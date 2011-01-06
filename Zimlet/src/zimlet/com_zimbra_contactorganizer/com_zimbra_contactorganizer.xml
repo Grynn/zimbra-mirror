@@ -1,7 +1,7 @@
 <zimlet name="com_zimbra_contactorganizer" version="0.2" label="Contact Organizer" description="Helps organizing, moving, deleting, tagging and filing all (or specified set of) contacts.">
 	<include>contactorganizer.js</include>
 	<includeCSS>contactorganizer.css</includeCSS>
-	<resource>co.gif</resource>
+	<resource>contactorganizer-icon.png</resource>
 	<handlerObject>Com_Zimbra_contactOrganizer</handlerObject>
 
 	<zimletPanelItem label="Contact Organizer" icon="co-panelIcon">

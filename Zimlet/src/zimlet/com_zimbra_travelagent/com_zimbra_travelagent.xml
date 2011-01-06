@@ -11,7 +11,6 @@
 <resource>hotwire.gif</resource>
 <resource>travelocity.gif</resource>
 <resource>kayak.gif</resource>
-<resource>travel_agent.gif</resource>
 <includeCSS>com_zimbra_travelagent.css</includeCSS>	
 <handlerObject>Com_Zimbra_TravelAgent</handlerObject>
 	<zimletPanelItem label="Travel Agent" icon="Globe">

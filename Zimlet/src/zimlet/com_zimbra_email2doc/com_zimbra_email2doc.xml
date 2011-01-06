@@ -1,7 +1,7 @@
 <zimlet name="com_zimbra_email2doc" version="1.6" label="${msg.label}" description="${msg.description}">
 	<include>email2doc.js</include>
 	<includeCSS>email2doc.css</includeCSS>
-	<resource>email2doc-icon.gif</resource>
+	<resource>email2doc-icon.png</resource>
 	<handlerObject>com_zimbra_email2doc_HandlerObject</handlerObject>
 
 	<zimletPanelItem label="${msg.Email2DocZimlet_panel_label}" icon="email2doc-panelIcon">

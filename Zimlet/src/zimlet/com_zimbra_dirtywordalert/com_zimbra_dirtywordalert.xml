@@ -1,7 +1,7 @@
 <zimlet name="com_zimbra_dirtywordalert" version="1.2" target="main compose-window" description="Checks for dirty words and alerts user when composing an email message.">
 	<include>dirtywordalert.js</include>
 	<includeCSS>dirtywordalert.css</includeCSS>
-	<resource>dirtywordalert-icon.gif</resource>
+	<resource>dirtywordalert-icon.png</resource>
 	<handlerObject>com_zimbra_dirtywordalert</handlerObject>
 
 	<zimletPanelItem label="Dirty Word Alert" icon="dirtywordalert-panelIcon">

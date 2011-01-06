@@ -11,7 +11,7 @@
 	<include>templates/OAuth.template.js</include>
 
     <includeCSS>social.css</includeCSS>
-    <resource>social-icon.gif</resource>
+    <resource>social-icon.png</resource>
     <handlerObject>com_zimbra_social_handlerObject</handlerObject>
 
     <userProperties>

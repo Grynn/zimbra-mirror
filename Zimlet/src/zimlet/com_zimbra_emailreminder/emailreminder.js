@@ -350,7 +350,7 @@ function() {
 	var i = 0;
 	html[i++] = "<DIV>";
 	html[i++] = "<TABLE width=100%>";
-	html[i++] = ["<TR><TD width=2%><img src='" , this.getResource("emailReminder.gif") , "'/></TD><TD>",hdrMsg,"</TD><TR>"].join("");
+	html[i++] = ["<TR><TD width=2%><img src='" , this.getResource("emailreminder-icon.png") , "'/></TD><TD>",hdrMsg,"</TD><TR>"].join("");
 	html[i++] = "</TABLE>";
 	html[i++] = "<TABLE>";
 	html[i++] = "<TR><TD id='emailReminder_absMenuTD'></TD><TD><input type='text' id='emailReminder_datefield' SIZE=9></input></TD><TD width='10px' id='emailReminder_calendarMenu'></TD><TD>(<span id='emailReminder_dateFriendlyName'></span>)</TD></TR>";

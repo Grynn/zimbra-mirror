@@ -1,7 +1,7 @@
 <zimlet name="com_zimbra_skinpreviewer" version="1.3" label="${msg.label}" description="${msg.description}">
 	<include>skinpreviewer.js</include>
 	<includeCSS>skinpreviewer.css</includeCSS>
-	<resource>skinpreviewer-icon.gif</resource>
+	<resource>skinpreviewer-icon.png</resource>
 	<handlerObject>com_zimbra_skinpreviewer_HandlerObject</handlerObject>
 	<zimletPanelItem label="${msg.SkinPreviewerZimlet_panel_label}" icon="skinpreviewer-panelIcon">
 		<toolTipText>${msg.SkinPreviewerZimlet_panel_tooltip}</toolTipText>

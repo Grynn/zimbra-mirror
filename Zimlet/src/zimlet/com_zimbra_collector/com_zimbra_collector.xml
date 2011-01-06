@@ -1,7 +1,7 @@
 <zimlet name="com_zimbra_collector" version="1.6" label="${msg.label}" description="${msg.description}">
 	<include>collector.js</include>
 	<includeCSS>collector.css</includeCSS>
-	<resource>collector-icon.gif</resource>
+	<resource>collector-icon.png</resource>
 	<handlerObject>com_zimbra_collector_HandlerObject</handlerObject>
 	<zimletPanelItem label="${msg.CollectorZimlet_panel_label}" icon="Collector-panelIcon">
 		<toolTipText>${msg.CollectorZimlet_panel_tooltip}</toolTipText>
