@@ -474,21 +474,43 @@ ZaGlobalAdvancedStatsPage.getMTAHosts = function() {
     if (ZaGlobalAdvancedStatsPage.MTA_HOSTS) {
         return ZaGlobalAdvancedStatsPage.MTA_HOSTS;
     }
-    var soapRequest = AjxSoapDoc.create("GetServiceStatusRequest", ZaZimbraAdmin.URN, null);
-    var csfeParams = { soapDoc: soapRequest };
-    var reqMgrParams = { controller: ZaApp.getInstance().getCurrentController(), busyMsg: ZaMsg.PQ_LOADING };
-    var soapResponse = ZaRequestMgr.invoke(csfeParams, reqMgrParams).Body.GetServiceStatusResponse;
-    
+	
     var hosts = new Array();
-    if (soapResponse.status && soapResponse.status instanceof Array) {
-        var ary = soapResponse.status;
+    var serverList = ZaApp.getInstance().getServerList();
+    if (serverList) {
+        var ary = serverList.getArray();
         var cnt = ary.length;
         for (var i = 0; i < cnt; i++) {
-            if (ary[i].service == "mta") {
-                hosts.push(ary[i].server);
+            var crtServer = ary[i];
+            var isInstalled = false;
+            var isEnabled = false;
+            if(crtServer.attrs){
+		// EnabledServiceList InstalledServiceList are array-like object.
+		// contain the service installed or enabled
+                var EnabledServiceList = crtServer.attrs[ZaServer.A_zimbraServiceEnabled];
+                var InstalledServiceList = crtServer.attrs[ZaServer.A_zimbraServiceEnabled];
+                
+		var j;
+                for(j in EnabledServiceList){
+                        if(EnabledServiceList[j] == "mta"){
+                                isEnabled = true;
+                                break;
+                        }
+                }
+		
+                for(j in InstalledServiceList){
+                        if(InstalledServiceList[j] == "mta"){
+                                isInstalled = true;
+                                break;
+                        }
+                }
             }
+	    
+            if (isInstalled && isEnabled)
+                hosts.push(ary[i].name);
         }
-    }
+    }	
+    
     ZaGlobalAdvancedStatsPage.MTA_HOSTS = hosts;
     return ZaGlobalAdvancedStatsPage.MTA_HOSTS;
 }
