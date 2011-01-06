@@ -42,6 +42,7 @@ CP=${ZMROOT}/lib/jars/zimbracommon.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/zimbrasoap.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/zimbrastore.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/zimbra-native.jar\
+${PATHSEP}${ZMROOT}/lib/jars/apache-log4j-extras-1.0.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/commons-logging.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/commons-cli-1.2.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/commons-httpclient-3.1.jar\
@@ -50,6 +51,8 @@ ${PATHSEP}${ZMROOT}/lib/jars/guava-r07.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/dom4j-1.5.2.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/log4j-1.2.16.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/json.jar
+
+
 
 java_version=$(${java} -version 2>&1 | grep "java version" | sed -e 's/"//g' | awk '{print $NF}' | awk -F_ '{print $1}')
 if [ x"$java_version" = "x1.6.0" ]; then
