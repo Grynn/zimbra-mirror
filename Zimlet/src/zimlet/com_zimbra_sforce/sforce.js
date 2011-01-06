@@ -1457,7 +1457,7 @@ function(caseNumber) {
 	var pickListNames = [];
 	for (var el in this._sforceCaseObject) {
 		var obj = this._sforceCaseObject[el];
-		if (obj.type != "picklist") {
+		if(!obj.picklistValues) {
 			continue;
 		}
 		try {
@@ -2612,7 +2612,7 @@ Com_Zimbra_SForce.prototype.done_login = function(callback, result) {
 					this.__dynamicMenuItems_links.push({id:Dwt.getNextId(),icon:"SFORCE-panelIcon", label:obj.label, itemName:itemName});
 					continue;
 				}
-				if (obj.type != "picklist") {
+				if (!obj.picklistValues) {
 					continue;
 				}
 				var subMenuItems = obj.picklistValues.split("=::=");
