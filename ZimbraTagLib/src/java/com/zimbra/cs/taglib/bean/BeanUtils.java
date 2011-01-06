@@ -47,10 +47,13 @@ import com.zimbra.cs.zclient.*;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.ServletException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
+import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.mailbox.Contact;
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 import com.yahoo.platform.yui.compressor.CssCompressor;
@@ -477,6 +480,15 @@ public class BeanUtils {
         List<String> val = mbox.getAccountInfo(false).getAttrs().get(attr);
         return (val.size() > 0) ? val.get(0) : null;
     }
+
+   /**
+    * Checks for a provisioned attribute or a user account/COS attribute. If either is true this
+    * method will return true
+    */
+   public static boolean isProvOrAttr(PageContext pc, String attr) throws JspException, ServiceException {
+       Provisioning prov = Provisioning.getInstance();
+       return prov.getConfig().getBooleanAttr(attr, false) || Provisioning.TRUE.equals(getAttr(pc, attr));
+   }
 
     public static String repeatString(String string, int count) {
         if (count==0) return "";

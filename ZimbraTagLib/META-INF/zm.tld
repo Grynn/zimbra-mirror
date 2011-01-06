@@ -6862,6 +6862,11 @@
         <function-signature>boolean isAddressBook(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
     </function>
 
+	<function>
+		<name>isProvOrAttr</name>
+		<function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isProvOrAttr(javax.servlet.jsp.PageContext, java.lang.String)</function-signature>
+	</function>
     <function>
         <name>getAddressBook</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
