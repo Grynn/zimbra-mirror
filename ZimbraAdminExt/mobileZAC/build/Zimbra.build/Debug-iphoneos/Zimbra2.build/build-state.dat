@@ -1,0 +1,135 @@
+TZimbra2
+v7
+r0
+t315286923.999424
+cCheck dependencies
+cCpResource build/Debug-iphoneos/Zimbra2.app/ResourceRules.plist /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/ResourceRules.plist
+cProcessInfoPlistFile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app/Info.plist Zimbra2-Info.plist
+cProcessProductPackaging "/Users/qinan/Library/MobileDevice/Provisioning Profiles/E968C65F-C46F-4185-9DCA-A3A486BFB887.mobileprovision" /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app/embedded.mobileprovision
+cTouch /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app
+cProcessProductPackaging /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/Entitlements.plist /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphoneos/Zimbra2.build/Zimbra2.xcent
+cCodeSign /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/Entitlements.plist
+c000000004CB3DFCF00000000000001A7
+t1286856655
+s423
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/ResourceRules.plist
+c000000004CB3DFCF00000000000001E5
+t1286856655
+s485
+
+N/Users/qinan/Library/MobileDevice/Provisioning Profiles/E968C65F-C46F-4185-9DCA-A3A486BFB887.mobileprovision
+c000000004D1AA6430000000000001C56
+t1293592131
+s7254
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app
+t2
+s0
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app/Info.plist
+t2
+s0
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app/PkgInfo
+t2
+s0
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app/ResourceRules.plist
+t2
+s0
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app/embedded.mobileprovision
+t2
+s0
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphoneos/Zimbra2.build/Zimbra2.xcent
+t1293592852
+s490
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rotate/build/Debug-iphoneos/Zimbra2.app
+t2
+s0
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rotate/build/Debug-iphoneos/Zimbra2.app/Info.plist
+t2
+s0
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rotate/build/Debug-iphoneos/Zimbra2.app/PkgInfo
+t2
+s0
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rotate/build/Debug-iphoneos/Zimbra2.app/ResourceRules.plist
+t2
+s0
+
+NZimbra2-Info.plist
+c000000004D1AA7AF00000000000002A4
+t1293592495
+s676
+
+CCheck dependencies
+r0
+lSLF07#2@18"Check dependencies315286923#315286923#0(0"0(0#1#0"8614561952#0"0#
+
+CCodeSign /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app
+s315286923.960900
+e315286923.999380
+r0
+xCodeSign
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app: object file format invalid or unsuitable
+lSLF07#2@41"CodeSign build/Debug-iphoneos/Zimbra2.app315286923#315286923#0(188"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app: object file format invalid or unsuitableCommand /usr/bin/codesign failed with exit code 11(4@49"Command /usr/bin/codesign failed with exit code 1315286923#18446744073709551615#0#0(1@0"0(0#0#95"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app8614010336#742"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    setenv _CODESIGN_ALLOCATE_ /Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate    /usr/bin/codesign -f -s "iPhone Developer: HAIRONG CAO (B6328BQBUM)" --resource-rules=/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app/ResourceRules.plist --entitlements /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphoneos/Zimbra2.build/Zimbra2.xcent /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app1#
+
+CCpResource build/Debug-iphoneos/Zimbra2.app/ResourceRules.plist /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/ResourceRules.plist
+s315285652.327531
+e315285652.345535
+r1
+xCpResource
+xbuild/Debug-iphoneos/Zimbra2.app/ResourceRules.plist
+x/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/ResourceRules.plist
+lSLF07#2@94"Copy /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/ResourceRules.plist315285652#315285652#0(0"0(0#0#89"/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/ResourceRules.plist8611010592#542"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/ResourceRules.plist /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app0#
+
+CProcessInfoPlistFile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app/Info.plist Zimbra2-Info.plist
+s315285652.328547
+e315285652.345738
+r1
+xProcessInfoPlistFile
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app/Info.plist
+xZimbra2-Info.plist
+lSLF07#2@26"Process Zimbra2-Info.plist315285652#315285652#0(0"0(0#0#81"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/Zimbra2-Info.plist8609180160#658"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    builtin-infoPlistUtility Zimbra2-Info.plist -genpkginfo /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app/PkgInfo -expandbuildsettings -format binary -platform iphoneos -resourcerulesfile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app/ResourceRules.plist -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app/Info.plist0#
+
+CProcessInfoPlistFile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rotate/build/Debug-iphoneos/Zimbra2.app/Info.plist Zimbra2-Info.plist
+r0
+
+CProcessProductPackaging "/Users/qinan/Library/MobileDevice/Provisioning Profiles/E968C65F-C46F-4185-9DCA-A3A486BFB887.mobileprovision" /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app/embedded.mobileprovision
+s315285812.391136
+e315285812.393169
+r1
+xProcessProductPackaging
+x/Users/qinan/Library/MobileDevice/Provisioning Profiles/E968C65F-C46F-4185-9DCA-A3A486BFB887.mobileprovision
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app/embedded.mobileprovision
+lSLF07#2@192"ProcessProductPackaging "/Users/qinan/Library/MobileDevice/Provisioning Profiles/E968C65F-C46F-4185-9DCA-A3A486BFB887.mobileprovision" build/Debug-iphoneos/Zimbra2.app/embedded.mobileprovision315285812#315285812#0(0"0(0#0#120"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app/embedded.mobileprovision8613384448#471"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    <com.apple.tools.product-pkg-utility> "/Users/qinan/Library/MobileDevice/Provisioning Profiles/E968C65F-C46F-4185-9DCA-A3A486BFB887.mobileprovision" -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app/embedded.mobileprovision0#
+
+CProcessProductPackaging /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/Entitlements.plist /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphoneos/Zimbra2.build/Zimbra2.xcent
+s315285652.356538
+e315285652.358115
+r1
+xProcessProductPackaging
+x/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/Entitlements.plist
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphoneos/Zimbra2.build/Zimbra2.xcent
+lSLF07#2@174"ProcessProductPackaging /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/Entitlements.plist build/Zimbra.build/Debug-iphoneos/Zimbra2.build/Zimbra2.xcent315285652#315285652#0(0"0(0#0#124"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphoneos/Zimbra2.build/Zimbra2.xcent8607734752#479"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    <com.apple.tools.product-pkg-utility> /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/Entitlements.plist -entitlements -format xml -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphoneos/Zimbra2.build/Zimbra2.xcent0#
+
+CTouch /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app
+s315285812.393244
+e315285812.395952
+r1
+xTouch
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app
+lSLF07#2@101"Touch /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app315285812#315285812#0(0"0(0#0#0"8613255520#312"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /usr/bin/touch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/Zimbra2.app0#
+
+CTouch /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rotate/build/Debug-iphoneos/Zimbra2.app
+r0
+

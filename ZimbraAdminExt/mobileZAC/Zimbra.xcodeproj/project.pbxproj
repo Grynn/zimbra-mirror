@@ -1,0 +1,757 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1D3623EC0D0F72F000981E51 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */; };
+		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
+		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		8E3143A20D8EFC7900101D4D /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E31439F0D8EFC7900101D4D /* Default.png */; };
+		F50CE5C812D44D0F0025352F /* DomainListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F50CE5C712D44D0F0025352F /* DomainListViewController.m */; };
+		F50CE61F12D452CB0025352F /* DomainListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F50CE5C712D44D0F0025352F /* DomainListViewController.m */; };
+		F50CE69212D4765F0025352F /* DLListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F50CE69112D4765F0025352F /* DLListViewController.m */; };
+		F50CE69E12D481C40025352F /* DLListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F50CE69112D4765F0025352F /* DLListViewController.m */; };
+		F50CE6B712D4858B0025352F /* CosListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F50CE6B612D4858B0025352F /* CosListViewController.m */; };
+		F50CE6C312D489290025352F /* CosListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F50CE6B612D4858B0025352F /* CosListViewController.m */; };
+		F50CE6E412D48F630025352F /* cos.png in Resources */ = {isa = PBXBuildFile; fileRef = F50CE6E112D48F630025352F /* cos.png */; };
+		F50CE6E512D48F630025352F /* cositem.png in Resources */ = {isa = PBXBuildFile; fileRef = F50CE6E212D48F630025352F /* cositem.png */; };
+		F50CE6F912D490DB0025352F /* cos.png in Resources */ = {isa = PBXBuildFile; fileRef = F50CE6E112D48F630025352F /* cos.png */; };
+		F50CE6FA12D490E10025352F /* cositem.png in Resources */ = {isa = PBXBuildFile; fileRef = F50CE6E212D48F630025352F /* cositem.png */; };
+		F50CE73012D493EE0025352F /* dl_green.png in Resources */ = {isa = PBXBuildFile; fileRef = F50CE72D12D493EE0025352F /* dl_green.png */; };
+		F50CE73312D493EE0025352F /* dl_green.png in Resources */ = {isa = PBXBuildFile; fileRef = F50CE72D12D493EE0025352F /* dl_green.png */; };
+		F50CE74F12D4949A0025352F /* dl_red.png in Resources */ = {isa = PBXBuildFile; fileRef = F50CE74E12D4949A0025352F /* dl_red.png */; };
+		F50CE75012D4949A0025352F /* dl_red.png in Resources */ = {isa = PBXBuildFile; fileRef = F50CE74E12D4949A0025352F /* dl_red.png */; };
+		F50CE77212D4B6080025352F /* dom.png in Resources */ = {isa = PBXBuildFile; fileRef = F50CE77112D4B6080025352F /* dom.png */; };
+		F50CE77312D4B6080025352F /* dom.png in Resources */ = {isa = PBXBuildFile; fileRef = F50CE77112D4B6080025352F /* dom.png */; };
+		F50CE77D12D4B67C0025352F /* cositem_green.png in Resources */ = {isa = PBXBuildFile; fileRef = F50CE77C12D4B67C0025352F /* cositem_green.png */; };
+		F50CE77E12D4B67C0025352F /* cositem_green.png in Resources */ = {isa = PBXBuildFile; fileRef = F50CE77C12D4B67C0025352F /* cositem_green.png */; };
+		F50CE7AD12D4C4F90025352F /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F50CE7AC12D4C4F90025352F /* SettingViewController.m */; };
+		F50CE7AE12D4C4F90025352F /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F50CE7AC12D4C4F90025352F /* SettingViewController.m */; };
+		F520972F12C0C07E006DD3F1 /* StatisticsController.m in Sources */ = {isa = PBXBuildFile; fileRef = F520972E12C0C07E006DD3F1 /* StatisticsController.m */; };
+		F520973212C0C09D006DD3F1 /* ZimGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = F520973112C0C09D006DD3F1 /* ZimGraphView.m */; };
+		F52A8AD912CB933D00D97FF7 /* UICustomSwitchExt.m in Sources */ = {isa = PBXBuildFile; fileRef = F52A8AD812CB933D00D97FF7 /* UICustomSwitchExt.m */; };
+		F52A8ADF12CB945F00D97FF7 /* switchBlueBg.png in Resources */ = {isa = PBXBuildFile; fileRef = F52A8ADC12CB945F00D97FF7 /* switchBlueBg.png */; };
+		F52A8AE012CB945F00D97FF7 /* switchOffPlain.png in Resources */ = {isa = PBXBuildFile; fileRef = F52A8ADD12CB945F00D97FF7 /* switchOffPlain.png */; };
+		F52A8AE112CB945F00D97FF7 /* switchThumb.png in Resources */ = {isa = PBXBuildFile; fileRef = F52A8ADE12CB945F00D97FF7 /* switchThumb.png */; };
+		F53A12EE12B3BCE300BC6D41 /* StatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F53A12ED12B3BCE300BC6D41 /* StatusViewController.m */; };
+		F53A12F212B3BD5C00BC6D41 /* StatusListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F53A12F112B3BD5C00BC6D41 /* StatusListViewController.m */; };
+		F53A135A12B3CF5300BC6D41 /* BoxMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = F53A135912B3CF5300BC6D41 /* BoxMaker.m */; };
+		F53A13E812B3DA2E00BC6D41 /* BrightnessController.m in Sources */ = {isa = PBXBuildFile; fileRef = F53A13E712B3DA2E00BC6D41 /* BrightnessController.m */; };
+		F53A144912B3E27D00BC6D41 /* ServerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F53A144812B3E27D00BC6D41 /* ServerListViewController.m */; };
+		F53A152512B48AF100BC6D41 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F53A152412B48AF100BC6D41 /* Icon.png */; };
+		F53A16EE12B5DB8E00BC6D41 /* GetController.m in Sources */ = {isa = PBXBuildFile; fileRef = F53A16ED12B5DB8E00BC6D41 /* GetController.m */; };
+		F53A16F112B5E26C00BC6D41 /* NetworkController.m in Sources */ = {isa = PBXBuildFile; fileRef = F53A16F012B5E26C00BC6D41 /* NetworkController.m */; };
+		F549F1B612BF422D00BFEDA0 /* SecurityController.m in Sources */ = {isa = PBXBuildFile; fileRef = F549F1B512BF422D00BFEDA0 /* SecurityController.m */; };
+		F54A920F12C30848003643E0 /* RotatingTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = F54A920E12C30848003643E0 /* RotatingTabBarController.m */; };
+		F5B6444112D2E822007ABCFF /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E31439F0D8EFC7900101D4D /* Default.png */; };
+		F5B6444412D2E822007ABCFF /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = F53A152412B48AF100BC6D41 /* Icon.png */; };
+		F5B6444512D2E822007ABCFF /* green.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4E77112B8FD190081ABDF /* green.png */; };
+		F5B6444612D2E822007ABCFF /* red.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4E77312B8FD240081ABDF /* red.png */; };
+		F5B6444712D2E822007ABCFF /* yellow.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4E77B12B8FD940081ABDF /* yellow.png */; };
+		F5B6444812D2E822007ABCFF /* account.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4E77D12B90E8E0081ABDF /* account.png */; };
+		F5B6444912D2E822007ABCFF /* account_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4E78A12B913F30081ABDF /* account_blue.png */; };
+		F5B6444A12D2E822007ABCFF /* account_red.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4E78F12B914180081ABDF /* account_red.png */; };
+		F5B6444B12D2E822007ABCFF /* account_black.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4EBBC12BB23170081ABDF /* account_black.png */; };
+		F5B6444C12D2E822007ABCFF /* add.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4EDA712BBB0FA0081ABDF /* add.png */; };
+		F5B6444D12D2E822007ABCFF /* edit.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4EDA912BBB1030081ABDF /* edit.png */; };
+		F5B6444E12D2E822007ABCFF /* password.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4EDC112BBB4D60081ABDF /* password.png */; };
+		F5B6444F12D2E822007ABCFF /* lock.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4EDC512BBB5540081ABDF /* lock.png */; };
+		F5B6445012D2E822007ABCFF /* configure.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4EDCD12BBB5BD0081ABDF /* configure.png */; };
+		F5B6445112D2E822007ABCFF /* alert.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4EDCF12BBB5C70081ABDF /* alert.png */; };
+		F5B6445212D2E822007ABCFF /* msg.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4EDD112BBB65F0081ABDF /* msg.png */; };
+		F5B6445312D2E822007ABCFF /* servers.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4EDD312BBB66B0081ABDF /* servers.png */; };
+		F5B6445412D2E822007ABCFF /* zmprov.gif in Resources */ = {isa = PBXBuildFile; fileRef = F5C4EDD512BBB6800081ABDF /* zmprov.gif */; };
+		F5B6445512D2E822007ABCFF /* switchBlueBg.png in Resources */ = {isa = PBXBuildFile; fileRef = F52A8ADC12CB945F00D97FF7 /* switchBlueBg.png */; };
+		F5B6445612D2E822007ABCFF /* switchOffPlain.png in Resources */ = {isa = PBXBuildFile; fileRef = F52A8ADD12CB945F00D97FF7 /* switchOffPlain.png */; };
+		F5B6445712D2E822007ABCFF /* switchThumb.png in Resources */ = {isa = PBXBuildFile; fileRef = F52A8ADE12CB945F00D97FF7 /* switchThumb.png */; };
+		F5B6445912D2E822007ABCFF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
+		F5B6445A12D2E822007ABCFF /* StatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F53A12ED12B3BCE300BC6D41 /* StatusViewController.m */; };
+		F5B6445B12D2E822007ABCFF /* StatusListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F53A12F112B3BD5C00BC6D41 /* StatusListViewController.m */; };
+		F5B6445C12D2E822007ABCFF /* BoxMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = F53A135912B3CF5300BC6D41 /* BoxMaker.m */; };
+		F5B6445D12D2E822007ABCFF /* BrightnessController.m in Sources */ = {isa = PBXBuildFile; fileRef = F53A13E712B3DA2E00BC6D41 /* BrightnessController.m */; };
+		F5B6445E12D2E822007ABCFF /* ServerListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F53A144812B3E27D00BC6D41 /* ServerListViewController.m */; };
+		F5B6445F12D2E822007ABCFF /* GetController.m in Sources */ = {isa = PBXBuildFile; fileRef = F53A16ED12B5DB8E00BC6D41 /* GetController.m */; };
+		F5B6446012D2E822007ABCFF /* NetworkController.m in Sources */ = {isa = PBXBuildFile; fileRef = F53A16F012B5E26C00BC6D41 /* NetworkController.m */; };
+		F5B6446112D2E822007ABCFF /* PutController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4E04412B66A5B0081ABDF /* PutController.m */; };
+		F5B6446212D2E822007ABCFF /* AccountListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4E10312B70A400081ABDF /* AccountListViewController.m */; };
+		F5B6446312D2E822007ABCFF /* AccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4E19E12B718E90081ABDF /* AccountViewController.m */; };
+		F5B6446412D2E822007ABCFF /* NewAccountController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4E36512B761E00081ABDF /* NewAccountController.m */; };
+		F5B6446512D2E822007ABCFF /* AccountListViewControllerExt.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4E41812B77C4F0081ABDF /* AccountListViewControllerExt.m */; };
+		F5B6446612D2E822007ABCFF /* ChangePasswordController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4E56412B86BED0081ABDF /* ChangePasswordController.m */; };
+		F5B6446712D2E822007ABCFF /* UICustomSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4E57212B8767D0081ABDF /* UICustomSwitch.m */; };
+		F5B6446812D2E822007ABCFF /* ZmprovController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4E5AC12B87C5C0081ABDF /* ZmprovController.m */; };
+		F5B6446912D2E822007ABCFF /* AccountStatusController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4E6B412B89BC70081ABDF /* AccountStatusController.m */; };
+		F5B6446A12D2E822007ABCFF /* AccountViewControllerExt.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4E95A12BA6A5D0081ABDF /* AccountViewControllerExt.m */; };
+		F5B6446B12D2E822007ABCFF /* ZimbraAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4EBC412BB25900081ABDF /* ZimbraAppDelegate.m */; };
+		F5B6446C12D2E822007ABCFF /* SecurityController.m in Sources */ = {isa = PBXBuildFile; fileRef = F549F1B512BF422D00BFEDA0 /* SecurityController.m */; };
+		F5B6446D12D2E822007ABCFF /* StatisticsController.m in Sources */ = {isa = PBXBuildFile; fileRef = F520972E12C0C07E006DD3F1 /* StatisticsController.m */; };
+		F5B6446E12D2E822007ABCFF /* ZimGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = F520973112C0C09D006DD3F1 /* ZimGraphView.m */; };
+		F5B6446F12D2E822007ABCFF /* RotatingTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = F54A920E12C30848003643E0 /* RotatingTabBarController.m */; };
+		F5B6447012D2E822007ABCFF /* UICustomSwitchExt.m in Sources */ = {isa = PBXBuildFile; fileRef = F52A8AD812CB933D00D97FF7 /* UICustomSwitchExt.m */; };
+		F5B6447212D2E822007ABCFF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		F5B6447312D2E822007ABCFF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		F5B6447412D2E822007ABCFF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */; };
+		F5C4E04512B66A5B0081ABDF /* PutController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4E04412B66A5B0081ABDF /* PutController.m */; };
+		F5C4E10412B70A400081ABDF /* AccountListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4E10312B70A400081ABDF /* AccountListViewController.m */; };
+		F5C4E19F12B718E90081ABDF /* AccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4E19E12B718E90081ABDF /* AccountViewController.m */; };
+		F5C4E36612B761E00081ABDF /* NewAccountController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4E36512B761E00081ABDF /* NewAccountController.m */; };
+		F5C4E41912B77C4F0081ABDF /* AccountListViewControllerExt.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4E41812B77C4F0081ABDF /* AccountListViewControllerExt.m */; };
+		F5C4E56512B86BED0081ABDF /* ChangePasswordController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4E56412B86BED0081ABDF /* ChangePasswordController.m */; };
+		F5C4E57312B8767D0081ABDF /* UICustomSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4E57212B8767D0081ABDF /* UICustomSwitch.m */; };
+		F5C4E5AD12B87C5C0081ABDF /* ZmprovController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4E5AC12B87C5C0081ABDF /* ZmprovController.m */; };
+		F5C4E6B512B89BC70081ABDF /* AccountStatusController.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4E6B412B89BC70081ABDF /* AccountStatusController.m */; };
+		F5C4E77212B8FD190081ABDF /* green.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4E77112B8FD190081ABDF /* green.png */; };
+		F5C4E77412B8FD240081ABDF /* red.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4E77312B8FD240081ABDF /* red.png */; };
+		F5C4E77C12B8FD940081ABDF /* yellow.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4E77B12B8FD940081ABDF /* yellow.png */; };
+		F5C4E77E12B90E8E0081ABDF /* account.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4E77D12B90E8E0081ABDF /* account.png */; };
+		F5C4E78B12B913F30081ABDF /* account_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4E78A12B913F30081ABDF /* account_blue.png */; };
+		F5C4E79012B914180081ABDF /* account_red.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4E78F12B914180081ABDF /* account_red.png */; };
+		F5C4E95B12BA6A5D0081ABDF /* AccountViewControllerExt.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4E95A12BA6A5D0081ABDF /* AccountViewControllerExt.m */; };
+		F5C4EBBD12BB23170081ABDF /* account_black.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4EBBC12BB23170081ABDF /* account_black.png */; };
+		F5C4EBC512BB25900081ABDF /* ZimbraAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F5C4EBC412BB25900081ABDF /* ZimbraAppDelegate.m */; };
+		F5C4EDA812BBB0FA0081ABDF /* add.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4EDA712BBB0FA0081ABDF /* add.png */; };
+		F5C4EDAA12BBB1030081ABDF /* edit.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4EDA912BBB1030081ABDF /* edit.png */; };
+		F5C4EDC212BBB4D60081ABDF /* password.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4EDC112BBB4D60081ABDF /* password.png */; };
+		F5C4EDC612BBB5540081ABDF /* lock.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4EDC512BBB5540081ABDF /* lock.png */; };
+		F5C4EDCE12BBB5BD0081ABDF /* configure.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4EDCD12BBB5BD0081ABDF /* configure.png */; };
+		F5C4EDD012BBB5C70081ABDF /* alert.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4EDCF12BBB5C70081ABDF /* alert.png */; };
+		F5C4EDD212BBB65F0081ABDF /* msg.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4EDD112BBB65F0081ABDF /* msg.png */; };
+		F5C4EDD412BBB66B0081ABDF /* servers.png in Resources */ = {isa = PBXBuildFile; fileRef = F5C4EDD312BBB66B0081ABDF /* servers.png */; };
+		F5C4EDD612BBB6800081ABDF /* zmprov.gif in Resources */ = {isa = PBXBuildFile; fileRef = F5C4EDD512BBB6800081ABDF /* zmprov.gif */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		1D6058910D05DD3D006BFB54 /* Zimbra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zimbra.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8E31439F0D8EFC7900101D4D /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		F50CE5C612D44D0F0025352F /* DomainListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DomainListViewController.h; sourceTree = "<group>"; };
+		F50CE5C712D44D0F0025352F /* DomainListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DomainListViewController.m; sourceTree = "<group>"; };
+		F50CE69012D4765F0025352F /* DLListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DLListViewController.h; sourceTree = "<group>"; };
+		F50CE69112D4765F0025352F /* DLListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DLListViewController.m; sourceTree = "<group>"; };
+		F50CE6B512D4858B0025352F /* CosListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CosListViewController.h; sourceTree = "<group>"; };
+		F50CE6B612D4858B0025352F /* CosListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CosListViewController.m; sourceTree = "<group>"; };
+		F50CE6E112D48F630025352F /* cos.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cos.png; sourceTree = "<group>"; };
+		F50CE6E212D48F630025352F /* cositem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cositem.png; sourceTree = "<group>"; };
+		F50CE72D12D493EE0025352F /* dl_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dl_green.png; sourceTree = "<group>"; };
+		F50CE74E12D4949A0025352F /* dl_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dl_red.png; sourceTree = "<group>"; };
+		F50CE77112D4B6080025352F /* dom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dom.png; sourceTree = "<group>"; };
+		F50CE77C12D4B67C0025352F /* cositem_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cositem_green.png; sourceTree = "<group>"; };
+		F50CE7AB12D4C4F90025352F /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
+		F50CE7AC12D4C4F90025352F /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
+		F520972D12C0C07E006DD3F1 /* StatisticsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatisticsController.h; sourceTree = "<group>"; };
+		F520972E12C0C07E006DD3F1 /* StatisticsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatisticsController.m; sourceTree = "<group>"; };
+		F520973012C0C09D006DD3F1 /* ZimGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZimGraphView.h; sourceTree = "<group>"; };
+		F520973112C0C09D006DD3F1 /* ZimGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZimGraphView.m; sourceTree = "<group>"; };
+		F52A8AD712CB933D00D97FF7 /* UICustomSwitchExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICustomSwitchExt.h; sourceTree = "<group>"; };
+		F52A8AD812CB933D00D97FF7 /* UICustomSwitchExt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICustomSwitchExt.m; sourceTree = "<group>"; };
+		F52A8ADC12CB945F00D97FF7 /* switchBlueBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switchBlueBg.png; sourceTree = "<group>"; };
+		F52A8ADD12CB945F00D97FF7 /* switchOffPlain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switchOffPlain.png; sourceTree = "<group>"; };
+		F52A8ADE12CB945F00D97FF7 /* switchThumb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switchThumb.png; sourceTree = "<group>"; };
+		F53A12EC12B3BCE300BC6D41 /* StatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusViewController.h; sourceTree = "<group>"; };
+		F53A12ED12B3BCE300BC6D41 /* StatusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusViewController.m; sourceTree = "<group>"; };
+		F53A12F012B3BD5C00BC6D41 /* StatusListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusListViewController.h; sourceTree = "<group>"; };
+		F53A12F112B3BD5C00BC6D41 /* StatusListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusListViewController.m; sourceTree = "<group>"; };
+		F53A135812B3CF5300BC6D41 /* BoxMaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoxMaker.h; sourceTree = "<group>"; };
+		F53A135912B3CF5300BC6D41 /* BoxMaker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoxMaker.m; sourceTree = "<group>"; };
+		F53A13E612B3DA2E00BC6D41 /* BrightnessController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrightnessController.h; sourceTree = "<group>"; };
+		F53A13E712B3DA2E00BC6D41 /* BrightnessController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrightnessController.m; sourceTree = "<group>"; };
+		F53A144212B3E0AA00BC6D41 /* Zimbra_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Zimbra_Prefix.pch; sourceTree = "<group>"; };
+		F53A144712B3E27D00BC6D41 /* ServerListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerListViewController.h; sourceTree = "<group>"; };
+		F53A144812B3E27D00BC6D41 /* ServerListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerListViewController.m; sourceTree = "<group>"; };
+		F53A152412B48AF100BC6D41 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		F53A16EC12B5DB8E00BC6D41 /* GetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetController.h; sourceTree = "<group>"; };
+		F53A16ED12B5DB8E00BC6D41 /* GetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetController.m; sourceTree = "<group>"; };
+		F53A16EF12B5E26C00BC6D41 /* NetworkController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkController.h; sourceTree = "<group>"; };
+		F53A16F012B5E26C00BC6D41 /* NetworkController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkController.m; sourceTree = "<group>"; };
+		F549F1B412BF422D00BFEDA0 /* SecurityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecurityController.h; sourceTree = "<group>"; };
+		F549F1B512BF422D00BFEDA0 /* SecurityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecurityController.m; sourceTree = "<group>"; };
+		F54A920D12C30848003643E0 /* RotatingTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RotatingTabBarController.h; sourceTree = "<group>"; };
+		F54A920E12C30848003643E0 /* RotatingTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RotatingTabBarController.m; sourceTree = "<group>"; };
+		F5B6447812D2E822007ABCFF /* Zimbra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zimbra.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F5B6447A12D2E822007ABCFF /* Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info copy.plist"; sourceTree = "<group>"; };
+		F5C4E04312B66A5B0081ABDF /* PutController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PutController.h; sourceTree = "<group>"; };
+		F5C4E04412B66A5B0081ABDF /* PutController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PutController.m; sourceTree = "<group>"; };
+		F5C4E10212B70A400081ABDF /* AccountListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountListViewController.h; sourceTree = "<group>"; };
+		F5C4E10312B70A400081ABDF /* AccountListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountListViewController.m; sourceTree = "<group>"; };
+		F5C4E19D12B718E90081ABDF /* AccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountViewController.h; sourceTree = "<group>"; };
+		F5C4E19E12B718E90081ABDF /* AccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountViewController.m; sourceTree = "<group>"; };
+		F5C4E36412B761E00081ABDF /* NewAccountController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewAccountController.h; sourceTree = "<group>"; };
+		F5C4E36512B761E00081ABDF /* NewAccountController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewAccountController.m; sourceTree = "<group>"; };
+		F5C4E41712B77C4F0081ABDF /* AccountListViewControllerExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountListViewControllerExt.h; sourceTree = "<group>"; };
+		F5C4E41812B77C4F0081ABDF /* AccountListViewControllerExt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountListViewControllerExt.m; sourceTree = "<group>"; };
+		F5C4E56312B86BED0081ABDF /* ChangePasswordController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangePasswordController.h; sourceTree = "<group>"; };
+		F5C4E56412B86BED0081ABDF /* ChangePasswordController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangePasswordController.m; sourceTree = "<group>"; };
+		F5C4E57112B8767D0081ABDF /* UICustomSwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICustomSwitch.h; sourceTree = "<group>"; };
+		F5C4E57212B8767D0081ABDF /* UICustomSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICustomSwitch.m; sourceTree = "<group>"; };
+		F5C4E5AB12B87C5C0081ABDF /* ZmprovController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZmprovController.h; sourceTree = "<group>"; };
+		F5C4E5AC12B87C5C0081ABDF /* ZmprovController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZmprovController.m; sourceTree = "<group>"; };
+		F5C4E6B312B89BC70081ABDF /* AccountStatusController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountStatusController.h; sourceTree = "<group>"; };
+		F5C4E6B412B89BC70081ABDF /* AccountStatusController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountStatusController.m; sourceTree = "<group>"; };
+		F5C4E77112B8FD190081ABDF /* green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = green.png; sourceTree = "<group>"; };
+		F5C4E77312B8FD240081ABDF /* red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = red.png; sourceTree = "<group>"; };
+		F5C4E77B12B8FD940081ABDF /* yellow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = yellow.png; sourceTree = "<group>"; };
+		F5C4E77D12B90E8E0081ABDF /* account.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = account.png; sourceTree = "<group>"; };
+		F5C4E78A12B913F30081ABDF /* account_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = account_blue.png; sourceTree = "<group>"; };
+		F5C4E78F12B914180081ABDF /* account_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = account_red.png; sourceTree = "<group>"; };
+		F5C4E95912BA6A5D0081ABDF /* AccountViewControllerExt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountViewControllerExt.h; sourceTree = "<group>"; };
+		F5C4E95A12BA6A5D0081ABDF /* AccountViewControllerExt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountViewControllerExt.m; sourceTree = "<group>"; };
+		F5C4EBBC12BB23170081ABDF /* account_black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = account_black.png; sourceTree = "<group>"; };
+		F5C4EBC312BB25900081ABDF /* ZimbraAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZimbraAppDelegate.h; sourceTree = "<group>"; };
+		F5C4EBC412BB25900081ABDF /* ZimbraAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZimbraAppDelegate.m; sourceTree = "<group>"; };
+		F5C4EDA712BBB0FA0081ABDF /* add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add.png; sourceTree = "<group>"; };
+		F5C4EDA912BBB1030081ABDF /* edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit.png; sourceTree = "<group>"; };
+		F5C4EDC112BBB4D60081ABDF /* password.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = password.png; sourceTree = "<group>"; };
+		F5C4EDC512BBB5540081ABDF /* lock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lock.png; sourceTree = "<group>"; };
+		F5C4EDCD12BBB5BD0081ABDF /* configure.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = configure.png; sourceTree = "<group>"; };
+		F5C4EDCF12BBB5C70081ABDF /* alert.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = alert.png; sourceTree = "<group>"; };
+		F5C4EDD112BBB65F0081ABDF /* msg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = msg.png; sourceTree = "<group>"; };
+		F5C4EDD312BBB66B0081ABDF /* servers.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = servers.png; sourceTree = "<group>"; };
+		F5C4EDD512BBB6800081ABDF /* zmprov.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = zmprov.gif; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1D60588F0D05DD3D006BFB54 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
+				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
+				1D3623EC0D0F72F000981E51 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5B6447112D2E822007ABCFF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F5B6447212D2E822007ABCFF /* Foundation.framework in Frameworks */,
+				F5B6447312D2E822007ABCFF /* UIKit.framework in Frameworks */,
+				F5B6447412D2E822007ABCFF /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1D3623EB0D0F72F000981E51 /* CoreGraphics.framework */,
+				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
+				1D30AB110D05D00D00671497 /* Foundation.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1D6058910D05DD3D006BFB54 /* Zimbra.app */,
+				F5B6447812D2E822007ABCFF /* Zimbra.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+			isa = PBXGroup;
+			children = (
+				8E3143A50D8EFC8A00101D4D /* Images */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = CustomTemplate;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				F53A144212B3E0AA00BC6D41 /* Zimbra_Prefix.pch */,
+				29B97316FDCFA39411CA2CEA /* main.m */,
+				F53A12EC12B3BCE300BC6D41 /* StatusViewController.h */,
+				F53A12ED12B3BCE300BC6D41 /* StatusViewController.m */,
+				F53A12F012B3BD5C00BC6D41 /* StatusListViewController.h */,
+				F53A12F112B3BD5C00BC6D41 /* StatusListViewController.m */,
+				F53A135812B3CF5300BC6D41 /* BoxMaker.h */,
+				F53A135912B3CF5300BC6D41 /* BoxMaker.m */,
+				F53A13E612B3DA2E00BC6D41 /* BrightnessController.h */,
+				F53A13E712B3DA2E00BC6D41 /* BrightnessController.m */,
+				F53A144712B3E27D00BC6D41 /* ServerListViewController.h */,
+				F53A144812B3E27D00BC6D41 /* ServerListViewController.m */,
+				F53A16EC12B5DB8E00BC6D41 /* GetController.h */,
+				F53A16ED12B5DB8E00BC6D41 /* GetController.m */,
+				F53A16EF12B5E26C00BC6D41 /* NetworkController.h */,
+				F53A16F012B5E26C00BC6D41 /* NetworkController.m */,
+				F5C4E04312B66A5B0081ABDF /* PutController.h */,
+				F5C4E04412B66A5B0081ABDF /* PutController.m */,
+				F5C4E10212B70A400081ABDF /* AccountListViewController.h */,
+				F5C4E10312B70A400081ABDF /* AccountListViewController.m */,
+				F5C4E19D12B718E90081ABDF /* AccountViewController.h */,
+				F5C4E19E12B718E90081ABDF /* AccountViewController.m */,
+				F5C4E36412B761E00081ABDF /* NewAccountController.h */,
+				F5C4E36512B761E00081ABDF /* NewAccountController.m */,
+				F5C4E41712B77C4F0081ABDF /* AccountListViewControllerExt.h */,
+				F5C4E41812B77C4F0081ABDF /* AccountListViewControllerExt.m */,
+				F5C4E56312B86BED0081ABDF /* ChangePasswordController.h */,
+				F5C4E56412B86BED0081ABDF /* ChangePasswordController.m */,
+				F5C4E57112B8767D0081ABDF /* UICustomSwitch.h */,
+				F5C4E57212B8767D0081ABDF /* UICustomSwitch.m */,
+				F5C4E5AB12B87C5C0081ABDF /* ZmprovController.h */,
+				F5C4E5AC12B87C5C0081ABDF /* ZmprovController.m */,
+				F5C4E6B312B89BC70081ABDF /* AccountStatusController.h */,
+				F5C4E6B412B89BC70081ABDF /* AccountStatusController.m */,
+				F5C4E95912BA6A5D0081ABDF /* AccountViewControllerExt.h */,
+				F5C4E95A12BA6A5D0081ABDF /* AccountViewControllerExt.m */,
+				F5C4EBC312BB25900081ABDF /* ZimbraAppDelegate.h */,
+				F5C4EBC412BB25900081ABDF /* ZimbraAppDelegate.m */,
+				F549F1B412BF422D00BFEDA0 /* SecurityController.h */,
+				F549F1B512BF422D00BFEDA0 /* SecurityController.m */,
+				F520972D12C0C07E006DD3F1 /* StatisticsController.h */,
+				F520972E12C0C07E006DD3F1 /* StatisticsController.m */,
+				F520973012C0C09D006DD3F1 /* ZimGraphView.h */,
+				F520973112C0C09D006DD3F1 /* ZimGraphView.m */,
+				F54A920D12C30848003643E0 /* RotatingTabBarController.h */,
+				F54A920E12C30848003643E0 /* RotatingTabBarController.m */,
+				F52A8AD712CB933D00D97FF7 /* UICustomSwitchExt.h */,
+				F52A8AD812CB933D00D97FF7 /* UICustomSwitchExt.m */,
+				F50CE5C612D44D0F0025352F /* DomainListViewController.h */,
+				F50CE5C712D44D0F0025352F /* DomainListViewController.m */,
+				F50CE69012D4765F0025352F /* DLListViewController.h */,
+				F50CE69112D4765F0025352F /* DLListViewController.m */,
+				F50CE6B512D4858B0025352F /* CosListViewController.h */,
+				F50CE6B612D4858B0025352F /* CosListViewController.m */,
+				F50CE7AB12D4C4F90025352F /* SettingViewController.h */,
+				F50CE7AC12D4C4F90025352F /* SettingViewController.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107310486CEB800E47090 /* Info.plist */,
+				F5B6447A12D2E822007ABCFF /* Info copy.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8E3143A50D8EFC8A00101D4D /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				F50CE77C12D4B67C0025352F /* cositem_green.png */,
+				F50CE77112D4B6080025352F /* dom.png */,
+				F50CE74E12D4949A0025352F /* dl_red.png */,
+				F50CE72D12D493EE0025352F /* dl_green.png */,
+				F50CE6E112D48F630025352F /* cos.png */,
+				F50CE6E212D48F630025352F /* cositem.png */,
+				F52A8ADC12CB945F00D97FF7 /* switchBlueBg.png */,
+				F52A8ADD12CB945F00D97FF7 /* switchOffPlain.png */,
+				F52A8ADE12CB945F00D97FF7 /* switchThumb.png */,
+				F5C4EDD512BBB6800081ABDF /* zmprov.gif */,
+				F5C4EDD312BBB66B0081ABDF /* servers.png */,
+				F5C4EDD112BBB65F0081ABDF /* msg.png */,
+				F5C4EDCF12BBB5C70081ABDF /* alert.png */,
+				F5C4EDCD12BBB5BD0081ABDF /* configure.png */,
+				F5C4EDC512BBB5540081ABDF /* lock.png */,
+				F5C4EDC112BBB4D60081ABDF /* password.png */,
+				F5C4EDA912BBB1030081ABDF /* edit.png */,
+				F5C4EDA712BBB0FA0081ABDF /* add.png */,
+				F5C4EBBC12BB23170081ABDF /* account_black.png */,
+				F5C4E78F12B914180081ABDF /* account_red.png */,
+				F5C4E78A12B913F30081ABDF /* account_blue.png */,
+				F5C4E77D12B90E8E0081ABDF /* account.png */,
+				F5C4E77B12B8FD940081ABDF /* yellow.png */,
+				F5C4E77312B8FD240081ABDF /* red.png */,
+				F5C4E77112B8FD190081ABDF /* green.png */,
+				F53A152412B48AF100BC6D41 /* Icon.png */,
+				8E31439F0D8EFC7900101D4D /* Default.png */,
+			);
+			name = Images;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1D6058900D05DD3D006BFB54 /* Zimbra */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Zimbra" */;
+			buildPhases = (
+				1D60588D0D05DD3D006BFB54 /* Resources */,
+				1D60588E0D05DD3D006BFB54 /* Sources */,
+				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Zimbra;
+			productName = HelloWorld;
+			productReference = 1D6058910D05DD3D006BFB54 /* Zimbra.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F5B6443F12D2E822007ABCFF /* ZimbraSimulator */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F5B6447512D2E822007ABCFF /* Build configuration list for PBXNativeTarget "ZimbraSimulator" */;
+			buildPhases = (
+				F5B6444012D2E822007ABCFF /* Resources */,
+				F5B6445812D2E822007ABCFF /* Sources */,
+				F5B6447112D2E822007ABCFF /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ZimbraSimulator;
+			productName = HelloWorld;
+			productReference = F5B6447812D2E822007ABCFF /* Zimbra.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Zimbra" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1D6058900D05DD3D006BFB54 /* Zimbra */,
+				F5B6443F12D2E822007ABCFF /* ZimbraSimulator */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1D60588D0D05DD3D006BFB54 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8E3143A20D8EFC7900101D4D /* Default.png in Resources */,
+				F53A152512B48AF100BC6D41 /* Icon.png in Resources */,
+				F5C4E77212B8FD190081ABDF /* green.png in Resources */,
+				F5C4E77412B8FD240081ABDF /* red.png in Resources */,
+				F5C4E77C12B8FD940081ABDF /* yellow.png in Resources */,
+				F5C4E77E12B90E8E0081ABDF /* account.png in Resources */,
+				F5C4E78B12B913F30081ABDF /* account_blue.png in Resources */,
+				F5C4E79012B914180081ABDF /* account_red.png in Resources */,
+				F5C4EBBD12BB23170081ABDF /* account_black.png in Resources */,
+				F5C4EDA812BBB0FA0081ABDF /* add.png in Resources */,
+				F5C4EDAA12BBB1030081ABDF /* edit.png in Resources */,
+				F5C4EDC212BBB4D60081ABDF /* password.png in Resources */,
+				F5C4EDC612BBB5540081ABDF /* lock.png in Resources */,
+				F5C4EDCE12BBB5BD0081ABDF /* configure.png in Resources */,
+				F5C4EDD012BBB5C70081ABDF /* alert.png in Resources */,
+				F5C4EDD212BBB65F0081ABDF /* msg.png in Resources */,
+				F5C4EDD412BBB66B0081ABDF /* servers.png in Resources */,
+				F5C4EDD612BBB6800081ABDF /* zmprov.gif in Resources */,
+				F52A8ADF12CB945F00D97FF7 /* switchBlueBg.png in Resources */,
+				F52A8AE012CB945F00D97FF7 /* switchOffPlain.png in Resources */,
+				F52A8AE112CB945F00D97FF7 /* switchThumb.png in Resources */,
+				F50CE6E412D48F630025352F /* cos.png in Resources */,
+				F50CE6E512D48F630025352F /* cositem.png in Resources */,
+				F50CE73012D493EE0025352F /* dl_green.png in Resources */,
+				F50CE74F12D4949A0025352F /* dl_red.png in Resources */,
+				F50CE77212D4B6080025352F /* dom.png in Resources */,
+				F50CE77D12D4B67C0025352F /* cositem_green.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5B6444012D2E822007ABCFF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F5B6444112D2E822007ABCFF /* Default.png in Resources */,
+				F5B6444412D2E822007ABCFF /* Icon.png in Resources */,
+				F5B6444512D2E822007ABCFF /* green.png in Resources */,
+				F5B6444612D2E822007ABCFF /* red.png in Resources */,
+				F5B6444712D2E822007ABCFF /* yellow.png in Resources */,
+				F5B6444812D2E822007ABCFF /* account.png in Resources */,
+				F5B6444912D2E822007ABCFF /* account_blue.png in Resources */,
+				F5B6444A12D2E822007ABCFF /* account_red.png in Resources */,
+				F5B6444B12D2E822007ABCFF /* account_black.png in Resources */,
+				F5B6444C12D2E822007ABCFF /* add.png in Resources */,
+				F5B6444D12D2E822007ABCFF /* edit.png in Resources */,
+				F5B6444E12D2E822007ABCFF /* password.png in Resources */,
+				F5B6444F12D2E822007ABCFF /* lock.png in Resources */,
+				F5B6445012D2E822007ABCFF /* configure.png in Resources */,
+				F5B6445112D2E822007ABCFF /* alert.png in Resources */,
+				F5B6445212D2E822007ABCFF /* msg.png in Resources */,
+				F5B6445312D2E822007ABCFF /* servers.png in Resources */,
+				F5B6445412D2E822007ABCFF /* zmprov.gif in Resources */,
+				F5B6445512D2E822007ABCFF /* switchBlueBg.png in Resources */,
+				F5B6445612D2E822007ABCFF /* switchOffPlain.png in Resources */,
+				F5B6445712D2E822007ABCFF /* switchThumb.png in Resources */,
+				F50CE6F912D490DB0025352F /* cos.png in Resources */,
+				F50CE6FA12D490E10025352F /* cositem.png in Resources */,
+				F50CE73312D493EE0025352F /* dl_green.png in Resources */,
+				F50CE75012D4949A0025352F /* dl_red.png in Resources */,
+				F50CE77312D4B6080025352F /* dom.png in Resources */,
+				F50CE77E12D4B67C0025352F /* cositem_green.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1D60588E0D05DD3D006BFB54 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
+				F53A12EE12B3BCE300BC6D41 /* StatusViewController.m in Sources */,
+				F53A12F212B3BD5C00BC6D41 /* StatusListViewController.m in Sources */,
+				F53A135A12B3CF5300BC6D41 /* BoxMaker.m in Sources */,
+				F53A13E812B3DA2E00BC6D41 /* BrightnessController.m in Sources */,
+				F53A144912B3E27D00BC6D41 /* ServerListViewController.m in Sources */,
+				F53A16EE12B5DB8E00BC6D41 /* GetController.m in Sources */,
+				F53A16F112B5E26C00BC6D41 /* NetworkController.m in Sources */,
+				F5C4E04512B66A5B0081ABDF /* PutController.m in Sources */,
+				F5C4E10412B70A400081ABDF /* AccountListViewController.m in Sources */,
+				F5C4E19F12B718E90081ABDF /* AccountViewController.m in Sources */,
+				F5C4E36612B761E00081ABDF /* NewAccountController.m in Sources */,
+				F5C4E41912B77C4F0081ABDF /* AccountListViewControllerExt.m in Sources */,
+				F5C4E56512B86BED0081ABDF /* ChangePasswordController.m in Sources */,
+				F5C4E57312B8767D0081ABDF /* UICustomSwitch.m in Sources */,
+				F5C4E5AD12B87C5C0081ABDF /* ZmprovController.m in Sources */,
+				F5C4E6B512B89BC70081ABDF /* AccountStatusController.m in Sources */,
+				F5C4E95B12BA6A5D0081ABDF /* AccountViewControllerExt.m in Sources */,
+				F5C4EBC512BB25900081ABDF /* ZimbraAppDelegate.m in Sources */,
+				F549F1B612BF422D00BFEDA0 /* SecurityController.m in Sources */,
+				F520972F12C0C07E006DD3F1 /* StatisticsController.m in Sources */,
+				F520973212C0C09D006DD3F1 /* ZimGraphView.m in Sources */,
+				F54A920F12C30848003643E0 /* RotatingTabBarController.m in Sources */,
+				F52A8AD912CB933D00D97FF7 /* UICustomSwitchExt.m in Sources */,
+				F50CE5C812D44D0F0025352F /* DomainListViewController.m in Sources */,
+				F50CE69212D4765F0025352F /* DLListViewController.m in Sources */,
+				F50CE6B712D4858B0025352F /* CosListViewController.m in Sources */,
+				F50CE7AE12D4C4F90025352F /* SettingViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F5B6445812D2E822007ABCFF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F5B6445912D2E822007ABCFF /* main.m in Sources */,
+				F5B6445A12D2E822007ABCFF /* StatusViewController.m in Sources */,
+				F5B6445B12D2E822007ABCFF /* StatusListViewController.m in Sources */,
+				F5B6445C12D2E822007ABCFF /* BoxMaker.m in Sources */,
+				F5B6445D12D2E822007ABCFF /* BrightnessController.m in Sources */,
+				F5B6445E12D2E822007ABCFF /* ServerListViewController.m in Sources */,
+				F5B6445F12D2E822007ABCFF /* GetController.m in Sources */,
+				F5B6446012D2E822007ABCFF /* NetworkController.m in Sources */,
+				F5B6446112D2E822007ABCFF /* PutController.m in Sources */,
+				F5B6446212D2E822007ABCFF /* AccountListViewController.m in Sources */,
+				F5B6446312D2E822007ABCFF /* AccountViewController.m in Sources */,
+				F5B6446412D2E822007ABCFF /* NewAccountController.m in Sources */,
+				F5B6446512D2E822007ABCFF /* AccountListViewControllerExt.m in Sources */,
+				F5B6446612D2E822007ABCFF /* ChangePasswordController.m in Sources */,
+				F5B6446712D2E822007ABCFF /* UICustomSwitch.m in Sources */,
+				F5B6446812D2E822007ABCFF /* ZmprovController.m in Sources */,
+				F5B6446912D2E822007ABCFF /* AccountStatusController.m in Sources */,
+				F5B6446A12D2E822007ABCFF /* AccountViewControllerExt.m in Sources */,
+				F5B6446B12D2E822007ABCFF /* ZimbraAppDelegate.m in Sources */,
+				F5B6446C12D2E822007ABCFF /* SecurityController.m in Sources */,
+				F5B6446D12D2E822007ABCFF /* StatisticsController.m in Sources */,
+				F5B6446E12D2E822007ABCFF /* ZimGraphView.m in Sources */,
+				F5B6446F12D2E822007ABCFF /* RotatingTabBarController.m in Sources */,
+				F5B6447012D2E822007ABCFF /* UICustomSwitchExt.m in Sources */,
+				F50CE61F12D452CB0025352F /* DomainListViewController.m in Sources */,
+				F50CE69E12D481C40025352F /* DLListViewController.m in Sources */,
+				F50CE6C312D489290025352F /* CosListViewController.m in Sources */,
+				F50CE7AD12D4C4F90025352F /* SettingViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1D6058940D05DD3E006BFB54 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: HAIRONG CAO (B6328BQBUM)";
+				"CODE_SIGN_IDENTITY[sdk=aspen*]" = "iPhone Developer: HAIRONG CAO (B6328BQBUM)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: HAIRONG CAO (B6328BQBUM)";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Zimbra_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				PREBINDING = NO;
+				PRODUCT_NAME = Zimbra;
+				PROVISIONING_PROFILE = "E968C65F-C46F-4185-9DCA-A3A486BFB887";
+				"PROVISIONING_PROFILE[sdk=aspen*]" = "E968C65F-C46F-4185-9DCA-A3A486BFB887";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E968C65F-C46F-4185-9DCA-A3A486BFB887";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		1D6058950D05DD3E006BFB54 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: HAIRONG CAO (B6328BQBUM)";
+				"CODE_SIGN_IDENTITY[sdk=aspen*]" = "iPhone Developer: HAIRONG CAO (B6328BQBUM)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: HAIRONG CAO (B6328BQBUM)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = HelloWorld_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				PREBINDING = NO;
+				PRODUCT_NAME = HelloWorld;
+				PROVISIONING_PROFILE = "E968C65F-C46F-4185-9DCA-A3A486BFB887";
+				"PROVISIONING_PROFILE[sdk=aspen*]" = "E968C65F-C46F-4185-9DCA-A3A486BFB887";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E968C65F-C46F-4185-9DCA-A3A486BFB887";
+				SDKROOT = iphoneos;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "Erica Sadun";
+				"CODE_SIGN_IDENTITY[sdk=aspen*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				PRODUCT_NAME = "Oh Hello";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		F5B6447612D2E822007ABCFF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: HAIRONG CAO (B6328BQBUM)";
+				"CODE_SIGN_IDENTITY[sdk=aspen*]" = "iPhone Developer: HAIRONG CAO (B6328BQBUM)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: HAIRONG CAO (B6328BQBUM)";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Zimbra_Prefix.pch;
+				INFOPLIST_FILE = "Info copy.plist";
+				PREBINDING = NO;
+				PRODUCT_NAME = Zimbra;
+				PROVISIONING_PROFILE = "E968C65F-C46F-4185-9DCA-A3A486BFB887";
+				"PROVISIONING_PROFILE[sdk=aspen*]" = "E968C65F-C46F-4185-9DCA-A3A486BFB887";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E968C65F-C46F-4185-9DCA-A3A486BFB887";
+				SDKROOT = iphonesimulator4.1;
+			};
+			name = Debug;
+		};
+		F5B6447712D2E822007ABCFF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: HAIRONG CAO (B6328BQBUM)";
+				"CODE_SIGN_IDENTITY[sdk=aspen*]" = "iPhone Developer: HAIRONG CAO (B6328BQBUM)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: HAIRONG CAO (B6328BQBUM)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = HelloWorld_Prefix.pch;
+				INFOPLIST_FILE = "Info copy.plist";
+				PREBINDING = NO;
+				PRODUCT_NAME = HelloWorld;
+				PROVISIONING_PROFILE = "E968C65F-C46F-4185-9DCA-A3A486BFB887";
+				"PROVISIONING_PROFILE[sdk=aspen*]" = "E968C65F-C46F-4185-9DCA-A3A486BFB887";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E968C65F-C46F-4185-9DCA-A3A486BFB887";
+				SDKROOT = iphonesimulator4.1;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Zimbra" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D6058940D05DD3E006BFB54 /* Debug */,
+				1D6058950D05DD3E006BFB54 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Zimbra" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F5B6447512D2E822007ABCFF /* Build configuration list for PBXNativeTarget "ZimbraSimulator" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F5B6447612D2E822007ABCFF /* Debug */,
+				F5B6447712D2E822007ABCFF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

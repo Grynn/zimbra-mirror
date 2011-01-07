@@ -1,0 +1,222 @@
+THelloWorld
+v7
+r0
+t313518428.954364
+cCheck dependencies
+cProcessInfoPlistFile "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/Info.plist" Info.plist
+cCpResource build/Debug-iphonesimulator/HelloWorld.app/Default.png Default.png
+cCpResource build/Debug-iphonesimulator/HelloWorld.app/Icon.png Icon.png
+cCpResource build/Debug-iphonesimulator/HelloWorld.app/helloworld.png helloworld.png
+cProcessPCH /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/HelloWorld_Prefix-ahkzlqsslccunzfpoflwihlvqoxn/HelloWorld_Prefix.pch.gch HelloWorld_Prefix.pch normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/HelloWorld.build/Debug-iphonesimulator/HelloWorld.build/Objects-normal/i386/main.o "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/main.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+cLd "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld" normal i386
+cGenerateDSYMFile "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app.dSYM" "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld"
+cTouch "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app"
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk
+c000000004C6C30170000000000000110
+t1282158615
+s272
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics
+c000000004C5A4DB60000000000295900
+t1280986550
+s2709760
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/Foundation.framework/Foundation
+c000000004C5A4DB0000000000029D580
+t1280986544
+s2741632
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h
+c000000004C5A4DA10000000000001466
+t1280986529
+s5222
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIKit.h
+c000000004C6241ED00000000000009CD
+t1281507821
+s2509
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/UIKit
+c000000004C6242840000000001E228C0
+t1281507972
+s31598784
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/usr/include/math.h
+c000000004A5C14A000000000000004F1
+t1247548576
+s1265
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/Default.png
+c0000000047663C800000000000004684
+t1197882496
+s18052
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/HelloWorld_Prefix.pch
+c0000000047D3485E00000000000000BD
+t1205028958
+s189
+i<Foundation/Foundation.h>
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/Icon.png
+c0000000047E0790A00000000000016D0
+t1205893386
+s5840
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app
+t1291825628
+s272
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app.dSYM
+t1291825628
+s102
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/Default.png
+t1291825628
+s18052
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld
+t1291825628
+s21628
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/Icon.png
+t1291825628
+s5840
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/Info.plist
+t1291825628
+s531
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/PkgInfo
+t1291825628
+s8
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/helloworld.png
+t1291825628
+s18052
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/HelloWorld.build/Debug-iphonesimulator/HelloWorld.build/Objects-normal/i386/HelloWorld.LinkFileList
+c000000004CFFB1DC00000000000000B4
+t1291825628
+s180
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/HelloWorld.build/Debug-iphonesimulator/HelloWorld.build/Objects-normal/i386/main.o
+t1291825628
+s59700
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/helloworld.png
+c0000000047663C800000000000004684
+t1197882496
+s18052
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/main.m
+c0000000048D99BF800000000000012AB
+t1222220792
+s4779
+i<UIKit/UIKit.h>
+i"math.h"
+
+N/var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/HelloWorld_Prefix-ahkzlqsslccunzfpoflwihlvqoxn/HelloWorld_Prefix.pch.gch
+t1291825628
+s15211536
+
+NInfo.plist
+c00000000484F3A0A0000000000000314
+t1213151754
+s788
+
+CCheck dependencies
+r0
+lSLF07#2@18"Check dependencies313518428#313518428#0(0"0(0#1#0"8247620834010738688#0"0#
+
+CCompileC build/HelloWorld.build/Debug-iphonesimulator/HelloWorld.build/Objects-normal/i386/main.o "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/main.m" normal i386 objective-c com.apple.compilers.gcc.4_2
+s313518428.855301
+e313518428.920886
+r1
+xCompileC
+xbuild/HelloWorld.build/Debug-iphonesimulator/HelloWorld.build/Objects-normal/i386/main.o
+x/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/main.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@105"Compile /Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/main.m313518428#313518428#0(0"0(0#0#97"/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/main.m8602585504#2568"    cd "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/HelloWorld.build/Debug-iphonesimulator/HelloWorld.build/HelloWorld-generated-files.hmap" "-I/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/HelloWorld.build/Debug-iphonesimulator/HelloWorld.build/HelloWorld-own-target-headers.hmap" "-I/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/HelloWorld.build/Debug-iphonesimulator/HelloWorld.build/HelloWorld-all-target-headers.hmap" -iquote "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/HelloWorld.build/Debug-iphonesimulator/HelloWorld.build/HelloWorld-project-headers.hmap" "-F/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator" "-I/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/include" "-I/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/HelloWorld.build/Debug-iphonesimulator/HelloWorld.build/DerivedSources/i386" "-I/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/HelloWorld.build/Debug-iphonesimulator/HelloWorld.build/DerivedSources" -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/HelloWorld_Prefix-ahkzlqsslccunzfpoflwihlvqoxn/HelloWorld_Prefix.pch -c "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/main.m" -o "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/HelloWorld.build/Debug-iphonesimulator/HelloWorld.build/Objects-normal/i386/main.o"0#
+
+CCpResource build/Debug-iphonesimulator/HelloWorld.app/Default.png Default.png
+s313518428.211477
+e313518428.216765
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/HelloWorld.app/Default.png
+xDefault.png
+lSLF07#2@16"Copy Default.png313518428#313518428#0(0"0(0#0#102"/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/Default.png8600798656#620"    cd "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches"    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/Default.png" "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app"0#
+
+CCpResource build/Debug-iphonesimulator/HelloWorld.app/Icon.png Icon.png
+s313518428.212207
+e313518428.216917
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/HelloWorld.app/Icon.png
+xIcon.png
+lSLF07#2@13"Copy Icon.png313518428#313518428#0(0"0(0#0#99"/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/Icon.png8603628832#617"    cd "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches"    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/Icon.png" "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app"0#
+
+CCpResource build/Debug-iphonesimulator/HelloWorld.app/helloworld.png helloworld.png
+s313518428.212738
+e313518428.217243
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/HelloWorld.app/helloworld.png
+xhelloworld.png
+lSLF07#2@19"Copy helloworld.png313518428#313518428#0(0"0(0#0#105"/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/helloworld.png8601172672#623"    cd "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches"    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -resolve-src-symlinks "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/helloworld.png" "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app"0#
+
+CGenerateDSYMFile "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app.dSYM" "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld"
+s313518428.940773
+e313518428.951813
+r1
+xGenerateDSYMFile
+x/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app.dSYM
+x/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld
+lSLF07#2@118"GenerateDSYMFile build/Debug-iphonesimulator/HelloWorld.app.dSYM build/Debug-iphonesimulator/HelloWorld.app/HelloWorld313518428#313518428#0(0"0(0#0#144"/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld8603403328#554"    cd "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches"    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/usr/bin/dsymutil "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld" -o "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app.dSYM"0#
+
+CLd "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld" normal i386
+s313518428.920974
+e313518428.940672
+r1
+xLd
+x/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld
+xnormal
+xi386
+lSLF07#2@149"Link /Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld313518428#313518428#0(0"0(0#0#0"8603191584#1185"    cd "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches"    setenv MACOSX_DEPLOYMENT_TARGET 10.6    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -arch i386 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk "-L/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator" "-F/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator" -filelist "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/HelloWorld.build/Debug-iphonesimulator/HelloWorld.build/Objects-normal/i386/HelloWorld.LinkFileList" -mmacosx-version-min=10.6 -Xlinker -objc_abi_version -Xlinker 2 -framework Foundation -framework UIKit -framework CoreGraphics -o "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld"0#
+
+CProcessInfoPlistFile "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/Info.plist" Info.plist
+s313518428.205617
+e313518428.211376
+r1
+xProcessInfoPlistFile
+x/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/Info.plist
+xInfo.plist
+lSLF07#2@18"Process Info.plist313518428#313518428#0(0"0(0#0#101"/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/Info.plist7236284523811400704#639"    cd "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches"    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    builtin-infoPlistUtility Info.plist -genpkginfo "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/PkgInfo" -expandbuildsettings -format binary -platform iphonesimulator -o "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app/Info.plist"0#
+
+CProcessPCH /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/HelloWorld_Prefix-ahkzlqsslccunzfpoflwihlvqoxn/HelloWorld_Prefix.pch.gch HelloWorld_Prefix.pch normal i386 objective-c com.apple.compilers.gcc.4_2
+s313518428.217437
+e313518428.855189
+r1
+xProcessPCH
+x/var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/HelloWorld_Prefix-ahkzlqsslccunzfpoflwihlvqoxn/HelloWorld_Prefix.pch.gch
+xHelloWorld_Prefix.pch
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@32"Precompile HelloWorld_Prefix.pch313518428#313518428#0(0"0(0#0#112"/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/HelloWorld_Prefix.pch8601292416#2403"    cd "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches"    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c-header -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/HelloWorld.build/Debug-iphonesimulator/HelloWorld.build/HelloWorld-generated-files.hmap" "-I/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/HelloWorld.build/Debug-iphonesimulator/HelloWorld.build/HelloWorld-own-target-headers.hmap" "-I/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/HelloWorld.build/Debug-iphonesimulator/HelloWorld.build/HelloWorld-all-target-headers.hmap" -iquote "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/HelloWorld.build/Debug-iphonesimulator/HelloWorld.build/HelloWorld-project-headers.hmap" "-F/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator" "-I/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/include" "-I/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/HelloWorld.build/Debug-iphonesimulator/HelloWorld.build/DerivedSources/i386" "-I/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/HelloWorld.build/Debug-iphonesimulator/HelloWorld.build/DerivedSources" -c "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/HelloWorld_Prefix.pch" -o /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/HelloWorld_Prefix-ahkzlqsslccunzfpoflwihlvqoxn/HelloWorld_Prefix.pch.gch0#
+
+CTouch "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app"
+s313518428.951934
+e313518428.954323
+r1
+xTouch
+x/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app
+lSLF07#2@139"Touch /Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app313518428#313518428#0(0"0(0#0#0"8592622656#389"    cd "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches"    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /usr/bin/touch -c "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug-iphonesimulator/HelloWorld.app"0#
+

@@ -1,0 +1,6 @@
+In file included from /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/DomainListViewController.m:9:
+/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/DomainListViewController.h:15: error: expected specifier-qualifier-list before 'GetController'
+/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/DomainListViewController.h:20: error: expected specifier-qualifier-list before 'GetController'
+/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/DomainListViewController.m:19: error: no declaration of property 'getController' found in the interface
+/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/DomainListViewController.m: In function '-[DomainListViewController tableView:cellForRowAtIndexPath:]':
+/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/DomainListViewController.m:49: warning: 'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)

@@ -1,0 +1,5 @@
+/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/ZmprovController.m: In function '-[ZmprovController loadDataToUI:]':
+/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/ZmprovController.m:155: warning: 'ZmprovController' may not respond to '-performIndicator:'
+/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/ZmprovController.m:155: warning: (Messages without a matching method signature
+/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/ZmprovController.m:155: warning: will be assumed to return 'id' and accept
+/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/ZmprovController.m:155: warning: '...' as arguments.)

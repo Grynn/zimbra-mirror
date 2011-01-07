@@ -1,0 +1,63 @@
+THelloWorld
+v7
+r1
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/Default.png
+c0000000047663C800000000000004684
+t1197882496
+s18052
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/Icon.png
+c0000000047E0790A00000000000016D0
+t1205893386
+s5840
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug/HelloWorld.app
+t2
+s0
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug/HelloWorld.app/Contents/Info.plist
+t2
+s0
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug/HelloWorld.app/Contents/PkgInfo
+t2
+s0
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug/HelloWorld.app/Contents/Resources/Default.png
+t2
+s0
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug/HelloWorld.app/Contents/Resources/Icon.png
+t2
+s0
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug/HelloWorld.app/Contents/Resources/helloworld.png
+t2
+s0
+
+N/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/helloworld.png
+c0000000047663C800000000000004684
+t1197882496
+s18052
+
+NInfo.plist
+c00000000484F3A0A0000000000000314
+t1213151754
+s788
+
+CCpResource build/Debug/HelloWorld.app/Contents/Resources/Default.png Default.png
+r0
+
+CCpResource build/Debug/HelloWorld.app/Contents/Resources/Icon.png Icon.png
+r0
+
+CCpResource build/Debug/HelloWorld.app/Contents/Resources/helloworld.png helloworld.png
+r0
+
+CProcessInfoPlistFile "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug/HelloWorld.app/Contents/Info.plist" Info.plist
+r0
+
+CTouch "/Users/qinan/workspace/mobile/cookbook/C03 - Controllers/05a - Brightness Toolbar Swatches/build/Debug/HelloWorld.app"
+r0
+

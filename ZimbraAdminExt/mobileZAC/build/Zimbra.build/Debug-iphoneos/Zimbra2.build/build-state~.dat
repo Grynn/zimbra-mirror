@@ -1,0 +1,44 @@
+TZimbra2
+v7
+r1
+cCheck dependencies
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/ResourceRules.plist
+c000000004CB3DFCF00000000000001E5
+t1286856655
+s485
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rotate/build/Debug-iphoneos/Zimbra2.app
+t2
+s0
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rotate/build/Debug-iphoneos/Zimbra2.app/Info.plist
+t2
+s0
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rotate/build/Debug-iphoneos/Zimbra2.app/PkgInfo
+t2
+s0
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rotate/build/Debug-iphoneos/Zimbra2.app/ResourceRules.plist
+t2
+s0
+
+NZimbra2-Info.plist
+c000000004D18707100000000000002B1
+t1293447281
+s689
+
+CCheck dependencies
+r0
+lSLF07#2@18"Check dependencies315140280#315140280#0(133"[BEROR]Code Sign error: The identity 'iPhone Developer' doesn't match any valid certificate/private key pair in the default keychain1(4@125"Code Sign error: The identity 'iPhone Developer' doesn't match any valid certificate/private key pair in the default keychain315140280#18446744073709551615#0#0(1@0"0(0#1#0"8609494080#0"0#
+
+CCpResource build/Debug-iphoneos/Zimbra2.app/ResourceRules.plist /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/ResourceRules.plist
+r0
+
+CProcessInfoPlistFile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rotate/build/Debug-iphoneos/Zimbra2.app/Info.plist Zimbra2-Info.plist
+r0
+
+CTouch /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rotate/build/Debug-iphoneos/Zimbra2.app
+r0
+

@@ -1,0 +1,1530 @@
+TZimbraSimulator
+v7
+r0
+t315902781.466028
+cCheck dependencies
+cProcessInfoPlistFile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/Info.plist "Info copy.plist"
+cCpResource build/Debug-iphonesimulator/Zimbra.app/Default.png Default.png
+cCpResource build/Debug-iphonesimulator/Zimbra.app/helloworld.png helloworld.png
+cCpResource build/Debug-iphonesimulator/Zimbra.app/imgserver2.jpg ../../../tmp/imgserver2.jpg
+cCpResource build/Debug-iphonesimulator/Zimbra.app/Icon.png Icon.png
+cCpResource build/Debug-iphonesimulator/Zimbra.app/green.png green.png
+cCpResource build/Debug-iphonesimulator/Zimbra.app/red.png red.png
+cCpResource build/Debug-iphonesimulator/Zimbra.app/yellow.png yellow.png
+cCpResource build/Debug-iphonesimulator/Zimbra.app/account.png account.png
+cCpResource build/Debug-iphonesimulator/Zimbra.app/account_blue.png account_blue.png
+cCpResource build/Debug-iphonesimulator/Zimbra.app/account_red.png account_red.png
+cCpResource build/Debug-iphonesimulator/Zimbra.app/account_black.png account_black.png
+cCpResource build/Debug-iphonesimulator/Zimbra.app/add.png add.png
+cCpResource build/Debug-iphonesimulator/Zimbra.app/edit.png edit.png
+cCpResource build/Debug-iphonesimulator/Zimbra.app/password.png password.png
+cCpResource build/Debug-iphonesimulator/Zimbra.app/lock.png lock.png
+cCpResource build/Debug-iphonesimulator/Zimbra.app/configure.png configure.png
+cCpResource build/Debug-iphonesimulator/Zimbra.app/alert.png alert.png
+cCpResource build/Debug-iphonesimulator/Zimbra.app/msg.png msg.png
+cCpResource build/Debug-iphonesimulator/Zimbra.app/servers.png servers.png
+cCpResource build/Debug-iphonesimulator/Zimbra.app/zmprov.gif zmprov.gif
+cCpResource build/Debug-iphonesimulator/Zimbra.app/switchBlueBg.png switchBlueBg.png
+cCpResource build/Debug-iphonesimulator/Zimbra.app/switchOffPlain.png switchOffPlain.png
+cCpResource build/Debug-iphonesimulator/Zimbra.app/switchThumb.png switchThumb.png
+cProcessPCH /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch.gch Zimbra_Prefix.pch normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/main.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/main.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/StatusViewController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusViewController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/StatusListViewController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusListViewController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/BoxMaker.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/BoxMaker.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/BrightnessController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/BrightnessController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ServerListViewController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/GetController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/NetworkController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/NetworkController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/PutController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountListViewController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountViewController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountViewController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/NewAccountController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/NewAccountController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountListViewControllerExt.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ChangePasswordController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ChangePasswordController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/UICustomSwitch.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/UICustomSwitch.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ZmprovController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZmprovController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountStatusController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountStatusController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountViewControllerExt.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountViewControllerExt.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ZimbraAppDelegate.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraAppDelegate.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/SecurityController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/StatisticsController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatisticsController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ZimGraphView.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimGraphView.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/RotatingTabBarController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/RotatingTabBarController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/UICustomSwitchExt.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/UICustomSwitchExt.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cLd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/Zimbra normal i386
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk
+c000000004C6C30170000000000000110
+t1282158615
+s272
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics
+c000000004C5A4DB60000000000295900
+t1280986550
+s2709760
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/Foundation.framework/Foundation
+c000000004C5A4DB0000000000029D580
+t1280986544
+s2741632
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h
+c000000004C5A4DA10000000000001466
+t1280986529
+s5222
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/QuartzCore.h
+c000000004C5A505200000000000000C4
+t1280987218
+s196
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIKit.h
+c000000004C6241ED00000000000009CD
+t1281507821
+s2509
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/UIKit
+c000000004C6242840000000001E228C0
+t1281507972
+s31598784
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/usr/include/math.h
+c000000004A5C14A000000000000004F1
+t1247548576
+s1265
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/../../../tmp/imgserver2.jpg
+c000000004D03949300000000000002AB
+t1292080275
+s683
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.h
+c000000004D07371A0000000000000220
+t1292318490
+s544
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m
+c000000004D07463100000000000023B8
+t1292322353
+s9144
+i"AccountListViewController.h"
+i"AccountViewController.h"
+i"BoxMaker.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.h
+c000000004D103FD100000000000004B4
+t1292910545
+s1204
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m
+c000000004D23FFE10000000000004832
+t1294204897
+s18482
+i"ZimbraAppDelegate.h"
+i"AccountListViewControllerExt.h"
+i"AccountViewControllerExt.h"
+i"GetController.h"
+i"PutController.h"
+i"BoxMaker.h"
+i"SecurityController.h"
+i"NewAccountController.h"
+i"QuartzCore/QuartzCore.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountStatusController.h
+c000000004D10393C000000000000036E
+t1292908860
+s878
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountStatusController.m
+c000000004D10366F0000000000002897
+t1292908143
+s10391
+i"ZimbraAppDelegate.h"
+i"AccountStatusController.h"
+i"BoxMaker.h"
+i"UICustomSwitch.h"
+i"GetController.h"
+i"PutController.h"
+i"SecurityController.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountViewController.h
+c000000004D06E18C00000000000000E2
+t1292296588
+s226
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountViewController.m
+c000000004D06E4340000000000001245
+t1292297268
+s4677
+i"AccountViewController.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountViewControllerExt.h
+c000000004D0AF90D000000000000031F
+t1292564749
+s799
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountViewControllerExt.m
+c000000004D24021F00000000000018A9
+t1294205471
+s6313
+i"AccountViewControllerExt.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/BoxMaker.h
+c000000004D08C3C9000000000000011A
+t1292420041
+s282
+i<Foundation/Foundation.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/BoxMaker.m
+c000000004D08C3FC0000000000000C73
+t1292420092
+s3187
+i"BoxMaker.h"
+i"math.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/BrightnessController.h
+c000000004D03AA40000000000000012D
+t1292085824
+s301
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/BrightnessController.m
+c000000004D064830000000000000043B
+t1292257328
+s1083
+i"BrightnessController.h"
+i"BoxMaker.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ChangePasswordController.h
+c000000004D10394B0000000000000232
+t1292908875
+s562
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ChangePasswordController.m
+c000000004D103A230000000000001F20
+t1292909091
+s7968
+i"ZimbraAppDelegate.h"
+i"ChangePasswordController.h"
+i"BoxMaker.h"
+i"UICustomSwitch.h"
+i"PutController.h"
+i"SecurityController.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/CosListViewController.h
+c000000004D2412A9000000000000011E
+t1294209705
+s286
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/Default.png
+c000000004D102C460000000000025B2B
+t1292905542
+s154411
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.h
+c000000004D0C86C30000000000000654
+t1292666563
+s1620
+i<Foundation/Foundation.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m
+c000000004D22D78B0000000000003963
+t1294129035
+s14691
+i"GetController.h"
+i"NetworkController.h"
+i"ServerListViewController.h"
+i"AccountListViewControllerExt.h"
+i"AccountStatusController.h"
+i"ZmprovController.h"
+i"StatisticsController.h"
+i"StatusListViewController.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/Icon.png
+c000000004D044F880000000000000CE4
+t1292128136
+s3300
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/NetworkController.h
+c000000004D05D3FE00000000000001F0
+t1292227582
+s496
+i<Foundation/Foundation.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/NetworkController.m
+c000000004D05D40B0000000000000949
+t1292227595
+s2377
+i"NetworkController.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/NewAccountController.h
+c000000004D103DA900000000000003D1
+t1292909993
+s977
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/NewAccountController.m
+c000000004D1B5E9F00000000000036ED
+t1293639327
+s14061
+i"ZimbraAppDelegate.h"
+i"NewAccountController.h"
+i"BoxMaker.h"
+i"UICustomSwitch.h"
+i"PutController.h"
+i"SecurityController.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.h
+c000000004D0B447C0000000000000397
+t1292584060
+s919
+i<Foundation/Foundation.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m
+c000000004D12D1CC00000000000020CE
+t1293078988
+s8398
+i"PutController.h"
+i"NetworkController.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/RotatingTabBarController.h
+c000000004D12D0E000000000000000E5
+t1293078752
+s229
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/RotatingTabBarController.m
+c000000004D12F1A40000000000000517
+t1293087140
+s1303
+i"RotatingTabBarController.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.h
+c000000004D103428000000000000034B
+t1292907560
+s843
+i<Foundation/Foundation.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m
+c000000004D104507000000000000117B
+t1292911879
+s4475
+i"SecurityController.h"
+i"ZmprovController.h"
+i"AccountStatusController.h"
+i"ChangePasswordController.h"
+i"NewAccountController.h"
+i"AccountListViewControllerExt.h"
+i"StatusListViewController.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.h
+c000000004D10461700000000000001D9
+t1292912151
+s473
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m
+c000000004D22BF310000000000002494
+t1294122801
+s9364
+i"ZimbraAppDelegate.h"
+i"ServerListViewController.h"
+i"StatusListViewController.h"
+i"StatisticsController.h"
+i"BoxMaker.h"
+i"GetController.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatisticsController.h
+c000000004D22BF9300000000000002CD
+t1294122899
+s717
+i"ZimGraphView.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatisticsController.m
+c000000004D22D6A700000000000027A5
+t1294128807
+s10149
+i"StatisticsController.h"
+i"StatusListViewController.h"
+i"GetController.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusListViewController.h
+c000000004D22DC610000000000000497
+t1294130273
+s1175
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusListViewController.m
+c000000004D22E26400000000000025D0
+t1294131812
+s9680
+i"ZimbraAppDelegate.h"
+i"StatusListViewController.h"
+i"StatusViewController.h"
+i"GetController.h"
+i"PutController.h"
+i"BoxMaker.h"
+i"SecurityController.h"
+i"StatisticsController.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusViewController.h
+c000000004D04A6FA00000000000000E0
+t1292150522
+s224
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusViewController.m
+c000000004D05A2D000000000000013B2
+t1292214992
+s5042
+i"StatusViewController.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/UICustomSwitch.h
+c000000004D1B5ADE00000000000001E2
+t1293638366
+s482
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/UICustomSwitch.m
+c000000004D1B5AA800000000000004DE
+t1293638312
+s1246
+i"UICustomSwitch.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/UICustomSwitchExt.h
+c000000004D1B5C140000000000000305
+t1293638676
+s773
+i<Foundation/Foundation.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/UICustomSwitchExt.m
+c000000004D1B5C690000000000001A82
+t1293638761
+s6786
+i"UICustomSwitchExt.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimGraphView.h
+c000000004D10893E0000000000000C52
+t1292929342
+s3154
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimGraphView.m
+c000000004D1089710000000000002218
+t1292929393
+s8728
+i"ZimGraphView.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraAppDelegate.h
+c000000004D103301000000000000032A
+t1292907265
+s810
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraAppDelegate.m
+c000000004D2413A100000000000019B9
+t1294209953
+s6585
+i"ZimbraAppDelegate.h"
+i"math.h"
+i"ServerListViewController.h"
+i"BoxMaker.h"
+i"BrightnessController.h"
+i"AccountListViewController.h"
+i"NewAccountController.h"
+i"AccountListViewControllerExt.h"
+i"ChangePasswordController.h"
+i"ZmprovController.h"
+i"AccountStatusController.h"
+i"SecurityController.h"
+i"RotatingTabBarController.h"
+i"CosListViewController.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraSimulator-Info.plist
+c000000004D22AB4E00000000000002A3
+t1294117710
+s675
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/Zimbra_Prefix.pch
+c000000004D03AA1300000000000000B5
+t1292085779
+s181
+i<Foundation/Foundation.h>
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZmprovController.h
+c000000004D10313400000000000002C1
+t1292906804
+s705
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZmprovController.m
+c000000004D1033FD0000000000001C3C
+t1292907517
+s7228
+i"ZimbraAppDelegate.h"
+i"ZmprovController.h"
+i"BoxMaker.h"
+i"GetController.h"
+i"PutController.h"
+i"SecurityController.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/account.png
+c0000000047E9895C00000000000049F2
+t1206487388
+s18930
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/account_black.png
+c0000000047E9895C000000000000384C
+t1206487388
+s14412
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/account_blue.png
+c0000000047E989640000000000002F79
+t1206487396
+s12153
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/account_red.png
+c0000000047E9896400000000000034DB
+t1206487396
+s13531
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/add.png
+c0000000047E9896600000000000023BE
+t1206487398
+s9150
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/alert.png
+c0000000047E9896200000000000031C7
+t1206487394
+s12743
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app
+t2
+s0
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app.dSYM
+t2
+s0
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/Default.png
+t1294209979
+s154411
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/Icon.png
+t1294209979
+s3300
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/Info.plist
+t1294209979
+s528
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/PkgInfo
+t1294209979
+s8
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/Zimbra
+t2
+s0
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/account.png
+t1294209979
+s18930
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/account_black.png
+t1294209979
+s14412
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/account_blue.png
+t1294209979
+s12153
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/account_red.png
+t1294209979
+s13531
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/add.png
+t1294209979
+s9150
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/alert.png
+t1294209979
+s12743
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/configure.png
+t1294209979
+s11665
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/edit.png
+t1294209979
+s5085
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/green.png
+t1294209979
+s18553
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/helloworld.png
+t1294209979
+s18052
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/imgserver2.jpg
+t1294209979
+s683
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/lock.png
+t1294209979
+s6369
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/msg.png
+t1294209979
+s26301
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/password.png
+t1294209979
+s8473
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/red.png
+t1294209979
+s18569
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/servers.png
+t1294209979
+s11831
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/switchBlueBg.png
+t1294209979
+s805
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/switchOffPlain.png
+t1294209979
+s684
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/switchThumb.png
+t1294209979
+s575
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/yellow.png
+t1294209979
+s19708
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/zmprov.gif
+t1294209979
+s1027
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/ZimbraSimulator.app
+t1294118895
+s170
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/ZimbraSimulator.app/Info.plist
+t1294118807
+s510
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/ZimbraSimulator.app/PkgInfo
+t1294118807
+s8
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/ZimbraSimulator.app/ZimbraSimulator-Info.plist
+t1294118895
+s356
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountListViewController.o
+t1294209980
+s57104
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountListViewControllerExt.o
+t1294209981
+s99872
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountStatusController.o
+t1294209981
+s72708
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountViewController.o
+t1294209980
+s46456
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountViewControllerExt.o
+t1294209981
+s61916
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/BoxMaker.o
+t1294209980
+s14164
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/BrightnessController.o
+t1294209980
+s37460
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ChangePasswordController.o
+t1294209981
+s74188
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/GetController.o
+t1294209980
+s82060
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/NetworkController.o
+t1294209980
+s18616
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/NewAccountController.o
+t1294209981
+s85028
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/PutController.o
+t1294209980
+s34540
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/RotatingTabBarController.o
+t1294209981
+s38696
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/SecurityController.o
+t1294209981
+s59728
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ServerListViewController.o
+t1294209980
+s62560
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/StatisticsController.o
+t1294209981
+s67764
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/StatusListViewController.o
+t1294209980
+s77736
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/StatusViewController.o
+t1294209980
+s46424
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/UICustomSwitch.o
+t1294209980
+s38740
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/UICustomSwitchExt.o
+t1294209981
+s64836
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ZimGraphView.o
+t1294209981
+s72072
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/Zimbra.LinkFileList
+c000000004D2413BB0000000000000FB6
+t1294209979
+s4022
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ZimbraAppDelegate.o
+t1294209981
+s65496
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ZmprovController.o
+t1294209981
+s66648
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/main.o
+t1294209980
+s6532
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/configure.png
+c0000000047E9896A0000000000002D91
+t1206487402
+s11665
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/edit.png
+c0000000047E9894E00000000000013DD
+t1206487374
+s5085
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/green.png
+c0000000047E9894A0000000000004879
+t1206487370
+s18553
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/helloworld.png
+c0000000047663C800000000000004684
+t1197882496
+s18052
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/lock.png
+c0000000047E9896600000000000018E1
+t1206487398
+s6369
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/main.m
+c000000004D0AEF9000000000000000EC
+t1292562320
+s236
+i"ZimbraAppDelegate.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/msg.png
+c0000000047E9895A00000000000066BD
+t1206487386
+s26301
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/password.png
+c0000000047E989640000000000002119
+t1206487396
+s8473
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/red.png
+c0000000047E989480000000000004889
+t1206487368
+s18569
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/servers.png
+c0000000047E9894A0000000000002E37
+t1206487370
+s11831
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/switchBlueBg.png
+c000000004AE9B3E20000000000000325
+t1256829922
+s805
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/switchOffPlain.png
+c000000004AE9B51000000000000002AC
+t1256830224
+s684
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/switchThumb.png
+c000000004B6187FD000000000000023F
+t1264683005
+s575
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/yellow.png
+c0000000047E9894A0000000000004CFC
+t1206487370
+s19708
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/zmprov.gif
+c000000004CE49BC80000000000000403
+t1290050504
+s1027
+
+N/var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch.gch
+t1294209980
+s15211536
+
+NInfo copy.plist
+c000000004D1B6CD20000000000000315
+t1293642962
+s789
+
+NZimbraSimulator-Info.plist
+c000000004D22AB4E00000000000002A3
+t1294117710
+s675
+
+CCheck dependencies
+r0
+lSLF07#2@18"Check dependencies315902779#315902780#0(0"0(0#1#0"8617050112#0"0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountListViewController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902780.747201
+e315902780.897056
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountListViewController.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m: In function '-[AccountListViewController tableView:cellForRowAtIndexPath:]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m:68: warning: 'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m:69: warning: 'setTextColor:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m:72: warning: 'setHidesAccessoryWhenEditing:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m: In function '-[AccountListViewController tableView:didSelectRowAtIndexPath:]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m:91: warning: unused variable 'newColor'
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m: In function '-[AccountListViewController loadView]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m:148: warning: 'stringWithContentsOfFile:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSString.h:383)
+lSLF07#2@98"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m315902780#315902780#0(1854"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m: In function '-[AccountListViewController tableView:cellForRowAtIndexPath:]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m:68: warning: 'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m:69: warning: 'setTextColor:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m:72: warning: 'setHidesAccessoryWhenEditing:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m: In function '-[AccountListViewController tableView:didSelectRowAtIndexPath:]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m:91: warning: unused variable 'newColor'/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m: In function '-[AccountListViewController loadView]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m:148: warning: 'stringWithContentsOfFile:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSString.h:383)5(22@194"'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)315902780#169#299#0(6@90"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m314015153#68#0#68#0#33"'*' is deprecated (declared at *)0(22@199"'setTextColor:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)315902780#468#304#0(6@90"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m314015153#69#0#69#0#33"'*' is deprecated (declared at *)0(22@215"'setHidesAccessoryWhenEditing:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)315902780#772#320#0(6@90"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m314015153#72#0#72#0#33"'*' is deprecated (declared at *)0(22@26"Unused variable 'newColor'315902780#1263#131#0(6@90"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m314015153#91#0#91#0#19"unused variable '*'0(22@209"'stringWithContentsOfFile:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSString.h:383)315902780#1539#315#0(6@90"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m314015153#148#0#148#0#33"'*' is deprecated (declared at *)0(0#0#90"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m8612439456#2263"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewController.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountListViewController.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountListViewControllerExt.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902780.835431
+e315902781.096198
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountListViewControllerExt.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m: In function '-[AccountListViewControllerExt tableView:cellForRowAtIndexPath:]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m:78: warning: 'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m:83: warning: 'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m:86: warning: 'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m:95: warning: 'setHidesAccessoryWhenEditing:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m: In function '-[AccountListViewControllerExt loadView]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m:421: warning: 'AccountListViewControllerExt' may not respond to '-startTimer'
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m:421: warning: (Messages without a matching method signature
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m:421: warning: will be assumed to return 'id' and accept
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m:421: warning: '...' as arguments.)
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m: In function '-[AccountListViewControllerExt viewWillAppear:]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m:457: warning: 'AccountListViewControllerExt' may not respond to '-startTimer'
+lSLF07#2@101"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m315902780#315902781#0(2490"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m: In function '-[AccountListViewControllerExt tableView:cellForRowAtIndexPath:]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m:78: warning: 'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m:83: warning: 'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m:86: warning: 'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m:95: warning: 'setHidesAccessoryWhenEditing:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m: In function '-[AccountListViewControllerExt loadView]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m:421: warning: 'AccountListViewControllerExt' may not respond to '-startTimer'/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m:421: warning: (Messages without a matching method signature/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m:421: warning: will be assumed to return 'id' and accept/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m:421: warning: '...' as arguments.)/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m: In function '-[AccountListViewControllerExt viewWillAppear:]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m:457: warning: 'AccountListViewControllerExt' may not respond to '-startTimer'7(22@194"'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)315902780#175#302#0(6@93"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m315897697#78#0#78#0#33"'*' is deprecated (declared at *)0(22@194"'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)315902780#477#302#0(6@93"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m315897697#83#0#83#0#33"'*' is deprecated (declared at *)0(22@194"'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)315902780#779#302#0(6@93"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m315897697#86#0#86#0#33"'*' is deprecated (declared at *)0(22@215"'setHidesAccessoryWhenEditing:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)315902780#1081#323#0(6@93"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m315897697#95#0#95#0#33"'*' is deprecated (declared at *)0(22@63"'AccountListViewControllerExt' may not respond to '-startTimer'315902780#1555#172#0(6@93"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m315897697#421#0#421#0#26"'*' may not respond to '*'0(13@108"(Messages without a matching method signature will be assumed to return 'id' and accept '...' as arguments.)315902780#1727#154#0(6@93"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m315897697#421#0#421#0#0"0(22@63"'AccountListViewControllerExt' may not respond to '-startTimer'315902780#2318#172#0(6@93"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m315897697#457#0#457#0#26"'*' may not respond to '*'0(0#0#93"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m8621466880#2269"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountListViewControllerExt.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountListViewControllerExt.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountStatusController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountStatusController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902781.064252
+e315902781.282507
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountStatusController.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountStatusController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountStatusController.m: In function '-[AccountStatusController tableView:cellForRowAtIndexPath:]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountStatusController.m:105: warning: incompatible Objective-C types assigning 'struct UIView *', expected 'struct UICustomSwitch *'
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountStatusController.m:111: warning: 'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountStatusController.m:112: warning: 'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)
+lSLF07#2@96"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountStatusController.m315902781#315902781#0(959"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountStatusController.m: In function '-[AccountStatusController tableView:cellForRowAtIndexPath:]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountStatusController.m:105: warning: incompatible Objective-C types assigning 'struct UIView *', expected 'struct UICustomSwitch *'/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountStatusController.m:111: warning: 'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountStatusController.m:112: warning: 'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)3(22@94"Incompatible Objective-C types assigning 'struct UIView *', expected 'struct UICustomSwitch *'315902781#165#198#0(6@88"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountStatusController.m314600943#105#0#105#0#58"incompatible Objective-C types assigning '*', expected '*'0(22@194"'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)315902781#363#298#0(6@88"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountStatusController.m314600943#111#0#111#0#33"'*' is deprecated (declared at *)0(22@194"'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)315902781#661#298#0(6@88"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountStatusController.m314600943#112#0#112#0#33"'*' is deprecated (declared at *)0(0#0#88"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountStatusController.m8617941408#2259"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountStatusController.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountStatusController.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountViewController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountViewController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902780.749868
+e315902780.872626
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountViewController.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountViewController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@94"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountViewController.m315902780#315902780#0(0"0(0#0#86"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountViewController.m8612610304#2255"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountViewController.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountViewController.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountViewControllerExt.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountViewControllerExt.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902781.070539
+e315902781.255004
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountViewControllerExt.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountViewControllerExt.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@97"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountViewControllerExt.m315902781#315902781#0(0"0(0#0#89"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountViewControllerExt.m8612942656#2261"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/AccountViewControllerExt.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/AccountViewControllerExt.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/BoxMaker.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/BoxMaker.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902780.501789
+e315902780.585130
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/BoxMaker.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/BoxMaker.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@81"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/BoxMaker.m315902780#315902780#0(0"0(0#0#73"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/BoxMaker.m8619391328#2229"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/BoxMaker.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/BoxMaker.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/BrightnessController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/BrightnessController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902780.558273
+e315902780.659932
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/BrightnessController.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/BrightnessController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@93"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/BrightnessController.m315902780#315902780#0(0"0(0#0#85"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/BrightnessController.m8618356672#2253"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/BrightnessController.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/BrightnessController.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ChangePasswordController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ChangePasswordController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902780.872896
+e315902781.064103
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ChangePasswordController.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ChangePasswordController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@97"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ChangePasswordController.m315902780#315902781#0(0"0(0#0#89"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ChangePasswordController.m8617083904#2261"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ChangePasswordController.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ChangePasswordController.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/GetController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902780.604888
+e315902780.835284
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/GetController.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m: In function '-[GetController startGetController]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m:107: warning: 'GetController' may not respond to '-_startReceive'
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m:107: warning: (Messages without a matching method signature
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m:107: warning: will be assumed to return 'id' and accept
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m:107: warning: '...' as arguments.)
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m: In function '-[GetController _receiveDidStopWithStatus:]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m:125: warning: 'stringWithContentsOfFile:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSString.h:383)
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m:131: warning: format not a string literal and no format arguments
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m:199: warning: 'GetController' may not respond to '-_addDataInUIView'
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m: In function '-[GetController _addDataInUIView]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m:210: warning: 'ZmprovController' may not respond to '-loadDataToUI:'
+lSLF07#2@86"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m315902780#315902780#0(1676"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m: In function '-[GetController startGetController]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m:107: warning: 'GetController' may not respond to '-_startReceive'/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m:107: warning: (Messages without a matching method signature/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m:107: warning: will be assumed to return 'id' and accept/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m:107: warning: '...' as arguments.)/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m: In function '-[GetController _receiveDidStopWithStatus:]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m:125: warning: 'stringWithContentsOfFile:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSString.h:383)/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m:131: warning: format not a string literal and no format arguments/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m:199: warning: 'GetController' may not respond to '-_addDataInUIView'/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m: In function '-[GetController _addDataInUIView]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m:210: warning: 'ZmprovController' may not respond to '-loadDataToUI:'6(22@51"'GetController' may not respond to '-_startReceive'315902780#131#145#0(6@78"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m315821835#107#0#107#0#26"'*' may not respond to '*'0(13@108"(Messages without a matching method signature will be assumed to return 'id' and accept '...' as arguments.)315902780#276#139#0(6@78"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m315821835#107#0#107#0#0"0(22@209"'stringWithContentsOfFile:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/Foundation.framework/Headers/NSString.h:383)315902780#803#303#0(6@78"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m315821835#125#0#125#0#33"'*' is deprecated (declared at *)0(22@51"Format not a string literal and no format arguments315902780#1106#145#0(6@78"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m315821835#131#0#131#0#51"format not a string literal and no format arguments0(22@54"'GetController' may not respond to '-_addDataInUIView'315902780#1251#148#0(6@78"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m315821835#199#0#199#0#26"'*' may not respond to '*'0(22@54"'ZmprovController' may not respond to '-loadDataToUI:'315902780#1528#148#0(6@78"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m315821835#210#0#210#0#26"'*' may not respond to '*'0(0#0#78"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m8613707872#2239"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/GetController.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/GetController.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/NetworkController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/NetworkController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902780.660065
+e315902780.749618
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/NetworkController.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/NetworkController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@90"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/NetworkController.m315902780#315902780#0(0"0(0#0#82"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/NetworkController.m8621146880#2247"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/NetworkController.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/NetworkController.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/NewAccountController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/NewAccountController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902780.810728
+e315902781.070411
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/NewAccountController.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/NewAccountController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@93"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/NewAccountController.m315902780#315902781#0(0"0(0#0#85"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/NewAccountController.m8611692896#2253"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/NewAccountController.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/NewAccountController.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/PutController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902780.674704
+e315902780.810587
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/PutController.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m: In function '-[PutController startPutController:]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m:62: warning: format not a string literal and no format arguments
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m:63: warning: 'PutController' may not respond to '-_startSend:'
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m:63: warning: (Messages without a matching method signature
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m:63: warning: will be assumed to return 'id' and accept
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m:63: warning: '...' as arguments.)
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m: In function '-[PutController _saveStringTofile:]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m:86: warning: format not a string literal and no format arguments
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m:87: warning: 'PutController' may not respond to '-_startSend:'
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m: In function '-[PutController _startSend:]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m:164: warning: 'PutController' may not respond to '-_sendDidStart'
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m: In function '-[PutController _stopSendWithStatus:]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m:178: warning: 'PutController' may not respond to '-_sendDidStopWithStatus:'
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m: In function '-[PutController _sendDidStopWithStatus:]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m:196: warning: format not a string literal and no format arguments
+lSLF07#2@86"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m315902780#315902780#0(2058"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m: In function '-[PutController startPutController:]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m:62: warning: format not a string literal and no format arguments/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m:63: warning: 'PutController' may not respond to '-_startSend:'/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m:63: warning: (Messages without a matching method signature/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m:63: warning: will be assumed to return 'id' and accept/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m:63: warning: '...' as arguments.)/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m: In function '-[PutController _saveStringTofile:]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m:86: warning: format not a string literal and no format arguments/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m:87: warning: 'PutController' may not respond to '-_startSend:'/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m: In function '-[PutController _startSend:]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m:164: warning: 'PutController' may not respond to '-_sendDidStart'/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m: In function '-[PutController _stopSendWithStatus:]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m:178: warning: 'PutController' may not respond to '-_sendDidStopWithStatus:'/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m: In function '-[PutController _sendDidStopWithStatus:]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m:196: warning: format not a string literal and no format arguments8(22@51"Format not a string literal and no format arguments315902780#132#144#0(6@78"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m314771788#62#0#62#0#51"format not a string literal and no format arguments0(22@49"'PutController' may not respond to '-_startSend:'315902780#276#142#0(6@78"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m314771788#63#0#63#0#26"'*' may not respond to '*'0(13@108"(Messages without a matching method signature will be assumed to return 'id' and accept '...' as arguments.)315902780#418#138#0(6@78"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m314771788#63#0#63#0#0"0(22@51"Format not a string literal and no format arguments315902780#934#144#0(6@78"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m314771788#86#0#86#0#51"format not a string literal and no format arguments0(22@49"'PutController' may not respond to '-_startSend:'315902780#1078#142#0(6@78"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m314771788#87#0#87#0#26"'*' may not respond to '*'0(22@51"'PutController' may not respond to '-_sendDidStart'315902780#1344#145#0(6@78"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m314771788#164#0#164#0#26"'*' may not respond to '*'0(22@61"'PutController' may not respond to '-_sendDidStopWithStatus:'315902780#1622#155#0(6@78"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m314771788#178#0#178#0#26"'*' may not respond to '*'0(22@51"Format not a string literal and no format arguments315902780#1913#145#0(6@78"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m314771788#196#0#196#0#51"format not a string literal and no format arguments0(0#0#78"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m8618326080#2239"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/PutController.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/PutController.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/RotatingTabBarController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/RotatingTabBarController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902781.256850
+e315902781.343134
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/RotatingTabBarController.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/RotatingTabBarController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/RotatingTabBarController.m: In function '-[RotatingTabBarController didRotateFromInterfaceOrientation:]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/RotatingTabBarController.m:21: warning: 'RotatingTabBarController' may not respond to '-adjustViewsForOrientation:'
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/RotatingTabBarController.m:21: warning: (Messages without a matching method signature
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/RotatingTabBarController.m:21: warning: will be assumed to return 'id' and accept
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/RotatingTabBarController.m:21: warning: '...' as arguments.)
+lSLF07#2@97"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/RotatingTabBarController.m315902781#315902781#0(766"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/RotatingTabBarController.m: In function '-[RotatingTabBarController didRotateFromInterfaceOrientation:]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/RotatingTabBarController.m:21: warning: 'RotatingTabBarController' may not respond to '-adjustViewsForOrientation:'/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/RotatingTabBarController.m:21: warning: (Messages without a matching method signature/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/RotatingTabBarController.m:21: warning: will be assumed to return 'id' and accept/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/RotatingTabBarController.m:21: warning: '...' as arguments.)2(22@75"'RotatingTabBarController' may not respond to '-adjustViewsForOrientation:'315902781#169#179#0(6@89"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/RotatingTabBarController.m314779940#21#0#21#0#26"'*' may not respond to '*'0(13@108"(Messages without a matching method signature will be assumed to return 'id' and accept '...' as arguments.)315902781#348#149#0(6@89"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/RotatingTabBarController.m314779940#21#0#21#0#0"0(0#0#89"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/RotatingTabBarController.m8612956960#2261"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/RotatingTabBarController.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/RotatingTabBarController.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/SecurityController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902781.139998
+e315902781.256742
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/SecurityController.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m: In function '-[SecurityController alertView:clickedButtonAtIndex:]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:28: warning: 'UIAlertView' may not respond to '-textFieldAtIndex:'
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:28: warning: (Messages without a matching method signature
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:28: warning: will be assumed to return 'id' and accept
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:28: warning: '...' as arguments.)
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:28: warning: initialization discards qualifiers from pointer target type
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:29: warning: 'UIAlertView' may not respond to '-textFieldAtIndex:'
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:29: warning: initialization discards qualifiers from pointer target type
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:80: warning: 'SecurityController' may not respond to '-loginDialog:'
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m: In function '-[SecurityController loginDialog:]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:99: warning: 'UIAlertView' may not respond to '-addTextFieldWithValue:label:'
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:100: warning: 'UIAlertView' may not respond to '-addTextFieldWithValue:label:'
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:103: warning: 'UIAlertView' may not respond to '-textFieldAtIndex:'
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:111: warning: 'UIAlertView' may not respond to '-textFieldAtIndex:'
+lSLF07#2@91"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m315902781#315902781#0(2087"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m: In function '-[SecurityController alertView:clickedButtonAtIndex:]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:28: warning: 'UIAlertView' may not respond to '-textFieldAtIndex:'/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:28: warning: (Messages without a matching method signature/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:28: warning: will be assumed to return 'id' and accept/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:28: warning: '...' as arguments.)/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:28: warning: initialization discards qualifiers from pointer target type/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:29: warning: 'UIAlertView' may not respond to '-textFieldAtIndex:'/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:29: warning: initialization discards qualifiers from pointer target type/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:80: warning: 'SecurityController' may not respond to '-loginDialog:'/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m: In function '-[SecurityController loginDialog:]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:99: warning: 'UIAlertView' may not respond to '-addTextFieldWithValue:label:'/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:100: warning: 'UIAlertView' may not respond to '-addTextFieldWithValue:label:'/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:103: warning: 'UIAlertView' may not respond to '-textFieldAtIndex:'/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m:111: warning: 'UIAlertView' may not respond to '-textFieldAtIndex:'10(22@53"'UIAlertView' may not respond to '-textFieldAtIndex:'315902781#154#151#0(6@83"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m314604679#28#0#28#0#26"'*' may not respond to '*'0(13@108"(Messages without a matching method signature will be assumed to return 'id' and accept '...' as arguments.)315902781#305#143#0(6@83"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m314604679#28#0#28#0#0"0(22@59"Initialization discards qualifiers from pointer target type315902781#705#157#0(6@83"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m314604679#28#0#28#0#0"0(22@53"'UIAlertView' may not respond to '-textFieldAtIndex:'315902781#862#151#0(6@83"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m314604679#29#0#29#0#26"'*' may not respond to '*'0(22@59"Initialization discards qualifiers from pointer target type315902781#1013#157#0(6@83"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m314604679#29#0#29#0#0"0(22@55"'SecurityController' may not respond to '-loginDialog:'315902781#1170#153#0(6@83"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m314604679#80#0#80#0#26"'*' may not respond to '*'0(22@64"'UIAlertView' may not respond to '-addTextFieldWithValue:label:'315902781#1458#162#0(6@83"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m314604679#99#0#99#0#26"'*' may not respond to '*'0(22@64"'UIAlertView' may not respond to '-addTextFieldWithValue:label:'315902781#1620#163#0(6@83"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m314604679#100#0#100#0#26"'*' may not respond to '*'0(22@53"'UIAlertView' may not respond to '-textFieldAtIndex:'315902781#1783#152#0(6@83"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m314604679#103#0#103#0#26"'*' may not respond to '*'0(22@53"'UIAlertView' may not respond to '-textFieldAtIndex:'315902781#1935#152#0(6@83"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m314604679#111#0#111#0#26"'*' may not respond to '*'0(0#0#83"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m8620537792#2249"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/SecurityController.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/SecurityController.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ServerListViewController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902780.585276
+e315902780.747052
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ServerListViewController.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m: In function '-[ServerListViewController tableView:cellForRowAtIndexPath:]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m:90: warning: 'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m:92: warning: 'setHidesAccessoryWhenEditing:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m: In function '-[ServerListViewController logout]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m:168: warning: no '-loginMain' method found
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m:168: warning: (Messages without a matching method signature
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m:168: warning: will be assumed to return 'id' and accept
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m:168: warning: '...' as arguments.)
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m: In function '-[ServerListViewController loadView]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m:237: warning: format not a string literal and no format arguments
+lSLF07#2@97"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m315902780#315902780#0(1778"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m: In function '-[ServerListViewController tableView:cellForRowAtIndexPath:]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m:90: warning: 'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m:92: warning: 'setHidesAccessoryWhenEditing:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m: In function '-[ServerListViewController logout]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m:168: warning: no '-loginMain' method found/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m:168: warning: (Messages without a matching method signature/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m:168: warning: will be assumed to return 'id' and accept/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m:168: warning: '...' as arguments.)/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m: In function '-[ServerListViewController loadView]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m:237: warning: format not a string literal and no format arguments5(22@194"'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)315902780#167#298#0(6@89"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m315815601#90#0#90#0#33"'*' is deprecated (declared at *)0(22@215"'setHidesAccessoryWhenEditing:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)315902780#465#319#0(6@89"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m315815601#92#0#92#0#33"'*' is deprecated (declared at *)0(22@28"No '-loginMain' method found315902780#925#133#0(6@89"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m315815601#168#0#168#0#19"no '*' method found0(13@108"(Messages without a matching method signature will be assumed to return 'id' and accept '...' as arguments.)315902780#1058#150#0(6@89"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m315815601#168#0#168#0#0"0(22@51"Format not a string literal and no format arguments315902780#1622#156#0(6@89"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m315815601#237#0#237#0#51"format not a string literal and no format arguments0(0#0#89"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m8617002208#2261"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ServerListViewController.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ServerListViewController.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/StatisticsController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatisticsController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902781.238473
+e315902781.395940
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/StatisticsController.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatisticsController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@93"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatisticsController.m315902781#315902781#0(0"0(0#0#85"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatisticsController.m8621839424#2253"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatisticsController.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/StatisticsController.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/StatusListViewController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusListViewController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902780.500394
+e315902780.674577
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/StatusListViewController.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusListViewController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusListViewController.m: In function '-[StatusListViewController tableView:cellForRowAtIndexPath:]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusListViewController.m:83: warning: 'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)
+lSLF07#2@97"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusListViewController.m315902780#315902780#0(465"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusListViewController.m: In function '-[StatusListViewController tableView:cellForRowAtIndexPath:]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusListViewController.m:83: warning: 'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)1(22@194"'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)315902780#167#298#0(6@89"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusListViewController.m315824612#83#0#83#0#33"'*' is deprecated (declared at *)0(0#0#89"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusListViewController.m8619969440#2261"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusListViewController.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/StatusListViewController.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/StatusViewController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusViewController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902780.499174
+e315902780.604735
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/StatusViewController.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusViewController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@93"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusViewController.m315902780#315902780#0(0"0(0#0#85"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusViewController.m8620588832#2253"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/StatusViewController.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/StatusViewController.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/UICustomSwitch.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/UICustomSwitch.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902780.897196
+e315902780.978809
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/UICustomSwitch.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/UICustomSwitch.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@87"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/UICustomSwitch.m315902780#315902780#0(0"0(0#0#79"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/UICustomSwitch.m8613551264#2241"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/UICustomSwitch.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/UICustomSwitch.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/UICustomSwitchExt.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/UICustomSwitchExt.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902781.282658
+e315902781.410682
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/UICustomSwitchExt.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/UICustomSwitchExt.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@90"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/UICustomSwitchExt.m315902781#315902781#0(0"0(0#0#82"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/UICustomSwitchExt.m8612296896#2247"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/UICustomSwitchExt.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/UICustomSwitchExt.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ZimGraphView.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimGraphView.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902781.255161
+e315902781.424285
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ZimGraphView.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimGraphView.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@85"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimGraphView.m315902781#315902781#0(0"0(0#0#77"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimGraphView.m8618757152#2237"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimGraphView.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ZimGraphView.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ZimbraAppDelegate.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraAppDelegate.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902781.096467
+e315902781.238321
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ZimbraAppDelegate.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraAppDelegate.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraAppDelegate.m: In function '-[ZimbraAppDelegate application:didRegisterForRemoteNotificationsWithDeviceToken:]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraAppDelegate.m:162: warning: format not a string literal and no format arguments
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraAppDelegate.m: In function '-[ZimbraAppDelegate application:didFailToRegisterForRemoteNotificationsWithError:]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraAppDelegate.m:169: warning: format not a string literal and no format arguments
+lSLF07#2@90"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraAppDelegate.m315902781#315902781#0(662"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraAppDelegate.m: In function '-[ZimbraAppDelegate application:didRegisterForRemoteNotificationsWithDeviceToken:]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraAppDelegate.m:162: warning: format not a string literal and no format arguments/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraAppDelegate.m: In function '-[ZimbraAppDelegate application:didFailToRegisterForRemoteNotificationsWithError:]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraAppDelegate.m:169: warning: format not a string literal and no format arguments2(22@51"Format not a string literal and no format arguments315902781#182#149#0(6@82"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraAppDelegate.m315902753#162#0#162#0#51"format not a string literal and no format arguments0(22@51"Format not a string literal and no format arguments315902781#513#149#0(6@82"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraAppDelegate.m315902753#169#0#169#0#51"format not a string literal and no format arguments0(0#0#82"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraAppDelegate.m8615295904#2247"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraAppDelegate.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ZimbraAppDelegate.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ZmprovController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZmprovController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902780.978977
+e315902781.139850
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ZmprovController.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZmprovController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZmprovController.m: In function '-[ZmprovController loadDataToUI:]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZmprovController.m:155: warning: 'ZmprovController' may not respond to '-performIndicator:'
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZmprovController.m:155: warning: (Messages without a matching method signature
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZmprovController.m:155: warning: will be assumed to return 'id' and accept
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZmprovController.m:155: warning: '...' as arguments.)
+lSLF07#2@89"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZmprovController.m315902780#315902781#0(684"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZmprovController.m: In function '-[ZmprovController loadDataToUI:]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZmprovController.m:155: warning: 'ZmprovController' may not respond to '-performIndicator:'/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZmprovController.m:155: warning: (Messages without a matching method signature/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZmprovController.m:155: warning: will be assumed to return 'id' and accept/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZmprovController.m:155: warning: '...' as arguments.)2(22@58"'ZmprovController' may not respond to '-performIndicator:'315902781#132#155#0(6@81"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZmprovController.m314600317#155#0#155#0#26"'*' may not respond to '*'0(13@108"(Messages without a matching method signature will be assumed to return 'id' and accept '...' as arguments.)315902781#287#142#0(6@81"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZmprovController.m314600317#155#0#155#0#0"0(0#0#81"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZmprovController.m8619627488#2245"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZmprovController.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/ZmprovController.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/main.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/main.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902780.497917
+e315902780.558118
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/main.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/main.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@77"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/main.m315902780#315902780#0(0"0(0#0#69"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/main.m8621177472#2221"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/main.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/main.o0#
+
+CCopyPlistFile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/ZimbraSimulator.app/ZimbraSimulator-Info.plist ZimbraSimulator-Info.plist
+s315811694.741385
+e315811695.048146
+r1
+xCopyPlistFile
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/ZimbraSimulator.app/ZimbraSimulator-Info.plist
+xZimbraSimulator-Info.plist
+lSLF07#2@31"Copy ZimbraSimulator-Info.plist315811694#315811695#0(0"0(0#0#89"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraSimulator-Info.plist32088624093986912#457"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/Xcode/Plug-ins/CoreBuildTasks.xcplugin/Contents/Resources/copyplist --convert binary1 ZimbraSimulator-Info.plist --outdir /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/ZimbraSimulator.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/Default.png Default.png
+s315902779.584348
+e315902779.607791
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/Default.png
+xDefault.png
+lSLF07#2@16"Copy Default.png315902779#315902780#0(0"0(0#0#74"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/Default.png8612242752#540"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/Default.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/Icon.png Icon.png
+s315902779.592862
+e315902779.608242
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/Icon.png
+xIcon.png
+lSLF07#2@13"Copy Icon.png315902779#315902780#0(0"0(0#0#71"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/Icon.png8621987648#537"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/Icon.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/account.png account.png
+s315902779.605372
+e315902779.626914
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/account.png
+xaccount.png
+lSLF07#2@16"Copy account.png315902779#315902780#0(0"0(0#0#74"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/account.png8620120992#540"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/account.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/account_black.png account_black.png
+s315902779.608775
+e315902779.626472
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/account_black.png
+xaccount_black.png
+lSLF07#2@22"Copy account_black.png315902779#315902780#0(0"0(0#0#80"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/account_black.png8618963648#546"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/account_black.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/account_blue.png account_blue.png
+s315902779.606179
+e315902779.627919
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/account_blue.png
+xaccount_blue.png
+lSLF07#2@21"Copy account_blue.png315902779#315902780#0(0"0(0#0#79"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/account_blue.png8619875936#545"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/account_blue.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/account_red.png account_red.png
+s315902779.606820
+e315902779.628091
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/account_red.png
+xaccount_red.png
+lSLF07#2@20"Copy account_red.png315902779#315902780#0(0"0(0#0#78"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/account_red.png8619423552#544"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/account_red.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/add.png add.png
+s315902779.609536
+e315902779.626623
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/add.png
+xadd.png
+lSLF07#2@12"Copy add.png315902779#315902780#0(0"0(0#0#70"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/add.png8618506016#536"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/add.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/alert.png alert.png
+s315902779.624073
+e315902779.637707
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/alert.png
+xalert.png
+lSLF07#2@14"Copy alert.png315902779#315902780#0(0"0(0#0#72"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/alert.png8620980960#538"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/alert.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/configure.png configure.png
+s315902779.622146
+e315902779.637573
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/configure.png
+xconfigure.png
+lSLF07#2@18"Copy configure.png315902779#315902780#0(0"0(0#0#76"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/configure.png8622042112#542"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/configure.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/edit.png edit.png
+s315902779.610242
+e315902779.626762
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/edit.png
+xedit.png
+lSLF07#2@13"Copy edit.png315902779#315902780#0(0"0(0#0#71"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/edit.png8618172448#537"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/edit.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/green.png green.png
+s315902779.598291
+e315902779.608387
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/green.png
+xgreen.png
+lSLF07#2@14"Copy green.png315902779#315902780#0(0"0(0#0#72"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/green.png30681223438925872#538"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/green.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/helloworld.png helloworld.png
+s315902779.591518
+e315902779.607952
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/helloworld.png
+xhelloworld.png
+lSLF07#2@19"Copy helloworld.png315902779#315902780#0(0"0(0#0#77"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/helloworld.png8612008992#543"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/helloworld.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/imgserver2.jpg ../../../tmp/imgserver2.jpg
+s315902779.592213
+e315902779.608099
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/imgserver2.jpg
+x../../../tmp/imgserver2.jpg
+lSLF07#2@32"Copy ../../../tmp/imgserver2.jpg315902779#315902780#0(0"0(0#0#90"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/../../../tmp/imgserver2.jpg8611887040#556"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/../../../tmp/imgserver2.jpg /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/lock.png lock.png
+s315902779.620329
+e315902779.637448
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/lock.png
+xlock.png
+lSLF07#2@13"Copy lock.png315902779#315902780#0(0"0(0#0#71"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/lock.png8607446464#537"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/lock.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/msg.png msg.png
+s315902779.628192
+e315902779.636908
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/msg.png
+xmsg.png
+lSLF07#2@12"Copy msg.png315902779#315902780#0(0"0(0#0#70"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/msg.png8619245632#536"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/msg.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/password.png password.png
+s315902779.619550
+e315902779.637299
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/password.png
+xpassword.png
+lSLF07#2@17"Copy password.png315902779#315902780#0(0"0(0#0#75"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/password.png8613832384#541"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/password.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/red.png red.png
+s315902779.599130
+e315902779.608536
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/red.png
+xred.png
+lSLF07#2@12"Copy red.png315902779#315902780#0(0"0(0#0#70"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/red.png8621651008#536"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/red.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/servers.png servers.png
+s315902779.628971
+e315902779.637048
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/servers.png
+xservers.png
+lSLF07#2@16"Copy servers.png315902779#315902780#0(0"0(0#0#74"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/servers.png8618415392#540"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/servers.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/switchBlueBg.png switchBlueBg.png
+s315902779.630389
+e315902779.637907
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/switchBlueBg.png
+xswitchBlueBg.png
+lSLF07#2@21"Copy switchBlueBg.png315902779#315902780#0(0"0(0#0#79"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/switchBlueBg.png8617475424#545"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/switchBlueBg.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/switchOffPlain.png switchOffPlain.png
+s315902779.631095
+e315902779.641399
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/switchOffPlain.png
+xswitchOffPlain.png
+lSLF07#2@23"Copy switchOffPlain.png315902779#315902780#0(0"0(0#0#81"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/switchOffPlain.png8617129184#547"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/switchOffPlain.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/switchThumb.png switchThumb.png
+s315902779.635713
+e315902779.641949
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/switchThumb.png
+xswitchThumb.png
+lSLF07#2@20"Copy switchThumb.png315902779#315902780#0(0"0(0#0#78"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/switchThumb.png8612095296#544"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/switchThumb.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/yellow.png yellow.png
+s315902779.599817
+e315902779.608683
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/yellow.png
+xyellow.png
+lSLF07#2@15"Copy yellow.png315902779#315902780#0(0"0(0#0#73"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/yellow.png8620568640#539"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/yellow.png /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CCpResource build/Debug-iphonesimulator/Zimbra.app/zmprov.gif zmprov.gif
+s315902779.629680
+e315902779.637172
+r1
+xCpResource
+xbuild/Debug-iphonesimulator/Zimbra.app/zmprov.gif
+xzmprov.gif
+lSLF07#2@15"Copy zmprov.gif315902779#315902780#0(0"0(0#0#73"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/zmprov.gif8617868416#539"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -resolve-src-symlinks /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/zmprov.gif /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CGenerateDSYMFile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app.dSYM /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/Zimbra
+s315902381.729476
+e315902381.791400
+r1
+xGenerateDSYMFile
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app.dSYM
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/Zimbra
+lSLF07#2@106"GenerateDSYMFile build/Debug-iphonesimulator/Zimbra.app.dSYM build/Debug-iphonesimulator/Zimbra.app/Zimbra315902381#315902381#0(0"0(0#0#108"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/Zimbra8610282208#452"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/usr/bin/dsymutil /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/Zimbra -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app.dSYM0#
+
+CLd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/Zimbra normal i386
+s315902781.424372
+e315902781.465950
+r0
+xLd
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/Zimbra
+xnormal
+xi386
+oUndefined symbols:
+o  "_OBJC_CLASS_$_CosListViewController", referenced from:
+o      objc-class-ref-to-CosListViewController in ZimbraAppDelegate.o
+old: symbol(s) not found
+ocollect2: ld returned 1 exit status
+lSLF07#2@113"Link /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/Zimbra315902781#315902781#0(206"Undefined symbols:  "_OBJC_CLASS_$_CosListViewController", referenced from:      objc-class-ref-to-CosListViewController in ZimbraAppDelegate.old: symbol(s) not foundcollect2: ld returned 1 exit status4(4@55""_OBJC_CLASS_$_CosListViewController", referenced from:315902781#19#58#0(6@0"315902781#0#0#0#0#0"0(13@62"Objc-class-ref-to-CosListViewController in ZimbraAppDelegate.o315902781#77#69#0(6@0"315902781#0#0#0#0#0"0(13@19"Symbol(s) not found315902781#146#24#0(6@0"315902781#0#0#0#0#0"0(13@35"Collect2: ld returned 1 exit status315902781#170#36#0(6@0"315902781#0#0#0#0#0"0(0#0#0"8621046272#1024"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv MACOSX_DEPLOYMENT_TARGET 10.6    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -arch i386 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -L/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -filelist /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Objects-normal/i386/Zimbra.LinkFileList -mmacosx-version-min=10.6 -Xlinker -objc_abi_version -Xlinker 2 -framework Foundation -framework UIKit -framework CoreGraphics -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/Zimbra1#
+
+CProcessInfoPlistFile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/Info.plist "Info copy.plist"
+s315902779.580369
+e315902779.584244
+r1
+xProcessInfoPlistFile
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/Info.plist
+xInfo copy.plist
+lSLF07#2@23"Process Info copy.plist315902779#315902780#0(0"0(0#0#78"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/Info copy.plist8613674208#548"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    builtin-infoPlistUtility "Info copy.plist" -genpkginfo /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/PkgInfo -expandbuildsettings -format binary -platform iphonesimulator -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/Info.plist0#
+
+CProcessInfoPlistFile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/Info.plist ZimbraSimulator-Info.plist
+s315810835.663271
+e315810835.702806
+r1
+xProcessInfoPlistFile
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/Info.plist
+xZimbraSimulator-Info.plist
+lSLF07#2@34"Process ZimbraSimulator-Info.plist315810835#315810836#0(0"0(0#0#89"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraSimulator-Info.plist8623041952#557"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    builtin-infoPlistUtility ZimbraSimulator-Info.plist -genpkginfo /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/PkgInfo -expandbuildsettings -format binary -platform iphonesimulator -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app/Info.plist0#
+
+CProcessInfoPlistFile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/ZimbraSimulator.app/Info.plist ZimbraSimulator-Info.plist
+s315811607.404651
+e315811607.409291
+r1
+xProcessInfoPlistFile
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/ZimbraSimulator.app/Info.plist
+xZimbraSimulator-Info.plist
+lSLF07#2@34"Process ZimbraSimulator-Info.plist315811607#315811607#0(0"0(0#0#89"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/ZimbraSimulator-Info.plist27585015875960920#575"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    builtin-infoPlistUtility ZimbraSimulator-Info.plist -genpkginfo /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/ZimbraSimulator.app/PkgInfo -expandbuildsettings -format binary -platform iphonesimulator -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/ZimbraSimulator.app/Info.plist0#
+
+CProcessPCH /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch.gch Zimbra_Prefix.pch normal i386 objective-c com.apple.compilers.gcc.4_2
+s315902779.642029
+e315902780.497780
+r1
+xProcessPCH
+x/var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch.gch
+xZimbra_Prefix.pch
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@28"Precompile Zimbra_Prefix.pch315902779#315902780#0(0"0(0#0#80"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/Zimbra_Prefix.pch8603869376#2081"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c-header -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/Zimbra-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Zimbra.build/Debug-iphonesimulator/ZimbraSimulator.build/DerivedSources -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/Zimbra_Prefix.pch -o /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/Zimbra_Prefix-feykvischrgslxfkgbeykqeijybn/Zimbra_Prefix.pch.gch0#
+
+CTouch /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app
+s315902381.791518
+e315902381.794182
+r1
+xTouch
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app
+lSLF07#2@107"Touch /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app315902381#315902381#0(0"0(0#0#0"8610540704#325"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /usr/bin/touch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/Zimbra.app0#
+
+CTouch /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/ZimbraSimulator.app
+s315811695.048273
+e315811695.051282
+r1
+xTouch
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/ZimbraSimulator.app
+lSLF07#2@116"Touch /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/ZimbraSimulator.app315811695#315811695#0(0"0(0#0#0"8610429664#334"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /usr/bin/touch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphonesimulator/ZimbraSimulator.app0#
+

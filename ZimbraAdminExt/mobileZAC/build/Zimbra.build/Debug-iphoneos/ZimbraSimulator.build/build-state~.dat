@@ -1,0 +1,44 @@
+TZimbraSimulator
+v7
+r1
+cCheck dependencies
+
+N/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/ResourceRules.plist
+c000000004CB3DFCF00000000000001E5
+t1286856655
+s485
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/ZimbraSimulator.app
+t2
+s0
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/ZimbraSimulator.app/Info.plist
+t2
+s0
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/ZimbraSimulator.app/PkgInfo
+t2
+s0
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/ZimbraSimulator.app/ResourceRules.plist
+t2
+s0
+
+NZimbraSimulator-Info.plist
+c000000004D1ABE5500000000000002B1
+t1293598293
+s689
+
+CCheck dependencies
+r0
+lSLF07#2@18"Check dependencies315303272#315303272#0(144"[BEROR]Code Sign error: a valid provisioning profile matching the application's Identifier 'com.yourcompany.ZimbraSimulator' could not be found1(4@136"Code Sign error: a valid provisioning profile matching the application's Identifier 'com.yourcompany.ZimbraSimulator' could not be found315303272#18446744073709551615#0#0(1@0"0(0#1#0"8247620834010738688#0"0#
+
+CCpResource build/Debug-iphoneos/ZimbraSimulator.app/ResourceRules.plist /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.2.sdk/ResourceRules.plist
+r0
+
+CProcessInfoPlistFile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/ZimbraSimulator.app/Info.plist ZimbraSimulator-Info.plist
+r0
+
+CTouch /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3apn/build/Debug-iphoneos/ZimbraSimulator.app
+r0
+

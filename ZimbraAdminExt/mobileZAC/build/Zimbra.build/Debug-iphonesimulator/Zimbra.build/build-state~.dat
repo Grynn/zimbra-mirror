@@ -1,0 +1,331 @@
+TZimbra
+v7
+r0
+t313777935.117482
+cCheck dependencies
+cProcessInfoPlistFile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app/Info.plist Info.plist
+cCpResource build/Debug-iphonesimulator/HelloWorld.app/Default.png Default.png
+cCpResource build/Debug-iphonesimulator/HelloWorld.app/Icon.png Icon.png
+cCpResource build/Debug-iphonesimulator/HelloWorld.app/helloworld.png helloworld.png
+cCpResource build/Debug-iphonesimulator/HelloWorld.app/imgserver2.jpg ../../../tmp/imgserver2.jpg
+cProcessPCH /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/HelloWorld_Prefix-avijmpgxqkuzyecurpwmaeegpmdw/HelloWorld_Prefix.pch.gch HelloWorld_Prefix.pch normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/main.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/main.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/StatusViewController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusViewController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/StatusListViewController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusListViewController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/BoxMaker.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/BoxMaker.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cCompileC build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/BrightnessController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/BrightnessController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+cLd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld normal i386
+cGenerateDSYMFile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app.dSYM /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld
+cTouch /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk
+c000000004C6C30170000000000000110
+t1282158615
+s272
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics
+c000000004C5A4DB60000000000295900
+t1280986550
+s2709760
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/Foundation.framework/Foundation
+c000000004C5A4DB0000000000029D580
+t1280986544
+s2741632
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h
+c000000004C5A4DA10000000000001466
+t1280986529
+s5222
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIKit.h
+c000000004C6241ED00000000000009CD
+t1281507821
+s2509
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/UIKit
+c000000004C6242840000000001E228C0
+t1281507972
+s31598784
+
+N/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/usr/include/math.h
+c000000004A5C14A000000000000004F1
+t1247548576
+s1265
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/../../../tmp/imgserver2.jpg
+c000000004D03949300000000000002AB
+t1292080275
+s683
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/BoxMaker.h
+c000000004D039BBF0000000000000116
+t1292082111
+s278
+i<Foundation/Foundation.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/BoxMaker.m
+c000000004D039AE20000000000000AA3
+t1292081890
+s2723
+i"BoxMaker.h"
+i"math.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/BrightnessController.h
+c000000004D03A57F0000000000000131
+t1292084607
+s305
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/BrightnessController.m
+c000000004D03A5600000000000000428
+t1292084576
+s1064
+i"BrightnessController.h"
+i"BoxMaker.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/Default.png
+c0000000047663C800000000000004684
+t1197882496
+s18052
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/HelloWorld_Prefix.pch
+c0000000047D3485E00000000000000BD
+t1205028958
+s189
+i<Foundation/Foundation.h>
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/Icon.png
+c0000000047E0790A00000000000016D0
+t1205893386
+s5840
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusListViewController.h
+c000000004D038A8C0000000000000182
+t1292077708
+s386
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusListViewController.m
+c000000004D03A18B0000000000000D29
+t1292083595
+s3369
+i"StatusListViewController.h"
+i"StatusViewController.h"
+i"BoxMaker.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusViewController.h
+c000000004D038A8900000000000000DF
+t1292077705
+s223
+i<UIKit/UIKit.h>
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusViewController.m
+c000000004D03887B0000000000000211
+t1292077179
+s529
+i"StatusViewController.h"
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app
+t1292085135
+s306
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app.dSYM
+t1292085135
+s102
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app/Default.png
+t1291825628
+s18052
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld
+t1292085135
+s30508
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app/Icon.png
+t1291825628
+s5840
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app/Info.plist
+t1291825628
+s531
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app/PkgInfo
+t1291825628
+s8
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app/helloworld.png
+t1291825628
+s18052
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app/imgserver2.jpg
+t1292080544
+s683
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/BoxMaker.o
+t1292085135
+s13396
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/BrightnessController.o
+t1292085135
+s37128
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/HelloWorld.LinkFileList
+c000000004D03A78E0000000000000317
+t1292085134
+s791
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/StatusListViewController.o
+t1292085135
+s47632
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/StatusViewController.o
+t1292085135
+s35264
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/main.o
+t1292085135
+s50508
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/helloworld.png
+c0000000047663C800000000000004684
+t1197882496
+s18052
+
+N/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/main.m
+c000000004D03A5980000000000000738
+t1292084632
+s1848
+i<UIKit/UIKit.h>
+i"math.h"
+i"StatusListViewController.h"
+i"BoxMaker.h"
+i"BrightnessController.h"
+
+N/var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/HelloWorld_Prefix-avijmpgxqkuzyecurpwmaeegpmdw/HelloWorld_Prefix.pch.gch
+t1292084893
+s15211536
+
+NInfo.plist
+c00000000484F3A0A0000000000000314
+t1213151754
+s788
+
+CCheck dependencies
+r0
+lSLF07#2@18"Check dependencies313777934#313777934#0(0"0(0#1#0"8621911200#0"0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/BoxMaker.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/BoxMaker.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s313777934.934010
+e313777935.023507
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/BoxMaker.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/BoxMaker.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@84"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/BoxMaker.m313777934#313777935#0(0"0(0#0#76"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/BoxMaker.m8616803968#2223"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/HelloWorld-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/HelloWorld-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/HelloWorld-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/HelloWorld-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/HelloWorld_Prefix-avijmpgxqkuzyecurpwmaeegpmdw/HelloWorld_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/BoxMaker.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/BoxMaker.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/BrightnessController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/BrightnessController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s313777935.023657
+e313777935.078050
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/BrightnessController.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/BrightnessController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@96"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/BrightnessController.m313777935#313777935#0(0"0(0#0#88"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/BrightnessController.m8632176032#2247"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/HelloWorld-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/HelloWorld-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/HelloWorld-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/HelloWorld-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/HelloWorld_Prefix-avijmpgxqkuzyecurpwmaeegpmdw/HelloWorld_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/BrightnessController.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/BrightnessController.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/StatusListViewController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusListViewController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s313777934.933045
+e313777935.052446
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/StatusListViewController.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusListViewController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusListViewController.m: In function '-[StatusListViewController tableView:cellForRowAtIndexPath:]':
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusListViewController.m:51: warning: 'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)
+o/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusListViewController.m:53: warning: 'setHidesAccessoryWhenEditing:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)
+lSLF07#2@100"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusListViewController.m313777934#313777935#0(793"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusListViewController.m: In function '-[StatusListViewController tableView:cellForRowAtIndexPath:]':/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusListViewController.m:51: warning: 'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusListViewController.m:53: warning: 'setHidesAccessoryWhenEditing:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)2(22@194"'setText:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)313777934#170#301#0(6@92"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusListViewController.m313776395#51#0#51#0#33"'*' is deprecated (declared at *)0(22@215"'setHidesAccessoryWhenEditing:' is deprecated (declared at /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk/System/Library/Frameworks/UIKit.framework/Headers/UITableViewCell.h:211)313777934#471#322#0(6@92"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusListViewController.m313776395#53#0#53#0#33"'*' is deprecated (declared at *)0(0#0#92"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusListViewController.m8627250848#2255"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/HelloWorld-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/HelloWorld-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/HelloWorld-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/HelloWorld-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/HelloWorld_Prefix-avijmpgxqkuzyecurpwmaeegpmdw/HelloWorld_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusListViewController.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/StatusListViewController.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/StatusViewController.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusViewController.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s313777934.932044
+e313777935.025049
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/StatusViewController.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusViewController.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@96"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusViewController.m313777934#313777935#0(0"0(0#0#88"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusViewController.m8627116160#2247"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/HelloWorld-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/HelloWorld-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/HelloWorld-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/HelloWorld-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/HelloWorld_Prefix-avijmpgxqkuzyecurpwmaeegpmdw/HelloWorld_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/StatusViewController.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/StatusViewController.o0#
+
+CCompileC build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/main.o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/main.m normal i386 objective-c com.apple.compilers.gcc.4_2
+s313777934.930898
+e313777935.032425
+r1
+xCompileC
+xbuild/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/main.o
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/main.m
+xnormal
+xi386
+xobjective-c
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@80"Compile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/main.m313777934#313777935#0(0"0(0#0#72"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/main.m8619602368#2215"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename    setenv LANG en_US.US-ASCII    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -x objective-c -arch i386 -fmessage-length=0 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -fexceptions -fvisibility=hidden -mmacosx-version-min=10.6 -gdwarf-2 -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/HelloWorld-generated-files.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/HelloWorld-own-target-headers.hmap -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/HelloWorld-all-target-headers.hmap -iquote /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/HelloWorld-project-headers.hmap -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/include -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/DerivedSources/i386 -I/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/DerivedSources -include /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/HelloWorld_Prefix-avijmpgxqkuzyecurpwmaeegpmdw/HelloWorld_Prefix.pch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/main.m -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/main.o0#
+
+CCpResource build/Debug-iphonesimulator/HelloWorld.app/Default.png Default.png
+r0
+
+CCpResource build/Debug-iphonesimulator/HelloWorld.app/Icon.png Icon.png
+r0
+
+CCpResource build/Debug-iphonesimulator/HelloWorld.app/helloworld.png helloworld.png
+r0
+
+CCpResource build/Debug-iphonesimulator/HelloWorld.app/imgserver2.jpg ../../../tmp/imgserver2.jpg
+r0
+
+CGenerateDSYMFile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app.dSYM /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld
+s313777935.098100
+e313777935.115300
+r1
+xGenerateDSYMFile
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app.dSYM
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld
+lSLF07#2@118"GenerateDSYMFile build/Debug-iphonesimulator/HelloWorld.app.dSYM build/Debug-iphonesimulator/HelloWorld.app/HelloWorld313777935#313777935#0(0"0(0#0#119"/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld8619557856#473"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/usr/bin/dsymutil /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app.dSYM0#
+
+CLd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld normal i386
+s313777935.078155
+e313777935.098000
+r1
+xLd
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld
+xnormal
+xi386
+lSLF07#2@124"Link /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld313777935#313777935#0(0"0(0#0#0"8622282080#1042"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename    setenv MACOSX_DEPLOYMENT_TARGET 10.6    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -arch i386 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator4.1.sdk -L/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator -F/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator -filelist /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Zimbra.build/Debug-iphonesimulator/Zimbra.build/Objects-normal/i386/HelloWorld.LinkFileList -mmacosx-version-min=10.6 -Xlinker -objc_abi_version -Xlinker 2 -framework Foundation -framework UIKit -framework CoreGraphics -o /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app/HelloWorld0#
+
+CProcessInfoPlistFile /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app/Info.plist Info.plist
+r0
+
+CProcessPCH /var/folders/nD/nDeLngCgGPmq4wvMv+UT3E+++TI/-Caches-/com.apple.Xcode.501/SharedPrecompiledHeaders/HelloWorld_Prefix-avijmpgxqkuzyecurpwmaeegpmdw/HelloWorld_Prefix.pch.gch HelloWorld_Prefix.pch normal i386 objective-c com.apple.compilers.gcc.4_2
+r0
+
+CTouch /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app
+s313777935.115379
+e313777935.117452
+r1
+xTouch
+x/Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app
+lSLF07#2@114"Touch /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app313777935#313777935#0(0"0(0#0#0"8627590560#335"    cd /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename    setenv PATH "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /usr/bin/touch -c /Users/qinan/workspace/mobile/testbed/iPhoneZAC3/mobileZAC3rename/build/Debug-iphonesimulator/HelloWorld.app0#
+
