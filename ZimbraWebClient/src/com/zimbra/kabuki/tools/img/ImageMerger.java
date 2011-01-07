@@ -210,7 +210,7 @@ public class ImageMerger {
         processMerge(dir, listFiles(files, F_NONE), factory, ImageLayout.NONE);
         processMerge(dir, listFiles(files, F_HORIZONTAL), factory, ImageLayout.HORIZONTAL);
         processMerge(dir, listFiles(files, F_VERTICAL), factory, ImageLayout.VERTICAL);
-        processCopy(dir, dir.listFiles(F_TILE), factory);
+        processCopy(dir, listFiles(files, F_TILE), factory);
     }
 
     private void processMerge(File dir, File[] files, ImageFactory factory,
