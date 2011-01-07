@@ -2,13 +2,9 @@ package projects.ajax.tests.briefcase.document;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
 import com.thoughtworks.selenium.DefaultSelenium;
-
 import projects.ajax.core.AjaxCommonTest;
 import projects.ajax.ui.briefcase.DocumentBriefcaseEdit;
-import projects.ajax.ui.briefcase.DocumentBriefcaseNew;
-import projects.ajax.ui.briefcase.DocumentBriefcaseOpen;
 import projects.ajax.ui.briefcase.PageBriefcase.Locators;
 import framework.core.ClientSessionFactory;
 import framework.items.DocumentItem;
@@ -34,7 +30,9 @@ public class EditDocument extends AjaxCommonTest {
 	public void EditDocumentBeforeClass() throws HarnessException {
 		logger.info(this.getClass().getSimpleName() + "BeforeClass start");
 		if (startingAccount == null) {
-			if (app.zPageMain.zIsActive())
+			if (app.zPageMain.zIsActive()
+					&& app.zPageMain
+							.sIsElementPresent("css=[onclick='ZmZimbraMail._onClickLogOff();']"))
 				((DefaultSelenium) ClientSessionFactory.session().selenium())
 						.click("css=[onclick='ZmZimbraMail._onClickLogOff();']");
 			app.zPageLogin.zWaitForActive();
