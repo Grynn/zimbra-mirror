@@ -248,6 +248,23 @@ Com_Zimbra_DnD.prototype._onDrop = function(ev) {
 
 };
 
+/* Convert non-ASCII characters to valid HTML UNICODE entities */
+Com_Zimbra_DnD.prototype.convertToEntities = function (astr){
+	var bstr = '', cstr, i = 0;
+	for(i; i < astr.length; ++i){
+		if(astr.charCodeAt(i) > 127){
+			cstr = astr.charCodeAt(i).toString(10);
+			while(cstr.length < 4){
+				cstr = '0' + cstr;
+			}
+			bstr += '&#' + cstr + ';';
+		} else {
+			bstr += astr.charAt(i);
+		}
+	}
+	return bstr;
+};
+
 Com_Zimbra_DnD.prototype._uploadFiles = function(file) {
 
     try {
@@ -259,7 +276,7 @@ Com_Zimbra_DnD.prototype._uploadFiles = function(file) {
         req.setRequestHeader("Cache-Control", "no-cache");
         req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         req.setRequestHeader("Content-Type",  (file.type || "application/octet-stream") + ";");
-        req.setRequestHeader("Content-Disposition", 'attachment; filename="'+ file.fileName + '"');
+        req.setRequestHeader("Content-Disposition", 'attachment; filename="'+ this.convertToEntities(file.fileName) + '"');
 
         var tempThis = req;
         req.onreadystatechange = AjxCallback.simpleClosure(this._handleResponse, this, tempThis);
@@ -322,3 +339,19 @@ Com_Zimbra_DnD.prototype._handleResponse = function(req) {
     }
     
 };
+
+function convertToEntities(astr){
+	var bstr = '', cstr, i = 0;
+	for(i; i < astr.length; ++i){
+		if(astr.charCodeAt(i) > 127){
+			cstr = astr.charCodeAt(i).toString(10);
+			while(cstr.length < 4){
+				cstr = '0' + cstr;
+			}
+			bstr += '&#' + cstr + ';';
+		} else {
+			bstr += astr.charAt(i);
+		}
+	}
+	return bstr;
+}
