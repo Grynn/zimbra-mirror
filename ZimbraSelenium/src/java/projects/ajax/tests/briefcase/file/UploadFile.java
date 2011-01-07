@@ -1,9 +1,12 @@
 package projects.ajax.tests.briefcase.file;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
+import com.thoughtworks.selenium.DefaultSelenium;
 import projects.ajax.core.AjaxCommonTest;
+import projects.ajax.ui.AppAjaxClient;
 import projects.ajax.ui.briefcase.PageBriefcase.Locators;
+import framework.core.ClientSessionFactory;
 import framework.items.DocumentItem;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
@@ -22,12 +25,25 @@ public class UploadFile extends AjaxCommonTest {
 
 	}
 
+	@BeforeClass(groups = { "always" })
+	public void UploadFileBeforeClass() throws HarnessException {
+		logger.info(this.getClass().getSimpleName() + "BeforeClass start");
+		if (startingAccount == null) {
+			if (app.zPageMain.zIsActive())
+				((DefaultSelenium) ClientSessionFactory.session().selenium())
+						.click("css=[onclick='ZmZimbraMail._onClickLogOff();']");
+			app.zPageLogin.zWaitForActive();
+			logger.info(this.getClass().getSimpleName() + "BeforeClass finish");
+		}
+	}
+
 	@Test(description = "Upload file through SOAP - verify through SOAP", groups = { "smoke" })
 	public void UploadFile_01() throws HarnessException {
 
 		// Create document item
 		DocumentItem document = new DocumentItem();
-		String filePath = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/other/testtextfile.txt";
+		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
+				+ "/data/public/other/testtextfile.txt";
 		String fileName = document.getFileName(filePath);
 
 		// Upload file to server through SOAP
@@ -59,18 +75,18 @@ public class UploadFile extends AjaxCommonTest {
 		app.zPageBriefcase.zClick(Locators.zBriefcaseFolderIcon);
 
 		// Verify file name through SOAP
-		
+
 		// import from soap
 		app.zGetActiveAccount().soapSend(
 
-				"<SearchRequest xmlns='urn:zimbraMail' types='document'>" +
+		"<SearchRequest xmlns='urn:zimbraMail' types='document'>" +
 
-				"<query>" + fileName + "</query>" +
+		"<query>" + fileName + "</query>" +
 
-				"</SearchRequest>");
+		"</SearchRequest>");
 
 		String name = app.zGetActiveAccount().soapSelectValue("//mail:doc",
-						"name");
+				"name");
 
 		ZAssert.assertEquals(name, fileName, "Verify file name through SOAP");
 	}
@@ -80,9 +96,10 @@ public class UploadFile extends AjaxCommonTest {
 
 		// Create document item
 		DocumentItem document = new DocumentItem();
-		String filePath =  ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/other/structure.jpg";
+		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
+				+ "/data/public/other/structure.jpg";
 		String fileName = document.getFileName(filePath);
-		
+
 		// Upload file to server through SOAP
 		ZimbraAccount account = app.zGetActiveAccount();
 		String attachmentId = account.uploadFile(filePath);
@@ -108,7 +125,7 @@ public class UploadFile extends AjaxCommonTest {
 
 		// Verify document is created
 		SleepUtil.sleepLong();
-	
+
 		String name = "";
 		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
 				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {

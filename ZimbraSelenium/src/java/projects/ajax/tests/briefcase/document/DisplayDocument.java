@@ -1,9 +1,13 @@
 package projects.ajax.tests.briefcase.document;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import com.thoughtworks.selenium.DefaultSelenium;
 
 import projects.ajax.core.AjaxCommonTest;
 import projects.ajax.ui.briefcase.PageBriefcase.Locators;
+import framework.core.ClientSessionFactory;
 import framework.items.DocumentItem;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
@@ -19,6 +23,18 @@ public class DisplayDocument extends AjaxCommonTest {
 
 		super.startingAccount = null;
 
+	}
+
+	@BeforeClass(groups = { "always" })
+	public void DisplayDocumentBeforeClass() throws HarnessException {
+		logger.info(this.getClass().getSimpleName() + "BeforeClass start");
+		if (startingAccount == null) {
+			if (app.zPageMain.zIsActive())
+				((DefaultSelenium) ClientSessionFactory.session().selenium())
+						.click("css=[onclick='ZmZimbraMail._onClickLogOff();']");
+			app.zPageLogin.zWaitForActive();
+			logger.info(this.getClass().getSimpleName() + "BeforeClass finish");
+		}
 	}
 
 	@Test(description = "Create document through SOAP - verify through GUI", groups = { "smoke" })
@@ -55,13 +71,11 @@ public class DisplayDocument extends AjaxCommonTest {
 		SleepUtil.sleepLong();
 
 		String name = "";
-		if (app.zPageBriefcase.sIsElementPresent(
-				"css=[id='zl__BDLV__rows']")
-				&& app.zPageBriefcase.sIsVisible(
-						"css=[id='zl__BDLV__rows']")) {
-			name = app.zPageBriefcase.sGetText(
-							"css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div:contains("
-									+ document.getDocName() + ")");
+		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
+				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
+			name = app.zPageBriefcase
+					.sGetText("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div:contains("
+							+ document.getDocName() + ")");
 		}
 
 		ZAssert.assertEquals(name, document.getDocName(),
