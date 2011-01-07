@@ -1754,8 +1754,13 @@ function(key, postCallback) {
 WebExZimlet.prototype._handleGetApptIdsHashMetaData =
 function(postCallback, result) {
 	this._apptIdsMetaData = null;//nullify old data
+	var response = result.getResponse();
+	if(response && response.BatchResponse && response.BatchResponse.GetCustomMetadataResponse) {
+		response = response.BatchResponse.GetCustomMetadataResponse;
+	} else {
+		return;
+	}
 	try {
-		var response = result.getResponse().BatchResponse.GetCustomMetadataResponse[0];
 		if (response.meta && response.meta[0]) {
 			this._apptIdsMetaData = response.meta[0]._attrs;
 		}
