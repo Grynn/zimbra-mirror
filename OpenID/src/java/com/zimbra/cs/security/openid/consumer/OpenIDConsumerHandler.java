@@ -53,6 +53,9 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
 
     private ConsumerManager manager;
 
+    private DiscoveryInformationCache discoveryInfoCache;
+    private String localServerId;
+
     @Override
     public void init(ZimbraExtension ext) throws ServiceException {
         super.init(ext);
@@ -66,6 +69,8 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
             ZimbraLog.extensions.error("OpenID error code %s", e.getErrorCode());
             throw ServiceException.FAILURE("Error in initializing OpenID ConsumerManager", e);
         }
+        localServerId = Provisioning.getInstance().getLocalServer().getId();
+        discoveryInfoCache = new DiscoveryInformationCache();
     }
 
     private static void configureHttpProxy() throws ServiceException {
@@ -120,20 +125,19 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
             String openId = identifier.getIdentifier();
             try {
                 Provisioning prov = Provisioning.getInstance();
-                AuthToken authToken = (AuthToken) req.getSession().getAttribute("auth-token");
-                Account acct;
+                AuthToken authToken = getZimbraAuthToken(req);
                 if (authToken == null) {
-                    // Create user session
-                    acct = prov.getAccountByForeignPrincipal(openId);
+                    // lookup the account corresponding to the open-id
+                    Account acct = prov.getAccountByForeignPrincipal(openId);
                     if (acct == null) {
                         throw new ServletException("No user account found corresponding to OpenID " + openId);
                     }
 
-                    // set a zimbra cookie
+                    // add a zimbra cookie to the response
                     authToken = AuthProvider.getAuthToken(acct);
                     authToken.encode(resp, false, req.getScheme().equals("https"));
 
-                    // redirect to the correct server
+                    // redirect to the correct URL
                     Server server = acct.getServer();
                     if (server == null) {
                         throw new ServletException("Server not found corresponding to account " + acct.getName());
@@ -142,8 +146,9 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
                                                                   prov.getDomain(acct),
                                                                   server.getAttr(Provisioning.A_zimbraMailURL)));
                 } else {
-                    // "Link" open-id with the account
-                    acct = prov.getAccountById(authToken.getAccountId());
+                    // user already has a valid login session => this request is for
+                    // "linking" open-id with the user account
+                    Account acct = prov.getAccountById(authToken.getAccountId());
                     acct.addForeignPrincipal(openId);
                     resp.getOutputStream().print("Success");
                 }
@@ -168,38 +173,12 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
             // and retrieve one service endpoint for authentication
             DiscoveryInformation discovered = manager.associate(discoveries);
 
-            // store the discovery information in the user's session
-            req.getSession().setAttribute("openid-disc", discovered);
+            // store the discovery information in memcached
+            req.getSession().setAttribute("server-id", localServerId);
+            discoveryInfoCache.put(req.getSession(), discovered);
 
             // obtain a AuthRequest message to be sent to the OpenID provider
             AuthRequest authReq = manager.authenticate(discovered, returnToUrl);
-
-            String zimbraCookie = null;
-            Cookie cookies[] =  req.getCookies();
-            if (cookies != null) {
-                for (Cookie cookie : cookies) {
-                    if (cookie.getName().equals(ZimbraServlet.COOKIE_ZM_ADMIN_AUTH_TOKEN) ||
-                            cookie.getName().equals(ZimbraServlet.COOKIE_ZM_AUTH_TOKEN)) {
-                        zimbraCookie = cookie.getValue();
-                        break;
-                    }
-                }
-            }
-
-            if (zimbraCookie == null) {
-                req.getSession().removeAttribute("auth-token");
-            } else {
-                try {
-                    AuthToken authToken = AuthProvider.getAuthToken(zimbraCookie);
-                    if (!authToken.isExpired()) {
-                        // user already has a valid login session => this request is for
-                        // "linking" open-id with the user account
-                        req.getSession().setAttribute("auth-token", authToken);
-                    }
-                } catch (AuthTokenException e) {
-                    // invalid token, no problem
-                }
-            }
 
             if (!discovered.isVersion2()) {
                 // Option 1: GET HTTP-redirect to the OpenID Provider endpoint
@@ -214,9 +193,31 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
                         getRequestDispatcher("/public/formredirection.jsp").forward(req, resp);
             }
         } catch (OpenIDException e) {
-            ZimbraLog.extensions.info("OpenID error code %s", e.getErrorCode(), e);
+            ZimbraLog.extensions.debug("OpenID error code %s", e.getErrorCode(), e);
+            throw new ServletException(e.getMessage());
+        } catch (ServiceException e) {
+            ZimbraLog.extensions.warn("Unexpected error", e);
             throw new ServletException(e.getMessage());
         }
+    }
+
+    private static AuthToken getZimbraAuthToken(HttpServletRequest req) {
+        Cookie cookies[] =  req.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(ZimbraServlet.COOKIE_ZM_AUTH_TOKEN)) {
+                    AuthToken authToken;
+                    try {
+                        authToken = AuthProvider.getAuthToken(cookie.getValue());
+                    } catch (AuthTokenException e) {
+                        // invalid token, no problem
+                        return null;
+                    }
+                    return authToken.isExpired() ? null : authToken;
+                }
+            }
+        }
+        return null;
     }
 
     private Identifier verifyResponse(HttpServletRequest req) throws ServletException {
@@ -226,7 +227,7 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
             ParameterList response = new ParameterList(req.getParameterMap());
 
             // retrieve the previously stored discovery information
-            DiscoveryInformation discovered = (DiscoveryInformation) req.getSession().getAttribute("openid-disc");
+            DiscoveryInformation discovered = discoveryInfoCache.get(req.getSession());
 
             // extract the receiving URL from the HTTP request
             StringBuffer receivingURL = req.getRequestURL();
@@ -241,6 +242,9 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
             return verification.getVerifiedId();
         } catch (OpenIDException e) {
             ZimbraLog.extensions.info("OpenID error code %s", e.getErrorCode(), e);
+            throw new ServletException(e.getMessage());
+        } catch (ServiceException e) {
+            ZimbraLog.extensions.warn("Unexpected error", e);
             throw new ServletException(e.getMessage());
         }
     }

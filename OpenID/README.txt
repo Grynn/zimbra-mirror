@@ -3,6 +3,10 @@
 
 - Copy "formredirection.jsp" file to /opt/zimbra/jetty/webapps/zimbra/public directory
 
+- Setup memcached
+
+- zmmaiboxdctl restart
+
 - To initiate OpenID-based sign-in, or, to associate/link an "open-id" with a user's account (to enable OpenID-based
   sign-in in future) who is already logged-in into Zimbra:
 
