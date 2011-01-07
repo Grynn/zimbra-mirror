@@ -37,6 +37,7 @@
   <property name="server.config.dir" value="../ZimbraServer/conf" />
   <property name="server.src.dir" location="../ZimbraServer/src" />
   <property name="server.build.dir" location="../ZimbraServer/build" />
+  <property name="server.build.lib.dir" location="${server.build.dir}/dist/lib" />
   <property name="server.lib.dir" location="../ZimbraServer/lib" />
   <property name="server.tools.lib.dir" location="../ZimbraServer/tools/lib" />
   <property name="server.classes.dir" location="${server.build.dir}/classes" />
@@ -471,10 +472,12 @@
         <copy todir="${dist.dir}/jetty/common/lib" file="../ZimbraServer/tools/lib/derbytools.jar" overwrite="true"/>
         <copy todir="${dist.dir}/jetty/common/lib" file="${common.jars.dir}/derby.jar" overwrite="true"/>
         <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
+          <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
           <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
           <arg line="-e zimbra_class_database=com.zimbra.cs.db.Derby -f"/>
         </java>
         <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
+          <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
           <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
           <arg line="-e debug_disable_mailbox_group=false -f"/>
         </java>
@@ -487,10 +490,12 @@
           <fileset file="${common.jars.dir}/sqlite*.jar"/>
         </copy>
         <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
+          <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
           <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
           <arg line="-e zimbra_class_database=com.zimbra.cs.db.SQLite -f"/>
         </java>
         <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
+          <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
           <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
           <arg line="-e debug_disable_mailbox_group=true -f"/>
         </java>
@@ -703,50 +708,62 @@
     <antcall target="db-versions-init" />
 
     <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
+      <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
       <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
       <arg line="-e zimbra_home='${param.data.dir}' -f" />
     </java>
     <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
+      <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
       <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
       <arg line="-e zimbra_extension_directory='${param.app.dir}/lib/ext'" />
     </java>
     <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
+      <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
       <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
       <arg line="-e mailboxd_directory='${param.app.dir}/jetty'" />
     </java>
     <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
+      <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
       <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
       <arg line="-e zimlet_directory='$${zimbra_home}/zimlets-deployed'" />
     </java>
     <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
+      <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
       <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
       <arg line="-e mailboxd_keystore='$${zimbra_home}/conf/keystore'" />
     </java>
     <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
+      <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
       <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
       <arg line="-e mailboxd_truststore='$${zimbra_home}/conf/cacerts'" />
     </java>
     <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
+      <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
       <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
       <arg line="-e zdesktop_relabel=${offline.relabel}" />
     </java>
     <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
+      <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
       <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
       <arg line="-e zdesktop_version=${offline.version}" />
     </java>
     <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
+      <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
       <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
       <arg line="-e zdesktop_buildid=${offline.buildid}" />
     </java>
     <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
+      <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
       <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
       <arg line="-e javamail_imap_debug=false" />
     </java>
     <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
+      <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
       <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
       <arg line="-e javamail_pop3_debug=false" />
     </java>
     <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
+      <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
       <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
       <arg line="-e javamail_smtp_debug=false" />
     </java>
