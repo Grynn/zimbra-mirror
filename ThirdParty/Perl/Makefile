@@ -164,7 +164,6 @@ PERL_LIBS 	:= \
 	Package::Constants \
 	IO::Compress::Base \
 	IO::Compress::Gzip \
-	IO::Uncompress::Gzip \
 	Compress::Raw::Zlib \
 	P/PM/PMQS/Compress-Zlib-1.42.tar.gz \
 	Archive::Tar \
