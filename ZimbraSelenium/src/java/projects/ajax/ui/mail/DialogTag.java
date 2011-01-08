@@ -5,6 +5,7 @@ package projects.ajax.ui.mail;
 
 import framework.ui.AbsApplication;
 import framework.ui.AbsDialog;
+import framework.ui.AbsPage;
 import framework.ui.Button;
 import framework.util.HarnessException;
 
@@ -61,7 +62,7 @@ public class DialogTag extends AbsDialog {
 	}
 	
 	@Override
-	public void zClickButton(Button button) throws HarnessException {
+	public AbsPage zClickButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zClickButton("+ button +")");
 
 		String locator = null;
@@ -94,7 +95,8 @@ public class DialogTag extends AbsDialog {
 		}
 		
 		this.zClick(locator);
-		
+	
+		return (null);
 	}
 
 	@Override

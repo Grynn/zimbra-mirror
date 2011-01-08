@@ -6,6 +6,7 @@ package projects.ajax.ui.addressbook;
 import projects.ajax.ui.AppAjaxClient;
 import framework.ui.AbsApplication;
 import framework.ui.AbsDialog;
+import framework.ui.AbsPage;
 import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
@@ -39,13 +40,14 @@ public class DialogContactMove extends AbsDialog {
 
 
 	@Override
-	public void zClickButton(Button button) throws HarnessException {
+	public AbsPage zClickButton(Button button) throws HarnessException {
 		String locator=null;
 		if (button == Button.B_OK) {			
 			locator="//div[contains(@id, '_buttons')]/table/tbody/tr/td[2]/table/tbody/tr/td/div";			
 			this.zClick(locator);	 	   			
 		}
 		
+		return (null);
 	}
 
 

@@ -32,7 +32,7 @@ public class CancelComposeHtml extends AjaxCommonTest {
 		
 		
 		// Create the message data to be sent
-		String subject = "body" + ZimbraSeleniumProperties.getUniqueString();
+		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
 		
 
 		// Open the new mail form
@@ -42,7 +42,7 @@ public class CancelComposeHtml extends AjaxCommonTest {
 		
 		
 		// Fill out the form with the data
-		mailform.zFillField(Field.Body, subject);
+		mailform.zFillField(Field.Body, body);
 		
 		// Cancel the message
 		// A warning dialog should appear regarding losing changes
@@ -50,7 +50,8 @@ public class CancelComposeHtml extends AjaxCommonTest {
 		ZAssert.assertNotNull(warning, "Verify the dialog is returned");
 		
 		// Dismiss the dialog
-		warning.zClickButton(Button.B_OK);
+		warning.zClickButton(Button.B_NO);
+		warning.zWaitForClose(); // Make sure the dialog is dismissed
 		
 
 	}

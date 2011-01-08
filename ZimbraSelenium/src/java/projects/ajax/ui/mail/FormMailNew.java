@@ -1,16 +1,16 @@
 package projects.ajax.ui.mail;
 
-import java.awt.event.KeyEvent;
 import java.util.List;
 
-import projects.ajax.ui.AppAjaxClient;
+import projects.ajax.ui.DialogWarning;
 
+import framework.items.IItem;
 import framework.items.MailItem;
 import framework.items.RecipientItem;
-import framework.items.IItem;
 import framework.items.RecipientItem.RecipientType;
 import framework.ui.AbsApplication;
 import framework.ui.AbsForm;
+import framework.ui.AbsPage;
 import framework.ui.AbsSeleniumObject;
 import framework.ui.Button;
 import framework.util.HarnessException;
@@ -116,14 +116,14 @@ public class FormMailNew extends AbsForm {
 	 * @return
 	 * @throws HarnessException
 	 */
-	public AbsSeleniumObject zToolbarPressButton(Button button) throws HarnessException {
+	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
 		
 		if ( button == null )
 			throw new HarnessException("Button cannot be null!");
 		
 		// Fallthrough objects
-		AbsSeleniumObject page = null;
+		AbsPage page = null;
 		String locator = null;
 		
 		if ( button == Button.B_SEND ) {
@@ -156,11 +156,19 @@ public class FormMailNew extends AbsForm {
 		} else if ( button == Button.B_CANCEL ) {
 
 			locator = Locators.zCancelIconBtn;
-			page = null;
+			page = new DialogWarning(DialogWarning.DialogWarningID.SaveCurrentMessageAsDraft, this.MyApplication);
 			
-			logger.warn("Need to implement Warning: Save current message as draft?");
+			// If the compose view is not dirty (i.e. no pending changes)
+			// then the dialog will not appear.  So, click the button
+			// and return the page, without waiting for it to be active
 			
-			// FALL THROUGH
+			if ( !this.sIsElementPresent(locator) )
+				throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
+			
+			this.zClick(locator);
+
+			// Return the page, if specified
+			return (page);
 			
 		} else if ( button == Button.B_SAVE_DRAFT ) {
 
@@ -209,6 +217,14 @@ public class FormMailNew extends AbsForm {
 		// Click it
 		this.zClick(locator);
 
+		
+		if ( page != null ) {
+			
+			// Make sure the page becomes active
+			page.zWaitForActive();
+			
+		}
+		
 		// Return the page, if specified
 		return (page);
 
