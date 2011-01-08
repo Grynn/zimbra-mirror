@@ -119,7 +119,7 @@ function(params) {
 	// add various event listeners when we get our first client
 	if (this._numIds == 0) {
 		if (AjxEnv.isIE) {
-			var shell = appCtxt.getShell();
+			var shell = DwtShell.getShell(window);
 			var events = DwtOutsideMouseEventMgr.EVENTS;
 			shell._setEventHdlrs(events);
 			for (var i = 0; i < events.length; i++) {
@@ -180,7 +180,7 @@ function(params) {
 
 	if (this._numIds == 0) {
 		if (AjxEnv.isIE) {
-			var shell = appCtxt.getShell();
+			var shell = DwtShell.getShell(window);
 			var events = DwtOutsideMouseEventMgr.EVENTS;
 			shell._setEventHdlrs(events, true);
 			for (var i = 0; i < events.length; i++) {
