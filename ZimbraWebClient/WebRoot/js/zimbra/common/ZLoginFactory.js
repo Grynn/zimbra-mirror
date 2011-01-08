@@ -193,6 +193,7 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
                 "</tr>",	
     			"</table>",
     			"</form>",
+    			"<div class='decor1'></div>",
 				"<div id='ZLoginAboutPanel' ", (params.showAbout ? "" : "style='display:none'"), ">", params.aboutMsg,
 				"</div>",	
     			"<div id='ZLoginLongVersion' class='version' ", (params.showLongVersion ? "" : "style='display:none'"), ">", params.longVersion, "</div>",
