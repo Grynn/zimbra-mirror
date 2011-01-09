@@ -66,8 +66,11 @@ public class CreateDocument extends AjaxCommonTest {
 		}
 
 		// Verify document name & text through SOAP
+		String text = "";
 		int i = 0;
-		while (i < 20) {
+		int y = 20;
+
+		while (i < y) {
 			SleepUtil.sleepSmall();
 			account.soapSend(
 
@@ -84,17 +87,14 @@ public class CreateDocument extends AjaxCommonTest {
 				break;
 			}
 			i++;
-			if (i == 20)
-				logger
-						.info("after "
-								+ i
-								+ " seconds account.soapSelectValue(//mail:doc,fr) is null");
 		}
 
-		String name = app.zGetActiveAccount().soapSelectValue("//mail:doc",
-				"name");
-		String text = app.zGetActiveAccount().soapSelectValue("//mail:doc",
-				"fr").trim();
+		if (i == y)
+			logger.info(i
+					+ "sec account.soapSelectValue(//mail:doc,fr) is null");
+
+		String name = account.soapSelectValue("//mail:doc", "name");
+		text = account.soapSelectValue("//mail:doc", "fr").trim();
 
 		ZAssert.assertEquals(document.getDocName(), name,
 				" Verify document name through SOAP");
