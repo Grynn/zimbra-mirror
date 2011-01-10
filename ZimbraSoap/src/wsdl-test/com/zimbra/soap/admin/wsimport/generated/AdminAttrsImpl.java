@@ -33,10 +33,13 @@ import javax.xml.bind.annotation.XmlType;
     "a"
 })
 @XmlSeeAlso({
-    ModifyCosRequest.class,
-    CreateServerRequest.class,
     ModifyDomainRequest.class,
     CreateDomainRequest.class,
+    GetAllConfigResponse.class,
+    ModifyConfigRequest.class,
+    ModifyCosRequest.class,
+    GetConfigResponse.class,
+    CreateServerRequest.class,
     ModifyServerRequest.class,
     ModifyAccountRequest.class
 })

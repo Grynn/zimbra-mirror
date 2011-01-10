@@ -98,23 +98,27 @@ public class Utility {
     }
 
     public static String getAccountServiceAuthToken() throws Exception {
-        Utility.getAcctSvcEIF();
         if (acctAuthToken == null) {
-            Utility.getAcctSvcEIF();
-            AuthRequest authReq = new AuthRequest();
-            Account acct = new Account();
-            acct.setBy(By.NAME);
-            acct.setValue("user1");
-            authReq.setAccount(acct);
-            authReq.setPassword("test123");
-            authReq.setPreauth(null);
-            authReq.setAuthToken(null);
-            // Invoke the methods.
-            AuthResponse authResponse = getAcctSvcEIF().authRequest(authReq);
-            Assert.assertNotNull(authResponse);
-            acctAuthToken = authResponse.getAuthToken();
+            acctAuthToken = getAccountServiceAuthToken("user1", "test123");
         }
         return acctAuthToken;
+    }
+
+    public static String getAccountServiceAuthToken(String acctName, String password)
+    throws Exception {
+        Utility.getAcctSvcEIF();
+        AuthRequest authReq = new AuthRequest();
+        Account acct = new Account();
+        acct.setBy(By.NAME);
+        acct.setValue(acctName);
+        authReq.setAccount(acct);
+        authReq.setPassword(password);
+        authReq.setPreauth(null);
+        authReq.setAuthToken(null);
+        // Invoke the methods.
+        AuthResponse authResponse = getAcctSvcEIF().authRequest(authReq);
+        Assert.assertNotNull(authResponse);
+        return authResponse.getAuthToken();
     }
 
     private static void setAcctSvcEIF(AccountService acctSvcEIF) {
@@ -371,7 +375,7 @@ public class Utility {
     public static String ensureAccountExists(String accountName) throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
         String domainName = accountName.substring(accountName.indexOf('@') + 1);
-        String domId = ensureDomainExists(domainName);
+        ensureDomainExists(domainName);
         GetAccountRequest getInfoReq = new GetAccountRequest();
         AccountSelector accountSel = new AccountSelector();
         accountSel.setBy(AccountBy.NAME);
@@ -384,12 +388,27 @@ public class Utility {
         } catch (SOAPFaultException sfe) {
             CreateAccountRequest createAcctReq = new CreateAccountRequest();
             createAcctReq.setName(accountName);
+            createAcctReq.setPassword("test123");
             Utility.addSoapAdminAuthHeader((WSBindingProvider)adminSvcEIF);
             CreateAccountResponse resp = adminSvcEIF.createAccountRequest(createAcctReq);
             Assert.assertNotNull(resp);
             AccountInfo accountInfo = resp.getAccount();
             return accountInfo.getId();
         }
+    }
+
+    /**
+     * Creating an account does not create the associated mailbox until first authenticated
+     * access.  This ensures that the mailbox exists by authenticating against the account.
+     * 
+     * @param accountName - name of account - must have password "test123" if exists already
+     * @return
+     * @throws Exception
+     */
+    public static String ensureMailboxExistsForAccount(String accountName) throws Exception {
+        String accountId = ensureAccountExists(accountName);
+        getAccountServiceAuthToken(accountName, "test123");
+        return accountId;
     }
 
     public static String ensureCosExists(String cosName) throws Exception {

@@ -30,11 +30,11 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "attributeSelectorImpl")
 @XmlSeeAlso({
+    GetCosRequest.class,
+    SearchDirectoryRequest.class,
     GetAccountRequest.class,
     GetServerRequest.class,
-    GetCosRequest.class,
-    GetDomainRequest.class,
-    SearchDirectoryRequest.class
+    GetDomainRequest.class
 })
 public abstract class AttributeSelectorImpl {
 

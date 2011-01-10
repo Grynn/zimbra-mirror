@@ -51,6 +51,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.CheckHealthResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/CheckHealth")
+    @WebResult(name = "CheckHealthResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public CheckHealthResponse checkHealthRequest(
+        @WebParam(name = "CheckHealthRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        CheckHealthRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.CheckPasswordStrengthResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/CheckPasswordStrength")
@@ -70,6 +82,18 @@ public interface AdminService {
     public CopyCosResponse copyCosRequest(
         @WebParam(name = "CopyCosRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         CopyCosRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.CountAccountResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/CountAccount")
+    @WebResult(name = "CountAccountResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public CountAccountResponse countAccountRequest(
+        @WebParam(name = "CountAccountRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        CountAccountRequest parameters);
 
     /**
      * 
@@ -171,6 +195,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.DeleteMailboxResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/DeleteMailbox")
+    @WebResult(name = "DeleteMailboxResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public DeleteMailboxResponse deleteMailboxRequest(
+        @WebParam(name = "DeleteMailboxRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        DeleteMailboxRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.DeleteServerResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/DeleteServer")
@@ -178,6 +214,18 @@ public interface AdminService {
     public DeleteServerResponse deleteServerRequest(
         @WebParam(name = "DeleteServerRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         DeleteServerRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.FlushCacheResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/FlushCache")
+    @WebResult(name = "FlushCacheResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public FlushCacheResponse flushCacheRequest(
+        @WebParam(name = "FlushCacheRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        FlushCacheRequest parameters);
 
     /**
      * 
@@ -243,6 +291,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetAllConfigResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetAllConfig")
+    @WebResult(name = "GetAllConfigResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetAllConfigResponse getAllConfigRequest(
+        @WebParam(name = "GetAllConfigRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetAllConfigRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.GetAllCosResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/GetAllCos")
@@ -267,6 +327,30 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetAllLocalesResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetAllLocales")
+    @WebResult(name = "GetAllLocalesResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetAllLocalesResponse getAllLocalesRequest(
+        @WebParam(name = "GetAllLocalesRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetAllLocalesRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetAllMailboxesResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetAllMailboxes")
+    @WebResult(name = "GetAllMailboxesResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetAllMailboxesResponse getAllMailboxesRequest(
+        @WebParam(name = "GetAllMailboxesRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetAllMailboxesRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.GetAllServersResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/GetAllServers")
@@ -274,6 +358,18 @@ public interface AdminService {
     public GetAllServersResponse getAllServersRequest(
         @WebParam(name = "GetAllServersRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         GetAllServersRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetConfigResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetConfig")
+    @WebResult(name = "GetConfigResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetConfigResponse getConfigRequest(
+        @WebParam(name = "GetConfigRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetConfigRequest parameters);
 
     /**
      * 
@@ -315,6 +411,30 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetMailboxResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetMailbox")
+    @WebResult(name = "GetMailboxResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetMailboxResponse getMailboxRequest(
+        @WebParam(name = "GetMailboxRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetMailboxRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetMailboxStatsResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetMailboxStats")
+    @WebResult(name = "GetMailboxStatsResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetMailboxStatsResponse getMailboxStatsRequest(
+        @WebParam(name = "GetMailboxStatsRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetMailboxStatsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.GetServerResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/GetServer")
@@ -339,6 +459,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetServiceStatusResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetServiceStatus")
+    @WebResult(name = "GetServiceStatusResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetServiceStatusResponse getServiceStatusRequest(
+        @WebParam(name = "GetServiceStatusRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetServiceStatusRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.ModifyAccountResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/ModifyAccount")
@@ -346,6 +478,18 @@ public interface AdminService {
     public ModifyAccountResponse modifyAccountRequest(
         @WebParam(name = "ModifyAccountRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         ModifyAccountRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.ModifyConfigResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/ModifyConfig")
+    @WebResult(name = "ModifyConfigResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public ModifyConfigResponse modifyConfigRequest(
+        @WebParam(name = "ModifyConfigRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        ModifyConfigRequest parameters);
 
     /**
      * 
@@ -382,6 +526,42 @@ public interface AdminService {
     public ModifyServerResponse modifyServerRequest(
         @WebParam(name = "ModifyServerRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         ModifyServerRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.NoOpResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/NoOp")
+    @WebResult(name = "NoOpResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public NoOpResponse noOpRequest(
+        @WebParam(name = "NoOpRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        NoOpRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.PingResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/Ping")
+    @WebResult(name = "PingResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public PingResponse pingRequest(
+        @WebParam(name = "PingRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        PingRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.RecalculateMailboxCountsResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/RecalculateMailboxCounts")
+    @WebResult(name = "RecalculateMailboxCountsResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public RecalculateMailboxCountsResponse recalculateMailboxCountsRequest(
+        @WebParam(name = "RecalculateMailboxCountsRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        RecalculateMailboxCountsRequest parameters);
 
     /**
      * 

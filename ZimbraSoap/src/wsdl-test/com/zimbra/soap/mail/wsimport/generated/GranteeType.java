@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="grp"/>
  *     &lt;enumeration value="all"/>
  *     &lt;enumeration value="dom"/>
- *     &lt;enumeration value="gst"/>
+ *     &lt;enumeration value="guest"/>
  *     &lt;enumeration value="key"/>
  *     &lt;enumeration value="pub"/>
  *   &lt;/restriction>
@@ -38,8 +38,8 @@ public enum GranteeType {
     ALL("all"),
     @XmlEnumValue("dom")
     DOM("dom"),
-    @XmlEnumValue("gst")
-    GST("gst"),
+    @XmlEnumValue("guest")
+    GUEST("guest"),
     @XmlEnumValue("key")
     KEY("key"),
     @XmlEnumValue("pub")

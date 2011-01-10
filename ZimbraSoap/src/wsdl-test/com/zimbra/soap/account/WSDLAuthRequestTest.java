@@ -20,7 +20,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.zimbra.soap.account.wsimport.generated.AccountService_Service;
+import com.zimbra.soap.Utility;
 import com.zimbra.soap.account.wsimport.generated.AccountService;
 import com.zimbra.soap.account.wsimport.generated.Account;
 import com.zimbra.soap.account.wsimport.generated.AuthRequest;
@@ -35,10 +35,7 @@ public class WSDLAuthRequestTest {
 
     @BeforeClass
     public static void init() throws Exception {
-        // The AccountService_Service class is the Java type bound to
-        // the service section of the WSDL document.
-        AccountService_Service service = new AccountService_Service();
-        eif = service.getAccountServicePort();
+        eif = Utility.getAcctSvcEIF();
     }
 
     /**
@@ -46,24 +43,23 @@ public class WSDLAuthRequestTest {
      */
     @Test
     public void simple() throws Exception {
-       AuthRequest authReq = new AuthRequest();
-       Account acct = new Account();
-       acct.setBy(By.NAME);
-       acct.setValue("user1");
-       authReq.setAccount(acct);
-       authReq.setPassword("test123");
-       authReq.setPreauth(null);
-       authReq.setAuthToken(null);
-       // Invoke the methods.
-       AuthResponse authResponse = eif.authRequest(authReq);
-       Assert.assertNotNull(authResponse);
-       String authToken = authResponse.getAuthToken();
-       Assert.assertTrue(authToken != null);
-       Assert.assertTrue(authToken.length() > 10);
-       long lifetime = authResponse.getLifetime();
-       Assert.assertTrue(lifetime > 0);
-       Assert.assertNull(authResponse.getRefer());
-       Assert.assertEquals(authResponse.getSkin(), "carbon");  // If the default changes, this might change too?
+        AuthRequest authReq = new AuthRequest();
+        Account acct = new Account();
+        acct.setBy(By.NAME);
+        acct.setValue("user1");
+        authReq.setAccount(acct);
+        authReq.setPassword("test123");
+        authReq.setPreauth(null);
+        authReq.setAuthToken(null);
+        AuthResponse authResponse = eif.authRequest(authReq);
+        Assert.assertNotNull(authResponse);
+        String authToken = authResponse.getAuthToken();
+        Assert.assertTrue(authToken != null);
+        Assert.assertTrue(authToken.length() > 10);
+        long lifetime = authResponse.getLifetime();
+        Assert.assertTrue(lifetime > 0);
+        Assert.assertNull(authResponse.getRefer());
+        Assert.assertEquals(authResponse.getSkin(), "carbon");  // If the default changes, this might change too?
     }
 
     /**
@@ -71,20 +67,11 @@ public class WSDLAuthRequestTest {
      */
     @Test
     public void badPasswd() throws Exception {
-       AuthRequest authReq = new AuthRequest();
-       Account acct = new Account();
-       acct.setBy(By.NAME);
-       acct.setValue("user1");
-       authReq.setAccount(acct);
-       authReq.setPassword("BAD-ONE");
-       authReq.setPreauth(null);
-       authReq.setAuthToken(null);
-       // Invoke the methods.
-       try {
-           AuthResponse authResponse = eif.authRequest(authReq);
-           Assert.fail("Should have had a fault resulting in an exception being thrown");
-       } catch (SOAPFaultException sfe) {
-           Assert.assertTrue(sfe.getMessage().startsWith("authentication failed for "));
-       }
+        try {
+            Utility.getAccountServiceAuthToken("user1", "BAD-PASSWORD");
+            Assert.fail("Should have had a fault resulting in an exception being thrown");
+        } catch (SOAPFaultException sfe) {
+            Assert.assertTrue(sfe.getMessage().startsWith("authentication failed for "));
+        }
     }
 }

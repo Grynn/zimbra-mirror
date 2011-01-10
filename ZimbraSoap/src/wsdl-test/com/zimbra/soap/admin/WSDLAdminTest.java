@@ -20,87 +20,7 @@ import javax.xml.ws.soap.SOAPFaultException;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 
-import com.zimbra.soap.admin.wsimport.generated.AccountBy;
-import com.zimbra.soap.admin.wsimport.generated.AddAccountAliasRequest;
-import com.zimbra.soap.admin.wsimport.generated.AddAccountAliasResponse;
-import com.zimbra.soap.admin.wsimport.generated.AdminObjectInfo;
-import com.zimbra.soap.admin.wsimport.generated.AdminService;
-import com.zimbra.soap.admin.wsimport.generated.AccountInfo;
-import com.zimbra.soap.admin.wsimport.generated.AccountSelector;
-import com.zimbra.soap.admin.wsimport.generated.Attr;
-import com.zimbra.soap.admin.wsimport.generated.CheckPasswordStrengthRequest;
-import com.zimbra.soap.admin.wsimport.generated.CheckPasswordStrengthResponse;
-import com.zimbra.soap.admin.wsimport.generated.CopyCosRequest;
-import com.zimbra.soap.admin.wsimport.generated.CopyCosResponse;
-import com.zimbra.soap.admin.wsimport.generated.CosBy;
-import com.zimbra.soap.admin.wsimport.generated.CosInfo;
-import com.zimbra.soap.admin.wsimport.generated.CosSelector;
-import com.zimbra.soap.admin.wsimport.generated.CreateAccountRequest;
-import com.zimbra.soap.admin.wsimport.generated.CreateAccountResponse;
-import com.zimbra.soap.admin.wsimport.generated.CreateCosRequest;
-import com.zimbra.soap.admin.wsimport.generated.CreateCosResponse;
-import com.zimbra.soap.admin.wsimport.generated.CreateDomainRequest;
-import com.zimbra.soap.admin.wsimport.generated.CreateDomainResponse;
-import com.zimbra.soap.admin.wsimport.generated.CreateServerRequest;
-import com.zimbra.soap.admin.wsimport.generated.CreateServerResponse;
-import com.zimbra.soap.admin.wsimport.generated.DeleteAccountRequest;
-import com.zimbra.soap.admin.wsimport.generated.DeleteAccountResponse;
-import com.zimbra.soap.admin.wsimport.generated.DeleteCosRequest;
-import com.zimbra.soap.admin.wsimport.generated.DeleteCosResponse;
-import com.zimbra.soap.admin.wsimport.generated.DeleteDomainRequest;
-import com.zimbra.soap.admin.wsimport.generated.DeleteDomainResponse;
-import com.zimbra.soap.admin.wsimport.generated.DeleteServerRequest;
-import com.zimbra.soap.admin.wsimport.generated.DeleteServerResponse;
-import com.zimbra.soap.admin.wsimport.generated.DomainBy;
-import com.zimbra.soap.admin.wsimport.generated.DomainInfo;
-import com.zimbra.soap.admin.wsimport.generated.DomainSelector;
-import com.zimbra.soap.admin.wsimport.generated.GetAccountInfoRequest;
-import com.zimbra.soap.admin.wsimport.generated.GetAccountInfoResponse;
-import com.zimbra.soap.admin.wsimport.generated.GetAccountMembershipRequest;
-import com.zimbra.soap.admin.wsimport.generated.GetAccountMembershipResponse;
-import com.zimbra.soap.admin.wsimport.generated.GetAllAccountsRequest;
-import com.zimbra.soap.admin.wsimport.generated.GetAllAccountsResponse;
-import com.zimbra.soap.admin.wsimport.generated.GetAllAdminAccountsRequest;
-import com.zimbra.soap.admin.wsimport.generated.GetAllAdminAccountsResponse;
-import com.zimbra.soap.admin.wsimport.generated.GetAllCosRequest;
-import com.zimbra.soap.admin.wsimport.generated.GetAllCosResponse;
-import com.zimbra.soap.admin.wsimport.generated.GetAllDomainsRequest;
-import com.zimbra.soap.admin.wsimport.generated.GetAllDomainsResponse;
-import com.zimbra.soap.admin.wsimport.generated.GetAllServersRequest;
-import com.zimbra.soap.admin.wsimport.generated.GetAllServersResponse;
-import com.zimbra.soap.admin.wsimport.generated.GetCosRequest;
-import com.zimbra.soap.admin.wsimport.generated.GetCosResponse;
-import com.zimbra.soap.admin.wsimport.generated.GetDomainInfoRequest;
-import com.zimbra.soap.admin.wsimport.generated.GetDomainInfoResponse;
-import com.zimbra.soap.admin.wsimport.generated.GetDomainRequest;
-import com.zimbra.soap.admin.wsimport.generated.GetDomainResponse;
-import com.zimbra.soap.admin.wsimport.generated.GetServerRequest;
-import com.zimbra.soap.admin.wsimport.generated.GetServerResponse;
-import com.zimbra.soap.admin.wsimport.generated.ModifyAccountRequest;
-import com.zimbra.soap.admin.wsimport.generated.ModifyAccountResponse;
-import com.zimbra.soap.admin.wsimport.generated.ModifyCosRequest;
-import com.zimbra.soap.admin.wsimport.generated.ModifyCosResponse;
-import com.zimbra.soap.admin.wsimport.generated.ModifyDomainRequest;
-import com.zimbra.soap.admin.wsimport.generated.ModifyDomainResponse;
-import com.zimbra.soap.admin.wsimport.generated.ModifyServerRequest;
-import com.zimbra.soap.admin.wsimport.generated.ModifyServerResponse;
-import com.zimbra.soap.admin.wsimport.generated.ReloadLocalConfigRequest;
-import com.zimbra.soap.admin.wsimport.generated.ReloadLocalConfigResponse;
-import com.zimbra.soap.admin.wsimport.generated.GetAccountRequest;
-import com.zimbra.soap.admin.wsimport.generated.GetAccountResponse;
-import com.zimbra.soap.admin.wsimport.generated.RemoveAccountAliasRequest;
-import com.zimbra.soap.admin.wsimport.generated.RemoveAccountAliasResponse;
-import com.zimbra.soap.admin.wsimport.generated.RenameAccountRequest;
-import com.zimbra.soap.admin.wsimport.generated.RenameAccountResponse;
-import com.zimbra.soap.admin.wsimport.generated.RenameCosRequest;
-import com.zimbra.soap.admin.wsimport.generated.RenameCosResponse;
-import com.zimbra.soap.admin.wsimport.generated.SearchDirectoryRequest;
-import com.zimbra.soap.admin.wsimport.generated.SearchDirectoryResponse;
-import com.zimbra.soap.admin.wsimport.generated.ServerBy;
-import com.zimbra.soap.admin.wsimport.generated.ServerInfo;
-import com.zimbra.soap.admin.wsimport.generated.ServerSelector;
-import com.zimbra.soap.admin.wsimport.generated.SetPasswordRequest;
-import com.zimbra.soap.admin.wsimport.generated.SetPasswordResponse;
+import com.zimbra.soap.admin.wsimport.generated.*;
 
 import com.zimbra.soap.Utility;
 
@@ -157,11 +77,142 @@ public class WSDLAdminTest {
     }
 
     @Test
+    public void pingTest() throws Exception {
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        PingRequest req = new PingRequest();
+        PingResponse resp = eif.pingRequest(req);
+        Assert.assertNotNull("PingResponse object", resp);
+    }
+
+    @Test
+    public void noopTest() throws Exception {
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        NoOpRequest req = new NoOpRequest();
+        NoOpResponse resp = eif.noOpRequest(req);
+        Assert.assertNotNull("NoOpResponse object", resp);
+    }
+
+    @Test
+    public void getServiceStatuTest() throws Exception {
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        GetServiceStatusRequest req = new GetServiceStatusRequest();
+        GetServiceStatusResponse resp = eif.getServiceStatusRequest(req);
+        Assert.assertNotNull("GetServiceStatusResponse object", resp);
+        TimeZoneInfo tz = resp.getTimezone();
+        Assert.assertNotNull("GetServiceStatusResponse <timezone> object", tz);
+        Assert.assertNotNull("GetServiceStatusResponse <timezone> displayName", tz.getDisplayName());
+        Assert.assertNotNull("GetServiceStatusResponse <timezone> id", tz.getId());
+        List <ServiceStatus> statuses = resp.getStatus();
+        // TODO: Would be nice to test with some real statuses - looks like need logger
+        //       service installed and enabled
+        Assert.assertNotNull("GetServiceStatusResponse statuses list object", statuses);
+    }
+
+    @Test
+    public void checkHealthTest() throws Exception {
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        CheckHealthRequest req = new CheckHealthRequest();
+        CheckHealthResponse resp = eif.checkHealthRequest(req);
+        Assert.assertNotNull("CheckHealthResponse object", resp);
+        Assert.assertTrue("isHealthy",resp.isHealthy());
+    }
+
+    @Test
     public void reloadLocalConfigTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         ReloadLocalConfigRequest req = new ReloadLocalConfigRequest();
         ReloadLocalConfigResponse resp = eif.reloadLocalConfigRequest(req);
         Assert.assertNotNull("ReloadLocalConfigResponse object", resp);
+    }
+
+    @Test
+    public void getAllConfigTest() throws Exception {
+        GetAllConfigRequest req = new GetAllConfigRequest();
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        GetAllConfigResponse resp = eif.getAllConfigRequest(req);
+        Assert.assertNotNull("GetAllConfigResponse object", resp);
+        List <Attr> attrs = resp.getA();
+        Assert.assertNotNull("GetAllConfigResponse list of attrs", attrs);
+        int len = attrs.size();
+        Assert.assertTrue("Number of GetAllConfigResponse <a> children is " +
+                len + " - should be at least 2", len >= 2);
+    }
+
+    @Test
+    public void getConfigTest() throws Exception {
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        GetConfigRequest req = new GetConfigRequest();
+        Attr attr = new Attr();
+        attr.setN("zimbraSpamHeader");
+        req.setA(attr);
+        GetConfigResponse resp = eif.getConfigRequest(req);
+        Assert.assertNotNull("GetConfigResponse object", resp);
+        List <Attr> attrs = resp.getA();
+        Assert.assertNotNull("GetConfigResponse list of attrs", attrs);
+        int len = attrs.size();
+        Assert.assertEquals("Number of GetConfigResponse <a> children" , 1, len);
+        Attr respAttr =attrs.get(0);
+        Assert.assertEquals("GetConfigResponse <a> 'n' attribute",
+                "zimbraSpamHeader", respAttr.getN());
+        Assert.assertEquals("GetConfigResponse <a> 'n' attribute",
+                "zimbraSpamHeader", respAttr.getN());
+        Assert.assertEquals("GetConfigResponse <a> 'n' attribute",
+                "X-Spam-Flag", respAttr.getValue());
+    }
+
+    @Test
+    public void modifyConfigTest() throws Exception {
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        ModifyConfigRequest req = new ModifyConfigRequest();
+        Attr attr = new Attr();
+        attr.setN("zimbraSpamHeader");
+        attr.setValue("X-NewSpam-Flag");
+        req.getA().add(attr);
+        ModifyConfigResponse resp = eif.modifyConfigRequest(req);
+        Assert.assertNotNull("modifyConfigResponse object", resp);
+        req = new ModifyConfigRequest();
+        attr.setValue("X-Spam-Flag");
+        req.getA().add(attr);
+        resp = eif.modifyConfigRequest(req);
+        Assert.assertNotNull("modifyConfigResponse object", resp);
+    }
+
+    @Test
+    public void getAllLocalesTest() throws Exception {
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        GetAllLocalesRequest req = new GetAllLocalesRequest();
+        GetAllLocalesResponse resp = eif.getAllLocalesRequest(req);
+        Assert.assertNotNull("GetAllLocalesResponse object", resp);
+        List <LocaleInfo> locales = resp.getLocale();
+        int len = locales.size();
+        Assert.assertTrue("number of <locales> is " + len +
+                " - should be longer than 10", len > 10);
+    }
+
+    @Test
+    public void getMailboxStatsTest() throws Exception {
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        GetMailboxStatsRequest req = new GetMailboxStatsRequest();
+        GetMailboxStatsResponse resp = eif.getMailboxStatsRequest(req);
+        Assert.assertNotNull("GetMailboxStatsResponse object", resp);
+        MailboxStats mboxStats = resp.getStats();
+        Assert.assertNotNull("stats object", mboxStats);
+        long numMboxes = mboxStats.getNumMboxes();
+        long totalSize = mboxStats.getTotalSize();
+        Assert.assertTrue("numMboxes " + numMboxes + " should be >=1", numMboxes >=1);
+        Assert.assertTrue("totalSize " + totalSize + " should be >=1000", totalSize >=1000);
+    }
+
+    @Test
+    public void flushCacheTest() throws Exception {
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        FlushCacheRequest req = new FlushCacheRequest();
+        CacheEntrySelector sel = new CacheEntrySelector();
+        sel.setAllServers(true);
+        sel.setType(CacheEntryType.DOMAIN.value());
+        req.setCache(sel);
+        FlushCacheResponse resp = eif.flushCacheRequest(req);
+        Assert.assertNotNull("FlushCacheResponse object", resp);
     }
 
     @Test
@@ -907,5 +958,108 @@ public class WSDLAdminTest {
         len = cosInfoList.size();
         Assert.assertTrue("Number of GetAllCosResponse <cos> children is " + len +
                 " - should be at least 1", len >= 1);
+    }
+
+    @Test
+    public void countAccountTest() throws Exception {
+        int len;
+        String testDomainId = Utility.ensureDomainExists(testAcctDomain);
+        String testAccountId = Utility.ensureMailboxExistsForAccount(testAcct);
+        String testCosId = Utility.ensureCosExists(testCos);
+        ModifyAccountRequest modReq = new ModifyAccountRequest();
+        modReq.setId(testAccountId);
+        Attr modAttr = new Attr();
+        modAttr.setN("zimbraCOSId");
+        modAttr.setValue(testCosId);
+        modReq.getA().add(modAttr);
+        ModifyAccountResponse modResp = eif.modifyAccountRequest(modReq);
+        Assert.assertNotNull("ModifyAccountResponse object", modResp);
+        AccountInfo accountInfo = modResp.getAccount();
+        Assert.assertNotNull("AccountInfo object", accountInfo);
+        Assert.assertEquals("modifyAccountResponse <account> 'name' attribute", 
+                testAcct, accountInfo.getName());
+        String respId = accountInfo.getId();
+        Assert.assertEquals("modifyAccountResponse <account> 'id' attribute",
+                testAccountId, respId);
+        len = accountInfo.getA().size();
+        Assert.assertTrue("modifyAccountResponse <account> has " + len +
+                " <a> children - should have at least 50", len >= 50);
+        CountAccountRequest req = new CountAccountRequest();
+        DomainSelector domainSel = new DomainSelector();
+        domainSel.setBy(DomainBy.ID);
+        domainSel.setValue(testDomainId);
+        req.setDomain(domainSel);
+        CountAccountResponse resp = eif.countAccountRequest(req);
+        Assert.assertNotNull(resp);
+        List <CosCountInfo> cosList = resp.getCos();
+        Assert.assertNotNull("cos list", cosList);
+        len = cosList.size();
+        Assert.assertTrue(len + "<cos> children present expect at least 1", len >= 1);
+        CosCountInfo firstCos = cosList.get(0);
+        Assert.assertTrue(
+                "First <cos> id [" + firstCos.getId() + "] len should be longer than 10 chars",
+                firstCos.getId().length() > 10);
+        Assert.assertTrue(
+                "First <cos> name [" + firstCos.getName() + "] len should be longer than 2 chars",
+                firstCos.getName().length() > 2);
+        long val = firstCos.getValue();
+        Assert.assertTrue( "First <cos> value [" + val + "] should be >=0", val >= 0);
+    }
+
+    @Test
+    public void getAllMailboxesTest() throws Exception {
+        GetAllMailboxesRequest req = new GetAllMailboxesRequest();
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        GetAllMailboxesResponse resp = eif.getAllMailboxesRequest(req);
+        Assert.assertNotNull("GetAllMailboxesResponse object", resp);
+        List <MailboxInfo> mboxInfoList = resp.getMbox();
+        int len;
+        Assert.assertNotNull("GetAllMailboxesResponse list of Mailboxes", mboxInfoList);
+        len = mboxInfoList.size();
+        Assert.assertTrue("Number of GetAllMailboxesResponse <mbox> children is " +
+                len + " - should be at least 2", len >= 2);
+    }
+
+    @Test
+    public void recalculateMailboxCountsTest() throws Exception {
+        String accountId = Utility.ensureMailboxExistsForAccount(testAcct);
+        RecalculateMailboxCountsRequest req = new RecalculateMailboxCountsRequest();
+        MailboxByAccountIdSelector sel = new MailboxByAccountIdSelector();
+        sel.setId(accountId);
+        req.setMbox(sel);
+        RecalculateMailboxCountsResponse resp = eif.recalculateMailboxCountsRequest(req);
+        Assert.assertNotNull("RecalculateMailboxCountsResponse object", resp);
+        MailboxQuotaInfo quotaInfo = resp.getMbox();
+        Assert.assertEquals("<mbox> 'id' attribute", accountId, quotaInfo.getId());
+        Assert.assertTrue("RecalculateMailboxCountsResponse <mbox> 'quotaUsed' attribute=" +
+                quotaInfo.getUsed() + " should be 0 or more", quotaInfo.getUsed() >= 0);
+    }
+
+    @Test
+    public void getMailboxTest() throws Exception {
+        String accountId = Utility.ensureMailboxExistsForAccount(testAcct);
+        GetMailboxRequest req = new GetMailboxRequest();
+        MailboxByAccountIdSelector sel = new MailboxByAccountIdSelector();
+        sel.setId(accountId);
+        req.setMbox(sel);
+        GetMailboxResponse resp = eif.getMailboxRequest(req);
+        Assert.assertNotNull("GetMailboxResponse object", resp);
+        MailboxWithMailboxId mboxid = resp.getMbox();
+        Assert.assertNotNull("Object for <mbox> element", mboxid);
+        Assert.assertTrue("mboxid = " + mboxid + " should be >0", mboxid.getMbxid() > 0);
+    }
+
+    @Test
+    public void deleteMailboxTest() throws Exception {
+        String accountId = Utility.ensureMailboxExistsForAccount(testAcct);
+        DeleteMailboxRequest req = new DeleteMailboxRequest();
+        MailboxByAccountIdSelector sel = new MailboxByAccountIdSelector();
+        sel.setId(accountId);
+        req.setMbox(sel);
+        DeleteMailboxResponse resp = eif.deleteMailboxRequest(req);
+        Assert.assertNotNull("DeletMailboxResponse object", resp);
+        MailboxWithMailboxId mboxid = resp.getMbox();
+        Assert.assertNotNull("Object for <mbox> element", mboxid);
+        Assert.assertTrue("mboxid = " + mboxid + " should be >0", mboxid.getMbxid() > 0);
     }
 }
