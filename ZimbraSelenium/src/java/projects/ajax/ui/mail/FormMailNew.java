@@ -280,30 +280,55 @@ public class FormMailNew extends AbsForm {
 			
 		} else if ( field == Field.Body ) {
 
-			try {
+			int frames = this.sGetXpathCount("//iframe");
+			logger.debug("Body: # of frames: "+ frames);
+
+			if ( frames == 0 ) {
+				////
+				// Text compose
+				////
 				
-				int frames = this.sGetXpathCount("//iframe");
-				logger.debug("Body: # of frames: "+ frames);
+				locator = "//textarea[contains(@id,'textarea_')]";
 				
-				if ( frames != 1 )
-					throw new HarnessException("Need to implement multiple iframe logic");
-				
-				this.sSelectFrame("index=0"); // iframe index is 0 based
-				
-				if ( !this.sIsElementPresent("//html//body"))
+				if ( !this.sIsElementPresent(locator))
 					throw new HarnessException("Unable to locate compose body");
 
-				this.sFocus("//html//body");
-				this.zClick("//html//body");
-				this.sType("//html//body", value);
 				
-			} finally {
-				// Make sure to go back to the original iframe
-				this.sSelectFrame("relative=top");
+				this.sFocus(locator);
+				this.zClick(locator);
+				this.sType(locator, value);
+				
+				return;
+				
+			} else if ( frames == 1 ) {
+				////
+				// HTML compose
+				////
+				
+				try {
+					
+					this.sSelectFrame("index=0"); // iframe index is 0 based
+					
+					locator = "//html//body";
+					
+					if ( !this.sIsElementPresent(locator))
+						throw new HarnessException("Unable to locate compose body");
+
+					this.sFocus(locator);
+					this.zClick(locator);
+					this.sType(locator, value);
+					
+				} finally {
+					// Make sure to go back to the original iframe
+					this.sSelectFrame("relative=top");
+				}
+				
+				return;
+
+			} else {
+				throw new HarnessException("Compose //iframe count was "+ frames);
 			}
 			
-			return;
-
 
 		} else {
 			throw new HarnessException("not implemented for field "+ field);
