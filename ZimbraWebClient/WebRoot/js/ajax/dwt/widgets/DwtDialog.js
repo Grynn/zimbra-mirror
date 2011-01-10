@@ -117,7 +117,7 @@ DwtDialog = function(params) {
 	this._button = {};
 	for (var i = 0; i < this._buttonList.length; i++) {
 		var buttonId = this._buttonList[i];
-		var b = this._button[buttonId] = new DwtButton({parent:this});
+		var b = this._button[buttonId] = new DwtButton({parent:this,id:this._htmlElId+"_button"+buttonId});
 		b.setText(this._buttonDesc[buttonId].label);
 		b.buttonId = buttonId;
 		b.addSelectionListener(new AjxListener(this, this._buttonListener));
