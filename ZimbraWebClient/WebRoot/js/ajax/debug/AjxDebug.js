@@ -92,7 +92,7 @@ AjxDebug.NOTIFY			= "notify";	// for troubleshooting missing new mail
 AjxDebug.DEFAULT_TYPE	= "debug";	// regular DBG messages
 
 AjxDebug.BUFFER_MAX[AjxDebug.RPC]			= 200;
-AjxDebug.BUFFER_MAX[AjxDebug.NOTIFY]		= 200;
+AjxDebug.BUFFER_MAX[AjxDebug.NOTIFY]		= 400;
 AjxDebug.BUFFER_MAX[AjxDebug.DEFAULT_TYPE]	= 0;	// this one can get big due to object dumps
 
 AjxDebug.MAX_OUT = 25000; // max length capable of outputting an XML msg
@@ -456,15 +456,15 @@ function(args) {
 		}
 	}
 
-	// check level if provided, strip it from args; level is either a number, or 1-5 lowercase letters
+	// check level if provided, strip it from args; level is either a number, or 1-8 lowercase letters
 	var userLevel = null;
 	var firstArg = argsArray[0];
-	var gotUserLevel = (typeof firstArg == "number" || ((origLen > 1) && firstArg.length <= 5 && /^[a-z]+$/.test(firstArg)));
+	var gotUserLevel = (typeof firstArg == "number" || ((origLen > 1) && firstArg.length <= 8 && /^[a-z]+$/.test(firstArg)));
 	if (gotUserLevel) {
 		userLevel = firstArg;
 		argsArray.shift();
 	}
-	if (userLevel) {
+	if (userLevel && (AjxDebug.BUFFER_MAX[userLevel] == null)) {
 		if (typeof this._level == "number") {
 			if (typeof userLevel != "number" || (userLevel > this._level)) { return; }
 		} else {
