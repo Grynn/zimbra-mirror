@@ -18,7 +18,7 @@ public class PageMain extends AbsTab {
 
 	public static class Locators {
 				
-		public static final String zLogoffButton		= "id=skin_container_logoff";
+		public static final String zLogoffButton		= "css=td[id=skin_container_logoff] a";
 		
 		public static final String zAppbarMail			= "id=zb__App__Mail_title";
 		public static final String zAppbarContact		= "id=zb__App__Contacts_title";
