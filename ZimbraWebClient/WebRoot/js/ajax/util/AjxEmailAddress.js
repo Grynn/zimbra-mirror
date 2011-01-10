@@ -35,6 +35,7 @@ AjxEmailAddress = function(address, type, name, dispName, isGroup) {
 	this.dispName = dispName;
 	this.type = type || AjxEmailAddress.TO;
 	this.isGroup = isGroup;
+	this.canExpand = false;
     this.isAjxEmailAddress = true;
 };
 
@@ -345,12 +346,17 @@ function(str) {
  */
 AjxEmailAddress.prototype.toString =
 function() {
-	if (this.name && !this.isGroup) {
+
+	if (this.isGroup) {
+		return this.address || this.name;
+	}
+	else if (this.name) {
 		var name = this.name.replace(/\\+"/g, '"');	// unescape double quotes (avoid double-escaping)
 		name = name.replace(/"/g, '\\"');			// escape double quotes
 		var buffer = ['"', name, '"'];
-		if (this.address)
+		if (this.address) {
 			buffer.push(" <", this.address, ">");
+		}
 		return buffer.join("");	// quote friendly part
 	} else {
 		return this.address;
@@ -449,6 +455,8 @@ AjxEmailAddress.copy =
 function(obj){    
     var addr = new AjxEmailAddress(obj.address, obj.type, obj.name, obj.dispName);
     addr.icon = obj.icon;
+	addr.isGroup = obj.isGroup;
+	addr.canExpand = obj.canExpand;
     return addr;
 };
 

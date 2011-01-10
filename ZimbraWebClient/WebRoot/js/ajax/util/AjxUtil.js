@@ -759,13 +759,17 @@ function(hash1, hash2, overwrite, ignore) {
 	return hash1;
 };
 
+// array check that doesn't rely on instanceof, since type info
+// can get lost in new window
+AjxUtil.isArray1 =
+function(arg) {
+	return Boolean(arg && (arg.length != null) && arg.splice && arg.slice);
+};
+
 // converts the arg to an array if it isn't one
 AjxUtil.toArray =
 function(arg) {
-	// array check that doesn't rely on instanceof, since type info
-	// can get lost in new window
-	var isArray = Boolean(arg && (arg.length != null) && arg.splice && arg.slice);
-	return isArray ? arg : (arg === undefined) ? [] : [arg];
+	return AjxUtil.isArray1(arg) ? arg : (arg === undefined) ? [] : [arg];
 };
 
 /**

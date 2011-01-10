@@ -57,7 +57,7 @@ AjxVector.fromArray =
 function(list) {
 	var vec = new AjxVector();
 	vec._array.length = 0;
-	if (list instanceof Array) {
+	if (AjxUtil.isArray1(list)) {
 		vec._array = list;
 	}
 	return vec;
