@@ -270,8 +270,8 @@ function(params) {
 	var pre = params.pre || "";
 	var eol = "\n";
 
-	text = AjxStringUtil.trim(text);
-	text = text.replace(/\n\r/g, eol);
+	text = AjxStringUtil.trim(text, false, "[\t ]");
+	text = text.replace(/\r\n/g, eol);
 	var lines = text.split(eol);
 	var words = [];
 
