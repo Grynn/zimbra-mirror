@@ -26,7 +26,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.*;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.mail.AuthenticationFailedException;
 import javax.security.auth.login.LoginException;
@@ -63,11 +65,15 @@ import com.zimbra.cs.offline.ab.gab.GDataServiceException;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
 import com.zimbra.cs.service.UserServlet;
+import com.zimbra.cs.service.formatter.ArchiveFormatter;
+import com.zimbra.cs.service.formatter.FormatListener;
+import com.zimbra.cs.service.formatter.Formatter;
+import com.zimbra.cs.service.formatter.ArchiveFormatter.Resolve;
 import com.zimbra.cs.util.Zimbra;
 import com.zimbra.cs.util.ZimbraApplication;
 import com.zimbra.cs.util.yauth.AuthenticationException;
 
-public class OfflineSyncManager {
+public class OfflineSyncManager implements FormatListener {
 
     private static final QName ZDSYNC_ZDSYNC = QName.get("zdsync", OfflineConstants.NAMESPACE);
     private static final QName ZDSYNC_ACCOUNT = QName.get("account", OfflineConstants.NAMESPACE);
@@ -329,9 +335,18 @@ public class OfflineSyncManager {
 
     public void syncStart(NamedEntry entry) {
         boolean b;
+        lock.lock();
+        while (suspendCount > 0) {
+           try {
+               OfflineLog.offline.info("sync suspended by background job");
+               waiting.await(30, TimeUnit.SECONDS);
+           } catch (InterruptedException e) {
+           }
+        }
         synchronized (syncStatusTable) {
             b = getStatus(entry).syncStart();
         }
+        lock.unlock();
         if (b)
             notifyStateChange();
     }
@@ -343,6 +358,9 @@ public class OfflineSyncManager {
         }
         if (b)
             notifyStateChange();
+        lock.lock();
+        waiting.signalAll();
+        lock.unlock();
     }
 
     public void resetLastSyncTime(NamedEntry entry) {
@@ -597,6 +615,7 @@ public class OfflineSyncManager {
     private boolean isConnectionDown = false, isServiceUp = false, isUiLoading = false;
     private Lock lock = new ReentrantLock();
     private Condition waiting  = lock.newCondition(); 
+    private int suspendCount = 0;  
 
     public synchronized boolean isConnectionDown() {
         return isConnectionDown;
@@ -644,6 +663,7 @@ public class OfflineSyncManager {
 
     public synchronized void shutdown() {
         lock.lock();
+        suspendCount = 0;
         waiting.signalAll();
         lock.unlock();
         try {
@@ -653,6 +673,7 @@ public class OfflineSyncManager {
     }
 
     public void init() {
+        Formatter.registerListener(ArchiveFormatter.class, this);
         new Thread(new Runnable() {
             @Override public void run() {
                 backgroundInit();
@@ -832,5 +853,75 @@ public class OfflineSyncManager {
         else if (quietTime > 5 * Constants.MILLIS_PER_MINUTE)
             freqLimit = 15 * Constants.MILLIS_PER_MINUTE;
         return freqLimit;
+    }
+
+    @Override
+    public void formatCallbackEnded(UserServlet.Context context) {
+        //don't currently need to suspend sync during export
+    }
+
+    @Override
+    public void formatCallbackStarted(UserServlet.Context context) {
+        //don't currently need to suspend sync during export
+    }
+
+    @Override
+    public void saveCallbackEnded(UserServlet.Context context) {
+        resumeSync();
+    }
+
+    @Override
+    public void saveCallbackStarted(UserServlet.Context context) throws ServiceException {
+        String resolve = context.params.get(ArchiveFormatter.PARAM_RESOLVE);
+        Resolve r = resolve == null ? Resolve.Skip : Resolve.valueOf(
+                resolve.substring(0,1).toUpperCase() +
+                resolve.substring(1).toLowerCase());
+        if (r == Resolve.Replace || r == Resolve.Reset) {
+            suspendSync(context.targetAccount);
+        }
+    }
+    
+    private boolean isSyncing(Account acct) throws ServiceException {
+        //have to check the account and any data sources; none can be syncing
+        OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
+        if (getSyncStatus(acct) == SyncStatus.running) {
+            return true;
+        }
+        if (OfflineProvisioning.isDataSourceAccount(acct)) {
+            List<DataSource> sources = prov.getAllDataSources(acct);
+            for (DataSource ds : sources) {
+                if (getSyncStatus(ds) == SyncStatus.running) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    private void suspendSync(Account acct) throws ServiceException {
+        lock.lock();
+        try {
+            suspendCount++; //flag not sufficient
+            //if account is currently syncing need to wait for it to finish; if not prevent new one from starting
+            while (isSyncing(acct)) {
+                try {
+                    OfflineLog.offline.info("Sync in progress, import waiting until it completes");
+                    waiting.await(30, TimeUnit.SECONDS);
+                } catch (InterruptedException e) {
+                }
+            }
+        }
+        finally {
+            lock.unlock();
+        }
+    }
+    
+    private void resumeSync() {
+        if (suspendCount > 0) {
+            lock.lock();
+            suspendCount--;
+            waiting.signalAll();
+            lock.unlock();
+        }
     }
 }
