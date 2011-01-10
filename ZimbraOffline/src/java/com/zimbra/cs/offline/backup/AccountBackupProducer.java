@@ -274,14 +274,13 @@ public class AccountBackupProducer {
             acctInfo.setAccountId(acct.getId());
             allInfo.add(acctInfo);
             File[] backups = listStoredBackupFiles(acct);
-            if (backups == null) {
-                continue;
-            }
             List<BackupInfo> backupInfo = new ArrayList<BackupInfo>(); 
-            for (File file : backups) {
-                BackupInfo bi = new BackupInfo(file);
-                bi.setTimestamp(extractTimestampFromFilename(file.getName(), acct.getName()));
-                backupInfo.add(bi);
+            if (backups != null) {
+                for (File file : backups) {
+                    BackupInfo bi = new BackupInfo(file);
+                    bi.setTimestamp(extractTimestampFromFilename(file.getName(), acct.getName()));
+                    backupInfo.add(bi);
+                }
             }
             acctInfo.setBackups(backupInfo);
         }
