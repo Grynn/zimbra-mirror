@@ -12,20 +12,23 @@ import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
 import framework.util.ZimbraSeleniumProperties;
 
-public class CreateMail extends AjaxCommonTest {
+public class CreateMailHtml extends AjaxCommonTest {
 
-	public CreateMail() {
-		logger.info("New "+ CreateMail.class.getCanonicalName());
+	public CreateMailHtml() {
+		logger.info("New "+ CreateMailHtml.class.getCanonicalName());
 		
 		// All tests start at the login page
 		super.startingPage = app.zPageMail;
-		super.startingAccount = null;
+		super.startingAccount = new ZimbraAccount();
+		super.startingAccount.provision();
+		super.startingAccount.authenticate();
+		super.startingAccount.modifyPreference("zimbraPrefComposeFormat", "html");
 		
 	}
 	
-	@Test(	description = "Send a mail",
+	@Test(	description = "Send a mail using HTML editor",
 			groups = { "sanity" })
-	public void CreateMail_01() throws HarnessException {
+	public void CreateMailHtml_01() throws HarnessException {
 		
 		
 		// Create the message data to be sent
