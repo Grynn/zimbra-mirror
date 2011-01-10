@@ -806,6 +806,12 @@ public class BeanUtils {
         return cal;
     }
 
+    public static Calendar getCurrentTime(TimeZone tz) {
+        Calendar cal = tz == null ? Calendar.getInstance() : Calendar.getInstance(tz);
+        cal.setTimeInMillis(System.currentTimeMillis());
+        return cal;
+    }
+
     public static Calendar getFirstDayOfMonthView(java.util.Calendar date, long prefFirstDayOfWeek) {
          prefFirstDayOfWeek++; // pref goes 0-6, Calendar goes 1-7
          Calendar cal = Calendar.getInstance(date.getTimeZone());

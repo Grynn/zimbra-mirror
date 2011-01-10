@@ -7072,6 +7072,12 @@
     </function>
 
     <function>
+        <name>getCurrentTime</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.util.Calendar getCurrentTime(java.util.TimeZone)</function-signature>
+    </function>
+
+    <function>
         <name>isSameDate</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isSameDate(java.util.Calendar,java.util.Calendar)</function-signature>

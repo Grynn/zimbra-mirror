@@ -1002,11 +1002,6 @@ public class ZMessageComposeBean {
             setTaskStatus(ZInvite.ZStatus.NEED.name());
         }
         Calendar calendar = options.getDate() != null ? options.getDate() : BeanUtils.getCalendar(System.currentTimeMillis(), mailbox.getPrefs().getTimeZone());
-        if (options.getDate() != null) {
-            Calendar now = BeanUtils.getCalendar(System.currentTimeMillis(), mailbox.getPrefs().getTimeZone());
-            // start hour to current hour instead of 12:00 AM
-            calendar.set(Calendar.HOUR_OF_DAY, now.get(Calendar.HOUR_OF_DAY));
-        }
         DateFormat df = new SimpleDateFormat(I18nUtil.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
         df.setTimeZone(mailbox.getPrefs().getTimeZone());
         String dateStr = df.format(calendar.getTime());
