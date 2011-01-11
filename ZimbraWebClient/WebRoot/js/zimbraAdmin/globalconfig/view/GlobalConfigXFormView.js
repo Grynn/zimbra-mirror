@@ -154,7 +154,7 @@ GlobalConfigXFormView.ATTACHMENTS_TAB_ATTRS = [ZaGlobalConfig.A_zimbraMtaBlocked
 GlobalConfigXFormView.ATTACHMENTS_TAB_RIGHTS = [];
 
 GlobalConfigXFormView.MTA_TAB_ATTRS = [ZaGlobalConfig.A_zimbraMtaAuthEnabled, ZaGlobalConfig.A_zimbraMtaTlsAuthOnly, ZaGlobalConfig.A_zimbraSmtpHostname,
-	ZaGlobalConfig.A_zimbraSmtpPort, ZaGlobalConfig.A_zimbraMtaRelayHost, ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled, ZaGlobalConfig.A_zimbraMilterServerEnabled, ZaGlobalConfig.A_zimbraMilterBindPort];
+	ZaGlobalConfig.A_zimbraSmtpPort, ZaGlobalConfig.A_zimbraMtaRelayHost, ZaGlobalConfig.A_zimbraMtaMyNetworks, ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled, ZaGlobalConfig.A_zimbraMilterServerEnabled, ZaGlobalConfig.A_zimbraMilterBindPort];
 GlobalConfigXFormView.MTA_TAB_RIGHTS = [];
 
 GlobalConfigXFormView.IMAP_TAB_ATTRS = [ZaGlobalConfig.A_zimbraImapServerEnabled, ZaGlobalConfig.A_zimbraImapSSLServerEnabled, ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled,
@@ -371,7 +371,13 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 								  label:ZaMsg.Domain_zimbraDNSCheckHostname,
 								  toolTipContent: ZaMsg.Domain_zimbraDNSCheckHostname
 								},
-							  	{ ref: ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled, type: _CHECKBOX_,
+							  	                                                                							      { ref: ZaGlobalConfig.A_zimbraMtaMyNetworks, type: _TEXTAREA_,
+                                                                  label:ZaMsg.NAD_MTA_MyNetworks,
+								  msgName:ZaMsg.NAD_MTA_MyNetworks,
+                                                                  width:250
+                                                                },
+
+								{ ref: ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled, type: _CHECKBOX_,
 							  	  label: ZaMsg.NAD_MTA_DnsLookups,
 							  	  trueValue: "TRUE", falseValue: "FALSE"
 							  	}

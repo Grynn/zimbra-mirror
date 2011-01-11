@@ -732,11 +732,13 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 									  onChange: ZaServerXFormView.onFormFieldChanged
 									},
 								  	{type:_SPACER_},
-									{ref:ZaServer.A_zimbraMtaMyNetworks,label:ZaMsg.NAD_MTA_MyNetworks,
-										type:_TEXTFIELD_,
+									{ref:ZaServer.A_zimbraMtaMyNetworks,
+										txtBoxLabel:ZaMsg.NAD_MTA_MyNetworks,
+										msgName:ZaMsg.NAD_MTA_MyNetworks,
+										type:_SUPER_TEXTAREA_,
+										resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
 										onChange: ZaServerXFormView.onFormFieldChanged,
-										toolTipContent: ZaMsg.tt_MTA_MyNetworks,
-										textFieldCssClass:"admin_xform_name_input"
+										textAreaWidth:"250px"
 									},
 							  		{type:_SPACER_}
 								]
