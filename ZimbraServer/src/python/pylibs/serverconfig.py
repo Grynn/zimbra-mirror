@@ -25,10 +25,10 @@ class ServerConfig(config.Config):
 		if key is not None:
 			if key == "mailboxd":
 				key = "mailbox"
-			Log.logMsg(5, "Checking service %s in services %s (%s)" % (key, self["zimbraServiceEnabled"], key in self["zimbraServiceEnabled"]))
-			return key in self["zimbraServiceEnabled"]
-		return self["zimbraServiceEnabled"].split(' ')
-
+			Log.logMsg(5, "Checking service %s in services %s (%s)" % (key, self.serviceconfig, key in self.serviceconfig.keys()))
+			return key in self.serviceconfig
+		return self.serviceconfig.iterkeys()
+                
 	def load(self, hostname):
 		if (hostname is None):
 			raise Exception, "Hostname required"
