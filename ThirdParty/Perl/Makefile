@@ -150,6 +150,7 @@ PERL_LIBS 	:= \
 	SOAP::Lite \
 	Net::Telnet \
 	Config::IniFiles \
+	Config::Properties \
 	Cache::FastMmap \
 	Device::SerialPort \
 	Date::Calc \
