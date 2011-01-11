@@ -1432,7 +1432,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public synchronized void setPassword(Account acct, String newPassword) throws ServiceException {
+    public synchronized SetPasswordResult setPassword(Account acct, String newPassword) throws ServiceException {
         throw new UnsupportedOperationException();
     }
 
