@@ -39,7 +39,7 @@ public class OpenDocument extends AjaxCommonTest {
 		}
 	}
 
-	@Test(description = "Create document through SOAP - edit text & verify through GUI", groups = { "smoke" })
+	@Test(description = "Create document through SOAP - open & verify through GUI", groups = { "smoke" })
 	public void OpenDocument_01() throws HarnessException {
 
 		// Create document item
@@ -72,47 +72,6 @@ public class OpenDocument extends AjaxCommonTest {
 		// Click on created document
 		SleepUtil.sleepLong();
 
-		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
-				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
-			app.zPageBriefcase
-					.zClick("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div:contains("
-							+ document.getDocName() + ")");
-		}
-		/*
-		 * // Click on Edit document icon in toolbar DocumentBriefcaseEdit
-		 * documentBriefcaseEdit = (DocumentBriefcaseEdit) app.zPageBriefcase
-		 * .zToolbarPressButton(Button.B_EDIT_FILE);
-		 * 
-		 * // Select document window opened for editing SleepUtil.sleepLong();
-		 * String windowName = document.getDocName(); try {
-		 * documentBriefcaseEdit.zSelectWindow(windowName);
-		 * 
-		 * // if name field appears in the toolbar then document page is opened
-		 * int i = 0; for(; i < 90; i++){ if
-		 * (documentBriefcaseEdit.sIsElementPresent("//*[@id='DWT2_item_1']")) {
-		 * break; } SleepUtil.sleepSmall(); }
-		 * 
-		 * if (!documentBriefcaseEdit.sIsVisible("//*[@id='DWT2_item_1']") ) {
-		 * throw new HarnessException("could not open an edit file page"); }
-		 * 
-		 * // Fill out the document with the new data document.setDocText("text"
-		 * + ZimbraSeleniumProperties.getUniqueString());
-		 * 
-		 * documentBriefcaseEdit.typeDocumentText(document.getDocText());
-		 * 
-		 * // Save and close documentBriefcaseEdit.zSelectWindow(windowName);
-		 * 
-		 * documentBriefcaseEdit.zSubmit(); } finally {
-		 * app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase"); }
-		 */
-		// ClientSessionFactory.session().selenium().refresh();
-		// refresh briefcase page
-		app.zPageBriefcase.zClick(Locators.zBriefcaseFolderIcon);
-
-		// Verify document was saved with new data
-		SleepUtil.sleepLong();
-
-		// Select document in a list view
 		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
 				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
 			app.zPageBriefcase
