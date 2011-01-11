@@ -241,7 +241,6 @@ public class EditDocument extends AjaxCommonTest {
 		app.zPageBriefcase.zClick(Locators.zBriefcaseFolderIcon);
 
 		// Verify document name & text through SOAP
-		String text = "";
 		int i = 0;
 		int y = 20;
 
@@ -269,11 +268,13 @@ public class EditDocument extends AjaxCommonTest {
 					+ "sec account.soapSelectValue(//mail:doc,fr) is null");
 
 		String name = account.soapSelectValue("//mail:doc", "name");
-		text = account.soapSelectValue("//mail:doc", "fr").trim();
+		String text = account.soapSelectValue("//mail:doc", "fr");
+		if (text != null)
+			text = account.soapSelectValue("//mail:doc", "fr").trim();
 
 		ZAssert.assertEquals(document.getDocName(), name,
 				" Verify document name through SOAP");
-		ZAssert.assertEquals(document.getDocText(), text,
+		ZAssert.assertEquals(text, document.getDocText(),
 				" Verify document text through SOAP");
 
 		/*
