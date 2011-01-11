@@ -313,7 +313,7 @@ function(params) {
 		if (word.para) {
 			// paragraph break - output what we have, add a blank line
 			if (wds.length) {
-				result += addPrefix + (curP || "") + wds.join("") + eol;
+				result += addPrefix + (curP || "") + wds.join("").replace(/^ /,"") + eol;
 			}
 			result += addPrefix + p + eol;
 			wds = [];
@@ -322,7 +322,7 @@ function(params) {
 		} else if ((apl + pl + curLen + sp + w.length <= max) && (p == curP || curP === null) && !word.special) {
 			// still room left on the current line, add the word
 			wds.push(w);
-			curLen += w.length + sp;
+			curLen += w.length;
 			curP = p;
 			if (word.lastWord && words[i + 1]) {
 				words[i + 1].special = true;
@@ -330,7 +330,7 @@ function(params) {
 		} else {
 			// output what we have and start a new line
 			if (wds.length) {
-				result += addPrefix + (curP || "") + wds.join("") + eol;
+				result += addPrefix + (curP || "") + wds.join("").replace(/^ /,"") + eol;
 			}
 			wds = [w];
 			curLen = w.length;
@@ -343,7 +343,7 @@ function(params) {
 
 	// handle last line
 	if (wds.length) {
-		result += addPrefix + curP + wds.join("") + eol;
+		result += addPrefix + curP + wds.join("").replace(/^ /,"") + eol;
 	}
 
 	return [before, result, after].join("");
