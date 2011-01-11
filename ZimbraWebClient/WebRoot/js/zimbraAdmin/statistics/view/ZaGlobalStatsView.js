@@ -162,19 +162,19 @@ ZaGlobalStatsView.prototype.setObject = function (entry) {
 	if( !ZaGlobalStatsView.prototype.isAllMtaDisable()  ){
     
     if( this._msgCountPage == null ){
-        this._msgCountPage = new ZaServerMessageCountPage(this);
+        this._msgCountPage = new ZaGlobalMessageCountPage(this);
         this.addTab(ZaMsg.TABT_InMsgs, this._msgCountPage);
     }
  		this._msgCountPage.setObject(entry);
     
     if( this._msgsVolumePage == null ){
-        this._msgsVolumePage = new ZaServerMessageVolumePage(this);
+        this._msgsVolumePage = new ZaGlobalMessageVolumePage(this);
         this.addTab(ZaMsg.TABT_InData, this._msgsVolumePage);
     }
     this._msgsVolumePage.setObject(entry);	
      
 		if( this._spamPage == null ){
-			  this._spamPage = new ZaServerSpamActivityPage(this);
+			  this._spamPage = new ZaGlobalSpamActivityPage(this);
         this.addTab(ZaMsg.TABT_Spam_Activity, this._spamPage);
 		}
 	  this._spamPage.setObject(entry);	
