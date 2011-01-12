@@ -225,7 +225,7 @@ function submit(id, name, type, flavor, verb) {
 																							<c:if test="${not default}">
 																								<td>
 																									<a title='<fmt:message key="SetAsDefault"/>' href="javascript:OnDefault('${account.id}', '${fn:replace(account.name, "'", "\\'")}', '${account.type}', '${account.flavor}')">
-																										<img src="/zimbra/img/startup/ImgAccordionClosed.gif" width=12 height=12 align="absbottom" border="0"></a>
+																										<img src="/img/imgSetDefault.png" width=12 height=12 align="absbottom" border="0"></a>
 																								</td>
 																							</c:if>
 																						</tr>
