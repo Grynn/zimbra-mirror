@@ -323,25 +323,33 @@ public class PageMail extends AbsTab {
 			
 		} else if ( button == Button.B_REPLY ) {
 			
+			page = new FormMailNew(this.MyApplication);;
+			locator = "css=div[id$='__REPLY']";
+			
+			if ( !this.sIsElementPresent(locator) ) {
+				throw new HarnessException("Reply icon not present "+ button);
+			}
+			
 			// Check if the button is enabled
-			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zReplyIconBtnID +"']/div)@class");
-			if ( attrs.contains("ZDisabledImage") ) {
+			String attrs = sGetAttribute("xpath=(//div[contains(@id,'__REPLY')])@class");
+			if ( attrs.contains("ZDisabled") ) {
 				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
 			}
-
-			locator = "id='"+ Locators.zReplyIconBtnID;
-			page = new FormMailNew(this.MyApplication);
 			
 		} else if ( button == Button.B_REPLYALL ) {
 			
+			page = new FormMailNew(this.MyApplication);;
+			locator = "css=div[id$='__REPLY_ALL']";
+			
+			if ( !this.sIsElementPresent(locator) ) {
+				throw new HarnessException("Reply All icon not present "+ button);
+			}
+			
 			// Check if the button is enabled
-			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zReplyAllIconBtnID +"']/div)@class");
-			if ( attrs.contains("ZDisabledImage") ) {
+			String attrs = sGetAttribute("xpath=(//div[contains(@id,'__REPLY_ALL')])@class");
+			if ( attrs.contains("ZDisabled") ) {
 				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
 			}
-
-			locator = "id='"+ Locators.zReplyAllIconBtnID;
-			page = new FormMailNew(this.MyApplication);
 			
 		} else if ( button == Button.B_FORWARD ) {
 			
