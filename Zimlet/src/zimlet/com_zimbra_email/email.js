@@ -675,7 +675,7 @@ function() {
 
 EmailTooltipZimlet.prototype._getAddress =
 function(obj) {
-	return (obj.constructor == AjxEmailAddress) ? obj.address : obj;
+	return obj.isAjxEmailAddress ? obj.address : obj;
 };
 
 EmailTooltipZimlet.prototype._contactListener =
@@ -751,6 +751,7 @@ function(ev, addr) {
 	if (!params.toOverride) {
 		params.toOverride = addr + AjxEmailAddress.SEPARATOR;
 	}
+	params.toOverrideObj = this._actionObject;
 
 	AjxDispatcher.run("Compose", params );
 };
