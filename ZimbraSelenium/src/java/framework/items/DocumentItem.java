@@ -242,8 +242,8 @@ public class DocumentItem implements IItem {
 	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(DocumentItem.class.getSimpleName()).append('\n');
-		sb.append("Doc name: ").append(docName).append('\n');
-		sb.append("Doc text: \n\n").append(docText).append("\n\n");
+		sb.append("Doc name: \n").append(docName).append('\n');
+		sb.append("Doc text: \n").append(docText).append("\n");
 		return (sb.toString());
 	}
 

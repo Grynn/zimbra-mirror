@@ -36,6 +36,8 @@ public class DocumentBriefcaseEdit extends AbsForm {
 		//ClientSessionFactory.session().selenium().selectFrame("css=iframe[id='DWT9',class='ZDEditor']");
 		//ClientSessionFactory.session().selenium().type("xpath=(//html/body)",text);
 		if(sIsElementPresent(Locators.zBodyField)){
+			logger.info("typing Document Text" + text);
+			SleepUtil.sleepSmall();
 			ClientSessionFactory.session().selenium().type(Locators.zBodyField,text);			
 		}		
 	}
