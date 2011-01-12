@@ -65,6 +65,7 @@ public class Button {
 	public static final Button B_REPLYALL = new Button("B_REPLYALL");
 	public static final Button B_FORWARD = new Button("B_FORWARD");
 	public static final Button B_RESPORTSPAM = new Button("B_RESPORTSPAM");
+	public static final Button B_RESPORTNOTSPAM = new Button("B_RESPORTNOTSPAM");
 	public static final Button B_NEWWINDOW = new Button("B_NEWWINDOW");
 	public static final Button B_LISTVIEW = new Button("B_LISTVIEW");
 

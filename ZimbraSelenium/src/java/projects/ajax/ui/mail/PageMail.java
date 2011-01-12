@@ -354,15 +354,19 @@ public class PageMail extends AbsTab {
 			locator = "id='"+ Locators.zForwardIconBtnID;
 			page = new FormMailNew(this.MyApplication);
 			
-		} else if ( button == Button.B_RESPORTSPAM ) {
+		} else if ( (button == Button.B_RESPORTSPAM) || (button == Button.B_RESPORTNOTSPAM) ) {
+			
+			page = null;
+			locator = "css=div[id$='__SPAM']";
+			if ( !this.sIsElementPresent(locator) ) {
+				throw new HarnessException("Spam icon not present "+ button);
+			}
 			
 			// Check if the button is enabled
-			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zJunkIconBtnID +"']/div)@class");
-			if ( attrs.contains("ZDisabledImage") ) {
+			String attrs = sGetAttribute("xpath=(//div[contains(@id,'__SPAM')])@class");
+			if ( attrs.contains("ZDisabled") ) {
 				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
 			}
-
-			locator = "id='"+ Locators.zJunkIconBtnID;			
 			
 		} else if ( button == Button.B_TAG ) {
 			
