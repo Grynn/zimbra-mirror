@@ -54,6 +54,7 @@
 	  %>
 </c:if>
 
+<c:if test="${empty authResult}">
 <c:if test="${loginException != null}">
     <zm:getException var="error" exception="${loginException}"/>
     <c:set var="errorCode" value="${error.code}"/>
@@ -201,3 +202,4 @@
 </script>
 </body>
 </html>
+</c:if>
