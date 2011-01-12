@@ -1580,6 +1580,11 @@ public class BeanUtils {
         }
         return s;
     }
+
+    public static String capitalize(String s) {
+        if (s == null || s.length() == 0) return "";
+        return s.length() > 1 ? s.substring(0,1).toUpperCase()+s.substring(1) : s.toUpperCase();
+    }
 }
 
 class ExtendedDateFormatSymbols extends DateFormatSymbols{
