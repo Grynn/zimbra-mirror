@@ -1681,3 +1681,24 @@ function(str, bold) {
 
 	return w;
 };
+
+/**
+ * correct the cross domain reference in passed url content
+ * eg: http://<ipaddress>/ url might have rest url page which points to http://<server name>/ pages
+ *
+ */
+AjxStringUtil.fixCrossDomainReference =
+function(url, restUrlAuthority) {
+	var urlParts = AjxStringUtil.parseURL(url);
+	if (urlParts.authority == window.location.host) {
+		return url;
+	}
+
+	if ((restUrlAuthority && url.indexOf(restUrlAuthority) >=0) || !restUrlAuthority) {
+		var oldRef = urlParts.protocol + "://" + urlParts.authority;
+		var newRef = window.location.protocol + "//" + window.location.host;
+		url = url.replace(oldRef, newRef);
+	}
+	return url;
+};
+
