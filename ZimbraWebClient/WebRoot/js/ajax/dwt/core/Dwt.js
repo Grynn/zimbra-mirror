@@ -351,13 +351,19 @@ function(domElement, attrName) {
 };
 
 /**
- * Returns true if el2 is an ancestor (in the parent chain) of el1.
+ * Returns true if el2 is an ancestor (in the parent chain) of el1, or if
+ * el1 and el2 are the same element.
  *
  * @param {DOMElement}	el1
  * @param {DOMElement}	el2
  */
 Dwt.isAncestor =
 function(el1, el2) {
+
+	if (el1 == el2) {
+		return true;
+	}
+
 	var el = el1;
 	while (el) {
 		el = el.parentNode;
