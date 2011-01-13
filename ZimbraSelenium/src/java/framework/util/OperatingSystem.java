@@ -22,7 +22,31 @@ public class OperatingSystem {
 		return (OperatingSystem.getSingleton().os.startsWith("Mac"));
 	}
 
-	private String os = null;
+	public enum OsType {
+      WINDOWS, WINDOWS_XP, LINUX, MAC
+   }
+
+   /**
+    * Get the OS type from the system information
+    * @return (enum: OperatingSystem.OsType) OS Type (Windows, MAC, or Linux)
+    */
+   public static OsType getOSType() {
+      String os = System.getProperty("os.name").toLowerCase();
+      logger.info("os.name is: " + os);
+      OsType osType = null;
+      if (isWindows()) {
+         osType = OsType.WINDOWS;
+      } else if (isWindowsXP()) {
+         osType = OsType.WINDOWS_XP;
+      } else if (isMac()) {
+         osType = OsType.MAC;
+      } else if (isLinux()) {
+         osType = OsType.LINUX;
+      }
+      return osType;
+   }
+
+   private String os = null;
 	
 	// Singleton methods
 	//

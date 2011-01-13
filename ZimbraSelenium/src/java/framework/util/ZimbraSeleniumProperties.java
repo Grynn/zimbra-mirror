@@ -20,6 +20,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import framework.util.OperatingSystem.OsType;
+
 public class ZimbraSeleniumProperties {
 	private static final Logger logger = LogManager.getLogger(ZimbraSeleniumProperties.class);
 	
@@ -228,28 +230,6 @@ public class ZimbraSeleniumProperties {
 	   "C:\\Documents and Settings\\<USER_NAME>\\Local Settings\\Application Data\\Zimbra\\Zimbra Desktop\\conf\\localconfig.xml"
 	};	   
 
-	public enum OsType {
-	   WINDOWS, LINUX, MAC
-	}
-
-	/**
-	 * Get the OS type from the system information
-	 * @return OS Type (Windows, MAC, or Linux)
-	 */
-	public static OsType getOSType() {
-	   String os = System.getProperty("os.name").toLowerCase();
-	   logger.info("os.name is: " + os);
-	   OsType osType = null;
-	   if (os.indexOf("win") >= 0) {
-	      osType = OsType.WINDOWS;
-	   } else if (os.indexOf("mac") >= 0) {
-	      osType = OsType.MAC;
-	   } else if (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0) {
-	      osType = OsType.LINUX;
-	   }
-	   return osType;
-	}
-
 	/**
     * Get value out of a specified element's name in XML file
     * @param xmlFile XML File to look at
@@ -300,7 +280,7 @@ public class ZimbraSeleniumProperties {
 		String port = ZimbraSeleniumProperties.getStringProperty("server.port", "7070");
 
 		if ( appType == AppType.DESKTOP ) {
-		   OsType osType = getOSType();
+		   OsType osType = OperatingSystem.getOSType();
 		   logger.info("AppType is: " + appType);
 		   logger.info("OS Type is: " + osType);
 
