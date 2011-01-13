@@ -22,6 +22,7 @@
 * This class is responsible for bootstrapping the ZimbraAdmin application.
 */
 ZaZimbraAdmin = function(appCtxt) {
+	if (arguments.length == 0) return;
 	ZaZimbraAdmin._instance = this;
 	ZaController.call(this, appCtxt, null,"ZaZimbraAdmin");
 
