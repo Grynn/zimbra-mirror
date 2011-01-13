@@ -442,6 +442,8 @@ AjxEmailAddress.prototype.clone =
 function() {
 	var addr = new AjxEmailAddress(this.address, this.type, this.name, this.dispName);
 	addr.icon = this.icon;
+	addr.isGroup = this.isGroup;
+	addr.canExpand = this.canExpand;
 	return addr;
 };
 
