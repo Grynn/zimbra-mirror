@@ -632,18 +632,17 @@ function(spanElement, contentObjText, matchContext, ev) {
 		contact = RegExp.$1;
 	}
 
+	this._actionObject = contentObjText;
 	var contactList = AjxDispatcher.run("GetContacts");
 	var addrContact = contactList ? contactList.getContactByEmail(contact) : null;
 	// if contact found or there is no contact list (i.e. contacts app is disabled), go to compose view
 	if (isMailTo || addrContact || contactList == null)
 	{
-		this._actionObject = null;
 		this._composeListener(ev, addr);
 	}
 	else
 	{
 		// otherwise, no contact in addrbook means go to contact edit view
-		this._actionObject = contentObjText;
 		this._contactListener(true);
 	}
 };
