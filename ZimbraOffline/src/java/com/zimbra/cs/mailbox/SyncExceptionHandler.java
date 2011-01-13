@@ -21,9 +21,12 @@ import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.mail.Message.RecipientType;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import com.zimbra.common.mime.shim.JavaMailInternetAddress;
@@ -35,6 +38,7 @@ import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
+import com.zimbra.cs.offline.util.RecoverableException;
 import com.zimbra.cs.util.JMSession;
 
 public class SyncExceptionHandler {
@@ -47,13 +51,111 @@ public class SyncExceptionHandler {
     private static final String SEND_MAIL_FAILED = "send mail failed";
     private static final String DOCUMENT_SYNC_FAILED = "document sync failed";
 
-
-    public static void checkRecoverableException(String message, Exception exception) throws ServiceException {
+    private static ConcurrentMap<Mailbox, List<SyncFailure>> ioExceptions = new ConcurrentHashMap<Mailbox, List<SyncFailure>>();
+    
+    private static int MAX_IO_EXCEPTIONS = OfflineLC.zdesktop_sync_io_exception_limit.intValue();
+    private static int FAILURE_RATE_THRESHOLD = OfflineLC.zdesktop_sync_io_exception_rate.intValue();
+    
+    public static void clearIOExceptions(Mailbox mbox) {
+        ioExceptions.put(mbox, new ArrayList<SyncFailure>());
+    }
+    
+    /**
+     * Check if the accumulated IOExceptions outweigh the successful syncs
+     * If there are any failures an error report is created
+     * @throws ServiceException - If the failure rate is exceeded
+     */
+    public static void checkIOExceptionRate(SyncMailbox mbox) throws ServiceException {
+        List<SyncFailure> failures = ioExceptions.get(mbox);
+        if (failures.size() > 0) {
+            double failureRate = mbox.getSyncCount() > 0 ? (failures.size()*1.0)/(mbox.getSyncCount()*1.0) : 1.0;
+            boolean abortSync = failureRate * 100 >= FAILURE_RATE_THRESHOLD; 
+            createIOExceptionErrorReport(mbox, !abortSync);
+            clearIOExceptions(mbox);
+            if (abortSync) {
+                Exception ioException = failures.get(0).getException();
+                RecoverableException e = new RecoverableException(ioException);
+                throw ServiceException.FAILURE("Multiple IOException for mailbox "+mbox, e);
+            } 
+        }
+    }
+    
+    private static boolean isCausedBy(Exception exception, Class<? extends Throwable> targetCause) {
+        Throwable cause = exception;
+        while (cause != null) {
+            if (cause.getClass().isAssignableFrom(targetCause)) {
+                return true;
+            }
+            cause = cause.getCause();
+        }
+        return false;
+    }
+    
+    /**
+     * Determine if the exception might be recoverable
+     * If mbox is specified IOExceptions will be deferred up to limit; calling code needs to call checkIOExceptionRate() upon sync completion
+     * If mbox is null IOExceptions thrown immediately (i.e. treated as recoverable)
+     * @throws ServiceException - if the exception is possibly recoverable
+     * @return true if the exception has been handled (i.e. deferred)
+     */
+    public static boolean isRecoverableException(DesktopMailbox mbox, int itemId, String message, Exception exception) throws ServiceException {
+        if (isCausedBy(exception, RecoverableException.class)) {
+            //avoid looping; the underlying exception is IOException but RecoverableException takes precedence
+            throw ServiceException.FAILURE(message, exception);
+        }
+        if (OfflineSyncManager.isIOException(exception)) {
+            if (mbox != null) {
+                handleIOException(mbox, itemId, message, exception);
+                return true;
+            } else {
+                throw ServiceException.FAILURE(message, exception);
+            }
+        }
         if (!OfflineSyncManager.getInstance().isServiceActive() ||
-            OfflineSyncManager.isIOException(exception) || OfflineSyncManager.isConnectionDown(exception) ||
+            OfflineSyncManager.isConnectionDown(exception) ||
             OfflineSyncManager.isAuthError(exception) || OfflineSyncManager.isReceiversFault(exception) ||
             OfflineSyncManager.isMailboxInMaintenance(exception))
             throw ServiceException.FAILURE(message, exception); // let it bubble in case it's server issue so we interrupt sync to retry later
+        return false;
+    }
+    
+    /**
+     * Process an IOException. The exception is accumulated so it can be reported later. 
+     * @throws ServiceException - If the accumulated exceptions exceed the maximum allowable
+     */
+    public static void handleIOException(DesktopMailbox mbox, int itemId, String message, Exception exception) throws ServiceException {
+        //lets see if we have reached IOException threshold
+        List<SyncFailure> failures = ioExceptions.get(mbox);
+        failures.add(new SyncFailure(itemId,exception,message));
+        if (failures.size() >= MAX_IO_EXCEPTIONS) {
+            //dump all of the failures to a single error report then throw failure
+            String failureMessage = "Multiple IOExceptions for mailbox "+mbox;
+            createIOExceptionErrorReport(mbox, false);
+            clearIOExceptions(mbox);
+            RecoverableException e = new RecoverableException(exception);
+            throw ServiceException.FAILURE(failureMessage, e);
+        } 
+    }
+    
+    private static void createIOExceptionErrorReport(DesktopMailbox mbox, boolean permanent) throws ServiceException {
+        List<SyncFailure> failures = ioExceptions.get(mbox);
+        StringBuilder errorSb = new StringBuilder("Sync failed due to IOException for the following items").append("\r\n");
+        if (permanent) {
+            errorSb.append("Items skipped permanently\r\n");
+        } else {
+            errorSb.append("Items will be retried on next sync\r\n");
+        }
+        Iterator<SyncFailure> it = failures.iterator();
+        while (it.hasNext()) {
+            SyncFailure failure = it.next();
+            errorSb.append("Item Id: ").append(failure.getItemId()).append(" Message: ").append(failure.getMessage()).append("\r\n");
+            if (it.hasNext()) {
+                //avoid duplicate output for last failure; this gets passed to saveFailureReport and appended there
+                errorSb = appendException(failure.getException(), errorSb);
+                errorSb.append("\r\n");
+            }
+        }
+        saveFailureReport(mbox, 1, errorSb.toString(), failures.get(failures.size()-1).getException()); 
     }
 
     static void syncMessageFailed(ZcsMailbox ombx, int itemId, Exception exception) throws ServiceException {
@@ -161,44 +263,49 @@ public class SyncExceptionHandler {
             }
 
             if (exception != null) {
-                ByteArrayOutputStream bao = new ByteArrayOutputStream() {
-                    private static final int STACK_TRACE_LIMIT = 1024 * 1024;
-
-                    @Override
-                    public synchronized void write(byte[] b, int off, int len) {
-                        len = len > STACK_TRACE_LIMIT - count ? STACK_TRACE_LIMIT - count : len;
-                        if (len > 0)
-                            super.write(b, off, len);
-                        //otherwise discard
-                    }
-
-                    @Override
-                    public synchronized void write(int b) {
-                        if (count < STACK_TRACE_LIMIT)
-                            super.write(b);
-                    }
-                };
-                PrintStream ps = new PrintStream(bao);
-                exception.printStackTrace(ps);
-                ps.flush();
-
-                sb.append("Failure details - PLEASE REMOVE ANY SENSITIVE INFORMATION\n");
-                sb.append("----------------------------------------------------------------------------\n\n");
-                if (exception instanceof SoapFaultException) {
-                    SoapFaultException sfe = (SoapFaultException)exception;
-                    if (sfe.getFaultRequest() != null)
-                        sb.append(sfe.getFaultRequest()).append("\n\n");
-                    if (sfe.getFaultResponse() != null)
-                        sb.append(sfe.getFaultResponse()).append("\n\n");
-                    else if (sfe.getFault() != null)
-                        sb.append(sfe.getFault().prettyPrint()).append("\n\n");
-                }
-                sb.append(bao.toString());
-                sb.append("\n----------------------------------------------------------------------------\n");
+                sb = appendException(exception, sb);
             }
 
             logSyncErrorMessage(dmbx, id, "zdesktop error report (" + timestamp + "): " + code, sb.toString());
             return sb.toString();
+    }
+    
+    public static StringBuilder appendException(Exception exception, StringBuilder sb) {
+        ByteArrayOutputStream bao = new ByteArrayOutputStream() {
+            private static final int STACK_TRACE_LIMIT = 1024 * 1024;
+
+            @Override
+            public synchronized void write(byte[] b, int off, int len) {
+                len = len > STACK_TRACE_LIMIT - count ? STACK_TRACE_LIMIT - count : len;
+                if (len > 0)
+                    super.write(b, off, len);
+                //otherwise discard
+            }
+
+            @Override
+            public synchronized void write(int b) {
+                if (count < STACK_TRACE_LIMIT)
+                    super.write(b);
+            }
+        };
+        PrintStream ps = new PrintStream(bao);
+        exception.printStackTrace(ps);
+        ps.flush();
+
+        sb.append("Failure details - PLEASE REMOVE ANY SENSITIVE INFORMATION\n");
+        sb.append("----------------------------------------------------------------------------\n\n");
+        if (exception instanceof SoapFaultException) {
+            SoapFaultException sfe = (SoapFaultException)exception;
+            if (sfe.getFaultRequest() != null)
+                sb.append(sfe.getFaultRequest()).append("\n\n");
+            if (sfe.getFaultResponse() != null)
+                sb.append(sfe.getFaultResponse()).append("\n\n");
+            else if (sfe.getFault() != null)
+                sb.append(sfe.getFault().prettyPrint()).append("\n\n");
+        }
+        sb.append(bao.toString());
+        sb.append("\n----------------------------------------------------------------------------\n");
+        return sb;
     }
 
     public static class Revision {

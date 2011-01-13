@@ -113,7 +113,9 @@ public class OfflineLC {
         new KnownKey("zdesktop_mobileme_smtp_auth", "true");
 
     public static final KnownKey zdesktop_backup_dir;
-
+    public static final KnownKey zdesktop_sync_io_exception_limit;
+    public static final KnownKey zdesktop_sync_io_exception_rate;
+    
     static void init() {
         // This method is there to guarantee static initializer of this
         // class is run.
@@ -356,6 +358,11 @@ public class OfflineLC {
         zdesktop_volume_compression_threshold = new KnownKey("zdesktop_volume_compression_threshold", "131072");
 
         zdesktop_backup_dir = new KnownKey("zdesktop_backup_dir", "${zimbra_home}/backup");
+        
+        //number of io exceptions in a single sync which triggers abort
+        zdesktop_sync_io_exception_limit = new KnownKey("zdesktop_sync_io_exception_limit", "10");
+        //percentage of io exceptions/total items synced which triggers abort
+        zdesktop_sync_io_exception_rate = new KnownKey("zdesktop_sync_io_exception_rate", "50");
     }
     
     public static String getFullVersion() {

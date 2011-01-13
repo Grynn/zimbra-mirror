@@ -100,6 +100,12 @@
   <key name="zdesktop_backup_dir">
     <value>${zimbra_home}/backup</value>
   </key>
+  <key name="zdesktop_sync_io_exception_limit">
+    <value>10</value>  
+  </key>
+  <key name="zdesktop_sync_io_exception_rate">
+    <value>50</value>  
+  </key>
   <key name="zimbra_admin_service_port">
     <value>@port@</value>
   </key>

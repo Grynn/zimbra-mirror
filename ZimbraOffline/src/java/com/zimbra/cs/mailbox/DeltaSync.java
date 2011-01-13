@@ -87,6 +87,7 @@ public class DeltaSync {
 
             OfflineLog.offline.debug("starting delta sync [token " + oldToken + ']');
             deltaSync(response);
+            SyncExceptionHandler.checkIOExceptionRate(ombx);
             // update the stored sync progress and loop again with new token if sync was incomplete
             if (!newToken.equals(oldToken))
                 mMailboxSync.recordSyncComplete(newToken);
@@ -748,6 +749,7 @@ public class DeltaSync {
 
     void syncContact(Element elt, int folderId) throws ServiceException {
         int id = (int) elt.getAttributeLong(MailConstants.A_ID);
+        ombx.recordItemSync(id);
         Contact cn = null;
         try {
             // make sure that the contact we're delta-syncing actually exists
@@ -805,6 +807,7 @@ public class DeltaSync {
 
     void syncMessage(Element elt, int folderId, MailItem.Type type) throws ServiceException {
         int id = (int) elt.getAttributeLong(MailConstants.A_ID);
+        ombx.recordItemSync(id);
         try {
             Message msg = null;
             try {
@@ -839,8 +842,9 @@ public class DeltaSync {
                 //message could be moved during
                 OfflineLog.offline.debug("delta: moved" + type + " (" + id + ")");
             } else {
-                SyncExceptionHandler.checkRecoverableException("DeltaSync.syncMessage", x);
-                SyncExceptionHandler.syncMessageFailed(ombx, id, x);
+                if(!SyncExceptionHandler.isRecoverableException(ombx, id, "DeltaSync.syncMessage", x)) {
+                    SyncExceptionHandler.syncMessageFailed(ombx, id, x);
+                }
             }
         }
     }

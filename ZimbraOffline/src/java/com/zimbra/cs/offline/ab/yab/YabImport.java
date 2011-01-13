@@ -88,8 +88,9 @@ public class YabImport implements DataSource.DataImport {
                     YAB_FAILED + ":" + error.getUserMessage(), error.getCode());
             }
         }
-        SyncExceptionHandler.checkRecoverableException(YAB_FAILED, e);
-        ds.reportError(Mailbox.ID_FOLDER_CONTACTS, YAB_FAILED, e);
+        if (!SyncExceptionHandler.isRecoverableException(null, 1, YAB_FAILED, e)) {
+            ds.reportError(Mailbox.ID_FOLDER_CONTACTS, YAB_FAILED, e);
+        }
     }
 
     private static ServiceException serviceException(String msg, int code) {

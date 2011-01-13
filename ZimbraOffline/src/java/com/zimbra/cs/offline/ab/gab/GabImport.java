@@ -56,8 +56,9 @@ public class GabImport implements DataSource.DataImport {
         try {
             session.sync();
         } catch (Exception e) {
-            SyncExceptionHandler.checkRecoverableException(ERROR, e);
-            ds.reportError(Mailbox.ID_FOLDER_CONTACTS, ERROR, e);
+            if (!SyncExceptionHandler.isRecoverableException(null, 1, ERROR, e)) {
+                ds.reportError(Mailbox.ID_FOLDER_CONTACTS, ERROR, e);
+            }
         }
         LOG.info("Finished importing contacts for data source '%s'", ds.getName());
     }

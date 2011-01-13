@@ -278,8 +278,9 @@ public final class LocalData {
 
     public void syncContactFailed(Exception e, int itemId, String data)
         throws ServiceException {
-        SyncExceptionHandler.checkRecoverableException("Contact sync failed", e);
-        SyncExceptionHandler.syncContactFailed(mbox, itemId, data, e);
+        if (!SyncExceptionHandler.isRecoverableException(null, itemId, "Contact sync failed", e)) {
+            SyncExceptionHandler.syncContactFailed(mbox, itemId, data, e);
+        }
     }
 
     public OfflineDataSource getDataSource() { return ds; }

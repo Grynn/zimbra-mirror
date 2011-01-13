@@ -132,6 +132,8 @@ public class MailboxSync {
                     ombx.getOfflineAccount().setRequestScopeDebugTraceOn(true);
                 }
                 try {
+                    SyncExceptionHandler.clearIOExceptions(ombx);
+                    ombx.resetSyncCounter();
                     if (!isOnRequest) {
                         if (ombx.isAutoSyncDisabled() || !syncMan.reauthOK(ombx.getAccount()) || !syncMan.retryOK(ombx.getAccount()))
                             return;
@@ -155,6 +157,7 @@ public class MailboxSync {
                                     if (ombx.anyChangesSince(syncMan.getLastSyncTime(ombx.getAccount()))) {
                                         syncMan.syncStart(ombx.getAccount());
                                         PushChanges.sync(ombx, isOnRequest);
+                                        SyncExceptionHandler.checkIOExceptionRate(ombx);
                                         syncMan.syncComplete(ombx.getAccount());
                                     }
                                     return;
@@ -283,6 +286,7 @@ public class MailboxSync {
     }
     
     private void checkpoint() throws ServiceException {
+        SyncExceptionHandler.checkIOExceptionRate(ombx);
         Metadata syncState = new Metadata().put(CKEY_STAGE, SyncStage.INITIAL);
         
         if (mSyncToken != null)

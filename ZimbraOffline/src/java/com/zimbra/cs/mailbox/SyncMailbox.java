@@ -15,6 +15,8 @@
 package com.zimbra.cs.mailbox;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicLong;
@@ -55,6 +57,19 @@ public abstract class SyncMailbox extends DesktopMailbox {
     private boolean isMPAcct;
     private long lastOptimizeTime = 0;
     private static final AtomicLong lastGC = new AtomicLong();
+    private Set<Integer> syncedIds = new HashSet<Integer>();
+
+    public int getSyncCount() {
+        return syncedIds.size();
+    }
+
+    public void recordItemSync(int itemId) {
+        syncedIds.add(itemId); //using set rather than a counter since various call sites may touch the same item more than once
+    }
+    
+    public void resetSyncCounter() {
+        syncedIds.clear();
+    }
 
     public SyncMailbox(MailboxData data) throws ServiceException {
         super(data);

@@ -298,9 +298,10 @@ public class PushChanges {
                                 break;
                         }
                     } catch (Exception x) {
-                        SyncExceptionHandler.checkRecoverableException("PushChanges.sync", x);
-                        SyncExceptionHandler.pushItemFailed(ombx, id, x);
-                        ombx.setChangeMask(sContext, id, type, 0); //clear change mask since we failed to push up an item due to unrecoverable reasons
+                		if (!SyncExceptionHandler.isRecoverableException(ombx, id, "PushChanges.sync", x)) {
+                    		SyncExceptionHandler.pushItemFailed(ombx, id, x);
+                    		ombx.setChangeMask(sContext, id, type, 0); //clear change mask since we failed to push up an item due to unrecoverable reasons
+                		}
                     }
                 }
             }
