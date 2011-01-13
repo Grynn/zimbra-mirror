@@ -6,6 +6,7 @@ import projects.ajax.core.AjaxCommonTest;
 import framework.items.MailItem;
 import framework.ui.Action;
 import framework.ui.Button;
+import framework.ui.Shortcut;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.ZAssert;
@@ -161,7 +162,7 @@ public class MarkReadMail extends AjaxCommonTest {
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
 		
 		// TODO: need to L10N this
-		app.zKeyboard.zTypeCharacters("mr");
+		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MARKREAD);
 
 		// Verify the message is marked read in the server (flags attribute should not contain (u)nread)
 		mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");

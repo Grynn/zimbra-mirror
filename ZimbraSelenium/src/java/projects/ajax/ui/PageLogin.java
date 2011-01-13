@@ -5,6 +5,7 @@ import framework.ui.AbsPage;
 import framework.ui.AbsTab;
 import framework.ui.Action;
 import framework.ui.Button;
+import framework.ui.Shortcut;
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
 
@@ -178,6 +179,11 @@ public class PageLogin extends AbsTab {
 	@Override
 	public AbsPage zListItem(Action action, Action option, String item) throws HarnessException {
 		throw new HarnessException("Login page does not have lists");
+	}
+
+	@Override
+	public AbsPage zKeyboardShortcut(Shortcut shortcut) throws HarnessException {
+		throw new HarnessException("No shortcuts supported in the login page");
 	}
 
 

@@ -15,6 +15,7 @@ import framework.ui.AbsPage;
 import framework.ui.AbsTab;
 import framework.ui.Action;
 import framework.ui.Button;
+import framework.ui.Shortcut;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 
@@ -536,7 +537,7 @@ public class PageMail extends AbsTab {
 			} else if ( option == Button.O_TAG_REMOVETAG ) {
 
 				// Type "u" shortcut
-				((AppAjaxClient)MyApplication).zKeyboard.zTypeCharacters("u");
+				zKeyboard.zTypeCharacters(Shortcut.S_MAIL_REMOVETAG.getKeys());
 				
 				pulldownLocator = null;	
 				optionLocator = null;
@@ -969,6 +970,28 @@ public class PageMail extends AbsTab {
 		
 		return (new DisplayMail(this.MyApplication));
 		
+	}
+
+	@Override
+	public AbsPage zKeyboardShortcut(Shortcut shortcut) throws HarnessException {
+
+		AbsPage page = null;
+		
+		if ( (shortcut == Shortcut.S_NEWITEM) ||
+				(shortcut == Shortcut.S_NEWMESSAGE) ||
+				(shortcut == Shortcut.S_NEWMESSAGE2) )
+		{
+			// "New Message" shortcuts result in a compose form opening
+			page = new FormMailNew(this.MyApplication);
+		}
+		
+		zKeyboard.zTypeCharacters(shortcut.getKeys());
+		
+		// If a page is specified, wait for it to become active
+		if ( page != null ) {
+			page.zWaitForActive();	// This method throws a HarnessException if never active
+		}
+		return (page);
 	}
 
 

@@ -3,7 +3,6 @@
  */
 package projects.ajax.ui.mail;
 
-import projects.ajax.ui.AppAjaxClient;
 import framework.items.FolderItem;
 import framework.ui.AbsApplication;
 import framework.ui.AbsDialog;
@@ -171,7 +170,7 @@ public class DialogMove extends AbsDialog {
 		// For some reason, the text doesn't get entered on the first try
 		this.sFocus(locator);
 		this.zClick(locator);
-		((AppAjaxClient)MyApplication).zKeyboard.zTypeCharacters(folder);
+		zKeyboard.zTypeCharacters(folder);
 
 		// Is this sleep necessary?
 		SleepUtil.sleepSmall();

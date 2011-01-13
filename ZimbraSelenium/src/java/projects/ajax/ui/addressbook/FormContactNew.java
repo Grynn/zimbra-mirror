@@ -1,6 +1,5 @@
 package projects.ajax.ui.addressbook;
 
-import projects.ajax.ui.AppAjaxClient;
 import framework.items.ContactItem;
 import framework.items.IItem;
 import framework.ui.AbsApplication;
@@ -128,7 +127,7 @@ public class FormContactNew extends AbsForm {
 			this.sFocus(Locators.zFirstEditField);
 
 			this.zClick(Locators.zFirstEditField);			
-			((AppAjaxClient)MyApplication).zKeyboard.zTypeCharacters(contact.firstName);
+			zKeyboard.zTypeCharacters(contact.firstName);
 		}
 		
 		if ( contact.lastName != null ) {
@@ -136,7 +135,7 @@ public class FormContactNew extends AbsForm {
 			this.sFocus(Locators.zLastEditField);
 			
 			this.zClick(Locators.zLastEditField);
-			((AppAjaxClient)MyApplication).zKeyboard.zTypeCharacters(contact.lastName);
+			zKeyboard.zTypeCharacters(contact.lastName);
 		}
  
 		//TODO: need fix xpath for zEmail1EditField

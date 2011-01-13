@@ -10,6 +10,7 @@ import framework.ui.AbsPage;
 import framework.ui.AbsTab;
 import framework.ui.Action;
 import framework.ui.Button;
+import framework.ui.Shortcut;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 
@@ -140,7 +141,7 @@ public class PageBriefcase extends AbsTab {
 			// zToolbarPressPulldown(Button, Button)
 			//
 
-			((AppAjaxClient)MyApplication).zKeyboard.zTypeCharacters("n");
+			zKeyboard.zTypeCharacters(Shortcut.S_NEWITEM.getKeys());
 
 			// Not default behavior (zPressKeyboardShortcut vs. zClick)
 			return (new DocumentBriefcaseNew(this.MyApplication));

@@ -8,6 +8,7 @@ import projects.ajax.core.AjaxCommonTest;
 import framework.items.MailItem;
 import framework.ui.Action;
 import framework.ui.Button;
+import framework.ui.Shortcut;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.ZAssert;
@@ -113,7 +114,7 @@ public class FlagMail extends AjaxCommonTest {
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
 		
 		// Flag the item
-		app.zKeyboard.zTypeCharacters("mf");
+		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MARKFLAG);
 		
 		// Wait for the client to send the data
 		SleepUtil.sleepMedium();

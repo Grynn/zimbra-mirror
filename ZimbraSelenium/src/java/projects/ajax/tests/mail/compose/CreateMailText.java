@@ -1,5 +1,6 @@
 package projects.ajax.tests.mail.compose;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
@@ -7,6 +8,7 @@ import projects.ajax.ui.mail.FormMailNew;
 import framework.items.MailItem;
 import framework.items.RecipientItem;
 import framework.ui.Button;
+import framework.ui.Shortcut;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
@@ -57,6 +59,44 @@ public class CreateMailText extends AjaxCommonTest {
 		ZAssert.assertEquals(received.dToRecipients.get(0).dEmailAddress, ZimbraAccount.AccountA().EmailAddress, "Verify the to field is correct");
 		ZAssert.assertEquals(received.dSubject, mail.dSubject, "Verify the subject field is correct");
 		ZAssert.assertStringContains(received.dBodyText, mail.dBodyText, "Verify the body field is correct");
+		
+	}
+
+	
+	@DataProvider(name = "DataProvideNewMessageShortcuts")
+	public Object[][] DataProvideNewMessageShortcuts() {
+	  return new Object[][] {
+			  new Object[] { Shortcut.S_NEWITEM, Shortcut.S_NEWITEM.getKeys() },
+			  new Object[] { Shortcut.S_NEWMESSAGE, Shortcut.S_NEWMESSAGE.getKeys() },
+			  new Object[] { Shortcut.S_NEWMESSAGE2, Shortcut.S_NEWMESSAGE2.getKeys() }
+	  };
+	}
+	
+	@Test(	description = "Send a mail using Text editor using keyboard shortcuts",
+			groups = { "smoke" },
+			dataProvider = "DataProvideNewMessageShortcuts")
+	public void CreateMailText_02(Shortcut shortcut, String keys) throws HarnessException {
+		
+		
+		// Create the message data to be sent
+		MailItem mail = new MailItem();
+		mail.dToRecipients.add(new RecipientItem(ZimbraAccount.AccountA()));
+		mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		mail.dBodyText = "body" + ZimbraSeleniumProperties.getUniqueString();
+		
+		
+		// Open the new mail form
+		FormMailNew mailform = (FormMailNew) app.zPageMail.zKeyboardShortcut(shortcut);
+		ZAssert.assertNotNull(mailform, "Verify the new form opened");
+		
+		// Send the message
+		mailform.zFill(mail);
+		mailform.zSubmit();
+				
+		
+		// From the receipient end, make sure the message is received
+		MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ mail.dSubject +")");
+		ZAssert.assertNotNull(received, "Verify the message is received");
 		
 	}
 

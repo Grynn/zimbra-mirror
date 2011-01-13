@@ -13,7 +13,6 @@ import projects.ajax.ui.preferences.PagePreferences;
 import projects.ajax.ui.preferences.TreePreferences;
 import projects.ajax.ui.search.PageSearch;
 import framework.ui.AbsApplication;
-import framework.ui.Keyboard;
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
 
@@ -47,7 +46,6 @@ import framework.util.ZimbraAccount;
  */
 public class AppAjaxClient extends AbsApplication {
 	
-	public Keyboard						zKeyboard = null;
 	public PageLogin					zPageLogin = null;
 	public PageMain						zPageMain = null;
 	public PageSearch					zPageSearch = null;
@@ -65,8 +63,6 @@ public class AppAjaxClient extends AbsApplication {
 		
 		logger.info("new " + AppAjaxClient.class.getCanonicalName());
 		
-		// Keyboard pointer
-		zKeyboard = new Keyboard(this);
 		
 		// Login page
 		

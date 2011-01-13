@@ -10,6 +10,7 @@ import projects.ajax.core.AjaxCommonTest;
 import framework.items.MailItem;
 import framework.ui.Action;
 import framework.ui.Button;
+import framework.ui.Shortcut;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
@@ -157,7 +158,7 @@ public class DeleteMail extends AjaxCommonTest {
 		
 		// Click delete
 		logger.info("Typing shortcut key "+ name + " KeyEvent: "+ keyEvent);
-		app.zKeyboard.zTypeKeyEvent(keyEvent);
+		app.zPageMail.zKeyboardKeyEvent(keyEvent);
 				
 		List<MailItem> messages = app.zPageMail.zListGetMessages();
 		ZAssert.assertNotNull(messages, "Verify the message list exists");
@@ -202,7 +203,7 @@ public class DeleteMail extends AjaxCommonTest {
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
 		
 		// Click delete
-		app.zKeyboard.zTypeCharacters(".t");
+		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MOVETOTRASH);
 				
 		List<MailItem> messages = app.zPageMail.zListGetMessages();
 		ZAssert.assertNotNull(messages, "Verify the message list exists");

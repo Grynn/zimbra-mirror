@@ -86,5 +86,42 @@ public abstract class AbsTab extends AbsPage {
 	 */
 	public abstract AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException;
 	
+	/**
+	 * Use the keyboard to enter the specified keyboard shortcut
+	 * @param shortcut
+	 * @return Returns the resulting Page, Wizard, etc. or null
+	 * @throws HarnessException
+	 */
+	public AbsPage zKeyboardShortcut(Shortcut shortcut) throws HarnessException {
+		AbsPage page = null;
+		zKeyboardTypeString(shortcut.getKeys());
+		return (page);
+	}
 
+	/**
+	 * Use the keyboard to enter the specified keyboard key event
+	 * @param keyEvent see java.awt.event.KeyEvent
+	 * @return Returns the resulting Page, Wizard, etc. or null
+	 * @throws HarnessException
+	 */
+	public AbsPage zKeyboardKeyEvent(int keyEvent) throws HarnessException {
+		AbsPage page = null;
+		this.zKeyboard.zTypeKeyEvent(keyEvent);
+		return (page);
+	}
+	
+	/**
+	 * Use the keyboard to enter the specified string
+	 * @param keys
+	 * @return
+	 * @throws HarnessException
+	 */
+	public AbsPage zKeyboardTypeString(String keys) throws HarnessException {
+		AbsPage page = null;
+		this.zKeyboard.zTypeCharacters(keys);
+		return (page);
+	}
+	
+
+	
 }

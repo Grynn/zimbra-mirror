@@ -1,7 +1,5 @@
 package projects.ajax.ui.briefcase;
 
-import projects.ajax.ui.AppAjaxClient;
-import projects.ajax.ui.briefcase.DocumentBriefcaseEdit.Locators;
 import framework.core.ClientSessionFactory;
 import framework.items.DocumentItem;
 import framework.items.IItem;
@@ -46,12 +44,12 @@ public class DocumentBriefcaseNew extends AbsForm {
 	
 	public void typeDocumentName(String text) throws HarnessException {
 		this.zSelectWindow("Zimbra Docs");
-		if(ClientSessionFactory.session().selenium().isElementPresent(Locators.zNameField))
+		if(sIsElementPresent(Locators.zNameField))
 			sType(Locators.zNameField, text);	
 	}
 		
 	public void editDocumentName(DocumentItem docItem) throws HarnessException {
-		if(ClientSessionFactory.session().selenium().isElementPresent(Locators.zEditNameField))
+		if(sIsElementPresent(Locators.zEditNameField))
 			sType(Locators.zEditNameField, docItem.getDocName());	
 	}
 	

@@ -10,6 +10,7 @@ import framework.items.MailItem;
 import framework.items.FolderItem.SystemFolder;
 import framework.ui.Action;
 import framework.ui.Button;
+import framework.ui.Shortcut;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.ZAssert;
@@ -143,7 +144,7 @@ public class MoveMessage extends AjaxCommonTest {
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
 		
 		// Click move
-		app.zKeyboard.zTypeCharacters("m");
+		app.zPageMail.zKeyboardShortcut(Shortcut.S_MOVE);
 		
 		// A move dialog will pop up
 		DialogMove dialog = new DialogMove(app);
@@ -194,7 +195,7 @@ public class MoveMessage extends AjaxCommonTest {
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
 		
 		// Click move
-		app.zKeyboard.zTypeCharacters(".t");
+		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MOVETOTRASH);
 		
 		// Wait for the client to send the data
 		SleepUtil.sleepLong();
@@ -259,7 +260,7 @@ public class MoveMessage extends AjaxCommonTest {
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
 		
 		// Click move
-		app.zKeyboard.zTypeCharacters(".i");
+		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MOVETOINBOX);
 		
 		// Wait for the client to send the data
 		SleepUtil.sleepLong();

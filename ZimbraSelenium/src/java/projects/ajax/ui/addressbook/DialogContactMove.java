@@ -3,7 +3,6 @@
  */
 package projects.ajax.ui.addressbook;
 
-import projects.ajax.ui.AppAjaxClient;
 import framework.ui.AbsApplication;
 import framework.ui.AbsDialog;
 import framework.ui.AbsPage;
@@ -68,7 +67,7 @@ public class DialogContactMove extends AbsDialog {
 			throw new HarnessException("unable to find folder name field "+ locator);
 		
 		this.zClick(locator);
-		((AppAjaxClient)MyApplication).zKeyboard.zTypeCharacters(folder);
+		zKeyboard.zTypeCharacters(folder);
 		
 		SleepUtil.sleepSmall();
 		

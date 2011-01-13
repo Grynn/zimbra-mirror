@@ -1,6 +1,5 @@
 package projects.ajax.ui.briefcase;
 
-import projects.ajax.ui.AppAjaxClient;
 import framework.core.ClientSessionFactory;
 import framework.items.DocumentItem;
 import framework.items.IItem;
@@ -52,7 +51,7 @@ public class DocumentBriefcaseOpen extends AbsForm {
 	}
 	
 	public void typeDocumentName(String text) throws HarnessException {
-		if(ClientSessionFactory.session().selenium().isElementPresent(Locators.zNameField))
+		if(sIsElementPresent(Locators.zNameField))
 			sType(Locators.zNameField, text);	
 	}	
 	
