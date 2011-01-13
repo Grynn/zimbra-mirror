@@ -32,10 +32,10 @@ public class GeneralUtility {
     * DesktopInstallUtil test = new DesktopInstallUtil();
     * 
     * \\Below is the static method
-    * DesktopInstallUtil.waitFor("projects.desktop.core.DesktopInstallUtil", null, true, "counter", input, WAIT_FOR_OPERAND.EQ, new Integer(10), 10000, 1000);
+    * GeneralUtility.waitFor("projects.desktop.core.DesktopInstallUtil", null, true, "counter", input, WAIT_FOR_OPERAND.EQ, new Integer(10), 10000, 1000);
     * 
     * \\Below is the non-static method
-    * DesktopInstallUtil.waitFor("projects.desktop.core.DesktopInstallUtil", test, false, "counter1", input, WAIT_FOR_OPERAND.EQ, new Integer(10), 10000, 1000);
+    * GeneralUtility.waitFor("projects.desktop.core.DesktopInstallUtil", test, false, "counter1", input, WAIT_FOR_OPERAND.EQ, new Integer(10), 10000, 1000);
     *
     *Where definition of those 2 methods are:
     * public static int counter() {
