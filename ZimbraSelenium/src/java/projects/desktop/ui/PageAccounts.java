@@ -2,9 +2,12 @@ package projects.desktop.ui;
 
 import framework.ui.AbsApplication;
 import framework.ui.AbsPage;
+import framework.ui.AbsTab;
+import framework.ui.Action;
+import framework.ui.Button;
 import framework.util.HarnessException;
 
-public class PageAccounts extends AbsPage {
+public class PageAccounts extends AbsTab {
 
 
    // Inner class that store all the locators relevant to the page
@@ -36,10 +39,36 @@ public class PageAccounts extends AbsPage {
       // TODO Auto-generated method stub
       return false;
    }
-
-   @Override
-   public void zNavigateTo() throws HarnessException {
-      // TODO Auto-generated method stub
-   }
-
+	
+	@Override
+	public AbsPage zListItem(Action action, String item) throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public AbsPage zListItem(Action action, Action option, String item)
+			throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public void zNavigateTo() throws HarnessException {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
+			throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

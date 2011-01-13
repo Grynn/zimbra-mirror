@@ -1,11 +1,13 @@
 package projects.desktop.ui;
 
-import projects.ajax.ui.PageMail;
 import framework.ui.AbsApplication;
 import framework.ui.AbsPage;
+import framework.ui.AbsTab;
+import framework.ui.Action;
+import framework.ui.Button;
 import framework.util.HarnessException;
 
-public class PageMain extends AbsPage{
+public class PageMain extends AbsTab{
 
    public static class Locators {
 
@@ -24,7 +26,7 @@ public class PageMain extends AbsPage{
    public PageMain(AbsApplication application) {
       super(application);
 
-      logger.info("new " + PageMail.class.getCanonicalName());
+      logger.info("new " + PageMain.class.getCanonicalName());
    }
 
    @Override
@@ -55,8 +57,34 @@ public class PageMain extends AbsPage{
    }
 
    @Override
-   public void zNavigateTo() throws HarnessException {
-      // TODO Auto-generated method stub
+   public AbsPage zListItem(Action action, String item) throws HarnessException {
+	   // TODO Auto-generated method stub
+	   return null;
    }
 
+   @Override
+	public AbsPage zListItem(Action action, Action option, String item)
+		throws HarnessException {
+	   // TODO Auto-generated method stub
+	   return null;
+   }
+
+	@Override
+	public void zNavigateTo() throws HarnessException {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
+			throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
