@@ -343,7 +343,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                 msg.mData.metadataChanged(this);
             } catch (MailServiceException.NoSuchItemException nsie) {
                 // real conversation didn't exist; create it!
-                createConversation(new Message[] {msg}, convId);
+                createConversation(convId, msg);
             }
 
             // and now we can update (and possibly delete) the old conversation
