@@ -2,13 +2,23 @@
 package framework.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class ZimbraSeleniumProperties {
 	private static final Logger logger = LogManager.getLogger(ZimbraSeleniumProperties.class);
@@ -211,19 +221,124 @@ public class ZimbraSeleniumProperties {
 	public static AppType getAppType() {
 		return (appType);
 	}
-	
+
+	public final static String [] possibleFiles = {
+	   "/opt/zmdesktop/zimbra/zdesktop/conf/localconfig.xml",
+	   "/home/zmdesktop/zimbra/zdesktop/conf/localconfig.xml",
+	   "C:\\Documents and Settings\\<USER_NAME>\\Local Settings\\Application Data\\Zimbra\\Zimbra Desktop\\conf\\localconfig.xml"
+	};	   
+
+	public enum OsType {
+	   WINDOWS, LINUX, MAC
+	}
+
+	/**
+	 * Get the OS type from the system information
+	 * @return OS Type (Windows, MAC, or Linux)
+	 */
+	public static OsType getOSType() {
+	   String os = System.getProperty("os.name").toLowerCase();
+	   logger.info("os.name is: " + os);
+	   OsType osType = null;
+	   if (os.indexOf("win") >= 0) {
+	      osType = OsType.WINDOWS;
+	   } else if (os.indexOf("mac") >= 0) {
+	      osType = OsType.MAC;
+	   } else if (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0) {
+	      osType = OsType.LINUX;
+	   }
+	   return osType;
+	}
+
+	/**
+    * Get value out of a specified element's name in XML file
+    * @param xmlFile XML File to look at
+    * @param elementName Element name, in which the value is wanted
+    * @return (String) Element's value
+    */
+	public static String parseXmlFile(String xmlFile, String elementName) {
+      DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+      String output = null;
+      try {
+         File file = new File(xmlFile);
+         DocumentBuilder db = dbf.newDocumentBuilder();
+         Document doc = db.parse(file);
+         doc.getDocumentElement().normalize();
+         NodeList nodeLst = doc.getDocumentElement().
+               getElementsByTagName("key");
+         for (int i = 0; i < nodeLst.getLength(); i++) {
+            Node currentNode = nodeLst.item(i);
+            Element currentElement = (Element)currentNode;
+            String keyName = currentElement.getAttribute("name");
+            if (!keyName.equals(elementName)) {
+               continue;
+            } else {
+               Element value = (Element)currentElement.
+                     getElementsByTagName("value").item(0);
+               output = value.getChildNodes().item(0).getNodeValue();
+               break;
+            }
+         }
+      } catch(ParserConfigurationException pce) {
+         pce.printStackTrace();
+      }catch(SAXException se) {
+         se.printStackTrace();
+      }catch(IOException ioe) {
+         ioe.printStackTrace();
+      }
+      return output;
+   }
+
+	/**
+	 * Get Base URL for selenium to open to access the application
+	 * under test
+	 * @return Base URL
+	 */
 	public static String getBaseURL() {
 		String scheme = ZimbraSeleniumProperties.getStringProperty("server.scheme", "http");
 		String host = ZimbraSeleniumProperties.getStringProperty("server.host", "localhost");
 		String port = ZimbraSeleniumProperties.getStringProperty("server.port", "7070");
-		
-		if ( appType == AppType.DESKTOP )
-			return "http://localhost:7633/zimbra/desktop/zmail.jsp";
-		
+
+		if ( appType == AppType.DESKTOP ) {
+		   OsType osType = getOSType();
+		   logger.info("AppType is: " + appType);
+		   logger.info("OS Type is: " + osType);
+
+		   for (int i = 0; i < possibleFiles.length; i++) {
+		      if (osType == OsType.WINDOWS) {
+		         if (!possibleFiles[i].contains("C:\\")) {
+		            continue;
+		         } else {
+		            String currentLoggedInUser = System.getProperty(
+		                  "user.name");
+		            logger.info("currentLoggedInUser: " +
+		                  currentLoggedInUser);
+		            possibleFiles[i] = possibleFiles[i].replace(
+		                  "<USER_NAME>", currentLoggedInUser);
+		         }
+		      } else {
+		         if (possibleFiles[i].contains("C:\\")) {
+                  continue;
+		         }
+		      }
+		      logger.info("Parsing XML file: " + possibleFiles[i]);
+		      port = parseXmlFile(possibleFiles[i],
+		            "zimbra_admin_service_port");
+		      String serialNumber = parseXmlFile(possibleFiles[i],
+		            "zdesktop_installation_key");
+		      String baseUrl = scheme + "://" + host + ":" + port +
+            "/desktop/login.jsp?at=" + serialNumber;
+
+		      logger.info("Base URL is: " + baseUrl);
+
+		      return (baseUrl);
+		   }
+		}
+
 		if ( appType == AppType.AJAX ) {
 			return (scheme + "://"+ host + ":" + port);
 		}
- 
+
 		if ( appType == AppType.HTML ) {
 			return (scheme + "://"+ host + ":" + port + "/h/");
 		}
@@ -240,11 +355,9 @@ public class ZimbraSeleniumProperties {
 			return ("https://"+ host +":7071");
 		}
 
-
 		// Default
 		logger.warn("Using default URL");
 		return (scheme +"://"+ host);
-
 	}
 
 	public static String zimbraGetVersionString() throws HarnessException {		
