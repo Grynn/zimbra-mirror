@@ -97,27 +97,27 @@ public class ZMimePartBean {
     private static final Map<String,String> sTypeToImage = new HashMap<String, String>();
 
     static {
-        sTypeToImage.put(CT_APP,               "doctypes/ImgExeDoc.gif");
-        sTypeToImage.put(CT_APP_ADOBE_PDF,     "doctypes/ImgPDFDoc.gif");
-        sTypeToImage.put(CT_APP_ADOBE_PS,      "doctypes/ImgGenericDoc.gif");
-        sTypeToImage.put(CT_APP_EXE,           "doctypes/ImgExeDoc.gif");
+        sTypeToImage.put(CT_APP,               "zimbra/ImgExeDoc.png");
+        sTypeToImage.put(CT_APP_ADOBE_PDF,     "zimbra/ImgPDFDoc.png");
+        sTypeToImage.put(CT_APP_ADOBE_PS,      "zimbra/ImgGenericDoc.png");
+        sTypeToImage.put(CT_APP_EXE,           "zimbra/ImgExeDoc.png");
 
-        sTypeToImage.put(CT_APP_MS_DOWNLOAD,   "doctypes/ImgExeDoc.gif");
-        sTypeToImage.put(CT_APP_MS_EXCEL,		"doctypes/ImgMSExcelDoc.gif");
-        sTypeToImage.put(CT_APP_MS_PPT,			"doctypes/ImgMSPowerpointDoc.gif");
-        sTypeToImage.put(CT_APP_MS_PROJECT,		"doctypes/ImgMSProjectDoc.gif");
-        sTypeToImage.put(CT_APP_MS_VISIO,		"doctypes/ImgMSVisioDoc.gif");
-        sTypeToImage.put(CT_APP_MS_WORD,        "doctypes/ImgMSWordDoc.gif");
-        sTypeToImage.put(CT_APP_OCTET_STREAM,	"doctypes/ImgUnknownDoc.gif");
-        sTypeToImage.put(CT_APP_ZIP,            "doctypes/ImgZipDoc.gif");
-        sTypeToImage.put(CT_APP_ZIP2,			"doctypes/ImgZipDoc.gif");
-        sTypeToImage.put(CT_AUDIO,				"doctypes/ImgAudioDoc.gif");
-        sTypeToImage.put(CT_VIDEO,				"doctypes/ImgVideoDoc.gif");
-        sTypeToImage.put(CT_IMG,                "doctypes/ImgImageDoc.gif");
-        sTypeToImage.put(CT_MSG_RFC822,			"doctypes/ImgMessageDoc.gif");
-        sTypeToImage.put(CT_TEXT,				"doctypes/ImgGenericDoc.gif");
-        sTypeToImage.put(CT_PLAIN_TEXT,			"doctypes/ImgGenericDoc.gif");
-        sTypeToImage.put(CT_TEXT_HTML, 			"doctypes/ImgHtmlDoc.gif");
+        sTypeToImage.put(CT_APP_MS_DOWNLOAD,   "zimbra/ImgExeDoc.png");
+        sTypeToImage.put(CT_APP_MS_EXCEL,		"zimbra/ImgMSExcelDoc.png");
+        sTypeToImage.put(CT_APP_MS_PPT,			"zimbra/ImgMSPowerpointDoc.png");
+        sTypeToImage.put(CT_APP_MS_PROJECT,		"zimbra/ImgMSProjectDoc.png");
+        sTypeToImage.put(CT_APP_MS_VISIO,		"zimbra/ImgMSVisioDoc.png");
+        sTypeToImage.put(CT_APP_MS_WORD,        "zimbra/ImgMSWordDoc.png");
+        sTypeToImage.put(CT_APP_OCTET_STREAM,	"zimbra/ImgUnknownDoc.png");
+        sTypeToImage.put(CT_APP_ZIP,            "zimbra/ImgZipDoc.png");
+        sTypeToImage.put(CT_APP_ZIP2,			"zimbra/ImgZipDoc.png");
+        sTypeToImage.put(CT_AUDIO,				"zimbra/ImgAudioDoc.png");
+        sTypeToImage.put(CT_VIDEO,				"zimbra/ImgVideoDoc.png");
+        sTypeToImage.put(CT_IMG,                "zimbra/ImgImageDoc.png");
+        sTypeToImage.put(CT_MSG_RFC822,			"zimbra/ImgMessageDoc.png");
+        sTypeToImage.put(CT_TEXT,				"zimbra/ImgGenericDoc.png");
+        sTypeToImage.put(CT_PLAIN_TEXT,			"zimbra/ImgGenericDoc.png");
+        sTypeToImage.put(CT_TEXT_HTML, 			"zimbra/ImgHtmlDoc.png");
     }
 
     private ZMimePart mMimePart;
