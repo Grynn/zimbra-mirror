@@ -2111,6 +2111,7 @@ function(obj, account, tableId) {
 	else
 		return {html:"<BR/>" + str, commentBoxId:commentBoxId};
 };
+
 SocialZimlet.prototype._setErrorToCard =
 function(tableId, error) {
 		var id = Dwt.getNextId();
@@ -2118,9 +2119,11 @@ function(tableId, error) {
 		html.push("<br/><br/><div width=90% align=center><label style='color:gray;font-weight:bold;font-size:12px'>", error, " </label>",
 				"<a id='", id,"' href='#' style='text-decoration:underline;color:gray' >",
 			this.getMessage("details"),"</a><br/><br/><label style='color:gray;font-style:italics'>",this.getMessage("clickOnRefreshToTryAgain"),"</label></div>");
-
-		document.getElementById(tableId).innerHTML = html.join("");
-		document.getElementById(id).onclick = AjxCallback.simpleClosure(this._displayFeedErrorWindow, this, tableId);
+		
+		if(document.getElementById(tableId) && error) {
+			document.getElementById(tableId).innerHTML = html.join("");
+			document.getElementById(id).onclick = AjxCallback.simpleClosure(this._displayFeedErrorWindow, this, tableId);
+		}
 };
 
 SocialZimlet.prototype._setMsgToCard =
