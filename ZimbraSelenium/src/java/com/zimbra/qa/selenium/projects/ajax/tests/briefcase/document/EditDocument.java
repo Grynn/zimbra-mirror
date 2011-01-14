@@ -16,7 +16,6 @@ import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseEdit;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseOpen;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase.Locators;
 
-
 public class EditDocument extends AjaxCommonTest {
 
 	public EditDocument() {
@@ -402,8 +401,8 @@ public class EditDocument extends AjaxCommonTest {
 		ZAssert.assertEquals(text, document.getDocText(),
 				"Verify document text through GUI");
 	}
-	
-	@Test(description = "Create document through SOAP - edit text & verify through GUI", groups = { "debug" })
+
+	@Test(description = "Create document through SOAP - edit text & verify through GUI", groups = { "smoke" })
 	public void EditDocument_04() throws HarnessException {
 
 		// Create document item
