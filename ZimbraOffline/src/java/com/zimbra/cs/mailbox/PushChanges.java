@@ -34,17 +34,17 @@ import javax.mail.internet.MimeMessage;
 
 import org.dom4j.QName;
 
+import com.zimbra.common.mime.MimeConstants;
+import com.zimbra.common.mime.shim.JavaMailInternetAddress;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.MailConstants;
+import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.util.BigByteBuffer;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.zclient.ZClientException;
-import com.zimbra.common.soap.MailConstants;
-import com.zimbra.common.soap.Element;
-import com.zimbra.common.soap.SoapFaultException;
-import com.zimbra.common.mime.MimeConstants;
-import com.zimbra.common.mime.shim.JavaMailInternetAddress;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -267,6 +267,9 @@ public class PushChanges {
                 for (int id : ids) {
                     if (OfflineSyncManager.getInstance().isInSkipList(id)) {
                         OfflineLog.offline.warn("Skipped push item id=%d per zdesktop_sync_skip_idlist", id);
+                        continue;
+                    } else if (ombx.isTransientItem(id)) {
+                        OfflineLog.offline.debug("skipped push transient item id=%d", id);
                         continue;
                     }
 
@@ -1126,15 +1129,24 @@ public class PushChanges {
                     return true;
                 id = createData.getFirst();
             }
-        } catch (ZClientException x) {
-            if (!x.getCode().equals(ZClientException.UPLOAD_SIZE_LIMIT_EXCEEDED))
-                throw x;
-            OfflineLog.offline.info("push: draft message %d too large to save to remote Drafts folder", id);
-            //let it fall through so we clear the dirty bit so we don't try to push it up any more
-        } catch (SoapFaultException sfe) {
-            if (!sfe.getCode().equals(MailServiceException.NO_SUCH_MSG))
-                throw sfe;
-            OfflineLog.offline.info("push: remote message " + id + " has been deleted; skipping");
+        } catch (ServiceException e) {
+            //bug 54080 
+            //rather than synchronizing whole method on mbox (thereby blocking mailbox while potentially long upload occurs)
+            //lets see if the message still exists
+            try {
+                ombx.getMessageById(sContext, id);
+            } catch (NoSuchItemException x) {
+                OfflineLog.offline.debug("push: message %d deleted during push", id);
+                return false;
+            }
+            if (e.getCode().equals(ZClientException.UPLOAD_SIZE_LIMIT_EXCEEDED)) {
+                OfflineLog.offline.info("push: draft message %d too large to save to remote Drafts folder", id);
+                //let it fall through so we clear the dirty bit so we don't try to push it up any more
+            } else if (e.getCode().equals(MailServiceException.NO_SUCH_MSG)) {
+                OfflineLog.offline.info("push: remote message " + id + " has been deleted; skipping");
+            } else {
+                throw e;
+            }
         }
 
         synchronized (ombx) {

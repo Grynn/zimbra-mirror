@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
+import com.zimbra.common.util.LruMap;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.offline.OfflineAccount;
@@ -359,4 +360,14 @@ public abstract class SyncMailbox extends DesktopMailbox {
     void trackChangeModified(MailItem item, int changeMask) throws ServiceException {}
 
     void itemCreated(MailItem item) throws ServiceException {}
+
+    private LruMap<Integer, Object> transientItems = new LruMap<Integer, Object>(16); 
+
+    synchronized void trackTransientItem(int itemId) {
+        transientItems.put(Integer.valueOf(itemId), new Object());
+    }
+
+    synchronized boolean isTransientItem(int itemId) {
+        return transientItems.containsKey(Integer.valueOf(itemId));
+    }
 }
