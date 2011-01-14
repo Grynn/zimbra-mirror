@@ -65,6 +65,7 @@ import com.zimbra.cs.offline.ab.gab.GDataServiceException;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
 import com.zimbra.cs.service.UserServlet;
+import com.zimbra.cs.service.UserServletContext;
 import com.zimbra.cs.service.formatter.ArchiveFormatter;
 import com.zimbra.cs.service.formatter.FormatListener;
 import com.zimbra.cs.service.formatter.Formatter;
@@ -856,22 +857,22 @@ public class OfflineSyncManager implements FormatListener {
     }
 
     @Override
-    public void formatCallbackEnded(UserServlet.Context context) {
+    public void formatCallbackEnded(UserServletContext context) {
         //don't currently need to suspend sync during export
     }
 
     @Override
-    public void formatCallbackStarted(UserServlet.Context context) {
+    public void formatCallbackStarted(UserServletContext context) {
         //don't currently need to suspend sync during export
     }
 
     @Override
-    public void saveCallbackEnded(UserServlet.Context context) {
+    public void saveCallbackEnded(UserServletContext context) {
         resumeSync();
     }
 
     @Override
-    public void saveCallbackStarted(UserServlet.Context context) throws ServiceException {
+    public void saveCallbackStarted(UserServletContext context) throws ServiceException {
         String resolve = context.params.get(ArchiveFormatter.PARAM_RESOLVE);
         Resolve r = resolve == null ? Resolve.Skip : Resolve.valueOf(
                 resolve.substring(0,1).toUpperCase() +
