@@ -82,7 +82,7 @@ public class GeneralUtility {
             iteration++;
          }
       }
-      System.out.println("iteration: " + iteration);
+
       logger.info("iteration: " + iteration);
 
       Method method = null;
@@ -96,7 +96,7 @@ public class GeneralUtility {
             methodList = nonStaticObject.getClass().getDeclaredMethods();
          }
          for (int i = 0; i < methodList.length; i++) {
-            System.out.println("methodlist[" + i + "].getName: " + methodList[i].getName());
+            logger.debug("methodlist[" + i + "].getName: " + methodList[i].getName());
             if (methodList[i].getName().equals(apiName)) {
                try {
                   if (isStaticApi) {
@@ -105,10 +105,10 @@ public class GeneralUtility {
                      output = methodList[i].invoke(nonStaticObject, parameters);
                   }
                   method = methodList[i];
-                  System.out.println("Breaking...");
+                  logger.debug("Breaking...");
                   break;
                } catch (IllegalArgumentException e) {
-                  System.out.println("Continue to find other method");
+                  logger.debug("Continue to find other method");
                   e.printStackTrace();
                } catch (Exception e) {
                   e.printStackTrace();
@@ -133,8 +133,8 @@ public class GeneralUtility {
             
       while (i < iteration && !_waitforObjectComparator(output, comparingObject, operand)) {
          i++;
-         System.out.println("Iteration: " + i);
-         System.out.println("Output is: " + output.toString());
+         logger.debug("Iteration: " + i);
+         logger.debug("Output is: " + output.toString());
          try {
             if (isStaticApi) {
                output = method.invoke(Class.forName(apiClassPath), parameters);
@@ -156,7 +156,7 @@ public class GeneralUtility {
          }
          SleepUtil.sleep(delayBetweenCheck);
       }
-      System.out.println("Final Output is: " + output.toString());
+      logger.info("Final Output is: " + output.toString());
       return output;
    }
 
