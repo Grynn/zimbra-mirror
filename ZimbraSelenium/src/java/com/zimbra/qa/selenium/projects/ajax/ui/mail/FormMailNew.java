@@ -9,7 +9,6 @@ import com.zimbra.qa.selenium.framework.items.RecipientItem.RecipientType;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsForm;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
@@ -48,6 +47,13 @@ public class FormMailNew extends AbsForm {
 		
 		public static final String zBodyFrameHTML		= "//div[contains(id,'zv__COMPOSE')]//iframe";
 
+		
+		public static final String zPriorityPulldown	= "css=[id^=zv__COMPOSE][id$=___priority_dropdown]";
+		public static final String zPriorityOptionHigh	= "css=[id^=zv__COMPOSE][id$=___priority_dropdown]";
+		public static final String zPriorityOptionNormal	= "css=[id^=zv__COMPOSE][id$=___priority_dropdown]";
+		public static final String zPriorityOptionLow	= "css=[id^=zv__COMPOSE][id$=___priority_dropdown]";
+
+		
 	}
 
 	public static class Field {
@@ -199,7 +205,27 @@ public class FormMailNew extends AbsForm {
 
 			throw new HarnessException("use zToolbarPressPulldown to attach signature");
 			
-		} else {
+		} else if ( button == Button.B_SHOWBCC) {
+
+			page = this;
+			locator = "xpath=//div[contains(@id,'zv__COMPOSE')]//a[contains(@id,'_toggle_bcc')]";
+
+			if ( zBccIsActive() )
+				return (this);
+			
+			////
+			// For some reason, zClick doesn't work for "Show BCC", but sClick does
+			////
+			
+			if ( !this.sIsElementPresent(locator) )
+				throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
+			
+			// Click it
+			this.sClick(locator);
+			
+			return (page);
+		}
+		else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}
 
@@ -238,11 +264,88 @@ public class FormMailNew extends AbsForm {
 	 * @return
 	 * @throws HarnessException
 	 */
-	public AbsSeleniumObject zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
-		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressPulldown("+ pulldown +", "+ option +")");
 		
-		throw new HarnessException("implement me!");
+		if ( pulldown == null )
+			throw new HarnessException("Pulldown cannot be null!");
+		
+		if ( option == null )
+			throw new HarnessException("Option cannot be null!");
 
+		// Default behavior variables
+		//
+		String pulldownLocator = null;	// If set, this will be expanded
+		String optionLocator = null;	// If set, this will be clicked
+		AbsPage page = null;	// If set, this page will be returned
+		
+		// Based on the button specified, take the appropriate action(s)
+		//
+		
+		if ( pulldown == Button.B_PRIORITY ) {
+			
+			if ( option == Button.O_PRIORITY_HIGH ) {
+				
+				// TODO
+				pulldownLocator = "css=[id^='zv__COMPOSE'][id$='___priority_left_icon']";
+				optionLocator = "TODO";
+				page = this;
+
+			} else if ( option == Button.O_PRIORITY_NORMAL ) {
+				
+				// TODO
+				pulldownLocator = "css=[id^='zv__COMPOSE'][id$='___priority_left_icon']";
+				optionLocator = "TODO";
+				page = this;
+
+			} else if ( option == Button.O_PRIORITY_LOW ) {
+				
+				// TODO
+				pulldownLocator = "css=[id^='zv__COMPOSE'][id$='___priority_left_icon']";
+				optionLocator = "TODO";
+				page = this;
+
+			} else {
+				throw new HarnessException("unsupported priority option "+ option);
+			}
+				
+		} else {
+			throw new HarnessException("no logic defined for pulldown "+ pulldown);
+		}
+
+		// Default behavior
+		if ( pulldownLocator != null ) {
+						
+			// Make sure the locator exists
+			if ( !this.sIsElementPresent(pulldownLocator) ) {
+				throw new HarnessException("Button "+ pulldown +" option "+ option +" pulldownLocator "+ pulldownLocator +" not present!");
+			}
+			
+			this.zClick(pulldownLocator);
+			SleepUtil.sleepSmall();
+			
+			if ( optionLocator != null ) {
+
+				// Make sure the locator exists
+				if ( !this.sIsElementPresent(optionLocator) ) {
+					throw new HarnessException("Button "+ pulldown +" option "+ option +" optionLocator "+ optionLocator +" not present!");
+				}
+				
+				this.zClick(optionLocator);
+				SleepUtil.sleepSmall();
+
+			}
+			
+			// If we click on pulldown/option and the page is specified, then
+			// wait for the page to go active
+			if ( page != null ) {
+				page.zWaitForActive();
+			}
+			
+		}
+		
+		// Return the specified page, or null if not set
+		return (page);
 	}
 	
 	/**
@@ -270,6 +373,11 @@ public class FormMailNew extends AbsForm {
 		} else if ( field == Field.Bcc ) {
 			
 			locator = Locators.zBccField;
+			
+			// Make sure the BCC field is showing
+			if ( !zBccIsActive() ) {
+				this.zToolbarPressButton(Button.B_SHOWBCC);
+			}
 			
 			// FALL THROUGH
 			
@@ -355,9 +463,26 @@ public class FormMailNew extends AbsForm {
 	}
 	
 	
+	private boolean zBccIsActive() throws HarnessException {
+		logger.info(myPageName() + ".zBccIsActive()");
+
+		// <tr id='zv__COMPOSEX_bcc_row' style='display: table_row' x-display='table-row' ...
+		// <tr id='zv__COMPOSEX_bcc_row' style='display: none'  x-display='table-row' ...
+		
+		String xpath = "//div[contains(@id,'zv__COMPOSE')]//tr[contains(@id,'_bcc_row')]";
+		if ( !sIsElementPresent(xpath) )
+			throw new HarnessException("Unable to locate the BCC field "+ xpath);
+		
+		String locator = "xpath=("+ xpath +")@style";
+		String style = this.sGetAttribute(locator);
+		
+		logger.info(myPageName() + ".zBccIsActive() ... style="+ style);
+		return (!style.contains("none"));
+	}
+
 	@Override
 	public void zFill(IItem item) throws HarnessException {
-		logger.info("FormMailNew.fill(ZimbraItem)");
+		logger.info(myPageName() + ".zFill(ZimbraItem)");
 		logger.info(item.prettyPrint());
 
 		// Make sure the item is a MailItem
@@ -442,11 +567,11 @@ public class FormMailNew extends AbsForm {
 		}
 		
 		if ( cc != null ) {
-			this.zFillField(Field.Cc, to.toString());
+			this.zFillField(Field.Cc, cc.toString());
 		}
 		
 		if ( bcc != null ) {
-			this.zFillField(Field.To, to.toString());
+			this.zFillField(Field.Bcc, bcc.toString());
 		}
 
 		

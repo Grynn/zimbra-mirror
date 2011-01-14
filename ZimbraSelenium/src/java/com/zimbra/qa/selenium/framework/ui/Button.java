@@ -82,12 +82,17 @@ public class Button {
 	public static final Button B_SPELL_CHECK = new Button("B_SPELL_CHECK");
 	public static final Button B_SIGNATURE = new Button("B_SIGNATURE");
 	public static final Button B_OPTIONS = new Button("B_OPTIONS");
+	public static final Button B_PRIORITY = new Button("B_PRIORITY");
+	public static final Button B_SHOWBCC = new Button("B_SHOWBCC");
 
 	public static final Button O_SEND_SEND_LATER = new Button("O_SEND_SEND_LATER");
 	public static final Button O_SIGNATURE_DO_NOT_ADD_SIGNATURE = new Button("O_SIGNATURE_DO_NOT_ADD_SIGNATURE");
 	public static final Button O_OPTION_FORMAT_AS_HTML = new Button("O_OPTION_FORMAT_AS_HTML");
 	public static final Button O_OPTION_FORMAT_AS_TEXT = new Button("O_OPTION_FORMAT_AS_TEXT");
 	public static final Button O_OPTION_REQUEST_READ_RECEIPT = new Button("O_OPTION_REQUEST_READ_RECEIPT");
+	public static final Button O_PRIORITY_HIGH = new Button("O_PRIORITY_HIGH");
+	public static final Button O_PRIORITY_NORMAL = new Button("O_PRIORITY_NORMAL");
+	public static final Button O_PRIORITY_LOW = new Button("O_PRIORITY_LOW");
 
 	// SearchPage buttons and pulldown options
 	public static final Button B_SEARCHTYPE = new Button("B_SEARCHTYPE");

@@ -154,6 +154,7 @@ public class AjaxCommonTest {
 	 * <ol>
 	 * <li>For all tests, make sure {@link #startingPage} is active</li>
 	 * <li>For all tests, make sure {@link #startingAccount} is logged in</li>
+	 * <li>For all tests, make any compose tabs are closed</li>
 	 * </ol>
 	 * <p>
 	 * @throws HarnessException
@@ -201,6 +202,8 @@ public class AjaxCommonTest {
 			
 		}
 		
+		// Make sure any extra compose tabs are closed
+		app.zPageMain.zCloseComposeTabs();
 
 		logger.info("commonTestBeforeMethod: finish");
 
