@@ -180,7 +180,7 @@
 			<manifest>
 				<attribute name="Main-Class" value="staf.Driver" />
 				<section name="staf/service/info">
-					<attribute name="Service-Class" value="staf.StafIntegration" />
+					<attribute name="Service-Class" value="com.zimbra.qa.selenium.staf.StafIntegration" />
 					<attribute name="Packaged-Jars" value="guava-r07 commons-beanutils-1.7 commons-configuration-1.5 commons-lang-2.4 ezmorph-1.0.6 json-lib-2.3-jdk15 ocutil-2.4.2 selenium-java-client-driver-1.0-SNAPSHOT selenium-server testng-5.12.1 xalan apache-log4j-extras-1.0 commons-cli-1.2 commons-code-1.4 commons-configuration-1.5 commons-httpclient-3.1 commons-logging dom4j-1.5.2 jaxen-1.1.1 libidn-1.17 log4j-1.2.16 mail resources zimbracommon zimbra-native zimbrasoap zimbrastore" />
 				</section>
 			</manifest>
