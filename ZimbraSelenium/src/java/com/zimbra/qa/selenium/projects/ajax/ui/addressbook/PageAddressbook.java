@@ -219,8 +219,8 @@ public class PageAddressbook extends AbsTab {
 		
 		 if ( option == Button.O_TAG_NEWTAG ) {
 
-			pulldownLocator = "css=div[id$='__TAG_MENU'] td[id$='__TAG_MENU_dropdown']";
-			optionLocator = "css=div[id$='__TAG_MENU|MENU'] td[id$='NEWTAG_title']";
+		    pulldownLocator = "css=td[id$='__TAG_MENU_dropdown'] div[class='ImgSelectPullDownArrow']";
+    		optionLocator = "css=div[id$='__TAG_MENU|MENU|NEWTAG']";
 			page = new DialogTag(this.MyApplication);
 
 			
