@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.log4j.LogManager;
 
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
+
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.ContactItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
@@ -12,6 +14,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
@@ -206,16 +209,67 @@ public class PageAddressbook extends AbsTab {
 		if ( pulldown == null )
 			throw new HarnessException("Button cannot be null!");
 
-		if ( pulldown == null )
-			throw new HarnessException("Button cannot be null!");
 
 		// Default behavior variables
 		//
 		String pulldownLocator = null;	// If set, this will be expanded
 		String optionLocator = null;	// If set, this will be clicked
 		AbsPage page = null;	// If set, this page will be returned
+	   if ( pulldown == Button.B_TAG ) {
+		
+		 if ( option == Button.O_TAG_NEWTAG ) {
 
-		return page;
+			pulldownLocator = "css=div[id$='__TAG_MENU'] td[id$='__TAG_MENU_dropdown']";
+			optionLocator = "css=div[id$='__TAG_MENU|MENU'] td[id$='NEWTAG_title']";
+			page = new DialogTag(this.MyApplication);
+
+			
+		 } else if ( option == Button.O_TAG_REMOVETAG ) {
+
+			zKeyboard.zTypeCharacters(Shortcut.S_MAIL_REMOVETAG.getKeys());
+					
+			pulldownLocator = null;	
+			optionLocator = null;
+			page = null;
+
+			// FALL THROUGH
+
+		 } else {
+			throw new HarnessException("no logic defined for pulldown/option "+ pulldown +"/"+ option);
+		 }
+	    }		
+	
+	// Default behavior
+		if ( pulldownLocator != null ) {
+						
+			// Make sure the locator exists
+			if ( !this.sIsElementPresent(pulldownLocator) ) {
+				throw new HarnessException("Button "+ pulldown +" option "+ option +" pulldownLocator "+ pulldownLocator +" not present!");
+			}
+			
+			this.zClick(pulldownLocator);
+			SleepUtil.sleepSmall();
+			
+			if ( optionLocator != null ) {
+
+				// Make sure the locator exists
+				if ( !this.sIsElementPresent(optionLocator) ) {
+					throw new HarnessException("Button "+ pulldown +" option "+ option +" optionLocator "+ optionLocator +" not present!");
+				}
+				
+				this.zClick(optionLocator);
+				SleepUtil.sleepSmall();
+
+			}
+			
+			// If we click on pulldown/option and the page is specified, then
+			// wait for the page to go active
+			if ( page != null ) {
+				page.zWaitForActive();
+			}
+			
+		}
+	    return page;
 	}
 
 	@Override
