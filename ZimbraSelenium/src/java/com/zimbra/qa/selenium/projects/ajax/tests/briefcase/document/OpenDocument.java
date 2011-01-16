@@ -118,7 +118,7 @@ public class OpenDocument extends AjaxCommonTest {
 		}
 
 		ZAssert.assertEquals(text, document.getDocText(),
-				"Verify document name through GUI");
+				"Verify document text through GUI");
 
 		/*
 		 * //name =ClientSessionFactory.session().selenium().getText(

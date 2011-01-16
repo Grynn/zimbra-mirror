@@ -17,6 +17,7 @@ public class DocumentBriefcaseOpen extends AbsForm {
 		public static final String zBodyField = "css=body"; 
 		public static final String zDocumentBodyField = "css=div#zdocument"; 
 		public static final String zNameField = "css=[class=DwtInputField] [input$=]"; 
+		public static final String zDocumentNameField = "css=[class=TbTop] [b$=]"; 
 	}
 	
 	public static String pageTitle;
@@ -49,6 +50,14 @@ public class DocumentBriefcaseOpen extends AbsForm {
 			text = ClientSessionFactory.session().selenium().getText(Locators.zDocumentBodyField);
 		}	
 		return text;
+	}
+	
+	public String retriveDocumentName() throws HarnessException {
+		String name = "";
+		if(sIsElementPresent(Locators.zDocumentNameField)){
+			name = ClientSessionFactory.session().selenium().getText(Locators.zDocumentNameField);
+		}	
+		return name;
 	}
 	
 	public void typeDocumentName(String text) throws HarnessException {

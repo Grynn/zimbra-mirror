@@ -12,7 +12,8 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseNew;
-
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseOpen;
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase.Locators;
 
 public class CreateDocument extends AjaxCommonTest {
 
@@ -39,7 +40,7 @@ public class CreateDocument extends AjaxCommonTest {
 		}
 	}
 
-	@Test(description = "Create document through GUI - verify through SOAP", groups = { "sanity" })
+	@Test(description = "Create document through GUI - verify through GUI", groups = { "sanity" })
 	public void CreateDocument_01() throws HarnessException {
 
 		// Create document item
@@ -66,42 +67,69 @@ public class CreateDocument extends AjaxCommonTest {
 			documentBriefcaseNew.zSelectWindow("Zimbra: Briefcase");
 		}
 
-		// Verify document name & text through SOAP
-		int i = 0;
-		int y = 20;
+		// Verify document name & text through GUI
+		// Select Briefcase tab
+		SleepUtil.sleepSmall();
+		app.zPageBriefcase.zNavigateTo();
 
-		while (i < y) {
-			SleepUtil.sleepSmall();
-			account.soapSend(
+		// ClientSessionFactory.session().selenium().refresh();
+		// refresh briefcase page
+		app.zPageBriefcase.zClick(Locators.zBriefcaseFolderIcon);
 
-			"<SearchRequest xmlns='urn:zimbraMail' types='document'>" +
+		// Click on created document
+		SleepUtil.sleepLong();
 
-			"<query>" + document.getDocName() + "</query>" +
-
-			"</SearchRequest>");
-
-			if (account.soapSelectValue("//mail:doc", "fr") != null) {
-				logger
-						.info(i
-								+ "sec account.soapSelectValue(//mail:doc,fr) succeeded");
-				break;
-			}
-			i++;
+		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
+				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
+			app.zPageBriefcase
+					.zClick("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div:contains("
+							+ document.getDocName() + ")");
 		}
 
-		if (i == y)
-			logger.info(i
-					+ "sec account.soapSelectValue(//mail:doc,fr) is null");
+		// Click on open in a separate window icon in toolbar
+		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
+				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW);
 
-		String name = account.soapSelectValue("//mail:doc", "name");
-		String text = account.soapSelectValue("//mail:doc", "fr");
-		if (text != null)
-			text = account.soapSelectValue("//mail:doc", "fr").trim();
+		// Select document opened in a separate window
+		SleepUtil.sleepLong();
 
-		ZAssert.assertEquals(document.getDocName(), name,
-				" Verify document name through SOAP");
+		String windowName = document.getDocName();
+		String name = "";
+		String text = "";
+		try {
+			documentBriefcaseOpen.zSelectWindow(windowName);
+
+			// if name field appears in the toolbar then document page is opened
+			int i = 0;
+			for (; i < 90; i++) {
+				if (documentBriefcaseOpen
+						.sIsElementPresent("css=div[id='zdocument']")) {
+					break;
+				}
+				SleepUtil.sleepSmall();
+			}
+
+			if (!documentBriefcaseOpen.sIsVisible("css=div[id='zdocument']")) {
+				throw new HarnessException(
+						"could not open a file in a separate window");
+			}
+
+			name = documentBriefcaseOpen.retriveDocumentName();
+			text = documentBriefcaseOpen.retriveDocumentText();
+
+			// close
+			documentBriefcaseOpen.zSelectWindow(windowName);
+
+			ClientSessionFactory.session().selenium().close();
+		} finally {
+			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
+		}
+
+		ZAssert.assertStringContains(name, document.getDocName(),
+				"Verify document name through GUI");
+
 		ZAssert.assertEquals(text, document.getDocText(),
-				" Verify document text through SOAP");
+				"Verify document text through GUI");
 
 		/*
 		*/
