@@ -1,15 +1,12 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import com.thoughtworks.selenium.DefaultSelenium;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseOpen;
@@ -23,21 +20,6 @@ public class CreateDocument extends AjaxCommonTest {
 		super.startingPage = app.zPageBriefcase;
 
 		super.startingAccount = null;
-
-	}
-
-	@BeforeClass(groups = { "always" })
-	public void CreateDocumentBeforeClass() throws HarnessException {
-		logger.info(this.getClass().getSimpleName() + "BeforeClass start");
-		if (startingAccount == null) {
-			if (app.zPageMain.zIsActive()
-					&& app.zPageMain
-							.sIsElementPresent("css=[onclick='ZmZimbraMail._onClickLogOff();']"))
-				((DefaultSelenium) ClientSessionFactory.session().selenium())
-						.click("css=[onclick='ZmZimbraMail._onClickLogOff();']");
-			app.zPageLogin.zWaitForActive();
-			logger.info(this.getClass().getSimpleName() + "BeforeClass finish");
-		}
 	}
 
 	@Test(description = "Create document through GUI - verify through GUI", groups = { "sanity" })
@@ -45,9 +27,7 @@ public class CreateDocument extends AjaxCommonTest {
 
 		// Create document item
 		DocumentItem document = new DocumentItem();
-
-		ZimbraAccount account = app.zGetActiveAccount();
-
+		
 		// Select Briefcase tab
 		SleepUtil.sleepSmall();
 		app.zPageBriefcase.zNavigateTo();

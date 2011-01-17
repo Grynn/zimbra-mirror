@@ -1,8 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import com.thoughtworks.selenium.DefaultSelenium;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
@@ -14,7 +12,6 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseOpen;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase.Locators;
 
-
 public class OpenDocument extends AjaxCommonTest {
 
 	public OpenDocument() {
@@ -23,21 +20,6 @@ public class OpenDocument extends AjaxCommonTest {
 		super.startingPage = app.zPageBriefcase;
 
 		super.startingAccount = null;
-
-	}
-
-	@BeforeClass(groups = { "always" })
-	public void OpenDocumentBeforeClass() throws HarnessException {
-		logger.info(this.getClass().getSimpleName() + "BeforeClass start");
-		if (startingAccount == null) {
-			if (app.zPageMain.zIsActive()
-					&& app.zPageMain
-							.sIsElementPresent("css=[onclick='ZmZimbraMail._onClickLogOff();']"))
-				((DefaultSelenium) ClientSessionFactory.session().selenium())
-						.click("css=[onclick='ZmZimbraMail._onClickLogOff();']");
-			app.zPageLogin.zWaitForActive();
-			logger.info(this.getClass().getSimpleName() + "BeforeClass finish");
-		}
 	}
 
 	@Test(description = "Create document through SOAP - open & verify through GUI", groups = { "smoke" })

@@ -1,9 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
@@ -13,7 +10,6 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase.Locators;
 
-
 public class UploadFile extends AjaxCommonTest {
 
 	public UploadFile() {
@@ -22,21 +18,6 @@ public class UploadFile extends AjaxCommonTest {
 		super.startingPage = app.zPageBriefcase;
 
 		super.startingAccount = null;
-
-	}
-
-	@BeforeClass(groups = { "always" })
-	public void UploadFileBeforeClass() throws HarnessException {
-		logger.info(this.getClass().getSimpleName() + "BeforeClass start");
-		if (startingAccount == null) {
-			if (app.zPageMain.zIsActive()
-					&& app.zPageMain
-							.sIsElementPresent("css=[onclick='ZmZimbraMail._onClickLogOff();']"))
-				((DefaultSelenium) ClientSessionFactory.session().selenium())
-						.click("css=[onclick='ZmZimbraMail._onClickLogOff();']");
-			app.zPageLogin.zWaitForActive();
-			logger.info(this.getClass().getSimpleName() + "BeforeClass finish");
-		}
 	}
 
 	@Test(description = "Upload file through SOAP - verify through SOAP", groups = { "smoke" })

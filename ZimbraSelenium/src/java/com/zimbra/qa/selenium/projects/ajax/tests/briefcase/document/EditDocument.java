@@ -1,8 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import com.thoughtworks.selenium.DefaultSelenium;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
@@ -24,21 +22,6 @@ public class EditDocument extends AjaxCommonTest {
 		super.startingPage = app.zPageBriefcase;
 
 		super.startingAccount = null;
-
-	}
-
-	@BeforeClass(groups = { "always" })
-	public void EditDocumentBeforeClass() throws HarnessException {
-		logger.info(this.getClass().getSimpleName() + "BeforeClass start");
-		if (startingAccount == null) {
-			if (app.zPageMain.zIsActive()
-					&& app.zPageMain
-							.sIsElementPresent("css=[onclick='ZmZimbraMail._onClickLogOff();']"))
-				((DefaultSelenium) ClientSessionFactory.session().selenium())
-						.click("css=[onclick='ZmZimbraMail._onClickLogOff();']");
-			app.zPageLogin.zWaitForActive();
-			logger.info(this.getClass().getSimpleName() + "BeforeClass finish");
-		}
 	}
 
 	@Test(description = "Create document through SOAP - edit name & verify through GUI", groups = { "smoke" })
@@ -224,10 +207,10 @@ public class EditDocument extends AjaxCommonTest {
 					+ ZimbraSeleniumProperties.getUniqueString());
 
 			documentBriefcaseEdit.typeDocumentText(document.getDocText());
-			
+
 			document.setDocName("name"
 					+ ZimbraSeleniumProperties.getUniqueString());
-			
+
 			documentBriefcaseEdit.zSelectWindow(windowName);
 			documentBriefcaseEdit.typeDocumentName(document.getDocName());
 
