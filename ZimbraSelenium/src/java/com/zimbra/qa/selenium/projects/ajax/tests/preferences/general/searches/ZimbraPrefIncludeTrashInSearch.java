@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.preferences.general.searches;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.testng.annotations.Test;
@@ -20,6 +21,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeI
 
 public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 
+	@SuppressWarnings("serial")
 	public ZimbraPrefIncludeTrashInSearch() {
 		logger.info("New "+ ZimbraPrefIncludeTrashInSearch.class.getCanonicalName());
 		
@@ -27,13 +29,15 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 		super.startingPage = app.zPagePreferences;
 
 		// Make sure we are using an account with conversation view
-		ZimbraAccount account = new ZimbraAccount();
-		account.provision();
-		account.authenticate();
-		account.modifyPreference("zimbraPrefIncludeTrashInSearch", "TRUE");
+		super.startingAccount = new ZimbraAccount();
+		super.startingAccount.provision();
+		super.startingAccount.authenticate();
+		super.startingAccount.modifyPreferences(
+				new HashMap<String , String>() {{
+				    put("zimbraPrefIncludeTrashInSearch", "TRUE");
+				}});
 
 			
-		super.startingAccount = account;		
 		
 	}
 	

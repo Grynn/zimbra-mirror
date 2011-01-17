@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.conversation;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.testng.annotations.Test;
@@ -18,6 +19,7 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
 public class DeleteConversation extends AjaxCommonTest {
 
+	@SuppressWarnings("serial")
 	public DeleteConversation() {
 		logger.info("New "+ DeleteConversation.class.getCanonicalName());
 		
@@ -25,12 +27,14 @@ public class DeleteConversation extends AjaxCommonTest {
 		super.startingPage = app.zPageMail;
 		
 		// Make sure we are using an account with conversation view
-		ZimbraAccount account = new ZimbraAccount();
-		account.provision();
-		account.authenticate();
-		account.modifyPreference("zimbraPrefGroupMailBy", "conversation");
-			
-		super.startingAccount = account;		
+		super.startingAccount = new ZimbraAccount();
+		super.startingAccount.provision();
+		super.startingAccount.authenticate();
+		super.startingAccount.modifyPreferences(
+				new HashMap<String , String>() {{
+				    put("zimbraPrefGroupMailBy", "conversation");
+				}});
+	
 	}
 	
 	@Test(	description = "Delete a conversation",

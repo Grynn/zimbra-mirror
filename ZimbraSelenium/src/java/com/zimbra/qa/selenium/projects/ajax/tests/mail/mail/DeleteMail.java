@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.mail;
 
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 import java.util.List;
 
 import org.testng.annotations.DataProvider;
@@ -19,6 +20,7 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
 public class DeleteMail extends AjaxCommonTest {
 
+	@SuppressWarnings("serial")
 	public DeleteMail() {
 		logger.info("New "+ DeleteMail.class.getCanonicalName());
 		
@@ -29,7 +31,10 @@ public class DeleteMail extends AjaxCommonTest {
 		super.startingAccount = new ZimbraAccount();
 		super.startingAccount.provision();
 		super.startingAccount.authenticate();
-		super.startingAccount.modifyPreference("zimbraPrefGroupMailBy", "message");
+		super.startingAccount.modifyPreferences(
+				new HashMap<String , String>() {{
+				    put("zimbraPrefGroupMailBy", "message");
+				}});
 		
 	}
 	

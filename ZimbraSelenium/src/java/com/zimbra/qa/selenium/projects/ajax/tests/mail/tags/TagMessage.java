@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.tags;
 
+import java.util.HashMap;
+
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -18,6 +20,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogTag;
 
 public class TagMessage extends AjaxCommonTest {
 
+	@SuppressWarnings("serial")
 	public TagMessage() {
 		logger.info("New "+ TagMessage.class.getCanonicalName());
 		
@@ -27,7 +30,11 @@ public class TagMessage extends AjaxCommonTest {
 		super.startingAccount = new ZimbraAccount();
 		super.startingAccount.provision();
 		super.startingAccount.authenticate();
-		super.startingAccount.modifyPreference("zimbraPrefGroupMailBy", "message");
+		super.startingAccount.modifyPreferences(
+				new HashMap<String , String>() {{
+				    put("zimbraPrefGroupMailBy", "message");
+				}});
+
 		
 	}
 

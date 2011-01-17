@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.mail;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.testng.annotations.Test;
@@ -22,6 +23,7 @@ public class GetMail extends AjaxCommonTest {
 
 	int pollIntervalSeconds = 60;
 	
+	@SuppressWarnings("serial")
 	public GetMail() {
 		logger.info("New "+ GetMail.class.getCanonicalName());
 		
@@ -32,9 +34,13 @@ public class GetMail extends AjaxCommonTest {
 		super.startingAccount = new ZimbraAccount();
 		super.startingAccount.provision();
 		super.startingAccount.authenticate();
-		super.startingAccount.modifyPreference("zimbraPrefGroupMailBy", "message");
-		super.startingAccount.modifyPreference("zimbraPrefMessageViewHtmlPreferred", "TRUE");
-		super.startingAccount.modifyPreference("zimbraPrefMailPollingInterval", "" + pollIntervalSeconds);
+		super.startingAccount.modifyPreferences(
+				new HashMap<String , String>() {{
+				    put("zimbraPrefGroupMailBy", "message");
+				    put("zimbraPrefMessageViewHtmlPreferred", "TRUE");
+				    put("zimbraPrefMailPollingInterval", "" + pollIntervalSeconds);
+				}});
+
 
 	}
 	

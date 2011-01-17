@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose;
 
+import java.util.HashMap;
+
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.MailItem;
@@ -15,6 +17,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
 public class ReplyMailText extends AjaxCommonTest {
 
+	@SuppressWarnings("serial")
 	public ReplyMailText() {
 		logger.info("New "+ ReplyMailText.class.getCanonicalName());
 		
@@ -23,7 +26,10 @@ public class ReplyMailText extends AjaxCommonTest {
 		super.startingAccount = new ZimbraAccount();
 		super.startingAccount.provision();
 		super.startingAccount.authenticate();
-		super.startingAccount.modifyPreference("zimbraPrefComposeFormat", "text");
+		super.startingAccount.modifyPreferences(
+				new HashMap<String , String>() {{
+				    put("zimbraPrefComposeFormat", "text");
+				}});
 		
 	}
 	

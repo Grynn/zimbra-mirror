@@ -289,20 +289,34 @@ public class ZimbraAccount {
 	 * Modify user prefences using ModifyPrefsRequest
 	 * @throws HarnessException 
 	 */
-	public ZimbraAccount modifyPreference(String pref, String value) {
+	public ZimbraAccount modifyPreferences(Map<String, String> preferences) {
+		
+		StringBuilder sb = new StringBuilder();
+		for (Map.Entry<String, String> entry : preferences.entrySet()) {
+			sb.append(String.format("<pref name='%s'>%s</pref>", entry.getKey(), entry.getValue()));
+		}
+		
+		if ( sb.length() <= 0 )
+			return (this); // Nothing to modify
+		
+		
 		try
 		{
+			
 			soapSend(
-					"<ModifyPrefsRequest xmlns='urn:zimbraAccount'>" +
-					"<pref name='"+ pref +"'>"+ value +"</pref>" +
-			"</ModifyPrefsRequest>");
+				"<ModifyPrefsRequest xmlns='urn:zimbraAccount'>" +
+						sb.toString() +
+				"</ModifyPrefsRequest>");
 
 			Element[] response = soapSelectNodes("//acct:ModifyPrefsResponse");
 			if ( response == null || response.length != 1 )
 				throw new HarnessException("Unable to modify preference "+ soapLastResponse());
+			
 		} catch (HarnessException e) {
+			// TODO: I would prefer to throw HarnessException here
 			logger.error("Unable to modify preference", e);
 		}
+		
 		return (this);
 
 	}

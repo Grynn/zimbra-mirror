@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.mail;
 
+import java.util.HashMap;
+
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.MailItem;
@@ -18,6 +20,7 @@ public class MarkReadMail extends AjaxCommonTest {
 
 	public int delaySeconds = 5;
 	
+	@SuppressWarnings("serial")
 	public MarkReadMail() {
 		logger.info("New "+ MarkReadMail.class.getCanonicalName());
 		
@@ -28,8 +31,12 @@ public class MarkReadMail extends AjaxCommonTest {
 		super.startingAccount = new ZimbraAccount();
 		super.startingAccount.provision();
 		super.startingAccount.authenticate();
-		super.startingAccount.modifyPreference("zimbraPrefGroupMailBy", "message");
-		super.startingAccount.modifyPreference("zimbraPrefMarkMsgRead", ""+ delaySeconds);
+		super.startingAccount.modifyPreferences(
+				new HashMap<String , String>() {{
+				    put("zimbraPrefGroupMailBy", "message");
+				    put("zimbraPrefMarkMsgRead", "" + delaySeconds);
+				}});
+
 
 	}
 	

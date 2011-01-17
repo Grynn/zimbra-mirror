@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.mail;
 
+import java.util.HashMap;
+
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
@@ -33,6 +35,7 @@ public class MoveMessage extends AjaxCommonTest {
 		
 	}
 	
+	@SuppressWarnings("serial")
 	public MoveMessage() {
 		logger.info("New "+ MoveMessage.class.getCanonicalName());
 		
@@ -43,7 +46,10 @@ public class MoveMessage extends AjaxCommonTest {
 		super.startingAccount = new ZimbraAccount();
 		super.startingAccount.provision();
 		super.startingAccount.authenticate();
-		super.startingAccount.modifyPreference("zimbraPrefGroupMailBy", "message");
+		super.startingAccount.modifyPreferences(
+				new HashMap<String , String>() {{
+				    put("zimbraPrefGroupMailBy", "message");
+				}});
 		
 	}
 	

@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.conversation;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.testng.annotations.Test;
@@ -17,6 +18,7 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
 public class GetConversation extends AjaxCommonTest {
 
+	@SuppressWarnings("serial")
 	public GetConversation() {
 		logger.info("New "+ GetConversation.class.getCanonicalName());
 		
@@ -24,12 +26,14 @@ public class GetConversation extends AjaxCommonTest {
 		super.startingPage = app.zPageMail;
 
 		// Make sure we are using an account with conversation view
-		ZimbraAccount account = new ZimbraAccount();
-		account.provision();
-		account.authenticate();
-		account.modifyPreference("zimbraPrefGroupMailBy", "conversation");
-			
-		super.startingAccount = account;		
+		super.startingAccount = new ZimbraAccount();
+		super.startingAccount.provision();
+		super.startingAccount.authenticate();
+		super.startingAccount.modifyPreferences(
+				new HashMap<String , String>() {{
+				    put("zimbraPrefGroupMailBy", "conversation");
+				}});
+	
 		
 	}
 	

@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.framework.util;
 
+import java.util.HashMap;
+
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -75,6 +77,7 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 	 * Get the global admin account used for Admin Console testing
 	 * This global admin has the zimbraPrefAdminConsoleWarnOnExit set to false
 	 */
+	@SuppressWarnings("serial")
 	public static synchronized ZimbraAdminAccount AdminConsoleAdmin() {
 		if ( _AdminConsoleAdmin == null ) {
 			String name = "globaladmin"+ ZimbraSeleniumProperties.getUniqueString();
@@ -82,7 +85,10 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 			_AdminConsoleAdmin = new ZimbraAdminAccount(name +"@"+ domain);
 			_AdminConsoleAdmin.provision();
 			_AdminConsoleAdmin.authenticate();
-			_AdminConsoleAdmin.modifyPreference("zimbraPrefAdminConsoleWarnOnExit", "FALSE");
+			_AdminConsoleAdmin.modifyPreferences(
+					new HashMap<String , String>() {{
+					    put("zimbraPrefAdminConsoleWarnOnExit", "TRUE");
+					}});
 		}
 		return (_AdminConsoleAdmin);
 	}

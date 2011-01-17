@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.preferences.general.searches;
 
+import java.util.HashMap;
+
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.ui.Action;
@@ -12,6 +14,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeI
 
 public class ZimbraPrefShowSearchString extends AjaxCommonTest {
 
+	@SuppressWarnings("serial")
 	public ZimbraPrefShowSearchString() {
 		logger.info("New "+ ZimbraPrefShowSearchString.class.getCanonicalName());
 		
@@ -19,13 +22,14 @@ public class ZimbraPrefShowSearchString extends AjaxCommonTest {
 		super.startingPage = app.zPagePreferences;
 
 		// Make sure we are using an account with conversation view
-		ZimbraAccount account = new ZimbraAccount();
-		account.provision();
-		account.authenticate();
-		account.modifyPreference("zimbraPrefShowSearchString", "TRUE");
-
+		super.startingAccount = new ZimbraAccount();
+		super.startingAccount.provision();
+		super.startingAccount.authenticate();
+		super.startingAccount.modifyPreferences(
+				new HashMap<String , String>() {{
+				    put("zimbraPrefShowSearchString", "TRUE");
+				}});
 			
-		super.startingAccount = account;		
 		
 	}
 	

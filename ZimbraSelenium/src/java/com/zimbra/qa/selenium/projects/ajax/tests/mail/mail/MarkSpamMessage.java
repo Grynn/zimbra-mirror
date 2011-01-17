@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.mail;
 
+import java.util.HashMap;
+
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -18,6 +20,7 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 public class MarkSpamMessage extends AjaxCommonTest {
 
 	
+	@SuppressWarnings("serial")
 	public MarkSpamMessage() {
 		logger.info("New "+ MarkSpamMessage.class.getCanonicalName());
 		
@@ -28,7 +31,11 @@ public class MarkSpamMessage extends AjaxCommonTest {
 		super.startingAccount = new ZimbraAccount();
 		super.startingAccount.provision();
 		super.startingAccount.authenticate();
-		super.startingAccount.modifyPreference("zimbraPrefGroupMailBy", "message");
+		super.startingAccount.modifyPreferences(
+				new HashMap<String , String>() {{
+				    put("zimbraPrefGroupMailBy", "message");
+				}});
+
 		
 	}
 	

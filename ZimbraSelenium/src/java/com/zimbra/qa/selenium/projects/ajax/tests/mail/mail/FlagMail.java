@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.mail;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.testng.annotations.Test;
@@ -18,6 +19,7 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
 public class FlagMail extends AjaxCommonTest {
 
+	@SuppressWarnings("serial")
 	public FlagMail() {
 		logger.info("New "+ FlagMail.class.getCanonicalName());
 		
@@ -28,7 +30,10 @@ public class FlagMail extends AjaxCommonTest {
 		super.startingAccount = new ZimbraAccount();
 		super.startingAccount.provision();
 		super.startingAccount.authenticate();
-		super.startingAccount.modifyPreference("zimbraPrefGroupMailBy", "message");
+		super.startingAccount.modifyPreferences(
+				new HashMap<String , String>() {{
+				    put("zimbraPrefGroupMailBy", "message");
+				}});
 		
 	}
 	
