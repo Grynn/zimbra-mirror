@@ -2,21 +2,20 @@ package com.zimbra.qa.selenium.projects.desktop.core;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
 
 import com.zimbra.qa.selenium.framework.util.CommandLine;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.OperatingSystem;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
+import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * This class contains methods that can be used for Zimbra Desktop Installation and Uninstallation
@@ -25,7 +24,10 @@ import java.lang.reflect.Method;
  */
 public class DesktopInstallUtil {
    protected static Logger logger = LogManager.getLogger(DesktopCommonTest.class);
-   private static final String _desktopRegistryPath = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{70D9DD93-2905-45F5-B89D-449465CB9246}";
+   private static final String _commonRegistryPath = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
+   private static String _desktopRegistryPath = null;
+   private static final String _zimbraDesktopDisplayName = "Zimbra Desktop";
+   //private static final String _buildUrl = "http://zre-matrix.eng.vmware.com/links/WINDOWS/HELIX/20110114070101_ZDESKTOP/ZimbraBuild/i386/";
 
    /**
     * Reads Windows registry value based on the specified location and key
@@ -33,9 +35,37 @@ public class DesktopInstallUtil {
     * @param key Registry Key to be queried for value
     * @return (String) Raw output of the query
     */
-   public static final String readRegistry(String location, String key){
+   private static final String _readZimbraDesktopRegistry(String location, String key){
       try {
-         String registryQuery = "reg query " + '"'+ location + "\" /v " + key;
+         String registryQuery = "reg query " + '"'+ location;
+         // Run reg query, then read output with StreamReader (internal class)
+         String[] lines = CommandLine.cmdExecWithOutput(registryQuery).split("\n");
+
+         logger.debug("registryQuery is: " + registryQuery);
+         logger.debug("Lines are: ");
+
+         String output = null;
+         String zimbraDesktopRegistryPath = null;
+         if (_desktopRegistryPath == null) {
+            for (int i = 0; i < lines.length; i++) {
+               if (lines[i].trim().equals("")) {
+                  // Skip it
+               } else {
+                  String displayName = CommandLine.cmdExecWithOutput("reg query " +
+                        '"'+ lines[i] + "\" /v DisplayName");
+                  if (displayName.contains(_zimbraDesktopDisplayName)) {
+                     zimbraDesktopRegistryPath = _desktopRegistryPath = lines[i];
+                     break;
+                  }
+               }
+            }
+         } else {
+            zimbraDesktopRegistryPath = _desktopRegistryPath;
+         }
+         output = CommandLine.cmdExecWithOutput("reg query " +
+               '"'+ zimbraDesktopRegistryPath + "\" /v " + key);
+         return output;
+         /**String registryQuery = "reg query " + '"'+ location + "\" /v " + key;
          logger.debug("registryQuery is: " + registryQuery);
 
          // Run reg query, then read output with StreamReader (internal class)
@@ -49,7 +79,7 @@ public class DesktopInstallUtil {
          reader.join();
 
          logger.debug("Getting the reader thread result");
-         return reader.getResult();
+         return reader.getResult();*/
       } catch (Exception e) {
          return null;
       }
@@ -61,8 +91,8 @@ public class DesktopInstallUtil {
     * @param key Registry Key to be queried for value
     * @return (String) Value of the specified key
     */
-   public static final String getRegistryValue(String location, String key) {
-      String output = readRegistry(location, key).trim();
+   private static final String _getRegistryValue(String location, String key) {
+      String output = _readZimbraDesktopRegistry(location, key).trim();
       logger.info("Registry output is: " + output);
       // Now process it
       // Output has the following format:
@@ -81,41 +111,6 @@ public class DesktopInstallUtil {
    }
 
    /**
-    * Internal class for StreamReader, which extends Thread class
-    * to ensure that it always synchronizes
-    * @author Jeffry Hidayat
-    *
-    */
-   static class StreamReader extends Thread {
-      private InputStream is;
-      private StringWriter sw = new StringWriter();
-      public StreamReader(InputStream is) {
-         this.is = is;
-      }
-
-      /**
-       * Run method of the StreamReader class
-       */
-      public void run() {
-         try {
-            int c;
-            while ((c = is.read()) != -1)
-               sw.write(c);
-         } catch (IOException e) {
-
-         }
-      }
-
-      /**
-       * Get the result of the Reader
-       * @return StringWriter object that was written by run Method
-       */
-      public String getResult() {
-         return sw.toString();
-      }
-   }
-
-   /**
     * Uninstalls Zimbra Desktop Application, if it was uninstalled already, then
     * just exits the method, otherwise it will execute and wait dynamically until
     * the uninstallation is done (Waiting for the registry query to return nothing)
@@ -123,88 +118,99 @@ public class DesktopInstallUtil {
     * @throws IOException 
     * @throws HarnessException 
     */
-   private static void _uninstallDesktopApp() throws IOException, InterruptedException, HarnessException {
-      String uninstallCommand = DesktopInstallUtil.getRegistryValue(
-            DesktopInstallUtil._desktopRegistryPath, "UninstallString") + " /quiet";
-      logger.info("uninstallCommand is: " + uninstallCommand);
+   public static void uninstallDesktopApp() throws IOException, InterruptedException, HarnessException {
+      OsType osType = OperatingSystem.getOSType();
+      switch (osType) {
+      case WINDOWS: case WINDOWS_XP:
+         if (isDesktopAppInstalled()) {
+            String uninstallCommand = DesktopInstallUtil._getRegistryValue(
+                  DesktopInstallUtil._commonRegistryPath, "UninstallString") + " /quiet";
+            //TODO: Do for Linux and Mac, right now it's only for Windows
+            logger.info("uninstallCommand is: " + uninstallCommand);
+      
+            if (uninstallCommand.trim().equals("")) {
+               logger.info("Zimbra Desktop App doesn't exist, thus exiting the method");
+               return;
+            } else {
+               logger.debug("Executing command...");
+               CommandLine.CmdExec(uninstallCommand);
+               logger.debug("uninstallCommand execution is successful");
+               GeneralUtility.waitFor("com.zimbra.qa.selenium.projects.desktop.core.DesktopInstallUtil", null, true, "isDesktopAppInstalled", null, WAIT_FOR_OPERAND.NEQ, true,
+                     300 * 1000, 5 * 1000);
+               logger.debug("Successfully waiting for");
+               logger.info("Zimbra Desktop Uninstallation is complete!");
+            }
+         } else {
+            logger.info("Desktop App doesn't exist, so quitting the uninstallation...");
+         }
+         break;
+      case LINUX: case MAC:
+         //TODO: Impelements Linux and MAC uninstallation method here
+         break;
+      }
+      _desktopRegistryPath = null;
+   }
 
-      if (uninstallCommand.trim().equals("")) {
-         logger.info("Zimbra Desktop App doesn't exist, thus exiting the method");
-         return;
-      } else {
-         logger.debug("Executing command...");
-         CommandLine.CmdExec(uninstallCommand);
-         logger.debug("uninstallCommand execution is successful");
-         Object [] params = {DesktopInstallUtil._desktopRegistryPath, "UninstallString"};
-         GeneralUtility.waitFor("projects.desktop.core.DesktopInstallUtil", null, true, "readRegistry", params, WAIT_FOR_OPERAND.EQ, "",
-               300 * 1000, 5 * 1000);
-         logger.debug("Successfully waiting for");
+   /**
+    * Installs Zimbra Desktop Application, if the app has been installed (based on the readRegistry),
+    * then nothing to proceed
+    * @param msiLocation Location of the installation file
+    * @throws HarnessException
+    * @throws IOException
+    * @throws InterruptedException
+    */
+   public static void installDesktopApp(String installFileBinaryLocation) throws HarnessException, IOException, InterruptedException {
+      //TODO: Do for Linux and Mac, right now it's only for Windows
+      File file = new File(installFileBinaryLocation);
+      OsType osType = OperatingSystem.getOSType();
+      switch (osType) {
+      case WINDOWS: case WINDOWS_XP:
+         if (DesktopInstallUtil.isDesktopAppInstalled()) {
+            logger.info("Zimbra Desktop App has already been installed.");
+         } else {
+            if (!file.exists()) {
+               throw new HarnessException ("MSI file doesn't exist at given path" + installFileBinaryLocation);
+            } else {
+               String installCommand = "MsiExec.exe /i " + installFileBinaryLocation + " /qn";
+               logger.debug("installCommand is: " + installCommand);
+               CommandLine.CmdExec(installCommand);
+               logger.debug("installCommand execution is successful");
+               GeneralUtility.waitFor("com.zimbra.qa.selenium.projects.desktop.core.DesktopInstallUtil", null, true, "isDesktopAppInstalled", null, WAIT_FOR_OPERAND.EQ, true,
+                     300 * 1000, 5 * 1000);
+               logger.info("Zimbra Desktop Installation is complete!");
+            }
+         }
+
+         break;
+      case LINUX: case MAC:
+         // TODO: Implements installation methods for Linux and Mac
+         break;
       }
    }
 
-   private static void _installDesktopApp(String msiLocation) throws HarnessException, IOException, InterruptedException {
-      File file = new File(msiLocation);
-      if (!file.exists()) {
-         throw new HarnessException ("MSI file doesn't exist at given path" + msiLocation);
-      } else {
-         String installCommand = "MsiExec.exe /i " + msiLocation + " /qn";
-         logger.debug("installCommand is: " + installCommand);
-         CommandLine.CmdExec(installCommand);
-         logger.debug("installCommand execution is successful");
-         Object [] params = {DesktopInstallUtil._desktopRegistryPath, "UninstallString"};
-         GeneralUtility.waitFor("projects.desktop.core.DesktopInstallUtil", null, true, "readRegistry", params, WAIT_FOR_OPERAND.NEQ, "",
-               300 * 1000, 5 * 1000);
+   /**
+    * Determines whether the Zimbra Desktop client is installed
+    * @return true, if it is installed, otherwise, false
+    */
+   public static boolean isDesktopAppInstalled() {
+      OsType osType = OperatingSystem.getOSType();
+      boolean isDesktopInstalled = false;
+      switch (osType) {
+      case WINDOWS: case WINDOWS_XP:
+         String registry = DesktopInstallUtil._readZimbraDesktopRegistry(DesktopInstallUtil._commonRegistryPath, "UninstallString");
+         if (registry != null) {
+            if (!registry.trim().equals("")) {
+               isDesktopInstalled = true;
+               logger.debug("readRegistry: " + registry);
+            }
+         }
+         break;
+      case LINUX: case MAC:
+         //TODO:
+         break;
       }
-   }
-   
-   // TODO: Please remove these below, before checking in
-   public static void main(String[] args) throws HarnessException, SecurityException, ClassNotFoundException, IOException, InterruptedException {
-      /**Object[] input = null;
-      DesktopInstallUtil test = new DesktopInstallUtil();
-      System.out.println(GeneralUtility.waitFor("projects.desktop.core.DesktopInstallUtil", null, true, "counter", input, WAIT_FOR_OPERAND.NEQ, new Integer(0), 10000, 1000));
-      _count = 2;
-      System.out.println(GeneralUtility.waitFor("projects.desktop.core.DesktopInstallUtil", test, false, "counter1", input, WAIT_FOR_OPERAND.NEQ, new Integer(4), 10000, 1000));
-   }*/
-      /**
-      String uninstallCommand = DesktopInstallUtil.getRegistryValue(
-            DesktopInstallUtil._desktopRegistryPath, "UninstallString") + " /quiet";
-      System.out.println("uninstallCommand is: " + uninstallCommand);
 
-      if (uninstallCommand.trim().equals("")) {
-         System.out.println("Zimbra Desktop App doesn't exist, thus exiting the method");
-         return;
-      } else {
-         System.out.println("Executing command...");
-         CommandLine.CmdExec(uninstallCommand);
-         System.out.println("Command execution successful");
-         Object [] params = {DesktopInstallUtil._desktopRegistryPath, "UninstallString"};
-         GeneralUtility.waitFor("projects.desktop.core.DesktopInstallUtil", null, true, "readRegistry", params, WAIT_FOR_OPERAND.EQ, "",
-               600 * 1000, 5 * 1000);
-         System.out.println("Successfully waiting for");
-      }*/
-      String msiLocation = "C:\\Jeff_Test\\zdesktop_7_0_dev-helix_b10684_win32.msi";
-      File file = new File(msiLocation);
-      if (!file.exists()) {
-         throw new HarnessException ("MSI file doesn't exist at given path" + msiLocation);
-      } else {
-         String installCommand = "MsiExec.exe /i " + msiLocation + " /qn";
-         System.out.println("installCommand is: " + installCommand);
-         CommandLine.CmdExec(installCommand);
-         System.out.println("installCommand execution is successful");
-         Object [] params = {DesktopInstallUtil._desktopRegistryPath, "UninstallString"};
-         GeneralUtility.waitFor("projects.desktop.core.DesktopInstallUtil", null, true, "readRegistry", params, WAIT_FOR_OPERAND.NEQ, "",
-               300 * 1000, 5 * 1000);
-      }
-   }
-
-   private static int _count = 0;
-   public static int counter() {
-      _count++;
-      return _count;
-   }
-   
-   public int counter1() {
-      _count += 2;
-      return _count;
+      logger.debug("isDesktopInstalled = " + isDesktopInstalled);
+      return isDesktopInstalled;   
    }
 }

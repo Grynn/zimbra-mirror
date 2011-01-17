@@ -22,7 +22,6 @@ import org.xml.sax.SAXException;
 
 import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 
-
 public class ZimbraSeleniumProperties {
 	private static final Logger logger = LogManager.getLogger(ZimbraSeleniumProperties.class);
 	
@@ -286,7 +285,7 @@ public class ZimbraSeleniumProperties {
 		   logger.info("OS Type is: " + osType);
 
 		   for (int i = 0; i < possibleFiles.length; i++) {
-		      if (osType == OsType.WINDOWS) {
+		      if (osType == OsType.WINDOWS || osType == OsType.WINDOWS_XP) {
 		         if (!possibleFiles[i].contains("C:\\")) {
 		            continue;
 		         } else {

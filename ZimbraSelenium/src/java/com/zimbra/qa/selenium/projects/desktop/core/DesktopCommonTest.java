@@ -9,18 +9,20 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
+import com.zimbra.qa.selenium.projects.desktop.ui.AppDesktopClient;
 
 import com.thoughtworks.selenium.SeleniumException;
+
 import com.zimbra.qa.selenium.framework.core.ClientSession;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.core.ZimbraSelenium;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.OperatingSystem;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.desktop.ui.AppDesktopClient;
-
+import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 
 /**
  * Common definitions for all Desktop test cases
@@ -28,6 +30,7 @@ import com.zimbra.qa.selenium.projects.desktop.ui.AppDesktopClient;
  *
  */
 public class DesktopCommonTest {
+   protected static OsType osType = null;
 	protected static Logger logger = LogManager.getLogger(DesktopCommonTest.class);
 	
 	/**
@@ -56,7 +59,6 @@ public class DesktopCommonTest {
 
 		startingPage = app.zPageMain;
 		startingAccount = gAdmin;
-
 	}
 
 	/**
@@ -69,6 +71,7 @@ public class DesktopCommonTest {
 	@BeforeSuite( groups = { "always" } )
 	public void commonTestBeforeSuite() throws HarnessException {
 		logger.info("commonTestBeforeSuite");
+		osType = OperatingSystem.getOSType();
 
 		try
 		{
