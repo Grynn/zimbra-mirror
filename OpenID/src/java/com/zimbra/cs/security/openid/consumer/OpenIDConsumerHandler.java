@@ -31,6 +31,7 @@ import org.openid4java.consumer.ConsumerManager;
 import org.openid4java.consumer.VerificationResult;
 import org.openid4java.discovery.DiscoveryInformation;
 import org.openid4java.discovery.Identifier;
+import org.openid4java.discovery.UrlIdentifier;
 import org.openid4java.message.AuthRequest;
 import org.openid4java.message.ParameterList;
 import org.openid4java.util.HttpClientFactory;
@@ -44,6 +45,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -51,10 +53,9 @@ import java.util.List;
  */
 public class OpenIDConsumerHandler extends ExtensionHttpHandler {
 
-    private ConsumerManager manager;
+    private static final String COOKIE_ZM_OPENID_DISCOVERY_INFO = "ZM_OPENID_DISCOVERY_INFO";
 
-    private DiscoveryInformationCache discoveryInfoCache;
-    private String localServerId;
+    private ConsumerManager manager;
 
     @Override
     public void init(ZimbraExtension ext) throws ServiceException {
@@ -69,8 +70,6 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
             ZimbraLog.extensions.error("OpenID error code %s", e.getErrorCode());
             throw ServiceException.FAILURE("Error in initializing OpenID ConsumerManager", e);
         }
-        localServerId = Provisioning.getInstance().getLocalServer().getId();
-        discoveryInfoCache = new DiscoveryInformationCache();
     }
 
     private static void configureHttpProxy() throws ServiceException {
@@ -172,10 +171,14 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
             // attempt to associate with the OpenID provider
             // and retrieve one service endpoint for authentication
             DiscoveryInformation discovered = manager.associate(discoveries);
+            if (discovered == null) {
+                throw new ServletException("No OP endpoints discovered");
+            }
 
-            // store the discovery information in memcached
-            req.getSession().setAttribute("server-id", localServerId);
-            discoveryInfoCache.put(req.getSession(), discovered);
+            // store the discovery information in a cookie
+            Cookie cookie = new Cookie(COOKIE_ZM_OPENID_DISCOVERY_INFO, serialize(discovered));
+            cookie.setPath("/");
+            resp.addCookie(cookie);
 
             // obtain a AuthRequest message to be sent to the OpenID provider
             AuthRequest authReq = manager.authenticate(discovered, returnToUrl);
@@ -195,26 +198,35 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
         } catch (OpenIDException e) {
             ZimbraLog.extensions.debug("OpenID error code %s", e.getErrorCode(), e);
             throw new ServletException(e.getMessage());
-        } catch (ServiceException e) {
-            ZimbraLog.extensions.warn("Unexpected error", e);
-            throw new ServletException(e.getMessage());
         }
     }
 
+    /**
+     * Returns a valid auth token if the request contains one.
+     *
+     * @param req
+     * @return
+     */
     private static AuthToken getZimbraAuthToken(HttpServletRequest req) {
+        String encodedToken = getCookieValue(req, ZimbraServlet.COOKIE_ZM_AUTH_TOKEN);
+        if (encodedToken == null)
+            return null;
+        AuthToken authToken;
+        try {
+            authToken = AuthProvider.getAuthToken(encodedToken);
+        } catch (AuthTokenException e) {
+            // invalid token, no problem
+            return null;
+        }
+        return authToken.isExpired() ? null : authToken;
+    }
+
+    private static String getCookieValue(HttpServletRequest req, String cookieName) {
         Cookie cookies[] =  req.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(ZimbraServlet.COOKIE_ZM_AUTH_TOKEN)) {
-                    AuthToken authToken;
-                    try {
-                        authToken = AuthProvider.getAuthToken(cookie.getValue());
-                    } catch (AuthTokenException e) {
-                        // invalid token, no problem
-                        return null;
-                    }
-                    return authToken.isExpired() ? null : authToken;
-                }
+                if (cookie.getName().equals(cookieName))
+                    return cookie.getValue();
             }
         }
         return null;
@@ -227,7 +239,11 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
             ParameterList response = new ParameterList(req.getParameterMap());
 
             // retrieve the previously stored discovery information
-            DiscoveryInformation discovered = discoveryInfoCache.get(req.getSession());
+            String serializedDiscInfo = getCookieValue(req, COOKIE_ZM_OPENID_DISCOVERY_INFO);
+            if (serializedDiscInfo == null) {
+                throw new ServletException("Request missing discovery information");
+            }
+            DiscoveryInformation discovered = deserializeDiscoveryInfo(serializedDiscInfo);
 
             // extract the receiving URL from the HTTP request
             StringBuffer receivingURL = req.getRequestURL();
@@ -252,5 +268,28 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
     @Override
     public String getPath() {
         return "/openid/consumer";
+    }
+
+    private static String serialize(DiscoveryInformation discInfo) {
+        return new StringBuilder().
+                append(discInfo.getOPEndpoint()).append(",").
+                append(discInfo.getVersion()).append(",").
+                append(discInfo.getClaimedIdentifier() == null ? " " : discInfo.getClaimedIdentifier()).append(",").
+                append(discInfo.getDelegateIdentifier() == null ? " " : discInfo.getDelegateIdentifier()).append(",").
+                toString();
+    }
+
+    private static DiscoveryInformation deserializeDiscoveryInfo(String serializedObj) throws ServiceException {
+        String[] parts = serializedObj.split(",");
+        if (parts.length < 4)
+            throw ServiceException.FAILURE("Invalid serialized value for DiscoveryInformation", null);
+        try {
+            return new DiscoveryInformation(new URL(parts[0]),
+                                            parts[2].trim().isEmpty() ? null : new UrlIdentifier(parts[2]),
+                                            parts[3].trim().isEmpty() ? null : parts[3],
+                                            parts[1]);
+        } catch (Exception e) {
+            throw ServiceException.FAILURE("Error in instantiating DiscoveryInformation", e);
+        }
     }
 }
