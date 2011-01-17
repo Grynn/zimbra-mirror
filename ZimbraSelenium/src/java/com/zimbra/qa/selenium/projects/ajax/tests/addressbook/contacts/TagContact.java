@@ -29,27 +29,30 @@ public class TagContact extends AjaxCommonTest  {
 			groups = { "smoke" })
 	public void TagContact_01() throws HarnessException {
 
-		 // Create a contact 
-		ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
- 
+		String firstName = "first" + ZimbraSeleniumProperties.getUniqueString();		
+		String lastName = "last" + ZimbraSeleniumProperties.getUniqueString();
+	    String email = "email" +  ZimbraSeleniumProperties.getUniqueString() + "@zimbra.com";
+		//default value for file as is last, first
+		String fileAs = lastName + ", " + firstName;
+	
         app.zGetActiveAccount().soapSend(
                 "<CreateContactRequest xmlns='urn:zimbraMail'>" +
-                "<cn fileAsStr='" + contactItem.lastName + "," + contactItem.firstName + "' >" +
-                "<a n='firstName'>" + contactItem.firstName +"</a>" +
-                "<a n='lastName'>" + contactItem.lastName +"</a>" +
-                "<a n='email'>" + contactItem.email + "</a>" +               
+                "<cn fileAsStr='" + fileAs + "' >" +
+                "<a n='firstName'>" + firstName +"</a>" +
+                "<a n='lastName'>" + lastName +"</a>" +
+                "<a n='email'>" + email + "</a>" +               
                 "</cn>" +            
                 "</CreateContactRequest>");
 
-        app.zGetActiveAccount().soapSelectNode("//mail:CreateContactResponse", 1);
-       
+        
+        ContactItem contactItem = ContactItem.importFromSOAP(app.zGetActiveAccount(), "FIELD[lastname]:" + lastName + "");
+        
         // Refresh the view, to pick up the new contact
         FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
         app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
-        
-        
+                 
         // Select the item
-        app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contactItem.fileAs);
+        app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, fileAs); // contactItem.fileAs);
 
 	    String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
 		
@@ -77,9 +80,8 @@ public class TagContact extends AjaxCommonTest  {
 		
 		//verify toasted message '1 contact tagged ...'
         ZAssert.assertStringContains(app.zPageAddressbook.sGetText("xpath=//div[@id='z_toast_text']"), "1 contact tagged \"" + tagName + "\"", "Verify toast message '" + "1 contact tagged \"" + tagName + "\"'" );
-         
-
-   
+ 
+  
    	}
 	
 	
