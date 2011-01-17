@@ -1,6 +1,5 @@
 package com.zimbra.qa.selenium.framework.util;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -14,10 +13,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.activation.MimetypesFileTypeMap;
-
 import org.apache.commons.httpclient.Cookie;
-import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpException;
@@ -31,11 +27,6 @@ import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.EntityEnclosingMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.multipart.FilePart;
-import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
-import org.apache.commons.httpclient.methods.multipart.Part;
-import org.apache.commons.httpclient.methods.multipart.PartBase;
-import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.log4j.BasicConfigurator;
@@ -60,7 +51,6 @@ import com.zimbra.qa.selenium.framework.core.DevEnvironment;
 public class ZimbraAccount {
 	private static Logger logger = LogManager.getLogger(ZimbraAccount.class);
 
-	protected UploadClient uploadClient = new UploadClient();
 	protected SoapClient soapClient = new SoapClient();
     public String ZimbraSoapClientHost = null;
     public String ZimbraSoapAdminHost = null;
@@ -276,11 +266,9 @@ public class ZimbraAccount {
 					"</AuthRequest>");
 			MyAuthToken = soapSelectValue("//acct:authToken", null);
 			soapClient.setAuthToken(MyAuthToken);
-			uploadClient.setAuthToken(MyAuthToken);
 		} catch (HarnessException e) {
 			logger.error("Unable to authenticate "+ EmailAddress, e);
 			soapClient.setAuthToken(null);
-			uploadClient.setAuthToken(null);
 		}
 		return (this);
 	}
@@ -345,8 +333,30 @@ public class ZimbraAccount {
 	 * @throws HarnessException
 	 */
 	public String uploadFile(String filename) throws HarnessException {
-		return (uploadClient.doUpload(this.ZimbraMailHost, new File(filename)));
-	}
+		RestUtil util = new RestUtil();
+		util.setAuthentication(this);
+		util.setPath("/service/upload");
+		util.setQueryParameter("fmt", "raw");
+		util.setUploadFile(new File(filename));
+		if ( util.doPost() != HttpStatus.SC_OK )
+			throw new HarnessException("Unable to upload "+ filename +" to "+ util.getLastURI());
+		
+		String response = util.getLastResponseBody();
+		
+    	// paw through the returned HTML and get the attachment id
+        // example: loaded(<code>,'null','<id>')
+        //
+        int firstQuote = response.indexOf("','") + 3;
+        int lastQuote = response.lastIndexOf("'");
+        if (lastQuote == -1 || firstQuote == -1)
+            throw new HarnessException("Attachment post failed, unexpected response: " + response);
+        
+        String id = response.substring(firstQuote, lastQuote);
+        logger.info("Attachment ID: "+ id);
+        
+        return (id);
+    }
+
 	
 	
 	/**
@@ -446,157 +456,6 @@ public class ZimbraAccount {
 		return (soapClient.responseEnvelope == null ? "null" : soapClient.responseEnvelope.prettyPrint());
 	}
 
-	
-	public static class UploadClient {
-		private static Logger logger = LogManager.getLogger(UploadClient.class);
-
-		private static final MimetypesFileTypeMap contentTypeMap = new MimetypesFileTypeMap();
-
-		public String AuthToken = null;
-		public String SessionId = null;
-
-		public UploadClient() {
-		}
-		
-		/**
-		 * Upload an attachment file
-		 * @param f
-		 * @return The attachment ID (for use in SaveDocumentRequest for example)
-		 * @throws HarnessException
-		 */
-		public String doUpload(String host, File f) throws HarnessException {
-			String attachmentId = null;
-			
-			// Determine the URI
-			URI uri = null;
-			try {
-				uri = getUploadURI(host);
-			} catch (URISyntaxException e) {
-				throw new HarnessException("Unable to determine URI for upload " + host, e);
-			}
-			
-			// Use HTTP to upload
-			HttpState initialState = new HttpState();
-			
-			// Set the cookies
-			if ( AuthToken != null ) {
-				Cookie authCookie = new Cookie(uri.getHost(), "ZM_AUTH_TOKEN", AuthToken, "/", null, false);
-				initialState.addCookie(authCookie);
-			}
-			if ( SessionId != null ) {
-				Cookie sessionCookie = new Cookie(uri.getHost(), "JSESSIONID", SessionId, "/zimbra", null, false);
-				initialState.addCookie(sessionCookie);
-			}
-
-			
-	        // Doing a Post
-			PostMethod method = null;
-			
-
-			// Create the client
-			HttpClient client = new HttpClient();
-			client.setState(initialState);
-			client.getHttpConnectionManager().getParams().setConnectionTimeout(5 * 1000);
-
-	        int code = 0;
-	        try {
-
-	        	// Create the POST method
-	        	method = new PostMethod(uri.toString());
-
-	        	PartBase filename1 = new StringPart("filename1", f.getAbsolutePath());
-	        	
-	        	FilePart fp = new FilePart(f.getName(), f);
-	        	String contentType = contentTypeMap.getContentType(f);
-	        	fp.setContentType(contentType);
-	        	
-	        	Part[] parts = { filename1, fp };
-
-	        	MultipartRequestEntity request = new MultipartRequestEntity(parts, method.getParams());
-	        	method.setRequestEntity( request );
-	        	
-	        	code = client.executeMethod(method);
-
-	        	// For logging
-	        	Header[] postHeaders = method.getRequestHeaders();
-	        	for (int i = 0; i < postHeaders.length; i++)
-	        	{
-	        		logger.info(postHeaders[i]);
-	        	}
-	        	if ( contentType.contains("text") ) {
-		        	ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		        	request.writeRequest(baos);
-		        	logger.info(baos.toString());
-	        	} else {
-	        		logger.info("binary data omitted from logs");
-	        	}
-	        	
-	        	Header[] responseHeaders = method.getResponseHeaders();
-	        	for (int i = 0; i < responseHeaders.length; i ++)
-	        	{
-	        		logger.info(responseHeaders[i]);
-	        	}
-	        	String responseBody = method.getResponseBodyAsString();
-	        	logger.info(responseBody);
-	        	logger.info("StatusCode: " + code);
-
-				// parse the response
-	            if (code != HttpStatus.SC_OK) {
-                    throw new HarnessException("Attachment "+ f.getAbsolutePath() +" post failed, response status: " + code);
-	            }
-
-            	// paw through the returned HTML and get the attachment id
-                // example: loaded(<code>,'null','<id>')
-                //
-                int firstQuote = method.getResponseBodyAsString().indexOf("','") + 3;
-                int lastQuote = method.getResponseBodyAsString().lastIndexOf("'");
-                if (lastQuote == -1 || firstQuote == -1)
-                    throw new HarnessException("Attachment post failed, unexpected response: " + method.getResponseBodyAsString());
-                
-                attachmentId = method.getResponseBodyAsString().substring(firstQuote, lastQuote);
-                logger.info("Attachment ID: "+ attachmentId);
-                
-	        } catch (HttpException e) {
-				throw new HarnessException("Unable to upload file "+ f.getAbsolutePath() , e);
-			} catch (IOException e) {
-				throw new HarnessException("Unable to upload file "+ f.getAbsolutePath() , e);
-			} finally {
-				if ( method != null ) {
-					method.releaseConnection();
-					method = null;
-				}
-	        }
-
-			
-			return (attachmentId);
-
-		}
-
-		public String setAuthToken(String token) {
-        	return (AuthToken = token);
-        }
-        
-        public String setSessionId(String id) {
-        	return (SessionId = id);
-        }
-        
-        protected URI getUploadURI(String host) throws URISyntaxException {
-        	
-        	// TODO: Need to make this configurable (config.properties)
-        	String scheme = ZimbraSeleniumProperties.getStringProperty("server.scheme", "http");
-        	String userinfo = null;
-        	String p = ZimbraSeleniumProperties.getStringProperty("server.port", "80");
-        	int port = Integer.parseInt(p);
-        	String path = "/service/upload";
-        	String query = "fmt=raw";
-        	String fragment = null;
-        	
-        	return (new URI(scheme, userinfo, host, port, path, query, fragment));
-
-        }
-
-        
-	}
 	
 	
     public static class SoapClient {

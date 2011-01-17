@@ -13,7 +13,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,6 +41,19 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 
+/**
+ * The <code>RestUtil</code> utility provides the ability to interact with the
+ * Zimbra REST interface.  The Zimbra REST interface allows messaging clients
+ * and end users to upload and download data files from the Zimbra server.
+ * <p>
+ * The RestUtil has methods for defining the REST URL to use, methods to set
+ * authentication, data files, and HTTP parameters.  Two main methods are included,
+ * doPost() and doGet() which execute POST and GET methods, respectively.
+ * <p>
+ * 
+ * @author Matt Rhoades
+ *
+ */
 public class RestUtil {
 	private static Logger logger = LogManager.getLogger(RestUtil.class);
 	
@@ -78,6 +90,10 @@ public class RestUtil {
 	// Used for determining upload content types
 	protected static MimetypesFileTypeMap contentTypeMap = new MimetypesFileTypeMap();
 
+
+	/**
+	 * Create a new Rest Utility
+	 */
 	public RestUtil() {
 		logger.info("new RestUtil()");
 		
@@ -87,6 +103,11 @@ public class RestUtil {
 		path = "service/home/~/";
 	}
 	
+	/**
+	 * Set the host and auth token to the values associated with the specified account
+	 * @param account
+	 * @return
+	 */
 	public ZimbraAccount setAuthentication(ZimbraAccount account) {
 		if ( account == null ) {
 			host = null;
@@ -98,6 +119,21 @@ public class RestUtil {
 		return (account);
 	}
 	
+	/**
+	 * Use the specified file for the HTTP POST
+	 * @param file
+	 */
+	public void setUploadFile(File file) {
+		requestFile = file;		
+	}
+
+	/**
+	 * Add the specified key/value pair to the URI query string<p>
+	 * For example, key="id" and value="257" to set "?id=257"
+	 * @param key
+	 * @param value
+	 * @throws HarnessException
+	 */
 	public void setQueryParameter(String key, String value) throws HarnessException {
 		if ( QueryMap.containsKey(key) ) {
 			throw new HarnessException("duplicate keys not implemented.  existing key/value = "+ key +"/"+ QueryMap.get(key));
@@ -105,41 +141,63 @@ public class RestUtil {
 		QueryMap.put(key, value);
 	}
 	
+	/**
+	 * Generate the URI query string based on the RestUtil object properties
+	 * @return
+	 * @throws URISyntaxException
+	 */
 	protected String getQuery() {
 		
 		StringBuilder sb = null;
-		for (Iterator<Map.Entry<String, String>> it = QueryMap.entrySet().iterator(); it.hasNext(); ) {
-			Map.Entry<String, String> entry = it.next();
-			String key = entry.getKey();
-			String value = entry.getValue();
+		for (Map.Entry<String, String> entry : QueryMap.entrySet()) {
 			
 			if ( sb == null ) {
 				sb = new StringBuilder();
-				sb.append(key).append('=').append(value);
+				sb.append(entry.getKey()).append('=').append(entry.getValue());
 			} else {
 				sb.append('&');
-				sb.append(key).append('=').append(value);
+				sb.append(entry.getKey()).append('=').append(entry.getValue());
 			}
+			
 		}
 		return (sb == null ? "" : sb.toString());
 		
 	}
+
+	/**
+	 * Generate the URI based on the RestUtil object properties
+	 * @return
+	 * @throws URISyntaxException
+	 */
+	protected URI getURI() throws URISyntaxException {
+    	return (new URI(scheme, userInfo, host, port, path, getQuery(), fragment));
+	}
 	
+
+	/**
+	 * Set the URI path (i.e. /service/home/~/Calendar.ics)
+	 * @param path
+	 */
 	public void setPath(String path) {
 		if (!path.startsWith("/"))
 			path = "/"+ path;
 		this.path = path;
 	}
 	
+	/**
+	 * Set the URI path to the default (i.e. /service/home/account@domain.com/
+	 * @param path
+	 */
 	public void setPath(ZimbraAccount account) {
 		setPath("/service/home/"+ account.EmailAddress +"/");
 	}
 	
-	protected URI getURI() throws URISyntaxException {
-    	return (new URI(scheme, userInfo, host, port, path, getQuery(), fragment));
-	}
-	
-	public Object doGet() throws HarnessException {
+	/**
+	 * Execute an HTTP GET
+	 * @return HTTP Status Code (HttpStatus.SC_OK is success)
+	 * @throws HarnessException
+	 */
+	public int doGet() throws HarnessException {
 		logger.debug("doGet()");
 
 		// This method simply wraps the logging around the doGetRequest() method
@@ -314,6 +372,11 @@ public class RestUtil {
 
 	}
 	
+	/**
+	 * Execute an HTTP POST
+	 * @return HTTP Status Code (HttpStatus.SC_OK is success)
+	 * @throws HarnessException
+	 */
 	public int doPost() throws HarnessException {
 		logger.debug("doPost()");
 
@@ -450,7 +513,7 @@ public class RestUtil {
 	        	requestHeaders = method.getRequestHeaders();
 	        	ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	        	request.writeRequest(baos);
-	        	requestBody += baos.toString();
+	        	requestBody = baos.toString();
 	        	
 	        	// Remember the response
 	        	responseHeaders = method.getResponseHeaders();
@@ -474,15 +537,42 @@ public class RestUtil {
 
 	}
 	
+	/**
+	 * Get the last URI used for HTTP
+	 * @return the URI
+	 * @throws HarnessException
+	 */
+	public URI getLastURI() throws HarnessException {
+		return (requestURI);
+	}
+	
+	/**
+	 * Get the last http response code (HttpStatus.SC_OK is success)
+	 * @return the HTTP code
+	 * @throws HarnessException
+	 */
 	public int getLastResponseCode() throws HarnessException {
 		return (responseCode);
 	}
 	
+	/**
+	 * Get the last response body as a String
+	 * @return the response body
+	 * @throws HarnessException
+	 */
 	public String getLastResponseBody() throws HarnessException {
 		return (responseBody);
 	}
 	
+	/**
+	 * Get the last response body as a File
+	 * @return the response body
+	 * @throws HarnessException
+	 */
 	public String getLastResponseFile() throws HarnessException {
+		if ( responseFile == null )
+			throw new HarnessException("response file is not defined.  Use doGet() or doPost() first");
+		
 		try {
 			return (responseFile.getCanonicalPath());
 		} catch (IOException e) {
@@ -490,10 +580,23 @@ public class RestUtil {
 		}
 	}
 	
+
+	/**
+	 * Apply the given regex pattern the the last response body
+	 * @param regex a Regex
+	 * @return the number of matches found in the HTTP reponse body
+	 * @throws HarnessException
+	 */
 	public int doRegex(String regex) throws HarnessException {
 		return (doPattern(Pattern.compile(regex)));
 	}
 	
+	/**
+	 * Apply the given regex pattern the the last response body
+	 * @param pattern a Regex
+	 * @return the number of matches found in the HTTP reponse body
+	 * @throws HarnessException
+	 */
 	public int doPattern(Pattern pattern) throws HarnessException {
 		int count = 0;
 		
