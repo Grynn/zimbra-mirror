@@ -70,6 +70,7 @@ public class ZimbraAccount {
     public String DisplayName = null;
     public String EmailAddress = null;
     public String Password = null;
+    protected String MyAuthToken = null;
     public Map<String, String> preferences = null;
 
     
@@ -273,9 +274,9 @@ public class ZimbraAccount {
 						"<account by='name'>"+ EmailAddress + "</account>" +
 						"<password>"+ Password +"</password>" +
 					"</AuthRequest>");
-			String token = soapSelectValue("//acct:authToken", null);
-			soapClient.setAuthToken(token);
-			uploadClient.setAuthToken(token);
+			MyAuthToken = soapSelectValue("//acct:authToken", null);
+			soapClient.setAuthToken(MyAuthToken);
+			uploadClient.setAuthToken(MyAuthToken);
 		} catch (HarnessException e) {
 			logger.error("Unable to authenticate "+ EmailAddress, e);
 			soapClient.setAuthToken(null);
@@ -283,9 +284,9 @@ public class ZimbraAccount {
 		}
 		return (this);
 	}
-	
+		
 	/**
-	 * Modify a user prefence using ModifyPrefsRequest
+	 * Modify user prefences using ModifyPrefsRequest
 	 * @throws HarnessException 
 	 */
 	public ZimbraAccount modifyPreference(String pref, String value) {
@@ -306,6 +307,7 @@ public class ZimbraAccount {
 
 	}
 	
+
 	/**
 	 * Get a user preference value
 	 */
