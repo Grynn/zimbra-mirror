@@ -15,9 +15,9 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-httpclient-3.1-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/junit-4.4.jar" sourcepath="/ThirdParty/junit-4.4">
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/junit-4.4.jar" sourcepath="/ZimbraCommon/jars-src/junit-4.4-src.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="http://www.junit.org/junit/javadoc/4.4/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/junit-4.4-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
