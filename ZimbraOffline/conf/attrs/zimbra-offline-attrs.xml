@@ -202,7 +202,7 @@
   <desc>account ID(s) to backup</desc>
 </attr>
 
-<attr name="zimbraPrefOfflineBackupPath" type="string" cardinality="single" optionalIn="account">
+<attr name="zimbraPrefOfflineBackupPath" type="string" cardinality="single" optionalIn="account" callback="com.zimbra.cs.offline.backup.BackupPathCallback">
   <desc>path for backup output</desc>
 </attr>
 

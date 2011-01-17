@@ -22,7 +22,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -52,6 +51,7 @@ import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.service.UserServlet;
+import com.zimbra.cs.service.formatter.ArchiveFormatter.Resolve;
 
 public class AccountBackupProducer {
     
@@ -75,6 +75,8 @@ public class AccountBackupProducer {
     private final String suffix = ".tgz"; 
     private final String suffixRegex = "\\"+suffix;
     private final String tmpSuffix = ".part";
+    
+    private static enum Status {SKIPPED, SUCCESS, RESTORED};
     
     private String makeExportName(String prefix) {
         StringBuilder sb = new StringBuilder(exportPath);
@@ -169,39 +171,25 @@ public class AccountBackupProducer {
         backupsToKeep = BackupPropertyManager.getInstance().getBackupsToKeep();
         exportPath = BackupPropertyManager.getInstance().getBackupPath();
     }
-    
-    Set<String> inProgressBackups = Collections.synchronizedSet(new HashSet<String>());
-    
-    private synchronized boolean markAccountInProgress(String accountId) {
-        if (isAccountInProgress(accountId)) {
-            return false;
-        }
-        inProgressBackups.add(accountId);
-        return true;
-    }
-    
-    private void markAccountDone(String accountId) {
-        inProgressBackups.remove(accountId);
-    }
-    
-    private boolean isAccountInProgress(String accountId) {
-        return inProgressBackups.contains(accountId);
-    }
+
+    private StatusTracker statusTracker = new StatusTracker();
     
     private boolean makeBackup(String accountId) throws ServiceException {
-        if (!markAccountInProgress(accountId)) {
-            OfflineLog.offline.warn("Backup already in progress for account "+accountId);
+        if (!statusTracker.markAccountInProgress(accountId, StatusTracker.Process.BACKUP)) {
+            OfflineLog.offline.warn("Backup/Restore already in progress for account "+accountId);
             return false;
         }
         try {
+            OfflineLog.offline.info("Backup starting acct="+accountId);
             Account acct = Provisioning.getInstance().getAccount(accountId);
             if (acct == null) {
                 throw ServiceException.INVALID_REQUEST("Unknown account "+accountId, null);
             }
             makeBackup(acct);
+            OfflineLog.offline.info("Backup complete acct="+accountId);
             return true;
         } finally {
-            markAccountDone(accountId);
+            statusTracker.markAccountDone(accountId);
         }
     }
     
@@ -211,7 +199,6 @@ public class AccountBackupProducer {
      */
     public Map<String, String> backupAccounts(String[] accountIds) throws ServiceException {
         if (accountIds != null && accountIds.length > 0) {
-            OfflineLog.offline.info("Backup starting");
             refreshBackupProperties();
             try {
                 FileUtil.ensureDirExists(exportPath);
@@ -222,12 +209,11 @@ public class AccountBackupProducer {
             Map<String, String> backupStatus = new HashMap<String, String>();
             for (String acct : accountIds) {
                 if (makeBackup(acct)) {
-                    backupStatus.put(acct, "success");
+                    backupStatus.put(acct, Status.SUCCESS.toString().toLowerCase());
                 } else {
-                    backupStatus.put(acct, "skipped"); 
+                    backupStatus.put(acct, Status.SKIPPED.toString().toLowerCase()); 
                 }
             }
-            OfflineLog.offline.info("Backup complete");
             return backupStatus;
         } else {
             throw ServiceException.FAILURE("No accounts selected for backup", null);
@@ -288,58 +274,67 @@ public class AccountBackupProducer {
     }
     
     public String restoreAccount(String accountId, long timestamp, String resolve) throws ServiceException {
-        Account acct = Provisioning.getInstance().getAccount(accountId);
-        File[] stored = listStoredBackupFiles(acct);
-        if (stored != null) {
-            for (File backupFile : stored) {
-                //timestamp on file doesn't always match file name; could happen if copied
-                long extracted = extractTimestampFromFilename(backupFile.getName(), acct.getName()); 
-                if (extracted == timestamp) {
-                    OfflineLog.offline.info("Restoring account "+acct.getName()+" from file "+backupFile.getAbsolutePath());
-                    
-                    //http://localhost:7733/home/local%40host.local/?fmt=tgz&resolve=reset&callback=ZmImportExportController__callback__import1
-                    AuthToken authtoken = AuthProvider.getAuthToken(acct);
-                    
-                    //make req to userservlet to create backup file
-                    String url = UserServlet.getRestUrl(acct);
-                    HttpClient client = ZimbraHttpConnectionManager.getInternalHttpConnMgr().newHttpClient();
-                    PostMethod post = new PostMethod(url);
-                    NameValuePair[] params = new NameValuePair[] {new NameValuePair("fmt", "tgz"), 
-                            new NameValuePair("resolve",(resolve != null ? resolve : "ignore")),
-                            new NameValuePair("callback", "ZmImportExportController__callback__import1")};
-                    post.setQueryString(params);
-                    try {
-                        HttpClientUtil.addInputStreamToHttpMethod(post, new FileInputStream(backupFile), backupFile.length(), "application/x-tar");
-                    } catch (FileNotFoundException e) {
-                        throw ServiceException.UNKNOWN_DOCUMENT("File "+backupFile+" not found", e);
-                    }
-                    authtoken.encode(client, post, false, acct.getAttr(ZAttrProvisioning.A_zimbraMailHost));
-                    try {
-                        int statusCode = HttpClientUtil.executeMethod(client, post);
-                        if (statusCode != HttpStatus.SC_OK) {
-                            throw ServiceException.FAILURE("unable to restore account return code: "+statusCode, null);
-                        }
-                    } catch (HttpException e) {
-                        throw ServiceException.PROXY_ERROR(e, url);
-                    } catch (IOException e) {
-                        throw ServiceException.FAILURE("unable to restore account due to IOException", e);
-                    }
-                    //TODO: the response from UserServlet is HTML with warnings etc. encoded in JS function.
-                    //not pure SOAP, but could be parsed to provide more feedback beyond success/fail
-                    //
-                    //<html>
-                    //<body onload='onLoad()'>
-                    //<script>
-                    //function onLoad() {
-                    //    window.parent.ZmImportExportController__callback__import1('warn',
-                    //    {"Code":{"Value":"soap:Sender"},"Reason":{"Text":"object with that name already exists: Flagged"},"Detail":{"Error":
-                    //    {"Code":"mail.ALREADY_EXISTS","Trace":"com.zimbra.cs.mailbox.MailServiceException: object with that name already exists:
-                    
-                    OfflineLog.offline.info("Finished Restoring account "+acct.getName());
-                    return "restored";
-                } 
-            }
+        if (!statusTracker.markAccountInProgress(accountId, StatusTracker.Process.BACKUP)) {
+            OfflineLog.offline.warn("Backup/Restore already in progress for account "+accountId);
+            return Status.SKIPPED.toString().toLowerCase();
         }
-        throw ServiceException.UNKNOWN_DOCUMENT("No backup with timestamp "+timestamp, null);
+        try {
+            Account acct = Provisioning.getInstance().getAccount(accountId);
+            File[] stored = listStoredBackupFiles(acct);
+            if (stored != null) {
+                for (File backupFile : stored) {
+                    //timestamp on file doesn't always match file name; could happen if copied
+                    long extracted = extractTimestampFromFilename(backupFile.getName(), acct.getName()); 
+                    if (extracted == timestamp) {
+                        OfflineLog.offline.info("Restoring account "+acct.getName()+" from file "+backupFile.getAbsolutePath());
+                        
+                        //http://localhost:7733/home/local%40host.local/?fmt=tgz&resolve=reset&callback=ZmImportExportController__callback__import1
+                        AuthToken authtoken = AuthProvider.getAuthToken(acct);
+                        
+                        //make req to userservlet to create backup file
+                        String url = UserServlet.getRestUrl(acct);
+                        HttpClient client = ZimbraHttpConnectionManager.getInternalHttpConnMgr().newHttpClient();
+                        PostMethod post = new PostMethod(url);
+                        NameValuePair[] params = new NameValuePair[] {new NameValuePair("fmt", "tgz"), 
+                                new NameValuePair("resolve",(resolve != null ? resolve : Resolve.Skip.toString())),
+                                new NameValuePair("callback", "ZmImportExportController__callback__import1")};
+                        post.setQueryString(params);
+                        try {
+                            HttpClientUtil.addInputStreamToHttpMethod(post, new FileInputStream(backupFile), backupFile.length(), "application/x-tar");
+                        } catch (FileNotFoundException e) {
+                            throw ServiceException.UNKNOWN_DOCUMENT("File "+backupFile+" not found", e);
+                        }
+                        authtoken.encode(client, post, false, acct.getAttr(ZAttrProvisioning.A_zimbraMailHost));
+                        try {
+                            int statusCode = HttpClientUtil.executeMethod(client, post);
+                            if (statusCode != HttpStatus.SC_OK) {
+                                throw ServiceException.FAILURE("unable to restore account return code: "+statusCode, null);
+                            }
+                        } catch (HttpException e) {
+                            throw ServiceException.PROXY_ERROR(e, url);
+                        } catch (IOException e) {
+                            throw ServiceException.FAILURE("unable to restore account due to IOException", e);
+                        }
+                        //TODO: the response from UserServlet is HTML with warnings etc. encoded in JS function.
+                        //not pure SOAP, but could be parsed to provide more feedback beyond success/fail
+                        //
+                        //<html>
+                        //<body onload='onLoad()'>
+                        //<script>
+                        //function onLoad() {
+                        //    window.parent.ZmImportExportController__callback__import1('warn',
+                        //    {"Code":{"Value":"soap:Sender"},"Reason":{"Text":"object with that name already exists: Flagged"},"Detail":{"Error":
+                        //    {"Code":"mail.ALREADY_EXISTS","Trace":"com.zimbra.cs.mailbox.MailServiceException: object with that name already exists:
+                        
+                        OfflineLog.offline.info("Finished Restoring account "+acct.getName());
+                        return Status.RESTORED.toString().toLowerCase();
+                    } 
+                }
+            }
+            throw ServiceException.UNKNOWN_DOCUMENT("No backup with timestamp "+timestamp, null);
+        }
+        finally {
+            statusTracker.markAccountDone(accountId);   
+        }
     }    
 }
