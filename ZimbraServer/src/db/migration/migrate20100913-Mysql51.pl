@@ -15,6 +15,8 @@
 # 
 
 use strict;
+use lib "/opt/zimbra/libexec/scripts";
+use lib "/opt/zimbra/zimbramon/lib";
 use Migrate;
 use Getopt::Long;
 my $concurrent = 10;
