@@ -140,6 +140,7 @@
     isTinyMCE      = false;
     window.isScriptErrorOn = ${isScriptErrorOn};
     window.isNotifyDebugOn = ${isNotifyDebugOn};
+    window.isOffline = true;
 </script>
 </head>
 <body>
