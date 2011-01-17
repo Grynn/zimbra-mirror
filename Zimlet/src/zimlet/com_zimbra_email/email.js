@@ -728,12 +728,15 @@ function(isDirty) {
 
 EmailTooltipZimlet.prototype._composeListener =
 function(ev, addr) {
-	this.popdown();
-	if (!addr) {
-		addr = this._actionObject ? this._getAddress(this._actionObject) : "" ;
-	}
-	var params = {};
 
+	this.popdown();
+
+	var obj = this._actionObject;
+	if (!addr) {
+		addr = this._getAddress(obj) || "";
+	}
+
+	var params = {};
 	var inNewWindow = (!appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && ev.shiftKey) ||
 					  (appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && !ev.shiftKey);
 
@@ -750,7 +753,9 @@ function(ev, addr) {
 	if (!params.toOverride) {
 		params.toOverride = addr + AjxEmailAddress.SEPARATOR;
 	}
-	params.toOverrideObj = this._actionObject;
+	if (obj && obj.isAjxEmailAddress && obj.address == addr) {
+		params.toOverrideObj = obj;
+	}
 
 	AjxDispatcher.run("Compose", params );
 };
