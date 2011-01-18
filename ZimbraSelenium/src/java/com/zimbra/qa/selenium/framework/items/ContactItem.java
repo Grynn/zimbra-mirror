@@ -180,8 +180,9 @@ public class ContactItem implements IItem {
 
 			// Set the ID
 			contact.setId(cn.getAttribute("id", null));
+            contact.fileAs=cn.getAttribute("fileAsStr",null);      
 
-			// Iterate the attributes
+            // Iterate the attributes
 			Element[] attributes = ZimbraAccount.SoapClient.selectNodes(cn, "//mail:a");
 			for (Element a : attributes) {
 				String key = a.getAttribute("n", "foo");

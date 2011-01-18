@@ -52,7 +52,7 @@ public class TagContact extends AjaxCommonTest  {
         app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
                  
         // Select the item
-        app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, fileAs); // contactItem.fileAs);
+        app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contactItem.fileAs); // contactItem.fileAs);
 
 	    String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
 		
@@ -72,11 +72,12 @@ public class TagContact extends AjaxCommonTest  {
 		// Make sure the tag was applied to the contact
 		app.zGetActiveAccount().soapSend(
 					"<GetContactsRequest xmlns='urn:zimbraMail'>" +
-						"<m id='"+ contactItem.getId() +"'/>" +
+						"<cn id='"+ contactItem.getId() +"'/>" +
 					"</GetContactsRequest>");
+		
 		String contactTags = app.zGetActiveAccount().soapSelectValue("//mail:GetContactsResponse//mail:cn", "t");
 		 
-		ZAssert.assertEquals(contactTags, tagID, "Verify the tag appears on the contact");
+		ZAssert.assertEquals(contactTags, tagID, "Verify the tag appears on the contact id=" +  contactItem.getId());
 		
 		//verify toasted message '1 contact tagged ...'
         ZAssert.assertStringContains(app.zPageAddressbook.sGetText("xpath=//div[@id='z_toast_text']"), "1 contact tagged \"" + tagName + "\"", "Verify toast message '" + "1 contact tagged \"" + tagName + "\"'" );
