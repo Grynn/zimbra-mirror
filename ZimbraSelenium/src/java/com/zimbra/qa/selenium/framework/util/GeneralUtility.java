@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.framework.util;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -178,6 +179,23 @@ public class GeneralUtility {
          return !mainObject.equals(compObject);
       default:
          throw new HarnessException("Unsupported WaitFor operand: " + operand);
+      }
+   }
+
+   /**
+    * Finds whether the specified windows task name is running or not
+    * @param taskName Task's name to be queried
+    * @return true, if the task is running, otherwise, false
+    * @throws IOException
+    * @throws InterruptedException
+    */
+   public static boolean findWindowsRunningTask(String taskName) throws IOException, InterruptedException {
+      String output = CommandLine.cmdExecWithOutput("TASKLIST /FI \"IMAGENAME EQ " + taskName + "\"");
+      logger.debug("output: " + output);
+      if (output.contains(taskName)) {
+         return true;
+      } else {
+         return false;
       }
    }
 }

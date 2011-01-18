@@ -3,10 +3,8 @@ package com.zimbra.qa.selenium.projects.desktop.core;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
 
 import com.zimbra.qa.selenium.framework.util.CommandLine;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
@@ -15,7 +13,6 @@ import com.zimbra.qa.selenium.framework.util.OperatingSystem;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 
-import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * This class contains methods that can be used for Zimbra Desktop Installation and Uninstallation

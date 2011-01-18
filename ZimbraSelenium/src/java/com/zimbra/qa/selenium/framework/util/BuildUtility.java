@@ -3,7 +3,6 @@ package com.zimbra.qa.selenium.framework.util;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -149,18 +148,18 @@ public class BuildUtility {
     * @param productName Product's name
     * @param branch Branch's name
     * @param arch Architecture Type
-    * @return 1 if successful, otherwise -1
+    * @return (String) Downloaded file path
     * @throws HarnessException
     * @throws SAXException
     * @throws IOException
     */
-   public static int downloadLatestBuild(String downloadDest, PRODUCT_NAME productName, BRANCH branch, ARCH arch)
+   public static String downloadLatestBuild(String downloadDest, PRODUCT_NAME productName, BRANCH branch, ARCH arch)
    throws HarnessException, SAXException, IOException {
       BufferedOutputStream bout = null;
       FileOutputStream fos = null;
       BufferedInputStream in = null;
       int bufferedSize = 1024;
-      int output = -1;
+      String output = null;
       try {
          logger.debug("Getting the builds from Build web");
          Build build = _buildOutputFilter(productName, branch, arch)[0];
@@ -191,6 +190,7 @@ public class BuildUtility {
 
          String [] temp = url.split("/");
          logger.debug("Downloaded file name is: " + temp[temp.length - 1]);
+         output = downloadDest + temp[temp.length - 1];
          fos = new FileOutputStream(downloadDest + temp[temp.length - 1]);
          bout = new BufferedOutputStream(fos, bufferedSize);
 
@@ -201,7 +201,6 @@ public class BuildUtility {
          while ((byteRead = in.read(data, 0 , bufferedSize)) != -1) {
             bout.write(data, 0, byteRead);
          }
-         output = 1;
 
       } catch (IOException ioe){
          ioe.printStackTrace();
