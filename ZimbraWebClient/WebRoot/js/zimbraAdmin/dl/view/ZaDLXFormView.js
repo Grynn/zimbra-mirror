@@ -1573,7 +1573,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 			{type:_ZAALLSCREEN_GROUPER_, numCols:1, width:"98%", label:ZaMsg.Shares_ListTitle,  
 			items: [
 		    	{ref:ZaDistributionList.A2_publishedShares, bmolsnr:true,
-		    		type:_DWT_LIST_, height:"200", width:"120%", cssClass: "DLSource",onSelection:ZaDLXFormView.shareSelectionListener,
+		    		type:_DWT_LIST_, height:"200", width:"99%", cssClass: "DLSource",onSelection:ZaDLXFormView.shareSelectionListener,
 				   	multiselect:true, widgetClass:ZaSharesListView, headerList:shareHeaderList
 				},
 				{type:_GROUP_, numCols:3, width:"350px", colSizes:["150px","150px","auto"], 
