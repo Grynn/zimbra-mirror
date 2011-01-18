@@ -14,6 +14,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.PageMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.PagePreferences;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences;
+import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageSearch;
 
 
@@ -50,6 +51,7 @@ public class AppAjaxClient extends AbsApplication {
 	public PageLogin					zPageLogin = null;
 	public PageMain						zPageMain = null;
 	public PageSearch					zPageSearch = null;
+	public PageAdvancedSearch			zPageAdvancedSearch = null;
 	public PageMail						zPageMail = null;
 	public PageBriefcase                zPageBriefcase = null;
 	public PageAddressbook              zPageAddressbook = null;
@@ -76,6 +78,9 @@ public class AppAjaxClient extends AbsApplication {
 		
 		zPageSearch = new PageSearch(this);
 		pages.put(zPageSearch.myPageName(), zPageSearch);
+		
+		zPageAdvancedSearch = new PageAdvancedSearch(this);
+		pages.put(zPageAdvancedSearch.myPageName(), zPageAdvancedSearch);
 		
 		// Mail page
 		zPageMail = new PageMail(this);

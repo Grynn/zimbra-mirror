@@ -111,7 +111,8 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 		app.zPageMail.zNavigateTo();
 		
 		// Search for the query
-		app.zPageSearch.zRunSearchQuery(query);
+		app.zPageSearch.zAddSearchQuery(query);
+		app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
 		
 		// Verify that both messages are in the list
 		List<ConversationItem> items = app.zPageMail.zListGetConversations();
