@@ -1039,9 +1039,12 @@ SocialZimlet.prototype._hideApp = function(appName) {
 };
 
 SocialZimlet.prototype.appLaunch = function(appName, params) {
-	if (this._socialAppName != appName)
+	if (this._socialAppName != appName) {
 		return;
-
+	}
+	if(this._launched) {
+		return;
+	}
 	this.app = appCtxt.getApp(appName);
 
 	this.showAppView();
