@@ -511,10 +511,16 @@ public class RestUtil {
 
 	        	// Remember the request
 	        	requestHeaders = method.getRequestHeaders();
-	        	ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	        	request.writeRequest(baos);
-	        	requestBody = baos.toString();
-	        	
+	        	if ( contentType.contains("text") ) {
+		        	ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		        	request.writeRequest(baos);
+		        	requestBody = baos.toString();
+	        	} else {
+	        		// Printing binary data to the console seems to screw it up
+	        		// If the content type is not text, don't print it
+	        		requestBody = "binary data omitted from logs";
+	        	}
+
 	        	// Remember the response
 	        	responseHeaders = method.getResponseHeaders();
 	        	responseBody = method.getResponseBodyAsString();
