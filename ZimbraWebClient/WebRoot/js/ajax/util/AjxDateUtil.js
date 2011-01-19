@@ -171,15 +171,6 @@ function(date) {
     date.setTime(date.getTime() + AjxDateUtil.MSEC_PER_DAY);
 };
 
-/**
- * rolls to next day. This can be used to roll to prev day avoiding the daylight saving shift in time.
- */
-AjxDateUtil.rollToPrevDay =
-function(date) {
-    date.setHours(0,0,0,0);
-    date.setTime(date.getTime() - AjxDateUtil.MSEC_PER_DAY);
-};
-
 // Computes the difference between now and <dateMSec>. Returns a string describing
 // the difference
 AjxDateUtil.computeDateDelta =
