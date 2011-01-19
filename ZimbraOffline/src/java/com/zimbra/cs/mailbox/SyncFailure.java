@@ -15,16 +15,16 @@
 package com.zimbra.cs.mailbox;
 
 public class SyncFailure {
-    private int itemId;
+    private long itemId;
     private Exception exception;
     private String message;
-    public SyncFailure(int itemId, Exception exception, String message) {
+    public SyncFailure(long itemId, Exception exception, String message) {
         super();
         this.itemId = itemId;
         this.exception = exception;
         this.message = message;
     }
-    public int getItemId() {
+    public long getItemId() {
         return itemId;
     }
     public Exception getException() {

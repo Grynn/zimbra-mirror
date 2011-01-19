@@ -16,6 +16,9 @@
   <key name="data_source_xsync_factory_class">
     <value>com.zimbra.zimbrasync.client.OfflineExchangeSyncFactory</value>
   </key>
+  <key name="data_source_ioexception_handler_class">
+    <value>com.zimbra.cs.mailbox.SyncExceptionHandler</value>
+  </key>
   <key name="debug_disable_mailbox_group">
     <value>true</value>
   </key>

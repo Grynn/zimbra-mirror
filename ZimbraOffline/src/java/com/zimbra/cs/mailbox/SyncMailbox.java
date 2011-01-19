@@ -58,13 +58,13 @@ public abstract class SyncMailbox extends DesktopMailbox {
     private boolean isMPAcct;
     private long lastOptimizeTime = 0;
     private static final AtomicLong lastGC = new AtomicLong();
-    private Set<Integer> syncedIds = new HashSet<Integer>();
+    private Set<Long> syncedIds = new HashSet<Long>();
 
     public int getSyncCount() {
         return syncedIds.size();
     }
 
-    public void recordItemSync(int itemId) {
+    public void recordItemSync(long itemId) {
         syncedIds.add(itemId); //using set rather than a counter since various call sites may touch the same item more than once
     }
     
