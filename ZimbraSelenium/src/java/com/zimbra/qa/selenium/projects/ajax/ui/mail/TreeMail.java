@@ -3,8 +3,12 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.IItem;
+import com.zimbra.qa.selenium.framework.items.SavedSearchFolderItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTree;
@@ -29,22 +33,16 @@ public class TreeMail extends AbsTree {
 		logger.info("new " + TreeMail.class.getCanonicalName());
 	}
 	
-	/* (non-Javadoc)
-	 * @see framework.ui.AbsTree#zTreeItem(framework.ui.Action, framework.items.FolderItem)
-	 */
-	public AbsPage zTreeItem(Action action, IItem folder) throws HarnessException {
+	protected AbsPage zTreeItem(Action action, SavedSearchFolderItem savedSearchItem) throws HarnessException {
+		AbsPage page = null;
+		String locator = null;
+	
+		// TODO: implement me!
 		
-		// Validate the arguments
-		if ( (action == null) || (folder == null) ) {
-			throw new HarnessException("Must define an action and addressbook");
-		}
-		
-		if ( !(folder instanceof FolderItem) ) {
-			throw new HarnessException("Must use FolderItem as argument, but was "+ folder.getClass());
-		}
-		
-		FolderItem folderItem = (FolderItem)folder;
-		
+		return (page);
+	}
+
+	protected AbsPage zTreeItem(Action action, FolderItem folderItem) throws HarnessException {
 		AbsPage page = null;
 		String locator = null;
 		
@@ -71,8 +69,40 @@ public class TreeMail extends AbsTree {
 		}
 
 		return (page);
+
 	}
 	
+	/* (non-Javadoc)
+	 * @see framework.ui.AbsTree#zTreeItem(framework.ui.Action, framework.items.FolderItem)
+	 */
+	public AbsPage zTreeItem(Action action, IItem folder) throws HarnessException {
+		
+		// Validate the arguments
+		if ( (action == null) || (folder == null) ) {
+			throw new HarnessException("Must define an action and addressbook");
+		}
+		
+		if ( folder instanceof FolderItem ) {
+			return (zTreeItem(action, (FolderItem)folder));
+		} else if ( folder instanceof SavedSearchFolderItem ) {
+			return (zTreeItem(action, (SavedSearchFolderItem)folder));
+		}
+		
+		throw new HarnessException("Must use FolderItem or SavedSearchFolderItem as argument, but was "+ folder.getClass());
+	}
+		
+	
+	public List<SavedSearchFolderItem> zListGetSavedSearches() {
+		
+		List<SavedSearchFolderItem> items = new ArrayList<SavedSearchFolderItem>();
+		
+		// TODO: implement me!
+		
+		// Return the list of items
+		return (items);
+		
+	}
+
 
 
 	/* (non-Javadoc)
@@ -88,5 +118,6 @@ public class TreeMail extends AbsTree {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
 
 }
