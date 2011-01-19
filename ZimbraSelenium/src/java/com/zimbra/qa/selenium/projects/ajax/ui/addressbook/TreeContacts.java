@@ -9,6 +9,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTree;
 import com.zimbra.qa.selenium.framework.ui.Action;
+import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 
@@ -84,9 +85,12 @@ public class TreeContacts extends AbsTree {
 			if ( !this.sIsElementPresent(locator) ) {
 					throw new HarnessException("Unable to locator folder in tree "+ locator);
 			}
-
 			
-			this.sRightClick(locator);
+			this.zClick(locator);			
+			zKeyboard.zTypeCharacters(Shortcut.S_RIGHTCLICK.getKeys());															
+			 
+			//TODO
+			//return a list of context menu's options
 			SleepUtil.sleepSmall();
 			page = null;
 				
