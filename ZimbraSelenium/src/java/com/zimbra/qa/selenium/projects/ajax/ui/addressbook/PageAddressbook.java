@@ -283,7 +283,7 @@ public class PageAddressbook extends AbsTab {
 
 		AbsPage page = null;
 
-		if ( action == Action.A_LEFTCLICK ) {
+		if (( action == Action.A_LEFTCLICK ) || ( action == Action.A_RIGHTCLICK )){
 
 			String listLocator = "//div[@id='zv__CNS']";
 			String rowLocator = "//div[contains(@id, 'zli__CNS__')]";
@@ -323,6 +323,14 @@ public class PageAddressbook extends AbsTab {
 				this.zClick(contactDisplayedLocator);
 				SleepUtil.sleepSmall();
 
+				// right-click
+				if ( action == Action.A_RIGHTCLICK ) {
+					zKeyboard.zTypeCharacters(Shortcut.S_RIGHTCLICK.getKeys());															
+				 
+					//TODO
+					//return a list of context menu's options
+				
+				}
 				// All done
 				return (new DisplayContact(MyApplication));
 
@@ -332,6 +340,7 @@ public class PageAddressbook extends AbsTab {
 
 
 		}
+		
 		else {
 			throw new HarnessException("implement me!");
 		}

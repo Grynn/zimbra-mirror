@@ -26,6 +26,8 @@ package com.zimbra.qa.selenium.framework.ui;
 public class Shortcut {
 
 	// General shortcuts
+	public static final Shortcut S_RIGHTCLICK = new Shortcut("S_RIGHTCLICK",			",");
+
 	public static final Shortcut S_GOTOMAIL = new Shortcut("S_GOTOMAIL",			"gm");
 	public static final Shortcut S_GOTOCONTACTS = new Shortcut("S_GOTOCONTACTS",	"ga");
 	public static final Shortcut S_GOTOCALENDAR = new Shortcut("S_GOTOCALENDAR",	"gc");

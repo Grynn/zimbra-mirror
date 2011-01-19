@@ -18,7 +18,8 @@ import com.zimbra.qa.selenium.framework.util.SleepUtil;
  *
  */
 public class TreeContacts extends AbsTree {
-
+    public static final String NEW_FOLDER="css=#ztih__main_Contacts__ADDRBOOK_table tbody tr td:nth-child(4)";
+    public static final String COLLAPSE_TREE="css#ztih__main_Contacts__ADDRBOOK_nodeCell";
 	public static class Locators {
 	}
 	
@@ -27,6 +28,21 @@ public class TreeContacts extends AbsTree {
 	public TreeContacts(AbsApplication application) {
 		super(application);
 		logger.info("new " + TreeContacts.class.getCanonicalName());
+	}
+	
+	
+	public AbsPage zTreeItem(Action action, String locator) throws HarnessException {
+		if ( action == Action.A_LEFTCLICK ) {
+		    if (locator.equals(NEW_FOLDER)) {
+		        this.zClick(locator);
+		    	//return create a new address book dialog
+		    }
+		    else if (locator.equals(COLLAPSE_TREE)) {
+		    	// collapse the tree folder
+		    }
+		    
+		}	
+		return null;
 	}
 	
 	/* (non-Javadoc)
@@ -60,8 +76,21 @@ public class TreeContacts extends AbsTree {
 			SleepUtil.sleepSmall();
 			page = null;
 			
-			// FALL THROUGH
+		}  
+		else if ( action == Action.A_RIGHTCLICK ) {
+				
+			locator = "id=zti__main_Contacts__"+ folder.getId() +"_textCell";
+				
+			if ( !this.sIsElementPresent(locator) ) {
+					throw new HarnessException("Unable to locator folder in tree "+ locator);
+			}
 
+			
+			this.sRightClick(locator);
+			SleepUtil.sleepSmall();
+			page = null;
+				
+			
 		} else {
 			throw new HarnessException("Action "+ action +" not yet implemented");
 		}
