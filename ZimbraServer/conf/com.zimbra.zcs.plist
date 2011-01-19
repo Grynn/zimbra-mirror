@@ -1,30 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Label</key>
-	<string>com.zimbra.zcs</string>
-	<key>Program</key>
-	<string>/opt/zimbra/libexec/zcs</string>
-	<key>ProgramArguments</key>
-	<array>
-		<string>zcs</string>
-		<string>start</string>
-	</array>
-	<key>StandardOutPath</key>
-	<string>/opt/zimbra/log/zcs.log</string>
-	<key>OnDemand</key>
+	<key>Debug</key>
 	<true/>
-	<key>RunAtLoad</key>
-	<true/>
-	<key>UserName</key>
-	<string>zimbra</string>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>JYTHONPATH</key>
+		<string>/opt/zimbra/zimbramon/pylibs</string>
+		<key>PATH</key>
+		<string>/opt/zimbra/bin:/opt/zimbra/postfix/sbin:/opt/zimbra/openldap/bin:/opt/zimbra/java/bin:/usr/bin:/bin:/sbin:/usr/sbin</string>
+		<key>PERL5LIB</key>
+		<string>/opt/zimbra/zimbramon/lib/darwin-thread-multi-2level:/opt/zimbra/zimbramon/lib</string>
+	</dict>
 	<key>GroupName</key>
 	<string>zimbra</string>
-  <key>EnvironmentVariables</key>
-  <dict>
-    <key>PERL5LIB</key>
-    <string>/opt/zimbra/zimbramon/lib/darwin-thread-multi-2level:/opt/zimbra/zimbramon/lib</string>
-  </dict>
+	<key>HardResourceLimits</key>
+	<dict>
+		<key>NumberOfFiles</key>
+		<integer>524288</integer>
+		<key>NumberOfProcesses</key>
+		<integer>2048</integer>
+	</dict>
+	<key>Label</key>
+	<string>com.zimbra.zcs</string>
+	<key>OnDemand</key>
+	<false/>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/opt/zimbra/libexec/zcs</string>
+		<string>start</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>ServiceDescription</key>
+	<string>Zimbra Collaboration Suite</string>
+	<key>StandardOutPath</key>
+	<string>/opt/zimbra/log/zcs-launchd.log</string>
+	<key>TimeOut</key>
+	<integer>300</integer>
+	<key>Umask</key>
+	<integer>27</integer>
+	<key>UserName</key>
+	<string>zimbra</string>
 </dict>
 </plist>
