@@ -123,8 +123,15 @@ ZaDLXFormView.removeAllMembers = function(event) {
 	var form = this.getForm();
 	var tmpCurrentRemoveList = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_removeList);
 	var tmpCurrentMemberList = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_memberList);
-	
-	var newRemoveList = AjxUtil.mergeArrays(tmpCurrentRemoveList,tmpCurrentMemberList);
+	var tmpCurrentAddList = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_addList);
+        var removeExistedList = [];
+        for(var i = 0; i < tmpCurrentMemberList.length; i++) {
+                var removedItem = tmpCurrentMemberList[i];
+                if(!tmpCurrentAddList || tmpCurrentAddList.length == 0 || AjxUtil.indexOf(tmpCurrentAddList,removedItem,false) < 0)
+                        removeExistedList.push(removedItem);
+        }
+
+	var newRemoveList = AjxUtil.mergeArrays(tmpCurrentRemoveList,removeExistedList);
 	newRemoveList._version = tmpCurrentRemoveList._version+1;
 	
 	this.setInstanceValue([], ZaDistributionList.A2_addList);
@@ -153,9 +160,15 @@ ZaDLXFormView.removeMembers = function(event) {
 	var newAddList = AjxUtil.arraySubstract(tmpCurrentAddList,form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_membersSelected));
 	newAddList._version = tmpCurrentAddList._version + 1;
 	this.setInstanceValue(newAddList, ZaDistributionList.A2_addList);	
+
+        var removeExistedList = [];
+        for(var i = 0; i < tmpSelectedList.length; i++) {
+                var removedItem = tmpSelectedList[i];
+                if(!tmpCurrentAddList || tmpCurrentAddList.length == 0 ||AjxUtil.indexOf(tmpCurrentAddList,removedItem,false) < 0)
+                        removeExistedList.push(removedItem);
+        }	
 	
-	
-	var newRemoveList = AjxUtil.mergeArrays(tmpCurrentRemoveList,tmpSelectedList);	
+	var newRemoveList = AjxUtil.mergeArrays(tmpCurrentRemoveList,removeExistedList);	
 	newRemoveList._version = tmpCurrentRemoveList._version+1;
 	this.setInstanceValue(newRemoveList, ZaDistributionList.A2_removeList);
 	
