@@ -27,10 +27,8 @@ import java.util.regex.Pattern;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -277,15 +275,6 @@ public class SetHeaderFilter extends com.zimbra.cs.servlet.SetHeaderFilter {
                 System.out.println("not proceeding with filter");
             }
 			return true;
-        }
-        
-        // CalDAV service discovery (bug 35008). 
-        // redirect any WebDAV request sent to the root URI "/" to "/dav/"
-        if (req.getPathInfo() == null && req.getMethod().equals("PROPFIND")) {
-            ServletContext targetContext = config.getServletContext().getContext("/service");
-            RequestDispatcher dispatcher = targetContext.getRequestDispatcher("/dav");
-            dispatcher.forward(req, resp);
-			return false;
         }
         
         String uri = req.getRequestURI();
