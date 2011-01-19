@@ -14,6 +14,12 @@
  */
 function com_zimbra_email_handlerObject() {
 	this.isPrimaryEmailTooltip = true;
+
+	// support for showing address objects in the msg header as bubbles
+	this._isBubble = {};
+	this._bubbleClassName = "addrBubble";
+	this._internalId = Dwt.getNextId();
+	DwtControl.ALL_BY_ID[this._internalId] = this;
 }
 
 com_zimbra_email_handlerObject.prototype = new ZmZimletBase();
@@ -44,12 +50,6 @@ function() {
 		this._newTooltipHint = ZmMsg.leftClickComposeHint + "<br>" + ZmMsg.rightClickHint;
 	}
 	this._prefDialog = new EmailToolTipPrefDialog(this);
-
-	// support for showing address objects in the msg header as bubbles
-	this._isBubble = {};
-	this._bubbleClassName = "addrBubble";
-	this._internalId = Dwt.getNextId();
-	DwtControl.ALL_BY_ID[this._internalId] = this;
 
 	this._subscriberZimlets = [];
 	this._preLoadImgs();
