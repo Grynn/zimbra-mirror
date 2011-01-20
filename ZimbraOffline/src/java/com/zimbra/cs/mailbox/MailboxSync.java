@@ -1,13 +1,13 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2007, 2008, 2009, 2010 Zimbra, Inc.
- * 
+ * Copyright (C) 2007, 2008, 2009, 2010, 2011 Zimbra, Inc.
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -29,46 +29,45 @@ import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
 
 public class MailboxSync {
-    
+
     //legacy
     private static final String SN_OFFLINE  = "offline";
     private static final String FN_PROGRESS = "state";
     private static final String FN_TOKEN    = "token";
     private static final String FN_INITIAL  = "initial";
     private static final String FN_LAST_ID  = "last";
-    
+
     //SyncResponse tree, only used during initial sync
     //because this could be huge, we only ever write it once to derby CLOB
     private static final String CONF_SYNCTREE = "synctree";
     private static final String CKEY_SYNCRESP = "syncresp";
-    
+
     //status, used during both initial and incremental stage
     private static final String CONF_SYNCSTATE = "syncstate";
     private static final String CKEY_STAGE = "stage";
     private static final String CKEY_DONE_FOLDERS = "done"; //list of completed folders, only for initial sync
     private static final String CKEY_LASTID = "lastid"; //last checkpoint, only for initial sync
     private static final String CKEY_TOKEN = "token"; //last sync token, only for incremental sync
-    
+
     private enum SyncStage {
         BLANK, INITIAL, SYNC
     }
-    
+
     private Element mSyncTree;
-    
+
     private SyncStage mStage = SyncStage.BLANK;
     private Set<Long> mDoneFolders = new HashSet<Long>();
     private int mLastSyncedItem;
     private String mSyncToken; //during initial sync, this token is set to the peek-forward delta token.  it's reset to initial token at the end of initial sync
-    
+
     private ZcsMailbox ombx;
-    
+
     private OfflinePoller poller;
 
-    @SuppressWarnings("unchecked")
     MailboxSync(ZcsMailbox ombx) throws ServiceException {
         this.ombx = ombx;
         poller = new OfflinePoller(ombx);
-        
+
         Metadata syncState = ombx.getConfig(null, CONF_SYNCSTATE);
         if (syncState != null && syncState.containsKey(CKEY_STAGE)) {
             try {
@@ -77,9 +76,9 @@ public class MailboxSync {
                 case INITIAL: {
                     MetadataList mdl = syncState.getList(CKEY_DONE_FOLDERS, true);
                     if (mdl != null)
-                        mDoneFolders.addAll(mdl.asList());
+                        mDoneFolders.addAll(mdl.<Long>asList());
                     mLastSyncedItem = (int)syncState.getLong(CKEY_LASTID, 0);
-                        
+
                     Metadata syncTree = ombx.getConfig(null, CONF_SYNCTREE);
                     mSyncTree = Element.parseXML(syncTree.get(CKEY_SYNCRESP));
                     //fall-thru
@@ -118,10 +117,10 @@ public class MailboxSync {
             }
         }
     }
-    
+
     void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {
         OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
-           
+
         if (!syncMan.isServiceActive()) {
             if (isOnRequest)
                 OfflineLog.offline.debug("offline sync request ignored");
@@ -212,7 +211,7 @@ public class MailboxSync {
             syncMan.ensureRunning(ombx.getAccount());
         }
     }
-    
+
     /** Returns the sync token from the last completed initial or delta sync,
      *  or <tt>null</tt> if initial sync has not yet been completed. */
     String getSyncToken() {
@@ -224,7 +223,7 @@ public class MailboxSync {
     Element getSyncTree() {
         return mSyncTree;
     }
-    
+
     /**
      * Check if folder sync is done, only used during initial sync
      * @param folderId
@@ -241,11 +240,11 @@ public class MailboxSync {
     int getLastSyncedItem() {
         return mLastSyncedItem;
     }
-    
+
     boolean isInitialSyncComplete() {
         return mStage == SyncStage.SYNC;
     }
-    
+
     /**
      * Store initial sync response, only ever called once
      * @param syncResponse
@@ -255,7 +254,7 @@ public class MailboxSync {
     void saveSyncTree(Element syncResponse, String token) throws ServiceException {
         Metadata syncTree = new Metadata().put(CKEY_SYNCRESP, syncResponse);
         ombx.setConfig(null, CONF_SYNCTREE, syncTree);
-        
+
         setStage(SyncStage.INITIAL);
         mSyncTree = syncResponse;
         mDoneFolders = new HashSet<Long>();
@@ -263,7 +262,7 @@ public class MailboxSync {
         mSyncToken = token;
         checkpoint();
     }
-    
+
     /**
      * Checkpoint last sync ID, only used during initial sync
      * @param itemId last synced itemId
@@ -273,7 +272,7 @@ public class MailboxSync {
         mLastSyncedItem = itemId;
         checkpoint();
     }
-    
+
     /**
      * Checkpoint a completed folder, only used during initial sync
      * @param folderId completed folder
@@ -284,11 +283,11 @@ public class MailboxSync {
         mLastSyncedItem = 0;
         checkpoint();
     }
-    
+
     private void checkpoint() throws ServiceException {
         SyncExceptionHandler.checkIOExceptionRate(ombx);
         Metadata syncState = new Metadata().put(CKEY_STAGE, SyncStage.INITIAL);
-        
+
         if (mSyncToken != null)
             syncState.put(CKEY_TOKEN, mSyncToken);
         if (mDoneFolders.size() > 0)
@@ -298,15 +297,15 @@ public class MailboxSync {
             syncState.put(CKEY_LASTID, mLastSyncedItem);
         ombx.setConfig(null, CONF_SYNCSTATE, syncState);
     }
-    
-    
+
+
     /** Stores the sync token from initial sync.
      *  As a side effect, sets the mailbox's {@link SyncStage}
      *  to <tt>SYNC</tt>.
      */
     void recordInitialSyncComplete(String token) throws ServiceException {
         setStage(SyncStage.SYNC);
-        
+
         if (mSyncTree != null) {
             mSyncTree = null;
             ombx.setConfig(null, CONF_SYNCTREE, null);
@@ -331,7 +330,7 @@ public class MailboxSync {
         else
             checkpoint(); //called by completion of peek-forward delta
     }
-    
+
     private void setStage(SyncStage stage) throws ServiceException {
         mStage = stage;
         OfflineSyncManager.getInstance().setStage(ombx.getAccount(), stage.toString());
