@@ -13,6 +13,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogMove;
 
 
 /**
@@ -32,8 +33,8 @@ public class PageBriefcase extends AbsTab {
 		public static final String zUploadFileIconBtn = "id=zb__BDLV__NEW_FILE_left_icon";
 		public static final String zEditFileIconBtn = "id=zb__BDLV__EDIT_FILE_left_icon";
 		public static final String zOpenFileInSeparateWindowIconBtn = "id=zb__BDLV__NEW_BRIEFCASE_WIN_left_icon";
-		public static final String zDeleteIconBtn = "id=zb__BCD__DELETE_left_icon";
-		public static final String zDeleteBtn = "id=zb__BCD__DELETE";
+		public static final String zDeleteIconBtn = "id=zb__BDLV__DELETE_left_icon";
+		public static final String zDeleteBtn = "id=zb__BDLV__DELETE";
 		public static final String zMoveItemIconBtn = "id=zb__BCD__MOVE_left_icon";
 		public static final String zTagItemIconBtn = "id=zb__BCD__TAG_MENU_left_icon";
 		public static final String zViewIconBtn = "id=zb__BCD__VIEW_MENU_left_icon";
@@ -201,6 +202,14 @@ public class PageBriefcase extends AbsTab {
 			}
 			locator = Locators.zEditFileIconBtn;	
 			page = new DocumentBriefcaseEdit(this.MyApplication);
+		} else if (button == Button.B_DELETE) {
+			// Check if the button is visible
+			String attrs = sGetAttribute("css=div[id='zb__BDLV__DELETE']@style");
+			if (!attrs.contains("visible")) {
+				throw new HarnessException(button + " not visible " + attrs);
+			}
+			locator = Locators.zDeleteIconBtn;	
+			page = new DialogDeleteConfirm(MyApplication); ;
 		} else if (button == Button.B_OPEN_IN_SEPARATE_WINDOW) {
 			// Check if the button is visible
 			String attrs = sGetAttribute("css=div[id='zb__BDLV__NEW_BRIEFCASE_WIN']@style");
