@@ -63,7 +63,8 @@ public class DeleteDocument extends AjaxCommonTest {
 					.session()
 					.selenium()
 					.waitForCondition(
-							"selenium.isElementPresent(\"css=[class='DwtListView-Rows']\");",
+							"selenium.isElementPresent(\"css=[id='zti__main_Briefcase__16_div'][class='DwtTreeItem-selected']\")&&"
+									+ "selenium.isElementPresent(\"css=[id='zl__BDLV__rows'] div[class^='Row']\");",
 							"5000");
 		} catch (Exception ex) {
 			logger.info("Error: class DwtListView-Rows not present", ex
@@ -81,8 +82,8 @@ public class DeleteDocument extends AjaxCommonTest {
 				.zToolbarPressButton(Button.B_DELETE);
 
 		// Click OK on Confirmation dialog
-		if(deleteConfirm.zIsActive())
-		deleteConfirm.zClickButton(Button.B_YES);
+		if (deleteConfirm.zIsActive())
+			deleteConfirm.zClickButton(Button.B_YES);
 
 		// ClientSessionFactory.session().selenium().refresh();
 		// refresh briefcase page
@@ -90,16 +91,16 @@ public class DeleteDocument extends AjaxCommonTest {
 
 		try {
 			// ClientSessionFactory.session().selenium().waitForCondition("var x = selenium.browserbot.findElementOrNull(\"css=[class='ZmBriefcaseDetailListView']\"); x != null && parseInt(x.style.width) >= 0;","5000");
-
 			ClientSessionFactory
 					.session()
 					.selenium()
 					.waitForCondition(
-							"selenium.isElementPresent(\"css=[class='DwtListView-Rows']\");",
+							"selenium.isElementPresent(\"css=[id='zti__main_Briefcase__16_div'][class='DwtTreeItem-selected']\")&&"
+									+ "!selenium.isElementPresent(\"css=[id='zl__BDLV__rows'] div[class^='Row']\");",
 							"5000");
 		} catch (Exception ex) {
 			logger.info("Error: class DwtListView-Rows not present", ex
-					.getCause());
+					.fillInStackTrace());
 		}
 
 		// Verify document was deleted
