@@ -546,10 +546,8 @@ class State:
 
 	def runLdap(self):
 		master = conf.Config.mConfig.ldap_is_master
-		if master == "true":
-			master = 1
-		else:
-			master = 0
+		if master != "true":
+			master = "false"
 		pw = conf.Config.mConfig.ldap_root_password
 		for (ldap,val) in self.curLdap().items():
 			if not self.doLdap(ldap, val, master, pw):
