@@ -1702,3 +1702,26 @@ function(url, restUrlAuthority) {
 	return url;
 };
 
+
+AjxStringUtil._dummyDiv = document.createElement("DIV");
+
+/**
+ * compare two html code fragments, ignoring the case of tags, since the tags inside innnerHTML are returned differently by different browsers (and from Outlook)
+ * e.g. IE returns CAPS for tag names in innerHTML while FF returns lowercase tag names. Outlook signature creation also returns lowercase.
+ * this approach is also good in case the browser removes some of the innerHTML set to it, like I suspect might be in the case of stuff coming from Outlook. (e.g. it removes head tag since it's illegal inside a div)
+ *
+ * @param html1
+ * @param html2
+ */
+AjxStringUtil.equalsHtmlPlatformIndependent =
+function(html1, html2) {
+	var div = AjxStringUtil._dummyDiv;
+
+	div.innerHTML = html1;
+	var inner1 = div.innerHTML;
+	div.innerHTML = html2;
+	var inner2 = div.innerHTML;
+	div.innerHTML = "";
+	return inner1 == inner2;
+};
+
