@@ -235,13 +235,15 @@ Com_Zimbra_DnD.prototype._onDrop = function(ev) {
             }
         }
 
+        var controller = appCtxt.getApp(ZmApp.MAIL).getComposeController(appCtxt.getApp(ZmApp.MAIL).getCurrentSessionId(ZmId.VIEW_COMPOSE));
+
         for (var i = 0; i < files.length; i++) {
             var file = files[i];
             var size = file.size || file.fileSize /*Safari*/;
             if(size > appCtxt.get(ZmSetting.ATTACHMENT_SIZE_LIMIT)) {
                 continue;
             }
-            this._uploadFiles(file);
+            this._uploadFiles(file, controller);
             this.dndTooltipEl.innerHTML = "<img src='/img/animated/ImgSpinner.gif' width='16' height='16' border='0' style='float:left;'/>&nbsp;<div style='display:inline;'>" + ZmMsg.attachingFiles + "</div>";
         }
     }
@@ -265,7 +267,7 @@ Com_Zimbra_DnD.prototype.convertToEntities = function (astr){
 	return bstr;
 };
 
-Com_Zimbra_DnD.prototype._uploadFiles = function(file) {
+Com_Zimbra_DnD.prototype._uploadFiles = function(file, controller) {
 
     try {
 
@@ -279,7 +281,7 @@ Com_Zimbra_DnD.prototype._uploadFiles = function(file) {
         req.setRequestHeader("Content-Disposition", 'attachment; filename="'+ this.convertToEntities(file.fileName) + '"');
 
         var tempThis = req;
-        req.onreadystatechange = AjxCallback.simpleClosure(this._handleResponse, this, tempThis);
+        req.onreadystatechange = AjxCallback.simpleClosure(this._handleResponse, this, tempThis, controller);
 
         req.send(file);
         delete req;
@@ -309,7 +311,7 @@ Com_Zimbra_DnD.prototype._handleErrorResponse = function(respCode) {
     warngDlg.popup();
 };
 
-Com_Zimbra_DnD.prototype._handleResponse = function(req) {
+Com_Zimbra_DnD.prototype._handleResponse = function(req, controller) {
     if(req) {
         if(req.readyState == 4 && req.status == 200) {
             var resp = eval("["+req.responseText+"]");
@@ -326,12 +328,10 @@ Com_Zimbra_DnD.prototype._handleResponse = function(req) {
 
                 if(Com_Zimbra_DnD.attachment_ids.length > 0 && Com_Zimbra_DnD.attachment_ids.length == Com_Zimbra_DnD.flength) {
 
-                    // locate the compose controller and set up the callback handler
-                    var cc = appCtxt.getApp(ZmApp.MAIL).getComposeController(appCtxt.getApp(ZmApp.MAIL).getCurrentSessionId(ZmId.VIEW_COMPOSE));
-                    var callback = new AjxCallback (cc,cc._handleResponseSaveDraftListener);
+                    var callback = new AjxCallback (controller,controller._handleResponseSaveDraftListener);
 
                     attachment_list = Com_Zimbra_DnD.attachment_ids.join(",");
-                    cc.sendMsg(attachment_list,ZmComposeController.DRAFT_TYPE_MANUAL,callback);
+                    controller.sendMsg(attachment_list,ZmComposeController.DRAFT_TYPE_MANUAL,callback);
                     this.dndTooltipEl.innerHTML = ZmMsg.dndTooltip;
                 }
             }
