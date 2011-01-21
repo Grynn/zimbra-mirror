@@ -231,7 +231,7 @@ LDAPAPI := \
 	Net-LDAPapi-3.0.3
 
 XML_PARSER := \
-	XML-Parser-2.36
+	XML-Parser-2.40
 
 PERL_MM_USE_DEFAULT	:= 1
 export PERL_MM_USE_DEFAULT
