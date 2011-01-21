@@ -92,9 +92,9 @@ public class GeneralUtility {
       try {
          Method [] methodList = null;
          if (isStaticApi) {
-            methodList = Class.forName(apiClassPath).getDeclaredMethods();
+            methodList = Class.forName(apiClassPath).getMethods();
          } else {
-            methodList = nonStaticObject.getClass().getDeclaredMethods();
+            methodList = nonStaticObject.getClass().getMethods();
          }
          for (int i = 0; i < methodList.length; i++) {
             logger.debug("methodlist[" + i + "].getName: " + methodList[i].getName());

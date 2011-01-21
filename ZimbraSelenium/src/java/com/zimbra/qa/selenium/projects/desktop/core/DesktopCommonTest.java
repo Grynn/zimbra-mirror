@@ -1,8 +1,17 @@
 package com.zimbra.qa.selenium.projects.desktop.core;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpState;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.testng.annotations.AfterClass;
@@ -14,6 +23,8 @@ import org.testng.annotations.BeforeSuite;
 import org.xml.sax.SAXException;
 
 import com.zimbra.qa.selenium.projects.desktop.ui.AppDesktopClient;
+import com.zimbra.qa.selenium.projects.desktop.ui.PageAccounts;
+import com.zimbra.qa.selenium.projects.desktop.ui.PageMain;
 
 import com.thoughtworks.selenium.SeleniumException;
 
@@ -28,10 +39,12 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraDesktopProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.BuildUtility.ARCH;
 import com.zimbra.qa.selenium.framework.util.BuildUtility.BRANCH;
 import com.zimbra.qa.selenium.framework.util.BuildUtility.PRODUCT_NAME;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 
 /**
@@ -47,7 +60,10 @@ public class DesktopCommonTest {
 	private PRODUCT_NAME _productName = null;
 	private BRANCH _branchName = null;
 	private ARCH _arch = null;
-	private boolean _uninstallAppAfterTest = true;
+	private final static String _accountFlavor = "Zimbra";
+	private final static String _defaultAccountName = ZimbraSeleniumProperties.getUniqueString();
+	private boolean _uninstallAppAfterTest = false;
+	private static ZimbraSelenium _selenium = null;
 
 	/**
 	 * Helper field.  admin = ZimbraAdminAccount.GlobalAdmin()
@@ -75,6 +91,8 @@ public class DesktopCommonTest {
 
 		startingPage = app.zPageMain;
 		startingAccount = gAdmin;
+		logger.debug("Email Address: " + gAdmin.EmailAddress);
+		logger.debug("Email Password: " + gAdmin.Password);
 	}
 
 	/**
@@ -94,6 +112,7 @@ public class DesktopCommonTest {
 		_productName = PRODUCT_NAME.ZDESKTOP;
 		_branchName = BRANCH.HELIX;
 		boolean isAppRunning = false;
+
 		switch (osType){
 		case WINDOWS: case WINDOWS_XP:
 		   _downloadFilePath = "C:\\download-zimbra-qa-test\\";
@@ -134,6 +153,7 @@ public class DesktopCommonTest {
 		   DesktopInstallUtil.installDesktopApp(downloadPath);
 		} else {
 		   // Running test with already installed Desktop App.
+		   logger.info("Running with already installed app");
 		}
 
 		if (!isAppRunning) {
@@ -147,16 +167,16 @@ public class DesktopCommonTest {
 		try
 		{
 			ClientSession session = ClientSessionFactory.session();
-			ZimbraSelenium selenium = session.selenium();
-			selenium.start();
-			selenium.windowMaximize();
-			selenium.windowFocus();
+			_selenium = session.selenium();
+			_selenium.start();
+			_selenium.windowMaximize();
+			_selenium.windowFocus();
 			// selenium.setupZVariables();
 			// admin doesn't use any of the JS code
-			selenium.allowNativeXpath("true");
+			_selenium.allowNativeXpath("true");
 			ZimbraSeleniumProperties.setAppType(
 			      ZimbraSeleniumProperties.AppType.DESKTOP);
-			selenium.open(ZimbraSeleniumProperties.getBaseURL());
+			_selenium.open(ZimbraSeleniumProperties.getBaseURL());
 			//selenium.open("http://127.0.0.1:1884/desktop/login.jsp?at=42077838-fc72-4756-a68b-959537b5ecc8");
 		} catch (SeleniumException e) {
 			logger.error("Unable to open admin app." +
@@ -166,6 +186,64 @@ public class DesktopCommonTest {
 	}
 
 	/**
+	 * Add default account using HTTP post
+	 * @throws HarnessException
+	 */
+   public void addDefaultAccount() throws HarnessException {
+      logger.info("Creating new account...");
+      String serverScheme = ZimbraSeleniumProperties.getStringProperty("server.scheme", "http");
+      String serverName = ZimbraSeleniumProperties.getStringProperty("server.host", "localhost");
+      ZimbraDesktopProperties zdp = ZimbraDesktopProperties.getInstance();
+      String connectionPort = zdp.getConnectionPort();
+
+      String emailServerName = ZimbraSeleniumProperties.getStringProperty("adminName", "admin@localhost").split("@")[1];
+      String emailServerPort = ZimbraSeleniumProperties.getStringProperty("server.port", "80");
+      String securityType = serverScheme.equals("http") ? "&security=cleartext" : "";
+      String accountSetupUrl = new StringBuilder(serverScheme).append("://")
+                                            .append(serverName). append(":")
+                                            .append(connectionPort).append("/")
+                                            .append("zimbra/desktop/accsetup.jsp?at=")
+                                            .append(zdp.getSerialNumber()).append("&accountId=&verb=add&accountFlavor=")
+                                            .append(_accountFlavor).append("&accountName=")
+                                            .append(_defaultAccountName).append("&email=")
+                                            .append(gAdmin.EmailAddress).append("&password=")
+                                            .append(gAdmin.Password).append("&host=") 
+                                            .append(emailServerName).append("&port=")
+                                            .append(emailServerPort).append("&syncFreqSecs=900&debugTraceEnabled=on")
+                                            .append(securityType).toString();
+      logger.info("accountSetupUrl: " + accountSetupUrl);
+
+      try {
+         URL url = new URL(accountSetupUrl);
+         URLConnection conn = url.openConnection();
+         
+         //Get the response
+         BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+         StringBuffer sb = new StringBuffer();
+         String line;
+         while ((line = rd.readLine()) != null)
+         {
+            sb.append(line);
+         }
+         rd.close();
+         logger.info("HTTP POST information ==> " + sb.toString());
+         
+
+      } catch (IOException e) {
+         throw new HarnessException("HTTP Post method for creating new account failed, please check the parameters");
+      }
+
+      String accountUrl = new StringBuilder(serverScheme).append("://")
+                                       .append(serverName). append(":")
+                                       .append(connectionPort).append("/")
+                                       .append("?at=")
+                                       .append(zdp.getSerialNumber()).toString();
+      _selenium.open(accountUrl);
+      ZimbraSeleniumProperties.waitForElementPresent(app.zPageAccounts,
+            PageAccounts.Locators.zLoginButton);
+   }
+
+   /**
 	 * Global BeforeClass
 	 *
 	 * 1. Dynamically wait for the application to be completely loaded
@@ -174,20 +252,45 @@ public class DesktopCommonTest {
 	@BeforeClass( groups = { "always" } )
 	public void commonTestBeforeClass() throws HarnessException {
 		logger.info("commonTestBeforeClass");
-
 		logger.info("Wait dynamically until the application is loaded");
-		int retry = 0;
-		int maxRetry = 30;
-		while (retry < maxRetry && !app.zIsLoaded()) {
-		   retry ++;
-		   SleepUtil.sleep(1000);
-		}
-		logger.info("retry is " + retry);
-		logger.info("App is loaded: " + app.zIsLoaded());
+		boolean isLoaded = (Boolean) GeneralUtility.waitFor("com.zimbra.qa.selenium.framework.ui.AbsApplication.AppDesktopClient",
+		      app, false, "zIsLoaded", null, WAIT_FOR_OPERAND.EQ, true, 30000, 1000);
+		boolean isPageAccountActive = app.zPageAccounts.zIsActive();
 
-		if (retry == maxRetry) {
-		   throw new HarnessException(
-		         "Time out: Desktop Application is never loaded");
+
+		if (isLoaded) {
+   		if (isPageAccountActive) {
+   		   logger.info("Account Page is active, so no accounts have been created");
+   		} else {
+   		   logger.info("Main page is active");
+   		   ZimbraSeleniumProperties.waitForElementPresent(app.zPageMain,
+   		         PageMain.Locators.zSetupButton);
+   		   app.zPageMain.sClick(PageMain.Locators.zSetupButton);
+   		   ZimbraSeleniumProperties.waitForElementPresent(app.zPageAccounts,
+   		         PageAccounts.Locators.zLoginButton);
+
+   		   boolean bFoundOtherUser = true;
+   		   logger.debug("Cleaning up all existing users");
+
+   		   // Cleaning up all the existing users
+   		   while (bFoundOtherUser) {
+   		      app.zPageAccounts.sClick(PageAccounts.Locators.zDeleteButton);
+   		      logger.debug("Selenium Confirmation: " + _selenium.getConfirmation());
+   		      SleepUtil.sleep(3000);
+   		      if (!(Boolean)ZimbraSeleniumProperties.waitForElementPresent(app.zPageAccounts,
+   		            PageAccounts.Locators.zDeleteButton, 5000)) {
+   		         bFoundOtherUser = false;
+   		      }
+   		   }
+   		}
+   		addDefaultAccount();
+   		
+   		// Go the the main page
+   		app.zPageAccounts.sClick(PageAccounts.Locators.zLoginButton);
+   		ZimbraSeleniumProperties.waitForElementPresent(app.zPageMain,
+   		      PageMain.Locators.zPeopleSearchField);
+		} else {
+		   throw new HarnessException("Nothing is loaded, please check the connection");
 		}
 	}
 
@@ -203,7 +306,6 @@ public class DesktopCommonTest {
 	@BeforeMethod( groups = { "always" } )
 	public void commonTestBeforeMethod() throws HarnessException {
 		logger.info("commonTestBeforeMethod: start");
-
 		logger.info("commonTestBeforeMethod: finish");
 	}
 

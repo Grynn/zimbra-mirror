@@ -7,21 +7,16 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
-
 public class PageAccounts extends AbsTab {
 
 
    // Inner class that store all the locators relevant to the page
    public static class Locators {
 
-      // Tabs
-      public static final String zMyAccountsTab_Inactive = "xpath=//div[@class='ZPanelTabInactive ZPanelFirstTab']";
-      public static final String zAddNewAccountTab_Inactive = "xpath=//div[@class='ZPanelTabInactive ZPanelTab']";
-      public static final String zMyAccountsTab_Active = "xpath=//div[@class='ZPanelTabActive ZPanelFirstTab']";
-      public static final String zAddNewAccountTab_Active = "xpath=//div[@class='ZPanelTabActive ZPanelTab']";
-
-      // Drop Down List
-      public static final String zAccountType = "xpath=//*[@id='accountFlavor']";
+      // Buttons
+      public static final String zAddNewAccountButton = "css=td div[class*='ZPanelButton'][onclick*='OnAdd()']";
+      public static final String zLoginButton = "css=div[id*='loginButton']";
+      public static final String zDeleteButton = "css=a[href*='OnDelete']";
    }
 
    public PageAccounts(AbsApplication application) {
@@ -37,8 +32,23 @@ public class PageAccounts extends AbsTab {
 
    @Override
    public boolean zIsActive() throws HarnessException {
-      // TODO Auto-generated method stub
-      return false;
+      // Check if the Add New Account Button is present
+      boolean present = sIsElementPresent(Locators.zAddNewAccountButton);
+      if ( !present ) {
+         logger.debug("isActive() present = "+ present);
+         return (false);
+      }
+
+      // Check if the Search People textfield is visible per position 
+      boolean visible = zIsVisiblePerPosition(Locators.zAddNewAccountButton,
+            0, 0);
+      if ( !visible ) {
+         logger.debug("isActive() visible = "+ visible);
+         return (false);
+      }
+      
+      logger.debug("isActive() = "+ true);
+      return (true);
    }
 	
 	@Override

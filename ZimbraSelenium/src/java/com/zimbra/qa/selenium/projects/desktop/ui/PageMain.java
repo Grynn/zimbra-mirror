@@ -14,14 +14,17 @@ public class PageMain extends AbsTab{
 
       // TextFields
       public static final String zPeopleSearchField =
-         "xpath=//*[@class=' people_search_input']";
-      public static final String zPeopleSearchResultsField =
-         "xpath=//*[@class='ZmPeopleSearch-noresults']";
+         "css=td#ztb_people_search_inputField div input[class*='people_search_input']";
 
       // Images
       // This is the search icon (magnifying glass)
       public static final String zPeopleSearchImage =
-         "xpath=//*[@class='ImgSearch2']";
+         "css=div[class*='ImgSearch2']";
+      
+      // Buttons
+      public static final String zSetupButton = 
+         "css=tbody td#skin_container_logoff a[onclick*='LogOff']";
+
    }
 
    public PageMain(AbsApplication application) {
