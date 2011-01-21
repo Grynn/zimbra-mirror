@@ -4851,6 +4851,31 @@ Dwt_Alert_XFormItem.prototype.constructWidget = function() {
 	alert.setTitle(title);
 	alert.setContent(content);
 	
+	// bug fix wrong IE box model when conculating the width
+	if(AjxEnv.isIE){
+		try{	
+			var htmlElement = alert.getHtmlElement();
+                	var size = Dwt.getSize(htmlElement);
+		
+			var container = this.getContainer();
+			var containerSize =  Dwt.getSize(container);
+			
+			var style = DwtCssStyle.getComputedStyleObject(htmlElement);	
+		        var bl = parseInt(style.borderLeftWidth)     || 1;
+                        var br = parseInt(style.borderRightWidth)    || 1;
+                        var pl = parseInt(style.paddingLeft)         || 5;
+                        var pr = parseInt(style.paddingRight)        || 5;
+                        var ml = parseInt(style.marginLeft)          || 5;
+                        var mr = parseInt(style.marginRight)         || 5;
+                        var extraWidth = bl + br + pl + pr + ml + mr;
+			
+			if(containerSize.x > extraWidth){
+				size.x = containerSize.x - extraWidth;
+				Dwt.setSize(htmlElement, size.x, size.y);
+			}
+		}catch(ex){
+		}
+	}	
 	return alert;
 }
 
