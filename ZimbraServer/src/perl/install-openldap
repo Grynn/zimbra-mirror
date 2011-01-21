@@ -123,10 +123,14 @@ sub getPlatformDirName() {
 		    $dirName = "RHEL4";
 		}
 	    }
-	} else {
-	    $dirName = "UBUNTU8";
-	}
-    }
+        } else {
+	    if (`uname -m` =~ /i686/) {
+                $dirName = "UBUNTU8";
+	    } else {
+                $dirName = "UBUNTU10_64";
+	    }
+        }
+      }
 
     return $dirName;
 }
