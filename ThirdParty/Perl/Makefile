@@ -159,7 +159,6 @@ PERL_LIBS 	:= \
 	Time::HiRes \
 	Convert::ASN1 \
 	Net::LDAP \
-	Net::Server \
 	Unix::Syslog \
 	Parallel::ForkManager \
 	Package::Constants \
@@ -233,6 +232,9 @@ LDAPAPI := \
 XML_PARSER := \
 	XML-Parser-2.40
 
+NET_SERVER := \
+	Net-Server-0.99
+
 PERL_MM_USE_DEFAULT	:= 1
 export PERL_MM_USE_DEFAULT
 
@@ -301,6 +303,16 @@ build:
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 	
+	@for lib in $(NET_SERVER); do \
+		echo -n "Compiling perl lib $$lib ..."; \
+		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
+		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
+		patch -g0 -N -p1 < $(PERL_ROOT)/patches/Net-Server.patch; \
+		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
+		$(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+	done
+	
 	@for lib in $(XML_PARSER); do \
 		echo -n "Compiling perl lib $$lib ..."; \
 		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
@@ -309,7 +321,7 @@ build:
 		$(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
-	
+
 	@for lib in $(PERL_LIBS); do \
 		echo -n "Compiling perl lib $$lib ..."; \
 		LDFLAGS="-fPIC" CFLAGS="-fPIC" BERKELEYDB_INCLUDE=$(BDB_INCLUDE) BERKELEYDB_LIB=$(BDB_LIB_DIR) $(PERL) -I$(DEST_LIB_DIR) -MCPAN -e "$$CPAN::Config->{make_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; $$CPAN::Config->{makepl_arg}.=' CCCDLFLAGS="-fPIC" CFLAGS="-fPIC" LDFLAGS="-fPIC"'; force (\"install\", \"$$lib\")" >> $(LOGFILE) 2>&1; \

@@ -1,0 +1,36 @@
+--- Net-Server-0.99/lib/Net/Server/PreFork.pm.orig	2011-01-21 11:52:42.655255991 -0800
++++ Net-Server-0.99/lib/Net/Server/PreFork.pm	2011-01-21 11:53:48.255258818 -0800
+@@ -330,6 +330,15 @@
+ #               },
+                );
+ 
++  ### reclaim process exit status from any terminated child process
++  ### inherited from a previous incarnation whose SIGCHLD signal was
++  ### ignored during a blind period between a restart and the moment
++  ### when the SIGCHLD handler was established just now
++  while ( defined(my $chld = waitpid(-1, WNOHANG)) ){
++    last unless $chld > 0;
++    $self->{reaped_children}->{$chld} = 1;
++  }
++
+   ### loop on reading info from the children
+   while( 1 ){
+ 
+--- Net-Server-0.99/lib/Net/Server/PreForkSimple.pm.orig	2011-01-21 11:53:56.495258794 -0800
++++ Net-Server-0.99/lib/Net/Server/PreForkSimple.pm	2011-01-21 11:54:20.845260046 -0800
+@@ -331,6 +331,15 @@
+ #               },
+                );
+ 
++  ### reclaim process exit status from any terminated child process
++  ### inherited from a previous incarnation whose SIGCHLD signal was
++  ### ignored during a blind period between a restart and the moment
++  ### when the SIGCHLD handler was established just now
++  while ( defined(my $chld = waitpid(-1, WNOHANG)) ){
++    last unless $chld > 0;
++    $self->delete_child($chld);
++  }
++
+   ### loop forever
+   while( 1 ){
+ 
