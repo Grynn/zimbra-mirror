@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.desktop.tests.addressbook.search;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -19,9 +20,14 @@ public class PeopleSearch extends DesktopCommonTest{
       super.startingAccount = null;
    }
 
+   @BeforeMethod(groups = {"always"})
+   public void basicPeopleSearchSetup () throws HarnessException {
+      app.zPageMain.zNavigateTo();
+   }
+
    @Test(   description = "Verifying People Search property",
-         groups = { "always" })
-   public void BasicSearch01() throws HarnessException {
+         groups = { "sanity" })
+   public void BasicPeopleSearch01() throws HarnessException {
       ZimbraSeleniumProperties.waitForElementPresent(app.zPageMain, PageMain.Locators.zPeopleSearchField);
       String searchResult =
          app.zPageMain.sGetText(PageMain.Locators.zPeopleSearchField);

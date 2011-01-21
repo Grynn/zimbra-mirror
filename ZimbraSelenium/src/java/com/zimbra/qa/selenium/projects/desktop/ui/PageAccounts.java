@@ -6,12 +6,21 @@ import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.projects.desktop.ui.PageMain.Locators;
 
 public class PageAccounts extends AbsTab {
 
 
    // Inner class that store all the locators relevant to the page
    public static class Locators {
+
+      // Tabs
+      public static final String zMyAccountsTab = "css=div[class$='ctive ZPanelFirstTab']";
+      public static final String zAddNewAccountTab = "css=div[class$='ctive ZPanelTab']";
+
+      // Dropdown list
+      public static final String zAccountTypeDropDownList = "css=select#accountFlavor";
 
       // Buttons
       public static final String zAddNewAccountButton = "css=td div[class*='ZPanelButton'][onclick*='OnAdd()']";
@@ -66,8 +75,15 @@ public class PageAccounts extends AbsTab {
 	
 	@Override
 	public void zNavigateTo() throws HarnessException {
-		// TODO Auto-generated method stub
-		
+		if (zIsActive()) {
+		   logger.debug("Accounts page has already been reached.");
+		} else {
+		   if (sIsElementPresent(PageMain.Locators.zPeopleSearchField)) {
+		      logger.debug("Currently in main page, now navigating to Accounts page");
+		      sClick(PageMain.Locators.zSetupButton);
+		   }
+		   ZimbraSeleniumProperties.waitForElementPresent(this, Locators.zLoginButton);
+		}
 	}
 	
 	@Override

@@ -284,11 +284,7 @@ public class DesktopCommonTest {
    		   }
    		}
    		addDefaultAccount();
-   		
-   		// Go the the main page
-   		app.zPageAccounts.sClick(PageAccounts.Locators.zLoginButton);
-   		ZimbraSeleniumProperties.waitForElementPresent(app.zPageMain,
-   		      PageMain.Locators.zPeopleSearchField);
+
 		} else {
 		   throw new HarnessException("Nothing is loaded, please check the connection");
 		}

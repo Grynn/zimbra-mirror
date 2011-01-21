@@ -6,6 +6,8 @@ import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.projects.desktop.ui.PageAccounts.Locators;
 
 
 public class PageMain extends AbsTab{
@@ -75,8 +77,22 @@ public class PageMain extends AbsTab{
 
 	@Override
 	public void zNavigateTo() throws HarnessException {
-		// TODO Auto-generated method stub
-		
+	   if (zIsActive()) {
+         logger.debug("Main page has already been reached.");
+      } else {
+         if (sIsElementPresent(PageAccounts.Locators.zAddNewAccountButton)) {
+            throw new HarnessException("No account hasn't been created, please check your environment");
+         } else if (sIsElementPresent(PageAccounts.Locators.zLoginButton)) {
+            logger.debug("Currently in Accounts page, now navigating to main page");
+            sClick(PageAccounts.Locators.zLoginButton);
+         } else if (sIsElementPresent(PageAccounts.Locators.zAccountTypeDropDownList)) {
+            logger.debug("Currently in Add New Account Tab on Accounts page, now navigating to main page");
+            sClick(PageAccounts.Locators.zMyAccountsTab);
+            ZimbraSeleniumProperties.waitForElementPresent(this, PageAccounts.Locators.zLoginButton);
+            sClick(PageAccounts.Locators.zLoginButton);
+         }
+         ZimbraSeleniumProperties.waitForElementPresent(this, Locators.zSetupButton);
+      }
 	}
 	
 	@Override
