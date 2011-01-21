@@ -835,6 +835,7 @@ AjxStringUtil.HTML_BODY_RE = /<body(\s|>)/i;
 AjxStringUtil.HTML_QUOTE_PRE_RE = /^\s*<blockquote/i;
 AjxStringUtil.HTML_QUOTE_POST_RE = /^\s*<\/blockquote>/i;
 AjxStringUtil.HTML_QUOTE_COLOR = "rgb(16, 16, 255)";
+AjxStringUtil.HTML_QUOTE_STYLE = "color:#000;font-weight:normal;font-style:normal;text-decoration:none;font-family:Helvetica,Arial,sans-serif;font-size:12pt;";
 
 /**
  * Returns a list of chunks of top-level content in a message body. Top-level
