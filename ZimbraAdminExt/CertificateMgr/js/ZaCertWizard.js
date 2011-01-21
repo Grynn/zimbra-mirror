@@ -662,7 +662,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 		
 	var case_user_options = {type:_CASE_, numCols:2, colSizes:["25px","*"], 
             tabGroupKey:ZaCertWizard.STEP_USER_OPTION, caseKey:ZaCertWizard.STEP_USER_OPTION,
-			align:_LEFT_, valign:_TOP_, width:"80%", cssStyle:"padding-left:50px;"};
+			align:_LEFT_, valign:_TOP_, width:"90%", cssStyle:"padding-left:50px;"};
 			
 	var case_user_options_items = [
 				{	type: _GROUP_, numCols:2, colSpan: "*", colSizes:["75px","*"], items: [
