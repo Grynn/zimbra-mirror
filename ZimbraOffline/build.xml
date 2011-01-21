@@ -1033,7 +1033,7 @@
 
     <!-- unzip zimbra mapi extension for windows -->
     <if><isset property="is-windows" /><then>
-        <unzip src="src/installer/extensions/zimbramapi-0.4.1.xpi" dest="${dist.app.dir}/win32/prism/extensions/mapi@zimbra.com" overwrite="true"/>
+        <unzip src="src/installer/extensions/zimbramapi-0.6.xpi" dest="${dist.app.dir}/win32/prism/extensions/mapi@zimbra.com" overwrite="true"/>
     </then></if>
 
     <!-- unzip inquisitor extension
