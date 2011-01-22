@@ -654,6 +654,23 @@ function(str) {
 	return str.replace(/[&]/g, '&amp;').replace(/ /g, '&nbsp;').replace(/[<]/g, '&lt;').replace(/[>]/g, '&gt;');
 };
 
+/**
+ * Encode
+ * @param base {string} Ruby base.
+ * @param text {string} Ruby text (aka furigana).
+ */
+AjxStringUtil.htmlRubyEncode = function(base, text) {
+    if (base && text) {
+        return [
+            "<ruby>",
+                "<rb>",AjxStringUtil.htmlEncode(base),"</rb> ",
+                "<rp>(</rp><rt>",AjxStringUtil.htmlEncode(text),"</rt><rp>)</rp>",
+            "</ruby>"
+        ].join("");
+    }
+    return AjxStringUtil.htmlEncode(base || text || "");
+};
+
 // this function makes sure a leading space is preservered, takes care of tabs,
 // then finally takes replaces newlines with <br>'s
 AjxStringUtil.nl2br =

@@ -228,6 +228,21 @@ public class BeanUtils {
         return s;
     }
 
+    public static String htmlRubyEncode(String base, String text) {
+        if (base != null && base.length() > 0 && text != null && text.length() > 0) {
+            StringBuilder str = new StringBuilder();
+            str.append("<ruby><rb>");
+            str.append(htmlEncode(base));
+            str.append("</rb><rp>(</rp><rt>");
+            str.append(htmlEncode(text));
+            str.append("</rt><rp>)</rp></ruby>");
+            return str.toString();
+        }
+        String s = base != null && base.length() > 0 ? base :
+                  (text != null && text.length() > 0 ? text : "");
+        return htmlEncode(s);
+    }
+
     private static String internalTextToHtml(String text) {
         if (text == null || text.length() == 0) return "";
         String s = replaceAll(text, sAMP, "&amp;");

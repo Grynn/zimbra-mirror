@@ -120,6 +120,8 @@ public class ZContactBean implements Comparable {
 
     public String getLastName() { return mContact.getAttrs().get("lastName"); }
 
+    public String getMaidenName() { return mContact.getAttrs().get("maidenName"); }
+
     public String getMiddleName() { return mContact.getAttrs().get("middleName"); }
 
     public String getMobilePhone() { return mContact.getAttrs().get("mobilePhone"); }
@@ -151,6 +153,12 @@ public class ZContactBean implements Comparable {
     public String getOtherURL() { return mContact.getAttrs().get("otherURL"); }
 
     public String getPager() { return mContact.getAttrs().get("pager"); }
+
+    public String getPhoneticFirstName() { return mContact.getAttrs().get("phoneticFirstName"); };
+
+    public String getPhoneticLastName() { return mContact.getAttrs().get("phoneticLastName"); };
+
+    public String getPhoneticCompany() { return mContact.getAttrs().get("phoneticCompany"); };
 
     public String getTollFree() { return mContact.getAttrs().get("tollFree"); }
 
