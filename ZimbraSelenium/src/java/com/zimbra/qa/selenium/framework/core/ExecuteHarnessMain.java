@@ -442,18 +442,17 @@ public class ExecuteHarnessMain {
 	protected static class MethodListener implements IInvokedMethodListener {
 		private static Logger logger = LogManager.getLogger(MethodListener.class);
 		
-		private static Logger openqaLogger = LogManager.getLogger("org.openqa");
-		private static Logger frameworkLogger = LogManager.getLogger("framework");
-		private static Logger projectsLogger = LogManager.getLogger("projects");
+		private static final String OpenQABasePackage = "org.openqa";
+		private static final String ZimbraQABasePackage = "com.zimbra.qa.selenium";
+		private static final Logger openqaLogger = LogManager.getLogger(OpenQABasePackage);
+		private static final Logger zimbraqaLogger = LogManager.getLogger(ZimbraQABasePackage);
 		
-		private Map<String, Appender> appenders = null;
-		private static Layout layout = null;
+		private final Map<String, Appender> appenders = new HashMap<String, Appender>();
+		private static final Layout layout = new PatternLayout("%-4r [%t] %-5p %c %x - %m%n");
 
 		private String outputFolder = null;
 		
 		protected MethodListener(String folder) {
-			layout = new PatternLayout("%-4r [%t] %-5p %c %x - %m%n");
-			appenders = new HashMap<String, Appender>();
 			outputFolder = (folder == null ? "logs" : folder);
 		}
 		
@@ -462,10 +461,13 @@ public class ExecuteHarnessMain {
 		}
 		
 		protected String getFilename(Method method) {
-			// String c = method.getDeclaringClass().getCanonicalName().replace('.', '/');
-			String c = method.getDeclaringClass().getCanonicalName();
+			// Change the class name in two ways to build the file path:
+			// 1. Remove com.zimbra.qa.selenium (for brevity)
+			// 2. Change package names to directory names, by changing "." to "/"
+			//
+			String c = method.getDeclaringClass().getCanonicalName().replace(ZimbraQABasePackage, "").replace('.', '/');
 			String m = method.getName();
-			return (String.format("%s/debug/%s.%s.txt", outputFolder, c, m));
+			return (String.format("%s/debug/%s/%s.txt", outputFolder, c, m));
 		}
 		
 		/**
@@ -482,8 +484,7 @@ public class ExecuteHarnessMain {
 						Appender a = new FileAppender(layout, filename, false);
 						appenders.put(key, a);
 						openqaLogger.addAppender(a);
-						frameworkLogger.addAppender(a);
-						projectsLogger.addAppender(a);
+						zimbraqaLogger.addAppender(a);
 					}
 					logger.info("MethodListener: START: "+ method.getTestMethod().getMethodName());
 				} catch (IOException e) {
@@ -508,8 +509,7 @@ public class ExecuteHarnessMain {
 				}
 				if ( a != null ) {
 					openqaLogger.removeAppender(a);
-					frameworkLogger.removeAppender(a);
-					projectsLogger.removeAppender(a);
+					zimbraqaLogger.removeAppender(a);
 					a.close();
 					a = null;
 				}
