@@ -231,10 +231,10 @@
   </target>
 
   <target name="offline-webroot">
-    <copy todir="${param.jetty.dir}/webapps/zimbra">
+    <copy todir="${param.jetty.dir}/webapps/zimbra" overwrite="true">
       <fileset dir="${web.dir}" includes="**/*" excludes="WEB-INF/classes/desktop/*"/>
     </copy>
-    <copy todir="${param.jetty.dir}/webapps/zimbra/WEB-INF/classes/messages">
+    <copy todir="${param.jetty.dir}/webapps/zimbra/WEB-INF/classes/messages" overwrite="true">
       <fileset dir="${web.dir}/WEB-INF/classes/desktop" includes="**/*"/>
     </copy>
   </target>
