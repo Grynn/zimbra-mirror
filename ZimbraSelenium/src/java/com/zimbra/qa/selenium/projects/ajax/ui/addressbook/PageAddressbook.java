@@ -8,7 +8,7 @@ import org.apache.log4j.LogManager;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
-import com.zimbra.qa.selenium.framework.items.ContactItem;
+import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
@@ -17,8 +17,7 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
-import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
 public class PageAddressbook extends AbsTab {
@@ -123,6 +122,79 @@ public class PageAddressbook extends AbsTab {
 		return list;		
 	}
 
+		
+	//TODO: subContextMenuItem
+	//right click contactItem
+	public AbsPage zContextMenu(ContextMenuItem cmi) throws HarnessException {
+		logger.info(myPageName() + " zContextMenu"+ " (" + cmi.text  + ")");
+	
+		//ensure only contacts' context menu items 
+	    if (! ( cmi == ContextMenuItem.C_CONTACT_SEARCH || 	    		
+	    		cmi == ContextMenuItem.C_CONTACT_ADVANCED_SEARCH ||
+	    		cmi == ContextMenuItem.C_CONTACT_DELETE ||
+	    		cmi == ContextMenuItem.C_CONTACT_EDIT ||
+	    		cmi == ContextMenuItem.C_CONTACT_FORWARD ||
+	    		cmi == ContextMenuItem.C_CONTACT_MOVE ||
+	    		cmi == ContextMenuItem.C_CONTACT_NEW_EMAIL ||
+	    		cmi == ContextMenuItem.C_CONTACT_PRINT ||
+	    		cmi == ContextMenuItem.C_CONTACT_TAG ||
+	    		cmi == ContextMenuItem.C_SEPARATOR 
+	         )){
+	    	throw new HarnessException("Not allow to call with non-contact contex-menu item "+ cmi.text );
+	    }
+	    	
+		// Default behavior variables
+		//
+		String locator = null;			// If set, this will be clicked
+		AbsPage page = null;	// If set, this page will be returned
+		String id = cmi.locator;
+
+		// Check if the item is enabled
+		String attrs = sGetAttribute("xpath=(//div[@id='"+ id +"'])@class");
+		if ( attrs.contains("ZDisabled") ) {
+			throw new HarnessException("Tried clicking on "+ cmi.text +" but it was disabled "+ attrs);
+		}
+
+		locator = "id="+ id;
+
+		if (cmi == ContextMenuItem.C_CONTACT_MOVE) {				
+			page = new DialogContactMove(MyApplication);
+					
+		}
+		else if (cmi == ContextMenuItem.C_CONTACT_EDIT) {				
+			page = new FormContactNew(MyApplication);								
+		}
+	    // TODO other options
+		
+		
+		if ( locator == null )
+			throw new HarnessException("locator was null for context menu "+ cmi.text);
+
+		// Default behavior, process the locator by clicking on it
+		//
+
+		// Make sure the context menu exists
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("contextmenu is not present locator="+ locator +" context menu item="+ cmi.text);
+
+		// Click it
+		this.zClick(locator);
+        SleepUtil.sleepSmall();
+		
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+		return (page);
+	} 
+	
+	
+	// click folderItem
+	public AbsPage zContextMenu(FolderItem folderItem, ContextMenuItem cmi ) throws HarnessException {
+		logger.info(myPageName() + " zContextMenu"+ " ");
+		
+		return null;
+	}
+		
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
@@ -198,7 +270,11 @@ public class PageAddressbook extends AbsTab {
 
 		// Click it
 		this.zClick(locator);
-
+		SleepUtil.sleepSmall();
+		
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
 		return (page);
 	}
 
@@ -326,9 +402,9 @@ public class PageAddressbook extends AbsTab {
 				// right-click
 				if ( action == Action.A_RIGHTCLICK ) {
 					zKeyboard.zTypeCharacters(Shortcut.S_RIGHTCLICK.getKeys());															
-				 
-					//TODO
-					//return a list of context menu's options
+				 				
+					//return a context menu
+					return (new ContextMenu(MyApplication));
 				
 				}
 				// All done

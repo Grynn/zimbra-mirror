@@ -7,6 +7,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsForm;
 import com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.DialogContactMove.Locators;
 
 
 
@@ -150,7 +151,21 @@ public class FormContactNew extends AbsForm {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		throw new HarnessException("implement me!");
+		logger.info(myPageName() + " zIsActive()");
+
+		String locator = Locators.zFirstEditField;
+		
+		if ( !this.sIsElementPresent(locator) ) {
+			return (false); // Not even present
+		}
+		
+		if ( !this.zIsVisiblePerPosition(locator, 0, 0) ) {
+			return (false);	// Not visible per position
+		}
+	
+		// Yes, visible
+		logger.info(myPageName() + " zIsVisible() = true");
+		return (true);
 	}
 
 }

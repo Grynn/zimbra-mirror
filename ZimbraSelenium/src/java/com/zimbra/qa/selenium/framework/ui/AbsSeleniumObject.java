@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.framework.ui;
 
+import java.awt.event.KeyEvent;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -75,10 +77,18 @@ public abstract class AbsSeleniumObject {
 	 * @param locator
 	 * @throws HarnessException
 	 */
-	public void zClick(String locator) {
-		logger.info("zClick("+ locator +")");
+	public void zClick(String locator) throws HarnessException {
+		// Check if the locator is present
+		if ( !sIsElementPresent(locator) ) {
+			logger.info("zClick("+ locator +") element is not present");
+			throw new HarnessException("zClick("+ locator +") element is not present");
+		}
+		
 		ClientSessionFactory.session().selenium().mouseDown(locator);
 		ClientSessionFactory.session().selenium().mouseUp(locator);
+		
+		logger.info("zClick("+ locator +")");
+		
 	}
 
 	/**
@@ -154,6 +164,15 @@ public abstract class AbsSeleniumObject {
 		logger.info("waitForPageToLoad(" + timeout + ")");
 	}
 	
+
+	public void sRightClick(String locator) {
+		//Selenium's contextMenu not work for Zimbra
+		//ClientSessionFactory.session().selenium().contextMenu(locator);
+		
+		//use shortcut
+		ClientSessionFactory.session().selenium().keyPress(locator, "" +KeyEvent.VK_COMMA);
+		logger.info("sRightClick(" + locator + ")");
+    }
 	/**
 	 * DefaultSelenium.mouseDown()
 	 */

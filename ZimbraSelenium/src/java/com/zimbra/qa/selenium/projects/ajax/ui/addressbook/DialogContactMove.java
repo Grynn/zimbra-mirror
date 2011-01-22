@@ -9,6 +9,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogMove.Locators;
 
 
 /**
@@ -20,10 +21,9 @@ import com.zimbra.qa.selenium.framework.util.SleepUtil;
 public class DialogContactMove extends AbsDialog {
 
 	public static class Locators {
-	
-
+			
+		public static final String zDialogId			= "ChooseFolderDialog";
 	}
-	
 	
 	public DialogContactMove(AbsApplication application) {
 		super(application);
@@ -78,7 +78,21 @@ public class DialogContactMove extends AbsDialog {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		throw new HarnessException("implement me!");
+		logger.info(myPageName() + " zIsActive()");
+
+		String locator = "id="+ Locators.zDialogId;
+		
+		if ( !this.sIsElementPresent(locator) ) {
+			return (false); // Not even present
+		}
+		
+		if ( !this.zIsVisiblePerPosition(locator, 0, 0) ) {
+			return (false);	// Not visible per position
+		}
+	
+		// Yes, visible
+		logger.info(myPageName() + " zIsVisible() = true");
+		return (true);
 	}
 
 
