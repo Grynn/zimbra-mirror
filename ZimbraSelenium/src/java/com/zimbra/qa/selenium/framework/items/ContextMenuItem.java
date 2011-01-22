@@ -62,17 +62,18 @@ public class ContextMenuItem {
 	public static ContextMenuItem getContextMenuItem  (String locator)throws HarnessException {
 	   ContextMenuItem cmi=null;
 	   //?????
-	   if (hm.containsKey(locator))
+	   //if (hm.containsKey(locator))
 		   
 	   for (String key : hm.keySet()) {
 		  if (key.equals(locator)) {
 		     cmi= hm.get(key);
-		     		     
+		    
+		     //TODO verify text, image, shortcut 
+			 /*   
 		     String cssLocator= "css=div[id='" + locator + "']";
 		     String xpathLocator = "xpath=//div[@id='" + locator + "']"; 
 		     
-		 	//verify text, image, shortcut 
-		     if (! (ClientSessionFactory.session().selenium().isElementPresent(cssLocator + " " +cmi.image) ||
+		 	 if (! (ClientSessionFactory.session().selenium().isElementPresent(cssLocator + " " +cmi.image) ||
 		    		ClientSessionFactory.session().selenium().isElementPresent(cssLocator + " " +cmi.text) ||
 		    		ClientSessionFactory.session().selenium().isElementPresent(cssLocator + " " +cmi.shortcut) 
 		         )) {
@@ -86,7 +87,7 @@ public class ContextMenuItem {
 			 //get attribute
 			 //String contextItemImage     = contextItemMain + "/td/div/table/tbody/tr/td[2]";
 			 //String contextItemShortcut  = contextItemMain + "/td/div/table/tbody/tr/td[4]";
-
+              */
 		     break;
 		  }
 		  else if (locator.startsWith("DWT")){
