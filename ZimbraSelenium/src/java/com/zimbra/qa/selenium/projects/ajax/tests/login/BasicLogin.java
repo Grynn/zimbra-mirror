@@ -16,7 +16,7 @@ public class BasicLogin extends AjaxCommonTest {
 		
 		// All tests start at the login page
 		super.startingPage = app.zPageLogin;
-		super.startingAccount = null;
+		super.startingAccountPreferences = null;
 		
 	}
 	

@@ -33,7 +33,6 @@ public class PageLogin extends AbsTab {
 	}
 	
 	
-	public ZimbraAccount DefaultLoginAccount = null;
 	
 	public PageLogin(AbsApplication application) {
 		super(application);
@@ -90,15 +89,6 @@ public class PageLogin extends AbsTab {
 		
 	}
 
-	/**
-	 * Login as DefaultLoginAccount
-	 * @throws HarnessException
-	 */
-	public void zLogin() throws HarnessException {
-		logger.debug("login()");
-
-		zLogin(DefaultLoginAccount);
-	}
 
 	
 	/**

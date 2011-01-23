@@ -24,7 +24,7 @@ public class EditContact extends AjaxCommonTest  {
 		super.startingPage =  app.zPageAddressbook;
 
 		// Make sure we are using an account with conversation view
-		super.startingAccount = null;		
+		super.startingAccountPreferences = null;		
 		
 	}
 	

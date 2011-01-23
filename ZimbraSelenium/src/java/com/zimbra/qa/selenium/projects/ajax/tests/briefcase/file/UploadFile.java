@@ -17,7 +17,7 @@ public class UploadFile extends AjaxCommonTest {
 
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccount = null;
+		super.startingAccountPreferences = null;
 	}
 
 	@Test(description = "Upload file through SOAP - verify through SOAP", groups = { "smoke" })

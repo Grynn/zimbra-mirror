@@ -24,13 +24,9 @@ public class ReplyAllMailHtml extends AjaxCommonTest {
 		
 		// All tests start at the login page
 		super.startingPage = app.zPageMail;
-		super.startingAccount = new ZimbraAccount();
-		super.startingAccount.provision();
-		super.startingAccount.authenticate();
-		super.startingAccount.modifyPreferences(
-				new HashMap<String , String>() {{
+		super.startingAccountPreferences = new HashMap<String, String>() {{
 				    put("zimbraPrefComposeFormat", "html");
-				}});
+				}};
 
 		
 	}

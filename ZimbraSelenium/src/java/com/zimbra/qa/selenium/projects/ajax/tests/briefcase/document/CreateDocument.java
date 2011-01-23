@@ -19,7 +19,7 @@ public class CreateDocument extends AjaxCommonTest {
 
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccount = null;
+		super.startingAccountPreferences = null;
 	}
 
 	@Test(description = "Create document through GUI - verify through GUI", groups = { "sanity" })

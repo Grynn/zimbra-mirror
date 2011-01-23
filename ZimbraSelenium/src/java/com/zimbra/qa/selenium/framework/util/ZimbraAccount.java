@@ -110,6 +110,7 @@ public class ZimbraAccount {
 		return (_AccountZWC);
 	}
 	public static synchronized void ResetAccountZWC() {
+		logger.warn("AccountZWC is being reset");
 		_AccountZWC = null;
 	}
 	private static ZimbraAccount _AccountZWC = null;
@@ -324,7 +325,35 @@ public class ZimbraAccount {
 		return (value);
 	}
 	
-	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((EmailAddress == null) ? 0 : EmailAddress.hashCode());
+		return result;
+	}
+
+    /*
+     * If the account email addresses are equal, then the objects are equal
+     */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ZimbraAccount other = (ZimbraAccount) obj;
+		if (EmailAddress == null) {
+			if (other.EmailAddress != null)
+				return false;
+		} else if (!EmailAddress.equals(other.EmailAddress))
+			return false;
+		return true;
+	}
+
 	
 	/**
 	 * Upload a file to the upload servlet

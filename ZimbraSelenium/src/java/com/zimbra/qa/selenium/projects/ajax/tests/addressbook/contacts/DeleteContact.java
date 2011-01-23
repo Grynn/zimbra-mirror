@@ -23,7 +23,7 @@ public class DeleteContact extends AjaxCommonTest  {
 		// All tests start at the Address page
 		super.startingPage = app.zPageAddressbook;
 
-		super.startingAccount = null;		
+		super.startingAccountPreferences = null;		
 		
 	}
 	

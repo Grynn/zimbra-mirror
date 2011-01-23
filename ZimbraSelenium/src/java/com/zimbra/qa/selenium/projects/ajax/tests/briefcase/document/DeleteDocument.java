@@ -19,9 +19,6 @@ public class DeleteDocument extends AjaxCommonTest {
 
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccount = new ZimbraAccount();
-		super.startingAccount.provision();
-		super.startingAccount.authenticate();
 	}
 
 	@Test(description = "Create document through SOAP - delete & verify through GUI", groups = { "smoke" })

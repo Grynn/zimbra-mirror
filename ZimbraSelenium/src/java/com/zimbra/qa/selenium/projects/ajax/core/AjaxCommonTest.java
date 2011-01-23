@@ -1,5 +1,8 @@
 package com.zimbra.qa.selenium.projects.ajax.core;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.testng.annotations.AfterClass;
@@ -28,12 +31,12 @@ import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
  * <ol>
  * <li>{@link AbsTab} {@link #startingPage} - navigate to this
  * page before each test case method</li>
- * <li>{@link ZimbraAccount} {@link #startingAccount} - ensure this
+ * <li>{@link ZimbraAccount} {@link #startingAccountPreferences} - ensure this
  * account is authenticated before each test case method</li>
  * </ol>
  * <p>
  * It is important to note that no re-authentication (i.e. logout
- * followed by login) will occur if {@link #startingAccount} is 
+ * followed by login) will occur if {@link #startingAccountPreferences} is 
  * already the currently authenticated account.
  * <p>
  * The same rule applies to the {@link #startingPage}, as well.  If
@@ -83,7 +86,7 @@ public class AjaxCommonTest {
 	 * startingAccount = the account to log in as
 	 */
 	protected AbsTab startingPage = null;
-	protected ZimbraAccount startingAccount = null;
+	protected Map<String, String> startingAccountPreferences = null;
 	
 	protected AjaxCommonTest() {
 		logger.info("New "+ AjaxCommonTest.class.getCanonicalName());
@@ -91,10 +94,8 @@ public class AjaxCommonTest {
 		app = new AppAjaxClient();
 		
 		startingPage = app.zPageMain;
-		startingAccount = ZimbraAccount.AccountZWC();
-		
-		app.zPageLogin.DefaultLoginAccount = startingAccount;
-		
+		startingAccountPreferences = new HashMap<String, String>();
+				
 	}
 	
 	/**
@@ -153,7 +154,7 @@ public class AjaxCommonTest {
 	 * <p>
 	 * <ol>
 	 * <li>For all tests, make sure {@link #startingPage} is active</li>
-	 * <li>For all tests, make sure {@link #startingAccount} is logged in</li>
+	 * <li>For all tests, make sure {@link #startingAccountPreferences} is logged in</li>
 	 * <li>For all tests, make any compose tabs are closed</li>
 	 * </ol>
 	 * <p>
@@ -163,29 +164,29 @@ public class AjaxCommonTest {
 	public void commonTestBeforeMethod() throws HarnessException {
 		logger.info("commonTestBeforeMethod: start");
 		
-		// If a startinAccount is defined, then make sure we are authenticated as that user
-		if ( startingAccount == null ) {
-			logger.debug("commonTestBeforeMethod: startingAccount is not defined");
-			startingAccount = ZimbraAccount.AccountZWC();
+		// If test account preferences are defined, then make sure the test account
+		// uses those preferences
+		// 
+		if ( (startingAccountPreferences != null) && (!startingAccountPreferences.isEmpty()) ) {
+			logger.debug("commonTestBeforeMethod: startingAccountPreferences are defined");
+			ZimbraAccount.AccountZWC().modifyPreferences(startingAccountPreferences);
 		}
 		
-		if ( startingAccount != null ) {
-			logger.debug("commonTestBeforeMethod: startingAccount is defined");
-			
-			if ( !startingAccount.equals(app.zGetActiveAccount())) {
-				
-				if ( app.zPageMain.zIsActive() )
-					app.zPageMain.zLogout();
-				app.zPageLogin.zLogin(startingAccount);
-				
-			}
+		// If AccountZWC is not currently logged in, then login now
+		if ( !ZimbraAccount.AccountZWC().equals(app.zGetActiveAccount()) ) {
+			logger.debug("commonTestBeforeMethod: AccountZWC is not currently logged in");
+
+			if ( app.zPageMain.zIsActive() )
+				app.zPageMain.zLogout();
+			app.zPageLogin.zLogin(ZimbraAccount.AccountZWC());
 			
 			// Confirm
-			if ( !startingAccount.equals(app.zGetActiveAccount())) {
-				throw new HarnessException("Unable to authenticate as "+ startingAccount.EmailAddress);
+			if ( !ZimbraAccount.AccountZWC().equals(app.zGetActiveAccount())) {
+				throw new HarnessException("Unable to authenticate as "+ ZimbraAccount.AccountZWC().EmailAddress);
 			}
-		}
 
+		}
+		
 		// If a startingPage is defined, then make sure we are on that page
 		if ( startingPage != null ) {
 			logger.debug("commonTestBeforeMethod: startingPage is defined");

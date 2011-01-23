@@ -23,7 +23,7 @@ public class Bug39246 extends AjaxCommonTest {
 		
 		// All tests start at the login page
 		super.startingPage = app.zPageMail;
-		super.startingAccount = null;
+		super.startingAccountPreferences = null;
 		
 	}
 	

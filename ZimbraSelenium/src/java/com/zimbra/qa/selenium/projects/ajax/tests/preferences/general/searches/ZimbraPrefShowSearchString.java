@@ -7,7 +7,6 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
 
@@ -22,13 +21,9 @@ public class ZimbraPrefShowSearchString extends AjaxCommonTest {
 		super.startingPage = app.zPagePreferences;
 
 		// Make sure we are using an account with conversation view
-		super.startingAccount = new ZimbraAccount();
-		super.startingAccount.provision();
-		super.startingAccount.authenticate();
-		super.startingAccount.modifyPreferences(
-				new HashMap<String , String>() {{
+		super.startingAccountPreferences = new HashMap<String, String>() {{
 				    put("zimbraPrefShowSearchString", "TRUE");
-				}});
+				}};
 			
 		
 	}

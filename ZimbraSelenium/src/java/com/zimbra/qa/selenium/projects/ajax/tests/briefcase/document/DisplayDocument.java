@@ -16,7 +16,7 @@ public class DisplayDocument extends AjaxCommonTest {
 
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccount = null;
+		super.startingAccountPreferences = null;
 	}
 
 	@Test(description = "Create document through SOAP - verify through GUI", groups = { "smoke" })

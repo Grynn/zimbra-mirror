@@ -11,7 +11,6 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
@@ -25,13 +24,9 @@ public class UnTagMessage extends AjaxCommonTest {
 		// All tests start at the login page
 		super.startingPage = app.zPageMail;
 			
-		super.startingAccount = new ZimbraAccount();
-		super.startingAccount.provision();
-		super.startingAccount.authenticate();
-		super.startingAccount.modifyPreferences(
-				new HashMap<String , String>() {{
+		super.startingAccountPreferences = new HashMap<String , String>() {{
 				    put("zimbraPrefGroupMailBy", "message");
-				}});
+				}};
 
 	}
 

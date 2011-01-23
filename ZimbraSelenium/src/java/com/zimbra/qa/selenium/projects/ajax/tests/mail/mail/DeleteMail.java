@@ -28,13 +28,9 @@ public class DeleteMail extends AjaxCommonTest {
 		super.startingPage = app.zPageMail;
 
 		// Make sure we are using an account with message view
-		super.startingAccount = new ZimbraAccount();
-		super.startingAccount.provision();
-		super.startingAccount.authenticate();
-		super.startingAccount.modifyPreferences(
-				new HashMap<String , String>() {{
-				    put("zimbraPrefGroupMailBy", "message");
-				}});
+		super.startingAccountPreferences = new HashMap<String, String>() {{
+					put("zimbraPrefGroupMailBy", "message");
+				}};
 		
 	}
 	
@@ -124,7 +120,7 @@ public class DeleteMail extends AjaxCommonTest {
 		}
 		ZAssert.assertNull(found, "Verify the message is no longer in the inbox");
 
-		
+		throw new HarnessException("testing!");
 	}
 
 	@DataProvider(name = "DataProviderDeleteKeys")
