@@ -525,6 +525,10 @@ public class ZComposeUploaderBean {
 
     public boolean getIsRepeatDone() { return hasParam(F_actionRepeatDone); }
 
+    public boolean getHasChanged() {
+        return (mIsUpload && (getIsRepeatDone() || getIsContactDone()));
+    }
+
     public String getContactSearchQuery() { return getParam(F_contactSearchQuery); }
 
     public String getPendingTo() { return mPendingTo; }
