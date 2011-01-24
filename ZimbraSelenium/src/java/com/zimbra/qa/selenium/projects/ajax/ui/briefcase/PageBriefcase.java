@@ -3,6 +3,7 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
@@ -10,11 +11,8 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogMove;
-
 
 /**
  * @author
@@ -59,8 +57,8 @@ public class PageBriefcase extends AbsTab {
 	public boolean zIsActive() throws HarnessException {
 
 		// Make sure the main page is active
-		if (!((AppAjaxClient)MyApplication).zPageMain.zIsActive()) {
-			((AppAjaxClient)MyApplication).zPageMain.zNavigateTo();
+		if (!((AppAjaxClient) MyApplication).zPageMain.zIsActive()) {
+			((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
 		}
 
 		// If the "folders" tree is visible, then Briefcase tab is active
@@ -97,31 +95,33 @@ public class PageBriefcase extends AbsTab {
 		}
 
 		// Make sure we are logged into the Ajax app
-		if (!((AppAjaxClient)MyApplication).zPageMain.zIsActive()) {
-			((AppAjaxClient)MyApplication).zPageMain.zNavigateTo();
+		if (!((AppAjaxClient) MyApplication).zPageMain.zIsActive()) {
+			((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
 		}
 
 		// make sure mail page is loaded
-		long l = 20;
-		while (l > 0) {
-			SleepUtil.sleepSmall();
-			if (this.sIsElementPresent("xpath=//div[@id='zov__main_Mail']"))
-				break;
-			l--;
+		try {
+			ClientSessionFactory
+					.session()
+					.selenium()
+					.waitForCondition(
+							"selenium.isElementPresent(\"xpath=//div[@id='zov__main_Mail']\")",
+							"20000");
+		} catch (Exception ex) {
+			logger
+					.info("Error: mail page is not loaded", ex
+							.fillInStackTrace());
 		}
-
 		// Click on Briefcase icon
 		if (this.sIsElementPresent(PageMain.Locators.zAppbarBriefcase)
 				&& this.sIsVisible(PageMain.Locators.zAppbarBriefcase))
 			zClick(PageMain.Locators.zAppbarBriefcase);
 
 		zWaitForActive();
-
 	}
 
 	@Override
-	public AbsPage zToolbarPressButton(Button button)
-			throws HarnessException {
+	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
 
 		if (button == null)
@@ -158,27 +158,23 @@ public class PageBriefcase extends AbsTab {
 			}
 			String newPageTitle = "Zimbra Docs";
 			locator = Locators.zNewMenuLeftIconBtn;
-			// Click it
+			// Click on New Document icon
 			this.zClick(locator);
-			SleepUtil.sleepLong();
+
+			waitForWindow(newPageTitle, "5000");
+
 			try {
 				zSelectWindow(newPageTitle);
+
 				// if name field appears in the toolbar then document page is
 				// opened
-				int i = 0;
-				for (; i < 30; i++) {
-					if (sIsElementPresent("//*[@id='DWT3_item_1']")) {
-						break;
-					}
-					SleepUtil.sleepSmall();
-				}
+				waitForElement("//*[@id='DWT3_item_1']", "30000");
 
 				if (!sIsVisible("//*[@id='DWT3_item_1']")) {
 					throw new HarnessException("could not open a new file page");
 				} else {
 					DocumentBriefcaseNew.pageTitle = newPageTitle;
 				}
-		
 				page = new DocumentBriefcaseNew(this.MyApplication);
 				return (page);
 			} catch (Exception ex) {
@@ -200,7 +196,7 @@ public class PageBriefcase extends AbsTab {
 			if (!attrs.contains("visible")) {
 				throw new HarnessException(button + " not visible " + attrs);
 			}
-			locator = Locators.zEditFileIconBtn;	
+			locator = Locators.zEditFileIconBtn;
 			page = new DocumentBriefcaseEdit(this.MyApplication);
 		} else if (button == Button.B_DELETE) {
 			// Check if the button is visible
@@ -208,15 +204,15 @@ public class PageBriefcase extends AbsTab {
 			if (!attrs.contains("visible")) {
 				throw new HarnessException(button + " not visible " + attrs);
 			}
-			locator = Locators.zDeleteIconBtn;	
-			page = new DialogDeleteConfirm(MyApplication); ;
+			locator = Locators.zDeleteIconBtn;
+			page = new DialogDeleteConfirm(MyApplication);
 		} else if (button == Button.B_OPEN_IN_SEPARATE_WINDOW) {
 			// Check if the button is visible
 			String attrs = sGetAttribute("css=div[id='zb__BDLV__NEW_BRIEFCASE_WIN']@style");
 			if (!attrs.contains("visible")) {
 				throw new HarnessException(button + " not visible " + attrs);
 			}
-			locator = Locators.zOpenFileInSeparateWindowIconBtn;	
+			locator = Locators.zOpenFileInSeparateWindowIconBtn;
 			page = new DocumentBriefcaseOpen(this.MyApplication);
 		} else if (button == Button.B_MOVE) {
 
@@ -305,8 +301,8 @@ public class PageBriefcase extends AbsTab {
 	}
 
 	@Override
-	public AbsPage zToolbarPressPulldown(Button pulldown,
-			Button option) throws HarnessException {
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
+			throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("
 				+ pulldown + ", " + option + ")");
 
@@ -421,8 +417,79 @@ public class PageBriefcase extends AbsTab {
 	}
 
 	@Override
-	public AbsPage zListItem(Action action, Action option,
-			String subject) throws HarnessException {
+	public AbsPage zListItem(Action action, Action option, String subject)
+			throws HarnessException {
 		throw new HarnessException("implement me!");
+	}
+
+	public void waitForElement(String element, String timeout) {
+		try {
+			ClientSessionFactory.session().selenium().waitForCondition(
+					"selenium.isElementPresent(\"" + element + "\")", timeout);
+		} catch (Exception ex) {
+			logger.info("Error: not present " + element, ex.fillInStackTrace());
+		}
+	}
+
+	public void waitForWindowTitle1(String title, String timeout) {
+		try {
+			ClientSessionFactory
+					.session()
+					.selenium()
+					.waitForCondition(
+							"{var x; for(var windowName in selenium.browserbot.openedWindows ){"
+									+ "var targetWindow = selenium.browserbot.openedWindows[windowName];"
+									+ "if(!selenium.browserbot._windowClosed(targetWindow)&&"
+									+ "targetWindow.document.title == '"
+									+ title + "'){x=windowName;"
+									+ "}}}; x!=null;", timeout);
+		} catch (Exception ex) {
+			logger.info("Error: win title not opened " + title, ex
+					.fillInStackTrace());
+		}
+	}
+
+	public void waitForWindow(String name, String timeout) {
+		try {
+			ClientSessionFactory
+					.session()
+					.selenium()
+					.waitForCondition(
+							"{var x; for(var windowName in selenium.browserbot.openedWindows ){"
+									+ "var targetWindow = selenium.browserbot.openedWindows[windowName];"
+									+ "if((!selenium.browserbot._windowClosed(targetWindow))&&"
+									+ "(targetWindow.name == '" + name
+									+ "' || targetWindow.document.title == '"
+									+ name + "')){x=windowName;"
+									+ "}}}; x!=null;", timeout);
+		} catch (Exception ex) {
+			logger.info("Error: win name not opened " + name, ex
+					.fillInStackTrace());
+		}
+	}
+
+	public void waitForWindowName1(String name, String timeout) {
+		try {
+			ClientSessionFactory.session().selenium().waitForCondition(
+					"{var targetWindow = selenium.browserbot.openedWindows['"
+							+ name + "'];}targetWindow!=null;", timeout);
+		} catch (Exception ex) {
+			logger.info("Error: win name not opened " + name, ex
+					.fillInStackTrace());
+		}
+	}
+
+	public void waitForCondition(String condition, String timeout) {
+		try {
+			// ClientSessionFactory.session().selenium().waitForCondition("var x = selenium.browserbot.findElementOrNull(\"css=[class='ZmBriefcaseDetailListView']\"); x != null && parseInt(x.style.width) >= 0;","5000");
+			ClientSessionFactory.session().selenium().waitForCondition(
+					condition, timeout);
+		} catch (Exception ex) {
+			logger.info("Error: " + condition, ex.fillInStackTrace());
+		}
+	}
+
+	public void closeWindow() {
+		ClientSessionFactory.session().selenium().close();
 	}
 }

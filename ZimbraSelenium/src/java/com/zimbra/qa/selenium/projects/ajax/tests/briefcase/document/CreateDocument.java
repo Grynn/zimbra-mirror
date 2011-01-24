@@ -1,11 +1,9 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
 import org.testng.annotations.Test;
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseNew;
@@ -27,9 +25,9 @@ public class CreateDocument extends AjaxCommonTest {
 
 		// Create document item
 		DocumentItem document = new DocumentItem();
-		
+
 		// Select Briefcase tab
-		SleepUtil.sleepSmall();
+		// SleepUtil.sleepSmall();
 		app.zPageBriefcase.zNavigateTo();
 
 		// Open new document page
@@ -49,16 +47,20 @@ public class CreateDocument extends AjaxCommonTest {
 
 		// Verify document name & text through GUI
 		// Select Briefcase tab
-		SleepUtil.sleepSmall();
+		// SleepUtil.sleepSmall();
 		app.zPageBriefcase.zNavigateTo();
 
-		// ClientSessionFactory.session().selenium().refresh();
 		// refresh briefcase page
+		// ClientSessionFactory.session().selenium().refresh();
 		app.zPageBriefcase.zClick(Locators.zBriefcaseFolderIcon);
 
-		// Click on created document
-		SleepUtil.sleepLong();
+		app.zPageBriefcase
+				.waitForCondition(
+						"selenium.isElementPresent(\"css=[id='zti__main_Briefcase__16_div'][class='DwtTreeItem-selected']\")&&"
+								+ "selenium.isElementPresent(\"css=[id='zl__BDLV__rows'] div[class^='Row']\");",
+						"5000");
 
+		// Click on created document
 		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
 				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
 			app.zPageBriefcase
@@ -70,26 +72,23 @@ public class CreateDocument extends AjaxCommonTest {
 		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
 				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW);
 
-		// Select document opened in a separate window
-		SleepUtil.sleepLong();
-
 		String windowName = document.getDocName();
+		app.zPageBriefcase.waitForWindow(windowName, "5000");
+
+		// Select document opened in a separate window
+		// SleepUtil.sleepLong();
+
 		String name = "";
 		String text = "";
 		try {
 			documentBriefcaseOpen.zSelectWindow(windowName);
 
-			// if name field appears in the toolbar then document page is opened
-			int i = 0;
-			for (; i < 90; i++) {
-				if (documentBriefcaseOpen
-						.sIsElementPresent("css=div[id='zdocument']")) {
-					break;
-				}
-				SleepUtil.sleepSmall();
-			}
-
-			if (!documentBriefcaseOpen.sIsVisible("css=div[id='zdocument']")) {
+			app.zPageBriefcase.waitForElement(
+					"css=td[class='ZhAppContent'] div:contains('"
+							+ document.getDocText() + "')", "60000");
+			
+			if (!documentBriefcaseOpen
+					.sIsVisible("css=td[class='ZhAppContent'] div[id='zdocument']")) {
 				throw new HarnessException(
 						"could not open a file in a separate window");
 			}
@@ -100,7 +99,7 @@ public class CreateDocument extends AjaxCommonTest {
 			// close
 			documentBriefcaseOpen.zSelectWindow(windowName);
 
-			ClientSessionFactory.session().selenium().close();
+			app.zPageBriefcase.closeWindow();
 		} finally {
 			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
 		}
@@ -108,10 +107,7 @@ public class CreateDocument extends AjaxCommonTest {
 		ZAssert.assertStringContains(name, document.getDocName(),
 				"Verify document name through GUI");
 
-		ZAssert.assertEquals(text, document.getDocText(),
+		ZAssert.assertStringContains(text, document.getDocText(),
 				"Verify document text through GUI");
-
-		/*
-		*/
 	}
 }

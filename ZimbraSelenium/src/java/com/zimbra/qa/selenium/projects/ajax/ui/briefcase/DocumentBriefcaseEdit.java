@@ -6,8 +6,6 @@ import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsForm;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
-
 
 public class DocumentBriefcaseEdit extends AbsForm {
 	
@@ -37,7 +35,7 @@ public class DocumentBriefcaseEdit extends AbsForm {
 		//ClientSessionFactory.session().selenium().type("xpath=(//html/body)",text);
 		if(sIsElementPresent(Locators.zBodyField)){
 			logger.info("typing Document Text" + text);
-			SleepUtil.sleepSmall();
+			//SleepUtil.sleepSmall();
 			ClientSessionFactory.session().selenium().type(Locators.zBodyField,text);			
 		}		
 	}
@@ -95,7 +93,7 @@ public class DocumentBriefcaseEdit extends AbsForm {
 		//this.sMouseUp(Locators.zSaveAndCloseIconBtn);
 		
 		// Wait for the page to be saved
-		SleepUtil.sleepSmall();
+		//SleepUtil.sleepSmall();
 	}
 
 
