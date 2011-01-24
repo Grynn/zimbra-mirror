@@ -430,10 +430,10 @@ public class PageBriefcase extends AbsTab {
 					.waitForCondition(
 							"var x = selenium.browserbot.findElementOrNull(\""
 									+ iframe
-									+ "\");if(x!=null){x=x.contentWindow.document.body;}if(browserVersion.isChrome){x.textContent=='"
+									+ "\");if(x!=null){x=x.contentWindow.document.body;}if(browserVersion.isChrome){x.textContent.indexOf('"
 									+ text
-									+ "';}else if(browserVersion.isIE){x.innerText=='"
-									+ text + "';}", timeout);
+									+ "') >= 0;}else if(browserVersion.isIE){x.innerText.indexOf('"
+									+ text + "') >= 0;}", timeout);
 			return true;
 		} catch (Exception ex) {
 			logger.info("Error: text '" + text + "' not present in element: "
