@@ -202,6 +202,21 @@ Function GetDataRoot()
     End If
 End Function
 
+Function IsNonEnUsXp()
+    Dim nLang, sVer
+    Set colOSes = oWMI.ExecQuery("Select * from Win32_OperatingSystem")
+    For Each oOS in colOSes
+        nLang = oOS.OSLanguage
+        sVer = oOS.Version
+        If nLang <> 1033 AND Instr(sVer, "5.") = 1 Then
+            IsNonEnUsXp = true
+        Else
+            IsNonEnUsXp = false
+        End If
+        Exit For
+    Next
+End Function
+
 '------------------------------- main ---------------------------------
 
 Set oFso = CreateObject("Scripting.FileSystemObject")
@@ -219,6 +234,9 @@ sScriptPath = WScript.ScriptFullName
 sScriptDir = Left(sScriptPath, InStrRev(sScriptPath, WScript.ScriptName) - 2)
 sAppRoot = oFso.GetParentFolderName(sScriptDir)
 sLocalAppDir = oShellApp.Namespace(&H1c&).Self.Path
+If IsNonEnUsXp Then ' bug 44608
+    sLocalAppDir = (oFso.GetFolder(sLocalAppDir)).ShortPath
+End If
 sDataRoot = GetDataRoot()
 sVerFile = sDataRoot & "\conf\version"
 sTmpDir = sDataRoot & ".tmp"
