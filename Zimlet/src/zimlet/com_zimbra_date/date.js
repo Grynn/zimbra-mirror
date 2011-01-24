@@ -244,7 +244,7 @@ function() {
 		pattern = pattern.replace(/\{([a-z]+)\}/g, Com_Zimbra_Date.__replaceKeyword);
 
 		// NOTE: can't use \b with asian characters!
-		boundary = this.getMessage("format"+i+".boundary");
+		boundary = this.getMessage("format"+(i+1)+".boundary");
 		if ((boundary != "" && boundary == BOUNDARY_TRUE) || boundary_all == BOUNDARY_TRUE) {
 			pattern = "\\b"+pattern+"\\b";
 		}
