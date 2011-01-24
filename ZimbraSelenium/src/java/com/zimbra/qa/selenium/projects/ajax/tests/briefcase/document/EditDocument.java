@@ -82,13 +82,13 @@ public class EditDocument extends AjaxCommonTest {
 		try {
 			app.zPageBriefcase.zSelectWindow(windowName);
 
-			// if name field appears in the toolbar then document page is opened
-			app.zPageBriefcase
-					.waitForElement("//*[@id='DWT2_item_1']", "60000");
-
-			if (!documentBriefcaseEdit.sIsVisible("//*[@id='DWT2_item_1']")) {
-				throw new HarnessException("could not open an edit file");
+			// if html body appears then document page is opened
+			if (!app.zPageBriefcase.waitForElement("css=iframe[id='DWT9'][class='ZDEditor']", "50000")){
+				throw new HarnessException("could not open an edit document page");
 			}
+		
+			app.zPageBriefcase.waitForText("css=iframe[id='DWT9'][class='ZDEditor']", document.getDocText(), "5000");
+
 			// Fill out the document with the new data
 			document.setDocName("name"
 					+ ZimbraSeleniumProperties.getUniqueString());
@@ -194,18 +194,16 @@ public class EditDocument extends AjaxCommonTest {
 		app.zPageBriefcase.waitForWindow(windowName, "5000");
 
 		// Select document window opened for editing
-		// SleepUtil.sleepLong();
-
+		
 		try {
 			app.zPageBriefcase.zSelectWindow(windowName);
 
-			// if name field appears in the toolbar then document page is opened
-			app.zPageBriefcase
-					.waitForElement("//*[@id='DWT2_item_1']", "60000");
-
-			if (!documentBriefcaseEdit.sIsVisible("//*[@id='DWT2_item_1']")) {
-				throw new HarnessException("could not open an edit file");
+			// if html body appears then document page is opened
+			if (!app.zPageBriefcase.waitForElement("css=iframe[id='DWT9'][class='ZDEditor']", "50000")){
+				throw new HarnessException("could not open an edit document page");
 			}
+		
+			app.zPageBriefcase.waitForText("css=iframe[id='DWT9'][class='ZDEditor']", document.getDocText(), "5000");
 
 			// Fill out the document with the new data
 			document.setDocText("text"
@@ -233,7 +231,6 @@ public class EditDocument extends AjaxCommonTest {
 
 		// Verify document name & text through GUI
 		// Select Briefcase tab
-		// SleepUtil.sleepSmall();
 		app.zPageBriefcase.zNavigateTo();
 
 		// refresh briefcase page
@@ -298,7 +295,7 @@ public class EditDocument extends AjaxCommonTest {
 				"Verify document text through GUI");
 	}
 
-	@Test(description = "Create document through SOAP - edit text through SOAP & verify through GUI", groups = { "smoke" })
+	@Test(description = "Create document & edit text through SOAP & verify through GUI", groups = { "smoke" })
 	public void EditDocument_03() throws HarnessException {
 
 		// Create document item
@@ -473,13 +470,12 @@ public class EditDocument extends AjaxCommonTest {
 		try {
 			app.zPageBriefcase.zSelectWindow(windowName);
 
-			// if name field appears in the toolbar then document page is opened
-			app.zPageBriefcase
-					.waitForElement("//*[@id='DWT2_item_1']", "60000");
-
-			if (!documentBriefcaseEdit.sIsVisible("//*[@id='DWT2_item_1']")) {
-				throw new HarnessException("could not open an edit file");
+			// if html body appears then document page is opened
+			if (!app.zPageBriefcase.waitForElement("css=iframe[id='DWT9'][class='ZDEditor']", "50000")){
+				throw new HarnessException("could not open an edit document page");
 			}
+		
+			app.zPageBriefcase.waitForText("css=iframe[id='DWT9'][class='ZDEditor']", document.getDocText(), "5000");
 
 			// Fill out the document with the new data
 			document.setDocText("text"

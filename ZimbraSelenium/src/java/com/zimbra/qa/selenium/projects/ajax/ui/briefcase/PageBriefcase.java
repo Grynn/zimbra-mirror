@@ -422,34 +422,39 @@ public class PageBriefcase extends AbsTab {
 		throw new HarnessException("implement me!");
 	}
 
-	public void waitForElement(String element, String timeout) {
-		try {
-			ClientSessionFactory.session().selenium().waitForCondition(
-					"selenium.isElementPresent(\"" + element + "\")", timeout);
-		} catch (Exception ex) {
-			logger.info("Error: not present " + element, ex.fillInStackTrace());
-		}
-	}
-
-	public void waitForWindowTitle1(String title, String timeout) {
+	public boolean waitForText(String iframe, String text, String timeout) {
 		try {
 			ClientSessionFactory
 					.session()
 					.selenium()
 					.waitForCondition(
-							"{var x; for(var windowName in selenium.browserbot.openedWindows ){"
-									+ "var targetWindow = selenium.browserbot.openedWindows[windowName];"
-									+ "if(!selenium.browserbot._windowClosed(targetWindow)&&"
-									+ "targetWindow.document.title == '"
-									+ title + "'){x=windowName;"
-									+ "}}}; x!=null;", timeout);
+							"var x = selenium.browserbot.findElementOrNull(\""
+									+ iframe
+									+ "\");if(x!=null){x=x.contentWindow.document.body;}if(browserVersion.isChrome){x.textContent=='"
+									+ text
+									+ "';}else if(browserVersion.isIE){x.innerText=='"
+									+ text + "';}", timeout);
+			return true;
 		} catch (Exception ex) {
-			logger.info("Error: win title not opened " + title, ex
-					.fillInStackTrace());
+			logger.info("Error: text '" + text + "' not present in element: "
+					+ iframe, ex.fillInStackTrace());
+			return false;
 		}
 	}
 
-	public void waitForWindow(String name, String timeout) {
+	public boolean waitForElement(String element, String timeout) {
+		try {
+			ClientSessionFactory.session().selenium().waitForCondition(
+					"selenium.isElementPresent(\"" + element + "\")", timeout);
+			return true;
+		} catch (Exception ex) {
+			logger.info("Error: element not present " + element, ex
+					.fillInStackTrace());
+			return false;
+		}
+	}
+
+	public boolean waitForWindow(String name, String timeout) {
 		try {
 			ClientSessionFactory
 					.session()
@@ -462,30 +467,22 @@ public class PageBriefcase extends AbsTab {
 									+ "' || targetWindow.document.title == '"
 									+ name + "')){x=windowName;"
 									+ "}}}; x!=null;", timeout);
+			return true;
 		} catch (Exception ex) {
-			logger.info("Error: win name not opened " + name, ex
-					.fillInStackTrace());
+			logger.info("Error: win not opened " + name, ex.fillInStackTrace());
+			return false;
 		}
 	}
 
-	public void waitForWindowName1(String name, String timeout) {
-		try {
-			ClientSessionFactory.session().selenium().waitForCondition(
-					"{var targetWindow = selenium.browserbot.openedWindows['"
-							+ name + "'];}targetWindow!=null;", timeout);
-		} catch (Exception ex) {
-			logger.info("Error: win name not opened " + name, ex
-					.fillInStackTrace());
-		}
-	}
-
-	public void waitForCondition(String condition, String timeout) {
+	public boolean waitForCondition(String condition, String timeout) {
 		try {
 			// ClientSessionFactory.session().selenium().waitForCondition("var x = selenium.browserbot.findElementOrNull(\"css=[class='ZmBriefcaseDetailListView']\"); x != null && parseInt(x.style.width) >= 0;","5000");
 			ClientSessionFactory.session().selenium().waitForCondition(
 					condition, timeout);
+			return true;
 		} catch (Exception ex) {
 			logger.info("Error: " + condition, ex.fillInStackTrace());
+			return false;
 		}
 	}
 

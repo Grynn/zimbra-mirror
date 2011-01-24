@@ -30,19 +30,8 @@ public class DocumentBriefcaseOpen extends AbsForm {
 		return this.getClass().getName();
 	}
 
-	public void typeDocumentText(String text) throws HarnessException {
-		ClientSessionFactory.session().selenium().selectFrame(Locators.zFrame);
-		// ClientSessionFactory.session().selenium().selectFrame("css=iframe[id='DWT9',class='ZDEditor']");
-		// ClientSessionFactory.session().selenium().type("xpath=(//html/body)","fghjghj");
-		if (sIsElementPresent(Locators.zBodyField)) {
-			ClientSessionFactory.session().selenium().type(Locators.zBodyField,
-					text);
-		}
-	}
-
 	public String retriveDocumentText() throws HarnessException {
 		// ClientSessionFactory.session().selenium().selectFrame(Locators.zFrame);
-		// ClientSessionFactory.session().selenium().selectFrame("css=iframe[id='DWT9',class='ZDEditor']");
 		String text = null;
 		if (zIsVisiblePerPosition(Locators.zDocumentBodyField, 0, 0)) {
 			// text = zGetHtml(Locators.zBodyField);
@@ -66,23 +55,7 @@ public class DocumentBriefcaseOpen extends AbsForm {
 			sType(Locators.zNameField, text);
 	}
 
-	@Override
 	public void zFill(IItem item) throws HarnessException {
-		logger.info("DocumentBriefcaseEdit(ZimbraItem)");
-		logger.info(item.prettyPrint());
-
-		// Make sure the item is a DocumentItem
-		if (!(item instanceof DocumentItem)) {
-			throw new HarnessException(
-					"Invalid item type - must be DocumentItem");
-		}
-
-		// Convert object to DocumentItem
-		DocumentItem docItem = (DocumentItem) item;
-
-		// Fill out the form
-		typeDocumentText(docItem.getDocText());
-		typeDocumentName(docItem.getDocName());
 	}
 
 	@Override
