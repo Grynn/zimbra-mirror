@@ -1010,16 +1010,31 @@ public class PushChanges {
                 type == MailItem.Type.WIKI) {
             syncWikiItem((WikiItem)item, create);
         } else {
-            if (ombx.getRemoteServerVersion().isAtLeast(InitialSync.sDocumentSyncHistoryVersion) &&
-                    !create)
-                checkDocumentSyncConflict(item);
-            Pair<Integer,Integer> resp = ombx.sendMailItem(item);
-            if (create) {
-                if (!ombx.renumberItem(sContext, id, type, resp.getFirst())) {
-                    return true;
+            RevisionInfo lastRev = null;
+            if (ombx.getRemoteServerVersion().isAtLeast(InitialSync.sDocumentSyncHistoryVersion) && 
+                    !create) {
+                List<RevisionInfo> revInfo = checkDocumentSyncConflict(item);
+                if (revInfo.size() > 0) {
+                    //list documents always returns newest first
+                    lastRev = revInfo.get(0);
                 }
             }
-            ombx.setSyncedVersionForMailItem("" + item.getId(), resp.getSecond());
+            //only upload document if we have a newer revision or modified content
+            if (lastRev == null || !(lastRev.getVersion() == item.getVersion() && lastRev.getTimestamp() == item.getDate())) { 
+                Pair<Integer,Integer> resp = ombx.sendMailItem(item);
+                if (create) {
+                    if (!ombx.renumberItem(sContext, id, type, resp.getFirst()))
+                        return true;
+                }
+                ombx.setSyncedVersionForMailItem("" + item.getId(), resp.getSecond());
+            }
+            //set tags
+            Element request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
+            Element action = request.addElement(MailConstants.E_ACTION);
+            action.addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE);
+            action.addAttribute(MailConstants.A_TAGS, item.getTagString()); 
+            action.addAttribute(MailConstants.A_ID, item.getId());
+            ombx.sendRequest(request);
         }
 
         synchronized (ombx) {
@@ -1032,7 +1047,7 @@ public class PushChanges {
         }
     }
 
-    private void checkDocumentSyncConflict(MailItem item) throws ServiceException {
+    private List<RevisionInfo> checkDocumentSyncConflict(MailItem item) throws ServiceException {
         int id = item.getId();
         int lastSyncVersion = ombx.getLastSyncedVersionForMailItem(id);
         Element request = new Element.XMLElement(MailConstants.LIST_DOCUMENT_REVISIONS_REQUEST);
@@ -1043,6 +1058,7 @@ public class PushChanges {
         Iterator<Element> iter = response.elementIterator(MailConstants.E_DOC);
         boolean conflict = false;
         ArrayList<SyncExceptionHandler.Revision> revisions = new ArrayList<SyncExceptionHandler.Revision>();
+        List<RevisionInfo> revInfo = new ArrayList<RevisionInfo>();
         while (iter.hasNext()) {
             Element e = iter.next();
             int ver = (int)e.getAttributeLong(MailConstants.A_VERSION);
@@ -1054,10 +1070,12 @@ public class PushChanges {
                 rev.modifiedDate = e.getAttributeLong(MailConstants.A_MODIFIED_DATE);
                 revisions.add(rev);
             }
+            revInfo.add(new RevisionInfo(ver, e.getAttributeLong(MailConstants.A_MODIFIED_DATE), (int) e.getAttributeLong(MailConstants.A_FOLDER)));
         }
         if (conflict) {
             SyncExceptionHandler.logDocumentEditConflict(ombx, item, revisions);
         }
+        return revInfo;
     }
 
     private boolean syncMessage(int id) throws ServiceException {
