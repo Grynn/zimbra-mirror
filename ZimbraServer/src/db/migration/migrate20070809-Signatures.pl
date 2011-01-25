@@ -2,7 +2,7 @@
 # 
 # ***** BEGIN LICENSE BLOCK *****
 # Zimbra Collaboration Suite Server
-# Copyright (C) 2007, 2008, 2009, 2010 Zimbra, Inc.
+# Copyright (C) 2007, 2008, 2010 Zimbra, Inc.
 # 
 # The contents of this file are subject to the Zimbra Public License
 # Version 1.3 ("License"); you may not use this file except in
@@ -42,7 +42,7 @@ if ($ismaster ne "true") {
 	exit;
 }
 
-my @attrs=("zimbraPrefMailSignature");
+my @attrs=("zimbraPrefMailSignature", "zimbraPrefIdentityName");
 
 print "Beginning identity migration";
 my $ld = Net::LDAPapi->new(-url=>"$host");
@@ -53,7 +53,7 @@ if ($host !~ /^ldaps/i) {
 $status = $ld->bind_s($binddn,$bindpwd);
 $status = $ld->search_s("",LDAP_SCOPE_SUBTREE,"(&(!(zimbraSignatureID=*))(zimbraPrefMailSignature=*))",\@attrs,0,$result);
 
-my ($ent,$dn,$attr,$sigContent,$rdn, $rdnValue, $ug, $sigId, $sigName, $sigDN, $baseDN);
+my ($ent,$dn,$sigRdn,$sigContent,$rdn, $rdnValue, $ug, $sigId, $sigName, $sigDN, $baseDN);
 
 for ($ent = $ld->first_entry; $ent != 0; $ent = $ld->next_entry) {
 	#
@@ -66,8 +66,9 @@ for ($ent = $ld->first_entry; $ent != 0; $ent = $ld->next_entry) {
 	($rdn, $sigName) = split /,/, $dn, 2;
 	($rdn, $sigName) = split /=/, $rdn, 2;
 
-	$attr = $ld->first_attribute;
-	$sigContent=($ld->get_values($attr))[0];
+	#$attr = $ld->first_attribute;
+	$sigContent=($ld->get_values("zimbraPrefMailSignature"))[0];
+	$sigRdn=($ld->get_values("zimbraPrefIdentityName"))[0];
 	$ug = Data::UUID->new;
 	$sigId = $ug->create_str();
 
@@ -83,12 +84,12 @@ for ($ent = $ld->first_entry; $ent != 0; $ent = $ld->next_entry) {
 	if ($rdn eq "uid" ) {
 		%ldap_modifications = (
 			"zimbraSignatureId", "$sigId",
-			"zimbraSignatureName", "$sigName",
+			"zimbraSignatureName", "$sigRdn",
 		);
 		$ld->modify_s($sigDN,\%ldap_modifications);	
 	} else {
 		%ldap_modifications = (
-			"zimbraSignatureName", "$sigName",
+			"zimbraSignatureName", "$sigRdn",
 			"objectClass", "zimbraSignature",
 			"zimbraSignatureId", "$sigId",
 			"zimbraPrefMailSignature", "$sigContent",
