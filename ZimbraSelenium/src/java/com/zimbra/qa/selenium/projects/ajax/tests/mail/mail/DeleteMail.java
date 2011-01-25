@@ -120,7 +120,6 @@ public class DeleteMail extends AjaxCommonTest {
 		}
 		ZAssert.assertNull(found, "Verify the message is no longer in the inbox");
 
-		throw new HarnessException("testing!");
 	}
 
 	@DataProvider(name = "DataProviderDeleteKeys")
