@@ -4169,12 +4169,54 @@ Dwt_Button_XFormItem.prototype.constructWidget = function () {
 		widget.setImage(icon);
 	}
 	
+	var isToolTip = false;	
 	var toolTipContent = this.getInheritedProperty("toolTipContent");
 	if(toolTipContent != null) {
 		widget.setToolTipContent(toolTipContent);
+		isToolTip = true;
 	}
 	
-	widget.setText(this.getLabel());
+        var labelContent = this.getLabel();
+	
+	try{
+		var size = Dwt.getSize(this.getContainer());
+		if(labelContent){
+			var totalCharWidth = AjxStringUtil.getWidth(labelContent);
+			var textLength;
+			if(icon){	
+				textLength = size.x - 42; // exclude icons, paddings, margin, borders
+			}
+			else{
+				textLength = size.x - 22; // exclude paddings, margin, borders
+			}
+			
+			if( (textLength > 0) && (totalCharWidth > textLength)){
+				if(!isToolTip){
+                                	widget.setToolTipContent(labelContent);
+                                }
+
+				var totalNumber = labelContent.length;
+				var textLength = textLength - AjxStringUtil.getWidth("..."); // three '.'
+				var maxNumberOfLetters= Math.floor(textLength * totalNumber / totalCharWidth);
+				if(textLength > 0){
+					labelContent = labelContent.substring(0, maxNumberOfLetters) + "...";
+				}
+				else{
+					labelContent = "";
+				}
+			}
+			 
+			el =  widget.getHtmlElement();
+                        var tableEl = el.firstChild;
+                       	if(!tableEl.style.width){
+                        	tableEl.style.width = "100%";
+                        }
+
+		}		
+	}catch(ex){
+	}
+
+	widget.setText(labelContent);
 
 	var onActivateMethod = this.getOnActivateMethod();
 	if (onActivateMethod != null) {

@@ -1673,7 +1673,7 @@ function(str, bold) {
 		var span1 = AjxStringUtil._testSpan = document.createElement("SPAN");
 		var span2 = AjxStringUtil._testSpanBold = document.createElement("SPAN");
 		span1.style.position = span2.style.position = Dwt.ABSOLUTE_STYLE;
-		var shellEl = appCtxt.getShell().getHtmlElement();
+		var shellEl = DwtShell.getShell(window).getHtmlElement();
 		shellEl.appendChild(span1);
 		shellEl.appendChild(span2);
 		Dwt.setLocation(span1, Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
