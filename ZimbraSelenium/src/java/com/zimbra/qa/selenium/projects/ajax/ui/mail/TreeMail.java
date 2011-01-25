@@ -10,6 +10,7 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
 
 
 /**
@@ -31,42 +32,100 @@ public class TreeMail extends AbsTree {
 	protected AbsPage zTreeItem(Action action, SavedSearchFolderItem savedSearchItem) throws HarnessException {
 		AbsPage page = null;
 		String locator = null;
+		int delayMillis = 0;
 	
 		// TODO: implement me!
 		
+		if ( locator == null )
+			throw new HarnessException("locator is null for action "+ action);
+		
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("Unable to locator folder in tree "+ locator);
+		
+		
+		// Default behavior.  Click the locator
+		zClick(locator);
+
+		if ( page != null ) {
+			
+			// Wait for the page to become active, if it was specified
+			page.zWaitForActive();
+		}
+
+		this.zClick(locator);
+		
+		if ( delayMillis > 0 ) {
+			
+			// Sleep for a bit, if it was specified
+			SleepUtil.sleep(delayMillis);
+			
+		}
+
 		return (page);
 	}
 
 	protected AbsPage zTreeItem(Action action, FolderItem folderItem) throws HarnessException {
 		AbsPage page = null;
 		String locator = null;
+		int delayMillis = 0;
 		
 		if ( action == Action.A_LEFTCLICK ) {
 			
 			locator = "id=zti__main_Mail__"+ folderItem.getId() +"_textCell";
 			
-			if ( !this.sIsElementPresent(locator) ) {
-				throw new HarnessException("Unable to locator folder in tree "+ locator);
-			}
-
-			this.zClick(locator);
-			
-			// Wait for the page to load
-			SleepUtil.sleepSmall();
-			
-			// No result page is returned in this case ... use app.zPageMail
-			page = null;
-			
 			// FALL THROUGH
+
+		} else if ( action == Action.A_RIGHTCLICK ) {
+			
+			// Currently, the harness must left-click + context shortcut key
+			// to activate the shortcut
+			
+			// Select the folder
+			this.zTreeItem(Action.A_LEFTCLICK, folderItem);
+			
+			// Click on the ContextMenu shortcut
+			zKeyboard.zTypeCharacters(Shortcut.S_RIGHTCLICK.getKeys());															
+				
+			// return a context menu
+			return (new ContextMenu(MyApplication));
 
 		} else {
 			throw new HarnessException("Action "+ action +" not yet implemented");
+		}
+
+		
+		if ( locator == null )
+			throw new HarnessException("locator is null for action "+ action);
+		
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("Unable to locator folder in tree "+ locator);
+		
+		
+		// Default behavior.  Click the locator
+		zClick(locator);
+
+		if ( page != null ) {
+			
+			// Wait for the page to become active, if it was specified
+			page.zWaitForActive();
+		}
+
+		this.zClick(locator);
+		
+		if ( delayMillis > 0 ) {
+			
+			// Sleep for a bit, if it was specified
+			SleepUtil.sleep(delayMillis);
+			
 		}
 
 		return (page);
 
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.zimbra.qa.selenium.framework.ui.AbsTree#zPressButton(com.zimbra.qa.selenium.framework.ui.Button)
+	 */
 	@Override
 	public AbsPage zPressButton(Button button) throws HarnessException {
 		
