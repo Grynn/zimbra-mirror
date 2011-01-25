@@ -187,7 +187,41 @@
 		</jar>
 	</target>
 
-	<target name="jar-staf" depends="jar-staf-selenium" description="Creates all the STAF jar files">
+	<target name="jar-staf-results" depends="compile" description="Creates the STAF jar file for the results service">
+
+		<property name="build.staf.selenium" location="${build.dir}/staf/results" />
+		<property name="build.staf.selenium.jars.dir" location="${build.staf.selenium}/STAF-INF/jars" />
+		<property name="build.staf.selenium.classes.dir" location="${build.staf.selenium}/STAF-INF/classes" />
+
+		<copy todir="${build.staf.selenium.classes.dir}">
+			<fileset dir="${build.classes.dir}" />
+		</copy>
+
+		<copy todir="${build.staf.selenium.jars.dir}">
+			<fileset dir="${common.dir}/jars">
+				<include name="apache-log4j-extras-1.0.jar" />
+				<include name="commons-cli-1.2.jar" />
+				<include name="dom4j-1.5.2.jar" />
+				<include name="jaxen-1.1.1.jar" />
+				<include name="log4j-1.2.16.jar" />
+			</fileset>
+			<fileset dir="${common.dir}/build">
+				<include name="zimbracommon.jar" />
+			</fileset>
+		</copy>
+
+		<jar destfile="${dist.lib.dir}/zimbratestngresults.jar" basedir="${build.staf.selenium}">
+			<manifest>
+				<attribute name="Main-Class" value="staf.Driver" />
+				<section name="staf/service/info">
+					<attribute name="Service-Class" value="com.zimbra.qa.selenium.results.ResultsStaf" />
+					<attribute name="Packaged-Jars" value="guava-r07 commons-beanutils-1.7 commons-configuration-1.5 commons-lang-2.4 ezmorph-1.0.6 json-lib-2.3-jdk15 ocutil-2.4.2 selenium-java-client-driver-1.0-SNAPSHOT selenium-server testng-5.12.1 xalan apache-log4j-extras-1.0 commons-cli-1.2 commons-code-1.4 commons-configuration-1.5 commons-httpclient-3.1 commons-logging dom4j-1.5.2 jaxen-1.1.1 libidn-1.17 log4j-1.2.16 mail resources zimbracommon zimbra-native zimbrasoap zimbrastore" />
+				</section>
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="jar-staf" depends="jar-staf-selenium, jar-staf-results" description="Creates all the STAF jar files">
 	</target>
 
 
