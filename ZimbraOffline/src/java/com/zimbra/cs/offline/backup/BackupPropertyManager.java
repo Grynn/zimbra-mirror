@@ -14,14 +14,18 @@
  */
 package com.zimbra.cs.offline.backup;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.offline.OfflineLC;
+import com.zimbra.cs.offline.OfflineLog;
 
 public class BackupPropertyManager {
     
@@ -109,12 +113,44 @@ public class BackupPropertyManager {
         return (val > 0 ? val : 1);
     }
 
+    private String getDefaultBackupPath() {
+        String defaultBackupPath = null;
+        try {
+            defaultBackupPath = new File(OfflineLC.zdesktop_backup_dir.value()).getCanonicalPath();
+        } catch (IOException e) {
+            OfflineLog.offline.error("Unable to set default path to "+OfflineLC.zdesktop_backup_dir.value(), e);
+        }
+        return defaultBackupPath;
+    }
+
     public void testAndSetDefaultBackupPath() throws ServiceException {
         OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
         Account localAccount = prov.getLocalAccount();
         String backupPath = localAccount.getAttr(OfflineProvisioning.A_zimbraPrefOfflineBackupPath);
         if (backupPath == null) {
-            prov.setAccountAttribute(localAccount, OfflineProvisioning.A_zimbraPrefOfflineBackupPath, OfflineLC.zdesktop_backup_dir.value());
+            prov.setAccountAttribute(localAccount, OfflineProvisioning.A_zimbraPrefOfflineBackupPath, getDefaultBackupPath());
+        } else {
+            try {
+                validateBackupPath(backupPath);
+            } catch (ServiceException se) {
+                OfflineLog.offline.warn("Current backup path is invalid; setting to default", se);
+                prov.setAccountAttribute(localAccount, OfflineProvisioning.A_zimbraPrefOfflineBackupPath, getDefaultBackupPath());
+            }
+        }
+    }
+    
+    public void validateBackupPath(String backupPath) throws ServiceException {
+        File testDir = new File((String) backupPath);
+        if (testDir.getPath().indexOf(LC.zimbra_home.value()) == 0) {
+            throw ServiceException.INVALID_REQUEST("Backups path "+testDir+" may not be placed under Zimbra Desktop data dir "+LC.zimbra_home.value(), null);
+        }
+        if (!testDir.exists()) {
+            if (!testDir.mkdirs()) {
+                throw ServiceException.INVALID_REQUEST("Directory "+testDir+" does not exist can could not mkdir", null);
+            }
+        }
+        if (!testDir.canRead() || !testDir.canWrite()) {
+            throw ServiceException.INVALID_REQUEST("Need read/write permissions on directory "+testDir, null);
         }
     }
 }

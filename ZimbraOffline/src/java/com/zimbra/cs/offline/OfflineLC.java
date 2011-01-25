@@ -357,7 +357,7 @@ public class OfflineLC {
         // size threshold for blob store compression
         zdesktop_volume_compression_threshold = new KnownKey("zdesktop_volume_compression_threshold", "131072");
 
-        zdesktop_backup_dir = new KnownKey("zdesktop_backup_dir", "${zimbra_home}/backup");
+        zdesktop_backup_dir = new KnownKey("zdesktop_backup_dir", "${zimbra_home}/../zd_backup");
         
         //number of io exceptions in a single sync which triggers abort
         zdesktop_sync_io_exception_limit = new KnownKey("zdesktop_sync_io_exception_limit", "10");

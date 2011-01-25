@@ -14,7 +14,6 @@
  */
 package com.zimbra.cs.offline.backup;
 
-import java.io.File;
 import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
@@ -22,7 +21,7 @@ import com.zimbra.cs.account.AttributeCallback;
 import com.zimbra.cs.account.Entry;
 
 /**
- * Backup Attribute callback. Validates that the specified directory is reabable and writeable 
+ * Backup Attribute callback. Validates that the specified directory is readable and writable 
  *
  */
 public class BackupPathCallback extends AttributeCallback {
@@ -41,14 +40,6 @@ public class BackupPathCallback extends AttributeCallback {
         if (!(attrValue instanceof String)) {
             throw ServiceException.INVALID_REQUEST(attrName+" must be a String", null);
         }
-        File testDir = new File((String)attrValue);
-        if (!testDir.exists()) {
-            if (!testDir.mkdirs()) {
-                throw ServiceException.INVALID_REQUEST("Directory "+testDir+" does not exist can could not mkdir", null);
-            }
-        }
-        if (!testDir.canRead() || !testDir.canWrite()) {
-            throw ServiceException.INVALID_REQUEST("Need read/write permissions on directory "+testDir, null);
-        }
+        BackupPropertyManager.getInstance().validateBackupPath((String) attrValue);
     }
 }

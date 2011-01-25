@@ -101,7 +101,7 @@
     <value>ffffffff-ffff-ffff-ffff-ffffffffffff</value>
   </key>
   <key name="zdesktop_backup_dir">
-    <value>${zimbra_home}/backup</value>
+    <value>${zimbra_home}/../zd_backup</value>
   </key>
   <key name="zdesktop_sync_io_exception_limit">
     <value>10</value>  
