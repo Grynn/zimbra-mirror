@@ -131,11 +131,14 @@ public class ExecuteHarnessMain {
 	public void setTestOutputFolderName(String path) {
 		
 		// Append the app, browser, locale
-		path += "/" +
-            ZimbraSeleniumProperties.getAppType() +"/" + 
-            ZimbraSeleniumProperties.getStringProperty("browser") + "/" +  
-            ZimbraSeleniumProperties.getStringProperty("locale") ;  		
-
+		path += "/"
+			+ ZimbraSeleniumProperties.getAppType()
+			+ "/"
+			+ ZimbraSeleniumProperties.getStringProperty(
+					ZimbraSeleniumProperties.getLocalHost() + ".browser",
+					ZimbraSeleniumProperties.getStringProperty("browser"))
+			+ "/" + ZimbraSeleniumProperties.getStringProperty("locale");
+		
 		// Make sure the path exists
 		File output = new File(path);
 		if ( !output.exists() )		output.mkdirs();

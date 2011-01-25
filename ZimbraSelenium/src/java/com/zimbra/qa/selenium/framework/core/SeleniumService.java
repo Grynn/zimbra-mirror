@@ -335,7 +335,10 @@ public class SeleniumService {
 		mode = SeleniumMode.Local;
 		SeleniumServer = ZimbraSeleniumProperties.getStringProperty("serverName", "localhost");
 		SeleniumPort = ZimbraSeleniumProperties.getIntProperty("serverPort", 4444);
-		SeleniumBrowser = ZimbraSeleniumProperties.getStringProperty("browser");
+		SeleniumBrowser = ZimbraSeleniumProperties.getStringProperty(
+				ZimbraSeleniumProperties.getLocalHost() + ".browser",
+				ZimbraSeleniumProperties.getStringProperty("browser")).split(
+				"_")[0];
 		SeleniumBrowserVersion = ZimbraSeleniumProperties.getStringProperty("browserVersion");
 
 		if (modeProp.equals(SeleniumMode.Local.toString().toLowerCase())) {

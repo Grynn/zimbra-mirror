@@ -2,14 +2,13 @@
 package com.zimbra.qa.selenium.framework.util;
 
 import java.io.File;
+import java.net.InetAddress;
 import java.util.Locale;
 import java.util.ResourceBundle;
-
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 
 public class ZimbraSeleniumProperties {
@@ -17,7 +16,7 @@ public class ZimbraSeleniumProperties {
 	
 	// Use these strings as arguments for some standard properties, e.g. ZimbraSeleniumProperties.getStringProperty(PropZimbraServer, "default");
 	public static final String PropZimbraVersion = "zimbraserverversion"; 
-	
+	private static InetAddress localMachine;
 	private static ZimbraSeleniumProperties instance = null;
 	private File BaseDirectory = null;
 	private File PropertiesConfigurationFilename = null;	
@@ -239,6 +238,15 @@ public class ZimbraSeleniumProperties {
             params, WAIT_FOR_OPERAND.EQ, true, timeout, 1000);
    }
 	
+	public static String getLocalHost() {
+		try {
+			localMachine = InetAddress.getLocalHost();
+			return localMachine.getHostName();
+		} catch (Exception e) {
+			logger.info(e.fillInStackTrace());
+			return "127.0.0.1";
+		}
+	}
 
 	/**
 	 * Get Base URL for selenium to open to access the application
