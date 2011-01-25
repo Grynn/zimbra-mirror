@@ -247,6 +247,7 @@ public class PageMail extends AbsTab {
 		//
 		String locator = null;			// If set, this will be clicked
 		AbsPage page = null;	// If set, this page will be returned
+		int delayMillis = 0;	// If >0, this method will wait that duration before returning
 		
 		// Based on the button specified, take the appropriate action(s)
 		//
@@ -275,6 +276,8 @@ public class PageMail extends AbsTab {
 				locator = "id="+ Locators.zGetMailIconBtnCLVID;
 			}
 
+			// Wait for a bit to let the inbox load
+			delayMillis = 3000;
 			
 		} else if ( button == Button.B_DELETE ) {
 			
@@ -449,6 +452,12 @@ public class PageMail extends AbsTab {
 			
 		}
 
+		if ( delayMillis > 0 ) {
+			
+			// Wait for a while before returning
+			SleepUtil.sleep(delayMillis);
+			
+		}
 		return (page);
 	}
 
