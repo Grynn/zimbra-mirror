@@ -8,10 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.zimbra.qa.selenium.framework.items.IItem;
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.AbsTree;
-import com.zimbra.qa.selenium.framework.ui.Action;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
 
@@ -79,6 +76,13 @@ public class TreePreferences extends AbsTree {
 		throw new HarnessException("Not implemented.  Use zTreeItem(Action action, TreeItem item) instead");
 	}
 	
+	/**
+	 * Not implemented.  There are no buttons in the preferences tree.
+	 */
+	public AbsPage zPressButton(Button button) throws HarnessException {
+		throw new HarnessException("Not implemented.  There are no buttons in the preferences tree.");
+	}
+
 	private static final Map<TreeItem, String> itemToLocator = createItemToLocator();
 	private static Map<TreeItem, String> createItemToLocator() {
 		
@@ -115,5 +119,6 @@ public class TreePreferences extends AbsTree {
 	public boolean zIsActive() throws HarnessException {
 		throw new HarnessException("implement me");
 	}
+
 
 }

@@ -55,7 +55,11 @@ public class Shortcut {
 	public static final Shortcut S_MAIL_MARKFLAG = new Shortcut("S_MAIL_MARKFLAG", 	"mf");
 	public static final Shortcut S_MAIL_MARKREAD = new Shortcut("S_MAIL_MARKFLAG", 	"mr");
 	public static final Shortcut S_MAIL_MARKUNREAD = new Shortcut("S_MAIL_MARKFLAG",		"mu");
+
+	// Folders shortcuts
+	public static final Shortcut S_NEWFOLDER = new Shortcut("S_NEWFOLDER", "nf");
 	
+	// Shortcut properties
 	private final String ID;
 	private final String Keys;
 	

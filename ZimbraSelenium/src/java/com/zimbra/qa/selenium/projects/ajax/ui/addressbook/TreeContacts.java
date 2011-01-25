@@ -3,15 +3,9 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.IItem;
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.AbsTree;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Shortcut;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
 
 
 /**
@@ -103,6 +97,63 @@ public class TreeContacts extends AbsTree {
 	}
 	
 
+	@Override
+	public AbsPage zPressButton(Button button) throws HarnessException {
+		
+		if ( button == null )
+			throw new HarnessException("Button cannot be null");
+			
+		AbsPage page = null;
+		String locator = null;
+		
+		if ( button == Button.B_TREE_NEWADDRESSBOOK ) {
+			
+			locator = null;
+			page = null;
+			
+			// TODO: implement me
+			
+			// FALL THROUGH
+
+		} else if ( button == Button.B_TREE_NEWTAG ) { 
+			
+			locator = null;
+			page = null;
+			
+			// TODO: implement me
+			
+			// FALL THROUGH
+
+		} else {
+			throw new HarnessException("no logic defined for button "+ button);
+		}
+
+		if ( locator == null ) {
+			throw new HarnessException("locator was null for button "+ button);
+		}
+		
+		// Default behavior, process the locator by clicking on it
+		//
+		
+		// Make sure the button exists
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
+		
+		// Click it
+		this.zClick(locator);
+		
+		// If page was specified, make sure it is active
+		if ( page != null ) {
+			
+			// This function (default) throws an exception if never active
+			page.zWaitForActive();
+			
+		}
+
+		return (page);
+
+	}
+
 
 	/* (non-Javadoc)
 	 * @see framework.ui.AbsTree#myPageName()
@@ -117,5 +168,6 @@ public class TreeContacts extends AbsTree {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
 
 }

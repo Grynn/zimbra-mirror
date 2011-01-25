@@ -116,8 +116,20 @@ public class Button {
 	
     //Addressbook button
 	public static final Button B_EDIT = new Button("zb__CNS__EDIT");
-	private final String ID;
 	
+	// Tree buttons
+	public static final Button B_TREE_NEWFOLDER = new Button("B_TREE_NEWFOLDER");
+	public static final Button B_TREE_NEWADDRESSBOOK = new Button("B_TREE_NEWADDRESSBOOK");
+	public static final Button B_TREE_NEWCALENDAR = new Button("B_TREE_NEWCALENDAR");
+	public static final Button B_TREE_NEWTASKLIST = new Button("B_TREE_NEWTASKLIST");
+	public static final Button B_TREE_NEWBRIEFCASE = new Button("B_TREE_NEWBRIEFCASE");
+	public static final Button B_TREE_NEWTAG = new Button("B_TREE_NEWTAG");
+	
+	
+	
+	// Button properties
+	private final String ID;
+
 	protected Button(String id) {
 		this.ID = id;
 	}

@@ -31,6 +31,14 @@ public abstract class AbsTree extends AbsPage {
 	}
 	
 	/**
+	 * Click on a button
+	 * @param button
+	 * @return
+	 * @throws HarnessException
+	 */
+	public abstract AbsPage zPressButton(Button button) throws HarnessException;
+
+	/**
 	 * Apply the specified action on the specified address book
 	 * @param action
 	 * @param addressbook

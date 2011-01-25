@@ -6,13 +6,8 @@ package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.IItem;
-import com.zimbra.qa.selenium.framework.items.SavedSearchFolderItem;
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.AbsTree;
-import com.zimbra.qa.selenium.framework.ui.Action;
+import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 
@@ -72,6 +67,65 @@ public class TreeMail extends AbsTree {
 
 	}
 	
+	@Override
+	public AbsPage zPressButton(Button button) throws HarnessException {
+		
+		if ( button == null )
+			throw new HarnessException("Button cannot be null");
+			
+		AbsPage page = null;
+		String locator = null;
+		
+		if ( button == Button.B_TREE_NEWFOLDER ) {
+			
+			locator = "id=overviewHeader-Text FakeAnchor";
+			page = new DialogCreateFolder(MyApplication);
+			
+			if ( !this.sIsElementPresent(locator) ) {
+				throw new HarnessException("Unable to locator folder in tree "+ locator);
+			}
+
+			this.zClick(locator);
+			
+			// Wait for the page to load
+			SleepUtil.sleepSmall();
+			
+			// No result page is returned in this case ... use app.zPageMail
+			page = null;
+			
+			// FALL THROUGH
+
+		} else {
+			throw new HarnessException("no logic defined for button "+ button);
+		}
+
+		if ( locator == null ) {
+			throw new HarnessException("locator was null for button "+ button);
+		}
+		
+		// Default behavior, process the locator by clicking on it
+		//
+		
+		// Make sure the button exists
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
+		
+		// Click it
+		this.zClick(locator);
+		
+		// If page was specified, make sure it is active
+		if ( page != null ) {
+			
+			// This function (default) throws an exception if never active
+			page.zWaitForActive();
+			
+		}
+
+		return (page);
+
+
+	}
+
 	/* (non-Javadoc)
 	 * @see framework.ui.AbsTree#zTreeItem(framework.ui.Action, framework.items.FolderItem)
 	 */
@@ -101,6 +155,19 @@ public class TreeMail extends AbsTree {
 		// Return the list of items
 		return (items);
 		
+	}
+	
+	public List<TagItem> zListGetTags() {
+		
+		
+		List<TagItem> items = new ArrayList<TagItem>();
+		
+		// TODO: implement me!
+		
+		// Return the list of items
+		return (items);
+		
+
 	}
 
 
