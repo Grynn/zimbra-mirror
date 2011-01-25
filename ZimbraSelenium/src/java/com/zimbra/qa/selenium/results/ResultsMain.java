@@ -2,43 +2,65 @@ package com.zimbra.qa.selenium.results;
 
 import java.io.File;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.commons.cli.*;
+import org.apache.log4j.*;
+
 
 public class ResultsMain {
 	private static Logger logger = LogManager.getLogger(ResultsMain.class);
 	
-	public static final String xmlfilename = "testng-results.xml";
-	public static final String resultfilename = "BugReports/BugReport.txt";
-	public static final File root = new File(".");
+	public static File root = new File(".");
 	
+    public static void usage(Options o) {
 
-	public static File findFile(String filename, File directory) {
-		
-		// If directory is a file, check if it matches
-		if ( directory.isFile() ) {
-			if ( filename.equals(directory.getName()) ) {
-				// Found it!
-				return (directory);
-			}
-			// Not it
-			return (null);
-		}
-		
-		// Check all the directory contents
-		for (File f : directory.listFiles()) {
-			
-			File found = findFile(filename, f);
-			if ( found != null ) {
-				// Found it!
-				return (found);
-			}
-			
-		}
-		
-		// Not found
-		return (null);
+        HelpFormatter hf = new HelpFormatter();
+        hf.printHelp("ResultsMain -h | -b <arg> [ -l <log4j> ]", o, true);
+        System.exit(1);
+
+    }
+
+	protected static void parseArgs(String[] args) {
+
+        Option h = new Option("h", "help", false, "print usage");
+        Option l = new Option("l", "log4j", true, "log4j.properties file");
+        Option b = new Option("b", "base", true, "base folder (i.e. TestNG folder containing testng-results.xml file");
+
+        Options options = new Options();
+        options.addOption(h);
+        options.addOption(l);
+        options.addOption(b);
+
+        try {
+
+            CommandLineParser parser = new GnuParser();
+
+            CommandLine cl = parser.parse(options, args);
+
+            // Option: -l <log4j.properties>
+            if (cl.hasOption("l")) {
+
+                String propertiesFile = cl.getOptionValue("l");
+                File log4jProperties = new File(propertiesFile);
+                if (log4jProperties.exists()) {
+                    PropertyConfigurator.configure(propertiesFile);
+                    logger.debug("Loaded log4j.properites: " + propertiesFile);
+                }
+
+            }
+
+            if (cl.hasOption("h")) {
+                usage(options);
+            }
+
+            if ( cl.hasOption("b") ) {
+            	root = new File(cl.getOptionValue("b"));
+            }
+
+        } catch (ParseException pe) {
+            System.err.println(pe.toString());
+            usage(options);
+        }
+
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -47,24 +69,14 @@ public class ResultsMain {
 		BasicConfigurator.configure();
 		logger.info("Starting ...");
 
-		// Find the testng-failed.xml file
-		File f = findFile(xmlfilename, root);
-		if ( f == null ) {
-			logger.error("Unable to file "+ xmlfilename +" in "+ root.getAbsolutePath() );
-			return;
-		}
-		logger.info("Using file: "+ f.getCanonicalPath());
+		// Parse any args
+		parseArgs(args);
 
-		
 		// Create the new core
 		ResultsCore core = new ResultsCore();
 		
-		// Configure it
-		core.setResultsXmlFile(f.getAbsolutePath());
-		core.setResultsOutputFile(resultfilename);
-		
 		// Execute it
-		core.execute();
+		core.execute(root);
 		
 		logger.info("Done.");
 		

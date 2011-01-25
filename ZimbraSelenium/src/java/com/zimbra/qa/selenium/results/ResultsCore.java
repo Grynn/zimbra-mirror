@@ -1,19 +1,9 @@
 package com.zimbra.qa.selenium.results;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
-import org.apache.log4j.Appender;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
+import org.apache.log4j.*;
 import org.dom4j.DocumentException;
 
 import com.zimbra.common.soap.Element;
@@ -22,119 +12,385 @@ import com.zimbra.common.util.ByteUtil;
 public class ResultsCore {
 	private static Logger logger = LogManager.getLogger(ResultsCore.class);
 	
-	protected static Logger outputLogger = LogManager.getLogger("output");
-
-	/**
-	 * The testng-failed.xml file
-	 */
-	protected String ResultsXmlFile = null;
-	
-	/**
-	 * Where to write the bug report output
-	 */
-	protected String ResultsOutputFile = null;
+	public enum BugState {
+		UNCONFIRMED,
+		NEW,
+		ASSIGNED,
+		REOPENED,
+		RESOLVED,
+		VERIFIED,
+		CLOSED
+	}
 	
 	public ResultsCore() throws IOException {
 		logger.info("new ResultsCore");
 		
-		this.setResultsOutputFile("BugReports/BugReports.txt");		
 	}
-
-	protected void processResult(String classname, String methodname, String result) {
-
-		// Test case name is the fully qualified name
-		String testcasename = classname + "." + methodname;
+	
+	private static File findFile(String filename, File directory) {
 		
-		// TODO: Read the bugzilla database file to determine bugid, assigninee, etc.
-		String bugid = "NEW";
-		String status = "ASSIGNED";
-		String assignee = "None";
-		
-		// TODO: Determine followup
-		// If result == PASS and no bugid ... don't log
-		if ( "PASS".equals(result) && "NEW".equals(bugid) )
-			return;
-		
-		// If result == PASS and open bug ... need followup (followup = "* ")
-		// If result == PASS and closed bug ... no followup (followup = "")
-		// If result == FAIL and no bugid ... need followup
-		// If result == FAIL and open bug ... no followup
-		// If result == FAIL and closed bug ... need followup
-		String followup = "* ";
-
-		String url = "http://bugzilla.zimbra.com/show_bug.cgi?id=" + bugid;
-		if ( "NEW".equals(bugid) ) {
-			url = "http://bugzilla.zimbra.com/enter_bug.cgi";			
+		// If directory is a file, check if it matches
+		if ( directory.isFile() ) {
+			if ( filename.equals(directory.getName()) ) {
+				// Found it!
+				return (directory);
+			}
+			// Not it
+			return (null);
 		}
 		
-		outputLogger.info(String.format("%s %s %s %s -- %s (%s)",
-				followup,
-				bugid,
-				status,
-				testcasename,
-				url,
-				assignee));
+		// Check all the directory contents
+		for (File f : directory.listFiles()) {
+			
+			File found = findFile(filename, f);
+			if ( found != null ) {
+				// Found it!
+				return (found);
+			}
+			
+		}
+		
+		// Not found
+		return (null);
+	}
 
+	private Map<String, Boolean> getResults(File root) throws UnsupportedEncodingException, IOException, DocumentException {
+		Map<String, Boolean> map = new HashMap<String, Boolean>();
+		
+		// Find the folder containing the "testng-results.xml" file
+		File results = findFile("testng-results.xml", root);
+		if ( results == null ) {
+			logger.error("Unable to find testng-results.xml in "+ root.getAbsolutePath());
+			return (map);
+		}
+		
+		// Open the testng-results.xml file and convert to Element
+        String docStr = new String(ByteUtil.getContent(results), "utf-8");    	
+        Element docElement = Element.parseXML(docStr);
+        
+        for (Element eClass : getElementsFromPath(docElement, "//class")) {
+        	String clazz = eClass.getAttribute("name", "undefined");
+        	
+        	for (Element eTestmethod : getElementsFromPath(eClass, "//test-method")) {
+        		if ( eTestmethod.getAttribute("is-config", "false").equals("true") )
+        			continue; // skip common* methods
+
+        		String method = eTestmethod.getAttribute("name", "undefined");
+        		Boolean status = eTestmethod.getAttribute("status", "FAIL").equals("PASS");
+        		map.put(clazz + "." + method, status);
+        	}
+        }
+        
+        return (map);
 	}
 	
-	
-	protected void processClasses(Element[] classes) {
-		
-		// Example:
-		// <class name="com.zimbra.qa.selenium.projects.client.tests.mail.GetMail
-		//  <test-method name="Test01" status="PASS"/>
-		// </class>
-		//
-		
-		// Iterate each class
-		// Look for <test-methods/> with status="FAIL"
-		//
-		for (Element e: classes) {
-			String classname = e.getAttribute("name", "undefined");
-			Element[] eTestMethods = getElementsFromPath(e, "//test-method");
-			for ( Element eTestMethod : eTestMethods ) {
-				String methodname = eTestMethod.getAttribute("name", "undefined");
-				String status = eTestMethod.getAttribute("status", "PASS");
-			
-				// Build the output file
-				processResult(classname, methodname, status);
+	private static final List<File> paths = new ArrayList<File>() {
+		private static final long serialVersionUID = -4098010628463819580L;
+		{
+			add(new File("/opt/qa/testlogs/BugReports"));
+			add(new File("T:\\BugReports"));
+			add(new File("C:\\BugReports"));
+		}};
 
+	private void getBugzillaData(Map<String, BugState> status, Map<String, List<String>> testcase, Map<String, String> contact) throws IOException {
+
+		// Find where the database files are located
+		File path = null;
+		for (File f : paths) {
+			if ( f.exists() ) {
+				path = f;
+				break;
 			}
 		}
-	}
-	
-	public void execute() throws UnsupportedEncodingException, IOException, DocumentException {
-
-		// Convert the xml file to a document
-        String docStr = new String(ByteUtil.getContent(new File(ResultsXmlFile)), "utf-8");    	
-        Element root = Element.parseXML(docStr);
-        
-        // Find all the <class/> elements
-        Element[] eClasses = getElementsFromPath(root, "//class");
-        processClasses(eClasses);
-        
-	}
-	
-	public String getResultsXmlFile() {
-		return ResultsXmlFile;
-	}
-
-	public void setResultsXmlFile(String resultsXmlFile) {
-		ResultsXmlFile = resultsXmlFile;
-	}
-
-	public String getResultsOutputFile() {
-		return ResultsOutputFile;
-	}
-
-	public void setResultsOutputFile(String resultsOutputFile) throws IOException {
-		ResultsOutputFile = resultsOutputFile;
 		
-		outputLogger.removeAllAppenders();
-		Appender appender = new FileAppender(new PatternLayout("%m%n"), ResultsOutputFile, false);
-		outputLogger.addAppender(appender);
+		if ( path == null ) {
+			logger.error("Unable to open the database path");
+			return;
+		}
+		
+		File bugStatusFile = new File(path, "bugStatus.txt");
+		File bugTestcaseFile = new File(path, "bugTestcase.txt");
+		File bugQAContactFile = new File(path, "bugQaContact.txt");
+
+		BufferedReader reader;
+		String line;
+		
+		reader = new BufferedReader(new FileReader(bugStatusFile));
+		while ( (line=reader.readLine()) != null ) {
+
+			// Example: 50208	RESOLVED
+			String[] values = line.split("\\s");
+			if ( values.length != 2 ) {
+				logger.warn("bugStatus: invalid line: "+ line);
+				continue;
+			}
+			
+			String bugid = values[0];
+			BugState bugState = BugState.valueOf(values[1]);
+						
+			status.put(bugid, bugState);
+			logger.debug("bugStatus: put "+ line);
+			
+		}
+
+		reader = new BufferedReader(new FileReader(bugTestcaseFile));
+		while ( (line=reader.readLine()) != null ) {
+
+			// Example: genesis/data/zmstatctl/basic.rb	29149 40782
+			String[] values = line.split("\\s");
+			if ( values.length <= 1 ) {
+				logger.warn("bugTestcase: invalid line: "+ line);
+				continue;
+			}
+			
+			String bugtestcase = values[0];
+			values = line.replace(bugtestcase, "").split("\\s");
+			
+			testcase.put(bugtestcase, Arrays.asList(values));
+			logger.debug("bugTestcase: put "+ line);
+
+		}
+		
+		reader = new BufferedReader(new FileReader(bugQAContactFile));
+		while ( (line=reader.readLine()) != null ) {
+			
+			// Example: 42337	sarang@zimbra.com
+
+			String[] values = line.split("\\s");
+			if ( values.length != 2 ) {
+				logger.warn("bugQAContact: invalid line: "+ line);
+				continue;
+			}
+			
+			String bugid = values[0];
+			String bugcontact = values[1];
+			
+			contact.put(bugid, bugcontact);
+			logger.debug("bugQAContact: put "+ line);
+
+		}
+		
+		
 
 	}
+	
+	private List<ReportItem> correlateData(Map<String, Boolean> results, Map<String, BugState> bugStatus, Map<String, List<String>> bugTestcase, Map<String, String> bugContact) {
+		List<ReportItem> items = new ArrayList<ReportItem>();
+
+
+		for (Map.Entry<String, Boolean> entry : results.entrySet() ) {
+			String tcID = entry.getKey();
+			Boolean tcResult = entry.getValue();
+			
+			logger.debug("Processing tc: "+ tcID + " result: "+ (tcResult ? "PASS" : "FAIL"));
+
+			ReportItem item = new ReportItem();
+			item.TestCaseID = tcID;
+			item.TestCaseResult = tcResult;
+
+			if ( tcResult ) {
+
+				// Loop through the passing test cases
+				// If no bug is associated, skip it
+				// If a bug is associated and status is OPEN, it needs followup
+				// If a bug is associated and status is CLOSED, it doesn't need followup
+
+				if ( !bugTestcase.containsKey(tcID) ) {
+					logger.debug("Passing TC ("+ tcID +") is not associated with a bug.  Skipping.");
+					continue;
+				}
+
+				for (String id : bugTestcase.get(tcID)) {
+
+					if (!bugStatus.containsKey(id) ) {
+						logger.error("Unable to determine status tc("+ tcID +") ids("+ bugTestcase.get(tcID) +")");
+						continue;
+					}
+
+					BugState state = bugStatus.get(id);
+					if ( state == BugState.VERIFIED || state == BugState.CLOSED ) {
+						item.BugID = id;
+						item.BugStatus = state;
+						item.NeedsFollowUp = false;
+						// Keep searching in case another bug ID needs followup
+					} else {
+						item.BugID = id;
+						item.BugStatus = state;
+						item.NeedsFollowUp = true;
+						break; // This bug needs followup, all done here.
+					}
+
+				}
+
+			} else {
+
+				// Loop through the failing test cases
+				// If no bug is associated, set as NEW for followup
+				// If a bug is associated and status is OPEN, it doesn't need followup
+				// If a bug is associated and status is CLOSED, it does need followup
+
+
+				if ( !bugTestcase.containsKey(tcID) ) {
+
+					// Failure without existing bug
+					item.NeedsFollowUp = true;
+					item.BugID = null;
+					item.BugOwner = null;
+
+				} else {
+
+					for (String id : bugTestcase.get(tcID)) {
+
+						if (!bugStatus.containsKey(id) ) {
+							logger.error("Unable to determine status tc("+ tcID +") ids("+ bugTestcase.get(tcID) +")");
+							continue;
+						}
+
+						BugState state = bugStatus.get(id);
+						if ( state == BugState.NEW || state == BugState.ASSIGNED || state == BugState.REOPENED ) {
+							item.BugID = id;
+							item.BugStatus = state;
+							item.NeedsFollowUp = false;
+							break; // Found the tracking bug, no need to go further
+						} else {
+							item.BugID = id;
+							item.BugStatus = state;
+							item.NeedsFollowUp = true;
+							// Keep searching in case another bug ID needs followup
+						}
+
+					}
+
+				}
+
+			}
+
+			items.add(item);
+		}
+
+
+		return (items);
+	}
+	
+	private String writeReportEntry(ReportItem item) {
+		
+		StringBuilder sb = new StringBuilder();
+		
+		if ( item.NeedsFollowUp ) {
+			sb.append("* ");
+		}
+		
+		if ( item.BugID == null ) {
+			sb.append("NEW ");
+		} else {
+			sb.append(item.BugID).append(' ');
+			sb.append(item.BugStatus).append(' ');
+		}
+		
+		sb.append(item.TestCaseID).append(' ');
+		
+		if ( item.BugID == null ) {
+			sb.append("-- http://bugzilla.zimbra.com/enter_bug.cgi");
+		} else {
+			sb.append("-- http://bugzilla.zimbra.com/show_bug.cgi?id=").append(item.BugID).append(' ');
+		}
+		
+		if ( item.BugOwner != null )
+			sb.append("( ").append(item.BugOwner).append(" )");
+		
+		return (sb.toString());
+
+	}
+	
+	private void writeReport(File root, List<ReportItem> items) throws IOException {
+		
+		// Create the BugReport.txt file as a log4j logger
+		String filename = root.getAbsolutePath() + "/BugReports/BugReport.txt";
+		Layout layout = new PatternLayout("%m%n");
+		FileAppender appender = new FileAppender(layout, filename, false);
+		Logger report = LogManager.getLogger("report");
+		report.setLevel(Level.INFO);
+		report.addAppender(appender);
+		
+		report.info("Automated bug report");
+		report.info("");
+		report.info("");
+		report.info("Date: " + new Date());
+		report.info("");
+		report.info("Bug Reports:");
+		report.info("(Items with an asterisk are out of sync and need follow up)");
+		report.info("");
+
+
+		report.info("");
+		report.info("FAILED test cases:");
+		for (ReportItem item : items) {
+			
+			if ( item.TestCaseResult == Boolean.FALSE ) {
+				report.info(writeReportEntry(item));
+			}
+			
+		}
+		
+		report.info("");
+		report.info("PASSED test cases:");
+		for (ReportItem item : items) {
+			
+			if ( item.TestCaseResult == Boolean.TRUE ) {
+				report.info(writeReportEntry(item));
+			}
+			
+		}
+		
+		report.info("");
+		report.info("");
+		report.info("Done!");
+		
+	}
+	
+	
+	public void execute(File testngRoot) throws UnsupportedEncodingException, IOException, DocumentException {
+		if ( testngRoot == null ) {
+			logger.error("testngRoot cannot be null");
+			return;
+		}
+		
+		if ( !testngRoot.exists() ) {
+			logger.error(testngRoot.getAbsoluteFile() +" does not exist!");
+			return;
+		}
+			
+		logger.info("Processing "+ testngRoot.getAbsolutePath() +" ...");
+		
+		
+		/*
+		 * Build a list of passed and failed test cases, based
+		 * on the TestNG XML files
+		 */
+		Map<String, Boolean> results = getResults(testngRoot);
+		
+		/*
+		 * Build Maps of the bug data, ID vs TestCase vs QAContact
+		 */
+		Map<String, BugState> bugStatus = new HashMap<String, BugState>();
+		Map<String, List<String>> bugTestcase = new HashMap<String, List<String>>();
+		Map<String, String> bugContact = new HashMap<String, String>();
+		getBugzillaData(bugStatus, bugTestcase, bugContact);
+		
+		/*
+		 * Correlate the Pass/Fail results with the bugzilla content
+		 */
+		List<ReportItem> reportItems = correlateData(results, bugStatus, bugTestcase, bugContact);
+		
+		/*
+		 * Write the bug report to a text file
+		 */
+		writeReport(testngRoot, reportItems);
+		
+		logger.info("Done!");
+        
+	}
+	
 
     /**
      * Runs an XPath query on the specified element context and returns the results.
@@ -170,5 +426,14 @@ public class ResultsCore {
 	}
 
 
+	private static class ReportItem {
+		public String TestCaseID = "undetermined";
+		public Boolean TestCaseResult = Boolean.FALSE;
+		
+		public String BugID = null;
+		public BugState BugStatus = BugState.NEW;
+		public String BugOwner = "None";
+		public boolean NeedsFollowUp = true;
+	}
 	
 }
