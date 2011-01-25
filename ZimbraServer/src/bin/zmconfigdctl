@@ -131,6 +131,8 @@ startzmconfigd()
 daemon()
 {
 	echo "Starting zmconfigdctl...success"
+	exec 1>&-
+	exec 2>&-
 	while :; do
 		sleep 60
 		startzmconfigd >> /opt/zimbra/log/zmconfigd.log 2>&1
