@@ -525,6 +525,8 @@ public class ExecuteHarnessMain {
 	 */
 	protected static class ResultListener extends TestListenerAdapter {
 
+		private static final String ZimbraQABasePackage = "com.zimbra.qa.selenium";
+
 		private int testsTotal = 0;
 		private int testsPass = 0;
 		private int testsFailed = 0;
@@ -566,9 +568,9 @@ public class ExecuteHarnessMain {
 		 * @return
 		 */
 		protected String getScreenCaptureFilename(Method method) {
-			String c = method.getDeclaringClass().getCanonicalName();
+			String c = method.getDeclaringClass().getCanonicalName().replace(ZimbraQABasePackage, "").replace('.', '/');
 			String m = method.getName();
-			return (String.format("%s/debug/%s.%s.screenshot%d.png", outputFolder, c, m, ++screenshotcount));
+			return (String.format("%s/debug/%s/%sss%d.png", outputFolder, c, m, ++screenshotcount));
 		}
 
 		/**
@@ -578,6 +580,7 @@ public class ExecuteHarnessMain {
 		 */
 		protected void getScreenCapture(ITestResult result) {
 			String filename = getScreenCaptureFilename(result.getMethod().getMethod());
+			logger.warn("Creating screenshot: "+ filename);
 			ClientSessionFactory.session().selenium().captureScreenshot(filename);
 		}
 		
