@@ -53,6 +53,8 @@ public class FormMailNew extends AbsForm{
       public static final String zToButton = "css=td#zb__COMPOSE1__TO_title";
       public static final String zCcButton = "css=td#zb__COMPOSE1__CC_title";
       public static final String zComposeInDifferentWindowButton = "css=td#zb__COMPOSE1__DETACH_COMPOSE_left_icon";
+      public static final String zFormatAsHtmlDropDownButton = "css=div#zmi__COMPOSE1_NEW_MESSAGE__FORMAT_HTML";
+      public static final String zFormatAsPlainTextDropDownButton = "css=div#zmi__COMPOSE1_NEW_MESSAGE__FORMAT_TEXT";
 
       // Links
       public static final String zShowBccLink = "css=a#zv__COMPOSE1_toggle_bcc";

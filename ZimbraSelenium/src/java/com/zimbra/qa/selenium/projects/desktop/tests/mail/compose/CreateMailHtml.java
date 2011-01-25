@@ -40,8 +40,6 @@ public class CreateMailHtml extends DesktopCommonTest {
       // Open the new mail form
       FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
       ZAssert.assertNotNull(mailform, "Verify the new form opened");
-      mailform.sClick(FormMailNew.Locators.zOptionsIconButton);
-      mailform.sClick(FormMailNew.Locators.zFormatAsHtmlDropDownButton);
 
       // Fill out the form with the data
       mailform.zFill(mail);
@@ -58,7 +56,6 @@ public class CreateMailHtml extends DesktopCommonTest {
       ZAssert.assertEquals(received.dToRecipients.get(0).dEmailAddress, ZimbraAccount.AccountA().EmailAddress, "Verify the to field is correct");
       ZAssert.assertEquals(received.dSubject, mail.dSubject, "Verify the subject field is correct");
       ZAssert.assertStringContains(received.dBodyText, mail.dBodyText, "Verify the body field is correct");
-      
    }
 
 }
