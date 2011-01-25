@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Map;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -26,7 +27,7 @@ import com.thoughtworks.selenium.SeleniumException;
 import com.zimbra.qa.selenium.framework.core.ClientSession;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.core.ZimbraSelenium;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
+import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.util.BuildUtility;
 import com.zimbra.qa.selenium.framework.util.CommandLine;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
@@ -41,6 +42,7 @@ import com.zimbra.qa.selenium.framework.util.BuildUtility.BRANCH;
 import com.zimbra.qa.selenium.framework.util.BuildUtility.PRODUCT_NAME;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 
 /**
  * Common definitions for all Desktop test cases
@@ -50,6 +52,8 @@ import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 public class DesktopCommonTest {
    protected static OsType osType = null;
 	protected static Logger logger = LogManager.getLogger(DesktopCommonTest.class);
+	protected Map<String, String> startingAccountPreferences = null;
+
 	private String _downloadFilePath = null;
 	private String _executableFilePath = null;
 	private PRODUCT_NAME _productName = null;
@@ -71,8 +75,8 @@ public class DesktopCommonTest {
 	 * startingPage = the starting page before the test method starts
 	 * startingAccount = the account to log in as
 	 */
-	protected AbsPage startingPage = null;
-	protected ZimbraAccount startingAccount = ZimbraAccount.AccountZWC();
+	protected AbsTab startingPage = null;
+	protected ZimbraAccount startingAccount = ZimbraAccount.AccountZDC();
 
 	protected DesktopCommonTest() throws HarnessException {
 		logger.info("New "+ DesktopCommonTest.class.getCanonicalName());
@@ -312,6 +316,27 @@ public class DesktopCommonTest {
 	@BeforeMethod( groups = { "always" } )
 	public void commonTestBeforeMethod() throws HarnessException {
 		logger.info("commonTestBeforeMethod: start");
+      if ( (startingAccountPreferences != null) && (!startingAccountPreferences.isEmpty()) ) {
+         logger.debug("commonTestBeforeMethod: startingAccountPreferences are defined");
+         ZimbraAccount.AccountZDC().modifyPreferences(startingAccountPreferences,
+               SOAP_DESTINATION_HOST_TYPE.CLIENT);
+      }
+
+		// If a startingPage is defined, then make sure we are on that page
+      if ( startingPage != null ) {
+         logger.debug("commonTestBeforeMethod: startingPage is defined");
+         
+         // If the starting page is not active, navigate to it
+         if ( !startingPage.zIsActive() ) {
+            startingPage.zNavigateTo();
+         }
+         
+         // Confirm that the page is active
+         if ( !startingPage.zIsActive() ) {
+            throw new HarnessException("Unable to navigate to "+ startingPage.myPageName());
+         }
+         
+      }
 		logger.info("commonTestBeforeMethod: finish");
 	}
 

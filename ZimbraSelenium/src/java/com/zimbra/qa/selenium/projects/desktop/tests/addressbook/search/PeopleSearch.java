@@ -1,6 +1,5 @@
 package com.zimbra.qa.selenium.projects.desktop.tests.addressbook.search;
 
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -17,11 +16,6 @@ public class PeopleSearch extends DesktopCommonTest{
       
       // All tests start at the login page
       super.startingPage = app.zPageMain;
-   }
-
-   @BeforeMethod(groups = {"always"})
-   public void basicPeopleSearchSetup () throws HarnessException {
-      app.zPageMain.zNavigateTo();
    }
 
    @Test(   description = "Verifying People Search property",

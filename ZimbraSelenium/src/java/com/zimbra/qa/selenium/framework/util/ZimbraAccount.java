@@ -55,16 +55,18 @@ public class ZimbraAccount {
     public String ZimbraSoapClientHost = null;
     public String ZimbraSoapAdminHost = null;
     public String ZimbraMailHost = null;
+    public String ZimbraMailClientHost = null;
     public String ZimbraId = null;
     public String CN = null;
     public String DisplayName = null;
     public String EmailAddress = null;
     public String Password = null;
     protected String MyAuthToken = null;
+    protected String MyClientAuthToken = null;
     public Map<String, String> preferences = null;
 
-    
-    
+
+
     /*
      * Create an account with the email address account<num>@<testdomain>
      * The password is set to config property "adminPwd"
@@ -93,11 +95,34 @@ public class ZimbraAccount {
 			password = ZimbraSeleniumProperties.getStringProperty("adminPwd", "test123");
 		}
 		Password = password;
-		        
-        
 	}
-	
-	/**
+
+   /**
+    * Get the user account logged into ZDC being tested
+    * @return the ZimbraAccount object representing the test account
+    */
+   public static synchronized ZimbraAccount AccountZDC() {
+      if ( _AccountZDC == null ) {
+         _AccountZDC = new ZimbraAccount();
+         _AccountZDC.provision();
+
+         logger.debug("Authenticating Mail server");
+         _AccountZDC.authenticate();
+
+         _AccountZDC.ZimbraMailClientHost = ZimbraSeleniumProperties.getStringProperty(
+               "desktop.server.host", "localhost");
+         logger.debug("Authenticating Client...");
+         _AccountZDC.authenticate(SOAP_DESTINATION_HOST_TYPE.CLIENT);
+      }
+      return (_AccountZDC);
+   }
+   public static synchronized void ResetAccountZDC() {
+      logger.warn("AccountZDC is being reset");
+      _AccountZDC = null;
+   }
+   private static ZimbraAccount _AccountZDC = null;
+
+   /**
 	 * Get the user account logged into ZWC being tested
 	 * @return the ZimbraAccount object representing the test account
 	 */
@@ -253,38 +278,72 @@ public class ZimbraAccount {
 		return (this);
 	}
 	
-	
+	public ZimbraAccount authenticate() {
+	   return authenticate(SOAP_DESTINATION_HOST_TYPE.SERVER);
+	}
+
 	/**
 	 * Authenticates the account (using SOAP client AuthRequest)
 	 * Sets the authToken
 	 */
-	public ZimbraAccount authenticate() {
+	public ZimbraAccount authenticate(SOAP_DESTINATION_HOST_TYPE destinationType) {
 		try {
-			soapSend(
-					"<AuthRequest xmlns='urn:zimbraAccount'>" +
-						"<account by='name'>"+ EmailAddress + "</account>" +
-						"<password>"+ Password +"</password>" +
-					"</AuthRequest>");
-			MyAuthToken = soapSelectValue("//acct:authToken", null);
-			soapClient.setAuthToken(MyAuthToken);
+			switch (destinationType) {
+			case SERVER:
+			   soapSend(
+	               "<AuthRequest xmlns='urn:zimbraAccount'>" +
+	                  "<account by='name'>"+ EmailAddress + "</account>" +
+	                  "<password>"+ Password +"</password>" +
+	               "</AuthRequest>",
+	               destinationType);
+			   MyAuthToken = soapSelectValue("//acct:authToken", null);
+			   soapClient.setAuthToken(MyAuthToken);
+			   break;
+			case CLIENT:
+			   String username = "local@host.local";
+			   String password = ZimbraDesktopProperties.getInstance().getSerialNumber();
+			   soapSend(
+	               "<AuthRequest xmlns='urn:zimbraAccount'>" +
+	                  "<account by='name'>"+ username + "</account>" +
+	                  "<password>"+ password +"</password>" +
+	               "</AuthRequest>",
+	               destinationType);
+			   MyClientAuthToken = soapSelectValue("//acct:authToken", null);
+			   soapClient.setClientAuthToken(MyClientAuthToken);
+			   break;
+			}
 		} catch (HarnessException e) {
 			logger.error("Unable to authenticate "+ EmailAddress, e);
 			soapClient.setAuthToken(null);
 		}
 		return (this);
 	}
-		
+
+	/**
+    * Modify user prefences using ModifyPrefsRequest with the default SERVER
+    * host destination type
+    * @param preferences Preferences to be modified through SOAP
+    * @throws HarnessException 
+    */
+	public ZimbraAccount modifyPreferences(Map<String, String> preferences) {
+	   return modifyPreferences(preferences, SOAP_DESTINATION_HOST_TYPE.SERVER);
+	   
+	}
+
 	/**
 	 * Modify user prefences using ModifyPrefsRequest
+	 * @param preferences Preferences to be modified through SOAP
+	 * @param destinationType The destination Host Type: SERVER or CLIENT
 	 * @throws HarnessException 
 	 */
-	public ZimbraAccount modifyPreferences(Map<String, String> preferences) {
-		
+	public ZimbraAccount modifyPreferences(Map<String, String> preferences,
+	      SOAP_DESTINATION_HOST_TYPE destinationType) {
+
 		StringBuilder sb = new StringBuilder();
 		for (Map.Entry<String, String> entry : preferences.entrySet()) {
 			sb.append(String.format("<pref name='%s'>%s</pref>", entry.getKey(), entry.getValue()));
 		}
-		
+
 		if ( sb.length() <= 0 )
 			return (this); // Nothing to modify
 		
@@ -295,7 +354,8 @@ public class ZimbraAccount {
 			soapSend(
 				"<ModifyPrefsRequest xmlns='urn:zimbraAccount'>" +
 						sb.toString() +
-				"</ModifyPrefsRequest>");
+				"</ModifyPrefsRequest>",
+				destinationType);
 
 			Element[] response = soapSelectNodes("//acct:ModifyPrefsResponse");
 			if ( response == null || response.length != 1 )
@@ -386,10 +446,37 @@ public class ZimbraAccount {
         return (id);
     }
 
-	
-	
+	public enum SOAP_DESTINATION_HOST_TYPE {
+	   SERVER, CLIENT
+	}
+
 	/**
-	 * Send a SOAP request from this account
+    * Send a SOAP request from this account to the specified destination host type
+    * @param request the SOAP request body (see ZimbraServer/docs/soap.txt)
+    * @param destinationHostType The destination Host Type: SERVER or CLIENT
+    * @return the response envelope
+    * @throws HarnessException on failure
+    */
+	public Element soapSend(String request, SOAP_DESTINATION_HOST_TYPE destinationHostType) throws HarnessException {
+
+      // TODO: need to watch for certain SOAP requests, such
+      // as ModifyPrefsRequest, which could trigger a client reload
+      //
+      String destination = null;
+      switch (destinationHostType) {
+      case CLIENT:
+         destination = ZimbraMailClientHost;
+         break;
+      case SERVER:
+         destination = ZimbraMailHost;
+         break;
+      }
+
+      return (soapClient.sendSOAP(destination, request, destinationHostType));
+	}
+
+	/**
+	 * Send a SOAP request from this account with the default mail server destination
 	 * @param request the SOAP request body (see ZimbraServer/docs/soap.txt)
 	 * @return the response envelope
 	 * @throws HarnessException on failure
@@ -400,7 +487,7 @@ public class ZimbraAccount {
 		// as ModifyPrefsRequest, which could trigger a client reload
 		//
 		
-		return (soapClient.sendSOAP(ZimbraMailHost, request));
+		return soapSend(request, SOAP_DESTINATION_HOST_TYPE.SERVER);
 	}
 
 	/**
@@ -491,6 +578,7 @@ public class ZimbraAccount {
     	private Logger logger = LogManager.getLogger(SoapClient.class);
     	
     	protected String AuthToken = null;
+    	protected String ClientAuthToken = null;
     	protected String SessionId = null;
     	protected int SequenceNum = -1;
     	
@@ -528,6 +616,15 @@ public class ZimbraAccount {
          */
         public String setAuthToken(String token) {
         	return (AuthToken = token);
+        }
+
+        /**
+         * Set the Zimbra ClientAuthToken
+         * @param token - use null to clear the context
+         * @return
+         */
+        public String setClientAuthToken(String token) {
+         return (ClientAuthToken = token);
         }
         
         /**
@@ -571,19 +668,44 @@ public class ZimbraAccount {
         	}
         	return (requestContext);
         }
-        
+
         /**
-         * Send the specified Zimbra SOAP request to the specified host
-         * @param host
-         * @param request
+         * Send the specified Zimbra SOAP request to the specified host with the
+         * default SERVER type destination host
+         * @param host Host name to send the SOAP context/request
+         * @param request Request to be sent over SOAP
          * @return
          * @throws HarnessException
          */
-        public Element sendSOAP(String host, String request) throws HarnessException {        	
+        public Element sendSOAP(String host, String request) throws HarnessException {
+           return sendSOAP(host, request, SOAP_DESTINATION_HOST_TYPE.SERVER);
+        }
+
+        /**
+         * Send the specified Zimbra SOAP request to the specified host
+         * @param host Host name to send the SOAP context/request
+         * @param request Request to be sent over SOAP
+         * @param destinationType Destination host type: SERVER or CLIENT
+         * @return
+         * @throws HarnessException
+         */
+        public Element sendSOAP(String host, String request,
+              SOAP_DESTINATION_HOST_TYPE destinationType) throws HarnessException {        	
         	try
         	{
-        		setContext(AuthToken, SessionId, SequenceNum);
-        		return (sendSOAP(host, requestContext, Element.parseXML(request)));
+        	   String token = null;
+        	   switch (destinationType) {
+        	   case SERVER:
+        	      token = AuthToken;
+        	      break;
+        	   case CLIENT:
+        	      token = ClientAuthToken;
+        	      break;
+        	   }
+
+        	   setContext(token, SessionId, SequenceNum);
+        		return (sendSOAP(host, requestContext, Element.parseXML(request),
+        		      destinationType));
         	} catch (DocumentException e) {
 				throw new HarnessException("Unable to parse request "+ request, e);
         	} catch (ContainerException e) {
@@ -591,18 +713,34 @@ public class ZimbraAccount {
 
         	}
         }
-        
-		/**
-		 * Send a Zimbra SOAP context/request to the host
-		 * @param host
-		 * @param context
-		 * @param request
-		 * @return
-		 * @throws HarnessException
-		 */
-        public Element sendSOAP(String host, Element context, Element request) throws HarnessException {
+
+        /**
+         * Send a Zimbra SOAP context/request to the host with the
+         * default SERVER type destination host
+         * @param host Host name to send the SOAP context/request
+         * @param context
+         * @param request Request to be sent over SOAP
+         * @return
+         * @throws HarnessException
+         */
+        public Element sendSOAP(String host, Element context, Element request)
+        throws HarnessException {
+           return sendSOAP(host, context, request, SOAP_DESTINATION_HOST_TYPE.SERVER);
+        }
+
+        /**
+		   * Send a Zimbra SOAP context/request to the host
+         * @param host Host name to send the SOAP context/request
+         * @param context
+         * @param request Request to be sent over SOAP
+         * @param destinationType Destination host type: SERVER or CLIENT
+         * @return
+         * @throws HarnessException
+         */
+        public Element sendSOAP(String host, Element context, Element request,
+              SOAP_DESTINATION_HOST_TYPE destinationType) throws HarnessException {
         	
-        	setTransport(host, request);
+        	setTransport(host, request, destinationType);
         	
         	// Remember the context, request, envelope and response for logging purposes
         	requestBody = request;
@@ -810,10 +948,14 @@ public class ZimbraAccount {
 			return (value);
 		}
 
-        protected void setTransport(String host, Element request) throws HarnessException {
+      protected void setTransport(String host, Element request) throws HarnessException {
+		     setTransport(host, request, SOAP_DESTINATION_HOST_TYPE.SERVER);
+      }
+
+      protected void setTransport(String host, Element request, SOAP_DESTINATION_HOST_TYPE destinationHostType) throws HarnessException {
 
     		// Only set the transport if the URI changes
-        	if ( setURI(host, request) ) {
+        	if ( setURI(host, request, destinationHostType) ) {
 
 
                 synchronized (mSoapProto) {
@@ -836,9 +978,14 @@ public class ZimbraAccount {
         	}
         }
 
-        protected boolean setURI(String host, Element request) throws HarnessException {
+      protected boolean setURI(String host, Element request) throws HarnessException {
+         return setURI(host, request, SOAP_DESTINATION_HOST_TYPE.SERVER);
+      }
+
+      protected boolean setURI(String host, Element request,
+         SOAP_DESTINATION_HOST_TYPE destinationType) throws HarnessException {
         	
-        	// TODO: need to get URI settings from config.properties
+         // TODO: need to get URI settings from config.properties
         	
         	
         	String scheme = ZimbraSeleniumProperties.getStringProperty("server.scheme", "http");
@@ -850,32 +997,49 @@ public class ZimbraAccount {
         	String fragment = null;
         	
         	String namespace = getNamespace(request);
-        	if ( namespace.equals("urn:zimbraAdmin") ) {
+        	logger.debug("namespace: " + namespace);
 
-        		// https://server.com:7071/service/admin/soap/
+         if ( namespace.equals("urn:zimbraAdmin") ) {
 
-        		scheme = "https";
-        		port = 7071;
-        		path = "/service/admin/soap/";
-        		
-        	} else if ( namespace.equals("urn:zimbraAccount") ) {
+            // https://server.com:7071/service/admin/soap/
+            scheme = "https";
+            path = "/service/admin/soap/";
 
-        		// http://server.com:80/service/soap/
+         } else if ( namespace.equals("urn:zimbraAccount") ) {
 
-        		path = "/service/soap/";
-        		
-        	} else if ( namespace.equals("urn:zimbraMail") ) {
-        		
-        		// http://server.com:80/service/soap/
-        		
-        		path = "/service/soap/";
-        		
-        	} else {
-        		throw new HarnessException("Unsupported qname: "+ namespace +".  Need to implement setURI for it.");
+            // http://server.com:80/service/soap/
+            path = "/service/soap/";
+
+         } else if ( namespace.equals("urn:zimbraMail") ) {
+
+            // http://server.com:80/service/soap/
+            path = "/service/soap/";
+
+         } else {
+            throw new HarnessException("Unsupported qname: "+ namespace +".  Need to implement setURI for it.");
+         }
+
+         switch (destinationType) {
+        	case SERVER:
+        	   if ( namespace.equals("urn:zimbraAdmin") ) {
+        	      port = 7071;
+        	   }
+        	   break;
+        	case CLIENT:
+        	   port = Integer.parseInt(ZimbraDesktopProperties.getInstance().getConnectionPort());
+        	   break;
         	}
-        	
-        	try {
+
+         try {
 				URI uri = new URI(scheme, userInfo, host, port, path, query, fragment);
+				logger.debug("scheme: " + scheme);
+				logger.debug("userInfo: " + userInfo);
+				logger.debug("Host: " + host);
+				logger.debug("Port: " + port);
+				logger.debug("Path: " + path);
+				logger.debug("Query: " + query);
+				logger.debug("Fragment: " + fragment);
+
 				if ( uri.equals(mURI) ) {
 					return (false); // URI didn't change
 				} else {
@@ -885,17 +1049,16 @@ public class ZimbraAccount {
 			} catch (URISyntaxException e) {
 				throw new HarnessException("Unable to create SOAP URI", e);
 			}
-			
 		}
 
-        protected static final Pattern mNamespacePattern = Pattern.compile("(xmlns=\\\"([^\"]+)\\\")");
-        protected String getNamespace(Element e) {
-            Matcher matcher = mNamespacePattern.matcher(e.toString());
+      protected static final Pattern mNamespacePattern = Pattern.compile("(xmlns=\\\"([^\"]+)\\\")");
+      protected String getNamespace(Element e) {
+         Matcher matcher = mNamespacePattern.matcher(e.toString());
     		while (matcher.find()) {
-    			return (matcher.group(2));
+    		   return (matcher.group(2));
     		}
-    		return (null);
-        }
+    	   return (null);
+      }
 /*        
 		protected Element[] getElementsFromPath(Element context, String path) {
     		org.dom4j.Element d4context = context.toXML();
