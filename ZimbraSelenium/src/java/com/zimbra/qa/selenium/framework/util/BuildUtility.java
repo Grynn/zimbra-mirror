@@ -237,7 +237,7 @@ public class BuildUtility {
          if (outputLines[i].startsWith("<TR BGCOLOR") &&
              outputLines[i].contains("logs") &&
              outputLines[i].contains(productName.toString()) &&
-             outputLines[i].contains(branch.toString()) &&
+             outputLines[i].contains(branch.toString() + "<") &&
              outputLines[i].contains(arch.toString())) {
             numOfElements ++;
             Build temp = buildUtil.new Build();

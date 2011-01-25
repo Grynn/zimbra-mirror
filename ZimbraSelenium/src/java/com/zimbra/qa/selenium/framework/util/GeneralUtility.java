@@ -111,6 +111,12 @@ public class GeneralUtility {
                } catch (IllegalArgumentException e) {
                   logger.debug("Continue to find other method");
                   e.printStackTrace();
+               } catch (InvocationTargetException ive) {
+                  method = methodList[i];
+                  logger.debug("Hit InvocationTargetException");
+                  logger.debug("Method: " + method);
+                  ive.printStackTrace();
+                  break;
                } catch (Exception e) {
                   e.printStackTrace();
                }
@@ -131,11 +137,11 @@ public class GeneralUtility {
       }
 
       int i = 0;
-            
+
       while (i < iteration && !_waitforObjectComparator(output, comparingObject, operand)) {
          i++;
          logger.debug("Iteration: " + i);
-         logger.debug("Output is: " + output.toString());
+         logger.debug("Output is: " + output);
          try {
             if (isStaticApi) {
                output = method.invoke(Class.forName(apiClassPath), parameters);
@@ -172,11 +178,22 @@ public class GeneralUtility {
     */
    private static boolean _waitforObjectComparator(Object mainObject, Object compObject, WAIT_FOR_OPERAND operand)
    throws HarnessException {
+      logger.debug("waitForOperand is: " + operand.toString());
+      logger.debug("mainObject is: " + mainObject);
+      logger.debug("compObject is: " + compObject);
       switch (operand){
       case EQ:
-         return mainObject.equals(compObject);
+         if (mainObject == null) {
+            return compObject == null;
+         } else {
+            return mainObject.equals(compObject);
+         }
       case NEQ:
-         return !mainObject.equals(compObject);
+         if (mainObject == null) {
+            return compObject != null;
+         } else {
+            return !mainObject.equals(compObject);
+         }
       default:
          throw new HarnessException("Unsupported WaitFor operand: " + operand);
       }

@@ -7,8 +7,6 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.desktop.ui.PageAccounts.Locators;
-
 
 public class PageMain extends AbsTab{
 
@@ -20,13 +18,15 @@ public class PageMain extends AbsTab{
 
       // Images
       // This is the search icon (magnifying glass)
-      public static final String zPeopleSearchImage =
-         "css=div[class*='ImgSearch2']";
+      public static final String zPeopleSearchImage = "css=div[class*='ImgSearch2']";
       
       // Buttons
-      public static final String zSetupButton = 
-         "css=tbody td#skin_container_logoff a[onclick*='LogOff']";
+      public static final String zSetupButton = "css=tbody td#skin_container_logoff a[onclick*='LogOff']";
 
+      // Tabs
+      public static final String zMailTabs = "css=td#zb__App__Mail_left_icon";
+      public static final String zAddressBookTabs = "css=td#zb__App__Contacts_left_icon";
+      public static final String zCalendarTabs = "css=td#zb__App__Calendar_left_icon";
    }
 
    public PageMain(AbsApplication application) {

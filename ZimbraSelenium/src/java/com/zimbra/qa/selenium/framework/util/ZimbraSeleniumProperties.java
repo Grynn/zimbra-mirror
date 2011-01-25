@@ -256,7 +256,8 @@ public class ZimbraSeleniumProperties {
 
 		      ZimbraDesktopProperties zdp = ZimbraDesktopProperties.getInstance();
 		      port = zdp.getConnectionPort();
-		      String baseUrl = scheme + "://" + host + ":" + port +
+		      String desktop_host = ZimbraSeleniumProperties.getStringProperty("desktop.server.host", "localhost");
+		      String baseUrl = scheme + "://" + desktop_host + ":" + port +
             "/desktop/login.jsp?at=" + zdp.getSerialNumber();;
 
 		      logger.info("Base URL is: " + baseUrl);

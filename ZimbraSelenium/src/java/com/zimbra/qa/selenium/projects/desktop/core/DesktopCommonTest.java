@@ -7,11 +7,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpState;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.testng.annotations.AfterClass;
@@ -64,12 +59,7 @@ public class DesktopCommonTest {
 	private final static String _defaultAccountName = ZimbraSeleniumProperties.getUniqueString();
 	private boolean _uninstallAppAfterTest = false;
 	private static ZimbraSelenium _selenium = null;
-
-	/**
-	 * Helper field.  admin = ZimbraAdminAccount.GlobalAdmin()
-	 */
-	protected final ZimbraAccount gAdmin = ZimbraAccount.AccountZWC();
-	
+	private static boolean _firstTime = true;
 
 	/**
 	 * The AdminConsole application object
@@ -82,17 +72,17 @@ public class DesktopCommonTest {
 	 * startingAccount = the account to log in as
 	 */
 	protected AbsPage startingPage = null;
-	protected ZimbraAccount startingAccount = null;
+	protected ZimbraAccount startingAccount = ZimbraAccount.AccountZWC();
 
-	protected DesktopCommonTest() {
+	protected DesktopCommonTest() throws HarnessException {
 		logger.info("New "+ DesktopCommonTest.class.getCanonicalName());
 
-		app = new AppDesktopClient();
+		app = new AppDesktopClient(startingAccount);
 
 		startingPage = app.zPageMain;
-		startingAccount = gAdmin;
-		logger.debug("Email Address: " + gAdmin.EmailAddress);
-		logger.debug("Email Password: " + gAdmin.Password);
+		
+		logger.debug("Email Address: " + startingAccount.EmailAddress);
+		logger.debug("Email Password: " + startingAccount.Password);
 	}
 
 	/**
@@ -171,13 +161,10 @@ public class DesktopCommonTest {
 			_selenium.start();
 			_selenium.windowMaximize();
 			_selenium.windowFocus();
-			// selenium.setupZVariables();
-			// admin doesn't use any of the JS code
 			_selenium.allowNativeXpath("true");
 			ZimbraSeleniumProperties.setAppType(
 			      ZimbraSeleniumProperties.AppType.DESKTOP);
 			_selenium.open(ZimbraSeleniumProperties.getBaseURL());
-			//selenium.open("http://127.0.0.1:1884/desktop/login.jsp?at=42077838-fc72-4756-a68b-959537b5ecc8");
 		} catch (SeleniumException e) {
 			logger.error("Unable to open admin app." +
 					"  Is a valid cert installed?", e);
@@ -192,7 +179,7 @@ public class DesktopCommonTest {
    public void addDefaultAccount() throws HarnessException {
       logger.info("Creating new account...");
       String serverScheme = ZimbraSeleniumProperties.getStringProperty("server.scheme", "http");
-      String serverName = ZimbraSeleniumProperties.getStringProperty("server.host", "localhost");
+      String serverName = ZimbraSeleniumProperties.getStringProperty("desktop.server.host", "localhost");
       ZimbraDesktopProperties zdp = ZimbraDesktopProperties.getInstance();
       String connectionPort = zdp.getConnectionPort();
 
@@ -206,8 +193,8 @@ public class DesktopCommonTest {
                                             .append(zdp.getSerialNumber()).append("&accountId=&verb=add&accountFlavor=")
                                             .append(_accountFlavor).append("&accountName=")
                                             .append(_defaultAccountName).append("&email=")
-                                            .append(gAdmin.EmailAddress).append("&password=")
-                                            .append(gAdmin.Password).append("&host=") 
+                                            .append(startingAccount.EmailAddress).append("&password=")
+                                            .append(startingAccount.Password).append("&host=") 
                                             .append(emailServerName).append("&port=")
                                             .append(emailServerPort).append("&syncFreqSecs=900&debugTraceEnabled=on")
                                             .append(securityType).toString();
@@ -238,6 +225,7 @@ public class DesktopCommonTest {
                                        .append(connectionPort).append("/")
                                        .append("?at=")
                                        .append(zdp.getSerialNumber()).toString();
+      logger.debug("Selenium is opening: " + accountUrl);
       _selenium.open(accountUrl);
       ZimbraSeleniumProperties.waitForElementPresent(app.zPageAccounts,
             PageAccounts.Locators.zLoginButton);
@@ -272,13 +260,34 @@ public class DesktopCommonTest {
    		   boolean bFoundOtherUser = true;
    		   logger.debug("Cleaning up all existing users");
 
-   		   // Cleaning up all the existing users
+   		   String deleteButtonLocator = null;
+
+   		   // If this is the first time checking, then cleaning up all the pre-existing user
+   		   // Otherwise, only cleans the non-default users, which is second user and so on...
+   		   // Second user is located in row 3.
+   		   if (_firstTime) {
+   	         deleteButtonLocator = PageAccounts.Locators.zDeleteButton;
+   		   } else {
+   		      String[] temp = PageAccounts.Locators.zDeleteButton.trim().split(" ");
+   		      deleteButtonLocator = new StringBuffer(temp[0]).append(" tr:nth-child(3)>td div[class^='ZAccount'] ").
+   		                              append(temp[1]).toString();
+   		   }
+
    		   while (bFoundOtherUser) {
-   		      app.zPageAccounts.sClick(PageAccounts.Locators.zDeleteButton);
-   		      logger.debug("Selenium Confirmation: " + _selenium.getConfirmation());
-   		      SleepUtil.sleep(3000);
+   		      if (app.zPageAccounts.sIsElementPresent(deleteButtonLocator)) {
+   		         app.zPageAccounts.sClick(deleteButtonLocator);
+   		         logger.debug("Selenium Confirmation: " + _selenium.getConfirmation());
+   		         SleepUtil.sleep(3000);
+   		         String nthChildString = "nth-child(3)";
+   		         if (deleteButtonLocator.contains(nthChildString)) {
+   		            // It is switched from 3 to 4 because after clicking the delete button the first time
+   		            // , there will be confirmation message which appears to be on the 3rd row.
+   		            deleteButtonLocator = deleteButtonLocator.replace(nthChildString, "nth-child(4)");
+   		         }
+   		      }
+
    		      if (!(Boolean)ZimbraSeleniumProperties.waitForElementPresent(app.zPageAccounts,
-   		            PageAccounts.Locators.zDeleteButton, 5000)) {
+   		            deleteButtonLocator, 5000)) {
    		         bFoundOtherUser = false;
    		      }
    		   }
@@ -288,6 +297,7 @@ public class DesktopCommonTest {
 		} else {
 		   throw new HarnessException("Nothing is loaded, please check the connection");
 		}
+		_firstTime = false;
 	}
 
 	//TODO:

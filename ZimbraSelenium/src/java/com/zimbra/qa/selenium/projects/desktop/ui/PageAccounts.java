@@ -7,7 +7,6 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.desktop.ui.PageMain.Locators;
 
 public class PageAccounts extends AbsTab {
 
@@ -25,7 +24,10 @@ public class PageAccounts extends AbsTab {
       // Buttons
       public static final String zAddNewAccountButton = "css=td div[class*='ZPanelButton'][onclick*='OnAdd()']";
       public static final String zLoginButton = "css=div[id*='loginButton']";
-      public static final String zDeleteButton = "css=a[href*='OnDelete']";
+      public static final String zDeleteButton = "css=div[class*='ZPanelInfoInner'] a[href*='OnDelete']";
+
+      // Tables
+      public static final String zAccountsTable = "css=div[class*='ZPanelInfoInner'] table";
    }
 
    public PageAccounts(AbsApplication application) {
