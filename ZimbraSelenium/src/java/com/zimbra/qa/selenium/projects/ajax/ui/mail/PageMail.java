@@ -16,8 +16,7 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
-import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
 /**
@@ -901,7 +900,13 @@ public class PageMail extends AbsTab {
 			
 		} else if ( action == Action.A_RIGHTCLICK ) {
 			
-			throw new HarnessException("implement me!  action = "+ action);
+			// Left-Click on the item
+			this.zClick(itemlocator);
+			
+			// Return the displayed mail page object
+			page = new ContextMenu(MyApplication);
+			
+			// FALL THROUGH
 			
 		} else if ( action == Action.A_MAIL_CHECKBOX ) {
 			
@@ -967,7 +972,105 @@ public class PageMail extends AbsTab {
 
 	@Override
 	public AbsPage zListItem(Action action, Action option, String subject) throws HarnessException {
-		throw new HarnessException("implement me!");
+		logger.info(myPageName() + " zListItem("+ action +", "+ option +", "+ subject +")");
+		
+		if ( action == null )
+			throw new HarnessException("action cannot be null");
+		if ( option == null )
+			throw new HarnessException("action cannot be null");
+		if ( subject == null || subject.trim().length() == 0)
+			throw new HarnessException("subject cannot be null or blank");
+
+		AbsPage page = null;
+		String listLocator;
+		String rowLocator;
+		String itemlocator = null;
+		
+		
+		// Find the item locator
+		//
+		
+		if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
+			listLocator = "//div[@id='zl__TV__rows']";
+			rowLocator = "//div[contains(@id, 'zli__TV__')]";
+		} else {
+			listLocator = "//div[@id='zl__CLV__rows']";
+			rowLocator = "//div[contains(@id, 'zli__CLV__')]";
+		}
+		
+		// TODO: how to handle both messages and conversations, maybe check the view first?
+		if ( !this.sIsElementPresent(listLocator) )
+			throw new HarnessException("List View Rows is not present "+ listLocator);
+		
+		// How many items are in the table?
+		int count = this.sGetXpathCount(listLocator + rowLocator);
+		logger.debug(myPageName() + " zListSelectItem: number of list items: "+ count);
+		
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+			
+			itemlocator = listLocator + "/div["+ i +"]";
+			String subjectlocator;
+			
+			// Look for the subject
+			
+			// Subject - Fragment
+			subjectlocator = itemlocator + "//td[contains(@id, '__su')]";
+			String s = this.sGetText(subjectlocator).trim();
+			
+			if ( s.contains(subject) ) {
+				break; // found it
+			}
+			
+			itemlocator = null;
+		}
+		
+		if ( itemlocator == null ) {
+			throw new HarnessException("Unable to locate item with subject("+ subject +")");
+		}
+
+		if ( action == Action.A_RIGHTCLICK ) {
+			
+			// Right-Click on the item
+			this.zRightClick(itemlocator);
+			
+			// Now the ContextMenu is opened
+			// Click on the specified option
+			
+			String optionLocator = null;
+			
+			if (option == Action.A_DELETE) {
+				
+				// <div id="zmi__TV_DELETE" ... By Message
+				// <div id="zmi__CLV__Par__DELETE" ... By Conversation
+				
+				if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
+					optionLocator = "zmi__TV__DELETE";
+				} else {
+					optionLocator = "zmi__CLV__Par__DELETE";
+				}
+
+				page = null;
+				
+			} else {
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+			}
+			
+			// click on the option
+			this.zClick(optionLocator);
+			
+			
+			// FALL THROUGH
+
+			
+		} else {
+			throw new HarnessException("implement me!  action = "+ action);
+		}
+		
+
+		// Default behavior
+		return (page);
+		
 	}
 
 	/**

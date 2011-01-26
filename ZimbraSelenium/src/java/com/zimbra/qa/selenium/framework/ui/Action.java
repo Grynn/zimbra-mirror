@@ -38,6 +38,14 @@ public class Action {
 	public static final Action A_CTRLSELECT = new Action("A_CTRLSELECT");
 	public static final Action A_RIGHTCLICK = new Action("A_RIGHTCLICK");
 
+	// General Zimbra Context Menu actions
+	public static final Action A_NEW = new Action("A_NEW");
+	public static final Action A_EDIT = new Action("A_EDIT");
+	public static final Action A_DELETE = new Action("A_DELETE");
+	public static final Action A_MOVE = new Action("A_MOVE");
+	public static final Action A_PRINT = new Action("A_PRINT");
+	public static final Action A_TAG = new Action("A_TAG");
+
 	// Mail page actions
 	public static final Action A_MAIL_CHECKBOX = new Action("A_MAIL_CHECKBOX");
 	public static final Action A_MAIL_UNCHECKBOX = new Action("A_MAIL_UNCHECKBOX");
