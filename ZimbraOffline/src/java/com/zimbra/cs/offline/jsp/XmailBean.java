@@ -21,8 +21,8 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
-import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.DataSource.ConnectionType;
+import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.zclient.ZFolder;
 
@@ -51,9 +51,6 @@ public class XmailBean extends MailBean {
 
     private static final String adomain = "aol.com";
     private static final String gdomain = "gmail.com";
-    private static final String hdomain = "hotmail.com";
-    private static final String ldomain = "live.com";
-    private static final String mdomain = "msn.com";
     private static final String ydomain = "yahoo.com";
     private static final String yjpdomain = "yahoo.co.jp";
     private static final String ymdomain = "ymail.com";
@@ -259,15 +256,6 @@ public class XmailBean extends MailBean {
                     } else {
                         addInvalid("type");
                         setError(getMessage("AOLMustUseImap"));
-                    }
-                } else if (email.endsWith('@' + hdomain) ||
-                    email.endsWith('@' + ldomain) || email.endsWith('@' + mdomain)) {
-                    if (dsType == DataSource.Type.pop3) {
-                        dsAttrs.put(Provisioning.A_zimbraDataSourceDomain,
-                            hdomain);
-                    } else {
-                        addInvalid("type");
-                        setError(getMessage("LiveMustUseLiveOrPop"));
                     }
                 }
                 if (isCalendarSyncSupported())
