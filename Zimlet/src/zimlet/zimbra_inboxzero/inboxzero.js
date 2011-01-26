@@ -384,7 +384,7 @@ InboxZero.prototype._pollRestoreItemsResponse = function(result) {
         var createdMsgs = created.m = created.m || [];
         for (var i = 0; i < messages.length; i++) {
             var message = messages[i];
-            if (appCtxt.getById(message.l).nId == ZmOrganizer.ID_INBOX) {
+            if (appCtxt.getById(message.l) && appCtxt.getById(message.l).nId == ZmOrganizer.ID_INBOX) {
                 // HACK: This uses the full msg info from the SearchResponse
                 // HACK: and puts it in the "created" list with the folder
                 // HACK: updated to the inbox. If there are any other fields
