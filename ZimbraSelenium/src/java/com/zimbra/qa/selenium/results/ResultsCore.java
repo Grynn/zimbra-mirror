@@ -346,6 +346,8 @@ public class ResultsCore {
 		report.info("");
 		report.info("Done!");
 		
+		report.removeAllAppenders();
+		
 	}
 	
 	
