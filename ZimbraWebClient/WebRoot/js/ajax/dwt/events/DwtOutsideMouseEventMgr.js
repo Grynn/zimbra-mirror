@@ -57,6 +57,7 @@ DwtOutsideMouseEventMgr = function() {
 	this._reset();
 	this._mouseEventListener = new AjxListener(null, DwtOutsideMouseEventMgr._mouseEventHdlr);
 	DwtOutsideMouseEventMgr.INSTANCE = this;
+	this.id = "DwtOutsideMouseEventMgr";
 };
 
 DwtOutsideMouseEventMgr.prototype.toString =
@@ -87,7 +88,7 @@ function(params) {
 	if (!this._menuCapObj) {
 		// we only need a single menu capture object, create it lazily
 		var mecParams = {
-			id:				"DwtOutsideMouseEventMgr",
+			id:		this.id,
 			hardCapture:	false,
 			mouseDownHdlr:	DwtOutsideMouseEventMgr._mouseEventHdlr,
 			mouseWheelHdlr:	DwtOutsideMouseEventMgr._mouseEventHdlr
