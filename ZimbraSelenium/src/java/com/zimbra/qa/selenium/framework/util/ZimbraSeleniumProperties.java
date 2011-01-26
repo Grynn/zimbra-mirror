@@ -27,11 +27,17 @@ public class ZimbraSeleniumProperties {
 	}
 	
 	public static String getStringProperty(String key, String defaultValue) {
+		if ( ZimbraClientProps.getInstance().containsProperty(key) ) {
+			return (ZimbraClientProps.getInstance().getProperty(key, defaultValue));
+		}
 		return (ZimbraSeleniumProperties.getInstance().getConfigProp()
 				.getString(key, defaultValue));
 	}
 
 	public static String getStringProperty(String key) {
+		if ( ZimbraClientProps.getInstance().containsProperty(key) ) {
+			return (ZimbraClientProps.getInstance().getProperty(key, null));
+		}
 		return (getStringProperty(key, null));
 	}
 	
