@@ -16,7 +16,9 @@ package com.zimbra.cs.offline.backup;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.zimbra.common.localconfig.LC;
@@ -81,7 +83,12 @@ public class BackupPropertyManager {
      * @throws ServiceException
      */
     public String[] getBackupAccounts() throws ServiceException {
-        return OfflineProvisioning.getOfflineInstance().getLocalAccount().getMultiAttr(OfflineProvisioning.A_zimbraPrefOfflineBackupAccountId);
+        String[] acctAttr = OfflineProvisioning.getOfflineInstance().getLocalAccount().getMultiAttr(OfflineProvisioning.A_zimbraPrefOfflineBackupAccountId);
+        if (acctAttr.length == 1) {
+            return acctAttr[0].split(",");
+        } else {
+            return acctAttr;
+        }
     }
     
     /**
