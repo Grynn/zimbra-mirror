@@ -40,7 +40,7 @@
 			<include name="naming/*.jar" />
 			<include name="jsp-2.1/*.jar" />
 		</fileset>
-		<fileset dir="../ThirdParty/jetty/src">
+		<fileset dir="../ZimbraServer/jars">
 			<include name="jetty-ant-${jetty.version}.jar" />
 		</fileset>
 		<fileset dir="${jetty_run_base}/app/jetty/common/lib">
