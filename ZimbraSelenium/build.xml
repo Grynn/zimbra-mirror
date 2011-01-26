@@ -96,16 +96,15 @@
 	</target>
 
 	<target name="javadocs" description="Build javadocs">
-		<javadoc destdir="${generated.javadocs.dir}" classpathref="class.path" access="public">
+		<javadoc destdir="${generated.javadocs.dir}" classpathref="class.path" access="public" useexternalfile="yes">
 			<link offline="true" href="http://java.sun.com/j2se/1.5.0/docs/api package-list" packagelistLoc="." />
-			<fileset dir="${src.java.dir}/com/zimbra/qa/selenium/projects/html/tests">
-				<include name="**/*.java" />
-				<exclude name="CommonTest.java" />
-			</fileset>
-			<fileset dir="${src.java.dir}/com/zimbra/qa/selenium/projects/zcs/tests">
-				<include name="**/*.java" />
-				<exclude name="CommonTest.java" />
-			</fileset>
+			<fileset dir="${src.java.dir}/com/zimbra/qa/selenium/framework" includes="**/*.java"/>
+			<fileset dir="${src.java.dir}/com/zimbra/qa/selenium/projects/ajax/core" includes="**/*.java"/>
+			<fileset dir="${src.java.dir}/com/zimbra/qa/selenium/projects/ajax/ui" includes="**/*.java"/>
+			<fileset dir="${src.java.dir}/com/zimbra/qa/selenium/projects/admin/core" includes="**/*.java"/>
+			<fileset dir="${src.java.dir}/com/zimbra/qa/selenium/projects/admin/ui" includes="**/*.java"/>
+			<fileset dir="${src.java.dir}/com/zimbra/qa/selenium/projects/mobile/core" includes="**/*.java"/>
+			<fileset dir="${src.java.dir}/com/zimbra/qa/selenium/projects/mobile/ui" includes="**/*.java"/>
 		</javadoc>
 	</target>
 
