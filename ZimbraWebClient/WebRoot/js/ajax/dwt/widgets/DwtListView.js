@@ -948,6 +948,14 @@ function(row) {
 	}
 };
 
+DwtListView.prototype.scrollToItem =
+function(item){
+    var el = this._getElFromItem(item);
+    if(el){
+        this._listDiv.scrollTop = el.offsetTop;
+    }
+};
+
 DwtListView.prototype.scrollToTop =
 function() {
 	this._listDiv.scrollTop = 0;
