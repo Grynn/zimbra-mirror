@@ -92,6 +92,23 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
+	 * Execute mouseDownRight followed by mouseUpRight on a locator
+	 * @param locator
+	 * @throws HarnessException 
+	 */
+	public void zRightClick(String locator) throws HarnessException {
+	   // Check if the locator is present
+      if ( !sIsElementPresent(locator) ) {
+         logger.info("zRightClick("+ locator +") element is not present");
+         throw new HarnessException("zRightClick("+ locator +") element is not present");
+      }
+
+      ClientSessionFactory.session().selenium().mouseDownRight(locator);
+	   ClientSessionFactory.session().selenium().mouseUpRight(locator);
+	   logger.info("zRightClick(" + locator + ")");
+	}
+
+	/**
 	 * Execute select on a windowID
 	 * @param windowID
 	 * @throws HarnessException
@@ -163,16 +180,8 @@ public abstract class AbsSeleniumObject {
 		((DefaultSelenium)ClientSessionFactory.session().selenium()).waitForPageToLoad(timeout);
 		logger.info("waitForPageToLoad(" + timeout + ")");
 	}
-	
 
-	public void sRightClick(String locator) {
-		//Selenium's contextMenu not work for Zimbra
-		//ClientSessionFactory.session().selenium().contextMenu(locator);
-		
-		//use shortcut
-		ClientSessionFactory.session().selenium().keyPress(locator, "" +KeyEvent.VK_COMMA);
-		logger.info("sRightClick(" + locator + ")");
-    }
+
 	/**
 	 * DefaultSelenium.mouseDown()
 	 */
