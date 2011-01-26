@@ -1689,7 +1689,7 @@ DwtHtmlEditor.prototype._convertHtml2Text =
 function(convertor) {
 	var iFrameDoc = this._getIframeDoc();
 	return (iFrameDoc && iFrameDoc.body)
-		? AjxStringUtil.convertHtml2Text(iFrameDoc.body, convertor) : "";
+		? AjxStringUtil.convertHtml2Text(iFrameDoc.body, convertor, true) : "";
 };
 
 // params must contain:

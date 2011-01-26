@@ -1050,7 +1050,7 @@ AjxStringUtil._NON_WHITESPACE = /\S+/;
 AjxStringUtil._LF = /\n/;
 
 AjxStringUtil.convertHtml2Text =
-function(domRoot, convertor) {
+function(domRoot, convertor, onlyOneNewLinePerP) {
 
 	if (!domRoot) { return null; }
 
@@ -1066,7 +1066,7 @@ function(domRoot, convertor) {
 	var text = [];
 	var idx = 0;
 	var ctxt = {};
-	this._traverse(domRoot, text, idx, AjxStringUtil._NO_LIST, 0, 0, ctxt, convertor);
+	this._traverse(domRoot, text, idx, AjxStringUtil._NO_LIST, 0, 0, ctxt, convertor, onlyOneNewLinePerP);
 
 	var result = text.join("");
 
@@ -1078,7 +1078,7 @@ function(domRoot, convertor) {
 };
 
 AjxStringUtil._traverse =
-function(el, text, idx, listType, listLevel, bulletNum, ctxt, convertor) {
+function(el, text, idx, listType, listLevel, bulletNum, ctxt, convertor, onlyOneNewLinePerP) {
 
 	var nodeName = el.nodeName.toLowerCase();
 
@@ -1101,7 +1101,7 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt, convertor) {
 			}
 		}
 	} else if (nodeName == "p") {
-		text[idx++] = "\n\n";
+		text[idx++] = onlyOneNewLinePerP ? "\n" : "\n\n";
 	} else if (listType == AjxStringUtil._NO_LIST && (nodeName == "br" || nodeName == "hr")) {
 		text[idx++] = "\n";
 	} else if (nodeName == "ol" || nodeName == "ul") {
@@ -1149,7 +1149,7 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt, convertor) {
 		if (tmp.nodeType == 1 && tmp.tagName.toLowerCase() == "li") {
 			bulletNum++;
 		}
-		idx = this._traverse(tmp, text, idx, listType, listLevel, bulletNum, ctxt, convertor);
+		idx = this._traverse(tmp, text, idx, listType, listLevel, bulletNum, ctxt, convertor, onlyOneNewLinePerP);
 	}
 
 	if (convertor && convertor["/"+nodeName]) {
