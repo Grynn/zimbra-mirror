@@ -555,7 +555,7 @@ function(x, y) {
 		var tstyle = DwtCssStyle.getComputedStyleObject(htmlEl); // Get the style for this menu (includes skinning)
 
 		//if the cascading extends over the edge of the screen, cascade to the left
-		if ( ((newX > pbound.x && newX < pbound.x + pbound.width) || (pbound.x > newX && pbound.x < newX + mySize.x)) && pbound.x >= mySize.x && pbound.y+pbound.height > mySize.y) {
+		if ( ((newX > pbound.x && newX < pbound.x + pbound.width) || (pbound.x > newX && pbound.x < newX + mySize.x)) && pbound.x >= mySize.x) {
 			var totalWidth = parseInt(tstyle.width);
 			if (!AjxEnv.isIE)
 				totalWidth += parseInt(tstyle.paddingLeft) + parseInt(tstyle.paddingRight) + parseInt(tstyle.borderLeftWidth) + parseInt(tstyle.borderRightWidth);
