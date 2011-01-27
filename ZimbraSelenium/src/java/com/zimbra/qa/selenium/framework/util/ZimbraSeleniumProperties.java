@@ -108,7 +108,8 @@ public class ZimbraSeleniumProperties {
 		} else {
 			try {
 				logger.info("config.properties is "+ PropertiesConfigurationFilename.getAbsolutePath());
-				configProp = new PropertiesConfiguration(PropertiesConfigurationFilename);
+				configProp = new PropertiesConfiguration();
+				configProp.load(PropertiesConfigurationFilename);
 			} catch (ConfigurationException e) {
 				ZimbraSeleniumLogger.mLog.error("Unable to open config file: " + PropertiesConfigurationFilename.getAbsolutePath(), e);
 				logger.info("config.properties is default");
