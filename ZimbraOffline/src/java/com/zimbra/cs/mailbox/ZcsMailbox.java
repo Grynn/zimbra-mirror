@@ -494,7 +494,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             int prevIndexId = item.getIndexId();
             item.move(getFolderById(folderId));
             if (prevIndexId != item.getIndexId()) {
-                queueForIndexing(item, null);
+                index.add(item);
             }
 
             item.setColor(new MailItem.Color(color));
