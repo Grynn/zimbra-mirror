@@ -3,12 +3,15 @@ package com.zimbra.qa.selenium.projects.desktop.ui;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.projects.desktop.ui.mail.PageMail;
+import com.zimbra.qa.selenium.projects.desktop.ui.mail.TreeMail;
 
 
 public class AppDesktopClient extends AbsApplication {
    public PageMain zPageMain = null;
    public PageAccounts zPageAccounts = null;
    public PageMail zPageMail = null;
+   public TreeMail zTreeMail = null;
 
    public AppDesktopClient(ZimbraAccount account) throws HarnessException {
       super();
@@ -27,6 +30,10 @@ public class AppDesktopClient extends AbsApplication {
       // Mail apge
       zPageMail = new PageMail(this);
       pages.put(zPageMail.myPageName(), zPageMail);
+
+      // Tree Mail
+      zTreeMail = new TreeMail(this);
+      trees.put(zTreeMail.myPageName(), zTreeMail);
    }
 
    @Override

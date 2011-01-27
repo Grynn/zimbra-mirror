@@ -25,7 +25,7 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 	 *
 	 */
 	public static class SystemFolder {
-		
+		public static final SystemFolder UserRoot = new SystemFolder("USER_ROOT");
 		public static final SystemFolder Briefcase = new SystemFolder("Briefcase");
 		public static final SystemFolder Calendar = new SystemFolder("Calendar");
 		public static final SystemFolder Chats = new SystemFolder("Chats");

@@ -60,9 +60,9 @@ public class DesktopCommonTest {
 	private BRANCH _branchName = null;
 	private ARCH _arch = null;
 	private final static String _accountFlavor = "Zimbra";
-	private final static String _defaultAccountName = ZimbraSeleniumProperties.getUniqueString();
+	protected final static String _defaultAccountName = ZimbraSeleniumProperties.getUniqueString();
 	private boolean _uninstallAppAfterTest = false;
-	private static ZimbraSelenium _selenium = null;
+	public static ZimbraSelenium _selenium = null;
 	private static boolean _firstTime = true;
 
 	/**

@@ -14,8 +14,8 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.projects.desktop.core.DesktopCommonTest;
-import com.zimbra.qa.selenium.projects.desktop.ui.PageMail;
 import com.zimbra.qa.selenium.projects.desktop.ui.mail.FormMailNew;
+import com.zimbra.qa.selenium.projects.desktop.ui.mail.PageMail;
 
 public class CreateMailText extends DesktopCommonTest {
    @SuppressWarnings("serial")

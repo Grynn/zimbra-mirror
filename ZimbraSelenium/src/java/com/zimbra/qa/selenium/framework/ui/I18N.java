@@ -155,7 +155,16 @@ public class I18N {
             return new Locale(language, country, variant);
         }
     }
-    
+
+    public final static String TREE_MAIL_INBOX = "Inbox";
+    public final static String TREE_MAIL_SENT = "Sent";
+    public final static String TREE_MAIL_DRAFTS = "Drafts";
+    public final static String TREE_MAIL_JUNK = "Junk";
+    public final static String TREE_MAIL_OUTBOX = "Outbox";
+    public final static String TREE_MAIL_TRASH = "Trash";
+
+    public final static String CONTEXT_MENU_ITEM_NEW_FOLDER = "New Folder";
+
 //	public static void main(String[] args) throws HarnessException {
 //    	BasicConfigurator.configure();
 //    	
