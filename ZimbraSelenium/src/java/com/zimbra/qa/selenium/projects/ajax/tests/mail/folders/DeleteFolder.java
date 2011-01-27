@@ -2,13 +2,11 @@ package com.zimbra.qa.selenium.projects.ajax.tests.mail.folders;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
 
 
 public class DeleteFolder extends AjaxCommonTest {
@@ -49,13 +47,8 @@ public class DeleteFolder extends AjaxCommonTest {
 		// Click on Get Mail to refresh the folder list
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
-		// Click on the folder
-		ContextMenu contextMenu = (ContextMenu) app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, subfolder);
-		ZAssert.assertNotNull(contextMenu, "Verify the context menu opened");
-		
-		
-		// Select Delete
-		contextMenu.zSelect(ContextMenuItem.C_CONTACT_DELETE);
+		// Delete the folder using context menu
+		app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Action.A_DELETE, subfolder);
 		
 		
 		// Verify the folder is now in the trash

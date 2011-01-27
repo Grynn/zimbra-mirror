@@ -253,15 +253,9 @@ public class PageMail extends AbsTab {
 		
 		if ( button == Button.B_NEW ) {
 			
+			// New button
 			locator = "css=div[id^='ztb__'] td[id$='__NEW_MENU_title']";
 			
-			// Make sure the button exists
-			if ( !this.sIsElementPresent(locator) )
-				throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
-			
-			// Click it
-			this.zClick(locator);
-
 			// Create the page
 			page = new FormMailNew(this.MyApplication);
 			
@@ -435,12 +429,6 @@ public class PageMail extends AbsTab {
 		
 		// Default behavior, process the locator by clicking on it
 		//
-		
-		// Make sure the button exists
-		if ( !this.sIsElementPresent(locator) )
-			throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
-		
-		// Click it
 		this.zClick(locator);
 		
 		// If page was specified, make sure it is active
@@ -457,6 +445,8 @@ public class PageMail extends AbsTab {
 			SleepUtil.sleep(delayMillis);
 			
 		}
+		
+		
 		return (page);
 	}
 

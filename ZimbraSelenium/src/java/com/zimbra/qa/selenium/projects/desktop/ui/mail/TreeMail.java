@@ -113,6 +113,10 @@ public class TreeMail extends AbsTree {
       return (page);
    }
 
+   protected AbsPage zTreeItem(Action action, SavedSearchFolderItem folderItem) throws HarnessException {
+	   throw new HarnessException("implement me!");
+   }
+   
    protected AbsPage zTreeItem(Action action, FolderItem folderItem) throws HarnessException {
       AbsPage page = null;
       String locator = null;
@@ -186,10 +190,35 @@ public class TreeMail extends AbsTree {
       throw new HarnessException("Must use FolderItem or SavedSearchFolderItem as argument, but was "+ folder.getClass());
    }
 
+   protected AbsPage zTreeItem(Action action, Action option, FolderItem folder) throws HarnessException {
+	   throw new HarnessException("implement me!");
+   }
+
+   protected AbsPage zTreeItem(Action action, Action option, SavedSearchFolderItem folder) throws HarnessException {
+	   throw new HarnessException("implement me!");
+   }
+
+   @Override
+   public AbsPage zTreeItem(Action action, Action option, IItem folder) throws HarnessException {
+	   // Validate the arguments
+	      if ( (action == null) || (option == null) || (folder == null) ) {
+	         throw new HarnessException("Must define an action, option, and addressbook");
+	      }
+	      
+	      if ( folder instanceof FolderItem ) {
+	         return (zTreeItem(action, option, (FolderItem)folder));
+	      } else if ( folder instanceof SavedSearchFolderItem ) {
+	         return (zTreeItem(action, option, (SavedSearchFolderItem)folder));
+	      }
+	      
+	      throw new HarnessException("Must use FolderItem or SavedSearchFolderItem as argument, but was "+ folder.getClass());
+   }
+
    @Override
    public boolean zIsActive() throws HarnessException {
       // TODO Auto-generated method stub
       return false;
    }
+
 
 }

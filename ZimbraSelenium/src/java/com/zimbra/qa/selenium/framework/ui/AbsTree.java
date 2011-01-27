@@ -48,6 +48,16 @@ public abstract class AbsTree extends AbsPage {
 	public abstract AbsPage zTreeItem(Action action, IItem item) throws HarnessException;
 
 	/**
+	 * Apply the specified action with option on the specified address book
+	 * @param action
+	 * @param addressbook
+	 * @return
+	 * @throws HarnessException
+	 */
+	public abstract AbsPage zTreeItem(Action action, Action option, IItem item) throws HarnessException;
+
+
+	/**
 	 * Return the unique name for this page class
 	 * @return
 	 */
