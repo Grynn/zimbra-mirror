@@ -95,7 +95,7 @@ function(obj, span, context) {
 Com_Zimbra_Date.prototype.menuItemSelected =
 function(itemId) {
 	switch (itemId) {
-		case "DAYVIEW":		this._dayViewListener(); break;
+		case "DAYVIEW":		this.showDayView(Com_Zimbra_Date._actionContext.date); break;
 		case "NEWAPPT":		this._newApptListener(); break;
 		case "SEARCHMAIL":	this._searchMailListener(); break;
 	}
@@ -103,43 +103,59 @@ function(itemId) {
 
 Com_Zimbra_Date.prototype.toolTipPoppedUp =
 function(spanElement, contentObjText, matchContext, canvas) {
-    if(appCtxt.isChildWindow) {
-        var app = this.getOpenerApp(ZmApp.CALENDAR);
-        if(app){
-            canvas.innerHTML = app.getDateToolTip(matchContext ? matchContext.date : new Date());
-        }
-    }else {
-        var cc = AjxDispatcher.run("GetCalController");
-        canvas.innerHTML = cc.getDayToolTipText(matchContext ? matchContext.date : new Date());
-    }
+	var app = this.getAppInMainWindow(ZmApp.CALENDAR);
+	if (!app) {
+		return;
+	}
+
+	canvas.innerHTML = app.getDateToolTip(matchContext ? matchContext.date : new Date());
 };
 
-
-Com_Zimbra_Date.prototype.getOpenerApp =
+/**
+ * returns the opener window if this is a child window, or this window otherwise
+ * @param appId
+ */
+Com_Zimbra_Date.prototype.getMainWindow =
 function(appId) {
-    var openerWindow = window.opener;
-    var wAppCtxt = openerWindow ? openerWindow.appCtxt : null;
-    var app = wAppCtxt ? wAppCtxt.getApp(appId) : null;
-    return app;
+	return appCtxt.isChildWindow ? window.opener : window;
 };
+
+
+/**
+ * returns the opener app if this is a child window, or this window's app if it's not a child window
+ * @param appId
+ */
+Com_Zimbra_Date.prototype.getAppInMainWindow =
+function(appId) {
+	var win = this.getMainWindow();
+	if (!win) {
+		return null;
+	}
+	var ctxt = win.appCtxt;
+	if (!ctxt) {
+		return null;
+	}
+	return ctxt.getApp(appId);
+};
+
 
 Com_Zimbra_Date.prototype.clicked =
 function(spanElement, contentObjText, matchContext, canvas) {
-    if(appCtxt.isChildWindow) {
-        var app = this.getOpenerApp(ZmApp.CALENDAR);
-        if(app) {
-            app.showDayView(matchContext.date);
-            window.opener.focus();
-        }
-    }else {
-        var calController = AjxDispatcher.run("GetCalController");
-        var miniCalendar = calController.getMiniCalendar();
-        calController.setDate(matchContext.date, 0, miniCalendar.getForceRollOver());
-        if (!calController._viewVisible) {
-            calController.show(ZmId.VIEW_CAL_DAY);
-        }
-    }
+	this.showDayView(matchContext.date);
 };
+
+Com_Zimbra_Date.prototype.showDayView =
+function(date) {
+	var app = this.getAppInMainWindow(ZmApp.CALENDAR);
+	if (!app) {
+		return;
+	}
+	app.showDayView(date);
+	if (appCtxt.isChildWindow) {
+		window.opener.focus();
+	}
+};
+
 
 Com_Zimbra_Date.prototype.match =
 function(line, startIndex) {
@@ -260,38 +276,44 @@ function() {
 	ZmObjectManager.registerHandler(this, ZmObjectManager.DATE, this._zimletContext.priority);
 };
 
-Com_Zimbra_Date.prototype._dayViewListener =
-function() {
-	var loadCallback = new AjxCallback(this, this._handleLoadDayView);
-	AjxDispatcher.require(["CalendarCore", "Calendar", "CalendarAppt"], false, loadCallback, null, true);
-};
-
-Com_Zimbra_Date.prototype._handleLoadDayView =
-function() {
-	var app = appCtxt.getApp(ZmApp.CALENDAR);
-	app.activate(true);
-
-	var controller = app.getCalController();
-	controller.show(ZmId.VIEW_CAL_DAY);
-	controller.setDate(Com_Zimbra_Date._actionContext.date);
-};
 
 Com_Zimbra_Date.prototype._newApptListener =
 function() {
-	var loadCallback = new AjxCallback(this, this._handleLoadNewAppt);
-	AjxDispatcher.require(["CalendarCore", "Calendar", "CalendarAppt"], false, loadCallback, null, true);
+	var win = this.getMainWindow();
+	if (!win) {
+		return;
+	}
+
+	var loadCallback = new win.AjxCallback(this, this._handleLoadNewAppt);
+	win.AjxDispatcher.require(["CalendarCore", "Calendar", "CalendarAppt"], false, loadCallback, null, true);
 };
 
 Com_Zimbra_Date.prototype._handleLoadNewAppt =
 function() {
 	// TODO support ev.shiftKey
-	appCtxt.getAppViewMgr().popView(true, ZmId.VIEW_LOADING);	// pop "Loading..." page
-	AjxDispatcher.run("GetCalController").newAppointmentHelper(Com_Zimbra_Date._actionContext.date);
+	var win = this.getMainWindow();
+	if (!win) {
+		return null;
+	}
+
+	win.appCtxt.getAppViewMgr().popView(true, ZmId.VIEW_LOADING);	// pop "Loading..." page
+	win.AjxDispatcher.run("GetCalController").newAppointmentHelper(Com_Zimbra_Date._actionContext.date);
+	if (appCtxt.isChildWindow) {
+		window.opener.focus();
+	}
 };
 
 Com_Zimbra_Date.prototype._searchMailListener =
 function() {
-	appCtxt.getSearchController().dateSearch(Com_Zimbra_Date._actionContext.date);
+	var win = this.getMainWindow(ZmApp.CALENDAR);
+	if (!win) {
+		return;
+	}
+
+	win.appCtxt.getSearchController().dateSearch(Com_Zimbra_Date._actionContext.date);
+	if (appCtxt.isChildWindow) {
+		window.opener.focus();
+	}
 };
 
 //
