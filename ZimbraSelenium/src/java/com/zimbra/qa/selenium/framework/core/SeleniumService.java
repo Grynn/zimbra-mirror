@@ -256,7 +256,7 @@ public class SeleniumService {
 	}
 	
 	private void stopBrowsers() throws HarnessException {
-		stopBrowsersXP();
+		//stopBrowsersXP();
 		stopBrowsersMac();
 		stopBrowsersLinux();
 	}

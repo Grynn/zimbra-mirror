@@ -130,13 +130,17 @@ public class ExecuteHarnessMain {
 	protected String testoutputfoldername = null;
 	public void setTestOutputFolderName(String path) {
 		
+		String browser = ZimbraSeleniumProperties.getStringProperty(
+				ZimbraSeleniumProperties.getLocalHost() + ".browser",
+				ZimbraSeleniumProperties.getStringProperty("browser"));
+		if(browser.charAt(0) == '*')
+			browser = browser.substring(1).split(" ")[0];		
+		
 		// Append the app, browser, locale
 		path += "/"
 			+ ZimbraSeleniumProperties.getAppType()
 			+ "/"
-			+ ZimbraSeleniumProperties.getStringProperty(
-					ZimbraSeleniumProperties.getLocalHost() + ".browser",
-					ZimbraSeleniumProperties.getStringProperty("browser"))
+			+	browser						
 			+ "/" + ZimbraSeleniumProperties.getStringProperty("locale");
 		
 		// Make sure the path exists
@@ -800,6 +804,32 @@ public class ExecuteHarnessMain {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
+		args = new String[8];
+		//args[0] = "-j";
+		args[0] = "-j".trim(); 
+		args[1] = "C:/p4/HELIX/ZimbraSelenium/build/dist/zimbra-6.0.0/lib/zimbraselenium.jar".trim(); 
+
+		args[2] = "-p".trim();
+		//args[3] = "projects.mobile.tests".trim();
+		//args[3] = "projects.ajax.tests.briefcase".trim();
+		//args[3] = "projects.ajax.tests.briefcase.document".trim();
+		args[3] = "projects.ajax.tests.briefcase.document.Move".trim();
+		//args[3] = "projects.zcs.tests.tasks.tasks.CreateTask".trim();
+		//args[3] = "projects.admin.tests.login.BasicLogin".trim();
+		//args[3] = "projects.admin.tests.accounts.CreateAccount".trim();
+		//args[3] = "projects.zcs.tests.search.searchbar.SearchBarIsInColonAutoCompleteAndSearch".trim();
+		
+		
+    	args[4] = "-g".trim();
+    	//args[5] = "always,sanity".trim();
+    	//args[5] = "always,smoke".trim();
+    	//args[5] = "always,d".trim();
+    	args[5] = "always,sanity,smoke".trim();
+    	
+    	args[6] = "-l".trim();
+    	args[7] = "conf/log4j.properties".trim();
+		
     	BasicConfigurator.configure();
 
     	
