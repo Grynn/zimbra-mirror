@@ -3,10 +3,10 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.List;
 
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
+
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -19,8 +19,6 @@ import com.zimbra.qa.selenium.framework.util.SleepUtil;
 
 public class ContextMenu extends AbsDisplay {
 
-	public static final String zContacts		= "id='zm__Contacts'";
-	
 	
 	public ContextMenu(AbsApplication application) {
 		super(application);
@@ -35,10 +33,70 @@ public class ContextMenu extends AbsDisplay {
         SleepUtil.sleepSmall();		
 	}
 
-	
-	public List<ContextMenuItem> zListGetContextMenuItems(String typeLocator) throws HarnessException {
+	public ContextMenuItem getContextMenuItem  (String locator, Class contextMenuItemObject)throws HarnessException {
+		   ContextMenuItem cmi=null;
+		   
+		   Field[] fields= contextMenuItemObject.getFields();
+	       
+	       for (Field f:fields) {
+	    	   try {   			    		 
+	    		 cmi = (ContextMenuItem) f.get(null); 
+	    		 
+	    	    	
+		         if (cmi.locator.equals(locator)) {
+			     
+		        	 String cssLocator= "css=td[id='" + locator ;
+			 
+			        //verify image, text, and shortcut 		   
+		        	 if (! this.sIsElementPresent(cssLocator + "_left_icon" + "'] " +cmi.image))
+		        	 {
+		        		 throw new HarnessException("cannot find " +  cssLocator + "_left_icon" + "'] " +cmi.image);
+		        	 }
+				
+		        	/* TODO locale
+		        	 * if (! this.sIsElementPresent(cssLocator + "_title" + "']:contains('" +cmi.text + "')")) 
+		        	 {
+		        		 throw new HarnessException("cannot find " +  cssLocator + "_title" + "']:contains('" +cmi.text + "')");
+		        	 }
+				    */   
+		        	 if (! this.sIsElementPresent(cssLocator + "_dropdown" +"']" +cmi.shortcut))
+		        	 {
+		        		 throw new HarnessException("cannot find " + cssLocator + "_dropdown" +"']" +cmi.shortcut);
+		        	 }
+		              	 
+		        	 break;
+		          }
+	    	   }   	
+	    	   //exception occurs for non-ContextMenuItem fields
+	    	   catch (Exception e) {}    		        	
+	    
+	       }	   
+		   
+	       if (locator.startsWith("DWT")){
+				  //most likely separator 
+			   cmi = ContextMenuItem.C_SEPARATOR;			  
+		   }
+		  
+			
+		   if (cmi == null) {
+			   throw new HarnessException("cannot find context menu " + locator);
+		   }
+		   
+		   return cmi;
+		}
+		
+	public ArrayList<ContextMenuItem> zListGetContextMenuItems(Class contextMenuItemObjects) throws HarnessException {
 
-		List <ContextMenuItem> list= new ArrayList<ContextMenuItem>();
+		ArrayList <ContextMenuItem> list= new ArrayList<ContextMenuItem>();
+		String typeLocator = null;
+		
+		//get LOCATOR 
+		try {			
+		  typeLocator = (String) contextMenuItemObjects.getField("LOCATOR").get(null);
+		}
+		catch (Exception e) {
+			throw new HarnessException(e.getMessage() + " Context Menu LOCATOR not defined");
+		}
 		
 		//TODO: check for visible		
 		if ( !this.sIsElementPresent("xpath=//div[@" +typeLocator + "]"))
@@ -55,8 +113,7 @@ public class ContextMenu extends AbsDisplay {
 			//get id attribute
 			String id = sGetAttribute("xpath=(//div[@" + typeLocator + "]/table/tbody/tr["+ i +"]/td/div)@id");
 						
-			ContextMenuItem ci  = ContextMenuItem.getContextMenuItem(id);		    			
-			
+			ContextMenuItem ci  = getContextMenuItem(id, contextMenuItemObjects);		    						
 			list.add(ci);	    	      
 		}
 
@@ -79,6 +136,10 @@ public class ContextMenu extends AbsDisplay {
 		//return ( this.sIsElementPresent(Locators.zTagDialogId) );
 	}
 
-
+	//check if a context menu item is enable
+	public boolean isEnable(ContextMenuItem cmi) {
+		String attrs = sGetAttribute("xpath=(//div[@id='" +cmi.locator + "'])@class");       
+		return !attrs.contains("ZDisabled");
+	}
 
 }

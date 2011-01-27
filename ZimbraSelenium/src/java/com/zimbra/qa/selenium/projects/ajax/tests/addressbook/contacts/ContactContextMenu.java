@@ -1,7 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.contacts;
 
 
-import java.util.List;
+import java.util.*;
 
 import org.testng.annotations.Test;
 
@@ -61,20 +61,32 @@ public class ContactContextMenu extends AjaxCommonTest  {
         ContextMenu contextMenu= (ContextMenu) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, contactItem.fileAs); // contactItem.fileAs);
         SleepUtil.sleepMedium();
         
-        List <ContextMenuItem> list = contextMenu.zListGetContextMenuItems(ContextMenu.zContacts);
+        ArrayList <ContextMenuItem> list = contextMenu.zListGetContextMenuItems(PageAddressbook.CONTEXT_MENU.class);
         
         //verify all items in the context menu list
-        ZAssert.assertTrue(list.contains(ContextMenuItem.C_CONTACT_SEARCH),"Verify contact search in context menu");
-        ZAssert.assertTrue(list.contains(ContextMenuItem.C_CONTACT_ADVANCED_SEARCH),"Verify advanced search in context menu");
-        ZAssert.assertTrue(list.contains(ContextMenuItem.C_CONTACT_NEW_EMAIL),"Verify new email in context menu");
-        ZAssert.assertTrue(list.contains(ContextMenuItem.C_CONTACT_EDIT),"Verify edit contact  in context menu");
+        ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_SEARCH),"Verify contact search in context menu");
+        ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_ADVANCED_SEARCH),"Verify advanced search in context menu");
+        ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_NEW_EMAIL),"Verify new email in context menu");
+        ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_EDIT),"Verify edit contact  in context menu");
         //TODO 
         //ZAssert.assertTrue(list.contains(ContextMenuItem.C_CONTACT_FORWARD),"Verify forward email in context menu");
-        ZAssert.assertTrue(list.contains(ContextMenuItem.C_CONTACT_TAG),"Verify tag option in context menu");
-        ZAssert.assertTrue(list.contains(ContextMenuItem.C_CONTACT_DELETE),"Verify delete option in context menu");
-        ZAssert.assertTrue(list.contains(ContextMenuItem.C_CONTACT_MOVE),"Verify move option in context menu");
-        ZAssert.assertTrue(list.contains(ContextMenuItem.C_CONTACT_PRINT),"Verify print option in context menu");
-        
+        ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_TAG),"Verify tag option in context menu");
+        ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_DELETE),"Verify delete option in context menu");
+        ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_MOVE),"Verify move option in context menu");
+        ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_PRINT),"Verify print option in context menu");
+
+        //Verify all items enabled
+        ZAssert.assertTrue(contextMenu.isEnable(PageAddressbook.CONTEXT_MENU.CONTACT_SEARCH),"Verify contact search is enabled");
+        ZAssert.assertTrue(contextMenu.isEnable(PageAddressbook.CONTEXT_MENU.CONTACT_ADVANCED_SEARCH),"Verify contact advanced search is enabled");
+        ZAssert.assertTrue(contextMenu.isEnable(PageAddressbook.CONTEXT_MENU.CONTACT_NEW_EMAIL),"Verify new email is enabled");
+        ZAssert.assertTrue(contextMenu.isEnable(PageAddressbook.CONTEXT_MENU.CONTACT_EDIT),"Verify edit contact is enabled");
+
+        //ZAssert.assertTrue(ContextMenuItem.C_CONTACT_FORWARD),"Verify forward email is enabled");
+
+        ZAssert.assertTrue(contextMenu.isEnable(PageAddressbook.CONTEXT_MENU.CONTACT_TAG),"Verify tag option is enabled");
+        ZAssert.assertTrue(contextMenu.isEnable(PageAddressbook.CONTEXT_MENU.CONTACT_DELETE),"Verify delete option is enabled");
+        ZAssert.assertTrue(contextMenu.isEnable(PageAddressbook.CONTEXT_MENU.CONTACT_MOVE),"Verify move option is enabled");
+        ZAssert.assertTrue(contextMenu.isEnable(PageAddressbook.CONTEXT_MENU.CONTACT_PRINT),"Verify print option is enabled");
    	}
 	
 
@@ -84,12 +96,9 @@ public class ContactContextMenu extends AjaxCommonTest  {
 		
 		ContactItem contactItem = createSelectAContactItem();
 		
-    	// Right click on the item to show the menu
-        app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, contactItem.fileAs); // contactItem.fileAs);
-        SleepUtil.sleepMedium();
-            
+    	    
         //select delete option
-        app.zPageAddressbook.zContextMenu(ContextMenuItem.C_CONTACT_DELETE);
+        app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Action.A_DELETE, contactItem.fileAs);
         SleepUtil.sleepSmall();
         
         //verify toasted message 1 contact moved to Trash
@@ -115,13 +124,9 @@ public class ContactContextMenu extends AjaxCommonTest  {
 	public void ClickMoveOnContextMenu() throws HarnessException {
 		
 		ContactItem contactItem = createSelectAContactItem();
-		
-    	// Right click on the item to show the menu
-        app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, contactItem.fileAs); // contactItem.fileAs);
-        SleepUtil.sleepMedium();
-            
+		            
         //select move option
-        DialogContactMove dialogContactMove = (DialogContactMove) app.zPageAddressbook.zContextMenu(ContextMenuItem.C_CONTACT_MOVE);
+        DialogContactMove dialogContactMove = (DialogContactMove) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Action.A_MOVE, contactItem.fileAs);
         SleepUtil.sleepSmall();
         
         //enter the moved folder
