@@ -136,6 +136,8 @@ public class DbOfflineMigration {
         PreparedStatement stmt = null;
         boolean isSuccess = false;
         try {
+            setNewDefaultSkin(conn, stmt, "carbon");
+            
             // only update db.version without actually creating dumpster tables
             stmt = conn.prepareStatement("UPDATE config set value='65' where name='db.version'");
             stmt.executeUpdate();
@@ -149,6 +151,24 @@ public class DbOfflineMigration {
             else
                 conn.commit();
         }
+    }
+    
+    private void setNewDefaultSkin(Connection conn, PreparedStatement stmt, String skin) throws Exception {
+        stmt = conn.prepareStatement("SELECT entry_id FROM directory" +
+                " WHERE entry_name = 'local@host.local' AND entry_type = 'acct'");
+        ResultSet rs = stmt.executeQuery();
+        if (!rs.next()) {
+            throw new Exception("Unable to get entry_id of local@host.local");
+        }
+        int entId = rs.getInt(1);
+        stmt.close();    
+
+        stmt = conn.prepareStatement("UPDATE directory_attrs set value = ?" +
+                " WHERE name='zimbraPrefSkin' AND entry_id = ?");
+        stmt.setString(1, skin);
+        stmt.setInt(2, entId);
+        stmt.executeUpdate();
+        stmt.close();
     }
     
     // derby does not support "drop table if exists...", so have to do this
