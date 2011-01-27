@@ -335,7 +335,7 @@ public class ZMessageBean {
     }
 
     private static void addBody(List<ZMimePartBean> result, ZMimePart body, ZMimePart child) {
-        if (body != child && child.isBody()) {
+        if (body != child && child.isBody() && child.getContent() != null) {
             ZMimePartBean mpb = new ZMimePartBean(child);
             if (mpb.getIsTextHtml() || mpb.getIsTextPlain()) {
                 result.add(mpb);
