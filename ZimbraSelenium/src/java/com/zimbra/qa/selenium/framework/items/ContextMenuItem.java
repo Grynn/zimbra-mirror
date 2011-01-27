@@ -9,7 +9,7 @@ public class ContextMenuItem {
 	protected static Logger logger = LogManager.getLogger(IItem.class);
 
 	public static String stringToReplace = "<ITEM_NAME>";
-	public static final String zDesktopContextMenuItems = new StringBuffer("css=td[id$='_title']:contains(")
+	public static final String zDesktopContextMenuItems = new StringBuffer("css=table[class$='MenuTable'] td[id$='_title']:contains(")
 	      .append(stringToReplace).append(")").toString();
 
 	//FIXME
@@ -19,7 +19,7 @@ public class ContextMenuItem {
 	public final String image;
 	public final String text;
 	public final String shortcut;
-	
+
 	public ContextMenuItem (String locator, String text, String image, String shortcut) {
 		this.locator=locator;
 		this.image=image;
@@ -28,7 +28,7 @@ public class ContextMenuItem {
 	}
 
 	public enum CONTEXT_MENU_ITEM_NAME {
-	   NEW_FOLDER
+	   NEW_FOLDER, DELETE
 	}
 
 	public static ContextMenuItem getDesktopContextMenuItem(CONTEXT_MENU_ITEM_NAME cmiName) {
@@ -41,6 +41,10 @@ public class ContextMenuItem {
 	      locator = zDesktopContextMenuItems.replace(stringToReplace, I18N.CONTEXT_MENU_ITEM_NEW_FOLDER);
 	      text = I18N.CONTEXT_MENU_ITEM_NEW_FOLDER;
 	      break;
+	   case DELETE:
+	      locator = zDesktopContextMenuItems.replace(stringToReplace, I18N.CONTEXT_MENU_ITEM_DELETE);
+         text = I18N.CONTEXT_MENU_ITEM_DELETE;
+         break;
 	   }
 
 	   return new ContextMenuItem(locator, text, image, shortcut);

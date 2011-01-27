@@ -163,7 +163,7 @@ public class GeneralUtility {
          }
          SleepUtil.sleep(delayBetweenCheck);
       }
-      logger.info("Final Output is: " + output.toString());
+      logger.info("Final Output is: " + output);
       return output;
    }
 

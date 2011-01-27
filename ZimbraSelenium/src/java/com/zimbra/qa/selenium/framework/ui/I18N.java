@@ -164,6 +164,7 @@ public class I18N {
     public final static String TREE_MAIL_TRASH = "Trash";
 
     public final static String CONTEXT_MENU_ITEM_NEW_FOLDER = "New Folder";
+    public final static String CONTEXT_MENU_ITEM_DELETE = "Delete";
 
 //	public static void main(String[] args) throws HarnessException {
 //    	BasicConfigurator.configure();

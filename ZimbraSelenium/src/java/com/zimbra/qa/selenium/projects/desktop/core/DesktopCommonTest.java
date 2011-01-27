@@ -60,7 +60,7 @@ public class DesktopCommonTest {
 	private BRANCH _branchName = null;
 	private ARCH _arch = null;
 	private final static String _accountFlavor = "Zimbra";
-	protected final static String _defaultAccountName = ZimbraSeleniumProperties.getUniqueString();
+	protected final static String defaultAccountName = ZimbraSeleniumProperties.getUniqueString();
 	private boolean _uninstallAppAfterTest = false;
 	public static ZimbraSelenium _selenium = null;
 	private static boolean _firstTime = true;
@@ -196,7 +196,7 @@ public class DesktopCommonTest {
                                             .append("zimbra/desktop/accsetup.jsp?at=")
                                             .append(zdp.getSerialNumber()).append("&accountId=&verb=add&accountFlavor=")
                                             .append(_accountFlavor).append("&accountName=")
-                                            .append(_defaultAccountName).append("&email=")
+                                            .append(defaultAccountName).append("&email=")
                                             .append(startingAccount.EmailAddress).append("&password=")
                                             .append(startingAccount.Password).append("&host=") 
                                             .append(emailServerName).append("&port=")

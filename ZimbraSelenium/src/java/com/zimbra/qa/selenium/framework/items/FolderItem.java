@@ -8,8 +8,11 @@ import org.apache.log4j.Logger;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 
 
 /**
@@ -91,6 +94,40 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 		
 	}
 
+	/**
+    * Delete a folder using SOAP with the default SERVER type destination host
+    * @param account Account used for deleting the folder
+    * @param folderName Folder name to be deleted
+    * @throws HarnessException
+    */
+	public static void deleteUsingSOAP(ZimbraAccount account, String folderName)
+	      throws HarnessException {
+	   deleteUsingSOAP(account, folderName, SOAP_DESTINATION_HOST_TYPE.SERVER);
+	}
+
+	/**
+	 * Delete a folder using SOAP
+	 * @param account Account used for deleting the folder
+	 * @param folderName Folder name to be deleted
+	 * @param destType Destination host type: CLIENT or SERVER
+	 * @throws HarnessException
+	 */
+	public static void deleteUsingSOAP(ZimbraAccount account, String folderName,
+	      SOAP_DESTINATION_HOST_TYPE destType) throws HarnessException {
+	   String id = account.soapSelectValue("//mail:folder[@name='"+ folderName +"']", "id");
+	   account.soapSend("<FolderActionRequest xmlns='urn:zimbraMail'>" +
+	                       "<action id='" + id + "' op='delete'/>" +
+	                    "</FolderActionRequest>", destType);
+	   Element[] response = account.soapSelectNodes("//mail:FolderActionResponse");
+      if ( response.length != 1 ) {
+         throw new HarnessException("Unable to delete folder "+ account.soapLastResponse());
+      }
+
+      Object[] params = {"//mail:folder[@name='"+ folderName +"']", "id"};
+      GeneralUtility.waitFor(null,
+            account, false, "soapSelectValue", params, WAIT_FOR_OPERAND.EQ, null, 30000, 1000);
+   }
+	
 	/**
 	 * Import a FolderItem specified in a GetFolderResponse
 	 * <br>

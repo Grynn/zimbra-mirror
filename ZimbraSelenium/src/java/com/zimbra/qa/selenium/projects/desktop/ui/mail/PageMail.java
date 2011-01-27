@@ -20,6 +20,8 @@ public class PageMail extends AbsTab {
       // Buttons
       public static final String zNewIconButton = "css=td#zb__CLV__NEW_MENU_left_icon"; 
       public static final String zSendReceiveButton = "css=td#zb__CLV__CHECK_MAIL_left_icon";
+      public static final String zConfirmationMessageOkButton = "css=tr>td>div[id*='button2']";
+      public static final String zConfirmationMessageCancelButton = "css=tr>td>div[id*='button1']";
       
       public static final String zViewIconBtnID       = "zb__CLV__VIEW_MENU_left_icon";
       public static final String zViewMenuTVBtnID     = "zb__TV__VIEW_MENU_left_icon";
