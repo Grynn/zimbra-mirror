@@ -1025,6 +1025,7 @@ public class PushChanges {
                 if (create) {
                     if (!ombx.renumberItem(sContext, id, type, resp.getFirst()))
                         return true;
+                    id = resp.getFirst();
                 }
                 ombx.setSyncedVersionForMailItem("" + item.getId(), resp.getSecond());
             }
@@ -1033,7 +1034,7 @@ public class PushChanges {
             Element action = request.addElement(MailConstants.E_ACTION);
             action.addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE);
             action.addAttribute(MailConstants.A_TAGS, item.getTagString()); 
-            action.addAttribute(MailConstants.A_ID, item.getId());
+            action.addAttribute(MailConstants.A_ID, id);
             ombx.sendRequest(request);
         }
 
