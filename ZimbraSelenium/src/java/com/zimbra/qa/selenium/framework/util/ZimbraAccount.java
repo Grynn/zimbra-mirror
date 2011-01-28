@@ -64,6 +64,7 @@ public class ZimbraAccount {
     protected String MyAuthToken = null;
     protected String MyClientAuthToken = null;
     public Map<String, String> preferences = null;
+    public final static String clientAccountName = "local@host.local";
 
 
 
@@ -300,7 +301,7 @@ public class ZimbraAccount {
 			   soapClient.setAuthToken(MyAuthToken);
 			   break;
 			case CLIENT:
-			   String username = "local@host.local";
+			   String username = clientAccountName;
 			   String password = ZimbraDesktopProperties.getInstance().getSerialNumber();
 			   soapSend(
 	               "<AuthRequest xmlns='urn:zimbraAccount'>" +
@@ -457,7 +458,22 @@ public class ZimbraAccount {
     * @return the response envelope
     * @throws HarnessException on failure
     */
-	public Element soapSend(String request, SOAP_DESTINATION_HOST_TYPE destinationHostType) throws HarnessException {
+	public Element soapSend(String request, SOAP_DESTINATION_HOST_TYPE destinationHostType)
+	      throws HarnessException {
+	   return soapSend(request, destinationHostType, null);
+	}
+
+	/**
+    * Send a SOAP request from this account to the specified destination host type with specific
+    * account name to be added in SOAP context
+    * @param request the SOAP request body (see ZimbraServer/docs/soap.txt)
+    * @param destinationHostType The destination Host Type: SERVER or CLIENT
+    * @param accountName Account name to be added in SOAP context
+    * @return the response envelope
+    * @throws HarnessException on failure
+    */
+	public Element soapSend(String request, SOAP_DESTINATION_HOST_TYPE destinationHostType,
+	      String accountName) throws HarnessException {
 
       // TODO: need to watch for certain SOAP requests, such
       // as ModifyPrefsRequest, which could trigger a client reload
@@ -472,7 +488,7 @@ public class ZimbraAccount {
          break;
       }
 
-      return (soapClient.sendSOAP(destination, request, destinationHostType));
+      return (soapClient.sendSOAP(destination, request, destinationHostType, accountName));
 	}
 
 	/**
@@ -690,20 +706,36 @@ public class ZimbraAccount {
          * @throws HarnessException
          */
         public Element sendSOAP(String host, String request,
-              SOAP_DESTINATION_HOST_TYPE destinationType) throws HarnessException {        	
+              SOAP_DESTINATION_HOST_TYPE destinationType) throws HarnessException {
+           return sendSOAP(host, request, destinationType, null);
+        }
+
+        /**
+         * Send the specified Zimbra SOAP request to the specified host with
+         * specific account name in context
+         * @param host Host name to send the SOAP context/request
+         * @param request Request to be sent over SOAP
+         * @param destinationType Destination host type: SERVER or CLIENT
+         * @param accountName Account name to be added to the context, if none, enter null
+         * @return
+         * @throws HarnessException
+         */
+        public Element sendSOAP(String host, String request,
+              SOAP_DESTINATION_HOST_TYPE destinationType, String accountName) throws HarnessException {        	
         	try
         	{
-        	   String token = null;
         	   switch (destinationType) {
         	   case SERVER:
-        	      token = AuthToken;
+        	      setContext(AuthToken, SessionId, SequenceNum);
         	      break;
         	   case CLIENT:
-        	      token = ClientAuthToken;
+               setContext(ClientAuthToken, SessionId, SequenceNum);
+               if (accountName != null) {
+                  SoapUtil.addTargetAccountToCtxt(requestContext, null, accountName);
+               }
         	      break;
         	   }
 
-        	   setContext(token, SessionId, SequenceNum);
         		return (sendSOAP(host, requestContext, Element.parseXML(request),
         		      destinationType));
         	} catch (DocumentException e) {

@@ -160,6 +160,9 @@ public class GeneralUtility {
          } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+         } catch (Exception e) {
+            //TODO:
+            e.printStackTrace();
          }
          SleepUtil.sleep(delayBetweenCheck);
       }
