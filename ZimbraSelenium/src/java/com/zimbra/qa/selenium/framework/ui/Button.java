@@ -36,6 +36,8 @@ public class Button {
 	public static final Button B_PRINT = new Button("B_PRINT");
 	public static final Button B_TAG = new Button("B_TAG");
 	public static final Button B_SAVE = new Button("B_SAVE");
+	public static final Button B_RENAME = new Button("B_RENAME");
+	public static final Button B_SHARE = new Button("B_SHARE");
 	
 	public static final Button O_NEW_MESSAGE = new Button("O_NEW_MESSAGE");
 	public static final Button O_NEW_CONTACT = new Button("O_NEW_CONTACT");
@@ -125,7 +127,11 @@ public class Button {
 	public static final Button B_TREE_NEWBRIEFCASE = new Button("B_TREE_NEWBRIEFCASE");
 	public static final Button B_TREE_NEWTAG = new Button("B_TREE_NEWTAG");
 	
-	
+	// Tree buttons (Mail folders)
+	public static final Button B_TREE_FOLDER_MARKASREAD = new Button("B_TREE_FOLDER_MARKASREAD");
+	public static final Button B_TREE_FOLDER_EXPANDALL = new Button("B_TREE_FOLDER_EXPANDALL");
+	public static final Button B_TREE_FOLDER_EMPTY = new Button("B_TREE_FOLDER_EMPTY");
+
 	
 	// Button properties
 	private final String ID;
