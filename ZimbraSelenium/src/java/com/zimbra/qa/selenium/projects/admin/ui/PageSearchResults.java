@@ -45,7 +45,7 @@ public class PageSearchResults extends AbsTab {
 	}
 
 	@Override
-	public AbsPage zListItem(Action action, Action option, String item)
+	public AbsPage zListItem(Action action, Button option, String item)
 			throws HarnessException {
 		// TODO Auto-generated method stub
 		return null;

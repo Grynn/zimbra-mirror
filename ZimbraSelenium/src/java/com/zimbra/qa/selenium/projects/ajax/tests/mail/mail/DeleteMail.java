@@ -330,7 +330,7 @@ public class DeleteMail extends AjaxCommonTest {
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 				
 		// Right click the item, select delete
-		app.zPageMail.zListItem(Action.A_RIGHTCLICK, Action.A_DELETE, mail.dSubject);
+		app.zPageMail.zListItem(Action.A_RIGHTCLICK, Button.B_DELETE, mail.dSubject);
 				
 		// Make sure the message no longer appears in the list
 		List<MailItem> messages = app.zPageMail.zListGetMessages();

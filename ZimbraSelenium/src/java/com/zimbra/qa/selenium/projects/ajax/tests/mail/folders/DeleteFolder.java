@@ -48,7 +48,7 @@ public class DeleteFolder extends AjaxCommonTest {
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
 		// Delete the folder using context menu
-		app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Action.A_DELETE, subfolder);
+		app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, subfolder);
 		
 		
 		// Verify the folder is now in the trash

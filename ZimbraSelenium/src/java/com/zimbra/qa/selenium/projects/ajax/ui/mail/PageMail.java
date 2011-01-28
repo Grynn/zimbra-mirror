@@ -961,13 +961,13 @@ public class PageMail extends AbsTab {
 	}
 
 	@Override
-	public AbsPage zListItem(Action action, Action option, String subject) throws HarnessException {
+	public AbsPage zListItem(Action action, Button option, String subject) throws HarnessException {
 		logger.info(myPageName() + " zListItem("+ action +", "+ option +", "+ subject +")");
 		
 		if ( action == null )
 			throw new HarnessException("action cannot be null");
 		if ( option == null )
-			throw new HarnessException("action cannot be null");
+			throw new HarnessException("button cannot be null");
 		if ( subject == null || subject.trim().length() == 0)
 			throw new HarnessException("subject cannot be null or blank");
 
@@ -1029,7 +1029,7 @@ public class PageMail extends AbsTab {
 			
 			String optionLocator = null;
 			
-			if (option == Action.A_DELETE) {
+			if (option == Button.B_DELETE) {
 				
 				// <div id="zmi__TV_DELETE" ... By Message
 				// <div id="zmi__CLV__Par__DELETE" ... By Conversation

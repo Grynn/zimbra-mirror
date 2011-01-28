@@ -171,7 +171,7 @@ public class TreeContacts extends AbsTree {
 
 
 	@Override
-	public AbsPage zTreeItem(Action action, Action option, IItem item) throws HarnessException {
+	public AbsPage zTreeItem(Action action, Button option, IItem item) throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
 

@@ -339,7 +339,7 @@ public class PageAddressbook extends AbsTab {
 	
 	
 	@Override
-	public AbsPage zListItem(Action action, Action option, String contact) throws HarnessException {
+	public AbsPage zListItem(Action action, Button option, String contact) throws HarnessException {
 		String locator = null;			// If set, this will be clicked
 		AbsPage page = null;	// If set, this page will be returned
 		String id = null;
@@ -350,15 +350,15 @@ public class PageAddressbook extends AbsTab {
 								
 			this.zRightClick(contactLocator);
 		
-			if (option == Action.A_DELETE){
+			if (option == Button.B_DELETE){
                 cmi=CONTEXT_MENU.CONTACT_DELETE;				
 			}
-			else if (option == Action.A_MOVE) {
+			else if (option == Button.B_MOVE) {
 				cmi=CONTEXT_MENU.CONTACT_MOVE;
 				page = new DialogContactMove(MyApplication);	
 			}
             
-			else if (option == Action.A_EDIT) {
+			else if (option == Button.B_EDIT) {
 				cmi=CONTEXT_MENU.CONTACT_EDIT;
 				page = new FormContactNew(MyApplication);	
 			}

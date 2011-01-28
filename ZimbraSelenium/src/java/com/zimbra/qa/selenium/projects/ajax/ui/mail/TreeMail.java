@@ -29,11 +29,11 @@ public class TreeMail extends AbsTree {
 		logger.info("new " + TreeMail.class.getCanonicalName());
 	}
 	
-	protected AbsPage zTreeItem(Action action, Action option, FolderItem folderItem) throws HarnessException {
+	protected AbsPage zTreeItem(Action action, Button option, FolderItem folderItem) throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
 	
-	protected AbsPage zTreeItem(Action action, Action option, SavedSearchFolderItem folderItem) throws HarnessException {
+	protected AbsPage zTreeItem(Action action, Button option, SavedSearchFolderItem folderItem) throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
 
@@ -213,7 +213,7 @@ public class TreeMail extends AbsTree {
 	}
 		
 	@Override
-	public AbsPage zTreeItem(Action action, Action option, IItem folder) throws HarnessException {
+	public AbsPage zTreeItem(Action action, Button option, IItem folder) throws HarnessException {
 		// Validate the arguments
 		if ( (action == null) || (option == null) || (folder == null) ) {
 			throw new HarnessException("Must define an action, option, and addressbook");

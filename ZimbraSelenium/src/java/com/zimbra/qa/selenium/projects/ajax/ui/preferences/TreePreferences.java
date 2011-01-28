@@ -72,6 +72,7 @@ public class TreePreferences extends AbsTree {
 	/**
 	 * Not implemented.  Use zTreeItem(Action action, TreeItem item) instead
 	 */
+	@Override
 	public AbsPage zTreeItem(Action action, IItem preference) throws HarnessException {
 		throw new HarnessException("Not implemented.  Use zTreeItem(Action action, TreeItem item) instead");
 	}
@@ -79,7 +80,8 @@ public class TreePreferences extends AbsTree {
 	/**
 	 * Not implemented.  Use zTreeItem(Action action, TreeItem item) instead
 	 */
-	public AbsPage zTreeItem(Action action, Action option, IItem item) throws HarnessException {
+	@Override
+	public AbsPage zTreeItem(Action action, Button option, IItem item) throws HarnessException {
 		throw new HarnessException("Not applicable.");
 	}
 
@@ -87,6 +89,7 @@ public class TreePreferences extends AbsTree {
 	/**
 	 * Not implemented.  There are no buttons in the preferences tree.
 	 */
+	@Override
 	public AbsPage zPressButton(Button button) throws HarnessException {
 		throw new HarnessException("Not implemented.  There are no buttons in the preferences tree.");
 	}

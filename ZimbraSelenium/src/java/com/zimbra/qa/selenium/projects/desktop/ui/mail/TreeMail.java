@@ -198,7 +198,8 @@ public class TreeMail extends AbsTree {
 	   throw new HarnessException("implement me!");
    }
 
-   public AbsPage zTreeItem(Action action, Action option, IItem folder) throws HarnessException {
+   @Override
+   public AbsPage zTreeItem(Action action, Button option, IItem folder) throws HarnessException {
 	   // Validate the arguments
 	      if ( (action == null) || (option == null) || (folder == null) ) {
 	         throw new HarnessException("Must define an action, option, and addressbook");
