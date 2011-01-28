@@ -25,6 +25,7 @@ import com.ibm.staf.service.STAFServiceInterfaceLevel30;
 import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 
 
 public class StafIntegration implements STAFServiceInterfaceLevel30 {
@@ -48,7 +49,6 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
     private String argJarfile = "jarfile";
     private String argPattern = "pattern";
     private String argGroup = "group";
-    private String argBrowser = "browser";	// TODO: implement BROWSER argument
     private String argLog = "log";
     private String argLog4j = "log4j";
     
@@ -162,6 +162,7 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 			configProperties.setProperty("serverName", "localhost");
 			configProperties.setProperty("serverPort", "4444");
 
+
 			// Save the temp file in the log folder for the records
 			String filename = configProperties.save(valueLog);
 			
@@ -173,6 +174,17 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 		} catch (IOException e) {
         	return (new STAFResult(STAFResult.JavaError, e.getMessage()));
 		}
+
+        // Set the app type on the properties
+		// Must happen before setTestOutputFolderName()
+        for (AppType t : AppType.values()) {
+        	// Look for ".type." (e.g. ".ajax.") in the pattern
+        	if ( valuePattern.contains(t.toString().toLowerCase()) ) {
+        		ZimbraSeleniumProperties.setAppType(t);
+            	break;
+        	}
+        }
+
 
 		// Set the harness parameters
         harness.jarfilename = valueJarfile;

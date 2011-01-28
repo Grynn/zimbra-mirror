@@ -731,13 +731,15 @@ public class ExecuteHarnessMain {
 	        if ( cmd.hasOption('p') ) {
 	        	String filter = cmd.getOptionValue('p');
 	        	this.classfilter = filter;
-	        	Matcher m = Pattern.compile("projects.(.*).tests.*").matcher(filter);
-	        	if (m.find()){
-	        		if(m.group(1).equalsIgnoreCase("zcs"))
-	        			ZimbraSeleniumProperties.setAppType(AppType.AJAX);
-	        		else
-	        			ZimbraSeleniumProperties.setAppType(Enum.valueOf(AppType.class, m.group(1).toUpperCase()));	        			 	
-	        	}
+	        	
+	            // Set the app type on the properties
+	            for (AppType t : AppType.values()) {
+	            	// Look for ".type." (e.g. ".ajax.") in the pattern
+	            	if ( this.classfilter.contains(t.toString().toLowerCase()) ) {
+	            		ZimbraSeleniumProperties.setAppType(t);
+	                	break;
+	            	}
+	            }
 	        }
 
 	        if ( cmd.hasOption('e') ) {	        	
