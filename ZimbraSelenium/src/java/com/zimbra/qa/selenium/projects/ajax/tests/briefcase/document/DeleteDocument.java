@@ -80,14 +80,14 @@ public class DeleteDocument extends AjaxCommonTest {
 				.waitForCondition(
 						"selenium.isElementPresent(\"css=[id='zti__main_Briefcase__16_div'][class='DwtTreeItem-selected']\")&&"
 								+ "selenium.isElementPresent(\"css=[id='zl__BDLV__rows']\");",
-						"5000");
+						"2000");
 
 		// Verify document was deleted
 		boolean isPresenet = true;
-		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
-				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
-			isPresenet = app.zPageBriefcase.sIsElementPresent(documentLocator);
-		}
+		isPresenet = !app.zPageBriefcase.waitForCondition(
+				"!selenium.isElementPresent(\"" + documentLocator + "\");",
+				"5000");
+
 		ZAssert.assertFalse(isPresenet,
 				"Verify document was deleted through GUI");
 	}

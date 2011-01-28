@@ -203,7 +203,6 @@ public class PageBriefcase extends AbsTab {
 			page = new DocumentBriefcaseOpen(this.MyApplication);
 		} else if (button == Button.B_MOVE) {
 			// Check if the button is enabled
-			waitForElement("class=ImgDelete", "3000");
 			String attrs = sGetAttribute("css=td[" + Locators.zMoveIconBtn
 					+ "]>div@class");
 			if (attrs.contains("ZDisabledImage")) {
@@ -439,7 +438,8 @@ public class PageBriefcase extends AbsTab {
 	}
 
 	@Override
-	public AbsPage zListItem(Action action, Button option, String subject) throws HarnessException {
+	public AbsPage zListItem(Action action, Button option, String subject)
+			throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
 
