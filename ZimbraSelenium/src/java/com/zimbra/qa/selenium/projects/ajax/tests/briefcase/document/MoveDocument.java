@@ -2,7 +2,6 @@ package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -45,8 +44,8 @@ public class MoveDocument extends AjaxCommonTest {
 		FolderItem subfolder = FolderItem.importFromSOAP(account, foldername);
 
 		String subfolderLocator = "css=div[id='zl__BDLV__rows'] td[width*='auto'] div:contains("
-			+ subfolder.getName() + ")";
-		
+				+ subfolder.getName() + ")";
+
 		// Select Briefcase tab
 		app.zPageBriefcase.zNavigateTo();
 
@@ -54,8 +53,11 @@ public class MoveDocument extends AjaxCommonTest {
 		// ClientSessionFactory.session().selenium().refresh();
 		app.zPageBriefcase.zClick(Locators.zBriefcaseFolderIcon);
 
-		app.zPageBriefcase
-				.waitForElement(subfolderLocator, "5000");
+		app.zPageBriefcase.waitForElement(subfolderLocator, "5000");
+
+		// Click on created subfolder
+		// app.zPageBriefcase.zListItem(Action.A_LEFTCLICK,subfolder.getName());
+		app.zPageBriefcase.zClick(subfolderLocator);
 
 		// Create document item
 		DocumentItem document = new DocumentItem();
@@ -123,8 +125,6 @@ public class MoveDocument extends AjaxCommonTest {
 				"Verify document was moved from the folder");
 
 		// click on subfolder in tree view
-		// app.zPageBriefcase.sIsElementPresent("css=td[class='DwtTreeItem-Text']:contains('"
-		// + subfolder.getName() + "')");
 		String briefcaseSubfolder = "css=td[class='DwtTreeItem-Text']:contains('"
 				+ subfolder.getName() + "')";
 		app.zPageBriefcase.zClick(briefcaseSubfolder);
