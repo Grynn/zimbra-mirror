@@ -244,11 +244,11 @@ public class DesktopCommonTest {
 	@BeforeClass( groups = { "always" } )
 	public void commonTestBeforeClass() throws HarnessException {
 		logger.info("commonTestBeforeClass");
+		startingAccount.authenticateToMailClientHost();
 		logger.info("Wait dynamically until the application is loaded");
 		boolean isLoaded = (Boolean) GeneralUtility.waitFor("com.zimbra.qa.selenium.framework.ui.AbsApplication.AppDesktopClient",
 		      app, false, "zIsLoaded", null, WAIT_FOR_OPERAND.EQ, true, 30000, 1000);
 		boolean isPageAccountActive = app.zPageAccounts.zIsActive();
-
 
 		if (isLoaded) {
    		if (isPageAccountActive) {

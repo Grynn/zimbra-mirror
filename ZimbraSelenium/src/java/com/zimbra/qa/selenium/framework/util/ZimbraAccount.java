@@ -110,13 +110,25 @@ public class ZimbraAccount {
          logger.debug("Authenticating Mail server");
          _AccountZDC.authenticate();
 
-         _AccountZDC.ZimbraMailClientHost = ZimbraSeleniumProperties.getStringProperty(
-               "desktop.server.host", "localhost");
-         logger.debug("Authenticating Client...");
-         _AccountZDC.authenticate(SOAP_DESTINATION_HOST_TYPE.CLIENT);
       }
       return (_AccountZDC);
    }
+
+   /**
+    * Authenticate the user account logged into ZDC being tested to the
+    * client (not ZCS)
+    */
+   public void authenticateToMailClientHost() {
+      if (MyClientAuthToken == null) {
+         this.ZimbraMailClientHost = ZimbraSeleniumProperties.getStringProperty(
+               "desktop.server.host", "localhost");
+         logger.debug("Authenticating Client...");
+         this.authenticate(SOAP_DESTINATION_HOST_TYPE.CLIENT);
+      } else {
+         //Fall through
+      }
+   }
+
    public static synchronized void ResetAccountZDC() {
       logger.warn("AccountZDC is being reset");
       _AccountZDC = null;
