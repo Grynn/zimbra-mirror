@@ -207,6 +207,11 @@ public class BeanUtils {
         return s;
     }
 
+    public static String htmlNewlineEncode(String text) {
+        if (text == null || text.length() == 0) return "";
+        return text.replaceAll("\n","<br>");
+    }
+
     public static String htmlDecode(String text) {
         if (text == null || text.length() == 0) return "";
         String s = replaceAll(text, "<br>", "\n");
