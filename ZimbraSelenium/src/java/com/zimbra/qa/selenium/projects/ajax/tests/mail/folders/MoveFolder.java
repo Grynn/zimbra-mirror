@@ -23,7 +23,7 @@ public class MoveFolder extends AjaxCommonTest {
 	
 	@Test(	description = "Move a folder - Right click, Move",
 			groups = { "smoke" })
-	public void DeleteFolder_01() throws HarnessException {
+	public void MoveFolder_01() throws HarnessException {
 		
 		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
 		ZAssert.assertNotNull(inbox, "Verify the inbox is available");
