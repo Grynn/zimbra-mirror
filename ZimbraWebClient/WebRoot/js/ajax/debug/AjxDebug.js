@@ -456,10 +456,10 @@ function(args) {
 		}
 	}
 
-	// check level if provided, strip it from args; level is either a number, or 1-8 lowercase letters
+	// check level if provided, strip it from args; level is either a number, or 1-8 lowercase letters/numbers
 	var userLevel = null;
 	var firstArg = argsArray[0];
-	var gotUserLevel = (typeof firstArg == "number" || ((origLen > 1) && firstArg.length <= 8 && /^[a-z]+$/.test(firstArg)));
+	var gotUserLevel = (typeof firstArg == "number" || ((origLen > 1) && firstArg.length <= 8 && /^[a-z0-9]+$/.test(firstArg)));
 	if (gotUserLevel) {
 		userLevel = firstArg;
 		argsArray.shift();

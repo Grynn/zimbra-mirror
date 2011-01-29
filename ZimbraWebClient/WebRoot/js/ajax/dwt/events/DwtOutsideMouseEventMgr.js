@@ -1,13 +1,13 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Web Client
- * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
- *
+ * Copyright (C) 2011 Zimbra, Inc.
+ * 
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- *
+ * 
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -76,6 +76,7 @@ DwtOutsideMouseEventMgr.EVENTS_HASH = AjxUtil.arrayAsHash(DwtOutsideMouseEventMg
  * @param {DwtControl}	params.obj				control on behalf of whom we're listening
  * @param {string}		params.elementId		ID of reference element, if other than control's HTML element
  * @param {AjxListener}	params.outsideListener	listener to call when we get an outside mouse event
+ * @param {boolean}		params.noWindowBlur		if true, don't listen from window blur events; useful for dev
  */
 DwtOutsideMouseEventMgr.prototype.startListening =
 function(params) {
@@ -130,7 +131,7 @@ function(params) {
 			}
 		}
 
-		if (!AjxEnv.isIE) {
+		if (!AjxEnv.isIE && !params.noWindowBlur) {
 			this._savedWindowBlurHandler = window.onblur;
 			window.onblur = DwtOutsideMouseEventMgr._mouseEventHdlr;
 		}
@@ -153,6 +154,7 @@ function(params) {
  * @param {string}		params.id			unique ID for this listening session
  * @param {DwtControl}	params.obj			control on behalf of whom we're listening
  * @param {string}		params.elementId	ID of element to remove from listening context
+ * @param {boolean}		params.noWindowBlur	if true, don't listen from window blur events; useful for dev
  */
 DwtOutsideMouseEventMgr.prototype.stopListening =
 function(params) {
@@ -191,7 +193,7 @@ function(params) {
 			}
 		}
 
-		if (!AjxEnv.isIE) {
+		if (!AjxEnv.isIE && !params.noWindowBlur) {
 			window.onblur = this._savedWindowBlurHandler;
 		}
 

@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Web Client
- * Copyright (C) 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011 Zimbra, Inc.
  * 
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -271,7 +271,10 @@ DwtKeyMap.TEXT_UNDERLINE	= "Underline";
  * Defines the "text strikethru" action.
  */
 DwtKeyMap.TEXT_STRIKETHRU	= "Strikethru";
+
 DwtKeyMap.YES				= "Yes";
+
+DwtKeyMap.DELETE			= "Delete";
 
 DwtKeyMap.GOTO_TAB_RE = new RegExp(DwtKeyMap.GOTO_TAB + "(\\d+)");
 

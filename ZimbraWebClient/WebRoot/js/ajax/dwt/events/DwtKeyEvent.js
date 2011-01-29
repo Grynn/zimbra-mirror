@@ -100,6 +100,7 @@ function(ev) {
 	if (key == 0 && AjxEnv.isMac && AjxEnv.isGeckoBased && ev.type == "keyup" && DwtKeyEvent._geckoCode) {
 		// if Mac Gecko, return keyCode saved from keypress event
 		key = DwtKeyEvent._geckoCode;
+		DwtKeyEvent._geckoCode = null;
 	}
 	return key;
 }

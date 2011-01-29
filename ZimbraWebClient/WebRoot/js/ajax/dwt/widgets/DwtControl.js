@@ -38,6 +38,7 @@
  * <li><i>DwtEvent.HOVEROVER</i></li>
  * <li><i>DwtEvent.HOVEROUT</i></li>
  * <li><i>DwtEvent.ONCONTEXTMENU</i></li>
+ * <li><i>DwtEvent.ONCLICK</i></li>
  * <li><i>DwtEvent.ONDBLCLICK</i></li>
  * <li><i>DwtEvent.ONFOCUS</i></li>
  * <li><i>DwtEvent.ONBLUR</i></li>
@@ -50,7 +51,6 @@
  * <li><i>DwtEvent.ONMOUSEUP</i></li>
  * <li><i>DwtEvent.ONMOUSEWHEEL</i></li>
  * <li><i>DwtEvent.ONSELECTSTART</i></li>
- * <li><i>DwtEvent.ONCONTEXTMENU</i></li>
  * </ul>
  *
  * @author Ross Dargahi
@@ -2182,6 +2182,7 @@ function(clear) {
  * 		control's event handlers. The set of events supported by the control are:
  * 		<ul>
  * 		<li><i>DwtEvent.ONCONTEXTMENU</i></li>
+ * 		<li><i>DwtEvent.ONCLICK</i></li>
  * 		<li><i>DwtEvent.ONDBLCLICK</i></li>
  * 		<li><i>DwtEvent.ONMOUSEDOWN</i></li>
  * 		<li><i>DwtEvent.ONMOUSEENTER</i></li>
@@ -2220,7 +2221,7 @@ function(events, clear) {
 DwtControl.prototype._setMouseEvents =
 function() {
 	// add custom mouse handlers to standard ones
-	var mouseEvents = [DwtEvent.ONCONTEXTMENU, DwtEvent.ONDBLCLICK, DwtEvent.ONMOUSEDOWN,
+	var mouseEvents = [DwtEvent.ONCONTEXTMENU, DwtEvent.ONCLICK, DwtEvent.ONDBLCLICK, DwtEvent.ONMOUSEDOWN,
 					   DwtEvent.ONMOUSEMOVE, DwtEvent.ONMOUSEUP, DwtEvent.ONSELECTSTART];
 	if (AjxEnv.isIE) {
 		mouseEvents.push(DwtEvent.ONMOUSEENTER, DwtEvent.ONMOUSELEAVE);
@@ -2500,6 +2501,20 @@ function() {
 	this._focus();
 };
 
+/**
+ * @private
+ */
+DwtControl.__clickHdlr =
+function(ev) {
+
+	try {
+
+	return DwtControl.__mouseEvent(ev, DwtEvent.ONCLICK);
+
+	} catch (ex) {
+		AjxException.reportScriptError(ex);
+	}
+};
 
 /**
  * @private
@@ -2974,6 +2989,8 @@ function(ev) {
 };
 
 /**
+ * Note: if there is also a mousedown handler, oncontextmenu is no longer sent, so be careful.
+ *
  * @private
  */
 DwtControl.__contextMenuHdlr =
@@ -3039,6 +3056,7 @@ function(ev, eventType, obj, mouseEv) {
  */
 DwtControl.__HANDLER = {};
 DwtControl.__HANDLER[DwtEvent.ONCONTEXTMENU] = DwtControl.__contextMenuHdlr;
+DwtControl.__HANDLER[DwtEvent.ONCLICK] = DwtControl.__clickHdlr;
 DwtControl.__HANDLER[DwtEvent.ONDBLCLICK] = DwtControl.__dblClickHdlr;
 DwtControl.__HANDLER[DwtEvent.ONMOUSEDOWN] = DwtControl.__mouseDownHdlr;
 DwtControl.__HANDLER[DwtEvent.ONMOUSEENTER] = DwtControl.__mouseEnterHdlr;
@@ -3069,11 +3087,7 @@ function() {
 		DwtControl.ALL_BY_ID[this._htmlElId] = this;
 	}
 	DwtComposite._pendingElements[this._htmlElId] = htmlElement;
-	if (this.__posStyle == null || this.__posStyle == DwtControl.STATIC_STYLE) {
-        htmlElement.style.position = DwtControl.STATIC_STYLE;
-	} else {
-        htmlElement.style.position = this.__posStyle;
-	}
+	htmlElement.style.position = this.__posStyle || DwtControl.STATIC_STYLE;
 	htmlElement.className = this._className;
 	htmlElement.style.overflow = "visible";
 	this._enabled = true;

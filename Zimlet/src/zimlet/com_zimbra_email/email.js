@@ -127,24 +127,26 @@ function(html, idx, obj, spanId, context, options) {
 		var canExpand = obj.isGroup && obj.canExpand;
 		if (canExpand && !this._aclv) {
 			// create a ZmAutocompleteListView to handle DL expansion; it's never shown
-			var params = {
+			var aclvParams = {
 				dataClass:		appCtxt.getAutocompleter(),
 				matchValue:		ZmAutocomplete.AC_VALUE_FULL,
 				options:		{addrBubbles:true, massDLComplete:true},
 				compCallback:	new AjxCallback(this, this._dlAddrSelected)
 			};
-			this._aclv = new ZmAutocompleteListView(params);
+			this._aclv = new ZmAutocompleteListView(aclvParams);
 		}
 
-		var params = {
-			parentId:	this._internalId,	// pretend to be a ZmAddressInputField
+		var bubbleParams = {
 			address:	obj.toString(),
 			id:			spanId,
 			canExpand:	canExpand,
 			dlAddress:	canExpand && obj.address,
 			separator:	AjxEmailAddress.SEPARATOR
 		};
-		html[idx++] = ZmAddressInputField.getBubble(params);
+		ZmAddressInputField.BUBBLE_OBJ_ID[spanId] = this._internalId;	// pretend to be a ZmAddressInputField
+		html[idx++] = "<span class='addrBubble' id='" + spanId + "'>";
+		html[idx++] = ZmAddressBubble.getContent(bubbleParams);
+		html[idx++] = "</span>";
 		return idx;
 	} else {
 		return ZmObjectHandler.prototype.generateSpan.apply(this, arguments);
@@ -872,23 +874,6 @@ function (url) {
 	var win = window.open(url, "subWind", windowFeatures);
 	if (!win) {
 		this._showWarningMsg(ZmMsg.popupBlocker);
-	}
-};
-
-/**
- * Expands the distribution list address of the bubble with the given ID.
- *
- * @param {string}	bubbleId	ID of bubble
- * @param {string}	email		address to expand
- */
-EmailTooltipZimlet.prototype.expandBubble =
-function(bubbleId, email) {
-
-	var bubble = document.getElementById(bubbleId);
-	if (bubble) {
-		var loc = Dwt.getLocation(bubble);
-		loc.y += Dwt.getSize(bubble).y + 2;
-		this._aclv.expandDL(email, null, null, null, loc);
 	}
 };
 
