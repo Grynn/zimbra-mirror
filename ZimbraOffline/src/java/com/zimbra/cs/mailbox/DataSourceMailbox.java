@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2009, 2010, 2011 Zimbra, Inc.
  *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -82,9 +82,9 @@ public class DataSourceMailbox extends SyncMailbox {
             hasFolders = ds.getType() == DataSource.Type.imap;
             isFlat = ds.isLive() || ds.isYahoo();
         }
-        mSyncFlag = getFlagById(Flag.ID_FLAG_SYNC);
-        mSyncFolderFlag = getFlagById(Flag.ID_FLAG_SYNCFOLDER);
-        mNoInferiorsFlag = getFlagById(Flag.ID_FLAG_NO_INFERIORS);
+        mSyncFlag = getFlagById(Flag.ID_SYNC);
+        mSyncFolderFlag = getFlagById(Flag.ID_SYNCFOLDER);
+        mNoInferiorsFlag = getFlagById(Flag.ID_NO_INFERIORS);
     }
 
     @Override
@@ -137,10 +137,10 @@ public class DataSourceMailbox extends SyncMailbox {
                 if (hasFolders) {
                     Folder draft = getFolderById(ID_FOLDER_DRAFTS);
                     if ((draft.getFlagBitmask() & Flag.BITMASK_SYNC) != 0) {
-                        alterTag(null, ID_FOLDER_DRAFTS, MailItem.Type.FOLDER, Flag.ID_FLAG_SYNC, false);
+                        alterTag(null, ID_FOLDER_DRAFTS, MailItem.Type.FOLDER, Flag.ID_SYNC, false);
                     }
                     if ((draft.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0) {
-                        alterTag(null, ID_FOLDER_DRAFTS, MailItem.Type.FOLDER, Flag.ID_FLAG_SYNCFOLDER, false);
+                        alterTag(null, ID_FOLDER_DRAFTS, MailItem.Type.FOLDER, Flag.ID_SYNCFOLDER, false);
                     }
                 }
                 return true;
@@ -156,10 +156,9 @@ public class DataSourceMailbox extends SyncMailbox {
                 OfflineDataSource ds = getDataSource();
                 if (ds != null && ds.isSyncInboxOnly()) {
                     int flags = mi.getFlagBitmask();
-
                     flags &= ~Flag.BITMASK_SYNCFOLDER;
                     flags &= ~Flag.BITMASK_SYNC;
-                    return Flag.bitmaskToFlags(flags);
+                    return Flag.toString(flags);
                 }
             } catch (ServiceException x) {}
         }
@@ -169,9 +168,9 @@ public class DataSourceMailbox extends SyncMailbox {
     @Override
     public synchronized void alterTag(OperationContext octxt, int itemId, MailItem.Type type, int tagId, boolean addTag)
             throws ServiceException {
-        if (tagId == Flag.ID_FLAG_SYNC && addTag) {
+        if (tagId == Flag.ID_SYNC && addTag) {
             Folder folder = getFolderById(itemId);
-            if ((folder.getFlagBitmask() & Flag.ID_FLAG_SYNCFOLDER) == 0) {
+            if ((folder.getFlagBitmask() & Flag.ID_SYNCFOLDER) == 0) {
                 throw MailServiceException.MODIFY_CONFLICT();
             }
         }

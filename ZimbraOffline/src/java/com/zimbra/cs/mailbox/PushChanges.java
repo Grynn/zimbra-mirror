@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011 Zimbra, Inc.
  *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -301,10 +301,10 @@ public class PushChanges {
                                 break;
                         }
                     } catch (Exception x) {
-                		if (!SyncExceptionHandler.isRecoverableException(ombx, id, "PushChanges.sync", x)) {
-                    		SyncExceptionHandler.pushItemFailed(ombx, id, x);
-                    		ombx.setChangeMask(sContext, id, type, 0); //clear change mask since we failed to push up an item due to unrecoverable reasons
-                		}
+                        if (!SyncExceptionHandler.isRecoverableException(ombx, id, "PushChanges.sync", x)) {
+                            SyncExceptionHandler.pushItemFailed(ombx, id, x);
+                            ombx.setChangeMask(sContext, id, type, 0); //clear change mask since we failed to push up an item due to unrecoverable reasons
+                        }
                     }
                 }
             }
@@ -591,10 +591,13 @@ public class PushChanges {
         boolean create = false;
         synchronized (ombx) {
             SearchFolder search = ombx.getSearchFolderById(sContext, id);
-
-            name = search.getName();    flags = search.getInternalFlagBitmask();
-            color = search.getColor();  parentId = search.getFolderId();
-            query = search.getQuery();  searchTypes = search.getReturnTypes();  sort = search.getSortField();
+            name = search.getName();
+            flags = search.getInternalFlagBitmask();
+            color = search.getColor();
+            parentId = search.getFolderId();
+            query = search.getQuery();
+            searchTypes = search.getReturnTypes();
+            sort = search.getSortField();
 
             int mask = ombx.getChangeMask(sContext, id, MailItem.Type.SEARCHFOLDER);
             if ((mask & Change.MODIFIED_CONFLICT) != 0) {
@@ -603,16 +606,23 @@ public class PushChanges {
                 action = request.addElement(MailConstants.E_SEARCH);
                 create = true;
             }
-            if (create || (mask & Change.MODIFIED_FLAGS) != 0)
-                action.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags));
-            if (create || (mask & Change.MODIFIED_FOLDER) != 0)
+            if (create || (mask & Change.MODIFIED_FLAGS) != 0) {
+                action.addAttribute(MailConstants.A_FLAGS, Flag.toString(flags));
+            }
+            if (create || (mask & Change.MODIFIED_FOLDER) != 0) {
                 action.addAttribute(MailConstants.A_FOLDER, parentId);
-            if (create || (mask & Change.MODIFIED_COLOR) != 0)
+            }
+            if (create || (mask & Change.MODIFIED_COLOR) != 0) {
                 action.addAttribute(MailConstants.A_COLOR, color);
-            if (create || (mask & Change.MODIFIED_NAME) != 0)
+            }
+            if (create || (mask & Change.MODIFIED_NAME) != 0) {
                 action.addAttribute(MailConstants.A_NAME, name);
-            if (create || (mask & Change.MODIFIED_QUERY) != 0)
-                action.addAttribute(MailConstants.A_QUERY, query).addAttribute(MailConstants.A_SEARCH_TYPES, searchTypes).addAttribute(MailConstants.A_SORT_FIELD, sort);
+            }
+            if (create || (mask & Change.MODIFIED_QUERY) != 0) {
+                action.addAttribute(MailConstants.A_QUERY, query)
+                    .addAttribute(MailConstants.A_SEARCH_TYPES, searchTypes)
+                    .addAttribute(MailConstants.A_SORT_FIELD, sort);
+            }
         }
 
         try {
@@ -673,7 +683,7 @@ public class PushChanges {
                 create = true;
             }
             if (create || (mask & Change.MODIFIED_FLAGS) != 0) {
-                action.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags));
+                action.addAttribute(MailConstants.A_FLAGS, Flag.toString(flags));
             }
             if (create || (mask & Change.MODIFIED_FOLDER) != 0) {
                 action.addAttribute(MailConstants.A_FOLDER, parentId);
@@ -881,14 +891,18 @@ public class PushChanges {
                 cnElem = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);
             }
 
-            if (create || (mask & Change.MODIFIED_FLAGS) != 0)
-                cnElem.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags));
-            if (create || (mask & Change.MODIFIED_TAGS) != 0)
+            if (create || (mask & Change.MODIFIED_FLAGS) != 0) {
+                cnElem.addAttribute(MailConstants.A_FLAGS, Flag.toString(flags));
+            }
+            if (create || (mask & Change.MODIFIED_TAGS) != 0) {
                 cnElem.addAttribute(MailConstants.A_TAGS, cn.getTagString());
-            if (create || (mask & Change.MODIFIED_FOLDER) != 0)
+            }
+            if (create || (mask & Change.MODIFIED_FOLDER) != 0) {
                 cnElem.addAttribute(MailConstants.A_FOLDER, folderId);
-            if (create || (mask & Change.MODIFIED_COLOR) != 0)
+            }
+            if (create || (mask & Change.MODIFIED_COLOR) != 0) {
                 cnElem.addAttribute(MailConstants.A_COLOR, color);
+            }
         }
 
         try {
@@ -1011,7 +1025,7 @@ public class PushChanges {
             syncWikiItem((WikiItem)item, create);
         } else {
             RevisionInfo lastRev = null;
-            if (ombx.getRemoteServerVersion().isAtLeast(InitialSync.sDocumentSyncHistoryVersion) && 
+            if (ombx.getRemoteServerVersion().isAtLeast(InitialSync.sDocumentSyncHistoryVersion) &&
                     !create) {
                 List<RevisionInfo> revInfo = checkDocumentSyncConflict(item);
                 if (revInfo.size() > 0) {
@@ -1020,7 +1034,7 @@ public class PushChanges {
                 }
             }
             //only upload document if we have a newer revision or modified content
-            if (lastRev == null || !(lastRev.getVersion() == item.getVersion() && lastRev.getTimestamp() == item.getDate())) { 
+            if (lastRev == null || !(lastRev.getVersion() == item.getVersion() && lastRev.getTimestamp() == item.getDate())) {
                 Pair<Integer,Integer> resp = ombx.sendMailItem(item);
                 if (create) {
                     if (!ombx.renumberItem(sContext, id, type, resp.getFirst()))
@@ -1033,7 +1047,7 @@ public class PushChanges {
             Element request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
             Element action = request.addElement(MailConstants.E_ACTION);
             action.addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE);
-            action.addAttribute(MailConstants.A_TAGS, item.getTagString()); 
+            action.addAttribute(MailConstants.A_TAGS, item.getTagString());
             action.addAttribute(MailConstants.A_ID, id);
             ombx.sendRequest(request);
         }
@@ -1122,16 +1136,21 @@ public class PushChanges {
                 action = request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_ID, id);
                 upload = true;
             }
-            if (create || (mask & Change.MODIFIED_FLAGS | Change.MODIFIED_UNREAD) != 0)
-                action.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags));
-            if (create || (mask & Change.MODIFIED_TAGS) != 0)
+            if (create || (mask & Change.MODIFIED_FLAGS | Change.MODIFIED_UNREAD) != 0) {
+                action.addAttribute(MailConstants.A_FLAGS, Flag.toString(flags));
+            }
+            if (create || (mask & Change.MODIFIED_TAGS) != 0) {
                 action.addAttribute(MailConstants.A_TAGS, msg.getTagString());
-            if (create || (mask & Change.MODIFIED_FOLDER) != 0)
+            }
+            if (create || (mask & Change.MODIFIED_FOLDER) != 0) {
                 action.addAttribute(MailConstants.A_FOLDER, folderId);
-            if (create || (mask & Change.MODIFIED_COLOR) != 0)
+            }
+            if (create || (mask & Change.MODIFIED_COLOR) != 0) {
                 action.addAttribute(MailConstants.A_COLOR, color);
-            if (msg.isDraft() && (create || (mask & Change.MODIFIED_METADATA) != 0) && msg.getDraftAutoSendTime() != 0)
+            }
+            if (msg.isDraft() && (create || (mask & Change.MODIFIED_METADATA) != 0) && msg.getDraftAutoSendTime() != 0) {
                 action.addAttribute(MailConstants.A_AUTO_SEND_TIME, msg.getDraftAutoSendTime());
+            }
         }
 
         try {
@@ -1149,7 +1168,7 @@ public class PushChanges {
                 id = createData.getFirst();
             }
         } catch (ServiceException e) {
-            //bug 54080 
+            //bug 54080
             //rather than synchronizing whole method on mbox (thereby blocking mailbox while potentially long upload occurs)
             //lets see if the message still exists
             try {

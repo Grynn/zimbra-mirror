@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011 Zimbra, Inc.
  *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -408,7 +408,7 @@ public class DeltaSync {
 
     void syncSearchFolder(Element elt, int id) throws ServiceException {
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
-        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
+        int flags = Flag.toBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
 
         int date = (int) (elt.getAttributeLong(MailConstants.A_DATE, -1000) / 1000);
 
@@ -455,7 +455,7 @@ public class DeltaSync {
     }
 
     void syncFolder(Element elt, int id, String type) throws ServiceException {
-        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null)) & ~Flag.BITMASK_UNREAD;
+        int flags = Flag.toBitmask(elt.getAttribute(MailConstants.A_FLAGS, null)) & ~Flag.BITMASK_UNREAD;
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
         String url = elt.getAttribute(MailConstants.A_URL, null);
         MailItem.Type itemType = type.equals(MailConstants.E_FOLDER) ? MailItem.Type.FOLDER : MailItem.Type.MOUNTPOINT;
@@ -766,7 +766,7 @@ public class DeltaSync {
         }
 
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
-        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
+        int flags = Flag.toBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
         long tags = Tag.tagsToBitmask(elt.getAttribute(MailConstants.A_TAGS, null));
 
         boolean hasBlob = false;
@@ -821,7 +821,7 @@ public class DeltaSync {
             }
 
             byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
-            int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
+            int flags = Flag.toBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
             long tags = Tag.tagsToBitmask(elt.getAttribute(MailConstants.A_TAGS, null));
             int convId = (int) elt.getAttributeLong(MailConstants.A_CONV_ID);
 

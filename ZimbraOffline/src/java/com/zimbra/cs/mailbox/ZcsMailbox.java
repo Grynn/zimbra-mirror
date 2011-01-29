@@ -499,8 +499,9 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
 
             item.setColor(new MailItem.Color(color));
             item.setTags(flags, tags);
-            if (getFlagById(Flag.ID_FLAG_UNREAD).canTag(item))
+            if (getFlagById(Flag.ID_UNREAD).canTag(item)) {
                 item.alterUnread(unread);
+            }
             success = true;
         } finally {
             endTransaction(success);

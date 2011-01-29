@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011 Zimbra, Inc.
  *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -431,7 +431,7 @@ public class InitialSync {
         int parentId = (int) elt.getAttributeLong(MailConstants.A_FOLDER);
         String name = MailItem.normalizeItemName(elt.getAttribute(MailConstants.A_NAME));
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
-        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
+        int flags = Flag.toBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
 
         long timestamp = elt.getAttributeLong(MailConstants.A_DATE, -1000);
 
@@ -469,7 +469,7 @@ public class InitialSync {
 
         int parentId = (id == Mailbox.ID_FOLDER_ROOT) ? id : (int) elt.getAttributeLong(MailConstants.A_FOLDER);
         String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : MailItem.normalizeItemName(elt.getAttribute(MailConstants.A_NAME));
-        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
+        int flags = Flag.toBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
         MailItem.Type view = MailItem.Type.of(elt.getAttribute(MailConstants.A_DEFAULT_VIEW, null));
 
@@ -611,7 +611,7 @@ public class InitialSync {
     void syncCalendarItem(int id, int folderId, boolean isAppointment) throws ServiceException {
         OfflineSyncManager.getInstance().continueOK();
         ombx.recordItemSync(id);
-        
+
         try {
             Element request = new Element.XMLElement(isAppointment ? MailConstants.GET_APPOINTMENT_REQUEST : MailConstants.GET_TASK_REQUEST);
             request.addAttribute(MailConstants.A_ID, Integer.toString(id));
@@ -625,7 +625,7 @@ public class InitialSync {
 
             Element calElement = response.getElement(isAppointment ? MailConstants.E_APPOINTMENT : MailConstants.E_TASK);
             String flagsStr = calElement.getAttribute(MailConstants.A_FLAGS, null);
-            int flags = flagsStr != null ? Flag.flagsToBitmask(flagsStr) : 0;
+            int flags = flagsStr != null ? Flag.toBitmask(flagsStr) : 0;
             String tagsStr = calElement.getAttribute(MailConstants.A_TAGS, null);
             long tags = tagsStr != null ? Tag.tagsToBitmask(tagsStr) : 0;
 
@@ -862,7 +862,7 @@ public class InitialSync {
         int id = (int) elt.getAttributeLong(MailConstants.A_ID);
         ombx.recordItemSync(id);
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
-        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
+        int flags = Flag.toBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
         String tags = elt.getAttribute(MailConstants.A_TAGS, null);
 
         Map<String, String> fields = new HashMap<String, String>();
@@ -1030,9 +1030,8 @@ public class InitialSync {
                         if (te != null) {
                             try {
                                 ombx.recordItemSync(ud.id);
-                                saveMessage(tin, te.getSize(), ud.id, ud.folderId,
-                                    type, ud.date, Flag.flagsToBitmask(itemData.flags),
-                                    ud.tags, ud.parentId);
+                                saveMessage(tin, te.getSize(), ud.id, ud.folderId, type, ud.date,
+                                        Flag.toBitmask(itemData.flags), ud.tags, ud.parentId);
                                 idSet.remove(ud.id);
                             } catch (Exception x) {
                                 if (!SyncExceptionHandler.isRecoverableException(ombx, ud.id, "InitialSync.syncMessagesAsTgz", x)) {
@@ -1159,7 +1158,7 @@ public class InitialSync {
     private void saveMessage(InputStream in, long sizeHint, Map<String, String> headers, int id, int folderId,
             MailItem.Type type) throws ServiceException {
         int received = (int) (Long.parseLong(headers.get("X-Zimbra-Received")) / 1000);
-        int flags = Flag.flagsToBitmask(headers.get("X-Zimbra-Flags"));
+        int flags = Flag.toBitmask(headers.get("X-Zimbra-Flags"));
         long tags = Tag.tagsToBitmask(headers.get("X-Zimbra-Tags"));
         int convId = Integer.parseInt(headers.get("X-Zimbra-Conv"));
 
@@ -1224,7 +1223,7 @@ public class InitialSync {
             return;
         } catch (IOException e) {
             StoreManager.getInstance().quietDelete(blob);
-            StringBuilder sb = new StringBuilder("IOException while saving message blob");  
+            StringBuilder sb = new StringBuilder("IOException while saving message blob");
             if (e.getMessage() != null && (e.getMessage().startsWith("Unable to rename") || e.getMessage().contains(".msg does not exist"))) {
                 sb.append("\r\n").append("Possibly due to Anti-Virus; Check A/V settings and logs for <zd data>/store");
             }
@@ -1283,7 +1282,9 @@ public class InitialSync {
 
         // use this data to generate the XML entry used in message delta sync
         Element sync = new Element.XMLElement(Sync.elementNameForType(type)).addAttribute(MailConstants.A_ID, id);
-        sync.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags)).addAttribute(MailConstants.A_TAGS, tagStr).addAttribute(MailConstants.A_CONV_ID, convId);
+        sync.addAttribute(MailConstants.A_FLAGS, Flag.toString(flags))
+                .addAttribute(MailConstants.A_TAGS, tagStr)
+                .addAttribute(MailConstants.A_CONV_ID, convId);
         sync.addAttribute(MailConstants.A_DATE, received * 1000L);
         getDeltaSync().syncMessage(sync, folderId, type);
     }
@@ -1323,7 +1324,7 @@ public class InitialSync {
         String name = doc.getAttribute(MailConstants.A_NAME);
         String contentType = doc.getAttribute(MailConstants.A_CONTENT_TYPE, "text/html");
         String description = doc.getAttribute(MailConstants.A_DESC, null);
-        int flags = Flag.flagsToBitmask(doc.getAttribute(MailConstants.A_FLAGS, null));
+        int flags = Flag.toBitmask(doc.getAttribute(MailConstants.A_FLAGS, null));
         //String tags = doc.getAttribute(MailConstants.A_TAGS, null);
         int version = (int) doc.getAttributeLong(MailConstants.A_VERSION);
         InputStream rs = null;
@@ -1430,7 +1431,7 @@ public class InitialSync {
                     OfflineLog.offline.info("skipping locally modified item "+id+" (change "+change+")");
                     continue;
                 }
-                
+
                 InputStream eofIn = new EofInputStream(tis, te.getSize());
 
                 Document doc = (Document)item;

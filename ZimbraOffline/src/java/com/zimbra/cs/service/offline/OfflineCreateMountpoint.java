@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2008, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2008, 2009, 2010, 2011 Zimbra, Inc.
  *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -49,7 +49,7 @@ public class OfflineCreateMountpoint extends OfflineServiceProxy {
         int parentId = (int) eMount.getAttributeLong(MailConstants.A_FOLDER);
         int id = (int) eMount.getAttributeLong(MailConstants.A_ID);
         String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : MailItem.normalizeItemName(eMount.getAttribute(MailConstants.A_NAME));
-        int flags = Flag.flagsToBitmask(eMount.getAttribute(MailConstants.A_FLAGS, null));
+        int flags = Flag.toBitmask(eMount.getAttribute(MailConstants.A_FLAGS, null));
         byte color = (byte) eMount.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
         MailItem.Type view = MailItem.Type.of(eMount.getAttribute(MailConstants.A_DEFAULT_VIEW, null));
         String ownerId = eMount.getAttribute(MailConstants.A_ZIMBRA_ID);
