@@ -20,12 +20,12 @@ public class CreateFolder extends AjaxCommonTest {
 		
 	}
 	
-	@Test(	description = "Create a new folder",
+	@Test(	description = "Create a new folder by clicking 'new folder' on folder tree",
 			groups = { "sanity" })
 	public void CreateFolder_01() throws HarnessException {
 		
 		
-		// Create the message data to be sent
+		// Set the new folder name
 		String name = "folder" + ZimbraSeleniumProperties.getUniqueString();
 		
 		DialogCreateFolder dialog = (DialogCreateFolder)app.zTreeMail.zPressButton(Button.B_TREE_NEWFOLDER);
@@ -38,7 +38,7 @@ public class CreateFolder extends AjaxCommonTest {
 		
 		// Make sure the folder was created on the server
 		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
-		ZAssert.assertNotNull(folder, "Verify the new form opened");
+		ZAssert.assertNotNull(folder, "Verify the new folder was created");
 		
 		ZAssert.assertEquals(folder.getName(), name, "Verify the server and client folder names match");
 		
@@ -54,7 +54,7 @@ public class CreateFolder extends AjaxCommonTest {
 		
 		
 		
-		// Create the message data to be sent
+		// Set the new folder name
 		String name = "folder" + ZimbraSeleniumProperties.getUniqueString();
 		
 		DialogCreateFolder dialog = (DialogCreateFolder)app.zPageMail.zKeyboardShortcut(shortcut);
@@ -67,19 +67,19 @@ public class CreateFolder extends AjaxCommonTest {
 		
 		// Make sure the folder was created on the server
 		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
-		ZAssert.assertNotNull(folder, "Verify the new form opened");
+		ZAssert.assertNotNull(folder, "Verify the new folder was created");
 		
 		ZAssert.assertEquals(folder.getName(), name, "Verify the server and client folder names match");
 		
 		
 	}
 
-	@Test(	description = "Create a new folder using context menu",
+	@Test(	description = "Create a new folder using context menu from folder",
 			groups = { "smoke" })
 	public void CreateFolder_03() throws HarnessException {
 		
 		
-		// Create the message data to be sent
+		// Set the new folder name
 		String name = "folder" + ZimbraSeleniumProperties.getUniqueString();
 		
 		// Get the Inbox folder
@@ -87,7 +87,7 @@ public class CreateFolder extends AjaxCommonTest {
 		
 		// Create a new folder in the inbox
 		// using the context menu + New Folder
-		DialogCreateFolder dialog = (DialogCreateFolder)app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, Button.B_NEW, inbox);
+		DialogCreateFolder dialog = (DialogCreateFolder)app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_NEW, inbox);
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
 		
 		// Fill out the form with the basic details
@@ -97,7 +97,33 @@ public class CreateFolder extends AjaxCommonTest {
 		
 		// Make sure the folder was created on the server
 		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
-		ZAssert.assertNotNull(folder, "Verify the new form opened");
+		ZAssert.assertNotNull(folder, "Verify the new folder was created");
+		
+		ZAssert.assertEquals(folder.getName(), name, "Verify the server and client folder names match");
+		
+	}
+
+	@Test(	description = "Create a new folder using mail app New -> New Folder",
+			groups = { "smoke" })
+	public void CreateFolder_04() throws HarnessException {
+		
+		
+		// Set the new folder name
+		String name = "folder" + ZimbraSeleniumProperties.getUniqueString();
+				
+		// Create a new folder in the inbox
+		// using the context menu + New Folder
+		DialogCreateFolder dialog = (DialogCreateFolder)app.zPageMail.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_FOLDER);
+		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
+		
+		// Fill out the form with the basic details
+		// TODO: does a folder in the tree need to be selected?
+		dialog.zEnterFolderName(name);
+		dialog.zClickButton(Button.B_OK);
+		
+		// Make sure the folder was created on the server
+		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
+		ZAssert.assertNotNull(folder, "Verify the new folder was created");
 		
 		ZAssert.assertEquals(folder.getName(), name, "Verify the server and client folder names match");
 		
