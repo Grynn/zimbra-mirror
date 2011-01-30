@@ -24,7 +24,7 @@ public class DeleteDocument extends AjaxCommonTest {
 
 		// Create document item
 		DocumentItem document = new DocumentItem();
-		String documentLocator = "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div:contains("
+		String documentLocator = "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
 				+ document.getDocName() + ")";
 
 		ZimbraAccount account = app.zGetActiveAccount();

@@ -100,9 +100,7 @@ public class PageBriefcase extends AbsTab {
 				"20000");
 
 		// Click on Briefcase icon
-		if (this.sIsElementPresent(PageMain.Locators.zAppbarBriefcase)
-				&& this.sIsVisible(PageMain.Locators.zAppbarBriefcase))
-			zClick(PageMain.Locators.zAppbarBriefcase);
+		zClick(PageMain.Locators.zAppbarBriefcase);
 
 		zWaitForActive();
 	}
@@ -454,6 +452,8 @@ public class PageBriefcase extends AbsTab {
 									+ "\");if(x!=null){x=x.contentWindow.document.body;}if(browserVersion.isChrome){x.textContent.indexOf('"
 									+ text
 									+ "') >= 0;}else if(browserVersion.isIE){x.innerText.indexOf('"
+									+ text
+									+ "') >= 0;}else{x.textContent.indexOf('"
 									+ text + "') >= 0;}", timeout);
 			return true;
 		} catch (Exception ex) {

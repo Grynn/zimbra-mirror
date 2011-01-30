@@ -65,7 +65,7 @@ public class EditDocument extends AjaxCommonTest {
 		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
 				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
 			app.zPageBriefcase
-					.zClick("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div:contains("
+					.zClick("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
 							+ document.getDocName() + ")");
 		}
 
@@ -122,7 +122,7 @@ public class EditDocument extends AjaxCommonTest {
 		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
 				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
 			name = app.zPageBriefcase
-					.sGetText("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div:contains("
+					.sGetText("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
 							+ document.getDocName() + ")");
 		}
 
@@ -131,9 +131,9 @@ public class EditDocument extends AjaxCommonTest {
 
 		/*
 		 * //name =ClientSessionFactory.session().selenium().getText(
-		 * "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div[id^=zlif__BDLV__]"
+		 * "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div[id^=zlif__BDLV__]"
 		 * );//ClientSessionFactory.session().selenium().isElementPresent(
-		 * "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto']>div:contains[id*='zlif__BDLV__']"
+		 * "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto']>div:contains[id*='zlif__BDLV__']"
 		 * );//ClientSessionFactory.session().selenium().isElementPresent(
 		 * "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] div:contains('name')"
 		 * );
@@ -182,7 +182,7 @@ public class EditDocument extends AjaxCommonTest {
 		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
 				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
 			app.zPageBriefcase
-					.zClick("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div:contains("
+					.zClick("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
 							+ document.getDocName() + ")");
 		}
 
@@ -199,11 +199,11 @@ public class EditDocument extends AjaxCommonTest {
 			app.zPageBriefcase.zSelectWindow(windowName);
 
 			// if html body appears then document page is opened
-			if (!app.zPageBriefcase.waitForElement("css=iframe[id='DWT9'][class='ZDEditor']", "50000")){
+			if (!app.zPageBriefcase.waitForElement("css=iframe[id*='DWT'][class='ZDEditor']", "50000")){
 				throw new HarnessException("could not open an edit document page");
 			}
 		
-			app.zPageBriefcase.waitForText("css=iframe[id='DWT9'][class='ZDEditor']", document.getDocText(), "5000");
+			app.zPageBriefcase.waitForText("css=iframe[id*='DWT'][class='ZDEditor']", document.getDocText(), "5000");
 
 			// Fill out the document with the new data
 			document.setDocText("text"
@@ -249,7 +249,7 @@ public class EditDocument extends AjaxCommonTest {
 		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
 				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
 			app.zPageBriefcase
-					.zClick("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div:contains("
+					.zClick("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
 							+ document.getDocName() + ")");
 		}
 
@@ -369,7 +369,7 @@ public class EditDocument extends AjaxCommonTest {
 		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
 				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
 			app.zPageBriefcase
-					.zClick("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div:contains("
+					.zClick("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
 							+ document.getDocName() + ")");
 		}
 
@@ -453,7 +453,7 @@ public class EditDocument extends AjaxCommonTest {
 		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
 				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
 			app.zPageBriefcase
-					.zClick("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div:contains("
+					.zClick("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
 							+ document.getDocName() + ")");
 		}
 
@@ -471,11 +471,11 @@ public class EditDocument extends AjaxCommonTest {
 			app.zPageBriefcase.zSelectWindow(windowName);
 
 			// if html body appears then document page is opened
-			if (!app.zPageBriefcase.waitForElement("css=iframe[id='DWT9'][class='ZDEditor']", "50000")){
+			if (!app.zPageBriefcase.waitForElement("css=iframe[id*='DWT'][class='ZDEditor']", "50000")){
 				throw new HarnessException("could not open an edit document page");
 			}
 		
-			app.zPageBriefcase.waitForText("css=iframe[id='DWT9'][class='ZDEditor']", document.getDocText(), "5000");
+			app.zPageBriefcase.waitForText("css=iframe[id*='DWT'][class='ZDEditor']", document.getDocText(), "5000");
 
 			// Fill out the document with the new data
 			document.setDocText("text"
@@ -511,7 +511,7 @@ public class EditDocument extends AjaxCommonTest {
 		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
 				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
 			app.zPageBriefcase
-					.zClick("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div:contains("
+					.zClick("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
 							+ document.getDocName() + ")");
 		}
 

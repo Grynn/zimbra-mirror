@@ -1,6 +1,8 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
 import org.testng.annotations.Test;
+
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -20,7 +22,7 @@ public class CreateDocument extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Create document through GUI - verify through GUI", groups = { "sanity" })
+	@Test(description = "Create document through GUI - verify through GUI", groups = { "smoke" })
 	public void CreateDocument_01() throws HarnessException {
 
 		// Create document item
@@ -33,12 +35,25 @@ public class CreateDocument extends AjaxCommonTest {
 		// Open new document page
 		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
 				.zToolbarPressButton(Button.O_NEW_DOCUMENT);
+
 		try {
+			app.zPageBriefcase.zSelectWindow("Zimbra Docs");
+
+			// if html body appears then document page is opened
+			if (!app.zPageBriefcase.waitForElement(
+					"css=iframe[id*='DWT'][class='ZDEditor']", "30000")) {
+				throw new HarnessException(
+						"could not open an edit document page");
+			}
+
+			app.zPageBriefcase.waitForText(
+					"css=iframe[id*='DWT'][class='ZDEditor']", "", "5000");
+
 			// Fill out the document with the data
 			documentBriefcaseNew.zFill(document);
 
 			// Save and close
-			documentBriefcaseNew.zSelectWindow("Zimbra Docs");
+			app.zPageBriefcase.zSelectWindow("Zimbra Docs");
 
 			documentBriefcaseNew.zSubmit();
 		} finally {
@@ -64,7 +79,7 @@ public class CreateDocument extends AjaxCommonTest {
 		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
 				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
 			app.zPageBriefcase
-					.zClick("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div:contains("
+					.zClick("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
 							+ document.getDocName() + ")");
 		}
 
@@ -86,7 +101,7 @@ public class CreateDocument extends AjaxCommonTest {
 			app.zPageBriefcase.waitForElement(
 					"css=td[class='ZhAppContent'] div:contains('"
 							+ document.getDocText() + "')", "60000");
-			
+
 			if (!documentBriefcaseOpen
 					.sIsVisible("css=td[class='ZhAppContent'] div[id='zdocument']")) {
 				throw new HarnessException(

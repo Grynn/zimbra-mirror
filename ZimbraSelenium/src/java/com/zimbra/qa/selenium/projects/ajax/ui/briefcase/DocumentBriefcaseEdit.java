@@ -31,12 +31,9 @@ public class DocumentBriefcaseEdit extends AbsForm {
 	public void typeDocumentText(String text) throws HarnessException {
 		// ClientSessionFactory.session().selenium().getEval("var x = selenium.browserbot.findElementOrNull(\""+Locators.zFrame+"\");if(x!=null)x=x.contentWindow.document.body;if(browserVersion.isChrome){x.textContent='"+text+"';}else if(browserVersion.isIE){x.innerText='"+text+"';}");
 		sSelectFrame(Locators.zFrame);
-		if (sIsElementPresent(Locators.zBodyField)) {
-			logger.info("typing Document Text" + text);
-			// SleepUtil.sleepSmall();
-			ClientSessionFactory.session().selenium().type(Locators.zBodyField,
-					text);
-		}
+		logger.info("typing Document Text" + text);
+		// SleepUtil.sleepSmall();
+		sType(Locators.zBodyField, text);		
 	}
 
 	public String retriveDocumentText() throws HarnessException {
