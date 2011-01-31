@@ -59,6 +59,9 @@ public class Shortcut {
 	// Folders shortcuts
 	public static final Shortcut S_NEWFOLDER = new Shortcut("S_NEWFOLDER", "nf");
 	
+	// Tag shortcuts
+	public static final Shortcut S_NEWTAG = new Shortcut("S_NEWTAG", "nt");
+
 	// Shortcut properties
 	private final String ID;
 	private final String Keys;

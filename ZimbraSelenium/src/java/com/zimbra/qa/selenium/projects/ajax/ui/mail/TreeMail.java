@@ -29,57 +29,26 @@ public class TreeMail extends AbsTree {
 		logger.info("new " + TreeMail.class.getCanonicalName());
 	}
 	
-	protected AbsPage zTreeItem(Action action, Button option, FolderItem folderItem) throws HarnessException {
+	protected AbsPage zTreeItem(Action action, Button option, FolderItem folder) throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
 	
-	protected AbsPage zTreeItem(Action action, Button option, SavedSearchFolderItem folderItem) throws HarnessException {
+	protected AbsPage zTreeItem(Action action, Button option, SavedSearchFolderItem savedSearchFolder) throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
 
-	protected AbsPage zTreeItem(Action action, SavedSearchFolderItem savedSearchItem) throws HarnessException {
-		AbsPage page = null;
-		String locator = null;
-		int delayMillis = 0;
-	
-		// TODO: implement me!
-		
-		if ( locator == null )
-			throw new HarnessException("locator is null for action "+ action);
-		
-		if ( !this.sIsElementPresent(locator) )
-			throw new HarnessException("Unable to locator folder in tree "+ locator);
-		
-		
-		// Default behavior.  Click the locator
-		zClick(locator);
-
-		if ( page != null ) {
-			
-			// Wait for the page to become active, if it was specified
-			page.zWaitForActive();
-		}
-
-		this.zClick(locator);
-		
-		if ( delayMillis > 0 ) {
-			
-			// Sleep for a bit, if it was specified
-			SleepUtil.sleep(delayMillis);
-			
-		}
-
-		return (page);
+	protected AbsPage zTreeItem(Action action, Button option, ZimletItem zimlet) throws HarnessException {
+		throw new HarnessException("implement me!");
 	}
 
-	protected AbsPage zTreeItem(Action action, FolderItem folderItem) throws HarnessException {
+	protected AbsPage zTreeItem(Action action, FolderItem folder) throws HarnessException {
 		AbsPage page = null;
 		String locator = null;
 		int delayMillis = 0;
 		
 		if ( action == Action.A_LEFTCLICK ) {
 			
-			locator = "id=zti__main_Mail__"+ folderItem.getId() +"_textCell";
+			locator = "id=zti__main_Mail__"+ folder.getId() +"_textCell";
 			
 			// FALL THROUGH
 
@@ -89,7 +58,7 @@ public class TreeMail extends AbsTree {
 			// to activate the shortcut
 			
 			// Select the folder
-			this.zTreeItem(Action.A_LEFTCLICK, folderItem);
+			this.zTreeItem(Action.A_LEFTCLICK, folder);
 			
 			// Click on the ContextMenu shortcut
 			zKeyboard.zTypeCharacters(Shortcut.S_RIGHTCLICK.getKeys());															
@@ -131,6 +100,46 @@ public class TreeMail extends AbsTree {
 
 	}
 	
+
+	protected AbsPage zTreeItem(Action action, SavedSearchFolderItem savedSearch) throws HarnessException {
+		AbsPage page = null;
+		String locator = null;
+		int delayMillis = 0;
+	
+		// TODO: implement me!
+		
+		if ( locator == null )
+			throw new HarnessException("locator is null for action "+ action);
+		
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("Unable to locator folder in tree "+ locator);
+		
+		
+		// Default behavior.  Click the locator
+		zClick(locator);
+
+		if ( page != null ) {
+			
+			// Wait for the page to become active, if it was specified
+			page.zWaitForActive();
+		}
+
+		this.zClick(locator);
+		
+		if ( delayMillis > 0 ) {
+			
+			// Sleep for a bit, if it was specified
+			SleepUtil.sleep(delayMillis);
+			
+		}
+
+		return (page);
+	}
+
+	protected AbsPage zTreeItem(Action action, ZimletItem zimlet) throws HarnessException {
+		throw new HarnessException("implement me");
+	}
+
 	/* (non-Javadoc)
 	 * @see com.zimbra.qa.selenium.framework.ui.AbsTree#zPressButton(com.zimbra.qa.selenium.framework.ui.Button)
 	 */
@@ -207,9 +216,11 @@ public class TreeMail extends AbsTree {
 			return (zTreeItem(action, (FolderItem)folder));
 		} else if ( folder instanceof SavedSearchFolderItem ) {
 			return (zTreeItem(action, (SavedSearchFolderItem)folder));
+		} else if ( folder instanceof ZimletItem ) {
+			return (zTreeItem(action, (ZimletItem)folder));
 		}
 		
-		throw new HarnessException("Must use FolderItem or SavedSearchFolderItem as argument, but was "+ folder.getClass());
+		throw new HarnessException("Must use FolderItem or SavedSearchFolderItem or ZimletItem as argument, but was "+ folder.getClass());
 	}
 		
 	@Override
@@ -223,9 +234,11 @@ public class TreeMail extends AbsTree {
 			return (zTreeItem(action, option, (FolderItem)folder));
 		} else if ( folder instanceof SavedSearchFolderItem ) {
 			return (zTreeItem(action, option, (SavedSearchFolderItem)folder));
+		} else if ( folder instanceof ZimletItem ) {
+			return (zTreeItem(action, option, (ZimletItem)folder));
 		}
 		
-		throw new HarnessException("Must use FolderItem or SavedSearchFolderItem as argument, but was "+ folder.getClass());
+		throw new HarnessException("Must use FolderItem or SavedSearchFolderItem or ZimletItem as argument, but was "+ folder.getClass());
 	}
 
 
@@ -253,6 +266,16 @@ public class TreeMail extends AbsTree {
 		
 
 	}
+
+	public List<ZimletItem> zListGetZimlets() {
+		List<ZimletItem> items = new ArrayList<ZimletItem>();
+		
+		String locator = "ztih__main_Mail__ZIMLET";
+	
+		// Return the list of items
+		return (items);
+	}
+
 
 
 

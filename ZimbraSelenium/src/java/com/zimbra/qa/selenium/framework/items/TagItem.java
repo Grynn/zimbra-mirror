@@ -72,6 +72,14 @@ public class TagItem implements IItem {
 	public String getId() {
 		return (dId);		
 	}
+	
+	public void setName(String name) {
+		dName = name;
+	}
+	
+	public String getName() {
+		return (dName);
+	}
 
 
 	
