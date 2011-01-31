@@ -577,7 +577,7 @@ function(ev) {
 	ev = DwtUiEvent.getEvent(ev);
 //	DBG.println("kbnav", "keyup: " + ev.keyCode);
 
-	var kbMgr = appCtxt.getKeyboardMgr();
+	var kbMgr = DwtKeyboardMgr.__shell.getKeyboardMgr();
 	if (kbMgr._evtMgr.notifyListeners(DwtEvent.ONKEYUP, ev) === false) {
 		return false;
 	}
@@ -598,7 +598,7 @@ function(ev) {
 	ev = DwtUiEvent.getEvent(ev);
 //	DBG.println("kbnav", "keypress: " + (ev.keyCode || ev.charCode));
 
-	var kbMgr = appCtxt.getKeyboardMgr();
+	var kbMgr = DwtKeyboardMgr.__shell.getKeyboardMgr();
 	if (kbMgr._evtMgr.notifyListeners(DwtEvent.ONKEYPRESS, ev) === false) {
 		return false;
 	}
@@ -708,7 +708,7 @@ function(ev) {
 
 	try {
 
-	var kbMgr = appCtxt.getKeyboardMgr();
+	var kbMgr = DwtKeyboardMgr.__shell.getKeyboardMgr();
 	if (kbMgr._evtMgr.notifyListeners(DwtEvent.ONKEYDOWN, ev) === false) {
 		return false;
 	};

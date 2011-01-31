@@ -164,11 +164,6 @@ function() {
 		document.getElementById(this._textAreaId).focus();
 	} else {
 		try {
-			if (!this._htmlModeInited) {
-				// TODO: potential for a loop here
-				setTimeout(AjxCallback.simpleClosure(this.focus, this), DwtHtmlEditor._INITDELAY);
-				return;
-			}
 			if (AjxEnv.isSafari) {
 				document.getElementById(this._iFrameId).focus();
 			} else {
@@ -1547,7 +1542,7 @@ function() {
 };
 
 DwtHtmlEditor.prototype._updateState =
-function() {
+function(defaultFontSize) {
 	if (this._mode != DwtHtmlEditor.HTML) { return; }
 
 	this._stateUpdateActionId = null;
@@ -1574,8 +1569,8 @@ function() {
 		//bug:25251
 		var fontSize = iFrameDoc.queryCommandValue(DwtHtmlEditor._FONT_SIZE);
 
-		if (fontSize == "") {
-			fontSize = (DwtHtmlEditor.FONT_SIZE_VALUES.indexOf(appCtxt.get(ZmSetting.COMPOSE_INIT_FONT_SIZE)) + 1);
+		if (!fontSize && defaultFontSize) {
+			fontSize = (DwtHtmlEditor.FONT_SIZE_VALUES.indexOf(defaultFontSize) + 1);
 		} else if (/\d+px/.test(fontSize)) {
 			 fontSize = Math.ceil(0.75 * parseInt(fontSize))+"pt"; // px and pt are USUALLY related this way
 		}
