@@ -2,7 +2,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.zimlets.webex;
 
 import java.util.List;
 
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.items.ZimletItem;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -25,8 +25,13 @@ public class FolderTree extends AjaxCommonTest {
 	public void FolderTree_01() throws HarnessException {
 		
 		
+		// Expand the zimlets section
+		app.zTreeMail.zExpandZimlets();
+		
+		// Get the list of zimlets
 		List<ZimletItem> zimlets = app.zTreeMail.zListGetZimlets();
 		
+		// Find out if WebEx is listed
 		ZimletItem found = null;
 		for (ZimletItem z : zimlets) {
 			if ( ZimletItem.getWebExZimlet().getName().equals(z.getName()) ) {
@@ -34,9 +39,26 @@ public class FolderTree extends AjaxCommonTest {
 			}
 		}
 		
-		ZAssert.assertNotNull(found, "Verify the LinkedIn Zimlet was found");
+		ZAssert.assertNotNull(found, "Verify the WebEx Zimlet was found");
 				
 	}
 
+	// All these tests require the Folder tree to be fully loaded
+	@BeforeMethod( groups = { "always" } )
+	public void folderTreeBeforeMethod() throws HarnessException {
+		logger.info("folderTreeBeforeMethod: start");
+		
+		for (int i = 0; i < 10; i++) {
+			
+			if ( app.zTreeMail.zIsActive() ) {
+				return; // Done!
+			}
+			
+			SleepUtil.sleep(1000);
+			
+		}
+		logger.info("folderTreeBeforeMethod: finish");
+
+	}
 
 }

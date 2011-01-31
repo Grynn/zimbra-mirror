@@ -3,14 +3,12 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
+import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
 /**
@@ -20,6 +18,9 @@ import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
 public class TreeMail extends AbsTree {
 
 	public static class Locators {
+		
+		public static final String ztih__main_Mail__ZIMLET_ID = "ztih__main_Mail__ZIMLET";
+		public static final String ztih__main_Mail__ZIMLET_nodeCell_ID = "ztih__main_Mail__ZIMLET_nodeCell";
 	}
 	
 		
@@ -243,7 +244,7 @@ public class TreeMail extends AbsTree {
 
 
 	
-	public List<SavedSearchFolderItem> zListGetSavedSearches() {
+	public List<SavedSearchFolderItem> zListGetSavedSearches() throws HarnessException {
 		
 		List<SavedSearchFolderItem> items = new ArrayList<SavedSearchFolderItem>();
 		
@@ -254,7 +255,7 @@ public class TreeMail extends AbsTree {
 		
 	}
 	
-	public List<TagItem> zListGetTags() {
+	public List<TagItem> zListGetTags() throws HarnessException {
 		
 		
 		List<TagItem> items = new ArrayList<TagItem>();
@@ -267,16 +268,102 @@ public class TreeMail extends AbsTree {
 
 	}
 
-	public List<ZimletItem> zListGetZimlets() {
+	public List<ZimletItem> zListGetZimlets() throws HarnessException {
+		
+		
+		// Create a list of items to return
 		List<ZimletItem> items = new ArrayList<ZimletItem>();
 		
-		String locator = "ztih__main_Mail__ZIMLET";
-	
-		// Return the list of items
-		return (items);
+		// Make sure the button exists
+		if ( !this.sIsElementPresent(Locators.ztih__main_Mail__ZIMLET_ID) )
+			throw new HarnessException("Zimlet Tree is not present "+ Locators.ztih__main_Mail__ZIMLET_ID);
+		
+		// Zimlet's div ID seems to start with -999
+		for (int zimletNum = -999; zimletNum < 0; zimletNum++ ) {
+			
+			String zimletLocator = "zti__main_Mail__"+ zimletNum +"_z_div";
+			String locator;
+
+			if ( !this.sIsElementPresent(zimletLocator) ) {
+				// No more items to parse
+				return (items);
+			}
+			
+			// Parse this div element into a ZimletItem object
+
+			ZimletItem item = new ZimletItem();
+			
+			// Get the image
+			locator = "xpath=(//*[@id='zti__main_Mail__"+ zimletNum +"_z_imageCell']/div)@class";
+			item.setImage(this.sGetAttribute(locator));
+
+			
+			// Get the display name
+			locator = "zti__main_Mail__"+ zimletNum +"_z_textCell";
+			item.setName(this.sGetText(locator));
+						
+			// Set the locator
+			item.setLocator(zimletLocator);
+			
+			// Add this item to the list
+			items.add(item);
+			
+		}
+		
+		// If we get here, there were over 1000 zimlets or something went wrong
+		throw new HarnessException("Too many zimlets!");
+		
 	}
 
+	public void zExpandFolders() throws HarnessException {
+		throw new HarnessException("implement me!");
+	}
+	
+	public boolean zIsFoldersExpanded() throws HarnessException {
+		throw new HarnessException("implement me!");
+	}
 
+	public void zExpandSavedSearchFolders() throws HarnessException {
+		throw new HarnessException("implement me!");
+	}
+	
+	public boolean zIsSavedSearchFoldersExpanded() throws HarnessException {
+		throw new HarnessException("implement me!");
+	}
+
+	public void zExpandTags() throws HarnessException {
+		throw new HarnessException("implement me!");
+	}
+	
+	public boolean zIsTagsExpanded() throws HarnessException {
+		throw new HarnessException("implement me!");
+	}
+
+	public void zExpandZimlets() throws HarnessException {
+		if ( zIsZimletsExpanded() ) {
+			return; // Nothing more to do.  Already expanded
+		}
+		
+		// Click on the arrow
+		String locator = "css=td[id="+ Locators.ztih__main_Mail__ZIMLET_nodeCell_ID +"] div";
+		this.zClick(locator);
+		
+		// Wait for the menu to open
+		for (int i = 0; i < 5; i++) {
+			if ( zIsZimletsExpanded() ) 
+				return; // Done
+			SleepUtil.sleep(1000);
+		}
+
+		throw new HarnessException("Zimlets never expanded!");
+	}
+	
+	public boolean zIsZimletsExpanded() throws HarnessException {
+		// Image is either ImgNodeExpanded or ImgNodeCollapsed
+		String locator = "xpath=(//td[@id='"+ Locators.ztih__main_Mail__ZIMLET_nodeCell_ID +"']/div)@class";
+		String image = this.sGetAttribute(locator);
+		return ( image.equals("ImgNodeExpanded") );
+	}
 
 
 	/* (non-Javadoc)
@@ -289,8 +376,22 @@ public class TreeMail extends AbsTree {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		// TODO Auto-generated method stub
-		return false;
+
+		// Make sure the main page is active
+		if ( !((AppAjaxClient)MyApplication).zPageMail.zIsActive() ) {
+			((AppAjaxClient)MyApplication).zPageMail.zNavigateTo();
+		}
+		
+		// Zimlets seem to be loaded last
+		// So, wait for the zimlet div to load
+		String locator = Locators.ztih__main_Mail__ZIMLET_ID;
+		
+		boolean loaded = this.sIsElementPresent(locator);
+		if ( !loaded )
+			return (false);
+		
+		return (loaded);
+
 	}
 
 
