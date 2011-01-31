@@ -25,6 +25,7 @@ import com.zimbra.cs.taglib.bean.ZTagLibException;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.common.zclient.ZClientException;
 import com.zimbra.common.service.ServiceException;
+import org.mortbay.io.RuntimeIOException;
 
 public class GetExceptionTag extends ZimbraSimpleTag {
     
@@ -41,7 +42,7 @@ public class GetExceptionTag extends ZimbraSimpleTag {
         if (e != null) {
             if (
                     (!(e instanceof ServiceException)) ||
-                            ((e instanceof ZTagLibException) && (!(e.getCause() instanceof SkipPageException || e.getCause() instanceof IllegalStateException))) || (e instanceof ZClientException))
+                            ((e instanceof ZTagLibException) && (!(e.getCause() instanceof SkipPageException || e.getCause() instanceof IllegalStateException || e.getCause() instanceof RuntimeIOException))) || (e instanceof ZClientException))
                 ZimbraLog.webclient.warn("local exception", e);
         }
         getJspContext().setAttribute(mVar, eb,  PageContext.PAGE_SCOPE);
