@@ -22,7 +22,7 @@ public class CreateDocument extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Create document through GUI - verify through GUI", groups = { "smoke" })
+	@Test(description = "Create document through GUI - verify through GUI", groups = { "sanity" })
 	public void CreateDocument_01() throws HarnessException {
 
 		// Create document item
