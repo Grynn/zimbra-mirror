@@ -205,14 +205,7 @@ public class ZimbraAccount {
 		put("zimbraPrefTimeZoneId", ZimbraSeleniumProperties.getStringProperty("zimbraPrefTimeZoneId", "America/Los_Angeles"));
 		put("zimbraFeatureReadReceiptsEnabled", "TRUE");
 		put("zimbraPrefCalendarAlwaysShowMiniCal", "FALSE");
-		// put("zimbraPrefSkin", "beach");
 		put("zimbraPrefComposeFormat", "html");
-		
-		put("zimbraZimletAvailableZimlets","+com_zimbra_email");
-		put("zimbraZimletAvailableZimlets","+com_zimbra_webex");
-		put("zimbraZimletAvailableZimlets","+com_zimbra_social");
-		put("zimbraZimletAvailableZimlets","+com_zimbra_linkedin");
-
  	}};
 
 	/**
