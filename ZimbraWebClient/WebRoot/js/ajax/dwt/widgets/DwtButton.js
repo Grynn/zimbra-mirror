@@ -226,6 +226,15 @@ function (enabledImg, disImg, hovImg, depImg) {
 };
 
 /**
+ * Sets the Drop Down Hover Image
+ */
+DwtButton.prototype.setDropDownHovImage =
+function(hovImg)
+{
+    this._dropDownHovImg = hovImg;    
+}
+
+/**
  * @private
  */
 DwtButton.prototype._addEventListeners =
