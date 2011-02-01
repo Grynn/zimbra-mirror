@@ -63,7 +63,8 @@ public class ZContactHitBean extends ZSearchHitBean {
     public String toString() { return mHit.toString(); }
 
     public String getFullName() { return mHit.getFullName(); }
-
+    public String getFileAs() { return mHit.getFileAs(); }
+    public String getNickname() { return mHit.getNickname(); }
     public String getNamePrefix() { return mHit.getNamePrefix(); }
     public String getFirstName() { return mHit.getFirstName(); }
     public String getPhoneticFirstName() { return mHit.getPhoneticFirstName(); }
