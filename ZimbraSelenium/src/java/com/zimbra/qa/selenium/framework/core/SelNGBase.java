@@ -83,6 +83,7 @@ public class SelNGBase {
 		selenium.windowFocus();
 		selenium.setupZVariables();
 		selenium.allowNativeXpath("true");
+		//selenium.useXpathLibrary("javascript-xpath");
 		selenium.open(ZimbraSeleniumProperties.getBaseURL());
 
 	}

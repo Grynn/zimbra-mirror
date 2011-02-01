@@ -4,6 +4,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
 
 /**
@@ -28,7 +29,8 @@ public class ClientSession {
 	private String name;	// A unique string identifying this session
 	
 	private ZimbraSelenium selenium = null;
-	private String applicationURL = "http://qa60.lab.zimbra.com"; // TODO: Get this from properties?
+	private String applicationURL = ZimbraSeleniumProperties.getStringProperty("server.scheme", "http") 
+	+ "://" + ZimbraSeleniumProperties.getStringProperty("server.host", "localhost"); 
 	private String currentBrowserName = null;
 	private ZimbraAccount currentAccount = null;
 

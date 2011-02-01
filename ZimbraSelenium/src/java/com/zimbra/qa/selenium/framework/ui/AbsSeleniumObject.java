@@ -84,8 +84,8 @@ public abstract class AbsSeleniumObject {
 			throw new HarnessException("zClick("+ locator +") element is not present");
 		}
 		
-		ClientSessionFactory.session().selenium().mouseDown(locator);
-		ClientSessionFactory.session().selenium().mouseUp(locator);
+		ClientSessionFactory.session().selenium().mouseDownAt(locator,"0,0");
+		ClientSessionFactory.session().selenium().mouseUpAt(locator,"0,0");		
 		
 		logger.info("zClick("+ locator +")");
 		
