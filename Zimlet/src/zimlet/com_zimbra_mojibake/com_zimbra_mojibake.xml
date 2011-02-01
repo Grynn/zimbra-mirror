@@ -1,0 +1,11 @@
+<zimlet name="com_zimbra_mojibake" version="1.0" label="${msg.label}" description="${msg.description}">
+	<include>mojibake.js</include>
+	<handlerObject>ZmMojibakeZimlet</handlerObject>
+	<zimletPanelItem label="${msg.label}" icon="MsgStatusUnread">
+		<toolTipText>${msg.description}</toolTipText>
+		<dragSource type="ZmConv" />
+	    <dragSource type="ZmMailMsg"/>
+	</zimletPanelItem>
+</zimlet>
+
+
