@@ -41,11 +41,13 @@ class OutboxTracker {
 
     static Iterator<Integer> iterator(Mailbox mbox, long retryDelay) throws ServiceException {
         Map<Integer, Long> outboxMap = null;
-        synchronized (sOutboxMessageMap) {
-            outboxMap = sOutboxMessageMap.get(mbox.getId());
-            if (outboxMap == null) {
-                refresh(mbox);
+        synchronized (mbox) {
+            synchronized (sOutboxMessageMap) {
                 outboxMap = sOutboxMessageMap.get(mbox.getId());
+                if (outboxMap == null) {
+                    refresh(mbox);
+                    outboxMap = sOutboxMessageMap.get(mbox.getId());
+                }
             }
         }
         List<Integer> msgList = new ArrayList<Integer>();
