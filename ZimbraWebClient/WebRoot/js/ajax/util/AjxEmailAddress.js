@@ -131,7 +131,8 @@ function(str) {
 	var addr, name;
 	var str = AjxStringUtil.trim(str);
 	var prelimOkay = AjxEmailAddress._prelimCheck(str);
-	if (!(prelimOkay && str.match(AjxEmailAddress.addrPat))) {
+	var contiDotOkay = AjxEmailAddress._continuousDotCheck(str);
+	if (!(prelimOkay && contiDotOkay && str.match(AjxEmailAddress.addrPat))) {
 		DBG.println(AjxDebug.DBG2, "mailbox match failed: " + str);
 		return null;
 	}
@@ -230,6 +231,27 @@ function(str) {
 	var atIndex = str.indexOf('@');
 	var dotIndex = str.lastIndexOf('.');
 	return ((atIndex != -1) && (dotIndex != -1) && (dotIndex > atIndex) && (dotIndex != str.length - 1));
+};
+
+/**
+* Checks if the email adress has two consecutive dots like: firstname..lastname@domain.com
+* @returns true if there are consecutive dots in email address, or else returns true
+*/
+AjxEmailAddress._continuousDotCheck =
+function(str) {
+	var address;
+	// getting address
+	var addrStartIndex = str.lastIndexOf('<');
+	if (addrStartIndex >= 0) {
+		var addrEndIndex = str.lastIndexOf('>');
+		if (addrEndIndex >= 0 && addrStartIndex < addrEndIndex) {
+			address = str.substring(addrStartIndex + 1, addrEndIndex);
+		}
+	}
+	if(!address){
+		address = str;
+	}
+	return address.indexOf("..") == -1;
 };
 
 /**
