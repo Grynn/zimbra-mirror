@@ -77,7 +77,7 @@ public abstract class AbsSeleniumObject {
 	 * @param locator
 	 * @throws HarnessException
 	 */
-	public void zClick(String locator) throws HarnessException {
+	public void zClickAt(String locator) throws HarnessException {
 		// Check if the locator is present
 		if ( !sIsElementPresent(locator) ) {
 			logger.info("zClick("+ locator +") element is not present");
@@ -91,6 +91,25 @@ public abstract class AbsSeleniumObject {
 		
 	}
 
+	/**
+	 * Execute mouseDown followed by mouseUp on a locator
+	 * @param locator
+	 * @throws HarnessException
+	 */
+	public void zClick(String locator) throws HarnessException {
+		// Check if the locator is present
+		if ( !sIsElementPresent(locator) ) {
+			logger.info("zClick("+ locator +") element is not present");
+			throw new HarnessException("zClick("+ locator +") element is not present");
+		}
+		
+		ClientSessionFactory.session().selenium().mouseDown(locator);
+		ClientSessionFactory.session().selenium().mouseUp(locator);
+		
+		logger.info("zClick("+ locator +")");
+		
+	}
+	
 	/**
 	 * Execute mouseDownRight followed by mouseUpRight on a locator
 	 * @param locator
