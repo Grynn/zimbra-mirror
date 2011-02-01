@@ -154,7 +154,7 @@ public class FormMailNew extends AbsForm{
             
             return;
             
-         } else if ( frames == 1 ) {
+         } else if ( frames > 0 ) {
             ////
             // HTML compose
             ////
@@ -314,11 +314,13 @@ public class FormMailNew extends AbsForm{
          logger.debug(Locators.zSendIconButton + " is not present.");
          return false;
       }
-      if (!zIsVisiblePerPosition(Locators.zSendIconButton, 0, 0)) {
+
+      // TODO: This returns -9998, -9998
+      /**if (!zIsVisiblePerPosition(Locators.zSendIconButton, 0, 0)) {
          logger.debug(Locators.zSendIconButton + " is not visible.");
          return false;
-      }
-      logger.debug(Locators.zSendIconButton + " is present and visible.");
+      }*/
+      logger.debug(Locators.zSendIconButton + " is present.");
       return true;
    }
    /**

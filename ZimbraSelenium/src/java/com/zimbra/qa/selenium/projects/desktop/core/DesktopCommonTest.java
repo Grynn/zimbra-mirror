@@ -41,6 +41,7 @@ import com.zimbra.qa.selenium.framework.util.BuildUtility.ARCH;
 import com.zimbra.qa.selenium.framework.util.BuildUtility.BRANCH;
 import com.zimbra.qa.selenium.framework.util.BuildUtility.PRODUCT_NAME;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
+import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsArch;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 
@@ -103,21 +104,24 @@ public class DesktopCommonTest {
 	public void commonTestBeforeSuite() throws HarnessException, SAXException, IOException, InterruptedException {
 		logger.info("commonTestBeforeSuite");
 		osType = OperatingSystem.getOSType();
+		OsArch osArch = OperatingSystem.getOsArch();
 		_productName = PRODUCT_NAME.ZDESKTOP;
 		_branchName = BRANCH.HELIX;
 		boolean isAppRunning = false;
-
 		switch (osType){
 		case WINDOWS: case WINDOWS_XP:
 		   _downloadFilePath = "C:\\download-zimbra-qa-test\\";
 		   _arch = ARCH.WINDOWS;
 
-		   File root = new File("C:\\Program Files (x86)"); 
+		   String filePath = "C:\\Program Files (x86)";
+
+		   File root = new File(filePath); 
 		   if (root.exists()) {
+		      // 64 bit
 	         _executableFilePath = "C:\\WINDOWS\\SysWOW64\\cscript.exe \"C:\\Program Files (x86)\\Zimbra\\Zimbra Desktop\\win32\\zdrun.vbs\"";
 	      } else {
-	         // TODO: Find out for 32 bit system
-	         _executableFilePath = "C:\\WINDOWS\\SysWOW64\\cscript.exe \"C:\\Program Files (x86)\\Zimbra\\Zimbra Desktop\\win32\\zdrun.vbs\"";
+	         // 32 bit
+	         _executableFilePath = "C:\\WINDOWS\\system32\\cscript.exe \"C:\\Program Files\\Zimbra\\Zimbra Desktop\\win32\\zdrun.vbs\"";
 	      }
 
 		   if (GeneralUtility.findWindowsRunningTask("zdesktop.exe")) {

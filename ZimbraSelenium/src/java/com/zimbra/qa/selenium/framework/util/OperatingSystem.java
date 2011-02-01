@@ -26,7 +26,21 @@ public class OperatingSystem {
       WINDOWS, WINDOWS_XP, LINUX, MAC
    }
 
-   /**
+	public enum OsArch {
+	   X86, X64
+	}
+	
+	public static OsArch getOsArch() {
+	   String osArch = System.getProperty("os.arch").toLowerCase();
+      logger.info("os.arch is: " + osArch);
+      if (osArch.equals("x86") || osArch.equals("i386")) {
+         return OsArch.X86;
+      } else {
+         return OsArch.X64;
+      }
+	}
+
+	/**
     * Get the OS type from the system information
     * @return (enum: OperatingSystem.OsType) OS Type (Windows, MAC, or Linux)
     */

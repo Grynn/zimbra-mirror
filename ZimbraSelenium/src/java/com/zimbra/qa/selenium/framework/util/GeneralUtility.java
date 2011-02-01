@@ -166,6 +166,7 @@ public class GeneralUtility {
          }
          SleepUtil.sleep(delayBetweenCheck);
       }
+      logger.info("Final Iteration is: " + i);
       logger.info("Final Output is: " + output);
       return output;
    }

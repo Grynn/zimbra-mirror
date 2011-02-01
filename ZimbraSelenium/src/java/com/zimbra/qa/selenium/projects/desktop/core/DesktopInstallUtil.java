@@ -6,11 +6,13 @@ import java.io.IOException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import com.zimbra.cs.account.EntrySearchFilter.Operator;
 import com.zimbra.qa.selenium.framework.util.CommandLine;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
+import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsArch;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 
 
@@ -21,7 +23,8 @@ import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
  */
 public class DesktopInstallUtil {
    protected static Logger logger = LogManager.getLogger(DesktopCommonTest.class);
-   private static final String _commonRegistryPath = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
+   private static final String _commonRegistryPath_x64 = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall";
+   private static final String _commonRegistryPath_x86 = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall";
    private static String _desktopRegistryPath = null;
    private static final String _zimbraDesktopDisplayName = "Zimbra Desktop";
    //private static final String _buildUrl = "http://zre-matrix.eng.vmware.com/links/WINDOWS/HELIX/20110114070101_ZDESKTOP/ZimbraBuild/i386/";
@@ -34,7 +37,7 @@ public class DesktopInstallUtil {
     */
    private static final String _readZimbraDesktopRegistry(String location, String key){
       try {
-         String registryQuery = "reg query " + '"'+ location;
+         String registryQuery = "reg query " + location;
          // Run reg query, then read output with StreamReader (internal class)
          String[] lines = CommandLine.cmdExecWithOutput(registryQuery).split("\n");
 
@@ -45,11 +48,15 @@ public class DesktopInstallUtil {
          String zimbraDesktopRegistryPath = null;
          if (_desktopRegistryPath == null) {
             for (int i = 0; i < lines.length; i++) {
+               if (lines[i].contains("\"")) {
+                  lines[i] = lines[i].replaceAll("\"", "");
+               }
                if (lines[i].trim().equals("")) {
                   // Skip it
                } else {
                   String displayName = CommandLine.cmdExecWithOutput("reg query " +
-                        '"'+ lines[i] + "\" /v DisplayName");
+                         lines[i] + " /v DisplayName");
+                  logger.debug("Display Name is: " + displayName);
                   if (displayName.contains(_zimbraDesktopDisplayName)) {
                      zimbraDesktopRegistryPath = _desktopRegistryPath = lines[i];
                      break;
@@ -60,23 +67,9 @@ public class DesktopInstallUtil {
             zimbraDesktopRegistryPath = _desktopRegistryPath;
          }
          output = CommandLine.cmdExecWithOutput("reg query " +
-               '"'+ zimbraDesktopRegistryPath + "\" /v " + key);
+                zimbraDesktopRegistryPath + " /v " + key);
          return output;
-         /**String registryQuery = "reg query " + '"'+ location + "\" /v " + key;
-         logger.debug("registryQuery is: " + registryQuery);
 
-         // Run reg query, then read output with StreamReader (internal class)
-         logger.debug("Executing registry Query");
-         Process process = Runtime.getRuntime().exec(registryQuery);
-
-         StreamReader reader = new StreamReader(process.getInputStream());
-         logger.debug("Starting the reader thread");
-         reader.start();
-         process.waitFor();
-         reader.join();
-
-         logger.debug("Getting the reader thread result");
-         return reader.getResult();*/
       } catch (Exception e) {
          return null;
       }
@@ -117,11 +110,23 @@ public class DesktopInstallUtil {
     */
    public static void uninstallDesktopApp() throws IOException, InterruptedException, HarnessException {
       OsType osType = OperatingSystem.getOSType();
+      OsArch osArch = OperatingSystem.getOsArch();
       switch (osType) {
       case WINDOWS: case WINDOWS_XP:
          if (isDesktopAppInstalled()) {
-            String uninstallCommand = DesktopInstallUtil._getRegistryValue(
-                  DesktopInstallUtil._commonRegistryPath, "UninstallString") + " /quiet";
+
+            String uninstallCommand = null;
+            switch (osArch) {
+            case X64:
+               uninstallCommand = DesktopInstallUtil._getRegistryValue(
+                     DesktopInstallUtil._commonRegistryPath_x64, "UninstallString") + " /quiet";
+               break;
+            case X86:
+               uninstallCommand = DesktopInstallUtil._getRegistryValue(
+                     DesktopInstallUtil._commonRegistryPath_x86, "UninstallString") + " /quiet";
+               break;
+            }
+
             //TODO: Do for Linux and Mac, right now it's only for Windows
             logger.info("uninstallCommand is: " + uninstallCommand);
       
@@ -191,10 +196,20 @@ public class DesktopInstallUtil {
     */
    public static boolean isDesktopAppInstalled() {
       OsType osType = OperatingSystem.getOSType();
+      OsArch osArch = OperatingSystem.getOsArch();
       boolean isDesktopInstalled = false;
       switch (osType) {
       case WINDOWS: case WINDOWS_XP:
-         String registry = DesktopInstallUtil._readZimbraDesktopRegistry(DesktopInstallUtil._commonRegistryPath, "UninstallString");
+         String registry = null;
+         switch (osArch) {
+         case X64:
+            registry = DesktopInstallUtil._readZimbraDesktopRegistry(DesktopInstallUtil._commonRegistryPath_x64, "UninstallString");
+            break;
+         case X86:
+            registry = DesktopInstallUtil._readZimbraDesktopRegistry(DesktopInstallUtil._commonRegistryPath_x86, "UninstallString");
+            break;
+         } 
+
          if (registry != null) {
             if (!registry.trim().equals("")) {
                isDesktopInstalled = true;

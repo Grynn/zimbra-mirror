@@ -47,10 +47,10 @@ public class CreateFolder extends DesktopCommonTest{
       createFolderDialog.zClick(DialogCreateFolder.Locators.zOkButton);
       _folderIsCreated = true;
 
-   // Make sure the folder was created on the Desktop Server
+      // Make sure the folder was created on the Desktop Server
       Object[] params = {startingAccount, _folderName, SOAP_DESTINATION_HOST_TYPE.CLIENT, startingAccount.EmailAddress};
       FolderItem desktopFolder = (FolderItem)GeneralUtility.waitFor("com.zimbra.qa.selenium.framework.items.FolderItem",
-            null, true, "importFromSOAP", params, WAIT_FOR_OPERAND.NEQ, null, 5000, 1000);
+            null, true, "importFromSOAP", params, WAIT_FOR_OPERAND.NEQ, null, 30000, 1000);
       ZAssert.assertNotNull(desktopFolder, "Verify the new form opened");
       ZAssert.assertEquals(desktopFolder.getName(), _folderName, "Verify the server and client folder names match");
 
@@ -59,8 +59,10 @@ public class CreateFolder extends DesktopCommonTest{
 
       // Make sure the folder was created on the ZCS server
       params = new Object[] {startingAccount, _folderName};
+
+      // Anticipate for slow performance client to ZCS server connection, thus putting 30 seconds
       FolderItem folder = (FolderItem)GeneralUtility.waitFor("com.zimbra.qa.selenium.framework.items.FolderItem",
-            null, true, "importFromSOAP", params, WAIT_FOR_OPERAND.NEQ, null, 5000, 1000);
+            null, true, "importFromSOAP", params, WAIT_FOR_OPERAND.NEQ, null, 30000, 1000);
       ZAssert.assertNotNull(folder, "Verify the new form opened");
       ZAssert.assertEquals(folder.getName(), _folderName, "Verify the server and client folder names match");
    }
