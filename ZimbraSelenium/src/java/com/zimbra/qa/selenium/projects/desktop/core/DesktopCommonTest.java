@@ -56,7 +56,6 @@ public class DesktopCommonTest {
 
 	private String _downloadFilePath = null;
 	private String _executableFilePath = null;
-	private ARCH _arch = null;
 	private final static String _accountFlavor = "Zimbra";
 	protected final static String defaultAccountName = ZimbraSeleniumProperties.getUniqueString();
 	public static ZimbraSelenium _selenium = null;
@@ -65,6 +64,7 @@ public class DesktopCommonTest {
 	// Configurable from config file or input parameters
 	private PRODUCT_NAME _productName = PRODUCT_NAME.ZDESKTOP;
 	private BRANCH _branchName = BRANCH.HELIX;
+	private ARCH _arch = null;
 	private boolean _uninstallAppAfterTest = false;
 	private boolean _forceInstall = false;
 
@@ -109,7 +109,29 @@ public class DesktopCommonTest {
 
 		_forceInstall = ZimbraSeleniumProperties.getStringProperty("desktop.forceInstall", "true").toLowerCase().equals("true") ? true : false;
 		_uninstallAppAfterTest = ZimbraSeleniumProperties.getStringProperty("desktop.uninstallAfterTest", "false").toLowerCase().equals("true") ? true : false;
-		osType = OperatingSystem.getOSType();
+
+		String productName = ZimbraSeleniumProperties.getStringProperty("desktop.productName", "ZDESKTOP").toUpperCase();
+		try {
+		   logger.info("productName: " + productName);
+		   _productName = PRODUCT_NAME.valueOf(productName);
+		} catch (IllegalArgumentException e) {
+		   _productName = PRODUCT_NAME.ZDESKTOP;
+		}
+
+		String productBranch = ZimbraSeleniumProperties.getStringProperty("desktop.productBranch", "HELIX").toUpperCase();
+		try {
+		   logger.info("productBranch: " + productBranch);
+         _branchName = BRANCH.valueOf(productBranch);
+      } catch (IllegalArgumentException e) {
+         _branchName = BRANCH.HELIX;
+      }
+
+      logger.info("_forceInstall: " + _forceInstall);
+      logger.info("_uninstallAppAfterTest: " + _uninstallAppAfterTest);
+      logger.info("_productName: " + _productName);
+      logger.info("_branchName: " + _branchName);
+
+      osType = OperatingSystem.getOSType();
 
 		boolean isAppRunning = false;
 		switch (osType){

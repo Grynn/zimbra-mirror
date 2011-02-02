@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
 import com.zimbra.qa.selenium.framework.util.OperatingSystem;
+import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 
 public class BuildUtility {
    private static final StringBuilder _buildBaseUrl = new StringBuilder("http://zre-matrix.eng.vmware.com");
@@ -33,10 +34,19 @@ public class BuildUtility {
    }
 
    public enum PRODUCT_NAME {
-      NETWORK, ZDESKTOP, FOSS, ISYNC, ZCO, APPLIANCE
+      NETWORK,
+      ZDESKTOP,
+      FOSS,
+      ISYNC,
+      ZCO,
+      APPLIANCE
    }
    public enum BRANCH {
-      GNR, HELIX, MAIN, ZCB_7, ZCB_MAIN
+      GNR,
+      HELIX, ZDESKTOP_700,
+      MAIN,
+      ZCB_7,
+      ZCB_MAIN
    }
    public enum ARCH {
       UBUNTU10_64, RHEL5_64, RHEL4_64, MACOSX_X86_10_6, RHEL4, SLES10_64, SLES11_64, WINDOWS
@@ -133,8 +143,23 @@ public class BuildUtility {
     */
    private static String _getDownloadableBuildUrl(String buildUrl) throws HarnessException {
       String[] lines = _getHtmlInfo(buildUrl).split("\n");
+      OsType os = OperatingSystem.getOSType();
+      String fileExtension = null;
+
+      switch (os) {
+      case WINDOWS: case WINDOWS_XP:
+         fileExtension = ".msi";
+         break;
+      case LINUX:
+         fileExtension = ".tgz";
+         break;
+      case MAC:
+         fileExtension = ".dmg";
+         break;
+      }
+
       for (int i = 0; i < lines.length; i++) {
-         if (lines[i].contains(".msi")) {
+         if (lines[i].contains(fileExtension)) {
             // Plus 6 because of these characters --> href="
             int startPos = lines[i].indexOf("href=\"") + 6;
             return buildUrl + lines[i].substring(startPos, lines[i].indexOf("\"",startPos));
@@ -245,11 +270,11 @@ public class BuildUtility {
          if (outputLines[i].startsWith("<TR BGCOLOR") &&
              outputLines[i].contains("logs") &&
              outputLines[i].contains(productName.toString()) &&
-             outputLines[i].contains(branch.toString() + "<") &&
+             outputLines[i].contains(branch.toString().replace('_', '-') + "<") &&
              outputLines[i].contains(arch.toString())) {
             numOfElements ++;
             Build temp = buildUtil.new Build();
-            //parsedOutput.add(outputLines[i]);
+
             int currentReadPos = 0;
             for (int j = 0; j < 7; j++) {
                currentReadPos = outputLines[i].indexOf("<TD", currentReadPos);
