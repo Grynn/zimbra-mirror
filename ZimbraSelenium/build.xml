@@ -108,7 +108,7 @@
 			<fileset dir="${src.java.dir}/com/zimbra/qa/selenium/projects/mobile/ui" includes="**/*.java"/>
 		</javadoc>
 	</target>
-
+	
 	<target name="bundles-classes" description="Copies the I18N properties files to build">
 		<copy todir="${build.resources.dir}">
 			<fileset dir="${webclient.dir}/WebRoot/messages/" />
@@ -120,10 +120,31 @@
 			<fileset dir="${zimlet.dir}/src/zimlet/com_zimbra_attachcontacts/">
 				<filename name="*.properties"/>
 			</fileset>
+			<fileset dir="${zimlet.dir}/src/zimlet/com_zimbra_attachmail/">
+				<filename name="*.properties"/>
+			</fileset>
+			<fileset dir="${zimlet.dir}/src/zimlet/com_zimbra_date/">
+				<filename name="*.properties"/>
+			</fileset>
+			<fileset dir="${zimlet.dir}/src/zimlet/com_zimbra_dnd/">
+				<filename name="*.properties"/>
+			</fileset>
 			<fileset dir="${zimlet.dir}/src/zimlet/com_zimbra_email/">
 				<filename name="*.properties"/>
 			</fileset>
 			<fileset dir="${zimlet.dir}/src/zimlet/com_zimbra_linkedin/">
+				<filename name="*.properties"/>
+			</fileset>
+			<fileset dir="${zimlet.dir}/src/zimlet/com_zimbra_phone/">
+				<filename name="*.properties"/>
+			</fileset>
+			<fileset dir="${zimlet.dir}/src/zimlet/com_zimbra_social/">
+				<filename name="*.properties"/>
+			</fileset>
+			<fileset dir="${zimlet.dir}/src/zimlet/com_zimbra_srchhighlighter/">
+				<filename name="*.properties"/>
+			</fileset>
+			<fileset dir="${zimlet.dir}/src/zimlet/com_zimbra_url/">
 				<filename name="*.properties"/>
 			</fileset>
 			<fileset dir="${zimlet.dir}/src/zimlet/com_zimbra_webex/">
