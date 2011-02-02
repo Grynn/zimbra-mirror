@@ -5,12 +5,16 @@ import java.io.IOException;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
 
-import com.zimbra.cs.account.EntrySearchFilter.Operator;
+import com.zimbra.qa.selenium.framework.util.BuildUtility;
 import com.zimbra.qa.selenium.framework.util.CommandLine;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem;
+import com.zimbra.qa.selenium.framework.util.BuildUtility.ARCH;
+import com.zimbra.qa.selenium.framework.util.BuildUtility.BRANCH;
+import com.zimbra.qa.selenium.framework.util.BuildUtility.PRODUCT_NAME;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsArch;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
@@ -86,7 +90,7 @@ public class DesktopInstallUtil {
       logger.info("Registry output is: " + output);
       // Now process it
       // Output has the following format:
-      // \n<Version information>\n\n<key>    <registry type>    <value>
+      // \n<Version information>\n\n<key>    *_SZ    <value>
       if (output == null) {
          return "";
       } else {
@@ -94,8 +98,8 @@ public class DesktopInstallUtil {
             return output;
          } else {
             // Parse out the value
-            String[] parsed = output.split("    ");
-            return parsed[parsed.length-1];
+            String[] parsed = output.split("_SZ");
+            return parsed[parsed.length-1].trim();
          }
       }
    }
@@ -111,9 +115,12 @@ public class DesktopInstallUtil {
    public static void uninstallDesktopApp() throws IOException, InterruptedException, HarnessException {
       OsType osType = OperatingSystem.getOSType();
       OsArch osArch = OperatingSystem.getOsArch();
+
       switch (osType) {
       case WINDOWS: case WINDOWS_XP:
          if (isDesktopAppInstalled()) {
+            CommandLine.CmdExec("TASKKILL /F /IM zdclient.exe");
+            CommandLine.CmdExec("TASKKILL /F /IM zdesktop.exe");
 
             String uninstallCommand = null;
             switch (osArch) {
@@ -224,5 +231,35 @@ public class DesktopInstallUtil {
 
       logger.debug("isDesktopInstalled = " + isDesktopInstalled);
       return isDesktopInstalled;   
+   }
+
+   /**
+    * This method will forcefully install the latest build. If there is a current installed build,
+    * it will uninstall and install the latest.
+    * @param prodName Product Name
+    * @param branch Branch Name
+    * @param arch Arch Name
+    * @param downloadLocation Location to download the install file, ie. C:\\download-zimbra-qa-test\\ for windows
+    * @throws HarnessException 
+    * @throws InterruptedException 
+    * @throws IOException 
+    * @throws SAXException 
+    */
+   public static void forceInstallLatestBuild(PRODUCT_NAME prodName, BRANCH branch, ARCH arch,
+         String downloadLocation)
+         throws IOException, InterruptedException, HarnessException, SAXException {
+      logger.info("Forcefully install latest build");
+      boolean isDesktopAppInstalled = isDesktopAppInstalled();
+      logger.info("isDesktopAppInstalled: " + isDesktopAppInstalled);
+      if (isDesktopAppInstalled) {
+         logger.info("Uninstalling the app");
+         uninstallDesktopApp();
+      } else {
+         // Nothing to do here
+      }
+
+      logger.info("Downloading latest build");
+      String fullDownloadPath = BuildUtility.downloadLatestBuild(downloadLocation, prodName, branch, arch);
+      installDesktopApp(fullDownloadPath);
    }
 }

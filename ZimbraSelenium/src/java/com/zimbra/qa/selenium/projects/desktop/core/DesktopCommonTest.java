@@ -41,7 +41,6 @@ import com.zimbra.qa.selenium.framework.util.BuildUtility.ARCH;
 import com.zimbra.qa.selenium.framework.util.BuildUtility.BRANCH;
 import com.zimbra.qa.selenium.framework.util.BuildUtility.PRODUCT_NAME;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
-import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsArch;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 
@@ -57,14 +56,17 @@ public class DesktopCommonTest {
 
 	private String _downloadFilePath = null;
 	private String _executableFilePath = null;
-	private PRODUCT_NAME _productName = null;
-	private BRANCH _branchName = null;
 	private ARCH _arch = null;
 	private final static String _accountFlavor = "Zimbra";
 	protected final static String defaultAccountName = ZimbraSeleniumProperties.getUniqueString();
-	private boolean _uninstallAppAfterTest = false;
 	public static ZimbraSelenium _selenium = null;
 	private static boolean _firstTime = true;
+
+	// Configurable from config file or input parameters
+	private PRODUCT_NAME _productName = PRODUCT_NAME.ZDESKTOP;
+	private BRANCH _branchName = BRANCH.HELIX;
+	private boolean _uninstallAppAfterTest = false;
+	private boolean _forceInstall = false;
 
 	/**
 	 * The AdminConsole application object
@@ -92,8 +94,9 @@ public class DesktopCommonTest {
 
 	/**
 	 * Global BeforeSuite
-	 * 
-	 * 1. Make sure the selenium server is available
+	 * 1. Make sure that Desktop Application is installed
+	 * 2. Make sure that Desktop Application is initialized
+	 * 3. Make sure the selenium server is available
 	 * 
 	 * @throws HarnessException
 	 * @throws IOException 
@@ -103,10 +106,11 @@ public class DesktopCommonTest {
 	@BeforeSuite( groups = { "always" } )
 	public void commonTestBeforeSuite() throws HarnessException, SAXException, IOException, InterruptedException {
 		logger.info("commonTestBeforeSuite");
+
+		_forceInstall = ZimbraSeleniumProperties.getStringProperty("desktop.forceInstall", "true").toLowerCase().equals("true") ? true : false;
+		_uninstallAppAfterTest = ZimbraSeleniumProperties.getStringProperty("desktop.uninstallAfterTest", "false").toLowerCase().equals("true") ? true : false;
 		osType = OperatingSystem.getOSType();
-		OsArch osArch = OperatingSystem.getOsArch();
-		_productName = PRODUCT_NAME.ZDESKTOP;
-		_branchName = BRANCH.HELIX;
+
 		boolean isAppRunning = false;
 		switch (osType){
 		case WINDOWS: case WINDOWS_XP:
@@ -128,11 +132,6 @@ public class DesktopCommonTest {
 		      isAppRunning = true;
 		   }
 
-		   File file = new File(_downloadFilePath);
-		   if (!file.exists()) {
-		      logger.info("Creating directory " + _downloadFilePath + "...");
-		      file.mkdir();
-		   }
 		   break;
 
 		case LINUX:
@@ -145,13 +144,19 @@ public class DesktopCommonTest {
 		   //TODO: _executableFilePath
 		}
 
-		if (!DesktopInstallUtil.isDesktopAppInstalled()) {
-		   String downloadPath = BuildUtility.downloadLatestBuild(_downloadFilePath, _productName, _branchName, _arch);
-		   logger.info("Now installing: " + downloadPath);
-		   DesktopInstallUtil.installDesktopApp(downloadPath);
+		logger.info("_forceInstall: " + _forceInstall);
+		if (_forceInstall) {
+		   DesktopInstallUtil.forceInstallLatestBuild(_productName, _branchName, _arch, _downloadFilePath);
+		   isAppRunning = false;
 		} else {
-		   // Running test with already installed Desktop App.
-		   logger.info("Running with already installed app");
+		   if (!DesktopInstallUtil.isDesktopAppInstalled()) {
+		      String downloadPath = BuildUtility.downloadLatestBuild(_downloadFilePath, _productName, _branchName, _arch);
+		      logger.info("Now installing: " + downloadPath);
+		      DesktopInstallUtil.installDesktopApp(downloadPath);
+		   } else {
+		      // Running test with already installed Desktop App.
+		      logger.info("Running with already installed app");
+		   }		   
 		}
 
 		if (!isAppRunning) {
@@ -357,14 +362,6 @@ public class DesktopCommonTest {
 
 		ClientSessionFactory.session().selenium().stop();
 		if (_uninstallAppAfterTest) {
-		   switch (osType) {
-		   case WINDOWS: case WINDOWS_XP:
-		      CommandLine.CmdExec("TASKKILL /F /IM zdclient.exe");
-		      CommandLine.CmdExec("TASKKILL /F /IM zdesktop.exe");
-		      break;
-		   case LINUX: case MAC:
-		      // TODO: Terminate the running services of Zimbra Desktop
-		   }
 		   DesktopInstallUtil.uninstallDesktopApp();
 		}
 		logger.info("commonTestAfterSuite: finish");

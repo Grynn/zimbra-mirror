@@ -3,6 +3,7 @@ package com.zimbra.qa.selenium.framework.util;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -160,6 +161,13 @@ public class BuildUtility {
       BufferedInputStream in = null;
       int bufferedSize = 1024;
       String output = null;
+
+      File file = new File(downloadDest);
+      if (!file.exists()) {
+         logger.info("Creating directory " + downloadDest + "...");
+         file.mkdir();
+      }
+
       try {
          logger.debug("Getting the builds from Build web");
          Build build = _buildOutputFilter(productName, branch, arch)[0];
