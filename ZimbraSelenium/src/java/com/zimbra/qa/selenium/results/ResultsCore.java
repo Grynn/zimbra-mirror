@@ -212,11 +212,13 @@ public class ResultsCore {
 						item.BugID = id;
 						item.BugStatus = state;
 						item.NeedsFollowUp = false;
+						item.BugOwner = (bugContact.containsKey(id) ? bugContact.get(id) : "None");
 						// Keep searching in case another bug ID needs followup
 					} else {
 						item.BugID = id;
 						item.BugStatus = state;
 						item.NeedsFollowUp = true;
+						item.BugOwner = (bugContact.containsKey(id) ? bugContact.get(id) : "None");
 						break; // This bug needs followup, all done here.
 					}
 
@@ -251,11 +253,13 @@ public class ResultsCore {
 							item.BugID = id;
 							item.BugStatus = state;
 							item.NeedsFollowUp = false;
+							item.BugOwner = (bugContact.containsKey(id) ? bugContact.get(id) : "None");
 							break; // Found the tracking bug, no need to go further
 						} else {
 							item.BugID = id;
 							item.BugStatus = state;
 							item.NeedsFollowUp = true;
+							item.BugOwner = (bugContact.containsKey(id) ? bugContact.get(id) : "None");
 							// Keep searching in case another bug ID needs followup
 						}
 
@@ -287,7 +291,7 @@ public class ResultsCore {
 			sb.append(item.BugStatus).append(' ');
 		}
 		
-		sb.append(item.TestCaseID).append(' ');
+		sb.append(item.TestCaseID.replace("com.zimbra.qa.selenium.projects.", "...")).append(' ');
 		
 		if ( item.BugID == null ) {
 			sb.append("-- http://bugzilla.zimbra.com/enter_bug.cgi");
@@ -302,8 +306,64 @@ public class ResultsCore {
 
 	}
 	
+	
+	/**
+	 * Compare a ReportItem to another
+	 * <p>
+	 * Sort according to:<br>
+	 * 1. Needs Follow UP<br>
+	 * 2. Bug state<br>
+	 * 3. Bug ID<br>
+	 * <p>
+	 * @author Matt Rhoades
+	 *
+	 */
+	private class ReportItemComparator implements Comparator<ReportItem> {
+		
+		private static final int LessThan = -1;
+		private static final int EqualTo = 0;
+		private static final int GreaterThan = 1;
+		
+		@Override
+		public int compare(ReportItem a, ReportItem b) {
+			
+			// NeedsFollowUp bugs are first
+			if ( a.NeedsFollowUp && !b.NeedsFollowUp )
+				return (LessThan);
+			
+			if ( !a.NeedsFollowUp && b.NeedsFollowUp )
+				return (GreaterThan);
+			
+			// NeedsFollowUp are equal (either both need it or both don't)
+			
+			// If one of the items doesn't have a bug ID, then it is first
+			if ( a.BugID == null && b.BugID != null )
+				return (LessThan);
+			
+			if ( a.BugID != null && b.BugID == null )
+				return (GreaterThan);
+
+			if ( a.BugID == null && b.BugID == null )
+				return (EqualTo);
+
+			// If BugStatus is not equal, return based on Status order, i.e. UNCONFIRMED, NEW, ASSIGNED, REOPENED, RESOLVED, VERIFIED, CLOSED
+			if (a.BugStatus != b.BugStatus) {
+				return (a.BugStatus.compareTo(b.BugStatus));
+			}
+			
+			// BugStatus are equal
+			
+			// Return based on bug ID
+			return (Integer.valueOf(a.BugID).compareTo(Integer.valueOf(b.BugID)));
+		}
+		
+	}
+
 	private void writeReport(File root, List<ReportItem> items) throws IOException {
 		
+		// Sort the items
+		Collections.sort(items, new ReportItemComparator());
+
 		// Create the BugReport.txt file as a log4j logger
 		String filename = root.getAbsolutePath() + "/BugReports/BugReport.txt";
 		Layout layout = new PatternLayout("%m%n");
@@ -344,7 +404,6 @@ public class ResultsCore {
 		
 		report.info("");
 		report.info("");
-		report.info("Done!");
 		
 		report.removeAllAppenders();
 		
