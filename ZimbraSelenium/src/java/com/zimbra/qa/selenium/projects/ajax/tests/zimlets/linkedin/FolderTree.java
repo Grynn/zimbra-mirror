@@ -6,6 +6,7 @@ import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.items.ZimletItem;
 import com.zimbra.qa.selenium.framework.items.ZimletItem.CoreZimletItem;
+import com.zimbra.qa.selenium.framework.items.ZimletItem.CoreZimletItem.CoreZimletName;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
@@ -24,7 +25,7 @@ public class FolderTree extends AjaxCommonTest {
 	@Test(	description = "Verify the LinkedIn zimlet appears in the folder tree",
 			groups = { "smoke" })
 	public void FolderTree_01() throws HarnessException {
-		ZimletItem linkedin = CoreZimletItem.getLinkedInZimlet(app);
+		ZimletItem linkedin = CoreZimletItem.getCoreZimlet(CoreZimletName.com_zimbra_linkedin, app);
 		
 		// Expand the zimlets section
 		app.zTreeMail.zExpandZimlets();

@@ -6,6 +6,7 @@ import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.items.ZimletItem;
 import com.zimbra.qa.selenium.framework.items.ZimletItem.CoreZimletItem;
+import com.zimbra.qa.selenium.framework.items.ZimletItem.CoreZimletItem.CoreZimletName;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
@@ -24,7 +25,7 @@ public class FolderTree extends AjaxCommonTest {
 	@Test(	description = "Verify the WebEx zimlet appears in the folder tree",
 			groups = { "smoke" })
 	public void FolderTree_01() throws HarnessException {
-		ZimletItem webex = CoreZimletItem.getWebExZimlet(app);
+		ZimletItem webex = CoreZimletItem.getCoreZimlet(CoreZimletName.com_zimbra_webex, app);
 		
 		// Expand the zimlets section
 		app.zTreeMail.zExpandZimlets();

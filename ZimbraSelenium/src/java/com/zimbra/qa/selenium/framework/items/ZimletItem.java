@@ -156,10 +156,37 @@ public class ZimletItem  {
 
 	public static class CoreZimletItem extends ZimletItem {
 
+		public enum CoreZimletName {
+			com_zimbra_attachcontacts,
+			com_zimbra_attachmail,
+			com_zimbra_date,
+			com_zimbra_dnd,
+			com_zimbra_email,
+			com_zimbra_linkedin,
+			com_zimbra_phone,
+			com_zimbra_social,
+			com_zimbra_srchhighlighter,
+			com_zimbra_url,
+			com_zimbra_webex
+		}
+		
+		
+		/**
+		 * Return the core ZimletItem
+		 * @param name
+		 * @param app
+		 * @return
+		 */
+		public static CoreZimletItem getCoreZimlet(CoreZimletName name, AbsApplication app) {
+			CoreZimletItem zimlet = new CoreZimletItem(name);
+			zimlet.setLocale(app);
+			return (zimlet);
+		}
+
 		/**
 		 * The zimlet name, such as com_zimbra_email
 		 */
-		protected String zName = null;
+		protected CoreZimletName zName = null;
 		
 		/**
 		 * An object containing the localized strings
@@ -167,9 +194,11 @@ public class ZimletItem  {
 		protected I18N L10N = new I18N();
 		
 
-		protected CoreZimletItem(String name) {
+		protected CoreZimletItem(CoreZimletName name) {
+			logger.info("new " + CoreZimletItem.class.getCanonicalName());
+			
 			zName = name;
-			L10N.zAddBundlename(zName);
+			L10N.zAddBundlename(zName.toString());
 			setLocale(Locale.ENGLISH); // Default
 		}
 
@@ -198,8 +227,10 @@ public class ZimletItem  {
 		
 		public String getFolderTreeName() {
 			String key = "label";
-			if ( zName.equals("com_zimbra_webex") )
-				key = "WebExZimlet_label";
+			
+			if ( zName.equals(CoreZimletName.com_zimbra_webex) )
+				key = "WebExZimlet_label"; // Special case for the webex zimlet
+			
 			return (L10N.zGetString(key));
 		}
 
@@ -212,70 +243,7 @@ public class ZimletItem  {
 			return (sb.toString());
 		}
 
-		
-		// Attach Contacts Zimlet
-		public static CoreZimletItem getAttachContactsZimlet(AbsApplication app) {
-			return (getCoreZimlet("com_zimbra_attachcontacts", app));
-		}
 
-		// Email Attacher Zimlet
-		public static CoreZimletItem getAttachMailZimlet(AbsApplication app) {
-			return (getCoreZimlet("com_zimbra_attachmail", app));
-		}
-
-		// Date Zimlet
-		public static CoreZimletItem getDateZimlet(AbsApplication app) {
-			return (getCoreZimlet("com_zimbra_date", app));
-		}
-
-		// Drag and Drop Zimlet
-		public static CoreZimletItem getDnDZimlet(AbsApplication app) {
-			return (getCoreZimlet("com_zimbra_dnd", app));
-		}
-
-		// Email Attacher Zimlet
-		public static CoreZimletItem getEmailZimlet(AbsApplication app) {
-			return (getCoreZimlet("com_zimbra_email", app));
-		}
-
-		// LinkedIn Zimlet
-		public static CoreZimletItem getLinkedInZimlet(AbsApplication app) {
-			return (getCoreZimlet("com_zimbra_linkedin", app));
-		}
-
-
-		// Phone Zimlet
-		public static CoreZimletItem getPhoneZimlet(AbsApplication app) {
-			return (getCoreZimlet("com_zimbra_phone", app));
-		}
-
-		// Social Zimlet
-		public static CoreZimletItem getSocialZimlet(AbsApplication app) {
-			return (getCoreZimlet("com_zimbra_social", app));
-		}
-
-		// Search Highlighter Zimlet
-		public static CoreZimletItem getSrchHighlighterZimlet(AbsApplication app) {
-			return (getCoreZimlet("com_zimbra_srchhighlighter", app));
-		}
-
-		// URL Zimlet
-		public static CoreZimletItem getUrlZimlet(AbsApplication app) {
-			return (getCoreZimlet("com_zimbra_url", app));
-		}
-
-		// WebEx Zimlet
-		public static CoreZimletItem getWebExZimlet(AbsApplication app) {
-			return (getCoreZimlet("com_zimbra_webex", app));
-		}
-
-
-		// Helper method
-		private static CoreZimletItem getCoreZimlet(String name, AbsApplication app) {
-			CoreZimletItem zimlet = new CoreZimletItem(name);
-			zimlet.setLocale(app);
-			return (zimlet);
-		}
 
 
 	}
