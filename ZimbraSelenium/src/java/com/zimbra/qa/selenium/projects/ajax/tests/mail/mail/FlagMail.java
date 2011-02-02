@@ -111,9 +111,6 @@ public class FlagMail extends AjaxCommonTest {
 		// Flag the item
 		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MARKFLAG);
 		
-		// Wait for the client to send the data
-		SleepUtil.sleepMedium();
-
 		// Get the item from the list
 		List<MailItem> messages = app.zPageMail.zListGetMessages();
 		ZAssert.assertNotNull(messages, "Verify the message list exists");
