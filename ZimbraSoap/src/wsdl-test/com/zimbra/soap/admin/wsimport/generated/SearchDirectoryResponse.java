@@ -46,11 +46,11 @@ import javax.xml.bind.annotation.XmlType;
 public class SearchDirectoryResponse {
 
     @XmlElements({
-        @XmlElement(name = "domain", type = DomainInfo.class),
-        @XmlElement(name = "calresource", type = CalendarResourceInfo.class),
-        @XmlElement(name = "cos", type = CosInfo.class),
         @XmlElement(name = "alias", type = AliasInfo.class),
+        @XmlElement(name = "calresource", type = CalendarResourceInfo.class),
+        @XmlElement(name = "domain", type = DomainInfo.class),
         @XmlElement(name = "dl", type = DistributionListInfo.class),
+        @XmlElement(name = "cos", type = CosInfo.class),
         @XmlElement(name = "account", type = AccountInfo.class)
     })
     protected List<AdminObjectInfo> calresourceOrDlOrAlias;
@@ -77,11 +77,11 @@ public class SearchDirectoryResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link DomainInfo }
-     * {@link CalendarResourceInfo }
-     * {@link CosInfo }
      * {@link AliasInfo }
+     * {@link CalendarResourceInfo }
+     * {@link DomainInfo }
      * {@link DistributionListInfo }
+     * {@link CosInfo }
      * {@link AccountInfo }
      * 
      * 

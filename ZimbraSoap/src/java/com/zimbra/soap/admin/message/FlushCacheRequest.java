@@ -15,21 +15,14 @@
 
 package com.zimbra.soap.admin.message;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.collect.Lists;
-
 import com.zimbra.common.soap.AdminConstants;
-import com.zimbra.soap.admin.type.CacheEntrySelector;
+import com.zimbra.soap.admin.type.CacheSelector;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name=AdminConstants.E_FLUSH_CACHE_REQUEST)
@@ -37,14 +30,19 @@ import com.zimbra.soap.admin.type.CacheEntrySelector;
 public class FlushCacheRequest {
 
     @XmlElement(name=AdminConstants.E_CACHE, required=false)
-    private CacheEntrySelector cache;
+    private final CacheSelector cache;
 
-    public FlushCacheRequest() {
+    /**
+     * no-argument constructor wanted by JAXB
+     */
+    @SuppressWarnings("unused")
+    private FlushCacheRequest() {
+        this((CacheSelector) null);
     }
 
-    public void setCache(CacheEntrySelector cache) {
+    public FlushCacheRequest(CacheSelector cache) {
         this.cache = cache;
     }
 
-    public CacheEntrySelector getCache() { return cache; }
+    public CacheSelector getCache() { return cache; }
 }

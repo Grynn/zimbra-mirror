@@ -16,9 +16,9 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="getAllAdminAccountsRequest">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *       &lt;/all>
- *       &lt;attribute name="applyCos" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;sequence>
+ *       &lt;/sequence>
+ *       &lt;attribute name="applyCos" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -27,27 +27,33 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "getAllAdminAccountsRequest", propOrder = {
-
-})
+@XmlType(name = "getAllAdminAccountsRequest")
 public class GetAllAdminAccountsRequest {
 
-    @XmlAttribute(required = true)
-    protected boolean applyCos;
+    @XmlAttribute
+    protected Boolean applyCos;
 
     /**
      * Gets the value of the applyCos property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
-    public boolean isApplyCos() {
+    public Boolean isApplyCos() {
         return applyCos;
     }
 
     /**
      * Sets the value of the applyCos property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
-    public void setApplyCos(boolean value) {
+    public void setApplyCos(Boolean value) {
         this.applyCos = value;
     }
 

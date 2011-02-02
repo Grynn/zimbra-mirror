@@ -19,23 +19,30 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.soap.admin.type.MailboxByAccountIdSelector;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name=AdminConstants.E_DELETE_MAILBOX_REQUEST)
-@XmlType(propOrder = {})
 public class DeleteMailboxRequest {
 
     @XmlElement(name=AdminConstants.E_MAILBOX, required=false)
-    private MailboxByAccountIdSelector mbox;
+    private final MailboxByAccountIdSelector mbox;
 
-    public DeleteMailboxRequest() {
+    /**
+     * no-argument constructor wanted by JAXB
+     */
+    @SuppressWarnings("unused")
+    private DeleteMailboxRequest() {
+        this((MailboxByAccountIdSelector) null);
     }
 
-    public void setMbox(MailboxByAccountIdSelector mbox) {
+    public DeleteMailboxRequest(String accountId) {
+        this(new MailboxByAccountIdSelector(accountId));
+    }
+
+    public DeleteMailboxRequest(MailboxByAccountIdSelector mbox) {
         this.mbox = mbox;
     }
 

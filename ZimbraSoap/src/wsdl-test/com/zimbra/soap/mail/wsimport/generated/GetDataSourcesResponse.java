@@ -41,10 +41,10 @@ import javax.xml.bind.annotation.XmlType;
 public class GetDataSourcesResponse {
 
     @XmlElements({
-        @XmlElement(name = "cal", type = MailCalDataSource.class),
-        @XmlElement(name = "imap", type = MailImapDataSource.class),
+        @XmlElement(name = "rss", type = MailRssDataSource.class),
         @XmlElement(name = "pop3", type = MailPop3DataSource.class),
-        @XmlElement(name = "rss", type = MailRssDataSource.class)
+        @XmlElement(name = "cal", type = MailCalDataSource.class),
+        @XmlElement(name = "imap", type = MailImapDataSource.class)
     })
     protected List<MailDataSource> pop3OrImapOrRss;
 
@@ -66,10 +66,10 @@ public class GetDataSourcesResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link MailRssDataSource }
+     * {@link MailPop3DataSource }
      * {@link MailCalDataSource }
      * {@link MailImapDataSource }
-     * {@link MailPop3DataSource }
-     * {@link MailRssDataSource }
      * 
      * 
      */

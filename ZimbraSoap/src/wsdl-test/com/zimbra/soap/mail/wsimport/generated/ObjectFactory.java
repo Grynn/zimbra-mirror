@@ -48,35 +48,51 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ExportContactsResponse }
+     * Create an instance of {@link MailPop3DataSource }
      * 
      */
-    public ExportContactsResponse createExportContactsResponse() {
-        return new ExportContactsResponse();
+    public MailPop3DataSource createMailPop3DataSource() {
+        return new MailPop3DataSource();
     }
 
     /**
-     * Create an instance of {@link GetDataSourcesResponse }
+     * Create an instance of {@link Folder }
      * 
      */
-    public GetDataSourcesResponse createGetDataSourcesResponse() {
-        return new GetDataSourcesResponse();
+    public Folder createFolder() {
+        return new Folder();
     }
 
     /**
-     * Create an instance of {@link ImportContactsRequest }
+     * Create an instance of {@link GetFolderRequest }
      * 
      */
-    public ImportContactsRequest createImportContactsRequest() {
-        return new ImportContactsRequest();
+    public GetFolderRequest createGetFolderRequest() {
+        return new GetFolderRequest();
     }
 
     /**
-     * Create an instance of {@link Mountpoint }
+     * Create an instance of {@link MailImapDataSource }
      * 
      */
-    public Mountpoint createMountpoint() {
-        return new Mountpoint();
+    public MailImapDataSource createMailImapDataSource() {
+        return new MailImapDataSource();
+    }
+
+    /**
+     * Create an instance of {@link Grant }
+     * 
+     */
+    public Grant createGrant() {
+        return new Grant();
+    }
+
+    /**
+     * Create an instance of {@link SearchFolder }
+     * 
+     */
+    public SearchFolder createSearchFolder() {
+        return new SearchFolder();
     }
 
     /**
@@ -85,6 +101,14 @@ public class ObjectFactory {
      */
     public GetDataSourcesRequest createGetDataSourcesRequest() {
         return new GetDataSourcesRequest();
+    }
+
+    /**
+     * Create an instance of {@link ExportContactsResponse }
+     * 
+     */
+    public ExportContactsResponse createExportContactsResponse() {
+        return new ExportContactsResponse();
     }
 
     /**
@@ -104,51 +128,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ImportContact }
-     * 
-     */
-    public ImportContact createImportContact() {
-        return new ImportContact();
-    }
-
-    /**
-     * Create an instance of {@link Folder }
-     * 
-     */
-    public Folder createFolder() {
-        return new Folder();
-    }
-
-    /**
      * Create an instance of {@link Folder.Acl }
      * 
      */
     public Folder.Acl createFolderAcl() {
         return new Folder.Acl();
-    }
-
-    /**
-     * Create an instance of {@link MailImapDataSource }
-     * 
-     */
-    public MailImapDataSource createMailImapDataSource() {
-        return new MailImapDataSource();
-    }
-
-    /**
-     * Create an instance of {@link SearchFolder }
-     * 
-     */
-    public SearchFolder createSearchFolder() {
-        return new SearchFolder();
-    }
-
-    /**
-     * Create an instance of {@link HeaderContext }
-     * 
-     */
-    public HeaderContext createHeaderContext() {
-        return new HeaderContext();
     }
 
     /**
@@ -160,27 +144,19 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ImportContactsRequest }
+     * 
+     */
+    public ImportContactsRequest createImportContactsRequest() {
+        return new ImportContactsRequest();
+    }
+
+    /**
      * Create an instance of {@link ExportContactsRequest }
      * 
      */
     public ExportContactsRequest createExportContactsRequest() {
         return new ExportContactsRequest();
-    }
-
-    /**
-     * Create an instance of {@link Grant }
-     * 
-     */
-    public Grant createGrant() {
-        return new Grant();
-    }
-
-    /**
-     * Create an instance of {@link GetFolderRequest }
-     * 
-     */
-    public GetFolderRequest createGetFolderRequest() {
-        return new GetFolderRequest();
     }
 
     /**
@@ -192,11 +168,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link MailPop3DataSource }
+     * Create an instance of {@link GetDataSourcesResponse }
      * 
      */
-    public MailPop3DataSource createMailPop3DataSource() {
-        return new MailPop3DataSource();
+    public GetDataSourcesResponse createGetDataSourcesResponse() {
+        return new GetDataSourcesResponse();
+    }
+
+    /**
+     * Create an instance of {@link ImportContact }
+     * 
+     */
+    public ImportContact createImportContact() {
+        return new ImportContact();
     }
 
     /**
@@ -205,6 +189,22 @@ public class ObjectFactory {
      */
     public ImportContactsResponse createImportContactsResponse() {
         return new ImportContactsResponse();
+    }
+
+    /**
+     * Create an instance of {@link Mountpoint }
+     * 
+     */
+    public Mountpoint createMountpoint() {
+        return new Mountpoint();
+    }
+
+    /**
+     * Create an instance of {@link HeaderContext }
+     * 
+     */
+    public HeaderContext createHeaderContext() {
+        return new HeaderContext();
     }
 
     /**

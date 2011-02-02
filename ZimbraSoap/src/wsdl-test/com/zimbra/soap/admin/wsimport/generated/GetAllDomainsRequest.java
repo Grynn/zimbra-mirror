@@ -16,9 +16,9 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="getAllDomainsRequest">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *       &lt;/all>
- *       &lt;attribute name="applyConfig" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;sequence>
+ *       &lt;/sequence>
+ *       &lt;attribute name="applyConfig" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -27,27 +27,33 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "getAllDomainsRequest", propOrder = {
-
-})
+@XmlType(name = "getAllDomainsRequest")
 public class GetAllDomainsRequest {
 
-    @XmlAttribute(required = true)
-    protected boolean applyConfig;
+    @XmlAttribute
+    protected Boolean applyConfig;
 
     /**
      * Gets the value of the applyConfig property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
-    public boolean isApplyConfig() {
+    public Boolean isApplyConfig() {
         return applyConfig;
     }
 
     /**
      * Sets the value of the applyConfig property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
-    public void setApplyConfig(boolean value) {
+    public void setApplyConfig(Boolean value) {
         this.applyConfig = value;
     }
 

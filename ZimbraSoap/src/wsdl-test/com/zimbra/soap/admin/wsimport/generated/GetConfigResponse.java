@@ -15,8 +15,8 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="getConfigResponse">
  *   &lt;complexContent>
  *     &lt;extension base="{urn:zimbraAdmin}adminAttrsImpl">
- *       &lt;all>
- *       &lt;/all>
+ *       &lt;sequence>
+ *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>

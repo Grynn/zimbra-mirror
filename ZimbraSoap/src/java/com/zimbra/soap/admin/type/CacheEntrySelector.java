@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2010 Zimbra, Inc.
+ * Copyright (C) 2010, 2011 Zimbra, Inc.
  * 
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -15,58 +15,47 @@
 
 package com.zimbra.soap.admin.type;
 
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlValue;
-
-import com.google.common.base.Joiner;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
-
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AdminConstants;
 
 @XmlAccessorType(XmlAccessType.NONE)
 public class CacheEntrySelector {
 
-    private static Splitter COMMA_SPLITTER = Splitter.on(",");
-    private static Joiner COMMA_JOINER = Joiner.on(",");
+    public static enum CacheEntryBy {
 
-    private List<CacheEntryType> types = Lists.newArrayList();
+        // case must match protocol
+        id, name;
 
-    @XmlAttribute(name=AdminConstants.A_ALLSERVERS, required=false)
-    private Boolean allServers;
-
-    private CacheEntrySelector() {
-    }
-
-    public CacheEntrySelector(boolean allServers, String types)
-    throws ServiceException {
-        this.allServers = allServers;
-        setTypes(types);
-    }
-
-    public Boolean isAllServers() { return allServers; }
-    @XmlAttribute(name=AdminConstants.A_TYPE)
-    public String getTypes() { return COMMA_JOINER.join(types); }
-    
-    public void setTypes(String types)
-    throws ServiceException {
-        for (String typeString : COMMA_SPLITTER.split(types)) {
-            addType(typeString);
+        public static CacheEntryBy fromString(String s) throws ServiceException {
+            try {
+                return CacheEntryBy.valueOf(s);
+            } catch (IllegalArgumentException e) {
+                throw ServiceException.INVALID_REQUEST("unknown key: "+s, e);
+            }
         }
     }
-    
-    public void addType(CacheEntryType type) {
-        types.add(type);
+
+    @XmlValue private final String key;
+    @XmlAttribute(name=AdminConstants.A_BY) private final CacheEntryBy cacheEntryBy;
+
+    /**
+     * no-argument constructor wanted by JAXB
+     */
+    @SuppressWarnings("unused")
+    private CacheEntrySelector() {
+        this(null, null);
     }
 
-    public void addType(String typeString)
-    throws ServiceException {
-        addType(CacheEntryType.fromString(typeString));
+    public CacheEntrySelector(CacheEntryBy by, String key) {
+        this.cacheEntryBy = by;
+        this.key = key;
     }
+
+    public String getKey() { return key; }
+
+    public CacheEntryBy getBy() { return cacheEntryBy; }
 }

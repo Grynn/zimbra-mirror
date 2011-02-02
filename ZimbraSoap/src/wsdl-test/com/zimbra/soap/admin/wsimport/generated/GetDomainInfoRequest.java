@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="domain" type="{urn:zimbraAdmin}domainSelector" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="applyConfig" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="applyConfig" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -34,8 +34,8 @@ import javax.xml.bind.annotation.XmlType;
 public class GetDomainInfoRequest {
 
     protected DomainSelector domain;
-    @XmlAttribute(required = true)
-    protected boolean applyConfig;
+    @XmlAttribute
+    protected Boolean applyConfig;
 
     /**
      * Gets the value of the domain property.
@@ -64,16 +64,24 @@ public class GetDomainInfoRequest {
     /**
      * Gets the value of the applyConfig property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
      */
-    public boolean isApplyConfig() {
+    public Boolean isApplyConfig() {
         return applyConfig;
     }
 
     /**
      * Sets the value of the applyConfig property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
      */
-    public void setApplyConfig(boolean value) {
+    public void setApplyConfig(Boolean value) {
         this.applyConfig = value;
     }
 

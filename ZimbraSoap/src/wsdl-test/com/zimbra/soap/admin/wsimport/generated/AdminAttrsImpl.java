@@ -33,15 +33,23 @@ import javax.xml.bind.annotation.XmlType;
     "a"
 })
 @XmlSeeAlso({
+    CheckAuthConfigRequest.class,
+    CheckGalConfigRequest.class,
     ModifyDomainRequest.class,
+    CreateAccountRequest.class,
     CreateDomainRequest.class,
     GetAllConfigResponse.class,
+    CreateDistributionListRequest.class,
     ModifyConfigRequest.class,
     ModifyCosRequest.class,
     GetConfigResponse.class,
+    ModifyDistributionListRequest.class,
     CreateServerRequest.class,
+    GetDistributionListRequest.class,
+    CreateCosRequest.class,
     ModifyServerRequest.class,
-    ModifyAccountRequest.class
+    ModifyAccountRequest.class,
+    GalContactInfo.class
 })
 public abstract class AdminAttrsImpl {
 

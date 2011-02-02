@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="cache" type="{urn:zimbraAdmin}cacheEntrySelector" minOccurs="0"/>
+ *         &lt;element name="cache" type="{urn:zimbraAdmin}cacheSelector" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -31,17 +31,17 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class FlushCacheRequest {
 
-    protected CacheEntrySelector cache;
+    protected CacheSelector cache;
 
     /**
      * Gets the value of the cache property.
      * 
      * @return
      *     possible object is
-     *     {@link CacheEntrySelector }
+     *     {@link CacheSelector }
      *     
      */
-    public CacheEntrySelector getCache() {
+    public CacheSelector getCache() {
         return cache;
     }
 
@@ -50,10 +50,10 @@ public class FlushCacheRequest {
      * 
      * @param value
      *     allowed object is
-     *     {@link CacheEntrySelector }
+     *     {@link CacheSelector }
      *     
      */
-    public void setCache(CacheEntrySelector value) {
+    public void setCache(CacheSelector value) {
         this.cache = value;
     }
 

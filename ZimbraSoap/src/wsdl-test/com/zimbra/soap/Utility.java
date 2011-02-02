@@ -14,6 +14,7 @@
  */
 package com.zimbra.soap;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,17 +47,22 @@ import com.zimbra.soap.admin.wsimport.generated.CreateDomainRequest;
 import com.zimbra.soap.admin.wsimport.generated.CreateDomainResponse;
 import com.zimbra.soap.admin.wsimport.generated.CreateServerRequest;
 import com.zimbra.soap.admin.wsimport.generated.CreateServerResponse;
+import com.zimbra.soap.admin.wsimport.generated.CreateVolumeRequest;
+import com.zimbra.soap.admin.wsimport.generated.CreateVolumeResponse;
 import com.zimbra.soap.admin.wsimport.generated.DeleteAccountRequest;
 import com.zimbra.soap.admin.wsimport.generated.DeleteAccountResponse;
 import com.zimbra.soap.admin.wsimport.generated.DeleteCosRequest;
 import com.zimbra.soap.admin.wsimport.generated.DeleteCosResponse;
 import com.zimbra.soap.admin.wsimport.generated.DeleteDomainRequest;
 import com.zimbra.soap.admin.wsimport.generated.DeleteServerRequest;
+import com.zimbra.soap.admin.wsimport.generated.DeleteVolumeRequest;
 import com.zimbra.soap.admin.wsimport.generated.DomainBy;
 import com.zimbra.soap.admin.wsimport.generated.DomainInfo;
 import com.zimbra.soap.admin.wsimport.generated.DomainSelector;
 import com.zimbra.soap.admin.wsimport.generated.GetAccountRequest;
 import com.zimbra.soap.admin.wsimport.generated.GetAccountResponse;
+import com.zimbra.soap.admin.wsimport.generated.GetAllVolumesRequest;
+import com.zimbra.soap.admin.wsimport.generated.GetAllVolumesResponse;
 import com.zimbra.soap.admin.wsimport.generated.GetCosRequest;
 import com.zimbra.soap.admin.wsimport.generated.GetCosResponse;
 import com.zimbra.soap.admin.wsimport.generated.GetDomainInfoRequest;
@@ -68,6 +74,7 @@ import com.zimbra.soap.admin.wsimport.generated.GetServerResponse;
 import com.zimbra.soap.admin.wsimport.generated.ServerBy;
 import com.zimbra.soap.admin.wsimport.generated.ServerInfo;
 import com.zimbra.soap.admin.wsimport.generated.ServerSelector;
+import com.zimbra.soap.admin.wsimport.generated.VolumeInfo;
 import com.zimbra.soap.mail.wsimport.generated.MailService_Service;
 import com.zimbra.soap.mail.wsimport.generated.MailService;
 
@@ -316,6 +323,29 @@ public class Utility {
                         " thrown attempting to delete cos " + cosName);
         }
     }
+    public static void deleteVolumeIfExists(String name) throws Exception {
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
+        GetAllVolumesRequest gavReq = new GetAllVolumesRequest();
+        GetAllVolumesResponse gavResp =
+                getAdminSvcEIF().getAllVolumesRequest(gavReq);
+        for (VolumeInfo volume : gavResp.getVolume()) {
+            if (name.equals(volume.getName())) {
+                DeleteVolumeRequest delReq = new DeleteVolumeRequest();
+                delReq.setId(volume.getId());
+                getAdminSvcEIF().deleteVolumeRequest(delReq);
+                String volRootpath = volume.getRootpath();
+                try {
+                    if (volRootpath != null && (volRootpath.length() > 0))
+                        new File(volume.getRootpath()).deleteOnExit();
+                } catch (Exception ex) {
+                    System.err.println("Exception " + ex.toString() + 
+                    " thrown inside deleteVolumeIfExists - deleting rootPath="
+                            + volRootpath + " for volume=" + name);
+                return;
+                }
+            }
+        }
+    }
 
     public static String ensureDomainExists(String domainName) throws Exception {
         String domainId = null;
@@ -431,5 +461,43 @@ public class Utility {
             CosInfo cosInfo = resp.getCos();
             return cosInfo.getId();
         }
+    }
+
+    public static Short ensureVolumeExists(String name, String rootPath)
+    throws Exception {
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
+        GetAllVolumesRequest gavReq = new GetAllVolumesRequest();
+        GetAllVolumesResponse gavResp =
+                getAdminSvcEIF().getAllVolumesRequest(gavReq);
+        for (VolumeInfo volume : gavResp.getVolume()) {
+            if (name.equals(volume.getName())) {
+                if (rootPath.equals(volume.getRootpath())) 
+                    return volume.getId();
+                deleteVolumeIfExists(name);
+                break;
+            }
+        }
+        Assert.assertTrue("Creating dir=" + rootPath +
+                " for volumeName=" + name, new File(rootPath).mkdir());
+        CreateVolumeRequest req = new CreateVolumeRequest();
+        VolumeInfo volume = new VolumeInfo();
+        volume.setName(name);
+        volume.setRootpath(rootPath);
+        volume.setCompressionThreshold(4096L);
+        volume.setType((short)1);
+        volume.setCompressBlobs(true);
+        req.setVolume(volume);
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
+        CreateVolumeResponse resp = getAdminSvcEIF().createVolumeRequest(req);
+        Assert.assertNotNull(resp);
+        VolumeInfo volumeInfo = resp.getVolume();
+        Assert.assertNotNull(volumeInfo);
+        Assert.assertEquals("CreateVolumeResponse <volume> 'name' attribute",
+                name, volumeInfo.getName());
+        Short testVolumeId = volumeInfo.getId();
+        Assert.assertTrue(
+                "CreateVolumeResponse <volume> 'id' attribute " +
+                testVolumeId + " - should be at least 1", testVolumeId >= 1);
+        return testVolumeId;
     }
 }
