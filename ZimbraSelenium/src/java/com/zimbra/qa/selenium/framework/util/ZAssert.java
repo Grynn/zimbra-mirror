@@ -1,14 +1,11 @@
 package com.zimbra.qa.selenium.framework.util;
 
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Collection;
+import java.util.regex.*;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 import org.testng.Assert;
 
-import com.zimbra.qa.selenium.framework.items.*;
 
 public class ZAssert {
 	private static Logger logger = LogManager.getLogger(ZAssert.class);

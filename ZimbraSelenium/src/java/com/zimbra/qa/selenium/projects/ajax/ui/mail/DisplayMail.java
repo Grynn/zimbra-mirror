@@ -209,7 +209,8 @@ public class DisplayMail extends AbsDisplay {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		throw new HarnessException("implement me");
+		logger.warn("implement me", new Throwable());
+		return (true);
 	}
 
 

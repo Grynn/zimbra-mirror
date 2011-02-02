@@ -1,15 +1,11 @@
 package com.zimbra.qa.selenium.framework.ui;
 
-import java.awt.event.KeyEvent;
+import org.apache.log4j.*;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.SeleniumException;
-import com.zimbra.qa.selenium.framework.core.ClientSession;
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
+import com.thoughtworks.selenium.*;
+import com.zimbra.qa.selenium.framework.core.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+
 
 
 /**

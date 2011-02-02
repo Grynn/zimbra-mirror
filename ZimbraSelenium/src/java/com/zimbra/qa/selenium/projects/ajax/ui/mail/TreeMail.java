@@ -45,7 +45,6 @@ public class TreeMail extends AbsTree {
 	protected AbsPage zTreeItem(Action action, FolderItem folder) throws HarnessException {
 		AbsPage page = null;
 		String locator = null;
-		int delayMillis = 0;
 		
 		if ( action == Action.A_LEFTCLICK ) {
 			
@@ -82,21 +81,15 @@ public class TreeMail extends AbsTree {
 		// Default behavior.  Click the locator
 		zClick(locator);
 
+		// If there is a busy overlay, wait for that to finish
+		this.zWaitForBusyOverlay();
+		
 		if ( page != null ) {
 			
 			// Wait for the page to become active, if it was specified
 			page.zWaitForActive();
 		}
-
-		this.zClick(locator);
-		
-		if ( delayMillis > 0 ) {
-			
-			// Sleep for a bit, if it was specified
-			SleepUtil.sleep(delayMillis);
-			
-		}
-
+	
 		return (page);
 
 	}
@@ -105,7 +98,6 @@ public class TreeMail extends AbsTree {
 	protected AbsPage zTreeItem(Action action, SavedSearchFolderItem savedSearch) throws HarnessException {
 		AbsPage page = null;
 		String locator = null;
-		int delayMillis = 0;
 	
 		// TODO: implement me!
 		
@@ -118,22 +110,16 @@ public class TreeMail extends AbsTree {
 		
 		// Default behavior.  Click the locator
 		zClick(locator);
+		
+		// If the app is busy, wait until it is ready again
+		this.zWaitForBusyOverlay();
 
 		if ( page != null ) {
 			
 			// Wait for the page to become active, if it was specified
 			page.zWaitForActive();
 		}
-
-		this.zClick(locator);
 		
-		if ( delayMillis > 0 ) {
-			
-			// Sleep for a bit, if it was specified
-			SleepUtil.sleep(delayMillis);
-			
-		}
-
 		return (page);
 	}
 
@@ -183,12 +169,11 @@ public class TreeMail extends AbsTree {
 		// Default behavior, process the locator by clicking on it
 		//
 		
-		// Make sure the button exists
-		if ( !this.sIsElementPresent(locator) )
-			throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
-		
 		// Click it
 		this.zClick(locator);
+		
+		// If the app is busy, wait for that to finish
+		this.zWaitForBusyOverlay();
 		
 		// If page was specified, make sure it is active
 		if ( page != null ) {

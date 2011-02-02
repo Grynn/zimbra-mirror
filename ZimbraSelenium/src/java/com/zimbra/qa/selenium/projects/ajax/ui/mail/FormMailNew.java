@@ -237,13 +237,11 @@ public class FormMailNew extends AbsForm {
 		// Default behavior, process the locator by clicking on it
 		//
 		
-		// Make sure the button exists
-		if ( !this.sIsElementPresent(locator) )
-			throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
-		
 		// Click it
 		this.zClick(locator);
 
+		// if the app is busy, wait for it to become active again
+		this.zWaitForBusyOverlay();
 		
 		if ( page != null ) {
 			
@@ -335,6 +333,9 @@ public class FormMailNew extends AbsForm {
 				SleepUtil.sleepSmall();
 
 			}
+			
+			// If the app is busy, wait for it to become active
+			this.zWaitForBusyOverlay();
 			
 			// If we click on pulldown/option and the page is specified, then
 			// wait for the page to go active

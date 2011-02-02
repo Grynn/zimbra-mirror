@@ -3,13 +3,8 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.search;
 
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.AbsTab;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 
 
@@ -103,7 +98,6 @@ public class PageSearch extends AbsTab {
 		//
 		String locator = null;	// If set, this will be clicked
 		AbsPage page = null;	// If set, this page will be returned
-		int delayMillis = 0;
 		
 		// Based on the button specified, take the appropriate action(s)
 		//
@@ -112,7 +106,6 @@ public class PageSearch extends AbsTab {
 			
 			locator = "zb__Search__SEARCH_title";
 			page = null;
-			delayMillis = 2000; // Sleep a couple seconds to let the search complete
 			
 			// Make sure the button exists
 			if ( !this.sIsElementPresent(locator) )
@@ -153,13 +146,13 @@ public class PageSearch extends AbsTab {
 		// Default behavior, process the locator by clicking on it
 		//
 		
-		// Make sure the button exists
-		if ( !this.sIsElementPresent(locator) )
-			throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
-		
 		// Click it
 		this.zClick(locator);
 		
+		// If the app is busy, wait for it to become active
+		this.zWaitForBusyOverlay();
+		
+
 		// If page was specified, make sure it is active
 		if ( page != null ) {
 			
@@ -168,11 +161,6 @@ public class PageSearch extends AbsTab {
 			
 		}
 		
-		if ( delayMillis > 0 ) {
-			
-			SleepUtil.sleep(delayMillis);
-		}
-
 		return (page);
 	}
 
@@ -234,7 +222,10 @@ public class PageSearch extends AbsTab {
 			}
 			
 			this.zClick(pulldownLocator);
-			SleepUtil.sleepSmall();
+
+			// If the app is busy, wait for it to become active
+			this.zWaitForBusyOverlay();
+			
 			
 			if ( optionLocator != null ) {
 
@@ -244,7 +235,10 @@ public class PageSearch extends AbsTab {
 				}
 				
 				this.zClick(optionLocator);
-				SleepUtil.sleepSmall();
+
+				// If the app is busy, wait for it to become active
+				this.zWaitForBusyOverlay();
+				
 
 			}
 			

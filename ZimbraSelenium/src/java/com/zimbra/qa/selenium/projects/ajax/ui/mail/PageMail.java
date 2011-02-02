@@ -3,19 +3,11 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import com.zimbra.qa.selenium.framework.items.ConversationItem;
-import com.zimbra.qa.selenium.framework.items.MailItem;
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.AbsTab;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.ui.Shortcut;
+import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
@@ -246,7 +238,6 @@ public class PageMail extends AbsTab {
 		//
 		String locator = null;			// If set, this will be clicked
 		AbsPage page = null;	// If set, this page will be returned
-		int delayMillis = 0;	// If >0, this method will wait that duration before returning
 		
 		// Based on the button specified, take the appropriate action(s)
 		//
@@ -268,9 +259,6 @@ public class PageMail extends AbsTab {
 			} else {
 				locator = "id="+ Locators.zGetMailIconBtnCLVID;
 			}
-
-			// Wait for a bit to let the inbox load
-			delayMillis = 3000;
 			
 		} else if ( button == Button.B_DELETE ) {
 			
@@ -431,6 +419,10 @@ public class PageMail extends AbsTab {
 		//
 		this.zClick(locator);
 		
+		// If the app is busy, wait for it to become active
+		this.zWaitForBusyOverlay();
+		
+
 		// If page was specified, make sure it is active
 		if ( page != null ) {
 			
@@ -439,13 +431,6 @@ public class PageMail extends AbsTab {
 			
 		}
 
-		if ( delayMillis > 0 ) {
-			
-			// Wait for a while before returning
-			SleepUtil.sleep(delayMillis);
-			
-		}
-		
 		
 		return (page);
 	}
@@ -561,7 +546,10 @@ public class PageMail extends AbsTab {
 			}
 			
 			this.zClick(pulldownLocator);
-			SleepUtil.sleepSmall();
+
+			// If the app is busy, wait for it to become active
+			this.zWaitForBusyOverlay();
+			
 			
 			if ( optionLocator != null ) {
 
@@ -571,10 +559,13 @@ public class PageMail extends AbsTab {
 				}
 				
 				this.zClick(optionLocator);
-				SleepUtil.sleepSmall();
 
+				// If the app is busy, wait for it to become active
+				this.zWaitForBusyOverlay();
+				
 			}
 			
+
 			// If we click on pulldown/option and the page is specified, then
 			// wait for the page to go active
 			if ( page != null ) {
@@ -955,6 +946,14 @@ public class PageMail extends AbsTab {
 			throw new HarnessException("implement me!  action = "+ action);
 		}
 		
+		// If the app is busy, wait for it to become active
+		this.zWaitForBusyOverlay();
+		
+
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+		
 		// default return command
 		return (page);
 		
@@ -1078,6 +1077,9 @@ public class PageMail extends AbsTab {
 	@Override
 	public AbsPage zKeyboardShortcut(Shortcut shortcut) throws HarnessException {
 
+		if (shortcut == null)
+			throw new HarnessException("Shortcut cannot be null");
+		
 		AbsPage page = null;
 		
 		if ( (shortcut == Shortcut.S_NEWITEM) ||
@@ -1089,6 +1091,9 @@ public class PageMail extends AbsTab {
 		}
 		
 		zKeyboard.zTypeCharacters(shortcut.getKeys());
+		
+		// If the app is busy, wait for it to become active
+		this.zWaitForBusyOverlay();
 		
 		// If a page is specified, wait for it to become active
 		if ( page != null ) {
