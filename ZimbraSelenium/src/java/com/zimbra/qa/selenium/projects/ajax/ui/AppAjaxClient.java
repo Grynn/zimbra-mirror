@@ -3,7 +3,7 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui;
 
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -108,7 +108,15 @@ public class AppAjaxClient extends AbsApplication {
 		trees.put(zTreePreferences.myPageName(), zTreePreferences);
 		
 
+		// Configure the localization strings
+		getL10N().zAddBundlename(I18N.Catalog.I18nMsg);
+		getL10N().zAddBundlename(I18N.Catalog.AjxMsg);
+		getL10N().zAddBundlename(I18N.Catalog.ZMsg);
+		getL10N().zAddBundlename(I18N.Catalog.ZsMsg);
+		getL10N().zAddBundlename(I18N.Catalog.ZmMsg);
+		
 	}
+	
 	
 	/* (non-Javadoc)
 	 * @see projects.admin.ui.AbsApplication#isLoaded()

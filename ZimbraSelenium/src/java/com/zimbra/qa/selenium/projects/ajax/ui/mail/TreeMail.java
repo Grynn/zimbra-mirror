@@ -295,15 +295,15 @@ public class TreeMail extends AbsTree {
 			
 			// Get the image
 			locator = "xpath=(//*[@id='zti__main_Mail__"+ zimletNum +"_z_imageCell']/div)@class";
-			item.setImage(this.sGetAttribute(locator));
+			item.setFolderTreeImage(this.sGetAttribute(locator));
 
 			
 			// Get the display name
 			locator = "zti__main_Mail__"+ zimletNum +"_z_textCell";
-			item.setName(this.sGetText(locator));
+			item.setFolderTreeName(this.sGetText(locator));
 						
 			// Set the locator
-			item.setLocator(zimletLocator);
+			item.setFolderTreeLocator(zimletLocator);
 			
 			// Add this item to the list
 			items.add(item);
@@ -340,19 +340,28 @@ public class TreeMail extends AbsTree {
 	}
 
 	public void zExpandZimlets() throws HarnessException {
-		if ( zIsZimletsExpanded() ) {
-			return; // Nothing more to do.  Already expanded
-		}
 		
-		// Click on the arrow
-		String locator = "css=td[id="+ Locators.ztih__main_Mail__ZIMLET_nodeCell_ID +"] div";
-		this.zClick(locator);
-		
-		// Wait for the menu to open
-		for (int i = 0; i < 5; i++) {
-			if ( zIsZimletsExpanded() ) 
-				return; // Done
-			SleepUtil.sleep(1000);
+		try {
+			
+			if ( zIsZimletsExpanded() ) {
+				return; // Nothing more to do.  Already expanded
+			}
+			
+			// Click on the arrow
+			String locator = "css=td[id="+ Locators.ztih__main_Mail__ZIMLET_nodeCell_ID +"] div";
+			this.zClick(locator);
+			
+			// Wait for the menu to open
+			for (int i = 0; i < 5; i++) {
+				if ( zIsZimletsExpanded() ) 
+					return; // Done
+				SleepUtil.sleep(1000);
+			}
+			
+		} finally {
+			// For some reason, the L10N isn't being expanded right away.
+			// Sleep for a bit to allow translation
+			SleepUtil.sleepMedium();
 		}
 
 		throw new HarnessException("Zimlets never expanded!");

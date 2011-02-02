@@ -5,6 +5,7 @@ import java.util.List;
 import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.items.ZimletItem;
+import com.zimbra.qa.selenium.framework.items.ZimletItem.CoreZimletItem;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
@@ -21,8 +22,9 @@ public class FolderTree extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "Verify the LinkedIn zimlet appears in the folder tree",
-			groups = { "sanity" })
+			groups = { "smoke" })
 	public void FolderTree_01() throws HarnessException {
+		ZimletItem linkedin = CoreZimletItem.getLinkedInZimlet(app);
 		
 		// Expand the zimlets section
 		app.zTreeMail.zExpandZimlets();
@@ -32,9 +34,9 @@ public class FolderTree extends AjaxCommonTest {
 		
 		// Find out if LinkedIn is listed
 		ZimletItem found = null;
-		for (ZimletItem z : zimlets) {
-			if ( ZimletItem.getLinkedinZimlet().getName().equals(z.getName()) ) {
-				found = z;
+		for (ZimletItem zimlet : zimlets) {
+			if (linkedin.equals(zimlet) ) {
+				found = zimlet;
 			}
 		}
 		

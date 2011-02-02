@@ -24,6 +24,7 @@
 	<property name="server.dir" location="../ZimbraServer" />
 	<property name="common.dir" location="../ZimbraCommon" />
 	<property name="soap.dir" location="../ZimbraSoap" />
+	<property name="zimlet.dir" location="../Zimlet" />
 
 
 	<path id="class.path">
@@ -114,6 +115,20 @@
 		</copy>
 		<copy todir="${build.resources.dir}">
 			<fileset dir="${server.dir}/conf/msgs/" />
+		</copy>
+		<copy todir="${build.resources.dir}">
+			<fileset dir="${zimlet.dir}/src/zimlet/com_zimbra_attachcontacts/">
+				<filename name="*.properties"/>
+			</fileset>
+			<fileset dir="${zimlet.dir}/src/zimlet/com_zimbra_email/">
+				<filename name="*.properties"/>
+			</fileset>
+			<fileset dir="${zimlet.dir}/src/zimlet/com_zimbra_linkedin/">
+				<filename name="*.properties"/>
+			</fileset>
+			<fileset dir="${zimlet.dir}/src/zimlet/com_zimbra_webex/">
+				<filename name="*.properties"/>
+			</fileset>
 		</copy>
 	</target>
 

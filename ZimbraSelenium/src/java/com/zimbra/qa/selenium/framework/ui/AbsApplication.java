@@ -1,18 +1,12 @@
 package com.zimbra.qa.selenium.framework.ui;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.PageMail;
+import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.*;
 
 
 /**
@@ -41,12 +35,12 @@ public abstract class AbsApplication {
 	/**
 	 * A map of {@link AbsTab} objects being managed by this object
 	 **/
-	protected Map<String, AbsTab>			pages = null;
+	protected Map<String, AbsTab>			pages = new HashMap<String, AbsTab>();
 
 	/**
 	 * A map of {@link AbsTree} objects being managed by this object
 	 **/
-	protected Map<String, AbsTree>			trees = null;
+	protected Map<String, AbsTree>			trees = new HashMap<String, AbsTree>();
 	
 	/**
 	 * The currently logged in user
@@ -56,14 +50,11 @@ public abstract class AbsApplication {
 	/**
 	 * The Localization bundles for the currently logged in user
 	 **/
-	protected I18N L10N = null;
+	private I18N L10N = new I18N();
 
 	protected AbsApplication() {
 		logger.info("new " + AbsApplication.class.getCanonicalName());
 		
-		pages = new HashMap<String, AbsTab>();
-		trees = new HashMap<String, AbsTree>();
-
 	}
 	
 	/**
@@ -116,7 +107,6 @@ public abstract class AbsApplication {
 		if ( account == null ) {
 			logger.info("Set authenticated account to null");
 			authenticatedAccount = null;
-			L10N = null;
 			return (null);
 		}
 		
@@ -128,11 +118,11 @@ public abstract class AbsApplication {
 							
 		logger.info("New authenticated account = "+ account.EmailAddress);
 		
+		// Based on account settings, the localization strings will change
+		L10N.setLocale(account.getLocalePreference());
+		
 		// Remember who is logged in
 		authenticatedAccount = account;
-		
-		// Based on account settings, the localization strings will change
-		L10N = new I18N(authenticatedAccount.getPreference("zimbraPrefLocale"));
 					
 		return (authenticatedAccount);
 	}
@@ -146,21 +136,22 @@ public abstract class AbsApplication {
 	}
 
 	/**
+	 * Get the current Localization object
+	 * @return
+	 * @throws HarnessException
+	 */
+	public I18N getL10N() {
+		return (L10N);
+	}
+	
+	/**
 	 * Get the Localized string for the specified key
 	 * @param key
 	 * @return
 	 * @throws HarnessException
 	 */
 	public String zGetLocaleString(String key) throws HarnessException {
-		
-		if ( L10N == null ) {
-			// If we are on a non-authenticated page, return the default L10N values
-			return (defaultL10N.zGetString(key));
-		}
-		return (L10N.zGetString(key));
+		return (getL10N().zGetString(key));
 	}
-	// Use the default java locale for non-authenticated screens
-	// Most of the time, this will be English
-	private static I18N defaultL10N = new I18N(Locale.getDefault()); 
 
 }

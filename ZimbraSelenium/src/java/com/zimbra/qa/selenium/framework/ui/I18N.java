@@ -1,9 +1,6 @@
 package com.zimbra.qa.selenium.framework.ui;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -12,71 +9,79 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 
 
 /**
- * A class that contains all Zimbra translations
+ * A class that contains Zimbra translations
  * @author Matt Rhoades
  *
  */
 public class I18N {
 	private static Logger logger = LogManager.getLogger(I18N.class);
+	
+	/*
+	 * See http://wiki.zimbra.com/wiki/Translations
+	 */
+	
+    // I18nMsg.properties:	Internationalization messages such as names of months, date and time formats, etc. 
+	// AjxMsg.properties:	Messages used by the ajax toolkit. 
+	// ZMsg.properties:		Common messages such as server error messages, etc. 
+	// ZaMsg.properties:	Messages used by the Zimbra Admin web client. 
+	// ZmMsg.properties:	Messages used by the Zimbra End User web client. 
+	// ZhMsg.properties:	Messages used by the Zimbra End User basic web client. 
+	// ZsMsg.properties:	Messages used by the Zimbra Server when automatically replying to appointment requests for locations and resources. (The language used for the outgoing messages is based on the server's default locale, not the client.) 
 
-	// TODO: Need to split this class into the respective projects
-	//
-	// For instance, unless you are testing admin console, you don't
-	// need the ZaMsg bundle.
-	//
-	// Removing unused bundles should reduce number of conflicts in the keys
-	//
+	public enum Catalog {
+		I18nMsg, AjxMsg, ZMsg, ZaMsg, ZhMsg, ZmMsg, ZsMsg
+	}
 	
-	
-	protected final String ResourceBundleAjxMsg 	= "AjxMsg";
-	protected final String ResourceBundleI18nMsg	= "I18nMsg";
-	protected final String ResourceBundleZaMsg 		= "ZaMsg";
-	protected final String ResourceBundleZbMsg 		= "ZbMsg";
-	protected final String ResourceBundleZhMsg 		= "ZhMsg";
-	protected final String ResourceBundleZmMsg 		= "ZmMsg";
-	protected final String ResourceBundleZsMsg 		= "ZsMsg";
-	protected final String ResourceBundleZMsg 		= "ZMsg";
+    public static final String CONTEXT_MENU_ITEM_NEW_FOLDER = "New Folder"; // TODO: ZmMsg: key: newFolder
+    public static final String CONTEXT_MENU_ITEM_DELETE = "Delete"; // TODO: ZMsg: key: del (?)
+
+	/**
+	 * My current Locale
+	 */
+	protected Locale currentLocale = Locale.getDefault();
 	
 	/**
 	 * A mapping of msg filename to resource bundles
 	 */
-	protected Map<String, ResourceBundle> bundles = null;
+	protected Map<String, ResourceBundle> bundles = new HashMap<String, ResourceBundle>();
 	
-	public I18N(String locale) {
-		this(getLocaleFromString(locale));
-	}
-	
-	public I18N(Locale locale) {
-		bundles = new HashMap<String, ResourceBundle>();
-		bundles.put("AjxMsg", 	ResourceBundle.getBundle(ResourceBundleAjxMsg, locale));
-		bundles.put("I18nMsg",	ResourceBundle.getBundle(ResourceBundleI18nMsg, locale));
-		bundles.put("ZaMsg", 	ResourceBundle.getBundle(ResourceBundleZaMsg, locale));
-		bundles.put("ZbMsg", 	ResourceBundle.getBundle(ResourceBundleZbMsg, locale));
-		bundles.put("ZhMsg", 	ResourceBundle.getBundle(ResourceBundleZhMsg, locale));
-		bundles.put("ZmMsg", 	ResourceBundle.getBundle(ResourceBundleZmMsg, locale));
-		bundles.put("ZsMsg", 	ResourceBundle.getBundle(ResourceBundleZsMsg, locale));
-		bundles.put("ZMsg", 	ResourceBundle.getBundle(ResourceBundleZMsg, locale));
-	}
-
 	/**
-	 * Get the first matching translation for the given key
-	 * @param key
-	 * @return
-	 * @throws HarnessException
+	 * 
+	 * @param locale
 	 */
-	public String zGetString(String key) throws HarnessException {
+	public I18N() {
+	}
+	
+	public Locale getLocale() {
+		return (currentLocale);
+	}
+	
+	public void setLocale(Locale locale) {
 		
-		for (String id : bundles.keySet() ) {
-			String value = zGetString(id, key);
-			if ( value != null ) {
-				return (value);
-			}
+		currentLocale = locale;
+
+		// Clear the bundles, so that the mapping is rebuilt the next time a key/value is requested
+		for (Map.Entry<String, ResourceBundle> entry : bundles.entrySet()) {
+			logger.info("bundle: set value to null for "+ entry.getKey());
+			entry.setValue(null);
 		}
 
-		throw new HarnessException("Unable to find localization for "+ key);
-		
 	}
 	
+	public void zAddBundlename(Catalog catalog) {
+		zAddBundlename(catalog.toString());
+	}
+	
+	public void zAddBundlename(String catalog) {
+		if ( !bundles.containsKey(catalog) ) {
+			
+			// Remember the new bundlename
+			logger.info("bundle: intialize value to null for "+ catalog);
+			bundles.put(catalog, null);
+
+		}
+	}
+
 	/**
 	 * Get the translation for the given key using the given bundle id
 	 * @param bundlename
@@ -84,26 +89,85 @@ public class I18N {
 	 * @return
 	 * @throws HarnessException 
 	 */
-	public String zGetString(String bundlename, String key) throws HarnessException {
+	public String zGetStringFromBundle(String catalog, String key) {
 		
-		if ( !bundles.containsKey(bundlename) )
-			throw new HarnessException("Unknown bundle ID " + bundlename);
+		if ( catalog == null )
+			throw new NullPointerException("catalog was null");
+		if ( key == null )
+			throw new NullPointerException("key was null");
 
-		ResourceBundle bundle = bundles.get(bundlename);
+		// If any bundles are null, load them now
+		checkBundles();
 		
-		// Make sure the bundle has the key
+		// Get the specified bundle
+		ResourceBundle bundle = bundles.get(catalog);
+		if ( bundle == null )
+			throw new NullPointerException("bundle was null");
+		
+		// Check if the bundle has the key
 		if ( !bundle.containsKey(key) ) {
-			return (null); // key not found in this bundle
+			return (null);
 		}
 		
-		// Return the value
+		// Get the value from the bundle
 		String value = bundle.getString(key);
-		logger.info(String.format("Localization: %s (key, value) = (%s, %s)", bundlename, key, value));		
+		
+		logger.info(String.format("Localization: %s (key, value) = (%s, %s)", catalog, key, value));
+		
 		return (value);
-
+		
+	}
+	
+	/**
+	 * Get the first matching translation for the given key
+	 * @param key
+	 * @return
+	 * @throws HarnessException
+	 */
+	public String zGetString(String key) {
+				
+		// If any bundles are null, load them now
+		checkBundles();
+		
+		List<String> values = new ArrayList<String>();
+		
+		for (String catalog : bundles.keySet()) {
+			String value = zGetStringFromBundle(catalog, key);
+			if ( value != null )
+				values.add(value);
+		}
+		
+		if ( values.size() == 0) {
+			logger.error("No match for key: "+ key);
+			return (null);
+		}
+		
+		if ( values.size() > 1) {
+			logger.warn("Multiple bundles matched key: "+ key);
+		}
+		
+		logger.info(String.format("Localization: (key, value) = (%s, %s)", key, values.get(0)));
+		return (values.get(0));
+		
 	}
 	
 	
+	
+
+    /**
+     * Rebuild bundles to include all bundles from bundlename, using the currentLocale
+     */
+    protected void checkBundles() {
+    	
+		// Rebuild any bundle that is null
+    	for (Map.Entry<String, ResourceBundle> entry : bundles.entrySet()) {
+    		if ( entry.getValue() == null ) {
+    			entry.setValue(ResourceBundle.getBundle(entry.getKey(), currentLocale));
+    		}
+    	}
+
+    }
+    
     /**
      * http://www.java2s.com/Code/Java/Network-Protocol/GetLocaleFromString.htm
      * Convert a string based locale into a Locale Object.
@@ -113,7 +177,7 @@ public class I18N {
      * @param localeString The String
      * @return the Locale
      */
-    private static Locale getLocaleFromString(String localeString)
+    public static Locale getLocaleFromString(String localeString)
     {
         if (localeString == null)
         {
@@ -156,28 +220,5 @@ public class I18N {
         }
     }
 
-    public final static String TREE_MAIL_INBOX = "Inbox";
-    public final static String TREE_MAIL_SENT = "Sent";
-    public final static String TREE_MAIL_DRAFTS = "Drafts";
-    public final static String TREE_MAIL_JUNK = "Junk";
-    public final static String TREE_MAIL_OUTBOX = "Outbox";
-    public final static String TREE_MAIL_TRASH = "Trash";
 
-    public final static String CONTEXT_MENU_ITEM_NEW_FOLDER = "New Folder";
-    public final static String CONTEXT_MENU_ITEM_DELETE = "Delete";
-
-//	public static void main(String[] args) throws HarnessException {
-//    	BasicConfigurator.configure();
-//    	
-//    	I18N l10n = new I18N(Locale.CHINESE);
-//    	logger.info("AjxMsg formatCalDate : "+ l10n.getString("formatCalDate"));
-//    	logger.info("I18nMsg currencyCode : "+ l10n.getString("currencyCode"));
-//    	logger.info("ZaMsg favIconUrl : "+ l10n.getString("favIconUrl"));
-//    	logger.info("ZbMsg ClientNameLong : "+ l10n.getString("ClientNameLong"));
-//    	logger.info("ZhMsg aboveQuotedText : "+ l10n.getString("aboveQuotedText"));
-//    	logger.info("ZmMsg above : "+ l10n.getString("above"));
-//    	logger.info("ZMsg EMPTY_RESPONSE : "+ l10n.getString("EMPTY_RESPONSE"));
-//    	logger.info("ZsMsg calendarSubjectCancelled : "+ l10n.getString("calendarSubjectCancelled"));
-//	}
-    
 }

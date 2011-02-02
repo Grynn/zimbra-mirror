@@ -4,12 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,6 +40,7 @@ import com.zimbra.common.soap.SoapUtil;
 import com.zimbra.common.soap.Element.ContainerException;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.qa.selenium.framework.core.DevEnvironment;
+import com.zimbra.qa.selenium.framework.ui.I18N;
 
 
 @SuppressWarnings("deprecation")
@@ -61,6 +57,7 @@ public class ZimbraAccount {
     public String DisplayName = null;
     public String EmailAddress = null;
     public String Password = null;
+    protected String ZimbraPrefLocale = Locale.getDefault().toString();
     protected String MyAuthToken = null;
     protected String MyClientAuthToken = null;
     public Map<String, String> preferences = null;
@@ -262,11 +259,17 @@ public class ZimbraAccount {
 				} else {
 					ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "id");
 					ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
-					
+					ZimbraPrefLocale = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraPrefLocale']", null);
 				}
 			} else {
 				ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "id");
 				ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
+				ZimbraPrefLocale = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraPrefLocale']", null);
+
+			}
+			
+			if ( (ZimbraPrefLocale == null) || ZimbraPrefLocale.trim().equals("") ) {
+				ZimbraPrefLocale = Locale.getDefault().toString();
 			}
 			
 			// Start: Dev environment hack
@@ -348,6 +351,14 @@ public class ZimbraAccount {
 		StringBuilder sb = new StringBuilder();
 		for (Map.Entry<String, String> entry : preferences.entrySet()) {
 			sb.append(String.format("<pref name='%s'>%s</pref>", entry.getKey(), entry.getValue()));
+			
+			
+			// If the locale preference is being changed, then remember the value
+			if ( entry.getKey().equals("zimbraPrefLocale") ) {
+				setLocalePreference(entry.getValue());
+			}
+			
+
 		}
 
 		if ( sb.length() <= 0 )
@@ -389,6 +400,20 @@ public class ZimbraAccount {
 		
 		String value = soapSelectValue("//acct:pref[@name='"+ pref +"']", null);
 		return (value);
+	}
+	
+	
+	/**
+	 * Get this Account's Locale Preference (zimbraPrefLocale)
+	 * @return
+	 * @throws HarnessException
+	 */
+	public Locale getLocalePreference() {
+		return (I18N.getLocaleFromString(ZimbraPrefLocale));
+	}
+	
+	protected void setLocalePreference(String locale) {
+		ZimbraPrefLocale = locale;
 	}
 	
 	@Override

@@ -3,7 +3,7 @@
  */
 package com.zimbra.qa.selenium.projects.mobile.ui;
 
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 
@@ -40,6 +40,13 @@ public class AppMobileClient extends AbsApplication {
 		zPageContacts = new PageContacts(this);
 		pages.put(zPageContacts.myPageName(), zPageContacts);
 		
+		// Configure the localization strings
+		getL10N().zAddBundlename(I18N.Catalog.I18nMsg);
+		getL10N().zAddBundlename(I18N.Catalog.AjxMsg);
+		getL10N().zAddBundlename(I18N.Catalog.ZMsg);
+		getL10N().zAddBundlename(I18N.Catalog.ZsMsg);
+		getL10N().zAddBundlename(I18N.Catalog.ZmMsg);
+
 	}
 	
 	/* (non-Javadoc)

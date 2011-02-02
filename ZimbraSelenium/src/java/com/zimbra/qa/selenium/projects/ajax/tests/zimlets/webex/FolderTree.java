@@ -5,6 +5,7 @@ import java.util.List;
 import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.items.ZimletItem;
+import com.zimbra.qa.selenium.framework.items.ZimletItem.CoreZimletItem;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
@@ -21,9 +22,9 @@ public class FolderTree extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "Verify the WebEx zimlet appears in the folder tree",
-			groups = { "sanity" })
+			groups = { "smoke" })
 	public void FolderTree_01() throws HarnessException {
-		
+		ZimletItem webex = CoreZimletItem.getWebExZimlet(app);
 		
 		// Expand the zimlets section
 		app.zTreeMail.zExpandZimlets();
@@ -33,13 +34,13 @@ public class FolderTree extends AjaxCommonTest {
 		
 		// Find out if WebEx is listed
 		ZimletItem found = null;
-		for (ZimletItem z : zimlets) {
-			if ( ZimletItem.getWebExZimlet().getName().equals(z.getName()) ) {
-				found = z;
+		for (ZimletItem zimlet : zimlets) {
+			if ( webex.equals(zimlet) ) {
+				found = zimlet;
 			}
 		}
 		
-		ZAssert.assertNotNull(found, "Verify the WebEx Zimlet was found");
+		ZAssert.assertNotNull(found, "Verify the Webex Zimlet was found");
 				
 	}
 
