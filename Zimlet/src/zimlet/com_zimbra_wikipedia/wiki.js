@@ -30,13 +30,6 @@ com_zimbra_wikipedia_HandlerObject.prototype.constructor = com_zimbra_wikipedia_
  */
 var WikipediaZimlet = com_zimbra_wikipedia_HandlerObject;
 
-/**
- * Initializes the zimlet.
- */
-WikipediaZimlet.prototype.init =
-function() {
-    //Nothing to init.
-};
 
 /**
  * Called by the Zimbra framework when the panel item was double clicked.
@@ -96,8 +89,69 @@ function() {
  */
 WikipediaZimlet.prototype._displaySearchResult = 
 function(search) {
-	var props = [ "toolbar=yes,location=yes,status=yes,menubar=yes,scrollbars=yes,resizable=yes,width=800,height=600" ];
-	props = props.join(",");
-    var url = "http://www.wikipedia.org/search-redirect.php?language=en&go=Go&search=" + AjxStringUtil.urlEncode(search);
-	window.open(url, "Wikipedia", props);
+    var url = "http://www.wikipedia.org/search-redirect.php?language="+this._getLanguageCode()+"&go=Go&search=" + AjxStringUtil.urlEncode(search);
+	this.openCenteredWindow(url);
+};
+
+/**
+ * Display search results.
+ */
+WikipediaZimlet.prototype._getLanguageCode = 
+function() {
+	var locale = appCtxt.getSettings().getSetting("LOCALE_NAME").value;
+	if(!locale) {
+		return "en";
+	}
+	locale = locale.toLowerCase();
+	var retLocale = "en";
+	switch(locale) {
+		case "en_au":
+		case "en_uk":
+		case "en_us":
+			retLocale = "en";
+			break;
+		case "ja":
+		case "nl":
+		case "de":
+		case "fr":
+		case "it":
+		case "pl":
+		case "pt":
+		case "ru":
+		case "es":
+			retLocale = locale;
+			break;
+		case "pt_br":
+			retLocale = "pt";
+			break;
+	}
+	return retLocale;
+};
+
+/**
+ * Shows warning message (used for popup blocker)
+ */
+WikipediaZimlet.prototype._showWarningMsg = function(message) {
+	var style = DwtMessageDialog.WARNING_STYLE;
+	var dialog = appCtxt.getMsgDialog();
+	this.warningDialog = dialog;
+	dialog.setMessage(message, style);
+	dialog.popup();
+};
+
+/**
+ * Opens new wikipedia browser at the center of the monitor
+ */
+WikipediaZimlet.prototype.openCenteredWindow =
+function (url) {
+	var width = 800;
+	var height = 600;
+	var left = parseInt((screen.availWidth / 2) - (width / 2));
+	var top = parseInt((screen.availHeight / 2) - (height / 2));
+	var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,scrollbars,left=" + left + ",top=" + top + "screenX=" + left + ",screenY=" + top;
+	var win = window.open(url, "subWind", windowFeatures);
+	if (!win) {
+		this._showWarningMsg(ZmMsg.popupBlocker);
+	}
+	return win;
 };

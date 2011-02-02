@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_wikipedia" version="0.6" label="${msg.label}" description="${msg.description}">
+<zimlet name="com_zimbra_wikipedia" version="1.0" label="${msg.label}" description="${msg.description}">
 	<include>wiki.js</include>
 	<includeCSS>wikipedia.css</includeCSS>
 	<handlerObject>com_zimbra_wikipedia_HandlerObject</handlerObject>
