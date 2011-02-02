@@ -317,7 +317,7 @@ public class BeanUtils {
         }                                                          
         else {
             String filler = (ellipses ? "..." : "");
-            return text.subSequence(0,length/2)+filler+text.subSequence((text.length() - length/2 - filler.length()),text.length()) ;
+            return text.subSequence(0,length/2)+filler+text.subSequence((text.length() - length/2 + filler.length()),text.length()) ;
         }
     }
 
