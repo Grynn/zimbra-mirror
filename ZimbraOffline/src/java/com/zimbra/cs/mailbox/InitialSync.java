@@ -1461,7 +1461,7 @@ public class InitialSync {
                 }
                 try {
                     MailItem existingItem = ombx.getItemById(sContext, id, MailItem.Type.UNKNOWN);
-                    if (existingItem.getRevision(doc.getVersion()) == null) {
+                    if (ombx.getItemRevision(sContext, existingItem.getId(), MailItem.Type.UNKNOWN, doc.getVersion()) == null) {
                         ombx.addDocumentRevision(new TracelessContext(player), id, pd);
                     }
                 } catch (MailServiceException.NoSuchItemException nsie) {
