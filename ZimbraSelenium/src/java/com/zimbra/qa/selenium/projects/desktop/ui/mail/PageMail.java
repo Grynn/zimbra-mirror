@@ -230,7 +230,7 @@ public class PageMail extends AbsTab {
       } else if ( button == Button.B_GETMAIL ) {
          
          locator = "css=div[id^='zb__'] td[id$='__CHECK_MAIL_title']";
-         this.zClick(locator);
+         this.sClick(locator);
       } /** TODO: else if ( button == Button.B_DELETE ) {
          String id;
          if ( zGetPropMailView() == PageMailView.BY_MESSAGE ) {
