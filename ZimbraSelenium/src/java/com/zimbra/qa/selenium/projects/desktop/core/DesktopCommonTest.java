@@ -172,7 +172,15 @@ public class DesktopCommonTest {
 		   isAppRunning = false;
 		} else {
 		   if (!DesktopInstallUtil.isDesktopAppInstalled()) {
-		      String downloadPath = BuildUtility.downloadLatestBuild(_downloadFilePath, _productName, _branchName, _arch);
+		      String buildUrl = ZimbraSeleniumProperties.getStringProperty("desktop.buildUrl", ""); 
+		      String downloadPath = null;
+
+		      if (buildUrl.equals("")) {
+		         downloadPath = BuildUtility.downloadLatestBuild(_downloadFilePath, _productName, _branchName, _arch);		         
+		      } else {
+		         downloadPath = BuildUtility.downloadBuild(_downloadFilePath, buildUrl);
+		      }
+
 		      logger.info("Now installing: " + downloadPath);
 		      DesktopInstallUtil.installDesktopApp(downloadPath);
 		   } else {

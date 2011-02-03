@@ -12,6 +12,7 @@ import com.zimbra.qa.selenium.framework.util.CommandLine;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.BuildUtility.ARCH;
 import com.zimbra.qa.selenium.framework.util.BuildUtility.BRANCH;
 import com.zimbra.qa.selenium.framework.util.BuildUtility.PRODUCT_NAME;
@@ -258,8 +259,15 @@ public class DesktopInstallUtil {
          // Nothing to do here
       }
 
-      logger.info("Downloading latest build");
-      String fullDownloadPath = BuildUtility.downloadLatestBuild(downloadLocation, prodName, branch, arch);
+      logger.info("Downloading the build");
+      String buildUrl = ZimbraSeleniumProperties.getStringProperty("desktop.buildUrl", "");
+      String fullDownloadPath = null;
+      if (buildUrl.equals("")) {
+         fullDownloadPath = BuildUtility.downloadLatestBuild(downloadLocation, prodName, branch, arch);         
+      } else {
+         fullDownloadPath = BuildUtility.downloadBuild(downloadLocation, buildUrl);
+      }
+
       installDesktopApp(fullDownloadPath);
    }
 }

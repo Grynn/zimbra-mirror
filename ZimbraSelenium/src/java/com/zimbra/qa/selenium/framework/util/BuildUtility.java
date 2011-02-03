@@ -176,30 +176,48 @@ public class BuildUtility {
     * @param arch Architecture Type
     * @return (String) Downloaded file path
     * @throws HarnessException
-    * @throws SAXException
+    * @throws SAXException 
     * @throws IOException
     */
    public static String downloadLatestBuild(String downloadDest, PRODUCT_NAME productName, BRANCH branch, ARCH arch)
    throws HarnessException, SAXException, IOException {
-      BufferedOutputStream bout = null;
-      FileOutputStream fos = null;
-      BufferedInputStream in = null;
-      int bufferedSize = 1024;
-      String output = null;
-
       File file = new File(downloadDest);
       if (!file.exists()) {
          logger.info("Creating directory " + downloadDest + "...");
          file.mkdir();
       }
 
+      Build build = null;
+
       try {
          logger.debug("Getting the builds from Build web");
-         Build build = _buildOutputFilter(productName, branch, arch)[0];
+         build = _buildOutputFilter(productName, branch, arch)[0];
          logger.debug("Getting the builds from Build web successful");
+      } catch (ParserConfigurationException pce) {
+         pce.printStackTrace();
+      }
+      return downloadBuild(downloadDest, build.buildUrl);
 
-         String url = _getDownloadableBuildUrl(build.buildUrl);
-         logger.info("Downloadable build URL is: " + url);
+   }
+
+   /**
+    * Downloads the build from build URL based on the given URL
+    * @param downloadDest Destination where to put the file in.
+    * @param buildUrl Build URL to be downloaded
+    * @return (String) Downloaded file path
+    * @throws HarnessException
+    * @throws IOException
+    */
+   public static String downloadBuild(String downloadDest, String buildUrl) throws HarnessException, IOException {
+      BufferedOutputStream bout = null;
+      FileOutputStream fos = null;
+      BufferedInputStream in = null;
+      int bufferedSize = 1024;
+      String output = null;
+
+      try {
+         String url = _getDownloadableBuildUrl(buildUrl);
+         logger.info("Build URL is: " + url);
 
          OperatingSystem.OsType osType = OperatingSystem.getOSType();
          logger.debug("OS Type is: " + osType.toString());
@@ -237,8 +255,6 @@ public class BuildUtility {
 
       } catch (IOException ioe){
          ioe.printStackTrace();
-      } catch (ParserConfigurationException pce) {
-         pce.printStackTrace();
       } finally {
          bout.flush();
          bout.close();
