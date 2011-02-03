@@ -44,6 +44,13 @@ if (! -d $CACHE_DIR) {
     mkdir($CACHE_DIR) || die "Could not create directory: $CACHE_DIR";
 }
 
+# Remove old binaries to make sure there's no cruft.
+for my $binaryName (keys %BINARIES) {
+    my $version = $BINARIES{$binaryName};
+    my $cmd = "rm -rf $BASE_DIR/$binaryName $BASE_DIR/$binaryName-$version";
+    runCommand($cmd);
+}
+
 for my $binaryName (keys %BINARIES) {
     my $version = $BINARIES{$binaryName};
     my $cmd;
@@ -64,14 +71,12 @@ for my $binaryName (keys %BINARIES) {
         runCommand($cmd);
     }
 
-    # Untar
+    # Untar.
     $cmd = "tar -xzf $tarball -C $BASE_DIR";
     runCommand($cmd);
 
+    # Symlink.
     if ($binaryName ne "openldap-libs") {
-        # Replace existing symlink.
-        $cmd = "rm -f $BASE_DIR/$binaryName";
-        runCommand($cmd);
         symlink("$BASE_DIR/$binaryName-$version", "$BASE_DIR/$binaryName") || die "Could not create symlink for $binaryName";
     }
 }
