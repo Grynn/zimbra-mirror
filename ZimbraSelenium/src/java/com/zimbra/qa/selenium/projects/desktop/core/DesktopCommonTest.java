@@ -22,6 +22,7 @@ import com.zimbra.qa.selenium.projects.desktop.ui.AppDesktopClient;
 import com.zimbra.qa.selenium.projects.desktop.ui.PageAccounts;
 import com.zimbra.qa.selenium.projects.desktop.ui.PageMain;
 
+import com.sun.jndi.toolkit.url.UrlUtil;
 import com.thoughtworks.selenium.SeleniumException;
 
 import com.zimbra.qa.selenium.framework.core.ClientSession;
@@ -40,6 +41,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.BuildUtility.ARCH;
 import com.zimbra.qa.selenium.framework.util.BuildUtility.BRANCH;
 import com.zimbra.qa.selenium.framework.util.BuildUtility.PRODUCT_NAME;
+import com.zimbra.qa.selenium.framework.util.BuildUtility.URLUtil;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
@@ -97,14 +99,10 @@ public class DesktopCommonTest {
 	 * 1. Make sure that Desktop Application is installed
 	 * 2. Make sure that Desktop Application is initialized
 	 * 3. Make sure the selenium server is available
-	 * 
-	 * @throws HarnessException
-	 * @throws IOException 
-	 * @throws SAXException 
-	 * @throws InterruptedException 
+	 * @throws Exception 
 	 */
 	@BeforeSuite( groups = { "always" } )
-	public void commonTestBeforeSuite() throws HarnessException, SAXException, IOException, InterruptedException {
+	public void commonTestBeforeSuite() throws Exception {
 		logger.info("commonTestBeforeSuite");
 
 		_forceInstall = ZimbraSeleniumProperties.getStringProperty("desktop.forceInstall", "true").toLowerCase().equals("true") ? true : false;
@@ -192,27 +190,43 @@ public class DesktopCommonTest {
 		if (!isAppRunning) {
 		   logger.info("Executable file path: " + _executableFilePath);
 		   CommandLine.CmdExec(_executableFilePath);
-		   SleepUtil.sleep(30000);
 		} else {
 		   logger.info("App is already running...");
 		}
 
-		try
-		{
-			ClientSession session = ClientSessionFactory.session();
-			_selenium = session.selenium();
-			_selenium.start();
-			_selenium.windowMaximize();
-			_selenium.windowFocus();
-			_selenium.allowNativeXpath("true");
-			ZimbraSeleniumProperties.setAppType(
-			      ZimbraSeleniumProperties.AppType.DESKTOP);
-			_selenium.open(ZimbraSeleniumProperties.getBaseURL());
-		} catch (SeleniumException e) {
-			logger.error("Unable to open admin app." +
-					"  Is a valid cert installed?", e);
-			throw e;
+		ClientSession session = ClientSessionFactory.session();
+		_selenium = session.selenium();
+		_selenium.start();
+		_selenium.windowMaximize();
+		_selenium.windowFocus();
+		_selenium.allowNativeXpath("true");
+		ZimbraSeleniumProperties.setAppType(
+		      ZimbraSeleniumProperties.AppType.DESKTOP);
+
+		// Dynamic wait for App to be ready
+		int maxRetry = 10;
+		int retry = 0;
+		boolean appIsReady = false;
+		while (retry < maxRetry && !appIsReady) {		   
+		   try
+		   {
+		      logger.info("Retry #" + retry);
+		      retry ++;
+		      _selenium.open(ZimbraSeleniumProperties.getBaseURL());
+		      appIsReady = true;
+		   } catch (SeleniumException e) {
+		      if (retry == maxRetry) {
+		         logger.error("Unable to open admin app." +
+		               "  Is a valid cert installed?", e);
+		         throw e;
+		      } else {
+		         logger.info("App is still not ready...");
+		         SleepUtil.sleep(10000);
+		         continue;
+		      }
+		   }
 		}
+		logger.info("App is ready!");
 	}
 
 	/**

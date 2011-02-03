@@ -139,6 +139,7 @@ public class GeneralUtility {
       int i = 0;
 
       while (i < iteration && !_waitforObjectComparator(output, comparingObject, operand)) {
+         SleepUtil.sleep(delayBetweenCheck);
          i++;
          logger.debug("Iteration: " + i);
          logger.debug("Output is: " + output);
@@ -164,7 +165,6 @@ public class GeneralUtility {
             //TODO:
             e.printStackTrace();
          }
-         SleepUtil.sleep(delayBetweenCheck);
       }
       logger.info("Final Iteration is: " + i);
       logger.info("Final Output is: " + output);

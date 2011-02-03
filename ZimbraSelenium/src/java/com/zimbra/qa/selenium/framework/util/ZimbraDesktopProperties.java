@@ -10,7 +10,6 @@ import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 public class ZimbraDesktopProperties {
 
    private String _serialNumber = null;
-   private String _connectionPort = null;
    private String _localConfigFileLocation = null;
 
    private static ZimbraDesktopProperties _instance = null;
@@ -62,8 +61,6 @@ public class ZimbraDesktopProperties {
          }
          logger.info("Parsing XML file: " + _possibleFiles[i]);
          try {
-            this._setConnectionPort(XmlStringUtil.parseXmlFile(_possibleFiles[i],
-                  "zimbra_admin_service_port"));
             this._setSerialNumber(XmlStringUtil.parseXmlFile(_possibleFiles[i],
                   "zdesktop_installation_key"));
             this._setLocalConfigFileLocation(_possibleFiles[i]);
@@ -85,11 +82,16 @@ public class ZimbraDesktopProperties {
       return _serialNumber;
    }
 
-   private void _setConnectionPort(String connectionPort) {
-      _connectionPort = connectionPort;
-   }
+   // There is no setter for ConnectionPort because connection port keeps on changing
+   // when re-initializing Zimbra Desktop App.
    public String getConnectionPort() {
-      return _connectionPort;
+      try {
+         return XmlStringUtil.parseXmlFile(getLocalConfigFileLocation(),
+         "zimbra_admin_service_port");
+      } catch (IOException e) {
+         logger.error("Local Config File location is not found.");
+         return null;
+      }
    }
 
    private void _setLocalConfigFileLocation(String localConfigFileLocation) {
