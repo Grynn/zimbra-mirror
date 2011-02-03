@@ -1294,7 +1294,7 @@ DwtListView.prototype._getDivHtml =
 function(item, params, html, idx, count) {
 
 	html[idx++] = "<div class='";
-	html[idx++] = this._getDivClass(this._normalClass, item, params);
+	html[idx++] = this._getDivClass(params.divClass || this._normalClass, item, params);
 	html[idx++] = " ";
 	html[idx++] = (count % 2) ? DwtListView.ROW_CLASS_EVEN : DwtListView.ROW_CLASS_ODD;
 	html[idx++] = "'";
