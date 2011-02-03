@@ -610,7 +610,8 @@ public class ExecuteHarnessMain {
 		@Override
 		public void onTestFailure(ITestResult result) {
 			testsFailed++;
-			failedTests.add(result.getName());
+			String fullname = result.getMethod().getMethod().getDeclaringClass().getName() +"."+ result.getMethod().getMethod().getName();
+			failedTests.add(fullname.replace("com.zimbra.qa.selenium.projects.", "..."));
 			this.getScreenCapture(result);
 		}
 
