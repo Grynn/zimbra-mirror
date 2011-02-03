@@ -112,62 +112,86 @@ public class ResultsCore {
 		File bugTestcaseFile = new File(path, "bugTestcase.txt");
 		File bugQAContactFile = new File(path, "bugQaContact.txt");
 
-		BufferedReader reader;
+		BufferedReader reader = null;
 		String line;
 		
-		reader = new BufferedReader(new FileReader(bugStatusFile));
-		while ( (line=reader.readLine()) != null ) {
+		try {
+			
+			reader = new BufferedReader(new FileReader(bugStatusFile));
+			while ( (line=reader.readLine()) != null ) {
 
-			// Example: 50208	RESOLVED
-			String[] values = line.split("\\s");
-			if ( values.length != 2 ) {
-				logger.warn("bugStatus: invalid line: "+ line);
-				continue;
+				// Example: 50208	RESOLVED
+				String[] values = line.split("\\s");
+				if ( values.length != 2 ) {
+					logger.warn("bugStatus: invalid line: "+ line);
+					continue;
+				}
+				
+				String bugid = values[0];
+				BugState bugState = BugState.valueOf(values[1]);
+							
+				status.put(bugid, bugState);
+				logger.debug("bugStatus: put "+ line);
+				
 			}
 			
-			String bugid = values[0];
-			BugState bugState = BugState.valueOf(values[1]);
-						
-			status.put(bugid, bugState);
-			logger.debug("bugStatus: put "+ line);
-			
+		} finally {
+			if ( reader != null )
+				reader.close();
+			reader = null;
 		}
 
-		reader = new BufferedReader(new FileReader(bugTestcaseFile));
-		while ( (line=reader.readLine()) != null ) {
+		try {
+			
+			reader = new BufferedReader(new FileReader(bugTestcaseFile));
+			while ( (line=reader.readLine()) != null ) {
+	
+				// Example: genesis/data/zmstatctl/basic.rb	29149 40782
+				String[] values = line.split("\\s");
+				if ( values.length <= 1 ) {
+					logger.warn("bugTestcase: invalid line: "+ line);
+					continue;
+				}
+				
+				String bugtestcase = values[0];
+				values = line.replace(bugtestcase, "").split("\\s");
+				
+				testcase.put(bugtestcase, Arrays.asList(values));
+				logger.debug("bugTestcase: put "+ line);
 
-			// Example: genesis/data/zmstatctl/basic.rb	29149 40782
-			String[] values = line.split("\\s");
-			if ( values.length <= 1 ) {
-				logger.warn("bugTestcase: invalid line: "+ line);
-				continue;
 			}
 			
-			String bugtestcase = values[0];
-			values = line.replace(bugtestcase, "").split("\\s");
-			
-			testcase.put(bugtestcase, Arrays.asList(values));
-			logger.debug("bugTestcase: put "+ line);
-
+		} finally {
+			if ( reader != null )
+				reader.close();
+			reader = null;
 		}
 		
-		reader = new BufferedReader(new FileReader(bugQAContactFile));
-		while ( (line=reader.readLine()) != null ) {
+		try {
 			
-			// Example: 42337	sarang@zimbra.com
+			reader = new BufferedReader(new FileReader(bugQAContactFile));
+			while ( (line=reader.readLine()) != null ) {
+				
+				// Example: 42337	sarang@zimbra.com
 
-			String[] values = line.split("\\s");
-			if ( values.length != 2 ) {
-				logger.warn("bugQAContact: invalid line: "+ line);
-				continue;
+				String[] values = line.split("\\s");
+				if ( values.length != 2 ) {
+					logger.warn("bugQAContact: invalid line: "+ line);
+					continue;
+				}
+				
+				String bugid = values[0];
+				String bugcontact = values[1];
+				
+				contact.put(bugid, bugcontact);
+				logger.debug("bugQAContact: put "+ line);
+
 			}
 			
-			String bugid = values[0];
-			String bugcontact = values[1];
-			
-			contact.put(bugid, bugcontact);
-			logger.debug("bugQAContact: put "+ line);
-
+		} finally {
+			if ( reader != null )
+				reader.close();
+			reader = null;
 		}
 		
 		
