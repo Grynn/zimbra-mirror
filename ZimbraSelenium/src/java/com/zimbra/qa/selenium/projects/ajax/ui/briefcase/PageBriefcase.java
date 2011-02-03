@@ -179,10 +179,11 @@ public class PageBriefcase extends AbsTab {
 			locator = Locators.zDeleteIconBtn;
 			page = new DialogDeleteConfirm(MyApplication);
 		} else if (button == Button.B_OPEN_IN_SEPARATE_WINDOW) {
-			// Check if the button is visible
-			String attrs = sGetAttribute("css=div[id='zb__BDLV__NEW_BRIEFCASE_WIN']@style");
-			if (!attrs.contains("visible")) {
-				throw new HarnessException(button + " not visible " + attrs);
+			// Check if the button is disabled
+			String attrs = sGetAttribute("css=td[" + Locators.zOpenFileInSeparateWindowIconBtn
+					+ "]>div@class");
+			if (attrs.contains("ZDisabledImage")) {
+				throw new HarnessException(button + " is disabled " + attrs);
 			}
 			locator = Locators.zOpenFileInSeparateWindowIconBtn;
 			page = new DocumentBriefcaseOpen(this.MyApplication);
