@@ -16,13 +16,11 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
-import org.xml.sax.SAXException;
 
 import com.zimbra.qa.selenium.projects.desktop.ui.AppDesktopClient;
 import com.zimbra.qa.selenium.projects.desktop.ui.PageAccounts;
 import com.zimbra.qa.selenium.projects.desktop.ui.PageMain;
 
-import com.sun.jndi.toolkit.url.UrlUtil;
 import com.thoughtworks.selenium.SeleniumException;
 
 import com.zimbra.qa.selenium.framework.core.ClientSession;
@@ -41,7 +39,6 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.BuildUtility.ARCH;
 import com.zimbra.qa.selenium.framework.util.BuildUtility.BRANCH;
 import com.zimbra.qa.selenium.framework.util.BuildUtility.PRODUCT_NAME;
-import com.zimbra.qa.selenium.framework.util.BuildUtility.URLUtil;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
