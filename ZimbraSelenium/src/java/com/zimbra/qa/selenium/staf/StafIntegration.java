@@ -49,6 +49,7 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
     private String argJarfile = "jarfile";
     private String argPattern = "pattern";
     private String argGroup = "group";
+    private String argDesktopURL = "url";
     private String argLog = "log";
     private String argLog4j = "log4j";
     
@@ -117,12 +118,14 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
         String valueRoot = request.optionValue(argRoot);
         String valueJarfile = request.optionValue(argJarfile);
         String valuePattern = request.optionValue(argPattern);
+        String valueURL = request.optionValue(argDesktopURL);
         String valueLog = request.optionValue(argLog);
         
         mLog.info("valueServer="+ valueServer);
         mLog.info("valueRoot="+ valueRoot);
         mLog.info("valueJarfile="+ valueJarfile);
         mLog.info("valuePattern="+ valuePattern);
+        mLog.info("valueURL="+ valueURL);
         mLog.info("valueLog="+ valueLog);
         
         // Since multiple GROUP arguments can be specified, process each one
@@ -161,6 +164,9 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 			configProperties.setProperty("seleniumMode", "Local");
 			configProperties.setProperty("serverName", "localhost");
 			configProperties.setProperty("serverPort", "4444");
+
+			if ( valueURL != null )
+				configProperties.setProperty("desktop.buildUrl", valueURL);
 
 
 			// Save the temp file in the log folder for the records
@@ -286,7 +292,7 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
     	// TODO: Need to convert the help command into the variables, aEXECUTE, aHELP, etc.
         return new STAFResult(STAFResult.Ok,
          "StafTest Service Help\n\n" + 
-         "EXECUTE SERVER <servername|IP address> ROOT <ZimbraSelenium path> JARFILE <path> PATTERN <projects.zcs.tests> [ GROUP <always|sanity|smoke|full> ]* [ LOG <folder> ] [ LOG4J <properties file> ]\n\n" +
+         "EXECUTE SERVER <servername|IP address> ROOT <ZimbraSelenium path> JARFILE <path> PATTERN <projects.ajax.tests> [ GROUP <always|sanity|smoke|functional> ]* [ URL <desktop installer folder> ] [ LOG <folder> ] [ LOG4J <properties file> ]\n\n" +
          "QUERY -- TBD: should return statistics on active jobs \n\n" +
          "HALT <TBD> -- TBD: should stop any executing tests\n\n" +
          "HELP\n\n");
@@ -351,15 +357,11 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
         stafParserExecute.addOption(argRoot, 1, STAFCommandParser.VALUEREQUIRED);
         stafParserExecute.addOption(argJarfile, 1, STAFCommandParser.VALUEREQUIRED);
         stafParserExecute.addOption(argPattern, 1, STAFCommandParser.VALUEREQUIRED);
-        stafParserExecute.addOption(argGroup, 0, STAFCommandParser.VALUEREQUIRED);
+        stafParserExecute.addOption(argGroup, 0, STAFCommandParser.VALUEREQUIRED); // Can be specified infinite amount of times
+        stafParserExecute.addOption(argDesktopURL, 1, STAFCommandParser.VALUEREQUIRED);
         stafParserExecute.addOption(argLog, 1, STAFCommandParser.VALUEREQUIRED);
         stafParserExecute.addOption(argLog4j, 1, STAFCommandParser.VALUEREQUIRED);
-        stafParserExecute.addOptionNeed(optionExecute, argServer);
-        stafParserExecute.addOptionNeed(argServer, argRoot);
-        stafParserExecute.addOptionNeed(argRoot, argJarfile);
-        stafParserExecute.addOptionNeed(argJarfile, argPattern);
-        stafParserExecute.addOptionNeed(argPattern, argGroup);
-        stafParserExecute.addOptionNeed(argGroup, argLog);
+        stafParserExecute.addOptionNeed(optionExecute, argRoot +" "+ argJarfile +" "+ argPattern +" "+ argGroup);
 
         // QUERY parser
         stafParserQuery = new STAFCommandParser();
