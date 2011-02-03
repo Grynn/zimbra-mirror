@@ -8,7 +8,6 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogDeleteConfirm;
-import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase.Locators;
 
 public class DeleteDocument extends AjaxCommonTest {
 
@@ -49,20 +48,10 @@ public class DeleteDocument extends AjaxCommonTest {
 		app.zPageBriefcase.zNavigateTo();
 
 		// refresh briefcase page
-		// ClientSessionFactory.session().selenium().refresh();
-		app.zPageBriefcase.zClick(Locators.zBriefcaseFolderIcon);
-
-		app.zPageBriefcase
-				.waitForCondition(
-						"selenium.isElementPresent(\"css=[id='zti__main_Briefcase__16_div'][class='DwtTreeItem-selected']\")&&"
-								+ "selenium.isElementPresent(\"css=[id='zl__BDLV__rows'] div[class^='Row']\");",
-						"5000");
+		app.zPageBriefcase.pageRefresh(true);
 
 		// Click on created document
-		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
-				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
-			app.zPageBriefcase.zClick(documentLocator);
-		}
+		app.zPageBriefcase.zClick(documentLocator);
 
 		// Click on Delete document icon in toolbar
 		DialogDeleteConfirm deleteConfirm = (DialogDeleteConfirm) app.zPageBriefcase
@@ -73,14 +62,7 @@ public class DeleteDocument extends AjaxCommonTest {
 			deleteConfirm.zClickButton(Button.B_YES);
 
 		// refresh briefcase page
-		// ClientSessionFactory.session().selenium().refresh();
-		app.zPageBriefcase.zClick(Locators.zBriefcaseFolderIcon);
-
-		app.zPageBriefcase
-				.waitForCondition(
-						"selenium.isElementPresent(\"css=[id='zti__main_Briefcase__16_div'][class='DwtTreeItem-selected']\")&&"
-								+ "selenium.isElementPresent(\"css=[id='zl__BDLV__rows']\");",
-						"2000");
+		app.zPageBriefcase.pageRefresh(false);
 
 		// Verify document was deleted
 		boolean isPresenet = true;

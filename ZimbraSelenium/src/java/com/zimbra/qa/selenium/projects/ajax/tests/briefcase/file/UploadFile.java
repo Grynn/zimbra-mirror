@@ -49,16 +49,7 @@ public class UploadFile extends AjaxCommonTest {
 
 		account.soapSelectNode("//mail:SaveDocumentResponse", 1);
 
-		// Select Briefcase tab
-		SleepUtil.sleepSmall();
-		app.zPageBriefcase.zNavigateTo();
-
-		// ClientSessionFactory.session().selenium().refresh();
-		// refresh briefcase page
-		app.zPageBriefcase.zClick(Locators.zBriefcaseFolderIcon);
-
 		// Verify file name through SOAP
-
 		// import from soap
 		app.zGetActiveAccount().soapSend(
 
@@ -99,16 +90,12 @@ public class UploadFile extends AjaxCommonTest {
 				"</SaveDocumentRequest>");
 
 		// Select Briefcase tab
-		SleepUtil.sleepSmall();
 		app.zPageBriefcase.zNavigateTo();
 
-		// ClientSessionFactory.session().selenium().refresh();
 		// refresh briefcase page
-		app.zPageBriefcase.zClick(Locators.zBriefcaseFolderIcon);
-
+		app.zPageBriefcase.pageRefresh(true);
+		
 		// Verify document is created
-		SleepUtil.sleepLong();
-
 		String name = "";
 		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
 				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
@@ -116,7 +103,6 @@ public class UploadFile extends AjaxCommonTest {
 					.sGetText("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
 							+ fileName + ")");
 		}
-
 		ZAssert.assertEquals(name, fileName, "Verify file name through GUI");
 	}
 }

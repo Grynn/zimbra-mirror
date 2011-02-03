@@ -6,7 +6,6 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase.Locators;
 
 public class DisplayDocument extends AjaxCommonTest {
 
@@ -45,14 +44,7 @@ public class DisplayDocument extends AjaxCommonTest {
 		app.zPageBriefcase.zNavigateTo();
 
 		// refresh briefcase page
-		// ClientSessionFactory.session().selenium().refresh();
-		app.zPageBriefcase.zClick(Locators.zBriefcaseFolderIcon);
-
-		app.zPageBriefcase
-				.waitForCondition(
-						"selenium.isElementPresent(\"css=[id='zti__main_Briefcase__16_div'][class='DwtTreeItem-selected']\")&&"
-								+ "selenium.isElementPresent(\"css=[id='zl__BDLV__rows'] div[class^='Row']\");",
-						"5000");
+		app.zPageBriefcase.pageRefresh(true);
 
 		// Verify document is created
 		// SleepUtil.sleepLong();

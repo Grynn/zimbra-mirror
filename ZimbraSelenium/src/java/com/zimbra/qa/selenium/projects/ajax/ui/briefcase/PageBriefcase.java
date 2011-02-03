@@ -102,6 +102,8 @@ public class PageBriefcase extends AbsTab {
 		// Click on Briefcase icon
 		zClick(PageMain.Locators.zAppbarBriefcase);
 
+		zWaitForBusyOverlay();
+
 		zWaitForActive();
 	}
 
@@ -141,32 +143,15 @@ public class PageBriefcase extends AbsTab {
 			if (!attrs.contains("visible")) {
 				throw new HarnessException(button + " not visible " + attrs);
 			}
-			String newPageTitle = "Zimbra Docs";
 			locator = Locators.zNewMenuLeftIconBtn;
+
 			// Click on New Document icon
 			this.zClick(locator);
 
-			waitForWindow(newPageTitle, "5000");
+			isEditDocLoaded("Zimbra Docs", "");
 
-			try {
-				zSelectWindow(newPageTitle);
-
-				// if name field appears in the toolbar then document page is
-				// opened
-				waitForElement("//*[@id='DWT3_item_1']", "30000");
-
-				if (!sIsVisible("//*[@id='DWT3_item_1']")) {
-					throw new HarnessException("could not open a new file page");
-				} else {
-					DocumentBriefcaseNew.pageTitle = newPageTitle;
-				}
-				page = new DocumentBriefcaseNew(this.MyApplication);
-				return (page);
-			} catch (Exception ex) {
-				zSelectWindow("Zimbra: Briefcase");
-				throw new HarnessException("couldn't select window"
-						+ newPageTitle, ex);
-			}
+			page = new DocumentBriefcaseNew(this.MyApplication);
+			return (page);
 		} else if (button == Button.B_UPLOAD_FILE) {
 			// Check if the button is visible
 			String attrs = sGetAttribute("xpath=(//div[@id='zb__BDLV__NEW_FILE'])@style");
@@ -279,6 +264,9 @@ public class PageBriefcase extends AbsTab {
 		// Click it
 		this.zClick(locator);
 
+		// If the app is busy, wait for it to become active
+		zWaitForBusyOverlay();
+
 		return (page);
 	}
 
@@ -384,6 +372,8 @@ public class PageBriefcase extends AbsTab {
 
 			throw new HarnessException("implement me!");
 		}
+		// If the app is busy, wait for it to become active
+		zWaitForBusyOverlay();
 
 		// Return the specified page, or null if not set
 		return (page);
@@ -441,7 +431,46 @@ public class PageBriefcase extends AbsTab {
 		throw new HarnessException("implement me!");
 	}
 
-	public boolean waitForText(String iframe, String text, String timeout) {
+	public void pageRefresh(boolean includeRow) throws HarnessException {
+		// ClientSessionFactory.session().selenium().refresh();
+		zClick(Locators.zBriefcaseFolderIcon);
+		String condition = "selenium.isElementPresent(\"css=[id='zti__main_Briefcase__16_div'][class='DwtTreeItem-selected']\")&&"
+				+ "selenium.isElementPresent(\"css=[id='zl__BDLV__rows']";
+		zWaitForBusyOverlay();
+		if (includeRow)
+			waitForCondition(condition + " div[class^='Row']\");", "5000");
+		else
+			waitForCondition(condition + "\");", "5000");
+	}
+
+	public boolean isOpenDocLoaded(String windowName, String text)
+			throws HarnessException {
+		waitForWindow(windowName, "5000");
+
+		zSelectWindow(windowName);
+
+		boolean loaded = waitForElement(
+				"css=td[class='ZhAppContent'] div:contains('" + text + "')",
+				"60000");
+
+		return loaded;
+	}
+
+	public boolean isEditDocLoaded(String windowName, String text)
+			throws HarnessException {
+		waitForWindow(windowName, "5000");
+
+		zSelectWindow(windowName);
+
+		waitForElement("css=iframe[id*='DWT'][class='ZDEditor']", "50000");
+
+		boolean loaded = waitForIframeText(
+				"css=iframe[id*='DWT'][class='ZDEditor']", text, "5000");
+
+		return loaded;
+	}
+
+	public boolean waitForIframeText(String iframe, String text, String timeout) {
 		try {
 			ClientSessionFactory
 					.session()
