@@ -119,6 +119,15 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public static final String A_zimbraPrefOfflineBackupPath = "zimbraPrefOfflineBackupPath";
     public static final String A_zimbraPrefOfflineBackupKeep = "zimbraPrefOfflineBackupKeep";
     public static final String A_offlineBackupLastSuccess = "offlineBackupLastSuccess";
+    public static final String A_zimbraPrefOfflineAttrProxyMode = "zimbraPrefOfflineAttrProxyMode";
+    public static final String A_zimbraPrefOfflineHttpProxyHost = "zimbraPrefOfflineHttpProxyHost";
+    public static final String A_zimbraPrefOfflineHttpProxyPort = "zimbraPrefOfflineHttpProxyPort";
+    public static final String A_zimbraPrefOfflineHttpProxyUsername = "zimbraPrefOfflineHttpProxyUsername";
+    public static final String A_zimbraPrefOfflineHttpProxyPassword = "zimbraPrefOfflineHttpProxyPassword";
+    public static final String A_zimbraPrefOfflineSocksProxyHost = "zimbraPrefOfflineSocksProxyHost";
+    public static final String A_zimbraPrefOfflineSocksProxyPort = "zimbraPrefOfflineSocksProxyPort";
+    public static final String A_zimbraPrefOfflineSocksProxyUsername = "zimbraPrefOfflineSocksProxyUsername";
+    public static final String A_zimbraPrefOfflineSocksProxyPassword = "zimbraPrefOfflineSocksProxyPassword";
 
     public enum EntryType {
         ACCOUNT("acct"), DATASOURCE("dsrc", true), IDENTITY("idnt", true), SIGNATURE("sig", true), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
@@ -482,7 +491,16 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             A_zimbraPrefOfflineBackupInterval,
             A_zimbraPrefOfflineBackupKeep,
             A_zimbraPrefOfflineBackupPath,
-            A_zimbraPrefOfflineZimletSyncAccountId
+            A_zimbraPrefOfflineZimletSyncAccountId,
+            A_zimbraPrefOfflineAttrProxyMode,
+            A_zimbraPrefOfflineHttpProxyHost,
+            A_zimbraPrefOfflineHttpProxyPort,
+            A_zimbraPrefOfflineHttpProxyUsername,
+            A_zimbraPrefOfflineHttpProxyPassword,
+            A_zimbraPrefOfflineSocksProxyHost,
+            A_zimbraPrefOfflineSocksProxyPort,
+            A_zimbraPrefOfflineSocksProxyUsername,
+            A_zimbraPrefOfflineSocksProxyPassword
     ));
 
     @Override

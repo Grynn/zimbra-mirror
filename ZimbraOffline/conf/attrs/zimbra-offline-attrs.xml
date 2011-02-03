@@ -218,4 +218,40 @@
   <desc>account ID to sync zimlets with</desc>
 </attr>
 
+<attr name="zimbraPrefOfflineAttrProxyMode" type="string" cardinality="single" optionalIn="account">
+  <desc>Proxy config mode; one of MANUAL, NONE, or SYSTEM</desc>
+</attr>
+
+<attr name="zimbraPrefOfflineHttpProxyHost" type="string" cardinality="single" optionalIn="account">
+  <desc>HTTP/S Proxy hostname; used if mode set to Manual</desc>
+</attr>
+
+<attr name="zimbraPrefOfflineHttpProxyPort" type="long" cardinality="single" optionalIn="account">
+  <desc>HTTP/S Proxy port; used if mode set to Manual</desc>
+</attr>
+
+<attr name="zimbraPrefOfflineHttpProxyUsername" type="string" cardinality="single" optionalIn="account">
+  <desc>HTTP/S Proxy username; used if mode set to Manual</desc>
+</attr>
+
+<attr name="zimbraPrefOfflineHttpProxyPassword" type="string" cardinality="single" optionalIn="account">
+  <desc>HTTP/S Proxy password; used if mode set to Manual</desc>
+</attr>
+
+<attr name="zimbraPrefOfflineSocksProxyHost" type="string" cardinality="single" optionalIn="account">
+  <desc>SOCKS Proxy hostname; used if mode set to Manual</desc>
+</attr>
+
+<attr name="zimbraPrefOfflineSocksProxyPort" type="long" cardinality="single" optionalIn="account">
+  <desc>SOCKS Proxy port; used if mode set to Manual</desc>
+</attr>
+
+<attr name="zimbraPrefOfflineSocksProxyUsername" type="string" cardinality="single" optionalIn="account">
+  <desc>SOCKS Proxy username; used if mode set to Manual</desc>
+</attr>
+
+<attr name="zimbraPrefOfflineSocksProxyPassword" type="string" cardinality="single" optionalIn="account">
+  <desc>SOCKS Proxy password; used if mode set to Manual</desc>
+</attr>
+
 </attrs>
