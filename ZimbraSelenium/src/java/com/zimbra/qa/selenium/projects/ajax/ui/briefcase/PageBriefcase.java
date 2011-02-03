@@ -148,6 +148,8 @@ public class PageBriefcase extends AbsTab {
 			// Click on New Document icon
 			this.zClick(locator);
 
+			zWaitForBusyOverlay();
+			
 			isEditDocLoaded("Zimbra Docs", "");
 
 			page = new DocumentBriefcaseNew(this.MyApplication);
@@ -461,8 +463,10 @@ public class PageBriefcase extends AbsTab {
 		waitForWindow(windowName, "5000");
 
 		zSelectWindow(windowName);
+		
+		waitForElement("css=div[class='ZDToolBar ZWidget']", "30000");
 
-		waitForElement("css=iframe[id*='DWT'][class='ZDEditor']", "50000");
+		waitForElement("css=iframe[id*='DWT'][class='ZDEditor']", "30000");
 
 		boolean loaded = waitForIframeText(
 				"css=iframe[id*='DWT'][class='ZDEditor']", text, "5000");
