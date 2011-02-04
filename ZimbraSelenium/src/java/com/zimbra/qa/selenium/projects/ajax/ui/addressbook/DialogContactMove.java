@@ -44,7 +44,8 @@ public class DialogContactMove extends AbsDialog {
 		String locator=null;
 		if (button == Button.B_OK) {			
 			locator="//div[contains(@id, '_buttons')]/table/tbody/tr/td[2]/table/tbody/tr/td/div";			
-			this.zClick(locator);	 	   			
+			this.zClick(locator);	 	
+			zWaitForBusyOverlay();
 		}
 		
 		return (null);

@@ -95,8 +95,7 @@ public class FormContactNew extends AbsForm {
 		zClick(Toolbar.SAVE);
 		
 		// Need to wait for the contact save
-		SleepUtil.sleepSmall();
-		
+		zWaitForBusyOverlay();		
 	}
 
 	// reset the form
