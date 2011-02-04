@@ -55,7 +55,7 @@ public class DeleteContact extends AjaxCommonTest  {
 
         //delete contact
         app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);
-        SleepUtil.sleepSmall();
+       
         
         //verify toasted message 1 contact moved to Trash
         ZAssert.assertStringContains(app.zPageAddressbook.sGetText("xpath=//div[@id='z_toast_text']"), "1 contact moved to Trash", "Verify toast message '1 contact moved to Trash'");

@@ -97,6 +97,8 @@ public class DialogTag extends AbsDialog {
 		
 		this.zClick(locator);
 		
+		
+		zWaitForBusyOverlay();
 		return (null);
 	}
 

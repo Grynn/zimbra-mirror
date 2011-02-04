@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
+
 
 /*
  * Right-click menu
@@ -30,7 +30,7 @@ public class ContextMenu extends AbsDisplay {
 		logger.info(myPageName() + " zSelect("+ cmi.text +")");
 				
 		this.zClick(cmi.locator);
-        SleepUtil.sleepSmall();		
+        zWaitForBusyOverlay();
 	}
 
 	public ContextMenuItem getContextMenuItem  (String locator, Class contextMenuItemObject)throws HarnessException {

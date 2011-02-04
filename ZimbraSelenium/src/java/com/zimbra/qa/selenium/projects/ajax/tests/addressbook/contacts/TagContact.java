@@ -60,10 +60,7 @@ public class TagContact extends AjaxCommonTest  {
 		DialogTag dialogTag = (DialogTag) app.zPageAddressbook.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_NEWTAG);
 		dialogTag.zSetTagName(tagName);
 		dialogTag.zClickButton(Button.B_OK);		
-		
-		// Wait for the client to save the data
-		SleepUtil.sleepLong();
-		
+				
 	
 		// Make sure the tag was created on the server (get the tag ID)
 		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;

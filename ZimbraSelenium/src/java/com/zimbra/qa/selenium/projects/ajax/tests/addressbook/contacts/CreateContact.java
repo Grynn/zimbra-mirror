@@ -49,10 +49,8 @@ public class CreateContact extends AjaxCommonTest  {
 	    formContactNew.zFill(contactItem);
 	    
 		// Save the contact
-        formContactNew.save();
+        formContactNew.zSubmit();
 		
-        SleepUtil.sleepMedium();
-
         //verify toasted message 'contact created'
         ZAssert.assertStringContains(app.zPageAddressbook.sGetText("xpath=//div[@id='z_toast_text']"), "Contact Created", "Verify toast message 'Contact Created'");
 

@@ -75,6 +75,7 @@ public class DialogRenameFolder extends AbsDialog {
 		}
 		
 		this.zClick(locator);
+		zWaitForBusyOverlay();
 		
 		return (null);
 	}
