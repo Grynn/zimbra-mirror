@@ -1047,15 +1047,21 @@ public class PageMail extends AbsTab {
 			
 			// click on the option
 			this.zClick(optionLocator);
-			
-			
-			// FALL THROUGH
-
+						
+				// FALL THROUGH
 			
 		} else {
 			throw new HarnessException("implement me!  action = "+ action);
 		}
+	
+		// If the app is busy, wait for it to become active
+		this.zWaitForBusyOverlay();
 		
+
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+	
 
 		// Default behavior
 		return (page);
