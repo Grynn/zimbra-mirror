@@ -60,8 +60,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     Random RAND = new Random();
     String consumerKey = "QVzR2KallP5LDZcmCUfX3cuZd7nBGSLSb4FNQk3mQXGvz4MAlQWXDj3S3w8S-jnk";
     String consumerSecret = "qQD8fZqU2DCkGXcDn70ntbiq1ac6i7VKkebGYvOfMLGvw8ajoCA-96OJnBwV_qO2"; 
-    String consumerKeyZD = "QVzR2KallP5LDZcmCUfX3cuZd7nBGSLSb4FNQk3mQXGvz4MAlQWXDj3S3w8S";
-    String  consumerSecretZD= "qQD8fZqU2DCkGXcDn70ntbiq1ac6i7VKkebGYvOfMLGvw8ajoCA"; 
+    String consumerKeyZD = "QVzR2KallP5LDZcmCUfX3cuZd7nBGSLSb4FNQk3mQXGvz4MAlQWXDj3S3w8S-jnk";
+    String  consumerSecretZD= "qQD8fZqU2DCkGXcDn70ntbiq1ac6i7VKkebGYvOfMLGvw8ajoCA-96OJnBwV_qO2"; 
     long timeStamp = System.currentTimeMillis() / 1000;
     String nonce = request.getParameter("nonce");
 	String oauth_callback = request.getParameter("oauth_callback");
