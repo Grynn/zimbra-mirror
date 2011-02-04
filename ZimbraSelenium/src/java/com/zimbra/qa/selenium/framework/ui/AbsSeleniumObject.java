@@ -66,9 +66,9 @@ public abstract class AbsSeleniumObject {
 		logger.info("isVisiblePerPosition("+ locator +") - (left, top) = ("+ left.intValue() +", "+ top.intValue() +") (limit, limit) = ("+ leftLimit +", "+ topLimit +") "+ (!hidden));
 		return (!hidden);
 	}
-
+	
 	/**
-	 * Execute mouseDownAt followed by mouseUpAt on the center position of a locator
+	 * Execute mouseDownAt followed by mouseUpAt on the (0,0) position of a locator
 	 * @param locator
 	 * @throws HarnessException
 	 */
@@ -79,12 +79,8 @@ public abstract class AbsSeleniumObject {
 			throw new HarnessException("zClick("+ locator +") element is not present");
 		}
 
-		String xPos = Integer.toString(ClientSessionFactory.session().selenium().getElementWidth(locator).intValue() / 2 + 0);
-		String yPos = Integer.toString(ClientSessionFactory.session().selenium().getElementHeight(locator).intValue() / 2 + 0);
-		logger.info("Middle point of the locator: " + locator + " is (" + xPos + ", " + yPos + ")");
-
-		ClientSessionFactory.session().selenium().mouseDownAt(locator, xPos + "," + yPos);
-      ClientSessionFactory.session().selenium().mouseUpAt(locator, xPos + "," + yPos);
+		ClientSessionFactory.session().selenium().mouseDownAt(locator,"0,0");
+		ClientSessionFactory.session().selenium().mouseUpAt(locator,"0,0");
 
 		logger.info("zClick("+ locator +")");
 	}
