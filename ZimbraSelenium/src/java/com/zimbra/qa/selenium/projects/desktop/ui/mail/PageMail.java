@@ -220,7 +220,7 @@ public class PageMail extends AbsTab {
             throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
          
          // Click it
-         this.zClick(locator);
+         this.sClick(locator);
 
          // Create the page
          page = new FormMailNew(this.MyApplication);
