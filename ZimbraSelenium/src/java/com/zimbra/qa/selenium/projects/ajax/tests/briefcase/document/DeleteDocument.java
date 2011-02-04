@@ -51,6 +51,7 @@ public class DeleteDocument extends AjaxCommonTest {
 		app.zPageBriefcase.pageRefresh(true);
 
 		// Click on created document
+		app.zPageBriefcase.waitForElement(documentLocator, "2000");
 		app.zPageBriefcase.zClick(documentLocator);
 
 		// Click on Delete document icon in toolbar

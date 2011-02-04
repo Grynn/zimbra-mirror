@@ -388,11 +388,10 @@ public class PageBriefcase extends AbsTab {
 		logger.info(myPageName() + " zListItem(" + action + ", " + name + ")");
 		AbsPage page = null;
 		String listLocator;
-		String rowLocator;
 		String itemlocator;
 
 		listLocator = "div[id='zl__BDLV__rows'][class='DwtListView-Rows']";
-		rowLocator = "div[id^='zli__BDLV__']";
+		//String rowLocator = rowLocator = "div[id^='zli__BDLV__']";
 		// rowLocator = "css=div:contains[id^='zli__BDLV__']";
 		// rowLocator = "css=div:contains[id:contains('zli__BDLV__')]";
 		if (!this.sIsElementPresent("css=" + listLocator))

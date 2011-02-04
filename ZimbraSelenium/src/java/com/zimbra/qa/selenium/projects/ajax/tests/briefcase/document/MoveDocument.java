@@ -50,13 +50,11 @@ public class MoveDocument extends AjaxCommonTest {
 		app.zPageBriefcase.zNavigateTo();
 
 		// refresh briefcase page
-		// ClientSessionFactory.session().selenium().refresh();
-		app.zPageBriefcase.zClick(Locators.zBriefcaseFolderIcon);
-
-		app.zPageBriefcase.waitForElement(subfolderLocator, "5000");
+		app.zPageBriefcase.pageRefresh(true);
 
 		// Click on created subfolder
 		// app.zPageBriefcase.zListItem(Action.A_LEFTCLICK,subfolder.getName());
+		app.zPageBriefcase.waitForElement(subfolderLocator, "5000");
 		app.zPageBriefcase.zClick(subfolderLocator);
 
 		// Create document item
@@ -81,10 +79,7 @@ public class MoveDocument extends AjaxCommonTest {
 		// document.importFromSOAP(account, document.getDocName());
 
 		// refresh briefcase page
-		// ClientSessionFactory.session().selenium().refresh();
-		app.zPageBriefcase.zClick(Locators.zBriefcaseFolderIcon);
-
-		app.zPageBriefcase.waitForElement(documentLocator, "5000");
+		app.zPageBriefcase.pageRefresh(true);
 
 		/*
 		 * app.zPageBriefcase.waitForCondition("selenium.isElementPresent(\"" +
@@ -94,6 +89,7 @@ public class MoveDocument extends AjaxCommonTest {
 
 		// Click on created document
 		// app.zPageBriefcase.zListItem(Action.A_LEFTCLICK,document.getDocName());
+		app.zPageBriefcase.waitForElement(documentLocator, "5000");
 		app.zPageBriefcase.zClick(documentLocator);
 
 		// Click on Move selected item icon in toolbar

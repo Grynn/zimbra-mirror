@@ -43,6 +43,8 @@ public class CreateDocument extends AjaxCommonTest {
 			documentBriefcaseNew.zFill(document);
 
 			// Save and close
+			app.zPageBriefcase.zSelectWindow("Zimbra Docs");
+
 			documentBriefcaseNew.zSubmit();
 		} finally {
 			documentBriefcaseNew.zSelectWindow("Zimbra: Briefcase");
@@ -56,6 +58,7 @@ public class CreateDocument extends AjaxCommonTest {
 		app.zPageBriefcase.pageRefresh(true);
 
 		// Click on created document
+		app.zPageBriefcase.waitForElement(documentLocator, "2000");
 		app.zPageBriefcase.zClick(documentLocator);
 
 		// Click on open in a separate window icon in toolbar
@@ -78,6 +81,8 @@ public class CreateDocument extends AjaxCommonTest {
 			text = documentBriefcaseOpen.retriveDocumentText();
 
 			// close
+			app.zPageBriefcase.zSelectWindow(docName);
+			
 			app.zPageBriefcase.closeWindow();
 		} finally {
 			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");

@@ -53,6 +53,7 @@ public class EditDocument extends AjaxCommonTest {
 		app.zPageBriefcase.pageRefresh(true);
 
 		// Click on created document
+		app.zPageBriefcase.waitForElement(documentLocator, "2000");
 		app.zPageBriefcase.zClick(documentLocator);
 
 		// Click on Edit document icon in toolbar
@@ -76,7 +77,7 @@ public class EditDocument extends AjaxCommonTest {
 
 			// Save and close
 			app.zPageBriefcase.zSelectWindow(docName);
-			
+
 			documentBriefcaseEdit.zSubmit();
 		} catch (Exception ex) {
 			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
@@ -144,6 +145,7 @@ public class EditDocument extends AjaxCommonTest {
 		app.zPageBriefcase.pageRefresh(true);
 
 		// Click on created document
+		app.zPageBriefcase.waitForElement(documentLocator, "2000");
 		app.zPageBriefcase.zClick(documentLocator);
 
 		// Click on Edit document icon in toolbar
@@ -174,7 +176,7 @@ public class EditDocument extends AjaxCommonTest {
 
 			// Save and close
 			app.zPageBriefcase.zSelectWindow(docName);
-			
+
 			documentBriefcaseEdit.zSubmit();
 		} catch (Exception ex) {
 			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
@@ -192,6 +194,7 @@ public class EditDocument extends AjaxCommonTest {
 		app.zPageBriefcase.pageRefresh(true);
 
 		// Click on created document
+		app.zPageBriefcase.waitForElement(documentLocator, "2000");
 		app.zPageBriefcase.zClick(documentLocator);
 
 		// Click on open in a separate window icon in toolbar
@@ -214,6 +217,8 @@ public class EditDocument extends AjaxCommonTest {
 			text = documentBriefcaseOpen.retriveDocumentText();
 
 			// close
+			app.zPageBriefcase.zSelectWindow(docName);
+			
 			app.zPageBriefcase.closeWindow();
 		} finally {
 			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
@@ -290,6 +295,7 @@ public class EditDocument extends AjaxCommonTest {
 		app.zPageBriefcase.pageRefresh(true);
 
 		// Click on created document
+		app.zPageBriefcase.waitForElement(documentLocator, "2000");
 		app.zPageBriefcase.zClick(documentLocator);
 
 		// Click on open in a separate window icon in toolbar
@@ -310,6 +316,8 @@ public class EditDocument extends AjaxCommonTest {
 			text = documentBriefcaseOpen.retriveDocumentText();
 
 			// close
+			app.zPageBriefcase.zSelectWindow(docName);
+			
 			app.zPageBriefcase.closeWindow();
 		} finally {
 			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
@@ -351,6 +359,7 @@ public class EditDocument extends AjaxCommonTest {
 		app.zPageBriefcase.pageRefresh(true);
 
 		// Click on created document
+		app.zPageBriefcase.waitForElement(documentLocator, "2000");
 		app.zPageBriefcase.zClick(documentLocator);
 
 		// Click on Edit document icon in toolbar
@@ -388,6 +397,7 @@ public class EditDocument extends AjaxCommonTest {
 		app.zPageBriefcase.pageRefresh(true);
 
 		// Click on created document
+		app.zPageBriefcase.waitForElement(documentLocator, "2000");
 		app.zPageBriefcase.zClick(documentLocator);
 
 		// Click on open in a separate window icon in toolbar
@@ -407,6 +417,8 @@ public class EditDocument extends AjaxCommonTest {
 			text = documentBriefcaseOpen.retriveDocumentText();
 
 			// close
+			app.zPageBriefcase.zSelectWindow(docName);
+			
 			app.zPageBriefcase.closeWindow();
 		} finally {
 			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
