@@ -230,7 +230,7 @@ Dwt.CLEAR = -20000;
  */
 Dwt.LOC_NOWHERE = -10000;
 
-// Drag N Drop action constants
+// Drag N Drop action constants. These are bit fields.
 /**
  * No drag and drop operation.
  */
@@ -351,7 +351,7 @@ function(domElement, attrName) {
 };
 
 /**
- * Returns true if el2 is an ancestor (in the parent chain) of el1, or if
+ * Returns true if el1 is an ancestor (in the parent chain) of el2, or if
  * el1 and el2 are the same element.
  *
  * @param {DOMElement}	el1
@@ -364,10 +364,10 @@ function(el1, el2) {
 		return true;
 	}
 
-	var el = el1;
+	var el = el2;
 	while (el) {
 		el = el.parentNode;
-		if (el == el2) {
+		if (el == el1) {
 			return true;
 		}
 	}
@@ -1453,4 +1453,24 @@ function() {
 	else if (window.getSelection) {
 		window.getSelection().removeAllRanges();
 	}
+};
+
+/**
+ * Returns true if the two elements overlap.
+ * 
+ * @param el1
+ * @param el2
+ */
+Dwt.doOverlap =
+function(el1, el2) {
+
+	if (!el1 || !el2) { return false; }
+
+	var loc1 = Dwt.getLocation(el1), loc2 = Dwt.getLocation(el2);
+	var size1 = Dwt.getSize(el1), size2 = Dwt.getSize(el2);
+	var left1 = loc1.x, left2 = loc2.x, top1 = loc1.y, top2 = loc2.y;
+	var right1 = left1 + size1.x, right2 = left2 + size2.x;
+	var bottom1 = top1 + size1.y, bottom2 = top2 + size2.y;
+
+	return !(left1 > right2 || right1 < left2 || top1 > bottom2 || bottom1 < top2);
 };

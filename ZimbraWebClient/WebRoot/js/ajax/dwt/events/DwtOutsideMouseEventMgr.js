@@ -253,12 +253,10 @@ function(ev) {
 		for (var i = 0; i < elementIds.length; i++) {
 			DBG.println("out", "check: " + elementIds[i]);
 			var el = document.getElementById(elementIds[i]);
-			if (Dwt.isAncestor(targetEl, el)) {
-				DBG.println("out", targetEl.id + " is an ancestor of " + el.id);
+			if (Dwt.isAncestor(el, targetEl)) {
 				runListener = false;
 				break;
 			}
-			DBG.println("out", targetEl.id + " is NOT an ancestor of " + el.id);
 		}
 		if (runListener) {
 			DBG.println("out", "run listener for: " + context.id);

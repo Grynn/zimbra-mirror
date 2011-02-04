@@ -1058,16 +1058,8 @@ function() {
 DwtControl.prototype.setDragSource =
 function(dragSource) {
 	this._dragSource = dragSource;
-	if (dragSource != null && this._ctrlCaptureObj == null) {
-		this._ctrlCaptureObj = new DwtMouseEventCapture({
-			targetObj:this,
-			id:"DwtControl",
-			mouseOverHdlr:DwtControl.__mouseOverHdlr,
-			mouseDownHdlr:DwtControl.__mouseDownHdlr,
-			mouseMoveHdlr:DwtControl.__mouseMoveHdlr,
-			mouseUpHdlr:DwtControl.__mouseUpHdlr,
-			mouseOutHdlr:DwtControl.__mouseOutHdlr
-		});
+	if (dragSource && !this._ctrlCaptureObj) {
+		this.__initCapture();
 		this._dndHoverAction = new AjxTimedAction(null, this.__dndDoHover);
 	}
 };
@@ -1096,6 +1088,47 @@ function() {
 DwtControl.prototype.setDropTarget =
 function(dropTarget) {
 	this._dropTarget = dropTarget;
+};
+
+/**
+ * Gets the control drag box.
+ *
+ * @return {DwtDragBox}		the control drag box or <code>null</code> for none
+ *
+ * @see #setDragBox
+ */
+DwtControl.prototype.getDragBox =
+function() {
+	return this._dragBox;
+};
+
+/**
+ * Set the control drag box. The drag box handles the display of a dotted rectangle
+ * that is typically used to select items.
+ *
+ * @param {DwtDragBox} dragBox		the control drag box
+ *
+ * @see #getDragBox
+ */
+DwtControl.prototype.setDragBox =
+function(dragBox) {
+	this._dragBox = dragBox;
+	if (dragBox && !this._ctrlCaptureObj) {
+		this.__initCapture();
+	}
+};
+
+DwtControl.prototype.__initCapture =
+function(dragBox) {
+	this._ctrlCaptureObj = new DwtMouseEventCapture({
+		targetObj:		this,
+		id:				"DwtControl",
+		mouseOverHdlr:	DwtControl.__mouseOverHdlr,
+		mouseDownHdlr:	DwtControl.__mouseDownHdlr,
+		mouseMoveHdlr:	DwtControl.__mouseMoveHdlr,
+		mouseUpHdlr:	DwtControl.__mouseUpHdlr,
+		mouseOutHdlr:	DwtControl.__mouseOutHdlr
+	});
 };
 
 /**
@@ -1896,6 +1929,16 @@ function(ev) {
 };
 
 /**
+ * Returns the type of drag operation we are performing.
+ *
+ * @param mouseEv
+ */
+DwtControl.prototype._getDragOp =
+function(mouseEv) {
+	return mouseEv.ctrlKey ? Dwt.DND_DROP_COPY : Dwt.DND_DROP_MOVE;
+};
+
+/**
  * Subclasses may override this protected method to return an HTML element that will represent
  * the dragging icon. The icon must be created on the DwtShell widget. This means that the
  * icon must be a child of the shells HTML component If this method returns
@@ -1924,6 +1967,19 @@ function(dragOp) {
 	return null;
 };
 
+DwtControl.prototype.getDragSelectionBox =
+function(dragOp) {
+
+	if (!this._dragSelectionBox) {
+		var box = this._dragSelectionBox = document.createElement("div");
+		box.className = "dndSelectionBox";
+		Dwt.setPosition(box, Dwt.ABSOLUTE_STYLE);
+		this.shell.getHtmlElement().appendChild(box);
+		Dwt.setZIndex(box, Dwt.Z_DND);
+	}
+	return this._dragSelectionBox;
+};
+
 /**
  * Subclasses may override this method to set the DnD icon properties based on whether drops are
  * allowed. The default implementation sets the class on the HTML element obtained
@@ -1949,7 +2005,9 @@ function(dragOp) {
  */
 DwtControl.prototype._setDragProxyState =
 function(dropAllowed) {
-	Dwt.condClass(this._dndProxy, dropAllowed, DwtCssStyle.DROPPABLE, DwtCssStyle.NOT_DROPPABLE);
+	if (this._dndProxy) {
+		Dwt.condClass(this._dndProxy, dropAllowed, DwtCssStyle.DROPPABLE, DwtCssStyle.NOT_DROPPABLE);
+	}
 };
 
 
@@ -1989,6 +2047,16 @@ function(icon) {
 			icon = null;
 		}
 	}
+};
+
+DwtControl.prototype.destroyDragSelectionBox =
+function() {
+
+	var box = this._dragSelectionBox;
+	if (box && box.parentNode) {
+		box.parentNode.removeChild(box);
+	}
+	this._dragSelectionBox = null;
 };
 
 /**
@@ -2635,9 +2703,19 @@ function(ev) {
 		} catch (ex) {
 			DBG.dumpObj(ex);
 		}
-		obj._dragOp = (mouseEv.ctrlKey) ? Dwt.DND_DROP_COPY : Dwt.DND_DROP_MOVE;
+		obj._dragOp = obj._getDragOp(mouseEv);
 		obj.__dragStartX = mouseEv.docX;
 		obj.__dragStartY = mouseEv.docY;
+	}
+	else if (obj._dragBox) {
+		// We do mouse capture for drag boxes mostly because the mouseup can come from anywhere, and we
+		// want to handle it, usually by destroying the box.
+		try {
+			obj._ctrlCaptureObj.capture();
+		} catch (ex) {
+			DBG.dumpObj(ex);
+		}
+		obj._dragBox._setStart(mouseEv, obj);
 	}
 
 	return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEDOWN, obj, mouseEv);
@@ -2655,14 +2733,12 @@ function(ev) {
 
 	try {
 
-	// If captureObj == null, then we are not a Draggable control or a
-	// mousedown event has not occurred , so do the default behaviour,
-	// else do the draggable behaviour
+	// Find the target control. If we're doing capture (DnD), we get it from the capture object.
 	var captureObj = (DwtMouseEventCapture.getId() == "DwtControl") ? DwtMouseEventCapture.getCaptureObj() : null;
 	var obj = captureObj ? captureObj.targetObj : DwtControl.getTargetControl(ev);
  	if (!obj) { return false; }
 
-	//DND cancel point
+	// DnD hover cancel point
 	if (obj.__dndHoverActionId != -1) {
 		AjxTimedAction.cancelAction(obj.__dndHoverActionId);
 		obj.__dndHoverActionId = -1;
@@ -2681,13 +2757,13 @@ function(ev) {
 	}
 
 	// If we are not draggable or if we have not started dragging and are
-	// within the Drag threshold then simply handle it as a move.
-	if (obj._dragSource == null || captureObj == null
-		|| (obj != null && obj._dragging == DwtControl._NO_DRAG
-			&& Math.abs(obj.__dragStartX - mouseEv.docX) <
-			   DwtControl.__DRAG_THRESHOLD
-			&& Math.abs(obj.__dragStartY - mouseEv.docY) <
-			   DwtControl.__DRAG_THRESHOLD)) {
+	// within the Drag threshold then handle it as a move.
+	var doingDnD = (obj._dragSource && captureObj &&
+			(Math.abs(obj.__dragStartX - mouseEv.docX) >= DwtControl.__DRAG_THRESHOLD ||
+			 Math.abs(obj.__dragStartY - mouseEv.docY) >= DwtControl.__DRAG_THRESHOLD));
+	var doingDragBox = (captureObj && obj._dragBox && obj._dragBox._dragObj == obj);
+
+	if (!doingDnD && !doingDragBox) {
 		if (obj.__hasToolTipContent()) {
 			var shell = DwtShell.getShell(window);
 			var manager = shell.getHoverMgr();
@@ -2709,85 +2785,91 @@ function(ev) {
 		}
 		return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEMOVE, obj, mouseEv);
 	} else {
-		// Deal with mouse moving out of the window etc...
-
-		// If we are not dragging, then see if we can drag.
-		// If we cannot drag this control, then
-		// we will set dragging status to DwtControl._DRAG_REJECTED
+		// If we are not dragging, try to begin a drag operation, which may be either DnD or drawing a box.
 		if (obj._dragging == DwtControl._NO_DRAG) {
-			obj._dragOp = obj._dragSource._beginDrag(obj._dragOp, obj);
-			if (obj._dragOp != Dwt.DND_DROP_NONE) {
-				obj._dragging = DwtControl._DRAGGING;
-				obj._dndProxy = obj._getDragProxy(obj._dragOp);
-				Dwt.addClass(obj._dndProxy, "DwtDragProxy");
-				if (obj._dndProxy == null)
+			if (obj._dragSource) {
+				obj._dragOp = obj._dragSource._beginDrag(obj._dragOp, obj);
+				if (obj._dragOp != Dwt.DND_DROP_NONE) {
+					obj._dragging = DwtControl._DRAGGING;
+					obj._dndProxy = obj._getDragProxy(obj._dragOp);
+					Dwt.addClass(obj._dndProxy, "DwtDragProxy");
+					if (!obj._dndProxy) {
+						obj._dragging = DwtControl._DRAG_REJECTED;
+					}
+				} else {
 					obj._dragging = DwtControl._DRAG_REJECTED;
-			} else {
-				obj._dragging = DwtControl._DRAG_REJECTED;
+				}
+			}
+			else if (obj._dragBox) {
+				obj._dragging = DwtControl._DRAGGING;
+				obj._dragBox._beginDrag(obj);
 			}
 		}
 
-		// If we are draggable, then see if the control under the mouse
-		// (if one exists) will allow us to be dropped on it.
-		// This is done by (a) making sure that the drag source data type
-		// can be dropped onto the target, and (b) that the application
-		// will allow it (i.e. via the listeners on the DropTarget
 		if (obj._dragging != DwtControl._DRAG_REJECTED) {
-			var destDwtObj = mouseEv.dwtObj;
-			if (destDwtObj) {
-				// Set up the drag hover event. we will even let this item hover over itself as there may be
-				// scenarios where that will hold true
-				obj._dndHoverAction.args = [ destDwtObj ];
-				obj.__dndHoverActionId = AjxTimedAction.scheduleAction(obj._dndHoverAction, DwtControl.__DND_HOVER_DELAY);
-			}
+			var targetObj = mouseEv.dwtObj;
+			if (obj._dragSource) {
+				var dropTarget = targetObj && targetObj._dropTarget;
+				var lastTargetObj = obj.__lastTargetObj;
+				if (targetObj) {
+					// Set up the drag hover event. we will even let this item hover over itself as there may be
+					// scenarios where that will hold true
+					obj._dndHoverAction.args = [ targetObj ];
+					obj.__dndHoverActionId = AjxTimedAction.scheduleAction(obj._dndHoverAction, DwtControl.__DND_HOVER_DELAY);
+				}
 
-			if (destDwtObj && destDwtObj._dropTarget && destDwtObj != obj) {
-				if (destDwtObj != obj.__lastDestDwtObj ||
-				    destDwtObj._dropTarget.hasMultipleTargets()) {
-					if (destDwtObj._dropTarget._dragEnter(obj._dragOp, destDwtObj,
-									      obj._dragSource._getData(),
-									      mouseEv, obj._dndProxy))
-					{
-						obj._setDragProxyState(true);
-						obj.__dropAllowed = true;
-						destDwtObj._dragEnter(mouseEv);
-					} else {
-						obj._setDragProxyState(false);
-						obj.__dropAllowed = false;
+				// See if the target will allow us to be dropped on it. We have to be an allowable type, and the
+				// target's drop listener may perform additional checks. The DnD icon will typically turn green or
+				// red to indicate whether a drop is allowed.
+				if (targetObj && dropTarget && (targetObj != obj)) {
+					if (targetObj != lastTargetObj || dropTarget.hasMultipleTargets()) {
+						var data = obj._dragSource._getData();
+						if (dropTarget._dragEnter(obj._dragOp, targetObj, data, mouseEv, obj._dndProxy)) {
+							obj._setDragProxyState(true);
+							obj.__dropAllowed = true;
+							targetObj._dragEnter(mouseEv);
+						} else {
+							obj._setDragProxyState(false);
+							obj.__dropAllowed = false;
+						}
+					} else if (obj.__dropAllowed) {
+						targetObj._dragOver(mouseEv);
 					}
-				} else if (obj.__dropAllowed) {
-					destDwtObj._dragOver(mouseEv);
-				}
-			} else {
-				obj._setDragProxyState(false);
-			}
-
-			if (obj.__lastDestDwtObj && obj.__lastDestDwtObj != destDwtObj
-				&& obj.__lastDestDwtObj._dropTarget
-				&& obj.__lastDestDwtObj != obj) {
-
-				// check if obj dragged out of scrollable container
-				if (destDwtObj && !destDwtObj._dndScrollCallback && obj.__lastDestDwtObj._dndScrollCallback) {
-					obj.__lastDestDwtObj._dndScrollCallback.run(mouseEv);
+				} else {
+					obj._setDragProxyState(false);
 				}
 
-				obj.__lastDestDwtObj._dragLeave(mouseEv);
-				obj.__lastDestDwtObj._dropTarget._dragLeave();
+				// Tell the previous target that we're no longer being dragged over it.
+				if (lastTargetObj && lastTargetObj != targetObj && lastTargetObj._dropTarget && lastTargetObj != obj) {
+					// check if obj dragged out of scrollable container
+					if (targetObj && !targetObj._dndScrollCallback && lastTargetObj._dndScrollCallback) {
+						lastTargetObj._dndScrollCallback.run(mouseEv);
+					}
+
+					lastTargetObj._dragLeave(mouseEv);
+					lastTargetObj._dropTarget._dragLeave();
+				}
+
+				obj.__lastTargetObj = targetObj;
+
+				if ((targetObj != obj) && targetObj && targetObj._dndScrollCallback) {
+					targetObj._dndScrollCallback.run(mouseEv);
+				}
+
+				// Move the DnD icon. We offset the location slightly so the icon doesn't receive the mousemove events.
+				Dwt.setLocation(obj._dndProxy, mouseEv.docX + 2, mouseEv.docY + 2);
 			}
 
-			obj.__lastDestDwtObj = destDwtObj;
-
-			if ((destDwtObj != obj) && destDwtObj && destDwtObj._dndScrollCallback) {
-				destDwtObj._dndScrollCallback.run(mouseEv);
+			// We keep drawing a drag box as long as we're still over the owning object. We need to check its child
+			// objects, and whether we're over the box itself (in case the user reverses direction).
+			else if (obj._dragBox) {
+				var evTarget = DwtUiEvent.getTarget(ev);
+				if (targetObj && (Dwt.isAncestor(obj.getHtmlElement(), evTarget) || evTarget == obj._dragSelectionBox)) {
+					obj._dragBox._dragMove(mouseEv, obj);
+				}
 			}
 
-			Dwt.setLocation(obj._dndProxy, mouseEv.docX + 2, mouseEv.docY + 2);
-			// TODO set up timed event to fire off another mouseover event.
-			// Also need to cancel
-			// any pending event, though we should do the cancel earlier
-			// in the code
 		} else {
-			// XXX: confirm w/ ROSS!
 			DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEMOVE, obj, mouseEv);
 		}
 		mouseEv._stopPropagation = true;
@@ -2809,12 +2891,12 @@ function(ev) {
 
 	try {
 
-	// See if are doing a drag n drop operation
+	// Find the target control. If we're doing capture (DnD), we get it from the capture object.
 	var captureObj = (DwtMouseEventCapture.getId() == "DwtControl") ? DwtMouseEventCapture.getCaptureObj() : null;
 	var obj = captureObj ? captureObj.targetObj : DwtControl.getTargetControl(ev);
 	if (!obj) { return false; }
 
-	//DND
+	// DnD hover cancel point
 	if (obj.__dndHoverActionId != -1) {
 		AjxTimedAction.cancelAction(obj.__dndHoverActionId);
 		obj.__dndHoverActionId = -1;
@@ -2822,33 +2904,39 @@ function(ev) {
 
 	var mouseEv = DwtShell.mouseEvent;
 	mouseEv.setFromDhtmlEvent(ev, captureObj ? true : obj);
-	if (!obj._dragSource || !captureObj) {
+	if (!(captureObj && (obj._dragSource || obj._dragBox))) {
 		return DwtControl.__processMouseUpEvent(ev, obj, mouseEv);
 	} else {
 		captureObj.release();
 		if (obj._dragging != DwtControl._DRAGGING) {
 			obj._dragging = DwtControl._NO_DRAG;
 			return DwtControl.__processMouseUpEvent(ev, obj, mouseEv);
-		} else {
-			obj.__lastDestDwtObj = null;
-			var destDwtObj = mouseEv.dwtObj;
-			if (destDwtObj && destDwtObj._dropTarget &&	obj.__dropAllowed && destDwtObj != obj) {
-				destDwtObj._drop(mouseEv);
-				destDwtObj._dropTarget._drop(obj._dragSource._getData(), mouseEv);
+		}
+		if (obj._dragSource) {
+			obj.__lastTargetObj = null;
+			var targetObj = mouseEv.dwtObj;
+			var dropTarget = targetObj && targetObj._dropTarget;
+			// Perform the drop if the target has allowed it
+			if (targetObj && dropTarget && obj.__dropAllowed && (targetObj != obj)) {
+				targetObj._drop(mouseEv);
+				dropTarget._drop(obj._dragSource._getData(), mouseEv);
 				obj._dragSource._endDrag();
 				obj._destroyDragProxy(obj._dndProxy);
 				obj._dragging = DwtControl._NO_DRAG;
 			} else {
 				DwtControl.__badDrop(obj, mouseEv);
 			}
-			if (destDwtObj && destDwtObj._dndScrollCallback) {
-				destDwtObj._dndScrollCallback.run(mouseEv);
+			if (targetObj && targetObj._dndScrollCallback) {
+				targetObj._dndScrollCallback.run(mouseEv);
 			}
-			mouseEv._stopPropagation = true;
-			mouseEv._returnValue = false;
-			mouseEv.setToDhtmlEvent(ev);
-			return false;
 		}
+		else if (obj._dragBox) {
+			obj._dragBox._endDrag(obj);
+		}
+		mouseEv._stopPropagation = true;
+		mouseEv._returnValue = false;
+		mouseEv.setToDhtmlEvent(ev);
+		return false;
 	}
 
 	} catch (ex) {

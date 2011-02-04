@@ -67,19 +67,24 @@ DwtDragEvent = function() {
 /**
  * Drag is starting.
  */
-DwtDragEvent.DRAG_START = 1;
+DwtDragEvent.DRAG_START = "START";
 
 /**
  * Set the <code>srcData</code> field of the event.
  */
-DwtDragEvent.SET_DATA = 2;
+DwtDragEvent.SET_DATA = "SET_DATA";
+
+/**
+ * Drag movement has occurred.
+ */
+DwtDragEvent.DRAG_MOVE = "MOVE";
 
 /**
  * Drag has ended.
  */
-DwtDragEvent.DRAG_END = 3;
+DwtDragEvent.DRAG_END = "END";
 
 /**
  * Drag canceled (i.e. dropped on invalid target).
  */
-DwtDragEvent.DRAG_CANCEL = 4;
+DwtDragEvent.DRAG_CANCEL = "CANCEL";
