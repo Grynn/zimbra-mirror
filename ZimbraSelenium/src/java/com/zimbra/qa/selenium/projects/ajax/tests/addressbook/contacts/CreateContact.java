@@ -42,9 +42,8 @@ public class CreateContact extends AjaxCommonTest  {
 			
 		FormContactNew formContactNew = (FormContactNew)app.zPageAddressbook.zToolbarPressButton(Button.B_NEW);
 				
-			
 		//verify form contact new page is displayed
-		ZAssert.assertTrue(app.zPageAddressbook.sIsElementPresent("xpath=//div[@id='editcontactform']"),"new contact form not displayed");
+		ZAssert.assertTrue(formContactNew.zIsActive(),"Verify new contact form is displayed");
 		
         // Fill in the form
 	    formContactNew.zFill(contactItem);
