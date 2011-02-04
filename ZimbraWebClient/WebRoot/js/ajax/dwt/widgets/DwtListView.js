@@ -269,16 +269,17 @@ function(htmlArr, idx, headerCol, i, numCols, id, defaultColumnSort) {
 	htmlArr[idx++] = "<td id='";
 	htmlArr[idx++] = id;
 	htmlArr[idx++] = "' class='";
-	htmlArr[idx++] = (id == this._currentColId)
-		? "DwtListView-Column DwtListView-ColumnActive'"
-		: "DwtListView-Column'";
+    var tmpClass = (id == this._currentColId) ? "DwtListView-Column DwtListView-ColumnActive"
+		: "DwtListView-Column";
+    tmpClass += headerCol._sortable ? "" : " DwtDefaultCursor";
+    htmlArr[idx++] = tmpClass + "'";
 	if (headerCol._width) {
 		htmlArr[idx++] = " width=";
 		htmlArr[idx++] = headerCol._width;
 		if (headerCol._widthUnits) {
 			htmlArr[idx++] = headerCol._widthUnits;
 		}
-	}
+    }
 	htmlArr[idx++] = ">";
 	// must add a div to force clipping :(
 	htmlArr[idx++] = "<div";
@@ -1742,6 +1743,9 @@ function(mouseEv, div) {
 		div.className = (div.id != this._currentColId)
 			? "DwtListView-Column"
 			: "DwtListView-Column DwtListView-ColumnActive";
+        var hdr = this.getItemFromElement(div);
+        if (!hdr._sortable)
+            div.className += " DwtDefaultCursor";
 	} else if (type == DwtListView.TYPE_HEADER_SASH) {
 		div.style.cursor = "auto";
 	}

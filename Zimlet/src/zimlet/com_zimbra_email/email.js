@@ -453,6 +453,22 @@ function(actionMenu) {
 	this._resetFilterMenu();
 };
 
+EmailTooltipZimlet.prototype.createSearchMenu =
+function(actionMenu) {
+	if (this._searchMenu) { return; }
+
+    var list = [ZmOperation.SEARCH, ZmOperation.SEARCH_TO];
+    var overrides = {};
+    overrides[ZmOperation.SEARCH] = {textKey:"findEmailFromRecipient"};
+    overrides[ZmOperation.SEARCH_TO] = {textKey:"findEmailToRecipient"};
+
+    this._searchMenu = new ZmActionMenu({parent:actionMenu, menuItems:list, overrides:overrides});
+    var searchOp = actionMenu.getOp("SEARCHEMAILS");
+    searchOp.setMenu(this._searchMenu);
+};
+
+
+
 EmailTooltipZimlet.prototype._resetFilterMenu =
 function() {
 	var filterItems = this._filterMenu.getItems();
@@ -533,6 +549,9 @@ function(obj, span, context) {
 		this.createFilterMenu(actionMenu);
 	}
 
+    if (!isDetachWindow && appCtxt.get(ZmSetting.SEARCH_ENABLED) && actionMenu.getOp("SEARCHEMAILS"))
+        this.createSearchMenu(actionMenu);
+
 	var addr = (obj instanceof AjxEmailAddress) ? obj.getAddress() : obj;
 	if (this.isMailToLink(addr)) {
 		addr = (this.parseMailToLink(addr)).to || addr;
@@ -560,8 +579,17 @@ function(obj, span, context) {
 	}
     else{
         if (obj && obj.type) {
-            var findEmailMsg = obj.type=="TO" ? ZmMsg.findEmailByToRecpt : obj.type=="CC" ? ZmMsg.findEmailByCCRecpt : ZmMsg.findEmailBySender;
-            ZmOperation.setOperation(actionMenu, ZmOperation.SEARCH, ZmOperation.SEARCH, findEmailMsg);
+            if (actionMenu.getOp("SEARCHEMAILS")){
+                 if (obj.type == "FROM"){
+                    ZmOperation.setOperation(this._searchMenu, ZmOperation.SEARCH, ZmOperation.SEARCH, ZmMsg.findEmailFromSender);
+                    ZmOperation.setOperation(this._searchMenu, ZmOperation.SEARCH_TO, ZmOperation.SEARCH_TO, ZmMsg.findEmailToSender);
+                 } else{
+                    ZmOperation.setOperation(this._searchMenu, ZmOperation.SEARCH, ZmOperation.SEARCH, ZmMsg.findEmailFromRecipient);
+                    ZmOperation.setOperation(this._searchMenu, ZmOperation.SEARCH_TO, ZmOperation.SEARCH_TO, ZmMsg.findEmailToRecipient);
+                 }
+                 this._searchMenu.addSelectionListener("SEARCH", new AjxListener(this, this.menuItemSelected,["SEARCH",obj]));
+                 this._searchMenu.addSelectionListener("SEARCH_TO", new AjxListener(this, this.menuItemSelected,["SEARCH_TO", obj]));
+            }
         }
     }
 
@@ -653,6 +681,7 @@ EmailTooltipZimlet.prototype.menuItemSelected =
 function(itemId, item, ev) {
 	switch (itemId) {
 		case "SEARCH":			this._searchListener();		break;
+        case "SEARCH_TO":        this._searchToListener();   break;
 		case "SEARCHBUILDER":	this._browseListener();		break;
 		case "NEWEMAIL":		this._composeListener(ev);	break;
 		case "NEWIM":			this._newImListener(ev);	break;
@@ -778,6 +807,15 @@ function() {
 		addr = (this.parseMailToLink(addr)).to || addr;
 	}
 	appCtxt.getSearchController().fromSearch(this._getAddress(addr));
+};
+
+EmailTooltipZimlet.prototype._searchToListener =
+function() {
+	var addr = this._getAddress(this._actionObject);
+	if (this.isMailToLink(addr)) {
+		addr = (this.parseMailToLink(addr)).to || addr;
+	}
+	appCtxt.getSearchController().toSearch(this._getAddress(addr));
 };
 
 EmailTooltipZimlet.prototype._filterListener =

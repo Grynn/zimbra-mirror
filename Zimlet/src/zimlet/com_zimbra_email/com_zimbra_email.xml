@@ -13,7 +13,7 @@
 			<regex attrs="ig">\b(mailto:[ ]*)?([0-9a-zA-Z]+[.&amp;#!$%'*+-/=?^_`{}|~])*[0-9a-zA-Z]+@([-0-9a-zA-Z]+[.])+[a-zA-Z]{2,6}([\w/_\.]*(\?\S+)?)\b</regex>
 		</matchOn>
 		<contextMenu>
-			<menuItem label="${msg.findEmailBySender}" icon="Search" id="SEARCH"/>
+			<menuItem label="${msg.findEmails}" icon="Search" id="SEARCHEMAILS"/>
 			<menuItem label="${msg.advancedSearch}" icon="SearchBuilder" id="SEARCHBUILDER"/>
 			<menuItem label="${msg.newEmail}" icon="NewMessage" id="NEWEMAIL"/>
 			<menuItem label="${msg.newIM}" icon="ImAvailable" id="NEWIM"/>
