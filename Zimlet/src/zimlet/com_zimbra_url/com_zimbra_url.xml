@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_url" version="2.2" label="URL Links" target="main view-window" description="Highlight Web URLs for linking in email messages.">
+<zimlet name="com_zimbra_url" version="2.2" label="${msg.zimletLabel}" target="main view-window" description="${msg.description}">
 	<include>url.js</include>
 	<resource>blank_pixel.gif</resource>
 	<handlerObject>Com_Zimbra_Url</handlerObject>
