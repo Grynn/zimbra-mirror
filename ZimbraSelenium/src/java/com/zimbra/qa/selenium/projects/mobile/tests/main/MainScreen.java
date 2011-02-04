@@ -45,7 +45,7 @@ public class MainScreen extends MobileCommonTest {
 		// The copyright doesn't seem to be translated
 		//use "\u00a9" (char)169 for Copyright ©
 		
-		String copyright = "Copyright " + "\u00a9" + " 2008-2011 Zimbra, Inc.";
+		String copyright = "Copyright " + "\u00a9" + " 2005-2011 VMware, Inc. VMware and Zimbra are registered trademarks or trademarks of VMware, Inc.";
 		
 				
 		ZAssert.assertTrue(app.zPageMain.sIsElementPresent(PageMain.Locators.zMainCopyright),	"Verify that the copyright notice is present");
