@@ -6,197 +6,18 @@ import java.util.*;
 import org.apache.log4j.*;
 import org.dom4j.DocumentException;
 
-import com.zimbra.common.soap.Element;
-import com.zimbra.common.util.ByteUtil;
+import com.zimbra.qa.selenium.results.BugStatus.BugState;
 
 public class ResultsCore {
 	private static Logger logger = LogManager.getLogger(ResultsCore.class);
 	
-	public enum BugState {
-		UNCONFIRMED,
-		NEW,
-		ASSIGNED,
-		REOPENED,
-		RESOLVED,
-		VERIFIED,
-		CLOSED
-	}
-	
+		
+		
 	public ResultsCore() throws IOException {
-		logger.info("new ResultsCore");
+		logger.info("new " + ResultsCore.class.getCanonicalName());
 		
 	}
 	
-	private static File findFile(String filename, File directory) {
-		
-		// If directory is a file, check if it matches
-		if ( directory.isFile() ) {
-			if ( filename.equals(directory.getName()) ) {
-				// Found it!
-				return (directory);
-			}
-			// Not it
-			return (null);
-		}
-		
-		// Check all the directory contents
-		for (File f : directory.listFiles()) {
-			
-			File found = findFile(filename, f);
-			if ( found != null ) {
-				// Found it!
-				return (found);
-			}
-			
-		}
-		
-		// Not found
-		return (null);
-	}
-
-	private Map<String, Boolean> getResults(File root) throws UnsupportedEncodingException, IOException, DocumentException {
-		Map<String, Boolean> map = new HashMap<String, Boolean>();
-		
-		// Find the folder containing the "testng-results.xml" file
-		File results = findFile("testng-results.xml", root);
-		if ( results == null ) {
-			logger.error("Unable to find testng-results.xml in "+ root.getAbsolutePath());
-			return (map);
-		}
-		
-		// Open the testng-results.xml file and convert to Element
-        String docStr = new String(ByteUtil.getContent(results), "utf-8");    	
-        Element docElement = Element.parseXML(docStr);
-        
-        for (Element eClass : getElementsFromPath(docElement, "//class")) {
-        	String clazz = eClass.getAttribute("name", "undefined");
-        	
-        	for (Element eTestmethod : getElementsFromPath(eClass, "//test-method")) {
-        		if ( eTestmethod.getAttribute("is-config", "false").equals("true") )
-        			continue; // skip common* methods
-
-        		String method = eTestmethod.getAttribute("name", "undefined");
-        		Boolean status = eTestmethod.getAttribute("status", "FAIL").equals("PASS");
-        		map.put(clazz + "." + method, status);
-        	}
-        }
-        
-        return (map);
-	}
-	
-	private static final List<File> paths = new ArrayList<File>() {
-		private static final long serialVersionUID = -4098010628463819580L;
-		{
-			add(new File("/opt/qa/testlogs/BugReports"));
-			add(new File("T:\\BugReports"));
-			add(new File("C:\\BugReports"));
-		}};
-
-	private void getBugzillaData(Map<String, BugState> status, Map<String, List<String>> testcase, Map<String, String> contact) throws IOException {
-
-		// Find where the database files are located
-		File path = null;
-		for (File f : paths) {
-			if ( f.exists() ) {
-				path = f;
-				break;
-			}
-		}
-		
-		if ( path == null ) {
-			logger.error("Unable to open the database path");
-			return;
-		}
-		
-		File bugStatusFile = new File(path, "bugStatus.txt");
-		File bugTestcaseFile = new File(path, "bugTestcase.txt");
-		File bugQAContactFile = new File(path, "bugQaContact.txt");
-
-		BufferedReader reader = null;
-		String line;
-		
-		try {
-			
-			reader = new BufferedReader(new FileReader(bugStatusFile));
-			while ( (line=reader.readLine()) != null ) {
-
-				// Example: 50208	RESOLVED
-				String[] values = line.split("\\s");
-				if ( values.length != 2 ) {
-					logger.warn("bugStatus: invalid line: "+ line);
-					continue;
-				}
-				
-				String bugid = values[0];
-				BugState bugState = BugState.valueOf(values[1]);
-							
-				status.put(bugid, bugState);
-				logger.debug("bugStatus: put "+ line);
-				
-			}
-			
-		} finally {
-			if ( reader != null )
-				reader.close();
-			reader = null;
-		}
-
-		try {
-			
-			reader = new BufferedReader(new FileReader(bugTestcaseFile));
-			while ( (line=reader.readLine()) != null ) {
-	
-				// Example: genesis/data/zmstatctl/basic.rb	29149 40782
-				String[] values = line.split("\\s");
-				if ( values.length <= 1 ) {
-					logger.warn("bugTestcase: invalid line: "+ line);
-					continue;
-				}
-				
-				String bugtestcase = values[0];
-				values = line.replace(bugtestcase, "").split("\\s");
-				
-				testcase.put(bugtestcase, Arrays.asList(values));
-				logger.debug("bugTestcase: put "+ line);
-
-			}
-			
-		} finally {
-			if ( reader != null )
-				reader.close();
-			reader = null;
-		}
-		
-		try {
-			
-			reader = new BufferedReader(new FileReader(bugQAContactFile));
-			while ( (line=reader.readLine()) != null ) {
-				
-				// Example: 42337	sarang@zimbra.com
-
-				String[] values = line.split("\\s");
-				if ( values.length != 2 ) {
-					logger.warn("bugQAContact: invalid line: "+ line);
-					continue;
-				}
-				
-				String bugid = values[0];
-				String bugcontact = values[1];
-				
-				contact.put(bugid, bugcontact);
-				logger.debug("bugQAContact: put "+ line);
-
-			}
-			
-		} finally {
-			if ( reader != null )
-				reader.close();
-			reader = null;
-		}
-		
-		
-
-	}
 	
 	private List<ReportItem> correlateData(Map<String, Boolean> results, Map<String, BugState> bugStatus, Map<String, List<String>> bugTestcase, Map<String, String> bugContact) {
 		List<ReportItem> items = new ArrayList<ReportItem>();
@@ -224,25 +45,25 @@ public class ResultsCore {
 					continue;
 				}
 
-				for (String id : bugTestcase.get(tcID)) {
+				for (String bugID : bugTestcase.get(tcID)) {
 
-					if (!bugStatus.containsKey(id) ) {
-						logger.error("Unable to determine status tc("+ tcID +") ids("+ bugTestcase.get(tcID) +")");
+					if (!bugStatus.containsKey(bugID) ) {
+						logger.error("Unable to determine status bug("+ bugID +") tc("+ tcID +")");
 						continue;
 					}
 
-					BugState state = bugStatus.get(id);
+					BugState state = bugStatus.get(bugID);
 					if ( state == BugState.VERIFIED || state == BugState.CLOSED ) {
-						item.BugID = id;
+						item.BugID = bugID;
 						item.BugStatus = state;
 						item.NeedsFollowUp = false;
-						item.BugOwner = (bugContact.containsKey(id) ? bugContact.get(id) : "None");
+						item.BugOwner = (bugContact.containsKey(bugID) ? bugContact.get(bugID) : "None");
 						// Keep searching in case another bug ID needs followup
 					} else {
-						item.BugID = id;
+						item.BugID = bugID;
 						item.BugStatus = state;
 						item.NeedsFollowUp = true;
-						item.BugOwner = (bugContact.containsKey(id) ? bugContact.get(id) : "None");
+						item.BugOwner = (bugContact.containsKey(bugID) ? bugContact.get(bugID) : "None");
 						break; // This bug needs followup, all done here.
 					}
 
@@ -265,25 +86,25 @@ public class ResultsCore {
 
 				} else {
 
-					for (String id : bugTestcase.get(tcID)) {
+					for (String bugID : bugTestcase.get(tcID)) {
 
-						if (!bugStatus.containsKey(id) ) {
-							logger.error("Unable to determine status tc("+ tcID +") ids("+ bugTestcase.get(tcID) +")");
+						if (!bugStatus.containsKey(bugID) ) {
+							logger.error("Unable to determine status bug("+ bugID +") tc("+ tcID +")");
 							continue;
 						}
 
-						BugState state = bugStatus.get(id);
+						BugState state = bugStatus.get(bugID);
 						if ( state == BugState.NEW || state == BugState.ASSIGNED || state == BugState.REOPENED ) {
-							item.BugID = id;
+							item.BugID = bugID;
 							item.BugStatus = state;
 							item.NeedsFollowUp = false;
-							item.BugOwner = (bugContact.containsKey(id) ? bugContact.get(id) : "None");
+							item.BugOwner = (bugContact.containsKey(bugID) ? bugContact.get(bugID) : "None");
 							break; // Found the tracking bug, no need to go further
 						} else {
-							item.BugID = id;
+							item.BugID = bugID;
 							item.BugStatus = state;
 							item.NeedsFollowUp = true;
-							item.BugOwner = (bugContact.containsKey(id) ? bugContact.get(id) : "None");
+							item.BugOwner = (bugContact.containsKey(bugID) ? bugContact.get(bugID) : "None");
 							// Keep searching in case another bug ID needs followup
 						}
 
@@ -435,33 +256,23 @@ public class ResultsCore {
 	
 	
 	public void execute(File testngRoot) throws UnsupportedEncodingException, IOException, DocumentException {
-		if ( testngRoot == null ) {
-			logger.error("testngRoot cannot be null");
-			return;
-		}
-		
-		if ( !testngRoot.exists() ) {
-			logger.error(testngRoot.getAbsoluteFile() +" does not exist!");
-			return;
-		}
-			
-		logger.info("Processing "+ testngRoot.getAbsolutePath() +" ...");
 		
 		
 		/*
 		 * Build a list of passed and failed test cases, based
 		 * on the TestNG XML files
 		 */
-		Map<String, Boolean> results = getResults(testngRoot);
+		Map<String, Boolean> results = TestCaseData.getStatusData(testngRoot);
 		
 		/*
 		 * Build Maps of the bug data, ID vs TestCase vs QAContact
 		 */
-		Map<String, BugState> bugStatus = new HashMap<String, BugState>();
-		Map<String, List<String>> bugTestcase = new HashMap<String, List<String>>();
-		Map<String, String> bugContact = new HashMap<String, String>();
-		getBugzillaData(bugStatus, bugTestcase, bugContact);
+		Map<String, BugState> bugStatus = BugStatus.getStatusData();
+		Map<String, List<String>> bugTestcase = BugTestcase.getTestcaseData();
+		Map<String, String> bugContact = BugQAContact.getQAContactData();
 		
+		logger.info("Processing "+ testngRoot.getAbsolutePath() +" ...");
+
 		/*
 		 * Correlate the Pass/Fail results with the bugzilla content
 		 */
@@ -476,39 +287,6 @@ public class ResultsCore {
         
 	}
 	
-
-    /**
-     * Runs an XPath query on the specified element context and returns the results.
-     */
-    @SuppressWarnings("unchecked")
-	protected Element[] getElementsFromPath(Element context, String path) {
-		org.dom4j.Element d4context = context.toXML();
-		org.dom4j.XPath xpath = d4context.createXPath(path);
-		xpath.setNamespaceURIs(getURIs());
-		org.dom4j.Node node;
-		List dom4jElements = xpath.selectNodes(d4context);
-
-		List<Element> zimbraElements = new ArrayList<Element>();
-		Iterator iter = dom4jElements.iterator();
-		while (iter.hasNext()) {
-			node = (org.dom4j.Node)iter.next();
-			if (node instanceof org.dom4j.Element) {
-				Element zimbraElement = Element.convertDOM((org.dom4j.Element) node);
-				zimbraElements.add(zimbraElement);
-			}
-		}
-
-		Element[] retVal = new Element[zimbraElements.size()];
-		zimbraElements.toArray(retVal);
-		return retVal;
-    }
-	private static Map<String, String> mURIs = null;
-	private static Map<String, String> getURIs() {
-		if (mURIs == null) {
-			mURIs = new HashMap<String, String>();
-		}
-		return mURIs;
-	}
 
 
 	private static class ReportItem {

@@ -43,7 +43,7 @@ public class ResultsStaf implements STAFServiceInterfaceLevel30 {
         if ( f.exists() ) {
             PropertyConfigurator.configure(defaultLog4jProperties);
         } else {
-        	BasicConfigurator.configure();
+        	BasicConfigurator.resetConfiguration();
         }
         	
         // Convert the request to all lower case
@@ -143,7 +143,7 @@ public class ResultsStaf implements STAFServiceInterfaceLevel30 {
     	// TODO: Need to convert the help command into the variables, aEXECUTE, aHELP, etc.
         return new STAFResult(STAFResult.Ok,
          "ResultStaf Service Help\n\n" + 
-         "REPORT ROOT <path to results>\n" +
+         "REPORT ROOT <path to results> [ LOG4J <log4j.properties> ]\n" +
          "HELP\n\n");
         
 	}
@@ -157,7 +157,7 @@ public class ResultsStaf implements STAFServiceInterfaceLevel30 {
         if ( f.exists() ) {
             PropertyConfigurator.configure(defaultLog4jProperties);
         } else {
-        	BasicConfigurator.configure();
+        	BasicConfigurator.resetConfiguration();
         }
 
         mLog.info("serviceJar.getName(): " + info.serviceJar.getName());
@@ -196,9 +196,6 @@ public class ResultsStaf implements STAFServiceInterfaceLevel30 {
             "A non-numeric value was specified for serial number");
 
         
-        
-		// Now, do the Selenium specific setup ...
-        BasicConfigurator.configure();
         
 		
 		// Now, the service is ready ...
