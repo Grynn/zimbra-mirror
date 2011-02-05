@@ -247,7 +247,7 @@ public abstract class AbsSeleniumObject {
 	 * zIsBusyOverlay()
 	 */
 	public boolean zIsBusyOverlay() {
-		boolean isBusyOverlay = (ClientSessionFactory.session().selenium().getEval("this.browserbot.getUserWindow().appCtxt.getShell().getBusy()").equals("true"));
+		boolean isBusyOverlay = (ClientSessionFactory.session().selenium().getEval("this.browserbot.getUserWindow().top.appCtxt.getShell().getBusy()").equals("true"));
 
 		logger.info("isBusyOverlay(" + ") = " + isBusyOverlay);
 		return (isBusyOverlay);
