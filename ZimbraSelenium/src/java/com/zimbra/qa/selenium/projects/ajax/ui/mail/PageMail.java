@@ -219,7 +219,9 @@ public class PageMail extends AbsTab {
 			throw new HarnessException("Can't locate mail icon");
 		}
 
-		zClick(PageMain.Locators.zAppbarMail);
+		this.zClick(PageMain.Locators.zAppbarMail);
+		
+		this.zWaitForBusyOverlay();
 		
 		zWaitForActive();
 
@@ -288,9 +290,6 @@ public class PageMail extends AbsTab {
 
 			locator = "css=td[id$='__MOVE_left_icon']";
 			
-			// Click it
-			this.zClick(locator);
-
 			page = new DialogMove(MyApplication);
 
 			// FALL THROUGH
@@ -866,6 +865,8 @@ public class PageMail extends AbsTab {
 			// Left-Click on the item
 			this.zClick(itemlocator);
 			
+			this.zWaitForBusyOverlay();
+
 			// Return the displayed mail page object
 			page = new DisplayMail(MyApplication);
 			
@@ -881,8 +882,8 @@ public class PageMail extends AbsTab {
 			
 		} else if ( action == Action.A_RIGHTCLICK ) {
 			
-			// Left-Click on the item
-			this.zClick(itemlocator);
+			// Right-Click on the item
+			this.zRightClick(itemlocator);
 			
 			// Return the displayed mail page object
 			page = new ContextMenu(MyApplication);
@@ -902,6 +903,8 @@ public class PageMail extends AbsTab {
 			// Left-Click on the flag field
 			this.zClick(selectlocator);
 			
+			this.zWaitForBusyOverlay();
+			
 			// No page to return
 			page = null;
 
@@ -920,6 +923,8 @@ public class PageMail extends AbsTab {
 			// Left-Click on the flag field
 			this.zClick(selectlocator);
 			
+			this.zWaitForBusyOverlay();
+
 			// No page to return
 			page = null;
 
@@ -937,6 +942,8 @@ public class PageMail extends AbsTab {
 			// Left-Click on the flag field
 			this.zClick(flaglocator);
 			
+			this.zWaitForBusyOverlay();
+
 			// No page to return
 			page = null;
 
@@ -945,9 +952,6 @@ public class PageMail extends AbsTab {
 		} else {
 			throw new HarnessException("implement me!  action = "+ action);
 		}
-		
-		// If the app is busy, wait for it to become active
-		this.zWaitForBusyOverlay();
 		
 
 		if ( page != null ) {
@@ -1048,14 +1052,14 @@ public class PageMail extends AbsTab {
 			// click on the option
 			this.zClick(optionLocator);
 						
-				// FALL THROUGH
+			this.zWaitForBusyOverlay();
+
+			// FALL THROUGH
 			
 		} else {
 			throw new HarnessException("implement me!  action = "+ action);
 		}
 	
-		// If the app is busy, wait for it to become active
-		this.zWaitForBusyOverlay();
 		
 
 		if ( page != null ) {

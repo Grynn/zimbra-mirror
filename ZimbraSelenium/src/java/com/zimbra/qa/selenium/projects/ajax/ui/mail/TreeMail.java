@@ -54,15 +54,11 @@ public class TreeMail extends AbsTree {
 
 		} else if ( action == Action.A_RIGHTCLICK ) {
 			
-			// Currently, the harness must left-click + context shortcut key
-			// to activate the shortcut
-			
+			locator = "id=zti__main_Mail__"+ folder.getId() +"_textCell";
+
 			// Select the folder
-			this.zTreeItem(Action.A_LEFTCLICK, folder);
+			this.zRightClick(locator);
 			
-			// Click on the ContextMenu shortcut
-			zKeyboard.zTypeCharacters(Shortcut.S_RIGHTCLICK.getKeys());															
-				
 			// return a context menu
 			return (new ContextMenu(MyApplication));
 
@@ -103,10 +99,7 @@ public class TreeMail extends AbsTree {
 		
 		if ( locator == null )
 			throw new HarnessException("locator is null for action "+ action);
-		
-		if ( !this.sIsElementPresent(locator) )
-			throw new HarnessException("Unable to locator folder in tree "+ locator);
-		
+				
 		
 		// Default behavior.  Click the locator
 		zClick(locator);
@@ -150,8 +143,7 @@ public class TreeMail extends AbsTree {
 
 			this.zClick(locator);
 			
-			// Wait for the page to load
-			SleepUtil.sleepSmall();
+			this.zWaitForBusyOverlay();
 			
 			// No result page is returned in this case ... use app.zPageMail
 			page = null;
@@ -326,30 +318,16 @@ public class TreeMail extends AbsTree {
 
 	public void zExpandZimlets() throws HarnessException {
 		
-		try {
-			
-			if ( zIsZimletsExpanded() ) {
-				return; // Nothing more to do.  Already expanded
-			}
-			
-			// Click on the arrow
-			String locator = "css=td[id="+ Locators.ztih__main_Mail__ZIMLET_nodeCell_ID +"] div";
-			this.zClick(locator);
-			
-			// Wait for the menu to open
-			for (int i = 0; i < 5; i++) {
-				if ( zIsZimletsExpanded() ) 
-					return; // Done
-				SleepUtil.sleep(1000);
-			}
-			
-		} finally {
-			// For some reason, the L10N isn't being expanded right away.
-			// Sleep for a bit to allow translation
-			SleepUtil.sleepMedium();
+		if ( zIsZimletsExpanded() ) {
+			return; // Nothing more to do.  Already expanded
 		}
+		
+		// Click on the arrow
+		String locator = "css=td[id="+ Locators.ztih__main_Mail__ZIMLET_nodeCell_ID +"] div";
+		this.zClick(locator);
+		
+		this.zWaitForBusyOverlay();
 
-		throw new HarnessException("Zimlets never expanded!");
 	}
 	
 	public boolean zIsZimletsExpanded() throws HarnessException {

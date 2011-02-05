@@ -1,9 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsDisplay;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
 
 
 /**
@@ -61,10 +59,6 @@ public class DisplayMail extends AbsDisplay {
 		super(application);
 		
 		logger.info("new " + DisplayMail.class.getCanonicalName());
-		
-		// Let the reading pane load
-		SleepUtil.sleepLong();
-
 
 	}
 	
@@ -78,18 +72,20 @@ public class DisplayMail extends AbsDisplay {
 	 * @return TBD: return the new window?
 	 * @throws HarnessException
 	 */
-	public Object zClickViewEntireMessage() throws HarnessException {
+	public AbsPage zClickViewEntireMessage() throws HarnessException {
 		logger.info(myPageName() + " zViewEntireMessage");
 		
-		if ( this.sIsElementPresent(Locators.zViewEntireMessage) )
+		AbsPage page = null;
+		String locator = Locators.zViewEntireMessage;
+		
+		if ( this.sIsElementPresent(locator) )
 			throw new HarnessException("'View Entire Message' link does not exist: "+ Locators.zViewEntireMessage);
 		
-		this.sClick(Locators.zViewEntireMessage);
+		this.sClick(locator);
 		
-		SleepUtil.sleepLong();	// Messages are usually large, let it load
-
-		// TODO: return the new window?
-		return (null);
+		this.zWaitForBusyOverlay();
+		
+		return (page);
 	}
 
 	/**
@@ -97,7 +93,7 @@ public class DisplayMail extends AbsDisplay {
 	 * @return TBD: return the new window?
 	 * @throws HarnessException
 	 */
-	public Object zClickHighlightObjects() throws HarnessException {
+	public AbsPage zClickHighlightObjects() throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
 	

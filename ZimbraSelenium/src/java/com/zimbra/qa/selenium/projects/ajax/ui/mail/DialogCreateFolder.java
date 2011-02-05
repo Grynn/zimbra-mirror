@@ -4,12 +4,8 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
 import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsDialog;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
 
 
 /**
@@ -78,6 +74,7 @@ public class DialogCreateFolder extends AbsDialog {
 	public AbsPage zClickButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zClickButton("+ button +")");
 
+		AbsPage page = null;
 		String locator = null;
 		
 		if ( button == Button.B_OK ) {
@@ -109,7 +106,9 @@ public class DialogCreateFolder extends AbsDialog {
 		
 		this.zClick(locator);
 		
-		return (null);
+		this.zWaitForBusyOverlay();
+
+		return (page);
 	}
 
 
@@ -140,12 +139,9 @@ public class DialogCreateFolder extends AbsDialog {
 		if ( !this.sIsElementPresent(locator) )
 			throw new HarnessException("unable to find folder in tree "+ locator);
 		
-		// For some reason, the text doesn't get entered on the first try
 		this.zClick(locator);
 		
-		// Is this sleep necessary?
-		SleepUtil.sleepSmall();
-		
+		this.zWaitForBusyOverlay();
 
 	}
 
@@ -169,8 +165,7 @@ public class DialogCreateFolder extends AbsDialog {
 		this.zClick(locator);
 		zKeyboard.zTypeCharacters(folder);
 
-		// Is this sleep necessary?
-		SleepUtil.sleepSmall();
+		this.zWaitForBusyOverlay();
 		
 	}
 

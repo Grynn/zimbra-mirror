@@ -2,20 +2,12 @@ package com.zimbra.qa.selenium.projects.ajax.tests.mail.mail;
 
 import java.util.HashMap;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.MailItem;
+import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.ui.Shortcut;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogMove;
 
@@ -93,9 +85,6 @@ public class MoveMessage extends AjaxCommonTest {
 		dialog.zClickTreeFolder(subfolder);
 		dialog.zClickButton(Button.B_OK);
 		
-		// Wait for the client to send the data
-		SleepUtil.sleepLong();
-
 		// Get the message, make sure it is in the correct folder
 		app.zGetActiveAccount().soapSend(
 				"<GetMsgRequest xmlns='urn:zimbraMail'>" +
@@ -154,9 +143,6 @@ public class MoveMessage extends AjaxCommonTest {
 		dialog.zClickTreeFolder(subfolder);
 		dialog.zClickButton(Button.B_OK);
 		
-		// Wait for the client to send the data
-		SleepUtil.sleepLong();
-
 		// Get the message, make sure it is in the correct folder
 		app.zGetActiveAccount().soapSend(
 				"<GetMsgRequest xmlns='urn:zimbraMail'>" +
@@ -200,9 +186,6 @@ public class MoveMessage extends AjaxCommonTest {
 		// Click move
 		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MOVETOTRASH);
 		
-		// Wait for the client to send the data
-		SleepUtil.sleepLong();
-
 		// Get the message, make sure it is in the correct folder
 		app.zGetActiveAccount().soapSend(
 				"<GetMsgRequest xmlns='urn:zimbraMail'>" +
@@ -265,9 +248,6 @@ public class MoveMessage extends AjaxCommonTest {
 		// Click move
 		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MOVETOINBOX);
 		
-		// Wait for the client to send the data
-		SleepUtil.sleepLong();
-
 		// Get the message, make sure it is in the correct folder
 		app.zGetActiveAccount().soapSend(
 				"<GetMsgRequest xmlns='urn:zimbraMail'>" +
@@ -323,9 +303,6 @@ public class MoveMessage extends AjaxCommonTest {
 		dialog.zEnterFolderName(subfolder.getName());
 		dialog.zClickButton(Button.B_OK);
 		
-		// Wait for the client to send the data
-		SleepUtil.sleepLong();
-
 		// Get the message, make sure it is in the correct folder
 		app.zGetActiveAccount().soapSend(
 				"<GetMsgRequest xmlns='urn:zimbraMail'>" +

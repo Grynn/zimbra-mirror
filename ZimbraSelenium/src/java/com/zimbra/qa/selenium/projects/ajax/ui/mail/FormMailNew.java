@@ -2,17 +2,10 @@ package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
 import java.util.List;
 
-import com.zimbra.qa.selenium.framework.items.IItem;
-import com.zimbra.qa.selenium.framework.items.MailItem;
-import com.zimbra.qa.selenium.framework.items.RecipientItem;
+import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.RecipientItem.RecipientType;
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsForm;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.Stafpostqueue;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 
 
@@ -115,6 +108,8 @@ public class FormMailNew extends AbsForm {
 		
 		zToolbarPressButton(Button.B_SEND);
 
+		this.zWaitForBusyOverlay();
+
 	}
 
 	/**
@@ -137,15 +132,10 @@ public class FormMailNew extends AbsForm {
 			
 			locator = Locators.zSendIconBtn;
 			
-			// Look for "Send"
-			if ( !this.sIsElementPresent(Locators.zSendIconBtn) )
-				throw new HarnessException("Send button is not visible "+ Locators.zSendIconBtn);
-			
-			// Click on it
+			// Click on send
 			this.zClick(locator);
 			
-			// Need to wait for the client request to be sent
-			SleepUtil.sleepSmall();
+			this.zWaitForBusyOverlay();
 			
 			// Wait for the message to be delivered
 			try {
@@ -158,7 +148,7 @@ public class FormMailNew extends AbsForm {
 				throw new HarnessException("Unable to wait for message queue", e);
 			}
 			
-			return (null);
+			return (page);
 		
 		} else if ( button == Button.B_CANCEL ) {
 
@@ -168,11 +158,10 @@ public class FormMailNew extends AbsForm {
 			// If the compose view is not dirty (i.e. no pending changes)
 			// then the dialog will not appear.  So, click the button
 			// and return the page, without waiting for it to be active
-			
-			if ( !this.sIsElementPresent(locator) )
-				throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
-			
+						
 			this.zClick(locator);
+
+			this.zWaitForBusyOverlay();
 
 			// Return the page, if specified
 			return (page);
@@ -217,12 +206,11 @@ public class FormMailNew extends AbsForm {
 			// For some reason, zClick doesn't work for "Show BCC", but sClick does
 			////
 			
-			if ( !this.sIsElementPresent(locator) )
-				throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
-			
 			// Click it
 			this.sClick(locator);
 			
+			this.zWaitForBusyOverlay();
+
 			return (page);
 		}
 		else {
@@ -320,7 +308,8 @@ public class FormMailNew extends AbsForm {
 			}
 			
 			this.zClick(pulldownLocator);
-			SleepUtil.sleepSmall();
+
+			this.zWaitForBusyOverlay();
 			
 			if ( optionLocator != null ) {
 
@@ -330,12 +319,10 @@ public class FormMailNew extends AbsForm {
 				}
 				
 				this.zClick(optionLocator);
-				SleepUtil.sleepSmall();
+
+				this.zWaitForBusyOverlay();
 
 			}
-			
-			// If the app is busy, wait for it to become active
-			this.zWaitForBusyOverlay();
 			
 			// If we click on pulldown/option and the page is specified, then
 			// wait for the page to go active
@@ -406,6 +393,7 @@ public class FormMailNew extends AbsForm {
 				
 				this.sFocus(locator);
 				this.zClick(locator);
+				this.zWaitForBusyOverlay();
 				this.sType(locator, value);
 				
 				return;
@@ -431,8 +419,12 @@ public class FormMailNew extends AbsForm {
 				} finally {
 					// Make sure to go back to the original iframe
 					this.sSelectFrame("relative=top");
+
 				}
 				
+				// Is this requried?
+				this.zWaitForBusyOverlay();
+
 				return;
 
 			} else {
@@ -458,8 +450,7 @@ public class FormMailNew extends AbsForm {
 		// Enter text
 		this.sType(locator, value);
 		
-		// Is this sleep required?
-		SleepUtil.sleepSmall();
+		this.zWaitForBusyOverlay();
 
 	}
 	

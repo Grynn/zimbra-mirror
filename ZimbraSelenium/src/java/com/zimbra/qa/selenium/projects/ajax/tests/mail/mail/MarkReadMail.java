@@ -66,9 +66,9 @@ public class MarkReadMail extends AjaxCommonTest {
 		
 		// Wait to read the message
 		SleepUtil.sleep((delaySeconds) * 1000);
-		
+
 		// Wait the for the client to send the change to the server
-		SleepUtil.sleepMedium();
+		app.zPageMail.zWaitForBusyOverlay();
 		
 		// Verify the message is marked read in the server (flags attribute should not contain (u)nread)
 		mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");

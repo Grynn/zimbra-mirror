@@ -4,12 +4,8 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
 import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsDialog;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
 
 
 /**
@@ -76,6 +72,7 @@ public class DialogMove extends AbsDialog {
 	public AbsPage zClickButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zClickButton("+ button +")");
 
+		AbsPage page = null;
 		String locator = null;
 		
 		if ( button == Button.B_NEW ) {
@@ -106,14 +103,11 @@ public class DialogMove extends AbsDialog {
 			throw new HarnessException("Button "+ button +" not implemented");
 		}
 		
-		// Make sure the locator exists
-		if ( !this.sIsElementPresent(locator) ) {
-			throw new HarnessException("Button "+ button +" locator "+ locator +" not present!");
-		}
-		
 		this.zClick(locator);
 		
-		return (null);
+		this.zWaitForBusyOverlay();
+
+		return (page);
 	}
 
 
@@ -141,14 +135,10 @@ public class DialogMove extends AbsDialog {
 		
 		String locator = "css=div[id='"+ Locators.zDialogId +"'] td[id='zti__ZmChooseFolderDialog_Mail__"+ folder.getId() +"_textCell']";
 		
-		if ( !this.sIsElementPresent(locator) )
-			throw new HarnessException("unable to find folder in tree "+ locator);
-		
 		// For some reason, the text doesn't get entered on the first try
 		this.zClick(locator);
 		
-		// Is this sleep necessary?
-		SleepUtil.sleepSmall();
+		this.zWaitForBusyOverlay();
 		
 
 	}
@@ -172,9 +162,6 @@ public class DialogMove extends AbsDialog {
 		this.sFocus(locator);
 		this.zClick(locator);
 		zKeyboard.zTypeCharacters(folder);
-
-		// Is this sleep necessary?
-		SleepUtil.sleepSmall();
 		
 	}
 

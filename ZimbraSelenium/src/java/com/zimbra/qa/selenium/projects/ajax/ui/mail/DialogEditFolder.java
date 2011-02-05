@@ -48,6 +48,7 @@ public class DialogEditFolder extends AbsDialog {
 	public AbsPage zClickButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zClickButton("+ button +")");
 
+		AbsPage page = null;
 		String locator = null;
 		
 		if ( button == Button.B_OK ) {
@@ -70,14 +71,11 @@ public class DialogEditFolder extends AbsDialog {
 			throw new HarnessException("Button "+ button +" not implemented");
 		}
 		
-		// Make sure the locator exists
-		if ( !this.sIsElementPresent(locator) ) {
-			throw new HarnessException("Button "+ button +" locator "+ locator +" not present!");
-		}
-		
 		this.zClick(locator);
 		
-		return (null);
+		this.zWaitForBusyOverlay();
+
+		return (page);
 	}
 
 
@@ -113,8 +111,7 @@ public class DialogEditFolder extends AbsDialog {
 		this.zClick(locator);
 		zKeyboard.zTypeCharacters(folder);
 
-		// Is this sleep necessary?
-		SleepUtil.sleepSmall();
+		this.zWaitForBusyOverlay();
 		
 	}
 

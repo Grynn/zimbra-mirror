@@ -66,6 +66,7 @@ public class DialogTag extends AbsDialog {
 	public AbsPage zClickButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zClickButton("+ button +")");
 
+		AbsPage page = null;
 		String locator = null;
 		
 		if ( button == Button.B_OK ) {
@@ -90,14 +91,11 @@ public class DialogTag extends AbsDialog {
 			throw new HarnessException("Button "+ button +" not implemented");
 		}
 		
-		// Make sure the locator exists
-		if ( !this.sIsElementPresent(locator) ) {
-			throw new HarnessException("Button "+ button +" locator "+ locator +" not present!");
-		}
-		
 		this.zClick(locator);
+		
+		this.zWaitForBusyOverlay();
 	
-		return (null);
+		return (page);
 	}
 
 	@Override
