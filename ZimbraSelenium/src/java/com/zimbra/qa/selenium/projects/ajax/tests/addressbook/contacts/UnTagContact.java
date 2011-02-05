@@ -8,6 +8,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.ToastedMessage;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -72,7 +73,7 @@ public class UnTagContact extends AjaxCommonTest  {
 		ZAssert.assertNull(contactTag, "Verify that the tag is removed from the contact");
 	      
 		//verify toasted message 'contact created'
-        ZAssert.assertStringContains(app.zPageAddressbook.sGetText("xpath=//div[@id='z_toast_text']"), "All tags removed from 1 contact", "Verify toast message 'All tags removed from 1 contact'");
+		ZAssert.assertTrue(ToastedMessage.isContainedText("All tags removed from 1 contact"), "Verify toast message 'All tags removed from 1 contact'");
 	 
    	}
 	

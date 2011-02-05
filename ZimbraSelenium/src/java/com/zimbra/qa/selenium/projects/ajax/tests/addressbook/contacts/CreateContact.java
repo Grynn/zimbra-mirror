@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.ToastedMessage;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
@@ -51,8 +52,8 @@ public class CreateContact extends AjaxCommonTest  {
 		// Save the contact
         formContactNew.zSubmit();
 		
-        //verify toasted message 'contact created'
-        ZAssert.assertStringContains(app.zPageAddressbook.sGetText("xpath=//div[@id='z_toast_text']"), "Contact Created", "Verify toast message 'Contact Created'");
+        //verify toasted message 'contact created'        
+        ZAssert.assertTrue(ToastedMessage.isContainedText("Contact Created"), "Verify toast message 'Contact Created'");
 
         //verify contact "file as" is displayed
 		List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();

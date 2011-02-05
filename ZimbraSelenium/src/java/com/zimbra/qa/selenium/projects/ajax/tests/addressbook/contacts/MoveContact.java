@@ -10,6 +10,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.ToastedMessage;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
@@ -57,15 +58,13 @@ public class MoveContact extends AjaxCommonTest  {
 
         //click Move icon 
         DialogContactMove dialogContactMove = (DialogContactMove) app.zPageAddressbook.zToolbarPressButton(Button.B_MOVE);
-        SleepUtil.sleepLong();
-        
+     
         //enter the moved folder
         dialogContactMove.zEnterFolderName("Emailed Contacts");        		
         dialogContactMove.zClickButton(Button.B_OK);
-        SleepUtil.sleepLong();
-        
+       
         //verify toasted message 1 contact moved to "Emailed Contacts"
-        ZAssert.assertStringContains(app.zPageAddressbook.sGetText("xpath=//div[@id='z_toast_text']"), "1 contact moved to \"Emailed Contacts\"", "Verify toast message '1 contact moved to \"Emailed Contacts\"'");
+        ZAssert.assertTrue(ToastedMessage.isContainedText("1 contact moved to \"Emailed Contacts\""), "Verify toast message '1 contact moved to \"Emailed Contacts\"'");
 
         //verify moved contact not displayed
         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 

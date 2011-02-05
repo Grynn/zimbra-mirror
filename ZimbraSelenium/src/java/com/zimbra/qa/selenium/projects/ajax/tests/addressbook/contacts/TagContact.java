@@ -7,6 +7,7 @@ import com.zimbra.qa.selenium.framework.items.ContactItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.ToastedMessage;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
@@ -77,7 +78,7 @@ public class TagContact extends AjaxCommonTest  {
 		ZAssert.assertEquals(contactTags, tagID, "Verify the tag appears on the contact id=" +  contactItem.getId());
 		
 		//verify toasted message '1 contact tagged ...'
-        ZAssert.assertStringContains(app.zPageAddressbook.sGetText("xpath=//div[@id='z_toast_text']"), "1 contact tagged \"" + tagName + "\"", "Verify toast message '" + "1 contact tagged \"" + tagName + "\"'" );
+		ZAssert.assertTrue(ToastedMessage.isContainedText("1 contact tagged \"" + tagName + "\""), "Verify toast message '" + "1 contact tagged \"" + tagName + "\"'" );
  
   
    	}

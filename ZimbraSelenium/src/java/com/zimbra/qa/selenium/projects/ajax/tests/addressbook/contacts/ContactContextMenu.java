@@ -60,7 +60,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 		// Select the item
         // Right click to show the menu
         ContextMenu contextMenu= (ContextMenu) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, contactItem.fileAs); // contactItem.fileAs);
-        SleepUtil.sleepMedium();
+      
         
         ArrayList <ContextMenuItem> list = contextMenu.zListGetContextMenuItems(PageAddressbook.CONTEXT_MENU.class);
         
@@ -100,10 +100,10 @@ public class ContactContextMenu extends AjaxCommonTest  {
     	    
         //select delete option
         app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_DELETE, contactItem.fileAs);
-        SleepUtil.sleepSmall();
+       
         
         //verify toasted message 1 contact moved to Trash
-        ZAssert.assertStringContains(app.zPageAddressbook.sGetText("xpath=//div[@id='z_toast_text']"), "1 contact moved to Trash", "Verify toast message '1 contact moved to Trash'");
+        ZAssert.assertTrue(ToastedMessage.isContainedText("1 contact moved to Trash"), "Verify toast message '1 contact moved to Trash'");
 
         //verify deleted contact not displayed
         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
@@ -128,15 +128,15 @@ public class ContactContextMenu extends AjaxCommonTest  {
 		            
         //select move option
         DialogContactMove dialogContactMove = (DialogContactMove) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_MOVE, contactItem.fileAs);
-        SleepUtil.sleepSmall();
+      
         
         //enter the moved folder
         dialogContactMove.zEnterFolderName("Emailed Contacts");        		
         dialogContactMove.zClickButton(Button.B_OK);
-        SleepUtil.sleepSmall();
+       
         
         //verify toasted message 1 contact moved to "Emailed Contacts"
-        ZAssert.assertStringContains(app.zPageAddressbook.sGetText("xpath=//div[@id='z_toast_text']"), "1 contact moved to \"Emailed Contacts\"", "Verify toast message '1 contact moved to \"Emailed Contacts\"'");
+        ZAssert.assertTrue(ToastedMessage.isContainedText("1 contact moved to \"Emailed Contacts\""), "Verify toast message '1 contact moved to \"Emailed Contacts\"'");
 
         //verify moved contact not displayed
         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
@@ -161,8 +161,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 		ContactItem contactItem = createSelectAContactItem();
 		//Click Edit contact	
         FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_EDIT, contactItem.fileAs);        
-	    SleepUtil.sleepSmall();
-	        
+	  	        
 		ContactItem newContact = ContactItem.generateContactItem(GenerateItemType.Basic);							
 		
 		//clear the form, 
@@ -176,7 +175,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 		
         
         //verify toasted message Contact Saved
-        ZAssert.assertStringContains(app.zPageAddressbook.sGetText("xpath=//div[@id='z_toast_text']"), "Contact Saved", "Verify toast message 'Contact Saved'");
+        ZAssert.assertTrue(ToastedMessage.isContainedText("Contact Saved"), "Verify toast message 'Contact Saved'");
 
         //verify new contact item is displayed
         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();   

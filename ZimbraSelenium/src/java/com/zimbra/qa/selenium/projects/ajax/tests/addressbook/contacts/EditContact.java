@@ -8,6 +8,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.ToastedMessage;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
@@ -71,7 +72,7 @@ public class EditContact extends AjaxCommonTest  {
 		
         
         //verify toasted message Contact Saved
-        ZAssert.assertStringContains(app.zPageAddressbook.sGetText("xpath=//div[@id='z_toast_text']"), "Contact Saved", "Verify toast message 'Contact Saved'");
+        ZAssert.assertTrue(ToastedMessage.isContainedText("Contact Saved"), "Verify toast message 'Contact Saved'");
 
         //verify new contact item is displayed
         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();   

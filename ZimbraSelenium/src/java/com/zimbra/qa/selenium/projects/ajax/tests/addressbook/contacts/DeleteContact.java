@@ -10,6 +10,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.ToastedMessage;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
@@ -58,7 +59,7 @@ public class DeleteContact extends AjaxCommonTest  {
        
         
         //verify toasted message 1 contact moved to Trash
-        ZAssert.assertStringContains(app.zPageAddressbook.sGetText("xpath=//div[@id='z_toast_text']"), "1 contact moved to Trash", "Verify toast message '1 contact moved to Trash'");
+        ZAssert.assertTrue(ToastedMessage.isContainedText("1 contact moved to Trash"), "Verify toast message '1 contact moved to Trash'");
 
         //verify deleted contact not displayed
         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
