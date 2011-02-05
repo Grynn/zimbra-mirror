@@ -433,9 +433,10 @@ public class PageBriefcase extends AbsTab {
 		throw new HarnessException("implement me!");
 	}
 
-	public void pageRefresh(boolean includeRow) throws HarnessException {
+	public void pageRefresh(String locator, boolean includeRow) throws HarnessException {
 		// ClientSessionFactory.session().selenium().refresh();
-		zClick(Locators.zBriefcaseFolderIcon);
+		//zClick(Locators.zBriefcaseFolderIcon);
+		zClick(locator);
 		String condition = "selenium.isElementPresent(\"css=[id='zti__main_Briefcase__16_div'][class='DwtTreeItem-selected']\")&&"
 				+ "selenium.isElementPresent(\"css=[id='zl__BDLV__rows']";
 		zWaitForBusyOverlay();

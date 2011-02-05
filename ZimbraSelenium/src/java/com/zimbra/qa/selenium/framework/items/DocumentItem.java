@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
@@ -76,22 +77,13 @@ public class DocumentItem implements IItem {
 		populateDocumentData();
 	}
 
-	// TODO: eventually, replace this with the com.zimbra.soap.types.Contact method
-	private String myId;
-	public String getId() {
-		return (myId);
-	}
-	public void setId(String id) {
-		myId=id;
-	}
-
 	/**
 	 * Populate DocumentItem data
 	 * 
 	 */
 	public void populateDocumentData() {
 		docName = "name" + ZimbraSeleniumProperties.getUniqueString();
-		docText = "text" + ZimbraSeleniumProperties.getUniqueString();			
+		docText = "text" + ZimbraSeleniumProperties.getUniqueString();
 	}
 
 	/**
@@ -145,18 +137,18 @@ public class DocumentItem implements IItem {
 	}
 
 	public void createUsingSOAP(ZimbraAccount account) throws HarnessException {
+		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
+				+ docText + "</body>" + "</html>");
 		e = account
 				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
-						+
-
-						"<doc name='"
+						+ "<doc name='"
 						+ docName
 						+ "' l='16' ct='application/x-zimbra-doc'>"
-						+ "<content>&lt;html>&lt;body>"
-						+ docText
-						+ "&lt;/body>&lt;/html></content>" +
-
-						"</doc>" + "</SaveDocumentRequest>");
+						+ "<content>"
+						+ contentHTML
+						+ "</content>"
+						+ "</doc>"
+						+ "</SaveDocumentRequest>");
 	}
 
 	public void createUsingSOAP(ZimbraAccount account, String attachmentId)
@@ -188,8 +180,8 @@ public class DocumentItem implements IItem {
 				throw new HarnessException(
 						"Element does not contain doc element");
 
-			// Set the ID
-			this.setId( doc.getAttribute("id", null) );
+			// get the ID
+			doc.getAttribute("id", null);
 
 		} catch (Exception e) {
 			throw new HarnessException("Could not parse SaveDocumentResponse: "
@@ -278,15 +270,15 @@ public class DocumentItem implements IItem {
 		System.out.println("Imported document item from SOAP");
 		System.out.println(d.prettyPrint());
 
+		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>" + "t1"
+				+ "</body>" + "</html>");
+
 		ZimbraAccount.AccountA().soapSend(
 				"<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>" +
 
-				"<doc name='d1' l='16' ct='application/x-zimbra-doc'>" +
-
-				"<content>&lt;html>&lt;body>" + "t1"
-						+ "&lt;/body>&lt;/html></content>" +
-
-						"</doc>" + "</SaveDocumentRequest>");
+				"<doc name='d1' l='16' ct='application/x-zimbra-doc'>"
+						+ "<content>" + contentHTML + "</content>" + "</doc>"
+						+ "</SaveDocumentRequest>");
 
 		d = new DocumentItem();
 		d.importFromSOAP(ZimbraAccount.AccountA(), "d1");

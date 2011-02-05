@@ -7,6 +7,7 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase.Locators;
 
 public class UploadFile extends AjaxCommonTest {
 
@@ -87,11 +88,8 @@ public class UploadFile extends AjaxCommonTest {
 
 				"</SaveDocumentRequest>");
 
-		// Select Briefcase tab
-		app.zPageBriefcase.zNavigateTo();
-
 		// refresh briefcase page
-		app.zPageBriefcase.pageRefresh(true);
+		app.zPageBriefcase.pageRefresh(Locators.zBriefcaseFolderIcon,true);
 		
 		// Verify document is created
 		String name = "";

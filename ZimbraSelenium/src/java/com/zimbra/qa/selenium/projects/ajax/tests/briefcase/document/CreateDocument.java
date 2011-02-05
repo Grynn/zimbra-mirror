@@ -9,6 +9,7 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseOpen;
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase.Locators;
 
 public class CreateDocument extends AjaxCommonTest {
 
@@ -26,11 +27,11 @@ public class CreateDocument extends AjaxCommonTest {
 		// Create document item
 		DocumentItem document = new DocumentItem();
 
-		String documentLocator = "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
-				+ document.getDocName() + ")";
+		String docName = document.getDocName();
+		String docText = document.getDocText();
 
-		// Select Briefcase tab
-		app.zPageBriefcase.zNavigateTo();
+		String documentLocator = "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
+				+ docName + ")";
 
 		// Open new document page
 		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
@@ -50,12 +51,8 @@ public class CreateDocument extends AjaxCommonTest {
 			documentBriefcaseNew.zSelectWindow("Zimbra: Briefcase");
 		}
 
-		// Verify document name & text through GUI
-		// Select Briefcase tab
-		app.zPageBriefcase.zNavigateTo();
-
 		// refresh briefcase page
-		app.zPageBriefcase.pageRefresh(true);
+		app.zPageBriefcase.pageRefresh(Locators.zBriefcaseFolderIcon,true);
 
 		// Click on created document
 		app.zPageBriefcase.waitForElement(documentLocator, "2000");
@@ -64,9 +61,6 @@ public class CreateDocument extends AjaxCommonTest {
 		// Click on open in a separate window icon in toolbar
 		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
 				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW);
-
-		String docName = document.getDocName();
-		String docText = document.getDocText();
 
 		app.zPageBriefcase.isOpenDocLoaded(docName, docText);
 
@@ -82,7 +76,7 @@ public class CreateDocument extends AjaxCommonTest {
 
 			// close
 			app.zPageBriefcase.zSelectWindow(docName);
-			
+
 			app.zPageBriefcase.closeWindow();
 		} finally {
 			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");

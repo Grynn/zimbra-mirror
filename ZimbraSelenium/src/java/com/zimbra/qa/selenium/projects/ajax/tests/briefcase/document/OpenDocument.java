@@ -4,10 +4,12 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseOpen;
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase.Locators;
 
 public class OpenDocument extends AjaxCommonTest {
 
@@ -26,6 +28,7 @@ public class OpenDocument extends AjaxCommonTest {
 		DocumentItem document = new DocumentItem();
 		
 		String docName = document.getDocName();
+		String docText = document.getDocText();
 
 		String documentLocator = "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
 				+ docName + ")";
@@ -33,24 +36,25 @@ public class OpenDocument extends AjaxCommonTest {
 		ZimbraAccount account = app.zGetActiveAccount();
 		String briefcaseFolderId = document.GetBriefcaseIdUsingSOAP(account);
 
+		// Create document using SOAP
+		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
+				+ docText + "</body>" + "</html>");
+
 		account
 				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
 						+ "<doc name='"
-						+ document.getDocName()
+						+ docName
 						+ "' l='"
 						+ briefcaseFolderId
 						+ "' ct='application/x-zimbra-doc'>"
-						+ "<content>&lt;html>&lt;body>"
-						+ document.getDocText()
-						+ "&lt;/body>&lt;/html></content>"
+						+ "<content>"
+						+ contentHTML
+						+ "</content>"
 						+ "</doc>"
 						+ "</SaveDocumentRequest>");
 
-		// Select Briefcase tab
-		app.zPageBriefcase.zNavigateTo();
-
 		// refresh briefcase page
-		app.zPageBriefcase.pageRefresh(true);
+		app.zPageBriefcase.pageRefresh(Locators.zBriefcaseFolderIcon,true);
 
 		// Click on created document
 		app.zPageBriefcase.waitForElement(documentLocator, "2000");
@@ -59,8 +63,6 @@ public class OpenDocument extends AjaxCommonTest {
 		// Click on open in a separate window icon in toolbar
 		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
 				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW);
-
-		String docText = document.getDocText();
 
 		app.zPageBriefcase.isOpenDocLoaded(docName, docText);
 		

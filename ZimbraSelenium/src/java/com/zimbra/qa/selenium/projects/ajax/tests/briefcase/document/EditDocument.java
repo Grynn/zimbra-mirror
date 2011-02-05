@@ -4,12 +4,14 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseEdit;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseOpen;
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase.Locators;
 
 public class EditDocument extends AjaxCommonTest {
 
@@ -27,11 +29,18 @@ public class EditDocument extends AjaxCommonTest {
 		// Create document item
 		DocumentItem document = new DocumentItem();
 
+		String docName = document.getDocName();
+		String docText = document.getDocText();
+
 		String documentLocator = "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
-				+ document.getDocName() + ")";
+				+ docName + ")";
 
 		ZimbraAccount account = app.zGetActiveAccount();
 		String briefcaseFolderId = document.GetBriefcaseIdUsingSOAP(account);
+
+		// Create document using SOAP
+		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
+				+ docText + "</body>" + "</html>");
 
 		account
 				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
@@ -40,17 +49,14 @@ public class EditDocument extends AjaxCommonTest {
 						+ "' l='"
 						+ briefcaseFolderId
 						+ "' ct='application/x-zimbra-doc'>"
-						+ "<content>&lt;html>&lt;body>"
-						+ document.getDocText()
-						+ "&lt;/body>&lt;/html></content>"
+						+ "<content>"
+						+ contentHTML
+						+ "</content>"
 						+ "</doc>"
 						+ "</SaveDocumentRequest>");
 
-		// Select Briefcase tab
-		app.zPageBriefcase.zNavigateTo();
-
 		// refresh briefcase page
-		app.zPageBriefcase.pageRefresh(true);
+		app.zPageBriefcase.pageRefresh(Locators.zBriefcaseFolderIcon,true);
 
 		// Click on created document
 		app.zPageBriefcase.waitForElement(documentLocator, "2000");
@@ -59,9 +65,6 @@ public class EditDocument extends AjaxCommonTest {
 		// Click on Edit document icon in toolbar
 		DocumentBriefcaseEdit documentBriefcaseEdit = (DocumentBriefcaseEdit) app.zPageBriefcase
 				.zToolbarPressButton(Button.B_EDIT_FILE);
-
-		String docName = document.getDocName();
-		String docText = document.getDocText();
 
 		app.zPageBriefcase.isEditDocLoaded(docName, docText);
 
@@ -88,7 +91,7 @@ public class EditDocument extends AjaxCommonTest {
 		}
 
 		// refresh briefcase page
-		app.zPageBriefcase.pageRefresh(true);
+		app.zPageBriefcase.pageRefresh(Locators.zBriefcaseFolderIcon,true);
 
 		// Verify document was saved with new data
 		String name = "";
@@ -119,30 +122,34 @@ public class EditDocument extends AjaxCommonTest {
 		// Create document item
 		DocumentItem document = new DocumentItem();
 
+		String docName = document.getDocName();
+		String docText = document.getDocText();
+
 		String documentLocator = "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
-				+ document.getDocName() + ")";
+				+ docName + ")";
 
 		ZimbraAccount account = app.zGetActiveAccount();
 		String briefcaseFolderId = document.GetBriefcaseIdUsingSOAP(account);
 
+		// Create document using SOAP
+		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
+				+ docText + "</body>" + "</html>");
+
 		account
 				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
 						+ "<doc name='"
-						+ document.getDocName()
+						+ docName
 						+ "' l='"
 						+ briefcaseFolderId
 						+ "' ct='application/x-zimbra-doc'>"
-						+ "<content>&lt;html>&lt;body>"
-						+ document.getDocText()
-						+ "&lt;/body>&lt;/html></content>"
+						+ "<content>"
+						+ contentHTML
+						+ "</content>"
 						+ "</doc>"
 						+ "</SaveDocumentRequest>");
 
-		// Select Briefcase tab
-		app.zPageBriefcase.zNavigateTo();
-
 		// refresh briefcase page
-		app.zPageBriefcase.pageRefresh(true);
+		app.zPageBriefcase.pageRefresh(Locators.zBriefcaseFolderIcon,true);
 
 		// Click on created document
 		app.zPageBriefcase.waitForElement(documentLocator, "2000");
@@ -151,9 +158,6 @@ public class EditDocument extends AjaxCommonTest {
 		// Click on Edit document icon in toolbar
 		DocumentBriefcaseEdit documentBriefcaseEdit = (DocumentBriefcaseEdit) app.zPageBriefcase
 				.zToolbarPressButton(Button.B_EDIT_FILE);
-
-		String docName = document.getDocName();
-		String docText = document.getDocText();
 
 		app.zPageBriefcase.isEditDocLoaded(docName, docText);
 
@@ -186,12 +190,15 @@ public class EditDocument extends AjaxCommonTest {
 			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
 		}
 
+		docName = document.getDocName();
+		docText = document.getDocText();
+
 		// Verify document name & text through GUI
 		documentLocator = "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
-				+ document.getDocName() + ")";
+				+ docName + ")";
 
 		// refresh briefcase page
-		app.zPageBriefcase.pageRefresh(true);
+		app.zPageBriefcase.pageRefresh(Locators.zBriefcaseFolderIcon,true);
 
 		// Click on created document
 		app.zPageBriefcase.waitForElement(documentLocator, "2000");
@@ -200,9 +207,6 @@ public class EditDocument extends AjaxCommonTest {
 		// Click on open in a separate window icon in toolbar
 		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
 				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW);
-
-		docName = document.getDocName();
-		docText = document.getDocText();
 
 		app.zPageBriefcase.isOpenDocLoaded(docName, docText);
 
@@ -218,16 +222,16 @@ public class EditDocument extends AjaxCommonTest {
 
 			// close
 			app.zPageBriefcase.zSelectWindow(docName);
-			
+
 			app.zPageBriefcase.closeWindow();
 		} finally {
 			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
 		}
 
-		ZAssert.assertStringContains(name, document.getDocName(),
+		ZAssert.assertStringContains(name, docName,
 				"Verify document name through GUI");
 
-		ZAssert.assertStringContains(text, document.getDocText(),
+		ZAssert.assertStringContains(text, docText,
 				"Verify document text through GUI");
 	}
 
@@ -237,32 +241,36 @@ public class EditDocument extends AjaxCommonTest {
 		// Create document item
 		DocumentItem document = new DocumentItem();
 
+		String docName = document.getDocName();
+		String docText = document.getDocText();
+
 		String documentLocator = "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
-				+ document.getDocName() + ")";
+				+ docName + ")";
 
 		ZimbraAccount account = app.zGetActiveAccount();
 		String briefcaseFolderId = document.GetBriefcaseIdUsingSOAP(account);
 
+		// Create document using SOAP
+		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
+				+ docText + "</body>" + "</html>");
+
 		account
 				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
 						+ "<doc name='"
-						+ document.getDocName()
+						+ docName
 						+ "' l='"
 						+ briefcaseFolderId
 						+ "' ct='application/x-zimbra-doc'>"
-						+ "<content>&lt;html>&lt;body>"
-						+ document.getDocText()
-						+ "&lt;/body>&lt;/html></content>"
+						+ "<content>"
+						+ contentHTML
+						+ "</content>"
 						+ "</doc>"
 						+ "</SaveDocumentRequest>");
 
 		// Search for created document
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
-						+ "<query>"
-						+ document.getDocName()
-						+ "</query>"
-						+ "</SearchRequest>");
+						+ "<query>" + docName + "</query>" + "</SearchRequest>");
 
 		String docId = account.soapSelectValue("//mail:doc", "id");
 		String version = account.soapSelectValue("//mail:doc", "ver");
@@ -270,11 +278,13 @@ public class EditDocument extends AjaxCommonTest {
 		document
 				.setDocText("text" + ZimbraSeleniumProperties.getUniqueString());
 
+		docText = document.getDocText();
+
 		// Edit document through SOAP
 		account
 				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
 						+ "<doc name='"
-						+ document.getDocName()
+						+ docName
 						+ "' l='"
 						+ briefcaseFolderId
 						+ "' ver='"
@@ -283,16 +293,13 @@ public class EditDocument extends AjaxCommonTest {
 						+ docId
 						+ "' ct='application/x-zimbra-doc'>"
 						+ "<content>&lt;html>&lt;body>"
-						+ document.getDocText()
+						+ docText
 						+ "&lt;/body>&lt;/html></content>"
 						+ "</doc>"
 						+ "</SaveDocumentRequest>");
 
-		// Select Briefcase tab
-		app.zPageBriefcase.zNavigateTo();
-
 		// refresh briefcase page
-		app.zPageBriefcase.pageRefresh(true);
+		app.zPageBriefcase.pageRefresh(Locators.zBriefcaseFolderIcon,true);
 
 		// Click on created document
 		app.zPageBriefcase.waitForElement(documentLocator, "2000");
@@ -301,9 +308,6 @@ public class EditDocument extends AjaxCommonTest {
 		// Click on open in a separate window icon in toolbar
 		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
 				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW);
-
-		String docName = document.getDocName();
-		String docText = document.getDocText();
 
 		app.zPageBriefcase.isOpenDocLoaded(docName, docText);
 
@@ -317,13 +321,13 @@ public class EditDocument extends AjaxCommonTest {
 
 			// close
 			app.zPageBriefcase.zSelectWindow(docName);
-			
+
 			app.zPageBriefcase.closeWindow();
 		} finally {
 			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
 		}
 
-		ZAssert.assertStringContains(text, document.getDocText(),
+		ZAssert.assertStringContains(text, docText,
 				"Verify document text through GUI");
 	}
 
@@ -333,30 +337,34 @@ public class EditDocument extends AjaxCommonTest {
 		// Create document item
 		DocumentItem document = new DocumentItem();
 
+		String docName = document.getDocName();
+		String docText = document.getDocText();
+
 		String documentLocator = "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
-				+ document.getDocName() + ")";
+				+ docName + ")";
 
 		ZimbraAccount account = app.zGetActiveAccount();
 		String briefcaseFolderId = document.GetBriefcaseIdUsingSOAP(account);
 
+		// Create document using SOAP
+		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
+				+ docText + "</body>" + "</html>");
+
 		account
 				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
 						+ "<doc name='"
-						+ document.getDocName()
+						+ docName
 						+ "' l='"
 						+ briefcaseFolderId
 						+ "' ct='application/x-zimbra-doc'>"
-						+ "<content>&lt;html>&lt;body>"
-						+ document.getDocText()
-						+ "&lt;/body>&lt;/html></content>"
+						+ "<content>"
+						+ contentHTML
+						+ "</content>"
 						+ "</doc>"
 						+ "</SaveDocumentRequest>");
 
-		// Select Briefcase tab
-		app.zPageBriefcase.zNavigateTo();
-
 		// refresh briefcase page
-		app.zPageBriefcase.pageRefresh(true);
+		app.zPageBriefcase.pageRefresh(Locators.zBriefcaseFolderIcon,true);
 
 		// Click on created document
 		app.zPageBriefcase.waitForElement(documentLocator, "2000");
@@ -365,9 +373,6 @@ public class EditDocument extends AjaxCommonTest {
 		// Click on Edit document icon in toolbar
 		DocumentBriefcaseEdit documentBriefcaseEdit = (DocumentBriefcaseEdit) app.zPageBriefcase
 				.zToolbarPressButton(Button.B_EDIT_FILE);
-
-		String docName = document.getDocName();
-		String docText = document.getDocText();
 
 		app.zPageBriefcase.isEditDocLoaded(docName, docText);
 
@@ -394,7 +399,7 @@ public class EditDocument extends AjaxCommonTest {
 		}
 
 		// refresh briefcase page
-		app.zPageBriefcase.pageRefresh(true);
+		app.zPageBriefcase.pageRefresh(Locators.zBriefcaseFolderIcon,true);
 
 		// Click on created document
 		app.zPageBriefcase.waitForElement(documentLocator, "2000");
@@ -418,13 +423,13 @@ public class EditDocument extends AjaxCommonTest {
 
 			// close
 			app.zPageBriefcase.zSelectWindow(docName);
-			
+
 			app.zPageBriefcase.closeWindow();
 		} finally {
 			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
 		}
 
-		ZAssert.assertStringContains(text, document.getDocText(),
+		ZAssert.assertStringContains(text, docText,
 				"Verify document text through GUI");
 	}
 }
