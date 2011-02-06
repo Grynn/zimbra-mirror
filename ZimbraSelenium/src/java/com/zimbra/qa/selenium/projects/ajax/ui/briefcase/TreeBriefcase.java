@@ -58,13 +58,17 @@ public class TreeBriefcase extends AbsTree {
 
 		if (action == Action.A_LEFTCLICK) {
 			locator = Locators.briefcaseTreeView + folder.getId()
-					+ "_textCell]";
+					+ "_imageCell]";
+			
+			this.zWaitForBusyOverlay();
+			
+			this.sMouseUp(locator);
 
 			// FALL THROUGH
 		} else if (action == Action.A_RIGHTCLICK) {
 
 			locator = Locators.briefcaseTreeView + folder.getId()
-					+ "_textCell]";
+					+ "_imageCell]";
 
 			if (!this.sIsElementPresent(locator))
 				throw new HarnessException(
