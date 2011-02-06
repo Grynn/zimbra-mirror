@@ -17,11 +17,9 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
  * @author Matt Rhoades
  *
  */
-public class SavedSearchFolderItem extends com.zimbra.soap.mail.type.Folder implements IItem {
+public class SavedSearchFolderItem extends com.zimbra.soap.mail.type.SearchFolder implements IItem {
 	protected static Logger logger = LogManager.getLogger(IItem.class);
 
-	protected String query = "foo";
-	protected String types = "message";
 	
 	/**
 	 * Create a new SavedSearchFolderItem object
@@ -30,21 +28,6 @@ public class SavedSearchFolderItem extends com.zimbra.soap.mail.type.Folder impl
 		setName(ZimbraSeleniumProperties.getUniqueString());
 	}
 
-	private void setTypes(String types) {
-		this.types = types;
-	}
-
-	private void setQuery(String query) {
-		this.query = query;
-	}
-
-	private String getTypes() {
-		return (types);
-	}
-
-	private String getQuery() {
-		return (query);
-	}
 	
 	public void createUsingSOAP(ZimbraAccount account) throws HarnessException {
 		
