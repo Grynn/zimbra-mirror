@@ -12,7 +12,6 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogDeleteConfirm;
-import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase.Locators;
 
 public class DeleteDocument extends AjaxCommonTest {
 
@@ -71,13 +70,10 @@ public class DeleteDocument extends AjaxCommonTest {
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
 		// Verify document was deleted
-		String itemLocator = Locators.briefcaseListView
-				+ " td[width*='auto'] div:contains(" + docName + ")";
-		boolean isPresenet = true;
-		isPresenet = !app.zPageBriefcase.waitForCondition(
-				"!selenium.isElementPresent(\"" + itemLocator + "\");", "5000");
+		boolean isDeleted = app.zPageBriefcase.isDeleted(docName);
 
-		ZAssert.assertFalse(isPresenet,
-				"Verify document was deleted through GUI");
+		ZAssert
+				.assertTrue(isDeleted,
+						"Verify document was deleted through GUI");
 	}
 }

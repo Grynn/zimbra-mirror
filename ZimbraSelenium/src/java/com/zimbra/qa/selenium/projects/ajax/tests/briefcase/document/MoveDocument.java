@@ -12,7 +12,6 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogChooseFolder;
-import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase.Locators;
 import org.testng.annotations.AfterMethod;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -99,22 +98,19 @@ public class MoveDocument extends AjaxCommonTest {
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
 		// Verify document was moved from the folder
-		String itemLocator = Locators.briefcaseListView
-				+ " td[width*='auto'] div:contains(" + docName + ")";
-		boolean isPresenet = true;
-		isPresenet = app.zPageBriefcase.sIsElementPresent(itemLocator);
+		boolean deleted = app.zPageBriefcase.isDeleted(docName);
 
-		ZAssert.assertFalse(isPresenet,
-				"Verify document was moved from the folder");
+		ZAssert
+				.assertTrue(deleted,
+						"Verify document was moved from the folder");
 
 		// click on subfolder in tree view
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolder, true);
 
 		// Verify document was moved to the selected folder
-		isPresenet = false;
-		isPresenet = app.zPageBriefcase.sIsElementPresent(itemLocator);
+		boolean present = app.zPageBriefcase.isPresent(docName);
 
-		ZAssert.assertTrue(isPresenet,
+		ZAssert.assertTrue(present,
 				"Verify document was moved to the selected folder");
 	}
 

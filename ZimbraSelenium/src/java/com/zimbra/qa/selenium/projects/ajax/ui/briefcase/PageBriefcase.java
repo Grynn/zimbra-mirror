@@ -150,7 +150,7 @@ public class PageBriefcase extends AbsTab {
 			this.zClick(locator);
 
 			zWaitForBusyOverlay();
-			
+
 			isEditDocLoaded("Zimbra Docs", "");
 
 			page = new DocumentBriefcaseNew(this.MyApplication);
@@ -181,8 +181,8 @@ public class PageBriefcase extends AbsTab {
 			page = new DialogDeleteConfirm(MyApplication);
 		} else if (button == Button.B_OPEN_IN_SEPARATE_WINDOW) {
 			// Check if the button is disabled
-			String attrs = sGetAttribute("css=td[" + Locators.zOpenFileInSeparateWindowIconBtn
-					+ "]>div@class");
+			String attrs = sGetAttribute("css=td["
+					+ Locators.zOpenFileInSeparateWindowIconBtn + "]>div@class");
 			if (attrs.contains("ZDisabledImage")) {
 				throw new HarnessException(button + " is disabled " + attrs);
 			}
@@ -386,13 +386,14 @@ public class PageBriefcase extends AbsTab {
 	@Override
 	public AbsPage zListItem(Action action, String docName)
 			throws HarnessException {
-		logger.info(myPageName() + " zListItem(" + action + ", " + docName + ")");
+		logger.info(myPageName() + " zListItem(" + action + ", " + docName
+				+ ")");
 		AbsPage page = null;
 		String listLocator = Locators.briefcaseListView;
 		String itemlocator;
 
-		//listLocator = "div[id='zl__BDLV__rows'][class='DwtListView-Rows']";
-		//String rowLocator = rowLocator = "div[id^='zli__BDLV__']";
+		// listLocator = "div[id='zl__BDLV__rows'][class='DwtListView-Rows']";
+		// String rowLocator = rowLocator = "div[id^='zli__BDLV__']";
 		// rowLocator = "css=div:contains[id^='zli__BDLV__']";
 		// rowLocator = "css=div:contains[id:contains('zli__BDLV__')]";
 		if (!this.sIsElementPresent(listLocator))
@@ -435,9 +436,10 @@ public class PageBriefcase extends AbsTab {
 		throw new HarnessException("implement me!");
 	}
 
-	public void pageRefresh(String locator, boolean includeRow) throws HarnessException {
+	public void pageRefresh(String locator, boolean includeRow)
+			throws HarnessException {
 		// ClientSessionFactory.session().selenium().refresh();
-		//zClick(Locators.zBriefcaseFolderIcon);
+		// zClick(Locators.zBriefcaseFolderIcon);
 		zClick(locator);
 		String condition = "selenium.isElementPresent(\"css=[id='zti__main_Briefcase__16_div'][class='DwtTreeItem-selected']\")&&"
 				+ "selenium.isElementPresent(\"css=[id='zl__BDLV__rows']";
@@ -461,12 +463,39 @@ public class PageBriefcase extends AbsTab {
 		return loaded;
 	}
 
+	public boolean isPresent(String itemName) throws HarnessException {
+		String itemLocator = Locators.briefcaseListView
+				+ " td[width*='auto'] div:contains(" + itemName + ")";
+
+		boolean present = false;
+		present = waitForCondition("selenium.isElementPresent(\"" + itemLocator
+				+ "\");", "5000");
+		return present;
+	}
+
+	public boolean isDeleted(String itemName) throws HarnessException {
+		String itemLocator = Locators.briefcaseListView
+				+ " td[width*='auto'] div:contains(" + itemName + ")";
+
+		boolean deleted = false;
+		deleted = waitForCondition("!selenium.isElementPresent(\""
+				+ itemLocator + "\");", "5000");
+		return deleted;
+	}
+
+	public String getText(String itemName) throws HarnessException {
+		String itemLocator = Locators.briefcaseListView
+				+ " td[width*='auto'] div:contains(" + itemName + ")";
+
+		return sGetText(itemLocator);
+	}
+
 	public boolean isEditDocLoaded(String windowName, String text)
 			throws HarnessException {
 		waitForWindow(windowName, "5000");
 
 		zSelectWindow(windowName);
-		
+
 		waitForElement("css=div[class='ZDToolBar ZWidget']", "30000");
 
 		waitForElement("css=iframe[id*='DWT'][class='ZDEditor']", "30000");

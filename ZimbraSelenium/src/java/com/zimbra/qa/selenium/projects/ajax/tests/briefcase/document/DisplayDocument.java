@@ -10,7 +10,6 @@ import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase.Locators;
 
 public class DisplayDocument extends AjaxCommonTest {
 
@@ -56,11 +55,12 @@ public class DisplayDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Verify document is created
-		String itemLocator = Locators.briefcaseListView
-				+ " td[width*='auto'] div:contains(" + docName + ")";
-		String name = app.zPageBriefcase.sGetText(itemLocator);
+		// String name = app.zPageBriefcase.getText(docName);
+		// ZAssert.assertEquals(name, docName,
+		// "Verify document name through GUI");
+		boolean present = app.zPageBriefcase.isPresent(docName);
 
-		ZAssert.assertEquals(name, docName, "Verify document name through GUI");
+		ZAssert.assertTrue(present, "Verify document name through GUI");
 
 		/*
 		 * //name =ClientSessionFactory.session().selenium().getText(

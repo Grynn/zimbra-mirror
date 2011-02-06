@@ -14,7 +14,6 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseEdit;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseOpen;
-import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase.Locators;
 
 public class EditDocument extends AjaxCommonTest {
 
@@ -96,12 +95,12 @@ public class EditDocument extends AjaxCommonTest {
 		docName = document.getDocName();
 
 		// Verify document was saved with new data
-		String itemLocator = Locators.briefcaseListView
-				+ " td[width*='auto'] div:contains(" + docName + ")";
-		String name = app.zPageBriefcase.sGetText(itemLocator);
+		// String name = app.zPageBriefcase.getText(docName);
+		// ZAssert.assertStringContains(name, docName,
+		// "Verify document name through GUI");
+		boolean present = app.zPageBriefcase.isPresent(docName);
 
-		ZAssert.assertStringContains(name, docName,
-				"Verify document name through GUI");
+		ZAssert.assertTrue(present, "Verify document name through GUI");
 
 		/*
 		 * //name =ClientSessionFactory.session().selenium().getText(
