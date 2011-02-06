@@ -17,6 +17,7 @@ public class PageBriefcase extends AbsTab {
 	public static class Locators {
 		public static final String zNewBriefcaseOverviewPaneIcon = "id=ztih__main_Briefcase__BRIEFCASE_textCell";
 		public static final String zBriefcaseFolder = "id=zti__main_Briefcase__16_textCell";
+		public static final String briefcaseListView = "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows']";
 		public static final String zBriefcaseFolderIcon = "id=zti__main_Briefcase__16";
 		public static final String zTrashFolder = "id=zti__main_Briefcase__3_textCell";
 		public static final String zBriefcaseAppIconBtn = "id=zb__App__Briefcase_left_icon";
@@ -153,7 +154,7 @@ public class PageBriefcase extends AbsTab {
 			isEditDocLoaded("Zimbra Docs", "");
 
 			page = new DocumentBriefcaseNew(this.MyApplication);
-			return (page);
+			return page;
 		} else if (button == Button.B_UPLOAD_FILE) {
 			// Check if the button is visible
 			String attrs = sGetAttribute("xpath=(//div[@id='zb__BDLV__NEW_FILE'])@style");
@@ -383,18 +384,18 @@ public class PageBriefcase extends AbsTab {
 	}
 
 	@Override
-	public AbsPage zListItem(Action action, String name)
+	public AbsPage zListItem(Action action, String docName)
 			throws HarnessException {
-		logger.info(myPageName() + " zListItem(" + action + ", " + name + ")");
+		logger.info(myPageName() + " zListItem(" + action + ", " + docName + ")");
 		AbsPage page = null;
-		String listLocator;
+		String listLocator = Locators.briefcaseListView;
 		String itemlocator;
 
-		listLocator = "div[id='zl__BDLV__rows'][class='DwtListView-Rows']";
+		//listLocator = "div[id='zl__BDLV__rows'][class='DwtListView-Rows']";
 		//String rowLocator = rowLocator = "div[id^='zli__BDLV__']";
 		// rowLocator = "css=div:contains[id^='zli__BDLV__']";
 		// rowLocator = "css=div:contains[id:contains('zli__BDLV__')]";
-		if (!this.sIsElementPresent("css=" + listLocator))
+		if (!this.sIsElementPresent(listLocator))
 			throw new HarnessException("List View Rows is not present "
 					+ listLocator);
 		/*
@@ -414,12 +415,13 @@ public class PageBriefcase extends AbsTab {
 		 * if ( itemlocator == null ) { throw new
 		 * HarnessException("Unable to locate item with name("+ name +")"); }
 		 */
-		itemlocator = "css=" + listLocator + " td[width='auto'] div:contains("
-				+ name + ")";
+		itemlocator = listLocator + " td[width*='auto'] div:contains("
+				+ docName + ")";
 		if (!this.sIsElementPresent(itemlocator))
 			throw new HarnessException("Unable to locate item with name("
-					+ name + ")");
+					+ docName + ")");
 		if (action == Action.A_LEFTCLICK) {
+			waitForElement(itemlocator, "2000");
 			// Left-Click on the item
 			this.zClick(itemlocator);
 			page = new DocumentPreview(MyApplication);

@@ -2,6 +2,9 @@ package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
+import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
@@ -21,15 +24,16 @@ public class DisplayDocument extends AjaxCommonTest {
 
 	@Test(description = "Create document through SOAP - verify through GUI", groups = { "smoke" })
 	public void DisplayDocument_01() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+
+		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
 
 		// Create document item
 		DocumentItem document = new DocumentItem();
 
 		String docName = document.getDocName();
 		String docText = document.getDocText();
-
-		ZimbraAccount account = app.zGetActiveAccount();
-		String briefcaseFolderId = document.GetBriefcaseIdUsingSOAP(account);
 
 		// Create document using SOAP
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
@@ -38,9 +42,9 @@ public class DisplayDocument extends AjaxCommonTest {
 		account
 				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
 						+ "<doc name='"
-						+ document.getDocName()
+						+ docName
 						+ "' l='"
-						+ briefcaseFolderId
+						+ briefcaseFolder.getId()
 						+ "' ct='application/x-zimbra-doc'>"
 						+ "<content>"
 						+ contentHTML
@@ -49,16 +53,12 @@ public class DisplayDocument extends AjaxCommonTest {
 						+ "</SaveDocumentRequest>");
 
 		// refresh briefcase page
-		app.zPageBriefcase.pageRefresh(Locators.zBriefcaseFolderIcon,true);
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Verify document is created
-		String name = "";
-		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
-				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
-			name = app.zPageBriefcase
-					.sGetText("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
-							+ docName + ")");
-		}
+		String itemLocator = Locators.briefcaseListView
+				+ " td[width*='auto'] div:contains(" + docName + ")";
+		String name = app.zPageBriefcase.sGetText(itemLocator);
 
 		ZAssert.assertEquals(name, docName, "Verify document name through GUI");
 

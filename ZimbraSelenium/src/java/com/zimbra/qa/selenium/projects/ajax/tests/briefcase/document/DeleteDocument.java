@@ -2,6 +2,9 @@ package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
+import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
@@ -22,18 +25,16 @@ public class DeleteDocument extends AjaxCommonTest {
 
 	@Test(description = "Create document through SOAP - delete & verify through GUI", groups = { "smoke" })
 	public void DeleteDocument_01() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+
+		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
 
 		// Create document item
 		DocumentItem document = new DocumentItem();
 
 		String docName = document.getDocName();
 		String docText = document.getDocText();
-
-		String documentLocator = "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
-				+ docName + ")";
-
-		ZimbraAccount account = app.zGetActiveAccount();
-		String briefcaseFolderId = document.GetBriefcaseIdUsingSOAP(account);
 
 		// Create document using SOAP
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
@@ -44,7 +45,7 @@ public class DeleteDocument extends AjaxCommonTest {
 						+ "<doc name='"
 						+ docName
 						+ "' l='"
-						+ briefcaseFolderId
+						+ briefcaseFolder.getId()
 						+ "' ct='application/x-zimbra-doc'>"
 						+ "<content>"
 						+ contentHTML
@@ -53,28 +54,28 @@ public class DeleteDocument extends AjaxCommonTest {
 						+ "</SaveDocumentRequest>");
 
 		// refresh briefcase page
-		app.zPageBriefcase.pageRefresh(Locators.zBriefcaseFolderIcon,true);
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		app.zPageBriefcase.waitForElement(documentLocator, "2000");
-		app.zPageBriefcase.zClick(documentLocator);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
 
 		// Click on Delete document icon in toolbar
 		DialogDeleteConfirm deleteConfirm = (DialogDeleteConfirm) app.zPageBriefcase
 				.zToolbarPressButton(Button.B_DELETE);
 
 		// Click OK on Confirmation dialog
-		if (deleteConfirm.zIsActive())
-			deleteConfirm.zClickButton(Button.B_YES);
+		deleteConfirm.zClickButton(Button.B_YES);
 
 		// refresh briefcase page
-		app.zPageBriefcase.pageRefresh(Locators.zBriefcaseFolderIcon,false);
+		app.zTreeBriefcase
+				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
 		// Verify document was deleted
+		String itemLocator = Locators.briefcaseListView
+				+ " td[width*='auto'] div:contains(" + docName + ")";
 		boolean isPresenet = true;
 		isPresenet = !app.zPageBriefcase.waitForCondition(
-				"!selenium.isElementPresent(\"" + documentLocator + "\");",
-				"5000");
+				"!selenium.isElementPresent(\"" + itemLocator + "\");", "5000");
 
 		ZAssert.assertFalse(isPresenet,
 				"Verify document was deleted through GUI");

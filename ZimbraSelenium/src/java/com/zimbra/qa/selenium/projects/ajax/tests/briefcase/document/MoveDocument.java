@@ -3,6 +3,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
+import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
@@ -30,45 +31,35 @@ public class MoveDocument extends AjaxCommonTest {
 
 	@Test(description = "Create document through SOAP - move & verify through GUI", groups = { "smoke" })
 	public void MoveDocument_01() throws HarnessException {
-
 		ZimbraAccount account = app.zGetActiveAccount();
-		String foldername = "folder"
-				+ ZimbraSeleniumProperties.getUniqueString();
 
-		// Create a subfolder to move the message into i.e. Briefcase/subfolder
 		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
 				SystemFolder.Briefcase);
 
-		// String briefcaseFolderId = document.GetBriefcaseIdUsingSOAP(account);
+		String name = "folder" + ZimbraSeleniumProperties.getUniqueString();
+
+		// Create a subfolder to move the message into i.e. Briefcase/subfolder
 		String briefcaseFolderId = briefcaseFolder.getId();
 
 		account.soapSend("<CreateFolderRequest xmlns='urn:zimbraMail'>"
-				+ "<folder name='" + foldername + "' l='" + briefcaseFolderId
-				+ "'/>" + "</CreateFolderRequest>");
+				+ "<folder name='" + name + "' l='" + briefcaseFolderId + "'/>"
+				+ "</CreateFolderRequest>");
 
-		FolderItem subfolder = FolderItem.importFromSOAP(account, foldername);
+		FolderItem subFolder = FolderItem.importFromSOAP(account, name);
 
-		String subfolderName = subfolder.getName();
-
-		String subfolderLocator = "css=div[id='zl__BDLV__rows'] td[width*='auto'] div:contains("
-				+ subfolderName + ")";
+		String subfolderName = subFolder.getName();
 
 		// refresh briefcase page
-		app.zPageBriefcase.pageRefresh(Locators.zBriefcaseFolderIcon,true);
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created subfolder
-		// app.zPageBriefcase.zListItem(Action.A_LEFTCLICK,subfolderName);
-		app.zPageBriefcase.waitForElement(subfolderLocator, "5000");
-		app.zPageBriefcase.zClick(subfolderLocator);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, subfolderName);
 
 		// Create document item
 		DocumentItem document = new DocumentItem();
 
 		String docName = document.getDocName();
 		String docText = document.getDocText();
-
-		String documentLocator = "css=div[id='zl__BDLV__rows'] td[width*='auto'] div:contains("
-				+ docName + ")";
 
 		// Create document using SOAP
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
@@ -77,7 +68,7 @@ public class MoveDocument extends AjaxCommonTest {
 		account
 				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
 						+ "<doc name='"
-						+ document.getDocName()
+						+ docName
 						+ "' l='"
 						+ briefcaseFolderId
 						+ "' ct='application/x-zimbra-doc'>"
@@ -90,47 +81,39 @@ public class MoveDocument extends AjaxCommonTest {
 		// document.importFromSOAP(account, document.getDocName());
 
 		// refresh briefcase page
-		app.zPageBriefcase.pageRefresh(Locators.zBriefcaseFolderIcon,true);
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		// app.zPageBriefcase.zListItem(Action.A_LEFTCLICK,document.getDocName());
-		app.zPageBriefcase.waitForElement(documentLocator, "5000");
-		app.zPageBriefcase.zClick(documentLocator);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
 
 		// Click on Move selected item icon in toolbar
 		DialogChooseFolder chooseFolder = (DialogChooseFolder) app.zPageBriefcase
 				.zToolbarPressButton(Button.B_MOVE);
 
 		// Click OK on Confirmation dialog
-		chooseFolder.zClickTreeFolder(subfolder);
+		chooseFolder.zClickTreeFolder(subFolder);
 		chooseFolder.zClickButton(Button.B_OK);
 
 		// refresh briefcase page
-		app.zPageBriefcase.pageRefresh(Locators.zBriefcaseFolderIcon,false);
+		app.zTreeBriefcase
+				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
 		// Verify document was moved from the folder
+		String itemLocator = Locators.briefcaseListView
+				+ " td[width*='auto'] div:contains(" + docName + ")";
 		boolean isPresenet = true;
-		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
-				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
-			isPresenet = app.zPageBriefcase.sIsElementPresent(documentLocator);
-		}
+		isPresenet = app.zPageBriefcase.sIsElementPresent(itemLocator);
 
 		ZAssert.assertFalse(isPresenet,
 				"Verify document was moved from the folder");
 
 		// click on subfolder in tree view
-		String treeViewSubfolderLocator = "css=td[class='DwtTreeItem-Text']:contains('"
-				+ subfolderName + "')";
-		
-		// refresh briefcase page
-		app.zPageBriefcase.pageRefresh(treeViewSubfolderLocator,true);
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolder, true);
 
 		// Verify document was moved to the selected folder
 		isPresenet = false;
-		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
-				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
-			isPresenet = app.zPageBriefcase.sIsElementPresent(documentLocator);
-		}
+		isPresenet = app.zPageBriefcase.sIsElementPresent(itemLocator);
+
 		ZAssert.assertTrue(isPresenet,
 				"Verify document was moved to the selected folder");
 	}

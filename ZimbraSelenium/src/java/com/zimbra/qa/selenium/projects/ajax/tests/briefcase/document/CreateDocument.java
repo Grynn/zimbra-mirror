@@ -3,13 +3,16 @@ package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
+import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseOpen;
-import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase.Locators;
 
 public class CreateDocument extends AjaxCommonTest {
 
@@ -23,15 +26,16 @@ public class CreateDocument extends AjaxCommonTest {
 
 	@Test(description = "Create document through GUI - verify through GUI", groups = { "sanity" })
 	public void CreateDocument_01() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+
+		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
 
 		// Create document item
 		DocumentItem document = new DocumentItem();
 
 		String docName = document.getDocName();
 		String docText = document.getDocText();
-
-		String documentLocator = "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
-				+ docName + ")";
 
 		// Open new document page
 		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
@@ -52,11 +56,10 @@ public class CreateDocument extends AjaxCommonTest {
 		}
 
 		// refresh briefcase page
-		app.zPageBriefcase.pageRefresh(Locators.zBriefcaseFolderIcon,true);
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		app.zPageBriefcase.waitForElement(documentLocator, "2000");
-		app.zPageBriefcase.zClick(documentLocator);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
 
 		// Click on open in a separate window icon in toolbar
 		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase

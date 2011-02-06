@@ -125,6 +125,7 @@ public class Button {
 	public static final Button B_TREE_NEWCALENDAR = new Button("B_TREE_NEWCALENDAR");
 	public static final Button B_TREE_NEWTASKLIST = new Button("B_TREE_NEWTASKLIST");
 	public static final Button B_TREE_NEWBRIEFCASE = new Button("B_TREE_NEWBRIEFCASE");
+	public static final Button B_TREE_BRIEFCASE_EXPANDCOLLAPSE = new Button("B_TREE_BRIEFCASE_EXPANDCOLLAPSE");
 	public static final Button B_TREE_NEWTAG = new Button("B_TREE_NEWTAG");
 	
 	// Tree buttons (Mail folders)
