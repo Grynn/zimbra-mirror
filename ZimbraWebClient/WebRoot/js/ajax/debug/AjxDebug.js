@@ -934,6 +934,11 @@ function(type, msg) {
 	AjxDebug._addMessageToBuffer(type, msg + "<br>");
 };
 
+AjxDebug.dumpObj =
+function(type, obj) {
+	AjxDebug._addMessageToBuffer(type, "<pre>" + AjxStringUtil.prettyPrint(obj, true) + "</pre>");
+};
+
 /**
  *
  * @param {hash}	params			hash of params:
@@ -942,6 +947,8 @@ function(type, msg) {
  */
 AjxDebug.logSoapMessage =
 function(params) {
+
+	if (params.methodNameStr == "NoOpRequest" || params.methodNameStr == "NoOpResponse") { return; }
 
 	var ts = AjxDebug._getTimeStamp();
 	var msg = ["<b>", params.methodNameStr, params.asyncMode ? "" : " (SYNCHRONOUS)" , " - ", ts, "</b>"].join("");
