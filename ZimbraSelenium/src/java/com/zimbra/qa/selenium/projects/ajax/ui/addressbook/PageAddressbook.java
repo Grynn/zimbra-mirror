@@ -9,16 +9,10 @@ import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.AbsTab;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.ui.Shortcut;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
-
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
 public class PageAddressbook extends AbsTab {
 
@@ -362,6 +356,11 @@ public class PageAddressbook extends AbsTab {
 			else if (option == Button.B_EDIT) {
 				cmi=CONTEXT_MENU.CONTACT_EDIT;
 				page = new FormContactNew(MyApplication);	
+			}
+
+			else if (option == Button.B_NEW) {
+				cmi=CONTEXT_MENU.CONTACT_NEW_EMAIL;
+				page = new FormMailNew(MyApplication);	
 			}
 
 			id = cmi.locator;
