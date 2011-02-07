@@ -6,12 +6,14 @@ import java.util.*;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
 public class ContactContextMenu extends AjaxCommonTest  {
 	public ContactContextMenu() {
@@ -200,20 +202,23 @@ public class ContactContextMenu extends AjaxCommonTest  {
 			}
 		}
 		
-        ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") deleted");
-      
+        ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") deleted");      
         	             
        }
 	
 	@Test(	description = "Right click then click New Email",
-			groups = { "smoke" })
+			groups = { "smokey" })
 	public void ClickNewEmail() throws HarnessException {
 	
 		ContactItem contactItem = createSelectAContactItem();
 
-		//Click New Email	
-        FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_NEW, contactItem.fileAs);        
-	
+		//Click New Email
+		//TODO: ????Button.B_NEW???????
+        FormMailNew formMailNew = (FormMailNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_NEW, contactItem.fileAs);        
+        
+        //Verify contactItem.email displayed in the "To" field
+        ZAssert.assertTrue(app.zPageAddressbook.sGetText(FormMailNew.Locators.zBubbleToField).equals(contactItem.email), "Verify contact email displayed in field To - expected" + contactItem.email + " - was " + app.zPageAddressbook.sGetText(FormMailNew.Locators.zBubbleToField));
+        
 	}
 }
 
