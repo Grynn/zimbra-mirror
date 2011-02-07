@@ -1,0 +1,145 @@
+diff -cr /var/tmp/postfix-2.9-20110205/src/smtpd/smtpd.c ./src/smtpd/smtpd.c
+*** /var/tmp/postfix-2.9-20110205/src/smtpd/smtpd.c	Sat Feb  5 18:25:25 2011
+--- ./src/smtpd/smtpd.c	Mon Feb  7 10:27:29 2011
+***************
+*** 4029,4034 ****
+--- 4029,4035 ----
+  	TLS_SERVER_START(&props,
+  			 ctx = smtpd_tls_ctx,
+  			 stream = state->client,
++ 			 fd = -1,
+  			 log_level = var_smtpd_tls_loglevel,
+  			 timeout = var_smtpd_starttls_tmout,
+  			 requirecert = requirecert,
+diff -cr /var/tmp/postfix-2.9-20110205/src/tls/tls.h ./src/tls/tls.h
+*** /var/tmp/postfix-2.9-20110205/src/tls/tls.h	Tue Dec 28 19:24:31 2010
+--- ./src/tls/tls.h	Mon Feb  7 10:25:04 2011
+***************
+*** 268,273 ****
+--- 268,274 ----
+  typedef struct {
+      TLS_APPL_STATE *ctx;		/* TLS application context */
+      VSTREAM *stream;			/* Client stream */
++     int     fd;				/* Event-driven file descriptor */
+      int     log_level;			/* TLS log level */
+      int     timeout;			/* TLS handshake timeout */
+      int     requirecert;		/* Insist on client cert? */
+***************
+*** 293,302 ****
+      ((props)->a12), ((props)->a13), ((props)->a14), ((props)->a15), \
+      ((props)->a16), ((props)->a17), ((props)->a18), ((props)->a19), (props)))
+  
+! #define TLS_SERVER_START(props, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10) \
+      tls_server_start((((props)->a1), ((props)->a2), ((props)->a3), \
+      ((props)->a4), ((props)->a5), ((props)->a6), ((props)->a7), \
+!     ((props)->a8), ((props)->a9), ((props)->a10), (props)))
+  
+   /*
+    * tls_session.c
+--- 294,303 ----
+      ((props)->a12), ((props)->a13), ((props)->a14), ((props)->a15), \
+      ((props)->a16), ((props)->a17), ((props)->a18), ((props)->a19), (props)))
+  
+! #define TLS_SERVER_START(props, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11) \
+      tls_server_start((((props)->a1), ((props)->a2), ((props)->a3), \
+      ((props)->a4), ((props)->a5), ((props)->a6), ((props)->a7), \
+!     ((props)->a8), ((props)->a9), ((props)->a10), ((props)->a11), (props)))
+  
+   /*
+    * tls_session.c
+diff -cr /var/tmp/postfix-2.9-20110205/src/tls/tls_server.c ./src/tls/tls_server.c
+*** /var/tmp/postfix-2.9-20110205/src/tls/tls_server.c	Fri Dec 31 19:01:44 2010
+--- ./src/tls/tls_server.c	Mon Feb  7 10:38:33 2011
+***************
+*** 89,95 ****
+  /*	SSL_accept(), SSL_read(), SSL_write() and SSL_shutdown().
+  /*
+  /*	To maintain control over TLS I/O, an event-driven server
+! /*	invokes tls_server_start() with a null VSTREAM argument.
+  /*	Then, tls_server_start() performs all the necessary
+  /*	preparations before the TLS handshake and returns a partially
+  /*	populated TLS context. The event-driven application is then
+--- 89,96 ----
+  /*	SSL_accept(), SSL_read(), SSL_write() and SSL_shutdown().
+  /*
+  /*	To maintain control over TLS I/O, an event-driven server
+! /*	invokes tls_server_start() with a null VSTREAM argument and
+! /*	with an fd argument that specifies the I/O file descriptor.
+  /*	Then, tls_server_start() performs all the necessary
+  /*	preparations before the TLS handshake and returns a partially
+  /*	populated TLS context. The event-driven application is then
+***************
+*** 658,663 ****
+--- 659,676 ----
+      SSL_set_accept_state(TLScontext->con);
+  
+      /*
++      * Connect the SSL connection with the network socket.
++      */
++     if (SSL_set_fd(TLScontext->con, props->stream == 0 ? props->fd :
++ 		   vstream_fileno(props->stream)) != 1) {
++ 	msg_info("SSL_set_fd error to %s", props->namaddr);
++ 	tls_print_errors();
++ 	uncache_session(app_ctx->ssl_ctx, TLScontext);
++ 	tls_free_context(TLScontext);
++ 	return (0);
++     }
++ 
++     /*
+       * If the debug level selected is high enough, all of the data is dumped:
+       * 3 will dump the SSL negotiation, 4 will dump everything.
+       * 
+***************
+*** 676,692 ****
+  	return (TLScontext);
+  
+      /*
+-      * Connect the SSL connection with the network socket.
+-      */
+-     if (SSL_set_fd(TLScontext->con, vstream_fileno(props->stream)) != 1) {
+- 	msg_info("SSL_set_fd error to %s", props->namaddr);
+- 	tls_print_errors();
+- 	uncache_session(app_ctx->ssl_ctx, TLScontext);
+- 	tls_free_context(TLScontext);
+- 	return (0);
+-     }
+- 
+-     /*
+       * Turn on non-blocking I/O so that we can enforce timeouts on network
+       * I/O.
+       */
+--- 689,694 ----
+diff -cr /var/tmp/postfix-2.9-20110205/src/tlsproxy/tlsproxy.c ./src/tlsproxy/tlsproxy.c
+*** /var/tmp/postfix-2.9-20110205/src/tlsproxy/tlsproxy.c	Mon Jan 17 10:43:31 2011
+--- ./src/tlsproxy/tlsproxy.c	Mon Feb  7 10:32:28 2011
+***************
+*** 687,692 ****
+--- 687,693 ----
+  	TLS_SERVER_START(&props,
+  			 ctx = tlsp_server_ctx,
+  			 stream = (VSTREAM *) 0,/* unused */
++ 			 fd = state->ciphertext_fd,
+  			 log_level = var_tlsp_tls_loglevel,
+  			 timeout = 0,		/* unused */
+  			 requirecert = (var_tlsp_tls_req_ccert
+***************
+*** 703,720 ****
+      }
+  
+      /*
+-      * This program will do the ciphertext I/O, not libtls. In the future,
+-      * the above event-driven engine may be factored out as a libtls library
+-      * module.
+-      */
+-     if (SSL_set_fd(state->tls_context->con, state->ciphertext_fd) != 1) {
+- 	msg_info("SSL_set_fd error to %s", state->remote_endpt);
+- 	tls_print_errors();
+- 	tlsp_state_free(state);
+- 	return;
+-     }
+- 
+-     /*
+       * XXX Do we care about TLS session rate limits? Good postscreen(8)
+       * clients will occasionally require the tlsproxy to renew their
+       * whitelist status, but bad clients hammering the server can suck up
+--- 704,709 ----
