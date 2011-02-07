@@ -45,7 +45,10 @@ public class FormMailNew extends AbsForm {
 		public static final String zPriorityOptionHigh	= "css=[id^=zv__COMPOSE][id$=___priority_dropdown]";
 		public static final String zPriorityOptionNormal	= "css=[id^=zv__COMPOSE][id$=___priority_dropdown]";
 		public static final String zPriorityOptionLow	= "css=[id^=zv__COMPOSE][id$=___priority_dropdown]";
-
+		
+		public static final String zBubbleToField		= "css=[id^=zv__COMPOSE][id$=_to_cell] div div span[2]";
+		public static final String zBubbleCcField		= "css=[id^=zv__COMPOSE][id$=_cc_cell]";
+		public static final String zBubbleBccField		= "css=[id^=zv__COMPOSE][id$=_bcc_cell]";
 		
 	}
 
@@ -77,7 +80,7 @@ public class FormMailNew extends AbsForm {
 	 * 
 	 * @param application
 	 */
-	protected FormMailNew(AbsApplication application) {
+	public FormMailNew(AbsApplication application) {
 		super(application);
 		
 		logger.info("new " + FormMailNew.class.getCanonicalName());
