@@ -91,11 +91,13 @@ AjxDebug.DEFAULT_TYPE	= "debug";		// regular DBG messages
 AjxDebug.RPC			= "rpc";		// for troubleshooting "Out of RPC cache" errors
 AjxDebug.NOTIFY			= "notify";		// for troubleshooting missing new mail
 AjxDebug.EXCEPTION		= "exception";	// JS errors
+AjxDebug.CALENDAR		= "calendar";	// for troubleshooting calendar errors
 
 AjxDebug.BUFFER_MAX[AjxDebug.DEFAULT_TYPE]	= 0;	// this one can get big due to object dumps
 AjxDebug.BUFFER_MAX[AjxDebug.RPC]			= 200;
 AjxDebug.BUFFER_MAX[AjxDebug.NOTIFY]		= 400;
 AjxDebug.BUFFER_MAX[AjxDebug.EXCEPTION]		= 100;
+AjxDebug.BUFFER_MAX[AjxDebug.CALENDAR]		= 400;
 
 AjxDebug.MAX_OUT = 25000; // max length capable of outputting an XML msg
 
