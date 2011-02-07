@@ -93,7 +93,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 
 	@Test(	description = "Right click then click delete",
 			groups = { "smoke" })
-	public void ClickDeleteOnContextMenu() throws HarnessException {
+	public void ClickDelete() throws HarnessException {
 		
 		ContactItem contactItem = createSelectAContactItem();
 		
@@ -122,7 +122,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 
 	@Test(	description = "Right click then click move",
 			groups = { "smoke" })
-	public void ClickMoveOnContextMenu() throws HarnessException {
+	public void ClickMove() throws HarnessException {
 		
 		ContactItem contactItem = createSelectAContactItem();
 		            
@@ -156,7 +156,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 
 	@Test(	description = "Right click then click Edit",
 			groups = { "smoke" })
-	public void ClickEditOnContextMenu() throws HarnessException {
+	public void ClickEdit() throws HarnessException {
 		
 		ContactItem contactItem = createSelectAContactItem();
 		//Click Edit contact	
@@ -205,6 +205,15 @@ public class ContactContextMenu extends AjaxCommonTest  {
         	             
        }
 	
-    //TODO: select other options
+	@Test(	description = "Right click then click New Email",
+			groups = { "smoke" })
+	public void ClickNewEmail() throws HarnessException {
+	
+		ContactItem contactItem = createSelectAContactItem();
+
+		//Click New Email	
+        FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_NEW, contactItem.fileAs);        
+	
+	}
 }
 
