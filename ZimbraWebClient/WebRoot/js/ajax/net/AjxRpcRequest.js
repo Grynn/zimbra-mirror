@@ -150,7 +150,12 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 AjxRpcRequest.prototype.cancel =
 function() {
 	AjxRpc.freeRpcCtxt(this);
-	this.__httpReq.abort();
+    //bug 55911
+    if (AjxEnv.isFirefox3_5up){
+        this.__httpReq.onreadystatechange = function(){};
+        DBG.println("AjxRpcRequest.prototype.cancel: clearing onreadystatechange before abort");
+    }
+    this.__httpReq.abort();
 };
 
 /**
