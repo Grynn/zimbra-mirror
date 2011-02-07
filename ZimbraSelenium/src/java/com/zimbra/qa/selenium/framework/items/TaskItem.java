@@ -16,9 +16,35 @@ import com.zimbra.qa.selenium.framework.util.*;
  *
  */
 public class TaskItem implements IItem {
+
 	protected static Logger logger = LogManager.getLogger(IItem.class);
 
 	
+	////
+	// START: GUI Data
+	////
+
+	public boolean gIsChecked;
+	
+	public String gTags; // TODO: how to represent the icon?
+
+	public String gPriority; // TODO: how to represent the icon?
+	
+	public boolean gHasAttachments;
+
+	public String gSubject;
+
+	public String gStatus;
+
+	public String gPercentComplete;
+
+	public String gDueDate;
+
+	
+	////
+	// FINISH: GUI Data
+	////
+
 	
 	/**
 	 * Create a mail item
@@ -96,21 +122,16 @@ public class TaskItem implements IItem {
 	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(TaskItem.class.getSimpleName()).append('\n');
-		sb.append('\n').append(prettyPrintSOAP());
-		sb.append('\n').append(prettyPrintGUI());
+		sb.append("Checked: ").append(gIsChecked).append('\n');
+		sb.append("Tags: ").append(gTags).append('\n');
+		sb.append("Priority: ").append(gPriority).append('\n');
+		sb.append("Attachments: ").append(gHasAttachments).append('\n');
+		sb.append("Subject: ").append(gSubject).append('\n');
+		sb.append("Status: ").append(gStatus).append('\n');
+		sb.append("% Complete: ").append(gPercentComplete).append('\n');
+		sb.append("Due Date: ").append(gDueDate).append('\n');
 		return (sb.toString());
 	}
 	
-	public String prettyPrintSOAP() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("SOAP Data:\n");
-		return (sb.toString());
-	}
-
-	public String prettyPrintGUI() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("GUI Data:\n");
-		return (sb.toString());
-	}
 
 }

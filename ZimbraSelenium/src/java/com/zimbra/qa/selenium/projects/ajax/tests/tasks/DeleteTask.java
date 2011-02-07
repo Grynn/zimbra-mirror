@@ -6,6 +6,7 @@ import java.util.List;
 import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -28,6 +29,8 @@ public class DeleteTask extends AjaxCommonTest {
 			groups = { "smoke" })
 	public void DeleteTask_01() throws HarnessException {
 		
+		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
+		
 		// Create a basic task to delete
 		String subject = "task"+ ZimbraSeleniumProperties.getUniqueString();
 				
@@ -47,10 +50,29 @@ public class DeleteTask extends AjaxCommonTest {
 				"</CreateTaskRequest>");
 
 		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
-		
 		ZAssert.assertNotNull(task, "Verify the task is created");
 		
-		ZAssert.assertTrue(false, "implement me!");
+		// Refresh the tasks view
+		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
+						
+		// Select the item
+		app.zPageTasks.zListItem(Action.A_LEFTCLICK, subject);
+		
+		// Click delete
+		app.zPageTasks.zToolbarPressButton(Button.B_DELETE);
+		
+		List<TaskItem> tasks = app.zPageTasks.zGetTasks();
+		ZAssert.assertNotNull(tasks, "Verify the task list exists");
+
+		TaskItem found = null;
+		for (TaskItem t : tasks) {
+			logger.info("Subject: looking for "+ subject +" found: "+ t.gSubject);
+			if ( subject.equals(t.gSubject) ) {
+				found = t;
+				break;
+			}
+		}
+		ZAssert.assertNull(found, "Verify the task is no longer present");
 	
 	}
 

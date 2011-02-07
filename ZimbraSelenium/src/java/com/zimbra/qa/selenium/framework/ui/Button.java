@@ -119,6 +119,11 @@ public class Button {
     //Addressbook button
 	public static final Button B_EDIT = new Button("zb__CNS__EDIT");
 	
+	// Task buttons
+	public static final Button B_TASK_FILTERBY = new Button("B_TASK_FILTERBY");
+	public static final Button B_TASK_MARKCOMPLETED = new Button("B_TASK_FILTERBY");
+
+	
 	// Tree buttons
 	public static final Button B_TREE_NEWFOLDER = new Button("B_TREE_NEWFOLDER");
 	public static final Button B_TREE_NEWADDRESSBOOK = new Button("B_TREE_NEWADDRESSBOOK");
