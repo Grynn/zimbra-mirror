@@ -530,11 +530,11 @@ class State:
 	def doPostconf(self):
 		if self.curPostconf():
 			c = commands.commands["postconf"]
-			s = ["%s='%s'" % (postconf, val) for (postconf, val) in self.curPostconf().items()]
-			try:
-				rc = c.execute((" ".join(s),))
-			except Exception, e:
-				return rc
+			for (postconf, val) in self.curPostconf().items():
+				try:
+					rc = c.execute("%s='%s'" % (postconf, val))
+				except Exception, e:
+					return rc
 			self.clearPostconf()
 			return rc
 		return 0
