@@ -257,6 +257,8 @@ public class AjaxCommonTest {
 		      ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.AJAX);
 		   }
 
+		   GeneralUtility.waitFor(null, ZimbraAccount.AccountZWC(), false,
+		         "authenticateToMailClientHost", null, WAIT_FOR_OPERAND.NEQ, null, 30000, 3000);
 			_selenium = ClientSessionFactory.session().selenium();
 			_selenium.start();
 			_selenium.windowMaximize();
@@ -295,7 +297,7 @@ public class AjaxCommonTest {
 
 		logger.info("commonTestBeforeSuite: finish");		
 	}
-	
+
 	/**
 	 * Global BeforeClass
 	 * 
@@ -357,9 +359,10 @@ public class AjaxCommonTest {
 	                  bFoundOtherUser = false;
 	               }
 	            }
+	            if (_firstTime) {
+	               addDefaultAccount();
+	            }
 	         }
-	         logger.debug("Selenium before adding account: " + _selenium);
-	         addDefaultAccount();
 
 	      } else {
 	         throw new HarnessException("Nothing is loaded, please check the connection");

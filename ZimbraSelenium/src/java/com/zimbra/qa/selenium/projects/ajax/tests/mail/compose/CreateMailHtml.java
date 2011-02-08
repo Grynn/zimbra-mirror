@@ -16,8 +16,7 @@ import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
-import com.zimbra.qa.selenium.projects.desktop.ui.mail.PageMail;
-
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.PageMail;
 
 public class CreateMailHtml extends AjaxCommonTest {
 
@@ -56,8 +55,8 @@ public class CreateMailHtml extends AjaxCommonTest {
 		mailform.zSubmit();
 				
 		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-         ZimbraSeleniumProperties.waitForElementPresent(app.zPageMail, PageMail.Locators.zSendReceiveButton);
-         app.zPageMail.sClick(PageMail.Locators.zSendReceiveButton);
+         ZimbraSeleniumProperties.waitForElementPresent(app.zPageMail, PageMail.Locators.zGetMailBtn);
+         app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
       }
 
       Object[] params = {ZimbraAccount.AccountA(), "subject:("+ mail.dSubject +")"};
@@ -69,7 +68,7 @@ public class CreateMailHtml extends AjaxCommonTest {
 		ZAssert.assertEquals(received.dToRecipients.get(0).dEmailAddress, ZimbraAccount.AccountA().EmailAddress, "Verify the to field is correct");
 		ZAssert.assertEquals(received.dSubject, mail.dSubject, "Verify the subject field is correct");
 		ZAssert.assertStringContains(received.dBodyText, mail.dBodyText, "Verify the body field is correct");
-		
+
 	}
 
 }

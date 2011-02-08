@@ -7,7 +7,6 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
-
 /**
  * Represents a "Create New Folder" dialog box
  * 
@@ -20,19 +19,14 @@ public class DialogCreateFolder extends AbsDialog {
 
 	public static class Locators {
 	
-		// TODO:  See https://bugzilla.zimbra.com/show_bug.cgi?id=55923
-		public static final String zDialogId			= "ChooseFolderDialog";
-		
-		public static final String zTitleId	 			= "ChooseFolderDialog_title";
+	   public static final String zDialogId = "css=div[class*='DwtDialog WindowOuterContainer']";
 
-		public static final String zDialogContentId		= "ChooseFolderDialog_content";
+      // Textfields
+      public static final String zNameField = "css=input[id$='_name'][class*='Field']";
 
-		// TODO: Tree
-		public static final String zDialogInputId		= "ChooseFolderDialog_inputDivId";
-		public static final String zDialogInputLocator	= "css=div[id='"+ zDialogId +"'] div[id='"+ zDialogInputId +"'] > div > input";
-
-		public static final String zDialogButtonsId		= "ChooseFolderDialog_buttons";
-
+      // Buttons
+      public static final String zOkButton = "css=tr>td>div[id*='button2']";
+      public static final String zCancelButton = "css=tr>td>div[id*='button1']";
 	}
 	
 	
@@ -76,21 +70,18 @@ public class DialogCreateFolder extends AbsDialog {
 
 		AbsPage page = null;
 		String locator = null;
-		
 		if ( button == Button.B_OK ) {
-			
-			// TODO: L10N this		
-			locator = "//div[@id='"+ Locators.zDialogId +"']//div[@id='"+ Locators.zDialogButtonsId +"']//td[text()='OK']";
+
+			locator = Locators.zOkButton;
 
 		} else if ( button == Button.B_CANCEL ) {
-			
-			// TODO: L10N this
-			locator = "//div[@id='"+ Locators.zDialogId +"']//div[@id='"+ Locators.zDialogButtonsId +"']//td[text()='Cancel']";
+
+			locator = Locators.zCancelButton;
 
 		} else {
 			throw new HarnessException("Button "+ button +" not implemented");
 		}
-		
+
 		// Default behavior, click the locator
 		//
 		
@@ -150,23 +141,17 @@ public class DialogCreateFolder extends AbsDialog {
 	 * @param folder
 	 */
 	public void zEnterFolderName(String folder) throws HarnessException {
-		logger.info(myPageName() + " zEnterFolderName("+ folder +")");
-		
-		if ( folder == null ) 
-			throw new HarnessException("folder must not be null");
-		
-		String locator = Locators.zDialogInputLocator;
+	   logger.info(myPageName() + " zEnterFolderName("+ folder +")");
 
-		if ( !this.sIsElementPresent(locator) )
-			throw new HarnessException("unable to find folder name field "+ locator);
-		
-		// For some reason, the text doesn't get entered on the first try
-		this.sFocus(locator);
-		this.zClick(locator);
-		zKeyboard.zTypeCharacters(folder);
+      if ( folder == null ) 
+         throw new HarnessException("folder must not be null");
 
-		this.zWaitForBusyOverlay();
-		
+      String locator = Locators.zNameField;
+
+      if ( !this.sIsElementPresent(locator) )
+         throw new HarnessException("unable to find folder name field "+ locator);
+
+      sType(locator, folder);      
 	}
 
 	public enum FolderColor {

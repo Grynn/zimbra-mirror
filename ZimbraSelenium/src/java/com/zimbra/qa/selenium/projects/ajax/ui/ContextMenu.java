@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
 
 /*
  * Right-click menu
@@ -32,6 +32,17 @@ public class ContextMenu extends AbsDisplay {
 		this.zClick(cmi.locator);
         zWaitForBusyOverlay();
 	}
+
+	public AbsPage zSelect(ContextMenuItem.CONTEXT_MENU_ITEM_NAME cmiName) throws HarnessException {
+      ContextMenuItem cmi = ContextMenuItem.getDesktopContextMenuItem(cmiName);
+      logger.info(myPageName() + " zSelect("+ cmi.text +")");
+      this.zClick(cmi.locator);
+      switch (cmiName) {
+      case NEW_FOLDER:
+         return new DialogCreateFolder(MyApplication);
+      }
+      return null;
+   }
 
 	public ContextMenuItem getContextMenuItem  (String locator, Class contextMenuItemObject)throws HarnessException {
 		   ContextMenuItem cmi=null;

@@ -9,6 +9,7 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
 
 
 /**
@@ -16,11 +17,16 @@ import com.zimbra.qa.selenium.projects.ajax.ui.*;
  *
  */
 public class TreeMail extends AbsTree {
-
+   public final static String stringToReplace = "<TREE_ITEM_NAME>";
 	public static class Locators {
-		
-		public static final String ztih__main_Mail__ZIMLET_ID = "ztih__main_Mail__ZIMLET";
+	   // For desktop, Bug 56273:
+	   public final static String zTreeItems = new StringBuffer("//td[text()='").
+            append(stringToReplace).append("']").toString();
+
+	   public static final String ztih__main_Mail__ZIMLET_ID = "ztih__main_Mail__ZIMLET";
 		public static final String ztih__main_Mail__ZIMLET_nodeCell_ID = "ztih__main_Mail__ZIMLET_nodeCell";
+		public static final String ztih_main_Mail__FOLDER_ITEM_ID = new StringBuffer("ztih__main_Mail__").
+		      append(stringToReplace).append("_textCell").toString();
 	}
 	
 		
@@ -29,7 +35,7 @@ public class TreeMail extends AbsTree {
 		super(application);
 		logger.info("new " + TreeMail.class.getCanonicalName());
 	}
-	
+
 	protected AbsPage zTreeItem(Action action, Button option, FolderItem folder) throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
@@ -177,8 +183,37 @@ public class TreeMail extends AbsTree {
 
 		return (page);
 
-
 	}
+
+	public AbsPage zTreeItem(Action action, String locator) throws HarnessException {
+      AbsPage page = null;
+
+      if ( locator == null )
+         throw new HarnessException("locator is null for action "+ action);
+
+      if ( !this.sIsElementPresent(locator) )
+         throw new HarnessException("Unable to locator folder in tree "+ locator);
+
+      if ( action == Action.A_LEFTCLICK ) {
+
+         // FALL THROUGH
+      } else if ( action == Action.A_RIGHTCLICK ) {
+
+         // Select the folder
+         this.zRightClick(locator);
+
+         // return a context menu
+         return (new ContextMenu(MyApplication));
+
+      } else {
+         throw new HarnessException("Action "+ action +" not yet implemented");
+      }
+
+      // Default behavior.  Click the locator
+      zClick(locator);
+
+      return (page);
+   }
 
 	/* (non-Javadoc)
 	 * @see framework.ui.AbsTree#zTreeItem(framework.ui.Action, framework.items.FolderItem)
