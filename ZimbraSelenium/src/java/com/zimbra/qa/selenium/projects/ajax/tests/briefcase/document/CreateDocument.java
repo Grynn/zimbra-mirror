@@ -55,6 +55,8 @@ public class CreateDocument extends AjaxCommonTest {
 			documentBriefcaseNew.zSelectWindow("Zimbra: Briefcase");
 		}
 
+		app.zPageBriefcase.isWindowClosed("Zimbra Docs", "3000");
+		
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 

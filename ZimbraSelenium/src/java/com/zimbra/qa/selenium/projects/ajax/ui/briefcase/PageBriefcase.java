@@ -506,6 +506,26 @@ public class PageBriefcase extends AbsTab {
 		return loaded;
 	}
 
+	public boolean isWindowClosed(String name, String timeout) {
+		try {
+			String condition = "{var x; for(var windowName in selenium.browserbot.openedWindows ){"
+					+ "var targetWindow = selenium.browserbot.openedWindows[windowName];"
+					+ "if((!selenium.browserbot._windowClosed(targetWindow))&&"
+					+ "(targetWindow.name == '"
+					+ name
+					+ "' || targetWindow.document.title == '"
+					+ name
+					+ "')){x=windowName;" + "}}}; x==null;"; 
+			
+			ClientSessionFactory.session().selenium().waitForCondition(
+					condition, timeout);
+			return true;
+		} catch (Exception ex) {
+			logger.info("Error: win not opened " + name, ex.fillInStackTrace());
+			return false;
+		}
+	}
+	
 	public boolean waitForIframeText(String iframe, String text, String timeout) {
 		try {
 			ClientSessionFactory
