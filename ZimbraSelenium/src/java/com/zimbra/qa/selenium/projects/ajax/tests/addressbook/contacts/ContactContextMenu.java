@@ -207,18 +207,20 @@ public class ContactContextMenu extends AjaxCommonTest  {
        }
 	
 	@Test(	description = "Right click then click New Email",
-			groups = { "smokey" })
+			groups = { "smoke" })
 	public void ClickNewEmail() throws HarnessException {
 	
 		ContactItem contactItem = createSelectAContactItem();
 
 		//Click New Email
-		//TODO: ????Button.B_NEW???????
         FormMailNew formMailNew = (FormMailNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_NEW, contactItem.fileAs);        
         
         //Verify contactItem.email displayed in the "To" field
-        ZAssert.assertTrue(app.zPageAddressbook.sGetText(FormMailNew.Locators.zBubbleToField).equals(contactItem.email), "Verify contact email displayed in field To - expected" + contactItem.email + " - was " + app.zPageAddressbook.sGetText(FormMailNew.Locators.zBubbleToField));
+        ZAssert.assertTrue(app.zPageAddressbook.sGetText(FormMailNew.Locators.zBubbleToField).contains(contactItem.email), "Verify contact email displayed in field To - expected " + contactItem.email + " - was " + app.zPageAddressbook.sGetText(FormMailNew.Locators.zBubbleToField));
         
+        //TODO: Verify send email
 	}
+	
+	
 }
 
