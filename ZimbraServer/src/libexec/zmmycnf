@@ -95,6 +95,7 @@ innodb_open_files              = 2710
 innodb_max_dirty_pages_pct     = 10
 innodb_flush_method            = O_DIRECT
 innodb_flush_log_at_trx_commit = 0
+max_allowed_packet             = 16777216
 
 [mysqld_safe]
 
