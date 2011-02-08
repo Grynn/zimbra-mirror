@@ -1,15 +1,10 @@
 package com.zimbra.qa.selenium.framework.util;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.channels.FileChannel;
+import java.util.*;
 
 import net.sf.json.*;
 
@@ -21,14 +16,35 @@ import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 public class CodeCoverage {
 	protected static Logger logger = LogManager.getLogger(CodeCoverage.class);
 	
+	/**
+	 * Set the output folder to write the coverage report
+	 * @param path
+	 */
+	public void setOutputFolder(String path) {
+		logger.info("Set code coverage folder: "+ path);
+		CODE_COVERAGE_DIRECTORY_PATH = path;
+	}
+	
+	/**
+	 * Instrument the code on the Zimbra server
+	 * <p>
+	 * STAF must be installed on the client and server.  Code will be instrumented and the server restarted.
+	 */
+	public void instrumentServer() {
+		// TODO
+	}
+	
+	/**
+	 * Write coverage.json to the output folder
+	 */
 	public void writeCoverage() {
-		
+		logger.info("<=======><=======><=== Writing Coverage to json file ===><=======><=======>");
+
 		if ( !Enabled ) {
-			logger.info("skipping code coverage");
+			logger.info("Code Coverage reporting is disabled");
 			return;
 		}
 		
-		logger.info("<=======><=======><=== Writing Coverage to json file ===><=======><=======>");
 		
 		// TODO: change from BufferedWriter to Logger
 		BufferedWriter out = null;
@@ -37,17 +53,18 @@ public class CodeCoverage {
 			
 			try {
 				
-				out = new BufferedWriter(new FileWriter(CODE_COVERAGE_DIRECTORY_PATH));
+				File f = new File(CODE_COVERAGE_DIRECTORY_PATH, CODE_COVERAGE_DIRECTORY_FILE);
+				out = new BufferedWriter(new FileWriter(f));
 				
-				// TODO: convert to StringBuilder
-				String jsonString = "";
+				out.write("{");
 				for (String key : FILENAME_TO_COVERAGE.keySet() ) {
-					jsonString = jsonString + "\"" + key + "\"" + ":{\"coverage\":"
+					out.write(
+						"\"" + key + "\"" + ":{\"coverage\":"
 						+ FILENAME_TO_COVERAGE.get(key) + ",\"source\":"
-						+ FILENAME_TO_SOURCE.get(key) + "},";
+						+ FILENAME_TO_SOURCE.get(key) + "}," );
 	
 				}
-				out.write("{" + jsonString + "}");
+				out.write("}");
 				
 			} finally {
 				if (out != null) {
@@ -59,12 +76,20 @@ public class CodeCoverage {
 		} catch (IOException e) {
 			logger.error("Unable to write coverage report", e);
 		}
+		
+		// Write the other html, css, etc. files to the folder
+		updateOutputFolder();
+		
 	}
 
+	/**
+	 * Update the coverage data
+	 */
 	public void calculateCoverage() {
+		logger.info("Calculating code coverage ...");
 
 		if ( !Enabled ) {
-			logger.info("skipping code coverage");
+			logger.info("Code Coverage reporting is disabled");
 			return;
 		}
 		
@@ -169,13 +194,69 @@ public class CodeCoverage {
 			FILENAME_TO_COVERAGE.put(file, data);
 		}
 	}
+	
+	private static final String CODE_COVERAGE_SOURCE_PATH = "src/CODECOVERAGE";
+	private static final List<String> reportFiles = new ArrayList<String>() {
+		private static final long serialVersionUID = -6339218908274560120L;
+	{
+		add("jscoverage.css");
+		add("jscoverage.html");
+		add("jscoverage.js");
+		add("jscoverage-highlight.css");
+		add("jscoverage-ie.css");
+		add("jscoverage-throbber.gif");
+	}};
+
+	private void updateOutputFolder() {
+		logger.info("Update output folder with html files");
+
+		for (String filename : reportFiles) {
+			File source = new File(CODE_COVERAGE_SOURCE_PATH, filename);
+			File destination = new File(CODE_COVERAGE_DIRECTORY_PATH, filename);
+			if ( !source.exists() ) {
+				logger.error("Unable to find report file: "+ source.getAbsolutePath());
+				continue;
+			}
+			try {
+				logger.info("copy "+ source.getCanonicalPath() +" to "+ destination.getCanonicalPath());
+				copy(source, destination);
+			} catch (IOException e) {
+				logger.error("Unable to copy file from "+ source.getAbsolutePath() +" to "+ destination.getAbsolutePath(), e);
+			}
+		}
+	}
+	
+	private static void copy(File source, File destination) throws IOException {
+		
+		if ( !destination.exists() ) {
+			destination.createNewFile();
+		}
+		
+		FileChannel sourceChannel = null;
+		FileChannel destinationChannel = null;
+		try {
+			sourceChannel = (new FileInputStream(source)).getChannel();
+			destinationChannel = (new FileOutputStream(destination)).getChannel();
+			destinationChannel.transferFrom(sourceChannel, 0 , sourceChannel.size());
+		} finally {
+			if ( sourceChannel != null ) {
+				sourceChannel.close();
+				sourceChannel = null;
+			}
+			if ( destinationChannel != null ) {
+				destinationChannel.close();
+				destinationChannel = null;
+			}
+		}
+	}
 
 	
+    private String CODE_COVERAGE_DIRECTORY_PATH = "CODECOVERAGE";
+    private String CODE_COVERAGE_DIRECTORY_FILE = "jscoverage.json";
     private Map<String, ArrayList<Integer>> FILENAME_TO_COVERAGE = new HashMap<String, ArrayList<Integer>>();
     private Map<String, JSONArray> FILENAME_TO_SOURCE = new HashMap<String, JSONArray>();
 
 	
-    private static final String CODE_COVERAGE_DIRECTORY_PATH = "CODECOVERAGE\\jscoverage.json";
     private static final String COVERAGE_SCRIPT = 
     	      "if (! window.jscoverage_report) {\n"
 			+ "  window.jscoverage_report = function jscoverage_report(dir) {\n"

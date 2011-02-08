@@ -44,10 +44,7 @@ import org.testng.xml.XmlClass;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.TestStatusReporter;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 
 
@@ -162,19 +159,24 @@ public class ExecuteHarnessMain {
 		File testng = new File(testoutputfoldername + "/TestNG");
 		if ( !testng.exists() )		testng.mkdirs();
 		
+		// Also, create the CodeCoverage folder
+		File coverage = new File(testoutputfoldername + "/coverage");
+		if ( !coverage.exists() )	coverage.mkdirs();
+		CodeCoverage.getInstance().setOutputFolder(coverage.getAbsolutePath());
+		
 	}
 	
 	/**
 	 * Where conf folder is located
 	 */
 	public String workingfoldername = ".";
-	
-	
+	 	
+	 	
 	// A list of classes to execute using TestNG from the jarfile
 	protected List<String> classes = null;
-	
-	
-	
+
+
+
 	/**
 	 * Determine all the classes in the specified jarfile filtered by a regex
 	 * @param jarfile The jarfile to inspect
