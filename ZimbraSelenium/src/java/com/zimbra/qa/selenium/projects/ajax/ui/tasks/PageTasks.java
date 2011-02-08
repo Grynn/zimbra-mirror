@@ -472,8 +472,9 @@ public class PageTasks extends AbsTab {
 	 * Get all tasks in the specified section
 	 * @param status
 	 * @return
+	 * @throws HarnessException 
 	 */
-	public List<TaskItem> zGetTasks(TaskStatus status) {
+	public List<TaskItem> zGetTasks(TaskStatus status) throws HarnessException {
 		
 		List<TaskItem> items = null;
 		
@@ -563,8 +564,9 @@ public class PageTasks extends AbsTab {
 	/**
 	 * Get all tasks from the current view
 	 * @return
+	 * @throws HarnessException 
 	 */
-	public List<TaskItem> zGetTasks() {
+	public List<TaskItem> zGetTasks() throws HarnessException {
 		
 		
 		List<TaskItem> items = new ArrayList<TaskItem>();
@@ -650,7 +652,7 @@ public class PageTasks extends AbsTab {
 				} else {
 					// TODO - handle other attachment types
 				}
-
+				
 
 				// See http://bugzilla.zimbra.com/show_bug.cgi?id=56452
 				

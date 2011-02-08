@@ -38,13 +38,17 @@ public class DisplayTask extends AbsDisplay {
 	 * The various displayed fields in a message
 	 */
 	public static enum Field {
-		ReceivedTime,	// Message received time
-		ReceivedDate,	// Message received date
-		From,
-		To,
-		Cc,
-		Bcc,			// Does this show in any mail views?  Maybe in Sent?
 		Subject,
+		Location,
+		Priority,
+		TaskList,
+		Status,
+		Percentage,
+		StartDate,
+		DueDate,
+		ReminderEnabled,
+		ReminderDate,
+		ReminderTime,
 		Body
 	}
 	
@@ -97,85 +101,60 @@ public class DisplayTask extends AbsDisplay {
 		throw new HarnessException("implement me!");
 	}
 	
-	/**
-	 * Get the string value of the specified field
-	 * @return the displayed string value
-	 * @throws HarnessException
-	 */
-	public String zGetMailProperty(Field field) throws HarnessException {
-		logger.info("DisplayMail.zGetDisplayedValue(" + field + ")");
+	@Override
+	public boolean zIsActive() throws HarnessException {
+		logger.warn("implement me", new Throwable());
+		return (true);
+	}
+
+	public String zGetTaskProperty(Field field) throws HarnessException {
+		logger.info(myPageName() + ".zGetTaskProperty(" + field + ")");
 
 		String locator = null;
 		
-		if ( field == Field.Bcc ) {
+		if ( field == Field.Subject ) {
 			
-			// Does this show in any mail views?  Maybe in Sent?
-			throw new HarnessException("implement me!");
+			locator = "implement me";
 			
-		} else if ( field == Field.Body ) {
+		} else if ( field == Field.Location ) {
 
-			/*
-			 * To get the body contents, need to switch iframes
-			 */
-			try {
-				
-				this.sSelectFrame("//iframe[contains(@id, '__MSG_body__iframe')]");
-				
-				String bodyLocator = "css=body";
-				
-				// Make sure the body is present
-				if ( !this.sIsElementPresent(bodyLocator) )
-					throw new HarnessException("Unable to find the message body!");
-				
-				// Get the body value
-				// String body = this.sGetText(bodyLocator).trim();
-				String html = this.zGetHtml(bodyLocator);
-				
-				logger.info("DisplayMail.zGetBody(" + bodyLocator + ") = " + html);
-				return(html);
+			locator = "implement me";
 
-			} finally {
-				// Make sure to go back to the original iframe
-				this.sSelectFrame("relative=top");
-			}
+		} else if ( field == Field.Priority ) {
 
-		} else if ( field == Field.Cc ) {
-			
-			locator = "css=tr[id$='_cc'] td[class~='LabelColValue']";
-			
-		} else if ( field == Field.From ) {
-			
-			locator = "css=tr[id$='_from']";
+			locator = "implement me";
 
-		} else if ( field == Field.ReceivedDate ) {
-			
-			locator = "css=tr[id$='__MSG_hdrTableTopRow'] td[class~='DateCol']";
+		} else if ( field == Field.TaskList ) {
 
-		} else if ( field == Field.ReceivedTime ) {
-			
-			String timeAndDateLocator = "css=td[class~='DateCol']";
+			locator = "implement me";
 
-			// Make sure the subject is present
-			if ( !this.sIsElementPresent(timeAndDateLocator) )
-				throw new HarnessException("Unable to find the time and date field!");
-			
-			// Get the subject value
-			String timeAndDate = this.sGetText(timeAndDateLocator).trim();
-			String date = this.zGetMailProperty(Field.ReceivedDate);
-			
-			// Strip the date so that only the time remains
-			String time = timeAndDate.replace(date, "").trim();
-			
-			logger.info("DisplayMail.zGetDisplayedValue(" + field + ") = " + time);
-			return(time);
+		} else if ( field == Field.Status ) {
 
-		} else if ( field == Field.Subject ) {
-			
-			locator = "css=tr[id$='__MSG_hdrTableTopRow'] td[class~='SubjectCol']";
+			locator = "implement me";
 
-		} else if ( field == Field.To ) {
-			
-			locator = "css=tr[id$='_to'] td[class~='LabelColValue']";
+		} else if ( field == Field.Percentage ) {
+
+			locator = "implement me";
+
+		} else if ( field == Field.StartDate ) {
+
+			locator = "implement me";
+
+		} else if ( field == Field.DueDate ) {
+
+			locator = "implement me";
+
+		} else if ( field == Field.ReminderEnabled ) {
+
+			locator = "implement me";
+
+		} else if ( field == Field.ReminderDate ) {
+
+			locator = "implement me";
+
+		} else if ( field == Field.ReminderTime ) {
+
+			locator = "implement me";
 
 		} else {
 			
@@ -187,27 +166,18 @@ public class DisplayTask extends AbsDisplay {
 		if ( locator == null )
 			throw new HarnessException("locator was null for field = "+ field);
 		
-		// Default behavior, process the locator by clicking on it
+		// Default behavior: return the text
 		//
-		
-		// Make sure the subject is present
-		if ( !this.sIsElementPresent(locator) )
-			throw new HarnessException("Unable to find the field = "+ field +" using locator = "+ locator);
 		
 		// Get the subject value
 		String value = this.sGetText(locator).trim();
 		
-		logger.info("DisplayMail.zGetDisplayedValue(" + field + ") = " + value);
+		logger.info(myPageName() + ".zGetTaskProperty(" + field + ") = " + value);
 		return(value);
 
 		
 	}
 
-	@Override
-	public boolean zIsActive() throws HarnessException {
-		logger.warn("implement me", new Throwable());
-		return (true);
-	}
 
 
 
