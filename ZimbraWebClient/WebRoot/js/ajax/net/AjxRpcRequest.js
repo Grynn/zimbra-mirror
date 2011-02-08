@@ -153,7 +153,7 @@ function() {
     //bug 55911
     if (AjxEnv.isFirefox3_5up){
         this.__httpReq.onreadystatechange = function(){};
-        DBG.println("AjxRpcRequest.prototype.cancel: clearing onreadystatechange before abort");
+        DBG.println(AjxDebug.DBG1, "AjxRpcRequest.prototype.cancel: clearing onreadystatechange before abort");
     }
     this.__httpReq.abort();
 };
