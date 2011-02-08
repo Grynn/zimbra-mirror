@@ -14,53 +14,53 @@
  */
 package com.zimbra.cs.offline.util.ymail;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.mail.Address;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.internet.ContentType;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimePart;
+import javax.mail.internet.SharedInputStream;
+
+import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.methods.multipart.PartSource;
+import org.dom4j.Namespace;
+import org.dom4j.QName;
+
 import com.zimbra.common.httpclient.HttpClientUtil;
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.AdminConstants;
+import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.Element.ContainerException;
+import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.SoapHttpTransport;
 import com.zimbra.common.soap.SoapProtocol;
-import com.zimbra.common.soap.Element;
-import com.zimbra.common.soap.AdminConstants;
-import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.SoapTransport;
-import com.zimbra.common.soap.Element.ContainerException;
-import com.zimbra.common.util.Log;
 import com.zimbra.common.util.DateUtil;
-import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.Log;
 import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.util.yauth.Auth;
-
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.SharedInputStream;
-import javax.mail.internet.MimePart;
-import javax.mail.internet.ContentType;
-import javax.mail.internet.InternetAddress;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.Address;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.io.InputStream;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.OutputStream;
-import java.io.FileOutputStream;
-import java.net.URLEncoder;
-import java.util.Iterator;
-import java.util.Date;
-import java.util.Map;
-import java.util.HashMap;
-
-import org.apache.commons.httpclient.methods.multipart.Part;
-import org.apache.commons.httpclient.methods.multipart.FilePart;
-import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
-import org.apache.commons.httpclient.methods.multipart.PartSource;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.Header;
-import org.dom4j.Namespace;
-import org.dom4j.QName;
 
 public class YMailClient {
     private final Auth auth;
@@ -242,7 +242,8 @@ public class YMailClient {
         Element cmp = new Element.XMLElement("subparts");
         addAttributes(cmp, mbp);
         String type = mbp.getContentType();
-        if (isAsciiText(mbp) && !mustAttach(mbp)) {
+        boolean isAttachment = (mbp.getDisposition() != null) && (mbp.getDisposition().equals("attachment"));
+        if (!isAttachment && isAsciiText(mbp) && !mustAttach(mbp)) {
             addElement(cmp, "data", getContentString(mbp));
         } else if (type.startsWith("multipart/")) {
             addSubparts(cmp, (Multipart) mbp.getContent());
@@ -301,6 +302,10 @@ public class YMailClient {
         addAttribute(cmp, "filename", mp.getFileName());
         addAttribute(cmp, "contentid", mp.getContentID());
         addAttribute(cmp, "disposition", mp.getDisposition());
+        if ("attachment".equals(mp.getDisposition()) && (mp.getContentType() != null) && (mp.getContentType().startsWith("text/plain"))) {
+            addAttribute(cmp, "type", "application");	//if block is a workaround for bug #53209
+            addAttribute(cmp, "subtype", "octet-stream");
+        }
     }
 
     private static void addAttribute(Element e, String name, String value) {
