@@ -13,6 +13,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
+import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
 
 public class PageAddressbook extends AbsTab {
 
@@ -363,6 +364,11 @@ public class PageAddressbook extends AbsTab {
 				page = new FormMailNew(MyApplication);	
 			}
 
+			else if (option == Button.B_SEARCHADVANCED) {
+				cmi=CONTEXT_MENU.CONTACT_ADVANCED_SEARCH;
+				page = new PageAdvancedSearch(MyApplication);	
+			}
+			
 			id = cmi.locator;
 			locator = "id="+ id;
 			// Make sure the context menu exists
