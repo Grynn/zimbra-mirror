@@ -110,7 +110,7 @@ endif
 	-DDEF_HTML_DIR=\"no\" \
 	-DDEF_README_DIR=\"no\" \
 	-DDEF_SENDMAIL_PATH=\"/opt/zimbra/postfix-$(POSTFIX_VERSION)/sbin/sendmail\" \
-	-DDEF_DATA_DIR=\"/opt/zimbra/data/postfix\" \
+	-DDEF_DATA_DIR=\"/opt/zimbra/data/postfix/data\" \
 	-DUSE_SASL_AUTH \
 	-DUSE_CYRUS_SASL \
 	-DHAS_LDAP -DHAS_MYSQL -DUSE_TLS $(DBINC) $(PCRE_DEF) $(PCRE_INCLUDE) $(FD_SIZE) \
