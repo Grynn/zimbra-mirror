@@ -14,6 +14,7 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
+import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
 
 public class ContactContextMenu extends AjaxCommonTest  {
 	public ContactContextMenu() {
@@ -221,6 +222,21 @@ public class ContactContextMenu extends AjaxCommonTest  {
         //TODO: Verify send email
 	}
 	
+
+	@Test(	description = "Right click then click Advanced Search",
+			groups = { "smoke" })
+	public void ClickAdvancedSearch() throws HarnessException {
+	
+		ContactItem contactItem = createSelectAContactItem();
+
+		//Click Advanced Search
+        PageAdvancedSearch pageAdvancedSearch = (PageAdvancedSearch) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_SEARCHADVANCED, contactItem.fileAs);        
+        
+        //Verify Advanced Search page is active
+        ZAssert.assertTrue(pageAdvancedSearch.zIsActive(),"Verify Advanced Search page is active");
+                
+	}
+
 	
 }
 
