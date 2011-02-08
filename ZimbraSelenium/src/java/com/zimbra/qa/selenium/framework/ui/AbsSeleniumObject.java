@@ -227,11 +227,16 @@ public abstract class AbsSeleniumObject {
 
 	/**
 	 * DefaultSelenium.getAttribute()
+	 * @throws HarnessException 
 	 */
-	public String sGetAttribute(String locator) {
-		String attrs = ClientSessionFactory.session().selenium().getAttribute(locator);
-		logger.info("getAttribute(" + locator + ") = " + attrs);
-		return (attrs);
+	public String sGetAttribute(String locator) throws HarnessException {
+		try {
+			String attrs = ClientSessionFactory.session().selenium().getAttribute(locator);
+			logger.info("getAttribute(" + locator + ") = " + attrs);
+			return (attrs);
+		} catch (SeleniumException e) {
+			throw new HarnessException(e);
+		}
 	}
 
 	/**
@@ -281,11 +286,16 @@ public abstract class AbsSeleniumObject {
 
 	/**
 	 * DefaultSelenium.getText()
+	 * @throws HarnessException 
 	 */
-	public String sGetText(String locator) {
-		String text = ClientSessionFactory.session().selenium().getText(locator);
-		logger.info("DefaultSelenium.getText(" + locator + ") = " + text);
-		return (text);
+	public String sGetText(String locator) throws HarnessException {
+		try {
+			String text = ClientSessionFactory.session().selenium().getText(locator);
+			logger.info("DefaultSelenium.getText(" + locator + ") = " + text);
+			return (text);
+		} catch (SeleniumException e) {
+			throw new HarnessException(e);
+		}
 	}
 	
 	/**

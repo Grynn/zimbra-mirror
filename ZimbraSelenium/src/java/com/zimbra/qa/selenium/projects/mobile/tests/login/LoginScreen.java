@@ -34,7 +34,7 @@ public class LoginScreen extends MobileCommonTest {
 	
 	@Test(	description = "Verify the copyright on the login screen contains the current year",
 			groups = { "smoke" })
-	public void LoginScreen02() {
+	public void LoginScreen02() throws HarnessException {
 		
 		Calendar calendar = new GregorianCalendar();
 		String thisYear = "" + calendar.get(Calendar.YEAR);

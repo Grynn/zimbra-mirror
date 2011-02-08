@@ -137,7 +137,7 @@ public class ContextMenu extends AbsDisplay {
 	}
 
 	//check if a context menu item is enable
-	public boolean isEnable(ContextMenuItem cmi) {
+	public boolean isEnable(ContextMenuItem cmi) throws HarnessException  {
 		String attrs = sGetAttribute("xpath=(//div[@id='" +cmi.locator + "'])@class");       
 		return !attrs.contains("ZDisabled");
 	}

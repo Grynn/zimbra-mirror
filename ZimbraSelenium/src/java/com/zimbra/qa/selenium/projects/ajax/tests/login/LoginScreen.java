@@ -38,7 +38,7 @@ public class LoginScreen extends AjaxCommonTest {
 	
 	@Test(	description = "Verify the copyright on the login screen contains the current year",
 			groups = { "functional" })
-	public void LoginScreen02() {
+	public void LoginScreen02() throws HarnessException {
 		
 		Calendar calendar = new GregorianCalendar();
 		String thisYear = "" + calendar.get(Calendar.YEAR);
