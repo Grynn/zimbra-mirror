@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.ui;
 
+import com.zimbra.cs.account.Provisioning.ZimletBy;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
@@ -8,6 +9,8 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 
 
 public class PageLogin extends AbsTab {
@@ -16,6 +19,10 @@ public class PageLogin extends AbsTab {
 
 		// Buttons
 		public static final String zBtnLogin = "xpath=//input[@class='zLoginButton']";
+	    // Desktop-specific
+      public static final String zAddNewAccountButton = "css=td div[class*='ZPanel'][onclick*='OnAdd()']";
+      public static final String zBtnLoginDesktop = "css=div[id*='loginButton']";
+      public static final String zDeleteButton = "css=div[class*='ZPanelInfoInner'] a[href*='OnDelete']";
 		
 		// Text Input
 		public static final String zInputUsername = "xpath=//*[@id='username']";
@@ -43,26 +50,38 @@ public class PageLogin extends AbsTab {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		
-		// Make sure the application is loaded first
-		if ( !MyApplication.zIsLoaded() )
-			throw new HarnessException("Admin Console application is not active!");
+	   AppType appType = ZimbraSeleniumProperties.getAppType();
+	   String locator = null;
 
+	   switch (appType) {
+	   case AJAX:
+	      locator = Locators.zBtnLogin;
+	      break;
+	   case DESKTOP:
+	      locator = Locators.zAddNewAccountButton;
+	      break;
+	   default:
+	      throw new HarnessException("Please add a support for appType: " + appType);
+		}
+
+	   // Make sure the application is loaded first
+		if ( !MyApplication.zIsLoaded() )
+			throw new HarnessException("Application is not active!");
 
 		// Look for the login button. 
-		boolean present = sIsElementPresent(Locators.zBtnLogin);
+		boolean present = sIsElementPresent(locator);
 		if ( !present ) {
 			logger.debug("isActive() present = "+ present);
 			return (false);
 		}
-		
-		boolean visible = zIsVisiblePerPosition(Locators.zBtnLogin, 0 , 0);
+
+		boolean visible = zIsVisiblePerPosition(locator, 0 , 0);
 		if ( !visible ) {
 			logger.debug("isActive() visible = "+ visible);
 			return (false);
 		}
 		
-		logger.debug("isActive() = "+ true);
+		logger.debug("isActive() = " + true);
 		return (true);
 	}
 
@@ -97,22 +116,35 @@ public class PageLogin extends AbsTab {
 	 * @throws HarnessException
 	 */
 	public void zLogin(ZimbraAccount account) throws HarnessException {
-		logger.debug("login(ZimbraAccount account)" + account.EmailAddress);
+	   logger.debug("login(ZimbraAccount account)" + account.EmailAddress);
 
-		zNavigateTo();
-		
-		// Fill out the form
-		zSetLoginName(account.EmailAddress);
-		zSetLoginPassword(account.Password);
-		
-		// Click the Login button
-		sClick(Locators.zBtnLogin);
+	   zNavigateTo();
 
-		// Wait for the app to load
-		sWaitForPageToLoad();
-		((AppAjaxClient)MyApplication).zPageMain.zWaitForActive();
-		
-		((AppAjaxClient)MyApplication).zSetActiveAcount(account);
+	   AppType appType = ZimbraSeleniumProperties.getAppType();
+	   switch (appType) {
+	   case AJAX:
+	      // Fill out the form
+	      zSetLoginName(account.EmailAddress);
+	      zSetLoginPassword(account.Password);
+	      
+	      // Click the Login button
+	      sClick(Locators.zBtnLogin);
+	      break;
+
+	   case DESKTOP:
+	      // Click the Login button
+         sClick(Locators.zBtnLoginDesktop);
+	      break;
+
+	   default:
+	      throw new HarnessException("Please add a support for appType: " + appType);
+	   }
+
+	   // Wait for the app to load
+	   sWaitForPageToLoad();
+	   ((AppAjaxClient)MyApplication).zPageMain.zWaitForActive();
+	   
+	   ((AppAjaxClient)MyApplication).zSetActiveAcount(account);
 		
 	}
 	
