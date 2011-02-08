@@ -259,7 +259,11 @@ public class ZimbraSeleniumProperties {
 		String scheme = ZimbraSeleniumProperties.getStringProperty("server.scheme", "http");
 		String host = ZimbraSeleniumProperties.getStringProperty("server.host", "localhost");
 		String port = ZimbraSeleniumProperties.getStringProperty("server.port", "7070");
-
+		String codeCoverage = "";
+		if ( CodeCoverage.getInstance().Enabled ) {
+			codeCoverage = "?dev=1&debug=0";
+		}
+		
 		if ( appType == AppType.DESKTOP ) {
 		   logger.info("AppType is: " + appType);
 
@@ -275,28 +279,24 @@ public class ZimbraSeleniumProperties {
 		}
 
 		if ( appType == AppType.AJAX ) {
-			return (scheme + "://"+ host + ":" + port);
+			return (scheme + "://"+ host + ":" + port +"/" + codeCoverage);
 		}
 
 		if ( appType == AppType.HTML ) {
-			return (scheme + "://"+ host + ":" + port + "/h/");
+			return (scheme + "://"+ host + ":" + port + "/h/" + codeCoverage);
 		}
 
 		if ( appType == AppType.MOBILE ) {
-			return (scheme + "://"+ host + ":" + port + "/m/");
-		}
-
-		if(ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no").equalsIgnoreCase("yes")) {
-			return (scheme +"://"+ host + ":"+ port +"?dev=1&debug=0");
+			return (scheme + "://"+ host + ":" + port + "/m/" + codeCoverage);
 		}
 
 		if ( appType == AppType.ADMIN ) {
-			return ("https://"+ host +":7071");
+			return ("https://"+ host +":7071" +"/" + codeCoverage);
 		}
 
 		// Default
 		logger.warn("Using default URL");
-		return (scheme +"://"+ host);
+		return (scheme +"://"+ host +"/"+ codeCoverage);
 	}
 
 	public static String zimbraGetVersionString() throws HarnessException {		

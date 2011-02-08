@@ -17,9 +17,7 @@ import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleniumException;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 
 
@@ -223,6 +221,8 @@ public class AjaxCommonTest {
 	public void commonTestAfterSuite() throws HarnessException {	
 		logger.info("commonTestAfterSuite: start");
 		
+		CodeCoverage.getInstance().writeCoverage();
+		
 		ClientSessionFactory.session().selenium().stop();
 
 		logger.info("commonTestAfterSuite: finish");
@@ -250,6 +250,8 @@ public class AjaxCommonTest {
 	public void commonTestAfterMethod() throws HarnessException {
 		logger.info("commonTestAfterMethod: start");
 		
+		CodeCoverage.getInstance().calculateCoverage();
+
 		logger.info("commonTestAfterMethod: finish");
 	}
 
