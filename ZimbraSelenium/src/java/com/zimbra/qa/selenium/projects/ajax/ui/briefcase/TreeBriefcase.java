@@ -62,7 +62,7 @@ public class TreeBriefcase extends AbsTree {
 			
 			this.zWaitForBusyOverlay();
 			
-			this.sMouseUp(locator);
+			ClientSessionFactory.session().selenium().clickAt(locator,"0,0");
 
 			// FALL THROUGH
 		} else if (action == Action.A_RIGHTCLICK) {
