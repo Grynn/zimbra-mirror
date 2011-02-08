@@ -76,48 +76,55 @@ public class DeleteTask extends AjaxCommonTest {
 	
 	}
 
-	@Test(	description = "Delete a mail using checkbox and toolbar delete button",
-			groups = { "foo" })
+	@Test(	description = "Delete a task using checkbox and toolbar delete button",
+			groups = { "smoke" })
 	public void DeleteTask_02() throws HarnessException {
 		
-		// Create the message data to be sent
-		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
-				
-		ZimbraAccount.AccountA().soapSend(
-					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
-						"<m>" +
-							"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
-							"<su>"+ subject +"</su>" +
-							"<mp ct='text/plain'>" +
-								"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
-							"</mp>" +
-						"</m>" +
-					"</SendMsgRequest>");
-
-		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
 		
-		// Click Get Mail button
-		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		// Create a basic task to delete
+		String subject = "task"+ ZimbraSeleniumProperties.getUniqueString();
 				
-		// Check the item
-		app.zPageMail.zListItem(Action.A_MAIL_CHECKBOX, mail.dSubject);
+		app.zGetActiveAccount().soapSend(
+				"<CreateTaskRequest xmlns='urn:zimbraMail'>" +
+					"<m >" +
+			        	"<inv>" +
+			        		"<comp name='"+ subject +"'>" +
+			        			"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+			        		"</comp>" +
+			        	"</inv>" +
+			        	"<su>"+ subject +"</su>" +
+			        	"<mp ct='text/plain'>" +
+			        		"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+			        	"</mp>" +
+					"</m>" +
+				"</CreateTaskRequest>");
+
+		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
+		ZAssert.assertNotNull(task, "Verify the task is created");
+		
+		// Refresh the tasks view
+		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
+						
+		// Select the item
+		app.zPageTasks.zListItem(Action.A_MAIL_CHECKBOX, subject);
 		
 		// Click delete
-		app.zPageMail.zToolbarPressButton(Button.B_DELETE);
+		app.zPageTasks.zToolbarPressButton(Button.B_DELETE);
 		
-		List<MailItem> messages = app.zPageMail.zListGetMessages();
-		ZAssert.assertNotNull(messages, "Verify the message list exists");
+		List<TaskItem> tasks = app.zPageTasks.zGetTasks();
+		ZAssert.assertNotNull(tasks, "Verify the task list exists");
 
-		MailItem found = null;
-		for (MailItem m : messages) {
-			logger.info("Subject: looking for "+ mail.dSubject +" found: "+ m.gSubject);
-			if ( mail.dSubject.equals(m.gSubject) ) {
-				found = m;
+		TaskItem found = null;
+		for (TaskItem t : tasks) {
+			logger.info("Subject: looking for "+ subject +" found: "+ t.gSubject);
+			if ( subject.equals(t.gSubject) ) {
+				found = t;
 				break;
 			}
 		}
-		ZAssert.assertNull(found, "Verify the message is no longer in the inbox");
-
+		ZAssert.assertNull(found, "Verify the task is no longer present");
+	
 	}
 
 	@DataProvider(name = "DataProviderDeleteKeys")
@@ -128,221 +135,267 @@ public class DeleteTask extends AjaxCommonTest {
 	  };
 	}
 	
-	@Test(	description = "Delete a mail by selecting and typing 'delete' keyboard",
-			groups = { "foo" },
+	@Test(	description = "Delete a task by selecting and typing 'delete' keyboard",
+			groups = { "smoke" },
 			dataProvider = "DataProviderDeleteKeys")
 	public void DeleteTask_03(String name, int keyEvent) throws HarnessException {
 		
-		// Create the message data to be sent
-		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
+		
+		// Create a basic task to delete
+		String subject = "task"+ ZimbraSeleniumProperties.getUniqueString();
 				
-		ZimbraAccount.AccountA().soapSend(
-					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
-						"<m>" +
-							"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
-							"<su>"+ subject +"</su>" +
-							"<mp ct='text/plain'>" +
-								"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
-							"</mp>" +
-						"</m>" +
-					"</SendMsgRequest>");
+		app.zGetActiveAccount().soapSend(
+				"<CreateTaskRequest xmlns='urn:zimbraMail'>" +
+					"<m >" +
+			        	"<inv>" +
+			        		"<comp name='"+ subject +"'>" +
+			        			"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+			        		"</comp>" +
+			        	"</inv>" +
+			        	"<su>"+ subject +"</su>" +
+			        	"<mp ct='text/plain'>" +
+			        		"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+			        	"</mp>" +
+					"</m>" +
+				"</CreateTaskRequest>");
 
-		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
+		ZAssert.assertNotNull(task, "Verify the task is created");
 		
-		// Click Get Mail button
-		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-				
-		// Check the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+		// Refresh the tasks view
+		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
+						
+		// Select the item
+		app.zPageTasks.zListItem(Action.A_MAIL_CHECKBOX, subject);
+
 		
-		// Click delete
+		// Click delete keyboard
 		logger.info("Typing shortcut key "+ name + " KeyEvent: "+ keyEvent);
 		app.zPageMail.zKeyboardKeyEvent(keyEvent);
-				
-		List<MailItem> messages = app.zPageMail.zListGetMessages();
-		ZAssert.assertNotNull(messages, "Verify the message list exists");
+		
+		
+		List<TaskItem> tasks = app.zPageTasks.zGetTasks();
+		ZAssert.assertNotNull(tasks, "Verify the task list exists");
 
-		MailItem found = null;
-		for (MailItem m : messages) {
-			logger.info("Subject: looking for "+ mail.dSubject +" found: "+ m.gSubject);
-			if ( mail.dSubject.equals(m.gSubject) ) {
-				found = m;
+		TaskItem found = null;
+		for (TaskItem t : tasks) {
+			logger.info("Subject: looking for "+ subject +" found: "+ t.gSubject);
+			if ( subject.equals(t.gSubject) ) {
+				found = t;
 				break;
 			}
 		}
-		ZAssert.assertNull(found, "Verify the message is no longer in the inbox");
-
-		
+		ZAssert.assertNull(found, "Verify the task is no longer present");
+	
 	}
 
-	@Test(	description = "Delete a mail by selecting and typing '.t' shortcut",
-			groups = { "foo" } )
+	@Test(	description = "Delete a task by selecting and typing '.t' shortcut",
+			groups = { "smoke" } )
 	public void DeleteTask_04() throws HarnessException {
 		
-		// Create the message data to be sent
-		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
-				
-		ZimbraAccount.AccountA().soapSend(
-					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
-						"<m>" +
-							"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
-							"<su>"+ subject +"</su>" +
-							"<mp ct='text/plain'>" +
-								"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
-							"</mp>" +
-						"</m>" +
-					"</SendMsgRequest>");
-
-		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
 		
-		// Click Get Mail button
-		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		// Create a basic task to delete
+		String subject = "task"+ ZimbraSeleniumProperties.getUniqueString();
 				
-		// Check the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
-		
-		// Click delete
-		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MOVETOTRASH);
-				
-		List<MailItem> messages = app.zPageMail.zListGetMessages();
-		ZAssert.assertNotNull(messages, "Verify the message list exists");
+		app.zGetActiveAccount().soapSend(
+				"<CreateTaskRequest xmlns='urn:zimbraMail'>" +
+					"<m >" +
+			        	"<inv>" +
+			        		"<comp name='"+ subject +"'>" +
+			        			"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+			        		"</comp>" +
+			        	"</inv>" +
+			        	"<su>"+ subject +"</su>" +
+			        	"<mp ct='text/plain'>" +
+			        		"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+			        	"</mp>" +
+					"</m>" +
+				"</CreateTaskRequest>");
 
-		MailItem found = null;
-		for (MailItem m : messages) {
-			logger.info("Subject: looking for "+ mail.dSubject +" found: "+ m.gSubject);
-			if ( mail.dSubject.equals(m.gSubject) ) {
-				found = m;
+		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
+		ZAssert.assertNotNull(task, "Verify the task is created");
+		
+		// Refresh the tasks view
+		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
+						
+		// Select the item
+		app.zPageTasks.zListItem(Action.A_MAIL_CHECKBOX, subject);
+
+		
+		// Use Delete Keyboard Shortcut
+		app.zPageTasks.zKeyboardShortcut(Shortcut.S_MAIL_MOVETOTRASH);
+		
+		
+		List<TaskItem> tasks = app.zPageTasks.zGetTasks();
+		ZAssert.assertNotNull(tasks, "Verify the task list exists");
+
+		TaskItem found = null;
+		for (TaskItem t : tasks) {
+			logger.info("Subject: looking for "+ subject +" found: "+ t.gSubject);
+			if ( subject.equals(t.gSubject) ) {
+				found = t;
 				break;
 			}
 		}
-		ZAssert.assertNull(found, "Verify the message is no longer in the inbox");
-
-		
+		ZAssert.assertNull(found, "Verify the task is no longer present");
+	
 	}
 
-	@Test(	description = "Delete multiple messages (3) by select and toolbar delete",
+	@Test(	description = "Delete multiple tasks (3) by select and toolbar delete",
 			groups = { "functional" })
 	public void DeleteTask_05() throws HarnessException {
 		
+		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
+
 		// Create the message data to be sent
-		String subject1 = "subject"+ ZimbraSeleniumProperties.getUniqueString();
-		String subject2 = "subject"+ ZimbraSeleniumProperties.getUniqueString();
-		String subject3 = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+		String subject1 = "task"+ ZimbraSeleniumProperties.getUniqueString();
+		String subject2 = "task"+ ZimbraSeleniumProperties.getUniqueString();
+		String subject3 = "task"+ ZimbraSeleniumProperties.getUniqueString();
 				
-		ZimbraAccount.AccountA().soapSend(
-				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
-					"<m>" +
-						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
-						"<su>"+ subject1 +"</su>" +
-						"<mp ct='text/plain'>" +
-							"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
-						"</mp>" +
+		app.zGetActiveAccount().soapSend(
+				"<CreateTaskRequest xmlns='urn:zimbraMail'>" +
+					"<m >" +
+			        	"<inv>" +
+			        		"<comp name='"+ subject1 +"'>" +
+			        			"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+			        		"</comp>" +
+			        	"</inv>" +
+			        	"<su>"+ subject1 +"</su>" +
+			        	"<mp ct='text/plain'>" +
+			        		"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+			        	"</mp>" +
 					"</m>" +
-				"</SendMsgRequest>");
+				"</CreateTaskRequest>");
 
-		ZimbraAccount.AccountA().soapSend(
-				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
-					"<m>" +
-						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
-						"<su>"+ subject2 +"</su>" +
-						"<mp ct='text/plain'>" +
-							"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
-						"</mp>" +
+		app.zGetActiveAccount().soapSend(
+				"<CreateTaskRequest xmlns='urn:zimbraMail'>" +
+					"<m >" +
+			        	"<inv>" +
+			        		"<comp name='"+ subject2 +"'>" +
+			        			"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+			        		"</comp>" +
+			        	"</inv>" +
+			        	"<su>"+ subject2 +"</su>" +
+			        	"<mp ct='text/plain'>" +
+			        		"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+			        	"</mp>" +
 					"</m>" +
-				"</SendMsgRequest>");
+				"</CreateTaskRequest>");
 
-		ZimbraAccount.AccountA().soapSend(
-				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
-					"<m>" +
-						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
-						"<su>"+ subject3 +"</su>" +
-						"<mp ct='text/plain'>" +
-							"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
-						"</mp>" +
+		app.zGetActiveAccount().soapSend(
+				"<CreateTaskRequest xmlns='urn:zimbraMail'>" +
+					"<m >" +
+			        	"<inv>" +
+			        		"<comp name='"+ subject3 +"'>" +
+			        			"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+			        		"</comp>" +
+			        	"</inv>" +
+			        	"<su>"+ subject3 +"</su>" +
+			        	"<mp ct='text/plain'>" +
+			        		"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+			        	"</mp>" +
 					"</m>" +
-				"</SendMsgRequest>");
+				"</CreateTaskRequest>");
 
 		// Import each message into MailItem objects
-		MailItem mail1 = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject1 +")");
-		MailItem mail2 = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject2 +")");
-		MailItem mail3 = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject3 +")");
-		
-		// Click Get Mail button
-		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-				
-		// Select all three items
-		app.zPageMail.zListItem(Action.A_MAIL_CHECKBOX, mail1.dSubject);
-		app.zPageMail.zListItem(Action.A_MAIL_CHECKBOX, mail2.dSubject);
-		app.zPageMail.zListItem(Action.A_MAIL_CHECKBOX, mail3.dSubject);
-		
-		// Click toolbar delete button
-		app.zPageMail.zToolbarPressButton(Button.B_DELETE);
-				
-		List<MailItem> messages = app.zPageMail.zListGetMessages();
-		ZAssert.assertNotNull(messages, "Verify the message list exists");
+		TaskItem task1 = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject1);
+		ZAssert.assertNotNull(task1, "Verify the task is created");
 
-		MailItem found1 = null;
-		MailItem found2 = null;
-		MailItem found3 = null;
-		for (MailItem m : messages) {
-			logger.info("Subject: looking at: "+ m.gSubject);
-			if ( mail1.dSubject.equals(m.gSubject) ) {
-				found1 = m;
+		TaskItem task2 = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject2);
+		ZAssert.assertNotNull(task2, "Verify the task is created");
+
+		TaskItem task3 = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject3);
+		ZAssert.assertNotNull(task3, "Verify the task is created");
+
+		// Refresh the tasks view
+		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
+						
+		// Select the items
+		app.zPageTasks.zListItem(Action.A_MAIL_CHECKBOX, subject1);
+		app.zPageTasks.zListItem(Action.A_MAIL_CHECKBOX, subject2);
+		app.zPageTasks.zListItem(Action.A_MAIL_CHECKBOX, subject3);
+				
+		// Click toolbar delete button
+		app.zPageTasks.zToolbarPressButton(Button.B_DELETE);
+				
+		List<TaskItem> tasks = app.zPageTasks.zGetTasks();
+		ZAssert.assertNotNull(tasks, "Verify the message list exists");
+
+		TaskItem found1 = null;
+		TaskItem found2 = null;
+		TaskItem found3 = null;
+		for (TaskItem t : tasks) {
+			logger.info("Subject: looking at: "+ t.gSubject);
+			if ( subject1.equals(t.gSubject) ) {
+				found1 = t;
 			}
-			if ( mail2.dSubject.equals(m.gSubject) ) {
-				found2 = m;
+			if ( subject2.equals(t.gSubject) ) {
+				found2 = t;
 			}
-			if ( mail3.dSubject.equals(m.gSubject) ) {
-				found3 = m;
+			if ( subject3.equals(t.gSubject) ) {
+				found3 = t;
 			}
 		}
-		ZAssert.assertNull(found1, "Verify the message "+ mail1.dSubject +" is no longer in the inbox");
-		ZAssert.assertNull(found2, "Verify the message "+ mail2.dSubject +" is no longer in the inbox");
-		ZAssert.assertNull(found3, "Verify the message "+ mail3.dSubject +" is no longer in the inbox");
+		ZAssert.assertNull(found1, "Verify the task "+ subject1 +" is no longer in the mailbox");
+		ZAssert.assertNull(found2, "Verify the task "+ subject2 +" is no longer in the mailbox");
+		ZAssert.assertNull(found3, "Verify the task "+ subject3 +" is no longer in the mailbox");	
 
-		
 	}
 
 
-	@Test(	description = "Delete a mail using context menu delete button",
-			groups = { "foo" })
+	@Test(	description = "Delete a task using context menu delete button",
+			groups = { "smoke" })
 	public void DeleteTask_06() throws HarnessException {
-		
-		// Create the message data to be sent
-		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
-				
-		ZimbraAccount.AccountA().soapSend(
-					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
-						"<m>" +
-							"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
-							"<su>"+ subject +"</su>" +
-							"<mp ct='text/plain'>" +
-								"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
-							"</mp>" +
-						"</m>" +
-					"</SendMsgRequest>");
 
-		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
 		
-		// Click Get Mail button
-		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
+		
+		// Create a basic task to delete
+		String subject = "task"+ ZimbraSeleniumProperties.getUniqueString();
 				
+		app.zGetActiveAccount().soapSend(
+				"<CreateTaskRequest xmlns='urn:zimbraMail'>" +
+					"<m >" +
+			        	"<inv>" +
+			        		"<comp name='"+ subject +"'>" +
+			        			"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+			        		"</comp>" +
+			        	"</inv>" +
+			        	"<su>"+ subject +"</su>" +
+			        	"<mp ct='text/plain'>" +
+			        		"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+			        	"</mp>" +
+					"</m>" +
+				"</CreateTaskRequest>");
+
+		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
+		ZAssert.assertNotNull(task, "Verify the task is created");
+		
+		// Refresh the tasks view
+		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
+						
+		// Select the item
+		app.zPageTasks.zListItem(Action.A_MAIL_CHECKBOX, subject);
+
+		
 		// Right click the item, select delete
-		app.zPageMail.zListItem(Action.A_RIGHTCLICK, Button.B_DELETE, mail.dSubject);
-				
-		// Make sure the message no longer appears in the list
-		List<MailItem> messages = app.zPageMail.zListGetMessages();
-		ZAssert.assertNotNull(messages, "Verify the message list exists");
+		app.zPageTasks.zListItem(Action.A_RIGHTCLICK, Button.B_DELETE, subject);
+		
+		
+		List<TaskItem> tasks = app.zPageTasks.zGetTasks();
+		ZAssert.assertNotNull(tasks, "Verify the task list exists");
 
-		MailItem found = null;
-		for (MailItem m : messages) {
-			logger.info("Subject: looking for "+ mail.dSubject +" found: "+ m.gSubject);
-			if ( mail.dSubject.equals(m.gSubject) ) {
-				found = m;
+		TaskItem found = null;
+		for (TaskItem t : tasks) {
+			logger.info("Subject: looking for "+ subject +" found: "+ t.gSubject);
+			if ( subject.equals(t.gSubject) ) {
+				found = t;
 				break;
 			}
 		}
-		ZAssert.assertNull(found, "Verify the message is no longer in the inbox");
+		ZAssert.assertNull(found, "Verify the task is no longer present");
 	
 	}
 

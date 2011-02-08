@@ -101,6 +101,9 @@ public class PageTasks extends AbsTab {
 	public AbsPage zListItem(Action action, String subject) throws HarnessException {
 		logger.info(myPageName() + " zListItem("+ action +", "+ subject +")");
 		
+		if ( action == null )
+			throw new HarnessException("action cannot be null");
+
 		if ( (subject == null) || (subject.trim().length() == 0) )
 			throw new HarnessException("subject cannot be null or empty");
 		
@@ -235,8 +238,104 @@ public class PageTasks extends AbsTab {
 	}
 
 	@Override
-	public AbsPage zListItem(Action action, Button option, String item) throws HarnessException {
-		throw new HarnessException("implement me!");
+	public AbsPage zListItem(Action action, Button option, String subject) throws HarnessException {
+		logger.info(myPageName() + " zListItem("+ action +", "+ option +", "+ subject +")");
+		
+		if ( action == null )
+			throw new HarnessException("action cannot be null");
+		if ( option == null )
+			throw new HarnessException("button cannot be null");
+		if ( subject == null || subject.trim().length() == 0)
+			throw new HarnessException("subject cannot be null or blank");
+
+		String rowLocator = null;
+		String itemLocator = null;
+		AbsPage page = null;
+		
+		// How many items are in the table?
+		rowLocator = "//div[@id='"+ Locators.zl__TKL__rows  +"']/div";
+		int count = this.sGetXpathCount(rowLocator);
+		logger.debug(myPageName() + " zListItem: number of rows: "+ count);
+
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+			
+			itemLocator = rowLocator + "["+ i +"]";
+			String id = this.sGetAttribute("xpath=("+ itemLocator +")@id");
+			String locator = null;
+		
+			// Skip any invalid IDs
+			if ( (id == null) || (id.trim().length() == 0) )
+				continue;
+			
+			// Look for zli__TKL__258
+			if ( id.contains(Locators.zli__TKL__) ) {
+				// Found a task
+
+				// What is the subject?
+				locator = itemLocator + "//td[5]";
+				String itemSubject = this.sGetText(locator).trim();
+				
+				if ((itemSubject == null) || (itemSubject.trim().length() == 0) ) {
+					logger.debug("found empty task subject");
+					continue;
+				}
+				
+				if (itemSubject.equals(subject)) {
+					// Found it
+					break;
+				}
+				
+			}
+		}
+
+		
+		if ( itemLocator == null ) {
+			throw new HarnessException("Unable to locate item with subject("+ subject +")");
+		}
+
+
+		if ( action == Action.A_RIGHTCLICK ) {
+			
+			// Right-Click on the item
+			this.zRightClick(itemLocator);
+			
+			// Now the ContextMenu is opened
+			// Click on the specified option
+			
+			String optionLocator = null;
+			
+			if (option == Button.B_DELETE) {
+				
+				// <div id="zmi__Tasks__DELETE" ... 
+				optionLocator = "zmi__Tasks__DELETE";
+				page = null;
+				
+			} else {
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+			}
+			
+			// click on the option
+			this.zClick(optionLocator);
+						
+			this.zWaitForBusyOverlay();
+
+			// FALL THROUGH
+			
+		} else {
+			throw new HarnessException("implement me!  action = "+ action);
+		}
+	
+		
+
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+	
+
+		// Default behavior
+		return (page);
+		
 	}
 
 	@Override
@@ -498,7 +597,7 @@ public class PageTasks extends AbsTab {
 				id = this.sGetAttribute("xpath=("+ itemLocator +")@id");
 			} catch (SeleniumException e) {
 				// Make sure there is an ID
-				logger.warn("Task row didn't have ID", e);
+				logger.warn("Task row didn't have ID.  Probably normal.", e);
 				continue;
 			}
 			
