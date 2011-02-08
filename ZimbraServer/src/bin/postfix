@@ -41,7 +41,7 @@ if [ "x$1" = "xstatus" -o "x$1" = "xstart" ]; then
   if [ -L ${zimbra_home}/postfix ]; then
     if [ ! -f ${zimbra_home}/postfix/conf/main.cf ]; then
       touch ${zimbra_home}/postfix/conf/main.cf
-      ${zimbra_home}/bin/postconf -e mail_owner=${postfix_mail_owner} setgid_group=${postfix_setgid_group}
+      ${zimbra_home}/postfix/sbin/postconf -e mail_owner=${postfix_mail_owner} setgid_group=${postfix_setgid_group}
     fi
   fi
   sudo ${zimbra_home}/libexec/zmmtastatus 2> /dev/null
