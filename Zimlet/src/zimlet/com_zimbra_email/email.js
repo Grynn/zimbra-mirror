@@ -915,6 +915,23 @@ function (url) {
 	}
 };
 
+/**
+ * Expands the distribution list address of the bubble with the given ID.
+ *
+ * @param {string}	bubbleId	ID of bubble
+ * @param {string}	email		address to expand
+ */
+EmailTooltipZimlet.prototype.expandBubble =
+function(bubbleId, email) {
+
+	var bubble = document.getElementById(bubbleId);
+	if (bubble) {
+		var loc = Dwt.getLocation(bubble);
+		loc.y += Dwt.getSize(bubble).y + 2;
+		this._aclv.expandDL(email, null, null, null, loc);
+	}
+};
+
 // handle click on an address (or "Select All") in popup DL expansion list
 EmailTooltipZimlet.prototype._dlAddrSelected =
 function(text, el, match, ev) {
