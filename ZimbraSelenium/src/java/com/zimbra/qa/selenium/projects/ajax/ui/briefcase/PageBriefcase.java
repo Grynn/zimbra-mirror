@@ -59,26 +59,24 @@ public class PageBriefcase extends AbsTab {
 	public boolean zIsActive() throws HarnessException {
 
 		// Make sure the main page is active
-		if (!((AppAjaxClient) MyApplication).zPageMain.zIsActive()) {
-			((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
-		}
+		// if (!((AppAjaxClient) MyApplication).zPageMain.zIsActive())
+		// ((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
 
 		// If the "folders" tree is visible, then Briefcase tab is active
-		
+
 		String locator = null;
 		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-		   locator = Locators.zBriefcaseFolderIcon_Desktop +
-		         "[id*='" + MyApplication.zGetActiveAccount().EmailAddress + "']";
+			locator = Locators.zBriefcaseFolderIcon_Desktop + "[id*='"
+					+ MyApplication.zGetActiveAccount().EmailAddress + "']";
 		} else {
-		   locator = Locators.zBriefcaseFolderIcon;
+			locator = Locators.zBriefcaseFolderIcon;
 		}
 
-		boolean loaded = this.sIsElementPresent(locator); 
+		boolean loaded = this.sIsElementPresent(locator);
 
-		   if (!loaded)
+		if (!loaded)
 			return (loaded);
-		boolean active = this.zIsVisiblePerPosition(
-		      locator, 4, 74);
+		boolean active = this.zIsVisiblePerPosition(locator, 4, 74);
 		return (active);
 
 	}
@@ -107,20 +105,28 @@ public class PageBriefcase extends AbsTab {
 		}
 
 		// Make sure we are logged into the Ajax app
-		if (!((AppAjaxClient) MyApplication).zPageMain.zIsActive()) {
-			((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
-		}
+		// if (!((AppAjaxClient) MyApplication).zPageMain.zIsActive())
+		// ((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
 
 		// make sure mail page is loaded
-		GeneralUtility.waitForElementPresent(this,
-		      PageMain.Locators.zAppbarBriefcase, 20000);
-
+		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+			GeneralUtility.waitForElementPresent(this,
+					PageMain.Locators.zAppbarBriefcase, 20000);
+		} else {
+			waitForCondition(
+					"selenium.isElementPresent(\"xpath=//div[@id='zov__main_Mail']\")",
+					"20000");
+		}
 		// Click on Briefcase icon
 		zClick(PageMain.Locators.zAppbarBriefcase);
 
 		waitForBusyOverlay();
-
-		zWaitForActive();
+		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+			zWaitForActive();
+		} else {
+			waitForCondition("selenium.isElementPresent(\""
+					+ Locators.zBriefcaseFolderIcon + "\")", "20000");
+		}
 	}
 
 	@Override
@@ -335,11 +341,13 @@ public class PageBriefcase extends AbsTab {
 
 				// FALL THROUGH
 			} else if (option == Button.O_TAG_REMOVETAG) {
-				// Type "u" shortcut using General shortcuts
-				zKeyboard.zTypeCharacters(Shortcut.S_MAIL_REMOVETAG.getKeys());
+				// Using General shortcuts: Type "u" shortcut
+				// zKeyboard.zTypeCharacters(Shortcut.S_MAIL_REMOVETAG.getKeys());
 
-				pulldownLocator = null;
-				optionLocator = null;
+				pulldownLocator = "css=td[id$='__TAG_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+
+				optionLocator = "css=td[id$='__TAG_MENU|MENU|REMOVETAG_title']";
+
 				page = null;
 
 				// FALL THROUGH
@@ -597,7 +605,7 @@ public class PageBriefcase extends AbsTab {
 					.selenium()
 					.waitForCondition(
 							"selenium.browserbot.getUserWindow().top.appCtxt.getShell().getBusy()==false",
-							"1500");
+							"5000");
 			return true;
 		} catch (Exception ex) {
 			logger.info("BusyOverlay: ", ex.fillInStackTrace());

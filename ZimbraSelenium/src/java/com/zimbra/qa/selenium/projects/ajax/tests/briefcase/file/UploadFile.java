@@ -61,8 +61,7 @@ public class UploadFile extends AjaxCommonTest {
 						+ "<query>" + fileName + "</query>"
 						+ "</SearchRequest>");
 
-		String name = app.zGetActiveAccount().soapSelectValue("//mail:doc",
-				"name");
+		String name = account.soapSelectValue("//mail:doc", "name");
 
 		ZAssert.assertEquals(name, fileName, "Verify file name through SOAP");
 	}
