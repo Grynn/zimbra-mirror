@@ -113,9 +113,12 @@ public class AjaxCommonTest {
    private final static String _accountFlavor = "Zimbra";
    public final static String defaultAccountName = ZimbraSeleniumProperties.getUniqueString();
    private static boolean _firstTime = true;
+
    // This variable is to track desktop current account, if new account is created
    // then, desktop has to add that newly created account, while removing the
-   // existing ones
+   // existing ones. For desktop purpose, this cannot use app.zGetActiveAccount
+   // because the implementation is different where in Ajax client, active account
+   // is set in login and logout, while in desktop, it is only set in addDefaultAccount
    private ZimbraAccount _currentAccount = null;
 
    // Configurable from config file or input parameters

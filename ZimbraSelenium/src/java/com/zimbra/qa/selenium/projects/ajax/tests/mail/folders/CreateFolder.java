@@ -52,7 +52,7 @@ public class CreateFolder extends AjaxCommonTest {
       Object[] params = null;
       if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
          // Make sure the folder was created on the Desktop Server
-         params = new Object[]{ZimbraAccount.AccountZWC(), _folderName, SOAP_DESTINATION_HOST_TYPE.CLIENT, ZimbraAccount.AccountZWC().EmailAddress};
+         params = new Object[]{app.zGetActiveAccount(), _folderName, SOAP_DESTINATION_HOST_TYPE.CLIENT, app.zGetActiveAccount().EmailAddress};
          FolderItem desktopFolder = (FolderItem)GeneralUtility.waitFor("com.zimbra.qa.selenium.framework.items.FolderItem",
                null, true, "importFromSOAP", params, WAIT_FOR_OPERAND.NEQ, null, 30000, 1000);
          ZAssert.assertNotNull(desktopFolder, "Verify the new form opened");
@@ -63,7 +63,7 @@ public class CreateFolder extends AjaxCommonTest {
       }
 
       // Make sure the folder was created on the ZCS server
-      params = new Object[] {ZimbraAccount.AccountZWC(), _folderName};
+      params = new Object[] {app.zGetActiveAccount(), _folderName};
 
       // Anticipate for slow performance client to ZCS server connection, thus putting 30 seconds
       FolderItem folder = (FolderItem)GeneralUtility.waitFor("com.zimbra.qa.selenium.framework.items.FolderItem",
@@ -161,7 +161,7 @@ public class CreateFolder extends AjaxCommonTest {
          try {
             app.zPageMail.zNavigateTo();
             // Delete it from Email Server
-            FolderItem.deleteUsingSOAP(ZimbraAccount.AccountZWC(), _folderName);
+            FolderItem.deleteUsingSOAP(app.zGetActiveAccount(), _folderName);
          } catch (Exception e) {
             logger.info("Failed while removing the folder.");
             e.printStackTrace();

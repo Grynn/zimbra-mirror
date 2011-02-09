@@ -59,7 +59,7 @@ public class TreeBriefcase extends AbsTree {
 		String locator = null;
 		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
 		   locator = Locators.briefcaseTreeView_Desktop +
-		         "[id*='" + ZimbraAccount.AccountZWC().EmailAddress + "']"
+		         "[id*='" + MyApplication.zGetActiveAccount().EmailAddress + "']"
 		         + "[id$='" + folder.getId() + "_imageCell']";
 		} else {
 		   locator = Locators.briefcaseTreeView + folder.getId()		   

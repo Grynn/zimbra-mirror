@@ -68,7 +68,7 @@ public class PageBriefcase extends AbsTab {
 		String locator = null;
 		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
 		   locator = Locators.zBriefcaseFolderIcon_Desktop +
-		         "[id*='" + ZimbraAccount.AccountZWC().EmailAddress + "']";
+		         "[id*='" + MyApplication.zGetActiveAccount().EmailAddress + "']";
 		} else {
 		   locator = Locators.zBriefcaseFolderIcon;
 		}
