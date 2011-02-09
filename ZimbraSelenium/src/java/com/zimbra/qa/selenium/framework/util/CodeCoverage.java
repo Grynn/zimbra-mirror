@@ -26,25 +26,16 @@ public class CodeCoverage {
 	}
 	
 	/**
-	 * Instrument the code on the Zimbra server
-	 * <p>
-	 * STAF must be installed on the client and server.  Code will be instrumented and the server restarted.
-	 */
-	public void instrumentServer() {
-		// TODO
-	}
-	
-	/**
 	 * Write coverage.json to the output folder
 	 */
 	public void writeCoverage() {
-		logger.info("<=======><=======><=== Writing Coverage to json file ===><=======><=======>");
 
 		if ( !Enabled ) {
-			logger.info("Code Coverage reporting is disabled");
+			logger.info("writeCoverage(): Code Coverage reporting is disabled");
 			return;
 		}
 		
+		logger.info("<=======><=======><=== Writing Coverage to json file ===><=======><=======>");
 		
 		// TODO: change from BufferedWriter to Logger
 		BufferedWriter out = null;
@@ -89,7 +80,7 @@ public class CodeCoverage {
 		logger.info("Calculating code coverage ...");
 
 		if ( !Enabled ) {
-			logger.info("Code Coverage reporting is disabled");
+			logger.info("calculateCoverage(): Code Coverage reporting is disabled");
 			return;
 		}
 		
@@ -195,7 +186,7 @@ public class CodeCoverage {
 		}
 	}
 	
-	private static final String CODE_COVERAGE_SOURCE_PATH = "src/CODECOVERAGE";
+	private static final String CODE_COVERAGE_SOURCE_PATH = "src/CODECOVERAGE/";
 	private static final List<String> reportFiles = new ArrayList<String>() {
 		private static final long serialVersionUID = -6339218908274560120L;
 	{
@@ -312,7 +303,81 @@ public class CodeCoverage {
 			+ "window.jscoverage_report()\n";
 
 
+	private static final String WebappsZimbra = "/opt/zimbra/jetty/webapps/zimbra";
+	private String WebappsZimbraOriginal = null;
+	private String WebappsZimbraInstrumented = null;
 	
+	private static class StafExecuteCommand extends StafAbstract {
+		public StafExecuteCommand(String server) {
+			StafServer = server;
+			StafService = "PROCESS";
+		}
+		public boolean execute(String command) throws HarnessException {
+			if ( command.trim().startsWith("zm") ) {
+				// For zm commands, run as zimbra user, and prepend the full path
+				StafParms = String.format("START SHELL COMMAND \"su - zimbra -c '/opt/zimbra/bin/%s'\" RETURNSTDOUT RETURNSTDERR WAIT %d", command, 90000);
+			} else {
+				StafParms = String.format("START SHELL COMMAND \"%s\" RETURNSTDOUT RETURNSTDERR WAIT %d", command, 90000);
+			}
+			return (super.execute());
+		}
+	}
+	
+	/**
+	 * Instrument the code on the Zimbra server
+	 * <p>
+	 * STAF must be installed on the client and server.  Code will be instrumented and the server restarted.
+	 */
+	public void instrumentServer() {
+		
+		if ( !Enabled ) {
+			logger.info("instrumentServer(): Code Coverage reporting is disabled");
+			return;
+		}
+				
+		WebappsZimbraOriginal		= "/opt/zimbra/jetty/webapps/zimbra" + ZimbraSeleniumProperties.getUniqueString();
+		WebappsZimbraInstrumented	= "/opt/zimbra/jetty/webapps/instrumented" + ZimbraSeleniumProperties.getUniqueString();
+		
+		try {
+			StafExecuteCommand staf = new StafExecuteCommand(ZimbraSeleniumProperties.getStringProperty("server.host"));
+			staf.execute("zmmailboxdctl stop");
+			staf.execute("/usr/local/bin/jscoverage --no-instrument=help/ "+ WebappsZimbra +" "+ WebappsZimbraInstrumented);
+			staf.execute("mv "+ WebappsZimbra +" "+ WebappsZimbraOriginal);
+			staf.execute("mv "+ WebappsZimbraInstrumented +" "+ WebappsZimbra);
+			staf.execute("zmmailboxdctl start");
+			staf.execute("zmcontrol status");
+		} catch (HarnessException e) {
+			logger.error("Unable to instrument code.  Disabling code coverage.", e);
+		}
+
+	}
+	
+	public void instrumentServerUndo() {
+		
+		if ( !Enabled ) {
+			logger.info("instrumentServerUndo(): Code Coverage reporting is disabled");
+			return;
+		}
+			
+		WebappsZimbraInstrumented	= "/opt/zimbra/jetty/webapps/instrumented" + ZimbraSeleniumProperties.getUniqueString();
+
+		try {
+			StafExecuteCommand staf = new StafExecuteCommand(ZimbraSeleniumProperties.getStringProperty("server.host"));
+			staf.execute("zmmailboxdctl stop");
+			staf.execute("mv "+ WebappsZimbra +" "+ WebappsZimbraInstrumented);
+			staf.execute("mv "+ WebappsZimbraOriginal +" "+ WebappsZimbra);
+			staf.execute("zmmailboxdctl start");
+			staf.execute("zmcontrol status");
+		} catch (HarnessException e) {
+			logger.error("Unable to instrument code.  Disabling code coverage.", e);
+		} finally {
+			WebappsZimbraOriginal = null;
+			WebappsZimbraInstrumented = null;
+		}
+
+	}
+
+
 	protected boolean Enabled = false;
 	protected String CoverageServer = null;
 	
@@ -335,4 +400,5 @@ public class CodeCoverage {
 		}
 		return instance;
 	}
+
  }

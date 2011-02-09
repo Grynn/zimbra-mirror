@@ -351,7 +351,7 @@ public class ExecuteHarnessMain {
 	}
 	
 	/**
-	 * Start the selenium server (if configured) and run tests
+	 * Execute tests
 	 * @throws HarnessException 
 	 * @throws IOException 
 	 * @throws FileNotFoundException 
@@ -361,19 +361,24 @@ public class ExecuteHarnessMain {
 		
 		Date start = new Date();
 		Date finish;
-		
+
 		StringBuilder result = new StringBuilder();
+		FileAppender appender = new FileAppender(new PatternLayout("%-4r %-5p %c %x - %m%n"), testoutputfoldername + "/debug.txt", false);
+
 		try {
-			
+
 			// Always add a file appender for all debugging
-			Logger.getRootLogger().addAppender(new FileAppender(new PatternLayout("%-4r %-5p %c %x - %m%n"), testoutputfoldername + "/debug.txt", false));
+			Logger.getRootLogger().addAppender(appender);
 			
-			SeleniumService.getInstance().startSeleniumServer();
-			String response = executeTests();
+			// Each method handles different subsystem ...
+			// executeCodeCoverage() ... if configured, instrument/uninstrument server code
+			// executeSelenium() ... if configured, start/stop seleneium
+			// executeTests() ... execute TestNG tests
+			String response = executeCodeCoverage();
 			result.append(response).append('\n');
 			
 		} finally {
-			SeleniumService.getInstance().stopSeleniumServer();
+			Logger.getRootLogger().removeAppender(appender);
 			finish = new Date();
 		}
 		
@@ -382,6 +387,47 @@ public class ExecuteHarnessMain {
 		result.append("Duration: ").append(duration / 1000).append(" seconds\n");
 		
 		return (result.toString());
+
+	}
+	
+	/**
+	 * Instrument/Uninstrument server JS code for code coverage (if configured), and then run tests
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws HarnessException
+	 * @throws IOException
+	 */
+	protected String executeCodeCoverage() throws FileNotFoundException, HarnessException, IOException {
+		
+		try {
+			
+			CodeCoverage.getInstance().instrumentServer();
+			return (executeSelenium());
+			
+		} finally {
+			CodeCoverage.getInstance().instrumentServerUndo();
+		}
+
+	}
+	
+	
+	/**
+	 * Start/Stop the selenium server (if configured), and then run tests
+	 * @throws HarnessException 
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 */
+	protected String executeSelenium() throws HarnessException, FileNotFoundException, IOException {
+		
+		try {
+			
+			SeleniumService.getInstance().startSeleniumServer();
+			return (executeTests());
+			
+		} finally {
+			SeleniumService.getInstance().stopSeleniumServer();
+		}
+		
 	}
 	
 	/**
@@ -390,7 +436,7 @@ public class ExecuteHarnessMain {
 	 * @throws IOException
 	 * @throws HarnessException 
 	 */
-	public String executeTests() throws FileNotFoundException, IOException, HarnessException {
+	protected String executeTests() throws FileNotFoundException, IOException, HarnessException {
 		logger.info("Execute tests ...");
 		
 		ResultListener listener = null;
