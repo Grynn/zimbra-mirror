@@ -215,7 +215,7 @@ function (resp){
 ZaCertWizard.prototype._uploadCallback =
 function (status, uploadResults) {
 	var cStep = this._containedObject[ZaModel.currentStep] ;
-	if (AjxEnv.hasFirebug) 
+	if(window.console && window.console.log) 
 		console.log("Cert File Upload: status = " + status);
 	if ((status == AjxPost.SC_OK) && (uploadResults != null) && (uploadResults.length > 0)) {
 		this.uploadResults = {
@@ -273,7 +273,7 @@ ZaCertWizard.prototype.getCertTypeFromUploadInputs = function (filename) {
 		var v = this.uploadInputs[n] ;
 		if (n == "intermediateCA" && v != null) {
 			for (var i=0; i < v.length; i ++)
-			if (filename = v[i]) {
+			if (filename == v[i]) {
 				return n ;
 			}
 		}else{
@@ -317,7 +317,7 @@ function(uploadManager) {
 ZaCertWizard.prototype.goNext = 
 function() {
 	var cStep = this._containedObject[ZaModel.currentStep] ;
-	if (AjxEnv.hasFirebug) 
+	if(window.console && window.console.log) 
 		console.log("Current Step: " + cStep + ", Now Go Next ...");
 	var type ; //type of the self| comm
 	if (this._containedObject[ZaCert.A_type_csr] || this._containedObject[ZaCert.A_type_comm] ) {
@@ -376,10 +376,10 @@ function() {
                     ZaCert.genCSR (ZaApp.getInstance(), this._containedObject.attrs, type, true,
                             this._containedObject[ZaCert.A_target_server], this._containedObject[ZaCert.A_keysize]) ;
                 } else {
-                    if (AjxEnv.hasFirebug) console.log("Self-Signed certificate, skip the CSR generation.") ;                    
+                    if(window.console && window.console.log) console.log("Self-Signed certificate, skip the CSR generation.") ;                    
                 }
 			}else{
-				if (AjxEnv.hasFirebug) console.log("Previous CSR exists, skip the CSR generation.") ;
+				if(window.console && window.console.log) console.log("Previous CSR exists, skip the CSR generation.") ;
 			}
 		}catch (ex) {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_cert_manager.genCSRError, ex, true) ;		
@@ -392,7 +392,7 @@ function() {
 			//No same file name is allowed due to the server limitation - server only return the filename
 			var formEl = document.getElementById(ZaCertWizard.CertUploadFormId);
 			var inputEls = formEl.getElementsByTagName("input") ;
-			
+	
 			this.uploadInputs = {
 				certFile : null ,
 				rootCA : null ,
@@ -469,22 +469,37 @@ function() {
 
 //TODO: move it to ZaUtil
 ZaCertWizard.getFileName = function (fullPath) {
+	// The <fullpath> is not same as the local path because the 
+	// security policy of different browser.
+	// * For IE7/8, if local upload path is disabled in setting, 
+	//       the <fullpath> would be "C:\fakepath\filename.ext";
+	// * For FF and SF, only the filename "filename.ext" is given, 
+	//       not containing the full local path.
+	// * For Chrome and Opera, it will present 
+	//	 "C:\fakepath\filename.ext".
+	// The fake path will result in file uploading error finally. 
+	// If the upload is ok for above fake path, the following codes
+	// only need to return back the corrent filename. Or, it should
+	// be handled before upload operation.
+
 		if (fullPath == null) return null ;
 		
 		var lastIndex = 0;
+	/*
 		if (AjxEnv.isWindows) {
 			lastIndex = fullPath.lastIndexOf("\\") ;
 		}else{
 			lastIndex = fullPath.lastIndexOf("/") ;			
 		}
-
+	*/
+		lastIndex = fullPath.lastIndexOf("\\") ;
 		return fullPath.substring(lastIndex + 1) ;
 }
 
 ZaCertWizard.prototype.goPrev = 
 function() {
 	var cStep = this._containedObject[ZaModel.currentStep] ;
-	if (AjxEnv.hasFirebug) 
+	if(window.console && window.console.log) 
 		console.log("Current Step: " + cStep + ", Now Go Previous ...");
 	var prevStep ;
 	if (cStep == ZaCertWizard.STEP_DOWNLOAD_CSR) {
@@ -609,7 +624,6 @@ ZaCertWizard.removeIntermediaCAInput = function (removeSpanEl) {
 	formEl.removeChild(intermediaCADivEl) ;	
 }
 
-
 ZaCertWizard.onRepeatRemove = 
 function (index, form) {
 	var list = this.getInstanceValue();
@@ -623,7 +637,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 	var case_select_server = {
 			type:_CASE_, numCols:2, colSizes:["100px","*"],
             tabGroupKey:ZaCertWizard.STEP_SELECT_SERVER, caseKey:ZaCertWizard.STEP_SELECT_SERVER,
-			align:_LEFT_, valign:_TOP_, cssStyle:"padding-left:50px;", width: "80%"
+			align:_LEFT_, valign:_TOP_, width:"80%",  cssStyle:"padding-left:50px;"
 		};
 	
 	var case_select_server_items = [
@@ -648,7 +662,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 		
 	var case_user_options = {type:_CASE_, numCols:2, colSizes:["25px","*"], 
             tabGroupKey:ZaCertWizard.STEP_USER_OPTION, caseKey:ZaCertWizard.STEP_USER_OPTION,
-			align:_LEFT_, valign:_TOP_, cssStyle:"padding-left:50px;"};
+			align:_LEFT_, valign:_TOP_, width:"90%", cssStyle:"padding-left:50px;"};
 			
 	var case_user_options_items = [
 				{	type: _GROUP_, numCols:2, colSpan: "*", colSizes:["75px","*"], items: [
@@ -677,13 +691,13 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 						//TODO: Change it on the XFormItem level
 						onChange: function (value, event, form) {
 							value = true ;
-							if (AjxEnv.hasFirebug) console.log("Self Install - onChange value = " + value) ;
+							if(window.console && window.console.log) console.log("Self Install - onChange value = " + value) ;
 							this.setInstanceValue (value) ;
 							this.setInstanceValue (!value, ZaCert.A_type_comm ) ;
 							this.setInstanceValue (!value, ZaCert.A_type_csr) ;
 						},
 						updateElement:function (newValue) {
-							if (AjxEnv.hasFirebug) console.log("Self Install - UpdateElement newValue = " + newValue) ;
+							if(window.console && window.console.log) console.log("Self Install - UpdateElement newValue = " + newValue) ;
 							this.getElement().checked = (newValue == true);
 						}
 					},
@@ -695,13 +709,13 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 						//TODO: Change it on the XFormItem level
 						onChange: function (value, event, form) {
 							value = true ;
-							if (AjxEnv.hasFirebug) console.log("Gen CSR - onChange value = " + value) ;
+							if(window.console && window.console.log) console.log("Gen CSR - onChange value = " + value) ;
 							this.setInstanceValue (value) ;
 							this.setInstanceValue (!value, ZaCert.A_type_self ) ;
 							this.setInstanceValue (!value, ZaCert.A_type_comm ) ;
 						},
 						updateElement:function (newValue) {
-							if (AjxEnv.hasFirebug) console.log("Gen CSR Install - UpdateElement newValue = " + newValue) ;
+							if(window.console && window.console.log) console.log("Gen CSR Install - UpdateElement newValue = " + newValue) ;
 							this.getElement().checked = (newValue == true);
 						}
 					},	
@@ -709,12 +723,12 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
                     visibilityChecks:[],
                     enableDisableChecks:[],
                     updateElement:function (newValue) {
-						if (AjxEnv.hasFirebug) console.log("Comm Install - UpdateElement newValue = " + newValue) ;
+						if(window.console && window.console.log) console.log("Comm Install - UpdateElement newValue = " + newValue) ;
 						this.getElement().checked = (newValue == true);
 					},
 					onChange: function (value, event, form) {
 						value = true ;
-						if (AjxEnv.hasFirebug) console.log("Comm Install - onChange value = " + value) ;
+						if(window.console && window.console.log) console.log("Comm Install - onChange value = " + value) ;
 						this.setInstanceValue (value) ;
 						this.setInstanceValue (!value, ZaCert.A_type_self ) ;
 						this.setInstanceValue (!value, ZaCert.A_type_csr) ;
@@ -783,10 +797,10 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 				        enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
                         label: com_zimbra_cert_manager.Use_Wildcard_Server_Name,
 						onChange: function (value, event, form) {
-							if (AjxEnv.hasFirebug) console.log("use wildcard: " + value) ;
+							if(window.console && window.console.log) console.log("use wildcard: " + value) ;
 							this.setInstanceValue (value) ;
 							if (value) {
-								if (AjxEnv.hasFirebug) console.log("Set the wildcard server name") ;
+								if(window.console && window.console.log) console.log("Set the wildcard server name") ;
                                 var wildCardSN = ZaCert.getWildCardServerName(this.getInstanceValue(ZaCert.A_commonName)) ;
 								this.setInstanceValue( wildCardSN,	ZaCert.A_commonName ) ;
 							}
