@@ -287,7 +287,7 @@ public class AjaxCommonTest {
 	                     "  Is a valid cert installed?", e);
 	               throw e;
 	            } else {
-	               logger.info("App is still not ready...");
+	               logger.info("App is still not ready...", e);
 	               SleepUtil.sleep(10000);
 	               continue;
 	            }
