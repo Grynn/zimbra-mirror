@@ -62,7 +62,12 @@ DwtDragEvent = function() {
 	 * Drag source data. This is the application data associated with the item being dragged.
 	 */
 	this.srcData = null;
-}
+};
+
+/**
+ * Drag initialization.
+ */
+DwtDragEvent.DRAG_INIT = "INIT";
 
 /**
  * Drag is starting.

@@ -2710,12 +2710,13 @@ function(ev) {
 	else if (obj._dragBox) {
 		// We do mouse capture for drag boxes mostly because the mouseup can come from anywhere, and we
 		// want to handle it, usually by destroying the box.
-		try {
-			obj._ctrlCaptureObj.capture();
-		} catch (ex) {
-			DBG.dumpObj(ex);
+		if (obj._dragBox._setStart(mouseEv, obj)) {
+			try {
+				obj._ctrlCaptureObj.capture();
+			} catch (ex) {
+				DBG.dumpObj(ex);
+			}
 		}
-		obj._dragBox._setStart(mouseEv, obj);
 	}
 
 	return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEDOWN, obj, mouseEv);

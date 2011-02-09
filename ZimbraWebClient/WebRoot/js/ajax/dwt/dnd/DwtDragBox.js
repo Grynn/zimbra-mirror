@@ -85,12 +85,15 @@ function(dragBoxListener) {
 
 DwtDragBox.prototype._setStart =
 function(mouseEv, srcControl) {
+
 	this._startX = mouseEv.docX;
 	this._startY = mouseEv.docY;
-	this._dragObj = srcControl;
+	this._dragObj = DwtDragBox.__dragEvent.srcControl = srcControl;
+	DwtDragBox.__dragEvent.action = DwtDragEvent.DRAG_INIT;
+	DwtDragBox.__dragEvent.target = mouseEv.target;
+	return (this.__evtMgr.notifyListeners(DwtDragBox.__DRAG_LISTENER, DwtDragBox.__dragEvent) !== false);
 };
 
-/** @private */
 DwtDragBox.prototype._beginDrag =
 function(srcControl) {
 
@@ -117,7 +120,6 @@ function(mouseEv, srcControl) {
 	this.__evtMgr.notifyListeners(DwtDragBox.__DRAG_LISTENER, DwtDragBox.__dragEvent);
 };
 
-/** @private */
 DwtDragBox.prototype._endDrag =
 function(srcControl) {
 
