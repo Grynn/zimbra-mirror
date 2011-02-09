@@ -137,7 +137,7 @@ public class AjaxCommonTest {
 		startingPage = app.zPageMain;
 		startingAccountPreferences = new HashMap<String, String>();
 	}
-	
+
 	/**
 	 * Global BeforeSuite
 	 * <p>
@@ -252,13 +252,13 @@ public class AjaxCommonTest {
 		         logger.info("App is already running...");
 		      }
 
+		      GeneralUtility.waitFor(null, ZimbraAccount.AccountZWC(), false,
+		            "authenticateToMailClientHost", null, WAIT_FOR_OPERAND.NEQ, null, 30000, 3000);
 		   } else {
 		      // AJAX test
 		      ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.AJAX);
 		   }
 
-		   GeneralUtility.waitFor(null, ZimbraAccount.AccountZWC(), false,
-		         "authenticateToMailClientHost", null, WAIT_FOR_OPERAND.NEQ, null, 30000, 3000);
 			_selenium = ClientSessionFactory.session().selenium();
 			_selenium.start();
 			_selenium.windowMaximize();
