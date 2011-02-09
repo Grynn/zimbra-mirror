@@ -37,7 +37,7 @@
 #
 
 
-# Last Update:2010-04-21-AXB
+# Last Update: 2010-12-22-AXB
 
 
 
@@ -70,6 +70,8 @@ util_rb_3tld co.at.pn
 util_rb_3tld co.at.lv
 util_rb_3tld or.at.lv
 util_rb_3tld co.at.tc
+util_rb_3tld qld.edu.au                                                                                                                                                                                              
+util_rb_3tld perso.neuf.fr
 
 endif
 
@@ -82,7 +84,7 @@ util_rb_2tld altervista.org
 util_rb_2tld biz.tm
 util_rb_2tld blogspot.com
 util_rb_2tld bravehost.com
-util_rb_2tld bravejournal.com 
+util_rb_2tld bravejournal.com
 util_rb_2tld by.ru
 util_rb_2tld chat.ru
 util_rb_2tld cjb.net
@@ -228,6 +230,7 @@ util_rb_2tld corp.st
 util_rb_2tld societe.st
 util_rb_2tld de.pn
 util_rb_2tld es.pn
+util_rb_2tld eu.pn
 util_rb_2tld euro.tm
 util_rb_2tld fr.pn
 util_rb_2tld gov.pn
@@ -268,3 +271,12 @@ util_rb_2tld org.rw
 util_rb_2tld myvnc.com
 util_rb_2tld blog4ever.com
 util_rb_2tld sytes.net
+util_rb_2tld multiply.com
+util_rb_2tld 80.hk                                                                                                                                                                                                   
+util_rb_2tld shutterfly.com
+util_rb_2tld chez.com                                                                                                                                                                                                
+util_rb_2tld ce.ms
+util_rb_2tld cz.cc                                                                                                                                                                                                   
+util_rb_2tld neostrada.pl
+util_rb_2tld dyndns-server.com                                                                                                                                                                                       
+
