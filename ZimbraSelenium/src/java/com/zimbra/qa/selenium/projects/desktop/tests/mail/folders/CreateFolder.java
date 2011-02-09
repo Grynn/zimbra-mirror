@@ -37,7 +37,7 @@ public class CreateFolder extends DesktopCommonTest{
       String locator = "css=td[id*='" + startingAccount.EmailAddress + "'][id*='2_textCell']";
 
       logger.debug("ID is: " + locator);
-      ZimbraSeleniumProperties.waitForElementPresent(app.zPageMail, locator);
+      GeneralUtility.waitForElementPresent(app.zPageMail, locator);
 
       String treeItemLocator = TreeMail.Locators.zTreeItems.replace(TreeMail.stringToReplace, defaultAccountName);
       ContextMenu contextMenu = (ContextMenu)app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, treeItemLocator);

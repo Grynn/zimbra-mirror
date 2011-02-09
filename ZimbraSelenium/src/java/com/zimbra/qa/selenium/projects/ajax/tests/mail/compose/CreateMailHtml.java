@@ -55,7 +55,7 @@ public class CreateMailHtml extends AjaxCommonTest {
 		mailform.zSubmit();
 				
 		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-         ZimbraSeleniumProperties.waitForElementPresent(app.zPageMail, PageMail.Locators.zGetMailBtn);
+		   GeneralUtility.waitForElementPresent(app.zPageMail, PageMail.Locators.zGetMailBtn);
          app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
       }
 

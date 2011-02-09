@@ -45,7 +45,7 @@ public class CreateMailText extends DesktopCommonTest {
       // Send the message
       mailform.zSubmit();
 
-      ZimbraSeleniumProperties.waitForElementPresent(app.zPageMail, PageMail.Locators.zSendReceiveButton);
+      GeneralUtility.waitForElementPresent(app.zPageMail, PageMail.Locators.zSendReceiveButton);
       app.zPageMail.sClick(PageMail.Locators.zSendReceiveButton);
 
       Object[] params = {ZimbraAccount.AccountA(), "subject:("+ mail.dSubject +")"};

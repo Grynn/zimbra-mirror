@@ -5,9 +5,13 @@ package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 
 /**
  * @author
@@ -20,6 +24,7 @@ public class PageBriefcase extends AbsTab {
 		public static final String zBriefcaseFolder = "id=zti__main_Briefcase__16_textCell";
 		public static final String briefcaseListView = "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows']";
 		public static final String zBriefcaseFolderIcon = "id=zti__main_Briefcase__16";
+		public static final String zBriefcaseFolderIcon_Desktop = "css=div[id*='Briefcase'][id$='16_div']";
 		public static final String zTrashFolder = "id=zti__main_Briefcase__3_textCell";
 		public static final String zBriefcaseAppIconBtn = "id=zb__App__Briefcase_left_icon";
 		public static final String zNewMenuIconBtn = "id=zb__BCD__NEW_FILE_left_icon";
@@ -59,11 +64,21 @@ public class PageBriefcase extends AbsTab {
 		}
 
 		// If the "folders" tree is visible, then Briefcase tab is active
-		boolean loaded = this.sIsElementPresent(Locators.zBriefcaseFolderIcon);
-		if (!loaded)
+		
+		String locator = null;
+		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+		   locator = Locators.zBriefcaseFolderIcon_Desktop +
+		         "[id*='" + ZimbraAccount.AccountZWC().EmailAddress + "']";
+		} else {
+		   locator = Locators.zBriefcaseFolderIcon;
+		}
+
+		boolean loaded = this.sIsElementPresent(locator); 
+
+		   if (!loaded)
 			return (loaded);
 		boolean active = this.zIsVisiblePerPosition(
-				Locators.zBriefcaseFolderIcon, 4, 74);
+		      locator, 4, 74);
 		return (active);
 
 	}
@@ -97,9 +112,8 @@ public class PageBriefcase extends AbsTab {
 		}
 
 		// make sure mail page is loaded
-		waitForCondition(
-				"selenium.isElementPresent(\"xpath=//div[@id='zov__main_Mail']\")",
-				"20000");
+		GeneralUtility.waitForElementPresent(this,
+		      PageMain.Locators.zAppbarBriefcase, 20000);
 
 		// Click on Briefcase icon
 		zClick(PageMain.Locators.zAppbarBriefcase);

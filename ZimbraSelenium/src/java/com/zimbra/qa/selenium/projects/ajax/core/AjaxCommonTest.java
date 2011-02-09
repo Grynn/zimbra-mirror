@@ -330,10 +330,10 @@ public class AjaxCommonTest {
 	            logger.info("Account Page is active, so no accounts have been created");
 	         } else {
 	            logger.info("Main page is active");
-	            ZimbraSeleniumProperties.waitForElementPresent(app.zPageMain,
+	            GeneralUtility.waitForElementPresent(app.zPageMain,
 	                  PageMain.Locators.zLogoffButton);
 	            app.zPageMain.sClick(PageMain.Locators.zLogoffButton);
-	            ZimbraSeleniumProperties.waitForElementPresent(app.zPageLogin,
+	            GeneralUtility.waitForElementPresent(app.zPageLogin,
 	                  PageLogin.Locators.zBtnLoginDesktop);
 
 	            boolean bFoundOtherUser = true;
@@ -365,15 +365,16 @@ public class AjaxCommonTest {
 	                  }
 	               }
 
-	               if (!(Boolean)ZimbraSeleniumProperties.waitForElementPresent(app.zPageLogin,
+	               if (!(Boolean)GeneralUtility.waitForElementPresent(app.zPageLogin,
 	                     deleteButtonLocator, 5000)) {
 	                  bFoundOtherUser = false;
 	               }
 	            }
-	            if (_firstTime || _currentAccount != ZimbraAccount.AccountZWC()) {
-	               addDefaultAccount();
-	               _currentAccount = ZimbraAccount.AccountZWC();
-	            }
+	         }
+
+	         if (_firstTime || _currentAccount != ZimbraAccount.AccountZWC()) {
+	            addDefaultAccount();
+	            _currentAccount = ZimbraAccount.AccountZWC();
 	         }
 
 	      } else {
@@ -441,7 +442,7 @@ public class AjaxCommonTest {
       logger.debug("Selenium is opening: " + accountUrl);
       logger.debug("Selenium is: " + _selenium);
       _selenium.open(accountUrl);
-      ZimbraSeleniumProperties.waitForElementPresent(app.zPageLogin,
+      GeneralUtility.waitForElementPresent(app.zPageLogin,
             PageLogin.Locators.zBtnLoginDesktop);
    }
 

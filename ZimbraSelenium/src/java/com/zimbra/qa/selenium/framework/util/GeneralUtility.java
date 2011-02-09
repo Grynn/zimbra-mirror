@@ -219,4 +219,29 @@ public class GeneralUtility {
          return false;
       }
    }
+
+   /**
+    * Dynamically wait for element to be present with default timeout 30 seconds
+    * @param owner Page Object, which is the owner of the locator
+    * @param locator Locator of the element
+    * @throws HarnessException 
+    * @return true if element is present, or false if element is not present when timeout is hit
+    */
+   public static boolean waitForElementPresent(Object owner, String locator) throws HarnessException {
+      return waitForElementPresent(owner, locator, 30000);
+   }
+
+   /**
+    * Dynamically wait for element to be present with specified timeout
+    * @param owner Page Object, which is the owner of the locator
+    * @param locator Locator of the element
+    * @param timeout Timeout to be waited for
+    * @return true if element is present, or false if element is not present when timeout is hit
+    * @throws HarnessException
+    */
+   public static boolean waitForElementPresent(Object owner, String locator, long timeout) throws HarnessException {
+      Object[] params = {locator};
+      return (Boolean)GeneralUtility.waitFor(null, owner, false, "sIsElementPresent",
+            params, WAIT_FOR_OPERAND.EQ, true, timeout, 1000);
+   }
 }

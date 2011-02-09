@@ -9,6 +9,7 @@ import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 /**
@@ -21,6 +22,7 @@ public class TreeBriefcase extends AbsTree {
 	public static class Locators {
 		public static final String briefcaseListView = "css=[id='zl__BDLV__rows']";
 		public static final String briefcaseTreeView = "css=[id*=zti__main_Briefcase__";
+		public static final String briefcaseTreeView_Desktop = "css=td[id*='main_Briefcase']";
 	}
 
 	public TreeBriefcase(AbsApplication application) {
@@ -55,20 +57,23 @@ public class TreeBriefcase extends AbsTree {
 			throws HarnessException {
 		AbsPage page = null;
 		String locator = null;
+		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+		   locator = Locators.briefcaseTreeView_Desktop +
+		         "[id*='" + ZimbraAccount.AccountZWC().EmailAddress + "']"
+		         + "[id$='" + folder.getId() + "_imageCell']";
+		} else {
+		   locator = Locators.briefcaseTreeView + folder.getId()		   
+            + "_imageCell]";
+		}
 
 		if (action == Action.A_LEFTCLICK) {
-			locator = Locators.briefcaseTreeView + folder.getId()
-					+ "_imageCell]";
-			
+
 			waitForBusyOverlay();
 			
 			//ClientSessionFactory.session().selenium().clickAt(locator,"0,0");
 
 			// FALL THROUGH
 		} else if (action == Action.A_RIGHTCLICK) {
-
-			locator = Locators.briefcaseTreeView + folder.getId()
-					+ "_imageCell]";
 
 			if (!this.sIsElementPresent(locator))
 				throw new HarnessException(
@@ -83,9 +88,6 @@ public class TreeBriefcase extends AbsTree {
 			throw new HarnessException("Action " + action
 					+ " not yet implemented");
 		}
-
-		if (locator == null)
-			throw new HarnessException("locator is null for action " + action);
 
 		if (!this.sIsElementPresent(locator))
 			throw new HarnessException("Unable to locate folder in the tree "

@@ -10,10 +10,10 @@ import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsForm;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.Stafpostqueue;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
 public class FormMailNew extends AbsForm{
 
@@ -342,7 +342,7 @@ public class FormMailNew extends AbsForm{
          locator = Locators.zSendIconButton;
          
          // Look for "Send"
-         if ( !ZimbraSeleniumProperties.waitForElementPresent(this, Locators.zSendIconButton))
+         if ( !GeneralUtility.waitForElementPresent(this, Locators.zSendIconButton))
             throw new HarnessException("Send button is not visible "+ Locators.zSendIconButton);
          
          // Click on it

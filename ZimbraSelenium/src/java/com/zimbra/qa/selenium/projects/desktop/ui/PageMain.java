@@ -5,8 +5,8 @@ import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
 public class PageMain extends AbsTab{
 
@@ -88,10 +88,10 @@ public class PageMain extends AbsTab{
          } else if (sIsElementPresent(PageAccounts.Locators.zAccountTypeDropDownList)) {
             logger.debug("Currently in Add New Account Tab on Accounts page, now navigating to main page");
             sClick(PageAccounts.Locators.zMyAccountsTab);
-            ZimbraSeleniumProperties.waitForElementPresent(this, PageAccounts.Locators.zLoginButton);
+            GeneralUtility.waitForElementPresent(this, PageAccounts.Locators.zLoginButton);
             sClick(PageAccounts.Locators.zLoginButton);
          }
-         ZimbraSeleniumProperties.waitForElementPresent(this, Locators.zSetupButton);
+         GeneralUtility.waitForElementPresent(this, Locators.zSetupButton);
       }
 	}
 	

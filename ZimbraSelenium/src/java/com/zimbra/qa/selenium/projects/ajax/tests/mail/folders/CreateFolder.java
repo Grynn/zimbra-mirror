@@ -3,7 +3,6 @@ package com.zimbra.qa.selenium.projects.ajax.tests.mail.folders;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
-import com.zimbra.common.util.L10nUtil;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.ContextMenuItem.CONTEXT_MENU_ITEM_NAME;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -42,7 +41,7 @@ public class CreateFolder extends AjaxCommonTest {
          treeItemLocator = TreeMail.Locators.ztih_main_Mail__FOLDER_ITEM_ID.replace(TreeMail.stringToReplace, "FOLDER");
       }
 
-      ZimbraSeleniumProperties.waitForElementPresent(app.zPageMail, treeItemLocator);
+      GeneralUtility.waitForElementPresent(app.zPageMail, treeItemLocator);
       contextMenu = (ContextMenu)app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, treeItemLocator);
 
       DialogCreateFolder createFolderDialog = (DialogCreateFolder)contextMenu.zSelect(CONTEXT_MENU_ITEM_NAME.NEW_FOLDER);

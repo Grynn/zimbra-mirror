@@ -5,8 +5,8 @@ import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.desktop.ui.AppDesktopClient;
 import com.zimbra.qa.selenium.projects.desktop.ui.PageMain;
 
@@ -190,9 +190,9 @@ public class PageMail extends AbsTab {
    @Override
    public void zNavigateTo() throws HarnessException {
       ((AppDesktopClient)MyApplication).zPageMain.zNavigateTo();
-      ZimbraSeleniumProperties.waitForElementPresent(this, PageMain.Locators.zMailTabs);
+      GeneralUtility.waitForElementPresent(this, PageMain.Locators.zMailTabs);
       sClick(PageMain.Locators.zMailTabs);
-      ZimbraSeleniumProperties.waitForElementPresent(this, Locators.zNewIconButton);
+      GeneralUtility.waitForElementPresent(this, Locators.zNewIconButton);
    }
 
    @Override

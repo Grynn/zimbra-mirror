@@ -5,8 +5,8 @@ import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
 public class PageAccounts extends AbsTab {
 
@@ -83,7 +83,7 @@ public class PageAccounts extends AbsTab {
 		      logger.debug("Currently in main page, now navigating to Accounts page");
 		      sClick(PageMain.Locators.zSetupButton);
 		   }
-		   ZimbraSeleniumProperties.waitForElementPresent(this, Locators.zLoginButton);
+		   GeneralUtility.waitForElementPresent(this, Locators.zLoginButton);
 		}
 	}
 	

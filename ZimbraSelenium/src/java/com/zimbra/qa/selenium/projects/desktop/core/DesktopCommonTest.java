@@ -281,7 +281,7 @@ public class DesktopCommonTest {
                                        .append(zdp.getSerialNumber()).toString();
       logger.debug("Selenium is opening: " + accountUrl);
       _selenium.open(accountUrl);
-      ZimbraSeleniumProperties.waitForElementPresent(app.zPageAccounts,
+      GeneralUtility.waitForElementPresent(app.zPageAccounts,
             PageAccounts.Locators.zLoginButton);
    }
 
@@ -305,10 +305,10 @@ public class DesktopCommonTest {
    		   logger.info("Account Page is active, so no accounts have been created");
    		} else {
    		   logger.info("Main page is active");
-   		   ZimbraSeleniumProperties.waitForElementPresent(app.zPageMain,
+   		   GeneralUtility.waitForElementPresent(app.zPageMain,
    		         PageMain.Locators.zSetupButton);
    		   app.zPageMain.sClick(PageMain.Locators.zSetupButton);
-   		   ZimbraSeleniumProperties.waitForElementPresent(app.zPageAccounts,
+   		   GeneralUtility.waitForElementPresent(app.zPageAccounts,
    		         PageAccounts.Locators.zLoginButton);
 
    		   boolean bFoundOtherUser = true;
@@ -340,7 +340,7 @@ public class DesktopCommonTest {
    		         }
    		      }
 
-   		      if (!(Boolean)ZimbraSeleniumProperties.waitForElementPresent(app.zPageAccounts,
+   		      if (!(Boolean)GeneralUtility.waitForElementPresent(app.zPageAccounts,
    		            deleteButtonLocator, 5000)) {
    		         bFoundOtherUser = false;
    		      }
