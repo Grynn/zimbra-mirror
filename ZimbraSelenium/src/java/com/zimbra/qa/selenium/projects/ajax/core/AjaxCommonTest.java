@@ -113,6 +113,10 @@ public class AjaxCommonTest {
    private final static String _accountFlavor = "Zimbra";
    protected final static String defaultAccountName = ZimbraSeleniumProperties.getUniqueString();
    private static boolean _firstTime = true;
+   // This variable is to track desktop current account, if new account is created
+   // then, desktop has to add that newly created account, while removing the
+   // existing ones
+   private ZimbraAccount _currentAccount = null;
 
    // Configurable from config file or input parameters
    private PRODUCT_NAME _productName = PRODUCT_NAME.ZDESKTOP;
@@ -305,7 +309,14 @@ public class AjaxCommonTest {
 	 */
 	@BeforeClass( groups = { "always" } )
 	public void commonTestBeforeClass() throws HarnessException {
-		logger.info("commonTestBeforeClass: start");
+	   logger.info("commonTestBeforeClass: start");
+
+	   // For the first time, assigning currentAccount to the AccountZWC
+	   // The AccountZWC will be changed to new object when encountering
+	   // Harness Exception
+	   if (_firstTime) {
+	      _currentAccount = ZimbraAccount.AccountZWC();
+	   }
 
 		if (isRunningDesktopTest) {
 		   ZimbraAccount.AccountZWC().authenticateToMailClientHost();
@@ -333,7 +344,7 @@ public class AjaxCommonTest {
 	            // If this is the first time checking, then cleaning up all the pre-existing user
 	            // Otherwise, only cleans the non-default users, which is second user and so on...
 	            // Second user is located in row 3.
-	            if (_firstTime) {
+	            if (_firstTime || _currentAccount != ZimbraAccount.AccountZWC()) {
 	               deleteButtonLocator = PageLogin.Locators.zDeleteButton;
 	            } else {
 	               String[] temp = PageLogin.Locators.zDeleteButton.trim().split(" ");
@@ -359,8 +370,9 @@ public class AjaxCommonTest {
 	                  bFoundOtherUser = false;
 	               }
 	            }
-	            if (_firstTime) {
+	            if (_firstTime || _currentAccount != ZimbraAccount.AccountZWC()) {
 	               addDefaultAccount();
+	               _currentAccount = ZimbraAccount.AccountZWC();
 	            }
 	         }
 
@@ -373,7 +385,7 @@ public class AjaxCommonTest {
 
 	}
 
-	  /**
+	/**
     * Add default account using HTTP post
     * @throws HarnessException
     */
