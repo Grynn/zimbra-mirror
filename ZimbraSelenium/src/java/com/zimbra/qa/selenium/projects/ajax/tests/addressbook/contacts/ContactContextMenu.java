@@ -2,7 +2,10 @@ package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.contacts;
 
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -216,6 +219,9 @@ public class ContactContextMenu extends AjaxCommonTest  {
 		//Click New Email
         FormMailNew formMailNew = (FormMailNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_NEW, contactItem.fileAs);        
         
+        //Verify Form New mail is active
+        ZAssert.assertTrue(formMailNew.zIsActive(),"Verify Form New Mail is active");
+        
         //Verify contactItem.email displayed in the "To" field
         ZAssert.assertTrue(app.zPageAddressbook.sGetText(FormMailNew.Locators.zBubbleToField).contains(contactItem.email), "Verify contact email displayed in field To - expected " + contactItem.email + " - was " + app.zPageAddressbook.sGetText(FormMailNew.Locators.zBubbleToField));
         
@@ -237,6 +243,22 @@ public class ContactContextMenu extends AjaxCommonTest  {
                 
 	}
 
+	@Test(	description = "Right click then click Print",
+			groups = { "smoke" })	
+	public void ClickPrint() throws HarnessException {
+		ContactItem contactItem = createSelectAContactItem();
+
+        PagePrint pagePrint = (PagePrint) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_PRINT, contactItem.fileAs);        
+                
+        //close Print Dialog 
+        pagePrint.cancelPrintDialog();
+        
+        //verify first,last,email displayed in Print View
+	    Assert.assertTrue(pagePrint.isContained("css=td[class='contactHeader']", contactItem.lastName + ", " + contactItem.firstName )," expected: " + contactItem.lastName + "," + contactItem.firstName + " not displayed in Print Page" + " was:"  );
+
+	    Assert.assertTrue(pagePrint.isContained("css=td[class='contactOutput']", contactItem.email ), contactItem.firstName + " not displayed in Print Page");
+	    
+	}
 	
 }
 

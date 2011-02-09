@@ -378,10 +378,15 @@ public class PageAddressbook extends AbsTab {
 				cmi=CONTEXT_MENU.CONTACT_ADVANCED_SEARCH;
 				page = new PageAdvancedSearch(MyApplication);	
 			}
+			else if (option == Button.B_PRINT) {
+				cmi=CONTEXT_MENU.CONTACT_PRINT;
+				//TODO:
+				page = new PagePrint(MyApplication);	
+			}
 			
 			id = cmi.locator;
 			locator = "id="+ id;
-			// Make sure the context menu exists
+			//  Make sure the context menu exists
 			if ( !this.sIsElementPresent(locator) )
 				throw new HarnessException("contextmenu is not present locator="+ locator +" context menu item="+ cmi.text);
 			
