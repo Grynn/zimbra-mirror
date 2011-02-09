@@ -211,14 +211,17 @@ public class CodeCoverage {
 		logger.info("Update output folder with html files");
 
 		for (String filename : reportFiles) {
-			File source = new File(CODE_COVERAGE_SOURCE_PATH, filename);
 			File destination = new File(CODE_COVERAGE_DIRECTORY_PATH, filename);
+			if ( destination.exists() ) {
+				logger.info("The destination file already exists.  Assume it was written previously.");
+				continue;
+			}
+			File source = new File(CODE_COVERAGE_SOURCE_PATH, filename);
 			if ( !source.exists() ) {
 				logger.error("Unable to find report file: "+ source.getAbsolutePath());
 				continue;
 			}
 			try {
-				logger.info("copy "+ source.getCanonicalPath() +" to "+ destination.getCanonicalPath());
 				copy(source, destination);
 			} catch (IOException e) {
 				logger.error("Unable to copy file from "+ source.getAbsolutePath() +" to "+ destination.getAbsolutePath(), e);
@@ -227,7 +230,8 @@ public class CodeCoverage {
 	}
 	
 	private static void copy(File source, File destination) throws IOException {
-		
+		logger.info("copy "+ source.getCanonicalPath() +" to "+ destination.getCanonicalPath());
+
 		if ( !destination.exists() ) {
 			destination.createNewFile();
 		}
