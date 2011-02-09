@@ -111,7 +111,7 @@ public class AjaxCommonTest {
    private String _downloadFilePath = null;
    private String _executableFilePath = null;
    private final static String _accountFlavor = "Zimbra";
-   protected final static String defaultAccountName = ZimbraSeleniumProperties.getUniqueString();
+   public final static String defaultAccountName = ZimbraSeleniumProperties.getUniqueString();
    private static boolean _firstTime = true;
    // This variable is to track desktop current account, if new account is created
    // then, desktop has to add that newly created account, while removing the

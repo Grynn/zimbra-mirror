@@ -5,14 +5,17 @@ import java.util.List;
 
 import org.apache.log4j.LogManager;
 
+import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
 
 public class PageAddressbook extends AbsTab {
@@ -56,11 +59,18 @@ public class PageAddressbook extends AbsTab {
 
 		boolean active=attrs.contains("ZSelected");
 
-		//make sure Addressbook folder is displayed
-		String locator = "xpath=//div[@id='ztih__main_Contacts__ADDRBOOK_div']";
+		String locator = null;
+		// On Zimbra Desktop, there is no Address book folder, but there is only
+		// account root folder
+      if(ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+	      locator = TreeMail.Locators.zTreeItems.replace(TreeMail.stringToReplace,
+	            AjaxCommonTest.defaultAccountName);
+	   } else {
+		   //make sure Addressbook folder is displayed
+		   locator = "xpath=//div[@id='ztih__main_Contacts__ADDRBOOK_div']";
+		}
 
-		active &= this.sIsElementPresent(locator);
-
+      active &= this.sIsElementPresent(locator);		   
 		return (active);
 
 	}
