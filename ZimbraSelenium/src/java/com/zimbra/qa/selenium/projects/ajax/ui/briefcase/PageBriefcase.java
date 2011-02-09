@@ -7,6 +7,7 @@ import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 
 /**
  * @author
@@ -103,7 +104,7 @@ public class PageBriefcase extends AbsTab {
 		// Click on Briefcase icon
 		zClick(PageMain.Locators.zAppbarBriefcase);
 
-		zWaitForBusyOverlay();
+		waitForBusyOverlay();
 
 		zWaitForActive();
 	}
@@ -149,7 +150,7 @@ public class PageBriefcase extends AbsTab {
 			// Click on New Document icon
 			this.zClick(locator);
 
-			zWaitForBusyOverlay();
+			waitForBusyOverlay();
 
 			isEditDocLoaded("Zimbra Docs", "");
 
@@ -269,7 +270,7 @@ public class PageBriefcase extends AbsTab {
 		this.zClick(locator);
 
 		// If the app is busy, wait for it to become active
-		zWaitForBusyOverlay();
+		waitForBusyOverlay();
 
 		return (page);
 	}
@@ -281,10 +282,10 @@ public class PageBriefcase extends AbsTab {
 				+ pulldown + ", " + option + ")");
 
 		if (pulldown == null)
-			throw new HarnessException("Button cannot be null!");
+			throw new HarnessException("Pulldown cannot be null!");
 
-		if (pulldown == null)
-			throw new HarnessException("Button cannot be null!");
+		if (option == null)
+			throw new HarnessException("Option cannot be null!");
 
 		// Default behavior variables
 		//
@@ -296,53 +297,13 @@ public class PageBriefcase extends AbsTab {
 		//
 
 		if (pulldown == Button.B_NEW) {
-
-			if (option == Button.O_NEW_ADDRESSBOOK) {
-				throw new HarnessException("implement me!");
-			} else if (option == Button.O_NEW_APPOINTMENT) {
-				throw new HarnessException("implement me!");
-			} else if (option == Button.O_NEW_BRIEFCASE) {
-				throw new HarnessException("implement me!");
-			} else if (option == Button.O_NEW_CALENDAR) {
-				throw new HarnessException("implement me!");
-			} else if (option == Button.O_NEW_CONTACT) {
-				throw new HarnessException("implement me!");
-			} else if (option == Button.O_NEW_CONTACTGROUP) {
+			if (option == Button.O_NEW_BRIEFCASE) {
 				throw new HarnessException("implement me!");
 			} else if (option == Button.O_NEW_DOCUMENT) {
 				throw new HarnessException("implement me!");
 			} else if (option == Button.O_NEW_FOLDER) {
 				throw new HarnessException("implement me!");
-			} else if (option == Button.O_NEW_MESSAGE) {
-
-				// TODO: should this actually click New followed by Message?
-
-				pulldownLocator = null;
-				optionLocator = null;
-				page = zToolbarPressButton(pulldown);
-
 			} else if (option == Button.O_NEW_TAG) {
-				throw new HarnessException("implement me!");
-			} else if (option == Button.O_NEW_TASK) {
-				throw new HarnessException("implement me!");
-			} else if (option == Button.O_NEW_TASKFOLDER) {
-				throw new HarnessException("implement me!");
-			} else {
-				throw new HarnessException(
-						"no logic defined for pulldown/option " + pulldown
-								+ "/" + option);
-			}
-		} else if (pulldown == Button.B_LISTVIEW) {
-
-			if (option == Button.O_LISTVIEW_BYCONVERSATION) {
-				throw new HarnessException("implement me!");
-			} else if (option == Button.O_LISTVIEW_BYMESSAGE) {
-				throw new HarnessException("implement me!");
-			} else if (option == Button.O_LISTVIEW_READINGPANEBOTTOM) {
-				throw new HarnessException("implement me!");
-			} else if (option == Button.O_LISTVIEW_READINGPANEOFF) {
-				throw new HarnessException("implement me!");
-			} else if (option == Button.O_LISTVIEW_READINGPANERIGHT) {
 				throw new HarnessException("implement me!");
 			} else {
 				throw new HarnessException(
@@ -350,11 +311,24 @@ public class PageBriefcase extends AbsTab {
 								+ "/" + option);
 			}
 		} else if (pulldown == Button.B_TAG) {
-
 			if (option == Button.O_TAG_NEWTAG) {
-				throw new HarnessException("implement me!");
+
+				pulldownLocator = "css=td[id$='__TAG_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+
+				optionLocator = "css=td[id$='__TAG_MENU|MENU|NEWTAG_title']";
+
+				page = new DialogTag(this.MyApplication);
+
+				// FALL THROUGH
 			} else if (option == Button.O_TAG_REMOVETAG) {
-				throw new HarnessException("implement me!");
+				// Type "u" shortcut using General shortcuts
+				zKeyboard.zTypeCharacters(Shortcut.S_MAIL_REMOVETAG.getKeys());
+
+				pulldownLocator = null;
+				optionLocator = null;
+				page = null;
+
+				// FALL THROUGH
 			} else {
 				throw new HarnessException(
 						"no logic defined for pulldown/option " + pulldown
@@ -368,17 +342,39 @@ public class PageBriefcase extends AbsTab {
 		// Default behavior
 		if (pulldownLocator != null) {
 
-			// TODO: Expand pulldownLocator
-
-			if (optionLocator != null) {
-				// TODO: Click optionLocator
+			// Make sure the locator exists
+			if (!this.sIsElementPresent(pulldownLocator)) {
+				throw new HarnessException("Button " + pulldown + " option "
+						+ option + " pulldownLocator " + pulldownLocator
+						+ " not present!");
 			}
 
-			throw new HarnessException("implement me!");
-		}
-		// If the app is busy, wait for it to become active
-		zWaitForBusyOverlay();
+			this.zClick(pulldownLocator);
 
+			// If the app is busy, wait for it to become active
+			waitForBusyOverlay();
+
+			if (optionLocator != null) {
+
+				// Make sure the locator exists
+				if (!this.sIsElementPresent(optionLocator)) {
+					throw new HarnessException("Button " + pulldown
+							+ " option " + option + " optionLocator "
+							+ optionLocator + " not present!");
+				}
+
+				this.zClick(optionLocator);
+
+				// If the app is busy, wait for it to become active
+				waitForBusyOverlay();
+			}
+
+			// If we click on pulldown/option and the page is specified, then
+			// wait for the page to go active
+			if (page != null) {
+				page.zWaitForActive();
+			}
+		}
 		// Return the specified page, or null if not set
 		return (page);
 	}
@@ -443,7 +439,7 @@ public class PageBriefcase extends AbsTab {
 		zClick(locator);
 		String condition = "selenium.isElementPresent(\"css=[id='zti__main_Briefcase__16_div'][class='DwtTreeItem-selected']\")&&"
 				+ "selenium.isElementPresent(\"css=[id='zl__BDLV__rows']";
-		zWaitForBusyOverlay();
+		waitForBusyOverlay();
 		if (includeRow)
 			waitForCondition(condition + " div[class^='Row']\");", "5000");
 		else
@@ -515,8 +511,8 @@ public class PageBriefcase extends AbsTab {
 					+ name
 					+ "' || targetWindow.document.title == '"
 					+ name
-					+ "')){x=windowName;" + "}}}; x==null;"; 
-			
+					+ "')){x=windowName;" + "}}}; x==null;";
+
 			ClientSessionFactory.session().selenium().waitForCondition(
 					condition, timeout);
 			return true;
@@ -525,7 +521,7 @@ public class PageBriefcase extends AbsTab {
 			return false;
 		}
 	}
-	
+
 	public boolean waitForIframeText(String iframe, String text, String timeout) {
 		try {
 			ClientSessionFactory
@@ -576,6 +572,21 @@ public class PageBriefcase extends AbsTab {
 			return true;
 		} catch (Exception ex) {
 			logger.info("Error: win not opened " + name, ex.fillInStackTrace());
+			return false;
+		}
+	}
+
+	public boolean waitForBusyOverlay() throws HarnessException {
+		try {
+			ClientSessionFactory
+					.session()
+					.selenium()
+					.waitForCondition(
+							"selenium.browserbot.getUserWindow().top.appCtxt.getShell().getBusy()==false",
+							"1500");
+			return true;
+		} catch (Exception ex) {
+			logger.info("BusyOverlay: ", ex.fillInStackTrace());
 			return false;
 		}
 	}

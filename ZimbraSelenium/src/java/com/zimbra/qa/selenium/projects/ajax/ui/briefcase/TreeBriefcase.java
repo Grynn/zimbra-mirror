@@ -60,9 +60,9 @@ public class TreeBriefcase extends AbsTree {
 			locator = Locators.briefcaseTreeView + folder.getId()
 					+ "_imageCell]";
 			
-			this.zWaitForBusyOverlay();
+			waitForBusyOverlay();
 			
-			ClientSessionFactory.session().selenium().clickAt(locator,"0,0");
+			//ClientSessionFactory.session().selenium().clickAt(locator,"0,0");
 
 			// FALL THROUGH
 		} else if (action == Action.A_RIGHTCLICK) {
@@ -95,7 +95,7 @@ public class TreeBriefcase extends AbsTree {
 		zClick(locator);
 
 		// If there is a busy overlay, wait for that to finish
-		this.zWaitForBusyOverlay();
+		waitForBusyOverlay();
 
 		if (page != null) {
 			// Wait for the page to become active, if it was specified
@@ -132,7 +132,7 @@ public class TreeBriefcase extends AbsTree {
 
 			this.zClick(locator);
 
-			this.zWaitForBusyOverlay();
+			waitForBusyOverlay();
 
 			return page;
 
@@ -160,7 +160,7 @@ public class TreeBriefcase extends AbsTree {
 		this.zClick(locator);
 
 		// If the app is busy, wait for that to finish
-		this.zWaitForBusyOverlay();
+		waitForBusyOverlay();
 
 		// If page was specified, make sure it is active
 		if (page != null) {
@@ -219,6 +219,21 @@ public class TreeBriefcase extends AbsTree {
 			return true;
 		} catch (Exception ex) {
 			logger.info("Error: " + condition, ex.fillInStackTrace());
+			return false;
+		}
+	}
+	
+	public boolean waitForBusyOverlay() throws HarnessException {
+		try {
+			ClientSessionFactory
+					.session()
+					.selenium()
+					.waitForCondition(
+							"selenium.browserbot.getUserWindow().top.appCtxt.getShell().getBusy()==false",
+							"1500");
+			return true;
+		} catch (Exception ex) {
+			logger.info("BusyOverlay: ", ex.fillInStackTrace());
 			return false;
 		}
 	}
