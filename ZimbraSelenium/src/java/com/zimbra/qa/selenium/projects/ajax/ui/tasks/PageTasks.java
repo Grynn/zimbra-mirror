@@ -31,6 +31,8 @@ public class PageTasks extends AbsTab {
 		// id='zli__TKL__<item
 		// id>' .../>
 		public static final String zb__TKE1__SAVE_left_icon = "zb__TKE1__SAVE_left_icon";
+		public static final String taskListView = "css=div[id='zl__TKL__rows'][class='DwtListView-Rows']";
+		//public static final String taskbodyView = "css=div[id='zl__TKL__rows'][class='DwtListView-Rows']";
 	}
 
 	public PageTasks(AbsApplication application) {
@@ -101,6 +103,15 @@ public class PageTasks extends AbsTab {
 		zWaitForActive();
 
 	}
+	public boolean isPresent(String itemName) throws HarnessException {
+		String itemLocator = Locators.taskListView
+				+ " td[width*='auto']:contains(" + itemName + ")";
+
+		sWaitForCondition(
+				"selenium.isElementPresent(\"" + itemLocator + "\");", "5000");
+		return true;
+	}
+
 
 	@Override
 	public AbsPage zListItem(Action action, String subject)
