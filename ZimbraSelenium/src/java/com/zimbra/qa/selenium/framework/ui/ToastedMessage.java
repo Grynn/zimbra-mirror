@@ -13,7 +13,7 @@ public class ToastedMessage extends AjaxCommonTest  {
     
     public static boolean isContainedText(String text) {
     	String seleniumText = ClientSessionFactory.session().selenium().getText(locator);
-		logger.info("DefaultSelenium.getText(" + locator + ") = " + text);        
+		logger.info("DefaultSelenium.getText(" + locator + ") = " + seleniumText);        
     	return seleniumText.contains(text);    
     }
     
