@@ -450,22 +450,6 @@ public class PageBriefcase extends AbsTab {
 		throw new HarnessException("implement me!");
 	}
 
-	public void pageRefresh(String locator, boolean includeRow)
-			throws HarnessException {
-		// ClientSessionFactory.session().selenium().refresh();
-		// zClick(Locators.zBriefcaseFolderIcon);
-		zClick(locator);
-		String condition = "selenium.isElementPresent(\"css=[id='zti__main_Briefcase__16_div'][class='DwtTreeItem-selected']\")&&"
-				+ "selenium.isElementPresent(\"css=[id='zl__BDLV__rows']";
-
-		zWaitForBusyOverlay();
-
-		if (includeRow)
-			sWaitForCondition(condition + " div[class^='Row']\");", "5000");
-		else
-			sWaitForCondition(condition + "\");", "5000");
-	}
-
 	public void isOpenDocLoaded(String windowName, String text)
 			throws HarnessException {
 		zWaitForWindow(windowName, "5000");
@@ -480,8 +464,7 @@ public class PageBriefcase extends AbsTab {
 		String itemLocator = Locators.briefcaseListView
 				+ " td[width*='auto'] div:contains(" + itemName + ")";
 
-		sWaitForCondition(
-				"selenium.isElementPresent(\"" + itemLocator + "\");", "5000");
+		zWaitForElement(itemLocator, "5000");
 		return true;
 	}
 
