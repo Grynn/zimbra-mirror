@@ -41,7 +41,15 @@ public class TaskNew extends AbsForm {
 		TaskItem taskItem = (TaskItem) item;
 
 		typeTaskSubject(taskItem.gettaskSubject());
+		typeTaskBody(taskItem.gettaskBody());
 
+	}
+
+	public void typeTaskBody(String gettaskBody) {
+		// TODO Auto-generated method stub
+		sSelectFrame(Locators.zFrame);
+		sType(Locators.zBodyField, gettaskBody);
+		sSelectWindow(null);
 	}
 
 	public void typeTaskSubject(String gettaskSubject) {
