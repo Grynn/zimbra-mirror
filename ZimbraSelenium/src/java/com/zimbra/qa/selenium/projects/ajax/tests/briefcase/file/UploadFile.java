@@ -93,11 +93,9 @@ public class UploadFile extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Verify document is created
-		String locator = "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
-         + fileName + ")";
-		app.zPageBriefcase.zWaitForElementPresent(locator, "30000");
 		String name = app.zPageBriefcase
-				.sGetText(locator);
+				.sGetText("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
+						+ fileName + ")");
 		ZAssert.assertEquals(name, fileName, "Verify file name through GUI");
 	}
 }

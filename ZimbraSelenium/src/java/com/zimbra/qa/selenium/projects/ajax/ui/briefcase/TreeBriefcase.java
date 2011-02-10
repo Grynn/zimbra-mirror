@@ -46,9 +46,9 @@ public class TreeBriefcase extends AbsTree {
 				+ "selenium.isElementPresent(\"css=[id='zl__BDLV__rows']";
 
 		if (isRowAdded)
-			waitForCondition(condition + " div[class^='Row']\");", "5000");
+			waitForCondition(condition + " div[class^='Row']\");", "10000");
 		else
-			waitForCondition(condition + "\");", "5000");
+			waitForCondition(condition + "\");", "10000");
 
 		return page;
 	}
