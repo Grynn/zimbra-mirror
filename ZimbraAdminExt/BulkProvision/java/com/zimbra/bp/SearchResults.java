@@ -68,7 +68,7 @@ public class SearchResults {
         AuthToken authToken = token;
         
         try {
-            CSVWriter writer = new CSVWriter(new OutputStreamWriter (out) ) ;
+            CSVWriter writer = new CSVWriter(new OutputStreamWriter (out, "UTF-8") ) ;
             List entryList = getSearchResults(authToken, query, domain, types ); 
             int noCols = 6 ;
             for (int i = 0 ; i < entryList.size(); i ++) {
