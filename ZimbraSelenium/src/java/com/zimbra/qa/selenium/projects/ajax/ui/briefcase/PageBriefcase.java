@@ -101,7 +101,7 @@ public class PageBriefcase extends AbsTab {
 		if (zIsActive()) {
 			return;
 		}
-
+		String locator = "css=[id='zov__main_Mail']";
 		// Make sure we are logged into the Ajax app
 		// if (!((AppAjaxClient) MyApplication).zPageMain.zIsActive())
 		// ((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
@@ -111,9 +111,7 @@ public class PageBriefcase extends AbsTab {
 			GeneralUtility.waitForElementPresent(this,
 					PageMain.Locators.zAppbarBriefcase, 20000);
 		} else {
-			waitForCondition(
-					"selenium.isElementPresent(\"xpath=//div[@id='zov__main_Mail']\")",
-					"20000");
+			zWaitForElement(locator,	"20000");
 		}
 		// Click on Briefcase icon
 		zClick(PageMain.Locators.zAppbarBriefcase);
@@ -123,8 +121,7 @@ public class PageBriefcase extends AbsTab {
 		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
 			zWaitForActive();
 		} else {
-			waitForCondition("selenium.isElementPresent(\""
-					+ Locators.zBriefcaseFolderIcon + "\")", "20000");
+			zWaitForElement(Locators.zBriefcaseFolderIcon, "20000");
 		}
 	}
 
@@ -439,7 +436,7 @@ public class PageBriefcase extends AbsTab {
 			throw new HarnessException("Unable to locate item with name("
 					+ docName + ")");
 		if (action == Action.A_LEFTCLICK) {
-			waitForElement(itemlocator, "2000");
+			zWaitForElement(itemlocator, "2000");
 			// Left-Click on the item
 			this.zClick(itemlocator);
 			page = new DocumentPreview(MyApplication);
@@ -464,42 +461,37 @@ public class PageBriefcase extends AbsTab {
 		zWaitForBusyOverlay();
 		
 		if (includeRow)
-			waitForCondition(condition + " div[class^='Row']\");", "5000");
+			sWaitForCondition(condition + " div[class^='Row']\");", "5000");
 		else
-			waitForCondition(condition + "\");", "5000");
+			sWaitForCondition(condition + "\");", "5000");
 	}
 
-	public boolean isOpenDocLoaded(String windowName, String text)
+	public void isOpenDocLoaded(String windowName, String text)
 			throws HarnessException {
 		waitForWindow(windowName, "5000");
 
 		zSelectWindow(windowName);
 
-		boolean loaded = waitForElement(
+		zWaitForElement(
 				"css=td[class='ZhAppContent'] div:contains('" + text + "')",
-				"60000");
-
-		return loaded;
+				"60000");	
 	}
 
 	public boolean isPresent(String itemName) throws HarnessException {
 		String itemLocator = Locators.briefcaseListView
 				+ " td[width*='auto'] div:contains(" + itemName + ")";
 
-		boolean present = false;
-		present = waitForCondition("selenium.isElementPresent(\"" + itemLocator
-				+ "\");", "5000");
-		return present;
+		sWaitForCondition("selenium.isElementPresent(\"" + itemLocator
+				+ "\");", "5000");	
+		return true;
 	}
 
 	public boolean isDeleted(String itemName) throws HarnessException {
 		String itemLocator = Locators.briefcaseListView
 				+ " td[width*='auto'] div:contains(" + itemName + ")";
-
-		boolean deleted = false;
-		deleted = waitForCondition("!selenium.isElementPresent(\""
+		sWaitForCondition("!selenium.isElementPresent(\""
 				+ itemLocator + "\");", "5000");
-		return deleted;
+		return true;
 	}
 
 	public String getText(String itemName) throws HarnessException {
@@ -515,9 +507,9 @@ public class PageBriefcase extends AbsTab {
 
 		zSelectWindow(windowName);
 
-		waitForElement("css=div[class='ZDToolBar ZWidget']", "30000");
+		zWaitForElement("css=div[class='ZDToolBar ZWidget']", "30000");
 
-		waitForElement("css=iframe[id*='DWT'][class='ZDEditor']", "30000");
+		zWaitForElement("css=iframe[id*='DWT'][class='ZDEditor']", "30000");
 
 		boolean loaded = waitForIframeText(
 				"css=iframe[id*='DWT'][class='ZDEditor']", text, "5000");
@@ -567,18 +559,6 @@ public class PageBriefcase extends AbsTab {
 		}
 	}
 
-	public boolean waitForElement(String element, String timeout) {
-		try {
-			ClientSessionFactory.session().selenium().waitForCondition(
-					"selenium.isElementPresent(\"" + element + "\")", timeout);
-			return true;
-		} catch (Exception ex) {
-			logger.info("Error: element not present " + element, ex
-					.fillInStackTrace());
-			return false;
-		}
-	}
-
 	public boolean waitForWindow(String name, String timeout) {
 		try {
 			ClientSessionFactory
@@ -599,18 +579,6 @@ public class PageBriefcase extends AbsTab {
 		}
 	}
 	
-	public boolean waitForCondition(String condition, String timeout) {
-		try {
-			// ClientSessionFactory.session().selenium().waitForCondition("var x = selenium.browserbot.findElementOrNull(\"css=[class='ZmBriefcaseDetailListView']\"); x != null && parseInt(x.style.width) >= 0;","5000");
-			ClientSessionFactory.session().selenium().waitForCondition(
-					condition, timeout);
-			return true;
-		} catch (Exception ex) {
-			logger.info("Error: " + condition, ex.fillInStackTrace());
-			return false;
-		}
-	}
-
 	public void closeWindow() {
 		ClientSessionFactory.session().selenium().close();
 	}
