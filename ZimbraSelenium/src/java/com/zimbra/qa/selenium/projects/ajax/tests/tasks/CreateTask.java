@@ -1,17 +1,17 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.tasks;
 
+import java.util.List;
+
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.TaskItem;
-import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
-import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.tasks.TaskNew;
+import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew;
+import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Field;
 
 public class CreateTask extends AjaxCommonTest {
 
@@ -24,28 +24,34 @@ public class CreateTask extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Create Simple task through GUI - verify through GUI", groups = { "sanity" })
+	@Test(	description = "Create Simple task through GUI - verify through GUI",
+			groups = { "sanity" })
 	public void CreateTask_01() throws HarnessException {
-		ZimbraAccount account = app.zGetActiveAccount();
 
-		FolderItem taskFolder = FolderItem.importFromSOAP(account,
-				SystemFolder.Tasks);
+		String subject = "task" + ZimbraSeleniumProperties.getUniqueString();
 
-		// Create task item
-		TaskItem task = new TaskItem();
-		String sub = task.gettaskSubject();
-		String body = task.gettaskBody();
-		TaskNew taskNew = (TaskNew) app.zPageTasks
-				.zToolbarPressButton(Button.B_NEW);
-
-		taskNew.zFill(task);
-
+		// Click NEW button
+		FormTaskNew taskNew = (FormTaskNew) app.zPageTasks.zToolbarPressButton(Button.B_NEW);
+		
+		// Fill out the resulting form
+		taskNew.zFillField(Field.Subject, subject);
 		taskNew.zSubmit();
-
-		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
-
-		boolean present = app.zPageTasks.isPresent(sub);
-		ZAssert.assertTrue(present, "Verify subject through GUI");
+		
+		// Get the list of tasks in the view
+		List<TaskItem> tasks = app.zPageTasks.zGetTasks();
+		ZAssert.assertNotNull(tasks, "Verify the list of tasks exists");
+		
+		// Iterate over the task list, looking for the new task
+		TaskItem found = null;
+		for (TaskItem t : tasks ) {
+			logger.info("Task: looking for "+ subject +" found: "+ t.gSubject);
+			if ( subject.equals(t.gSubject) ) {
+				// Found it!
+				found = t;
+			}
+		}
+		
+		ZAssert.assertNotNull(found, "Verify the new task is in the task list");
 
 	}
 
