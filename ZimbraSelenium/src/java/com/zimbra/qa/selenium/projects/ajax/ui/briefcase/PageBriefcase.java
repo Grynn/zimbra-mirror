@@ -471,8 +471,8 @@ public class PageBriefcase extends AbsTab {
 	public boolean isDeleted(String itemName) throws HarnessException {
 		String itemLocator = Locators.briefcaseListView
 				+ " td[width*='auto'] div:contains(" + itemName + ")";
-		sWaitForCondition("!selenium.isElementPresent(\"" + itemLocator
-				+ "\");", "5000");
+
+		zWaitForElementDeleted(itemLocator, "5000");
 		return true;
 	}
 

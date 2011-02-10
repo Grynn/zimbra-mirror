@@ -320,6 +320,16 @@ public abstract class AbsSeleniumObject {
 		}
 	}
 
+	public void zWaitForElementDeleted(String element, String timeout)
+			throws HarnessException {
+		try {
+			ClientSessionFactory.session().selenium().waitForCondition(
+					"!selenium.isElementPresent(\"" + element + "\")", timeout);
+		} catch (Exception ex) {
+			throw new HarnessException(element + " never disappeared : ", ex);
+		}
+	}
+
 	public void zWaitForWindow(String name, String timeout)
 			throws HarnessException {
 		try {
