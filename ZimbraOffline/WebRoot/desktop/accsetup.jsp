@@ -308,6 +308,12 @@ function onEditLink(id, keep, makeInvisible) {
 															</c:otherwise>
 														</c:choose>
 													</c:if>
+													<c:if test="${not empty bean.stackTrace}">
+													  <div><a href="javascript:zd.toggle('stack')"><fmt:message key='ShowStackTrace'/></a></div>
+													  <div id="stack" style="display:none">
+													    ${bean.stackTrace}
+													  </div>
+													</c:if>
 												</div>
 											</c:when>
 											<c:when test="${not bean.allValid}">
