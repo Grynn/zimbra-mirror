@@ -297,7 +297,7 @@ public abstract class AbsSeleniumObject {
 		}
 	}
 
-	private void sWaitForCondition(String condition, String timeout)
+	protected void sWaitForCondition(String condition, String timeout)
 			throws HarnessException {
 		try {
 			ClientSessionFactory.session().selenium().waitForCondition(
