@@ -289,10 +289,7 @@ public abstract class AbsSeleniumObject {
 
 	public void zWaitForBusyOverlay() throws HarnessException {
 		try {
-			ClientSessionFactory
-					.session()
-					.selenium()
-					.waitForCondition(
+			sWaitForCondition(
 							"selenium.browserbot.getUserWindow().top.appCtxt.getShell().getBusy()==false",
 							"15000");
 		} catch (Exception ex) {
@@ -300,7 +297,7 @@ public abstract class AbsSeleniumObject {
 		}
 	}
 
-	public void sWaitForCondition(String condition, String timeout)
+	private void sWaitForCondition(String condition, String timeout)
 			throws HarnessException {
 		try {
 			ClientSessionFactory.session().selenium().waitForCondition(
@@ -310,10 +307,10 @@ public abstract class AbsSeleniumObject {
 		}
 	}
 
-	public void zWaitForElement(String element, String timeout)
+	public void zWaitForElementPresent(String element, String timeout)
 			throws HarnessException {
 		try {
-			ClientSessionFactory.session().selenium().waitForCondition(
+			sWaitForCondition(
 					"selenium.isElementPresent(\"" + element + "\")", timeout);
 		} catch (Exception ex) {
 			throw new HarnessException(element + " never appeared : ", ex);
@@ -323,7 +320,7 @@ public abstract class AbsSeleniumObject {
 	public void zWaitForElementDeleted(String element, String timeout)
 			throws HarnessException {
 		try {
-			ClientSessionFactory.session().selenium().waitForCondition(
+			sWaitForCondition(
 					"!selenium.isElementPresent(\"" + element + "\")", timeout);
 		} catch (Exception ex) {
 			throw new HarnessException(element + " never disappeared : ", ex);
@@ -333,10 +330,7 @@ public abstract class AbsSeleniumObject {
 	public void zWaitForWindow(String name, String timeout)
 			throws HarnessException {
 		try {
-			ClientSessionFactory
-					.session()
-					.selenium()
-					.waitForCondition(
+			sWaitForCondition(
 							"{var x; for(var windowName in selenium.browserbot.openedWindows ){"
 									+ "var targetWindow = selenium.browserbot.openedWindows[windowName];"
 									+ "if((!selenium.browserbot._windowClosed(targetWindow))&&"
@@ -352,10 +346,7 @@ public abstract class AbsSeleniumObject {
 	public boolean zWaitForIframeText(String iframe, String text, String timeout)
 			throws HarnessException {
 		try {
-			ClientSessionFactory
-					.session()
-					.selenium()
-					.waitForCondition(
+			sWaitForCondition(
 							"var x = selenium.browserbot.findElementOrNull(\""
 									+ iframe
 									+ "\");if(x!=null){x=x.contentWindow.document.body;}if(browserVersion.isChrome){x.textContent.indexOf('"
@@ -381,7 +372,7 @@ public abstract class AbsSeleniumObject {
 					+ name
 					+ "')){x=windowName;" + "}}}; x==null;";
 
-			ClientSessionFactory.session().selenium().waitForCondition(
+			sWaitForCondition(
 					condition, timeout);
 			return true;
 		} catch (Exception ex) {

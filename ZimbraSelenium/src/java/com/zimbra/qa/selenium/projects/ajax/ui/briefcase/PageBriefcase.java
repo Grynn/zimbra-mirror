@@ -111,7 +111,7 @@ public class PageBriefcase extends AbsTab {
 			GeneralUtility.waitForElementPresent(this,
 					PageMain.Locators.zAppbarBriefcase, 20000);
 		} else {
-			zWaitForElement(locator, "20000");
+			zWaitForElementPresent(locator, "20000");
 		}
 		// Click on Briefcase icon
 		zClick(PageMain.Locators.zAppbarBriefcase);
@@ -121,7 +121,7 @@ public class PageBriefcase extends AbsTab {
 		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
 			zWaitForActive();
 		} else {
-			zWaitForElement(Locators.zBriefcaseFolderIcon, "20000");
+			zWaitForElementPresent(Locators.zBriefcaseFolderIcon, "20000");
 		}
 	}
 
@@ -436,7 +436,7 @@ public class PageBriefcase extends AbsTab {
 			throw new HarnessException("Unable to locate item with name("
 					+ docName + ")");
 		if (action == Action.A_LEFTCLICK) {
-			zWaitForElement(itemlocator, "2000");
+			zWaitForElementPresent(itemlocator, "2000");
 			// Left-Click on the item
 			this.zClick(itemlocator);
 			page = new DocumentPreview(MyApplication);
@@ -456,7 +456,7 @@ public class PageBriefcase extends AbsTab {
 
 		zSelectWindow(windowName);
 
-		zWaitForElement("css=td[class='ZhAppContent'] div:contains('" + text
+		zWaitForElementPresent("css=td[class='ZhAppContent'] div:contains('" + text
 				+ "')", "60000");
 	}
 
@@ -464,7 +464,7 @@ public class PageBriefcase extends AbsTab {
 		String itemLocator = Locators.briefcaseListView
 				+ " td[width*='auto'] div:contains(" + itemName + ")";
 
-		zWaitForElement(itemLocator, "5000");
+		zWaitForElementPresent(itemLocator, "5000");
 		return true;
 	}
 
@@ -489,9 +489,9 @@ public class PageBriefcase extends AbsTab {
 
 		zSelectWindow(windowName);
 
-		zWaitForElement("css=div[class='ZDToolBar ZWidget']", "30000");
+		zWaitForElementPresent("css=div[class='ZDToolBar ZWidget']", "30000");
 
-		zWaitForElement("css=iframe[id*='DWT'][class='ZDEditor']", "30000");
+		zWaitForElementPresent("css=iframe[id*='DWT'][class='ZDEditor']", "30000");
 
 		zWaitForIframeText("css=iframe[id*='DWT'][class='ZDEditor']", text,
 				"5000");
