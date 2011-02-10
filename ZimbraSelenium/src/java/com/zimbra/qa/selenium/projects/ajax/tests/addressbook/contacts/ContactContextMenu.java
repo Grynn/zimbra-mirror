@@ -244,7 +244,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 	}
 
 	@Test(	description = "Right click then click Print",
-			groups = { "smoke" })	
+			groups = { "smoke-not-run-for-now" })	
 	public void ClickPrint() throws HarnessException {
 		ContactItem contactItem = createSelectAContactItem();
 

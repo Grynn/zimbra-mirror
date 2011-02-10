@@ -379,11 +379,12 @@ public class PageAddressbook extends AbsTab {
 				page = new PageAdvancedSearch(MyApplication);	
 			}
 			else if (option == Button.B_PRINT) {
-				cmi=CONTEXT_MENU.CONTACT_PRINT;
-				//TODO:
+				cmi=CONTEXT_MENU.CONTACT_PRINT;				
 				page = new PagePrint(MyApplication);	
 			}
-			
+			else {
+				throw new HarnessException("option " + option + " not supported");
+			}
 			id = cmi.locator;
 			locator = "id="+ id;
 			//  Make sure the context menu exists
