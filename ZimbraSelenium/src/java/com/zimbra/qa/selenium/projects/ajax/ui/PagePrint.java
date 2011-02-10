@@ -55,7 +55,7 @@ public class PagePrint extends AbsPage {
 	}
 	
 	
-	public boolean isContained(String locator, String message) {		
+	public boolean isContained(String locator, String message) throws HarnessException {		
 		return this.sGetText(locator).contains(message);
 	}
 }
