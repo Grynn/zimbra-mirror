@@ -1,0 +1,5 @@
+<zimletConfig name="com_zimbra_gmaps" version="0.1">
+  <global>
+    <property name="allowedDomains">*.google.com</property>
+  </global>
+</zimletConfig>

@@ -1,0 +1,10 @@
+<zimlet name="com_zimbra_gmaps" version="0.1" label="${msg.label}" description="${msg.description}">
+	<include>gmaps.js</include>
+	<handlerObject>ZmGMapsZimlet</handlerObject>
+	<contentObject>
+		<matchOn>
+			<regex attrs="ig"></regex>
+		</matchOn>
+	</contentObject>
+
+</zimlet>
