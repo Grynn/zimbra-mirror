@@ -7,6 +7,7 @@ import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
@@ -62,15 +63,18 @@ public class PageBriefcase extends AbsTab {
 
 		// If the "folders" tree is visible, then Briefcase tab is active
 
-		String locator = null;
-		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-			locator = Locators.zBriefcaseFolderIcon_Desktop + "[id*='"
-					+ MyApplication.zGetActiveAccount().EmailAddress + "']";
-		} else {
-			locator = Locators.zBriefcaseFolderIcon;
-		}
+      String locator = null;
+      if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+         String currentActiveEmailAddress = MyApplication.zGetActiveAccount() != null ?
+               MyApplication.zGetActiveAccount().EmailAddress :
+                  ZimbraAccount.AccountZWC().EmailAddress;
+         locator = Locators.zBriefcaseFolderIcon_Desktop + "[id*='"
+               + currentActiveEmailAddress + "']";
+      } else {
+         locator = Locators.zBriefcaseFolderIcon;
+      }
 
-		boolean loaded = this.sIsElementPresent(locator);
+      boolean loaded = this.sIsElementPresent(locator);
 
 		if (!loaded)
 			return (loaded);
@@ -108,6 +112,7 @@ public class PageBriefcase extends AbsTab {
 
 		// make sure mail page is loaded
 		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+		   ((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
 			GeneralUtility.waitForElementPresent(this,
 					PageMain.Locators.zAppbarBriefcase, 20000);
 		} else {
