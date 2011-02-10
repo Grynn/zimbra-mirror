@@ -111,13 +111,13 @@ public class PageBriefcase extends AbsTab {
 			GeneralUtility.waitForElementPresent(this,
 					PageMain.Locators.zAppbarBriefcase, 20000);
 		} else {
-			zWaitForElement(locator,	"20000");
+			zWaitForElement(locator, "20000");
 		}
 		// Click on Briefcase icon
 		zClick(PageMain.Locators.zAppbarBriefcase);
 
 		zWaitForBusyOverlay();
-		
+
 		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
 			zWaitForActive();
 		} else {
@@ -457,9 +457,9 @@ public class PageBriefcase extends AbsTab {
 		zClick(locator);
 		String condition = "selenium.isElementPresent(\"css=[id='zti__main_Briefcase__16_div'][class='DwtTreeItem-selected']\")&&"
 				+ "selenium.isElementPresent(\"css=[id='zl__BDLV__rows']";
-		
+
 		zWaitForBusyOverlay();
-		
+
 		if (includeRow)
 			sWaitForCondition(condition + " div[class^='Row']\");", "5000");
 		else
@@ -468,29 +468,28 @@ public class PageBriefcase extends AbsTab {
 
 	public void isOpenDocLoaded(String windowName, String text)
 			throws HarnessException {
-		waitForWindow(windowName, "5000");
+		zWaitForWindow(windowName, "5000");
 
 		zSelectWindow(windowName);
 
-		zWaitForElement(
-				"css=td[class='ZhAppContent'] div:contains('" + text + "')",
-				"60000");	
+		zWaitForElement("css=td[class='ZhAppContent'] div:contains('" + text
+				+ "')", "60000");
 	}
 
 	public boolean isPresent(String itemName) throws HarnessException {
 		String itemLocator = Locators.briefcaseListView
 				+ " td[width*='auto'] div:contains(" + itemName + ")";
 
-		sWaitForCondition("selenium.isElementPresent(\"" + itemLocator
-				+ "\");", "5000");	
+		sWaitForCondition(
+				"selenium.isElementPresent(\"" + itemLocator + "\");", "5000");
 		return true;
 	}
 
 	public boolean isDeleted(String itemName) throws HarnessException {
 		String itemLocator = Locators.briefcaseListView
 				+ " td[width*='auto'] div:contains(" + itemName + ")";
-		sWaitForCondition("!selenium.isElementPresent(\""
-				+ itemLocator + "\");", "5000");
+		sWaitForCondition("!selenium.isElementPresent(\"" + itemLocator
+				+ "\");", "5000");
 		return true;
 	}
 
@@ -503,7 +502,7 @@ public class PageBriefcase extends AbsTab {
 
 	public boolean isEditDocLoaded(String windowName, String text)
 			throws HarnessException {
-		waitForWindow(windowName, "5000");
+		zWaitForWindow(windowName, "5000");
 
 		zSelectWindow(windowName);
 
@@ -511,74 +510,12 @@ public class PageBriefcase extends AbsTab {
 
 		zWaitForElement("css=iframe[id*='DWT'][class='ZDEditor']", "30000");
 
-		boolean loaded = waitForIframeText(
-				"css=iframe[id*='DWT'][class='ZDEditor']", text, "5000");
+		zWaitForIframeText("css=iframe[id*='DWT'][class='ZDEditor']", text,
+				"5000");
 
-		return loaded;
+		return true;
 	}
 
-	public boolean isWindowClosed(String name, String timeout) {
-		try {
-			String condition = "{var x; for(var windowName in selenium.browserbot.openedWindows ){"
-					+ "var targetWindow = selenium.browserbot.openedWindows[windowName];"
-					+ "if((!selenium.browserbot._windowClosed(targetWindow))&&"
-					+ "(targetWindow.name == '"
-					+ name
-					+ "' || targetWindow.document.title == '"
-					+ name
-					+ "')){x=windowName;" + "}}}; x==null;";
-
-			ClientSessionFactory.session().selenium().waitForCondition(
-					condition, timeout);
-			return true;
-		} catch (Exception ex) {
-			logger.info("Error: win not opened " + name, ex.fillInStackTrace());
-			return false;
-		}
-	}
-
-	public boolean waitForIframeText(String iframe, String text, String timeout) {
-		try {
-			ClientSessionFactory
-					.session()
-					.selenium()
-					.waitForCondition(
-							"var x = selenium.browserbot.findElementOrNull(\""
-									+ iframe
-									+ "\");if(x!=null){x=x.contentWindow.document.body;}if(browserVersion.isChrome){x.textContent.indexOf('"
-									+ text
-									+ "') >= 0;}else if(browserVersion.isIE){x.innerText.indexOf('"
-									+ text
-									+ "') >= 0;}else{x.textContent.indexOf('"
-									+ text + "') >= 0;}", timeout);
-			return true;
-		} catch (Exception ex) {
-			logger.info("Error: text '" + text + "' not present in element: "
-					+ iframe, ex.fillInStackTrace());
-			return false;
-		}
-	}
-
-	public boolean waitForWindow(String name, String timeout) {
-		try {
-			ClientSessionFactory
-					.session()
-					.selenium()
-					.waitForCondition(
-							"{var x; for(var windowName in selenium.browserbot.openedWindows ){"
-									+ "var targetWindow = selenium.browserbot.openedWindows[windowName];"
-									+ "if((!selenium.browserbot._windowClosed(targetWindow))&&"
-									+ "(targetWindow.name == '" + name
-									+ "' || targetWindow.document.title == '"
-									+ name + "')){x=windowName;"
-									+ "}}}; x!=null;", timeout);
-			return true;
-		} catch (Exception ex) {
-			logger.info("Error: win not opened " + name, ex.fillInStackTrace());
-			return false;
-		}
-	}
-	
 	public void closeWindow() {
 		ClientSessionFactory.session().selenium().close();
 	}

@@ -319,8 +319,9 @@ public abstract class AbsSeleniumObject {
 			throw new HarnessException(element + " never appeared : ", ex);
 		}
 	}
-	
-	public void zWaitForWindow(String name, String timeout) throws HarnessException {
+
+	public void zWaitForWindow(String name, String timeout)
+			throws HarnessException {
 		try {
 			ClientSessionFactory
 					.session()
@@ -332,12 +333,53 @@ public abstract class AbsSeleniumObject {
 									+ "(targetWindow.name == '" + name
 									+ "' || targetWindow.document.title == '"
 									+ name + "')){x=windowName;"
-									+ "}}}; x!=null;", timeout);		
+									+ "}}}; x!=null;", timeout);
 		} catch (Exception ex) {
 			throw new HarnessException(name + " never opened : ", ex);
 		}
-	}	
-	
+	}
+
+	public boolean zWaitForIframeText(String iframe, String text, String timeout)
+			throws HarnessException {
+		try {
+			ClientSessionFactory
+					.session()
+					.selenium()
+					.waitForCondition(
+							"var x = selenium.browserbot.findElementOrNull(\""
+									+ iframe
+									+ "\");if(x!=null){x=x.contentWindow.document.body;}if(browserVersion.isChrome){x.textContent.indexOf('"
+									+ text
+									+ "') >= 0;}else if(browserVersion.isIE){x.innerText.indexOf('"
+									+ text
+									+ "') >= 0;}else{x.textContent.indexOf('"
+									+ text + "') >= 0;}", timeout);
+			return true;
+		} catch (Exception ex) {
+			throw new HarnessException(iframe + " never opened : ", ex);
+		}
+	}
+
+	public boolean zIsWindowClosed(String name, String timeout) {
+		try {
+			String condition = "{var x; for(var windowName in selenium.browserbot.openedWindows ){"
+					+ "var targetWindow = selenium.browserbot.openedWindows[windowName];"
+					+ "if((!selenium.browserbot._windowClosed(targetWindow))&&"
+					+ "(targetWindow.name == '"
+					+ name
+					+ "' || targetWindow.document.title == '"
+					+ name
+					+ "')){x=windowName;" + "}}}; x==null;";
+
+			ClientSessionFactory.session().selenium().waitForCondition(
+					condition, timeout);
+			return true;
+		} catch (Exception ex) {
+			logger.info("Error: win not opened " + name, ex.fillInStackTrace());
+			return false;
+		}
+	}
+
 	/**
 	 * DefaultSelenium.isChecked()
 	 */
