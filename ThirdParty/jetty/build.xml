@@ -28,7 +28,7 @@
 		
 		<copy todir="${jetty.dir}/lib" file="${src.dir}/lib/jetty-${jetty.version}.jar" />
 		<copy todir="${jetty.dir}/lib" file="${src.dir}/lib/jetty-util-${jetty.version}.jar" />
-		<copy todir="${jetty.dir}/lib" file="${src.dir}/lib/servlet-api-2.5-20081211.jar" />
+		<copy todir="${jetty.dir}/lib" file="${src.dir}/lib/servlet-api-2.5-20110124.jar" />
 		<copy todir="${jetty.dir}/lib/ext" file="${src.dir}/lib/ext/jetty-sslengine-${jetty.version}.jar" />
 		<copy todir="${jetty.dir}/lib/ext" file="${src.dir}/lib/ext/jetty-setuid-${jetty.version}.jar" />
 		<copy todir="${jetty.dir}/lib/ext" file="${src.dir}/lib/ext/jetty-rewrite-handler-${jetty.version}.jar" />
