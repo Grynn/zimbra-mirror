@@ -264,14 +264,17 @@ public abstract class AbsSeleniumObject {
 	 */
 
 	public void zWaitForBusyOverlay() throws HarnessException {
-        for (int i = 0; i < 15; i++) {
-              if ( !this.zIsBusyOverlay() )
-                    return;
-              com.zimbra.qa.selenium.framework.util.SleepUtil.sleepSmall();
-        }
-        throw new HarnessException("Busy Overlay never disappeared!");
-    }
-
+		try {
+			ClientSessionFactory
+					.session()
+					.selenium()
+					.waitForCondition(
+							"selenium.browserbot.getUserWindow().top.appCtxt.getShell().getBusy()==false",
+							"15000");			
+		} catch (Exception ex) {
+			throw new HarnessException("Busy Overlay never disappeared!", ex);			
+		}
+	}
         
 	/**
 	 * DefaultSelenium.isChecked()

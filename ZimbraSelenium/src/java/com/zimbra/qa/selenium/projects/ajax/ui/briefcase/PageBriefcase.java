@@ -7,10 +7,8 @@ import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 /**
@@ -120,7 +118,8 @@ public class PageBriefcase extends AbsTab {
 		// Click on Briefcase icon
 		zClick(PageMain.Locators.zAppbarBriefcase);
 
-		waitForBusyOverlay();
+		zWaitForBusyOverlay();
+		
 		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
 			zWaitForActive();
 		} else {
@@ -170,7 +169,7 @@ public class PageBriefcase extends AbsTab {
 			// Click on New Document icon
 			this.zClick(locator);
 
-			waitForBusyOverlay();
+			zWaitForBusyOverlay();
 
 			isEditDocLoaded("Zimbra Docs", "");
 
@@ -290,7 +289,7 @@ public class PageBriefcase extends AbsTab {
 		this.zClick(locator);
 
 		// If the app is busy, wait for it to become active
-		waitForBusyOverlay();
+		zWaitForBusyOverlay();
 
 		return (page);
 	}
@@ -374,7 +373,7 @@ public class PageBriefcase extends AbsTab {
 			this.zClick(pulldownLocator);
 
 			// If the app is busy, wait for it to become active
-			waitForBusyOverlay();
+			zWaitForBusyOverlay();
 
 			if (optionLocator != null) {
 
@@ -388,7 +387,7 @@ public class PageBriefcase extends AbsTab {
 				this.zClick(optionLocator);
 
 				// If the app is busy, wait for it to become active
-				waitForBusyOverlay();
+				zWaitForBusyOverlay();
 			}
 
 			// If we click on pulldown/option and the page is specified, then
@@ -461,7 +460,9 @@ public class PageBriefcase extends AbsTab {
 		zClick(locator);
 		String condition = "selenium.isElementPresent(\"css=[id='zti__main_Briefcase__16_div'][class='DwtTreeItem-selected']\")&&"
 				+ "selenium.isElementPresent(\"css=[id='zl__BDLV__rows']";
-		waitForBusyOverlay();
+		
+		zWaitForBusyOverlay();
+		
 		if (includeRow)
 			waitForCondition(condition + " div[class^='Row']\");", "5000");
 		else
@@ -597,22 +598,7 @@ public class PageBriefcase extends AbsTab {
 			return false;
 		}
 	}
-
-	public boolean waitForBusyOverlay() throws HarnessException {
-		try {
-			ClientSessionFactory
-					.session()
-					.selenium()
-					.waitForCondition(
-							"selenium.browserbot.getUserWindow().top.appCtxt.getShell().getBusy()==false",
-							"5000");
-			return true;
-		} catch (Exception ex) {
-			logger.info("BusyOverlay: ", ex.fillInStackTrace());
-			return false;
-		}
-	}
-
+	
 	public boolean waitForCondition(String condition, String timeout) {
 		try {
 			// ClientSessionFactory.session().selenium().waitForCondition("var x = selenium.browserbot.findElementOrNull(\"css=[class='ZmBriefcaseDetailListView']\"); x != null && parseInt(x.style.width) >= 0;","5000");
