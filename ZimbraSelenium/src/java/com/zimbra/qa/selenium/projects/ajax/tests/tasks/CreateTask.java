@@ -24,7 +24,7 @@ public class CreateTask extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Create task through GUI - verify through GUI", groups = { "sanity" })
+	@Test(description = "Create Simple task through GUI - verify through GUI", groups = { "sanity" })
 	public void CreateTask_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -44,7 +44,8 @@ public class CreateTask extends AjaxCommonTest {
 
 		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
 
-		ZAssert.assertNotNull(sub, "Task is crerated successfully");
+		boolean present = app.zPageTasks.isPresent(sub);
+		ZAssert.assertTrue(present, "Verify subject through GUI");
 
 	}
 
