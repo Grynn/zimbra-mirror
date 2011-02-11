@@ -25,12 +25,8 @@ public class DisplayTask extends AbsDisplay {
 	 * Defines Selenium locators for various objects in {@link DisplayTask}
 	 */
 	public static class Locators {
-		public static final String zSubject				= "css=[class='LabelColValue SubjectCol']";
-		public static final String zDate 				= "css=[class='LabelColValue DateCol']";
-
 		
-		public static final String zViewEntireMessage 	= "id=zv__CLV__MSG_msgTruncation_link";
-		public static final String zHighlightObjects 	= "id=zv__CLV_highlightObjects_link";
+		public static final String IsActive 			= "css=[parentid='zv__TKL']";
 
 	}
 
@@ -40,15 +36,12 @@ public class DisplayTask extends AbsDisplay {
 	public static enum Field {
 		Subject,
 		Location,
-		Priority,
-		TaskList,
-		Status,
-		Percentage,
 		StartDate,
 		DueDate,
-		ReminderEnabled,
-		ReminderDate,
-		ReminderTime,
+		Priority,
+		Status,
+		Percentage, // "Completed"
+		Reminder,
 		Body
 	}
 	
@@ -71,60 +64,30 @@ public class DisplayTask extends AbsDisplay {
 		return (this.getClass().getName());
 	}
 
-	/**
-	 * Click on "view entire message" in this message
-	 * @return TBD: return the new window?
-	 * @throws HarnessException
-	 */
-	public AbsPage zClickViewEntireMessage() throws HarnessException {
-		logger.info(myPageName() + " zViewEntireMessage");
-		
-		AbsPage page = null;
-		String locator = Locators.zViewEntireMessage;
-		
-		if ( this.sIsElementPresent(locator) )
-			throw new HarnessException("'View Entire Message' link does not exist: "+ Locators.zViewEntireMessage);
-		
-		this.sClick(locator);
-		
-		this.zWaitForBusyOverlay();
-		
-		return (page);
-	}
-
-	/**
-	 * Click on "highlight objects" in this message
-	 * @return TBD: return the new window?
-	 * @throws HarnessException
-	 */
-	public AbsPage zClickHighlightObjects() throws HarnessException {
-		throw new HarnessException("implement me!");
-	}
-	
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		logger.warn("implement me", new Throwable());
-		return (true);
+		String locator = Locators.IsActive;
+		return (sIsElementPresent(locator));
 	}
 
 	public String zGetTaskProperty(Field field) throws HarnessException {
 		logger.info(myPageName() + ".zGetTaskProperty(" + field + ")");
 
+		//**
+		// See https://bugzilla.zimbra.com/show_bug.cgi?id=56657 - "Need unique id for "view task" pane"
+		//**
+		
 		String locator = null;
 		
 		if ( field == Field.Subject ) {
 			
-			locator = "implement me";
+			locator = "css=[parentid='zv__TKL'][class^='SubjectCol']";
 			
 		} else if ( field == Field.Location ) {
 
 			locator = "implement me";
 
 		} else if ( field == Field.Priority ) {
-
-			locator = "implement me";
-
-		} else if ( field == Field.TaskList ) {
 
 			locator = "implement me";
 
@@ -141,18 +104,6 @@ public class DisplayTask extends AbsDisplay {
 			locator = "implement me";
 
 		} else if ( field == Field.DueDate ) {
-
-			locator = "implement me";
-
-		} else if ( field == Field.ReminderEnabled ) {
-
-			locator = "implement me";
-
-		} else if ( field == Field.ReminderDate ) {
-
-			locator = "implement me";
-
-		} else if ( field == Field.ReminderTime ) {
 
 			locator = "implement me";
 
