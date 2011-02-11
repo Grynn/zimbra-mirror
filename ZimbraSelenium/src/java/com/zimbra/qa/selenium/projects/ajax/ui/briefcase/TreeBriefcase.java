@@ -5,7 +5,6 @@ package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 
 import java.util.*;
 
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -46,9 +45,9 @@ public class TreeBriefcase extends AbsTree {
 				+ "selenium.isElementPresent(\"css=[id='zl__BDLV__rows']";
 
 		if (isRowAdded)
-			waitForCondition(condition + " div[class^='Row']\");", "10000");
+			sWaitForCondition(condition + " div[class^='Row']\");", "10000");
 		else
-			waitForCondition(condition + "\");", "10000");
+			sWaitForCondition(condition + "\");", "10000");
 
 		return page;
 	}
@@ -68,7 +67,7 @@ public class TreeBriefcase extends AbsTree {
 
 		if (action == Action.A_LEFTCLICK) {
 
-			waitForBusyOverlay();
+			zWaitForBusyOverlay();
 			
 			//ClientSessionFactory.session().selenium().clickAt(locator,"0,0");
 
@@ -97,7 +96,7 @@ public class TreeBriefcase extends AbsTree {
 		zClick(locator);
 
 		// If there is a busy overlay, wait for that to finish
-		waitForBusyOverlay();
+		zWaitForBusyOverlay();
 
 		if (page != null) {
 			// Wait for the page to become active, if it was specified
@@ -134,7 +133,7 @@ public class TreeBriefcase extends AbsTree {
 
 			this.zClick(locator);
 
-			waitForBusyOverlay();
+			zWaitForBusyOverlay();
 
 			return page;
 
@@ -162,7 +161,7 @@ public class TreeBriefcase extends AbsTree {
 		this.zClick(locator);
 
 		// If the app is busy, wait for that to finish
-		waitForBusyOverlay();
+		zWaitForBusyOverlay();
 
 		// If page was specified, make sure it is active
 		if (page != null) {
@@ -211,33 +210,6 @@ public class TreeBriefcase extends AbsTree {
 			throw new HarnessException(
 					"Must use FolderItem as argument, but was "
 							+ briefcaseFolder.getClass());
-	}
-
-	public boolean waitForCondition(String condition, String timeout) {
-		try {
-			// ClientSessionFactory.session().selenium().waitForCondition("var x = selenium.browserbot.findElementOrNull(\"css=[class='ZmBriefcaseDetailListView']\"); x != null && parseInt(x.style.width) >= 0;","5000");
-			ClientSessionFactory.session().selenium().waitForCondition(
-					condition, timeout);
-			return true;
-		} catch (Exception ex) {
-			logger.info("Error: " + condition, ex.fillInStackTrace());
-			return false;
-		}
-	}
-	
-	public boolean waitForBusyOverlay() throws HarnessException {
-		try {
-			ClientSessionFactory
-					.session()
-					.selenium()
-					.waitForCondition(
-							"selenium.browserbot.getUserWindow().top.appCtxt.getShell().getBusy()==false",
-							"1500");
-			return true;
-		} catch (Exception ex) {
-			logger.info("BusyOverlay: ", ex.fillInStackTrace());
-			return false;
-		}
 	}
 
 	public List<TagItem> zListGetTags() throws HarnessException {
