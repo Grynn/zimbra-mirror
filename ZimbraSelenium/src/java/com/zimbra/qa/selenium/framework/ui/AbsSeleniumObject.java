@@ -31,6 +31,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
  * 
  */
 public abstract class AbsSeleniumObject {
+	protected static final int LoadDelay  = 30000; // wait 30 seconds for objects to load
 	protected static Logger logger = LogManager
 			.getLogger(AbsSeleniumObject.class);
 
@@ -297,113 +298,100 @@ public abstract class AbsSeleniumObject {
 
 	public void zWaitForBusyOverlay() throws HarnessException {
 		try {
-			sWaitForCondition(
-							"selenium.browserbot.getUserWindow().top.appCtxt.getShell().getBusy()==false",
-							"15000");
+			sWaitForCondition("selenium.browserbot.getUserWindow().top.appCtxt.getShell().getBusy()==false");
 		} catch (Exception ex) {
 			throw new HarnessException("Busy Overlay never disappeared!", ex);
 		}
 	}
 
 	/**
-	 * DefaultSelenium.waitForCondition()
-	 * Runs the specified JavaScript snippet repeatedly until it evaluates to true
+	 * DefaultSelenium.waitForCondition() Runs the specified JavaScript snippet
+	 * repeatedly until it evaluates to true
 	 * 
 	 * @param locator
-	 * @param timeout
 	 * @throws HarnessException
 	 */
-	protected void sWaitForCondition(String condition, String timeout)
-			throws HarnessException {
+	private void sWaitForCondition(String condition) throws HarnessException {
 		try {
 			ClientSessionFactory.session().selenium().waitForCondition(
-					condition, timeout);
+					condition, "" + LoadDelay);
 		} catch (Exception ex) {
 			throw new HarnessException(condition + " never become true: ", ex);
 		}
 	}
 
 	/**
-	 * zWaitForElementPresent()
-	 * Waits for condition when selenium.isElementPresent() returns true
+	 * zWaitForElementPresent() Waits for condition when
+	 * selenium.isElementPresent() returns true
 	 * 
 	 * @param locator
-	 * @param timeout
 	 * @throws HarnessException
 	 */
-	public void zWaitForElementPresent(String locator, String timeout)
-			throws HarnessException {
+	public void zWaitForElementPresent(String locator) throws HarnessException {
 		try {
-			sWaitForCondition(
-					"selenium.isElementPresent(\"" + locator + "\")", timeout);
+			sWaitForCondition("selenium.isElementPresent(\"" + locator + "\")");
 		} catch (Exception ex) {
 			throw new HarnessException(locator + " never appeared : ", ex);
 		}
 	}
 
 	/**
-	 * zWaitForElementDeleted()
-	 * Waits for condition when selenium.isElementPresent() returns false
+	 * zWaitForElementDeleted() Waits for condition when
+	 * selenium.isElementPresent() returns false
 	 * 
 	 * @param locator
-	 * @param timeout
 	 * @throws HarnessException
 	 */
-	public void zWaitForElementDeleted(String locator, String timeout)
-			throws HarnessException {
+	public void zWaitForElementDeleted(String locator) throws HarnessException {
 		try {
-			sWaitForCondition(
-					"!selenium.isElementPresent(\"" + locator + "\")", timeout);
+			sWaitForCondition("!selenium.isElementPresent(\"" + locator + "\")");
 		} catch (Exception ex) {
 			throw new HarnessException(locator + " never disappeared : ", ex);
 		}
 	}
 
 	/**
-	 * zWaitForWindow()
-	 * Waits for condition when window with a given name is opened
+	 * zWaitForWindow() Waits for condition when window with a given name is
+	 * opened
 	 * 
 	 * @param name
-	 * @param timeout
 	 * @throws HarnessException
 	 */
-	public void zWaitForWindow(String name, String timeout)
-			throws HarnessException {
+	public void zWaitForWindow(String name) throws HarnessException {
 		try {
-			sWaitForCondition(
-							"{var x; for(var windowName in selenium.browserbot.openedWindows ){"
-									+ "var targetWindow = selenium.browserbot.openedWindows[windowName];"
-									+ "if((!selenium.browserbot._windowClosed(targetWindow))&&"
-									+ "(targetWindow.name == '" + name
-									+ "' || targetWindow.document.title == '"
-									+ name + "')){x=windowName;"
-									+ "}}}; x!=null;", timeout);
+			sWaitForCondition("{var x; for(var windowName in selenium.browserbot.openedWindows ){"
+					+ "var targetWindow = selenium.browserbot.openedWindows[windowName];"
+					+ "if((!selenium.browserbot._windowClosed(targetWindow))&&"
+					+ "(targetWindow.name == '"
+					+ name
+					+ "' || targetWindow.document.title == '"
+					+ name
+					+ "')){x=windowName;" + "}}}; x!=null;");
 		} catch (Exception ex) {
 			throw new HarnessException(name + " never opened : ", ex);
 		}
 	}
 
 	/**
-	 * zWaitForIframeText()
-	 * Waits for condition when text appears in the iframe body
+	 * zWaitForIframeText() Waits for condition when text appears in the iframe
+	 * body
 	 * 
 	 * @param iframe
 	 * @param text
-	 * @param timeout
 	 * @throws HarnessException
 	 */
-	public boolean zWaitForIframeText(String iframe, String text, String timeout)
+	public boolean zWaitForIframeText(String iframe, String text)
 			throws HarnessException {
 		try {
-			sWaitForCondition(
-							"var x = selenium.browserbot.findElementOrNull(\""
-									+ iframe
-									+ "\");if(x!=null){x=x.contentWindow.document.body;}if(browserVersion.isChrome){x.textContent.indexOf('"
-									+ text
-									+ "') >= 0;}else if(browserVersion.isIE){x.innerText.indexOf('"
-									+ text
-									+ "') >= 0;}else{x.textContent.indexOf('"
-									+ text + "') >= 0;}", timeout);
+			sWaitForCondition("var x = selenium.browserbot.findElementOrNull(\""
+					+ iframe
+					+ "\");if(x!=null){x=x.contentWindow.document.body;}if(browserVersion.isChrome){x.textContent.indexOf('"
+					+ text
+					+ "') >= 0;}else if(browserVersion.isIE){x.innerText.indexOf('"
+					+ text
+					+ "') >= 0;}else{x.textContent.indexOf('"
+					+ text
+					+ "') >= 0;}");
 			return true;
 		} catch (Exception ex) {
 			throw new HarnessException(iframe + " never opened : ", ex);
@@ -411,15 +399,13 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
-	 * zIsWindowClosed()
-	 * Waits for condition when window with a given name is closed
-	 * 	 
+	 * zIsWindowClosed() Waits for condition when window with a given name is
+	 * closed
+	 * 
 	 * @param name
-	 * @param timeout
 	 * @throws HarnessException
 	 */
-	public boolean zIsWindowClosed(String name, String timeout) 
-	throws HarnessException {
+	public boolean zIsWindowClosed(String name) throws HarnessException {
 		try {
 			String condition = "{var x; for(var windowName in selenium.browserbot.openedWindows ){"
 					+ "var targetWindow = selenium.browserbot.openedWindows[windowName];"
@@ -430,8 +416,7 @@ public abstract class AbsSeleniumObject {
 					+ name
 					+ "')){x=windowName;" + "}}}; x==null;";
 
-			sWaitForCondition(
-					condition, timeout);
+			sWaitForCondition(condition);
 			return true;
 		} catch (Exception ex) {
 			logger.info("Error: win not opened " + name, ex.fillInStackTrace());

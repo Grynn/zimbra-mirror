@@ -63,18 +63,19 @@ public class PageBriefcase extends AbsTab {
 
 		// If the "folders" tree is visible, then Briefcase tab is active
 
-      String locator = null;
-      if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-         String currentActiveEmailAddress = MyApplication.zGetActiveAccount() != null ?
-               MyApplication.zGetActiveAccount().EmailAddress :
-                  ZimbraAccount.AccountZWC().EmailAddress;
-         locator = Locators.zBriefcaseFolderIcon_Desktop + "[id*='"
-               + currentActiveEmailAddress + "']";
-      } else {
-         locator = Locators.zBriefcaseFolderIcon;
-      }
+		String locator = null;
+		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+			String currentActiveEmailAddress = MyApplication
+					.zGetActiveAccount() != null ? MyApplication
+					.zGetActiveAccount().EmailAddress : ZimbraAccount
+					.AccountZWC().EmailAddress;
+			locator = Locators.zBriefcaseFolderIcon_Desktop + "[id*='"
+					+ currentActiveEmailAddress + "']";
+		} else {
+			locator = Locators.zBriefcaseFolderIcon;
+		}
 
-      boolean loaded = this.sIsElementPresent(locator);
+		boolean loaded = this.sIsElementPresent(locator);
 
 		if (!loaded)
 			return (loaded);
@@ -112,11 +113,11 @@ public class PageBriefcase extends AbsTab {
 
 		// make sure mail page is loaded
 		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-		   ((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
+			((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
 			GeneralUtility.waitForElementPresent(this,
 					PageMain.Locators.zAppbarBriefcase, 20000);
 		} else {
-			zWaitForElementPresent(locator, "20000");
+			zWaitForElementPresent(locator);
 		}
 		// Click on Briefcase icon
 		zClick(PageMain.Locators.zAppbarBriefcase);
@@ -126,7 +127,7 @@ public class PageBriefcase extends AbsTab {
 		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
 			zWaitForActive();
 		} else {
-			zWaitForElementPresent(Locators.zBriefcaseFolderIcon, "20000");
+			zWaitForElementPresent(Locators.zBriefcaseFolderIcon);
 		}
 	}
 
@@ -441,23 +442,25 @@ public class PageBriefcase extends AbsTab {
 		// In desktop, it is a must to go refresh the page, go to mail page and
 		// Get Mail
 		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-		   ((AppAjaxClient)MyApplication).zPageMail.zNavigateTo();
-		   ((AppAjaxClient)MyApplication).zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		   zNavigateTo();
+			((AppAjaxClient) MyApplication).zPageMail.zNavigateTo();
+			((AppAjaxClient) MyApplication).zPageMail
+					.zToolbarPressButton(Button.B_GETMAIL);
+			zNavigateTo();
 
-		   // If after waiting, it still doesn't appear, go to page mail,
-		   // click get mail again
-		   if (!GeneralUtility.waitForElementPresent(this, itemlocator, 5000)) {
-		      ((AppAjaxClient)MyApplication).zPageMail.zNavigateTo();
-	         ((AppAjaxClient)MyApplication).zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		   }
+			// If after waiting, it still doesn't appear, go to page mail,
+			// click get mail again
+			if (!GeneralUtility.waitForElementPresent(this, itemlocator, 5000)) {
+				((AppAjaxClient) MyApplication).zPageMail.zNavigateTo();
+				((AppAjaxClient) MyApplication).zPageMail
+						.zToolbarPressButton(Button.B_GETMAIL);
+			}
 		}
 
 		if (!this.sIsElementPresent(itemlocator))
 			throw new HarnessException("Unable to locate item with name("
 					+ docName + ")");
 		if (action == Action.A_LEFTCLICK) {
-			zWaitForElementPresent(itemlocator, "2000");
+			zWaitForElementPresent(itemlocator);
 			// Left-Click on the item
 			this.zClick(itemlocator);
 			page = new DocumentPreview(MyApplication);
@@ -473,19 +476,19 @@ public class PageBriefcase extends AbsTab {
 
 	public void isOpenDocLoaded(String windowName, String text)
 			throws HarnessException {
-		zWaitForWindow(windowName, "5000");
+		zWaitForWindow(windowName);
 
 		zSelectWindow(windowName);
 
-		zWaitForElementPresent("css=td[class='ZhAppContent'] div:contains('" + text
-				+ "')", "60000");
+		zWaitForElementPresent("css=td[class='ZhAppContent'] div:contains('"
+				+ text + "')");
 	}
 
 	public boolean isPresent(String itemName) throws HarnessException {
 		String itemLocator = Locators.briefcaseListView
 				+ " td[width*='auto'] div:contains(" + itemName + ")";
 
-		zWaitForElementPresent(itemLocator, "5000");
+		zWaitForElementPresent(itemLocator);
 		return true;
 	}
 
@@ -493,7 +496,7 @@ public class PageBriefcase extends AbsTab {
 		String itemLocator = Locators.briefcaseListView
 				+ " td[width*='auto'] div:contains(" + itemName + ")";
 
-		zWaitForElementDeleted(itemLocator, "5000");
+		zWaitForElementDeleted(itemLocator);
 		return true;
 	}
 
@@ -506,16 +509,15 @@ public class PageBriefcase extends AbsTab {
 
 	public boolean isEditDocLoaded(String windowName, String text)
 			throws HarnessException {
-		zWaitForWindow(windowName, "5000");
+		zWaitForWindow(windowName);
 
 		zSelectWindow(windowName);
 
-		zWaitForElementPresent("css=div[class='ZDToolBar ZWidget']", "30000");
+		zWaitForElementPresent("css=div[class='ZDToolBar ZWidget']");
 
-		zWaitForElementPresent("css=iframe[id*='DWT'][class='ZDEditor']", "30000");
+		zWaitForElementPresent("css=iframe[id*='DWT'][class='ZDEditor']");
 
-		zWaitForIframeText("css=iframe[id*='DWT'][class='ZDEditor']", text,
-				"5000");
+		zWaitForIframeText("css=iframe[id*='DWT'][class='ZDEditor']", text);
 
 		return true;
 	}

@@ -35,25 +35,21 @@ public class TreeBriefcase extends AbsTree {
 	}
 
 	public AbsPage zTreeItem(Action action, IItem item, boolean isRowAdded)
-			throws HarnessException {
+	throws HarnessException {
 
 		AbsPage page = zTreeItem(action, item);
 
-		String condition = "selenium.isElementPresent(\""
-				+ Locators.briefcaseTreeView
-				+ "][class='DwtTreeItem-selected']\")&&"
-				+ "selenium.isElementPresent(\"css=[id='zl__BDLV__rows']";
+		String treeItemLocator = Locators.briefcaseTreeView
+		+ "][class='DwtTreeItem-selected']";
 
-		if (isRowAdded) {
-		   if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-		      zWaitForElementPresent("css=[id='zl__BDLV__rows'] div[class^='Row']",
-		            "30000");
-		   } else {
-		      sWaitForCondition(condition + " div[class^='Row']\");", "10000");
-		   }
-		} else {
-			sWaitForCondition(condition + "\");", "10000");
-		}
+		zWaitForElementPresent(treeItemLocator);
+
+		String listItemLocator = "css=[id='zl__BDLV__rows']";
+
+		if (isRowAdded)
+			listItemLocator += " div[class^='Row']";
+
+		zWaitForElementPresent(listItemLocator);
 
 		return page;
 	}

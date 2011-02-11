@@ -107,8 +107,7 @@ public class PageTasks extends AbsTab {
 		String itemLocator = Locators.taskListView
 				+ " td[width*='auto']:contains(" + itemName + ")";
 
-		sWaitForCondition(
-				"selenium.isElementPresent(\"" + itemLocator + "\");", "5000");
+		zWaitForElementPresent(itemLocator);
 		return true;
 	}
 
