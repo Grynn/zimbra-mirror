@@ -716,6 +716,7 @@ function(shell) {
 		ZaZimbraAdmin._splashScreen.setVisible(true);
 	else {
 		ZaZimbraAdmin._splashScreen = new ZaSplashScreen(shell);
+		ZaZimbraAdmin._splashScreen.setVisible(true);
 	}
 }
 
