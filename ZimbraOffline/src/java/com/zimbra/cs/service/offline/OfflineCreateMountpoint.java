@@ -40,9 +40,11 @@ public class OfflineCreateMountpoint extends OfflineServiceProxy {
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
         ZimbraSoapContext ctxt = getZimbraSoapContext(context);
         Mailbox mbox = getRequestedMailbox(ctxt);
-        if (!(mbox instanceof ZcsMailbox))
+        if (!(mbox instanceof ZcsMailbox)) {
             throw OfflineServiceException.MISCONFIGURED("incorrect mailbox class: " + mbox.getClass().getSimpleName());
-
+        }
+        Element t = request.getElement(MailConstants.E_MOUNT);
+        t.addAttribute(MailConstants.A_FETCH_IF_EXISTS, true);
         Element response = super.handle(request, context);
 
         Element eMount = response.getElement(MailConstants.E_MOUNT);
