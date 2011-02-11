@@ -1188,6 +1188,12 @@ function() {
 AjxDateUtil.__calculate_set =
 function(date, type, value) {
 	var args = value.split(/,/);
+	//Add support for Japanese Heisei year format represented by H{year-number}
+	//The year is H23 in H23/12/31, means 2011/12/31; we get that by adding year 1988 to 23
+	//For example: H23 = 23 + 1988 = 2011(English year)
+	if(args[0].indexOf("H") == 0) {
+		args[0] = parseInt(args[0].replace("H", "")) + 1988;
+	}
 	if (type.match(AjxDateUtil.RE_YEAR)) {
 		args[0] = AjxDateUtil.__calculate_fullYear(args[0]); // year
 		if (args[1] != null) args[1] = AjxDateUtil.__calculate_month(args[1]); // month
