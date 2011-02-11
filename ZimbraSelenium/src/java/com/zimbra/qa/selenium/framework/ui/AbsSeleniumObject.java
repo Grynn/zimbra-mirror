@@ -244,17 +244,25 @@ public abstract class AbsSeleniumObject {
 
 	/**
 	 * DefaultSelenium.getAttribute()
-	 * 
-	 * @throws HarnessException
+	 * @throws SeleniumException
 	 */
-	public String sGetAttribute(String locator) throws HarnessException {
+	public String sGetAttribute(String locator) throws SeleniumException {
+		
+		// How can we determine whether the attribute exists or not?
+		// Default selenium doesn't seem to have a way.
+		// Tasks requires the SeleniumException to be thrown, then caught ... so, can't convert to HarnessException
+		//
+		
 		try {
-			String attrs = ClientSessionFactory.session().selenium()
-					.getAttribute(locator);
+		
+			logger.info("getAttribute(" + locator + ")");
+			String attrs = ClientSessionFactory.session().selenium().getAttribute(locator);
 			logger.info("getAttribute(" + locator + ") = " + attrs);
 			return (attrs);
+			
 		} catch (SeleniumException e) {
-			throw new HarnessException(e);
+			logger.error(e.getMessage(), e); // SeleniumExceptions don't use logger, so log it here
+			throw e;
 		}
 	}
 

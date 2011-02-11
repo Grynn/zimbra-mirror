@@ -639,7 +639,7 @@ public class PageTasks extends AbsTab {
 				id = this.sGetAttribute("xpath=(" + itemLocator + ")@id");
 			} catch (SeleniumException e) {
 				// Make sure there is an ID
-				logger.warn("Task row didn't have ID.  Probably normal.", e);
+				logger.warn("Task row didn't have ID.  Probably normal if message is 'Could not find element attribute' => "+ e.getMessage());
 				continue;
 			}
 
