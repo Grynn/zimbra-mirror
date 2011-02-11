@@ -437,6 +437,22 @@ public class PageBriefcase extends AbsTab {
 		 */
 		itemlocator = listLocator + " td[width*='auto'] div:contains("
 				+ docName + ")";
+
+		// In desktop, it is a must to go refresh the page, go to mail page and
+		// Get Mail
+		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+		   ((AppAjaxClient)MyApplication).zPageMail.zNavigateTo();
+		   ((AppAjaxClient)MyApplication).zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		   zNavigateTo();
+
+		   // If after waiting, it still doesn't appear, go to page mail,
+		   // click get mail again
+		   if (!GeneralUtility.waitForElementPresent(this, itemlocator, 5000)) {
+		      ((AppAjaxClient)MyApplication).zPageMail.zNavigateTo();
+	         ((AppAjaxClient)MyApplication).zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		   }
+		}
+
 		if (!this.sIsElementPresent(itemlocator))
 			throw new HarnessException("Unable to locate item with name("
 					+ docName + ")");

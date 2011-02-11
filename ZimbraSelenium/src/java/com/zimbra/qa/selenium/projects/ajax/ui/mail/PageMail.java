@@ -7,7 +7,11 @@ import java.util.*;
 
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
@@ -154,6 +158,7 @@ public class PageMail extends AbsTab {
 		public static final String zCLVRows			= "zl__CLV__rows";
 		public static final String zTVRows			= "zl__TV__rows";
 
+		public static final String zLoadingImage_Desktop = "css=img[src='/img/animated/ImgSpinner.gif']";
 	}
 	
 	
@@ -420,7 +425,19 @@ public class PageMail extends AbsTab {
 		
 		// If the app is busy, wait for it to become active
 		this.zWaitForBusyOverlay();
-		
+
+		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP &&
+		      button == Button.B_GETMAIL) {
+
+		   
+		   // Wait for the spinner image
+		   if (GeneralUtility.waitForElementPresent(this,
+		         PageMail.Locators.zLoadingImage_Desktop, 5000)) {
+		      Object[] params = {PageMail.Locators.zLoadingImage_Desktop};
+		      GeneralUtility.waitFor(null, this, false, "sIsElementPresent",
+		            params, WAIT_FOR_OPERAND.EQ, false, 30000, 1000);
+		   }
+		}
 
 		// If page was specified, make sure it is active
 		if ( page != null ) {

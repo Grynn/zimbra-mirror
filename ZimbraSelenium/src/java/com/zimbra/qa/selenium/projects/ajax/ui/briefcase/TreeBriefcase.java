@@ -44,10 +44,16 @@ public class TreeBriefcase extends AbsTree {
 				+ "][class='DwtTreeItem-selected']\")&&"
 				+ "selenium.isElementPresent(\"css=[id='zl__BDLV__rows']";
 
-		if (isRowAdded)
-			sWaitForCondition(condition + " div[class^='Row']\");", "10000");
-		else
+		if (isRowAdded) {
+		   if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+		      zWaitForElementPresent("css=[id='zl__BDLV__rows'] div[class^='Row']",
+		            "30000");
+		   } else {
+		      sWaitForCondition(condition + " div[class^='Row']\");", "10000");
+		   }
+		} else {
 			sWaitForCondition(condition + "\");", "10000");
+		}
 
 		return page;
 	}
@@ -68,7 +74,7 @@ public class TreeBriefcase extends AbsTree {
 		if (action == Action.A_LEFTCLICK) {
 
 			zWaitForBusyOverlay();
-			
+
 			//ClientSessionFactory.session().selenium().clickAt(locator,"0,0");
 
 			// FALL THROUGH
