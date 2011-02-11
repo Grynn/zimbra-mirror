@@ -148,7 +148,7 @@ DwtColorPicker.prototype._createHtmlFromTemplate = function(templateId, data) {
         if (!DwtColorPicker.Button) {
             DwtColorPicker.__defineClasses();
         }
-        var button = new DwtColorPicker.Button({parent:this});
+        var button = this._defaultColorButton = new DwtColorPicker.Button({parent:this});
         button.setText(data.noFillLabel || AjxMsg.colorsUseDefault);
         button.replaceElement(buttonEl);
         button.addSelectionListener(new AjxListener(this, this._handleColorSelect, [null]));
@@ -233,6 +233,12 @@ DwtColorPicker.prototype.getInputColor = function () {
     return this._inputColor;
 };
 
+DwtColorPicker.prototype.setDefaultColor = function (color) {
+    if(this._defaultColorButton) {
+        this._defaultColorButton.setDefaultColor(color);
+    }
+};
+
 DwtColorPicker.__color2hex = function(s) {
     var m = s && s.match(DwtColorPicker._RGB_RE);
     if (m) {
@@ -287,9 +293,14 @@ DwtColorPicker.__defineClasses = function() {
     DwtColorPicker.Button = function(params) {
         params.className = params.className || "DwtColorPickerButton";
         DwtButton.call(this, params);
+        this._colorDiv = document.getElementById(this.getHtmlElement().id+"_color");
     };
     DwtColorPicker.Button.prototype = new DwtButton;
     DwtColorPicker.Button.prototype.constructor = DwtColorPicker.Button;
+
+    DwtColorPicker.Button.prototype.setDefaultColor = function(color) {
+        this._colorDiv.style.backgroundColor = color;
+    };
 
     DwtColorPicker.Button.prototype.toString = function() {
         return "DwtColorPickerButton";
