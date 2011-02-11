@@ -16,12 +16,24 @@ import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 public class CodeCoverage {
 	protected static Logger logger = LogManager.getLogger(CodeCoverage.class);
 	
+	// For debugging ...
+	// Don't instrument server
+	private static boolean debugging = false;
+	
+	
+	
+	/**
+	 * The cumulative code coverage object
+	 */
+	protected JSONObject cumulativeCoverage = null;
+	
+	
 	/**
 	 * Set the output folder to write the coverage report
 	 * @param path
 	 */
 	public void setOutputFolder(String path) {
-		logger.info("Set code coverage folder: "+ path);
+		logger.info("setOutputFolder("+ path +")");
 		CODE_COVERAGE_DIRECTORY_PATH = path;
 	}
 	
@@ -34,8 +46,16 @@ public class CodeCoverage {
 			logger.info("writeCoverage(): Code Coverage reporting is disabled");
 			return;
 		}
-		
+	
+		logger.info("writeCoverage()");
 		logger.info("<=======><=======><=== Writing Coverage to json file ===><=======><=======>");
+		Date start = new Date();
+		
+		if (EnableSourceCodeReport) {
+			logger.info("writeCoverage(): Updating source files");
+			updateSourceFiles();
+		}
+		
 		
 		// TODO: change from BufferedWriter to Logger
 		BufferedWriter out = null;
@@ -47,15 +67,9 @@ public class CodeCoverage {
 				File f = new File(CODE_COVERAGE_DIRECTORY_PATH, CODE_COVERAGE_DIRECTORY_FILE);
 				out = new BufferedWriter(new FileWriter(f));
 				
-				out.write("{");
-				for (String key : FILENAME_TO_COVERAGE.keySet() ) {
-					out.write(
-						"\"" + key + "\"" + ":{\"coverage\":"
-						+ FILENAME_TO_COVERAGE.get(key) + ",\"source\":"
-						+ FILENAME_TO_SOURCE.get(key) + "}," );
-	
+				if ( cumulativeCoverage != null ) {
+					cumulativeCoverage.write(out);
 				}
-				out.write("}");
 				
 			} finally {
 				if (out != null) {
@@ -71,71 +85,138 @@ public class CodeCoverage {
 		// Write the other html, css, etc. files to the folder
 		updateOutputFolder();
 		
+		updateTotalDuration(start, new Date());
+		
+		// Log how much time code coverage took
+		logger.info("CodeCoverage: took "+ getTotalDuration() +" seconds");
 	}
 
 	/**
 	 * Update the coverage data
 	 */
 	public void calculateCoverage() {
-		logger.info("Calculating code coverage ...");
+		logger.info("calculateCoverage()");
 
 		if ( !Enabled ) {
 			logger.info("calculateCoverage(): Code Coverage reporting is disabled");
 			return;
 		}
-		
 
+		Date start = new Date();
 		try {
+
+			// COVERAGE_SCRIPT returns a JSON object
+			// The key is the file name
+			// The values (coverage) is the coverage counts, null = not covered, 1 = covered 1 times, 2 = covered 2 times, etc.
+			// Example:
+			//
+
+			if ( cumulativeCoverage == null ) {
+
+				// First time in, just initialize the object
+				logger.info("initalizing coverage object");
+				cumulativeCoverage = (JSONObject) JSONSerializer.toJSON(ClientSessionFactory.session().selenium().getEval(COVERAGE_SCRIPT));
+				return;
+				
+			}
 			
-			String coverage_string = ClientSessionFactory.session().selenium().getEval(COVERAGE_SCRIPT);
-			JSONObject jsonCoverage = (JSONObject) JSONSerializer.toJSON(coverage_string);
-			String individualFileInfo[] = coverage_string.split("},");
-			for (int i = 0; i < individualFileInfo.length; i++) {
-				String jsonElements[] = individualFileInfo[i].split(":");
-				if (jsonElements[0].startsWith("{"))
-					jsonElements[0] = jsonElements[0].replace("{", "");
-				if (jsonElements[0].startsWith("\"")
-						&& jsonElements[0].endsWith(".js\"")) {
-					String jsFileName = jsonElements[0].replace("\"", "");
-					parseCoverage(jsFileName, jsonCoverage);
-					updateSource(jsFileName);
+
+			// Second time in, update the cumulative data
+
+			// Get the latest coverage
+			logger.info("getting updates to coverage object");
+			JSONObject jsonCoverage = (JSONObject) JSONSerializer.toJSON(ClientSessionFactory.session().selenium().getEval(COVERAGE_SCRIPT));
+
+			Iterator<?> iterator = jsonCoverage.keys();
+			while (iterator.hasNext()) {
+				String key = (String)iterator.next();
+				JSONArray nCoverage = jsonCoverage.getJSONObject(key).getJSONArray("coverage");
+
+				logger.debug(key +": "+ nCoverage);
+				
+				if ( !cumulativeCoverage.containsKey(key) ) {
+					
+					// New filename, simply add the data
+					logger.info("add new filename: "+ key);
+					cumulativeCoverage.put(key, jsonCoverage.getJSONObject(key));
+
+				} else {
+
+					// Sum the old data with the new updates
+					logger.info("updating filename: "+ key);
+					cumulativeCoverage.getJSONObject(key).put("coverage", updateCoverage(cumulativeCoverage.getJSONObject(key).getJSONArray("coverage"), nCoverage));
+					
 				}
-			}
 
-		} catch (Exception e) {
-			logger.error("Unable to calculate coverage", e);
+			}
+		} catch (JSONException e) {
+			logger.error("Unable to calculate code coverage.  Disabling code coverage", e);
+			Enabled = false;
 		}
 		
+		updateTotalDuration(start, new Date());
 	}
+	
+	private JSONArray updateCoverage(JSONArray oCoverage, JSONArray nCoverage) {
+		logger.debug("updateCoverage()");
 
-	private void parseCoverage(String file, JSONObject jsonCoverage) {
-		JSONObject fileName = jsonCoverage.getJSONObject(file);
-		JSONArray jsonCoverageArray = fileName.getJSONArray("coverage");
-		ArrayList<Integer> coverage = new ArrayList<Integer>();
-		for (int j = 0; j < jsonCoverageArray.size(); j++) {
-			if (jsonCoverageArray.getString(j).equalsIgnoreCase("null")) {
-				coverage.add(null);
-			} else {
-				coverage.add(Integer.parseInt(jsonCoverageArray.getString(j)));
-			}
-		}
-		updateCoverage(file, coverage);
-	}
-
-	private void updateSource(String file) {
-		if (FILENAME_TO_SOURCE.containsKey(file)) {
-			return;
-		}
+		JSONArray array = new JSONArray();
 		
+		for (int i = 0; i < nCoverage.size(); i++) {
+			
+			Integer oldValue = null;
+			Integer newValue = null;
+			if ( (i < oCoverage.size()) && (!oCoverage.getString(i).equalsIgnoreCase("null")) ) {
+				oldValue = Integer.parseInt(oCoverage.getString(i));
+			}
+			if ( !nCoverage.getString(i).equalsIgnoreCase("null") ) {
+				newValue = Integer.parseInt(nCoverage.getString(i));
+			}
+			
+			if (oldValue == null && newValue == null) {
+				array.add("null");
+				continue;
+			}
+			if (newValue == null) {
+				array.add(oldValue);
+				continue;
+			}
+			if (oldValue == null) {
+				array.add(newValue);
+				continue;
+			}
+			
+			array.add(oldValue + newValue);
+
+		}
+
+		return (array);
+	}
+
+	private void updateSourceFiles() {
+		logger.debug("updateSourceFiles()");
+		
+		Iterator<?> iterator = cumulativeCoverage.keys();
+		while (iterator.hasNext()) {
+			String key = (String)iterator.next();
+			cumulativeCoverage.getJSONObject(key).put("source", updateSourceFileContent(key));
+			logger.info("Added source for "+ key);
+		}
+	}
+	
+	private JSONArray updateSourceFileContent(String filename) {
+		logger.debug("updateSourceFileContent("+ filename +")");
+
+		JSONArray jsonSourceArray = new JSONArray();
+
 		try {
 			
-			URL url = new URL("http://" + CoverageServer +"/zimbra/"+ file);
+			URL url = new URL("http://" + CoverageServer +"/zimbra/"+ filename);
 			URLConnection uc = url.openConnection();
 			BufferedReader reader = null;
 			
 			try {
 				
-				JSONArray jsonSourceArray = new JSONArray();
 				reader = new BufferedReader(new InputStreamReader(uc.getInputStream()));
 				
 				String line;
@@ -143,7 +224,6 @@ public class CodeCoverage {
 					jsonSourceArray.add(line);
 				}
 
-				FILENAME_TO_SOURCE.put(file, jsonSourceArray);
 	
 			} finally {
 				if ( reader != null ) {
@@ -156,36 +236,11 @@ public class CodeCoverage {
 			logger.error("Unable to update coverage source", e);
 		}
 
-	}
+		return (jsonSourceArray);
 
-	private void updateCoverage(String file, ArrayList<Integer> data) {
-		if (FILENAME_TO_COVERAGE.containsKey(file)) {
-			ArrayList<Integer> coverage = FILENAME_TO_COVERAGE.get(file);
-			int i = 0;
-			for (; i < coverage.size(); i++) {
-				Integer oldValue = coverage.get(i);
-				Integer newValue = data.get(i);
-				if (oldValue == null && newValue == null) {
-					continue;
-				}
-				if (newValue == null) {
-					continue;
-				}
-				if (oldValue == null) {
-					oldValue = 0;
-				}
-				coverage.set(i, oldValue + newValue);
-			}
-
-			for (; i < data.size(); i++) {
-				coverage.add(data.get(i));
-			}
-			FILENAME_TO_COVERAGE.put(file, coverage);
-		} else {
-			FILENAME_TO_COVERAGE.put(file, data);
-		}
 	}
-	
+		
+		
 	private static final String CODE_COVERAGE_SOURCE_PATH = "src/CODECOVERAGE/";
 	private static final List<String> reportFiles = new ArrayList<String>() {
 		private static final long serialVersionUID = -6339218908274560120L;
@@ -199,7 +254,7 @@ public class CodeCoverage {
 	}};
 
 	private void updateOutputFolder() {
-		logger.info("Update output folder with html files");
+		logger.debug("updateOutputFolder()");
 
 		for (String filename : reportFiles) {
 			File destination = new File(CODE_COVERAGE_DIRECTORY_PATH, filename);
@@ -221,7 +276,7 @@ public class CodeCoverage {
 	}
 	
 	private static void copy(File source, File destination) throws IOException {
-		logger.info("copy "+ source.getCanonicalPath() +" to "+ destination.getCanonicalPath());
+		logger.debug("copy "+ source.getCanonicalPath() +" to "+ destination.getCanonicalPath());
 
 		if ( !destination.exists() ) {
 			destination.createNewFile();
@@ -248,8 +303,6 @@ public class CodeCoverage {
 	
     private String CODE_COVERAGE_DIRECTORY_PATH = "CODECOVERAGE";
     private String CODE_COVERAGE_DIRECTORY_FILE = "jscoverage.json";
-    private Map<String, ArrayList<Integer>> FILENAME_TO_COVERAGE = new HashMap<String, ArrayList<Integer>>();
-    private Map<String, JSONArray> FILENAME_TO_SOURCE = new HashMap<String, JSONArray>();
 
 	
     private static final String COVERAGE_SCRIPT = 
@@ -334,7 +387,15 @@ public class CodeCoverage {
 			logger.info("instrumentServer(): Code Coverage reporting is disabled");
 			return;
 		}
-				
+			
+		logger.info("instrumentServer()");
+		Date start = new Date();
+
+		if ( debugging ) {
+			logger.info("instrumentServer(): debugging ... skipping ");
+			return;
+		}
+		
 		WebappsZimbraOriginal		= "/opt/zimbra/jetty/webapps/zimbra" + ZimbraSeleniumProperties.getUniqueString();
 		WebappsZimbraInstrumented	= "/opt/zimbra/jetty/webapps/instrumented" + ZimbraSeleniumProperties.getUniqueString();
 		
@@ -350,6 +411,7 @@ public class CodeCoverage {
 			logger.error("Unable to instrument code.  Disabling code coverage.", e);
 		}
 
+		updateTotalDuration(start, new Date());
 	}
 	
 	public void instrumentServerUndo() {
@@ -359,6 +421,14 @@ public class CodeCoverage {
 			return;
 		}
 			
+		logger.info("instrumentServerUndo()");
+		Date start = new Date();
+		
+		if ( debugging ) {
+			logger.info("instrumentServer(): debugging ... skipping ");
+			return;
+		}
+		
 		WebappsZimbraInstrumented	= "/opt/zimbra/jetty/webapps/instrumented" + ZimbraSeleniumProperties.getUniqueString();
 
 		try {
@@ -375,10 +445,24 @@ public class CodeCoverage {
 			WebappsZimbraInstrumented = null;
 		}
 
+		updateTotalDuration(start, new Date());
 	}
 
+	// Time data (in seconds)
+	private long totalDuration = 0;
+	protected long getTotalDuration() {
+		return (totalDuration);
+	}
+	protected void updateTotalDuration(Date start, Date finish) {
+		if ( start.after(finish) || start.equals(finish) ) {
+			logger.error("updateTotalDuration: start wasn't before finish");
+			return;
+		}
+		totalDuration += ((finish.getTime()/1000) - (start.getTime()/1000));
+	}
 
 	protected boolean Enabled = false;
+	protected boolean EnableSourceCodeReport = false;
 	protected String CoverageServer = null;
 	
 	// Singleton methods
@@ -386,8 +470,10 @@ public class CodeCoverage {
 	private volatile static CodeCoverage instance;
 
 	private CodeCoverage() {
-		Enabled = ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no").equalsIgnoreCase("yes");
-		CoverageServer = ZimbraSeleniumProperties.getStringProperty("coverageServer", "zqa-060.eng.vmware.com");
+		logger.info("new "+ CodeCoverage.class.getCanonicalName());
+		Enabled = ZimbraSeleniumProperties.getStringProperty("coverage.enabled", "false").equalsIgnoreCase("true");
+		CoverageServer = ZimbraSeleniumProperties.getStringProperty("coverage.server", "zqa-060.eng.vmware.com");
+		EnableSourceCodeReport = ZimbraSeleniumProperties.getStringProperty("coverage.reportsource", "false").equalsIgnoreCase("true");
 	}
 
 	public static CodeCoverage getInstance() {
