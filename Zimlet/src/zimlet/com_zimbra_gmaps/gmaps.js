@@ -103,7 +103,7 @@ function() {
 ZmGMapsZimlet.prototype.clicked =
 function(spanElem, contentObj, matchContext, canvas) {
 	var addr = contentObj.replace("\n","+").replace("\r","+").replace(/ /g, "+");
-	canvas = window.open("http://maps.google.com/maps?q="+escape(addr));
+	canvas = window.open("http://maps.google.com/maps?q="+AjxStringUtil.urlComponentEncode(addr));
 };
 
 /**
@@ -128,15 +128,10 @@ function(spanElement, addrs, context, canvas) {
 ZmGMapsZimlet.prototype._getMapUrl =
 function(addrs) {
 	addrs = addrs.replace("\n","+").replace("\r","+").replace(/ /g, "+");
+	ZmGMapsZimlet.URLPARAMS["center"] = addrs;
 	var params = [];
-	var val = "";
 	for(var el in ZmGMapsZimlet.URLPARAMS) {		
-		if(el == "center") {
-			val = AjxStringUtil.urlEncode(addrs);
-		} else {
-			val = AjxStringUtil.urlComponentEncode(ZmGMapsZimlet.URLPARAMS[el]);
-		}
-		params.push(el + "=" + val);
+		params.push(el + "=" + AjxStringUtil.urlComponentEncode(ZmGMapsZimlet.URLPARAMS[el]));
 	}
 	var url = ZmGMapsZimlet.URL + "?" + params.join("&");
 	url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
