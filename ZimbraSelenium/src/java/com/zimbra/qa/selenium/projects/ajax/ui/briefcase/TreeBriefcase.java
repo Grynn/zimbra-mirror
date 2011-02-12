@@ -47,7 +47,7 @@ public class TreeBriefcase extends AbsTree {
 		   ((AppAjaxClient) MyApplication).zPageBriefcase.zNavigateTo();
 		} else {
 		   treeItemLocator = Locators.briefcaseTreeView
-		         + "[class='DwtTreeItem-selected']";
+		         + "][class='DwtTreeItem-selected']";
 		}
 
 		zWaitForElementPresent(treeItemLocator);
