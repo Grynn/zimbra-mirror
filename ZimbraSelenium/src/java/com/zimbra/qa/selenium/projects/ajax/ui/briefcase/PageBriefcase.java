@@ -113,9 +113,10 @@ public class PageBriefcase extends AbsTab {
 
 		// make sure mail page is loaded
 		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-			((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
+			((AppAjaxClient) MyApplication).zPageMail.zNavigateTo();
 			GeneralUtility.waitForElementPresent(this,
 					PageMain.Locators.zAppbarBriefcase, 20000);
+			((AppAjaxClient) MyApplication).zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 		} else {
 			zWaitForElementPresent(locator);
 		}

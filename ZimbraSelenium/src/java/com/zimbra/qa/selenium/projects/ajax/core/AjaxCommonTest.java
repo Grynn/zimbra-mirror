@@ -119,7 +119,7 @@ public class AjaxCommonTest {
    // existing ones. For desktop purpose, this cannot use app.zGetActiveAccount
    // because the implementation is different where in Ajax client, active account
    // is set in login and logout, while in desktop, it is only set in addDefaultAccount
-   private ZimbraAccount _currentAccount = null;
+   private static ZimbraAccount _currentAccount = null;
 
    // Configurable from config file or input parameters
    private PRODUCT_NAME _productName = PRODUCT_NAME.ZDESKTOP;
