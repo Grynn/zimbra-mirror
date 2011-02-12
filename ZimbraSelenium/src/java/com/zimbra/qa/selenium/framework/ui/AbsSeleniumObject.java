@@ -297,6 +297,8 @@ public abstract class AbsSeleniumObject {
 	 */
 
 	public void zWaitForBusyOverlay() throws HarnessException {
+		logger.info("zWaitForBusyOverlay()");
+
 		try {
 			sWaitForCondition("selenium.browserbot.getUserWindow().top.appCtxt.getShell().getBusy()==false");
 		} catch (Exception ex) {
@@ -312,6 +314,7 @@ public abstract class AbsSeleniumObject {
 	 * @throws HarnessException
 	 */
 	private void sWaitForCondition(String condition) throws HarnessException {
+		logger.info("sWaitForCondition("+ condition +"), timeout="+ LoadDelay);
 		try {
 			ClientSessionFactory.session().selenium().waitForCondition(
 					condition, "" + LoadDelay);
@@ -328,6 +331,8 @@ public abstract class AbsSeleniumObject {
 	 * @throws HarnessException
 	 */
 	public void zWaitForElementPresent(String locator) throws HarnessException {
+		logger.info("zWaitForElementPresent("+ locator +")");
+
 		try {
 			sWaitForCondition("selenium.isElementPresent(\"" + locator + "\")");
 		} catch (Exception ex) {
@@ -343,6 +348,7 @@ public abstract class AbsSeleniumObject {
 	 * @throws HarnessException
 	 */
 	public void zWaitForElementDeleted(String locator) throws HarnessException {
+		logger.info("zWaitForElementDeleted("+ locator +")");
 		try {
 			sWaitForCondition("!selenium.isElementPresent(\"" + locator + "\")");
 		} catch (Exception ex) {
@@ -358,6 +364,8 @@ public abstract class AbsSeleniumObject {
 	 * @throws HarnessException
 	 */
 	public void zWaitForWindow(String name) throws HarnessException {
+		logger.info("zWaitForWindow("+ name +")");
+
 		try {
 			sWaitForCondition("{var x; for(var windowName in selenium.browserbot.openedWindows ){"
 					+ "var targetWindow = selenium.browserbot.openedWindows[windowName];"
@@ -382,6 +390,8 @@ public abstract class AbsSeleniumObject {
 	 */
 	public boolean zWaitForIframeText(String iframe, String text)
 			throws HarnessException {
+		logger.info("zWaitForIframeText("+ iframe +", "+ text +")");
+
 		try {
 			sWaitForCondition("var x = selenium.browserbot.findElementOrNull(\""
 					+ iframe
@@ -406,6 +416,8 @@ public abstract class AbsSeleniumObject {
 	 * @throws HarnessException
 	 */
 	public boolean zIsWindowClosed(String name) throws HarnessException {
+		logger.info("zIsWindowClosed("+ name +")");
+
 		try {
 			String condition = "{var x; for(var windowName in selenium.browserbot.openedWindows ){"
 					+ "var targetWindow = selenium.browserbot.openedWindows[windowName];"
