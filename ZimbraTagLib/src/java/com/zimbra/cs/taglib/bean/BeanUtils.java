@@ -861,15 +861,8 @@ public class BeanUtils {
          int dow = cal.get(Calendar.DAY_OF_WEEK);
 
         // pref goes 0-6, Calendar goes 1-7
-        if ("workWeek".equalsIgnoreCase(view)) {
-                if (dow == Calendar.SUNDAY)
-                    cal.add(Calendar.DAY_OF_MONTH, 1);
-                else if (dow != Calendar.MONDAY)
-                    cal.add(Calendar.DAY_OF_MONTH, - (dow - Calendar.MONDAY));
-        } else if ("week".equalsIgnoreCase(view)) {
-                if (dow != prefFirstDayOfWeek)
-                    cal.add(Calendar.DAY_OF_MONTH, - (((dow-1) + (7- (int)prefFirstDayOfWeek)) % 7));
-        }
+         if (dow != prefFirstDayOfWeek)
+             cal.add(Calendar.DAY_OF_MONTH, - (((dow-1) + (7- (int)prefFirstDayOfWeek)) % 7));
          return cal;
      }
 
