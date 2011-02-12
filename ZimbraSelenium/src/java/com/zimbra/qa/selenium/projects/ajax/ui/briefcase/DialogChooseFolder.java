@@ -6,6 +6,9 @@ import com.zimbra.qa.selenium.framework.ui.AbsDialog;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 
 /**
  * Represents a "Choose Folder" dialog box for move operation
@@ -130,9 +133,16 @@ public class DialogChooseFolder extends AbsDialog {
 		
 		if ( folder == null ) 
 			throw new HarnessException("folder must not be null");
-		
-		String locator = "css=div[id='"+ Locators.zDialogId +"'] td[id='zti__ZmChooseFolderDialog_Briefcase__"+ folder.getId() +"_textCell']";
-		
+		String locator = null;
+		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+		   locator = "css=div[id='"+ Locators.zDialogId +"'] td[id^='zti__" +
+		         MyApplication.zGetActiveAccount().EmailAddress +
+		         ":ZmChooseFolderDialog_Briefcase__']" +
+		         "[id$='" + folder.getId() +
+		         "_textCell']";
+		} else {
+		   locator = "css=div[id='"+ Locators.zDialogId +"'] td[id='zti__ZmChooseFolderDialog_Briefcase__"+ folder.getId() +"_textCell']";
+		}
 		if ( !this.sIsElementPresent(locator) )
 			throw new HarnessException("unable to find folder in tree "+ locator);
 	

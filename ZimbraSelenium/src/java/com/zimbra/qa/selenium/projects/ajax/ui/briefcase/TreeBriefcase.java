@@ -37,7 +37,6 @@ public class TreeBriefcase extends AbsTree {
 	public AbsPage zTreeItem(Action action, IItem item, boolean isRowAdded)
 	throws HarnessException {
 
-		AbsPage page = zTreeItem(action, item);
 
 		String treeItemLocator = null;
 		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
@@ -49,6 +48,7 @@ public class TreeBriefcase extends AbsTree {
 		   treeItemLocator = Locators.briefcaseTreeView
 		         + "][class='DwtTreeItem-selected']";
 		}
+		AbsPage page = zTreeItem(action, item);
 
 		zWaitForElementPresent(treeItemLocator);
 
