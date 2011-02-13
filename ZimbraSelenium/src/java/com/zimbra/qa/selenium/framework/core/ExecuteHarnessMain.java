@@ -525,6 +525,13 @@ public class ExecuteHarnessMain {
 			return (String.format("%s/debug/%s/%s.txt", outputFolder, c, m));
 		}
 		
+		protected String getTestCaseID(Method method) {
+			// The TestCaseId is the fully qualified name of the method
+			String c = method.getDeclaringClass().getCanonicalName();
+			String m = method.getName();
+			return (c + "." + m);
+		}
+		
 		/**
 		 * Add a new FileAppender for each class before invocation
 		 */
@@ -541,7 +548,7 @@ public class ExecuteHarnessMain {
 						openqaLogger.addAppender(a);
 						zimbraqaLogger.addAppender(a);
 					}
-					logger.info("MethodListener: START: "+ method.getTestMethod().getMethodName());
+					logger.info("MethodListener: START: " + getTestCaseID(method.getTestMethod().getMethod()));
 				} catch (IOException e) {
 					logger.warn("Unable to add test class appender", e);
 				}
@@ -555,7 +562,7 @@ public class ExecuteHarnessMain {
 		@Override
 		public void afterInvocation(IInvokedMethod method, ITestResult result) {
 			if ( method.isTestMethod() ) {
-				logger.info("MethodListener: FINISH: "+ method.getTestMethod().getMethodName());
+				logger.info("MethodListener: FINISH: "+ getTestCaseID(method.getTestMethod().getMethod()));
 				Appender a = null;
 				String key = getKey(method.getTestMethod().getMethod());
 				if ( appenders.containsKey(key) ) {
