@@ -260,7 +260,7 @@ InboxZero.prototype._doWithPrefix = function(prefix, msg, callback) {
 
     AjxDispatcher.require(["TasksCore", "Tasks"]);
     var task = new ZmTask();
-    task.setStartDate(AjxDateUtil.roundTimeMins(new Date, 30));
+    task.setEndDate(AjxDateUtil.roundTimeMins(new Date, 30));
     task.setFromMailMessage(msg, prefix+msg.subject);
     appCtxt.getApp(ZmApp.TASKS).getTaskController().show(task, ZmCalItem.MODE_NEW, true);
 };
