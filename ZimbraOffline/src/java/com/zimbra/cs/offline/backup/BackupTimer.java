@@ -58,6 +58,7 @@ public class BackupTimer extends Thread {
     private long lastBackupSuccess = -1;
     private boolean halted = false;
     private boolean sleeping = false;
+    private final long clockTolerance = Constants.MILLIS_PER_MINUTE;
 
     private synchronized void waitForInterval(long lastBackupAttempt) {
         try {
@@ -69,11 +70,10 @@ public class BackupTimer extends Thread {
                 long nextTime = interval + lastBackupAttempt;
                 OfflineLog.offline.info("Waiting until next backup at "+new Date(nextTime));
                 long waitTime = nextTime - System.currentTimeMillis();
-                if (waitTime > 0) {
-                    wait(waitTime);
-                } else {
-                    //already expired
-                }
+                while (waitTime > 0) {
+                    wait(waitTime > clockTolerance ? clockTolerance : waitTime);
+                    waitTime = nextTime - System.currentTimeMillis();
+                } 
             }
         } catch (InterruptedException e) {
         } finally {
