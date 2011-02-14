@@ -36,7 +36,7 @@
 	<property name="dist.lib.dir" location="${dist.dir}/lib"/>
 	<property name="dist.lib.ext.dir" location="${dist.lib.dir}/ext"/>
 	<property name="zimlet.dist.dir" location="${dist.dir}/zimlets"/>
-	
+	<property name="zimbrasoap.dir" location="../ZimbraSoap" />
 	
 
 	<!-- deploy -->
@@ -69,6 +69,7 @@
 		<pathelement location="${network.classes.dir}" />		
 		<pathelement location="${build.classes.dir}" />
 		<pathelement location="${zimbraServer.dir}/build/classes"/>
+        <pathelement location="${zimbrasoap.dir}/build/classes" />
 		<fileset dir="${common.dir}/jars">
 			<include name="**/*.jar"/>
 		</fileset>
