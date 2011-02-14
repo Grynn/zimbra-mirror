@@ -287,6 +287,10 @@ function(ev) {
 ZaDomainListController.prototype._addDomainAliasListener =
 function (ev) {
     var domain = new ZaDomain () ;
+    if(this._contentView.getSelectionCount() == 1) {
+             var item = this._contentView.getSelection()[0];
+             domain[ZaDomain.A2_zimbraDomainAliasTarget] = item;
+    }
     var domainAliasWizard = ZaApp.getInstance().getDomainAliasWizard () ;
     domainAliasWizard.registerCallback(DwtDialog.OK_BUTTON,
             ZaDomain.prototype.createDomainAlias, domain,
