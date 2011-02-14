@@ -748,6 +748,7 @@ function () {
 	div.style.padding = "20px";
 	var a = document.createElement("a");
 	ZaGlobalAdvancedStatsPage.setText(a, ZaMsg.NAD_AdvStatsAddChartLabel);
+	a.href = "#";
 	a.onclick = function () { ZaGlobalAdvancedStatsPage.insertChartHTML(element); };
 	div.appendChild(a);
 	element.appendChild(div);
