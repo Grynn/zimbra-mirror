@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Web Client
- * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 Zimbra, Inc.
  * 
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -1368,6 +1368,8 @@ function(ev) {
 		}
 	}
 
+	var ctrlA = false;
+	
 	if (ev.type == "keydown") {
 		if (ev.keyCode == 9) {
 			if (AjxEnv.isIE) {
@@ -1379,7 +1381,7 @@ function(ev) {
 			}
 		} else if (DwtKeyboardMgr.isPossibleInputShortcut(ev)) {
 			// pass to keyboard mgr for kb nav
-			retVal = DwtKeyboardMgr.__keyDownHdlr(ev);
+			retVal = ctrlA = DwtKeyboardMgr.__keyDownHdlr(ev);
 		}
 	}
 
@@ -1395,6 +1397,17 @@ function(ev) {
 		if (iFrameDoc.selection.type == "None") {
 			this._currInsPt.collapse(false);
 		}
+		//IE Hack for Ctrl+A to create range and include all elements
+    	if(ctrlA && ev.keyCode == 65 && ev.ctrlKey) {
+        	var p = this._getParentElement();
+        	while (p && (p.nodeType == 1) && (p.tagName.toLowerCase() != 'body')) {
+            	p = p.parentNode;
+	    	}
+        	var idoc = this._getIframeDoc();
+        	this._currInsPt = idoc.selection.createRange();
+        	this._currInsPt.moveToElementText(p);
+        	this._currInsPt.select();
+    	}
 	}
 
 	if (this._stateUpdateActionId != null) {
