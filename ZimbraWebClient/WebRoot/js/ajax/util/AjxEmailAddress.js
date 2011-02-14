@@ -364,10 +364,12 @@ function(str) {
 /**
  * Returns a string representation of this object.
  * 
+ * @param {boolean}		short	if true, return a brief version (name if available, otherwise email)
+ * 
  * @return	{string}		a string representation of this object
  */
 AjxEmailAddress.prototype.toString =
-function() {
+function(short) {
 
 	if (this.isGroup) {
 		return this.address || this.name;
@@ -375,8 +377,8 @@ function() {
 	else if (this.name) {
 		var name = this.name.replace(/\\+"/g, '"');	// unescape double quotes (avoid double-escaping)
 		name = name.replace(/"/g, '\\"');			// escape double quotes
-		var buffer = ['"', name, '"'];
-		if (this.address) {
+		var buffer = short ? [name] : ['"', name, '"'];
+		if (this.address && !short) {
 			buffer.push(" <", this.address, ">");
 		}
 		return buffer.join("");	// quote friendly part

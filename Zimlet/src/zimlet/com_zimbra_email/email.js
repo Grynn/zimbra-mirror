@@ -122,7 +122,8 @@ function(ev) {
 EmailTooltipZimlet.prototype.generateSpan =
 function(html, idx, obj, spanId, context, options) {
 
-	if (options && options.addrBubbles) {
+	options = options || {};
+	if (options.addrBubbles) {
 		this._isBubble[spanId] = true;
 		var canExpand = obj.isGroup && obj.canExpand;
 		if (canExpand && !this._aclv) {
@@ -137,7 +138,7 @@ function(html, idx, obj, spanId, context, options) {
 		}
 
 		var bubbleParams = {
-			address:	obj.toString(),
+			addrObj:	obj,
 			id:			spanId,
 			canExpand:	canExpand,
 			dlAddress:	canExpand && obj.address,
@@ -172,7 +173,7 @@ function(obj, context, spanId) {
 };
 
 EmailTooltipZimlet.prototype._getHtmlContent =
-function(html, idx, obj, context, spanId) {
+function(html, idx, obj, context, spanId, options) {
 	if (obj instanceof AjxEmailAddress) {
 		var context = window.parentAppCtxt || window.appCtxt;
 		var contactsApp = context.getApp(ZmApp.CONTACTS);
@@ -180,11 +181,11 @@ function(html, idx, obj, context, spanId) {
 		var buddy = this._getBuddy(contact, obj.address);
 		if (contactsApp && !contact && contact !== null) {
 			// search for contact
-			var respCallback = new AjxCallback(this, this._handleResponseGetContact, [html, idx, obj, spanId]);
+			var respCallback = new AjxCallback(this, this._handleResponseGetContact, [html, idx, obj, spanId, options]);
 			contactsApp.getContactByEmail(obj.address, respCallback);
 		}
 		// return content for what we have now (may get updated after search)
-		return this._updateHtmlContent(html, idx, obj, contact, buddy);
+		return this._updateHtmlContent(html, idx, obj, contact, buddy, spanId, options);
 	} else {
 		html[idx++] = AjxStringUtil.htmlEncode(obj);
 		return idx;
@@ -197,7 +198,7 @@ function(html, idx, obj, context, spanId) {
  * with the results of a search.
  */
 EmailTooltipZimlet.prototype._updateHtmlContent =
-function(html, idx, obj, contact, buddy, spanId) {
+function(html, idx, obj, contact, buddy, spanId, options) {
 
 	var content;
 	var pres = buddy && buddy.getPresence();
@@ -224,19 +225,12 @@ function(html, idx, obj, contact, buddy, spanId) {
 
 		this._getRoster();
 	} else {
-		if (contact && contact.toString() == "ZmContact") {
-			content = AjxStringUtil.htmlEncode(contact.getFullName());
-		}
-		if (!content) {
-			content = AjxStringUtil.htmlEncode(obj.toString());
-		}
+		content = AjxStringUtil.htmlEncode(obj.toString(options && options.shortAddress));
 	}
 
-	if (spanId) {
-		var span = document.getElementById(spanId);
-		if (span) {
-			span.innerHTML = content;
-		}
+	var span = spanId && document.getElementById(spanId);
+	if (span) {
+		span.innerHTML = content;
 	} else {
 		html[idx++] = content;
 		return idx;
@@ -244,10 +238,10 @@ function(html, idx, obj, contact, buddy, spanId) {
 };
 
 EmailTooltipZimlet.prototype._handleResponseGetContact =
-function(html, idx, obj, spanId, contact) {
+function(html, idx, obj, spanId, options, contact) {
 	if (contact) {
 		var buddy = this._getBuddy(contact, obj.address);
-		this._updateHtmlContent(html, idx, obj, contact, buddy, spanId);
+		this._updateHtmlContent(html, idx, obj, contact, buddy, spanId, options);
 	}
 };
 
