@@ -623,7 +623,7 @@ ZaAccountViewController.prototype.isLegalofMailTransport =
 function(elementValue) {
 	if(!elementValue) return false;
 
-	var regex = new RegExp("(lmtp|smtp)\\:[\\w\\.\\-]+\\:[0-9]+$");
+	var regex = new RegExp("(lmtp|smtp|LMTP|SMTP)\\:[\\w\\.\\-]+\\:[0-9]+$");
 	var match = regex.exec(elementValue);
 	if(match != null) {
 		return true;
