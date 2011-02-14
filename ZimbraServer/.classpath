@@ -84,12 +84,8 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/apache-jsieve-0.4-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-3.0.3.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-3.0.3.jar" sourcepath="/Users/ysasaki/.m2/repository/org/apache/lucene/lucene-core/3.0.3/lucene-core-3.0.3-sources.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-analyzers-3.0.3.jar"/>
-	<classpathentry kind="src" path="src/java"/>
-	<classpathentry kind="src" output="build/test-classes" path="src/java-test"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraIM"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-core-2.0.2.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-6.1.22.z6.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/sqlite-jdbc-3.6.20.1.jar" sourcepath="/ZimbraCommon/jars-src/sqlite-jdbc-3.6.20.1-sources.jar">
@@ -109,7 +105,13 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-io-1.4.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/icu4j-4.4.2.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraSoap"/>
+	<classpathentry kind="lib" path="jars/hsqldb.jar"/>
+	<classpathentry kind="lib" path="jars/sqltool.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ews.jar" sourcepath="/ZimbraCommon/jars-src/ews.zip"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraSoap"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraIM"/>
+	<classpathentry kind="src" path="src/java"/>
+	<classpathentry kind="src" output="build/test-classes" path="src/java-test"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

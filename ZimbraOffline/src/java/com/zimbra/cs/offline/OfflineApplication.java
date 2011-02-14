@@ -1,13 +1,13 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2007, 2008, 2009, 2010 Zimbra, Inc.
- * 
+ * Copyright (C) 2007, 2008, 2009, 2010, 2011 Zimbra, Inc.
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -48,9 +48,9 @@ public class OfflineApplication extends ZimbraApplication {
         "db", "directory", "wildfire", "versions-init", "default-volumes"
     };
     private static String ZIMBRA_DB_NAME = "zimbra";
-    
+
     private List<String> extensionNames;
-        
+
     @Override
     public String getId() {
         return OfflineLC.zdesktop_app_id.value();
@@ -70,13 +70,13 @@ public class OfflineApplication extends ZimbraApplication {
     public boolean supports(String className) {
         return false;
     }
-    
+
     @Override
     public void addExtensionName(String name) {
         (extensionNames == null ? extensionNames = new ArrayList<String>() : extensionNames).add(name);
         OfflineLog.offline.info("added extension: %s", name);
     }
-    
+
     @Override
     public List<String> getExtensionNames() {
         return extensionNames;
@@ -93,7 +93,7 @@ public class OfflineApplication extends ZimbraApplication {
 
             long threshold = OfflineLC.zdesktop_volume_compression_threshold.longValue();
             Volume vol = Volume.getCurrentMessageVolume();
-            
+
             // in offline, we always use the relative path "store" for message volume
             if (vol.getCompressionThreshold() != threshold) {
                 Volume.update(vol.getId(), vol.getType(), vol.getName(),
@@ -111,8 +111,8 @@ public class OfflineApplication extends ZimbraApplication {
     public void initializeZimbraDb(boolean forMailboxd) throws ServiceException {
         if (!forMailboxd)
             return;
-                
-        DbPool.Connection conn = DbPool.getConnection();
+
+        DbPool.DbConnection conn = DbPool.getConnection();
         try {
             if (Db.getInstance().databaseExists(conn, ZIMBRA_DB_NAME)) {
                 migrateDb(conn);
@@ -122,16 +122,16 @@ public class OfflineApplication extends ZimbraApplication {
             } else {
                 File file = null;
                 PreparedStatement stmt = null;
-                
+
                 OfflineLog.offline.info("Creating database " + ZIMBRA_DB_NAME);
                 for (String name : sqlScripts) {
                     try {
                         file = new File(LC.mailboxd_directory.value() + "/../db/" + name + ".sql");
-                        
+
                         String script;
                         String template = new String(ByteUtil.getContent(file));
                         Map<String, String> vars = new HashMap<String, String>();
-                        
+
                         vars.put("ZIMBRA_HOME", LC.zimbra_home.value() + '/');
                         vars.put("ZIMBRA_INSTALL", LC.zimbra_home.value() + '/');
                         script = StringUtil.fillTemplate(template, vars, StringUtil.atPattern);
@@ -161,7 +161,7 @@ public class OfflineApplication extends ZimbraApplication {
             conn.close();
         }
     }
-    
+
     @Override
     public void shutdown() {
         super.shutdown();
@@ -172,8 +172,8 @@ public class OfflineApplication extends ZimbraApplication {
         OfflineSyncManager.getInstance().shutdown();
         BackupTimer.shutdown();
     }
-      
-    private void migrateDb(DbPool.Connection conn) {
+
+    private void migrateDb(DbPool.DbConnection conn) {
         try {
             OfflineLog.offline.debug("DB migration check started...");
             new com.zimbra.cs.db.DbOfflineMigration().run(conn);
@@ -184,16 +184,16 @@ public class OfflineApplication extends ZimbraApplication {
             OfflineLog.offline.error("DB migration error: " + e.getMessage());
         }
     }
-    
+
     private void deployZimlets() {
         OfflineLog.offline.debug("Deploying new zimlets...");
-        
+
         File zimletDir = new File(LC.zimbra_home.value() + File.separator + "zimlets");
         if (zimletDir == null || !zimletDir.exists() || !zimletDir.isDirectory()) {
             OfflineLog.offline.debug("Invalid zimlets directory: " + zimletDir.getPath());
             return;
         }
-        
+
         String[] zimlets = zimletDir.list();
         if (zimlets == null) {
             OfflineLog.offline.debug("No zimlets found at " + zimletDir.getPath());

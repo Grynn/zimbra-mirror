@@ -1,13 +1,13 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2008, 2009, 2010 Zimbra, Inc.
- * 
+ * Copyright (C) 2008, 2009, 2010, 2011 Zimbra, Inc.
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -20,7 +20,7 @@ import java.sql.SQLException;
 
 import org.apache.derby.iapi.error.StandardException;
 
-import com.zimbra.cs.db.DbPool.Connection;
+import com.zimbra.cs.db.DbPool.DbConnection;
 
 public class DbOfflineMigration {
 
@@ -28,12 +28,12 @@ public class DbOfflineMigration {
         runInternal(true, null);
     }
 
-    public void run(Connection conn) throws Exception {
+    public void run(DbConnection conn) throws Exception {
         runInternal(false, conn);
     }
 
-    public void runInternal(boolean isTestRun, Connection dbConn) throws Exception {
-        Connection conn = dbConn;
+    public void runInternal(boolean isTestRun, DbConnection dbConn) throws Exception {
+        DbConnection conn = dbConn;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         int newOfflineDbVersion = OfflineVersions.OFFLINE_DB_VERSION;
@@ -42,7 +42,7 @@ public class DbOfflineMigration {
         try {
             if (conn == null)
                 conn = DbPool.getConnection();
-            
+
             stmt = conn.prepareStatement("SELECT value FROM config WHERE name = 'db.version'");
             rs = stmt.executeQuery();
             rs.next();
@@ -109,19 +109,19 @@ public class DbOfflineMigration {
                 DbPool.quietClose(conn);
         }
     }
-    
-    private void migrateFromVersion63(Connection conn, boolean isTestRun) throws Exception {
+
+    private void migrateFromVersion63(DbConnection conn, boolean isTestRun) throws Exception {
         PreparedStatement stmt = null;
         boolean isSuccess = false;
         try {
             stmt = conn.prepareStatement("ALTER TABLE mobile_devices ADD COLUMN policy_values VARCHAR(512);");
             stmt.executeUpdate();
             stmt.close();
-            
+
             stmt = conn.prepareStatement("UPDATE config set value='64' where name='db.version'");
             stmt.executeUpdate();
             stmt.close();
-            
+
             isSuccess = true;
         } finally {
             DbPool.closeStatement(stmt);
@@ -131,18 +131,18 @@ public class DbOfflineMigration {
                 conn.commit();
         }
     }
-    
-    private void migrateFromVersion64(Connection conn, boolean isTestRun) throws Exception {
+
+    private void migrateFromVersion64(DbConnection conn, boolean isTestRun) throws Exception {
         PreparedStatement stmt = null;
         boolean isSuccess = false;
         try {
             setNewDefaultSkin(conn, stmt, "carbon");
-            
+
             // only update db.version without actually creating dumpster tables
             stmt = conn.prepareStatement("UPDATE config set value='65' where name='db.version'");
             stmt.executeUpdate();
             stmt.close();
-            
+
             isSuccess = true;
         } finally {
             DbPool.closeStatement(stmt);
@@ -152,8 +152,8 @@ public class DbOfflineMigration {
                 conn.commit();
         }
     }
-    
-    private void setNewDefaultSkin(Connection conn, PreparedStatement stmt, String skin) throws Exception {
+
+    private void setNewDefaultSkin(DbConnection conn, PreparedStatement stmt, String skin) throws Exception {
         stmt = conn.prepareStatement("SELECT entry_id FROM directory" +
                 " WHERE entry_name = 'local@host.local' AND entry_type = 'acct'");
         ResultSet rs = stmt.executeQuery();
@@ -161,7 +161,7 @@ public class DbOfflineMigration {
             throw new Exception("Unable to get entry_id of local@host.local");
         }
         int entId = rs.getInt(1);
-        stmt.close();    
+        stmt.close();
 
         stmt = conn.prepareStatement("UPDATE directory_attrs set value = ?" +
                 " WHERE name='zimbraPrefSkin' AND entry_id = ?");
@@ -170,10 +170,10 @@ public class DbOfflineMigration {
         stmt.executeUpdate();
         stmt.close();
     }
-    
+
     // derby does not support "drop table if exists...", so have to do this
     // programmatically
-    public void dropTableIfExists(Connection conn, String table)
+    public void dropTableIfExists(DbConnection conn, String table)
         throws Exception {
         try {
             executeUpdateStatement(conn, "DROP TABLE " + table);
@@ -183,7 +183,7 @@ public class DbOfflineMigration {
         }
     }
 
-    private void executeUpdateStatement(Connection conn, String sql)
+    private void executeUpdateStatement(DbConnection conn, String sql)
         throws Exception {
         PreparedStatement stmt = null;
         try {

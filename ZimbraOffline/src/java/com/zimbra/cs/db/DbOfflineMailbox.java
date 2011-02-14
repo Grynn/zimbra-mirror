@@ -25,7 +25,7 @@ import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Pair;
-import com.zimbra.cs.db.DbPool.Connection;
+import com.zimbra.cs.db.DbPool.DbConnection;
 import com.zimbra.cs.localconfig.DebugConfig;
 import com.zimbra.cs.mailbox.ChangeTrackingMailbox;
 import com.zimbra.cs.mailbox.Flag;
@@ -47,7 +47,7 @@ public class DbOfflineMailbox {
 
     public static void renumberItemManual(MailItem item, int newId) throws ServiceException {
         Mailbox mbox = item.getMailbox();
-        Connection conn = mbox.getOperationConnection();
+        DbConnection conn = mbox.getOperationConnection();
         MailItem.Type type = item.getType();
 
         PreparedStatement stmt = null;
@@ -156,7 +156,7 @@ public class DbOfflineMailbox {
 
     public static void renumberItemCascade(MailItem item, int newId) throws ServiceException {
         Mailbox mbox = item.getMailbox();
-        Connection conn = mbox.getOperationConnection();
+        DbConnection conn = mbox.getOperationConnection();
         MailItem.Type type = item.getType();
 
         PreparedStatement stmt = null;
@@ -209,7 +209,7 @@ public class DbOfflineMailbox {
     }
 
     // handle reworking tag bitmasks for other mail items
-    private static void updateTagBitmask(Connection conn, Tag tag, int newId) throws SQLException, ServiceException {
+    private static void updateTagBitmask(DbConnection conn, Tag tag, int newId) throws SQLException, ServiceException {
         Mailbox mbox = tag.getMailbox();
         long newMask = 1L << Tag.getIndex(newId);
 
@@ -255,7 +255,7 @@ public class DbOfflineMailbox {
 
     public static void setDate(MailItem item, int date) throws ServiceException {
         Mailbox mbox = item.getMailbox();
-        Connection conn = mbox.getOperationConnection();
+        DbConnection conn = mbox.getOperationConnection();
 
         PreparedStatement stmt = null;
         try {
@@ -275,7 +275,7 @@ public class DbOfflineMailbox {
     }
 
     public static TypedIdList getChangedItems(ChangeTrackingMailbox ombx) throws ServiceException {
-        Connection conn = ombx.getOperationConnection();
+        DbConnection conn = ombx.getOperationConnection();
 
         TypedIdList result = new TypedIdList();
         PreparedStatement stmt = null;
@@ -302,7 +302,7 @@ public class DbOfflineMailbox {
 
     public static Map<Integer, Pair<Integer, Integer>> getChangeMasksAndFolders(ChangeTrackingMailbox ombx)
             throws ServiceException {
-        Connection conn = ombx.getOperationConnection();
+        DbConnection conn = ombx.getOperationConnection();
 
         Map<Integer, Pair<Integer, Integer>> result = new HashMap<Integer, Pair<Integer, Integer>>();
         PreparedStatement stmt = null;
@@ -330,7 +330,7 @@ public class DbOfflineMailbox {
 
     public static Map<Integer, Pair<Integer, Integer>> getChangeMasksAndFlags(ChangeTrackingMailbox ombx)
             throws ServiceException {
-        Connection conn = ombx.getOperationConnection();
+        DbConnection conn = ombx.getOperationConnection();
 
         Map<Integer, Pair<Integer, Integer>> result = new HashMap<Integer, Pair<Integer, Integer>>();
         PreparedStatement stmt = null;
@@ -355,7 +355,7 @@ public class DbOfflineMailbox {
     }
 
     public static List<Pair<Integer, Integer>> getSimpleUnreadChanges(ChangeTrackingMailbox ombx, boolean isUnread) throws ServiceException {
-        Connection conn = ombx.getOperationConnection();
+        DbConnection conn = ombx.getOperationConnection();
         List<Pair<Integer, Integer>> readList = new ArrayList<Pair<Integer, Integer>>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -385,7 +385,7 @@ public class DbOfflineMailbox {
     }
 
     public static Map<Integer, List<Pair<Integer, Integer>>> getFolderMoveChanges(ChangeTrackingMailbox ombx) throws ServiceException {
-        Connection conn = ombx.getOperationConnection();
+        DbConnection conn = ombx.getOperationConnection();
         Map<Integer, List<Pair<Integer, Integer>>> changes = new HashMap<Integer, List<Pair<Integer, Integer>>>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -426,7 +426,7 @@ public class DbOfflineMailbox {
     }
 
     public static Map<Integer, Integer> getItemModSequences(ChangeTrackingMailbox ombx, int[] ids) throws ServiceException {
-        Connection conn = ombx.getOperationConnection();
+        DbConnection conn = ombx.getOperationConnection();
         Map<Integer, Integer> changes = new HashMap<Integer, Integer>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -459,7 +459,7 @@ public class DbOfflineMailbox {
     }
 
     public static Map<Integer, Integer> getItemFolderIds(ChangeTrackingMailbox ombx, int[] ids) throws ServiceException {
-        Connection conn = ombx.getOperationConnection();
+        DbConnection conn = ombx.getOperationConnection();
         Map<Integer, Integer> result = new HashMap<Integer, Integer>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -493,7 +493,7 @@ public class DbOfflineMailbox {
 
     public static int getChangeMask(MailItem item) throws ServiceException {
         Mailbox mbox = item.getMailbox();
-        Connection conn = mbox.getOperationConnection();
+        DbConnection conn = mbox.getOperationConnection();
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -519,7 +519,7 @@ public class DbOfflineMailbox {
 
     public static void setChangeMask(MailItem item, int mask) throws ServiceException {
         Mailbox mbox = item.getMailbox();
-        Connection conn = mbox.getOperationConnection();
+        DbConnection conn = mbox.getOperationConnection();
 
         PreparedStatement stmt = null;
         try {
@@ -543,7 +543,7 @@ public class DbOfflineMailbox {
 
     public static void updateChangeRecord(MailItem item, int mask) throws ServiceException {
         Mailbox mbox = item.getMailbox();
-        Connection conn = mbox.getOperationConnection();
+        DbConnection conn = mbox.getOperationConnection();
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -580,11 +580,11 @@ public class DbOfflineMailbox {
     }
 
     public static boolean isTombstone(ChangeTrackingMailbox ombx, int id, MailItem.Type type) throws ServiceException {
-        Connection conn = ombx.getOperationConnection();
+        DbConnection conn = ombx.getOperationConnection();
         return !getMatchingTombstones(conn, ombx, id, type).isEmpty();
     }
 
-    private static List<Pair<Integer, String>> getMatchingTombstones(Connection conn, ChangeTrackingMailbox ombx,
+    private static List<Pair<Integer, String>> getMatchingTombstones(DbConnection conn, ChangeTrackingMailbox ombx,
             int id, MailItem.Type type) throws ServiceException {
         List<Pair<Integer, String>> matches = new ArrayList<Pair<Integer, String>>();
 
@@ -630,7 +630,7 @@ public class DbOfflineMailbox {
     }
 
     public static void removeTombstone(ChangeTrackingMailbox ombx, int id, MailItem.Type type) throws ServiceException {
-        Connection conn = ombx.getOperationConnection();
+        DbConnection conn = ombx.getOperationConnection();
         String itemId = Integer.toString(id);
 
         PreparedStatement stmt = null;
@@ -674,7 +674,7 @@ public class DbOfflineMailbox {
     }
 
     public static void clearTombstones(ChangeTrackingMailbox ombx, int token) throws ServiceException {
-        Connection conn = ombx.getOperationConnection();
+        DbConnection conn = ombx.getOperationConnection();
 
         PreparedStatement stmt = null;
         try {
@@ -692,7 +692,7 @@ public class DbOfflineMailbox {
     }
 
     public static void replaceAccountId(Mailbox mbox, String newAccountId) throws ServiceException {
-        Connection conn = mbox.getOperationConnection();
+        DbConnection conn = mbox.getOperationConnection();
 
         PreparedStatement stmt = null;
         try {
@@ -708,7 +708,7 @@ public class DbOfflineMailbox {
         }
     }
 
-    public static void forceDeleteMailbox(Connection conn, int id) throws ServiceException {
+    public static void forceDeleteMailbox(DbConnection conn, int id) throws ServiceException {
         assert(Db.supports(Db.Capability.ROW_LEVEL_LOCKING) || Thread.holdsLock(MailboxManager.getInstance()));
         PreparedStatement stmt = null;
         try {

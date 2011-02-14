@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2009, 2010, 2011 Zimbra, Inc.
  *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -30,7 +30,7 @@ import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.DbMailbox;
 import com.zimbra.cs.db.DbOfflineMailbox;
-import com.zimbra.cs.db.DbPool.Connection;
+import com.zimbra.cs.db.DbPool.DbConnection;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.util.OfflineYAuth;
@@ -67,7 +67,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
     public void recordItemSync(long itemId) {
         syncedIds.add(itemId); //using set rather than a counter since various call sites may touch the same item more than once
     }
-    
+
     public void resetSyncCounter() {
         syncedIds.clear();
     }
@@ -220,7 +220,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
                     beginTransaction("deleteMailbox", null, redoRecorder);
                     redoRecorder.log();
 
-                    Connection conn = getOperationConnection();
+                    DbConnection conn = getOperationConnection();
 
                     DbMailbox.clearMailboxContent(this);
                     synchronized(MailboxManager.getInstance()) {
@@ -361,7 +361,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
 
     void itemCreated(MailItem item) throws ServiceException {}
 
-    private LruMap<Integer, Object> transientItems = new LruMap<Integer, Object>(16); 
+    private LruMap<Integer, Object> transientItems = new LruMap<Integer, Object>(16);
 
     synchronized void trackTransientItem(int itemId) {
         transientItems.put(Integer.valueOf(itemId), new Object());

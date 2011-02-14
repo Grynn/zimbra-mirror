@@ -1,13 +1,13 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2006, 2007, 2009, 2010 Zimbra, Inc.
- * 
+ * Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011 Zimbra, Inc.
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -29,15 +29,15 @@ import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.account.offline.OfflineProvisioning.EntryType;
-import com.zimbra.cs.db.DbPool.Connection;
+import com.zimbra.cs.db.DbPool.DbConnection;
 
 public class DbOfflineDirectory {
     static final Object lock = new Object();
 
-    private static int getLastId(Connection conn, String table) throws ServiceException {
+    private static int getLastId(DbConnection conn, String table) throws ServiceException {
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        
+
         try {
             stmt = conn.prepareStatement("SELECT MAX(entry_id) FROM " + table);
             rs = stmt.executeQuery();
@@ -57,7 +57,7 @@ public class DbOfflineDirectory {
         boolean markChanged) throws ServiceException {
         String zimbraId = (String) attrs.get(Provisioning.A_zimbraId);
 
-        Connection conn = null;
+        DbConnection conn = null;
         PreparedStatement stmt = null;
         int entryId;
 
@@ -97,8 +97,8 @@ public class DbOfflineDirectory {
             OfflineDbPool.getInstance().quietClose(conn);
         }
     }
-    
-    private static void validateNewLeafName(EntryType etype, NamedEntry parent, String name, int entryId, Connection conn)
+
+    private static void validateNewLeafName(EntryType etype, NamedEntry parent, String name, int entryId, DbConnection conn)
     throws ServiceException {
         //bug 52717; cannot rely on db to do case-insensitive check with utf8
         //have to read existing and compare in java; otherwise we create entries that cause directory sync to fail
@@ -122,7 +122,7 @@ public class DbOfflineDirectory {
         }
     }
 
-    private static String getLeafName(EntryType etype, NamedEntry parent, int entryId, Connection conn)
+    private static String getLeafName(EntryType etype, NamedEntry parent, int entryId, DbConnection conn)
     throws ServiceException {
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -144,12 +144,12 @@ public class DbOfflineDirectory {
             OfflineDbPool.getInstance().closeResults(rs);
             OfflineDbPool.getInstance().closeStatement(stmt);
         }
-        
+
     }
 
     public static void createDirectoryLeaf(EntryType etype, NamedEntry parent, String name, String id, Map<String,Object> attrs, boolean markChanged)
     throws ServiceException {
-        Connection conn = null;
+        DbConnection conn = null;
         PreparedStatement stmt = null;
         int entryId;
 
@@ -180,10 +180,10 @@ public class DbOfflineDirectory {
                             insertAttribute(conn, etype, entryId, key, value);
                     }
                 }
-    
+
                 if (markChanged)
                     markEntryDirty(conn, parentId);
-    
+
                 conn.commit();
             }
         } catch (SQLException e) {
@@ -193,7 +193,7 @@ public class DbOfflineDirectory {
                 else if (etype == EntryType.DATASOURCE)
                     throw AccountServiceException.DATA_SOURCE_EXISTS(name);
                 else if (etype == EntryType.SIGNATURE)
-                	throw AccountServiceException.SIGNATURE_EXISTS(name);
+                    throw AccountServiceException.SIGNATURE_EXISTS(name);
             } else {
                 throw ServiceException.FAILURE("inserting new " + etype + ": " + parent.getName() + '/' + name, e);
             }
@@ -203,9 +203,9 @@ public class DbOfflineDirectory {
         }
     }
 
-    private static void insertAttribute(Connection conn, EntryType etype, int entryId, String key, String value)
+    private static void insertAttribute(DbConnection conn, EntryType etype, int entryId, String key, String value)
     throws ServiceException, SQLException {
-    	value = OfflineProvisioning.getSanitizedValue(key, value);
+        value = OfflineProvisioning.getSanitizedValue(key, value);
         PreparedStatement stmt = null;
         try {
             String table = (etype.isLeafEntry() ? "directory_leaf_attrs" : "directory_attrs");
@@ -219,11 +219,11 @@ public class DbOfflineDirectory {
         }
     }
 
-    private static void deleteAttribute(Connection conn, EntryType etype, int entryId, String key, String value)
+    private static void deleteAttribute(DbConnection conn, EntryType etype, int entryId, String key, String value)
     throws ServiceException, SQLException {
         boolean allValues = (value == null);
         if (value != null) {
-        	value = OfflineProvisioning.getSanitizedValue(key, value);
+            value = OfflineProvisioning.getSanitizedValue(key, value);
         }
         PreparedStatement stmt = null;
         try {
@@ -241,7 +241,7 @@ public class DbOfflineDirectory {
         }
     }
 
-    private static void markEntryDirty(Connection conn, int entryId) throws SQLException, ServiceException {
+    private static void markEntryDirty(DbConnection conn, int entryId) throws SQLException, ServiceException {
         PreparedStatement stmt = null;
         try {
             stmt = conn.prepareStatement("UPDATE directory SET modified = 1 WHERE entry_id = ?");
@@ -253,7 +253,7 @@ public class DbOfflineDirectory {
     }
 
     public static void markEntryClean(EntryType etype, NamedEntry entry) throws ServiceException {
-        Connection conn = null;
+        DbConnection conn = null;
         PreparedStatement stmt = null;
         try {
             conn = OfflineDbPool.getInstance().getConnection();
@@ -286,7 +286,7 @@ public class DbOfflineDirectory {
     }
 
     public static List<String> listAllDirtyEntries(EntryType etype) throws ServiceException {
-        Connection conn = null;
+        DbConnection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
@@ -309,7 +309,7 @@ public class DbOfflineDirectory {
     }
 
     public static List<String> listAllDirectoryEntries(EntryType etype) throws ServiceException {
-        Connection conn = null;
+        DbConnection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
@@ -332,7 +332,7 @@ public class DbOfflineDirectory {
     }
 
     public static List<String> listAllDirectoryLeaves(EntryType etype, NamedEntry parent) throws ServiceException {
-        Connection conn = null;
+        DbConnection conn = null;
         try {
             conn = OfflineDbPool.getInstance().getConnection();
             return listAllDirectoryLeaves(etype, parent, conn);
@@ -341,7 +341,7 @@ public class DbOfflineDirectory {
         }
     }
 
-    private static List<String> listAllDirectoryLeaves(EntryType etype, NamedEntry parent, Connection conn) throws ServiceException {
+    private static List<String> listAllDirectoryLeaves(EntryType etype, NamedEntry parent, DbConnection conn) throws ServiceException {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
@@ -362,7 +362,7 @@ public class DbOfflineDirectory {
     }
 
     public static List<String> searchDirectoryEntries(EntryType etype, String lookupKey, String lookupPattern) throws ServiceException {
-        Connection conn = null;
+        DbConnection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
@@ -396,9 +396,9 @@ public class DbOfflineDirectory {
             OfflineDbPool.getInstance().quietClose(conn);
         }
     }
-    
+
     public static Map<String,Object> readDirectoryEntry(EntryType etype, String lookupKey, String lookupValue) throws ServiceException {
-        Connection conn = null;
+        DbConnection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
@@ -434,7 +434,7 @@ public class DbOfflineDirectory {
 
     public static Map<String,Object> readDirectoryLeaf(EntryType etype, NamedEntry parent, String lookupKey, String lookupValue)
     throws ServiceException {
-        Connection conn = null;
+        DbConnection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
@@ -466,7 +466,7 @@ public class DbOfflineDirectory {
 
     public static void modifyDirectoryEntry(EntryType etype, String lookupKey, String lookupValue, Map<String,? extends Object> attrs, boolean markChanged)
     throws ServiceException {
-        Connection conn = null;
+        DbConnection conn = null;
         try {
             conn = OfflineDbPool.getInstance().getConnection();
 
@@ -490,7 +490,7 @@ public class DbOfflineDirectory {
     public static void modifyDirectoryLeaf(EntryType etype, NamedEntry parent, String lookupKey, String lookupValue,
                                            Map<String,? extends Object> attrs, boolean markChanged, String newName)
     throws ServiceException {
-        Connection conn = null;
+        DbConnection conn = null;
         PreparedStatement stmt = null;
         try {
             conn = OfflineDbPool.getInstance().getConnection();
@@ -524,7 +524,7 @@ public class DbOfflineDirectory {
         }
     }
 
-    private static void modifyDirectoryEntry(Connection conn, EntryType etype, int entryId, Map<String,? extends Object> attrs)
+    private static void modifyDirectoryEntry(DbConnection conn, EntryType etype, int entryId, Map<String,? extends Object> attrs)
     throws ServiceException, SQLException {
         for (Map.Entry<String,? extends Object> attr : attrs.entrySet()) {
             Object vobject = attr.getValue();
@@ -543,9 +543,9 @@ public class DbOfflineDirectory {
             String key = attr.getKey();
             boolean doAdd = key.charAt(0) == '+', doRemove = key.charAt(0) == '-';
             if (doAdd || doRemove) {
-                // make sure there aren't other conflicting changes without +/- going on at the same time 
+                // make sure there aren't other conflicting changes without +/- going on at the same time
                 key = key.substring(1);
-                if (attrs.containsKey(key)) 
+                if (attrs.containsKey(key))
                     throw ServiceException.INVALID_REQUEST("can't mix +attrName/-attrName with attrName", null);
             }
 
@@ -570,7 +570,7 @@ public class DbOfflineDirectory {
         }
     }
 
-    private static int getIdForEntry(Connection conn, EntryType etype, String lookupKey, String lookupValue) throws ServiceException {
+    private static int getIdForEntry(DbConnection conn, EntryType etype, String lookupKey, String lookupValue) throws ServiceException {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
@@ -605,14 +605,14 @@ public class DbOfflineDirectory {
         }
     }
 
-    private static int getIdForParent(Connection conn, NamedEntry parent) throws ServiceException {
+    private static int getIdForParent(DbConnection conn, NamedEntry parent) throws ServiceException {
         int parentId = getIdForEntry(conn, EntryType.typeForEntry(parent), Provisioning.A_zimbraId, parent.getAttr(Provisioning.A_zimbraId));
         if (parentId <= 0)
             throw AccountServiceException.NO_SUCH_ACCOUNT(parent.getName());
         return parentId;
     }
 
-    private static int getIdForLeaf(Connection conn, EntryType etype, NamedEntry parent, String lookupKey, String lookupValue) throws ServiceException {
+    private static int getIdForLeaf(DbConnection conn, EntryType etype, NamedEntry parent, String lookupKey, String lookupValue) throws ServiceException {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
@@ -651,7 +651,7 @@ public class DbOfflineDirectory {
     }
 
     public static void deleteDirectoryEntry(EntryType etype, String zimbraId) throws ServiceException {
-        Connection conn = null;
+        DbConnection conn = null;
         PreparedStatement stmt = null;
         try {
             conn = OfflineDbPool.getInstance().getConnection();
@@ -673,7 +673,7 @@ public class DbOfflineDirectory {
     }
 
     public static void deleteDirectoryEntry(int entryId) throws ServiceException {
-        Connection conn = null;
+        DbConnection conn = null;
         PreparedStatement stmt = null;
         try {
             conn = OfflineDbPool.getInstance().getConnection();
@@ -690,9 +690,9 @@ public class DbOfflineDirectory {
             OfflineDbPool.getInstance().quietClose(conn);
         }
     }
-        
+
     public static void deleteDirectoryLeaf(EntryType etype, NamedEntry parent, String id, boolean markChanged) throws ServiceException {
-        Connection conn = null;
+        DbConnection conn = null;
         PreparedStatement stmt = null;
         try {
             conn = OfflineDbPool.getInstance().getConnection();
@@ -705,22 +705,22 @@ public class DbOfflineDirectory {
             stmt.setString(2, etype.toString());
             stmt.setString(3, id);
             int count;
-            
+
             synchronized(lock) {
                 count = stmt.executeUpdate();
                 stmt.close();
 
                 if (markChanged && count > 0) {
                     markEntryDirty(conn, parentId);
-    
+
                     Map<String, Object> record = new HashMap<String, Object>(1);
                     if (etype == EntryType.IDENTITY)
                         record.put('+' + OfflineProvisioning.A_offlineDeletedIdentity, id);
                     else if (etype == EntryType.DATASOURCE)
                         record.put('+' + OfflineProvisioning.A_offlineDeletedDataSource, id);
                     else if (etype == EntryType.SIGNATURE)
-                    	record.put('+' + OfflineProvisioning.A_offlineDeletedSignature, id);
-                    
+                        record.put('+' + OfflineProvisioning.A_offlineDeletedSignature, id);
+
                     modifyDirectoryEntry(conn, EntryType.ACCOUNT, parentId, record);
                 }
                 conn.commit();
@@ -732,9 +732,9 @@ public class DbOfflineDirectory {
             OfflineDbPool.getInstance().quietClose(conn);
         }
     }
-    
+
     public static void deleteDirectoryLeaf(NamedEntry parent, int entryId) throws ServiceException {
-        Connection conn = null;
+        DbConnection conn = null;
         PreparedStatement stmt = null;
         try {
             conn = OfflineDbPool.getInstance().getConnection();
@@ -753,21 +753,21 @@ public class DbOfflineDirectory {
             OfflineDbPool.getInstance().quietClose(conn);
         }
     }
-    
+
     public static class GranterEntry {
         public String name;
         public String id;
         public String granteeId;
-        
+
         public GranterEntry(String n, String i, String gi) {
             name = n;
             id = i;
             granteeId = gi;
         }
     }
-    
+
     public static void createGranterEntry(String name, String id, String granteeId) throws ServiceException {
-        Connection conn = null;
+        DbConnection conn = null;
         PreparedStatement stmt = null;
         try {
             conn = OfflineDbPool.getInstance().getConnection();
@@ -785,9 +785,9 @@ public class DbOfflineDirectory {
             OfflineDbPool.getInstance().quietClose(conn);
         }
     }
-    
+
     public static GranterEntry readGranter(String name, String granteeId) throws ServiceException {
-        Connection conn = null;
+        DbConnection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
@@ -796,7 +796,7 @@ public class DbOfflineDirectory {
                 " WHERE " + Db.equalsSTRING("granter_name") + " AND grantee_id = ?");
             stmt.setString(1, name);
             stmt.setString(2, granteeId);
-            
+
             rs = stmt.executeQuery();
             return rs.next() ? new GranterEntry(rs.getString(1), rs.getString(2), rs.getString(3)) : null;
         } catch (SQLException e) {
@@ -805,11 +805,11 @@ public class DbOfflineDirectory {
             OfflineDbPool.getInstance().closeResults(rs);
             OfflineDbPool.getInstance().closeStatement(stmt);
             OfflineDbPool.getInstance().quietClose(conn);
-        }         
+        }
     }
-    
+
     public static List<GranterEntry> searchGranter(String by, String pattern) throws ServiceException {
-        Connection conn = null;
+        DbConnection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         String column = by.equalsIgnoreCase("id") ? "granter_id" : "granter_name";
@@ -818,8 +818,8 @@ public class DbOfflineDirectory {
             stmt = conn.prepareStatement("SELECT granter_name, granter_id, grantee_id FROM directory_granter" +
                 " WHERE " + Db.likeSTRING(column));
             stmt.setString(1, pattern);
-            
-            rs = stmt.executeQuery();            
+
+            rs = stmt.executeQuery();
             List<GranterEntry> ents = new ArrayList<GranterEntry>();
             while (rs.next())
                 ents.add(new GranterEntry(rs.getString(1), rs.getString(2), rs.getString(3)));
@@ -830,17 +830,17 @@ public class DbOfflineDirectory {
             OfflineDbPool.getInstance().closeResults(rs);
             OfflineDbPool.getInstance().closeStatement(stmt);
             OfflineDbPool.getInstance().quietClose(conn);
-        }        
+        }
     }
-    
+
     public static void deleteGranterByGrantee(String granteeId) throws ServiceException {
-        Connection conn = null;
+        DbConnection conn = null;
         PreparedStatement stmt = null;
         try {
             conn = OfflineDbPool.getInstance().getConnection();
             stmt = conn.prepareStatement("DELETE FROM directory_granter WHERE grantee_id = ?");
             stmt.setString(1, granteeId);
-            
+
             stmt.executeUpdate();
             conn.commit();
         } catch (SQLException e) {
@@ -848,6 +848,6 @@ public class DbOfflineDirectory {
         } finally {
             OfflineDbPool.getInstance().closeStatement(stmt);
             OfflineDbPool.getInstance().quietClose(conn);
-        }        
+        }
     }
 }

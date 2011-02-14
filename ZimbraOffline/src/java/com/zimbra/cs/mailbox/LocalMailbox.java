@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2007, 2008, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2007, 2008, 2009, 2010, 2011 Zimbra, Inc.
  *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -23,7 +23,7 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.DbOfflineMailbox;
-import com.zimbra.cs.db.DbPool.Connection;
+import com.zimbra.cs.db.DbPool.DbConnection;
 import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.redolog.op.CreateFolder;
@@ -99,7 +99,7 @@ public class LocalMailbox extends DesktopMailbox {
 
             try {
                 // remove all the relevant entries from the database
-                Connection conn = getOperationConnection();
+                DbConnection conn = getOperationConnection();
                 ZimbraLog.mailbox.info("attempting to remove the zimbra.mailbox row for id "+mbox.getId());
                 DbOfflineMailbox.forceDeleteMailbox(conn, mbox.getId());
                 success = true;
@@ -129,5 +129,5 @@ public class LocalMailbox extends DesktopMailbox {
             return false;
         }
     }
-    
+
 }
