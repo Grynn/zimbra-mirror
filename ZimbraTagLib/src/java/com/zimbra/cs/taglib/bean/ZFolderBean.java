@@ -405,7 +405,7 @@ public class  ZFolderBean {
             }
         } else if (getIsTaskView()) {
             if (getIsMountPoint()) {
-                return "tasks/ImgSharedTaskList.png";
+                return "tasks/ImgSharedTaskListOverlay.png";
             } else {
                 return "startup/ImgTaskList.png";
             }
