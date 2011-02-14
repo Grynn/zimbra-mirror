@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Zimlets
- * Copyright (C) 2007, 2008, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2007, 2008, 2009, 2010, 2011 Zimbra, Inc.
  * 
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -235,7 +235,9 @@ Com_Zimbra_DnD.prototype._onDrop = function(ev) {
             }
         }
 
-        var controller = appCtxt.getApp(ZmApp.MAIL).getComposeController(appCtxt.getApp(ZmApp.MAIL).getCurrentSessionId(ZmId.VIEW_COMPOSE));
+        var curView = appCtxt.getAppViewMgr().getCurrentView();
+        var controller = curView.getController();
+        if(!controller) { return; }
 
         for (var i = 0; i < files.length; i++) {
             var file = files[i];
