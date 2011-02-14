@@ -90,7 +90,7 @@ ZaZimlet._handleGetAllResponse = function(callback, resp) {
     if (callback) {
         var args = callback.args;
         args = args ? (args instanceof Array ? args : [args]) : [];
-        callback = new AjxCallback(callback.object, callback.func, args.concat(list));
+        callback = new AjxCallback(callback.obj, callback.func, args.concat(list));
         ZaZimlet._handleGetAllResources(list, callback);
     }
     return list;
