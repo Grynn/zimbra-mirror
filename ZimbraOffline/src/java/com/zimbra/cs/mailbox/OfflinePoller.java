@@ -14,6 +14,8 @@
  */
 package com.zimbra.cs.mailbox;
 
+import java.net.SocketTimeoutException;
+
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
@@ -72,35 +74,37 @@ public class OfflinePoller implements Runnable {
 			waitsetRequest();
 		} catch (Exception x) {
 			try {
-				OfflineSyncManager.getInstance().processSyncException(ombx.getAccount(), x);
+			    if (!SyncExceptionHandler.isCausedBy(x, SocketTimeoutException.class)) { //workaround for bug #55186, see bug #56686
+			        OfflineSyncManager.getInstance().processSyncException(ombx.getAccount(), x);
+			    }
 			} catch (Exception e) {
 				OfflineLog.offline.error("unexpected exception", e);
 			}
 		}
 	}
-	
+
 	private void createWaitset() throws ServiceException {
         Element request = new Element.XMLElement(MailConstants.CREATE_WAIT_SET_REQUEST);
         request.addAttribute(MailConstants.A_DEFTYPES, "all");
         Element account = request.addElement(MailConstants.E_WAITSET_ADD).addElement(MailConstants.E_A);
         account.addAttribute(MailConstants.A_ID, ombx.getAccountId());
         synchronized (this) {
-        	account.addAttribute(MailConstants.A_TOKEN, "" + lastKnownToken);
+            account.addAttribute(MailConstants.A_TOKEN, "" + lastKnownToken);
         }
-        
+
         Element response = ombx.sendRequest(request, true);
-        
+
         synchronized (this) {
             if (hasError(response)) {
-            	hasChanges = true; //when there's error force a sync
-            	return;
+                hasChanges = true; //when there's error force a sync
+                return;
             }
-		}
-        
+        }
+
         setId = response.getAttribute(MailConstants.A_WAITSET_ID);
         lastSequence = response.getAttribute(MailConstants.A_SEQ);
 	}
-	
+
 	private void waitsetRequest() throws ServiceException {
         Element request = new Element.XMLElement(MailConstants.WAIT_SET_REQUEST);
         request.addAttribute(MailConstants.A_WAITSET_ID, setId);
@@ -112,40 +116,40 @@ public class OfflinePoller implements Runnable {
         Element account = request.addElement(MailConstants.E_WAITSET_UPDATE).addElement(MailConstants.E_A);
         account.addAttribute(MailConstants.A_ID, ombx.getAccountId());
         synchronized (this) {
-        	account.addAttribute(MailConstants.A_TOKEN, "" + lastKnownToken);
+            account.addAttribute(MailConstants.A_TOKEN, "" + lastKnownToken);
         }
 
         Element response = null;
         try {
-        	response = ombx.sendRequest(request, true, true, 1 * Constants.SECONDS_PER_MINUTE * 1000); //will block
+            response = ombx.sendRequest(request, true, true, 1 * Constants.SECONDS_PER_MINUTE * 1000); //will block
         } catch (ServiceException x) {
-        	if (x.getCode().equals("admin.NO_SUCH_WAITSET") || x.getCode().equals("service.PERM_DENIED")) {
-        		setId = null;
-        		lastSequence = null;
-        		return;
-        	} else
-        		throw x;
+            if (x.getCode().equals("admin.NO_SUCH_WAITSET") || x.getCode().equals(ServiceException.PERM_DENIED)) {
+                setId = null;
+                lastSequence = null;
+                return;
+            } else
+                throw x;
         }
-        
+
         lastSequence = response.getAttribute(MailConstants.A_SEQ, lastSequence);
-        
+
         synchronized (this) {
             if (hasError(response)) {
-            	hasChanges = true; //when there's error force a sync
-            	return;
+                hasChanges = true; //when there's error force a sync
+                return;
             }
-            
+
             account = response.getOptionalElement(MailConstants.E_A);
             if (account != null && account.getAttribute(MailConstants.A_ID).equals(ombx.getAccountId()))
-            	hasChanges = true;
+                hasChanges = true;
 		}
 	}
 	
 	private boolean hasError(Element response) throws ServiceException {
         Element error = response.getOptionalElement(MailConstants.E_ERROR);
         if (error != null) {
-        	OfflineLog.offline.warn("waitset error account=%s type=%s", error.getAttribute(MailConstants.A_ID), error.getAttribute(MailConstants.A_TYPE));
-        	return true;
+            OfflineLog.offline.warn("waitset error account=%s type=%s", error.getAttribute(MailConstants.A_ID), error.getAttribute(MailConstants.A_TYPE));
+            return true;
         }
 		return false;
 	}

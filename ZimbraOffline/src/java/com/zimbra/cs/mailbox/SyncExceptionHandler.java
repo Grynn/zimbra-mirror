@@ -81,7 +81,13 @@ public class SyncExceptionHandler extends IOExceptionHandler {
         }
     }
     
-    private static boolean isCausedBy(Exception exception, Class<? extends Throwable> targetCause) {
+    /**
+     * determine if a given exception is essentially caused by the target cause exception
+     * @param exception the exception to be checked
+     * @param targetCause the target cause exception
+     * @return true if given exception is caused by the target cause exception
+     */
+    public static boolean isCausedBy(Exception exception, Class<? extends Throwable> targetCause) {
         Throwable cause = exception;
         while (cause != null) {
             if (cause.getClass().isAssignableFrom(targetCause)) {
