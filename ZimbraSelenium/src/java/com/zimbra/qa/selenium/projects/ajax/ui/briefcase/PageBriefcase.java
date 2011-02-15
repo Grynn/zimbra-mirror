@@ -79,7 +79,7 @@ public class PageBriefcase extends AbsTab {
 
 		if (!loaded)
 			return (loaded);
-		boolean active = this.zIsVisiblePerPosition(locator, 4, 74);
+		boolean active = this.zIsVisiblePerPosition(locator, 0, 0);
 		return (active);
 
 	}
@@ -446,7 +446,10 @@ public class PageBriefcase extends AbsTab {
 			((AppAjaxClient) MyApplication).zPageMail.zNavigateTo();
 			((AppAjaxClient) MyApplication).zPageMail
 					.zToolbarPressButton(Button.B_GETMAIL);
-			zNavigateTo();
+			// TODO: Investigate the UI properties
+			// Can't use zNavigateTo because briefcase element is always present
+			// even though the mail page is active.
+			zClick(PageMain.Locators.zAppbarBriefcase);
 
 			// If after waiting, it still doesn't appear, go to page mail,
 			// click get mail again
@@ -454,6 +457,11 @@ public class PageBriefcase extends AbsTab {
 				((AppAjaxClient) MyApplication).zPageMail.zNavigateTo();
 				((AppAjaxClient) MyApplication).zPageMail
 						.zToolbarPressButton(Button.B_GETMAIL);
+            // TODO: Investigate the UI properties
+	         // Can't use zNavigateTo because briefcase element is always present
+	         // even though the mail page is active.
+	         zClick(PageMain.Locators.zAppbarBriefcase);
+				GeneralUtility.waitForElementPresent(this, itemlocator);
 			}
 		}
 
