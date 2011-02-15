@@ -36,15 +36,15 @@ import javax.xml.bind.annotation.XmlType;
     "a"
 })
 @XmlSeeAlso({
-    CalendarResourceInfo.class,
     DomainInfo.class,
     DistributionListInfo.class,
-    AccountInfo.class,
     DlInfo.class,
+    ServerInfo.class,
+    AccountInfo.class,
     LocaleInfo.class,
     AliasInfo.class,
-    ServerInfo.class,
-    CosInfo.class
+    CosInfo.class,
+    CalendarResourceInfo.class
 })
 public class AdminObjectInfo {
 

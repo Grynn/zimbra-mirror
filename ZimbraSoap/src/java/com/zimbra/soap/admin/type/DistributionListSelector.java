@@ -67,4 +67,12 @@ public class DistributionListSelector {
     public DistributionListBy getBy() {
         return dlBy;
     }
+
+    public static DistributionListSelector fromId(String id) {
+        return new DistributionListSelector(DistributionListBy.id, id);
+    }
+
+    public static DistributionListSelector fromName(String name) {
+        return new DistributionListSelector(DistributionListBy.name, name);
+    }
 }

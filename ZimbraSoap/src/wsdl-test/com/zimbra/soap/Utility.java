@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2010 Zimbra, Inc.
+ * Copyright (C) 2010, 2011 Zimbra, Inc.
  *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -36,13 +36,21 @@ import com.zimbra.soap.admin.wsimport.generated.AccountInfo;
 import com.zimbra.soap.admin.wsimport.generated.AccountSelector;
 import com.zimbra.soap.admin.wsimport.generated.AdminService_Service;
 import com.zimbra.soap.admin.wsimport.generated.AdminService;
+import com.zimbra.soap.admin.wsimport.generated.Attr;
+import com.zimbra.soap.admin.wsimport.generated.CalendarResourceBy;
+import com.zimbra.soap.admin.wsimport.generated.CalendarResourceInfo;
+import com.zimbra.soap.admin.wsimport.generated.CalendarResourceSelector;
 import com.zimbra.soap.admin.wsimport.generated.CosBy;
 import com.zimbra.soap.admin.wsimport.generated.CosInfo;
 import com.zimbra.soap.admin.wsimport.generated.CosSelector;
 import com.zimbra.soap.admin.wsimport.generated.CreateAccountRequest;
 import com.zimbra.soap.admin.wsimport.generated.CreateAccountResponse;
+import com.zimbra.soap.admin.wsimport.generated.CreateCalendarResourceRequest;
+import com.zimbra.soap.admin.wsimport.generated.CreateCalendarResourceResponse;
 import com.zimbra.soap.admin.wsimport.generated.CreateCosRequest;
 import com.zimbra.soap.admin.wsimport.generated.CreateCosResponse;
+import com.zimbra.soap.admin.wsimport.generated.CreateDistributionListRequest;
+import com.zimbra.soap.admin.wsimport.generated.CreateDistributionListResponse;
 import com.zimbra.soap.admin.wsimport.generated.CreateDomainRequest;
 import com.zimbra.soap.admin.wsimport.generated.CreateDomainResponse;
 import com.zimbra.soap.admin.wsimport.generated.CreateServerRequest;
@@ -51,11 +59,17 @@ import com.zimbra.soap.admin.wsimport.generated.CreateVolumeRequest;
 import com.zimbra.soap.admin.wsimport.generated.CreateVolumeResponse;
 import com.zimbra.soap.admin.wsimport.generated.DeleteAccountRequest;
 import com.zimbra.soap.admin.wsimport.generated.DeleteAccountResponse;
+import com.zimbra.soap.admin.wsimport.generated.DeleteCalendarResourceRequest;
+import com.zimbra.soap.admin.wsimport.generated.DeleteCalendarResourceResponse;
 import com.zimbra.soap.admin.wsimport.generated.DeleteCosRequest;
 import com.zimbra.soap.admin.wsimport.generated.DeleteCosResponse;
+import com.zimbra.soap.admin.wsimport.generated.DeleteDistributionListRequest;
 import com.zimbra.soap.admin.wsimport.generated.DeleteDomainRequest;
 import com.zimbra.soap.admin.wsimport.generated.DeleteServerRequest;
 import com.zimbra.soap.admin.wsimport.generated.DeleteVolumeRequest;
+import com.zimbra.soap.admin.wsimport.generated.DistributionListBy;
+import com.zimbra.soap.admin.wsimport.generated.DistributionListInfo;
+import com.zimbra.soap.admin.wsimport.generated.DistributionListSelector;
 import com.zimbra.soap.admin.wsimport.generated.DomainBy;
 import com.zimbra.soap.admin.wsimport.generated.DomainInfo;
 import com.zimbra.soap.admin.wsimport.generated.DomainSelector;
@@ -63,8 +77,12 @@ import com.zimbra.soap.admin.wsimport.generated.GetAccountRequest;
 import com.zimbra.soap.admin.wsimport.generated.GetAccountResponse;
 import com.zimbra.soap.admin.wsimport.generated.GetAllVolumesRequest;
 import com.zimbra.soap.admin.wsimport.generated.GetAllVolumesResponse;
+import com.zimbra.soap.admin.wsimport.generated.GetCalendarResourceRequest;
+import com.zimbra.soap.admin.wsimport.generated.GetCalendarResourceResponse;
 import com.zimbra.soap.admin.wsimport.generated.GetCosRequest;
 import com.zimbra.soap.admin.wsimport.generated.GetCosResponse;
+import com.zimbra.soap.admin.wsimport.generated.GetDistributionListRequest;
+import com.zimbra.soap.admin.wsimport.generated.GetDistributionListResponse;
 import com.zimbra.soap.admin.wsimport.generated.GetDomainInfoRequest;
 import com.zimbra.soap.admin.wsimport.generated.GetDomainInfoResponse;
 import com.zimbra.soap.admin.wsimport.generated.GetDomainRequest;
@@ -274,7 +292,8 @@ public class Utility {
         }
     }
 
-    public static void deleteAccountIfExists(String accountName) throws Exception {
+    public static void deleteAccountIfExists(String accountName)
+    throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
         try {
             GetAccountRequest getReq = new GetAccountRequest();
@@ -282,20 +301,54 @@ public class Utility {
             accountSel.setBy(AccountBy.NAME);
             accountSel.setValue(accountName);
             getReq.setAccount(accountSel);
-            GetAccountResponse getResp = getAdminSvcEIF().getAccountRequest(getReq);
+            GetAccountResponse getResp =
+                    getAdminSvcEIF().getAccountRequest(getReq);
             Assert.assertNotNull(getResp);
             AccountInfo accountInfo = getResp.getAccount();
             Assert.assertNotNull(accountInfo);
             String respId = accountInfo.getId();
             DeleteAccountRequest delReq = new DeleteAccountRequest();
             delReq.setId(respId);
-            DeleteAccountResponse delResp = getAdminSvcEIF().deleteAccountRequest(delReq);
+            DeleteAccountResponse delResp =
+                    getAdminSvcEIF().deleteAccountRequest(delReq);
             Assert.assertNotNull(delResp);
         } catch (SOAPFaultException sfe) {
             String missive = sfe.getMessage();
             if (!missive.startsWith("no such account:"))
                 System.err.println("Exception " + sfe.toString() + 
                         " thrown attempting to delete account " + accountName);
+        }
+    }
+
+    public static void deleteCalendarResourceIfExists(String calResourceName)
+    throws Exception {
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
+        try {
+            GetCalendarResourceRequest getReq =
+                    new GetCalendarResourceRequest();
+            CalendarResourceSelector calResourceSel =
+                    new CalendarResourceSelector();
+            calResourceSel.setBy(CalendarResourceBy.NAME);
+            calResourceSel.setValue(calResourceName);
+            getReq.setCalresource(calResourceSel);
+            GetCalendarResourceResponse getResp =
+                getAdminSvcEIF().getCalendarResourceRequest(getReq);
+            Assert.assertNotNull(getResp);
+            CalendarResourceInfo calResourceInfo = getResp.getCalresource();
+            Assert.assertNotNull(calResourceInfo);
+            String respId = calResourceInfo.getId();
+            DeleteCalendarResourceRequest delReq =
+                    new DeleteCalendarResourceRequest();
+            delReq.setId(respId);
+            DeleteCalendarResourceResponse delResp =
+                getAdminSvcEIF().deleteCalendarResourceRequest(delReq);
+            Assert.assertNotNull(delResp);
+        } catch (SOAPFaultException sfe) {
+            String missive = sfe.getMessage();
+            if (!missive.startsWith("no such calendar resource:"))
+                System.err.println("Exception " + sfe.toString() + 
+                        " thrown attempting to delete CalendarResource "
+                        + calResourceName);
         }
     }
 
@@ -323,6 +376,7 @@ public class Utility {
                         " thrown attempting to delete cos " + cosName);
         }
     }
+
     public static void deleteVolumeIfExists(String name) throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
         GetAllVolumesRequest gavReq = new GetAllVolumesRequest();
@@ -344,6 +398,28 @@ public class Utility {
                 return;
                 }
             }
+        }
+    }
+
+    public static void deleteDistributionListIfExists(String name) throws Exception {
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
+        GetDistributionListRequest getInfoReq = new GetDistributionListRequest();
+        DistributionListSelector dlSel = new DistributionListSelector();
+        dlSel.setBy(DistributionListBy.NAME);
+        dlSel.setValue(name);
+        getInfoReq.setDl(dlSel);
+        try {
+            GetDistributionListResponse getResp = adminSvcEIF.getDistributionListRequest(getInfoReq);
+            Assert.assertNotNull(getResp);
+            DeleteDistributionListRequest delReq = new DeleteDistributionListRequest();
+            delReq.setId(getResp.getDl().getId());
+            Assert.assertNotNull("DeleteDistributionListResponse object",
+                    getAdminSvcEIF().deleteDistributionListRequest(delReq));
+        } catch (SOAPFaultException sfe) {
+            String missive = sfe.getMessage();
+            if (!missive.startsWith("no such dl:"))
+                System.err.println("Exception " + sfe.toString() + 
+                        " thrown attempting to delete dl " + name);
         }
     }
 
@@ -402,7 +478,8 @@ public class Utility {
         }
     }
 
-    public static String ensureAccountExists(String accountName) throws Exception {
+    public static String ensureAccountExists(String accountName)
+    throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
         String domainName = accountName.substring(accountName.indexOf('@') + 1);
         ensureDomainExists(domainName);
@@ -412,7 +489,8 @@ public class Utility {
         accountSel.setValue(accountName);
         getInfoReq.setAccount(accountSel);
         try {
-            GetAccountResponse getResp = adminSvcEIF.getAccountRequest(getInfoReq);
+            GetAccountResponse getResp =
+                    adminSvcEIF.getAccountRequest(getInfoReq);
             Assert.assertNotNull(getResp);
             return getResp.getAccount().getId();
         } catch (SOAPFaultException sfe) {
@@ -420,10 +498,48 @@ public class Utility {
             createAcctReq.setName(accountName);
             createAcctReq.setPassword("test123");
             Utility.addSoapAdminAuthHeader((WSBindingProvider)adminSvcEIF);
-            CreateAccountResponse resp = adminSvcEIF.createAccountRequest(createAcctReq);
+            CreateAccountResponse resp =
+                    adminSvcEIF.createAccountRequest(createAcctReq);
             Assert.assertNotNull(resp);
             AccountInfo accountInfo = resp.getAccount();
             return accountInfo.getId();
+        }
+    }
+
+    public static String ensureCalendarResourceExists(
+            String calResourceName, String displayName)
+    throws Exception {
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
+        String domainName =
+                    calResourceName.substring(calResourceName.indexOf('@') + 1);
+        ensureDomainExists(domainName);
+        GetCalendarResourceRequest getInfoReq =
+                    new GetCalendarResourceRequest();
+        CalendarResourceSelector calResourceSel =
+                    new CalendarResourceSelector();
+        calResourceSel.setBy(CalendarResourceBy.NAME);
+        calResourceSel.setValue(calResourceName);
+        getInfoReq.setCalresource(calResourceSel);
+        try {
+            GetCalendarResourceResponse getResp =
+                    adminSvcEIF.getCalendarResourceRequest(getInfoReq);
+            Assert.assertNotNull(getResp);
+            return getResp.getCalresource().getId();
+        } catch (SOAPFaultException sfe) {
+            CreateCalendarResourceRequest createAcctReq =
+                    new CreateCalendarResourceRequest();
+            createAcctReq.setName(calResourceName);
+            createAcctReq.setPassword("test123");
+            createAcctReq.getA().add(Utility.mkAttr("displayName", displayName));
+            createAcctReq.getA().add(Utility.mkAttr("zimbraCalResType", "Location"));
+            createAcctReq.getA().add(Utility.mkAttr(
+                "zimbraCalResLocationDisplayName", "Harare"));
+            Utility.addSoapAdminAuthHeader((WSBindingProvider)adminSvcEIF);
+            CreateCalendarResourceResponse resp =
+                    adminSvcEIF.createCalendarResourceRequest(createAcctReq);
+            Assert.assertNotNull(resp);
+            CalendarResourceInfo calResourceInfo = resp.getCalresource();
+            return calResourceInfo.getId();
         }
     }
 
@@ -439,6 +555,31 @@ public class Utility {
         String accountId = ensureAccountExists(accountName);
         getAccountServiceAuthToken(accountName, "test123");
         return accountId;
+    }
+
+    public static String ensureDistributionListExists(String name) throws Exception {
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
+        String domainName = name.substring(name.indexOf('@') + 1);
+        ensureDomainExists(domainName);
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
+        GetDistributionListRequest getInfoReq = new GetDistributionListRequest();
+        DistributionListSelector dlSel = new DistributionListSelector();
+        dlSel.setBy(DistributionListBy.NAME);
+        dlSel.setValue(name);
+        getInfoReq.setDl(dlSel);
+        try {
+            GetDistributionListResponse getResp = adminSvcEIF.getDistributionListRequest(getInfoReq);
+            Assert.assertNotNull(getResp);
+            return getResp.getDl().getId();
+        } catch (SOAPFaultException sfe) {
+            CreateDistributionListRequest createAcctReq = new CreateDistributionListRequest();
+            createAcctReq.setName(name);
+            Utility.addSoapAdminAuthHeader((WSBindingProvider)adminSvcEIF);
+            CreateDistributionListResponse resp = adminSvcEIF.createDistributionListRequest(createAcctReq);
+            Assert.assertNotNull(resp);
+            DistributionListInfo dlInfo = resp.getDl();
+            return dlInfo.getId();
+        }
     }
 
     public static String ensureCosExists(String cosName) throws Exception {
@@ -499,5 +640,12 @@ public class Utility {
                 "CreateVolumeResponse <volume> 'id' attribute " +
                 testVolumeId + " - should be at least 1", testVolumeId >= 1);
         return testVolumeId;
+    }
+
+    public static Attr mkAttr(String name, String value) {
+        Attr attr = new Attr();
+        attr.setN(name);
+        attr.setValue(value);
+        return attr;
     }
 }

@@ -19,15 +19,8 @@ import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
-import com.zimbra.common.soap.AdminConstants;
-import com.zimbra.common.soap.AccountConstants;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name=AccountConstants.E_CALENDAR_RESOURCE)
-@XmlType(propOrder = {})
 public class CalendarResourceInfo extends AdminObjectInfo {
 
     /**

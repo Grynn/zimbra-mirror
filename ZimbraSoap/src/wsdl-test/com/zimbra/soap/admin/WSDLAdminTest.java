@@ -92,7 +92,37 @@ public class WSDLAdminTest {
     }
 
     @Test
-    public void getServiceStatuTest() throws Exception {
+    public void versionInfoTest() throws Exception {
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        GetVersionInfoRequest req = new GetVersionInfoRequest();
+        GetVersionInfoResponse resp = eif.getVersionInfoRequest(req);
+        Assert.assertNotNull("GetVersionInfoResponse object", resp);
+        VersionInfo info = resp.getInfo();
+        Assert.assertNotNull("GetVersionInfoResponse <info> object", info);
+        info.getType();  // Don't care whether null or not
+        Assert.assertNotNull("getVersion result", info.getVersion());
+        Assert.assertNotNull("getRelease result", info.getRelease());
+        Assert.assertNotNull("getBuildDate result", info.getBuildDate());
+        Assert.assertNotNull("getHost result", info.getHost());
+        Assert.assertNotNull("getMajorVersion result", info.getMajorversion());
+        Assert.assertNotNull("getMinorVersion result", info.getMinorversion());
+        Assert.assertNotNull("getMicroVersion result", info.getMicroversion());
+        Assert.assertNotNull("getPlatform result", info.getPlatform());
+    }
+
+    @Test
+    public void licenseInfoTest() throws Exception {
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        GetLicenseInfoRequest req = new GetLicenseInfoRequest();
+        GetLicenseInfoResponse resp = eif.getLicenseInfoRequest(req);
+        Assert.assertNotNull("GetLicenseInfoResponse object", resp);
+        LicenseExpirationInfo info = resp.getExpiration();
+        Assert.assertNotNull("GetLicenseInfoResponse <info> object", info);
+        Assert.assertNotNull("getDate result", info.getDate());
+    }
+
+    @Test
+    public void getServiceStatusTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         GetServiceStatusRequest req = new GetServiceStatusRequest();
         GetServiceStatusResponse resp = eif.getServiceStatusRequest(req);
@@ -334,6 +364,45 @@ public class WSDLAdminTest {
         List <AdminObjectInfo> entries = resp.getCalresourceOrDlOrAlias();
         Assert.assertTrue("number of entries in response [" + searchTotal + "] should be at least 1",
                 entries.size() >= 1);
+    }
+
+    @Test
+    public void getAllRightsTest() throws Exception {
+        Utility.ensureAccountExists(testAcct);
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        GetAllRightsRequest req = new GetAllRightsRequest();
+        GetAllRightsResponse resp = eif.getAllRightsRequest(req);
+        Assert.assertNotNull("GetAllRightsResponse object", resp);
+        List <RightInfo> rInfos = resp.getRight();
+        Assert.assertNotNull("GetAllRightsResponse object", rInfos);
+        for (RightInfo rInfo : rInfos) {
+            RightsAttrs rAttrs = rInfo.getAttrs();
+            if (null != rAttrs) {
+                for (Object attrObj : rAttrs.getAOrAny()) {
+                    if (attrObj instanceof Attr) {
+                        Attr attr = (Attr) attrObj;
+                        Assert.assertNotNull("name of an attr", attr.getN());
+                        Assert.assertNotNull("value of an attr", attr.getValue());
+                    } else {
+                        System.out.println("Attribute Object= " + attrObj.toString());
+                    }
+                }
+            }
+            Assert.assertNotNull("RightInfo name", rInfo.getName());
+            Assert.assertNotNull("RightInfo desc", rInfo.getDesc());
+            Assert.assertNotNull("RightInfo class", rInfo.getRightClass());
+            Assert.assertNotNull("RightInfo type", rInfo.getType());
+            // Assert.assertNotNull("RightInfo targetType", rInfo.getTargetType());
+            ComboRights comboRights = rInfo.getRights();
+            if (null != comboRights) {
+                for (ComboRightInfo cri : comboRights.getR()) {
+                    Assert.assertNotNull("ComboRightInfo name", cri.getN());
+                    Assert.assertNotNull("ComboRightInfo type", cri.getType());
+                    // Assert.assertNotNull("ComboRightInfo targetType",
+                    //         cri.getTargetType());
+                }
+            }
+        }
     }
 
     @Test
@@ -590,6 +659,31 @@ public class WSDLAdminTest {
                 " - should be at least 1", len >= 1);
     }
 
+    // Getting system failure: server gren-elliots-macbook-pro.local 
+    //     zimbraRemoteManagementPrivateKeyPath 
+    //     (/opt/zimbra/.ssh/zimbra_identity) does not exist
+    // TODO: Re-enable when/if know how to resolve this.
+    public void getServerNIfsTestNOT() throws Exception {
+        int len;
+        ServerSelector serverSel;
+        String testServerId = Utility.ensureServerExists(testServer);
+        GetServerNIfsRequest getReq = new GetServerNIfsRequest();
+        serverSel = new ServerSelector();
+        serverSel.setBy(ServerBy.ID);
+        serverSel.setValue(testServerId);
+        getReq.setServer(serverSel);
+        GetServerNIfsResponse getResp = eif.getServerNIfsRequest(getReq);
+        Assert.assertNotNull("response object", getResp);
+        List <NetworkInformation> nis = getResp.getNi();
+        Assert.assertNotNull("List of NIs", nis);
+        NetworkInformation ni = nis.get(0);
+        Assert.assertNotNull("First NI", ni);
+        List <Attr> attrs = ni.getA();
+        len = attrs.size();
+        Assert.assertTrue("GetServerNIfsResponse <server> has " + len +
+                " <a> children - should have at least 2", len >= 2);
+    }
+
     @Test
     public void createCosTest() throws Exception {
         int len;
@@ -758,5 +852,59 @@ public class WSDLAdminTest {
         len = cosInfoList.size();
         Assert.assertTrue("Number of GetAllCosResponse <cos> children is " + len +
                 " - should be at least 1", len >= 1);
+    }
+
+    @Test
+    public void CheckDirectoryTest() throws Exception {
+        CheckDirectoryRequest req = new CheckDirectoryRequest();
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        CheckDirSelector dirSel = new CheckDirSelector();
+        dirSel.setPath("/opt/zimbra/log");
+        req.getDirectory().add(dirSel);
+        dirSel = new CheckDirSelector();
+        dirSel.setPath("/opt/zimbra/wsdlNonExistent");
+        req.getDirectory().add(dirSel);
+        dirSel = new CheckDirSelector();
+        dirSel.setPath("/opt/zimbra/wsdlToBeCreated");
+        dirSel.setCreate(true);
+        req.getDirectory().add(dirSel);
+        CheckDirectoryResponse resp = eif.checkDirectoryRequest(req);
+        Assert.assertNotNull("CheckDirectoryResponse object", resp);
+        List <DirPathInfo> dirPaths = resp.getDirectory();
+        Assert.assertNotNull("CheckDirectoryResponse list of directories", dirPaths);
+        int len = dirPaths.size();
+        Assert.assertEquals("Number of paths", 3, len);
+        for (DirPathInfo pathInfo : dirPaths) {
+            String path = pathInfo.getPath();
+            if (path.equals("/opt/zimbra/log")) {
+                Assert.assertEquals("isExists" + " for path=" + path, 
+                        true, pathInfo.isExists());
+                Assert.assertEquals("isDirectory" + " for path=" + path, 
+                        true, pathInfo.isIsDirectory());
+                Assert.assertEquals("isReadable" + " for path=" + path, 
+                        true, pathInfo.isReadable());
+                Assert.assertEquals("isWritable" + " for path=" + path, 
+                        true, pathInfo.isWritable());
+            } else if (path.equals("/opt/zimbra/wsdlNonExistent")) {
+                Assert.assertEquals("isExists" + " for path=" + path, 
+                        false, pathInfo.isExists());
+                Assert.assertEquals("isDirectory" + " for path=" + path, 
+                        false, pathInfo.isIsDirectory());
+                Assert.assertEquals("isReadable" + " for path=" + path, 
+                        false, pathInfo.isReadable());
+                Assert.assertEquals("isWritable" + " for path=" + path, 
+                        false, pathInfo.isWritable());
+            } else if (path.equals("/opt/zimbra/wsdlToBeCreated")) {
+                Assert.assertEquals("isExists" + " for path=" + path, 
+                        true, pathInfo.isExists());
+                Assert.assertEquals("isDirectory" + " for path=" + path, 
+                        true, pathInfo.isIsDirectory());
+                Assert.assertEquals("isReadable" + " for path=" + path, 
+                        true, pathInfo.isReadable());
+                Assert.assertEquals("isWritable" + " for path=" + path, 
+                        true, pathInfo.isWritable());
+            } else
+                Assert.fail("Unexpected path=" + path);
+        }
     }
 }

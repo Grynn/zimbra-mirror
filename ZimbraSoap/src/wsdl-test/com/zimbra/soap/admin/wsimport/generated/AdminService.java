@@ -39,6 +39,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.AddAccountLoggerResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/AddAccountLogger")
+    @WebResult(name = "AddAccountLoggerResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public AddAccountLoggerResponse addAccountLoggerRequest(
+        @WebParam(name = "AddAccountLoggerRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        AddAccountLoggerRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.AddDistributionListAliasResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/AddDistributionListAlias")
@@ -82,6 +94,18 @@ public interface AdminService {
     public CheckAuthConfigResponse checkAuthConfigRequest(
         @WebParam(name = "CheckAuthConfigRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         CheckAuthConfigRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.CheckDirectoryResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/CheckDirectory")
+    @WebResult(name = "CheckDirectoryResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public CheckDirectoryResponse checkDirectoryRequest(
+        @WebParam(name = "CheckDirectoryRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        CheckDirectoryRequest parameters);
 
     /**
      * 
@@ -183,6 +207,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.CreateCalendarResourceResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/CreateCalendarResource")
+    @WebResult(name = "CreateCalendarResourceResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public CreateCalendarResourceResponse createCalendarResourceRequest(
+        @WebParam(name = "CreateCalendarResourceRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        CreateCalendarResourceRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.CreateCosResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/CreateCos")
@@ -262,6 +298,18 @@ public interface AdminService {
     public DeleteAccountResponse deleteAccountRequest(
         @WebParam(name = "DeleteAccountRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         DeleteAccountRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.DeleteCalendarResourceResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/DeleteCalendarResource")
+    @WebResult(name = "DeleteCalendarResourceResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public DeleteCalendarResourceResponse deleteCalendarResourceRequest(
+        @WebParam(name = "DeleteCalendarResourceRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        DeleteCalendarResourceRequest parameters);
 
     /**
      * 
@@ -363,6 +411,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetAccountLoggersResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetAccountLoggers")
+    @WebResult(name = "GetAccountLoggersResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetAccountLoggersResponse getAccountLoggersRequest(
+        @WebParam(name = "GetAccountLoggersRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetAccountLoggersRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.GetAccountMembershipResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/GetAccountMembership")
@@ -387,6 +447,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetAllAccountLoggersResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetAllAccountLoggers")
+    @WebResult(name = "GetAllAccountLoggersResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetAllAccountLoggersResponse getAllAccountLoggersRequest(
+        @WebParam(name = "GetAllAccountLoggersRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetAllAccountLoggersRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.GetAllAccountsResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/GetAllAccounts")
@@ -406,6 +478,18 @@ public interface AdminService {
     public GetAllAdminAccountsResponse getAllAdminAccountsRequest(
         @WebParam(name = "GetAllAdminAccountsRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         GetAllAdminAccountsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetAllCalendarResourcesResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetAllCalendarResources")
+    @WebResult(name = "GetAllCalendarResourcesResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetAllCalendarResourcesResponse getAllCalendarResourcesRequest(
+        @WebParam(name = "GetAllCalendarResourcesRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetAllCalendarResourcesRequest parameters);
 
     /**
      * 
@@ -483,6 +567,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetAllRightsResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetAllRights")
+    @WebResult(name = "GetAllRightsResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetAllRightsResponse getAllRightsRequest(
+        @WebParam(name = "GetAllRightsRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetAllRightsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.GetAllServersResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/GetAllServers")
@@ -502,6 +598,18 @@ public interface AdminService {
     public GetAllVolumesResponse getAllVolumesRequest(
         @WebParam(name = "GetAllVolumesRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         GetAllVolumesRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetCalendarResourceResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetCalendarResource")
+    @WebResult(name = "GetCalendarResourceResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetCalendarResourceResponse getCalendarResourceRequest(
+        @WebParam(name = "GetCalendarResourceRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetCalendarResourceRequest parameters);
 
     /**
      * 
@@ -591,6 +699,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetLicenseInfoResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetLicenseInfo")
+    @WebResult(name = "GetLicenseInfoResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetLicenseInfoResponse getLicenseInfoRequest(
+        @WebParam(name = "GetLicenseInfoRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetLicenseInfoRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.GetMailboxResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/GetMailbox")
@@ -610,6 +730,42 @@ public interface AdminService {
     public GetMailboxStatsResponse getMailboxStatsRequest(
         @WebParam(name = "GetMailboxStatsRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         GetMailboxStatsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetPublishedShareInfoResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetPublishedShareInfo")
+    @WebResult(name = "GetPublishedShareInfoResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetPublishedShareInfoResponse getPublishedShareInfoRequest(
+        @WebParam(name = "GetPublishedShareInfoRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetPublishedShareInfoRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetQuotaUsageResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetQuotaUsage")
+    @WebResult(name = "GetQuotaUsageResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetQuotaUsageResponse getQuotaUsageRequest(
+        @WebParam(name = "GetQuotaUsageRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetQuotaUsageRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetServerNIfsResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetServerNIfs")
+    @WebResult(name = "GetServerNIfsResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetServerNIfsResponse getServerNIfsRequest(
+        @WebParam(name = "GetServerNIfsRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetServerNIfsRequest parameters);
 
     /**
      * 
@@ -651,6 +807,30 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetShareInfoResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetShareInfo")
+    @WebResult(name = "GetShareInfoResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetShareInfoResponse getShareInfoRequest(
+        @WebParam(name = "GetShareInfoRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetShareInfoRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetVersionInfoResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetVersionInfo")
+    @WebResult(name = "GetVersionInfoResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetVersionInfoResponse getVersionInfoRequest(
+        @WebParam(name = "GetVersionInfoRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetVersionInfoRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.GetVolumeResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/GetVolume")
@@ -670,6 +850,18 @@ public interface AdminService {
     public ModifyAccountResponse modifyAccountRequest(
         @WebParam(name = "ModifyAccountRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         ModifyAccountRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.ModifyCalendarResourceResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/ModifyCalendarResource")
+    @WebResult(name = "ModifyCalendarResourceResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public ModifyCalendarResourceResponse modifyCalendarResourceRequest(
+        @WebParam(name = "ModifyCalendarResourceRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        ModifyCalendarResourceRequest parameters);
 
     /**
      * 
@@ -771,6 +963,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.PublishShareInfoResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/PublishShareInfo")
+    @WebResult(name = "PublishShareInfoResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public PublishShareInfoResponse publishShareInfoRequest(
+        @WebParam(name = "PublishShareInfoRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        PublishShareInfoRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.PurgeMessagesResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/PurgeMessages")
@@ -778,6 +982,18 @@ public interface AdminService {
     public PurgeMessagesResponse purgeMessagesRequest(
         @WebParam(name = "PurgeMessagesRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         PurgeMessagesRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.ReIndexResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/ReIndex")
+    @WebResult(name = "ReIndexResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public ReIndexResponse reIndexRequest(
+        @WebParam(name = "ReIndexRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        ReIndexRequest parameters);
 
     /**
      * 
@@ -819,6 +1035,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.RemoveAccountLoggerResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/RemoveAccountLogger")
+    @WebResult(name = "RemoveAccountLoggerResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public RemoveAccountLoggerResponse removeAccountLoggerRequest(
+        @WebParam(name = "RemoveAccountLoggerRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        RemoveAccountLoggerRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.RemoveDistributionListAliasResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/RemoveDistributionListAlias")
@@ -855,6 +1083,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.RenameCalendarResourceResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/RenameCalendarResource")
+    @WebResult(name = "RenameCalendarResourceResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public RenameCalendarResourceResponse renameCalendarResourceRequest(
+        @WebParam(name = "RenameCalendarResourceRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        RenameCalendarResourceRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.RenameCosResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/RenameCos")
@@ -874,6 +1114,18 @@ public interface AdminService {
     public RenameDistributionListResponse renameDistributionListRequest(
         @WebParam(name = "RenameDistributionListRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         RenameDistributionListRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.SearchCalendarResourcesResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/SearchCalendarResources")
+    @WebResult(name = "SearchCalendarResourcesResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public SearchCalendarResourcesResponse searchCalendarResourcesRequest(
+        @WebParam(name = "SearchCalendarResourcesRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        SearchCalendarResourcesRequest parameters);
 
     /**
      * 
@@ -910,5 +1162,17 @@ public interface AdminService {
     public SetPasswordResponse setPasswordRequest(
         @WebParam(name = "SetPasswordRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         SetPasswordRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.VerifyIndexResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/VerifyIndex")
+    @WebResult(name = "VerifyIndexResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public VerifyIndexResponse verifyIndexRequest(
+        @WebParam(name = "VerifyIndexRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        VerifyIndexRequest parameters);
 
 }

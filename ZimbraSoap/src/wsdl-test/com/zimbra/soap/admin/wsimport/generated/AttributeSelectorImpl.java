@@ -34,7 +34,9 @@ import javax.xml.bind.annotation.XmlType;
     SearchDirectoryRequest.class,
     GetAccountRequest.class,
     GetServerRequest.class,
-    GetDomainRequest.class
+    GetDomainRequest.class,
+    SearchCalendarResourcesRequest.class,
+    GetCalendarResourceRequest.class
 })
 public abstract class AttributeSelectorImpl {
 
