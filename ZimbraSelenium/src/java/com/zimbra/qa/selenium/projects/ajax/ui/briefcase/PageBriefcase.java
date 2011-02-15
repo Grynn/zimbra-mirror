@@ -443,24 +443,12 @@ public class PageBriefcase extends AbsTab {
 		// In desktop, it is a must to go refresh the page, go to mail page and
 		// Get Mail
 		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-			((AppAjaxClient) MyApplication).zPageMail.zNavigateTo();
-			((AppAjaxClient) MyApplication).zPageMail
-					.zToolbarPressButton(Button.B_GETMAIL);
-			// TODO: Investigate the UI properties
-			// Can't use zNavigateTo because briefcase element is always present
-			// even though the mail page is active.
-			zClick(PageMain.Locators.zAppbarBriefcase);
+		   _syncDesktopToZcs();
 
 			// If after waiting, it still doesn't appear, go to page mail,
 			// click get mail again
 			if (!GeneralUtility.waitForElementPresent(this, itemlocator, 5000)) {
-				((AppAjaxClient) MyApplication).zPageMail.zNavigateTo();
-				((AppAjaxClient) MyApplication).zPageMail
-						.zToolbarPressButton(Button.B_GETMAIL);
-            // TODO: Investigate the UI properties
-	         // Can't use zNavigateTo because briefcase element is always present
-	         // even though the mail page is active.
-	         zClick(PageMain.Locators.zAppbarBriefcase);
+			   _syncDesktopToZcs();
 				GeneralUtility.waitForElementPresent(this, itemlocator);
 			}
 		}
@@ -531,7 +519,64 @@ public class PageBriefcase extends AbsTab {
 		return true;
 	}
 
-	public void closeWindow() {
+   /**
+    * Select the file, then tag it with the specified name
+    * @param fileName File name to be tagged
+    * @param tagName Tag Name
+    * @throws HarnessException
+    */
+   public void tagFile(String fileName, String tagName) throws HarnessException {
+	     // Click on created document
+      ((AppAjaxClient)MyApplication).zPageBriefcase.zListItem(Action.A_LEFTCLICK,
+            fileName);
+
+      // Click on New Tag
+      DialogTag dialogTag = (DialogTag) ((AppAjaxClient)MyApplication)
+            .zPageBriefcase
+            .zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_NEWTAG);
+
+      dialogTag.zSetTagName(tagName);
+      dialogTag.zClickButton(Button.B_OK);
+
+      if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+         _syncDesktopToZcs();
+      }
+   }
+
+   /**
+    * Select the file and untag it.
+    * @param fileName File name to be untagged
+    * @throws HarnessException
+    */
+   public void untagFile(String fileName) throws HarnessException {
+      // Click on tagged document
+      ((AppAjaxClient)MyApplication).zPageBriefcase.zListItem(
+	         Action.A_LEFTCLICK, fileName);
+
+      ((AppAjaxClient)MyApplication).zPageBriefcase.zToolbarPressPulldown(
+            Button.B_TAG, Button.O_TAG_REMOVETAG);
+
+      if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+         _syncDesktopToZcs();
+      }
+   }
+
+   /**
+    * Synch Zimbra Desktop client to ZCS server
+    * @throws HarnessException
+    */
+   private void _syncDesktopToZcs() throws HarnessException {
+      // Need to sync the desktop client to ZCS server
+      ((AppAjaxClient) MyApplication).zPageMail.zNavigateTo();
+      ((AppAjaxClient) MyApplication).zPageMail
+            .zToolbarPressButton(Button.B_GETMAIL);
+      // TODO: Investigate the UI properties
+      // Can't use zNavigateTo because briefcase element is always present
+      // even though the mail page is active.
+      zClick(PageMain.Locators.zAppbarBriefcase);
+   }
+
+   public void closeWindow() {
 		ClientSessionFactory.session().selenium().close();
 	}
 }
