@@ -179,6 +179,7 @@ DwtIframe.prototype._rawEventHandler = function(ev) {
 
 DwtIframe._forwardEvents = [ DwtEvent.ONCHANGE,
 			     DwtEvent.ONCLICK,
+			     DwtEvent.ONCONTEXTMENU,
 			     DwtEvent.ONDBLCLICK,
 			     DwtEvent.ONFOCUS,
 			     DwtEvent.ONKEYDOWN,
