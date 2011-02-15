@@ -19,9 +19,6 @@ function Com_Zimbra_DnD() {
 Com_Zimbra_DnD.prototype = new ZmZimletBase();
 Com_Zimbra_DnD.prototype.constructor = Com_Zimbra_DnD;
 
-Com_Zimbra_DnD.attachment_ids = null;
-Com_Zimbra_DnD.flength = null;
-
 Com_Zimbra_DnD.prototype.init = function () {
 
     this.isHTML5 = false;
@@ -31,7 +28,8 @@ Com_Zimbra_DnD.prototype.init = function () {
     } else if(!AjxEnv.isIE) {
        this._initNonHTM5();  
     }
-
+    this.upLoadC = 0;
+    this.attachment_ids = [];
 };
 
 Com_Zimbra_DnD.prototype.isDndSupported = function (evntname) {
@@ -220,8 +218,6 @@ Com_Zimbra_DnD.prototype._onDrop = function(ev) {
     var files = dt.files;
     
     if(files) {
-        Com_Zimbra_DnD.attachment_ids = [];
-        Com_Zimbra_DnD.flength = files.length;
 
         for (var j = 0; j < files.length; j++) {
             var file = files[j];
@@ -275,7 +271,7 @@ Com_Zimbra_DnD.prototype._uploadFiles = function(file, controller) {
 
         var req = new XMLHttpRequest();
         var fileName = null;
-
+        this.upLoadC = this.upLoadC + 1;
         req.open("POST", appCtxt.get(ZmSetting.CSFE_UPLOAD_URI)+"&fmt=extended,raw", true);
         req.setRequestHeader("Cache-Control", "no-cache");
         req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
@@ -289,6 +285,7 @@ Com_Zimbra_DnD.prototype._uploadFiles = function(file, controller) {
         delete req;
     } catch(exp) {
         var msgDlg = appCtxt.getMsgDialog();
+        this.upLoadC = this.upLoadC - 1;
         msgDlg.setMessage(ZmMsg.importErrorUpload, DwtMessageDialog.CRITICAL_STYLE);
         this.dndTooltipEl.innerHTML = ZmMsg.dndTooltip;
         msgDlg.popup();
@@ -309,6 +306,7 @@ Com_Zimbra_DnD.prototype._handleErrorResponse = function(respCode) {
        var msg = AjxMessageFormat.format(ZmMsg.errorAttachment, (respCode || AjxPost.SC_NO_CONTENT));
        warngDlg.setMessage(msg, style);
     }
+    this.upLoadC = this.upLoadC - 1;
     this.dndTooltipEl.innerHTML = ZmMsg.dndTooltip;
     warngDlg.popup();
 };
@@ -324,16 +322,15 @@ Com_Zimbra_DnD.prototype._handleResponse = function(req, controller) {
                 var respObj = resp[2];
                 for (var i = 0; i < respObj.length; i++) {
                     if(respObj[i].aid != "undefined") {
-                        Com_Zimbra_DnD.attachment_ids.push(respObj[i].aid);
+                        this.attachment_ids.push(respObj[i].aid);
+                        this.upLoadC = this.upLoadC - 1;
                     }
                 }
 
-                if(Com_Zimbra_DnD.attachment_ids.length > 0 && Com_Zimbra_DnD.attachment_ids.length == Com_Zimbra_DnD.flength) {
-
-                    var callback = new AjxCallback (controller,controller._handleResponseSaveDraftListener);
-
-                    attachment_list = Com_Zimbra_DnD.attachment_ids.join(",");
-                    controller.sendMsg(attachment_list,ZmComposeController.DRAFT_TYPE_MANUAL,callback);
+                if(this.attachment_ids.length > 0 && this.upLoadC == 0) {
+                    var attachment_list = this.attachment_ids.join(",");
+                    this.attachment_ids = [];
+                    controller.saveDraft(ZmComposeController.DRAFT_TYPE_MANUAL, attachment_list);
                     this.dndTooltipEl.innerHTML = ZmMsg.dndTooltip;
                 }
             }
