@@ -251,14 +251,12 @@ public class GetMessage extends AjaxCommonTest {
 		// Wait for a bit so the zimlet can take affect
 		SleepUtil.sleep(5000);
 		
-		// Get the HTML of the body
-		HtmlElement bodyElement = display.zGetMailPropertyAsHtml(Field.Subject);
+		// Find the subject and the phone span
+		String locator = "css=span[id$='_com_zimbra_phone']";
 		
-		// Verify that the phone zimlet has been applied
-		// <a href="callto:1-877-486-9273" onclick="window.top.Com_Zimbra_Phone.unsetOnbeforeunload()">1-877-486-9273</a>
-		HtmlElement.evaluate(bodyElement, "//a[@href='callto:"+ phonenumber +"']", null, (String)null, 1);
-		HtmlElement.evaluate(bodyElement, "//a[@href='callto:"+ phonenumber +"']", "onclick", "window.top.Com_Zimbra_Phone.unsetOnbeforeunload()", 1);
-		HtmlElement.evaluate(bodyElement, "//a[@href='callto:"+ phonenumber +"']", null, phonenumber, 1);
+		ZAssert.assertTrue(display.sIsElementPresent(locator), "Verify the phone zimlet applies to the subject");
+		ZAssert.assertEquals(display.sGetText(locator), phonenumber, "Verify the phone zimlet highlights the phone number");
+		
 
 	}
 
