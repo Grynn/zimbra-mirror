@@ -2,7 +2,6 @@ package com.zimbra.qa.selenium.projects.html.tests.tasks;
 
 import java.lang.reflect.Method;
 
-import org.apache.tools.ant.taskdefs.WaitFor;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
