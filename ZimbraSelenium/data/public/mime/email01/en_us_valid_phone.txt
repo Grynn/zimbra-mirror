@@ -1,0 +1,19 @@
+From: foo@foo.com 
+To: foo@foo.com 
+Subject: subject12977323015009
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=utf-8 
+Content-Transfer-Encoding: 7bit
+
+text  text
+
+
+text 1-877-486-9273 general phone number
+text 877-486-9273 general phone number
+text (877) 456-7890 see http://bugzilla.zimbra.com/show_bug.cgi?id=52337#c3
+text #6503501010 see http://bugzilla.zimbra.com/show_bug.cgi?id=52337#c3
+text +1 650 350 1010 see http://bugzilla.zimbra.com/show_bug.cgi?id=52337#c3
+text 650.350.1010 see http://bugzilla.zimbra.com/show_bug.cgi?id=52337#c3
+text (650) 350 1010 see http://bugzilla.zimbra.com/show_bug.cgi?id=52337#c3
+text +1 (650) 350 1010 see http://bugzilla.zimbra.com/show_bug.cgi?id=52337#c3
+text 1-650-350-1010 see http://bugzilla.zimbra.com/show_bug.cgi?id=52337#c3

@@ -45,8 +45,7 @@ public class DisplayMail extends AbsDisplay {
 		Cc,
 		Bcc,			// Does this show in any mail views?  Maybe in Sent?
 		Subject,
-		Body,
-		BodyH
+		Body
 	}
 	
 
@@ -98,39 +97,41 @@ public class DisplayMail extends AbsDisplay {
 		throw new HarnessException("implement me!");
 	}
 	
-	/**
-	 * Get the DefaultSelenium.getHtmlSource() for the body field
-	 * @return
-	 * @throws HarnessException
-	 */
-	public HtmlElement zGetMailBodyIframe() throws HarnessException {
+	public HtmlElement zGetMailPropertyAsHtml(Field field) throws HarnessException {
 		
-		/*
-		 * To get the body contents, need to switch iframes
-		 */
-		String source = "undefined";
-		try {
+		String source = null;
+		
+		if ( field == Field.Body) {
 			
-			this.sSelectFrame("//iframe[contains(@id, '__MSG_body__iframe')]");
-			
-			source = this.sGetHtmlSource();
-			
-			// For some reason, we don't get the <html/> tag.  Add it
-			source = "<html>" + source + "</html>";
-			logger.info("DisplayMail.zGetMailBodyIframe() = "+ source);
-									
-			// Clean up the HTML code to be valid
-			HtmlElement element = HtmlElement.clean(source);
-			logger.info("DisplayMail.zGetMailBodyIframe() (after cleaning) = "+ element.prettyPrint());
+			try {
+				
+				this.sSelectFrame("//iframe[contains(@id, '__MSG_body__iframe')]");
+				
+				source = this.sGetHtmlSource();
+				
+				// For some reason, we don't get the <html/> tag.  Add it
+				source = "<html>" + source + "</html>";
+										
+			} finally {
+				// Make sure to go back to the original iframe
+				this.sSelectFrame("relative=top");
+			}
 
-			return (element);
-							
-		} finally {
-			// Make sure to go back to the original iframe
-			this.sSelectFrame("relative=top");
+		} else {
+			throw new HarnessException("not implemented for field "+ field);
 		}
+		
+		// Make sure source was found
+		if ( source == null )
+			throw new HarnessException("source was null for "+ field);
+
+		logger.info("DisplayMail.zGetMailPropertyAsHtml() = "+ source);
+
+		// Clean up the HTML code to be valid
+		return (HtmlElement.clean(source));
 
 	}
+	
 	
 	/**
 	 * Get the string value of the specified field

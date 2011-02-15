@@ -1,0 +1,1 @@
+These mime messages have valid/invalid phone numbers for testing the phone zimlet
