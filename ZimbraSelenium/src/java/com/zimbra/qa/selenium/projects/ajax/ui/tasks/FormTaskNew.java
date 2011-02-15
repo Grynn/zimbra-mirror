@@ -11,6 +11,8 @@ import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 
 
 
+
+
 /**
  * The <code>FormMailNew<code> object defines a compose new message view
  * in the Zimbra Ajax client.
@@ -45,6 +47,15 @@ public class FormTaskNew extends AbsForm {
 		public static final String zPriorityOptionHigh	= "css=[id^=zv__COMPOSE][id$=___priority_dropdown]";
 		public static final String zPriorityOptionNormal	= "css=[id^=zv__COMPOSE][id$=___priority_dropdown]";
 		public static final String zPriorityOptionLow	= "css=[id^=zv__COMPOSE][id$=___priority_dropdown]";
+		
+		//added by Girish
+		public static final String zFrame = "css=iframe[id*='DWT']";
+		public static final String zSaveAndCloseIconBtn = "//*[@id='DWT9_left_icon']";
+		public static final String zBodyField = "css=body";
+		public static final String zNameField = "css=[id^=DWT4] [input$=]";
+		public static final String zEditNameField = "css=[class=DwtInputField] [input$=]";
+		public static final String zSaveTask = "zb__TKE1__SAVE_left_icon";
+		public static final String zTasksubjField = "//td[contains(@id,'_subject')]/div/input";
 
 		
 	}
@@ -104,9 +115,9 @@ public class FormTaskNew extends AbsForm {
 
 	@Override
 	public void zSubmit() throws HarnessException {
-		logger.info("FormMailNew.submit()");
-		
-		zToolbarPressButton(Button.B_SEND);
+		if (!this.sIsElementPresent(Locators.zSaveTask))
+			throw new HarnessException("Save button is not present");
+		zClick(Locators.zSaveTask);
 
 		this.zWaitForBusyOverlay();
 
@@ -346,102 +357,23 @@ public class FormTaskNew extends AbsForm {
 	
 		String locator = null;
 		
-		if ( field == Field.To ) {
-			
-			locator = Locators.zToField;
-			
-			// FALL THROUGH
-			
-		} else if ( field == Field.Cc ) {
-			
-			locator = Locators.zCcField;
-			
-			// FALL THROUGH
-			
-		} else if ( field == Field.Bcc ) {
-			
-			locator = Locators.zBccField;
-			
-			// Make sure the BCC field is showing
-			if ( !zBccIsActive() ) {
-				this.zToolbarPressButton(Button.B_SHOWBCC);
-			}
-			
-			// FALL THROUGH
-			
-		} else if ( field == Field.Subject ) {
-			
-			locator = Locators.zSubjectField;
-			
-			// FALL THROUGH
-			
-		} else if ( field == Field.Body ) {
 
-			int frames = this.sGetXpathCount("//iframe");
-			logger.debug("Body: # of frames: "+ frames);
+		if (field == Field.Subject) {
 
-			if ( frames == 0 ) {
-				////
-				// Text compose
-				////
-				
-				locator = "//textarea[contains(@id,'textarea_')]";
-				
-				if ( !this.sIsElementPresent(locator))
-					throw new HarnessException("Unable to locate compose body");
+			locator = Locators.zTasksubjField;
 
-				
-				this.sFocus(locator);
-				this.zClick(locator);
-				this.zWaitForBusyOverlay();
-				this.sType(locator, value);
-				
-				return;
-				
-			} else if ( frames == 1 ) {
-				////
-				// HTML compose
-				////
-				
-				try {
-					
-					this.sSelectFrame("index=0"); // iframe index is 0 based
-					
-					locator = "//html//body";
-					
-					if ( !this.sIsElementPresent(locator))
-						throw new HarnessException("Unable to locate compose body");
-
-					this.sFocus(locator);
-					this.zClick(locator);
-					this.sType(locator, value);
-					
-				} finally {
-					// Make sure to go back to the original iframe
-					this.sSelectFrame("relative=top");
-
-				}
-				
-				// Is this requried?
-				this.zWaitForBusyOverlay();
-
-				return;
-
-			} else {
-				throw new HarnessException("Compose //iframe count was "+ frames);
-			}
-			
+		} else if (field == Field.Body) {
+			locator = Locators.zBodyField;
+			sSelectFrame(Locators.zFrame);
+			sType(locator, value);
+			sSelectWindow(null);
+			return;
 
 		} else {
-			throw new HarnessException("not implemented for field "+ field);
+
+			throw new HarnessException("not implemented for field " + field);
 		}
 		
-		if ( locator == null ) {
-			throw new HarnessException("locator was null for field "+ field);
-		}
-		
-		// Default behavior, enter value into locator field
-		//
 		
 		// Make sure the button exists
 		if ( !this.sIsElementPresent(locator) )

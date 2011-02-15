@@ -379,7 +379,7 @@ public class PageTasks extends AbsTab {
 			// New button
 			locator = "zb__TKL__NEW_MENU_left_icon";
 
-			page = new TaskNew(this.MyApplication);
+			page = new FormTaskNew(this.MyApplication);
 
 			// Create the page
 			// page = new FormTaskNew(this.MyApplication);
@@ -443,7 +443,7 @@ public class PageTasks extends AbsTab {
 
 		} else if (button == Button.B_SAVE) {
 			locator = "zb__TKE1__SAVE_left_icon";
-			page = new TaskNew(this.MyApplication);
+			page = new FormTaskNew(this.MyApplication);
 
 		} else if (button == Button.B_TAG) {
 

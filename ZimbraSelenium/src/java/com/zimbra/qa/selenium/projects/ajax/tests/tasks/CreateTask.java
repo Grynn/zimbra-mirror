@@ -29,12 +29,14 @@ public class CreateTask extends AjaxCommonTest {
 	public void CreateTask_01() throws HarnessException {
 
 		String subject = "task" + ZimbraSeleniumProperties.getUniqueString();
+		String body = "taskbody" + ZimbraSeleniumProperties.getUniqueString();
 
 		// Click NEW button
 		FormTaskNew taskNew = (FormTaskNew) app.zPageTasks.zToolbarPressButton(Button.B_NEW);
 		
 		// Fill out the resulting form
 		taskNew.zFillField(Field.Subject, subject);
+		taskNew.zFillField(Field.Body, body);
 		taskNew.zSubmit();
 		
 		// Get the list of tasks in the view
