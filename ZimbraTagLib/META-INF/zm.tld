@@ -1119,6 +1119,14 @@
         </attribute>
         <attribute>
             <description>
+                import data
+            </description>
+            <name>importData</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
                 URL
             </description>
             <name>url</name>
