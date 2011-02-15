@@ -1,7 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
 import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.*;
 
 
 /**
@@ -45,7 +45,8 @@ public class DisplayMail extends AbsDisplay {
 		Cc,
 		Bcc,			// Does this show in any mail views?  Maybe in Sent?
 		Subject,
-		Body
+		Body,
+		BodyH
 	}
 	
 
@@ -95,6 +96,40 @@ public class DisplayMail extends AbsDisplay {
 	 */
 	public AbsPage zClickHighlightObjects() throws HarnessException {
 		throw new HarnessException("implement me!");
+	}
+	
+	/**
+	 * Get the DefaultSelenium.getHtmlSource() for the body field
+	 * @return
+	 * @throws HarnessException
+	 */
+	public HtmlElement zGetMailBodyIframe() throws HarnessException {
+		
+		/*
+		 * To get the body contents, need to switch iframes
+		 */
+		String source = "undefined";
+		try {
+			
+			this.sSelectFrame("//iframe[contains(@id, '__MSG_body__iframe')]");
+			
+			source = this.sGetHtmlSource();
+			
+			// For some reason, we don't get the <html/> tag.  Add it
+			source = "<html>" + source + "</html>";
+			logger.info("DisplayMail.zGetMailBodyIframe() = "+ source);
+									
+			// Clean up the HTML code to be valid
+			HtmlElement element = HtmlElement.clean(source);
+			logger.info("DisplayMail.zGetMailBodyIframe() (after cleaning) = "+ element.prettyPrint());
+
+			return (element);
+							
+		} finally {
+			// Make sure to go back to the original iframe
+			this.sSelectFrame("relative=top");
+		}
+
 	}
 	
 	/**
