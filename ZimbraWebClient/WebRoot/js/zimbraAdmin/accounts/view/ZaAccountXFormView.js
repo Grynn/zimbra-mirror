@@ -1544,7 +1544,9 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 			visibilityChecks:[], enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternalSync, entry.name, ZaAccount.A_name]]
 		},
 		{ref:ZaAccount.A_zimbraAuthLdapExternalDn,type:_TEXTFIELD_,width:256,
-                                msgName:ZaMsg.NAD_AuthLdapExternalDn,label:ZaMsg.NAD_AuthLdapExternalDn, labelLocation:_LEFT_, align:_LEFT_}
+                       	msgName:ZaMsg.NAD_AuthLdapExternalDn,label:ZaMsg.NAD_AuthLdapExternalDn, labelLocation:_LEFT_, 
+			align:_LEFT_, toolTipContent: ZaMsg.tt_AuthLdapExternalDn
+		}
 		]
 	};
 	case1Items.push(passwordGroup);														
