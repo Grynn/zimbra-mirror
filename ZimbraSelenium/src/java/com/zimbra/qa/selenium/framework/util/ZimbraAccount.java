@@ -207,6 +207,7 @@ public class ZimbraAccount {
 		put("zimbraFeatureReadReceiptsEnabled", "TRUE");
 		put("zimbraPrefCalendarAlwaysShowMiniCal", "FALSE");
 		put("zimbraPrefComposeFormat", "html");
+		put("zimbraPrefWarnOnExit","FALSE");
  	}};
 
 	/**
