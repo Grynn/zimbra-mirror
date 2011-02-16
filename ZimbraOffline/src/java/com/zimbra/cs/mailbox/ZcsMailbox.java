@@ -391,24 +391,29 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             markItemDeleted(item.getType(), id);
             try {
                 DbOfflineMailbox.renumberItem(item, newId);
+                uncache(item);
             } catch (ServiceException se) {
                 throw ServiceException.FAILURE("Failure renumbering item name["+item.getName()+"] subject["+item.getSubject()+"]", se);
             }
             item.mId = item.mData.id = newId;
             item.markItemCreated();
 
-            // remove the old item from the cache, as it's gone now...
-            uncacheItem(id);
-            if (item instanceof Folder) {
-                // old items have the wrong folder id, which sucks
-                purge(MailItem.Type.MESSAGE);
-                purge(MailItem.Type.FOLDER);
-            } else if (item instanceof Tag) {
-                // old items have the wrong tag bitmask, which also sucks
-                purge(MailItem.Type.MESSAGE);
-                purge(MailItem.Type.TAG);
-            }
+            if (item instanceof Folder || item instanceof Tag) {
+                //replace with the new item
+                cache(item);
+                if (item instanceof Folder) {
+                    //sub folders might have wrong id
+                    List<Folder> subFolders = ((Folder) item).getSubfolders(octxt);
+                    for (Folder subFolder : subFolders) {
+                        subFolder.mData.folderId = newId;
+                        subFolder.mData.parentId = newId;
+                        cache(subFolder); //make sure it's in the cache
+                    }
+                } 
 
+                //msgs are lazy-loaded so purge is safe
+                purge(MailItem.Type.MESSAGE);
+            }
             success = true;
         } catch (MailServiceException.NoSuchItemException nsie) {
             //item deleted from local before sync completes renumbering
