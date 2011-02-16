@@ -274,21 +274,24 @@ public class DirectorySync {
                 OfflineLog.offline.warn("dsync: pulled %d incoming filter rules:\n%s", rules.getRules().size(), e.prettyPrint(), x);
             }
         }
-        if (modified.contains(Provisioning.A_zimbraMailOutgoingSieveScript)) {
-            Element xmlRules = RuleManager.getOutgoingRulesAsXML(XMLElement.mFactory, acct);
-            ZFilterRules rules = new ZFilterRules(xmlRules);
-            zmbx.saveOutgoingFilterRules(rules);
-            OfflineLog.offline.debug("dsync: pushed %d outgoing filter rules: %s", rules.getRules().size(), acct.getName());
-        } else {
-            ZFilterRules rules = zmbx.getOutgoingFilterRules(true);
-            Element e = new XMLElement(MailConstants.SAVE_RULES_REQUEST); //dummy element
-            rules.toElement(e);
-            try {
-                RuleManager.setOutgoingXMLRules(acct, e.getElement(MailConstants.E_FILTER_RULES));
-                OfflineLog.offline.debug("dsync: pulled %d outgoing filter rules: %s", rules.getRules().size(), acct.getName());
-            } catch (ServiceException x) {
-                //bug 37422
-                OfflineLog.offline.warn("dsync: pulled %d outgoing filter rules:\n%s", rules.getRules().size(), e.prettyPrint(), x);
+        if (((OfflineAccount)acct).getRemoteServerVersion().isAtLeast7xx()) {
+            //outgoing rules added in 7.0
+            if (modified.contains(Provisioning.A_zimbraMailOutgoingSieveScript)) {
+                Element xmlRules = RuleManager.getOutgoingRulesAsXML(XMLElement.mFactory, acct);
+                ZFilterRules rules = new ZFilterRules(xmlRules);
+                zmbx.saveOutgoingFilterRules(rules);
+                OfflineLog.offline.debug("dsync: pushed %d outgoing filter rules: %s", rules.getRules().size(), acct.getName());
+            } else {
+                ZFilterRules rules = zmbx.getOutgoingFilterRules(true);
+                Element e = new XMLElement(MailConstants.SAVE_RULES_REQUEST); //dummy element
+                rules.toElement(e);
+                try {
+                    RuleManager.setOutgoingXMLRules(acct, e.getElement(MailConstants.E_FILTER_RULES));
+                    OfflineLog.offline.debug("dsync: pulled %d outgoing filter rules: %s", rules.getRules().size(), acct.getName());
+                } catch (ServiceException x) {
+                    //bug 37422
+                    OfflineLog.offline.warn("dsync: pulled %d outgoing filter rules:\n%s", rules.getRules().size(), e.prettyPrint(), x);
+                }
             }
         }
     }
