@@ -55,7 +55,11 @@ public class UnTagDocument extends AjaxCommonTest {
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 		
-		// Create a tag 
+	    // Click on created document
+		app.zPageBriefcase.zSyncDesktopToZcs();
+      app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+
+      // Create a tag 
 		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
 		
 		/*
@@ -74,9 +78,17 @@ public class UnTagDocument extends AjaxCommonTest {
 				
 		//ClientSessionFactory.session().selenium().refresh();
 		*/
-		app.zPageBriefcase.tagFile(docName, tagName);
-		
-		// Make sure the tag was created on the server (get the tag ID)
+
+	   // Click on New Tag
+      DialogTag dialogTag = (DialogTag) app.zPageBriefcase
+            .zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_NEWTAG);
+
+      dialogTag.zSetTagName(tagName);
+      dialogTag.zClickButton(Button.B_OK);
+
+      app.zPageBriefcase.zSyncDesktopToZcs();
+
+      // Make sure the tag was created on the server (get the tag ID)
 		account.soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");
 
 		String tagId = account.soapSelectValue(
@@ -95,9 +107,15 @@ public class UnTagDocument extends AjaxCommonTest {
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
-		app.zPageBriefcase.untagFile(docName);
+	    // Click on tagged document
+      app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+      
+      // Click Remove Tag
+      app.zPageBriefcase.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_REMOVETAG);
 
-		account
+      app.zPageBriefcase.zSyncDesktopToZcs();
+
+      account
 		.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
 				+ "<query>" + docName + "</query>" + "</SearchRequest>");
 		

@@ -56,6 +56,7 @@ public class DeleteDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
+		app.zPageBriefcase.zSyncDesktopToZcs();
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
 
 		// Click on Delete document icon in toolbar

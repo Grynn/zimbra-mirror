@@ -59,6 +59,7 @@ public class EditDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
+		app.zPageBriefcase.zSyncDesktopToZcs();
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
 
 		// Click on Edit document icon in toolbar
@@ -147,6 +148,7 @@ public class EditDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
+		app.zPageBriefcase.zSyncDesktopToZcs();
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
 
 		// Click on Edit document icon in toolbar
@@ -191,6 +193,7 @@ public class EditDocument extends AjaxCommonTest {
 		docText = document.getDocText();
 
 		// Click on created document
+		app.zPageBriefcase.zSyncDesktopToZcs();
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
 
 		// Click on open in a separate window icon in toolbar
@@ -289,6 +292,7 @@ public class EditDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
+		app.zPageBriefcase.zSyncDesktopToZcs();
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
 
 		// Click on open in a separate window icon in toolbar
@@ -351,6 +355,7 @@ public class EditDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
+		app.zPageBriefcase.zSyncDesktopToZcs();
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
 
 		// Click on Edit document icon in toolbar

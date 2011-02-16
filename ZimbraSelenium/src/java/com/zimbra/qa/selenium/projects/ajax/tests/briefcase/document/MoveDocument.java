@@ -52,6 +52,7 @@ public class MoveDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created subfolder
+		app.zPageBriefcase.zSyncDesktopToZcs();
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, subfolderName);
 
 		// Create document item
