@@ -14,7 +14,7 @@ public class DocumentBriefcaseOpen extends AbsForm {
 		public static final String zBodyField = "css=body";
 		public static final String zDocumentBodyField = "css=td[class='ZhAppContent'] div[id='zdocument']";
 		public static final String zNameField = "css=[class=DwtInputField] [input$=]";
-		public static final String zDocumentNameField = "css=[class=TbTop] [b$=]";
+		public static final String zDocumentNameField = "css=[class=TbTop] b";
 	}
 
 	public static String pageTitle;
@@ -31,21 +31,19 @@ public class DocumentBriefcaseOpen extends AbsForm {
 
 	public String retriveDocumentText() throws HarnessException {
 		// ClientSessionFactory.session().selenium().selectFrame(Locators.zFrame);
-		String text = null;
-		if (zIsVisiblePerPosition(Locators.zDocumentBodyField, 0, 0)) {
+		String text = sGetText(Locators.zDocumentBodyField);
+		//if (zIsVisiblePerPosition(Locators.zDocumentBodyField, 0, 0)) {
 			// text = zGetHtml(Locators.zBodyField);
 			// text = sGetText(Locators.zBodyField);
-			text = sGetText(Locators.zDocumentBodyField);
-		}
+			//text = sGetText(Locators.zDocumentBodyField);
+		//}
 		return text;
 	}
 
 	public String retriveDocumentName() throws HarnessException {
-		String name = "";
-		if (sIsElementPresent(Locators.zDocumentNameField)) {
-			name = ClientSessionFactory.session().selenium().getText(
-					Locators.zDocumentNameField);
-		}
+		String name = ClientSessionFactory.session().selenium().getText(
+				Locators.zDocumentNameField);
+
 		return name;
 	}
 

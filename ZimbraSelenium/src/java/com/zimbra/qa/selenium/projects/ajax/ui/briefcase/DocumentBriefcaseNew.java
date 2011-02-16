@@ -12,7 +12,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 		public static final String zFrame = "css=iframe[id*='DWT']";
 		public static final String zSaveAndCloseIconBtn = "//*[@id='DWT9_left_icon']";
 		public static final String zBodyField = "css=body";
-		public static final String zNameField = "css=[id^=DWT4] [input$=]";
+		public static final String zNameField = "css=[id^=DWT4]>input";
 		public static final String zEditNameField = "css=[class=DwtInputField] [input$=]";
 	}
 
@@ -38,8 +38,8 @@ public class DocumentBriefcaseNew extends AbsForm {
 
 	public void typeDocumentName(String text) throws HarnessException {
 		this.zSelectWindow("Zimbra Docs");
-		if (sIsElementPresent(Locators.zNameField))
-			sType(Locators.zNameField, text);
+
+		sType(Locators.zNameField, text);
 	}
 
 	public void editDocumentName(DocumentItem docItem) throws HarnessException {

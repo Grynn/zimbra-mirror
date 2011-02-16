@@ -12,7 +12,7 @@ public class DocumentBriefcaseEdit extends AbsForm {
 		public static final String zFrame = "css=iframe[id='DWT9'][class='ZDEditor']";
 		public static final String zSaveAndCloseIconBtn = "//*[@id='DWT8_left_icon']";
 		public static final String zBodyField = "css=body";
-		public static final String zNameField = "css=[class=DwtInputField] [input$=]";
+		public static final String zNameField = "css=[class=DwtInputField] input";
 	}
 
 	public static String pageTitle;
@@ -32,7 +32,7 @@ public class DocumentBriefcaseEdit extends AbsForm {
 		sSelectFrame(Locators.zFrame);
 		logger.info("typing Document Text" + text);
 		// SleepUtil.sleepSmall();
-		sType(Locators.zBodyField, text);		
+		sType(Locators.zBodyField, text);
 	}
 
 	public String retriveDocumentText() throws HarnessException {
@@ -46,8 +46,7 @@ public class DocumentBriefcaseEdit extends AbsForm {
 	}
 
 	public void typeDocumentName(String text) throws HarnessException {
-		if (sIsElementPresent(Locators.zNameField))
-			sType(Locators.zNameField, text);
+		sType(Locators.zNameField, text);
 	}
 
 	@Override

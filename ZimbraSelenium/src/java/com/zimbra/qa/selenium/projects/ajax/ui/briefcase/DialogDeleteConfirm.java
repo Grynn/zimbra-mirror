@@ -64,7 +64,7 @@ public class DialogDeleteConfirm extends AbsDialog {
 		if (button == Button.B_YES) {
 			locator = "css=div[class='" + Locators.zDialogClass + "'] "
 					+ "div[class='" + Locators.zDialogButtonsClass
-					+ "'] td:contains[id*='button']:contains(Yes)";
+					+ "'] td[id*='button']:contains(Yes)";
 		} else if (button == Button.B_NO) {
 			locator = "css=div[class='" + Locators.zDialogClass + "'] "
 					+ "div[class='" + Locators.zDialogButtonsClass
