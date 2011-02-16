@@ -74,7 +74,7 @@ public class LoginScreen extends AjaxCommonTest {
 	}
 
 	@Test(	description = "Verify tab order in the login screen (username, password, enter)",
-			groups = { "functional" })
+			groups = { "unstable" })
 	public void LoginScreen04() throws HarnessException {
 		
 		throw new HarnessException("implement me!");
