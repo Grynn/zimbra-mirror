@@ -216,11 +216,8 @@ function(emailStr, type, strict) {
  * @param {string}	str		an email string
  * @return	{boolean}	<code>true</code> if the string is valid
  */
-AjxEmailAddress.isValid =
-function(str) {
-	str = AjxStringUtil.trim(str);
-	var prelimOkay = AjxEmailAddress._prelimCheck(str);
-	return (prelimOkay && (str.match(AjxEmailAddress.addrPat) != null));
+AjxEmailAddress.isValid = function(str) {
+	return AjxEmailAddress.parse(str) != null;
 };
 
 AjxEmailAddress._prelimCheck =
