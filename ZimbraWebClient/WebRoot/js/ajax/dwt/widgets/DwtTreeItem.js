@@ -782,7 +782,8 @@ function(expand, ev, skipNotify) {
 			// actually have content
 			this._realizeDeferredChildren();
 			this._expanded = true;
-			this._childDiv.style.display = "block";
+			if(this._childDiv && this._childDiv.style)
+				this._childDiv.style.display = "block";
 			if (this._nodeCell) {
 				AjxImg.setImage(this._nodeCell, this._expandNodeImage);
 			}
