@@ -254,6 +254,7 @@ function(listener) {
  */
 DwtHtmlEditor.prototype.clear =
 function() {
+	AjxDebug.println(AjxDebug.REPLY, "DwtHtmlEditor::clear");
 	this.setContent("");
 }
 
@@ -314,15 +315,19 @@ function(content) {
 		this._currInsPt = null; // reset insertion pointer, bug 11623
 	}
 
+	content = content || "";
 	if (this._mode == DwtHtmlEditor.HTML) {
 		// If the html editor is initialized then go ahead and set the content, else let
 		// _finishHtmlModeInit run before we try setting the content
-		this._pendingContent = content || "";
+		this._pendingContent = content;
+		AjxDebug.println(AjxDebug.REPLY, "Editor in HTML mode, initialized: " + this._htmlModeInited);
 		if (this._htmlModeInited) {
+			AjxDebug.println(AjxDebug.REPLY, "Editor in HTML mode, setting content on timer");
 			this._setContentOnTimer();
 		} // ELSE: _finishHtmlModeInit is about to run and it'll use _pendingContent
 	} else {
-		document.getElementById(this._textAreaId).value = (content || "");
+		AjxDebug.println(AjxDebug.REPLY, "Editor in text mode, content length: " + content.length);
+		document.getElementById(this._textAreaId).value = content;
 	}
 }
 
@@ -1664,7 +1669,9 @@ DwtHtmlEditor.prototype._setContentOnTimer =
 function() {
 	var iframeDoc = this._getIframeDoc();
 	try {
+		AjxDebug.println(AjxDebug.REPLY, "DwtHtmlEditor::_setContentOnTimer");
 		if (this._pendingContent != null) {
+			AjxDebug.println(AjxDebug.REPLY, "setting content, length: " + this._pendingContent.length);
 			iframeDoc.body.innerHTML = this._pendingContent;
 		}
 		// XXX: mozilla hack
@@ -1673,6 +1680,7 @@ function() {
 		}
 		this._onContentInitialized();
 	} catch (ex) {
+		AjxDebug.println(AjxDebug.REPLY, "_setContentOnTimer got exception, trying again - [" + ex + "]");
 		var ta = new AjxTimedAction(this, this._setContentOnTimer);
 		AjxTimedAction.scheduleAction(ta, 10);
 		return true;
