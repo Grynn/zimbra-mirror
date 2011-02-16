@@ -555,8 +555,9 @@ ZaAccountListController.prototype._editItem = function (item) {
 		    viewController = ZaDLXFormView;
 		}
 	}
-		
-	if (! this.selectExistingTabByItemId(itemId,viewContstructor)){
+	
+	try {	
+	   if (! this.selectExistingTabByItemId(itemId,viewContstructor)){
 //		DBG.println("TYPE == ", item.type);
 		if (type == ZaItem.ACCOUNT) {
 			//this._selectedItem = ev.item;
@@ -573,6 +574,14 @@ ZaAccountListController.prototype._editItem = function (item) {
 			}
 		} else if (type == ZaItem.RESOURCE ){
 			ZaApp.getInstance().getResourceController(itemId).show(item, true);
+		}
+	   }
+	} catch(ex) {
+		if(ex.msg) {
+			//output exception message
+			ZaApp.getInstance().dialogs["errorMsgDlg"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON]);
+                       	ZaApp.getInstance().dialogs["errorMsgDlg"].setMessage(ex.msg, null, DwtMessageDialog.TITLE[DwtMessageDialog.WARNING_STYLE]);
+                       	ZaApp.getInstance().dialogs["errorMsgDlg"].popup();
 		}
 	}
 };
