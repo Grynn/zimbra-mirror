@@ -90,7 +90,11 @@ public class ZComposeUploaderBean {
     public static final String F_messageid = "messageid";
     public static final String F_draftid = "draftid";
     public static final String F_fileUpload = "fileUpload";
-    public static final String F_contactSearchQuery  = "contactSearchQuery";
+    public static final String F_contactSearchQuery = "contactSearchQuery";
+    public static final String F_contactSearchNameQuery = "contactSearchNameQuery";
+    public static final String F_contactSearchPhoneticQuery = "contactSearchPhoneticQuery";
+    public static final String F_contactSearchEmailQuery = "contactSearchEmailQuery";
+    public static final String F_contactSearchDeptQuery = "contactSearchDeptQuery";
     public static final String F_contactLocation = "contactLocation";
     public static final String F_sendUID = "sendUID";
 
@@ -530,6 +534,14 @@ public class ZComposeUploaderBean {
     }
 
     public String getContactSearchQuery() { return getParam(F_contactSearchQuery); }
+
+    public String getContactSearchNameQuery() { return getParam(F_contactSearchNameQuery); }
+
+    public String getContactSearchPhoneticQuery() { return getParam(F_contactSearchPhoneticQuery); }
+
+    public String getContactSearchEmailQuery() { return getParam(F_contactSearchEmailQuery); }
+
+    public String getContactSearchDeptQuery() { return getParam(F_contactSearchDeptQuery); }
 
     public String getPendingTo() { return mPendingTo; }
 
