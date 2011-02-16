@@ -3,6 +3,7 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui;
 
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
@@ -43,6 +44,23 @@ public class PageMain extends AbsTab {
 
 	}
 
+	public boolean zIsZimletLoaded() throws HarnessException {
+		return (ClientSessionFactory
+	            .session()
+				.selenium()
+				.getEval(
+						"this.browserbot.getUserWindow().top.appCtxt.getZimletMgr().loaded")
+				.equals("true"));
+	}
+	
+	public boolean zIsMinicalLoaded() throws HarnessException {
+		return (ClientSessionFactory
+	            .session()
+				.selenium()
+				.getEval(
+						"this.browserbot.getUserWindow().top.appCtxt.getAppViewMgr().getCurrentViewComponent(this.browserbot.getUserWindow().top.ZmAppViewMgr.C_TREE_FOOTER) != null")
+				.equals("true"));
+	}
 	/* (non-Javadoc)
 	 * @see projects.admin.ui.AbsPage#isActive()
 	 */
@@ -54,8 +72,14 @@ public class PageMain extends AbsTab {
 			throw new HarnessException("Admin Console application is not active!");
 		
 
-		// Look for the Logout button
-		boolean present = sIsElementPresent(Locators.zLogoffButton);
+		// Look for the Logout button 
+		// check if zimlet + minical loaded
+		boolean present = sIsElementPresent(Locators.zLogoffButton) 
+		               && zIsZimletLoaded()
+		           //    && zIsMinicalLoaded()
+		               ;
+			
+		
 		if ( !present ) {
 			logger.debug("isActive() present = "+ present);
 			return (false);
@@ -85,8 +109,7 @@ public class PageMain extends AbsTab {
 			// This page is already active
 			return;
 		}
-		
-		
+			
 		// 1. Logout
 		// 2. Login as the default account
 		if ( !((AppAjaxClient)MyApplication).zPageLogin.zIsActive() ) {
