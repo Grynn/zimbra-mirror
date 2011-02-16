@@ -6,6 +6,8 @@ package com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 
 
 /**
@@ -61,16 +63,21 @@ public class TreeContacts extends AbsTree {
 		
 		if ( action == Action.A_LEFTCLICK ) {
 			
-			locator = "id=zti__main_Contacts__"+ folder.getId() +"_textCell";
-			
-			if ( !this.sIsElementPresent(locator) ) {
+			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+			   locator = "css=td[id^='zti__" +
+			         MyApplication.zGetActiveAccount().EmailAddress +
+			         ":main_Contacts__'][id$=':" + folder.getId() +"_textCell']";
+			} else {
+			   locator = "id=zti__main_Contacts__"+ folder.getId() +"_textCell";
+			}
+
+			if ( !GeneralUtility.waitForElementPresent(this, locator) ) {
 				throw new HarnessException("Unable to locator folder in tree "+ locator);
 			}
 
 			this.zClick(locator);
 			SleepUtil.sleepSmall();
 			page = null;
-			
 		}  
 		else if ( action == Action.A_RIGHTCLICK ) {
 				

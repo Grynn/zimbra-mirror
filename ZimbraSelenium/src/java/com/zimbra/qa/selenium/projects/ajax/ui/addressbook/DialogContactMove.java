@@ -9,6 +9,8 @@ import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogMove.Locators;
 
 
@@ -43,7 +45,11 @@ public class DialogContactMove extends AbsDialog {
 	public AbsPage zClickButton(Button button) throws HarnessException {
 		String locator=null;
 		if (button == Button.B_OK) {			
-			locator="//div[contains(@id, '_buttons')]/table/tbody/tr/td[2]/table/tbody/tr/td/div";			
+			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+			   locator = "css=div[id='ChooseFolderDialog_button2']";
+			} else {
+			   locator="//div[contains(@id, '_buttons')]/table/tbody/tr/td[2]/table/tbody/tr/td/div";
+			}
 			this.zClick(locator);	 	
 			zWaitForBusyOverlay();
 		}

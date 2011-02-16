@@ -6,7 +6,9 @@ import java.util.List;
 import org.apache.log4j.LogManager;
 
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
+import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
@@ -24,7 +26,9 @@ public class PageAddressbook extends AbsTab {
 		public static final String LOCATOR		= "id='zm__Contacts'";
 		
 		//contact's context menu	
-		public static final ContextMenuItem CONTACT_SEARCH = new ContextMenuItem("zmi__Contacts__SEARCH_MENU","Find Emails...","div[class='ImgSearch']"," div[class='ImgCascade']");	
+		public static final ContextMenuItem CONTACT_SEARCH = ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP ?
+		      new ContextMenuItem("zmi__Contacts__SEARCH","Find Emails From Contact","div[class='ImgSearch']"," div") :             
+		      new ContextMenuItem("zmi__Contacts__SEARCH_MENU","Find Emails...","div[class='ImgSearch']"," div[class='ImgCascade']");	
 		public static final ContextMenuItem CONTACT_ADVANCED_SEARCH = new ContextMenuItem("zmi__Contacts__BROWSE","Advanced Search","div[class='ImgSearchBuilder']","");	
 		public static final ContextMenuItem CONTACT_NEW_EMAIL = new ContextMenuItem("zmi__Contacts__NEW_MESSAGE","New Email","div[class='ImgNewMessage']",":contains('nm')");  	
 		public static final ContextMenuItem CONTACT_EDIT = new ContextMenuItem("zmi__Contacts__CONTACT","Edit Contact","div[class='ImgEdit']","");	
@@ -104,8 +108,14 @@ public class PageAddressbook extends AbsTab {
 			throw new HarnessException("Can't locate addressbook icon");
 		}
 
-		zClick(PageMain.Locators.zAppbarContact);
+		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+   		((AppAjaxClient) MyApplication).zPageMail.zNavigateTo();
+         GeneralUtility.waitForElementPresent(this,
+               PageMain.Locators.zAppbarBriefcase, 20000);
+         ((AppAjaxClient) MyApplication).zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		}
 
+		zClick(PageMain.Locators.zAppbarContact);
 
 		zWaitForActive();
 
@@ -438,5 +448,18 @@ public class PageAddressbook extends AbsTab {
 	
 	}
 
-
+   /**
+    * Synch Zimbra Desktop client to ZCS server
+    * @throws HarnessException
+    */
+   public void zSyncDesktopToZcs() throws HarnessException {
+      // Need to sync the desktop client to ZCS server
+      ((AppAjaxClient) MyApplication).zPageMail.zNavigateTo();
+      ((AppAjaxClient) MyApplication).zPageMail
+            .zToolbarPressButton(Button.B_GETMAIL);
+      // TODO: Investigate the UI properties
+      // Can't use zNavigateTo because briefcase element is always present
+      // even though the mail page is active.
+      zClick(PageMain.Locators.zAppbarContact);
+   }
 }

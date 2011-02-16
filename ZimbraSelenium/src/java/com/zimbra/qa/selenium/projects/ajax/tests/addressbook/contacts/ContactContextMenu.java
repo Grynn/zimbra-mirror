@@ -2,14 +2,11 @@ package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.contacts;
 
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -52,6 +49,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
         
         // Refresh the view, to pick up the new contact
         FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
+        app.zPageAddressbook.zSyncDesktopToZcs();
         app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
                  
         return contactItem;		
@@ -66,10 +64,9 @@ public class ContactContextMenu extends AjaxCommonTest  {
 		// Select the item
         // Right click to show the menu
         ContextMenu contextMenu= (ContextMenu) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, contactItem.fileAs); // contactItem.fileAs);
-      
-        
+
         ArrayList <ContextMenuItem> list = contextMenu.zListGetContextMenuItems(PageAddressbook.CONTEXT_MENU.class);
-        
+
         //verify all items in the context menu list
         ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_SEARCH),"Verify contact search in context menu");
         ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_ADVANCED_SEARCH),"Verify advanced search in context menu");
