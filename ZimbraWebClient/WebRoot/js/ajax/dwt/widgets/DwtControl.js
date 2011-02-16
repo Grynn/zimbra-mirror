@@ -2822,7 +2822,7 @@ function(ev) {
 				// See if the target will allow us to be dropped on it. We have to be an allowable type, and the
 				// target's drop listener may perform additional checks. The DnD icon will typically turn green or
 				// red to indicate whether a drop is allowed.
-				if (targetObj && dropTarget && (targetObj != obj)) {
+				if (targetObj && dropTarget && ((targetObj != obj) || dropTarget.hasMultipleTargets())) {
 					if (targetObj != lastTargetObj || dropTarget.hasMultipleTargets()) {
 						var data = obj._dragSource._getData();
 						if (dropTarget._dragEnter(obj._dragOp, targetObj, data, mouseEv, obj._dndProxy)) {
@@ -2918,7 +2918,7 @@ function(ev) {
 			var targetObj = mouseEv.dwtObj;
 			var dropTarget = targetObj && targetObj._dropTarget;
 			// Perform the drop if the target has allowed it
-			if (targetObj && dropTarget && obj.__dropAllowed && (targetObj != obj)) {
+			if (targetObj && dropTarget && obj.__dropAllowed && ((targetObj != obj) || dropTarget.hasMultipleTargets())) {
 				targetObj._drop(mouseEv);
 				dropTarget._drop(obj._dragSource._getData(), mouseEv);
 				obj._dragSource._endDrag();
