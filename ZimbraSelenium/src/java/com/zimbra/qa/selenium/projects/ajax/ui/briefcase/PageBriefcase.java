@@ -440,7 +440,7 @@ public class PageBriefcase extends AbsTab {
 		itemlocator = listLocator + " td[width*='auto'] div:contains("
 				+ docName + ")";
 
-		if (!this.sIsElementPresent(itemlocator))
+		if (!GeneralUtility.waitForElementPresent(this, itemlocator))
 			throw new HarnessException("Unable to locate item with name("
 					+ docName + ")");
 		if (action == Action.A_LEFTCLICK) {
