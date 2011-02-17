@@ -169,7 +169,8 @@ GlobalConfigXFormView.ASAV_TAB_ATTRS = [ZaGlobalConfig.A_zimbraSpamKillPercent, 
 	ZaGlobalConfig.A_zimbraVirusDefinitionsUpdateFrequency, ZaGlobalConfig.A_zimbraVirusBlockEncryptedArchive, ZaGlobalConfig.A_zimbraVirusWarnRecipient];
 GlobalConfigXFormView.ASAV_TAB_RIGHTS = [];
 
-GlobalConfigXFormView.INTEROP_TAB_ATTRS = [ZaGlobalConfig.A_zimbraFreebusyExchangeURL, ZaGlobalConfig.A_zimbraFreebusyExchangeAuthScheme, ZaGlobalConfig.A_zimbraFreebusyExchangeAuthUsername,
+GlobalConfigXFormView.INTEROP_TAB_ATTRS = [ZaGlobalConfig.A_zimbraFreebusyExchangeURL, ZaGlobalConfig.A_zimbraFreebusyExchangeAuthScheme, 
+	ZaGlobalConfig.A_zimbraFreebusyExchangeServerType, ZaGlobalConfig.A_zimbraFreebusyExchangeAuthUsername,
 	ZaGlobalConfig.A_zimbraFreebusyExchangeAuthPassword, ZaGlobalConfig.A_zimbraFreebusyExchangeUserOrg];
 GlobalConfigXFormView.INTEROP_TAB_RIGHTS = [ZaGlobalConfig.CHECK_EXCHANGE_AUTH_CONFIG_RIGHT];
 
@@ -637,6 +638,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                             { ref: ZaGlobalConfig.A_zimbraFreebusyExchangeAuthScheme, type: _OSELECT1_,
 						  	  label: ZaMsg.NAD_Exchange_Auth_Schema
 						  	},
+			      { ref: ZaGlobalConfig.A_zimbraFreebusyExchangeServerType, type: _OSELECT1_,
+                                                          label: ZaMsg.NAD_Exchange_Server_Type
+                                                        },
                               { ref: ZaGlobalConfig.A_zimbraFreebusyExchangeAuthUsername, type: _TEXTFIELD_,
 						  	  label: ZaMsg.NAD_Exchange_Auth_User, width: "20em"
 						  	},

@@ -582,7 +582,8 @@ ZaDomainXFormView.WIKI_TAB_ATTRS = [ZaDomain.A_zimbraNotebookAccount];
 ZaDomainXFormView.WIKI_TAB_RIGHTS = [];
 
 ZaDomainXFormView.INTEROP_TAB_ATTRS = [ZaDomain.A_zimbraFreebusyExchangeURL, ZaDomain.A_zimbraFreebusyExchangeAuthScheme,
-	ZaDomain.A_zimbraFreebusyExchangeAuthUsername, ZaDomain.A_zimbraFreebusyExchangeAuthPassword,ZaDomain.A_zimbraFreebusyExchangeUserOrg];
+	ZaDomain.A_zimbraFreebusyExchangeAuthUsername, ZaDomain.A_zimbraFreebusyExchangeAuthPassword,
+	ZaDomain.A_zimbraFreebusyExchangeUserOrg, ZaDomain.A_zimbraFreebusyExchangeServerType];
 ZaDomainXFormView.INTEROP_TAB_RIGHTS = [];
 
 ZaDomainXFormView.ZIMLETS_TAB_ATTRS = [ZaDomain.A_zimbraZimletDomainAvailableZimlets];
@@ -990,6 +991,10 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 							type: _SUPER_SELECT1_,   resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
 					    	onChange: ZaDomainXFormView.onFormFieldChanged
         	           	},
+						{ ref: ZaDomain.A_zimbraFreebusyExchangeServerType, label: ZaMsg.NAD_Exchange_Server_Type,
+                                                        type: _SUPER_SELECT1_,   resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                                                	onChange: ZaDomainXFormView.onFormFieldChanged
+                                		},
 						{ ref: ZaDomain.A_zimbraFreebusyExchangeAuthUsername,
                             resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
 				  	  		type: _SUPER_TEXTFIELD_, width: "20em",

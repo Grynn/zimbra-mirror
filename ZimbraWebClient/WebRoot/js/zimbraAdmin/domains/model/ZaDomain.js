@@ -216,6 +216,7 @@ ZaDomain.A_zimbraNotebookAccount = "zimbraNotebookAccount";
 ZaDomain.A_zimbraFreebusyExchangeAuthUsername = "zimbraFreebusyExchangeAuthUsername" ;
 ZaDomain.A_zimbraFreebusyExchangeAuthPassword = "zimbraFreebusyExchangeAuthPassword" ;
 ZaDomain.A_zimbraFreebusyExchangeAuthScheme  = "zimbraFreebusyExchangeAuthScheme" ;
+ZaDomain.A_zimbraFreebusyExchangeServerType = "zimbraFreebusyExchangeServerType" ;
 ZaDomain.A_zimbraFreebusyExchangeURL ="zimbraFreebusyExchangeURL";
 ZaDomain.A_zimbraFreebusyExchangeUserOrg = "zimbraFreebusyExchangeUserOrg" ;
 
@@ -1909,6 +1910,8 @@ ZaDomain.myXModel = {
        { id:ZaDomain.A_zimbraFreebusyExchangeAuthPassword, ref:"attrs/" + ZaDomain.A_zimbraFreebusyExchangeAuthPassword, type: _COS_STRING_ },
        { id:ZaDomain.A_zimbraFreebusyExchangeAuthScheme, ref:"attrs/" + ZaDomain.A_zimbraFreebusyExchangeAuthScheme,
              type: _COS_ENUM_ , choices: ZaSettings.authorizationScheme },
+       { id:ZaDomain.A_zimbraFreebusyExchangeServerType, ref:"attrs/" + ZaDomain.A_zimbraFreebusyExchangeServerType,
+             type: _COS_ENUM_ , choices: ZaSettings.exchangeServerType },
        { id:ZaDomain.A_zimbraFreebusyExchangeURL, ref:"attrs/" + ZaDomain.A_zimbraFreebusyExchangeURL, type: _COS_STRING_ } ,
        { id:ZaDomain.A_zimbraFreebusyExchangeUserOrg, ref:"attrs/" + ZaDomain.A_zimbraFreebusyExchangeUserOrg, type: _COS_STRING_ },
        {id:ZaDomain.A2_isTestingGAL, ref:ZaDomain.A2_isTestingGAL, type:_NUMBER_},

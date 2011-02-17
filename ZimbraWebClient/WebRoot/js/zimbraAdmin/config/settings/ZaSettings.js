@@ -378,6 +378,13 @@ ZaSettings.getAuthorizationScheme = function(){
 }
 ZaSettings.authorizationScheme  = ZaSettings.getAuthorizationScheme;
 
+ZaSettings.getExchangeServerType = function(){
+  return [
+    {value: "webdav", label: ZaMsg.choice_webdav},
+    {value: "ews", label: ZaMsg.choice_ews}
+    ];
+}
+ZaSettings.exchangeServerType = ZaSettings.getExchangeServerType;
 
 //List view groups
 ZaSettings.OVERVIEW_CONFIG_ITEMS = [ZaSettings.COS_LIST_VIEW,ZaSettings.ZIMLET_LIST_VIEW,ZaSettings.SERVER_LIST_VIEW,ZaSettings.ADMIN_ZIMLET_LIST_VIEW,

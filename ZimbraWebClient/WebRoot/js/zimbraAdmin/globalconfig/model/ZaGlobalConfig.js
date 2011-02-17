@@ -152,6 +152,7 @@ ZaGlobalConfig.A_currentMonitorHost = "_currentMonitorHost";
 ZaGlobalConfig.A_zimbraFreebusyExchangeAuthUsername = "zimbraFreebusyExchangeAuthUsername" ;
 ZaGlobalConfig.A_zimbraFreebusyExchangeAuthPassword = "zimbraFreebusyExchangeAuthPassword" ;
 ZaGlobalConfig.A_zimbraFreebusyExchangeAuthScheme  = "zimbraFreebusyExchangeAuthScheme" ;
+ZaGlobalConfig.A_zimbraFreebusyExchangeServerType  = "zimbraFreebusyExchangeServerType" ;
 ZaGlobalConfig.A_zimbraFreebusyExchangeURL ="zimbraFreebusyExchangeURL";
 ZaGlobalConfig.A_zimbraFreebusyExchangeUserOrg = "zimbraFreebusyExchangeUserOrg"  ;
 
@@ -398,7 +399,9 @@ ZaGlobalConfig.myXModel = {
         { id:ZaGlobalConfig.A_zimbraFreebusyExchangeAuthPassword, ref:"attrs/" + ZaGlobalConfig.A_zimbraFreebusyExchangeAuthPassword, type: _STRING_ },
         { id:ZaGlobalConfig.A_zimbraFreebusyExchangeAuthScheme, ref:"attrs/" + ZaGlobalConfig.A_zimbraFreebusyExchangeAuthScheme,
             type: _ENUM_, choices: ZaSettings.authorizationScheme },
-        { id:ZaGlobalConfig.A_zimbraFreebusyExchangeURL, ref:"attrs/" + ZaGlobalConfig.A_zimbraFreebusyExchangeURL, type: _STRING_ },
+        { id:ZaGlobalConfig.A_zimbraFreebusyExchangeServerType, ref:"attrs/" + ZaGlobalConfig.A_zimbraFreebusyExchangeServerType,
+            type: _ENUM_, choices: ZaSettings.exchangeServerType },
+	{ id:ZaGlobalConfig.A_zimbraFreebusyExchangeURL, ref:"attrs/" + ZaGlobalConfig.A_zimbraFreebusyExchangeURL, type: _STRING_ },
         { id:ZaGlobalConfig.A_zimbraFreebusyExchangeUserOrg, ref:"attrs/" + ZaGlobalConfig.A_zimbraFreebusyExchangeUserOrg, type: _STRING_ },
         {id:ZaGlobalConfig.A2_blocked_extension_selection, type:_LIST_},
         {id:ZaGlobalConfig.A2_common_extension_selection, type:_LIST_}
