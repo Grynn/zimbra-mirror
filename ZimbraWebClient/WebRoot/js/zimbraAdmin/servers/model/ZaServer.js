@@ -128,6 +128,21 @@ ZaServer.A_VolumeType = "type";
 ZaServer.A_CurrentIndexVolumeId = "current_index_volume_id";
 ZaServer.A_CurrentMsgVolumeId = "current_msg_volume_id";
 ZaServer.A_isCurrent = "isCurrent";
+
+//VAMI Appliance Update
+ZaServer.A_zimbraApplianceVendor = "zimbraApplianceVendor";
+ZaServer.A_zimbraApplianceName = "zimbraApplianceName";
+ZaServer.A_zimbraApplianceVersion = "zimbraApplianceVersion";
+ZaServer.A_zimbraApplianceFullVersion = "zimbraApplianceFullVersion";
+ZaServer.A_zimbraApplianceDetails = "zimbraApplianceDetails";
+ZaServer.A_zimbraApplianceDefaultRepUrl = "zimbraApplianceDefaultRepUrl";
+ZaServer.A_zimbraApplianceCustomRepUrl = "zimbraApplianceCustomRepUrl";
+ZaServer.A_zimbraApplianceCustomRepUrlUser = "zimbraApplianceCustomRepUrlUser";
+ZaServer.A_zimbraApplianceCustomRepUrlPass = "zimbraApplianceCustomRepUrlPass";
+ZaServer.A_zimbraApplianceUpdateOption = "zimbraApplianceUpdateOption";
+ZaServer.A_zimbraApplianceUpdateType = "zimbraApplianceUpdateType";
+ZaServer.A_zimbraApplianceUpdatehourofrun = "zimbraApplianceUpdatehourofrun";
+
 //mail proxy
 ZaServer.A_zimbraMailProxyPort = "zimbraMailProxyPort";
 ZaServer.A_zimbraMailSSLProxyPort = "zimbraMailSSLProxyPort";
@@ -154,6 +169,47 @@ ZaServer.currentkeys = {};
 ZaServer.currentkeys[ZaServer.MSG] = ZaServer.A_CurrentMsgVolumeId;
 ZaServer.currentkeys[ZaServer.INDEX] = ZaServer.A_CurrentIndexVolumeId;
 ZaServer.volumeTypes =[ZaServer.MSG,ZaServer.INDEX];
+
+ZaServer.updateoptions = {};
+ZaServer.updateoptions[0] = ZaMsg.NONE = 111;
+ZaServer.updateoptions[2] = ZaMsg.EVERYDAY = 112;
+ZaServer.updateoptions[3] = ZaMsg.EVERYSUNDAY = 113;
+ZaServer.updateoptions[4] = ZaMsg.EVERYMONDAY =114;
+ZaServer.updateoptions[5] = ZaMsg.EVERYTUESDAY = 115;
+ZaServer.updateoptions[6] = ZaMsg.EVERYWEDNESDAY = 116;
+ZaServer.updateoptions[7] = ZaMsg.EVERYTHURSDAY = 117;
+ZaServer.updateoptions[8] = ZaMsg.EVERYFRIDAY = 118;
+ZaServer.updateoptions[9] = ZaMsg.EVERYSATURDAY = 119;
+
+ZaServer.updatehourofrun = {};
+ZaServer.updatehourofrun[0] = ZaMsg.ONEAM = 201;
+ZaServer.updatehourofrun[1] = ZaMsg.TWOAM = 202;
+ZaServer.updatehourofrun[2] = ZaMsg.THREEAM = 203;
+ZaServer.updatehourofrun[3] = ZaMsg.FOURAM = 204;
+ZaServer.updatehourofrun[4] = ZaMsg.FIVEAM = 205;
+ZaServer.updatehourofrun[5] = ZaMsg.SIXAM = 206;
+ZaServer.updatehourofrun[6] = ZaMsg.SEVENAM = 207;
+ZaServer.updatehourofrun[7] = ZaMsg.EIGHTAM = 208;
+ZaServer.updatehourofrun[8] = ZaMsg.NINEAM = 209;
+ZaServer.updatehourofrun[9] = ZaMsg.TENAM = 210;
+ZaServer.updatehourofrun[10] = ZaMsg.ELEVENAM = 211;
+ZaServer.updatehourofrun[11] = ZaMsg.TWELVEAM = 212;
+ZaServer.updatehourofrun[12] = ZaMsg.TWELVEPM = 312;
+ZaServer.updatehourofrun[13] = ZaMsg.ELEVENPM = 311; 
+ZaServer.updatehourofrun[14] = ZaMsg.TENPM = 310;
+ZaServer.updatehourofrun[15] = ZaMsg.NINEPM = 309;
+ZaServer.updatehourofrun[16] = ZaMsg.EIGHTPM = 308;
+ZaServer.updatehourofrun[17] = ZaMsg.SEVENPM = 307;
+ZaServer.updatehourofrun[18] = ZaMsg.SIXPM = 306;
+ZaServer.updatehourofrun[19] = ZaMsg.FIVEPM = 305;
+ZaServer.updatehourofrun[20] = ZaMsg.FOURPM = 304;
+ZaServer.updatehourofrun[21] = ZaMsg.THREEPM = 303;
+ZaServer.updatehourofrun[22] = ZaMsg.TWOPM = 302;
+ZaServer.updatehourofrun[23] = ZaMsg.ONEPM =301;
+
+ZaServer.APPLIANCEUPDATE_CD = 2;
+ZaServer.APPLIANCEUPDATE_DEFAULTREP = 1;
+ZaServer.APPLIANCEUPDATE_CUSTOMREP = 3;
 
 ZaServer.DEFAULT_IMAP_PORT=143;
 ZaServer.DEFAULT_IMAP_SSL_PORT=993;
@@ -424,7 +480,20 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_showVolumes, ref:ZaServer.A_showVolumes, type: _ENUM_, choices: [false,true]},
 		{id:ZaServer.A2_volume_selection_cache, ref:ZaServer.A2_volume_selection_cache, type:_LIST_},
 		{id:ZaServer.A_CurrentIndexVolumeId, ref:ZaServer.A_CurrentIndexVolumeId, type:_NUMBER_},
-		{id:ZaServer.A_CurrentMsgVolumeId, ref:ZaServer.A_CurrentMsgVolumeId, type:_NUMBER_}
+		{id:ZaServer.A_CurrentMsgVolumeId, ref:ZaServer.A_CurrentMsgVolumeId, type:_NUMBER_},
+		//VAMI update
+		{id:ZaServer.A_zimbraApplianceVendor, ref:"attrs/" +  ZaServer.A_zimbraApplianceVendor, type:_STRING_, maxLength: 256 },
+		{id:ZaServer.A_zimbraApplianceName, ref:"attrs/" +  ZaServer.A_zimbraApplianceName, type:_STRING_, maxLength: 256 },
+		{id:ZaServer.A_zimbraApplianceVersion, ref:"attrs/" +  ZaServer.A_zimbraApplianceVersion, type:_STRING_, maxLength: 256 },
+		{id:ZaServer.A_zimbraApplianceFullVersion, ref:"attrs/" +  ZaServer.A_zimbraApplianceFullVersion, type:_STRING_, maxLength: 256 },
+		{id:ZaServer.A_zimbraApplianceDetails, ref:"attrs/" +  ZaServer.A_zimbraApplianceDetails, type:_STRING_, maxLength: 256 },
+		{id:ZaServer.A_zimbraApplianceDefaultRepUrl, ref:"attrs/" +  ZaServer.A_zimbraApplianceDefaultRepUrl, type:_STRING_, maxLength: 256 },
+		{id:ZaServer.A_zimbraApplianceCustomRepUrl, ref:"attrs/" +  ZaServer.A_zimbraApplianceCustomRepUrl, type:_STRING_, maxLength: 256 },
+		{id:ZaServer.A_zimbraApplianceCustomRepUrlUser, ref:"attrs/" +  ZaServer.A_zimbraApplianceCustomRepUrlUser, type:_STRING_, maxLength: 256 },
+		{id:ZaServer.A_zimbraApplianceCustomRepUrlPass, ref:"attrs/" +  ZaServer.A_zimbraApplianceCustomRepUrlPass, type:_STRING_, maxLength: 256 },
+		{id:ZaServer.A_zimbraApplianceUpdateOption, ref:"attrs/" +  ZaServer.A_zimbraApplianceUpdateOption, type:_LIST_},
+		{id:ZaServer.A_zimbraApplianceUpdateType, ref:"attrs/" +  ZaServer.A_zimbraApplianceUpdateType, type:_LIST_},
+		{id:ZaServer.A_zimbraApplianceUpdatehourofrun, ref:"attrs/" +  ZaServer.A_zimbraApplianceUpdatehourofrun, type:_LIST_},
     ]
 };
 		
