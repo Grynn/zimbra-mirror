@@ -1,11 +1,11 @@
-<zimlet name="com_zimbra_url" version="2.2" label="${msg.zimletLabel}" target="main view-window" description="${msg.description}">
+<zimlet name="com_zimbra_url" version="2.3" label="${msg.zimletLabel}" target="main view-window" description="${msg.description}">
 	<include>url.js</include>
 	<resource>blank_pixel.gif</resource>
 	<handlerObject>Com_Zimbra_Url</handlerObject>
 	<serverExtension hasKeyword="url" extensionClass="com.zimbra.cs.zimlet.handler.RegexHandler"/>
 	<contentObject type="url">
 		<matchOn>
-			<regex attrs="ig">((telnet:)|((https?|ftp|gopher|news|file):\/\/)|(www\.[\w\.\_\-]+))[^\s\xA0\(\)\&lt;\>\[\]\{\}\'\"]*</regex>
+			<regex attrs="ig">(((telnet|cid):)|((https?|mailto|notes|smb|ftp|gopher|news|tel|callto|webcal|feed|file):\/\/)|(www\.[\w\.\_\-]+))[^\s\xA0\(\)\&lt;\>\[\]\{\}\'\"]*</regex>
 		</matchOn>
 	</contentObject>
 </zimlet>
