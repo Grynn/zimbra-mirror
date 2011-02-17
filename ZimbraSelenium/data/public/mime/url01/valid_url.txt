@@ -1,0 +1,13 @@
+From: foo@foo.com 
+To: foo@foo.com 
+Subject: subject12955323015009
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=utf-8 
+Content-Transfer-Encoding: 7bit
+
+text  text
+
+
+text http://www.vmware.com general
+text https://www.vmware.com general
+
