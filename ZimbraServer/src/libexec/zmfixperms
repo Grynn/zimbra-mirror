@@ -644,13 +644,15 @@ fi
 
 if [ -d ${zimbra_home}/data/postfix ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/data/postfix"
+  if [ ! -d ${zimbra_home}/data/postfix/data ]; then
+    mkdir -p ${zimbra_home}/data/postfix/data
+  fi
   if [ ! -d ${zimbra_home}/data/postfix/spool/pid ]; then
     mkdir -p ${zimbra_home}/data/postfix/spool/pid
   fi
   chmod 755 ${zimbra_home}/data/postfix
   chown -fR ${postfix_owner}:${postfix_owner} ${zimbra_home}/data/postfix/spool
   chown -f ${root_user} ${zimbra_home}/data/postfix/spool
-  chgrp -f ${postfix_owner} ${zimbra_home}/data/postfix/spool
   chown -f ${postfix_owner} ${zimbra_home}/data/postfix/spool/pid
   chgrp -f ${root_group} ${zimbra_home}/data/postfix/spool/pid
   # Postfix specific permissions
@@ -664,6 +666,9 @@ if [ -d ${zimbra_home}/data/postfix ]; then
   fi
   chown -f ${postfix_owner} ${zimbra_home}/data/postfix
   chown -f ${postfix_owner} ${zimbra_home}/data/postfix/* 2> /dev/null
+  chgrp -f ${postfix_suid_group} ${zimbra_home}/data/postfix/data
+  chown -f ${root_user} ${zimbra_home}/data/postfix/spool
+  chgrp -f ${root_group} ${zimbra_home}/data/postfix/spool
 fi
 
 if [ -d ${zimbra_home}/index -a ${extended} = "yes" ]; then
