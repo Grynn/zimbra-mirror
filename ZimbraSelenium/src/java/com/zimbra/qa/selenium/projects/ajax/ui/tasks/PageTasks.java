@@ -33,6 +33,9 @@ public class PageTasks extends AbsTab {
 		public static final String zb__TKE1__SAVE_left_icon = "zb__TKE1__SAVE_left_icon";
 		public static final String taskListView = "css=div[id='zl__TKL__rows'][class='DwtListView-Rows']";
 		//public static final String taskbodyView = "css=div[id='zl__TKL__rows'][class='DwtListView-Rows']";
+		public static final String zTasksTab = "zb__App__Tasks";
+		public static final String zNewTask = "zb__TKL__NEW_MENU_left_icon";
+		
 	}
 
 	public PageTasks(AbsApplication application) {
@@ -377,7 +380,7 @@ public class PageTasks extends AbsTab {
 		if (button == Button.B_NEW) {
 
 			// New button
-			locator = "zb__TKL__NEW_MENU_left_icon";
+			locator = Locators.zNewTask;
 
 			page = new FormTaskNew(this.MyApplication);
 

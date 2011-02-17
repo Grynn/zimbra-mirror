@@ -56,6 +56,7 @@ public class FormTaskNew extends AbsForm {
 		public static final String zEditNameField = "css=[class=DwtInputField] [input$=]";
 		public static final String zSaveTask = "zb__TKE1__SAVE_left_icon";
 		public static final String zTasksubjField = "//td[contains(@id,'_subject')]/div/input";
+		public static final String zCancelTask = "zb__TKE1__CANCEL_left_icon";
 
 		
 	}
@@ -132,14 +133,33 @@ public class FormTaskNew extends AbsForm {
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
 		
-		if ( button == null )
+		if (button == null)
 			throw new HarnessException("Button cannot be null!");
-		
+
 		// Fallthrough objects
 		AbsPage page = null;
 		String locator = null;
-		
-		if ( button == Button.B_SEND ) {
+		if (button == null)
+			throw new HarnessException("Button cannot be null!");
+
+		// Fallthrough objects
+
+		if (button == Button.B_CANCEL) {
+
+			locator = Locators.zCancelTask;
+
+			this.zClick(locator);
+			page = new DialogWarning(
+					DialogWarning.DialogWarningID.SaveTaskChangeMessage,
+					this.MyApplication);
+
+			this.zWaitForBusyOverlay();
+
+			return (page);
+		} else {
+			throw new HarnessException("no logic defined for button " + button);
+		}
+	/*	if ( button == Button.B_SEND ) {
 			
 			locator = Locators.zSendIconBtn;
 			
@@ -248,9 +268,9 @@ public class FormTaskNew extends AbsForm {
 			page.zWaitForActive();
 			
 		}
-		
+		*/
 		// Return the page, if specified
-		return (page);
+	//	return (page);
 
 	}
 	
