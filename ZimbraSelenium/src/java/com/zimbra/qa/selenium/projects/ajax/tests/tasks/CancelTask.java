@@ -35,15 +35,19 @@ public class CancelTask extends AjaxCommonTest {
 
 		String subject = "task" + ZimbraSeleniumProperties.getUniqueString();
 		String body = "taskbody" + ZimbraSeleniumProperties.getUniqueString();
-
+		
+		//Click NEW button
 		FormTaskNew taskNew = (FormTaskNew) app.zPageTasks.zToolbarPressButton(Button.B_NEW);
-
+		
+		//Fill out resulting form
 		taskNew.zFillField(Field.Subject, subject);
 		taskNew.zFillField(Field.Body, body);
-
+		
+		//Click Cancel , to cancel the compose
 		AbsDialog warning = (AbsDialog) taskNew.zToolbarPressButton(Button.B_CANCEL);
 		ZAssert.assertNotNull(warning, "Verify the dialog is returned");
 
+		//Click No button of warning dialog
 		warning.zClickButton(Button.B_NO);
 
 		List<TaskItem> tasks = app.zPageTasks.zGetTasks();
