@@ -1104,7 +1104,7 @@ ZaAccountXFormView.getAddressFormItem = function(){
 
 ZaAccountXFormView.accountNameInfoPool = null;
 ZaAccountXFormView.getAccountNameInfoItem = function(){
-	if(AjxUtil.isEmpty(ZaAccountXFormView.addressItemsPool)){
+	if(AjxUtil.isEmpty(ZaAccountXFormView.accountNameInfoPool)){
 		ZaAccountXFormView.accountNameInfoPool = new Object();
 		ZaAccountXFormView.accountNameInfoPool[ZaAccount.A_name] = {ref:ZaAccount.A_name, type:_EMAILADDR_,
 					 msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
