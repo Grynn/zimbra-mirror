@@ -922,7 +922,7 @@ function(row) {
 		// is different from the old selection.
 		// In the case where a header item is dragged over, the row might be
 		// null or void.
-		if (!row || row.id != oldRow.id) {
+		if (!row || (oldRow && (row.id != oldRow.id))) {
 			this._updateDragSelection(oldRow, false);
 		}
 	}
