@@ -657,31 +657,52 @@ function(ev) {
 
 ZaAccountListController.prototype._expireSessionListener = 
 function(ev) {
-	if(this._contentView.getSelectionCount()==1) {
-		var item = this._contentView.getSelection()[0];
-		if((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.ACCOUNT)){
-			if(!item.targetObj)
-				item.targetObj = item.getAliasTargetObj();
-			item = item.targetObj;
-		}
-		item.loadEffectiveRights("id", item.id, false);
-		if(ZaItem.hasWritePermission(ZaAccount.A_zimbraAuthTokenValidityValue,item)) {
-			ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(ZaMsg.WARN_EXPIRE_SESSIONS, DwtMessageDialog.WARNING_STYLE);
-			ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, ZaAccountListController.prototype.expireSessions, this, [item]);		
-			ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.closeCnfrmDlg, this, null);				
-			ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();
-		} else {
-			this.popupMsgDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_PERMISSION_FOR_OPERATION_ON, [item.name ? item.name : item.attrs[ZaAccount.A_accountName]]), true);
-		}
+	try {	
+		if(this._contentView.getSelectionCount()==1) {
+			var item = this._contentView.getSelection()[0];
+			if((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.ACCOUNT)){
+				if(!item.targetObj)
+					item.targetObj = item.getAliasTargetObj();
+				item = item.targetObj;
+			}
+			item.loadEffectiveRights("id", item.id, false);
+			if(ZaItem.hasWritePermission(ZaAccount.A_zimbraAuthTokenValidityValue,item)) {
+				ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(ZaMsg.WARN_EXPIRE_SESSIONS, DwtMessageDialog.WARNING_STYLE);
+				ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, ZaAccountListController.prototype.expireSessions, this, [item]);		
+				ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.closeCnfrmDlg, this, null);				
+				ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();
+			} else {
+				this.popupMsgDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_PERMISSION_FOR_OPERATION_ON, [item.name ? item.name : item.attrs[ZaAccount.A_accountName]]), true);
+			}	
+		}	
+ 	}catch(ex){
+		this._handleException(ex, "ZaAccountListController._expireSessionListener", null, false);
 	}
 }
 
 ZaAccountListController.prototype.expireSessions = 
 function(acct) {
-	ZaApp.getInstance().dialogs["confirmMessageDialog"].popdown();
-	mods = {};
-	mods[ZaAccount.A_zimbraAuthTokenValidityValue] = (!acct.attrs[ZaAccount.A_zimbraAuthTokenValidityValue] ? 1 : ((parseInt(acct.attrs[ZaAccount.A_zimbraAuthTokenValidityValue])+1) % 9)); 
-	acct.modify(mods,acct);
+	try {
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].popdown();
+		mods = {};
+		mods[ZaAccount.A_zimbraAuthTokenValidityValue] = (!acct.attrs[ZaAccount.A_zimbraAuthTokenValidityValue] ? 1 : ((parseInt(acct.attrs[ZaAccount.A_zimbraAuthTokenValidityValue])+1) % 9)); 
+		acct.modify(mods,acct);
+		//if we find we invalidate self account, we will throw an simulative exception of AUTH_EXPIRED 
+		//this exception will be handled in _handleException to redirect admin to login page  
+		if(ZaZimbraAdmin.currentAdminAccount.id == acct.id){
+			var exParams = {
+				msg: 	ZaMsg.EX_EXPIRE_OWN_SESSIONS,
+				code:	ZmCsfeException.SVC_AUTH_EXPIRED ,
+				method: null,
+				detail: "",
+				data:   "",
+				trace:  ""
+			};
+			throw new ZmCsfeException(exParams);
+		}
+	}catch(ex){
+		this._handleException(ex, "ZaAccountListController.expireSessions", null, false);
+	}
 }  
 
 ZaAccountListController._viewMailListenerLauncher = 
