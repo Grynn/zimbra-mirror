@@ -359,6 +359,32 @@ public class PageBriefcase extends AbsTab {
 						"no logic defined for pulldown/option " + pulldown
 								+ "/" + option);
 			}
+		} else if (pulldown == Button.B_SEND) {
+			if (option == Button.O_SEND_AS_ATTACHMENT) {
+
+				pulldownLocator = "css=td[id$='__SEND_FILE_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+
+				optionLocator = "css=td[id$='_title']:contains('Send as attachment')";
+				
+				page = new FormMailSend(this.MyApplication);
+
+				// FALL THROUGH
+			} else if (option == Button.O_SEND_LINK) {
+				// Using General shortcuts: Type "u" shortcut
+				// zKeyboard.zTypeCharacters(Shortcut.S_MAIL_REMOVETAG.getKeys());
+
+				pulldownLocator = "css=td[id$='__SEND_FILE_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+
+				optionLocator = "css=td[id$='_title']:contains('Send link')";
+
+				page = new FormMailSend(this.MyApplication);
+
+				// FALL THROUGH
+			} else {
+				throw new HarnessException(
+						"no logic defined for pulldown/option " + pulldown
+								+ "/" + option);
+			}
 		} else {
 			throw new HarnessException("no logic defined for pulldown "
 					+ pulldown);

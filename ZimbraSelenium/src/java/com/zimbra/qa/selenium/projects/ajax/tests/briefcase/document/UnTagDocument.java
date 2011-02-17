@@ -49,8 +49,28 @@ public class UnTagDocument extends AjaxCommonTest {
 						+ "</doc>"
 						+ "</SaveDocumentRequest>");
 		
-		String docId = account.soapSelectValue(
-				"//mail:SaveDocumentResponse//mail:doc","id");
+		/*
+		 * String docId =
+		 * account.soapSelectValue("//mail:SaveDocumentResponse//mail:doc"
+		 * ,"id");
+		 * 
+		 * // Search for created documentaccount.soapSend(
+		 * "<SearchRequest xmlns='urn:zimbraMail' types='document'>" +
+		 * "<query>in:" + briefcaseFolder.getName() +
+		 * "</query></SearchRequest>");
+		 * 
+		 * String docId = account.soapSelectValue(
+		 * "//mail:SearchResponse//mail:doc[@name='" + docName + "']", "id");
+		 * String version = account.soapSelectValue(
+		 * "//mail:SearchResponse//mail:doc[@name='" + docName + "']", "id");
+		 * 
+		 * account.soapSend(
+		 * "<SearchRequest xmlns='urn:zimbraMail' types='document'>" + "<query>"
+		 * + docName + "</query>" + "</SearchRequest>");
+		 * 
+		 * docId = account.soapSelectValue("//mail:doc", "id"); version =
+		 * account.soapSelectValue("//mail:doc", "ver");
+		 */
 		
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);

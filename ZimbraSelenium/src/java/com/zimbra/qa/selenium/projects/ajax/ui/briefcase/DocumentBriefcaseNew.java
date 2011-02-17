@@ -61,8 +61,8 @@ public class DocumentBriefcaseNew extends AbsForm {
 		DocumentItem docItem = (DocumentItem) item;
 
 		// Fill out the form
-		typeDocumentText(docItem.getDocText());
 		typeDocumentName(docItem.getDocName());
+		typeDocumentText(docItem.getDocText());
 		logger.info(item.prettyPrint());
 	}
 
