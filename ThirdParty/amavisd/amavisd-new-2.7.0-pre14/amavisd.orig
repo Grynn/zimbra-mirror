@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -T
 
 #------------------------------------------------------------------------------
 # This is amavisd-new.
@@ -398,7 +398,7 @@ BEGIN {
       $spamcontrol_obj
       $helpers_home $sa_configpath $sa_siteconfigpath
       $sa_local_tests_only $sa_timeout $sa_debug
-      $dspam $sa_spawned $sa_userprefs_file
+      $dspam $sa_spawned
     )],
     'platform' => [qw(
       $can_truncate $unicode_aware $my_pid
@@ -1959,9 +1959,9 @@ sub read_config_file($$) {
     elsif ($errn)        { $msg = "is inaccessible: $!" }
     elsif (-d _)         { $msg = "is a directory" }
     elsif (!-f _)        { $msg = "is not a regular file" }
-#    elsif ($> && -o _)   { $msg = "should not be owned by EUID $>"}
+    elsif ($> && -o _)   { $msg = "should not be owned by EUID $>"}
     elsif ($> && -w _)   { $msg = "is writable by EUID $>, EGID $)" }
-#    elsif ($owner_uid)   { $msg = "should be owned by root (uid 0) "}
+    elsif ($owner_uid)   { $msg = "should be owned by root (uid 0) "}
     if (defined $msg)    { die "Config file \"$config_file\" $msg," }
     $read_config_files_depth++;  push(@actual_config_files, $config_file);
     if ($read_config_files_depth >= 100) {
@@ -4266,13 +4266,10 @@ sub make_query_keys($$$;$) {
     my(@dkeys); my($d) = $domain;
     for (;;) {               # (@).sub.example.com (@).example.com (@).com (@).
       push(@dkeys, $prepend_to_domain.'.'.$d);
-      if ($d ne '') {
-        push(@dkeys, $d);
-      }
       last  if $d eq '';
       $d = ($d =~ /^([^.]*)\.(.*)\z/s) ? $2 : '';
     }
-    if (@dkeys > 20) { @dkeys = @dkeys[$#dkeys-19 .. $#dkeys] }  # sanity limit
+    if (@dkeys > 10) { @dkeys = @dkeys[$#dkeys-9 .. $#dkeys] }  # sanity limit
     push(@keys,@dkeys);
   }
   if (defined $append_string && $append_string ne '') {
@@ -10586,8 +10583,8 @@ sub after_chroot_init() {
           rename($config_file.'.moved', $config_file);
           $m = 'is writable (confirmed)';
         }
-#        push(@msg, "Directory of a config file \"$config_file\" $m, ".
-#                   "UID $<, EUID $>, EGID $)" );
+        push(@msg, "Directory of a config file \"$config_file\" $m, ".
+                   "UID $<, EUID $>, EGID $)" );
       }
       last  if @msg;
     }
@@ -24335,7 +24332,6 @@ sub initializeSpamAssassin {
     home_dir_for_helpers => $helpers_home,
     rules_filename       => $sa_configpath,
     site_rules_filename  => $sa_siteconfigpath,
-    userprefs_filename => $sa_userprefs_file,
 #   LOCAL_STATE_DIR   => '/var/lib',
 #   PREFIX            => '/usr/local',
 #   DEF_RULES_DIR     => '/usr/local/share/spamassassin',
