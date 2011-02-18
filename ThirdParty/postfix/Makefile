@@ -96,6 +96,7 @@ endif
 	cd postfix-$(POSTFIX_VERSION); \
 	patch -g0 -p1 < ../patches/postfix-zimbra-bdb.patch; \
 	patch -g0 -p1 < ../patches/postfix-main-cf-zimbra.patch; \
+	patch -g0 -p1 < ../patches/postfix-ssl.patch; \
 	$(MAKE) $(MAKEARGS)  makefiles \
 	OPT="-O2" \
 	DEBUG="-g" \
