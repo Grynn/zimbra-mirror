@@ -178,10 +178,18 @@ public class DisplayMail extends AbsDisplay {
 		} else if ( field == Field.Cc ) {
 			
 			locator = "css=tr[id$='_cc'] td[class~='LabelColValue'] span[id$='_com_zimbra_email'] span span";
+			if ( !sIsElementPresent(locator) ) {
+				// no email zimlet case
+				locator = "css=tr[id$='_cc'] td[class~='LabelColValue']";
+			}
 			
 		} else if ( field == Field.From ) {
 			
 			locator = "css=tr[id$='_from'] span[id$='_com_zimbra_email'] span span";
+			if ( !sIsElementPresent(locator) ) {
+				// no email zimlet case
+				locator = "css=tr[id$='_from']";
+			}
 
 		} else if ( field == Field.ReceivedDate ) {
 			
