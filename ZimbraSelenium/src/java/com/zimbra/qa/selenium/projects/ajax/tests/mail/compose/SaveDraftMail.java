@@ -6,9 +6,11 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
@@ -44,10 +46,16 @@ public class SaveDraftMail extends AjaxCommonTest {
 		// Send the message
 		mailform.zToolbarPressButton(Button.B_SAVE_DRAFT);
 		mailform.zToolbarPressButton(Button.B_CANCEL);
+		app.zPageMail.zSyncDesktopToZcs();
 		
 		// Get the message from the server
-		MailItem draft = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
-		FolderItem draftsFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Drafts);
+		Object[] params = {app.zGetActiveAccount(), "subject:("+ subject +")"};
+      MailItem draft = (MailItem)GeneralUtility.waitFor("com.zimbra.qa.selenium.framework.items.MailItem", null, true,
+            "importFromSOAP", params, WAIT_FOR_OPERAND.NEQ, null, 30000, 1000);
+
+      Object[] params2 = {app.zGetActiveAccount(), SystemFolder.Drafts};
+      FolderItem draftsFolder = (FolderItem)GeneralUtility.waitFor("com.zimbra.qa.selenium.framework.items.FolderItem", null, true,
+            "importFromSOAP", params2, WAIT_FOR_OPERAND.NEQ, null, 30000, 1000);
 		
 		// Verify the draft data matches
 		ZAssert.assertEquals(draft.dSubject, subject, "Verify the subject field is correct");
