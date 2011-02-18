@@ -84,9 +84,8 @@ public class ReplyMailHtml extends AjaxCommonTest {
 
 		// From the receiving end, verify the message details
 		// Need 'in:inbox' to seprate the message from the sent message
-		Object[] params = {ZimbraAccount.AccountA(), "in:inbox subject:("+ mail.dSubject +")"};
-      MailItem received = (MailItem)GeneralUtility.waitFor("com.zimbra.qa.selenium.framework.items.MailItem", null, true,
-            "importFromSOAP", params, WAIT_FOR_OPERAND.NEQ, null, 30000, 1000);
+      MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountA(),
+            "in:inbox subject:("+ mail.dSubject +")");
 
 		ZAssert.assertEquals(received.dFromRecipient.dEmailAddress, app.zGetActiveAccount().EmailAddress, "Verify the from field is correct");
 		ZAssert.assertEquals(received.dToRecipients.get(0).dEmailAddress, ZimbraAccount.AccountA().EmailAddress, "Verify the to field is correct");

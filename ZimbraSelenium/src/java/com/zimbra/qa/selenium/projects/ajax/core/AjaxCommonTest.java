@@ -44,7 +44,6 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.PageLogin;
-import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
 import com.zimbra.qa.selenium.projects.desktop.core.DesktopInstallUtil;
 
 /**
@@ -437,11 +436,19 @@ public class AjaxCommonTest {
                   append(temp[1]).toString();
                }
 
-               while (bFoundOtherUser) {
+               int maxRetry = 30;
+               int retry = 0;
+               while (bFoundOtherUser && retry < maxRetry) {
+                  SleepUtil.sleepSmall();
+                  if (app.zPageLogin.sIsElementPresent(PageLogin.Locators.zMyAccountsTab)) {
+                     app.zPageLogin.sClick(PageLogin.Locators.zMyAccountsTab);
+                     GeneralUtility.waitForElementPresent(app.zPageLogin,
+                           PageLogin.Locators.zBtnLoginDesktop);
+                  }
+
                   if (app.zPageLogin.sIsElementPresent(deleteButtonLocator)) {
                      app.zPageLogin.sClick(deleteButtonLocator);
                      logger.debug("Selenium Confirmation: " + _selenium.getConfirmation());
-                     SleepUtil.sleep(3000);
                      String nthChildString = "nth-child(3)";
                      if (deleteButtonLocator.contains(nthChildString)) {
                         // It is switched from 3 to 4 because after clicking the delete button the first time
@@ -454,6 +461,11 @@ public class AjaxCommonTest {
                         deleteButtonLocator, 5000)) {
                      bFoundOtherUser = false;
                   }
+                  retry++;
+               }
+
+               if (retry == maxRetry) {
+                  throw new HarnessException("Retry deleting the user timed out");
                }
             }
             addDefaultAccount();

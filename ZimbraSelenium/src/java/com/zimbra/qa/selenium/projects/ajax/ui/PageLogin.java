@@ -7,6 +7,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.ui.Shortcut;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -21,6 +22,7 @@ public class PageLogin extends AbsTab {
 		public static final String zBtnLogin = "xpath=//input[@class='zLoginButton']";
 	    // Desktop-specific
       public static final String zAddNewAccountButton = "css=td div[class*='ZPanel'][onclick*='OnAdd()']";
+      public static final String zMyAccountsTab = "css=div[class$='ctive ZPanelFirstTab']";
       public static final String zBtnLoginDesktop = "css=div[id*='loginButton']";
       public static final String zDeleteButton = "css=div[class*='ZPanelInfoInner'] a[href*='OnDelete']";
 		
@@ -129,7 +131,18 @@ public class PageLogin extends AbsTab {
 
 	   case DESKTOP:
 	      // Click the Login button
-         sClick(Locators.zBtnLoginDesktop);
+	      if (!this.sIsElementPresent(Locators.zBtnLoginDesktop) ||
+	            !this.sIsVisible(Locators.zBtnLoginDesktop)) {
+	         if (this.sIsElementPresent(Locators.zMyAccountsTab)) {
+	            sClick(Locators.zMyAccountsTab);
+	         } else {
+	            throw new HarnessException("It looks like account hasn't been created," +
+	            		" please check the logic.");
+	         }
+	      }
+
+	      GeneralUtility.waitForElementPresent(this, Locators.zBtnLoginDesktop);
+	      sClick(Locators.zBtnLoginDesktop);
 	      break;
 
 	   default:

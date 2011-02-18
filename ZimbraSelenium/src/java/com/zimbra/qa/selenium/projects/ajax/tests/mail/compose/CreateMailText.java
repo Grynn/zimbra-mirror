@@ -9,16 +9,12 @@ import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.RecipientItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.ui.Shortcut;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.PageMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
 
@@ -60,9 +56,7 @@ public class CreateMailText extends AjaxCommonTest {
 
 		app.zPageMail.zSyncDesktopToZcs();
 
-      Object[] params = {ZimbraAccount.AccountA(), "subject:("+ mail.dSubject +")"};
-      MailItem received = (MailItem)GeneralUtility.waitFor("com.zimbra.qa.selenium.framework.items.MailItem", null, true,
-            "importFromSOAP", params, WAIT_FOR_OPERAND.NEQ, null, 30000, 1000);
+		MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ mail.dSubject +")");
 
       logger.debug("===========received is: " + received);
       logger.debug("===========app is: " + app);
@@ -108,9 +102,8 @@ public class CreateMailText extends AjaxCommonTest {
 		app.zPageMail.zSyncDesktopToZcs();
 
 		// From the receipient end, make sure the message is received
-		Object[] params = {ZimbraAccount.AccountA(), "subject:("+ mail.dSubject +")"};
-      MailItem received = (MailItem)GeneralUtility.waitFor("com.zimbra.qa.selenium.framework.items.MailItem", null, true,
-            "importFromSOAP", params, WAIT_FOR_OPERAND.NEQ, null, 30000, 1000);
+		MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ mail.dSubject +")");
+
 		ZAssert.assertNotNull(received, "Verify the message is received");
 		
 	}
