@@ -400,6 +400,7 @@ public class PageTasks extends AbsTab {
 				throw new HarnessException("Tried clicking on " + button
 						+ " but it was disabled " + attrs);
 			}
+			page = new FormTaskNew(this.MyApplication);
 
 		} else if (button == Button.B_DELETE) {
 

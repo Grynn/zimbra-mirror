@@ -384,9 +384,12 @@ public class FormTaskNew extends AbsForm {
 
 		} else if (field == Field.Body) {
 			locator = Locators.zBodyField;
-			sSelectFrame(Locators.zFrame);
-			sType(locator, value);
-			sSelectWindow(null);
+			try {
+				sSelectFrame(Locators.zFrame);
+				sType(locator, value);
+			} finally {
+				sSelectWindow(null);
+			}
 			return;
 
 		} else {
