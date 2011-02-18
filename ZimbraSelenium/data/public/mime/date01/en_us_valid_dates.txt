@@ -1,0 +1,12 @@
+From: foo@foo.com 
+To: foo@foo.com 
+Subject: subject12912323015009
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=utf-8 
+Content-Transfer-Encoding: 7bit
+
+text 1/1/2014 text
+text 1/31/2014 text
+text 10/1/2014 text
+text 10/31/2014 text
+
