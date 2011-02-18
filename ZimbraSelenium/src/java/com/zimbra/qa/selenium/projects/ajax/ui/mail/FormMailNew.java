@@ -37,7 +37,9 @@ public class FormMailNew extends AbsForm {
 		public static final String zCcField				= "css=[id^=zv__COMPOSE][id$=_cc_control]";
 		public static final String zBccField			= "css=[id^=zv__COMPOSE][id$=_bcc_control]";
 		public static final String zSubjectField		= "css=div[id^=zv__COMPOSE] input[id$=_subject_control]";
-		
+		public static final String zAttachmentField     = "css=div[id$=_attachments_div]";
+		public static final String zAttachmentText      = "css=div[id$=_attachments_div] a[class='AttLink']:contains(";
+
 		public static final String zBodyFrameHTML		= "//div[contains(id,'zv__COMPOSE')]//iframe";
 
 		

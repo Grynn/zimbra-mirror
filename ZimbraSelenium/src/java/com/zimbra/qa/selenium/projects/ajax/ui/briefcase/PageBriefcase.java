@@ -11,6 +11,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
 /**
  * @author
@@ -366,7 +367,7 @@ public class PageBriefcase extends AbsTab {
 
 				optionLocator = "css=td[id$='_title']:contains('Send as attachment')";
 				
-				page = new FormMailSend(this.MyApplication);
+				page = new FormMailNew(this.MyApplication);
 
 				// FALL THROUGH
 			} else if (option == Button.O_SEND_LINK) {
@@ -377,7 +378,7 @@ public class PageBriefcase extends AbsTab {
 
 				optionLocator = "css=td[id$='_title']:contains('Send link')";
 
-				page = new FormMailSend(this.MyApplication);
+				page = new FormMailNew(this.MyApplication);
 
 				// FALL THROUGH
 			} else {
