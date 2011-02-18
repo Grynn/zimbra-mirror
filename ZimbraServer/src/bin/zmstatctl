@@ -101,8 +101,8 @@ sub getPidFiles() {
 
 sub usage() {
     print STDERR <<_USAGE_;
-Usage: zmstatctl start|stop|status|rotate
-Starts/stops monitoring processes, checks status, or rotates logs.
+Usage: zmstatctl start|stop|restart|status|rotate
+Starts/stops/restarts monitoring processes, checks status, or rotates logs.
 _USAGE_
     exit(1);
 }
@@ -132,7 +132,25 @@ my $TOOL_MTAQUEUE = 'zmstat-mtaqueue';
 
 my $cmd = $ARGV[0];
 if (defined($cmd)) {
-    if ($cmd eq 'start') {
+
+    if ($cmd eq 'stop' || $cmd eq 'restart') {
+        my @pids = getPidFiles();
+        foreach my $pidFile (@pids) {
+            my $pid = readPidFile($pidFile);
+            if ($pid) {
+                print "Terminating process $pid\n";
+                if (!kill(0, $pid)) {
+                    unlink($pidFile);
+                } elsif (kill(15, $pid) == 1) {  # SIGTERM
+                    unlink($pidFile);
+                }
+            }
+        }
+        if ($cmd eq 'stop') {
+            exit(0);  # always return success to calling script
+        }
+    }
+    if ($cmd eq 'start' || $cmd eq 'restart') {
         my $procs = getProcList();
         my $doNginx = $procs =~ /\bnginx\b/;
         my $doMysql = -x getZimbraHome() . "/mysql/libexec/mysqld" ? 1 : 0;
@@ -171,20 +189,6 @@ if (defined($cmd)) {
             print "Invoking: $cmd\n";
             system("$cmd >> $outfile 2>&1 &");
         }
-    } elsif ($cmd eq 'stop') {
-        my @pids = getPidFiles();
-        foreach my $pidFile (@pids) {
-            my $pid = readPidFile($pidFile);
-            if ($pid) {
-                print "Terminating process $pid\n";
-                if (!kill(0, $pid)) {
-                    unlink($pidFile);
-                } elsif (kill(15, $pid) == 1) {  # SIGTERM
-                    unlink($pidFile);
-                }
-            }
-        }
-        exit(0);  # always return success to calling script
     } elsif ($cmd eq 'status') {
         my @pids = getPidFiles();
         if (scalar(@pids) == 0) {
