@@ -27,17 +27,21 @@ public class ContactContextMenu extends AjaxCommonTest  {
 		
 	}
 	
-	private ContactItem createSelectAContactItem() throws HarnessException {
+	private ContactItem createSelectAContactItem(String ... tagIdArray) throws HarnessException {
 
+		String tagParam ="";
 		String firstName = "first" + ZimbraSeleniumProperties.getUniqueString();		
 		String lastName = "last" + ZimbraSeleniumProperties.getUniqueString();
 	    String email = "email" +  ZimbraSeleniumProperties.getUniqueString() + "@zimbra.com";
 		//default value for file as is last, first
 		String fileAs = lastName + ", " + firstName;
 	
+		if (tagIdArray.length == 1) {
+			tagParam = " t='" + tagIdArray[0] + "'";
+		}
         app.zGetActiveAccount().soapSend(
                 "<CreateContactRequest xmlns='urn:zimbraMail'>" +
-                "<cn fileAsStr='" + fileAs + "' >" +
+                "<cn " + tagParam + " fileAsStr='" + fileAs + "' >" +
                 "<a n='firstName'>" + firstName +"</a>" +
                 "<a n='lastName'>" + lastName +"</a>" +
                 "<a n='email'>" + email + "</a>" +               
@@ -49,7 +53,6 @@ public class ContactContextMenu extends AjaxCommonTest  {
         
         // Refresh the view, to pick up the new contact
         FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
-        app.zPageAddressbook.zSyncDesktopToZcs();
         app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
                  
         return contactItem;		
@@ -64,9 +67,10 @@ public class ContactContextMenu extends AjaxCommonTest  {
 		// Select the item
         // Right click to show the menu
         ContextMenu contextMenu= (ContextMenu) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, contactItem.fileAs); // contactItem.fileAs);
-
+      
+        
         ArrayList <ContextMenuItem> list = contextMenu.zListGetContextMenuItems(PageAddressbook.CONTEXT_MENU.class);
-
+        
         //verify all items in the context menu list
         ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_SEARCH),"Verify contact search in context menu");
         ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_ADVANCED_SEARCH),"Verify advanced search in context menu");
@@ -124,8 +128,37 @@ public class ContactContextMenu extends AjaxCommonTest  {
    	}
 
 	@Test(	description = "Right click then click move",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void ClickMove() throws HarnessException {
+		
+		ContactItem contactItem = createSelectAContactItem();
+		            
+        //select move option
+        DialogContactMove dialogContactMove = (DialogContactMove) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_MOVE, contactItem.fileAs);
+      
+        
+        //enter the moved folder
+        dialogContactMove.zEnterFolderName("Emailed Contacts");        		
+        dialogContactMove.zClickButton(Button.B_OK);
+       
+        
+        //verify moved contact not displayed
+        List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
+ 	           
+		boolean isFileAsEqual=false;
+		for (ContactItem ci : contacts) {
+			if (ci.fileAs.equals(contactItem.fileAs)) {
+	            isFileAsEqual = true;	 
+				break;
+			}
+		}
+		
+        ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") not displayed");
+        
+   	}
+	@Test(	description = "Right click then click move, also verify toasted message",
+			groups = { "smoke" })
+	public void ClickMoveVerifyToastedMessage() throws HarnessException {
 		
 		ContactItem contactItem = createSelectAContactItem();
 		            
@@ -155,7 +188,6 @@ public class ContactContextMenu extends AjaxCommonTest  {
         ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") not displayed");
         
    	}
-
 
 	@Test(	description = "Right click then click Edit",
 			groups = { "smoke" })
@@ -256,6 +288,73 @@ public class ContactContextMenu extends AjaxCommonTest  {
 	    Assert.assertTrue(pagePrint.isContained("css=td[class='contactOutput']", contactItem.email ), contactItem.firstName + " not displayed in Print Page");
 	    
 	}
+
+	@Test(	description = "Right click then click Tag Contact->New Tag",
+			groups = { "smoke" })	
+	public void ClickTagContactNewTag() throws HarnessException {
+		ContactItem contactItem = createSelectAContactItem();
+
 	
+		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
+			
+		//click Tag Contact->New Tag	
+        DialogTag dialogTag = (DialogTag) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_TAG, Button.O_TAG_NEWTAG , contactItem.fileAs);        
+    	dialogTag.zSetTagName(tagName);
+		dialogTag.zClickButton(Button.B_OK);		
+
+		// Make sure the tag was created on the server (get the tag ID)
+		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;
+		String tagID = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tagName +"']", "id");
+
+		// Make sure the tag was applied to the contact
+		app.zGetActiveAccount().soapSend(
+					"<GetContactsRequest xmlns='urn:zimbraMail'>" +
+						"<cn id='"+ contactItem.getId() +"'/>" +
+					"</GetContactsRequest>");
+		
+		String contactTags = app.zGetActiveAccount().soapSelectValue("//mail:GetContactsResponse//mail:cn", "t");
+		 
+		ZAssert.assertEquals(contactTags, tagID, "Verify the tag appears on the contact id=" +  contactItem.getId());
+		
+		//verify toasted message '1 contact tagged ...'
+		ZAssert.assertTrue(ToastedMessage.isContainedText("1 contact tagged \"" + tagName + "\""), "Verify toast message '" + "1 contact tagged \"" + tagName + "\"'" );
+ 
+	}
+
+	
+	@Test(	description = "Right click then click Tag Contact->Remove Tag",
+			groups = { "smoke" })	
+	public void ClickTagContactRemoveTag() throws HarnessException {
+		
+		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
+			
+			// Create a tag via soap
+		app.zGetActiveAccount().soapSend(
+				"<CreateTagRequest xmlns='urn:zimbraMail'>" +
+             	"<tag name='"+ tagName +"' color='1' />" +
+             "</CreateTagRequest>");
+		String tagid = app.zGetActiveAccount().soapSelectValue("//mail:CreateTagResponse/mail:tag", "id");
+
+				
+		ContactItem contactItem = createSelectAContactItem(tagid);
+
+		//click Tag Contact->Remove Tag	
+        app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_TAG, Button.O_TAG_REMOVETAG , contactItem.fileAs);        
+
+	
+		app.zGetActiveAccount().soapSend(
+				"<GetContactsRequest xmlns='urn:zimbraMail'>" +
+					"<m id='"+ contactItem.getId() +"'/>" +
+				"</GetContactsRequest>");
+	     
+		String contactTag = app.zGetActiveAccount().soapSelectValue("//mail:GetContactsResponse//mail:cn", "t");
+	
+	    ZAssert.assertNull(contactTag, "Verify that the tag is removed from the contact");
+      
+	    //verify toasted message Tag \"" + tagName + "\" removed from 1 contact
+	    ZAssert.assertTrue(ToastedMessage.isContainedText("Tag \"" + tagName + "\" removed from 1 contact"), "Verify toast message Tag \"" + tagName + "\" removed from 1 contact");
+ 
+	}
+
 }
 

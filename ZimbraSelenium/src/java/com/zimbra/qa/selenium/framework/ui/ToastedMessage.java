@@ -4,9 +4,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
-public class ToastedMessage extends AjaxCommonTest  {
+public class ToastedMessage extends AbsSeleniumObject  {
 	private static String locator= "css=div[id='z_toast_text']";
 	protected static Logger logger = LogManager.getLogger(ToastedMessage.class);
 

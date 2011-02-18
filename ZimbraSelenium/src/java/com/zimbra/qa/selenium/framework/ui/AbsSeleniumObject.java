@@ -207,6 +207,14 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
+	 * DefaultSelenium.mouseOver()
+	 */
+	public void sMouseOver(String locator) {
+		ClientSessionFactory.session().selenium().mouseOver(locator);
+		logger.info("mouseOver(" + locator + ")");
+	}
+
+	/**
 	 * DefaultSelenium.mouseUp()
 	 */
 	public void sMouseUp(String locator) {

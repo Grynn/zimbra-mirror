@@ -111,6 +111,7 @@ public class Button {
 	public static final Button O_SEARCHTYPE_FILES = new Button("O_SEARCHTYPE_FILES");
 	public static final Button O_SEARCHTYPE_INCLUDESHARED = new Button("O_SEARCHTYPE_INCLUDESHARED");
 
+	
 	//Briefcase buttons
 	public static final Button B_UPLOAD_FILE = new Button("B_UPLOAD_FILE");
 	public static final Button B_EDIT_FILE = new Button("B_EDIT_FILE");
@@ -120,6 +121,8 @@ public class Button {
 	
     //Addressbook button
 	public static final Button B_EDIT = new Button("zb__CNS__EDIT");
+	public static final Button O_SEARCH_MAIL_SENT_TO_CONTACT = new Button("O_SEARCH_MAIL_SENT_TO_CONTACT");
+	public static final Button O_SEARCH_MAIL_RECEIVED_FROM_CONTACT = new Button("O_SEARCH_MAIL_RECEIVED_FROM_CONTACT");
 	
 	// Task buttons
 	public static final Button B_TASK_FILTERBY = new Button("B_TASK_FILTERBY");

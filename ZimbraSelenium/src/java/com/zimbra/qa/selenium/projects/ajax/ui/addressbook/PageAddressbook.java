@@ -16,6 +16,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
@@ -40,7 +41,16 @@ public class PageAddressbook extends AbsTab {
 	   		
 	}
 
-
+	public static class CONTEXT_SUB_MENU {
+				
+		public static final ContextMenuItem CONTACT_SUB_NEW_TAG = new ContextMenuItem("zmi__Contacts__TAG_MENU|MENU|NEWTAG","New Tag","div[class='ImgNewTag']",":contains('nt')");
+		public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("zmi__Contacts__TAG_MENU|MENU|REMOVETAG","Remove Tag","div[class='ImgDeleteTag']","");
+		
+		//TODO: Need fixed id for the following:
+		public static final ContextMenuItem CONTACT_SUB_RECEIVED_FROM_CONTACT = new ContextMenuItem("zmi__Contacts__BROWSE","Advanced Search","div[class='ImgSearchBuilder']","");
+	    public static final ContextMenuItem CONTACT_SUB_SENT_TO_CONTACT = new ContextMenuItem("zmi__Contacts__BROWSE","Advanced Search","div[class='ImgSearchBuilder']","");
+	}
+	
 	public PageAddressbook(AbsApplication application) {
 		super(application);		
 		logger.info("new " + PageAddressbook.class.getCanonicalName());
@@ -354,6 +364,92 @@ public class PageAddressbook extends AbsTab {
 	}
 	
 	
+	public AbsPage zListItem(Action action, Button option ,Button subOption, String contact) throws HarnessException {
+		String locator = null;			// If set, this will be clicked
+		AbsPage page = null;	// If set, this page will be returned
+		String id = null;
+        String contactLocator = getContactLocator(contact);
+        
+        if ( action == Action.A_RIGHTCLICK ) {
+			ContextMenuItem cmi=null;
+		    ContextMenuItem sub_cmi = null;
+			this.zRightClick(contactLocator);
+			
+			
+			if (option == Button.B_TAG) {
+		        
+				cmi=CONTEXT_MENU.CONTACT_TAG;
+													
+				if (subOption == Button.O_TAG_NEWTAG) {
+					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_NEW_TAG;
+					page = new DialogTag(this.MyApplication);
+				}
+				
+				else if (subOption == Button.O_TAG_REMOVETAG) {
+					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_REMOVE_TAG;
+					page = null;	
+				}
+			}
+			else if (option == Button.B_SEARCH) {
+				cmi=CONTEXT_MENU.CONTACT_SEARCH;
+				
+				
+				if (subOption == Button.O_SEARCH_MAIL_SENT_TO_CONTACT) {
+					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_SENT_TO_CONTACT;
+				    //TODO change DisplayMail constructor to public??
+					//page = new DisplayMail(this.MyApplication); 
+				}
+			
+				else if (subOption == Button.O_SEARCH_MAIL_RECEIVED_FROM_CONTACT) {
+					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_RECEIVED_FROM_CONTACT;
+					//TODO change DisplayMail constructor to public??
+					//page = new DisplayMail(this.MyApplication); 
+				}
+			}
+			id = cmi.locator;
+			locator = "id="+ id;
+			//  Make sure the context menu exists
+			if ( !this.sIsElementPresent(locator) )
+				throw new HarnessException("contextmenu is not present locator="+ locator +" context menu item="+ cmi.text);
+			
+			// Check if the item is enabled
+			String attrs = sGetAttribute("xpath=(//div[@id='"+ id +"'])@class");
+			if ( attrs.contains("ZDisabled") ) {
+				throw new HarnessException("Tried clicking on "+ cmi.text +" but it was disabled "+ attrs);
+			}
+			
+
+			// Mouse over the option
+			sMouseOver(locator);
+						
+			id = sub_cmi.locator;
+			locator = "id="+ id;
+		
+			//  Make sure the sub context menu exists			
+			zWaitForElementPresent(locator) ;
+			
+			
+			// Check if the item is enabled
+			attrs = sGetAttribute("xpath=(//div[@id='"+ id +"'])@class");
+			if ( attrs.contains("ZDisabled") ) {
+				throw new HarnessException("Tried clicking on "+ cmi.text +" but it was disabled "+ attrs);
+			}			
+
+        }
+        
+		// Click option
+		this.zClick(locator);
+		zWaitForBusyOverlay();
+		
+		
+		
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+		return (page);
+    
+	}
+	
 	@Override
 	public AbsPage zListItem(Action action, Button option, String contact) throws HarnessException {
 		String locator = null;			// If set, this will be clicked
@@ -395,6 +491,7 @@ public class PageAddressbook extends AbsTab {
 			else {
 				throw new HarnessException("option " + option + " not supported");
 			}
+			
 			id = cmi.locator;
 			locator = "id="+ id;
 			//  Make sure the context menu exists
