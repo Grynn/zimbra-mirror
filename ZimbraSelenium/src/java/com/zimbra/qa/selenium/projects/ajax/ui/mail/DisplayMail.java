@@ -177,11 +177,11 @@ public class DisplayMail extends AbsDisplay {
 
 		} else if ( field == Field.Cc ) {
 			
-			locator = "css=tr[id$='_cc'] td[class~='LabelColValue']";
+			locator = "css=tr[id$='_cc'] td[class~='LabelColValue'] span[id$='_com_zimbra_email'] span span";
 			
 		} else if ( field == Field.From ) {
 			
-			locator = "css=tr[id$='_from']";
+			locator = "css=tr[id$='_from'] span[id$='_com_zimbra_email'] span span";
 
 		} else if ( field == Field.ReceivedDate ) {
 			
@@ -211,7 +211,7 @@ public class DisplayMail extends AbsDisplay {
 
 		} else if ( field == Field.To ) {
 			
-			locator = "css=tr[id$='_to'] td[class~='LabelColValue']";
+			locator = "css=tr[id$='_to'] td[class~='LabelColValue'] span[id$='_com_zimbra_email'] span span";
 
 		} else {
 			
