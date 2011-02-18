@@ -104,10 +104,13 @@ public class CreateMailText extends AjaxCommonTest {
 		// Send the message
 		mailform.zFill(mail);
 		mailform.zSubmit();
-				
-		
+
+		app.zPageMail.zSyncDesktopToZcs();
+
 		// From the receipient end, make sure the message is received
-		MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ mail.dSubject +")");
+		Object[] params = {ZimbraAccount.AccountA(), "subject:("+ mail.dSubject +")"};
+      MailItem received = (MailItem)GeneralUtility.waitFor("com.zimbra.qa.selenium.framework.items.MailItem", null, true,
+            "importFromSOAP", params, WAIT_FOR_OPERAND.NEQ, null, 30000, 1000);
 		ZAssert.assertNotNull(received, "Verify the message is received");
 		
 	}
