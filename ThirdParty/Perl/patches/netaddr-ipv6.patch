@@ -1,0 +1,32 @@
+--- NetAddr-IP-4.039/Lite/Util/Util.pm.orig	2011-02-18 13:27:00.805233860 -0800
++++ NetAddr-IP-4.039/Lite/Util/Util.pm	2011-02-18 13:28:40.455247781 -0800
+@@ -115,8 +115,11 @@
+ 
+ # allow user to choose upper or lower case
+ 
+-my $n2x_format = "%X:%X:%X:%X:%X:%X:%X:%X";
+-my $n2d_format = "%X:%X:%X:%X:%X:%X:%D.%D.%D.%D";
++BEGIN {
++  use vars qw($n2x_format $n2d_format);
++  my $n2x_format = "%X:%X:%X:%X:%X:%X:%X:%X";
++  my $n2d_format = "%X:%X:%X:%X:%X:%X:%D.%D.%D.%D";
++}
+ 
+ sub upper { $n2x_format = uc($n2x_format); $n2d_format = uc($n2d_format); }
+ sub lower { $n2x_format = lc($n2x_format); $n2d_format = lc($n2d_format); }
+@@ -473,6 +476,7 @@
+ sub inet_n2dx($) {
+   my($nadr) = @_;
+   if (isIPv4($nadr)) {
++    local $1;
+     ipv6_n2d($nadr) =~ /([^:]+)$/;
+     return $1;
+   }
+@@ -494,6 +498,7 @@
+   my($nadr) = @_;
+   my $addr = ipv6_n2d($nadr);
+   return $addr unless isIPv4($nadr);
++  local $1;
+   $addr =~ /([^:]+)$/;
+   return $1;
+ }
