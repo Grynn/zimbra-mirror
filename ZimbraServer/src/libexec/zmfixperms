@@ -160,6 +160,9 @@ if [ -d ${zimbra_home} ]; then
         # allow text relocation for these problem files
         chcon -t textrel_shlib_t ${zimbra_home}/httpd/modules/libphp5.so
       fi
+      if [ -f ${zimbra_home}/mysql/lib/mysql/plugin/ha_innodb_plugin.so.0.0.0 ]; then
+        chcon -t textrel_shlib_t ${zimbra_home}/mysql/lib/mysql/plugin/ha_innodb_plugin.so.0.0.0
+      fi
       # Fix Zimbra upgrades selinux perms
       restorecon -R /etc/security
     fi
