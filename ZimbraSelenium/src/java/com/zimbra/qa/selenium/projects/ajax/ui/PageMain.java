@@ -67,11 +67,6 @@ public class PageMain extends AbsTab {
 	@Override
 	public boolean zIsActive() throws HarnessException {
 
-		// Make sure the Mobile Client is loaded in the browser
-		if ( !MyApplication.zIsLoaded() )
-			throw new HarnessException("Admin Console application is not active!");
-		
-
 		// Look for the Logout button 
 		// check if zimlet + minical loaded
 		boolean present = sIsElementPresent(Locators.zLogoffButton) 

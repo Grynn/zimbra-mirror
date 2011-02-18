@@ -64,10 +64,6 @@ public class PageLogin extends AbsTab {
 	      throw new HarnessException("Please add a support for appType: " + appType);
 		}
 
-	   // Make sure the application is loaded first
-		if ( !MyApplication.zIsLoaded() )
-			throw new HarnessException("Application is not active!");
-
 		// Look for the login button. 
 		boolean present = sIsElementPresent(locator);
 		if ( !present ) {

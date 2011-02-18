@@ -59,7 +59,7 @@ public class CreateFolder extends AjaxCommonTest {
          ZAssert.assertEquals(desktopFolder.getName(), _folderName, "Verify the server and client folder names match");
 
          // Force-sync
-         app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+         app.zPageMail.zSyncDesktopToZcs();
       }
 
       // Make sure the folder was created on the ZCS server

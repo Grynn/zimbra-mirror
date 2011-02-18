@@ -54,10 +54,7 @@ public class CreateMailHtml extends AjaxCommonTest {
 		// Send the message
 		mailform.zSubmit();
 				
-		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-		   GeneralUtility.waitForElementPresent(app.zPageMail, PageMail.Locators.zGetMailBtn);
-         app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-      }
+      app.zPageMail.zSyncDesktopToZcs();
 
       Object[] params = {ZimbraAccount.AccountA(), "subject:("+ mail.dSubject +")"};
       MailItem received = (MailItem)GeneralUtility.waitFor("com.zimbra.qa.selenium.framework.items.MailItem", null, true,

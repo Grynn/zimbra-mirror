@@ -58,15 +58,14 @@ public class CreateMailText extends AjaxCommonTest {
 		// Send the message
 		mailform.zSubmit();
 
-		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-		   GeneralUtility.waitForElementPresent(app.zPageMail, PageMail.Locators.zGetMailBtn);
-   		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		}
+		app.zPageMail.zSyncDesktopToZcs();
 
       Object[] params = {ZimbraAccount.AccountA(), "subject:("+ mail.dSubject +")"};
       MailItem received = (MailItem)GeneralUtility.waitFor("com.zimbra.qa.selenium.framework.items.MailItem", null, true,
             "importFromSOAP", params, WAIT_FOR_OPERAND.NEQ, null, 30000, 1000);
 
+      logger.debug("===========received is: " + received);
+      logger.debug("===========app is: " + app);
 		// TODO: add checks for TO, Subject, Body
 		ZAssert.assertEquals(received.dFromRecipient.dEmailAddress, app.zGetActiveAccount().EmailAddress, "Verify the from field is correct");
 		ZAssert.assertEquals(received.dToRecipients.get(0).dEmailAddress, ZimbraAccount.AccountA().EmailAddress, "Verify the to field is correct");

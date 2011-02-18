@@ -231,8 +231,17 @@ public class PageMail extends AbsTab {
 		zWaitForActive();
 
 	}
-	
-	
+
+	/**
+	 * Sync ZD client to ZCS server
+	 * @throws HarnessException
+	 */
+	public void zSyncDesktopToZcs() throws HarnessException {
+	   if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+         zToolbarPressButton(Button.B_GETMAIL);
+      }
+	}
+
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton("+ button +")");

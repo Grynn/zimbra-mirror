@@ -112,7 +112,6 @@ public class AjaxCommonTest {
    private String _executableFilePath = null;
    private final static String _accountFlavor = "Zimbra";
    public final static String defaultAccountName = ZimbraSeleniumProperties.getUniqueString();
-   private static boolean _firstTime = true;
 
    // This variable is to track desktop current account, if new account is created
    // then, desktop has to add that newly created account, while removing the
@@ -145,18 +144,18 @@ public class AjaxCommonTest {
 		startingAccountPreferences = new HashMap<String, String>();
 	}
 
-	/**
-	 * Global BeforeSuite
-	 * <p>
-	 * <ol>
-	 * <li>Start the DefaultSelenium client</li>
-	 * </ol>
-	 * <p>
-	 * @throws HarnessException
-	 * @throws InterruptedException 
-	 * @throws IOException 
-	 * @throws SAXException 
-	 */
+   /**
+    * Global BeforeSuite
+    * <p>
+    * <ol>
+    * <li>Start the DefaultSelenium client</li>
+    * </ol>
+    * <p>
+    * @throws HarnessException
+    * @throws InterruptedException 
+    * @throws IOException 
+    * @throws SAXException 
+    */
 	@BeforeSuite( groups = { "always" } )
 	public void commonTestBeforeSuite() throws HarnessException, IOException, InterruptedException, SAXException {
 		logger.info("commonTestBeforeSuite: start");
@@ -305,89 +304,34 @@ public class AjaxCommonTest {
 		logger.info("commonTestBeforeSuite: finish");		
 	}
 
-	/**
-	 * Global BeforeClass
-	 * 
-	 * @throws HarnessException
-	 */
+   /**
+    * Global BeforeClass
+    *
+    * @throws HarnessException
+    */
 	@BeforeClass( groups = { "always" } )
 	public void commonTestBeforeClass() throws HarnessException {
-	   logger.info("commonTestBeforeClass: start");
+      logger.info("commonTestBeforeClass: start");
 
-	   // For the first time, assigning currentAccount to the AccountZWC
-	   // The AccountZWC will be changed to new object when encountering
-	   // Harness Exception
-	   if (_firstTime) {
-	      _currentAccount = ZimbraAccount.AccountZWC();
-	   }
+      if (isRunningDesktopTest) {
+         logger.info("Wait dynamically until the application is loaded");
+         boolean isLoaded = (Boolean) GeneralUtility.waitFor(null,
+               app, false, "zIsLoaded", null, WAIT_FOR_OPERAND.EQ, true, 30000, 1000);
 
-		if (isRunningDesktopTest) {
-		   ZimbraAccount.AccountZWC().authenticateToMailClientHost();
-	      logger.info("Wait dynamically until the application is loaded");
-	      boolean isLoaded = (Boolean) GeneralUtility.waitFor(null,
-	            app, false, "zIsLoaded", null, WAIT_FOR_OPERAND.EQ, true, 30000, 1000);
-	      boolean isPageAccountActive = app.zPageLogin.zIsActive();
+         // Navigating to login page is important because for new App is created
+         // in each different class, and tests are using zGetActiveAcount.
+         // The only way zSetActiveAccount is called is whenever logging in
+         // and logging out, so unlike Ajax, Desktop is comparing the AccountZWC
+         // with the current added account, not necessarily ActiveAccount in Ajax
+         app.zPageLogin.zNavigateTo();
 
-	      if (isLoaded) {
-	         if (isPageAccountActive) {
-	            logger.info("Account Page is active, so no accounts have been created");
-	         } else {
-	            logger.info("Main page is active");
-	            GeneralUtility.waitForElementPresent(app.zPageMain,
-	                  PageMain.Locators.zLogoffButton);
-	            app.zPageMain.sClick(PageMain.Locators.zLogoffButton);
-	            GeneralUtility.waitForElementPresent(app.zPageLogin,
-	                  PageLogin.Locators.zBtnLoginDesktop);
+         if (!isLoaded) {
+            throw new HarnessException("Nothing is loaded, please check the connection");
+         }
+      }
+      logger.info("commonTestBeforeClass: finish");
 
-	            boolean bFoundOtherUser = true;
-	            logger.debug("Cleaning up all existing users");
-
-	            String deleteButtonLocator = null;
-
-	            // If this is the first time checking, then cleaning up all the pre-existing user
-	            // Otherwise, only cleans the non-default users, which is second user and so on...
-	            // Second user is located in row 3.
-	            if (_firstTime || _currentAccount != ZimbraAccount.AccountZWC()) {
-	               deleteButtonLocator = PageLogin.Locators.zDeleteButton;
-	            } else {
-	               String[] temp = PageLogin.Locators.zDeleteButton.trim().split(" ");
-	               deleteButtonLocator = new StringBuffer(temp[0]).append(" tr:nth-child(3)>td div[class^='ZAccount'] ").
-	                                       append(temp[1]).toString();
-	            }
-
-	            while (bFoundOtherUser) {
-	               if (app.zPageLogin.sIsElementPresent(deleteButtonLocator)) {
-	                  app.zPageLogin.sClick(deleteButtonLocator);
-	                  logger.debug("Selenium Confirmation: " + _selenium.getConfirmation());
-	                  SleepUtil.sleep(3000);
-	                  String nthChildString = "nth-child(3)";
-	                  if (deleteButtonLocator.contains(nthChildString)) {
-	                     // It is switched from 3 to 4 because after clicking the delete button the first time
-	                     // , there will be confirmation message which appears to be on the 3rd row.
-	                     deleteButtonLocator = deleteButtonLocator.replace(nthChildString, "nth-child(4)");
-	                  }
-	               }
-
-	               if (!(Boolean)GeneralUtility.waitForElementPresent(app.zPageLogin,
-	                     deleteButtonLocator, 5000)) {
-	                  bFoundOtherUser = false;
-	               }
-	            }
-	         }
-
-	         if (_firstTime || _currentAccount != ZimbraAccount.AccountZWC()) {
-	            addDefaultAccount();
-	            _currentAccount = ZimbraAccount.AccountZWC();
-	         }
-
-	      } else {
-	         throw new HarnessException("Nothing is loaded, please check the connection");
-	      }
-	      _firstTime = false;
-		}
-		logger.info("commonTestBeforeClass: finish");
-
-	}
+   }
 
 	/**
     * Add default account using HTTP post
@@ -450,84 +394,130 @@ public class AjaxCommonTest {
    }
 
    /**
-	 * Global BeforeMethod
-	 * <p>
-	 * <ol>
-	 * <li>For all tests, make sure {@link #startingPage} is active</li>
-	 * <li>For all tests, make sure {@link #startingAccountPreferences} is logged in</li>
-	 * <li>For all tests, make any compose tabs are closed</li>
-	 * </ol>
-	 * <p>
-	 * @throws HarnessException
-	 */
-	@BeforeMethod( groups = { "always" } )
+    * Global BeforeMethod
+    * <p>
+    * <ol>
+    * <li>For all tests, make sure {@link #startingPage} is active</li>
+    * <li>For all tests, make sure {@link #startingAccountPreferences} is logged in</li>
+    * <li>For all tests, make any compose tabs are closed</li>
+    * </ol>
+    * <p>
+    * @throws HarnessException
+    */
+   @BeforeMethod( groups = { "always" } )
 	public void commonTestBeforeMethod() throws HarnessException {
-		logger.info("commonTestBeforeMethod: start");
+      logger.info("commonTestBeforeMethod: start");
 
-		SOAP_DESTINATION_HOST_TYPE destType = null;
-		AppType appType = ZimbraSeleniumProperties.getAppType(); 
-		switch (appType) {
-		case AJAX:
-		   destType = SOAP_DESTINATION_HOST_TYPE.SERVER;
-		   break;
-		case DESKTOP:
-		   destType = SOAP_DESTINATION_HOST_TYPE.CLIENT;
-		   break;
-		default:
+      SOAP_DESTINATION_HOST_TYPE destType = null;
+      AppType appType = ZimbraSeleniumProperties.getAppType(); 
+      switch (appType) {
+      case AJAX:
+         destType = SOAP_DESTINATION_HOST_TYPE.SERVER;
+         break;
+
+      case DESKTOP:
+         destType = SOAP_DESTINATION_HOST_TYPE.CLIENT;
+
+         if (_currentAccount != ZimbraAccount.AccountZWC()) {
+            app.zPageLogin.zNavigateTo();
+            if  (app.zPageLogin.sIsElementPresent(PageLogin.Locators.zBtnLoginDesktop)) {
+               boolean bFoundOtherUser = true;
+               logger.debug("Cleaning up all existing users");
+
+               String deleteButtonLocator = null;
+
+               // If this is the first time checking, then cleaning up all the pre-existing user
+               // Otherwise, only cleans the non-default users, which is second user and so on...
+               // Second user is located in row 3.
+               if (_currentAccount != ZimbraAccount.AccountZWC()) {
+                  deleteButtonLocator = PageLogin.Locators.zDeleteButton;
+               } else {
+                  String[] temp = PageLogin.Locators.zDeleteButton.trim().split(" ");
+                  deleteButtonLocator = new StringBuffer(temp[0]).append(" tr:nth-child(3)>td div[class^='ZAccount'] ").
+                  append(temp[1]).toString();
+               }
+
+               while (bFoundOtherUser) {
+                  if (app.zPageLogin.sIsElementPresent(deleteButtonLocator)) {
+                     app.zPageLogin.sClick(deleteButtonLocator);
+                     logger.debug("Selenium Confirmation: " + _selenium.getConfirmation());
+                     SleepUtil.sleep(3000);
+                     String nthChildString = "nth-child(3)";
+                     if (deleteButtonLocator.contains(nthChildString)) {
+                        // It is switched from 3 to 4 because after clicking the delete button the first time
+                        // , there will be confirmation message which appears to be on the 3rd row.
+                        deleteButtonLocator = deleteButtonLocator.replace(nthChildString, "nth-child(4)");
+                     }
+                  }
+
+                  if (!(Boolean)GeneralUtility.waitForElementPresent(app.zPageLogin,
+                        deleteButtonLocator, 5000)) {
+                     bFoundOtherUser = false;
+                  }
+               }
+            }
+            addDefaultAccount();
+            _currentAccount = ZimbraAccount.AccountZWC();
+         }
+
+         break;
+
+      default:
          throw new HarnessException("Please add a support for appType: " + appType);
-		}
-		// If test account preferences are defined, then make sure the test account
-		// uses those preferences
-		// 
-		if ( (startingAccountPreferences != null) && (!startingAccountPreferences.isEmpty()) ) {
-			logger.debug("commonTestBeforeMethod: startingAccountPreferences are defined");
-			ZimbraAccount.AccountZWC().modifyPreferences(startingAccountPreferences, destType);
-		}
-		
-		// If AccountZWC is not currently logged in, then login now
-		if ( !ZimbraAccount.AccountZWC().equals(app.zGetActiveAccount()) ) {
-			logger.debug("commonTestBeforeMethod: AccountZWC is not currently logged in");
+      }
 
-			switch (appType) {
-			case AJAX:
-			   if ( app.zPageMain.zIsActive() )
-			      app.zPageMain.zLogout();
-			   app.zPageLogin.zLogin(ZimbraAccount.AccountZWC());
+      // If test account preferences are defined, then make sure the test account
+      // uses those preferences
+      // 
+      if ( (startingAccountPreferences != null) && (!startingAccountPreferences.isEmpty()) ) {
+         logger.debug("commonTestBeforeMethod: startingAccountPreferences are defined");
+         ZimbraAccount.AccountZWC().modifyPreferences(startingAccountPreferences, destType);
+      }
+		
+      // If AccountZWC is not currently logged in, then login now
+      if ( !ZimbraAccount.AccountZWC().equals(app.zGetActiveAccount()) ) {
+         logger.debug("commonTestBeforeMethod: AccountZWC is not currently logged in");
+
+         switch (appType) {
+         case AJAX:
+            if ( app.zPageMain.zIsActive() )
+               app.zPageMain.zLogout();
+            app.zPageLogin.zLogin(ZimbraAccount.AccountZWC());
 			   
-			   // Confirm
-			   if ( !ZimbraAccount.AccountZWC().equals(app.zGetActiveAccount())) {
-			      throw new HarnessException("Unable to authenticate as "+ ZimbraAccount.AccountZWC().EmailAddress);
-			   }
-			   break;
-			case DESKTOP:
-			   // Fall Through
-			   break;
-			default:
-			   throw new HarnessException("Please add a support for appType: " + appType);
-			}
+            // Confirm
+            if ( !ZimbraAccount.AccountZWC().equals(app.zGetActiveAccount())) {
+               throw new HarnessException("Unable to authenticate as "+ ZimbraAccount.AccountZWC().EmailAddress);
+            }
+            break;
+         case DESKTOP:
+            // Fall Through
+            break;
+         default:
+            throw new HarnessException("Please add a support for appType: " + appType);
+         }
 
-		}
+      }
 		
-		// If a startingPage is defined, then make sure we are on that page
-		if ( startingPage != null ) {
-			logger.debug("commonTestBeforeMethod: startingPage is defined");
-			
-			// If the starting page is not active, navigate to it
-			if ( !startingPage.zIsActive() ) {
-				startingPage.zNavigateTo();
-			}
-			
-			// Confirm that the page is active
-			if ( !startingPage.zIsActive() ) {
-				throw new HarnessException("Unable to navigate to "+ startingPage.myPageName());
-			}
-			
-		}
-		
-		// Make sure any extra compose tabs are closed
-		app.zPageMain.zCloseComposeTabs();
+      // If a startingPage is defined, then make sure we are on that page
+      if ( startingPage != null ) {
+         logger.debug("commonTestBeforeMethod: startingPage is defined");
 
-		logger.info("commonTestBeforeMethod: finish");
+         // If the starting page is not active, navigate to it
+         if ( !startingPage.zIsActive() ) {
+            startingPage.zNavigateTo();
+         }
+			
+         // Confirm that the page is active
+         if ( !startingPage.zIsActive() ) {
+            throw new HarnessException("Unable to navigate to "+ startingPage.myPageName());
+         }
+
+      }
+		
+      // Make sure any extra compose tabs are closed
+      app.zPageMain.zCloseComposeTabs();
+
+      logger.info("commonTestBeforeMethod: finish");
 
 	}
 
