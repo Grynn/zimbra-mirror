@@ -110,7 +110,9 @@ public class ContactContextMenu extends AjaxCommonTest  {
        
         
         //verify toasted message 1 contact moved to Trash
-        ZAssert.assertTrue(ToastedMessage.isContainedText("1 contact moved to Trash"), "Verify toast message '1 contact moved to Trash'");
+        Toaster toast = app.zPageMain.zGetToaster();
+        String toastMsg = toast.zGetToastMessage();
+        ZAssert.assertStringContains(toastMsg, "1 contact moved to Trash", "Verify toast message '1 contact moved to Trash'");
 
         //verify deleted contact not displayed
         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
@@ -172,7 +174,9 @@ public class ContactContextMenu extends AjaxCommonTest  {
        
         
         //verify toasted message 1 contact moved to "Emailed Contacts"
-        ZAssert.assertTrue(ToastedMessage.isContainedText("1 contact moved to \"Emailed Contacts\""), "Verify toast message '1 contact moved to \"Emailed Contacts\"'");
+        Toaster toast = app.zPageMain.zGetToaster();
+        String toastMsg = toast.zGetToastMessage();
+        ZAssert.assertStringContains(toastMsg, "1 contact moved to \"Emailed Contacts\"", "Verify toast message '1 contact moved to \"Emailed Contacts\"'");
 
         //verify moved contact not displayed
         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
@@ -210,7 +214,9 @@ public class ContactContextMenu extends AjaxCommonTest  {
 		
         
         //verify toasted message Contact Saved
-        ZAssert.assertTrue(ToastedMessage.isContainedText("Contact Saved"), "Verify toast message 'Contact Saved'");
+        Toaster toast = app.zPageMain.zGetToaster();
+        String toastMsg = toast.zGetToastMessage();
+        ZAssert.assertStringContains(toastMsg, "Contact Saved", "Verify toast message 'Contact Saved'");
 
         //verify new contact item is displayed
         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();   
@@ -317,7 +323,9 @@ public class ContactContextMenu extends AjaxCommonTest  {
 		ZAssert.assertEquals(contactTags, tagID, "Verify the tag appears on the contact id=" +  contactItem.getId());
 		
 		//verify toasted message '1 contact tagged ...'
-		ZAssert.assertTrue(ToastedMessage.isContainedText("1 contact tagged \"" + tagName + "\""), "Verify toast message '" + "1 contact tagged \"" + tagName + "\"'" );
+		Toaster toast = app.zPageMain.zGetToaster();
+		String toastMsg = toast.zGetToastMessage();
+		ZAssert.assertStringContains(toastMsg, "1 contact tagged \"" + tagName + "\"", "Verify toast message '" + "1 contact tagged \"" + tagName + "\"'" );
  
 	}
 
@@ -352,7 +360,9 @@ public class ContactContextMenu extends AjaxCommonTest  {
 	    ZAssert.assertNull(contactTag, "Verify that the tag is removed from the contact");
       
 	    //verify toasted message Tag \"" + tagName + "\" removed from 1 contact
-	    ZAssert.assertTrue(ToastedMessage.isContainedText("Tag \"" + tagName + "\" removed from 1 contact"), "Verify toast message Tag \"" + tagName + "\" removed from 1 contact");
+	    Toaster toast = app.zPageMain.zGetToaster();
+	    String toastMsg = toast.zGetToastMessage();
+	    ZAssert.assertStringContains(toastMsg, "Tag \"" + tagName + "\" removed from 1 contact", "Verify toast message Tag \"" + tagName + "\" removed from 1 contact");
  
 	}
 

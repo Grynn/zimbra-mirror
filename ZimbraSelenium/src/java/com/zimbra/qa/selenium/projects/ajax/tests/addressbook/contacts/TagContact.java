@@ -3,17 +3,11 @@ package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.contacts;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.items.ContactItem;
-import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.ui.ToastedMessage;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 public class TagContact extends AjaxCommonTest  {
 	public TagContact() {
@@ -79,7 +73,9 @@ public class TagContact extends AjaxCommonTest  {
 		ZAssert.assertEquals(contactTags, tagID, "Verify the tag appears on the contact id=" +  contactItem.getId());
 		
 		//verify toasted message '1 contact tagged ...'
-		ZAssert.assertTrue(ToastedMessage.isContainedText("1 contact tagged \"" + tagName + "\""), "Verify toast message '" + "1 contact tagged \"" + tagName + "\"'" );
+        Toaster toast = app.zPageMain.zGetToaster();
+        String toastMsg = toast.zGetToastMessage();
+        ZAssert.assertStringContains(toastMsg, "1 contact tagged \"" + tagName + "\"", "Verify toast message '" + "1 contact tagged \"" + tagName + "\"'" );
  
   
    	}
