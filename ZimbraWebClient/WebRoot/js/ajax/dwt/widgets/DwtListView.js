@@ -1712,7 +1712,9 @@ function(ev) {
 
 DwtListView.prototype._updateDragSelection =
 function(row, select) {
-    // TODO
+
+	if (!row) { return; }
+	
     if (!select) {
 		row.className = this._getItemData(row, "origClassName");
 	} else {
