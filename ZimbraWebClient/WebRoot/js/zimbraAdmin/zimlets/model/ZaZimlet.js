@@ -120,6 +120,22 @@ function () {
 	}
 }
 
+ZaZimlet.__RE_MSG = /\$\{msg\.(.*?)\}/g;
+ZaZimlet.prototype.getDescription = 
+function () {
+	var des = null;
+	var name = null;
+	if(this.attrs && this.attrs[ZaZimlet.A_zimbraZimletDescription]){
+		name =this[ZaZimlet.A_name];
+		des = this.attrs[ZaZimlet.A_zimbraZimletDescription];
+		des = (des ||"").replace(ZaZimlet.__RE_MSG, function($0, $1) {
+        		var res = window[name];
+        		return (res && res[$1]) || $0;
+    			});	
+	}
+	return des;
+}
+
 ZaZimlet.prototype.enable = function (enabled, callback) {
 	var soapDoc = AjxSoapDoc.create("ModifyZimletRequest", ZaZimbraAdmin.URN, null);
 	var zimletEl = soapDoc.set("zimlet", "");

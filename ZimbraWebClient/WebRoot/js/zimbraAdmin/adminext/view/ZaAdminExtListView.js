@@ -82,7 +82,7 @@ function(zimlet, now, isDragProxy) {
 		} else if(field == ZaZimlet.A_zimbraZimletDescription) {	
 			// description
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
-			html[idx++] = AjxStringUtil.htmlEncode(zimlet.attrs[ZaZimlet.A_zimbraZimletDescription ]);
+			html[idx++] = AjxStringUtil.htmlEncode(zimlet.getDescription() );
 			html[idx++] = "</nobr></td>";
 		}
 	}

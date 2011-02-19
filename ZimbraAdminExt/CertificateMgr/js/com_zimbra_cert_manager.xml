@@ -1,5 +1,5 @@
 <zimlet name="com_zimbra_cert_manager" version="6.0.6" 
-	description="Certificate Manager Extension for Admin UI" 
+	description="${msg.description}" 
 	extension="true">
 
 	<include>ZaCert.js</include>

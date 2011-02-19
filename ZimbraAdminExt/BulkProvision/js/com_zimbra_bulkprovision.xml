@@ -1,5 +1,5 @@
 <zimlet name="com_zimbra_bulkprovision" version="7.0"
-	description="Bulk Provisioning Account Extension for Admin UI"
+	description="${msg.description}"
 	extension="true">
 	<include>com_zimbra_bulkprovision.js</include>
     <include>ZaBulkImportXWizard.js</include>
