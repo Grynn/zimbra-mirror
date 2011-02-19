@@ -4,6 +4,8 @@ import org.apache.log4j.*;
 
 import com.thoughtworks.selenium.*;
 import com.zimbra.qa.selenium.framework.core.*;
+import com.zimbra.qa.selenium.framework.util.*;
+
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
 /**
@@ -364,6 +366,24 @@ public abstract class AbsSeleniumObject {
 		}
 	}
 
+	/**
+	 * zWaitForElementEnabled(String id) Wait until the element (id) becomes enabled 
+	 * 
+	 * @param id
+	 * @throws HarnessException
+	 */
+	public void zWaitForElementEnabled(String id) throws HarnessException {		
+		logger.info("zWaitForElementEnabled("+ id +")");
+
+		for (int i = 0; i < 15; i++) {
+			  String attrs = sGetAttribute("xpath=(//div[@id='"+ id +"'])@class");			
+              if ( !attrs.contains("ZDisabled") )
+                    return;
+              SleepUtil.sleepSmall();
+        }
+		throw new HarnessException("Element with id="+ id +" never become enabled: ");
+		
+	}
 	/**
 	 * zWaitForWindow() Waits for condition when window with a given name is
 	 * opened

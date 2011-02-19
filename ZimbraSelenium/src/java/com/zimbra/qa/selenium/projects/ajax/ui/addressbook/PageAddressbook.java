@@ -373,7 +373,9 @@ public class PageAddressbook extends AbsTab {
         if ( action == Action.A_RIGHTCLICK ) {
 			ContextMenuItem cmi=null;
 		    ContextMenuItem sub_cmi = null;
-			this.zRightClick(contactLocator);
+		    this.zClick(contactLocator);
+		    this.zKeyboard.zTypeCharacters(Shortcut.S_RIGHTCLICK.getKeys());
+			//this.zRightClick(contactLocator);
 			
 			
 			if (option == Button.B_TAG) {
@@ -396,7 +398,7 @@ public class PageAddressbook extends AbsTab {
 				
 				if (subOption == Button.O_SEARCH_MAIL_SENT_TO_CONTACT) {
 					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_SENT_TO_CONTACT;
-				    //TODO change DisplayMail constructor to public??
+				    //TODO change DisplayMail constructor to public??					
 					//page = new DisplayMail(this.MyApplication); 
 				}
 			
@@ -425,16 +427,14 @@ public class PageAddressbook extends AbsTab {
 			id = sub_cmi.locator;
 			locator = "id="+ id;
 		
+			
 			//  Make sure the sub context menu exists			
 			zWaitForElementPresent(locator) ;
 			
+			// make sure the sub context menu enabled			
+			zWaitForElementEnabled(id);
 			
-			// Check if the item is enabled
-			attrs = sGetAttribute("xpath=(//div[@id='"+ id +"'])@class");
-			if ( attrs.contains("ZDisabled") ) {
-				throw new HarnessException("Tried clicking on "+ cmi.text +" but it was disabled "+ attrs);
-			}			
-
+	
         }
         
 		// Click option
