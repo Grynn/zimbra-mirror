@@ -159,8 +159,10 @@ function(ev) {
 	DBG.println(AjxDebug.DBG3, ev.type + " event, key = " + key + ", value = " + value);
 	ev.inputLengthChanged = (value.length != aclv._inputLength);
 
+	var inputFieldOldValue;
 	if (aclv._inputFieldXFormItem) {
 		DBG.println(AjxDebug.DBG1, "Set the inputField " + aclv._inputFieldXFormItem["refPath"] + " value: " + value) ;
+		inputFieldOldValue = aclv._inputFieldXFormItem.getInstanceValue();
 		var onChangeMethod = aclv._inputFieldXFormItem.getOnChangeMethod();
 		if(onChangeMethod != null && typeof(onChangeMethod) == "function") {
 			onChangeMethod.call(aclv._inputFieldXFormItem,value,ev,aclv._inputFieldXForm);
@@ -232,9 +234,17 @@ function(ev) {
 	DBG.println(AjxDebug.DBG2, "scheduling autocomplete");
 	aclv._acActionId = AjxTimedAction.scheduleAction(aclv._acAction, aclv._acInterval);
 	//fire the xform changed event
+	var inputFieldNewValue = inputFieldOldValue;
+	if (aclv._inputFieldXFormItem){
+		inputFieldNewValue = aclv._inputFieldXFormItem.getInstanceValue();
+	}
+	
 	if (aclv._inputFieldXForm){
 		aclv._inputFieldXForm.setIsDirty(true, aclv._inputFieldXFormItem ) ;
 		aclv._inputFieldXForm.notifyListeners(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new DwtXFormsEvent(aclv._inputFieldXForm, aclv._inputFieldXFormItem,true));
+		if(inputFieldNewValue != inputFieldOldValue){
+			aclv._inputFieldXForm.notifyListeners(DwtEvent.XFORMS_VALUE_CHANGED, new DwtXFormsEvent(aclv._inputFieldXForm, aclv._inputFieldXFormItem,true));
+		}
 	}
 	
 	return true;
@@ -421,7 +431,12 @@ function(match) {
 	el.value = match[this._matchValue];
 	el.focus();
 	this.reset();
-	this._inputFieldXFormItem.setInstanceValue(match[this._matchValue]);	
+	this._inputFieldXFormItem.setInstanceValue(match[this._matchValue]);
+	if(this._inputFieldXForm){	
+		this._inputFieldXForm.setIsDirty(true, this._inputFieldXFormItem) ;
+        	this._inputFieldXForm.notifyListeners(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new DwtXFormsEvent(this._inputFieldXForm, this._inputFieldXFormItem,true));
+		this._inputFieldXForm.notifyListeners(DwtEvent.XFORMS_VALUE_CHANGED, new DwtXFormsEvent(this._inputFieldXForm, this._inputFieldXFormItem,true));
+	}
 	if (this._compCallback)
 		this._compCallback.run(match, this._inputFieldXFormItem);
 }
