@@ -685,9 +685,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                         {type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_Skin_Color_Settings,
                             items: [
 								{ type: _DWT_ALERT_,
-									style: DwtAlert.INFO,
+									style: DwtAlert.WARNING,
 									iconVisible: true, 
-									content: ZaMsg.Domain_flush_cache_q,
+									content: ZaMsg.Alert_Flush_Theme_Cache,
 									colSpan:2,
 									visibilityChecks:[],ref:null
 								},                            
