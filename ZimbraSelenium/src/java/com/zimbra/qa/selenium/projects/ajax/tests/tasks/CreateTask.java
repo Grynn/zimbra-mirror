@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.tasks;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.testng.annotations.Test;
@@ -15,13 +16,16 @@ import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Field;
 
 public class CreateTask extends AjaxCommonTest {
 
-	public CreateTask() {
+   @SuppressWarnings("serial")
+   public CreateTask() {
 		// logger.info("New " + CreateDocument.class.getCanonicalName());
 		logger.info("New " + CreateTask.class.getCanonicalName());
 
 		super.startingPage = app.zPageTasks;
 
-		super.startingAccountPreferences = null;
+      super.startingAccountPreferences = new HashMap<String , String>() {{
+         put("zimbraPrefComposeFormat", "html");
+      }};
 	}
 
 	@Test(	description = "Create Simple task through GUI - verify through GUI",
