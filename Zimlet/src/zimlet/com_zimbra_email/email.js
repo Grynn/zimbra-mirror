@@ -141,7 +141,7 @@ function(html, idx, obj, spanId, context, options) {
 			addrObj:	obj,
 			id:			spanId,
 			canExpand:	canExpand,
-			dlAddress:	canExpand && obj.address,
+			email:		obj.getAddress(),
 			separator:	AjxEmailAddress.SEPARATOR
 		};
 		ZmAddressInputField.BUBBLE_OBJ_ID[spanId] = this._internalId;	// pretend to be a ZmAddressInputField
