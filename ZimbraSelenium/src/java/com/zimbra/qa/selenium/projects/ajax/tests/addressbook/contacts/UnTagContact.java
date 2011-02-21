@@ -67,7 +67,7 @@ public class UnTagContact extends AjaxCommonTest  {
 		
 		app.zGetActiveAccount().soapSend(
 					"<GetContactsRequest xmlns='urn:zimbraMail'>" +
-						"<m id='"+ contactItem.getId() +"'/>" +
+						"<cn id='"+ contactItem.getId() +"'/>" +
 					"</GetContactsRequest>");
 		String contactTag = app.zGetActiveAccount().soapSelectValue("//mail:GetContactsResponse//mail:cn", "t");
 		

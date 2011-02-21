@@ -346,24 +346,30 @@ public class ContactContextMenu extends AjaxCommonTest  {
 				
 		ContactItem contactItem = createSelectAContactItem(tagid);
 
-		//click Tag Contact->Remove Tag	
+
+       //click Tag Contact->Remove Tag	
         app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_TAG, Button.O_TAG_REMOVETAG , contactItem.fileAs);        
 
-	
+     	
 		app.zGetActiveAccount().soapSend(
 				"<GetContactsRequest xmlns='urn:zimbraMail'>" +
-					"<m id='"+ contactItem.getId() +"'/>" +
+		        "<a n='t'/>"+
+		 		"<cn id='"+ contactItem.getId() +"'/>" +
 				"</GetContactsRequest>");
 	     
+		
+		
 		String contactTag = app.zGetActiveAccount().soapSelectValue("//mail:GetContactsResponse//mail:cn", "t");
 	
-	    ZAssert.assertNull(contactTag, "Verify that the tag is removed from the contact");
+	    ZAssert.assertNull(contactTag, "Verify that the tag is removed from the contact. Expected: null. Actual:" + contactTag);
       
 	    //verify toasted message Tag \"" + tagName + "\" removed from 1 contact
 	    Toaster toast = app.zPageMain.zGetToaster();
 	    String toastMsg = toast.zGetToastMessage();
 	    ZAssert.assertStringContains(toastMsg, "Tag \"" + tagName + "\" removed from 1 contact", "Verify toast message Tag \"" + tagName + "\" removed from 1 contact");
  
+	
+	
 	}
 
 }
