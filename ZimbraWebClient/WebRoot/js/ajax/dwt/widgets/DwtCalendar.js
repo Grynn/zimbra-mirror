@@ -313,11 +313,11 @@ function(date, skipNotify, forceRollOver, dblClick) {
 			// I think it should respect what the user passed in, and only change
 			// the parts of the date that it is responsible for.
 			//newDate.setHours(0,0,0,0);
-            //handle daylight saving
-            if(AjxDateUtil.isDayShifted(newDate)) {
-                AjxDateUtil.rollToNextDay(newDate);
-            }
-            newDate.setHours(this._date.getHours(), this._date.getMinutes(), this._date.getSeconds(), 0);            
+			//handle daylight saving
+			if(AjxDateUtil.isDayShifted(newDate)) {
+				AjxDateUtil.rollToNextDay(newDate);
+			}
+			newDate.setHours(this._date.getHours(), this._date.getMinutes(), this._date.getSeconds(), 0);            
 		}
 
 		this._date = newDate;
@@ -581,7 +581,7 @@ function(eventType, type, detail, ev) {
 
 DwtCalendar.prototype._layout =
 function() {
-	if (this._date == null) { return false; }
+	if (this._date == null) { this._date = new Date(); }
 
 	if (!this._calWidgetInited) {
 		this._init();

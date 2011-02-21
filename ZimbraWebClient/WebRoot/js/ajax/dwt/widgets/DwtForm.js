@@ -681,6 +681,7 @@ DwtForm.prototype._registerControl = function(itemDef, parentDef,
 	// create control
 	parent = parent || this;
 	var type = itemDef.type = itemDef.type || defaultType;
+	var isMenu = (parentDef && parentDef.menu == itemDef);
 	var element = document.getElementById([parent._htmlElId,id].join("_"));
 	if (Dwt.instanceOf(type, "DwtRadioButtonGroup")) {
 		// create control
@@ -717,7 +718,7 @@ DwtForm.prototype._registerControl = function(itemDef, parentDef,
 		if (Dwt.instanceOf(type, "DwtFormRows")) {
 		    item.equals = DwtFormRows.__equals;
 		}
-		if (element) {
+		if (element || isMenu) {
 			control = item.control = this._createControl(itemDef, parentDef, tabIndexes, params, parent, defaultType);
 		}
 	}
@@ -897,9 +898,14 @@ DwtForm.prototype._createControl = function(itemDef, parentDef,
 
 	// init input field
 	else if (control instanceof DwtInputField) {
-		var handler = DwtForm.__makeFunc(itemDef.onchange);
-		var onkeyup = AjxCallback.simpleClosure(this._input2model2handler, this, id, handler);
+		var changehandler = DwtForm.__makeFunc(itemDef.onchange);
+		var onkeyup = AjxCallback.simpleClosure(this._input2model2handler, this, id, changehandler);
 		control.setHandler(DwtEvent.ONKEYUP, onkeyup);
+
+		var blurhandler = DwtForm.__makeFunc(itemDef.onblur);
+		var onblur = AjxCallback.simpleClosure(this._input2model2handler, this, id, blurhandler);
+		control.setHandler(DwtEvent.ONBLUR, onblur);
+		
 		control.setHint(itemDef.hint);
 	}
 
@@ -962,6 +968,11 @@ DwtForm.prototype._createControl = function(itemDef, parentDef,
 				}
 				this._registerControl(toolbarItemDef, itemDef, null, null, control, "DwtToolBarButton");
 			}
+		}
+	}
+	else if (control instanceof DwtCalendar) {
+		if (itemDef.onselect instanceof AjxListener) {
+			control.addSelectionListener(itemDef.onselect);
 		}
 	}
 
