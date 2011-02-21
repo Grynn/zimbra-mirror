@@ -421,7 +421,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
             msgName:ZaMsg.NAD_ResType,label:ZaMsg.NAD_SchedulePolicy,
             visibilityChecks:[[ZaItem.hasWritePermission,ZaResource.A_zimbraCalResAutoAcceptDecline],[ZaItem.hasWritePermission,ZaResource.A_zimbraCalResAutoDeclineIfBusy]],
             enableDisableChecks:[[ZaItem.hasReadPermission,ZaResource.A_zimbraCalResAutoAcceptDecline],[ZaItem.hasReadPermission,ZaResource.A_zimbraCalResAutoDeclineIfBusy]],
-            labelLocation:_LEFT_, width: "300px", choices:ZaResource.schedulePolicyChoices});
+            labelLocation:_LEFT_, width: "500px", choices:ZaResource.schedulePolicyChoices});
 
     setupGroup.items.push({ref:ZaResource.A_zimbraCalResMaxNumConflictsAllowed, type:_TEXTFIELD_,
         msgName:ZaMsg.zimbraCalResMaxNumConflictsAllowed, label:ZaMsg.zimbraCalResMaxNumConflictsAllowed,
