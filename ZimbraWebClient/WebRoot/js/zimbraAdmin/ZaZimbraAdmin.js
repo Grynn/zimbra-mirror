@@ -521,28 +521,39 @@ function() {
 
 ZaZimbraAdmin.prototype._setUserName =
 function () {
-	var e = document.getElementById(ZaSettings.SKIN_USER_NAME_ID) ;
-	if(e) {
-		if(!ZaZimbraAdmin.currentUserName)
-			return;
-		
-		var containerWidth = Dwt.getSize(e).x;
-		var innerContent = null;
-		if(containerWidth <= 20) {
-			// if there are not enough space, just follow skin's setting
-			innerContent = ( String(ZaZimbraAdmin.currentUserName).length>(skin.maxAdminName+1)) ? String(ZaZimbraAdmin.currentUserName).substr(0,skin.maxAdminName) : ZaZimbraAdmin.currentUserName;
-		}
-		else {
-			// reserve 20px for estimation error. 
-			// here we assume 5.5px for one word, just follow the apptab.
-			var maxNumberOfLetters = Math.floor((containerWidth - 20)/5.5);
-			innerContent = ZaZimbraAdmin.currentUserName;
-			if (maxNumberOfLetters < innerContent.length) {
-				innerContent = innerContent.substring(0, (maxNumberOfLetters - 3)) + "..."
-			}	
-		}
-		e.innerHTML = innerContent;		
+	var userNameContainer = document.getElementById(ZaSettings.SKIN_USER_NAME_ID) ;
+	if(!userNameContainer) {
+		return;
 	}
+		
+	if(!ZaZimbraAdmin.currentUserName) {
+		return;
+	}
+	
+	var dwLabel = new DwtLabel(this._shell, "", "", Dwt.RELATIVE_STYLE);	
+	var containerWidth = Dwt.getSize(userNameContainer).x;
+	var innerContent = null;
+	if(containerWidth <= 20) {
+		// if there are not enough space, just follow skin's setting
+		innerContent = ( String(ZaZimbraAdmin.currentUserName).length>(skin.maxAdminName+1)) ? String(ZaZimbraAdmin.currentUserName).substr(0,skin.maxAdminName) : ZaZimbraAdmin.currentUserName;
+	}
+	else {
+		// reserve 20px for estimation error. 
+		// here we assume 5.5px for one word, just follow the apptab.
+		var maxNumberOfLetters = Math.floor((containerWidth - 20)/5.5);
+		innerContent = ZaZimbraAdmin.currentUserName;
+		if (maxNumberOfLetters < innerContent.length) {
+			innerContent = innerContent.substring(0, (maxNumberOfLetters - 3)) + "..."
+		}	
+	}
+	
+	dwLabel.setText(innerContent);	
+	if(innerContent != ZaZimbraAdmin.currentUserName){
+		dwLabel._setMouseEvents();
+		dwLabel.setToolTipContent( ZaZimbraAdmin.currentUserName );
+	}	
+	userNameContainer.innerHTML = ""; // clean the "Administrator" inherited from the skin's raw html code	
+	dwLabel.reparentHtmlElement (ZaSettings.SKIN_USER_NAME_ID) ;
 }
 
 ZaZimbraAdmin.prototype._helpListener =
