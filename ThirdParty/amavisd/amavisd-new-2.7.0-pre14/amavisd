@@ -398,7 +398,7 @@ BEGIN {
       $spamcontrol_obj
       $helpers_home $sa_configpath $sa_siteconfigpath
       $sa_local_tests_only $sa_timeout $sa_debug
-      $dspam $sa_spawned $sa_userprefs_file
+      $dspam $sa_spawned
     )],
     'platform' => [qw(
       $can_truncate $unicode_aware $my_pid
@@ -24335,7 +24335,6 @@ sub initializeSpamAssassin {
     home_dir_for_helpers => $helpers_home,
     rules_filename       => $sa_configpath,
     site_rules_filename  => $sa_siteconfigpath,
-    userprefs_filename => $sa_userprefs_file,
 #   LOCAL_STATE_DIR   => '/var/lib',
 #   PREFIX            => '/usr/local',
 #   DEF_RULES_DIR     => '/usr/local/share/spamassassin',
