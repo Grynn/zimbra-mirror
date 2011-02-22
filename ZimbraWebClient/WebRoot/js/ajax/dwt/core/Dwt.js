@@ -1431,7 +1431,7 @@ function(el) {
 
 	if (document.selection) {
 		// IE
-		var range = document.body.createTextRange();
+		var range = el.parentTextEdit.createTextRange();
 		range.moveToElementText(el);
 		range.select();
 	}
