@@ -235,9 +235,6 @@ XML_PARSER := \
 NET_SERVER := \
 	Net-Server-0.99
 
-NETADDR_IP := \
-	NetAddr-IP-4.039.tar.gz
-
 PERL_MM_USE_DEFAULT	:= 1
 export PERL_MM_USE_DEFAULT
 
@@ -311,16 +308,6 @@ build:
 		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
 		patch -g0 -N -p1 < $(PERL_ROOT)/patches/Net-Server.patch; \
-		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
-		$(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
-		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
-	done
-	
-	@for lib in $(NETADDR_IP); do \
-		echo -n "Compiling perl lib $$lib ..."; \
-		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
-		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
-		patch -g0 -N -p1 < $(PERL_ROOT)/patches/netaddr-ipv6.patch; \
 		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
 		$(MAKE); $(MAKE) install;) >>$(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
