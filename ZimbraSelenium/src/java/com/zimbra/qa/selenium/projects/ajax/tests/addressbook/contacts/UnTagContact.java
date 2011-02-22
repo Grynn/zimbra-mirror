@@ -40,18 +40,24 @@ public class UnTagContact extends AjaxCommonTest  {
                 "</CreateTagRequest>");
 		String tagid = app.zGetActiveAccount().soapSelectValue("//mail:CreateTagResponse/mail:tag", "id");
 
-		 // Create a contact with tag
-		ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
-		contactItem.setId(tagid);
-		
+		String tagParam = " t='" + tagid + "'";;
+		String firstName = "first" + ZimbraSeleniumProperties.getUniqueString();		
+		String lastName = "last" + ZimbraSeleniumProperties.getUniqueString();
+	    String email = "email" +  ZimbraSeleniumProperties.getUniqueString() + "@zimbra.com";
+		//default value for file as is last, first
+		String fileAs = lastName + ", " + firstName;
+	
         app.zGetActiveAccount().soapSend(
                 "<CreateContactRequest xmlns='urn:zimbraMail'>" +
-                "<cn t='" + tagid + "' fileAsStr='" + contactItem.lastName + "," + contactItem.firstName + "' >" +
-                "<a n='firstName'>" + contactItem.firstName +"</a>" +
-                "<a n='lastName'>" + contactItem.lastName +"</a>" +
-                "<a n='email'>" + contactItem.email + "</a>" +               
+                "<cn " + tagParam + " fileAsStr='" + fileAs + "' >" +
+                "<a n='firstName'>" + firstName +"</a>" +
+                "<a n='lastName'>" + lastName +"</a>" +
+                "<a n='email'>" + email + "</a>" +               
                 "</cn>" +            
                 "</CreateContactRequest>");
+
+				        
+        ContactItem contactItem = ContactItem.importFromSOAP(app.zGetActiveAccount(), "FIELD[lastname]:" + lastName + "");
         
         // Refresh the view, to pick up the new contact
         FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
