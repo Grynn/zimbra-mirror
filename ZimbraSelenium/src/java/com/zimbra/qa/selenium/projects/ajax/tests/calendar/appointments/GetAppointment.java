@@ -31,9 +31,8 @@ public class GetAppointment extends AjaxCommonTest {
 		String subject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
 		String location = "location" + ZimbraSeleniumProperties.getUniqueString();
 		String content = "content" + ZimbraSeleniumProperties.getUniqueString();
-		ZDate start = new ZDate(2014, 12, 25, 12, 0, 0);
-		ZDate end   = new ZDate(2014, 12, 25, 14, 0, 0);
-
+		ZDate startUTC = new ZDate(2014, 12, 25, 12, 0, 0);
+		ZDate endUTC   = new ZDate(2014, 12, 25, 14, 0, 0);
 		
 		// Create an appointment
 		app.zGetActiveAccount().soapSend(
@@ -41,8 +40,8 @@ public class GetAppointment extends AjaxCommonTest {
 						"<m>" +
 							"<inv>" +
 								"<comp status='CONF' fb='B' class='PUB' transp='O' allDay='0' name='"+ subject +"' loc='"+ location +"'>" +
-									"<s d='"+ start.toYYYYMMDDTHHMMSSZ() +"'/>" +
-									"<e d='"+ end.toYYYYMMDDTHHMMSSZ() +"'/>" +
+									"<s d='"+ startUTC.toYYYYMMDDTHHMMSSZ() +"'/>" +
+									"<e d='"+ endUTC.toYYYYMMDDTHHMMSSZ() +"'/>" +
 									"<or a='"+ app.zGetActiveAccount().EmailAddress + "'/>" +
 								"</comp>" +
 							"</inv>" +
@@ -54,16 +53,15 @@ public class GetAppointment extends AjaxCommonTest {
 					"</CreateAppointmentRequest>");
 		
 
-		AppointmentItem appt = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), subject, start.addDays(-10), end.addDays(+10));
+		AppointmentItem appt = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), subject, startUTC.addDays(-10), endUTC.addDays(+10));
 		ZAssert.assertNotNull(appt, "Verify the appointment is in the mailbox");
 
 		ZAssert.assertEquals(subject, appt.getSubject(), "Verify the appointment subjects match");
 		ZAssert.assertEquals(location, appt.getLocation(), "Verify the appointment locations match");
 		ZAssert.assertEquals(content, appt.getContent(), "Verify the appointment contents match");
 
-		// TODO: need to handle timezones in ZDate
-		//		ZAssert.assertEquals(start, appt.getStartTime(), "Verify the appointment start times match");
-		//		ZAssert.assertEquals(end, appt.getEndTime(), "Verify the appointment end times match");
+		ZAssert.assertEquals(startUTC, appt.getStartTime(), "Verify the appointment start times match");
+		ZAssert.assertEquals(endUTC, appt.getEndTime(), "Verify the appointment end times match");
 		
 	}
 

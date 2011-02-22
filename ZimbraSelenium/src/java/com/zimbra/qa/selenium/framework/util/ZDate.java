@@ -67,19 +67,12 @@ public class ZDate {
 		throw new HarnessException("Unable to parse time element "+ e.prettyPrint());
 	}
 	
-	public ZDate(ZDate other) {
-		this (
-			other.calendar.get(Calendar.YEAR),
-			other.calendar.get(Calendar.MONTH + 1),
-			other.calendar.get(Calendar.DAY_OF_MONTH),
-			other.calendar.get(Calendar.HOUR_OF_DAY),
-			other.calendar.get(Calendar.MINUTE),
-			other.calendar.get(Calendar.SECOND)
-			);		
-	}
-
-	public long toMillis() throws HarnessException {
-		return (calendar.getTimeInMillis());
+	public long toMillis() {
+		if ( calendar == null ) {
+			calendar = Calendar.getInstance();
+		}
+		long t = calendar.getTimeInMillis();
+		return ( (t / 1000) * 1000); // strip any millisecond blah
 	}
 	
 	public String toYYYYMMDDTHHMMSSZ() throws HarnessException {
@@ -126,8 +119,22 @@ public class ZDate {
 	}
 
 	public ZDate addSeconds(int amount) {
-		ZDate other = new ZDate(this);
+		
+		// Create the new object to return
+		ZDate other = new ZDate(
+				this.calendar.get(Calendar.YEAR),
+				this.calendar.get(Calendar.MONTH) + 1,
+				this.calendar.get(Calendar.DAY_OF_MONTH),
+				this.calendar.get(Calendar.HOUR_OF_DAY),
+				this.calendar.get(Calendar.MINUTE),
+				this.calendar.get(Calendar.SECOND)
+			);
+		other.calendar.setTimeZone(this.calendar.getTimeZone());
+		
+		// Adjust it
 		other.calendar.add(Calendar.SECOND, amount);
+		
+		// return it
 		return (other);
 	}
 
@@ -159,12 +166,7 @@ public class ZDate {
 		if (getClass() != obj.getClass())
 			return false;
 		ZDate other = (ZDate) obj;
-		if (calendar == null) {
-			if (other.calendar != null)
-				return false;
-		} else if (!calendar.equals(other.calendar))
-			return false;
-		return true;
+		return (toMillis() == other.toMillis());
 	}
 
 
