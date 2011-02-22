@@ -1,8 +1,12 @@
 package com.zimbra.qa.selenium.framework.util;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLConnection;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -243,5 +247,32 @@ public class GeneralUtility {
       Object[] params = {locator};
       return (Boolean)GeneralUtility.waitFor(null, owner, false, "sIsElementPresent",
             params, WAIT_FOR_OPERAND.EQ, true, timeout, 1000);
+   }
+
+   /**
+    * Do an HTTP Post with the given URL link
+    * @param Url URL to do HTTP Post
+    * @throws HarnessException
+    */
+   public static void doHttpPost(String Url) throws HarnessException {
+      try {
+         URL url = new URL(Url);
+         URLConnection conn = url.openConnection();
+         
+         //Get the response
+         BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+         StringBuffer sb = new StringBuffer();
+         String line;
+         while ((line = rd.readLine()) != null)
+         {
+            sb.append(line);
+         }
+         rd.close();
+         logger.info("HTTP POST information ==> " + sb.toString());
+         
+
+      } catch (IOException e) {
+         throw new HarnessException("HTTP Post failed!");
+      }
    }
 }

@@ -359,26 +359,7 @@ public class AjaxCommonTest {
                                             .append(emailServerPort).append("&syncFreqSecs=900&debugTraceEnabled=on")
                                             .append(securityType).toString();
       logger.info("accountSetupUrl: " + accountSetupUrl);
-
-      try {
-         URL url = new URL(accountSetupUrl);
-         URLConnection conn = url.openConnection();
-         
-         //Get the response
-         BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-         StringBuffer sb = new StringBuffer();
-         String line;
-         while ((line = rd.readLine()) != null)
-         {
-            sb.append(line);
-         }
-         rd.close();
-         logger.info("HTTP POST information ==> " + sb.toString());
-         
-
-      } catch (IOException e) {
-         throw new HarnessException("HTTP Post method for creating new account failed, please check the parameters");
-      }
+      GeneralUtility.doHttpPost(accountSetupUrl);
 
       String accountUrl = new StringBuilder(serverScheme).append("://")
                                        .append(serverName). append(":")
@@ -390,6 +371,44 @@ public class AjaxCommonTest {
       _selenium.open(accountUrl);
       GeneralUtility.waitForElementPresent(app.zPageLogin,
             PageLogin.Locators.zBtnLoginDesktop);
+   }
+
+   /**
+    * Delete Desktop account through HTTP Post
+    * @param accountName Account Name to be deleted
+    * @param accountId Account ID to be deleted
+    * @param accountType Account Type (usually: zimbra)
+    * @param accountFlavor Account Flavor (usually: Zimbra) 
+    * @throws HarnessException
+    */
+   public void deleteDesktopAccount(String accountName, String accountId,
+         String accountType, String accountFlavor) throws HarnessException {
+      String serverScheme = ZimbraSeleniumProperties.getStringProperty("server.scheme", "http");
+      String serverName = ZimbraSeleniumProperties.getStringProperty("desktop.server.host", "localhost");
+      ZimbraDesktopProperties zdp = ZimbraDesktopProperties.getInstance();
+      String connectionPort = zdp.getConnectionPort();
+      String accountDeleteUrl = new StringBuilder(serverScheme).append("://")
+            .append(serverName). append(":")
+            .append(connectionPort).append("/")
+            .append("zimbra/desktop/accsetup.jsp?at=")
+            .append(zdp.getSerialNumber()).append("&accountId=")
+            .append(accountId).append("&verb=del&accountFlavor=")
+            .append(accountFlavor).append("&accountName=")
+            .append(accountName).append("&accountType=")
+            .append(accountType).toString();
+
+      logger.info("accountDeleteUrl: " + accountDeleteUrl);
+      GeneralUtility.doHttpPost(accountDeleteUrl);
+
+      String accountUrl = new StringBuilder(serverScheme).append("://")
+            .append(serverName). append(":")
+            .append(connectionPort).append("/")
+            .append("?at=")
+            .append(zdp.getSerialNumber()).toString();
+
+      _selenium.refresh();
+      GeneralUtility.waitForElementPresent(app.zPageLogin,
+            PageLogin.Locators.zAddNewAccountButton);
    }
 
    /**
@@ -447,8 +466,11 @@ public class AjaxCommonTest {
                   }
 
                   if (app.zPageLogin.sIsElementPresent(deleteButtonLocator)) {
-                     app.zPageLogin.sClick(deleteButtonLocator);
-                     logger.debug("Selenium Confirmation: " + _selenium.getConfirmation());
+                     String attribute = app.zPageLogin.sGetAttribute(deleteButtonLocator + "@href");
+                     String accountId = attribute.split("'")[1];
+                     String accountName = attribute.split("'")[3];
+                     deleteDesktopAccount(accountName, accountId, "Zimbra", _accountFlavor);
+
                      String nthChildString = "nth-child(3)";
                      if (deleteButtonLocator.contains(nthChildString)) {
                         // It is switched from 3 to 4 because after clicking the delete button the first time
