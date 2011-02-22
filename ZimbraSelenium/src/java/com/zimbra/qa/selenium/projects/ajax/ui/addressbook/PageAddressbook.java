@@ -550,13 +550,24 @@ public class PageAddressbook extends AbsTab {
     * @throws HarnessException
     */
    public void zSyncDesktopToZcs() throws HarnessException {
-      // Need to sync the desktop client to ZCS server
-      ((AppAjaxClient) MyApplication).zPageMail.zNavigateTo();
-      ((AppAjaxClient) MyApplication).zPageMail
-            .zToolbarPressButton(Button.B_GETMAIL);
-      // TODO: Investigate the UI properties
-      // Can't use zNavigateTo because briefcase element is always present
-      // even though the mail page is active.
-      zClick(PageMain.Locators.zAppbarContact);
+      if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+         // Need to sync the desktop client to ZCS server
+         ((AppAjaxClient) MyApplication).zPageMail.zNavigateTo();
+         ((AppAjaxClient) MyApplication).zPageMail
+               .zToolbarPressButton(Button.B_GETMAIL);
+         // TODO: Investigate the UI properties
+         // Can't use zNavigateTo because briefcase element is always present
+         // even though the mail page is active.
+         zClick(PageMain.Locators.zAppbarContact);
+
+         try {
+            // Check the message queue
+            Stafpostqueue sp = new Stafpostqueue();
+            sp.waitForPostqueue();
+         } catch (Exception e) {
+            throw new HarnessException("Error while Staf Post Queue" +
+                  " after synching the ZD to ZCS");
+         }
+      }
    }
 }
