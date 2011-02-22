@@ -27,9 +27,10 @@ public class OfflineSaveDocument extends OfflineDocumentHandlers.SaveDocument {
     protected Element proxyRequest(Element request, Map<String, Object> context, ItemId iidRequested, ItemId iidResolved)
         throws ServiceException {
         Element eUpload = request.getElement(MailConstants.E_DOC).getOptionalElement(MailConstants.E_UPLOAD);
-        if (eUpload != null) {
+        boolean mountpoint = iidRequested != iidResolved;
+        if (eUpload != null && mountpoint) {
             String id = eUpload.getAttribute(MailConstants.A_ID);
-            String acctId = iidRequested.getAccountId();        
+            String acctId = iidRequested.getAccountId();       
             eUpload.addAttribute(MailConstants.A_ID, OfflineDocumentHandlers.uploadOfflineDocument(id, acctId)); 
         }
         return super.proxyRequest(request, context, iidRequested, iidResolved);

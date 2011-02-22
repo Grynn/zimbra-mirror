@@ -297,7 +297,7 @@ public class PushChanges {
                                 break;
                             case WIKI:
                             case DOCUMENT:
-                                syncDocument(id);
+                                syncDocument(id, tombstones);
                                 break;
                         }
                     } catch (Exception x) {
@@ -1002,7 +1002,7 @@ public class PushChanges {
         return true;
     }
 
-    private boolean syncDocument(int id) throws ServiceException {
+    private boolean syncDocument(int id, TypedIdList tombstones) throws ServiceException {
         if (!OfflineLC.zdesktop_sync_documents.booleanValue() ||
                 !ombx.getRemoteServerVersion().isAtLeast(InitialSync.sMinDocumentSyncVersion)) {
             return true;
@@ -1040,6 +1040,14 @@ public class PushChanges {
                     if (!ombx.renumberItem(sContext, id, type, resp.getFirst()))
                         return true;
                     id = resp.getFirst();
+                    List<Integer> tombstonedDocs = tombstones.getIds(MailItem.Type.DOCUMENT);
+                    if (tombstonedDocs != null && tombstonedDocs.indexOf(id) > -1) {
+                        ombx.removePendingDelete(sContext, id, type);
+                        tombstonedDocs.remove(Integer.valueOf(id)); //remove(Object o), not remote(int idx)!!
+                        if (tombstonedDocs.isEmpty()) {
+                            tombstones.remove(MailItem.Type.DOCUMENT);
+                        }
+                    }
                 }
                 ombx.setSyncedVersionForMailItem("" + item.getId(), resp.getSecond());
             }
