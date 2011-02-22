@@ -1,27 +1,34 @@
 package com.zimbra.qa.selenium.framework.util;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 
 import org.apache.log4j.*;
 
 import com.zimbra.common.soap.Element;
 
-@SuppressWarnings("deprecation")
 public class ZDate {
 	Logger logger = LogManager.getLogger(ZDate.class);
 
-	protected Date calendar = null;
+	public static final TimeZone TimeZoneUTC = TimeZone.getTimeZone("UTC");
+	
+	
+	protected Calendar calendar = null;
 	
 	public ZDate(int year, int month, int monthday, int hour, int minutes, int seconds) {
+		
 		// TODO: Handle errors (such as month = 0)
-		calendar = new Date();
-		calendar.setYear(year - 1901);
-		calendar.setMonth(month);
-		calendar.setDate(monthday);
-		calendar.setHours(hour);
-		calendar.setMinutes(minutes);
-		calendar.setSeconds(seconds);
+		
+		calendar = Calendar.getInstance();
+		
+		calendar.setTimeZone(TimeZoneUTC);
+		
+		calendar.set(Calendar.YEAR, year);
+		calendar.set(Calendar.MONTH, month - 1);
+		calendar.set(Calendar.DAY_OF_MONTH, monthday);
+		calendar.set(Calendar.HOUR_OF_DAY, hour);
+		calendar.set(Calendar.MINUTE, minutes);
+		calendar.set(Calendar.SECOND, seconds);
 		
 		logger.info("New "+ ZDate.class.getName());
 	}
@@ -41,7 +48,9 @@ public class ZDate {
 			
 			// Parse the unix time
 			long unix = new Long(u).longValue();
-			calendar = new Date(unix);
+			calendar = Calendar.getInstance();
+			calendar.setTimeZone(TimeZoneUTC);
+			calendar.setTimeInMillis(unix);
 			return;
 			
 		}
@@ -49,7 +58,8 @@ public class ZDate {
 		if ( d != null ) {
 			
 			// TODO
-			calendar = new Date();
+			calendar = Calendar.getInstance();
+			calendar.setTimeZone(TimeZoneUTC);
 			return;
 			
 		}
@@ -58,37 +68,66 @@ public class ZDate {
 	}
 	
 	public ZDate(ZDate other) {
-		calendar = new Date();
-		calendar.setYear(other.calendar.getYear());
-		calendar.setMonth(other.calendar.getMonth());
-		calendar.setDate(other.calendar.getDate());
-		calendar.setHours(other.calendar.getHours());
-		calendar.setMinutes(other.calendar.getMinutes());
-		calendar.setSeconds(other.calendar.getSeconds());
-
-		logger.info("New "+ ZDate.class.getName());
+		this (
+			other.calendar.get(Calendar.YEAR),
+			other.calendar.get(Calendar.MONTH + 1),
+			other.calendar.get(Calendar.DAY_OF_MONTH),
+			other.calendar.get(Calendar.HOUR_OF_DAY),
+			other.calendar.get(Calendar.MINUTE),
+			other.calendar.get(Calendar.SECOND)
+			);		
 	}
 
 	public long toMillis() throws HarnessException {
-		return (calendar.getTime());
+		return (calendar.getTimeInMillis());
 	}
 	
 	public String toYYYYMMDDTHHMMSSZ() throws HarnessException {
 		return (format("yyyyMMdd'T'HHmmss'Z'"));
 	}
 	
+	public String toYYYYMMDD() throws HarnessException {
+		return (format("yyyyMMdd"));
+	}
+
+	public String toYYYYMMDDHHMMSSZ() throws HarnessException {
+		return (format("yyyyMMddHHmmss"));
+	}
+
+	public String toMMM_dC_yyyy() throws HarnessException {
+		return (format("MMM d, yyyy"));
+	}
+
+	public Object toMMM_dd_yyyy_A_hCmm_a() throws HarnessException {
+		return (format("MMM d, yyyy @ h:mm a"));
+	}
+
+
 	protected String format(String format) throws HarnessException {
 		try {
 			SimpleDateFormat converter = new SimpleDateFormat(format);
-			return (converter.format(calendar));
+			converter.setTimeZone(calendar.getTimeZone());
+			return (converter.format(calendar.getTime()));
 		} catch (IllegalArgumentException e) {
 			throw new HarnessException("Unable to format date: "+ calendar, e);
 		}
 	}
 
-	public ZDate addDays(int days) {
+	public ZDate addDays(int amount) {
+		return (addHours(amount * 24));
+	}
+
+	public ZDate addHours(int amount) {
+		return (addMinutes(amount * 60));
+	}
+
+	public ZDate addMinutes(int amount) {
+		return (addSeconds(amount * 60));
+	}
+
+	public ZDate addSeconds(int amount) {
 		ZDate other = new ZDate(this);
-		other.calendar.setDate(this.calendar.getDate() + days);
+		other.calendar.add(Calendar.SECOND, amount);
 		return (other);
 	}
 
@@ -98,7 +137,7 @@ public class ZDate {
 			return (format("MM/dd/yyyy HH:mm:ss z"));
 		} catch (HarnessException e) {
 			logger.error(e);
-			return (calendar.toGMTString());
+			return (calendar.toString());
 		}
 	}
 	
