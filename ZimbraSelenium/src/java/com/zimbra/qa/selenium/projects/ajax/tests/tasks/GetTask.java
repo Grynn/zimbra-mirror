@@ -205,9 +205,9 @@ public class GetTask extends AjaxCommonTest {
 		// Create a basic task to delete
 		String subject = "task"+ ZimbraSeleniumProperties.getUniqueString();
 		String location = "location"+ ZimbraSeleniumProperties.getUniqueString();
-		GregorianCalendar startDate = new GregorianCalendar(2015, 1, 15, 12, 0, 0);
-		GregorianCalendar dueDate = new GregorianCalendar(2015, 1, 17, 12, 0, 0);
-		GregorianCalendar reminderDate = new GregorianCalendar(2015, 1, 16, 12, 0, 0);
+		ZDate startDate    = new ZDate(2015, 1, 15, 12, 0, 0);
+		ZDate dueDate      = new ZDate(2015, 1, 17, 12, 0, 0);
+		ZDate reminderDate = new ZDate(2015, 1, 16, 12, 0, 0);
 		String content = "content"+ ZimbraSeleniumProperties.getUniqueString();
 				
 		app.zGetActiveAccount().soapSend(
@@ -215,12 +215,12 @@ public class GetTask extends AjaxCommonTest {
 					"<m >" +
 			        	"<inv>" +
 			        		"<comp priority='1' status='INPR' percentComplete='50' allDay='1' name='"+ subject +"' location='"+ location +"'>" +
-		        				"<s d='"+ DateUtil.convert(startDate, DateUtil.yyyyMMdd) +"'/>" +
-		        				"<s d='"+ DateUtil.convert(dueDate, DateUtil.yyyyMMdd) +"'/>" +
+		        				"<s d='"+ startDate.toYYYYMMDD() +"'/>" +
+		        				"<s d='"+ dueDate.toYYYYMMDD() +"'/>" +
 								"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
 								"<alarm action='DISPLAY'>" +
 									"<trigger>" +
-										"<abs d='"+ DateUtil.convert(reminderDate, DateUtil.yyyyMMddHHmmssZ) +"'/>" +
+										"<abs d='"+ reminderDate.toYYYYMMDDHHMMSSZ() +"'/>" +
 									"</trigger>" +
 								"</alarm>" +
 			        		"</comp>" +
@@ -244,12 +244,12 @@ public class GetTask extends AjaxCommonTest {
 		// Verify the To, From, Subject, Body
 		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.Subject), subject, "Verify the subject matches");
 		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.Location), location, "Verify the location matches");
-		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.StartDate), DateUtil.convert(startDate, DateUtil.MMM_dC_yyyy), "Verify the start date matches");
-		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.DueDate), DateUtil.convert(dueDate, DateUtil.MMM_dC_yyyy), "Verify the due date matches");
+		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.StartDate), startDate.toMMM_dC_yyyy(), "Verify the start date matches");
+		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.DueDate), dueDate.toMMM_dC_yyyy(), "Verify the due date matches");
 		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.Priority), "High", "Verify the priority matches");
 		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.Status), "In Progress", "Verify the status matches");
 		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.Percentage), "50", "Verify the percentage matches");
-		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.Reminder), DateUtil.convert(dueDate, DateUtil.MMM_dd_yyyy_A_hCmm_a), "Verify the percentage matches");
+		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.Reminder), dueDate.toMMM_dd_yyyy_A_hCmm_a(), "Verify the percentage matches");
 		
 		// The body could contain HTML, even though it is only displaying text (e.g. <br> may be present)
 		// do a contains, rather than equals.
