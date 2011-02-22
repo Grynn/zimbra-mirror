@@ -384,6 +384,41 @@ public abstract class AbsSeleniumObject {
 		throw new HarnessException("Element with id="+ id +" never become enabled: ");
 		
 	}
+
+	/**
+	 * zWaitForElementVisible(String id) Wait until the element (id) becomes visible
+	 * 
+	 * @param id
+	 * @throws HarnessException
+	 */
+	public void zWaitForElementVisible(String locator) throws HarnessException {		
+		logger.info("zWaitForElementVisible("+ locator +")");
+		for (int i = 0; i < 15; i++) {
+		    if (zIsVisiblePerPosition(locator,0,0)) {		    
+			  return;
+		    }
+            SleepUtil.sleepSmall();
+         }		
+		throw new HarnessException(locator + "never visibled!");		
+	}
+
+	/**
+	 * zWaitForElementInvisible(String id) Wait until the element (id) becomes invisible
+	 * 
+	 * @param id
+	 * @throws HarnessException
+	 */
+	public void zWaitForElementInvisible(String locator) throws HarnessException {		
+		logger.info("zWaitForElementInvisible("+ locator +")");
+		for (int i = 0; i < 15; i++) {
+		    if (!zIsVisiblePerPosition(locator,0,0)) {		   
+			  return;
+		    }
+            SleepUtil.sleepSmall();
+         }		
+		throw new HarnessException(locator + "never invisible!");		
+	}
+
 	/**
 	 * zWaitForWindow() Waits for condition when window with a given name is
 	 * opened
