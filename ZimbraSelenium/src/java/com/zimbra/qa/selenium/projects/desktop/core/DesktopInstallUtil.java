@@ -27,7 +27,7 @@ import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
  *
  */
 public class DesktopInstallUtil {
-   protected static Logger logger = LogManager.getLogger(DesktopCommonTest.class);
+   protected static Logger logger = LogManager.getLogger(DesktopInstallUtil.class);
    private static final String _commonRegistryPath_x64 = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall";
    private static final String _commonRegistryPath_x86 = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall";
    private static String _desktopRegistryPath = null;
