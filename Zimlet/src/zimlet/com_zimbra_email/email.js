@@ -543,8 +543,9 @@ function(obj, span, context) {
 		this.createFilterMenu(actionMenu);
 	}
 
-    if (!isDetachWindow && appCtxt.get(ZmSetting.SEARCH_ENABLED) && actionMenu.getOp("SEARCHEMAILS"))
+    if (!isDetachWindow && appCtxt.get(ZmSetting.SEARCH_ENABLED) && actionMenu.getOp("SEARCHEMAILS")) {
         this.createSearchMenu(actionMenu);
+    }
 
 	var addr = (obj instanceof AjxEmailAddress) ? obj.getAddress() : obj;
 	if (this.isMailToLink(addr)) {
@@ -568,10 +569,10 @@ function(obj, span, context) {
 		}
 	}
 
-	if (actionMenu.getOp("SEARCH") && (isDetachWindow || !appCtxt.get(ZmSetting.SEARCH_ENABLED))) {
-		ZmOperation.removeOperation(actionMenu, "SEARCH", actionMenu._menuItems);
+	if (actionMenu.getOp("SEARCHEMAILS") && (isDetachWindow || !appCtxt.get(ZmSetting.SEARCH_ENABLED))) {
+		ZmOperation.removeOperation(actionMenu, "SEARCHEMAILS", actionMenu._menuItems);
 	}
-    else{
+    else {
         if (obj && obj.type) {
             if (actionMenu.getOp("SEARCHEMAILS")){
                  if (obj.type == "FROM"){
