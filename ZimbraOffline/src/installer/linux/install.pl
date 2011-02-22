@@ -36,7 +36,8 @@ my $messages = {
         UserInstall => "Would you like to continue to install data files for user: {0}?",
         UserInstallNote => "To install data files for additional users, please login as the user and run this command:", 
         Welcome => "Welcome to Zimbra Desktop setup wizard. This will install Zimbra Desktop on your computer.",
-        YesNo => "(Y)es or (N)o"
+        YesNo => "(Y)es or (N)o",
+        IA32Warning => "WARNING: ia32-libs is missing for x86_64 platform. This package is required to run Zimbra Desktop on 64-bit Linux."
     }
 };
 
@@ -122,6 +123,14 @@ sub dialog_license() {
     exit 1 if (substr($in, 0, 1) ne 'a');
 }
 
+sub dependency_check() {
+    my $arch = `uname -m`;
+    chomp($arch);
+    if (($arch eq 'x86_64') && !(-d '/usr/share/doc/ia32-libs')) {
+        print get_message('IA32Warning'), "\n\n";
+    }
+}
+
 sub dialog_app_root() {
     return get_input(get_message("ChooseAppRoot"), '/opt/zimbra/zdesktop');
 }
@@ -138,6 +147,7 @@ chdir($script_dir);
 
 dialog_welcome();
 dialog_license();
+dependency_check();
 $app_root = dialog_app_root();
 
 stop_process("$app_root/linux/prism/zdclient");
