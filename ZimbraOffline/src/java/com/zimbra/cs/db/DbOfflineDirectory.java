@@ -30,6 +30,7 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.account.offline.OfflineProvisioning.EntryType;
 import com.zimbra.cs.db.DbPool.DbConnection;
+import com.zimbra.cs.offline.OfflineLog;
 
 public class DbOfflineDirectory {
     static final Object lock = new Object();
@@ -451,6 +452,7 @@ public class DbOfflineDirectory {
             while (rs.next())
                 OfflineProvisioning.addToMap(attrs, rs.getString(1), rs.getString(2));
             if (attrs.isEmpty()) {
+                OfflineLog.offline.warn("Found empty directory_leaf_attrs when looking up by key - value %s - %s attempting to remove directory leaf", lookupKey, lookupValue);
                 deleteDirectoryLeaf(parent, entryId); // remove dangling directory leaf entry
                 return null;
             }
@@ -698,7 +700,7 @@ public class DbOfflineDirectory {
             conn = OfflineDbPool.getInstance().getConnection();
 
             int parentId = getIdForParent(conn, parent);
-
+            OfflineLog.offline.debug("Deleting directory leaf parent:%d type:%s entryId:%s",parentId, etype, id);
             stmt = conn.prepareStatement("DELETE FROM directory_leaf" +
                     " WHERE parent_id = ? AND entry_type = ? AND " + Db.equalsSTRING("zimbra_id"));
             stmt.setInt(1, parentId);
@@ -739,6 +741,7 @@ public class DbOfflineDirectory {
         try {
             conn = OfflineDbPool.getInstance().getConnection();
             int parentId = getIdForParent(conn, parent);
+            OfflineLog.offline.debug("Deleting directory leaf parent:%d entry_id:%s",parentId, entryId);
             stmt = conn.prepareStatement("DELETE FROM directory_leaf WHERE parent_id = ? AND entry_id = ?");
             stmt.setInt(1, parentId);
             stmt.setInt(2, entryId);
