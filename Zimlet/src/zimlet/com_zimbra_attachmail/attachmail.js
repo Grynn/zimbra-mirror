@@ -131,13 +131,14 @@ AttachMailTabView.prototype.showMe =
 function() {
 
 	DwtTabViewPage.prototype.showMe.call(this);
-	if(this._isLoaded) {
+	var acct = appCtxt.multiAccounts ? appCtxt.getAppViewMgr().getCurrentView().getFromAccount() : appCtxt.getActiveAccount();
+	if (acct.id == this.prevAccountId) {
 			this.setSize(Dwt.DEFAULT, "255");
-		return;
+			return;
 	}
+
 	this._createHtml1();
 	document.getElementById(this._folderTreeCellId).onclick = AjxCallback.simpleClosure(this._treeListener, this);
-	this._isLoaded = true;
 };
 
 /**
@@ -484,7 +485,10 @@ function() {
 	app._createDeferredFolders();
 
 	var base = this.toString();
-	var acct = appCtxt.getActiveAccount();
+	
+	var acct = appCtxt.multiAccounts ? appCtxt.getAppViewMgr().getCurrentView().getFromAccount() : appCtxt.getActiveAccount();
+	this.prevAccountId = acct.id;
+
 	var params = {
 		treeIds: ["FOLDER"],
 		fieldId: this._folderTreeCellId,
