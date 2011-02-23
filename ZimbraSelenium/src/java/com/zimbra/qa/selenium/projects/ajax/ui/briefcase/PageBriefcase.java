@@ -371,14 +371,12 @@ public class PageBriefcase extends AbsTab {
 
 				// FALL THROUGH
 			} else if (option == Button.O_SEND_LINK) {
-				// Using General shortcuts: Type "u" shortcut
-				// zKeyboard.zTypeCharacters(Shortcut.S_MAIL_REMOVETAG.getKeys());
-
+			
 				pulldownLocator = "css=td[id$='__SEND_FILE_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
 
 				optionLocator = "css=td[id$='_title']:contains('Send link')";
 
-				page = new FormMailNew(this.MyApplication);
+				page = new DialogWarning(DialogWarning.DialogWarningID.SendLink, this.MyApplication);
 
 				// FALL THROUGH
 			} else {

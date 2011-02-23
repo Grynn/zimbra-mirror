@@ -39,9 +39,9 @@ public class FormMailNew extends AbsForm {
 		public static final String zSubjectField		= "css=div[id^=zv__COMPOSE] input[id$=_subject_control]";
 		public static final String zAttachmentField     = "css=div[id$=_attachments_div]";
 		public static final String zAttachmentText      = "css=div[id$=_attachments_div] a[class='AttLink']:contains(";
-
+		public static final String zLinkText 			= "css=iframe[id*='DWT'][class*='Editor']";
+		
 		public static final String zBodyFrameHTML		= "//div[contains(id,'zv__COMPOSE')]//iframe";
-
 		
 		public static final String zPriorityPulldown	= "css=[id^=zv__COMPOSE][id$=___priority_dropdown]";
 		public static final String zPriorityOptionHigh	= "css=[id^=zv__COMPOSE][id$=___priority_dropdown]";

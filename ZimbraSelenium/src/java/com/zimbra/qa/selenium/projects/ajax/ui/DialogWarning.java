@@ -5,6 +5,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsDialog;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
 
 /**
@@ -23,6 +24,8 @@ public class DialogWarning extends AbsDialog {
 		public static DialogWarningID SaveCurrentMessageAsDraft = new DialogWarningID("YesNoCancel");
 
 		public static DialogWarningID SaveTaskChangeMessage = new DialogWarningID("YesNoCancel");
+		
+		public static DialogWarningID SendLink = new DialogWarningID("css=div[class=DwtConfirmDialog]");
 		
 		private String Id;
 		private DialogWarningID(String id) {
@@ -78,9 +81,13 @@ public class DialogWarning extends AbsDialog {
 		String buttonsTableLocator = "//div[@id='"+ MyDivId +"']//div[contains(@id, '_buttons')]";
 		
 		if ( button == Button.B_YES ) {
-
-			locator = buttonsTableLocator + "//table//table//tr/td[1]/div";
-
+			if(MyDivId.contains("css=div[class=DwtConfirmDialog]")){
+				locator = "css=td[class=ZWidgetTitle]:contains(Yes)";				
+				page = 	new FormMailNew(this.MyApplication);
+			}else{
+				locator = buttonsTableLocator + "//table//table//tr/td[1]/div";
+			}
+			
 		} else if ( button == Button.B_NO ) {
 
 			locator = buttonsTableLocator + "//table//table//tr/td[2]/div";
