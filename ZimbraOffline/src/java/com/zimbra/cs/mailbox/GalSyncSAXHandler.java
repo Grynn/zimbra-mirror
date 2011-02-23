@@ -33,7 +33,7 @@ import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbPool;
 import com.zimbra.cs.db.DbDataSource.DataSourceItem;
 import com.zimbra.cs.db.DbMailItem.QueryParams;
-import com.zimbra.cs.db.DbPool.Connection;
+import com.zimbra.cs.db.DbPool.DbConnection;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
@@ -240,7 +240,7 @@ public class GalSyncSAXHandler implements ElementHandler {
         QueryParams params = new QueryParams();
         params.setFolderIds(folderIds);
         
-        Connection conn = null;
+        DbConnection conn = null;
         Set<Integer> galItemIds = null;
         synchronized (galMbox) {
             try {
