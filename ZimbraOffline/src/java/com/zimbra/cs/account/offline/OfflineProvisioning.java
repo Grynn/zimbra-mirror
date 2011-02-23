@@ -389,6 +389,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             ((OfflineSignature) e).setName(e.getAttr(A_zimbraSignatureName));
         } else if (etype == EntryType.CONFIG) {
             attrs = OfflineConfig.instantiate(this).getAttrs();
+        } else if (etype == EntryType.COS && e instanceof OfflineCos) {
+            attrs = OfflineCos.instantiate(this).getAttrs();
         } else {
             attrs = DbOfflineDirectory.readDirectoryEntry(etype, A_zimbraId, e.getAttr(A_zimbraId));
         }
