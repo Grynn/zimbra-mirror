@@ -558,7 +558,7 @@ function(obj, span, context) {
 
     if (!isDetachWindow && appCtxt.get(ZmSetting.SEARCH_ENABLED) && actionMenu.getOp("SEARCHEMAILS")) {
         this.createSearchMenu(actionMenu);
-
+	}
 	var addr = (obj instanceof AjxEmailAddress) ? obj.getAddress() : obj;
 	if (this.isMailToLink(addr)) {
 		addr = (this.parseMailToLink(addr)).to || addr;
