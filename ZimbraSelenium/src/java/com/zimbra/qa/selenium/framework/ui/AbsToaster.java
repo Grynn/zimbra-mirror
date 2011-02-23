@@ -1,6 +1,9 @@
 package com.zimbra.qa.selenium.framework.ui;
 
+import java.awt.event.KeyEvent;
+
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 
 /**
  * An abstraction of the toaster message that occurs in the Ajax client
@@ -8,8 +11,8 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
  *
  */
 public abstract class AbsToaster extends AbsSeleniumObject {
-	protected String locator= "css=div[id='z_toast_text']";
-
+	protected String locator   = "css=div[id='z_toast_text']";
+    protected String idVisibleLocator = "z_toast";
 	/**
 	 * A pointer to the application that created this object
 	 */
@@ -31,7 +34,16 @@ public abstract class AbsToaster extends AbsSeleniumObject {
 	 * @throws HarnessException
 	 */
 	public String zGetToastMessage() throws HarnessException {
-		return (sGetText(locator));
+		String text=null;		
+		
+		this.zWaitForElementVisible(locator);
+    	text=sGetText(locator);
+    	    
+    	//make the toasted message invisible if it contains "Undo" link
+    	this.sKeyPressNative(String.valueOf(KeyEvent.VK_ESCAPE));
+    	    	
+    	this.zWaitForElementInvisible(locator);
+		return text;					
 	}
 	
 	/**
@@ -53,9 +65,9 @@ public abstract class AbsToaster extends AbsSeleniumObject {
     	throw new HarnessException("fill in later");
     }
 	
-    public boolean isVisible() throws HarnessException {
-    	//TODO fill in later
-    	throw new HarnessException("fill in later");
+    public boolean zIsVisible() throws HarnessException {        
+    	return zIsVisiblePerPosition(locator,0,0);
+    	
     }
 
     public boolean clickLink(String innerText) throws HarnessException {
