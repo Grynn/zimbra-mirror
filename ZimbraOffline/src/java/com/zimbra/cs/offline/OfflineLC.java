@@ -35,6 +35,7 @@ public class OfflineLC {
     public static final KnownKey zdesktop_retry_delay_max;    
     public static final KnownKey zdesktop_client_poll_interval;
     public static final KnownKey zdesktop_retry_limit;
+    public static final KnownKey zdesktop_gal_sync_timer_frequency;
     public static final KnownKey zdesktop_gal_sync_interval_secs;
     public static final KnownKey zdesktop_gal_sync_request_timeout;
     public static final KnownKey zdesktop_gal_sync_trace_enabled;
@@ -188,6 +189,10 @@ public class OfflineLC {
         // How often offline GAL is delta-sync'ed. Default every 12 hours.
         zdesktop_gal_sync_interval_secs = new KnownKey("zdesktop_gal_sync_interval_seconds");
         zdesktop_gal_sync_interval_secs.setDefault("43200");
+        
+        // How often offline GAL timer fires. Default every 5 minutes.
+        zdesktop_gal_sync_timer_frequency = new KnownKey("zdesktop_gal_sync_timer_frequency");
+        zdesktop_gal_sync_timer_frequency.setDefault("300000");
 
         // HTTP GAL sync request timeout in milliseconds while waiting for response. A value of zero means no timeout. Default 60 seconds.
         zdesktop_gal_sync_request_timeout = new KnownKey("zdesktop_galsync_request_timeout");

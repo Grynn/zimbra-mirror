@@ -74,7 +74,8 @@ public interface OfflineConstants {
 
     public static final String A_offlineGalAccountId = "offlineGalAccountId";
     public static final String A_offlineGalAccountSyncToken = "offlineGalAccountSyncToken";
-    public static final String A_offlineGalAccountLastFullSync = "offlineGalAccountLastFullSync";
+    public static final String A_offlineGalAccountLastFullSync = "offlineGalAccountLastFullSync"; // deprecated
+    public static final String A_offlineGalAccountLastRefresh = "offlineGalAccountLastRefresh";
     public static final String A_offlineGalAccountDataSourceId = "offlineGalAccountDataSourceId";
     
     public static final String A_offlineSyncFreq = "offlineSyncFreq";

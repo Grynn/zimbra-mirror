@@ -56,6 +56,7 @@ import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.offline.DirectorySync;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.mailbox.GalSync;
 import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
@@ -774,6 +775,7 @@ public class OfflineSyncManager implements FormatListener {
                 }
             }
             DirectorySync.getInstance();
+            GalSync.getInstance();
 
             // deal with left over mailboxes from interrupted delete/reset
             int[] mids = MailboxManager.getInstance().getMailboxIds();

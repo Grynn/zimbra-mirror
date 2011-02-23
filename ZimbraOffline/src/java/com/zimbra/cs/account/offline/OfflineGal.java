@@ -19,6 +19,8 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
@@ -42,7 +44,6 @@ import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OperationContext;
 import com.zimbra.cs.mailbox.ContactAutoComplete.AutoCompleteResult;
 import com.zimbra.cs.mailbox.ContactAutoComplete;
-import com.zimbra.common.util.Pair;
 import com.zimbra.cs.service.util.ItemId;
 
 public class OfflineGal {
@@ -93,17 +94,10 @@ public class OfflineGal {
         }
 
         mOpContext = new OperationContext(mGalMbox);
-
-        Folder fstFolder = mGalMbox.getFolderById(mOpContext, Mailbox.ID_FOLDER_CONTACTS);
-        Folder currFolder = fstFolder;
-        try {
-            Folder sndFolder = mGalMbox.getFolderByPath(mOpContext, SECOND_GAL_FOLDER);
-            if (fstFolder.getItemCount() < sndFolder.getItemCount())
-                currFolder = sndFolder;
-        } catch (MailServiceException.NoSuchItemException e) {}
+        Folder folder = getSyncFolder(mGalMbox, mOpContext, false);
 
         name = name.trim();
-        String query = "in:\"" + currFolder.getName() + "\"";
+        String query = "in:\"" + folder.getName() + "\"";
         // '.' is a special operator that matches everything.
         if (name.length() > 0 && !name.equals(".")) {
             // escape quotes
@@ -187,14 +181,44 @@ public class OfflineGal {
             zqr.doneWithSearchResults();
         }
     }
-
-    // Return: first  - id of current GAL folder, second - id of previous GAL folder
-    public static Pair<Integer, Integer> getSyncFolders(Mailbox galMbox, OperationContext context) throws ServiceException {
-        Folder fstFolder = galMbox.getFolderById(context, Mailbox.ID_FOLDER_CONTACTS);
-        Folder sndFolder = galMbox.getFolderByPath(context, SECOND_GAL_FOLDER);
-        int fstId = fstFolder.getId();
-        int sndId = sndFolder.getId();
-        return fstFolder.getItemCount() > 0 ? new Pair<Integer, Integer>(new Integer(fstId), new Integer(sndId)) :
-            new Pair<Integer, Integer>(new Integer(sndId), new Integer(fstId));
+    
+    private static ConcurrentMap<String, Folder> syncFolderCache = new ConcurrentHashMap<String, Folder>();
+    
+    /* 
+     * We used to have two alternating folders to store GAL. After the upgrade, we should continue to use the 
+     * "current" folder (sync folder) to store GAL, until a full-sync when we can safely delete the "second"
+     * folder and only use the system folder "Contacts" from then on.
+     */
+    public static Folder getSyncFolder(Mailbox galMbox, OperationContext context, boolean fullSync) throws ServiceException {
+        if (fullSync) { 
+            Folder sndFolder = getSecondFolder(galMbox, context);
+            if (sndFolder != null) { // migration: empty and delete "Contacts2" folder
+                // there is a small chance (only on full sync) of race condition here if user is searching in gal when
+                // this migration is run. but since the chance is small and is one-time only, the condition is not handled 
+                galMbox.emptyFolder(context, sndFolder.getId(), false);
+                galMbox.delete(context, sndFolder.getId(), MailItem.Type.FOLDER);
+                syncFolderCache.remove(galMbox.getAccountId());
+                OfflineLog.offline.debug("Offline GAL deleted second sync folder");
+            }
+        }
+        
+        Folder syncFolder = syncFolderCache.get(galMbox.getAccountId());
+        if (syncFolder == null) {
+            syncFolder = galMbox.getFolderById(context, Mailbox.ID_FOLDER_CONTACTS);
+            Folder sndFolder = getSecondFolder(galMbox, context);
+            if (sndFolder != null && sndFolder.getItemCount() > 0) {
+                syncFolder = sndFolder;
+            }
+            syncFolderCache.put(galMbox.getAccountId(), syncFolder);
+        }
+        return syncFolder;
+    }
+    
+    private static Folder getSecondFolder(Mailbox galMbox, OperationContext context) throws ServiceException {
+        try {
+            return galMbox.getFolderByPath(context, SECOND_GAL_FOLDER);
+        } catch (MailServiceException.NoSuchItemException e) {
+            return null;
+        }
     }
 }

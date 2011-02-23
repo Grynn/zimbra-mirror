@@ -581,9 +581,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.remove(A_zimbraPrefChildVisibleAccount);
 
         attrs.put(A_zimbraJunkMessagesIndexingEnabled, TRUE);
-
         attrs.put(A_zimbraMailQuota, "0");
-
+        attrs.put(A_offlineGalAccountSyncToken, "");
+        
         Account account = createAccountInternal(emailAddress, zgi.getId(), attrs, true, false);
 
         try {
@@ -831,8 +831,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_cn, id);
         attrs.put(A_sn, id);
         attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
-        attrs.put(A_offlineGalAccountSyncToken, "");
-        attrs.put(A_offlineGalAccountLastFullSync, "0");
+        attrs.put(A_offlineGalAccountLastRefresh, "0");
         attrs.put(A_offlineAccountFlavor, "Gal");
         setDefaultAccountAttributes(attrs);
 
@@ -969,7 +968,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     public boolean isGalAccount(Account account) {
-        return account.getAttr(A_offlineGalAccountSyncToken, null) != null;
+        String flavor = account.getAttr(A_offlineAccountFlavor, null);
+        return flavor != null && flavor.equals("Gal");
     }
 
     public boolean isMountpointAccount(Account account) {

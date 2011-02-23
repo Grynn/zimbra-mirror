@@ -122,6 +122,10 @@
   <desc>last time (days since epoch) the system did a full sync</desc>
 </attr>
 
+<attr name="offlineGalAccountLastRefresh" type="long" cardinality="single" optionalIn="account">
+  <desc>last time (days since epoch) gal maintenance task was run</desc>
+</attr>
+
 <attr name="offlineMountpointProxyAccountId" type="string" cardinality="single" optionalIn="account">
   <desc>id of the offline acount through which access to mountpoints is proxied</desc>
 </attr>

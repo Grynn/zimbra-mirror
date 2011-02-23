@@ -29,6 +29,7 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.accesscontrol.Rights.Admin;
 import com.zimbra.cs.account.offline.OfflineAccount;
+import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.im.IMPersona;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
@@ -47,7 +48,8 @@ public class OfflineDeleteMailbox extends DeleteMailbox {
         Element mreq = request.getElement(AdminConstants.E_MAILBOX);
         String accountId = mreq.getAttribute(AdminConstants.A_ACCOUNTID);
         
-        Account account = Provisioning.getInstance().get(AccountBy.id, accountId, zsc.getAuthToken());
+        OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
+        Account account = prov.get(AccountBy.id, accountId, zsc.getAuthToken());
         if (account == null) {
             // Note: isDomainAdminOnly *always* returns false for pure ACL based AccessManager 
             if (isDomainAdminOnly(zsc)) {
@@ -65,8 +67,14 @@ public class OfflineDeleteMailbox extends DeleteMailbox {
             checkAccountRight(zsc, account, Admin.R_deleteAccount);   
         }
 
-        if (account != null)
+        if (account != null) {
             IMPersona.deleteIMPersona(account.getName());
+            
+            if (prov.isZcsAccount(account)) {
+                prov.setAccountAttribute(account, OfflineConstants.A_offlineGalAccountSyncToken, ""); // to trigger full gal sync
+            }
+        }
+        
         //test if the mbox is fetchable; if it is not (e.g. due to corrupt db files) then we want to force-remove it from mgr so next req makes new db files. 
         try {
             MailboxManager.getInstance().getMailboxByAccountId(accountId, false);

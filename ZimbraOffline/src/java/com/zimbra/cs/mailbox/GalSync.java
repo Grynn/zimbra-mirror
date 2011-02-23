@@ -15,280 +15,111 @@
 package com.zimbra.cs.mailbox;
 
 import java.util.HashMap;
-import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.io.IOException;
 import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.Semaphore;
 
-import com.zimbra.common.mailbox.ContactConstants;
+import org.dom4j.ElementHandler;
+
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.AdminConstants;
-import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element.XMLElement;
-import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.Constants;
-import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
-import com.zimbra.cs.account.DataSource;
-import com.zimbra.cs.account.DataSource.Type;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
-import com.zimbra.cs.account.offline.OfflineGal;
+import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.AccountBy;
-import com.zimbra.cs.db.DbDataSource;
-import com.zimbra.cs.db.DbDataSource.DataSourceItem;
-import com.zimbra.cs.index.SortBy;
-import com.zimbra.cs.index.ZimbraQueryResults;
 import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
-import com.zimbra.common.util.Pair;
-
-import org.dom4j.ElementHandler;
-import org.dom4j.ElementPath;
+import com.zimbra.cs.util.Zimbra;
+import com.zimbra.cs.util.ZimbraApplication;
 
 public class GalSync {
-
-    private static class SyncHandler implements ElementHandler {
-
-        public static final String PATH_RESPONSE = "/Envelope/Body/SyncGalResponse";
-        public static final String PATH_CN = PATH_RESPONSE + "/cn";
-
-        private OfflineAccount galAccount;
-        private boolean fullSync;
-        private Mailbox galMbox;
-        private OperationContext context;
-        private Exception exception = null;
-        private String token = null;
-        private int syncFolder;
-        private int dropFolder;
-        private ArrayList<String> idGroups = null;
-        private int grpSize = OfflineLC.zdesktop_gal_sync_group_size.intValue();
-        private int idCount;
-        private DataSource ds = null;
-
-        public SyncHandler(OfflineAccount galAccount, boolean fullSync, boolean trace) {
-            this.galAccount = galAccount;
-            this.fullSync = fullSync;
-        }
-
-        public String getToken() { return token; }
-        public OfflineAccount getGalAccount() { return galAccount; }
-        public int getDropFolder() { return dropFolder; }
-        public Exception getException() { return exception; }
-        public int getGroupCount() { return idGroups == null ? 0 : idGroups.size(); }
-        public String removeGroup() { return idGroups.remove(0); }
-
-        @Override
-        public void onStart(ElementPath elPath) { //TODO: add trace logging;
-            String path = elPath.getPath();
-            if (!path.equals(PATH_RESPONSE))
-                return;
-
-            org.dom4j.Element row = elPath.getCurrent();
-            token = row.attributeValue(AdminConstants.A_TOKEN);
-            if (token == null) {
-                OfflineLog.offline.debug("Offline GAL parse error: SyncGalResponse has no token attribute");
-                elPath.removeHandler(PATH_CN);
-                return;
-            }
-
-            try {
-                galMbox = MailboxManager.getInstance().getMailboxByAccountId(galAccount.getId(), false);
-                context = new OperationContext(galMbox);
-                Pair<Integer, Integer> pair = OfflineGal.getSyncFolders(galMbox, context);
-                String dsId = galAccount.getAttr(OfflineConstants.A_offlineGalAccountDataSourceId, false);
-
-                if (fullSync) {
-                    OfflineLog.offline.debug("Offline GAL full sync requested: " + galAccount.getName());
-                    syncFolder = pair.getSecond().intValue();
-                    dropFolder = pair.getFirst().intValue();
-                    galMbox.emptyFolder(context, syncFolder, false);
-
-                    if (dsId == null) {
-                        dsId = UUID.randomUUID().toString();
-                        OfflineProvisioning.getOfflineInstance().setAccountAttribute(galAccount,
-                            OfflineConstants.A_offlineGalAccountDataSourceId, dsId);
-                    }
-                } else {
-                    syncFolder = pair.getFirst().intValue();
-                }
-
-                if (dsId != null) {
-                    ds = new DataSource(galAccount, Type.gal, galAccount.getName(), dsId,
-                        new HashMap<String, Object>(), OfflineProvisioning.getOfflineInstance());
-                    if (fullSync)
-                        DbDataSource.deleteAllMappings(ds);
-                }
-            } catch (ServiceException e) {
-                exception = e;
-                elPath.removeHandler(PATH_CN);
-            }
-        }
-
-        @Override
-        public void onEnd(ElementPath elPath) { //TODO: add trace logging;
-            String path = elPath.getPath();
-            if (!path.equals(PATH_CN))
-                return;
-
-            if (token == null) {
-                OfflineLog.offline.debug("Offline GAL parse error: missing SyncGalResponse tag");
-                elPath.removeHandler(PATH_CN);
-                return;
-            }
-
-            org.dom4j.Element row = elPath.getCurrent();
-            String id = row.attributeValue(AdminConstants.A_ID);
-            if (id == null) {
-                OfflineLog.offline.debug("Offline GAL parse error: cn has no id attribute");
-            } else {
-                Iterator itr = row.elementIterator();
-                if (itr.hasNext()) {
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put(OfflineConstants.GAL_LDAP_DN, id);
-                    while(itr.hasNext()) {
-                        org.dom4j.Element child = (org.dom4j.Element) itr.next();
-                        String key = child.attributeValue(AdminConstants.A_N);
-                        if (!key.equals("objectClass"))
-                            map.put(key, child.getText());
-                    }
-
-                    try {
-                        saveContact(id, map, galMbox);
-                    } catch (ServiceException e) {
-                        exception = e;
-                    } catch (IOException e) {
-                        exception = e;
-                    }
-
-                    if (exception != null)
-                        elPath.removeHandler(PATH_CN);
-                } else { // Ids Only
-                    if (idGroups == null)
-                        idGroups = new ArrayList<String>();
-                    if (idGroups.size() == 0 || idCount >= grpSize) {
-                        idGroups.add(id);
-                        idCount = 1;
-                    } else {
-                        int i = idGroups.size() - 1;
-                        idGroups.set(i, idGroups.get(i) + "," + id);
-                        idCount++;
-                    }
-                }
-            }
-
-            row.detach(); // done with this node - prune it off to save memory
-        }
-
-        private void createContact(ParsedContact contact, String id, String logstr) throws ServiceException {
-            Contact c = galMbox.createContact(context, contact, syncFolder, null);
-            if (ds != null)
-                DbDataSource.addMapping(ds, new DataSourceItem(0, c.getId(), id, null));
-            OfflineLog.offline.debug("Offline GAL contact created: " + logstr);
-        }
-
-        private int findContact(String id) throws ServiceException, IOException {
-            if (ds == null) {
-                ZimbraQueryResults zqr = galMbox.index.search(context,
-                        "#" + OfflineConstants.GAL_LDAP_DN + ":\"" + id + "\"",
-                        EnumSet.of(MailItem.Type.CONTACT), SortBy.NONE, 1);
-                try {
-                    if (zqr.hasNext())
-                        return zqr.getNext().getItemId();
-                } finally {
-                    zqr.doneWithSearchResults();
-                }
-            } else {
-                DataSourceItem dsItem = DbDataSource.getReverseMapping(ds, id);
-                if (dsItem.itemId > 0)
-                    return dsItem.itemId;
-            }
-            return -1;
-        }
-
-        public void saveContact(String id, Map<String, String> map, Mailbox galMbox) throws ServiceException, IOException {
-            String fullName = map.get(ContactConstants.A_fullName);
-            if (fullName == null) {
-                String fname = map.get(ContactConstants.A_firstName);
-                String lname = map.get(ContactConstants.A_lastName);
-                fullName = fname == null ? "" : fname;
-                if (lname != null)
-                    fullName = fullName + (fullName.length() > 0 ? " " : "") + lname;
-                if (fullName.length() > 0)
-                    map.put(ContactConstants.A_fullName, fullName);
-            }
-            map.put(ContactConstants.A_type, map.get(OfflineGal.A_zimbraCalResType) == null ? OfflineGal.CTYPE_ACCOUNT : OfflineGal.CTYPE_RESOURCE);
-            String logstr = "id=" + id + " name=\"" + fullName + "\"";
-
-            ParsedContact contact = new ParsedContact(map);
-            if (fullSync) {
-                createContact(contact, id, logstr);
-            } else {
-                int itemId = findContact(id);
-                if (itemId > 0) {
-                    try {
-                        galMbox.modifyContact(context, itemId, contact);
-                        OfflineLog.offline.debug("Offline GAL contact modified: " + logstr);
-                    } catch (MailServiceException.NoSuchItemException e) {
-                        OfflineLog.offline.warn("Offline GAL modify error - no such contact: " + logstr + " itemId=" + Integer.toString(itemId));
-                    }
-                } else {
-                    createContact(contact, id, logstr);
-                }
-            }
-        }
+    private static GalSync instance = new GalSync();
+    private TimerTask currentTask;
+    private boolean isDisabled = false;
+    private boolean isRunning = false;
+    private OfflineProvisioning prov;
+    
+    public static GalSync getInstance() {
+        return instance;
     }
 
-    private static class SyncThread extends Thread {
-        private ZcsMailbox ombx;
-        private String user;
-        private OfflineAccount galAccount;
-        private long lastFullSync;
-        private boolean traceOn;
-        private Semaphore lock;
-
-        public SyncThread(ZcsMailbox ombx, String user, OfflineAccount galAccount, long lastFullSync, boolean traceOn, Semaphore lock) {
-            super("sync-gal-" + user);
-            this.ombx = ombx;
-            this.user = user;
-            this.galAccount = galAccount;
-            this.lastFullSync = lastFullSync;
-            this.traceOn = traceOn;
-            this.lock = lock;
-
-            setPriority(MIN_PRIORITY);
+    private Timer timer = new Timer("sync-timer-gal");
+    private GalSync() {
+        if (!OfflineLC.zdesktop_sync_gal.booleanValue()) {
+            OfflineLog.offline.debug("Offline GAL sync is disabled in local config (zdesktop_sync_gal = false)");
+            isDisabled = true;
+            return;
         }
-
-        @Override
-        public void run() {
-            OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
-            try {
-                OfflineLog.offline.info("Offline GAL sync started for " + user);
-                syncGal(ombx, galAccount, lastFullSync, traceOn);
-                syncMan.syncComplete(galAccount);
-                OfflineLog.offline.info("Offline GAL sync completed successfully for " + user);
-            } catch (Exception e) {
-                syncMan.processSyncException(galAccount, "", e, traceOn);
-                OfflineLog.offline.info("Offline GAL sync failed for " + user +
-                    ": " + e.getMessage());
-            } finally {
-                lock.release();
+        
+        prov = (OfflineProvisioning)Provisioning.getInstance();
+        
+        timer.schedule(currentTask = new TimerTask() {
+            @Override public void run() {
+                if (ZimbraApplication.getInstance().isShutdown()) {
+                    currentTask.cancel();
+                    return;
+                }
+                try {
+                    runTask(null, false); // sync all accounts
+                } catch (Throwable e) { //don't let exceptions kill the timer
+                    if (e instanceof OutOfMemoryError)
+                        Zimbra.halt("caught out of memory error", e);
+                    else if (OfflineSyncManager.getInstance().isServiceActive())
+                        OfflineLog.offline.warn("caught exception in timer ", e);
+                }
+            }
+        },
+        5 * Constants.MILLIS_PER_SECOND,
+        OfflineLC.zdesktop_gal_sync_timer_frequency.longValue());
+    }
+    
+    /*
+     * the only starting point for running gal-sync task. if account == null, sync gal for all zcs accounts
+     */
+    public void runTask(OfflineAccount targetAccount, boolean isOnRequest) {
+        if (isDisabled) {
+            OfflineLog.offline.debug("Offline GAL sync is disabled in local config (zdesktop_sync_gal = false)");
+            return;
+        }
+        
+        synchronized (this) {
+            if (isRunning) {
+                OfflineLog.offline.info("Offline GAL sync is already running");
+                return;
+            } else {
+                isRunning = true;
             }
         }
-    };
-
-    private static Semaphore galSyncLock = new Semaphore(1);
-
-    public static void sync(ZcsMailbox ombx, boolean isOnRequest) throws ServiceException {
+        
+        try {    
+            for (Account acct : prov.getAllZcsAccounts()) {
+                OfflineAccount account = (OfflineAccount) acct;
+                if (targetAccount != null && !account.getId().equals(targetAccount.getId())) {
+                    continue;
+                }
+                ZcsMailbox ombx = (ZcsMailbox) OfflineMailboxManager.getInstance().getMailboxByAccount(account);
+                sync(ombx, isOnRequest);
+                if (targetAccount != null) {
+                    break;
+                }
+            }
+        } catch (ServiceException e) {
+            OfflineLog.offline.warn("Offline GAL sync task failed: " + e.getMessage());
+        } finally {
+            isRunning = false;
+        }
+    }
+    
+    private void sync(ZcsMailbox ombx, boolean isOnRequest) throws ServiceException {        
         OfflineAccount account = (OfflineAccount)ombx.getAccount();
         if (!account.getBooleanAttr(Provisioning.A_zimbraFeatureGalEnabled , false) ||
             !account.getBooleanAttr(Provisioning.A_zimbraFeatureGalSyncEnabled , false)) {
@@ -310,75 +141,65 @@ public class GalSync {
                 return;
         }
 
-        if (!OfflineLC.zdesktop_sync_gal.booleanValue()) {
-            OfflineLog.offline.debug("Offline GAL sync is disabled in local config (zdesktop_sync_gal=false)");
-            syncMan.resetLastSyncTime(galAccount);
-            return;
-        }
-
-        // to reduce system resources used by gal sync, only one active gal sync op is allowed
-        if (!galSyncLock.tryAcquire()) {
-            OfflineLog.offline.debug("Another account is running Offline GAL sync. Will retry later.");
-            return;
-        }
-
-        long lastFullSync = galAccount.getLongAttr(OfflineConstants.A_offlineGalAccountLastFullSync, 0);
         syncMan.syncStart(galAccount);
-
-        /* TODO: allow graceful shutdown of this thread once offline improves its shutdown routines
-         * currently if server shuts down during gal sync, we get a nasty redo log exception from this thread,
-         * which is the same as what we would get during mailbox sync. */
-        new SyncThread(ombx, ombx.getRemoteUser(), galAccount, lastFullSync, account.isDebugTraceEnabled(), galSyncLock).start();
+        String user = ombx.getRemoteUser();
+        boolean traceOn = account.isDebugTraceEnabled();
+        try {
+            OfflineLog.offline.info("Offline GAL sync started for " + user);
+            syncGal(ombx, account, galAccount, traceOn, isOnRequest);
+            syncMan.syncComplete(galAccount);
+            OfflineLog.offline.info("Offline GAL sync completed successfully for " + user);
+        } catch (Exception e) {
+            syncMan.processSyncException(galAccount, "", e, traceOn);
+            OfflineLog.offline.info("Offline GAL sync failed for " + user + ": " + e.getMessage());
+        }         
     }
 
-    private static void ensureGalAccountNotExists(OfflineAccount account) throws ServiceException {
-        OfflineProvisioning prov = (OfflineProvisioning)Provisioning.getInstance();
+    private void ensureGalAccountNotExists(OfflineAccount account) throws ServiceException {
         prov.deleteGalAccount(account);
     }
 
-    private static OfflineAccount ensureGalAccountExists(OfflineAccount account) throws ServiceException {
+    private OfflineAccount ensureGalAccountExists(OfflineAccount account) throws ServiceException {
         String galAcctId = account.getAttr(OfflineConstants.A_offlineGalAccountId, false);
-        OfflineProvisioning prov = (OfflineProvisioning)Provisioning.getInstance();
         OfflineAccount galAcct;
         if (galAcctId == null || galAcctId.length() == 0 || (galAcct = (OfflineAccount)prov.get(AccountBy.id, galAcctId)) == null) {
             galAcct = prov.createGalAccount(account);
             OfflineLog.offline.info("Offline GAL mailbox created: " + galAcct.getName());
-        }
-
-        // ensure second alternating contact folder is created as well
-        Mailbox galMbox = MailboxManager.getInstance().getMailboxByAccountId(galAcct.getId(), false);
-        OperationContext octxt = new OperationContext(galMbox);
-        try {
-            galMbox.getFolderByPath(octxt, OfflineGal.SECOND_GAL_FOLDER);
-        } catch (MailServiceException.NoSuchItemException e) {
-            try {
-                galMbox.createFolder(octxt, OfflineGal.SECOND_GAL_FOLDER, (byte)0, MailItem.Type.CONTACT);
-            } catch (ServiceException se) {
-                prov.deleteGalAccount(account);
-                throw se;
-            }
+        } else { // migration: move existing token from gal account to main account; lastFullSync to LastRefresh
+            String token = account.getAttr(OfflineConstants.A_offlineGalAccountSyncToken, false);
+            if (token == null) {
+                token = galAcct.getAttr(OfflineConstants.A_offlineGalAccountSyncToken, false);
+                if (token != null && !token.isEmpty()) {
+                    prov.setAccountAttribute(account, OfflineConstants.A_offlineGalAccountSyncToken, token);
+                    
+                    long fs = galAcct.getLongAttr(OfflineConstants.A_offlineGalAccountLastFullSync, 0);
+                    prov.setAccountAttribute(galAcct, OfflineConstants.A_offlineGalAccountLastRefresh, Long.toString(fs));
+                }
+            }            
         }
         return galAcct;
     }
 
-    private static void syncGal(ZcsMailbox mbox, OfflineAccount galAccount, long lastFullSync, boolean traceEnabled)
+    private void syncGal(ZcsMailbox mbox, OfflineAccount account, OfflineAccount galAccount, boolean traceEnabled, boolean isOnRequest)
         throws ServiceException, IOException {
-        String syncToken = galAccount.getAttr(OfflineConstants.A_offlineGalAccountSyncToken, false);
-        long interval = OfflineLC.zdesktop_gal_refresh_interval_days.longValue();
-        if (lastFullSync > 0 && (System.currentTimeMillis() - lastFullSync) / Constants.MILLIS_PER_DAY >= interval)
-            syncToken = "";
+        String syncToken = account.getAttr(OfflineConstants.A_offlineGalAccountSyncToken, false);        
         boolean fullSync = (syncToken == null || syncToken.length() == 0);
+        
+        GalSyncSAXHandler handler =  new GalSyncSAXHandler(mbox, galAccount, fullSync, traceEnabled);
+        if (!isOnRequest && !fullSync) { // don't run the potentially lengthy maintenance if it's manual or full
+            handler.runMaintenance();
+        }
 
         XMLElement req = new XMLElement(AccountConstants.SYNC_GAL_REQUEST);
         req.addAttribute(AccountConstants.A_ID_ONLY, "true");
         if (!fullSync)
             req.addAttribute(AdminConstants.A_TOKEN, syncToken);
-
-        SyncHandler handler =  new SyncHandler(galAccount, fullSync, traceEnabled);
+        
         HashMap<String, ElementHandler> handlers = new HashMap<String, ElementHandler>();
-        handlers.put(SyncHandler.PATH_RESPONSE, handler);
-        handlers.put(SyncHandler.PATH_CN, handler);
-
+        handlers.put(GalSyncSAXHandler.PATH_RESPONSE, handler);
+        handlers.put(GalSyncSAXHandler.PATH_CN, handler);
+        handlers.put(GalSyncSAXHandler.PATH_DELETED, handler);
+        
         mbox.sendRequest(req, true, true, OfflineLC.zdesktop_gal_sync_request_timeout.intValue(), SoapProtocol.Soap12, handlers);
 
         Exception e = handler.getException();
@@ -393,7 +214,7 @@ public class GalSync {
         }
 
         while (handler.getGroupCount() > 0) {
-            fetchContacts(handler, mbox);
+            handler.fetchContacts();
             if (handler.getGroupCount() > 0) {
                 try {
                     Thread.sleep(OfflineLC.zdesktop_gal_sync_group_interval.longValue());
@@ -401,34 +222,10 @@ public class GalSync {
             }
         }
 
-        OfflineProvisioning prov = (OfflineProvisioning)Provisioning.getInstance();
-        prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountSyncToken, token);
-        if (fullSync) {
-            Mailbox galMbox = MailboxManager.getInstance().getMailboxByAccountId(galAccount.getId(), false);
-            OperationContext octxt = new OperationContext(galMbox);
-            galMbox.emptyFolder(octxt, handler.getDropFolder(), false);
-            prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountLastFullSync, Long.toString(System.currentTimeMillis()));
-            galMbox.optimize(null, 0);
+        if (fullSync) { // after a full sync, reset maintenance timer
+            prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountLastRefresh,
+                Long.toString(System.currentTimeMillis()));
         }
-    }
-
-    private static void fetchContacts(SyncHandler handler, ZcsMailbox mbox) throws ServiceException, IOException {
-        XMLElement req = new XMLElement(MailConstants.GET_CONTACTS_REQUEST);
-        req.addElement(AdminConstants.E_CN).addAttribute(AccountConstants.A_ID, handler.removeGroup());
-        Element response = mbox.sendRequest(req, true, true, OfflineLC.zdesktop_gal_sync_request_timeout.intValue(), SoapProtocol.Soap12);
-
-        Mailbox galMbox = MailboxManager.getInstance().getMailboxByAccountId(handler.getGalAccount().getId(), false);
-        List<Element> contacts = response.listElements(MailConstants.E_CONTACT);
-        for(Element elt : contacts) {
-            String id = elt.getAttribute(AccountConstants.A_ID);
-            Map<String, String> fields = new HashMap<String, String>();
-            fields.put(OfflineConstants.GAL_LDAP_DN, id);
-            for (Element eField : elt.listElements()) {
-                String name = eField.getAttribute(Element.XMLElement.A_ATTR_NAME);
-                if (!name.equals("objectClass"))
-                    fields.put(name, eField.getText());
-            }
-            handler.saveContact(id, fields, galMbox);
-        }
+        prov.setAccountAttribute(account, OfflineConstants.A_offlineGalAccountSyncToken, token);
     }
 }

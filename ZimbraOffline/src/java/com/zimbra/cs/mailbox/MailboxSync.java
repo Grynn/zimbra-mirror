@@ -184,7 +184,6 @@ public class MailboxSync {
                     OfflineProvisioning.getOfflineInstance().setAccountAttribute(
                         ombx.getAccount(), OfflineConstants.A_offlineLastSync,
                         Long.toString(System.currentTimeMillis()));
-                    GalSync.sync(ombx, isOnRequest);
                 } catch (Exception e) {
                     if (!syncMan.isServiceActive()) {
                         return;
