@@ -158,12 +158,19 @@ DwtHtmlEditor.INIT_HTML = [ "<html><head><title>ZWC</title></head><body><p>",
                             "</p></body></html>" ].join("");
 
 DwtHtmlEditor.prototype.focus =
-function() {
+function(tryCount) {
 	DBG.println(AjxDebug.DBG1, "DwtHtmlEditor.prototype.focus");
 	if (!AjxEnv.isIE && this._mode == DwtHtmlEditor.TEXT) {
 		document.getElementById(this._textAreaId).focus();
 	} else {
 		try {
+			if (!this._htmlModeInited) {
+				tryCount = tryCount || 0;
+				if (tryCount < 10) {
+					setTimeout(AjxCallback.simpleClosure(this.focus, this, tryCount + 1), DwtHtmlEditor._INITDELAY);
+				}
+				return;
+			}
 			if (AjxEnv.isSafari) {
 				document.getElementById(this._iFrameId).focus();
 			} else {
