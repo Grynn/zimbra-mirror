@@ -20,15 +20,29 @@ import com.zimbra.qa.selenium.framework.util.SleepUtil;
  */
 public abstract class AbsDialog extends AbsPage {
 	protected static Logger logger = LogManager.getLogger(AbsDialog.class);
+	protected AbsTab MyTab;
 
 	/**
 	 * Create this page object that exists in the specified application
 	 * @param application
 	 */
 	public AbsDialog(AbsApplication application) {
+		this(application, null);
+	}
+
+	/**
+	 * Create this page object that exists in the specified application
+	 * @param application
+	 * @param page
+	 */
+	public AbsDialog(AbsApplication application, AbsTab page) {
+
 		super(application);
-		
+
+		MyTab = page;
+
 		logger.info("new AbsDialog");
+
 	}
 	
 	/**

@@ -11,7 +11,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogMove;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
 
 /**
  * @author Matt Rhoades
@@ -368,15 +368,12 @@ public class PageTasks extends AbsTab {
 
 		if (button == null)
 			throw new HarnessException("Button cannot be null!");
-
-		// Default behavior variables
-		//
+		
 		String locator = null; // If set, this will be clicked
 		AbsPage page = null; // If set, this page will be returned
 
 		// Based on the button specified, take the appropriate action(s)
 		//
-
 		if (button == Button.B_NEW) {
 
 			// New button
@@ -384,11 +381,7 @@ public class PageTasks extends AbsTab {
 
 			page = new FormTaskNew(this.MyApplication);
 
-			// Create the page
-			// page = new FormTaskNew(this.MyApplication);
-
-			// FALL THROUGH
-
+			
 		} else if (button == Button.B_EDIT) {
 
 			locator = "zb__TKL__EDIT_left_icon";
@@ -426,7 +419,7 @@ public class PageTasks extends AbsTab {
 						+ " but it was disabled " + attrs);
 			}
 
-			page = new DialogMove(MyApplication);
+			page = new DialogMove(this.MyApplication,this);
 
 			// FALL THROUGH
 
