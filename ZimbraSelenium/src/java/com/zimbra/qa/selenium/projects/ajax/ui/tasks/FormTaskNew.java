@@ -6,7 +6,7 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.RecipientItem.RecipientType;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
 
@@ -151,7 +151,8 @@ public class FormTaskNew extends AbsForm {
 			this.zClick(locator);
 			page = new DialogWarning(
 					DialogWarning.DialogWarningID.SaveTaskChangeMessage,
-					this.MyApplication);
+					this.MyApplication,
+					((AppAjaxClient)this.MyApplication).zPageTasks);
 
 			this.zWaitForBusyOverlay();
 

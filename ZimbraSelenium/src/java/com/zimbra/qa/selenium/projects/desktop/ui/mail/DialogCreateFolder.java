@@ -1,15 +1,13 @@
 package com.zimbra.qa.selenium.projects.desktop.ui.mail;
 
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsDialog;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
 public class DialogCreateFolder extends AbsDialog {
 
-   public DialogCreateFolder(AbsApplication application) {
-      super(application);
+   public DialogCreateFolder(AbsApplication application, AbsTab tab) {
+      super(application, tab);
+      
       logger.debug("new " + DialogCreateFolder.class.getCanonicalName());
    }
 

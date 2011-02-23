@@ -218,7 +218,7 @@ public class PageAddressbook extends AbsTab {
 		    }
 
 		   locator = "id="+ id;
-		   page = new DialogContactMove(MyApplication);
+		   page = new DialogMove(MyApplication, this);
 	    }
 
 
@@ -262,7 +262,7 @@ public class PageAddressbook extends AbsTab {
 
 		    pulldownLocator = "css=td[id$='__TAG_MENU_dropdown'] div[class='ImgSelectPullDownArrow']";
     		optionLocator = "css=div[id$='__TAG_MENU|MENU|NEWTAG']";
-			page = new DialogTag(this.MyApplication);
+			page = new DialogTag(this.MyApplication, this);
 
 			
 		 } else if ( option == Button.O_TAG_REMOVETAG ) {
@@ -381,7 +381,7 @@ public class PageAddressbook extends AbsTab {
 													
 				if (subOption == Button.O_TAG_NEWTAG) {
 					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_NEW_TAG;
-					page = new DialogTag(this.MyApplication);
+					page = new DialogTag(this.MyApplication, this);
 				}
 				
 				else if (subOption == Button.O_TAG_REMOVETAG) {
@@ -464,7 +464,7 @@ public class PageAddressbook extends AbsTab {
 			}
 			else if (option == Button.B_MOVE) {
 				cmi=CONTEXT_MENU.CONTACT_MOVE;
-				page = new DialogContactMove(MyApplication);	
+				page = new DialogMove(MyApplication, this);	
 			}
             
 			else if (option == Button.B_EDIT) {

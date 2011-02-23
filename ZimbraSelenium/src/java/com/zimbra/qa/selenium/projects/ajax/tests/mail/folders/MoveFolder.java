@@ -7,7 +7,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogMove;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
 
 
 public class MoveFolder extends AjaxCommonTest {
@@ -56,14 +56,14 @@ public class MoveFolder extends AjaxCommonTest {
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
 		// Move the folder using context menu
-		DialogMove dialog = (DialogMove)app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, subfolder1);
-		dialog.zEnterFolderName(name2);
+		DialogMove dialog = (DialogMove)app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_MOVE, subfolder1);
+		dialog.zClickTreeFolder(subfolder2);
 		dialog.zClickButton(Button.B_OK);
 		
 		// Verify the folder is now in the other subfolder
-		subfolder2 = FolderItem.importFromSOAP(app.zGetActiveAccount(), name2);
-		ZAssert.assertNotNull(subfolder2, "Verify the subfolder is again available");
-		ZAssert.assertEquals(subfolder1.getId(), subfolder2.getParentId(), "Verify the subfolder's parent is now the other subfolder");
+		subfolder1 = FolderItem.importFromSOAP(app.zGetActiveAccount(), name1);
+		ZAssert.assertNotNull(subfolder1, "Verify the subfolder is again available");
+		ZAssert.assertEquals(subfolder2.getId(), subfolder1.getParentId(), "Verify the subfolder's parent is now the other subfolder");
 
 		
 	}

@@ -3,10 +3,7 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsDialog;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
 
@@ -37,8 +34,10 @@ public class DialogTag extends AbsDialog {
 	}
 	
 	
-	public DialogTag(AbsApplication application) {
-		super(application);
+	public DialogTag(AbsApplication application, AbsTab tab) {
+		super(application, tab);
+		
+		logger.info("new "+ DialogTag.class.getCanonicalName());
 	}
 	
 	public void zSetTagName(String name) throws HarnessException {

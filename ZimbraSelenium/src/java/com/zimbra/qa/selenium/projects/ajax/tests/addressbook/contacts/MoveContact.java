@@ -7,11 +7,11 @@ import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.Toaster;
-import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.DialogContactMove;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
 public class MoveContact extends AjaxCommonTest  {
@@ -28,7 +28,9 @@ public class MoveContact extends AjaxCommonTest  {
 	@Test(	description = "Move a contact item to different folder",
 			groups = { "smoke" })
 	public void MoveContact_01() throws HarnessException {
+		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
 
+		
 		 // Create a contact 
 		ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
  
@@ -54,10 +56,10 @@ public class MoveContact extends AjaxCommonTest  {
 
 
         //click Move icon 
-        DialogContactMove dialogContactMove = (DialogContactMove) app.zPageAddressbook.zToolbarPressButton(Button.B_MOVE);
+        DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zToolbarPressButton(Button.B_MOVE);
      
         //enter the moved folder
-        dialogContactMove.zEnterFolderName("Emailed Contacts");        		
+        dialogContactMove.zClickTreeFolder(emailedContacts);
         dialogContactMove.zClickButton(Button.B_OK);
        
         //verify toasted message 1 contact moved to "Emailed Contacts"

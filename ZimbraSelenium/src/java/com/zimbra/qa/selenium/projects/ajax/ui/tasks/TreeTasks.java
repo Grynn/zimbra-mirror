@@ -45,7 +45,7 @@ public class TreeTasks extends AbsTree {
 		if ( button == Button.B_TREE_NEWFOLDER ) {
 			
 			locator = "id=overviewHeader-Text FakeAnchor";
-			page = new DialogCreateFolder(MyApplication);
+			page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageMail);
 			
 			if ( !this.sIsElementPresent(locator) ) {
 				throw new HarnessException("Unable to locator folder in tree "+ locator);

@@ -31,8 +31,11 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 
 	}
 
-	public DialogCreateBriefcaseFolder(AbsApplication application) {
-		super(application);
+	public DialogCreateBriefcaseFolder(AbsApplication application, AbsTab tab) {
+		super(application, tab);
+		
+		logger.info("new " + DialogCreateBriefcaseFolder.class.getCanonicalName());
+
 	}
 
 	/*

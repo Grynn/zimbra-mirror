@@ -202,7 +202,7 @@ public class PageBriefcase extends AbsTab {
 				throw new HarnessException(button + " not visible " + attrs);
 			}
 			locator = Locators.zDeleteIconBtn;
-			page = new DialogDeleteConfirm(MyApplication);
+			page = new DialogDeleteConfirm(MyApplication, this);
 		} else if (button == Button.B_OPEN_IN_SEPARATE_WINDOW) {
 			// Check if the button is disabled
 			String attrs = sGetAttribute("css=td["
@@ -222,7 +222,7 @@ public class PageBriefcase extends AbsTab {
 			}
 			// locator = "css=td[id='zb__BDLV__MOVE_left_icon']";
 			locator = Locators.zMoveIconBtn;
-			page = new DialogChooseFolder(MyApplication);
+			page = new DialogMove(MyApplication, this);
 		} else if (button == Button.B_PRINT) {
 
 			// Check if the button is enabled
@@ -340,7 +340,7 @@ public class PageBriefcase extends AbsTab {
 
 				optionLocator = "css=td[id$='__TAG_MENU|MENU|NEWTAG_title']";
 
-				page = new DialogTag(this.MyApplication);
+				page = new DialogTag(this.MyApplication, this);
 
 				// FALL THROUGH
 			} else if (option == Button.O_TAG_REMOVETAG) {
@@ -375,7 +375,7 @@ public class PageBriefcase extends AbsTab {
 
 				optionLocator = "css=td[id$='_title']:contains('Send link')";
 
-				page = new DialogWarning(DialogWarning.DialogWarningID.SendLink, this.MyApplication);
+				page = new DialogWarning(DialogWarning.DialogWarningID.SendLink, this.MyApplication, this);
 
 				// FALL THROUGH
 			} else {

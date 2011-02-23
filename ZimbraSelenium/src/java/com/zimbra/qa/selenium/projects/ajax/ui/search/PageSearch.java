@@ -116,7 +116,7 @@ public class PageSearch extends AbsTab {
 		} else if ( button == Button.B_SEARCHSAVE ) {
 			
 			locator = "zb__Search__SAVE_title";
-			page = new DialogSaveSearch(MyApplication);
+			page = new DialogSaveSearch(MyApplication, this);
 			
 			// Make sure the button exists
 			if ( !this.sIsElementPresent(locator) )

@@ -4,10 +4,7 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.search;
 
 import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsDialog;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 
@@ -35,8 +32,8 @@ public class DialogSaveSearch extends AbsDialog {
 	}
 	
 	
-	public DialogSaveSearch(AbsApplication application) {
-		super(application);
+	public DialogSaveSearch(AbsApplication application, AbsTab tab) {
+		super(application, tab);
 		
 		logger.info("new " + DialogSaveSearch.class.getCanonicalName());
 

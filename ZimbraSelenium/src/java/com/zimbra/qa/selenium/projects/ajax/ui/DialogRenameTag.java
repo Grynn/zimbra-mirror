@@ -3,10 +3,7 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui;
 
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsDialog;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
 
@@ -24,8 +21,10 @@ public class DialogRenameTag extends AbsDialog {
 	}
 	
 	
-	public DialogRenameTag(AbsApplication application) {
-		super(application);
+	public DialogRenameTag(AbsApplication application, AbsTab tab) {
+		super(application, tab);
+		logger.info("new " + DialogRenameTag.class.getCanonicalName());
+
 	}
 	
 	public void zSetNewName(String name) throws HarnessException {

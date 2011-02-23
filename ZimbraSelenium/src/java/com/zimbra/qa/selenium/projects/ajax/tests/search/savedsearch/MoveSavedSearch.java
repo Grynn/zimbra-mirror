@@ -6,7 +6,7 @@ import com.zimbra.qa.selenium.framework.items.SavedSearchFolderItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogMove;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
 //TODO: add more in ContactItem.java
@@ -55,10 +55,10 @@ public class MoveSavedSearch extends AjaxCommonTest  {
 		
 		// Right click on the search, select delete
 		// TODO: can the folder move dialog be reused?  Or, do we need DialogMoveSavedSearchFolder class?
-		DialogMove dialog = (DialogMove) app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_MOVE, item1);
+		DialogRenameFolder dialog = (DialogRenameFolder) app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_MOVE, item1);
 		
 		// Rename the search
-		dialog.zEnterFolderName(item2.getName());
+		dialog.zSetNewName(name2);
 		dialog.zClickButton(Button.B_OK);
 
 

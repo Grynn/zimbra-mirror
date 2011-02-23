@@ -294,7 +294,7 @@ public class PageMail extends AbsTab {
 
 			locator = "css=td[id$='__MOVE_left_icon']";
 			
-			page = new DialogMove(MyApplication);
+			page = new DialogMove(MyApplication, this);
 
 			// FALL THROUGH
 			
@@ -529,7 +529,7 @@ public class PageMail extends AbsTab {
 
 				pulldownLocator = "css=div[id$='__TAG_MENU'] td[id$='__TAG_MENU_dropdown']";
 				optionLocator = "css=div[id$='__TAG_MENU|MENU'] td[id$='NEWTAG_title']";
-				page = new DialogTag(this.MyApplication);
+				page = new DialogTag(this.MyApplication, this);
 
 				// FALL THROUGH
 				

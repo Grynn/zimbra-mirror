@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
@@ -134,16 +135,18 @@ public class ContactContextMenu extends AjaxCommonTest  {
 	@Test(	description = "Right click then click move",
 			groups = { "functional" })
 	public void ClickMove() throws HarnessException {
+		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
 		
-		ContactItem contactItem = createSelectAContactItem();
+		
+		ContactItem contactItem = createSelectAContactItem();		
 		app.zPageAddressbook.zSyncDesktopToZcs();
 		            
         //select move option
-        DialogContactMove dialogContactMove = (DialogContactMove) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_MOVE, contactItem.fileAs);
+        DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_MOVE, contactItem.fileAs);
       
         
         //enter the moved folder
-        dialogContactMove.zEnterFolderName("Emailed Contacts");        		
+        dialogContactMove.zClickTreeFolder(emailedContacts);
         dialogContactMove.zClickButton(Button.B_OK);
 
         app.zPageAddressbook.zSyncDesktopToZcs();
@@ -164,16 +167,18 @@ public class ContactContextMenu extends AjaxCommonTest  {
 	@Test(	description = "Right click then click move, also verify toasted message",
 			groups = { "smoke" })
 	public void ClickMoveVerifyToastedMessage() throws HarnessException {
+		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
 		
+				
 		ContactItem contactItem = createSelectAContactItem();
 		app.zPageAddressbook.zSyncDesktopToZcs();
 		            
         //select move option
-        DialogContactMove dialogContactMove = (DialogContactMove) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_MOVE, contactItem.fileAs);
+		DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_MOVE, contactItem.fileAs);
       
         
         //enter the moved folder
-        dialogContactMove.zEnterFolderName("Emailed Contacts");        		
+        dialogContactMove.zClickTreeFolder(emailedContacts);		
         dialogContactMove.zClickButton(Button.B_OK);
        
         

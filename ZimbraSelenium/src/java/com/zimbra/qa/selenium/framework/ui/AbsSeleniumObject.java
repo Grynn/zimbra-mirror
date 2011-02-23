@@ -38,7 +38,7 @@ public abstract class AbsSeleniumObject {
 			.getLogger(AbsSeleniumObject.class);
 
 	public AbsSeleniumObject() {
-		logger.info("new AbsSeleniumObject");
+		logger.info("new "+ AbsSeleniumObject.class.getCanonicalName());
 	}
 
 	/**

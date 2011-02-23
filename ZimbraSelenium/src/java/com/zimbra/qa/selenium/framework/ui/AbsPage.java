@@ -55,8 +55,10 @@ public abstract class AbsPage extends AbsSeleniumObject {
 	 * @param application
 	 */
 	public AbsPage(AbsApplication application) {
-		logger.info("new AbsAdminPage");
 		MyApplication = application;
+		
+		logger.info("new "+ AbsPage.class.getCanonicalName());
+
 	}
 	
 	/**

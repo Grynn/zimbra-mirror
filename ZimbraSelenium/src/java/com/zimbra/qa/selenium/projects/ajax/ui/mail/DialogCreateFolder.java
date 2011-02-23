@@ -30,8 +30,11 @@ public class DialogCreateFolder extends AbsDialog {
 	}
 	
 	
-	public DialogCreateFolder(AbsApplication application) {
-		super(application);
+	public DialogCreateFolder(AbsApplication application, AbsTab tab) {
+		super(application, tab);
+		
+		logger.info("new "+ DialogCreateFolder.class.getCanonicalName());
+
 	}
 	
 

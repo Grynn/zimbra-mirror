@@ -25,14 +25,6 @@ public abstract class AbsDialog extends AbsPage {
 	/**
 	 * Create this page object that exists in the specified application
 	 * @param application
-	 */
-	public AbsDialog(AbsApplication application) {
-		this(application, null);
-	}
-
-	/**
-	 * Create this page object that exists in the specified application
-	 * @param application
 	 * @param page
 	 */
 	public AbsDialog(AbsApplication application, AbsTab page) {
@@ -41,7 +33,7 @@ public abstract class AbsDialog extends AbsPage {
 
 		MyTab = page;
 
-		logger.info("new AbsDialog");
+		logger.info("new " + AbsDialog.class.getCanonicalName());
 
 	}
 	

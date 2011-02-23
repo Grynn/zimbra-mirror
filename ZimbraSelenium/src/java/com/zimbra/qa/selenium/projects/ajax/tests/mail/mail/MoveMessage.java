@@ -9,7 +9,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogMove;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
 public class MoveMessage extends AjaxCommonTest {
@@ -19,7 +19,7 @@ public class MoveMessage extends AjaxCommonTest {
 		logger.info("Checking for the Move Dialog ...");
 
 		// Check if the "Move Dialog is still open
-		DialogMove dialog = new DialogMove(app);
+		DialogMove dialog = new DialogMove(app, ((AppAjaxClient)app).zPageMail);
 		if ( dialog.zIsActive() ) {
 			logger.warn(dialog.myPageName() +" was still active.  Cancelling ...");
 			dialog.zClickButton(Button.B_CANCEL);
@@ -139,7 +139,7 @@ public class MoveMessage extends AjaxCommonTest {
 		app.zPageMail.zKeyboardShortcut(Shortcut.S_MOVE);
 		
 		// A move dialog will pop up
-		DialogMove dialog = new DialogMove(app);
+		DialogMove dialog = new DialogMove(app, ((AppAjaxClient)app).zPageMail);
 		dialog.zClickTreeFolder(subfolder);
 		dialog.zClickButton(Button.B_OK);
 		
@@ -300,7 +300,7 @@ public class MoveMessage extends AjaxCommonTest {
 		
 		// Click move
 		DialogMove dialog = (DialogMove) app.zPageMail.zToolbarPressButton(Button.B_MOVE);
-		dialog.zEnterFolderName(subfolder.getName());
+		dialog.zClickTreeFolder(subfolder);
 		dialog.zClickButton(Button.B_OK);
 		
 		// Get the message, make sure it is in the correct folder

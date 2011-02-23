@@ -132,7 +132,7 @@ public class TreeBriefcase extends AbsTree {
 		if (button == Button.B_TREE_NEWBRIEFCASE) {
 
 			locator = "id=overviewHeader-Text FakeAnchor";
-			page = new DialogCreateBriefcaseFolder(MyApplication);
+			page = new DialogCreateBriefcaseFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageBriefcase);
 
 			if (!this.sIsElementPresent(locator)) {
 				throw new HarnessException(

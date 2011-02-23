@@ -1,15 +1,11 @@
 package com.zimbra.qa.selenium.projects.ajax.ui;
 
 import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsDialog;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.AbsTab;
-import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.PageAddressbook;
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.PageMail;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogMove.Locators;
 import com.zimbra.qa.selenium.projects.ajax.ui.tasks.PageTasks;
 
 public class DialogMove extends AbsDialog {
@@ -28,7 +24,8 @@ public class DialogMove extends AbsDialog {
 
 	public DialogMove(AbsApplication application,AbsTab page) {
 		super(application,page);
-		// TODO Auto-generated constructor stub
+		
+		logger.info("new "+ DialogMove.class.getCanonicalName());
 	}
 
 	@Override
@@ -87,9 +84,49 @@ public class DialogMove extends AbsDialog {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		// TODO Auto-generated method stub
-		return false;
+
+		logger.info(myPageName() + " zIsActive()");
+
+		String locator = "id="+ Locators.zDialogId;
+		
+		if ( !this.sIsElementPresent(locator) ) {
+			return (false); // Not even present
+		}
+		
+		if ( !this.zIsVisiblePerPosition(locator, 0, 0) ) {
+			return (false);	// Not visible per position
+		}
+	
+		// Yes, visible
+		logger.info(myPageName() + " zIsVisible() = true");
+		return (true);
+
 	}
+	
+	/**
+	 * Enter text into the move message dialog folder name field
+	 * @param folder
+	 */
+	public void zEnterFolderName(String folder) throws HarnessException {
+		String locator = "//div[contains(@id, '_inputDivId')]/div/input";
+		
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("unable to find folder name field "+ locator);
+		
+		this.zClick(locator);
+		zKeyboard.zTypeCharacters(folder);
+		
+		// SleepUtil.sleepSmall();
+		this.zWaitForBusyOverlay(); 
+			
+	}
+
+
+	/**
+	 * Left-Click on a folder in the tree
+	 * @param folder
+	 * @throws HarnessException
+	 */
 	public void zClickTreeFolder(FolderItem folder) throws HarnessException {
 
 		logger.info(myPageName() + " zClickTreeFolder(" + folder + ")");
@@ -111,11 +148,15 @@ public class DialogMove extends AbsDialog {
 			+ folder.getId() + "_textCell']";
 
 		}else if (MyTab instanceof PageTasks){
+			
 			locator = "css=div[id='" + Locators.zDialogId+ "'] td[id='zti__ZmChooseFolderDialog_Tasks__"+ folder.getId() + "_textCell']";
 
-		}else {
-			throw new HarnessException("Unknown app type!");
+		}else if (MyTab instanceof PageBriefcase ) {
+			
+			locator = "css=div[id='" + Locators.zDialogId+ "'] td[id='zti__ZmChooseFolderDialog_Briefcase__"+ folder.getId() + "_textCell']";
 
+		} else {
+			throw new HarnessException("Unknown app type!");
 		}
 
 		// For some reason, the text doesn't get entered on the first try

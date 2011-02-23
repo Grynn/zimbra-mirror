@@ -6,7 +6,7 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.RecipientItem.RecipientType;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
 
@@ -158,7 +158,7 @@ public class FormMailNew extends AbsForm {
 		} else if ( button == Button.B_CANCEL ) {
 
 			locator = Locators.zCancelIconBtn;
-			page = new DialogWarning(DialogWarning.DialogWarningID.SaveCurrentMessageAsDraft, this.MyApplication);
+			page = new DialogWarning(DialogWarning.DialogWarningID.SaveCurrentMessageAsDraft, this.MyApplication, ((AppAjaxClient)this.MyApplication).zPageMail);
 			
 			// If the compose view is not dirty (i.e. no pending changes)
 			// then the dialog will not appear.  So, click the button

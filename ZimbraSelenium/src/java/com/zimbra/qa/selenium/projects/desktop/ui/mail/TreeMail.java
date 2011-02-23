@@ -10,7 +10,7 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.projects.desktop.ui.ContextMenu;
+import com.zimbra.qa.selenium.projects.desktop.ui.*;
 
 public class TreeMail extends AbsTree {
 
@@ -40,7 +40,7 @@ public class TreeMail extends AbsTree {
 
       if (button == Button.B_TREE_NEWFOLDER) {
          locator = "id=overviewHeader-Text FakeAnchor";
-         page = new DialogCreateFolder(MyApplication);
+         page = new DialogCreateFolder(MyApplication, ((AppDesktopClient)MyApplication).zPageMail);
 
          if ( !this.sIsElementPresent(locator) ) {
             throw new HarnessException("Unable to locator folder in tree "+ locator);

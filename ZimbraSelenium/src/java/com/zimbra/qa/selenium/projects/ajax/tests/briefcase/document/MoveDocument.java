@@ -12,7 +12,7 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogChooseFolder;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import org.testng.annotations.AfterMethod;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -89,7 +89,7 @@ public class MoveDocument extends AjaxCommonTest {
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
 
 		// Click on Move selected item icon in toolbar
-		DialogChooseFolder chooseFolder = (DialogChooseFolder) app.zPageBriefcase
+		DialogMove chooseFolder = (DialogMove) app.zPageBriefcase
 				.zToolbarPressButton(Button.B_MOVE);
 
 		// Click OK on Confirmation dialog
@@ -122,7 +122,7 @@ public class MoveDocument extends AjaxCommonTest {
 		logger.info("Checking for the Move Dialog ...");
 
 		// Check if the "Move Dialog is still open
-		DialogChooseFolder dialog = new DialogChooseFolder(app);
+		DialogMove dialog = new DialogMove(app, ((AppAjaxClient)app).zPageBriefcase);
 		if (dialog.zIsActive()) {
 			logger.warn(dialog.myPageName()
 					+ " was still active.  Cancelling ...");

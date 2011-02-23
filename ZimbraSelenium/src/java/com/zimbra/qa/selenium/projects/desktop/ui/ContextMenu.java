@@ -28,7 +28,7 @@ public class ContextMenu extends AbsDisplay {
       this.zClick(cmi.locator);
       switch (cmiName) {
       case NEW_FOLDER:
-         return new DialogCreateFolder(MyApplication);
+         return new DialogCreateFolder(MyApplication, ((AppDesktopClient)MyApplication).zPageMail);
       }
       return null;
    }

@@ -1,9 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.ui;
 
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsDialog;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
@@ -36,8 +33,8 @@ public class DialogWarning extends AbsDialog {
 	protected String MyDivId = null;
 	
 	
-	public DialogWarning(DialogWarningID dialogId, AbsApplication application) {
-		super(application);
+	public DialogWarning(DialogWarningID dialogId, AbsApplication application, AbsTab tab) {
+		super(application, tab);
 		
 		// Remember which div this object is pointing at
 		/*
@@ -50,6 +47,8 @@ public class DialogWarning extends AbsDialog {
 		 */
 		MyDivId = dialogId.Id;
 		
+		logger.info("new " + DialogWarning.class.getCanonicalName());
+
 	}
 	
 	public String zGetWarningTitle() throws HarnessException {
