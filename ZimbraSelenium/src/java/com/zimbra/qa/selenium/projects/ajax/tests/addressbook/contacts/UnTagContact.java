@@ -71,7 +71,9 @@ public class UnTagContact extends AjaxCommonTest  {
 
     	// Untag it
 		app.zPageAddressbook.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_REMOVETAG);
-		
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+
 		app.zGetActiveAccount().soapSend(
 					"<GetContactsRequest xmlns='urn:zimbraMail'>" +
 						"<cn id='"+ contactItem.getId() +"'/>" +
