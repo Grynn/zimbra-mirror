@@ -477,9 +477,9 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 	
 	
 	var headerList = new Array();
-	headerList[0] = new ZaListHeaderItem(ZaMTAQSummaryItem.A_text_col, ZaMsg.PQV_name_col, null, null, false, null, false, true);
-	headerList[1] = new ZaListHeaderItem(ZaMTAQSummaryItem.A_count_col, ZaMsg.PQV_count_col, null, "30px", false, null, false, true);
-	headerList[2] = new ZaListHeaderItem(null, null, null, null, null, null, false, true);							
+	headerList[0] = new ZaListHeaderItem(ZaMTAQSummaryItem.A_text_col, ZaMsg.PQV_name_col, null, "38px", false, null, false, true);
+	headerList[1] = new ZaListHeaderItem(ZaMTAQSummaryItem.A_count_col, ZaMsg.PQV_count_col, null, "auto", false, null, false, true);
+	//headerList[2] = new ZaListHeaderItem(null, null, null, null, null, null, false, true);							
 		
 	var msgHeaderList = new Array();
 	msgHeaderList[0] = new ZaListHeaderItem(ZaMTAQMsgItem.A_id, ZaMsg.PQV_qid_col, null, "100px", null, null, false, true);
@@ -568,7 +568,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 						{type:_SPACER_, height:"15"},	
 																
 						{type:_ZAALLSCREEN_GROUPER_, numCols:1, width:"100%", label:ZaMsg.PQV_Messages,  items: [
-							{type:_GROUP_, numCols:9, tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
+							{type:_GROUP_, numCols:9, colSizes:["16%", "3%", "16%", "3%", "16%", "3%", "16%", "3%", "24%"], tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
 								{type:_DWT_BUTTON_,ref:ZaMTA.A_DeferredQ, label:ZaMsg.TBB_RequeueAll,onActivate:"ZaMTAXFormView.actionButtonListener.call(this,ZaMTA.ActionRequeue);",toolTipContent:ZaMsg.PQ_Requeue_tt},{type:_CELLSPACER_},
 								{type:_DWT_BUTTON_,ref:ZaMTA.A_DeferredQ, label:ZaMsg.TBB_HoldAll,onActivate:"ZaMTAXFormView.actionButtonListener.call(this,ZaMTA.ActionHold);",toolTipContent:ZaMsg.PQ_Hold_tt},{type:_CELLSPACER_},							
 								{type:_DWT_BUTTON_,ref:ZaMTA.A_DeferredQ, label:ZaMsg.PQ_DeleteAll,onActivate:"ZaMTAXFormView.actionButtonListener.call(this,ZaMTA.ActionDelete);" ,toolTipContent:ZaMsg.PQ_Delete_tt},{type:_CELLSPACER_},							
@@ -643,7 +643,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 						]},
 						{type:_SPACER_, height:"15"},	
 						{type:_ZAALLSCREEN_GROUPER_, numCols:1, width:"100%", label:ZaMsg.PQV_Messages,  items: [
-							{type:_GROUP_, numCols:9, tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
+							{type:_GROUP_, numCols:9, colSizes:["16%", "3%", "16%", "3%", "16%", "3%", "16%", "3%", "24%"], tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
 								{type:_DWT_BUTTON_,ref:ZaMTA.A_IncomingQ, label:ZaMsg.TBB_RequeueAll,onActivate:"ZaMTAXFormView.actionButtonListener.call(this,ZaMTA.ActionRequeue)",toolTipContent:ZaMsg.PQ_Requeue_tt},{type:_CELLSPACER_},
 								{type:_DWT_BUTTON_,ref:ZaMTA.A_IncomingQ, label:ZaMsg.TBB_HoldAll,onActivate:"ZaMTAXFormView.actionButtonListener.call(this,ZaMTA.ActionHold)",toolTipContent:ZaMsg.PQ_Hold_tt},{type:_CELLSPACER_},	
 								{type:_DWT_BUTTON_,ref:ZaMTA.A_IncomingQ, label:ZaMsg.PQ_DeleteAll,onActivate:"ZaMTAXFormView.actionButtonListener.call(this,ZaMTA.ActionDelete)",toolTipContent:ZaMsg.PQ_Delete_tt},{type:_CELLSPACER_},
@@ -720,7 +720,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 						]},
 						{type:_SPACER_, height:"15"},	
 						{type:_ZAALLSCREEN_GROUPER_, numCols:1, width:"100%", label:ZaMsg.PQV_Messages,  items: [
-							{type:_GROUP_, numCols:9, tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
+							{type:_GROUP_, numCols:9, colSizes:["16%", "3%", "16%", "3%", "16%", "3%", "16%", "3%", "24%"], tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
 								{type:_DWT_BUTTON_,ref:ZaMTA.A_ActiveQ, label:ZaMsg.TBB_RequeueAll,onActivate:"ZaMTAXFormView.actionButtonListener.call(this,ZaMTA.ActionRequeue)",toolTipContent:ZaMsg.PQ_Requeue_tt},{type:_CELLSPACER_},
 								{type:_DWT_BUTTON_,ref:ZaMTA.A_ActiveQ, label:ZaMsg.TBB_HoldAll,onActivate:"ZaMTAXFormView.actionButtonListener.call(this,ZaMTA.ActionHold)",toolTipContent:ZaMsg.PQ_Hold_tt},{type:_CELLSPACER_},	
 								{type:_DWT_BUTTON_,ref:ZaMTA.A_ActiveQ, label:ZaMsg.PQ_DeleteAll,onActivate:"ZaMTAXFormView.actionButtonListener.call(this,ZaMTA.ActionDelete)",toolTipContent:ZaMsg.PQ_Delete_tt},{type:_CELLSPACER_},
@@ -797,7 +797,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 						]},
 						{type:_SPACER_, height:"15"},	
 						{type:_ZAALLSCREEN_GROUPER_, numCols:1, width:"100%", label:ZaMsg.PQV_Messages,  items: [
-							{type:_GROUP_, numCols:9, tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
+							{type:_GROUP_, numCols:9, colSizes:["16%", "3%", "16%", "3%", "16%", "3%", "16%", "3%", "24%"], tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
 								{type:_DWT_BUTTON_,ref:ZaMTA.A_HoldQ, label:ZaMsg.TBB_RequeueAll,onActivate:"ZaMTAXFormView.actionButtonListener.call(this,ZaMTA.ActionRequeue)",toolTipContent:ZaMsg.PQ_Requeue_tt},{type:_CELLSPACER_},
 								{type:_DWT_BUTTON_,ref:ZaMTA.A_HoldQ, label:ZaMsg.TBB_ReleaseAll,onActivate:"ZaMTAXFormView.actionButtonListener.call(this,ZaMTA.ActionRelease)",toolTipContent:ZaMsg.PQ_Release_tt},{type:_CELLSPACER_},	
 								{type:_DWT_BUTTON_,ref:ZaMTA.A_HoldQ, label:ZaMsg.PQ_DeleteAll,onActivate:"ZaMTAXFormView.actionButtonListener.call(this,ZaMTA.ActionDelete)",toolTipContent:ZaMsg.PQ_Delete_tt},{type:_CELLSPACER_},
@@ -877,7 +877,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 						]},
 						{type:_SPACER_, height:"15"},	
 						{type:_ZAALLSCREEN_GROUPER_, numCols:1, width:"100%", label:ZaMsg.PQV_Messages,  items: [
-						{type:_GROUP_, numCols:9, tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
+						{type:_GROUP_, numCols:9, colSizes:["16%", "3%", "16%", "3%", "16%", "3%", "16%", "3%", "24%"], tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
 							{type:_DWT_BUTTON_,ref:ZaMTA.A_CorruptQ, label:ZaMsg.TBB_RequeueAll,onActivate:"ZaMTAXFormView.actionButtonListener.call(this,ZaMTA.ActionRequeue)",toolTipContent:ZaMsg.PQ_Requeue_tt},{type:_CELLSPACER_},
 							{type:_DWT_BUTTON_,ref:ZaMTA.A_CorruptQ, label:ZaMsg.TBB_HoldAll,onActivate:"ZaMTAXFormView.actionButtonListener.call(this,ZaMTA.ActionHold)",toolTipContent:ZaMsg.PQ_Hold_tt},{type:_CELLSPACER_},	
 							{type:_DWT_BUTTON_,ref:ZaMTA.A_CorruptQ, label:ZaMsg.PQ_DeleteAll,onActivate:"ZaMTAXFormView.actionButtonListener.call(this,ZaMTA.ActionDelete)",toolTipContent:ZaMsg.PQ_Delete_tt},{type:_CELLSPACER_},
