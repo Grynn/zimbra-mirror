@@ -293,6 +293,15 @@ public class GeneralUtility {
          account.soapSend(request,
                SOAP_DESTINATION_HOST_TYPE.CLIENT,
                account.EmailAddress);
+
+         try {
+            // Check the message queue
+            Stafpostqueue sp = new Stafpostqueue();
+            sp.waitForPostqueue();
+         } catch (Exception e) {
+            throw new HarnessException("Error while Staf Post Queue" +
+                  " after synching the ZD to ZCS");
+         }
       }
    }
 }
