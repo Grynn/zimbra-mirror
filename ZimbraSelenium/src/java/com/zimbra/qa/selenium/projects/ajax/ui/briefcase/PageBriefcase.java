@@ -117,7 +117,6 @@ public class PageBriefcase extends AbsTab {
 			((AppAjaxClient) MyApplication).zPageMail.zNavigateTo();
 			GeneralUtility.waitForElementPresent(this,
 					PageMain.Locators.zAppbarBriefcase, 20000);
-			((AppAjaxClient) MyApplication).zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 		} else {
 			zWaitForElementPresent(locator);
 		}

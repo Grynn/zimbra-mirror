@@ -42,8 +42,6 @@ public class TreeBriefcase extends AbsTree {
 		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
 		   treeItemLocator = Locators.briefcaseTreeView_Desktop
                + "[class='DwtTreeItem-Text']";
-		   ((AppAjaxClient) MyApplication).zPageMail.zNavigateTo();
-		   ((AppAjaxClient) MyApplication).zPageBriefcase.zNavigateTo();
 		} else {
 		   treeItemLocator = Locators.briefcaseTreeView
 		         + "][class='DwtTreeItem-selected']";

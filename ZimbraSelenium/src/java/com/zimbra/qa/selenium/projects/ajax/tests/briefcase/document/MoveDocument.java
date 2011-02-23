@@ -79,6 +79,7 @@ public class MoveDocument extends AjaxCommonTest {
 						+ "</doc>"
 						+ "</SaveDocumentRequest>");
 
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		// document.importFromSOAP(account, document.getDocName());
 
 		// refresh briefcase page
