@@ -197,9 +197,11 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
 				"<div id='ZLoginAboutPanel' ", (params.showAbout ? "" : "style='display:none'"), ">", params.aboutMsg,
 				"</div>",	
     			"<div id='ZLoginLongVersion' class='version' ", (params.showLongVersion ? "" : "style='display:none'"), ">", params.longVersion, "</div>",
-    			"<div class='copyright'>",params.copyrightText,"</div>",
-    		"<div id='ZLoginNotice'>",params.clientLevelNotice,"</div>",
-    	"</div>"
+    	"</div>",
+	"<div class='Footer'>",
+		"<div id='ZLoginNotice'>",params.clientLevelNotice,"</div>",
+		"<div class='copyright'>",params.copyrightText,"</div>",
+	"</div>"
 	].join("");
 	return html;
 }
