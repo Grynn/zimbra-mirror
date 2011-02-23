@@ -79,7 +79,7 @@ public class GetAppointment extends AjaxCommonTest {
 		ZDate endUTC   = new ZDate(2014, 1, 1, 14, 0, 0);
 		
 		// EST timezone string
-		String EST = "America/New_York";
+		String tz = ZDate.TimeZoneEST.getID();
 
 		// Create a meeting request from AccountA to the test account
 		ZimbraAccount.AccountA().soapSend(
@@ -87,8 +87,8 @@ public class GetAppointment extends AjaxCommonTest {
 						"<m>" +
 							"<inv>" +
 								"<comp status='CONF' fb='B' class='PUB' transp='O' allDay='0' name='"+ subject +"' loc='"+ location +"'>" +
-									"<s d='"+ startUTC.toTimeZone(EST).toYYYYMMDDTHHMMSS() +"' tz='"+ EST +"'/>" +
-									"<e d='"+ endUTC.toTimeZone(EST).toYYYYMMDDTHHMMSS() +"' tz='"+ EST +"'/>" +
+									"<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
+									"<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
 									"<at role='REQ' ptst='NE' rsvp='1' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
 									"<or a='"+ ZimbraAccount.AccountA().EmailAddress + "'/>" +
 								"</comp>" +
@@ -109,8 +109,8 @@ public class GetAppointment extends AjaxCommonTest {
 		ZAssert.assertEquals(location, appt.getLocation(), "Verify the appointment locations match");
 		ZAssert.assertEquals(content, appt.getContent(), "Verify the appointment contents match");
 
-		ZAssert.assertEquals(startUTC.toTimeZone(EST), appt.getStartTime(), "Verify the appointment start times match");
-		ZAssert.assertEquals(endUTC.toTimeZone(EST), appt.getEndTime(), "Verify the appointment end times match");
+		ZAssert.assertEquals(startUTC.toTimeZone(tz), appt.getStartTime(), "Verify the appointment start times match");
+		ZAssert.assertEquals(endUTC.toTimeZone(tz), appt.getEndTime(), "Verify the appointment end times match");
 		
 	}
 
