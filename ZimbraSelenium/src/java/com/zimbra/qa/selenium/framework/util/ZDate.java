@@ -1,6 +1,6 @@
 package com.zimbra.qa.selenium.framework.util;
 
-import java.text.SimpleDateFormat;
+import java.text.*;
 import java.util.*;
 
 import org.apache.log4j.*;
@@ -39,17 +39,19 @@ public class ZDate {
 		String tz = e.getAttribute("tz", null);
 		String u = e.getAttribute("u", null);
 		
-		if ( tz == null ) {
-			// Assume GMT
-			// TODO
+		calendar = Calendar.getInstance();
+		
+		if ( (tz == null) || (tz.trim().length() == 0)) {
+			// Assume UTC
+			calendar = Calendar.getInstance();
+		} else {
+			calendar = Calendar.getInstance(TimeZone.getTimeZone(tz));
 		}
 		
 		if ( u != null ) {
 			
-			// Parse the unix time
+			// Parse the unix time, which is in GMT
 			long unix = new Long(u).longValue();
-			calendar = Calendar.getInstance();
-			calendar.setTimeZone(TimeZoneUTC);
 			calendar.setTimeInMillis(unix);
 			return;
 			
@@ -57,9 +59,12 @@ public class ZDate {
 		
 		if ( d != null ) {
 			
-			// TODO
-			calendar = Calendar.getInstance();
-			calendar.setTimeZone(TimeZoneUTC);
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
+			try {
+				calendar.setTime( formatter.parse(d) );
+			} catch (ParseException ex) {
+				throw new HarnessException("Unable to parse date element "+ e.prettyPrint(), ex);
+			}
 			return;
 			
 		}
@@ -67,6 +72,32 @@ public class ZDate {
 		throw new HarnessException("Unable to parse time element "+ e.prettyPrint());
 	}
 	
+	public ZDate toTimeZone(TimeZone tz) throws HarnessException {
+		if ( tz == null ) {
+			throw new HarnessException("TimeZone cannot be null");
+		}
+		
+		// Create the new object to return
+		ZDate other = new ZDate(2011, 2, 22, 17, 0, 0);
+		
+		// Set the timezone and the time
+		other.calendar.setTimeZone(tz);
+		other.calendar.setTime(this.calendar.getTime());
+		
+		// return it
+		return (other);
+	}
+	
+	public ZDate toTimeZone(String timezone) throws HarnessException {
+		for ( String t : TimeZone.getAvailableIDs() ) {
+			if ( t.equals(timezone) ) {
+				return (toTimeZone(TimeZone.getTimeZone(timezone)));
+			}
+		}
+		throw new HarnessException("Unable to define timezone: "+ timezone);
+	}
+		
+
 	public long toMillis() {
 		if ( calendar == null ) {
 			calendar = Calendar.getInstance();
@@ -79,6 +110,10 @@ public class ZDate {
 		return (format("yyyyMMdd'T'HHmmss'Z'"));
 	}
 	
+	public String toYYYYMMDDTHHMMSS() throws HarnessException {
+		return (format("yyyyMMdd'T'HHmmss"));
+	}
+
 	public String toYYYYMMDD() throws HarnessException {
 		return (format("yyyyMMdd"));
 	}
