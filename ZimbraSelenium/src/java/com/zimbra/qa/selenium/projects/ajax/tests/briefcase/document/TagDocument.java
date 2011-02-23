@@ -53,7 +53,7 @@ public class TagDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		app.zPageBriefcase.zSyncDesktopToZcs();
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
 
 		// Create a tag using GUI
@@ -66,7 +66,7 @@ public class TagDocument extends AjaxCommonTest {
 		dialogTag.zSetTagName(tagName);
 		dialogTag.zClickButton(Button.B_OK);
 
-		app.zPageBriefcase.zSyncDesktopToZcs();
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
 		// Make sure the tag was created on the server (get the tag ID)
 		account.soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");

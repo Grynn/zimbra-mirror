@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.RecipientItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
@@ -50,7 +51,7 @@ public class CreateMailHtml extends AjaxCommonTest {
 		// Send the message
 		mailform.zSubmit();
 				
-      app.zPageMail.zSyncDesktopToZcs();
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
       MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ mail.dSubject +")");
 		

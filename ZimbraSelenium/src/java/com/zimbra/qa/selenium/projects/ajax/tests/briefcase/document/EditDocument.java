@@ -6,6 +6,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
@@ -59,7 +60,7 @@ public class EditDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		app.zPageBriefcase.zSyncDesktopToZcs();
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
 
 		// Click on Edit document icon in toolbar
@@ -148,7 +149,7 @@ public class EditDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		app.zPageBriefcase.zSyncDesktopToZcs();
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
 
 		// Click on Edit document icon in toolbar
@@ -193,7 +194,7 @@ public class EditDocument extends AjaxCommonTest {
 		docText = document.getDocText();
 
 		// Click on created document
-		app.zPageBriefcase.zSyncDesktopToZcs();
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
 
 		// Click on open in a separate window icon in toolbar
@@ -292,7 +293,7 @@ public class EditDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		app.zPageBriefcase.zSyncDesktopToZcs();
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
 
 		// Click on open in a separate window icon in toolbar
@@ -355,7 +356,7 @@ public class EditDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		app.zPageBriefcase.zSyncDesktopToZcs();
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
 
 		// Click on Edit document icon in toolbar

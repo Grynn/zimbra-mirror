@@ -533,25 +533,6 @@ public class PageBriefcase extends AbsTab {
 		return true;
 	}
 
-   /**
-    * Synch Zimbra Desktop client to ZCS server
-    * @throws HarnessException
-    */
-   public void zSyncDesktopToZcs() throws HarnessException {
-      if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-         // Need to sync the desktop client to ZCS server
-         ((AppAjaxClient) MyApplication).zPageMail.zNavigateTo();
-         ((AppAjaxClient) MyApplication).zPageMail
-               .zToolbarPressButton(Button.B_GETMAIL);
-         // TODO: Investigate the UI properties
-         // Can't use zNavigateTo because briefcase element is always present
-         // even though the mail page is active.
-         zClick(PageMain.Locators.zAppbarBriefcase);
-      } else {
-         // PASS THROUGH
-      }
-   }
-
    public void closeWindow() {
 		ClientSessionFactory.session().selenium().close();
 	}

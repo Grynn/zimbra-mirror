@@ -9,7 +9,6 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.Stafpostqueue;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
@@ -231,24 +230,6 @@ public class PageMail extends AbsTab {
 		
 		zWaitForActive();
 
-	}
-
-	/**
-	 * Sync ZD client to ZCS server
-	 * @throws HarnessException
-	 */
-	public void zSyncDesktopToZcs() throws HarnessException {
-	   if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-         zToolbarPressButton(Button.B_GETMAIL);
-         try {
-            // Check the message queue
-            Stafpostqueue sp = new Stafpostqueue();
-            sp.waitForPostqueue();
-         } catch (Exception e) {
-            throw new HarnessException("Error while Staf Post Queue" +
-            		" after synching the ZD to ZCS");
-         }
-      }
 	}
 
 	@Override

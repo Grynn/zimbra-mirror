@@ -16,7 +16,6 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
@@ -544,30 +543,4 @@ public class PageAddressbook extends AbsTab {
 		throw new HarnessException("action not supported ");
 	
 	}
-
-   /**
-    * Synch Zimbra Desktop client to ZCS server
-    * @throws HarnessException
-    */
-   public void zSyncDesktopToZcs() throws HarnessException {
-      if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-         // Need to sync the desktop client to ZCS server
-         ((AppAjaxClient) MyApplication).zPageMail.zNavigateTo();
-         ((AppAjaxClient) MyApplication).zPageMail
-               .zToolbarPressButton(Button.B_GETMAIL);
-         // TODO: Investigate the UI properties
-         // Can't use zNavigateTo because briefcase element is always present
-         // even though the mail page is active.
-         zClick(PageMain.Locators.zAppbarContact);
-
-         try {
-            // Check the message queue
-            Stafpostqueue sp = new Stafpostqueue();
-            sp.waitForPostqueue();
-         } catch (Exception e) {
-            throw new HarnessException("Error while Staf Post Queue" +
-                  " after synching the ZD to ZCS");
-         }
-      }
-   }
 }

@@ -80,7 +80,7 @@ public class ReplyMailHtml extends AjaxCommonTest {
 		// Send the message
 		mailform.zSubmit();
 
-		app.zPageMail.zSyncDesktopToZcs();
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
 		// From the receiving end, verify the message details
 		// Need 'in:inbox' to seprate the message from the sent message

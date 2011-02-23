@@ -11,6 +11,9 @@ import java.net.URLConnection;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+
 /**
  * This class contains general utilities methods that can be used across the framework
  * @author Jeffry Hidayat
@@ -273,6 +276,23 @@ public class GeneralUtility {
 
       } catch (IOException e) {
          throw new HarnessException("HTTP Post failed!");
+      }
+   }
+
+   /**
+    * Synchronizing ZD client to ZCS through SOAP
+    * @param account Account
+    * @throws HarnessException
+    */
+   public static void syncDesktopToZcsWithSoap(ZimbraAccount account)
+   throws HarnessException {
+      if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+         String request =
+               "<SyncRequest xmlns=\"urn:zimbraOffline\"/>";
+
+         account.soapSend(request,
+               SOAP_DESTINATION_HOST_TYPE.CLIENT,
+               account.EmailAddress);
       }
    }
 }

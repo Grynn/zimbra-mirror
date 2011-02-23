@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
@@ -65,7 +66,7 @@ public class ReplyAllMailText extends AjaxCommonTest {
 		// Send the message
 		mailform.zSubmit();
 
-      app.zPageMail.zSyncDesktopToZcs();
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
 		// From the receiving end, verify the message details
 		// Need 'in:inbox' to seprate the message from the sent message
