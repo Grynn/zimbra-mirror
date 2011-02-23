@@ -945,7 +945,6 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 				}
 			);
 		};	
-				
 	//	if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraFeatureIMEnabled],[])) {
 	//		featuresCase.items.push(
 	//			{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraIMFeature, id:"account_wiz_features_im",
@@ -977,6 +976,20 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 				}
 			);
 		};
+                if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraFeatureManageSMIMECertificateEnabled],[])) {
+                        featuresCase.items.push(
+                                {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraSMIMEFeature, id:"account_wiz_features_smime",
+                                        colSizes:["auto"],numCols:1,                                        
+                                        items:[
+                                                {ref:ZaAccount.A_zimbraFeatureManageSMIMECertificateEnabled, type:_SUPER_WIZ_CHECKBOX_,
+ 						resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+						msgName:ZaMsg.LBL_zimbraFeatureManageSMIMECertificateEnabled, 
+						checkBoxLabel:ZaMsg.LBL_zimbraFeatureManageSMIMECertificateEnabled,  
+						trueValue:"TRUE", falseValue:"FALSE"}
+                                        ]
+                                }
+                        );
+                };	
 
 		cases.push(featuresCase);
 	}
@@ -1788,7 +1801,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									txtBoxLabel:ZaMsg.LBL_zimbraMailSpamLifetime}
 							]
 						});
-		}					
+		}		
 		cases.push({type:_CASE_, caseKey:ZaNewAccountXWizard.ADVANCED_STEP, tabGroupKey:ZaNewAccountXWizard.ADVANCED_STEP, id:"account_form_advanced_step", numCols:1, width:"100%", 
 				items:advancedCaseItems});
 	}
