@@ -14,9 +14,11 @@ import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.PageMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
 
@@ -117,12 +119,8 @@ public class PageAddressbook extends AbsTab {
 			throw new HarnessException("Can't locate addressbook icon");
 		}
 
-		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-   		((AppAjaxClient) MyApplication).zPageMail.zNavigateTo();
-         GeneralUtility.waitForElementPresent(this,
-               PageMain.Locators.zAppbarBriefcase, 20000);
-         ((AppAjaxClient) MyApplication).zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		}
+		GeneralUtility.waitForElementPresent(this,
+		      PageMain.Locators.zAppbarBriefcase);
 
 		zClick(PageMain.Locators.zAppbarContact);
 
@@ -542,5 +540,23 @@ public class PageAddressbook extends AbsTab {
 		
 		throw new HarnessException("action not supported ");
 	
+	}
+
+	/**
+	 * Sync Desktop to ZCS through SOAP and wait for spinner to disappear
+	 * @throws HarnessException
+	 */
+	public void zSyncDesktopToZcs() throws HarnessException {
+	   if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+         GeneralUtility.syncDesktopToZcsWithSoap(MyApplication.zGetActiveAccount());
+
+         // Wait for the spinner image
+         if (GeneralUtility.waitForElementPresent(this,
+               PageMail.Locators.zLoadingImage_Desktop, 5000)) {
+            Object[] params = {PageMail.Locators.zLoadingImage_Desktop};
+            GeneralUtility.waitFor(null, this, false, "sIsElementPresent",
+                  params, WAIT_FOR_OPERAND.EQ, false, 30000, 1000);
+         }
+	   }
 	}
 }

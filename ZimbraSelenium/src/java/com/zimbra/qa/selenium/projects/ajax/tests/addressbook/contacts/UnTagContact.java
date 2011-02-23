@@ -5,7 +5,6 @@ import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.ContactItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
@@ -62,7 +61,7 @@ public class UnTagContact extends AjaxCommonTest  {
         
         // Refresh the view, to pick up the new contact
         FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
-        GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+        app.zPageAddressbook.zSyncDesktopToZcs();
         app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
                
         // Select the item
@@ -79,9 +78,9 @@ public class UnTagContact extends AjaxCommonTest  {
 						"<cn id='"+ contactItem.getId() +"'/>" +
 					"</GetContactsRequest>");
 		String contactTag = app.zGetActiveAccount().soapSelectValue("//mail:GetContactsResponse//mail:cn", "t");
-		
+
 		ZAssert.assertNull(contactTag, "Verify that the tag is removed from the contact");
-	      
+
 		//verify toasted message 'contact created'
         Toaster toast = app.zPageMain.zGetToaster();
         String toastMsg = toast.zGetToastMessage();
