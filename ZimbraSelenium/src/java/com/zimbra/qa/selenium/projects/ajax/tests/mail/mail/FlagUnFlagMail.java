@@ -79,6 +79,8 @@ public class FlagUnFlagMail extends AjaxCommonTest {
 			}
 		}
 
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+
 		// Make sure the GUI shows "flagged"
 		ZAssert.assertNotNull(listmail, "Verify the message is in the list");
 		ZAssert.assertFalse(listmail.gIsFlagged, "Verify the message is flagged in the list");
@@ -139,6 +141,8 @@ public class FlagUnFlagMail extends AjaxCommonTest {
 				break;
 			}
 		}
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
 		// Make sure the GUI shows "flagged"
 		ZAssert.assertNotNull(listmail, "Verify the message is in the list");
