@@ -70,6 +70,12 @@ public abstract class AbsTab extends AbsPage {
 	public abstract AbsPage zListItem(Action action, Button option, String item) throws HarnessException;
 	
 	/**
+	 * Take action on list items with optional action
+	 * (mainly right-click -> context menu-> sub menu)
+	 */
+	public abstract AbsPage zListItem(Action action, Button option, Button subOption, String item) throws HarnessException;
+	
+	/**
 	 * Click on a button
 	 * @param button the button to press
 	 * @return Returns the resulting Page, Wizard, etc. or null
