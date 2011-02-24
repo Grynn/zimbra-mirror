@@ -60,6 +60,11 @@ public class AccountItem implements IItem {
 		logger.error("implement me!", new Throwable("implement me!"));
 		return (sb.toString());
 	}
+
+	@Override
+	public String getName() {
+		return (EmailAddress);
+	}
 	
 	
 }

@@ -27,25 +27,12 @@ public class TreeContacts extends AbsTree {
 	}
 	
 	
-	public AbsPage zTreeItem(Action action, String locator) throws HarnessException {
-		if ( action == Action.A_LEFTCLICK ) {
-		    if (locator.equals(NEW_FOLDER)) {
-		        this.zClick(locator);
-		    	//return create a new address book dialog
-		    }
-		    else if (locator.equals(COLLAPSE_TREE)) {
-		    	// collapse the tree folder
-		    }
-		    
-		}	
-		return null;
-	}
-	
 	/* (non-Javadoc)
 	 * @see framework.ui.AbsTree#zTreeItem(framework.ui.Action, framework.items.FolderItem)
 	 */
 	public AbsPage zTreeItem(Action action, IItem addressbook) throws HarnessException {
-		
+		tracer.trace("Click "+ action +" on addressbook "+ addressbook);
+
 		// Validate the arguments
 		if ( (action == null) || (addressbook == null) ) {
 			throw new HarnessException("Must define an action and addressbook");
@@ -105,7 +92,8 @@ public class TreeContacts extends AbsTree {
 
 	@Override
 	public AbsPage zPressButton(Button button) throws HarnessException {
-		
+		tracer.trace("Click button "+ button);
+
 		if ( button == null )
 			throw new HarnessException("Button cannot be null");
 			
@@ -178,6 +166,8 @@ public class TreeContacts extends AbsTree {
 
 	@Override
 	public AbsPage zTreeItem(Action action, Button option, IItem item) throws HarnessException {
+		tracer.trace("Click "+ action +" then "+ option +" on addressbook "+ item);
+
 		throw new HarnessException("implement me!");
 	}
 

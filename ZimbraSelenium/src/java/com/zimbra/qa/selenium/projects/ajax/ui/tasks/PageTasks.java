@@ -99,6 +99,8 @@ public class PageTasks extends AbsTab {
 			((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
 		}
 
+		tracer.trace("Navigate to "+ this.myPageName());
+
 		this.zClick(PageMain.Locators.zAppbarTasks);
 
 		this.zWaitForBusyOverlay();
@@ -120,6 +122,8 @@ public class PageTasks extends AbsTab {
 			throws HarnessException {
 		logger.info(myPageName() + " zListItem(" + action + ", " + subject
 				+ ")");
+
+		tracer.trace(action +" on subject = "+ subject);
 
 		if (action == null)
 			throw new HarnessException("action cannot be null");
@@ -268,6 +272,8 @@ public class PageTasks extends AbsTab {
 		logger.info(myPageName() + " zListItem(" + action + ", " + option
 				+ ", " + subject + ")");
 
+		tracer.trace(action +" then "+ option +" on subject = "+ subject);
+
 		if (action == null)
 			throw new HarnessException("action cannot be null");
 		if (option == null)
@@ -365,6 +371,8 @@ public class PageTasks extends AbsTab {
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
+
+		tracer.trace("Press the "+ button +" button");
 
 		if (button == null)
 			throw new HarnessException("Button cannot be null!");
@@ -495,6 +503,9 @@ public class PageTasks extends AbsTab {
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
 			throws HarnessException {
+		
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
+
 		throw new HarnessException("implement me!");
 	}
 

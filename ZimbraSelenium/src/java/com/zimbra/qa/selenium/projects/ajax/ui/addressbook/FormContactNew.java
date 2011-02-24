@@ -1,12 +1,8 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 
-import com.zimbra.qa.selenium.framework.items.ContactItem;
-import com.zimbra.qa.selenium.framework.items.IItem;
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsForm;
-import com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.*;
 
 
 
@@ -82,7 +78,7 @@ public class FormContactNew extends AbsForm {
 	}
 	
 	
-	public void save() throws HarnessException {
+	protected void save() throws HarnessException {
 		logger.info("FormContactNew.save()");
 		
 		// Look for "Save"
@@ -109,6 +105,65 @@ public class FormContactNew extends AbsForm {
 		}
 	}
 	
+	public static class Field {
+		
+		public static final Field FirstName = new Field("FirstName");
+		public static final Field LastName = new Field("LastName");
+		
+		
+		private String field;
+		private Field(String name) {
+			field = name;
+		}
+		
+		@Override
+		public String toString() {
+			return (field);
+		}
+
+	}
+	
+
+	public void zFillField(Field field, String value) throws HarnessException {
+		tracer.trace("Set "+ field +" to "+ value);
+
+		String locator = null;
+		
+		if ( field == Field.FirstName ) {
+			
+			locator = Locators.zFirstEditField;
+			
+			// FALL THROUGH
+			
+		} else if ( field == Field.LastName ) {
+			
+			locator = Locators.zLastEditField;
+			
+			// FALL THROUGH
+			
+		} else {
+			throw new HarnessException("not implemented for field "+ field);
+		}
+		
+		if ( locator == null ) {
+			throw new HarnessException("locator was null for field "+ field);
+		}
+		
+		// Default behavior, enter value into locator field
+		//
+		
+		// Make sure the button exists
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("Field is not present field="+ field +" locator="+ locator);
+		
+		// Enter text
+		this.sFocus(locator);
+		this.zClick(locator);			
+		zKeyboard.zTypeCharacters(value);
+
+
+	}
+	
 	@Override
 	public void zFill(IItem item) throws HarnessException {
 		logger.info("FormMailNew.fill(IItem)");
@@ -124,20 +179,18 @@ public class FormContactNew extends AbsForm {
 		
 		// Fill out the form		
 		if ( contact.firstName != null ) {
-			this.sFocus(Locators.zFirstEditField);
+			
+			zFillField(Field.FirstName, contact.firstName);
 
-			this.zClick(Locators.zFirstEditField);			
-			zKeyboard.zTypeCharacters(contact.firstName);
 		}
 		
 		if ( contact.lastName != null ) {
 			
-			this.sFocus(Locators.zLastEditField);
-			
-			this.zClick(Locators.zLastEditField);
-			zKeyboard.zTypeCharacters(contact.lastName);
+			zFillField(Field.LastName, contact.lastName);
+
+
 		}
- 
+		
 		//TODO: need fix xpath for zEmail1EditField
 		//if ( contact.email != null ) {			
 		//	this.sType(Locators.zEmail1EditField, contact.email);

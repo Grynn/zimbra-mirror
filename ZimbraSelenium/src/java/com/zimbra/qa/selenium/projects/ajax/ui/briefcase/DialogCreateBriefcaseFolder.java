@@ -72,6 +72,8 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 	public AbsPage zClickButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zClickButton(" + button + ")");
 
+		tracer.trace("Click dialog button "+ button);
+
 		AbsPage page = null;
 		String locator = null;
 
@@ -131,6 +133,8 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 	public void zClickTreeFolder(FolderItem folder) throws HarnessException {
 		logger.info(myPageName() + " zClickTreeFolder(" + folder + ")");
 
+		tracer.trace("Click on tree briefcase with name "+ folder.getName());
+
 		if (folder == null)
 			throw new HarnessException("folder must not be null");
 
@@ -155,6 +159,8 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 	 */
 	public void zEnterFolderName(String folder) throws HarnessException {
 		logger.info(myPageName() + " zEnterFolderName(" + folder + ")");
+
+		tracer.trace("Enter briefcase name in text box "+ folder);
 
 		if (folder == null)
 			throw new HarnessException("folder must not be null");
@@ -185,6 +191,8 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 	 */
 	public void zEnterFolderColor(FolderColor color) throws HarnessException {
 		logger.info(myPageName() + " zEnterFolderColor(" + color + ")");
+
+		tracer.trace("Enter color "+ color);
 
 		if (color == null)
 			throw new HarnessException("folder must not be null");

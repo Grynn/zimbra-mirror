@@ -77,6 +77,11 @@ public class DocumentItem implements IItem {
 		populateDocumentData();
 	}
 
+	@Override
+	public String getName() {
+		return (getDocName());
+	}
+	
 	/**
 	 * Populate DocumentItem data
 	 * 

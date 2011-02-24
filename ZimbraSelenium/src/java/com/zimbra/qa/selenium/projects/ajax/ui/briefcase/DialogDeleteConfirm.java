@@ -56,6 +56,8 @@ public class DialogDeleteConfirm extends AbsDialog {
 	public AbsPage zClickButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zClickButton(" + button + ")");
 
+		tracer.trace("Click dialog button "+ button);
+
 		String locator = null;
 
 		if (button == Button.B_YES) {

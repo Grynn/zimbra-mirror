@@ -114,6 +114,8 @@ public class PageAddressbook extends AbsTab {
 			((AppAjaxClient)MyApplication).zPageMain.zNavigateTo();
 		}
 
+		tracer.trace("Navigate to "+ this.myPageName());
+
 		// Click on Addressbook icon
 		if ( !sIsElementPresent(PageMain.Locators.zAppbarContact) ) {
 			throw new HarnessException("Can't locate addressbook icon");
@@ -162,6 +164,8 @@ public class PageAddressbook extends AbsTab {
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
+
+		tracer.trace("Press the "+ button +" button");
 
 		if ( button == null )
 			throw new HarnessException("Button cannot be null!");
@@ -246,6 +250,8 @@ public class PageAddressbook extends AbsTab {
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
+
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
 
 		if ( pulldown == null )
 			throw new HarnessException("Button cannot be null!");
@@ -367,6 +373,8 @@ public class PageAddressbook extends AbsTab {
 		String id = null;
         String contactLocator = getContactLocator(contact);
         
+		tracer.trace(action +" then "+ option +" then "+ subOption +" on contact = "+ contact);
+
         if ( action == Action.A_RIGHTCLICK ) {
 			ContextMenuItem cmi=null;
 		    ContextMenuItem sub_cmi = null;
@@ -454,6 +462,8 @@ public class PageAddressbook extends AbsTab {
 		String id = null;
         String contactLocator = getContactLocator(contact);
         
+		tracer.trace(action +" then "+ option +" on contact = "+ contact);
+
 		if ( action == Action.A_RIGHTCLICK ) {
 			ContextMenuItem cmi=null;
 								
@@ -523,6 +533,8 @@ public class PageAddressbook extends AbsTab {
 		logger.info(myPageName() + " zListItem("+ action +", "+ contact +")");
         String contactLocator=getContactLocator(contact);
         
+		tracer.trace(action +" on contact = "+ contact);
+
 		if ( action == Action.A_LEFTCLICK ) {
 			//click
 			this.zClick(contactLocator);

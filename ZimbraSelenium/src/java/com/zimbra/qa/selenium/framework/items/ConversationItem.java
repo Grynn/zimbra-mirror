@@ -134,6 +134,10 @@ public class ConversationItem implements IItem {
 	public ConversationItem() {
 	}
 
+	@Override
+	public String getName() {
+		return (gSubject);
+	}
 	
 	public void createUsingSOAP(ZimbraAccount account) throws HarnessException {
 		throw new HarnessException("implement me");

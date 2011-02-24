@@ -6,7 +6,11 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 public interface IItem {
 
 	
-
+	/**
+	 * Get the name of this item, such as subject, fileas, folder name, etc.
+	 */
+	public String getName();
+	
 	/**
 	 * Create an object on the Zimbra server based on the object values
 	 * @param account - the account used to create the object

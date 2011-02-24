@@ -29,6 +29,11 @@ public class AppointmentItem implements IItem {
 	public AppointmentItem() {	
 	}
 	
+	@Override
+	public String getName() {
+		return (getSubject());
+	}
+
 	public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) throws HarnessException {
 		
 		AppointmentItem appt = null;
@@ -141,7 +146,6 @@ public class AppointmentItem implements IItem {
 	public String getSubject() {
 		return (dSubject);
 	}
-
 	public String getLocation() {
 		return (dLocation);
 	}

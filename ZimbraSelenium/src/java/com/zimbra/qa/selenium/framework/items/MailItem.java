@@ -148,6 +148,11 @@ public class MailItem implements IItem {
 	public MailItem() {
 	}
 	
+	@Override
+	public String getName() {
+		return (dSubject);
+	}
+	
 	// TODO: eventually, replace this with the com.zimbra.soap.types.Contact method
 	private String myId;
 	public String getId() {

@@ -55,11 +55,15 @@ public class PageAdvancedSearch extends AbsTab {
 
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
+		tracer.trace("Press the "+ button +" button");
+
 		throw new HarnessException("implement me!");
 	}
 
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
+
 		throw new HarnessException("implement me!");
 	}
 

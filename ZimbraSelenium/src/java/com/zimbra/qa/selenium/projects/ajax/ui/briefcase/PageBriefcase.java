@@ -107,6 +107,9 @@ public class PageBriefcase extends AbsTab {
 		if (zIsActive()) {
 			return;
 		}
+		
+		tracer.trace("Navigate to "+ this.myPageName());
+		
 		String locator = "css=[id='zov__main_Mail']";
 		// Make sure we are logged into the Ajax app
 		// if (!((AppAjaxClient) MyApplication).zPageMain.zIsActive())
@@ -135,6 +138,8 @@ public class PageBriefcase extends AbsTab {
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
+
+		tracer.trace("Press the "+ button +" button");
 
 		if (button == null)
 			throw new HarnessException("Button cannot be null!");
@@ -304,6 +309,8 @@ public class PageBriefcase extends AbsTab {
 		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("
 				+ pulldown + ", " + option + ")");
 
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
+
 		if (pulldown == null)
 			throw new HarnessException("Pulldown cannot be null!");
 
@@ -433,6 +440,9 @@ public class PageBriefcase extends AbsTab {
 			throws HarnessException {
 		logger.info(myPageName() + " zListItem(" + action + ", " + docName
 				+ ")");
+		
+		tracer.trace(action +" on briefcase = "+ docName);
+
 		AbsPage page = null;
 		String listLocator = Locators.briefcaseListView;
 		String itemlocator;
@@ -479,6 +489,8 @@ public class PageBriefcase extends AbsTab {
 	@Override
 	public AbsPage zListItem(Action action, Button option, String subject)
 			throws HarnessException {
+		tracer.trace(action +" then "+ option +" on briefcase = "+ subject);
+
 		throw new HarnessException("implement me!");
 	}
 
@@ -531,6 +543,8 @@ public class PageBriefcase extends AbsTab {
 	}
 
    public void closeWindow() {
+		tracer.trace("Close the separate window");
+
 		ClientSessionFactory.session().selenium().close();
 	}
 }

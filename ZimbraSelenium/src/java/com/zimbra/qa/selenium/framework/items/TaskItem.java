@@ -53,6 +53,10 @@ public class TaskItem implements IItem {
 		populateTaskData();
 	}
 
+	public String getName() {
+		return (gSubject);
+	}
+	
 	public void populateTaskData() {
 		// TODO Auto-generated method stub
 		taskSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();

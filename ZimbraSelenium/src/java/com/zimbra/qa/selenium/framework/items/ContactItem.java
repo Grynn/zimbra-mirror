@@ -59,6 +59,12 @@ public class ContactItem implements IItem {
 		this.fileAs=fileAs;
 	}
 
+	@Override
+	public String getName() {
+		return (fileAs);
+	}
+	
+
 	// TODO: eventually, replace this with the com.zimbra.soap.types.Contact method
 	private String myId;
 	public String getId() {
@@ -243,7 +249,8 @@ public class ContactItem implements IItem {
 			sb.append(String.format("Attribute: key(%s) value(%s)", key, ContactAttributes.get(key))).append('\n');
 		return (sb.toString());
 	}
-	
+
+
 
 }
 

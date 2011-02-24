@@ -21,6 +21,10 @@ public class RecipientItem implements IItem {
 	public RecipientItem() {
 	}
 	
+	public String getName() {
+		return (dEmailAddress);
+	}
+	
 	public RecipientItem(ZimbraAccount account) {
 		this(account.EmailAddress);
 	}

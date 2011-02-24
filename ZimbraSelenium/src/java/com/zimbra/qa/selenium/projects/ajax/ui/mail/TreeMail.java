@@ -197,6 +197,7 @@ public class TreeMail extends AbsTree {
 
 	public AbsPage zTreeItem(Action action, String locator) throws HarnessException {
       AbsPage page = null;
+      
 
       if ( locator == null )
          throw new HarnessException("locator is null for action "+ action);
@@ -230,19 +231,18 @@ public class TreeMail extends AbsTree {
 	 */
 	public AbsPage zTreeItem(Action action, IItem folder) throws HarnessException {
 		
+		tracer.trace("Click "+ action +" on folder "+ folder.getName());
+
 		// Validate the arguments
 		if ( (action == null) || (folder == null) ) {
 			throw new HarnessException("Must define an action and addressbook");
 		}
 		
 		if ( folder instanceof FolderItem ) {
-			tracer.trace("Click "+ action +" on folder "+ ((FolderItem)folder).getName());
 			return (zTreeItem(action, (FolderItem)folder));
 		} else if ( folder instanceof SavedSearchFolderItem ) {
-			tracer.trace("Click "+ action +" on folder "+ ((SavedSearchFolderItem)folder).getName());
 			return (zTreeItem(action, (SavedSearchFolderItem)folder));
 		} else if ( folder instanceof ZimletItem ) {
-			tracer.trace("Click "+ action +" on folder "+ ((ZimletItem)folder).getFolderTreeName());
 			return (zTreeItem(action, (ZimletItem)folder));
 		}
 		
@@ -252,6 +252,7 @@ public class TreeMail extends AbsTree {
 	@Override
 	public AbsPage zTreeItem(Action action, Button option, IItem folder) throws HarnessException {
 		
+		tracer.trace("Click "+ action +" then "+ option +" on folder "+ folder.getName());
 
 		// Validate the arguments
 		if ( (action == null) || (option == null) || (folder == null) ) {
@@ -259,13 +260,10 @@ public class TreeMail extends AbsTree {
 		}
 		
 		if ( folder instanceof FolderItem ) {
-			tracer.trace("Click "+ action +" then "+ option +" on folder "+ ((FolderItem)folder).getName());
 			return (zTreeItem(action, option, (FolderItem)folder));
 		} else if ( folder instanceof SavedSearchFolderItem ) {
-			tracer.trace("Click "+ action +" then "+ option +" on folder "+ ((SavedSearchFolderItem)folder).getName());
 			return (zTreeItem(action, option, (SavedSearchFolderItem)folder));
 		} else if ( folder instanceof ZimletItem ) {
-			tracer.trace("Click "+ action +" then "+ option +" on folder "+ ((ZimletItem)folder).getFolderTreeName());
 			return (zTreeItem(action, option, (ZimletItem)folder));
 		}
 		

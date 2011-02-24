@@ -35,7 +35,8 @@ public class TreeTasks extends AbsTree {
 	 */
 	@Override
 	public AbsPage zPressButton(Button button) throws HarnessException {
-		
+		tracer.trace("Press the "+ button +" button");
+
 		if ( button == null )
 			throw new HarnessException("Button cannot be null");
 			
@@ -93,15 +94,18 @@ public class TreeTasks extends AbsTree {
 	/* (non-Javadoc)
 	 * @see framework.ui.AbsTree#zTreeItem(framework.ui.Action, framework.items.FolderItem)
 	 */
-	public AbsPage zTreeItem(Action action, IItem folder) throws HarnessException {
+	public AbsPage zTreeItem(Action action, IItem tasklist) throws HarnessException {
 		
+		tracer.trace(action +" on folder = "+ tasklist.getName());
+
 		AbsPage page = null;
 		String locator = null;
 		
-		if ( !(folder instanceof FolderItem) )
+		if ( !(tasklist instanceof FolderItem) )
 			throw new HarnessException("folder must be of type FolderItem");
 		
-		FolderItem f = (FolderItem) folder;
+		// TODO: should be TaskListItem?
+		FolderItem f = (FolderItem) tasklist;
 		
 		if ( action == Action.A_LEFTCLICK ) {
 			
@@ -145,14 +149,16 @@ public class TreeTasks extends AbsTree {
 	}
 		
 	@Override
-	public AbsPage zTreeItem(Action action, Button option, IItem folder) throws HarnessException {
-		logger.info(myPageName() + " zListItem("+ action +", "+ option +", "+ folder +")");
+	public AbsPage zTreeItem(Action action, Button option, IItem tasklist) throws HarnessException {
+		logger.info(myPageName() + " zListItem("+ action +", "+ option +", "+ tasklist +")");
 		
+		tracer.trace(action +" then "+ option +" on folder = "+ tasklist.getName());
+
 		if ( action == null )
 			throw new HarnessException("action cannot be null");
 		if ( option == null )
 			throw new HarnessException("button cannot be null");
-		if ( folder == null )
+		if ( tasklist == null )
 			throw new HarnessException("folder cannot be null");
 
 		AbsPage page = null;
@@ -160,10 +166,11 @@ public class TreeTasks extends AbsTree {
 		String optionLocator = null;
 		String itemLocator = null;
 		
-		if ( !(folder instanceof FolderItem) )
+		// TODO: should be TaskList item?
+		if ( !(tasklist instanceof FolderItem) )
 			throw new HarnessException("folder must be of type FolderItem");
 		
-		FolderItem f = (FolderItem) folder;
+		FolderItem f = (FolderItem) tasklist;
 		logger.debug("processing "+ f.getName());
 
 		if ( action == Action.A_LEFTCLICK ) {
@@ -179,7 +186,7 @@ public class TreeTasks extends AbsTree {
 		if ( optionLocator == null )
 			throw new HarnessException("locator is null for option "+ option);
 		if ( itemLocator == null )
-			throw new HarnessException("locator is null for item "+ folder);
+			throw new HarnessException("locator is null for item "+ tasklist);
 		
 		
 		// Default behavior.  Click the locator

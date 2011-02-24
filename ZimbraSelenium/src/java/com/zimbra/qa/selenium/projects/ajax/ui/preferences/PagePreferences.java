@@ -101,6 +101,8 @@ public class PagePreferences extends AbsTab {
 			((AppAjaxClient)MyApplication).zPageMain.zNavigateTo();
 		}
 		
+		tracer.trace("Navigate to "+ this.myPageName());
+
 		// Click on Preferences icon
 		if ( !sIsElementPresent(PageMain.Locators.zAppbarPreferences) ) {
 			throw new HarnessException("Can't locate preferences icon");
@@ -221,6 +223,8 @@ public class PagePreferences extends AbsTab {
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
 		
+		tracer.trace("Click button "+ button);
+
 		if ( button == null )
 			throw new HarnessException("Button cannot be null!");
 		
@@ -266,7 +270,9 @@ public class PagePreferences extends AbsTab {
 
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
-		throw new HarnessException(myPageName() + " does not have a Toolbar");
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
+
+		throw new HarnessException("implement me!");
 	}
 
 	

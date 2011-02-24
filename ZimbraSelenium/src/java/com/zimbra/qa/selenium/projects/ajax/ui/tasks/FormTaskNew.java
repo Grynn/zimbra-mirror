@@ -1,11 +1,8 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.tasks;
 
-import java.util.List;
-
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.RecipientItem.RecipientType;
 import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
@@ -63,10 +60,8 @@ public class FormTaskNew extends AbsForm {
 
 	public static class Field {
 	
-		public static final Field To = new Field("To");
-		public static final Field Cc = new Field("Cc");
-		public static final Field Bcc = new Field("Bcc");
 		public static final Field Subject = new Field("Subject");
+		public static final Field Location = new Field("Location");
 		public static final Field Body = new Field("Body");
 		
 		
@@ -116,12 +111,10 @@ public class FormTaskNew extends AbsForm {
 
 	@Override
 	public void zSubmit() throws HarnessException {
-		if (!this.sIsElementPresent(Locators.zSaveTask))
-			throw new HarnessException("Save button is not present");
-		zClick(Locators.zSaveTask);
-
-		this.zWaitForBusyOverlay();
-
+		logger.info("FormTaskNew.zSubmit()");
+		
+		zToolbarPressButton(Button.B_SAVE);
+		
 	}
 
 	/**
@@ -133,121 +126,32 @@ public class FormTaskNew extends AbsForm {
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
 		
+		tracer.trace("Click "+ button);
+
 		if (button == null)
 			throw new HarnessException("Button cannot be null!");
 
 		// Fallthrough objects
 		AbsPage page = null;
 		String locator = null;
-		if (button == null)
-			throw new HarnessException("Button cannot be null!");
 
-		// Fallthrough objects
+		if (button == Button.B_SAVE ) {
+			
+			locator = Locators.zSaveTask;
+			page = null;
 
-		if (button == Button.B_CANCEL) {
+		} else if (button == Button.B_CANCEL) {
 
 			locator = Locators.zCancelTask;
-
-			this.zClick(locator);
 			page = new DialogWarning(
 					DialogWarning.DialogWarningID.SaveTaskChangeMessage,
 					this.MyApplication,
 					((AppAjaxClient)this.MyApplication).zPageTasks);
 
-			this.zWaitForBusyOverlay();
-
-			return (page);
 		} else {
 			throw new HarnessException("no logic defined for button " + button);
 		}
-	/*	if ( button == Button.B_SEND ) {
-			
-			locator = Locators.zSendIconBtn;
-			
-			// Click on send
-			this.zClick(locator);
-			
-			this.zWaitForBusyOverlay();
-			
-			// Wait for the message to be delivered
-			try {
-			
-				// Check the message queue
-				Stafpostqueue sp = new Stafpostqueue();
-				sp.waitForPostqueue();
-			
-			} catch (Exception e) {
-				throw new HarnessException("Unable to wait for message queue", e);
-			}
-			
-			return (page);
 		
-		} else if ( button == Button.B_CANCEL ) {
-
-			locator = Locators.zCancelIconBtn;
-			page = new DialogWarning(DialogWarning.DialogWarningID.SaveCurrentMessageAsDraft, this.MyApplication);
-			
-			// If the compose view is not dirty (i.e. no pending changes)
-			// then the dialog will not appear.  So, click the button
-			// and return the page, without waiting for it to be active
-						
-			this.zClick(locator);
-
-			this.zWaitForBusyOverlay();
-
-			// Return the page, if specified
-			return (page);
-			
-		} else if ( button == Button.B_SAVE_DRAFT ) {
-
-			locator = Locators.zSaveDraftIconBtn;
-			page = this;
-			
-			// FALL THROUGH
-			
-		} else if ( button == Button.B_ADD_ATTACHMENT ) {
-
-			throw new HarnessException("implement me (?)");
-			
-			// FALL THROUGH
-			
-		} else if ( button == Button.B_SPELL_CHECK ) {
-
-			locator = Locators.zSpellCheckIconBtn;
-			page = this;
-			
-			// FALL THROUGH
-			
-		} else if ( button == Button.B_SIGNATURE ) {
-
-			throw new HarnessException("use zToolbarPressPulldown to attach signature");
-			
-		} else if ( button == Button.B_OPTIONS ) {
-
-			throw new HarnessException("use zToolbarPressPulldown to attach signature");
-			
-		} else if ( button == Button.B_SHOWBCC) {
-
-			page = this;
-			locator = "xpath=//div[contains(@id,'zv__COMPOSE')]//a[contains(@id,'_toggle_bcc')]";
-
-			if ( zBccIsActive() )
-				return (this);
-			
-			////
-			// For some reason, zClick doesn't work for "Show BCC", but sClick does
-			////
-			
-			// Click it
-			this.sClick(locator);
-			
-			this.zWaitForBusyOverlay();
-
-			return (page);
-		}
-		else {
-			throw new HarnessException("no logic defined for button "+ button);
-		}
 
 		// Make sure a locator was set
 		if ( locator == null )
@@ -269,10 +173,9 @@ public class FormTaskNew extends AbsForm {
 			page.zWaitForActive();
 			
 		}
-		*/
-		// Return the page, if specified
-	//	return (page);
 
+		return (page);
+		
 	}
 	
 	/**
@@ -285,6 +188,8 @@ public class FormTaskNew extends AbsForm {
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressPulldown("+ pulldown +", "+ option +")");
 		
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
+
 		if ( pulldown == null )
 			throw new HarnessException("Pulldown cannot be null!");
 		
@@ -375,7 +280,8 @@ public class FormTaskNew extends AbsForm {
 	 * @throws HarnessException
 	 */
 	public void zFillField(Field field, String value) throws HarnessException {
-	
+		tracer.trace("Set "+ field +" to "+ value);
+
 		String locator = null;
 		
 
@@ -411,117 +317,30 @@ public class FormTaskNew extends AbsForm {
 	}
 	
 	
-	private boolean zBccIsActive() throws HarnessException {
-		logger.info(myPageName() + ".zBccIsActive()");
-
-		// <tr id='zv__COMPOSEX_bcc_row' style='display: table_row' x-display='table-row' ...
-		// <tr id='zv__COMPOSEX_bcc_row' style='display: none'  x-display='table-row' ...
-		
-		String xpath = "//div[contains(@id,'zv__COMPOSE')]//tr[contains(@id,'_bcc_row')]";
-		if ( !sIsElementPresent(xpath) )
-			throw new HarnessException("Unable to locate the BCC field "+ xpath);
-		
-		String locator = "xpath=("+ xpath +")@style";
-		String style = this.sGetAttribute(locator);
-		
-		logger.info(myPageName() + ".zBccIsActive() ... style="+ style);
-		return (!style.contains("none"));
-	}
-
 	@Override
 	public void zFill(IItem item) throws HarnessException {
 		logger.info(myPageName() + ".zFill(ZimbraItem)");
 		logger.info(item.prettyPrint());
 
 		// Make sure the item is a MailItem
-		if ( !(item instanceof MailItem) ) {
-			throw new HarnessException("Invalid item type - must be MailItem");
+		if ( !(item instanceof TaskItem) ) {
+			throw new HarnessException("Invalid item type - must be TaskItem");
 		}
 		
 		// Convert object to MailItem
-		MailItem mail = (MailItem) item;
+		TaskItem task = (TaskItem) item;
 		
 		// Fill out the form
 		//
 		
 		// Handle the subject
-		if ( mail.dSubject != null ) {
+		if ( task.gettaskSubject() != null ) {
 			
-			zFillField(Field.Subject, mail.dSubject);
+			zFillField(Field.Subject, task.gettaskSubject());
 
 		}
 		
-		if ( mail.dBodyText != null ) {
-			
-			zFillField(Field.Body, mail.dBodyText);
-			
-		}
-		
-		// TODO: how to handle HTML body?
-		
-		// Handle the Recipient list, which can be a combination
-		// of To, Cc, Bcc, and From
-		StringBuilder to = null;
-		StringBuilder cc = null;
-		StringBuilder bcc = null;
-		StringBuilder from = null;
-		
-		// Convert the list of recipients to a semicolon separated string
-		List<RecipientItem> recipients = mail.dAllRecipients();
-		if ( recipients != null ) {
-			if ( !recipients.isEmpty() ) {
-				
-				for (RecipientItem r : recipients) {
-					if ( r.dType == RecipientType.To ) {
-						if ( to == null ) {
-							to = new StringBuilder();
-							to.append(r.dEmailAddress);
-						} else {
-							to.append(";").append(r.dEmailAddress);
-						}
-					}
-					if ( r.dType == RecipientType.Cc ) {
-						if ( cc == null ) {
-							cc = new StringBuilder();
-							cc.append(r.dEmailAddress);
-						} else {
-							cc.append(";").append(r.dEmailAddress);
-						}
-					}
-					if ( r.dType == RecipientType.Bcc ) {
-						if ( bcc == null ) {
-							bcc = new StringBuilder();
-							bcc.append(r.dEmailAddress);
-						} else {
-							bcc.append(";").append(r.dEmailAddress);
-						}
-					}
-					if ( r.dType == RecipientType.From ) {
-						if ( from == null ) {
-							from = new StringBuilder();
-							from.append(r.dEmailAddress);
-						} else {
-							from.append(";").append(r.dEmailAddress);
-						}
-					}
-				}
-				
-			}
-		}
-		
-		// Fill out the To field
-		if ( to != null ) {
-			this.zFillField(Field.To, to.toString());
-		}
-		
-		if ( cc != null ) {
-			this.zFillField(Field.Cc, cc.toString());
-		}
-		
-		if ( bcc != null ) {
-			this.zFillField(Field.Bcc, bcc.toString());
-		}
-
+		// TODO: more
 		
 	}
 
