@@ -1997,8 +1997,9 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							],
 							cssStyle:"padding-top:5px; padding-bottom:5px"
 						},
-						{type:_ZA_PLAIN_GROUPER_, id:"account_prefs_general",colSizes:["auto"],numCols:1,
+						{type:_ZA_PLAIN_GROUPER_, id:"account_prefs_general",colSizes:["auto"],numCols:1, 
 							items :[
+								 { type:_GROUP_, numCols: 1, colSizes:["auto"], width:"100%", colSpan:3, items:[
 								{ref:ZaAccount.A_zimbraPrefClientType,
 									type:_SUPER_SELECT1_,
 									labelCssStyle:"width:195px",colSizes:["375px","190px"], 
@@ -2006,7 +2007,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									msgName:ZaMsg.MSG_zimbraPrefClientType,
 									label:ZaMsg.LBL_zimbraPrefClientType, 
 									labelLocation:_LEFT_
-								},
+								}]},
 								{ref:ZaAccount.A_zimbraPrefMailInitialSearch, type:_SUPER_TEXTFIELD_,
 									colSizes:["195px","375px","190px"], 
 									msgName:ZaMsg.LBL_zimbraPrefMailInitialSearch,
@@ -2043,17 +2044,18 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, checkBoxLabel:ZaMsg.LBL_zimbraPrefShowSelectionCheckbox,
 									trueValue:"TRUE", falseValue:"FALSE"},
 								{ref:ZaAccount.A_zimbraJunkMessagesIndexingEnabled, 
-									type:_SUPER_CHECKBOX_,  colSpan:2,
+									type:_SUPER_CHECKBOX_,  colSpan:3,
 									colSizes:["195px","375px","190px"],
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.LBL_zimbraJunkMessagesIndexingEnabled,
 									checkBoxLabel:ZaMsg.LBL_zimbraJunkMessagesIndexingEnabled, 
 									trueValue:"TRUE", falseValue:"FALSE"},
-                                {ref:ZaAccount.A_zimbraPrefLocale, type:_SUPER_SELECT1_,
+                                				{ type:_GROUP_, numCols: 1, colSizes:["auto"], width:"100%", colSpan:3, items:[
+								{ref:ZaAccount.A_zimbraPrefLocale, type:_SUPER_SELECT1_,
 									labelCssStyle:"width:195px", colSizes:["375px","190px"],
-                                    choices: ZaSettings.getLocaleChoices(),
-                                    msgName:ZaMsg.LBL_zimbraPrefLocale,label:ZaMsg.LBL_zimbraPrefLocale,
-									 labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS}
+                                    					choices: ZaSettings.getLocaleChoices(),
+                                    					msgName:ZaMsg.LBL_zimbraPrefLocale,label:ZaMsg.LBL_zimbraPrefLocale,
+									labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS}]}
                             ]                                                             
 						},	
 						{type:_ZA_TOP_GROUPER_, id:"account_prefs_standard_client",colSizes:["195px","auto"],numCols:2,
