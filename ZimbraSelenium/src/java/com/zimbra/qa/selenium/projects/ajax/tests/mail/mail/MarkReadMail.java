@@ -8,6 +8,7 @@ import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.ui.Shortcut;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
@@ -67,6 +68,8 @@ public class MarkReadMail extends AjaxCommonTest {
 		// Wait to read the message
 		SleepUtil.sleep((delaySeconds) * 1000);
 
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+
 		// Wait the for the client to send the change to the server
 		app.zPageMail.zWaitForBusyOverlay();
 		
@@ -124,6 +127,8 @@ public class MarkReadMail extends AjaxCommonTest {
 		// Select the next item immediately
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail2.dSubject);
 
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+
 		// Verify the message is marked read in the server (flags attribute should not contain (u)nread)
 		mail1 = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject1 +")");
 		ZAssert.assertStringContains(mail1.getFlags(), "u", "Verify the message is marked read in the server");
@@ -167,6 +172,8 @@ public class MarkReadMail extends AjaxCommonTest {
 		
 		// TODO: need to L10N this
 		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MARKREAD);
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
 		// Verify the message is marked read in the server (flags attribute should not contain (u)nread)
 		mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");

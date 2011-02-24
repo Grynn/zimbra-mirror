@@ -68,6 +68,7 @@ public class MarkUnReadMail extends AjaxCommonTest {
 		// TODO: need to L10N this
 		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MARKUNREAD);
 
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
 		// Verify the message is marked read in the server (flags attribute should not contain (u)nread)
 		mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");

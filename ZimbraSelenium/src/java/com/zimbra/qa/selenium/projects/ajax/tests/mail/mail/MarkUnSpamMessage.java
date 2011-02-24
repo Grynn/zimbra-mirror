@@ -71,6 +71,8 @@ public class MarkUnSpamMessage extends AjaxCommonTest {
 		
 		// Click spam
 		app.zPageMail.zToolbarPressButton(Button.B_RESPORTNOTSPAM);
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		
 		// Get the mail item for the new message
 		// Need 'is:anywhere' to include the spam folder
