@@ -51,21 +51,6 @@ public class DocumentBriefcaseEdit extends AbsForm {
 
 	@Override
 	public void zFill(IItem item) throws HarnessException {
-		logger.info("DocumentBriefcaseEdit(ZimbraItem)");
-		logger.info(item.prettyPrint());
-
-		// Make sure the item is a DocumentItem
-		if (!(item instanceof DocumentItem)) {
-			throw new HarnessException(
-					"Invalid item type - must be DocumentItem");
-		}
-
-		// Convert object to DocumentItem
-		DocumentItem docItem = (DocumentItem) item;
-
-		// Fill out the form
-		typeDocumentText(docItem.getDocText());
-		typeDocumentName(docItem.getDocName());
 	}
 
 	@Override

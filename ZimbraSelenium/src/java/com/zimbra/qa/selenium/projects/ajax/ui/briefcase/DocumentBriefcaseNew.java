@@ -4,7 +4,10 @@ import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsForm;
+import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Locators;
 
 public class DocumentBriefcaseNew extends AbsForm {
 
@@ -14,6 +17,17 @@ public class DocumentBriefcaseNew extends AbsForm {
 		public static final String zBodyField = "css=body";
 		public static final String zNameField = "css=[id^=DWT4]>input";
 		public static final String zEditNameField = "css=[class=DwtInputField] [input$=]";
+	}
+
+	public static class Field {
+		public static final Field Name = new Field("Name");
+		public static final Field Body = new Field("Body");
+
+		private String field;
+
+		private Field(String name) {
+			field = name;
+		}
 	}
 
 	public static String pageTitle;
@@ -49,22 +63,48 @@ public class DocumentBriefcaseNew extends AbsForm {
 
 	@Override
 	public void zFill(IItem item) throws HarnessException {
-		logger.info("DocumentBriefcaseNew.fill(ZimbraItem)");
-
-		// Make sure the item is a DocumentItem
-		if (!(item instanceof DocumentItem)) {
-			throw new HarnessException(
-					"Invalid item type - must be DocumentItem");
-		}
-
-		// Convert object to DocumentItem
-		DocumentItem docItem = (DocumentItem) item;
-
-		// Fill out the form
-		typeDocumentName(docItem.getDocName());
-		typeDocumentText(docItem.getDocText());
-		logger.info(item.prettyPrint());
 	}
+	
+	public void zFillField(Field field, String value) throws HarnessException {
+		
+		String locator = null;
+		
+		if ( field == Field.Name) {
+			
+			locator = Locators.zNameField;
+			
+			zSelectWindow("Zimbra Docs");
+						
+			// FALL THROUGH
+			
+		} else if ( field == Field.Body ) {
+			
+			locator = Locators.zBodyField;
+			
+			sSelectFrame(Locators.zFrame);
+			
+			// FALL THROUGH
+			
+		} else {
+			throw new HarnessException("not implemented for field "+ field);
+		}
+		
+		if ( locator == null ) {
+			throw new HarnessException("locator was null for field "+ field);
+		}
+		
+		// Default behavior, enter value into locator field
+	
+		// Make sure the button exists
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("Field is not present field="+ field +" locator="+ locator);
+		
+		// Enter text
+		this.sType(locator, value);
+		
+		this.zWaitForBusyOverlay();
+	}
+	
 
 	@Override
 	public void zSubmit() throws HarnessException {

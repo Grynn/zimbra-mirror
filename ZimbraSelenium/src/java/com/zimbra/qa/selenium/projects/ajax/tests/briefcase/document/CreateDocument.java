@@ -46,8 +46,9 @@ public class CreateDocument extends AjaxCommonTest {
 			app.zPageBriefcase.zSelectWindow("Zimbra Docs");
 
 			// Fill out the document with the data
-			documentBriefcaseNew.zFill(document);
-
+			documentBriefcaseNew.zFillField(DocumentBriefcaseNew.Field.Name, docName);
+			documentBriefcaseNew.zFillField(DocumentBriefcaseNew.Field.Body, docText);
+			
 			// Save and close
 			app.zPageBriefcase.zSelectWindow("Zimbra Docs");
 
