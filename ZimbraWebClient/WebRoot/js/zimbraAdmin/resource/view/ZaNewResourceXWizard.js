@@ -469,7 +469,13 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 								{ref:ZaResource.A_zimbraCalResContactEmail, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactEmail,
 									label:ZaMsg.NAD_ContactEmail, labelLocation:_LEFT_, width:defaultWidth},
 								{ref:ZaResource.A_zimbraCalResContactPhone, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactPhone,
-									label:ZaMsg.NAD_ContactPhone, labelLocation:_LEFT_, width:defaultWidth}
+									label:ZaMsg.NAD_ContactPhone, labelLocation:_LEFT_, width:defaultWidth},
+								{ref:ZaResource.A_contactInfoAutoComplete, type: _AUTO_COMPLETE_LIST_,
+                        						matchValue:ZaContactList.matchValue, matchText: ZaContactList.matchText,
+                        						dataLoaderClass: ZaContactList , dataLoaderMethod: ZaContactList.prototype.getContactList ,
+                        						compCallback: ZaContactList.prototype._autocompleteCallback,
+                        						inputFieldElementId: ZaResource.A_zimbraCalResContactName
+                    						}
 							]
 						},
 						{type:_ZAWIZGROUP_, colSizes:["200px","300px"],
