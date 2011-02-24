@@ -50,6 +50,8 @@ public class DialogEditFolder extends AbsDialog {
 	public AbsPage zClickButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zClickButton("+ button +")");
 
+		tracer.trace("Click dialog button "+ button);
+		
 		AbsPage page = null;
 		String locator = null;
 		
@@ -100,6 +102,8 @@ public class DialogEditFolder extends AbsDialog {
 	public void zSetNewName(String folder) throws HarnessException {
 		logger.info(myPageName() + " zEnterFolderName("+ folder +")");
 		
+		tracer.trace("Enter new folder name "+ folder);
+
 		if ( folder == null ) 
 			throw new HarnessException("folder must not be null");
 		
@@ -138,6 +142,8 @@ public class DialogEditFolder extends AbsDialog {
 	public void zSetNewColor(FolderColor color) throws HarnessException {
 		logger.info(myPageName() + " zEnterFolderColor("+ color +")");
 		
+		tracer.trace("Enter folder color "+ color);
+
 		if ( color == null ) 
 			throw new HarnessException("folder must not be null");
 		

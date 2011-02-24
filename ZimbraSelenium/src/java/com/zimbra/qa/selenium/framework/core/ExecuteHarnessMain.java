@@ -74,6 +74,12 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 public class ExecuteHarnessMain {
 	private static Logger logger = LogManager.getLogger(ExecuteHarnessMain.class);
 
+	/**
+	 * A Log4j logger for tracing test case steps
+	 */
+	public static final String TraceLoggerName = "testcase.trace";
+	public static Logger tracer = LogManager.getLogger(TraceLoggerName);
+
 	private static HashMap<String, String> configMap= new HashMap<String,String>();
 	
 	
@@ -497,6 +503,7 @@ public class ExecuteHarnessMain {
 	protected static class MethodListener implements IInvokedMethodListener {
 		private static Logger logger = LogManager.getLogger(MethodListener.class);
 		
+		
 		private static final String OpenQABasePackage = "org.openqa";
 		private static final String ZimbraQABasePackage = "com.zimbra.qa.selenium";
 		private static final Logger openqaLogger = LogManager.getLogger(OpenQABasePackage);
@@ -549,6 +556,13 @@ public class ExecuteHarnessMain {
 						zimbraqaLogger.addAppender(a);
 					}
 					logger.info("MethodListener: START: " + getTestCaseID(method.getTestMethod().getMethod()));
+					
+					tracer.trace("/***");
+					tracer.trace("## ID: " + getTestCaseID(method.getTestMethod().getMethod()));
+					tracer.trace("# Objective: " + method.getTestMethod().getDescription());
+					tracer.trace("# Group(s): " + Arrays.toString(method.getTestMethod().getGroups()));
+					tracer.trace("");
+					
 				} catch (IOException e) {
 					logger.warn("Unable to add test class appender", e);
 				}
@@ -563,6 +577,14 @@ public class ExecuteHarnessMain {
 		public void afterInvocation(IInvokedMethod method, ITestResult result) {
 			if ( method.isTestMethod() ) {
 				logger.info("MethodListener: FINISH: "+ getTestCaseID(method.getTestMethod().getMethod()));
+				
+				tracer.trace("");
+				tracer.trace("# Pass: " + result.isSuccess());
+				tracer.trace("# End ID: " + getTestCaseID(method.getTestMethod().getMethod()));
+				tracer.trace("***/");
+				tracer.trace("");
+				tracer.trace("");
+
 				Appender a = null;
 				String key = getKey(method.getTestMethod().getMethod());
 				if ( appenders.containsKey(key) ) {

@@ -71,6 +71,8 @@ public class DialogCreateFolder extends AbsDialog {
 	public AbsPage zClickButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zClickButton("+ button +")");
 
+		tracer.trace("Click dialog button "+ button);
+
 		AbsPage page = null;
 		String locator = null;
 		if ( button == Button.B_OK ) {
@@ -125,6 +127,8 @@ public class DialogCreateFolder extends AbsDialog {
 	public void zClickTreeFolder(FolderItem folder) throws HarnessException {
 		logger.info(myPageName() + " zClickTreeFolder("+ folder +")");
 		
+		tracer.trace("Click on tree folder with name "+ folder.getName());
+
 		if ( folder == null ) 
 			throw new HarnessException("folder must not be null");
 		
@@ -144,17 +148,19 @@ public class DialogCreateFolder extends AbsDialog {
 	 * @param folder
 	 */
 	public void zEnterFolderName(String folder) throws HarnessException {
-	   logger.info(myPageName() + " zEnterFolderName("+ folder +")");
+		logger.info(myPageName() + " zEnterFolderName("+ folder +")");
 
-      if ( folder == null ) 
-         throw new HarnessException("folder must not be null");
+		tracer.trace("Enter folder name in text box "+ folder);
 
-      String locator = Locators.zNameField;
+		if ( folder == null ) 
+			throw new HarnessException("folder must not be null");
 
-      if ( !this.sIsElementPresent(locator) )
-         throw new HarnessException("unable to find folder name field "+ locator);
+		String locator = Locators.zNameField;
 
-      sType(locator, folder);      
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("unable to find folder name field "+ locator);
+
+		sType(locator, folder);      
 	}
 
 	public enum FolderColor {
@@ -178,6 +184,8 @@ public class DialogCreateFolder extends AbsDialog {
 	public void zEnterFolderColor(FolderColor color) throws HarnessException {
 		logger.info(myPageName() + " zEnterFolderColor("+ color +")");
 		
+		tracer.trace("Enter color "+ color);
+
 		if ( color == null ) 
 			throw new HarnessException("folder must not be null");
 		

@@ -144,6 +144,8 @@ public class TreeMail extends AbsTree {
 	@Override
 	public AbsPage zPressButton(Button button) throws HarnessException {
 		
+		tracer.trace("Click "+ button);
+
 		if ( button == null )
 			throw new HarnessException("Button cannot be null");
 			
@@ -234,10 +236,13 @@ public class TreeMail extends AbsTree {
 		}
 		
 		if ( folder instanceof FolderItem ) {
+			tracer.trace("Click "+ action +" on folder "+ ((FolderItem)folder).getName());
 			return (zTreeItem(action, (FolderItem)folder));
 		} else if ( folder instanceof SavedSearchFolderItem ) {
+			tracer.trace("Click "+ action +" on folder "+ ((SavedSearchFolderItem)folder).getName());
 			return (zTreeItem(action, (SavedSearchFolderItem)folder));
 		} else if ( folder instanceof ZimletItem ) {
+			tracer.trace("Click "+ action +" on folder "+ ((ZimletItem)folder).getFolderTreeName());
 			return (zTreeItem(action, (ZimletItem)folder));
 		}
 		
@@ -246,16 +251,21 @@ public class TreeMail extends AbsTree {
 		
 	@Override
 	public AbsPage zTreeItem(Action action, Button option, IItem folder) throws HarnessException {
+		
+
 		// Validate the arguments
 		if ( (action == null) || (option == null) || (folder == null) ) {
 			throw new HarnessException("Must define an action, option, and addressbook");
 		}
 		
 		if ( folder instanceof FolderItem ) {
+			tracer.trace("Click "+ action +" then "+ option +" on folder "+ ((FolderItem)folder).getName());
 			return (zTreeItem(action, option, (FolderItem)folder));
 		} else if ( folder instanceof SavedSearchFolderItem ) {
+			tracer.trace("Click "+ action +" then "+ option +" on folder "+ ((SavedSearchFolderItem)folder).getName());
 			return (zTreeItem(action, option, (SavedSearchFolderItem)folder));
 		} else if ( folder instanceof ZimletItem ) {
+			tracer.trace("Click "+ action +" then "+ option +" on folder "+ ((ZimletItem)folder).getFolderTreeName());
 			return (zTreeItem(action, option, (ZimletItem)folder));
 		}
 		

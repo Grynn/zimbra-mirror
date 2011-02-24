@@ -75,6 +75,9 @@ public class DisplayMail extends AbsDisplay {
 	public AbsPage zClickViewEntireMessage() throws HarnessException {
 		logger.info(myPageName() + " zViewEntireMessage");
 		
+		tracer.trace("Click 'View Entire Message'");
+
+		
 		AbsPage page = null;
 		String locator = Locators.zViewEntireMessage;
 		
@@ -94,6 +97,8 @@ public class DisplayMail extends AbsDisplay {
 	 * @throws HarnessException
 	 */
 	public AbsPage zClickHighlightObjects() throws HarnessException {
+		tracer.trace("Click 'highlight objects'");
+
 		throw new HarnessException("implement me!");
 	}
 	

@@ -43,6 +43,8 @@ public class DialogTag extends AbsDialog {
 	public void zSetTagName(String name) throws HarnessException {
 		logger.info(myPageName() + " zSetTagName("+ name +")");
 
+		tracer.trace("Set tag name "+ name);
+
 		String locator = "id="+ Locators.zTagNameFieldId;
 		
 		// Make sure the locator exists
@@ -57,6 +59,8 @@ public class DialogTag extends AbsDialog {
 	public void zSetTagColor(String color) throws HarnessException {
 		logger.info(myPageName() + " zSetTagColor("+ color +")");
 
+		tracer.trace("Set tag color "+ color);
+
 		throw new HarnessException("implement me!");
 		
 	}
@@ -64,6 +68,8 @@ public class DialogTag extends AbsDialog {
 	@Override
 	public AbsPage zClickButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zClickButton("+ button +")");
+
+		tracer.trace("Click dialog button "+ button);
 
 		AbsPage page = null;
 		String locator = null;

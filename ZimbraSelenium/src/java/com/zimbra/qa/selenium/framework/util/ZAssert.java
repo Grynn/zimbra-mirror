@@ -6,16 +6,23 @@ import java.util.regex.*;
 import org.apache.log4j.*;
 import org.testng.Assert;
 
+import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain;
+
 
 public class ZAssert {
 	private static Logger logger = LogManager.getLogger(ZAssert.class);
 	
+
     private static int TotalCountTests = 0;
     private static int TotalCountPass = 0;
 
     private static int CountTests;
     private static int CountPass;
 
+	protected static final Logger tracer = LogManager.getLogger(ExecuteHarnessMain.TraceLoggerName);
+    private static void trace(String message) {
+		tracer.trace(message);
+    }
     
     public static void resetCounts() {
     	CountTests=0;
@@ -23,7 +30,8 @@ public class ZAssert {
     }
     
 	public static void assertTrue(boolean condition, String message) {
-		
+		trace(message);
+
 		// Add counts
 		TotalCountTests++;
 		CountTests++;
@@ -52,7 +60,8 @@ public class ZAssert {
 	}
 
 	public static void assertFalse(boolean condition, String message) {
-		
+		trace(message);
+	
 		// Add counts
 		TotalCountTests++;
 		CountTests++;
@@ -81,6 +90,8 @@ public class ZAssert {
 	}
 
 	public static void assertEquals(Object actual, Object expected, String message) {
+		trace(message);
+
 		TotalCountTests++;
 		CountTests++;
 		
@@ -102,6 +113,8 @@ public class ZAssert {
 	}
 
 	public static void assertGreaterThan(int actual, int expected, String message) {
+		trace(message);
+
 		TotalCountTests++;
 		CountTests++;
 		
@@ -124,6 +137,8 @@ public class ZAssert {
 	}
 
 	public static void assertGreaterThanEqualTo(int actual, int expected, String message) {
+		trace(message);
+
 		TotalCountTests++;
 		CountTests++;
 		
@@ -146,6 +161,8 @@ public class ZAssert {
 	}
 
 	public static void assertLessThan(int actual, int expected, String message) {
+		trace(message);
+
 		TotalCountTests++;
 		CountTests++;
 		
@@ -168,6 +185,8 @@ public class ZAssert {
 	}
 
 	public static void assertLessThanEqualTo(int actual, int expected, String message) {
+		trace(message);
+
 		TotalCountTests++;
 		CountTests++;
 		
@@ -190,6 +209,8 @@ public class ZAssert {
 	}
 
 	public static void assertNull(Object object, String message) {
+		trace(message);
+
 
 		TotalCountTests++;
 		CountTests++;
@@ -213,6 +234,8 @@ public class ZAssert {
 
 
 	public static void assertNotNull(Object object, String message) {
+		trace(message);
+
 
 		TotalCountTests++;
 		CountTests++;
@@ -235,6 +258,7 @@ public class ZAssert {
 	}
 
 	public static void assertContains(Collection<?> collection, Object object, String message) {
+		trace(message);
 
 		TotalCountTests++;
 		CountTests++;
@@ -257,11 +281,12 @@ public class ZAssert {
 		
 	}
 
-		public static void assertMatches(String pattern, String input, String message) {
+	public static void assertMatches(String pattern, String input, String message) {
 		assertMatches(Pattern.compile(pattern), input, message);
 	}
 	
 	public static void assertMatches(Pattern pattern, String input, String message) {
+		trace(message);
 
 		TotalCountTests++;
 		CountTests++;
@@ -291,7 +316,8 @@ public class ZAssert {
 	 * @param message the logging message
 	 */
 	public static void assertStringContains(String actual, String substring, String message) {
-	
+		trace(message);
+
 		TotalCountTests++;
 		CountTests++;
 		
@@ -320,7 +346,8 @@ public class ZAssert {
 	 * @param message the logging message
 	 */
 	public static void assertStringDoesNotContain(String actual, String substring, String message) {
-	
+		trace(message);
+
 		TotalCountTests++;
 		CountTests++;
 		

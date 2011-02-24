@@ -118,19 +118,21 @@ public class PageMain extends AbsTab {
 	 */
 	public void zLogout() throws HarnessException {
 		logger.debug("logout()");
-		
+
+		tracer.trace("Logout of the "+ MyApplication.myApplicationName());
+
 		zNavigateTo();
 
 		if ( !sIsElementPresent(Locators.zLogoffButton) ) {
 			throw new HarnessException("The logoff button is not present " + Locators.zLogoffButton);
 		}
-				
+
 		// Click on logout
 		sClick(Locators.zLogoffButton);
-				
+
 		sWaitForPageToLoad();
 		((AppAjaxClient)MyApplication).zPageLogin.zWaitForActive();
-		
+
 		((AppAjaxClient)MyApplication).zSetActiveAcount(null);
 
 	}

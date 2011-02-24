@@ -126,6 +126,8 @@ public class FormMailNew extends AbsForm {
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
 		
+		tracer.trace("Click button "+ button);
+
 		if ( button == null )
 			throw new HarnessException("Button cannot be null!");
 		
@@ -258,6 +260,8 @@ public class FormMailNew extends AbsForm {
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressPulldown("+ pulldown +", "+ option +")");
 		
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
+
 		if ( pulldown == null )
 			throw new HarnessException("Pulldown cannot be null!");
 		
@@ -349,6 +353,8 @@ public class FormMailNew extends AbsForm {
 	 */
 	public void zFillField(Field field, String value) throws HarnessException {
 	
+		tracer.trace("Set "+ field +" to "+ value);
+
 		String locator = null;
 		
 		if ( field == Field.To ) {

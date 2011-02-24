@@ -37,6 +37,8 @@ public abstract class AbsSeleniumObject {
 	protected static Logger logger = LogManager
 			.getLogger(AbsSeleniumObject.class);
 
+	protected static final Logger tracer = LogManager.getLogger(ExecuteHarnessMain.TraceLoggerName);
+	
 	public AbsSeleniumObject() {
 		logger.info("new "+ AbsSeleniumObject.class.getCanonicalName());
 	}

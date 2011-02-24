@@ -219,10 +219,7 @@ public class PageMail extends AbsTab {
 			((AppAjaxClient)MyApplication).zPageMain.zNavigateTo();
 		}
 		
-		// Click on Mail icon
-		if ( !sIsElementPresent(PageMain.Locators.zAppbarMail) ) {
-			throw new HarnessException("Can't locate mail icon");
-		}
+		tracer.trace("Navigate to "+ this.myPageName());
 
 		this.zClick(PageMain.Locators.zAppbarMail);
 		
@@ -236,6 +233,8 @@ public class PageMail extends AbsTab {
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
 		
+		tracer.trace("Press the "+ button +" button");
+
 		if ( button == null )
 			throw new HarnessException("Button cannot be null!");
 		
@@ -454,6 +453,8 @@ public class PageMail extends AbsTab {
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
 		
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
+
 		if ( pulldown == null )
 			throw new HarnessException("Pulldown cannot be null!");
 		
@@ -828,6 +829,8 @@ public class PageMail extends AbsTab {
 	public AbsPage zListItem(Action action, String subject) throws HarnessException {
 		logger.info(myPageName() + " zListItem("+ action +", "+ subject +")");
 		
+		tracer.trace(action +" on subject = "+ subject);
+
 		AbsPage page = null;
 		String listLocator;
 		String rowLocator;
@@ -983,6 +986,9 @@ public class PageMail extends AbsTab {
 	public AbsPage zListItem(Action action, Button option, String subject) throws HarnessException {
 		logger.info(myPageName() + " zListItem("+ action +", "+ option +", "+ subject +")");
 		
+		tracer.trace(action +" then "+ option +" on subject = "+ subject);
+
+		
 		if ( action == null )
 			throw new HarnessException("action cannot be null");
 		if ( option == null )
@@ -1106,6 +1112,8 @@ public class PageMail extends AbsTab {
 		if (shortcut == null)
 			throw new HarnessException("Shortcut cannot be null");
 		
+		tracer.trace("Using the keyboard, press the "+ shortcut.getKeys() +" keyboard shortcut");
+
 		AbsPage page = null;
 		
 		if ( (shortcut == Shortcut.S_NEWITEM) ||

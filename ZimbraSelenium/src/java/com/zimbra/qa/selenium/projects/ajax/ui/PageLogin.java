@@ -106,6 +106,8 @@ public class PageLogin extends AbsTab {
 	 */
 	public void zLogin(ZimbraAccount account) throws HarnessException {
 	   logger.debug("login(ZimbraAccount account)" + account.EmailAddress);
+	   
+	   tracer.trace("Login to the "+ MyApplication.myApplicationName() +" using user/password "+ account.EmailAddress +"/"+ account.Password);
 
 	   zNavigateTo();
 

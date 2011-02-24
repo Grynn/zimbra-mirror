@@ -39,7 +39,7 @@ import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.soap.SoapUtil;
 import com.zimbra.common.soap.Element.ContainerException;
 import com.zimbra.common.util.ByteUtil;
-import com.zimbra.qa.selenium.framework.core.DevEnvironment;
+import com.zimbra.qa.selenium.framework.core.*;
 import com.zimbra.qa.selenium.framework.ui.I18N;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 
@@ -354,6 +354,12 @@ public class ZimbraAccount {
 	public ZimbraAccount modifyPreferences(Map<String, String> preferences,
 	      SOAP_DESTINATION_HOST_TYPE destinationType) {
 
+		// Test Case Trace logging
+		for (Map.Entry<String, String> entry : preferences.entrySet()) {
+			ExecuteHarnessMain.tracer.trace(EmailAddress +" preferences: "+ entry.getKey() +"="+ entry.getValue());
+		}
+
+		
 		StringBuilder sb = new StringBuilder();
 		for (Map.Entry<String, String> entry : preferences.entrySet()) {
 			sb.append(String.format("<pref name='%s'>%s</pref>", entry.getKey(), entry.getValue()));
@@ -510,21 +516,20 @@ public class ZimbraAccount {
     */
 	public Element soapSend(String request, SOAP_DESTINATION_HOST_TYPE destinationHostType,
 	      String accountName) throws HarnessException {
+		// TODO: need to watch for certain SOAP requests, such
+		// as ModifyPrefsRequest, which could trigger a client reload
+		//
+		String destination = null;
+		switch (destinationHostType) {
+		case CLIENT:
+			destination = ZimbraMailClientHost;
+			break;
+		case SERVER:
+			destination = ZimbraMailHost;
+			break;
+		}
 
-      // TODO: need to watch for certain SOAP requests, such
-      // as ModifyPrefsRequest, which could trigger a client reload
-      //
-      String destination = null;
-      switch (destinationHostType) {
-      case CLIENT:
-         destination = ZimbraMailClientHost;
-         break;
-      case SERVER:
-         destination = ZimbraMailHost;
-         break;
-      }
-
-      return (soapClient.sendSOAP(destination, request, destinationHostType, accountName));
+		return (soapClient.sendSOAP(destination, request, destinationHostType, accountName));
 	}
 
 	/**
@@ -535,6 +540,14 @@ public class ZimbraAccount {
 	 */
 	public Element soapSend(String request) throws HarnessException {
 		
+		try {
+			if ( !(this instanceof ZimbraAdminAccount) ) {
+				ExecuteHarnessMain.tracer.trace(EmailAddress +" sends "+ Element.parseXML(request).getName());
+			}
+		} catch (DocumentException e) {
+			ExecuteHarnessMain.tracer.warn("Unable to parse "+ request);
+		}
+
 		// TODO: need to watch for certain SOAP requests, such
 		// as ModifyPrefsRequest, which could trigger a client reload
 		//
@@ -756,28 +769,30 @@ public class ZimbraAccount {
          * @return
          * @throws HarnessException
          */
-        public Element sendSOAP(String host, String request,
-              SOAP_DESTINATION_HOST_TYPE destinationType, String accountName) throws HarnessException {        	
+        public Element sendSOAP(String host, String request, SOAP_DESTINATION_HOST_TYPE destinationType, String accountName) throws HarnessException {        	
         	try
         	{
-        	   switch (destinationType) {
-        	   case SERVER:
-        	      setContext(AuthToken, SessionId, SequenceNum);
-        	      break;
-        	   case CLIENT:
-               setContext(ClientAuthToken, SessionId, SequenceNum);
-               if (accountName != null) {
-                  SoapUtil.addTargetAccountToCtxt(requestContext, null, accountName);
-               }
-        	      break;
-        	   }
+        		switch (destinationType) {
+        		case SERVER:
+        			setContext(AuthToken, SessionId, SequenceNum);
+        			break;
+        		case CLIENT:
+        			setContext(ClientAuthToken, SessionId, SequenceNum);
+        			if (accountName != null) {
+        				SoapUtil.addTargetAccountToCtxt(requestContext, null, accountName);
+        			}
+        			break;
+        		}
 
-        		return (sendSOAP(host, requestContext, Element.parseXML(request),
-        		      destinationType));
+
+
+
+        		return (sendSOAP(host, requestContext, Element.parseXML(request), destinationType));
+        		
         	} catch (DocumentException e) {
-				throw new HarnessException("Unable to parse request "+ request, e);
+        		throw new HarnessException("Unable to parse request "+ request, e);
         	} catch (ContainerException e) {
-				throw new HarnessException("Unable to parse request "+ request, e);
+        		throw new HarnessException("Unable to parse request "+ request, e);
 
         	}
         }
@@ -809,7 +824,8 @@ public class ZimbraAccount {
               SOAP_DESTINATION_HOST_TYPE destinationType) throws HarnessException {
         	
         	setTransport(host, request, destinationType);
-        	
+
+    		
         	// Remember the context, request, envelope and response for logging purposes
         	requestBody = request;
         	requestEnvelope = mSoapProto.soapEnvelope(requestBody, context);
