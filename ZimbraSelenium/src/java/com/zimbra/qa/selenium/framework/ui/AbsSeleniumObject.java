@@ -109,8 +109,8 @@ public abstract class AbsSeleniumObject {
 					+ ") element is not present");
 		}
 
-		ClientSessionFactory.session().selenium().mouseDownRight(locator);
-		ClientSessionFactory.session().selenium().mouseUpRight(locator);
+		ClientSessionFactory.session().selenium().mouseDownRightAt(locator,"0,0");
+		ClientSessionFactory.session().selenium().mouseUpRightAt(locator,"0,0");
 		logger.info("zRightClick(" + locator + ")");
 	}
 
