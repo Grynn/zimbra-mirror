@@ -8,8 +8,8 @@ import java.util.*;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
 
 
 /**
@@ -53,14 +53,26 @@ public class TreeMail extends AbsTree {
 		String locator = null;
 		
 		if ( action == Action.A_LEFTCLICK ) {
-			
-			locator = "id=zti__main_Mail__"+ folder.getId() +"_textCell";
+			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+			   locator = new StringBuffer("css=td[id^='zti__").
+			         append(MyApplication.zGetActiveAccount().EmailAddress).
+			         append(":main_Mail__']").append("[id$='").
+			         append(folder.getId()).append("_textCell']").toString();
+			} else {
+			   locator = "id=zti__main_Mail__"+ folder.getId() +"_textCell";
+			}
 			
 			// FALL THROUGH
 
 		} else if ( action == Action.A_RIGHTCLICK ) {
-			
-			locator = "id=zti__main_Mail__"+ folder.getId() +"_textCell";
+			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+			   locator = new StringBuffer("css=td[id^='zti__").
+                  append(MyApplication.zGetActiveAccount().EmailAddress).
+                  append(":main_Mail__']").append("[id$='").
+                  append(folder.getId()).append("_textCell']").toString();
+			} else {
+			   locator = "id=zti__main_Mail__"+ folder.getId() +"_textCell";
+			}
 
 			// Select the folder
 			this.zRightClick(locator);
