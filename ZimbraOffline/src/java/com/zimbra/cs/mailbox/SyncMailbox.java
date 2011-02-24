@@ -349,7 +349,23 @@ public abstract class SyncMailbox extends DesktopMailbox {
                 }
             }
         }
-
+        if (pms.deleted != null) {
+            for (Object delete : pms.deleted.values()) {
+                int itemId = -1;
+                if (delete instanceof MailItem) {
+                    MailItem item = (MailItem) delete; 
+                    if (item.getFolderId() == ID_FOLDER_FAILURE) {
+                        continue;
+                    }
+                    itemId = item.getId();
+                } else if (delete instanceof Integer) {
+                    itemId = ((Integer) delete).intValue();
+                }
+                if (itemId >= FIRST_USER_ID || Tag.validateId(itemId)) {
+                    trackChangeDeleted();
+                }
+            }
+        }
         if (outboxed) {
             OutboxTracker.invalidate(this);
         }
@@ -358,6 +374,8 @@ public abstract class SyncMailbox extends DesktopMailbox {
     void trackChangeNew(MailItem item) throws ServiceException {}
 
     void trackChangeModified(MailItem item, int changeMask) throws ServiceException {}
+    
+    void trackChangeDeleted() throws ServiceException {}
 
     void itemCreated(MailItem item) throws ServiceException {}
 

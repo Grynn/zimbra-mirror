@@ -88,13 +88,20 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
         if ((changeMask & filter) != 0)
             DbOfflineMailbox.updateChangeRecord(item, changeMask & filter);
     }
-
+    
+    @Override
+    void trackChangeDeleted() throws ServiceException {
+        if (!isTrackingSync()) {
+            return;
+        }
+        lastChangeTime = System.currentTimeMillis();
+    }
+    
     abstract boolean isPushType(MailItem.Type type);
-
+    
     abstract int getChangeMaskFilter(MailItem.Type type);
-
-    synchronized boolean isPendingDelete(OperationContext octxt, int itemId, MailItem.Type type)
-            throws ServiceException {
+    
+    synchronized boolean isPendingDelete(OperationContext octxt, int itemId, MailItem.Type type) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("isPendingDelete", octxt);
