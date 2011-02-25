@@ -153,6 +153,18 @@ public abstract class AbsSeleniumObject {
 	// // ***
 
 	/**
+	 * DefaultSelenium.getEval()
+	 * 
+	 * @param script
+	 */
+	public String sGetEval(String script) throws HarnessException {
+		String value = ClientSessionFactory.session().selenium().getEval(script);
+		logger.info("getEval("+ script +") = "+ value);
+		return (value);
+	}
+
+
+	/**
 	 * DefaultSelenium.getHtmlSource()
 	 * 
 	 * @param locator
