@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.tasks;
 
 import java.util.List;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
@@ -9,6 +10,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
 
 
@@ -35,8 +37,8 @@ public class MoveTask extends AjaxCommonTest {
 
 		app.zGetActiveAccount().soapSend(
 				"<CreateFolderRequest xmlns='urn:zimbraMail'>"
-			+		"<folder name='" + name + "' l='" + taskFolderID + "'/>"
-			+	"</CreateFolderRequest>");
+				+		"<folder name='" + name + "' l='" + taskFolderID + "'/>"
+				+	"</CreateFolderRequest>");
 
 		FolderItem subFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
 
@@ -47,18 +49,18 @@ public class MoveTask extends AjaxCommonTest {
 
 		app.zGetActiveAccount().soapSend(
 				"<CreateTaskRequest xmlns='urn:zimbraMail'>"
-			+		"<m >"
-			+			"<inv>"
-			+				"<comp name='" + subject + "'>"
-			+					"<or a='"+ app.zGetActiveAccount().EmailAddress + "'/>"
-			+				"</comp>" 
-			+			"</inv>"
-			+			"<su>" + subject + "</su>"
-			+			"<mp ct='text/plain'>"
-			+				"<content>content" + ZimbraSeleniumProperties.getUniqueString() + "</content>"
-			+			"</mp>"
-			+		"</m>"
-			+	"</CreateTaskRequest>");
+				+		"<m >"
+				+			"<inv>"
+				+				"<comp name='" + subject + "'>"
+				+					"<or a='"+ app.zGetActiveAccount().EmailAddress + "'/>"
+				+				"</comp>" 
+				+			"</inv>"
+				+			"<su>" + subject + "</su>"
+				+			"<mp ct='text/plain'>"
+				+				"<content>content" + ZimbraSeleniumProperties.getUniqueString() + "</content>"
+				+			"</mp>"
+				+		"</m>"
+				+	"</CreateTaskRequest>");
 
 		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(),subject);
 		ZAssert.assertNotNull(task, "Verify the task is created");
@@ -71,6 +73,7 @@ public class MoveTask extends AjaxCommonTest {
 
 		// Click on Move selected item icon in toolbar
 		DialogMove dialogmove = (DialogMove) app.zPageTasks.zToolbarPressButton(Button.B_MOVE);
+		ZAssert.assertTrue(dialogmove.zIsActive(), "Verify that the dialog is active or not");
 
 		// Click OK on Confirmation dialog
 		dialogmove.zClickTreeFolder(subFolder);
@@ -108,6 +111,20 @@ public class MoveTask extends AjaxCommonTest {
 			}
 		}
 		ZAssert.assertNotNull(movetask,	"Verify the task is moved to the selected folder");
+	}
+
+	@AfterMethod(groups = { "always" })
+	public void afterMethod() throws HarnessException {
+		logger.info("Checking for the Move Dialog ...");
+
+		// Check if the "Move Dialog is still open
+		DialogMove dialog = new DialogMove(app, ((AppAjaxClient)app).zPageTasks);
+		if (dialog.zIsActive()) {
+			logger.warn(dialog.myPageName()
+					+ " was still active.  Cancelling ...");
+			dialog.zClickButton(Button.B_CANCEL);
+		}
+
 	}
 
 }
