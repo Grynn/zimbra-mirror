@@ -12,6 +12,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
+import java.awt.event.KeyEvent;
 
 /**
  * @author
@@ -483,6 +484,9 @@ public class PageBriefcase extends AbsTab {
 			this.zClick(itemlocator);
 			page = new DocumentPreview(MyApplication);
 		}
+		
+		zWaitForBusyOverlay();
+		
 		return page;
 	}
 	
@@ -571,7 +575,7 @@ public class PageBriefcase extends AbsTab {
 		sType(Locators.zRenameInput, text);
  	    sFocus(Locators.zRenameInput);
  	    //hit <Enter> key
- 	    sKeyPressNative("10");	   
+ 	    sKeyPressNative(Integer.toString(KeyEvent.VK_ENTER));	   
 	}
 
 	public void isOpenDocLoaded(String windowName, String text)
