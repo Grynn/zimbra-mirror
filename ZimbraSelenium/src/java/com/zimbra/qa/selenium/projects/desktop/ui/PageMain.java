@@ -75,6 +75,14 @@ public class PageMain extends AbsTab{
 	   return null;
    }
 
+   @Override
+	public AbsPage zListItem(Action action, Button option, Button subOption ,String item)
+			throws HarnessException {
+		tracer.trace(action +" then "+ option + "," + subOption + " on item = "+ item);
+
+		throw new HarnessException("implement me!");
+	}
+	
 	@Override
 	public void zNavigateTo() throws HarnessException {
 	   if (zIsActive()) {

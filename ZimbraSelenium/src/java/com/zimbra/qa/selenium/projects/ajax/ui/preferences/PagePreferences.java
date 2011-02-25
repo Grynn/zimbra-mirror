@@ -213,7 +213,14 @@ public class PagePreferences extends AbsTab {
 	public AbsPage zListItem(Action action, String item) throws HarnessException {
 		throw new HarnessException(myPageName() + " does not have a Toolbar");
 	}
+	
+	@Override
+	public AbsPage zListItem(Action action, Button option, Button subOption ,String item)
+			throws HarnessException {
 
+		throw new HarnessException("Not applicaple for Preference");
+	}
+	
 	@Override
 	public AbsPage zListItem(Action action, Button option, String item) throws HarnessException {
 		throw new HarnessException(myPageName() + " does not have a Toolbar");

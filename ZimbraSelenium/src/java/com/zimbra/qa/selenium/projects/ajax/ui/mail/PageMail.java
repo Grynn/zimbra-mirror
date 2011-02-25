@@ -983,6 +983,14 @@ public class PageMail extends AbsTab {
 	}
 
 	@Override
+	public AbsPage zListItem(Action action, Button option, Button subOption ,String item)
+			throws HarnessException {
+		tracer.trace(action +" then "+ option + "," + subOption + " on item = "+ item);
+	
+		throw new HarnessException("implement me!");
+	}
+	
+	@Override
 	public AbsPage zListItem(Action action, Button option, String subject) throws HarnessException {
 		logger.info(myPageName() + " zListItem("+ action +", "+ option +", "+ subject +")");
 		

@@ -50,7 +50,13 @@ public class PageSearchResults extends AbsTab {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	@Override
+	public AbsPage zListItem(Action action, Button option, Button subOption ,String item)
+			throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;	
+	}
+	
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		// TODO Auto-generated method stub

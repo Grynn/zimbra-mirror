@@ -75,6 +75,14 @@ public class PageAccounts extends AbsTab {
 	}
 	
 	@Override
+	public AbsPage zListItem(Action action, Button option, Button subOption ,String item)
+			throws HarnessException {
+		tracer.trace(action +" then "+ option + "," + subOption + " on item = "+ item);
+
+		throw new HarnessException("implement me!");
+	}
+	
+	@Override
 	public void zNavigateTo() throws HarnessException {
 		if (zIsActive()) {
 		   logger.debug("Accounts page has already been reached.");

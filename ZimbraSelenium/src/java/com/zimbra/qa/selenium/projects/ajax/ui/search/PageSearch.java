@@ -269,6 +269,11 @@ public class PageSearch extends AbsTab {
 		throw new HarnessException(myPageName() + " does not have a list view");
 	}
 
+	@Override
+	public AbsPage zListItem(Action action, Button option, Button subOption ,String item)  throws HarnessException {
+	   throw new HarnessException(myPageName() + " does not have a list view");
+    }
+		
 	/**
 	 * Enter text into the query string field
 	 * @param query

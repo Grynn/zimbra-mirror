@@ -486,6 +486,15 @@ public class PageBriefcase extends AbsTab {
 		return page;
 	}
 
+	
+	@Override
+	public AbsPage zListItem(Action action, Button option, Button subOption ,String item)
+			throws HarnessException {
+		tracer.trace(action +" then "+ option + "," + subOption + " on item = "+ item);
+
+		throw new HarnessException("implement me!");
+	}
+	
 	@Override
 	public AbsPage zListItem(Action action, Button option, String subject)
 			throws HarnessException {

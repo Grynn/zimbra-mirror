@@ -216,7 +216,12 @@ public class PageContacts extends AbsTab {
 	public AbsPage zListItem(Action action, Button option, String item) throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
-
+	@Override
+	public AbsPage zListItem(Action action, Button option, Button subOption ,String item)
+			throws HarnessException {
+		throw new HarnessException("Mobile page does not have context menu");
+	}	
+	
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
 		throw new HarnessException("implement me!");

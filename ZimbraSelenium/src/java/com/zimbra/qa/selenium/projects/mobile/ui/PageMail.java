@@ -192,6 +192,12 @@ public class PageMail extends AbsTab {
 	}
 
 	@Override
+	public AbsPage zListItem(Action action, Button option, Button subOption ,String item)
+			throws HarnessException {
+		throw new HarnessException("Mobile page does not have context menu");
+	}	
+	
+	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		// TODO Auto-generated method stub
 		return null;

@@ -161,6 +161,11 @@ public class PageMain extends AbsTab {
 		throw new HarnessException("Main page does not have lists");
 	}
 
+	@Override
+	public AbsPage zListItem(Action action, Button option, Button subOption ,String item)
+			throws HarnessException {
+		throw new HarnessException("Main page does not have lists");
+	}	
 	/**
 	 * Close any extra compose tabs
 	 */

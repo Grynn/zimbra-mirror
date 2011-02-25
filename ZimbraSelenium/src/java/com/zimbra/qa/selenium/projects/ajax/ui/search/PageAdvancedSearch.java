@@ -77,7 +77,11 @@ public class PageAdvancedSearch extends AbsTab {
 		throw new HarnessException(myPageName() + " does not have a list view");
 	}
 
-
+	@Override
+	public AbsPage zListItem(Action action, Button option, Button subOption ,String item)  throws HarnessException {
+	   throw new HarnessException(myPageName() + " does not have a list view");
+    }
+	
 	
 
 }
