@@ -255,10 +255,23 @@ public class DisplayMail extends AbsDisplay {
 
 		
 	}
+	
+	/**
+	 * Wait for Zimlets to be rendered in the message
+	 * @throws HarnessException
+	 */
+	public void zWaitForZimlets() throws HarnessException {
+		// TODO: don't sleep.  figure out a way to query the app if zimlets are applied
+		logger.info("zWaitForZimlets: sleep a bit to let the zimlets be applied");
+		SleepUtil.sleepLong();
+	}
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
 		logger.warn("implement me", new Throwable());
+		
+		zWaitForZimlets();
+		
 		return (true);
 	}
 
