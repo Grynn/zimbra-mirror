@@ -35,7 +35,7 @@ public class PageTasks extends AbsTab {
 		//public static final String taskbodyView = "css=div[id='zl__TKL__rows'][class='DwtListView-Rows']";
 		public static final String zTasksTab = "zb__App__Tasks";
 		public static final String zNewTask = "zb__TKL__NEW_MENU_left_icon";
-		
+
 	}
 
 	public PageTasks(AbsApplication application) {
@@ -110,7 +110,7 @@ public class PageTasks extends AbsTab {
 	}
 	public boolean isPresent(String itemName) throws HarnessException {
 		String itemLocator = Locators.taskListView
-				+ " td[width*='auto']:contains(" + itemName + ")";
+		+ " td[width*='auto']:contains(" + itemName + ")";
 
 		zWaitForElementPresent(itemLocator);
 		return true;
@@ -119,7 +119,7 @@ public class PageTasks extends AbsTab {
 
 	@Override
 	public AbsPage zListItem(Action action, String subject)
-			throws HarnessException {
+	throws HarnessException {
 		logger.info(myPageName() + " zListItem(" + action + ", " + subject
 				+ ")");
 
@@ -218,7 +218,7 @@ public class PageTasks extends AbsTab {
 					+ "@class");
 			if (image.equals("ImgCheckboxChecked"))
 				throw new HarnessException(
-						"Trying to check box, but it was already enabled");
+				"Trying to check box, but it was already enabled");
 
 			// Left-Click on the flag field
 			this.zClick(selectlocator);
@@ -241,7 +241,7 @@ public class PageTasks extends AbsTab {
 					+ "@class");
 			if (image.equals("ImgCheckboxUnchecked"))
 				throw new HarnessException(
-						"Trying to uncheck box, but it was already disabled");
+				"Trying to uncheck box, but it was already disabled");
 
 			// Left-Click on the flag field
 			this.zClick(selectlocator);
@@ -267,14 +267,14 @@ public class PageTasks extends AbsTab {
 	}
 	@Override
 	public AbsPage zListItem(Action action, Button option, Button subOption ,String item)
-			throws HarnessException {
+	throws HarnessException {
 		tracer.trace(action +" then "+ option + "," + subOption + " on item = "+ item);
 
 		throw new HarnessException("implement me!");
 	}
 	@Override
 	public AbsPage zListItem(Action action, Button option, String subject)
-			throws HarnessException {
+	throws HarnessException {
 		logger.info(myPageName() + " zListItem(" + action + ", " + option
 				+ ", " + subject + ")");
 
@@ -382,7 +382,7 @@ public class PageTasks extends AbsTab {
 
 		if (button == null)
 			throw new HarnessException("Button cannot be null!");
-		
+
 		String locator = null; // If set, this will be clicked
 		AbsPage page = null; // If set, this page will be returned
 
@@ -395,7 +395,7 @@ public class PageTasks extends AbsTab {
 
 			page = new FormTaskNew(this.MyApplication);
 
-			
+
 		} else if (button == Button.B_EDIT) {
 
 			locator = "zb__TKL__EDIT_left_icon";
@@ -508,11 +508,85 @@ public class PageTasks extends AbsTab {
 
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
-			throws HarnessException {
-		
-		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
+	throws HarnessException {
 
-		throw new HarnessException("implement me!");
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
+		if (pulldown == null)
+			throw new HarnessException("Pulldown cannot be null!");
+
+		if (option == null)
+			throw new HarnessException("Option cannot be null!");
+		// Default behavior variables
+		
+		String pulldownLocator = null; // If set, this will be expanded
+		String optionLocator = null; // If set, this will be clicked
+		AbsPage page = null; // If set, this page will be returned
+
+		if (pulldown == Button.B_TAG) {
+			if (option == Button.O_TAG_NEWTAG) {
+
+				pulldownLocator = "css=td[id$='__TAG_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+
+				optionLocator = "css=td[id$='__TAG_MENU|MENU|NEWTAG_title']";
+
+				page = new DialogTag(this.MyApplication, this);
+
+				// FALL THROUGH
+			} else if (option == Button.O_TAG_REMOVETAG) {
+
+				pulldownLocator = "css=td[id$='__TAG_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+
+				optionLocator = "css=td[id$='__TAG_MENU|MENU|REMOVETAG_title']";
+
+				page = null;
+
+				// FALL THROUGH
+			} else {
+				throw new HarnessException(
+						"no logic defined for pulldown/option " + pulldown
+						+ "/" + option);
+			}
+		} 
+		// Default behavior
+		if (pulldownLocator != null) {
+
+			// Make sure the locator exists
+			if (!this.sIsElementPresent(pulldownLocator)) {
+				throw new HarnessException("Button " + pulldown + " option "
+						+ option + " pulldownLocator " + pulldownLocator
+						+ " not present!");
+			}
+
+			this.zClick(pulldownLocator);
+
+			// If the app is busy, wait for it to become active
+			zWaitForBusyOverlay();
+
+			if (optionLocator != null) {
+
+				// Make sure the locator exists
+				if (!this.sIsElementPresent(optionLocator)) {
+					throw new HarnessException("Button " + pulldown
+							+ " option " + option + " optionLocator "
+							+ optionLocator + " not present!");
+				}
+
+				this.zClick(optionLocator);
+
+				// If the app is busy, wait for it to become active
+				zWaitForBusyOverlay();
+			}
+
+			// If we click on pulldown/option and the page is specified, then
+			// wait for the page to go active
+			if (page != null) {
+				page.zWaitForActive();
+			}
+		}
+		// Return the specified page, or null if not set
+		return (page);
+
+
 	}
 
 	public enum TaskStatus {
@@ -675,7 +749,7 @@ public class PageTasks extends AbsTab {
 				// <div id="zlif__TKL__258__se" style=""
 				// class="ImgCheckboxUnchecked"></div>
 				locator = itemLocator
-						+ "//div[contains(@class, 'ImgCheckboxUnchecked')]";
+				+ "//div[contains(@class, 'ImgCheckboxUnchecked')]";
 				item.gIsChecked = this.sIsElementPresent(locator);
 
 				// Is it tagged?
@@ -688,12 +762,12 @@ public class PageTasks extends AbsTab {
 				// <td width="19" id="zlif__TKL__258__pr"><center><div style=""
 				// class="ImgTaskHigh"></div></center></td>
 				locator = itemLocator
-						+ "//td[contains(@id, '__pr')]/center/div";
+				+ "//td[contains(@id, '__pr')]/center/div";
 				if (!this.sIsElementPresent(locator)) {
 					item.gPriority = "normal";
 				} else {
 					locator = "xpath=(" + itemLocator
-							+ "//td[contains(@id, '__pr')]/center/div)@class";
+					+ "//td[contains(@id, '__pr')]/center/div)@class";
 					attr = this.sGetAttribute(locator);
 					if (attr.equals("ImgTaskHigh")) {
 						item.gPriority = "high";
@@ -706,7 +780,7 @@ public class PageTasks extends AbsTab {
 				// <td width="19" class="Attach"><div id="zlif__TKL__258__at"
 				// style="" class="ImgBlank_16"></div></td>
 				locator = "xpath=(" + itemLocator
-						+ "//div[contains(@id, '__at')])@class";
+				+ "//div[contains(@id, '__at')])@class";
 				attr = this.sGetAttribute(locator);
 				if (attr.equals("ImgBlank_16")) {
 					item.gHasAttachments = false;
