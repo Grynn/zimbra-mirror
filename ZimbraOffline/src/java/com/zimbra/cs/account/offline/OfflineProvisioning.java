@@ -973,6 +973,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         String flavor = account.getAttr(A_offlineAccountFlavor, null);
         return flavor != null && flavor.equals("Gal");
     }
+    
+    public boolean isMountpointAccount(String accountId) throws ServiceException {
+        Account acct = getAccountById(accountId);
+        return (acct != null && isMountpointAccount(acct));
+    }
 
     public boolean isMountpointAccount(Account account) {
         return account.getAttr(A_offlineMountpointProxyAccountId, null) != null;
