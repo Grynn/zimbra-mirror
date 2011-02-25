@@ -42,7 +42,7 @@ public class PageBriefcase extends AbsTab {
 		public static final String zNewDocumentIconBtn = "id=zb__BCD__NEW_DOC_left_icon";
 		public static final String zNewSpreadsheetIconBtn = "id=zb__BCD__NEW_SPREADSHEET_left_icon";
 		public static final String zNewPresentationIconBtn = "id=zb__BCD__NEW_PRESENTATION_left_icon";
-
+		public static final String zRenameInput = "css=div[class^=RenameInput]>input";
 	}
 
 	public PageBriefcase(AbsApplication application) {
@@ -485,7 +485,6 @@ public class PageBriefcase extends AbsTab {
 		}
 		return page;
 	}
-
 	
 	@Override
 	public AbsPage zListItem(Action action, Button option, Button subOption ,String item)
@@ -499,8 +498,80 @@ public class PageBriefcase extends AbsTab {
 	public AbsPage zListItem(Action action, Button option, String subject)
 			throws HarnessException {
 		tracer.trace(action +" then "+ option +" on briefcase = "+ subject);
+		
+		logger.info(myPageName() + " zListItem(" + action + ", " + option
+				+ ", " + subject + ")");
 
-		throw new HarnessException("implement me!");
+		if (action == null)
+			throw new HarnessException("action cannot be null");
+		if (option == null)
+			throw new HarnessException("button cannot be null");
+		if (subject == null || subject.trim().length() == 0)
+			throw new HarnessException("docName cannot be null or blank");
+
+		AbsPage page = null;
+		String listLocator = Locators.briefcaseListView;
+		String rowLocator;
+		String itemlocator = null;
+
+		if (!this.sIsElementPresent(listLocator))
+			throw new HarnessException("List View Rows is not present "
+					+ listLocator);
+
+		itemlocator = listLocator + " td[width*='auto'] div:contains("
+				+ subject + ")";
+
+			if (action == Action.A_RIGHTCLICK) {
+
+			zWaitForElementPresent(itemlocator);
+
+			// Right-Click on the item
+			this.zRightClick(itemlocator);
+
+			// Now the ContextMenu is opened
+			// Click on the specified option
+
+			String optionLocator = null;
+
+			if (option == Button.B_RENAME) {
+
+				optionLocator = "css=td#zmi__Briefcase__RENAME_FILE_title:contains(Rename)";
+
+				page = null;
+
+			} else {
+				throw new HarnessException("implement action:" + action
+						+ " option:" + option);
+			}
+
+			// click on the option
+			this.zClick("css=td#zmi__Briefcase__RENAME_FILE_title:contains(Rename)");
+
+			this.zWaitForBusyOverlay();
+
+			// FALL THROUGH
+
+		} else {
+			throw new HarnessException("implement me!  action = " + action);
+		}
+
+		if (page != null) {
+			page.zWaitForActive();
+		}
+
+		// Default behavior
+		return (page);
+	}
+	
+	public void rename(String text) throws HarnessException {
+		// ClientSessionFactory.session().selenium().getEval("var x = selenium.browserbot.findElementOrNull(\""+Locators.zFrame+"\");if(x!=null)x=x.contentWindow.document.body;if(browserVersion.isChrome){x.textContent='"+text+"';}else if(browserVersion.isIE){x.innerText='"+text+"';}");
+		logger.info("renaming to: " + text);
+		zSelectWindow("Zimbra: Briefcase");
+		//sSelectFrame("relative=top");
+		sType(Locators.zRenameInput, text);
+ 	    sFocus(Locators.zRenameInput);
+ 	    //hit <Enter> key
+ 	    sKeyPressNative("10");	   
 	}
 
 	public void isOpenDocLoaded(String windowName, String text)
