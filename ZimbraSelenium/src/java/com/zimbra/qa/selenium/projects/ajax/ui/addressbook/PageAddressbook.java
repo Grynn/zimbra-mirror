@@ -122,7 +122,7 @@ public class PageAddressbook extends AbsTab {
 		}
 
 		GeneralUtility.waitForElementPresent(this,
-		      PageMain.Locators.zAppbarBriefcase);
+		      PageMain.Locators.zAppbarContact);
 
 		zClick(PageMain.Locators.zAppbarContact);
 
