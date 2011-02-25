@@ -166,10 +166,12 @@ function(account, now, isDragProxy) {
 			if (account.type == ZaItem.ACCOUNT) {
 				status = ZaAccount._accountStatus(account.attrs[ZaAccount.A_accountStatus]);
 			} else if (account.type == ZaItem.DL) {
-				status = account.attrs.zimbraMailStatus;
+				status = ZaDistributionList.getDLStatus(account.attrs[ZaDistributionList.A_mailStatus]);
 			}else if ( account.type == ZaItem.RESOURCE) {
 				status = ZaResource.getAccountStatusLabel(account.attrs[ZaAccount.A_accountStatus]);
-			} 
+			}else if (account.type == ZaItem.DOMAIN) {
+				status =  ZaDomain._domainStatus(account.attrs[ZaDomain.A_zimbraDomainStatus]);
+			}
 			html[idx++] = status;
 			html[idx++] = "</nobr></td>";		
 		}else if (field == ZaAccount.A_zimbraLastLogonTimestamp) {
