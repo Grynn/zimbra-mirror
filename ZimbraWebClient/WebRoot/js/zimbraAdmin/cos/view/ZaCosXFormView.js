@@ -267,10 +267,10 @@ ZaCosXFormView.SKIN_TAB_ATTRS = [ZaCos.A_zimbraPrefSkin,ZaCos.A_zimbraAvailableS
 ZaCosXFormView.SKIN_TAB_RIGHTS = [];
 
 ZaCosXFormView.ZIMLET_TAB_ATTRS = [ZaCos.A_zimbraZimletAvailableZimlets];
-ZaCosXFormView.ZIMLET_TAB_RIGHTS = [];
+ZaCosXFormView.ZIMLET_TAB_RIGHTS = [ZaCos.RIGHT_GET_ZIMLET, ZaCos.RIGHT_LIST_ZIMLET];
 
 ZaCosXFormView.SERVERPOOL_TAB_ATTRS = [ZaCos.A_zimbraMailHostPool];
-ZaCosXFormView.SERVERPOOL_TAB_RIGHTS = [];
+ZaCosXFormView.SERVERPOOL_TAB_RIGHTS = [ZaCos.RIGHT_GET_HOSTNAME];
 
 ZaCosXFormView.ADVANCED_TAB_ATTRS = [ZaCos.A_zimbraAttachmentsBlocked,
 	ZaCos.A_zimbraMailQuota,

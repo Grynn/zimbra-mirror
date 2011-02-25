@@ -192,6 +192,11 @@ ZaCos.A_zimbraPasswordLockoutDuration = "zimbraPasswordLockoutDuration";
 ZaCos.A_zimbraPasswordLockoutMaxFailures = "zimbraPasswordLockoutMaxFailures";
 ZaCos.A_zimbraPasswordLockoutFailureLifetime = "zimbraPasswordLockoutFailureLifetime";
 
+// right
+ZaCos.RIGHT_LIST_ZIMLET = "listZimlet";
+ZaCos.RIGHT_GET_ZIMLET = "getZimlet";
+ZaCos.RIGHT_GET_HOSTNAME = "zimbraVirtualHostname";
+
 ZaCos.A_zimbraFreebusyExchangeUserOrg = "zimbraFreebusyExchangeUserOrg" ;
 ZaCos.cacheCounter = 0;
 ZaCos.staticCosByNameCacheTable={};
