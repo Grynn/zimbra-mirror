@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 
 
 /**
@@ -223,8 +224,11 @@ public class DisplayMail extends AbsDisplay {
 			locator = "css=tr[id$='__MSG_hdrTableTopRow'] td[class~='SubjectCol']";
 
 		} else if ( field == Field.To ) {
-			
-			locator = "css=tr[id$='_to'] td[class~='LabelColValue'] span[id$='_com_zimbra_email'] span span";
+			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+			   locator = "css=tr[id$='_to'] td[class~='LabelColValue'] span[id$='_com_zimbra_email']";
+			} else {
+			   locator = "css=tr[id$='_to'] td[class~='LabelColValue'] span[id$='_com_zimbra_email'] span span";
+			}
 
 		} else {
 			
