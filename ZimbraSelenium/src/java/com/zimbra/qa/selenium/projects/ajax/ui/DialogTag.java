@@ -7,6 +7,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
 
+
 /**
  * Represents a "New Tag", "Rename Tag" dialog box
  * <p>
@@ -126,7 +127,24 @@ public class DialogTag extends AbsDialog {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		return ( this.sIsElementPresent(Locators.zTagDialogId) );
+
+		logger.info(myPageName() + " zIsActive()");
+
+		String locator = "id="+ Locators.zTagDialogId;
+
+		if ( !this.sIsElementPresent(locator) ) {
+			return (false); // Not even present
+		}
+
+		if ( !this.zIsVisiblePerPosition(locator, 0, 0) ) {
+			return (false);	// Not visible per position
+		}
+
+		// Yes, visible
+		logger.info(myPageName() + " zIsVisible() = true");
+		return (true);
+
+		//return ( this.sIsElementPresent(Locators.zTagDialogId) );
 	}
 
 
