@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.TaskItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -42,11 +43,13 @@ public class CreateTask extends AjaxCommonTest {
 		taskNew.zFillField(Field.Subject, subject);
 		taskNew.zFillField(Field.Body, body);
 		taskNew.zSubmit();
-		
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+
 		// Get the list of tasks in the view
 		List<TaskItem> tasks = app.zPageTasks.zGetTasks();
 		ZAssert.assertNotNull(tasks, "Verify the list of tasks exists");
-		
+
 		// Iterate over the task list, looking for the new task
 		TaskItem found = null;
 		for (TaskItem t : tasks ) {
@@ -56,7 +59,7 @@ public class CreateTask extends AjaxCommonTest {
 				found = t;
 			}
 		}
-		
+
 		ZAssert.assertNotNull(found, "Verify the new task is in the task list");
 
 	}
