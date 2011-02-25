@@ -103,7 +103,7 @@ ZaZimlet._handleGetAllResources = function(list, callback) {
         // NOTE: Setting an ID on the includes will replace the old SCRIPT
         // NOTE: tags with the new ones when the resources are requested
         // NOTE: again.
-        includes.push( { src:["/res/",zimlet.name,".js"].join(""),id:"res_"+zimlet.name } );
+        includes.push( { src:["/res/",zimlet.name,".js?v=",appVers,ZaZimbraAdmin.LOCALE_QS].join(""),id:"res_"+zimlet.name } );
     }
     var baseurl = appContextPath;
     var proxy = null;
@@ -134,6 +134,27 @@ function () {
     			});	
 	}
 	return des;
+}
+
+ZaZimlet.prototype.getLabel = 
+function (){
+	var label = null;
+	var name = this[ZaZimlet.A_name];
+
+	if(this.label){
+		label = this.label;
+                label = (label ||"").replace(ZaZimlet.__RE_MSG, function($0, $1) {
+                        var res = window[name];
+                        return (res && res[$1]) || $0;
+                        });
+
+	}
+	
+	if(!label){
+		var res = window[name];
+		label = res["label"] || res["zimletLabel"] || name;
+	}
+	return label;
 }
 
 ZaZimlet.prototype.enable = function (enabled, callback) {

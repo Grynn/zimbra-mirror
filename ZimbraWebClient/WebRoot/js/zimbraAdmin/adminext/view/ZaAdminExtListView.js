@@ -77,7 +77,7 @@ function(zimlet, now, isDragProxy) {
 		if(field == ZaZimlet.A_name) {	
 			// name
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
-			html[idx++] = AjxStringUtil.htmlEncode(zimlet[ZaZimlet.A_name]);
+			html[idx++] = AjxStringUtil.htmlEncode(zimlet.getLabel());
 			html[idx++] = "</nobr></td>";
 		} else if(field == ZaZimlet.A_zimbraZimletDescription) {	
 			// description
