@@ -13,10 +13,10 @@ ZIMBRA_HOME ?= /opt/zimbra
 
 ifdef BETA
 	include $(CURL_ROOT)/../beta_versions.def
-	PATCH	:= patch -N -g0 -p1 < ../patches/krb5-7200.patch; patch -N -g0 -p1 < ../patches/proxy.patch; patch -N -g0 -p1 < ../patches/f13-lrt.patch;
+	PATCH	:= patch -N -g0 -p1 < ../patches/krb5-7200.patch;
 else
 	include $(CURL_ROOT)/../versions.def
-	PATCH	:= patch -N -g0 -p1 < ../patches/krb5-7200.patch; patch -N -g0 -p1 < ../patches/proxy.patch; patch -N -g0 -p1 < ../patches/f13-lrt.patch;
+	PATCH	:= patch -N -g0 -p1 < ../patches/krb5-7200.patch;
 endif
 
 
