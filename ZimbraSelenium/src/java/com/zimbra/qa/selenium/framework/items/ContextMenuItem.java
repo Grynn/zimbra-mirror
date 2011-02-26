@@ -15,7 +15,7 @@ public class ContextMenuItem {
 	//FIXME
 	public static final ContextMenuItem C_SEPARATOR = new ContextMenuItem("css=div[id='DWT']","","","");
     
-	public final String locator;
+	public  String locator;
 	public final String image;
 	public final String text;
 	public final String shortcut;
