@@ -348,6 +348,7 @@ sub updateRsyslogd {
       s/;local0.none//g;
       s/;local1.none//g;
       s/;auth.none//g;
+      s/;mail.none//g;
       s/^\*\.\*;auth,authpriv.none/\*\.\*;auth,authpriv.none;local0.none;local1.none;mail.none/;
       s/^\*\.=debug;\\/\*.=debug;\\\n\tlocal0,local1.none;\\/;
       s/^\*\.=info;\*\.=notice;\*\.=warn;\\/\*.=info;\*.=notice;\*.=warn;\\\n\tlocal0,local1.none;\\/;
