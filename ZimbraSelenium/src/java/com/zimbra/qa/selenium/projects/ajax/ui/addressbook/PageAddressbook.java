@@ -48,8 +48,8 @@ public class PageAddressbook extends AbsTab {
 		public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("zmi__Contacts__TAG_MENU|MENU|REMOVETAG","Remove Tag","div[class='ImgDeleteTag']","");
 		
 		//TODO: Need fixed id for the following:
-		public static final ContextMenuItem CONTACT_SUB_RECEIVED_FROM_CONTACT = new ContextMenuItem("zmi__Contacts__BROWSE","Advanced Search","div[class='ImgSearchBuilder']","");
-	    public static final ContextMenuItem CONTACT_SUB_SENT_TO_CONTACT = new ContextMenuItem("zmi__Contacts__BROWSE","Advanced Search","div[class='ImgSearchBuilder']","");
+		public static  ContextMenuItem CONTACT_SUB_RECEIVED_FROM_CONTACT = new ContextMenuItem(null,"Received From Contact","div[class='ImgSearch']","");
+	    public static  ContextMenuItem CONTACT_SUB_SENT_TO_CONTACT = new ContextMenuItem(null,"Sent To Contact","div[class='ImgSearch']","");
 	}
 	
 	public PageAddressbook(AbsApplication application) {
@@ -116,14 +116,12 @@ public class PageAddressbook extends AbsTab {
 
 		tracer.trace("Navigate to "+ this.myPageName());
 
-		// Click on Addressbook icon
-		if ( !sIsElementPresent(PageMain.Locators.zAppbarContact) ) {
+		if (!GeneralUtility.waitForElementPresent(this,PageMain.Locators.zAppbarContact))  {
 			throw new HarnessException("Can't locate addressbook icon");
 		}
 
-		GeneralUtility.waitForElementPresent(this,
-		      PageMain.Locators.zAppbarContact);
-
+		
+		// Click on Addressbook icon
 		zClick(PageMain.Locators.zAppbarContact);
 
 		zWaitForActive();
@@ -278,7 +276,8 @@ public class PageAddressbook extends AbsTab {
 			pulldownLocator = null;	
 			optionLocator = null;
 			page = null;
-
+			
+			zWaitForBusyOverlay();
 			// FALL THROUGH
 
 		 } else {
@@ -399,19 +398,36 @@ public class PageAddressbook extends AbsTab {
 			}
 			else if (option == Button.B_SEARCH) {
 				cmi=CONTEXT_MENU.CONTACT_SEARCH;
-				
+				String previousSiblingId="zmi__Contacts__TAG_MENU|MENU";
+		        String parentId=sGetNextSiblingId(previousSiblingId);
+		        int    parentIdInt = 0;
+		        String prefix="DWT";
+		        
+		        try {
+		        	//DWTXXXX
+		        	// 3 is for DWT
+		        	parentIdInt = Integer.parseInt(parentId.substring(3, parentId.length()));
+		        	
+		        }
+		        catch (Exception e) {
+		        	throw new HarnessException("cannot find the id");
+		        }
 				
 				if (subOption == Button.O_SEARCH_MAIL_SENT_TO_CONTACT) {
 					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_SENT_TO_CONTACT;
-				    //TODO change DisplayMail constructor to public??					
-					//page = new DisplayMail(this.MyApplication); 
+		            //locator = "css=div[id=" + sGetNextSiblingId(previousSiblingId) + "]" + sub_cmi.locator;
+				    sub_cmi.locator=prefix + (parentIdInt + 3);
+					page = ((AppAjaxClient)MyApplication).zPageMail;
+				    
 				}
 			
 				else if (subOption == Button.O_SEARCH_MAIL_RECEIVED_FROM_CONTACT) {
 					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_RECEIVED_FROM_CONTACT;
-					//TODO change DisplayMail constructor to public??
-					//page = new DisplayMail(this.MyApplication); 
+					//locator = "css=div[id=" + sGetNextSiblingId(previousSiblingId) + "]" + sub_cmi.locator;
+					sub_cmi.locator=prefix + (parentIdInt + 2);			
+					page = ((AppAjaxClient)MyApplication).zPageMail;
 				}
+					
 			}
 			id = cmi.locator;
 			locator = "id="+ id;
@@ -439,8 +455,8 @@ public class PageAddressbook extends AbsTab {
 			// make sure the sub context menu enabled			
 			zWaitForElementEnabled(id);
 			
-	
-        }
+        } 
+			
         
 		// Click option
 		this.zClick(locator);

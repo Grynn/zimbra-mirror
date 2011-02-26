@@ -177,6 +177,22 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
+	 * getNextSiblingId()
+	 * 
+	 * @param 
+	 */
+	public String sGetNextSiblingId(String id) {
+		String sibLingid = ClientSessionFactory
+				.session()
+				.selenium()
+				.getEval(
+		"this.browserbot.getUserWindow().document.getElementById('" + id + "')" + ".nextSibling.id" );
+		logger.info("sGetNextSiblingId( " + id + ") = " + sibLingid);
+		return (sibLingid);
+	}
+
+	
+	/**
 	 * DefaultSelenium.getSelectedId()
 	 * 
 	 * @param locator

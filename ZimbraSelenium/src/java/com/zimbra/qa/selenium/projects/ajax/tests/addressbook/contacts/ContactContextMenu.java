@@ -28,12 +28,8 @@ public class ContactContextMenu extends AjaxCommonTest  {
 		
 	}
 	
-	private ContactItem createSelectAContactItem(String ... tagIdArray) throws HarnessException {
-
+	private ContactItem createSelectAContactItem(String firstName, String lastName, String email, String ... tagIdArray ) throws HarnessException {
 		String tagParam ="";
-		String firstName = "first" + ZimbraSeleniumProperties.getUniqueString();		
-		String lastName = "last" + ZimbraSeleniumProperties.getUniqueString();
-	    String email = "email" +  ZimbraSeleniumProperties.getUniqueString() + "@zimbra.com";
 		//default value for file as is last, first
 		String fileAs = lastName + ", " + firstName;
 	
@@ -57,6 +53,17 @@ public class ContactContextMenu extends AjaxCommonTest  {
         app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
                  
         return contactItem;		
+	
+		
+	}
+
+	private ContactItem createSelectARandomContactItem(String ... tagIdArray) throws HarnessException {
+
+		String firstName = "first" + ZimbraSeleniumProperties.getUniqueString();		
+		String lastName = "last" + ZimbraSeleniumProperties.getUniqueString();
+	    String email = "email" +  ZimbraSeleniumProperties.getUniqueString() + "@zimbra.com";
+	
+	    return createSelectAContactItem(firstName, lastName, email, tagIdArray );
 	}
 	
 	
@@ -64,7 +71,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 			groups = { "smoke" })
 	public void ShowContextMenu() throws HarnessException {
 		
-		ContactItem contactItem = createSelectAContactItem();
+		ContactItem contactItem = createSelectARandomContactItem();
 		app.zPageAddressbook.zSyncDesktopToZcs();
 
 		// Select the item
@@ -103,9 +110,9 @@ public class ContactContextMenu extends AjaxCommonTest  {
 
 	@Test(	description = "Right click then click delete",
 			groups = { "smoke" })
-	public void ClickDelete() throws HarnessException {
+	public void Delete() throws HarnessException {
 		
-		ContactItem contactItem = createSelectAContactItem();
+		ContactItem contactItem = createSelectARandomContactItem();
 		app.zPageAddressbook.zSyncDesktopToZcs();
 
         //select delete option
@@ -134,11 +141,11 @@ public class ContactContextMenu extends AjaxCommonTest  {
 
 	@Test(	description = "Right click then click move",
 			groups = { "functional" })
-	public void ClickMove() throws HarnessException {
+	public void Move() throws HarnessException {
 		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
 		
 		
-		ContactItem contactItem = createSelectAContactItem();		
+		ContactItem contactItem = createSelectARandomContactItem();		
 		app.zPageAddressbook.zSyncDesktopToZcs();
 		            
         //select move option
@@ -166,11 +173,11 @@ public class ContactContextMenu extends AjaxCommonTest  {
    	}
 	@Test(	description = "Right click then click move, also verify toasted message",
 			groups = { "smoke" })
-	public void ClickMoveVerifyToastedMessage() throws HarnessException {
+	public void MoveVerifyToastedMessage() throws HarnessException {
 		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
 		
 				
-		ContactItem contactItem = createSelectAContactItem();
+		ContactItem contactItem = createSelectARandomContactItem();
 		app.zPageAddressbook.zSyncDesktopToZcs();
 		            
         //select move option
@@ -206,9 +213,9 @@ public class ContactContextMenu extends AjaxCommonTest  {
 
 	@Test(	description = "Right click then click Edit",
 			groups = { "smoke" })
-	public void ClickEdit() throws HarnessException {
+	public void Edit() throws HarnessException {
 		
-		ContactItem contactItem = createSelectAContactItem();
+		ContactItem contactItem = createSelectARandomContactItem();
 		app.zPageAddressbook.zSyncDesktopToZcs();
 		//Click Edit contact	
         FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_EDIT, contactItem.fileAs);        
@@ -260,9 +267,9 @@ public class ContactContextMenu extends AjaxCommonTest  {
 	
 	@Test(	description = "Right click then click New Email",
 			groups = { "smoke" })
-	public void ClickNewEmail() throws HarnessException {
+	public void NewEmail() throws HarnessException {
 	
-		ContactItem contactItem = createSelectAContactItem();
+		ContactItem contactItem = createSelectARandomContactItem();
 		app.zPageAddressbook.zSyncDesktopToZcs();
 
 		//Click New Email
@@ -280,9 +287,9 @@ public class ContactContextMenu extends AjaxCommonTest  {
 
 	@Test(	description = "Right click then click Advanced Search",
 			groups = { "smoke" })
-	public void ClickAdvancedSearch() throws HarnessException {
+	public void AdvancedSearch() throws HarnessException {
 	
-		ContactItem contactItem = createSelectAContactItem();
+		ContactItem contactItem = createSelectARandomContactItem();
 		app.zPageAddressbook.zSyncDesktopToZcs();
 
 		//Click Advanced Search
@@ -295,8 +302,8 @@ public class ContactContextMenu extends AjaxCommonTest  {
 
 	@Test(	description = "Right click then click Print",
 			groups = { "smoke-not-run-for-now" })	
-	public void ClickPrint() throws HarnessException {
-		ContactItem contactItem = createSelectAContactItem();
+	public void Print() throws HarnessException {
+		ContactItem contactItem = createSelectARandomContactItem();
 		app.zPageAddressbook.zSyncDesktopToZcs();
 
         PagePrint pagePrint = (PagePrint) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_PRINT, contactItem.fileAs);        
@@ -314,7 +321,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 	@Test(	description = "Right click then click Tag Contact->New Tag",
 			groups = { "smoke" })	
 	public void ClickTagContactNewTag() throws HarnessException {
-		ContactItem contactItem = createSelectAContactItem();
+		ContactItem contactItem = createSelectARandomContactItem();
 		app.zPageAddressbook.zSyncDesktopToZcs();
 
 		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
@@ -360,7 +367,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 		String tagid = app.zGetActiveAccount().soapSelectValue("//mail:CreateTagResponse/mail:tag", "id");
 
 				
-		ContactItem contactItem = createSelectAContactItem(tagid);
+		ContactItem contactItem = createSelectARandomContactItem(tagid);
 		app.zPageAddressbook.zSyncDesktopToZcs();
 
       //click Tag Contact->Remove Tag	
@@ -371,7 +378,8 @@ public class ContactContextMenu extends AjaxCommonTest  {
       // 2. Then the next step is verifying the toast message, if using the zSyncDesktopToZcs(),
       // it will wait for spinner to disappear, which could cause the toast
       // message to disappear before the spinner disappears
-      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      //TODO: remove it as checked in ???????????????????????????????????????????????????????????
+      //GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
      	
 		app.zGetActiveAccount().soapSend(
 				"<GetContactsRequest xmlns='urn:zimbraMail'>" +
@@ -394,5 +402,40 @@ public class ContactContextMenu extends AjaxCommonTest  {
 	
 	}
 
+	@Test(	description = "Right click then click Find Emails->Sent to contact",
+			groups = { "smoke" })
+	public void FindEmailsSentToContact() throws HarnessException {
+				
+	    //Create  email sent to this contacts	
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		
+		// Send the message from AccountA to the ZWC user
+		ZimbraAccount.AccountA().soapSend(
+					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+						"<m>" +
+							"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+							"<su>"+ subject +"</su>" +
+							"<mp ct='text/plain'>" +
+								"<content>"+ "body" + ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+							"</mp>" +
+						"</m>" +
+					"</SendMsgRequest>");
+
+		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+
+		ContactItem contactItem = createSelectAContactItem(app.zGetActiveAccount().DisplayName, app.zGetActiveAccount().clientAccountName, app.zGetActiveAccount().EmailAddress);
+		app.zPageAddressbook.zSyncDesktopToZcs();		
+		
+		//Click Find Emails->Sent To Contact
+        app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_SEARCH, Button.O_SEARCH_MAIL_SENT_TO_CONTACT , contactItem.fileAs);
+
+        
+        // Get all the messages in the inbox
+		List<ConversationItem> messages = app.zPageMail.zListGetConversations();
+		ZAssert.assertNotNull(messages, "Verify the message list exists");
+
+		// TODO: "Verify the message is in the inbox");
+                
+	}
 }
 
