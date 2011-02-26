@@ -24,8 +24,8 @@ public class DialogWarning extends AbsDialog {
 		
 		public static DialogWarningID SendLink = new DialogWarningID("css=div[class=DwtConfirmDialog]");
 		
-		private String Id;
-		private DialogWarningID(String id) {
+		protected String Id;
+		protected DialogWarningID(String id) {
 			Id = id;
 		}
 	}

@@ -162,7 +162,8 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 			item = new FolderItem();
 			item.setId(fElement.getAttribute("id"));
 			item.setName(fElement.getAttribute("name"));
-			
+			item.setParentId(fElement.getAttribute("l"));
+
 			return (item);
 			
 		} catch (NumberFormatException e) {

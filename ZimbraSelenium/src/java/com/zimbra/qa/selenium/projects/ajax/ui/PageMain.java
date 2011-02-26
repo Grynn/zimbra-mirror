@@ -5,6 +5,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogError.DialogErrorID;
 
 
 /**
@@ -39,6 +40,12 @@ public class PageMain extends AbsTab {
 	public Toaster zGetToaster() throws HarnessException {
 		return (new Toaster(this.MyApplication));
 	}
+	
+	public DialogError zGetErrorDialog(DialogErrorID zimbra) {
+		return (new DialogError(zimbra, this.MyApplication, this));
+	}
+
+
 
 	public boolean zIsZimletLoaded() throws HarnessException {
 		return ("true".equals(sGetEval("this.browserbot.getUserWindow().top.appCtxt.getZimletMgr().loaded")));
