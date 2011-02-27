@@ -211,6 +211,11 @@ public class ZimbraAccount {
 		put("zimbraPrefWarnOnExit","FALSE");
  	}};
 
+ 	/**
+ 	 * A list of domains that exist on the server, so the harness doesn't need to resend GetDomainrequest/CreateDomainRequest
+ 	 */
+ 	protected static List<String> domainList = new ArrayList<String>();
+ 	
 	/**
 	 * Creates the account on the ZCS using CreateAccountRequest
 	 */
@@ -220,23 +225,29 @@ public class ZimbraAccount {
 			// Make sure domain exists
 			String domain = EmailAddress.split("@")[1];
 			
-			// Check if the domain exists
-			ZimbraAdminAccount.GlobalAdmin().soapSend(
-					"<GetDomainRequest xmlns='urn:zimbraAdmin'>" +
-                		"<domain by='name'>"+ domain +"</domain>" +
-                	"</GetDomainRequest>");
-			Element response = ZimbraAdminAccount.GlobalAdmin().soapSelectNode("//admin:GetDomainResponse/admin:domain", 1);
-			
-			if ( response == null ) {
+			if ( !domainList.contains(domain) ) {
 
-				// If the domain does not exist, create it
+				// Check if the domain exists
 				ZimbraAdminAccount.GlobalAdmin().soapSend(
-						"<CreateDomainRequest xmlns='urn:zimbraAdmin'>" +
-		                	"<name>"+ domain +"</name>" +
-		                "</CreateDomainRequest>");
-				
-			}	
-			
+							"<GetDomainRequest xmlns='urn:zimbraAdmin'>"
+						+		"<domain by='name'>"+ domain +"</domain>"
+						+	"</GetDomainRequest>");
+				Element response = ZimbraAdminAccount.GlobalAdmin().soapSelectNode("//admin:GetDomainResponse/admin:domain", 1);
+
+				if ( response == null ) {
+
+					// If the domain does not exist, create it
+					ZimbraAdminAccount.GlobalAdmin().soapSend(
+							"<CreateDomainRequest xmlns='urn:zimbraAdmin'>"
+						+		"<name>"+ domain +"</name>"
+						+	"</CreateDomainRequest>");
+
+				}	
+
+				domainList.add(domain);
+
+			}
+
 
 			// Build the list of default preferences
 			StringBuilder prefs = new StringBuilder();
@@ -245,32 +256,45 @@ public class ZimbraAccount {
     		}
     		prefs.append(String.format("<a n='%s'>%s</a>", "displayName", DisplayName));
 
+    		// Create the account
 			ZimbraAdminAccount.GlobalAdmin().soapSend(
-					"<CreateAccountRequest xmlns='urn:zimbraAdmin'>" +
-			        	"<name>"+ EmailAddress +"</name>" +
-			        	"<password>"+ Password +"</password>" +
-			        	prefs.toString() + 
-			        "</CreateAccountRequest>");
+					"<CreateAccountRequest xmlns='urn:zimbraAdmin'>"
+				+		"<name>"+ EmailAddress +"</name>"
+				+		"<password>"+ Password +"</password>"
+				+		prefs.toString()
+				+	"</CreateAccountRequest>");
 			
 			Element[] createAccountResponse = ZimbraAdminAccount.GlobalAdmin().soapSelectNodes("//admin:CreateAccountResponse");
+			
+			
 			if ( (createAccountResponse == null) || (createAccountResponse.length == 0)) {
+				
 				logger.error("Error occured during account provisioning, perhaps account already exists: "+ EmailAddress);
 				ZimbraAdminAccount.GlobalAdmin().soapSend(
-						"<GetAccountRequest xmlns='urn:zimbraAdmin'>" +
-							"<account by='name'>"+ EmailAddress + "</account>" +
-						"</GetAccountRequest>");
+						"<GetAccountRequest xmlns='urn:zimbraAdmin'>"
+					+		"<account by='name'>"+ EmailAddress + "</account>"
+					+	"</GetAccountRequest>");
+				
 				Element[] getAccountResponse = ZimbraAdminAccount.GlobalAdmin().soapSelectNodes("//admin:GetAccountResponse");
+				
+				
 				if ( (getAccountResponse == null) || (getAccountResponse.length == 0)) {
+					
 					logger.error("Error occured during get account provisioning.  Now I'm really confused");
+					
 				} else {
+					
 					ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "id");
 					ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
 					ZimbraPrefLocale = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraPrefLocale']", null);
+					
 				}
 			} else {
+				
 				ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "id");
 				ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
 				ZimbraPrefLocale = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraPrefLocale']", null);
+				
 
 			}
 			
@@ -286,10 +310,14 @@ public class ZimbraAccount {
 
 			
 		} catch (HarnessException e) {
+		
 			logger.error("Unable to provision account: "+ EmailAddress, e);
 			ZimbraId = null;
 			ZimbraMailHost = null;
+			
 		}
+		
+		
 		return (this);
 	}
 	
