@@ -318,6 +318,11 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 					colSizes:["auto"],numCols:1,id:"global_mta_tab",
 					items: [
 						{type:_ZA_TOP_GROUPER_,label:ZaMsg.Global_MTA_AuthenticationGrp,
+							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+								[ZaGlobalConfig.A_zimbraMtaAuthEnabled,
+								ZaGlobalConfig.A_zimbraMtaTlsAuthOnly]]],
+							visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraMtaAuthEnabled,
+								ZaGlobalConfig.A_zimbraMtaTlsAuthOnly],
 							items:[
 							  	{ ref: ZaGlobalConfig.A_zimbraMtaAuthEnabled, type: _CHECKBOX_,
 							   	  label:ZaMsg.NAD_MTA_Authentication,
@@ -334,6 +339,20 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 							 ]
 						},
 						{type:_ZA_TOP_GROUPER_,label:ZaMsg.Global_MTA_NetworkGrp,id:"mta_network_group",
+                                                        visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                                                                [ZaGlobalConfig.A_zimbraSmtpHostname,
+								ZaGlobalConfig.A_zimbraSmtpPort,
+								ZaGlobalConfig.A_zimbraMtaRelayHost,
+								ZaGlobalConfig.A_zimbraDNSCheckHostname,
+								ZaGlobalConfig.A_zimbraMtaMyNetworks,
+                                                                ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled]]],
+                                                        visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraSmtpHostname,
+                                                                ZaGlobalConfig.A_zimbraSmtpPort,
+								ZaGlobalConfig.A_zimbraMtaRelayHost,
+								ZaGlobalConfig.A_zimbraDNSCheckHostname,
+								ZaGlobalConfig.A_zimbraMtaMyNetworks,
+								ZaGlobalConfig.A_zimbraMtaDnsLookupsEnabled
+                                                        ],
 							items:[
 								{ ref: ZaGlobalConfig.A_zimbraSmtpHostname, type: _REPEAT_,
 						  	  		label: ZaMsg.LBL_zimbraSmtpHostname,
@@ -345,7 +364,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 									showAddOnNextRow:true,
 									addButtonLabel:ZaMsg.Add_zimbraSmtpHostname, 
 									removeButtonLabel:ZaMsg.Remove_zimbraSmtpHostname,
-									removeButtonCSSStyle: "margin-left: 50px",							  		
+									removeButtonCSSStyle: "margin-left: 50px",
+									visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,ZaGlobalConfig.A_zimbraSmtpHostname]],
+									visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraSmtpHostname],
 							  		items: [
 										{ ref:".", type: _TEXTFIELD_, label:null,labelLocation:_NONE_,
 								  			toolTipContent: ZaMsg.tt_zimbraSmtpHostname
@@ -353,7 +374,9 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 							  		]
 						  		},
 								{ ref: ZaGlobalConfig.A_zimbraSmtpPort, type: _OUTPUT_,
-								  label: ZaMsg.NAD_MTA_WebMailPort
+								  label: ZaMsg.NAD_MTA_WebMailPort,
+                                                                        visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,ZaGlobalConfig.A_zimbraSmtpHostname]],
+                                                                        visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraSmtpHostname],
 							    },
 								{ref:ZaGlobalConfig.A_zimbraMtaRelayHost,label:ZaMsg.NAD_MTA_RelayMTA,labelLocation:_LEFT_,											
 							    	type:_HOSTPORT_,
@@ -386,6 +409,12 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 						},
 					       
 					 	{type:_ZA_TOP_GROUPER_,label:ZaMsg.Global_MTA_MilterServer,
+                                                        visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                                                                [ZaGlobalConfig.A_zimbraMilterBindPort,
+                                                                ZaGlobalConfig.A_zimbraMilterServerEnabled]]],
+                                                        visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraMilterBindPort,
+                                                                ZaGlobalConfig.A_zimbraMilterServerEnabled
+                                                        ],
                                                         items:[
                                                                 { ref: ZaGlobalConfig.A_zimbraMilterBindPort, type: _OUTPUT_,
                                                                   label: ZaMsg.NAD_MTA_MilterBindPort
@@ -397,6 +426,12 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                                                 },
 
 						{type:_ZA_TOP_GROUPER_,label:ZaMsg.Global_MTA_Messages,
+                                                        visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                                                                [ZaGlobalConfig.A_zimbraMtaMaxMessageSize,
+                                                                ZaGlobalConfig.A_zimbraSmtpSendAddOriginatingIP]]],
+                                                        visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraMtaMaxMessageSize,
+								ZaGlobalConfig.A_zimbraSmtpSendAddOriginatingIP
+                                                        ],
 							items:[
 								{ ref: ZaGlobalConfig.A_zimbraMtaMaxMessageSize, type: _TEXTFIELD_,
 								  label: ZaMsg.NAD_MTA_MaxMsgSize, width: "6em"
@@ -407,6 +442,14 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 							]
 						},
 						{type:_ZA_TOP_GROUPER_,label: ZaMsg.NAD_MTA_ProtocolChecks,
+                                                	visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                                                        	[ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname,
+                                                        	ZaGlobalConfig.A_zimbraMtaRejectNonFqdnHostname,
+                                                        	ZaGlobalConfig.A_zimbraMtaRejectNonFqdnSender]]],
+                                                	visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraMtaRejectUnknownClient,
+                                                        	ZaGlobalConfig.A_zimbraMtaRejectUnknownHostname,
+                                                        	ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain
+                                                	],
 							items:[
 						  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname, type: _CHECKBOX_,
 						  	  label: ZaMsg.NAD_MTA_reject_invalid_hostname
@@ -420,6 +463,14 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 						  	}
 						]},
 						{ type: _ZA_TOP_GROUPER_, label: ZaMsg.NAD_MTA_DnsChecks,
+                        				visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                                                		[ZaGlobalConfig.A_zimbraMtaRejectUnknownClient,
+                                                		ZaGlobalConfig.A_zimbraMtaRejectUnknownHostname,
+                                                		ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain]]],
+							visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraMtaRejectUnknownClient,
+								ZaGlobalConfig.A_zimbraMtaRejectUnknownHostname,
+								ZaGlobalConfig.A_zimbraMtaRejectUnknownSenderDomain
+						],
 						  items: [
 						  	{ ref: ZaGlobalConfig.A_zimbraMtaRejectUnknownClient, type: _CHECKBOX_,
 						  	  label: ZaMsg.NAD_MTA_reject_unknown_client
