@@ -65,7 +65,6 @@ function() {
 	this.emailZimlet.slideShow.addSlide(this._slide);
 	this._mainDiv = document.getElementById(UnknownPersonSlide.TEXT_DIV_ID);
 	this._slide.setCanvasElement(this._mainDiv);
-	this._addClickHandlers();
 };
 
 UnknownPersonSlide.prototype._handleImgLoadFailure =
@@ -90,10 +89,33 @@ function(img) {
 	img.height = 80;
 };
 
-UnknownPersonSlide.prototype._addClickHandlers =
-function() {
-	document.getElementById(UnknownPersonSlide.TEXT_DIV_ID).onmouseup = AjxCallback.simpleClosure(this._handleRightClick, this);
-	document.getElementById(UnknownPersonSlide.PHOTO_PARENT_ID).onmouseup = AjxCallback.simpleClosure(this._handleRightClick, this);
+UnknownPersonSlide.prototype._handleAllClicks =
+function(ev) {
+	var isRightClick;
+	this.emailZimlet.popdown();
+	if (AjxEnv.isIE) {
+		ev = window.event;
+	}
+	if (ev.which){
+		isRightClick = (ev.which == 3);
+	} else if (ev.button) {
+		isRightClick = (ev.button == 2);
+	}
+	if(isRightClick) {
+		DwtUiEvent.setBehaviour(ev, true, false);
+		this.emailZimlet.contextMenu.popup(100, this.emailZimlet.x, this.emailZimlet.y);
+		return;
+	}
+
+	//if its not right click.. 
+	var dwtev = DwtShell.mouseEvent;
+	dwtev.setFromDhtmlEvent(ev);
+	var el = dwtev.target;
+	if(el.id == "UnknownPersonSlide_EmailAnchorId") {
+		this.emailZimlet._composeListener(null, this.emailZimlet.emailAddress);
+	} else if(el.id == "UnknownPersonSlide_NameAnchorId") {
+		this.emailZimlet._contactListener(true);
+	}
 };
 
 UnknownPersonSlide.prototype._handleRightClick =
@@ -110,6 +132,7 @@ function(ev) {
 	if(!rightclick) {
 		return;
 	}
+	this.emailZimlet.popdown();
 	DwtUiEvent.setBehaviour(ev, true, false);
 	this.emailZimlet.contextMenu.popup(100, this.emailZimlet.x, this.emailZimlet.y);
 };
@@ -217,12 +240,17 @@ function(attrs) {
 	var iHtml = AjxTemplate.expand("com_zimbra_email.templates.Email1#ContactDetails", attrs);
 	this._setTextDivHeight(iHtml);
 	document.getElementById(UnknownPersonSlide.TEXT_DIV_ID).innerHTML = iHtml;
+	document.getElementById("UnknownPersonSlide_Frame").onmouseup =  AjxCallback.simpleClosure(this._handleAllClicks, this);
+	/*
 	document.getElementById("UnknownPersonSlide_EmailAnchorId").onclick =  AjxCallback.simpleClosure(this._openCompose, this);
 	if(document.getElementById("UnknownPersonSlide_NameAnchorId")) {
 		document.getElementById("UnknownPersonSlide_NameAnchorId").onclick =  AjxCallback.simpleClosure(this._openContact, this); 
 	}
+	*/
 	this._removeCustomAttrs(attrs);
 };
+
+
 
 UnknownPersonSlide.prototype._removeCustomAttrs =
 function(attrs) {
@@ -286,14 +314,4 @@ function(html) {
 	this._tempdiv.innerHTML = html;
 	this._textDivOffsetHeight = this._tempdiv.offsetHeight + this._tempdiv.offsetHeight*0.25;
 	this._tempdiv.innerHTML = "";
-};
-
-UnknownPersonSlide.prototype._openCompose =
-function() {
-	this.emailZimlet._composeListener(null, this.emailZimlet.emailAddress);
-};
-
-UnknownPersonSlide.prototype._openContact =
-function() {
-	this.emailZimlet._contactListener(true);
 };

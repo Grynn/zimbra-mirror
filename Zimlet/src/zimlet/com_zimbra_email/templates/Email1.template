@@ -1,5 +1,5 @@
 <template id='Frame'>
-	<div style='display:block;width:100%;height:100%;background:white;overflow:auto;' width=100% height=100%>
+	<div id='UnknownPersonSlide_Frame' style='display:block;width:100%;height:100%;background:white;overflow:auto;' width=100% height=100%>
 		<table><tr><td valign='top'>
 		<div align=center id="${photoParentId}"></div></td><td>
 		<div align=center style='width:175px' id="${textDivId}"></div></td></tr></table>
@@ -7,13 +7,13 @@
 </template>
 <template id='ContactDetails'>
 	<$ if (data.fullName) { $>
-		<a id='UnknownPersonSlide_NameAnchorId' style='font-size:15px;font-weight:bold;text-decoration:none;' href='#'><$= AjxStringUtil.htmlEncode(data.fullName) $></a><br/>
+		<label id='UnknownPersonSlide_NameAnchorId' style='font-size:15px;font-weight:bold;text-decoration:none;color:darkBlue;cursor:pointer'><$= AjxStringUtil.htmlEncode(data.fullName) $></label><br/>
 	<$ } $>
 	<$ if (data.jobTitle) { $>
 		<label ><$= AjxStringUtil.htmlEncode(data.jobTitle) $></label><br/>
 	<$ } $>
 	<$ if (data.email) { $>
-		<a  id='UnknownPersonSlide_EmailAnchorId' href='#' style='text-decoration:underline;'><$= AjxStringUtil.htmlEncode(data.email) $></a><br/>
+		<label  id='UnknownPersonSlide_EmailAnchorId' style='text-decoration:underline;color:darkBlue;cursor:pointer'><$= AjxStringUtil.htmlEncode(data.email) $></label><br/>
 	<$ } $>
 	<$ if (data.mobilePhone) { $>
 		<label ><$= AjxStringUtil.htmlEncode(data.mobilePhone) $> (cell)</label><br/>

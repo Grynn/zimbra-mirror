@@ -264,6 +264,9 @@ function(contact, address) {
 
 EmailTooltipZimlet.prototype.hoverOut =
 function(object, context, x, y, span) {
+	if(!this.tooltip) {
+		return;
+	}
 	this._hoverOver =  false;
 	this.tooltip._poppedUp = false;//makes the tooltip sticky
 	setTimeout(AjxCallback.simpleClosure(this.popDownIfMouseNotOnSlide, this), 700);
@@ -285,7 +288,9 @@ function() {
 EmailTooltipZimlet.prototype.popdown =
 function() {
 	this._hoverOver =  false;
+	
 	if(this.tooltip) {
+		this.tooltip._poppedUp = true;
 		this.tooltip.popdown();
 	}
 };
