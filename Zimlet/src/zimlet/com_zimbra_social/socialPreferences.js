@@ -403,7 +403,7 @@ com_zimbra_socialPreferences.prototype._showPreferencesDlg = function() {
 	this._getPrefView = new DwtComposite(this.zimlet.getShell());
 	this._getPrefView.getHtmlElement().style.overflow = "auto";
 	this._getPrefView.getHtmlElement().innerHTML = this._createPrefView();
-	this._getPrefDialog = this.zimlet._createDialog({title:"Social Zimlet Preferences", view:this._getPrefView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	this._getPrefDialog = this.zimlet._createDialog({title:this.zimlet.getMessage("socialZimletPreferences"), view:this._getPrefView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
 	this._getPrefDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okPrefBtnListener));
 	this._getPrefDialog.popup();
 	this._setPrefCheckboxes();
@@ -464,7 +464,7 @@ function() {
 
 	if (save) {
 		this.zimlet.saveUserProperties(new AjxCallback(this, this.showYesNoDialog));
-		appCtxt.getAppController().setStatusMsg("Preferences Saved", ZmStatusView.LEVEL_INFO);
+		appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("preferencesSaved"), ZmStatusView.LEVEL_INFO);
 	}
 
 	this._getPrefDialog.popdown();
@@ -544,7 +544,7 @@ com_zimbra_socialPreferences.prototype._createPrefView =
 function() {
 	var html = new Array();
 	var i = 0;
-	html[i++] = "<label style='font-weight:bold'>Social App Preferences:</label>";
+	html[i++] = "<label style='font-weight:bold'>"+this.zimlet.getMessage("socialAppPreferences")+"</label>";
 	html[i++] = "<BR/>";
 	html[i++] = "<table>";
 	html[i++] = "<tr><td><input type='checkbox' id='social_pref_tweetmemePopularIsOn' /></td><td width=100%>"+this.zimlet.getMessage("showTweetmemeByDefault")+"</td></tr>";

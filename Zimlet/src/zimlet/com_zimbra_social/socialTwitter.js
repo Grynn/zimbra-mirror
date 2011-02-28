@@ -192,12 +192,12 @@ com_zimbra_socialTwitter.prototype._checkIfFollowingCallback = function(params, 
 com_zimbra_socialTwitter.prototype._addFollowUnFollowBtn = function(params) {
 	var btn = new DwtButton({parent:this.zimlet.getShell()});
 	if (params.following) {
-		btn.setText("Unfollow");
+		btn.setText(this.zimlet.getMessage("unFollow"));
 		btn.setImage("social_unFollowIcon");
 		btn.addSelectionListener(new AjxListener(this, this._twitterFollowMe, params));
 		document.getElementById(params.id).appendChild(btn.getHtmlElement());
 	} else {
-		btn.setText("follow me on twitter");
+		btn.setText(this.zimlet.getMessage("followMeOnTwitter"));
 		btn.setImage("social_twitterIcon");
 		btn.addSelectionListener(new AjxListener(this, this._twitterFollowMe, params));
 		document.getElementById(params.id).appendChild(btn.getHtmlElement());
@@ -353,7 +353,7 @@ function(account, response) {
 		this.zimlet.updateField.value = "";
 		this.zimlet.showNumberOfLetters();
 	}
-	appCtxt.getAppController().setStatusMsg("Updates Sent", ZmStatusView.LEVEL_INFO);
+	appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("updatesSent"), ZmStatusView.LEVEL_INFO);
 	var tableId = this.zimlet._getTableIdFromAccount(account);
 	if (tableId) {
 		setTimeout(AjxCallback.simpleClosure(this.getTwitterFeeds, this, {tableId: tableId, account: account, type:"ACCOUNT"}), 3000);//refresh table after 3 secs
@@ -463,7 +463,9 @@ function(showAlertObj) {
 	var j = 0;
 	hdr[j++] = "<TABLE width=500px>";
 	hdr[j++] = "<TR><TD align=left>";
-	hdr[j++] = "<label style='font-weight:bold;font-size:13px;color:blue';font-family:'Lucida Grande',sans-serif;>Zimbra Social: You have " + totalUnreadCount + " unread tweets</label>";
+	hdr[j++] = "<label style='font-weight:bold;font-size:13px;color:blue';font-family:'Lucida Grande',sans-serif;>";
+	hdr[j++] = AjxMessageFormat.format(this.zimlet.getMessage("youHaveXUnreadTweets"), totalUnreadCount); 
+	hdr[j++] = "</label>";
 	hdr[j++] = "</td>";
 	hdr[j++] = "</tr>";
 	hdr[j++] = "</TABLE>";
@@ -489,7 +491,7 @@ function(emailContentObj) {
 	html[i++] = "with LMTP; " + (new Date()).toString() + "\n";
 	html[i++] = "Received: by mail02.prod.aol.net (1.38.193.5/16.2) id AA10153;\n";
 	html[i++] = (new Date()).toString() + "\n";
-	html[i++] = "From: Zimbra social <social@zimbra.zimlet.com>\n";
+	html[i++] = "From: " + this.zimlet.getMessage("zimbraSocial") + " <social@zimbra.zimlet.com>\n";
 	html[i++] = "Original-Sender: Zimbra social <social@zimbra.zimlet.com>\n";
 	html[i++] = "To: " + appCtxt.getActiveAccount().name + "\n";
 	html[i++] = "Date: " + (new Date()).toString() + "\n";
@@ -792,14 +794,14 @@ function(tableId, profileAccnt) {
 	html[i++] = "<DIV>";
 	html[i++] = "<TABLE width=100%>";
 	html[i++] = "<TR><TD colspan=2>" + (profileAccnt.description == null ? "" : profileAccnt.description) + "</TD></TR>";
-	html[i++] = "<TR><TD width=25%>followers:</TD><TD>" + (profileAccnt.followers_count == null ? "" : profileAccnt.followers_count) + "</TD></TR>";
-	html[i++] = "<TR><TD  width=25%>friends:</TD><TD>" + (profileAccnt.friends_count == null ? "" : profileAccnt.friends_count) + "</TD></TR>";
-	html[i++] = "<TR><TD  width=25%>updates:</TD><TD>" + (profileAccnt.statuses_count == null ? "" : profileAccnt.statuses_count) + "</TD></TR>";
-	html[i++] = "<TR><TD  width=25%>name:</TD><TD>" + (profileAccnt.name == null ? "" : profileAccnt.name) + "</TD></TR>";
-	html[i++] = "<TR><TD  width=25%>location:</TD><TD>" + (profileAccnt.location == null ? "" : profileAccnt.location) + "</TD></TR>";
-	html[i++] = "<TR><TD  width=25%>timezone:</TD><TD>" + (profileAccnt.time_zone == null ? "" : profileAccnt.time_zone) + "</TD></TR>";
-	html[i++] = "<TR><TD  width=25%>favourites:</TD><TD>" + (profileAccnt.favourites_count == null ? "" : profileAccnt.favourites_count) + "</TD></TR>";
-	html[i++] = "<TR><TD  width=25%>twitterPage:</TD><TD><a href='http://twitter.com/" + profileAccnt.screen_name + "' target='_blank' >" + "http://twitter.com/" + profileAccnt.screen_name + "</a></TD></TR>";
+	html[i++] = "<TR><TD width=25%>"+this.zimlet.getMessage("followers") +"</TD><TD>" + (profileAccnt.followers_count == null ? "" : profileAccnt.followers_count) + "</TD></TR>";
+	html[i++] = "<TR><TD  width=25%>"+this.zimlet.getMessage("friends") +"</TD><TD>" + (profileAccnt.friends_count == null ? "" : profileAccnt.friends_count) + "</TD></TR>";
+	html[i++] = "<TR><TD  width=25%>"+this.zimlet.getMessage("updates") +"</TD><TD>" + (profileAccnt.statuses_count == null ? "" : profileAccnt.statuses_count) + "</TD></TR>";
+	html[i++] = "<TR><TD  width=25%>"+this.zimlet.getMessage("name") +"</TD><TD>" + (profileAccnt.name == null ? "" : profileAccnt.name) + "</TD></TR>";
+	html[i++] = "<TR><TD  width=25%>"+this.zimlet.getMessage("location") +"</TD><TD>" + (profileAccnt.location == null ? "" : profileAccnt.location) + "</TD></TR>";
+	html[i++] = "<TR><TD  width=25%>"+this.zimlet.getMessage("timezone") +"</TD><TD>" + (profileAccnt.time_zone == null ? "" : profileAccnt.time_zone) + "</TD></TR>";
+	html[i++] = "<TR><TD  width=25%>"+this.zimlet.getMessage("favorites") +"</TD><TD>" + (profileAccnt.favourites_count == null ? "" : profileAccnt.favourites_count) + "</TD></TR>";
+	html[i++] = "<TR><TD  width=25%>"+this.zimlet.getMessage("twitterPage") +"</TD><TD><a href='http://twitter.com/" + profileAccnt.screen_name + "' target='_blank' >" + "http://twitter.com/" + profileAccnt.screen_name + "</a></TD></TR>";
 
 	for (var j = 0; j < followMeDivIdAndAccountsMap.length; j++) {
 		var obj = followMeDivIdAndAccountsMap[j];

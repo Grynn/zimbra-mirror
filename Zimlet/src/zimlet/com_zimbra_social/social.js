@@ -405,10 +405,10 @@ function(ev) {
 	if (this.whatAreYouDoingField != "NOT_PRESENT") {
 		if (val.toLowerCase().indexOf("d @") == 0) {
 			this.whatAreYouDoingField.innerHTML = this.getMessage("sendDirectMsg");
-			this.whatAreYouDoingField.style.color = "yellow";
+			this.whatAreYouDoingField.style.background = "yellow";
 		} else {
 			this.whatAreYouDoingField.innerHTML = this.getMessage("whatAreYouDoing");
-			this.whatAreYouDoingField.style.color = "black";
+			this.whatAreYouDoingField.style.background = "";
 		}
 	}
 	this._updateNumberOfLettersField(len);
@@ -1051,10 +1051,6 @@ SocialZimlet.prototype.appLaunch = function(appName, params) {
 	this._launched = true;
 };
 
-SocialZimlet.prototype._selectDefaultFolder =
-function() {
-	this._treeView.setSelected(this._getIdFromName("Missed Calls"));
-};
 
 SocialZimlet.prototype._createTreeView =
 function() {
@@ -1594,7 +1590,7 @@ function(params) {
 			imageAnchor = imageAnchor + "<a  href='" + obj.url + "' target='_blank' style='color:gray'>";
 			imageAnchor = imageAnchor + "<table><tr>";
 			imageAnchor = imageAnchor + "<td class='social_tweetMemeBg' width=48px height=48px align='center'  valign='middle'>";
-			imageAnchor = imageAnchor + tweetcount + "</td></tr><tr><td class='social_tweetMemeRetweetBg'>retweets</td></tr></table>";
+			imageAnchor = imageAnchor + tweetcount + "</td></tr><tr><td class='social_tweetMemeRetweetBg'>"+this.getMessage("retweets")+"</td></tr></table>";
 			imageAnchor = imageAnchor + "</a>";
 			imageAnchor = imageAnchor + "</td>";
 		} else if (type == "DIGG") {
@@ -1749,13 +1745,13 @@ function(params) {
 		html[i++] = "<table width=100%>";
 		html[i++] = "<TR>";
 		if (type == "TWEETMEME" || type == "DIGG") {
-			html[i++] = "<TD width=95% style='color:gray;font-size:11px'>";
+			html[i++] = "<TD  style='color:gray;font-size:11px;text-align:left'>";
 		} else {
-			html[i++] = "<TD width=90% style='color:gray;font-size:11px'>";
+			html[i++] = "<TD style='color:gray;font-size:11px;text-align:left'>";
 		}
 		html[i++] = source.indexOf("via") != -1 ? source : this.getMessage("via") + " " + source;
 		html[i++] = "</td>";
-		html[i++] = "<td colspan="+columnSpan+" >";
+		html[i++] = "<td colspan="+columnSpan+" align=right style='text-align:right'>";
 
 		if (type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS") {
 			if(accountName == screen_name) {
@@ -1861,16 +1857,12 @@ function(tableId, newId) {
 	if(pageNumber > 1 && (newId < this.tableIdAndHighestPostIdMap[tableId])) {
 		isDirty = false;
 	} else if(pageNumber > 1 && (newId > this.tableIdAndHighestPostIdMap[tableId])) {
-		document.getElementById(tableId +  "_refreshNotice").innerHTML = "There are new tweets. Please click refresh to load them";
+		document.getElementById(tableId +  "_refreshNotice").innerHTML = this.getMessage("refreshToLoadNewTweets");
 		document.getElementById(tableId +  "_refreshNotice").style.display = "block";
 		isDirty = true;
 	} else if(newId == this.tableIdAndHighestPostIdMap[tableId]) {
 		isDirty = false;
 	}
-	//}  else if(pageNumber > 1 && (newId == this.tableIdAndHighestPostIdMap[tableId])) {
-	//	isDirty = true;
-	//} 
-
 	return isDirty;
 };
 
@@ -2140,7 +2132,7 @@ SocialZimlet.prototype._displayFeedErrorWindow =
 function(tableId) {
 	var win = this.openCenteredWindow("");
 	if(this.tableIdAndHttpErrorMap[tableId]) {
-		win.document.write("<div style='color:blue;font-size:16px;font-weight:bold;background:#FFFF99'>Below is the HTTP error we received from the Server:</div>");
+		win.document.write("<div style='color:blue;font-size:16px;font-weight:bold;background:#FFFF99'>"+this.getMessage("httpErrorStatement")+"</div>");
 		win.document.write(this.tableIdAndHttpErrorMap[tableId]);
 	}
 };
@@ -2195,6 +2187,7 @@ function(comments, totlCmnts, postId, divId, account, tableId) {
 		html[i++] = "</table>";
 	}
 	if (actualComments < totlCmnts) {
+		var seeAllComments = AjxMessageFormat.format(this.getMessage("seeAllComments"), totlCmnts);
 		var moreCommentsLinkId = this._getFacebookMoreCommentsLinkId(postId, divId, account, tableId);
 		html[i++] = "<table width=100% cellpadding=1 cellspacing=1><tr><td>";
 		html[i++] = "<tr>";
@@ -2203,7 +2196,7 @@ function(comments, totlCmnts, postId, divId, account, tableId) {
 		html[i++] = "</TD>";
 		html[i++] = "<TD>";
 		html[i++] = "<DIV class='social_FBCommentRow'>";
-		html[i++] = ["<a  href='#' id='", moreCommentsLinkId, "'>See all ", totlCmnts, " comments</a>"].join("");
+		html[i++] = ["<a  href='#' id='", moreCommentsLinkId, "'>",seeAllComments,"</a>"].join("");
 		html[i++] = "</div>";
 		html[i++] = "</td>";
 		html[i++] = "<TD style='width:16px;height:16px' align='center'>";
@@ -2489,7 +2482,7 @@ SocialZimlet.prototype.displayFbCommentWidget = function(params) {
 
 SocialZimlet.prototype.addFbCommentsHandlers = function(params) {
 	var btn = new DwtButton({parent:this.getShell()});
-	btn.setText("comment");
+	btn.setText(this.getMessage("comment"));
 	btn.setImage("social_facebookIcon");
 	btn.addSelectionListener(new AjxListener(this.facebook, this.facebook._addFBComment, params));
 	document.getElementById(params.commentBtnId).appendChild(btn.getHtmlElement());
@@ -2709,7 +2702,7 @@ function(tableId, errorName, response) {
 	}
 		
 	if(!success) {
-		text = ["{\"error\":\"Could not load.\"}"].join("");
+		text = ["{\"error\":\"",this.getMessage("couldNotLoad"),"\"}"].join("");
 		jsonObj = eval("(" + text + ")");
 		if(tableId) {
 			this.tableIdAndHttpErrorMap[tableId] = response.text;
