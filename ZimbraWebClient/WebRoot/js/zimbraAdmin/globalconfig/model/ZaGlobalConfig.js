@@ -167,6 +167,15 @@ ZaGlobalConfig.A_zimbraSkinLogoAppBanner = "zimbraSkinLogoAppBanner" ;
 ZaGlobalConfig.A2_blocked_extension_selection = "blocked_extension_selection";
 ZaGlobalConfig.A2_common_extension_selection = "common_extension_selection";
 
+//S/MIME properties
+ZaGlobalConfig.A_zimbraSMIMELdapURL = "zimbraSMIMELdapURL";
+ZaGlobalConfig.A_zimbraSMIMELdapBindDn = "zimbraSMIMELdapBindDn";
+ZaGlobalConfig.A_zimbraSMIMELdapBindPassword = "zimbraSMIMELdapBindPassword";
+ZaGlobalConfig.A_zimbraSMIMELdapSearchBase = "zimbraSMIMELdapSearchBase";
+ZaGlobalConfig.A_zimbraSMIMELdapFilter = "zimbraSMIMELdapFilter";
+ZaGlobalConfig.A_zimbraSMIMELdapAttribute = "zimbraSMIMELdapAttribute";
+ZaGlobalConfig.A2_zimbraSMIMEConf = "zimbraSMIMEConf";
+
 ZaGlobalConfig.__configInstance = null;
 ZaGlobalConfig.isDirty = true;
 
@@ -251,39 +260,78 @@ ZaGlobalConfig.prototype.initFromJS = function(obj) {
 }
 
 //ZaGlobalConfig.prototype.modify = 
-ZaGlobalConfig.modifyMethod = function (mods) {
-	var soapDoc = AjxSoapDoc.create("ModifyConfigRequest", ZaZimbraAdmin.URN, null);
-	for (var aname in mods) {
-		//multy value attribute
-		if(mods[aname] instanceof Array) {
-			var cnt = mods[aname].length;
-			if(cnt > 0) {
-				for(var ix=0; ix <cnt; ix++) {
-					if(mods[aname][ix] instanceof String)
-						var attr = soapDoc.set("a", mods[aname][ix].toString());
-					else if(mods[aname][ix] instanceof Object)
-						var attr = soapDoc.set("a", mods[aname][ix].toString());
-					else 
-						var attr = soapDoc.set("a", mods[aname][ix]);
-						
-					attr.setAttribute("n", aname);
-				}
-			} 
-			else {
-				var attr = soapDoc.set("a");
-				attr.setAttribute("n", aname);
-			}
-		} else {
-			//bug fix 10354: ingnore the changed ZaLicense Properties
-			if ((typeof ZaLicense == "function") && (ZaSettings.LICENSE_ENABLED)){
-				if (ZaUtil.findValueInObjArrByPropertyName (ZaLicense.myXModel.items, aname, "id") > -1 ){
-					continue ;
-				}
-			}
-			var attr = soapDoc.set("a", mods[aname]);
-			attr.setAttribute("n", aname);
-		}
-	}
+ZaGlobalConfig.modifyMethod = function (tmods, tmpObj) {
+        var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
+        soapDoc.setMethodAttribute("onerror", "stop");
+
+        // S/MIME
+        var mods = tmods;
+        if(mods[ZaDomain.A2_zimbraSMIMEConf]) {
+
+                for(var cname in mods[ZaDomain.A2_zimbraSMIMEConf]) {
+                        var modifySmimeDoc = soapDoc.set("ModifySMIMEConfigRequest", null, null, ZaZimbraAdmin.URN);
+                        //var domainAttr = soapDoc.set("domain", this.id,modifySmimeDoc);
+                        //domainAttr.setAttribute("by","id");
+
+                        var configAttr = soapDoc.set("config", null,modifySmimeDoc);
+                        configAttr.setAttribute("name",cname);
+
+                        var mod_item = mods[ZaDomain.A2_zimbraSMIMEConf][cname];
+                        if(mod_item["Op"] == "ADD" || mod_item["Op"] == "MODIFIED") {
+                                configAttr.setAttribute("op","modify");
+                                var conf = tmpObj[ZaDomain.A2_zimbraSMIMEConf][mod_item["Loc"]];
+                                attr = soapDoc.set("a", conf[ZaDomain.A_zimbraSMIMELdapURL], configAttr);
+                                attr.setAttribute("n", ZaDomain.A_zimbraSMIMELdapURL);
+                                attr = soapDoc.set("a", conf[ZaDomain.A_zimbraSMIMELdapBindDn], configAttr);
+                                attr.setAttribute("n", ZaDomain.A_zimbraSMIMELdapBindDn);
+                                attr = soapDoc.set("a", conf[ZaDomain.A_zimbraSMIMELdapBindPassword], configAttr);
+                                attr.setAttribute("n", ZaDomain.A_zimbraSMIMELdapBindPassword);
+                                attr = soapDoc.set("a", conf[ZaDomain.A_zimbraSMIMELdapFilter], configAttr);
+                                attr.setAttribute("n", ZaDomain.A_zimbraSMIMELdapFilter);
+                                attr = soapDoc.set("a", conf[ZaDomain.A_zimbraSMIMELdapSearchBase], configAttr);
+                                attr.setAttribute("n", ZaDomain.A_zimbraSMIMELdapSearchBase);
+                                attr = soapDoc.set("a", conf[ZaDomain.A_zimbraSMIMELdapAttribute], configAttr);
+                                attr.setAttribute("n", ZaDomain.A_zimbraSMIMELdapAttribute);
+                        }else{
+                                configAttr.setAttribute("op","remove");
+                        }
+                }
+                delete mods[ZaDomain.A2_zimbraSMIMEConf];
+        }
+
+        var modifyConfDoc = soapDoc.set("ModifyConfigRequest", null, null, ZaZimbraAdmin.URN);
+        for (var aname in mods) {
+                //multy value attribute
+                if(mods[aname] instanceof Array) {
+                        var cnt = mods[aname].length;
+                        if(cnt > 0) {
+                                for(var ix=0; ix <cnt; ix++) {
+                                        if(mods[aname][ix] instanceof String)
+                                                var attr = soapDoc.set("a", mods[aname][ix].toString(), modifyConfDoc);
+                                        else if(mods[aname][ix] instanceof Object)
+                                                var attr = soapDoc.set("a", mods[aname][ix].toString(), modifyConfDoc);
+                                        else 
+                                                var attr = soapDoc.set("a", mods[aname][ix], modifyConfDoc);
+                                                
+                                        attr.setAttribute("n", aname);
+                                }
+                        } 
+                        else {
+                                var attr = soapDoc.set("a");
+                                attr.setAttribute("n", aname);
+                        }
+                } else {
+                        //bug fix 10354: ingnore the changed ZaLicense Properties
+                        if ((typeof ZaLicense == "function") && (ZaSettings.LICENSE_ENABLED)){
+                                if (ZaUtil.findValueInObjArrByPropertyName (ZaLicense.myXModel.items, aname, "id") > -1 ){
+                                        continue ;
+                                }
+                        }
+                        var attr = soapDoc.set("a", mods[aname], modifyConfDoc);
+                        attr.setAttribute("n", aname);
+                }
+        }
+
 	var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
@@ -403,6 +451,16 @@ ZaGlobalConfig.myXModel = {
             type: _ENUM_, choices: ZaSettings.exchangeServerType },
 	{ id:ZaGlobalConfig.A_zimbraFreebusyExchangeURL, ref:"attrs/" + ZaGlobalConfig.A_zimbraFreebusyExchangeURL, type: _STRING_ },
         { id:ZaGlobalConfig.A_zimbraFreebusyExchangeUserOrg, ref:"attrs/" + ZaGlobalConfig.A_zimbraFreebusyExchangeUserOrg, type: _STRING_ },
+
+        //S/MIME
+        { id:ZaGlobalConfig.A_zimbraSMIMELdapURL, ref:"attrs/" + ZaGlobalConfig.A_zimbraSMIMELdapURL, type: _STRING_ },
+        { id:ZaGlobalConfig.A_zimbraSMIMELdapBindDn, ref:"attrs/" + ZaGlobalConfig.A_zimbraSMIMELdapBindDn, type: _STRING_ },
+        { id:ZaGlobalConfig.A_zimbraSMIMELdapBindPassword, ref:"attrs/" + ZaGlobalConfig.A_zimbraSMIMELdapBindPassword, type: _STRING_ },
+        { id:ZaGlobalConfig.A_zimbraSMIMELdapSearchBase, ref:"attrs/" + ZaGlobalConfig.A_zimbraSMIMELdapSearchBase, type: _STRING_ },
+        { id:ZaGlobalConfig.A_zimbraSMIMELdapFilter, ref:"attrs/" + ZaGlobalConfig.A_zimbraSMIMELdapFilter, type: _STRING_ },
+	{ id:ZaGlobalConfig.A_zimbraSMIMELdapAttribute, ref:"attrs/" + ZaGlobalConfig.A_zimbraSMIMELdapAttribute, type: _STRING_ },
+	{id:ZaGlobalConfig.A2_zimbraSMIMEConf, ref:ZaDomain.A2_zimbraSMIMEConf, type:_LIST_},
+
         {id:ZaGlobalConfig.A2_blocked_extension_selection, type:_LIST_},
         {id:ZaGlobalConfig.A2_common_extension_selection, type:_LIST_}
 

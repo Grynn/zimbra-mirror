@@ -25,7 +25,7 @@ ZaDomainXFormView = function(parent, entry) {
 		parent:parent,
 		iKeyName:"ZaDomainXFormView",
 		contextId: ZaId.TAB_DOMAIN_EDIT
-	}); //qin@	
+	}); 
 	this.GALModes = [
 		{label:ZaMsg.GALMode_internal, value:ZaDomain.GAL_Mode_internal},
 		{label:ZaMsg.GALMode_external, value:ZaDomain.GAL_Mode_external}, 
@@ -208,7 +208,111 @@ function(entry) {
 			//this._containedObject[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs = ZaItem.deepCloneListItem (entry[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds].attrs); 
 		}
 	}
+
+	this._containedObject[ZaDomain.A2_zimbraSMIMEConf] = [];
+	var SMIMEconfs = {};
+	if(entry.attrs[ZaDomain.A_zimbraSMIMELdapURL]) {
+		if(!(entry.attrs[ZaDomain.A_zimbraSMIMELdapURL] instanceof Array))
+			entry.attrs[ZaDomain.A_zimbraSMIMELdapURL] = [entry.attrs[ZaDomain.A_zimbraSMIMELdapURL]];
+		if(entry.attrs[ZaDomain.A_zimbraSMIMELdapURL].length > 0) {
+		for(var i = 0; i < entry.attrs[ZaDomain.A_zimbraSMIMELdapURL].length; i++) {
+			var items = entry.attrs[ZaDomain.A_zimbraSMIMELdapURL][i].split(":");
+			if(!SMIMEconfs[items[0]]){
+				SMIMEconfs[items[0]] = {"name":items[0]};
+			}
+			if(items.length > 2) {
+				items[1] = entry.attrs[ZaDomain.A_zimbraSMIMELdapURL][i].substring(items[0].length+1);
+			}
+			SMIMEconfs[items[0]][ZaDomain.A_zimbraSMIMELdapURL] = items[1];
+		}}
+	}
+	if(entry.attrs[ZaDomain.A_zimbraSMIMELdapBindDn]) {
+		if(!(entry.attrs[ZaDomain.A_zimbraSMIMELdapBindDn] instanceof Array))
+			entry.attrs[ZaDomain.A_zimbraSMIMELdapBindDn] = [entry.attrs[ZaDomain.A_zimbraSMIMELdapBindDn]];
+		if(entry.attrs[ZaDomain.A_zimbraSMIMELdapBindDn].length > 0) {
+               for(var i = 0; i < entry.attrs[ZaDomain.A_zimbraSMIMELdapBindDn].length; i++) {
+                        var items = entry.attrs[ZaDomain.A_zimbraSMIMELdapBindDn][i].split(":");
+                        if(!SMIMEconfs[items[0]]){
+                                SMIMEconfs[items[0]] = {"name":items[0]};
+                        }
+                        if(items.length > 2) {
+                                items[1] = entry.attrs[ZaDomain.A_zimbraSMIMELdapBindDn][i].substring(items[0].length+1);
+                        }
+                        SMIMEconfs[items[0]][ZaDomain.A_zimbraSMIMELdapBindDn] = items[1];
+                }
+		}
+	}
+        if(entry.attrs[ZaDomain.A_zimbraSMIMELdapBindPassword]) {
+		if(!(entry.attrs[ZaDomain.A_zimbraSMIMELdapBindPassword] instanceof Array))
+			entry.attrs[ZaDomain.A_zimbraSMIMELdapBindPassword] = [entry.attrs[ZaDomain.A_zimbraSMIMELdapBindPassword]];
+	 	if(entry.attrs[ZaDomain.A_zimbraSMIMELdapBindPassword].length > 0) {
+               	for(var i = 0; i < entry.attrs[ZaDomain.A_zimbraSMIMELdapBindPassword].length; i++) {
+                        var items = entry.attrs[ZaDomain.A_zimbraSMIMELdapBindPassword][i].split(":");
+                        if(!SMIMEconfs[items[0]]){
+                                SMIMEconfs[items[0]] = {"name":items[0]};
+                        }
+                        if(items.length > 2) {
+                                items[1] = entry.attrs[ZaDomain.A_zimbraSMIMELdapBindPassword][i].substring(items[0].length+1);
+                        }
+                        SMIMEconfs[items[0]][ZaDomain.A_zimbraSMIMELdapBindPassword] = items[1];
+                }
+		}
+        }
+        if(entry.attrs[ZaDomain.A_zimbraSMIMELdapSearchBase]) {
+		if(!(entry.attrs[ZaDomain.A_zimbraSMIMELdapSearchBase] instanceof Array))
+			entry.attrs[ZaDomain.A_zimbraSMIMELdapSearchBase] = [entry.attrs[ZaDomain.A_zimbraSMIMELdapSearchBase]];
+		if(entry.attrs[ZaDomain.A_zimbraSMIMELdapSearchBase].length > 0) {
+               for(var i = 0; i < entry.attrs[ZaDomain.A_zimbraSMIMELdapSearchBase].length; i++) {
+                        var items = entry.attrs[ZaDomain.A_zimbraSMIMELdapSearchBase][i].split(":");
+                        if(!SMIMEconfs[items[0]]){
+                                SMIMEconfs[items[0]] = {"name":items[0]};
+                        }
+                        if(items.length > 2) {
+                                items[1] = entry.attrs[ZaDomain.A_zimbraSMIMELdapSearchBase][i].substring(items[0].length+1);
+                        }
+                        SMIMEconfs[items[0]][ZaDomain.A_zimbraSMIMELdapSearchBase] = items[1];
+                }
+		}
+        }
+        if(entry.attrs[ZaDomain.A_zimbraSMIMELdapFilter]) {
+		if(!(entry.attrs[ZaDomain.A_zimbraSMIMELdapFilter] instanceof Array))
+			entry.attrs[ZaDomain.A_zimbraSMIMELdapFilter] = [entry.attrs[ZaDomain.A_zimbraSMIMELdapFilter]];
+		if(entry.attrs[ZaDomain.A_zimbraSMIMELdapFilter].length > 0) {
+                for(var i = 0; i < entry.attrs[ZaDomain.A_zimbraSMIMELdapFilter].length; i++) {
+                        var items = entry.attrs[ZaDomain.A_zimbraSMIMELdapFilter][i].split(":");
+                        if(!SMIMEconfs[items[0]]){
+                                SMIMEconfs[items[0]] = {"name":items[0]};
+                        }
+                        if(items.length > 2) {
+                                items[1] = entry.attrs[ZaDomain.A_zimbraSMIMELdapFilter][i].substring(items[0].length+1);
+                        }
+                        SMIMEconfs[items[0]][ZaDomain.A_zimbraSMIMELdapFilter] = items[1];
+                }
+		}
+        }
+        if(entry.attrs[ZaDomain.A_zimbraSMIMELdapAttribute]) {
+		if(!(entry.attrs[ZaDomain.A_zimbraSMIMELdapAttribute] instanceof Array))
+			entry.attrs[ZaDomain.A_zimbraSMIMELdapAttribute] = [entry.attrs[ZaDomain.A_zimbraSMIMELdapAttribute]];
+		if(entry.attrs[ZaDomain.A_zimbraSMIMELdapAttribute].length > 0) {
+                for(var i = 0; i < entry.attrs[ZaDomain.A_zimbraSMIMELdapAttribute].length; i++) {
+                        var items = entry.attrs[ZaDomain.A_zimbraSMIMELdapAttribute][i].split(":");
+                        if(!SMIMEconfs[items[0]]){
+                                SMIMEconfs[items[0]] = {"name":items[0]};
+                        }
+                        if(items.length > 2) {
+                                items[1] = entry.attrs[ZaDomain.A_zimbraSMIMELdapAttribute][i].substring(items[0].length+1);
+                        }
+
+                        SMIMEconfs[items[0]][ZaDomain.A_zimbraSMIMELdapAttribute] = items[1];
+                }
+		}
+        }
 	
+	for(var conf in SMIMEconfs) {
+		this._containedObject[ZaDomain.A2_zimbraSMIMEConf].push(SMIMEconfs[conf]);
+	}
+
+
     this._localXForm.setInstance(this._containedObject);        
 	this.updateTab();
 }
@@ -577,6 +681,10 @@ ZaDomainXFormView.BC_TAB_RIGHTS = [];
 
 ZaDomainXFormView.CERT_TAB_ATTRS = [ZaDomain.A_zimbraSSLCertificate];
 ZaDomainXFormView.CERT_TAB_RIGHTS = [];
+
+ZaDomainXFormView.SMIME_TAB_ATTRS = [ZaDomain.A_zimbraSMIMELdapURL, ZaDomain.A_zimbraSMIMELdapBindDn, 
+	ZaDomain.A_zimbraSMIMELdapBindPassword,ZaDomain.A_zimbraSMIMELdapSearchBase,ZaDomain.A_zimbraSMIMELdapAttribute];
+ZaDomainXFormView.SMIME_TAB_RIGHTS = [];
 
 ZaDomainXFormView.WIKI_TAB_ATTRS = [ZaDomain.A_zimbraNotebookAccount];
 ZaDomainXFormView.WIKI_TAB_RIGHTS = [];
@@ -1140,7 +1248,33 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 		};
                 switchGroup.items.push(case9a);
         }
-
+        if(ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.SMIME_TAB_ATTRS, ZaDomainXFormView.SMIME_TAB_RIGHTS)) {
+                tabIx = ++this.TAB_INDEX;
+                tabBar.choices.push({value:tabIx, label:ZaMsg.Domain_Tab_SMIME});
+                var case10 = {type: _ZATABCASE_, caseKey:tabIx,
+                        colSizes:["100%"],numCols:1,id:"global_smime_tab",
+                        items: [
+                                {type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_SMIME_Settings,width:"*",
+                                        items: [
+                                                {ref:ZaDomain.A2_zimbraSMIMEConf, type:_REPEAT_, 
+                                                        label:"", repeatInstance:"", showAddButton:true, showRemoveButton:true,
+                                                        addButtonLabel:ZaMsg.Domain_Add_SMIME,
+                                                        removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,
+                                                        showAddOnNextRow:true,
+							align: _CENTER_, 
+							//width: "*", 
+                                                        items: [
+                                                                {ref:".", type:_SMIME_, label:null,
+                                                                labelLocation:_NONE_,
+								onChange: ZaDomainXFormView.onFormFieldChanged,
+                                                                visibilityChecks:[],enableDisableChecks:[]}
+                                                                ]
+                                                }                                    
+                                 ]}
+                        ]
+                };
+                switchGroup.items.push(case10);
+        }
  
     xFormObject.items.push(tabBar);
 	xFormObject.items.push(switchGroup);

@@ -182,9 +182,126 @@ GlobalConfigXFormView.SKIN_TAB_RIGHTS = [];
 GlobalConfigXFormView.BC_TAB_ATTRS = [ZaGlobalConfig.A_zimbraBasicAuthRealm];
 GlobalConfigXFormView.BC_TAB_RIGHTS = [];
 
+GlobalConfigXFormView.SMIME_TAB_ATTRS = [ZaGlobalConfig.A_zimbraSMIMELdapURL, ZaGlobalConfig.A_zimbraSMIMELdapBindDn, ZaGlobalConfig.A_zimbraSMIMELdapBindPassword,ZaGlobalConfig.A_zimbraSMIMELdapSearchBase,ZaGlobalConfig.A_zimbraSMIMELdapAttribute];
+GlobalConfigXFormView.SMIME_TAB_RIGHTS = [];
+
+GlobalConfigXFormView.prototype.setObject =
+function(entry) {
+
+	this._containedObject = entry;
+        this._containedObject[ZaGlobalConfig.A2_zimbraSMIMEConf] = [];
+        var SMIMEconfs = {};
+        if(entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapURL]) {
+		if(!(entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapURL] instanceof Array))
+			entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapURL] = [entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapURL]];
+		if(entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapURL].length > 0) {
+                	for(var i = 0; i < entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapURL].length; i++) {
+                        var items = entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapURL][i].split(":");
+                        if(!SMIMEconfs[items[0]]){
+                                SMIMEconfs[items[0]] = {"name":items[0]};
+                        }
+                        if(items.length > 2) {
+                                items[1] = entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapURL][i].substring(items[0].length+1);
+                        }
+                        SMIMEconfs[items[0]][ZaGlobalConfig.A_zimbraSMIMELdapURL] = items[1];
+                	}
+		}	
+        }
+        if(entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapBindDn]) {
+		if(!(entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapBindDn] instanceof Array))
+			entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapBindDn] = [entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapBindDn]];
+		if(entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapBindDn].length > 0) {
+               for(var i = 0; i < entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapBindDn].length; i++) {
+                        var items = entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapBindDn][i].split(":");
+                        if(!SMIMEconfs[items[0]]){
+                                SMIMEconfs[items[0]] = {"name":items[0]};
+                        }
+                        if(items.length > 2) {
+                                items[1] = entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapBindDn][i].substring(items[0].length+1);
+                        }
+                        SMIMEconfs[items[0]][ZaGlobalConfig.A_zimbraSMIMELdapBindDn] = items[1];
+                }}
+
+        }
+        if(entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapBindPassword]){
+		if(!(entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapBindPassword] instanceof Array))
+			entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapBindPassword] = [entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapBindPassword]];
+		if(entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapBindPassword].length > 0) {
+                for(var i = 0; i < entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapBindPassword].length; i++) {
+                        var items = entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapBindPassword][i].split(":");
+                        if(!SMIMEconfs[items[0]]){
+                                SMIMEconfs[items[0]] = {"name":items[0]};
+                        }
+                        if(items.length > 2) {
+                                items[1] = entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapBindPassword][i].substring(items[0].length+1);
+                        }
+                        SMIMEconfs[items[0]][ZaGlobalConfig.A_zimbraSMIMELdapBindPassword] = items[1];
+                }
+		}
+        }
+
+        if(entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapSearchBase]) {
+		if(!(entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapSearchBase] instanceof Array))
+			entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapSearchBase] = [entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapSearchBase]];
+		if(entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapSearchBase].length > 0) {
+                for(var i = 0; i < entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapSearchBase].length; i++) {
+                        var items = entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapSearchBase][i].split(":");
+                        if(!SMIMEconfs[items[0]]){
+                                SMIMEconfs[items[0]] = {"name":items[0]};
+                        }
+                        if(items.length > 2) {
+                                items[1] = entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapSearchBase][i].substring(items[0].length+1);
+                        }
+                        SMIMEconfs[items[0]][ZaGlobalConfig.A_zimbraSMIMELdapSearchBase] = items[1];
+                }
+		}
+        }
+        if(entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapFilter]) {
+		if(!(entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapFilter] instanceof Array))
+			entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapFilter] = [entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapFilter]];
+		if(entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapFilter].length > 0) {
+                for(var i = 0; i < entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapFilter].length; i++) {
+                        var items = entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapFilter][i].split(":");
+                        if(!SMIMEconfs[items[0]]){
+                                SMIMEconfs[items[0]] = {"name":items[0]};
+                        }
+                        if(items.length > 2) {
+                                items[1] = entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapFilter][i].substring(items[0].length+1);
+                        }
+                        SMIMEconfs[items[0]][ZaGlobalConfig.A_zimbraSMIMELdapFilter] = items[1];
+                }
+		}
+        }
+        if(entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapAttribute]) {
+		if(!(entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapAttribute] instanceof Array))
+			entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapAttribute] = [entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapAttribute]];
+		if( entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapAttribute].length > 0) {
+                for(var i = 0; i < entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapAttribute].length; i++) {
+                        var items = entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapAttribute][i].split(":");
+                        if(!SMIMEconfs[items[0]]){
+                                SMIMEconfs[items[0]] = {"name":items[0]};
+                        }
+                        if(items.length > 2) {
+                                items[1] = entry.attrs[ZaGlobalConfig.A_zimbraSMIMELdapAttribute][i].substring(items[0].length+1);
+                        }
+
+                        SMIMEconfs[items[0]][ZaGlobalConfig.A_zimbraSMIMELdapAttribute] = items[1];
+                }
+		}
+        }
+
+        for(var conf in SMIMEconfs) {
+                this._containedObject[ZaGlobalConfig.A2_zimbraSMIMEConf].push(SMIMEconfs[conf]);
+        }
+
+    	this._localXForm.setInstance(this._containedObject);
+        this.updateTab();
+}
+
+
 GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
-	var _tab1, _tab2, _tab3, _tab4, _tab5, _tab6, _tab7, _tab8, _tab9;
+	var _tab1, _tab2, _tab3, _tab4, _tab5, _tab6, _tab7, _tab8, _tab9, _tab10;
 	
     var tabBarChoices = [];
     var switchItems = [];
@@ -798,6 +915,35 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                 };
         switchItems.push (case9) ;
     }
+    if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.SMIME_TAB_ATTRS, GlobalConfigXFormView.SMIME_TAB_RIGHTS)) {
+        _tab10 = ++this.TAB_INDEX;
+
+        tabBarChoices.push ({value:_tab10, label:ZaMsg.Domain_Tab_SMIME});
+        var case10 =             //smime properties
+                {type: _ZATABCASE_, caseKey:_tab10,
+                       colSizes:["auto"],numCols:1,id:"global_smime_tab",
+                       items:   [
+                                {type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_SMIME_Settings,width:"*",
+                                        items: [
+                                                {ref:ZaGlobalConfig.A2_zimbraSMIMEConf, type:_REPEAT_,
+                                                        label:"", repeatInstance:"", showAddButton:true, showRemoveButton:true,
+                                                        addButtonLabel:ZaMsg.Domain_Add_SMIME,
+                                                        removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,
+                                                        showAddOnNextRow:true,
+                                                        align: _CENTER_,
+                                                        items: [
+                                                                {ref:".", type:_SMIME_, label:null,
+                                                                labelLocation:_NONE_,
+                                                                visibilityChecks:[],enableDisableChecks:[]}
+                                                                ]
+                                                }
+                                 ]}
+                                ]
+                };
+        switchItems.push (case10) ;
+    }
+
+	
     xFormObject.items = [
 		{ type: _DWT_ALERT_,
 		  cssClass: "DwtTabTable",

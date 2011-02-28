@@ -220,7 +220,12 @@ function () {
 		}
 		if(!ZaItem.hasWritePermission(a,tmpObj)) {
 				continue;
-		}			
+		}
+
+		if(a == ZaDomain.A_zimbraSMIMELdapURL || a == ZaDomain.A_zimbraSMIMELdapBindDn 
+			|| a == ZaDomain.A_zimbraSMIMELdapBindPassword || a == ZaDomain.A_zimbraSMIMELdapSearchBase
+			|| a == ZaDomain.A_zimbraSMIMELdapFilter || a == ZaDomain.A_zimbraSMIMELdapAttribute)
+			continue;			
 		if (!(AjxUtil.isEmpty(this._currentObject.attrs[a]) && AjxUtil.isEmpty(tmpObj.attrs[a]))) {
 			if(tmpObj.attrs[a] instanceof Array) {
 					if(
@@ -277,6 +282,163 @@ function () {
 		}
 	}
 
+	// S/MIME
+	if(!haveSmth) {
+
+	    var curObjAttrs = this._currentObject.attrs;
+            var curSMIMEconfs = {};
+            if(curObjAttrs[ZaDomain.A_zimbraSMIMELdapURL]) {
+		if(!(curObjAttrs[ZaDomain.A_zimbraSMIMELdapURL] instanceof Array))
+			curObjAttrs[ZaDomain.A_zimbraSMIMELdapURL] = [curObjAttrs[ZaDomain.A_zimbraSMIMELdapURL]];
+		if( curObjAttrs[ZaDomain.A_zimbraSMIMELdapURL].length > 0) {
+                for(var i = 0; i < curObjAttrs[ZaDomain.A_zimbraSMIMELdapURL].length; i++) {
+                        var items = curObjAttrs[ZaDomain.A_zimbraSMIMELdapURL][i].split(":");
+                        if(!curSMIMEconfs[items[0]]){
+                                curSMIMEconfs[items[0]] = {"name":items[0]};
+                        }
+                        if(items.length > 2) {
+                                items[1] = curObjAttrs[ZaDomain.A_zimbraSMIMELdapURL][i].substring(items[0].length+1);
+                        }
+                        curSMIMEconfs[items[0]][ZaDomain.A_zimbraSMIMELdapURL] = items[1];
+                }}
+            }
+            if(curObjAttrs[ZaDomain.A_zimbraSMIMELdapBindDn]) {
+		if(!(curObjAttrs[ZaDomain.A_zimbraSMIMELdapBindDn] instanceof Array))
+			curObjAttrs[ZaDomain.A_zimbraSMIMELdapBindDn] = [curObjAttrs[ZaDomain.A_zimbraSMIMELdapBindDn]];
+		if( curObjAttrs[ZaDomain.A_zimbraSMIMELdapBindDn].length > 0) {
+               for(var i = 0; i < curObjAttrs[ZaDomain.A_zimbraSMIMELdapBindDn].length; i++) {
+                        var items = curObjAttrs[ZaDomain.A_zimbraSMIMELdapBindDn][i].split(":");
+                        if(!curSMIMEconfs[items[0]]){
+                                curSMIMEconfs[items[0]] = {"name":items[0]};
+                        }
+                        if(items.length > 2) {
+                                items[1] = curObjAttrs[ZaDomain.A_zimbraSMIMELdapBindDn][i].substring(items[0].length+1);
+                        }
+                        curSMIMEconfs[items[0]][ZaDomain.A_zimbraSMIMELdapBindDn] = items[1];
+                }
+		}
+            }
+            if(curObjAttrs[ZaDomain.A_zimbraSMIMELdapBindPassword])  {
+		if(!(curObjAttrs[ZaDomain.A_zimbraSMIMELdapBindPassword] instanceof Array))
+			curObjAttrs[ZaDomain.A_zimbraSMIMELdapBindPassword] = [curObjAttrs[ZaDomain.A_zimbraSMIMELdapBindPassword]];
+		if(curObjAttrs[ZaDomain.A_zimbraSMIMELdapBindPassword].length > 0) {
+               for(var i = 0; i < curObjAttrs[ZaDomain.A_zimbraSMIMELdapBindPassword].length; i++) {
+                        var items = curObjAttrs[ZaDomain.A_zimbraSMIMELdapBindPassword][i].split(":");
+                        if(!curSMIMEconfs[items[0]]){
+                                curSMIMEconfs[items[0]] = {"name":items[0]};
+                        }
+                        if(items.length > 2) {
+                                items[1] = curObjAttrs[ZaDomain.A_zimbraSMIMELdapBindPassword][i].substring(items[0].length+1);
+                        }
+                        curSMIMEconfs[items[0]][ZaDomain.A_zimbraSMIMELdapBindPassword] = items[1];
+                }
+		}
+           }
+
+            if(curObjAttrs[ZaDomain.A_zimbraSMIMELdapSearchBase]) {
+		if(!(curObjAttrs[ZaDomain.A_zimbraSMIMELdapSearchBase] instanceof Array))
+			curObjAttrs[ZaDomain.A_zimbraSMIMELdapSearchBase]= [curObjAttrs[ZaDomain.A_zimbraSMIMELdapSearchBase]];	
+		if( curObjAttrs[ZaDomain.A_zimbraSMIMELdapSearchBase].length > 0) {
+               for(var i = 0; i < curObjAttrs[ZaDomain.A_zimbraSMIMELdapSearchBase].length; i++) {
+                        var items = curObjAttrs[ZaDomain.A_zimbraSMIMELdapSearchBase][i].split(":");
+                        if(!curSMIMEconfs[items[0]]){
+                                curSMIMEconfs[items[0]] = {"name":items[0]};
+                        }
+                        if(items.length > 2) {
+                                items[1] = curObjAttrs[ZaDomain.A_zimbraSMIMELdapSearchBase][i].substring(items[0].length+1);
+                        }
+                        curSMIMEconfs[items[0]][ZaDomain.A_zimbraSMIMELdapSearchBase] = items[1];
+                }
+		}
+            }
+            if(curObjAttrs[ZaDomain.A_zimbraSMIMELdapFilter]) {
+		if(!(curObjAttrs[ZaDomain.A_zimbraSMIMELdapFilter] instanceof Array))
+			curObjAttrs[ZaDomain.A_zimbraSMIMELdapFilter] = [curObjAttrs[ZaDomain.A_zimbraSMIMELdapFilter]];
+		if(curObjAttrs[ZaDomain.A_zimbraSMIMELdapFilter].length > 0) {
+               for(var i = 0; i < curObjAttrs[ZaDomain.A_zimbraSMIMELdapFilter].length; i++) {
+                        var items = curObjAttrs[ZaDomain.A_zimbraSMIMELdapFilter][i].split(":");
+                        if(!curSMIMEconfs[items[0]]){
+                                curSMIMEconfs[items[0]] = {"name":items[0]};
+                        }
+                        if(items.length > 2) {
+                                items[1] = curObjAttrs[ZaDomain.A_zimbraSMIMELdapFilter][i].substring(items[0].length+1);
+                        }
+                        curSMIMEconfs[items[0]][ZaDomain.A_zimbraSMIMELdapFilter] = items[1];
+                }
+		}
+            }
+            if(curObjAttrs[ZaDomain.A_zimbraSMIMELdapAttribute])  {
+		if(!(curObjAttrs[ZaDomain.A_zimbraSMIMELdapAttribute] instanceof Array))
+			curObjAttrs[ZaDomain.A_zimbraSMIMELdapAttribute] = [curObjAttrs[ZaDomain.A_zimbraSMIMELdapAttribute]];
+		if(curObjAttrs[ZaDomain.A_zimbraSMIMELdapAttribute].length > 0) {
+               for(var i = 0; i < curObjAttrs[ZaDomain.A_zimbraSMIMELdapAttribute].length; i++) {
+                        var items = curObjAttrs[ZaDomain.A_zimbraSMIMELdapAttribute][i].split(":");
+                        if(!curSMIMEconfs[items[0]]){
+                                curSMIMEconfs[items[0]] = {"name":items[0]};
+                        }
+                        if(items.length > 2) {
+                                items[1] = curObjAttrs[ZaDomain.A_zimbraSMIMELdapAttribute][i].substring(items[0].length+1);
+                        }
+
+                        curSMIMEconfs[items[0]][ZaDomain.A_zimbraSMIMELdapAttribute] = items[1];
+                }
+		}
+            }
+		var modifiedSMIME = {};
+		var consumedConfs = {};
+                if(tmpObj[ZaDomain.A2_zimbraSMIMEConf] && tmpObj[ZaDomain.A2_zimbraSMIMEConf] instanceof Array 
+                        && tmpObj[ZaDomain.A2_zimbraSMIMEConf].length >= 0) {
+			for(var i = 0; i < tmpObj[ZaDomain.A2_zimbraSMIMEConf].length; i ++) {
+				var conf = tmpObj[ZaDomain.A2_zimbraSMIMEConf][i];
+				if(!conf["name"] || conf["name"] == "" || !conf[ZaDomain.A_zimbraSMIMELdapURL]
+					|| conf[ZaDomain.A_zimbraSMIMELdapURL] == "") {
+                        			this._errorDialog.setMessage(ZaMsg.ERROR_SMIME_MSG_NULL, 
+							null, DwtMessageDialog.CRITICAL_STYLE, 
+							ZaMsg.zimbraAdminTitle);
+                        			this._errorDialog.popup();
+                        			return false;
+				}else if(consumedConfs[conf["name"]]){
+                                                this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_SMIME_MSG_SAMENAME,
+							[conf["name"]]),
+                                                        null, DwtMessageDialog.CRITICAL_STYLE,
+                                                        ZaMsg.zimbraAdminTitle);
+                                                this._errorDialog.popup();
+                                                return false;
+				}
+
+				if(!curSMIMEconfs[conf["name"]]) {
+					modifiedSMIME[conf["name"]] = {"Op":"ADD","Loc":i};
+					haveSmth = true;
+				}
+				else {
+					var oldconf = curSMIMEconfs[conf["name"]];
+					if(oldconf["name"] != conf["name"]
+						|| oldconf[ZaDomain.A_zimbraSMIMELdapURL] != conf[ZaDomain.A_zimbraSMIMELdapURL]
+						|| oldconf[ZaDomain.A_zimbraSMIMELdapBindDn]!= conf[ZaDomain.A_zimbraSMIMELdapBindDn]
+						|| oldconf[ZaDomain.A_zimbraSMIMELdapBindPassword]!= conf [ZaDomain.A_zimbraSMIMELdapBindPassword]
+						|| oldconf[ZaDomain.A_zimbraSMIMELdapSearchBase] != conf[ZaDomain.A_zimbraSMIMELdapSearchBase]
+						|| oldconf[ZaDomain.A_zimbraSMIMELdapFilter] != conf[ZaDomain.A_zimbraSMIMELdapFilter]
+						|| oldconf[ZaDomain.A_zimbraSMIMELdapAttribute] != conf[ZaDomain.A_zimbraSMIMELdapAttribute]
+					) {
+						modifiedSMIME[conf["name"]] ={"Op":"MODIFIED","Loc":i};
+						haveSmth = true;
+					}
+					consumedConfs[conf["name"]] = "DONE";
+					delete curSMIMEconfs[conf["name"]];
+				}
+			}
+
+                                for(var dconf in curSMIMEconfs) {
+                                        modifiedSMIME[dconf] = {"Op":"DELETED","Loc":i};
+					haveSmth = true;
+                                }
+
+		}
+
+		if(haveSmth) {
+			mods[ZaDomain.A2_zimbraSMIMEConf] = modifiedSMIME;
+		}
+	}
 	if(haveSmth || catchAllChanged) {
 		try { 
 			if(renameNotebookAccount) {
