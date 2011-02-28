@@ -63,19 +63,13 @@ sub get_df_stat() {
             $path  = $5;
         }
         next if $dev !~ m#^/#;
-        my $skip_vol = 0;
-        for my $vol ( @DF_EXCLUDES ) {
-            $skip_vol = 1 if ($vol eq $path);
-        }
-        if ($skip_vol != 1) {
-            push(@stats, {
-                path => $path,
-                disk => $dev,
-                disk_use => $used,
-                disk_pct_used => $pct,
-                disk_space => $space
-            });
-		}
+        push(@stats, {
+            path => $path,
+            disk => $dev,
+            disk_use => $used,
+            disk_pct_used => $pct,
+            disk_space => $space
+        });
     }
     close DF;
     @stats;
@@ -134,10 +128,17 @@ while (1) {
     foreach my $df (@stats) {
     	my $pct = $df->{'disk_pct_used'};
     	my $dev = $df->{'disk'};
-    	if ($pct >= $DISK_CRIT_THRESHOLD) {
-            Zimbra::Mon::Logger::Log( "crit", "Disk warning: ${hostname}: $dev at $pct%"); 
+        my $mnt = $df->{'path'};
+        my $skip_vol = 0;
+        for my $vol ( @DF_EXCLUDES ) {
+            $skip_vol = 1 if (($vol eq $mnt) || ($vol eq $dev));
+        }
+        if (($skip_vol == 1) && (($pct >= $DISK_CRIT_THRESHOLD) || ($pct >= $DISK_WARN_THRESHOLD))) {
+            Zimbra::Mon::Logger::Log( "info", "Disk warning: ${hostname}: $mnt on device $dev at $pct%");
+        } elsif ($pct >= $DISK_CRIT_THRESHOLD) {
+            Zimbra::Mon::Logger::Log( "crit", "Disk warning: ${hostname}: $mnt on device $dev at $pct%"); 
     	} elsif ($pct >= $DISK_WARN_THRESHOLD) {
-            Zimbra::Mon::Logger::Log( "err", "Disk warning: ${hostname}: $dev at $pct%");
+            Zimbra::Mon::Logger::Log( "err", "Disk warning: ${hostname}: $mnt on device $dev at $pct%");
     	}
     }
     my $tstamp = getTstamp();
