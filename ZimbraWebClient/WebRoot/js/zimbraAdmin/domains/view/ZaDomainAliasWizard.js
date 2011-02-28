@@ -30,7 +30,7 @@ function() {
                 {ref:ZaDomain.A2_zimbraDomainAliasTarget, type:_DYNSELECT_,
 					inputWidth: 250,   emptyText:ZaMsg.enterSearchTerm,	
                     label: ZaMsg.LBL_targetDomain, toolTipContent:ZaMsg.tt_StartTypingDomainName,
-                    dataFetcherMethod:ZaSearch.prototype.dynSelectSearchDomains,
+                    dataFetcherMethod:ZaSearch.prototype.dynSelectSearchOnlyDomains,
                     dataFetcherClass:ZaSearch,editable:true,
                     visibilityChecks:[],enableDisableChecks:[]}
             ]

@@ -369,6 +369,31 @@ ZaSearch.prototype.dynSelectSearchDomains = function (callArgs) {
 	}
 }
 
+ZaSearch.prototype.dynSelectSearchOnlyDomains = function (callArgs) {
+        try {
+                var value = callArgs["value"];
+                var event = callArgs["event"];
+                var callback = callArgs["callback"];
+                var busyId = Dwt.getNextId();
+
+                var params = new Object();
+                dataCallback = new AjxCallback(this, this.dynSelectDataCallback, {callback:callback,busyId:busyId});
+                params.types = [ZaSearch.DOMAINS];
+                params.callback = dataCallback;
+                params.sortBy = ZaDomain.A_domainName;
+                params.query = ZaSearch.getSearchOnlyDomainByNameQuery(value);
+                params.controller = ZaApp.getInstance().getCurrentController();
+                params.showBusy = true;
+                params.busyId = busyId;
+                params.busyMsg = ZaMsg.BUSY_SEARCHING_DOMAINS;
+                params.skipCallbackIfCancelled = false;
+        params.attrs = [ZaDomain.A_domainName,ZaDomain.A_zimbraDomainStatus,ZaItem.A_zimbraId, ZaDomain.A_domainType];
+                ZaSearch.searchDirectory(params);
+        } catch (ex) {
+                ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearchOnlyDomains"); 
+        }
+}
+
 /**
  * @argument callArgs {value, event, callback}
  */
@@ -500,6 +525,16 @@ function(n) {
 		n = String(n).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
 		return ("(|(uid=*"+n+"*)(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(zimbraId="+n+")(zimbraDomainName=*"+n+"*))");
 	}
+}
+
+ZaSearch.getSearchOnlyDomainByNameQuery =
+function(n) {
+        if (n == null || n == "") {
+                return "";
+        } else {
+                n = String(n).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
+                return ("(&(|(uid=*"+n+"*)(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(zimbraId="+n+")(zimbraDomainName=*"+n+"*))(zimbraDomainType=local))");
+        }
 }
 
 ZaSearch.getSearchByNameQuery =
