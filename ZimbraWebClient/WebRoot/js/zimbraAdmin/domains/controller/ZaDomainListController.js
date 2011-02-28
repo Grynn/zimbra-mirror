@@ -503,6 +503,14 @@ function () {
 	if(cnt == 1) {
 		var item = this._contentView.getSelection()[0];
 		if(item) {
+			if(item.attrs[ZaDomain.A_domainType] == "alias"){
+				if(this._toolbarOperations[ZaOperation.ADD_DOMAIN_ALIAS])
+                                        this._toolbarOperations[ZaOperation.ADD_DOMAIN_ALIAS].enabled=false;
+				
+				if(this._popupOperations[ZaOperation.ADD_DOMAIN_ALIAS])
+                                        this._popupOperations[ZaOperation.ADD_DOMAIN_ALIAS].enabled=false;
+			}
+			
 			if(item.attrs[ZaDomain.A_zimbraDomainStatus] == ZaDomain.DOMAIN_STATUS_SHUTDOWN) {
 				if(this._toolbarOperations[ZaOperation.EDIT])
 					this._toolbarOperations[ZaOperation.EDIT].enabled=false;
