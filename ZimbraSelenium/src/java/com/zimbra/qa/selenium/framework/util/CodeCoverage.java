@@ -465,6 +465,27 @@ public class CodeCoverage {
 	protected boolean EnableSourceCodeReport = false;
 	protected String CoverageServer = null;
 	
+	/**
+	 * Return a map of URL query parameters, required to enable code coverage from the Zimbra ajax app
+	 * @return
+	 */
+	public Map<String, String> getQueryMap() {
+		Map<String, String> map = new HashMap<String, String>();
+		
+		String property = ZimbraSeleniumProperties.getStringProperty("coverage.query", "");
+		
+		for (String p : property.split("&")) {
+			if ( p.contains("=") ) {
+				map.put(p.split("=")[0], p.split("=")[1]);
+			} else {
+				// No value, just use p as the key and null as the value
+				map.put(p, null);
+			}
+		}
+		
+		return (map);
+	}
+
 	// Singleton methods
 
 	private volatile static CodeCoverage instance;
@@ -486,5 +507,6 @@ public class CodeCoverage {
 		}
 		return instance;
 	}
+
 
  }

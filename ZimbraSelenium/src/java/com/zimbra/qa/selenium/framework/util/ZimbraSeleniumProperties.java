@@ -2,9 +2,10 @@
 package com.zimbra.qa.selenium.framework.util;
 
 import java.io.File;
-import java.net.InetAddress;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.net.*;
+import java.util.*;
+import java.util.Map.Entry;
+
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.LogManager;
@@ -232,11 +233,15 @@ public class ZimbraSeleniumProperties {
 	 */
 	public static String getBaseURL() {
 		String scheme = ZimbraSeleniumProperties.getStringProperty("server.scheme", "http");
+		String userinfo = null;
 		String host = ZimbraSeleniumProperties.getStringProperty("server.host", "localhost");
 		String port = ZimbraSeleniumProperties.getStringProperty("server.port", "7070");
-		String codeCoverage = "";
+		String path = null;
+		Map<String, String> queryMap = new HashMap<String, String>();
+		String fragment = null;
+		
 		if ( CodeCoverage.getInstance().Enabled ) {
-			codeCoverage = "?dev=1&debug=0";
+			queryMap.putAll(CodeCoverage.getInstance().getQueryMap());
 		}
 		
 		if ( appType == AppType.DESKTOP ) {
@@ -244,34 +249,68 @@ public class ZimbraSeleniumProperties {
 
 		      ZimbraDesktopProperties zdp = ZimbraDesktopProperties.getInstance();
 		      port = zdp.getConnectionPort();
-		      String desktop_host = ZimbraSeleniumProperties.getStringProperty("desktop.server.host", "localhost");
-		      String baseUrl = scheme + "://" + desktop_host + ":" + port +
-            "/desktop/login.jsp?at=" + zdp.getSerialNumber();;
+		      host = ZimbraSeleniumProperties.getStringProperty("desktop.server.host", "localhost");
+		      path = "/desktop/login.jsp";
+		      queryMap.put("at", zdp.getSerialNumber());
 
-		      logger.info("Base URL is: " + baseUrl);
-
-		      return (baseUrl);
 		}
 
 		if ( appType == AppType.AJAX ) {
-			return (scheme + "://"+ host + ":" + port +"/" + codeCoverage);
+			
+			// FALL THROUGH
+
 		}
 
 		if ( appType == AppType.HTML ) {
-			return (scheme + "://"+ host + ":" + port + "/h/" + codeCoverage);
+			
+			path ="/h/";
+
 		}
 
 		if ( appType == AppType.MOBILE ) {
-			return (scheme + "://"+ host + ":" + port + "/m/" + codeCoverage);
+
+			path ="/m/";
+			
 		}
 
 		if ( appType == AppType.ADMIN ) {
-			return ("https://"+ host +":7071" +"/" + codeCoverage);
+		
+			scheme = "https";
+			port = "7071";
+
 		}
 
-		// Default
-		logger.warn("Using default URL");
-		return (scheme +"://"+ host +"/"+ codeCoverage);
+		// Build the query from the map
+		StringBuilder sb = null;
+		for (Entry<String, String> set : queryMap.entrySet()) {
+			String q;
+			if ( set.getValue() == null ) {
+				q = set.getKey(); // If value is null, just use the key as the parameter value
+			} else {
+				q = set.getKey() +"="+ set.getValue();
+			}
+			if ( sb == null ) {
+				sb = new StringBuilder();
+				sb.append(q);
+			} else {
+				sb.append('&').append(q);
+			}
+		}
+		String query = ( sb == null ? null : sb.toString());
+		
+		try {
+			URI uri = new URI(scheme, userinfo, host, Integer.parseInt(port), path, query, fragment);
+			logger.info("Base URL: "+ uri.toString());
+			return (uri.toString());
+		} catch (NumberFormatException e) {
+			logger.error("Unable to parse port into integer: "+ port, e);
+		} catch (URISyntaxException e) {
+			logger.error("Unable to build Base URL.  Use default.", e);
+		}
+
+		// Use default
+		return (scheme + "://"+ host +":"+ port);
+
 	}
 
 	public static String zimbraGetVersionString() throws HarnessException {		
