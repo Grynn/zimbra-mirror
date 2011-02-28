@@ -60,7 +60,7 @@ public class TagTask extends AjaxCommonTest{
 		// Click on New Tag and check for active
 		DialogTag dialogtag = (DialogTag)app.zPageTasks.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_NEWTAG);
 		ZAssert.assertNotNull(dialogtag, "Verify that the Create New Tag dialog is active");
-		ZAssert.assertTrue(dialogtag.zIsActive(), "Verify that the Create New Tag dialog is active or not");
+		ZAssert.assertTrue(dialogtag.zIsActive(), "Verify that the Create New Tag dialog is active");
 
 		//Fill Name  and Press OK button
 		dialogtag.zSetTagName(tagName);
