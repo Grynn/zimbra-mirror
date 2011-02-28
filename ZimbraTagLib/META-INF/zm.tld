@@ -1006,6 +1006,20 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
+            <description>department name
+            </description>
+            <name>dept</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>email address
+            </description>
+            <name>email</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
             <description>type of objects to return (account, resource, all)</description>
             <name>type</name>
             <rtexprvalue>true</rtexprvalue>
