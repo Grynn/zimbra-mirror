@@ -186,6 +186,8 @@ ZaCos.A_zimbraFeatureMailEnabled = "zimbraFeatureMailEnabled";
 ZaCos.A_zimbraFeatureGroupCalendarEnabled = "zimbraFeatureGroupCalendarEnabled";
 ZaCos.A_zimbraFeatureFlaggingEnabled = "zimbraFeatureFlaggingEnabled" ;
 ZaCos.A_zimbraFeatureManageSMIMECertificateEnabled = "zimbraFeatureManageSMIMECertificateEnabled";
+ZaCos.A_zimbraFeatureSMIMEEnabled = "zimbraFeatureSMIMEEnabled";
+
 //security
 ZaCos.A_zimbraPasswordLockoutEnabled = "zimbraPasswordLockoutEnabled";
 ZaCos.A_zimbraPasswordLockoutDuration = "zimbraPasswordLockoutDuration";
@@ -682,6 +684,7 @@ ZaCos.myXModel = {
         {id:ZaCos.A_zimbraFeatureGalEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureGalEnabled, type:_ENUM_},
         {id:ZaCos.A_zimbraFeatureMAPIConnectorEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureMAPIConnectorEnabled, type:_ENUM_},
         {id:ZaCos.A_zimbraFeatureManageSMIMECertificateEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureManageSMIMECertificateEnabled, type:_ENUM_},
+        {id:ZaCos.A_zimbraFeatureSMIMEEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureSMIMEEnabled, type:_ENUM_},
 	{id:ZaCos.A_zimbraFeatureMailForwardingEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureMailForwardingEnabled, type:_ENUM_},
 	{id:ZaCos.A_zimbraFeatureMailSendLaterEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureMailSendLaterEnabled, type:_ENUM_},
         {id:ZaCos.A_zimbraFeatureFreeBusyViewEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraFeatureFreeBusyViewEnabled, type:_ENUM_},

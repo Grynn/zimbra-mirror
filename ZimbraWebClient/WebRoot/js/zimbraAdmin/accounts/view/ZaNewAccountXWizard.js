@@ -976,11 +976,17 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 				}
 			);
 		};
-                if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraFeatureManageSMIMECertificateEnabled],[])) {
+                if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraFeatureManageSMIMECertificateEnabledi, ZaAccount.A_zimbraFeatureSMIMEEnabled],[])) {
                         featuresCase.items.push(
                                 {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraSMIMEFeature, id:"account_wiz_features_smime",
                                         colSizes:["auto"],numCols:1,                                        
                                         items:[
+                                                {ref:ZaAccount.A_zimbraFeatureSMIMEEnabled, type:_SUPER_WIZ_CHECKBOX_,
+                                                resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+                                                msgName:ZaMsg.LBL_zimbraFeatureSMIMEEnabled,
+                                                checkBoxLabel:ZaMsg.LBL_zimbraFeatureSMIMEEnabled,
+                                                trueValue:"TRUE", falseValue:"FALSE"},
+
                                                 {ref:ZaAccount.A_zimbraFeatureManageSMIMECertificateEnabled, type:_SUPER_WIZ_CHECKBOX_,
  						resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 						msgName:ZaMsg.LBL_zimbraFeatureManageSMIMECertificateEnabled, 
