@@ -404,9 +404,8 @@ public class PageAddressbook extends AbsTab {
 		        String prefix="DWT";
 		        
 		        try {
-		        	//DWTXXXX
-		        	// 3 is for DWT
-		        	parentIdInt = Integer.parseInt(parentId.substring(3, parentId.length()));
+		        	//DWTXXXX		        
+		        	parentIdInt = Integer.parseInt(parentId.substring(prefix.length(), parentId.length()));
 		        	
 		        }
 		        catch (Exception e) {

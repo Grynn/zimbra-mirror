@@ -402,7 +402,43 @@ public class ContactContextMenu extends AjaxCommonTest  {
 	
 	}
 
-	@Test(	description = "Right click then click Find Emails->Sent to contact",
+	@Test(	description = "Right click then  click Find Emails->Sent To contact",
+			groups = { "smoke" })
+	public void FindEmailsReceivedFromContact() throws HarnessException {
+				
+	    //Create  email sent to this contacts	
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		
+		// Send the message from AccountA to the ZWC user
+		ZimbraAccount.AccountA().soapSend(
+					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+						"<m>" +
+							"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+							"<su>"+ subject +"</su>" +
+							"<mp ct='text/plain'>" +
+								"<content>"+ "body" + ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+							"</mp>" +
+						"</m>" +
+					"</SendMsgRequest>");
+		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+
+		ContactItem contactItem = createSelectAContactItem(app.zGetActiveAccount().DisplayName, app.zGetActiveAccount().clientAccountName, app.zGetActiveAccount().EmailAddress);
+		app.zPageAddressbook.zSyncDesktopToZcs();		
+		
+		//Click Find Emails->Sent To Contact
+        app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_SEARCH, Button.O_SEARCH_MAIL_SENT_TO_CONTACT , contactItem.fileAs);
+
+        
+        // Get all the messages in the inbox
+		List<ConversationItem> messages = app.zPageMail.zListGetConversations();
+		ZAssert.assertNotNull(messages, "Verify the message list exists");
+
+		// TODO: "Verify the message is in the inbox");
+                
+	}
+	
+	
+	@Test(	description = "Right click then  click Find Emails->Received from contact",
 			groups = { "smoke" })
 	public void FindEmailsSentToContact() throws HarnessException {
 				
@@ -421,13 +457,14 @@ public class ContactContextMenu extends AjaxCommonTest  {
 						"</m>" +
 					"</SendMsgRequest>");
 
-		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+		MailItem mail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
 
-		ContactItem contactItem = createSelectAContactItem(app.zGetActiveAccount().DisplayName, app.zGetActiveAccount().clientAccountName, app.zGetActiveAccount().EmailAddress);
+		ContactItem contactItem = createSelectAContactItem(ZimbraAccount.AccountA().DisplayName, ZimbraAccount.AccountA().clientAccountName, ZimbraAccount.AccountA().EmailAddress);
 		app.zPageAddressbook.zSyncDesktopToZcs();		
 		
-		//Click Find Emails->Sent To Contact
-        app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_SEARCH, Button.O_SEARCH_MAIL_SENT_TO_CONTACT , contactItem.fileAs);
+		
+		//Click Find Emails->Received From Contact
+        app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_SEARCH, Button.O_SEARCH_MAIL_RECEIVED_FROM_CONTACT, contactItem.fileAs);
 
         
         // Get all the messages in the inbox
