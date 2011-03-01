@@ -1,10 +1,9 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.bugs;
 
-import java.io.IOException;
+import java.io.File;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.cs.lmtpserver.LmtpProtocolException;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -24,14 +23,14 @@ public class Bug39246 extends AjaxCommonTest {
 	
 	@Test(	description = "Verify bug 39246",
 			groups = { "functional" })
-	public void Bug39246_01() throws IOException, LmtpProtocolException, HarnessException  {
+	public void Bug39246_01() throws HarnessException  {
 		
 		final String subject = "Bug39246";
 		final String mime = ZimbraSeleniumProperties.getBaseDirectory() + "/data/private/mime/viewEntireMessage_Bug39246.txt";
 		
 		
 		// Inject the example message
-		LmtpUtilDeprecated.injectFile(app.zGetActiveAccount().EmailAddress, mime);
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mime));
 
 		// Get Mail
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);

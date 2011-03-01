@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.zimlets.url;
 
+import java.io.File;
 import java.util.*;
 
 import org.testng.annotations.*;
@@ -129,7 +130,7 @@ public class GetMessage extends AjaxCommonTest {
 		final String url2 = "https://www.vmware.com";
 		
 		// Inject the example message
-		LmtpUtil.injectFile(app.zGetActiveAccount().EmailAddress, mime);
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mime));
 
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
@@ -164,7 +165,7 @@ public class GetMessage extends AjaxCommonTest {
 		final String mime = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/url01/invalid_url.txt";
 		
 		// Inject the example message
-		LmtpUtil.injectFile(app.zGetActiveAccount().EmailAddress, mime);
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mime));
 
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);

@@ -14,6 +14,11 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.lmtpserver.LmtpProtocolException;
 import com.zimbra.cs.lmtpserver.utils.LmtpClient;
 
+/**
+ * @deprecated As of version 7.0.  See LmtpInject class instead
+ * @author zimbra
+ *
+ */
 public class LmtpUtil {
 
 	/**
