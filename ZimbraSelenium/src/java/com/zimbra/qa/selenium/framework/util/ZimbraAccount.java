@@ -58,13 +58,12 @@ public class ZimbraAccount {
     public String DisplayName = null;
     public String EmailAddress = null;
     public String Password = null;
+    public boolean accountIsDirty = false;
     protected String ZimbraPrefLocale = Locale.getDefault().toString();
     protected String MyAuthToken = null;
     protected String MyClientAuthToken = null;
     public Map<String, String> preferences = null;
     public final static String clientAccountName = "local@host.local";
-
-
 
     /*
      * Create an account with the email address account<num>@<testdomain>
@@ -370,14 +369,14 @@ public class ZimbraAccount {
     */
 	public ZimbraAccount modifyPreferences(Map<String, String> preferences) {
 	   return modifyPreferences(preferences, SOAP_DESTINATION_HOST_TYPE.SERVER);
-	   
+
 	}
 
-	/**
-	 * Modify user prefences using ModifyPrefsRequest
+   /**
+	 * Modify user preferences using ModifyPrefsRequest
 	 * @param preferences Preferences to be modified through SOAP
 	 * @param destinationType The destination Host Type: SERVER or CLIENT
-	 * @throws HarnessException 
+	 * @throws HarnessException
 	 */
 	public ZimbraAccount modifyPreferences(Map<String, String> preferences,
 	      SOAP_DESTINATION_HOST_TYPE destinationType) {
@@ -422,11 +421,94 @@ public class ZimbraAccount {
 			// TODO: I would prefer to throw HarnessException here
 			logger.error("Unable to modify preference", e);
 		}
-		
+
+		accountIsDirty = true;
+
 		return (this);
 
 	}
-	
+
+   /**
+    * Get all the available zimlets through SOAP from either client or server
+    * @param info Information to look for
+    * @param destinationType Type of SOAP destination, client or server
+    * @return String[] All available zimlets
+    * @throws HarnessException
+    */
+   public String[] getAvailableZimlets(SOAP_DESTINATION_HOST_TYPE destinationType)
+   throws HarnessException {
+      String[] output = null;
+
+      try {
+         this.soapSend(
+               "<GetInfoRequest xmlns='urn:zimbraAccount'>" +
+               "</GetInfoRequest>",
+               destinationType,
+               this.EmailAddress);
+         Element[] response = soapSelectNodes("//acct:GetInfoResponse/acct:attrs/acct:attr");
+
+         StringBuilder temp = new StringBuilder();
+         for (Element element : response) {
+            if (element.getAttribute("name").equals("zimbraZimletAvailableZimlets")) {
+               temp.append(element.getText().trim().replace("+", "")).append(";");
+            }
+         }
+
+         temp.deleteCharAt(temp.length() - 1);
+         output = temp.toString().split(";");
+
+      } catch (ServiceException se) {
+         se.printStackTrace();
+         throw new HarnessException("Getting service exception while getting available zimlets: " +
+               se.getMessage());
+      }
+
+      accountIsDirty = true;
+
+      return output;
+
+   }
+
+   /**
+    * Modify user zimlet preferences using ModifyZimletPrefsRequest
+    * @param zimletPreferences Zimlet Preferences to be modified through SOAP
+    * @param destinationType The destination Host Type: SERVER or CLIENT
+    * @throws HarnessException
+    */
+   public ZimbraAccount modifyZimletPreferences(Map<String, String> zimletPreferences,
+         SOAP_DESTINATION_HOST_TYPE destinationType) {
+
+      for (Map.Entry<String, String> entry : zimletPreferences.entrySet()) {
+         ExecuteHarnessMain.tracer.trace(EmailAddress +" zimletPreferences: "+
+               entry.getKey() + "=" + entry.getValue());
+      }
+
+      StringBuilder sb = new StringBuilder();
+      for (Map.Entry<String, String> entry : zimletPreferences.entrySet()) {
+         sb.append(String.format("<zimlet xmlns='' name='%s' presence='%s'/>",
+               entry.getKey(), entry.getValue()));
+      }
+
+      if ( sb.length() <= 0 )
+         return (this); // Nothing to modify
+
+      try
+      {
+         soapSend(
+               "<ModifyZimletPrefsRequest xmlns='urn:zimbraAccount'>" +
+               sb.toString() +
+               "</ModifyZimletPrefsRequest>",
+               destinationType);
+
+         Element[] response = soapSelectNodes("//acct:ModifyZimletPrefsResponse");
+         if ( response == null || response.length != 1 )
+            throw new HarnessException("Unable to modify preference "+ soapLastResponse());
+      } catch (HarnessException e) {
+         logger.error("Unable to modify preference", e);
+      }
+      return (this);
+   }
+
 
 	/**
 	 * Get a user preference value
@@ -673,6 +755,7 @@ public class ZimbraAccount {
     	protected String AuthToken = null;
     	protected String ClientAuthToken = null;
     	protected String SessionId = null;
+    	protected String clientSessionId = null;
     	protected int SequenceNum = -1;
     	
     	protected Element requestEnvelope;
@@ -728,7 +811,16 @@ public class ZimbraAccount {
         public String setSessionId(String id) {
         	return (SessionId = id);
         }
-        
+
+        /**
+         * Set the Zimbra SessionId
+         * @param id
+         * @return
+         */
+        public String setClientSessionId(String id) {
+         return (clientSessionId = id);
+        }
+
         /**
          * Set the Zimbra SequenceNum
          * Use with the SessionId
@@ -805,7 +897,10 @@ public class ZimbraAccount {
         			setContext(AuthToken, SessionId, SequenceNum);
         			break;
         		case CLIENT:
-        			setContext(ClientAuthToken, SessionId, SequenceNum);
+        		   // Setting the session ID to 0 shouldn't affect anything for Desktop
+        		   // SOAP request
+        		   setClientSessionId("0");
+        			setContext(ClientAuthToken, clientSessionId, SequenceNum);
         			if (accountName != null) {
         				SoapUtil.addTargetAccountToCtxt(requestContext, null, accountName);
         			}
@@ -1123,6 +1218,11 @@ public class ZimbraAccount {
             path = "/service/soap/";
 
          } else if ( namespace.equals("urn:zimbraMail") ) {
+
+            // http://server.com:80/service/soap/
+            path = "/service/soap/";
+
+         } else if ( namespace.equals("urn:zimbra") ) {
 
             // http://server.com:80/service/soap/
             path = "/service/soap/";
