@@ -60,10 +60,10 @@ public class PageTasks extends AbsTab {
 			((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
 		}
 
-		// If the "folders" tree is visible, then mail is active
 		String locator = "zb__App__Tasks";
+		String rowLocator = "//div[@id='" + Locators.zl__TKL__rows + "']/div";
 
-		boolean loaded = this.sIsElementPresent(locator);
+		boolean loaded = this.sIsElementPresent(rowLocator);
 		if (!loaded)
 			return (false);
 

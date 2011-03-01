@@ -6,10 +6,6 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
-
-
-
-
 /**
  * The <code>FormMailNew<code> object defines a compose new message view
  * in the Zimbra Ajax client.
@@ -114,7 +110,6 @@ public class FormTaskNew extends AbsForm {
 		logger.info("FormTaskNew.zSubmit()");
 		
 		zToolbarPressButton(Button.B_SAVE);
-		
 	}
 
 	/**
@@ -160,7 +155,7 @@ public class FormTaskNew extends AbsForm {
 		
 		// Default behavior, process the locator by clicking on it
 		//
-		
+
 		// Click it
 		this.zClick(locator);
 
@@ -283,7 +278,7 @@ public class FormTaskNew extends AbsForm {
 		tracer.trace("Set "+ field +" to "+ value);
 
 		String locator = null;
-		
+
 
 		if (field == Field.Subject) {
 
@@ -292,10 +287,12 @@ public class FormTaskNew extends AbsForm {
 		} else if (field == Field.Body) {
 			locator = Locators.zBodyField;
 			try {
-				sSelectFrame(Locators.zFrame);
-				sType(locator, value);
+			   sSelectFrame(Locators.zFrame);
+			   this.sFocus(locator);
+			   this.zClick(locator);
+			   zKeyboard.zTypeCharacters(value);
 			} finally {
-				sSelectWindow(null);
+			   sSelectWindow("Zimbra: Tasks");
 			}
 			return;
 
@@ -303,8 +300,7 @@ public class FormTaskNew extends AbsForm {
 
 			throw new HarnessException("not implemented for field " + field);
 		}
-		
-		
+
 		// Make sure the button exists
 		if ( !this.sIsElementPresent(locator) )
 			throw new HarnessException("Field is not present field="+ field +" locator="+ locator);
