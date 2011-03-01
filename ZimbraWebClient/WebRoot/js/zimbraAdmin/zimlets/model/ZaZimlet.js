@@ -152,7 +152,7 @@ function (){
 	
 	if(!label){
 		var res = window[name];
-		label = res["label"] || res["zimletLabel"] || name;
+		label = (res && (res["label"] || res["zimletLabel"])) || name;
 	}
 	return label;
 }

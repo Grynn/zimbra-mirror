@@ -38,18 +38,18 @@ ZaController.changeActionsStateMethods["ZaZimletListController"] = new Array();
 **/
 ZaZimletListController.prototype.show = 
 function(list, openInNewTab) {
-    if (!this._UICreated) {
+    	if (!this._UICreated) {
 		this._createUI();
-	} 	
+	}
+ 	
 	if (list != null && list instanceof ZaItemList) {
-		this._contentView.set(list.getVector());
-	
 		this._list = list;
 	} else {
-		this._list = ZaZimlet.getAll(ZaZimlet.EXCLUDE_EXTENSIONS);			
-		this._contentView.set(this._list.getVector());
-		
-	}	
+		this._list = ZaZimlet.getAll(ZaZimlet.EXCLUDE_EXTENSIONS, new AjxCallback(this, this.show));
+		return;				
+	}
+
+	this._contentView.set(this._list.getVector());	
 	ZaApp.getInstance().pushView(this.getContentViewId());
 	this._removeList = new Array();
 		

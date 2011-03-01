@@ -39,17 +39,18 @@ ZaController.changeActionsStateMethods["ZaAdminExtListController"] = new Array()
 **/
 ZaAdminExtListController.prototype.show = 
 function(list, openInNewTab) {
-    if (!this._UICreated) {
+    	if (!this._UICreated) {
 		this._createUI();
-	} 	
+	}
+ 	
 	if (list != null && list instanceof ZaItemList) {
-		this._contentView.set(list.getVector());
 		this._list = list;
 	} else {
-		this._list = ZaZimlet.getAll(ZaZimlet.EXCLUDE_MAIL);
-		this._contentView.set(this._list.getVector());
-		
+		this._list = ZaZimlet.getAll(ZaZimlet.EXCLUDE_MAIL, new AjxCallback(this, this.show));
+		return;		
 	}	
+
+	this._contentView.set(this._list.getVector());
 	//ZaApp.getInstance().pushView(ZaZimbraAdmin._ADMIN_ZIMLET_LIST_VIEW);					
 	ZaApp.getInstance().pushView(this.getContentViewId());
 	this._removeList = new Array();
