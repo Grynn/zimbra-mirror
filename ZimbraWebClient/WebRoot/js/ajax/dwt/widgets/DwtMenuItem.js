@@ -389,6 +389,16 @@ function(ev) {
 	}
 };
 
+/*
+ * returns menu item table row element
+ */
+DwtMenuItem.prototype.getRowElement =
+function() {
+   var el = this._textEl ? this._textEl : this._iconEl ? this._iconEl : this._dropDownEl;
+   if (el)
+    return el.parentNode;
+};
+
 DwtMenuItem._listeners = {};
 DwtMenuItem._listeners[DwtEvent.ONMOUSEOVER] = new AjxListener(null, DwtMenuItem._mouseOverListener);
 DwtMenuItem._listeners[DwtEvent.ONMOUSEOUT] = new AjxListener(null, DwtMenuItem._mouseOutListener);
