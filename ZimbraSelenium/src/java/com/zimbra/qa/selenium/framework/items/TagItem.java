@@ -107,7 +107,11 @@ public class TagItem implements IItem {
 			
 			// Set the ID
 			item.setId(t.getAttribute("id", null));
-			
+			//Set tag name
+			Element sElement = ZimbraAccount.SoapClient.selectNode(tag, "//mail:tag");
+			if ( sElement != null )
+			item.dName = sElement.getAttribute("name");
+
 			
 			return (item);
 			
@@ -135,7 +139,8 @@ public class TagItem implements IItem {
 			
 			account.soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");
 			
-			Element[] results = account.soapSelectNodes("//mail:GetTagResponse//mail:tag[@name='"+ name +"'");
+			Element[] results = account.soapSelectNodes("//mail:GetTagResponse//mail:tag[@name='"+name+"']");
+			
 			if (results.length != 1)
 				throw new HarnessException("Query should return 1 result, not "+ results.length);
 				
