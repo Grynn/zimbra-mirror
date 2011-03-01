@@ -205,7 +205,7 @@ public class DeltaSync {
                     continue;
 
                 (tasks == null ? tasks = new HashMap<Integer,Integer>() : tasks).put(id, folderId);
-            } else if (type.equals(MailConstants.E_DOC) || type.equals(MailConstants.E_WIKIWORD)) {
+            } else if (type.equals(MailConstants.E_DOC)) {
                 if (!OfflineLC.zdesktop_sync_documents.booleanValue() ||
                         !ombx.getRemoteServerVersion().isAtLeast(InitialSync.sMinDocumentSyncVersion))
                     continue;
@@ -218,6 +218,8 @@ public class DeltaSync {
                     continue;
 
                 (documents == null ? documents = new ArrayList<Integer>() : documents).add(id);
+            } else if (type.equals(MailConstants.E_WIKIWORD)) {
+                continue;   //no longer support wiki since zd7
             } else if (InitialSync.KNOWN_FOLDER_TYPES.contains(type)) {
                 // can't tell new folders from modified ones, so might as well go through the initial sync process
                 syncContainer(change, id);
@@ -882,9 +884,7 @@ public class DeltaSync {
                 OfflineLog.response.debug(response);
 
             for (Element doc : response.listElements(MailConstants.E_DOC))
-                getInitialSync().syncDocument(doc);
-            for (Element doc : response.listElements(MailConstants.E_WIKIWORD))
-                getInitialSync().syncDocument(doc);
-        }
+            	getInitialSync().syncDocument(doc);
+    	}
     }
 }

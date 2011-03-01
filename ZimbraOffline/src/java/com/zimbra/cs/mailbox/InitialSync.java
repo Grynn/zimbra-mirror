@@ -280,10 +280,6 @@ public class InitialSync {
                 if (eDocIds != null) {
                     syncAllDocumentsInFolder(folderId);
                 }
-                eDocIds = elt.getOptionalElement(MailConstants.E_WIKIWORD);
-                if (eDocIds != null) {
-                    syncAllDocumentsInFolder(folderId);
-                }
             }
         }
 
@@ -1305,8 +1301,6 @@ public class InitialSync {
         OfflineLog.offline.debug(response.prettyPrint());
 
         for (Element doc : response.listElements(MailConstants.E_DOC))
-            syncDocument(doc);
-        for (Element doc : response.listElements(MailConstants.E_WIKIWORD))
             syncDocument(doc);
     }
 
