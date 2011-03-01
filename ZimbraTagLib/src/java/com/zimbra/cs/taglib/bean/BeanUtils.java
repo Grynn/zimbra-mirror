@@ -864,7 +864,18 @@ public class BeanUtils {
          if (dow != prefFirstDayOfWeek)
              cal.add(Calendar.DAY_OF_MONTH, - (((dow-1) + (7- (int)prefFirstDayOfWeek)) % 7));
          return cal;
-     }
+    }
+
+    public static Calendar getCurrentDay(java.util.Calendar date) {
+         Calendar cal = Calendar.getInstance(date.getTimeZone());
+         cal.setTimeInMillis(date.getTimeInMillis());
+         cal.set(Calendar.HOUR_OF_DAY, 0);
+         cal.set(Calendar.MINUTE, 0);
+         cal.set(Calendar.SECOND, 0);
+         cal.set(Calendar.MILLISECOND, 0);
+
+         return cal;
+    }
 
     public static void getNextDay(Calendar cal) {
         cal.add(Calendar.DAY_OF_MONTH, 1);
