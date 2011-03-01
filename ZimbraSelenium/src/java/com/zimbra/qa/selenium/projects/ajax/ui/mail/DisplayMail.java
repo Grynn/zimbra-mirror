@@ -78,17 +78,13 @@ public class DisplayMail extends AbsDisplay {
 		
 		tracer.trace("Click 'View Entire Message'");
 
-		
-		AbsPage page = null;
+		AbsPage page = this;
 		String locator = Locators.zViewEntireMessage;
-		
-		if ( this.sIsElementPresent(locator) )
-			throw new HarnessException("'View Entire Message' link does not exist: "+ Locators.zViewEntireMessage);
 		
 		this.sClick(locator);
 		
 		this.zWaitForBusyOverlay();
-		
+
 		return (page);
 	}
 

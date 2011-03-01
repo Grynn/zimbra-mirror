@@ -1102,18 +1102,6 @@ public class PageMail extends AbsTab {
 		
 	}
 
-	/**
-	 * Get the Reading Pane object
-	 * @return
-	 */
-	public DisplayMail zGetReadingPane() {
-		
-		// TODO: check if something is displayed in the reading pane?
-		
-		return (new DisplayMail(this.MyApplication));
-		
-	}
-
 	@Override
 	public AbsPage zKeyboardShortcut(Shortcut shortcut) throws HarnessException {
 

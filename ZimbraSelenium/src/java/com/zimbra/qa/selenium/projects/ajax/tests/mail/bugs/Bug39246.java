@@ -31,18 +31,17 @@ public class Bug39246 extends AjaxCommonTest {
 		
 		
 		// Inject the example message
-		LmtpUtil.injectFile(app.zGetActiveAccount().EmailAddress, mime);
+		LmtpUtilDeprecated.injectFile(app.zGetActiveAccount().EmailAddress, mime);
 
 		// Get Mail
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 		
 		// Select the message
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		DisplayMail display = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 
 		// In the preview pane, click "View Entire Message"
-		DisplayMail pane = app.zPageMail.zGetReadingPane();
-		pane.zClickViewEntireMessage();
-
+		display.zClickViewEntireMessage();
+		
 		throw new HarnessException("Convert remaining code from LmtpInject.viewEntireMessage_Bug39246()");
 
 		
