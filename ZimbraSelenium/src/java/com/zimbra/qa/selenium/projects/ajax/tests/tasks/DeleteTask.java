@@ -191,7 +191,7 @@ public class DeleteTask extends AjaxCommonTest {
 	}
 
 	@Test(	description = "Delete a task by selecting and typing '.t' shortcut",
-			groups = { "smoke" } )
+			groups = { "functional" } )
 	public void DeleteTask_04() throws HarnessException {
 		
 		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
