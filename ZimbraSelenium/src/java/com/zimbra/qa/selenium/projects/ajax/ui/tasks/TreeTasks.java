@@ -7,7 +7,7 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
+
 
 
 /**
@@ -19,7 +19,11 @@ public class TreeTasks extends AbsTree {
 	public static class Locators {
 		public static final String ztih__main_Tasks__ZIMLET_ID = "ztih__main_Tasks__ZIMLET";
 		public static final String ztih__main_Mail__ZIMLET_nodeCell_ID = "ztih__main_Mail__ZIMLET_nodeCell";
+		public static final String zNewTagIcon = "//td[contains(@class,'overviewHeader-Text FakeAnchor')]/div[contains(@class,'ImgNewTag')]";
+		public static final String zTagsHeader = "//td[contains(@id,'ztih__main_Tasks__TAG_textCell')]";
 	}
+	
+	
 	
 		
 	
@@ -35,59 +39,45 @@ public class TreeTasks extends AbsTree {
 	 */
 	@Override
 	public AbsPage zPressButton(Button button) throws HarnessException {
-		tracer.trace("Press the "+ button +" button");
+		tracer.trace("Press the " + button + " button");
 
-		if ( button == null )
+		if (button == null)
 			throw new HarnessException("Button cannot be null");
-			
+
 		AbsPage page = null;
 		String locator = null;
-		
-		if ( button == Button.B_TREE_NEWFOLDER ) {
-			
-			locator = "id=overviewHeader-Text FakeAnchor";
-			page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageMail);
-			
-			if ( !this.sIsElementPresent(locator) ) {
-				throw new HarnessException("Unable to locator folder in tree "+ locator);
+		if (button == Button.B_TREE_NEWTAG) {
+
+			locator = Locators.zNewTagIcon;
+
+			if (!this.sIsElementPresent(locator)) {
+				throw new HarnessException("Unable to locator folder in tree "
+						+ locator);
 			}
-
-			this.zClick(locator);
-			
-			this.zWaitForBusyOverlay();
-			
-			// No result page is returned in this case ... use app.zPageMail
-			page = null;
-			
-			// FALL THROUGH
-
+			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageTasks);
 		} else {
-			throw new HarnessException("no logic defined for button "+ button);
+			throw new HarnessException("no logic defined for button " + button);
 		}
 
-		if ( locator == null ) {
-			throw new HarnessException("locator was null for button "+ button);
+		if (locator == null) {
+			throw new HarnessException("locator was null for button " + button);
 		}
-		
-		// Default behavior, process the locator by clicking on it
-		//
-		
+
 		// Click it
 		this.zClick(locator);
-		
+
 		// If the app is busy, wait for that to finish
 		this.zWaitForBusyOverlay();
-		
+
 		// If page was specified, make sure it is active
-		if ( page != null ) {
-			
+		if (page != null) {
+
 			// This function (default) throws an exception if never active
 			page.zWaitForActive();
-			
+
 		}
 
 		return (page);
-
 
 	}
 
@@ -151,8 +141,8 @@ public class TreeTasks extends AbsTree {
 	@Override
 	public AbsPage zTreeItem(Action action, Button option, IItem tasklist) throws HarnessException {
 		logger.info(myPageName() + " zListItem("+ action +", "+ option +", "+ tasklist +")");
-		
-		tracer.trace(action +" then "+ option +" on folder = "+ tasklist.getName());
+
+		tracer.trace(action +" then "+ option +" on task = "+ tasklist.getName());
 
 		if ( action == null )
 			throw new HarnessException("action cannot be null");
@@ -164,43 +154,59 @@ public class TreeTasks extends AbsTree {
 		AbsPage page = null;
 		String actionLocator = null;
 		String optionLocator = null;
-		String itemLocator = null;
-		
+		//String itemLocator = null;
+
 		// TODO: should be TaskList item?
-		if ( !(tasklist instanceof FolderItem) )
+		if (!(tasklist instanceof TagItem))
 			throw new HarnessException("folder must be of type FolderItem");
-		
-		FolderItem f = (FolderItem) tasklist;
-		logger.debug("processing "+ f.getName());
+
+		TagItem t=(TagItem) tasklist;
+
+		tracer.trace("processing "+ t.getName());
 
 		if ( action == Action.A_LEFTCLICK ) {
 			actionLocator = "implement me";
 		} else if ( action == Action.A_RIGHTCLICK ) {
-			actionLocator = "implement me";
+
+			/**
+			 * Note:=//actionLocator="zti__main_Tasks__"+ t.getId() +"_textCell";
+			 * Some times when we create tag through soap then it doesn't show in task list until we do refresh.
+			 * So many times this actionLoactor doesn't found.
+			 * So we use  actionLocator= "ztih__main_Tasks__TAG_textCell"; 
+			 */
+			//actionLocator="zti__main_Tasks__"+ t.getId() +"_textCell";
+			actionLocator= Locators.zTagsHeader;
+
+			this.zRightClick(actionLocator);
+
+			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageTasks);
+
 		} else {
 			throw new HarnessException("Action "+ action +" not yet implemented");
 		}
-
+		if (option==Button.B_TREE_NEWTAG){
+			optionLocator="//td[contains(@id,'_title') and contains(text(),'New Tag')]";
+		}else {
+			throw new HarnessException("button "+ option +" not yet implemented");
+		}
 		if ( actionLocator == null )
 			throw new HarnessException("locator is null for action "+ action);
 		if ( optionLocator == null )
 			throw new HarnessException("locator is null for option "+ option);
-		if ( itemLocator == null )
-			throw new HarnessException("locator is null for item "+ tasklist);
-		
-		
+
+
 		// Default behavior.  Click the locator
-		zClick(actionLocator);
+		zClick(optionLocator);
 
 		// If there is a busy overlay, wait for that to finish
 		this.zWaitForBusyOverlay();
-		
+
 		if ( page != null ) {
-			
+
 			// Wait for the page to become active, if it was specified
 			page.zWaitForActive();
 		}
-	
+
 		return (page);
 	}
 

@@ -92,35 +92,32 @@ public class TagItem implements IItem {
 	}
 
 	public static TagItem importFromSOAP(Element tag) throws HarnessException {
-		
+
 		TagItem item = null;
-		
+
 		try {
 
 			// Make sure we only have the <tag/> part
 			Element t = ZimbraAccount.SoapClient.selectNode(tag, "//mail:tag");
 			if ( t == null )
 				throw new HarnessException("Element does not contain an <tag/> element");
-			
+
 			// Create the object
 			item = new TagItem();
-			
+
 			// Set the ID
 			item.setId(t.getAttribute("id", null));
 			//Set tag name
-			Element sElement = ZimbraAccount.SoapClient.selectNode(tag, "//mail:tag");
-			if ( sElement != null )
-			item.dName = sElement.getAttribute("name");
+			item.setName(t.getAttribute("name",null));			
 
-			
 			return (item);
-			
+
 		} catch (Exception e) {
 			throw new HarnessException("Could not parse GetMsgResponse: "+ tag.prettyPrint(), e);
 		} finally {
 			if ( item != null )	logger.info(item.prettyPrint());
 		}
-		
+
 	}
 
 

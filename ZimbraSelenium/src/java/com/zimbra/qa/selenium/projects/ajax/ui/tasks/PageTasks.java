@@ -13,6 +13,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
 
+
 /**
  * @author Matt Rhoades
  * 
@@ -35,7 +36,8 @@ public class PageTasks extends AbsTab {
 		//public static final String taskbodyView = "css=div[id='zl__TKL__rows'][class='DwtListView-Rows']";
 		public static final String zTasksTab = "zb__App__Tasks";
 		public static final String zNewTask = "zb__TKL__NEW_MENU_left_icon";
-
+		public static final String zNewTaskDropDown = "css=td[id$='__NEW_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+		public static final String zNewTagMenuItem= "//td[contains(@id,'_title')and contains(text(),'Tag')]";
 	}
 
 	public PageTasks(AbsApplication application) {
@@ -542,11 +544,22 @@ public class PageTasks extends AbsTab {
 
 				// FALL THROUGH
 			} else {
-				throw new HarnessException(
-						"no logic defined for pulldown/option " + pulldown
-						+ "/" + option);
+				throw new HarnessException(	"no logic defined for pulldown/option " + pulldown+ "/" + option);
 			}
-		} 
+		} else if (pulldown== Button.B_NEW) {
+			
+			if(option == Button.O_NEW_TAG){
+				
+				pulldownLocator = Locators.zNewTaskDropDown;
+				
+				optionLocator= Locators.zNewTagMenuItem;
+				
+				page = new DialogTag(this.MyApplication, this);
+			}else{
+				throw new HarnessException(	"no logic defined for pulldown/option " + pulldown+ "/" + option);
+			}
+			
+		}
 		// Default behavior
 		if (pulldownLocator != null) {
 
@@ -817,5 +830,34 @@ public class PageTasks extends AbsTab {
 		return (items);
 
 	}
+	@Override
+	public AbsPage zKeyboardShortcut(Shortcut shortcut) throws HarnessException {
+
+		if (shortcut == null)
+			throw new HarnessException("Shortcut cannot be null");
+		
+		tracer.trace("Using the keyboard, press the "+ shortcut.getKeys() +" keyboard shortcut");
+
+		AbsPage page = null;
+		
+		if ( (shortcut == Shortcut.S_NEWTAG) ){
+			
+			// "New Message" shortcuts result in a compose form opening
+			//page = new FormMailNew(this.MyApplication);
+			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageTasks);
+		}
+		
+		zKeyboard.zTypeCharacters(shortcut.getKeys());
+		
+		// If the app is busy, wait for it to become active
+		this.zWaitForBusyOverlay();
+		
+		// If a page is specified, wait for it to become active
+		if ( page != null ) {
+			page.zWaitForActive();	// This method throws a HarnessException if never active
+		}
+		return (page);
+	}
+
 
 }
