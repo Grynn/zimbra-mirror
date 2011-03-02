@@ -37,7 +37,7 @@ public class PageTasks extends AbsTab {
 		public static final String zTasksTab = "zb__App__Tasks";
 		public static final String zNewTask = "zb__TKL__NEW_MENU_left_icon";
 		public static final String zNewTaskDropDown = "css=td[id$='__NEW_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
-		public static final String zNewTagMenuItem= "//td[contains(@id,'_title')and contains(text(),'Tag')]";
+		public static final String zNewTagMenuItem= "//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgNewTag')]";
 	}
 
 	public PageTasks(AbsApplication application) {

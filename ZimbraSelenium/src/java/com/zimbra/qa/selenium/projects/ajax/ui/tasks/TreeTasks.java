@@ -185,7 +185,8 @@ public class TreeTasks extends AbsTree {
 			throw new HarnessException("Action "+ action +" not yet implemented");
 		}
 		if (option==Button.B_TREE_NEWTAG){
-			optionLocator="//td[contains(@id,'_title') and contains(text(),'New Tag')]";
+			//optionLocator="//td[contains(@id,'_title') and contains(text(),'New Tag')]";
+			optionLocator="//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgNewTag')]";
 		}else {
 			throw new HarnessException("button "+ option +" not yet implemented");
 		}
