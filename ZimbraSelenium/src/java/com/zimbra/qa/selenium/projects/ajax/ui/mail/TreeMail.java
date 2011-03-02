@@ -8,6 +8,7 @@ import java.util.*;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
@@ -23,14 +24,16 @@ public class TreeMail extends AbsTree {
 	   public final static String zTreeItems = new StringBuffer("//td[text()='").
             append(stringToReplace).append("']").toString();
 
+	   public static final String createNewFolderButton = "css=div[class^='ImgNewFolder ZWidget']";
 	   public static final String ztih__main_Mail__ZIMLET_ID = "ztih__main_Mail__ZIMLET";
 		public static final String ztih__main_Mail__ZIMLET_nodeCell_ID = "ztih__main_Mail__ZIMLET_nodeCell";
 		public static final String ztih_main_Mail__FOLDER_ITEM_ID = new StringBuffer("ztih__main_Mail__").
 		      append(stringToReplace).append("_textCell").toString();
+
+		// TODO: Implement for Desktop after bug 56273 is fixed
+		public static final String treeExpandCollapseButton = "css=div[id='ztih__main_Mail__FOLDER_div'] div[class^='ImgNode']";
 	}
-	
-		
-	
+
 	public TreeMail(AbsApplication application) {
 		super(application);
 		logger.info("new " + TreeMail.class.getCanonicalName());
@@ -107,7 +110,19 @@ public class TreeMail extends AbsTree {
 		return (page);
 
 	}
-	
+
+	/**
+	 * To get whether the tree is collapsed or not
+	 * @return true if tree is collapsed, otherwise false
+	 */
+	public boolean isCollapsed() {
+	   if (sIsElementPresent(Locators.treeExpandCollapseButton.replace(
+	         "ImgNode", "ImgNodeCollapsed"))) {
+	      return true;
+	   } else {
+	      return false;
+	   }
+	}
 
 	protected AbsPage zTreeItem(Action action, SavedSearchFolderItem savedSearch) throws HarnessException {
 		AbsPage page = null;
@@ -153,18 +168,8 @@ public class TreeMail extends AbsTree {
 		String locator = null;
 		
 		if ( button == Button.B_TREE_NEWFOLDER ) {
-			
-			page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageMail);
-			
-			locator = "id=overviewHeader-Text FakeAnchor";
-			this.zClick(locator);
-			
-			this.zWaitForBusyOverlay();
-			
-			// No result page is returned in this case ... use app.zPageMail
-			page = null;
-			
-			// FALL THROUGH
+			locator = Locators.createNewFolderButton;
+		   page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageMail);
 
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
@@ -258,7 +263,7 @@ public class TreeMail extends AbsTree {
 		if ( (action == null) || (option == null) || (folder == null) ) {
 			throw new HarnessException("Must define an action, option, and addressbook");
 		}
-		
+
 		if ( folder instanceof FolderItem ) {
 			return (zTreeItem(action, option, (FolderItem)folder));
 		} else if ( folder instanceof SavedSearchFolderItem ) {

@@ -6,12 +6,14 @@ package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 import java.util.*;
 
 import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.items.ContextMenuItem.CONTEXT_MENU_ITEM_NAME;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
@@ -159,6 +161,22 @@ public class PageMail extends AbsTab {
 		public static final String zTVRows			= "zl__TV__rows";
 
 		public static final String zLoadingImage_Desktop = "css=img[src='/img/animated/ImgSpinner.gif']";
+
+
+		public static class CONTEXT_MENU {
+		   // TODO: Until https://bugzilla.zimbra.com/show_bug.cgi?id=56273 is fixed, ContextMenuItem will be defined using the text content
+		   public static String stringToReplace = "<ITEM_NAME>";
+		   public static final String zDesktopContextMenuItems = new StringBuffer("css=table[class$='MenuTable'] td[id$='_title']:contains(")
+		   .append(stringToReplace).append(")").toString();
+
+		   // Folder's context menu
+		   public static final ContextMenuItem NEW_FOLDER = new ContextMenuItem(
+		         zDesktopContextMenuItems.replace(stringToReplace, I18N.CONTEXT_MENU_ITEM_NEW_FOLDER),
+		         I18N.CONTEXT_MENU_ITEM_NEW_FOLDER,
+		         "div[class='ImgNewFolder']",
+		   ":contains('nf')"); 
+
+		}
 	}
 	
 	
@@ -429,12 +447,7 @@ public class PageMail extends AbsTab {
 
 		   
 		   // Wait for the spinner image
-		   if (GeneralUtility.waitForElementPresent(this,
-		         PageMail.Locators.zLoadingImage_Desktop, 5000)) {
-		      Object[] params = {PageMail.Locators.zLoadingImage_Desktop};
-		      GeneralUtility.waitFor(null, this, false, "sIsElementPresent",
-		            params, WAIT_FOR_OPERAND.EQ, false, 30000, 1000);
-		   }
+		   zWaitForDesktopLoadingSpinner(5000);
 		}
 
 		// If page was specified, make sure it is active
@@ -448,6 +461,21 @@ public class PageMail extends AbsTab {
 		
 		return (page);
 	}
+
+	/** Waiting for the desktop loading spinner
+	 * @throws HarnessException 
+	 * 
+	 */
+	public void zWaitForDesktopLoadingSpinner(long timeout) throws HarnessException {
+      if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+         if (GeneralUtility.waitForElementPresent(this,
+               PageMail.Locators.zLoadingImage_Desktop, timeout)) {
+            Object[] params = {PageMail.Locators.zLoadingImage_Desktop};
+            GeneralUtility.waitFor(null, this, false, "sIsElementPresent",
+                  params, WAIT_FOR_OPERAND.EQ, false, 30000, 1000);
+         }
+      }
+   }
 
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
@@ -982,6 +1010,98 @@ public class PageMail extends AbsTab {
 		
 	}
 
+	public AbsPage zListItem(Action action, Button option, FolderItem folderItem)
+	throws HarnessException {
+	   logger.info(myPageName() + " zListItem("+ action +", "+ option +")");
+	   tracer.trace(action +" then "+ option +" on Folder Item = "+ folderItem);
+
+	   if ( action == null )
+         throw new HarnessException("action cannot be null");
+      if ( option == null )
+         throw new HarnessException("button cannot be null");
+      if ( folderItem == null )
+         throw new HarnessException("folderItem cannot be null");
+
+      String treeItemLocator = null;
+      boolean onRootFolder = false;
+
+      if (folderItem.getName().equals("USER_ROOT")) {
+         onRootFolder = true;
+         switch (ZimbraSeleniumProperties.getAppType()) {
+         case AJAX:
+            treeItemLocator = TreeMail.Locators.ztih_main_Mail__FOLDER_ITEM_ID.replace(
+                  TreeMail.stringToReplace, "FOLDER");
+            break;
+
+         case DESKTOP:
+            treeItemLocator = TreeMail.Locators.zTreeItems.replace(TreeMail.stringToReplace,
+            AjaxCommonTest.defaultAccountName);
+            break;
+         default:
+            throw new HarnessException("Implement me!");
+         }
+      } else {
+         throw new HarnessException("Implement me!");
+      }
+
+      AbsPage page = null;
+      if (treeItemLocator == null) throw new HarnessException("treeItemLocator is null, please check!");
+
+      GeneralUtility.waitForElementPresent(this, treeItemLocator);
+
+      if ( action == Action.A_RIGHTCLICK ) {
+
+         if (option == Button.B_TREE_NEWFOLDER) {
+            ContextMenu contextMenu = (ContextMenu)((AppAjaxClient)MyApplication).zTreeMail.zTreeItem(
+                  action, treeItemLocator);
+            page = contextMenu.zSelect(CONTEXT_MENU_ITEM_NAME.NEW_FOLDER);
+         }
+         else {
+            throw new HarnessException("implement action:"+ action +" option:"+ option);
+         }
+      } else if (action == Action.A_LEFTCLICK) {
+         if (option == Button.B_TREE_NEWFOLDER) {
+            if (ZimbraSeleniumProperties.getAppType() == AppType.AJAX) {
+               if (((AppAjaxClient)MyApplication).zTreeMail.isCollapsed()) {
+                  // Expand it
+                  ((AppAjaxClient)MyApplication).zTreeMail.zClick(
+                        TreeMail.Locators.treeExpandCollapseButton);
+                  GeneralUtility.waitFor(null, ((AppAjaxClient)MyApplication).zTreeMail, false,
+                        "isCollapsed", null, WAIT_FOR_OPERAND.EQ, false, 30000, 1000);
+               } else {
+                  if (onRootFolder) {
+                     // TODO: Bug 57414
+                     // Collapse the tree and expand it again to select the root folder
+                     ((AppAjaxClient)MyApplication).zTreeMail.zClick(
+                           TreeMail.Locators.treeExpandCollapseButton);
+
+                     GeneralUtility.waitFor(null, ((AppAjaxClient)MyApplication).zTreeMail, false,
+                           "isCollapsed", null, WAIT_FOR_OPERAND.EQ, true, 30000, 1000);
+                     
+                     ((AppAjaxClient)MyApplication).zTreeMail.zClick(
+                           TreeMail.Locators.treeExpandCollapseButton);
+                     
+                     page = ((AppAjaxClient)MyApplication).zTreeMail.zPressButton(option);
+                  }  else {
+                     // Fall Through
+                  }
+               }
+
+            } else {
+               // Not available for Desktop
+               throw new HarnessException("Not Supported! Action:" + action + " Option:" + option);
+            }
+
+         } else {
+            throw new HarnessException("implement action:"+ action +" option:"+ option);
+         }
+      } else {
+         throw new HarnessException("implement action:"+ action +" option:"+ option);
+      }
+
+      return page;
+	}
+
 	@Override
 	public AbsPage zListItem(Action action, Button option, Button subOption ,String item)
 			throws HarnessException {
@@ -1075,7 +1195,20 @@ public class PageMail extends AbsTab {
 
 				page = null;
 				
-			} else {
+			} else if (option == Button.B_TREE_NEWFOLDER) {
+		      String treeItemLocator = null;
+		      if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+		         treeItemLocator = TreeMail.Locators.zTreeItems.replace(TreeMail.stringToReplace,
+		               AjaxCommonTest.defaultAccountName);
+		      } else {
+		         treeItemLocator = TreeMail.Locators.ztih_main_Mail__FOLDER_ITEM_ID.replace(TreeMail.stringToReplace, "FOLDER");
+		      }
+
+		      GeneralUtility.waitForElementPresent(this, treeItemLocator);
+		      ContextMenu contextMenu = (ContextMenu)((AppAjaxClient)MyApplication).zTreeMail.zTreeItem(Action.A_RIGHTCLICK, treeItemLocator);
+			   page = contextMenu.zSelect(CONTEXT_MENU_ITEM_NAME.NEW_FOLDER);
+			}
+			else {
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 			}
 			

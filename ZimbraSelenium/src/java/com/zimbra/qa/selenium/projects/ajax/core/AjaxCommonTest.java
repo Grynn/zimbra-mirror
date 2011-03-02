@@ -8,7 +8,6 @@ import org.testng.annotations.*;
 import org.xml.sax.SAXException;
 
 import com.thoughtworks.selenium.*;
-import com.zimbra.common.service.ServiceException;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.util.*;

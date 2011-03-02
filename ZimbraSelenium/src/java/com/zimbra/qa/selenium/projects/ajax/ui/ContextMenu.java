@@ -37,11 +37,20 @@ public class ContextMenu extends AbsDisplay {
       ContextMenuItem cmi = ContextMenuItem.getDesktopContextMenuItem(cmiName);
       logger.info(myPageName() + " zSelect("+ cmi.text +")");
       this.zClick(cmi.locator);
+      AbsPage page = null;
       switch (cmiName) {
       case NEW_FOLDER:
-         return new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageMail);
+         page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageMail);
       }
-      return null;
+
+      // If page was specified, make sure it is active
+      if ( page != null ) {
+         // This function (default) throws an exception if never active
+         page.zWaitForActive();
+         
+      }
+
+      return page;
    }
 
 	public ContextMenuItem getContextMenuItem  (String locator, Class contextMenuItemObject)throws HarnessException {

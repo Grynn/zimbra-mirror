@@ -5,7 +5,13 @@ package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.Stafpostqueue;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 
 /**
  * Represents a "Create New Folder" dialog box
@@ -50,7 +56,7 @@ public class DialogCreateFolder extends AbsDialog {
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsVisible()");
 
-		String locator = "id="+ Locators.zDialogId;
+		String locator = Locators.zNameField;
 		
 		if ( !this.sIsElementPresent(locator) ) {
 			return (false); // Not even present
@@ -65,8 +71,7 @@ public class DialogCreateFolder extends AbsDialog {
 		return (true);
 		
 	}
-	
-	
+
 	@Override
 	public AbsPage zClickButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zClickButton("+ button +")");
@@ -78,6 +83,23 @@ public class DialogCreateFolder extends AbsDialog {
 		if ( button == Button.B_OK ) {
 
 			locator = Locators.zOkButton;
+
+			this.zClick(locator);
+
+	      this.zWaitForBusyOverlay();
+
+	      // Wait for the spinner image ONLY for desktop
+         ((AppAjaxClient)MyApplication).zPageMail.zWaitForDesktopLoadingSpinner(5000);
+
+         // Check the message queue
+	      Stafpostqueue sp = new Stafpostqueue();
+	      try {
+	         sp.waitForPostqueue();
+	      } catch (Exception e) {
+	         throw new HarnessException("Getting exception while post queueing: " + e.getMessage());
+	      }
+
+	      return (page);
 
 		} else if ( button == Button.B_CANCEL ) {
 
