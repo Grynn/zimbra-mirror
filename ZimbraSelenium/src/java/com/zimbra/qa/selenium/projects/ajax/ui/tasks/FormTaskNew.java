@@ -306,7 +306,9 @@ public class FormTaskNew extends AbsForm {
 			throw new HarnessException("Field is not present field="+ field +" locator="+ locator);
 		
 		// Enter text
-		this.sType(locator, value);
+      this.sFocus(locator);
+      this.zClick(locator);
+      zKeyboard.zTypeCharacters(value);
 		
 		this.zWaitForBusyOverlay();
 
