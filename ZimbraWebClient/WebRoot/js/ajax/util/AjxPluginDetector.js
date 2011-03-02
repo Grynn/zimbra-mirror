@@ -40,6 +40,25 @@ function() {
 	}
 };
 
+AjxPluginDetector.detectPDFReader =
+function(){
+    if(AjxEnv.isIE){
+        return  ( AjxPluginDetector.detectActiveXControl('PDF.PdfCtrl.5')
+                || AjxPluginDetector.detectActiveXControl('AcroExch.Document') );
+    }else{
+        var hasPDFReader = false;
+        if(AjxEnv.isChrome){
+            hasPDFReader = AjxPluginDetector.detectPlugin('Chrome PDF Viewer');
+        }else if(AjxEnv.isFirefox){
+            hasPDFReader = AjxPluginDetector.detectPlugin('Firefox PDF Plugin for Mac OS X');
+        }
+        if(!hasPDFReader){
+            hasPDFReader = AjxPluginDetector.detectPlugin('Adobe Acrobat');
+        }
+        return hasPDFReader;
+    }
+};
+
 AjxPluginDetector.detectDirector =
 function() { 
 	if(AjxEnv.isIE) {
