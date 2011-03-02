@@ -71,18 +71,18 @@ AttachContactsTabView.prototype.toString = function() {
 AttachContactsTabView.prototype.showMe =
 function() {
 	DwtTabViewPage.prototype.showMe.call(this);
-	if(this._isLoaded) {
-		this.setSize(Dwt.DEFAULT, "255");
-	} else {
-		this._createHtml1();
-		Dwt.byId(this._folderTreeCellId).onclick = AjxCallback.simpleClosure(this._treeListener, this);
-		this._isLoaded = true;
+	var acct = appCtxt.multiAccounts ? appCtxt.getAppViewMgr().getCurrentView().getFromAccount() : appCtxt.getActiveAccount();
+	if (appCtxt.multiAccounts) {
+		appCtxt.accountList.setActiveAccount(acct);
 	}
-
-	if (this._closed) {
+	if (this.prevAccount && (acct.id == this.prevAccount.id)) {
 		this.reset();
-		this._closed = false;
+		this.setSize(Dwt.DEFAULT, "255");
+		return;
 	}
+	this.prevAccount = acct;
+	this._createHtml1();
+	Dwt.byId(this._folderTreeCellId).onclick = AjxCallback.simpleClosure(this._treeListener, this);
 };
 
 AttachContactsTabView.prototype.setClosed =
@@ -368,11 +368,13 @@ function() {
 
 AttachContactsTabView.prototype.reset =
 function() {
-	Dwt.byId(AttachContactsTabView.ELEMENT_ID_SEARCH_FIELD).value = "";
-	for (var chkboxId in this._checkboxIdAndItemIdMap) {
-		var input = Dwt.byId(chkboxId);
-		input.checked = false;
-	}
+	 Dwt.byId(AttachContactsTabView.ELEMENT_ID_SEARCH_FIELD).value = "";
+	 if (this._checkboxIdAndItemIdMap && (this._checkboxIdAndItemIdMap.length != 0)) {
+		 for (var chkboxId in this._checkboxIdAndItemIdMap) {
+		     var input = Dwt.byId(chkboxId);
+		     input.checked = false;
+		}
+	 }
 
 	var folderId = AttachContactsTabView.DEFAULT_CONTACTS_FOLDER;
 	this._currentQuery = this._getQueryFromFolder(folderId);
@@ -389,11 +391,10 @@ function() {
 
 	app._createDeferredFolders();
 	var base = this.toString();
-	var acct = appCtxt.getActiveAccount();
 	var params = {
 		treeIds: ["ADDRBOOK"],
-		overviewId: (appCtxt.multiAccounts) ? ([base, acct.name].join(":")) : base,
-		account: acct
+		overviewId: (appCtxt.multiAccounts) ? ([base, this.prevAccount.name].join(":")) : base,
+		account: this.prevAccount
 	};
 	this._setOverview(params);
 
@@ -418,10 +419,10 @@ function(params) {
 			treeIds: params.treeIds
 		};
 		overview =  opc.createOverview(ovParams);
-			overview.set(params.treeIds);
-
+		overview.account = this.prevAccount;
+		overview.set(params.treeIds);
 	} else if (params.account) {
-		//overview.account = params.account;
+		overview.account = params.account;
 	}
 	this._overview = overview;
 	Dwt.byId(this._folderTreeCellId).appendChild(overview.getHtmlElement());
@@ -447,7 +448,7 @@ AttachContactsTabView.prototype._hideRoot =
 function(treeView) {
 	var ti = treeView.getTreeItemById(ZmOrganizer.ID_ROOT);
 	if (!ti) {
-		var rootId = ZmOrganizer.getSystemId(ZmOrganizer.ID_ROOT);
+		var rootId = ZmOrganizer.getSystemId(ZmOrganizer.ID_ROOT, this.prevAccount);
 		ti = treeView.getTreeItemById(rootId);
 	}
 	ti.showCheckBox(false);
