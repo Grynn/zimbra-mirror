@@ -77,6 +77,13 @@ com_zimbra_gdocs.prototype.openCenteredWindow = function (url) {
 	}
 };
 
+com_zimbra_gdocs.prototype._showWarningMsg = function(message) {
+	var style = DwtMessageDialog.WARNING_STYLE;
+	var dialog = appCtxt.getMsgDialog();
+	dialog.setMessage(message, style);
+	dialog.popup();
+}
+
 com_zimbra_gdocs.prototype.accessor = {
                 consumerKey   : "anonymous",
                 consumerSecret: "anonymous",
