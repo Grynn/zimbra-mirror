@@ -401,11 +401,12 @@ public class ContactContextMenu extends AjaxCommonTest  {
 	
 	
 	}
-
+	
 	@Test(	description = "Right click then  click Find Emails->Sent To contact",
-			groups = { "smoke" })
-	public void FindEmailsReceivedFromContact() throws HarnessException {
-				
+			groups = { "smokey" })
+	public void FindEmailsSentToContact() throws HarnessException {
+
+			
 	    //Create  email sent to this contacts	
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		
@@ -437,16 +438,15 @@ public class ContactContextMenu extends AjaxCommonTest  {
                 
 	}
 	
-	
-	@Test(	description = "Right click then  click Find Emails->Received from contact",
-			groups = { "smoke" })
-	public void FindEmailsSentToContact() throws HarnessException {
-				
+	@Test(	description = "Right click then  click Find Emails->Received From contact",
+				groups = { "smokey" })
+	public void FindEmailsReceivedFromContact() throws HarnessException {
+		
 	    //Create  email sent to this contacts	
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		
-		// Send the message from AccountA to the ZWC user
-		ZimbraAccount.AccountA().soapSend(
+		// Send the message from AccountB to the ZWC user
+		ZimbraAccount.AccountB().soapSend(
 					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
 						"<m>" +
 							"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
@@ -457,9 +457,9 @@ public class ContactContextMenu extends AjaxCommonTest  {
 						"</m>" +
 					"</SendMsgRequest>");
 
-		MailItem mail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
+		MailItem mail = MailItem.importFromSOAP(ZimbraAccount.AccountB(), "subject:("+ subject +")");
 
-		ContactItem contactItem = createSelectAContactItem(ZimbraAccount.AccountA().DisplayName, ZimbraAccount.AccountA().clientAccountName, ZimbraAccount.AccountA().EmailAddress);
+		ContactItem contactItem = createSelectAContactItem(ZimbraAccount.AccountB().DisplayName, ZimbraAccount.AccountB().clientAccountName, ZimbraAccount.AccountB().EmailAddress);
 		app.zPageAddressbook.zSyncDesktopToZcs();		
 		
 		
