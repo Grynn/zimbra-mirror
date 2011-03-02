@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="cos" type="{urn:zimbraAdmin}cosInfo" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="cos" type="{urn:zimbraAdmin}annotatedCosInfo" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetAllCosResponse {
 
-    protected List<CosInfo> cos;
+    protected List<AnnotatedCosInfo> cos;
 
     /**
      * Gets the value of the cos property.
@@ -53,13 +53,13 @@ public class GetAllCosResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link CosInfo }
+     * {@link AnnotatedCosInfo }
      * 
      * 
      */
-    public List<CosInfo> getCos() {
+    public List<AnnotatedCosInfo> getCos() {
         if (cos == null) {
-            cos = new ArrayList<CosInfo>();
+            cos = new ArrayList<AnnotatedCosInfo>();
         }
         return this.cos;
     }

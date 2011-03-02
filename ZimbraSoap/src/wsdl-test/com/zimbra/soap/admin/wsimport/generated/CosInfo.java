@@ -3,6 +3,7 @@ package com.zimbra.soap.admin.wsimport.generated;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -15,8 +16,8 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="cosInfo">
  *   &lt;complexContent>
  *     &lt;extension base="{urn:zimbraAdmin}adminObjectInfo">
- *       &lt;all>
- *       &lt;/all>
+ *       &lt;sequence>
+ *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -26,6 +27,9 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "cosInfo")
+@XmlSeeAlso({
+    AnnotatedCosInfo.class
+})
 public class CosInfo
     extends AdminObjectInfo
 {

@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="grantee" type="{urn:zimbraAdmin}granteeSelector" minOccurs="0"/>
+ *         &lt;element name="grantee" type="{urn:zimbraAdmin}granteeChooser" minOccurs="0"/>
  *         &lt;element name="owner" type="{urn:zimbraAdmin}accountSelector"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class GetShareInfoRequest {
 
-    protected GranteeSelector grantee;
+    protected GranteeChooser grantee;
     @XmlElement(required = true)
     protected AccountSelector owner;
 
@@ -43,10 +43,10 @@ public class GetShareInfoRequest {
      * 
      * @return
      *     possible object is
-     *     {@link GranteeSelector }
+     *     {@link GranteeChooser }
      *     
      */
-    public GranteeSelector getGrantee() {
+    public GranteeChooser getGrantee() {
         return grantee;
     }
 
@@ -55,10 +55,10 @@ public class GetShareInfoRequest {
      * 
      * @param value
      *     allowed object is
-     *     {@link GranteeSelector }
+     *     {@link GranteeChooser }
      *     
      */
-    public void setGrantee(GranteeSelector value) {
+    public void setGrantee(GranteeChooser value) {
         this.grantee = value;
     }
 

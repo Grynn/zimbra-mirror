@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *           &lt;element name="calresource" type="{urn:zimbraAdmin}calendarResourceInfo"/>
  *           &lt;element ref="{urn:zimbraAdmin}dl"/>
  *           &lt;element ref="{urn:zimbraAdmin}alias"/>
- *           &lt;element ref="{urn:zimbraAdmin}account"/>
+ *           &lt;element name="account" type="{urn:zimbraAdmin}accountInfo"/>
  *           &lt;element ref="{urn:zimbraAdmin}domain"/>
  *           &lt;element name="cos" type="{urn:zimbraAdmin}cosInfo"/>
  *         &lt;/choice>
@@ -46,12 +46,12 @@ import javax.xml.bind.annotation.XmlType;
 public class SearchDirectoryResponse {
 
     @XmlElements({
-        @XmlElement(name = "dl", type = DistributionListInfo.class),
-        @XmlElement(name = "account", type = AccountInfo.class),
-        @XmlElement(name = "domain", type = DomainInfo.class),
+        @XmlElement(name = "alias", type = AliasInfo.class),
         @XmlElement(name = "calresource", type = CalendarResourceInfo.class),
         @XmlElement(name = "cos", type = CosInfo.class),
-        @XmlElement(name = "alias", type = AliasInfo.class)
+        @XmlElement(name = "domain", type = DomainInfo.class),
+        @XmlElement(name = "dl", type = DistributionListInfo.class),
+        @XmlElement(name = "account", type = AccountInfo.class)
     })
     protected List<AdminObjectInfo> calresourceOrDlOrAlias;
     @XmlAttribute(required = true)
@@ -77,12 +77,12 @@ public class SearchDirectoryResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link DistributionListInfo }
-     * {@link AccountInfo }
-     * {@link DomainInfo }
+     * {@link AliasInfo }
      * {@link CalendarResourceInfo }
      * {@link CosInfo }
-     * {@link AliasInfo }
+     * {@link DomainInfo }
+     * {@link DistributionListInfo }
+     * {@link AccountInfo }
      * 
      * 
      */

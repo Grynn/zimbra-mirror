@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;/sequence>
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="type" use="required" type="{urn:zimbraAdmin}rightType" />
- *       &lt;attribute name="targetType" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="targetType" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="rightClass" use="required" type="{urn:zimbraAdmin}rightClass" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -49,7 +49,7 @@ public class RightInfo {
     protected String name;
     @XmlAttribute(required = true)
     protected RightType type;
-    @XmlAttribute(required = true)
+    @XmlAttribute
     protected String targetType;
     @XmlAttribute(required = true)
     protected RightClass rightClass;

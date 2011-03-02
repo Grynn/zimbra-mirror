@@ -20,12 +20,13 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="getInfoResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
+ *       &lt;sequence>
  *         &lt;element name="version" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *         &lt;element name="crumb" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="lifetime" type="{http://www.w3.org/2001/XMLSchema}long"/>
+ *         &lt;element name="adminDelegated" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="rest" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="used" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
  *         &lt;element name="prevSession" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
@@ -54,8 +55,28 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
- *         &lt;element name="soapURL" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="publicURL" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="zimlets" minOccurs="0">
+ *           &lt;complexType>
+ *             &lt;complexContent>
+ *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;sequence>
+ *                   &lt;element name="zimlet" type="{urn:zimbraAccount}zimletInfo" maxOccurs="unbounded" minOccurs="0"/>
+ *                 &lt;/sequence>
+ *               &lt;/restriction>
+ *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
+ *         &lt;element name="props" minOccurs="0">
+ *           &lt;complexType>
+ *             &lt;complexContent>
+ *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *                 &lt;sequence>
+ *                   &lt;element name="prop" type="{urn:zimbraAccount}prop" maxOccurs="unbounded" minOccurs="0"/>
+ *                 &lt;/sequence>
+ *               &lt;/restriction>
+ *             &lt;/complexContent>
+ *           &lt;/complexType>
+ *         &lt;/element>
  *         &lt;element name="identities" minOccurs="0">
  *           &lt;complexType>
  *             &lt;complexContent>
@@ -94,19 +115,21 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
- *         &lt;element name="changePasswordURL" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="props" minOccurs="0">
+ *         &lt;element name="childAccounts" minOccurs="0">
  *           &lt;complexType>
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
- *                   &lt;element name="prop" type="{urn:zimbraAccount}prop" maxOccurs="unbounded" minOccurs="0"/>
+ *                   &lt;element name="childAccount" type="{urn:zimbraAccount}childAccount" maxOccurs="unbounded" minOccurs="0"/>
  *                 &lt;/sequence>
  *               &lt;/restriction>
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
- *       &lt;/all>
+ *         &lt;element name="changePasswordURL" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="soapURL" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="publicURL" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *       &lt;/sequence>
  *       &lt;attribute name="attSizeLimit" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="docSizeLimit" type="{http://www.w3.org/2001/XMLSchema}long" />
  *     &lt;/restriction>
@@ -118,7 +141,29 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "getInfoResponse", propOrder = {
-
+    "version",
+    "id",
+    "name",
+    "crumb",
+    "lifetime",
+    "adminDelegated",
+    "rest",
+    "used",
+    "prevSession",
+    "accessed",
+    "recent",
+    "cos",
+    "prefs",
+    "attrs",
+    "zimlets",
+    "props",
+    "identities",
+    "signatures",
+    "dataSources",
+    "childAccounts",
+    "changePasswordURL",
+    "soapURL",
+    "publicURL"
 })
 public class GetInfoResponse {
 
@@ -130,6 +175,7 @@ public class GetInfoResponse {
     protected String name;
     protected String crumb;
     protected long lifetime;
+    protected Boolean adminDelegated;
     protected String rest;
     protected Long used;
     protected Long prevSession;
@@ -138,13 +184,15 @@ public class GetInfoResponse {
     protected Cos cos;
     protected GetInfoResponse.Prefs prefs;
     protected GetInfoResponse.Attrs attrs;
-    protected List<String> soapURL;
-    protected String publicURL;
+    protected GetInfoResponse.Zimlets zimlets;
+    protected GetInfoResponse.Props props;
     protected GetInfoResponse.Identities identities;
     protected GetInfoResponse.Signatures signatures;
     protected GetInfoResponse.DataSources dataSources;
+    protected GetInfoResponse.ChildAccounts childAccounts;
     protected String changePasswordURL;
-    protected GetInfoResponse.Props props;
+    protected List<String> soapURL;
+    protected String publicURL;
     @XmlAttribute
     protected Long attSizeLimit;
     @XmlAttribute
@@ -260,6 +308,30 @@ public class GetInfoResponse {
      */
     public void setLifetime(long value) {
         this.lifetime = value;
+    }
+
+    /**
+     * Gets the value of the adminDelegated property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isAdminDelegated() {
+        return adminDelegated;
+    }
+
+    /**
+     * Sets the value of the adminDelegated property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setAdminDelegated(Boolean value) {
+        this.adminDelegated = value;
     }
 
     /**
@@ -455,56 +527,51 @@ public class GetInfoResponse {
     }
 
     /**
-     * Gets the value of the soapURL property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the soapURL property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getSoapURL().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     * 
-     * 
-     */
-    public List<String> getSoapURL() {
-        if (soapURL == null) {
-            soapURL = new ArrayList<String>();
-        }
-        return this.soapURL;
-    }
-
-    /**
-     * Gets the value of the publicURL property.
+     * Gets the value of the zimlets property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link GetInfoResponse.Zimlets }
      *     
      */
-    public String getPublicURL() {
-        return publicURL;
+    public GetInfoResponse.Zimlets getZimlets() {
+        return zimlets;
     }
 
     /**
-     * Sets the value of the publicURL property.
+     * Sets the value of the zimlets property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link GetInfoResponse.Zimlets }
      *     
      */
-    public void setPublicURL(String value) {
-        this.publicURL = value;
+    public void setZimlets(GetInfoResponse.Zimlets value) {
+        this.zimlets = value;
+    }
+
+    /**
+     * Gets the value of the props property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link GetInfoResponse.Props }
+     *     
+     */
+    public GetInfoResponse.Props getProps() {
+        return props;
+    }
+
+    /**
+     * Sets the value of the props property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link GetInfoResponse.Props }
+     *     
+     */
+    public void setProps(GetInfoResponse.Props value) {
+        this.props = value;
     }
 
     /**
@@ -580,6 +647,30 @@ public class GetInfoResponse {
     }
 
     /**
+     * Gets the value of the childAccounts property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link GetInfoResponse.ChildAccounts }
+     *     
+     */
+    public GetInfoResponse.ChildAccounts getChildAccounts() {
+        return childAccounts;
+    }
+
+    /**
+     * Sets the value of the childAccounts property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link GetInfoResponse.ChildAccounts }
+     *     
+     */
+    public void setChildAccounts(GetInfoResponse.ChildAccounts value) {
+        this.childAccounts = value;
+    }
+
+    /**
      * Gets the value of the changePasswordURL property.
      * 
      * @return
@@ -604,27 +695,56 @@ public class GetInfoResponse {
     }
 
     /**
-     * Gets the value of the props property.
+     * Gets the value of the soapURL property.
      * 
-     * @return
-     *     possible object is
-     *     {@link GetInfoResponse.Props }
-     *     
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the soapURL property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getSoapURL().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link String }
+     * 
+     * 
      */
-    public GetInfoResponse.Props getProps() {
-        return props;
+    public List<String> getSoapURL() {
+        if (soapURL == null) {
+            soapURL = new ArrayList<String>();
+        }
+        return this.soapURL;
     }
 
     /**
-     * Sets the value of the props property.
+     * Gets the value of the publicURL property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getPublicURL() {
+        return publicURL;
+    }
+
+    /**
+     * Sets the value of the publicURL property.
      * 
      * @param value
      *     allowed object is
-     *     {@link GetInfoResponse.Props }
+     *     {@link String }
      *     
      */
-    public void setProps(GetInfoResponse.Props value) {
-        this.props = value;
+    public void setPublicURL(String value) {
+        this.publicURL = value;
     }
 
     /**
@@ -745,6 +865,65 @@ public class GetInfoResponse {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
+     *         &lt;element name="childAccount" type="{urn:zimbraAccount}childAccount" maxOccurs="unbounded" minOccurs="0"/>
+     *       &lt;/sequence>
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "", propOrder = {
+        "childAccount"
+    })
+    public static class ChildAccounts {
+
+        protected List<ChildAccount> childAccount;
+
+        /**
+         * Gets the value of the childAccount property.
+         * 
+         * <p>
+         * This accessor method returns a reference to the live list,
+         * not a snapshot. Therefore any modification you make to the
+         * returned list will be present inside the JAXB object.
+         * This is why there is not a <CODE>set</CODE> method for the childAccount property.
+         * 
+         * <p>
+         * For example, to add a new item, do as follows:
+         * <pre>
+         *    getChildAccount().add(newItem);
+         * </pre>
+         * 
+         * 
+         * <p>
+         * Objects of the following type(s) are allowed in the list
+         * {@link ChildAccount }
+         * 
+         * 
+         */
+        public List<ChildAccount> getChildAccount() {
+            if (childAccount == null) {
+                childAccount = new ArrayList<ChildAccount>();
+            }
+            return this.childAccount;
+        }
+
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;sequence>
      *         &lt;choice maxOccurs="unbounded" minOccurs="0">
      *           &lt;element name="pop3" type="{urn:zimbraAccount}accountPop3DataSource"/>
      *           &lt;element name="imap" type="{urn:zimbraAccount}accountImapDataSource"/>
@@ -766,9 +945,9 @@ public class GetInfoResponse {
     public static class DataSources {
 
         @XmlElements({
+            @XmlElement(name = "cal", type = AccountCalDataSource.class),
             @XmlElement(name = "rss", type = AccountRssDataSource.class),
             @XmlElement(name = "pop3", type = AccountPop3DataSource.class),
-            @XmlElement(name = "cal", type = AccountCalDataSource.class),
             @XmlElement(name = "imap", type = AccountImapDataSource.class)
         })
         protected List<AccountDataSource> pop3OrImapOrRss;
@@ -791,9 +970,9 @@ public class GetInfoResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
+         * {@link AccountCalDataSource }
          * {@link AccountRssDataSource }
          * {@link AccountPop3DataSource }
-         * {@link AccountCalDataSource }
          * {@link AccountImapDataSource }
          * 
          * 
@@ -1039,6 +1218,65 @@ public class GetInfoResponse {
                 signature = new ArrayList<Signature>();
             }
             return this.signature;
+        }
+
+    }
+
+
+    /**
+     * <p>Java class for anonymous complex type.
+     * 
+     * <p>The following schema fragment specifies the expected content contained within this class.
+     * 
+     * <pre>
+     * &lt;complexType>
+     *   &lt;complexContent>
+     *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+     *       &lt;sequence>
+     *         &lt;element name="zimlet" type="{urn:zimbraAccount}zimletInfo" maxOccurs="unbounded" minOccurs="0"/>
+     *       &lt;/sequence>
+     *     &lt;/restriction>
+     *   &lt;/complexContent>
+     * &lt;/complexType>
+     * </pre>
+     * 
+     * 
+     */
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "", propOrder = {
+        "zimlet"
+    })
+    public static class Zimlets {
+
+        protected List<ZimletInfo> zimlet;
+
+        /**
+         * Gets the value of the zimlet property.
+         * 
+         * <p>
+         * This accessor method returns a reference to the live list,
+         * not a snapshot. Therefore any modification you make to the
+         * returned list will be present inside the JAXB object.
+         * This is why there is not a <CODE>set</CODE> method for the zimlet property.
+         * 
+         * <p>
+         * For example, to add a new item, do as follows:
+         * <pre>
+         *    getZimlet().add(newItem);
+         * </pre>
+         * 
+         * 
+         * <p>
+         * Objects of the following type(s) are allowed in the list
+         * {@link ZimletInfo }
+         * 
+         * 
+         */
+        public List<ZimletInfo> getZimlet() {
+            if (zimlet == null) {
+                zimlet = new ArrayList<ZimletInfo>();
+            }
+            return this.zimlet;
         }
 
     }

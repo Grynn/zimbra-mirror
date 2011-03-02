@@ -33,17 +33,22 @@ import javax.xml.bind.annotation.XmlType;
     "a"
 })
 @XmlSeeAlso({
+    DeleteDataSourceRequest.class,
     ModifyDomainRequest.class,
     CreateDomainRequest.class,
+    CheckRightRequest.class,
     CreateCalendarResourceRequest.class,
     ModifyCosRequest.class,
+    ModifyDataSourceRequest.class,
     CreateCosRequest.class,
     CheckAuthConfigRequest.class,
+    GetDataSourcesRequest.class,
     CheckGalConfigRequest.class,
     CreateAccountRequest.class,
     GetAllConfigResponse.class,
     CreateDistributionListRequest.class,
     ModifyConfigRequest.class,
+    CreateGalSyncAccountRequest.class,
     GetConfigResponse.class,
     ModifyDistributionListRequest.class,
     CreateServerRequest.class,
@@ -51,6 +56,8 @@ import javax.xml.bind.annotation.XmlType;
     ModifyCalendarResourceRequest.class,
     ModifyServerRequest.class,
     ModifyAccountRequest.class,
+    DataSourceSpecifier.class,
+    DataSourceInfo.class,
     GalContactInfo.class,
     NetworkInformation.class
 })

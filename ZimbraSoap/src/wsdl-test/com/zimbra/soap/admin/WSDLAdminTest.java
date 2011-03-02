@@ -21,6 +21,9 @@ import javax.xml.ws.soap.SOAPFaultException;
 import com.sun.xml.ws.developer.WSBindingProvider;
 
 import com.zimbra.soap.admin.wsimport.generated.*;
+import com.zimbra.soap.admin.wsimport.generated.DomainAdminRight.Rights;
+import com.zimbra.soap.admin.wsimport.generated.EffectiveAttrInfo.Default;
+import com.zimbra.soap.admin.wsimport.generated.GetRightsDocResponse.DomainAdminCopypasteToZimbraRightsDomainadminXmlTemplate;
 
 import com.zimbra.soap.Utility;
 
@@ -30,6 +33,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.w3c.dom.Element;
 
 public class WSDLAdminTest {
 
@@ -366,43 +370,319 @@ public class WSDLAdminTest {
                 entries.size() >= 1);
     }
 
+    private void validateRightInfo(RightInfo rInfo, String riTag) {
+        RightsAttrs rAttrs = rInfo.getAttrs();
+        if (null != rAttrs) {
+            int aNum = 0;
+            for (Attr attr: rAttrs.getA()) {
+                aNum++;
+                String aTag = riTag + " a " + aNum;
+                Assert.assertNotNull(aTag + " name", attr.getN());
+                Assert.assertNotNull(aTag + " value", attr.getValue());
+            }
+            int eNum = 0;
+            for (Element elem : rAttrs.getAny()) {
+                eNum++;
+                String eTag = riTag + " element " + aNum;
+                Assert.assertNotNull(eTag + " name", elem.getNodeName());
+            }
+        }
+        Assert.assertNotNull("RightInfo name", rInfo.getName());
+        Assert.assertNotNull("RightInfo desc", rInfo.getDesc());
+        Assert.assertNotNull("RightInfo class", rInfo.getRightClass());
+        Assert.assertNotNull("RightInfo type", rInfo.getType());
+        // Assert.assertNotNull("RightInfo targetType", rInfo.getTargetType());
+        ComboRights comboRights = rInfo.getRights();
+        if (null != comboRights) {
+            for (ComboRightInfo cri : comboRights.getR()) {
+                Assert.assertNotNull("ComboRightInfo name", cri.getN());
+                Assert.assertNotNull("ComboRightInfo type", cri.getType());
+                // Assert.assertNotNull("ComboRightInfo targetType",
+                //         cri.getTargetType());
+            }
+        }
+    }
+
     @Test
     public void getAllRightsTest() throws Exception {
         Utility.ensureAccountExists(testAcct);
-        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        AdminService nvEif = Utility.getNonValidatingAdminSvcEIF();
+        // the validator does not like the @XmlAnyElement used
+        // in RightsAttrs
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)nvEif);
         GetAllRightsRequest req = new GetAllRightsRequest();
-        GetAllRightsResponse resp = eif.getAllRightsRequest(req);
+        GetAllRightsResponse resp = nvEif.getAllRightsRequest(req);
         Assert.assertNotNull("GetAllRightsResponse object", resp);
         List <RightInfo> rInfos = resp.getRight();
         Assert.assertNotNull("GetAllRightsResponse object", rInfos);
+        int riNum = 0;
         for (RightInfo rInfo : rInfos) {
-            RightsAttrs rAttrs = rInfo.getAttrs();
-            if (null != rAttrs) {
-                for (Object attrObj : rAttrs.getAOrAny()) {
-                    if (attrObj instanceof Attr) {
-                        Attr attr = (Attr) attrObj;
-                        Assert.assertNotNull("name of an attr", attr.getN());
-                        Assert.assertNotNull("value of an attr", attr.getValue());
-                    } else {
-                        System.out.println("Attribute Object= " + attrObj.toString());
-                    }
-                }
-            }
-            Assert.assertNotNull("RightInfo name", rInfo.getName());
-            Assert.assertNotNull("RightInfo desc", rInfo.getDesc());
-            Assert.assertNotNull("RightInfo class", rInfo.getRightClass());
-            Assert.assertNotNull("RightInfo type", rInfo.getType());
-            // Assert.assertNotNull("RightInfo targetType", rInfo.getTargetType());
-            ComboRights comboRights = rInfo.getRights();
-            if (null != comboRights) {
-                for (ComboRightInfo cri : comboRights.getR()) {
-                    Assert.assertNotNull("ComboRightInfo name", cri.getN());
-                    Assert.assertNotNull("ComboRightInfo type", cri.getType());
-                    // Assert.assertNotNull("ComboRightInfo targetType",
-                    //         cri.getTargetType());
+            riNum++;
+            String riTag = "RightInfo " + riNum;
+            validateRightInfo(rInfo, riTag);
+        }
+    }
+
+    @Test
+    public void getRightTest() throws Exception {
+        Utility.ensureAccountExists(testAcct);
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        GetRightRequest req = new GetRightRequest();
+        req.setExpandAllAttrs(true);
+        req.setRight("adminConsoleAccountRights");
+        GetRightResponse resp = eif.getRightRequest(req);
+        Assert.assertNotNull("GetRightResponse object", resp);
+        RightInfo rInfo = resp.getRight();
+        Assert.assertNotNull("GetRightResponse RightInfo", rInfo);
+        validateRightInfo(rInfo, "RightInfo");
+    }
+
+    @Test
+    public void getRightsDocTest() throws Exception {
+        Utility.ensureAccountExists(testAcct);
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        GetRightsDocRequest req = new GetRightsDocRequest();
+        GetRightsDocResponse resp = eif.getRightsDocRequest(req);
+        Assert.assertNotNull("GetRightsDocResponse object", resp);
+
+        List<PackageRightsInfo> pkgRights = resp.getPackage();
+        int pkgNum = 0;
+        for (PackageRightsInfo pkg : pkgRights) {
+            pkgNum++;
+            String pkgTag = "Package " + pkgNum;
+            Assert.assertNotNull(pkgTag + " name", pkg.getName());
+            List<CmdRightsInfo> cmdRights = pkg.getCmd();
+            Assert.assertNotNull(pkgTag + " Cmd list", cmdRights);
+            int cmdNum = 0;
+            for (CmdRightsInfo cmd : cmdRights) {
+                cmdNum++;
+                String cmdTag = pkgTag + " Cmd " + cmdNum;
+                Assert.assertNotNull(cmdTag + " description",
+                        cmd.getDesc());
+                Assert.assertNotNull(cmdTag + " name", cmd.getName());
+                com.zimbra.soap.admin.wsimport.generated.CmdRightsInfo.Rights rInfo =
+                    cmd.getRights();
+                List<NamedElement> rNs = rInfo.getRight();
+                int rNum = 0;
+                for (NamedElement rn : rNs) {
+                    rNum++;
+                    String rTag = cmdTag + " RightName " + rNum;
+                    Assert.assertNotNull(rTag, rn.getName());
                 }
             }
         }
+
+        Assert.assertNotNull("notUsed list", resp.getNotUsed());
+        DomainAdminCopypasteToZimbraRightsDomainadminXmlTemplate domRights =
+            resp.getDomainAdminCopypasteToZimbraRightsDomainadminXmlTemplate();
+        String tag =
+            "domainAdmin-copypaste-to-zimbra-rights-domainadmin-xml-template";
+        List<DomainAdminRight> rights = domRights.getRight();
+        Assert.assertNotNull(tag + " rights list", rights);
+        int domNum = 0;
+        for (DomainAdminRight dar : rights) {
+            domNum++;
+            String domTag = tag + " right " + domNum;
+            Assert.assertNotNull(domTag + " name", dar.getName());
+            Assert.assertNotNull(domTag + " type", dar.getType());
+            Assert.assertNotNull(domTag + " description", dar.getDesc());
+            Rights subRights = dar.getRights();
+            Assert.assertNotNull(domTag + " rights", subRights);
+            int rnNum = 0;
+            for (RightWithName rWithName : subRights.getR()) {
+                rnNum++;
+                String rnTag = domTag + " right " + rnNum;
+                Assert.assertNotNull(rnTag + " n attrib", rWithName.getN());
+            }
+        }
+    }
+
+    private void checkEffectiveAttrsInfo(EffectiveAttrsInfo attrInfo,
+            String tag) {
+        Assert.assertNotNull(tag, attrInfo);
+        Assert.assertTrue(tag + " all setting", attrInfo.isAll());
+        List <EffectiveAttrInfo> attrs = attrInfo.getA();
+        Assert.assertNotNull(tag + " attrs", attrs);
+        int attNum = 0;
+        for (EffectiveAttrInfo anAttr : attrs) {
+            attNum++;
+            String attrTag = tag + " attr " + attNum;
+            Assert.assertNotNull(attrTag, anAttr);
+            Assert.assertNotNull(attrTag + " n", anAttr.getN());
+            ConstraintInfo constraint = anAttr.getConstraint();
+            if (constraint != null) {
+                Assert.assertNotNull(attrTag + " constraint", 
+                        constraint.getValues());
+            }
+            Default def = anAttr.getDefault();
+            if (def != null) {
+                List<String> values = def.getV();
+                Assert.assertNotNull(attrTag + " default", values);
+            }
+        }
+    }
+
+    private void checkAllEffectiveRights(EffectiveRightsInfo allEffectiveRights,
+            String tag) {
+        Assert.assertNotNull("allEffectiveRights", allEffectiveRights);
+        checkEffectiveAttrsInfo(allEffectiveRights.getGetAttrs(),
+                tag + " getAttrs");
+        checkEffectiveAttrsInfo(allEffectiveRights.getSetAttrs(),
+                tag + " setAttrs");
+        List <RightWithName> rights = allEffectiveRights.getRight();
+        Assert.assertNotNull("rights", rights);
+        int rNum = 0;
+        for (RightWithName aRight : rights) {
+            rNum++;
+            String rTag = tag + " right " + rNum;
+            Assert.assertNotNull(rTag + " name", aRight.getN());
+        }
+    }
+
+    @Test
+    public void getAllEffectiveRightsTest() throws Exception {
+        Utility.ensureAccountExists(testAcct);
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        GetAllEffectiveRightsRequest req = new GetAllEffectiveRightsRequest();
+        req.setExpandAllAttrs("setAttrs, getAttrs");
+        GetAllEffectiveRightsResponse resp = eif.getAllEffectiveRightsRequest(req);
+        Assert.assertNotNull("GetAllEffectiveRightsResponse object", resp);
+        GranteeInfo grantee = resp.getGrantee();
+        Assert.assertNotNull("grantee object", grantee);
+        Assert.assertNotNull("grantee id", grantee.getId());
+        Assert.assertNotNull("grantee name", grantee.getName());
+        Assert.assertNotNull("grantee type", grantee.getType());
+        List<EffectiveRightsTarget> targets = resp.getTarget();
+        Assert.assertNotNull("list of targets", targets);
+        int targNum = 0;
+        for ( EffectiveRightsTarget target : targets) {
+            targNum++;
+            String targTag = "target " + targNum;
+            Assert.assertNotNull(targTag, target);
+            Assert.assertNotNull(targTag + " type", target.getType());
+            checkAllEffectiveRights(target.getAll(), targTag + " all");
+            
+            List <InDomainInfo> inDomsList = target.getInDomains();
+            Assert.assertNotNull("InDomains list", inDomsList);
+            int inDomNum = 0;
+            for (InDomainInfo anInDom : inDomsList) {
+                inDomNum++;
+                String inDomTag = targTag + " inDomain " + inDomNum;
+                int domNum = 0;
+                for (NamedElement dom : anInDom.getDomain()) {
+                    domNum++;
+                    String domTag = inDomTag + " domain " + domNum;
+                    Assert.assertNotNull(domTag + " name", dom.getName());
+                }
+                checkAllEffectiveRights(anInDom.getRights(), 
+                        inDomTag + " rights");
+            }
+            List <RightsEntriesInfo> entries = target.getEntries();
+            int entNum = 0;
+            for (RightsEntriesInfo entriesInfo : entries) {
+                entNum++;
+                String entTag = targTag + " RightsEntries " + entNum;
+                Assert.assertNotNull(entTag, entriesInfo);
+                int entryNum = 0;
+                for (NamedElement namedEntry : entriesInfo.getEntry()) {
+                    entryNum++;
+                    String entryTag = entTag + " entry " + entNum;
+                    Assert.assertNotNull(entryTag + " name", namedEntry.getName());
+                }
+                EffectiveRightsInfo entriesInfoRights = entriesInfo.getRights();
+                Assert.assertNotNull("entriesInfoRights", entriesInfoRights);
+            }
+        }
+    }
+
+    // TODO: Figure out how to test GrantRight/GetGrants
+    //       Looks like can only assign a user right to a regular user
+    //       The GetAllRightsResponse I've seen only talks about 
+    //       various rights with rightClass="ADMIN"
+    // @Test
+    public void NOTgrants() throws Exception {
+        String accountId = Utility.ensureAccountExists(testAcct);
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+
+        GranteeSelector gSel = new GranteeSelector();
+        gSel.setBy(GranteeBy.NAME); // required
+        // note - initial testing idea was to use "admin" account
+        // but GetGrantsRequest won't accept an admin account
+        // as the grantee - they don't need to be granted anything...
+        gSel.setValue(testAcct);
+        gSel.setType(GranteeType.USR);
+        gSel.setAll(true);  // required
+        gSel.setSecret("test123");
+
+        EffectiveRightsTargetSelector tSel = new EffectiveRightsTargetSelector();
+        tSel.setType(TargetType.ACCOUNT);
+        tSel.setBy(TargetBy.ID);
+        tSel.setValue(accountId);
+
+        RightModifierInfo rmi = new RightModifierInfo();
+        // Note: if CanDelegate modifier set, target cannot be a regular user
+        //       acct.
+        // rmi.setCanDelegate(true);
+        rmi.setValue("addAccountAlias");
+        rmi.setSubDomain(false);
+
+        GrantRightRequest grReq = new GrantRightRequest();
+        grReq.setGrantee(gSel);
+        grReq.setTarget(tSel);
+        grReq.setRight(rmi);
+
+        GrantRightResponse grResp = eif.grantRightRequest(grReq);
+        Assert.assertNotNull("GrantRightResponse object", grResp);
+
+        GetGrantsRequest ggReq = new GetGrantsRequest();
+        ggReq.setGrantee(gSel);
+        ggReq.setTarget(tSel);
+        GetGrantsResponse ggResp = eif.getGrantsRequest(ggReq);
+        Assert.assertNotNull("GetGrantsResponse object", ggResp);
+        Assert.assertTrue("Number of grants >= 1", ggResp.getGrant().size() >=1);
+        int gNum = 0;
+        for (GrantInfo grant : ggResp.getGrant()) {
+            gNum++;
+            String gTag = " grant " + gNum;
+            GranteeInfo grantee = grant.getGrantee();
+            Assert.assertNotNull(gTag + " GranteeInfo", grantee);
+            Assert.assertNotNull(gTag + " Grantee type", grantee.getType());
+            Assert.assertNotNull(gTag + " Grantee id", grantee.getId());
+            Assert.assertNotNull(gTag + " Grantee name", grantee.getName());
+            TypeIdName targ = grant.getTarget();
+            Assert.assertNotNull(gTag + " Target", targ);
+            Assert.assertNotNull(gTag + " Target type", targ.getType());
+            Assert.assertNotNull(gTag + " Target id", targ.getId());
+            Assert.assertNotNull(gTag + " Target name", targ.getName());
+            RightModifierInfo rightMod = grant.getRight();
+            Assert.assertNotNull(gTag + " Right", rightMod);
+            Assert.assertNotNull(gTag + " Right value", rightMod.getValue());
+        }
+    }
+
+    @Test
+    public void getEffectiveRightsTest() throws Exception {
+        String accountId = Utility.ensureAccountExists(testAcct);
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        GetEffectiveRightsRequest req = new GetEffectiveRightsRequest();
+        req.setExpandAllAttrs("getAttrs");
+        GranteeSelector gSel = new GranteeSelector();
+        gSel.setBy(GranteeBy.NAME);
+        gSel.setValue("admin");
+        req.setGrantee(gSel);
+        EffectiveRightsTargetSelector tSel = new EffectiveRightsTargetSelector();
+        tSel.setType(TargetType.ACCOUNT);
+        tSel.setBy(TargetBy.ID);
+        tSel.setValue(accountId);
+        req.setTarget(tSel);
+        GetEffectiveRightsResponse resp = eif.getEffectiveRightsRequest(req);
+        Assert.assertNotNull("GetEffectiveRightsResponse object", resp);
+        GranteeInfo grantee = resp.getGrantee();
+        Assert.assertNotNull("grantee object", grantee);
+        Assert.assertNotNull("grantee id", grantee.getId());
+        Assert.assertNotNull("grantee name", grantee.getName());
+        // Not present for GetEffectiveRights (is for GetAllEffectiveRights)
+        // Assert.assertNotNull("grantee type", grantee.getType());
     }
 
     @Test
@@ -846,7 +1126,7 @@ public class WSDLAdminTest {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         GetAllCosResponse resp = eif.getAllCosRequest(req);
         Assert.assertNotNull("GetAllCosResponse object", resp);
-        List <CosInfo> cosInfoList = resp.getCos();
+        List <AnnotatedCosInfo> cosInfoList = resp.getCos();
         int len;
         Assert.assertNotNull("GetAllCosResponse list of cos", cosInfoList);
         len = cosInfoList.size();

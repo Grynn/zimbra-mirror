@@ -22,6 +22,7 @@ import javax.xml.ws.soap.SOAPFaultException;
 
 import com.sun.xml.ws.api.message.Header;
 import com.sun.xml.ws.api.message.Headers;
+import com.sun.xml.ws.developer.SchemaValidationFeature;
 import com.sun.xml.ws.developer.WSBindingProvider;
 import com.sun.xml.bind.api.JAXBRIContext;
 
@@ -104,6 +105,7 @@ import org.junit.Assert;
 public class Utility {
     private static AccountService acctSvcEIF = null;
     private static AdminService adminSvcEIF = null;
+    private static AdminService nvAdminSvcEIF = null;
     private static MailService mailSvcEIF = null;
     private static String acctAuthToken = null;
     private static String adminAuthToken = null;
@@ -155,7 +157,8 @@ public class Utility {
             // The AccountService_Service class is the Java type bound to
             // the service section of the WSDL document.
             AccountService_Service acctSvc = new AccountService_Service();
-            setAcctSvcEIF(acctSvc.getAccountServicePort());
+            SchemaValidationFeature feature = new SchemaValidationFeature();
+            setAcctSvcEIF(acctSvc.getAccountServicePort(feature));
         }
         return acctSvcEIF;
     }
@@ -203,12 +206,23 @@ public class Utility {
 
     public static AdminService getAdminSvcEIF() throws Exception {
         if (adminSvcEIF == null) {
-            // The AccountService_Service class is the Java type bound to
+            // The AdminService_Service class is the Java type bound to
             // the service section of the WSDL document.
             AdminService_Service adminSvc = new AdminService_Service();
-            setAdminSvcEIF(adminSvc.getAdminServicePort());
+            // For Non-validating, use :
+            //    setAdminSvcEIF(adminSvc.getAdminServicePort());
+            SchemaValidationFeature feature = new SchemaValidationFeature();
+            setAdminSvcEIF(adminSvc.getAdminServicePort(feature));
         }
         return adminSvcEIF;
+    }
+
+    public static AdminService getNonValidatingAdminSvcEIF() throws Exception {
+        if (nvAdminSvcEIF == null) {
+            AdminService_Service adminSvc = new AdminService_Service();
+            nvAdminSvcEIF = adminSvc.getAdminServicePort();
+        }
+        return nvAdminSvcEIF;
     }
 
     private static void setMailSvcEIF(MailService mailSvcEIF) {
@@ -218,7 +232,8 @@ public class Utility {
     public static MailService getMailSvcEIF() {
         if (mailSvcEIF == null) {
             MailService_Service mailSvc = new MailService_Service();
-            Utility.setMailSvcEIF(mailSvc.getMailServicePort());
+            SchemaValidationFeature feature = new SchemaValidationFeature();
+            Utility.setMailSvcEIF(mailSvc.getMailServicePort(feature));
         }
         return mailSvcEIF;
     }
@@ -417,7 +432,7 @@ public class Utility {
                     getAdminSvcEIF().deleteDistributionListRequest(delReq));
         } catch (SOAPFaultException sfe) {
             String missive = sfe.getMessage();
-            if (!missive.startsWith("no such dl:"))
+            if (!missive.startsWith("no such distribution list:"))
                 System.err.println("Exception " + sfe.toString() + 
                         " thrown attempting to delete dl " + name);
         }

@@ -52,99 +52,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Session }
+     * Create an instance of {@link ZimletConfigInfo }
      * 
      */
-    public Session createSession() {
-        return new Session();
-    }
-
-    /**
-     * Create an instance of {@link AuthResponse.Prefs }
-     * 
-     */
-    public AuthResponse.Prefs createAuthResponsePrefs() {
-        return new AuthResponse.Prefs();
-    }
-
-    /**
-     * Create an instance of {@link AuthResponse.Attrs }
-     * 
-     */
-    public AuthResponse.Attrs createAuthResponseAttrs() {
-        return new AuthResponse.Attrs();
-    }
-
-    /**
-     * Create an instance of {@link AuthRequest.Prefs }
-     * 
-     */
-    public AuthRequest.Prefs createAuthRequestPrefs() {
-        return new AuthRequest.Prefs();
-    }
-
-    /**
-     * Create an instance of {@link AuthRequest.Attrs }
-     * 
-     */
-    public AuthRequest.Attrs createAuthRequestAttrs() {
-        return new AuthRequest.Attrs();
-    }
-
-    /**
-     * Create an instance of {@link AuthResponse }
-     * 
-     */
-    public AuthResponse createAuthResponse() {
-        return new AuthResponse();
-    }
-
-    /**
-     * Create an instance of {@link ChildAccount.Attrs }
-     * 
-     */
-    public ChildAccount.Attrs createChildAccountAttrs() {
-        return new ChildAccount.Attrs();
-    }
-
-    /**
-     * Create an instance of {@link AccountCalDataSource }
-     * 
-     */
-    public AccountCalDataSource createAccountCalDataSource() {
-        return new AccountCalDataSource();
-    }
-
-    /**
-     * Create an instance of {@link GetInfoResponse.Prefs }
-     * 
-     */
-    public GetInfoResponse.Prefs createGetInfoResponsePrefs() {
-        return new GetInfoResponse.Prefs();
-    }
-
-    /**
-     * Create an instance of {@link ModifyPropertiesRequest }
-     * 
-     */
-    public ModifyPropertiesRequest createModifyPropertiesRequest() {
-        return new ModifyPropertiesRequest();
-    }
-
-    /**
-     * Create an instance of {@link GetIdentitiesRequest }
-     * 
-     */
-    public GetIdentitiesRequest createGetIdentitiesRequest() {
-        return new GetIdentitiesRequest();
-    }
-
-    /**
-     * Create an instance of {@link GetPrefsRequest }
-     * 
-     */
-    public GetPrefsRequest createGetPrefsRequest() {
-        return new GetPrefsRequest();
+    public ZimletConfigInfo createZimletConfigInfo() {
+        return new ZimletConfigInfo();
     }
 
     /**
@@ -156,62 +68,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ChangePasswordResponse }
-     * 
-     */
-    public ChangePasswordResponse createChangePasswordResponse() {
-        return new ChangePasswordResponse();
-    }
-
-    /**
-     * Create an instance of {@link ModifyPropertiesResponse }
-     * 
-     */
-    public ModifyPropertiesResponse createModifyPropertiesResponse() {
-        return new ModifyPropertiesResponse();
-    }
-
-    /**
-     * Create an instance of {@link ChildAccount }
-     * 
-     */
-    public ChildAccount createChildAccount() {
-        return new ChildAccount();
-    }
-
-    /**
-     * Create an instance of {@link GetInfoRequest }
-     * 
-     */
-    public GetInfoRequest createGetInfoRequest() {
-        return new GetInfoRequest();
-    }
-
-    /**
-     * Create an instance of {@link GetSignaturesResponse }
-     * 
-     */
-    public GetSignaturesResponse createGetSignaturesResponse() {
-        return new GetSignaturesResponse();
-    }
-
-    /**
-     * Create an instance of {@link AuthRequest }
-     * 
-     */
-    public AuthRequest createAuthRequest() {
-        return new AuthRequest();
-    }
-
-    /**
-     * Create an instance of {@link Account }
-     * 
-     */
-    public Account createAccount() {
-        return new Account();
-    }
-
-    /**
      * Create an instance of {@link GetInfoResponse.Identities }
      * 
      */
@@ -220,107 +76,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Signature }
+     * Create an instance of {@link AuthResponse.Attrs }
      * 
      */
-    public Signature createSignature() {
-        return new Signature();
-    }
-
-    /**
-     * Create an instance of {@link AccountPop3DataSource }
-     * 
-     */
-    public AccountPop3DataSource createAccountPop3DataSource() {
-        return new AccountPop3DataSource();
-    }
-
-    /**
-     * Create an instance of {@link Cos }
-     * 
-     */
-    public Cos createCos() {
-        return new Cos();
-    }
-
-    /**
-     * Create an instance of {@link GetInfoResponse.Signatures }
-     * 
-     */
-    public GetInfoResponse.Signatures createGetInfoResponseSignatures() {
-        return new GetInfoResponse.Signatures();
-    }
-
-    /**
-     * Create an instance of {@link GetIdentitiesResponse }
-     * 
-     */
-    public GetIdentitiesResponse createGetIdentitiesResponse() {
-        return new GetIdentitiesResponse();
-    }
-
-    /**
-     * Create an instance of {@link EndSessionResponse }
-     * 
-     */
-    public EndSessionResponse createEndSessionResponse() {
-        return new EndSessionResponse();
-    }
-
-    /**
-     * Create an instance of {@link Identity }
-     * 
-     */
-    public Identity createIdentity() {
-        return new Identity();
-    }
-
-    /**
-     * Create an instance of {@link AccountImapDataSource }
-     * 
-     */
-    public AccountImapDataSource createAccountImapDataSource() {
-        return new AccountImapDataSource();
-    }
-
-    /**
-     * Create an instance of {@link GetSignaturesRequest }
-     * 
-     */
-    public GetSignaturesRequest createGetSignaturesRequest() {
-        return new GetSignaturesRequest();
-    }
-
-    /**
-     * Create an instance of {@link GetPrefsResponse }
-     * 
-     */
-    public GetPrefsResponse createGetPrefsResponse() {
-        return new GetPrefsResponse();
-    }
-
-    /**
-     * Create an instance of {@link Prop }
-     * 
-     */
-    public Prop createProp() {
-        return new Prop();
-    }
-
-    /**
-     * Create an instance of {@link AccountContactsDataSource }
-     * 
-     */
-    public AccountContactsDataSource createAccountContactsDataSource() {
-        return new AccountContactsDataSource();
-    }
-
-    /**
-     * Create an instance of {@link Attr }
-     * 
-     */
-    public Attr createAttr() {
-        return new Attr();
+    public AuthResponse.Attrs createAuthResponseAttrs() {
+        return new AuthResponse.Attrs();
     }
 
     /**
@@ -332,51 +92,35 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetInfoResponse.Attrs }
+     * Create an instance of {@link ModifyPropertiesRequest }
      * 
      */
-    public GetInfoResponse.Attrs createGetInfoResponseAttrs() {
-        return new GetInfoResponse.Attrs();
+    public ModifyPropertiesRequest createModifyPropertiesRequest() {
+        return new ModifyPropertiesRequest();
     }
 
     /**
-     * Create an instance of {@link SignatureContent }
+     * Create an instance of {@link ChangePasswordResponse }
      * 
      */
-    public SignatureContent createSignatureContent() {
-        return new SignatureContent();
+    public ChangePasswordResponse createChangePasswordResponse() {
+        return new ChangePasswordResponse();
     }
 
     /**
-     * Create an instance of {@link AccountRssDataSource }
+     * Create an instance of {@link ChildAccount.Attrs }
      * 
      */
-    public AccountRssDataSource createAccountRssDataSource() {
-        return new AccountRssDataSource();
+    public ChildAccount.Attrs createChildAccountAttrs() {
+        return new ChildAccount.Attrs();
     }
 
     /**
-     * Create an instance of {@link EndSessionRequest }
+     * Create an instance of {@link ZimletInfo }
      * 
      */
-    public EndSessionRequest createEndSessionRequest() {
-        return new EndSessionRequest();
-    }
-
-    /**
-     * Create an instance of {@link GetInfoResponse.Props }
-     * 
-     */
-    public GetInfoResponse.Props createGetInfoResponseProps() {
-        return new GetInfoResponse.Props();
-    }
-
-    /**
-     * Create an instance of {@link GetInfoResponse.DataSources }
-     * 
-     */
-    public GetInfoResponse.DataSources createGetInfoResponseDataSources() {
-        return new GetInfoResponse.DataSources();
+    public ZimletInfo createZimletInfo() {
+        return new ZimletInfo();
     }
 
     /**
@@ -388,11 +132,195 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link PreAuth }
+     * Create an instance of {@link AuthResponse.Prefs }
      * 
      */
-    public PreAuth createPreAuth() {
-        return new PreAuth();
+    public AuthResponse.Prefs createAuthResponsePrefs() {
+        return new AuthResponse.Prefs();
+    }
+
+    /**
+     * Create an instance of {@link GetInfoRequest }
+     * 
+     */
+    public GetInfoRequest createGetInfoRequest() {
+        return new GetInfoRequest();
+    }
+
+    /**
+     * Create an instance of {@link GetInfoResponse.Signatures }
+     * 
+     */
+    public GetInfoResponse.Signatures createGetInfoResponseSignatures() {
+        return new GetInfoResponse.Signatures();
+    }
+
+    /**
+     * Create an instance of {@link GetInfoResponse.Attrs }
+     * 
+     */
+    public GetInfoResponse.Attrs createGetInfoResponseAttrs() {
+        return new GetInfoResponse.Attrs();
+    }
+
+    /**
+     * Create an instance of {@link Signature }
+     * 
+     */
+    public Signature createSignature() {
+        return new Signature();
+    }
+
+    /**
+     * Create an instance of {@link Prop }
+     * 
+     */
+    public Prop createProp() {
+        return new Prop();
+    }
+
+    /**
+     * Create an instance of {@link ZimletDesc }
+     * 
+     */
+    public ZimletDesc createZimletDesc() {
+        return new ZimletDesc();
+    }
+
+    /**
+     * Create an instance of {@link GetIdentitiesResponse }
+     * 
+     */
+    public GetIdentitiesResponse createGetIdentitiesResponse() {
+        return new GetIdentitiesResponse();
+    }
+
+    /**
+     * Create an instance of {@link ZimletContext }
+     * 
+     */
+    public ZimletContext createZimletContext() {
+        return new ZimletContext();
+    }
+
+    /**
+     * Create an instance of {@link AuthRequest }
+     * 
+     */
+    public AuthRequest createAuthRequest() {
+        return new AuthRequest();
+    }
+
+    /**
+     * Create an instance of {@link AccountCalDataSource }
+     * 
+     */
+    public AccountCalDataSource createAccountCalDataSource() {
+        return new AccountCalDataSource();
+    }
+
+    /**
+     * Create an instance of {@link GetPrefsResponse }
+     * 
+     */
+    public GetPrefsResponse createGetPrefsResponse() {
+        return new GetPrefsResponse();
+    }
+
+    /**
+     * Create an instance of {@link EndSessionResponse }
+     * 
+     */
+    public EndSessionResponse createEndSessionResponse() {
+        return new EndSessionResponse();
+    }
+
+    /**
+     * Create an instance of {@link Account }
+     * 
+     */
+    public Account createAccount() {
+        return new Account();
+    }
+
+    /**
+     * Create an instance of {@link SignatureContent }
+     * 
+     */
+    public SignatureContent createSignatureContent() {
+        return new SignatureContent();
+    }
+
+    /**
+     * Create an instance of {@link GetInfoResponse.Zimlets }
+     * 
+     */
+    public GetInfoResponse.Zimlets createGetInfoResponseZimlets() {
+        return new GetInfoResponse.Zimlets();
+    }
+
+    /**
+     * Create an instance of {@link AuthRequest.Prefs }
+     * 
+     */
+    public AuthRequest.Prefs createAuthRequestPrefs() {
+        return new AuthRequest.Prefs();
+    }
+
+    /**
+     * Create an instance of {@link GetInfoResponse.DataSources }
+     * 
+     */
+    public GetInfoResponse.DataSources createGetInfoResponseDataSources() {
+        return new GetInfoResponse.DataSources();
+    }
+
+    /**
+     * Create an instance of {@link AuthResponse }
+     * 
+     */
+    public AuthResponse createAuthResponse() {
+        return new AuthResponse();
+    }
+
+    /**
+     * Create an instance of {@link EndSessionRequest }
+     * 
+     */
+    public EndSessionRequest createEndSessionRequest() {
+        return new EndSessionRequest();
+    }
+
+    /**
+     * Create an instance of {@link GetPrefsRequest }
+     * 
+     */
+    public GetPrefsRequest createGetPrefsRequest() {
+        return new GetPrefsRequest();
+    }
+
+    /**
+     * Create an instance of {@link GetSignaturesRequest }
+     * 
+     */
+    public GetSignaturesRequest createGetSignaturesRequest() {
+        return new GetSignaturesRequest();
+    }
+
+    /**
+     * Create an instance of {@link AccountPop3DataSource }
+     * 
+     */
+    public AccountPop3DataSource createAccountPop3DataSource() {
+        return new AccountPop3DataSource();
+    }
+
+    /**
+     * Create an instance of {@link Identity }
+     * 
+     */
+    public Identity createIdentity() {
+        return new Identity();
     }
 
     /**
@@ -401,6 +329,126 @@ public class ObjectFactory {
      */
     public AccountDataSource createAccountDataSource() {
         return new AccountDataSource();
+    }
+
+    /**
+     * Create an instance of {@link GetInfoResponse.ChildAccounts }
+     * 
+     */
+    public GetInfoResponse.ChildAccounts createGetInfoResponseChildAccounts() {
+        return new GetInfoResponse.ChildAccounts();
+    }
+
+    /**
+     * Create an instance of {@link AccountImapDataSource }
+     * 
+     */
+    public AccountImapDataSource createAccountImapDataSource() {
+        return new AccountImapDataSource();
+    }
+
+    /**
+     * Create an instance of {@link ModifyPropertiesResponse }
+     * 
+     */
+    public ModifyPropertiesResponse createModifyPropertiesResponse() {
+        return new ModifyPropertiesResponse();
+    }
+
+    /**
+     * Create an instance of {@link AccountContactsDataSource }
+     * 
+     */
+    public AccountContactsDataSource createAccountContactsDataSource() {
+        return new AccountContactsDataSource();
+    }
+
+    /**
+     * Create an instance of {@link GetIdentitiesRequest }
+     * 
+     */
+    public GetIdentitiesRequest createGetIdentitiesRequest() {
+        return new GetIdentitiesRequest();
+    }
+
+    /**
+     * Create an instance of {@link Session }
+     * 
+     */
+    public Session createSession() {
+        return new Session();
+    }
+
+    /**
+     * Create an instance of {@link ChildAccount }
+     * 
+     */
+    public ChildAccount createChildAccount() {
+        return new ChildAccount();
+    }
+
+    /**
+     * Create an instance of {@link Attr }
+     * 
+     */
+    public Attr createAttr() {
+        return new Attr();
+    }
+
+    /**
+     * Create an instance of {@link GetInfoResponse.Props }
+     * 
+     */
+    public GetInfoResponse.Props createGetInfoResponseProps() {
+        return new GetInfoResponse.Props();
+    }
+
+    /**
+     * Create an instance of {@link PreAuth }
+     * 
+     */
+    public PreAuth createPreAuth() {
+        return new PreAuth();
+    }
+
+    /**
+     * Create an instance of {@link Cos }
+     * 
+     */
+    public Cos createCos() {
+        return new Cos();
+    }
+
+    /**
+     * Create an instance of {@link AuthRequest.Attrs }
+     * 
+     */
+    public AuthRequest.Attrs createAuthRequestAttrs() {
+        return new AuthRequest.Attrs();
+    }
+
+    /**
+     * Create an instance of {@link GetInfoResponse.Prefs }
+     * 
+     */
+    public GetInfoResponse.Prefs createGetInfoResponsePrefs() {
+        return new GetInfoResponse.Prefs();
+    }
+
+    /**
+     * Create an instance of {@link GetSignaturesResponse }
+     * 
+     */
+    public GetSignaturesResponse createGetSignaturesResponse() {
+        return new GetSignaturesResponse();
+    }
+
+    /**
+     * Create an instance of {@link AccountRssDataSource }
+     * 
+     */
+    public AccountRssDataSource createAccountRssDataSource() {
+        return new AccountRssDataSource();
     }
 
     /**

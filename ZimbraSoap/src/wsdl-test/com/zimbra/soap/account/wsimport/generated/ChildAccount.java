@@ -31,9 +31,10 @@ import javax.xml.bind.annotation.XmlType;
  *           &lt;/complexType>
  *         &lt;/element>
  *       &lt;/sequence>
- *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="visible" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="active" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -48,12 +49,14 @@ import javax.xml.bind.annotation.XmlType;
 public class ChildAccount {
 
     protected ChildAccount.Attrs attrs;
-    @XmlAttribute
+    @XmlAttribute(required = true)
+    protected String id;
+    @XmlAttribute(required = true)
     protected String name;
     @XmlAttribute(required = true)
     protected boolean visible;
-    @XmlAttribute
-    protected String id;
+    @XmlAttribute(required = true)
+    protected boolean active;
 
     /**
      * Gets the value of the attrs property.
@@ -77,6 +80,30 @@ public class ChildAccount {
      */
     public void setAttrs(ChildAccount.Attrs value) {
         this.attrs = value;
+    }
+
+    /**
+     * Gets the value of the id property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Sets the value of the id property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setId(String value) {
+        this.id = value;
     }
 
     /**
@@ -120,27 +147,19 @@ public class ChildAccount {
     }
 
     /**
-     * Gets the value of the id property.
+     * Gets the value of the active property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
      */
-    public String getId() {
-        return id;
+    public boolean isActive() {
+        return active;
     }
 
     /**
-     * Sets the value of the id property.
+     * Sets the value of the active property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
      */
-    public void setId(String value) {
-        this.id = value;
+    public void setActive(boolean value) {
+        this.active = value;
     }
 
 

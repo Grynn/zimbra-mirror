@@ -34,6 +34,7 @@ public class WSDLDistListTest {
     private final static String testDlDomain = "wsdl.dl.domain.example.test";
     private final static String testAcct = "wsdl_acct1@" + testDlDomain;
     private final static String testDl = "wsdl_dl1@" + testDlDomain;
+    private final static String parentDl = "wsdl_dlparent@" + testDlDomain;
     private static AdminService eif = null;
 
     @BeforeClass
@@ -48,6 +49,7 @@ public class WSDLDistListTest {
         // one-time cleanup code
         try {
             Utility.deleteDistributionListIfExists(testDl);
+            Utility.deleteDistributionListIfExists(parentDl);
             Utility.deleteDistributionListIfExists("foobar" + testDl);
             Utility.deleteAccountIfExists(testAcct);
             Utility.deleteDomainIfExists(testDlDomain);
@@ -216,40 +218,39 @@ public class WSDLDistListTest {
 
     @Test
     public void getDlMembershipTest() throws Exception {
+        // For a useful test, we need a DL which is a member of another DL
         int len;
-        String testDistributionListId = Utility.ensureDistributionListExists(testDl);
-        GetDistributionListMembershipRequest membershipReq = new GetDistributionListMembershipRequest();
+        Utility.ensureDistributionListExists(testDl);
+        String parentDlId = Utility.ensureDistributionListExists(parentDl);
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        AddDistributionListMemberRequest req =
+            new AddDistributionListMemberRequest();
+        req.setId(parentDlId);
+        req.getDlm().add(testDl);
+        AddDistributionListMemberResponse resp =
+            eif.addDistributionListMemberRequest(req);
+        Assert.assertNotNull("AddDistributionListMemberResponse object", resp);
+        GetDistributionListMembershipRequest membershipReq =
+            new GetDistributionListMembershipRequest();
         DistributionListSelector adminAcct = new DistributionListSelector();
         adminAcct.setBy(DistributionListBy.NAME);
         adminAcct.setValue(testDl);
         membershipReq.setDl(adminAcct);
         GetDistributionListMembershipResponse dlMembershipResponse =
             eif.getDistributionListMembershipRequest(membershipReq);
-        Assert.assertNotNull("GetDistributionListMembershipResponse object", dlMembershipResponse);
-        // TODO: test an dl where the response actually has children
+        Assert.assertNotNull("GetDistributionListMembershipResponse object",
+                dlMembershipResponse);
         len = dlMembershipResponse.getDl().size();
-        Assert.assertEquals("GetDistributionListMembershipResponse object has " + len +
-                " <dl> children - expecting 0", 0, len);
-
-        // check that name did get changed.
-        GetDistributionListRequest getReq = new GetDistributionListRequest();
-        DistributionListSelector dlSel = new DistributionListSelector();
-        dlSel.setBy(DistributionListBy.ID);
-        dlSel.setValue(testDistributionListId);
-        getReq.setDl(dlSel);
-        getReq.setSortAscending(true);
-        GetDistributionListResponse getResp = eif.getDistributionListRequest(getReq);
-        Assert.assertNotNull(getResp);
-        DistributionListInfo dlInfo = getResp.getDl();
-        Assert.assertNotNull(dlInfo);
-        Assert.assertEquals("getDistributionListResponse <dl> 'name' attribute",
-                testDl, dlInfo.getName());
-        String respId = dlInfo.getId();
-        Assert.assertEquals("getDistributionListResponse <dl> 'id' attribute",
-                testDistributionListId, respId);
-        len = dlInfo.getA().size();
-        Assert.assertTrue("GetDistributionListResponse <dl> has " + len +
-                " <a> children - should have at least 5", len >= 5);
+        Assert.assertEquals("Number of dls this dl is a member of", 1, len);
+        int pNum = 0;
+        for (DistributionListMembershipInfo parentInfo :
+                    dlMembershipResponse.getDl()) {
+            pNum++;
+            String pTag = "containing DL" + pNum;
+            Assert.assertEquals(pTag + " id", parentDlId, parentInfo.getId());
+            Assert.assertEquals(pTag + " name", parentDl, parentInfo.getName());
+            Assert.assertNull(pTag + " via", parentInfo.getVia());
+        }
     }
 
     @Test
@@ -321,8 +322,9 @@ public class WSDLDistListTest {
         Assert.assertNotNull("shares object", infos);
 
         GetShareInfoRequest getReq = new GetShareInfoRequest();
-        GranteeSelector gSel = new GranteeSelector();
-        getReq.setGrantee(gSel);
+        GranteeChooser gChoose = new GranteeChooser();
+        gChoose.setType("USR");
+        getReq.setGrantee(gChoose);
         getReq.setOwner(accountSel);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         GetShareInfoResponse getResp = eif.getShareInfoRequest(getReq);

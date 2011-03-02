@@ -3,6 +3,7 @@ package com.zimbra.soap.admin.wsimport.generated;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -15,8 +16,9 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="accountInfo">
  *   &lt;complexContent>
  *     &lt;extension base="{urn:zimbraAdmin}adminObjectInfo">
- *       &lt;all>
- *       &lt;/all>
+ *       &lt;sequence>
+ *       &lt;/sequence>
+ *       &lt;attribute name="isExternal" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -30,5 +32,31 @@ public class AccountInfo
     extends AdminObjectInfo
 {
 
+    @XmlAttribute
+    protected Boolean isExternal;
+
+    /**
+     * Gets the value of the isExternal property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isIsExternal() {
+        return isExternal;
+    }
+
+    /**
+     * Sets the value of the isExternal property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setIsExternal(Boolean value) {
+        this.isExternal = value;
+    }
 
 }

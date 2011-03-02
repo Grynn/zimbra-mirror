@@ -3,12 +3,10 @@ package com.zimbra.soap.admin.wsimport.generated;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlType;
 import org.w3c.dom.Element;
 
@@ -23,10 +21,8 @@ import org.w3c.dom.Element;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;choice maxOccurs="unbounded" minOccurs="0">
- *           &lt;element ref="{urn:zimbraAdmin}a"/>
- *           &lt;any processContents='skip' namespace='##other'/>
- *         &lt;/choice>
+ *         &lt;element ref="{urn:zimbraAdmin}a" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;any processContents='skip' namespace='##other' maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="all" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
@@ -38,44 +34,73 @@ import org.w3c.dom.Element;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "rightsAttrs", propOrder = {
-    "aOrAny"
+    "a",
+    "any"
 })
 public class RightsAttrs {
 
-    @XmlElementRef(name = "a", namespace = "urn:zimbraAdmin", type = JAXBElement.class)
+    protected List<Attr> a;
     @XmlAnyElement
-    protected List<Object> aOrAny;
+    protected List<Element> any;
     @XmlAttribute
     protected Boolean all;
 
     /**
-     * Gets the value of the aOrAny property.
+     * Gets the value of the a property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the aOrAny property.
+     * This is why there is not a <CODE>set</CODE> method for the a property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getAOrAny().add(newItem);
+     *    getA().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link Attr }{@code >}
+     * {@link Attr }
+     * 
+     * 
+     */
+    public List<Attr> getA() {
+        if (a == null) {
+            a = new ArrayList<Attr>();
+        }
+        return this.a;
+    }
+
+    /**
+     * Gets the value of the any property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the any property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getAny().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
      * {@link Element }
      * 
      * 
      */
-    public List<Object> getAOrAny() {
-        if (aOrAny == null) {
-            aOrAny = new ArrayList<Object>();
+    public List<Element> getAny() {
+        if (any == null) {
+            any = new ArrayList<Element>();
         }
-        return this.aOrAny;
+        return this.any;
     }
 
     /**
