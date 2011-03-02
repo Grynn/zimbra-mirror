@@ -1723,6 +1723,15 @@ function(url, restUrlAuthority) {
 
 AjxStringUtil._dummyDiv = document.createElement("DIV");
 
+AjxStringUtil.htmlPlatformIndependent =
+function(html) {
+	var div = AjxStringUtil._dummyDiv;
+	div.innerHTML = html;
+	var inner = div.innerHTML;
+	div.innerHTML = "";
+	return inner;
+};
+
 /**
  * compare two html code fragments, ignoring the case of tags, since the tags inside innnerHTML are returned differently by different browsers (and from Outlook)
  * e.g. IE returns CAPS for tag names in innerHTML while FF returns lowercase tag names. Outlook signature creation also returns lowercase.
@@ -1733,13 +1742,6 @@ AjxStringUtil._dummyDiv = document.createElement("DIV");
  */
 AjxStringUtil.equalsHtmlPlatformIndependent =
 function(html1, html2) {
-	var div = AjxStringUtil._dummyDiv;
-
-	div.innerHTML = html1;
-	var inner1 = div.innerHTML;
-	div.innerHTML = html2;
-	var inner2 = div.innerHTML;
-	div.innerHTML = "";
-	return inner1 == inner2;
+	return AjxStringUtil.htmlPlatformIndependent(html1) == AjxStringUtil.htmlPlatformIndependent(html2);
 };
 
