@@ -23,6 +23,7 @@ public class DialogWarning extends AbsDialog {
 		public static DialogWarningID SaveTaskChangeMessage = new DialogWarningID("YesNoCancel");
 		
 		public static DialogWarningID SendLink = new DialogWarningID("css=div[class=DwtConfirmDialog]");
+		public static DialogWarningID DeleteTagWarningMessage = new DialogWarningID("YesNoCancel");
 		
 		protected String Id;
 		protected DialogWarningID(String id) {
