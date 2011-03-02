@@ -235,16 +235,21 @@ public class Props2JsServlet extends HttpServlet {
 
     protected Locale getLocale(HttpServletRequest req) {
         String language = req.getParameter("language");
+        String locid = req.getParameter("locid");
         if (language != null) {
             String country = req.getParameter("country");
             if (country != null) {
-                String variant = req.getParameter("variant");
-                if (variant != null) {
-                    return new Locale(language, country, variant);
-                }
                 return new Locale(language, country);
             }
             return new Locale(language);
+        }
+        else if (locid != null) {
+            String[] parts = locid.split("_");
+            if (parts.length > 1) {
+                return new Locale(parts[0], parts[1]);
+            } else {
+                return new Locale(parts[0]);
+            }
         }
         return req.getLocale();
     }
