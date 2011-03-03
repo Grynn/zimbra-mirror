@@ -6,6 +6,8 @@ package com.zimbra.qa.selenium.projects.ajax.ui.tasks;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
@@ -99,14 +101,23 @@ public class TreeTasks extends AbsTree {
 		FolderItem f = (FolderItem) tasklist;
 		
 		if ( action == Action.A_LEFTCLICK ) {
-			
-			locator = "zti__main_Tasks__"+ f.getId() +"_textCell";
+			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+			   locator = "css=[id^='zti__" + MyApplication.zGetActiveAccount().EmailAddress +
+			         ":main_Tasks__'][id$=':" + f.getId() + "_textCell']";
+			} else {
+			   locator = "zti__main_Tasks__" + f.getId() + "_textCell";
+			}
 			
 			// FALL THROUGH
 
 		} else if ( action == Action.A_RIGHTCLICK ) {
 			
-			locator = "zti__main_Tasks__"+ f.getId() +"_textCell";
+		   if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+            locator = "css=[id^='zti__" + MyApplication.zGetActiveAccount().EmailAddress +
+                  ":main_Tasks__'][id$=':" + f.getId() + "_textCell']";
+         } else {
+            locator = "zti__main_Tasks__" + f.getId() + "_textCell";
+         }
 
 			// Select the folder
 			this.zRightClick(locator);
@@ -134,7 +145,9 @@ public class TreeTasks extends AbsTree {
 			// Wait for the page to become active, if it was specified
 			page.zWaitForActive();
 		}
-	
+
+		((AppAjaxClient)MyApplication).zPageTasks.zWaitForDesktopLoadingSpinner(5000);
+
 		return (page);
 
 	}
@@ -195,6 +208,8 @@ public class TreeTasks extends AbsTree {
 					DialogWarning.DialogWarningID.DeleteTagWarningMessage,
 					MyApplication, ((AppAjaxClient) MyApplication).zPageTasks);
 
+		   optionLocator = Locators.zRenameTreeMenuItem;
+		   page = new DialogRenameTag(MyApplication,((AppAjaxClient) MyApplication).zPageTasks);
 		} else {
 			throw new HarnessException("button " + option
 					+ " not yet implemented");

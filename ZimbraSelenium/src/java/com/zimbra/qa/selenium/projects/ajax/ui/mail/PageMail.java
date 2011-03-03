@@ -160,9 +160,6 @@ public class PageMail extends AbsTab {
 		public static final String zCLVRows			= "zl__CLV__rows";
 		public static final String zTVRows			= "zl__TV__rows";
 
-		public static final String zLoadingImage_Desktop = "css=img[src='/img/animated/ImgSpinner.gif']";
-
-
 		public static class CONTEXT_MENU {
 		   // TODO: Until https://bugzilla.zimbra.com/show_bug.cgi?id=56273 is fixed, ContextMenuItem will be defined using the text content
 		   public static String stringToReplace = "<ITEM_NAME>";
@@ -461,21 +458,6 @@ public class PageMail extends AbsTab {
 		
 		return (page);
 	}
-
-	/** Waiting for the desktop loading spinner
-	 * @throws HarnessException 
-	 * 
-	 */
-	public void zWaitForDesktopLoadingSpinner(long timeout) throws HarnessException {
-      if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-         if (GeneralUtility.waitForElementPresent(this,
-               PageMail.Locators.zLoadingImage_Desktop, timeout)) {
-            Object[] params = {PageMail.Locators.zLoadingImage_Desktop};
-            GeneralUtility.waitFor(null, this, false, "sIsElementPresent",
-                  params, WAIT_FOR_OPERAND.EQ, false, 30000, 1000);
-         }
-      }
-   }
 
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {

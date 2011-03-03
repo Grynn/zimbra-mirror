@@ -52,22 +52,8 @@ public class CreateTask extends AjaxCommonTest {
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
-		// Get the list of tasks in the view
-		List<TaskItem> tasks = app.zPageTasks.zGetTasks();
-		ZAssert.assertNotNull(tasks, "Verify the list of tasks exists");
-
-		// Iterate over the task list, looking for the new task
-		TaskItem found = null;
-		for (TaskItem t : tasks ) {
-			logger.info("Task: looking for "+ subject +" found: "+ t.gSubject);
-			if ( subject.equals(t.gSubject) ) {
-				// Found it!
-				found = t;
-			}
-		}
-
-		ZAssert.assertNotNull(found, "Verify the new task is in the task list");
-
+		ZAssert.assertNotNull(app.zPageTasks.findTask(subject),
+		      "Verify the new task is in the task list");
 	}
 
 }

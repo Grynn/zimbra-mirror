@@ -8,7 +8,13 @@ import java.util.*;
 import com.thoughtworks.selenium.SeleniumException;
 import com.zimbra.qa.selenium.framework.items.TaskItem;
 import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.ZAssert;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
@@ -138,6 +144,7 @@ public class PageTasks extends AbsTab {
 		String itemSubject = null;
 
 		// How many items are in the table?
+		findTask(subject);
 		String rowLocator = "//div[@id='" + Locators.zl__TKL__rows + "']/div";
 		int count = this.sGetXpathCount(rowLocator);
 		logger.debug(myPageName() + " zListItem: number of rows: " + count);
@@ -223,9 +230,25 @@ public class PageTasks extends AbsTab {
 				"Trying to check box, but it was already enabled");
 
 			// Left-Click on the flag field
-			this.zClick(selectlocator);
 
+			this.zClick(selectlocator);
 			this.zWaitForBusyOverlay();
+
+			// TODO: Please keep lines below until http://bugzilla.zimbra.com/show_bug.cgi?id=57496 is fixed
+			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+   			Object[] params = {"xpath=" + selectlocator + "@class"};
+   			GeneralUtility.waitFor(null, this, false, "sGetAttribute", params,
+   			      WAIT_FOR_OPERAND.EQ, "ImgCheckboxChecked", 5000, 1000);
+   
+   			int retry = 0;
+   			int maxRetry = 30;
+   			while (!this.sGetAttribute("xpath=" + selectlocator + "@class").equals("ImgCheckboxChecked") && retry < maxRetry) {
+   			   SleepUtil.sleep(1000);
+   			   this.zClick(selectlocator);
+   			   this.zWaitForBusyOverlay();
+   			   retry ++;
+   			}
+			}
 
 			// No page to return
 			page = null;
@@ -859,5 +882,38 @@ public class PageTasks extends AbsTab {
 		return (page);
 	}
 
+	/**
+	 * Browse through the current listed tasks to find task with the specified subject
+	 * @param subject Subject of the task to be searched for
+	 * @return TaskItem with the specified subject
+	 * @throws HarnessException
+	 */
+	public TaskItem browseTask(String subject) throws HarnessException {
+	   // Get the list of tasks in the view
+      List<TaskItem> tasks = zGetTasks();
+      ZAssert.assertNotNull(tasks, "Verify the list of tasks exists");
 
+      // Iterate over the task list, looking for the new task
+      TaskItem found = null;
+      for (TaskItem t : tasks ) {
+         logger.info("Task: looking for "+ subject +" found: "+ t.gSubject);
+         if ( subject.equals(t.gSubject) ) {
+            // Found it!
+            found = t;
+         }
+      }
+      return found;
+	}
+
+	/**
+	 * Dynamically wait (for 30 secs) until the task with the specified subject is found
+	 * @param subject Subject of the task to be searched for
+	 * @return TaskItem with the specified subject
+	 * @throws HarnessException
+	 */
+	public TaskItem findTask(String subject) throws HarnessException {
+	   Object[] params = {subject};
+	   return (TaskItem)GeneralUtility.waitFor(null, this, false, "browseTask", params,
+	         WAIT_FOR_OPERAND.NEQ, null, 30000, 1000);
+	}
 }

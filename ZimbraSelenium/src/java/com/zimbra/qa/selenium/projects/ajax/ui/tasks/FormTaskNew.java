@@ -3,6 +3,8 @@ package com.zimbra.qa.selenium.projects.ajax.ui.tasks;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
@@ -49,6 +51,7 @@ public class FormTaskNew extends AbsForm {
 		public static final String zEditNameField = "css=[class=DwtInputField] [input$=]";
 		public static final String zSaveTask = "zb__TKE1__SAVE_left_icon";
 		public static final String zTasksubjField = "//td[contains(@id,'zv__TKE1_subject')]/div/input";
+		public static final String zTasksubjFieldDesktop = "//td[contains(@id,'_subject')]/div/input";
 		public static final String zCancelTask = "zb__TKE1__CANCEL_left_icon";
 
 		
@@ -282,7 +285,11 @@ public class FormTaskNew extends AbsForm {
 
 		if (field == Field.Subject) {
 
-			locator = Locators.zTasksubjField;
+		   if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+		      locator = Locators.zTasksubjFieldDesktop;
+		   } else {
+		      locator = Locators.zTasksubjField;
+		   }
 
 		} else if (field == Field.Body) {
 			locator = Locators.zBodyField;
