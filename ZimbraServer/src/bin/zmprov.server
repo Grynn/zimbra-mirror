@@ -121,7 +121,7 @@ if (fork()) {
 	select(undef, undef, undef, 0.2);  # sleep 1/5th second
 
 	my $buf;
-	my $sock = new IO::Socket::INET (PeerAddr => 'localhost',
+	my $sock = new IO::Socket::INET6 (PeerAddr => 'localhost',
 		      PeerPort => $port,
 		      Proto    => 'tcp') || die "$!";
 
