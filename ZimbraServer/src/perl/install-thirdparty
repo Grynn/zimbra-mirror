@@ -134,7 +134,7 @@ sub getPlatformDirName() {
 	    }
         } else {
 	    if (`uname -m` =~ /i686/) {
-                $dirName = "UBUNTU8";
+                $dirName = "UBUNTU8_64";
 	    } else {
                 $dirName = "UBUNTU10_64";
 	    }
