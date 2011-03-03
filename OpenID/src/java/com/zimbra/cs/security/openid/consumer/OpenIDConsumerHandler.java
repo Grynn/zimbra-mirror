@@ -25,13 +25,13 @@ import com.zimbra.cs.extension.ExtensionHttpHandler;
 import com.zimbra.cs.extension.ZimbraExtension;
 import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.servlet.ZimbraServlet;
+import org.apache.commons.codec.binary.Base64;
 import org.openid4java.OpenIDException;
 import org.openid4java.consumer.ConsumerException;
 import org.openid4java.consumer.ConsumerManager;
 import org.openid4java.consumer.VerificationResult;
 import org.openid4java.discovery.DiscoveryInformation;
 import org.openid4java.discovery.Identifier;
-import org.openid4java.discovery.UrlIdentifier;
 import org.openid4java.message.AuthRequest;
 import org.openid4java.message.ParameterList;
 import org.openid4java.util.HttpClientFactory;
@@ -42,10 +42,13 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.List;
 
 /**
@@ -63,9 +66,13 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
         configureHttpProxy();
         try {
             manager = new ConsumerManager();
-            // don't use associations, use stateless mode, to allow the extension to work
-            // in a multi-node setup
-            manager.setMaxAssocAttempts(0);
+            if (Provisioning.getInstance().getLocalServer().isOpenidConsumerStatelessModeEnabled()) {
+                manager.setMaxAssocAttempts(0);
+            } else {
+                manager.setAssociations(new MemcachedConsumerAssociationStore());
+                // set nonce timestamp expiry to 5 min
+                manager.setNonceVerifier(new MemcachedNonceVerifier(300));
+            }
         } catch (ConsumerException e) {
             ZimbraLog.extensions.error("OpenID error code %s", e.getErrorCode());
             throw ServiceException.FAILURE("Error in initializing OpenID ConsumerManager", e);
@@ -127,7 +134,7 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
                 AuthToken authToken = getZimbraAuthToken(req);
                 if (authToken == null) {
                     // lookup the account corresponding to the open-id
-                    Account acct = prov.getAccountByForeignPrincipal(openId);
+                    Account acct = prov.getAccountByForeignPrincipal("openid:" + openId);
                     if (acct == null) {
                         throw new ServletException("No user account found corresponding to OpenID " + openId);
                     }
@@ -148,7 +155,7 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
                     // user already has a valid login session => this request is for
                     // "linking" open-id with the user account
                     Account acct = prov.getAccountById(authToken.getAccountId());
-                    acct.addForeignPrincipal(openId);
+                    acct.addForeignPrincipal("openid:" + openId);
                     resp.getOutputStream().print("Success");
                 }
             } catch (ServiceException e) {
@@ -232,7 +239,7 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
         return null;
     }
 
-    private Identifier verifyResponse(HttpServletRequest req) throws ServletException {
+    private Identifier verifyResponse(HttpServletRequest req) throws ServletException, IOException {
         try {
             // extract the parameters from the authentication response
             // (which comes in as a HTTP request from the OpenID provider)
@@ -270,26 +277,21 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
         return "/openid/consumer";
     }
 
-    private static String serialize(DiscoveryInformation discInfo) {
-        return new StringBuilder().
-                append(discInfo.getOPEndpoint()).append(",").
-                append(discInfo.getVersion()).append(",").
-                append(discInfo.getClaimedIdentifier() == null ? " " : discInfo.getClaimedIdentifier()).append(",").
-                append(discInfo.getDelegateIdentifier() == null ? " " : discInfo.getDelegateIdentifier()).append(",").
-                toString();
+    private static String serialize(DiscoveryInformation discInfo) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos) ;
+        oos.writeObject(discInfo);
+        oos.flush();
+        return Base64.encodeBase64String(baos.toByteArray());
     }
 
-    private static DiscoveryInformation deserializeDiscoveryInfo(String serializedObj) throws ServiceException {
-        String[] parts = serializedObj.split(",");
-        if (parts.length < 4)
-            throw ServiceException.FAILURE("Invalid serialized value for DiscoveryInformation", null);
+    private static DiscoveryInformation deserializeDiscoveryInfo(String serializedObj)
+            throws ServiceException, IOException {
+        ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(Base64.decodeBase64(serializedObj)));
         try {
-            return new DiscoveryInformation(new URL(parts[0]),
-                                            parts[2].trim().isEmpty() ? null : new UrlIdentifier(parts[2]),
-                                            parts[3].trim().isEmpty() ? null : parts[3],
-                                            parts[1]);
-        } catch (Exception e) {
-            throw ServiceException.FAILURE("Error in instantiating DiscoveryInformation", e);
+            return (DiscoveryInformation) ois.readObject();
+        } catch (ClassNotFoundException e) {
+            throw ServiceException.FAILURE("Error in deserializing DiscoveryInformation object", e);
         }
     }
 }
