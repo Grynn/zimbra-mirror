@@ -301,28 +301,26 @@ ZaTabView.isTAB_ENABLED = function (entry, attrsArray, rightsArray) {
 	if(!entry)
 		return true;
 		
-	if(!attrsArray && !rightsArray)
+	if(AjxUtil.isEmpty(attrsArray) && AjxUtil.isEmpty(rightsArray))
 		return true;
-
-	var aAccess = false;
-	var rAccess = true;		
-	if(attrsArray) {
+		
+	if(!AjxUtil.isEmpty(attrsArray)) {
 		var cntAttrs = attrsArray.length;
-		for(var i=0; i< cntAttrs && !aAccess; i++) {
+		for(var i=0; i< cntAttrs; i++) {
 			if(ZaItem.hasReadPermission(attrsArray[i],entry)) {
-				aAccess = true;
+				return true;
 			}
 		}
 	} 
 	
-	if(rightsArray) {
+	if(!AjxUtil.isEmpty(rightsArray)) {
 		var cntRights = rightsArray.length;
-		for(var i=0; i< cntRights && rAccess; i++) {
-			if(!ZaItem.hasRight(rightsArray[i],entry)) {
-				rAccess = false;
+		for(var i=0; i< cntRights; i++) {
+			if(ZaItem.hasRight(rightsArray[i],entry)) {
+				return true;
 			}
 		}
 	}
 	
-	return (aAccess && rAccess); 
+	return false; 
 }
