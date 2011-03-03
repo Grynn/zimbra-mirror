@@ -189,7 +189,7 @@ class State:
 				elif val == False:
 					val = "no"
 				Log.logMsg(5, "Adding postconf %s = %s" % (key, val))
-				self.current["postconf"][key] = val
+				self.current["postconf"][key] = val.replace('\n', ' ')
 			try:
 				return self.current["postconf"][key]
 			except Exception, e:
