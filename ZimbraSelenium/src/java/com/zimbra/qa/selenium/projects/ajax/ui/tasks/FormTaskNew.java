@@ -48,7 +48,7 @@ public class FormTaskNew extends AbsForm {
 		public static final String zNameField = "css=[id^=DWT4] [input$=]";
 		public static final String zEditNameField = "css=[class=DwtInputField] [input$=]";
 		public static final String zSaveTask = "zb__TKE1__SAVE_left_icon";
-		public static final String zTasksubjField = "//td[contains(@id,'_subject')]/div/input";
+		public static final String zTasksubjField = "//td[contains(@id,'zv__TKE1_subject')]/div/input";
 		public static final String zCancelTask = "zb__TKE1__CANCEL_left_icon";
 
 		
@@ -309,6 +309,10 @@ public class FormTaskNew extends AbsForm {
       this.sFocus(locator);
       this.zClick(locator);
       zKeyboard.zTypeCharacters(value);
+      
+      if(!(sGetValue(locator).equalsIgnoreCase(value))){
+    	  sType(locator, value);
+      }
 		
 		this.zWaitForBusyOverlay();
 

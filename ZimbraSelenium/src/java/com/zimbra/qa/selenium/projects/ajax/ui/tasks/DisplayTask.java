@@ -81,7 +81,8 @@ public class DisplayTask extends AbsDisplay {
 		
 		if ( field == Field.Subject ) {
 			
-			locator = "css=[parentid='zv__TKL'][class^='SubjectCol']";
+			//locator = "css=[parentid='zv__TKL'][class^='SubjectCol']";
+			locator="class=SubjectCol LabelColValue";
 			
 		} else if ( field == Field.Location ) {
 
@@ -107,7 +108,11 @@ public class DisplayTask extends AbsDisplay {
 
 			locator = "implement me";
 
-		} else {
+		} else if ( field == Field.Body ) {
+
+			locator = "class=MsgBody MsgBody-html";
+
+		}else {
 			
 			throw new HarnessException("no logic defined for field "+ field);
 			
