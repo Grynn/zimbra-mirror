@@ -592,7 +592,7 @@ function(response, params) {
 			eval("obj=" + respDoc);
 		} catch (ex) {
 			if (ex.name == "SyntaxError") {
-				ex = new ZmCsfeException(null, ZmCsfeException.BAD_JSON_RESPONSE, params.methodNameStr);
+				ex = new ZmCsfeException(null, ZmCsfeException.BAD_JSON_RESPONSE, params.methodNameStr, respDoc);
 			}
 			DBG.dumpObj(AjxDebug.DBG1, ex);
 			if (params.asyncMode) {
