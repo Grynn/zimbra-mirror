@@ -12,6 +12,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.Toaster;
 import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Field;
 
@@ -43,6 +44,11 @@ public class CreateTask extends AjaxCommonTest {
 		taskNew.zFillField(Field.Subject, subject);
 		taskNew.zFillField(Field.Body, body);
 		taskNew.zSubmit();
+
+		// Verifying the toaster message
+		Toaster toast = app.zPageMain.zGetToaster();
+	   String toastMsg = toast.zGetToastMessage();
+	   ZAssert.assertStringContains(toastMsg, "Task Saved", "Verify toast message: Task Saved");
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
