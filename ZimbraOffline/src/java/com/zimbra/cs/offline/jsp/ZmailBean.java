@@ -144,5 +144,10 @@ public class ZmailBean extends MailBean {
     public boolean isUsernameRequired() {
         return false;
     }
+    
+    @Override
+    public void setPassword(String input) {
+        this.password = input;
+    }
 }
 
