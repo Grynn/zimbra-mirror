@@ -19,6 +19,7 @@ import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.account.AuthTokenException;
+import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
 import com.zimbra.cs.extension.ExtensionHttpHandler;
@@ -47,8 +48,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -123,45 +127,80 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
 
     private void processReturn(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        Identifier identifier = verifyResponse(req);
-        ZimbraLog.extensions.debug("claimed identifier: %s", identifier);
-        if (identifier == null) {
-            throw new ServletException("Authentication failed");
-        } else {
-            String openId = identifier.getIdentifier();
-            try {
-                Provisioning prov = Provisioning.getInstance();
-                AuthToken authToken = getZimbraAuthToken(req);
-                if (authToken == null) {
-                    // lookup the account corresponding to the open-id
-                    Account acct = prov.getAccountByForeignPrincipal("openid:" + openId);
-                    if (acct == null) {
-                        throw new ServletException("No user account found corresponding to OpenID " + openId);
-                    }
+        VerificationResult verification;
+        DiscoveryInformation discovered;
+        try {
+            // extract the parameters from the authentication response
+            // (which comes in as a HTTP request from the OpenID provider)
+            ParameterList response = new ParameterList(req.getParameterMap());
 
-                    // add a zimbra cookie to the response
-                    authToken = AuthProvider.getAuthToken(acct);
-                    authToken.encode(resp, false, req.getScheme().equals("https"));
-
-                    // redirect to the correct URL
-                    Server server = acct.getServer();
-                    if (server == null) {
-                        throw new ServletException("Server not found corresponding to account " + acct.getName());
-                    }
-                    resp.sendRedirect(ZimbraServlet.getServiceUrl(server,
-                                                                  prov.getDomain(acct),
-                                                                  server.getAttr(Provisioning.A_zimbraMailURL)));
-                } else {
-                    // user already has a valid login session => this request is for
-                    // "linking" open-id with the user account
-                    Account acct = prov.getAccountById(authToken.getAccountId());
-                    acct.addForeignPrincipal("openid:" + openId);
-                    resp.getOutputStream().print("Success");
-                }
-            } catch (ServiceException e) {
-                ZimbraLog.extensions.warn("Unexpected error after having verified OpenID authentication response", e);
-                throw new ServletException(e.getMessage());
+            // retrieve the previously stored discovery information
+            String serializedDiscInfo = getCookieValue(req, COOKIE_ZM_OPENID_DISCOVERY_INFO);
+            if (serializedDiscInfo == null) {
+                throw new ServletException("Request missing discovery information");
             }
+            discovered = deserializeDiscoveryInfo(serializedDiscInfo);
+
+            // extract the receiving URL from the HTTP request
+            StringBuffer receivingURL = req.getRequestURL();
+            String queryString = req.getQueryString();
+            if (queryString != null && queryString.length() > 0)
+                receivingURL.append("?").append(req.getQueryString());
+
+            // verify the response
+            verification = manager.verify(receivingURL.toString(), response, discovered);
+        } catch (OpenIDException e) {
+            ZimbraLog.extensions.info("OpenID error code %s", e.getErrorCode(), e);
+            throw new ServletException(e.getMessage());
+        }
+
+        Identifier identifier = verification.getVerifiedId();
+        if (identifier == null)
+            throw new ServletException("Authentication failed");
+
+        ZimbraLog.extensions.debug("claimed identifier: %s", identifier);
+        String openId = identifier.getIdentifier();
+        try {
+            Provisioning prov = Provisioning.getInstance();
+            AuthToken authToken = getZimbraAuthToken(req);
+            if (authToken == null) {
+                // lookup the account corresponding to the open-id
+                Account acct = prov.getAccountByForeignPrincipal("openid:" + openId);
+                if (acct == null) {
+                    throw new ServletException("No user account found corresponding to OpenID " + openId);
+                }
+
+                // add a zimbra cookie to the response
+                authToken = AuthProvider.getAuthToken(acct);
+                authToken.encode(resp, false, req.getScheme().equals("https"));
+
+                // redirect to the correct URL
+                Server server = acct.getServer();
+                if (server == null) {
+                    throw new ServletException("Server not found corresponding to account " + acct.getName());
+                }
+                resp.sendRedirect(ZimbraServlet.getServiceUrl(server,
+                                                              prov.getDomain(acct),
+                                                              server.getAttr(Provisioning.A_zimbraMailURL)));
+            } else {
+                // user already has a valid login session => this request is for
+                // "linking" open-id with the user account
+                Account acct = prov.getAccountById(authToken.getAccountId());
+
+                // check whether OP Endpoint URL is an allowed one
+                Domain domain = prov.getDomain(acct);
+                String[] allowedOPURLs = domain.getOpenidConsumerAllowedOPEndpointURL();
+                if (allowedOPURLs == null)
+                    throw new ServletException("There are no allowed OP Endpoint URLs");
+                if (!Arrays.asList(allowedOPURLs).contains(discovered.getOPEndpoint().toString()))
+                    throw new ServletException("OP Endpoint URL " + discovered.getOPEndpoint() + " is not allowed");
+
+                acct.addForeignPrincipal("openid:" + openId);
+                resp.getOutputStream().print("Success");
+            }
+        } catch (ServiceException e) {
+            ZimbraLog.extensions.warn("Unexpected error after having verified OpenID authentication response", e);
+            throw new ServletException(e.getMessage());
         }
     }
 
@@ -174,6 +213,16 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
 
             // perform discovery on the user-supplied identifier
             List discoveries = manager.discover(userSuppliedId);
+
+            // if nothing was discovered then assume userSuppliedId to be the OP endpoint URL
+            if (discoveries.isEmpty()) {
+                ZimbraLog.extensions.debug("No OP endpoints discovered");
+                try {
+                    discoveries.add(new DiscoveryInformation(new URL(userSuppliedId)));
+                } catch (MalformedURLException e) {
+                    throw new ServletException("Expected supplied identifier to be OP Endpoint URL");
+                }
+            }
 
             // attempt to associate with the OpenID provider
             // and retrieve one service endpoint for authentication
@@ -239,39 +288,6 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
         return null;
     }
 
-    private Identifier verifyResponse(HttpServletRequest req) throws ServletException, IOException {
-        try {
-            // extract the parameters from the authentication response
-            // (which comes in as a HTTP request from the OpenID provider)
-            ParameterList response = new ParameterList(req.getParameterMap());
-
-            // retrieve the previously stored discovery information
-            String serializedDiscInfo = getCookieValue(req, COOKIE_ZM_OPENID_DISCOVERY_INFO);
-            if (serializedDiscInfo == null) {
-                throw new ServletException("Request missing discovery information");
-            }
-            DiscoveryInformation discovered = deserializeDiscoveryInfo(serializedDiscInfo);
-
-            // extract the receiving URL from the HTTP request
-            StringBuffer receivingURL = req.getRequestURL();
-            String queryString = req.getQueryString();
-            if (queryString != null && queryString.length() > 0)
-                receivingURL.append("?").append(req.getQueryString());
-
-            // verify the response
-            VerificationResult verification = manager.verify(receivingURL.toString(), response, discovered);
-
-            // examine the verification result and extract the verified identifier
-            return verification.getVerifiedId();
-        } catch (OpenIDException e) {
-            ZimbraLog.extensions.info("OpenID error code %s", e.getErrorCode(), e);
-            throw new ServletException(e.getMessage());
-        } catch (ServiceException e) {
-            ZimbraLog.extensions.warn("Unexpected error", e);
-            throw new ServletException(e.getMessage());
-        }
-    }
-
     @Override
     public String getPath() {
         return "/openid/consumer";
@@ -286,12 +302,13 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
     }
 
     private static DiscoveryInformation deserializeDiscoveryInfo(String serializedObj)
-            throws ServiceException, IOException {
+            throws ServletException, IOException {
         ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(Base64.decodeBase64(serializedObj)));
         try {
             return (DiscoveryInformation) ois.readObject();
         } catch (ClassNotFoundException e) {
-            throw ServiceException.FAILURE("Error in deserializing DiscoveryInformation object", e);
+            ZimbraLog.extensions.error("Error in deserializing DiscoveryInformation", e);
+            throw new ServletException(e.getMessage());
         }
     }
 }

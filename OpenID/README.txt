@@ -11,6 +11,15 @@
 - Copy "formredirection.jsp" file to /opt/zimbra/jetty/webapps/zimbra/public directory
 
 
+- Configure allowed OpenID Provider URLs for the domain:
+
+    zmprov md <domain> +zimbraOpenidConsumerAllowedOPEndpointURL <op_endpoint_url>
+
+    e.g.
+
+      zmprov md <domain> +zimbraOpenidConsumerAllowedOPEndpointURL https://open.login.yahooapis.com/openid/op/auth
+
+
 - If the zimbraOpenidConsumerStatelessModeEnabled server attribute is set to FALSE (TRUE by default), setup memcached
 
 
@@ -28,6 +37,10 @@
 
   You should end up with a "Success" page. Essentially, this step results in the "open id" being added to account's
   zimbraForeignPrincipal attribute.
+
+  OpenID Consumer tries to discover the OpendID Provider Endpoint URL using the user-supplied-identifier. If the
+  discovery process fails to discover any endpoints then the user-supplied-identifier is assumed to be the OpenID
+  Provider Endpoint URL.
 
 
 - To initiate OpenID-based login (instead of the usual username/password-based login), again browse to:
