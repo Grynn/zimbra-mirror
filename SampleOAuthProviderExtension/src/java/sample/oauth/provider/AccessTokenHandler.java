@@ -49,7 +49,6 @@ import com.zimbra.cs.extension.ZimbraExtension;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.Metadata;
-import com.zimbra.cs.mailbox.MetadataList;
 import com.zimbra.cs.servlet.ZimbraServlet;
 import net.oauth.OAuth;
 import net.oauth.OAuthAccessor;
@@ -117,7 +116,7 @@ public class AccessTokenHandler extends ExtensionHttpHandler {
                 // generate access token and secret
                 SampleZmOAuthProvider.generateAccessToken(accessor);
 
-                persistConsumerKeyInMbox(accessor, accountId);
+                persistAccessTokenInMbox(accessor, accountId);
 
                 response.setContentType("text/plain");
                 OutputStream out = response.getOutputStream();
@@ -134,20 +133,16 @@ public class AccessTokenHandler extends ExtensionHttpHandler {
         }
     }
 
-    private static void persistConsumerKeyInMbox(OAuthAccessor accessor, String accountId)
+    private static void persistAccessTokenInMbox(OAuthAccessor accessor, String accountId)
             throws AuthTokenException, ServiceException {
         Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(accountId);
         Metadata oAuthConfig = mbox.getConfig(null, "zwc:oauth");
         if (oAuthConfig == null)
             oAuthConfig = new Metadata();
-        MetadataList authzedConsumers = oAuthConfig.getList("authorized_consumers", true);
-        if (authzedConsumers == null) {
-            authzedConsumers = new MetadataList();
-        } else if (authzedConsumers.asList().contains(accessor.consumer.consumerKey)) {
-            // consumer is already present in the list of authzed consumers
-            return;
-        }
-        authzedConsumers.add(accessor.consumer.consumerKey);
+        Metadata authzedConsumers = oAuthConfig.getMap("authorized_consumers", true);
+        if (authzedConsumers == null)
+            authzedConsumers = new Metadata();
+        authzedConsumers.put(accessor.consumer.consumerKey, new OAuthAccessorSerializer().serialize(accessor));
         oAuthConfig.put("authorized_consumers", authzedConsumers);
         mbox.setConfig(null, "zwc:oauth", oAuthConfig);
     }

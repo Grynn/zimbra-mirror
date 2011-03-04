@@ -222,9 +222,6 @@ public class SampleZmOAuthProvider {
         
         // update token in local cache
         //ALL_TOKENS.add(accessor);
-        
-        // add to memcache
-        OAuthTokenCache.put(accessor,OAuthTokenCache.ACCESS_TOKEN_TYPE);
     }
 
     public static void handleException(Exception e, HttpServletRequest request,
