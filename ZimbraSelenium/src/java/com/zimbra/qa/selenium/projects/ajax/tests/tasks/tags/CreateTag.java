@@ -51,7 +51,7 @@ public class CreateTag extends AjaxCommonTest {
 			public void CreateTag_02() throws HarnessException {
 
 		Shortcut shortcut = Shortcut.S_NEWTAG;
-
+		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
 
 		// Set the new tag name
 		String name = "tag" + ZimbraSeleniumProperties.getUniqueString();
@@ -63,7 +63,10 @@ public class CreateTag extends AjaxCommonTest {
 		dialog.zSetTagName(name);
 		dialog.zClickButton(Button.B_OK);
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		//Need to click on Task folder explicitly so that created tag does show in tag list.
+      app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
+
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
 		// Make sure the tag was created on the server
 		TagItem tag = TagItem.importFromSOAP(app.zGetActiveAccount(), name);
