@@ -5,6 +5,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui.tasks;
 
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
@@ -187,8 +188,15 @@ public class TreeTasks extends AbsTree {
 
 		} else if (action == Action.A_RIGHTCLICK) {
 
-			actionLocator = "zti__main_Tasks__" + t.getId() + "_textCell";
-			// actionLocator= Locators.zTagsHeader;
+		   if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+		      actionLocator = "css=[id^='zti__" + MyApplication.zGetActiveAccount().EmailAddress +
+		            ":main_Tasks__'][id$=':" + t.getId() + "_textCell']";
+		   } else {
+		      actionLocator = "zti__main_Tasks__" + t.getId() + "_textCell";
+		   }
+
+		   GeneralUtility.waitForElementPresent(this, actionLocator);
+		   // actionLocator= Locators.zTagsHeader;
 			this.zRightClick(actionLocator);
 
 			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageTasks);

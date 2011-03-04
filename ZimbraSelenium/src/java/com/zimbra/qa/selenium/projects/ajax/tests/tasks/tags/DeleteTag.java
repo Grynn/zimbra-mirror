@@ -33,6 +33,8 @@ public class DeleteTag extends AjaxCommonTest {
 				"<CreateTagRequest xmlns='urn:zimbraMail'>" + "<tag name='"
 				+ name + "' color='1' />" + "</CreateTagRequest>");
 
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+
 		TagItem tag = TagItem.importFromSOAP(app.zGetActiveAccount(), name);
 		ZAssert.assertNotNull(tag, "Verify the tag was created");
 
@@ -46,6 +48,8 @@ public class DeleteTag extends AjaxCommonTest {
 
 		// Click "Yes" to confirm
 		dialog.zClickButton(Button.B_YES);
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
 		// To check whether deleted tag is exist
 		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");
