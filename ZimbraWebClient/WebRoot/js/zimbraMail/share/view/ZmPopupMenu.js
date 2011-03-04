@@ -38,6 +38,7 @@ ZmPopupMenu = function(parent, className, id, controller) {
 	var params = Dwt.getParams(arguments, ZmPopupMenu.PARAMS);
 	params.className = params.className ? params.className : "ActionMenu";
 	params.style = params.style || DwtMenu.POPUP_STYLE;
+    params.id = params.id || "POPUP_" + Dwt.getNextId();
 	DwtMenu.call(this, params);
 
 	controller = controller || appCtxt.getCurrentController();
@@ -157,6 +158,12 @@ function(id, params) {
 
 	mi.setEnabled(params.enabled !== false);
 	mi.setData(ZmPopupMenu.MENU_ITEM_ID_KEY, id);
+
+    //set context menu tr id
+    var row = mi.getRowElement();
+    if (row && id && typeof id == "string") {
+        row.setAttribute("id", "POPUP" + "_" + id.replace(/\s/g, ""));
+    }
 
 	return mi;
 };
