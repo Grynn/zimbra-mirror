@@ -143,6 +143,7 @@ function(viewId, isNewView) {
             
             this._addHandlers(el);
             var dndTooltip = this.dndTooltipEl = document.getElementById(el.id + '_zdnd_tooltip');
+            this.dndTooltipEl.innerHTML = ZmMsg.dndTooltip;
             if(dndTooltip && dndTooltip.style) dndTooltip.style.display = "block";
         }
     } else if ("createEvent" in document && document.getElementById("zdnd_files") && !AjxEnv.isIE && !isWindowsSafari) {
@@ -272,7 +273,7 @@ Com_Zimbra_DnD.prototype._uploadFiles = function(file, controller) {
         var req = new XMLHttpRequest();
         var fileName = null;
         this.upLoadC = this.upLoadC + 1;
-        req.open("POST", appCtxt.get(ZmSetting.CSFE_UPLOAD_URI)+"&fmt=extended,raw", true);
+        req.open("POST", appCtxt.get(ZmSetting.CSFE_ATTACHMENT_UPLOAD_URI)+"?fmt=extended,raw", true);
         req.setRequestHeader("Cache-Control", "no-cache");
         req.setRequestHeader("X-Requested-With", "XMLHttpRequest");
         req.setRequestHeader("Content-Type",  (file.type || "application/octet-stream") + ";");
@@ -330,7 +331,10 @@ Com_Zimbra_DnD.prototype._handleResponse = function(req, controller) {
                 if(this.attachment_ids.length > 0 && this.upLoadC == 0) {
                     var attachment_list = this.attachment_ids.join(",");
                     this.attachment_ids = [];
-                    controller.saveDraft(ZmComposeController.DRAFT_TYPE_MANUAL, attachment_list);
+                    var viewId = appCtxt.getAppViewMgr().getCurrentViewId();
+                    if (viewId == ZmId.VIEW_COMPOSE || viewId.indexOf(ZmId.VIEW_COMPOSE) != -1) {
+                        controller.saveDraft(ZmComposeController.DRAFT_TYPE_MANUAL, attachment_list);
+                    }
                     this.dndTooltipEl.innerHTML = ZmMsg.dndTooltip;
                 }
             }
