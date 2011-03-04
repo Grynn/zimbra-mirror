@@ -26,6 +26,7 @@ public class TreeMail extends AbsTree {
 
 	   public static final String createNewFolderButton = "css=div[class^='ImgNewFolder ZWidget']";
 	   public static final String ztih__main_Mail__ZIMLET_ID = "ztih__main_Mail__ZIMLET";
+	   public static final String ztih__main_Mail__ZIMLET_ID_Desktop = "zt__main_Mail_zimlets__ZIMLET";
 		public static final String ztih__main_Mail__ZIMLET_nodeCell_ID = "ztih__main_Mail__ZIMLET_nodeCell";
 		public static final String ztih_main_Mail__FOLDER_ITEM_ID = new StringBuffer("ztih__main_Mail__").
 		      append(stringToReplace).append("_textCell").toString();
@@ -307,15 +308,29 @@ public class TreeMail extends AbsTree {
 		// Create a list of items to return
 		List<ZimletItem> items = new ArrayList<ZimletItem>();
 		
+		String treeLocator = ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP ?
+            Locators.ztih__main_Mail__ZIMLET_ID_Desktop :
+               Locators.ztih__main_Mail__ZIMLET_ID;
+
 		// Make sure the button exists
-		if ( !this.sIsElementPresent(Locators.ztih__main_Mail__ZIMLET_ID) )
-			throw new HarnessException("Zimlet Tree is not present "+ Locators.ztih__main_Mail__ZIMLET_ID);
+		if ( !this.sIsElementPresent(treeLocator) )
+			throw new HarnessException("Zimlet Tree is not present "+ treeLocator);
 		
 		// Zimlet's div ID seems to start with -999
 		for (int zimletNum = -999; zimletNum < 0; zimletNum++ ) {
-			
-			String zimletLocator = "zti__main_Mail__"+ zimletNum +"_z_div";
-			String locator;
+
+			String zimletLocator = null;
+			String imageLocator = null;
+			String nameLocator = null;
+			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+			   zimletLocator = "zti__main_Mail_zimlets__" + zimletNum +"_z_div";
+			   imageLocator = "xpath=(//*[@id='zti__main_Mail_zimlets__"+ zimletNum +"_z_imageCell']/div)@class";
+            nameLocator = "zti__main_Mail_zimlets__"+ zimletNum +"_z_textCell";
+			} else {
+			   zimletLocator = "zti__main_Mail__"+ zimletNum +"_z_div";
+			   imageLocator = "xpath=(//*[@id='zti__main_Mail__"+ zimletNum +"_z_imageCell']/div)@class";
+			   nameLocator = "zti__main_Mail__"+ zimletNum +"_z_textCell";
+			}
 
 			if ( !this.sIsElementPresent(zimletLocator) ) {
 				// No more items to parse
@@ -327,13 +342,10 @@ public class TreeMail extends AbsTree {
 			ZimletItem item = new ZimletItem();
 			
 			// Get the image
-			locator = "xpath=(//*[@id='zti__main_Mail__"+ zimletNum +"_z_imageCell']/div)@class";
-			item.setFolderTreeImage(this.sGetAttribute(locator));
+			item.setFolderTreeImage(this.sGetAttribute(imageLocator));
 
-			
 			// Get the display name
-			locator = "zti__main_Mail__"+ zimletNum +"_z_textCell";
-			item.setFolderTreeName(this.sGetText(locator));
+			item.setFolderTreeName(this.sGetText(nameLocator));
 						
 			// Set the locator
 			item.setFolderTreeLocator(zimletLocator);
@@ -379,7 +391,12 @@ public class TreeMail extends AbsTree {
 		}
 		
 		// Click on the arrow
-		String locator = "css=td[id="+ Locators.ztih__main_Mail__ZIMLET_nodeCell_ID +"] div";
+		String locator = null;
+		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+		   locator = "css=div[class*='ZmOverviewZimletHeader'] div[class^='ImgNode']";
+		} else {
+		   locator = "css=td[id="+ Locators.ztih__main_Mail__ZIMLET_nodeCell_ID +"] div";
+		}
 		this.zClick(locator);
 		
 		this.zWaitForBusyOverlay();
@@ -387,8 +404,14 @@ public class TreeMail extends AbsTree {
 	}
 	
 	public boolean zIsZimletsExpanded() throws HarnessException {
-		// Image is either ImgNodeExpanded or ImgNodeCollapsed
-		String locator = "xpath=(//td[@id='"+ Locators.ztih__main_Mail__ZIMLET_nodeCell_ID +"']/div)@class";
+	   String locator = null;
+	   // Image is either ImgNodeExpanded or ImgNodeCollapsed
+	   if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+	      locator = "css=div[class*='ZmOverviewZimletHeader'] div[class^='ImgNode']@class";
+	   } else {
+	      locator = "xpath=(//td[@id='"+ Locators.ztih__main_Mail__ZIMLET_nodeCell_ID +"']/div)@class"; 
+	   }
+
 		String image = this.sGetAttribute(locator);
 		return ( image.equals("ImgNodeExpanded") );
 	}
@@ -412,7 +435,9 @@ public class TreeMail extends AbsTree {
 		
 		// Zimlets seem to be loaded last
 		// So, wait for the zimlet div to load
-		String locator = Locators.ztih__main_Mail__ZIMLET_ID;
+		String locator = ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP ?
+		      Locators.ztih__main_Mail__ZIMLET_ID_Desktop :
+		         Locators.ztih__main_Mail__ZIMLET_ID;
 		
 		boolean loaded = this.sIsElementPresent(locator);
 		if ( !loaded )
