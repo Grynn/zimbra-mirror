@@ -234,22 +234,6 @@ public class PageTasks extends AbsTab {
 			this.zClick(selectlocator);
 			this.zWaitForBusyOverlay();
 
-			// TODO: Please keep lines below until http://bugzilla.zimbra.com/show_bug.cgi?id=57496 is fixed
-			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-   			Object[] params = {"xpath=" + selectlocator + "@class"};
-   			GeneralUtility.waitFor(null, this, false, "sGetAttribute", params,
-   			      WAIT_FOR_OPERAND.EQ, "ImgCheckboxChecked", 5000, 1000);
-   
-   			int retry = 0;
-   			int maxRetry = 30;
-   			while (!this.sGetAttribute("xpath=" + selectlocator + "@class").equals("ImgCheckboxChecked") && retry < maxRetry) {
-   			   SleepUtil.sleep(1000);
-   			   this.zClick(selectlocator);
-   			   this.zWaitForBusyOverlay();
-   			   retry ++;
-   			}
-			}
-
 			// No page to return
 			page = null;
 

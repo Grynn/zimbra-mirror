@@ -43,7 +43,8 @@ public class BuildUtility {
    }
    public enum BRANCH {
       GNR,
-      HELIX, ZDESKTOP_700,
+      HELIX,
+      ZDESKTOP_700, ZDESKTOP_701,
       MAIN,
       ZCB_7,
       ZCB_MAIN
