@@ -2,7 +2,9 @@
 # 
 server
 {
-    listen                  ${mail.pop3.port};
+    ${core.ipboth.enabled}listen                  [::]:${mail.pop3.port};
+    ${core.ipv4only.enabled}listen                ${mail.pop3.port};
+    ${core.ipv6only.enabled}listen                [::]:${mail.pop3.port} ipv6only=on;
     protocol                pop3;
     proxy                   on;
     sasl_service_name       "pop";

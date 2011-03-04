@@ -3,8 +3,10 @@
 # 
 server
 {
-    server_name             ${vhn}; 
-    listen                  ${vip}:${mail.pop3.port};
+    server_name             ${vhn};
+    ${core.ipboth.enabled}listen                  ${vip}:${mail.pop3.port};
+    ${core.ipv4only.enabled}listen                  ${vip}:${mail.pop3.port};
+    ${core.ipv6only.enabled}listen                  ${vip}:${mail.pop3.port} ipv6only=on;
     protocol                pop3;
     proxy                   on;
     sasl_service_name       "pop";

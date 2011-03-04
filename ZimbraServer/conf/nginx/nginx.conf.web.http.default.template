@@ -2,7 +2,9 @@
 # 
 server
 {
-    listen    ${web.http.port} default;
+    ${core.ipboth.enabled}listen    [::]:${web.http.port} default;
+    ${core.ipv4only.enabled}listen    ${web.http.port} default;
+    ${core.ipv6only.enabled}listen    [::]:${web.http.port} default ipv6only=on;
     client_max_body_size 0;
 
     location /

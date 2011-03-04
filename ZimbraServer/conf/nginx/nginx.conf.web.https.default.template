@@ -2,7 +2,9 @@
 # 
 server
 {
-    listen                  ${web.https.port} default;
+    ${core.ipboth.enabled}listen                  [::]:${web.https.port} default;
+    ${core.ipv4only.enabled}listen                ${web.https.port} default;
+    ${core.ipv6only.enabled}listen                [::]:${web.https.port} default ipv6only=on;
     client_max_body_size    0;
     ssl                     on;
     ssl_prefer_server_ciphers ${web.ssl.preferserverciphers};

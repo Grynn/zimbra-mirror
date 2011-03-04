@@ -41,12 +41,13 @@ build:
 	(cd nginx-$(NGINX_VERSION)-zimbra; \
 	./configure \
             --prefix=$(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra \
-	    --with-cc-opt="$(WITH_CC_OPT)" \
-	    --with-ld-opt="$(WITH_LD_OPT)" \
+            --with-cc-opt="$(WITH_CC_OPT)" \
+            --with-ld-opt="$(WITH_LD_OPT)" \
             --with-debug \
+            --with-ipv6 \
             --with-http_ssl_module \
             --with-http_stub_status_module \
-	    --with-pcre \
+            --with-pcre \
             --with-http_upstream_zmauth_module \
             --with-mail \
             --with-mail-sasl \

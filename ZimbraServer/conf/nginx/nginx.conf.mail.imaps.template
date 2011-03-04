@@ -4,7 +4,9 @@
 server
 {
     server_name         ${vhn}; 
-    listen              ${vip}:${mail.imaps.port};
+    ${core.ipboth.enabled}listen              ${vip}:${mail.imaps.port};
+    ${core.ipv4only.enabled}listen            ${vip}:${mail.imaps.port};
+    ${core.ipv6only.enabled}listen            ${vip}:${mail.imaps.port} ipv6only=on;
     protocol            imap;
     proxy               on;
     ssl                 on;
