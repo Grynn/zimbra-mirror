@@ -47,7 +47,7 @@ public class MoveContact extends AjaxCommonTest  {
        
         // Refresh the view, to pick up the new contact
         FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
-        app.zPageAddressbook.zSyncDesktopToZcs();
+        GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
         app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
         
         

@@ -61,7 +61,7 @@ public class UnTagContact extends AjaxCommonTest  {
         
         // Refresh the view, to pick up the new contact
         FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
-        app.zPageAddressbook.zSyncDesktopToZcs();
+        GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
         app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
                
         // Select the item
@@ -70,6 +70,12 @@ public class UnTagContact extends AjaxCommonTest  {
 
     	// Untag it
 		app.zPageAddressbook.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_REMOVETAG);
+
+
+		//verify toasted message 'contact created'
+		Toaster toast = app.zPageMain.zGetToaster();
+		String toastMsg = toast.zGetToastMessage();
+		ZAssert.assertStringContains(toastMsg, "All tags removed from 1 contact", "Verify toast message 'All tags removed from 1 contact'");
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
@@ -81,10 +87,6 @@ public class UnTagContact extends AjaxCommonTest  {
 
 		ZAssert.assertNull(contactTag, "Verify that the tag is removed from the contact");
 
-		//verify toasted message 'contact created'
-        Toaster toast = app.zPageMain.zGetToaster();
-        String toastMsg = toast.zGetToastMessage();
-        ZAssert.assertStringContains(toastMsg, "All tags removed from 1 contact", "Verify toast message 'All tags removed from 1 contact'");
 	 
    	}
 	

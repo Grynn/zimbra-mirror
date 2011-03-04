@@ -569,21 +569,4 @@ public class PageAddressbook extends AbsTab {
 	
 	}
 
-	/**
-	 * Sync Desktop to ZCS through SOAP and wait for spinner to disappear
-	 * @throws HarnessException
-	 */
-	public void zSyncDesktopToZcs() throws HarnessException {
-	   if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-         GeneralUtility.syncDesktopToZcsWithSoap(MyApplication.zGetActiveAccount());
-
-         // Wait for the spinner image
-         if (GeneralUtility.waitForElementPresent(this,
-               PageMail.Locators.zLoadingImage_Desktop, 5000)) {
-            Object[] params = {PageMail.Locators.zLoadingImage_Desktop};
-            GeneralUtility.waitFor(null, this, false, "sIsElementPresent",
-                  params, WAIT_FOR_OPERAND.EQ, false, 30000, 1000);
-         }
-	   }
-	}
 }
