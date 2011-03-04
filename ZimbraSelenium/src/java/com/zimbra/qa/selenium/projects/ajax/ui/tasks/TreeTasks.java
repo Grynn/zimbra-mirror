@@ -25,6 +25,7 @@ public class TreeTasks extends AbsTree {
 		public static final String zNewTagIcon = "//td[contains(@class,'overviewHeader-Text FakeAnchor')]/div[contains(@class,'ImgNewTag')]";
 		public static final String zTagsHeader = "//td[contains(@id,'ztih__main_Tasks__TAG_textCell')]";
 		public static final String zDeleteTreeMenuItem = "//div[contains(@class,'ZMenuItem')]//tbody//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgDelete')]";
+		public static final String zRenameTreeMenuItem = "//div[contains(@class,'ZMenuItem')]//tbody//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgRename')]";
 	}
 	
 	
@@ -216,9 +217,13 @@ public class TreeTasks extends AbsTree {
 					DialogWarning.DialogWarningID.DeleteTagWarningMessage,
 					MyApplication, ((AppAjaxClient) MyApplication).zPageTasks);
 
-		   optionLocator = Locators.zRenameTreeMenuItem;
-		   page = new DialogRenameTag(MyApplication,((AppAjaxClient) MyApplication).zPageTasks);
-		} else {
+		} else if (option == Button.B_RENAME) {
+
+			optionLocator = Locators.zRenameTreeMenuItem;
+
+			page = new DialogRenameTag(MyApplication,((AppAjaxClient) MyApplication).zPageTasks);
+
+		}else {
 			throw new HarnessException("button " + option
 					+ " not yet implemented");
 		}
