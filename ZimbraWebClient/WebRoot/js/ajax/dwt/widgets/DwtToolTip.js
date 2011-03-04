@@ -22,6 +22,7 @@ DwtToolTip = function(shell, className, dialog) {
 	this.shell = shell;
 	this._dialog = dialog;
 	this._poppedUp = false;
+	this.isSticky = false;
 	this._div = document.createElement("div");
 	this._div.className = className || "DwtToolTip";
 	this._div.style.position = DwtControl.ABSOLUTE_STYLE;
@@ -93,6 +94,18 @@ function(x, y, skipInnerHTML, popdownOnMouseOver) {
 		this._popupAction = new AjxTimedAction(this, this._positionElement, [x, y]);
 		AjxTimedAction.scheduleAction(this._popupAction, 5);
 	}
+};
+
+/*
+* setSticky allows making the tooltip not to popdown. 
+* IMPORTANT: Tooltip is singleton inside Zimbra i.e. only one instance of tooltip is reused by all objects. 
+* So, it is very important for the code setting tooltip to sticky to have some mechanism to close the tooltip by itself. 
+* Like have a close-button inside tooltip and when clicked, should set the setSticky(false) and then close the tooltip.
+* 
+*/
+DwtToolTip.prototype.setSticky = 
+function(bool) {
+	this.isSticky = bool;
 };
 
 DwtToolTip.prototype.popdown = 
@@ -224,6 +237,9 @@ function(startX, startY) {
 
 DwtToolTip.prototype._mouseOverListener = 
 function(ev) {
+	if(this.isSticky) {
+		return;
+	}
     if (this._popdownOnMouseOver && this._poppedUp) {
         var callback = (this._popdownOnMouseOver instanceof AjxCallback) ? this._popdownOnMouseOver : null;
         this.popdown();
