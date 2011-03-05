@@ -9,6 +9,8 @@ import com.zimbra.qa.selenium.framework.items.ZimletItem.CoreZimletItem;
 import com.zimbra.qa.selenium.framework.items.ZimletItem.CoreZimletItem.CoreZimletName;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail.FolderSection;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail.FolderSectionAction;
 
 
 public class FolderTree extends AjaxCommonTest {
@@ -28,7 +30,7 @@ public class FolderTree extends AjaxCommonTest {
 		ZimletItem linkedin = CoreZimletItem.getCoreZimlet(CoreZimletName.com_zimbra_linkedin, app);
 		
 		// Expand the zimlets section
-		app.zTreeMail.zExpandZimlets();
+		app.zTreeMail.zSectionAction(FolderSectionAction.Expand, FolderSection.Zimlets);
 		
 		// Get the list of zimlets
 		List<ZimletItem> zimlets = app.zTreeMail.zListGetZimlets();

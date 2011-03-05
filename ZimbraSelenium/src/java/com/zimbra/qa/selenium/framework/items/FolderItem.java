@@ -76,6 +76,24 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 	public FolderItem() {
 	}
 
+	////
+	// GUI methods
+	////
+	
+	
+	/**
+	 * Whether or not the folder is expanded (namely whether the icon is showing expanded/collapsed)
+	 * @return
+	 */
+	protected boolean gIsExpanded = false;
+	public boolean gGetIsExpanded() {
+		return (gIsExpanded);
+	}
+
+	public void gSetIsExpanded(boolean expanded) {
+		gIsExpanded = expanded;
+	}
+
 	public void createUsingSOAP(ZimbraAccount account) throws HarnessException {
 		
 		// TODO: handle all folder properties, not just name and parent
@@ -252,5 +270,6 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 		sb.append("Parent ID: ").append(super.getParentId()).append('\n');
 		return (sb.toString());
 	}
+
 
 }

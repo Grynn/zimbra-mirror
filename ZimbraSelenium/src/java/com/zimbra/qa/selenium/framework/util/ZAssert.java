@@ -67,7 +67,7 @@ public class ZAssert {
 		CountTests++;
 		
 		// Build a 'standard' detailed message
-		String details = String.format("%s -- (%s == %s) [%s]", "assertFalse", condition, true, message);
+		String details = String.format("%s -- (%s == %s) [%s]", "assertFalse", condition, false, message);
 		
 		// Log it
 		logger.info(details);

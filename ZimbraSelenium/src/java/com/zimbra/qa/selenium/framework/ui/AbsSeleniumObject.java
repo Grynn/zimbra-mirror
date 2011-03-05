@@ -284,6 +284,15 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
+	 * DefaultSelenium.getCssCount()
+	 */
+	public int sGetCssCount(String css) {
+		int count = ClientSessionFactory.session().selenium().getCssCount(css).intValue();
+		logger.info("getCssCount(" + css + ") = " + count);
+		return (count);
+	}
+	
+	/**
 	 * DefaultSelenium.getAttribute()
 	 * @throws SeleniumException
 	 */

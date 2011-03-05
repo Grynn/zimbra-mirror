@@ -3,14 +3,24 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
+import com.zimbra.qa.selenium.framework.items.FolderItem;
+import com.zimbra.qa.selenium.framework.items.IItem;
+import com.zimbra.qa.selenium.framework.items.SavedSearchFolderItem;
+import com.zimbra.qa.selenium.framework.items.TagItem;
+import com.zimbra.qa.selenium.framework.items.ZimletItem;
+import com.zimbra.qa.selenium.framework.ui.AbsApplication;
+import com.zimbra.qa.selenium.framework.ui.AbsPage;
+import com.zimbra.qa.selenium.framework.ui.AbsTree;
+import com.zimbra.qa.selenium.framework.ui.Action;
+import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
-import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
+import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
 
 
 /**
@@ -84,6 +94,36 @@ public class TreeMail extends AbsTree {
 			// return a context menu
 			return (new ContextMenu(MyApplication));
 
+		} else if ( action == Action.A_TREE_EXPAND ) {
+			
+			locator = "css=[id='zti__main_Mail__"+ folder.getId() +"_nodeCell'] div[class='ImgNodeCollapsed']";
+			if ( !this.sIsElementPresent(locator) ) {
+				logger.warn("Trying to expand a folder that probably has no subfolders or is already expanded");
+				return (page);
+			}
+			
+			this.sMouseDown(locator);
+			
+			this.zWaitForBusyOverlay();
+			
+			// No page to return
+			return (null);
+						
+		} else if ( action == Action.A_TREE_COLLAPSE ) {
+			
+			locator = "css=[id='zti__main_Mail__"+ folder.getId() +"_nodeCell'] div[class='ImgNodeExpanded']";
+			if ( !this.sIsElementPresent(locator) ) {
+				logger.warn("Trying to collapse a folder that probably has no subfolders or is already collapsed");
+				return (page);
+			}
+			
+			this.sMouseDown(locator);
+			
+			this.zWaitForBusyOverlay();
+			
+			// No page to return
+			return (null);
+			
 		} else {
 			throw new HarnessException("Action "+ action +" not yet implemented");
 		}
@@ -91,9 +131,6 @@ public class TreeMail extends AbsTree {
 		
 		if ( locator == null )
 			throw new HarnessException("locator is null for action "+ action);
-		
-		if ( !this.sIsElementPresent(locator) )
-			throw new HarnessException("Unable to locator folder in tree "+ locator);
 		
 		
 		// Default behavior.  Click the locator
@@ -277,6 +314,73 @@ public class TreeMail extends AbsTree {
 	}
 
 
+	/**
+	 * Used for recursively building the tree list
+	 * @param top
+	 * @return
+	 * @throws HarnessException
+	 */
+	private List<FolderItem>zListGetFolders(String top) throws HarnessException {
+		List<FolderItem> items = new ArrayList<FolderItem>();
+
+		String searchLocator = top + "//div[@class='DwtComposite']";
+		
+		int count = this.sGetXpathCount(searchLocator);
+		for ( int i = 1; i <= count; i++) {
+			String itemLocator = searchLocator + "["+ i + "]";
+			
+			if ( !this.sIsElementPresent(itemLocator) ) {
+				continue;
+			}
+
+			String locator;
+			
+			String id = sGetAttribute("xpath=("+ itemLocator +"/.)@id");
+			if ( id == null || id.trim().length() == 0 || !(id.startsWith("zti__main_Mail__")) ) {
+				// Not a folder
+				// Maybe "Find Shares ..."
+				continue;
+			}
+
+			FolderItem item = new FolderItem();
+			
+			// Set the locator
+			// TODO: This could probably be made safer, to make sure the id matches an int pattern
+			item.setId(id.replace("zti__main_Mail__", ""));
+			
+			// Set the name
+			locator = itemLocator + "//td[contains(@id, '_textCell')]";
+			item.setName(this.sGetText(locator));
+			
+			// Set the expanded boolean
+			locator = itemLocator + "//td[contains(@id, '_nodeCell')]/div";
+			if ( sIsElementPresent(locator) ) {
+				// The image could be hidden, if there are no subfolders
+				item.gSetIsExpanded("ImgNodeExpanded".equals(sGetAttribute("xpath=("+ locator + ")@class")));
+			}
+			
+			items.add(item);
+			
+			// Add any sub folders
+			items.addAll(zListGetFolders(itemLocator));
+			
+
+		}
+		
+		return (items);
+
+	}
+	
+	public List<FolderItem> zListGetFolders() throws HarnessException {
+
+		List<FolderItem> items = new ArrayList<FolderItem>();
+		
+		// Recursively fill out the list, starting with all mail folders
+		items.addAll(zListGetFolders("//div[@id='ztih__main_Mail__FOLDER']"));
+		
+		return (items);
+		
+	}
 	
 	public List<SavedSearchFolderItem> zListGetSavedSearches() throws HarnessException {
 		
@@ -360,62 +464,78 @@ public class TreeMail extends AbsTree {
 		
 	}
 
-	public void zExpandFolders() throws HarnessException {
-		throw new HarnessException("implement me!");
+	public enum FolderSectionAction {
+		Expand,
+		Collapse
 	}
 	
-	public boolean zIsFoldersExpanded() throws HarnessException {
-		throw new HarnessException("implement me!");
-	}
-
-	public void zExpandSavedSearchFolders() throws HarnessException {
-		throw new HarnessException("implement me!");
-	}
-	
-	public boolean zIsSavedSearchFoldersExpanded() throws HarnessException {
-		throw new HarnessException("implement me!");
-	}
-
-	public void zExpandTags() throws HarnessException {
-		throw new HarnessException("implement me!");
+	public enum FolderSection {
+		Folders,
+		Searches,
+		Tags,
+		Zimlets
 	}
 	
-	public boolean zIsTagsExpanded() throws HarnessException {
-		throw new HarnessException("implement me!");
-	}
-
-	public void zExpandZimlets() throws HarnessException {
+	/**
+	 * Apply an expand/collpase to the Folders, Searches, Tags and Zimlets sections
+	 * @param a
+	 * @param section
+	 * @throws HarnessException
+	 */
+	public AbsPage zSectionAction(FolderSectionAction action, FolderSection section) throws HarnessException {
 		
-		if ( zIsZimletsExpanded() ) {
-			return; // Nothing more to do.  Already expanded
-		}
-		
-		// Click on the arrow
+		AbsPage page = null;
 		String locator = null;
-		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-		   locator = "css=div[class*='ZmOverviewZimletHeader'] div[class^='ImgNode']";
-		} else {
-		   locator = "css=td[id="+ Locators.ztih__main_Mail__ZIMLET_nodeCell_ID +"] div";
-		}
-		this.zClick(locator);
+		boolean expanded = false;
 		
-		this.zWaitForBusyOverlay();
+		if ( section == FolderSection.Zimlets ) {
 
+			// What is the current state of the section?
+			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+				locator = "css=div[class*='ZmOverviewZimletHeader'] div[class^='ImgNode']@class";
+			} else {
+				locator = "xpath=(//td[@id='"+ Locators.ztih__main_Mail__ZIMLET_nodeCell_ID +"']/div)@class"; 
+			}
+
+			// Image is either ImgNodeExpanded or ImgNodeCollapsed
+			expanded = sGetAttribute(locator).equals("ImgNodeExpanded");
+
+			
+			if ( action == FolderSectionAction.Expand ) {
+				
+				if ( expanded ) {
+					logger.info("section is already expanded");
+					return (page);
+				}
+					
+				if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+					locator = "css=div[class*='ZmOverviewZimletHeader'] div[class^='ImgNode']";
+				} else {
+					locator = "css=td[id="+ Locators.ztih__main_Mail__ZIMLET_nodeCell_ID +"] div";
+				}
+
+			}
+
+			// Fall through
+			
+		}
+		
+		if ( locator == null ) {
+			throw new HarnessException("no locator defined for "+ action +" "+ section);
+		}
+		
+		// Default behavior
+		this.zClick(locator);
+
+		this.zWaitForBusyOverlay();
+		
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+
+		return (page);
 	}
 	
-	public boolean zIsZimletsExpanded() throws HarnessException {
-	   String locator = null;
-	   // Image is either ImgNodeExpanded or ImgNodeCollapsed
-	   if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-	      locator = "css=div[class*='ZmOverviewZimletHeader'] div[class^='ImgNode']@class";
-	   } else {
-	      locator = "xpath=(//td[@id='"+ Locators.ztih__main_Mail__ZIMLET_nodeCell_ID +"']/div)@class"; 
-	   }
-
-		String image = this.sGetAttribute(locator);
-		return ( image.equals("ImgNodeExpanded") );
-	}
-
 
 	/* (non-Javadoc)
 	 * @see framework.ui.AbsTree#myPageName()

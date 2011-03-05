@@ -46,6 +46,10 @@ public class Action {
 	public static final Action A_MAIL_UNFLAG = new Action("A_MAIL_UNFLAG");
 	public static final Action A_MAIL_EXPANDCONVERSATION = new Action("A_MAIL_EXPANDCONVERSATION");
 	
+	// Tree actions
+	public static final Action A_TREE_EXPAND = new Action("A_TREE_EXPAND");
+	public static final Action A_TREE_COLLAPSE = new Action("A_TREE_COLLAPSE");
+	
 	private final String ID;
 	
 	protected Action(String id) {
