@@ -30,6 +30,7 @@ ZaItem.prototype.constructor = ZaItem;
 ZaItem.loadMethods = new Object();
 ZaItem.initMethods = new Object();
 ZaItem.modifyMethods = new Object();
+ZaItem.modifyMethodsExt = new Object();
 ZaItem.createMethods = new Object();
 ZaItem.removeMethods = new Object();
 

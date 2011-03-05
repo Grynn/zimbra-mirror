@@ -66,6 +66,7 @@ ZaTabView.prototype.constructor = ZaTabView;
 * @see ZaCosXFormView#ZaServerXFormView
 **/
 ZaTabView.XFormModifiers = new Object();
+ZaTabView.XFormSetObjectMethods = new Object();
 
 ZaTabView.DEFAULT_TAB = 1;
 
