@@ -2996,7 +2996,7 @@ nowrap:false, labelWrap:true,
                        						label:ZaMsg.LBL_zimbraProxyAllowedDomains, 
                        						labelCssStyle:"vertical-align:top",
                        						type:_SUPER_REPEAT_,
-								resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+                       						resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
                        						repeatInstance:"",
                        						addButtonLabel:ZaMsg.NAD_ProxyAddAllowedDomain ,
                        						removeButtonLabel: ZaMsg.NAD_ProxyRemoveAllowedDomain,
@@ -3006,7 +3006,8 @@ nowrap:false, labelWrap:true,
                        						repeatItems: [
                                					{ref:".", type:_TEXTFIELD_,
                                 				enableDisableChecks:[ZaItem.hasWritePermission] ,
-                                  				visibilityChecks:[ZaItem.hasReadPermission],
+                                  				visibilityChecks:[[ZaItem.hasReadPermission,ZaAccount.A_zimbraProxyAllowedDomains]],
+                                  				enableDisableChecks:[[ZaItem.hasWritePermission,ZaAccount.A_zimbraProxyAllowedDomains]],
                                   				width: "15em"}
                                 				]			
                      					},
