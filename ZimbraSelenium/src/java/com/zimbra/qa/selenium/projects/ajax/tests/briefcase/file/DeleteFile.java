@@ -23,7 +23,7 @@ public class DeleteFile extends AjaxCommonTest {
 
 	}
 
-	@Test(description = "Upload file through SOAP - delete & verify through GUI", groups = { "functional" })
+	@Test(description = "Upload file through SOAP - delete & verify through GUI", groups = { "moke" })
 	public void DeleteFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -34,11 +34,11 @@ public class DeleteFile extends AjaxCommonTest {
 		DocumentItem document = new DocumentItem();
 
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/testtextfile.txt";
+				+ "/data/public/other/putty.log";
 
 		String fileName = document.getFileName(filePath);
 
-		// Upload file to server through SOAP
+		// Upload file to server through RestUtil
 		String attachmentId = account.uploadFile(filePath);
 
 		// Save uploaded file to briefcase through SOAP

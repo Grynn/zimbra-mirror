@@ -22,7 +22,7 @@ public class UploadFile extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Upload file through SOAP - verify through SOAP", groups = { "smoke" })
+	@Test(description = "Upload file through SOAP - verify through SOAP", groups = { "moke" })
 	public void UploadFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -37,7 +37,7 @@ public class UploadFile extends AjaxCommonTest {
 
 		String fileName = document.getFileName(filePath);
 
-		// Upload file to server through SOAP
+		// Upload file to server through RestUtil
 		String attachmentId = account.uploadFile(filePath);
 
 		// Save uploaded file to briefcase through SOAP
@@ -67,7 +67,7 @@ public class UploadFile extends AjaxCommonTest {
 		ZAssert.assertEquals(name, fileName, "Verify file name through SOAP");
 	}
 
-	@Test(description = "Upload file through SOAP - verify through GUI", groups = { "sanity" })
+	@Test(description = "Upload file through SOAP - verify through GUI", groups = { "moke" })
 	public void UploadFile_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -82,13 +82,13 @@ public class UploadFile extends AjaxCommonTest {
 
 		String fileName = document.getFileName(filePath);
 
-		// Upload file to server through SOAP
+		// Upload file to server through RestUtil
 		String attachmentId = account.uploadFile(filePath);
 
 		// Save uploaded file to briefcase through SOAP
 		account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'>"
 				+ "<doc l='" + briefcaseFolder.getId() + "'><upload id='"
-				+ attachmentId + "'/>" + "</doc>" + "</SaveDocumentRequest>");
+				+ attachmentId + "'/></doc></SaveDocumentRequest>");
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
@@ -96,9 +96,7 @@ public class UploadFile extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Verify document is created
-		String name = app.zPageBriefcase
-				.sGetText("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div:contains("
-						+ fileName + ")");
+		String name = app.zPageBriefcase.getText(fileName);
 		ZAssert.assertEquals(name, fileName, "Verify file name through GUI");
 	}
 }
