@@ -10,6 +10,8 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
 
@@ -66,7 +68,12 @@ public class PagePreferences extends AbsTab {
 		
 		
 		// If the "folders" tree is visible, then mail is active
-		String locator = "xpath=//div[@id='zov__main_Options']";
+		String locator = null;
+		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+		   locator = "css=div[id='zov__local@host.local:main_Options']";
+		} else {
+		   locator = "xpath=//div[@id='zov__main_Options']";
+		}
 		
 		boolean loaded = this.sIsElementPresent(locator);
 		if ( !loaded )

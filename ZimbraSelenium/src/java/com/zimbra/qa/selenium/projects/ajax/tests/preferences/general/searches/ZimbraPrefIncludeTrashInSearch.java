@@ -6,11 +6,13 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.ConversationItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.RecipientItem;
 import com.zimbra.qa.selenium.framework.items.RecipientItem.RecipientType;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -64,18 +66,20 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 		ZimbraPrefIncludeTrashInSearchTrue_01();
 		
 		String query = "query" + ZimbraSeleniumProperties.getUniqueString();
+		FolderItem inboxFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(),
+		      FolderItem.SystemFolder.Inbox);
 		
 		MailItem message1 = new MailItem();
 		message1.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		message1.dFromRecipient = new RecipientItem("foo@example.com", RecipientType.From);
 		message1.dToRecipients.add(new RecipientItem("bar@example.com", RecipientType.To));
-		message1.gBodyText = query; 
+		message1.dBodyText = query; 
 		
 		MailItem message2 = new MailItem();
 		message2.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		message2.dFromRecipient = new RecipientItem("foo@example.com", RecipientType.From);
 		message2.dToRecipients.add(new RecipientItem("bar@example.com", RecipientType.To));
-		message2.gBodyText = query; 
+		message2.dBodyText = query; 
 		
 		
 		// Determine the folder ID's for inbox and trash
@@ -101,9 +105,10 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
                     "</m>" +
                 "</AddMsgRequest>");
 
-
 		// Go to mail
 		app.zPageMail.zNavigateTo();
+		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inboxFolder);
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 		
 		// Search for the query
 		app.zPageSearch.zAddSearchQuery(query);

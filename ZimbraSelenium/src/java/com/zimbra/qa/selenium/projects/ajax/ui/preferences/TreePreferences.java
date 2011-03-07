@@ -10,6 +10,8 @@ import java.util.Map;
 import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 
 
 /**
@@ -19,9 +21,10 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 public class TreePreferences extends AbsTree {
 
 	public static class Locators {
-		public static String zGeneralTextID = "zti__main_Options__PREF_PAGE_GENERAL_textCell";
-		public static String zGeneralImageID = "zti__main_Options__PREF_PAGE_GENERAL_imageCell";
-		
+		public final static String zGeneralTextID = "zti__main_Options__PREF_PAGE_GENERAL_textCell";
+		public final static String zGeneralTextID_Desktop = "zti__local@host.local:main_Options__PREF_PAGE_GENERAL_textCell";
+		public final static String zGeneralImageID = "zti__main_Options__PREF_PAGE_GENERAL_imageCell";
+		public final static String zGeneralImageID_Desktop = "zti__local@host.local:main_Options__PREF_PAGE_GENERAL_imageCell";
 	}
 	
 	public enum TreeItem {
@@ -50,16 +53,30 @@ public class TreePreferences extends AbsTree {
 	 */
 	public void zTreeItem(Action action, TreeItem item) throws HarnessException {
 		logger.info("zTreeItem(" + action +", "+ item +")");
-		
-		if ( !itemToLocator.containsKey(item) ) {
-			throw new HarnessException("locator not defined in itemToLocator for "+ item);
-		}
-		
-		if ( itemToLocator.get(item) == null ) {
-			throw new HarnessException("locator is null in itemToLocator for "+ item);
-		}
+		String locator = null;
+		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+		   if ( !itemToLocator_desktop.containsKey(item) ) {
+            throw new HarnessException("locator not defined in itemToLocator_desktop for "+ item);
+         }
+         
+         if ( itemToLocator_desktop.get(item) == null ) {
+            throw new HarnessException("locator is null in itemToLocator_desktop for "+ item);
+         }
+   
+         locator = itemToLocator_desktop.get(item);
 
-		String locator = itemToLocator.get(item);
+		} else {
+   		if ( !itemToLocator.containsKey(item) ) {
+   			throw new HarnessException("locator not defined in itemToLocator for "+ item);
+   		}
+   		
+   		if ( itemToLocator.get(item) == null ) {
+   			throw new HarnessException("locator is null in itemToLocator for "+ item);
+   		}
+   
+   	   locator = itemToLocator.get(item);
+
+		}
 		
 		if ( !sIsElementPresent(locator) ) {
 			throw new HarnessException("locator is not present "+ locator);
@@ -117,6 +134,28 @@ public class TreePreferences extends AbsTree {
 		return (Collections.unmodifiableMap(map));
 	}
 
+	private static final Map<TreeItem, String> itemToLocator_desktop = createItemToLocator_desktop();
+   private static Map<TreeItem, String> createItemToLocator_desktop() {
+      
+      Map<TreeItem, String> map = new HashMap<TreeItem, String>();
+      
+      map.put(TreeItem.General, "id=" + Locators.zGeneralTextID_Desktop);
+      map.put(TreeItem.Mail, null);
+      map.put(TreeItem.MailComposing, null);
+      map.put(TreeItem.MailSignatures, null);
+      map.put(TreeItem.MailAccounts, null);
+      map.put(TreeItem.MailFilters, null);
+      map.put(TreeItem.MailTrustedAddresses, null);
+      map.put(TreeItem.AddressBook, null);
+      map.put(TreeItem.Calendar, null);
+      map.put(TreeItem.Sharing, null);
+      map.put(TreeItem.Notifications, null);
+      map.put(TreeItem.ImportExport, null);
+      map.put(TreeItem.Shortcuts, null);
+      map.put(TreeItem.Zimlets, null);
+      
+      return (Collections.unmodifiableMap(map));
+   }
 
 	/* (non-Javadoc)
 	 * @see framework.ui.AbsTree#myPageName()
