@@ -12,7 +12,6 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
-import java.awt.event.KeyEvent;
 
 /**
  * @author
@@ -108,9 +107,9 @@ public class PageBriefcase extends AbsTab {
 		if (zIsActive()) {
 			return;
 		}
-		
-		tracer.trace("Navigate to "+ this.myPageName());
-		
+
+		tracer.trace("Navigate to " + this.myPageName());
+
 		String locator = "css=[id='zov__main_Mail']";
 		// Make sure we are logged into the Ajax app
 		// if (!((AppAjaxClient) MyApplication).zPageMain.zIsActive())
@@ -140,7 +139,7 @@ public class PageBriefcase extends AbsTab {
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
 
-		tracer.trace("Press the "+ button +" button");
+		tracer.trace("Press the " + button + " button");
 
 		if (button == null)
 			throw new HarnessException("Button cannot be null!");
@@ -310,7 +309,7 @@ public class PageBriefcase extends AbsTab {
 		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("
 				+ pulldown + ", " + option + ")");
 
-		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
+		tracer.trace("Click pulldown " + pulldown + " then " + option);
 
 		if (pulldown == null)
 			throw new HarnessException("Pulldown cannot be null!");
@@ -373,17 +372,19 @@ public class PageBriefcase extends AbsTab {
 				pulldownLocator = "css=td[id$='__SEND_FILE_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
 
 				optionLocator = "css=td[id$='_title']:contains('Send as attachment')";
-				
+
 				page = new FormMailNew(this.MyApplication);
 
 				// FALL THROUGH
 			} else if (option == Button.O_SEND_LINK) {
-			
+
 				pulldownLocator = "css=td[id$='__SEND_FILE_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
 
 				optionLocator = "css=td[id$='_title']:contains('Send link')";
 
-				page = new DialogWarning(DialogWarning.DialogWarningID.SendLink, this.MyApplication, this);
+				page = new DialogWarning(
+						DialogWarning.DialogWarningID.SendLink,
+						this.MyApplication, this);
 
 				// FALL THROUGH
 			} else {
@@ -441,8 +442,8 @@ public class PageBriefcase extends AbsTab {
 			throws HarnessException {
 		logger.info(myPageName() + " zListItem(" + action + ", " + docName
 				+ ")");
-		
-		tracer.trace(action +" on briefcase = "+ docName);
+
+		tracer.trace(action + " on briefcase = " + docName);
 
 		AbsPage page = null;
 		String listLocator = Locators.briefcaseListView;
@@ -484,25 +485,26 @@ public class PageBriefcase extends AbsTab {
 			this.zClick(itemlocator);
 			page = new DocumentPreview(MyApplication);
 		}
-		
+
 		zWaitForBusyOverlay();
-		
+
 		return page;
 	}
-	
+
 	@Override
-	public AbsPage zListItem(Action action, Button option, Button subOption ,String item)
-			throws HarnessException {
-		tracer.trace(action +" then "+ option + "," + subOption + " on item = "+ item);
+	public AbsPage zListItem(Action action, Button option, Button subOption,
+			String item) throws HarnessException {
+		tracer.trace(action + " then " + option + "," + subOption
+				+ " on item = " + item);
 
 		throw new HarnessException("implement me!");
 	}
-	
+
 	@Override
 	public AbsPage zListItem(Action action, Button option, String subject)
 			throws HarnessException {
-		tracer.trace(action +" then "+ option +" on briefcase = "+ subject);
-		
+		tracer.trace(action + " then " + option + " on briefcase = " + subject);
+
 		logger.info(myPageName() + " zListItem(" + action + ", " + option
 				+ ", " + subject + ")");
 
@@ -515,7 +517,7 @@ public class PageBriefcase extends AbsTab {
 
 		AbsPage page = null;
 		String listLocator = Locators.briefcaseListView;
-		String rowLocator;
+		// String rowLocator;
 		String itemlocator = null;
 
 		if (!this.sIsElementPresent(listLocator))
@@ -525,7 +527,7 @@ public class PageBriefcase extends AbsTab {
 		itemlocator = listLocator + " td[width*='auto'] div:contains("
 				+ subject + ")";
 
-			if (action == Action.A_RIGHTCLICK) {
+		if (action == Action.A_RIGHTCLICK) {
 
 			zWaitForElementPresent(itemlocator);
 
@@ -549,7 +551,7 @@ public class PageBriefcase extends AbsTab {
 			}
 
 			// click on the option
-			this.zClick("css=td#zmi__Briefcase__RENAME_FILE_title:contains(Rename)");
+			this.zClick(optionLocator);
 
 			this.zWaitForBusyOverlay();
 
@@ -566,16 +568,26 @@ public class PageBriefcase extends AbsTab {
 		// Default behavior
 		return (page);
 	}
-	
+
 	public void rename(String text) throws HarnessException {
 		// ClientSessionFactory.session().selenium().getEval("var x = selenium.browserbot.findElementOrNull(\""+Locators.zFrame+"\");if(x!=null)x=x.contentWindow.document.body;if(browserVersion.isChrome){x.textContent='"+text+"';}else if(browserVersion.isIE){x.innerText='"+text+"';}");
 		logger.info("renaming to: " + text);
 		zSelectWindow("Zimbra: Briefcase");
-		//sSelectFrame("relative=top");
+		// sSelectFrame("relative=top");
 		sType(Locators.zRenameInput, text);
- 	    sFocus(Locators.zRenameInput);
- 	    //hit <Enter> key
- 	    sKeyPressNative(Integer.toString(KeyEvent.VK_ENTER));	   
+		sFocus(Locators.zRenameInput);
+		// hit <Enter> key
+		// sKeyPressNative(Integer.toString(KeyEvent.VK_ENTER));
+
+		sGetEval("if(window.KeyEvent)"
+				+ "{var evObj = document.createEvent('KeyEvents');"
+				+ "evObj.initKeyEvent( 'keyup', true, true, window, false, false, false, false, 13, 0 );} "
+				+ "else {var evObj = document.createEvent('HTMLEvents');"
+				+ "evObj.initEvent( 'keyup', true, true, window, 1 );"
+				+ "evObj.keyCode = 13;}"
+				+ "var x = selenium.browserbot.findElementOrNull('"
+				+ Locators.zRenameInput + "'); "
+				+ "x.blur(); x.focus(); x.dispatchEvent(evObj);");
 	}
 
 	public void isOpenDocLoaded(String windowName, String text)
@@ -626,7 +638,7 @@ public class PageBriefcase extends AbsTab {
 		return true;
 	}
 
-   public void closeWindow() {
+	public void closeWindow() {
 		tracer.trace("Close the separate window");
 
 		ClientSessionFactory.session().selenium().close();
