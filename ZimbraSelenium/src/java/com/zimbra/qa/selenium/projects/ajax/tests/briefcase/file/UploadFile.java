@@ -22,7 +22,7 @@ public class UploadFile extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Upload file through SOAP - verify through SOAP", groups = { "moke" })
+	@Test(description = "Upload file through SOAP - verify through SOAP", groups = { "smoke" })
 	public void UploadFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -67,7 +67,7 @@ public class UploadFile extends AjaxCommonTest {
 		ZAssert.assertEquals(name, fileName, "Verify file name through SOAP");
 	}
 
-	@Test(description = "Upload file through SOAP - verify through GUI", groups = { "moke" })
+	@Test(description = "Upload file through SOAP - verify through GUI", groups = { "sanity" })
 	public void UploadFile_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 

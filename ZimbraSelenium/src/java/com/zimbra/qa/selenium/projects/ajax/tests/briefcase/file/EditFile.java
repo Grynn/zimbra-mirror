@@ -24,7 +24,7 @@ public class EditFile extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Upload file through SOAP - edit name & verify through GUI", groups = { "moke" })
+	@Test(description = "Upload file through SOAP - edit name & verify through GUI", groups = { "smoke" })
 	public void EditFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 

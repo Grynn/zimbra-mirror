@@ -23,7 +23,7 @@ public class DeleteFile extends AjaxCommonTest {
 
 	}
 
-	@Test(description = "Upload file through SOAP - delete & verify through GUI", groups = { "moke" })
+	@Test(description = "Upload file through SOAP - delete & verify through GUI", groups = { "smoke" })
 	public void DeleteFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
