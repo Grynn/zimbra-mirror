@@ -174,8 +174,8 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 		// For some reason, the text doesn't get entered on the first try
 		this.sFocus(locator);
 		this.zClick(locator);
-		zKeyboard.zTypeCharacters(folder);
-
+		this.sType(locator, folder);
+	
 		this.zWaitForBusyOverlay();
 
 	}
