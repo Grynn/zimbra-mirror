@@ -43,10 +43,10 @@ public class FormMailNew extends AbsForm {
 		
 		public static final String zBodyFrameHTML		= "//div[contains(id,'zv__COMPOSE')]//iframe";
 		
-		public static final String zPriorityPulldown	= "css=[id^=zv__COMPOSE][id$=___priority_dropdown]";
-		public static final String zPriorityOptionHigh	= "css=[id^=zv__COMPOSE][id$=___priority_dropdown]";
-		public static final String zPriorityOptionNormal	= "css=[id^=zv__COMPOSE][id$=___priority_dropdown]";
-		public static final String zPriorityOptionLow	= "css=[id^=zv__COMPOSE][id$=___priority_dropdown]";
+		public static final String zPriorityPulldown	= "css=[id*='__COMPOSE'][id$='___priority_dropdown']";
+		public static final String zPriorityOptionHigh	= "css=[id*='__COMPOSE'][id$='___priority_dropdown']";
+		public static final String zPriorityOptionNormal	= "css=[id*='__COMPOSE'][id$='___priority_dropdown']";
+		public static final String zPriorityOptionLow	= "css=[id*='__COMPOSE'][id$='___priority_dropdown']";
 		
 		public static final String zBubbleToField		= "css=[id^=zv__COMPOSE][id$=_to_cell]";
 		public static final String zBubbleCcField		= "css=[id^=zv__COMPOSE][id$=_cc_cell]";
@@ -282,21 +282,21 @@ public class FormMailNew extends AbsForm {
 			if ( option == Button.O_PRIORITY_HIGH ) {
 				
 				// TODO
-				pulldownLocator = "css=[id^='zv__COMPOSE'][id$='___priority_left_icon']";
+				pulldownLocator = Locators.zPriorityPulldown;
 				optionLocator = "TODO";
 				page = this;
 
 			} else if ( option == Button.O_PRIORITY_NORMAL ) {
 				
 				// TODO
-				pulldownLocator = "css=[id^='zv__COMPOSE'][id$='___priority_left_icon']";
+				pulldownLocator = Locators.zPriorityPulldown;
 				optionLocator = "TODO";
 				page = this;
 
 			} else if ( option == Button.O_PRIORITY_LOW ) {
 				
 				// TODO
-				pulldownLocator = "css=[id^='zv__COMPOSE'][id$='___priority_left_icon']";
+				pulldownLocator = Locators.zPriorityPulldown;
 				optionLocator = "TODO";
 				page = this;
 

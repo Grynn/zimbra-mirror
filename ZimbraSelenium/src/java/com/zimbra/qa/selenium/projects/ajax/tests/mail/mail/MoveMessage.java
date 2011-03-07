@@ -241,7 +241,9 @@ public class MoveMessage extends AjaxCommonTest {
 "</content>" +
                 	"</m>" +
             	"</AddMsgRequest>");
-		
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+
 		// Get the mail item for the new message
 		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
 		

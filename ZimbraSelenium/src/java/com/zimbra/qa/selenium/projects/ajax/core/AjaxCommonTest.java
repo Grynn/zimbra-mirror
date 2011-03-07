@@ -593,7 +593,7 @@ public class AjaxCommonTest {
 		// then recreate a new account, but for desktop, the zimlet
 		// preferences has to be reset to default, all core zimlets are enabled
 		ZimbraAccount currentAccount = app.zGetActiveAccount();
-		if (currentAccount.accountIsDirty &&
+		if (currentAccount != null && currentAccount.accountIsDirty &&
 		      currentAccount == ZimbraAccount.AccountZWC()) {
 
 		   if (ZimbraSeleniumProperties.getAppType() == AppType.AJAX) {
