@@ -3,9 +3,12 @@ package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
+import com.zimbra.qa.selenium.framework.ui.AbsDialog;
 import com.zimbra.qa.selenium.framework.ui.AbsForm;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Locators;
 
@@ -125,8 +128,12 @@ public class DocumentBriefcaseNew extends AbsForm {
 		// this.sMouseDown(Locators.zSaveAndCloseIconBtn);
 		// this.sMouseUp(Locators.zSaveAndCloseIconBtn);
 
-		// Wait for the page to be saved
-		// SleepUtil.sleepSmall();
+		// Add Document version notes in the popped up dialog
+		DialogAddVersionNotes dlgAddNotes = new DialogAddVersionNotes(MyApplication, ((AppAjaxClient)MyApplication).zPageBriefcase);
+		if(dlgAddNotes.zIsActive()){
+		dlgAddNotes.zEnterVersionNotes("notes" + ZimbraSeleniumProperties.getUniqueString());
+		dlgAddNotes.zClickButton(Button.B_OK);
+		}
 	}
 
 	@Override
