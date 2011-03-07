@@ -79,6 +79,7 @@
 
 			<webApp name="ZimbraWebClient" warfile="build/dist/app/jetty/webapps/zimbra" contextpath="/zimbra">
 				<lib dir="${jetty_run_base}/app/jetty/common/lib" includes="*.jar" excludes="not-needed.jar,zimbracommon.jar,zimbra-native.jar" />
+		        <lib dir="${jetty_run_base}/app/jetty/lib/jsp-2.1" includes="*.jar" excludes="not-needed.jar"/> 
 				<classes dir="build/classes"/>
 				<classes dir="../ZimbraCommon/build/classes" />
 		        <classes dir="../ZimbraSoap/build/classes" />
