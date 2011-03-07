@@ -107,6 +107,7 @@ public class DialogAddVersionNotes extends AbsDialog {
 
 		this.sFocus(locator);
 		this.zClick(locator);
+		
 		zKeyboard.zTypeCharacters(notes);
 
 		this.zWaitForBusyOverlay();

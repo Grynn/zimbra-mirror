@@ -115,7 +115,7 @@ public class EditDocument extends AjaxCommonTest {
 		 */
 	}
 
-	@Test(description = "Create document through SOAP - edit text & name & verify through GUI", groups = { "smoke" })
+	@Test(description = "Create document through SOAP - edit text & name & verify through GUI", groups = { "moke" })
 	public void EditDocument_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -228,7 +228,7 @@ public class EditDocument extends AjaxCommonTest {
 				"Verify document text through GUI");
 	}
 
-	@Test(description = "Create document & edit text through SOAP & verify through GUI", groups = { "smoke" })
+	@Test(description = "Create document & edit text through SOAP & verify through GUI", groups = { "moke" })
 	public void EditDocument_03() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -322,7 +322,7 @@ public class EditDocument extends AjaxCommonTest {
 				"Verify document text through GUI");
 	}
 
-	@Test(description = "Create document through SOAP - edit text & verify through GUI", groups = { "smoke" })
+	@Test(description = "Create document through SOAP - edit text & verify through GUI", groups = { "moke" })
 	public void EditDocument_04() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 

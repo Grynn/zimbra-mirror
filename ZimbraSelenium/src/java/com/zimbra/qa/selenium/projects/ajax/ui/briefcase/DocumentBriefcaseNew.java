@@ -67,47 +67,47 @@ public class DocumentBriefcaseNew extends AbsForm {
 	@Override
 	public void zFill(IItem item) throws HarnessException {
 	}
-	
+
 	public void zFillField(Field field, String value) throws HarnessException {
-		
+
 		String locator = null;
-		
-		if ( field == Field.Name) {
-			
+
+		if (field == Field.Name) {
+
 			locator = Locators.zNameField;
-			
+
 			zSelectWindow("Zimbra Docs");
-						
+
 			// FALL THROUGH
-			
-		} else if ( field == Field.Body ) {
-			
+
+		} else if (field == Field.Body) {
+
 			locator = Locators.zBodyField;
-			
+
 			sSelectFrame(Locators.zFrame);
-			
+
 			// FALL THROUGH
-			
+
 		} else {
-			throw new HarnessException("not implemented for field "+ field);
+			throw new HarnessException("not implemented for field " + field);
 		}
-		
-		if ( locator == null ) {
-			throw new HarnessException("locator was null for field "+ field);
+
+		if (locator == null) {
+			throw new HarnessException("locator was null for field " + field);
 		}
-		
+
 		// Default behavior, enter value into locator field
-	
+
 		// Make sure the button exists
-		if ( !this.sIsElementPresent(locator) )
-			throw new HarnessException("Field is not present field="+ field +" locator="+ locator);
-		
+		if (!this.sIsElementPresent(locator))
+			throw new HarnessException("Field is not present field=" + field
+					+ " locator=" + locator);
+
 		// Enter text
 		this.sType(locator, value);
-		
+
 		this.zWaitForBusyOverlay();
 	}
-	
 
 	@Override
 	public void zSubmit() throws HarnessException {
@@ -129,10 +129,14 @@ public class DocumentBriefcaseNew extends AbsForm {
 		// this.sMouseUp(Locators.zSaveAndCloseIconBtn);
 
 		// Add Document version notes in the popped up dialog
-		DialogAddVersionNotes dlgAddNotes = new DialogAddVersionNotes(MyApplication, ((AppAjaxClient)MyApplication).zPageBriefcase);
-		if(dlgAddNotes.zIsActive()){
-		dlgAddNotes.zEnterVersionNotes("notes" + ZimbraSeleniumProperties.getUniqueString());
-		dlgAddNotes.zClickButton(Button.B_OK);
+		DialogAddVersionNotes dlgAddNotes = new DialogAddVersionNotes(
+				MyApplication, ((AppAjaxClient) MyApplication).zPageBriefcase);
+
+		if (dlgAddNotes.zIsActive()) {
+			dlgAddNotes.zEnterVersionNotes("notes"
+					+ ZimbraSeleniumProperties.getUniqueString());
+
+			dlgAddNotes.zClickButton(Button.B_OK);
 		}
 	}
 
