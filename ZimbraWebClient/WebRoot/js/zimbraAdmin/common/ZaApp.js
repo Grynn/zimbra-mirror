@@ -108,14 +108,14 @@ ZaApp.prototype.getDomainAliasWizard = function (isEdit) {
 
 ZaApp.prototype.launch =
 function(appCtxt) {
-	/*if(ZaSettings.DASHBOARD_VIEW && ZaApp.prototype.getDashBoardController) {
+	if(ZaSettings.DASHBOARD_VIEW && ZaApp.prototype.getDashBoardController) {
 		var dashBoardController = ZaApp.getInstance().getDashBoardController(ZaSettings.DASHBOARD_VIEW);
 		if(ZaApp.getInstance().getCurrentController()) {
 			ZaApp.getInstance().getCurrentController().switchToNextView(dashBoardController, ZaDashBoardController.prototype.show,true);
 		} else {					
 			dashBoardController.show(true);
 		}
-	} else {*/
+	} else {
 		if(ZaSettings.TREE_ENABLED) {	
 			if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATUS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 				var ctl = this._appCtxt.getAppController().getOverviewPanelController();
@@ -172,7 +172,7 @@ function(appCtxt) {
 				ZaController.prototype._showAccountsView.call(ZaItem.RESOURCE,null);
 			} 
 		}
-	//}
+	}
 }
 
 ZaApp.prototype.getAppCtxt = 
