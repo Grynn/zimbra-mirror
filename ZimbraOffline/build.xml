@@ -22,6 +22,7 @@
   <property name="jars.dir" location="jars" />
   <property name="src.dir" location="src" />
   <property name="src.java.dir" location="${src.dir}/java" />
+  <property name="src.zimlet.dir" location="${src.dir}/zimlet" />
   <property name='web.dir' value='WebRoot'/>
   <property name="build.dir" location="build" />
   <property name="build.classes.dir" location="${build.dir}/classes" />
@@ -683,7 +684,23 @@
     <antcall target="offline-reset-the-world-part-2" />
   </target>
 
+  <target name="offline-package-zimlet">
+      <echo>${zimlet}</echo>
+      <zip destfile="${destdir}/${zimlet}.zip" update="true" >
+          <fileset dir="${src.zimlet.dir}/${zimlet}" />
+      </zip>
+  </target>
+
+  <property name="zimlets-zdesktop" value="com_zdesktop_survey" />
+
+  <target name="offline-build-zd-zimlets">
+      <foreach list="${zimlets-zdesktop}" target="offline-package-zimlet" param="zimlet">
+          <param name="destdir" value="${dist.data.dir}/zimlets" />
+      </foreach>
+  </target>
+
   <target name="offline-build-zimlets">
+    <antcall target="offline-build-zd-zimlets" />
     <ant dir="../Zimlet" target="clean" inheritAll="false" />
     <ant dir="../Zimlet" target="package-zimlets" inheritAll="false" />
     <ant dir="../Zimlet" target="package-zimlets-offline" inheritAll="false" />
