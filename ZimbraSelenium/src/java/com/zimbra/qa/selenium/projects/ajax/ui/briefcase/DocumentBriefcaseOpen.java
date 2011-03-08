@@ -13,6 +13,7 @@ public class DocumentBriefcaseOpen extends AbsForm {
 		public static final String zSaveAndCloseIconBtn = "//*[@id='DWT8_left_icon']";
 		public static final String zBodyField = "css=body";
 		public static final String zDocumentBodyField = "css=td[class='ZhAppContent'] div[id='zdocument']";
+		public static final String zFileBodyField = "css=html>body";
 		public static final String zNameField = "css=[class=DwtInputField] [input$=]";
 		public static final String zDocumentNameField = "css=[class=TbTop] b";
 	}
@@ -27,6 +28,12 @@ public class DocumentBriefcaseOpen extends AbsForm {
 	@Override
 	public String myPageName() {
 		return this.getClass().getName();
+	}
+	
+	public String retriveFileText() throws HarnessException {
+		String text = sGetText(Locators.zFileBodyField);
+	
+		return text;
 	}
 
 	public String retriveDocumentText() throws HarnessException {

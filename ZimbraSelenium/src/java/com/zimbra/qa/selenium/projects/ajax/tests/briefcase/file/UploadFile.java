@@ -22,7 +22,7 @@ public class UploadFile extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Upload file through SOAP - verify through SOAP", groups = { "smoke" })
+	@Test(description = "Upload file through SOAP - verify through SOAP", groups = { "moke" })
 	public void UploadFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -33,7 +33,7 @@ public class UploadFile extends AjaxCommonTest {
 		DocumentItem document = new DocumentItem();
 
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/testtextfile.txt";
+				+ "/data/public/other/com_zimbra_ymaps.zip";
 
 		String fileName = document.getFileName(filePath);
 

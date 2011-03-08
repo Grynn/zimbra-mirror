@@ -43,6 +43,7 @@ public class PageBriefcase extends AbsTab {
 		public static final String zNewSpreadsheetIconBtn = "id=zb__BCD__NEW_SPREADSHEET_left_icon";
 		public static final String zNewPresentationIconBtn = "id=zb__BCD__NEW_PRESENTATION_left_icon";
 		public static final String zRenameInput = "css=div[class^=RenameInput]>input";
+		public static final String zFileBodyField = "css=html>body";
 	}
 
 	public PageBriefcase(AbsApplication application) {
@@ -598,6 +599,15 @@ public class PageBriefcase extends AbsTab {
 
 		zWaitForElementPresent("css=td[class='ZhAppContent'] div:contains('"
 				+ text + "')");
+	}
+
+	public void isOpenFileLoaded(String windowName, String text)
+			throws HarnessException {
+		zWaitForWindow(windowName);
+
+		zSelectWindow(windowName);
+
+		zWaitForElementPresent(Locators.zFileBodyField + ":contains('" + text + "')");
 	}
 
 	public boolean isPresent(String itemName) throws HarnessException {
