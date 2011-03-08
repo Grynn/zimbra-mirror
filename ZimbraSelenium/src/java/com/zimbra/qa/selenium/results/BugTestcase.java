@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 
-public class BugTestcase extends BugData {
+public class BugTestcase extends BugDataFile {
 
 	/**
 	 * Return the current list of "Test Case" to "List of BugIDs"
@@ -21,7 +21,6 @@ public class BugTestcase extends BugData {
 	
 	protected static final String DataFilename = "bugTestcase.txt";
 	
-	protected static Map<String, List<String>> bugTestcaseMap = new HashMap<String, List<String>>();
 	
 	protected BugTestcase() {
 		logger.info("new " + BugTestcase.class.getCanonicalName());
@@ -30,14 +29,8 @@ public class BugTestcase extends BugData {
 
 	protected Map<String, List<String>> getData() throws IOException {
 		
-		// Open the data file
-		File datafile = getDatafile(DataFilename);
-
-		if ( datafile == null )
-			return (bugTestcaseMap);			// No file OR file didn't change
 		
-		// New datafile was found.  Clear the map
-		bugTestcaseMap = new HashMap<String, List<String>>();
+		Map<String, List<String>> bugTestcaseMap = new HashMap<String, List<String>>();
 		
 		// Read the file and build the map
 		BufferedReader reader = null;
@@ -45,7 +38,7 @@ public class BugTestcase extends BugData {
 		
 		try {
 			
-			reader = new BufferedReader(new FileReader(datafile));
+			reader = new BufferedReader(new FileReader(getDatafile(DataFilename)));
 			while ( (line=reader.readLine()) != null ) {
 	
 				// Example: genesis/data/zmstatctl/basic.rb	29149 40782

@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 
-public class BugQAContact extends BugData {
+public class BugQAContact extends BugDataFile {
 
 	/**
 	 * Return the current list of "Bug ID" to "QA Contact"
@@ -29,15 +29,9 @@ public class BugQAContact extends BugData {
 
 
 	protected Map<String, String> getData() throws IOException {
-		
-		// Open the data file
-		File datafile = getDatafile(DataFilename);
-
-		if ( datafile == null )
-			return (bugQAContactMap);			// No file OR file didn't change
-		
+				
 		// New datafile was found.  Clear the map
-		bugQAContactMap = new HashMap<String, String>();
+		Map<String, String> bugQAContactMap = new HashMap<String, String>();
 		
 		// Read the file and build the map
 		BufferedReader reader = null;
@@ -45,7 +39,7 @@ public class BugQAContact extends BugData {
 		
 		try {
 			
-			reader = new BufferedReader(new FileReader(datafile));
+			reader = new BufferedReader(new FileReader(getDatafile(DataFilename)));
 			while ( (line=reader.readLine()) != null ) {
 				
 				// Example: 42337	sarang@zimbra.com

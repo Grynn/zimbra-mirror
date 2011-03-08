@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 
-public class BugStatus extends BugData {
+public class BugStatus extends BugDataFile {
 
 	public enum BugState {
 		UNCONFIRMED,
@@ -31,7 +31,6 @@ public class BugStatus extends BugData {
 	
 	protected static final String DataFilename = "bugStatus.txt";
 
-	protected static Map<String, BugState> bugStatusMap = new HashMap<String, BugState>();
 	
 	protected BugStatus() {
 		logger.info("new " + BugStatus.class.getCanonicalName());
@@ -40,14 +39,8 @@ public class BugStatus extends BugData {
 
 	protected Map<String, BugState> getData() throws IOException {
 		
-		// Open the data file
-		File datafile = getDatafile(DataFilename);
-
-		if ( datafile == null )
-			return (bugStatusMap);			// No file OR file didn't change
-		
 		// New datafile was found.  Clear the map
-		bugStatusMap = new HashMap<String, BugState>();
+		Map<String, BugState> bugStatusMap = new HashMap<String, BugState>();
 		
 		// Read the file and build the map
 		BufferedReader reader = null;
@@ -55,7 +48,7 @@ public class BugStatus extends BugData {
 		
 		try {
 			
-			reader = new BufferedReader(new FileReader(datafile));
+			reader = new BufferedReader(new FileReader(getDatafile(DataFilename)));
 			while ( (line=reader.readLine()) != null ) {
 
 				// Example: 50208	RESOLVED

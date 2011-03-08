@@ -38,34 +38,40 @@ public class ResultsStaf implements STAFServiceInterfaceLevel30 {
 	public STAFResult acceptRequest(RequestInfo info) {
         mLog.info("StafIntegration: acceptRequest ...");
 
-
-        File f = new File(defaultLog4jProperties);
-        if ( f.exists() ) {
-            PropertyConfigurator.configure(defaultLog4jProperties);
-        } else {
-        	BasicConfigurator.resetConfiguration();
-        }
+        try {
         	
-        // Convert the request to all lower case
-        StringTokenizer requestTokenizer = new StringTokenizer(info.request);
-        
-        
-        // Determine what the first argument is
-        String request = requestTokenizer.nextToken().toLowerCase();
+            File f = new File(defaultLog4jProperties);
+            if ( f.exists() ) {
+                PropertyConfigurator.configure(defaultLog4jProperties);
+            } else {
+            	BasicConfigurator.resetConfiguration();
+            }
+            	
+            // Convert the request to all lower case
+            StringTokenizer requestTokenizer = new StringTokenizer(info.request);
+            
+            
+            // Determine what the first argument is
+            String request = requestTokenizer.nextToken().toLowerCase();
 
-        // call the appropriate method to handle the command
-        if (request.equals(optionReport.toLowerCase()))
-        {
-            return handleExecute(info);
+            // call the appropriate method to handle the command
+            if (request.equals(optionReport.toLowerCase()))
+            {
+                return handleExecute(info);
+            }
+            else if (request.equals(optionHelp.toLowerCase()))
+            {
+                return handleHelp();
+            }
+            else
+            {
+                return new STAFResult(STAFResult.InvalidRequestString, "Unknown (STAF) Request: " + request);
+            }
+
+        } finally {
+    		System.gc();
         }
-        else if (request.equals(optionHelp.toLowerCase()))
-        {
-            return handleHelp();
-        }
-        else
-        {
-            return new STAFResult(STAFResult.InvalidRequestString, "Unknown (STAF) Request: " + request);
-        }
+
     }
 	
 	private STAFResult parseExecute(STAFCommandParseResult request) {

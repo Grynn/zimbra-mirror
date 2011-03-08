@@ -21,15 +21,10 @@ public class TestCaseData {
 	 * @throws DocumentException 
 	 */
 	public static Map<String, Boolean> getStatusData(File root) throws IOException, DocumentException {
-		if ( root == null )
-			throw new NullPointerException("root folder was null");
-		
-		if ( !root.exists() )
-			throw new FileNotFoundException(root.getCanonicalPath() +" does not exist");
-			
 
 		TestCaseData engine = new TestCaseData();
 		return (engine.getData(root));
+		
 		
 	}
 	
@@ -41,8 +36,6 @@ public class TestCaseData {
 	 */
 	protected static final String TestNGResultsXMLFilename = "testng-results.xml";
 	
-	protected static Map<String, Boolean> testcaseStatusMap = new HashMap<String, Boolean>();
-
 	
 	protected TestCaseData() {
 		logger.info("new "+ TestCaseData.class.getCanonicalName());
@@ -90,6 +83,13 @@ public class TestCaseData {
 	 * @throws DocumentException
 	 */
 	private Map<String, Boolean> getData(File root) throws UnsupportedEncodingException, IOException, DocumentException {
+		if ( root == null )
+			throw new NullPointerException("root folder was null");
+		
+		if ( !root.exists() )
+			throw new FileNotFoundException(root.getCanonicalPath() +" does not exist");
+			
+
 		Map<String, Boolean> map = new HashMap<String, Boolean>();
 		
 		// Find the folder containing the "testng-results.xml" file
