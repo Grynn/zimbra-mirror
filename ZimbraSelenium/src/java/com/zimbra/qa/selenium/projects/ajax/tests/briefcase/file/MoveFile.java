@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
+package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
 import org.testng.annotations.Test;
 
@@ -7,7 +7,6 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -17,10 +16,10 @@ import org.testng.annotations.AfterMethod;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 
-public class MoveDocument extends AjaxCommonTest {
+public class MoveFile extends AjaxCommonTest {
 
-	public MoveDocument() {
-		logger.info("New " + MoveDocument.class.getCanonicalName());
+	public MoveFile() {
+		logger.info("New " + MoveFile.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
 
@@ -29,8 +28,8 @@ public class MoveDocument extends AjaxCommonTest {
 		// {{put("zimbraPrefGroupMailBy", "message");}};
 	}
 
-	@Test(description = "Create document through SOAP - move & verify through GUI", groups = { "smoke" })
-	public void MoveDocument_01() throws HarnessException {
+	@Test(description = "Upload file through SOAP - move & verify through GUI", groups = { "smoke" })
+	public void MoveFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
 		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
@@ -59,34 +58,34 @@ public class MoveDocument extends AjaxCommonTest {
 		// Create document item
 		DocumentItem document = new DocumentItem();
 
-		String docName = document.getDocName();
-		String docText = document.getDocText();
+		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
+		+ "/data/public/other/putty.log";
 
-		// Create document using SOAP
-		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
-				+ docText + "</body>" + "</html>");
+		String fileName = document.getFileName(filePath);
 
-		account
-				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
-						+ "<doc name='"
-						+ docName
-						+ "' l='"
-						+ briefcaseFolderId
-						+ "' ct='application/x-zimbra-doc'>"
-						+ "<content>"
-						+ contentHTML
-						+ "</content>"
-						+ "</doc>"
-						+ "</SaveDocumentRequest>");
+		// Upload file to server through RestUtil
+		String attachmentId = account.uploadFile(filePath);
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		// document.importFromSOAP(account, document.getDocName());
+		// Save uploaded file to briefcase through SOAP
+		account.soapSend(
+
+		"<SaveDocumentRequest xmlns='urn:zimbraMail'>" +
+
+		"<doc l='" + briefcaseFolder.getId() + "'>" +
+
+		"<upload id='" + attachmentId + "'/>" +
+
+		"</doc>" +
+
+		"</SaveDocumentRequest>");
+
+		//account.soapSelectNode("//mail:SaveDocumentResponse", 1);
 
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileName);
 
 		// Click on Move selected item icon in toolbar
 		DialogMove chooseFolder = (DialogMove) app.zPageBriefcase
@@ -101,7 +100,7 @@ public class MoveDocument extends AjaxCommonTest {
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
 		// Verify document was moved from the folder
-		boolean deleted = app.zPageBriefcase.isDeleted(docName);
+		boolean deleted = app.zPageBriefcase.isDeleted(fileName);
 
 		ZAssert
 				.assertTrue(deleted,
@@ -111,7 +110,7 @@ public class MoveDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolder, true);
 
 		// Verify document was moved to the selected folder
-		boolean present = app.zPageBriefcase.isPresent(docName);
+		boolean present = app.zPageBriefcase.isPresent(fileName);
 
 		ZAssert.assertTrue(present,
 				"Verify document was moved to the selected folder");
