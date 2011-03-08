@@ -694,6 +694,7 @@
   <property name="zimlets-zdesktop" value="com_zdesktop_survey" />
 
   <target name="offline-build-zd-zimlets">
+      <mkdir dir="${dist.data.dir}/zimlets" />
       <foreach list="${zimlets-zdesktop}" target="offline-package-zimlet" param="zimlet">
           <param name="destdir" value="${dist.data.dir}/zimlets" />
       </foreach>
