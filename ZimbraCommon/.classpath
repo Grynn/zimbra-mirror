@@ -12,9 +12,9 @@
 			<attribute name="javadoc_location" value="http://commons.apache.org/dbcp/api-1.2.2/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="jars/commons-fileupload-1.2.1.jar" sourcepath="/ThirdParty/commons-fileupload-1.2.1/src/java">
+	<classpathentry kind="lib" path="jars/commons-fileupload-1.2.1.jar" sourcepath="jars-src/commons-fileupload-1.2.1-src.zip">
 		<attributes>
-			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-fileupload-1.2.1-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="jars/commons-httpclient-3.1.jar" sourcepath="jars-src/commons-httpclient-3.1-src.jar">
