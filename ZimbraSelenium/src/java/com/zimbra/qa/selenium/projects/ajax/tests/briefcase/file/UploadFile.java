@@ -33,7 +33,7 @@ public class UploadFile extends AjaxCommonTest {
 		DocumentItem document = new DocumentItem();
 
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/com_zimbra_ymaps.zip";
+				+ "/data/public/other/testsoundfile.wav";
 
 		String fileName = document.getFileName(filePath);
 
