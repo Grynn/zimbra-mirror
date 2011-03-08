@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.tasks;
 
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
+import java.util.HashMap;
 import java.util.List;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.TaskItem;
@@ -14,12 +15,15 @@ import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Field;
 
 public class CancelTask extends AjaxCommonTest {
-	public CancelTask() {
+	@SuppressWarnings("serial")
+   public CancelTask() {
 		logger.info("New " + CancelTask.class.getCanonicalName());
 
 		super.startingPage = app.zPageTasks;
 
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String , String>() {{
+         put("zimbraPrefComposeFormat", "html");
+      }};
 	}
 	/**
 	 * Test Case: CancelTask_01
