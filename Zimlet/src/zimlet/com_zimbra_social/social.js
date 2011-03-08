@@ -216,7 +216,7 @@ function() {
 
 SocialZimlet.prototype._addAccountCheckBoxListeners =
 function() {
-	for (var accntId in this.allAccounts) {
+	for (var accntId = 0; accntId < this.allAccounts.length; accntId++) {
 		var callback = AjxCallback.simpleClosure(this._saveToAccountCheckboxesPref, this, accntId);
 		Dwt.setHandler(document.getElementById(this.allAccounts[accntId].checkboxId), DwtEvent.ONCLICK, callback);
 	}

@@ -515,31 +515,67 @@ function(id, opened) {
 };
 
 /**
+ * Find the array index of a toolbar button by id.
+ *
+ * Works only if descendent classes implement the _buttons property as a
+ * native Array.
+ * @param id {number} Index to check and see if exists in the array.
+ * @return {number} Index of the id in the array, or -1 if the id does not
+ * exist.
  * @private
  */
 DwtToolBar.prototype.__getButtonIndex =
 function(id) {
     var i = 0;
+    // NOTE: _buttons seems to always be implemented as an Array.
+    // This code should not be needed because:
+    // * If we're working with Objects-as-associative-arrays, we don't want
+    //   numeric indexes.
+    // * If we're working with arrays, id will ALWAYS be i if found, or
+    //   undefined if not found. This function could be done via a simple
+    //   return this._buttons && this._buttons[id] && id;
+    //   or something close to that if falsey values might be valid.
     for (var name in this._buttons) {
-        if (name == id) {
-            return i;
+        // NOTE: Protect from native Array.prototype extensions
+        if (this._buttons.hasOwnProperty(name)) {
+            if (name == id) {
+                return i;
+            }
+            i++;
         }
-        i++;
     }
     return -1;
 };
 
 /**
+ * Find a toolbar button by id.
+ *
+ * Works only if descendent classes implement the _buttons property as a
+ * native Array.
+ * @param index {number} The integer index of the button to retrieve.
+ * @return {DwtButton} The DWT button at the current index, or null if the
+ * buton does not exist.
  * @private
  */
 DwtToolBar.prototype.__getButtonAt =
 function(index) {
     var i = 0;
+    // NOTE: _buttons seems to always be implemented as an Array.
+    // This code should not be needed because:
+    // * If we're working with Objects-as-associative-arrays, we don't want
+    //   numeric indexes.
+    // * If we're working with arrays, id will ALWAYS be i if found, or
+    //   undefined if not found. This function could be done via a simple
+    //   return this._buttons && this._buttons[index];
+    //   or something close to that if falsey values might be valid.
     for (var name in this._buttons) {
-        if (i == index) {
-            return this._buttons[name];
+        // NOTE: Protect from native Array.prototype extensions
+        if (this._buttons.hasOwnProperty(name)) {
+            if (i == index) {
+                return this._buttons[name];
+            }
+            i++;
         }
-        i++;
     }
     return null;
 };
