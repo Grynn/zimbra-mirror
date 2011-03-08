@@ -3,46 +3,17 @@
  */
 package com.zimbra.qa.selenium.framework.core;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.*;
+import java.util.jar.*;
+import java.util.regex.*;
 
+import org.apache.commons.cli.*;
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.log4j.Appender;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Layout;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.PropertyConfigurator;
-import org.testng.IInvokedMethod;
-import org.testng.IInvokedMethodListener;
-import org.testng.ITestContext;
-import org.testng.ITestResult;
-import org.testng.TestListenerAdapter;
-import org.testng.TestNG;
-import org.testng.xml.XmlClass;
-import org.testng.xml.XmlSuite;
-import org.testng.xml.XmlTest;
+import org.apache.log4j.*;
+import org.testng.*;
+import org.testng.xml.*;
 
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
@@ -557,6 +528,13 @@ public class ExecuteHarnessMain {
 					}
 					logger.info("MethodListener: START: " + getTestCaseID(method.getTestMethod().getMethod()));
 					
+					// Log the associated bugs
+					Bugs b = method.getTestMethod().getMethod().getAnnotation(Bugs.class);
+					if ( b != null ) {
+						logger.info("Associated bugs: "+ b.ids());
+					}
+					
+					// Log the test case trace
 					tracer.trace("/***");
 					tracer.trace("## ID: " + getTestCaseID(method.getTestMethod().getMethod()));
 					tracer.trace("# Objective: " + method.getTestMethod().getDescription());

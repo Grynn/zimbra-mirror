@@ -1,0 +1,21 @@
+From: from12996131112962@example.com
+To: to12996131112962@example.com
+Cc: cc12996131112962@example.com
+Sender: sender12996131112962@example.com
+Errors-To: errorsto12996131112962@example.com
+Subject: subject12996131112962
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=utf-8 
+Content-Transfer-Encoding: 7bit
+
+Wollstonecraft's philosophical and gothic novel revolves around the story 
+of a woman imprisoned in an insane asylum by her husband. It focuses on the
+ societal rather than the individual "wrongs of woman" and criticizes what 
+ Wollstonecraft viewed as the patriarchal institution of marriage in 
+ eighteenth-century Britain and the legal system that protected it. 
+ However, the heroine's inability to relinquish her romantic fantasies 
+ also indicts women for wallowing in a false and damaging sentimentalism. 
+ The novel pioneered the celebration of female sexuality and cross-class 
+ identification between women. Such themes, coupled with the publication 
+ of Godwin's scandalous Memoirs of Wollstonecraft's life, made the novel 
+ unpopular at the time it was published.
