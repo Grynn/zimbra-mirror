@@ -1582,7 +1582,9 @@ function(obj, recurse, showFuncs, omit) {
 			stopRecursion = !recurse;
 			var keys = new Array();
 			for (var i in obj) {
-				keys.push(i);
+                if (obj.hasOwnProperty(i)) {
+                    keys.push(i);
+                }
 			}
 
 			if (isArray) {
