@@ -200,7 +200,7 @@ public class PageMail extends AbsTab {
 
 		// Default behavior, process the locator by clicking on it
 		//
-		this.zClick(locator);
+		this.sClick(locator);
 
 		// If the app is busy, wait for it to become active
 		this.zWaitForBusyOverlayHTML();
@@ -375,7 +375,40 @@ public class PageMail extends AbsTab {
 
 		List<MailItem> items = new ArrayList<MailItem>();
 
+		int count = this.sGetXpathCount("//tbody[@id='mess_list_tbody']//tr");
+		for (int i = 1; i <= count; i++) {
+			String itemLocator = "//tbody[@id='mess_list_tbody']//tr["+ i +"]";
+			String locator;
+			
+			MailItem item = new MailItem();
+			
+			// Column 1 is checkbox
+			
+			// Column 2 is 'flagged'
+			
+			// Column 3 is 'priority'
 
+			// Column 4 is 'tags'
+
+			// Column 5 is 'sent/reply/received/read/etc.' icon
+			
+			// Column 6 is 'From'
+			locator = itemLocator + "/td[6]";
+			item.gFrom = this.sGetText(locator);
+
+			// Column 7 is 'attachments'
+			
+			// Column 8 is 'subject'
+			locator = itemLocator + "/td[8]//span[1]";
+			item.gSubject = this.sGetText(locator);
+			
+			// Column 9 is 'size'
+			
+			// Column 10 is 'received date'
+			
+			items.add(item);
+			
+		}
 		// Return the list of items
 		return (items);
 	}
