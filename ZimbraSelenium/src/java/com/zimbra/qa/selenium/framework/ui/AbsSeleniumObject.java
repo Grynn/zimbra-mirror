@@ -152,6 +152,7 @@ public abstract class AbsSeleniumObject {
 	// Start: Selenium methods
 	// // ***
 
+	
 	/**
 	 * DefaultSelenium.getEval()
 	 * 
@@ -226,7 +227,7 @@ public abstract class AbsSeleniumObject {
 					.waitForPageToLoad(timeout);
 			logger.info("waitForPageToLoad(" + timeout + ")");
 		} catch (Exception ex) {
-			logger.info(ex.fillInStackTrace());
+			logger.warn("sWaitForPageToLoad() error", ex);
 		}
 	}
 
@@ -355,6 +356,14 @@ public abstract class AbsSeleniumObject {
 		}
 	}
 
+	/**
+	 * zWaitForBusyOverlayHTML
+	 */
+	public void zWaitForBusyOverlayHTML() throws HarnessException {
+		logger.info("zWaitForBusyOverlayHTML()");
+		SleepUtil.sleepLong();
+	}
+	
 	/**
 	 * DefaultSelenium.waitForCondition() Runs the specified JavaScript snippet
 	 * repeatedly until it evaluates to true

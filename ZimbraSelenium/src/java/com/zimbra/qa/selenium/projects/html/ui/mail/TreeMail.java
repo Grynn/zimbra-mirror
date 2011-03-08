@@ -50,7 +50,7 @@ public class TreeMail extends AbsTree {
 		zClick(locator);
 
 		// If there is a busy overlay, wait for that to finish
-		this.zWaitForBusyOverlay();
+		this.zWaitForBusyOverlayHTML();
 
 		if ( page != null ) {
 
@@ -89,7 +89,7 @@ public class TreeMail extends AbsTree {
 		zClick(locator);
 
 		// If the app is busy, wait until it is ready again
-		this.zWaitForBusyOverlay();
+		this.zWaitForBusyOverlayHTML();
 
 		if ( page != null ) {
 
@@ -130,7 +130,7 @@ public class TreeMail extends AbsTree {
 		this.zClick(locator);
 
 		// If the app is busy, wait for that to finish
-		this.zWaitForBusyOverlay();
+		this.zWaitForBusyOverlayHTML();
 
 		// If page was specified, make sure it is active
 		if ( page != null ) {
@@ -344,7 +344,7 @@ public class TreeMail extends AbsTree {
 		// Default behavior
 		this.zClick(locator);
 
-		this.zWaitForBusyOverlay();
+		this.zWaitForBusyOverlayHTML();
 
 		if ( page != null ) {
 			page.zWaitForActive();

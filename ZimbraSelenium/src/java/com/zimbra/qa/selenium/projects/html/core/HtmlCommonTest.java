@@ -1,23 +1,15 @@
 package com.zimbra.qa.selenium.projects.html.core;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.*;
 
 import org.apache.log4j.*;
 import org.testng.annotations.*;
 import org.xml.sax.SAXException;
 
-import com.thoughtworks.selenium.*;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.framework.util.BuildUtility.*;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
-import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
-import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.desktop.core.DesktopInstallUtil;
 import com.zimbra.qa.selenium.projects.html.ui.AppHtmlClient;
 
 /**
@@ -114,29 +106,19 @@ public class HtmlCommonTest {
 	 * @throws SAXException 
 	 */
 	@BeforeSuite( groups = { "always" } )
-	public void commonTestBeforeSuite() throws HarnessException, IOException, InterruptedException, SAXException {
+	public void commonTestBeforeSuite() throws HarnessException {
 		logger.info("commonTestBeforeSuite: start");
 
-		// Make sure there is a new default account
-		ZimbraAccount.ResetAccountHTML();
 
 		ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.HTML);
 
-		try
-		{
+		ClientSessionFactory.session().selenium().start();
+		ClientSessionFactory.session().selenium().windowMaximize();
+		ClientSessionFactory.session().selenium().windowFocus();
+		ClientSessionFactory.session().selenium().allowNativeXpath("true");
+		ClientSessionFactory.session().selenium().setTimeout("30000");// Use 30 second timeout for opening the browser
 
-			ClientSessionFactory.session().selenium().start();
-			ClientSessionFactory.session().selenium().windowMaximize();
-			ClientSessionFactory.session().selenium().windowFocus();
-			ClientSessionFactory.session().selenium().allowNativeXpath("true");
-			ClientSessionFactory.session().selenium().setTimeout("30000");// Use 30 second timeout for opening the browser
-
-			ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getBaseURL());
-			logger.info("App is ready!");
-
-		} catch (SeleniumException e) {
-			throw new HarnessException("Unable to open app", e);
-		}
+		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getBaseURL());
 
 		logger.info("commonTestBeforeSuite: finish");		
 	}
@@ -263,12 +245,12 @@ public class HtmlCommonTest {
 	public void commonTestAfterMethod() throws HarnessException {
 		logger.info("commonTestAfterMethod: start");
 
-		// For Ajax, if account is considered dirty (modified),
-		// then recreate a new account, but for desktop, the zimlet
-		// preferences has to be reset to default, all core zimlets are enabled
+		// For Ajax and Html, if account is considered dirty (modified),
+		// then recreate a new account
 		ZimbraAccount currentAccount = app.zGetActiveAccount();
-		if (currentAccount != null && currentAccount.accountIsDirty &&
-				currentAccount == ZimbraAccount.AccountHTML()) {
+		if (currentAccount != null 
+				&& currentAccount.accountIsDirty 
+				&& currentAccount == ZimbraAccount.AccountHTML()) {
 
 			ZimbraAccount.ResetAccountHTML();
 

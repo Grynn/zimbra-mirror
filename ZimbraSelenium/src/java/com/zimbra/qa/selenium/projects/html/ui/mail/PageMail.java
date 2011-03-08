@@ -19,7 +19,7 @@ public class PageMail extends AbsTab {
 
 
 	public static class Locators {
-		public static final String LocatorGetMail = "css=img[src='ImgRefresh.png']";
+		public static final String LocatorGetMail = "css=img[alt='Refresh']";
 	}
 
 
@@ -83,7 +83,7 @@ public class PageMail extends AbsTab {
 
 		this.zClick(PageMain.Locators.zAppbarMail);
 
-		this.zWaitForBusyOverlay();
+		this.zWaitForBusyOverlayHTML();
 
 		zWaitForActive();
 
@@ -116,7 +116,7 @@ public class PageMail extends AbsTab {
 
 		} else if ( button == Button.B_GETMAIL ) {
 
-			locator = "id="+ Locators.LocatorGetMail;
+			locator = Locators.LocatorGetMail;
 			page = null;
 
 		} else if ( button == Button.B_DELETE ) {
@@ -203,8 +203,8 @@ public class PageMail extends AbsTab {
 		this.zClick(locator);
 
 		// If the app is busy, wait for it to become active
-		this.zWaitForBusyOverlay();
-
+		this.zWaitForBusyOverlayHTML();
+		
 		// If page was specified, make sure it is active
 		if ( page != null ) {
 
@@ -329,7 +329,7 @@ public class PageMail extends AbsTab {
 			this.zClick(pulldownLocator);
 
 			// If the app is busy, wait for it to become active
-			this.zWaitForBusyOverlay();
+			this.zWaitForBusyOverlayHTML();
 
 
 			if ( optionLocator != null ) {
@@ -342,7 +342,7 @@ public class PageMail extends AbsTab {
 				this.zClick(optionLocator);
 
 				// If the app is busy, wait for it to become active
-				this.zWaitForBusyOverlay();
+				this.zWaitForBusyOverlayHTML();
 
 			}
 
@@ -405,10 +405,6 @@ public class PageMail extends AbsTab {
 		tracer.trace(action +" on subject = "+ subject);
 
 		AbsPage page = null;
-		String listLocator;
-		String rowLocator;
-		String itemlocator = null;
-
 
 		// Find the item locator
 		//
@@ -455,9 +451,6 @@ public class PageMail extends AbsTab {
 			throw new HarnessException("subject cannot be null or blank");
 
 		AbsPage page = null;
-		String listLocator;
-		String rowLocator;
-		String itemlocator = null;
 
 
 
@@ -493,7 +486,7 @@ public class PageMail extends AbsTab {
 		zKeyboard.zTypeCharacters(shortcut.getKeys());
 
 		// If the app is busy, wait for it to become active
-		this.zWaitForBusyOverlay();
+		this.zWaitForBusyOverlayHTML();
 
 		// If a page is specified, wait for it to become active
 		if ( page != null ) {

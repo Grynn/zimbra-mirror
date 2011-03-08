@@ -154,6 +154,24 @@ public class ZimbraAccount {
 	}
 	private static ZimbraAccount _AccountZWC = null;
 
+	/**
+	 * Get the user account logged into HTML being tested
+	 * @return the ZimbraAccount object representing the test account
+	 */
+	public static synchronized ZimbraAccount AccountHTML() {
+		if ( _AccountHTML == null ) {
+			_AccountHTML = new ZimbraAccount();
+			_AccountHTML.provision();
+			_AccountHTML.authenticate();
+		}
+		return (_AccountHTML);
+	}
+	public static synchronized void ResetAccountHTML() {
+		logger.warn("AccountHTML is being reset");
+		_AccountHTML = null;
+	}
+	private static ZimbraAccount _AccountHTML = null;
+
 	public static synchronized ZimbraAccount AccountZMC() {
 		if ( _AccountZMC == null ) {
 			_AccountZMC = new ZimbraAccount();
@@ -468,6 +486,17 @@ public class ZimbraAccount {
       return output;
 
    }
+
+	/**
+     * Modify user zimlet preferences using ModifyZimletPrefsRequest
+     * @param zimletPreferences Zimlet Preferences to be modified through SOAP
+     * @param destinationType The destination Host Type: SERVER or CLIENT
+     * @throws HarnessException
+     */
+	public ZimbraAccount modifyZimletPreferences(Map<String, String> preferences) {
+	   return modifyZimletPreferences(preferences, SOAP_DESTINATION_HOST_TYPE.SERVER);
+	}
+
 
    /**
     * Modify user zimlet preferences using ModifyZimletPrefsRequest
