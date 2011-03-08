@@ -25,7 +25,7 @@ public class SendDocLink extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Create document through SOAP - click Send as attachment, Cancel & verify through GUI", groups = { "functional" })
+	@Test(description = "Create document through SOAP - click Send Link, Cancel & verify through GUI", groups = { "functional" })
 	public void SendDocLink_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 

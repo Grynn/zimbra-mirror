@@ -21,7 +21,7 @@ public class DisplayFile extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Create document through RestUtil - verify through GUI", groups = { "smoke" })
+	@Test(description = "Upload file through RestUtil - verify through GUI", groups = { "smoke" })
 	public void DisplayFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 

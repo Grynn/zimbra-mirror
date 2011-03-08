@@ -28,7 +28,7 @@ public class MoveFile extends AjaxCommonTest {
 		// {{put("zimbraPrefGroupMailBy", "message");}};
 	}
 
-	@Test(description = "Upload file through SOAP - move & verify through GUI", groups = { "smoke" })
+	@Test(description = "Upload file through RestUtil - move & verify through GUI", groups = { "smoke" })
 	public void MoveFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 

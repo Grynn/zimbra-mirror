@@ -24,8 +24,8 @@ public class SendFileAttachment extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Create document through RestUtil - click Send as attachment, Cancel & verify through GUI", groups = { "functional" })
-	public void SendDocAttachment_01() throws HarnessException {
+	@Test(description = "Upload file through RestUtil - click Send as attachment, Cancel & verify through GUI", groups = { "functional" })
+	public void SendFileAttachment_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
 		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,

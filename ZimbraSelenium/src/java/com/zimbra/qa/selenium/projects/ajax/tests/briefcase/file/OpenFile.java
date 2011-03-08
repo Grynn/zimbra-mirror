@@ -24,7 +24,7 @@ public class OpenFile extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Create document through RestUtil - open & verify through GUI", groups = { "smoke" })
+	@Test(description = "Upload file through RestUtil - open & verify through GUI", groups = { "smoke" })
 	public void OpenFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
