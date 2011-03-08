@@ -38,6 +38,7 @@ public class Button {
 	public static final Button B_SAVE = new Button("B_SAVE");
 	public static final Button B_RENAME = new Button("B_RENAME");
 	public static final Button B_SHARE = new Button("B_SHARE");
+	public static final Button B_CLOSE = new Button("B_CLOSE");
 	
 	public static final Button O_NEW_MESSAGE = new Button("O_NEW_MESSAGE");
 	public static final Button O_NEW_CONTACT = new Button("O_NEW_CONTACT");

@@ -18,7 +18,12 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 public class PageAdvancedSearch extends AbsTab {
 
 	public static class Locators {
+		public static final String TOOLBAR="css=div[id='skin_container_search_builder_toolbar']";
+		public static final String PANEL="css=div[id='skin_container_search_builder']";
 				
+		//TODO 
+		//Fill in non-dynamic ID after bug 57628 fixed.
+		public static final String CLOSE="css=div[id='WAIT_FOR_BUG_57628_TO_GET_THE_ID_FOR_CLOSE_BUTTON";
 	}
 	
 	
@@ -34,9 +39,16 @@ public class PageAdvancedSearch extends AbsTab {
 	 */
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		throw new HarnessException("implement me!");
+		try {
+			zWaitForElementVisible(Locators.TOOLBAR);
+		}
+		catch (Exception e) {
+			return false;
+		} 
+		return sIsVisible(Locators.TOOLBAR) & sIsVisible(Locators.PANEL);		
 	}
 
+	
 	/* (non-Javadoc)
 	 * @see projects.admin.ui.AbsPage#myPageName()
 	 */
@@ -55,9 +67,16 @@ public class PageAdvancedSearch extends AbsTab {
 
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
+		AbsPage page=null;
 		tracer.trace("Press the "+ button +" button");
 
-		throw new HarnessException("implement me!");
+		if (button == Button.B_CLOSE) {
+           zClick(Locators.CLOSE);			
+           throw new HarnessException("Wait for bug 57826 fixed");
+		}
+	 	zWaitForBusyOverlay();
+	 	
+		return page;
 	}
 
 	@Override
