@@ -29,19 +29,14 @@ public class CreateContact extends AjaxCommonTest  {
 	}
 	
 	
-	@Test(	description = "Create a basic contact item",
-			groups = { "sanity" })
-	public void CreateContact_01() throws HarnessException {				
-		createBasicContact(app);		
-	}
+
 
 	//can be used for other classes such as DeleteContact, MoveContact
-	public static ContactItem createBasicContact(AppAjaxClient app)throws HarnessException {
+	public static ContactItem createBasicContact(AppAjaxClient app, FormContactNew formContactNew)throws HarnessException {
+							
 		// Create a contact Item
 		ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
-			
-		FormContactNew formContactNew = (FormContactNew)app.zPageAddressbook.zToolbarPressButton(Button.B_NEW);
-				
+	
 		//verify form contact new page is displayed
 		ZAssert.assertTrue(formContactNew.zIsActive(),"Verify new contact form is displayed");
 		
@@ -69,5 +64,21 @@ public class CreateContact extends AjaxCommonTest  {
         ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") existed ");
 
 		return contactItem;
+	}
+	
+	@Test(	description = "Create a basic contact item by click New in page Addressbook ",
+			groups = { "sanity" })
+	public void CreateContact_01() throws HarnessException {				
+		FormContactNew formContactNew = (FormContactNew)app.zPageAddressbook.zToolbarPressButton(Button.B_NEW);
+
+		createBasicContact(app, formContactNew);		
+	}
+	
+	@Test(	description = "Create a basic contact item by use PullDown Menu->Contacts",
+			groups = { "functional" })
+	public void CreateContactFromPulldownMenu() throws HarnessException {				
+		FormContactNew formContactNew = (FormContactNew)app.zPageAddressbook.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_CONTACT);
+		
+		createBasicContact(app, formContactNew);		
 	}
 }

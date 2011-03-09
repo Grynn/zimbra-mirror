@@ -284,7 +284,13 @@ public class PageAddressbook extends AbsTab {
 			throw new HarnessException("no logic defined for pulldown/option "+ pulldown +"/"+ option);
 		 }
 	    }		
-	
+	   else if ( pulldown == Button.B_NEW ) {
+		   if ( option == Button.O_NEW_CONTACT ) {
+			    pulldownLocator = "css=div[id='zb__CNS__NEW_MENU'] td[id='zb__CNS__NEW_MENU_dropdown']";
+			    optionLocator="css=tr[id='POPUP_NEW_CONTACT']";
+				page = new FormContactNew(this.MyApplication);		   
+		   }
+	   }
 	// Default behavior
 		if ( pulldownLocator != null ) {
 						
