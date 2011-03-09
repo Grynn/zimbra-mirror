@@ -36,10 +36,10 @@ public class UploadFile extends AjaxCommonTest {
 				+ "/data/public/other/testsoundfile.wav";
 
 		String fileName = document.getFileName(filePath);
-
+		
 		// Upload file to server through RestUtil
 		String attachmentId = account.uploadFile(filePath);
-
+	
 		// Save uploaded file to briefcase through SOAP
 		account.soapSend(
 
@@ -63,8 +63,15 @@ public class UploadFile extends AjaxCommonTest {
 						+ "</SearchRequest>");
 
 		String name = account.soapSelectValue("//mail:doc", "name");
-
+		String id = account.soapSelectValue("//mail:doc", "id");
+		
 		ZAssert.assertEquals(name, fileName, "Verify file name through SOAP");
+		
+		//delete file upon test completion
+		account.soapSend(
+				"<ItemActionRequest xmlns='urn:zimbraMail'>" +
+				"<action id='" + id + "' op='trash'/>" +
+				"</ItemActionRequest>");				
 	}
 
 	@Test(description = "Upload file through RestUtil - verify through GUI", groups = { "sanity" })
