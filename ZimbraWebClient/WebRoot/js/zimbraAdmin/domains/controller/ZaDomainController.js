@@ -617,12 +617,13 @@ function (resp) {
 	if(!resp)
 		return;
 	if(resp.isException()) {
-		var ex = resp.getException();
-		if(ex.msg && (ex.msg.indexOf("NameNotFoundException")>0 || ex.msg.indexOf("NoMXRecordsForDomain")>0)) {
-			this.popupErrorDialog(AjxMessageFormat.format(ZaMsg.failedToGetMXRecords, [this._currentObject.name]));
-		} else {
-			this._handleException(resp.getException(), "ZaDomainController.prototype.checkMXCallback", null, false);
-		}
+		//var ex = resp.getException();
+		//if(ex.msg && (ex.msg.indexOf("NameNotFoundException")>0 || ex.msg.indexOf("NoMXRecordsForDomain")>0)) {
+		//	this.popupErrorDialog(AjxMessageFormat.format(ZaMsg.failedToGetMXRecords, [this._currentObject.name]));
+		//} else {
+		//	this._handleException(resp.getException(), "ZaDomainController.prototype.checkMXCallback", null, false);
+		//}
+		this.popupErrorDialog(AjxMessageFormat.format(ZaMsg.failedToGetMXRecords, [this._currentObject.name]));
 		return;
 	} 
 	var response = resp.getResponse().Body.CheckDomainMXRecordResponse;
