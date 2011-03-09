@@ -34,7 +34,7 @@ public class ViewMail extends AjaxCommonTest {
 	
 	@Bugs(	ids = "57047" )
 	@Test(	description = "Receive a mail with Sender: specified",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void ViewMail_01() throws HarnessException {
 		
 		final String subject = "subject12996131112962";

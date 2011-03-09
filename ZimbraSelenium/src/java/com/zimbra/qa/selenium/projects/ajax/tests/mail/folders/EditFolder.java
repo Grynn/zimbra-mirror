@@ -68,7 +68,7 @@ public class EditFolder extends AjaxCommonTest {
 	}
 
 	@Test(	description = "Edit a folder, change the color (Context menu -> Edit)",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void EditFolder_02() throws HarnessException {
 		
 		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);

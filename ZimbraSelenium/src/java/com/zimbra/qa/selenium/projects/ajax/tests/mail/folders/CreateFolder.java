@@ -1,19 +1,14 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.folders;
 
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.items.FolderItem;
-import com.zimbra.qa.selenium.framework.items.ContextMenuItem.CONTEXT_MENU_ITEM_NAME;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
 
 public class CreateFolder extends AjaxCommonTest {
 
@@ -82,7 +77,7 @@ public class CreateFolder extends AjaxCommonTest {
 	}
 
 	@Test(	description = "Create a new folder using keyboard shortcuts",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void CreateFolder_02() throws HarnessException {
 		
 		Shortcut shortcut = Shortcut.S_NEWFOLDER;
@@ -108,7 +103,7 @@ public class CreateFolder extends AjaxCommonTest {
 	}
 
    @Test(	description = "Create a new folder using context menu from root folder",
-      groups = { "smoke" })
+      groups = { "functional" })
    public void CreateFolder_03() throws HarnessException {
       _folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
 
@@ -142,7 +137,7 @@ public class CreateFolder extends AjaxCommonTest {
    }
 
 	@Test(	description = "Create a new folder using mail app New -> New Folder",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void CreateFolder_04() throws HarnessException {
 		
 		

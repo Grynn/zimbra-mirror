@@ -142,7 +142,7 @@ public class MarkReadMail extends AjaxCommonTest {
 
 
 	@Test(	description = "Mark a message as read by clicking on it, then using 'mr' hotkeys",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void MarkReadMail_03() throws HarnessException {
 		
 

@@ -46,7 +46,7 @@ public class CreateTag extends AjaxCommonTest {
 	
 	
 	@Test(	description = "Create a new tag using keyboard shortcuts",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void CreateTag_02() throws HarnessException {
 		
 		Shortcut shortcut = Shortcut.S_NEWTAG;
@@ -73,7 +73,7 @@ public class CreateTag extends AjaxCommonTest {
 	}
 
 	@Test(	description = "Create a new tag using context menu from a tag",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void CreateTag_03() throws HarnessException {
 		
 		
@@ -108,7 +108,7 @@ public class CreateTag extends AjaxCommonTest {
 	}
 
 	@Test(	description = "Create a new tag using mail app New -> New Folder",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void CreateTag_04() throws HarnessException {
 		
 		

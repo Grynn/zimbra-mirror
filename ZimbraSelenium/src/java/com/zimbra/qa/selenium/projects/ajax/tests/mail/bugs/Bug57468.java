@@ -5,6 +5,7 @@ import java.util.List;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
@@ -43,8 +44,9 @@ public class Bug57468 extends AjaxCommonTest {
 
 	}
 
+	@Bugs( ids = "57468")
 	@Test(	description = "Verify collapsed folders remain collapsed when getting mail",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void Bug57468_01() throws HarnessException {
 
 		// Create a subfolder in Inbox

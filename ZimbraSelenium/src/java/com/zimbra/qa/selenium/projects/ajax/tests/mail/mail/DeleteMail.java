@@ -79,7 +79,7 @@ public class DeleteMail extends AjaxCommonTest {
 	}
 
 	@Test(	description = "Delete a mail using checkbox and toolbar delete button",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void DeleteMail_02() throws HarnessException {
 		
 		// Create the message data to be sent
@@ -131,7 +131,7 @@ public class DeleteMail extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "Delete a mail by selecting and typing 'delete' keyboard",
-			groups = { "smoke" },
+			groups = { "functional" },
 			dataProvider = "DataProviderDeleteKeys")
 	public void DeleteMail_03(String name, int keyEvent) throws HarnessException {
 		
@@ -178,7 +178,7 @@ public class DeleteMail extends AjaxCommonTest {
 	}
 
 	@Test(	description = "Delete a mail by selecting and typing '.t' shortcut",
-			groups = { "smoke" } )
+			groups = { "functional" } )
 	public void DeleteMail_04() throws HarnessException {
 		
 		// Create the message data to be sent
@@ -307,7 +307,7 @@ public class DeleteMail extends AjaxCommonTest {
 
 
 	@Test(	description = "Delete a mail using context menu delete button",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void DeleteMail_06() throws HarnessException {
 		
 		// Create the message data to be sent

@@ -32,7 +32,7 @@ public class GetMessage extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "Receive a mail with a basic US Phone number",
-			groups = { "functional" })
+			groups = { "smoke" })
 	public void GetMessage_01() throws HarnessException {
 		
 		// Create the message data to be sent

@@ -32,7 +32,7 @@ public class GetMail extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "View a mail in a mountpoint",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void GetMail_01() throws HarnessException {
 		String foldername = "folder" + ZimbraSeleniumProperties.getUniqueString();
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
@@ -105,7 +105,7 @@ public class GetMail extends AjaxCommonTest {
 	}
 
 	@Test(	description = "View the contents of a mail in a mountpoint",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void GetMail_02() throws HarnessException {
 		String foldername = "folder" + ZimbraSeleniumProperties.getUniqueString();
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();

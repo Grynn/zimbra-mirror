@@ -23,7 +23,7 @@ public class RenameFolder extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "Rename a folder - Context menu -> Rename",
-			groups = { "functional" })
+			groups = { "smoke" })
 	public void RenameFolder_01() throws HarnessException {
 		
 		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);

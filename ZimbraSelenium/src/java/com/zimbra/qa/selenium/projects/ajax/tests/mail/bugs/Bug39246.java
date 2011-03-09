@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -21,6 +22,7 @@ public class Bug39246 extends AjaxCommonTest {
 		
 	}
 	
+	@Bugs( ids = "39246")
 	@Test(	description = "Verify bug 39246",
 			groups = { "functional" })
 	public void Bug39246_01() throws HarnessException  {

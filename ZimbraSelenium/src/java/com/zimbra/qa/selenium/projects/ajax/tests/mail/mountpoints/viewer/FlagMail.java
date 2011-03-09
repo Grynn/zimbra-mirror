@@ -28,7 +28,7 @@ public class FlagMail extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "Verify Permission Denied on Flag a shared mail (read-only share)",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void FlagMail_01() throws HarnessException {
 		String foldername = "folder" + ZimbraSeleniumProperties.getUniqueString();
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
@@ -112,7 +112,7 @@ public class FlagMail extends AjaxCommonTest {
 
 	
 	@Test(	description = "Verify Permission Denied on Flag (keyboard='mf') a shared mail (read-only share)",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void FlagMail_02() throws HarnessException {
 		String foldername = "folder" + ZimbraSeleniumProperties.getUniqueString();
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();

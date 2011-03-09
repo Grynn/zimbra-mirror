@@ -34,7 +34,7 @@ public class SearchMail extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "Search for a message by subject",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void SearchMail_01() throws HarnessException {
 		
 		// Create the message data to be sent

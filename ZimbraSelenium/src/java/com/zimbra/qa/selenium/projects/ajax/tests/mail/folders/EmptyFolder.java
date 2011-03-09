@@ -21,7 +21,7 @@ public class EmptyFolder extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "Empty a folder (context menu)",
-			groups = { "functional" })
+			groups = { "smoke" })
 	public void EmptyFolder_01() throws HarnessException {
 		
 		String foldername = "folder" + ZimbraSeleniumProperties.getUniqueString();

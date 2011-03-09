@@ -20,7 +20,7 @@ public class MarkAllAsReadFolder extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "Mark all messages as read in folder (context menu)",
-			groups = { "functional" })
+			groups = { "smoke" })
 	public void MarkAllAsReadFolder_01() throws HarnessException {
 		
 		String foldername = "folder" + ZimbraSeleniumProperties.getUniqueString();

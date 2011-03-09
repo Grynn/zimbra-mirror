@@ -84,7 +84,7 @@ public class FlagMail extends AjaxCommonTest {
 
 	
 	@Test(	description = "Flag a mail by using shortcut 'mf'",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void FlagMail_02() throws HarnessException {
 		
 		// Create the message data to be sent

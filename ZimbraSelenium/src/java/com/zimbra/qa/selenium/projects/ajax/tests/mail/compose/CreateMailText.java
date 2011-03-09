@@ -80,7 +80,7 @@ public class CreateMailText extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "Send a mail using Text editor using keyboard shortcuts",
-			groups = { "smoke" },
+			groups = { "functional" },
 			dataProvider = "DataProvideNewMessageShortcuts")
 	public void CreateMailText_02(Shortcut shortcut, String keys) throws HarnessException {
 		

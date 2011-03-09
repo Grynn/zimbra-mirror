@@ -100,7 +100,7 @@ public class MoveMessage extends AjaxCommonTest {
 	}
 
 	@Test(	description = "Move a mail by selecting message, then click 'm' shortcut",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void MoveMail_02() throws HarnessException {
 		
 		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
@@ -274,7 +274,7 @@ public class MoveMessage extends AjaxCommonTest {
 	}
 
 	@Test(	description = "Move a mail by entering folder name in the dialog search",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void MoveMail_05() throws HarnessException {
 		
 		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
