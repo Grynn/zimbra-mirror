@@ -838,6 +838,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         setDefaultAccountAttributes(attrs);
 
         OfflineAccount galAcct = (OfflineAccount)createAccountInternal(name, id, attrs, true, false);
+        setAccountAttribute(galAcct, OfflineConstants.A_offlineGalGroupMembersPopulated, Provisioning.FALSE);
+        setAccountAttribute(mainAcct, OfflineConstants.A_offlineGalAccountSyncToken, "");
         setAccountAttribute(mainAcct, OfflineConstants.A_offlineGalAccountId, galAcct.getId());
         return galAcct;
     }

@@ -126,6 +126,10 @@
   <desc>last time (days since epoch) gal maintenance task was run</desc>
 </attr>
 
+<attr name="offlineGalGroupMembersPopulated" type="boolean" cardinality="single" optionalIn="account">
+  <desc>whether we have populated group member lists for this gal account yet</desc>
+</attr>
+
 <attr name="offlineMountpointProxyAccountId" type="string" cardinality="single" optionalIn="account">
   <desc>id of the offline acount through which access to mountpoints is proxied</desc>
 </attr>

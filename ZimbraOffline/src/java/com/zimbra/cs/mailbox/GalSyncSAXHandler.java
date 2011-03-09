@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import org.dom4j.ElementHandler;
 import org.dom4j.ElementPath;
@@ -24,7 +23,6 @@ import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.soap.Element.XMLElement;
 import com.zimbra.common.util.Constants;
 import com.zimbra.cs.account.DataSource;
-import com.zimbra.cs.account.DataSource.Type;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineGal;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -67,13 +65,7 @@ public class GalSyncSAXHandler implements ElementHandler {
         galMbox = MailboxManager.getInstance().getMailboxByAccountId(galAccount.getId(), false);
         context = new OperationContext(galMbox);
         
-        String dsId = galAccount.getAttr(OfflineConstants.A_offlineGalAccountDataSourceId, false);
-        if (dsId == null) {
-            dsId = UUID.randomUUID().toString();
-            prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountDataSourceId, dsId);
-        }
-        ds = new DataSource(galAccount, Type.gal, galAccount.getName(), dsId,
-            new HashMap<String, Object>(), prov);
+        ds = GalSyncUtil.createDataSourceForAccount(galAccount);
         
         syncFolder = OfflineGal.getSyncFolder(galMbox, context, fullSync).getId();
         OfflineLog.offline.debug("Offline GAL current sync folder: " + Integer.toString(syncFolder));
@@ -172,7 +164,7 @@ public class GalSyncSAXHandler implements ElementHandler {
     }
     
     private void handleException(Exception e, ElementPath elPath) {
-        OfflineLog.offline.debug("Offline GAL exception caught: " + e.toString());
+        OfflineLog.offline.debug("Offline GAL exception caught",e);
         if (e instanceof ServiceException || e instanceof IOException) {
             exception = e;
         }
@@ -180,7 +172,7 @@ public class GalSyncSAXHandler implements ElementHandler {
     }
     
     private void deleteContact(String id) throws ServiceException, IOException {
-        int iid = findContact(id);
+        int iid = GalSyncUtil.findContact(id, ds);
         if (iid > 0) {
             // always delete mapping first, so that in case of crash, unmapped contacts can be cleaned up in runMaintenance()
             DbDataSource.deleteMapping(ds, iid);
@@ -195,13 +187,6 @@ public class GalSyncSAXHandler implements ElementHandler {
         OfflineLog.offline.debug("Offline GAL contact created: " + logstr);
     }
 
-    private int findContact(String id) throws ServiceException, IOException {
-        DataSourceItem dsItem = DbDataSource.getReverseMapping(ds, id);
-        if (dsItem.itemId > 0)
-            return dsItem.itemId;
-        return -1;
-    }
-
     private void saveContact(String id, Map<String, String> map) throws ServiceException, IOException {
         String fullName = map.get(ContactConstants.A_fullName);
         if (fullName == null) {
@@ -213,14 +198,27 @@ public class GalSyncSAXHandler implements ElementHandler {
             if (fullName.length() > 0)
                 map.put(ContactConstants.A_fullName, fullName);
         }
-        map.put(ContactConstants.A_type, map.get(OfflineGal.A_zimbraCalResType) == null ? OfflineGal.CTYPE_ACCOUNT : OfflineGal.CTYPE_RESOURCE);
-        String logstr = "id=" + id + " name=\"" + fullName + "\"";
-
+        String type = map.get(ContactConstants.A_type);
+        if (type == null) {
+            type = map.get(OfflineGal.A_zimbraCalResType) == null ? OfflineGal.CTYPE_ACCOUNT : OfflineGal.CTYPE_RESOURCE;
+            map.put(ContactConstants.A_type, type);
+        }
+        String logstr = "id=" + id + " name=\"" + fullName + "\"" + " type=\""+type+"\"";
+        if (type.equals(OfflineGal.CTYPE_GROUP) && mainMbox.getRemoteServerVersion().isAtLeast7xx()) {
+            String dlName = map.get(ContactConstants.A_email);
+            String dlMembers = GalSyncUtil.fetchDlMembers(dlName, mainMbox);
+            if (dlMembers == null) {
+                OfflineLog.offline.debug("No members in dlist %s",dlName);
+            } else {
+                map.put(ContactConstants.A_member, dlMembers);
+            }
+        }
+        
         ParsedContact contact = new ParsedContact(map);
         if (fullSync) {
             createContact(contact, id, logstr);
         } else {
-            int itemId = findContact(id);
+            int itemId = GalSyncUtil.findContact(id, ds);
             if (itemId > 0) {
                 try {
                     galMbox.modifyContact(context, itemId, contact);

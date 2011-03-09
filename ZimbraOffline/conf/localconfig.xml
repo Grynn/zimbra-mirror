@@ -154,6 +154,9 @@
   <key name="zimbra_class_conditionalproxyselector">
     <value>com.zimbra.cs.offline.net.AttrProxySelector</value>
   </key>
+  <key name="zimbra_class_galgroupinfoprovider">
+    <value>com.zimbra.cs.mailbox.OfflineGalGroupInfoProvider</value>
+  </key>
   <key name="zimbra_disk_cache_servlet_flush">
     <value>false</value>
   </key>

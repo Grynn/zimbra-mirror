@@ -49,6 +49,7 @@ import com.zimbra.cs.service.util.ItemId;
 public class OfflineGal {
 
     public static final String CTYPE_ACCOUNT = "account";
+    public static final String CTYPE_GROUP = "group";
     public static final String CTYPE_RESOURCE = "resource";
     public static final String CTYPE_ALL = "all";
 
@@ -104,7 +105,7 @@ public class OfflineGal {
             query = query + " AND contact:\"" + name.replace("\"", "\\\"") + "\"";
         }
         if (type.equals(CTYPE_ACCOUNT))
-            query = query + " AND #" + ContactConstants.A_type + ":" + CTYPE_ACCOUNT;
+            query = query + " AND (#" + ContactConstants.A_type + ":" + CTYPE_ACCOUNT + " OR #"+ContactConstants.A_type + ":" + CTYPE_GROUP +")";
         else if (type.equals(CTYPE_RESOURCE))
             query = query + " AND #" + ContactConstants.A_type + ":" + CTYPE_RESOURCE;
 
@@ -142,7 +143,7 @@ public class OfflineGal {
                 Iterator<String> it = fields.keySet().iterator();
                 while (it.hasNext()) {
                     String key = it.next();
-                    if (!key.equals(MailConstants.A_ID) && !key.equals("type") && !key.equals(OfflineConstants.GAL_LDAP_DN))
+                    if (!key.equals(MailConstants.A_ID) && !key.equals(OfflineConstants.GAL_LDAP_DN))
                         cn.addKeyValuePair(key, fields.get(key), MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
                 }
 

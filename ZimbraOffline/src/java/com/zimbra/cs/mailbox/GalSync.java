@@ -14,29 +14,37 @@
  */
 package com.zimbra.cs.mailbox;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.io.IOException;
 import java.util.EnumSet;
 
 import org.dom4j.ElementHandler;
 
+import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.AdminConstants;
-import com.zimbra.common.soap.Element.XMLElement;
+import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.SoapProtocol;
+import com.zimbra.common.soap.Element.XMLElement;
 import com.zimbra.common.util.Constants;
-import com.zimbra.cs.offline.OfflineSyncManager;
-import com.zimbra.cs.offline.common.OfflineConstants;
-import com.zimbra.cs.offline.OfflineLC;
-import com.zimbra.cs.offline.OfflineLog;
-import com.zimbra.cs.account.offline.OfflineAccount;
-import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.AccountBy;
+import com.zimbra.cs.account.offline.OfflineAccount;
+import com.zimbra.cs.account.offline.OfflineGal;
+import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.mime.ParsedContact;
+import com.zimbra.cs.offline.OfflineLC;
+import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.OfflineSyncManager;
+import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
 import com.zimbra.cs.util.Zimbra;
 import com.zimbra.cs.util.ZimbraApplication;
@@ -225,7 +233,42 @@ public class GalSync {
         if (fullSync) { // after a full sync, reset maintenance timer
             prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountLastRefresh,
                 Long.toString(System.currentTimeMillis()));
+            //we've done a full sync, group populate is implied; as long as remote server is 7xx
+            if (mbox.getRemoteServerVersion().isAtLeast7xx()) {
+                prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalGroupMembersPopulated, Provisioning.TRUE);
+            }
+        } else if (!galAccount.getBooleanAttr(OfflineConstants.A_offlineGalGroupMembersPopulated, false) && mbox.getRemoteServerVersion().isAtLeast7xx()) {
+            //existing groups have incorrect type=account and don't have member list
+            populateGroupMembers(mbox, galAccount);
+            prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalGroupMembersPopulated, Provisioning.TRUE);
         }
         prov.setAccountAttribute(account, OfflineConstants.A_offlineGalAccountSyncToken, token);
+    }
+
+    private void populateGroupMembers(ZcsMailbox mbox, OfflineAccount galAccount) throws ServiceException {
+        OfflineLog.offline.debug("populating group members for previously create gal contacts");
+        XMLElement request = new XMLElement(AccountConstants.SEARCH_GAL_REQUEST);
+        request.addAttribute(AccountConstants.A_TYPE, OfflineGal.CTYPE_GROUP);
+        request.addElement(AccountConstants.A_NAME).setText(".");
+        Element response = mbox.sendRequest(request, true, true, OfflineLC.zdesktop_gal_sync_request_timeout.intValue(), SoapProtocol.Soap12);
+        List<Element> groups = response.listElements(MailConstants.E_CONTACT);
+        DataSource ds = GalSyncUtil.createDataSourceForAccount(galAccount);
+        Mailbox galMbox = MailboxManager.getInstance().getMailboxByAccountId(galAccount.getId(), false);
+        OperationContext ctxt = new OperationContext(galMbox);
+        if (groups != null) {
+            for (Element group : groups) {
+                //lookup each existing entry, make sure it's type=group and has correct members
+                String id = group.getAttribute(AccountConstants.A_ID);
+                int contactId = GalSyncUtil.findContact(id, ds);
+                Contact contact = galMbox.getContactById(ctxt, contactId);
+                String dlJson = GalSyncUtil.fetchDlMembers(contact.getName(), mbox);
+                Map<String,String> newFields = new HashMap<String, String>();
+                newFields.put(ContactConstants.A_member, dlJson);
+                newFields.put(ContactConstants.A_type, OfflineGal.CTYPE_GROUP);
+                ParsedContact pc = new ParsedContact(contact);
+                pc.modify(newFields, null);
+                galMbox.modifyContact(ctxt, contactId, pc);
+            }
+        }
     }
 }
