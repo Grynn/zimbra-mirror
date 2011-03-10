@@ -33,7 +33,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 		}
 	}
 
-	public static String pageTitle;
+	public static final String pageTitle = "Zimbra Docs";
 
 	public DocumentBriefcaseNew(AbsApplication application) {
 		super(application);
@@ -142,6 +142,16 @@ public class DocumentBriefcaseNew extends AbsForm {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		throw new HarnessException("implement me");
+		zWaitForWindow(pageTitle);
+
+		zSelectWindow(pageTitle);
+
+		zWaitForElementPresent("css=div[class='ZDToolBar ZWidget']");
+
+		zWaitForElementPresent("css=iframe[id*='DWT'][class='ZDEditor']");
+
+		zWaitForIframeText("css=iframe[id*='DWT'][class='ZDEditor']", "");
+		
+		return true;
 	}
 }

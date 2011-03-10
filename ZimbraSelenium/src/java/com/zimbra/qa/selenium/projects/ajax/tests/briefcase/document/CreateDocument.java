@@ -7,6 +7,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
@@ -40,15 +41,17 @@ public class CreateDocument extends AjaxCommonTest {
 
 		// Open new document page
 		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
-				.zToolbarPressButton(Button.O_NEW_DOCUMENT);
-
+				.zToolbarPressButton(Button.B_NEW);
+		
 		try {
 			app.zPageBriefcase.zSelectWindow("Zimbra Docs");
 
 			// Fill out the document with the data
-			documentBriefcaseNew.zFillField(DocumentBriefcaseNew.Field.Name, docName);
-			documentBriefcaseNew.zFillField(DocumentBriefcaseNew.Field.Body, docText);
-			
+			documentBriefcaseNew.zFillField(DocumentBriefcaseNew.Field.Name,
+					docName);
+			documentBriefcaseNew.zFillField(DocumentBriefcaseNew.Field.Body,
+					docText);
+
 			// Save and close
 			app.zPageBriefcase.zSelectWindow("Zimbra Docs");
 
@@ -95,5 +98,102 @@ public class CreateDocument extends AjaxCommonTest {
 
 		ZAssert.assertStringContains(text, docText,
 				"Verify document text through GUI");
+	}
+
+	@Test(description = "Create document using New menu pulldown menu - verify through SOAP", groups = { "functional" })
+	public void CreateDocument_02() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+
+		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
+		// Create document item
+		DocumentItem document = new DocumentItem();
+
+		String docName = document.getDocName();
+		String docText = document.getDocText();
+
+		// Open new document page using keyboard shortcut
+		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
+				.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_DOCUMENT);
+
+		try {
+			app.zPageBriefcase.zSelectWindow("Zimbra Docs");
+
+			// Fill out the document with the data
+			documentBriefcaseNew.zFillField(DocumentBriefcaseNew.Field.Name,
+					docName);
+			documentBriefcaseNew.zFillField(DocumentBriefcaseNew.Field.Body,
+					docText);
+
+			// Save and close
+			app.zPageBriefcase.zSelectWindow("Zimbra Docs");
+
+			documentBriefcaseNew.zSubmit();
+		} finally {
+			documentBriefcaseNew.zSelectWindow("Zimbra: Briefcase");
+		}
+
+		app.zPageBriefcase.zIsWindowClosed("Zimbra Docs");
+
+		// Search for created document
+		account
+				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
+						+ "<query>" + docName + "</query>" + "</SearchRequest>");
+
+		String name = account.soapSelectValue("//mail:doc", "name");
+		
+		ZAssert.assertStringContains(docName, name,
+				"Verify document name through GUI");		
+	}
+
+	@Test(description = "Create document using keyboard shortcut - verify through SOAP", groups = { "functional" })
+	public void CreateDocument_03() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+
+		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
+		// Create document item
+		DocumentItem document = new DocumentItem();
+
+		String docName = document.getDocName();
+		String docText = document.getDocText();
+
+		Shortcut shortcut = Shortcut.S_NEWDOCUMENT;
+
+		// Open new document page using keyboard shortcut
+		app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
+		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
+				.zKeyboardShortcut(shortcut);
+
+		try {
+			app.zPageBriefcase.zSelectWindow("Zimbra Docs");
+
+			// Fill out the document with the data
+			documentBriefcaseNew.zFillField(DocumentBriefcaseNew.Field.Name,
+					docName);
+			documentBriefcaseNew.zFillField(DocumentBriefcaseNew.Field.Body,
+					docText);
+
+			// Save and close
+			app.zPageBriefcase.zSelectWindow("Zimbra Docs");
+
+			documentBriefcaseNew.zSubmit();
+		} finally {
+			documentBriefcaseNew.zSelectWindow("Zimbra: Briefcase");
+		}
+
+		app.zPageBriefcase.zIsWindowClosed("Zimbra Docs");
+
+		// Search for created document
+		account
+				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
+						+ "<query>" + docName + "</query>" + "</SearchRequest>");
+
+		String name = account.soapSelectValue("//mail:doc", "name");
+		
+		ZAssert.assertStringContains(docName, name,
+				"Verify document name through GUI");		
 	}
 }

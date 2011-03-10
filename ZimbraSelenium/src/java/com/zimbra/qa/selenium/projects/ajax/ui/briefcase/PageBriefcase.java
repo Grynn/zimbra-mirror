@@ -168,7 +168,7 @@ public class PageBriefcase extends AbsTab {
 
 		} else if (button == Button.O_NEW_BRIEFCASE) {
 			locator = "id=" + Locators.zNewMenuIconBtn;
-		} else if (button == Button.O_NEW_DOCUMENT) {
+		} else if (button == Button.B_NEW) {
 			// Check if the button is visible
 			String attrs = sGetAttribute("xpath=(//div[@id='zb__BDLV__NEW_MENU'])@style");
 			if (!attrs.contains("visible")) {
@@ -181,9 +181,12 @@ public class PageBriefcase extends AbsTab {
 
 			zWaitForBusyOverlay();
 
-			isEditDocLoaded("Zimbra Docs", "");
+			//isEditDocLoaded("Zimbra Docs", "");
 
 			page = new DocumentBriefcaseNew(this.MyApplication);
+			
+			page.zIsActive();
+			
 			return page;
 		} else if (button == Button.B_UPLOAD_FILE) {
 			// Check if the button is visible
@@ -331,7 +334,13 @@ public class PageBriefcase extends AbsTab {
 			if (option == Button.O_NEW_BRIEFCASE) {
 				throw new HarnessException("implement me!");
 			} else if (option == Button.O_NEW_DOCUMENT) {
-				throw new HarnessException("implement me!");
+				pulldownLocator = "css=td[id$='BDLV__NEW_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+				
+				optionLocator = "css=td[id$='_title']:contains('Document')";
+
+				page = new DocumentBriefcaseNew(this.MyApplication); 
+				
+				// FALL THROUGH
 			} else if (option == Button.O_NEW_FOLDER) {
 				throw new HarnessException("implement me!");
 			} else if (option == Button.O_NEW_TAG) {
@@ -570,6 +579,35 @@ public class PageBriefcase extends AbsTab {
 		return (page);
 	}
 
+	@Override
+	public AbsPage zKeyboardShortcut(Shortcut shortcut) throws HarnessException {
+
+		if (shortcut == null)
+			throw new HarnessException("Shortcut cannot be null");
+		
+		tracer.trace("Using the keyboard, press the "+ shortcut.getKeys() +" keyboard shortcut");
+
+		AbsPage page = null;
+		
+		if ( (shortcut == Shortcut.S_NEWITEM) ||
+				(shortcut == Shortcut.S_NEWDOCUMENT) )
+		{
+			// "New Document" shortcuts result in a new document page opening
+			page = new DocumentBriefcaseNew(this.MyApplication);
+		}
+		
+		zKeyboard.zTypeCharacters(shortcut.getKeys());
+		
+		// If the app is busy, wait for it to become active
+		this.zWaitForBusyOverlay();
+		
+		// If a page is specified, wait for it to become active
+		if ( page != null ) {
+			page.zWaitForActive();	// This method throws a HarnessException if never active
+		}
+		return (page);
+	}
+	
 	public void rename(String text) throws HarnessException {
 		// ClientSessionFactory.session().selenium().getEval("var x = selenium.browserbot.findElementOrNull(\""+Locators.zFrame+"\");if(x!=null)x=x.contentWindow.document.body;if(browserVersion.isChrome){x.textContent='"+text+"';}else if(browserVersion.isIE){x.innerText='"+text+"';}");
 		logger.info("renaming to: " + text);
