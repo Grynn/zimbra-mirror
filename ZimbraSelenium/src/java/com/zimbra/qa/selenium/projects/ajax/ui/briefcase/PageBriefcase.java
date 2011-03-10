@@ -153,22 +153,7 @@ public class PageBriefcase extends AbsTab {
 		// Based on the button specified, take the appropriate action(s)
 		//
 
-		if (button == Button.B_NEW) {
-
-			// For "NEW" without a specified pulldown option, just return the
-			// default item
-			// To use "NEW" with a pulldown option, see
-			// zToolbarPressPulldown(Button, Button)
-			//
-
-			zKeyboard.zTypeCharacters(Shortcut.S_NEWITEM.getKeys());
-
-			// Not default behavior (zPressKeyboardShortcut vs. zClick)
-			return (new DocumentBriefcaseNew(this.MyApplication));
-
-		} else if (button == Button.O_NEW_BRIEFCASE) {
-			locator = "id=" + Locators.zNewMenuIconBtn;
-		} else if (button == Button.B_NEW) {
+		if (button == Button.B_NEW){
 			// Check if the button is visible
 			String attrs = sGetAttribute("xpath=(//div[@id='zb__BDLV__NEW_MENU'])@style");
 			if (!attrs.contains("visible")) {
