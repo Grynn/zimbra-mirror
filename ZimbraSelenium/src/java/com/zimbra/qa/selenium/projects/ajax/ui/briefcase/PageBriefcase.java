@@ -153,7 +153,7 @@ public class PageBriefcase extends AbsTab {
 		// Based on the button specified, take the appropriate action(s)
 		//
 
-		if (button == Button.B_NEW){
+		if (button == Button.B_NEW) {
 			// Check if the button is visible
 			String attrs = sGetAttribute("xpath=(//div[@id='zb__BDLV__NEW_MENU'])@style");
 			if (!attrs.contains("visible")) {
@@ -166,12 +166,12 @@ public class PageBriefcase extends AbsTab {
 
 			zWaitForBusyOverlay();
 
-			//isEditDocLoaded("Zimbra Docs", "");
+			// isEditDocLoaded("Zimbra Docs", "");
 
 			page = new DocumentBriefcaseNew(this.MyApplication);
-			
+
 			page.zIsActive();
-			
+
 			return page;
 		} else if (button == Button.B_UPLOAD_FILE) {
 			// Check if the button is visible
@@ -320,11 +320,11 @@ public class PageBriefcase extends AbsTab {
 				throw new HarnessException("implement me!");
 			} else if (option == Button.O_NEW_DOCUMENT) {
 				pulldownLocator = "css=td[id$='BDLV__NEW_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
-				
+
 				optionLocator = "css=td[id$='_title']:contains('Document')";
 
-				page = new DocumentBriefcaseNew(this.MyApplication); 
-				
+				page = new DocumentBriefcaseNew(this.MyApplication);
+
 				// FALL THROUGH
 			} else if (option == Button.O_NEW_FOLDER) {
 				throw new HarnessException("implement me!");
@@ -569,30 +569,39 @@ public class PageBriefcase extends AbsTab {
 
 		if (shortcut == null)
 			throw new HarnessException("Shortcut cannot be null");
-		
-		tracer.trace("Using the keyboard, press the "+ shortcut.getKeys() +" keyboard shortcut");
+
+		tracer.trace("Using the keyboard, press the " + shortcut.getKeys()
+				+ " keyboard shortcut");
 
 		AbsPage page = null;
-		
-		if ( (shortcut == Shortcut.S_NEWITEM) ||
-				(shortcut == Shortcut.S_NEWDOCUMENT) )
-		{
+
+		if ((shortcut == Shortcut.S_NEWITEM)
+				|| (shortcut == Shortcut.S_NEWDOCUMENT)) {
 			// "New Document" shortcuts result in a new document page opening
 			page = new DocumentBriefcaseNew(this.MyApplication);
 		}
-		
-		zKeyboard.zTypeCharacters(shortcut.getKeys());
-		
+
+		// zKeyboard.zTypeCharacters(shortcut.getKeys());
+		sGetEval("if(window.KeyEvent)"
+				+ "{var evObj = document.createEvent('KeyEvents');"
+				+ "evObj.initKeyEvent( 'keydown', true, true, window, false, false, false, false, 78, 0 );} "
+				+ "else {var evObj = document.createEvent('HTMLEvents');"
+				+ "evObj.initEvent( 'keydown', true, true, window, 1 );"
+				+ "evObj.keyCode = 78;}"
+				+ "var x = selenium.browserbot.findElementOrNull('"
+				+ "css=html>body" + "'); "
+				+ "x.blur(); x.focus(); x.dispatchEvent(evObj);");
+
 		// If the app is busy, wait for it to become active
 		this.zWaitForBusyOverlay();
-		
+
 		// If a page is specified, wait for it to become active
-		if ( page != null ) {
-			page.zWaitForActive();	// This method throws a HarnessException if never active
+		if (page != null) {
+			page.zWaitForActive(); // throws a HarnessException if never active
 		}
 		return (page);
 	}
-	
+
 	public void rename(String text) throws HarnessException {
 		// ClientSessionFactory.session().selenium().getEval("var x = selenium.browserbot.findElementOrNull(\""+Locators.zFrame+"\");if(x!=null)x=x.contentWindow.document.body;if(browserVersion.isChrome){x.textContent='"+text+"';}else if(browserVersion.isIE){x.innerText='"+text+"';}");
 		logger.info("renaming to: " + text);
@@ -630,7 +639,8 @@ public class PageBriefcase extends AbsTab {
 
 		zSelectWindow(windowName);
 
-		zWaitForElementPresent(Locators.zFileBodyField + ":contains('" + text + "')");
+		zWaitForElementPresent(Locators.zFileBodyField + ":contains('" + text
+				+ "')");
 	}
 
 	public boolean isPresent(String itemName) throws HarnessException {
