@@ -41,7 +41,7 @@ ZmErrorDialog = function(parent, msgs) {
 
 	var reportButton = new DwtDialog_ButtonDescriptor(ZmErrorDialog.REPORT_BUTTON, msgs.report, DwtDialog.ALIGN_LEFT);
 	var detailButton = new DwtDialog_ButtonDescriptor(ZmErrorDialog.DETAIL_BUTTON, msgs.showDetails, DwtDialog.ALIGN_LEFT);
-	DwtMessageDialog.call(this, {parent:parent, extraButtons:[reportButton, detailButton]});
+	DwtMessageDialog.call(this, {parent:parent, extraButtons:[reportButton, detailButton], id:"ErrorDialog"});
 
 	this.registerCallback(ZmErrorDialog.REPORT_BUTTON, this._reportCallback, this);
 	this.registerCallback(ZmErrorDialog.DETAIL_BUTTON, this.showDetail, this);
@@ -69,8 +69,8 @@ function() {
 // Consts
 //
 
-ZmErrorDialog.REPORT_BUTTON = ++DwtDialog.LAST_BUTTON;
-ZmErrorDialog.DETAIL_BUTTON = ++DwtDialog.LAST_BUTTON;
+ZmErrorDialog.REPORT_BUTTON = "Report";
+ZmErrorDialog.DETAIL_BUTTON = "Detail";
 ZmErrorDialog.DEFAULT_REPORT_URL = "//www.zimbra.com/e/";
 
 //
