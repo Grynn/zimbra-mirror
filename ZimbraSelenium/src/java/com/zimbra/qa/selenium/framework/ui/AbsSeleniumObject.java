@@ -219,13 +219,16 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.waitForPageToLoad()
 	 */
 	public void sWaitForPageToLoad() {
+		String timeout = ZimbraSeleniumProperties.getStringProperty("selenium.maxpageload.msec", "10000");
+		
 		try {
-			String timeout = "10000";
+
 			// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is
 			// removed
+			logger.info("waitForPageToLoad(" + timeout + ")");
 			((DefaultSelenium) ClientSessionFactory.session().selenium())
 					.waitForPageToLoad(timeout);
-			logger.info("waitForPageToLoad(" + timeout + ")");
+			
 		} catch (Exception ex) {
 			logger.warn("sWaitForPageToLoad() error", ex);
 		}

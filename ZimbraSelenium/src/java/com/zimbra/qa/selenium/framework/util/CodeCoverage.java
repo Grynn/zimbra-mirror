@@ -11,6 +11,7 @@ import net.sf.json.*;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import com.ibm.staf.STAFResult;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 
 public class CodeCoverage {
@@ -26,7 +27,6 @@ public class CodeCoverage {
 	 * The cumulative code coverage object
 	 */
 	protected JSONObject cumulativeCoverage = null;
-	
 	
 	/**
 	 * Set the output folder to write the coverage report
@@ -123,9 +123,21 @@ public class CodeCoverage {
 
 			// Second time in, update the cumulative data
 
-			// Get the latest coverage
-			logger.info("getting updates to coverage object");
-			JSONObject jsonCoverage = (JSONObject) JSONSerializer.toJSON(ClientSessionFactory.session().selenium().getEval(COVERAGE_SCRIPT));
+			JSONObject jsonCoverage = null;
+			try {
+				
+				// Get the latest coverage
+				logger.info("getting updates to coverage object");
+				jsonCoverage = (JSONObject) JSONSerializer.toJSON(ClientSessionFactory.session().selenium().getEval(COVERAGE_SCRIPT));
+
+			} catch (JSONException e) {
+				
+				logger.error("Unable to calculate code coverage.  Disabling code coverage", e);
+				logger.error(ClientSessionFactory.session().selenium().getEval(COVERAGE_SCRIPT));
+				Enabled = false;
+				throw e;
+
+			}
 
 			Iterator<?> iterator = jsonCoverage.keys();
 			while (iterator.hasNext()) {
@@ -149,12 +161,9 @@ public class CodeCoverage {
 				}
 
 			}
-		} catch (JSONException e) {
-			logger.error("Unable to calculate code coverage.  Disabling code coverage", e);
-			Enabled = false;
+		} finally {
+			updateTotalDuration(start, new Date());
 		}
-		
-		updateTotalDuration(start, new Date());
 	}
 	
 	private JSONArray updateCoverage(JSONArray oCoverage, JSONArray nCoverage) {
@@ -376,12 +385,46 @@ public class CodeCoverage {
 		}
 	}
 	
+	private static class StafFSCommand extends StafAbstract {
+		public StafFSCommand(String server) {
+			StafServer = server;
+			StafService = "FS";
+		}
+		public boolean execute(String command) throws HarnessException {
+			StafParms = command;
+			return (super.execute());
+		}
+	}
+	
+	/**
+	 * Check if jscoverage is available on the server
+	 * 
+	 */
+	public void instrumentServerCheck() throws HarnessException {
+		
+		if ( !Enabled ) {
+			logger.info("instrumentServerCheck(): Code Coverage reporting is disabled");
+			return;
+
+		}
+		
+		StafFSCommand staf = new StafFSCommand(ZimbraSeleniumProperties.getStringProperty("server.host"));
+		staf.execute("QUERY ENTRY "+ Tool);
+		if ( staf.StafResult.rc == STAFResult.DoesNotExist ) {
+			Enabled = false;
+			throw new HarnessException(Tool +" does not exist!");
+		}	
+
+
+	}
+	
 	/**
 	 * Instrument the code on the Zimbra server
 	 * <p>
 	 * STAF must be installed on the client and server.  Code will be instrumented and the server restarted.
+	 * @throws HarnessException 
 	 */
-	public void instrumentServer() {
+	public void instrumentServer() throws HarnessException {
 		
 		if ( !Enabled ) {
 			logger.info("instrumentServer(): Code Coverage reporting is disabled");
@@ -396,13 +439,16 @@ public class CodeCoverage {
 			return;
 		}
 		
+		// Check that JScoverage is installed correctly
+		instrumentServerCheck();
+		
 		WebappsZimbraOriginal		= "/opt/zimbra/jetty/webapps/zimbra" + ZimbraSeleniumProperties.getUniqueString();
 		WebappsZimbraInstrumented	= "/opt/zimbra/jetty/webapps/instrumented" + ZimbraSeleniumProperties.getUniqueString();
 		
 		try {
 			StafExecuteCommand staf = new StafExecuteCommand(ZimbraSeleniumProperties.getStringProperty("server.host"));
 			staf.execute("zmmailboxdctl stop");
-			staf.execute("/usr/local/bin/jscoverage --no-instrument=help/ "+ WebappsZimbra +" "+ WebappsZimbraInstrumented);
+			staf.execute(Tool +" --no-instrument=help/ "+ WebappsZimbra +" "+ WebappsZimbraInstrumented);
 			staf.execute("mv "+ WebappsZimbra +" "+ WebappsZimbraOriginal);
 			staf.execute("mv "+ WebappsZimbraInstrumented +" "+ WebappsZimbra);
 			staf.execute("zmmailboxdctl start");
@@ -414,7 +460,12 @@ public class CodeCoverage {
 		updateTotalDuration(start, new Date());
 	}
 	
-	public void instrumentServerUndo() {
+	/**
+	 * Undo the instrumented code
+	 * <p>
+	 * STAF must be installed on the client and server.  Code will be instrumented and the server restarted.
+	 */
+	public void instrumentServerUndo() throws HarnessException {
 		
 		if ( !Enabled ) {
 			logger.info("instrumentServerUndo(): Code Coverage reporting is disabled");
@@ -462,6 +513,7 @@ public class CodeCoverage {
 	}
 
 	protected boolean Enabled = false;
+	protected String Tool = "/usr/local/bin/jscoverage";
 	protected boolean EnableSourceCodeReport = false;
 	protected String CoverageServer = null;
 	
@@ -493,8 +545,14 @@ public class CodeCoverage {
 	private CodeCoverage() {
 		logger.info("new "+ CodeCoverage.class.getCanonicalName());
 		Enabled = ZimbraSeleniumProperties.getStringProperty("coverage.enabled", "false").equalsIgnoreCase("true");
-		CoverageServer = ZimbraSeleniumProperties.getStringProperty("coverage.server", "zqa-060.eng.vmware.com");
-		EnableSourceCodeReport = ZimbraSeleniumProperties.getStringProperty("coverage.reportsource", "false").equalsIgnoreCase("true");
+		
+		if ( Enabled ) {
+			Tool = ZimbraSeleniumProperties.getStringProperty("coverage.tool", "/usr/local/bin/jscoverage");
+			CoverageServer = ZimbraSeleniumProperties.getStringProperty("coverage.server", "zqa-060.eng.vmware.com");
+			EnableSourceCodeReport = ZimbraSeleniumProperties.getStringProperty("coverage.reportsource", "false").equalsIgnoreCase("true");
+			String timeout = ZimbraSeleniumProperties.getStringProperty("coverage.maxpageload.msec", "10000");
+			ZimbraSeleniumProperties.setStringProperty("selenium.maxpageload.msec", timeout);
+		}
 	}
 
 	public static CodeCoverage getInstance() {
