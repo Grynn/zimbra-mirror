@@ -1,6 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -39,6 +38,7 @@ visibility:hidden; }
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
 
 </head>
+
 <body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
@@ -83,80 +83,89 @@ else
 //-->
 //]]></script>
 <h1>Configuring IMAP</h1>
-<p>You can enable the IMAP service and set the following from the Global Settings, IMAP tab. You can also enable the IMAP service from a Server's IMAP tab. The server settings overrule the global settings.</p>
+<p>You can enable the IMAP service and set the following from the Global 
+ Settings, IMAP tab. You can also enable the IMAP service from a Server's 
+ IMAP tab. The server settings overrule the global settings.</p>
 <p>&#160;</p>
-<table style="border-top-style: Solid; border-bottom-style: Solid; border-top-width: 4px; border-bottom-width: 4px; vertical-align: Center;" cellspacing="6" width="80%">
-<col style="width: 34.164%;" />
-<col style="width: 65.836%;" />
-<tr style="vertical-align: center;">
-<td style="width: 34.164%; padding-right: 10px; padding-left: 10px;">
-<p style="font-weight: bold;">Enable IMAP service</p>
-</td>
-<td style="width: 65.836%; padding-right: 10px; padding-left: 10px;">
-<p>Allows IMAP connection to the Zimbra servers.</p>
-</td>
-</tr>
-<tr style="vertical-align: center;">
-<td style="width: 34.164%; padding-right: 10px; padding-left: 10px;">
-<p style="font-weight: bold;">Enable SSL for IMAP service</p>
-</td>
-<td style="width: 65.836%; padding-right: 10px; padding-left: 10px;">
-<p>Enables encrypted connections. &#160;(https)</p>
-</td>
-</tr>
-<tr style="vertical-align: center;">
-<td style="width: 34.164%; padding-right: 10px; padding-left: 10px;">
-<p style="font-weight: bold;">Enable clear text login</p>
-</td>
-<td style="width: 65.836%; padding-right: 10px; padding-left: 10px;">
-<p>Enables connections that are not encrypted. &#160;(http)</p>
-<p>&#160;</p>
-</td>
-</tr>
-<tr style="vertical-align: center;">
-<td style="width: 34.164%; padding-right: 10px; padding-left: 10px;">
-<p style="font-weight: bold;">IMAP port number</p>
-</td>
-<td style="width: 65.836%; padding-right: 10px; padding-left: 10px;">
-<p>The default port number for http connections is 143. If you use IMAP/POP proxy, the port number is 7143.</p>
-<p>&#160;</p>
-</td>
-</tr>
-<tr style="vertical-align: center;">
-<td style="width: 34.164%; padding-right: 10px; padding-left: 10px;">
-<p style="font-weight: bold;">IMAP SSL port number</p>
-</td>
-<td style="width: 65.836%; padding-right: 10px; padding-left: 10px;">
-<p>The default port number for https connections is 993. If you use IMAP/POP proxy, the port number is 7993.</p>
-<p>&#160;</p>
-</td>
-</tr>
-<tr style="vertical-align: center;">
-<td style="width: 34.164%; padding-right: 10px; padding-left: 10px;">
-<p style="font-weight: bold;">IMAP proxy port number</p>
-</td>
-<td style="width: 65.836%; padding-right: 10px; padding-left: 10px;">
-<p>Only configured if IMAP/POP proxy is set up. The required port number is 143.</p>
-<p>&#160;</p>
-</td>
-</tr>
-<tr style="vertical-align: center;">
-<td style="width: 34.164%; padding-right: 10px; padding-left: 10px;">
-<p style="font-weight: bold;">IMAP SSL proxy port number</p>
-</td>
-<td style="width: 65.836%; padding-right: 10px; padding-left: 10px;">
-<p>Only configured if IMAP/POP proxy is set up. The required port number is 993.</p>
-<p>&#160;</p>
-</td>
-</tr>
-<tr style="vertical-align: center;">
-<td style="width: 34.164%; padding-right: 10px; padding-left: 10px;">
-<p style="font-weight: bold;">Number of threads</p>
-</td>
-<td style="width: 65.836%; padding-right: 10px; padding-left: 10px;">
-<p>Number of threads that should be available. The global setting is not set. The server default setting is 200.</p>
-</td>
-</tr>
+<table style="border-top-style: Solid; border-bottom-style: Solid; border-top-width: 4px; 
+		 border-bottom-width: 4px; vertical-align: Center;" cellspacing="6" 
+		 width="80%">
+	<col style="width: 34.164%;" />
+	<col style="width: 65.836%;" />
+	<tr style="vertical-align: center;">
+		<td style="width: 34.164%; padding-right: 10px; padding-left: 10px; 
+			 vertical-align: Top; border-bottom-style: Solid; border-bottom-width: 1px;"><p 
+			 style="font-weight: bold;">Enable IMAP service</p></td>
+		<td style="width: 65.836%; padding-right: 10px; padding-left: 10px; 
+			 vertical-align: Top; border-bottom-style: Solid; border-bottom-width: 1px;"><p>Allows 
+		 IMAP connection to the Zimbra servers.</p></td>
+	</tr>
+	<tr style="vertical-align: center;">
+		<td style="width: 34.164%; padding-right: 10px; padding-left: 10px; 
+			 vertical-align: Top; border-bottom-style: Solid; border-bottom-width: 1px;"><p 
+			 style="font-weight: bold;">Enable SSL for IMAP service</p></td>
+		<td style="width: 65.836%; padding-right: 10px; padding-left: 10px; 
+			 vertical-align: Top; border-bottom-style: Solid; border-bottom-width: 1px;"><p>Enables 
+		 encrypted connections. &#160;(https)</p></td>
+	</tr>
+	<tr style="vertical-align: center;">
+		<td style="width: 34.164%; padding-right: 10px; padding-left: 10px; 
+			 vertical-align: Top; border-bottom-style: Solid; border-bottom-width: 1px;"><p 
+			 style="font-weight: bold;">Enable clear text login</p></td>
+		<td style="width: 65.836%; padding-right: 10px; padding-left: 10px; 
+			 vertical-align: Top; border-bottom-style: Solid; border-bottom-width: 1px;"><p>Enables 
+		 connections that are not encrypted. &#160;(http)</p>
+		<p>&#160;</p></td>
+	</tr>
+	<tr style="vertical-align: center;">
+		<td style="width: 34.164%; padding-right: 10px; padding-left: 10px; 
+			 vertical-align: Top; border-bottom-style: Solid; border-bottom-width: 1px;"><p 
+			 style="font-weight: bold;">IMAP port number</p></td>
+		<td style="width: 65.836%; padding-right: 10px; padding-left: 10px; 
+			 vertical-align: Top; border-bottom-style: Solid; border-bottom-width: 1px;"><p>The 
+		 default port number for http connections is 143. If you use IMAP/POP 
+		 proxy, the port number is 7143.</p>
+		<p>&#160;</p></td>
+	</tr>
+	<tr style="vertical-align: center;">
+		<td style="width: 34.164%; padding-right: 10px; padding-left: 10px; 
+			 vertical-align: Top; border-bottom-style: Solid; border-bottom-width: 1px;"><p 
+			 style="font-weight: bold;">IMAP SSL port number</p></td>
+		<td style="width: 65.836%; padding-right: 10px; padding-left: 10px; 
+			 vertical-align: Top; border-bottom-style: Solid; border-bottom-width: 1px;"><p>The 
+		 default port number for https connections is 993. If you use IMAP/POP 
+		 proxy, the port number is 7993.</p>
+		<p>&#160;</p></td>
+	</tr>
+	<tr style="vertical-align: center;">
+		<td style="width: 34.164%; padding-right: 10px; padding-left: 10px; 
+			 vertical-align: Top; border-bottom-style: Solid; border-bottom-width: 1px;"><p 
+			 style="font-weight: bold;">IMAP proxy port number</p></td>
+		<td style="width: 65.836%; padding-right: 10px; padding-left: 10px; 
+			 vertical-align: Top; border-bottom-style: Solid; border-bottom-width: 1px;"><p>Only 
+		 configured if IMAP/POP proxy is set up. The required port number 
+		 is 143.</p>
+		<p>&#160;</p></td>
+	</tr>
+	<tr style="vertical-align: center;">
+		<td style="width: 34.164%; padding-right: 10px; padding-left: 10px; 
+			 vertical-align: Top; border-bottom-style: Solid; border-bottom-width: 1px;"><p 
+			 style="font-weight: bold;">IMAP SSL proxy port number</p></td>
+		<td style="width: 65.836%; padding-right: 10px; padding-left: 10px; 
+			 vertical-align: Top; border-bottom-style: Solid; border-bottom-width: 1px;"><p>Only 
+		 configured if IMAP/POP proxy is set up. The required port number 
+		 is 993.</p>
+		<p>&#160;</p></td>
+	</tr>
+	<tr style="vertical-align: center;">
+		<td style="width: 34.164%; padding-right: 10px; padding-left: 10px; 
+			 vertical-align: Top; border-bottom-style: Solid; border-bottom-width: 1px;"><p 
+			 style="font-weight: bold;">Number of threads</p></td>
+		<td style="width: 65.836%; padding-right: 10px; padding-left: 10px; 
+			 vertical-align: Top; border-bottom-style: Solid; border-bottom-width: 1px;"><p>Number 
+		 of threads that should be available. The global setting is not 
+		 set. The server default setting is 200.</p></td>
+	</tr>
 </table>
 <p>&#160;</p>
 <p>&#160;</p>

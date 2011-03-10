@@ -84,8 +84,9 @@ else
 //]]></script>
 <h1>Volume Management</h1>
 <p>The Server, Volumes tab can be used to manage storage volumes on your 
- Zimbra Mailbox server. When Zimbra Collaboration Suite is installed, one 
- index volume and one message volume are configured on each mailbox server.</p>
+ Zimbra Mailbox server. When Zimbra Collaboration Server is installed, 
+ one index volume and one message volume are configured on each mailbox 
+ server.</p>
 <ul type="disc">
 	<li class="p"><p>The Index volume is /opt/ 
 	 zimbra/index</p></li>
@@ -117,52 +118,72 @@ else
 <ul type="disc">
 	<li class="p"><p style="font-weight: bold;">Manage Volumes section</p></li>
 	<ul type="disc">
-		<li style="font-size: 11pt;" type="circle"><p><span style="font-weight: bold;"><b>Volume 
+		<li style="font-size: 10pt;" type="circle"><p><span style="font-weight: bold;"><b>Volume 
 		 Name</b></span><span>. The name of the volume. &#160;The initial volumes 
 		 are named index1 and message1.</span></p></li>
-		<li style="font-size: 11pt;" type="circle"><p><span style="font-weight: bold;"><b>Volume 
+		<li style="font-size: 10pt;" type="circle"><p><span style="font-weight: bold;"><b>Volume 
 		 Root Path</b></span><span>. The location in the file system where 
 		 volume data is stored.</span></p></li>
-		<li style="font-size: 11pt;" type="circle"><p><span style="font-weight: bold;"><b>Volume 
+		<li style="font-size: 10pt;" type="circle"><p><span style="font-weight: bold;"><b>Volume 
 		 Type</b></span><span>. The volume type is either Index or Primary 
 		 Message, Secondary Message.</span></p></li>
-		<li style="font-size: 11pt;" type="circle"><p><span style="font-weight: bold;"><b>Compress 
+		<li style="font-size: 10pt;" type="circle"><p><span style="font-weight: bold;"><b>Compress 
 		 Blobs</b></span><span>. When this box is checked, message blobs whose 
 		 size is above the compression threshold are compressed. If Blob 
 		 compression is turned on, the disk space used is decreased.</span><span 
 		 style="font-weight: bold;"><b>&#160;Note</b></span><span>: &#160;Turning 
 		 on blob compression will also increase memory requirements for 
 		 the server.</span></p></li>
-		<li style="font-size: 11pt;" type="circle"><p><span style="font-weight: bold;"><b>Compression 
+		<li style="font-size: 10pt;" type="circle"><p><span style="font-weight: bold;"><b>Compression 
 		 Threshold</b></span><span>. Messages larger than the threshold are 
 		 compressed. The default threshold is 4096 bytes.</span></p></li>
-		<li style="font-size: 11pt;" type="circle"><p><span style="font-weight: bold;"><b>Current</b></span><span>. 
+		<li style="font-size: 10pt;" type="circle"><p><span style="font-weight: bold;"><b>Current</b></span><span>. 
 		 A check mark is displayed next to volumes that are current.</span></p></li>
-		<li style="font-size: 11pt;" type="circle"><p><span>Assign Current 
+		<li style="font-size: 10pt;" type="circle"><p><span>Assign Current 
 		 Volumes. This can be either the message volume, secondary message 
-		 volume, or the index volume.</span></p></li>
-		<li class="p" style="font-size: 11pt;" type="circle"><p>HSM Policy</p></li>
+		 volume, or the index volume.</span><span style="font-weight: bold;"><b> 
+		 section</b></span></p></li>
 	</ul>
+	<li class="p"><p style="font-weight: bold;">Assign Current Volumes 
+	 section</p></li>
+	<ul type="circle">
+		<li class="p"><p style="font-weight: bold;">Current primary message 
+		 volume<span style="font-weight: normal;">. The current primary 
+		 volume name. New messages are saved in this current message volume.</span></p></li>
+		<li class="p"><p style="font-weight: bold;">Current secondary message 
+		 volume<span style="font-weight: normal;">. The current secondary 
+		 message volume name. Older data is stored on the secondary message 
+		 volume.</span></p></li>
+		<li class="p"><p style="font-weight: bold;">Current index volume<span 
+		 style="font-weight: normal;">. The current index volume name. 
+		 As volumes become full, you can create a new current index volume 
+		 for new accounts</span></p></li>
+	</ul>
+</ul>
+<ul type="disc">
+	<li class="p"><p style="font-weight: bold;">HSM Policy section</p></li>
 </ul>
 <p style="margin-left: 40px;">To manage your disk utilization, you can 
  implement a global HSM policy 
  or a different HSM policy for each mailbox server.</p>
 <ul type="circle">
-	<li><p style="margin-left: 40px;"><span style="font-weight: bold;"><b>Types 
-	 of items to move</b></span>. You can select messages, tasks, appointments, 
-	 contacts, briefcase items to move from a primary volume to the current 
-	 secondary volume based.</p></li>
-	<li><p style="margin-left: 40px;"><span style="font-weight: bold;"><b>Move 
-	 items older than.</b></span> &#160;The default global HSM policy is to 
-	 move messages and files more than 30 days old to the secondary volume. 
-	 &#160;The age of items to be moved can be specified by number of days, 
-	 months, weeks, hours, or minutes.</p></li>
-	<li><p style="margin-left: 40px;"><span style="font-weight: bold;"><b>Policy 
-	 String</b></span>. You can use the search query language to set up other 
-	 HSM policies. For example, if you wanted all messages marked as junk 
-	 to be included in messages moved to the current secondary volume, 
-	 you would add the following to the policy: <span style="font-weight: bold;"><b>message:in:junk 
-	 before:-[x] days</b></span>.</p></li>
+	<ul type="circle">
+		<li style="font-size: 10pt;"><p><span style="font-weight: bold;"><b>Types 
+		 of items to move</b></span>. You can select messages, tasks, appointments, 
+		 contacts, briefcase items to move from a primary volume to the 
+		 current secondary volume based.</p></li>
+		<li style="font-size: 10pt;"><p><span style="font-weight: bold;"><b>Move 
+		 items older than.</b></span> &#160;The default global HSM policy is 
+		 to move messages and files more than 30 days old to the secondary 
+		 volume. &#160;The age of items to be moved can be specified by 
+		 number of days, months, weeks, hours, or minutes.</p></li>
+		<li style="font-size: 10pt;" type="circle"><p><span style="font-weight: bold;"><b>Policy 
+		 String</b></span>. You can use the search query language to set up 
+		 other HSM policies. For example, if you wanted all messages marked 
+		 as junk to be included in messages moved to the current secondary 
+		 volume, you would add the following to the policy: <span style="font-weight: bold;"><b>message:in:junk 
+		 before:-[x] days</b></span>.</p></li>
+	</ul>
 </ul>
 <p>&#160;</p>
 

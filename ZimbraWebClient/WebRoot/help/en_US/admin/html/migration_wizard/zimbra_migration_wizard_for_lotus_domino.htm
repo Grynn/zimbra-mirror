@@ -1,6 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -39,6 +38,7 @@ visibility:hidden; }
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
 
 </head>
+
 <body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
@@ -54,7 +54,7 @@ if (window.gbWhTopic)
 
 	if (window.addTocInfo)
 	{
-	addTocInfo("Migration Wizards\nZimbra Migration Wizard for Lotus Domino");
+	addTocInfo("Migrating Accounts to ZCS\nZimbra Migration Wizard for Lotus Domino");
 addButton("show",BTN_TEXT,"Show TOC","","","","",0,0,"","","");
 
 	}
@@ -83,86 +83,83 @@ else
 //-->
 //]]></script>
 <h1>Zimbra Migration Wizard for Lotus Domino</h1>
-<p>The Zimbra Migration Wizard for Lotus Domino is used to migrate Domino server email accounts to the Zimbra server and to import the email, calendars and address book information for selected Domino users. The import process replicates the user's Lotus Domino folder hierarchy, importing email messages, calendar, and contacts on the Domino server. Keywords are converted to tags in ZCS.</p>
+<p>The Zimbra Migration Wizard for Lotus Domino is used to migrate Domino 
+ server email accounts to the Zimbra server and to import the email, calendars 
+ and address book information for selected Domino users. The import process 
+ replicates the user's Lotus Domino folder hierarchy, importing email messages, 
+ calendar, and contacts on the Domino server. Keywords are converted to 
+ tags in ZCS.</p>
 <ul type="disc">
-<li class="p">
-<p>Lotus Notes 6.0 or later must be installed on the Microsoft Windows computer you use to run the migration.</p>
-</li>
-<li class="p">
-<p>The system PATH variable should contain a path to the directory that includes the 
-nnotes.dll</p>
-</li>
-<li class="p">
-<p>The Icppn30.dll provided with the migrator should be in the current working directory or in the System32 directory.</p>
-</li>
-<li class="p">
-<p>You must supply the ID file that has full administrative privileges on mailboxes to be migrated.</p>
-</li>
+	<li class="p"><p>Lotus Notes 6.0 or later must be installed on the 
+	 Microsoft Windows computer you use to run the migration.</p></li>
+	<li class="p"><p>The system PATH variable should contain a path to 
+	 the directory that includes the nnotes.dll</p></li>
+	<li class="p"><p>The Icppn30.dll provided with the migrator should 
+	 be in the current working directory or in the System32 directory.</p></li>
+	<li class="p"><p>You must supply the ID file that has full administrative 
+	 privileges on mailboxes to be migrated.</p></li>
 </ul>
-<p>Read the ZCS migration guide for Lotus Domino migration for more information. You can find this on the administration console Help Desk page.</p>
+<p>Read the Migration Wizard Guide for Domino for more information. You 
+ can find this on the administration console Help Desk page.</p>
 <h2>Before you begin</h2>
-<p>The Migration Wizard asks questions in a series of dialog boxes about how to set up the new accounts. Before you start, you should:</p>
+<p>The Migration Wizard asks questions in a series of dialog boxes about 
+ how to set up the new accounts. Before you start, you should:</p>
 <ul type="disc">
-<li class="p">
-<p>Determine which domain users' accounts should migrate to. You can import to one domain at a time.</p>
-</li>
-<li class="p">
-<p>Decide whether to migrate individual accounts or large groups of accounts at one time.</p>
-</li>
-<li class="p">
-<p>Change the mail relay information to point to the Zimbra server instead of the Domino server. This will prevent any lost mail while the files are being imported.</p>
-</li>
+	<li class="p"><p>Determine which domain users' accounts should migrate 
+	 to. You can import to one domain at a time.</p></li>
+	<li class="p"><p>Decide whether to migrate individual accounts or large 
+	 groups of accounts at one time.</p></li>
+	<li class="p"><p>Change the mail relay information to point to the 
+	 Zimbra server instead of the Domino server. This will prevent any 
+	 lost mail while the files are being imported.</p></li>
 </ul>
 <ul>
-<li class="p-note">
-<p class="note">The local part of the user's SMTP address in Lotus Domino becomes the first portion of the email address on the Zimbra server.</p>
-</li>
+	<li class="p-note"><p class="note">The local part of the user's SMTP 
+	 address in Lotus Domino becomes the first portion of the email address 
+	 on the Zimbra server.</p></li>
 </ul>
-<p>You can specify if email in the <span style="font-style: italic; font-weight: bold;"><i><b>Junk</b></i></span> folder or <span style="font-weight: bold; font-style: italic;"><i><b>Trash</b></i></span> &#160;folder are imported, set a latest receive date for old email to be imported, and select that the new email address replace the old email address in all meetings organized by the user.</p>
-<p>By default, messages larger than 10 MB will not be imported. The message size includes the message and attachments. If the message is larger than 10 MB, a warning is logged to Migration Wizard log file, which can be reviewed from the Import Complete dialog when the migration is complete.</p>
+<p>You can specify if email in the <span style="font-style: italic; font-weight: bold;"><i><b>Junk</b></i></span> 
+ folder or <span style="font-weight: bold; font-style: italic;"><i><b>Trash</b></i></span> 
+ &#160;folder are imported, set a latest receive date for old email to 
+ be imported, and select that the new email address replace the old email 
+ address in all meetings organized by the user.</p>
+<p>By default, messages larger than 10 MB will not be imported. The message 
+ size includes the message and attachments. If the message is larger than 
+ 10 MB, a warning is logged to Migration Wizard log file, which can be 
+ reviewed from the Import Complete dialog when the migration is complete.</p>
 <h2>How to Migrate Accounts</h2>
 <ol type="1">
-<li class="p">
-<p>Click the Migration Wizard icon on the administration console to download executable to your computer.</p>
-</li>
-<li class="p">
-<p>Go to the directory where the file is saved. Click the <span style="font-weight: bold;"><b>Migration 
-Wizard.exe</b></span>, to open the wizard. The Welcome dialog appears.</p>
-</li>
-<li class="p">
-<p>Follow the dialogs. Below is the dialog sequence.</p>
-</li>
+	<li class="p"><p>Click the Migration Wizard icon on the administration 
+	 console to download executable to your computer.</p></li>
+	<li class="p"><p>Go to the directory where the file is saved. Click 
+	 the <span style="font-weight: bold;"><b>Migration Wizard.exe</b></span>, 
+	 to open the wizard. The Welcome dialog appears.</p></li>
+	<li class="p"><p>Follow the dialogs. Below is the dialog sequence.</p></li>
 </ol>
 <ul type="disc">
-<li type="disc" class="p">
-<p><span style="font-weight: bold;"><b><a href="mw_import_destination.htm" target="_blank">Import Destination</a></b></span>. Enter the host name and administration user name and password.</p>
-</li>
-<li type="disc" class="p">
-<p style="margin-left: 0px;"><span style="font-weight: bold;"><b><a href="mw_destination_domain.htm" target="_blank">Destination Domain</a></b></span>. Select the Zimbra domain name.</p>
-</li>
-<li type="disc" class="p">
-<p style="margin-left: 0px;"><a href="mw_domino_ldap_server_information.htm" style="font-weight: bold;">LDAP Server Information</a>. Enter information to connect to the LDAP server.</p>
-</li>
-<li type="disc" class="p">
-<p style="margin-left: 0px;"><span style="font-weight: bold;"><b><a href="import_source_for_dominos.htm">Import Source</a></b></span>. Enter the Domino Server name, the Admin ID file path, password, Notes 
-INI path. If you are migrating Private Folders, specify the path to the directory containing ID files of all the Lotus Domino users to be migrated and specify the path to the file containing passwords for these ID files.</p>
-</li>
-<li type="disc" class="p">
-<p style="margin-left: 0px;"><span style="font-weight: bold;"><b><a href="mw_domino_source_and_destination_mailboxes.htm">Source and Destination Mailboxes</a></b></span>. Define which users should be migrated.</p>
-</li>
-<li type="disc" class="p">
-<p style="margin-left: 0px;"><span style="font-weight: bold;"><b><a href="mw_target_account_verification.htm" target="_blank">Target Account Verification</a></b></span>. Displays the number of accounts that exist and the number of accounts that do not exist on the Zimbra server.</p>
-</li>
-<li type="disc" class="p">
-<p style="margin-left: 0px;"><span style="font-weight: bold;"><b><a href="mw_account_provisioning.htm" target="_blank">Account Provisioning</a></b></span>. All accounts that do not exist are shown in the <span style="font-weight: bold;"><b>
-Unprovisioned Accounts</b></span> list box.</p>
-</li>
-<li type="disc" class="p">
-<p style="margin-left: 0px;"><span style="font-weight: bold;"><b><a href="mw_import_options.htm" target="_blank">Import Options</a></b></span>. Configure whether to import junk, deleted mail, &#160;and other older mail and set the number of mailboxes to import simultaneously.</p>
-</li>
-<li type="disc" class="p">
-<p style="margin-left: 0px;"><span style="font-weight: bold;"><b><a href="mw_import_in_progress.htm" target="_blank">Import In Progress</a></b></span>. When the import is complete, errors or warnings are displayed.</p>
-</li>
+	<li class="p" type="disc"><p><span style="font-weight: bold;"><b><a href="mw_import_destination.htm" target="_blank">Import Destination</a></b></span>. Enter the host name 
+	 and administration user name and password.</p></li>
+	<li class="p" type="disc"><p style="margin-left: 0px;"><span style="font-weight: bold;"><b><a href="mw_destination_domain.htm" target="_blank">Destination Domain</a></b></span>. 
+	 Select the Zimbra domain name.</p></li>
+	<li class="p" type="disc"><p style="margin-left: 0px;"><a href="mw_domino_ldap_server_information.htm" style="font-weight: bold;">LDAP Server Information</a>. Enter information 
+	 to connect to the LDAP server.</p></li>
+	<li class="p" type="disc"><p style="margin-left: 0px;"><span style="font-weight: bold;"><b><a href="import_source_for_dominos.htm">Import Source</a></b></span>. Enter 
+	 the Domino Server name, the Admin ID file path, password, Notes INI path. If you are migrating Private Folders, specify 
+	 the path to the directory containing ID files of all the Lotus Domino 
+	 users to be migrated and specify the path to the file containing passwords 
+	 for these ID files.</p></li>
+	<li class="p" type="disc"><p style="margin-left: 0px;"><span style="font-weight: bold;"><b><a href="mw_domino_source_and_destination_mailboxes.htm">Source and Destination 
+	 Mailboxes</a></b></span>. Define which users should be migrated.</p></li>
+	<li class="p" type="disc"><p style="margin-left: 0px;"><span style="font-weight: bold;"><b><a href="mw_target_account_verification.htm" target="_blank">Target Account 
+	 Verification</a></b></span>. Displays the number of accounts that exist 
+	 and the number of accounts that do not exist on the Zimbra server.</p></li>
+	<li class="p" type="disc"><p style="margin-left: 0px;"><span style="font-weight: bold;"><b><a href="mw_account_provisioning.htm" target="_blank">Account Provisioning</a></b></span>. 
+	 All accounts that do not exist are shown in the <span style="font-weight: bold;"><b>Unprovisioned Accounts</b></span> list box.</p></li>
+	<li class="p" type="disc"><p style="margin-left: 0px;"><span style="font-weight: bold;"><b><a href="mw_import_options.htm" target="_blank">Import Options</a></b></span>. 
+	 Configure whether to import junk, deleted mail, &#160;and other older 
+	 mail and set the number of mailboxes to import simultaneously.</p></li>
+	<li class="p" type="disc"><p style="margin-left: 0px;"><span style="font-weight: bold;"><b><a href="mw_import_in_progress.htm" target="_blank">Import In Progress</a></b></span>. 
+	 When the import is complete, errors or warnings are displayed.</p></li>
 </ul>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--

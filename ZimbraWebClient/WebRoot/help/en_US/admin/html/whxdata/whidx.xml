@@ -1,8 +1,8 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <index>
-<chunkinfo url="whidata0.xml" first="account attributes, assigning" last="mail report" num="111" />
-<chunkinfo url="whidata1.xml" first="mail server" last="zimlets, mandatory" num="109" />
-<chunkinfo url="whidata2.xml" first="Zimlets, removing from the server" last="Zimlets, setting up in COS and accounts" num="2" />
+<chunkinfo url="whidata0.xml" first="account advanced features" last="forwarding, disable" num="109" />
+<chunkinfo url="whidata1.xml" first="free_busy, checking" last="search for administrators" num="110" />
+<chunkinfo url="whidata2.xml" first="search, advanced" last="Zimlets, setting up in COS and accounts" num="64" />
 
 </index>

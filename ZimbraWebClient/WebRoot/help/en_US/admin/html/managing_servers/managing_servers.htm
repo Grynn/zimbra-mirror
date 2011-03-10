@@ -88,123 +88,116 @@ else
  registered on the LDAP server. You can edit a server's records but you 
  cannot add or delete servers.</p>
 <ul>
-	<ul style="list-style: url('../blue_right.jpg');">
-		<li class="p-note"><p class="note"><span style="font-weight: bold;"><b>Note</b></span>: 
-		 To add server records, use the CLI <span class="code">zmprov</span> command. &#160;See the <span style="font-style: italic;"><i>Administration 
-		 Guide</i></span> for details.</p></li>
-	</ul>
-	<p>The following information is available from the Server tabs.</p>
-	<h3>General tab</h3>
-	<ul class="whs1" type="disc">
-		<li class="p"><p style="font-weight: normal;"><b style="font-weight: bold;"><span 
-		 class="fieldnames" style="font-weight: normal;">Display name</span> 
-		 <span style="font-weight: normal;">for the server</span></b></p></li>
-		<li class="p"><p style="font-weight: normal;"><span class="fieldnames" 
-															 style="font-weight: normal;">Field 
-		 for</span> a one-line description</p></li>
-		<li class="p"><p style="font-weight: normal;"><b><span class="fieldnames" 
-		 style="font-weight: normal;">Server Host Name</span></b></p></li>
-		<li class="p-whs2"><p class="whs2"><span class="fieldnames" style="font-weight: normal;">LMTP 
-		 Advertised Name</span>. This is the host name to output when LMTP 
-		 connections are made to this server</p></li>
-		<li class="p-whs2"><p class="whs2"><span class="fieldnames" style="font-weight: normal;">LMTP 
-		 Bind Address</span>. IP address to use when connecting via LMTP</p></li>
-		<li class="p-whs2"><p class="whs2">Maximum number of scheduled 
-		 tasks that can run simultaneously</p></li>
-		<li class="p-whs2"><p class="whs2">Sleep time between subsequent 
-		 mailbox purges</p></li>
-		<li class="p-whs2"><p class="whs2">The option to enable that the 
-		 server is a reverse proxy lookup target. If this is selected, 
-		 <span style="font-weight: bold;"><b>Server&gt;IMAP&gt;Enable clear 
-		 text login</b></span> is automatically checked and grayed out.</p></li>
-		<li class="p"><p style="font-weight: normal;"><b><span style="font-weight: normal;">Notes.</span></b> 
-		 Additional free-form text regarding this server</p></li>
-	</ul>
-	<h3>Services tab</h3>
-	<p>The Services tab shows the Zimbra services. A checkmark identifies 
-	 the services that are enabled for the selected server. Possible services 
-	 include LDAP, Mailbox, IMAP and POP proxy, MTA, SNMP, Logger, Spell 
-	 Checker, Anti-Virus, and Anti-Spam.</p>
-	<h3>MTA tab</h3>
-	<p>The <a href="configuring_the_mta_tab_for_servers.htm">MTA tab</a> 
-	 shows</p>
-	<ul class="whs1" type="disc">
-		<li class="p"><p>Whether authentication is enabled, including TLS authentication</p></li>
-		<li class="p"><p>Web mail MTA Hostname</p></li>
-		<li class="p"><p>Web mail MTA port as 25</p></li>
-		<li class="p"><p>Web mail MTA timeout. 
-		 The default is 60 minutes</p></li>
-		<li class="p"><p><a href="../managing_global_settings/relay_mta_for_external_delivery.htm">Relay 
-		 MTA</a> for external delivery address</p></li>
-		<li class="p"><p>MTA Trusted Networks</p></li>
-		<li class="p"><p>Options for DNS lookups 
-		 can be enabled</p></li>
-	</ul>
-	<h3>IMAP tab</h3>
-	<ul>
-		<li class="p-note"><p class="note"><span class="Important">Important:</span> 
-		 When you make changes to IMAP or POP configuration, the server 
-		 must be restarted in order for the changes to take effect.</p></li>
-	</ul>
-	<p>The IMAP tab shows whether the following are enabled. If the setting 
-	 is different from the global setting, the field is highlighted with 
-	 a Reset to Global link.</p>
-	<ul type="disc">
-		<li class="p"><p>IMAP services</p></li>
-		<li class="p"><p>Number of threads</p></li>
-		<li class="p"><p>SSL for IMAP services</p></li>
-		<li class="p"><p>Enable clear text login</p></li>
-		<li class="p"><p>Network IMAP port number</p></li>
-		<li class="p"><p>IMAP SSL port number</p></li>
-	</ul>
-	<h3>POP tab</h3>
-	<p>The POP tab shows:</p>
-	<ul type="disc">
-		<li class="p"><p>POP3 service, address, and advertised name</p></li>
-		<li class="p"><p>Number of threads. The default is 10</p></li>
-		<li class="p"><p>SSL for POP3 services</p></li>
-		<li class="p"><p>Option for clear text login</p></li>
-		<li class="p"><p>Network options for Advertised name and address</p></li>
-		<li class="p"><p>POP3 port numbers</p></li>
-	</ul>
-	<h3>Volumes tab</h3>
-	<p>Multiple <a href="volume_management.htm">volumes for message store 
-	 and index store</a> can be defined for the Zimbra mailbox server</p>
-	<ul type="disc">
-		<li class="p"><p><span style="font-weight: bold;"><b>Volume Name</b></span>. 
-		 The name of the volume. &#160;The initial volumes are named index1 
-		 and message1.</p></li>
-		<li class="p"><p><span style="font-weight: bold;"><b>Volume Root Path</b></span>. 
-		 The location in the file system where volume data is stored.</p></li>
-		<li class="p"><p><span style="font-weight: bold;"><b>Volume Type</b></span>. 
-		 The volume type is either Index or Message.</p></li>
-		<li class="p"><p><span style="font-weight: bold;"><b>Compress Blobs</b></span>. 
-		 When this box is checked, message blobs whose size is above the 
-		 compression threshold are compressed.</p></li>
-		<li class="p"><p><span style="font-weight: bold;"><b>Compression Threshold</b></span>. 
-		 Messages larger than the threshold are compressed. The default 
-		 threshold is 4096 bytes.</p></li>
-		<li class="p"><p><span style="font-weight: bold;"><b>Status</b></span>. 
-		 This displays &quot;current&quot; when the volume is current.</p></li>
-		<li class="p"><p style="font-weight: bold;">Assigned Current Volumes<span 
-		 style="font-weight: normal;">. The current primary message volume, 
-		 secondary message volume, and index volume are listed.</span></p></li>
-		
-	</ul>
-	<p>&#160;</p>
-	
-	
-	
-	
-	<p>&#160;</p>
-	<p>&#160;</p>
-	<p>
-	
-	<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PickupDialog_Invoke) == 'function') PickupDialog_Invoke(e,'','Stopping Mailbox Service on a Server','stopping_mailbox_service_on_a_server.htm','Volume Management','volume_management.htm');return false;" title="Related Topics"><img src="../ss_btn_related_topics.gif" border="0" height="17" width="81" alt="Related Topics" /></a>
-
-	
-	 </p>
+	<li class="P-note"><p class="note">To add server records, use the CLI 
+	 <span class="code">zmprov</span> command. 
+	 &#160;See the <span style="font-style: italic;"><i>Administration Guide</i></span> 
+	 for details.</p></li>
 </ul>
+<p>The following information is available from the Server tabs.</p>
+<h2>General tab</h2>
+<p>The general tab shows the following:</p>
+<ul class="whs1" type="disc">
+	<li class="p"><p style="font-weight: normal;"><b style="font-weight: bold;"><span 
+	 class="fieldnames" style="font-weight: normal;">Display name</span> 
+	 <span style="font-weight: normal;">for the server</span></b></p></li>
+	<li class="p"><p style="font-weight: normal;"><span class="fieldnames" 
+														 style="font-weight: normal;">Field 
+	 for</span> a one-line description</p></li>
+	<li class="p"><p style="font-weight: normal;"><b><span class="fieldnames" 
+															 style="font-weight: normal;">Server 
+	 Host Name</span></b></p></li>
+	<li class="p-whs2"><p class="whs2"><span class="fieldnames" style="font-weight: normal;">LMTP 
+	 Advertised Name</span>. This is the host name to output when LMTP 
+	 connections are made to this server</p></li>
+	<li class="p-whs2"><p class="whs2"><span class="fieldnames" style="font-weight: normal;">LMTP 
+	 Bind Address</span>. IP address to use when connecting via LMTP</p></li>
+	<li class="p-whs2"><p class="whs2">Maximum number of scheduled tasks 
+	 that can run simultaneously</p></li>
+	<li class="p-whs2"><p class="whs2">Sleep time between subsequent mailbox 
+	 purges</p></li>
+	<li class="p-whs2"><p class="whs2">The option to enable that the server 
+	 is a reverse proxy lookup target. If this is selected, <span style="font-weight: bold;"><b>Server&gt;IMAP&gt;Enable 
+	 clear text login</b></span> is automatically checked and grayed out.</p></li>
+	<li class="p"><p style="font-weight: normal;"><b><span style="font-weight: normal;">Notes.</span></b> 
+	 Additional free-form text regarding this server</p></li>
+</ul>
+<h3>Services tab</h3>
+<p>The Services tab shows the Zimbra services. A checkmark identifies the 
+ services that are enabled for the selected server. Possible services include 
+ LDAP, Mailbox, IMAP and POP proxy, MTA, SNMP, Logger, Spell Checker, Anti-Virus, 
+ and Anti-Spam.</p>
+<h3>MTA tab</h3>
+<p>The <a href="configuring_the_mta_tab_for_servers.htm">MTA tab</a> shows</p>
+<ul class="whs1" type="disc">
+	<li class="p"><p>Whether authentication is enabled, including TLS authentication</p></li>
+	<li class="p"><p>Web mail MTA Hostname</p></li>
+	<li class="p"><p>Web mail MTA port as 25</p></li>
+	<li class="p"><p>Web mail MTA timeout. 
+	 The default is 60 minutes</p></li>
+	<li class="p"><p><a href="../managing_global_settings/relay_mta_for_external_delivery.htm">Relay 
+	 MTA</a> for external delivery address</p></li>
+	<li class="p"><p>MTA Trusted Networks</p></li>
+	<li class="p"><p>Options for DNS lookups 
+	 can be enabled</p></li>
+</ul>
+<h3>IMAP tab</h3>
+<p><span style="font-weight: bold; color: #000080;"><font color="navy" ><b>Important</b></font></span>. &#160;When 
+ you make changes to IMAP or POP configurations, the server must be restarted 
+ in order for the changes to take effect. </p>
+<p>The IMAP tab shows whether the following are enabled. If the setting 
+ is different from the global setting, the field is highlighted with a 
+ Reset to Global link.</p>
+<ul type="disc">
+	<li class="p"><p>IMAP services</p></li>
+	<li class="p"><p>Number of threads</p></li>
+	<li class="p"><p>SSL for IMAP services</p></li>
+	<li class="p"><p>Enable clear text login</p></li>
+	<li class="p"><p>Network IMAP port number</p></li>
+	<li class="p"><p>IMAP SSL port number</p></li>
+</ul>
+<h3>POP tab</h3>
+<p>The POP tab shows:</p>
+<ul type="disc">
+	<li class="p"><p>POP3 service, address, and advertised name</p></li>
+	<li class="p"><p>Number of threads. The default is 10</p></li>
+	<li class="p"><p>SSL for POP3 services</p></li>
+	<li class="p"><p>Option for clear text login</p></li>
+	<li class="p"><p>Network options for Advertised name and address</p></li>
+	<li class="p"><p>POP3 port numbers</p></li>
+</ul>
+<h3>Volumes tab</h3>
+<p>Multiple <a href="volume_management.htm">volumes for message store and 
+ index store</a> can be defined for the Zimbra mailbox server</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Volume Name</b></span>. 
+	 The name of the volume. &#160;The initial volumes are named index1 
+	 and message1.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Volume Root Path</b></span>. 
+	 The location in the file system where volume data is stored.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Volume Type</b></span>. 
+	 The volume type is either Index or Message.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Compress Blobs</b></span>. 
+	 When this box is checked, message blobs whose size is above the compression 
+	 threshold are compressed.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Compression Threshold</b></span>. 
+	 Messages larger than the threshold are compressed. The default threshold 
+	 is 4096 bytes.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Status</b></span>. This 
+	 displays &quot;current&quot; when the volume is current.</p></li>
+	<li class="p"><p style="font-weight: bold;">Assigned Current Volumes<span 
+	 style="font-weight: normal;">. The current primary message volume, 
+	 secondary message volume, and index volume are listed.</span></p></li>
+	
+</ul>
+
+
+
+
+<p>&#160;</p>
+<p>
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PickupDialog_Invoke) == 'function') PickupDialog_Invoke(e,'','Stopping Mailbox Service on a Server','stopping_mailbox_service_on_a_server.htm','Volume Management','volume_management.htm');return false;" title="Related Topics"><img src="../ss_btn_related_topics.gif" border="0" height="17" width="81" alt="Related Topics" /></a>
+
+ </p>
 <script type="text/javascript" language="JavaScript">//<![CDATA[
 if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
   WritePopupMenuLayer();

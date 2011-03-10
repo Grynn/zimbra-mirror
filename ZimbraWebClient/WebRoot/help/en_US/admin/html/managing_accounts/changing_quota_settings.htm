@@ -86,16 +86,16 @@ else
 <p>A quota sets the amount of space on the disk in megabytes that an account 
  can use. Accounts can be assigned an account quota or they can have unlimited 
  storage. Account quotas apply to email messages, attachments, calendar 
- appointments, Tasks, files in Briefcase, and Documents notebook pages. 
- When the quota is reached, all email messages to that account are rejected.</p>
+ appointments, Tasks, and files in Briefcase. When the quota is reached, 
+ all email messages to that account are rejected.</p>
 <ul style="list-style: url('../blue_right.jpg');">
 	<li class="p-note"><p class="note">By default rejected messages are 
 	 deferred. The deferred queue is scanned to resend 
 	 messages. If the message cannot be sent after the specified number 
 	 of delivery attempts, the message is bounced back to the original 
-	 owner. You can configure a setting from the zmprov CLI so that when 
-	 a mailbox quota is reached, messages received to that mailbox are 
-	 bounced instead of being deferred.</p></li>
+	 owner. You can configure a setting 
+	 from the zmprov CLI so that when a mailbox quota is reached, messages 
+	 received to that mailbox are bounced instead of being deferred.</p></li>
 </ul>
 <p>You can configure a warning message 
  to automatically notify users that are close to using their allotted space.</p>
@@ -138,6 +138,7 @@ else
 	 generated email. Editing the message is not required unless you want 
 	 to give additional information in the message.</p></li>
 </ol>
+
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

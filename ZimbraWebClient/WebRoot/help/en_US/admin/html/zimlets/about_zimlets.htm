@@ -84,73 +84,67 @@ else
 //]]></script>
 <h1>Managing Zimlets</h1>
 <p>Zimlets™ is a 
- mechanism for integrating the Zimbra Collaboration Suite with third party 
+ mechanism for integrating the Zimbra Collaboration Server with third party 
  information systems and content. Zimlets are also used to intermix user 
  interface within the Zimbra Web Client for Email, Calendar, Address Book, 
  and Documents applications. You can create other Zimlets so that users 
  can interact with your company resources or other defined applications 
  from the Zimbra Web Client.</p>
+<ul style="list-style: url('../blue_right.gif');">
+	<li class="p-note"><p class="note">For information about how to develop 
+	 and configure Zimlets see the <span style="font-style: italic;"><i>Zimlet 
+	 Development on the <a href="http://wiki.zimbra.com/index.php?title=Main_Page" 
+							 target="_blank">Zimbra wiki</a></i></span>. &#160;Go 
+	 to the Zimbra gallery<a title="Zimbra Gallery" href="http://gallery.zimbra.com/" 
+							 target="_blank">, http:// 
+	 gallery.zimbra.com</a>, to see the type of Zimlets that can be used 
+	 within the ZCS. &#160;</p></li>
+</ul>
+<p>From the administration console, 
+ you can add new Zimlets, set access privileges by COS and by individual 
+ accounts, and disable and uninstall Zimlets 
+ from ZCS. &#160;Users can disable and enable Zimlets that are not mandatory 
+ from their <span style="font-weight: bold;"><b>Preferences&gt;Zimlets</b></span> 
+ page.</p>
+<p>If you create a Zimlet that needs 
+ additional configuration after deployment, you will need to use the ZCS 
+ CLI to access and change the Zimlet configuration. See the <span style="font-style: italic;"><i>Working 
+ with Zimlets</i></span> chapter in the Administrator's Guide for details.</p>
+<p>Zimlets that are deployed are listed 
+ on the Zimlets contents pane. You can remove Zimlets, disable and enable 
+ them from the Zimlets content pane.</p>
+<h2>Default Zimlets Enabled on ZCS</h2>
+<p>ZCS includes pre-configured Zimlets that enhance the user experience 
+ while working in the Zimbra Web Client. Some of Zimlets are already deployed 
+ and made available from the COS. &#160;You can manage which Zimlets are 
+ available to users from the COS Zimlets tab. The following is a list of 
+ default Zimlets.:</p>
 <ul>
-	<ul style="list-style: url('../blue_right.gif');">
-		<li class="p-note"><p class="note">For information about how to 
-		 develop and configure Zimlets see the <span style="font-style: italic;"><i>Zimlet 
-		 Development on the <a href="http://wiki.zimbra.com/index.php?title=Main_Page" 
-								 target="_blank">Zimbra wiki</a></i></span>. 
-		 &#160;Go to the Zimbra gallery<a title="Zimbra Gallery" href="http://gallery.zimbra.com/" 
-											 target="_blank">, http:// gallery.zimbra.com</a>, to see the 
-		 type of Zimlets that can be used within the ZCS. &#160;</p></li>
-	</ul>
-	<p>From the administration console, you can add new Zimlets, set access 
-	 privileges by COS and by individual accounts, and disable and uninstall Zimlets from ZCS. &#160;Users can disable 
-	 and enable Zimlets that are not mandatory from their <span style="font-weight: bold;"><b>Preferences&gt;Zimlets</b></span> 
-	 page.</p>
-	<p>If you create a Zimlet that needs additional configuration after 
-	 deployment, you will need to use the ZCS CLI to access and change 
-	 the Zimlet configuration. See the <span style="font-style: italic;"><i>Working 
-	 with Zimlets</i></span> chapter in the Administrator's Guide for details.</p>
-	<p>Zimlets that are deployed are listed on the Zimlets contents pane. 
-	 You can remove Zimlets, disable and enable them from the Zimlets content 
-	 pane.</p>
-	<h2>Default Zimlets Enabled on ZCS</h2>
-	<p>ZCS includes pre-configured Zimlets that enhance the user experience 
-	 while working in the Zimbra Web Client. These Zimlets are already 
-	 deployed and made available from the COS. &#160;You can manage which 
-	 Zimlets are available to users from the COS Zimlets tab.</p>
-	<ul type="disc">
-		<li class="p"><p><span style="font-weight: bold;"><b>com_zimbra_date</b></span>. When users click 
-		 on a date either in the email or on the mini-calendar, their calendar 
-		 schedule for that date displays.</p></li>
-	</ul>
-	<p align="center"><img src="../calendarzimlet2.png" alt="calendarzimlet2.png" style="border: none;" width="158" height="123" border="0" /></p>
-	<ul>
-		<ul style="list-style: url('../blue_right.gif');">
-<li class="p-note"><p class="note">If you disable the date Zimlet, 
-		 the QuickAdd feature and the ability to click on a day and go 
-		 to that date in the calendar does not work.</p></li>
-	</ul>
-	<ul type="disc">
-		<li class="p"><p><span style="font-weight: bold;"><b>com_zimbra_email</b></span>. Highlights 
-		 and previews associated contact for an email address. Users can 
-		 see complete contact information if it is available in their address 
-		 books.</p></li>
-	</ul>
-	<p align="center"><img src="../emailzimlet.png" alt="emailzimlet.png" style="border: none;" width="123" height="62" border="0" /></p>
-	<ul type="disc">
-		<li class="p"><p><span style="font-weight: bold;"><b>com_zimbra_url</b></span>. This highlights 
-		 and links URLs. Users can quickly go to the web site specified 
-		 in an email message.</p></li>
-	</ul>
-	<p align="center">&#160;</p>
-	<ul type="disc">
-		<li class="p"><p><span style="font-weight: bold;"><b>com_zimbra_phone</b></span>. Users can click 
-		 on a phone number that displays in any of the application pages 
-		 to quickly call that number if they have the installed a VOIP software application such as Skype 
-		 or Cisco VOIP. 
-		 &#160;When they click on the phone number, the VOIP 
-		 application is launched.</p></li>
-	</ul>
-	<p align="center"><img src="../phonezimlet.png" alt="phonezimlet.png" style="border: none;" width="353" height="72" border="0" /></p>
-	<p>&#160;</p>
+	<li><p><span style="font-weight: bold;"><b>Attach Contacts</b></span><span>.</span> 
+	 Allows attaching contacts when composing a new message.</p></li>
+	<li><p><span style="font-weight: bold;"><b>Email Attacher</b></span>. 
+	 Attach email messages when composing a new message.</p></li>
+	<li><p><span style="font-weight: bold;"><b>Date</b></span>.<span style="font-weight: bold;"><b> 
+	 </b></span>Highlights dates, previews associated appointments and creates 
+	 a link to the calendar.</p></li>
+	<li><p><span style="font-weight: bold;"><b>Drag-n-Drop Attachments</b></span>. 
+	 Provides ability to drag-n-drop file attachments when composing an 
+	 email message.</p></li>
+	<li><p><span style="font-weight: bold;"><b>Email Contact</b></span>. Details 
+	 Highlights and previews associated contact details for an email address.</p></li>
+	<li><p><span style="font-weight: bold;"><b>LinkedIn</b></span>. 
+	 Hooks on to email Zimlet; shows LinkedIn 
+	 search result for a given email.</p></li>
+	<li><p><span style="font-weight: bold;"><b>Social</b></span>. Access social 
+	 services like Twitter, Facebook, Digg and TweetMeme from 
+	 Zimbra.</p></li>
+	<li><p><span style="font-weight: bold;"><b>Search Highlighter</b></span>. 
+	 After a mail search, this Zimlet highlights Search terms with yellow 
+	 color.</p></li>
+	<li><p><span style="font-weight: bold;"><b>URL Links</b></span>. Highlights 
+	 Web URLs for linking in email messages.</p></li>
+	<li><p><span style="font-weight: bold;"><b>WebEx</b></span>. 
+	 Easily schedule, start or join WebEx meetings.</p></li>
 	<p>&#160;</p>
 </ul>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[

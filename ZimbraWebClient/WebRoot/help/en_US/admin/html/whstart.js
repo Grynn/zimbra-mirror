@@ -31,7 +31,7 @@ function delayReload()
 	}
 }
 
-var gsToolbarOrder = "toc|idx|fts|blankblock";
+var gsToolbarOrder = "toc|idx|fts|blankblock|banner";
 var gsMinibarOrder = "blankblock|hide2|";
 
 var gsTopic = "getting_started/about_zcs.htm";

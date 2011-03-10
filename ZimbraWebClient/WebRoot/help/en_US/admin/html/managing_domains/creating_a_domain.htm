@@ -86,7 +86,7 @@ else
 <h1>Adding a New Domain</h1>
 <p>One domain is identified during 
  the installation process and additional domains can be added. When you 
- add a domain you configure the Global Address List 
+ add a domain you configure the <a href="using_the_global_address_list_(gal).htm">Global Address List</a> 
  (GAL) mode and the <a href="authentication_settings.htm">Authentication 
  mode</a> for the domain. You can also set up virtual hosts, 
  create the domain Documents 
@@ -104,14 +104,13 @@ else
 	<ul type="disc">
 		<li class="p"><p><span style="font-weight: bold;"><b>Domain name</b></span>. 
 		 Enter the full name of the domain ( 
-		 domainexample.com)</p></li>
+		 domainexample.com).</p></li>
 		<li class="p"><p><span style="font-weight: bold;"><b>Public service 
 		 host name</b></span>. Enter the host name of the REST URL. This is 
-		 the URL that is used when sharing Documents Notebooks, email folders 
-		 and Briefcase folders, as well as sharing Task lists, Address 
-		 Books, and Calendars. See Setting up a Public Service Host Name 
-		 in the Managing ZCS Configurations chapter in the ZCS Administrator's 
-		 Guide.</p></li>
+		 the URL that is used when sharing email folders and Briefcase 
+		 folders, as well as sharing Task lists, Address Books, and Calendars. 
+		 See Setting up a Public Service Host Name in the Managing ZCS 
+		 Configurations chapter in the ZCS Administrator's Guide.</p></li>
 		<li class="p"><p><span style="font-weight: bold;"><b>Inbound SMTP 
 		 host name</b></span>. If your MX records point to a spam-relay or 
 		 any other external non-Zimbra server, enter the name of the server 
@@ -122,7 +121,7 @@ else
 		 accounts for this domain</b></span>. Enter the maximum number of accounts 
 		 that can be created on this domain. &#160;The number entered here 
 		 is displayed in the Account Limits tab. &#160;The default is no 
-		 limit (blank field)</p></li>
+		 limit (blank field).</p></li>
 		<li class="p"><p><span style="font-weight: bold;"><b>Default</b></span><span 
 		 style="font-weight: bold;"><b> &#160;</b></span><span 
 		 style="font-weight: bold;"><b>Class of Service</b></span> 
@@ -146,24 +145,29 @@ else
 	 <span style="font-weight: bold;"><b>External,</b></span> or <span style="font-weight: bold;"><b>Both</b></span>. 
 	 The default is Internal.</p></li>
 </ol>
-<p style="margin-left: 40px;">(Optional) 
- Change the maximum number of search results returned for a GAL Search. 
- &#160;The default is 100 results.</p>
-<p style="margin-left: 40px;">Enter the GAL 
- Sync Account name. This account syncs to the LDAP, and all GAL contacts 
- in LDAP are added to the Address Book.</p>
-<p style="margin-left: 40px;">Enter the data source name for the GAL sync.</p>
-<p style="margin-left: 40px;">If you selected an external GAL, configure 
- the external LDAP settings.</p>
-<p style="margin-left: 40px;">Set &#160;the Internal GAL polling interval 
- in days, hours, minutes, or seconds. This is the frequency that the GAL 
- sync account is updated</p>
+<ul type="disc">
+	<li><p 
+		 style="margin-left: 40px;">(Optional) Change the maximum number 
+	 of search results returned for a GAL Search. &#160;The default is 
+	 100 results.</p></li>
+	<li><p style="margin-left: 40px;">Enter the <a href="using_the_global_address_list_(gal).htm">GAL 
+	 Sync Account</a> name. This account syncs to the LDAP, and all GAL 
+	 contacts in LDAP are added to the Address Book.</p></li>
+	<li><p style="margin-left: 40px;">Enter the data source name for the 
+	 GAL sync.</p></li>
+	<li><p style="margin-left: 40px;">If you selected an external GAL, 
+	 configure the <a href="using_the_global_address_list_(gal).htm">external 
+	 LDAP settings</a>.</p></li>
+	<li><p style="margin-left: 40px;">Set &#160;the Internal GAL polling 
+	 interval in days, hours, minutes, or seconds. This is the frequency 
+	 that the GAL sync account is updated.</p></li>
+</ul>
 <ol start="3" type="1">
 	<li class="p"><p><span>Configure the</span> <span style="font-weight: bold;"><b>Authentication 
 	 Mode</b></span>.</p></li>
 </ol>
 <ul type="disc">
-	<li class="p"><p style="margin-left: 40px;">If you selected <span style="font-weight: bold;"><b>Internal</b></span> 
+	<li><p style="margin-left: 40px;">If you selected <span style="font-weight: bold;"><b>Internal</b></span> 
 	 as the GAL mode, no other authentication configuration is required. 
 	 Click <span style="font-weight: bold;"><b>Next</b></span>.</p></li>
 	<ul type="disc">
@@ -173,7 +177,7 @@ else
 		 the next step is to configure the <a href="how_to_configure_authentication_mode.htm">authentication 
 		 mode</a> <a class="dropspot" href="javascript:TextPopup(this)" 
 					 id="a2">.</a></p>
-		<div class="droptext" id="POPUP440148114" style="display: none;">
+		<div class="droptext" id="POPUP427719451" style="display: none;">
 			<ol type="1">
 				<li class="p" type="a"><p>Select either <span style="font-weight: bold;"><b>External 
 				 LDAP</b></span> or <span style="font-weight: bold;"><b>External 
@@ -208,34 +212,10 @@ else
 	 host address</a>. Virtual hosting allows you to host more than one 
 	 domain name on a server. When you create a virtual host, this becomes 
 	 the default domain user login.</p></li>
-	<li class="p"><p><span 
-	 style="font-weight: bold;"><b>Documents</b></span>. (Optional) Documents 
-	 is a document sharing and collaboration application that enables users 
-	 to create, organize and share web documents, and other files with 
-	 users on the domain. Each domain can have their own domain documents 
-	 account. You can now create the domain level Documents wiki account 
-	 and configure access privileges. &#160;&#160;See About 
-	 Zimbra Documents</p>
-	<ul>
-		<li class="p" type="disc"><p>Check the box to create domain Documents.</p></li>
-		<li class="p" type="disc"><p>Enter the Documents account name and 
-		 password. The default account name is &quot;wiki&quot;, but you 
-		 can change this. &#160;</p></li>
-		<li class="p" type="disc"><p>On the <span style="font-weight: bold;"><b>Documents 
-		 Access Control</b></span> dialog, define the global access control 
-		 privileges.</p></li>
-		<li style="list-style: none; display: inline;"><ul type="disc">
-			<li class="p"><p>By default all users in the domain can read, 
-			 write, delete, and insert (add) new pages in the Domain Documents 
-			 wiki.</p></li>
-			<li class="p"><p>Users in all domains can be given read, write, 
-			 delete, and insert permissions.</p></li>
-			<li class="p"><p>Public can be given read-only access to the 
-			 Documents pages.</p></li>
-			<li class="p"><p>Members of distribution lists can be given 
-			 read, write, delete, and insert permissions.</p></li>
-		</ul></li>
-	</ul></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Briefcase</b></span>. 
+	 Configure the name that should be displayed in the prompt on the <a href="authentication_required_dialog.htm">Authentication Required 
+	 dialog</a> used to log into Briefcase folders shared with external 
+	 guests. The default is Zimbra.</p></li>
 	<li class="p"><p style="margin-left: 0px;">Click<span style="font-weight: bold;"><b> 
 	 Finish</b></span> to create the domain.</p></li>
 </ol>
@@ -244,7 +224,7 @@ else
 
 <script type="text/javascript" language="JavaScript1.2">//<![CDATA[
 	if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
-	TextPopupInit('a2','POPUP440148114');
+	TextPopupInit('a2','POPUP427719451');
 //]]></script>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--

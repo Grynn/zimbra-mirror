@@ -90,58 +90,54 @@ else
  messages in the queue is displayed on the tab and you can where messages 
  are coming from and going to.</p>
 <ul style="list-style: url('../blue_right.gif');">
-	<p class="note"><span style="font-weight: bold;"><b>Note:</b></span> When 
-	 you open Mail Queues, the information that is downloaded is cached. 
-	 Messages continue to be delivered. &#160;When you refresh the queue, 
-	 you may see different information. If your queues are large, do not 
-	 refresh too often while troubleshooting the queues. &#160;&#160;&#160;</p>
-	<p>The Mail Queue panes are divided into two sections:</p>
-	<ul type="disc">
-		<li class="p"><p>The <span style="font-weight: bold;"><b>Summary/Filte</b></span>r 
-		 pane shows a summary of messages by receiver domain, origin IP, sender domain, receiver address, sender address, 
-		 and, for the Deferred queue, by error type. Click on any of the 
-		 summaries in the list to see detailed information by messages. 
-		 You can select more than one summary at a time. These messages 
-		 are displayed in the Messages pane.</p></li>
-	</ul>
-	<ul type="disc">
-		<li class="p"><p>The <span style="font-weight: bold;"><b>Messages</b></span> 
-		 pane shows individual message envelope information for the selected 
-		 summaries. &#160;</p></li>
-	</ul>
-	<p>At any time, you can click <span style="font-weight: bold;"><b>Refresh</b></span> 
-	 to update the view.</p>
-	<p>You can manage the contents of the queues, either for all messages 
-	 in the summary or for a single message as follows:</p>
-	<ul type="disc">
-		<li class="p"><p><span style="font-weight: bold;"><b>Re queue</b></span> 
-		 messages in the queues. Message routing is re-evaluated and earlier 
-		 penalties are forgotten.</p></li>
-		<li class="p"><p><span style="font-weight: bold;"><b>Hold</b></span> moves 
-		 messages to the Hold queue. &#160;Messages stay in this queue 
-		 until the administrator moves them.</p></li>
-		<li class="p"><p><span style="font-weight: bold;"><b>Release</b></span> 
-		 moves messages from the Hold queue. Messages are moved to the 
-		 Deferred queue.</p></li>
-		<li class="p"><p><span style="font-weight: bold;"><b>Delete</b></span> 
-		 messages deletes the message from the server.</p></li>
-	</ul>
-	<p style="margin-left: 0px;">Postfix queue file IDs 
-	 are reused. &#160;If you requeue or 
-	 delete a message, note the message envelope information, not the queue 
-	 ID. It is possible that when you refresh the mail queues, the queue 
-	 ID could be used on a different message.</p>
-	<h3>Flushing the Queues</h3>
-	<p>In addition to managing individual messages in a specific queue, 
-	 you can flush all queued mail on a server. When you click the Flush 
-	 button, delivery is attempted for all messages in the Deferred, Incoming, 
-	 and Active queues.</p>
-	<p>See <a href="about_mta_queues.htm">About MTA Queues</a></p>
-	<p>&#160;</p>
-	<p>&#160;</p>
-	<p>&#160;&#160;</p>
-	<p>&#160;</p>
+	<li class="P-note"><p class="note">When you open Mail Queues, the information 
+	 that is downloaded is cached. Messages continue to be delivered. &#160;When 
+	 you refresh the queue, you may see different information. If your 
+	 queues are large, do not refresh too often while troubleshooting the 
+	 queues. &#160;&#160;&#160;</p></li>
 </ul>
+<p>The Mail Queue panes are divided into two sections:</p>
+<ul type="disc">
+	<li class="p"><p>The <span style="font-weight: bold;"><b>Summary/Filte</b></span>r 
+	 pane shows a summary of messages by receiver domain, origin IP, sender domain, receiver address, sender address, and, 
+	 for the Deferred queue, by error type. Click on any of the summaries 
+	 in the list to see detailed information by messages. You can select 
+	 more than one summary at a time. These messages are displayed in the 
+	 Messages pane.</p></li>
+</ul>
+<ul type="disc">
+	<li class="p"><p>The <span style="font-weight: bold;"><b>Messages</b></span> 
+	 pane shows individual message envelope information for the selected 
+	 summaries. &#160;</p></li>
+</ul>
+<p>At any time, you can click <span style="font-weight: bold;"><b>Refresh</b></span> 
+ to update the view.</p>
+<p>You can manage the contents of the queues, either for all messages in 
+ the summary or for a single message as follows:</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Re queue</b></span> messages 
+	 in the queues. Message routing is re-evaluated and earlier penalties 
+	 are forgotten.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Hold</b></span> moves 
+	 messages to the Hold queue. &#160;Messages stay in this queue until 
+	 the administrator moves them.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Release</b></span> moves 
+	 messages from the Hold queue. Messages are moved to the Deferred queue.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Delete</b></span> messages 
+	 deletes the message from the server.</p></li>
+</ul>
+<p style="margin-left: 0px;">Postfix queue file IDs 
+ are reused. &#160;If you requeue or delete 
+ a message, note the message envelope information, not the queue ID. It 
+ is possible that when you refresh the mail queues, the queue ID could 
+ be used on a different message.</p>
+<h3>Flushing the Queues</h3>
+<p>In addition to managing individual messages in a specific queue, you 
+ can flush all queued mail on a server. When you click the Flush button, 
+ delivery is attempted for all messages in the Deferred, Incoming, and 
+ Active queues.</p>
+<p>See <a href="about_mta_queues.htm">About MTA Queues</a></p>
+<p>&#160;</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

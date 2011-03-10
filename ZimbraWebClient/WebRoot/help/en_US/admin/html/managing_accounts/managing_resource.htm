@@ -93,7 +93,7 @@ else
 <p>When you create a resource account, a directory account is created on 
  the LDAP server.</p>
 <p>When you initially create a resource, you can configure the following:</p>
-<p><span style="font-weight: bold;"><b>Resource name</b></span>.</p>
+<p><span style="font-weight: bold;"><b>Resource Name</b></span>.</p>
 <ul type="disc">
 	<li class="p"><p><span style="font-weight: bold;"><b>Name</b></span>: Descriptive 
 	 name for the location or equipment.</p></li>
@@ -105,9 +105,9 @@ else
 <ul type="disc">
 	<li class="p"><p><span style="font-weight: bold;"><b>Type</b></span> of resource, 
 	 select either location or equipment.</p></li>
-	<li class="p"><p>resources. Class<span 
+	<li class="p"><p>Class<span 
 	 style="font-weight: bold;"><b> of Service</b></span>. 
-	 Note: If many resources are going 
+	 &#160;If many resources are going 
 	 to be created and you are configuring Account Limits, you may want 
 	 to set up a separate COS for resources and configure the COS with 
 	 only the features the resource account needs.</p></li>
@@ -125,12 +125,12 @@ else
 <p style="margin-left: 40px;"><span style="margin-left: 40px;">Select one 
  of the following to handle other types of requests:</span></p>
 <ol type="disc">
-	<li style="list-style: none; display: inline;"><ul type="disc">
+	<li style="list-style: none; display: inline;"><ul type="circle">
 		<li class="p"><p style="font-weight: bold;"><a class="dropspot" 
 														 href="javascript:TextPopup(this)" 
 														 id="a1">Auto accept 
 		 if available, auto decline on conflict.</a> <span style="font-weight: normal;">&#160;</span></p>
-		<div class="droptext" id="POPUP426583887" style="display: none;">
+		<div class="droptext" id="POPUP429423440" style="display: none;">
 			<p>Automatically accept appointments unless the resource is 
 			 already scheduled. The free/busy times can be viewed. You 
 			 can modify the auto-decline rule to accept some meetings that 
@@ -140,7 +140,7 @@ else
 														 href="javascript:TextPopup(this)" 
 														 id="a2">Manual 
 		 accept, auto decline on conflict.</a> </p>
-		<div class="droptext" id="POPUP428697422" style="display: none;">
+		<div class="droptext" id="POPUP427976721" style="display: none;">
 			<p>Appointment that create a conflict are declined. All other 
 			 appointments must be manually accepted. Appointment requests 
 			 that do not conflict are marked as tentative in the resource 
@@ -151,27 +151,23 @@ else
 		</div></li>
 	</ul></li>
 </ol>
-<p style="font-weight: bold; margin-left: 80px;">Conflict Rules<span style="font-weight: normal;">. 
+<p style="font-weight: bold; margin-left: 40px;">Conflict Rules<span style="font-weight: normal;">. 
  For recurring appointments that are enabled with one of the above options, 
  you can set up a threshold (either as a number of conflicts or a percentage 
  of all the recurring appointments) so that some instances of &#160;recurring 
  appointments can be available for this resource.</span> </p>
-<ul type="disc">
-	<ul type="disc">
-		<li type="disc"><p style="font-weight: bold; margin-left: 48px;"><span 
-		 style="font-weight: normal;">For </span>Auto accept if available, 
-		 auto decline on conflict<span style="font-weight: normal;"> and 
-		 </span>Manual accept, auto decline on conflict<span style="font-weight: normal;">, 
-		 the scheduling policy can be set up with conflict rules for recurring 
-		 appointments. &#160;</span></p></li>
-		<li type="disc"><p style="font-weight: bold; margin-left: 48px;">Maximum 
-		 allowed number of conflicts<span style="font-weight: normal;"> 
-		 and/or </span>Maximum allowed percent of conflicts<span style="font-weight: normal;"> 
-		 can be configured to allow a recurring resource to be scheduled 
-		 even if it is not available for all the requested recurring appointment 
-		 dates. </span></p></li>
-	</ul>
+<ul type="circle">
+	<li><p style="margin-left: 40px;">For <span style="font-weight: bold;"><b>Auto 
+	 accept if available,</b></span> <span style="font-weight: bold;"><b>auto 
+	 decline on conflict</b></span> and &#160;<span style="font-weight: bold;"><b>Manual 
+	 accept, auto decline on conflict</b></span>, the scheduling policy can 
+	 be set up with conflict rules for recurring appointments. &#160;</p></li>
 </ul>
+<p style="margin-left: 80px;"><span style="font-weight: bold;"><b>Maximum 
+ allowed number of conflicts</b></span> and/or <span style="font-weight: bold;"><b>Maximum 
+ allowed percent of conflicts</b></span> can be configured to allow a recurring 
+ resource to be scheduled even if it is not available for all the requested 
+ recurring appointment dates. </p>
 <p style="margin-left: 80px; font-weight: normal;">The resource accepts 
  appointments even if there are conflicts unless either the number of conflicts 
  reaches the maximum allowed or the maximum percentage of conflicts allowed 
@@ -191,27 +187,19 @@ else
 		 single instance is always declined. The conflict rules do not 
 		 apply.</p></li>
 	</ol>
-	<li style="list-style: none; display: inline;"><ul type="disc">
-		<li class="p"><p style="font-weight: normal;"><span style="font-weight: bold;"><b><a 
-		 class="dropspot" href="javascript:TextPopup(this)" id="a3">Auto 
-		 accept always.</a></b></span> &#160;&#160;</p>
-		<div class="droptext" id="POPUP425127365" style="display: none;">
-			<p>The resource automatically accepts all appointments that 
-			 are scheduled. &#160;In this case free/busy information is 
-			 not maintained, thus more than one meeting could schedule 
-			 the resource for the same time. Because the resource always 
-			 stays free, the suggested use for this policy would be for 
-			 a frequently used location off premises so that the location 
-			 address can be included in the invite to attendees.</p>
-		</div></li>
-		<li class="p"><p style="font-weight: normal;"><span style="font-weight: bold;"><b><a 
-		 class="dropspot" href="javascript:TextPopup(this)" id="a4">No 
-		 auto accept or decline.</a></b></span> </p>
-		<div class="droptext" id="POPUP428169705" style="display: none;">
-			<p>The resource scheduling policy is to manually mange the 
-			 resource. A delegated user logs into the resource account 
-			 and accepts or declines the reservation request.</p>
-		</div></li>
+	<li style="list-style: none; display: inline;"><ul type="circle">
+		<li class="p"><p style="font-weight: normal;"><span style="font-weight: bold;"><b>Auto 
+		 accept always</b></span>. The resource automatically accepts all appointments 
+		 that are scheduled. &#160;In this case free/busy information is 
+		 not maintained, thus more than one meeting could schedule the 
+		 resource for the same time. Because the resource always stays 
+		 free, the suggested use for this policy would be for a frequently 
+		 used location off premises so that the location address can be 
+		 included in the invite to attendees.</p></li>
+		<li class="p"><p style="font-weight: normal;"><span style="font-weight: bold;"><b>No 
+		 auto accept or decline</b></span>. The resource scheduling policy 
+		 is to manually mange the resource. A delegated user logs into 
+		 the resource account and accepts or declines the reservation request.</p></li>
 	</ul></li>
 </ol>
 <ul type="disc">
@@ -258,10 +246,8 @@ else
 
 <script type="text/javascript" language="JavaScript1.2">//<![CDATA[
 	if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
-	TextPopupInit('a1','POPUP426583887');
-	TextPopupInit('a2','POPUP428697422');
-	TextPopupInit('a3','POPUP425127365');
-	TextPopupInit('a4','POPUP428169705');
+	TextPopupInit('a1','POPUP429423440');
+	TextPopupInit('a2','POPUP427976721');
 //]]></script>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
