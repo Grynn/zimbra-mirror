@@ -186,9 +186,8 @@ GlobalConfigXFormView.BC_TAB_RIGHTS = [];
 
 GlobalConfigXFormView.prototype.setObject =
 function(entry) {
-
-	this._containedObject = entry;
-
+	
+	ZaTabView.prototype.setObject.call(this, entry);
         // execute other init methods
         if(ZaTabView.XFormSetObjectMethods["GlobalConfigXFormView"]) {
                 var methods = ZaTabView.XFormSetObjectMethods["GlobalConfigXFormView"];
