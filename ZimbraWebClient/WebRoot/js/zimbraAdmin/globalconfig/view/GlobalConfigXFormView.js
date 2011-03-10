@@ -400,8 +400,8 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 								{ ref: ZaGlobalConfig.A_zimbraSmtpPort, type: _OUTPUT_,
 								  label: ZaMsg.NAD_MTA_WebMailPort,
                                                                         visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,ZaGlobalConfig.A_zimbraSmtpHostname]],
-                                                                        visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraSmtpHostname],
-							    },
+                                                                        visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraSmtpHostname]
+							    	},
 								{ref:ZaGlobalConfig.A_zimbraMtaRelayHost,label:ZaMsg.NAD_MTA_RelayMTA,labelLocation:_LEFT_,											
 							    	type:_HOSTPORT_,
 									onClick: "ZaController.showTooltip",
