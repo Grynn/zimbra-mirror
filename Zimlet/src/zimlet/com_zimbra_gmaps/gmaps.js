@@ -34,8 +34,9 @@ ZmGMapsZimlet.URLPARAMS = [];
 ZmGMapsZimlet.URLPARAMS["size"] = "345x245";
 ZmGMapsZimlet.URLPARAMS["zoom"] = "12";
 ZmGMapsZimlet.URLPARAMS["sensor"] = "false";
-ZmGMapsZimlet.URLPARAMS["markers"] = "color:red";
+ZmGMapsZimlet.URLPARAMS["markers"] = "size:mid|color:red|";
 ZmGMapsZimlet.URLPARAMS["center"] = "";
+
 
 /**
  * Map image URI cache.
@@ -102,6 +103,9 @@ function() {
  */
 ZmGMapsZimlet.prototype.clicked =
 function(spanElem, contentObj, matchContext, canvas) {
+	var lang = this.getMessage("mapLanguage");
+	if(lang)
+		ZmGMapsZimlet.URLPARAMS["language"] = lang;		
 	var addr = contentObj.replace("\n","+").replace("\r","+").replace(/ /g, "+");
 	canvas = window.open("http://maps.google.com/maps?q="+AjxStringUtil.urlComponentEncode(addr));
 };
@@ -126,14 +130,31 @@ function(spanElement, addrs, context, canvas) {
 };
 
 ZmGMapsZimlet.prototype._getMapUrl =
-function(addrs) {
+function(myaddrs) {
+        var addrs = myaddrs;
+        var lang = this.getMessage("mapLanguage");
+        if(lang)
+                ZmGMapsZimlet.URLPARAMS["language"] = lang;
+        var clearStr =   this.getMessage("clearString");
+        if(clearStr) {
+            var strs = clearStr.split("|");
+            if(!(strs instanceof Array)) strs = [strs];
+            for(var i = 0; i < strs.length; i ++) {
+                   if(myaddrs.indexOf(strs[i]) == 0) {
+                       addrs = myaddrs.substring(strs[i].length);
+                   }
+            }
+        }
 	addrs = addrs.replace("\n","+").replace("\r","+").replace(/ /g, "+");
-	ZmGMapsZimlet.URLPARAMS["center"] = addrs;
+	var marker = ZmGMapsZimlet.URLPARAMS["markers"] + addrs;
+    ZmGMapsZimlet.URLPARAMS["center"] = addrs;
 	var params = [];
 	for(var el in ZmGMapsZimlet.URLPARAMS) {		
-		params.push(el + "=" + AjxStringUtil.urlComponentEncode(ZmGMapsZimlet.URLPARAMS[el]));
+		params.push(el + "=" + ZmGMapsZimlet.URLPARAMS[el]);//AjxStringUtil.urlComponentEncode(ZmGMapsZimlet.URLPARAMS[el]));
 	}
+    params.push("markers=" + marker);
 	var url = ZmGMapsZimlet.URL + "?" + params.join("&");
-	url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
+	//url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
+	//url = AjxStringUtil.urlComponentEncode(url);
 	return url;
 };
