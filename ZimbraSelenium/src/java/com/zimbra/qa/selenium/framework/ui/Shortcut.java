@@ -63,7 +63,7 @@ public class Shortcut {
 	public static final Shortcut S_NEWTAG = new Shortcut("S_NEWTAG", "nt");
 	
 	// Briefcase shortcuts
-	public static final Shortcut S_NEWDOCUMENT = new Shortcut("S_NEWDOCUMENT", "n");
+	public static final Shortcut S_NEWDOCUMENT = new Shortcut("S_NEWDOCUMENT", "nd");
 
 	// Shortcut properties
 	private final String ID;
