@@ -1403,9 +1403,13 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 try {
                     //if sync is setup for zimlet properties and local is dirty then the sync'd account is effectively dirty too
                     String zimletAcctId = getZimletSyncAccountId();
-                    if (zimletAcctId != null) {
+                    if (zimletAcctId != null && zimletAcctId.length() > 0) {
                         Account zimletAcct = get(AccountBy.id, zimletAcctId);
-                        dirty.add(zimletAcct);
+                        if (zimletAcct != null) {
+                            dirty.add(zimletAcct);
+                        } else {
+                            OfflineLog.offline.debug("zimlet sync account id ["+zimletAcctId+"] does not exist");
+                        }
                     }
                 } catch (ServiceException se) {
                     //account id might be incorrect; this shouldn't cause all of dir sync to bomb
