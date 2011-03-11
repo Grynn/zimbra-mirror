@@ -17,11 +17,13 @@ package com.zimbra.cs.service.offline;
 import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.account.offline.DirectorySync;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.SyncMailbox;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
+import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.soap.DocumentHandler;
 import com.zimbra.common.soap.Element;
@@ -42,6 +44,10 @@ public class OfflineSync extends DocumentHandler {
         
         if (mbox instanceof SyncMailbox)
         	((SyncMailbox)mbox).sync(true, isDebugTraceOn);
+        
+        if (mbox instanceof ZcsMailbox) {
+            DirectorySync.getInstance().sync(mbox.getAccount(), true);
+        }
 
         return zsc.createElement(OfflineConstants.SYNC_RESPONSE);
     }

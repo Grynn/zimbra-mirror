@@ -96,23 +96,20 @@ public class DirectorySync {
     private Map<String, Long> mLastSyncTimes = new HashMap<String, Long>();
     private Map<String, Long> mLastFailTimes = new HashMap<String, Long>();
 
-    private boolean mSyncRunning;
-
-    private boolean lockAccountsToSync() {
-        if (!mSyncRunning) {
-            synchronized (this) {
-                if (!mSyncRunning) {
-                    mSyncRunning = true;
-                    return true;
-                }
-            }
+    HashMap<String, Boolean> accountSyncStatus = new HashMap<String, Boolean>();
+    
+    private synchronized boolean lockAccountToSync(Account acct) {
+        Boolean inProgress = accountSyncStatus.get(acct.getId()) ; 
+        if (inProgress != null && inProgress) {
+            return false;
+        } else {
+            accountSyncStatus.put(acct.getId(), Boolean.TRUE);
+            return true;
         }
-        return false;
     }
-
-    private void unlockAccounts() {
-        assert mSyncRunning == true;
-        mSyncRunning = false;
+    
+    private synchronized void unlockAccount(Account acct) {
+        accountSyncStatus.remove(acct.getId());
     }
 
     void syncAllAccounts(boolean isOnRequest) {
@@ -120,85 +117,84 @@ public class DirectorySync {
         if (!isOnRequest && now - lastExecutionTime < mMinSyncInterval)
             return;
 
-        if (lockAccountsToSync()) {
-            try {
-                OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
-                // first, be sure to push the locally-changed accounts
-                if (prov.hasDirtyAccounts()) {
-                    for (Account acct : prov.listDirtyAccounts()) {
-                        long lastFail = mLastFailTimes.get(acct.getId()) == null ? 0 : mLastFailTimes.get(acct.getId());
-                        if (now - lastFail > mFailSyncInterval) { //we slow donw dir sync if a failure ever happened
-                            if (sync(acct, isOnRequest)) {
-                                mLastSyncTimes.put(acct.getId(), now);
-                                mLastFailTimes.remove(acct.getId());
-                            } else
-                                mLastFailTimes.put(acct.getId(), now);
-                        }
-                    }
-                }
-
-                // then, sync the accounts we haven't synced in a while
-                // XXX: we should have a cache and iterate over it -- accounts shouldn't change out from under us
-                for (Account acct : prov.getAllZcsAccounts()) {
-                    long lastSync = mLastSyncTimes.get(acct.getId()) == null ? 0 : mLastSyncTimes.get(acct.getId());
+        try {
+            OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
+            // first, be sure to push the locally-changed accounts
+            if (prov.hasDirtyAccounts()) {
+                for (Account acct : prov.listDirtyAccounts()) {
                     long lastFail = mLastFailTimes.get(acct.getId()) == null ? 0 : mLastFailTimes.get(acct.getId());
-                    if (now - lastFail > mFailSyncInterval && now - lastSync > mAccountPollInterval) {
-                        if (sync(acct, isOnRequest)) {
-                            mLastSyncTimes.put(acct.getId(), now);
-                            mLastFailTimes.remove(acct.getId());
-                        } else
-                            mLastFailTimes.put(acct.getId(), now);
+                    if (now - lastFail > mFailSyncInterval) { //we slow donw dir sync if a failure ever happened
+                        sync(acct, isOnRequest);
                     }
                 }
-
-                lastExecutionTime = now;
-            } catch (ServiceException e) {
-                if (!e.getCode().equals(ServiceException.INTERRUPTED))
-                    OfflineLog.offline.warn("error listing accounts to sync", e);
-            } catch (Exception t) {
-                OfflineLog.offline.error("Unexpected exception syncing directory", t);
-            } finally {
-                unlockAccounts();
             }
-        }
+
+            // then, sync the accounts we haven't synced in a while
+            // XXX: we should have a cache and iterate over it -- accounts shouldn't change out from under us
+            for (Account acct : prov.getAllZcsAccounts()) {
+                long lastSync = mLastSyncTimes.get(acct.getId()) == null ? 0 : mLastSyncTimes.get(acct.getId());
+                long lastFail = mLastFailTimes.get(acct.getId()) == null ? 0 : mLastFailTimes.get(acct.getId());
+                if (now - lastFail > mFailSyncInterval && now - lastSync > mAccountPollInterval) {
+                    sync(acct, isOnRequest);
+                }
+            }
+
+            lastExecutionTime = now;
+        } catch (ServiceException e) {
+            if (!e.getCode().equals(ServiceException.INTERRUPTED))
+                OfflineLog.offline.warn("error listing accounts to sync", e);
+        } catch (Exception t) {
+            OfflineLog.offline.error("Unexpected exception syncing directory", t);
+        } 
     }
 
-    private boolean sync(Account acct, boolean isOnRequest) throws ServiceException {
-        OfflineSyncManager.getInstance().continueOK();
-        if (!isOnRequest && !OfflineSyncManager.getInstance().reauthOK(acct)) //don't reauth if just failed not too long ago
-            return false;
-
-        OfflineProvisioning prov = (OfflineProvisioning) Provisioning.getInstance();
-
-        // figure out where we need to connect to
-        String email = acct.getAttr(Provisioning.A_mail);
-        String password = acct.getAttr(OfflineProvisioning.A_offlineRemotePassword);
-        String baseUri = acct.getAttr(OfflineProvisioning.A_offlineRemoteServerUri);
-
-        if (email == null || password == null || baseUri == null) {
-            OfflineLog.offline.warn("one of email/password/uri not set for account: " + acct.getName());
-            return false;
-        }
-
-        try {
-            // fetch the account data from the remote host
-            ZMailbox zmbx = prov.newZMailbox((OfflineAccount)acct, AccountConstants.USER_SERVICE_URI);
-            syncAccount(prov, acct, zmbx);
-            pushAccount(prov, acct, zmbx);
-            if (((OfflineAccount)acct).getRemoteServerVersion().isAtLeast6xx()) {
-                syncFilterRules(prov, acct, zmbx);
-                syncWhiteBlackList(prov, acct, zmbx);
+    public void sync(Account acct, boolean isOnRequest) throws ServiceException {
+        if (lockAccountToSync(acct)) {
+            try {
+                OfflineSyncManager.getInstance().continueOK();
+                if (!isOnRequest && !OfflineSyncManager.getInstance().reauthOK(acct)) //don't reauth if just failed not too long ago
+                    return;
+        
+                OfflineProvisioning prov = (OfflineProvisioning) Provisioning.getInstance();
+        
+                // figure out where we need to connect to
+                String email = acct.getAttr(Provisioning.A_mail);
+                String password = acct.getAttr(OfflineProvisioning.A_offlineRemotePassword);
+                String baseUri = acct.getAttr(OfflineProvisioning.A_offlineRemoteServerUri);
+        
+                if (email == null || password == null || baseUri == null) {
+                    OfflineLog.offline.warn("one of email/password/uri not set for account: " + acct.getName());
+                    return;
+                }
+        
+                try {
+                    // fetch the account data from the remote host
+                    ZMailbox zmbx = prov.newZMailbox((OfflineAccount)acct, AccountConstants.USER_SERVICE_URI);
+                    syncAccount(prov, acct, zmbx);
+                    pushAccount(prov, acct, zmbx);
+                    if (((OfflineAccount)acct).getRemoteServerVersion().isAtLeast6xx()) {
+                        syncFilterRules(prov, acct, zmbx);
+                        syncWhiteBlackList(prov, acct, zmbx);
+                    }
+                    else {
+                        syncRules5xx(prov, acct, zmbx);
+                    }
+        
+                    // FIXME: there's a race condition here, as <tt>acct</tt> may have been modified during the push
+                    prov.markAccountClean(acct);
+                    mLastSyncTimes.put(acct.getId(), System.currentTimeMillis());
+                    mLastFailTimes.remove(acct.getId());
+                    return;
+                } catch (Exception e) {
+                    OfflineSyncManager.getInstance().processSyncException(acct, e, false);
+                    mLastFailTimes.put(acct.getId(), System.currentTimeMillis());
+                    return;
+                }
+            } finally {
+                unlockAccount(acct);
             }
-            else {
-                syncRules5xx(prov, acct, zmbx);
-            }
-
-            // FIXME: there's a race condition here, as <tt>acct</tt> may have been modified during the push
-            prov.markAccountClean(acct);
-            return true;
-        } catch (Exception e) {
-            OfflineSyncManager.getInstance().processSyncException(acct, e, false);
-            return false;
+        } else {
+            OfflineLog.offline.info("directory sync already in progress for account "+acct);
         }
     }
 
@@ -710,7 +706,8 @@ public class DirectorySync {
         Map<String, Object> attrs = signature.getAttrs();
         attrs.remove(OfflineProvisioning.A_offlineModifiedAttrs);
         scrubAttributes(attrs);
-        String sigType = signature.getAttr(Provisioning.A_zimbraPrefMailSignatureHTML, null) == null ? "text/plain" : "text/html";
+        String sigHtml = signature.getAttr(Provisioning.A_zimbraPrefMailSignatureHTML, null);
+        String sigType = (sigHtml == null || sigHtml.length() == 0) ? "text/plain" : "text/html";
         ZSignature zsig = new ZSignature(signature.getId(), signature.getName(), signature.getAttr(Signature.mimeTypeToAttrName(sigType)), sigType);
 
         // create or modify the signature, as requested
