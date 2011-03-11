@@ -19,7 +19,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.qa.selenium.framework.core.*;
 import com.zimbra.qa.selenium.framework.util.RetryFailedTests;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.Stafzmprov;
+import com.zimbra.qa.selenium.framework.util.staf.Stafzmprov;
 import com.zimbra.qa.selenium.projects.html2.tests.CommonTest;
 import com.zimbra.qa.selenium.projects.html2.ui.ComposeView;
 

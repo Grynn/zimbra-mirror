@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import com.ibm.staf.STAFResult;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
+import com.zimbra.qa.selenium.framework.util.staf.*;
 
 public class CodeCoverage {
 	protected static Logger logger = LogManager.getLogger(CodeCoverage.class);
@@ -369,33 +370,6 @@ public class CodeCoverage {
 	private String WebappsZimbraOriginal = null;
 	private String WebappsZimbraInstrumented = null;
 	
-	private static class StafExecuteCommand extends StafAbstract {
-		public StafExecuteCommand(String server) {
-			StafServer = server;
-			StafService = "PROCESS";
-		}
-		public boolean execute(String command) throws HarnessException {
-			if ( command.trim().startsWith("zm") ) {
-				// For zm commands, run as zimbra user, and prepend the full path
-				StafParms = String.format("START SHELL COMMAND \"su - zimbra -c '/opt/zimbra/bin/%s'\" RETURNSTDOUT RETURNSTDERR WAIT %d", command, 90000);
-			} else {
-				StafParms = String.format("START SHELL COMMAND \"%s\" RETURNSTDOUT RETURNSTDERR WAIT %d", command, 90000);
-			}
-			return (super.execute());
-		}
-	}
-	
-	private static class StafFSCommand extends StafAbstract {
-		public StafFSCommand(String server) {
-			StafServer = server;
-			StafService = "FS";
-		}
-		public boolean execute(String command) throws HarnessException {
-			StafParms = command;
-			return (super.execute());
-		}
-	}
-	
 	/**
 	 * Check if jscoverage is available on the server
 	 * 
@@ -408,9 +382,9 @@ public class CodeCoverage {
 
 		}
 		
-		StafFSCommand staf = new StafFSCommand(ZimbraSeleniumProperties.getStringProperty("server.host"));
+		StafServiceFS staf = new StafServiceFS();
 		staf.execute("QUERY ENTRY "+ Tool);
-		if ( staf.StafResult.rc == STAFResult.DoesNotExist ) {
+		if ( staf.getSTAFResult().rc == STAFResult.DoesNotExist ) {
 			Enabled = false;
 			throw new HarnessException(Tool +" does not exist!");
 		}	
@@ -446,7 +420,7 @@ public class CodeCoverage {
 		WebappsZimbraInstrumented	= "/opt/zimbra/jetty/webapps/instrumented" + ZimbraSeleniumProperties.getUniqueString();
 		
 		try {
-			StafExecuteCommand staf = new StafExecuteCommand(ZimbraSeleniumProperties.getStringProperty("server.host"));
+			StafServicePROCESS staf = new StafServicePROCESS();
 			staf.execute("zmmailboxdctl stop");
 			staf.execute(Tool +" --no-instrument=help/ "+ WebappsZimbra +" "+ WebappsZimbraInstrumented);
 			staf.execute("mv "+ WebappsZimbra +" "+ WebappsZimbraOriginal);
@@ -483,7 +457,7 @@ public class CodeCoverage {
 		WebappsZimbraInstrumented	= "/opt/zimbra/jetty/webapps/instrumented" + ZimbraSeleniumProperties.getUniqueString();
 
 		try {
-			StafExecuteCommand staf = new StafExecuteCommand(ZimbraSeleniumProperties.getStringProperty("server.host"));
+			StafServicePROCESS staf = new StafServicePROCESS();
 			staf.execute("zmmailboxdctl stop");
 			staf.execute("mv "+ WebappsZimbra +" "+ WebappsZimbraInstrumented);
 			staf.execute("mv "+ WebappsZimbraOriginal +" "+ WebappsZimbra);

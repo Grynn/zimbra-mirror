@@ -4,8 +4,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.core.*;
-import com.zimbra.qa.selenium.framework.util.Stafzmmailbox;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.staf.Stafzmmailbox;
 import com.zimbra.qa.selenium.projects.html2.tests.CommonTest;
 import com.zimbra.qa.selenium.projects.html2.ui.MailApp;
 

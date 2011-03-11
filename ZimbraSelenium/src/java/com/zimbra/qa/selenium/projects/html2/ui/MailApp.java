@@ -5,8 +5,8 @@ import org.testng.Assert;
 import com.zimbra.qa.selenium.framework.core.*;
 import com.zimbra.qa.selenium.framework.util.LmtpUtil;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.Stafpostqueue;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumLogger;
+import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.html2.tests.CommonTest;
 
 

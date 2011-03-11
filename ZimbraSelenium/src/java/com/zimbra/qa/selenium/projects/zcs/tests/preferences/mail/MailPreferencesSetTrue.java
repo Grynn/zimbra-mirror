@@ -20,8 +20,8 @@ import com.zimbra.qa.selenium.framework.core.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.RetryFailedTests;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.Stafzmprov;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.staf.Stafzmprov;
 import com.zimbra.qa.selenium.projects.zcs.tests.CommonTest;
 import com.zimbra.qa.selenium.projects.zcs.ui.MailApp;
 

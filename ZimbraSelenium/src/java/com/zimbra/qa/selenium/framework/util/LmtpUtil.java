@@ -13,6 +13,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.lmtpserver.LmtpProtocolException;
 import com.zimbra.cs.lmtpserver.utils.LmtpClient;
+import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 
 /**
  * @deprecated As of version 7.0.  See LmtpInject class instead

@@ -13,7 +13,7 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.Stafpostqueue;
+import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 
 public class FormMailNew extends AbsForm{
 

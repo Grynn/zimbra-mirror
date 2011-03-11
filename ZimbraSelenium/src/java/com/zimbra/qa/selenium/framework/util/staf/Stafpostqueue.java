@@ -1,14 +1,11 @@
-package com.zimbra.qa.selenium.framework.util;
+package com.zimbra.qa.selenium.framework.util.staf;
 
 import java.util.ArrayList;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
-import com.zimbra.qa.selenium.framework.core.DevEnvironment;
+import com.zimbra.qa.selenium.framework.core.*;
+import com.zimbra.qa.selenium.framework.util.*;
 
-public class Stafpostqueue extends StafAbstract {
-	private Logger logger = LogManager.getLogger(Stafzmprov.class);
+public class Stafpostqueue extends StafServicePROCESS {
 
 	private static final String MailQueueIsEmpty = "Mail queue is empty";
 	

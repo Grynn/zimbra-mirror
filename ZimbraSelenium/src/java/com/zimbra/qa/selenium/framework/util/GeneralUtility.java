@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 
 /**
  * This class contains general utilities methods that can be used across the framework

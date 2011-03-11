@@ -7,8 +7,8 @@ import org.testng.Assert;
 import com.zimbra.qa.selenium.framework.core.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.Stafzmprov;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.staf.Stafzmprov;
 import com.zimbra.qa.selenium.projects.html2.tests.CommonTest;
 
 

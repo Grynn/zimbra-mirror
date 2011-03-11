@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.framework.util;
+package com.zimbra.qa.selenium.framework.util.staf;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -7,29 +7,41 @@ import com.ibm.staf.STAFException;
 import com.ibm.staf.STAFHandle;
 import com.ibm.staf.STAFMarshallingContext;
 import com.ibm.staf.STAFResult;
+import com.zimbra.qa.selenium.framework.util.*;
 
+/**
+ * A wrapper class to create STAF classes from
+ * @author Matt Rhoades
+ *
+ */
 public class StafAbstract {
-	private static Logger logger = LogManager.getLogger(StafAbstract.class);
+	protected static Logger logger = LogManager.getLogger(StafAbstract.class);
 	
 	// STAF command settings
-	public String StafServer = null;
-	public String StafService = null;
-	public String StafParms = null;
-	public int StafTimeoutMillis = 30000;
+	protected String StafServer = null;
+	protected String StafService = null;
+	protected String StafParms = null;
 	
 	// STAF response
-	public STAFResult StafResult = null;
-	public String StafResponse = null;
+	protected STAFResult StafResult = null;
+	protected String StafResponse = null;
 	
 	
 	public StafAbstract() {
-		logger.info("new StafAbstract");
+		logger.info("new "+ StafAbstract.class.getCanonicalName());
 		
 		StafServer = ZimbraSeleniumProperties.getStringProperty("server.host", "local");
-		StafService = "PROCESS";
-		StafTimeoutMillis = 30000;
-		StafParms = "START SHELL COMMAND \"ls\" RETURNSTDOUT RETURNSTDERR WAIT "+ StafTimeoutMillis;
+		StafService = "PING";
+		StafParms = "PING";
 		
+	}
+	
+	public STAFResult getSTAFResult() {
+		return (StafResult);
+	}
+	
+	public String getSTAFResponse() {
+		return (StafResponse);
 	}
 	
 	/**
