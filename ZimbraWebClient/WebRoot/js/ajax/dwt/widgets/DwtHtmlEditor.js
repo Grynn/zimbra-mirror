@@ -157,6 +157,9 @@ DwtHtmlEditor.INIT_HTML = [ "<html><head><title>ZWC</title></head><body><p>",
                             AjxEnv.isGeckoBased ? "<br type='_moz' />" : "",
                             "</p></body></html>" ].join("");
 
+
+DwtHtmlEditor.TAB = "<span style='white-space:pre'>\t</span>";
+
 DwtHtmlEditor.prototype.focus =
 function(tryCount) {
 	DBG.println(AjxDebug.DBG1, "DwtHtmlEditor.prototype.focus");
@@ -632,7 +635,7 @@ DwtHtmlEditor.prototype.applyCellProperties = function(table, cells, props) {
 };
 
 DwtHtmlEditor.prototype._insertHTML =
-function(html) {
+function(html, moveCursorAfterInsertedNode) {
 	var sel = this._getSelection();
 	var range = this._createRange(sel);
 	if (AjxEnv.isIE) {
@@ -649,7 +652,7 @@ function(html) {
 		while (div.firstChild) {
 			fragment.appendChild(div.firstChild);
 		}
-		this._insertNodeAtSelection(fragment);
+		this._insertNodeAtSelection(fragment, null, null, moveCursorAfterInsertedNode);
 	}
 };
 
@@ -673,16 +676,30 @@ function(selection) {
 }
 
 DwtHtmlEditor.prototype._insertNodeAtSelection =
-function(node, select, returnSelectionHtml) {
+function(node, select, returnSelectionHtml, moveCursorAfterInsertedNode) {
 	this.focus();
 	if (!AjxEnv.isIE) {
 		var range = this._getRange();
-                var sel = this._getIframeWin().getSelection();
-		sel.removeAllRanges();
+		if (!moveCursorAfterInsertedNode) {
+			//not sure what this is for, but it moves my cursor to the beginning of the editable div and screws everything up, so for my case I don't need it.
+        	var sel = this._getIframeWin().getSelection();
+			sel.removeAllRanges();
+		}
 		try {
 			range.deleteContents();
+			if (moveCursorAfterInsertedNode) {
+				//since at least in this case the node is a DocumentFragment, we need to save the first child since insertNode moves it from the node.
+				var contentChild = node.firstChild;
+			}
 			range.insertNode(node);
-			range.selectNode(node);
+			if (moveCursorAfterInsertedNode && contentChild.nextSibling) {
+				//select the next sibling of the content node, and collapse it to the left so all we do is move the cursor to after the inserted node.
+				range.selectNode(contentChild.nextSibling);
+				range.collapse(true);
+			}
+			else {
+				range.selectNode(node);
+			}
                         if (select) {
                                 sel.addRange(range);
                         }
@@ -1390,6 +1407,12 @@ function(ev) {
 				ke._returnValue = false;
 				ke.setToDhtmlEvent(ev);
 				retVal = false;
+			}
+			else if (AjxEnv.isFirefox) { //Chrome/Safari/WebKit naturally does the tabs correctly
+				if (!ev.shiftKey) {
+					this._insertHTML(DwtHtmlEditor.TAB, true);
+					retVal = false;
+				}
 			}
 		} else if (DwtKeyboardMgr.isPossibleInputShortcut(ev)) {
 			// pass to keyboard mgr for kb nav
