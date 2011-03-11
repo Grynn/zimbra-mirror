@@ -116,6 +116,11 @@ public class ConversationItem implements IItem {
 	 */
 	public boolean gIsSelected;
 
+	/**
+	 * Is the conversation currently exapanded in the list view?
+	 */
+	public boolean gIsExpanded;
+
 
 	/**
 	 * The text body of the message

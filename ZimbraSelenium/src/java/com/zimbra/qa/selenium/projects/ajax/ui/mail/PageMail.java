@@ -752,16 +752,16 @@ public class PageMail extends AbsTab {
 
 			// Is it checked?
 			locator = convlocator + "//div[contains(@class, 'ImgCheckboxChecked')]";
-			item.isSelected = this.sIsElementPresent(locator);
+			item.gIsSelected = this.sIsElementPresent(locator);
 			
 			// Is it expanded?
 			locator = convlocator + "//div[contains(@class, 'ImgNodeExpanded')]";
-			item.isExpanded = this.sIsElementPresent(locator);
+			item.gIsExpanded = this.sIsElementPresent(locator);
 			
 			// Is it flagged
 			// TODO: probably can't have boolean, need 'blank', 'disabled', 'red', and other states
 			locator = convlocator + "//div[contains(@class, 'ImgFlagRed')]";
-			item.isFlagged = this.sIsElementPresent(locator);
+			item.gIsFlagged = this.sIsElementPresent(locator);
 			
 			// What's the priority?
 			locator = convlocator +"//div[contains(@id, '__pr')]";
@@ -769,7 +769,7 @@ public class PageMail extends AbsTab {
 				throw new HarnessException("Unable to locator priority field");
 			String priority = this.sGetAttribute("xpath="+locator+"@class");
 			if ( priority.equals("ImgPriorityHigh_list") ) {
-				item.priority = "high";
+				item.gPriority = "high";
 			} else {
 				// TODO - handle other priorities
 			}
@@ -780,20 +780,20 @@ public class PageMail extends AbsTab {
 
 			// Get the From
 			locator = convlocator + "//td[contains(@id, '__fr')]";
-			item.from = this.sGetText(locator).trim();
+			item.gFrom = this.sGetText(locator).trim();
 			
 			// Get the attachment
 			locator = "xpath=("+ convlocator +"//div[contains(@id, '__at')])@class";
 			String attach = this.sGetAttribute(locator);
 			if ( attach.equals("ImgBlank_16") ) {
-				item.hasAttachments = false;
+				item.gHasAttachments = false;
 			} else {
 				// TODO - handle other attachment types
 			}
 				
 			// Get the fragment
 			locator = convlocator + "//span[contains(@id, '__fm')]";
-			item.fragment = this.sGetText(locator).trim();
+			item.gFragment = this.sGetText(locator).trim();
 
 			// Get the subject
 			locator = convlocator + "//td[contains(@id, '__su')]";
@@ -801,27 +801,27 @@ public class PageMail extends AbsTab {
 			
 			// The subject contains the fragment, e.g. "subject - fragment", so
 			// strip it off
-			item.subject = s.replace(item.fragment, "").trim();
+			item.gSubject = s.replace(item.gFragment, "").trim();
 
 			// Get the folder
 			locator = convlocator + "//nobr[contains(@id, '__fo')]";
 			if ( this.sIsElementPresent(locator) ) {
-				item.folder = this.sGetText(locator).trim();
+				item.gFolder = this.sGetText(locator).trim();
 			} else {
-				item.folder = "";
+				item.gFolder = "";
 			}
 
 			// Get the size
 			locator = convlocator + "//nobr[contains(@id, '__sz')]";
 			if ( this.sIsElementPresent(locator) ) {
-				item.size = this.sGetText(locator).trim();
+				item.gSize = this.sGetText(locator).trim();
 			} else {
-				item.size = "";
+				item.gSize = "";
 			}
 			
 			// Get the received date
 			locator = convlocator + "//td[contains(@id, '__dt')]";
-			item.received = this.sGetText(locator).trim();
+			item.gReceived = this.sGetText(locator).trim();
 			
 			// Add the new item to the list
 			items.add(item);

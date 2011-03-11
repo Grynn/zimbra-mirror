@@ -129,7 +129,7 @@ public class DisplayMail extends AbsDisplay {
 		if ( source == null )
 			throw new HarnessException("source was null for "+ field);
 
-		logger.info("DisplayMail.zGetMailPropertyAsHtml() = "+ source);
+		logger.info("DisplayMail.zGetMailPropertyAsHtml() = "+ HtmlElement.clean(source).prettyPrint());
 
 		// Clean up the HTML code to be valid
 		return (HtmlElement.clean(source));
