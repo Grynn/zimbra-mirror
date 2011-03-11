@@ -37,6 +37,7 @@ import javax.xml.bind.annotation.XmlType;
     ModifyDomainRequest.class,
     CreateDomainRequest.class,
     CheckRightRequest.class,
+    CreateZimletRequest.class,
     CreateCalendarResourceRequest.class,
     ModifyCosRequest.class,
     ModifyDataSourceRequest.class,
@@ -58,7 +59,9 @@ import javax.xml.bind.annotation.XmlType;
     ModifyAccountRequest.class,
     DataSourceSpecifier.class,
     DataSourceInfo.class,
+    XmppComponentInfo.class,
     GalContactInfo.class,
+    XmppComponentSpec.class,
     NetworkInformation.class
 })
 public abstract class AdminAttrsImpl {

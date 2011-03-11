@@ -21,7 +21,7 @@ import com.zimbra.doc.soap.AbstractElement;
 import com.zimbra.doc.soap.Element;
 import com.zimbra.doc.soap.Attribute;
 import java.util.*;
-import com.sun.javadoc.*;
+import com.sun.javadoc.Tag;
 
 /**
  * 

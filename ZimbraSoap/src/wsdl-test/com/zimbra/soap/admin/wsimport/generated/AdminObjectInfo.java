@@ -43,8 +43,9 @@ import javax.xml.bind.annotation.XmlType;
     LocaleInfo.class,
     AliasInfo.class,
     AccountInfo.class,
-    CosInfo.class,
-    CalendarResourceInfo.class
+    CalendarResourceInfo.class,
+    ZimletInfo.class,
+    CosInfo.class
 })
 public class AdminObjectInfo {
 

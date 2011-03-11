@@ -599,8 +599,12 @@ public class WSDLAdminTest {
     //       Looks like can only assign a user right to a regular user
     //       The GetAllRightsResponse I've seen only talks about 
     //       various rights with rightClass="ADMIN"
+    // Currently fails as regards grantee as invalid.
+    //     RightBearer.isValidGranteeForAdminRights(mGranteeType, grantee))
+    // is returning false - probably needs to be in an admin group
+    // or to be a delegated admin account
     // @Test
-    public void NOTgrants() throws Exception {
+    public void grantsTestDISABLED() throws Exception {
         String accountId = Utility.ensureAccountExists(testAcct);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
 
@@ -612,7 +616,8 @@ public class WSDLAdminTest {
         gSel.setValue(testAcct);
         gSel.setType(GranteeType.USR);
         gSel.setAll(true);  // required
-        gSel.setSecret("test123");
+        // password is not allowed for grantee type usr
+        // gSel.setSecret("test123");
 
         EffectiveRightsTargetSelector tSel = new EffectiveRightsTargetSelector();
         tSel.setType(TargetType.ACCOUNT);
@@ -623,7 +628,8 @@ public class WSDLAdminTest {
         // Note: if CanDelegate modifier set, target cannot be a regular user
         //       acct.
         // rmi.setCanDelegate(true);
-        rmi.setValue("addAccountAlias");
+        // rmi.setValue("addAccountAlias");
+        rmi.setValue("viewFreeBusy");
         rmi.setSubDomain(false);
 
         GrantRightRequest grReq = new GrantRightRequest();
@@ -683,6 +689,30 @@ public class WSDLAdminTest {
         Assert.assertNotNull("grantee name", grantee.getName());
         // Not present for GetEffectiveRights (is for GetAllEffectiveRights)
         // Assert.assertNotNull("grantee type", grantee.getType());
+    }
+
+    @Test
+    public void checkRightTest() throws Exception {
+        String accountId = Utility.ensureAccountExists(testAcct);
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        CheckRightRequest req = new CheckRightRequest();
+        GranteeSelector gSel = new GranteeSelector();
+        gSel.setBy(GranteeBy.NAME);
+        gSel.setValue("admin");
+        req.setGrantee(gSel);
+        EffectiveRightsTargetSelector tSel = new EffectiveRightsTargetSelector();
+        tSel.setType(TargetType.ACCOUNT);
+        tSel.setBy(TargetBy.ID);
+        tSel.setValue(accountId);
+        req.setTarget(tSel);
+        CheckedRight checkedRight = new CheckedRight();
+        // from /opt/zimbra/conf/rights/zimbra-rights.xml
+        checkedRight.setValue("renameAccount");
+        req.setRight(checkedRight);
+        CheckRightResponse resp = eif.checkRightRequest(req);
+        Assert.assertNotNull("CheckRightResponse object", resp);
+        resp.isAllow();
+        resp.getVia();  // will be null
     }
 
     @Test
@@ -1132,6 +1162,37 @@ public class WSDLAdminTest {
         len = cosInfoList.size();
         Assert.assertTrue("Number of GetAllCosResponse <cos> children is " + len +
                 " - should be at least 1", len >= 1);
+    }
+
+    @Test
+    public void getMailQueueTest() throws Exception {
+        GetAllServersRequest gasReq = new GetAllServersRequest();
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
+        GetAllServersResponse gasResp = eif.getAllServersRequest(gasReq);
+        ServerInfo serverInfo = gasResp.getServer().get(0);
+        GetMailQueueRequest req = new GetMailQueueRequest();
+        ServerMailQueueQuery smqq = new ServerMailQueueQuery();
+        smqq.setName(serverInfo.getName());
+        MailQueueQuery mqq = new MailQueueQuery();
+        mqq.setName("Wow");  // TODO: Use a real name?
+        // Note: set true -> sets off a scan which might interfere with reruns
+        mqq.setScan(false);
+        QueueQuery qq = new QueueQuery();
+        mqq.setQuery(qq);
+        smqq.setQueue(mqq);
+        req.setServer(smqq);
+        GetMailQueueResponse resp = eif.getMailQueueRequest(req);
+        Assert.assertNotNull("GetMailQueueResponse object", resp);
+        ServerMailQueueDetails smqd = resp.getServer();
+        Assert.assertEquals("Server name", serverInfo.getName(), smqd.getName());
+        MailQueueDetails mqd = smqd.getQueue();
+        Assert.assertNotNull("MailQueueDetails object", mqd);
+        mqd.getTime();
+        Assert.assertEquals("queue total", 0, mqd.getTotal());
+        Assert.assertEquals("queue isMore", false, mqd.isMore());
+        mqd.isScan();
+        mqd.getQi();  // TODO: For real Q, this would potentially be populated
+        mqd.getQs();  // TODO: For real Q, this would potentially be populated
     }
 
     @Test

@@ -34,7 +34,9 @@ import javax.xml.bind.annotation.XmlType;
     SearchDirectoryRequest.class,
     GetAccountRequest.class,
     GetServerRequest.class,
+    GetXMPPComponentRequest.class,
     GetDomainRequest.class,
+    GetZimletRequest.class,
     SearchCalendarResourcesRequest.class,
     GetCalendarResourceRequest.class
 })

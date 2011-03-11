@@ -17,7 +17,7 @@ package com.zimbra.doc.soap.doclet;
 
 import com.zimbra.doc.soap.Service;
 import java.util.*;
-import com.sun.javadoc.*;
+import com.sun.javadoc.Tag;
 
 /**
  * 
