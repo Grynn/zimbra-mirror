@@ -45,6 +45,7 @@ public class DisplayMail extends AbsDisplay {
 		To,
 		Cc,
 		OnBehalfOf,
+		OnBehalfOfLabel,
 		Bcc,			// Does this show in any mail views?  Maybe in Sent?
 		Subject,
 		Body
@@ -196,11 +197,15 @@ public class DisplayMail extends AbsDisplay {
 
 		} else if ( field == Field.OnBehalfOf ) {
 			
-			locator = "css=tr[id$='_obo'] span[id$='_com_zimbra_email'] span span";
+			locator = "css=td[id$='_obo'] span[id$='_com_zimbra_email'] span span";
 			if ( !sIsElementPresent(locator) ) {
 				// no email zimlet case
-				locator = "css=tr[id$='_obo']";
+				locator = "css=td[id$='_obo']";
 			}
+
+		} else if ( field == Field.OnBehalfOfLabel ) {
+			
+			locator = "css=td[id$='_obo_label']";
 
 		}else if ( field == Field.ReceivedDate ) {
 			
