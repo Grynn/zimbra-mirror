@@ -246,28 +246,41 @@ public class GalSync {
     }
 
     private void populateGroupMembers(ZcsMailbox mbox, OfflineAccount galAccount) throws ServiceException {
-        OfflineLog.offline.debug("populating group members for previously create gal contacts");
-        XMLElement request = new XMLElement(AccountConstants.SEARCH_GAL_REQUEST);
-        request.addAttribute(AccountConstants.A_TYPE, OfflineGal.CTYPE_GROUP);
-        request.addElement(AccountConstants.A_NAME).setText(".");
-        Element response = mbox.sendRequest(request, true, true, OfflineLC.zdesktop_gal_sync_request_timeout.intValue(), SoapProtocol.Soap12);
-        List<Element> groups = response.listElements(MailConstants.E_CONTACT);
-        DataSource ds = GalSyncUtil.createDataSourceForAccount(galAccount);
-        Mailbox galMbox = MailboxManager.getInstance().getMailboxByAccountId(galAccount.getId(), false);
-        OperationContext ctxt = new OperationContext(galMbox);
-        if (groups != null) {
-            for (Element group : groups) {
-                //lookup each existing entry, make sure it's type=group and has correct members
-                String id = group.getAttribute(AccountConstants.A_ID);
-                int contactId = GalSyncUtil.findContact(id, ds);
-                Contact contact = galMbox.getContactById(ctxt, contactId);
-                String dlJson = GalSyncUtil.fetchDlMembers(contact.getName(), mbox);
-                Map<String,String> newFields = new HashMap<String, String>();
-                newFields.put(ContactConstants.A_member, dlJson);
-                newFields.put(ContactConstants.A_type, OfflineGal.CTYPE_GROUP);
-                ParsedContact pc = new ParsedContact(contact);
-                pc.modify(newFields, null);
-                galMbox.modifyContact(ctxt, contactId, pc);
+        OfflineLog.offline.debug("populating group members for previously created gal contacts");
+        int offset = 0;
+        boolean more = true;
+        while (more) {
+            XMLElement request = new XMLElement(AccountConstants.SEARCH_GAL_REQUEST);
+            request.addAttribute(AccountConstants.A_TYPE, OfflineGal.CTYPE_GROUP);
+            request.addElement(AccountConstants.A_NAME).setText(".");
+            request.addAttribute(MailConstants.A_QUERY_OFFSET, offset);
+            Element response = mbox.sendRequest(request, true, true, OfflineLC.zdesktop_gal_sync_request_timeout.intValue(), SoapProtocol.Soap12);
+            List<Element> groups = response.listElements(MailConstants.E_CONTACT);
+            more = response.getAttributeBool(MailConstants.A_QUERY_MORE);
+            DataSource ds = GalSyncUtil.createDataSourceForAccount(galAccount);
+            Mailbox galMbox = MailboxManager.getInstance().getMailboxByAccountId(galAccount.getId(), false);
+            OperationContext ctxt = new OperationContext(galMbox);
+            if (groups != null) {
+                for (Element group : groups) {
+                    offset++;
+                    //lookup each existing entry, make sure it's type=group and has correct members
+                    String id = group.getAttribute(AccountConstants.A_ID);
+                    int contactId = GalSyncUtil.findContact(id, ds);
+                    if (contactId == -1) {
+                        //group probably added after galsync completed. will be added on next sync.
+                        OfflineLog.offline.debug("contact ["+id+"] does not exist in local gal; assuming it will be synced on next pass");
+                        continue;
+                    } 
+                    Contact contact = galMbox.getContactById(ctxt, contactId);
+                    String listName = contact.getEmailAddresses().size() > 0 ? contact.getEmailAddresses().get(0) : contact.getFileAsString();
+                    String dlJson = GalSyncUtil.fetchDlMembers(listName, mbox);
+                    Map<String,String> newFields = new HashMap<String, String>();
+                    newFields.put(ContactConstants.A_member, dlJson);
+                    newFields.put(ContactConstants.A_type, OfflineGal.CTYPE_GROUP);
+                    ParsedContact pc = new ParsedContact(contact);
+                    pc.modify(newFields, null);
+                    galMbox.modifyContact(ctxt, contactId, pc);
+                }
             }
         }
     }
