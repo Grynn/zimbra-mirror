@@ -1027,7 +1027,7 @@ function() {
 	var row = null;
 	if (!AjxEnv.isIE) {
 		try {
-			for (i = 0; range = sel.getRangeAt(i) && i < limit; i++) {
+			for (i = 0; (range = sel.getRangeAt(i)) && i < limit; i++) {
 				var td = range.startContainer.childNodes[range.startOffset];
 				if (td) {
 					if (td.parentNode != row) {
