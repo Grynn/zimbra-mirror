@@ -69,7 +69,7 @@ function () {
 	this._toolbarOrder.push(ZaOperation.LABEL);
 	this._toolbarOrder.push(ZaOperation.SEP);
 	this._toolbarOrder.push(ZaOperation.REFRESH);
-	this._toolbarOperations[ZaOperation.LABEL] = new ZaOperation(ZaOperation.LABEL, ZaMsg.TBB_LastUpdated, ZaMsg.TBB_LastUpdated_tt, null, null, null,null,null,null,"refreshTime");	
+	this._toolbarOperations[ZaOperation.LABEL] = new ZaOperation(ZaOperation.LABEL, ZaMsg.TBB_LastUpdated, ZaMsg.TBB_LastUpdated_tt, null, null, null,null,null,"ZaUpdatedLabel","refreshTime");	
 	this._toolbarOperations[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
 	this._toolbarOperations[ZaOperation.REFRESH] =new ZaOperation(ZaOperation.REFRESH, ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, "Refresh", "Refresh", new AjxListener(this, this.refreshListener));	
 }
