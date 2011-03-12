@@ -93,7 +93,13 @@ public class DisplayMail extends AbsDisplay {
 
 		} else if ( button == Button.B_HIGHLIGHT_OBJECTS ) {
 
-			throw new HarnessException("implement me!");
+			locator = "css=span[id$='__TV_highlightObjects_link']";
+
+			this.sClick(locator);
+			
+			this.zWaitForBusyOverlay();
+
+			return (page);
 
 		} else if ( button == Button.B_ACCEPT ) {
 			

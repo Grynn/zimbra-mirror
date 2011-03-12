@@ -41,7 +41,7 @@ public class Bug39246 extends AjaxCommonTest {
 		DisplayMail display = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 
 		// In the preview pane, click "View Entire Message"
-		display.zClickViewEntireMessage();
+		display.zPressButton(Button.B_VIEW_ENTIRE_MESSAGE);
 		
 		throw new HarnessException("Convert remaining code from LmtpInject.viewEntireMessage_Bug39246()");
 
