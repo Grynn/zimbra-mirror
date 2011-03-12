@@ -1,7 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsDisplay;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 
@@ -53,7 +52,17 @@ public class DisplayContact extends AbsDisplay {
 		return (this.getClass().getName());
 	}
 
+	@Override
+	public AbsPage zPressButton(Button button) throws HarnessException {
+		logger.info(myPageName() + " zDisplayPressButton("+ button +")");
+		
+		tracer.trace("Click "+ button);
+
+		throw new HarnessException("no logic defined for button: "+ button);
+		
+	}
 	
+
 	/**
 	 * Get the string value of the specified field
 	 * @return the displayed string value

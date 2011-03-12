@@ -3,6 +3,8 @@ package com.zimbra.qa.selenium.framework.ui;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import com.zimbra.qa.selenium.framework.util.HarnessException;
+
 /**
  * A <code>AbsDisplay</code> object represents a read-only "displayed object", 
  * such as a message, contact, appointment (as attendee), document, etc.
@@ -38,5 +40,10 @@ public abstract class AbsDisplay extends AbsPage {
 	 * @return
 	 */
 	public abstract String myPageName();
+	
+	/**
+	 * Click on a Button in the display
+	 */
+	public abstract AbsPage zPressButton(Button button) throws HarnessException;
 	
 }

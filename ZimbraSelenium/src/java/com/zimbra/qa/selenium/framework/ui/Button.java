@@ -143,6 +143,14 @@ public class Button {
 	public static final Button B_TREE_FOLDER_MARKASREAD = new Button("B_TREE_FOLDER_MARKASREAD");
 	public static final Button B_TREE_FOLDER_EXPANDALL = new Button("B_TREE_FOLDER_EXPANDALL");
 	public static final Button B_TREE_FOLDER_EMPTY = new Button("B_TREE_FOLDER_EMPTY");
+	
+	// Mail 'Display' buttons
+	public static final Button B_ACCEPT = new Button("B_ACCEPT");
+	public static final Button B_DECLINE = new Button("B_DECLINE");
+	public static final Button B_TENTATIVE = new Button("B_TENTATIVE");
+	public static final Button B_PROPOSE_NEW_TIME = new Button("B_PROPOSE_NEW_TIME");
+	public static final Button B_VIEW_ENTIRE_MESSAGE = new Button("B_VIEW_ENTIRE_MESSAGE");
+	public static final Button B_HIGHLIGHT_OBJECTS = new Button("B_HIGHLIGHT_OBJECTS");
 
 	
 	// Button properties

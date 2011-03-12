@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
+import java.util.*;
+
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
@@ -70,35 +72,93 @@ public class DisplayMail extends AbsDisplay {
 		return (this.getClass().getName());
 	}
 
-	/**
-	 * Click on "view entire message" in this message
-	 * @return TBD: return the new window?
-	 * @throws HarnessException
-	 */
-	public AbsPage zClickViewEntireMessage() throws HarnessException {
-		logger.info(myPageName() + " zViewEntireMessage");
+	@Override
+	public AbsPage zPressButton(Button button) throws HarnessException {
+		logger.info(myPageName() + " zDisplayPressButton("+ button +")");
 		
-		tracer.trace("Click 'View Entire Message'");
+		tracer.trace("Click "+ button);
 
 		AbsPage page = this;
-		String locator = Locators.zViewEntireMessage;
+		String locator = null;
+
+		if ( button == Button.B_VIEW_ENTIRE_MESSAGE ) {
+			
+			locator = Locators.zViewEntireMessage;
+
+			this.sClick(locator);
+			
+			this.zWaitForBusyOverlay();
+
+			return (page);
+
+		} else if ( button == Button.B_HIGHLIGHT_OBJECTS ) {
+
+			throw new HarnessException("implement me!");
+
+		} else if ( button == Button.B_ACCEPT ) {
+			
+			locator = "css=td[id$='__Inv__REPLY_ACCEPT_title']";
+			page = null;
+			
+		} else if ( button == Button.B_DECLINE ) {
+			
+			locator = "css=td[id$='__Inv__REPLY_TENTATIVE_title']";
+			page = null;
 		
-		this.sClick(locator);
+		} else if ( button == Button.B_TENTATIVE ) {
+			
+			locator = "css=td[id$='__Inv__REPLY_DECLINE_title']";
+			page = null;
+			
+		} else if ( button == Button.B_PROPOSE_NEW_TIME ) {
+			
+			locator = "css=td[id$='__Inv__PROPOSE_NEW_TIME_title']";
+			page = null;
+			
+		} else  {
+			
+			throw new HarnessException("no implementation for button: "+ button);
+
+		}
+		
+		if ( locator == null )
+			throw new HarnessException("no locator defined for button "+ button);
+		
+		
+		this.zClick(locator);
 		
 		this.zWaitForBusyOverlay();
 
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+		
 		return (page);
 	}
 
 	/**
-	 * Click on "highlight objects" in this message
-	 * @return TBD: return the new window?
+	 * Return TRUE/FALSE whether the Accept/Decline/Tentative buttons are present
+	 * @return
 	 * @throws HarnessException
 	 */
-	public AbsPage zClickHighlightObjects() throws HarnessException {
-		tracer.trace("Click 'highlight objects'");
+	public boolean zHasADTButtons() throws HarnessException {
+	
+		// Haven't fully baked this method.  
+		// Maybe it works.  
+		// Maybe it needs to check "visible" and/or x/y/z coordinates
 
-		throw new HarnessException("implement me!");
+		List<String> locators = Arrays.asList(
+				"css=td[id$='__Inv__REPLY_ACCEPT_title']",
+				"css=td[id$='__Inv__REPLY_TENTATIVE_title']",
+				"css=td[id$='__Inv__REPLY_DECLINE_title']",
+				"css=td[id$='__Inv__PROPOSE_NEW_TIME_title']");
+
+		for (String locator : locators) {
+			if ( !this.sIsElementPresent(locator) )
+				return (false);
+		}
+		
+		return (true);
 	}
 	
 	public HtmlElement zGetMailPropertyAsHtml(Field field) throws HarnessException {
@@ -284,6 +344,7 @@ public class DisplayMail extends AbsDisplay {
 		
 		return (true);
 	}
+
 
 
 

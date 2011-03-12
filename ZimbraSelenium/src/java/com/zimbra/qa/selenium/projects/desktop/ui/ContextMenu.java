@@ -46,6 +46,17 @@ public class ContextMenu extends AbsDisplay {
    public String myPageName() {
       return (this.getClass().getName());
    }
+   
+	@Override
+	public AbsPage zPressButton(Button button) throws HarnessException {
+		logger.info(myPageName() + " zDisplayPressButton("+ button +")");
+		
+		tracer.trace("Click "+ button);
+
+		throw new HarnessException("no logic defined for button: "+ button);
+		
+	}
+
 
    @Override
    public boolean zIsActive() throws HarnessException {

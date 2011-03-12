@@ -1,7 +1,6 @@
 package com.zimbra.qa.selenium.projects.desktop.ui.mail;
 
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsDisplay;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 
@@ -72,6 +71,16 @@ public class DisplayMail extends AbsDisplay {
    public String myPageName() {
       return (this.getClass().getName());
    }
+
+	@Override
+	public AbsPage zPressButton(Button button) throws HarnessException {
+		logger.info(myPageName() + " zDisplayPressButton("+ button +")");
+		
+		tracer.trace("Click "+ button);
+
+		throw new HarnessException("no logic defined for button: "+ button);
+		
+	}
 
    /**
     * Click on "view entire message" in this message
