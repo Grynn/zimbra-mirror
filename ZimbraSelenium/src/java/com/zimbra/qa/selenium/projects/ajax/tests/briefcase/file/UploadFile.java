@@ -68,10 +68,7 @@ public class UploadFile extends AjaxCommonTest {
 		ZAssert.assertEquals(name, fileName, "Verify file name through SOAP");
 		
 		//delete file upon test completion
-		account.soapSend(
-				"<ItemActionRequest xmlns='urn:zimbraMail'>" +
-				"<action id='" + id + "' op='trash'/>" +
-				"</ItemActionRequest>");				
+		app.zPageBriefcase.deleteFileById(id);
 	}
 
 	@Test(description = "Upload file through RestUtil - verify through GUI", groups = { "sanity" })
@@ -85,7 +82,7 @@ public class UploadFile extends AjaxCommonTest {
 		DocumentItem document = new DocumentItem();
 
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/structure.jpg";
+				+ "/data/public/other/testwordfile.doc";
 
 		String fileName = document.getFileName(filePath);
 

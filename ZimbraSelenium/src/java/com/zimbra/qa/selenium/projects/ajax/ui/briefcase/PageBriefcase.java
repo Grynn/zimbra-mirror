@@ -426,6 +426,8 @@ public class PageBriefcase extends AbsTab {
 			// wait for the page to go active
 			if (page != null) {
 				page.zWaitForActive();
+				if(option == Button.O_SEND_AS_ATTACHMENT)
+					zWaitForElementPresent("css=tr[id$=_attachments_row]");	
 			}
 		}
 		// Return the specified page, or null if not set
@@ -679,6 +681,24 @@ public class PageBriefcase extends AbsTab {
 		zWaitForIframeText("css=iframe[id*='DWT'][class='ZDEditor']", text);
 
 		return true;
+	}
+	
+	public void deleteFileByName(String docName) throws HarnessException {
+		ZimbraAccount account = MyApplication.zGetActiveAccount();
+		account.soapSend(
+				"<SearchRequest xmlns='urn:zimbraMail' types='document'>"
+						+ "<query>" + docName + "</query>"
+						+ "</SearchRequest>");
+		String id = account.soapSelectValue("//mail:doc", "id");
+		deleteFileById(id);
+	}
+	
+	public void deleteFileById(String docId) throws HarnessException {
+		ZimbraAccount account = MyApplication.zGetActiveAccount();
+		account.soapSend(
+				"<ItemActionRequest xmlns='urn:zimbraMail'>" +
+				"<action id='" + docId + "' op='trash'/>" +
+				"</ItemActionRequest>");	
 	}
 
 	public void closeWindow() {

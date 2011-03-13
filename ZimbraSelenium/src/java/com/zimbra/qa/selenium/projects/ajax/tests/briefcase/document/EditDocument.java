@@ -103,7 +103,10 @@ public class EditDocument extends AjaxCommonTest {
 		boolean present = app.zPageBriefcase.isPresent(docName);
 
 		ZAssert.assertTrue(present, "Verify document name through GUI");
-
+		
+		//delete file upon test completion
+		app.zPageBriefcase.deleteFileByName(docName);
+		
 		/*
 		 * //name =ClientSessionFactory.session().selenium().getText(
 		 * "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div[id^=zlif__BDLV__]"
@@ -226,6 +229,9 @@ public class EditDocument extends AjaxCommonTest {
 
 		ZAssert.assertStringContains(text, docText,
 				"Verify document text through GUI");
+		
+		//delete file upon test completion
+		app.zPageBriefcase.deleteFileByName(docName);
 	}
 
 	@Test(description = "Create document & edit text through SOAP & verify through GUI", groups = { "smoke" })
@@ -320,6 +326,9 @@ public class EditDocument extends AjaxCommonTest {
 
 		ZAssert.assertStringContains(text, docText,
 				"Verify document text through GUI");
+		
+		//delete file upon test completion
+		app.zPageBriefcase.deleteFileByName(docName);
 	}
 
 	@Test(description = "Create document through SOAP - edit text & verify through GUI", groups = { "smoke" })
@@ -419,5 +428,8 @@ public class EditDocument extends AjaxCommonTest {
 
 		ZAssert.assertStringContains(text, docText,
 				"Verify document text through GUI");
+		
+		//delete file upon test completion
+		app.zPageBriefcase.deleteFileByName(docName);
 	}
 }

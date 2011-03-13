@@ -35,7 +35,7 @@ public class SendFileAttachment extends AjaxCommonTest {
 		DocumentItem document = new DocumentItem();
 
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/testwordfile.doc";
+				+ "/data/public/other/structure.jpg";
 		
 		String fileName = document.getFileName(filePath);
 
