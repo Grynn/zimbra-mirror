@@ -801,7 +801,7 @@ public class OfflineSyncManager implements FormatListener {
           [(<account>...</account>)*]
         </zdsync>
      */
-    public void encode(Element context, String requestedAccountId) throws ServiceException {
+    public void encode(Element context) throws ServiceException {
         OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
         Element zdsync = context.addUniqueElement(ZDSYNC_ZDSYNC);
         List<Account> accounts = prov.getAllAccounts();
