@@ -1,18 +1,12 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.conversation;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.ConversationItem;
-import com.zimbra.qa.selenium.framework.items.MailItem;
-import com.zimbra.qa.selenium.framework.items.RecipientItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
 
@@ -39,18 +33,15 @@ public class GetConversation extends AjaxCommonTest {
 		
 		
 		// Create the message data to be sent
-		MailItem mail = new MailItem();
-		mail.dToRecipients.add(new RecipientItem(app.zGetActiveAccount().EmailAddress));
-		mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		mail.gBodyText = "body" + ZimbraSeleniumProperties.getUniqueString();
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		
 		ZimbraAccount.AccountA().soapSend(
 					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
 						"<m>" +
 							"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
-							"<su>"+ mail.dSubject +"</su>" +
+							"<su>"+ subject +"</su>" +
 							"<mp ct='text/plain'>" +
-								"<content>"+ mail.gBodyText +"</content>" +
+								"<content>"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
 							"</mp>" +
 						"</m>" +
 					"</SendMsgRequest>");
@@ -64,8 +55,8 @@ public class GetConversation extends AjaxCommonTest {
 
 		boolean found = false;
 		for (ConversationItem c : conversations) {
-			logger.info("Subject: looking for "+ mail.dSubject +" found: "+ c.subject);
-			if ( c.subject.equals(mail.dSubject) ) {
+			logger.info("Subject: looking for "+ subject +" found: "+ c.gSubject);
+			if ( subject.equals(c.gSubject) ) {
 				found = true;
 				break;
 			}
