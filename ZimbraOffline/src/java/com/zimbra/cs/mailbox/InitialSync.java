@@ -981,7 +981,7 @@ public class InitialSync {
         return data;
     }
 
-    private void syncMessagesAsTgz(List<Integer> ids, byte type) throws ServiceException {
+    private void syncMessagesAsTgz(List<Integer> ids, MailItem.Type type) throws ServiceException {
         if (isAttachmentDownloadBlocked()) {
             handleAttachmentDownloadBlocking(ombx.getOfflineAccount());
         }
