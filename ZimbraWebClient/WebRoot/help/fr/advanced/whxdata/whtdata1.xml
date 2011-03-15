@@ -3,7 +3,7 @@
 <tocdata>
 <item name="À propos de la planification de rendez-vous" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 <item name="Planification d'un rendez-vous" url="Calendar/Scheduling_meetings.htm" />
-<item name="Programmation des événements de journée entière" url="Calendar/Scheduling_All_Day_events.htm" />
+<item name="Programmation des événements d'une journée" url="Calendar/Scheduling_All_Day_events.htm" />
 <item name="Création de rendez-vous récurrents" url="Calendar/Creating_recurring_appointments.htm" />
 <item name="Création d'un rendez-vous à partir d'un rendez-vous existant" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
 <item name="Conversion d'un mail et de contacts en demandes de réunion" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
@@ -14,8 +14,8 @@
 <item name="Configurer les autorisations pour consulter vos informations de disponibilité (libre/occupé) " url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
 <item name="Envoyer votre état de disponibilité (libre/occupé) aux autres utilisateurs" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
 <item name="Consulter les disponibilités (libre/occupé)" url="Calendar/Seeing_free_busy_times.htm" />
-<item name="Marquer un rendez-vous comme étant d'ordre privé" url="Calendar/Marking_an_appointment_as_private.htm" />
-<item name="Planification des ressources" url="Calendar/Scheduling_Resources.htm" />
+<item name="Marquer un rendez-vous comme étant privé" url="Calendar/Marking_an_appointment_as_private.htm" />
+<item name="Programmation des ressources" url="Calendar/Scheduling_Resources.htm" />
 <item name="Modifier les détails d'une réunion dans votre calendrier" url="Calendar/editing_meetings_on_your_calendar.htm" />
 <item name="Répondre à une invitation de réunion" url="Calendar/Responding_to_an_invitation.htm" />
 <item name="Faire suivre un rendez-vous" url="Calendar/Forwarding_an_appointment.htm" />

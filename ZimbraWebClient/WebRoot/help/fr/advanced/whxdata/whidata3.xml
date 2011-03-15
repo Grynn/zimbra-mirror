@@ -1,6 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="suppression de contacts" >
+  <topic name="Suppression d'un contact" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="suppression du mobile" >
+  <topic name="Effacer les données de votre périphérique mobiile" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
+</key>
 <key name="Supprimer" >
   <topic name="Supprimer des dossiers" url="Navigation_folders_and_tips/deleting_folders.htm" />
   <key name="dossiers" >
@@ -11,7 +17,7 @@
   <topic name="Modification de rendez-vous récurrents" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
 <key name="supprimer le mobile" >
-  <topic name="Gérer des mobiles" url="Userspecific/Managing_your_mobile_devices.htm" />
+  <topic name="Gérer vos périphériques mobiles" url="Userspecific/Managing_your_mobile_devices.htm" />
 </key>
 <key name="supprimer une réunion" >
   <topic name="Suppression d'un rendez-vous" url="Calendar/Deleting_an_appointment.htm" />
@@ -45,7 +51,7 @@
   <topic name="Utiliser les tags pour classer les mails" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
 </key>
 <key name="téléphone, suppression" >
-  <topic name="Gérer des mobiles" url="Userspecific/Managing_your_mobile_devices.htm" />
+  <topic name="Gérer vos périphériques mobiles" url="Userspecific/Managing_your_mobile_devices.htm" />
 </key>
 <key name="touches de raccourcis" >
   <topic name="Touches de raccourcis du clavier ZWC" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
@@ -62,13 +68,13 @@
   <topic name="Fonctionnement du filtre" url="filters/how_filtering_works.htm" />
 </key>
 <key name="trouver des partages" >
-  <topic name="Gérer les objets partagés" url="Sharing/Managing_items_you_share.htm" />
+  <topic name="Gérer les éléments que vous partagez" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="type de client" >
   <topic name="Configurer vos préférences générales " url="Userspecific/Setting_your_general_preferences.htm" />
 </key>
-<key name="Types de fichiers de pièces jointes supportés" >
-  <topic name="Types de fichiers de pièces jointes supportés" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+<key name="Types de fichiers de pièce jointe pris en charge" >
+  <topic name="Types de fichiers de pièce jointe pris en charge" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
 </key>
 <key name="uploader les nouveaux Zimlets" >
   <topic name="Gestion de vos Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
@@ -104,7 +110,7 @@
   <topic name="Utiliser l'onglet Programme lors de la création d'un rendez-vous" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
 <key name="versions" >
-  <topic name="Contrôle de la version des fichiers du Porte-documents" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+  <topic name="Contrôle de la version des fichiers du porte-documents" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 </key>
 <key name="W dans le mini- calendrier" >
   <topic name="Afficher le numéro des semaines dans le calendrier" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />

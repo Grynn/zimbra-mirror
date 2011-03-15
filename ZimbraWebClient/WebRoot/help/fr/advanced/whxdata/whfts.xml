@@ -2,7 +2,7 @@
 <!-- saved from url=(0014)about:internet -->
 <odb>
 	<odbtype type="WebHelp"/>
-	<language name="en_US"/>
+	<language name="fr_FR"/>
 	<index type="TopicIndex" url="topictableindex.xml"/>
 	<index type="PackageIndex" url="packageindex.xml"/>
 	<index type="Synonym" url="synonym.xml"/>
@@ -177,8 +177,6 @@
 		<file url="whxdata\package_167.xml"/>
 		<file url="whxdata\package_168.xml"/>
 		<file url="whxdata\package_169.xml"/>
-		<file url="whxdata\package_170.xml"/>
-		<file url="whxdata\package_171.xml"/>
 		<file url="whxdata\packageindex.xml"/>
 		<file url="whxdata\synonym.xml"/>
 		<file url="whxdata\topictable_0.xml"/>

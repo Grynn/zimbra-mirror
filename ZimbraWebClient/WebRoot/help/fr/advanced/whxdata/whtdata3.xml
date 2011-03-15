@@ -2,7 +2,7 @@
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
 <item name="Partager des dossiers" url="Sharing/Sharing_a_folder.htm" />
-<item name="Gérer les objets partagés" url="Sharing/Managing_items_you_share.htm" />
+<item name="Gérer les objets que vous partagez" url="Sharing/Managing_items_you_share.htm" />
 <item name="Partager avec une liste de diffusion" url="Sharing/Sharing_with_a_Distribution_List.htm" />
 <book name="Partage de dossiers de messagerie" >
   <item name="Partage de dossiers de messagerie" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
@@ -13,8 +13,8 @@
 </book>
 <book name="Partage de calendriers" >
   <item name="Partage de votre calendrier" url="Calendar/Delegating_Calendar_Access.htm" />
-  <item name="Accorder les droits Admin pour un calendrier partagé" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
-  <item name="Accorder les droits Gestionnaire pour un calendrier partagé" url="Calendar/Manager_rights_for_shared_Calendars.htm" />
+  <item name="Accorder les droits Admin pour des calendriers partagés" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+  <item name="Accorder les droits Gestionnaire pour des calendriers partagés" url="Calendar/Manager_rights_for_shared_Calendars.htm" />
   <item name="Accepter l'accès à un calendrier partagé" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
   <item name="Refuser une demande de partage de calendrier" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
 </book>
@@ -26,7 +26,7 @@
   <item name="Accepter l'accès à des listes de tâches partagées" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
 </book>
 <book name="Partager les dossiers du porte-documents" >
-  <item name="Partager votre Porte-documents" url="Briefcase/Sharing_your_Briefcase.htm" />
+  <item name="Partager votre porte-documents" url="Briefcase/Sharing_your_Briefcase.htm" />
 </book>
 
 </tocdata>

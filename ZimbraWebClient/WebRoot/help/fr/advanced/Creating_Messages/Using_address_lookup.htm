@@ -54,7 +54,7 @@ if (window.gbWhTopic)
 
 	if (window.addTocInfo)
 	{
-	addTocInfo("Écrire un mail\nSaisie automatique d'adresse");
+	addTocInfo("Rédaction d'un mail\nSaisie automatique d'adresse");
 addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 
 	}
@@ -82,16 +82,11 @@ else
 
 //-->
 //]]></script>
-<div style="width: 100%; position: relative;" id="header">
-	
-</div>
-
-
 <h1>Saisie automatique d'adresse</h1>
-<p>La fonction de saisie automatique vous suggère des noms pendant que vous entrez des caractères dans les champs <span style="font-weight: bold;"><b>De, Cc et Cci</b></span>. Elle affiche une liste d'adresses possibles de votre liste de contacts qui <span style="font-style: italic;"><i>débute</i></span> avec le texte que vous avez saisi.</p>
-<p>Pendant que vous continuez à saisir le nom dans le champ <span style="font-weight: bold;"><b>À :</b></span> , la liste des adresses correspondantes se réduit, car il existe moins de correspondances. La liste disparaît s'il n'existe aucune correspondance.</p>
+<p>La fonction de saisie automatique suggère des noms lorsque vous entrez des caractères dans les champs <span style="font-weight: bold;"><b>De, Cc et Cci</b></span>. Elle affiche une liste d'adresses possibles de votre liste de contacts ou de votre liste d'adresses globale qui <span style="font-style: italic;"><i>commencent</i></span> par le texte que vous avez saisi.</p>
+<p>Pendant que vous continuez à saisir le nom dans le champ <span style="font-weight: bold;"><b>À :</b></span>, la liste des adresses correspondantes se réduit, car il existe moins de correspondances. La liste disparaît s'il n'existe aucune correspondance.</p>
 <h4>Exemple</h4>
-<p>Par exemple, supposez que vous voulez envoyer un mail à David Brinks dont l'adresse mail est dbrinks@acme.com. Lorsque vous tapez le premier &quot; d&quot; dans le champ d'adresse, une liste affichant toutes les correspondances possibles s'affiche, et les proportions correspondantes sont surlignées. Dans ce cas, elle pourrait afficher :</p>
+<p>Supposez que vous voulez envoyer un mail à David Brinks dont l'adresse mail est dbrinks@acme.com. Lorsque vous tapez le premier &quot;d&quot; dans le champ d'adresse, une liste contenant toutes les correspondances possibles s'affiche avec les proportions correspondantes en évidence. Dans ce cas, elle pourrait afficher :</p>
 <p style="margin-left: 40px;"><span style="font-weight: bold;"><b>D</b></span>ale Edwards &lt; <span style="font-weight: bold;"><b>d</b></span>ed@acme.com&gt;</p>
 <p style="margin-left: 40px;"><span style="font-weight: bold;"><b>D</b></span>avid Brinks &lt; <span  	 style="font-weight: bold;"><b>d</b></span>brinks@acme.com&gt;</p>
 <p style="margin-left: 40px;">Erica <span style="font-weight: bold;"><b>D</b></span>odd &lt;erica878@xyz.com&gt;</p>
@@ -105,8 +100,8 @@ else
 </ul>
 <p>La correspondance s'établit toujours par rapport aux caractères de début. Le texte "r;bob" correspondra à "r;bob smith" mais pas à "r; billybob smith".</p>
 <h3>Utilisation de la fonction de saisie automatique</h3>
-<p>Une fois que votre texte correspond à un ou plusieurs de vos contacts, les correspondances s'afficheront dans une liste au-dessous du champ que vous êtes en train de modifier. Par défaut, la première correspondance est surlignée.</p>
-<p>Les noms s'affichent dans un ordre de &quot;classement&quot; ; les contacts auxquels vous avez envoyé des mails sont placés avant les contacts auxquels vous n'avez pas ou n'envoyez pas fréquemment des mails. En un mot, le contact le plus fréquemment utilisé apparaît en premier. Si vous ne préférez pas que le nom de ce contact apparaisse toujours en premier, vous pouvez cliquez sur <span style="font-weight: bold;"><b>Ignorer</b></span> pour que ce contact passe à une position inférieure.</p>
+<p>Une fois que le texte correspond à un ou plusieurs de vos contacts, les correspondances s'affichent dans une liste au-dessous du champ que vous modifiez. Par défaut, la première correspondance est surlignée.</p>
+<p>Les noms s'affichent dans un ordre de &quot;classement&quot; ; les contacts auxquels vous avez envoyé des mails sont placés avant les contacts auxquels vous n'en navez pas envoyés ou n'envoyez pas fréquemment des mails. En un mot, le contact le plus fréquemment utilisé apparaît en premier. Si vous ne voulez pas que le nom du contact apparaisse toujours en premier, vous pouvez cliquer sur <span style="font-weight: bold;"><b>Ignorer</b></span> pour que le contact descende dans la liste.</p>
 <p>Les différentes touches que vous utilisez déclenchent un comportement spécifique. La souris peut également être utilisée pour sélectionner une correspondance.</p>
 <ul type="disc">
 	<li class="p"><p>La virgule, le point-virgule, les touches Retour/Entrée et Tab déclenchent tous la saisie. Le texte que vous avez saisi sera remplacé par la correspondance actuellement sélectionnée. </p></li>
@@ -114,13 +109,9 @@ else
 	<li class="p"><p>Les touches fléchées Haut et Bas permettent de modifier la sélection dans la liste. En déplaçant le curseur de la souris sur la liste, vous pouvez également modifier la sélection.</p></li>
 	<li class="p"><p>Cliquez avec la souris sur une correspondance pour permettre sa saisie.</p></li>
 </ul>
-<p>Sachant qu'une seule touche (le point-virgule, par exemple) vous permet d'effectuer la saisie, vous disposez d'un moyen rapide de saisir des adresses. Si vous connaissez certains caractères vous permettant d'obtenir un contact spécifique à la première correspondance, vous pouvez les saisir, suivies d'un point-virgule, et l'adresse de ce contact s'affichera. Par exemple, si je sais que "r; db" donne comme première correspondance David Brinks, je peux saisir "r; db;" et l'adresse complète "r;David Brinks &lt; dbrinks@acme.com&gt;" s'affiche dans la zone d'adresse.</p>
+<p>Sachant qu'une seule touche (le point-virgule, par exemple) vous permet d'effectuer la saisie, vous disposez d'un moyen rapide de saisir des adresses. Si vous connaissez certains caractères vous permettant d’obtenir un contact spécifique à la première correspondance, vous pouvez les saisir, suivis d'un point-virgule, et l'adresse du contact s'affiche. Par exemple, si vous savez que « r; db » donne comme première correspondance David Brinks, vous pouvez saisir « r;&#160; db; » et l'adresse complète « r;David Brinks  &lt;dbrinks@acme.com&gt; » s'affiche dans la zone d'adresse.</p>
 <p class="note"><span style="font-weight: bold;"><b>Remarque</b></span> : Vous pouvez modifier les paramètres de la fonction de saisie automatique dans <a  	 href="../Userspecific/Setting_your_address_book_preferences.htm">Préférences, Carnet d'adresses</a>. </p>
-<p>La fonction de saisie automatique est disponible dans d'autres applications (par exemple, pour l'ajout de participants à un rendez-vous) et fonctionne de la même manière.</p> 
-<div style="width: 100%; position: relative;" id="footer">
-	<p style="font-size: 8pt; background-color: #e9e9e9; border-top-width: 1px; 
-		 border-top-style: Solid;"><span style="font-size: 8pt; background-color: #e9e9e9; "><font size="1" style="font-size:8pt;">Copyright @ 2011 Zimbra and VMware, Inc. Tous droits réservés.</font></span></p>
-</div>
+<p>La fonction de saisie automatique est disponible dans d'autres applications (par exemple, pour l'ajout de participants à un rendez-vous) et fonctionne de la même manière.</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

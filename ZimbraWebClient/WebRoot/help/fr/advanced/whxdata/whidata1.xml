@@ -1,9 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="Dossier Corbeille" >
-  <topic name="Dossier Corbeille" url="Navigation_folders_and_tips/trash_folder.htm" />
-</key>
 <key name="dossiers" >
   <topic name="Renommer des dossiers" url="Navigation_folders_and_tips/renaming_folders.htm" />
   <topic name="À propos des dossiers" url="Navigation_folders_and_tips/about_folders.htm" />
@@ -18,7 +15,7 @@
   <topic name="Utilisation de l'éditeur RTF" url="Documents/Using_the_rich_text_editor.htm" />
 </key>
 <key name="emplacement, réserver" >
-  <topic name="Planification des ressources" url="Calendar/Scheduling_Resources.htm" />
+  <topic name="Programmation des ressources" url="Calendar/Scheduling_Resources.htm" />
 </key>
 <key name="en-têtes, inclusion" >
   <topic name="Configurer vos préférences pour la fenêtre Écrire un mail " url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
@@ -30,14 +27,14 @@
   <topic name="Envoyer des fichiers à partir de votre Porte-documents" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 </key>
 <key name="équipement, réserver" >
-  <topic name="Planification des ressources" url="Calendar/Scheduling_Resources.htm" />
+  <topic name="Programmation des ressources" url="Calendar/Scheduling_Resources.htm" />
 </key>
 <key name="événements" >
   <topic name="Programmation de journées entières" url="Calendar/Scheduling_All_Day_events.htm" />
   <topic name="À propos des rendez-vous, réunions et événements" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
 <key name="évènements publics/privés du calendrier" >
-  <topic name="Marquer un rendez-vous comme étant d'ordre privé" url="Calendar/Marking_an_appointment_as_private.htm" />
+  <topic name="Marquer un rendez-vous comme étant privé" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
 <key name="Exemples de recherches" >
   <topic name="Exemples de recherches" url="Search/search_examples.htm" />
@@ -52,7 +49,7 @@
   <topic name="Sauvegarder (backup) le contenu de votre compte" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
 <key name="extraire" >
-  <topic name="Travailler avec des fichiers dans un Porte-documents" url="Briefcase/Working_with_files_in_Briefcase.htm" />
+  <topic name="Travailler avec des fichiers dans un porte-documents" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
 <key name="Faire suivre un mail en pièce jointe" >
   <topic name="Configurer vos préférences pour la fenêtre Écrire un mail " url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
@@ -111,9 +108,6 @@
 <key name="glisser-déposer" >
   <topic name="Espace de travail de Zimbra Web Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
-<key name="groupes de contacts" >
-  <topic name="Création de Listes du Groupe de Contacts" url="Contacts/Creating_Group_Contact_Lists.htm" />
-</key>
 <key name="HTML" >
   <topic name="Affichage HTML dans les mails" url="reading_mail/displaying_html_in_email_messages.htm" />
   <topic name="Utilisation de l'éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
@@ -140,6 +134,7 @@
 </key>
 <key name="ignorer" >
   <topic name="Utilisation de la vérification d'adresse" url="Creating_Messages/Using_address_lookup.htm" />
+  <topic name="Classement des adresses mail pour la saisie automatique" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="images dans les signatures" >
   <topic name="Utilisation d'une signature" url="Userspecific/using_a_signature.htm" />
@@ -161,7 +156,6 @@
   <topic name="Importer des contacts" url="Contacts/Importing_Contacts.htm" />
 </key>
 <key name="Impression" >
-  <topic name="Impression d'une conversation" url="conversations/printing_a_conversation.htm" />
   <topic name="Impression d'un mail" url="reading_mail/printing_a_mail_message.htm" />
   <key name="mail" >
     <topic name="Impression d'un mail" url="reading_mail/printing_a_mail_message.htm" />
@@ -197,7 +191,7 @@
 <key name="liste blanche" >
   <topic name="Filtrer le spam" url="filters/Filtering_Junk_Mail.htm" />
 </key>
-<key name="Liste des contacts" >
+<key name="Liste de contacts" >
   <topic name="Contacts" url="Contacts/contacts.htm" />
 </key>
 <key name="Liste GAL / liste de contacts" >
@@ -207,10 +201,7 @@
   <topic name="Filtrer le spam" url="filters/Filtering_Junk_Mail.htm" />
 </key>
 <key name="listes de distribution personnelles" >
-  <topic name="Création de Listes du Groupe de Contacts" url="Contacts/Creating_Group_Contact_Lists.htm" />
-</key>
-<key name="Livraison de mail impossible " >
-  <topic name="Livraison de mail impossible " url="Creating_Messages/undeliverable_mail.htm" />
+  <topic name="Création de listes de contacts de groupe" url="Contacts/Creating_Group_Contact_Lists.htm" />
 </key>
 <key name="mail" >
   <topic name="Lecture d'un mail" url="reading_mail/reading_mail.htm" />
@@ -222,14 +213,17 @@
 <key name="mail, accusé de réception" >
   <topic name="Demander un accusé de réception" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
 </key>
+<key name="marquer les mails avec un drapeau" >
+  <topic name="Marquer un mail avec un drapeau" url="Tags_and_flags/Flagging_an_email_message.htm" />
+</key>
 <key name="marquer tâche comme terminée" >
   <topic name="Modifier une tâche" url="Tasks/Change_a_task.htm" />
 </key>
 <key name="marquer un rendez-vous comme étant d'ordre privé" >
-  <topic name="Marquer un rendez-vous comme étant d'ordre privé" url="Calendar/Marking_an_appointment_as_private.htm" />
+  <topic name="Marquer un rendez-vous comme étant privé" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
 <key name="Menus de clic droit" >
-  <topic name="Menus de clic droit" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <topic name="Menus contextuels (clic droit)" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="menus, clic droit" >
   <topic name="Menus de clic droit" url="Navigation_folders_and_tips/right-click_menus.htm" />
@@ -245,16 +239,16 @@
   <topic name="Afficher le numéro des semaines dans le calendrier" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 <key name="Mobile" >
-  <topic name="Gérer des mobiles" url="Userspecific/Managing_your_mobile_devices.htm" />
+  <topic name="Gérer vos périphériques mobiles" url="Userspecific/Managing_your_mobile_devices.htm" />
 </key>
 <key name="modification de la liste de tâches partagées" >
   <topic name="Partager votre liste de tâches" url="Tasks/Share_your_Task_folder.htm" />
 </key>
-<key name="modifier comme nouveau mail" >
-  <topic name="Menus de clic droit" url="Navigation_folders_and_tips/right-click_menus.htm" />
-</key>
-<key name="Modifier contact" >
+<key name="modification des contacts" >
   <topic name="Modification d'un contact" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="modifier comme nouveau mail" >
+  <topic name="Menus contextuels (clic droit)" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="modifier le type de client par défaut" >
   <topic name="Configurer vos préférences générales " url="Userspecific/Setting_your_general_preferences.htm" />
@@ -278,12 +272,15 @@
 <key name="navigateurs" >
   <topic name="Utilisation du navigateur avec Zimbra" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
 </key>
-<key name="Navigation" >
+<key name="navigation" >
   <topic name="Navigation sur l'interface utilisateur" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
   <topic name="Zone de dossiers" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
 <key name="navigation clavier" >
   <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="navigation, clavier" >
+  <topic name="Touches de raccourcis du clavier ZWC" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
 </key>
 
 </indexdata>

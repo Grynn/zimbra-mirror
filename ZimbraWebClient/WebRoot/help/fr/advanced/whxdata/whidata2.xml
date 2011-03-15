@@ -1,8 +1,8 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="navigation, clavier" >
-  <topic name="Touches de raccourcis du clavier ZWC" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+<key name="nombre de mails" >
+  <topic name="Zone de dossiers" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
 <key name="nommer les dossiers" >
   <topic name="À propos des dossiers" url="Navigation_folders_and_tips/about_folders.htm" />
@@ -35,10 +35,10 @@
   <topic name="Notifications de nouveau mail" url="Userspecific/New_mail_notifications.htm" />
 </key>
 <key name="ouvrir les fichiers dans le porte-documents" >
-  <topic name="Travailler avec des fichiers dans un Porte-documents" url="Briefcase/Working_with_files_in_Briefcase.htm" />
+  <topic name="Travailler avec des fichiers dans un porte-documents" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
 <key name="page de partage" >
-  <topic name="Gérer les objets partagés" url="Sharing/Managing_items_you_share.htm" />
+  <topic name="Gérer les éléments que vous partagez" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="pages, créer dans un Porte-documents" >
   <topic name="Créer une page" url="Documents/Create_a_new_page.htm" />
@@ -75,7 +75,7 @@
   <topic name="Partager un dossier" url="Sharing/Sharing_a_folder.htm" />
 </key>
 <key name="partager les fichiers du porte-documents" >
-  <topic name="Partager votre Porte-documents" url="Briefcase/Sharing_your_Briefcase.htm" />
+  <topic name="Partager votre porte-documents" url="Briefcase/Sharing_your_Briefcase.htm" />
 </key>
 <key name="partager votre calendrier" >
   <topic name="Déléguer l'accès à votre calendrier" url="Calendar/Delegating_Calendar_Access.htm" />
@@ -96,7 +96,7 @@
   <topic name="Répondre à une invitation" url="Calendar/Responding_to_an_invitation.htm" />
 </key>
 <key name="planification d'une salle ou d'un équipement" >
-  <topic name="Planification des ressources" url="Calendar/Scheduling_Resources.htm" />
+  <topic name="Programmation des ressources" url="Calendar/Scheduling_Resources.htm" />
 </key>
 <key name="polices" >
   <topic name="Utilisation de l'éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
@@ -133,13 +133,16 @@
   <topic name="Configurer vos préférences générales " url="Userspecific/Setting_your_general_preferences.htm" />
 </key>
 <key name="préférences, partage" >
-  <topic name="Gérer les objets partagés" url="Sharing/Managing_items_you_share.htm" />
+  <topic name="Gérer les élément que vous partagez" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="présence non obligatoire" >
   <topic name="Utiliser l'onglet Programme lors de la création d'un rendez-vous" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
 <key name="présence obligatoire" >
   <topic name="Utiliser l'onglet Programme lors de la création d'un rendez-vous" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+</key>
+<key name="proposer un nouvel horaire" >
+  <topic name="Répondre à une invitation" url="Calendar/Responding_to_an_invitation.htm" />
 </key>
 <key name="QuickAdd/Ajout rapide" >
   <topic name="Utilisation de QuickAdd/Ajout rapide pour créer un rendez-vous" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
@@ -168,6 +171,9 @@
 <key name="rechercher des destinataires" >
   <topic name="Recherche de destinataires " url="Search/Searching_for_Recipients_.htm" />
 </key>
+<key name="rechercher des éléments partagés" >
+  <topic name="Zone de dossiers" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
 <key name="rechercher un mail" >
   <topic name="Rechercher des mails" url="Search/_search__vs.__search_for_.htm" />
 </key>
@@ -183,7 +189,7 @@
     <topic name="Récupération de mails supprimés" url="reading_mail/recovering_deleted_mail_messages.htm" />
   </key>
 </key>
-<key name="récupérer des fichiers supprimés" >
+<key name="récupérer des mails supprimés" >
   <topic name="Vider la corbeille " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="Redirection" >
@@ -212,10 +218,10 @@
   <topic name="Modification de rendez-vous récurrents" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
 <key name="renommer des fichiers dans le porte-documents" >
-  <topic name="Travailler avec des fichiers dans un Porte-documents" url="Briefcase/Working_with_files_in_Briefcase.htm" />
+  <topic name="Travailler avec des fichiers dans un porte-documents" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
 <key name="renvoyer" >
-  <topic name="Menus de clic droit" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <topic name="Menus contextuels (clic droit)" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="Répondre" >
   <topic name="Répondre à des mails" url="reading_mail/replying_to_mail_messages.htm" />
@@ -236,10 +242,10 @@
   <topic name="Configurer vos préférences pour la fenêtre Écrire un mail " url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="réserver des salles et l'équipement" >
-  <topic name="Planification des ressources" url="Calendar/Scheduling_Resources.htm" />
+  <topic name="Programmation des ressources" url="Calendar/Scheduling_Resources.htm" />
 </key>
 <key name="ressources" >
-  <topic name="Planification des ressources" url="Calendar/Scheduling_Resources.htm" />
+  <topic name="Programmation des ressources" url="Calendar/Scheduling_Resources.htm" />
 </key>
 <key name="retirer des autorisations du carnet d'adresses" >
   <topic name="Partage de votre carnet d'adresses" url="Contacts/Sharing_your_Address_Book.htm" />
@@ -260,7 +266,7 @@
   <topic name="Recevoir un message d'autorisation refusée " url="Calendar/Receiving_a_permission_denied_message.htm" />
 </key>
 <key name="rôle gestionnaire dans calendrier" >
-  <topic name="Droits Admin pour un calendrier partagé" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+  <topic name="Droits Admin pour des calendriers partagés" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
 </key>
 <key name="RSS" >
   <topic name="S'abonner à un fil RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
@@ -285,12 +291,6 @@
 </key>
 <key name="signatures, ajouter automatiquement" >
   <topic name="Créer des avatars" url="Userspecific/Creating_Personas.htm" />
-</key>
-<key name="suppression de contacts" >
-  <topic name="Suppression d'un contact" url="Contacts/deleting_a_contact.htm" />
-</key>
-<key name="suppression du mobile" >
-  <topic name="Mobile perdu ou volé – Effacer les données personnelles" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
 </key>
 
 </indexdata>

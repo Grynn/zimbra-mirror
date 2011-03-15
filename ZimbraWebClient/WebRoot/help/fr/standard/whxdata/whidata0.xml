@@ -8,7 +8,7 @@
   <topic name="Choisir comment les mails sont affichés" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
 </key>
 <key name="affichage du calendrier" >
-  <topic name="Affichages du Calendrier" url="Calendar/Calendar_Views.htm" />
+  <topic name="Calendar_Views" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="afficher au format HTML" >
   <topic name="Ouvrir des pièces jointes" url="reading_mail/opening_file_attachments.htm" />
@@ -26,16 +26,16 @@
   <topic name="Enregistrement d'un brouillon" url="Creating_Messages/saving_a_draft_message.htm" />
 </key>
 <key name="calendrier distant" >
-  <topic name="Créer un Calendrier" url="Calendar/b_Create_New_Calendar.htm" />
+  <topic name="Créer un calendrier" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="calendrier, exclure de libre/occupé" >
-  <topic name="Créer un Calendrier" url="Calendar/b_Create_New_Calendar.htm" />
+  <topic name="Créer un calendrier" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="calendrier, personnaliser la semaine ouvrée" >
   <topic name="Affichages du Calendrier" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="calendrier, supprimer" >
-  <topic name="Créer un Calendrier" url="Calendar/b_Create_New_Calendar.htm" />
+  <topic name="Créer un calendrier" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="carnet d'adresses, ajouter de nouveaux contacts" >
   <topic name="Ajout de nouveaux contacts" url="Contacts/b_Adding_new_contacts.htm" />
@@ -43,7 +43,10 @@
 <key name="carnets d'adresses, créer" >
   <topic name="Vos carnets d'adresses" url="Contacts/b_Your_Address_Books.htm" />
 </key>
-<key name="Conditions de filtre" >
+<key name="classement des adresses" >
+  <topic name="Classement des adresses mail pour la saisie automatique" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
+</key>
+<key name="condition de filtre" >
   <topic name="Conditions et actions de filtre supportées" url="filters/filter_conditions_and_actions_supported.htm" />
 </key>
 <key name="configurer une adresse de redirection" >
@@ -58,8 +61,11 @@
 <key name="déconnexion" >
   <topic name="Connexion et déconnexion" url="Userspecific/logging_on_and_off.htm" />
 </key>
-<key name="Description du langage de demande" >
+<key name="descriptions du langage d'interrogation" >
   <topic name="Description du langage de demande" url="Search/query_language_description.htm" />
+</key>
+<key name="Distribution impossible de mail " >
+  <topic name="Distribution impossible de mail " url="Creating_Messages/undeliverable_mail.htm" />
 </key>
 <key name="dossier, fil RSS " >
   <topic name="S'abonner au fil RSS/ATOM " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
@@ -90,12 +96,10 @@
 </key>
 <key name="ignorer" >
   <topic name="Utilisation de la vérification d'adresse" url="Creating_Messages/Using_address_lookup.htm" />
+  <topic name="Classement des adresses mail pour la saisie automatique" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="libre/occupé, exclure le calendrier" >
-  <topic name="Créer un Calendrier" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
-<key name="Livraison de mail impossible " >
-  <topic name="Livraison de mail impossible " url="Creating_Messages/undeliverable_mail.htm" />
+  <topic name="Créer un calendrier" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="Mail" >
   <topic name="Lecture d'un mail" url="reading_mail/reading_mail.htm" />
@@ -183,7 +187,7 @@
   <topic name="Ajouter automatiquement votre signature" url="Userspecific/b_Automatically_adding_your_signature.htm" />
 </key>
 <key name="synchroniser un autre calendrier" >
-  <topic name="Créer un Calendrier" url="Calendar/b_Create_New_Calendar.htm" />
+  <topic name="Créer un calendrier" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="tâche, marquer comme terminée" >
   <topic name="Modifier une tâche" url="Tasks/Change_a_task.htm" />
@@ -200,11 +204,8 @@
 <key name="touches de raccourcis" >
   <topic name="Touches de raccourcis clavier" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
 </key>
-<key name="Types de fichiers de pièces jointes supportés" >
-  <topic name="Types de fichiers de pièces jointes supportés" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-</key>
-<key name="versions" >
-  <topic name="Contrôle de la version des fichiers du Porte-documents" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+<key name="Types de fichiers de pièce jointe pris en charge" >
+  <topic name="Types de fichiers de pièce jointe pris en charge" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
 </key>
 
 </indexdata>

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <odb>
 	<odbtype type="WebHelp"/>
-	<language name="en_US"/>
+	<language name="fr_FR"/>
 	<index type="TopicIndex" url="topictableindex.xml"/>
 	<index type="PackageIndex" url="packageindex.xml"/>
 	<index type="Synonym" url="synonym.xml"/>
@@ -145,10 +145,6 @@
 		<file url="whxdata\package_136.xml"/>
 		<file url="whxdata\package_137.xml"/>
 		<file url="whxdata\package_138.xml"/>
-		<file url="whxdata\package_139.xml"/>
-		<file url="whxdata\package_140.xml"/>
-		<file url="whxdata\package_141.xml"/>
-		<file url="whxdata\package_142.xml"/>
 		<file url="whxdata\packageindex.xml"/>
 		<file url="whxdata\synonym.xml"/>
 		<file url="whxdata\topictable_0.xml"/>

@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="generator" content="Adobe RoboHelp 8" />
-<title>caractères de substitution</title>
+<title>Caractères de substitution</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
 //<![CDATA[
@@ -84,45 +84,24 @@ else
 
 //-->
 //]]></script>
-<div style="width: 100%; position: relative;" id="header">
-	<table style="vertical-align: top;" cellspacing="0" width="100%">
-		<col style="width: 50%;" />
-		<col style="width: 50%;" />
-		<tr style="vertical-align: top;">
-			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
-   <p 
-				 style="font-weight: bold;">&#160;</p></td>
-			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
-   <p 
-				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
-			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_2_FAQ" target="_blank">Pour plus de détails (procédures, dépannage), consultez la Foire aux questions (FAQ) consacrée à Zimbra Desktop</a></p></td>
-		</tr>
-	</table>
-</div>
-
-
 <h1>Substitution de filtre</h1>
 <p>Les substitutions peuvent être utilisées dans les comparaisons qui exécutent l'opérateur de comparaison &quot;Modèle de correspondance&quot;. Les deux caractères de substitution sont <span style="font-weight: bold;"><b>*</b></span> et <span style="font-weight: bold;"><b>?</b></span></p>
 <h3><span style="font-weight: bold;"><b>Astérisque (*)</b></span></h3>
-<p>L'astérisque * est un paramètre de substitution pour &quot;aucun ou plusieurs caractères de  n'importe quel type&quot;.</p>
+<p>L'astérisque * est un paramètre de substitution pour &quot;aucun ou plusieurs caractères de n'importe quel type&quot;.</p>
 <p>Exemple de recherche de caractères dans le champ d'objet : <span style="font-weight: bold;"><b>palette*bananes</b></span></p>
-<p style="margin-left: 40px;">avec<span style="font-style: italic;"><i> Correspondances :</i></span> Lignes d'objet telles que &quot; palettebananes&quot;, &quot;bananes&quot;, &quot;palette de casserole de feuilles de bananes&quot; mais pas &quot;super-banane-palette&quot;</p>
+<p style="margin-left: 40px;">avec <span style="font-style: italic;"><i>Correspondances :</i></span> Lignes d'objet telles que &quot; palettebananes&quot;, &quot;bananes&quot;, &quot;palette de casserole de feuilles de bananes&quot; mais pas &quot;super-banane-palette&quot;</p>
 <p>Exemple de recherche de caractères dans le champ d'objet : <span style="font-weight: bold;"><b>w*bandana</b></span></p>
-<p style="margin-left: 40px;">avec<span style="font-style: italic;"><i> Correspondances :</i></span> Lignes d'objet telles que &quot;bandana blanc&quot; ou &quot;dont le bandana&quot;   mais non &quot;à qui appartient ce bandana ?&quot;</p>
+<p style="margin-left: 40px;">avec <span style="font-style: italic;"><i>Correspondances :</i></span> Lignes d'objet telles que &quot;bandana blanc&quot; ou &quot;dont le bandana&quot;, mais pas &quot;à qui appartient ce bandana ?&quot;</p>
 <h3>Point d'interrogation (?)</h3>
 <p>Le point d'interrogation est un paramètre de substitution pour &quot;un caractère (et pas davantage !)&quot;.</p>
 <p>Exemple de recherche de caractères dans le champ d'objet : <span style="font-weight: bold;"><b>banane?bateau</b></span></p>
-<p style="margin-left: 40px;">avec<span style="font-style: italic;"><i> Correspondances :</i></span> Lignes d'objet telles que &quot; bananesbateau&quot;, &quot;banane-bateau&quot;, &quot;banane!bateau&quot; ou &quot;banane bateau&quot;</p>
-<h3 style="margin-left: 0px;">Le caractère d'échappement est le slash (barre oblique) : \</h3>
-<p style="margin-left: 0px;">Il est possible que vous souhaitiez spécifier une correspondance exacte pour une chaîne dont les caractères sont normalement considérés comme des caractères de substitution. Par exemple, si vous voulez spécifier une correspondance pour une ligne d'objet dans laquelle l'en-tête principal est entouré de trois astérisques, comme par exemple</p>
+<p style="margin-left: 40px;">avec <span style="font-style: italic;"><i>Correspondances :</i></span> Lignes d'objet telles que &quot; bananesbateau&quot;, &quot;banane-bateau&quot;, &quot;banane!bateau&quot; ou &quot;banane bateau&quot;</p>
+<h3 style="margin-left: 0px;">Le caractère d'échappement est la barre oblique : \</h3>
+<p style="margin-left: 0px;">Vous pouvez vouloer spécifier une correspondance exacte pour une chaîne dont les caractères sont normalement considérés comme des caractères de substitution. Par exemple, si vous voulez spécifier une correspondance pour une ligne d'objet dans laquelle l'en-tête principal est entouré de trois astérisques, par exemple</p>
 <p>***MORE MONEY!!!*** ou</p>
 <p>***FREE GIFT***</p>
-<p>Pour spécifier un caractère de substitution en tant que tel plutôt qu'une substitution pour d'autres caractères, utilisez la barre oblique inverse \ juste avant le caractère. Par exemple, le caractère de comparaison &quot;\*\*\**\*\*\*&quot; spécifie un objet avec trois astérisques placés avant et après une chaîne de caractères (espaces compris).</p>
+<p>Pour spécifier un caractère de substitution en tant que tel plutôt qu'une substitution pour d'autres caractères, placez la barre oblique inverse (\) juste avant le caractère. Par exemple, le caractère de comparaison &quot;\*\*\**\*\*\*&quot; spécifie un objet avec trois astérisques placés avant et après une chaîne de caractères (espaces compris).</p>
 <p><img src="../image19.jpg" alt="image19.jpg" style="border: none;" width="589" height="223" border="0" /></p>
-<div style="width: 100%; position: relative;" id="footer">
-	<p style="font-size: 8pt; background-color: #e9e9e9; border-top-width: 1px; 
-		 border-top-style: Solid;"><span style="font-size: 8pt; background-color: #e9e9e9; "><font size="1" style="font-size:8pt;">Copyright @ 2011 Zimbra and VMware, Inc. Tous droits réservés.</font></span></p>
-</div>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

@@ -7,18 +7,18 @@
   <item name="Touches de raccourcis clavier" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
 </book>
 <book name="Configuration de Zimbra Desktop" >
-  <item name="Configurer un compte client Web Zimbra" url="Zdesktop/Z-Setting_up_your_Zimbra_Web_Client_account.htm" />
-  <item name="Configuration de Comptes Yahoo! Mail et Gmail" url="Zdesktop/z-Setting_up_Yahoo!_Mail_Plus,_Gmail,_AOL_account_setup.htm" />
-  <item name="Configurer les comptes POP/IMAP" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
+  <item name="Configurer un compte Zimbra Web Client" url="Zdesktop/Z-Setting_up_your_Zimbra_Web_Client_account.htm" />
+  <item name="Configuration de comptes Yahoo! Mail et Gmail" url="Zdesktop/z-Setting_up_Yahoo!_Mail_Plus,_Gmail,_AOL_account_setup.htm" />
+  <item name="Configurer des comptes POP/IMAP" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
   <item name="Synchroniser vos comptes" url="Zdesktop/Synchronize_your_account_to_Zimbra_Desktop.htm" />
   <item name="Désactivation de la synchronisation automatique" url="Zdesktop/Turning_Off_Automatic_Sync.htm" />
   <item name="Organisation de votre affichage de bureau" url="Zdesktop/z-Changing_account_order_on_Desktop.htm" />
   <item name="Suppression d'un compte sur Desktop" url="Zdesktop/z-Deleting_an_account_from_Desktop.htm" />
 </book>
 <book name="Navigation dans votre boîte aux lettres" >
-  <item name="Navigation sur Zimbra Desktop" url="Navigation_folders_and_tips/z-Navigating_Zimbra_Desktop.htm" />
+  <item name="Navigation Zimbra Desktop" url="Navigation_folders_and_tips/z-Navigating_Zimbra_Desktop.htm" />
   <item name="Fonctions d'interface utilisateur et raccourcis" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
-  <item name="Menus de clic droit" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <item name="Menus contextuels (clic droit de la souris)" url="Navigation_folders_and_tips/right-click_menus.htm" />
   <item name="Dossiers du système" url="Navigation_folders_and_tips/inbox_folder.htm" />
   <item name="Appliquer des actions à plusieurs sélections" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
 </book>
@@ -26,22 +26,23 @@
   <item name="Gestion de l'affichage de vos mails" url="conversations/conversation_list_view.htm" />
   <item name="Configuration du comportement du bureau pour actualiser" url="Zdesktop/z_Setting_Desktop_behavior_for_getting_mail.htm" />
   <item name="Affichage des mails" url="Navigation_folders_and_tips/Traditional_View.htm" />
-  <item name="Quel est le principe de fonctionnement des conversations" url="conversations/conversations_can_span_folders.htm" />
+  <item name="Principe de fonctionnement des conversations" url="conversations/conversations_can_span_folders.htm" />
   <item name="Classification de vos mails" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
   <item name="Impression d'une conversation" url="conversations/printing_a_conversation.htm" />
   <item name="Récupération de mails supprimés" url="reading_mail/recovering_deleted_mail_messages.htm" />
-  <item name="Livraison de mail impossible" url="Creating_Messages/undeliverable_mail.htm" />
+  <item name="Distribution de mail impossible " url="Creating_Messages/undeliverable_mail.htm" />
   <item name="Configurer une adresse de redirection" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </book>
-<book name="Écrire un mail" >
-  <item name="Création et envoi de mails" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+<book name="Rédiger un mail" >
+  <item name="Rédaction et envoi de mails" url="Creating_Messages/Creating_a_new_mail_message.htm" />
   <item name="Parties d'un mail" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Utilisation de l'éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="Utilisation des adresses Cc : et Cci :  " url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="Ajouter votre signature" url="Userspecific/using_a_signature.htm" />
-  <item name="Joindre des fichiers à un mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  <item name="Joindre des fichiers à votre mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="Types de fichiers de pièces jointes pris en charge" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Utilisation de la vérification d'adresse" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Classement des adresses mail pour la saisie automatique" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="Enregistrement d'un brouillon" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Lire, Répondre et Faire suivre des mails" >
@@ -82,7 +83,7 @@
   <item name="À propos de la planification de rendez-vous" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
   <item name="Planification d'un rendez-vous" url="Calendar/Scheduling_meetings.htm" />
   <item name="Consultation des disponibilités (libre/occupé)" url="Calendar/Seeing_free_busy_times.htm" />
-  <item name="Marquer un rendez-vous comme étant d'ordre privé" url="Calendar/Marking_an_appointment_as_private.htm" />
+  <item name="Marquer un rendez-vous comme étant privé" url="Calendar/Marking_an_appointment_as_private.htm" />
   <item name="Utilisation de QuickAdd/Ajout rapide pour créer un rendez-vous" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
   <item name="Conversion de mails et de contacts en demande de réunion" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
   <item name="Création de rendez-vous récurrents" url="Calendar/Creating_recurring_appointments.htm" />
@@ -119,19 +120,16 @@
   <item name="Marquer un mail d'un drapeau" url="Tags_and_flags/Flagging_an_email_message.htm" />
 </book>
 <book name="Gestion de vos tâches" >
-  <item name="À propos des tâches" url="Tasks/About_Tasks.htm" />
-  <item name="Créer des listes de tâches" url="Tasks/Create_tasks_folders.htm" />
-  <item name="Ajouter une tâche" url="Tasks/Add_a_task.htm" />
-  <item name="Modifier une tâche" url="Tasks/Change_a_task.htm" />
-  <item name="Supprimer une tâche" url="Tasks/Delete_a_task.htm" />
-  <item name="Déplacer des tâches" url="Tasks/Moving_tasks.htm" />
-  <item name="Trier des tâches" url="Tasks/Sorting_tasks_.htm" />
+<chunk name="Gestion de vos tâches" ref="whtdata1.xml" />
 </book>
 <book name="Partager des dossiers (uniquement les comptes Zimbra)" >
-<chunk name="Partager des dossiers (uniquement les comptes Zimbra)" ref="whtdata1.xml" />
+<chunk name="Partager des dossiers (uniquement les comptes Zimbra)" ref="whtdata2.xml" />
 </book>
 <book name="Utilisation du Porte-documents" >
-<chunk name="Utilisation du Porte-documents" ref="whtdata2.xml" />
+  <item name="Travailler dans un porte-documents" url="Briefcase/Working_in_Briefcase.htm" />
+  <item name="Créer un document " url="Documents/Create_a_new_page.htm" />
+  <item name="Utilisation de l'éditeur RTF" url="Documents/Using_the_rich_text_editor.htm" />
+  <item name="Ajout d'un tableau à un document" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </book>
 <book name="Gestion du contenu de votre compte" >
 <chunk name="Gestion du contenu de votre compte" ref="whtdata3.xml" />

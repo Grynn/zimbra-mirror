@@ -24,18 +24,19 @@
     <item name="Lecture d'un mail" url="reading_mail/reading_mail.htm" />
     <item name="Marquer des mails comme non lus" url="reading_mail/b_Marking_mail_as_unread.htm" />
     <item name="Ouvrir des pièces jointes" url="reading_mail/opening_file_attachments.htm" />
-    <item name="Livraison de mail impossible " url="Creating_Messages/undeliverable_mail.htm" />
+    <item name="Distribution impossible de mail " url="Creating_Messages/undeliverable_mail.htm" />
   </book>
 </book>
-<book name="Écrire un mail" >
-  <item name="Création de mails" url="Creating_Messages/b_Composing_email_message.htm" />
+<book name="Rédaction d'un mail" >
+  <item name="Rédaction de mails." url="Creating_Messages/b_Composing_email_message.htm" />
   <item name="Parties d'un mail" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Ajouter automatiquement votre signature" url="Userspecific/b_Automatically_adding_your_signature.htm" />
   <item name="Saisie automatique d'adresse" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Classement des adresses mail pour la saisie automatique" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="Joindre des fichiers à votre mail" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="Types de fichiers de pièces jointes pris en charge" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Utilisation de l'éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
-  <item name="Enregistrement de mails en tant que brouillons" url="Creating_Messages/saving_a_draft_message.htm" />
+  <item name="Enregistrement de mails comme brouillons" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Répondre et transférer des mails" >
   <item name="Répondre à des mails" url="reading_mail/replying_to_mail_messages.htm" />
@@ -51,7 +52,7 @@
   <item name="À propos du Calendrier" url="Calendar/b_About_Calendar.htm" />
   <item name="Créer de nouveaux calendriers" url="Calendar/b_Create_New_Calendar.htm" />
   <item name="Appliquer des codes de couleur à vos calendriers" url="Calendar/Adding_background_color_to_calendars.htm" />
-  <item name="Options d'affichage du Calendrier" url="Calendar/Calendar_Views.htm" />
+  <item name="Options d'affichage du calendrier" url="Calendar/Calendar_Views.htm" />
   <item name="Importer un calendrier iCalendar" url="Calendar/Importing_iCalendars.htm" />
   <item name="Nettoyer votre calendrier" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
 </book>
@@ -65,15 +66,15 @@
   <item name="Créer des listes de tâches" url="Tasks/bc_Create_task_lists.htm" />
   <item name="Modifier une tâche" url="Tasks/Change_a_task.htm" />
 </book>
-<book name="Travailler dans un Porte-documents" >
-  <item name="Contrôle de la version des fichiers du Porte-documents" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+<book name="Travailler dans un porte-documents" >
+  <item name="Travailler dans un porte-documents" url="Briefcase/b_Working_in_Briefcase.htm" />
 </book>
 <book name="Partager des dossiers" >
   <book name="Partage de calendriers" >
-    <item name="Connecter à un calendrier partagé" url="Calendar/Link_to_Shared_Calendar.htm" />
+    <item name="Lien vers un calendrier partagé" url="Calendar/Link_to_Shared_Calendar.htm" />
   </book>
   <book name="Partager des carnets d'adresses" >
-    <item name="Lien avec un carnet d'adresses partagé" url="Contacts/Linking_to_a_Shared_Address_Book.htm" />
+    <item name="Lien vers un carnet d'adresses partagé" url="Contacts/Linking_to_a_Shared_Address_Book.htm" />
   </book>
 </book>
 <book name="Recherche d'objets" >
@@ -83,13 +84,13 @@
 </book>
 <book name="Utilisation des tags et des dossiers pour organiser vos mails" >
   <item name="Affecter des tags à des mails et à des contacts" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
-  <item name="Marquer un mail d'un drapeau" url="Tags_and_flags/b_Flagging_an_email_message.htm" />
+  <item name="Marquer un mail avec un drapeau" url="Tags_and_flags/b_Flagging_an_email_message.htm" />
   <item name="Renommer des dossiers" url="Navigation_folders_and_tips/renaming_folders.htm" />
   <item name="Supprimer des dossiers" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
 </book>
 <book name="Utiliser des filtres pour trier les mails" >
   <item name="Filtrer vos mails" url="filters/bc_Filtering_your_messages.htm" />
-  <item name="Conditions et actions de filtre supportées" url="filters/filter_conditions_and_actions_supported.htm" />
+  <item name="Conditions et actions de filtre prises en charge" url="filters/filter_conditions_and_actions_supported.htm" />
 </book>
 <book name="Configuration de vos préférences" >
   <item name="Configuration de vos préférences" url="Userspecific/b_Setting_your_Options.htm" />

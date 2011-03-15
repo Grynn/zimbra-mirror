@@ -1,10 +1,11 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <tocdata>
-<item name="Partager vos dossiers Zimbra" url="Zdesktop/zd_Sharing_Your_Zimbra_Folders.htm" />
-<item name="Partager vos dossiers" url="Zdesktop/zd_Sharing_Folders_steps_.htm" />
-<item name="Accepter l'accès à un dossier de boîte de réception partagé" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
-<item name="Travailler dans un dossier partagé" url="Zdesktop/zd_working_in_a_shared_folder.htm" />
-<item name="Travailler dans un dossier de mails partagé" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
-<item name="Retrait d'accès à un dossier partagé" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+<item name="À propos des tâches" url="Tasks/About_Tasks.htm" />
+<item name="Créer des listes de tâches" url="Tasks/Create_tasks_folders.htm" />
+<item name="Ajouter une tâche" url="Tasks/Add_a_task.htm" />
+<item name="Modifier une tâche" url="Tasks/Change_a_task.htm" />
+<item name="Supprimer une tâche" url="Tasks/Delete_a_task.htm" />
+<item name="Déplacer des tâches" url="Tasks/Moving_tasks.htm" />
+<item name="Trier des tâches" url="Tasks/Sorting_tasks_.htm" />
 
 </tocdata>
