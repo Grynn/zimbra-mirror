@@ -20,7 +20,7 @@
   <item name="将操作项应用于多重选择" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
   <item name="使用浏览器" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
   <item name="保存我的工作" url="Userspecific/browser_session_handling.htm" />
-  <item name="查看窗格" url="Navigation_folders_and_tips/Folders_area.htm" />
+  <item name="查看“概述”窗格" url="Navigation_folders_and_tips/Folders_area.htm" />
   <item name="邮件系统文件夹" url="Navigation_folders_and_tips/inbox_folder.htm" />
   <item name="清空“已删除邮件”文件夹" url="Navigation_folders_and_tips/trash_folder.htm" />
   <item name="取消操作" url="Userspecific/Undo_Action.htm" />
@@ -62,6 +62,7 @@
   <item name="电子邮件的组成部分" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="自动添加签名" url="Userspecific/using_a_signature.htm" />
   <item name="自动完成地址功能" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="如何划分自动完成电子邮件地址的等级" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="安排将来发送的电子邮件" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="请求回执" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="将文件附加到邮件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
@@ -93,7 +94,7 @@
 <book name="管理行事历" >
   <item name="关于 @CompanyName@ 行事历" url="Calendar/About_Calendar.htm" />
   <item name="创建行事历" url="Calendar/Create_Calendars.htm" />
-  <item name="彩色编码行事历" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="颜色编码的行事历" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="设置行事历首选项" url="Userspecific/Setting_your_Calendar_preferences.htm" />
   <item name="查看行事历星期数字" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
   <item name="行事历视图选项" url="Calendar/Calendar_Views.htm" />
@@ -112,7 +113,7 @@
   <item name="从现有约会创建约会" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
   <item name="将邮件和联系人转为会议请求" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
   <item name="查看参会者和地点可用性" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
-  <item name="使用 QuickAdd 创建约会" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+  <item name="使用快速添加创建约会" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
   <item name="确定谁可邀请您参加会议" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
   <item name="因权限不足而收到的被拒邮件" url="Calendar/Receiving_a_permission_denied_message.htm" />
   <item name="设置您的空闲/忙碌信息的查看权限" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
@@ -137,11 +138,11 @@
   <item name="删除任务" url="Tasks/Delete_a_task.htm" />
   <item name="任务排序" url="Tasks/Sorting_tasks_.htm" />
 </book>
-<book name="在“公文包”中工作" >
-  <item name="在“公文包”中工作" url="Briefcase/Working_in_Briefcase.htm" />
+<book name="在公文包中工作" >
+  <item name="在公文包中工作" url="Briefcase/Working_in_Briefcase.htm" />
   <item name="在公文包中使用文件" url="Briefcase/Working_with_files_in_Briefcase.htm" />
   <item name="创建新文档" url="Documents/Create_a_new_page.htm" />
-  <item name="使用 rich text 编辑器" url="Documents/Using_the_rich_text_editor.htm" />
+  <item name="使用富文本编辑器" url="Documents/Using_the_rich_text_editor.htm" />
   <item name="向公文包中的文档添加表格" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
   <item name="公文包中文件的版本控制" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
   <item name="从公文包发送文件" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
@@ -171,11 +172,10 @@
 <chunk name="设置首选项" ref="whtdata4.xml" />
 </book>
 <book name="管理您的移动通信设备（仅限网路版本）" >
-  <item name="管理您的移动通信设备" url="Userspecific/Managing_your_mobile_devices.htm" />
-  <item name="如何清除您的移动通信设备" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
+<chunk name="管理您的移动通信设备（仅限网路版本）" ref="whtdata5.xml" />
 </book>
 <book name="保存您的帐户文件夹" >
-<chunk name="保存您的帐户文件夹" ref="whtdata5.xml" />
+  <item name="离线保存您帐户的内容" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </book>
 <book name="使用 Zimlet" >
 <chunk name="使用 Zimlet" ref="whtdata6.xml" />

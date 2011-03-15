@@ -6,6 +6,7 @@
 </key>
 <key name="忘记" >
   <topic name="使用地址查询" url="Creating_Messages/Using_address_lookup.htm" />
+  <topic name="如何划分自动完成电子邮件地址的等级" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="忙/闲" >
   <topic name="查看空闲忙碌时间" url="Calendar/Seeing_free_busy_times.htm" />
@@ -18,11 +19,13 @@
 <key name="快速搜索" >
   <topic name="快速搜索" url="Search/Quick_search.htm" />
 </key>
-<key name="恢复已删除的文件" >
+<key name="快速添加" >
+  <topic name="使用快速添加创建约会" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="恢复已删除的邮件" >
   <topic name="清空“已删除邮件”文件夹 " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="打印" >
-  <topic name="打印会话" url="conversations/printing_a_conversation.htm" />
   <topic name="打印邮件" url="reading_mail/printing_a_mail_message.htm" />
   <key name="邮件" >
     <topic name="打印邮件" url="reading_mail/printing_a_mail_message.htm" />
@@ -138,12 +141,6 @@
 <key name="新邮件" >
   <topic name="如何知道有新邮件" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
-<key name="旗标" >
-  <topic name="为邮件加上标志" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  <key name="邮件" >
-    <topic name="为邮件加上标志" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  </key>
-</key>
 <key name="无法投递的邮件" >
   <topic name="无法投递的邮件" url="Creating_Messages/undeliverable_mail.htm" />
 </key>
@@ -157,6 +154,7 @@
   <topic name="确定谁可邀请您参加会议" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
 <key name="查找共享项" >
+  <topic name="文件夹区" url="Navigation_folders_and_tips/Folders_area.htm" />
   <topic name="管理您共享的内容" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="查看阅读窗格" >
@@ -177,6 +175,9 @@
   <key name="指定" >
     <topic name="为邮件加标记" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
   </key>
+</key>
+<key name="标记邮件" >
+  <topic name="为邮件加上标志" url="Tags_and_flags/Flagging_an_email_message.htm" />
 </key>
 <key name="标记，创建" >
   <topic name="用标记为邮件分类" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
@@ -281,9 +282,6 @@
 <key name="空闲/忙碌，设置查看权限" >
   <topic name="设置您的空闲/忙碌信息的查看权限" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
 </key>
-<key name="窗格" >
-  <topic name="文件夹区" url="Navigation_folders_and_tips/Folders_area.htm" />
-</key>
 <key name="签出" >
   <topic name="在公文包中使用文件" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
@@ -305,7 +303,10 @@
 <key name="约会提醒" >
   <topic name="设置用户首选项" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
-<key name="编辑联系人资料" >
+<key name="编写新邮件" >
+  <topic name="编写新邮件" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+</key>
+<key name="编辑联系人" >
   <topic name="编辑联系人资料" url="Contacts/editing_a_contact.htm" />
 </key>
 <key name="编辑邮件夹共享权限" >
@@ -315,9 +316,6 @@
   <topic name="编辑联系人资料" url="Contacts/editing_a_contact.htm" />
   <topic name="联系人" url="Contacts/contacts.htm" />
   <topic name="创建新联系人" url="Contacts/creating_a_new_contact.htm" />
-  <key name="编辑" >
-    <topic name="编辑联系人资料" url="Contacts/editing_a_contact.htm" />
-  </key>
 </key>
 <key name="联系人列表" >
   <topic name="联系人" url="Contacts/contacts.htm" />
@@ -375,10 +373,6 @@
   <topic name="关于 Zimbra 行事历" url="Calendar/About_Calendar.htm" />
   <topic name="行事历列表视图" url="Calendar/Calendar_List_View.htm" />
   <topic name="行事历视图" url="Calendar/Calendar_Views.htm" />
-</key>
-<key name="行事历首选项" >
-  <topic name="设置行事历首选项" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-  <topic name="确定谁可邀请您参加会议" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
 
 </indexdata>

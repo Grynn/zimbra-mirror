@@ -25,6 +25,9 @@
 <key name="保存搜索" >
   <topic name="创建并保存搜索查询" url="Search/b_Create_and_Save_a_Search_Query.htm" />
 </key>
+<key name="划分地址等级" >
+  <topic name="如何划分自动完成电子邮件地址的等级" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
+</key>
 <key name="创建搜索条件" >
   <topic name="使用搜索功能" url="Search/b_Using_Search.htm" />
 </key>
@@ -57,6 +60,7 @@
 </key>
 <key name="忘记" >
   <topic name="使用地址查询" url="Creating_Messages/Using_address_lookup.htm" />
+  <topic name="如何划分自动完成电子邮件地址的等级" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="快捷键" >
   <topic name="快捷键" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
@@ -105,9 +109,6 @@
 </key>
 <key name="添加联系人组列表" >
   <topic name="添加新联系人" url="Contacts/b_Adding_new_contacts.htm" />
-</key>
-<key name="版本" >
-  <topic name="公文包中文件的版本控制" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 </key>
 <key name="用 HTML 格式排版" >
   <topic name="使用 HTML 编辑器" url="Creating_Messages/Using_HTML_Editor.htm" />

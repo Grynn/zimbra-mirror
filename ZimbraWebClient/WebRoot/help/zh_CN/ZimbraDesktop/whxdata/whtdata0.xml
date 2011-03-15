@@ -42,6 +42,7 @@
   <item name="将文件附加到邮件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="支持的附件类型" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="使用地址查询" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="如何划分自动完成电子邮件地址的等级" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="保存邮件草稿" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="阅读、回复及转发邮件" >
@@ -101,7 +102,7 @@
   <item name="AND 及 OR 搜索" url="Search/and_vs_or_searches.htm" />
   <item name="在搜索中使用 * 作为通配符" url="Search/Using_Wildcard_in_Search.htm" />
 </book>
-<book name="设置您的首选项" >
+<book name="设置首选项" >
   <item name="设置您的 Desktop 首选项" url="Userspecific/z-Setting_your_Desktop_Preferences.htm" />
   <item name="设置桌面提示" url="Userspecific/Setting_up_desktop_alerts.htm" />
   <item name="将邮件通知转至另一地址" url="Userspecific/New_mail_notifications.htm" />
@@ -130,7 +131,7 @@
 <book name="共享文件夹（仅限 Zimbra 帐户）" >
   <item name="共享您的 Zimbra 文件夹" url="Zdesktop/zd_Sharing_Your_Zimbra_Folders.htm" />
   <item name="如何共享文件夹" url="Zdesktop/zd_Sharing_Folders_steps_.htm" />
-  <item name="接受他人的共享邮箱邀请" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
+  <item name="接受他人的共享邮箱文件夹邀请" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
   <item name="在共享文件夹中工作" url="Zdesktop/zd_working_in_a_shared_folder.htm" />
   <item name="在共享邮件文件夹中工作" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
   <item name="撤销共享文件夹的访问权" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
@@ -138,12 +139,14 @@
 <book name="使用公文包" >
   <item name="在公文包中工作" url="Briefcase/Working_in_Briefcase.htm" />
   <item name="创建新文档 " url="Documents/Create_a_new_page.htm" />
-  <item name="使用富文本编辑器" url="Documents/Using_the_rich_text_editor.htm" />
+  <item name="使用丰富格式文本编辑器" url="Documents/Using_the_rich_text_editor.htm" />
   <item name="向文档中添加表格" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </book>
 <book name="管理帐户内容" >
   <item name="邮件归档" url="Zdesktop/Archiving_your_email_messages.htm" />
   <item name="将帐户数据移动至另一帐户" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+  <item name="备份本地文件夹" url="Zdesktop/Backing_up_your_local_folders_7.htm" />
+  <item name="从备份文件还原帐户" url="Zdesktop/Restoring_Accounts_from_Your_Backup_Files.htm" />
 </book>
 
 </tocdata>

@@ -32,6 +32,7 @@
   <item name="电子邮件的组成部分" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="自动添加您的签名" url="Userspecific/b_Automatically_adding_your_signature.htm" />
   <item name="自动完成地址功能" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="如何划分自动完成电子邮件地址的等级" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="将文件附加到邮件" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="支持的附件类型" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="使用 HTML 编辑器" url="Creating_Messages/Using_HTML_Editor.htm" />
@@ -50,7 +51,7 @@
 <book name="管理行事历" >
   <item name="关于行事历" url="Calendar/b_About_Calendar.htm" />
   <item name="创建新行事历" url="Calendar/b_Create_New_Calendar.htm" />
-  <item name="彩色编码行事历" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="颜色编码的行事历" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="行事历视图选项" url="Calendar/Calendar_Views.htm" />
   <item name="导入 iCalendars" url="Calendar/Importing_iCalendars.htm" />
   <item name="清除行事历" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
@@ -65,8 +66,8 @@
   <item name="创建任务列表" url="Tasks/bc_Create_task_lists.htm" />
   <item name="改变任务" url="Tasks/Change_a_task.htm" />
 </book>
-<book name="在“公文包”中工作" >
-  <item name="公文包中文件的版本控制" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+<book name="在公文包中工作" >
+  <item name="在公文包中工作" url="Briefcase/b_Working_in_Briefcase.htm" />
 </book>
 <book name="共享文件夹" >
   <book name="共享行事历" >

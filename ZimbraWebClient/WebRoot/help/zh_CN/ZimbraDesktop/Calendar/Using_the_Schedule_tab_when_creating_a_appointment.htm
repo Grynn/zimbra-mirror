@@ -1,4 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿</b>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -84,26 +85,38 @@ else
 //-->
 //]]></script>
 <h1>在建议面板中查看参会者和地点可用性</h1>
-<p>安排会议时，可以查看参会者的忙碌或空闲时间，以便可以找到适合所有参会者的会议时间。当您将参会者添加到约会时，概述窗格中的建议面板会显示参会者在 30 分钟时段内的空闲状态和至少一个可用地点。 </p>
+<p>安排会议时，可以查看参会者的忙碌或空闲时间，以便可以找到适合所有参会者的会议时间。当您将参会者添加到“参会者”字段时，“概述”窗格中的建议面板会显示参会者在 30 分钟时段内的空闲状态和至少一个可用会议室（地点）。时间右侧的数字表示在此时间的可用地点数量。可以单击此数字查看建议地点的列表，然后选择一个地点。所选择的地点将添加到约会页面上的“地点”字段中。</p>
+<p class="note"><span style="font-weight: bold;"><b>注意</b></span>：如果已在公司目录中配置了会议室地点，则会显示这些地点。</p>
 <p>小行事历通过颜色代码显示可参与会议的参会者。</p>
 <ul type="disc">
 	<li><p>绿色表示在这些天内，所有参会者都可以参加会议，至少有一个地点可用。 </p></li>
-	<li><p>橙色表示不是所有人都可以参加会议（但超过一半的人可以参加），至少有一个地点可用。您可以将鼠标指针悬停在日期上，以查看至多 10 个无法参加会议的参会者的姓名 
-	 </p></li>
+	<li><p>橙色表示不是所有人都可以参加会议（但超过一半的人可以参加），至少有一个地点可用。您可以将鼠标指针悬停在日期上，以查看最多 10 个无法参加会议的参会者的姓名。</p></li>
 	<li><p>红色表示超过一半的参会者不能在那几天参加会议。 </p></li>
 </ul>
-<p>右侧的数字是这个时间该区域可用地点的数量。可以单击此数字查看建议地点的列表，然后选择一个地点。</p>
 <p>在下面的示例中，所有参会者在 1 月份除了 1 月 18 日以外都可参加会议。少于一半的人在那天可参加会议。</p>
-<p><img src="../schedular.png" alt="schedular.png" style="border: none;" width="199" height="301" border="0" /></p>
-<p>&#160;</p>
-<p>可以为应当包括在建议时间中的地点的类型设置首选项。在概述窗格标题中单击<span style="font-weight: bold;"><b>建议时间</b></span>以打开<span style="font-weight: bold;"><b>建议首选项</b></span>对话框。 </p>
+<p style="margin-left: 40px;"><img src="../schedular.png" alt="schedular.png" style="border: none;" width="199" height="301" border="0" /></p>
+<h6>查看组织者的地点 </h6>
+<p>要作为组织者查找可用地点，请打开约会页面，在添加受邀者之前在“概述”窗格的“建议时间”区域单击<span style="font-weight: bold;"><b>显示建议(日期)</b></span>。</p>
+<h2>管理建议输出</h2>
+<p>可以配置建议面板显示信息的方式。默认配置为一旦在“参会者”字段中输入了第一个参会者的姓名，就会立即显示参会者和地点可用性。可以在<span  	 style="font-weight: bold;"><b>建议首选项</b></span>对话框中更改默认首选项并配置其他首选项。</p>
+<p>在“概述”窗格中单击<span style="font-weight: bold;"><b>建议时间</b></span>标题以打开“建议首选项”对话框。 </p>
+<p style="margin-left: 40px;"><img src="../cas_suggestedtimes_options.png" alt="cas_suggestedtimes_options.png" style="border: none;" width="110" height="132" border="0" /></p>
+<p style="margin-left: 0px;">配置以下选项：</p>
 <ul type="disc">
-	<li><p><span style="font-weight: bold;"><b>名称</b></span>、<span style="font-weight: bold;"><b>最小容量</b></span>、<span style="font-weight: bold;"><b>描述</b></span>、<span  	 style="font-weight: bold;"><b>场地</b></span>、<span style="font-weight: bold;"><b>楼层</b></span>。&#160;可以指定您想预留的房间资源，指定名称、容量和具体地点。<span style="font-weight: bold;"><b>注意</b></span>：&#160;为了便于搜索，必须为房间配置此信息。</p></li>
-	<li><p><span style="font-weight: bold;"><b>包含的时间</b></span>。您可以指定哪些时间应当包括在参会者可用性的搜索中。 
+	<li><p><span style="font-weight: bold;"><b>建议</b></span>。选项包括<span style="font-weight: bold;"><b>自动</b></span>（默认）<span  	 style="font-weight: bold;"><b></b></span>或<span style="font-weight: bold;"><b>手动</b></span>。 
 	 </p></li>
-	<ul type="disc">
+	<ul type="circle">
+		<li><p>要手动显示参会者时间和地点，请单击<span style="font-weight: bold;"><b>手动</b></span>。如果要查看参会者/地点信息，请在“建议时间”区域单击<span style="font-weight: bold;"><b>显示建议(日期)</b></span>。 </p></li>
+	</ul>
+	<li><p style="font-weight: bold;">地点首选项<span style="font-weight: normal;">。可以在此部分定义要在搜索中包括的地点类型。如果没有设置地点首选项，则将此部分留空。 </span></p></li>
+	<ul type="circle">
+		<li><p style="font-weight: normal;">可以在名称字段中输入部分地点名称，而包含名称中字符串的地点将包括在搜索中。例如，建筑 3 中会议室的地点名称中包含“Bldg3”。如果在<span style="font-weight: bold;"><b>名称</b></span>字段中添加“Bldg3”，则只会建议名称中包含“Bldg3”的地点。 </p></li>
+		<li><p style="font-weight: bold;"><span style="font-weight: normal;">如果不希望根据参会者可用性建议地点，请取消选中</span>建议可用的会议室<span style="font-weight: normal;"></span></p></li>
+	</ul>
+	<li><p><span style="font-weight: bold;"><b>时间首选项</b></span>。您可以指定哪些时间应当包括在参会者可用性的搜索中。 </p></li>
+	<ul type="circle">
 		<li><p><span style="font-weight: bold;"><b>仅限我的工作时间</b></span>。仅搜索与您配置的工作时间相符的时间。这是您在行事历首选项中设置的每周的工作日和时间。</p></li>
-		<li><p><span style="font-weight: bold;"><b>所有参会者的工作时间。</b></span>搜索地点时，需要考虑每个人的工作时间。<span style="font-weight: bold;"><b>注意</b></span>：&#160;如果参会者来自不同时区，尤其是其中有许多时区相距很远，则您永远无法找到所有参会者都能到达的地点。&#160;在这种情况下，建议面板不显示任何地点资源。</p></li>
+		<li><p><span style="font-weight: bold;"><b><span style="font-weight: bold;"><b>所有参会者的工作时间。</b></span>搜索地点时，需要考虑每个人的工作时间。<span style="font-weight: bold;"><b>注意</b></span>：如果参会者来自不同时区，尤其是其中有许多时区相距很远，则您永远无法找到满足所有参会者的地点。&#160;在这种情况下，建议面板不显示任何地点资源。</p></li>
 		<li><p><span style="font-weight: bold;"><b>非工作时间</b></span>。将搜索日程安排，以查找没有标记为工作的时间，比如晚上和周末。</p></li>
 	</ul>
 </ul>

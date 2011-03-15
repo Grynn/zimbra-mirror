@@ -1,6 +1,10 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="行事历首选项" >
+  <topic name="设置行事历首选项" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+  <topic name="确定谁可邀请您参加会议" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+</key>
 <key name="行事历，与管理员角色共享" >
   <topic name="对共享行事历的管理员权限" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
 </key>
@@ -85,8 +89,8 @@
   <topic name="如何使用过滤功能" url="filters/how_filtering_works.htm" />
 </key>
 <key name="过滤条件" >
-  <topic name="支持的过滤条件与操作" url="filters/filter_conditions_and_actions_supported.htm" />
   <topic name="如何使用过滤功能" url="filters/how_filtering_works.htm" />
+  <topic name="支持的过滤条件与操作" url="filters/filter_conditions_and_actions_supported.htm" />
 </key>
 <key name="过滤规则，现有文件夹" >
   <topic name="如何使用过滤功能" url="filters/how_filtering_works.htm" />
@@ -145,6 +149,9 @@
 <key name="邮件视图" >
   <topic name="管理电子邮件视图" url="conversations/conversation_list_view.htm" />
 </key>
+<key name="邮件计数" >
+  <topic name="文件夹区" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
 <key name="邮件通知" >
   <topic name="新邮件通知" url="Userspecific/New_mail_notifications.htm" />
 </key>
@@ -187,7 +194,7 @@
 <key name="预览窗格，开关" >
   <topic name="在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
-<key name="预订房间和设备" >
+<key name="预订会议室和设备" >
   <topic name="安排资源" url="Calendar/Scheduling_Resources.htm" />
 </key>
 <key name="首选项" >
