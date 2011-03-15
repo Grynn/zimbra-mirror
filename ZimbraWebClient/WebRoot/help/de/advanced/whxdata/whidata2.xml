@@ -1,12 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="Obligatorische Teilnahme" >
-  <topic name="Registerkarte „Planung“ bei der Erstellung eines Termins verwenden" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
-</key>
-<key name="Öffentliche/Private Kalenderereignisse" >
-  <topic name="Termin als privat markieren" url="Calendar/Marking_an_appointment_as_private.htm" />
-</key>
 <key name="Option, Abwesenheitsmeldung" >
   <topic name="Abwesenheitsmeldung" url="Userspecific/vacation_message.htm" />
 </key>
@@ -61,9 +55,6 @@
   <topic name="Vergessenes Passwort" url="Userspecific/if_you_forget_your_password.htm" />
   <topic name="Passwort ändern" url="Userspecific/chaning_your_password.htm" />
 </key>
-<key name="Persönliche Kontakte" >
-  <topic name="Kontakt ändern" url="Contacts/editing_a_contact.htm" />
-</key>
 <key name="Persönliche Verteiler" >
   <topic name="Kontaktgruppen anlegen" url="Contacts/Creating_Group_Contact_Lists.htm" />
 </key>
@@ -100,6 +91,9 @@
 </key>
 <key name="Privates Kalenderereignis" >
   <topic name="Termin als privat markieren" url="Calendar/Marking_an_appointment_as_private.htm" />
+</key>
+<key name="Rangfolge von Adressen bestimmen" >
+  <topic name="Rangfolge von Mail-Adressen für die Autovervollständigung" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="Raum reservieren" >
   <topic name="Ressourcen planen" url="Calendar/Scheduling_Resources.htm" />
@@ -292,6 +286,7 @@
 </key>
 <key name="Vergessen" >
   <topic name="Adressen vervollständigen" url="Creating_Messages/Using_address_lookup.htm" />
+  <topic name="Rangfolge von Mail-Adressen für die Autovervollständigung" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="Verschieben" >
   <topic name="Mails zwischen Ordnern verschieben" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />

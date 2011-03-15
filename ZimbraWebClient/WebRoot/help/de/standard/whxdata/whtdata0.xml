@@ -32,6 +32,7 @@
   <item name="Teile einer Mail" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Signatur automatisch einfügen" url="Userspecific/b_Automatically_adding_your_signature.htm" />
   <item name="Automatische Vervollständigung von Adressen" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Rangfolge von Mail-Adressen für die Autovervollständigung" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="Dateien an Mail anhängen" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="Als Anhänge unterstützte Dateitypen" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Im HTML-Editor arbeiten " url="Creating_Messages/Using_HTML_Editor.htm" />
@@ -66,7 +67,7 @@
   <item name="Aufgaben ändern" url="Tasks/Change_a_task.htm" />
 </book>
 <book name="Im Ordner &quot;Dateien&quot; arbeiten" >
-  <item name="Versionskontrolle der Dateien im Ordner &quot;Dateien&quot;" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+  <item name="Im Ordner &quot;Dateien&quot; arbeiten" url="Briefcase/b_Working_in_Briefcase.htm" />
 </book>
 <book name="Ordner freigeben" >
   <book name="Kalender freigeben" >

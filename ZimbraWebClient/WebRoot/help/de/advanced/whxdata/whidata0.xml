@@ -188,6 +188,9 @@
 <key name="Dateien, anhängen" >
   <topic name="Dateien an eine Mail anhängen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
+<key name="Dem Kalender die Termindaten hinzufügen" >
+  <topic name="Einladung_beantworten" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
 <key name="Drei-Fenster-Ansicht" >
   <topic name="Arbeitsbereich im Zimbra-Web-Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
@@ -195,7 +198,6 @@
   <topic name="Wissenswertes zu Aufgaben" url="Tasks/About_Tasks.htm" />
 </key>
 <key name="Drucken" >
-  <topic name="Unterhaltung drucken" url="conversations/printing_a_conversation.htm" />
   <topic name="Mails drucken" url="reading_mail/printing_a_mail_message.htm" />
   <key name="Mail" >
     <topic name="Mails drucken" url="reading_mail/printing_a_mail_message.htm" />
@@ -241,12 +243,6 @@
 <key name="Erneut senden" >
   <topic name="Kontextmenüs" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
-<key name="Erstellen" >
-  <topic name="Neue Mail verfassen" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  <key name="Neue Mail" >
-    <topic name="Neue Mail verfassen" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  </key>
-</key>
 <key name="Erstellen von Tags" >
   <topic name="Mails mit Tags klassifizieren" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
 </key>
@@ -262,8 +258,10 @@
 <key name="Filter, Funktionsweise" >
   <topic name="Funktionsweise von Filtern" url="filters/how_filtering_works.htm" />
 </key>
-<key name="Filterbedingungen" >
+<key name="Filterbedingung" >
   <topic name="Von Filtern unterstützte Bedingungen und Aktionen" url="filters/filter_conditions_and_actions_supported.htm" />
+</key>
+<key name="Filterbedingungen" >
   <topic name="Funktionsweise von Filtern" url="filters/how_filtering_works.htm" />
 </key>
 <key name="Filterregeln, vorhandene Ordner" >
@@ -299,11 +297,20 @@
 <key name="Freigegebene Aufgabenliste ändern" >
   <topic name="Aufgabenliste freigeben" url="Tasks/Share_your_Task_folder.htm" />
 </key>
+<key name="Freigegebene Objekte suchen" >
+  <topic name="Ordner (Bereich)" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
 <key name="Funktionen der Benutzeroberfläche" >
   <topic name="Funktionen und Tastenkürzel der Benutzeroberfläche" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
 </key>
 <key name="Funktionen des Zimbra-Web-Clients" >
   <topic name="Wissenswertes zur Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
+</key>
+<key name="GAL und Kontakte" >
+  <topic name="GAL und Kontakte" url="Contacts/gal_vs_contacts.htm" />
+</key>
+<key name="Ganztägiger Termin" >
+  <topic name="Ganztägige Ereignisse planen" url="Calendar/Scheduling_All_Day_events.htm" />
 </key>
 
 </indexdata>

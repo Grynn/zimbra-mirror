@@ -34,6 +34,9 @@
     <topic name="Gelöschte Mails wiederherstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
   </key>
 </key>
+<key name="Wiederherstellen der gelöschten Nachrichten" >
+  <topic name="Papierkorb leeren " url="Navigation_folders_and_tips/trash_folder.htm" />
+</key>
 <key name="Wiederkehrende Termine löschen" >
   <topic name="Wiederkehrende Termine ändern" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>

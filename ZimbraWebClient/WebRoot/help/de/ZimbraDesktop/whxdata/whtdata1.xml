@@ -1,8 +1,10 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <tocdata>
-<item name="Im Ordner &quot;Dateien&quot; arbeiten" url="Briefcase/Working_in_Briefcase.htm" />
-<item name="Neues Dokument erstellen " url="Documents/Create_a_new_page.htm" />
-<item name="Im Rich-Text-Editor arbeiten" url="Documents/Using_the_rich_text_editor.htm" />
-<item name="Tabelle in ein Dokument einfügen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<item name="Ihre Zimbra-Ordner freigeben" url="Zdesktop/zd_Sharing_Your_Zimbra_Folders.htm" />
+<item name="Ordner freigeben" url="Zdesktop/zd_Sharing_Folders_steps_.htm" />
+<item name="Zugriff auf freigegebenen Mailbox-Ordner annehmen" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
+<item name="In einem freigegebenen Ordner arbeiten" url="Zdesktop/zd_working_in_a_shared_folder.htm" />
+<item name="In freigegebenem Mail-Ordner arbeiten" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
+<item name="Zugriff auf freigegebenen Ordner entziehen" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
 
 </tocdata>

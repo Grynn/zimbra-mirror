@@ -39,9 +39,10 @@
   <item name="Im HTML-Editor arbeiten" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="CC: und BCC: Adressen verwenden" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="Signatur einfügen" url="Userspecific/using_a_signature.htm" />
-  <item name="Dateien an eine Mail anhängen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  <item name="Dateien an eine Nachricht anhängen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="Als Anhänge unterstützte Dateitypen" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Adressen vervollständigen" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Rangfolge von Mail-Adressen für die Autovervollständigung" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="Mailentwurf speichern" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Mails lesen, beantworten und weiterleiten" >
@@ -128,15 +129,13 @@
   <item name="Aufgaben sortieren" url="Tasks/Sorting_tasks_.htm" />
 </book>
 <book name="Ordner freigeben (nur Zimbra-Accounts)" >
-  <item name="Zimbra-Ordner freigeben" url="Zdesktop/zd_Sharing_Your_Zimbra_Folders.htm" />
-  <item name="Ordner freigeben" url="Zdesktop/zd_Sharing_Folders_steps_.htm" />
-  <item name="Zugriff auf freigegebenen Mailbox-Ordner annehmen" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
-  <item name="In einem freigegebenen Ordner arbeiten" url="Zdesktop/zd_working_in_a_shared_folder.htm" />
-  <item name="In freigegebenem Mail-Ordner arbeiten" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
-  <item name="Zugriff auf freigegebenen Ordner entziehen" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+<chunk name="Ordner freigeben (nur Zimbra-Accounts)" ref="whtdata1.xml" />
 </book>
 <book name="Ordner &quot;Dateien&quot; nutzen" >
-<chunk name="Ordner &quot;Dateien&quot; nutzen" ref="whtdata1.xml" />
+  <item name="Im Ordner &quot;Dateien&quot; arbeiten" url="Briefcase/Working_in_Briefcase.htm" />
+  <item name="Neues Dokument erstellen " url="Documents/Create_a_new_page.htm" />
+  <item name="Im Rich-Text-Editor arbeiten" url="Documents/Using_the_rich_text_editor.htm" />
+  <item name="Tabelle in ein Dokument einfügen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </book>
 <book name="Account-Inhalt verwalten" >
 <chunk name="Account-Inhalt verwalten" ref="whtdata2.xml" />

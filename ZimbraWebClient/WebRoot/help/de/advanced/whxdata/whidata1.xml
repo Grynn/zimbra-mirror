@@ -1,16 +1,7 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="GAL und Kontakte" >
-  <topic name="GAL und Kontakte" url="Contacts/gal_vs_contacts.htm" />
-</key>
-<key name="Ganztägiger Termin" >
-  <topic name="Ganztägige Ereignisse planen" url="Calendar/Scheduling_All_Day_events.htm" />
-</key>
-<key name="Gelöschte Dateien wiederherstellen" >
-  <topic name="Papierkorb leeren " url="Navigation_folders_and_tips/trash_folder.htm" />
-</key>
-<key name="Gelöschte Dateien, wiederherstellen" >
+<key name="Gelöschte Nachrichten, wiederherstellen" >
   <topic name="Papierkorb leeren " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="Gerät reservieren" >
@@ -129,15 +120,12 @@
   <topic name="Kontakt ändern" url="Contacts/editing_a_contact.htm" />
   <topic name="Kontakt" url="Contacts/contacts.htm" />
   <topic name="Neuen Kontakt anlegen" url="Contacts/creating_a_new_contact.htm" />
-  <key name="Bearbeiten" >
-    <topic name="Kontakt ändern" url="Contacts/editing_a_contact.htm" />
-  </key>
-</key>
-<key name="Kontakt bearbeiten" >
-  <topic name="Kontakt ändern" url="Contacts/editing_a_contact.htm" />
 </key>
 <key name="Kontakte automatisch hinzufügen" >
   <topic name="Automatisches Hinzufügen von Kontakten" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
+</key>
+<key name="Kontakte bearbeiten" >
+  <topic name="Kontakt ändern" url="Contacts/editing_a_contact.htm" />
 </key>
 <key name="Kontakte drucken" >
   <topic name="Kontakte drucken" url="Contacts/Printing_Contacts.htm" />
@@ -232,6 +220,9 @@
   <topic name="Mail-Identitäten" url="Userspecific/Mail_Identities.htm" />
   <topic name="Persönlichkeiten anlegen" url="Userspecific/Creating_Personas.htm" />
 </key>
+<key name="Mail-Zähler" >
+  <topic name="Ordner (Bereich)" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
 <key name="Mail, Lesebestätigung" >
   <topic name="Lesebestätigung anfordern" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
 </key>
@@ -257,11 +248,8 @@
 <key name="Mails filtern" >
   <topic name="Mails filtern" url="filters/filtering_your_messages.htm" />
 </key>
-<key name="Markieren" >
+<key name="Mails markieren" >
   <topic name="Mails markieren" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  <key name="Mail" >
-    <topic name="Mails markieren" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  </key>
 </key>
 <key name="Meldung, Abwesenheit" >
   <topic name="Abwesenheitsmeldung" url="Userspecific/vacation_message.htm" />
@@ -307,11 +295,23 @@
 <key name="Neue Mails abrufen" >
   <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
+<key name="Neue Mails verfassen" >
+  <topic name="Neue Mail verfassen" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+</key>
 <key name="Neue Seiten anlegen" >
   <topic name="Neue Seite anlegen" url="Documents/Create_a_new_page.htm" />
 </key>
+<key name="Neue Uhrzeit vorschlagen" >
+  <topic name="Einladung_beantworten" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
 <key name="Neue Zimlets hochladen" >
   <topic name="Zimlets verwalten" url="Zimlets/Managing_your_Zimlets.htm" />
+</key>
+<key name="Obligatorische Teilnahme" >
+  <topic name="Registerkarte „Planung“ bei der Erstellung eines Termins verwenden" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+</key>
+<key name="Öffentliche/Private Kalenderereignisse" >
+  <topic name="Termin als privat markieren" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
 
 </indexdata>

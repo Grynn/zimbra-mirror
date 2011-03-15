@@ -64,7 +64,7 @@
 <key name="Externer Kalender" >
   <topic name="Neuen Kalender erstellen" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
-<key name="Filterbedingungen" >
+<key name="Filterbedingung" >
   <topic name="Von Filtern unterstützte Bedingungen und Aktionen" url="filters/filter_conditions_and_actions_supported.htm" />
 </key>
 <key name="Frei/Belegt, Kalender ausschließen" >
@@ -143,6 +143,9 @@
 <key name="Ordner, RSS-Feed" >
   <topic name="RSS-/Atom-Feeds abonnieren " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </key>
+<key name="Rangfolge von Adressen bestimmen" >
+  <topic name="Rangfolge von Mail-Adressen für die Autovervollständigung" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
+</key>
 <key name="RSS-Feed" >
   <topic name="RSS-/Atom-Feeds abonnieren " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </key>
@@ -179,9 +182,7 @@
 </key>
 <key name="Vergessen" >
   <topic name="Adressen vervollständigen" url="Creating_Messages/Using_address_lookup.htm" />
-</key>
-<key name="Versionen" >
-  <topic name="Versionskontrolle der Dateien im Ordner &quot;Dateien&quot;" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+  <topic name="Rangfolge von Mail-Adressen für die Autovervollständigung" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="Vervollständigung der Adresse in Mails" >
   <topic name="Adressen vervollständigen" url="Creating_Messages/Using_address_lookup.htm" />
