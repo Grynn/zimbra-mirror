@@ -62,6 +62,7 @@
   <item name="メールメッセージの各部分について" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="署名を自動的に追加する" url="Userspecific/using_a_signature.htm" />
   <item name="アドレスのオートコンプリート" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="オートコンプリート用メールアドレスのランク順序" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="メールを後で送信されるように予定する" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="閲覧確認を要求する" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="メッセージにファイルを添付する" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
@@ -122,7 +123,7 @@
   <item name="リソースを予定する" url="Calendar/Scheduling_Resources.htm" />
   <item name="カレンダー上の会議の詳細を変更する" url="Calendar/editing_meetings_on_your_calendar.htm" />
   <item name="会議の招待に応答する" url="Calendar/Responding_to_an_invitation.htm" />
-  <item name="予約を転送する" url="Calendar/Forwarding_an_appointment.htm" />
+  <item name="会議の招待を転送する" url="Calendar/Forwarding_an_appointment.htm" />
   <item name="カレンダーの予約から返信する" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
   <item name="自分で企画した会議を変更する" url="Calendar/Changing_a_meeting_.htm" />
   <item name="繰り返し予約を変更する" url="Calendar/Deleting_recurring_appointments.htm" />
@@ -138,25 +139,23 @@
   <item name="タスクを並べ替える" url="Tasks/Sorting_tasks_.htm" />
 </book>
 <book name="ブリーフケースで作業する" >
-  <item name="ブリーフケースで作業する" url="Briefcase/Working_in_Briefcase.htm" />
-  <item name="ブリーフケースでファイルを操作する" url="Briefcase/Working_with_files_in_Briefcase.htm" />
-  <item name="新しい文書を作成する" url="Documents/Create_a_new_page.htm" />
-  <item name="リッチテキストエディタを使用する" url="Documents/Using_the_rich_text_editor.htm" />
-  <item name="ブリーフケースの文書にテーブルを追加する" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-  <item name="ブリーフケースにあるファイルのバージョン管理" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
-  <item name="ブリーフケースからファイルを送信する" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
+<chunk name="ブリーフケースで作業する" ref="whtdata1.xml" />
 </book>
 <book name="フォルダを共有する" >
-<chunk name="フォルダを共有する" ref="whtdata1.xml" />
+<chunk name="フォルダを共有する" ref="whtdata2.xml" />
 </book>
 <book name="項目を検索する" >
-<chunk name="項目を検索する" ref="whtdata2.xml" />
+<chunk name="項目を検索する" ref="whtdata3.xml" />
 </book>
 <book name="タグとフォルダを使用してメールを整理する" >
-<chunk name="タグとフォルダを使用してメールを整理する" ref="whtdata3.xml" />
+<chunk name="タグとフォルダを使用してメールを整理する" ref="whtdata4.xml" />
 </book>
 <book name="メールフィルターを使用する" >
-<chunk name="メールフィルターを使用する" ref="whtdata4.xml" />
+  <item name="フィルター規則を設定する" url="filters/how_filtering_works.htm" />
+  <item name="メッセージをフィルターする" url="filters/filtering_your_messages.htm" />
+  <item name="サポートされているフィルターの条件と操作" url="filters/filter_conditions_and_actions_supported.htm" />
+  <item name="「含む」、「一致」、および「完全一致」オプションを使用して選別する" url="Search/contains_vs_matches.htm" />
+  <item name="フィルターのワイルドカード" url="filters/wildcards.htm" />
 </book>
 <book name="プリファレンスを指定する" >
 <chunk name="プリファレンスを指定する" ref="whtdata5.xml" />
@@ -165,10 +164,10 @@
 <chunk name="携帯デバイスを管理する（Network Editionのみ）" ref="whtdata6.xml" />
 </book>
 <book name="アカウントのフォルダを保存する" >
-<chunk name="アカウントのフォルダを保存する" ref="whtdata7.xml" />
+  <item name="アカウントの内容をオフラインでバックアップする" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </book>
 <book name="Zimletを使用する" >
-<chunk name="Zimletを使用する" ref="whtdata8.xml" />
+<chunk name="Zimletを使用する" ref="whtdata7.xml" />
 </book>
 
 </tocdata>

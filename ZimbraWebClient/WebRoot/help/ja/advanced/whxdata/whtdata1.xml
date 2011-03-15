@@ -1,32 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="フォルダを共有する" url="Sharing/Sharing_a_folder.htm" />
-<item name="共有する項目を管理する" url="Sharing/Managing_items_you_share.htm" />
-<item name="配布リストを使用して共有する" url="Sharing/Sharing_with_a_Distribution_List.htm" />
-<book name="メールフォルダを共有する" >
-  <item name="メールフォルダを共有する" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
-  <item name="自分のメールフォルダを共有する" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
-  <item name="共有フォルダへのアクセスを編集する" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
-  <item name="共有メールフォルダへのアクセスを受け入れる" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
-  <item name="共有メールフォルダ内で操作する" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
-</book>
-<book name="カレンダーを共有する" >
-  <item name="カレンダーを共有する" url="Calendar/Delegating_Calendar_Access.htm" />
-  <item name="共有カレンダーのシステム管理者権利を与える" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
-  <item name="共有カレンダーの管理者権利を与える" url="Calendar/Manager_rights_for_shared_Calendars.htm" />
-  <item name="共有カレンダーへのアクセスを受け入れる" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
-  <item name="カレンダーの共有要求を拒否する" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
-</book>
-<book name="アドレスブックを共有する" >
-  <item name="アドレスブックを共有する" url="Contacts/Sharing_your_Address_Book.htm" />
-</book>
-<book name="タスクリストを共有する" >
-  <item name="自分のタスクリストを共有する" url="Tasks/Share_your_Task_folder.htm" />
-  <item name="共有タスクリストへのアクセスを受け入れる" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
-</book>
-<book name="ブリーフケースフォルダを共有する" >
-  <item name="ブリーフケースを共有する" url="Briefcase/Sharing_your_Briefcase.htm" />
-</book>
+<item name="ブリーフケースで作業する" url="Briefcase/Working_in_Briefcase.htm" />
+<item name="ブリーフケースでファイルを操作する" url="Briefcase/Working_with_files_in_Briefcase.htm" />
+<item name="新しい文書を作成する" url="Documents/Create_a_new_page.htm" />
+<item name="リッチテキストエディタを使用する" url="Documents/Using_the_rich_text_editor.htm" />
+<item name="ブリーフケースの文書にテーブルを追加する" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<item name="ブリーフケースにあるファイルのバージョン管理" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+<item name="ブリーフケースからファイルを送信する" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 
 </tocdata>

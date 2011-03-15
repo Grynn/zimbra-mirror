@@ -110,6 +110,9 @@
 <key name="アシスタント" >
   <topic name="Zimbra Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
 </key>
+<key name="アドレスのランク順序" >
+  <topic name="オートコンプリート用メールアドレスのランク順序" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
+</key>
 <key name="アドレスをオートコンプリートする" >
   <topic name="アドレス参照を使用する" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
@@ -349,9 +352,6 @@
 </key>
 <key name="ナビゲーション" >
   <topic name="[フォルダ]領域" url="Navigation_folders_and_tips/Folders_area.htm" />
-</key>
-<key name="バージョン" >
-  <topic name="ブリーフケースにあるファイルのバージョン管理" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 </key>
 
 </indexdata>

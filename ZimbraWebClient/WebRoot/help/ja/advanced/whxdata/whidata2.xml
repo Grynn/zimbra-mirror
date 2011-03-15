@@ -1,12 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="取り消す" >
-  <topic name="操作を取り消す" url="Userspecific/Undo_Action.htm" />
-</key>
-<key name="受信メールを並べ替える" >
-  <topic name="フィルター機能のしくみ" url="filters/how_filtering_works.htm" />
-</key>
 <key name="受信者、検索" >
   <topic name="受信者を検索する " url="Search/Searching_for_Recipients_.htm" />
 </key>
@@ -48,6 +42,7 @@
 </key>
 <key name="忘れる" >
   <topic name="アドレス参照を使用する" url="Creating_Messages/Using_address_lookup.htm" />
+  <topic name="オートコンプリート用メールアドレスのランク順序" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="招待に応答する" >
   <topic name="招待に応答する" url="Calendar/Responding_to_an_invitation.htm" />
@@ -63,6 +58,12 @@
 </key>
 <key name="新しいZimletをアップロードする" >
   <topic name="Zimletを管理する" url="Zimlets/Managing_your_Zimlets.htm" />
+</key>
+<key name="新しいメールメッセージを作成する" >
+  <topic name="新しいメールメッセージを作成する" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+</key>
+<key name="新しい時刻を提案" >
+  <topic name="招待に応答する" url="Calendar/Responding_to_an_invitation.htm" />
 </key>
 <key name="新着メッセージ" >
   <topic name="新着メールを確認する" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
@@ -209,9 +210,6 @@
   <topic name="連絡先を編集する" url="Contacts/editing_a_contact.htm" />
   <topic name="連絡先" url="Contacts/contacts.htm" />
   <topic name="新しい連絡先を作成する" url="Contacts/creating_a_new_contact.htm" />
-  <key name="編集する" >
-    <topic name="連絡先を編集する" url="Contacts/editing_a_contact.htm" />
-  </key>
 </key>
 <key name="連絡先、インポートする" >
   <topic name="連絡先をインポートする" url="Contacts/Importing_Contacts.htm" />
@@ -234,7 +232,7 @@
 <key name="連絡先を印刷する" >
   <topic name="連絡先を印刷する" url="Contacts/Printing_Contacts.htm" />
 </key>
-<key name="連絡先を編集" >
+<key name="連絡先を編集する" >
   <topic name="連絡先を編集する" url="Contacts/editing_a_contact.htm" />
 </key>
 <key name="連絡先を追加する" >

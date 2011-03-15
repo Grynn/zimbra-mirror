@@ -1,8 +1,8 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <index>
-<chunkinfo url="whidata0.xml" first="[ゴミ箱]フォルダ" last="バージョン" num="113" />
-<chunkinfo url="whidata1.xml" first="パスワード" last="印刷する" num="117" />
-<chunkinfo url="whidata2.xml" first="取り消す" last="電話、ワイプする" num="91" />
+<chunkinfo url="whidata0.xml" first="[ゴミ箱]フォルダ" last="ナビゲーション" num="113" />
+<chunkinfo url="whidata1.xml" first="バージョン" last="受信メールを並べ替える" num="119" />
+<chunkinfo url="whidata2.xml" first="受信者、検索" last="電話、ワイプする" num="90" />
 
 </index>

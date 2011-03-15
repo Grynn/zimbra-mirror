@@ -84,25 +84,8 @@ else
 
 //-->
 //]]></script>
-<div style="width: 100%; position: relative;" id="header">
-	<table style="vertical-align: top;" cellspacing="0" width="100%">
-		<col style="width: 50%;" />
-		<col style="width: 50%;" />
-		<tr style="vertical-align: top;">
-			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
-   <p 
-				 style="font-weight: bold;">&#160;</p></td>
-			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
-   <p 
-				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
-			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_2_FAQ" target="_blank">全般的な質問/トラブルシューティングに関する質問についてはZimbra Desktop FAQをご覧ください</a></p></td>
-		</tr>
-	</table>
-</div>
-
-
 <h1>アドレスのオートコンプリート</h1>
-<p>オートコンプリート機能を使用すると、新規メッセージの[<span style="font-weight: bold;"><b>宛先</b></span>]、[<span style="font-weight: bold;"><b>Cc</b></span>]、[<span style="font-weight: bold;"><b>Bcc</b></span>]欄にアドレスを入力するに従い、可能性のある名前の候補が表示されます。連絡先リストに含まれているアドレスのうち、入力した文字から始まるものが一覧されます。</p>
+<p>オートコンプリート機能を使用すると、新規メッセージの[<span style="font-weight: bold;"><b>宛先</b></span>]、[<span style="font-weight: bold;"><b>Cc</b></span>]、[<span style="font-weight: bold;"><b>Bcc</b></span>]欄にアドレスを入力するに従い、可能性のある名前の候補が表示されます。連絡先リストまたはグローバルアドレスリストに含まれているアドレスのうち、入力した文字から始まるものが一覧されます。<span style="font-style: italic;"><i></i></span></p>
 <p>[<span style="font-weight: bold;"><b>宛先:</b></span>]欄に入力を続けていくと、一致する項目が少なくなるため、表示される候補の数は次第に少なくなります。一致する項目がなくなると、リストは消えます。</p>
 <h4>例</h4>
 <p>たとえば、David Brinks氏にメールメッセージを送信する場合に、そのメールアドレスがdbrinks@acme.comだとします。アドレス欄に最初の「d」を入力すると、一致する可能性のあるすべてのアドレスのリストが現れ、一致する部分がハイライトされます。次の例を見てください。</p>
@@ -113,8 +96,8 @@ else
 <h3>照合</h3>
 <p>オートコンプリート機能は、入力した内容と以下の連絡先部分を照合します。</p>
 <ul type="disc">
-	<li class="p"><p>名</p></li>
-	<li class="p"><p>姓</p></li>
+	<li class="p"><p>&#160;名</p></li>
+	<li class="p"><p>&#160;姓</p></li>
 	<li class="p"><p>メールアドレス</p></li>
 </ul>
 <p>照合は常にフィールドの最初の部分に対して行われます。つまり、「r;bob」というテキストは「r;bob smith」には一致しますが、「r;billybob smith」には一致しません。</p>
@@ -128,13 +111,9 @@ else
 	<li class="p"><p>上矢印キーまたは下矢印キーを押すと、リスト内を移動して別の項目を選択できます。マウスポインタを動かして別の項目を選択することもできます。</p></li>
 	<li class="p"><p>一致項目をマウスでクリックすると、その項目を選択して確定できます。</p></li>
 </ul>
-<p>1つのキー（セミコロンなど）を押すだけで選択されている項目を確定できるため、すばやくアドレスを入力できます。特定の連絡先を最初の一致項目として表示させるための文字がわかっている場合は、それらの文字を入力してからセミコロンのキーを押します。すると、その連絡先のアドレスが表示されます。たとえば、「r;db”」を入力すると最初に一致するのがDavid Brinksだとわかっている場合、「r;db;」と入力するだけで完全なアドレス「r;David Brinks &lt;dbrinks@acme.com&gt;」がアドレスボックスに表示されます。</p>
+<p>1つのキー（セミコロンなど）を押すだけで選択されている項目を確定できるため、すばやくアドレスを入力できます。特定の連絡先を最初の一致項目として表示させるための文字がわかっている場合は、それらの文字を入力してからセミコロンのキーを押します。すると、その連絡先のアドレスが表示されます。たとえば、「r; db」を入力すると最初に一致するのがDavid Brinksだとわかっている場合、「r; db;」と入力するだけで完全なアドレス「r;David Brinks &lt; dbrinks@acme.com&gt;」がアドレスボックスに表示されます。</p>
 <p class="note"><span style="font-weight: bold;"><b>備考</b></span>：オートコンプリートの動作は[プリファレンス]の[アドレスブック]ページで変更できます。 </p>
-<p>オートコンプリートは他のアプリケーション（カレンダー予約に参加者を追加する場合など）でも使用でき、同じように機能します。</p> 
-<div style="width: 100%; position: relative;" id="footer">
-	<p style="font-size: 8pt; background-color: #e9e9e9; border-top-width: 1px; 
-		 border-top-style: Solid;"><span style="font-size: 8pt; background-color: #e9e9e9; "><font size="1" style="font-size:8pt;">Copyright @ 2011 Zimbra and VMware, Inc. All rights reserved.</font></span></p>
-</div>
+<p>オートコンプリートは他のアプリケーション（カレンダー予約に参加者を追加する場合など）でも使用でき、同じように機能します。</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

@@ -1,6 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="バージョン" >
+  <topic name="ブリーフケースにあるファイルのバージョン管理" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+</key>
 <key name="パスワード" >
   <topic name="パスワードを忘れた場合" url="Userspecific/if_you_forget_your_password.htm" />
   <topic name="パスワードを変更する" url="Userspecific/chaning_your_password.htm" />
@@ -52,12 +55,6 @@
 </key>
 <key name="フォント" >
   <topic name="HTMLエディタを使用する" url="Creating_Messages/Using_HTML_Editor.htm" />
-</key>
-<key name="フラグを付ける" >
-  <topic name="メールメッセージにフラグを付ける" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  <key name="メールメッセージ" >
-    <topic name="メールメッセージにフラグを付ける" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  </key>
 </key>
 <key name="ブラウザ" >
   <topic name="ブラウザ内でZimbraを使用する" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
@@ -141,6 +138,9 @@
 <key name="メッセージから予約を作成" >
   <topic name="Zimbra Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
 </key>
+<key name="メッセージにフラグを付ける" >
+  <topic name="メールメッセージにフラグを付ける" url="Tags_and_flags/Flagging_an_email_message.htm" />
+</key>
 <key name="メッセージをアーカイブする" >
   <topic name="メッセージを完全に削除する" url="reading_mail/archiving_old_messages.htm" />
 </key>
@@ -158,6 +158,9 @@
 </key>
 <key name="メッセージビュー" >
   <topic name="メールメッセージビューを管理する" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="メッセージ数" >
+  <topic name="[フォルダ]領域" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
 <key name="メニュー、右クリック" >
   <topic name="右クリックメニュー" url="Navigation_folders_and_tips/right-click_menus.htm" />
@@ -252,6 +255,9 @@
 <key name="予定ビュー" >
   <topic name="複数のカレンダーを表示する" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
 </key>
+<key name="予定情報をカレンダーに追加する" >
+  <topic name="招待に応答する" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
 <key name="予約" >
   <topic name="予約、会議、イベントについて" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
@@ -300,15 +306,6 @@
 <key name="会議を削除する" >
   <topic name="予約を削除する" url="Calendar/Deleting_an_appointment.htm" />
 </key>
-<key name="作成する" >
-  <topic name="新しいメールメッセージを作成する" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  <key name="新しいメールメッセージ" >
-    <topic name="新しいメールメッセージを作成する" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  </key>
-</key>
-<key name="個人連絡先" >
-  <topic name="連絡先を編集する" url="Contacts/editing_a_contact.htm" />
-</key>
 <key name="個人配布リスト" >
   <topic name="グループ連絡先リストを作成する" url="Contacts/Creating_Group_Contact_Lists.htm" />
 </key>
@@ -333,6 +330,9 @@
 <key name="共有メールフォルダへのアクセスを取り消す" >
   <topic name="共有フォルダへのアクセスを無効にする" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
 </key>
+<key name="共有項目を検索する" >
+  <topic name="[フォルダ]領域" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
 <key name="内容ペイン、列ヘッダーを変更する" >
   <topic name="ビューをカスタマイズする" url="Navigation_folders_and_tips/Customize_your_view.htm" />
 </key>
@@ -342,10 +342,10 @@
 <key name="再送信する" >
   <topic name="右クリックメニュー" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
-<key name="削除したファイル、復元する" >
+<key name="削除したメッセージ、復元する" >
   <topic name="ゴミ箱を空にする " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
-<key name="削除した項目を復元する" >
+<key name="削除したメッセージを復元する" >
   <topic name="ゴミ箱を空にする " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="削除する" >
@@ -355,11 +355,16 @@
   </key>
 </key>
 <key name="印刷する" >
-  <topic name="スレッドを印刷する" url="conversations/printing_a_conversation.htm" />
   <topic name="メールメッセージを印刷する" url="reading_mail/printing_a_mail_message.htm" />
   <key name="メールメッセージ" >
     <topic name="メールメッセージを印刷する" url="reading_mail/printing_a_mail_message.htm" />
   </key>
+</key>
+<key name="取り消す" >
+  <topic name="操作を取り消す" url="Userspecific/Undo_Action.htm" />
+</key>
+<key name="受信メールを並べ替える" >
+  <topic name="フィルター機能のしくみ" url="filters/how_filtering_works.htm" />
 </key>
 
 </indexdata>

@@ -84,26 +84,38 @@ else
 //-->
 //]]></script>
 <h1>[提案]パネルで参加者および場所の空き状態を表示する</h1>
-<p>会議を予定する場合、参加者の予定なし/予定あり状態を確認することができるため、すべての参加者に良い時間を見つけることができます。参加者に予約を追加すると、[概要]ペインの[提案]パネルにその参加者の30分間のタイムスロットと、少なくとも1つの場所が示されます。 </p>
+<p>会議を予定する場合、参加者の予定なし/予定あり状態を確認することができるため、すべての参加者に良い時間を見つけることができます。[参加者]フィールドに参加者を追加すると、概要ペインの[提案]パネルに参加者と少なくとも1つの部屋（場所）の空き状態が30分間のタイムスロットで示されます。時間の右の数はその時に使用できる場所の数を示します。クリックして、提案される場所のリストを表示して、場所を選択できます。選択された場所が[予定]ページの[場所]フィールドに追加されます。</p>
+<p class="note"><span style="font-weight: bold;"><b>備考：</b></span>部屋の場所は、社内ディレクトリで設定されている場合に表示されます。</p>
 <p>ミニカレンダーは、参加者の空き状態を色つきで表示します。</p>
 <ul type="disc">
 	<li><p>緑色はそれらの日にすべての参加者が参加でき、少なくとも1つの場所が使用可能であることを示します。 </p></li>
-	<li><p>オレンジは、全員は参加できないが、少なくとも半数は参加でき、少なくとも1つの場所が使用できることを示します。日付の上にマウスポインタを置くと、参加できない人の名前を最大10人まで表示することができます。 
-	 </p></li>
+	<li><p>オレンジは、全員は参加できないが、少なくとも半数は参加でき、少なくとも1つの場所が使用できることを示します。日付の上にマウスポインタを置くと、参加できない人の名前を最大10人まで表示することができます。</p></li>
 	<li><p>赤はそれらの日に半数以上の参加者が参加できないことを示します。 </p></li>
 </ul>
-<p>右の数はその時に使用できる場所の数を示します。クリックして、提案される場所のリストを表示して、場所を選択できます。</p>
 <p>以下の例では、すべての参加者が1月中は1月18日以外は参加可能であることを示します。1月18日は半数以下の人しか参加できません。</p>
-<p><img src="../schedular.png" alt="schedular.png" style="border: none;" width="199" height="301" border="0" /></p>
-<p>&#160;</p>
-<p>提案時間にどの種類の場所を含めるのか、プリファレンスを設定できます。[概要]ペインの見出しで[<span style="font-weight: bold;"><b>提案時刻</b></span>]をクリックして、[<span style="font-weight: bold;"><b>提案のプリファレンス</b></span>]ダイアログを開きます。 </p>
+<p style="margin-left: 40px;"><img src="../schedular.png" alt="schedular.png" style="border: none;" width="199" height="301" border="0" /></p>
+<h6>作成者への場所の表示 </h6>
+<p>作成者として使用可能な場所を検索するには、予定ページを開き、参加者を追加する前に概要ペインの[提案時刻]領域で[<span style="font-weight: bold;"><b>（日付）の提案を表示</b></span>]をクリックします。</p>
+<h2>提案出力を管理する</h2>
+<p>[提案]パネルでの情報の表示方法を設定できます。デフォルトの設定では、[参加者]フィールドに最初の参加者名を入力するとすぐに参加者と場所の空き状態が表示されます。[<span  	 style="font-weight: bold;"><b>提案のプリファレンス</b></span>]ダイアログで、デフォルトを変更したり、その他のプリファレンスを設定できます。</p>
+<p>概要ペインの[<span style="font-weight: bold;"><b>提案時刻</b></span>]見出しをクリックして、[提案のプリファレンス]ダイアログを開きます。 </p>
+<p style="margin-left: 40px;"><img src="../cas_suggestedtimes_options.png" alt="cas_suggestedtimes_options.png" style="border: none;" width="110" height="132" border="0" /></p>
+<p style="margin-left: 0px;">次のオプションを設定します。</p>
 <ul type="disc">
-	<li><p>[<span style="font-weight: bold;"><b>名前</b></span>]、[<span style="font-weight: bold;"><b>最小収容</b></span>]、[<span style="font-weight: bold;"><b>説明</b></span>]、[<span   style="font-weight: bold;"><b>場所</b></span>]、[<span style="font-weight: bold;"><b>ビル</b></span>]、[<span style="font-weight: bold;"><b>階</b></span>]：&#160;予約する部屋リソース、名前、収容人数、特定の場所などについて、具体的に指定できます。<span style="font-weight: bold;"><b>備考</b></span>：&#160;この情報は、検索するために部屋に対してあらかじめ設定しておく必要があります。</p></li>
-	<li><p>[<span style="font-weight: bold;"><b>次を含む</b></span>]：参加者の空き状態の検索に含まれる時間を指定します。 
+	<li><p>[<span style="font-weight: bold;"><b>提案</b></span>]：オプションは、[<span style="font-weight: bold;"><b>自動</b></span>]（デフォルト）または[<span style="font-weight: bold;"><b>手動</b></span>]です。 
 	 </p></li>
-	<ul type="disc">
+	<ul type="circle">
+		<li><p>参加者の時間と場所を手動で表示するには、[<span style="font-weight: bold;"><b>手動</b></span>]をクリックします。参加者と場所の情報を表示するには、[提案時刻]領域で[<span style="font-weight: bold;"><b>（日付）の提案を表示</b></span>]をクリックします。 </p></li>
+	</ul>
+	<li><p style="font-weight: bold;">[場所のプリファレンス<span style="font-weight: normal;">]：&#160;この領域では、検索の対象となる場所の種類を定義できます。&#160;場所のプリファレンスを指定しない場合には、この領域は空白にしておきます。</span> </p></li>
+	<ul type="circle">
+		<li><p style="font-weight: normal;">[名前]フィールドに場所名の一部を入力できます。名前にその文字列が含まれる場所が検索の対象となります。&#160;たとえば、ビル3の部屋は場所名に「Bldg3」が含まれています。&#160;「Bldg3」を[<span style="font-weight: bold;"><b>名前</b></span>]フィールドに追加すると、名前に「Bldg3」が含まれる場所だけが提案されます。 </p></li>
+		<li><p style="font-weight: bold;"><span style="font-weight: normal;">参加者の空き状態とともに場所の提案を表示しないようにするには、</span>[使用可能なルームを提案]<span style="font-weight: normal;">チェックボックスをオフにします。</span><span style="font-weight: normal;">&#160;</span></p></li>
+	</ul>
+	<li><p>[<span style="font-weight: bold;"><b>時間のプリファレンス</b></span>]：参加者の空き状態の検索に含まれる時間を指定します。 </p></li>
+	<ul type="circle">
 		<li><p>[<span style="font-weight: bold;"><b>自分の勤務時間のみ</b></span>]：設定した勤務時間のみを検索します。カレンダーのプリファレンスで設定した勤務日と時間です。</p></li>
-		<li><p>[<span style="font-weight: bold;"><b>すべての参加者の勤務時間</b></span>]：場所を検索するとき、すべての人の勤務時間を考慮に入れます。<span style="font-weight: bold;"><b>備考</b></span>：&#160;異なるタイムゾーンの参加者を含める場合、特に離れたタイムゾーンの人が何人もいる場合は、すべての参加者が来れる場所を見つけることはできません。&#160;この場合、提案パネルには場所のリソースを示しません。</p></li>
+		<li><p><span style="font-weight: bold;"><b>[すべての参加者の勤務時間]：</b></span>場所を検索するとき、すべての人の勤務時間を考慮に入れます。<span style="font-weight: bold;"><b>備考</b></span>：異なるタイムゾーンの参加者を含める場合、特に離れたタイムゾーンの人が何人もいる場合は、すべての参加者が参加できる場所を見つけることはできません。&#160;この場合、提案パネルには場所のリソースを示しません。</p></li>
 		<li><p>[<span style="font-weight: bold;"><b>非勤務時間</b></span>]：この検索では、勤務時間としてマークしていない時間を含めます。夜や週末などです。</p></li>
 	</ul>
 </ul>

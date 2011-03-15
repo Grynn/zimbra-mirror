@@ -82,11 +82,6 @@ else
 
 //-->
 //]]></script>
-<div style="width: 100%; position: relative;" id="header">
-	
-</div>
-
-
 <h1>メッセージをフィルターする</h1>
 <p>フィルター機能を使用すると、一連の照合規則を受信メールに適用し、指定した操作を実行できます。</p>
 <p>受信メールメッセージをフィルターして、それらのメッセージをフォルダに振り分けたり、自動的にタグを付けたり、転送したりできます。また、それらのメッセージを破棄することも可能です。たとえば、以下のような規則を作成できます。</p>
@@ -120,28 +115,20 @@ else
 <ol start="6" type="1">
 	<li class="p"><p>[<span style="font-weight: bold;"><b>次の操作を実行</b></span>]領域のドロップダウンリストから<a href="filter_conditions_and_actions_supported.htm">操作</a>を選択します。</p></li>
 </ol>
-<ul type="disc">
-	<li class="p"><p style="margin-left: 40px;">必要に応じてフォルダまたはタグ名を指定します。指定する内容は、選択した操作によって異なります。</p></li>
-</ul>
+<p style="margin-left: 40px;">必要に応じてフォルダまたはタグ名を指定します。指定する内容は、選択した操作によって異なります。</p>
 <p style="margin-left: 40px;">さらに操作を追加する場合は、<img src="../plusbutton.gif" alt="plusbutton.gif" style="border: none;" width="21" height="20" border="0" />をクリックします。さらに操作を追加するか、[<span  	 style="font-weight: bold;"><b>OK</b></span>]をクリックして設定を完了します。</p>
 <ol start="7" type="1">
-	<li class="p" style="font-style: normal;"><p style="font-style: normal;">[フィルターを追加]ダイアログの上部に、[<span style="font-weight: bold;"><b>アクティブ</b></span>]チェックボックスがあります。フィルター規則を有効にする場合は、このチェックボックスをオンにします。規則を実行したくない場合は、[アクティブ]チェックボックスをオフにできます。</p></li>
+	<li class="p" style="font-style: normal;"><p style="font-style: normal;">[フィルターを追加]ダイアログの上部に、[<span style="font-weight: bold;"><b>アクティブ</b></span>]チェックボックスがあります。フィルター規則を有効にする場合は、このチェックボックスをオンにします。&#160;規則を実行したくない場合は、[アクティブ]チェックボックスをオフにできます。</p></li>
 	<li class="p" style="font-style: normal;"><p style="font-style: normal;">このフィルターの条件を満たすメッセージに対してこのフィルターだけを実行する場合は、[<span style="font-weight: bold;"><b>その他のフィルターは処理しない</b></span>]チェックボックスをオンにします。[<span style="font-weight: bold;"><b>その他のフィルターは処理しない</b></span>]操作は、各フィルター規則内の最後の操作でなければなりません。この操作により、現在の規則に一致したメールメッセージに、それ以上のフィルター規則が適用されるのを防ぐことができます。</p>
-	<p class="note"><span style="font-weight: bold;"><b>備考</b></span>：この操作を指定しなかった場合は、現在のフィルターがメールメッセージに一致した場合でも、そのメールメッセージに対して後続のフィルター規則が評価されます。あるメッセージに1つのフィルター規則が一致した後、同じメッセージにそれ以上のフィルター規則を適用するようなケースはほとんどありません（最初の操作と矛盾した操作が適用される可能性があります）。</p></li>
+	<p class="note">&#160;<span style="font-weight: bold;"><b>備考</b></span>：この操作を指定しなかった場合は、現在のフィルターがメールメッセージに一致した場合でも、そのメールメッセージに対して後続のフィルター規則が評価されます。あるメッセージに1つのフィルター規則が一致した後、同じメッセージにそれ以上のフィルター規則を適用するようなケースはほとんどありません（最初の操作と矛盾した操作が適用される可能性があります）。</p></li>
 </ol>
 <p style="font-style: normal;">フィルター規則への変更はすぐに保存されます。このフィルターは、今後受信するすべてのメールに自動的に適用されます。 &#160;</p>
 <p style="font-style: normal;">既存のメールに対してフィルター規則を実行することもできます。[フィルターのプリファレンス]にある[<span style="font-weight: bold;"><b>フィルターを実行</b></span>]をクリックして、選択したフィルターに対して実行するメールフォルダを選択します。</p>
 <p class="note"><span style="font-weight: bold;"><b>備考</b></span>：メールメッセージから新しいフィルターを作成することもできます。メッセージを右クリックし、[<span style="font-weight: bold;"><b>新しいフィルター</b></span>]を選択します。[<span style="font-weight: bold;"><b>フィルターを編集</b></span>]ダイアログが開き、メールメッセージ内の情報を使って[<span style="font-weight: bold;"><b>差出人</b></span>]、[<span style="font-weight: bold;"><b>宛先</b></span>]、および[<span style="font-weight: bold;"><b>件名</b></span>]フィールドが自動的に設定されます。&#160;フィルター条件が正しい場合は、フィルターの名前を指定し、[OK]をクリックします。</p> <p>&#160;</p> <p>
-
-<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','サポートされているフィルターの条件と操作','filter_conditions_and_actions_supported.htm','フィルター機能のしくみ','how_filtering_works.htm','ワイルドカード','wildcards.htm');return false;" title="関連トピック"><span style="font-family:Arial;font-size:8pt;font-weight:bold;font-style:normal;text-decoration:underline"><nobr> 関連トピック </nobr></span></a>
-
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','サポートされているフィルターの条件と操作','filter_conditions_and_actions_supported.htm','フィルター機能のしくみ','how_filtering_works.htm','ワイルドカード','wildcards.htm');return false;" title=" 関連トピック"><span style="font-family:Arial;font-size:8pt;font-weight:bold;font-style:normal;text-decoration:underline"><nobr>  関連トピック </nobr></span></a>
 
  </p>
 <p>&#160;</p>
-<div style="width: 100%; position: relative;" id="footer">
-	<p style="font-size: 8pt; background-color: #e9e9e9; border-top-width: 1px; 
-		 border-top-style: Solid;"><span style="font-size: 8pt; background-color: #e9e9e9; "><font size="1" style="font-size:8pt;">Copyright @ 2011 Zimbra and VMware, Inc. All rights reserved.</font></span></p>
-</div>
 <script type="text/javascript" language="JavaScript">//<![CDATA[
 if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
   WritePopupMenuLayer();

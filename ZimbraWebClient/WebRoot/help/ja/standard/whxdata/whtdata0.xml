@@ -32,6 +32,7 @@
   <item name="メールメッセージの各部分について" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="署名を自動的に追加する" url="Userspecific/b_Automatically_adding_your_signature.htm" />
   <item name="アドレスのオートコンプリート" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="オートコンプリート用メールアドレスのランク順序" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="メッセージにファイルを添付する" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="サポートされている添付ファイルの種類" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="HTMLエディタを使用する" url="Creating_Messages/Using_HTML_Editor.htm" />
@@ -66,7 +67,7 @@
   <item name="タスクを変更する" url="Tasks/Change_a_task.htm" />
 </book>
 <book name="ブリーフケースで作業する" >
-  <item name="ブリーフケースにあるファイルのバージョン管理" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+  <item name="ブリーフケースで作業する" url="Briefcase/b_Working_in_Briefcase.htm" />
 </book>
 <book name="フォルダを共有する" >
   <book name="カレンダーを共有する" >

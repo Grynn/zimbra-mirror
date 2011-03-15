@@ -39,9 +39,10 @@
   <item name="HTMLエディタを使用する" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="Cc:アドレスとBcc:アドレスを使用する" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="署名を追加する" url="Userspecific/using_a_signature.htm" />
-  <item name="メールメッセージにファイルを添付する" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  <item name="メッセージにファイルを添付する" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="サポートされている添付ファイルの種類" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="アドレス参照を使用する" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="オートコンプリート用メールアドレスのランク順序" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="下書きメッセージを保存する" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="メッセージを閲覧、返信、転送する" >
@@ -144,6 +145,8 @@
 <book name="アカウントの内容を管理する" >
   <item name="メールメッセージをアーカイブする" url="Zdesktop/Archiving_your_email_messages.htm" />
   <item name="アカウントデータを別のアカウントに移動する" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+  <item name="ローカルフォルダをバックアップする" url="Zdesktop/Backing_up_your_local_folders_7.htm" />
+  <item name="バックアップファイルからアカウントを復元する" url="Zdesktop/Restoring_Accounts_from_Your_Backup_Files.htm" />
 </book>
 
 </tocdata>
