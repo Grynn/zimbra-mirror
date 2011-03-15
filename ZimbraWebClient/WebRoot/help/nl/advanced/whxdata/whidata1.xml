@@ -1,6 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="Doorsturen, jouw e-mail" >
+  <topic name="Een doorstuuradres instellen" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="doorsturen, kopinformatie toevoegen" >
+  <topic name="Voorkeuren instellen voor het venster voor het opstellen van e-mailberichten" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+</key>
 <key name="Doorstuuradres" >
   <topic name="Je eigen gebruikersvoorkeuren instellen" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
@@ -57,6 +63,9 @@
 <key name="externe gebruiker" >
   <topic name="Bepalen wie jou kan uitnodigen voor een vergadering" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
+<key name="filterconditie" >
+  <topic name="Ondersteunde filtercondities en acties" url="filters/filter_conditions_and_actions_supported.htm" />
+</key>
 <key name="Filteren, berichten" >
   <topic name="Berichten filteren" url="filters/filtering_your_messages.htm" />
 </key>
@@ -67,7 +76,6 @@
   <topic name="Hoe werkt filteren" url="filters/how_filtering_works.htm" />
 </key>
 <key name="Filtervoorwaarden" >
-  <topic name="Ondersteunde filtercondities en acties" url="filters/filter_conditions_and_actions_supported.htm" />
   <topic name="Hoe werkt filteren" url="filters/how_filtering_works.htm" />
 </key>
 <key name="Gebruikersinterfacefuncties" >
@@ -75,6 +83,9 @@
 </key>
 <key name="Gebruikersvoorkeuren" >
   <topic name="Je eigen gebruikersvoorkeuren instellen" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="gedeelde items zoeken" >
+  <topic name="Mappen-gedeelte" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
 <key name="Gedeelde toegang, adresboek" >
   <topic name="Je adresboek delen" url="Contacts/Sharing_your_Address_Book.htm" />
@@ -283,15 +294,6 @@
 </key>
 <key name="Navigeren, met het toetsenbord" >
   <topic name="Sneltoetsen in de Zimbra-webclient" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
-</key>
-<key name="Nieuwe berichten" >
-  <topic name="Hoe weet je dat je nieuwe e-mail hebt?" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
-</key>
-<key name="nieuwe pagina's maken" >
-  <topic name="Een nieuwe pagina maken" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="Ondersteunde bestandstypen als bijlage" >
-  <topic name="Ondersteunde bestandstypen als bijlage" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
 </key>
 
 </indexdata>

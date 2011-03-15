@@ -7,6 +7,9 @@
 <key name="aanpassen, contactveld" >
   <topic name="Een nieuw contact maken" url="Contacts/creating_a_new_contact.htm" />
 </key>
+<key name="aantal berichten" >
+  <topic name="Mappen-gedeelte" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
 <key name="Abonneren op RSS" >
   <topic name="Abonneren op RSS/ATOM-feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
@@ -34,11 +37,13 @@
 <key name="Adressen automatisch invullen in e-mail" >
   <topic name="Adres opzoeken gebruiken" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
+<key name="adressen rangschikken" >
+  <topic name="Hoe e-mailadressen worden gerangschikt voor automatisch aanvullen" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
+</key>
 <key name="afbeeldingen in handtekening" >
   <topic name="Een handtekening gebruiken" url="Userspecific/using_a_signature.htm" />
 </key>
 <key name="Afdrukken" >
-  <topic name="Een conversatie afdrukken" url="conversations/printing_a_conversation.htm" />
   <topic name="Een e-mailbericht afdrukken" url="reading_mail/printing_a_mail_message.htm" />
   <key name="E-mailbericht" >
     <topic name="Een e-mailbericht afdrukken" url="reading_mail/printing_a_mail_message.htm" />
@@ -58,6 +63,9 @@
 </key>
 <key name="Afspraak, herinnering aan" >
   <topic name="Je eigen gebruikersvoorkeuren instellen" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="afspraakinformatie toevoegen aan agenda" >
+  <topic name="Een uitnodiging beantwoorden" url="Calendar/Responding_to_an_invitation.htm" />
 </key>
 <key name="Afspraken" >
   <topic name="Afspraken, vergaderingen en evenementen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
@@ -187,13 +195,16 @@
 <key name="berichten naar een map verplaatsen" >
   <topic name="Hoe werkt filteren" url="filters/how_filtering_works.htm" />
 </key>
+<key name="berichten vlaggen" >
+  <topic name="Een e-mailbericht van een vlag voorzien" url="Tags_and_flags/Flagging_an_email_message.htm" />
+</key>
 <key name="Berichten, vakantie" >
   <topic name="Vakantiebericht" url="Userspecific/vacation_message.htm" />
 </key>
 <key name="Berichtweergave" >
   <topic name="De weergave van je e-mailberichten beheren" url="conversations/conversation_list_view.htm" />
 </key>
-<key name="Beschrijving van de querytaal" >
+<key name="beschrijvingen van querytalen" >
   <topic name="Beschrijving van de querytaal" url="Search/query_language_description.htm" />
 </key>
 <key name="bestanden, toevoegen als bijlage" >
@@ -224,11 +235,8 @@
   <topic name="Een contact bewerken" url="Contacts/editing_a_contact.htm" />
   <topic name="Contacten" url="Contacts/contacts.htm" />
   <topic name="Een nieuw contact maken" url="Contacts/creating_a_new_contact.htm" />
-  <key name="Bewerken" >
-    <topic name="Een contact bewerken" url="Contacts/editing_a_contact.htm" />
-  </key>
 </key>
-<key name="Contact bewerken" >
+<key name="contacten bewerken" >
   <topic name="Een contact bewerken" url="Contacts/editing_a_contact.htm" />
 </key>
 <key name="Contacten importeren" >
@@ -237,7 +245,7 @@
 <key name="contacten, aangepaste velden op formulier maken" >
   <topic name="Een nieuw contact maken" url="Contacts/creating_a_new_contact.htm" />
 </key>
-<key name="Contacten, automatisch" >
+<key name="contacten, automatisch" >
   <topic name="Contacten automatisch toevoegen" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
 </key>
 <key name="Contacten, lijst afdrukken" >
@@ -246,7 +254,7 @@
 <key name="Contacten, verwijderd contact opnieuw toevoegen aan lijst" >
   <topic name="Een contact verwijderen" url="Contacts/deleting_a_contact.htm" />
 </key>
-<key name="Contactenlijst" >
+<key name="contactenlijst" >
   <topic name="Contacten" url="Contacts/contacts.htm" />
 </key>
 <key name="Controleren of er nieuwe e-mail is binnengekomen" >
@@ -256,10 +264,10 @@
 <key name="controleren, reacties op vergadering" >
   <topic name="Het tabblad Planning gebruiken bij het maken van een afspraak" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
-<key name="Conversaties" >
+<key name="conversaties" >
   <topic name="Conversaties kunnen meerdere mappen omvatten" url="conversations/conversations_can_span_folders.htm" />
   <topic name="Een conversatie afdrukken" url="conversations/printing_a_conversation.htm" />
-  <key name="Afdrukken" >
+  <key name="afdrukken" >
     <topic name="Een conversatie afdrukken" url="conversations/printing_a_conversation.htm" />
   </key>
 </key>
@@ -294,12 +302,6 @@
   <topic name="Een e-mailbericht doorsturen" url="Creating_Messages/forwarding_a_mail_message.htm" />
 </key>
 <key name="doorsturen, bericht als bijlage" >
-  <topic name="Voorkeuren instellen voor het venster voor het opstellen van e-mailberichten" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
-</key>
-<key name="Doorsturen, jouw e-mail" >
-  <topic name="Een doorstuuradres instellen" url="Userspecific/Setting_a_Forwarding_Address.htm" />
-</key>
-<key name="doorsturen, kopinformatie toevoegen" >
   <topic name="Voorkeuren instellen voor het venster voor het opstellen van e-mailberichten" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 

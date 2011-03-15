@@ -1,6 +1,21 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="nieuw tijdstip voorstellen" >
+  <topic name="Een uitnodiging beantwoorden" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="Nieuwe berichten" >
+  <topic name="Hoe weet je dat je nieuwe e-mail hebt?" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="nieuwe e-mailberichten maken" >
+  <topic name="Een nieuw e-mailbericht maken" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+</key>
+<key name="nieuwe pagina's maken" >
+  <topic name="Een nieuwe pagina maken" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="Ondersteunde bestandstypen als bijlage" >
+  <topic name="Ondersteunde bestandstypen als bijlage" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+</key>
 <key name="ongedaan maken" >
   <topic name="Actie ongedaan maken" url="Userspecific/Undo_Action.htm" />
 </key>
@@ -24,12 +39,6 @@
 </key>
 <key name="opnieuw verzenden" >
   <topic name="Rechtsklikmenu's" url="Navigation_folders_and_tips/right-click_menus.htm" />
-</key>
-<key name="Opstellen" >
-  <topic name="Een nieuw e-mailbericht maken" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  <key name="Nieuw e-mailbericht" >
-    <topic name="Een nieuw e-mailbericht maken" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  </key>
 </key>
 <key name="Optie, vakantiebericht" >
   <topic name="Vakantiebericht" url="Userspecific/vacation_message.htm" />
@@ -61,9 +70,6 @@
 <key name="Persona" >
   <topic name="E-mailidentiteiten" url="Userspecific/Mail_Identities.htm" />
   <topic name="Persona's maken" url="Userspecific/Creating_Personas.htm" />
-</key>
-<key name="Persoonlijke contacten" >
-  <topic name="Een contact bewerken" url="Contacts/editing_a_contact.htm" />
 </key>
 <key name="Persoonlijke distributielijsten" >
   <topic name="Groepcontactlijsten maken" url="Contacts/Creating_Group_Contact_Lists.htm" />
@@ -100,9 +106,10 @@
 </key>
 <key name="Rechtsklikken" >
   <topic name="De werkruimte van de Zimbra-webclient" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
-<key name="Rechtsklikmenu's" >
-  <topic name="Rechtsklikmenu's" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <key name="Rechtsklikmenu
+s" >
+    <topic name="Rechtsklikmenu's" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  </key>
 </key>
 <key name="Regels, filter-" >
   <topic name="Berichten filteren" url="filters/filtering_your_messages.htm" />
@@ -244,6 +251,7 @@
 </key>
 <key name="vergeten" >
   <topic name="Adres opzoeken gebruiken" url="Creating_Messages/Using_address_lookup.htm" />
+  <topic name="Hoe e-mailadressen worden gerangschikt voor automatisch aanvullen" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="Verplaatsen" >
   <topic name="E-mailberichten verplaatsen tussen mappen" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
@@ -260,10 +268,10 @@
 <key name="versies" >
   <topic name="Versiebeheer van bestanden in aktektas" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 </key>
-<key name="verwijderde bestanden herstellen" >
+<key name="verwijderde berichten herstellen" >
   <topic name="Prullenbak leegmaken " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
-<key name="verwijderde bestanden, herstellen" >
+<key name="verwijderde berichten, herstellen" >
   <topic name="Prullenbak leegmaken " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="Verwijderen" >
@@ -287,12 +295,6 @@
 <key name="verzenden, status vrij/bezet" >
   <topic name="Jouw vrij/bezet-status verzenden aan anderen" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
 </key>
-<key name="Vlaggen" >
-  <topic name="Een e-mailbericht van een vlag voorzien" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  <key name="E-mailbericht" >
-    <topic name="Een e-mailbericht van een vlag voorzien" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  </key>
-</key>
 <key name="Voorbeelddeelvenster, in- en uitschakelen" >
   <topic name="E-mail lezen via het Leesdeelvenster" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
@@ -304,12 +306,6 @@
 </key>
 <key name="voorkeuren, Agenda" >
   <topic name="Je Agenda-voorkeuren instellen" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-</key>
-<key name="voorkeuren, delen" >
-  <topic name="Items beheren die jij deelt" url="Sharing/Managing_items_you_share.htm" />
-</key>
-<key name="Voorkeuren, leesdeelvenster bekijken" >
-  <topic name="E-mail lezen via het Leesdeelvenster" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 
 </indexdata>

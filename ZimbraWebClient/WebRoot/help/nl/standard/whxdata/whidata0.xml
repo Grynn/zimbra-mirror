@@ -10,6 +10,9 @@
 <key name="Adressen automatisch invullen in e-mail" >
   <topic name="Adres opzoeken gebruiken" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
+<key name="adressen rangschikken" >
+  <topic name="Hoe e-mailadressen worden gerangschikt voor automatisch aanvullen" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
+</key>
 <key name="afdrukken, taken" >
   <topic name="Info over taken" url="Tasks/About_Tasks.htm" />
 </key>
@@ -46,7 +49,7 @@
 <key name="Berichten, vakantie" >
   <topic name="Vakantiebericht" url="Userspecific/vacation_message.htm" />
 </key>
-<key name="Beschrijving van de querytaal" >
+<key name="beschrijvingen van querytalen" >
   <topic name="Beschrijving van de querytaal" url="Search/query_language_description.htm" />
 </key>
 <key name="Bijlagen" >
@@ -82,11 +85,11 @@
 <key name="E-mailbericht" >
   <topic name="Gedeelten van een e-mailbericht" url="Creating_Messages/parts_of_an_email_message.htm" />
 </key>
+<key name="filterconditie" >
+  <topic name="Ondersteunde filtercondities en acties" url="filters/filter_conditions_and_actions_supported.htm" />
+</key>
 <key name="Filteren, berichten" >
   <topic name="Berichten filteren" url="filters/bc_Filtering_your_messages.htm" />
-</key>
-<key name="Filtervoorwaarden" >
-  <topic name="Ondersteunde filtercondities en acties" url="filters/filter_conditions_and_actions_supported.htm" />
 </key>
 <key name="Groepcontacten toevoegen" >
   <topic name="Nieuwe contacten toevoegen" url="Contacts/b_Adding_new_contacts.htm" />
@@ -183,9 +186,7 @@
 </key>
 <key name="vergeten" >
   <topic name="Adres opzoeken gebruiken" url="Creating_Messages/Using_address_lookup.htm" />
-</key>
-<key name="versies" >
-  <topic name="Versiebeheer van bestanden in aktektas" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+  <topic name="Hoe e-mailadressen worden gerangschikt voor automatisch aanvullen" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="Voorkeuren" >
   <topic name="Je opties instellen" url="Userspecific/b_Setting_your_Options.htm" />

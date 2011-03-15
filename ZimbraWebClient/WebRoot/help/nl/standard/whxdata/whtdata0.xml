@@ -32,9 +32,10 @@
   <item name="Gedeelten van een e-mailbericht" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Automatisch je handtekening toevoegen" url="Userspecific/b_Automatically_adding_your_signature.htm" />
   <item name="Automatisch invullen van adressen" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Hoe e-mailadressen worden gerangschikt voor automatisch aanvullen" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
+  <item name="Bestanden als bijlage aan je bericht toevoegen" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="Ondersteunde bestandstypen als bijlage" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="HTML-editor gebruiken" url="Creating_Messages/Using_HTML_Editor.htm" />
-  <item name="Bestanden als bijlage aan je bericht toevoegen" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="Berichten als concepten opslaan" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Berichten beantwoorden en doorsturen" >
@@ -66,7 +67,7 @@
   <item name="Een taak wijzigen" url="Tasks/Change_a_task.htm" />
 </book>
 <book name="Met de Aktetas werken" >
-  <item name="Versiebeheer van bestanden in Aktektas" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+  <item name="Met de Aktetas werken" url="Briefcase/b_Working_in_Briefcase.htm" />
 </book>
 <book name="Mappen delen" >
   <book name="Agenda's delen" >

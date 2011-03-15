@@ -6,7 +6,7 @@
   <item name="In- en uitloggen" url="Userspecific/logging_on_and_off.htm" />
   <item name="Mijn standaard client-type wijzigen voor het inloggen" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Toetsenbordsneltoetsen" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
-  <item name="@CompanyName@ Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+  <item name="De @CompanyName@-Assistent" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
   <item name="Je wachtwoord wijzigen" url="Userspecific/chaning_your_password.htm" />
   <item name="Wachtwoord vergeten?" url="Userspecific/if_you_forget_your_password.htm" />
   <item name="Als je sessie verloopt" url="Userspecific/if_your_session_expires.htm" />
@@ -36,7 +36,7 @@
   <item name="Een doorstuuradres instellen" url="Userspecific/Setting_a_Forwarding_Address.htm" />
   <item name="Abonneren op RSS/ATOM-feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
   <item name="Accountidentiteiten beheren" url="Userspecific/Mail_Identities.htm" />
-  <item name="De map Spam beheren" url="filters/Managing_your_Junk_Folder.htm" />
+  <item name="De Junk-map beheren" url="filters/Managing_your_Junk_Folder.htm" />
   <item name="Verwijderde items herstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="E-mailberichten verwijderen" url="reading_mail/archiving_old_messages.htm" />
   <book name="Berichten lezen" >
@@ -62,6 +62,7 @@
   <item name="Gedeelten van een e-mailbericht" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Automatisch je handtekening toevoegen" url="Userspecific/using_a_signature.htm" />
   <item name="Automatisch invullen van adressen" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Hoe e-mailadressen worden gerangschikt voor automatisch aanvullen" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="E-mails plannen voor toekomstige verzending" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="Een ontvangstbewijs vragen" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="Bestanden als bijlage aan je bericht toevoegen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
@@ -91,7 +92,7 @@
   <item name="Contacten verwijderen" url="Contacts/deleting_a_contact.htm" />
 </book>
 <book name="Je agenda beheren" >
-  <item name="Info over @CompanyName@ Agenda" url="Calendar/About_Calendar.htm" />
+  <item name="Info over @CompanyName@-agenda" url="Calendar/About_Calendar.htm" />
   <item name="Agenda's maken" url="Calendar/Create_Calendars.htm" />
   <item name="Agenda's kleurcoderen" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Je Agenda-voorkeuren instellen" url="Userspecific/Setting_your_Calendar_preferences.htm" />
@@ -144,10 +145,10 @@
 <chunk name="Je mobiele apparaat beheren (alleen netwerkversie)" ref="whtdata7.xml" />
 </book>
 <book name="Je accountmappen opslaan" >
-  <item name="De inhoud van je account offline opslaan" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+<chunk name="Je accountmappen opslaan" ref="whtdata8.xml" />
 </book>
 <book name="Zimlets gebruiken" >
-<chunk name="Zimlets gebruiken" ref="whtdata8.xml" />
+<chunk name="Zimlets gebruiken" ref="whtdata9.xml" />
 </book>
 
 </tocdata>

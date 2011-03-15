@@ -39,9 +39,10 @@
   <item name="HTML-editor gebruiken" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="Cc: en Bcc:-adressen adressen toevoegen" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="Je handtekening toevoegen" url="Userspecific/using_a_signature.htm" />
-  <item name="Bestanden als bijlage toevoegen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  <item name="Bestanden als bijlage aan je bericht toevoegen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="Ondersteunde bestandstypen als bijlage" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Adres opzoeken gebruiken" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Hoe e-mailadressen worden gerangschikt voor automatisch aanvullen" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="Een conceptbericht opslaan" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Berichten lezen, beantwoorden en doorsturen" >
@@ -131,13 +132,10 @@
 <chunk name="Mappen delen (alleen Zimbra-accounts)" ref="whtdata1.xml" />
 </book>
 <book name="Aktetas gebruiken" >
-  <item name="Met de Aktetas werken" url="Briefcase/Working_in_Briefcase.htm" />
-  <item name="Een nieuw document maken " url="Documents/Create_a_new_page.htm" />
-  <item name="De RTF-editor gebruiken" url="Documents/Using_the_rich_text_editor.htm" />
-  <item name="Een tabel aan een document toevoegen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<chunk name="Aktetas gebruiken" ref="whtdata2.xml" />
 </book>
 <book name="Je accountinhoud beheren" >
-<chunk name="Je accountinhoud beheren" ref="whtdata2.xml" />
+<chunk name="Je accountinhoud beheren" ref="whtdata3.xml" />
 </book>
 
 </tocdata>

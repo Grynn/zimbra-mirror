@@ -84,21 +84,6 @@ else
 
 //-->
 //]]></script>
-<div style="width: 100%; position: relative;" id="header">
-	<table style="vertical-align: top;" cellspacing="0" width="100%">
-		<col style="width: 50%;" />
-		<col style="width: 50%;" />
-		<tr style="vertical-align: top;">
-			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
-   <p 
-				 style="font-weight: bold;">&nbsp;</p></td>
-			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
-   <p 
-				 style="font-size: 8pt; color: #ff0000;" align="right"><a  			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_2_FAQ" target="_blank">Zie Veelgestelde vragen over Zimbra Desktop voor antwoorden op algemene vragen en oplossingen voor problemen</a></p></td>
-		</tr>
-	</table>
-</div>
- 
 <h1>Ondersteunde filtercondities en acties</h1>
 <p>Filterregels zijn niet hoofdlettergevoelig. Dit betekent dat de regels hoofdletters negeren.</p>
 <h3>Condities</h3>
@@ -111,7 +96,7 @@ else
 	<li class="p"><p><span style="font-weight: bold;"><b>Onderwerp:.</b></span> Kijkt in de onderwerpkop van een bericht.</p></li>
 </ul>
 <ul type="disc">
-	<li class="p"><p><span style="font-weight: bold;"><b>Koptekst met naam.</b></span> Als deze optie is geselecteerd, wordt er een extra tekstinvoerveld weergegeven voor de vergelijkingsoperator (het gedeelte &quot;bevat&quot;). Met deze optie kun je alle e-mailkoppen opgeven. Je kunt niet alleen de standaardvelden Aan: of Van: opgeven, maar tevens Datum, Beantwoorden en andere aangepaste velden die zijn inbegrepen in de berichtkop. Je kunt deze optie gebruiken om e-mailberichten uit te filteren die koppen met een onjuiste indeling hebben. Dit betekent dat ze bepaalde informatie niet bevatten die normaal als standaard wordt beschouwd voor een e-mailbericht.  Soms laat spam, die automatisch wordt gegenereerd, informatie weg zoals de velden Afzender of Beantwoorden. Gebruik het tweede tekstveld (het veld meteen rechts naast de vergelijkingsoperator) om de koptekst op te geven waarop getest moet worden.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Koptekst met naam.</b></span> Als deze optie is geselecteerd, wordt er een extra tekstinvoerveld weergegeven voor de vergelijkingsoperator (het gedeelte &quot;bevat&quot;). Met deze optie kun je alle e-mailkoppen opgeven. Je kunt niet alleen de standaardvelden Aan: of Van: opgeven, maar tevens Datum, Beantwoorden en andere aangepaste velden die zijn inbegrepen in de berichtkop. Je kunt deze optie gebruiken om e-mailberichten uit te filteren die koppen met een onjuiste indeling hebben. Dit betekent dat ze bepaalde informatie niet bevatten die normaal als standaard wordt beschouwd voor een e-mailbericht. Soms laat spam, die automatisch wordt gegenereerd, informatie weg zoals de velden Afzender of Beantwoorden. Gebruik het tweede tekstveld (het veld meteen rechts naast de vergelijkingsoperator) om de koptekst op te geven waarop getest moet worden.</p></li>
 	<li class="p"><p><span style="font-weight: bold;"><b>Grootte.</b></span> Gebruik deze optie voor e-mailberichten die groter of kleiner zijn dan de opgegeven grootte. De grootte van de e-mail omvat tevens alle bestandsbijlagen. Je kunt deze optie gebruiken om e-mailberichten weg te gooien die te groot zijn.</p></li>
 	<li class="p"><p><span style="font-weight: bold;"><b>Datum.</b></span> Gebruik deze optie om e-mailberichten op te geven die zijn verzonden voor of na een opgegeven datum.</p></li>
 	<li class="p"><p><span style="font-weight: bold;"><b>Berichtinhoud.</b></span> De opties voor Berichtinhoud zijn Bevat/Bevat niet. Hiermee kun je overeenkomende woorden in de berichtinhoud van de e-mail opgeven. Je kunt niet op woorden filteren in bestandsbijlagen.</p></li>
@@ -123,8 +108,8 @@ else
 <p>Vergelijkingsoperators omvatten het volgende:</p>
 <ul type="disc">
 	<li class="p"><p><span style="font-weight: bold;"><b>Komt exact overeen/Komt niet exact overeen</b></span>. Geeft een exacte overeenkomst op. Als je bijvoorbeeld opgeeft <span style="font-weight: bold;"><b>Onderwerp</b></span> <span style="font-weight: bold;"><b>komt exact overeen met</b></span> - <span style="font-weight: bold;"><b>Banaan</b></span>, dan komt dit alleen overeen met &quot;Banaan&quot; en niet met &quot;Bananen&quot; of &quot;Een vrachtwagen vol bananenbladeren&quot;.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Bevat/Bevat niet</b></span>. Geeft aan dat de onderwerpregel de opgegeven subreeks moet bevatten.  Als je bijvoorbeeld opgeeft <span style="font-weight: bold;"><b>Onderwerp bevat banaan</b></span>, zou dit overeenkomen met &quot;Ik heb zin in een banaan&quot;.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Komt overeen met wildcard/komt niet overeen met wildcard</b></span>. De wildcard (joker) * is een teken dat wordt gebruikt in het vergelijkingsveld van het e-mailfilter om één of meer tekens in het filter te vertegenwoordigen Als je bijvoorbeeld opgeeft dat het onderwerp overeenkomt met &quot;banaan*&quot;, komt dit overeen met &quot;banaanboom&quot; of &quot;banaansoort&quot; maar niet met &quot;deze banaansoort&quot;.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Bevat/Bevat niet</b></span>. Geeft aan dat de onderwerpregel de opgegeven subreeks moet bevatten. &#160;Als je bijvoorbeeld opgeeft <span style="font-weight: bold;"><b>Onderwerp bevat banaan</b></span>, zou dit overeenkomen met &quot;Ik heb zin in een banaan&quot;.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Komt overeen met wildcard/komt niet overeen met wildcard</b></span>. De wildcard (joker) * is een teken dat wordt gebruikt in het vergelijkingsveld van het e-mailfilter om één of meer tekens in het filter te vertegenwoordigen Als je bijvoorbeeld opgeeft dat het onderwerp overeenkomt met &quot; banaan*&quot;, komt dit overeen met &quot;banaanboom&quot; of &quot;banaansoort&quot; maar niet met &quot;deze banaansoort.&quot;</p></li>
 </ul>
 <h3>Acties</h3>
 <ul type="disc">
@@ -144,13 +129,7 @@ else
 	<li class="p"><p><span style="font-weight: bold;"><b>In Postvak IN bewaren</b></span> Er kunnen meerdere &quot;bewaar&quot;-acties worden opgegeven, maar slechts één kopie van het bericht wordt opgeslagen naar het Postvak IN.</p></li>
 	<li class="p"><p style="font-weight: bold;">Doorsturen naar adres. <span  	 style="font-weight: normal;">De e-mail wordt doorgestuurd naar het opgegeven adres.</span></p></li>
 </ul>
-<p>&nbsp;</p>
-
-<div style="width: 100%; position: relative;" id="footer">
-	<p style="font-size: 8pt; background-color: #e9e9e9; border-top-width: 1px; 
-		 border-top-style: Solid;"><span style="font-size: 8pt; background-color: #e9e9e9; "><font size="1" style="font-size:8pt;">Copyright @ 2011 Zimbra en VMware, Inc. 
-	 Alle rechten voorbehouden.</font></span></p>
-</div>
+<p>&#160;</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)
