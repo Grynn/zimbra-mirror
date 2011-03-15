@@ -1,9 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="dispositivo móvel" >
-  <topic name="Gerenciando seus dispositivos móveis" url="Userspecific/Managing_your_mobile_devices.htm" />
-</key>
 <key name="e-mail" >
   <topic name="Lendo e-mail" url="reading_mail/reading_mail.htm" />
   <key name="Lendo" >
@@ -16,11 +13,11 @@
 <key name="E-mails da conta POP, recebendo" >
   <topic name="Definindo suas preferências de usuário" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
+<key name="editando contatos" >
+  <topic name="Editando um contato" url="Contacts/editing_a_contact.htm" />
+</key>
 <key name="editar como novo" >
   <topic name="Menus do botão direito do mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
-</key>
-<key name="Editar contato" >
-  <topic name="Editando um contato" url="Contacts/editing_a_contact.htm" />
 </key>
 <key name="editar permissões de pasta de e-mail" >
   <topic name="Revogando um acesso a uma pasta compartilhada" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
@@ -66,6 +63,7 @@
 </key>
 <key name="esquecer" >
   <topic name="Usando a procura de endereços" url="Creating_Messages/Using_address_lookup.htm" />
+  <topic name="Como endereços de e-mail são classificados para preenchimento automático" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="evento de agenda particular" >
   <topic name="Marcando um compromisso como particular" url="Calendar/Marking_an_appointment_as_private.htm" />
@@ -83,10 +81,10 @@
     <topic name="Excluindo pastas" url="Navigation_folders_and_tips/deleting_folders.htm" />
   </key>
 </key>
-<key name="excluíndo compromissos recorrentes" >
+<key name="excluindo compromissos recorrentes" >
   <topic name="Alterando compromissos recorrentes" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
-<key name="excluíndo contatos" >
+<key name="excluindo contatos" >
   <topic name="Excluindo um contato" url="Contacts/deleting_a_contact.htm" />
 </key>
 <key name="excluir uma reunião" >
@@ -175,7 +173,6 @@
   <topic name="Fazendo backup do conteúdo de sua conta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
 <key name="Imprimindo" >
-  <topic name="Imprimindo um tópico de conversação" url="conversations/printing_a_conversation.htm" />
   <topic name="Imprimindo uma mensagem de e-mail" url="reading_mail/printing_a_mail_message.htm" />
   <key name="mensagem de e-mail" >
     <topic name="Imprimindo uma mensagem de e-mail" url="reading_mail/printing_a_mail_message.htm" />
@@ -208,7 +205,7 @@
 <key name="limpeza de dispositivo móvel" >
   <topic name="Como limpar seu dispositivo móvel" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
 </key>
-<key name="Lista de contatos" >
+<key name="lista de contatos" >
   <topic name="Contatos" url="Contacts/contacts.htm" />
 </key>
 <key name="lista de endereço, editando acesso compartilhado" >
@@ -250,6 +247,9 @@
 <key name="local, reservando" >
   <topic name="Programando recursos" url="Calendar/Scheduling_Resources.htm" />
 </key>
+<key name="localizando itens compartilhados" >
+  <topic name="Área de pastas" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
 <key name="localizar compartilhamentos" >
   <topic name="Gerenciando itens compartilhados" url="Sharing/Managing_items_you_share.htm" />
 </key>
@@ -287,6 +287,9 @@
 <key name="mensagem, confirmação de leitura" >
   <topic name="Solicitando uma confirmação de leitura" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
 </key>
+<key name="mensagens excluídas, recuperar" >
+  <topic name="Esvaziar a lixeira " url="Navigation_folders_and_tips/trash_folder.htm" />
+</key>
 <key name="mensagens, férias" >
   <topic name="Mensagem de férias" url="Userspecific/vacation_message.htm" />
 </key>
@@ -295,10 +298,6 @@
 </key>
 <key name="menus, botão direito do mouse" >
   <topic name="Menus de botão direito do mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
-</key>
-<key name="miniagenda" >
-  <topic name="Definindo suas preferências de agenda" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-  <topic name="Visualizando o número de semanas da agenda" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 
 </indexdata>

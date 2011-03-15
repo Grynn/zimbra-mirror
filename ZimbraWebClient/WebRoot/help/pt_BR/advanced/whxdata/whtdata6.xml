@@ -1,13 +1,10 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Definindo suas preferências de usuário" url="Userspecific/Setting_your_user_preferences.htm" />
-<item name="Alterando suas preferências de usuário" url="Userspecific/Changing_Your_User_Options.htm" />
-<item name="Notificação por e-mail para outro endereço" url="Userspecific/New_mail_notifications.htm" />
-<item name="Definindo endereços bloqueados e permitidos na caixa de entrada" url="filters/Filtering_Junk_Mail.htm" />
-<item name="Criando mensagens de ausência" url="Userspecific/vacation_message.htm" />
-<item name="Criando personagens" url="Userspecific/Creating_Personas.htm" />
-<item name="Alterando seu fuso horário padrão" url="Userspecific/Changing_your_default_timezone.htm" />
-<item name="Mantendo uma lista de endereços confiáveis" url="Userspecific/Maintaining_a_Trusted_Addresses_list.htm" />
+<item name="Configurando regras de filtros" url="filters/how_filtering_works.htm" />
+<item name="Filtrando suas mensagens" url="filters/filtering_your_messages.htm" />
+<item name="Condições de filtro e ações suportadas" url="filters/filter_conditions_and_actions_supported.htm" />
+<item name="Filtragem usando as opções CONTAINS, MATCHES, e IS" url="Search/contains_vs_matches.htm" />
+<item name="Curingas de filtro" url="filters/wildcards.htm" />
 
 </tocdata>

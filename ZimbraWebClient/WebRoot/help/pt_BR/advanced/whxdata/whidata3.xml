@@ -15,10 +15,10 @@
 <key name="Tipos de arquivo de anexo suportados" >
   <topic name="Tipos de arquivo de anexo suportados" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
 </key>
-<key name="Tópicos de conversação" >
+<key name="tópicos de conversação" >
   <topic name="Tópicos de conversação podem se estender por pastas" url="conversations/conversations_can_span_folders.htm" />
   <topic name="Imprimindo um tópico de conversação" url="conversations/printing_a_conversation.htm" />
-  <key name="Imprimindo" >
+  <key name="imprimindo" >
     <topic name="Imprimindo um tópico de conversação" url="conversations/printing_a_conversation.htm" />
   </key>
 </key>

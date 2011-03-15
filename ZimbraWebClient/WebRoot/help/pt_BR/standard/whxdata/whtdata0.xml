@@ -32,6 +32,7 @@
   <item name="Partes da mensagem de e-mail" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Adicionando sua assinatura automaticamente" url="Userspecific/b_Automatically_adding_your_signature.htm" />
   <item name="Preenchimento automático de endereços" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Como endereços de e-mail são classificados para preenchimento automático" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="Anexando arquivos a sua mensagem" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="Tipos de arquivo de anexo suportados" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Usando o editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
@@ -66,7 +67,7 @@
   <item name="Alterar uma tarefa" url="Tasks/Change_a_task.htm" />
 </book>
 <book name="Trabalhando no porta-arquivos" >
-  <item name="Controle de versão de arquivos no porta-arquivos" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+  <item name="Trabalhando no porta-arquivos" url="Briefcase/b_Working_in_Briefcase.htm" />
 </book>
 <book name="Compartilhando pastas" >
   <book name="Compartilhando agendas" >

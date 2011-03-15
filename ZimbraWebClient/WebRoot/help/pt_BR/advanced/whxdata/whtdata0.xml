@@ -36,7 +36,7 @@
   <item name="Definindo um endereço de encaminhamento" url="Userspecific/Setting_a_Forwarding_Address.htm" />
   <item name="Assinar conteúdos RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
   <item name="Gerenciando suas identidades de conta" url="Userspecific/Mail_Identities.htm" />
-  <item name="Gerenciando sua pasta Spam" url="filters/Managing_your_Junk_Folder.htm" />
+  <item name="Gerenciando a pasta Spam" url="filters/Managing_your_Junk_Folder.htm" />
   <item name="Recuperando itens excluídos" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Eliminando mensagens de e-mail" url="reading_mail/archiving_old_messages.htm" />
   <book name="Lendo mensagens" >
@@ -62,11 +62,12 @@
   <item name="Partes da mensagem de e-mail" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Adicionando automaticamente sua assinatura" url="Userspecific/using_a_signature.htm" />
   <item name="Preenchimento automático de endereços" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Como endereços de e-mail são classificados para preenchimento automático" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="Programar e-mails para entrega futura" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="Solicitando uma confirmação de leitura" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="Anexando arquivos a sua mensagem" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="Tipos de arquivo de anexo suportados" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-  <item name="Adicionando endereços Cc: e Cco: e Cco:" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+  <item name="Adicionando endereços Cc: e Cco: " url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="Usando o editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="Usando o corretor ortográfico" url="Creating_Messages/Using_Spell_Check.htm" />
   <item name="Salvando mensagens como rascunhos" url="Creating_Messages/saving_a_draft_message.htm" />
@@ -92,7 +93,7 @@
 </book>
 <book name="Gerenciando sua agenda" >
   <item name="Sobre a Agenda do @CompanyName@" url="Calendar/About_Calendar.htm" />
-  <item name="Criar agendas" url="Calendar/Create_Calendars.htm" />
+  <item name="Criando agendas" url="Calendar/Create_Calendars.htm" />
   <item name="Aplicar código de cores às suas agendas" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Definindo suas preferências de agenda" url="Userspecific/Setting_your_Calendar_preferences.htm" />
   <item name="Visualizando o número de semanas da agenda" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
@@ -129,23 +130,20 @@
 <chunk name="Usando marcadores e pastas para organizar e-mail" ref="whtdata5.xml" />
 </book>
 <book name="Usando filtros de e-mail" >
-  <item name="Configurando regras de filtros" url="filters/how_filtering_works.htm" />
-  <item name="Filtrando suas mensagens" url="filters/filtering_your_messages.htm" />
-  <item name="Condições de filtro e ações suportadas" url="filters/filter_conditions_and_actions_supported.htm" />
-  <item name="Filtragem usando as opções CONTAINS, MATCHES, e IS" url="Search/contains_vs_matches.htm" />
-  <item name="Curingas de filtro" url="filters/wildcards.htm" />
+<chunk name="Usando filtros de e-mail" ref="whtdata6.xml" />
 </book>
 <book name="Configurando suas preferências" >
-<chunk name="Configurando suas preferências" ref="whtdata6.xml" />
+<chunk name="Configurando suas preferências" ref="whtdata7.xml" />
 </book>
 <book name="Gerenciando seu dispositivo móvel (somente Network Edition)" >
-<chunk name="Gerenciando seu dispositivo móvel (somente Network Edition)" ref="whtdata7.xml" />
+  <item name="Gerenciando seus dispositivos móveis" url="Userspecific/Managing_your_mobile_devices.htm" />
+  <item name="Como limpar seu dispositivo móvel" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
 </book>
 <book name="Salvando as pastas da sua conta" >
-<chunk name="Salvando as pastas da sua conta" ref="whtdata8.xml" />
+  <item name="Salvando o conteúdo da sua conta offline" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </book>
 <book name="Usando Zimlets" >
-<chunk name="Usando Zimlets" ref="whtdata9.xml" />
+<chunk name="Usando Zimlets" ref="whtdata8.xml" />
 </book>
 
 </tocdata>

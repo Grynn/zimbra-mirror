@@ -1,6 +1,10 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="miniagenda" >
+  <topic name="Definindo suas preferências de agenda" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+  <topic name="Visualizando o número de semanas da agenda" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+</key>
 <key name="Movendo" >
   <topic name="Movendo mensagens de e-mail entre pastas" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   <key name="Mensagens de e-mail entre pastas" >
@@ -161,6 +165,9 @@
 <key name="programando uma sala ou equipamento" >
   <topic name="Programando recursos" url="Calendar/Scheduling_Resources.htm" />
 </key>
+<key name="propor novo horário" >
+  <topic name="Respondendo a um convite" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
 <key name="QuickAdd" >
   <topic name="Usando o QuickAdd para criar um compromisso" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 </key>
@@ -176,7 +183,7 @@
     <topic name="Recuperando mensagens de e-mail excluídas " url="reading_mail/recovering_deleted_mail_messages.htm" />
   </key>
 </key>
-<key name="recuperar arquivos excluídos" >
+<key name="recuperar mensagens excluídas" >
   <topic name="Esvaziar a lixeira " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="recurso" >
@@ -268,11 +275,8 @@
 <key name="sessão expirada" >
   <topic name="Caso sua sessão expire" url="Userspecific/if_your_session_expires.htm" />
 </key>
-<key name="Sinalização" >
+<key name="sinalizando mensagens" >
   <topic name="Sinalizando uma mensagem de e-mail" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  <key name="Mensagem de e-mail" >
-    <topic name="Sinalizando uma mensagem de e-mail" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  </key>
 </key>
 <key name="tabelas, adicionando a um documento" >
   <topic name="Adicionando uma tabela a um documento" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />

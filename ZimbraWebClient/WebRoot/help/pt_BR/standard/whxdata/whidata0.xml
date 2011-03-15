@@ -40,7 +40,10 @@
 <key name="busca, salvando" >
   <topic name="Usando a busca" url="Search/b_Using_Search.htm" />
 </key>
-<key name="Condições do filtro" >
+<key name="classificando endereços" >
+  <topic name="Como endereços de e-mail são classificados para preenchimento automático" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
+</key>
+<key name="condições de filtro" >
   <topic name="Condições de filtro e ações suportadas" url="filters/filter_conditions_and_actions_supported.htm" />
 </key>
 <key name="contatos de grupo, adicionando" >
@@ -58,7 +61,7 @@
 <key name="definindo um endereço de encaminhamento" >
   <topic name="Definindo um endereço de encaminhamento" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
-<key name="Descrição da linguagem de critérios" >
+<key name="descrição da linguagem de critérios" >
   <topic name="Descrição da linguagem de critérios" url="Search/query_language_description.htm" />
 </key>
 <key name="e-mail" >
@@ -78,6 +81,7 @@
 </key>
 <key name="esquecer" >
   <topic name="Usando a procura de endereços" url="Creating_Messages/Using_address_lookup.htm" />
+  <topic name="Como endereços de e-mail são classificados para preenchimento automático" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="filtrando mensagens" >
   <topic name="Filtrando suas mensagens" url="filters/bc_Filtering_your_messages.htm" />
@@ -192,9 +196,6 @@
 </key>
 <key name="Tipos de arquivo de anexo suportados" >
   <topic name="Tipos de arquivo de anexo suportados" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-</key>
-<key name="versões" >
-  <topic name="Controle de versão de arquivos no porta-arquivos" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 </key>
 <key name="visualização de agenda" >
   <topic name="Calendar_Views" url="Calendar/Calendar_Views.htm" />

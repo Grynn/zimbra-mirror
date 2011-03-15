@@ -39,9 +39,10 @@
   <item name="Usando o editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="Usando endereços cc: e cco:" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="Adicionando sua assinatura" url="Userspecific/using_a_signature.htm" />
-  <item name="Anexando arquivos a uma mensagem de e-mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  <item name="Anexando arquivos a sua mensagem" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="Tipos de arquivo de anexo suportados" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Usando a procura de endereços" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Como endereços de e-mail são classificados para preenchimento automático" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="Salvando uma mensagem de rascunho" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Lendo, respondendo e encaminhando mensagens" >

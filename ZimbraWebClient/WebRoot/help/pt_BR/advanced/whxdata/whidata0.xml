@@ -19,6 +19,9 @@
 <key name="adicionando contatos" >
   <topic name="Criando um novo contato" url="Contacts/creating_a_new_contact.htm" />
 </key>
+<key name="adicionando informações de compromissos à agenda" >
+  <topic name="Respondendo a um convite" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
 <key name="adicionando palavras ao meu dicionário" >
   <topic name="Usando o verificador ortográfico" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
@@ -94,9 +97,6 @@
 <key name="arquivando mensagens" >
   <topic name="eliminando mensagens" url="reading_mail/archiving_old_messages.htm" />
 </key>
-<key name="arquivos excluídos, recuperar" >
-  <topic name="Esvaziar a lixeira " url="Navigation_folders_and_tips/trash_folder.htm" />
-</key>
 <key name="arquivos, anexando" >
   <topic name="Anexando arquivos a uma mensagem de e-mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
@@ -143,7 +143,10 @@
   <topic name="Criando um novo contato" url="Contacts/creating_a_new_contact.htm" />
 </key>
 <key name="cancelar reuniões" >
-  <topic name="excluíndo um compromisso" url="Calendar/Deleting_an_appointment.htm" />
+  <topic name="excluindo um compromisso" url="Calendar/Deleting_an_appointment.htm" />
+</key>
+<key name="classificando endereços" >
+  <topic name="Como endereços de e-mail são classificados para preenchimento automático" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="classificando mensagens de e-mail recebidas" >
   <topic name="Como funciona a filtragem" url="filters/how_filtering_works.htm" />
@@ -193,8 +196,10 @@
 <key name="compromissos recorrentes, alterando" >
   <topic name="Alterando compromissos recorrentes" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
-<key name="Condições do filtro" >
+<key name="condições de filtro" >
   <topic name="Condições de filtro e ações suportadas" url="filters/filter_conditions_and_actions_supported.htm" />
+</key>
+<key name="Condições do filtro" >
   <topic name="Como funciona a filtragem" url="filters/how_filtering_works.htm" />
 </key>
 <key name="confirmação de leitura" >
@@ -212,6 +217,9 @@
 <key name="conta, importar" >
   <topic name="Fazendo backup do conteúdo de sua conta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
+<key name="contador de mensagens" >
+  <topic name="Área de pastas" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
 <key name="contas externas" >
   <topic name="Gerenciando suas contas POP" url="Userspecific/Managing_your_POP_Accounts.htm" />
 </key>
@@ -228,21 +236,15 @@
   <topic name="Editando um contato" url="Contacts/editing_a_contact.htm" />
   <topic name="Contatos" url="Contacts/contacts.htm" />
   <topic name="Criando um novo contato" url="Contacts/creating_a_new_contact.htm" />
-  <key name="Editando" >
-    <topic name="Editando um contato" url="Contacts/editing_a_contact.htm" />
-  </key>
 </key>
 <key name="contato, imprimindo lista" >
   <topic name="Imprimindo contatos" url="Contacts/Printing_Contacts.htm" />
 </key>
-<key name="Contatos automaticamente" >
+<key name="contatos automaticamente" >
   <topic name="Adicionando contatos, automaticamente" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
 </key>
 <key name="contatos de grupo" >
   <topic name="Criando listas de grupos de contatos" url="Contacts/Creating_Group_Contact_Lists.htm" />
-</key>
-<key name="Contatos pessoais" >
-  <topic name="Editando um contato" url="Contacts/editing_a_contact.htm" />
 </key>
 <key name="contatos, adicionando um contato excluído novamente na lista" >
   <topic name="Excluindo um contato" url="Contacts/deleting_a_contact.htm" />
@@ -265,14 +267,11 @@
 <key name="copiar compromissos" >
   <topic name="Criando um compromisso de um compromisso existente" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
 </key>
-<key name="Criando" >
-  <topic name="Criando uma nova mensagem de e-mail" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  <key name="Nova mensagem de e-mail" >
-    <topic name="Criando uma nova mensagem de e-mail" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  </key>
-</key>
 <key name="criando marcadores" >
   <topic name="Usando marcadores para classificar mensagens de e-mail" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="criando mensagens de e-mail" >
+  <topic name="Criando uma nova mensagem de e-mail" url="Creating_Messages/Creating_a_new_mail_message.htm" />
 </key>
 <key name="criando novas páginas" >
   <topic name="Criar uma nova página" url="Documents/Create_a_new_page.htm" />
@@ -302,7 +301,7 @@
 <key name="desativar zimlets" >
   <topic name="Gerenciando seus Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
 </key>
-<key name="Descrição da linguagem de critérios" >
+<key name="descrição da linguagem de critérios" >
   <topic name="Descrição da linguagem de critérios" url="Search/query_language_description.htm" />
 </key>
 <key name="desfazer" >
@@ -316,6 +315,9 @@
 </key>
 <key name="dicionário, adicionando palavras ao" >
   <topic name="Usando o verificador ortográfico" url="Creating_Messages/Using_Spell_Check.htm" />
+</key>
+<key name="dispositivo móvel" >
+  <topic name="Gerenciando seus dispositivos móveis" url="Userspecific/Managing_your_mobile_devices.htm" />
 </key>
 
 </indexdata>
