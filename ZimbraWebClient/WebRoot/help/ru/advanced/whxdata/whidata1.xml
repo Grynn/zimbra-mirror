@@ -1,6 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="импорт контактов" >
+  <topic name="Импорт контактов" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="импорт учетных записей" >
+  <topic name="Резервное копирование содержимого учетной записи" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
 <key name="использование меток" >
   <topic name="Использование меток для систематизации почтовых сообщений" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
 </key>
@@ -16,13 +22,13 @@
 <key name="как установить исходный вид области содержимого" >
   <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
+<key name="количество сообщений" >
+  <topic name="Область «Папки»" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
 <key name="контакт" >
   <topic name="Изменение контакта" url="Contacts/editing_a_contact.htm" />
   <topic name="Контакты" url="Contacts/contacts.htm" />
   <topic name="Создание нового контакта" url="Contacts/creating_a_new_contact.htm" />
-  <key name="изменение" >
-    <topic name="Изменение контакта" url="Contacts/editing_a_contact.htm" />
-  </key>
 </key>
 <key name="контакт, печать списка" >
   <topic name="Печать контактов" url="Contacts/Printing_Contacts.htm" />
@@ -54,9 +60,6 @@
 <key name="личные данные почты при создании сообщения" >
   <topic name="Создание нового сообщения" url="Creating_Messages/Creating_a_new_mail_message.htm" />
 </key>
-<key name="личные контакты" >
-  <topic name="Изменение контакта" url="Contacts/editing_a_contact.htm" />
-</key>
 <key name="личные списки рассылки" >
   <topic name="Создание групповых списков контактов" url="Contacts/Creating_Group_Contact_Lists.htm" />
 </key>
@@ -78,10 +81,10 @@
 <key name="метки" >
   <topic name="Назначение меток сообщениям" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
   <topic name="Удаление меток" url="Tags_and_flags/deleting_tags.htm" />
-  <key name="назначение" >
+  <key name="Назначение" >
     <topic name="Назначение меток сообщениям" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
   </key>
-  <key name="удаление" >
+  <key name="Удаление" >
     <topic name="Удаление меток" url="Tags_and_flags/deleting_tags.htm" />
   </key>
 </key>

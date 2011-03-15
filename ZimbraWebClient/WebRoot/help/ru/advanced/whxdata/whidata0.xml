@@ -7,7 +7,7 @@
 <key name="«Папки», область" >
   <topic name="Область «Папки»" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
-<key name="atom-ленты" >
+<key name="Atom-ленты" >
   <topic name="Подписка на RSS/Atom-ленты" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
 <key name="HTML" >
@@ -154,7 +154,7 @@
     <topic name="Восстановление удаленных почтовых сообщений" url="reading_mail/recovering_deleted_mail_messages.htm" />
   </key>
 </key>
-<key name="восстановление удаленных файлов" >
+<key name="восстановление удаленных сообщений" >
   <topic name="Очистка Корзины " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="встреча на весь день" >
@@ -168,14 +168,17 @@
 </key>
 <key name="горячие клавиши" >
   <topic name="Горячие клавиши ZWC" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
-  <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
   <topic name="Рабочее пространство веб-клиента Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="групповые контакты" >
   <topic name="Создание групповых списков контактов" url="Contacts/Creating_Group_Contact_Lists.htm" />
 </key>
 <key name="добавить подпись" >
   <topic name="Использование подписи" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="добавление информации о встрече в ежедневник" >
+  <topic name="Ответ на приглашение" url="Calendar/Responding_to_an_invitation.htm" />
 </key>
 <key name="добавление контактов" >
   <topic name="Создание нового контакта" url="Contacts/creating_a_new_contact.htm" />
@@ -233,6 +236,7 @@
 </key>
 <key name="забыть" >
   <topic name="Использование поиска адреса" url="Creating_Messages/Using_address_lookup.htm" />
+  <topic name="Порядок ранжирования адресов электронной почты при автозаполнении" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="заголовки, включают" >
   <topic name="Установка параметров для окна создания сообщения" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
@@ -274,6 +278,9 @@
 <key name="изменение встречи" >
   <topic name="Изменение повторяющихся встреч" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
+<key name="изменение контактов" >
+  <topic name="Изменение контакта" url="Contacts/editing_a_contact.htm" />
+</key>
 <key name="изменение общедоступного списка задач" >
   <topic name="Общедоступный список задач" url="Tasks/Share_your_Task_folder.htm" />
 </key>
@@ -282,9 +289,6 @@
 </key>
 <key name="изменение типа клиента по умолчанию" >
   <topic name="Установка общих настроек" url="Userspecific/Setting_your_general_preferences.htm" />
-</key>
-<key name="изменить контакт" >
-  <topic name="Изменение контакта" url="Contacts/editing_a_contact.htm" />
 </key>
 <key name="изменить права доступа к папке почты" >
   <topic name="Отказ в доступе к общей папке" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
@@ -304,12 +308,6 @@
 </key>
 <key name="импорт ежедневников iCal" >
   <topic name="Импорт ежедневника iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
-</key>
-<key name="импорт контактов" >
-  <topic name="Импорт контактов" url="Contacts/Importing_Contacts.htm" />
-</key>
-<key name="импорт учетных записей" >
-  <topic name="Резервное копирование содержимого учетной записи" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
 
 </indexdata>

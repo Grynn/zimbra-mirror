@@ -32,6 +32,7 @@
   <item name="Элементы сообщения" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Автоматическое добавление подписи" url="Userspecific/b_Automatically_adding_your_signature.htm" />
   <item name="Автоматическое заполнение адреса" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Порядок ранжирования адресов электронной почты при автозаполнении" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="Вложение файлов в сообщение" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="Поддерживаемые типы файлов вложений" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Использование HTML-редактора" url="Creating_Messages/Using_HTML_Editor.htm" />
@@ -66,7 +67,7 @@
   <item name="Изменение задачи" url="Tasks/Change_a_task.htm" />
 </book>
 <book name="Работа в портфеле" >
-  <item name="Управление версиями файлов в портфеле" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+  <item name="Работа в портфеле" url="Briefcase/b_Working_in_Briefcase.htm" />
 </book>
 <book name="Общий доступ к папкам" >
   <book name="Общий доступ к ежедневникам" >

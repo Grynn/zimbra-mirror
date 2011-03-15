@@ -43,7 +43,6 @@
   <topic name="Рабочее пространство веб-клиента Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="печать" >
-  <topic name="Печать разговора" url="conversations/printing_a_conversation.htm" />
   <topic name="Печать сообщений" url="reading_mail/printing_a_mail_message.htm" />
   <key name="сообщение" >
     <topic name="Печать сообщений" url="reading_mail/printing_a_mail_message.htm" />
@@ -90,6 +89,9 @@
 </key>
 <key name="подтверждение прочтения письма" >
   <topic name="Запрос подтверждения прочтения письма" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
+</key>
+<key name="поиск общих ресурсов" >
+  <topic name="Область «Папки»" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
 <key name="поиск общих элементов" >
   <topic name="Управление элементами общего доступа" url="Sharing/Managing_items_you_share.htm" />
@@ -155,6 +157,9 @@
   <topic name="Фильтрация сообщений" url="filters/filtering_your_messages.htm" />
   <topic name="Как работают фильтры" url="filters/how_filtering_works.htm" />
 </key>
+<key name="предложить новое время" >
+  <topic name="Ответ на приглашение" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
 <key name="предоставление доступа к вашему ежедневнику" >
   <topic name="Предоставление доступа к ежедневнику" url="Calendar/Delegating_Calendar_Access.htm" />
 </key>
@@ -207,6 +212,9 @@
 <key name="резервное копирование учетных записей" >
   <topic name="Резервное копирование содержимого учетной записи" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
+<key name="рейтинг адресов" >
+  <topic name="Порядок ранжирования адресов электронной почты при автозаполнении" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
+</key>
 <key name="ресурсы" >
   <topic name="Планирование ресурсов" url="Calendar/Scheduling_Resources.htm" />
 </key>
@@ -229,17 +237,14 @@
   <topic name="Планирование событий на весь день" url="Calendar/Scheduling_All_Day_events.htm" />
   <topic name="О встречах, собраниях и событиях" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
-<key name="создание" >
-  <topic name="Создание нового сообщения" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  <key name="новое сообщение" >
-    <topic name="Создание нового сообщения" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  </key>
-</key>
 <key name="создание встречи из сообщения" >
   <topic name="Помощник Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
 </key>
 <key name="создание меток" >
   <topic name="Использование меток для систематизации почтовых сообщений" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="создание нового сообщения" >
+  <topic name="Создание нового сообщения" url="Creating_Messages/Creating_a_new_mail_message.htm" />
 </key>
 <key name="создание новых страниц" >
   <topic name="Создание новой страницы" url="Documents/Create_a_new_page.htm" />
@@ -306,9 +311,6 @@
 </key>
 <key name="удаление повторяющихся встреч" >
   <topic name="Изменение повторяющихся встреч" url="Calendar/Deleting_recurring_appointments.htm" />
-</key>
-<key name="удаление собрания" >
-  <topic name="Удаление встречи" url="Calendar/Deleting_an_appointment.htm" />
 </key>
 
 </indexdata>

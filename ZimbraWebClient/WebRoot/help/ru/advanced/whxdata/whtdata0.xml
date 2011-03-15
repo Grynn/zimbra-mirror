@@ -62,6 +62,7 @@
   <item name="Элементы сообщения" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Автоматическое добавление подписи" url="Userspecific/using_a_signature.htm" />
   <item name="Автоматическое заполнение адреса" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Порядок ранжирования адресов электронной почты при автозаполнении" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="Расписание для последующей доставки сообщений" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="Запрос подтверждения прочтения письма" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="Вложение файлов в сообщение" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
@@ -117,25 +118,23 @@
   <item name="Сортировка задач" url="Tasks/Sorting_tasks_.htm" />
 </book>
 <book name="Работа в портфеле" >
-  <item name="Работа в портфеле" url="Briefcase/Working_in_Briefcase.htm" />
-  <item name="Работа с файлами в портфеле" url="Briefcase/Working_with_files_in_Briefcase.htm" />
-  <item name="Создание нового документа" url="Documents/Create_a_new_page.htm" />
-  <item name="Использование редактора форматированного текста" url="Documents/Using_the_rich_text_editor.htm" />
-  <item name="Добавление таблицы в документ в портфеле" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-  <item name="Управление версиями файлов в портфеле" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
-  <item name="Отправка файлов из портфеля" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
+<chunk name="Работа в портфеле" ref="whtdata2.xml" />
 </book>
 <book name="Общий доступ к папкам" >
-<chunk name="Общий доступ к папкам" ref="whtdata2.xml" />
+<chunk name="Общий доступ к папкам" ref="whtdata3.xml" />
 </book>
 <book name="Поиск элементов" >
-<chunk name="Поиск элементов" ref="whtdata3.xml" />
+<chunk name="Поиск элементов" ref="whtdata4.xml" />
 </book>
 <book name="Использование меток и папок для систематизации почты" >
-<chunk name="Использование меток и папок для систематизации почты" ref="whtdata4.xml" />
+<chunk name="Использование меток и папок для систематизации почты" ref="whtdata5.xml" />
 </book>
 <book name="Использование почтовых фильтров" >
-<chunk name="Использование почтовых фильтров" ref="whtdata5.xml" />
+  <item name="Установка правил фильтра" url="filters/how_filtering_works.htm" />
+  <item name="Фильтрация сообщений" url="filters/filtering_your_messages.htm" />
+  <item name="Поддерживаемые условия и действия фильтров" url="filters/filter_conditions_and_actions_supported.htm" />
+  <item name="Фильтрация с использованием критериев СОДЕРЖИТ, СООТВЕТСТВУЕТ и ЯВЛЯЕТСЯ" url="Search/contains_vs_matches.htm" />
+  <item name="Подстановочные знаки фильтра" url="filters/wildcards.htm" />
 </book>
 <book name="Установка настроек пользователя" >
 <chunk name="Установка настроек пользователя" ref="whtdata6.xml" />

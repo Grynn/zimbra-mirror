@@ -1,32 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Общий доступ к папкам" url="Sharing/Sharing_a_folder.htm" />
-<item name="Управление элементами общего доступа" url="Sharing/Managing_items_you_share.htm" />
-<item name="Общий доступ с помощью списка рассылки" url="Sharing/Sharing_with_a_Distribution_List.htm" />
-<book name="Общий доступ к папкам почты" >
-  <item name="Общий доступ к папкам почты" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
-  <item name="Совместный доступ к папке почты" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
-  <item name="Изменение доступа к общей папке" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
-  <item name="Принятие доступа к общей папке почты" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
-  <item name="Работа в общей папке почты" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
-</book>
-<book name="Общий доступ к ежедневникам" >
-  <item name="Предоставление общего доступа к ежедневнику" url="Calendar/Delegating_Calendar_Access.htm" />
-  <item name="Предоставление прав администратора для ежедневников общего доступа" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
-  <item name="Предоставление прав менеджера для ежедневников общего доступа" url="Calendar/Manager_rights_for_shared_Calendars.htm" />
-  <item name="Принятие доступа к общему ежедневнику" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
-  <item name="Отклонение запроса на общий доступ к ежедневнику" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
-</book>
-<book name="Общий доступ к адресным книгам" >
-  <item name="Предоставление доступа к адресной книге" url="Contacts/Sharing_your_Address_Book.htm" />
-</book>
-<book name="Общий доступ к спискам задач" >
-  <item name="Предоставление доступа к списку задач" url="Tasks/Share_your_Task_folder.htm" />
-  <item name="Принятие доступа к списку задач" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
-</book>
-<book name="Общий доступ к папкам портфеля" >
-  <item name="Общий доступ к портфелю" url="Briefcase/Sharing_your_Briefcase.htm" />
-</book>
+<item name="Работа в портфеле" url="Briefcase/Working_in_Briefcase.htm" />
+<item name="Работа с файлами в портфеле" url="Briefcase/Working_with_files_in_Briefcase.htm" />
+<item name="Создание нового документа" url="Documents/Create_a_new_page.htm" />
+<item name="Использование редактора форматированного текста" url="Documents/Using_the_rich_text_editor.htm" />
+<item name="Добавление таблицы в документ в портфеле" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<item name="Управление версиями файлов в портфеле" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+<item name="Отправка файлов из портфеля" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 
 </tocdata>

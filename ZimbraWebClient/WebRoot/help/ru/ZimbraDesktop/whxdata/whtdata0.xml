@@ -39,9 +39,10 @@
   <item name="Использование HTML-редактора" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="Использование адресов полей «Копия» и «Скрытая копия»" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="Добавление подписи" url="Userspecific/using_a_signature.htm" />
-  <item name="Вложение файлов в сообщения" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  <item name="Вложение файлов в сообщение" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="Поддерживаемые типы файлов вложений" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Использование поиска адреса" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Порядок ранжирования адресов электронной почты при автозаполнении" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="Сохранение черновиков сообщений" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Чтение, создание ответов и пересылка сообщений" >
@@ -134,8 +135,7 @@
 <chunk name="Использование портфеля" ref="whtdata2.xml" />
 </book>
 <book name="Управление содержимым учетной записи" >
-  <item name="Архивирование сообщений электронной почты" url="Zdesktop/Archiving_your_email_messages.htm" />
-  <item name="Перемещение данных учетной записи в другую учетную запись" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+<chunk name="Управление содержимым учетной записи" ref="whtdata3.xml" />
 </book>
 
 </tocdata>

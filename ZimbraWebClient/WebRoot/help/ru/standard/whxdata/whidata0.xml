@@ -16,9 +16,6 @@
 <key name="адресные книги, создание" >
   <topic name="Адресные книги" url="Contacts/b_Your_Address_Books.htm" />
 </key>
-<key name="версии" >
-  <topic name="Управление версиями файлов в Портфеле" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
-</key>
 <key name="вид «Разговоры»" >
   <topic name="Управление отображением сообщений" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
 </key>
@@ -63,6 +60,7 @@
 </key>
 <key name="забыть" >
   <topic name="Использование поиска адреса" url="Creating_Messages/Using_address_lookup.htm" />
+  <topic name="Порядок ранжирования адресов электронной почты при автозаполнении" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="задача, пометить завершенной" >
   <topic name="Изменение задачи" url="Tasks/Change_a_task.htm" />
@@ -154,6 +152,9 @@
 <key name="просмотр сообщений" >
   <topic name="Управление отображением сообщений" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
 </key>
+<key name="рейтинг адресов" >
+  <topic name="Порядок ранжирования адресов электронной почты при автозаполнении" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
+</key>
 <key name="свободен/занят, исключить ежедневник" >
   <topic name="Создание нового ежедневника" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
@@ -190,7 +191,7 @@
 <key name="удаленный ежедневник" >
   <topic name="Создание нового ежедневника" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
-<key name="условия фильтра" >
+<key name="условие фильтра" >
   <topic name="Поддерживаемые условия и действия фильтров" url="filters/filter_conditions_and_actions_supported.htm" />
 </key>
 <key name="установка адреса для пересылки" >

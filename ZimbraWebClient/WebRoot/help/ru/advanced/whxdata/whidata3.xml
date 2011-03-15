@@ -1,21 +1,23 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="удаленные файлы, восстановление" >
+<key name="удаление собрания" >
+  <topic name="Удаление встречи" url="Calendar/Deleting_an_appointment.htm" />
+</key>
+<key name="удаленные сообщения, восстановление" >
   <topic name="Очистка Корзины " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
-<key name="условия фильтра" >
+<key name="условие фильтра" >
   <topic name="Поддерживаемые условия и действия фильтров" url="filters/filter_conditions_and_actions_supported.htm" />
+</key>
+<key name="условия фильтра" >
   <topic name="Как работают фильтры" url="filters/how_filtering_works.htm" />
 </key>
 <key name="установка адреса для пересылки" >
   <topic name="Установка адреса для пересылки" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
-<key name="установка флагов" >
+<key name="установка флагов для сообщений" >
   <topic name="Установка флагов для почтовых сообщений" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  <key name="электронное сообщение" >
-    <topic name="Установка флагов для почтовых сообщений" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  </key>
 </key>
 <key name="учетная запись IMAP" >
   <topic name="Управление учетной записью POP" url="Userspecific/Managing_your_POP_Accounts.htm" />
