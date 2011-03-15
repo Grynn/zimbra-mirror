@@ -510,6 +510,14 @@ public class BeanUtils {
        return prov.getConfig().getBooleanAttr(attr, false) || Provisioning.TRUE.equals(getAttr(pc, attr));
    }
 
+    public static String getMailURL(PageContext pc) {
+        try {
+            return Provisioning.getInstance().getLocalServer().getMailURL();
+        } catch (ServiceException e) {
+            return "/zimbra";
+        }
+    }
+
     public static String repeatString(String string, int count) {
         if (count==0) return "";
         StringBuilder sb = new StringBuilder(string.length()*count);

@@ -6889,6 +6889,7 @@
 		<function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isProvOrAttr(javax.servlet.jsp.PageContext, java.lang.String)</function-signature>
 	</function>
+
     <function>
         <name>getAddressBook</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
@@ -7504,5 +7505,11 @@
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String htmlNewlineEncode(java.lang.String)</function-signature>
     </function>
+
+    <function>
+		<name>getMailURL</name>
+		<function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String getMailURL(javax.servlet.jsp.PageContext)</function-signature>
+	</function>
 
 </taglib>
