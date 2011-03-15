@@ -42,6 +42,7 @@
   <item name="Adjuntar archivos a un mensaje" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="Tipos de archivos adjuntos admitidos" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Autocompletado de direcciones" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Cómo se clasifican las direcciones de correo electrónico para el autocompletado" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="Guardar un borrador" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Leer, responder y reenviar mensajes" >
@@ -131,13 +132,10 @@
 <chunk name="Compartir carpetas (sólo las cuentas de Zimbra)" ref="whtdata1.xml" />
 </book>
 <book name="Utilizar el maletín" >
-  <item name="Trabajar con el Maletín" url="Briefcase/Working_in_Briefcase.htm" />
-  <item name="Crear un nuevo documento " url="Documents/Create_a_new_page.htm" />
-  <item name="Utilizar el editor de texto enriquecido" url="Documents/Using_the_rich_text_editor.htm" />
-  <item name="Añadir una tabla a un documento" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<chunk name="Utilizar el maletín" ref="whtdata2.xml" />
 </book>
 <book name="Gestionar el contenido de tu cuenta" >
-<chunk name="Gestionar el contenido de tu cuenta" ref="whtdata2.xml" />
+<chunk name="Gestionar el contenido de tu cuenta" ref="whtdata3.xml" />
 </book>
 
 </tocdata>

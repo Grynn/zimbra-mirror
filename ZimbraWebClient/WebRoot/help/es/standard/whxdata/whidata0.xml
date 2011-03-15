@@ -28,9 +28,6 @@
 <key name="autocompletado de direcciones" >
   <topic name="usar autocompletado de direcciones" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
-<key name="autocompletado de direcciones de correo" >
-  <topic name="usar autocompletado de direcciones" url="Creating_Messages/Using_address_lookup.htm" />
-</key>
 <key name="borrador" >
   <topic name="guardar un borrador" url="Creating_Messages/saving_a_draft_message.htm" />
 </key>
@@ -49,7 +46,10 @@
 <key name="carpetas" >
   <topic name="cambiar el nombre de las carpetas" url="Navigation_folders_and_tips/renaming_folders.htm" />
 </key>
-<key name="condiciones de los filtros" >
+<key name="clasificar direcciones" >
+  <topic name="Cómo se clasifican las direcciones de correo electrónico para el autocompletado" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
+</key>
+<key name="condición del filtro" >
   <topic name="condiciones y acciones admitidas de los filtros" url="filters/filter_conditions_and_actions_supported.htm" />
 </key>
 <key name="configurar una dirección de reenvío" >
@@ -67,7 +67,7 @@
 <key name="crear una consulta de búsqueda" >
   <topic name="utilizar la búsqueda" url="Search/b_Using_Search.htm" />
 </key>
-<key name="descripción del lenguaje de búsquedas" >
+<key name="descripciones del idioma de consulta" >
   <topic name="Descripción del lenguaje de búsquedas" url="Search/query_language_description.htm" />
 </key>
 <key name="disponible/ocupado, excluir agenda" >
@@ -135,6 +135,7 @@
 </key>
 <key name="olvidar" >
   <topic name="usar autocompletado de direcciones" url="Creating_Messages/Using_address_lookup.htm" />
+  <topic name="Cómo se clasifican las direcciones de correo electrónico para el autocompletado" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="opción, mensaje por ausencia" >
   <topic name="mensaje por ausencia" url="Userspecific/vacation_message.htm" />
@@ -144,6 +145,9 @@
 </key>
 <key name="opciones, notificación de mensaje nuevo" >
   <topic name="notificaciones de nuevos mensajes" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="operación de autocompletado de direcciones de correo" >
+  <topic name="usar autocompletado de direcciones" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
 <key name="personalizar semana laboral" >
   <topic name="Vistas de la agenda" url="Calendar/Calendar_Views.htm" />
@@ -195,9 +199,6 @@
 </key>
 <key name="ver mensajes" >
   <topic name="gestionar cómo se visualizan los mensajes" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
-</key>
-<key name="versiones" >
-  <topic name="Control de versiones de los archivos del Maletín" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 </key>
 <key name="vista de la agenda" >
   <topic name="Vistas de la agenda" url="Calendar/Calendar_Views.htm" />

@@ -1,7 +1,13 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Gestionar tus dispositivos móviles" url="Userspecific/Managing_your_mobile_devices.htm" />
-<item name="Cómo borrar los datos de tu dispositivo móvil" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
+<item name="Configurar tus preferencias" url="Userspecific/Setting_your_user_preferences.htm" />
+<item name="Cambiar las preferencias del usuario" url="Userspecific/Changing_Your_User_Options.htm" />
+<item name="Notificación por correo a otra cuenta" url="Userspecific/New_mail_notifications.htm" />
+<item name="Indicar las direcciones a bloquear o permitir en tu buzón de correo" url="filters/Filtering_Junk_Mail.htm" />
+<item name="Crear mensajes por ausencia" url="Userspecific/vacation_message.htm" />
+<item name="Crear perfiles" url="Userspecific/Creating_Personas.htm" />
+<item name="Cambiar la zona horaria predeterminada" url="Userspecific/Changing_your_default_timezone.htm" />
+<item name="Mantener una lista de direcciones fiables" url="Userspecific/Maintaining_a_Trusted_Addresses_list.htm" />
 
 </tocdata>

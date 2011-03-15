@@ -62,6 +62,7 @@
   <item name="Los componentes de un mensaje" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Añadir tu firma de forma automática" url="Userspecific/using_a_signature.htm" />
   <item name="Autocompletado de direcciones" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Cómo se clasifican las direcciones de correo electrónico para el autocompletado" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="Programar mensajes para entregarlos más adelante" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="Solicitar una notificación de lectura" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="Adjuntar archivos a un mensaje" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
@@ -88,7 +89,7 @@
   <item name="Exportar libretas de direcciones" url="Contacts/Exporting_Address_Books.htm" />
   <item name="Imprimir los nombres de los contactos o las libretas de direcciones" url="Contacts/Printing_Contacts.htm" />
   <item name="Modificar los datos de contacto" url="Contacts/editing_a_contact.htm" />
-  <item name="Eliminar contacto" url="Contacts/deleting_a_contact.htm" />
+  <item name="Eliminar contactos" url="Contacts/deleting_a_contact.htm" />
 </book>
 <book name="Gestionar tu agenda" >
   <item name="Acerca de la agenda de @CompanyName@" url="Calendar/About_Calendar.htm" />
@@ -129,17 +130,14 @@
 <chunk name="Utilizar etiquetas y carpetas para organizar los mensajes" ref="whtdata5.xml" />
 </book>
 <book name="Utilizar filtros de correo" >
-  <item name="Configurar las reglas del filtro" url="filters/how_filtering_works.htm" />
-  <item name="Filtrar tus mensajes" url="filters/filtering_your_messages.htm" />
-  <item name="Condiciones y acciones admitidas de los filtros" url="filters/filter_conditions_and_actions_supported.htm" />
-  <item name="Crear filtros usando las opciones contiene, coincide y es" url="Search/contains_vs_matches.htm" />
-  <item name="Comodines en los filtros" url="filters/wildcards.htm" />
+<chunk name="Utilizar filtros de correo" ref="whtdata6.xml" />
 </book>
 <book name="Configurar tus preferencias" >
-<chunk name="Configurar tus preferencias" ref="whtdata6.xml" />
+<chunk name="Configurar tus preferencias" ref="whtdata7.xml" />
 </book>
 <book name="Gestionar tu dispositivo móvil (únicamente en la Network Edition)" >
-<chunk name="Gestionar tu dispositivo móvil (únicamente en la Network Edition)" ref="whtdata7.xml" />
+  <item name="Gestionar tus dispositivos móviles" url="Userspecific/Managing_your_mobile_devices.htm" />
+  <item name="Cómo borrar los datos de tu dispositivo móvil" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
 </book>
 <book name="Guardar las carpetas de tu cuenta" >
 <chunk name="Guardar las carpetas de tu cuenta" ref="whtdata8.xml" />

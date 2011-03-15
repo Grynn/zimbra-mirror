@@ -32,6 +32,7 @@
   <item name="Los componentes de un mensaje" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Añadir tu firma de forma automática" url="Userspecific/b_Automatically_adding_your_signature.htm" />
   <item name="Autocompletado de direcciones" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Cómo se clasifican las direcciones de correo electrónico para el autocompletado" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="Adjuntar archivos a un mensaje" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="Tipos de archivos adjuntos admitidos" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Utilizar el editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
@@ -66,7 +67,7 @@
   <item name="Cambiar una tarea" url="Tasks/Change_a_task.htm" />
 </book>
 <book name="Trabajar con el Maletín" >
-  <item name="Control de versiones de los archivos del Maletín" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+  <item name="Trabajar con el Maletín" url="Briefcase/b_Working_in_Briefcase.htm" />
 </book>
 <book name="Compartir carpetas" >
   <book name="Compartir tus agendas" >

@@ -83,26 +83,38 @@ else
 //-->
 //]]></script>
 <h1>Ver la disponibilidad de los asistentes y las ubicaciones en el panel de sugerencias</h1>
-<p>Al programar reuniones, puedes ver cuándo están ocupados o libres los asistentes para encontrar un momento que les vaya bien a todos. A medida que se añaden asistentes a una cita, en el panel de preferencias del panel Resumen aparece la disponibilidad de los asistentes y de una ubicación como mínimo en intervalos de tiempo de 30 minutos. </p>
+<p>Al programar reuniones, puedes ver cuándo están ocupados o libres los asistentes para encontrar un momento que les vaya bien a todos. A medida que añades asistentes al campo de Asistentes, un panel de sugerencias del panel Resumen muestra la disponibilidad de los asistentes y de al menos una sala (ubicación) en intervalos de tiempo de 30 minutos. El número situado a la derecha de la hora es el número de ubicaciones que están disponibles para dicha hora. Puedes hacer clic en este número para ver una lista de ubicaciones recomendadas y para seleccionar una ubicación. La ubicación seleccionada se añade al campo Ubicación de la página de citas.</p>
+<p class="note"><span style="font-weight: bold;"><b>Nota</b></span>: Las ubicaciones de las salas se mostrarán si se han configurado en el directorio de la empresa.</p>
 <p>La agenda en miniatura sugiere la disponibilidad de los asistentes mediante un código de colores.</p>
 <ul type="disc">
 	<li><p>El verde significa que esos días están disponibles todos los asistentes y como mínimo una ubicación  </p></li>
-	<li><p>El naranja significa que no todos pueden asistir a la reunión, pero está disponible más de la mitad y como mínimo una ubicación. Pasando el cursor por encima de la fecha, se ven los nombres de hasta 10 personas que no están disponibles 
-	 </p></li>
-	<li><p>El rojo significa que más de la mitad de los asistentes no pueden asistir a la reunión en esas fechas. </p></li>
+	<li><p>El naranja significa que no todos pueden asistir a la reunión, pero está disponible más de la mitad y como mínimo una ubicación. Puedes mantener el cursor sobre la fecha para ver los nombres de hasta 10 personas que no estén disponibles.</p></li>
+	<li><p>El rojo significa que más de la mitad de los convocados no podrá asistir a la reunión en los días especificados. </p></li>
 </ul>
-<p>El número que aparece a la derecha es el número de ubicaciones disponibles en esos días. Haciendo clic en ese número, se obtiene una lista de las ubicaciones sugeridas y se puede seleccionar una.</p>
 <p>En el ejemplo de abajo, están disponibles todos los asistentes durante todo el mes excepto el 18 de enero. Ese día están disponibles menos de la mitad.</p>
-<p><img src="../schedular.png" alt="schedular.png" style="border: none;" width="199" height="301" border="0" /></p>
-<p>&#160;</p>
-<p>Puedes definir preferencias sobre el tipo de ubicaciones que deseas que se incluyan en las horas sugeridas. Haz clic en la opción <span style="font-weight: bold;"><b>Horas sugeridas</b></span> del encabezado del panel Resumen para abrir el cuadro de diálogo <span style="font-weight: bold;"><b>Preferencias de sugerencia</b></span>. </p>
+<p style="margin-left: 40px;"><img src="../schedular.png" alt="schedular.png" style="border: none;" width="199" height="301" border="0" /></p>
+<h6>Ver las ubicaciones para el Organizador </h6>
+<p>Si deseas encontrar ubicaciones disponibles para ti como organizador, abre una página de cita y, antes de añadir un invitado, en el área Horas sugeridas del panel Resumen, haz clic en <span style="font-weight: bold;"><b>Mostrar sugerencias para (fecha).</b></span></p>
+<h2>Gestionar la emisión de sugerencias</h2>
+<p>Puedes configurar cómo debería mostrarse la información en el panel de sugerencias. La configuración predeterminada está diseñada para mostrar la disponibilidad de los asistentes y de la ubicación en el mismo instante en el que se introduce el nombre del primer convocado en el campo Asistente. Puedes cambiar la opción predeterminada y configurar otras preferencias desde el cuadro de diálogo <span  	 style="font-weight: bold;"><b>Preferencias de sugerencia</b></span>.</p>
+<p>Haz clic en el encabezado <span style="font-weight: bold;"><b>Horas sugeridas</b></span> del panel Resumen para abrir el cuadro de diálogo Preferencias de sugerencia. </p>
+<p style="margin-left: 40px;"><img src="../cas_suggestedtimes_options.png" alt="cas_suggestedtimes_options.png" style="border: none;" width="110" height="132" border="0" /></p>
+<p style="margin-left: 0px;">Configura las siguientes opciones:</p>
 <ul type="disc">
-	<li><p><span style="font-weight: bold;"><b>Nombre</b></span>,<span style="font-weight: bold;"><b>Capacidad mínima</b></span>,<span style="font-weight: bold;"><b> Descripción</b></span>,<span  	 style="font-weight: bold;"><b>Lugar</b></span>,<span style="font-weight: bold;"><b>Edificio, Planta</b></span>. &#160;Puedes especificar el <a href="Scheduling_Resources.htm">recurso de sala</a> que deseas reservar introduciendo un nombre, la capacidad y una ubicación concreta. <span style="font-weight: bold;"><b>Nota</b></span>: &#160;Esta información tiene que estar configurada para la sala para que pueda buscarse.</p></li>
-	<li><p><span style="font-weight: bold;"><b>Incluir</b></span>. Tienes que especificar qué horas deben incluirse en la consulta de la disponibilidad de los asistentes. 
+	<li><p><span style="font-weight: bold;"><b>Sugerencias</b></span>. Las opciones son <span style="font-weight: bold;"><b>Automático</b></span> (predeterminada)<span  	 style="font-weight: bold;"><b> </b></span>&#160;o <span style="font-weight: bold;"><b>Manual</b></span>. 
 	 </p></li>
-	<ul type="disc">
-		<li><p><span style="font-weight: bold;"><b>Solo mis horas de trabajo</b></span>. Busca solo las horas que coinciden con las horas que tienes configuradas como de trabajo. Son las horas y la semana laboral que se definen en las preferencias de agenda.</p></li>
-		<li><p><span style="font-weight: bold;"><b>Horas de trabajo de todos los asistentes.</b></span> Al buscar una ubicación, se tienen en cuenta las horas de trabajo de todos. <span style="font-weight: bold;"><b>Nota</b></span>: &#160;Si incluyes asistentes de diferentes franjas horarias, sobre todo si entre unos y otros hay muchas franjas de diferencia, no podrás encontrar una ubicación a la que puedan asistir todos. &#160;En este caso, en el panel de sugerencias no aparecerán recursos de ubicación.</p></li>
+	<ul type="circle">
+		<li><p>Para visualizar el horario de los asistentes y las ubicaciones manualmente, haz clic en <span style="font-weight: bold;"><b>Manual</b></span>. Cuando desees ver&#160;la información de los asistentes o las ubicaciones, haz clic en <span style="font-weight: bold;"><b>Mostrar sugerencias para (fecha).</b></span> en el área Horas sugeridas. </p></li>
+	</ul>
+	<li><p style="font-weight: bold;">Preferencias de ubicación<span style="font-weight: normal;">. &#160;En esta sección, puedes definir qué tipo de ubicaciones deseas incluir en tu búsqueda. &#160;Deja esta sección en blanco si no tienes preferencias de ubicación. </span></p></li>
+	<ul type="circle">
+		<li><p style="font-weight: normal;">En el campo de nombre puedes introducir el nombre parcial de una ubicación y las &#160;ubicaciones que incluyan esa cadena de caracteres en el nombre se incluirán en la búsqueda. &#160;Por ejemplo, Salas del edificio 3 incluye &#160;&quot;Edfc3&quot; en el nombre de ubicación. &#160;Si añades &quot;Edfc3&quot; al campo <span style="font-weight: bold;"><b>Nombre</b></span>, únicamente se sugerirán las ubicaciones que incluyan los caracteres &quot;Edfc3&quot; en el nombre. </p></li>
+		<li><p style="font-weight: bold;"><span style="font-weight: normal;">Si no deseas que se sugieran ubicaciones junto con la disponibilidad de los asistentes, desactiva la opción </span>Sugerir salas disponibles<span style="font-weight: normal;">&#160;</span></p></li>
+	</ul>
+	<li><p><span style="font-weight: bold;"><b>Preferencias horarias</b></span>. Puedes especificar qué horas deberían incluirse en la búsqueda de disponibilidad de los asistentes. </p></li>
+	<ul type="circle">
+		<li><p><span style="font-weight: bold;"><b>Sólo mis horas de trabajo</b></span>. Solamente busca las horas que coinciden con las horas laborables que has configurado. Son las horas y la semana laboral que se definen en las preferencias de agenda.</p></li>
+		<li><p><span style="font-weight: bold;"><b>Horas de trabajo de todos los asistentes.</b></span> Cuando se busca una ubicación, esta opción tiene en cuenta las horas laborables de todo el personal. <span style="font-weight: bold;"><b>Nota</b></span>: &#160;Si incluyes asistentes procedentes de distintas zonas horarias, especialmente los que se encuentran a muchas zonas horarias de distancia, nunca podrás encontrar una ubicación que se ajuste a todos los convocados. &#160;En este caso, en el panel de sugerencias no aparecerán recursos de ubicación.</p></li>
 		<li><p><span style="font-weight: bold;"><b>Horas fuera del horario de trabajo</b></span>. En esta búsqueda se reserva para horas que no están marcadas como de trabajo, por ejemplo, noches y fines de semana.</p></li>
 	</ul>
 </ul>

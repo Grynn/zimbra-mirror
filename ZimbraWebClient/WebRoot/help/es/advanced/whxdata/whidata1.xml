@@ -13,17 +13,14 @@
     <topic name="leer el correo" url="reading_mail/reading_mail.htm" />
   </key>
 </key>
-<key name="Crear" >
-  <topic name="redactar un nuevo mensaje" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  <key name="nuevo mensaje de correo" >
-    <topic name="redactar un nuevo mensaje" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  </key>
-</key>
 <key name="crear etiquetas" >
   <topic name="usar etiquetas para clasificar los mensajes" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
 </key>
 <key name="crear nuevas páginas" >
   <topic name="Crear una nueva página" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="crear nuevos mensajes de correo" >
+  <topic name="redactar un nuevo mensaje" url="Creating_Messages/Creating_a_new_mail_message.htm" />
 </key>
 <key name="crear una cita desde un mensaje" >
   <topic name="Asistente de Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
@@ -55,7 +52,7 @@
 <key name="desactivar Zimlets" >
   <topic name="Gestionar tus Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
 </key>
-<key name="descripción del lenguaje de búsquedas" >
+<key name="descripciones del idioma de consulta" >
   <topic name="Descripción del lenguaje de búsquedas" url="Search/query_language_description.htm" />
 </key>
 <key name="deshacer" >
@@ -94,7 +91,7 @@
 <key name="editar como nuevo" >
   <topic name="menús accesibles con el botón derecho del ratón" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
-<key name="Editar contacto" >
+<key name="editar contactos" >
   <topic name="modificar un contacto" url="Contacts/editing_a_contact.htm" />
 </key>
 <key name="editor de texto enriquecido" >
@@ -121,11 +118,14 @@
 <key name="encabezados, incluir" >
   <topic name="Configurar tus preferencias para la ventana de redacción de mensajes" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
+<key name="encontrar elementos compartidos" >
+  <topic name="área de carpetas" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
 <key name="enviar" >
   <topic name="Trabajar con archivos en el Maletín" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
 <key name="enviar archivos del maletín" >
-  <topic name="Enviar archivos desde tu maletín" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
+  <topic name="Enviar archivos desde tu Maletín" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 </key>
 <key name="equipamiento, reservar" >
   <topic name="programar recursos" url="Calendar/Scheduling_Resources.htm" />
@@ -251,7 +251,6 @@
   <topic name="Importar y exportar elementos " url="Userspecific/Importing_and_Exporting_Items_.htm" />
 </key>
 <key name="imprimir" >
-  <topic name="imprimir una conversación" url="conversations/printing_a_conversation.htm" />
   <topic name="imprimir un mensaje" url="reading_mail/printing_a_mail_message.htm" />
   <key name="mensaje de correo" >
     <topic name="imprimir un mensaje" url="reading_mail/printing_a_mail_message.htm" />
@@ -287,7 +286,7 @@
 <key name="libretas de direcciones, importar" >
   <topic name="importar contactos" url="Contacts/Importing_Contacts.htm" />
 </key>
-<key name="lista de contactos" >
+<key name="Lista de contactos" >
   <topic name="Contactos" url="Contacts/contacts.htm" />
 </key>
 <key name="lista de permitidos" >
@@ -308,11 +307,17 @@
 <key name="maletín, enviar archivos desde el" >
   <topic name="Enviar archivos desde tu maletín" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 </key>
-<key name="Marcar" >
-  <topic name="marcar un mensaje de correo" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  <key name="mensaje de correo" >
-    <topic name="Marcar un mensaje de correo" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  </key>
+<key name="marcar citas como privadas" >
+  <topic name="Marcar una cita como privada" url="Calendar/Marking_an_appointment_as_private.htm" />
+</key>
+<key name="marcar mensajes" >
+  <topic name="Marcar un mensaje de correo" url="Tags_and_flags/Flagging_an_email_message.htm" />
+</key>
+<key name="marcar tarea como completa" >
+  <topic name="Cambiar una tarea" url="Tasks/Change_a_task.htm" />
+</key>
+<key name="mensaje de correo" >
+  <topic name="componentes de un mensaje" url="Creating_Messages/parts_of_an_email_message.htm" />
 </key>
 
 </indexdata>

@@ -20,7 +20,7 @@
 <key name="agenda, acerca de" >
   <topic name="Acerca de la Agenda de Zimbra" url="Calendar/About_Calendar.htm" />
 </key>
-<key name="Agenda, ajustar permisos de invitación" >
+<key name="agenda, ajustar permisos de invitación" >
   <topic name="Especificar quién te puede invitar a una reunión" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
 <key name="agenda, compartida con rol de administrador" >
@@ -68,6 +68,9 @@
 <key name="añadir firma (automática)" >
   <topic name="usar una firma" url="Userspecific/using_a_signature.htm" />
 </key>
+<key name="añadir información de la cita a la agenda" >
+  <topic name="Responder a una invitación" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
 <key name="añadir palabras a mi diccionario" >
   <topic name="utilizar el corrector ortográfico" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
@@ -82,9 +85,6 @@
 </key>
 <key name="archivos adjuntos ics, guardar" >
   <topic name="Responder a una invitación" url="Calendar/Responding_to_an_invitation.htm" />
-</key>
-<key name="archivos eliminados, recuperar" >
-  <topic name="Vaciar Papelera " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="archivos, adjuntar" >
   <topic name="adjuntar archivos a un mensaje" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
@@ -105,9 +105,6 @@
   <topic name="Asistente de Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
 </key>
 <key name="autocompletado de direcciones" >
-  <topic name="usar autocompletado de direcciones" url="Creating_Messages/Using_address_lookup.htm" />
-</key>
-<key name="autocompletado de direcciones de correo" >
   <topic name="usar autocompletado de direcciones" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
 <key name="bloquear el spam" >
@@ -199,11 +196,17 @@
 <key name="citas recurrentes, cambiar" >
   <topic name="cambiar las citas recurrentes" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
+<key name="clasificar direcciones" >
+  <topic name="Cómo se clasifican las direcciones de correo electrónico para el autocompletado" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
+</key>
 <key name="clasificar los mensajes entrantes" >
   <topic name="cómo funcionan los filtros" url="filters/how_filtering_works.htm" />
 </key>
 <key name="clic con el botón derecho" >
   <topic name="área de trabajo del programa en línea de Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="clic con el botón derecho del ratón, menús" >
+  <topic name="menús accesibles con el botón derecho del ratón" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="cómo configurar el panel de contenido inicial" >
   <topic name="configurar tus preferencias" url="Userspecific/Setting_your_user_preferences.htm" />
@@ -241,8 +244,10 @@
 <key name="comprobar si hay nuevos mensajes" >
   <topic name="cómo saber que tienes mensajes nuevos" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
-<key name="condiciones de los filtros" >
+<key name="condición del filtro" >
   <topic name="condiciones y acciones admitidas de los filtros" url="filters/filter_conditions_and_actions_supported.htm" />
+</key>
+<key name="condiciones de los filtros" >
   <topic name="cómo funcionan los filtros" url="filters/how_filtering_works.htm" />
 </key>
 <key name="configurar una dirección de reenvío" >
@@ -258,18 +263,12 @@
   <topic name="modificar un contacto" url="Contacts/editing_a_contact.htm" />
   <topic name="Contactos" url="Contacts/contacts.htm" />
   <topic name="crear un nuevo contacto" url="Contacts/creating_a_new_contact.htm" />
-  <key name="modificar" >
-    <topic name="modificar un contacto" url="Contacts/editing_a_contact.htm" />
-  </key>
 </key>
 <key name="contacto, imprimir lista" >
   <topic name="imprimir tus contactos" url="Contacts/Printing_Contacts.htm" />
 </key>
-<key name="contactos de forma automática" >
+<key name="Contactos de forma automática" >
   <topic name="añadir contactos, de forma automática" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
-</key>
-<key name="Contactos personales" >
-  <topic name="modificar un contacto" url="Contacts/editing_a_contact.htm" />
 </key>
 <key name="contactos, crear campos personalizados en el formulario" >
   <topic name="crear un nuevo contacto" url="Contacts/creating_a_new_contact.htm" />
