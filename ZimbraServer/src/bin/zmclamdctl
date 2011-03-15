@@ -84,7 +84,7 @@ pskillall() {
   plist=`${ps_cmd} | awk '{ if ( $8 ~ /'${pname}'/ ) { print $2 } }'`
   for p in ${plist}
   do
-    echo kill ${killsig} ${p}
+    kill ${killsig} ${p}
   done
 }
 
