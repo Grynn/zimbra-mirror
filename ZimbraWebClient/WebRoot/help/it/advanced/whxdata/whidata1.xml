@@ -10,9 +10,6 @@
 <key name="elenco bianco" >
   <topic name="Filtro della posta indesiderata" url="filters/Filtering_Junk_Mail.htm" />
 </key>
-<key name="Elenco contatti" >
-  <topic name="Contatti" url="Contacts/contacts.htm" />
-</key>
 <key name="elenco nero" >
   <topic name="Filtro della posta indesiderata" url="filters/Filtering_Junk_Mail.htm" />
 </key>
@@ -65,9 +62,6 @@
 <key name="feed Atom" >
   <topic name="Iscrizione ai feed RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
-<key name="file eliminati, ripristino" >
-  <topic name="Svuota Cestino " url="Navigation_folders_and_tips/trash_folder.htm" />
-</key>
 <key name="file, allegare" >
   <topic name="Allegare file a un messaggio email" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
@@ -115,8 +109,8 @@
   <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="identità di posta" >
-  <topic name="Creazione di personalità" url="Userspecific/Creating_Personas.htm" />
   <topic name="Identità di posta" url="Userspecific/Mail_Identities.htm" />
+  <topic name="Creazione di personalità" url="Userspecific/Creating_Personas.htm" />
   <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="identità di posta usata nella composizione del messaggio" >
@@ -234,6 +228,9 @@
 <key name="Menu del tasto destro del mouse" >
   <topic name="Menu del tasto destro del mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
+<key name="messaggi eliminati, recupero" >
+  <topic name="Svuota Cestino " url="Navigation_folders_and_tips/trash_folder.htm" />
+</key>
 <key name="messaggi email di account POP, ricezione" >
   <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
@@ -256,9 +253,6 @@
 <key name="Modifica come nuovo" >
   <topic name="Menu del tasto destro del mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
-<key name="Modifica contatto" >
-  <topic name="Modifica di un contatto" url="Contacts/editing_a_contact.htm" />
-</key>
 <key name="modifica del tipo di client predefinito" >
   <topic name="Impostazione delle preferenze generali" url="Userspecific/Setting_your_general_preferences.htm" />
 </key>
@@ -270,6 +264,9 @@
 </key>
 <key name="modifica delle opzioni" >
   <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="modifica di contatti" >
+  <topic name="Modifica di un contatto" url="Contacts/editing_a_contact.htm" />
 </key>
 <key name="modifica di un appuntamento" >
   <topic name="Modifica di appuntamenti ricorrenti" url="Calendar/Deleting_recurring_appointments.htm" />

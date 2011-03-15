@@ -3541,7 +3541,7 @@ CEngine.BuildTriggerObject = function(trigger_ID, target_ID)
 
 /// Section Begin  - CCSSP DHTM 2 (JavaScript 1.2)
 
-//Begin the definition of CAgency classes
+//Begin the definition of CAgencyXXXX classes
 
 //Begin of the CAgencyShow definition
 function CAgencyShow( element, bIsShow )
@@ -4546,7 +4546,7 @@ CAgencyChangeStyle.prototype.EndEffect = function()
 }
 // End of the CAgencyChangeStyle definition
 
-//End the definition of CAgency classes
+//End the definition of CAgencyXXXX classes
 
 //Begin to collaborate with other event handler settings 
 CCSSP.RegisterEventHandler( window, "onload", "CEngine.OnPageLoad(event);BSSCOnLoad(event);InitTriggersInHead(event);");

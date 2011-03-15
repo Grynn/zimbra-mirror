@@ -80,6 +80,12 @@
 <key name="aggiunta di contatti" >
   <topic name="Creazione di un nuovo contatto" url="Contacts/creating_a_new_contact.htm" />
 </key>
+<key name="aggiunta di contrassegni ai messaggi" >
+  <topic name="Applicazione di un contrassegno a un messaggio email" url="Tags_and_flags/Flagging_an_email_message.htm" />
+</key>
+<key name="aggiunta di informazioni su un appuntamento all'Agenda" >
+  <topic name="Risposta a un invito" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
 <key name="aggiunta di parole al Mio dizionario" >
   <topic name="Uso del controllo ortografico" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
@@ -106,12 +112,6 @@
 </key>
 <key name="apertura dei file nella valigetta" >
   <topic name="Uso dei file nella Valigetta" url="Briefcase/Working_with_files_in_Briefcase.htm" />
-</key>
-<key name="Applicazione di contrassegni" >
-  <topic name="Applicazione di un contrassegno a un messaggio email" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  <key name="messaggio email" >
-    <topic name="Applicazione di un contrassegno a un messaggio email" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  </key>
 </key>
 <key name="appuntamenti" >
   <topic name="Appuntamenti, riunioni ed eventi" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
@@ -186,6 +186,9 @@
 <key name="cellulare elimina" >
   <topic name="Cancellazione dei dati del dispositivo cellulare" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
 </key>
+<key name="classificazione indirizzi" >
+  <topic name="Modalità di classificazione degli indirizzi per il completamento automatico" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
+</key>
 <key name="clic con il tasto destro del mouse" >
   <topic name="Area di lavoro di Zimbra Web Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
@@ -213,8 +216,10 @@
 <key name="Condivisione di cartelle" >
   <topic name="Condivisione di una cartella" url="Sharing/Sharing_a_folder.htm" />
 </key>
-<key name="Condizioni del filtro" >
+<key name="condizione di filtro" >
   <topic name="Condizioni dei filtri e azioni supportate" url="filters/filter_conditions_and_actions_supported.htm" />
+</key>
+<key name="Condizioni del filtro" >
   <topic name="Funzionamento dei filtri" url="filters/how_filtering_works.htm" />
 </key>
 <key name="conferma di lettura" >
@@ -223,10 +228,7 @@
 <key name="contatti di un gruppo" >
   <topic name="Creazione di elenchi di contatti di un gruppo" url="Contacts/Creating_Group_Contact_Lists.htm" />
 </key>
-<key name="Contatti personali" >
-  <topic name="Modifica di un contatto" url="Contacts/editing_a_contact.htm" />
-</key>
-<key name="Contatti, aggiunta automatica" >
+<key name="contatti, aggiunta automatica" >
   <topic name="Aggiunta automatica di contatti" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
 </key>
 <key name="contatti, aggiunta di contatti eliminati all'elenco" >
@@ -235,6 +237,9 @@
 <key name="contatti, creazione campo personalizzato su modello" >
   <topic name="Creazione di un nuovo contatto" url="Contacts/creating_a_new_contact.htm" />
 </key>
+<key name="contatti, Elenco" >
+  <topic name="Contatti" url="Contacts/contacts.htm" />
+</key>
 <key name="contatti, importazione" >
   <topic name="Importazione di contatti" url="Contacts/Importing_Contacts.htm" />
 </key>
@@ -242,12 +247,12 @@
   <topic name="Modifica di un contatto" url="Contacts/editing_a_contact.htm" />
   <topic name="Contatti" url="Contacts/contacts.htm" />
   <topic name="Creazione di un nuovo contatto" url="Contacts/creating_a_new_contact.htm" />
-  <key name="Modifica" >
-    <topic name="Modifica di un contatto" url="Contacts/editing_a_contact.htm" />
-  </key>
 </key>
 <key name="contatto, elenco di stampa" >
   <topic name="Stampa dei contatti" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="conteggio messaggi" >
+  <topic name="Area Cartelle" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
 <key name="contrassegna impegno come completato" >
   <topic name="Modifica di un impegno" url="Tasks/Change_a_task.htm" />
@@ -258,24 +263,21 @@
 <key name="controllo ortografico" >
   <topic name="Uso del controllo ortografico" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
-<key name="Conversazioni" >
+<key name="conversazioni" >
   <topic name="Conversazioni distribuite fra più cartelle" url="conversations/conversations_can_span_folders.htm" />
   <topic name="Stampa di una conversazione" url="conversations/printing_a_conversation.htm" />
-  <key name="Stampa" >
+  <key name="stampa" >
     <topic name="Stampa di una conversazione" url="conversations/printing_a_conversation.htm" />
   </key>
 </key>
 <key name="copia di appuntamenti" >
   <topic name="Creazione di un nuovo appuntamento da uno esistente" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
 </key>
-<key name="Creazione" >
-  <topic name="Composizione di un nuovo messaggio email" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  <key name="nuovo messaggio email" >
-    <topic name="Composizione di un nuovo messaggio email" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  </key>
-</key>
 <key name="creazione di nuove pagine" >
   <topic name="Creazione di una nuova pagina" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="creazione di nuovi messaggi mail" >
+  <topic name="Composizione di un nuovo messaggio email" url="Creating_Messages/Creating_a_new_mail_message.htm" />
 </key>
 <key name="creazione di tag" >
   <topic name="Uso dei tag per classificare i messaggi email" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
@@ -289,7 +291,7 @@
 <key name="denominazione cartelle" >
   <topic name="Cartelle" url="Navigation_folders_and_tips/about_folders.htm" />
 </key>
-<key name="Descrizione del linguaggio di query" >
+<key name="descrizioni del linguaggio di query" >
   <topic name="Descrizione del linguaggio di query" url="Search/query_language_description.htm" />
 </key>
 <key name="destinatari, ricerca" >
@@ -297,6 +299,7 @@
 </key>
 <key name="dimentica" >
   <topic name="Uso della ricerca degli indirizzi" url="Creating_Messages/Using_address_lookup.htm" />
+  <topic name="Modalità di classificazione degli indirizzi per il completamento automatico" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="disattiva Zimlet" >
   <topic name="Gestione degli zimlet" url="Zimlets/Managing_your_Zimlets.htm" />

@@ -43,10 +43,13 @@
 <key name="cartelle" >
   <topic name="Ridenominazione delle cartelle" url="Navigation_folders_and_tips/renaming_folders.htm" />
 </key>
+<key name="classificazione indirizzi" >
+  <topic name="Modalità di classificazione degli indirizzi per il completamento automatico" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
+</key>
 <key name="completamento automatico degli indirizzi" >
   <topic name="Uso della ricerca degli indirizzi" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
-<key name="Condizioni del filtro" >
+<key name="condizione di filtro" >
   <topic name="Condizioni dei filtri e azioni supportate" url="filters/filter_conditions_and_actions_supported.htm" />
 </key>
 <key name="contatti di un gruppo, aggiunta" >
@@ -61,11 +64,12 @@
 <key name="creazione di una query di ricerca" >
   <topic name="Uso della funzione di ricerca" url="Search/b_Using_Search.htm" />
 </key>
-<key name="Descrizione del linguaggio di query" >
+<key name="descrizioni del linguaggio di query" >
   <topic name="Descrizione del linguaggio di query" url="Search/query_language_description.htm" />
 </key>
 <key name="dimentica" >
   <topic name="Uso della ricerca degli indirizzi" url="Creating_Messages/Using_address_lookup.htm" />
+  <topic name="Modalità di classificazione degli indirizzi per il completamento automatico" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="feed RSS" >
   <topic name="Iscrizione ai feed RSS/ATOM " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
@@ -192,9 +196,6 @@
 </key>
 <key name="uscita" >
   <topic name="Accesso e uscita" url="Userspecific/logging_on_and_off.htm" />
-</key>
-<key name="versioni" >
-  <topic name="Controllo delle versioni dei file nella Valigetta" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 </key>
 <key name="vista della conversazione" >
   <topic name="Gestione della visualizzazione dei messaggi" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />

@@ -92,6 +92,9 @@
 <key name="Promemoria riunione" >
   <topic name="Impostazione di avvisi sul desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
+<key name="proposta di un nuovo orario" >
+  <topic name="Risposta a un invito" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
 <key name="query di ricerca" >
   <topic name="Uso della funzione di ricerca avanzata" url="Search/building_search_queries.htm" />
   <topic name="Salvataggio delle query di ricerca" url="Search/saving_search_queries.htm" />
@@ -104,6 +107,9 @@
   <key name="messaggi email eliminati" >
     <topic name="Recupero dei messaggi email eliminati" url="reading_mail/recovering_deleted_mail_messages.htm" />
   </key>
+</key>
+<key name="recupero di messaggi eliminati" >
+  <topic name="Svuota Cestino " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="regole filtro, cartelle esistenti" >
   <topic name="Funzionamento dei filtri" url="filters/how_filtering_works.htm" />
@@ -133,6 +139,9 @@
 <key name="ricerca di condivisioni" >
   <topic name="Gestione degli elementi condivisi" url="Sharing/Managing_items_you_share.htm" />
 </key>
+<key name="ricerca di elementi condivisi" >
+  <topic name="Area Cartelle" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
 <key name="ricerca di un messaggio" >
   <topic name="Ricerca di messaggi" url="Search/_search__vs.__search_for_.htm" />
 </key>
@@ -156,9 +165,6 @@
 </key>
 <key name="riinvia" >
   <topic name="Menu del tasto destro del mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
-</key>
-<key name="ripristino di file eliminati" >
-  <topic name="Svuota Cestino " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="riquadro contenuto, modifica intestazione colonna" >
   <topic name="Personalizzazione della vista" url="Navigation_folders_and_tips/Customize_your_view.htm" />
@@ -252,7 +258,6 @@
   <topic name="Funzionamento dei filtri" url="filters/how_filtering_works.htm" />
 </key>
 <key name="Stampa" >
-  <topic name="Stampa di una conversazione" url="conversations/printing_a_conversation.htm" />
   <topic name="Stampa di un messaggio email" url="reading_mail/printing_a_mail_message.htm" />
   <key name="messaggio email" >
     <topic name="Stampa di un messaggio email" url="reading_mail/printing_a_mail_message.htm" />

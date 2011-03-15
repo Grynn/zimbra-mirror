@@ -32,6 +32,7 @@
   <item name="Parti di un messaggio email" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Aggiunta automatica della firma" url="Userspecific/b_Automatically_adding_your_signature.htm" />
   <item name="Completamento automatico degli indirizzi" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Modalità di classificazione degli indirizzi per il completamento automatico" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="Allegare file al messaggio" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="Tipi di file allegati supportati" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Uso dell'editor HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
@@ -66,7 +67,7 @@
   <item name="Modifica di un impegno" url="Tasks/Change_a_task.htm" />
 </book>
 <book name="Uso della Valigetta" >
-  <item name="Controllo delle versioni dei file nella Valigetta" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+  <item name="Uso della Valigetta" url="Briefcase/b_Working_in_Briefcase.htm" />
 </book>
 <book name="Condivisione di cartelle" >
   <book name="Condivisione di Agende" >

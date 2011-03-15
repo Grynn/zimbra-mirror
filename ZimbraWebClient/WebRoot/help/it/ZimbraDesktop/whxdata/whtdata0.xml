@@ -39,9 +39,10 @@
   <item name="Uso dell'editor HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="Uso degli indirizzi in Cc: e  Ccn:" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="Aggiungere la firma" url="Userspecific/using_a_signature.htm" />
-  <item name="Allegare file a un messaggio email" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  <item name="Allegare file al messaggio" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="Tipi di file allegati supportati" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Uso della ricerca degli indirizzi" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Modalità di classificazione degli indirizzi per il completamento automatico" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="Salvataggio di una bozza del messaggio" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Lettura, risposta e inoltro dei messaggi" >
@@ -125,13 +126,10 @@
 <chunk name="Condivisione di cartelle (solo account ZWC)" ref="whtdata2.xml" />
 </book>
 <book name="Uso della Valigetta" >
-  <item name="Uso della Valigetta" url="Briefcase/Working_in_Briefcase.htm" />
-  <item name="Creazione di un nuovo documento " url="Documents/Create_a_new_page.htm" />
-  <item name="Uso dell'editor Rich Text" url="Documents/Using_the_rich_text_editor.htm" />
-  <item name="Aggiunta di una tabella a un documento" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<chunk name="Uso della Valigetta" ref="whtdata3.xml" />
 </book>
 <book name="Gestione del contenuto dell'account" >
-<chunk name="Gestione del contenuto dell'account" ref="whtdata3.xml" />
+<chunk name="Gestione del contenuto dell'account" ref="whtdata4.xml" />
 </book>
 
 </tocdata>

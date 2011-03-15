@@ -36,7 +36,7 @@
   <item name="Impostazione di un indirizzo di inoltro" url="Userspecific/Setting_a_Forwarding_Address.htm" />
   <item name="Iscrizione ai feed RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
   <item name="Gestione delle identità dell'account" url="Userspecific/Mail_Identities.htm" />
-  <item name="Gestione della cartella della posta antispam" url="filters/Managing_your_Junk_Folder.htm" />
+  <item name="Gestione della cartella della posta indesiderata" url="filters/Managing_your_Junk_Folder.htm" />
   <item name="Recupero degli elementi eliminati" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Eliminazione di messaggi email" url="reading_mail/archiving_old_messages.htm" />
   <book name="Lettura dei messaggi" >
@@ -62,6 +62,7 @@
   <item name="Parti di un messaggio email" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Aggiunta automatica della firma" url="Userspecific/using_a_signature.htm" />
   <item name="Completamento automatico degli indirizzi" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Modalità di classificazione degli indirizzi per il completamento automatico" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="Pianificazione dei messaggi email per recapito futuro" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="Richiesta della conferma di lettura" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="Allegare file al messaggio" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
@@ -135,11 +136,10 @@
 <chunk name="Impostazione delle preferenze" ref="whtdata7.xml" />
 </book>
 <book name="Gestione del dispositivo cellulare (solo Network Edition)" >
-  <item name="Gestione dei dispositivi cellulari" url="Userspecific/Managing_your_mobile_devices.htm" />
-  <item name="Cancellazione dei dati del dispositivo cellulare" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
+<chunk name="Gestione del dispositivo cellulare (solo Network Edition)" ref="whtdata8.xml" />
 </book>
 <book name="Salvataggio delle cartelle dell'account" >
-<chunk name="Salvataggio delle cartelle dell'account" ref="whtdata8.xml" />
+  <item name="Salvataggio del contenuto dell'account offline" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </book>
 <book name="Uso degli zimlet" >
 <chunk name="Uso degli zimlet" ref="whtdata9.xml" />
