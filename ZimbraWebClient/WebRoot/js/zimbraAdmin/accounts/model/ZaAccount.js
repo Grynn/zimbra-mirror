@@ -1615,7 +1615,7 @@ ZaAccount.myXModel = {
         	constraints: {type:"method", value:
 			   function (value, form, formItem, instance) {				   
 				   if (value){
-					  	if(AjxUtil.isValidEmailNonReg(value)) {
+					  	if(AjxEmailAddress.isValid(value)) {
 						   return value;
 					   } else {
 						   throw ZaMsg.ErrorInvalidEmailAddress;
