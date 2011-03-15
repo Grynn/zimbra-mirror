@@ -112,9 +112,6 @@
 <key name="個人分發清單" >
   <topic name="建立聯絡人群組清單" url="Contacts/Creating_Group_Contact_Lists.htm" />
 </key>
-<key name="個人聯絡資料" >
-  <topic name="編輯聯絡人資料" url="Contacts/editing_a_contact.htm" />
-</key>
 <key name="偏好設定" >
   <topic name="設定用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
@@ -188,7 +185,6 @@
   <topic name="管理你分享的內容" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="列印" >
-  <topic name="列印對話" url="conversations/printing_a_conversation.htm" />
   <topic name="列印郵件" url="reading_mail/printing_a_mail_message.htm" />
   <key name="郵件" >
     <topic name="列印郵件" url="reading_mail/printing_a_mail_message.htm" />
@@ -215,7 +211,7 @@
 <key name="刪除會議" >
   <topic name="刪除預約" url="Calendar/Deleting_an_appointment.htm" />
 </key>
-<key name="刪除的檔案、還原" >
+<key name="刪除的郵件，還原" >
   <topic name="清空垃圾桶 " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="刪除聯絡人" >
@@ -355,8 +351,15 @@
 <key name="將預約標記為私人" >
   <topic name="將預約標記為私人" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
+<key name="將預約資訊加入記事簿" >
+  <topic name="回覆邀請函" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
 <key name="尋找分享項" >
   <topic name="管理你分享的內容" url="Sharing/Managing_items_you_share.htm" />
+  <topic name="資料夾區" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
+<key name="對地址排序" >
+  <topic name="自動完成功能排序電郵地址的方式" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="對話" >
   <topic name="對話可跨越若干資料夾" url="conversations/conversations_can_span_folders.htm" />
@@ -381,17 +384,14 @@
 <key name="帳戶，匯出" >
   <topic name="備份你的帳戶的內容" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
-<key name="建立" >
-  <topic name="編寫新郵件" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  <key name="新郵件" >
-    <topic name="編寫新郵件" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  </key>
-</key>
 <key name="建立新頁面" >
   <topic name="建立新頁面" url="Documents/Create_a_new_page.htm" />
 </key>
 <key name="建立標記" >
   <topic name="用標記分類郵件" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="建議新時間" >
+  <topic name="回覆邀請函" url="Calendar/Responding_to_an_invitation.htm" />
 </key>
 
 </indexdata>

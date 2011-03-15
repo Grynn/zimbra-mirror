@@ -1,9 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="記事簿，閒/忙" >
-  <topic name="查看空閒忙碌時間" url="Calendar/Seeing_free_busy_times.htm" />
-</key>
 <key name="記事簿，關於" >
   <topic name="關於 Zimbra 記事簿" url="Calendar/About_Calendar.htm" />
 </key>
@@ -79,13 +76,14 @@
   <topic name="如何使用過濾功能" url="filters/how_filtering_works.htm" />
 </key>
 <key name="過濾條件" >
-  <topic name="支援的過濾條件與操作" url="filters/filter_conditions_and_actions_supported.htm" />
   <topic name="如何使用過濾功能" url="filters/how_filtering_works.htm" />
+  <topic name="支援的過濾條件與操作" url="filters/filter_conditions_and_actions_supported.htm" />
 </key>
 <key name="過濾規則，現有資料夾" >
   <topic name="如何使用過濾功能" url="filters/how_filtering_works.htm" />
 </key>
 <key name="過濾郵件" >
+  <topic name="為郵件加上旗標" url="Tags_and_flags/Flagging_an_email_message.htm" />
   <topic name="過濾郵件" url="filters/filtering_your_messages.htm" />
 </key>
 <key name="選單，右鍵點擊" >
@@ -115,7 +113,7 @@
     <topic name="還原刪除的郵件" url="reading_mail/recovering_deleted_mail_messages.htm" />
   </key>
 </key>
-<key name="還原刪除的檔案" >
+<key name="還原刪除的郵件" >
   <topic name="清空垃圾桶 " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="郵件" >
@@ -127,6 +125,9 @@
 </key>
 <key name="郵件存檔" >
   <topic name="清除郵件" url="reading_mail/archiving_old_messages.htm" />
+</key>
+<key name="郵件數量" >
+  <topic name="資料夾區" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
 <key name="郵件草稿" >
   <topic name="儲存郵件草稿" url="Creating_Messages/saving_a_draft_message.htm" />

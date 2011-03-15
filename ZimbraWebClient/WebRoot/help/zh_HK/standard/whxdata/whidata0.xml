@@ -58,6 +58,9 @@
 <key name="將事項標記為完成" >
   <topic name="改變事項" url="Tasks/Change_a_task.htm" />
 </key>
+<key name="對地址排序" >
+  <topic name="自動完成功能排序電郵地址的方式" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
+</key>
 <key name="對話視窗" >
   <topic name="管理郵件的顯示方式" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
 </key>
@@ -66,6 +69,7 @@
 </key>
 <key name="忘記" >
   <topic name="使用地址查詢" url="Creating_Messages/Using_address_lookup.htm" />
+  <topic name="自動完成功能排序電郵地址的方式" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="快速鍵" >
   <topic name="快速鍵" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
@@ -96,9 +100,6 @@
 </key>
 <key name="無法投遞的郵件" >
   <topic name="無法投遞的郵件" url="Creating_Messages/undeliverable_mail.htm" />
-</key>
-<key name="版本" >
-  <topic name="公事包中檔案版本管理" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 </key>
 <key name="用 HTML 排版" >
   <topic name="使用 HTML 編輯器" url="Creating_Messages/Using_HTML_Editor.htm" />

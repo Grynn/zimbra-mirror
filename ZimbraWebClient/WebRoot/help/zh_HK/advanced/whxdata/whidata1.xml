@@ -15,14 +15,15 @@
 </key>
 <key name="忘記" >
   <topic name="使用地址查詢" url="Creating_Messages/Using_address_lookup.htm" />
+  <topic name="自動完成功能排序電郵地址的方式" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
 </key>
 <key name="快速搜尋" >
   <topic name="快速搜尋" url="Search/Quick_search.htm" />
 </key>
 <key name="快速鍵" >
-  <topic name="Zimbra 網路用戶端工作空間" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
   <topic name="ZWC 快速鍵" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
   <topic name="設定用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Zimbra 網路用戶端工作空間" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="拒絕記事簿分享請求" >
   <topic name="拒絕記事簿分享請求" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
@@ -102,12 +103,6 @@
 </key>
 <key name="新郵件" >
   <topic name="如何知道有新郵件" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
-</key>
-<key name="旗標" >
-  <topic name="為郵件加上旗標" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  <key name="郵件" >
-    <topic name="為郵件加上旗標" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  </key>
 </key>
 <key name="日程安排視窗" >
   <topic name="查看多個記事簿" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
@@ -250,6 +245,9 @@
 <key name="空閒/忙碌，設定查看許可" >
   <topic name="設定你的空閒/忙碌資訊的查看許可" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
 </key>
+<key name="編寫新郵件" >
+  <topic name="編寫新郵件" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+</key>
 <key name="編輯聯絡人資料" >
   <topic name="編輯聯絡人資料" url="Contacts/editing_a_contact.htm" />
 </key>
@@ -269,9 +267,6 @@
   <topic name="編輯聯絡人資料" url="Contacts/editing_a_contact.htm" />
   <topic name="聯絡人" url="Contacts/contacts.htm" />
   <topic name="建立新聯絡人" url="Contacts/creating_a_new_contact.htm" />
-  <key name="編輯" >
-    <topic name="編輯聯絡人資料" url="Contacts/editing_a_contact.htm" />
-  </key>
 </key>
 <key name="聯絡人清單" >
   <topic name="聯絡人" url="Contacts/contacts.htm" />
@@ -384,6 +379,9 @@
 </key>
 <key name="記事簿，轉寄預約" >
   <topic name="轉寄預約" url="Calendar/Forwarding_an_appointment.htm" />
+</key>
+<key name="記事簿，閒/忙" >
+  <topic name="查看空閒忙碌時間" url="Calendar/Seeing_free_busy_times.htm" />
 </key>
 
 </indexdata>

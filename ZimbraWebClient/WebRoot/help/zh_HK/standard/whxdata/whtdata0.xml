@@ -32,6 +32,7 @@
   <item name="電子郵件的組成部分" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="自動加入你的署名" url="Userspecific/b_Automatically_adding_your_signature.htm" />
   <item name="自動完成地址功能" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="自動完成功能排序電郵地址的方式" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="將檔案附加到郵件" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="支援的附件類型" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="使用 HTML 編輯器" url="Creating_Messages/Using_HTML_Editor.htm" />
@@ -66,7 +67,7 @@
   <item name="改變事項" url="Tasks/Change_a_task.htm" />
 </book>
 <book name="在「公事包」中工作" >
-  <item name="公事包中檔案版本管理" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+  <item name="在「公事包」中工作" url="Briefcase/b_Working_in_Briefcase.htm" />
 </book>
 <book name="分享資料夾" >
   <book name="分享記事簿" >

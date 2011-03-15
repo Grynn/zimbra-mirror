@@ -8,7 +8,7 @@
 </book>
 <book name="設定 Zimbra Desktop" >
   <item name="設定一個 Zimbra 網路用戶端帳戶" url="Zdesktop/Z-Setting_up_your_Zimbra_Web_Client_account.htm" />
-  <item name="設定 Yahoo!電郵及 Gmail 帳戶" url="Zdesktop/z-Setting_up_Yahoo!_Mail_Plus,_Gmail,_AOL_account_setup.htm" />
+  <item name="設定 Yahoo! 電郵及 Gmail 帳戶" url="Zdesktop/z-Setting_up_Yahoo!_Mail_Plus,_Gmail,_AOL_account_setup.htm" />
   <item name="設定 POP/IMAP 帳戶" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
   <item name="同步你的帳戶資料" url="Zdesktop/Synchronize_your_account_to_Zimbra_Desktop.htm" />
   <item name="關閉自動同步" url="Zdesktop/Turning_Off_Automatic_Sync.htm" />
@@ -42,6 +42,7 @@
   <item name="將檔案附加到郵件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="支援的附件類型" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="使用地址查詢" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="自動完成功能排序電郵地址的方式" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="儲存郵件草稿" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="讀取、回覆和轉寄郵件" >
@@ -144,6 +145,8 @@
 <book name="管理帳戶內容" >
   <item name="郵件歸檔" url="Zdesktop/Archiving_your_email_messages.htm" />
   <item name="將帳戶資料移至另一帳戶" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+  <item name="備份本機資料夾" url="Zdesktop/Backing_up_your_local_folders_7.htm" />
+  <item name="透過備份檔案還原帳戶" url="Zdesktop/Restoring_Accounts_from_Your_Backup_Files.htm" />
 </book>
 
 </tocdata>

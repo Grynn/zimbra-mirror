@@ -62,6 +62,7 @@
   <item name="電子郵件的組成部分" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="自動加入署名" url="Userspecific/using_a_signature.htm" />
   <item name="自動完成地址功能" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="自動完成功能排序電郵地址的方式" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
   <item name="設定日後傳送郵件" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="請求回執" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="將檔案附加到郵件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
@@ -171,11 +172,10 @@
 <chunk name="偏好設定" ref="whtdata4.xml" />
 </book>
 <book name="管理你的流動通信裝置（僅限網路版）" >
-  <item name="管理你的流動通信裝置" url="Userspecific/Managing_your_mobile_devices.htm" />
-  <item name="如何清除你的流動通信裝置" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
+<chunk name="管理你的流動通信裝置（僅限網路版）" ref="whtdata5.xml" />
 </book>
 <book name="分享你的帳戶資料夾" >
-<chunk name="分享你的帳戶資料夾" ref="whtdata5.xml" />
+  <item name="離線儲存你帳戶的內容" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </book>
 <book name="使用 Zimlet" >
 <chunk name="使用 Zimlet" ref="whtdata6.xml" />
