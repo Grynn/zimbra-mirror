@@ -371,9 +371,9 @@ function (serverList) {
 		ZaApp.getInstance().dialogs["flushCacheDialog"] = new ZaFlushCacheXDialog(this._container);
 	}
 	serverList._version = 1;
-	/*for(var i=0;i<serverList.length;i++) {
+	for(var i=0;i<serverList.length;i++) {
 		serverList[i]["status"] = 0;
-	}*/
+	}
 	obj = {statusMessage:null,flushZimlet:false,flushSkin:true,flushLocale:false,serverList:serverList,status:0};
 	ZaApp.getInstance().dialogs["flushCacheDialog"].setObject(obj);
 	ZaApp.getInstance().dialogs["flushCacheDialog"].popup();
