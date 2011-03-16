@@ -20,6 +20,7 @@ use Socket;
 use Net::LDAP;
 use Net::LDAP::LDIF;
 use Getopt::Long;
+use File::Basename;
 
 my (%c,%loaded,%saved,$rc);
 my ($oldServerName, $newServerName, $help, $verbose, $force, $delete, $skipusers, $usersonly);
@@ -31,8 +32,8 @@ if ($> ne $uid) {
 }
 
 GetOptions("help" => \$help, 
-    "oldname=s" => \$oldServerName,
-    "newname=s" => \$newServerName,
+    "oldservername=s" => \$oldServerName,
+    "newservername=s" => \$newServerName,
     "force" => \$force,
     "deletelogger" => \$delete,
     "skipusers" => \$skipusers,
@@ -179,17 +180,22 @@ exit 0;
 # ***** Subroutines *****
 sub usage {
   print "\n";
-  print "Usage: $0 [-h] [-d] [-f] [-s] [-o <prev servername>] [-v+] -n <servername>\n";
+  print "Usage: " . basename($0) . " [-h] [-d] [-f] [-s] [-o <oldServerName>] [-v+] -n <newServerName>\n";
   print "Changes the name of the local zimbra server.\n";
-  print " --help: print this usage statement.\n";
-  print " --force: Force the rename, bypassing safety checks.\n";
-  print " --oldServerName <oldname>: Previous name for the server.  Defaults to LC zimbra_server_hostname.\n";
-  print " --newServerName <newname>: New name for the server.\n";
-  print " --deletelogger: Delete the logger database for the old server.  Default is to remap its data to the new hostname.\n";
-  print " --skipusers: Skips modifying the user database with the new server.\n"; 
-  print " --usersonly: Only updates the user database.  This way, you can run once to do all the server\n";
-  print "              updates, and then a second time to update the accounts.  Likely requires --force.\n";
-  print " --verbose: Set the verbosity level.  Can be specified multiple times to increase the level.\n";
+  print " -h | --help                                 Print this usage statement.\n";
+  print " -f | --force                                Force the rename, bypassing safety checks.\n";
+  print " -o <oldServerName> | --oldServerName <oldServerName>\n";
+  print "                                             Previous name for the server.  Defaults to LC zimbra_server_hostname.\n";
+  print " -n <newServerName> | --newServerName <newServerName>\n";
+  print "                                             New name for the server.\n";
+  print " -d | --deletelogger                         Delete the logger database for the old server.  Default is to remap\n";
+  print "                                             its data to the new hostname.\n";
+  print " -s | --skipusers                            Skips modifying the user database with the new server.\n"; 
+  print " -u | --usersonly                            Only updates the user database.  This way, you can run once to do all\n";
+  print "                                             the server updates, and then a second time to update the accounts.\n";
+  print "                                             Likely requires --force.\n";
+  print " -v | --verbose:                             Set the verbosity level.  Can be specified multiple times to increase\n";
+  print "                                             the level.\n";
   print "\n";
   exit 0; 
 }
