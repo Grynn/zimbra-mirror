@@ -366,7 +366,12 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         try {
             beginTransaction("renumberItem", octxt);
             MailItem item = getItemById(id, type);
-
+            if (item.getId() == newId) {
+                OfflineLog.offline.info("Item already renumbered; no need to renumber (" + id + " => "+ newId + ")");
+                return true;
+            } else if (item.getId() != id) {
+                OfflineLog.offline.warn("renumbering item which may have already been renumbered (" + id + " => " + newId + ") : itemId = "+item.getId());
+            }
             // changing a message's item id needs to purge its Conversation (virtual or real)
             if (item instanceof Message)
                 uncacheItem(item.getParentId());

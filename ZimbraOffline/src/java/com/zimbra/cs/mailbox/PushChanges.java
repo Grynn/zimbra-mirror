@@ -1226,17 +1226,18 @@ public class PushChanges {
         Element request = null;
         boolean create = false;
         String name = null;
-
+        String uid = null;
         MailItem.Type type = isAppointment ? MailItem.Type.APPOINTMENT : MailItem.Type.TASK;
-
+        CalendarItem cal = null;
         synchronized (ombx) {
-            CalendarItem cal = ombx.getCalendarItemById(sContext, id);
+            cal = ombx.getCalendarItemById(sContext, id);
             name = cal.getSubject();
             date = cal.getDate();
             tags = cal.getTagBitmask();
             flags = cal.getFlagBitmask();
             folderId = cal.getFolderId();
             color = cal.getColor();
+            uid = cal.getUid();
             mask = ombx.getChangeMask(sContext, id, type);
 
             if ((mask & Change.MODIFIED_CONFLICT) != 0 || (mask & Change.MODIFIED_CONTENT) != 0 || (mask & Change.MODIFIED_INVITE) != 0) { // need to push to the server
@@ -1268,8 +1269,21 @@ public class PushChanges {
                 //Instead, we just let it bounce back as a calendar update from server.
                 //mod sequence will always be bounced back in the next sync so we'll set there.
                 if (serverItemId != id) { //new item
-                    if (!ombx.renumberItem(sContext, id, type, serverItemId))
-                        return true;
+                    try {
+                        CalendarItem calItem = ombx.getCalendarItemById(sContext, serverItemId);
+                        OfflineLog.offline.debug("New calendar item %d has been mapped to existing calendar item %d during push", id, serverItemId);
+                        boolean uidSame = (calItem.getUid() == null && uid == null) || (calItem.getUid() != null && calItem.getUid().equals(uid)); 
+                        if (!uidSame) {
+                            OfflineLog.offline.warn("calendar item %d UID %s differs from server-mapped item %d UID %s", id, uid, calItem.getId(), calItem.getUid());
+                            assert(uidSame);
+                        } else if (cal.getId() != calItem.getId()) {
+                            OfflineLog.offline.warn("Deleting ZD cal item %d with same UID as existing %d",cal.getId(), calItem.getId());
+                            ombx.delete(sContext, cal, null);
+                        }
+                    } catch (NoSuchItemException nsie) {
+                        if (!ombx.renumberItem(sContext, id, type, serverItemId))
+                            return true;
+                    }
                 }
                 id = serverItemId;
             } else {
@@ -1282,7 +1296,7 @@ public class PushChanges {
         }
 
         synchronized (ombx) {
-            CalendarItem cal = ombx.getCalendarItemById(sContext, id);
+            cal = ombx.getCalendarItemById(sContext, id);
             // check to see if the calendar item was changed while we were pushing the update...
             mask = 0;
             if (flags != cal.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
