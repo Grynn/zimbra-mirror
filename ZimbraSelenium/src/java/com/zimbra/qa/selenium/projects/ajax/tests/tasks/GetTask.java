@@ -220,13 +220,13 @@ public class GetTask extends AjaxCommonTest {
 				"<CreateTaskRequest xmlns='urn:zimbraMail'>" +
 					"<m >" +
 			        	"<inv>" +
-			        		"<comp priority='1' status='INPR' percentComplete='50' allDay='1' name='"+ subject +"' location='"+ location +"'>" +
+			        		"<comp priority='1' status='INPR' percentComplete='50' allDay='1' name='"+ subject +"' loc='"+ location +"'>" +
 		        				"<s d='"+ startDate.toYYYYMMDD() +"'/>" +
-		        				"<s d='"+ dueDate.toYYYYMMDD() +"'/>" +
+		        				"<e d='"+ dueDate.toYYYYMMDD() +"'/>" +
 								"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
 								"<alarm action='DISPLAY'>" +
 									"<trigger>" +
-										"<abs d='"+ reminderDate.toYYYYMMDDHHMMSSZ() +"'/>" +
+										"<abs d='"+ reminderDate.toYYYYMMDDTHHMMSSZ() +"'/>" +
 									"</trigger>" +
 								"</alarm>" +
 			        		"</comp>" +
@@ -256,8 +256,9 @@ public class GetTask extends AjaxCommonTest {
 		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.DueDate), dueDate.toMMM_dC_yyyy(), "Verify the due date matches");
 		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.Priority), "High", "Verify the priority matches");
 		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.Status), "In Progress", "Verify the status matches");
-		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.Percentage), "50", "Verify the percentage matches");
-		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.Reminder), dueDate.toMMM_dd_yyyy_A_hCmm_a(), "Verify the percentage matches");
+		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.Percentage), "50%", "Verify the percentage matches");
+		//ZAssert.assertEquals(	actual.zGetTaskProperty(Field.Reminder), dueDate.toMMM_dd_yyyy_A_hCmm_a(), "Verify the percentage matches");
+		ZAssert.assertStringContains(actual.zGetTaskProperty(Field.Reminder), reminderDate.toMMM_dC_yyyy(), "Verify the percentage matches");
 		
 		// The body could contain HTML, even though it is only displaying text (e.g. <br> may be present)
 		// do a contains, rather than equals.
