@@ -22,7 +22,14 @@ public class VersionCheckExtension implements ZimbraExtension {
     public void init() throws ServiceException {
         SoapServlet.addService("AdminServlet", new VersionCheckService());
         // XXX bburtin: Disabling test to avoid false positives until bug 54812 is fixed.
-        // ZimbraSuite.addTest(TestVersionCheck.class);        
+        /*
+        try {
+            ZimbraSuite.addTest(TestVersionCheck.class);
+        } catch (NoClassDefFoundError e) {
+            // Expected in production, because JUnit is not available. 
+            ZimbraLog.test.debug("Unable to load ZimbraAdminVersionCheck unit tests.", e);
+        }
+        */
     }
 
     public void destroy() {
