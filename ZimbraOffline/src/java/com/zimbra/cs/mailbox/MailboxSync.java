@@ -22,6 +22,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
@@ -125,6 +126,15 @@ public class MailboxSync {
             if (isOnRequest)
                 OfflineLog.offline.debug("offline sync request ignored");
         } else if (ombx.lockMailboxToSync()) {
+            try {
+                ombx.getAccount();
+            } catch (AccountServiceException ase) {
+                if (ase.getCode().equals(AccountServiceException.NO_SUCH_ACCOUNT)) {
+                    OfflineLog.offline.debug("cancelCurrentTask as there is no such account " + ombx.getAccountName());
+                    ombx.cancelCurrentTask();
+                    return;
+                }
+            }
             synchronized (ombx.syncLock) {
                 if (isOnRequest && isDebugTraceOn) {
                     OfflineLog.offline.debug("============================== SYNC DEBUG TRACE START ==============================");
