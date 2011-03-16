@@ -1,16 +1,22 @@
 package com.zimbra.qa.selenium.framework.util;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.zip.GZIPInputStream;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import com.zimbra.common.util.tar.TarEntry;
+import com.zimbra.common.util.tar.TarInputStream;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
@@ -304,5 +310,102 @@ public class GeneralUtility {
                   " after synching the ZD to ZCS");
          }
       }
+   }
+
+   /**
+    * Un-tar the TGZ file
+    * @param tarFile
+    * @param dest
+    * @throws HarnessException
+    */
+   public static void untarBaseUpgradeFile(File tarFile, File dest) throws HarnessException {  
+      if (dest == null) {
+         throw new HarnessException("dest cannot be null!");
+      }
+
+      if (!dest.exists()) {
+         createDirectory(dest);
+      }
+
+      try {
+         TarInputStream tin = new TarInputStream(new GZIPInputStream(new FileInputStream(tarFile)));  
+         TarEntry tarEntry = tin.getNextEntry();  
+         
+         while (tarEntry != null) {  
+            File destPath = new File(dest.toString().trim() + File.separatorChar +
+                  tarEntry.getName());  
+            logger.info("destPath is: " + destPath);
+            
+            if (tarEntry.isDirectory()) {
+               createDirectory(destPath);
+
+            } else {
+               FileOutputStream fout = new FileOutputStream(destPath);
+               tin.copyEntryContents(fout);  
+               fout.close();
+
+            }  
+
+            tarEntry = tin.getNextEntry();  
+
+         }  
+
+         tin.close(); tin = null;  
+
+      } catch (IOException ie) {
+         throw new HarnessException("Getting IO Exception while untarring the file from: " +
+               tarFile + " to: " + dest);
+      }
+
+   }
+
+   /**
+    * Creating a directory recursively depending on the existence of the parents
+    * @param dir
+    * @return
+    * @throws HarnessException
+    */
+   public static boolean createDirectory(File dir) throws HarnessException {
+      if (dir == null) {
+         throw new HarnessException("dir cannot be null");
+      }
+
+      String [] dirNames = dir.toString().split(Character.toString(File.separatorChar));
+
+      StringBuilder currentPath = new StringBuilder("");
+      for (int i = 0; i < dirNames.length; i++) {
+         currentPath.append(File.separatorChar).append(dirNames[i].trim());
+         File currentDir = new File(currentPath.toString());
+         boolean currentDirExists = currentDir.exists();
+
+         if (!currentDirExists) {
+            boolean result = currentDir.mkdir();
+            if (!result) {
+               return false;
+            }
+         }
+      }
+
+      return true;
+   }
+
+   /**
+    * Delete the non-emptu directory
+    * @param path
+    * @return
+    */
+   public static boolean deleteDirectory(File path) {
+      if( path.exists() ) {
+         File[] files = path.listFiles();
+         for(int i = 0; i < files.length; i++) {
+            if(files[i].isDirectory()) {
+              deleteDirectory(files[i]);
+            }
+            else {
+              files[i].delete();
+            }
+         }
+       }
+       return( path.delete() );
    }
 }

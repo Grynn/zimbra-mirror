@@ -55,5 +55,6 @@
 	<classpathentry kind="lib" path="jars/htmlcleaner-2.2.jar"/>
 	<classpathentry kind="lib" path="jars/selenium-java-2.0b2.jar"/>
 	<classpathentry kind="lib" path="jars/selenium-server-standalone-2.0b2.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/ant-tar-patched.jar" sourcepath="/ThirdParty/ant-tar-patched/src/java"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

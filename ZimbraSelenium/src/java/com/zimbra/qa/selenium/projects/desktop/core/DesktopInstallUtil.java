@@ -20,7 +20,6 @@ import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsArch;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 
-
 /**
  * This class contains methods that can be used for Zimbra Desktop Installation and Uninstallation
  * @author Jeffry Hidayat
@@ -117,9 +116,9 @@ public class DesktopInstallUtil {
       OsType osType = OperatingSystem.getOSType();
       OsArch osArch = OperatingSystem.getOsArch();
 
-      switch (osType) {
-      case WINDOWS: case WINDOWS_XP:
-         if (isDesktopAppInstalled()) {
+      if (isDesktopAppInstalled()) {
+         switch (osType) {
+         case WINDOWS: case WINDOWS_XP:
             CommandLine.CmdExec("TASKKILL /F /IM zdclient.exe");
             CommandLine.CmdExec("TASKKILL /F /IM zdesktop.exe");
 
@@ -150,14 +149,18 @@ public class DesktopInstallUtil {
                logger.debug("Successfully waiting for");
                logger.info("Zimbra Desktop Uninstallation is complete!");
             }
-         } else {
-            logger.info("Desktop App doesn't exist, so quitting the uninstallation...");
+            break;
+         case LINUX:
+            // TODO:
+            break;
+         case MAC:
+            //TODO: Impelements Linux and MAC uninstallation method here
+            break;
          }
-         break;
-      case LINUX: case MAC:
-         //TODO: Impelements Linux and MAC uninstallation method here
-         break;
+      } else {
+         logger.info("Desktop App doesn't exist, so quitting the uninstallation...");
       }
+
       _desktopRegistryPath = null;
    }
 
@@ -170,31 +173,73 @@ public class DesktopInstallUtil {
     * @throws InterruptedException
     */
    public static void installDesktopApp(String installFileBinaryLocation) throws HarnessException, IOException, InterruptedException {
-      //TODO: Do for Linux and Mac, right now it's only for Windows
-      File file = new File(installFileBinaryLocation);
-      OsType osType = OperatingSystem.getOSType();
-      switch (osType) {
-      case WINDOWS: case WINDOWS_XP:
-         if (DesktopInstallUtil.isDesktopAppInstalled()) {
-            logger.info("Zimbra Desktop App has already been installed.");
+
+      if (DesktopInstallUtil.isDesktopAppInstalled()) {
+         logger.info("Zimbra Desktop App has already been installed.");
+      } else {
+         //TODO: Do for Linux and Mac, right now it's only for Windows
+         logger.info("installFileBinaryLocation is: " + installFileBinaryLocation);
+         File file = new File(installFileBinaryLocation);
+         OsType osType = OperatingSystem.getOSType();
+         String installCommand = null;
+
+         if (!file.exists()) {
+            throw new HarnessException ("MSI file doesn't exist at given path" + installFileBinaryLocation);
          } else {
-            if (!file.exists()) {
-               throw new HarnessException ("MSI file doesn't exist at given path" + installFileBinaryLocation);
-            } else {
-               String installCommand = "MsiExec.exe /i " + installFileBinaryLocation + " /qn";
+            switch (osType) {
+            case WINDOWS: case WINDOWS_XP:
+               installCommand = "MsiExec.exe /i " + installFileBinaryLocation + " /qn";
                logger.debug("installCommand is: " + installCommand);
                CommandLine.CmdExec(installCommand);
                logger.debug("installCommand execution is successful");
                GeneralUtility.waitFor("com.zimbra.qa.selenium.projects.desktop.core.DesktopInstallUtil", null, true, "isDesktopAppInstalled", null, WAIT_FOR_OPERAND.EQ, true,
                      300 * 1000, 5 * 1000);
                logger.info("Zimbra Desktop Installation is complete!");
+               break;
+
+            case LINUX:
+               file = new File(installFileBinaryLocation);
+
+               logger.info("PWD: " + CommandLine.cmdExecWithOutput("pwd"));
+
+               File currentDir = new File(CommandLine.cmdExecWithOutput("pwd").trim());
+               logger.info("currentDir is implemented: " + currentDir.exists());
+               String destPath = currentDir.getAbsolutePath().endsWith(Character.toString(File.separatorChar)) ?
+                     currentDir.getAbsolutePath() + "zdesktop" :
+                        currentDir.getAbsolutePath() + "/zdesktop";
+               File destinationDir = new File(destPath);
+
+               logger.info("destinationDir is: " + destinationDir.getAbsolutePath());
+               if (destinationDir.exists()) {
+                  GeneralUtility.deleteDirectory(destinationDir);
+               }
+
+               GeneralUtility.createDirectory(destinationDir);
+
+               GeneralUtility.untarBaseUpgradeFile(file, destinationDir);
+               installFileBinaryLocation = installFileBinaryLocation.replace(".tgz", "");
+               String[] path = installFileBinaryLocation.split("/");
+               logger.info("Giving full permissions to some files...");
+               CommandLine.CmdExec("chmod -R 777 " + "zdesktop/" +
+                     path[path.length - 1]);
+
+               String[] params = new String[] {"\n", "A\n", "\n", "N\n", "\n"};
+               // TODO: /test.txt is only a blank file
+               installCommand = "zdesktop/" + path[path.length - 1] + "/install.pl";
+
+               logger.info("installCommand: " + installCommand);
+               logger.info("executing installCommand");
+               CommandLine.CmdExec(installCommand, params);
+               //GeneralUtility.waitFor("com.zimbra.qa.selenium.projects.desktop.core.DesktopInstallUtil",
+               //      null, true, "isDesktopAppInstalled", null, WAIT_FOR_OPERAND.EQ, true, 60000, 1000);
+               break;
+
+            case MAC:
+               // TODO: Implements installation methods for Linux and Mac
+               break;
+
             }
          }
-
-         break;
-      case LINUX: case MAC:
-         // TODO: Implements installation methods for Linux and Mac
-         break;
       }
    }
 
@@ -225,7 +270,13 @@ public class DesktopInstallUtil {
             }
          }
          break;
-      case LINUX: case MAC:
+      case LINUX:
+         File installDir = new File("/opt/zimbra/zdesktop");
+         if (installDir.exists()) {
+            isDesktopInstalled = true;
+         }
+         break;
+      case MAC:
          //TODO:
          break;
       }

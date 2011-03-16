@@ -194,6 +194,7 @@ public class AjaxCommonTest {
 		         break;
 
 		      case LINUX:
+		         _downloadFilePath = "/download-zimbra-qa-test/";
 		         _arch = ARCH.RHEL4;
 		         //TODO: _executableFilePath
 		         break;
