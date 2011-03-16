@@ -1429,7 +1429,7 @@ public class BeanUtils {
      * false otherwise.
      */
     public static boolean isAllowedUA(com.zimbra.cs.taglib.bean.ZUserAgentBean ua, String[] allowedUA) {
-        if (allowedUA.length == 0) return true;
+        if (allowedUA == null || allowedUA.length == 0) return true;
         Pattern pattern;
         Matcher m;
         for (String str : allowedUA) {
