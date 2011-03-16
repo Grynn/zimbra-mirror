@@ -30,7 +30,9 @@ AjxTemplate.compile = function(pkg, authoritative, define, templateText) {
 			var attrs = AjxTemplate.__parseAttrs(m[1]);
 			var body = m[2];
 			if (attrs["xml:space"] != "preserve") {
-				body = body.replace(AjxTemplate.__RE_GT_LINESEP_LT, "><").trim();
+                // bug 47973: IE doesn't support String.prototype.trim
+                // NOTE: This was caused when the Java TemplateCompiler class was ported.
+                body = body.replace(AjxTemplate.__RE_GT_LINESEP_LT, "><").replace(/^\s+|\s+$/,"");
 			}
 
 			var packageId = pkg;
