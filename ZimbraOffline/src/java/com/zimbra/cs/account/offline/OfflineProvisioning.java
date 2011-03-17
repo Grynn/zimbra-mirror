@@ -1459,6 +1459,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public synchronized void preAuthAccount(Account acct, String accountName, String accountBy, long timestamp, long expires, String preAuth, Map<String, Object> authCtxt) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("preAuthAccount");
     }
+    
+    @Override
+    public void certAuthAccount(Account acct, AuthContext.Protocol proto, Map<String, Object> authCtxt) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("certAuthAccount");
+    }
 
     @Override
     public synchronized void changePassword(Account acct, String currentPassword, String newPassword) throws ServiceException {
