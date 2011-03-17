@@ -931,7 +931,7 @@ OSelect_XFormItem.prototype.setValue = function (newValue, clearOldValues, inclu
 		} else {
 			var oldValues = this.getInstanceValue();
 			if(typeof oldValues == "string") {
-				newValues = new String(oldValues);
+				newValues = oldValues;
 			} else if(typeof oldValues =="object" || oldValues instanceof Array) {
 				newValues = [];
 				for(var a in oldValues) {
