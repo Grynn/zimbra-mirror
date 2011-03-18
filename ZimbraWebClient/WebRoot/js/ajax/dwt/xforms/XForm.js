@@ -327,6 +327,10 @@ XForm.prototype.setInstanceValue = function(val, refPath) {
 	this.xmodel.setInstanceValue(this.instance,refPath,val);
 }
 
+XForm.prototype.getInstanceValue = function(refPath) {
+	return this.xmodel.getInstanceValue(this.instance,refPath);
+}
+
 XForm.checkInstanceValue = function(refPath,val) {
 	return (this.getInstanceValue(refPath) == val);
 }
