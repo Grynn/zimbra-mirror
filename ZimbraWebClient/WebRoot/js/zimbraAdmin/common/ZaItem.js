@@ -33,6 +33,7 @@ ZaItem.modifyMethods = new Object();
 ZaItem.modifyMethodsExt = new Object();
 ZaItem.createMethods = new Object();
 ZaItem.removeMethods = new Object();
+ZaItem.modelExtensions = new Object();
 
 ZaItem.ACCOUNT = "account";
 ZaItem.DATASOURCE = "dataSource";

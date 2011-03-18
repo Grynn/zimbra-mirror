@@ -26,13 +26,13 @@ ZaServer = function() {
 	//The type is required. The application tab uses it to show the right icon
 	this.type = ZaItem.SERVER ; 
 }
-
+ZaServer.modelExtensions = [];
 ZaServer.prototype = new ZaItem;
 ZaServer.prototype.constructor = ZaServer;
 ZaItem.loadMethods["ZaServer"] = new Array();
 ZaItem.initMethods["ZaServer"] = new Array();
 ZaItem.modifyMethods["ZaServer"] = new Array();
-
+ZaItem.modelExtensions["ZaServer"] = new Array();
 //attribute name constants, this values are taken from zimbra.schema
 ZaServer.A_name = "cn";
 ZaServer.A_description = "description";
@@ -967,8 +967,24 @@ ZaServer.compareVolumesByName = function (a,b) {
 	
 }
 
+ZaServer.prototype.loadVolumes = function (callback) {
+	var soapDoc = AjxSoapDoc.create("GetAllVolumesRequest", ZaZimbraAdmin.URN, null);
+	var params = {
+		soapDoc: soapDoc,
+		targetServer: this.id,
+		asyncMode: callback ? true : false,
+		callback: callback ? callback : null		
+	}
+	
+	var reqMgrParams = {
+		controller : ZaApp.getInstance().getCurrentController(),
+		busyMsg : ZaMsg.BUSY_LOADING_VOL
+	}
+	ZaRequestMgr.invoke(params, reqMgrParams) ;
+}
+
 ZaServer.prototype.deleteVolume =
-function (id) {
+function (id, callback) {
 	if(!id)
 		return false;
 		
@@ -977,7 +993,8 @@ function (id) {
 	var params = {
 		soapDoc: soapDoc,
 		targetServer: this.id,
-		asyncMode: false
+		asyncMode: callback ? true : false,
+		callback: callback ? callback : null		
 	}
 	
 	var reqMgrParams = {
