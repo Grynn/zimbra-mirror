@@ -84,14 +84,8 @@ function(callback, form, optionalTimeout) {
 			continue;
 		}
 	}
-	for (var i = 0; i < inputs.length; i++) {
-		var hidden = document.createElement("input");
-		hidden.type = "hidden";
-		hidden.name = "filename" + (i+1);
-		hidden.value = inputs[i].value;
 
-		inputs[i].parentNode.insertBefore(hidden, inputs[i]);
-	}
+    this._addHiddenFileNames(inputs);
 
 	form.target = this._iframeId;
 	this._callback = callback;
@@ -109,6 +103,35 @@ function(callback, form, optionalTimeout) {
 		}
 		throw ex;
 	}
+};
+
+AjxPost.prototype._addHiddenFileNames =
+function(inputs){
+    var m = 0;
+    for (var i = 0; i < inputs.length; i++) {
+        var fileInput = inputs[i];
+        if(fileInput.files && fileInput.files.length > 1){
+            var files = fileInput.files, fileStr=[];
+            for(var j=0; j<files.length; j++){
+               var f = files[j];
+               fileStr.push(f.name || f.fileName);
+            }
+            this._addHiddenFileName(inputs[i], fileStr.join('\n'), ++m);
+        }else{
+            this._addHiddenFileName(inputs[i], inputs[i].value, ++m);
+        }
+    }
+
+};
+
+AjxPost.prototype._addHiddenFileName =
+function(inputField, fileName, index){
+    var hidden = document.createElement("input");
+    hidden.type = "hidden";
+    hidden.name = "filename" + (index);
+    hidden.value = fileName;
+    inputField.parentNode.insertBefore(hidden, inputField);
+
 };
 
 
