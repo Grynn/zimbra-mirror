@@ -90,9 +90,12 @@ DWORD WINAPI MonitorThread(LPVOID lpParam) {
 
     while (true) {
         WIN32_FIND_DATA FindFileData;
-        if (FindFirstFile(anchor, &FindFileData) == INVALID_HANDLE_VALUE) {
+        HANDLE hFind;
+        if ((hFind = FindFirstFile(anchor, &FindFileData)) == INVALID_HANDLE_VALUE) {
             PostMessage(hCurrWnd, WM_CLOSE, 0, NULL);
             break;
+        } else {
+            FindClose(hFind);
         }
         Sleep(pollint);
     }
