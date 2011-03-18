@@ -9,16 +9,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
+import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.TimeZone;
+
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
 
 import net.freeutils.tnef.Attachment;
 import net.freeutils.tnef.Attr;
@@ -37,6 +40,8 @@ import net.freeutils.tnef.TNEFUtils;
  * @author gren
  */
 public class Main {
+
+    private static final Logger log = Logger.getLogger(Main.class);
 
     private static final Map<Integer, String> propertyIdMap;
     private static final Map<Long, String> PSETID_MeetingByLidMap;
@@ -883,7 +888,13 @@ public class Main {
             usage();
         } else if ((args.length == 2) && (args[0].equals("-t"))) {
             tnefFile = new File(args[1]);
-            writeXmlToStream(tnefFile, System.out);
+            try {
+                OutputStreamWriter outWriter =
+                            new OutputStreamWriter(System.out, "UTF-8");
+                writeXmlToWriter(tnefFile, outWriter);
+            } catch (IOException ex) {
+                log.error("Problem creating writer for System.out", ex);
+            }
         } else {
             String xmlFimeName;
             for (int i = 0; i < args.length; ++i) {
@@ -893,17 +904,18 @@ public class Main {
                 FileOutputStream wout = null;
                 try {
                     wout = new FileOutputStream(xmlFileName);
-                    ps = new PrintStream(wout, false);
-                    writeXmlToStream(tnefFile, ps);
+                    OutputStreamWriter outWriter =
+                            new OutputStreamWriter(wout, "UTF-8");
+                    writeXmlToWriter(tnefFile, outWriter);
                     wout.flush();
                 } catch (IOException ex) {
-                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                    log.error("Problem creating " + xmlFileName, ex);
                 } finally {
                     if (wout != null) {
                         try {
                             wout.close();
                         } catch (IOException ex) {
-                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                            log.error("Problem closing " + xmlFileName, ex);
                         }
                     }
                 }
@@ -911,7 +923,7 @@ public class Main {
         }
     }
 
-    public static void writeXmlToStream(File tnefFile, PrintStream outStream) {
+    public static void writeXmlToWriter(File tnefFile, Writer outWriter) {
         if (tnefFile != null) {
             FileInputStream tnefInput = null;
             try {
@@ -922,15 +934,16 @@ public class Main {
                 tnefStream = new TNEFInputStream(tnefInput);
                 tnefView = new Message(tnefStream);
                 xmlIndentLevel = 0;
-                outStream.println(toXmlStringBuffer(tnefView));
+                outWriter.write(toXmlStringBuffer(tnefView).toString());
+                outWriter.flush();
             } catch (IOException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                log.error("Problem writing Xml for TNEF file " + tnefFile, ex);
             } finally {
                 if (tnefInput != null) {
                     try {
                         tnefInput.close();
                     } catch (IOException ex) {
-                        Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        log.error("Problem closing TNEF file " + tnefFile, ex);
                     }
                 }
             }
