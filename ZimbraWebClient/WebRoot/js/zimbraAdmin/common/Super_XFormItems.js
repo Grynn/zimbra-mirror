@@ -1621,7 +1621,14 @@ ZATabCase_XFormItem.prototype.getCustomHeight = function () {
 		if(formHeaders) {
 			var formHeader = formHeaders[0];		
 			if(formHeader) {
-				headerHeight = formHeader.getElement().clientHeight ? formHeader.getElement().clientHeight : formHeader.getElement().offsetHeight;				
+				if(formHeader.getContainer()) {
+					formHeader = formHeader.getContainer();
+				}
+				else {
+					formHeader = formHeader.getElement();
+				}
+
+				headerHeight = formHeader.clientHeight ? formHeader.clientHeight : formHeader.offsetHeight;				
 			}
 		}
 		var formTabBars = form.getItemsById("xform_tabbar");
@@ -1629,7 +1636,14 @@ ZATabCase_XFormItem.prototype.getCustomHeight = function () {
 		if(formTabBars) {
 			var formTabBar = formTabBars[0];		
 			if(formTabBar) {
-				tabBarHeight = formTabBar.getElement().clientHeight ? formTabBar.getElement().clientHeight : formTabBar.getElement().offsetHeight;				
+				if(formTabBar.getContainer()) {
+                                        formTabBar = formTabBar.getContainer();
+                                }
+				else {
+					formTabBar =  formTabBar.getElement();
+				}
+
+				tabBarHeight = formTabBar.clientHeight ? formTabBar.clientHeight : formTabBar.offsetHeight;				
 			}
 		}
         var totalHeaderHeight = headerHeight * headerLevel ;
