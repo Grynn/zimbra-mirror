@@ -209,7 +209,7 @@ public class ABCompose extends AppPage {
 
 			// Click Group
 			obj.zMenuItem.zClick(localize(locator.group));
-			obj.zEditField.zType( getNameWithoutSpace(localize(locator.groupNameLabel)), g.nickname);
+			obj.zEditField.zType( getNameWithoutSpace(localize(locator.groupNameLabel)), g.groupName);
 			
 			
 			// Add any members
@@ -230,7 +230,7 @@ public class ABCompose extends AppPage {
 			obj.zButton.zClick(localize(locator.save), "2");
 			obj.zToastAlertMessage.zAlertMsgExists(localize(locator.groupCreated),
 					"Group Created message should be shown");
-			obj.zContactListItem.zExists(g.nickname);
+			obj.zContactListItem.zExists(g.groupName);
 			
 			return (g);	
 			

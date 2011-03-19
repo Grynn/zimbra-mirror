@@ -30,8 +30,8 @@ public class DeleteContactGroup extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		ContactGroupItem group = new ContactGroupItem();
-		group.nickname = getLocalizedData_NoSpecialChar();
+		ContactGroupItem group = new ContactGroupItem(getLocalizedData_NoSpecialChar());
+	
 		for (int i = 1; i <= 2; i++) {
 			String email = "acc" + i + "@testdomain.com";
 			Stafzmprov.createAccount(email);
@@ -39,9 +39,9 @@ public class DeleteContactGroup extends CommonTest {
 
 		}
 		page.zABCompose.createContactGroupItem(ActionMethod.DEFAULT, group);
-		obj.zContactListItem.zExists(group.nickname);
+		obj.zContactListItem.zExists(group.groupName);
 		obj.zButton.zClick(page.zABApp.zDeleteContactIconBtn);
-		obj.zContactListItem.zNotExists(group.nickname);
+		obj.zContactListItem.zNotExists(group.groupName);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -54,8 +54,8 @@ public class DeleteContactGroup extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		ContactGroupItem group = new ContactGroupItem();
-		group.nickname = getLocalizedData_NoSpecialChar();
+		ContactGroupItem group = new ContactGroupItem(getLocalizedData_NoSpecialChar());
+	
 		for (int i = 1; i <= 2; i++) {
 			String email = "acc" + i + "@testdomain.com";
 			Stafzmprov.createAccount(email);
@@ -63,10 +63,10 @@ public class DeleteContactGroup extends CommonTest {
 
 		}
 		page.zABCompose.createContactGroupItem(ActionMethod.DEFAULT, group);
-		obj.zContactListItem.zExists(group.nickname);
-		obj.zContactListItem.zRtClick(group.nickname);
+		obj.zContactListItem.zExists(group.groupName);
+		obj.zContactListItem.zRtClick(group.groupName);
 		obj.zMenuItem.zClick(page.zABApp.zRtClickContactDeleteMenuIconBtn);
-		obj.zContactListItem.zNotExists(group.nickname);
+		obj.zContactListItem.zNotExists(group.groupName);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -79,8 +79,8 @@ public class DeleteContactGroup extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		ContactGroupItem group = new ContactGroupItem();
-		group.nickname = getLocalizedData_NoSpecialChar();
+		ContactGroupItem group = new ContactGroupItem(getLocalizedData_NoSpecialChar());
+	
 		for (int i = 1; i <= 2; i++) {
 			String email = "acc" + i + "@testdomain.com";
 			Stafzmprov.createAccount(email);
@@ -88,11 +88,11 @@ public class DeleteContactGroup extends CommonTest {
 
 		}
 		page.zABCompose.createContactGroupItem(ActionMethod.DEFAULT, group);
-		obj.zContactListItem.zExists(group.nickname);
+		obj.zContactListItem.zExists(group.groupName);
 		Robot robot = new Robot();
 		robot.keyPress(KeyEvent.VK_DELETE);
 		robot.keyRelease(KeyEvent.VK_DELETE);
-		obj.zContactListItem.zNotExists(group.nickname);
+		obj.zContactListItem.zNotExists(group.groupName);
 
 		SelNGBase.needReset.set(false);
 	}
