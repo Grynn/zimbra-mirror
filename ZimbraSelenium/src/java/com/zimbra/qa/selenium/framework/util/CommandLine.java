@@ -49,15 +49,29 @@ public class CommandLine {
 	   return CmdExec(command, null);
 	}
 
-	/**
+   /**
+    * Execute Command line and return the execution status
+    * @param command Command line to be executed
+    * @param params Parameter to be passed to STDIN
+    * @return (Integer) Execution status code
+    * @throws IOException
+    * @throws InterruptedException
+    */
+   public static int CmdExec(String command, String[] params)
+   throws IOException, InterruptedException {
+      return CmdExec(command, params, false);
+   }
+
+   /**
 	 * Execute Command line and return the execution status
 	 * @param command Command line to be executed
 	 * @param params Parameter to be passed to STDIN
+	 * @param background Running in the background process
 	 * @return (Integer) Execution status code
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	public static int CmdExec(String command, String[] params)
+	public static int CmdExec(String command, String[] params, boolean background)
 	throws IOException, InterruptedException {
 		Process p = Runtime.getRuntime().exec(command);
 
@@ -76,7 +90,12 @@ public class CommandLine {
 		   }
 		   outputStream.close();
 		}
-		int exitValue = p.waitFor();
+		int exitValue = -1;
+
+		if (!background) {
+		   exitValue = p.waitFor();
+		}
+
 		logger.info(command + " - " + exitValue);
 		return (exitValue);
 	}
@@ -113,6 +132,15 @@ public class CommandLine {
 
       errorGobbler.start();
       outputGobbler.start();
+
+      if (params != null) {
+         OutputStream outputStream = process.getOutputStream();
+         for (int i = 0; i < params.length; i++) {
+            outputStream.write(params[i].getBytes());
+            outputStream.flush();
+         }
+         outputStream.close();
+      }
 
       StreamReader reader = new StreamReader(inputStream);
       logger.debug("Starting the reader thread");

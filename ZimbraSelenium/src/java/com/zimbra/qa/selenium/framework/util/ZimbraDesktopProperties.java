@@ -34,8 +34,8 @@ public class ZimbraDesktopProperties {
    }
 
    private final static String [] _possibleFiles = {
-      "/opt/zmdesktop/zimbra/zdesktop/conf/localconfig.xml",
-      "/home/zmdesktop/zimbra/zdesktop/conf/localconfig.xml",
+      "/opt/zimbra/zdesktop/conf/localconfig.xml",
+      "/home/<USER_NAME>/zdesktop/conf/localconfig.xml",
       "C:\\Documents and Settings\\<USER_NAME>\\Local Settings\\Application Data\\Zimbra\\Zimbra Desktop\\conf\\localconfig.xml"
    };
 
@@ -43,16 +43,17 @@ public class ZimbraDesktopProperties {
       OsType osType = OperatingSystem.getOSType();
 
       for (int i = 0; i < _possibleFiles.length; i++) {
+         String currentLoggedInUser = System.getProperty(
+               "user.name");
+         _possibleFiles[i] = _possibleFiles[i].replace(
+               "<USER_NAME>", currentLoggedInUser);
          if (osType == OsType.WINDOWS || osType == OsType.WINDOWS_XP) {
             if (!_possibleFiles[i].contains("C:\\")) {
                continue;
             } else {
-               String currentLoggedInUser = System.getProperty(
-                     "user.name");
                logger.info("currentLoggedInUser: " +
                      currentLoggedInUser);
-               _possibleFiles[i] = _possibleFiles[i].replace(
-                     "<USER_NAME>", currentLoggedInUser);
+               
             }
          } else {
             if (_possibleFiles[i].contains("C:\\")) {
@@ -100,4 +101,5 @@ public class ZimbraDesktopProperties {
    public String getLocalConfigFileLocation() {
       return _localConfigFileLocation;
    }
+
 }
