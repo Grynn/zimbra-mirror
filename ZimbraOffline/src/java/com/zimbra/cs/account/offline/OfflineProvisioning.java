@@ -1461,8 +1461,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
     
     @Override
-    public void certAuthAccount(Account acct, AuthContext.Protocol proto, Map<String, Object> authCtxt) throws ServiceException {
-        throw OfflineServiceException.UNSUPPORTED("certAuthAccount");
+    public void ssoAuthAccount(Account acct, AuthContext.Protocol proto, Map<String, Object> authCtxt) throws ServiceException {
+        throw OfflineServiceException.UNSUPPORTED("ssoAuthAccount");
     }
 
     @Override
