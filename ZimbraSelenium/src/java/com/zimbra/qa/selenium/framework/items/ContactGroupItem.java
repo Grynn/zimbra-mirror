@@ -13,9 +13,6 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 
 /**
  * The <code>ContactGroupItem</code> defines a Zimbra Contact Group
- * <p> 
- * @author Matt Rhoades
- *
  */
 public class ContactGroupItem extends ContactItem implements IItem {
 	protected static Logger logger = LogManager.getLogger(IItem.class);
@@ -23,7 +20,7 @@ public class ContactGroupItem extends ContactItem implements IItem {
 	/**
 	 * The name of the contact group
 	 */
-	public String nickname = null;
+	public String groupName = null;
 	
 	/**
 	 * The list of contacts within this group
@@ -31,14 +28,11 @@ public class ContactGroupItem extends ContactItem implements IItem {
 	public ArrayList<String> dlist = null;
 	
 	/**
-	 * The "File As" setting for this contact group
+	 * Create a new contact group item+ 
 	 */
-	public String fileas = null;
-	
-	/**
-	 * Create a new, empty contact group
-	 */
-	public ContactGroupItem() {
+	public ContactGroupItem(String groupName) {
+		this.groupName=groupName;
+		fileAs = groupName;
 		type = "group";
 		dlist = new ArrayList<String>();
 	}
@@ -101,6 +95,7 @@ public class ContactGroupItem extends ContactItem implements IItem {
 	}
 	
 	
+	
 	public static ContactGroupItem importFromSOAP(Element GetContactsResponse) throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
@@ -118,7 +113,7 @@ public class ContactGroupItem extends ContactItem implements IItem {
 		StringBuilder sb = new StringBuilder();
 		sb.append(super.prettyPrint());
 		sb.append(ContactGroupItem.class.getSimpleName()).append('\n');
-		sb.append("Name: ").append(nickname).append('\n');
+		sb.append("Name: ").append(groupName).append('\n');
 		sb.append("dlist: ").append(getDList()).append('\n');
 		for (String key : ContactAttributes.keySet())
 			sb.append(String.format("Attribute: key(%s) value(%s)", key, ContactAttributes.get(key))).append('\n');

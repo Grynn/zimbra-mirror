@@ -148,9 +148,26 @@ public class PageAddressbook extends AbsTab {
 
 		// Get each contact's data from the table list
 		for (int i = 1; i <= count; i++) {
-			String contactDisplayedLocator = "//div[@id='zv__CNS']/div["+ i +"]/table/tbody/tr/td[3]";
+			String commonLocator = "//div[@id='zv__CNS']/div["+ i +"]/table/tbody/tr/";
+			
+			String contactDisplayedLocator = commonLocator + "td[3]";
+			String imageLocator = "xpath=(" + commonLocator + "td[2]/center/div)@class";
+            String attrs = sGetAttribute(imageLocator);
 
-			ContactItem ci=new ContactItem(ClientSessionFactory.session().selenium().getText(contactDisplayedLocator));		    			
+			ContactItem ci=null;
+			String fileAs = ClientSessionFactory.session().selenium().getText(contactDisplayedLocator);
+			
+			//check if it is a contactgroup or a contactgroup item
+			if ( attrs.contains("ImgGroup") ) {
+                ci=new ContactGroupItem(fileAs);
+			}
+			else if ( attrs.contains("ImgContact") ) {
+				ci=new ContactItem(fileAs);		    			
+			}
+			else {
+				throw new HarnessException("Image not neither conntact group nor contact.");		
+			}
+			
 			list.add(ci);	    	      
 		}
 
@@ -289,6 +306,11 @@ public class PageAddressbook extends AbsTab {
 			    pulldownLocator = "css=div[id='zb__CNS__NEW_MENU'] td[id='zb__CNS__NEW_MENU_dropdown']";
 			    optionLocator="css=tr[id='POPUP_NEW_CONTACT']";
 				page = new FormContactNew(this.MyApplication);		   
+		   }
+		   if ( option == Button.O_NEW_CONTACTGROUP) {
+			    pulldownLocator = "css=div[id='zb__CNS__NEW_MENU'] td[id='zb__CNS__NEW_MENU_dropdown']";
+			    optionLocator="css=tr[id='POPUP_NEW_GROUP']";
+				page = new FormContactGroupNew(this.MyApplication);		   
 		   }
 	   }
 	// Default behavior
