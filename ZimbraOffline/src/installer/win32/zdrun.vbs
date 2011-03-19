@@ -66,7 +66,12 @@ Sub CopyIfExists(sSrc, sDest, bOW)
 End Sub
 
 Sub LaunchPrism()
-    Dim sCmd
+    Dim sCmd, iRet 
+
+    iRet = oReg.CreateKey(HKEY_CURRENT_USER, "Software\Zimbra\Zimbra Desktop\Prism")
+    If iRet = 0 Then
+        oReg.SetStringValue HKEY_CURRENT_USER, "Software\Zimbra\Zimbra Desktop\Prism", "OverridePath", sOverridePath
+    End If
 
     sCmd = Chr(34) & sAppRoot & "\win32\prism\zdclient.exe" & Chr(34)
     oShell.Run sCmd, 1, false 
@@ -301,7 +306,5 @@ End If
 
 oReg.CreateKey HKEY_CURRENT_USER, "Software\Zimbra\Zimbra Desktop"
 oReg.SetStringValue HKEY_CURRENT_USER, "Software\Zimbra\Zimbra Desktop", "DataRoot", sDataRoot
-oReg.CreateKey HKEY_CURRENT_USER, "Software\Zimbra\Zimbra Desktop\Prism"
-oReg.SetStringValue HKEY_CURRENT_USER, "Software\Zimbra\Zimbra Desktop\Prism", "OverridePath", sOverridePath
 
 LaunchPrism
