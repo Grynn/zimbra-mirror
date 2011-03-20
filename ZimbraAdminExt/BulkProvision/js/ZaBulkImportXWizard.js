@@ -898,8 +898,8 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 					enableDisableChecks:[],colSpan:2
 		       },
 		       {type:_DWT_ALERT_, style:DwtAlert.INFO,iconVisible:false,content:com_zimbra_bulkprovision.ProvisioningSuccessReportsNote,
-					visibilityChangeEventSources:[ZaBulkProvision.A2_status],
-					visibilityChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_status,ZaBulkProvision.iSTATUS_FINISHED]],colSpan:2
+					visibilityChangeEventSources:[ZaBulkProvision.A2_status,ZaBulkProvision.A2_provisionedCount],
+					visibilityChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_status,ZaBulkProvision.iSTATUS_FINISHED],[XForm.checkInstanceValueNot,ZaBulkProvision.A2_provisionedCount,0]],colSpan:2
 		       }, 
 		       {type:_DWT_ALERT_, style:DwtAlert.CRITICAL,iconVisible:false,content:com_zimbra_bulkprovision.ProvisioningFailedReportsNote,
 					visibilityChangeEventSources:[ZaBulkProvision.A2_status],
@@ -916,8 +916,8 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 		       },
 		       {type:_DATA_URL_,labelLocation:_NONE_,label:com_zimbra_bulkprovision.DownloadSuccessReportLink,
 		    	   ref:ZaBulkProvision.A2_completedAccountsFileLink,bmolsnr:true,
-		    	   visibilityChangeEventSources:[ZaBulkProvision.A2_completedAccountsFileLink],
-		    	   visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaBulkProvision.A2_completedAccountsFileLink]]
+		    	   visibilityChangeEventSources:[ZaBulkProvision.A2_completedAccountsFileLink,ZaBulkProvision.A2_provisionedCount],
+		    	   visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaBulkProvision.A2_completedAccountsFileLink],[XForm.checkInstanceValueNot,ZaBulkProvision.A2_provisionedCount,0]]
 		       },
 		       {type:_DATA_URL_,labelLocation:_NONE_,label:com_zimbra_bulkprovision.DownloadErrorReportLink,
 			    	   ref:ZaBulkProvision.A2_failedAccountsFileLink,bmolsnr:true,
