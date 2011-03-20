@@ -432,4 +432,96 @@ public class EditDocument extends AjaxCommonTest {
 		//delete file upon test completion
 		app.zPageBriefcase.deleteFileByName(docName);
 	}
+	
+	@Test(description = "Create document through SOAP - Edit Document using Right Click Context Menu & verify through GUI", groups = { "functional" })
+	public void EditDocument_05() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+
+		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
+		// Create document item
+		DocumentItem document = new DocumentItem();
+
+		String docName = document.getDocName();
+		String docText = document.getDocText();
+
+		// Create document using SOAP
+		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
+				+ docText + "</body>" + "</html>");
+
+		account
+				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
+						+ "<doc name='"
+						+ docName
+						+ "' l='"
+						+ briefcaseFolder.getId()
+						+ "' ct='application/x-zimbra-doc'>"
+						+ "<content>"
+						+ contentHTML
+						+ "</content>"
+						+ "</doc>"
+						+ "</SaveDocumentRequest>");
+
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
+
+		// Click on created document
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+
+		// Edit Document using Right Click Context Menu
+		DocumentBriefcaseEdit documentBriefcaseEdit = (DocumentBriefcaseEdit) app.zPageBriefcase.
+		zListItem(Action.A_RIGHTCLICK, Button.B_EDIT, docName);
+				
+		//app.zPageBriefcase.isEditDocLoaded(docName, docText);
+		
+		// Select edit document window
+		try {
+			app.zPageBriefcase.zSelectWindow(docName);
+
+			// Fill out the document with the new data
+			document.setDocName("name"
+					+ ZimbraSeleniumProperties.getUniqueString());
+
+			documentBriefcaseEdit.typeDocumentName(document.getDocName());
+
+			// Save and close
+			app.zPageBriefcase.zSelectWindow(docName);
+
+			documentBriefcaseEdit.zSubmit();
+		} catch (Exception ex) {
+			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
+			throw new HarnessException("error in editing document " + docName,
+					ex);
+		} finally {
+			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
+		}
+
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
+
+		docName = document.getDocName();
+
+		// Verify document was saved with new data
+		// String name = app.zPageBriefcase.getText(docName);
+		// ZAssert.assertStringContains(name, docName,
+		// "Verify document name through GUI");
+		boolean present = app.zPageBriefcase.isPresent(docName);
+
+		ZAssert.assertTrue(present, "Verify document name through GUI");
+		
+		//delete file upon test completion
+		app.zPageBriefcase.deleteFileByName(docName);
+		
+		/*
+		 * //name =ClientSessionFactory.session().selenium().getText(
+		 * "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div[id^=zlif__BDLV__]"
+		 * );//ClientSessionFactory.session().selenium().isElementPresent(
+		 * "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto']>div:contains[id*='zlif__BDLV__']"
+		 * );//ClientSessionFactory.session().selenium().isElementPresent(
+		 * "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] div:contains('name')"
+		 * );
+		 */
+	}
 }

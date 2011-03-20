@@ -542,6 +542,12 @@ public class PageBriefcase extends AbsTab {
 
 				page = null;
 
+			} else if (option == Button.B_EDIT) {
+
+				optionLocator = "css=td#zmi__Briefcase__EDIT_FILE_title:contains(Edit)";
+
+				page = new DocumentBriefcaseEdit(MyApplication, subject);
+
 			} else {
 				throw new HarnessException("implement action:" + action
 						+ " option:" + option);
