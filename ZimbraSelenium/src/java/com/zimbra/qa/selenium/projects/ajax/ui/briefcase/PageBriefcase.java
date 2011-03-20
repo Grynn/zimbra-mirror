@@ -427,7 +427,7 @@ public class PageBriefcase extends AbsTab {
 			if (page != null) {
 				page.zWaitForActive();
 				if(option == Button.O_SEND_AS_ATTACHMENT)
-					zWaitForElementPresent("css=tr[id$=_attachments_row]");	
+					zWaitForElementPresent("css=div[id$=_attachments_div] a[class='AttLink']");	
 			}
 		}
 		// Return the specified page, or null if not set
