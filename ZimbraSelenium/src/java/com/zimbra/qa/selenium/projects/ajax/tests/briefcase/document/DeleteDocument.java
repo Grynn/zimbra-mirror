@@ -120,7 +120,7 @@ public class DeleteDocument extends AjaxCommonTest {
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
 
 		// Click the Delete keyboard shortcut
-		//app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
+		// app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
 		DialogDeleteConfirm deleteConfirm = (DialogDeleteConfirm) app.zPageBriefcase
 				.zKeyboardShortcut(shortcut);
 
@@ -138,7 +138,7 @@ public class DeleteDocument extends AjaxCommonTest {
 				.assertTrue(isDeleted,
 						"Verify document was deleted through GUI");
 	}
-	
+
 	@Test(description = "Create document through SOAP - delete using Backspace Key & verify through GUI", groups = { "functional" })
 	public void DeleteDocument_03() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
@@ -178,8 +178,8 @@ public class DeleteDocument extends AjaxCommonTest {
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
 
-		// Click the Backspace keyboard shortcut
-		//app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
+		// Delete Document using Backspace keyboard shortcut
+		// app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
 		DialogDeleteConfirm deleteConfirm = (DialogDeleteConfirm) app.zPageBriefcase
 				.zKeyboardShortcut(shortcut);
 
@@ -197,4 +197,61 @@ public class DeleteDocument extends AjaxCommonTest {
 				.assertTrue(isDeleted,
 						"Verify document was deleted through GUI");
 	}
+
+	@Test(description = "Create document through SOAP - delete using Right Click context menu & verify through GUI", groups = { "functional" })
+	public void DeleteDocument_04() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+
+		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
+		// Create document item
+		DocumentItem document = new DocumentItem();
+
+		String docName = document.getDocName();
+		String docText = document.getDocText();
+
+		// Create document using SOAP
+		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
+				+ docText + "</body>" + "</html>");
+
+		account
+				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
+						+ "<doc name='"
+						+ docName
+						+ "' l='"
+						+ briefcaseFolder.getId()
+						+ "' ct='application/x-zimbra-doc'>"
+						+ "<content>"
+						+ contentHTML
+						+ "</content>"
+						+ "</doc>"
+						+ "</SaveDocumentRequest>");
+
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
+
+		// Click on created document
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+
+		// Delete Document using Right Click Context Menu
+		DialogDeleteConfirm deleteConfirm = (DialogDeleteConfirm) app.zPageBriefcase
+				.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE, document);
+
+		// Click OK on Confirmation dialog
+		deleteConfirm.zClickButton(Button.B_YES);
+
+		// refresh briefcase page
+		app.zTreeBriefcase
+				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
+
+		// Verify document was deleted
+		boolean isDeleted = app.zPageBriefcase.isDeleted(docName);
+
+		ZAssert
+				.assertTrue(isDeleted,
+						"Verify document was deleted through GUI");
+	}
+
 }

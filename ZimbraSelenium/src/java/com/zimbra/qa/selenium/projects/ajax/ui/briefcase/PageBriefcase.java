@@ -588,6 +588,12 @@ public class PageBriefcase extends AbsTab {
 
 				page = new DocumentBriefcaseOpen(MyApplication, docItem);
 
+			} else if (option == Button.O_DELETE) {
+
+				optionLocator = "css=td#zmi__Briefcase__DELETE_title:contains(Delete)";
+
+				page = new DialogDeleteConfirm(MyApplication, this);
+
 			} else {
 				throw new HarnessException("implement action:" + action
 						+ " option:" + option);
