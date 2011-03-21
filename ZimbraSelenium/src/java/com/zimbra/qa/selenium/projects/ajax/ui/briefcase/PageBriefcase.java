@@ -21,7 +21,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 public class PageBriefcase extends AbsTab {
 
 	public DocumentItem docItem;
-	
+
 	public static class Locators {
 		public static final String zNewBriefcaseOverviewPaneIcon = "id=ztih__main_Briefcase__BRIEFCASE_textCell";
 		public static final String zBriefcaseFolder = "id=zti__main_Briefcase__16_textCell";
@@ -49,7 +49,6 @@ public class PageBriefcase extends AbsTab {
 		public static final String zFileBodyField = "css=html>body";
 	}
 
-	
 	public PageBriefcase(AbsApplication application) {
 		super(application);
 		logger.info("new " + PageBriefcase.class.getCanonicalName());
@@ -200,6 +199,7 @@ public class PageBriefcase extends AbsTab {
 				throw new HarnessException(button + " not visible " + attrs);
 			}
 			locator = Locators.zDeleteIconBtn;
+			
 			page = new DialogDeleteConfirm(MyApplication, this);
 		} else if (button == Button.B_OPEN_IN_SEPARATE_WINDOW) {
 			// Check if the button is disabled
@@ -430,8 +430,8 @@ public class PageBriefcase extends AbsTab {
 			// wait for the page to go active
 			if (page != null) {
 				page.zWaitForActive();
-				if(option == Button.O_SEND_AS_ATTACHMENT)
-					zWaitForElementPresent("css=div[id$=_attachments_div] a[class='AttLink']");	
+				if (option == Button.O_SEND_AS_ATTACHMENT)
+					zWaitForElementPresent("css=div[id$=_attachments_div] a[class='AttLink']");
 			}
 		}
 		// Return the specified page, or null if not set
@@ -439,13 +439,13 @@ public class PageBriefcase extends AbsTab {
 	}
 
 	public AbsPage zListItem(Action action, DocumentItem document)
-	throws HarnessException {
-		
+			throws HarnessException {
+
 		docItem = document;
-		
+
 		return zListItem(action, docItem.getDocName());
 	}
-	
+
 	@Override
 	public AbsPage zListItem(Action action, String docName)
 			throws HarnessException {
@@ -489,20 +489,20 @@ public class PageBriefcase extends AbsTab {
 			throw new HarnessException("Unable to locate item with name("
 					+ docName + ")");
 		if (action == Action.A_LEFTCLICK) {
-			
+
 			zWaitForElementPresent(itemlocator);
-			
+
 			// Left-Click on the item
 			this.zClick(itemlocator);
-			
-			//page = new DocumentPreview(MyApplication);
-			
+
+			// page = new DocumentPreview(MyApplication);
+
 		} else if (action == Action.A_DOUBLECLICK) {
 			zWaitForElementPresent(itemlocator);
-			
+
 			// double-click on the item
 			this.sDoubleClick(itemlocator);
-			
+
 			page = new DocumentBriefcaseOpen(MyApplication, docItem);
 		}
 
@@ -524,13 +524,13 @@ public class PageBriefcase extends AbsTab {
 	}
 
 	public AbsPage zListItem(Action action, Button option, DocumentItem document)
-	throws HarnessException {
-		
+			throws HarnessException {
+
 		docItem = document;
-		
+
 		return zListItem(action, option, docItem.getDocName());
 	}
-	
+
 	@Override
 	public AbsPage zListItem(Action action, Button option, String subject)
 			throws HarnessException {
@@ -588,7 +588,7 @@ public class PageBriefcase extends AbsTab {
 
 				page = new DocumentBriefcaseOpen(MyApplication, docItem);
 
-			}else {
+			} else {
 				throw new HarnessException("implement action:" + action
 						+ " option:" + option);
 			}
@@ -622,20 +622,33 @@ public class PageBriefcase extends AbsTab {
 				+ " keyboard shortcut");
 
 		AbsPage page = null;
-
+		
+		String keyCode = "";
+		
 		if ((shortcut == Shortcut.S_NEWITEM)
 				|| (shortcut == Shortcut.S_NEWDOCUMENT)) {
+
 			// "New Document" shortcuts result in a new document page opening
 			page = new DocumentBriefcaseNew(this.MyApplication);
+			
+			keyCode = "78";
+		} else if (shortcut == Shortcut.S_DELETE) {
+			
+			// "Delete Document" shortcut leads to Confirmation Dialog opening
+			page = new DialogDeleteConfirm(MyApplication, this);
+			
+			keyCode = "46";
+		}else {
+			throw new HarnessException("implement shortcut: " + shortcut);
 		}
-
+		
 		// zKeyboard.zTypeCharacters(shortcut.getKeys());
 		sGetEval("if(window.KeyEvent)"
 				+ "{var evObj = document.createEvent('KeyEvents');"
-				+ "evObj.initKeyEvent( 'keydown', true, true, window, false, false, false, false, 78, 0 );} "
+				+ "evObj.initKeyEvent( 'keydown', true, true, window, false, false, false, false," + keyCode + ", 0 );} "
 				+ "else {var evObj = document.createEvent('HTMLEvents');"
 				+ "evObj.initEvent( 'keydown', true, true, window, 1 );"
-				+ "evObj.keyCode = 78;}"
+				+ "evObj.keyCode = " + keyCode + ";}"
 				+ "var x = selenium.browserbot.findElementOrNull('"
 				+ "css=html>body" + "'); "
 				+ "x.blur(); x.focus(); x.dispatchEvent(evObj);");
@@ -728,23 +741,21 @@ public class PageBriefcase extends AbsTab {
 
 		return true;
 	}
-	
+
 	public void deleteFileByName(String docName) throws HarnessException {
 		ZimbraAccount account = MyApplication.zGetActiveAccount();
-		account.soapSend(
-				"<SearchRequest xmlns='urn:zimbraMail' types='document'>"
-						+ "<query>" + docName + "</query>"
-						+ "</SearchRequest>");
+		account
+				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
+						+ "<query>" + docName + "</query>" + "</SearchRequest>");
 		String id = account.soapSelectValue("//mail:doc", "id");
 		deleteFileById(id);
 	}
-	
+
 	public void deleteFileById(String docId) throws HarnessException {
 		ZimbraAccount account = MyApplication.zGetActiveAccount();
-		account.soapSend(
-				"<ItemActionRequest xmlns='urn:zimbraMail'>" +
-				"<action id='" + docId + "' op='trash'/>" +
-				"</ItemActionRequest>");	
+		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>"
+				+ "<action id='" + docId + "' op='trash'/>"
+				+ "</ItemActionRequest>");
 	}
 
 	public void closeWindow() {

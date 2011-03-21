@@ -27,7 +27,7 @@ public class Shortcut {
 
 	// General shortcuts
 	public static final Shortcut S_RIGHTCLICK = new Shortcut("S_RIGHTCLICK",			",");
-
+	
 	public static final Shortcut S_GOTOMAIL = new Shortcut("S_GOTOMAIL",			"gm");
 	public static final Shortcut S_GOTOCONTACTS = new Shortcut("S_GOTOCONTACTS",	"ga");
 	public static final Shortcut S_GOTOCALENDAR = new Shortcut("S_GOTOCALENDAR",	"gc");
@@ -64,6 +64,8 @@ public class Shortcut {
 	
 	// Briefcase shortcuts
 	public static final Shortcut S_NEWDOCUMENT = new Shortcut("S_NEWDOCUMENT", "nd");
+	public static final Shortcut S_DELETE = new Shortcut("S_DELETE", "Delete");
+	public static final Shortcut S_BACKSPACE = new Shortcut("S_BACKSPACE", "Backspace");
 
 	// Shortcut properties
 	private final String ID;
