@@ -39,6 +39,7 @@ ZaNewDomainXWizard = function(parent, entry) {
 	ZaNewDomainXWizard.AUTH_CONFIG_SUM_STEP = ++this.TAB_INDEX;
 	ZaNewDomainXWizard.AUTH_TEST_RESULT_STEP = ++this.TAB_INDEX;
 	ZaNewDomainXWizard.VHOST_STEP = ++this.TAB_INDEX;
+    ZaNewDomainXWizard.FEATURE_STEP = ++this.TAB_INDEX;
 	ZaNewDomainXWizard.BRIEFCASE_STEP = ++this.TAB_INDEX;
 	ZaNewDomainXWizard.NOTEBOOK_ACL_STEP = ++this.TAB_INDEX;
 	ZaNewDomainXWizard.CONFIG_COMPLETE_STEP = ++this.TAB_INDEX;
@@ -58,6 +59,7 @@ ZaNewDomainXWizard = function(parent, entry) {
 		{label:ZaMsg.AuthSettingsSummary, value:ZaNewDomainXWizard.AUTH_CONFIG_SUM_STEP},												
 		{label:ZaMsg.AuthTestResult, value:ZaNewDomainXWizard.AUTH_TEST_RESULT_STEP},
 		{label:ZaMsg.Domain_Tab_VirtualHost, value:ZaNewDomainXWizard.VHOST_STEP},
+        {label:ZaMsg.TABT_Feature, value:ZaNewDomainXWizard.FEATURE_STEP},
 		{label:ZaMsg.Domain_Tab_Briefcase, value:ZaNewDomainXWizard.BRIEFCASE_STEP},		
 		{label:ZaMsg.Notebook_Access_Control, value:ZaNewDomainXWizard.NOTEBOOK_ACL_STEP},			
 		{label:ZaMsg.DomainConfigComplete, value:ZaNewDomainXWizard.CONFIG_COMPLETE_STEP}		
@@ -1345,6 +1347,22 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 									{ref:".", type:_TEXTFIELD_, label:null,width:250}
 								]
 						}
+					]
+				},
+				{type:_CASE_, caseKey:ZaNewDomainXWizard.FEATURE_STEP,
+					items: [
+						{ type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_zimbraCalendarFeature,
+                                  		  items :[
+                                                  {ref:ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled,
+                                                      type:_SUPER_CHECKBOX_,
+                                                      msgName:ZaMsg.LBL_zimbraFeatureCalendarReminderDeviceEmailEnabled,
+                                                      checkBoxLabel:ZaMsg.LBL_zimbraFeatureCalendarReminderDeviceEmailEnabled,
+                                                      resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                                                      trueValue:"TRUE", falseValue:"FALSE"
+                                                  }
+                                         	 ]
+                                		}
+
 					]
 				},
 				{type:_CASE_, caseKey:ZaNewDomainXWizard.BRIEFCASE_STEP, 

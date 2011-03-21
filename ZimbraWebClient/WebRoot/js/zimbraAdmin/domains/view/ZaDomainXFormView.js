@@ -589,6 +589,9 @@ ZaDomainXFormView.VH_TAB_RIGHTS = [];
 ZaDomainXFormView.BC_TAB_ATTRS = [ZaDomain.A_zimbraBasicAuthRealm];
 ZaDomainXFormView.BC_TAB_RIGHTS = [];
 
+ZaDomainXFormView.Feature_TAB_ATTRS = [ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled];
+ZaDomainXFormView.Feature_TAB_RIGHTS = [];
+
 ZaDomainXFormView.CERT_TAB_ATTRS = [ZaDomain.A_zimbraSSLCertificate];
 ZaDomainXFormView.CERT_TAB_RIGHTS = [];
 
@@ -956,6 +959,30 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 		};
 		switchGroup.items.push(case4);	
 	}
+
+	if(ZaDomainXFormView.Feature_TAB_ATTRS && ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.Feature_TAB_ATTRS, ZaDomainXFormView.Feature_TAB_RIGHTS)) {
+		tabIx = ++this.TAB_INDEX;
+		tabBar.choices.push({value:tabIx, label:ZaMsg.TABT_Feature});
+		var caseFeature = {type:_ZATABCASE_, caseKey:tabIx,
+                        cssStyle:"padding-left:10px",
+			items : [
+				{ type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_zimbraCalendarFeature,
+				  items :[
+                      {ref:ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled,
+                          type:_SUPER_CHECKBOX_,
+                          msgName:ZaMsg.LBL_zimbraFeatureCalendarReminderDeviceEmailEnabled,
+                          checkBoxLabel:ZaMsg.LBL_zimbraFeatureCalendarReminderDeviceEmailEnabled,
+                          onChange:ZaDomainXFormView.onFormFieldChanged,
+                          resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                          trueValue:"TRUE", falseValue:"FALSE"
+                      }
+				         ]
+				}
+			]
+		};
+		switchGroup.items.push(caseFeature);
+	}
+
 	if(ZaDomainXFormView.BC_TAB_ATTRS && ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.BC_TAB_ATTRS, ZaDomainXFormView.BC_TAB_RIGHTS)) {
 		tabIx = ++this.TAB_INDEX;
 		tabBar.choices.push({value:tabIx, label:ZaMsg.Domain_Tab_Briefcase});

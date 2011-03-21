@@ -133,7 +133,9 @@ ZaDomain.A_zimbraGalSyncLdapBindPassword="zimbraGalSyncLdapBindPassword";
 
 //GAL Sync accounts
 ZaDomain.A_zimbraGalAccountId = "zimbraGalAccountId";
- 
+
+ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled = "zimbraFeatureCalendarReminderDeviceEmailEnabled";
+
 //Auth
 ZaDomain.A_AuthMech = "zimbraAuthMech";
 ZaDomain.A_AuthLdapURL = "zimbraAuthLdapURL";
@@ -548,6 +550,11 @@ function(tmpObj, newDomain) {
 	if(tmpObj.attrs[ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled]) {
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled]);
 		attr.setAttribute("n", ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled);	
+	}
+
+	if(tmpObj.attrs[ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled]) {
+		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled]);
+		attr.setAttribute("n", ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled);
 	}
 
     if(tmpObj.attrs[ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled]) {
@@ -1929,7 +1936,8 @@ ZaDomain.myXModel = {
        { id:ZaDomain.A_zimbraFreebusyExchangeUserOrg, ref:"attrs/" + ZaDomain.A_zimbraFreebusyExchangeUserOrg, type: _COS_STRING_ },
        {id:ZaDomain.A2_isTestingGAL, ref:ZaDomain.A2_isTestingGAL, type:_NUMBER_},
        {id:ZaDomain.A2_isTestingSync, ref:ZaDomain.A2_isTestingSync, type:_NUMBER_},
-       {id:ZaDomain.A2_isTestingAuth, ref:ZaDomain.A2_isTestingAuth, type:_NUMBER_}
+       {id:ZaDomain.A2_isTestingAuth, ref:ZaDomain.A2_isTestingAuth, type:_NUMBER_},
+       {id:ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraFeatureCalendarReminderDeviceEmailEnabled}
     ]
 };
 
