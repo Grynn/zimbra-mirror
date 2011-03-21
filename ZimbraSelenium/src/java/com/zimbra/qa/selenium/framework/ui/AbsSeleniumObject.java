@@ -214,6 +214,16 @@ public abstract class AbsSeleniumObject {
 				.click(locator);
 		logger.info("click(" + locator + ")");
 	}
+	
+	/**
+	 * DefaultSelenium.doubleClick()
+	 */
+	public void sDoubleClick(String locator) {
+		// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
+		((DefaultSelenium) ClientSessionFactory.session().selenium())
+				.doubleClick(locator);
+		logger.info("doubleClick(" + locator + ")");
+	}
 
 	/**
 	 * DefaultSelenium.waitForPageToLoad()

@@ -37,6 +37,7 @@ public class Action {
 	public static final Action A_SHIFTSELECT = new Action("A_SHIFTSELECT");
 	public static final Action A_CTRLSELECT = new Action("A_CTRLSELECT");
 	public static final Action A_RIGHTCLICK = new Action("A_RIGHTCLICK");
+	public static final Action A_DOUBLECLICK = new Action("A_DOUBLECLICK");
 
 
 	// Mail page actions

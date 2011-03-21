@@ -104,8 +104,8 @@ public class CreateDocument extends AjaxCommonTest {
 	public void CreateDocument_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
-		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
-				SystemFolder.Briefcase);
+		//FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+		//		SystemFolder.Briefcase);
 
 		// Create document item
 		DocumentItem document = new DocumentItem();
@@ -144,15 +144,18 @@ public class CreateDocument extends AjaxCommonTest {
 		String name = account.soapSelectValue("//mail:doc", "name");
 		
 		ZAssert.assertStringContains(docName, name,
-				"Verify document name through GUI");		
+				"Verify document name through GUI");	
+		
+		//delete file upon test completion
+		app.zPageBriefcase.deleteFileByName(docName);
 	}
 
 	@Test(description = "Create document using keyboard shortcut - verify through SOAP", groups = { "functional" })
 	public void CreateDocument_03() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
-		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
-				SystemFolder.Briefcase);
+		//FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+		//		SystemFolder.Briefcase);
 
 		// Create document item
 		DocumentItem document = new DocumentItem();
@@ -194,6 +197,9 @@ public class CreateDocument extends AjaxCommonTest {
 		String name = account.soapSelectValue("//mail:doc", "name");
 		
 		ZAssert.assertStringContains(docName, name,
-				"Verify document name through GUI");		
+				"Verify document name through GUI");	
+		
+		//delete file upon test completion
+		app.zPageBriefcase.deleteFileByName(docName);
 	}
 }

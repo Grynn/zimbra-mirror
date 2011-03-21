@@ -23,14 +23,14 @@ public class DocumentBriefcaseNew extends AbsForm {
 		public static final Field Name = new Field("Name");
 		public static final Field Body = new Field("Body");
 
-		private String field;
+		//private String field;
 
 		private Field(String name) {
-			field = name;
+		//	field = name;
 		}
 	}
 
-	public static final String pageTitle = "Zimbra Docs";
+	public final String pageTitle = "Zimbra Docs";
 
 	public DocumentBriefcaseNew(AbsApplication application) {
 		super(application);

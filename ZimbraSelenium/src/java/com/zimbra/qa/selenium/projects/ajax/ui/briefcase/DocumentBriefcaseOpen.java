@@ -1,12 +1,15 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
+import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsForm;
+import com.zimbra.qa.selenium.framework.ui.AbsDisplay;
+import com.zimbra.qa.selenium.framework.ui.AbsPage;
+import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
-public class DocumentBriefcaseOpen extends AbsForm {
+public class DocumentBriefcaseOpen extends AbsDisplay {
 
 	public static class Locators {
 		public static final String zFrame = "css=iframe[id='DWT9']";
@@ -18,11 +21,21 @@ public class DocumentBriefcaseOpen extends AbsForm {
 		public static final String zDocumentNameField = "css=[class=TbTop] b";
 	}
 
-	public static String pageTitle;
+	public String pageTitle;
+	public String pageText;
 
 	public DocumentBriefcaseOpen(AbsApplication application) {
 		super(application);
-		logger.info("new " + DocumentBriefcaseEdit.class.getCanonicalName());
+		logger.info("new " + DocumentBriefcaseOpen.class.getCanonicalName());
+	}
+	
+	public DocumentBriefcaseOpen(AbsApplication application, DocumentItem document) {
+		super(application);
+		pageTitle = document.getDocName();
+		
+		pageText = document.getDocText();
+		
+		logger.info("new " + DocumentBriefcaseOpen.class.getCanonicalName());
 	}
 
 	@Override
@@ -63,31 +76,20 @@ public class DocumentBriefcaseOpen extends AbsForm {
 	}
 
 	@Override
-	public void zSubmit() throws HarnessException {
-		logger.info("DocumentBriefcaseEdit.SaveAndClose()");
+	public boolean zIsActive() throws HarnessException {
+		zWaitForWindow(pageTitle);
 
-		// Look for "Save & Close"
-		if (!this.sIsElementPresent(Locators.zSaveAndCloseIconBtn))
-			throw new HarnessException("Save & Close button is not present "
-					+ Locators.zSaveAndCloseIconBtn);
+		zSelectWindow(pageTitle);
 
-		boolean visible = this.sIsVisible(Locators.zSaveAndCloseIconBtn);
-		if (!visible)
-			throw new HarnessException("Save & Close button is not visible "
-					+ Locators.zSaveAndCloseIconBtn);
-
-		// Click on it
-		zClick(Locators.zSaveAndCloseIconBtn);
-		// this.sMouseDown(Locators.zSaveAndCloseIconBtn);
-		// this.sMouseUp(Locators.zSaveAndCloseIconBtn);
-
-		// Wait for the page to be saved
-		// SleepUtil.sleepSmall();
+		zWaitForElementPresent("css=td[class='ZhAppContent'] div:contains('"
+				+ pageText + "')");
+		
+		return true;
 	}
 
 	@Override
-	public boolean zIsActive() throws HarnessException {
+	public AbsPage zPressButton(Button button) throws HarnessException {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 }

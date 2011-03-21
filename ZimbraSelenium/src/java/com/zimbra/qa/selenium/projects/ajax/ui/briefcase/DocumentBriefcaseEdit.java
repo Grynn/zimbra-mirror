@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 
+import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsForm;
@@ -17,19 +18,24 @@ public class DocumentBriefcaseEdit extends AbsForm {
 		public static final String zNameField = "css=[class=DwtInputField] input";
 	}
 
-	public static String pageTitle;
+	public String pageTitle;
+	public String pageText;
 
 	public DocumentBriefcaseEdit(AbsApplication application) {
 		super(application);
 		logger.info("new " + DocumentBriefcaseEdit.class.getCanonicalName());
 	}
 
-	public DocumentBriefcaseEdit(AbsApplication application, String title) {
+	public DocumentBriefcaseEdit(AbsApplication application, DocumentItem document) {
 		super(application);
-		pageTitle = title;
+		
+		pageTitle = document.getDocName();
+		
+		pageText = document.getDocText();
+		
 		logger.info("new " + DocumentBriefcaseEdit.class.getCanonicalName());
 	}
-
+	
 	@Override
 	public String myPageName() {
 		return this.getClass().getName();
@@ -102,6 +108,8 @@ public class DocumentBriefcaseEdit extends AbsForm {
 		zWaitForElementPresent("css=div[class='ZDToolBar ZWidget']");
 
 		zWaitForElementPresent("css=iframe[id*='DWT'][class='ZDEditor']");
+		
+		zWaitForIframeText("css=iframe[id*='DWT'][class='ZDEditor']", pageText);
 
 		return true;
 	}

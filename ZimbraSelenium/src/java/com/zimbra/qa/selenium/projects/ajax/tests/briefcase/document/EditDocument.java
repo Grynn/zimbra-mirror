@@ -472,7 +472,7 @@ public class EditDocument extends AjaxCommonTest {
 
 		// Edit Document using Right Click Context Menu
 		DocumentBriefcaseEdit documentBriefcaseEdit = (DocumentBriefcaseEdit) app.zPageBriefcase.
-		zListItem(Action.A_RIGHTCLICK, Button.B_EDIT, docName);
+		zListItem(Action.A_RIGHTCLICK, Button.B_EDIT, document);
 				
 		//app.zPageBriefcase.isEditDocLoaded(docName, docText);
 		

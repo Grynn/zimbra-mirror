@@ -4,6 +4,7 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
+import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -19,6 +20,8 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
  */
 public class PageBriefcase extends AbsTab {
 
+	public DocumentItem docItem;
+	
 	public static class Locators {
 		public static final String zNewBriefcaseOverviewPaneIcon = "id=ztih__main_Briefcase__BRIEFCASE_textCell";
 		public static final String zBriefcaseFolder = "id=zti__main_Briefcase__16_textCell";
@@ -46,6 +49,7 @@ public class PageBriefcase extends AbsTab {
 		public static final String zFileBodyField = "css=html>body";
 	}
 
+	
 	public PageBriefcase(AbsApplication application) {
 		super(application);
 		logger.info("new " + PageBriefcase.class.getCanonicalName());
@@ -434,6 +438,14 @@ public class PageBriefcase extends AbsTab {
 		return (page);
 	}
 
+	public AbsPage zListItem(Action action, DocumentItem document)
+	throws HarnessException {
+		
+		docItem = document;
+		
+		return zListItem(action, docItem.getDocName());
+	}
+	
 	@Override
 	public AbsPage zListItem(Action action, String docName)
 			throws HarnessException {
@@ -477,14 +489,28 @@ public class PageBriefcase extends AbsTab {
 			throw new HarnessException("Unable to locate item with name("
 					+ docName + ")");
 		if (action == Action.A_LEFTCLICK) {
+			
 			zWaitForElementPresent(itemlocator);
+			
 			// Left-Click on the item
 			this.zClick(itemlocator);
-			page = new DocumentPreview(MyApplication);
+			
+			//page = new DocumentPreview(MyApplication);
+			
+		} else if (action == Action.A_DOUBLECLICK) {
+			zWaitForElementPresent(itemlocator);
+			
+			// double-click on the item
+			this.sDoubleClick(itemlocator);
+			
+			page = new DocumentBriefcaseOpen(MyApplication, docItem);
 		}
 
 		zWaitForBusyOverlay();
 
+		if (page != null) {
+			page.zWaitForActive();
+		}
 		return page;
 	}
 
@@ -497,6 +523,14 @@ public class PageBriefcase extends AbsTab {
 		throw new HarnessException("implement me!");
 	}
 
+	public AbsPage zListItem(Action action, Button option, DocumentItem document)
+	throws HarnessException {
+		
+		docItem = document;
+		
+		return zListItem(action, option, docItem.getDocName());
+	}
+	
 	@Override
 	public AbsPage zListItem(Action action, Button option, String subject)
 			throws HarnessException {
@@ -546,7 +580,7 @@ public class PageBriefcase extends AbsTab {
 
 				optionLocator = "css=td#zmi__Briefcase__EDIT_FILE_title:contains(Edit)";
 
-				page = new DocumentBriefcaseEdit(MyApplication, subject);
+				page = new DocumentBriefcaseEdit(MyApplication, docItem);
 
 			} else {
 				throw new HarnessException("implement action:" + action

@@ -23,6 +23,8 @@ public class DocumentPreview extends AbsDisplay {
 	public static enum Field {
 		Name, Time, Date, Body
 	}
+	
+	public final String pageTitle = "Zimbra: Briefcase";
 
 	/**
 	 * Protected constuctor for this object. Only classes within this package
@@ -104,6 +106,11 @@ public class DocumentPreview extends AbsDisplay {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		throw new HarnessException("implement me");
+		
+		zSelectWindow(pageTitle);
+		
+		zWaitForElementPresent("css=div[class=ZmPreviewView]");
+
+		return true;
 	}
 }
