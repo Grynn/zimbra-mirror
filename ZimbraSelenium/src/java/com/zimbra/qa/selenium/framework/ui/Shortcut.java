@@ -64,8 +64,8 @@ public class Shortcut {
 	
 	// Briefcase shortcuts
 	public static final Shortcut S_NEWDOCUMENT = new Shortcut("S_NEWDOCUMENT", "nd");
-	public static final Shortcut S_DELETE = new Shortcut("S_DELETE", "Delete");
-	public static final Shortcut S_BACKSPACE = new Shortcut("S_BACKSPACE", "Backspace");
+	public static final Shortcut S_DELETE = new Shortcut("S_DELETE", "<Delete>");
+	public static final Shortcut S_BACKSPACE = new Shortcut("S_BACKSPACE", "<Backspace>");
 
 	// Shortcut properties
 	private final String ID;

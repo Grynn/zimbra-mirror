@@ -199,7 +199,7 @@ public class PageBriefcase extends AbsTab {
 				throw new HarnessException(button + " not visible " + attrs);
 			}
 			locator = Locators.zDeleteIconBtn;
-			
+
 			page = new DialogDeleteConfirm(MyApplication, this);
 		} else if (button == Button.B_OPEN_IN_SEPARATE_WINDOW) {
 			// Check if the button is disabled
@@ -622,30 +622,37 @@ public class PageBriefcase extends AbsTab {
 				+ " keyboard shortcut");
 
 		AbsPage page = null;
-		
+
 		String keyCode = "";
-		
+
 		if ((shortcut == Shortcut.S_NEWITEM)
 				|| (shortcut == Shortcut.S_NEWDOCUMENT)) {
 
 			// "New Document" shortcuts result in a new document page opening
 			page = new DocumentBriefcaseNew(this.MyApplication);
-			
+
 			keyCode = "78";
 		} else if (shortcut == Shortcut.S_DELETE) {
-			
+
 			// "Delete Document" shortcut leads to Confirmation Dialog opening
 			page = new DialogDeleteConfirm(MyApplication, this);
-			
+
 			keyCode = "46";
-		}else {
+		} else if (shortcut == Shortcut.S_BACKSPACE) {
+
+			// "Delete Document" shortcut leads to Confirmation Dialog opening
+			page = new DialogDeleteConfirm(MyApplication, this);
+
+			keyCode = "8";
+		} else {
 			throw new HarnessException("implement shortcut: " + shortcut);
 		}
-		
+
 		// zKeyboard.zTypeCharacters(shortcut.getKeys());
 		sGetEval("if(window.KeyEvent)"
 				+ "{var evObj = document.createEvent('KeyEvents');"
-				+ "evObj.initKeyEvent( 'keydown', true, true, window, false, false, false, false," + keyCode + ", 0 );} "
+				+ "evObj.initKeyEvent( 'keydown', true, true, window, false, false, false, false,"
+				+ keyCode + ", 0 );} "
 				+ "else {var evObj = document.createEvent('HTMLEvents');"
 				+ "evObj.initEvent( 'keydown', true, true, window, 1 );"
 				+ "evObj.keyCode = " + keyCode + ";}"
