@@ -1,0 +1,13 @@
+--- openldap-2.4.23/servers/slapd/modrdn.c	10 Jun 2010 17:48:07 -0000	1.170.2.8
++++ openldap-2.4.23/servers/slapd/modrdn.c	4 Jan 2011 19:44:44 -0000	1.170.2.9
+@@ -392,7 +392,9 @@ slap_modrdn2mods(
+ 	LDAPRDN		new_rdn = NULL;
+ 
+ 	assert( !BER_BVISEMPTY( &op->oq_modrdn.rs_newrdn ) );
+-	assert( !op->orr_deleteoldrdn || !BER_BVISEMPTY( &op->o_req_dn ) );
++
++	/* if requestDN is empty, silently reset deleteOldRDN */
++	if ( BER_BVISEMPTY( &op->o_req_dn ) ) op->orr_deleteoldrdn = 0;
+ 
+ 	if ( ldap_bv2rdn_x( &op->oq_modrdn.rs_newrdn, &new_rdn,
+ 		(char **)&rs->sr_text, LDAP_DN_FORMAT_LDAP, op->o_tmpmemctx ) ) {
