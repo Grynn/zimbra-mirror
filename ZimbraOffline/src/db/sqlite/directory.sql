@@ -40,27 +40,6 @@ CREATE TABLE directory_attrs (
 CREATE INDEX i_dattr_entry_id_name ON directory_attrs(entry_id, name);
 CREATE INDEX i_dattr_name ON directory_attrs(name);
 
-CREATE TRIGGER fki_dattr_entry_id
-BEFORE INSERT ON [directory_attrs]
-FOR EACH ROW BEGIN
-  SELECT RAISE(ROLLBACK, 'insert on table "directory_attrs" violates foreign key constraint "fki_dattr_entry_id"')
-  WHERE (SELECT entry_id FROM directory WHERE entry_id = NEW.entry_id) IS NULL;
-END;
-
--- CREATE TRIGGER fku_dattr_entry_id
--- BEFORE UPDATE OF entry_id ON [directory_attrs] 
--- FOR EACH ROW BEGIN
---     SELECT RAISE(ROLLBACK, 'update on table "directory_attrs" violates foreign key constraint "fku_dattr_entry_id"')
---       WHERE (SELECT entry_id FROM directory WHERE entry_id = NEW.entry_id) IS NULL;
--- END;
-
-CREATE TRIGGER fkdc_dattr_entry_id
-BEFORE DELETE ON directory
-FOR EACH ROW BEGIN 
-    DELETE FROM directory_attrs WHERE directory_attrs.entry_id = OLD.entry_id;
-END;
-
-
 CREATE TABLE directory_leaf (
    entry_id    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
    parent_id   INTEGER NOT NULL,
@@ -71,26 +50,6 @@ CREATE TABLE directory_leaf (
    UNIQUE (parent_id, entry_type, entry_name),
    CONSTRAINT fk_dleaf_entry_id FOREIGN KEY (parent_id) REFERENCES directory(entry_id) ON DELETE CASCADE
 );
-
-CREATE TRIGGER fki_dleaf_entry_id
-BEFORE INSERT ON [directory_leaf]
-FOR EACH ROW BEGIN
-  SELECT RAISE(ROLLBACK, 'insert on table "directory_leaf" violates foreign key constraint "fki_dleaf_entry_id"')
-  WHERE (SELECT entry_id FROM directory WHERE entry_id = NEW.parent_id) IS NULL;
-END;
-
--- CREATE TRIGGER fku_dleaf_entry_id
--- BEFORE UPDATE OF entry_id ON [directory_leaf] 
--- FOR EACH ROW BEGIN
---     SELECT RAISE(ROLLBACK, 'update on table "directory_leaf" violates foreign key constraint "fku_dleaf_entry_id"')
---       WHERE (SELECT entry_id FROM directory WHERE entry_id = NEW.entry_id) IS NULL;
--- END;
-
-CREATE TRIGGER fkdc_dleaf_entry_id
-BEFORE DELETE ON directory
-FOR EACH ROW BEGIN 
-    DELETE FROM directory_leaf WHERE directory_leaf.entry_id = OLD.entry_id;
-END;
 
 
 CREATE TABLE directory_leaf_attrs (
@@ -103,26 +62,6 @@ CREATE TABLE directory_leaf_attrs (
 
 CREATE INDEX i_dleafattr_entry_id_name ON directory_leaf_attrs(entry_id, name);
 CREATE INDEX i_dleafattr_name ON directory_leaf_attrs(name);
-
-CREATE TRIGGER fki_dleafattr_entry_id
-BEFORE INSERT ON [directory_leaf_attrs]
-FOR EACH ROW BEGIN
-  SELECT RAISE(ROLLBACK, 'insert on table "directory_leaf_attrs" violates foreign key constraint "fki_dleafattr_entry_id"')
-  WHERE (SELECT entry_id FROM directory_leaf WHERE entry_id = NEW.entry_id) IS NULL;
-END;
-
--- CREATE TRIGGER fku_dleafattr_entry_id
--- BEFORE UPDATE OF entry_id ON [directory_leaf_attrs] 
--- FOR EACH ROW BEGIN
---     SELECT RAISE(ROLLBACK, 'update on table "directory_leaf_attrs" violates foreign key constraint "fku_dleafattr_entry_id"')
---       WHERE (SELECT entry_id FROM directory_leaf WHERE entry_id = NEW.entry_id) IS NULL;
--- END;
-
-CREATE TRIGGER fkdc_dleafattr_entry_id
-BEFORE DELETE ON directory_leaf
-FOR EACH ROW BEGIN 
-    DELETE FROM directory_leaf_attrs WHERE directory_leaf_attrs.entry_id = OLD.entry_id;
-END;
 
 CREATE TABLE directory_granter (
    granter_name  VARCHAR(128) NOT NULL,

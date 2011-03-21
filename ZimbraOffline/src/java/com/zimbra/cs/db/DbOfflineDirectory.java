@@ -853,4 +853,27 @@ public class DbOfflineDirectory {
             OfflineDbPool.getInstance().quietClose(conn);
         }
     }
+    
+    private static String[] deprecatedTriggers = {"fki_dattr_entry_id", "fku_dattr_entry_id", "fkdc_dattr_entry_id",
+        "fki_dleaf_entry_id", "fku_dleaf_entry_id", "fkdc_dleaf_entry_id", "fki_dleafattr_entry_id",
+        "fku_dleafattr_entry_id","fkdc_dleafattr_entry_id"
+    };
+    
+    public static void removeDeprecatedTriggers(DbConnection conn) throws ServiceException {
+        PreparedStatement stmt = null;
+        OfflineLog.offline.debug("Removing deprecated triggers in offline directory db");
+        String dropTrigger = "DROP TRIGGER IF EXISTS ";
+        try {
+            for (String trig : deprecatedTriggers) {
+                stmt = conn.prepareStatement(dropTrigger+trig);
+                stmt.executeUpdate();
+            }
+            conn.commit();
+            OfflineLog.offline.debug("Finished removing deprecated triggers in offline directory db");
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("unable to remove deprecated triggers due to exception", e);
+        } finally {
+            OfflineDbPool.getInstance().closeStatement(stmt);
+        }        
+    }
 }

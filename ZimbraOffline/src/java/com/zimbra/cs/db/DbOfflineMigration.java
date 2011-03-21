@@ -80,7 +80,10 @@ public class DbOfflineMigration {
             if (oldOfflineDbVersion != newOfflineDbVersion) {
                 switch (oldOfflineDbVersion) {
                 case 1:
-                    // migrateFromOfflineVersionX(conn, isTestRun);
+                case 2:
+                case 3:
+                case 4:
+                    migrateFromOfflineVersion4(conn);
                     break;
                 default:
                     throw new DbUnsupportedVersionException();
@@ -152,7 +155,25 @@ public class DbOfflineMigration {
                 conn.commit();
         }
     }
-
+    
+    private void migrateFromOfflineVersion4(DbConnection conn) throws Exception {
+        PreparedStatement stmt = null;
+        boolean success = false;
+        try {
+            DbOfflineDirectory.removeDeprecatedTriggers(conn);
+            stmt = conn.prepareStatement("UPDATE config set value='5' where name='offline.db.version'");
+            stmt.executeUpdate();
+            stmt.close();
+            success = true;
+        } finally {
+            if (success) {
+                conn.commit();
+            } else {
+                conn.rollback();
+            }
+        }
+    }
+    
     private void setNewDefaultSkin(DbConnection conn, PreparedStatement stmt, String skin) throws Exception {
         stmt = conn.prepareStatement("SELECT entry_id FROM directory" +
                 " WHERE entry_name = 'local@host.local' AND entry_type = 'acct'");
