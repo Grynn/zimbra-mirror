@@ -100,7 +100,7 @@ public class OpenDocument extends AjaxCommonTest {
 		 */
 	}
 
-	@Test(description = "Create document through SOAP - open & verify through GUI", groups = { "functional" })
+	@Test(description = "Create document through SOAP - Double click to open in new window & verify through GUI", groups = { "functional" })
 	public void OpenDocument_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -141,6 +141,72 @@ public class OpenDocument extends AjaxCommonTest {
 		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
 				.zListItem(Action.A_DOUBLECLICK, document);
 
+		//app.zPageBriefcase.isOpenDocLoaded(docName, docText);
+
+		String text = "";
+
+		// Select document opened in a separate window
+		try {
+			app.zPageBriefcase.zSelectWindow(docName);
+
+			text = documentBriefcaseOpen.retriveDocumentText();
+
+			// close
+			app.zPageBriefcase.zSelectWindow(docName);
+
+			app.zPageBriefcase.closeWindow();
+		} finally {
+			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
+		}
+
+		ZAssert.assertStringContains(text, docText,
+				"Verify document text through GUI");
+		
+		//delete file upon test completion
+		app.zPageBriefcase.deleteFileByName(docName);
+	}
+	
+	@Test(description = "Create document through SOAP - open using Right Click Context Menu & verify through GUI", groups = { "functional" })
+	public void OpenDocument_03() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+
+		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
+		// Create document item
+		DocumentItem document = new DocumentItem();
+
+		String docName = document.getDocName();
+		String docText = document.getDocText();
+
+		// Create document using SOAP
+		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
+				+ docText + "</body>" + "</html>");
+
+		account
+				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
+						+ "<doc name='"
+						+ docName
+						+ "' l='"
+						+ briefcaseFolder.getId()
+						+ "' ct='application/x-zimbra-doc'>"
+						+ "<content>"
+						+ contentHTML
+						+ "</content>"
+						+ "</doc>"
+						+ "</SaveDocumentRequest>");
+
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
+
+		// Click on created document
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+
+		// Open Document using Right Click Context Menu
+		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase.
+		zListItem(Action.A_RIGHTCLICK, Button.O_OPEN, document);
+		
 		//app.zPageBriefcase.isOpenDocLoaded(docName, docText);
 
 		String text = "";

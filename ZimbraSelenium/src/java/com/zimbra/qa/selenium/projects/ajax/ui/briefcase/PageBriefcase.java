@@ -576,13 +576,19 @@ public class PageBriefcase extends AbsTab {
 
 				page = null;
 
-			} else if (option == Button.B_EDIT) {
+			} else if (option == Button.O_EDIT) {
 
 				optionLocator = "css=td#zmi__Briefcase__EDIT_FILE_title:contains(Edit)";
 
 				page = new DocumentBriefcaseEdit(MyApplication, docItem);
 
-			} else {
+			} else if (option == Button.O_OPEN) {
+
+				optionLocator = "css=td#zmi__Briefcase__OPEN_FILE_title:contains(Open)";
+
+				page = new DocumentBriefcaseOpen(MyApplication, docItem);
+
+			}else {
 				throw new HarnessException("implement action:" + action
 						+ " option:" + option);
 			}

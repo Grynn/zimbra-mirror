@@ -119,6 +119,8 @@ public class Button {
 	public static final Button B_OPEN_IN_SEPARATE_WINDOW = new Button("B_OPEN_IN_SEPARATE_WINDOW");
 	public static final Button O_SEND_AS_ATTACHMENT = new Button("O_SEND_AS_ATTACHMENT");
 	public static final Button O_SEND_LINK = new Button("O_SEND_LINK");
+	public static final Button O_EDIT = new Button("O_EDIT");
+	public static final Button O_OPEN = new Button("O_OPEN");
 	
     //Addressbook button
 	public static final Button B_EDIT = new Button("zb__CNS__EDIT");
