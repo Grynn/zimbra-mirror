@@ -66,8 +66,8 @@ public class StatsSpec {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link String }
      * {@link JAXBElement }{@code <}{@link StatsValueWrapper }{@code >}
+     * {@link String }
      * 
      * 
      */

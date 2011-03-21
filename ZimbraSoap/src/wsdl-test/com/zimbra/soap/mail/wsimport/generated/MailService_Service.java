@@ -3,7 +3,7 @@ package com.zimbra.soap.mail.wsimport.generated;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
@@ -32,8 +32,8 @@ public class MailService_Service
             baseUrl = com.zimbra.soap.mail.wsimport.generated.MailService_Service.class.getResource(".");
             url = new URL(baseUrl, "file:/p4/gelliot_osx/main/ZimbraSoap/build/schema/MailService.wsdl");
         } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: 'file:/p4/gelliot_osx/main/ZimbraSoap/build/schema/MailService.wsdl', retrying as a local file");
-            logger.warning(e.getMessage());
+            logger.warn("Failed to create URL for the wsdl Location: 'file:/p4/gelliot_osx/main/ZimbraSoap/build/schema/MailService.wsdl', retrying as a local file");
+            logger.warn(e.getMessage());
         }
         MAILSERVICE_WSDL_LOCATION = url;
     }

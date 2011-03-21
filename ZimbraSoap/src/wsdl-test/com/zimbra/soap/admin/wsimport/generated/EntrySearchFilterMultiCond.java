@@ -42,8 +42,8 @@ import javax.xml.bind.annotation.XmlType;
 public class EntrySearchFilterMultiCond {
 
     @XmlElements({
-        @XmlElement(name = "cond", type = EntrySearchFilterSingleCond.class),
-        @XmlElement(name = "conds", type = EntrySearchFilterMultiCond.class)
+        @XmlElement(name = "conds", type = EntrySearchFilterMultiCond.class),
+        @XmlElement(name = "cond", type = EntrySearchFilterSingleCond.class)
     })
     protected List<Object> condsOrCond;
     @XmlAttribute
@@ -69,8 +69,8 @@ public class EntrySearchFilterMultiCond {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link EntrySearchFilterSingleCond }
      * {@link EntrySearchFilterMultiCond }
+     * {@link EntrySearchFilterSingleCond }
      * 
      * 
      */

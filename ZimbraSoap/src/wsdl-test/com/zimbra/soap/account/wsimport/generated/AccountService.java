@@ -29,7 +29,7 @@ public interface AccountService {
      * @return
      *     returns com.zimbra.soap.account.wsimport.generated.AuthResponse
      */
-    @WebMethod
+    @WebMethod(action = "urn:zimbraAccount/Auth")
     @WebResult(name = "AuthResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
     public AuthResponse authRequest(
         @WebParam(name = "AuthRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
@@ -41,7 +41,7 @@ public interface AccountService {
      * @return
      *     returns com.zimbra.soap.account.wsimport.generated.ChangePasswordResponse
      */
-    @WebMethod
+    @WebMethod(action = "urn:zimbraAccount/ChangePassword")
     @WebResult(name = "ChangePasswordResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
     public ChangePasswordResponse changePasswordRequest(
         @WebParam(name = "ChangePasswordRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
@@ -53,7 +53,7 @@ public interface AccountService {
      * @return
      *     returns com.zimbra.soap.account.wsimport.generated.EndSessionResponse
      */
-    @WebMethod
+    @WebMethod(action = "urn:zimbraAccount/EndSession")
     @WebResult(name = "EndSessionResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
     public EndSessionResponse endSessionRequest(
         @WebParam(name = "EndSessionRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
@@ -65,7 +65,7 @@ public interface AccountService {
      * @return
      *     returns com.zimbra.soap.account.wsimport.generated.GetIdentitiesResponse
      */
-    @WebMethod
+    @WebMethod(action = "urn:zimbraAccount/GetIdentities")
     @WebResult(name = "GetIdentitiesResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
     public GetIdentitiesResponse getIdentitiesRequest(
         @WebParam(name = "GetIdentitiesRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
@@ -77,7 +77,7 @@ public interface AccountService {
      * @return
      *     returns com.zimbra.soap.account.wsimport.generated.GetInfoResponse
      */
-    @WebMethod
+    @WebMethod(action = "urn:zimbraAccount/GetInfo")
     @WebResult(name = "GetInfoResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
     public GetInfoResponse getInfoRequest(
         @WebParam(name = "GetInfoRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
@@ -89,7 +89,7 @@ public interface AccountService {
      * @return
      *     returns com.zimbra.soap.account.wsimport.generated.GetPrefsResponse
      */
-    @WebMethod
+    @WebMethod(action = "urn:zimbraAccount/GetPrefs")
     @WebResult(name = "GetPrefsResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
     public GetPrefsResponse getPrefsRequest(
         @WebParam(name = "GetPrefsRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
@@ -101,10 +101,22 @@ public interface AccountService {
      * @return
      *     returns com.zimbra.soap.account.wsimport.generated.GetSignaturesResponse
      */
-    @WebMethod
+    @WebMethod(action = "urn:zimbraAccount/GetSignatures")
     @WebResult(name = "GetSignaturesResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
     public GetSignaturesResponse getSignaturesRequest(
         @WebParam(name = "GetSignaturesRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
         GetSignaturesRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.ModifyPropertiesResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/ModifyProperties")
+    @WebResult(name = "ModifyPropertiesResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public ModifyPropertiesResponse modifyPropertiesRequest(
+        @WebParam(name = "ModifyPropertiesRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        ModifyPropertiesRequest parameters);
 
 }

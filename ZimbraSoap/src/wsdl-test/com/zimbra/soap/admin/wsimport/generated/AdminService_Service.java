@@ -3,7 +3,7 @@ package com.zimbra.soap.admin.wsimport.generated;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
@@ -32,8 +32,8 @@ public class AdminService_Service
             baseUrl = com.zimbra.soap.admin.wsimport.generated.AdminService_Service.class.getResource(".");
             url = new URL(baseUrl, "file:/p4/gelliot_osx/main/ZimbraSoap/build/schema/AdminService.wsdl");
         } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: 'file:/p4/gelliot_osx/main/ZimbraSoap/build/schema/AdminService.wsdl', retrying as a local file");
-            logger.warning(e.getMessage());
+            logger.warn("Failed to create URL for the wsdl Location: 'file:/p4/gelliot_osx/main/ZimbraSoap/build/schema/AdminService.wsdl', retrying as a local file");
+            logger.warn(e.getMessage());
         }
         ADMINSERVICE_WSDL_LOCATION = url;
     }
