@@ -509,6 +509,7 @@ function(sel) {
 			div._pos = i;
 			div[DwtListView._STYLE_CLASS] = "Row";
 			div[DwtListView._SELECTED_STYLE_CLASS] = div[DwtListView._STYLE_CLASS] + "-" + DwtCssStyle.SELECTED;
+                        div[DwtListView._STYLE_CLASS] = "ZaAutoCompleteListRow";
 			div.className = div[DwtListView._STYLE_CLASS];
 			div.innerHTML = AjxStringUtil.htmlEncode (match[this._matchText]);
 			thisHtmlElement.appendChild(div);
