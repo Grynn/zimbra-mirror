@@ -82,7 +82,43 @@ public class MarkUnReadMail extends AjaxCommonTest {
 	@Test(	description = "Mark a message as read by context menu -> mark unread",
 			groups = { "functional" })
 	public void MarkUnReadMail_02() throws HarnessException {
-		throw new HarnessException("implement me");
+
+		// Create the message data to be sent
+		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+		
+		FolderItem inboxFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
+		app.zGetActiveAccount().soapSend(
+					"<AddMsgRequest xmlns='urn:zimbraMail'>" +
+                		"<m l='"+ inboxFolder.getId() +"' f=''>" +
+                    		"<content>From: foo@foo.com\n" +
+"To: foo@foo.com \n" +
+"Subject: "+ subject +"\n" +
+"MIME-Version: 1.0 \n" +
+"Content-Type: text/plain; charset=utf-8 \n" +
+"Content-Transfer-Encoding: 7bit\n" +
+"\n" +
+"simple text string in the body\n" +
+"</content>" +
+                    	"</m>" +
+                	"</AddMsgRequest>");
+		
+		// Create a mail item to represent the message
+		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+		ZAssert.assertStringDoesNotContain(mail.getFlags(), "u", "Verify message is initially unread");
+
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+				
+		// Select the item
+		app.zPageMail.zListItem(Action.A_RIGHTCLICK, Button.O_MARK_AS_UNREAD, mail.dSubject);
+		
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+
+		// Verify the message is marked read in the server (flags attribute should not contain (u)nread)
+		mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+		ZAssert.assertStringContains(mail.getFlags(), "u", "Verify the message is marked read in the server");
+		
+		// TODO: Verify the message is not marked unread in the list
 	}
 		
 

@@ -1178,6 +1178,7 @@ public class PageMail extends AbsTab {
 				page = null;
 				
 			} else if (option == Button.B_TREE_NEWFOLDER) {
+				
 		      String treeItemLocator = null;
 		      if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
 		         treeItemLocator = TreeMail.Locators.zTreeItems.replace(TreeMail.stringToReplace,
@@ -1189,6 +1190,32 @@ public class PageMail extends AbsTab {
 		      GeneralUtility.waitForElementPresent(this, treeItemLocator);
 		      ContextMenu contextMenu = (ContextMenu)((AppAjaxClient)MyApplication).zTreeMail.zTreeItem(Action.A_RIGHTCLICK, treeItemLocator);
 			   page = contextMenu.zSelect(CONTEXT_MENU_ITEM_NAME.NEW_FOLDER);
+			   
+			} else if ( option == Button.O_MARK_AS_READ ) {
+				
+				if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
+					optionLocator = "zmi__TV__MARK_READ_title";
+				} else {
+					optionLocator = "zmi__CLV__MARK_READ_title";
+				}
+
+				page = null;
+				
+				// FALLTHROUGH
+
+			} else if ( option == Button.O_MARK_AS_UNREAD ) {
+				
+				if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
+					optionLocator = "zmi__TV__MARK_UNREAD_title";
+				} else {
+					optionLocator = "zmi__CLV__MARK_UNREAD_title";
+				}
+
+				page = null;
+
+				
+				// FALLTHROUGH
+
 			}
 			else {
 				throw new HarnessException("implement action:"+ action +" option:"+ option);

@@ -72,11 +72,29 @@ public class Button {
 	public static final Button B_NEWWINDOW = new Button("B_NEWWINDOW");
 	public static final Button B_LISTVIEW = new Button("B_LISTVIEW");
 
-	public static final Button O_LISTVIEW_BYCONVERSATION = new Button("O_LSITVIEW_BYCONVERSATION");
-	public static final Button O_LISTVIEW_BYMESSAGE = new Button("O_LSITVIEW_BYMESSAGE");
-	public static final Button O_LISTVIEW_READINGPANEBOTTOM = new Button("O_LSITVIEW_READINGPANEBOTTOM");
-	public static final Button O_LISTVIEW_READINGPANERIGHT = new Button("O_LSITVIEW_READINGPANERIGHT");
-	public static final Button O_LISTVIEW_READINGPANEOFF = new Button("O_LSITVIEW_READINGPANEOFF");
+	public static final Button O_LISTVIEW_BYCONVERSATION = new Button("O_LISTVIEW_BYCONVERSATION");
+	public static final Button O_LISTVIEW_BYMESSAGE = new Button("O_LISTVIEW_BYMESSAGE");
+	public static final Button O_LISTVIEW_READINGPANEBOTTOM = new Button("O_LISTVIEW_READINGPANEBOTTOM");
+	public static final Button O_LISTVIEW_READINGPANERIGHT = new Button("O_LISTVIEW_READINGPANERIGHT");
+	public static final Button O_LISTVIEW_READINGPANEOFF = new Button("O_LISTVIEW_READINGPANEOFF");
+
+	// MailPage context menu
+	public static final Button O_MARK_AS_READ = new Button("O_MARK_AS_READ");
+	public static final Button O_MARK_AS_UNREAD = new Button("O_MARK_AS_UNREAD");
+	public static final Button O_REPLY = new Button("O_REPLY");
+	public static final Button O_REPLY_TO_ALL = new Button("O_REPLY_TO_ALL");
+	public static final Button O_FORWARD = new Button("O_FORWARD");
+	public static final Button O_EDIT_AS_NEW = new Button("O_EDIT_AS_NEW");
+	public static final Button O_TAG_MESSAGE = new Button("O_TAG_MESSAGE");
+	// public static final Button O_DELETE = new Button("O_DELETE");
+	public static final Button O_MOVE = new Button("O_MOVE");
+	public static final Button O_PRINT = new Button("O_PRINT");
+	public static final Button O_MARK_AS_SPAM = new Button("O_MARK_AS_SPAM");
+	public static final Button O_SHOW_ORIGINAL = new Button("O_SHOW_ORIGINAL");
+	public static final Button O_NEW_FILTER = new Button("O_NEW_FILTER");
+	public static final Button O_CREATE_APPOINTMENT = new Button("O_CREATE_APPOINTMENT");
+	public static final Button O_CREATE_TASK = new Button("O_CREATE_TASK");
+	public static final Button O_CLEAR_SEARCH_HIGHLIGHTS = new Button("O_CLEAR_SEARCH_HIGHLIGHTS");
 
 	// Compose mail buttons and pulldown options
 	public static final Button B_SEND = new Button("B_SEND");
