@@ -9,14 +9,21 @@ import java.io.InputStreamReader;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
+
 class StreamGobbler extends Thread
 {
    InputStream is;
    protected static Logger logger = LogManager.getLogger(StreamGobbler.class);
+   StringBuilder output = new StringBuilder("");
 
    StreamGobbler(InputStream is)
    {
       this.is = is;
+   }
+
+   public String getOutput() {
+      return this.output.toString();
    }
 
    public void run()
@@ -27,7 +34,8 @@ class StreamGobbler extends Thread
          BufferedReader br = new BufferedReader(isr);
          String line = null;
          while ( (line = br.readLine()) != null)
-               logger.info(line);    
+            this.output.append(line).append("\n");   
+            logger.info(line);
        } catch (IOException ioe) {
           ioe.printStackTrace();  
        }
@@ -106,9 +114,10 @@ public class CommandLine {
     * @return (String) output from the console
     * @throws IOException
     * @throws InterruptedException
+    * @throws HarnessException 
     */
    public static String cmdExecWithOutput(String command)
-   throws IOException, InterruptedException {
+   throws IOException, InterruptedException, HarnessException {
       return cmdExecWithOutput(command, null);
    }
 
@@ -119,8 +128,10 @@ public class CommandLine {
 	 * @return (String) output from the console
 	 * @throws IOException
 	 * @throws InterruptedException
+    * @throws HarnessException 
 	 */
-	public static String cmdExecWithOutput(String command, String[] params) throws IOException, InterruptedException {
+	public static String cmdExecWithOutput(String command, String[] params)
+	throws IOException, InterruptedException, HarnessException {
 	   logger.debug("Executing command: " + command);
       Process process = Runtime.getRuntime().exec(command);
 
@@ -142,12 +153,17 @@ public class CommandLine {
          outputStream.close();
       }
 
-      StreamReader reader = new StreamReader(inputStream);
+      int maxRetry = 30;
+      int retry = 0;
+      while (retry < maxRetry && (errorGobbler.isAlive() || outputGobbler.isAlive())) {
+         retry ++;
+         logger.debug("Execution thread is still alive, retry: " + retry);
+         SleepUtil.sleep(1000);
+      }
+
       logger.debug("Starting the reader thread");
-      reader.start();
       process.waitFor();
-      reader.join();
-      String output = reader.getResult();
+      String output = outputGobbler.output.toString() + errorGobbler.output.toString();
       return output;
 	}
 }

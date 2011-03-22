@@ -223,8 +223,9 @@ public class GeneralUtility {
     * @return true, if the task is running, otherwise, false
     * @throws IOException
     * @throws InterruptedException
+    * @throws HarnessException 
     */
-   public static boolean findWindowsRunningTask(String taskName) throws IOException, InterruptedException {
+   public static boolean findWindowsRunningTask(String taskName) throws IOException, InterruptedException, HarnessException {
       String output = CommandLine.cmdExecWithOutput("TASKLIST /FI \"IMAGENAME EQ " + taskName + "\"");
       logger.debug("output: " + output);
       if (output.contains(taskName)) {
