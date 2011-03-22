@@ -85,25 +85,87 @@ public class TagDocument extends AjaxCommonTest {
 
 		String name = account.soapSelectValue(
 				"//mail:SearchResponse//mail:doc", "name");
-		
-		ZAssert.assertEquals(name, docName,
-				"Verify tagged document name");
-		
-		// Make sure the tag was applied to the document
-		//account.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
-		//				+ "<query>in:briefcase</query></SearchRequest>");
 
-		//String id = account.soapSelectValue(
-		//		"//mail:SearchResponse//mail:doc[@name='" + docName + "']", "t");
-		
+		ZAssert.assertEquals(name, docName, "Verify tagged document name");
+
+		// Make sure the tag was applied to the document
+		// account.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
+		// + "<query>in:briefcase</query></SearchRequest>");
+
+		// String id = account.soapSelectValue(
+		// "//mail:SearchResponse//mail:doc[@name='" + docName + "']", "t");
+
 		account
-		.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
-				+ "<query>" + docName + "</query>" + "</SearchRequest>");
-		
-		String id = account.soapSelectValue(
-				"//mail:SearchResponse//mail:doc", "t");
-		
+				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
+						+ "<query>" + docName + "</query>" + "</SearchRequest>");
+
+		String id = account.soapSelectValue("//mail:SearchResponse//mail:doc",
+				"t");
+
 		ZAssert.assertEquals(id, tagId,
-		"Verify the tag was attached to the document");
+				"Verify the tag was attached to the document");
+	}
+
+	@Test(description = "Tag a Document using pre-existing Tag", groups = { "functional" })
+	public void TagDocument_02() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+
+		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
+		// Create document item
+		DocumentItem document = new DocumentItem();
+
+		String docName = document.getDocName();
+		String docText = document.getDocText();
+
+		// Create document using SOAP
+		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
+				+ docText + "</body>" + "</html>");
+
+		account
+				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
+						+ "<doc name='"
+						+ docName
+						+ "' l='"
+						+ briefcaseFolder.getId()
+						+ "' ct='application/x-zimbra-doc'>"
+						+ "<content>"
+						+ contentHTML
+						+ "</content>"
+						+ "</doc>"
+						+ "</SaveDocumentRequest>");
+
+		// Create a tag
+		String tagName = "tag" + ZimbraSeleniumProperties.getUniqueString();
+
+		account.soapSend("<CreateTagRequest xmlns='urn:zimbraMail'>"
+				+ "<tag name='" + tagName + "' color='1' />"
+				+ "</CreateTagRequest>");
+
+		// Make sure the tag was created on the server
+		TagItem tag = TagItem.importFromSOAP(app.zGetActiveAccount(), tagName);
+		ZAssert.assertNotNull(tag, "Verify the new tag was created");
+
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
+
+		// Click on created document
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+
+		// Tag document selecting pre-existing tag from Toolbar drop down list
+		app.zPageBriefcase.zToolbarPressPulldown(Button.B_TAG, tag.getName());
+
+		// Make sure the tag was applied to the document
+		account
+				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
+						+ "<query>" + docName + "</query>" + "</SearchRequest>");
+
+		String id = account.soapSelectValue("//mail:SearchResponse//mail:doc",
+				"t");
+
+		ZAssert.assertEquals(id, tag.getId(),
+				"Verify the tag was attached to the document");
 	}
 }

@@ -5,6 +5,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
+import com.zimbra.qa.selenium.framework.items.TagItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -432,6 +433,87 @@ public class PageBriefcase extends AbsTab {
 				page.zWaitForActive();
 				if (option == Button.O_SEND_AS_ATTACHMENT)
 					zWaitForElementPresent("css=div[id$=_attachments_div] a[class='AttLink']");
+			}
+		}
+		// Return the specified page, or null if not set
+		return (page);
+	}
+
+	public AbsPage zToolbarPressPulldown(Button pulldown, String option)
+			throws HarnessException {
+
+		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("
+				+ pulldown + ", " + option + ")");
+
+		tracer.trace("Click pulldown " + pulldown + " then " + option);
+
+		if (pulldown == null)
+			throw new HarnessException("Pulldown cannot be null!");
+
+		if (option == null)
+			throw new HarnessException("Option cannot be null!");
+
+		// Default behavior variables
+		//
+		String pulldownLocator = null; // If set, this will be expanded
+		String optionLocator = null; // If set, this will be clicked
+		AbsPage page = null; // If set, this page will be returned
+
+		// Based on the button specified, take the appropriate action(s)
+		if (pulldown == Button.B_TAG) {
+			if (option.length() > 0) {
+
+				pulldownLocator = "css=td[id$='__TAG_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+
+				optionLocator = "css=td[class=ZWidgetTitle]:contains(" + option
+						+ ")";
+
+				page = null;
+
+				// FALL THROUGH
+			} else {
+				throw new HarnessException(
+						"no logic defined for pulldown/option " + pulldown
+								+ "/" + option);
+			}
+		} else {
+			throw new HarnessException("no logic defined for pulldown "
+					+ pulldown);
+		}
+
+		// Default behavior
+		if (pulldownLocator != null) {
+			// Make sure the locator exists
+			if (!this.sIsElementPresent(pulldownLocator)) {
+				throw new HarnessException("Button " + pulldown + " option "
+						+ option + " pulldownLocator " + pulldownLocator
+						+ " not present!");
+			}
+
+			this.zClick(pulldownLocator);
+
+			// If the app is busy, wait for it to become active
+			zWaitForBusyOverlay();
+
+			if (optionLocator != null) {
+
+				// Make sure the locator exists
+				if (!this.sIsElementPresent(optionLocator)) {
+					throw new HarnessException("Button " + pulldown
+							+ " option " + option + " optionLocator "
+							+ optionLocator + " not present!");
+				}
+
+				this.zClick(optionLocator);
+
+				// If the app is busy, wait for it to become active
+				zWaitForBusyOverlay();
+			}
+
+			// If we click on pulldown/option and the page is specified, then
+			// wait for the page to go active
+			if (page != null) {
+				page.zWaitForActive();
 			}
 		}
 		// Return the specified page, or null if not set

@@ -55,7 +55,7 @@ public class UnTagFile extends AjaxCommonTest {
 		 * String docId = account.soapSelectValue(
 		 * "//mail:SearchResponse//mail:doc[@name='" + docName + "']", "id");
 		 * String version = account.soapSelectValue(
-		 * "//mail:SearchResponse//mail:doc[@name='" + docName + "']", "id");
+		 * "//mail:SearchResponse//mail:doc[@name='" + docName + "']", "ver");
 		 * 
 		 * account.soapSend(
 		 * "<SearchRequest xmlns='urn:zimbraMail' types='document'>" + "<query>"
@@ -109,7 +109,10 @@ public class UnTagFile extends AjaxCommonTest {
 		// Make sure the tag was applied to the document
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
-						+ "<query>" + fileName + "</query>" + "</SearchRequest>");
+						+ "<query>"
+						+ fileName
+						+ "</query>"
+						+ "</SearchRequest>");
 
 		String id = account.soapSelectValue("//mail:SearchResponse//mail:doc",
 				"t");
@@ -131,7 +134,10 @@ public class UnTagFile extends AjaxCommonTest {
 
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
-						+ "<query>" + fileName + "</query>" + "</SearchRequest>");
+						+ "<query>"
+						+ fileName
+						+ "</query>"
+						+ "</SearchRequest>");
 
 		id = account.soapSelectValue("//mail:SearchResponse//mail:doc", "t");
 
