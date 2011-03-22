@@ -104,6 +104,9 @@ public class TagDocument extends AjaxCommonTest {
 
 		ZAssert.assertEquals(id, tagId,
 				"Verify the tag was attached to the document");
+		
+		//delete Document upon test completion
+		app.zPageBriefcase.deleteFileByName(docName);
 	}
 
 	@Test(description = "Tag a Document using pre-existing Tag", groups = { "functional" })
@@ -167,5 +170,8 @@ public class TagDocument extends AjaxCommonTest {
 
 		ZAssert.assertEquals(id, tag.getId(),
 				"Verify the tag was attached to the document");
+		
+		//delete Document upon test completion
+		app.zPageBriefcase.deleteFileByName(docName);
 	}
 }
