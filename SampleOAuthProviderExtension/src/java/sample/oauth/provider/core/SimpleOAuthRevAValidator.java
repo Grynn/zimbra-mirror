@@ -48,6 +48,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.zimbra.common.util.StringUtil;
 import net.oauth.signature.OAuthSignatureMethod;
 import net.oauth.*;
 
@@ -213,8 +214,8 @@ public class SimpleOAuthRevAValidator implements OAuthValidator {
     protected void validateVerifier(OAuthMessage message, OAuthAccessor accessor)
     throws OAuthException, IOException {
         String verifier = message.getParameter(OAuth.OAUTH_VERIFIER);
-        if (!verifier.equals(accessor.getProperty(OAuth.OAUTH_VERIFIER).toString())) {
-        		ZimbraLog.extensions.debug("verifier from request("+verifier+") and local memory("+accessor.getProperty(OAuth.OAUTH_VERIFIER).toString()+") should be same.");
+        if (!StringUtil.equal(verifier, (String) accessor.getProperty(OAuth.OAUTH_VERIFIER))) {
+        		ZimbraLog.extensions.debug("verifier from request("+verifier+") and local memory("+accessor.getProperty(OAuth.OAUTH_VERIFIER)+") should be same.");
                 OAuthProblemException problem = new OAuthProblemException("invalid_verifier");
                 throw problem;
         }
