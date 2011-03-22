@@ -1,8 +1,6 @@
 package com.zimbra.qa.selenium.staf;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -264,7 +262,7 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 	        
 
 		} catch (HarnessException e) {
-			return (new STAFResult(STAFResult.JavaError, e.getMessage()));
+			return (new STAFResult(STAFResult.JavaError, getStackTrace(e)));
 		} finally {
 			serviceIsRunning = false;
 		}
@@ -274,6 +272,38 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 
 	}
 	
+	/**
+	 *  Convert a stack trace to a string
+	 * @param t
+	 * @return
+	 */
+	private String getStackTrace(Throwable t) {
+		String s = t.getMessage();
+		try {
+
+			Writer writer = null;
+			PrintWriter printer = null;
+			try {
+				writer = new StringWriter();
+				printer = new PrintWriter(writer);
+				t.printStackTrace(printer);
+				s = writer.toString();
+			} finally {
+				if ( printer != null ) {
+					printer.close();
+					printer = null;
+				}
+				if ( writer != null ) {
+					writer.close();
+					writer = null;
+				}
+			}
+			
+		} catch (IOException e) {
+			mLog.warn("IOException while closing writer ", e);
+		}
+		return (s);
+	}
 	
 
 	private STAFResult handleQuery(RequestInfo info) {
