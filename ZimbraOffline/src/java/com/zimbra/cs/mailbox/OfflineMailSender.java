@@ -73,9 +73,6 @@ public class OfflineMailSender extends MailSender {
                 (getOriginalMessageId() != null ? getOriginalMessageId().toString(acct) : null), getReplyType(),
                 identityId, acct.getId(), 0).getId();
             mbox.move(octxt, draftId, MailItem.Type.MESSAGE, DesktopMailbox.ID_FOLDER_OUTBOX);
-            if (mbox instanceof SyncMailbox && getSavedDraftId() != null) { 
-                ((SyncMailbox) mbox).trackTransientItem(getSavedDraftId().getId());
-            }
             // we can now purge the uploaded attachments
             if (getUploads() != null)
                 FileUploadServlet.deleteUploads(getUploads());

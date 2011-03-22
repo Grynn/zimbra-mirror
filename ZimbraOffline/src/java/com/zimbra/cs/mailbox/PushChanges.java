@@ -268,9 +268,6 @@ public class PushChanges {
                     if (OfflineSyncManager.getInstance().isInSkipList(id)) {
                         OfflineLog.offline.warn("Skipped push item id=%d per zdesktop_sync_skip_idlist", id);
                         continue;
-                    } else if (ombx.isTransientItem(id)) {
-                        OfflineLog.offline.debug("skipped push transient item id=%d", id);
-                        continue;
                     }
 
                     if (batched.contains(id)) //already done

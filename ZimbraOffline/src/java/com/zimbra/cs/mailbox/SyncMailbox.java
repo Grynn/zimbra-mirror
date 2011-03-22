@@ -378,14 +378,4 @@ public abstract class SyncMailbox extends DesktopMailbox {
     void trackChangeDeleted() throws ServiceException {}
 
     void itemCreated(MailItem item) throws ServiceException {}
-
-    private LruMap<Integer, Object> transientItems = new LruMap<Integer, Object>(16);
-
-    synchronized void trackTransientItem(int itemId) {
-        transientItems.put(Integer.valueOf(itemId), new Object());
-    }
-
-    synchronized boolean isTransientItem(int itemId) {
-        return transientItems.containsKey(Integer.valueOf(itemId));
-    }
 }
