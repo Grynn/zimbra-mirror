@@ -284,21 +284,21 @@ public class FormMailNew extends AbsForm {
 				
 				// TODO
 				pulldownLocator = Locators.zPriorityPulldown;
-				optionLocator = "TODO";
+				optionLocator = "css=[class='ImgPriorityHigh_list']";
 				page = this;
 
 			} else if ( option == Button.O_PRIORITY_NORMAL ) {
 				
 				// TODO
 				pulldownLocator = Locators.zPriorityPulldown;
-				optionLocator = "TODO";
+				optionLocator = "css=[class='ImgPriorityNormal_list']";
 				page = this;
 
 			} else if ( option == Button.O_PRIORITY_LOW ) {
 				
 				// TODO
 				pulldownLocator = Locators.zPriorityPulldown;
-				optionLocator = "TODO";
+				optionLocator = "css=[class='ImgPriorityLow_list']";
 				page = this;
 
 			} else {
