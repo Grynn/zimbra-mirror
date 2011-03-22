@@ -13,10 +13,9 @@ public class FormContactGroupNew extends AbsForm {
 		
 		public static final String zNewContactGroupMenuIconBtn = "css=id=^_left_icon div[class=ImgNewGroup]";
 		
-				
-		public static final String zGroupnameField = "css=input#$_groupName";		
-	    public static final String zGroupMembers   = "css=textarea#$_addNewField.groupMembers";
-	    public static final String zAddButton      = "css=td#$_addNewButton div table.ZWidgetTable tbody tr td#$_title.ZWidgetTitle";
+		public static final String zGroupnameField = "css=input[id$='_groupName']";		
+	    public static final String zGroupMembers   = "css=textarea[id$='_addNewField']";
+	    public static final String zAddButton      = "css=td[id$='_addNewButton'] td[id$='_title']";
          
         // more goes here
 	    	    
@@ -102,21 +101,17 @@ public class FormContactGroupNew extends AbsForm {
 		}
 		
 		if ( group.getDList().length() > 0 ) {
+							
+			sFocus(Locators.zGroupMembers);
+			zClick(Locators.zGroupMembers);		        
+		    zKeyboard.zTypeCharacters(group.getDList());
 			
-			for (int i=0; i < group.getDList().length(); i++) {
-				sFocus(Locators.zGroupMembers);
-				
-				zClick(Locators.zGroupMembers);
-		
-				zKeyboard.zTypeCharacters(group.dlist.get(i));
 	
-				//click Add button
-		        sClick(Locators.zAddButton);
-				zWaitForBusyOverlay();
+			//click Add button
+		    zClick(Locators.zAddButton);
+		    zWaitForBusyOverlay();
 				
 			}
-
-		}
 		else {
 			throw new HarnessException("Empty group members - group members are required");			
 		}
