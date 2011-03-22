@@ -94,7 +94,13 @@ function getPort(uri) {
 function reloadWebAppIni(iniFile) {
   var oldUri = WebAppProperties.uri;
   var oldPort = getPort(oldUri);
-  WebAppProperties.readINI(iniFile);
+
+  try {
+    WebAppProperties.readINI(iniFile);
+  } catch (e) { // locked by jetty process that's trying to update the port
+    return; // return for retry
+  }
+
   var newUri = WebAppProperties.uri; 
   var newPort = getPort(newUri);
 
