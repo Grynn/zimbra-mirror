@@ -438,7 +438,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							labelLocation:_LEFT_,trueValue:"TRUE", falseValue:"FALSE",
 							labelCssClass:"xform_label", align:_LEFT_,labelWrap:true,
 							visibilityChecks:[[XForm.checkInstanceValueEmty,ZaDomain.A2_gal_sync_accounts],[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId]],
-							enableDisableChecks:[[ZaItem.hasRight,ZaDomain.RIGHT_CREATE_ACCOUNT],[ZaItem.hasRight,ZaDomain.RIGHT_ADMIN_LOGIN_AS]]							
+							enableDisableChecks:[[ZaItem.hasRight,ZaDomain.RIGHT_CREATE_ACCOUNT]]							
 						},						
 						{type:_DYNSELECT_, label:ZaMsg.Domain_GalSyncAccount,
 							width:250,
@@ -450,7 +450,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							dataFetcherDomain:entry.name,
 							visibilityChecks:[[XForm.checkInstanceValueEmty,ZaDomain.A2_gal_sync_accounts],[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId]],
 							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasRight,ZaDomain.RIGHT_CREATE_ACCOUNT],[ZaItem.hasRight,ZaDomain.RIGHT_ADMIN_LOGIN_AS]]
+							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasRight,ZaDomain.RIGHT_CREATE_ACCOUNT]]
 						},
 						{ref:(ZaDomain.A2_gal_sync_accounts + "[0].name"), type:_OUTPUT_,label:ZaMsg.Domain_GalSyncAccount,
 							visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaDomain.A2_gal_sync_accounts],[ZaItem.hasReadPermission,ZaDomain.A_zimbraGalAccountId]]
@@ -471,7 +471,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds)]
 							],
 							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasRight,ZaDomain.RIGHT_CREATE_ACCOUNT],[ZaItem.hasRight,ZaDomain.RIGHT_ADMIN_LOGIN_AS]]							
+							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasRight,ZaDomain.RIGHT_CREATE_ACCOUNT]]							
 						},
 						{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval),
 							type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_internal, labelLocation:_LEFT_,
@@ -493,7 +493,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_zimbra_ds)]
 							],
 							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasRight,ZaDomain.RIGHT_ADMIN_LOGIN_AS]]													
+							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]													
 						},
 						{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds + ".name"), label:ZaMsg.Domain_ExternalGALDSName, type:_OUTPUT_,
 							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
@@ -511,7 +511,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
 							], 
 							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasRight,ZaDomain.RIGHT_ADMIN_LOGIN_AS]]							
+							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]							
 						},
 						{ref:(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds + ".attrs." + ZaDataSource.A_zimbraDataSourcePollingInterval), 
 							type:_LIFETIME_, label:ZaMsg.LBL_zimbraDataSourcePollingInterval_external, labelLocation:_LEFT_,
@@ -535,7 +535,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 								[XForm.checkInstanceValueEmty,(ZaDomain.A2_gal_sync_accounts + "[0]." + ZaAccount.A2_ldap_ds)]
 							],
 							enableDisableChangeEventSources:[ZaDomain.A2_create_gal_acc],
-							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"],[ZaItem.hasRight,ZaDomain.RIGHT_ADMIN_LOGIN_AS]]
+							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A2_create_gal_acc,"TRUE"]]
 						},						
 						{type:_GROUP_, colSpan:2,numCols:2,colSizes:["220px","430px"],
 							visibilityChangeEventSources:[ZaDomain.A_zimbraGalMode],
