@@ -1170,8 +1170,8 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
  
         		items: [
                 		{ref:".", type:_TEXTFIELD_,
-                         	 enableDisableChecks:[ZaItem.hasWritePermission] ,
-                                 visibilityChecks:[ZaItem.hasReadPermission],
+                         	 enableDisableChecks:[] ,
+                                 visibilityChecks:[],
                                  width: "15em"}
                                ]
                     },	
