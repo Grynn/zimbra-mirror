@@ -28,6 +28,33 @@ public class CreateContactGroup extends AjaxCommonTest  {
 		
 	}
 	
+	//To be used by other test cases
+	public static ContactGroupItem CreateContactGroupViaSoap(AppAjaxClient app) throws HarnessException {
+
+		String domain = "@zimbra.com";
+		String groupName =  "group_" + ZimbraSeleniumProperties.getUniqueString();
+        String emailAddress1 = ZimbraSeleniumProperties.getUniqueString() + domain;
+        String emailAddress2 = ZimbraSeleniumProperties.getUniqueString() + domain;
+        
+        // Create a contact group 
+		ContactGroupItem group = new ContactGroupItem(groupName);
+	    
+		group.addDListMember(emailAddress1);
+		group.addDListMember(emailAddress2);
+	
+        app.zGetActiveAccount().soapSend(
+                "<CreateContactRequest xmlns='urn:zimbraMail'>" +
+                "<cn fileAsStr='" + groupName + "' >" +
+                "<a n='type'>group</a>" +
+                "<a n='nickname'>" + groupName +"</a>" +
+                "<a n='dlist'>" + emailAddress1 + "," + emailAddress2 + "</a>" +
+                "</cn>" +
+                "</CreateContactRequest>");
+
+        app.zGetActiveAccount().soapSelectNode("//mail:CreateContactResponse", 1);
+        
+        return group;
+	}
 	
 	@Test(	description = "Create a basic contact group",
 			groups = { "smoke" })
