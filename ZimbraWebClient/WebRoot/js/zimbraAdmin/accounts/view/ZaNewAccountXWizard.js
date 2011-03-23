@@ -977,7 +977,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 				}
 			);
 		};
-                if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraFeatureManageSMIMECertificateEnabledi, ZaAccount.A_zimbraFeatureSMIMEEnabled],[])) {
+                if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraFeatureManageSMIMECertificateEnabled, ZaAccount.A_zimbraFeatureSMIMEEnabled],[])) {
                         featuresCase.items.push(
                                 {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraSMIMEFeature, id:"account_wiz_features_smime",
                                         colSizes:["auto"],numCols:1,                                        
