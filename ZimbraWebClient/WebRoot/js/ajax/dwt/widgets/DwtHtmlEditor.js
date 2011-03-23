@@ -1631,8 +1631,12 @@ function(defaultFontSize) {
 		if (AjxEnv.isIE) {
 			// For some reason, IE returns a number, so we transform it into
 			// a color specifier that we can actually use
-			ev.backgroundColor = "#" + DwtButtonColorPicker.toHex(ev.backgroundColor, 6).replace(/(..)(..)(..)/, "$3$2$1");
-			ev.color = "#" + DwtButtonColorPicker.toHex(ev.color, 6).replace(/(..)(..)(..)/, "$3$2$1");
+			if (AjxUtil.isNumber(ev.backgroundColor)) { // Recent versions of IE have it right; make sure we only apply the conversion when we got a number
+				ev.backgroundColor = "#" + DwtButtonColorPicker.toHex(ev.backgroundColor, 6).replace(/(..)(..)(..)/, "$3$2$1");
+			}
+			if (AjxUtil.isNumber(ev.color)) {
+				ev.color = "#" + DwtButtonColorPicker.toHex(ev.color, 6).replace(/(..)(..)(..)/, "$3$2$1");
+			}
 		}
 		ev.justification = null;
 		ev.direction = null;
