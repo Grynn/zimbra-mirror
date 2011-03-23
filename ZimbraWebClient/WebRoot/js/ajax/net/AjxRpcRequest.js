@@ -127,7 +127,7 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 
 	if (requestHeaders) {
 		for (var i in requestHeaders) {
-            if (requestHeaders.hasOwnProperty[i]) {
+            if (requestHeaders.hasOwnProperty(i)) {
                 this.__httpReq.setRequestHeader(i, requestHeaders[i]);
             }
 		}
