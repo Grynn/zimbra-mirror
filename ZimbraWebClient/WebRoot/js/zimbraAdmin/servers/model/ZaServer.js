@@ -54,6 +54,7 @@ ZaServer.A_zimbraAntiSpamServiceInstalled = "_"+ZaServer.A_zimbraServiceInstalle
 ZaServer.A_zimbraSpellServiceInstalled = "_"+ZaServer.A_zimbraServiceInstalled+"_spell";
 ZaServer.A_zimbraLoggerServiceInstalled = "_"+ZaServer.A_zimbraServiceInstalled+"_logger";
 ZaServer.A_zimbraMailProxyServiceInstalled = "_"+ZaServer.A_zimbraServiceInstalled+"_imapproxy";
+ZaServer.A_zimbraVmwareHAServiceInstalled = "_"+ ZaServer.A_zimbraServiceInstalled+"_vmwareha";
 
 ZaServer.A_zimbraReverseProxyHttpEnabled = "zimbraReverseProxyHttpEnabled";
 ZaServer.A_zimbraServiceEnabled = "zimbraServiceEnabled";
@@ -66,6 +67,8 @@ ZaServer.A_zimbraAntiSpamServiceEnabled = "_"+ZaServer.A_zimbraServiceEnabled+"_
 ZaServer.A_zimbraSpellServiceEnabled = "_"+ZaServer.A_zimbraServiceEnabled+"_spell";
 ZaServer.A_zimbraLoggerServiceEnabled = "_"+ZaServer.A_zimbraServiceEnabled+"_logger";
 ZaServer.A_zimbraMailProxyServiceEnabled = "_"+ZaServer.A_zimbraServiceEnabled+"_imapproxy";
+ZaServer.A_zimbraVmwareHAServiceEnabled = "_"+ZaServer.A_zimbraServiceEnabled+"_vmwareha";
+
 // MTA
 ZaServer.A_zimbraMtaAuthEnabled = "zimbraMtaAuthEnabled";
 ZaServer.A_zimbraMtaDnsLookupsEnabled = "zimbraMtaDnsLookupsEnabled";
@@ -412,6 +415,7 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_zimbraAntiSpamServiceEnabled, ref:"attrs/"+ZaServer.A_zimbraAntiSpamServiceEnabled, type: _ENUM_, choices: [false,true] },
 		{id:ZaServer.A_zimbraSpellServiceEnabled, ref:"attrs/"+ZaServer.A_zimbraSpellServiceEnabled, type: _ENUM_, choices: [false,true] },
 		{id:ZaServer.A_zimbraLoggerServiceEnabled, ref:"attrs/"+ZaServer.A_zimbraLoggerServiceEnabled, type: _ENUM_, choices: [false,true] },
+        {id:ZaServer.A_zimbraVmwareHAServiceEnabled, ref:"attrs/"+ZaServer.A_zimbraVmwareHAServiceEnabled, type: _ENUM_, choices: [false,true] },
 		{id:ZaServer.A_zimbraMailProxyServiceEnabled, ref:"attrs/"+ZaServer.A_zimbraMailProxyServiceEnabled, type: _ENUM_, choices: [false,true] },		
 		{id:ZaServer.A_zimbraReverseProxyLookupTarget, ref:"attrs/"+ZaServer.A_zimbraReverseProxyLookupTarget, type: _COS_ENUM_, choices: ZaModel.BOOLEAN_CHOICES},
 		{id:ZaServer.A_zimbraLdapServiceInstalled, ref:"attrs/"+ZaServer.A_zimbraLdapServiceInstalled, type: _ENUM_, choices: [false,true] },
@@ -422,7 +426,8 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_zimbraAntiSpamServiceInstalled, ref:"attrs/"+ZaServer.A_zimbraAntiSpamServiceInstalled, type: _ENUM_, choices: [false,true] },
 		{id:ZaServer.A_zimbraSpellServiceInstalled, ref:"attrs/"+ZaServer.A_zimbraSpellServiceInstalled, type: _ENUM_, choices: [false,true] },
 		{id:ZaServer.A_zimbraLoggerServiceInstalled, ref:"attrs/"+ZaServer.A_zimbraLoggerServiceInstalled, type: _ENUM_, choices: [false,true] },
-		{id:ZaServer.A_zimbraMailProxyServiceInstalled, ref:"attrs/"+ZaServer.A_zimbraMailProxyServiceInstalled, type: _ENUM_, choices: [false,true] },				
+		{id:ZaServer.A_zimbraMailProxyServiceInstalled, ref:"attrs/"+ZaServer.A_zimbraMailProxyServiceInstalled, type: _ENUM_, choices: [false,true] },
+        {id:ZaServer.A_zimbraVmwareHAServiceInstalled, ref:"attrs/"+ZaServer.A_zimbraVmwareHAServiceInstalled, type: _ENUM_, choices: [false,true] },
 		// MTA
 		{id:ZaServer.A_zimbraMtaAuthEnabled, ref:"attrs/" +  ZaServer.A_zimbraMtaAuthEnabled, type: _COS_ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
 		{id:ZaServer.A_zimbraMtaTlsAuthOnly, ref:"attrs/" +  ZaServer.A_zimbraMtaTlsAuthOnly, type: _COS_ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
@@ -597,6 +602,11 @@ ZaServer.modifyMethod = function (tmpObj) {
 			var enabled = [];
 			for (var i = 0; i < svcInstalled.length; i++) {
 				var service = svcInstalled[i];
+				if (service == "vmware-ha") {
+					if (tmpObj.attrs["_"+ZaServer.A_zimbraServiceEnabled+"_"+"vmwareha"]) 
+						enabled.push("vmware-ha");
+					continue;
+				}
 				if (tmpObj.attrs["_"+ZaServer.A_zimbraServiceEnabled+"_"+service]) {
 					enabled.push(service);
 				}			
@@ -616,6 +626,15 @@ ZaServer.modifyMethod = function (tmpObj) {
 				if (!dirty) {
 					for (var i = 0; i < prevEnabled.length; i++) {
 						var service = prevEnabled[i];
+						if (service == "vmware-ha") {
+							if(!tmpObj.attrs["_"+ZaServer.A_zimbraServiceEnabled+"_"+"vmware"]){
+								dirty = true;
+								break;
+							} else {
+								continue;
+							}
+
+						}
 						if (!tmpObj.attrs["_"+ZaServer.A_zimbraServiceEnabled+"_"+service]) {
 							dirty = true;
 							break;
@@ -894,6 +913,11 @@ ZaServer.prototype.initFromJS = function(server) {
 		}
 		for (var i = 0; i < installed.length; i++) {
 			var service = installed[i];
+			if(service == "vmware-ha"){
+				this.attrs["_"+ZaServer.A_zimbraServiceInstalled+"_"+"vmwareha"] = true;
+                        	this.attrs["_"+ZaServer.A_zimbraServiceEnabled+"_"+"vmwareha"] = false;
+				continue;
+			}
 			this.attrs["_"+ZaServer.A_zimbraServiceInstalled+"_"+service] = true;
 			this.attrs["_"+ZaServer.A_zimbraServiceEnabled+"_"+service] = false;
 		}
@@ -906,6 +930,11 @@ ZaServer.prototype.initFromJS = function(server) {
 		}
 		for (var i = 0; i < enabled.length; i++) {
 			var service = enabled[i];
+			if (service == "vmware-ha") {
+				this.attrs["_"+ZaServer.A_zimbraServiceEnabled+"_"+"vmwareha"] = true;
+				continue;
+			}
+
 			this.attrs["_"+ZaServer.A_zimbraServiceEnabled+"_"+service] = true;
 		}
 	}

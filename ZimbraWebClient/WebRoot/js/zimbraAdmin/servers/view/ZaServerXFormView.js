@@ -793,6 +793,13 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 						  	  [ZaItem.hasWritePermission,ZaServer.A_zimbraServiceEnabled]],
 						  	  label: ZaMsg.NAD_Service_Logger,
 					  	      onChange: ZaServerXFormView.onFormFieldChanged
+						  	},
+                            				{ ref: ZaServer.A_zimbraVmwareHAServiceEnabled, type: _CHECKBOX_,
+						  	  enableDisableChangeEventSources:[ZaServer.A_zimbraVmwareHAServiceInstalled],
+						  	  enableDisableChecks:[[XForm.checkInstanceValue,ZaServer.A_zimbraVmwareHAServiceInstalled,true],
+						  	  [ZaItem.hasWritePermission,ZaServer.A_zimbraServiceEnabled]],
+						  	  label: ZaMsg.NAD_Service_VmwareHA,
+					  	      onChange: ZaServerXFormView.onFormFieldChanged
 						  	}
 						]}
 					]
