@@ -44,10 +44,13 @@ import com.zimbra.cs.account.Server;
 import com.zimbra.cs.account.Provisioning.ServerBy;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.db.Db;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbOfflineMailbox;
+import com.zimbra.cs.db.Db.Capability;
 import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
+import com.zimbra.cs.mailbox.calendar.Invite;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLC;
@@ -776,4 +779,39 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         }
         return false;
     }
+
+    @Override
+    public synchronized CalendarItem getCalendarItemByUid(
+                    OperationContext octxt, String uid) throws ServiceException {
+        CalendarItem item = super.getCalendarItemByUid(octxt, uid);
+        if (item == null && Db.supports(Capability.CASE_SENSITIVE_COMPARISON) && Invite.isOutlookUid(uid)) {
+            if (!uid.toLowerCase().equals(uid)) {
+                //maybe stored in db in lower case
+                item = super.getCalendarItemByUid(octxt, uid.toLowerCase());
+                if (item != null) {
+                    OfflineLog.offline.debug("coercing Outlook calitem ["+item.getId()+"] UID to upper case");
+                    boolean success = false;
+                    try {
+                        beginTransaction("forceUpperAppointment", octxt);
+                        uncache(item);
+                        DbOfflineMailbox.forceUidUpperCase(this, uid.toLowerCase());
+                        item = super.getCalendarItemByUid(octxt, uid);
+                        assert(item != null);
+                        success = true;
+                    } finally {
+                        endTransaction(success);
+                    }
+                }    
+            } else {
+                //possible that we're receiving update from unpatched zcs which is in lower case and our db is already correct
+                //return the upper case equivalent; server will keep sending lower until it's patched but should handle pushes in upper since MySQL is case insensitive
+                item = super.getCalendarItemByUid(octxt, uid.toUpperCase());
+                if (item != null) {
+                    OfflineLog.offline.debug("received lower case UID but our DB is already in upper case");
+                }
+            }
+        }
+        return item;
+    }
+
 }

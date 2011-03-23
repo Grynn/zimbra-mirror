@@ -724,4 +724,25 @@ public class DbOfflineMailbox {
             DbPool.closeStatement(stmt);
         }
     }
+
+    public static void forceUidUpperCase(Mailbox mbox, String uid) throws ServiceException {
+        assert(Db.supports(Db.Capability.ROW_LEVEL_LOCKING) || Thread.holdsLock(mbox));
+
+        DbConnection conn = mbox.getOperationConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.prepareStatement("UPDATE " + DbMailItem.getCalendarItemTableName(mbox) + " SET uid = ? where uid = ?");
+            int pos = 1;
+            stmt.setString(pos++, uid.toUpperCase());
+            stmt.setString(pos++, uid);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("unable to force upper case UID in mbox:" + mbox.getId(), e);
+        } finally {
+            DbPool.closeResults(rs);
+            DbPool.closeStatement(stmt);
+        }
+    }
+
 }
