@@ -15,6 +15,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.PageMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.PagePreferences;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences;
+import com.zimbra.qa.selenium.projects.ajax.ui.preferences.signature.PageSignature;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageSearch;
 import com.zimbra.qa.selenium.projects.ajax.ui.tasks.*;
@@ -59,6 +60,7 @@ public class AppAjaxClient extends AbsApplication {
 	public PageAddressbook              zPageAddressbook = null;
 	public PageTasks					zPageTasks = null;
 	public PagePreferences				zPagePreferences = null;
+	public PageSignature				zPageSignature = null;
 	
 	public TreeMail						zTreeMail = null;
 	public TreeContacts					zTreeContacts = null;
@@ -121,6 +123,9 @@ public class AppAjaxClient extends AbsApplication {
 
 		zTreePreferences = new TreePreferences(this);
 		trees.put(zTreePreferences.myPageName(), zTreePreferences);
+		// signature Preferences page
+		zPageSignature = new PageSignature(this);
+		pages.put(zPageSignature.myPageName(),zPageSignature);
 		
 
 		// Configure the localization strings
