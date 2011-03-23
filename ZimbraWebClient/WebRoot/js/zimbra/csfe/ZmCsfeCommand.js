@@ -593,6 +593,7 @@ function(response, params) {
 		} catch (ex) {
 			if (ex.name == "SyntaxError") {
 				ex = new ZmCsfeException(null, ZmCsfeException.BAD_JSON_RESPONSE, params.methodNameStr, respDoc);
+				AjxDebug.println(AjxDebug.BAD_JSON, "bad json. respDoc=" + respDoc);
 			}
 			DBG.dumpObj(AjxDebug.DBG1, ex);
 			if (params.asyncMode) {

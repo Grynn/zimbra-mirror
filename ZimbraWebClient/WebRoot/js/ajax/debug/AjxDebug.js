@@ -94,6 +94,7 @@ AjxDebug.EXCEPTION		= "exception";	// JS errors
 AjxDebug.CALENDAR		= "calendar";	// for troubleshooting calendar errors
 AjxDebug.REPLY			= "reply";		// bug 56308
 AjxDebug.SCROLL			= "scroll"; 	// bug 55775
+AjxDebug.BAD_JSON		= "bad_json"; 	// bug 57066
 
 AjxDebug.BUFFER_MAX[AjxDebug.DEFAULT_TYPE]	= 0;	// this one can get big due to object dumps
 AjxDebug.BUFFER_MAX[AjxDebug.RPC]			= 200;
