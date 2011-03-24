@@ -56,11 +56,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Folder.Acl }
+     * Create an instance of {@link ExportContactsRequest }
      * 
      */
-    public Folder.Acl createFolderAcl() {
-        return new Folder.Acl();
+    public ExportContactsRequest createExportContactsRequest() {
+        return new ExportContactsRequest();
     }
 
     /**
@@ -72,54 +72,6 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link MailRssDataSource }
-     * 
-     */
-    public MailRssDataSource createMailRssDataSource() {
-        return new MailRssDataSource();
-    }
-
-    /**
-     * Create an instance of {@link GetFolderRequest }
-     * 
-     */
-    public GetFolderRequest createGetFolderRequest() {
-        return new GetFolderRequest();
-    }
-
-    /**
-     * Create an instance of {@link ExportContactsResponse }
-     * 
-     */
-    public ExportContactsResponse createExportContactsResponse() {
-        return new ExportContactsResponse();
-    }
-
-    /**
-     * Create an instance of {@link HeaderContext }
-     * 
-     */
-    public HeaderContext createHeaderContext() {
-        return new HeaderContext();
-    }
-
-    /**
-     * Create an instance of {@link SearchFolder }
-     * 
-     */
-    public SearchFolder createSearchFolder() {
-        return new SearchFolder();
-    }
-
-    /**
-     * Create an instance of {@link ImportContact }
-     * 
-     */
-    public ImportContact createImportContact() {
-        return new ImportContact();
-    }
-
-    /**
      * Create an instance of {@link GetDataSourcesResponse }
      * 
      */
@@ -128,35 +80,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link MailCalDataSource }
+     * Create an instance of {@link MailRssDataSource }
      * 
      */
-    public MailCalDataSource createMailCalDataSource() {
-        return new MailCalDataSource();
+    public MailRssDataSource createMailRssDataSource() {
+        return new MailRssDataSource();
     }
 
     /**
-     * Create an instance of {@link Mountpoint }
+     * Create an instance of {@link ImportContactsResponse }
      * 
      */
-    public Mountpoint createMountpoint() {
-        return new Mountpoint();
-    }
-
-    /**
-     * Create an instance of {@link GetDataSourcesRequest }
-     * 
-     */
-    public GetDataSourcesRequest createGetDataSourcesRequest() {
-        return new GetDataSourcesRequest();
-    }
-
-    /**
-     * Create an instance of {@link Folder }
-     * 
-     */
-    public Folder createFolder() {
-        return new Folder();
+    public ImportContactsResponse createImportContactsResponse() {
+        return new ImportContactsResponse();
     }
 
     /**
@@ -168,19 +104,43 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link SearchFolder }
+     * 
+     */
+    public SearchFolder createSearchFolder() {
+        return new SearchFolder();
+    }
+
+    /**
+     * Create an instance of {@link NamedValue }
+     * 
+     */
+    public NamedValue createNamedValue() {
+        return new NamedValue();
+    }
+
+    /**
+     * Create an instance of {@link AccountSelector }
+     * 
+     */
+    public AccountSelector createAccountSelector() {
+        return new AccountSelector();
+    }
+
+    /**
+     * Create an instance of {@link GetDataSourcesRequest }
+     * 
+     */
+    public GetDataSourcesRequest createGetDataSourcesRequest() {
+        return new GetDataSourcesRequest();
+    }
+
+    /**
      * Create an instance of {@link ImportContactsRequest }
      * 
      */
     public ImportContactsRequest createImportContactsRequest() {
         return new ImportContactsRequest();
-    }
-
-    /**
-     * Create an instance of {@link ExportContactsRequest }
-     * 
-     */
-    public ExportContactsRequest createExportContactsRequest() {
-        return new ExportContactsRequest();
     }
 
     /**
@@ -192,6 +152,38 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link GranteeChooser }
+     * 
+     */
+    public GranteeChooser createGranteeChooser() {
+        return new GranteeChooser();
+    }
+
+    /**
+     * Create an instance of {@link OpValue }
+     * 
+     */
+    public OpValue createOpValue() {
+        return new OpValue();
+    }
+
+    /**
+     * Create an instance of {@link ImportContact }
+     * 
+     */
+    public ImportContact createImportContact() {
+        return new ImportContact();
+    }
+
+    /**
+     * Create an instance of {@link Mountpoint }
+     * 
+     */
+    public Mountpoint createMountpoint() {
+        return new Mountpoint();
+    }
+
+    /**
      * Create an instance of {@link Grant }
      * 
      */
@@ -200,11 +192,67 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ImportContactsResponse }
+     * Create an instance of {@link ShareInfo }
      * 
      */
-    public ImportContactsResponse createImportContactsResponse() {
-        return new ImportContactsResponse();
+    public ShareInfo createShareInfo() {
+        return new ShareInfo();
+    }
+
+    /**
+     * Create an instance of {@link Folder }
+     * 
+     */
+    public Folder createFolder() {
+        return new Folder();
+    }
+
+    /**
+     * Create an instance of {@link Folder.Acl }
+     * 
+     */
+    public Folder.Acl createFolderAcl() {
+        return new Folder.Acl();
+    }
+
+    /**
+     * Create an instance of {@link HeaderContext }
+     * 
+     */
+    public HeaderContext createHeaderContext() {
+        return new HeaderContext();
+    }
+
+    /**
+     * Create an instance of {@link DataSources }
+     * 
+     */
+    public DataSources createDataSources() {
+        return new DataSources();
+    }
+
+    /**
+     * Create an instance of {@link ExportContactsResponse }
+     * 
+     */
+    public ExportContactsResponse createExportContactsResponse() {
+        return new ExportContactsResponse();
+    }
+
+    /**
+     * Create an instance of {@link MailCalDataSource }
+     * 
+     */
+    public MailCalDataSource createMailCalDataSource() {
+        return new MailCalDataSource();
+    }
+
+    /**
+     * Create an instance of {@link GetFolderRequest }
+     * 
+     */
+    public GetFolderRequest createGetFolderRequest() {
+        return new GetFolderRequest();
     }
 
     /**

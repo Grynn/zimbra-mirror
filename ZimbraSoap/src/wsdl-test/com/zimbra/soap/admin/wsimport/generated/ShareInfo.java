@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "shareInfo")
+@XmlType(name = "shareInfo", namespace = "urn:zimbra")
 public class ShareInfo {
 
     @XmlAttribute(required = true)

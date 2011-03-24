@@ -14,31 +14,31 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;simpleType name="accountBy">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="name"/>
- *     &lt;enumeration value="id"/>
- *     &lt;enumeration value="foreignPrincipal"/>
  *     &lt;enumeration value="adminName"/>
  *     &lt;enumeration value="appAdminName"/>
+ *     &lt;enumeration value="id"/>
+ *     &lt;enumeration value="foreignPrincipal"/>
+ *     &lt;enumeration value="name"/>
  *     &lt;enumeration value="krb5Principal"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
  * 
  */
-@XmlType(name = "accountBy")
+@XmlType(name = "accountBy", namespace = "urn:zimbra")
 @XmlEnum
 public enum AccountBy {
 
-    @XmlEnumValue("name")
-    NAME("name"),
-    @XmlEnumValue("id")
-    ID("id"),
-    @XmlEnumValue("foreignPrincipal")
-    FOREIGN_PRINCIPAL("foreignPrincipal"),
     @XmlEnumValue("adminName")
     ADMIN_NAME("adminName"),
     @XmlEnumValue("appAdminName")
     APP_ADMIN_NAME("appAdminName"),
+    @XmlEnumValue("id")
+    ID("id"),
+    @XmlEnumValue("foreignPrincipal")
+    FOREIGN_PRINCIPAL("foreignPrincipal"),
+    @XmlEnumValue("name")
+    NAME("name"),
     @XmlEnumValue("krb5Principal")
     KRB_5_PRINCIPAL("krb5Principal");
     private final String value;

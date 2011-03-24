@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="getCosRequest">
  *   &lt;complexContent>
- *     &lt;extension base="{urn:zimbraAdmin}attributeSelectorImpl">
+ *     &lt;extension base="{urn:zimbra}attributeSelectorImpl">
  *       &lt;sequence>
  *         &lt;element name="cos" type="{urn:zimbraAdmin}cosSelector" minOccurs="0"/>
  *       &lt;/sequence>

@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="getDomainRequest">
  *   &lt;complexContent>
- *     &lt;extension base="{urn:zimbraAdmin}attributeSelectorImpl">
+ *     &lt;extension base="{urn:zimbra}attributeSelectorImpl">
  *       &lt;sequence>
  *         &lt;element name="domain" type="{urn:zimbraAdmin}domainSelector" minOccurs="0"/>
  *       &lt;/sequence>

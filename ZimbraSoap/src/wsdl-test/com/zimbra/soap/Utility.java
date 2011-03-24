@@ -17,9 +17,11 @@ package com.zimbra.soap;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.ws.soap.SOAPFaultException;
 
+import com.google.common.collect.Maps;
 import com.sun.xml.ws.api.message.Header;
 import com.sun.xml.ws.api.message.Headers;
 import com.sun.xml.ws.developer.SchemaValidationFeature;
@@ -103,19 +105,23 @@ import org.junit.Assert;
  * Current assumption : user1 exists with password test123
  */
 public class Utility {
+    private static final String DEFAULT_PASS = "test123";
     private static AccountService acctSvcEIF = null;
     private static AdminService adminSvcEIF = null;
     private static AdminService nvAdminSvcEIF = null;
     private static MailService mailSvcEIF = null;
-    private static String acctAuthToken = null;
     private static String adminAuthToken = null;
+    private static Map<String,String> acctAuthToks = Maps.newHashMap();
 
-    public static void addSoapAcctAuthHeader(WSBindingProvider bp) throws Exception {
-        Utility.getAccountServiceAuthToken();
+    public static void addSoapAcctAuthHeader(WSBindingProvider bp,
+                String authToken)
+    throws Exception {
         // Note that am not using JAXB generated HeaderContext here
-        JAXBRIContext jaxb = (JAXBRIContext) JAXBRIContext.newInstance(com.zimbra.soap.header.HeaderContext.class);
-        com.zimbra.soap.header.HeaderContext hdrCtx = new com.zimbra.soap.header.HeaderContext();
-        hdrCtx.setAuthToken(acctAuthToken);
+        JAXBRIContext jaxb = (JAXBRIContext) JAXBRIContext.newInstance(
+                    com.zimbra.soap.header.HeaderContext.class);
+        com.zimbra.soap.header.HeaderContext hdrCtx =
+            new com.zimbra.soap.header.HeaderContext();
+        hdrCtx.setAuthToken(authToken);
         Header soapHdr = Headers.create(jaxb,hdrCtx);
         List <Header> soapHdrs = new ArrayList <Header>();
         soapHdrs.add(soapHdr);
@@ -124,14 +130,35 @@ public class Utility {
         bp.setOutboundHeaders(soapHdrs);
     }
 
-    public static String getAccountServiceAuthToken() throws Exception {
-        if (acctAuthToken == null) {
-            acctAuthToken = getAccountServiceAuthToken("user1", "test123");
+    public static String addSoapAcctAuthHeaderForAcct(WSBindingProvider bp,
+            String acctName)
+    throws Exception {
+        String authTok;
+        if (acctAuthToks.containsKey(acctName))
+            authTok = acctAuthToks.get(acctName);
+        else {
+            authTok = Utility.getAccountServiceAuthToken(acctName, DEFAULT_PASS);
+            acctAuthToks.put(acctName, authTok);
         }
-        return acctAuthToken;
+        addSoapAcctAuthHeader(bp, authTok);
+        return authTok;
     }
 
-    public static String getAccountServiceAuthToken(String acctName, String password)
+    public static void addSoapAcctAuthHeader(WSBindingProvider bp)
+    throws Exception {
+        String authTok = Utility.getAccountServiceAuthToken();
+        addSoapAcctAuthHeader(bp, authTok);
+    }
+
+    public static String getAccountServiceAuthToken() throws Exception {
+        String acctName = "user1";
+        if (acctAuthToks.containsKey(acctName))
+            return acctAuthToks.get(acctName);
+        return getAccountServiceAuthToken(acctName, DEFAULT_PASS);
+    }
+
+    public static String getAccountServiceAuthToken(
+                    String acctName, String password)
     throws Exception {
         Utility.getAcctSvcEIF();
         AuthRequest authReq = new AuthRequest();
@@ -188,7 +215,7 @@ public class Utility {
             acct.setBy(com.zimbra.soap.admin.wsimport.generated.AccountBy.NAME);
             acct.setValue("admin");
             authReq.setAccount(acct);
-            authReq.setPassword("test123");
+            authReq.setPassword(DEFAULT_PASS);
             authReq.setAuthToken(null);
             com.zimbra.soap.admin.wsimport.generated.AuthResponse authResponse =
                     getAdminSvcEIF().authRequest(authReq);
@@ -511,7 +538,7 @@ public class Utility {
         } catch (SOAPFaultException sfe) {
             CreateAccountRequest createAcctReq = new CreateAccountRequest();
             createAcctReq.setName(accountName);
-            createAcctReq.setPassword("test123");
+            createAcctReq.setPassword(DEFAULT_PASS);
             Utility.addSoapAdminAuthHeader((WSBindingProvider)adminSvcEIF);
             CreateAccountResponse resp =
                     adminSvcEIF.createAccountRequest(createAcctReq);
@@ -544,7 +571,7 @@ public class Utility {
             CreateCalendarResourceRequest createAcctReq =
                     new CreateCalendarResourceRequest();
             createAcctReq.setName(calResourceName);
-            createAcctReq.setPassword("test123");
+            createAcctReq.setPassword(DEFAULT_PASS);
             createAcctReq.getA().add(Utility.mkAttr("displayName", displayName));
             createAcctReq.getA().add(Utility.mkAttr("zimbraCalResType", "Location"));
             createAcctReq.getA().add(Utility.mkAttr(
@@ -568,7 +595,7 @@ public class Utility {
      */
     public static String ensureMailboxExistsForAccount(String accountName) throws Exception {
         String accountId = ensureAccountExists(accountName);
-        getAccountServiceAuthToken(accountName, "test123");
+        getAccountServiceAuthToken(accountName, DEFAULT_PASS);
         return accountId;
     }
 

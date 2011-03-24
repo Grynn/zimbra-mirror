@@ -42,9 +42,9 @@ public class GetDataSourcesResponse {
 
     @XmlElements({
         @XmlElement(name = "rss", type = MailRssDataSource.class),
-        @XmlElement(name = "cal", type = MailCalDataSource.class),
+        @XmlElement(name = "imap", type = MailImapDataSource.class),
         @XmlElement(name = "pop3", type = MailPop3DataSource.class),
-        @XmlElement(name = "imap", type = MailImapDataSource.class)
+        @XmlElement(name = "cal", type = MailCalDataSource.class)
     })
     protected List<MailDataSource> pop3OrImapOrRss;
 
@@ -67,9 +67,9 @@ public class GetDataSourcesResponse {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link MailRssDataSource }
-     * {@link MailCalDataSource }
-     * {@link MailPop3DataSource }
      * {@link MailImapDataSource }
+     * {@link MailPop3DataSource }
+     * {@link MailCalDataSource }
      * 
      * 
      */

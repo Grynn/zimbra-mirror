@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="getAccountRequest">
  *   &lt;complexContent>
- *     &lt;extension base="{urn:zimbraAdmin}attributeSelectorImpl">
+ *     &lt;extension base="{urn:zimbra}attributeSelectorImpl">
  *       &lt;sequence>
- *         &lt;element name="account" type="{urn:zimbraAdmin}accountSelector" minOccurs="0"/>
+ *         &lt;element name="account" type="{urn:zimbra}accountSelector" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="applyCos" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/extension>

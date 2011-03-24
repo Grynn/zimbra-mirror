@@ -51,6 +51,54 @@ public interface AccountService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.CreateIdentityResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/CreateIdentity")
+    @WebResult(name = "CreateIdentityResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public CreateIdentityResponse createIdentityRequest(
+        @WebParam(name = "CreateIdentityRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        CreateIdentityRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.CreateSignatureResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/CreateSignature")
+    @WebResult(name = "CreateSignatureResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public CreateSignatureResponse createSignatureRequest(
+        @WebParam(name = "CreateSignatureRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        CreateSignatureRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.DeleteIdentityResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/DeleteIdentity")
+    @WebResult(name = "DeleteIdentityResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public DeleteIdentityResponse deleteIdentityRequest(
+        @WebParam(name = "DeleteIdentityRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        DeleteIdentityRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.DeleteSignatureResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/DeleteSignature")
+    @WebResult(name = "DeleteSignatureResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public DeleteSignatureResponse deleteSignatureRequest(
+        @WebParam(name = "DeleteSignatureRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        DeleteSignatureRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.account.wsimport.generated.EndSessionResponse
      */
     @WebMethod(action = "urn:zimbraAccount/EndSession")
@@ -58,6 +106,78 @@ public interface AccountService {
     public EndSessionResponse endSessionRequest(
         @WebParam(name = "EndSessionRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
         EndSessionRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.GetAccountInfoResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/GetAccountInfo")
+    @WebResult(name = "GetAccountInfoResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public GetAccountInfoResponse getAccountInfoRequest(
+        @WebParam(name = "GetAccountInfoRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        GetAccountInfoRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.GetAllLocalesResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/GetAllLocales")
+    @WebResult(name = "GetAllLocalesResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public GetAllLocalesResponse getAllLocalesRequest(
+        @WebParam(name = "GetAllLocalesRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        GetAllLocalesRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.GetAvailableCsvFormatsResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/GetAvailableCsvFormats")
+    @WebResult(name = "GetAvailableCsvFormatsResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public GetAvailableCsvFormatsResponse getAvailableCsvFormatsRequest(
+        @WebParam(name = "GetAvailableCsvFormatsRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        GetAvailableCsvFormatsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.GetAvailableLocalesResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/GetAvailableLocales")
+    @WebResult(name = "GetAvailableLocalesResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public GetAvailableLocalesResponse getAvailableLocalesRequest(
+        @WebParam(name = "GetAvailableLocalesRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        GetAvailableLocalesRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.GetAvailableSkinsResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/GetAvailableSkins")
+    @WebResult(name = "GetAvailableSkinsResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public GetAvailableSkinsResponse getAvailableSkinsRequest(
+        @WebParam(name = "GetAvailableSkinsRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        GetAvailableSkinsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.GetDistributionListMembersResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/GetDistributionListMembers")
+    @WebResult(name = "GetDistributionListMembersResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public GetDistributionListMembersResponse getDistributionListMembersRequest(
+        @WebParam(name = "GetDistributionListMembersRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        GetDistributionListMembersRequest parameters);
 
     /**
      * 
@@ -99,6 +219,18 @@ public interface AccountService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.GetShareInfoResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/GetShareInfo")
+    @WebResult(name = "GetShareInfoResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public GetShareInfoResponse getShareInfoRequest(
+        @WebParam(name = "GetShareInfoRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        GetShareInfoRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.account.wsimport.generated.GetSignaturesResponse
      */
     @WebMethod(action = "urn:zimbraAccount/GetSignatures")
@@ -111,6 +243,54 @@ public interface AccountService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.GetVersionInfoResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/GetVersionInfo")
+    @WebResult(name = "GetVersionInfoResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public GetVersionInfoResponse getVersionInfoRequest(
+        @WebParam(name = "GetVersionInfoRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        GetVersionInfoRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.GetWhiteBlackListResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/GetWhiteBlackList")
+    @WebResult(name = "GetWhiteBlackListResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public GetWhiteBlackListResponse getWhiteBlackListRequest(
+        @WebParam(name = "GetWhiteBlackListRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        GetWhiteBlackListRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.ModifyIdentityResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/ModifyIdentity")
+    @WebResult(name = "ModifyIdentityResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public ModifyIdentityResponse modifyIdentityRequest(
+        @WebParam(name = "ModifyIdentityRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        ModifyIdentityRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.ModifyPrefsResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/ModifyPrefs")
+    @WebResult(name = "ModifyPrefsResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public ModifyPrefsResponse modifyPrefsRequest(
+        @WebParam(name = "ModifyPrefsRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        ModifyPrefsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.account.wsimport.generated.ModifyPropertiesResponse
      */
     @WebMethod(action = "urn:zimbraAccount/ModifyProperties")
@@ -118,5 +298,29 @@ public interface AccountService {
     public ModifyPropertiesResponse modifyPropertiesRequest(
         @WebParam(name = "ModifyPropertiesRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
         ModifyPropertiesRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.ModifySignatureResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/ModifySignature")
+    @WebResult(name = "ModifySignatureResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public ModifySignatureResponse modifySignatureRequest(
+        @WebParam(name = "ModifySignatureRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        ModifySignatureRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.ModifyWhiteBlackListResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/ModifyWhiteBlackList")
+    @WebResult(name = "ModifyWhiteBlackListResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public ModifyWhiteBlackListResponse modifyWhiteBlackListRequest(
+        @WebParam(name = "ModifyWhiteBlackListRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        ModifyWhiteBlackListRequest parameters);
 
 }

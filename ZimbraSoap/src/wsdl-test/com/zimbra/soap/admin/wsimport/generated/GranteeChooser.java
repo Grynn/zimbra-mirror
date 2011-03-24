@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "granteeChooser")
+@XmlType(name = "granteeChooser", namespace = "urn:zimbra")
 public class GranteeChooser {
 
     @XmlAttribute

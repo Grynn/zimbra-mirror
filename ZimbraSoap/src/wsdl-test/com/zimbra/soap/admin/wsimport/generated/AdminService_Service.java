@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "AdminService", targetNamespace = "urn:zimbraAdmin", wsdlLocation = "file:/p4/gelliot_osx/main/ZimbraSoap/build/schema/AdminService.wsdl")
+@WebServiceClient(name = "AdminService", targetNamespace = "urn:zimbraAdmin", wsdlLocation = "file:/p4/gelliot_mac/ZimbraSoap/build/schema/AdminService.wsdl")
 public class AdminService_Service
     extends Service
 {
@@ -30,9 +30,9 @@ public class AdminService_Service
         try {
             URL baseUrl;
             baseUrl = com.zimbra.soap.admin.wsimport.generated.AdminService_Service.class.getResource(".");
-            url = new URL(baseUrl, "file:/p4/gelliot_osx/main/ZimbraSoap/build/schema/AdminService.wsdl");
+            url = new URL(baseUrl, "file:/p4/gelliot_mac/ZimbraSoap/build/schema/AdminService.wsdl");
         } catch (MalformedURLException e) {
-            logger.warn("Failed to create URL for the wsdl Location: 'file:/p4/gelliot_osx/main/ZimbraSoap/build/schema/AdminService.wsdl', retrying as a local file");
+            logger.warn("Failed to create URL for the wsdl Location: 'file:/p4/gelliot_mac/ZimbraSoap/build/schema/AdminService.wsdl', retrying as a local file");
             logger.warn(e.getMessage());
         }
         ADMINSERVICE_WSDL_LOCATION = url;

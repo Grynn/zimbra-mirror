@@ -17,8 +17,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="grantee" type="{urn:zimbraAdmin}granteeChooser" minOccurs="0"/>
- *         &lt;element name="owner" type="{urn:zimbraAdmin}accountSelector"/>
+ *         &lt;element name="grantee" type="{urn:zimbra}granteeChooser" minOccurs="0"/>
+ *         &lt;element name="owner" type="{urn:zimbra}accountSelector"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

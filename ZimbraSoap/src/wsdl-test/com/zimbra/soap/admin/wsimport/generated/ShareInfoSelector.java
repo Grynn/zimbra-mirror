@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="folder" type="{urn:zimbraAdmin}publishFolderInfo"/>
- *         &lt;element name="owner" type="{urn:zimbraAdmin}accountSelector" minOccurs="0"/>
+ *         &lt;element name="owner" type="{urn:zimbra}accountSelector" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="action" use="required" type="{urn:zimbraAdmin}pubShareInfoAction" />
  *     &lt;/restriction>

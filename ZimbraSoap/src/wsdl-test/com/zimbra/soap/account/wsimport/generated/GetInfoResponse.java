@@ -945,8 +945,8 @@ public class GetInfoResponse {
     public static class DataSources {
 
         @XmlElements({
-            @XmlElement(name = "imap", type = AccountImapDataSource.class),
             @XmlElement(name = "rss", type = AccountRssDataSource.class),
+            @XmlElement(name = "imap", type = AccountImapDataSource.class),
             @XmlElement(name = "pop3", type = AccountPop3DataSource.class),
             @XmlElement(name = "cal", type = AccountCalDataSource.class)
         })
@@ -970,8 +970,8 @@ public class GetInfoResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link AccountImapDataSource }
          * {@link AccountRssDataSource }
+         * {@link AccountImapDataSource }
          * {@link AccountPop3DataSource }
          * {@link AccountCalDataSource }
          * 

@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="getServerRequest">
  *   &lt;complexContent>
- *     &lt;extension base="{urn:zimbraAdmin}attributeSelectorImpl">
+ *     &lt;extension base="{urn:zimbra}attributeSelectorImpl">
  *       &lt;sequence>
  *         &lt;element name="server" type="{urn:zimbraAdmin}serverSelector" minOccurs="0"/>
  *       &lt;/sequence>

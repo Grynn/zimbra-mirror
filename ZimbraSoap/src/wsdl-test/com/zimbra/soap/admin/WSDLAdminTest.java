@@ -227,8 +227,29 @@ public class WSDLAdminTest {
         Assert.assertNotNull("ReloadLocalConfigResponse object", resp);
     }
 
-    @Test
-    public void getAllConfigTest() throws Exception {
+    // TODO: re-enable when later version of Metro is in use.  
+    // @Test
+    // Currently failing with a NullPointerException at :
+    // at com.sun.xml.stream.buffer.AbstractProcessor.readFromNextStructure(AbstractProcessor.java:189)
+    // at com.sun.xml.stream.buffer.AbstractProcessor.readStructure(AbstractProcessor.java:163)
+    // at com.sun.xml.stream.buffer.AbstractProcessor.readEiiState(AbstractProcessor.java:167)
+    // at com.sun.xml.stream.buffer.stax.StreamReaderBufferProcessor.next(StreamReaderBufferProcessor.java:220)
+    // at com.sun.xml.ws.streaming.XMLStreamReaderUtil.readRest(XMLStreamReaderUtil.java:67)
+    // at com.sun.xml.ws.message.stream.StreamMessage.readPayloadAsJAXB(StreamMessage.java:262)
+    // at com.sun.xml.ws.client.sei.ResponseBuilder$Body.readResponse(ResponseBuilder.java:469)
+    // at com.sun.xml.ws.client.sei.SyncMethodHandler.invoke(SyncMethodHandler.java:121)
+    // at com.sun.xml.ws.client.sei.SyncMethodHandler.invoke(SyncMethodHandler.java:89)
+    // at com.sun.xml.ws.client.sei.SEIStub.invoke(SEIStub.java:118)
+    // at $Proxy112.getAllConfigRequest(Unknown Source)
+    //
+    // Believe this is a bug in Metro 1.5 documented at 
+    //     http://java.net/jira/browse/JAX_WS-807
+    // Can't upgrade to newer versions of Metro because they require JAX-WS 2.2
+    // and JDK6 only comes with JAX-WS 2.1.  It is possible to work around that
+    // but would require jumping through hoops.
+    // See GetAllConfigTest - the same Response Xml seems to work fine with
+    // simple JAXB unmarshalling.
+    public void getAllConfigTest_Disabled() throws Exception {
         GetAllConfigRequest req = new GetAllConfigRequest();
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         GetAllConfigResponse resp = eif.getAllConfigRequest(req);

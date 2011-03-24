@@ -16,10 +16,10 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="aliasInfo">
  *   &lt;complexContent>
  *     &lt;extension base="{urn:zimbraAdmin}adminObjectInfo">
- *       &lt;all>
- *       &lt;/all>
+ *       &lt;sequence>
+ *       &lt;/sequence>
  *       &lt;attribute name="targetName" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="type" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="type" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -35,7 +35,7 @@ public class AliasInfo
 
     @XmlAttribute(required = true)
     protected String targetName;
-    @XmlAttribute(required = true)
+    @XmlAttribute
     protected String type;
 
     /**

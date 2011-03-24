@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "attributeSelectorImpl")
+@XmlType(name = "attributeSelectorImpl", namespace = "urn:zimbra")
 @XmlSeeAlso({
     GetCosRequest.class,
     SearchDirectoryRequest.class,

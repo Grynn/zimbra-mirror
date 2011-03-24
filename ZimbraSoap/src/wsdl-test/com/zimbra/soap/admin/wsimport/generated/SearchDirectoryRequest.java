@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="searchDirectoryRequest">
  *   &lt;complexContent>
- *     &lt;extension base="{urn:zimbraAdmin}attributeSelectorImpl">
- *       &lt;all>
- *       &lt;/all>
+ *     &lt;extension base="{urn:zimbra}attributeSelectorImpl">
+ *       &lt;sequence>
+ *       &lt;/sequence>
  *       &lt;attribute name="query" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="maxResults" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="limit" type="{http://www.w3.org/2001/XMLSchema}int" />

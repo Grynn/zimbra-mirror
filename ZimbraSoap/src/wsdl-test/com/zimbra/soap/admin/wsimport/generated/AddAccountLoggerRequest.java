@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="logger" type="{urn:zimbraAdmin}loggerInfo"/>
  *         &lt;choice minOccurs="0">
  *           &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *           &lt;element name="account" type="{urn:zimbraAdmin}accountSelector"/>
+ *           &lt;element name="account" type="{urn:zimbra}accountSelector"/>
  *         &lt;/choice>
  *       &lt;/sequence>
  *     &lt;/restriction>

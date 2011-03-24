@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlValue;
  * &lt;complexType name="accountSelector">
  *   &lt;simpleContent>
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *       &lt;attribute name="by" type="{urn:zimbraAdmin}accountBy" />
+ *       &lt;attribute name="by" use="required" type="{urn:zimbra}accountBy" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
  * &lt;/complexType>
@@ -26,14 +26,14 @@ import javax.xml.bind.annotation.XmlValue;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "accountSelector", propOrder = {
+@XmlType(name = "accountSelector", namespace = "urn:zimbra", propOrder = {
     "value"
 })
 public class AccountSelector {
 
     @XmlValue
     protected String value;
-    @XmlAttribute
+    @XmlAttribute(required = true)
     protected AccountBy by;
 
     /**
