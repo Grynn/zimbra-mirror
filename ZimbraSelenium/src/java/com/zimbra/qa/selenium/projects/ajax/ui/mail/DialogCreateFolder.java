@@ -3,13 +3,11 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
+import java.net.URL;
+
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 
@@ -215,6 +213,35 @@ public class DialogCreateFolder extends AbsDialog {
 			throw new HarnessException("'more colors' - implement me!");
 		
 		throw new HarnessException("implement me!");
+		
+	}
+
+
+	public void zClickSubscribeFeed(boolean b) throws HarnessException {
+		String locator = "CreateNewFolderDialog_remote";
+		
+		if ( !this.sIsElementPresent(locator) ) {
+			throw new HarnessException(locator + " no present!");
+		}
+		
+		if ( this.sIsChecked(locator) == b ) {
+			logger.debug("checkbox status matched.  not doing anything");
+			return;
+		}
+		
+		this.sCheck(locator);
+		
+	}
+
+
+	public void zEnterFeedURL(URL feed) throws HarnessException {
+		String locator = "CreateNewFolderDialog_remoteURLfield";
+
+		if ( !this.sIsElementPresent(locator) ) {
+			throw new HarnessException(locator + " no present!");
+		}
+		
+		this.sType(locator, feed.toString());
 		
 	}
 

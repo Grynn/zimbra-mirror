@@ -561,6 +561,14 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
+	 * DefaultSelenium.check()
+	 */
+	public void sCheck(String locator) {
+		ClientSessionFactory.session().selenium().check(locator);
+		logger.info("check(" + locator + ")");
+	}
+
+	/**
 	 * DefaultSelenium.isChecked()
 	 */
 	public boolean sIsChecked(String locator) {
