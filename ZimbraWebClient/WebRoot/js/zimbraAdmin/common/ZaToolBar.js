@@ -295,9 +295,11 @@ function () {
         if (this._btnOrder [i] == ZaOperation.NONE ) {
             index = i ;
             break ;
-        } else { //duplicate the operation.
+        } else if (this._btnOrder[i] == ZaOperation.SEP) {//There is no need to show SEP in popup menu
+		continue;
+	} else { //duplicate the operation.
             var op =  this._opList [this._btnOrder [i]] ;
-            if (op != null  && op.className != undefined) {
+            if (op != null ) {
                 this._moreActionsMenuList.push (ZaOperation.duplicate(op)) ;
             }
         }
