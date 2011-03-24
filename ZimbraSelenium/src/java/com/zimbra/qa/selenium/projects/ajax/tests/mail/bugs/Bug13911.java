@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.bugs;
 
 import java.io.File;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 
 import org.testng.annotations.*;
@@ -36,7 +37,7 @@ public class Bug13911 extends AjaxCommonTest {
 			groups = { "functional" })
 	public void Bug_13911() throws HarnessException {
 
-		String subject = "Hjælp til 3F";
+		String subject = "subject13010064065623";
 		String bodyBeforeImage = "Kære alle";
 		String bodyAfterImage = "Problemet består";
 
