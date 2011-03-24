@@ -517,6 +517,11 @@ function (entry) {
 		}
 		this._containedObject[ZaDistributionList.A2_publishedShares]._version = 1;
 	}
+	if(!entry.id) {
+		if(ZaItem.hasWritePermission(ZaAccount.A_zimbraIsDelegatedAdminAccount,entry)) {
+			this._containedObject.attrs[ZaDistributionList.A_mailStatus] = "enabled";
+		}
+	}
 	this.modifyContainedObject () ;	
 	this._localXForm.setInstance(this._containedObject);	
 	

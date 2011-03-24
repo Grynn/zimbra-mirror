@@ -20,7 +20,6 @@ ZaDistributionList = function(id, name, memberList, description, notes) {
     this._init();
 
     this.attrs = new Object();
-	this.attrs[ZaDistributionList.A_mailStatus] = "enabled";
 	this.attrs[ZaAccount.A_zimbraMailAlias] = [];
 	this.id = (id != null)? id: null;
 	this.type = ZaItem.DL;
