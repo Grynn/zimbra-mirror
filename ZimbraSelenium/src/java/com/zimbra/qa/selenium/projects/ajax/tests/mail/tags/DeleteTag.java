@@ -46,13 +46,18 @@ public class DeleteTag extends AjaxCommonTest {
 		DialogWarning dialog = (DialogWarning) app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, tag);
 		ZAssert.assertNotNull(dialog, "Verify the warning dialog opened");
 		
+		
 		// Click "Yes" to confirm
 		dialog.zClickButton(Button.B_YES);
 
-		
-		// Verify the tag is no longer found
-		tag = TagItem.importFromSOAP(app.zGetActiveAccount(), name);
-		ZAssert.assertNull(tag, "Verify the tag is deleted");
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+
+		// To check whether deleted tag is exist
+		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");
+
+		String tagname = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='" + name + "']","name");
+		ZAssert.assertNull(tagname, "Verify the tag is deleted");
+
 
 		
 	}

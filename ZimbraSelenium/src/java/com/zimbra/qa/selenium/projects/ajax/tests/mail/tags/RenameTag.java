@@ -42,7 +42,7 @@ public class RenameTag extends AjaxCommonTest {
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
 		// Rename the tag using the context menu
-		DialogRenameTag dialog = (DialogRenameTag) app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, tag);
+		DialogRenameTag dialog = (DialogRenameTag) app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_RENAME, tag);
 		ZAssert.assertNotNull(dialog, "Verify the warning dialog opened");
 		
 		// Set the new name, click OK

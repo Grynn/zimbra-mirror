@@ -5,6 +5,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove.Locators;
 
 
 /**
@@ -16,7 +17,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 public class DialogRenameTag extends AbsDialog {
 
 	public static class Locators {
-	
+		public static final String zDialogRenameId	= "//div[contains(@class,'DwtDialog')]/div/table/tbody/tr/td[contains(@class,'DwtDialogTitle') and contains (text(),'Rename Tag')]";
 
 	}
 	
@@ -102,8 +103,21 @@ public class DialogRenameTag extends AbsDialog {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		String locator = "implement me";
-		return ( this.sIsElementPresent(locator) );
+		logger.info(myPageName() + " zIsActive()");
+
+		String locator = "id="+ Locators.zDialogRenameId;
+		
+		if ( !this.sIsElementPresent(locator) ) {
+			return (false); // Not even present
+		}
+		
+		if ( !this.zIsVisiblePerPosition(locator, 0, 0) ) {
+			return (false);	// Not visible per position
+		}
+	
+		// Yes, visible
+		logger.info(myPageName() + " zIsVisible() = true");
+		return (true);
 	}
 
 

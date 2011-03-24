@@ -3,11 +3,12 @@ package com.zimbra.qa.selenium.projects.ajax.tests.mail.tags;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.*;
-
+//import com.zimbra.qa.selenium.projects.ajax.ui.mail.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 
 public class CreateTag extends AjaxCommonTest {
 
@@ -76,7 +77,7 @@ public class CreateTag extends AjaxCommonTest {
 			groups = { "functional" })
 	public void CreateTag_03() throws HarnessException {
 		
-		
+		FolderItem inboxFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
 		// Set the new tag name
 		String name1 = "tag" + ZimbraSeleniumProperties.getUniqueString();
 		String name2 = "tag" + ZimbraSeleniumProperties.getUniqueString();
@@ -90,7 +91,7 @@ public class CreateTag extends AjaxCommonTest {
 		// Get the tag
 		TagItem tag2 = TagItem.importFromSOAP(app.zGetActiveAccount(), name2);
 		
-		
+		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inboxFolder);
 		// Create a new tag using the context menu + New Tag
 		DialogTag dialog = (DialogTag)app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_NEWTAG, tag2);
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
