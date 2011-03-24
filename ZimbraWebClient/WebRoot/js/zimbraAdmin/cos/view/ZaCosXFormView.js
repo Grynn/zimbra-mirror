@@ -682,6 +682,11 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     msgName:ZaMsg.LBL_zimbraPrefMailToasterEnabled,
                     label:ZaMsg.LBL_zimbraPrefMailToasterEnabled,
                     trueValue:"TRUE", falseValue:"FALSE"
+                },
+		        {ref:ZaCos.A_zimbraPrefMessageIdDedupingEnabled, type:_CHECKBOX_,
+                    msgName:ZaMsg.LBL_zimbraPrefMessageIdDedupingEnabled,
+                    label:ZaMsg.LBL_zimbraPrefMessageIdDedupingEnabled,
+                    trueValue:"TRUE", falseValue:"FALSE"
                 }
 
             ]},
