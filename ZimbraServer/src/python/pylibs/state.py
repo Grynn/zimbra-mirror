@@ -751,7 +751,9 @@ class State:
 			Log.logMsg(5, "comment after lookup key=%s val=%s cmd=%s sr=%s" % (key, val, cmd, sr))
 			if (len(parts) > 2):
 				valset = parts[2].split(',')
-				if val in valset:
+				if val is None:
+					val = commentstr
+				elif val in valset:
 					val = commentstr
 				else:
 					val = ""
@@ -775,7 +777,9 @@ class State:
 			Log.logMsg(5, "uncomment after lookup key=%s val=%s cmd=%s sr=%s" % (key, val, cmd, sr))
 			if (len(parts) > 2):
 				valset = parts[2].split(',')
-				if val in valset:
+				if val is None:
+					val = ""
+				elif val in valset:
 					val = ""
 				else:
 					val = commentstr
