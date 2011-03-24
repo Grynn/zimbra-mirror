@@ -272,7 +272,7 @@ public class PageMail extends AbsTab {
 			
 			// FALL THROUGH
 			
-		} else if ( button == Button.B_GETMAIL ) {
+		} else if ( button == Button.B_GETMAIL || button == Button.B_LOADFEED ) {
 			
 			if ( zGetPropMailView() == PageMailView.BY_MESSAGE ) {
 				locator = "id="+ Locators.zGetMailIconBtnTVID;

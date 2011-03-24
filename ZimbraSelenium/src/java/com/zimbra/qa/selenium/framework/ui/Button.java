@@ -64,6 +64,7 @@ public class Button {
 
 	// MailPage buttons and pulldown options
 	public static final Button B_GETMAIL = new Button("B_GETMAIL");
+	public static final Button B_LOADFEED = new Button("B_LOADFEED");
 	public static final Button B_REPLY = new Button("B_REPLY");
 	public static final Button B_REPLYALL = new Button("B_REPLYALL");
 	public static final Button B_FORWARD = new Button("B_FORWARD");
