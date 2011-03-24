@@ -5,7 +5,6 @@ package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
-import com.zimbra.qa.selenium.framework.items.TagItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -33,6 +32,7 @@ public class PageBriefcase extends AbsTab {
 		public static final String zBriefcaseAppIconBtn = "id=zb__App__Briefcase_left_icon";
 		public static final String zNewMenuIconBtn = "id=zb__BCD__NEW_FILE_left_icon";
 		public static final String zNewMenuLeftIconBtn = "id=zb__BDLV__NEW_MENU_left_icon";
+		public static final String zNewMenuArrowBtn = "css=td[id=zb__BDLV__NEW_MENU_dropdown]>div[class^=ImgSelectPullDownArrow]";
 		public static final String zUploadFileIconBtn = "id=zb__BDLV__NEW_FILE_left_icon";
 		public static final String zEditFileIconBtn = "id=zb__BDLV__EDIT_FILE_left_icon";
 		public static final String zOpenFileInSeparateWindowIconBtn = "id=zb__BDLV__NEW_BRIEFCASE_WIN_left_icon";
@@ -324,8 +324,8 @@ public class PageBriefcase extends AbsTab {
 			if (option == Button.O_NEW_BRIEFCASE) {
 				throw new HarnessException("implement me!");
 			} else if (option == Button.O_NEW_DOCUMENT) {
-				pulldownLocator = "css=td[id$='BDLV__NEW_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
-
+				pulldownLocator = Locators.zNewMenuArrowBtn;
+				
 				optionLocator = "css=td[id$='_title']:contains('Document')";
 
 				page = new DocumentBriefcaseNew(this.MyApplication);
@@ -334,7 +334,13 @@ public class PageBriefcase extends AbsTab {
 			} else if (option == Button.O_NEW_FOLDER) {
 				throw new HarnessException("implement me!");
 			} else if (option == Button.O_NEW_TAG) {
-				throw new HarnessException("implement me!");
+				pulldownLocator = Locators.zNewMenuArrowBtn;
+				
+				optionLocator = "css=tr[id=POPUP_NEW_TAG] td[id$='_title']:contains('Tag')";
+
+				page = new DialogTag(this.MyApplication, this);
+				
+				// FALL THROUGH
 			} else {
 				throw new HarnessException(
 						"no logic defined for pulldown/option " + pulldown
@@ -732,21 +738,30 @@ public class PageBriefcase extends AbsTab {
 			page = new DialogDeleteConfirm(MyApplication, this);
 
 			keyCode = "8";
+		} else if (shortcut == Shortcut.S_NEWTAG) {
+
+			// "NEW TAG" shortcut opens "Create New Tag" dialog
+			page = new DialogTag(MyApplication, this);
+
+			keyCode = "78,84";
 		} else {
 			throw new HarnessException("implement shortcut: " + shortcut);
 		}
 
 		// zKeyboard.zTypeCharacters(shortcut.getKeys());
-		sGetEval("if(window.KeyEvent)"
-				+ "{var evObj = document.createEvent('KeyEvents');"
-				+ "evObj.initKeyEvent( 'keydown', true, true, window, false, false, false, false,"
-				+ keyCode + ", 0 );} "
-				+ "else {var evObj = document.createEvent('HTMLEvents');"
-				+ "evObj.initEvent( 'keydown', true, true, window, 1 );"
-				+ "evObj.keyCode = " + keyCode + ";}"
-				+ "var x = selenium.browserbot.findElementOrNull('"
-				+ "css=html>body" + "'); "
-				+ "x.blur(); x.focus(); x.dispatchEvent(evObj);");
+
+		for (String kc : keyCode.split(",")) {
+			sGetEval("if(window.KeyEvent)"
+					+ "{var evObj = document.createEvent('KeyEvents');"
+					+ "evObj.initKeyEvent( 'keydown', true, true, window, false, false, false, false,"
+					+ kc + ", 0 );} "
+					+ "else {var evObj = document.createEvent('HTMLEvents');"
+					+ "evObj.initEvent( 'keydown', true, true, window, 1 );"
+					+ "evObj.keyCode = " + kc + ";}"
+					+ "var x = selenium.browserbot.findElementOrNull('"
+					+ "css=html>body" + "'); "
+					+ "x.blur(); x.focus(); x.dispatchEvent(evObj);");
+		}
 
 		// If the app is busy, wait for it to become active
 		this.zWaitForBusyOverlay();
