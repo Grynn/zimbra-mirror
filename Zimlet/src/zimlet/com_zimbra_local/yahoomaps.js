@@ -183,17 +183,17 @@ function(result) {
 	html[idx++] = result.BUSINESSURL;
 	html[idx++] = "', url:'";
 	html[idx++] = result.URL;
-	html[idx++] = "'});\">+Contact</a>";
+	html[idx++] = "'});\"'>+Contact</a>";
 
 	if (appCtxt.getZimletMgr().zimletExists("com_zimbra_asterisk")) {
-		html[idx++] = "&nbsp;|&nbsp;<a href='#' onclick=\"YahooMaps._phoneCall('";
+		html[idx++] = "&nbsp;|&nbsp;<a href='javascript:void(0)' onclick=\"YahooMaps._phoneCall('";
 		html[idx++] = result.PHONE;
-		html[idx++] = "');\">Call</a>";
+		html[idx++] = "');\">Call</a>'";
 	}
 
 	if (appCtxt.getZimletMgr().zimletExists("com_zimbra_sms")) {
-		//html[idx++] = "&nbsp;|&nbsp;<a href='#' onclick=\"YahooMaps._sendSMS('"+result.PHONE+"');\">SMS</a>";
-		html[idx++] = "&nbsp;|&nbsp;<a href='#' onclick=\"YahooMaps._sendSMS({";
+		//html[idx++] = "&nbsp;|&nbsp;<a href='javascript:void(0)' onclick=\"YahooMaps._sendSMS('"+result.PHONE+"');\">SMS</a>";
+		html[idx++] = "&nbsp;|&nbsp;<a href='javascript:void(0)' onclick=\"YahooMaps._sendSMS({";
 		html[idx++] = " title:'";
 		html[idx++] = title;
 		html[idx++] = "', addr:'";;

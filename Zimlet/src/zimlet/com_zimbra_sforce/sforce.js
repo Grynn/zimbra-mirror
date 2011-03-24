@@ -1336,16 +1336,16 @@ function() {
 
 Com_Zimbra_SForce.prototype._getSFViewEditLinks =
 function(id, otherLinksArry) {
-	var lnks = ["<a id='sforce_view_",id,"'  style='color: #385495; font-size: 11px;text-decoration:underline'  href='#'>view</a>&nbsp;",
-		"<a id='sforce_edit_",id,"' style='color: #385495; font-size: 11px;text-decoration:underline' href='#'>edit</a>&nbsp;",
-		"<a id='sforce_clone_",id,"'  style='color: #385495; font-size: 11px;text-decoration:underline'  href='#'>clone</a>"];
+	var lnks = ["<a id='sforce_view_",id,"'  style='color: #385495; font-size: 11px;text-decoration:underline'  href='javascript:void(0)'>view</a>&nbsp;",
+		"<a id='sforce_edit_",id,"' style='color: #385495; font-size: 11px;text-decoration:underline' href='javascript:void(0)'>edit</a>&nbsp;",
+		"<a id='sforce_clone_",id,"'  style='color: #385495; font-size: 11px;text-decoration:underline'  href='javascript:void(0)'>clone</a>"];
 
 	if (otherLinksArry == undefined) {
 		return lnks.join("");
 	}
 	for (var i = 0; i < otherLinksArry.length; i++) {
 
-		lnks.push(["&nbsp;<a id='",otherLinksArry[i].id,"'  style='color: #385495; font-size: 11px;text-decoration:underline'  href='#'>",otherLinksArry[i].name,"</a>"].join(""));
+		lnks.push(["&nbsp;<a id='",otherLinksArry[i].id,"'  style='color: #385495; font-size: 11px;text-decoration:underline'  href='javascript:void(0)'>",otherLinksArry[i].name,"</a>"].join(""));
 	}
 	return lnks.join("");
 };

@@ -1713,7 +1713,7 @@ function(params) {
 		html[i++] = "<TD class='social_feedText' width=90%>";
 
 		if (type != "TWEETMEME" && type != "FACEBOOK") {
-			html[i++] = [" <a href='#' style='color:darkblue;font-size:12px;font-weight:bold' id='", this._getAccountLinkId(screen_name, tableId),
+			html[i++] = [" <a href='javascript:void(0)' style='color:darkblue;font-size:12px;font-weight:bold' id='", this._getAccountLinkId(screen_name, tableId),
 				"'>", screen_name, ":</a> "].join("");
 		} else {
 			html[i++] = "<label style='color:#262626;font-size:12px;font-weight:bold'>" + screen_name + ": </label>";
@@ -1755,27 +1755,27 @@ function(params) {
 
 		if (type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS") {
 			if(accountName == screen_name) {
-				html[i++] = "<a href='#'  title='"+this.getMessage("deletePost")+"' style='color:gray;font-size:11px' id='" + this._gettwitterDeleteLinkId(obj.id, tableId, type) + "'>"+this.getMessage("del")+"</a>&nbsp;&nbsp;";
+				html[i++] = "<a href='javascript:void(0)'  title='"+this.getMessage("deletePost")+"' style='color:gray;font-size:11px' id='" + this._gettwitterDeleteLinkId(obj.id, tableId, type) + "'>"+this.getMessage("del")+"</a>&nbsp;&nbsp;";
 			}
 		}
 
 		if (type == "ACCOUNT" || type == "SEARCH" || type == "TREND" || type == "DIRECT_MSGS") {
-			html[i++] = "<a href='#' title='"+this.getMessage("directMessage")+"' style='color:gray;font-size:11px' id='" + this._gettwitterDMLinkId("d @" + screen_name) + "'>"+this.getMessage("dm")+"</a>&nbsp;&nbsp;";
+			html[i++] = "<a href='javascript:void(0)' title='"+this.getMessage("directMessage")+"' style='color:gray;font-size:11px' id='" + this._gettwitterDMLinkId("d @" + screen_name) + "'>"+this.getMessage("dm")+"</a>&nbsp;&nbsp;";
 		}
 		if(type != "DIRECT_MSGS") {
 			var linkName = this.getMessage("retweet");
 			if(type == "FACEBOOK") {
 				linkName = this.getMessage("share");
 			}
-			html[i++] = "<a href='#' title='"+this.getMessage("retweetThisItem")+"' style='color:gray;font-size:11px' id='" + this._gettwitterRetweetLinkId("RT @" + screen_name + text) + "'>"+linkName+"</a>&nbsp;&nbsp;";
+			html[i++] = "<a href='javascript:void(0)' title='"+this.getMessage("retweetThisItem")+"' style='color:gray;font-size:11px' id='" + this._gettwitterRetweetLinkId("RT @" + screen_name + text) + "'>"+linkName+"</a>&nbsp;&nbsp;";
 		}
 
 		if (type != "TWEETMEME" && type != "FACEBOOK" && type != "DIGG" && type != "DIRECT_MSGS") {
-			html[i++] = "<a href='#' title='"+this.getMessage("replyToThisPerson")+"' style='color:gray;font-size:11px' id='" + this._gettwitterReplyLinkId("@" + screen_name) + "'>"+this.getMessage("reply")+"</a>";
+			html[i++] = "<a href='javascript:void(0)' title='"+this.getMessage("replyToThisPerson")+"' style='color:gray;font-size:11px' id='" + this._gettwitterReplyLinkId("@" + screen_name) + "'>"+this.getMessage("reply")+"</a>";
 		}
 		if (type == "FACEBOOK") {
-			html[i++] = "<a href='#' title='"+this.getMessage("likeThisPost")+"' style='color:gray;font-size:11px' id='" + this._getFBLikeLinkId(obj.post_id, tableId) + "'>"+this.getMessage("like")+"</a>&nbsp;&nbsp;";
-			html[i++] = "<a href='#' title='"+this.getMessage("commentOnThisPost")+"' style='color:gray;font-size:11px' id='" + this._getFacebookCommentLinkId(obj.post_id, tableId) + "'>"+this.getMessage("comment")+"</a>";
+			html[i++] = "<a href='javascript:void(0)' title='"+this.getMessage("likeThisPost")+"' style='color:gray;font-size:11px' id='" + this._getFBLikeLinkId(obj.post_id, tableId) + "'>"+this.getMessage("like")+"</a>&nbsp;&nbsp;";
+			html[i++] = "<a href='javascript:void(0)' title='"+this.getMessage("commentOnThisPost")+"' style='color:gray;font-size:11px' id='" + this._getFacebookCommentLinkId(obj.post_id, tableId) + "'>"+this.getMessage("comment")+"</a>";
 		}
 		html[i++] = "</td>";
 		html[i++] = "</TR>";
@@ -1834,8 +1834,8 @@ function(tableId, numberOfPosts, html, position, type) {
 		mainDivDisplayStyle = "none";
 	}
 	html[i++] = ["<div style='display:", mainDivDisplayStyle, "' class='social_rowsDiv' width=100%><table width=100%><tr><td align=left><a style='display:", newerLnkDisplayStyle, 
-				"' href='#' id='", newerItemsLnkId, "' >< ", this.getMessage("newerItems"), "</a></td><td align=right><a  style='display:", olderLnkDisplayStyle, 
-				"' href='#' id='", olderItemsLnkId, "' >", this.getMessage("olderItems"), " ></a></td></tr></table></div>"].join("");
+				"' href='javascript:void(0)' id='", newerItemsLnkId, "' >< ", this.getMessage("newerItems"), "</a></td><td align=right><a  style='display:", olderLnkDisplayStyle, 
+				"' href='javascript:void(0)' id='", olderItemsLnkId, "' >", this.getMessage("olderItems"), " ></a></td></tr></table></div>"].join("");
 
 };
 
@@ -2112,7 +2112,7 @@ function(tableId, error) {
 		var id = Dwt.getNextId();
 		var html = [];
 		html.push("<br/><br/><div width=90% align=center><label style='color:gray;font-weight:bold;font-size:12px'>", error, " </label>",
-				"<a id='", id,"' href='#' style='text-decoration:underline;color:gray' >",
+				"<a id='", id,"' href='javascript:void(0)' style='text-decoration:underline;color:gray' >",
 			this.getMessage("details"),"</a><br/><br/><label style='color:gray;font-style:italics'>",this.getMessage("clickOnRefreshToTryAgain"),"</label></div>");
 		
 		if(document.getElementById(tableId) && error) {
@@ -2196,7 +2196,7 @@ function(comments, totlCmnts, postId, divId, account, tableId) {
 		html[i++] = "</TD>";
 		html[i++] = "<TD>";
 		html[i++] = "<DIV class='social_FBCommentRow'>";
-		html[i++] = ["<a  href='#' id='", moreCommentsLinkId, "'>",seeAllComments,"</a>"].join("");
+		html[i++] = ["<a  href='javascript:void(0)' id='", moreCommentsLinkId, "'>",seeAllComments,"</a>"].join("");
 		html[i++] = "</div>";
 		html[i++] = "</td>";
 		html[i++] = "<TD style='width:16px;height:16px' align='center'>";
@@ -2417,7 +2417,7 @@ function(text) {
 		var end = re.lastIndex;
 		var part = text.substring(start, end);
 		var id = "social_hashlink_" + Dwt.getNextId();
-		var url = ["<a  href='#' id='", id, "'>", word, "</a>"].join("");
+		var url = ["<a  href='javascript:void(0)' id='", id, "'>", word, "</a>"].join("");
 		newStr = newStr + part.replace(word, url);
 		this._allHashLinks[id] = {hasHandler:false, word:word};
 		start = end;
@@ -2440,7 +2440,7 @@ function(text, userId, tableId, screen_name) {
 		var end = re.lastIndex;
 		var part = text.substring(start, end);
 		var id = this._getAccountLinkId(AjxStringUtil.trim(word.replace("@", "")), tableId);
-		var url = ["<a  href='#' id='", id, "'>", word, "</a>"].join("");
+		var url = ["<a  href='javascript:void(0)' id='", id, "'>", word, "</a>"].join("");
 		newStr = newStr + part.replace(word, url);
 		start = end;
 	}

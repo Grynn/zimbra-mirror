@@ -192,7 +192,7 @@ function(html) {
 LinkedInZimlet.prototype._showJoinLinkedInAccount =
 function() {
 	var html = [];
-	html.push("<br/><br/>", this.getMessage("noAccount"), " <a href='#' id='LinkedInZimlet_ShowPreferences'>",this.getMessage("clickHere"),"</a>");
+	html.push("<br/><br/>", this.getMessage("noAccount"), " <a href='javascript:void(0)' id='LinkedInZimlet_ShowPreferences'>",this.getMessage("clickHere"),"</a>");
 	document.getElementById("linkedInZimlet_searchResultsDiv").innerHTML = html.join("");
 	document.getElementById("LinkedInZimlet_ShowPreferences").onclick = AjxCallback.simpleClosure(this._showLinkedInPrefFromTooltip, this); 
 };

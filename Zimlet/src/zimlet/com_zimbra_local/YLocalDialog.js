@@ -97,7 +97,7 @@ YLocalDialog.prototype._createSearchHtml = function(msg,showZip) {
     var params = {latitude:45,longitude:45};
     cell.appendChild(this._lableObj.getHtmlElement());
     YLocalDialog.gInstance = this;
-    cell.innerHTML = "<a href='#' onclick='changeLocation()'>Click here</a> to select location on map";
+    cell.innerHTML = "<a href='javascript:void(0)' onclick='changeLocation()'>Click here</a> to select location on map";
 
 	var element = this._getContentDiv();
 	element.appendChild(table);
