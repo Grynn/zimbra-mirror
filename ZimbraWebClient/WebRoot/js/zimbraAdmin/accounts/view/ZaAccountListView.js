@@ -200,6 +200,8 @@ function(account, now, isDragProxy) {
 				targetType_desc = ZaMsg.aliasTargetTypeAccount ;
 			}else if (targetType == ZaItem.DL) {
 				targetType_desc = ZaMsg.aliasTargetTypeDL ;
+			}else if (targetType = ZaItem.RESOURCE) {
+				targetType_desc = ZaMsg.aliasTargetTypeResource ;
 			}
 			html[idx++] = AjxStringUtil.htmlEncode(targetType_desc);
 			html[idx++] = "</nobr></td>";

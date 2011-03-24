@@ -658,6 +658,7 @@ function (newAlias) {
 	var soapCmd  ;
 	switch(this.type) {
 		case ZaItem.ACCOUNT: soapCmd = "AddAccountAliasRequest" ; break ;
+		case ZaItem.RESOURCE: soapCmd = "AddAccountAliasRequest" ; break ;
 		case ZaItem.DL: soapCmd = "AddDistributionListAliasRequest" ; break ;
 		default: throw new Error("Can't add alias for account type: " + this.type) ;				
 	}

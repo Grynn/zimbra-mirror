@@ -571,7 +571,9 @@ ZaAccountListController.prototype._editItem = function (item) {
 				ZaApp.getInstance().getAccountViewController().show(targetObj, true);
 			}else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_DL){
 				ZaApp.getInstance().getDistributionListController().show(targetObj, true);
-			}
+			}else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_RESOURCE){
+				ZaApp.getInstance().getResourceController(itemId).show(targetObj, true);
+			} 
 		} else if (type == ZaItem.RESOURCE ){
 			ZaApp.getInstance().getResourceController(itemId).show(item, true);
 		}
@@ -1049,6 +1051,17 @@ function () {
                 }
 
 		if (this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {
+                    this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+                }
+
+                if(this._popupOperations[ZaOperation.EXPIRE_SESSION]) {
+                    this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+                }
+
+            }
+		
+	    if ((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.RESOURCE)){	    
+                if (this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {
                     this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
                 }
 

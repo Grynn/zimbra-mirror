@@ -31,6 +31,7 @@ ZaAlias.A_uid = "uid";
 
 ZaAlias.TARGET_TYPE_DL = ZaItem.DL ;
 ZaAlias.TARGET_TYPE_ACCOUNT = ZaItem.ACCOUNT ;
+ZaAlias.TARGET_TYPE_RESOURCE = ZaItem.RESOURCE;
 
 ZaItem._ATTR[ZaAlias.A_targetAccount] = ZaMsg.attrDesc_aliasFor;
 
@@ -48,6 +49,7 @@ function(callback) {
 	switch(this.attrs[ZaAlias.A_targetType]) {
 		case ZaAlias.TARGET_TYPE_ACCOUNT: soapCmd = "RemoveAccountAliasRequest" ; break ;
 		case ZaAlias.TARGET_TYPE_DL  : soapCmd = "RemoveDistributionListAliasRequest" ; break ;
+		case ZaAlias.TARGET_TYPE_RESOURCE : soapCmd = "RemoveAccountAliasRequest" ; break ;
 		default: throw new Error("Can't add alias for account type: " + this.attrs[ZaAlias.A_targetType]) ;				
 	}
 	
@@ -106,6 +108,15 @@ function() {
 			idx = this._addRow(ZaMsg.NAD_AccountStatus, 
 						ZaDistributionList.getDLStatus(target.attrs[ZaDistributionList.A_mailStatus]), html, idx);		
 			
+		}else if (target && (this.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_RESOURCE)){
+			idx = this._addRow(ZaItem._attrDesc(ZaAlias.A_targetAccount),
+                                                target.attrs[ZaAccount.A_displayname], html, idx);
+
+			idx = this._addRow(ZaMsg.NAD_AccountStatus,
+                                                ZaResource.getAccountStatusLabel(target.attrs[ZaResource.A_accountStatus]), html, idx);
+			if(target.getAttrs && target.getAttrs[ZaResource.A_mailHost]) {
+				idx = this._addRow(ZaMsg.NAD_MailServer, target.attrs[ZaResource.A_mailHost], html, idx);
+			}	
 		}
 		html[idx++] = "</table>";
 		this._toolTip = html.join("");
@@ -240,6 +251,8 @@ function () {
 		targetObj = new ZaDistributionList(targetId, targetName) ;
 	}else if (targetType == ZaAlias.TARGET_TYPE_ACCOUNT) {
 		targetObj = new ZaAccount() ;
+	}else if (targetType == ZaAlias.TARGET_TYPE_RESOURCE) {
+		targetObj = new ZaResource();
 	}else {
 		throw new Error ("Alias type " + targetType + " is not valid.") ;
 	}
