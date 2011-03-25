@@ -358,16 +358,16 @@ public class FormTaskNew extends AbsForm {
 		logger.info(myPageName() + " zIsActive()");
 		
 		// Look for the div
-		String locator = "css=div[id^='ztb__COMPOSE']";
+		String locator = "css=td[id='zv__TKE1_subject']";
 		
 		if ( !this.sIsElementPresent(locator) ) {
 			return (false);	
 		}
 		
-		if ( !this.zIsVisiblePerPosition(locator, 150, 80) ) {
-			return (false);
-		}
-		
+//		if ( !this.zIsVisiblePerPosition(locator, 150, 80) ) {
+//			return (false);
+//		}
+//		
 		logger.info(myPageName() + " zIsActive() = true");
 		return (true);
 	}

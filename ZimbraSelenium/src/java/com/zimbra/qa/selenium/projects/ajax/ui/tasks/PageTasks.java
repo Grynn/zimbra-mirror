@@ -8,16 +8,9 @@ import java.util.*;
 import com.thoughtworks.selenium.SeleniumException;
 import com.zimbra.qa.selenium.framework.items.TaskItem;
 import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
-
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
 
 
 /**
@@ -503,15 +496,13 @@ public class PageTasks extends AbsTab {
 		this.zWaitForBusyOverlay();
 
 		// If page was specified, make sure it is active
-		/*
-		 * if (page != null) {
-		 * 
-		 * // This function (default) throws an exception if never active
-		 * page.zWaitForActive();
-		 * 
-		 * }
-		 */
+		if (page != null) {
+			
+			// This function (default) throws an exception if never active
+			page.zWaitForActive();
 
+		}
+		
 		return (page);
 	}
 
