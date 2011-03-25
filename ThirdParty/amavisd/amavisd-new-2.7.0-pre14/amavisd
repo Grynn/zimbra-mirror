@@ -867,7 +867,8 @@ BEGIN {
 
   # $myhostname is used by SMTP server module in the initial SMTP welcome line,
   # in inserted Received: lines, Message-ID in notifications, log entries, ...
-  $myhostname = (POSIX::uname)[1];  # should be a FQDN !
+  $myhostname = `hostname -f`;  # should be a FQDN !
+  chomp($myhostname);
 
   $snmp_contact  = '';  # a value of sysContact OID
   $snmp_location = '';  # a value of sysLocation OID
