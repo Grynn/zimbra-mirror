@@ -65,11 +65,7 @@ public class CreateTag extends AjaxCommonTest {
 
 		// Fill out the input field
 		dialog.zSetTagName(name);
-		// dialog.zClickButton(Button.B_OK);
-		
-		// debugging code
-		this.app.zPageBriefcase
-				.zClick("css=td[id^=CreateTagDialog_button]:contains(OK)");
+		dialog.zClickButton(Button.B_OK);
 		
 		// refresh briefcase page tags section after creating a new tag
 		app.zTreeBriefcase
@@ -147,12 +143,8 @@ public class CreateTag extends AjaxCommonTest {
 
 		// Fill out the input field
 		dialog.zSetTagName(name);
-		// dialog.zClickButton(Button.B_OK);
-		
-		// debugging code
-		this.app.zPageBriefcase
-				.zClick("css=td[id^=CreateTagDialog_button]:contains(OK)");
-
+		dialog.zClickButton(Button.B_OK);
+	
 		// refresh briefcase page tags section after creating a new tag
 		app.zTreeBriefcase
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
