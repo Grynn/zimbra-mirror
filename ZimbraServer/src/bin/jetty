@@ -306,6 +306,7 @@ SPNEGO_ENABLED=`echo $SPNEGO_ENABLED_CONFIG | sed -e 's/zimbraSpnegoAuthEnabled:
 if [ "$SPNEGO_ENABLED" = "TRUE" ] 
 then
   SPNEGO_JAVA_OPTIONS=`/opt/zimbra/bin/zmlocalconfig -x -m nokey spnego_java_options`
+#  SPNEGO_JAVA_OPTIONS="$SPNEGO_JAVA_OPTIONS -Dsun.security.spnego.debug=all"
   JAVA_OPTIONS="$JAVA_OPTIONS $SPNEGO_JAVA_OPTIONS"
 fi
 
