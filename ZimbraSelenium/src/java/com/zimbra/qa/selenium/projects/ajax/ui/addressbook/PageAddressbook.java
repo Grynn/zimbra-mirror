@@ -296,37 +296,47 @@ public class PageAddressbook extends AbsTab {
 		AbsPage page = null;	// If set, this page will be returned
 	   if ( pulldown == Button.B_TAG ) {
 		
-		 if ( option == Button.O_TAG_NEWTAG ) {
+	      if ( option == Button.O_TAG_NEWTAG ) {
 
-		    pulldownLocator = "css=td[id$='__TAG_MENU_dropdown'] div[class='ImgSelectPullDownArrow']";
-    		optionLocator = "css=div[id$='__TAG_MENU|MENU|NEWTAG']";
-			page = new DialogTag(this.MyApplication, this);
+	         pulldownLocator = "css=td[id$='__TAG_MENU_dropdown'] div[class='ImgSelectPullDownArrow']";
+	         optionLocator = "css=div[id$='__TAG_MENU|MENU|NEWTAG']";
+	         page = new DialogTag(this.MyApplication, this);
 
+	      } else if ( option == Button.O_TAG_REMOVETAG ) {
+
+	         zKeyboard.zTypeCharacters(Shortcut.S_MAIL_REMOVETAG.getKeys());
+
+	         pulldownLocator = null;	
+	         optionLocator = null;
+	         page = null;
 			
-		 } else if ( option == Button.O_TAG_REMOVETAG ) {
+	         zWaitForBusyOverlay();
 
-			zKeyboard.zTypeCharacters(Shortcut.S_MAIL_REMOVETAG.getKeys());
-					
-			pulldownLocator = null;	
-			optionLocator = null;
-			page = null;
-			
-			zWaitForBusyOverlay();
-			// FALL THROUGH
+	      } else {
+	         throw new HarnessException("no logic defined for pulldown/option "+ pulldown +"/"+ option);
+	      }
 
-		 } else {
-			throw new HarnessException("no logic defined for pulldown/option "+ pulldown +"/"+ option);
-		 }
-	    }		
-	   else if ( pulldown == Button.B_NEW ) {
+	   } else if ( pulldown == Button.B_NEW ) {
 		   if ( option == Button.O_NEW_CONTACT ) {
 			    pulldownLocator = "css=div[id='zb__CNS__NEW_MENU'] td[id='zb__CNS__NEW_MENU_dropdown']";
-			    optionLocator="css=tr[id='POPUP_NEW_CONTACT']";
-				page = new FormContactNew(this.MyApplication);		   
+
+			    // TODO: Bug 58365 for Desktop
+			    if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+                optionLocator="css=div[class='ActionMenu ZHasIcon'] div[class*='ZMenuItem ZWidget ZHasLeftIcon ZHasText'] table[class*='ZWidgetTable ZMenuItemTable']:contains('Contact')";
+             } else {
+                optionLocator="css=tr[id='POPUP_NEW_CONTACT']";
+             }
+			    page = new FormContactNew(this.MyApplication);
 		   }
 		   if ( option == Button.O_NEW_CONTACTGROUP) {
 			    pulldownLocator = "css=div[id='zb__CNS__NEW_MENU'] td[id='zb__CNS__NEW_MENU_dropdown']";
-			    optionLocator="css=tr[id='POPUP_NEW_GROUP']";
+
+			    // TODO: Bug 58365 for Desktop
+			    if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+			       optionLocator="css=div[class='ActionMenu ZHasIcon'] div[class*='ZMenuItem ZWidget ZHasLeftIcon ZHasText'] table[class*='ZWidgetTable ZMenuItemTable']:contains('Contact Group')";
+			    } else {
+			       optionLocator="css=tr[id='POPUP_NEW_GROUP']";
+			    }
 				page = new FormContactGroupNew(this.MyApplication);		   
 		   }
 	   }
@@ -347,7 +357,7 @@ public class PageAddressbook extends AbsTab {
 				if ( !this.sIsElementPresent(optionLocator) ) {
 					throw new HarnessException("Button "+ pulldown +" option "+ option +" optionLocator "+ optionLocator +" not present!");
 				}
-				
+
 				this.zClick(optionLocator);
 				zWaitForBusyOverlay();
 
