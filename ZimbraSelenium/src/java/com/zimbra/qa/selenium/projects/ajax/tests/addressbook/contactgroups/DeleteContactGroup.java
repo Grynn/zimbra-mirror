@@ -6,11 +6,10 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.Toaster;
+
 
 
 public class DeleteContactGroup extends AjaxCommonTest  {
@@ -46,10 +45,9 @@ public class DeleteContactGroup extends AjaxCommonTest  {
        
         
         //verify toasted message 1 contact group moved to Trash
-        Toaster toast = app.zPageMain.zGetToaster();
-        String toastMsg = toast.zGetToastMessage();
         String expectedMsg = "1 contact group moved to Trash";
-        ZAssert.assertStringContains(toastMsg, expectedMsg , "Verify toast message '" + expectedMsg + "'");
+        ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
+		        expectedMsg , "Verify toast message '" + expectedMsg + "'");
 
         //verify deleted contact group not displayed
         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 

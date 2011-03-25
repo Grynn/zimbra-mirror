@@ -13,13 +13,28 @@ public class FormContactGroupNew extends AbsForm {
 		
 		public static final String zNewContactGroupMenuIconBtn = "css=id=^_left_icon div[class=ImgNewGroup]";
 		
-		public static final String zGroupnameField = "css=input[id$='_groupName']";		
-	    public static final String zGroupMembers   = "css=textarea[id$='_addNewField']";
-	    public static final String zAddButton      = "css=td[id$='_addNewButton'] td[id$='_title']";
-         
-        // more goes here
-	    	    
-	}
+		public static final String zGroupnameField               = "css=input[id$='_groupName']";		
+	    public static final String zGroupAddNewTextArea          = "css=textarea[id$='_addNewField']";
+	    public static final String zAddNewButton                 = "css=td[id$='_addNewButton'] td[id$='_title']";        
+	    public static final String zAddButton                    = "css=td[id$='_addButton'] td[id$='_title']";        
+	    public static final String zAddAllButton                 = "css=td[id$='_addAllButton'] td[id$='_title']";
+	    public static final String zPrevButton                   = "css=td[id$='_prevButton'] td[id$='_title']";
+	    public static final String zNextButton                   = "css=td[id$='_nextButton'] td[id$='_title']";
+	    
+	    public static final String zFindField                    = "css=input[id$='_searchField']";
+        public static final String zSearchButton                 = "css=td[id$='_searchButton'] td[id$='_title']";
+        public static final String zDropdownSelect               = "css=td[id$='_listSelect'] td[id$='_select_container'] td[id$='_dropdown']";
+	    public static final String zDropdownSelectContacts       = "css=table[id$='_pseudoitems_container'] tbody tr:nth-of-type(1)";
+	    public static final String zDropdownSelectSharedContacts = "css=table[id$='_pseudoitems_container'] tbody tr:nth-of-type(2)";
+	    public static final String zDropdownSelectGAL            = "css=table[id$='_pseudoitems_container'] tbody tr:nth-of-type(3)";
+	    public static final String zListView                     = "css=div[id$='_listView'] div#z1__GRP__rows";
+	    public static final String zEmailView                    = "css=div[id$='_groupMembers'] div#z1__GRP__rows";
+	
+	    public static final String zDeleteAllButton                 = "css=td[id$='_delAllButton'] td[id$='_title']";
+	    public static final String zDeleteButton                 = "css=td[id$='_delButton'] td[id$='_title']";
+        
+	    
+	} 
 
 	public static class Toolbar extends  AbsSeleniumObject{
 		
@@ -65,15 +80,17 @@ public class FormContactGroupNew extends AbsForm {
 
 	// reset the form
 	public void zReset() throws HarnessException {
-		logger.info("FormMailNew.zReset()");
-		String[] fieldList = {Locators.zGroupMembers, 
+		logger.info("FormMailGroupNew.zReset()");
+		String[] fieldList = {Locators.zGroupAddNewTextArea, 
 				              Locators.zGroupnameField };
-		                      //TODO: ,Locators.zEmail1EditField};
+		                  
 		
 		for (int i=0; i < fieldList.length; i++) {
-		  this.sType(fieldList[i], "");
+		  sType(fieldList[i], "");
 		  
 		}
+		
+		zClick(Locators.zDeleteAllButton);
 	}
 	
 	@Override
@@ -102,13 +119,13 @@ public class FormContactGroupNew extends AbsForm {
 		
 		if ( group.getDList().length() > 0 ) {
 							
-			sFocus(Locators.zGroupMembers);
-			zClick(Locators.zGroupMembers);		        
+			sFocus(Locators.zGroupAddNewTextArea);
+			zClick(Locators.zGroupAddNewTextArea);		        
 		    zKeyboard.zTypeCharacters(group.getDList());
 			
 	
 			//click Add button
-		    zClick(Locators.zAddButton);
+		    zClick(Locators.zAddNewButton);
 		    zWaitForBusyOverlay();
 				
 			}
@@ -119,6 +136,11 @@ public class FormContactGroupNew extends AbsForm {
 					
 	}
 
+	//TODO verify the list of email with separator , included in the email view
+	public boolean zIsContainedInEmailView(String list) throws HarnessException {		
+		throw new HarnessException("IMplement me");		
+	}
+	
 	@Override
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");

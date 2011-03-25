@@ -6,7 +6,6 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -52,10 +51,9 @@ public class MoveContactGroup extends AjaxCommonTest  {
         dialogContactMove.zClickButton(Button.B_OK);
        
         //verify toasted message 1 contact greoup moved to "Emailed Contacts"
-        Toaster toast = app.zPageMain.zGetToaster();
-        String toastMsg = toast.zGetToastMessage();
         String expectedMsg = "1 contact group moved to \"Emailed Contacts\"";
-        ZAssert.assertStringContains(toastMsg, expectedMsg , "Verify toast message '" + expectedMsg + "'");
+        ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
+		        expectedMsg , "Verify toast message '" + expectedMsg + "'");
 
         //verify moved contact not displayed
         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 

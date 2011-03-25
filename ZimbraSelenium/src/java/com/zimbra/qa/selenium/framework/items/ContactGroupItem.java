@@ -7,8 +7,10 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.zimbra.common.soap.Element;
+import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
 
 /**
@@ -37,6 +39,31 @@ public class ContactGroupItem extends ContactItem implements IItem {
 		dlist = new ArrayList<String>();
 	}
 	
+	public static ContactGroupItem generateContactItem(GenerateItemType type) throws HarnessException {
+	
+		ContactGroupItem group =  null;
+		if ( type.equals(GenerateItemType.Default) || type.equals(GenerateItemType.Basic) ) {
+
+			String domain = "@zimbra.com";
+			String groupName =  "group_" + ZimbraSeleniumProperties.getUniqueString();
+	        String emailAddress1 = "email_" + ZimbraSeleniumProperties.getUniqueString() + domain;
+	        String emailAddress2 = "email_" +  ZimbraSeleniumProperties.getUniqueString() + domain;
+	        
+	        // Create a contact group 
+			group = new ContactGroupItem(groupName);
+		    
+			group.addDListMember(emailAddress1);
+			group.addDListMember(emailAddress2);
+		
+		}
+		
+		if ( type.equals(GenerateItemType.AllAttributes) ) {
+			throw new HarnessException("Implement me!");
+		}
+		
+		return group;
+	}
+
 	/**
 	 * Get the dlist attribute as a comma separated String
 	 * @return

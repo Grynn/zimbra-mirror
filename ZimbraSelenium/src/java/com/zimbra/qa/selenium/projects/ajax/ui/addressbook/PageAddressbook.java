@@ -24,6 +24,10 @@ import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
 
 public class PageAddressbook extends AbsTab {
 
+	// image class name for contact and group
+	private static final String GROUP_IMAGE   = "ImgGroup";
+	private static final String CONTACT_IMAGE = "ImgContact";
+	
 	public static class CONTEXT_MENU {
 		public static final String LOCATOR		= "id='zm__Contacts'";
 		
@@ -148,20 +152,18 @@ public class PageAddressbook extends AbsTab {
 
 		// Get each contact's data from the table list
 		for (int i = 1; i <= count; i++) {
-			String commonLocator = "//div[@id='zv__CNS']/div["+ i +"]/table/tbody/tr/";
-			
-			String contactDisplayedLocator = commonLocator + "td[3]";
-			String imageLocator = "xpath=(" + commonLocator + "td[2]/center/div)@class";
-            String attrs = sGetAttribute(imageLocator);
-
+			String commonLocator = "//div[@id='zv__CNS']/div["+ i +"]";
+			String contactType = getContactType(commonLocator);
+		    
 			ContactItem ci=null;
+			String contactDisplayedLocator = commonLocator + "/table/tbody/tr/td[3]";
 			String fileAs = ClientSessionFactory.session().selenium().getText(contactDisplayedLocator);
 			
 			//check if it is a contactgroup or a contactgroup item
-			if ( attrs.contains("ImgGroup") ) {
+			if ( contactType.equals(GROUP_IMAGE)) {
                 ci=new ContactGroupItem(fileAs);
 			}
-			else if ( attrs.contains("ImgContact") ) {
+			else if (  contactType.equals(CONTACT_IMAGE) ) {
 				ci=new ContactItem(fileAs);		    			
 			}
 			else {
@@ -224,8 +226,26 @@ public class PageAddressbook extends AbsTab {
 			}
 
 			locator = "id="+ id;
-			page = new FormContactNew(MyApplication);
-		
+			ArrayList<String> selectedContactArrayList=getSelectedContactLocator();
+			
+			if (selectedContactArrayList.size() == 0) {
+				throw new HarnessException("No selected contact/contact group ");				
+			}
+			
+			if (selectedContactArrayList.size() > 1) {
+				throw new HarnessException("Cannot edit more than one contact/contact group ");				
+			}
+			
+		    String contactType = getContactType(selectedContactArrayList.get(0));
+			
+		    //check if it is a contactgroup or a contactgroup item
+			if ( contactType.equals(GROUP_IMAGE)) {
+				page = new FormContactGroupNew(MyApplication);		
+			}
+			else if (  contactType.equals(CONTACT_IMAGE) ) {
+				page = new FormContactNew(MyApplication);
+			}
+			
 	    } else if ( button == Button.B_MOVE) {
 
 		    String id = "zb__CNS__MOVE_left_icon";
@@ -346,6 +366,23 @@ public class PageAddressbook extends AbsTab {
 	    return page;
 	}
 
+	// return the type of a contact
+	private String getContactType(String locator) {
+		String imageLocator = "xpath=(" + locator +"/table/tbody/tr/td[2]/center/div)@class";
+        String attrs = sGetAttribute(imageLocator);
+		
+		//check if it is a contactgroup or a contactgroup item
+		if ( attrs.contains(GROUP_IMAGE) ) {
+			return GROUP_IMAGE;
+		}	
+		else if ( attrs.contains(CONTACT_IMAGE) ) {
+			return CONTACT_IMAGE;
+		}
+		
+		return null;
+	}
+	
+    // return the xpath locator of a contact
 	private String getContactLocator(String contact) throws HarnessException {
 		String listLocator = "//div[@id='zv__CNS']";
 		String rowLocator = "//div[contains(@id, 'zli__CNS__')]";
@@ -393,6 +430,50 @@ public class PageAddressbook extends AbsTab {
 		return contactLocator;
 	}
 	
+    //get selected contacts locators
+	private ArrayList<String> getSelectedContactLocator() throws HarnessException {
+        
+		
+		String listLocator = "//div[@id='zv__CNS']";
+		String rowLocator = "//div[contains(@id, 'zli__CNS__')]";
+		
+        ArrayList<String> arrayList = new ArrayList<String>();
+		
+		if ( !sIsElementPresent(listLocator) )
+			throw new HarnessException("List View Rows is not present "+ listLocator);
+
+		if ( !sIsElementPresent(rowLocator) )
+		    return arrayList; //an empty arraylist
+			
+		//Get the number of contacts (String) 
+		int count = sGetXpathCount(listLocator + rowLocator);
+		logger.debug(myPageName() + " getSelectedContactLocator: number of contacts: "+ count);
+
+		if ( count == 0 )
+			throw new HarnessException("List count was zero");
+
+		// Get each contact's data from the table list
+		for (int i = 1; i <= count; i++) {
+
+			String itemLocator = listLocator + rowLocator + "[" + i +"]";
+
+			if ( !sIsElementPresent(itemLocator) ) {
+				throw new HarnessException("unable to locate item " + itemLocator);
+			}
+
+			if (sGetAttribute("xpath=(" +itemLocator+ ")@class").contains("Row-selected")) {
+			    arrayList.add(itemLocator);
+			}
+
+			// Log this item to the debug output
+			LogManager.getLogger("projects").info("getSelectedContactLocator: found selected contact "+ itemLocator);
+     		
+		} 
+			
+		return arrayList;
+	}
+	
+
 	
 	public AbsPage zListItem(Action action, Button option ,Button subOption, String contact) throws HarnessException {
 		String locator = null;			// If set, this will be clicked
