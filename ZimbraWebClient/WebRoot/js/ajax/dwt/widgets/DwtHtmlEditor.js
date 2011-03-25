@@ -1400,7 +1400,11 @@ function(ev) {
 	var ctrlA = false;
 	
 	if (ev.type == "keydown") {
-		if (ev.keyCode == 9) {
+		if (AjxEnv.isFirefox && ev.metaKey && (ev.keyCode == 37 || ev.keyCode == 39)) { //disable CMD+right/left arrows since it does back/forward history on FF
+			DwtUiEvent.setDhtmlBehaviour(ev, true, false);
+			retVal = false;
+		}
+		else if (ev.keyCode == 9) {
 			if (AjxEnv.isIE) {
 				this._handleIETabKey(!ev.shiftKey);
 				ke._stopPropagation = true;
@@ -1411,6 +1415,7 @@ function(ev) {
 			else if (AjxEnv.isFirefox) { //Chrome/Safari/WebKit naturally does the tabs correctly
 				if (!ev.shiftKey) {
 					this._insertHTML(DwtHtmlEditor.TAB, true);
+					DwtUiEvent.setDhtmlBehaviour(ev, true, false);
 					retVal = false;
 				}
 			}
