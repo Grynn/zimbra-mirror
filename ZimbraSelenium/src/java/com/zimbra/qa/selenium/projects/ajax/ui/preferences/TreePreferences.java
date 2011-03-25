@@ -25,6 +25,7 @@ public class TreePreferences extends AbsTree {
 		public final static String zGeneralTextID_Desktop = "zti__local@host.local:main_Options__PREF_PAGE_GENERAL_textCell";
 		public final static String zGeneralImageID = "zti__main_Options__PREF_PAGE_GENERAL_imageCell";
 		public final static String zGeneralImageID_Desktop = "zti__local@host.local:main_Options__PREF_PAGE_GENERAL_imageCell";
+		public final static String zSignatureTextID_Desktop = "zti__<EMAIL_ADDRESS>:main_Options__PREF_PAGE_SIGNATURES_textCell";
 	}
 	
 	public enum TreeItem {
@@ -63,7 +64,8 @@ public class TreePreferences extends AbsTree {
             throw new HarnessException("locator is null in itemToLocator_desktop for "+ item);
          }
    
-         locator = itemToLocator_desktop.get(item);
+         locator = itemToLocator_desktop.get(item).replace("<EMAIL_ADDRESS>",
+               MyApplication.zGetActiveAccount().EmailAddress);
 
 		} else {
    		if ( !itemToLocator.containsKey(item) ) {
@@ -142,7 +144,7 @@ public class TreePreferences extends AbsTree {
       map.put(TreeItem.General, "id=" + Locators.zGeneralTextID_Desktop);
       map.put(TreeItem.Mail, null);
       map.put(TreeItem.MailComposing, null);
-      map.put(TreeItem.MailSignatures, null);
+      map.put(TreeItem.MailSignatures, "id=" + Locators.zSignatureTextID_Desktop);
       map.put(TreeItem.MailAccounts, null);
       map.put(TreeItem.MailFilters, null);
       map.put(TreeItem.MailTrustedAddresses, null);

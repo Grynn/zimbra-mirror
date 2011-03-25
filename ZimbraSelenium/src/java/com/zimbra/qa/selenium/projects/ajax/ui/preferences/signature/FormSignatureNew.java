@@ -136,12 +136,7 @@ public class FormSignatureNew extends AbsForm {
 		String locator = null;
 
 		if (field == Field.SignatureName) {
-
-			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-				locator = "implement";
-			} else {
-				locator = Locators.zsignatureNameLabel;
-			}
+		   locator = Locators.zsignatureNameLabel;
 
 		} else if (field == Field.SignatureBody) {
 			locator = Locators.signatureBody;
