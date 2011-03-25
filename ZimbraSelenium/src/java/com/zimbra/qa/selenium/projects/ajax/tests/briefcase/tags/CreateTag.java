@@ -70,6 +70,10 @@ public class CreateTag extends AjaxCommonTest {
 		// debugging code
 		this.app.zPageBriefcase
 				.zClick("css=td[id^=CreateTagDialog_button]:contains(OK)");
+		
+		// refresh briefcase page tags section after creating a new tag
+		app.zTreeBriefcase
+				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
 		// Make sure the tag was created on the server
 		TagItem tag = TagItem.importFromSOAP(account, name);
