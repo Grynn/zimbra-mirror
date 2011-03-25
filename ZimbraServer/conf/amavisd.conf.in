@@ -53,7 +53,7 @@ $QUARANTINEDIR = "$MYHOME/quarantine";  # -Q
 # $db_home   = "$MYHOME/db";      # dir for bdb nanny/cache/snmp databases, -D
 # $helpers_home = "$MYHOME/var";  # working directory for SpamAssassin, -S
 $lock_file = "$MYHOME/var/amavisd.lock";  # -L
-$pid_file  = "$MYHOME/var/amavisd.pid";   # -P
+$pid_file  = "/opt/zimbra/log/amavisd.pid";   # -P
 #NOTE: create directories $MYHOME/tmp, $MYHOME/var, $MYHOME/db manually
 
 $log_level = 1;              # verbosity 0..5, -d
