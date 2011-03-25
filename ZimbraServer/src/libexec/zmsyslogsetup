@@ -260,6 +260,9 @@ sub updateSyslog {
       if ( $rsyslog == 0 ) {
         s/^\*\.info/\*\.info;local0.none;local1.none;auth.none/;
       }
+      if ($rsyslog == 1 || -e "/etc/init.d/sysklogd") {
+        s/;mail.none//g;
+      }
       if ( $rsyslog == 1 || -e "/etc/init.d/sysklogd" ) {
         s/^\*\.\*;auth,authpriv.none/\*\.\*;auth,authpriv.none;local0.none;local1.none;mail.none/;
         s/^\*\.=debug;\\/\*.=debug;\\\n\tlocal0,local1.none;\\/;
