@@ -19,7 +19,7 @@ if [ x`whoami` != xzimbra ]; then
   exit 1
 fi
 
-export LD_LIBRARY_PATH=/opt/zimbra/openldap-clibs/lib:/opt/zimbra/openssl/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/opt/zimbra/openldap/lib:/opt/zimbra/openssl/lib:$LD_LIBRARY_PATH
 
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
