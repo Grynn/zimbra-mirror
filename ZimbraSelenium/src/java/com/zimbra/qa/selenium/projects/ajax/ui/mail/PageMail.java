@@ -496,23 +496,28 @@ public class PageMail extends AbsTab {
 
 				// FALL THROUGH
 			} else {
-				throw new HarnessException(	"no logic defined for pulldown/option " + pulldown+ "/" + option);
+				throw new HarnessException(
+						"no logic defined for pulldown/option " + pulldown
+								+ "/" + option);
 			}
-		} else if (pulldown== Button.B_NEW) {
+		} else if ((pulldown == Button.B_NEW) && (option == Button.O_NEW_TAG)) {
 
-			if(option == Button.O_NEW_TAG){
+			pulldownLocator = "css=td[id$='__NEW_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+			optionLocator = "//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgNewTag')]";
 
+			page = new DialogTag(this.MyApplication, this);
+		} else if ((pulldown == Button.B_NEW)&& (option == Button.O_NEW_FOLDER)) {
 
-				pulldownLocator = "css=td[id$='__NEW_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
-				optionLocator = "//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgNewTag')]";
+			pulldownLocator = "css=td[id$='__NEW_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+			optionLocator = "//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgNewFolder')]";
 
+			page = new DialogCreateFolder(this.MyApplication, this);
 
-				page = new DialogTag(this.MyApplication, this);
-			}else{
-				throw new HarnessException(	"no logic defined for pulldown/option " + pulldown+ "/" + option);
-			}
-
+		} else {
+			throw new HarnessException("no logic defined for pulldown/option "
+					+ pulldown + "/" + option);
 		}
+		
 		// Default behavior
 		if (pulldownLocator != null) {
 
@@ -1215,6 +1220,11 @@ public class PageMail extends AbsTab {
 			// "New Message" shortcuts result in a compose form opening
 			//page = new FormMailNew(this.MyApplication);
 			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+		}else if ( (shortcut == Shortcut.S_NEWFOLDER) ){
+
+			// "New Message" shortcuts result in a compose form opening
+			//page = new FormMailNew(this.MyApplication);
+			page = new DialogCreateFolder(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
 		}
 
 
