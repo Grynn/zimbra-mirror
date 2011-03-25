@@ -48,9 +48,9 @@
   <property name="common.classes.dir" location="${common.dir}/build/classes" />
   <property name="common.jars.dir" location="${common.dir}/jars" />
 
-    <property name="soap.dir" location="../ZimbraSoap"/>
-    <property name="soap.build.dir" location="${soap.dir}/build"/>
-    <property name="soap.classes.dir" location="${soap.build.dir}/classes"/>
+  <property name="soap.dir" location="../ZimbraSoap"/>
+  <property name="soap.build.dir" location="${soap.dir}/build"/>
+  <property name="soap.classes.dir" location="${soap.build.dir}/classes"/>
 
   <property name="im.dir" location="../ZimbraIM" />
   <property name="im.jars.dir" location="${im.dir}/jars" />
@@ -71,8 +71,11 @@
   <property name="zsync.client.build.dir" location="${zsync.client.dir}/build" />
   <property name="zsync.client.classes.dir" location="${zsync.client.build.dir}/classes" />
 
-        <property name="zdext.dir" location="../ZimbraOfflineExt"/>
-        <property name="zdext.build.dir" location="${zdext.dir}/build"/>
+  <property name="zdext.dir" location="../ZimbraOfflineExt"/>
+  <property name="zdext.build.dir" location="${zdext.dir}/build"/>
+
+  <property name="offlineext.jar.file" value="offlineext.jar" />
+  <property name="offlineext.dist.dir" location="${dist.dir}/ext/offline"/>
 
   <condition property="is-windows">
     <os family="windows" />
@@ -660,6 +663,7 @@
       <fileset dir="${dist.dir}" includes="app/**,data/**"/>
     </copy>
     <unzip src="${dist.dir}/ext/exchange.zip" dest="${zimbra.home.dir}/app/lib/ext" overwrite="true"/>
+    <unzip src="${dist.dir}/ext/offlineext.zip" dest="${zimbra.home.dir}/app/lib/ext" overwrite="true"/>
 
     <mkdir dir="${zimbra.sqlite.dir}" />
     <if>
@@ -834,11 +838,12 @@
 			<else>
 				<set-assert-flag file="${dist.data.dir}/bin/zdesktop"/>
 			</else>
-		</if>	
+		</if>
 
     <chmod file="${dist.data.dir}/bin/zdesktop" perm="ugo+x" />
 
     <antcall target="offline-make-dist-ext"/>
+    <antcall target="offline-make-dist-ext-converter" />
   </target>
 
 	<macrodef name="set-assert-flag">
@@ -866,6 +871,17 @@
       <fileset dir="${zdext.build.dir}" includes="zdext.jar"/>
     </copy>
     <zip destfile="${dist.dir}/ext/exchange.zip" basedir="${dist.dir}/ext" includes="exchange/*.jar"/>
+  </target>
+
+  <target name="offline-make-dist-ext-converter" depends="offline-compile">
+    <mkdir dir="${dist.dir}/ext"/>
+    <mkdir dir="${dist.dir}/ext/offline"/>
+    <jar destfile="${offlineext.dist.dir}/${offlineext.jar.file}" >
+      <manifest>
+        <attribute name="Zimbra-Extension-Class" value="com.zimbra.cs.offline.extension.OfflineExtension"/>
+      </manifest>
+    </jar>
+    <zip destfile="${dist.dir}/ext/offlineext.zip" basedir="${dist.dir}/ext" includes="offline/*.jar"/>
   </target>
 
   <target name="offline-prep-launcher">
