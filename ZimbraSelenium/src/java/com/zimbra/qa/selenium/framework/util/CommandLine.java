@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.InputStreamReader;
+import java.util.Calendar;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -153,12 +154,12 @@ public class CommandLine {
          outputStream.close();
       }
 
-      int maxRetry = 30;
-      int retry = 0;
-      while (retry < maxRetry && (errorGobbler.isAlive() || outputGobbler.isAlive())) {
-         retry ++;
-         logger.debug("Execution thread is still alive, retry: " + retry);
-         SleepUtil.sleep(1000);
+
+      long startTime = Calendar.getInstance().getTimeInMillis();
+
+      while ((Calendar.getInstance().getTimeInMillis() - startTime) < 30000 &&
+            (errorGobbler.isAlive() || outputGobbler.isAlive())) {
+         logger.debug("Execution thread is still alive, retry...");
       }
 
       logger.debug("Starting the reader thread");
