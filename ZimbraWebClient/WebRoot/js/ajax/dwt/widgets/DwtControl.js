@@ -3289,10 +3289,7 @@ DwtControl.prototype.__showToolTip =
 function(event, content) {
 
 	if (!content) { return; }
-	var shell = DwtShell.getShell(window);
-	var tooltip = shell.getToolTip();
-	tooltip.setContent(content);
-	tooltip.popup(event.x, event.y);
+    DwtControl.showToolTip(content, event.x, event.y);
 	this.__lastTooltipX = event.x;
 	this.__lastTooltipY = event.y;
 	this.__tooltipClosed = false;
@@ -3306,9 +3303,7 @@ function(event) {
 	if (this._eventMgr.isListenerRegistered(DwtEvent.HOVEROUT)) {
 		this._eventMgr.notifyListeners(DwtEvent.HOVEROUT, event);
 	}
-	var shell = DwtShell.getShell(window);
-	var tooltip = shell.getToolTip();
-	tooltip.popdown();
+    DwtControl.hideToolTip();
 	this.__lastTooltipX = null;
 	this.__lastTooltipY = null;
 };
@@ -3350,4 +3345,29 @@ if (AjxEnv.isIE) {
 	window.attachEvent("onunload", DwtControl.ON_UNLOAD);
 } else {
 	window.addEventListener("unload", DwtControl.ON_UNLOAD, false);
+}
+
+/**
+ *  A helper method to show the toolTips.
+ * @param content
+ * @param x [Number] The x coordinate of the toolTip.
+ * @param y [Number] The y coordinate of the toolTip.
+ */
+DwtControl.showToolTip =
+function(content, x, y) {
+	if (!content) { return; }
+	var shell = DwtShell.getShell(window);
+	var tooltip = shell.getToolTip();
+	tooltip.setContent(content);
+	tooltip.popup(x, y);
+}
+
+/**
+ * A helper method to hide the toolTip.
+ */
+DwtControl.hideToolTip =
+function() {
+	var shell = DwtShell.getShell(window);
+	var tooltip = shell.getToolTip();
+	tooltip.popdown();
 }
