@@ -65,15 +65,19 @@ public class CreateTag extends AjaxCommonTest {
 
 		// Fill out the input field
 		dialog.zSetTagName(name);
-		dialog.zClickButton(Button.B_OK);
+		// dialog.zClickButton(Button.B_OK);
 		
+		// debugging code
+		this.app.zPageBriefcase
+				.zClick("css=td[id^=CreateTagDialog_button]:contains(OK)");
+
 		// Make sure the tag was created on the server
 		TagItem tag = TagItem.importFromSOAP(account, name);
 		ZAssert.assertNotNull(tag, "Verify the new folder was created");
-		
+
 		// Click on the tag and make sure it appears in the tree
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, tag);
-		
+
 		ZAssert.assertEquals(tag.getName(), name,
 				"Verify the server and client tag names match");
 	}
@@ -96,7 +100,7 @@ public class CreateTag extends AjaxCommonTest {
 
 		// Get the tag
 		TagItem tag1 = TagItem.importFromSOAP(account, name1);
-		
+
 		// refresh briefcase page tags section before creating a new tag
 		app.zTreeBriefcase
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
@@ -122,8 +126,15 @@ public class CreateTag extends AjaxCommonTest {
 	public void CreateTag_04() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
+		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
 		// Set the new tag name
 		String name = "tag" + ZimbraSeleniumProperties.getUniqueString();
+
+		// refresh briefcase page tags section before creating a new tag
+		app.zTreeBriefcase
+				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
 		// Create a new tag in the Briefcase using the New pull down menu + Tag
 		DialogTag dialog = (DialogTag) app.zPageBriefcase
@@ -132,8 +143,16 @@ public class CreateTag extends AjaxCommonTest {
 
 		// Fill out the input field
 		dialog.zSetTagName(name);
-		dialog.zClickButton(Button.B_OK);
+		// dialog.zClickButton(Button.B_OK);
+		
+		// debugging code
+		this.app.zPageBriefcase
+				.zClick("css=td[id^=CreateTagDialog_button]:contains(OK)");
 
+		// refresh briefcase page tags section after creating a new tag
+		app.zTreeBriefcase
+				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
+		
 		// Make sure the tag was created on the server
 		TagItem tag = TagItem.importFromSOAP(account, name);
 		ZAssert.assertNotNull(tag, "Verify the new tag was created");

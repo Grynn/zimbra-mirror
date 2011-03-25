@@ -32,7 +32,7 @@ public class PageBriefcase extends AbsTab {
 		public static final String zBriefcaseAppIconBtn = "id=zb__App__Briefcase_left_icon";
 		public static final String zNewMenuIconBtn = "id=zb__BCD__NEW_FILE_left_icon";
 		public static final String zNewMenuLeftIconBtn = "id=zb__BDLV__NEW_MENU_left_icon";
-		public static final String zNewMenuArrowBtn = "css=td[id=zb__BDLV__NEW_MENU_dropdown]>div[class^=ImgSelectPullDownArrow]";
+		public static final String zNewMenuArrowBtn = "css=div[id=zb__BDLV__NEW_MENU] div[class^=ImgSelectPullDownArrow]";
 		public static final String zUploadFileIconBtn = "id=zb__BDLV__NEW_FILE_left_icon";
 		public static final String zEditFileIconBtn = "id=zb__BDLV__EDIT_FILE_left_icon";
 		public static final String zOpenFileInSeparateWindowIconBtn = "id=zb__BDLV__NEW_BRIEFCASE_WIN_left_icon";
@@ -412,9 +412,12 @@ public class PageBriefcase extends AbsTab {
 						+ option + " pulldownLocator " + pulldownLocator
 						+ " not present!");
 			}
-
+			
+			// If the app is busy, wait for it to become active
+			zWaitForBusyOverlay();
+			
 			this.zClick(pulldownLocator);
-
+			
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
 
