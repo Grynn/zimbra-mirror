@@ -104,7 +104,7 @@ case "$1" in
       fi
       echo -n "Starting mailboxd..."
       sudo ${zimbra_home}/libexec/zmmailboxdmgr start \
-        -ea ${mailboxd_java_options} ${spnegoJavaOptions} -Xms${javaXms}m \
+        -ea -Dfile.encoding=UTF-8 ${mailboxd_java_options} ${spnegoJavaOptions} -Xms${javaXms}m \
         -Xmx${javaXmx}m -Xmn${javaXmn}m < /dev/null > /dev/null 2>&1
       status=$?
       if [ $status = 0 ]; then
