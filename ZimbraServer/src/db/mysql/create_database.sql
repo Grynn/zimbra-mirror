@@ -1,19 +1,29 @@
--- 
+--
 -- ***** BEGIN LICENSE BLOCK *****
 -- Zimbra Collaboration Suite Server
--- Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
--- 
+-- Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 Zimbra, Inc.
+--
 -- The contents of this file are subject to the Zimbra Public License
 -- Version 1.3 ("License"); you may not use this file except in
 -- compliance with the License.  You may obtain a copy of the License at
 -- http://www.zimbra.com/license.
--- 
+--
 -- Software distributed under the License is distributed on an "AS IS"
 -- basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
 -- ***** END LICENSE BLOCK *****
--- 
+--
 CREATE DATABASE ${DATABASE_NAME}
 DEFAULT CHARACTER SET utf8;
+
+CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_address (
+   id            INTEGER UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+   mailbox_id    INTEGER UNSIGNED NOT NULL,
+   address       VARCHAR(128) NOT NULL,
+   contact_count INTEGER NOT NULL,
+
+   UNIQUE INDEX i_mail_address_address (mailbox_id, address),
+   CONSTRAINT fk_mail_address_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id)
+) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    mailbox_id    INTEGER UNSIGNED NOT NULL,
@@ -31,6 +41,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    flags         INTEGER NOT NULL DEFAULT 0,
    tags          BIGINT NOT NULL DEFAULT 0,
    sender        VARCHAR(128),
+   sender_id     INTEGER UNSIGNED DEFAULT NULL,
    subject       TEXT,
    name          VARCHAR(128),               -- namespace entry for item (e.g. tag name, folder name, document filename)
    metadata      MEDIUMTEXT,
@@ -57,6 +68,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    CONSTRAINT fk_mail_item_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
    CONSTRAINT fk_mail_item_parent_id FOREIGN KEY (mailbox_id, parent_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id),
    CONSTRAINT fk_mail_item_folder_id FOREIGN KEY (mailbox_id, folder_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id),
+   CONSTRAINT fk_mail_item_sender_id FOREIGN KEY (sender_id) REFERENCES ${DATABASE_NAME}.mail_address(id),
    CONSTRAINT fk_mail_item_volume_id FOREIGN KEY (volume_id) REFERENCES zimbra.volume(id)
 ) ENGINE = InnoDB;
 
@@ -199,7 +211,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.pop3_message (
    data_source_id CHAR(36) NOT NULL,
    uid            VARCHAR(255) BINARY NOT NULL,
    item_id        INTEGER UNSIGNED NOT NULL,
-   
+
    PRIMARY KEY (mailbox_id, item_id),
    CONSTRAINT fk_pop3_message_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id)
 ) ENGINE = InnoDB;
@@ -232,7 +244,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.imap_message (
    uid            BIGINT NOT NULL,
    item_id        INTEGER UNSIGNED NOT NULL,
    flags          INTEGER NOT NULL DEFAULT 0,
-   
+
    PRIMARY KEY (mailbox_id, item_id),
    CONSTRAINT fk_imap_message_mailbox_id FOREIGN KEY (mailbox_id)
       REFERENCES zimbra.mailbox(id) ON DELETE CASCADE,
@@ -250,7 +262,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.data_source_item (
    folder_id      INTEGER UNSIGNED NOT NULL DEFAULT 0,
    remote_id      VARCHAR(255) BINARY NOT NULL,
    metadata       MEDIUMTEXT,
-   
+
    PRIMARY KEY (mailbox_id, item_id),
    UNIQUE INDEX i_remote_id (mailbox_id, data_source_id, remote_id),   -- for reverse lookup
    CONSTRAINT fk_data_source_item_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id) ON DELETE CASCADE
