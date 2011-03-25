@@ -436,6 +436,11 @@ public abstract class AbsSeleniumObject {
 	public void zWaitForElementEnabled(String id) throws HarnessException {		
 		logger.info("zWaitForElementEnabled("+ id +")");
 
+		//not applicable for the element
+		if (!sIsElementPresent("xpath=//div[@id='"+ id +"']")) {
+		   return;	
+		}
+		
 		for (int i = 0; i < 15; i++) {
 			  String attrs = sGetAttribute("xpath=(//div[@id='"+ id +"'])@class");			
               if ( !attrs.contains("ZDisabled") )

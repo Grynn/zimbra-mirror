@@ -14,11 +14,9 @@ import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.PageMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
 
@@ -50,10 +48,9 @@ public class PageAddressbook extends AbsTab {
 				
 		public static final ContextMenuItem CONTACT_SUB_NEW_TAG = new ContextMenuItem("zmi__Contacts__TAG_MENU|MENU|NEWTAG","New Tag","div[class='ImgNewTag']",":contains('nt')");
 		public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("zmi__Contacts__TAG_MENU|MENU|REMOVETAG","Remove Tag","div[class='ImgDeleteTag']","");
-		
-		//TODO: Need fixed id for the following:
-		public static  ContextMenuItem CONTACT_SUB_RECEIVED_FROM_CONTACT = new ContextMenuItem(null,"Received From Contact","div[class='ImgSearch']","");
-	    public static  ContextMenuItem CONTACT_SUB_SENT_TO_CONTACT = new ContextMenuItem(null,"Sent To Contact","div[class='ImgSearch']","");
+			
+		public static final ContextMenuItem CONTACT_SUB_RECEIVED_FROM_CONTACT = new ContextMenuItem("POPUP_SEARCH","Received From Contact","div[class='ImgSearch']","");
+	    public static final ContextMenuItem CONTACT_SUB_SENT_TO_CONTACT = new ContextMenuItem("POPUP_SEARCH_TO","Sent To Contact","div[class='ImgSearch']","");
 	}
 	
 	public PageAddressbook(AbsApplication application) {
@@ -507,32 +504,13 @@ public class PageAddressbook extends AbsTab {
 			}
 			else if (option == Button.B_SEARCH) {
 				cmi=CONTEXT_MENU.CONTACT_SEARCH;
-				String previousSiblingId="zmi__Contacts__TAG_MENU|MENU";
-		        String parentId=sGetNextSiblingId(previousSiblingId);
-		        int    parentIdInt = 0;
-		        String prefix="DWT";
-		        
-		        try {
-		        	//DWTXXXX		        
-		        	parentIdInt = Integer.parseInt(parentId.substring(prefix.length(), parentId.length()));
-		        	
-		        }
-		        catch (Exception e) {
-		        	throw new HarnessException("cannot find the id");
-		        }
-				
 				if (subOption == Button.O_SEARCH_MAIL_SENT_TO_CONTACT) {
 					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_SENT_TO_CONTACT;
-		            //locator = "css=div[id=" + sGetNextSiblingId(previousSiblingId) + "]" + sub_cmi.locator;
-				    sub_cmi.locator=prefix + (parentIdInt + 3);
-					page = ((AppAjaxClient)MyApplication).zPageMail;
-				    
+		    		page = ((AppAjaxClient)MyApplication).zPageMail;
 				}
 			
 				else if (subOption == Button.O_SEARCH_MAIL_RECEIVED_FROM_CONTACT) {
 					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_RECEIVED_FROM_CONTACT;
-					//locator = "css=div[id=" + sGetNextSiblingId(previousSiblingId) + "]" + sub_cmi.locator;
-					sub_cmi.locator=prefix + (parentIdInt + 2);			
 					page = ((AppAjaxClient)MyApplication).zPageMail;
 				}
 					
