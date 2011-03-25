@@ -277,7 +277,9 @@ public abstract class AbsPage extends AbsSeleniumObject {
 		        case '*': doType(KeyEvent.VK_ASTERISK); break;
 		        case '(': doType(KeyEvent.VK_LEFT_PARENTHESIS); break;
 		        case ')': doType(KeyEvent.VK_RIGHT_PARENTHESIS); break;
-		        case '_': doType(KeyEvent.VK_UNDERSCORE); break;
+		       // case '_': doType(KeyEvent.VK_UNDERSCORE); break;
+		        case '_': doType(KeyEvent.VK_SHIFT, KeyEvent.VK_MINUS); break;
+		        
 		        case '+': doType(KeyEvent.VK_PLUS); break;
 		        case '\t': doType(KeyEvent.VK_TAB); break;
 		        case '\n': doType(KeyEvent.VK_ENTER); break;
