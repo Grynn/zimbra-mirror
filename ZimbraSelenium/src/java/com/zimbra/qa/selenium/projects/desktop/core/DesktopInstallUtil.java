@@ -82,9 +82,14 @@ public class DesktopInstallUtil {
          } else {
             zimbraDesktopRegistryPath = _desktopRegistryPath;
          }
-         output = CommandLine.cmdExecWithOutput("reg query " +
-                zimbraDesktopRegistryPath + " /v " + key);
-         return output;
+
+         if (zimbraDesktopRegistryPath == null) {
+            return null;
+         } else {
+            output = CommandLine.cmdExecWithOutput("reg query " +
+                  zimbraDesktopRegistryPath + " /v " + key);
+            return output;
+         }
 
       } catch (Exception e) {
          return null;
