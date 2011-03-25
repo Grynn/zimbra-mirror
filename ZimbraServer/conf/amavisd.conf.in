@@ -142,11 +142,11 @@ $sa_local_tests_only = 0;    # only tests which do not require internet access?
 # $timestamp_fmt_mysql = 1; # if using MySQL *and* msgs.time_iso is TIMESTAMP;
 #   defaults to 0, which is good for non-MySQL or if msgs.time_iso is CHAR(16)
 
-$virus_admin               = "@@av_notify_user@@";  # notifications recip.
+$virus_admin               = '@@av_notify_user@@';  # notifications recip.
 
-$mailfrom_notify_admin     = "@@av_notify_user@@";  # notifications sender
-$mailfrom_notify_recip     = "@@av_notify_user@@";  # notifications sender
-$mailfrom_notify_spamadmin = "@@av_notify_user@@"; # notifications sender
+$mailfrom_notify_admin     = '@@av_notify_user@@';  # notifications sender
+$mailfrom_notify_recip     = '@@av_notify_user@@';  # notifications sender
+$mailfrom_notify_spamadmin = '@@av_notify_user@@'; # notifications sender
 $mailfrom_to_quarantine = ''; # null return path; uses original sender if undef
 
 @addr_extension_virus_maps      = ('virus');
