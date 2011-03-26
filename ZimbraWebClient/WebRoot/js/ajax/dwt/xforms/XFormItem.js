@@ -627,6 +627,7 @@ XFormItem.prototype.updateEnabledDisabled = function (parentDisabled) {
 					} else if (myEnabledDisabledChecks[i] instanceof Array) {
 						//first element is a func reference, the rest of elements are arguments
 						var func = myEnabledDisabledChecks[i].shift();
+						if(!func || !func.apply) continue;
 						isEnabled = func.apply(this, myEnabledDisabledChecks[i]);
 						myEnabledDisabledChecks[i].unshift(func);
 						if(!isEnabled)
