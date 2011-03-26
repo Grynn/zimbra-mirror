@@ -190,6 +190,32 @@
     </classpath>
   </taskdef>
 
+  <macrodef name="win-copy-binary">
+    <attribute name="src" />
+    <attribute name="dst" />
+    <sequential>
+      <pathconvert targetos="windows" property="wcb.src">
+        <path>
+          <pathelement location="@{src}" />
+        </path>
+      </pathconvert>
+      <pathconvert targetos="windows" property="wcb.dst">
+        <path>
+          <pathelement location="@{dst}" />
+        </path>
+      </pathconvert>
+
+      <exec executable="cmd" failonerror="true">
+        <arg value="/C" />
+        <arg value="COPY" />
+        <arg value="/Y" />
+        <arg value="/B" />
+        <arg value="${wcb.src}" />
+        <arg value="${wcb.dst}" />
+      </exec>
+    </sequential>
+  </macrodef>
+  
   <!-- Targets -->
   <target name="offline-build-init">
     <mkdir dir="${build.classes.dir}" />
@@ -418,7 +444,11 @@
     <copy tofile="${dist.dir}/conf/log4j.properties" file="${config.dir}/log4j.properties" overwrite="true" />
         <copy tofile="${dist.dir}/conf/zdesktop.conf" file="${config.dir}/zdesktop.conf" overwrite="true" />
     <copy tofile="${dist.dir}/conf/timezones.ics" file="${server.config.dir}/timezones.ics" overwrite="true" />
-    <copy tofile="${dist.dir}/conf/zimbra-contact-fields.xml" file="${server.config.dir}/contacts/zimbra-contact-fields.xml" overwrite="true" />
+    <if><isset property="is-windows" /><then>
+      <win-copy-binary dst="${dist.dir}/conf/zimbra-contact-fields.xml" src="${server.config.dir}/contacts/zimbra-contact-fields.xml" />
+    </then><else>
+      <copy tofile="${dist.dir}/conf/zimbra-contact-fields.xml" file="${server.config.dir}/contacts/zimbra-contact-fields.xml" overwrite="true" />
+    </else></if>
     <copy todir="${dist.dir}/conf/msgs" overwrite="true">
       <fileset dir="${server.config.dir}/msgs" />
     </copy>
@@ -431,7 +461,11 @@
     <copy todir="${dist.dir}/conf/rights" overwrite="true">
       <fileset dir="${server.config.dir}/rights" excludes="*admin*" />
     </copy>
-    <fixcrlf srcdir="${dist.dir}/conf" eol="unix" includes="**" />
+    <if><isset property="is-windows" /><then>
+      <fixcrlf srcdir="${dist.dir}/conf" eol="unix" includes="**" excludes="zimbra-contact-fields.xml" />
+    </then><else>
+      <fixcrlf srcdir="${dist.dir}/conf" eol="unix" includes="**" />
+    </else></if>
 
     <copy todir="${dist.dir}/conf" file="${server.config.dir}/globs2" overwrite="true" />
     <copy todir="${dist.dir}/conf" file="${server.config.dir}/magic" overwrite="true" />
