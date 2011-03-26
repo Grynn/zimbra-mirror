@@ -4,7 +4,6 @@ package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.contactgroups;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.ContactGroupItem;
-import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
@@ -25,59 +24,73 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		super.startingAccountPreferences = null;		
 		
 	}
-	
-	@Test(	description = "Untag a contact group",
-			groups = { "smoke" })
-	public void UnTagContact_01() throws HarnessException {
 
-
-	    String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
+	//verify a contact group is untaged via UI & soap
+	private void VerifyContactGroupUntag(ContactGroupItem group, String tagName) throws HarnessException {
+		String expectedMsg = "Tag \"" + tagName + "\" removed from 1 contact group";
 		
-			// Create a tag via soap
+		ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
+		        expectedMsg , "Verify toast message '" + expectedMsg + "'");
+ 
+	    GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+
+	    app.zGetActiveAccount().soapSend(
+				"<GetContactsRequest xmlns='urn:zimbraMail'>" +
+					"<cn id='"+ group.getId() +"'/>" +
+				"</GetContactsRequest>");
+	    String contactTag = app.zGetActiveAccount().soapSelectValue("//mail:GetContactsResponse//mail:cn", "t");
+
+	    ZAssert.assertNull(contactTag, "Verify that the tag is removed from the contact");
+    }
+
+	//get tag id via soap
+	private String GetTagid(String tagName) throws HarnessException{
+			
+	   // Create a tag via soap
 		app.zGetActiveAccount().soapSend(
 				"<CreateTagRequest xmlns='urn:zimbraMail'>" +
-                	"<tag name='"+ tagName +"' color='1' />" +
-                "</CreateTagRequest>");
+               	"<tag name='"+ tagName +"' color='1' />" +
+               "</CreateTagRequest>");
 		String tagid = app.zGetActiveAccount().soapSelectValue("//mail:CreateTagResponse/mail:tag", "id");
 
-		  // Create a contact group 
-		ContactGroupItem group = CreateContactGroup.CreateContactGroupViaSoap(app, tagid);
-		group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-	      
-             
-        // Refresh the view, to pick up the new contact
-        FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
-        GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-        app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
-               
-        // Select the item
-        app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group.fileAs);
-
-
-    	// Untag it
+		return tagid;
+	}
+	
+	@Test(	description = "Untag a contact group by click Tag->Remove tag on toolbar ",
+			groups = { "smoke" })
+	public void UnTagContactGroup_01() throws HarnessException {
+		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();	
+		String tagid = GetTagid(tagName);
+		
+		// Create a contact group via Soap then select
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, tagid);
+	  
+    	// Untag it by click Tag->Remove Tag on toolbar 
 		app.zPageAddressbook.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_REMOVETAG);
-
-
-		//verify toasted message 'contact created'
-		String expectedMsg = "All tags removed from 1 contact group";
-	    ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
-			        expectedMsg , "Verify toast message '" + expectedMsg + "'");
-
-	 
-
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-
-		app.zGetActiveAccount().soapSend(
-					"<GetContactsRequest xmlns='urn:zimbraMail'>" +
-						"<cn id='"+ group.getId() +"'/>" +
-					"</GetContactsRequest>");
-		String contactTag = app.zGetActiveAccount().soapSelectValue("//mail:GetContactsResponse//mail:cn", "t");
-
-		ZAssert.assertNull(contactTag, "Verify that the tag is removed from the contact");
-
+    
+        // Verify contact group untagged
+		VerifyContactGroupUntag(group, tagName);
 	 
    	}
 	
-	
+
+	@Test(	description = "Untag a contact group by click Tag->Remove tag on Context Menu",
+			groups = { "functional" })
+	public void UnTagContactGroup_02() throws HarnessException {
+		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();	
+		String tagid = GetTagid(tagName);
+		
+		// Create a contact group via Soap then select
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, tagid);
+	  
+    	// Untag it by click Tag->Remove Tag on context menu
+		app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_TAG, Button.O_TAG_REMOVETAG , group.fileAs);
+
+	     
+        // Verify contact group untagged
+		VerifyContactGroupUntag(group,tagName);
+	 
+   	}
+
 }
 

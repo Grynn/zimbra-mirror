@@ -22,28 +22,30 @@ import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
 
 public class PageAddressbook extends AbsTab {
 
-	// image class name for contact and group
-	private static final String GROUP_IMAGE   = "ImgGroup";
-	private static final String CONTACT_IMAGE = "ImgContact";
 	
 	public static class CONTEXT_MENU {
 		public static final String LOCATOR		= "id='zm__Contacts'";
 		
 		//contact's context menu	
 		public static final ContextMenuItem CONTACT_SEARCH = ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP ?
-		      new ContextMenuItem("zmi__Contacts__SEARCH","Find Emails From Contact","div[class='ImgSearch']"," div") :             
-		      new ContextMenuItem("zmi__Contacts__SEARCH_MENU","Find Emails...","div[class='ImgSearch']"," div[class='ImgCascade']");	
-		public static final ContextMenuItem CONTACT_ADVANCED_SEARCH = new ContextMenuItem("zmi__Contacts__BROWSE","Advanced Search","div[class='ImgSearchBuilder']","");	
-		public static final ContextMenuItem CONTACT_NEW_EMAIL = new ContextMenuItem("zmi__Contacts__NEW_MESSAGE","New Email","div[class='ImgNewMessage']",":contains('nm')");  	
-		public static final ContextMenuItem CONTACT_EDIT = new ContextMenuItem("zmi__Contacts__CONTACT","Edit Contact","div[class='ImgEdit']","");	
-		public static final ContextMenuItem CONTACT_FORWARD = new ContextMenuItem("zmi__Contacts__SEND_CONTACTS_IN_EMAIL","Forward Contact","div[class='ImgMsgStatusSent']","");	
-		public static final ContextMenuItem CONTACT_TAG = new ContextMenuItem("zmi__Contacts__TAG_MENU","Tag Contact","div[class='ImgTag']"," div[class='ImgCascade']");	
-		public static final ContextMenuItem CONTACT_DELETE = new ContextMenuItem("zmi__Contacts__DELETE","Delete","div[class='ImgDelete']",":contains('Del')");
-		public static final ContextMenuItem CONTACT_MOVE = new ContextMenuItem("zmi__Contacts__MOVE","Move","div[class='ImgMoveToFolder']","");
-		public static final ContextMenuItem CONTACT_PRINT = new ContextMenuItem("zmi__Contacts__PRINT_CONTACT","Print","div[class='ImgPrint']",":contains('p')");
-	   		
+		      new ContextMenuItem("zmi__Contacts__SEARCH","Find Emails From Contact","div[class*='ImgSearch']"," div") :             
+		      new ContextMenuItem("zmi__Contacts__SEARCH_MENU","Find Emails...","div[class*='ImgSearch']"," div[class*='ImgCascade']");	
+		public static final ContextMenuItem CONTACT_ADVANCED_SEARCH = new ContextMenuItem("zmi__Contacts__BROWSE","Advanced Search","div[class*='ImgSearchBuilder']","");	
+		public static final ContextMenuItem CONTACT_NEW_EMAIL = new ContextMenuItem("zmi__Contacts__NEW_MESSAGE","New Email","div[class*='ImgNewMessage']",":contains('nm')");  	
+    
+		//TODO: contact group: "Edit Group" instead of "Edit Contact"
+		public static final ContextMenuItem CONTACT_EDIT = new ContextMenuItem("zmi__Contacts__CONTACT","Edit Contact","div[class*='ImgEdit']","");	
+		public static final ContextMenuItem CONTACT_FORWARD = new ContextMenuItem("zmi__Contacts__SEND_CONTACTS_IN_EMAIL","Forward Contact","div[class*='ImgMsgStatusSent']","");	
+	
+		//TODO: contact group: "Tag Group" instead of "Tag Contact"
+		public static final ContextMenuItem CONTACT_TAG = new ContextMenuItem("zmi__Contacts__TAG_MENU","Tag Contact","div[class*='ImgTag']"," div[class='ImgCascade']");	
+		public static final ContextMenuItem CONTACT_DELETE = new ContextMenuItem("zmi__Contacts__DELETE","Delete","div[class*='ImgDelete']",":contains('Del')");
+		public static final ContextMenuItem CONTACT_MOVE = new ContextMenuItem("zmi__Contacts__MOVE","Move","div[class*='ImgMoveToFolder']","");
+		public static final ContextMenuItem CONTACT_PRINT = new ContextMenuItem("zmi__Contacts__PRINT_CONTACT","Print","div[class*='ImgPrint']",":contains('p')");
+	 		
 	}
 
+	
 	public static class CONTEXT_SUB_MENU {
 				
 		public static final ContextMenuItem CONTACT_SUB_NEW_TAG = new ContextMenuItem("zmi__Contacts__TAG_MENU|MENU|NEWTAG","New Tag","div[class='ImgNewTag']",":contains('nt')");
@@ -157,10 +159,10 @@ public class PageAddressbook extends AbsTab {
 			String fileAs = ClientSessionFactory.session().selenium().getText(contactDisplayedLocator);
 			
 			//check if it is a contactgroup or a contactgroup item
-			if ( contactType.equals(GROUP_IMAGE)) {
+			if ( contactType.equals(ContactGroupItem.IMAGE_CLASS)) {
                 ci=new ContactGroupItem(fileAs);
 			}
-			else if (  contactType.equals(CONTACT_IMAGE) ) {
+			else if (  contactType.equals(ContactItem.IMAGE_CLASS) ) {
 				ci=new ContactItem(fileAs);		    			
 			}
 			else {
@@ -223,25 +225,7 @@ public class PageAddressbook extends AbsTab {
 			}
 
 			locator = "id="+ id;
-			ArrayList<String> selectedContactArrayList=getSelectedContactLocator();
-			
-			if (selectedContactArrayList.size() == 0) {
-				throw new HarnessException("No selected contact/contact group ");				
-			}
-			
-			if (selectedContactArrayList.size() > 1) {
-				throw new HarnessException("Cannot edit more than one contact/contact group ");				
-			}
-			
-		    String contactType = getContactType(selectedContactArrayList.get(0));
-			
-		    //check if it is a contactgroup or a contactgroup item
-			if ( contactType.equals(GROUP_IMAGE)) {
-				page = new FormContactGroupNew(MyApplication);		
-			}
-			else if (  contactType.equals(CONTACT_IMAGE) ) {
-				page = new FormContactNew(MyApplication);
-			}
+			page = newFormSelected();	
 			
 	    } else if ( button == Button.B_MOVE) {
 
@@ -279,6 +263,23 @@ public class PageAddressbook extends AbsTab {
 		return (page);
 	}
 
+	public ContactGroupItem createUsingSOAPSelectContactGroup(AppAjaxClient app, String ... tagIDArray)  throws HarnessException {	
+	  // Create a contact group via Soap
+	  ContactGroupItem group = ContactGroupItem.createUsingSOAP(app, tagIDArray);
+		             
+	  group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+	    
+      // Refresh the view, to pick up the new contact
+      FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
+    
+      // Select the item
+      zListItem(Action.A_LEFTCLICK, group.fileAs);
+      
+      return group;
+    }
+	
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
@@ -303,17 +304,12 @@ public class PageAddressbook extends AbsTab {
 	         page = new DialogTag(this.MyApplication, this);
 
 	      } else if ( option == Button.O_TAG_REMOVETAG ) {
-
-	         zKeyboard.zTypeCharacters(Shortcut.S_MAIL_REMOVETAG.getKeys());
-
-	         pulldownLocator = null;	
-	         optionLocator = null;
-	         page = null;
+						
+			pulldownLocator = "css=td[id$='__TAG_MENU_dropdown'] div[class='ImgSelectPullDownArrow']";
+			optionLocator = "css=div[id$='zb__CNS__TAG_MENU|MENU|REMOVETAG']"; 
+			page = null;
 			
-	         zWaitForBusyOverlay();
-
-	      } else {
-	         throw new HarnessException("no logic defined for pulldown/option "+ pulldown +"/"+ option);
+			zWaitForBusyOverlay();
 	      }
 
 	   } else if ( pulldown == Button.B_NEW ) {
@@ -322,10 +318,10 @@ public class PageAddressbook extends AbsTab {
 
 			    // TODO: Bug 58365 for Desktop
 			    if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-                optionLocator="css=div[class='ActionMenu ZHasIcon'] div[class*='ZMenuItem ZWidget ZHasLeftIcon ZHasText'] table[class*='ZWidgetTable ZMenuItemTable']:contains('Contact')";
-             } else {
-                optionLocator="css=tr[id='POPUP_NEW_CONTACT']";
-             }
+                   optionLocator="css=div[class='ActionMenu ZHasIcon'] div[class*='ZMenuItem ZWidget ZHasLeftIcon ZHasText'] table[class*='ZWidgetTable ZMenuItemTable']:contains('Contact')";                
+			    } else {
+                  optionLocator="css=tr[id='POPUP_NEW_CONTACT']";
+                }
 			    page = new FormContactNew(this.MyApplication);
 		   }
 		   if ( option == Button.O_NEW_CONTACTGROUP) {
@@ -379,11 +375,11 @@ public class PageAddressbook extends AbsTab {
         String attrs = sGetAttribute(imageLocator);
 		
 		//check if it is a contactgroup or a contactgroup item
-		if ( attrs.contains(GROUP_IMAGE) ) {
-			return GROUP_IMAGE;
+		if ( attrs.contains(ContactGroupItem.IMAGE_CLASS) ) {
+			return ContactGroupItem.IMAGE_CLASS;
 		}	
-		else if ( attrs.contains(CONTACT_IMAGE) ) {
-			return CONTACT_IMAGE;
+		else if ( attrs.contains(ContactItem.IMAGE_CLASS) ) {
+			return ContactItem.IMAGE_CLASS;
 		}
 		
 		return null;
@@ -391,7 +387,7 @@ public class PageAddressbook extends AbsTab {
 	
     // return the xpath locator of a contact
 	private String getContactLocator(String contact) throws HarnessException {
-		String listLocator = "//div[@id='zv__CNS']";
+		String listLocator = "//div[@id='zv__CNS']";				
 		String rowLocator = "//div[contains(@id, 'zli__CNS__')]";
 		String contactLocator = null;
 		
@@ -468,7 +464,7 @@ public class PageAddressbook extends AbsTab {
 				throw new HarnessException("unable to locate item " + itemLocator);
 			}
 
-			if (sGetAttribute("xpath=(" +itemLocator+ ")@class").contains("Row-selected")) {
+			if (sGetAttribute("xpath=(" +itemLocator+ ")@class").contains("Row-selected ")) {
 			    arrayList.add(itemLocator);
 			}
 
@@ -590,8 +586,8 @@ public class PageAddressbook extends AbsTab {
 			}
             
 			else if (option == Button.B_EDIT) {
-				cmi=CONTEXT_MENU.CONTACT_EDIT;
-				page = new FormContactNew(MyApplication);	
+				cmi=CONTEXT_MENU.CONTACT_EDIT;				 
+				page = newFormSelected();	
 			}
 
 			else if (option == Button.B_NEW) {
@@ -666,4 +662,32 @@ public class PageAddressbook extends AbsTab {
 	
 	}
 
+	private AbsPage newFormSelected() throws HarnessException {
+	    AbsPage page = null;
+		ArrayList<String> selectedContactArrayList=getSelectedContactLocator();
+	
+	    if (selectedContactArrayList.size() == 0) {
+		  throw new HarnessException("No selected contact/contact group ");				
+	    }
+	
+	    if (selectedContactArrayList.size() > 1) {
+	      for (int i=0; i<selectedContactArrayList.size(); i++) {
+	    	  System.out.println(selectedContactArrayList.get(i));
+	      }
+		  throw new HarnessException("Cannot edit more than one contact/contact group ");				
+	    }
+	
+        String contactType = getContactType(selectedContactArrayList.get(0));
+	
+        //check if it is a contact or a contact group item
+	    if ( contactType.equals(ContactGroupItem.IMAGE_CLASS)) {
+		  page = new FormContactGroupNew(MyApplication);		
+	    }
+	    else if (  contactType.equals(ContactItem.IMAGE_CLASS) ) {
+		  page = new FormContactNew(MyApplication);
+	    }
+	
+	    return page;
+	
+	}
 }

@@ -72,11 +72,11 @@ public class UnTagContact extends AjaxCommonTest  {
 		app.zPageAddressbook.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_REMOVETAG);
 
 
-		//verify toasted message 'contact created'
-		Toaster toast = app.zPageMain.zGetToaster();
-		String toastMsg = toast.zGetToastMessage();
-		ZAssert.assertStringContains(toastMsg, "All tags removed from 1 contact", "Verify toast message 'All tags removed from 1 contact'");
-
+		//verify toasted message Tag xxxxxx removed from 1 contact group
+	    String expectedMsg = "Tag \"" + tagName + "\" removed from 1 contact";		
+		ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
+		        expectedMsg , "Verify toast message '" + expectedMsg + "'");
+ 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
 		app.zGetActiveAccount().soapSend(

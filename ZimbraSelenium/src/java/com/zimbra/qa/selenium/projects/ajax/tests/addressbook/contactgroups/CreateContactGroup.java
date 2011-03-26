@@ -9,7 +9,6 @@ import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.*;
 
 
@@ -25,29 +24,7 @@ public class CreateContactGroup extends AjaxCommonTest  {
 		super.startingAccountPreferences = null;		
 		
 	}
-	
-	
-	//To be used by other test cases
-	public static ContactGroupItem CreateContactGroupViaSoap(AppAjaxClient app, String ... tagIdArray ) throws HarnessException {
-		String tagParam ="";
-		if (tagIdArray.length == 1) {
-			tagParam = " t='" + tagIdArray[0] + "'";
-		}
-
-        // Create a contact group 
-		ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
-	
-        app.zGetActiveAccount().soapSend(
-                "<CreateContactRequest xmlns='urn:zimbraMail'>" +
-                "<cn " + tagParam + " fileAsStr='" + group.groupName + "' >" +
-                "<a n='type'>group</a>" +
-                "<a n='nickname'>" + group.groupName +"</a>" +
-                "<a n='dlist'>" + group.getDList() + "</a>" +
-                "</cn>" +
-                "</CreateContactRequest>");
-
-        return group;
-	}
+		
 	
 	@Test(	description = "Create a basic contact group",
 			groups = { "sanity" })

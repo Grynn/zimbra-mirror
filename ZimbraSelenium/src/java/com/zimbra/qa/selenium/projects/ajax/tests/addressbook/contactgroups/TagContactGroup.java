@@ -20,27 +20,9 @@ public class TagContactGroup extends AjaxCommonTest  {
 		
 	}
 	
-	@Test(	description = "Tag a contact group",
-			groups = { "smoke" })
-	public void TagContact_01() throws HarnessException {
+	private void TagGroup(DialogTag dialogTag, ContactGroupItem group) throws HarnessException {
 	
-        // Create a contact group 
-		ContactGroupItem group = CreateContactGroup.CreateContactGroupViaSoap(app);
-		
-		group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-        
-        // Refresh the view, to pick up the new contact
-        FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
-        GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-        app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
-                 
-        // Select the item
-        app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group.fileAs); 
-        
-	    String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
-		
-		// Click new tag
-		DialogTag dialogTag = (DialogTag) app.zPageAddressbook.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_NEWTAG);
+		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();			
 		dialogTag.zSetTagName(tagName);
 		dialogTag.zClickButton(Button.B_OK);		
 				
@@ -64,9 +46,35 @@ public class TagContactGroup extends AjaxCommonTest  {
         ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
 		        expectedMsg , "Verify toast message '" + expectedMsg + "'");
 
-  
+	}
+	
+	@Test(	description = "Tag a contact group by click Tag button on toolbar",
+			groups = { "smoke" })
+	public void TagContactGroup_01() throws HarnessException {
+	
+		// Create a contact group via Soap then select
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app);
+	           
+		// Click new tag on Tag->New Tag on toolbar
+		DialogTag dialogTag = (DialogTag) app.zPageAddressbook.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_NEWTAG);
+		
+		// Tag a contact group
+        TagGroup(dialogTag, group);	  
    	}
 	
+	@Test(	description = "Tag a contact group by click Tag Group on Context Menu",
+			groups = { "functional" })
+	public void TagContactGroup_02() throws HarnessException {
+	
+		// Create a contact group via Soap then select
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app);
+	           
+		// Click Tag Group on context menu
+        DialogTag dialogTag = (DialogTag) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_TAG, Button.O_TAG_NEWTAG , group.fileAs);        
+		
+		// Tag a contact group
+        TagGroup(dialogTag, group);	  
+   	}
 	
   	
 }
