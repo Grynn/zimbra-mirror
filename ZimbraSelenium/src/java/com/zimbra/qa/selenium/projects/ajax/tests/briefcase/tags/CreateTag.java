@@ -64,6 +64,7 @@ public class CreateTag extends AjaxCommonTest {
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
 
 		// Fill out the input field
+		dialog.zSelectWindow("Zimbra: Briefcase");
 		dialog.zSetTagName(name);
 		dialog.zClickButton(Button.B_OK);
 		
