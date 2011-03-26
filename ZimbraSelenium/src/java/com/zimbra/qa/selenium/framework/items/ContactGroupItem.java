@@ -11,6 +11,7 @@ import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 
 
 /**
@@ -18,6 +19,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
  */
 public class ContactGroupItem extends ContactItem implements IItem {
 	protected static Logger logger = LogManager.getLogger(IItem.class);
+	public static final String IMAGE_CLASS   = "ImgGroup";
 
 	/**
 	 * The name of the contact group
@@ -48,12 +50,14 @@ public class ContactGroupItem extends ContactItem implements IItem {
 			String groupName =  "group_" + ZimbraSeleniumProperties.getUniqueString();
 	        String emailAddress1 = "email_" + ZimbraSeleniumProperties.getUniqueString() + domain;
 	        String emailAddress2 = "email_" +  ZimbraSeleniumProperties.getUniqueString() + domain;
+	        String emailAddress3 = "email_" +  ZimbraSeleniumProperties.getUniqueString() + domain;
 	        
 	        // Create a contact group 
 			group = new ContactGroupItem(groupName);
 		    
 			group.addDListMember(emailAddress1);
 			group.addDListMember(emailAddress2);
+			group.addDListMember(emailAddress3);
 		
 		}
 		
@@ -127,9 +131,28 @@ public class ContactGroupItem extends ContactItem implements IItem {
 		throw new HarnessException("implement me!");
 	}
 
-	public void createUsingSOAP(ZimbraAccount account) throws HarnessException {
-		throw new HarnessException("implement me");
+	public static ContactGroupItem createUsingSOAP(AppAjaxClient app, String ... tagIdArray ) throws HarnessException {
+		
+			String tagParam ="";
+			if (tagIdArray.length == 1) {
+				tagParam = " t='" + tagIdArray[0] + "'";
+			}
+
+	        // Create a contact group 
+			ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
+		
+	        app.zGetActiveAccount().soapSend(
+	                "<CreateContactRequest xmlns='urn:zimbraMail'>" +
+	                "<cn " + tagParam + " fileAsStr='" + group.groupName + "' >" +
+	                "<a n='type'>group</a>" +
+	                "<a n='nickname'>" + group.groupName +"</a>" +
+	                "<a n='dlist'>" + group.getDList() + "</a>" +
+	                "</cn>" +
+	                "</CreateContactRequest>");
+
+	        return group;
 	}
+	
 
 	public static ContactGroupItem importFromSOAP(ZimbraAccount account, String query) throws HarnessException {
 		throw new HarnessException("implement me!");

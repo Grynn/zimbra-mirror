@@ -19,6 +19,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
  */
 public class ContactItem implements IItem {
 	protected static Logger logger = LogManager.getLogger(IItem.class);
+	public static final String IMAGE_CLASS   = "ImgContact";
 
 	public String fileAs = null;	
 	public String type = null;
