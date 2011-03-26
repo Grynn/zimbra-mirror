@@ -763,7 +763,7 @@ public class PageBriefcase extends AbsTab {
 					+ "evObj.keyCode = " + kc + ";}"
 					+ "var x = selenium.browserbot.findElementOrNull('"
 					+ "css=html>body" + "'); "
-					+ "x.blur(); x.focus(); x.dispatchEvent(evObj);");
+					+ "x.focus(); x.dispatchEvent(evObj);");
 		}
 
 		// If the app is busy, wait for it to become active
