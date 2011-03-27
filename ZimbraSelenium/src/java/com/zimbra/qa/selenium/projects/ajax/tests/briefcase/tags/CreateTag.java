@@ -64,9 +64,14 @@ public class CreateTag extends AjaxCommonTest {
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
 
 		// Fill out the input field
-		dialog.zSelectWindow("Zimbra: Briefcase");
 		dialog.zSetTagName(name);
-		dialog.zClickButton(Button.B_OK);
+		
+		//debug code
+		dialog.sFocus("css=div[id=CreateTagDialog_button2] td[id=CreateTagDialog_button2_title]:contains(OK)");
+		dialog.sMouseDown("css=div[id=CreateTagDialog_button2] td[id=CreateTagDialog_button2_title]:contains(OK)");
+		dialog.sMouseUp("css=div[id=CreateTagDialog_button2] td[id=CreateTagDialog_button2_title]:contains(OK)");
+		
+		//dialog.zClickButton(Button.B_OK);
 		
 		// refresh briefcase page tags section after creating a new tag
 		app.zTreeBriefcase

@@ -325,7 +325,7 @@ public class PageBriefcase extends AbsTab {
 				throw new HarnessException("implement me!");
 			} else if (option == Button.O_NEW_DOCUMENT) {
 				pulldownLocator = Locators.zNewMenuArrowBtn;
-				
+
 				optionLocator = "css=td[id$='_title']:contains('Document')";
 
 				page = new DocumentBriefcaseNew(this.MyApplication);
@@ -335,11 +335,11 @@ public class PageBriefcase extends AbsTab {
 				throw new HarnessException("implement me!");
 			} else if (option == Button.O_NEW_TAG) {
 				pulldownLocator = Locators.zNewMenuArrowBtn;
-				
+
 				optionLocator = "css=tr[id=POPUP_NEW_TAG] td[id$='_title']:contains('Tag')";
 
 				page = new DialogTag(this.MyApplication, this);
-				
+
 				// FALL THROUGH
 			} else {
 				throw new HarnessException(
@@ -412,12 +412,12 @@ public class PageBriefcase extends AbsTab {
 						+ option + " pulldownLocator " + pulldownLocator
 						+ " not present!");
 			}
-			
+
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
-			
+
 			this.zClick(pulldownLocator);
-			
+
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
 
@@ -754,6 +754,11 @@ public class PageBriefcase extends AbsTab {
 		// zKeyboard.zTypeCharacters(shortcut.getKeys());
 
 		for (String kc : keyCode.split(",")) {
+			/*
+			 * vare=document.createEvent('KeyboardEvent');
+			 * if(typeof(e.initKeyboardEvent)!='undefined'){e.initEvent()}
+			 * else{e.initKeyEvent()}
+			 */
 			sGetEval("if(window.KeyEvent)"
 					+ "{var evObj = document.createEvent('KeyEvents');"
 					+ "evObj.initKeyEvent( 'keydown', true, true, window, false, false, false, false,"
