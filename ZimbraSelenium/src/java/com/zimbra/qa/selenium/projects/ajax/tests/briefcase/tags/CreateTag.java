@@ -66,13 +66,23 @@ public class CreateTag extends AjaxCommonTest {
 		// Fill out the input field
 		dialog.zSetTagName(name);
 		
-		//debug code
-		dialog.sFocus("css=div[id=CreateTagDialog_button2] td[id=CreateTagDialog_button2_title]:contains(OK)");
-		dialog.sMouseDown("css=div[id=CreateTagDialog_button2] td[id=CreateTagDialog_button2_title]:contains(OK)");
-		dialog.sMouseUp("css=div[id=CreateTagDialog_button2] td[id=CreateTagDialog_button2_title]:contains(OK)");
-		
-		//dialog.zClickButton(Button.B_OK);
-		
+		SleepUtil.sleepSmall();
+		dialog.zClickButton(Button.B_OK);
+				
+		/*
+		dialog.sMouseOver("css=div[id=CreateTagDialog_button2]:contains(OK)");
+		dialog.sFocus("css=div[id=CreateTagDialog_button2]:contains(OK)");
+		dialog.sGetEval("selenium.doMouseUpAt('css=div[id=CreateTagDialog_button2]','0,0')");
+		dialog.sGetEval("{var evObj = document.createEvent('MouseEvents');"
+				+ "evObj.initMouseEvent( 'mouseup', true, true, window, 1, 100, 200, 100, 200, false, false, false, false, 0, null);} "
+				+ "var x = selenium.browserbot.findElementOrNull('"
+				+ "css=div[id=CreateTagDialog_button2]" 
+				+ "'); "
+				+ "x.blur; x.focus(); x.dispatchEvent(evObj);");		
+		dialog.zClick("css=div[id=ZmTagColorMenu]");
+		dialog.zClick("css=td[class=ZWidgetTitle]:contains(Red)");
+		*/
+				
 		// refresh briefcase page tags section after creating a new tag
 		app.zTreeBriefcase
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
@@ -119,6 +129,10 @@ public class CreateTag extends AjaxCommonTest {
 		// Fill out the input field
 		dialog.zSetTagName(name2);
 		dialog.zClickButton(Button.B_OK);
+		
+		// refresh briefcase page tags section after creating a new tag
+		app.zTreeBriefcase
+				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
 		// Make sure the tag was created on the server
 		TagItem tag2 = TagItem.importFromSOAP(account, name2);
@@ -143,6 +157,7 @@ public class CreateTag extends AjaxCommonTest {
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
 		// Create a new tag in the Briefcase using the New pull down menu + Tag
+		SleepUtil.sleepSmall();
 		DialogTag dialog = (DialogTag) app.zPageBriefcase
 				.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_TAG);
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
