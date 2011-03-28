@@ -15,7 +15,7 @@ PATCH	:=
 
 ifdef BETA
 	include $(OPENLDAP_ROOT)/../beta_versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/ITS6577.patch; patch -g0 -N -p1 < ../patches/ITS6638.patch; patch -g0 -N -p1 < ../patches/ITS6660.patch; patch -g0 -N -p1 < ../patches/ITS6853.patch; patch -g0 -N -p1 < ../patches/ITS6768.patch
+	PATCH	:= 
 else
 	include $(OPENLDAP_ROOT)/../versions.def
 	PATCH	:= patch -g0 -N -p1 < ../patches/ITS6577.patch; patch -g0 -N -p1 < ../patches/ITS6638.patch; patch -g0 -N -p1 < ../patches/ITS6660.patch; patch -g0 -N -p1 < ../patches/ITS6853.patch;
@@ -43,7 +43,6 @@ build:
 	patch -g0 -N -p1 < ../patches/ITS5037.patch; \
 	$(PATCH) \
 	patch -g0 -N -p1 < ../patches/leopard.fix; \
-	patch -g0 -N -p1 < ../patches/bdb5.patch; \
 	patch -g0 -N -p1 < ../patches/index-slot-increase.patch; \
 	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(BDB_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(LDAP_LIB_DIR) -L$(LIBTOOL_LIB_DIR) \
 		 -R$(OPENSSL_LIB_DIR) -R$(BDB_LIB_DIR) -R$(CYRUS_LIB_DIR) -R$(LDAP_LIB_DIR) -R$(LIBTOOL_LIB_DIR)" \
