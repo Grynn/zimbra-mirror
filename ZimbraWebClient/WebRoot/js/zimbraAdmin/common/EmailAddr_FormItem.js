@@ -49,7 +49,7 @@ function(data, more, total) {
 	var withoutAlias = [];
 	for(var i = 0; data && i < data.length; i++) {
 		var targetObj = ZaDomain.getTargetDomainByName(data[i]) ;
-		if (targetObj.attrs [ZaDomain.A_domainType] == ZaDomain.domainTypes.local){
+		if (targetObj && targetObj.attrs [ZaDomain.A_domainType] == ZaDomain.domainTypes.local){
 			withoutAlias.push(data[i]);
 		}
 	}
