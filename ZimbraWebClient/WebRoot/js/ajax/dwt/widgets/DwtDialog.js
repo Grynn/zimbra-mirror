@@ -404,11 +404,17 @@ function(actionCode, ev) {
 			
 		case DwtKeyMap.CANCEL:
 			// hitting ESC should act as a cancel
+            //TODO: dialog should set ESC/Enter listeners so we don't have to guess the action to take
 			var handled = false;
 			handled = handled || this._runCallbackForButtonId(DwtDialog.CANCEL_BUTTON);
 			handled = handled || this._runCallbackForButtonId(DwtDialog.NO_BUTTON);
 			handled = handled || this._runCallbackForButtonId(DwtDialog.DISMISS_BUTTON);
-			this.popdown();
+
+            //don't let OK act as cancel if there are other buttons
+            if (!handled && this._buttonDesc[DwtDialog.OK_BUTTON] && this._buttonList.length == 1) {
+                handled = handled || this._runCallbackForButtonId(DwtDialog.OK_BUTTON);
+            }
+            this.popdown();
 			return true;
 
 		case DwtKeyMap.YES:
