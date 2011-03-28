@@ -2006,6 +2006,7 @@ XFormItemFactory.createItemType("_OUTPUT_", "output", Output_XFormItem, XFormIte
 
 //	type defaults
 Output_XFormItem.prototype.writeElementDiv = true;
+Output_XFormItem.prototype.labelWrap = true;
 Output_XFormItem.prototype.cssClass =  "xform_output";	// element itself (or element div)
 Output_XFormItem.prototype.containerCssClass =  "xform_output_container";	// element itself (or element div)
 
