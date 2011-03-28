@@ -258,6 +258,9 @@ function (form, listArr){
     form.getModel().setInstanceValue(instance, ZaAccount.A2_directMemberList, directMemberList) ;
     form.getModel().setInstanceValue(instance, ZaAccount.A2_indirectMemberList, indirectMemberList) ;
     form.getModel().setInstanceValue(instance, ZaAccount.A2_nonMemberList, nonMemberList) ;
+
+    if(directMemberList == null || directMemberList.length <= ZaAccountMemberOfListView.SEARCH_LIMIT)
+        form.getModel().setInstanceValue(instance, ZaAccount.A2_directMemberList + "_more", 0);
 };
 
 ZaAccountMemberOfListView._closeConfirmDialog =
@@ -354,11 +357,14 @@ function (form, listArr){
     }
 
     memberOf[ZaAccount.A2_directMemberList] = memberOf[ZaAccount.A2_directMemberList].concat(nonDupArr);
-    
+
 	form.parent.setDirty(true);
     form.getModel().setInstanceValue(instance, ZaAccount.A2_directMemberList, memberOf[ZaAccount.A2_directMemberList]) ;
     form.getModel().setInstanceValue(instance, ZaAccount.A2_nonMemberList, memberOf[ZaAccount.A2_nonMemberList]) ;
     form.getModel().setInstanceValue(instance, ZaAccount.A2_indirectMemberList, memberOf[ZaAccount.A2_indirectMemberList]) ;
+
+    if(memberOf[ZaAccount.A2_directMemberList].length > ZaAccountMemberOfListView.SEARCH_LIMIT)
+        form.getModel().setInstanceValue(instance, ZaAccount.A2_directMemberList + "_more", 1);
 };
 
 
@@ -537,6 +543,7 @@ function (){
 
 ZaAccountMemberOfListView.backButtonHndlr = 
 function (event, listItemId){
+    var instance = this.getInstance();
 	var currentOffset = this.getInstanceValue( listItemId + "_offset") ;
 	if (currentOffset == null) currentOffset = 0;
 	var nextOffset = 0;
@@ -547,7 +554,12 @@ function (event, listItemId){
 		nextOffset = currentOffset - ZaAccountMemberOfListView.SEARCH_LIMIT ;
 		this.setInstanceValue(nextOffset, listItemId + "_offset" );
 		this.setInstanceValue(1, listItemId + "_more");	
-	}
+
+        var directMemberOfList = instance [ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList] ;
+        var indirectMemberOfList = instance [ZaAccount.A2_memberOf][ZaAccount.A2_indirectMemberList] ;
+        this.setInstanceValue( directMemberOfList , ZaAccount.A2_directMemberList);
+        this.setInstanceValue( indirectMemberOfList , ZaAccount.A2_indirectMemberList);
+    }
 };
 
 ZaAccountMemberOfListView.fwdButtonHndlr =
@@ -778,7 +790,7 @@ S_Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 			if (offset == null) offset = 0;
 			more = instance [ ZaAccount.A2_indirectMemberList + "_more"] ;
 			if (more == null) more = 0;
-			if (more > 0) {
+			if (more > 0 && offset + ZaAccountMemberOfListView.SEARCH_LIMIT <= len) {
 				len = offset + ZaAccountMemberOfListView.SEARCH_LIMIT ;
 			}
 		}else if (this.id.indexOf(ZaAccount.A2_directMemberList) >= 0){
@@ -786,7 +798,7 @@ S_Dwt_List_XFormItem.prototype.setItems = function (itemArray){
 			if (offset == null) offset = 0;
 			more = instance [ ZaAccount.A2_directMemberList + "_more"] ;
 			if (more == null) more = 0;
-			if (more > 0) {
+			if (more > 0 && offset + ZaAccountMemberOfListView.SEARCH_LIMIT <= len) {
 				len = offset + ZaAccountMemberOfListView.SEARCH_LIMIT ;
 			}
 		}
