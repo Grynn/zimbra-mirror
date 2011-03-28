@@ -25,6 +25,7 @@ public class TreePreferences extends AbsTree {
 		public final static String zGeneralTextID_Desktop = "zti__local@host.local:main_Options__PREF_PAGE_GENERAL_textCell";
 		public final static String zGeneralImageID = "zti__main_Options__PREF_PAGE_GENERAL_imageCell";
 		public final static String zGeneralImageID_Desktop = "zti__local@host.local:main_Options__PREF_PAGE_GENERAL_imageCell";
+		public final static String zsignatureTextID = "zti__main_Options__PREF_PAGE_SIGNATURES_textCell";
 		public final static String zSignatureTextID_Desktop = "zti__<EMAIL_ADDRESS>:main_Options__PREF_PAGE_SIGNATURES_textCell";
 	}
 	
@@ -121,7 +122,7 @@ public class TreePreferences extends AbsTree {
 		map.put(TreeItem.General, "id=" + Locators.zGeneralTextID);
 		map.put(TreeItem.Mail, null);
 		map.put(TreeItem.MailComposing, null);
-		map.put(TreeItem.MailSignatures, null);
+		map.put(TreeItem.MailSignatures, "id="+Locators.zsignatureTextID);
 		map.put(TreeItem.MailAccounts, null);
 		map.put(TreeItem.MailFilters, null);
 		map.put(TreeItem.MailTrustedAddresses, null);
