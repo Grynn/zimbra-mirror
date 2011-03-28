@@ -34,8 +34,28 @@ ZaMsgDialog.CLOSE_TAB_DELETE_BUTTON_DESC =
 ZaMsgDialog.NO_DELETE_BUTTON = "no delete" ;
 ZaMsgDialog.NO_DELETE_BUTTON_DESC = 
 	new DwtDialog_ButtonDescriptor (ZaMsgDialog.NO_DELETE_BUTTON, ZaMsg.bt_no_delete, DwtDialog.ALIGN_RIGHT);
+ZaMsgDialog.schedulePopDownOp = null;
+ZaMsgDialog.schedulePopDownAction = null;
+ZaMsgDialog.scheduleTimeout = 3*1000; // 5 seconds
+ZaMsgDialog.prototype.popdown =
+function() {
+    if (ZaMsgDialog.schedulePopDownOp) {
+            AjxTimedAction.cancelAction(ZaMsgDialog.schedulePopDownOp);
+            ZaMsgDialog.schedulePopDownOp = null;
+    }
+    DwtDialog.prototype.popdown.call(this);
+}
 
-
+ZaMsgDialog.prototype.popup =
+function() {
+    if (ZaMsgDialog.schedulePopDownAction == null) {
+        ZaMsgDialog.schedulePopDownAction = new AjxTimedAction(this, this.popdown);
+    }
+    if (ZaMsgDialog.schedulePopDownOp == null) {
+        ZaMsgDialog.schedulePopDownOp = AjxTimedAction.scheduleAction(ZaMsgDialog.schedulePopDownAction, ZaMsgDialog.scheduleTimeout);
+    }
+    DwtDialog.prototype.popup.call(this);
+}
 
 
 
