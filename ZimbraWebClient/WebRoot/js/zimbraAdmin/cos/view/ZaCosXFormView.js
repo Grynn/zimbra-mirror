@@ -394,8 +394,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 						ZaCos.A_zimbraFeatureContactsEnabled,
 						ZaCos.A_zimbraFeatureCalendarEnabled,
 						ZaCos.A_zimbraFeatureTasksEnabled,
-						//ZaCos.A_zimbraFeatureNotebookEnabled,
-						//ZaCos.A_zimbraFeatureIMEnabled,
+						ZaCos.A_zimbraFeatureBriefcasesEnabled
 						ZaCos.A_zimbraFeatureOptionsEnabled
 					]]
 				],

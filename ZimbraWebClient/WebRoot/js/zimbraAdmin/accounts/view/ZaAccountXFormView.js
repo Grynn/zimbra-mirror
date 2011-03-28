@@ -1801,9 +1801,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							 ZaAccount.A_zimbraFeatureContactsEnabled,
 							 ZaAccount.A_zimbraFeatureCalendarEnabled,
 							 ZaAccount.A_zimbraFeatureTasksEnabled,
-							 //ZaAccount.A_zimbraFeatureNotebookEnabled,
 							 ZaAccount.A_zimbraFeatureBriefcasesEnabled,
-							 //ZaAccount.A_zimbraFeatureIMEnabled,
 							 ZaAccount.A_zimbraFeatureOptionsEnabled
 							 ]]
 						],
