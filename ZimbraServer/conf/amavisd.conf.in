@@ -185,7 +185,7 @@ $defang_by_ccat{CC_BADH.",6"} = 1;  # header field syntax error
 
 # OTHER MORE COMMON SETTINGS (defaults may suffice):
 
-# $myhostname = 'host.example.com';  # must be a fully-qualified domain name!
+$myhostname = '@@zimbra_server_hostname@@';  # must be a fully-qualified domain name!
 
 # $notify_method  = 'smtp:[127.0.0.1]:10025';
 # $forward_method = 'smtp:[127.0.0.1]:10025';  # set to undef with milter!
