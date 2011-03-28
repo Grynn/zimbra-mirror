@@ -186,8 +186,32 @@ public class MarkReadMail extends AjaxCommonTest {
 
 	@Test(	description = "Mark a message as read by context menu -> mark read",
 			groups = { "functional" })
-	public void MarkReadMail_04() throws HarnessException {
-		throw new HarnessException("implement me");
+			public void MarkReadMail_04() throws HarnessException {
+		// Create the message data to be sent
+		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+
+		ZimbraAccount.AccountA().soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+				"<m>" +
+				"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+				"<su>"+ subject +"</su>" +
+				"<mp ct='text/plain'>" +
+				"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+				"</mp>" +
+				"</m>" +
+		"</SendMsgRequest>");
+
+
+		// Create a mail item to represent the message
+		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		app.zPageMail.zListItem(Action.A_RIGHTCLICK, Button.O_MARK_AS_READ, mail.dSubject);
+		// Verify the message is marked read in the server (flags attribute should not contain (u)nread)
+		mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+		ZAssert.assertStringDoesNotContain(mail.getFlags(), "u", "Verify the message is marked read in the server");
+
 	}
 		
 
