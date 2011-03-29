@@ -498,7 +498,7 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_zimbraApplianceCustomRepUrlPass, ref:"attrs/" +  ZaServer.A_zimbraApplianceCustomRepUrlPass, type:_STRING_, maxLength: 256 },
 		{id:ZaServer.A_zimbraApplianceUpdateOption, ref:"attrs/" +  ZaServer.A_zimbraApplianceUpdateOption, type:_LIST_},
 		{id:ZaServer.A_zimbraApplianceUpdateType, ref:"attrs/" +  ZaServer.A_zimbraApplianceUpdateType, type:_LIST_},
-		{id:ZaServer.A_zimbraApplianceUpdatehourofrun, ref:"attrs/" +  ZaServer.A_zimbraApplianceUpdatehourofrun, type:_LIST_},
+		{id:ZaServer.A_zimbraApplianceUpdatehourofrun, ref:"attrs/" +  ZaServer.A_zimbraApplianceUpdatehourofrun, type:_LIST_}
     ]
 };
 		
