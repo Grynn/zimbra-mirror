@@ -24,7 +24,7 @@ public class DialogWarning extends AbsDialog {
 		
 		public static DialogWarningID SendLink = new DialogWarningID("css=div[class=DwtConfirmDialog]");
 		public static DialogWarningID DeleteTagWarningMessage = new DialogWarningID("YesNoCancel");
-		
+		public static DialogWarningID EmptyFolderWarningMessage = new DialogWarningID("OKCancel");
 		protected String Id;
 		protected DialogWarningID(String id) {
 			Id = id;
@@ -95,6 +95,11 @@ public class DialogWarning extends AbsDialog {
 		} else if ( button == Button.B_CANCEL ) {
 
 			locator = buttonsTableLocator + "//table//table//tr/td[3]/div";
+
+		}else if ( button == Button.B_OK ) {
+			
+			//locator = buttonsTableLocator + "//table//table//tr/td[2]/div";
+			locator = "need to implement Do not have unique id for OK Cancle Warning dialog bug 58448";
 
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);

@@ -46,7 +46,7 @@ public class EditFolder extends AjaxCommonTest {
 
 		// Rename the folder using context menu
 		DialogEditFolder dialog = (DialogEditFolder) app.zTreeMail.zTreeItem(
-				Action.A_RIGHTCLICK, Button.B_RENAME, subfolder1);
+				Action.A_RIGHTCLICK, Button.B_TREE_EDIT, subfolder1);
 		ZAssert.assertNotNull(dialog, "Verify the dialog opened");
 
 		// Set the name, click OK

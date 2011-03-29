@@ -22,6 +22,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogRenameTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
@@ -96,15 +97,30 @@ public class TreeMail extends AbsTree {
 		if (option == Button.B_TREE_EDIT) {
 
 			optionLocator = Locators.zEditTreeMenuItem;
+			page = new DialogEditFolder(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
 
 		} else if (option == Button.B_DELETE) {
-			optionLocator= "implement me";
+			optionLocator= "id=POPUP_DELETE";
+			page= null;
 
 		} else if (option == Button.B_RENAME) {
 
-			optionLocator= "implement me";
+			optionLocator= "id=POPUP_RENAME_FOLDER";
 
 			//page = new DialogRenameTag(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+
+		}else if (option == Button.B_TREE_FOLDER_EMPTY) {
+			optionLocator= "id=POPUP_EMPTY_FOLDER";
+			page = new DialogWarning(DialogWarning.DialogWarningID.EmptyFolderWarningMessage,
+					MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
+
+		}else if (option == Button.B_TREE_FOLDER_MARKASREAD) {
+			optionLocator= "id=POPUP_MARK_ALL_READ";
+			page= null;
+
+		}else if (option == Button.B_MOVE) {
+			optionLocator= "id=POPUP_MOVE";
+			page = new DialogMove(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
 
 		} else {
 			throw new HarnessException("button " + option

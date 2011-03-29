@@ -133,7 +133,7 @@ public class DialogEditFolder extends AbsDialog {
 		if (folder == null)
 			throw new HarnessException("folder must not be null");
 
-		String locator = "implement me";
+		String locator = "css=div.DwtDialogBody div input";
 
 		if (!this.sIsElementPresent(locator))
 			throw new HarnessException("unable to find folder name field "
@@ -143,6 +143,9 @@ public class DialogEditFolder extends AbsDialog {
 		this.sFocus(locator);
 		this.zClick(locator);
 		zKeyboard.zTypeCharacters(folder);
+		if (!(sGetValue(locator).equalsIgnoreCase(folder))) {
+			sType(locator, folder);
+		}
 
 		this.zWaitForBusyOverlay();
 

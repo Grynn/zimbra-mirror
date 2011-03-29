@@ -27,10 +27,8 @@ public class DeleteFolder extends AjaxCommonTest {
 		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
 		ZAssert.assertNotNull(inbox, "Verify the inbox is available");
 		
-		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
+		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
 		ZAssert.assertNotNull(trash, "Verify the trash is available");
-		
-
 		
 		// Create the subfolder
 		String name = "folder" + ZimbraSeleniumProperties.getUniqueString();
@@ -55,11 +53,8 @@ public class DeleteFolder extends AjaxCommonTest {
 		subfolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
 		ZAssert.assertNotNull(subfolder, "Verify the subfolder is again available");
 		ZAssert.assertEquals(trash.getId(), subfolder.getParentId(), "Verify the subfolder's parent is now the trash folder ID");
-
 		
-	}
-
-	
+	}	
 
 
 }
