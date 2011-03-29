@@ -639,7 +639,7 @@ WebExZimlet.prototype._getCreateOrModifyMeetingRequest = function(params) {
 		"<bodyContent xsi:type=\"",apiType,"\">",
 		pwdStr,
 		"<metaData><confName>", AjxStringUtil.xmlEncode(subject), "</confName>",
-		"<location>",loc,"</location><meetingType>3</meetingType></metaData>",
+		"<location>",loc,"</location></metaData>",
 		"<participants><attendees>", emls.join(""),altHostsEmls.join(""), "</attendees></participants>",
 		"<schedule>",
 		"<startDate>", formattedStartDate, "</startDate>",
