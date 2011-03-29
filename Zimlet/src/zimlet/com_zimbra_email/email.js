@@ -141,7 +141,7 @@ function(html, idx, obj, spanId, context, options) {
 			addrObj:	obj,
 			id:			spanId,
 			canExpand:	canExpand,
-			email:		obj.getAddress(),
+			email:		this._getAddress(obj),
 			separator:	AjxEmailAddress.SEPARATOR
 		};
 		ZmAddressInputField.BUBBLE_OBJ_ID[spanId] = this._internalId;	// pretend to be a ZmAddressInputField
@@ -564,7 +564,7 @@ function(obj, span, context) {
     if (!isDetachWindow && appCtxt.get(ZmSetting.SEARCH_ENABLED) && actionMenu.getOp("SEARCHEMAILS")) {
         this.createSearchMenu(actionMenu);
 	}
-	var addr = (obj instanceof AjxEmailAddress) ? obj.getAddress() : obj;
+	var addr = this._getAddress(obj);
 	if (this.isMailToLink(addr)) {
 		addr = (this.parseMailToLink(addr)).to || addr;
 	}
