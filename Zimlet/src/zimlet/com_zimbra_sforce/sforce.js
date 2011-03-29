@@ -349,7 +349,7 @@ function(result) {
 	html[i++] = "<table>";
 	html[i++] = ["<td><div id='sforce_quickUpdate_changeOwner'  refObjIdValue='",ownerId,"'>",ownerName,"</div></td>"].join("");
 	html[i++] = "<td><div id='sforce_quickUpdate_changeOwnerLookupBtn'></div></td>";
-	html[i++] = "<td><div id='sforce_quickUpdate_changeOwnerClearDiv' style='display:none;'><a href=# id='sforce_quickUpdate_changeOwnerClearLink'>clear</a></div></td></tr>";
+	html[i++] = "<td><div id='sforce_quickUpdate_changeOwnerClearDiv' style='display:none;'><a href='javascript:void(0)' id='sforce_quickUpdate_changeOwnerClearLink'>clear</a></div></td></tr>";
 	html[i++] = "</table>";
 	html[i++] = "</div></td></tr>";
 	for (var el in this._allQuickUpdatePickLists) {
@@ -1845,7 +1845,7 @@ function(typeOrObj, indx, email) {
 	html[i++] = "<tr><td>Last Name<span style='color:red;font-weight:bold;'>*</span>:</td><td colspan=3><input type='text' id='sforce_contactOrleadLN" + indx + "'></input></td></tr>";
 	html[i++] = "<tr  id='sforce_contactOrLeadAccTR" + indx + "'><td>Account:</td><td><div id='sforce_contactOrLeadAcc" + indx + "'  refObjIdValue='" + refObjId + "'>" + accName + "</div></td>";
 	html[i++] = "<td><div id='sforce_contactOrLeadAccLookupBtn" + indx + "'></div></td>";
-	html[i++] = "<td><div id='sforce_contactOrLeadAccClearDiv" + indx + "' style='display:none;'><a href=# id='sforce_contactOrLeadAccClearLnk" + indx + "'>clear</a></div></td></tr>";
+	html[i++] = "<td><div id='sforce_contactOrLeadAccClearDiv" + indx + "' style='display:none;'><a href='javascript:void(0)' id='sforce_contactOrLeadAccClearLnk" + indx + "'>clear</a></div></td></tr>";
 	html[i++] = "<tr id='sforce_contactOrLeadCompTR" + indx + "'><td>Company<span style='color:red;font-weight:bold;'>*</span>:</td>";
 	html[i++] = "<td colspan=3><input type='text' id='sforce_contactOrleadComp" + indx + "'></input></td></tr>";
 	html[i++] = "<tr><td>Phone:</td><td colspan=3><input type='text' id='sforce_contactOrleadPH" + indx + "'></input></td></tr>";
@@ -2390,7 +2390,7 @@ Com_Zimbra_SForce.prototype._setRecordsToNotesDlg = function() {
 	html[i++] = "<option value='Solution_lookUp'>Solution [lookup] </option>";
 	html[i++] = "</select></td>";
 	html[i++] = "</tr>";
-	html[i++] = "<tr><td>Quick create: <a href=# id='sforce_quickCreateContactLnk'>Contact</a> or <a href=# id='sforce_quickCreateLeadLnk'>Lead</a></td></tr>";
+	html[i++] = "<tr><td>Quick create: <a href='javascript:void(0)' id='sforce_quickCreateContactLnk'>Contact</a> or <a href='javascript:void(0)' id='sforce_quickCreateLeadLnk'>Lead</a></td></tr>";
 	html[i++] = "</table>";
 	document.getElementById("SForce_mainAccountsInfoDiv").innerHTML = html.join("");
 };

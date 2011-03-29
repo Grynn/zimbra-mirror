@@ -470,7 +470,7 @@ function() {
 	html[i++] = "<DIV class='breminder_msgDiv' id='breminder_foundMsgId'>";
 	html[i++]  = this.getMessage("BirthdayReminder_FoundContacts").replace("{0}",this.filteredContactsArry.length);
 	html[i++] = "</DIV>";
-	html[i++] = ["<div style='padding:2px'><a id='breminder_selectAllOrNone' href=# style='font-weight:bold;'>",
+	html[i++] = ["<div style='padding:2px'><a id='breminder_selectAllOrNone' href='javascript:void(0)' style='font-weight:bold;'>",
 				this.getMessage("BirthdayReminder_selectAllOrNone"),"</a></div>"].join("");
 	html[i++] = "<DIV class='breminder_mainDiv' style=\"overflow:auto;height:260px;width:99%\" >";
 	for (var j = 0; j < this.filteredContactsArry.length; j++) {

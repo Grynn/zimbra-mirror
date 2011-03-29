@@ -1398,7 +1398,7 @@ function(indx, notes) {
 			var helpLinkId = Dwt.getNextId();
 			this._accntPrefsHelpObjsHash.push({helpLinkId:helpLinkId, propId:obj.propId});
 			html.push("<tr><td>", this.getMessage(obj.label), "</td><td><input id='", id, "'  type='", type, "'/>",
-				"&nbsp; <a href=# id='",helpLinkId,"' style='color:darkBlue;text-decoration:underline'>",this.getMessage("WebExZimlet_help"),"</a></td></tr>");
+				"&nbsp; <a href='javascript:void(0)' id='",helpLinkId,"' style='color:darkBlue;text-decoration:underline'>",this.getMessage("WebExZimlet_help"),"</a></td></tr>");
 		} else {
 			html.push("<tr><td>", this.getMessage(obj.label), "</td><td><input id='", id, "'  type='", type, "'/>",
 				"<label style='color:gray'>", this.getMessage(obj.extraLabel), "</label></td></tr>");
@@ -1938,7 +1938,7 @@ function(selectHtml) {
 		html.push("<div><b>",this.getMessage("WebExZimlet_getAccounts"),"</b></div>");
 		html.push("<table class='webExZimlet_table'>");
 		html.push("<tr><td>", this.getMessage(WebExZimlet.PROP_ALT_HOSTS.label), "</td><td><input  id='", this._showSelectAccntsDlg._altHostFieldId, "'  type='text'/>",
-				"&nbsp; <a href=# id='",this._showSelectAccntsDlg._altHelpLinkId,"' style='color:darkBlue;text-decoration:underline'>",this.getMessage("WebExZimlet_help"),"</a></td></tr>");
+				"&nbsp; <a href='javascript:void(0)' id='",this._showSelectAccntsDlg._altHelpLinkId,"' style='color:darkBlue;text-decoration:underline'>",this.getMessage("WebExZimlet_help"),"</a></td></tr>");
 		html.push("<tr><td>", this.getMessage(WebExZimlet.PROP_MEETING_PASSWORD.label), "</td><td><input id='", this._showSelectAccntsDlg._mPwdFieldId, "'  type='text'/>",
 				"<label style='color:gray'>", this.getMessage(WebExZimlet.PROP_MEETING_PASSWORD.extraLabel), "</label></td></tr>");
 		html.push("</table>");
@@ -2157,7 +2157,7 @@ WebExZimlet.prototype._setMeetingListView = function(objResult, listType) {
 				"<td>", mtg.hostWebExID, "</td>",
 				"<td>", AjxStringUtil.urlComponentDecode(mtg.confName), "</td>",
 				"<td>", mtg.startDate, "<br/><label style='color:gray;font-size:10px'>", this._getTimeZoneName(mtg.timeZone.toString()), "</label></td>",
-				"<td><a href=# id='", startLinkId, "' >", this.getMessage("WebExZimlet_startJoin"), "</a></td>",
+				"<td><a href='javascript:void(0)' id='", startLinkId, "' >", this.getMessage("WebExZimlet_startJoin"), "</a></td>",
 				"</tr>");
 		isOdd = !isOdd;
 	}

@@ -123,8 +123,8 @@ function(controller) {
 
 	this._storeMsgs();
 	var html = [this._getMainMsg(timerSpanId),
-		" <a  style='text-decoration:underline;color:#CA0000;font-weight:bold;font-size:12px' href=# id='",undoLinkId,"'>",this._msg_UndoSendZimlet_Undo,"</a> or",
-		" <a  style='text-decoration:underline;color:darkblue;font-size:10px;font-weight:normal' href=# id='",sendNowId,"'>",this._msg_UndoSendZimlet_sendNow,"</a>"].join("");
+		" <a  style='text-decoration:underline;color:#CA0000;font-weight:bold;font-size:12px' href='javascript:void(0)' id='",undoLinkId,"'>",this._msg_UndoSendZimlet_Undo,"</a> or",
+		" <a  style='text-decoration:underline;color:darkblue;font-size:10px;font-weight:normal' href='javascript:void(0)' id='",sendNowId,"'>",this._msg_UndoSendZimlet_sendNow,"</a>"].join("");
 
 	var params = {controller:controller, viewId:viewId, timerSpanId:timerSpanId};
 
