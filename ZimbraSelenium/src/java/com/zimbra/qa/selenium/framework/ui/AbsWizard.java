@@ -30,6 +30,13 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
  */
 public abstract class AbsWizard extends AbsPage {
 	protected static Logger logger = LogManager.getLogger(AbsWizard.class);
+	public static String CANCEL_BUTTON = "zdlg__NEW_ACCT_button1_title";
+	public static String HELP_BUTTON = "zdlg__NEW_ACCT_button10_title";
+	public static String PREVIOUS_BUTTON = "zdlg__NEW_ACCT_button11_title";
+	public static String NEXT_BUTTON = "zdlg__NEW_ACCT_button12_title";
+	public static String FINISH_BUTTON = "zdlg__NEW_ACCT_button13_title";
+	
+	
 
 	public enum WizardButton {
 		Help, Cancel, Next, Previous, Finish
@@ -84,14 +91,19 @@ public abstract class AbsWizard extends AbsPage {
 	}
 	
 	protected void clickWizardButton(WizardButton button) throws HarnessException {
-		throw new HarnessException("implement me");
 
 		// TODO: If possible, define in the abstract class
-		
+
 		// Check if the button is enabled
 		// throw HarnessException if not enabled
-		
 		// Click on the button
+		switch(button) {
+		case Finish : if(sIsElementPresent(FINISH_BUTTON)) sClick(FINISH_BUTTON); break;
+		case Next:if(sIsElementPresent(NEXT_BUTTON)) sClick(NEXT_BUTTON);break;
+		case Previous:if(sIsElementPresent(PREVIOUS_BUTTON))sClick(PREVIOUS_BUTTON);break;
+		case Cancel:if(sIsElementPresent(CANCEL_BUTTON))sClick(CANCEL_BUTTON);break;
+		case Help:if(sIsElementPresent(HELP_BUTTON)) sClick(HELP_BUTTON);break;
+		}
 	}
 
 }
