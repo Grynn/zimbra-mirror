@@ -288,6 +288,23 @@ function(params, resp) {
 			if(resp && !resp.isException()) {
 				var response = resp.getResponse().Body.SearchDirectoryResponse;
 				this._list.loadFromJS(response);
+                // filter the search result
+                if(params.resultFilter && this._list.size() > 0) {
+                    var listVec = this._list.getVector();
+                    for(var i = 0; i < listVec.size(); i++) {
+                        var item = listVec.get(i);
+                        if(item.type == ZaItem.ALIAS) {
+                            var target = item.getAliasTargetObj();
+                            var isMatch = true;
+                            for (var f in params.resultFilter) {
+                                if(target.attrs[f].indexOf(params.resultFilter[f]) < 0) {
+                                    this._list.remove(item);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
 				if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] != 'TRUE') {
 					var act = new AjxTimedAction(this._list, ZaItemList.prototype.loadEffectiveRights, null);
 					AjxTimedAction.scheduleAction(act, 150)

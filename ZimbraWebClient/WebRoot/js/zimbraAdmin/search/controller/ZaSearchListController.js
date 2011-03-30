@@ -43,6 +43,9 @@ ZaSearchListController = function(appCtxt, container) {
 	this._searchFieldInput = null ; //the input of the search field for basic search, it is also be used as the tab title
 	this.objType = ZaEvent.S_ACCOUNT;	
 	this.fetchAttrs = ZaSearch.standardAttributes;
+
+    this.searchResultFilter = [ZaAccount.A_accountStatus];  // for Alias currently
+    this._filterObj = null;
 }
 
 ZaSearchListController.prototype = new ZaListViewController();
@@ -53,7 +56,7 @@ ZaController.initPopupMenuMethods["ZaSearchListController"] = new Array();
 ZaController.changeActionsStateMethods["ZaSearchListController"] = new Array();
 ZaSearchListController.prototype.show = function (doPush) {
 	var busyId = Dwt.getNextId();
-	var callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,CONS:null,show:doPush, busyId:busyId});
+	var callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,CONS:null,show:doPush, busyId:busyId, resultFilter:this._filterObj});
 	/*
 	if (this._currentQuery == null) {
 		this._currentQuery =  (ZaSearch._currentQuery ? ZaSearch._currentQuery : "");
@@ -287,6 +290,40 @@ function(query) {
 	
 }
 
+ZaSearchListController._getResultFilterObj =
+function(controller, params, filterObj) {
+    if(!controller._isAdvancedSearch || !params.query || params.query == "")
+        return params.query;
+    else {
+        var isAliasSpec = false;
+        if(params.types && params.types[0] instanceof Array) {
+            var adv_types = params.types[0];
+            for(var i = 0; i < adv_types.length && !isAliasSpec; i++)
+		        if(adv_types[i] == ZaSearch.ALIASES)
+			        isAliasSpec = true;
+        }
+
+        if(!isAliasSpec) return params.query;
+        if(!filterObj || !(filterObj instanceof Object))
+            filterObj = {};
+
+        var query = params.query;
+        for(var i = 0; i < controller.searchResultFilter.length; i++){
+            var f = controller.searchResultFilter[i];
+	        var sw = "(" + f + "=*";
+	        var ew = "*)";
+            var start = query.indexOf(sw);
+            if(start < 0 || start > query.length-1)
+                continue;
+	        var end = query.indexOf(ew,start+sw.length);
+	        if(end > query.length-1)
+                continue;
+            filterObj[f] = query.substr(start+sw.length,end-start-sw.length);
+            query = query.substr(0, start) + query.substr(end + ew.length,query.length);
+        }
+        return query;
+    }
+}
 /*********** Search Field Callback */
 ZaSearchListController.prototype._searchFieldCallback =
 function(params) {
@@ -295,12 +332,13 @@ function(params) {
 	if(controller.setSearchTypes)
 		controller.setSearchTypes(params.types);
 
-	controller._currentQuery = params.query ;
+    controller._filterObj = {};
+	controller._currentQuery = ZaSearchListController._getResultFilterObj(controller,params,controller._filterObj) ;
 	controller._currentSortField = params.sortBy;
 	var busyId = Dwt.getNextId();	
-	var callback = new AjxCallback(controller, controller.searchCallback, {limit:controller.RESULTSPERPAGE,show:true, openInSearchTab: true,busyId:busyId});
+	var callback = new AjxCallback(controller, controller.searchCallback, {limit:controller.RESULTSPERPAGE,show:true, openInSearchTab: true,busyId:busyId, resultFilter:controller._filterObj});
         var searchParams = {
-                        query:params.query,
+                        query:controller._currentQuery,//params.query,
                         types:params.types,
                         showBusy:true,
                         busyId:busyId,
@@ -320,6 +358,7 @@ function(params) {
 		if(params.types[i] == ZaSearch.ALIASES)
 			isAliasSpec = true;
 	}
+
 	if(isAliasSpec) {
 		searchQueryList.push(searchParams);
 		var keyword = ZaSearchListController._getSearchKeyWord(params.query);
