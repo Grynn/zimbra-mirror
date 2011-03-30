@@ -1,15 +1,9 @@
 package com.zimbra.qa.selenium.projects.admin.tests.accounts;
 
-import java.util.List;
-
 import org.testng.annotations.Test;
 
-
-import com.zimbra.common.soap.Element;
-import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
 import com.zimbra.qa.selenium.projects.admin.core.AdminCommonTest;
 import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 import com.zimbra.qa.selenium.projects.admin.ui.PageManageAccounts;
@@ -37,16 +31,16 @@ public class CreateAccount extends AdminCommonTest {
 		app.zPageManageAccounts.createAccount(account);
 		
 		// Verify the account exists in the ZCS
-		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+/*		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
 				"<GetAccountRequest xmlns='urn:zimbraAdmin'>" +
 					"<account by='name'>"+ account.EmailAddress +"</account>" +
 				"</GetAccountRequest>");
 		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetAccountResponse", 1);
 		ZAssert.assertNotNull(response, "Verify the account is created successfully");
-		
+*/		
 		// Verify the account exists in the Account list
-		List<IItem> accounts = app.zPageSearchResults.getSearchResults(account.EmailAddress);
-		ZAssert.assertTrue(accounts.contains(account), "Verify the new account appears in the list");
+		Boolean accountPresent = app.zPageSearchResults.getSearchResults(account.EmailAddress);
+		ZAssert.assertTrue(accountPresent, "Verify the new account appears in the list");
 
 	}
 
@@ -62,16 +56,15 @@ public class CreateAccount extends AdminCommonTest {
 		wizard.zCompleteWizard(account);
 		
 		// Verify the account exists in the ZCS
-		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+/*		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
 				"<GetAccountRequest xmlns='urn:zimbraAdmin'>" +
 					"<account by='name'>"+ account.EmailAddress +"</account>" +
 				"</GetAccountRequest>");
 		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetAccountResponse", 1);
 		ZAssert.assertNotNull(response, "Verify the account is created successfully");
-
-		// Verify the account exists in the Account list
-		List<IItem> accounts = app.zPageSearchResults.getSearchResults(account.EmailAddress);
-		ZAssert.assertTrue(accounts.contains(account), "Verify the new account appears in the list");
+*/
+		Boolean accountPresent = app.zPageSearchResults.getSearchResults(account.EmailAddress);
+		ZAssert.assertTrue(accountPresent, "Verify the new account appears in the list");
 
 	}
 
@@ -87,16 +80,15 @@ public class CreateAccount extends AdminCommonTest {
 		wizard.zCompleteWizard(account);
 
 		// Verify the account exists in the ZCS
-		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+/*		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
 				"<GetAccountRequest xmlns='urn:zimbraAdmin'>" +
 					"<account by='name'>"+ account.EmailAddress +"</account>" +
 				"</GetAccountRequest>");
 		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetAccountResponse", 1);
-		ZAssert.assertNotNull(response, "Verify the account is created successfully");
+		ZAssert.assertNotNull(response, "Verify the account is created successfully");*/
 
-		// Verify the account exists in the Account list
-		List<IItem> accounts = app.zPageSearchResults.getSearchResults(account.EmailAddress);
-		ZAssert.assertTrue(accounts.contains(account), "Verify the new account appears in the list");
+		Boolean accountPresent = app.zPageSearchResults.getSearchResults(account.EmailAddress);
+		ZAssert.assertTrue(accountPresent, "Verify the new account appears in the list");
 
 	}
 

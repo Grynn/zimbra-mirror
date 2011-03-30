@@ -3,6 +3,7 @@ package com.zimbra.qa.selenium.framework.ui;
 import org.apache.log4j.*;
 
 import com.thoughtworks.selenium.*;
+import com.zimbra.cs.zclient.ZFilterAction.ZKeepAction;
 import com.zimbra.qa.selenium.framework.core.*;
 import com.zimbra.qa.selenium.framework.util.*;
 
@@ -211,7 +212,9 @@ public abstract class AbsSeleniumObject {
 	public void sClick(String locator) {
 		// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
 		((DefaultSelenium) ClientSessionFactory.session().selenium())
-				.click(locator);
+		.mouseOver(locator);
+		((DefaultSelenium) ClientSessionFactory.session().selenium())
+				.clickAt(locator,"");
 		logger.info("click(" + locator + ")");
 	}
 	
