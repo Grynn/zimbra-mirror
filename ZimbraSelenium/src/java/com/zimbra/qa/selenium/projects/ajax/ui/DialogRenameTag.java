@@ -17,8 +17,10 @@ import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove.Locators;
 public class DialogRenameTag extends AbsDialog {
 
 	public static class Locators {
-		public static final String zDialogRenameId	= "//div[contains(@class,'DwtDialog')]/div/table/tbody/tr/td[contains(@class,'DwtDialogTitle') and contains (text(),'Rename Tag')]";
-
+		//see https://bugzilla.zimbra.com/show_bug.cgi?id=57458
+		public static final String zDialogRenameId	= "RenameTagDialog";
+		public static final String zNewTagNameFieldId	= "RenameTagDialog_name";
+		public static final String zButtonsId 		= "RenameTagDialog_buttons";
 	}
 	
 	
@@ -31,15 +33,13 @@ public class DialogRenameTag extends AbsDialog {
 	public void zSetNewName(String name) throws HarnessException {
 		logger.info(myPageName() + " zSetNewName("+ name +")");
 
-		String locator = "implement me";
+		String locator = "//input[@id='"+ Locators.zNewTagNameFieldId +"']";
 		
 		// Make sure the locator exists
 		if ( !this.sIsElementPresent(locator) ) {
 			throw new HarnessException("Rename locator "+ locator +" is not present");
-		}
-		
-		this.sType(locator, name);
-		
+		}		
+		this.sType(locator, name);		
 	}
 	
 	
@@ -51,8 +51,8 @@ public class DialogRenameTag extends AbsDialog {
 		
 		if ( button == Button.B_OK ) {
 			
-			locator =  "implement me";
-			
+			locator =  "//div[@id='"+ Locators.zDialogRenameId +"']//div[@id='"+ Locators.zButtonsId +"']//td[text()='OK']";
+					
 		} else if ( button == Button.B_CANCEL ) {
 			
 			locator =  "implement me";

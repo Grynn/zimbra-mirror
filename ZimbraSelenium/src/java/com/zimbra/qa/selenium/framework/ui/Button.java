@@ -167,6 +167,8 @@ public class Button {
 	public static final Button B_TREE_NEWBRIEFCASE = new Button("B_TREE_NEWBRIEFCASE");
 	public static final Button B_TREE_BRIEFCASE_EXPANDCOLLAPSE = new Button("B_TREE_BRIEFCASE_EXPANDCOLLAPSE");
 	public static final Button B_TREE_NEWTAG = new Button("B_TREE_NEWTAG");
+	public static final Button B_TREE_RENAMETAG = new Button("B_TREE_RENAMETAG");
+	public static final Button B_TREE_DELETE = new Button("B_TREE_DELETE");
 	public static final Button B_TREE_EDIT = new Button("B_TREE_EDIT");
 	// Tree buttons (Mail folders)
 	public static final Button B_TREE_FOLDER_MARKASREAD = new Button("B_TREE_FOLDER_MARKASREAD");

@@ -22,9 +22,9 @@ public class TreeBriefcase extends AbsTree {
 		public static final String briefcaseListView = "css=[id='zl__BDLV__rows']";
 		public static final String briefcaseTreeView = "css=[id*=zti__main_Briefcase__";
 		public static final String briefcaseTreeView_Desktop = "css=td[id*='main_Briefcase']";
-		public static final String zDeleteTreeMenuItem = "//div[contains(@class,'ZMenuItem')]//tbody//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgDelete')]";
-		public static final String zRenameTreeMenuItem = "//div[contains(@class,'ZMenuItem')]//tbody//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgRename')]";
-
+		public static final String zNewTagTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgNewTag]";
+		public static final String zRenameTagTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgRename]";
+		public static final String zDeleteTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgDelete]";
 	}
 
 	public TreeBriefcase(AbsApplication application) {
@@ -65,12 +65,18 @@ public class TreeBriefcase extends AbsTree {
 
 		if (option == Button.B_TREE_NEWTAG) {
 
-			optionLocator = "//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgNewTag')]";
+			optionLocator = Locators.zNewTagTreeMenuItem;
 
 			page = new DialogTag(MyApplication,
 					((AppAjaxClient) MyApplication).zPageBriefcase);
 
-		} else if (option == Button.B_DELETE) {
+		} else if (option == Button.B_TREE_RENAMETAG) {
+
+			optionLocator = Locators.zRenameTagTreeMenuItem;
+
+			page = new DialogRenameTag(MyApplication,
+					((AppAjaxClient) MyApplication).zPageBriefcase);
+		} else if (option == Button.B_TREE_DELETE) {
 
 			optionLocator = Locators.zDeleteTreeMenuItem;
 
@@ -79,12 +85,6 @@ public class TreeBriefcase extends AbsTree {
 					MyApplication,
 					((AppAjaxClient) MyApplication).zPageBriefcase);
 
-		} else if (option == Button.B_RENAME) {
-
-			optionLocator = Locators.zRenameTreeMenuItem;
-
-			page = new DialogRenameTag(MyApplication,
-					((AppAjaxClient) MyApplication).zPageBriefcase);
 		} else {
 			throw new HarnessException("button " + option
 					+ " not yet implemented");
