@@ -39,7 +39,7 @@ public class CreateAccount extends AdminCommonTest {
 		ZAssert.assertNotNull(response, "Verify the account is created successfully");
 */		
 		// Verify the account exists in the Account list
-		Boolean accountPresent = app.zPageSearchResults.getSearchResults(account.EmailAddress);
+		Boolean accountPresent = app.zPageSearchResults.getSearchResults(account.getEmailAddress());
 		ZAssert.assertTrue(accountPresent, "Verify the new account appears in the list");
 
 	}
@@ -63,7 +63,7 @@ public class CreateAccount extends AdminCommonTest {
 		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetAccountResponse", 1);
 		ZAssert.assertNotNull(response, "Verify the account is created successfully");
 */
-		Boolean accountPresent = app.zPageSearchResults.getSearchResults(account.EmailAddress);
+		Boolean accountPresent = app.zPageSearchResults.getSearchResults(account.getEmailAddress());
 		ZAssert.assertTrue(accountPresent, "Verify the new account appears in the list");
 
 	}
@@ -87,7 +87,7 @@ public class CreateAccount extends AdminCommonTest {
 		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetAccountResponse", 1);
 		ZAssert.assertNotNull(response, "Verify the account is created successfully");*/
 
-		Boolean accountPresent = app.zPageSearchResults.getSearchResults(account.EmailAddress);
+		Boolean accountPresent = app.zPageSearchResults.getSearchResults(account.getEmailAddress());
 		ZAssert.assertTrue(accountPresent, "Verify the new account appears in the list");
 
 	}

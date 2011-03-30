@@ -37,8 +37,8 @@ public class WizardCreateAccount extends AbsWizard {
 		
 		AccountItem account = (AccountItem)item;
 		
-		String CN = account.EmailAddress.split("@")[0];
-		String domain = account.EmailAddress.split("@")[1];
+		String CN = account.getLocalName();
+		String domain = account.getDomainName();
 		
 		sFocus(zdlg_ACCT_NAME);
 		sClick(zdlg_ACCT_NAME);
@@ -50,7 +50,7 @@ public class WizardCreateAccount extends AbsWizard {
 		sType(zdlg_DOMAIN_NAME, domain);
 		//zKeyboard.zTypeCharacters(domain);
 		
-		for (String key : account.AccountAttrs.keySet()) {
+		for (String key : account.getAccountAttrs().keySet()) {
 			
 			// TODO: Handle Previous/Next to find the input field, if necessary
 			
@@ -58,7 +58,7 @@ public class WizardCreateAccount extends AbsWizard {
 				
 				sFocus(zdlg_LAST_NAME);
 				sClick(zdlg_LAST_NAME);
-				sType(zdlg_LAST_NAME, account.AccountAttrs.get(key));
+				sType(zdlg_LAST_NAME, account.getAccountAttrs().get(key));
 				//zKeyboard.zTypeCharacters( account.AccountAttrs.get(key));
 				continue;
 			}

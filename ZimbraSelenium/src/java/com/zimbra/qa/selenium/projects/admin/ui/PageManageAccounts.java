@@ -140,7 +140,7 @@ public class PageManageAccounts extends AbsTab {
 	 * @throws HarnessException
 	 */
 	public AccountItem createAccount(AccountItem account) throws HarnessException {
-		logger.debug("createAccount(AccountItem account)" + account.EmailAddress);
+		logger.debug("createAccount(AccountItem account)" + account.getEmailAddress());
 
 		// Get the New Account Wizard
 		WizardCreateAccount wizard = getNewAccountWizard(Locators.zb__ACLV__NEW_MENU_title);
