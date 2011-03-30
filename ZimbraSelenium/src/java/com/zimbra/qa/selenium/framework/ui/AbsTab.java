@@ -1,16 +1,13 @@
 package com.zimbra.qa.selenium.framework.ui;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import java.util.List;
+
+import org.apache.log4j.*;
 
 import com.zimbra.qa.selenium.framework.items.TagItem;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.PageMail;
 
 
 /**
@@ -171,4 +168,54 @@ public abstract class AbsTab extends AbsPage {
       return TagItem.importFromSOAP(account, tagName);
 
    }
+   
+   /**
+    * Focus on a window based on browser title
+    * @param title The browser title to focus
+    */
+   public void zSeparateWindowFocus(String title) throws HarnessException {
+
+		this.zWaitForWindow(title);
+
+		this.zSelectWindow(title);
+	   
+   }
+   
+   /**
+    * Close a window based on browser title (and return focus on the main window)
+    * @param title The browser title to close
+    */
+   public void zSeparateWindowClose(String title) throws HarnessException {
+	   
+	   
+	   try {
+		   
+		   List<String> titles = this.sGetAllWindowTitles();
+		   logger.debug("Found "+ titles.size() +" open windows");
+		   
+		   for (String t : titles ) {
+			   logger.info("Found "+ t +" looking for "+ title);
+			   if ( title.equals(t) ) {
+				   
+					this.zSelectWindow(t); // Select the window
+					this.sClose(); // Close the window
+					return;
+				   
+			   }
+
+		   }
+		   
+		   logger.warn("Tried closing "+ title +" but it was not found");
+		   
+	   } finally {
+		   
+			this.zSelectWindow("null");
+
+	   }
+	   
+   }
+   
+   
+   
+   
 }

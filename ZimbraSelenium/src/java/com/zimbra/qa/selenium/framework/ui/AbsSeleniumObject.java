@@ -1,13 +1,12 @@
 package com.zimbra.qa.selenium.framework.ui;
 
+import java.util.*;
+
 import org.apache.log4j.*;
 
 import com.thoughtworks.selenium.*;
-import com.zimbra.cs.zclient.ZFilterAction.ZKeepAction;
 import com.zimbra.qa.selenium.framework.core.*;
 import com.zimbra.qa.selenium.framework.util.*;
-
-import com.zimbra.qa.selenium.framework.util.HarnessException;
 
 /**
  * The <code>AbsSeleniumObject</code> class is a base class that all "GUI"
@@ -219,6 +218,14 @@ public abstract class AbsSeleniumObject {
 	}
 	
 	/**
+	 * DefaultSelenium.close()
+	 */
+	public void sClose() {
+		ClientSessionFactory.session().selenium().close();
+		logger.info("close()");
+	}
+	
+	/**
 	 * DefaultSelenium.doubleClick()
 	 */
 	public void sDoubleClick(String locator) {
@@ -307,6 +314,15 @@ public abstract class AbsSeleniumObject {
 		int count = ClientSessionFactory.session().selenium().getCssCount(css).intValue();
 		logger.info("getCssCount(" + css + ") = " + count);
 		return (count);
+	}
+	
+	/**
+	 * DefaultSelenium.getAllWindowTitles()
+	 */
+	public List<String> sGetAllWindowTitles() {
+		logger.info("getAllWindowNames()");
+		String[] windows = ClientSessionFactory.session().selenium().getAllWindowTitles();
+		return (Arrays.asList(windows));		
 	}
 	
 	/**
