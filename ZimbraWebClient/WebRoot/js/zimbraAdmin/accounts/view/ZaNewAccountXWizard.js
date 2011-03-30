@@ -1024,11 +1024,11 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 								{ref:ZaAccount.A_zimbraPrefImapSearchFoldersEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraPrefImapSearchFoldersEnabled,checkBoxLabel:ZaMsg.LBL_zimbraPrefImapSearchFoldersEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
 								{ref:ZaAccount.A_zimbraPrefShowSearchString, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraPrefShowSearchString,checkBoxLabel:ZaMsg.LBL_zimbraPrefShowSearchString,trueValue:"TRUE", falseValue:"FALSE"},
 								{ref:ZaAccount.A_zimbraPrefUseKeyboardShortcuts, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS,checkBoxLabel:ZaMsg.LBL_zimbraPrefUseKeyboardShortcuts, trueValue:"TRUE", falseValue:"FALSE"},
-                                {ref:ZaAccount.A_zimbraPrefClientType, type:_SUPERWIZ_SELECT1_, 
-                                	msgName:ZaMsg.MSG_zimbraPrefClientType,
-                                    label:ZaMsg.LBL_zimbraPrefClientType, labelLocation:_LEFT_, 
-                                    resetToSuperLabel:ZaMsg.NAD_ResetToCOS
-                                },								
+                                				{ref:ZaAccount.A_zimbraPrefClientType, type:_SUPERWIZ_SELECT1_, 
+                                					msgName:ZaMsg.MSG_zimbraPrefClientType,
+                                    					label:ZaMsg.LBL_zimbraPrefClientType, labelLocation:_LEFT_, 
+                                    					resetToSuperLabel:ZaMsg.NAD_ResetToCOS
+                                				},								
 								{ref:ZaAccount.A_zimbraPrefMailInitialSearch, type:_SUPERWIZ_TEXTFIELD_, 
 									msgName:ZaMsg.LBL_zimbraPrefMailInitialSearch,
 									txtBoxLabel:ZaMsg.LBL_zimbraPrefMailInitialSearch, 
@@ -1048,9 +1048,9 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 								{ref:ZaAccount.A_zimbraJunkMessagesIndexingEnabled, type:_SUPER_WIZ_CHECKBOX_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,checkBoxLabel:ZaMsg.LBL_zimbraJunkMessagesIndexingEnabled,
 									trueValue:"TRUE", falseValue:"FALSE"}	,
-                                {ref:ZaAccount.A_zimbraPrefLocale, type:_SUPERWIZ_SELECT1_, msgName:ZaMsg.LBL_zimbraPrefMailLocale,
-                                    choices: ZaSettings.getLocaleChoices(),
-                                    label:ZaMsg.LBL_zimbraPrefLocale, labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS}
+                                				{ref:ZaAccount.A_zimbraPrefLocale, type:_SUPERWIZ_SELECT1_, msgName:ZaMsg.LBL_zimbraPrefMailLocale,
+                                    					choices: ZaSettings.getLocaleChoices(),
+                                    					label:ZaMsg.LBL_zimbraPrefLocale, labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS}
 
                             ]
 						});

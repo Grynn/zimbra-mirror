@@ -2673,7 +2673,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 					items: [
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_EditFwdTopGroupGrouper,
 							id:"account_form_user_forwarding_addr",colSizes:["auto"],
-                            numCols:3,colSizes:["275px","auto"], 
+                            				numCols:1,colSizes:["auto"], 
 							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
 								[
 									ZaAccount.A_zimbraFeatureMailForwardingEnabled
@@ -2683,11 +2683,12 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							{
 								ref:ZaAccount.A_zimbraFeatureMailForwardingEnabled,
 								resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
-								type:_SUPER_CHECKBOX_, colSpan:3,
+								type:_SUPER_CHECKBOX_, colSpan: 1,  
+								colSizes:["275", "275", "*"],
 								checkBoxLabel:ZaMsg.LBL_zimbraFeatureMailForwardingEnabled,  
 								trueValue:"TRUE", falseValue:"FALSE"
 							},
-							{type:_GROUP_,numCols:3,colSpan:3,colSizes:["275px","auto"], 
+							{type:_GROUP_,numCols:2 ,colSizes:["275px","auto"], 
 						  		items:[					  	
 									{ref:ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled, 
 										type:_ZA_CHECKBOX_, 
