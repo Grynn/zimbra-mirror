@@ -303,8 +303,6 @@ sub run() {
     
         sleep(5);
     }
-    my $dumped = save_heap_info($JAVA_VERSION, $destination,
-            $mailboxd_pid, $timeout) if ($options{'a'});
     
     if ($HAVE_PSTACK) {
         for (my $i = 1; $i <= 3; $i++) {
@@ -320,8 +318,6 @@ sub run() {
     if ($options{'j'}) {
         system("/opt/zimbra/libexec/zmjavawatch > zmjavawatch.log 2>&1");
     }
-    
-    save_jvm_core($JAVA_VERSION, $mailboxd_pid) if (!$dumped && $options{'a'});
     
     if ($HAVE_LSOF) {
         logmsg "Saving output of LSOF\n";
@@ -398,6 +394,11 @@ sub run() {
       logmsg "ld.so.conf not present...skipping copy.\n";
     }
 
+    my $dumped = save_heap_info($JAVA_VERSION, $destination,
+            $mailboxd_pid, $timeout) if ($options{'a'});
+
+    save_jvm_core($JAVA_VERSION, $mailboxd_pid) if (!$dumped && $options{'a'});
+    
     logmsg "\n *** Diagnostics collection done.  Data stored in $destination/.\n";
     my $dirname = `pwd`;
     chomp($dirname);
