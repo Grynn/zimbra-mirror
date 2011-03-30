@@ -70,18 +70,28 @@ public class CreateTag extends AjaxCommonTest {
 		dialog.zClickButton(Button.B_OK);
 				
 		/*
-		dialog.sMouseOver("css=div[id=CreateTagDialog_button2]:contains(OK)");
-		dialog.sFocus("css=div[id=CreateTagDialog_button2]:contains(OK)");
-		dialog.sGetEval("selenium.doMouseUpAt('css=div[id=CreateTagDialog_button2]','0,0')");
-		dialog.sGetEval("{var evObj = document.createEvent('MouseEvents');"
-				+ "evObj.initMouseEvent( 'mouseup', true, true, window, 1, 100, 200, 100, 200, false, false, false, false, 0, null);} "
-				+ "var x = selenium.browserbot.findElementOrNull('"
-				+ "css=div[id=CreateTagDialog_button2]" 
-				+ "'); "
-				+ "x.blur; x.focus(); x.dispatchEvent(evObj);");		
-		dialog.zClick("css=div[id=ZmTagColorMenu]");
-		dialog.zClick("css=td[class=ZWidgetTitle]:contains(Red)");
-		*/
+		 * ClientSessionFactory.session().selenium().waitForCondition(
+		 * "selenium.browserbot.getUserWindow().top.appCtxt.getShell()._veilOverlay.veilZ==100"
+		 * ,"3000");ClientSessionFactory.session().selenium().fireEvent(
+		 * "css=div[id=CreateTagDialog_button2]","mousedown");
+		 * ClientSessionFactory
+		 * .session().selenium().fireEvent("css=div[id=CreateTagDialog_button2]"
+		 * ,"mouseup");
+		 * dialog.sMouseOver("css=div[id=CreateTagDialog_button2]:contains(OK)"
+		 * ); dialog.sFocus("css=div[id=CreateTagDialog_button2]:contains(OK)");
+		 * dialog.sGetEval(
+		 * "selenium.doMouseUpAt('css=div[id=CreateTagDialog_button2]','0,0')");
+		 * dialog.sGetEval("{var evObj = document.createEvent('MouseEvents');" +
+		 * "evObj.initMouseEvent( 'mouseup', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);} "
+		 * + "var x = selenium.browserbot.findElementOrNull('" +
+		 * "css=div[id=CreateTagDialog_button2]" + "'); " +
+		 * "x.blur; x.focus(); x.dispatchEvent(evObj);");
+		 * dialog.zClick("css=div[id=ZmTagColorMenu]");
+		 * dialog.zClick("css=td[class=ZWidgetTitle]:contains(Red)");
+		 * ClientSessionFactory.session().selenium().waitForCondition(
+		 * "selenium.browserbot.getUserWindow().top.appCtxt.getShell()._veilOverlay.activeDialogs.length==0"
+		 * ,"3000");
+		 */
 				
 		// refresh briefcase page tags section after creating a new tag
 		app.zTreeBriefcase

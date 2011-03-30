@@ -336,7 +336,7 @@ public class PageBriefcase extends AbsTab {
 			} else if (option == Button.O_NEW_TAG) {
 				pulldownLocator = Locators.zNewMenuArrowBtn;
 
-				optionLocator = "css=tr[id=POPUP_NEW_TAG] td[id$='_title']:contains('Tag')";
+				optionLocator = "css=td[id$='_title'][class=ZWidgetTitle]:contains('Tag')";
 
 				page = new DialogTag(this.MyApplication, this);
 
