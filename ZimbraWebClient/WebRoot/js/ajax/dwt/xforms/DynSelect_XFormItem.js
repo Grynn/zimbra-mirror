@@ -313,7 +313,10 @@ DynSelect_XFormItem.prototype.updateElement = function (newValue) {
 
 DynSelect_XFormItem.prototype.setElementEnabled = function(enabled) {
 	this._enabled = enabled;
-	var table = this.getForm().getElement(this.getId()).getElementsByTagName("table")[0];
+	var el = this.getForm().getElement(this.getId());
+	if (!el || !el.getElementsByTagName || !el.getElementsByTagName("table")[0])
+		return;
+        var table = el.getElementsByTagName("table")[0];
 	if(enabled) {
 		if(AjxUtil.isEmpty(this.getInstanceValue()) && !AjxUtil.isEmpty(this.getInheritedProperty("emptyText"))) {
 			this.getDisplayElement().className = this.getDisplayCssClass() + "_empty";
