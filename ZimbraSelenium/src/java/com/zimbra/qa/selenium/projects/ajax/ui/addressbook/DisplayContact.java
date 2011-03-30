@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.DisplayContactGroup.Field;
 
 
-public class DisplayContact extends DisplayContactGroup {
+public class DisplayContact extends  AbsDisplay {
+	public static String ALPHABET_PREFIX = "css=table[id$='alphabet'] td[_idx=";
+	public static String ALPHABET_POSTFIX = "]";
 
 	/**
 	 * Defines Selenium locators for various objects in {@link DisplayContact}
