@@ -143,21 +143,42 @@ public class AppointmentItem implements IItem {
 		return (sb.toString());
 	}
 
+	public void setSubject(String subject) {
+		dSubject = subject;
+	}
+	
 	public String getSubject() {
 		return (dSubject);
 	}
+	
+	public void setLocation(String location) {
+		dLocation = location;
+	}
+	
 	public String getLocation() {
 		return (dLocation);
 	}
 
+	public void setContent(String content) {
+		dContent = content;
+	}
+	
 	public String getContent() {
 		return (dContent);
 	}
 
+	public void setStartTime(ZDate date) {
+		dStart = date;
+	}
+	
 	public ZDate getStartTime() {
 		return (dStart);
 	}
 
+	public void setEndTime(ZDate date) {
+		dEnd = date;
+	}
+	
 	public ZDate getEndTime() {
 		return (dEnd);
 	}
