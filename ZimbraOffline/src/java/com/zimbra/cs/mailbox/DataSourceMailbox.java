@@ -102,26 +102,31 @@ public class DataSourceMailbox extends SyncMailbox {
             for (Pair<Integer, String> pair : systemMailFolders) {
                 MailItem mi = getCachedItem(pair.getFirst());
                 DbMailItem.alterTag(mSyncFolderFlag, Arrays.asList(pair.getFirst()), true);
-                if (mi != null)
-                    mi.mData.flags |= mSyncFolderFlag.getBitmask();
+                if (mi != null) {
+                    mi.mData.setFlag(mSyncFolderFlag);
+                }
                 if (isSyncEnabledByDefault(pair.getSecond())) {
                     DbMailItem.alterTag(mSyncFlag, Arrays.asList(pair.getFirst()), true);
-                    if (mi != null)
-                        mi.mData.flags |= mSyncFlag.getBitmask();
+                    if (mi != null) {
+                        mi.mData.setFlag(mSyncFlag);
+                    }
                 }
             }
             if (isFlat) {
                 DbMailItem.alterTag(mNoInferiorsFlag, Arrays.asList(
                     ID_FOLDER_INBOX, ID_FOLDER_TRASH, ID_FOLDER_SENT), true);
                 MailItem mi = getCachedItem(ID_FOLDER_INBOX);
-                if (mi != null)
-                    mi.mData.flags |= mNoInferiorsFlag.getBitmask();
+                if (mi != null) {
+                    mi.mData.setFlag(mNoInferiorsFlag);
+                }
                 mi = getCachedItem(ID_FOLDER_TRASH);
-                if (mi != null)
-                    mi.mData.flags |= mNoInferiorsFlag.getBitmask();
+                if (mi != null) {
+                    mi.mData.setFlag(mNoInferiorsFlag);
+                }
                 mi = getCachedItem(ID_FOLDER_SENT);
-                if (mi != null)
-                    mi.mData.flags |= mNoInferiorsFlag.getBitmask();
+                if (mi != null) {
+                    mi.mData.setFlag(mNoInferiorsFlag);
+                }
             }
             OfflineDataSource ds = getDataSource();
             if (ds.isYahoo() || ds.isGmail())
@@ -186,14 +191,14 @@ public class DataSourceMailbox extends SyncMailbox {
         throws ServiceException {
         folder.alterTag(mSyncFolderFlag, canSync);
         if (canSync) {
-            folder.mData.flags |= mSyncFolderFlag.getBitmask();
+            folder.mData.setFlag(mSyncFolderFlag);
             if (isSyncEnabledByDefault(folder.getPath())) {
                 folder.alterTag(mSyncFlag, canSync);
-                folder.mData.flags |= mSyncFlag.getBitmask();
+                folder.mData.setFlag(mSyncFlag);
             }
         } else {
-            folder.mData.flags &= ~mSyncFolderFlag.getBitmask();
-            folder.mData.flags &= ~mSyncFlag.getBitmask();
+            folder.mData.unsetFlag(mSyncFolderFlag);
+            folder.mData.unsetFlag(mSyncFlag);
         }
     }
 

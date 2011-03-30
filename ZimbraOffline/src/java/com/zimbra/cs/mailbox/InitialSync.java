@@ -1380,7 +1380,7 @@ public class InitialSync {
                 ombx.getItemById(sContext, id, MailItem.Type.UNKNOWN);
                 ombx.addDocumentRevision(new TracelessContext(player), id, pd);
             } catch (MailServiceException.NoSuchItemException nsie) {
-                ombx.createDocument(new TracelessContext(player), folderId, pd, type);
+                ombx.createDocument(new TracelessContext(player), folderId, pd, type, flags);
             }
             if (flags != 0)
                 ombx.setTags(sContext, id, type, flags, MailItem.TAG_UNCHANGED);
@@ -1483,7 +1483,7 @@ public class InitialSync {
                     }
                 } catch (MailServiceException.NoSuchItemException nsie) {
                     try {
-                        ombx.createDocument(new TracelessContext(player), doc.getFolderId(), pd, doc.getType());
+                        ombx.createDocument(new TracelessContext(player), doc.getFolderId(), pd, doc.getType(), ud.getFlags());
                     } catch (MailServiceException me) {
                         if (me.getCode().equals(MailServiceException.ALREADY_EXISTS)) {
                             // this is an edge case where a different object of
@@ -1499,7 +1499,7 @@ public class InitialSync {
                             MailItem oldItem = ombx.getItemByPath(sContext, path);
                             String newName = path + "-old";
                             ombx.rename(sContext, oldItem.mId, MailItem.Type.UNKNOWN, newName);
-                            ombx.createDocument(new TracelessContext(player), doc.getFolderId(), pd, doc.getType());
+                            ombx.createDocument(new TracelessContext(player), doc.getFolderId(), pd, doc.getType(), ud.getFlags());
                         } else
                             throw me;
                     }
