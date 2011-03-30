@@ -16,14 +16,10 @@ import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
  */
 public class WizardCreateAccount extends AbsWizard {
 
-	public static final String zdlg__NEW_ACCT = "xpath=//*[@id='zdlg__NEW_ACCT']";
-
-	// Wizard Navigation Buttons
-	public static final String DWT279_title = "xpath=//*[@id='DWT279_title']"; // "Cancel" button
-	public static final String DWT280_title = "xpath=//*[@id='DWT280_title']"; // "Help" button
-	public static final String DWT281_title = "xpath=//*[@id='DWT281_title']"; // "Previous" button
-	public static final String DWT282_title = "xpath=//*[@id='DWT282_title']"; // "Next" button
-	public static final String DWT283_title = "xpath=//*[@id='DWT283_title']"; // "Finish" button
+	public static final String zdlg_NEW_ACCT = "zdlg__NEW_ACCT";
+	public static final String zdlg_ACCT_NAME = "zdlgv__NEW_ACCT_name_2";
+	public static final String zdlg_DOMAIN_NAME="zdlgv__NEW_ACCT_name_3_display";
+	public static final String zdlg_LAST_NAME="zdlgv__NEW_ACCT_sn";
 
 	public WizardCreateAccount(AbsTab page) {
 		super(page);
@@ -44,15 +40,26 @@ public class WizardCreateAccount extends AbsWizard {
 		String CN = account.EmailAddress.split("@")[0];
 		String domain = account.EmailAddress.split("@")[1];
 		
-		sType("xpath=//@[@id='_XForm_3_name_2']", CN);
-		sType("xpath=//@[@id='_XForm_3_name_3_display']", domain);
+		sFocus(zdlg_ACCT_NAME);
+		sClick(zdlg_ACCT_NAME);
+		sType(zdlg_ACCT_NAME, CN);
+		
+		
+		sFocus(zdlg_DOMAIN_NAME);
+		sClick(zdlg_DOMAIN_NAME);
+		sType(zdlg_DOMAIN_NAME, domain);
+		//zKeyboard.zTypeCharacters(domain);
 		
 		for (String key : account.AccountAttrs.keySet()) {
 			
 			// TODO: Handle Previous/Next to find the input field, if necessary
 			
-			if ( key.equals("givenName")) {
-				sType("xpath=//@[@id='_XForm_3_givenName']", account.AccountAttrs.get(key));
+			if ( key.equals("sn")) {
+				
+				sFocus(zdlg_LAST_NAME);
+				sClick(zdlg_LAST_NAME);
+				sType(zdlg_LAST_NAME, account.AccountAttrs.get(key));
+				//zKeyboard.zTypeCharacters( account.AccountAttrs.get(key));
 				continue;
 			}
 
@@ -61,8 +68,8 @@ public class WizardCreateAccount extends AbsWizard {
 			throw new HarnessException("Unknown account attribute key "+ key);
 			
 		}
-		
-		
+
+		clickFinish();
 		return (account);
 		
 	}
@@ -70,12 +77,12 @@ public class WizardCreateAccount extends AbsWizard {
 	@Override
 	public boolean zIsOpen() throws HarnessException {
 		
-		boolean present = sIsElementPresent(zdlg__NEW_ACCT);
+		boolean present = sIsElementPresent(zdlg_NEW_ACCT);
 		if ( !present ) {
 			return (false);
 		}
 		
-		boolean visible = this.zIsVisiblePerPosition(zdlg__NEW_ACCT, 0, 0);
+		boolean visible = this.zIsVisiblePerPosition(zdlg_NEW_ACCT, 0, 0);
 		if ( !visible ) {
 			return (false);
 		}
