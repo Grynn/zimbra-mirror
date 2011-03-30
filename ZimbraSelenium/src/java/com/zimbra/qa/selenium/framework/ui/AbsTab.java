@@ -3,8 +3,10 @@ package com.zimbra.qa.selenium.framework.ui;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import com.zimbra.qa.selenium.framework.items.TagItem;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
@@ -148,5 +150,25 @@ public abstract class AbsTab extends AbsPage {
                   params, WAIT_FOR_OPERAND.EQ, false, 30000, 1000);
          }
       }
+   }
+
+   /**
+    * Getting tagItem
+    * @param account Account from which, tagItem will be retrieved
+    * @param tagName Tag Name to be searched for
+    * @return Tag Item with the given tagName under given account
+    * @throws HarnessException
+    */
+   public TagItem zGetTagItem(ZimbraAccount account, String tagName)
+   throws HarnessException {
+      if (account == null) {
+         throw new HarnessException("Account cannot be null");
+      } else if (tagName == null) {
+         throw new HarnessException("tagName cannot be null");
+      }
+
+      zWaitForDesktopLoadingSpinner(5000);
+      return TagItem.importFromSOAP(account, tagName);
+
    }
 }

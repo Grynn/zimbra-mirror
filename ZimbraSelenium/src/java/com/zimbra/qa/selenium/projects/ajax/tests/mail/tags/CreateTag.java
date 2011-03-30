@@ -6,6 +6,7 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 //import com.zimbra.qa.selenium.projects.ajax.ui.mail.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
@@ -29,15 +30,24 @@ public class CreateTag extends AjaxCommonTest {
 		// Set the new tag name
 		String name = "tag" + ZimbraSeleniumProperties.getUniqueString();
 		
-		DialogTag dialog = (DialogTag)app.zTreeMail.zPressButton(Button.B_TREE_NEWTAG);
+		DialogTag dialog = null;
+		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+		   // TODO: For now, on desktop test, create the folder through New drop down menu,
+	      // until a way to identify desktop/ajax specific
+	      // test is decided.
+		   dialog = (DialogTag)app.zPageMail.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_TAG);
+		} else {
+		   dialog = (DialogTag)app.zTreeMail.zPressButton(Button.B_TREE_NEWTAG);
+		}
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
 		
 		// Fill out the form with the basic details
-		dialog.zSetTagName(name);
-		dialog.zClickButton(Button.B_OK);
-		
+		dialog.zSubmit(name);
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+
 		// Make sure the tag was created on the server
-		TagItem tag = TagItem.importFromSOAP(app.zGetActiveAccount(), name);
+		TagItem tag = app.zPageMail.zGetTagItem(app.zGetActiveAccount(), name);
 		ZAssert.assertNotNull(tag, "Verify the new folder was created");
 		
 		ZAssert.assertEquals(tag.getName(), name, "Verify the server and client tag names match");
@@ -61,11 +71,12 @@ public class CreateTag extends AjaxCommonTest {
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
 		
 		// Fill out the form with the basic details
-		dialog.zSetTagName(name);
-		dialog.zClickButton(Button.B_OK);
-		
+		dialog.zSubmit(name);
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+
 		// Make sure the tag was created on the server
-		TagItem tag = TagItem.importFromSOAP(app.zGetActiveAccount(), name);
+		TagItem tag = app.zPageMail.zGetTagItem(app.zGetActiveAccount(), name);
 		ZAssert.assertNotNull(tag, "Verify the new folder was created");
 		
 		ZAssert.assertEquals(tag.getName(), name, "Verify the server and client tag names match");
@@ -88,27 +99,31 @@ public class CreateTag extends AjaxCommonTest {
             		"<tag name='"+ name2 +"' color='1' />" +
             	"</CreateTagRequest>");
 
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+
 		// Get the tag
-		TagItem tag2 = TagItem.importFromSOAP(app.zGetActiveAccount(), name2);
-		
+		TagItem tag2 = app.zPageMail.zGetTagItem(app.zGetActiveAccount(), name2);
+
 		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inboxFolder);
 		// Create a new tag using the context menu + New Tag
 		DialogTag dialog = (DialogTag)app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_NEWTAG, tag2);
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
 		
 		// Fill out the form with the basic details
-		dialog.zSetTagName(name1);
-		dialog.zClickButton(Button.B_OK);
-		
+		dialog.zSubmit(name1);
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+
 		// Make sure the folder was created on the server
-		TagItem tag1 = TagItem.importFromSOAP(app.zGetActiveAccount(), name1);
+		TagItem tag1 = app.zPageMail.zGetTagItem(app.zGetActiveAccount(), name1);
+
 		ZAssert.assertNotNull(tag1, "Verify the new tag was created");
 		
 		ZAssert.assertEquals(tag1.getName(), name1, "Verify the server and client tag names match");
 		
 	}
 
-	@Test(	description = "Create a new tag using mail app New -> New Folder",
+	@Test(	description = "Create a new tag using mail app New -> New Tag",
 			groups = { "functional" })
 	public void CreateTag_04() throws HarnessException {
 		
@@ -123,11 +138,12 @@ public class CreateTag extends AjaxCommonTest {
 		
 		// Fill out the form with the basic details
 		// TODO: does a folder in the tree need to be selected?
-		dialog.zSetTagName(name);
-		dialog.zClickButton(Button.B_OK);
-		
+		dialog.zSubmit(name);
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+
 		// Make sure the folder was created on the server
-		TagItem tag = TagItem.importFromSOAP(app.zGetActiveAccount(), name);
+		TagItem tag = app.zPageMail.zGetTagItem(app.zGetActiveAccount(), name);
 		ZAssert.assertNotNull(tag, "Verify the new tag was created");
 		
 		ZAssert.assertEquals(tag.getName(), name, "Verify the server and client tag names match");

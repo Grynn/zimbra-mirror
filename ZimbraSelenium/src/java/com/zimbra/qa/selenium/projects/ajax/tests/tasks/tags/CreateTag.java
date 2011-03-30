@@ -6,6 +6,7 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 
@@ -28,16 +29,25 @@ public class CreateTag extends AjaxCommonTest {
 		// Set the new tag name
 		String name = "tag" + ZimbraSeleniumProperties.getUniqueString();
 
-		DialogTag dialog =(DialogTag)app.zTreeTasks.zPressButton(Button.B_TREE_NEWTAG);
+		DialogTag dialog = null;
+      if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+         // TODO: For now, on desktop test, create the folder through New drop down menu,
+         // until a way to identify desktop/ajax specific
+         // test is decided.
+         dialog = (DialogTag)app.zPageTasks.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_TAG);
+      } else {
+         dialog = (DialogTag)app.zTreeTasks.zPressButton(Button.B_TREE_NEWTAG);
+      }
+
 		ZAssert.assertNotNull(dialog, "Verify the new tag dialog opened");
 
 		// Fill out the form with the basic details
-		dialog.zSetTagName(name);
-		dialog.zClickButton(Button.B_OK);
+		dialog.zSubmit(name);
 
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
-		// Make sure the tag was created on the server
-		TagItem tag = TagItem.importFromSOAP(app.zGetActiveAccount(), name);
+      // Make sure the tag was created on the server
+		TagItem tag = app.zPageTasks.zGetTagItem(app.zGetActiveAccount(), name);
 
 		ZAssert.assertNotNull(tag, "Verify the new tag was created");
 		ZAssert.assertEquals(tag.getName(), name, "Verify the server and client tag names match");
@@ -60,16 +70,15 @@ public class CreateTag extends AjaxCommonTest {
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
 
 		// Fill out the form with the basic details
-		dialog.zSetTagName(name);
-		dialog.zClickButton(Button.B_OK);
+		dialog.zSubmit(name);
+
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
 		//Need to click on Task folder explicitly so that created tag does show in tag list.
       app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
 
-      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-
 		// Make sure the tag was created on the server
-		TagItem tag = TagItem.importFromSOAP(app.zGetActiveAccount(), name);
+      TagItem tag = app.zPageTasks.zGetTagItem(app.zGetActiveAccount(), name);
 
 		ZAssert.assertNotNull(tag, "Verify the new tag was created");
 		ZAssert.assertEquals(tag.getName(), name, "Verify the server and client tag names match");
@@ -106,13 +115,12 @@ public class CreateTag extends AjaxCommonTest {
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
 
 		// Fill out the form with the basic details
-		dialog.zSetTagName(name1);
-		dialog.zClickButton(Button.B_OK);
+		dialog.zSubmit(name1);
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
 		// Make sure the tag was created on the server
-		TagItem tag1 = TagItem.importFromSOAP(app.zGetActiveAccount(), name1);
+      TagItem tag1 = app.zPageTasks.zGetTagItem(app.zGetActiveAccount(), name1);
 		ZAssert.assertNotNull(tag1, "Verify the new tag was created");
 
 		ZAssert.assertEquals(tag1.getName(), name1, "Verify the server and client tag names match");
@@ -132,13 +140,12 @@ public class CreateTag extends AjaxCommonTest {
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
 
 		// Fill out the form with the basic details
-		dialog.zSetTagName(name);
-		dialog.zClickButton(Button.B_OK);
+		dialog.zSubmit(name);
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
 		// Make sure the task was created on the server
-		TagItem tag = TagItem.importFromSOAP(app.zGetActiveAccount(), name);
+		TagItem tag = app.zPageTasks.zGetTagItem(app.zGetActiveAccount(), name);
 		ZAssert.assertNotNull(tag, "Verify the new tag was created");
 
 		ZAssert.assertEquals(tag.getName(), name, "Verify the server and client tag names match");
