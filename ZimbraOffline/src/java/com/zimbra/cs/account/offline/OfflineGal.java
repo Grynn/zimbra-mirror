@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2008, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2008, 2009, 2010, 2011 Zimbra, Inc.
  *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -104,15 +104,15 @@ public class OfflineGal {
             // escape quotes
             query = query + " AND contact:\"" + name.replace("\"", "\\\"") + "\"";
         }
-        if (type.equals(CTYPE_ACCOUNT))
+        if (type.equals(CTYPE_ACCOUNT)) {
             query = query + " AND (#" + ContactConstants.A_type + ":" + CTYPE_ACCOUNT + " OR #"+ContactConstants.A_type + ":" + CTYPE_GROUP +")";
-        else if (type.equals(CTYPE_RESOURCE))
+        } else if (type.equals(CTYPE_RESOURCE)) {
             query = query + " AND #" + ContactConstants.A_type + ":" + CTYPE_RESOURCE;
-
+        }
         SearchParams sp = new SearchParams();
         sp.setQueryStr(query);
         sp.setTypes(EnumSet.of(MailItem.Type.CONTACT));
-        sp.setSortByStr(sortBy);
+        sp.setSortBy(sortBy);
         sp.setOffset(offset);
         sp.setLimit(limit);
         if (cursor != null) {
@@ -129,6 +129,8 @@ public class OfflineGal {
             return;
         }
 
+        SortBy sort = SortBy.of(sortBy);
+
         try {
             int c = 0;
             while (c++ < limit && zqr.hasNext()) {
@@ -143,19 +145,22 @@ public class OfflineGal {
                 Iterator<String> it = fields.keySet().iterator();
                 while (it.hasNext()) {
                     String key = it.next();
-                    if (!key.equals(MailConstants.A_ID) && !key.equals(OfflineConstants.GAL_LDAP_DN))
+                    if (!key.equals(MailConstants.A_ID) && !key.equals(OfflineConstants.GAL_LDAP_DN)) {
                         cn.addKeyValuePair(key, fields.get(key), MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
+                    }
                 }
 
-                SortBy sortOrder = SortBy.lookup(sortBy);
-                if (sortOrder != null) {
-                    Object sf = hit.getSortField(sortOrder);
-                    if (sf != null && sf instanceof String)
+                if (sort != null) {
+                    Object sf = hit.getSortField(sort);
+                    if (sf != null && sf instanceof String) {
                         cn.addAttribute(MailConstants.A_SORT_FIELD, (String)sf);
+                    }
                 }
             }
 
-            response.addAttribute(MailConstants.A_SORTBY, sortBy);
+            if (sort != null) {
+                response.addAttribute(MailConstants.A_SORTBY, sort.toString());
+            }
             response.addAttribute(MailConstants.A_QUERY_OFFSET, offset);
             response.addAttribute(AccountConstants.A_MORE, zqr.hasNext());
         } finally {
@@ -182,27 +187,27 @@ public class OfflineGal {
             zqr.doneWithSearchResults();
         }
     }
-    
+
     private static ConcurrentMap<String, Folder> syncFolderCache = new ConcurrentHashMap<String, Folder>();
-    
-    /* 
-     * We used to have two alternating folders to store GAL. After the upgrade, we should continue to use the 
+
+    /*
+     * We used to have two alternating folders to store GAL. After the upgrade, we should continue to use the
      * "current" folder (sync folder) to store GAL, until a full-sync when we can safely delete the "second"
      * folder and only use the system folder "Contacts" from then on.
      */
     public static Folder getSyncFolder(Mailbox galMbox, OperationContext context, boolean fullSync) throws ServiceException {
-        if (fullSync) { 
+        if (fullSync) {
             Folder sndFolder = getSecondFolder(galMbox, context);
             if (sndFolder != null) { // migration: empty and delete "Contacts2" folder
                 // there is a small chance (only on full sync) of race condition here if user is searching in gal when
-                // this migration is run. but since the chance is small and is one-time only, the condition is not handled 
+                // this migration is run. but since the chance is small and is one-time only, the condition is not handled
                 galMbox.emptyFolder(context, sndFolder.getId(), false);
                 galMbox.delete(context, sndFolder.getId(), MailItem.Type.FOLDER);
                 syncFolderCache.remove(galMbox.getAccountId());
                 OfflineLog.offline.debug("Offline GAL deleted second sync folder");
             }
         }
-        
+
         Folder syncFolder = syncFolderCache.get(galMbox.getAccountId());
         if (syncFolder == null) {
             syncFolder = galMbox.getFolderById(context, Mailbox.ID_FOLDER_CONTACTS);
@@ -214,7 +219,7 @@ public class OfflineGal {
         }
         return syncFolder;
     }
-    
+
     private static Folder getSecondFolder(Mailbox galMbox, OperationContext context) throws ServiceException {
         try {
             return galMbox.getFolderByPath(context, SECOND_GAL_FOLDER);

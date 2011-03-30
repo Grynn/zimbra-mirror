@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_address (
    contact_count INTEGER NOT NULL,
 
    UNIQUE INDEX i_mail_address_address (mailbox_id, address),
-   CONSTRAINT fk_mail_address_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id)
+   CONSTRAINT fk_mail_address_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    tags          BIGINT NOT NULL DEFAULT 0,
    sender        VARCHAR(128),
    sender_id     INTEGER UNSIGNED DEFAULT NULL,
+   recipients    VARCHAR(128),
    subject       TEXT,
    name          VARCHAR(128),               -- namespace entry for item (e.g. tag name, folder name, document filename)
    metadata      MEDIUMTEXT,
@@ -89,6 +90,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item_dumpster (
    tags          BIGINT NOT NULL DEFAULT 0,
    sender        VARCHAR(128),
    subject       TEXT,
+   recipients    VARCHAR(128),
    name          VARCHAR(128),               -- namespace entry for item (e.g. tag name, folder name, document filename)
    metadata      MEDIUMTEXT,
    mod_metadata  INTEGER UNSIGNED NOT NULL,  -- change number for last row modification
