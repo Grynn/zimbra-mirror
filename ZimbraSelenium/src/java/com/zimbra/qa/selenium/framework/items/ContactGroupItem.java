@@ -143,10 +143,11 @@ public class ContactGroupItem extends ContactItem implements IItem {
 		
 	        app.zGetActiveAccount().soapSend(
 	                "<CreateContactRequest xmlns='urn:zimbraMail'>" +
-	                "<cn " + tagParam + " fileAsStr='" + group.groupName + "' >" +
+	                "<cn " + tagParam + " >" +
 	                "<a n='type'>group</a>" +
 	                "<a n='nickname'>" + group.groupName +"</a>" +
 	                "<a n='dlist'>" + group.getDList() + "</a>" +
+	                "<a n='fileAs'>8:" +  group.fileAs +"</a>" +
 	                "</cn>" +
 	                "</CreateContactRequest>");
 

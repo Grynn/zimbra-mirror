@@ -239,10 +239,20 @@ public class PageAddressbook extends AbsTab {
 
 		   locator = "id="+ id;
 		   page = new DialogMove(MyApplication, this);
+	    } else if (
+	    		   (button == Button.B_AB_ALL) || (button == Button.B_AB_123) ||
+	    		   (button == Button.B_AB_A) || (button == Button.B_AB_B)
+			       //TODO: add more 
+          ){
+       	   locator=DisplayContactGroup.ALPHABET_PREFIX + button.toString() + DisplayContactGroup.ALPHABET_POSTFIX;
+       	   
+       	   //TODO??
+       	   //page = ???
 	    }
 
+       zWaitForBusyOverlay();
 
-		if ( locator == null )
+	   if ( locator == null )
 			throw new HarnessException("locator was null for button "+ button);
 
 		// Default behavior, process the locator by clicking on it
@@ -254,6 +264,9 @@ public class PageAddressbook extends AbsTab {
 
 		// Click it
 		this.zClick(locator);
+		
+		//for addressbook toolbar???????
+		this.sClick(locator);
 		zWaitForBusyOverlay();
 	
 		
@@ -268,7 +281,12 @@ public class PageAddressbook extends AbsTab {
 	  ContactGroupItem group = ContactGroupItem.createUsingSOAP(app, tagIDArray);
 		             
 	  group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-	    
+	  String[] dlist = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
+	  for (int i=0; i<dlist.length; i++) {
+		  group.addDListMember(dlist[i]);
+	  }
+	  
+	  
       // Refresh the view, to pick up the new contact
       FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
       GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
@@ -279,7 +297,25 @@ public class PageAddressbook extends AbsTab {
       
       return group;
     }
-	
+
+	public ContactItem createUsingSOAPSelectContact(AppAjaxClient app, String ... tagIDArray)  throws HarnessException {	
+		  // Create a contact via Soap
+		  ContactItem contactItem = ContactItem.createUsingSOAP(app, tagIDArray);			             
+		  contactItem.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+		  		  
+		  
+	      // Refresh the view, to pick up the new contact
+	      FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
+	      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+	      app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
+	    
+	      // Select the item
+	      zListItem(Action.A_LEFTCLICK, contactItem.fileAs);
+	      
+	      return contactItem;
+	    }
+		
+
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
@@ -646,14 +682,27 @@ public class PageAddressbook extends AbsTab {
 		if ( action == Action.A_LEFTCLICK ) {
 			//click
 			this.zClick(contactLocator);
-			zWaitForBusyOverlay();
-			return (new DisplayContact(MyApplication)); 
+			//zWaitForBusyOverlay();
+			
+			ArrayList<String> selectedContactArrayList=getSelectedContactLocator();			
+	        String contactType = getContactType(selectedContactArrayList.get(0));
+		
+	        //check if it is a contact or a contact group item
+		    if ( contactType.equals(ContactGroupItem.IMAGE_CLASS)) {
+			  return  new DisplayContactGroup(MyApplication);		
+		    }
+		    else if (  contactType.equals(ContactItem.IMAGE_CLASS) ) {
+			  return new DisplayContact(MyApplication);
+		    }
+		    else {
+			  throw new HarnessException(" Error: not support the contact type");						    	
+		    }
 			
 		}
 		else if (action == Action.A_RIGHTCLICK ) {
 			
             this.zRightClick(contactLocator); 
-            zWaitForBusyOverlay();
+            //zWaitForBusyOverlay();
     		return (new ContextMenu(MyApplication));			
 		}
 			

@@ -147,6 +147,13 @@ public class Button {
 	public static final Button O_SEARCH_MAIL_SENT_TO_CONTACT = new Button("O_SEARCH_MAIL_SENT_TO_CONTACT");
 	public static final Button O_SEARCH_MAIL_RECEIVED_FROM_CONTACT = new Button("O_SEARCH_MAIL_RECEIVED_FROM_CONTACT");
 	
+	//Addressbook alphabet bar buttons
+	public static final Button B_AB_ALL = new Button("0"); //_idx="0"
+	public static final Button B_AB_123 = new Button("1");
+	public static final Button B_AB_A = new Button("2");
+	public static final Button B_AB_B = new Button("3");
+	//TODO: add more
+	
 	// Task buttons
 	public static final Button B_TASK_FILTERBY = new Button("B_TASK_FILTERBY");
 	public static final Button B_TASK_MARKCOMPLETED = new Button("B_TASK_FILTERBY");

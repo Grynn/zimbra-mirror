@@ -9,6 +9,7 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 
 
 /**
@@ -132,6 +133,28 @@ public class ContactItem implements IItem {
 		return (address);
 	}
 	
+	public static ContactItem createUsingSOAP(AppAjaxClient app, String ... tagIdArray ) throws HarnessException {
+		
+		String tagParam ="";
+		if (tagIdArray.length == 1) {
+			tagParam = " t='" + tagIdArray[0] + "'";
+		}
+
+        // Create a contact item
+		ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
+	
+		app.zGetActiveAccount().soapSend(
+	                "<CreateContactRequest xmlns='urn:zimbraMail'>" +
+	                "<cn " + tagParam + " >" +
+	                "<a n='firstName'>" + contactItem.firstName +"</a>" +
+	                "<a n='lastName'>" + contactItem.lastName +"</a>" +
+	                "<a n='email'>" + contactItem.email + "</a>" +
+	                "</cn>" +
+	                "</CreateContactRequest>");	  
+		
+        return contactItem;
+    }
+	
 	public enum GenerateItemType {
 		Default, Basic, AllAttributes
 	}
@@ -153,7 +176,7 @@ public class ContactItem implements IItem {
 			c.middleName = "middle" + ZimbraSeleniumProperties.getUniqueString();
 			c.lastName = "last" + ZimbraSeleniumProperties.getUniqueString();
 		    c.email = "email" +  ZimbraSeleniumProperties.getUniqueString() + "@zimbra.com";
-			//default value for file as is last, first
+			//default value for file as is  last , first
 			c.fileAs = c.lastName + ", " + c.firstName;
 			return (c);
 		}
