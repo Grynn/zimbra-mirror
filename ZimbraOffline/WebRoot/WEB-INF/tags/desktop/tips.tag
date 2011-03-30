@@ -22,7 +22,7 @@
 	<tr>
 		<td class="ZTip"><a href="http://www.zimbra.com/products/desktop2.html" target="_blank"><fmt:message key='TipsHome'/></a></td>
 		<td class="ZDot">&#8226;</td>
-		<td class="ZTip"><a href="http://www.zimbra.com/desktop2/help/en_US/Zimbra_Mail_Help.htm" target="_blank"><fmt:message key='TipsHelp'/></a></td>
+		<td class="ZTip"><a href="http://www.zimbra.com/desktop7/help/en_US/Zimbra_Mail_Help.htm" target="_blank"><fmt:message key='TipsHelp'/></a></td>
 		<td class="ZDot">&#8226;</td>
 		<td class="ZTip"><a href="http://wiki.zimbra.com/index.php?title=Zimbra_Desktop_7" target="_blank"><fmt:message key='TipsNotes'/></a></td>
 		<td class="ZDot">&#8226;</td>
