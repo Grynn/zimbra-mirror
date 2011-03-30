@@ -679,7 +679,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
         type:_ZATABCASE_, colSizes:["auto"],numCols:1, caseKey:_tab1,
             id:"server_general_tab",
             items:[
-                {type:_ZA_PLAIN_GROUPER_/*_ZAGROUP_*/, width:"100%", items:[
+                {type:_ZA_PLAIN_GROUPER_, cssStyle:"padding-left:0px; padding-right:0px", width:"100%", items:[
                     {ref:ZaServer.A_name, type:_OUTPUT_, label:ZaMsg.NAD_DisplayName, labelLocation:_LEFT_},
                     ZaItem.descriptionXFormItem,
                     { ref: ZaServer.A_ServiceHostname, type:_OUTPUT_,
