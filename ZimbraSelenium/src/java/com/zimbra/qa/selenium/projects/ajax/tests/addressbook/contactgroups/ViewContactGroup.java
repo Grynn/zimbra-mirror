@@ -128,12 +128,13 @@ public class ViewContactGroup extends AjaxCommonTest  {
 		ZAssert.assertTrue(countGroup==1, "Verify contact groups " + group1.fileAs + " not displayed, and "+ group2.fileAs + " displayed ");
 	}
 
-	@Test(	description = "Click Alphabetbar button B: Verify only contact groups started with B is listed ",
+	@Test(	description = "Click Alphabetbar button B: Verify only contact groups started with B|b is listed ",
 			groups = { "functional" })
 	public void DisplayContactGroup_04() throws HarnessException {
 	
 		 // Create  contact groups 
-		ContactGroupItem group1 = createContactGroup("B");    
+		ContactGroupItem group0 = createContactGroup("b");
+		ContactGroupItem group1 = createContactGroup("B");		
     	ContactGroupItem group2 = createContactGroup("5");
     	ContactGroupItem group3 = createContactGroup("V");
     	
@@ -151,7 +152,7 @@ public class ViewContactGroup extends AjaxCommonTest  {
 		List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();
 		int countGroup= 0;
 		for (ContactItem ci : contacts) {
-			if (ci.fileAs.equals(group1.fileAs)) 
+			if (ci.fileAs.equals(group1.fileAs) || ci.fileAs.equals(group0.fileAs)) 
 			{
 	            countGroup++;
 			}
@@ -161,7 +162,7 @@ public class ViewContactGroup extends AjaxCommonTest  {
 				
 		}
 	
-		ZAssert.assertTrue(countGroup==1, "Verify contact groups " + group1.fileAs + " displayed, and " + group2.fileAs + "," + group3.fileAs + " not displayed ");
+		ZAssert.assertTrue(countGroup==2, "Verify contact groups " + group1.fileAs + " " + group0.fileAs + " displayed, and " + group2.fileAs + "," + group3.fileAs + " not displayed ");
 	}
 
 }

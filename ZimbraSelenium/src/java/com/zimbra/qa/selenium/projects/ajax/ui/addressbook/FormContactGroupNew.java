@@ -1,13 +1,18 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 
+import java.awt.event.KeyEvent;
+
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
 
 public class FormContactGroupNew extends AbsForm {
+	public static final String SELECT_OPTION_TEXT_GAL = "Global Address List";
+	public static final String SELECT_OPTION_TEXT_CONTACTS = "Contacts";
+	public static final String SELECT_OPTION_TEXT_SHARED_CONTACTS = "Personal and Shared Contacts";
 	
 	public static class Locators {
 		
@@ -22,15 +27,20 @@ public class FormContactGroupNew extends AbsForm {
 	    public static final String zNextButton                   = "css=td[id$='_nextButton'] td[id$='_title']";
 	    
 	    public static final String zFindField                    = "css=input[id$='_searchField']";
-        public static final String zSearchButton                 = "css=td[id$='_searchButton'] td[id$='_title']";
-        public static final String zDropdownSelect               = "css=td[id$='_listSelect'] td[id$='_select_container'] td[id$='_dropdown']";
-	    public static final String zDropdownSelectContacts       = "css=table[id$='_pseudoitems_container'] tbody tr:nth-of-type(1)";
-	    public static final String zDropdownSelectSharedContacts = "css=table[id$='_pseudoitems_container'] tbody tr:nth-of-type(2)";
-	    public static final String zDropdownSelectGAL            = "css=table[id$='_pseudoitems_container'] tbody tr:nth-of-type(3)";
+        public static final String zSearchButton                 = "css=td[id$='_searchButton'][id^='DWT'] td[id$='_title']";
+        public static final String zSearchDropdown               = "css=td[id$='_listSelect'] td[id$='_select_container'] ";
+        public static final String zFolderDropdown               = "css=td[id$='_folderSelect'] td[id$='_select_container'] td[id$='_dropdown'] div[class='ImgSelectPullDownArrow']";
+        
+        
+        //TODO
+	    public static final String zDropdownSelectContacts       = "css=DYNAMIC_ID";
+	    public static final String zDropdownSelectSharedContacts = "css=DYNAMIC_ID";
+	    public static final String zDropdownSelectGAL            = "css=DYNAMIC_ID";
+	    
 	    public static final String zListView                     = "css=div[id$='_listView'] div#z1__GRP__rows";
 	    public static final String zEmailView                    = "css=div[id$='_groupMembers'] div#z1__GRP__rows";
 	
-	    public static final String zDeleteAllButton                 = "css=td[id$='_delAllButton'] td[id$='_title']";
+	    public static final String zDeleteAllButton              = "css=td[id$='_delAllButton'] td[id$='_title']";
 	    public static final String zDeleteButton                 = "css=td[id$='_delButton'] td[id$='_title']";
         
 	    
@@ -160,4 +170,26 @@ public class FormContactGroupNew extends AbsForm {
 		return (true);
 	}
 
+	public void select(AppAjaxClient app, String dropdown, String option) throws HarnessException {
+		
+		String postfix = " td[id$='_dropdown'] div[class='ImgSelectPullDownArrow']";
+		String textLocator = " td[id$='_title']";
+		
+		if (this.sGetText(dropdown + textLocator).equals(option)) {
+			return;
+		}
+		
+		//select contact dropdown 
+		zClick(dropdown + postfix);
+		SleepUtil.sleepSmall();		
+		
+		//assume contact is one arrow key down away from GAL
+		app.zPageAddressbook.zKeyboardKeyEvent(KeyEvent.VK_DOWN);
+		app.zPageAddressbook.zKeyboardKeyEvent(KeyEvent.VK_ENTER);		
+		
+		//formGroup.zClick(FormContactGroupNew.Locators.zDropdownSelectContacts);
+		
+		
+		return ;
+	}
 }

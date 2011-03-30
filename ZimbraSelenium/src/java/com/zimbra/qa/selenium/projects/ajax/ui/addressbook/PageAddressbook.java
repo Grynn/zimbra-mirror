@@ -239,14 +239,11 @@ public class PageAddressbook extends AbsTab {
 
 		   locator = "id="+ id;
 		   page = new DialogMove(MyApplication, this);
-	    } else if (
-	    		   (button == Button.B_AB_ALL) || (button == Button.B_AB_123) ||
-	    		   (button == Button.B_AB_A) || (button == Button.B_AB_B)
-			       //TODO: add more 
-          ){
+	    } else if (isAlphabetButton(button))
+          {
        	   locator=DisplayContactGroup.ALPHABET_PREFIX + button.toString() + DisplayContactGroup.ALPHABET_POSTFIX;
        	   
-       	   //TODO??
+       	   //TODO
        	   //page = ???
 	    }
 
@@ -265,8 +262,10 @@ public class PageAddressbook extends AbsTab {
 		// Click it
 		this.zClick(locator);
 		
-		//for addressbook toolbar???????
-		this.sClick(locator);
+		if (isAlphabetButton(button)) {
+ 		  //for addressbook alphabet button only
+		  this.sClick(locator);
+		}
 		zWaitForBusyOverlay();
 	
 		
@@ -738,5 +737,16 @@ public class PageAddressbook extends AbsTab {
 	
 	    return page;
 	
+	}
+
+	private boolean isAlphabetButton(Button button) {
+	  return (button == Button.B_AB_ALL) || (button == Button.B_AB_123) 
+		|| (button == Button.B_AB_A) || (button == Button.B_AB_B) || (button == Button.B_AB_C) || (button == Button.B_AB_D) 
+	    || (button == Button.B_AB_E) || (button == Button.B_AB_F) || (button == Button.B_AB_G) || (button == Button.B_AB_H)
+	    || (button == Button.B_AB_I) || (button == Button.B_AB_J) || (button == Button.B_AB_K) || (button == Button.B_AB_L)
+	    || (button == Button.B_AB_M) || (button == Button.B_AB_N) || (button == Button.B_AB_O) || (button == Button.B_AB_P)
+	    || (button == Button.B_AB_Q) || (button == Button.B_AB_R) || (button == Button.B_AB_S) || (button == Button.B_AB_T)
+	    || (button == Button.B_AB_U) || (button == Button.B_AB_V) || (button == Button.B_AB_W) || (button == Button.B_AB_X)
+	    || (button == Button.B_AB_Y) || (button == Button.B_AB_Z);
 	}
 }

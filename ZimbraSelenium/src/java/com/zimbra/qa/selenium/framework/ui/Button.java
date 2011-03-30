@@ -152,6 +152,33 @@ public class Button {
 	public static final Button B_AB_123 = new Button("1");
 	public static final Button B_AB_A = new Button("2");
 	public static final Button B_AB_B = new Button("3");
+	public static final Button B_AB_C = new Button("4");
+	public static final Button B_AB_D = new Button("5");
+	public static final Button B_AB_E = new Button("6");
+	public static final Button B_AB_F = new Button("7");
+	public static final Button B_AB_G = new Button("8");
+	public static final Button B_AB_H = new Button("9");
+	public static final Button B_AB_I = new Button("10");
+	public static final Button B_AB_J = new Button("11");
+	public static final Button B_AB_K = new Button("12");
+	public static final Button B_AB_L = new Button("13");
+	public static final Button B_AB_M = new Button("14");
+	public static final Button B_AB_N = new Button("15");
+	public static final Button B_AB_O = new Button("16");
+	public static final Button B_AB_P = new Button("17");
+	public static final Button B_AB_Q = new Button("18");
+	public static final Button B_AB_R = new Button("19");
+	public static final Button B_AB_S = new Button("20");
+	public static final Button B_AB_T = new Button("21");
+	public static final Button B_AB_U = new Button("22");
+	public static final Button B_AB_V = new Button("23");
+	public static final Button B_AB_W = new Button("24");
+	public static final Button B_AB_X = new Button("25");
+	public static final Button B_AB_Y = new Button("26");
+	public static final Button B_AB_Z = new Button("27");
+
+	
+
 	//TODO: add more
 	
 	// Task buttons
