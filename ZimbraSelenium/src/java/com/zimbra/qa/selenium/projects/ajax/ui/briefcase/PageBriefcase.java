@@ -20,7 +20,9 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
  */
 public class PageBriefcase extends AbsTab {
 
-	public DocumentItem docItem;
+	private DocumentItem docItem;
+
+	public static final String pageTitle = "Zimbra: Briefcase";
 
 	public static class Locators {
 		public static final String zNewBriefcaseOverviewPaneIcon = "id=ztih__main_Briefcase__BRIEFCASE_textCell";
@@ -140,6 +142,14 @@ public class PageBriefcase extends AbsTab {
 		}
 	}
 
+	public AbsPage zToolbarPressButton(Button button, DocumentItem document)
+			throws HarnessException {
+
+		docItem = document;
+
+		return zToolbarPressButton(button);
+	}
+
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
@@ -192,7 +202,7 @@ public class PageBriefcase extends AbsTab {
 				throw new HarnessException(button + " not visible " + attrs);
 			}
 			locator = Locators.zEditFileIconBtn;
-			page = new DocumentBriefcaseEdit(this.MyApplication);
+			page = new DocumentBriefcaseEdit(this.MyApplication, docItem);
 		} else if (button == Button.B_DELETE) {
 			// Check if the button is visible
 			String attrs = sGetAttribute("css=div[id='zb__BDLV__DELETE']@style");

@@ -5,6 +5,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
 /**
  * Represents a "Add Document Version Notes" dialog box
@@ -51,7 +52,7 @@ public class DialogAddVersionNotes extends AbsDialog {
 	public AbsPage zClickButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zClickButton(" + button + ")");
 
-		tracer.trace("Click dialog button "+ button);
+		tracer.trace("Click dialog button " + button);
 
 		String locator = null;
 
@@ -79,7 +80,8 @@ public class DialogAddVersionNotes extends AbsDialog {
 		}
 
 		// if(zIsActive())
-		// zGetDisplayedText("css=div[class=" + Locators.zDialogContentClassId + "]");
+		// zGetDisplayedText("css=div[class=" + Locators.zDialogContentClassId +
+		// "]");
 
 		this.zClick(locator);
 
@@ -91,27 +93,43 @@ public class DialogAddVersionNotes extends AbsDialog {
 	 * 
 	 * @param notes
 	 */
-	public void zEnterVersionNotes(String notes) throws HarnessException {
+	private void zEnterVersionNotes(String notes) throws HarnessException {
 		logger.info(myPageName() + " zEnterVersionNotes(" + notes + ")");
 
-		tracer.trace("Enter version notes in text field "+ notes);
+		tracer.trace("Enter version notes in text field " + notes);
 
 		if (notes == null)
 			throw new HarnessException("notes must not be null");
 
-		String locator = "css=div[class=" + Locators.zDialogContentClassId + "] textarea[id$='notes']";
-		
+		String locator = "css=div[class=" + Locators.zDialogContentClassId
+				+ "] textarea[id$='notes']";
+
 		if (!this.sIsElementPresent(locator))
-			throw new HarnessException("unable to find body field "
-					+ locator);
+			throw new HarnessException("unable to find body field " + locator);
 
 		this.sFocus(locator);
 		this.zClick(locator);
 		this.sType(locator, notes);
-		
+
 		this.zWaitForBusyOverlay();
 	}
-	
+
+	public void zDismissAddVersionNotesDlg(String parentWindow)
+			throws HarnessException {
+		zSelectWindow(PageBriefcase.pageTitle);
+
+		if (zIsWindowOpen(parentWindow)) {
+			zSelectWindow(parentWindow);
+
+			if (zIsActive()) {
+				zEnterVersionNotes("notes"
+						+ ZimbraSeleniumProperties.getUniqueString());
+
+				zClickButton(Button.B_OK);
+			}
+		}
+	}
+
 	@Override
 	public String zGetDisplayedText(String locator) throws HarnessException {
 		logger.info(myPageName() + " zGetDisplayedText(" + locator + ")");

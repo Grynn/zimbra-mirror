@@ -15,6 +15,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseOpen;
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase;
 
 public class CreateDocument extends AjaxCommonTest {
 
@@ -44,7 +45,7 @@ public class CreateDocument extends AjaxCommonTest {
 				.zToolbarPressButton(Button.B_NEW);
 		
 		try {
-			app.zPageBriefcase.zSelectWindow("Zimbra Docs");
+			app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
 
 			// Fill out the document with the data
 			documentBriefcaseNew.zFillField(DocumentBriefcaseNew.Field.Name,
@@ -53,14 +54,14 @@ public class CreateDocument extends AjaxCommonTest {
 					docText);
 
 			// Save and close
-			app.zPageBriefcase.zSelectWindow("Zimbra Docs");
+			app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
 
-			documentBriefcaseNew.zSubmit();
+			documentBriefcaseNew.zSubmit();		
 		} finally {
-			documentBriefcaseNew.zSelectWindow("Zimbra: Briefcase");
+			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
 		}
 
-		app.zPageBriefcase.zIsWindowClosed("Zimbra Docs");
+		app.zPageBriefcase.zWaitForWindowClosed(DocumentBriefcaseNew.pageTitle);
 
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
@@ -90,7 +91,7 @@ public class CreateDocument extends AjaxCommonTest {
 
 			app.zPageBriefcase.closeWindow();
 		} finally {
-			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
+			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
 		}
 
 		ZAssert.assertStringContains(name, docName,
@@ -118,7 +119,7 @@ public class CreateDocument extends AjaxCommonTest {
 				.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_DOCUMENT);
 
 		try {
-			app.zPageBriefcase.zSelectWindow("Zimbra Docs");
+			app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
 
 			// Fill out the document with the data
 			documentBriefcaseNew.zFillField(DocumentBriefcaseNew.Field.Name,
@@ -127,14 +128,14 @@ public class CreateDocument extends AjaxCommonTest {
 					docText);
 
 			// Save and close
-			app.zPageBriefcase.zSelectWindow("Zimbra Docs");
+			app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
 
-			documentBriefcaseNew.zSubmit();
+			documentBriefcaseNew.zSubmit();						
 		} finally {
-			documentBriefcaseNew.zSelectWindow("Zimbra: Briefcase");
+			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
 		}
-
-		app.zPageBriefcase.zIsWindowClosed("Zimbra Docs");
+		
+		app.zPageBriefcase.zWaitForWindowClosed(DocumentBriefcaseNew.pageTitle);
 
 		// Search for created document
 		account
@@ -166,12 +167,12 @@ public class CreateDocument extends AjaxCommonTest {
 		Shortcut shortcut = Shortcut.S_NEWDOCUMENT;
 
 		// Open new document page using keyboard shortcut
-		app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
+		app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
 		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
 				.zKeyboardShortcut(shortcut);
 
 		try {
-			app.zPageBriefcase.zSelectWindow("Zimbra Docs");
+			app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
 
 			// Fill out the document with the data
 			documentBriefcaseNew.zFillField(DocumentBriefcaseNew.Field.Name,
@@ -180,14 +181,14 @@ public class CreateDocument extends AjaxCommonTest {
 					docText);
 
 			// Save and close
-			app.zPageBriefcase.zSelectWindow("Zimbra Docs");
+			app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
 
-			documentBriefcaseNew.zSubmit();
+			documentBriefcaseNew.zSubmit();		
 		} finally {
-			documentBriefcaseNew.zSelectWindow("Zimbra: Briefcase");
+			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
 		}
-
-		app.zPageBriefcase.zIsWindowClosed("Zimbra Docs");
+		
+		app.zPageBriefcase.zWaitForWindowClosed(DocumentBriefcaseNew.pageTitle);
 
 		// Search for created document
 		account

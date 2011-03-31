@@ -4,9 +4,7 @@ import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsForm;
-import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 
 public class DocumentBriefcaseNew extends AbsForm {
@@ -23,14 +21,14 @@ public class DocumentBriefcaseNew extends AbsForm {
 		public static final Field Name = new Field("Name");
 		public static final Field Body = new Field("Body");
 
-		//private String field;
+		// private String field;
 
 		private Field(String name) {
-		//	field = name;
+			// field = name;
 		}
 	}
 
-	public final String pageTitle = "Zimbra Docs";
+	public static final String pageTitle = "Zimbra Docs";
 
 	public DocumentBriefcaseNew(AbsApplication application) {
 		super(application);
@@ -125,16 +123,11 @@ public class DocumentBriefcaseNew extends AbsForm {
 		// this.sMouseDown(Locators.zSaveAndCloseIconBtn);
 		// this.sMouseUp(Locators.zSaveAndCloseIconBtn);
 
-		// Add Document version notes in the popped up dialog
+		// add version notes
 		DialogAddVersionNotes dlgAddNotes = new DialogAddVersionNotes(
 				MyApplication, ((AppAjaxClient) MyApplication).zPageBriefcase);
 
-		if (dlgAddNotes.zIsActive()) {
-			dlgAddNotes.zEnterVersionNotes("notes"
-					+ ZimbraSeleniumProperties.getUniqueString());
-
-			dlgAddNotes.zClickButton(Button.B_OK);
-		}
+		dlgAddNotes.zDismissAddVersionNotesDlg(pageTitle);
 	}
 
 	@Override
@@ -148,7 +141,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 		zWaitForElementPresent("css=iframe[id*='DWT'][class='ZDEditor']");
 
 		zWaitForIframeText("css=iframe[id*='DWT'][class='ZDEditor']", "");
-		
+
 		return true;
 	}
 }

@@ -4,9 +4,7 @@ import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsForm;
-import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 
 public class DocumentBriefcaseEdit extends AbsForm {
@@ -18,24 +16,21 @@ public class DocumentBriefcaseEdit extends AbsForm {
 		public static final String zNameField = "css=[class=DwtInputField] input";
 	}
 
-	public String pageTitle;
-	public String pageText;
+	private DocumentItem docItem;
 
-	public DocumentBriefcaseEdit(AbsApplication application) {
+	public DocumentItem getDocItem() {
+		return docItem;
+	}
+
+	public DocumentBriefcaseEdit(AbsApplication application,
+			DocumentItem document) {
 		super(application);
+
+		docItem = document;
+
 		logger.info("new " + DocumentBriefcaseEdit.class.getCanonicalName());
 	}
 
-	public DocumentBriefcaseEdit(AbsApplication application, DocumentItem document) {
-		super(application);
-		
-		pageTitle = document.getDocName();
-		
-		pageText = document.getDocText();
-		
-		logger.info("new " + DocumentBriefcaseEdit.class.getCanonicalName());
-	}
-	
 	@Override
 	public String myPageName() {
 		return this.getClass().getName();
@@ -60,6 +55,7 @@ public class DocumentBriefcaseEdit extends AbsForm {
 	}
 
 	public void typeDocumentName(String text) throws HarnessException {
+		zSelectWindow(docItem.getDocName());
 		sType(Locators.zNameField, text);
 	}
 
@@ -69,6 +65,8 @@ public class DocumentBriefcaseEdit extends AbsForm {
 
 	@Override
 	public void zSubmit() throws HarnessException {
+		zSelectWindow(docItem.getDocName());
+
 		logger.info("DocumentBriefcaseEdit.SaveAndClose()");
 
 		// Look for "Save & Close"
@@ -86,31 +84,36 @@ public class DocumentBriefcaseEdit extends AbsForm {
 		// this.sMouseDown(Locators.zSaveAndCloseIconBtn);
 		// this.sMouseUp(Locators.zSaveAndCloseIconBtn);
 
-		// Add Document version notes in the popped up dialog
+		// add version notes
 		DialogAddVersionNotes dlgAddNotes = new DialogAddVersionNotes(
 				MyApplication, ((AppAjaxClient) MyApplication).zPageBriefcase);
 
-		if (dlgAddNotes.zIsActive()) {
-			dlgAddNotes.zEnterVersionNotes("notes"
-					+ ZimbraSeleniumProperties.getUniqueString());
-
-			dlgAddNotes.zClickButton(Button.B_OK);
-		}
+		dlgAddNotes.zDismissAddVersionNotesDlg(docItem.getDocName());
 	}
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		
-		zWaitForWindow(pageTitle);
+		logger.info("DocumentBriefcaseEdit.zIsActive()");
+		if (docItem != null) {
 
-		zSelectWindow(pageTitle);
+			zWaitForWindow(docItem.getDocName());
 
-		zWaitForElementPresent("css=div[class='ZDToolBar ZWidget']");
+			zSelectWindow(docItem.getDocName());
 
-		zWaitForElementPresent("css=iframe[id*='DWT'][class='ZDEditor']");
-		
-		zWaitForIframeText("css=iframe[id*='DWT'][class='ZDEditor']", pageText);
+			zWaitForElementPresent("css=div[class='ZDToolBar ZWidget']");
 
-		return true;
+			zWaitForElementPresent("css=iframe[id*='DWT'][class='ZDEditor']");
+
+			zWaitForIframeText("css=iframe[id*='DWT'][class='ZDEditor']",
+					docItem.getDocText());
+
+			logger.info("DocumentBriefcaseEdit is Active()");
+
+			return true;
+		} else {
+			logger.info("DocumentBriefcaseEdit.docItem is null");
+
+			return false;
+		}
 	}
 }
