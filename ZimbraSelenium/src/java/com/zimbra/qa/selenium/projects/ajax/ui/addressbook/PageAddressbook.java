@@ -375,7 +375,7 @@ public class PageAddressbook extends AbsTab {
 		if ( pulldownLocator != null ) {
 						
 			// Make sure the locator exists
-			if ( !this.sIsElementPresent(pulldownLocator) ) {
+			if ( !sIsElementPresent(pulldownLocator) ) {
 				throw new HarnessException("Button "+ pulldown +" option "+ option +" pulldownLocator "+ pulldownLocator +" not present!");
 			}
 			
@@ -383,13 +383,11 @@ public class PageAddressbook extends AbsTab {
 			zWaitForBusyOverlay();
 			
 			if ( optionLocator != null ) {
-
+                
 				// Make sure the locator exists
-				if ( !this.sIsElementPresent(optionLocator) ) {
-					throw new HarnessException("Button "+ pulldown +" option "+ option +" optionLocator "+ optionLocator +" not present!");
-				}
-
-				this.zClick(optionLocator);
+				zWaitForElementPresent(optionLocator);
+				
+				zClick(optionLocator);
 				zWaitForBusyOverlay();
 
 			}
@@ -524,9 +522,9 @@ public class PageAddressbook extends AbsTab {
         if ( action == Action.A_RIGHTCLICK ) {
 			ContextMenuItem cmi=null;
 		    ContextMenuItem sub_cmi = null;
-		    this.zClick(contactLocator);
-		    this.zKeyboard.zTypeCharacters(Shortcut.S_RIGHTCLICK.getKeys());
-			//this.zRightClick(contactLocator);
+		    zClick(contactLocator);
+		    //zKeyboard.zTypeCharacters(Shortcut.S_RIGHTCLICK.getKeys());
+			zRightClick(contactLocator);
 			
 			
 			if (option == Button.B_TAG) {
@@ -558,9 +556,9 @@ public class PageAddressbook extends AbsTab {
 			}
 			id = cmi.locator;
 			locator = "id="+ id;
+			
 			//  Make sure the context menu exists
-			if ( !this.sIsElementPresent(locator) )
-				throw new HarnessException("contextmenu is not present locator="+ locator +" context menu item="+ cmi.text);
+			zWaitForElementPresent(locator) ;
 			
 			// Check if the item is enabled
 			String attrs = sGetAttribute("xpath=(//div[@id='"+ id +"'])@class");
@@ -570,7 +568,9 @@ public class PageAddressbook extends AbsTab {
 			
 
 			// Mouse over the option
+			sFocus(locator);
 			sMouseOver(locator);
+			
 						
 			id = sub_cmi.locator;
 			locator = "id="+ id;
@@ -586,7 +586,7 @@ public class PageAddressbook extends AbsTab {
 			
         
 		// Click option
-		this.zClick(locator);
+		zClick(locator);
 		zWaitForBusyOverlay();
 		
 		
@@ -610,7 +610,7 @@ public class PageAddressbook extends AbsTab {
 		if ( action == Action.A_RIGHTCLICK ) {
 			ContextMenuItem cmi=null;
 								
-			this.zRightClick(contactLocator);
+		    zRightClick(contactLocator);
 		
 			if (option == Button.B_DELETE){
                 cmi=CONTEXT_MENU.CONTACT_DELETE;				
@@ -644,9 +644,9 @@ public class PageAddressbook extends AbsTab {
 			
 			id = cmi.locator;
 			locator = "id="+ id;
+
 			//  Make sure the context menu exists
-			if ( !this.sIsElementPresent(locator) )
-				throw new HarnessException("contextmenu is not present locator="+ locator +" context menu item="+ cmi.text);
+			zWaitForElementPresent(locator) ;
 			
 			// Check if the item is enabled
 			String attrs = sGetAttribute("xpath=(//div[@id='"+ id +"'])@class");
@@ -659,7 +659,7 @@ public class PageAddressbook extends AbsTab {
 		
 				
 		// Click option
-		this.zClick(locator);
+		zClick(locator);
 		zWaitForBusyOverlay();
 		
 		
