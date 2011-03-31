@@ -2396,6 +2396,9 @@ function(loc) {
  */
 DwtControl._scrollIntoView =
 function(element, container) {
+	
+	if (!element || !container) { return; }
+	
 	var elementTop = Dwt.toWindow(element, 0, 0, null, null, DwtPoint.tmp).y;
 	var containerTop = Dwt.toWindow(container, 0, 0, null, null, DwtPoint.tmp).y + container.scrollTop;
 
