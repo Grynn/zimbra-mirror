@@ -1,0 +1,11 @@
+<zimlet name="com_zimbra_about" version="0.1" label="${msg.label}"
+	description="${msg.description}">
+	<include>com_zimbra_about.js</include>
+	<includeCSS>aboutzimbra.css</includeCSS>	
+	<include>templates/About.template.js</include>
+	<handlerObject>ZmAboutZimlet</handlerObject>
+
+	<zimletPanelItem label="${msg.label}">
+		<toolTipText>${msg.description}</toolTipText>
+	</zimletPanelItem>
+</zimlet>
