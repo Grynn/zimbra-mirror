@@ -547,9 +547,16 @@ public class PageAddressbook extends AbsTab {
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				
+				ArrayList<String> selectedContactArrayList=getSelectedContactLocator();			
+		        String contactType = getContactType(selectedContactArrayList.get(0));
+			
+		        //check if it is a contact 
+                if (  contactType.equals(ContactItem.IMAGE_CLASS) ) {
+    				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+    				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+    				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+			    }
 				
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_RIGHT);
 				
