@@ -43,15 +43,29 @@ DwtListView = function(params) {
 	if (params.headerList) {
 		var htmlElement = this.getHtmlElement();
 
-		this._listColDiv = document.createElement("div");
-		this._listColDiv.id = DwtId.getListViewId(this._view, DwtId.LIST_VIEW_HEADERS);
-		this._listColDiv.className = "DwtListView-ColHeader";
-		htmlElement.appendChild(this._listColDiv);
+        var html = new Array(50);
+        var idx = 0;
+        var headId = DwtId.getListViewId(this._view, DwtId.LIST_VIEW_HEADERS);
+        var colId = DwtId.getListViewId(this._view, DwtId.LIST_VIEW_ROWS);
+        html[idx++] = "<table width='100%' cellspacing='0' cellpadding='0'><tr><td ";
+        html[idx++] = "id=" + headId;
+        html[idx++] = "></td></tr><tr><td ";
+        html[idx++] = "id=" + colId;
+        html[idx++] = "></td></tr></table>";
+        htmlElement.innerHTML = html.join("");
 
-		this._listDiv = document.createElement("div");
-		this._listDiv.id = DwtId.getListViewId(this._view, DwtId.LIST_VIEW_ROWS);
-		this._listDiv.className = "DwtListView-Rows";
-		htmlElement.appendChild(this._listDiv);
+        var headHtml = document.getElementById(headId);
+        this._listColDiv = document.createElement("div");
+        this._listColDiv.id = DwtId.getListViewId(this._view, DwtId.LIST_VIEW_HEADERS);
+        this._listColDiv.className = "DwtListView-ColHeader";
+        headHtml.appendChild(this._listColDiv);
+
+        var colHtml = document.getElementById(colId);
+        this._listDiv = document.createElement("div");
+        this._listDiv.id = DwtId.getListViewId(this._view, DwtId.LIST_VIEW_ROWS);
+        this._listDiv.className = "DwtListView-Rows";
+        colHtml.appendChild(this._listDiv);
+
 
 		// setup vars needed for sorting
 		this._bSortAsc = false;
