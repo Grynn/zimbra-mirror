@@ -1,5 +1,6 @@
 package  com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -540,6 +541,18 @@ public class PageAddressbook extends AbsTab {
 					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_REMOVE_TAG;
 					page = null;	
 				}
+				
+				//For Chrome and Safari only
+				// as an alternative for sMouseOver(locator) 
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_RIGHT);
+				
 			}
 			else if (option == Button.B_SEARCH) {
 				cmi=CONTEXT_MENU.CONTACT_SEARCH;
@@ -570,8 +583,7 @@ public class PageAddressbook extends AbsTab {
 			// Mouse over the option
 			sFocus(locator);
 			sMouseOver(locator);
-			
-						
+	
 			id = sub_cmi.locator;
 			locator = "id="+ id;
 		
