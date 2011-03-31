@@ -2525,7 +2525,6 @@ function(ev) {
 DwtControl.prototype.__hasToolTipContent =
 function() {
 	if (this._disposed) { return false; }
-
 	return Boolean(this.__toolTipContent || (this.getToolTipContent != DwtControl.prototype.getToolTipContent));
 };
 
@@ -2633,12 +2632,13 @@ function(ev, evType) {
 	var mouseEv = DwtShell.mouseEvent;
 	if (obj._dragging == DwtControl._NO_DRAG) {
 		mouseEv.setFromDhtmlEvent(ev, obj);
+		mouseEv.hoverStarted = false;	// don't handle hover if it has already begun
 		if (obj.isListenerRegistered(evType)) {
 			obj.notifyListeners(evType, mouseEv);
 		}
 		// Call the tooltip after the listeners to give them a
 		// chance to change the tooltip text.
-		if (obj.__hasToolTipContent()) {
+		if (obj.__hasToolTipContent(mouseEv) && !mouseEv.hoverStarted) {
 			var shell = DwtShell.getShell(window);
 			var manager = shell.getHoverMgr();
 			if ((!manager.isHovering() || manager.getHoverObject() != obj) && !DwtMenu.menuShowing()) {
