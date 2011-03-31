@@ -283,28 +283,31 @@ function(params, resp) {
 				this._updateUI(this._list);
 		} else {
 			ZaSearch.TOO_MANY_RESULTS_FLAG = false;
-			this._list = new ZaItemList(params.CONS);
+			this._list = null;
+            var tempList = new ZaItemList(params.CONS);
 			this._searchTotal = 0;
 			if(resp && !resp.isException()) {
 				var response = resp.getResponse().Body.SearchDirectoryResponse;
-				this._list.loadFromJS(response);
+				this._list = new ZaItemList(params.CONS);
+                tempList.loadFromJS(response);
                 // filter the search result
-                if(params.resultFilter && this._list.size() > 0) {
-                    var listVec = this._list.getVector();
+                if(params.resultFilter && tempList.size() > 0) {
+                    var listVec = tempList.getVector();
                     for(var i = 0; i < listVec.size(); i++) {
                         var item = listVec.get(i);
-                        if(item.type == ZaItem.ALIAS) {
-                            var target = item.getAliasTargetObj();
-                            var isMatch = true;
-                            for (var f in params.resultFilter) {
-                                if(target.attrs[f].indexOf(params.resultFilter[f]) < 0) {
-                                    this._list.remove(item);
-                                    break;
-                                }
+                        var target = null;
+                        if(item.type == ZaItem.ALIAS)
+                            target = item.getAliasTargetObj();
+                        else target = item;
+                        for (var f in params.resultFilter) {
+                            if(target.attrs[f].indexOf(params.resultFilter[f]) >= 0) {
+                                this._list.add(item);
+                                break;
                             }
                         }
+
                     }
-                }
+                } else this._list = tempList;
 				if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] != 'TRUE') {
 					var act = new AjxTimedAction(this._list, ZaItemList.prototype.loadEffectiveRights, null);
 					AjxTimedAction.scheduleAction(act, 150)

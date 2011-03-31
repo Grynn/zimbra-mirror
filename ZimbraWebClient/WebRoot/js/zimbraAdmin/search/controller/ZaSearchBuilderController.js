@@ -427,6 +427,7 @@ function (filter, key, value, op) {
 		value = String(value).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
 	}
 	var entry = null ;
+    var searchListController = ZaApp.getInstance().getSearchListController();
 	if (key == ZaSearchOption.A_domainFilter 
 		//|| key == ZaSearchOption.A_domainAll
 		|| key == ZaSearchOption.A_domainList 
@@ -473,7 +474,11 @@ function (filter, key, value, op) {
 		entry = "(" + key + "=*" + value + "*)" ;
                 entry += "(" + ZaSearchOption.A_zimbraPrefMailForwardingAddress + "=*" + value + "*)" ;
                 entry = "(|" + entry + ")";
-        }else {
+    } else if (searchListController.searchResultFilter.indexOf(key) >= 0) {
+        if(!searchListController._filterObj || !(searchListController._filterObj instanceof Object))
+             searchListController._filterObj = {};
+        searchListController._filterObj[key] = value;
+    } else {
 		entry = "(" + key + "=*" + value + "*)" ;
 	}
 	

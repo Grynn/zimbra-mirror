@@ -290,40 +290,6 @@ function(query) {
 	
 }
 
-ZaSearchListController._getResultFilterObj =
-function(controller, params, filterObj) {
-    if(!controller._isAdvancedSearch || !params.query || params.query == "")
-        return params.query;
-    else {
-        var isAliasSpec = false;
-        if(params.types && params.types[0] instanceof Array) {
-            var adv_types = params.types[0];
-            for(var i = 0; i < adv_types.length && !isAliasSpec; i++)
-		        if(adv_types[i] == ZaSearch.ALIASES)
-			        isAliasSpec = true;
-        }
-
-        if(!isAliasSpec) return params.query;
-        if(!filterObj || !(filterObj instanceof Object))
-            filterObj = {};
-
-        var query = params.query;
-        for(var i = 0; i < controller.searchResultFilter.length; i++){
-            var f = controller.searchResultFilter[i];
-	        var sw = "(" + f + "=*";
-	        var ew = "*)";
-            var start = query.indexOf(sw);
-            if(start < 0 || start > query.length-1)
-                continue;
-	        var end = query.indexOf(ew,start+sw.length);
-	        if(end > query.length-1)
-                continue;
-            filterObj[f] = query.substr(start+sw.length,end-start-sw.length);
-            query = query.substr(0, start) + query.substr(end + ew.length,query.length);
-        }
-        return query;
-    }
-}
 /*********** Search Field Callback */
 ZaSearchListController.prototype._searchFieldCallback =
 function(params) {
@@ -332,8 +298,7 @@ function(params) {
 	if(controller.setSearchTypes)
 		controller.setSearchTypes(params.types);
 
-    controller._filterObj = {};
-	controller._currentQuery = ZaSearchListController._getResultFilterObj(controller,params,controller._filterObj) ;
+	controller._currentQuery = params.query;
 	controller._currentSortField = params.sortBy;
 	var busyId = Dwt.getNextId();	
 	var callback = new AjxCallback(controller, controller.searchCallback, {limit:controller.RESULTSPERPAGE,show:true, openInSearchTab: true,busyId:busyId, resultFilter:controller._filterObj});
