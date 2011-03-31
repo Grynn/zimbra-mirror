@@ -83,7 +83,8 @@ public class CreateContactGroup extends AjaxCommonTest  {
 		//fill in group name
 		formGroup.sType(FormContactGroupNew.Locators.zGroupnameField, group.groupName);		
 		
-		//default:  GAL dropdown selected				
+        //select GAL option
+		formGroup.select(app, FormContactGroupNew.Locators.zSearchDropdown,  FormContactGroupNew.SELECT_OPTION_TEXT_GAL);
 		
 		//find email from GAL
 		formGroup.sType(FormContactGroupNew.Locators.zFindField, ZimbraAccount.AccountB().EmailAddress);
@@ -156,8 +157,9 @@ public class CreateContactGroup extends AjaxCommonTest  {
 		//fill in group name and email addresses
 		formGroup.zFill(group);
 	   
-        //default:  GAL dropdown selected				
-		
+        //select GAL option
+		formGroup.select(app, FormContactGroupNew.Locators.zSearchDropdown,  FormContactGroupNew.SELECT_OPTION_TEXT_GAL);
+	
 		//find email from GAL
 		formGroup.sType(FormContactGroupNew.Locators.zFindField, ZimbraAccount.AccountB().EmailAddress);
 				

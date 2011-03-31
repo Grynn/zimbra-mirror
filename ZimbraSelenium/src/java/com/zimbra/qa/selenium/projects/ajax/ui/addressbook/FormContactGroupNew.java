@@ -183,9 +183,20 @@ public class FormContactGroupNew extends AbsForm {
 		zClick(dropdown + postfix);
 		SleepUtil.sleepSmall();		
 		
-		//assume contact is one arrow key down away from GAL
+		
+		//assume contact is one arrow key down away from top
+		//assume shared contact is two arrow key down away from top
+		//assume GAL is three arrow key down away from top
 		app.zPageAddressbook.zKeyboardKeyEvent(KeyEvent.VK_DOWN);
+		if (!option.equals(SELECT_OPTION_TEXT_CONTACTS)) {
+			app.zPageAddressbook.zKeyboardKeyEvent(KeyEvent.VK_DOWN);			
+			if (!option.equals(SELECT_OPTION_TEXT_SHARED_CONTACTS)) {
+				app.zPageAddressbook.zKeyboardKeyEvent(KeyEvent.VK_DOWN);			
+			}	
+		}
+		
 		app.zPageAddressbook.zKeyboardKeyEvent(KeyEvent.VK_ENTER);		
+
 		
 		//formGroup.zClick(FormContactGroupNew.Locators.zDropdownSelectContacts);
 		
