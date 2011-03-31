@@ -224,16 +224,16 @@ function(listType) {
 	var i = 0 ;
 	headerList[i++] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, "40px", sortable++, "objectClass", true, true);
 	this._defaultColumnSortable = sortable ;
-	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, "220px", sortable++, ZaAccount.A_name, true, true);
+	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.ALV_Name_col, null, "210px", sortable++, ZaAccount.A_name, true, true);
 	
 	if (this._listType && this._listType == ZaItem.ALIAS) {
-		headerList[i++] = new ZaListHeaderItem(ZaAlias.A_targetAccount, ZaMsg.ALV_TargetName_col, null, "220px", sortable++,ZaAlias.A_targetAccount, true, true);
+		headerList[i++] = new ZaListHeaderItem(ZaAlias.A_targetAccount, ZaMsg.ALV_TargetName_col, null, "210px", sortable++,ZaAlias.A_targetAccount, true, true);
 		headerList[i++] = new ZaListHeaderItem("target" + ZaAlias.A_targetType, ZaMsg.ALV_TargetType_col, null, "200px", sortable++,ZaAlias.A_targetType, true, true);
 	}else{
 		//idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible	
-		headerList[i++] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, "220px", sortable++,ZaAccount.A_displayname, true, true);
+		headerList[i++] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, "210px", sortable++,ZaAccount.A_displayname, true, true);
 		headerList[i++] = new ZaListHeaderItem(ZaAccount.A_accountStatus, ZaMsg.ALV_Status_col, null, "120px", sortable++,ZaAccount.A_accountStatus, true, true);
-		headerList[i++] = new ZaListHeaderItem(ZaAccount.A_zimbraLastLogonTimestamp, ZaMsg.ALV_Last_Login, null, "165px", sortable++, ZaAccount.A_zimbraLastLogonTimestamp, true, true);
+		headerList[i++] = new ZaListHeaderItem(ZaAccount.A_zimbraLastLogonTimestamp, ZaMsg.ALV_Last_Login, null, "195px", sortable++, ZaAccount.A_zimbraLastLogonTimestamp, true, true);
 	}
 	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_description, ZaMsg.ALV_Description_col, null, "auto", null, null,false, true );
 	
