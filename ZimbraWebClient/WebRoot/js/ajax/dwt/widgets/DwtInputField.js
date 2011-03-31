@@ -121,6 +121,7 @@ DwtInputField = function(params) {
         this._inputField.onkeyup = DwtInputField._keyUpHdlr;
         this._inputField.onblur = DwtInputField._blurHdlr;
 		this._inputField.onfocus = DwtInputField._focusHdlr;
+        this._inputField.onkeydown = DwtInputField._keyDownHdlr;
 
         if (params.size)
             this._inputField.size = params.size;
@@ -731,6 +732,16 @@ function(ev) {
 	}
 };
 
+DwtInputField._keyDownHdlr =
+function(ev) {
+    var obj = DwtControl.getTargetControl(ev);
+    if (obj) {
+        if (obj._hintIsVisible) {
+            obj._hideHint('');
+        }
+    }
+};
+
 DwtInputField.prototype._hideHint = 
 function(value) {
 	var element = this.getInputElement();
@@ -891,6 +902,7 @@ function(params) {
 	ninput.onkeyup = DwtInputField._keyUpHdlr;
 	ninput.onblur = DwtInputField._blurHdlr;
 	ninput.onfocus = DwtInputField._focusHdlr;
+    ninput.onkeydown = DwtInputField._keyDownHdlr;
 	for (var eventType in this._inputEventHandlers) {
 		ninput[eventType] = this._inputEventHandlers[eventType];
 	}
@@ -898,4 +910,20 @@ function(params) {
 	this._tabGroup.removeAllMembers();
 	this._tabGroup.addMember(ninput);
 	return ninput;
+};
+
+/*
+ * clears the onFocus handler
+ */
+DwtInputField.prototype.disableFocusHdlr =
+function() {
+    this._inputField.onfocus = null;
+};
+
+/*
+ * enables the onFocus handler
+ */
+DwtInputField.prototype.enableFocusHdlr =
+function(){
+    this._inputField.onfocus = DwtInputField._focusHdlr;
 };
