@@ -23,6 +23,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogRenameFolder;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogRenameTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
@@ -107,7 +108,7 @@ public class TreeMail extends AbsTree {
 
 			optionLocator= "id=POPUP_RENAME_FOLDER";
 
-			//page = new DialogRenameTag(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+			page = new DialogRenameFolder(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
 
 		}else if (option == Button.B_TREE_FOLDER_EMPTY) {
 			optionLocator= "id=POPUP_EMPTY_FOLDER";

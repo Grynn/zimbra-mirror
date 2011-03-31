@@ -7,6 +7,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
 
+
 /**
  * Represents a "Rename Folder" dialog box
  * <p>
@@ -16,8 +17,10 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 public class DialogRenameFolder extends AbsDialog {
 
 	public static class Locators {
-	
 
+		public static final String zDialogRenameId = "RenameFolderDialog";
+		public static final String zNewFolderNameFieldId = "RenameFolderDialog_name";
+		public static final String zButtonsId = "RenameFolderDialog_buttons";
 	}
 	
 	
@@ -28,7 +31,7 @@ public class DialogRenameFolder extends AbsDialog {
 	public void zSetNewName(String name) throws HarnessException {
 		logger.info(myPageName() + " zSetNewName("+ name +")");
 
-		String locator = "implement me";
+		String locator = "//input[@id='"+ Locators.zNewFolderNameFieldId +"']";
 		
 		// Make sure the locator exists
 		if ( !this.sIsElementPresent(locator) ) {
@@ -48,7 +51,7 @@ public class DialogRenameFolder extends AbsDialog {
 		
 		if ( button == Button.B_OK ) {
 			
-			locator =  "implement me";
+			locator =  "//div[@id='"+ Locators.zDialogRenameId +"']//div[@id='"+ Locators.zButtonsId +"']//td[text()='OK']";
 			
 		} else if ( button == Button.B_CANCEL ) {
 			
@@ -101,8 +104,21 @@ public class DialogRenameFolder extends AbsDialog {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		String locator = "implement me";
-		return ( this.sIsElementPresent(locator) );
+		logger.info(myPageName() + " zIsActive()");
+
+		String locator = "id="+ Locators.zDialogRenameId;
+		
+		if ( !this.sIsElementPresent(locator) ) {
+			return (false); // Not even present
+		}
+		
+		if ( !this.zIsVisiblePerPosition(locator, 0, 0) ) {
+			return (false);	// Not visible per position
+		}
+	
+		// Yes, visible
+		logger.info(myPageName() + " zIsVisible() = true");
+		return (true);
 	}
 
 

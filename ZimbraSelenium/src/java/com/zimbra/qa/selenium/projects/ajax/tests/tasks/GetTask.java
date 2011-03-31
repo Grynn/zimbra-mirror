@@ -4,6 +4,8 @@ import java.util.*;
 
 import org.testng.annotations.Test;
 
+
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -148,7 +150,7 @@ public class GetTask extends AjaxCommonTest {
 
 	@Test(	description = "Get a task with html content - verify task contents",
 			groups = { "smoke" })
-	public void GetTask_03() throws HarnessException {
+			public void GetTask_03() throws HarnessException {
 
 		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
 
@@ -157,36 +159,40 @@ public class GetTask extends AjaxCommonTest {
 		String bodyText = "text" + ZimbraSeleniumProperties.getUniqueString();
 		String bodyHTML = "text <strong>bold"+ ZimbraSeleniumProperties.getUniqueString() +"</strong> text";
 		String contentHTML = XmlStringUtil.escapeXml(
-			"<html>" +
+				"<html>" +
 				"<head></head>" +
 				"<body>"+ bodyHTML +"</body>" +
-			"</html>");
-		
+		"</html>");
+
 		app.zGetActiveAccount().soapSend(
 				"<CreateTaskRequest xmlns='urn:zimbraMail'>" +
-					"<m >" +
-			        	"<inv>" +
-			        		"<comp name='"+ subject +"'>" +
-			        			"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
-			        		"</comp>" +
-			        	"</inv>" +
-			        	"<su>"+ subject +"</su>" +
-						"<mp ct='multipart/alternative'>" +
-						"<mp ct='text/plain'>" +
-							"<content>" + bodyText +"</content>" +
-						"</mp>" +
-						"<mp ct='text/html'>" +
-							"<content>"+ contentHTML +"</content>" +
-						"</mp>" +
-					"</mp>" +
-					"</m>" +
-				"</CreateTaskRequest>");
+				"<m >" +
+				"<inv>" +
+				"<comp name='"+ subject +"'>" +
+				"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+				"</comp>" +
+				"</inv>" +
+				"<su>"+ subject +"</su>" +
+				"<mp ct='multipart/alternative'>" +
+				"<mp ct='text/plain'>" +
+				"<content>" + bodyText +"</content>" +
+				"</mp>" +
+				"<mp ct='text/html'>" +
+				"<content>"+ contentHTML +"</content>" +
+				"</mp>" +
+				"</mp>" +
+				"</m>" +
+		"</CreateTaskRequest>");
+
+		String calItemId = app.zGetActiveAccount().soapSelectValue(
+				"//mail:CreateTaskResponse", "calItemId");
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
+
 		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
 		ZAssert.assertNotNull(task, "Verify the task is created");
-		
+
 		// Refresh the tasks view
 		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
 
@@ -194,14 +200,21 @@ public class GetTask extends AjaxCommonTest {
 		DisplayTask actual = (DisplayTask) app.zPageTasks.zListItem(Action.A_LEFTCLICK, subject);
 
 		// Verify the To, From, Subject, Body
-		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.Subject), subject, "Verify the subject matches");
-		
+		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.Subject), subject, "Verify the subject matches");		
 
-		// Verify the To, From, Subject, Body		
-		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.Body), contentHTML, "Verify the content matches");
+		//Verify HTML content through show original window
+		ClientSessionFactory.session().selenium().openWindow(ZimbraSeleniumProperties.getBaseURL() + "/home/" + app.zGetActiveAccount().EmailAddress + "/Tasks/?id=" + calItemId + "&mime=text/plain&noAttach=1","ShowOrignal");
+		ClientSessionFactory.session().selenium().waitForPopUp("ShowOrignal", "3000");
+		ClientSessionFactory.session().selenium().selectWindow("ShowOrignal");
 		
+		String showOrigBody =ClientSessionFactory.session().selenium().getBodyText().replaceAll("\\n", "").trim().replaceAll(" ", "");
+		String bodyHtml =bodyHTML.trim().replaceAll(" ", "");
+		ZAssert.assertStringContains(showOrigBody, bodyHtml, "Verify the content matches");
+		ClientSessionFactory.session().selenium().selectWindow("null");	
+
 	}
 
+	
 	@Test(	description = "Get a task with all fields - verify task contents",
 			groups = { "smoke" })
 	public void GetTask_04() throws HarnessException {
