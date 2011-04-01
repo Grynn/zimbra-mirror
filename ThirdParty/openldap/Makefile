@@ -18,7 +18,7 @@ ifdef BETA
 	PATCH	:= 
 else
 	include $(OPENLDAP_ROOT)/../versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/ITS6577.patch; patch -g0 -N -p1 < ../patches/ITS6638.patch; patch -g0 -N -p1 < ../patches/ITS6660.patch; patch -g0 -N -p1 < ../patches/ITS6853.patch;
+	PATCH	:= 
 endif
 
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
