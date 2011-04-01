@@ -181,8 +181,9 @@ function() {
 		var bubbleParams = this._bubbleParams[id];
 		var bubble = new ZmAddressBubble(bubbleParams);
 		bubble.replaceElement(id);
-			
-		this._bubbleList.add(bubble);
+		if (this._bubbleList) {
+			this._bubbleList.add(bubble);
+		}
 	}
 };
 
@@ -193,7 +194,7 @@ function(ev) {
 	if (ev.detail == DwtEvent.ONDBLCLICK) {
 		this._composeListener(ev, bubble.address);
 	}
-	else {
+	else if (this._bubbleList) {
 		this._bubbleList.selectText(bubble);
 	}
 };
@@ -223,7 +224,9 @@ function() {
 	AjxTimedAction.scheduleAction(new AjxTimedAction(this,
 		function() {
 			this._actionBubble = null;
-			this._bubbleList.clearRightSelection();
+			if (this._bubbleList) {
+				this._bubbleList.clearRightSelection();
+			}
 		}), 10);
 };
 
