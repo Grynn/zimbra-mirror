@@ -385,6 +385,9 @@ function(subscriberZimlet, isPrimary) {
 **/
 EmailTooltipZimlet.prototype.onHoverOverEmailInList =
 function(object, ev) {
+	if(!object || !object.address) {
+		return;
+	}
 	this.hoverOver(object, null, ev.docX, ev.docY);
 };
 
