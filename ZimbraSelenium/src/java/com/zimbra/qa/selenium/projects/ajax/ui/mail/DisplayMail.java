@@ -44,6 +44,7 @@ public class DisplayMail extends AbsDisplay {
 		ReceivedTime,	// Message received time
 		ReceivedDate,	// Message received date
 		From,
+		ReplyTo,
 		To,
 		Cc,
 		OnBehalfOf,
@@ -273,7 +274,15 @@ public class DisplayMail extends AbsDisplay {
 			
 			locator = "css=td[id$='_obo_label']";
 
-		}else if ( field == Field.ReceivedDate ) {
+		} else if ( field == Field.ReplyTo ) {
+			
+			locator = "css=tr[id$='_reply to'] span[id$='_com_zimbra_email'] span span";
+			if ( !sIsElementPresent(locator) ) {
+				// no email zimlet case
+				locator = "css=tr[id$='_reply to']";
+			}
+
+		} else if ( field == Field.ReceivedDate ) {
 			
 			locator = "css=tr[id$='__MSG_hdrTableTopRow'] td[class~='DateCol']";
 

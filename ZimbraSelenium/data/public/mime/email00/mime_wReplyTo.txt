@@ -1,0 +1,15 @@
+From: from13016959916873@example.com
+To: to13016959916873@example.com
+Cc: cc13016959916873@example.com
+Reply-To: replyto13016959916873@example.com
+Subject: subject13016959916873
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=utf-8 
+Content-Transfer-Encoding: 7bit
+
+The Cock Lane ghost attracted mass public attention in 18th-century England. 
+In 1762 an apartment in Cock Lane, a short road adjacent to London's Smithfield 
+market and a few minutes' walk from St Paul's Cathedral, was the site of 
+a reported haunting centred around three people: William Kent, a usurer 
+from Norfolk, Richard Parsons, a parish clerk, and Parsons' daughter 
+Elizabeth.

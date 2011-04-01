@@ -66,5 +66,37 @@ public class ViewMail extends AjaxCommonTest {
 		
 	}
 
+	@Test(	description = "Receive a mail with Reply-To: specified",
+			groups = { "functional" })
+	public void ViewMail_02() throws HarnessException {
+		
+		final String subject = "subject13016959916873";
+		final String from = "from13016959916873@example.com";
+		final String replyto = "replyto13016959916873@example.com";
+		final String mimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email00";
+
+		// Inject the example message(s)
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFolder));
+
+		
+		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), subject);
+		ZAssert.assertNotNull(mail, "Verify message is received");
+		ZAssert.assertEquals(from, mail.dFromRecipient.dEmailAddress, "Verify the from matches");
+		ZAssert.assertEquals(replyto, mail.dReplyToRecipient.dEmailAddress, "Verify the Reply-To matches");
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Select the message so that it shows in the reading pane
+		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+
+		// Verify the To, From, Subject, Body
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.ReplyTo), replyto, "Verify the Reply-To matches the 'Reply-To:' header");
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.From), from, "Verify the From matches the 'From:' header");
+		
+
+		
+	}
+
 
 }
