@@ -103,6 +103,7 @@ AjxDebug.BUFFER_MAX[AjxDebug.EXCEPTION]		= 100;
 AjxDebug.BUFFER_MAX[AjxDebug.CALENDAR]		= 400;
 AjxDebug.BUFFER_MAX[AjxDebug.REPLY]			= 100;
 AjxDebug.BUFFER_MAX[AjxDebug.SCROLL]		= 100;
+AjxDebug.BUFFER_MAX[AjxDebug.BAD_JSON]		= 200;
 
 AjxDebug.MAX_OUT = 25000; // max length capable of outputting an XML msg
 
