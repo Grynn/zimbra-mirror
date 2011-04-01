@@ -21,16 +21,25 @@ public class ZimbraDesktopProperties {
    }
 
    public static ZimbraDesktopProperties getInstance() {
-      if (_instance == null) {
-         synchronized (ZimbraDesktopProperties.class) {
-            if (_instance == null) {
-               _instance = new ZimbraDesktopProperties();
-               _instance.init();
+      try {
+         if (_instance == null ||
+               _instance.getSerialNumber() != XmlStringUtil.parseXmlFile(_instance.getLocalConfigFileLocation(),
+               "zdesktop_installation_key")) {
+            synchronized (ZimbraDesktopProperties.class) {
+               if (_instance == null) {
+                  _instance = new ZimbraDesktopProperties();
+                  _instance.init();
+               }
             }
          }
+         return _instance;
+         
+      } catch (IOException ie) {
+         logger.info(
+               "Getting IO Exception while getting instance of ZimbraDesktopProperties...");
       }
 
-      return _instance;
+      return null;
    }
 
    private final static String [] _possibleFiles = {
