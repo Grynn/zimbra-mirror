@@ -54,6 +54,8 @@ AjxDateUtil._daysPerMonth = {
 	11:31
 };
 
+AjxDateUtil.MAX_DAYS_PER_MONTH = 31;
+
 AjxDateUtil.WEEK_ONE_JAN_DATE = 1;
 
 AjxDateUtil._init =

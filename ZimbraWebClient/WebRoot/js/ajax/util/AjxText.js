@@ -640,6 +640,7 @@ AjxDateFormat.prototype.parse = function(s) {
 		object = date;
 	}
 	catch (e) {
+        DBG.println(AjxDebug.DBG3, e);
 		// do nothing
 	}
 	return object;
@@ -904,7 +905,11 @@ AjxDateFormat.DaySegment.prototype.format = function(date) {
 
 AjxDateFormat.DaySegment.prototype.parse = function(object, s, index) {
 	var fixedlen = this._getFixedLength();
-	var pname = /D/.test(this._s) ? "dayofyear" : "dayofmonth";
+    var dayofmonth = function(day) {
+                      if(day > AjxDateUtil.MAX_DAYS_PER_MONTH) { throw new AjxFormat.ParsingException(this._parent, this, "number too long"); }
+                      else { object["dayofmonth"] = day; }
+                     };
+	var pname = /D/.test(this._s) ? "dayofyear" : dayofmonth;
 	return AjxFormat.Segment._parseInt(object, pname, 0, s, index, fixedlen);
 };
 
