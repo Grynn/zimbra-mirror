@@ -1993,7 +1993,10 @@ ZaAccount.initMethod = function () {
 	this.id = "";
 	this.name="";
 	this.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
-    this.attrs[ZaAccount.A_zimbraForeignPrincipal] = new Array (); ;
+    this.attrs[ZaAccount.A_zimbraForeignPrincipal] = new Array ();
+    this[ZaAccount.A2_memberOf] = {directMemberList: [],indirectMemberList: [],nonMemberList: []};
+    this[ZaAccount.A2_directMemberList + "_more"] = 0;
+    this[ZaAccount.A2_indirectMemberList + "_more"] = 0;
 }
 ZaItem.initMethods["ZaAccount"].push(ZaAccount.initMethod);
 
