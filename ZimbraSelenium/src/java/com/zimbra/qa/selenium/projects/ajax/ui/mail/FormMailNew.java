@@ -39,6 +39,8 @@ public class FormMailNew extends AbsForm {
 		public static final String zBccField			= "css=[id^=zv__COMPOSE][id$=_bcc_control]";
 		public static final String zSubjectField		= "css=div[id^=zv__COMPOSE] input[id$=_subject_control]";
 		public static final String zAttachmentField     = "css=div[id$=_attachments_div]";
+		public static final String zAttachmentImage     = "css=div[id$=_attachments_div] div[class='ImgAttachment']";
+		public static final String zAttachmentCheckbox  = "css=div[id$=_attachments_div] input[name='ZmComposeView_forAttName1']";			
 		public static final String zAttachmentText      = "css=div[id$=_attachments_div] a[class='AttLink']:contains(";
 		public static final String zLinkText 			= "css=iframe[id*='DWT'][class*='Editor']";
 		
@@ -598,6 +600,15 @@ public class FormMailNew extends AbsForm {
 		
 		logger.info(myPageName() + " zIsActive() = true");
 		return (true);
+	}
+	
+	public boolean zHasAttachment(String name)  throws HarnessException {
+	    
+	    //verify clipper image existed, checkbox is checked, and  attachment file name
+	    
+	    return  sIsElementPresent(Locators.zAttachmentImage) &&
+	            sIsChecked(Locators.zAttachmentCheckbox) &&
+	            sIsElementPresent(Locators.zAttachmentText + "'" + name + "'" + ")");	    		   
 	}
 
 }

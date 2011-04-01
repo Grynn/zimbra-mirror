@@ -240,6 +240,19 @@ public class PageAddressbook extends AbsTab {
 
 		   locator = "id="+ id;
 		   page = new DialogMove(MyApplication, this);
+	    } else if ( button == Button.B_FORWARD) {
+
+		    String id = "zb__CNS__SEND_CONTACTS_IN_EMAIL_left_icon";
+
+		    // Check if the button is enabled
+		    String attrs = sGetAttribute("xpath=(//td[@id='"+ id +"']/div)@class");
+		    if ( attrs.contains("ZDisabledImage") ) {
+			  throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
+		    }
+
+		   locator = "id="+ id;
+		   page = new FormMailNew(MyApplication);	
+
 	    } else if (isAlphabetButton(button))
           {
        	   locator=DisplayContactGroup.ALPHABET_PREFIX + button.toString() + DisplayContactGroup.ALPHABET_POSTFIX;
@@ -656,6 +669,10 @@ public class PageAddressbook extends AbsTab {
 			else if (option == Button.B_PRINT) {
 				cmi=CONTEXT_MENU.CONTACT_PRINT;				
 				page = new PagePrint(MyApplication);	
+			}
+			else if (option == Button.B_FORWARD) {
+				cmi=CONTEXT_MENU.CONTACT_FORWARD;				
+				page = new FormMailNew(MyApplication);	
 			}
 			else {
 				throw new HarnessException("option " + option + " not supported");
