@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.core.*;
+import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -45,6 +46,11 @@ public class ViewMail extends AjaxCommonTest {
 		// Inject the example message(s)
 		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFolder));
 
+		
+		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), subject);
+		ZAssert.assertNotNull(mail, "Verify message is received");
+		ZAssert.assertEquals(from, mail.dFromRecipient.dEmailAddress, "Verify the from matches");
+		ZAssert.assertEquals(sender, mail.dSenderRecipient.dEmailAddress, "Verify the sender matches");
 		
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
