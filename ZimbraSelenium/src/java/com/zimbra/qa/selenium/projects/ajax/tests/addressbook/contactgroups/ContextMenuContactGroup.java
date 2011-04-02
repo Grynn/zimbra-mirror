@@ -40,7 +40,7 @@ public class ContextMenuContactGroup extends AjaxCommonTest  {
 
 
 	@Test(	description = "Right click a contact group to show a menu",
-			groups = { "smokey" })
+			groups = { "smoke" })
 	public void ShowContextMenu() throws HarnessException {
 		
 		ContactGroupItem group =  createSelectAContactGroup();

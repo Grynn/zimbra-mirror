@@ -68,7 +68,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 	
 	
 	@Test(	description = "Right click a contact to show a menu",
-			groups = { "smokey" })
+			groups = { "smoke" })
 	public void ShowContextMenu() throws HarnessException {
 		
 		ContactItem contactItem = createSelectARandomContactItem();
