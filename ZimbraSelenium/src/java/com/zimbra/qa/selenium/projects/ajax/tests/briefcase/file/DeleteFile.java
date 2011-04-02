@@ -72,16 +72,15 @@ public class DeleteFile extends AjaxCommonTest {
 		app.zTreeBriefcase
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
-		// This step is necessary because next test may be uploading the same file
-		// if ZD is not synced to ZCS, ZCS will be confused, and the next uploaded file
+		// This step is necessary because next test may be uploading the same
+		// file
+		// if ZD is not synced to ZCS, ZCS will be confused, and the next
+		// uploaded file
 		// will be deleted per previous command.
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
 		// Verify document was deleted
-		boolean isDeleted = app.zPageBriefcase.isDeleted(fileName);
-
-		ZAssert
-				.assertTrue(isDeleted,
-						"Verify document was deleted through GUI");
+		ZAssert.assertFalse(app.zPageBriefcase.isPresentInListView(fileName),
+				"Verify document was deleted through GUI");
 	}
 }

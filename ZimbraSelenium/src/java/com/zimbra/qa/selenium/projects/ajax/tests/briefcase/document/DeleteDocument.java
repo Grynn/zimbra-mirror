@@ -12,6 +12,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogDeleteConfirm;
 
@@ -24,7 +25,7 @@ public class DeleteDocument extends AjaxCommonTest {
 
 	}
 
-	@Test(description = "Create document through SOAP - delete & verify trash through GUI", groups = { "functional" })
+	@Test(description = "Create document through SOAP - delete & check trash", groups = { "smoke" })
 	public void DeleteDocument_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -79,7 +80,8 @@ public class DeleteDocument extends AjaxCommonTest {
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
 		// Verify document was deleted
-		boolean isDeleted = app.zPageBriefcase.isDeleted(docName);
+		boolean isDeleted = app.zPageBriefcase
+				.waitForDeletedFromListView(docName);
 
 		ZAssert
 				.assertTrue(isDeleted,
@@ -92,7 +94,7 @@ public class DeleteDocument extends AjaxCommonTest {
 						+ " "
 						+ docName
 						+ "</query>" + "</SearchRequest>");
-		
+
 		String id = account.soapSelectValue("//mail:SearchResponse//mail:doc",
 				"id");
 		ZAssert.assertEquals(id, docId,
@@ -151,7 +153,8 @@ public class DeleteDocument extends AjaxCommonTest {
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
 		// Verify document was deleted
-		boolean isDeleted = app.zPageBriefcase.isDeleted(docName);
+		boolean isDeleted = app.zPageBriefcase
+				.waitForDeletedFromListView(docName);
 
 		ZAssert
 				.assertTrue(isDeleted,
@@ -210,7 +213,8 @@ public class DeleteDocument extends AjaxCommonTest {
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
 		// Verify document was deleted
-		boolean isDeleted = app.zPageBriefcase.isDeleted(docName);
+		boolean isDeleted = app.zPageBriefcase
+				.waitForDeletedFromListView(docName);
 
 		ZAssert
 				.assertTrue(isDeleted,
@@ -266,10 +270,72 @@ public class DeleteDocument extends AjaxCommonTest {
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
 		// Verify document was deleted
-		boolean isDeleted = app.zPageBriefcase.isDeleted(docName);
+		boolean isDeleted = app.zPageBriefcase
+				.waitForDeletedFromListView(docName);
 
 		ZAssert
 				.assertTrue(isDeleted,
 						"Verify document was deleted through GUI");
+	}
+
+	@Test(description = "Delete multiple messages(3) by selecting check box and delete using toolbar", groups = { "functional" })
+	public void DeleteDocument_05() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+
+		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
+		// Create documents using SOAP
+		String docName1 = "docName1"
+				+ ZimbraSeleniumProperties.getUniqueString();
+		String docName2 = "docName1"
+				+ ZimbraSeleniumProperties.getUniqueString();
+		String docName3 = "docName1"
+				+ ZimbraSeleniumProperties.getUniqueString();
+		String[] documents = { docName1, docName2, docName3 };
+
+		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
+				+ ZimbraSeleniumProperties.getUniqueString() + "</body>"
+				+ "</html>");
+
+		for (String item : documents) {
+			account
+					.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
+							+ "<doc name='"
+							+ item
+							+ "' l='"
+							+ briefcaseFolder.getId()
+							+ "' ct='application/x-zimbra-doc'>"
+							+ "<content>"
+							+ contentHTML
+							+ "</content>"
+							+ "</doc>"
+							+ "</SaveDocumentRequest>");
+		}
+
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
+
+		// Select all three items
+		for (String item : documents) {
+			app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, item);
+		}
+
+		// Click toolbar delete button
+		DialogDeleteConfirm deleteConfirm = (DialogDeleteConfirm) app.zPageBriefcase
+				.zToolbarPressButton(Button.B_DELETE);
+
+		// Click OK on Confirmation dialog
+		deleteConfirm.zClickButton(Button.B_YES);
+		
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
+
+		// Verify items are deleted);
+		for (String item : documents) {
+			ZAssert.assertFalse(app.zPageBriefcase.isPresentInListView(item),
+					"Verify the item " + item
+							+ " is no longer in the list view");
+		}
 	}
 }

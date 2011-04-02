@@ -557,16 +557,17 @@ public class PageBriefcase extends AbsTab {
 
 		AbsPage page = null;
 		String listLocator = Locators.briefcaseListView;
-		String itemlocator;
+		String itemLocator = listLocator
+				+ " div[id^='zli__BDLV__'][class^='Row']";
+		String itemNameLocator = itemLocator
+				+ " td[width*='auto'] div:contains(" + docName + ")";
 
-		// listLocator = "div[id='zl__BDLV__rows'][class='DwtListView-Rows']";
-		// String rowLocator = rowLocator = "div[id^='zli__BDLV__']";
-		// rowLocator = "css=div:contains[id^='zli__BDLV__']";
-		// rowLocator = "css=div:contains[id:contains('zli__BDLV__')]";
-		if (!this.sIsElementPresent(listLocator))
-			throw new HarnessException("List View Rows is not present "
-					+ listLocator);
 		/*
+		 * listLocator = "div[id='zl__BDLV__rows'][class='DwtListView-Rows']";
+		 * String rowLocator = rowLocator = "div[id^='zli__BDLV__']"; rowLocator
+		 * = "css=div:contains[id^='zli__BDLV__']"; rowLocator =
+		 * "css=div:contains[id:contains('zli__BDLV__')]";
+		 * 
 		 * // How many items are in the table? int count =this.sGetXpathCount(
 		 * "//div[@id='zl__BDLV__rows']//div[contains(@id, 'zli__BDLV__')]");
 		 * logger.debug(myPageName() +
@@ -583,28 +584,64 @@ public class PageBriefcase extends AbsTab {
 		 * if ( itemlocator == null ) { throw new
 		 * HarnessException("Unable to locate item with name("+ name +")"); }
 		 */
-		itemlocator = listLocator + " td[width*='auto'] div:contains("
-				+ docName + ")";
 
-		if (!GeneralUtility.waitForElementPresent(this, itemlocator))
+		if (!this.sIsElementPresent(listLocator))
+			throw new HarnessException("List View Rows is not present "
+					+ listLocator);
+
+		if (!GeneralUtility.waitForElementPresent(this, itemNameLocator))
 			throw new HarnessException("Unable to locate item with name("
 					+ docName + ")");
 		if (action == Action.A_LEFTCLICK) {
 
-			zWaitForElementPresent(itemlocator);
+			zWaitForElementPresent(itemNameLocator);
 
 			// Left-Click on the item
-			this.zClick(itemlocator);
+			this.zClick(itemNameLocator);
 
 			// page = new DocumentPreview(MyApplication);
 
 		} else if (action == Action.A_DOUBLECLICK) {
-			zWaitForElementPresent(itemlocator);
+			zWaitForElementPresent(itemNameLocator);
 
 			// double-click on the item
-			this.sDoubleClick(itemlocator);
+			this.sDoubleClick(itemNameLocator);
 
 			page = new DocumentBriefcaseOpen(MyApplication, docItem);
+		} else if (action == Action.A_BRIEFCASE_CHECKBOX) {
+			String checkBoxLocator = "";
+			
+			int count = sGetCssCount(itemLocator);
+		
+			for (int i = 1; i <= count; i++) {
+				if (sIsElementPresent(itemLocator + ":nth-child(" + i
+						+ "):contains(" + docName + ")")) {
+					checkBoxLocator = itemLocator + ":nth-child(" + i
+							+ ") div[class^=ImgCheckbox]";
+					break;
+				}
+			}
+
+			if (!this.sIsElementPresent(checkBoxLocator))
+				throw new HarnessException("Checkbox locator is not present "
+						+ checkBoxLocator);
+
+			String image = this.sGetAttribute(checkBoxLocator + "@class");
+
+			if (image.equals("ImgCheckboxChecked"))
+				throw new HarnessException(
+						"Trying to check box, but it was already enabled");
+
+			// Left-Click on the Check box field
+			this.zClick(checkBoxLocator);
+
+			// No page to return
+			page = null;
+
+			// FALL THROUGH
+
+		} else {
+			throw new HarnessException("implement me!  action = " + action);
 		}
 
 		zWaitForBusyOverlay();
@@ -832,7 +869,15 @@ public class PageBriefcase extends AbsTab {
 				+ "')");
 	}
 
-	public boolean isPresent(String itemName) throws HarnessException {
+	public boolean isPresentInListView(String itemName) throws HarnessException {
+		String itemLocator = Locators.briefcaseListView
+				+ " td[width*='auto'] div:contains(" + itemName + ")";
+
+		return sIsElementPresent(itemLocator);		
+	}
+
+	public boolean waitForPresentInListView(String itemName)
+			throws HarnessException {
 		String itemLocator = Locators.briefcaseListView
 				+ " td[width*='auto'] div:contains(" + itemName + ")";
 
@@ -840,7 +885,8 @@ public class PageBriefcase extends AbsTab {
 		return true;
 	}
 
-	public boolean isDeleted(String itemName) throws HarnessException {
+	public boolean waitForDeletedFromListView(String itemName)
+			throws HarnessException {
 		String itemLocator = Locators.briefcaseListView
 				+ " td[width*='auto'] div:contains(" + itemName + ")";
 

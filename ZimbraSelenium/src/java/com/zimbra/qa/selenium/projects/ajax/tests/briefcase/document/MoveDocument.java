@@ -101,19 +101,14 @@ public class MoveDocument extends AjaxCommonTest {
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
 		// Verify document was moved from the folder
-		boolean deleted = app.zPageBriefcase.isDeleted(docName);
-
-		ZAssert
-				.assertTrue(deleted,
-						"Verify document was moved from the folder");
+		ZAssert.assertFalse(app.zPageBriefcase.isPresentInListView(docName),
+				"Verify document was moved from the folder");
 
 		// click on subfolder in tree view
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolder, true);
 
 		// Verify document was moved to the selected folder
-		boolean present = app.zPageBriefcase.isPresent(docName);
-
-		ZAssert.assertTrue(present,
+		ZAssert.assertTrue(app.zPageBriefcase.isPresentInListView(docName),
 				"Verify document was moved to the selected folder");
 	}
 
@@ -122,7 +117,8 @@ public class MoveDocument extends AjaxCommonTest {
 		logger.info("Checking for the Move Dialog ...");
 
 		// Check if the "Move Dialog is still open
-		DialogMove dialog = new DialogMove(app, ((AppAjaxClient)app).zPageBriefcase);
+		DialogMove dialog = new DialogMove(app,
+				((AppAjaxClient) app).zPageBriefcase);
 		if (dialog.zIsActive()) {
 			logger.warn(dialog.myPageName()
 					+ " was still active.  Cancelling ...");

@@ -62,20 +62,20 @@ public class EditFile extends AjaxCommonTest {
 
 		// Click on created document
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileName);
-		
+
 		// Right click on document, select Rename
-		app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, Button.B_RENAME, fileName);
-		
-		document.setDocName("name"
-				+ ZimbraSeleniumProperties.getUniqueString());
+		app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, Button.B_RENAME,
+				fileName);
+
+		document
+				.setDocName("rename" + ZimbraSeleniumProperties.getUniqueString());
 
 		fileName = document.getDocName();
 
-	    app.zPageBriefcase.rename(fileName);
-	  
-	 	// Verify document name through GUI;
-		boolean present = app.zPageBriefcase.isPresent(fileName);
+		app.zPageBriefcase.rename(fileName);
 
-		ZAssert.assertTrue(present, "Verify document name through GUI");			
+		// Verify document name through GUI;
+		ZAssert.assertTrue(app.zPageBriefcase.waitForPresentInListView(fileName),
+				"Verify document name through GUI");
 	}
 }

@@ -95,7 +95,8 @@ public class EditDocument extends AjaxCommonTest {
 		// ZAssert.assertStringContains(name, docName2,
 
 		// "Verify document name through GUI");
-		ZAssert.assertTrue(app.zPageBriefcase.isPresent(docName2),
+		ZAssert.assertTrue(app.zPageBriefcase
+				.waitForPresentInListView(docName2),
 				"Verify document name through GUI");
 
 		// delete file upon test completion
@@ -469,7 +470,7 @@ public class EditDocument extends AjaxCommonTest {
 		// ZAssert.assertStringContains(name, docName,
 
 		// "Verify document name through GUI");
-		boolean present = app.zPageBriefcase.isPresent(docName2);
+		boolean present = app.zPageBriefcase.waitForPresentInListView(docName2);
 
 		ZAssert.assertTrue(present, "Verify document name through GUI");
 

@@ -61,7 +61,7 @@ public class DisplayDocument extends AjaxCommonTest {
 		// String name = app.zPageBriefcase.getText(docName);
 		// ZAssert.assertEquals(name, docName,
 		// "Verify document name through GUI");
-		boolean present = app.zPageBriefcase.isPresent(docName);
+		boolean present = app.zPageBriefcase.waitForPresentInListView(docName);
 
 		ZAssert.assertTrue(present, "Verify document name through GUI");
 

@@ -59,7 +59,7 @@ public class MoveFile extends AjaxCommonTest {
 		DocumentItem document = new DocumentItem();
 
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-		+ "/data/public/other/putty.log";
+				+ "/data/public/other/putty.log";
 
 		String fileName = document.getFileName(filePath);
 
@@ -79,7 +79,7 @@ public class MoveFile extends AjaxCommonTest {
 
 		"</SaveDocumentRequest>");
 
-		//account.soapSelectNode("//mail:SaveDocumentResponse", 1);
+		// account.soapSelectNode("//mail:SaveDocumentResponse", 1);
 
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
@@ -100,17 +100,14 @@ public class MoveFile extends AjaxCommonTest {
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
 		// Verify document was moved from the folder
-		boolean deleted = app.zPageBriefcase.isDeleted(fileName);
-
-		ZAssert
-				.assertTrue(deleted,
-						"Verify document was moved from the folder");
+		ZAssert.assertFalse(app.zPageBriefcase.isPresentInListView(fileName),
+				"Verify document was moved from the folder");
 
 		// click on subfolder in tree view
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolder, true);
 
 		// Verify document was moved to the selected folder
-		boolean present = app.zPageBriefcase.isPresent(fileName);
+		boolean present = app.zPageBriefcase.isPresentInListView(fileName);
 
 		ZAssert.assertTrue(present,
 				"Verify document was moved to the selected folder");
@@ -121,7 +118,8 @@ public class MoveFile extends AjaxCommonTest {
 		logger.info("Checking for the Move Dialog ...");
 
 		// Check if the "Move Dialog is still open
-		DialogMove dialog = new DialogMove(app, ((AppAjaxClient)app).zPageBriefcase);
+		DialogMove dialog = new DialogMove(app,
+				((AppAjaxClient) app).zPageBriefcase);
 		if (dialog.zIsActive()) {
 			logger.warn(dialog.myPageName()
 					+ " was still active.  Cancelling ...");
