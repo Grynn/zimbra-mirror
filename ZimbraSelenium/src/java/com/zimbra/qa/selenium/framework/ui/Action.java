@@ -51,6 +51,9 @@ public class Action {
 	public static final Action A_TREE_EXPAND = new Action("A_TREE_EXPAND");
 	public static final Action A_TREE_COLLAPSE = new Action("A_TREE_COLLAPSE");
 	
+	// Briefcase page actions
+	public static final Action A_BRIEFCASE_CHECKBOX = new Action("A_BRIEFCASE_CHECKBOX");
+	
 	private final String ID;
 	
 	protected Action(String id) {

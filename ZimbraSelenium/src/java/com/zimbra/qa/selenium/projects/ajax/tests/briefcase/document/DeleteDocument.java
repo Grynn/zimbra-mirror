@@ -24,12 +24,15 @@ public class DeleteDocument extends AjaxCommonTest {
 
 	}
 
-	@Test(description = "Create document through SOAP - delete & verify through GUI", groups = { "smoke" })
+	@Test(description = "Create document through SOAP - delete & verify trash through GUI", groups = { "functional" })
 	public void DeleteDocument_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
 		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
 				SystemFolder.Briefcase);
+
+		FolderItem trashFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Trash);
 
 		// Create document item
 		DocumentItem document = new DocumentItem();
@@ -53,6 +56,9 @@ public class DeleteDocument extends AjaxCommonTest {
 						+ "</content>"
 						+ "</doc>"
 						+ "</SaveDocumentRequest>");
+
+		String docId = account.soapSelectValue(
+				"//mail:SaveDocumentResponse//mail:doc", "id");
 
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
@@ -78,6 +84,19 @@ public class DeleteDocument extends AjaxCommonTest {
 		ZAssert
 				.assertTrue(isDeleted,
 						"Verify document was deleted through GUI");
+
+		account
+				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
+						+ "<query>in:"
+						+ trashFolder.getName()
+						+ " "
+						+ docName
+						+ "</query>" + "</SearchRequest>");
+		
+		String id = account.soapSelectValue("//mail:SearchResponse//mail:doc",
+				"id");
+		ZAssert.assertEquals(id, docId,
+				"Verify the message was moved to the trash folder");
 	}
 
 	@Test(description = "Create document through SOAP - delete using Delete Key & verify through GUI", groups = { "functional" })
@@ -253,5 +272,4 @@ public class DeleteDocument extends AjaxCommonTest {
 				.assertTrue(isDeleted,
 						"Verify document was deleted through GUI");
 	}
-
 }
