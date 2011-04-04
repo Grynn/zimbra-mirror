@@ -5,6 +5,7 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,6 +21,7 @@ import org.xml.sax.SAXException;
 
 import com.zimbra.qa.selenium.framework.util.OperatingSystem;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 
 public class BuildUtility {
    private static final StringBuilder _buildBaseUrl = new StringBuilder("http://zre-matrix.eng.vmware.com");
@@ -202,7 +204,62 @@ public class BuildUtility {
    }
 
    /**
-    * Downloads the build from build URL based on the given URL
+    * Delete all the old Desktop builds
+    * @param dir Directory where to delete the old desktop builds
+    */
+   public static void deleteOldBuilds(File dir) {
+
+      FilenameFilter filter = new FilenameFilter() {
+
+         public boolean accept(File dir, String name) {
+            String fileExtension = null;
+            String productName = null;
+
+            AppType appType = ZimbraSeleniumProperties.getAppType();
+
+            switch (appType) {
+            case DESKTOP:
+               productName = "zdesktop";
+               break;
+            default:
+               logger.warn("Not supported!");
+            }
+
+            switch (OperatingSystem.getOSType()) {
+            case WINDOWS: case WINDOWS_XP:
+               fileExtension = ".msi";
+               break;
+            case LINUX: case MAC:
+               fileExtension = ".tgz";
+               break;
+            }
+
+            return name.toLowerCase().contains(productName) &&
+                  name.toLowerCase().contains(fileExtension);
+         }
+      };
+
+      String[] fileNames = dir.list(filter);
+      File[] files = new File[fileNames.length];
+      String dirPath = dir.getAbsolutePath();
+
+      if (!dirPath.trim().endsWith(Character.toString(File.separatorChar))) {
+         dirPath = dirPath.trim() + File.separatorChar;
+      }
+
+      logger.debug("Files to be deleted are: ");
+      for (int i = 0; i < fileNames.length; i++) {
+         logger.debug(fileNames[i]);
+         String absolutePath = dirPath + fileNames[i]; 
+         logger.debug("Absolute Path is: " + absolutePath);
+         files[i] = new File(absolutePath);
+         files[i].delete();
+      }
+
+   }
+   
+   /**
+    * Deletes the previous builds and downloads the build from build URL based on the given URL
     * @param downloadDest Destination where to put the file in.
     * @param buildUrl Build URL to be downloaded
     * @return (String) Downloaded file path
@@ -223,19 +280,11 @@ public class BuildUtility {
          OperatingSystem.OsType osType = OperatingSystem.getOSType();
          logger.debug("OS Type is: " + osType.toString());
 
-         String fileSeparator = null;
-         switch (osType) {
-         case WINDOWS: case WINDOWS_XP:
-            fileSeparator = "\\";
-            break;
-         case LINUX: case MAC:
-            fileSeparator = "/";
-            break;
+         if (!downloadDest.trim().endsWith(Character.toString(File.separatorChar))) {
+            downloadDest = downloadDest.trim() + File.separatorChar;
          }
 
-         if (!downloadDest.trim().endsWith(fileSeparator)) {
-            downloadDest = downloadDest.trim() + fileSeparator;
-         }
+         deleteOldBuilds(new File(downloadDest));
 
          logger.debug("Now downloading the file to location: " + downloadDest + " ...");
          in = new BufferedInputStream(new java.net.URL(url).openStream());
