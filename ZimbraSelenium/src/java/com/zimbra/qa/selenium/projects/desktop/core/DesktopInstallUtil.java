@@ -13,6 +13,7 @@ import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.OperatingSystem;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.ZimbraDesktopProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.BuildUtility.ARCH;
 import com.zimbra.qa.selenium.framework.util.BuildUtility.BRANCH;
@@ -304,6 +305,20 @@ public class DesktopInstallUtil {
          logger.info("Desktop App doesn't exist, so quitting the uninstallation...");
       }
 
+      logger.info("Removing existing config file");
+
+      ZimbraDesktopProperties.getInstance();
+      if (ZimbraDesktopProperties.getUserFolder() != null) {
+         File localProfile = new File(ZimbraDesktopProperties.getUserFolder());
+         logger.debug("Deleting Local profile...");
+         if (GeneralUtility.deleteDirectory(localProfile)) {
+            logger.debug("Local Profile folders cannot be deleted.");
+         } else {
+            logger.debug("Local Profile folders are successfully deleted.");
+         }
+      }
+
+      ZimbraDesktopProperties.reset();
       _desktopRegistryPath = null;
    }
 
@@ -417,7 +432,8 @@ public class DesktopInstallUtil {
          } 
 
          if (registry != null) {
-            if (!registry.trim().equals("")) {
+            if (!registry.trim().equals("") &&
+                  !registry.trim().toLowerCase().contains("error")) {
                isDesktopInstalled = true;
                logger.debug("readRegistry: " + registry);
             }

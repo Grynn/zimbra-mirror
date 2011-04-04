@@ -248,6 +248,15 @@ public class ZimbraSeleniumProperties {
 		   logger.info("AppType is: " + appType);
 
 		      ZimbraDesktopProperties zdp = ZimbraDesktopProperties.getInstance();
+		      int maxRetry = 30;
+		      int retry = 0;
+		      while (retry < maxRetry && zdp.getSerialNumber() == null) {
+		         logger.debug("Local Config file is still not ready");
+		         SleepUtil.sleep(1000);
+		         retry ++;
+		         zdp = ZimbraDesktopProperties.getInstance();
+		      }
+
 		      port = zdp.getConnectionPort();
 		      host = ZimbraSeleniumProperties.getStringProperty("desktop.server.host", "localhost");
 		      path = "/desktop/login.jsp";

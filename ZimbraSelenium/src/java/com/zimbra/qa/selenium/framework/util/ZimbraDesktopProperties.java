@@ -20,26 +20,51 @@ public class ZimbraDesktopProperties {
       logger.debug("New ZimbraDesktopProperties");
    }
 
+   public static synchronized void reset() {
+      _instance = null;
+   }
+
    public static ZimbraDesktopProperties getInstance() {
       try {
          if (_instance == null ||
-               _instance.getSerialNumber() != XmlStringUtil.parseXmlFile(_instance.getLocalConfigFileLocation(),
-               "zdesktop_installation_key")) {
+               _instance.getLocalConfigFileLocation() == null ||
+               !_instance.getSerialNumber().equals(XmlStringUtil.parseXmlFile(_instance.getLocalConfigFileLocation(),
+               "zdesktop_installation_key"))) {
             synchronized (ZimbraDesktopProperties.class) {
-               if (_instance == null) {
-                  _instance = new ZimbraDesktopProperties();
-                  _instance.init();
-               }
+               _instance = new ZimbraDesktopProperties();
+               _instance.init();
             }
          }
          return _instance;
-         
+
       } catch (IOException ie) {
          logger.info(
                "Getting IO Exception while getting instance of ZimbraDesktopProperties...");
       }
 
       return null;
+   }
+
+   public static String getUserFolder() {
+      if (_instance == null ||
+            _instance._localConfigFileLocation == null) {
+         logger.debug("User Folder is NULL!");
+         return null;
+      } else {
+         String output = null;
+
+         switch(OperatingSystem.getOSType()) {
+         case WINDOWS: case WINDOWS_XP:
+            output = _instance._localConfigFileLocation.split("Zimbra Desktop")[0]; 
+            break;
+         case LINUX: case MAC:
+            output = _instance._localConfigFileLocation.split("conf")[0];
+            break;
+         }
+
+         logger.debug("User Folder is: " + output);
+         return output;
+      }
    }
 
    private final static String [] _possibleFiles = {
