@@ -15,6 +15,8 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogDeleteConfirm;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DeleteDocument extends AjaxCommonTest {
 
@@ -79,7 +81,7 @@ public class DeleteDocument extends AjaxCommonTest {
 		app.zTreeBriefcase
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
-		// Verify document was deleted
+		// Verify document was deleted from the list
 		boolean isDeleted = app.zPageBriefcase
 				.waitForDeletedFromListView(docName);
 
@@ -87,6 +89,7 @@ public class DeleteDocument extends AjaxCommonTest {
 				.assertTrue(isDeleted,
 						"Verify document was deleted through GUI");
 
+		// Verify document moved to Trash
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
 						+ "<query>in:"
@@ -285,14 +288,16 @@ public class DeleteDocument extends AjaxCommonTest {
 		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
 				SystemFolder.Briefcase);
 
+		FolderItem trashFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Trash);
+
 		// Create documents using SOAP
-		String docName1 = "docName1"
-				+ ZimbraSeleniumProperties.getUniqueString();
-		String docName2 = "docName1"
-				+ ZimbraSeleniumProperties.getUniqueString();
-		String docName3 = "docName1"
-				+ ZimbraSeleniumProperties.getUniqueString();
-		String[] documents = { docName1, docName2, docName3 };
+		String[] documents = {
+				"docName1" + ZimbraSeleniumProperties.getUniqueString(),
+				"docName2" + ZimbraSeleniumProperties.getUniqueString(),
+				"docName3" + ZimbraSeleniumProperties.getUniqueString() };
+
+		HashMap<String, String> hm = new HashMap<String, String>();
 
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
 				+ ZimbraSeleniumProperties.getUniqueString() + "</body>"
@@ -311,6 +316,11 @@ public class DeleteDocument extends AjaxCommonTest {
 							+ "</content>"
 							+ "</doc>"
 							+ "</SaveDocumentRequest>");
+
+			hm.put(account.soapSelectValue(
+					"//mail:SaveDocumentResponse//mail:doc", "name"), account
+					.soapSelectValue("//mail:SaveDocumentResponse//mail:doc",
+							"id"));
 		}
 
 		// refresh briefcase page
@@ -327,15 +337,37 @@ public class DeleteDocument extends AjaxCommonTest {
 
 		// Click OK on Confirmation dialog
 		deleteConfirm.zClickButton(Button.B_YES);
-		
+
 		// refresh briefcase page
-		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
+		app.zTreeBriefcase
+				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
 		// Verify items are deleted);
-		for (String item : documents) {
-			ZAssert.assertFalse(app.zPageBriefcase.isPresentInListView(item),
-					"Verify the item " + item
+		for (Map.Entry<String, String> entry : hm.entrySet()) {
+			String name = entry.getKey();
+			String docId = entry.getValue();
+
+			// Verify document was deleted from the list
+			ZAssert.assertFalse(app.zPageBriefcase.isPresentInListView(name),
+					"Verify the document " + name
 							+ " is no longer in the list view");
+
+			// Verify document moved to Trash
+			account
+					.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
+							+ "<query>in:"
+							+ trashFolder.getName()
+							+ " "
+							+ name
+							+ "</query>" + "</SearchRequest>");
+
+			String id = account.soapSelectValue(
+					"//mail:SearchResponse//mail:doc", "id");
+
+			ZAssert
+					.assertEquals(docId, id, "Verify the deleted document: "
+							+ name + " id: " + docId
+							+ " was moved to the trash folder");
 		}
 	}
 }
