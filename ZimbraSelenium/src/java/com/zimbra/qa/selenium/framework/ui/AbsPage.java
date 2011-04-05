@@ -135,6 +135,14 @@ public abstract class AbsPage extends AbsSeleniumObject {
 	 */
 	public void zDragAndDrop(String locatorSource, String locatorDestination) throws HarnessException {
 
+		if ( !this.sIsElementPresent(locatorSource) ) {
+			throw new HarnessException("locator (source) cannot be found: "+ locatorSource);
+		}
+		
+		if ( !this.sIsElementPresent(locatorDestination) ) {
+			throw new HarnessException("locator (destination) cannot be found: "+ locatorDestination);
+		}
+		
 		SleepUtil.sleep(2000);
 		
 		// Get the coordinates for the locators
