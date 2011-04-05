@@ -52,7 +52,8 @@ public class CreateMountpointTag extends ZimbraSimpleTag {
 
     public void doTag() throws JspException, IOException {
         try {
-            ZFolderBean result = new ZFolderBean(getMailbox().createMountpoint(mParentId, mName, mView, mColor, mFlags, mOwnerBy, mOwner, mSharedItemBy, mSharedItem));
+            ZFolderBean result = new ZFolderBean(getMailbox().createMountpoint(
+                    mParentId, mName, mView, mColor, mFlags, mOwnerBy, mOwner, mSharedItemBy, mSharedItem, false));
             getJspContext().setAttribute(mVar, result, PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
             throw new JspTagException(e);

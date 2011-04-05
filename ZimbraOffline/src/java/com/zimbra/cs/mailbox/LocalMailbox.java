@@ -59,7 +59,7 @@ public class LocalMailbox extends DesktopMailbox {
             } catch (NoSuchItemException e) {
                 createMountpoint(null, ID_FOLDER_NOTIFICATIONS, accountId,
                     accountId, ID_FOLDER_USER_ROOT,
-                    MailItem.Type.UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB);
+                    MailItem.Type.UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, false);
             }
         }
     }

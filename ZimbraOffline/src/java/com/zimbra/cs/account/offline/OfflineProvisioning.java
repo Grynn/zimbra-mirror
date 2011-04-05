@@ -1044,7 +1044,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             mbox.createMountpoint(null,
                 DesktopMailbox.ID_FOLDER_NOTIFICATIONS, accountId,
                 accountId, Mailbox.ID_FOLDER_USER_ROOT,
-                MailItem.Type.UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB);
+                MailItem.Type.UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, false);
         }
     }
 

@@ -58,13 +58,15 @@ public class OfflineCreateMountpoint extends OfflineServiceProxy {
         String ownerName = eMount.getAttribute(MailConstants.A_OWNER_NAME);
         int remoteId = (int) eMount.getAttributeLong(MailConstants.A_REMOTE_ID);
         int mod_content = (int) eMount.getAttributeLong(MailConstants.A_REVISION, -1);
+        boolean reminderEnabled = eMount.getAttributeBool(MailConstants.A_REMINDER, false);
 
         OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ((ZcsMailbox)mbox).getOfflineAccount());
-        CreateMountpoint redo = new CreateMountpoint(mbox.getId(), parentId, name, ownerId, remoteId, view, flags, new MailItem.Color(color));
+        CreateMountpoint redo = new CreateMountpoint(mbox.getId(), parentId, name, ownerId, remoteId, view, flags,
+                new MailItem.Color(color), reminderEnabled);
         redo.setId(id);
         redo.setChangeId(mod_content);
         try {
-            mbox.createMountpoint(new TracelessContext(redo), parentId, name, ownerId, remoteId, view, flags, color);
+            mbox.createMountpoint(new TracelessContext(redo), parentId, name, ownerId, remoteId, view, flags, color, reminderEnabled);
         } catch (ServiceException e) {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS)
                 throw e;

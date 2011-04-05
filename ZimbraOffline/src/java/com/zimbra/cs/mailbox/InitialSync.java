@@ -477,6 +477,7 @@ public class InitialSync {
         String url = elt.getAttribute(MailConstants.A_URL, null);
 
         boolean relocated = elt.getAttributeBool(A_RELOCATED, false) || (id != Mailbox.ID_FOLDER_ROOT && !name.equals(elt.getAttribute(MailConstants.A_NAME)));
+        boolean reminderEnabled = elt.getAttributeBool(MailConstants.A_REMINDER, false);
 
         RedoableOp redo;
         String ownerId = null;
@@ -502,7 +503,7 @@ public class InitialSync {
             remoteId = (int)elt.getAttributeLong(MailConstants.A_REMOTE_ID);
             OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ombx.getOfflineAccount());
 
-            redo = new CreateMountpoint(ombx.getId(), parentId, name, ownerId, remoteId, view, flags, new MailItem.Color(color));
+            redo = new CreateMountpoint(ombx.getId(), parentId, name, ownerId, remoteId, view, flags, new MailItem.Color(color), reminderEnabled);
             ((CreateMountpoint)redo).setId(id);
         }
         redo.start(timestamp > 0 ? timestamp : System.currentTimeMillis());
@@ -512,7 +513,7 @@ public class InitialSync {
                 // don't care about current feed syncpoint; sync can't be done offline
                 ombx.createFolder(new TracelessContext(redo), name, parentId, system, view, flags, color, url);
             } else {
-                ombx.createMountpoint(new TracelessContext(redo), parentId, name, ownerId, remoteId, view, flags, color);
+                ombx.createMountpoint(new TracelessContext(redo), parentId, name, ownerId, remoteId, view, flags, color, reminderEnabled);
             }
             if (relocated) {
                 ombx.setChangeMask(sContext, id, itemType, Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
