@@ -108,15 +108,18 @@ public abstract class AbsPage extends AbsSeleniumObject {
 	}
 	
 
-	private static class Point {
+	private static class Coordinate {
 		final int X;
 		final int Y;
 		
-		public Point(int x, int y) {
+		public Coordinate(int x, int y) {
 			this.X = x;
 			this.Y = y;
 		}
 		
+		/** 
+		 * Print this coordinate in "x,y" format
+		 */
 		public String toString() {
 			return (this.X + "," + this.Y);
 		}
@@ -124,20 +127,26 @@ public abstract class AbsPage extends AbsSeleniumObject {
 	}
 	
 	
+	/**
+	 * Drag and Drop a locator onto another locator
+	 * @param locatorSource The locator item to drag
+	 * @param locatorDestination The locator item to drop onto
+	 * @throws HarnessException
+	 */
 	public void zDragAndDrop(String locatorSource, String locatorDestination) throws HarnessException {
 
 		SleepUtil.sleep(2000);
 		
 		// Get the coordinates for the locators
-		Point destination = new Point(
+		Coordinate destination = new Coordinate(
 				this.sGetElementPositionLeft(locatorDestination), 
 				this.sGetElementPositionTop(locatorDestination));
 		
-		Point source = new Point(
+		Coordinate source = new Coordinate(
 				this.sGetElementPositionLeft(locatorSource), 
 				this.sGetElementPositionTop(locatorSource));
 		
-		Point relative = new Point(
+		Coordinate relative = new Coordinate(
 				destination.X - source.X,
 				destination.Y - source.Y);
 		
@@ -148,7 +157,7 @@ public abstract class AbsPage extends AbsSeleniumObject {
 		// Hold the mouse down on the source
 		this.sMouseDown(locatorSource);
 		
-		// Drag the moust to the destination, plus the offset
+		// Drag the mouse to the destination, plus the offset
 		this.sMouseMoveAt(locatorDestination, relative.toString());
 		
 		// Wait a bit for things to happen
@@ -157,7 +166,7 @@ public abstract class AbsPage extends AbsSeleniumObject {
 		// Release the mouse
 		this.sMouseUpAt(locatorDestination, relative.toString());
 		
-		// Wait for busy overlay?
+		// Wait for the client to come back
 		this.zWaitForBusyOverlay();
 
 		
