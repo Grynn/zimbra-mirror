@@ -67,6 +67,7 @@ public class ViewContact extends AjaxCommonTest  {
 		 // Create  contacts  
 		ContactItem contact1 = createContact("B");
 		ContactItem contact2 = createContact("5");
+		ContactItem contact3 = createContact("b");
 		
     	    
         // Refresh the view, to pick up the new contact
@@ -83,15 +84,14 @@ public class ViewContact extends AjaxCommonTest  {
 		int countContact=0;
 		for (ContactItem ci : contacts) {
 			if (ci.fileAs.equals(contact1.fileAs) ||
-			    ci.fileAs.equals(contact2.fileAs) ) 
+			    ci.fileAs.equals(contact2.fileAs) ||
+			    ci.fileAs.equals(contact3.fileAs) ) 
 			{
 				countContact++;
-	            if (countContact == 2) 
-	 			   break;
 			}			
 		}
 	
-		ZAssert.assertTrue(countContact==2, "Verify contact (" + contact1.fileAs + " and "+ contact2.fileAs + ") displayed ");
+		ZAssert.assertTrue(countContact==3, "Verify contact (" + contact1.fileAs + "," + contact2.fileAs + " and "+ contact3.fileAs + ") displayed ");
 	}
 
 	@Test(	description = "Click Alphabetbar button 123: Verify contact started with digit listed and A-Z not-listed ",
@@ -101,7 +101,7 @@ public class ViewContact extends AjaxCommonTest  {
 		 // Create  contacts  
 		ContactItem contact1 = createContact("B");
 		ContactItem contact2 = createContact("5");
-	
+		ContactItem contact3 = createContact("b");
         
         // Refresh the view, to pick up the new contact
         FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
@@ -119,16 +119,17 @@ public class ViewContact extends AjaxCommonTest  {
 			{
 	            countContact++;
 			}
-			if (ci.fileAs.equals(contact1.fileAs)) {
+			if (ci.fileAs.equals(contact1.fileAs)  ||
+				ci.fileAs.equals(contact3.fileAs)) {
 				countContact--; 
 			}
 				
 		}
 	
-		ZAssert.assertTrue(countContact==1, "Verify contact  " + contact1.fileAs + " not displayed, and "+ contact2.fileAs + " displayed ");
+		ZAssert.assertTrue(countContact==1, "Verify contact  " + contact1.fileAs + "," + contact3.fileAs + " not displayed, and "+ contact2.fileAs + " displayed ");
 	}
 
-	@Test(	description = "Click Alphabetbar button B: Verify only contact started with B is listed ",
+	@Test(	description = "Click Alphabetbar button B: Verify only contact started with B|b is listed ",
 			groups = { "functional" })
 	public void DisplayContact_04() throws HarnessException {
 	
@@ -136,6 +137,7 @@ public class ViewContact extends AjaxCommonTest  {
 		ContactItem contact1 = createContact("B");
 		ContactItem contact2 = createContact("5");
 		ContactItem contact3 = createContact("V");
+		ContactItem contact4 = createContact("b");
 
       
         
@@ -151,7 +153,7 @@ public class ViewContact extends AjaxCommonTest  {
 		List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();
 		int countContact= 0;
 		for (ContactItem ci : contacts) {
-			if (ci.fileAs.equals(contact1.fileAs)) 
+			if (ci.fileAs.equals(contact1.fileAs)  || ci.fileAs.equals(contact4.fileAs) ) 
 			{
 				countContact++;
 			}
@@ -161,7 +163,7 @@ public class ViewContact extends AjaxCommonTest  {
 				
 		}
 	
-		ZAssert.assertTrue(countContact==1, "Verify contact " + contact1.fileAs + " displayed, and " + contact2.fileAs + "," + contact3.fileAs + " not displayed ");
+		ZAssert.assertTrue(countContact==2, "Verify contact " + contact1.fileAs + "," + contact4.fileAs + " displayed, and " + contact2.fileAs + "," + contact3.fileAs + " not displayed ");
 	}
 
 }

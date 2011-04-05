@@ -67,6 +67,7 @@ public class ViewContactGroup extends AjaxCommonTest  {
 		 // Create  contact groups 
 		ContactGroupItem group1 = createContactGroup("B");    
     	ContactGroupItem group2 = createContactGroup("5");
+    	ContactGroupItem group3 = createContactGroup("b");    
     	
         
         // Refresh the view, to pick up the new contact
@@ -83,15 +84,14 @@ public class ViewContactGroup extends AjaxCommonTest  {
 		int countGroup=0;
 		for (ContactItem ci : contacts) {
 			if (ci.fileAs.equals(group1.fileAs) ||
-			    ci.fileAs.equals(group2.fileAs) ) 
+				ci.fileAs.equals(group2.fileAs) ||
+			    ci.fileAs.equals(group3.fileAs) ) 
 			{
 	            countGroup++;
-	            if (countGroup == 2) 
-	 			   break;
-			}			
+	    	}			
 		}
 	
-		ZAssert.assertTrue(countGroup==2, "Verify contact groups (" + group1.fileAs + " and "+ group2.fileAs + ") displayed ");
+		ZAssert.assertTrue(countGroup==3, "Verify contact groups (" + group1.fileAs + "," + group2.fileAs + " and "+ group3.fileAs + ") displayed ");
 	}
 
 	@Test(	description = "Click Alphabetbar button 123: Verify contact groups started with digit listed and A-Z not-listed ",
@@ -101,7 +101,7 @@ public class ViewContactGroup extends AjaxCommonTest  {
 		 // Create  contact groups 
 		ContactGroupItem group1 = createContactGroup("B");    
     	ContactGroupItem group2 = createContactGroup("5");
-    	
+    	ContactGroupItem group3 = createContactGroup("b");
         
         // Refresh the view, to pick up the new contact
         FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
@@ -119,13 +119,15 @@ public class ViewContactGroup extends AjaxCommonTest  {
 			{
 	            countGroup++;
 			}
-			if (ci.fileAs.equals(group1.fileAs)) {
+			if (ci.fileAs.equals(group1.fileAs) ||
+				ci.fileAs.equals(group3.fileAs) 	
+			    ) {
 				countGroup--; 
 			}
 				
 		}
 	
-		ZAssert.assertTrue(countGroup==1, "Verify contact groups " + group1.fileAs + " not displayed, and "+ group2.fileAs + " displayed ");
+		ZAssert.assertTrue(countGroup==1, "Verify contact groups " + group1.fileAs + "," + group3.fileAs + " not displayed, and "+ group2.fileAs + " displayed ");
 	}
 
 	@Test(	description = "Click Alphabetbar button B: Verify only contact groups started with B|b is listed ",
