@@ -256,7 +256,7 @@ ZaBulkProvision.getMyXModel = function () {
 	        {id:ZaBulkProvision.A2_SMTPHost, type:_STRING_, ref:ZaBulkProvision.A2_SMTPHost},
 	        {id:ZaBulkProvision.A2_SMTPPort, type:_NUMBER_, ref:ZaBulkProvision.A2_SMTPPort},
 	        {id:ZaBulkProvision.A2_IMAPHost, type:_STRING_, ref:ZaBulkProvision.A2_IMAPHost},
-	        {id:ZaBulkProvision.A2_IMAPPort, type:_NUMBER_, ref:ZaBulkProvision.A2_IMAPPort}
+	        {id:ZaBulkProvision.A2_IMAPPort, type:_NUMBER_, ref:ZaBulkProvision.A2_IMAPPort,defaultValue:993}
         ]
     }
 

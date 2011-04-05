@@ -145,7 +145,11 @@ ZaBulkDataImportXWizard.prototype.previewCallback = function(params, resp) {
 		}		
 		if(response[ZaBulkProvision.A2_IMAPPort] && response[ZaBulkProvision.A2_IMAPPort][0] && response[ZaBulkProvision.A2_IMAPPort][0]._content) {
 			this._localXForm.setInstanceValue(response[ZaBulkProvision.A2_IMAPPort][0]._content,ZaBulkProvision.A2_IMAPPort);
-		}			
+		} else {
+			if(params.nextStep == ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS) {
+				this._localXForm.setInstanceValue(993,ZaBulkProvision.A2_IMAPPort);
+			}
+		}
 		if(response[ZaBulkProvision.A2_connectionType] && response[ZaBulkProvision.A2_connectionType][0] && response[ZaBulkProvision.A2_connectionType][0]._content) {
 			this._localXForm.setInstanceValue(response[ZaBulkProvision.A2_connectionType][0]._content,ZaBulkProvision.A2_connectionType);
 		}
@@ -964,11 +968,20 @@ ZaBulkDataImportXWizard.myXFormModifier = function(xFormObject,entry) {
 	cases.push(case_acct_picker);
 	var case_imap_options = {type:_CASE_, numCols:2, colSizes:["250px","380px"],tablGroupKey:ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS,caseKey:ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS,
 			items:[
-			       {type:_TEXTFIELD_,label:com_zimbra_bulkprovision.IMAPHost, ref:ZaBulkProvision.A2_IMAPHost, visibilityChecks:[],enableDisableChecks:[]},
-			       {type:_TEXTFIELD_,label:com_zimbra_bulkprovision.IMAPPort, ref:ZaBulkProvision.A2_IMAPPort, visibilityChecks:[],enableDisableChecks:[]},
 			       {ref:ZaBulkProvision.A2_connectionType, type:_OSELECT1_, label:com_zimbra_bulkprovision.IMAPConnectionType,labelLocation:_LEFT_,
-			    	   visibilityChecks:[],enableDisableChecks:[]
+			    	   visibilityChecks:[],enableDisableChecks:[],
+			    	   elementChanged: function(elementValue,instanceValue, event) {
+			    	   		this.setInstanceValue(elementValue);
+			    	   		if(elementValue == ZaBulkProvision.CONNECTION_CLEARTEXT) {
+			    	   			this.setInstanceValue(143,ZaBulkProvision.A2_IMAPPort);	
+			    	   		} else {
+			    	   			this.setInstanceValue(993,ZaBulkProvision.A2_IMAPPort);
+			    	   		}
+			    	   		
+					   }			    	   
 			       },
+			       {type:_TEXTFIELD_,label:com_zimbra_bulkprovision.IMAPHost, ref:ZaBulkProvision.A2_IMAPHost, visibilityChecks:[],enableDisableChecks:[]},
+			       {type:_TEXTFIELD_,label:com_zimbra_bulkprovision.IMAPPort, ref:ZaBulkProvision.A2_IMAPPort, visibilityChecks:[],enableDisableChecks:[],bmolsnr:true},
 			       {ref:ZaBulkProvision.A2_useAdminLogin,  type:_CHECKBOX_,  
 			    	   label:com_zimbra_bulkprovision.UseIMAPAdminCredentialsChkBx,trueValue:"1", falseValue:"0",visibilityChecks:[],enableDisableChecks:[]
 			       },			       
