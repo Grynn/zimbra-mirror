@@ -10,8 +10,6 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
-import com.zimbra.qa.selenium.projects.ajax.ui.DragAndDrop;
-
 public class DragAndDropFolder extends AjaxCommonTest{
 
 	public DragAndDropFolder(){
@@ -58,8 +56,9 @@ public class DragAndDropFolder extends AjaxCommonTest{
 		// Click on Get Mail to refresh the folder list
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
-		DragAndDrop.zDragAndDrop(
-				"//td[contains(@id, 'zti__main_Mail__" + subfolder1.getId() + "_textCell') and contains(text(), '"+ name1 + "')]", "//td[contains(@id, 'zti__main_Mail__" + subfolder2.getId() + "_textCell') and contains(text(),'"+ name2 + "')]");
+		app.zPageMail.zDragAndDrop(
+				"//td[contains(@id, 'zti__main_Mail__" + subfolder1.getId() + "_textCell') and contains(text(), '"+ name1 + "')]",
+				"//td[contains(@id, 'zti__main_Mail__" + subfolder2.getId() + "_textCell') and contains(text(),'"+ name2 + "')]");
 
 
 		// Verify the folder is now in the other subfolder

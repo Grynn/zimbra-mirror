@@ -1,14 +1,11 @@
 package com.zimbra.qa.selenium.framework.ui;
 
-import java.awt.AWTException;
-import java.awt.Robot;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.*;
 
 
 /**
@@ -111,6 +108,61 @@ public abstract class AbsPage extends AbsSeleniumObject {
 	}
 	
 
+	private static class Point {
+		final int X;
+		final int Y;
+		
+		public Point(int x, int y) {
+			this.X = x;
+			this.Y = y;
+		}
+		
+		public String toString() {
+			return (this.X + "," + this.Y);
+		}
+		
+	}
+	
+	
+	public void zDragAndDrop(String locatorSource, String locatorDestination) throws HarnessException {
+
+		SleepUtil.sleep(2000);
+		
+		// Get the coordinates for the locators
+		Point destination = new Point(
+				this.sGetElementPositionLeft(locatorDestination), 
+				this.sGetElementPositionTop(locatorDestination));
+		
+		Point source = new Point(
+				this.sGetElementPositionLeft(locatorSource), 
+				this.sGetElementPositionTop(locatorSource));
+		
+		Point relative = new Point(
+				destination.X - source.X,
+				destination.Y - source.Y);
+		
+		logger.info("x,y coordinate of the objectToBeDroppedInto=" + destination);
+		logger.info("x,y coordinate of the objectToBeDragged=" + source);
+		logger.info("x,y coordinate of the objectToBeDroppedInto relative to objectToBeDragged = " + relative);
+		
+		// Hold the mouse down on the source
+		this.sMouseDown(locatorSource);
+		
+		// Drag the moust to the destination, plus the offset
+		this.sMouseMoveAt(locatorDestination, relative.toString());
+		
+		// Wait a bit for things to happen
+		SleepUtil.sleep(1000 * 3);
+		
+		// Release the mouse
+		this.sMouseUpAt(locatorDestination, relative.toString());
+		
+		// Wait for busy overlay?
+		this.zWaitForBusyOverlay();
+
+		
+
+	}
 	
 	
 	/**

@@ -181,6 +181,29 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
+	 * DefaultSelenium.getElementPositionLeft()
+	 * 
+	 * @param locator
+	 */
+	public int sGetElementPositionLeft(String locator) {
+		int n = ClientSessionFactory.session().selenium().getElementPositionLeft(locator).intValue();
+		logger.info("getElementPositionLeft("+ locator +") = "+ n);
+		return (n);
+	}
+	
+	/**
+	 * DefaultSelenium.getElementPositionTop()
+	 * 
+	 * @param locator
+	 */
+	public int sGetElementPositionTop(String locator) {
+		int n = ClientSessionFactory.session().selenium().getElementPositionTop(locator).intValue();
+		logger.info("getElementPositionTop("+ locator +") = "+ n);
+		return (n);
+	}
+	
+
+	/**
 	 * getNextSiblingId()
 	 * 
 	 * @param
@@ -277,6 +300,22 @@ public abstract class AbsSeleniumObject {
 	public void sMouseUp(String locator) {
 		ClientSessionFactory.session().selenium().mouseUp(locator);
 		logger.info("mouseUp(" + locator + ")");
+	}
+
+	/**
+	 * DefaultSelenium.mouseMoveAt()
+	 */
+	public void sMouseMoveAt(String locator, String coordString) {
+		ClientSessionFactory.session().selenium().mouseMoveAt(locator, coordString);
+		logger.info("mouseMoveAt(" + locator + ",'" + coordString + "')");
+	}
+
+	/**
+	 * DefaultSelenium.mouseUpAt()
+	 */
+	public void sMouseUpAt(String locator, String coordString) {
+		ClientSessionFactory.session().selenium().mouseUpAt(locator, coordString);
+		logger.info("mouseUpAt(" + locator + ",'" + coordString +")'");
 	}
 
 	/**
