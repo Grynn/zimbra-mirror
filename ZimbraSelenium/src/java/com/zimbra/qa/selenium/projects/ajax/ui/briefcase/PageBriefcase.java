@@ -5,6 +5,9 @@ package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
+import com.zimbra.qa.selenium.framework.items.FileItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem;
+import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -20,7 +23,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
  */
 public class PageBriefcase extends AbsTab {
 
-	private DocumentItem docItem;
+	// private DocumentItem docItem;
 
 	public static final String pageTitle = "Zimbra: Briefcase";
 
@@ -142,16 +145,8 @@ public class PageBriefcase extends AbsTab {
 		}
 	}
 
-	public AbsPage zToolbarPressButton(Button button, DocumentItem document)
+	public AbsPage zToolbarPressButton(Button button, IItem item)
 			throws HarnessException {
-
-		docItem = document;
-
-		return zToolbarPressButton(button);
-	}
-
-	@Override
-	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
 
 		tracer.trace("Press the " + button + " button");
@@ -202,7 +197,8 @@ public class PageBriefcase extends AbsTab {
 				throw new HarnessException(button + " not visible " + attrs);
 			}
 			locator = Locators.zEditFileIconBtn;
-			page = new DocumentBriefcaseEdit(this.MyApplication, docItem);
+			page = new DocumentBriefcaseEdit(this.MyApplication,
+					(DocumentItem) item);
 		} else if (button == Button.B_DELETE) {
 			// Check if the button is visible
 			String attrs = sGetAttribute("css=div[id='zb__BDLV__DELETE']@style");
@@ -539,28 +535,30 @@ public class PageBriefcase extends AbsTab {
 		return (page);
 	}
 
-	public AbsPage zListItem(Action action, DocumentItem document)
-			throws HarnessException {
+	public AbsPage zListItem(Action action, IItem item) throws HarnessException {
 
-		docItem = document;
+		// Validate the arguments
+		if ((action == null) || (item == null)) {
+			throw new HarnessException("Must define an action and item");
+		}
 
-		return zListItem(action, docItem.getDocName());
-	}
+		if (!((item instanceof FolderItem) || (item instanceof FileItem) || (item instanceof DocumentItem))) {
+			throw new HarnessException("Not supported item: " + item.getClass());
+		}
 
-	@Override
-	public AbsPage zListItem(Action action, String docName)
-			throws HarnessException {
-		logger.info(myPageName() + " zListItem(" + action + ", " + docName
+		String itemName = item.getName();
+
+		tracer.trace(action + " on briefcase item = " + itemName);
+
+		logger.info(myPageName() + " zListItem(" + action + ", " + itemName
 				+ ")");
-
-		tracer.trace(action + " on briefcase = " + docName);
 
 		AbsPage page = null;
 		String listLocator = Locators.briefcaseListView;
 		String itemLocator = listLocator
 				+ " div[id^='zli__BDLV__'][class^='Row']";
 		String itemNameLocator = itemLocator
-				+ " td[width*='auto'] div:contains(" + docName + ")";
+				+ " td[width*='auto'] div:contains(" + itemName + ")";
 
 		/*
 		 * listLocator = "div[id='zl__BDLV__rows'][class='DwtListView-Rows']";
@@ -591,7 +589,7 @@ public class PageBriefcase extends AbsTab {
 
 		if (!GeneralUtility.waitForElementPresent(this, itemNameLocator))
 			throw new HarnessException("Unable to locate item with name("
-					+ docName + ")");
+					+ itemName + ")");
 		if (action == Action.A_LEFTCLICK) {
 
 			zWaitForElementPresent(itemNameLocator);
@@ -607,15 +605,19 @@ public class PageBriefcase extends AbsTab {
 			// double-click on the item
 			this.sDoubleClick(itemNameLocator);
 
-			page = new DocumentBriefcaseOpen(MyApplication, docItem);
+			if (item instanceof DocumentItem) {
+				page = new DocumentBriefcaseOpen(MyApplication,
+						(DocumentItem) item);
+			} else
+				page = null;
 		} else if (action == Action.A_BRIEFCASE_CHECKBOX) {
 			String checkBoxLocator = "";
-			
+
 			int count = sGetCssCount(itemLocator);
-		
+
 			for (int i = 1; i <= count; i++) {
 				if (sIsElementPresent(itemLocator + ":nth-child(" + i
-						+ "):contains(" + docName + ")")) {
+						+ "):contains(" + itemName + ")")) {
 					checkBoxLocator = itemLocator + ":nth-child(" + i
 							+ ") div[class^=ImgCheckbox]";
 					break;
@@ -652,37 +654,23 @@ public class PageBriefcase extends AbsTab {
 		return page;
 	}
 
-	@Override
-	public AbsPage zListItem(Action action, Button option, Button subOption,
-			String item) throws HarnessException {
-		tracer.trace(action + " then " + option + "," + subOption
-				+ " on item = " + item);
-
-		throw new HarnessException("implement me!");
-	}
-
-	public AbsPage zListItem(Action action, Button option, DocumentItem document)
+	public AbsPage zListItem(Action action, Button option, IItem item)
 			throws HarnessException {
-
-		docItem = document;
-
-		return zListItem(action, option, docItem.getDocName());
-	}
-
-	@Override
-	public AbsPage zListItem(Action action, Button option, String subject)
-			throws HarnessException {
-		tracer.trace(action + " then " + option + " on briefcase = " + subject);
-
-		logger.info(myPageName() + " zListItem(" + action + ", " + option
-				+ ", " + subject + ")");
 
 		if (action == null)
 			throw new HarnessException("action cannot be null");
 		if (option == null)
 			throw new HarnessException("button cannot be null");
-		if (subject == null || subject.trim().length() == 0)
-			throw new HarnessException("docName cannot be null or blank");
+		if (item == null)
+			throw new HarnessException("Item cannot be null or blank");
+
+		String subject = item.getName();
+
+		tracer.trace(action + " then " + option + " on briefcase item = "
+				+ subject);
+
+		logger.info(myPageName() + " zListItem(" + action + ", " + option
+				+ ", " + subject + ")");
 
 		AbsPage page = null;
 		String listLocator = Locators.briefcaseListView;
@@ -718,13 +706,15 @@ public class PageBriefcase extends AbsTab {
 
 				optionLocator = "css=td#zmi__Briefcase__EDIT_FILE_title:contains(Edit)";
 
-				page = new DocumentBriefcaseEdit(MyApplication, docItem);
+				page = new DocumentBriefcaseEdit(MyApplication,
+						(DocumentItem) item);
 
 			} else if (option == Button.O_OPEN) {
 
 				optionLocator = "css=td#zmi__Briefcase__OPEN_FILE_title:contains(Open)";
 
-				page = new DocumentBriefcaseOpen(MyApplication, docItem);
+				page = new DocumentBriefcaseOpen(MyApplication,
+						(DocumentItem) item);
 
 			} else if (option == Button.O_DELETE) {
 
@@ -733,7 +723,7 @@ public class PageBriefcase extends AbsTab {
 				page = new DialogDeleteConfirm(MyApplication, this);
 
 			} else {
-				throw new HarnessException("implement action:" + action
+				throw new HarnessException("implement action: " + action
 						+ " option:" + option);
 			}
 
@@ -772,7 +762,7 @@ public class PageBriefcase extends AbsTab {
 		if ((shortcut == Shortcut.S_NEWITEM)
 				|| (shortcut == Shortcut.S_NEWDOCUMENT)) {
 
-			// "New Document" shortcuts result in a new document page opening
+			// "New Document" shortcut result in a new document page opening
 			page = new DocumentBriefcaseNew(this.MyApplication);
 
 			keyCode = "78";
@@ -794,6 +784,12 @@ public class PageBriefcase extends AbsTab {
 			page = new DialogTag(MyApplication, this);
 
 			keyCode = "78,84";
+		} else if (shortcut == Shortcut.S_MOVE) {
+
+			// "Move" shortcut opens "Choose Folder" dialog
+			page = new DialogMove(MyApplication, this);
+
+			keyCode = "77";
 		} else {
 			throw new HarnessException("implement shortcut: " + shortcut);
 		}
@@ -849,14 +845,13 @@ public class PageBriefcase extends AbsTab {
 				+ "x.blur(); x.focus(); x.dispatchEvent(evObj);");
 	}
 
-	public void isOpenDocLoaded(String windowName, String text)
-			throws HarnessException {
-		zWaitForWindow(windowName);
+	public void isOpenDocLoaded(DocumentItem docItem) throws HarnessException {
+		zWaitForWindow(docItem.getName());
 
-		zSelectWindow(windowName);
+		zSelectWindow(docItem.getName());
 
 		zWaitForElementPresent("css=td[class='ZhAppContent'] div:contains('"
-				+ text + "')");
+				+ docItem.getDocText() + "')");
 	}
 
 	public void isOpenFileLoaded(String windowName, String text)
@@ -873,7 +868,7 @@ public class PageBriefcase extends AbsTab {
 		String itemLocator = Locators.briefcaseListView
 				+ " td[width*='auto'] div:contains(" + itemName + ")";
 
-		return sIsElementPresent(itemLocator);		
+		return sIsElementPresent(itemLocator);
 	}
 
 	public boolean waitForPresentInListView(String itemName)
@@ -901,17 +896,18 @@ public class PageBriefcase extends AbsTab {
 		return sGetText(itemLocator);
 	}
 
-	public boolean isEditDocLoaded(String windowName, String text)
+	public boolean isEditDocLoaded(DocumentItem docItem)
 			throws HarnessException {
-		zWaitForWindow(windowName);
+		zWaitForWindow(docItem.getName());
 
-		zSelectWindow(windowName);
+		zSelectWindow(docItem.getName());
 
 		zWaitForElementPresent("css=div[class='ZDToolBar ZWidget']");
 
 		zWaitForElementPresent("css=iframe[id*='DWT'][class='ZDEditor']");
 
-		zWaitForIframeText("css=iframe[id*='DWT'][class='ZDEditor']", text);
+		zWaitForIframeText("css=iframe[id*='DWT'][class='ZDEditor']", docItem
+				.getDocText());
 
 		return true;
 	}
@@ -936,5 +932,31 @@ public class PageBriefcase extends AbsTab {
 		tracer.trace("Close the separate window");
 
 		ClientSessionFactory.session().selenium().close();
+	}
+
+	@Override
+	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
+		throw new HarnessException("implement me!  button = " + button);
+	}
+
+	@Override
+	public AbsPage zListItem(Action action, String name)
+			throws HarnessException {
+		throw new HarnessException("implement me! : action = " + action
+				+ " name = " + name);
+	}
+
+	@Override
+	public AbsPage zListItem(Action action, Button option, String subject)
+			throws HarnessException {
+		throw new HarnessException("implement me! : action=" + action
+				+ " option=" + option + " subject=" + subject);
+	}
+
+	@Override
+	public AbsPage zListItem(Action action, Button option, Button subOption,
+			String item) throws HarnessException {
+		throw new HarnessException("implement me! : action=" + action
+				+ " subOption=" + subOption + "item=" + item);
 	}
 }

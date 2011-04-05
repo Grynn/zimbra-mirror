@@ -1,7 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
 import org.testng.annotations.Test;
-import com.zimbra.qa.selenium.framework.items.DocumentItem;
+import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
@@ -31,13 +31,13 @@ public class SendFileAttachment extends AjaxCommonTest {
 		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
 				SystemFolder.Briefcase);
 
-		// Create document item
-		DocumentItem document = new DocumentItem();
-
+		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/structure.jpg";
+		+ "/data/public/other/structure.jpg";
 		
-		String fileName = document.getFileName(filePath);
+		FileItem fileItem = new FileItem(filePath);
+
+		String fileName = fileItem.getName();
 
 		// Upload file to server through RestUtil
 		String attachmentId = account.uploadFile(filePath);
@@ -51,7 +51,7 @@ public class SendFileAttachment extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 		
 		// Click on Send as attachment
 		FormMailNew mailform = (FormMailNew) app.zPageBriefcase.zToolbarPressPulldown(Button.B_SEND, Button.O_SEND_AS_ATTACHMENT);

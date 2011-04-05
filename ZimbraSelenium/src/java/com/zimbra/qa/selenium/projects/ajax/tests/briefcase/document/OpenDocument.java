@@ -32,10 +32,10 @@ public class OpenDocument extends AjaxCommonTest {
 				SystemFolder.Briefcase);
 
 		// Create document item
-		DocumentItem document = new DocumentItem();
+		DocumentItem docItem = new DocumentItem();
 
-		String docName = document.getDocName();
-		String docText = document.getDocText();
+		String docName = docItem.getName();
+		String docText = docItem.getDocText();
 
 		// Create document using SOAP
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
@@ -59,13 +59,13 @@ public class OpenDocument extends AjaxCommonTest {
 
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click on open in a separate window icon in toolbar
 		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW);
+				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW, docItem);
 
-		app.zPageBriefcase.isOpenDocLoaded(docName, docText);
+		app.zPageBriefcase.isOpenDocLoaded(docItem);
 
 		String text = "";
 
@@ -108,10 +108,10 @@ public class OpenDocument extends AjaxCommonTest {
 				SystemFolder.Briefcase);
 
 		// Create document item
-		DocumentItem document = new DocumentItem();
+		DocumentItem docItem = new DocumentItem();
 
-		String docName = document.getDocName();
-		String docText = document.getDocText();
+		String docName = docItem.getName();
+		String docText = docItem.getDocText();
 
 		// Create document using SOAP
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
@@ -135,11 +135,11 @@ public class OpenDocument extends AjaxCommonTest {
 
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Double Click on item in the list view
 		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
-				.zListItem(Action.A_DOUBLECLICK, document);
+				.zListItem(Action.A_DOUBLECLICK, docItem);
 
 		//app.zPageBriefcase.isOpenDocLoaded(docName, docText);
 
@@ -174,10 +174,10 @@ public class OpenDocument extends AjaxCommonTest {
 				SystemFolder.Briefcase);
 
 		// Create document item
-		DocumentItem document = new DocumentItem();
+		DocumentItem docItem = new DocumentItem();
 
-		String docName = document.getDocName();
-		String docText = document.getDocText();
+		String docName = docItem.getName();
+		String docText = docItem.getDocText();
 
 		// Create document using SOAP
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
@@ -201,11 +201,11 @@ public class OpenDocument extends AjaxCommonTest {
 
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Open Document using Right Click Context Menu
 		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase.
-		zListItem(Action.A_RIGHTCLICK, Button.O_OPEN, document);
+		zListItem(Action.A_RIGHTCLICK, Button.O_OPEN, docItem);
 		
 		//app.zPageBriefcase.isOpenDocLoaded(docName, docText);
 

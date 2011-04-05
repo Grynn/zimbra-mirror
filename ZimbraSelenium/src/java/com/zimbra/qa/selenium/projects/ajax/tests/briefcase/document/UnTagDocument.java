@@ -27,19 +27,16 @@ public class UnTagDocument extends AjaxCommonTest {
 				SystemFolder.Briefcase);
 
 		// Create document item
-		DocumentItem document = new DocumentItem();
-
-		String docName = document.getDocName();
-		String docText = document.getDocText();
+		DocumentItem docItem = new DocumentItem();
 
 		// Create document using SOAP
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
-				+ docText + "</body>" + "</html>");
+				+ docItem.getDocText() + "</body>" + "</html>");
 
 		account
 				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
 						+ "<doc name='"
-						+ docName
+						+ docItem.getName()
 						+ "' l='"
 						+ briefcaseFolder.getId()
 						+ "' ct='application/x-zimbra-doc'>"
@@ -77,7 +74,7 @@ public class UnTagDocument extends AjaxCommonTest {
 
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Create a tag
 		String tagName = "tag" + ZimbraSeleniumProperties.getUniqueString();
@@ -116,7 +113,7 @@ public class UnTagDocument extends AjaxCommonTest {
 		// Make sure the tag was applied to the document
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
-						+ "<query>" + docName + "</query>" + "</SearchRequest>");
+						+ "<query>" + docItem.getName() + "</query>" + "</SearchRequest>");
 
 		String id = account.soapSelectValue("//mail:SearchResponse//mail:doc",
 				"t");
@@ -128,7 +125,7 @@ public class UnTagDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on tagged document
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click Remove Tag
 		app.zPageBriefcase.zToolbarPressPulldown(Button.B_TAG,
@@ -138,7 +135,7 @@ public class UnTagDocument extends AjaxCommonTest {
 
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
-						+ "<query>" + docName + "</query>" + "</SearchRequest>");
+						+ "<query>" + docItem.getName() + "</query>" + "</SearchRequest>");
 
 		id = account.soapSelectValue("//mail:SearchResponse//mail:doc", "t");
 

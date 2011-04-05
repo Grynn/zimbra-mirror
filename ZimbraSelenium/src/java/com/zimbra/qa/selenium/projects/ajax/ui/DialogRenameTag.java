@@ -18,7 +18,7 @@ public class DialogRenameTag extends AbsDialog {
 
 	public static class Locators {
 		//see https://bugzilla.zimbra.com/show_bug.cgi?id=57458
-		public static final String zDialogRenameId	= "RenameTagDialog";
+		public static final String zRenameTagDialogId	= "RenameTagDialog";
 		public static final String zNewTagNameFieldId	= "RenameTagDialog_name";
 		public static final String zButtonsId 		= "RenameTagDialog_buttons";
 	}
@@ -51,7 +51,7 @@ public class DialogRenameTag extends AbsDialog {
 		
 		if ( button == Button.B_OK ) {
 			
-			locator =  "//div[@id='"+ Locators.zDialogRenameId +"']//div[@id='"+ Locators.zButtonsId +"']//td[text()='OK']";
+			locator =  "//div[@id='"+ Locators.zRenameTagDialogId +"']//div[@id='"+ Locators.zButtonsId +"']//td[text()='OK']";
 					
 		} else if ( button == Button.B_CANCEL ) {
 			
@@ -105,7 +105,7 @@ public class DialogRenameTag extends AbsDialog {
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");
 
-		String locator = "id="+ Locators.zDialogRenameId;
+		String locator = "id="+ Locators.zRenameTagDialogId;
 		
 		if ( !this.sIsElementPresent(locator) ) {
 			return (false); // Not even present

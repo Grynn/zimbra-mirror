@@ -15,8 +15,6 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogDeleteConfirm;
-import java.util.HashMap;
-import java.util.Map;
 
 public class DeleteDocument extends AjaxCommonTest {
 
@@ -38,10 +36,10 @@ public class DeleteDocument extends AjaxCommonTest {
 				SystemFolder.Trash);
 
 		// Create document item
-		DocumentItem document = new DocumentItem();
+		DocumentItem docItem = new DocumentItem();
 
-		String docName = document.getDocName();
-		String docText = document.getDocText();
+		String docName = docItem.getName();
+		String docText = docItem.getDocText();
 
 		// Create document using SOAP
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
@@ -68,11 +66,11 @@ public class DeleteDocument extends AjaxCommonTest {
 
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click on Delete document icon in toolbar
 		DialogDeleteConfirm deleteConfirm = (DialogDeleteConfirm) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_DELETE);
+				.zToolbarPressButton(Button.B_DELETE, docItem);
 
 		// Click OK on Confirmation dialog
 		deleteConfirm.zClickButton(Button.B_YES);
@@ -112,10 +110,10 @@ public class DeleteDocument extends AjaxCommonTest {
 				SystemFolder.Briefcase);
 
 		// Create document item
-		DocumentItem document = new DocumentItem();
+		DocumentItem docItem = new DocumentItem();
 
-		String docName = document.getDocName();
-		String docText = document.getDocText();
+		String docName = docItem.getName();
+		String docText = docItem.getDocText();
 
 		Shortcut shortcut = Shortcut.S_DELETE;
 
@@ -141,7 +139,7 @@ public class DeleteDocument extends AjaxCommonTest {
 
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click the Delete keyboard shortcut
 		// app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
@@ -172,10 +170,10 @@ public class DeleteDocument extends AjaxCommonTest {
 				SystemFolder.Briefcase);
 
 		// Create document item
-		DocumentItem document = new DocumentItem();
+		DocumentItem docItem = new DocumentItem();
 
-		String docName = document.getDocName();
-		String docText = document.getDocText();
+		String docName = docItem.getName();
+		String docText = docItem.getDocText();
 
 		Shortcut shortcut = Shortcut.S_BACKSPACE;
 
@@ -201,7 +199,7 @@ public class DeleteDocument extends AjaxCommonTest {
 
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Delete Document using Backspace keyboard shortcut
 		// app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
@@ -232,10 +230,10 @@ public class DeleteDocument extends AjaxCommonTest {
 				SystemFolder.Briefcase);
 
 		// Create document item
-		DocumentItem document = new DocumentItem();
+		DocumentItem docItem = new DocumentItem();
 
-		String docName = document.getDocName();
-		String docText = document.getDocText();
+		String docName = docItem.getName();
+		String docText = docItem.getDocText();
 
 		// Create document using SOAP
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
@@ -259,11 +257,11 @@ public class DeleteDocument extends AjaxCommonTest {
 
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Delete Document using Right Click Context Menu
 		DialogDeleteConfirm deleteConfirm = (DialogDeleteConfirm) app.zPageBriefcase
-				.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE, document);
+				.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE, docItem);
 
 		// Click OK on Confirmation dialog
 		deleteConfirm.zClickButton(Button.B_YES);
@@ -292,22 +290,23 @@ public class DeleteDocument extends AjaxCommonTest {
 				SystemFolder.Trash);
 
 		// Create documents using SOAP
-		String[] documents = {
-				"docName1" + ZimbraSeleniumProperties.getUniqueString(),
-				"docName2" + ZimbraSeleniumProperties.getUniqueString(),
-				"docName3" + ZimbraSeleniumProperties.getUniqueString() };
-
-		HashMap<String, String> hm = new HashMap<String, String>();
+		DocumentItem[] docItems = {
+				new DocumentItem("docName1"
+						+ ZimbraSeleniumProperties.getUniqueString()),
+				new DocumentItem("docName2"
+						+ ZimbraSeleniumProperties.getUniqueString()),
+				new DocumentItem("docName3"
+						+ ZimbraSeleniumProperties.getUniqueString()) };
 
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
 				+ ZimbraSeleniumProperties.getUniqueString() + "</body>"
 				+ "</html>");
 
-		for (String item : documents) {
+		for (int i = 0; i < docItems.length; i++) {
 			account
 					.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
 							+ "<doc name='"
-							+ item
+							+ docItems[i].getName()
 							+ "' l='"
 							+ briefcaseFolder.getId()
 							+ "' ct='application/x-zimbra-doc'>"
@@ -317,23 +316,22 @@ public class DeleteDocument extends AjaxCommonTest {
 							+ "</doc>"
 							+ "</SaveDocumentRequest>");
 
-			hm.put(account.soapSelectValue(
-					"//mail:SaveDocumentResponse//mail:doc", "name"), account
-					.soapSelectValue("//mail:SaveDocumentResponse//mail:doc",
-							"id"));
+			docItems[i].setDocId(account.soapSelectValue(
+					"//mail:SaveDocumentResponse//mail:doc", "id"));
+
 		}
 
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Select all three items
-		for (String item : documents) {
+		for (DocumentItem item : docItems) {
 			app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, item);
 		}
 
 		// Click toolbar delete button
 		DialogDeleteConfirm deleteConfirm = (DialogDeleteConfirm) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_DELETE);
+				.zToolbarPressButton(Button.B_DELETE, docItems[0]);
 
 		// Click OK on Confirmation dialog
 		deleteConfirm.zClickButton(Button.B_YES);
@@ -343,9 +341,9 @@ public class DeleteDocument extends AjaxCommonTest {
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
 		// Verify items are deleted);
-		for (Map.Entry<String, String> entry : hm.entrySet()) {
-			String name = entry.getKey();
-			String docId = entry.getValue();
+		for (DocumentItem item : docItems) {
+			String name = item.getName();
+			String docId = item.getId();
 
 			// Verify document was deleted from the list
 			ZAssert.assertFalse(app.zPageBriefcase.isPresentInListView(name),

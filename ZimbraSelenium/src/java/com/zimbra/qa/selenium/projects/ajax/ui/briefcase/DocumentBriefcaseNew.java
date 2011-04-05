@@ -56,7 +56,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 
 	public void editDocumentName(DocumentItem docItem) throws HarnessException {
 		if (sIsElementPresent(Locators.zEditNameField))
-			sType(Locators.zEditNameField, docItem.getDocName());
+			sType(Locators.zEditNameField, docItem.getName());
 	}
 
 	@Override

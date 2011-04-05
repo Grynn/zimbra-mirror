@@ -1,7 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
 import org.testng.annotations.Test;
-import com.zimbra.qa.selenium.framework.items.DocumentItem;
+import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
@@ -30,13 +30,13 @@ public class DeleteFile extends AjaxCommonTest {
 		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
 				SystemFolder.Briefcase);
 
-		// Create document item
-		DocumentItem document = new DocumentItem();
-
+		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
 				+ "/data/public/other/putty.log";
 
-		String fileName = document.getFileName(filePath);
+		FileItem fileItem = new FileItem(filePath);
+
+		String fileName = fileItem.getName();
 
 		// Upload file to server through RestUtil
 		String attachmentId = account.uploadFile(filePath);
@@ -59,11 +59,11 @@ public class DeleteFile extends AjaxCommonTest {
 
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Click on Delete document icon in toolbar
 		DialogDeleteConfirm deleteConfirm = (DialogDeleteConfirm) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_DELETE);
+				.zToolbarPressButton(Button.B_DELETE, fileItem);
 
 		// Click OK on Confirmation dialog
 		deleteConfirm.zClickButton(Button.B_YES);

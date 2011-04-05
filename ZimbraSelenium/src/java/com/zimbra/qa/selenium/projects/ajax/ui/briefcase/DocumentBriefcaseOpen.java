@@ -31,7 +31,7 @@ public class DocumentBriefcaseOpen extends AbsDisplay {
 	
 	public DocumentBriefcaseOpen(AbsApplication application, DocumentItem document) {
 		super(application);
-		pageTitle = document.getDocName();
+		pageTitle = document.getName();
 		
 		pageText = document.getDocText();
 		

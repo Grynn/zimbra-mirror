@@ -27,10 +27,10 @@ public class TagDocument extends AjaxCommonTest {
 				SystemFolder.Briefcase);
 
 		// Create document item
-		DocumentItem document = new DocumentItem();
+		DocumentItem docItem = new DocumentItem();
 
-		String docName = document.getDocName();
-		String docText = document.getDocText();
+		String docName = docItem.getName();
+		String docText = docItem.getDocText();
 
 		// Create document using SOAP
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
@@ -54,7 +54,7 @@ public class TagDocument extends AjaxCommonTest {
 
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Create a tag using GUI
 		String tagName = "tag" + ZimbraSeleniumProperties.getUniqueString();
@@ -117,10 +117,10 @@ public class TagDocument extends AjaxCommonTest {
 				SystemFolder.Briefcase);
 
 		// Create document item
-		DocumentItem document = new DocumentItem();
+		DocumentItem docItem = new DocumentItem();
 
-		String docName = document.getDocName();
-		String docText = document.getDocText();
+		String docName = docItem.getName();
+		String docText = docItem.getDocText();
 
 		// Create document using SOAP
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
@@ -155,7 +155,7 @@ public class TagDocument extends AjaxCommonTest {
 
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Tag document selecting pre-existing tag from Toolbar drop down list
 		app.zPageBriefcase.zToolbarPressPulldown(Button.B_TAG, tag.getName());

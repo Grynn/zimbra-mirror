@@ -32,10 +32,10 @@ public class SendDocAttachment extends AjaxCommonTest {
 				SystemFolder.Briefcase);
 
 		// Create document item
-		DocumentItem document = new DocumentItem();
+		DocumentItem docItem = new DocumentItem();
 
-		String docName = document.getDocName();
-		String docText = document.getDocText();
+		String docName = docItem.getName();
+		String docText = docItem.getDocText();
 
 		// Create document using SOAP
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
@@ -58,7 +58,7 @@ public class SendDocAttachment extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 		
 		// Click on Send as attachment
 		FormMailNew mailform = (FormMailNew) app.zPageBriefcase.zToolbarPressPulldown(Button.B_SEND, Button.O_SEND_AS_ATTACHMENT);

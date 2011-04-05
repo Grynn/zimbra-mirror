@@ -26,13 +26,11 @@ public class UnTagFile extends AjaxCommonTest {
 		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
 				SystemFolder.Briefcase);
 
-		// Create document item
-		DocumentItem document = new DocumentItem();
-
+		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/com_zimbra_ymaps.zip";
-
-		String fileName = document.getFileName(filePath);
+		+ "/data/public/other/com_zimbra_ymaps.zip";
+		
+		FileItem fileItem = new FileItem(filePath);
 
 		// Upload file to server through RestUtil
 		String attachmentId = account.uploadFile(filePath);
@@ -70,7 +68,7 @@ public class UnTagFile extends AjaxCommonTest {
 
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Create a tag
 		String tagName = "tag" + ZimbraSeleniumProperties.getUniqueString();
@@ -110,7 +108,7 @@ public class UnTagFile extends AjaxCommonTest {
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
 						+ "<query>"
-						+ fileName
+						+ fileItem.getName()
 						+ "</query>"
 						+ "</SearchRequest>");
 
@@ -124,7 +122,7 @@ public class UnTagFile extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on tagged document
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Click Remove Tag
 		app.zPageBriefcase.zToolbarPressPulldown(Button.B_TAG,
@@ -135,7 +133,7 @@ public class UnTagFile extends AjaxCommonTest {
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
 						+ "<query>"
-						+ fileName
+						+ fileItem.getName()
 						+ "</query>"
 						+ "</SearchRequest>");
 

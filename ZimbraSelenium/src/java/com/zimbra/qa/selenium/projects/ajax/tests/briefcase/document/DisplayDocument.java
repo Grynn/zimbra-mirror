@@ -32,7 +32,7 @@ public class DisplayDocument extends AjaxCommonTest {
 		// Create document item
 		DocumentItem document = new DocumentItem();
 
-		String docName = document.getDocName();
+		String docName = document.getName();
 		String docText = document.getDocText();
 
 		// Create document using SOAP

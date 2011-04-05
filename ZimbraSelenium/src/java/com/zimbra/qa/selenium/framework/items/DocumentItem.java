@@ -30,6 +30,12 @@ public class DocumentItem implements IItem {
 	private String docText;
 
 	/**
+	 * The document id
+	 */
+	private String docId;
+
+	
+	/**
 	 * The status of this document
 	 */
 	public boolean isSaved;
@@ -47,39 +53,22 @@ public class DocumentItem implements IItem {
 	public static Element e;
 
 	/**
-	 * The file path
-	 */
-	private String filePath;
-
-	public String getFilePath() {
-		return filePath;
-	}
-
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
-
-	/**
-	 * get file name from a given path
-	 * 
-	 * @param filePath
-	 */
-	public String getFileName(String filePath) {
-		String[] arr = filePath.split("/");
-		String fileName = arr[arr.length - 1];
-		return fileName;
-	}
-
-	/**
 	 * Create a document item
 	 */
 	public DocumentItem() {
 		populateDocumentData();
 	}
 
+	/**
+	 * Create a document item
+	 */
+	public DocumentItem(String name) {
+		docName = name;
+	}
+	
 	@Override
 	public String getName() {
-		return (getDocName());
+		return docName;
 	}
 	
 	/**
@@ -92,10 +81,19 @@ public class DocumentItem implements IItem {
 	}
 
 	/**
-	 * Get document name
+	 * Get document id
 	 */
-	public String getDocName() {
-		return docName;
+	public String getId() {
+		return docId;
+	}
+	
+	/**
+	 * Set document id
+	 * 
+	 * @param id
+	 */
+	public void setDocId(String id) {
+		this.docId = id;
 	}
 
 	/**

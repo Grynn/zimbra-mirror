@@ -1,7 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
 import org.testng.annotations.Test;
-import com.zimbra.qa.selenium.framework.items.DocumentItem;
+import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
@@ -29,13 +29,13 @@ public class UploadFile extends AjaxCommonTest {
 		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
 				SystemFolder.Briefcase);
 
-		// Create document item
-		DocumentItem document = new DocumentItem();
-
+		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/testsoundfile.wav";
+		+ "/data/public/other/testsoundfile.wav";
+		
+		FileItem file = new FileItem(filePath);
 
-		String fileName = document.getFileName(filePath);
+		String fileName = file.getName();
 		
 		// Upload file to server through RestUtil
 		String attachmentId = account.uploadFile(filePath);
@@ -78,13 +78,13 @@ public class UploadFile extends AjaxCommonTest {
 		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
 				SystemFolder.Briefcase);
 
-		// Create document item
-		DocumentItem document = new DocumentItem();
-
+		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/testwordfile.doc";
+		+ "/data/public/other/putty.log";
+		
+		FileItem file = new FileItem(filePath);
 
-		String fileName = document.getFileName(filePath);
+		String fileName = file.getName();
 
 		// Upload file to server through RestUtil
 		String attachmentId = account.uploadFile(filePath);

@@ -26,13 +26,13 @@ public class TagFile extends AjaxCommonTest {
 		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
 				SystemFolder.Briefcase);
 
-		// Create document item
-		DocumentItem document = new DocumentItem();
-
+		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/testpptfile.ppt";
+		+ "/data/public/other/testpptfile.ppt";
+		
+		FileItem fileItem = new FileItem(filePath);
 
-		String fileName = document.getFileName(filePath);
+		String fileName = fileItem.getName();
 
 		// Upload file to server through RestUtil
 		String attachmentId = account.uploadFile(filePath);
@@ -47,7 +47,7 @@ public class TagFile extends AjaxCommonTest {
 
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Create a tag using GUI
 		String tagName = "tag" + ZimbraSeleniumProperties.getUniqueString();
@@ -112,13 +112,13 @@ public class TagFile extends AjaxCommonTest {
 		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
 				SystemFolder.Briefcase);
 
-		// Create document item
-		DocumentItem document = new DocumentItem();
-
+		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/testpptfile.ppt";
+		+ "/data/public/other/testpptfile.ppt";
+		
+		FileItem fileItem = new FileItem(filePath);
 
-		String fileName = document.getFileName(filePath);
+		String fileName = fileItem.getName();
 
 		// Upload file to server through RestUtil
 		String attachmentId = account.uploadFile(filePath);
@@ -144,7 +144,7 @@ public class TagFile extends AjaxCommonTest {
 
 		// Click on uploaded file
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Tag file selecting pre-existing tag from Toolbar drop down list
 		app.zPageBriefcase.zToolbarPressPulldown(Button.B_TAG, tag.getName());

@@ -2,7 +2,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.items.DocumentItem;
+import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
@@ -32,13 +32,13 @@ public class MoveFile extends AjaxCommonTest {
 	public void MoveFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
-		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+		FolderItem folderItem = FolderItem.importFromSOAP(account,
 				SystemFolder.Briefcase);
 
 		String name = "folder" + ZimbraSeleniumProperties.getUniqueString();
 
 		// Create a subfolder to move the message into i.e. Briefcase/subfolder
-		String briefcaseFolderId = briefcaseFolder.getId();
+		String briefcaseFolderId = folderItem.getId();
 
 		account.soapSend("<CreateFolderRequest xmlns='urn:zimbraMail'>"
 				+ "<folder name='" + name + "' l='" + briefcaseFolderId + "'/>"
@@ -46,22 +46,18 @@ public class MoveFile extends AjaxCommonTest {
 
 		FolderItem subFolder = FolderItem.importFromSOAP(account, name);
 
-		String subfolderName = subFolder.getName();
-
 		// refresh briefcase page
-		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, folderItem, true);
 
 		// Click on created subfolder
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, subfolderName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, subFolder);
 
-		// Create document item
-		DocumentItem document = new DocumentItem();
-
+		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/putty.log";
-
-		String fileName = document.getFileName(filePath);
+		+ "/data/public/other/putty.log";
+		
+		FileItem fileItem = new FileItem(filePath);
 
 		// Upload file to server through RestUtil
 		String attachmentId = account.uploadFile(filePath);
@@ -71,7 +67,7 @@ public class MoveFile extends AjaxCommonTest {
 
 		"<SaveDocumentRequest xmlns='urn:zimbraMail'>" +
 
-		"<doc l='" + briefcaseFolder.getId() + "'>" +
+		"<doc l='" + folderItem.getId() + "'>" +
 
 		"<upload id='" + attachmentId + "'/>" +
 
@@ -82,14 +78,14 @@ public class MoveFile extends AjaxCommonTest {
 		// account.soapSelectNode("//mail:SaveDocumentResponse", 1);
 
 		// refresh briefcase page
-		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, folderItem, true);
 
 		// Click on created document
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Click on Move selected item icon in toolbar
 		DialogMove chooseFolder = (DialogMove) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_MOVE);
+				.zToolbarPressButton(Button.B_MOVE, fileItem);
 
 		// Click OK on Confirmation dialog
 		chooseFolder.zClickTreeFolder(subFolder);
@@ -97,17 +93,17 @@ public class MoveFile extends AjaxCommonTest {
 
 		// refresh briefcase page
 		app.zTreeBriefcase
-				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
+				.zTreeItem(Action.A_LEFTCLICK, folderItem, false);
 
 		// Verify document was moved from the folder
-		ZAssert.assertFalse(app.zPageBriefcase.isPresentInListView(fileName),
+		ZAssert.assertFalse(app.zPageBriefcase.isPresentInListView(fileItem.getName()),
 				"Verify document was moved from the folder");
 
 		// click on subfolder in tree view
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolder, true);
 
 		// Verify document was moved to the selected folder
-		boolean present = app.zPageBriefcase.isPresentInListView(fileName);
+		boolean present = app.zPageBriefcase.isPresentInListView(fileItem.getName());
 
 		ZAssert.assertTrue(present,
 				"Verify document was moved to the selected folder");

@@ -1,7 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
 import org.testng.annotations.Test;
-import com.zimbra.qa.selenium.framework.items.DocumentItem;
+import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
@@ -28,13 +28,13 @@ public class DisplayFile extends AjaxCommonTest {
 		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
 				SystemFolder.Briefcase);
 
-		// Create document item
-		DocumentItem document = new DocumentItem();
-
+		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
 				+ "/data/public/other/testwordfile.doc";
 
-		String fileName = document.getFileName(filePath);
+		FileItem file = new FileItem(filePath);
+
+		String fileName = file.getName();
 
 		// Upload file to server through RestUtil
 		String attachmentId = account.uploadFile(filePath);
@@ -50,9 +50,9 @@ public class DisplayFile extends AjaxCommonTest {
 		// Verify document is created
 		String name = app.zPageBriefcase.getText(fileName);
 		ZAssert.assertEquals(name, fileName, "Verify file name through GUI");
-		
-		//boolean present = app.zPageBriefcase.isPresent(docName);
-		//ZAssert.assertTrue(present, "Verify document name through GUI");
+
+		// boolean present = app.zPageBriefcase.isPresent(docName);
+		// ZAssert.assertTrue(present, "Verify document name through GUI");
 
 	}
 }

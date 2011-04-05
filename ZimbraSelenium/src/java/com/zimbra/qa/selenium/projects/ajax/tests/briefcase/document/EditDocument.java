@@ -35,20 +35,17 @@ public class EditDocument extends AjaxCommonTest {
 				SystemFolder.Briefcase);
 
 		// Create document item
-		DocumentItem document = new DocumentItem();
-
-		String docName1 = document.getDocName();
-		String docName2 = "name2" + ZimbraSeleniumProperties.getUniqueString();
-		String docText = document.getDocText();
+		DocumentItem docItem1 = new DocumentItem();
+		DocumentItem docItem2 = new DocumentItem();
 
 		// Create document using SOAP
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
-				+ docText + "</body>" + "</html>");
+				+ docItem1.getDocText() + "</body>" + "</html>");
 
 		account
 				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
 						+ "<doc name='"
-						+ docName1
+						+ docItem1.getName()
 						+ "' l='"
 						+ briefcaseFolder.getId()
 						+ "' ct='application/x-zimbra-doc'>"
@@ -63,25 +60,25 @@ public class EditDocument extends AjaxCommonTest {
 
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName1);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem1);
 
 		// Click on Edit document icon in toolbar
 		DocumentBriefcaseEdit documentBriefcaseEdit = (DocumentBriefcaseEdit) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_EDIT_FILE, document);
+				.zToolbarPressButton(Button.B_EDIT_FILE, docItem1);
 
-		app.zPageBriefcase.isEditDocLoaded(docName1, docText);
+		app.zPageBriefcase.isEditDocLoaded(docItem1);
 
 		// Select edit document window
 		try {
-			app.zPageBriefcase.zSelectWindow(docName1);
+			app.zPageBriefcase.zSelectWindow(docItem1.getName());
 
 			// Fill out the document with the new data
-			documentBriefcaseEdit.typeDocumentName(docName2);
+			documentBriefcaseEdit.typeDocumentName(docItem2.getName());
 
 			// Save and close
 			documentBriefcaseEdit.zSubmit();
 		} catch (Exception ex) {
-			throw new HarnessException("error in editing document " + docName1,
+			throw new HarnessException("error in editing document " + docItem1.getName(),
 					ex);
 		} finally {
 			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
@@ -96,11 +93,11 @@ public class EditDocument extends AjaxCommonTest {
 
 		// "Verify document name through GUI");
 		ZAssert.assertTrue(app.zPageBriefcase
-				.waitForPresentInListView(docName2),
+				.waitForPresentInListView(docItem2.getName()),
 				"Verify document name through GUI");
 
 		// delete file upon test completion
-		app.zPageBriefcase.deleteFileByName(docName2);
+		app.zPageBriefcase.deleteFileByName(docItem2.getName());
 
 		/*
 		 * //name =ClientSessionFactory.session().selenium().getText(
@@ -121,21 +118,17 @@ public class EditDocument extends AjaxCommonTest {
 				SystemFolder.Briefcase);
 
 		// Create document item
-		DocumentItem document = new DocumentItem();
+		DocumentItem docItem1 = new DocumentItem();
+		DocumentItem docItem2 = new DocumentItem();
 
-		String docName1 = document.getDocName();
-		String docName2 = "name2" + ZimbraSeleniumProperties.getUniqueString();
-		String docText1 = document.getDocText();
-		String docText2 = "text2" + ZimbraSeleniumProperties.getUniqueString();
-
-		// Create document using SOAP
+    	// Create document using SOAP
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
-				+ docText1 + "</body>" + "</html>");
+				+ docItem1.getDocText() + "</body>" + "</html>");
 
 		account
 				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
 						+ "<doc name='"
-						+ docName1
+						+ docItem1.getName()
 						+ "' l='"
 						+ briefcaseFolder.getId()
 						+ "' ct='application/x-zimbra-doc'>"
@@ -150,28 +143,28 @@ public class EditDocument extends AjaxCommonTest {
 
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName1);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem1);
 
 		// Click on Edit document icon in toolbar
 		DocumentBriefcaseEdit documentBriefcaseEdit = (DocumentBriefcaseEdit) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_EDIT_FILE, document);
+				.zToolbarPressButton(Button.B_EDIT_FILE, docItem1);
 
-		app.zPageBriefcase.isEditDocLoaded(docName1, docText1);
+		app.zPageBriefcase.isEditDocLoaded(docItem1);
 
 		// Select document window opened for editing
 		try {
-			app.zPageBriefcase.zSelectWindow(docName1);
+			app.zPageBriefcase.zSelectWindow(docItem1.getName());
 
 			// Type new document text
-			documentBriefcaseEdit.typeDocumentText(docText2);
+			documentBriefcaseEdit.typeDocumentText(docItem2.getDocText());
 
 			// Type new document name
-			documentBriefcaseEdit.typeDocumentName(docName2);
+			documentBriefcaseEdit.typeDocumentName(docItem2.getName());
 
 			// Save and close
 			documentBriefcaseEdit.zSubmit();
 		} catch (Exception ex) {
-			throw new HarnessException("error in editing document " + docName1,
+			throw new HarnessException("error in editing document " + docItem1.getName(),
 					ex);
 		} finally {
 			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
@@ -182,20 +175,20 @@ public class EditDocument extends AjaxCommonTest {
 
 		// Click on modified document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName2);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem2);
 
 		// Click on open in a separate window icon in toolbar
 		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW);
+				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW, docItem2);
 
-		app.zPageBriefcase.isOpenDocLoaded(docName2, docText2);
+		app.zPageBriefcase.isOpenDocLoaded(docItem2);
 
 		String name = "";
 		String text = "";
 
 		// Select document opened in a separate window
 		try {
-			app.zPageBriefcase.zSelectWindow(docName2);
+			app.zPageBriefcase.zSelectWindow(docItem2.getName());
 
 			name = documentBriefcaseOpen.retriveDocumentName();
 			text = documentBriefcaseOpen.retriveDocumentText();
@@ -206,14 +199,14 @@ public class EditDocument extends AjaxCommonTest {
 			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
 		}
 
-		ZAssert.assertStringContains(name, docName2,
+		ZAssert.assertStringContains(name, docItem2.getName(),
 				"Verify document name through GUI");
 
-		ZAssert.assertStringContains(text, docText2,
+		ZAssert.assertStringContains(text, docItem2.getDocText(),
 				"Verify document text through GUI");
 
 		// delete file upon test completion
-		app.zPageBriefcase.deleteFileByName(docName2);
+		app.zPageBriefcase.deleteFileByName(docItem2.getName());
 	}
 
 	@Test(description = "Create document & edit text through SOAP & verify through GUI", groups = { "smoke" })
@@ -224,20 +217,16 @@ public class EditDocument extends AjaxCommonTest {
 				SystemFolder.Briefcase);
 
 		// Create document item
-		DocumentItem document = new DocumentItem();
-
-		String docName = document.getDocName();
-		String docText = document.getDocText();
-		String docText2 = "text2" + ZimbraSeleniumProperties.getUniqueString();
+		DocumentItem docItem = new DocumentItem();
 
 		// Create document using SOAP
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
-				+ docText + "</body>" + "</html>");
+				+ docItem.getDocText() + "</body>" + "</html>");
 
 		account
 				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
 						+ "<doc name='"
-						+ docName
+						+ docItem.getName()
 						+ "' l='"
 						+ briefcaseFolder.getId()
 						+ "' ct='application/x-zimbra-doc'>"
@@ -250,16 +239,18 @@ public class EditDocument extends AjaxCommonTest {
 		// Search for created document
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
-						+ "<query>" + docName + "</query>" + "</SearchRequest>");
+						+ "<query>" + docItem.getName() + "</query>" + "</SearchRequest>");
 
 		String docId = account.soapSelectValue("//mail:doc", "id");
 		String version = account.soapSelectValue("//mail:doc", "ver");
+		
+		docItem.setDocText("editText" + ZimbraSeleniumProperties.getUniqueString());
 
 		// Edit document through SOAP
 		account
 				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
 						+ "<doc name='"
-						+ docName
+						+ docItem.getName()
 						+ "' l='"
 						+ briefcaseFolder.getId()
 						+ "' ver='"
@@ -268,29 +259,29 @@ public class EditDocument extends AjaxCommonTest {
 						+ docId
 						+ "' ct='application/x-zimbra-doc'>"
 						+ "<content>&lt;html>&lt;body>"
-						+ docText2
+						+ docItem.getDocText()
 						+ "&lt;/body>&lt;/html></content>"
 						+ "</doc>"
 						+ "</SaveDocumentRequest>");
-
+		
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on modified document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click on open in a separate window icon in toolbar
 		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW);
+				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW, docItem);
 
-		app.zPageBriefcase.isOpenDocLoaded(docName, docText2);
+		app.zPageBriefcase.isOpenDocLoaded(docItem);
 
 		String text = "";
 
 		// Select document opened in a separate window
 		try {
-			app.zPageBriefcase.zSelectWindow(docName);
+			app.zPageBriefcase.zSelectWindow(docItem.getName());
 
 			text = documentBriefcaseOpen.retriveDocumentText();
 
@@ -300,11 +291,11 @@ public class EditDocument extends AjaxCommonTest {
 			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
 		}
 
-		ZAssert.assertStringContains(text, docText2,
+		ZAssert.assertStringContains(text, docItem.getDocText(),
 				"Verify document text through GUI");
 
 		// delete file upon test completion
-		app.zPageBriefcase.deleteFileByName(docName);
+		app.zPageBriefcase.deleteFileByName(docItem.getName());
 	}
 
 	@Test(description = "Create document through SOAP - edit text & verify through GUI", groups = { "smoke" })
@@ -315,20 +306,16 @@ public class EditDocument extends AjaxCommonTest {
 				SystemFolder.Briefcase);
 
 		// Create document item
-		DocumentItem document = new DocumentItem();
-
-		String docName = document.getDocName();
-		String docText = document.getDocText();
-		String docText2 = "text2" + ZimbraSeleniumProperties.getUniqueString();
+		DocumentItem docItem = new DocumentItem();
 
 		// Create document using SOAP
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
-				+ docText + "</body>" + "</html>");
+				+ docItem.getDocText() + "</body>" + "</html>");
 
 		account
 				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
 						+ "<doc name='"
-						+ docName
+						+ docItem.getName()
 						+ "' l='"
 						+ briefcaseFolder.getId()
 						+ "' ct='application/x-zimbra-doc'>"
@@ -343,63 +330,69 @@ public class EditDocument extends AjaxCommonTest {
 
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click on Edit document icon in toolbar
 		DocumentBriefcaseEdit documentBriefcaseEdit = (DocumentBriefcaseEdit) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_EDIT_FILE, document);
+				.zToolbarPressButton(Button.B_EDIT_FILE, docItem);
 
-		app.zPageBriefcase.isEditDocLoaded(docName, docText);
+		app.zPageBriefcase.isEditDocLoaded(docItem);
 
+		String editText="";
+		
 		// Select document window opened for editing
 		try {
-			app.zPageBriefcase.zSelectWindow(docName);
+			app.zPageBriefcase.zSelectWindow(docItem.getName());
 
+			editText = "editText" + ZimbraSeleniumProperties.getUniqueString();
+			
 			// Fill out the document with the new data
-			documentBriefcaseEdit.typeDocumentText(docText2);
+			documentBriefcaseEdit.typeDocumentText(editText);
 
 			// Save and close
 			documentBriefcaseEdit.zSubmit();
 		} catch (Exception ex) {
-			throw new HarnessException("error in editing document " + docName,
+			throw new HarnessException("error in editing document " + docItem.getName(),
 					ex);
 		} finally {
 			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
 		}
-
+		
+		docItem.setDocText(editText);
+		
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
-		// Click on created document
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+		// Click on modified document
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click on open in a separate window icon in toolbar
 		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW);
+				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW, docItem);
 
-		app.zPageBriefcase.isOpenDocLoaded(docName, docText2);
+		app.zPageBriefcase.isOpenDocLoaded(docItem);
 
 		String text = "";
 
 		// Select document opened in a separate window
 		try {
-			app.zPageBriefcase.zSelectWindow(docName);
+			app.zPageBriefcase.zSelectWindow(docItem.getName());
 
 			text = documentBriefcaseOpen.retriveDocumentText();
 
 			// close
-			app.zPageBriefcase.zSelectWindow(docName);
+			app.zPageBriefcase.zSelectWindow(docItem.getName());
 
 			app.zPageBriefcase.closeWindow();
 		} finally {
 			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
 		}
 
-		ZAssert.assertStringContains(text, docText2,
+		ZAssert.assertStringContains(text, docItem.getDocText(),
 				"Verify document text through GUI");
 
 		// delete file upon test completion
-		app.zPageBriefcase.deleteFileByName(docName);
+		app.zPageBriefcase.deleteFileByName(docItem.getName());
 	}
 
 	@Test(description = "Create document through SOAP - Edit Document using Right Click Context Menu & verify through GUI", groups = { "functional" })
@@ -410,20 +403,16 @@ public class EditDocument extends AjaxCommonTest {
 				SystemFolder.Briefcase);
 
 		// Create document item
-		DocumentItem document = new DocumentItem();
-
-		String docName = document.getDocName();
-		String docName2 = "name2" + ZimbraSeleniumProperties.getUniqueString();
-		String docText = document.getDocText();
+		DocumentItem docItem = new DocumentItem();
 
 		// Create document using SOAP
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
-				+ docText + "</body>" + "</html>");
+				+ docItem.getDocText() + "</body>" + "</html>");
 
 		account
 				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
 						+ "<doc name='"
-						+ docName
+						+ docItem.getName()
 						+ "' l='"
 						+ briefcaseFolder.getId()
 						+ "' ct='application/x-zimbra-doc'>"
@@ -438,30 +427,36 @@ public class EditDocument extends AjaxCommonTest {
 
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Edit Document using Right Click Context Menu
 		DocumentBriefcaseEdit documentBriefcaseEdit = (DocumentBriefcaseEdit) app.zPageBriefcase
-				.zListItem(Action.A_RIGHTCLICK, Button.O_EDIT, document);
+				.zListItem(Action.A_RIGHTCLICK, Button.O_EDIT, docItem);
 
 		// app.zPageBriefcase.isEditDocLoaded(docName, docText);
 
+		String editDocName = "";
+		
 		// Select edit document window
 		try {
-			app.zPageBriefcase.zSelectWindow(docName);
+			app.zPageBriefcase.zSelectWindow(docItem.getName());
 
 			// Fill out the document with the new data
-			documentBriefcaseEdit.typeDocumentName(docName2);
+			editDocName = "editDocName" + ZimbraSeleniumProperties.getUniqueString();
+			
+			documentBriefcaseEdit.typeDocumentName(editDocName);
 
 			// Save and close
 			documentBriefcaseEdit.zSubmit();
 		} catch (Exception ex) {
-			throw new HarnessException("error in editing document " + docName,
+			throw new HarnessException("error in editing document " + docItem.getName(),
 					ex);
 		} finally {
 			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
 		}
 
+		docItem.setDocName(editDocName);
+		
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
@@ -470,12 +465,12 @@ public class EditDocument extends AjaxCommonTest {
 		// ZAssert.assertStringContains(name, docName,
 
 		// "Verify document name through GUI");
-		boolean present = app.zPageBriefcase.waitForPresentInListView(docName2);
+		boolean present = app.zPageBriefcase.waitForPresentInListView(docItem.getName());
 
 		ZAssert.assertTrue(present, "Verify document name through GUI");
 
 		// delete file upon test completion
-		app.zPageBriefcase.deleteFileByName(docName2);
+		app.zPageBriefcase.deleteFileByName(docItem.getName());
 
 		/*
 		 * //name =ClientSessionFactory.session().selenium().getText(

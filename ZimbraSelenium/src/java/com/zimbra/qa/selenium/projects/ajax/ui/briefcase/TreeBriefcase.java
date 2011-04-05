@@ -311,7 +311,7 @@ public class TreeBriefcase extends AbsTree {
 	 */
 	public AbsPage zTreeItem(Action action, IItem item) throws HarnessException {
 
-		tracer.trace("Click " + action + " on temm " + item.getName());
+		tracer.trace("Click " + action + " on item " + item.getName());
 
 		// Validate the arguments
 		if ((action == null) || (item == null)) {

@@ -1,7 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
 import org.testng.annotations.Test;
-import com.zimbra.qa.selenium.framework.items.DocumentItem;
+import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
@@ -31,14 +31,15 @@ public class OpenFile extends AjaxCommonTest {
 		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
 				SystemFolder.Briefcase);
 
-		// Create document item
-		DocumentItem document = new DocumentItem();
-
+		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-				+ "/data/public/other/testtextfile.txt";
+		+ "/data/public/other/testtextfile.txt";
+		
+		FileItem fileItem = new FileItem(filePath);
 
-		String fileName = document.getFileName(filePath);
-		String fileText = "test";
+		String fileName = fileItem.getName();
+		
+		final String fileText = "test";
 
 		// Upload file to server through RestUtil
 		String attachmentId = account.uploadFile(filePath);
@@ -53,11 +54,11 @@ public class OpenFile extends AjaxCommonTest {
 
 		// Click on created file
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Click on open in a separate window icon in toolbar
 		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW);
+				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW, fileItem);
 
 		app.zPageBriefcase.isOpenFileLoaded(fileName, fileText);
 

@@ -2,8 +2,9 @@ package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.items.DocumentItem;
+import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
+import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
@@ -31,13 +32,11 @@ public class EditFile extends AjaxCommonTest {
 		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
 				SystemFolder.Briefcase);
 
-		// Create document item
-		DocumentItem document = new DocumentItem();
-
+		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
 				+ "/data/public/other/putty.log";
 
-		String fileName = document.getFileName(filePath);
+		IItem fileItem = new FileItem(filePath);
 
 		// Upload file to server through RestUtil
 		String attachmentId = account.uploadFile(filePath);
@@ -61,21 +60,20 @@ public class EditFile extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Right click on document, select Rename
 		app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, Button.B_RENAME,
-				fileName);
+				fileItem);
 
-		document
-				.setDocName("rename" + ZimbraSeleniumProperties.getUniqueString());
+		String fileName2 = "renameFile"
+				+ ZimbraSeleniumProperties.getUniqueString();
 
-		fileName = document.getDocName();
-
-		app.zPageBriefcase.rename(fileName);
+		app.zPageBriefcase.rename(fileName2);
 
 		// Verify document name through GUI;
-		ZAssert.assertTrue(app.zPageBriefcase.waitForPresentInListView(fileName),
-				"Verify document name through GUI");
+		ZAssert.assertTrue(app.zPageBriefcase
+				.waitForPresentInListView(fileName2),
+				"Verify new file name through GUI");
 	}
 }

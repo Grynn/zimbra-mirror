@@ -55,7 +55,7 @@ public class DocumentBriefcaseEdit extends AbsForm {
 	}
 
 	public void typeDocumentName(String text) throws HarnessException {
-		zSelectWindow(docItem.getDocName());
+		zSelectWindow(docItem.getName());
 		sType(Locators.zNameField, text);
 	}
 
@@ -65,7 +65,7 @@ public class DocumentBriefcaseEdit extends AbsForm {
 
 	@Override
 	public void zSubmit() throws HarnessException {
-		zSelectWindow(docItem.getDocName());
+		zSelectWindow(docItem.getName());
 
 		logger.info("DocumentBriefcaseEdit.SaveAndClose()");
 
@@ -88,7 +88,7 @@ public class DocumentBriefcaseEdit extends AbsForm {
 		DialogAddVersionNotes dlgAddNotes = new DialogAddVersionNotes(
 				MyApplication, ((AppAjaxClient) MyApplication).zPageBriefcase);
 
-		dlgAddNotes.zDismissAddVersionNotesDlg(docItem.getDocName());
+		dlgAddNotes.zDismissAddVersionNotesDlg(docItem.getName());
 	}
 
 	@Override
@@ -96,9 +96,9 @@ public class DocumentBriefcaseEdit extends AbsForm {
 		logger.info("DocumentBriefcaseEdit.zIsActive()");
 		if (docItem != null) {
 
-			zWaitForWindow(docItem.getDocName());
+			zWaitForWindow(docItem.getName());
 
-			zSelectWindow(docItem.getDocName());
+			zSelectWindow(docItem.getName());
 
 			zWaitForElementPresent("css=div[class='ZDToolBar ZWidget']");
 

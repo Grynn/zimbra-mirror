@@ -35,14 +35,14 @@ public class CreateDocument extends AjaxCommonTest {
 				SystemFolder.Briefcase);
 
 		// Create document item
-		DocumentItem document = new DocumentItem();
+		DocumentItem docItem = new DocumentItem();
 
-		String docName = document.getDocName();
-		String docText = document.getDocText();
+		String docName = docItem.getName();
+		String docText = docItem.getDocText();
 
 		// Open new document page
 		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_NEW);
+				.zToolbarPressButton(Button.B_NEW,docItem);
 		
 		try {
 			app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
@@ -68,13 +68,13 @@ public class CreateDocument extends AjaxCommonTest {
 
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docName);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click on open in a separate window icon in toolbar
 		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW);
+				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW, docItem);
 
-		app.zPageBriefcase.isOpenDocLoaded(docName, docText);
+		app.zPageBriefcase.isOpenDocLoaded(docItem);
 
 		String name = "";
 		String text = "";
@@ -111,7 +111,7 @@ public class CreateDocument extends AjaxCommonTest {
 		// Create document item
 		DocumentItem document = new DocumentItem();
 
-		String docName = document.getDocName();
+		String docName = document.getName();
 		String docText = document.getDocText();
 
 		// Open new document page using Pulldown menu
@@ -161,7 +161,7 @@ public class CreateDocument extends AjaxCommonTest {
 		// Create document item
 		DocumentItem document = new DocumentItem();
 
-		String docName = document.getDocName();
+		String docName = document.getName();
 		String docText = document.getDocText();
 
 		Shortcut shortcut = Shortcut.S_NEWDOCUMENT;
