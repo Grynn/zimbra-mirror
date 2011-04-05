@@ -130,3 +130,20 @@ function(srcControl) {
 	}
 	this._dragObj = null;
 };
+
+/*
+ *  return starting X position
+ *  @return {int} starting X position
+ */
+DwtDragBox.prototype.getStartX =
+function() {
+    return this._startX;
+};
+
+/*  return starting Y position
+ *  @return {int} starting Y position
+ */
+DwtDragBox.prototype.getStartY =
+function() {
+    return this._startY;
+};
