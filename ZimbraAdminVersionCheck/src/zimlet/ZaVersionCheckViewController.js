@@ -50,7 +50,7 @@ function(ev) {
 	} else if (AjxUtil.isEmpty(this._currentObject.attrs[ZaVersionCheck.A_zimbraVersionCheckServer]) || 
 				AjxUtil.isEmpty(this._currentObject.attrs[ZaVersionCheck.A_zimbraVersionCheckURL]) ||
 				(this._currentObject.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationEmail] == "TRUE" &&
-					(AjxUtil.isEmpty(this._currentObject.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationEmailFrom]) ||
+					(
 			 		 AjxUtil.isEmpty(this._currentObject.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationSubject]) ||
 			 		 AjxUtil.isEmpty(this._currentObject.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationBody]) ||
 			 		 AjxUtil.isEmpty(this._currentObject.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationEmail])
@@ -125,14 +125,7 @@ function () {
 			this._errorDialog.popup();		
 			return false;
 		}
-		
-		if(AjxUtil.isEmpty(tmpObj.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationEmailFrom])) {
-			//show error msg
-			this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR, [com_zimbra_adminversioncheck.MSG_zimbraVersionCheckNotificationEmailFrom]), null, DwtMessageDialog.CRITICAL_STYLE, null);
-			this._errorDialog.popup();		
-			return false;
-		}
-		
+				
 		if(AjxUtil.isEmpty(tmpObj.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationBody])) {
 			//show error msg
 			this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR, [com_zimbra_adminversioncheck.MSG_zimbraVersionCheckNotificationBody]), null, DwtMessageDialog.CRITICAL_STYLE, null);
@@ -147,24 +140,7 @@ function () {
 			return false;
 		}
 	}
-	
-	//check if "from" account is real
-	if(tmpObj.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationEmailFrom]) {
-		if(tmpObj.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationEmailFrom] != this._currentObject.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationEmailFrom]) {
-			var testA = new ZaAccount();
-			try {
-				testA.load("name",tmpObj.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationEmailFrom]);
-			} catch (ex) {
-				if (ex.code == ZmCsfeException.ACCT_NO_SUCH_ACCOUNT) {
-					this._errorDialog.setMessage(AjxMessageFormat.format(com_zimbra_adminversioncheck.ERROR_WRONG_ACCOUNT, [tmpObj.attrs[ZaVersionCheck.A_zimbraVersionCheckNotificationEmailFrom]]), null, DwtMessageDialog.CRITICAL_STYLE, null);
-					this._errorDialog.popup();	
-					return false;	
-				} else {
-					throw (ex);
-				}
-			}
-		}
-	}
+
 	
 	//transfer the fields from the tmpObj to the _currentObject, since _currentObject is an instance of ZaDomain
 	var mods = new Object();

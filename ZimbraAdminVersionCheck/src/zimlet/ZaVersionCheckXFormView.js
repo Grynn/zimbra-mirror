@@ -108,7 +108,7 @@ ZaVersionCheckXFormView.myXFormModifier = function(xFormObject, entry) {
 						visibilityChecks:[],
 						tableCssStyle: "height: 15px"
 				  	},
-					{ type: _DWT_ALERT_,
+					{ type: _DWT_ALERT_,colSpan:"*",
 					  containerCssStyle: "padding-bottom:0px",
 					  style: DwtAlert.WARNING,
 					  iconVisible: false,
@@ -131,16 +131,18 @@ ZaVersionCheckXFormView.myXFormModifier = function(xFormObject, entry) {
 						trueValue:"TRUE",falseValue:"FALSE",
 						enableDisableChecks:[],visibilityChecks:[]
 					},
+					{ type: _DWT_ALERT_,colSpan:"*",
+						  containerCssStyle: "padding-bottom:0px",
+						  style: DwtAlert.WARNING,
+						  iconVisible: false, content:com_zimbra_adminversioncheck.NoteSendingNotificationFromAddress
+					},
 					{ref:ZaVersionCheck.A_zimbraVersionCheckNotificationEmail, type:_TEXTFIELD_, 
 						label:com_zimbra_adminversioncheck.LBL_zimbraVersionCheckNotificationEmail, width:250,
 						visibilityChecks:[],
 						enableDisableChangeEventSources:[ZaVersionCheck.A_zimbraVersionCheckSendNotifications],
 						enableDisableChecks:[[XForm.checkInstanceValue,ZaVersionCheck.A_zimbraVersionCheckSendNotifications,"TRUE"]]						
   					},
-  					{ref:ZaVersionCheck.A_zimbraVersionCheckNotificationEmailFrom, type:_DYNSELECT_,
-  						dataFetcherClass:ZaSearch,dataFetcherTypes:[ZaSearch.ACCOUNTS],
-  						dataFetcherAttrs:[ZaItem.A_zimbraId, ZaItem.A_cn, ZaAccount.A_name, ZaAccount.A_displayname, ZaAccount.A_mail],
-						dataFetcherMethod:ZaSearch.prototype.dynSelectSearch,
+  					{ref:ZaVersionCheck.A_zimbraVersionCheckNotificationEmailFrom, type:_TEXTFIELD_,
 						visibilityChecks:[],
 						enableDisableChangeEventSources:[ZaVersionCheck.A_zimbraVersionCheckSendNotifications],
 						enableDisableChecks:[[XForm.checkInstanceValue,ZaVersionCheck.A_zimbraVersionCheckSendNotifications,"TRUE"]],

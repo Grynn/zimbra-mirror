@@ -174,13 +174,13 @@ public class VersionCheck extends AdminDocumentHandler {
 						msg = msg.replaceAll("\\$\\{NEWLINE\\}", "\n");
 						String subj = subjTemplate.replaceAll("\\$\\{IS_CRITICAL\\}", criticalStr).replaceAll("\\$\\{NEW_LINE\\}", "\n");
 						try {
-							Account targetAccount = Provisioning.getInstance().get(AccountBy.name, fromEmail);
+							Account targetAccount = Provisioning.getInstance().get(AccountBy.id, zc.getAuthtokenAccountId());
 							String accountSOAPURI = AccountUtil.getSoapUri(targetAccount);
 							AuthToken targetAuth = AuthProvider.getAuthToken(targetAccount,	System.currentTimeMillis() + 3600 * 1000);
 							Options options = new Options();
 							options.setAuthToken(targetAuth.getEncoded());
-							options.setTargetAccount(fromEmail);
-							options.setTargetAccountBy(AccountBy.name);
+							options.setTargetAccount(targetAccount.getId());
+							options.setTargetAccountBy(AccountBy.id);
 							if(accountSOAPURI == null) {
 								accountSOAPURI =  URLUtil.getSoapURL(prov.getLocalServer(),true);
 							}
@@ -190,10 +190,16 @@ public class VersionCheck extends AdminDocumentHandler {
 							ZOutgoingMessage m = new ZOutgoingMessage();
 							List<ZEmailAddress> addrs = new ArrayList<ZEmailAddress>();
 							addrs.addAll(ZEmailAddress.parseAddresses(emails,ZEmailAddress.EMAIL_TYPE_TO));
+							
+							if(fromEmail != null && fromEmail.length()>0) {
+								addrs.add(new ZEmailAddress(fromEmail,null,null, ZEmailAddress.EMAIL_TYPE_FROM));
+							}
 							m.setSubject(subj);
+						
 							m.setAddresses(addrs);
 							m.setMessagePart(new MessagePart("text/plain", msg));
 							zmbox.sendMessage(m, null, false);
+							
 						} catch (Exception e) {
 							ZimbraLog.extensions.error("Version check extension failed to send notifications.",	this, e);
 						}
