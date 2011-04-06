@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
     "a"
 })
 @XmlSeeAlso({
-    NewIdentity.class
+    Identity.class
 })
 public abstract class AttrsImpl {
 

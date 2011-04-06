@@ -27,6 +27,54 @@ public interface MailService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.BrowseResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/Browse")
+    @WebResult(name = "BrowseResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public BrowseResponse browseRequest(
+        @WebParam(name = "BrowseRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        BrowseRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.ConvActionResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/ConvAction")
+    @WebResult(name = "ConvActionResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public ConvActionResponse convActionRequest(
+        @WebParam(name = "ConvActionRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        ConvActionRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.CreateTagResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/CreateTag")
+    @WebResult(name = "CreateTagResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public CreateTagResponse createTagRequest(
+        @WebParam(name = "CreateTagRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        CreateTagRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.EmptyDumpsterResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/EmptyDumpster")
+    @WebResult(name = "EmptyDumpsterResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public EmptyDumpsterResponse emptyDumpsterRequest(
+        @WebParam(name = "EmptyDumpsterRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        EmptyDumpsterRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.mail.wsimport.generated.ExportContactsResponse
      */
     @WebMethod(action = "urn:zimbraMail/ExportContacts")
@@ -34,6 +82,42 @@ public interface MailService {
     public ExportContactsResponse exportContactsRequest(
         @WebParam(name = "ExportContactsRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
         ExportContactsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns java.lang.String
+     */
+    @WebMethod(action = "urn:zimbraMail/GenerateUUID")
+    @WebResult(name = "GenerateUUIDResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public String generateUUIDRequest(
+        @WebParam(name = "GenerateUUIDRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        GenerateUUIDRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.GetConvResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/GetConv")
+    @WebResult(name = "GetConvResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public GetConvResponse getConvRequest(
+        @WebParam(name = "GetConvRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        GetConvRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.GetCustomMetadataResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/GetCustomMetadata")
+    @WebResult(name = "GetCustomMetadataResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public GetCustomMetadataResponse getCustomMetadataRequest(
+        @WebParam(name = "GetCustomMetadataRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        GetCustomMetadataRequest parameters);
 
     /**
      * 
@@ -63,6 +147,42 @@ public interface MailService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.GetMailboxMetadataResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/GetMailboxMetadata")
+    @WebResult(name = "GetMailboxMetadataResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public GetMailboxMetadataResponse getMailboxMetadataRequest(
+        @WebParam(name = "GetMailboxMetadataRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        GetMailboxMetadataRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.GetMsgMetadataResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/GetMsgMetadata")
+    @WebResult(name = "GetMsgMetadataResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public GetMsgMetadataResponse getMsgMetadataRequest(
+        @WebParam(name = "GetMsgMetadataRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        GetMsgMetadataRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.GetTagResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/GetTag")
+    @WebResult(name = "GetTagResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public GetTagResponse getTagRequest(
+        @WebParam(name = "GetTagRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        GetTagRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.mail.wsimport.generated.ImportContactsResponse
      */
     @WebMethod(action = "urn:zimbraMail/ImportContacts")
@@ -70,5 +190,89 @@ public interface MailService {
     public ImportContactsResponse importContactsRequest(
         @WebParam(name = "ImportContactsRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
         ImportContactsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.ItemActionResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/ItemAction")
+    @WebResult(name = "ItemActionResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public ItemActionResponse itemActionRequest(
+        @WebParam(name = "ItemActionRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        ItemActionRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.ModifyMailboxMetadataResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/ModifyMailboxMetadata")
+    @WebResult(name = "ModifyMailboxMetadataResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public ModifyMailboxMetadataResponse modifyMailboxMetadataRequest(
+        @WebParam(name = "ModifyMailboxMetadataRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        ModifyMailboxMetadataRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.MsgActionResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/MsgAction")
+    @WebResult(name = "MsgActionResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public MsgActionResponse msgActionRequest(
+        @WebParam(name = "MsgActionRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        MsgActionRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.NoOpResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/NoOp")
+    @WebResult(name = "NoOpResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public NoOpResponse noOpRequest(
+        @WebParam(name = "NoOpRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        NoOpRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.SetCustomMetadataResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/SetCustomMetadata")
+    @WebResult(name = "SetCustomMetadataResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public SetCustomMetadataResponse setCustomMetadataRequest(
+        @WebParam(name = "SetCustomMetadataRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        SetCustomMetadataRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.SetMailboxMetadataResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/SetMailboxMetadata")
+    @WebResult(name = "SetMailboxMetadataResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public SetMailboxMetadataResponse setMailboxMetadataRequest(
+        @WebParam(name = "SetMailboxMetadataRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        SetMailboxMetadataRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.TagActionResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/TagAction")
+    @WebResult(name = "TagActionResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public TagActionResponse tagActionRequest(
+        @WebParam(name = "TagActionRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        TagActionRequest parameters);
 
 }

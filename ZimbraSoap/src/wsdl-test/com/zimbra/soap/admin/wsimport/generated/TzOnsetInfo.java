@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "tzOnsetInfo")
+@XmlType(name = "tzOnsetInfo", namespace = "urn:zimbra")
 public class TzOnsetInfo {
 
     @XmlAttribute

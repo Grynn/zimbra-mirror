@@ -37,7 +37,6 @@ import com.zimbra.soap.account.wsimport.generated.Identity;
 import com.zimbra.soap.account.wsimport.generated.ModifyIdentityRequest;
 import com.zimbra.soap.account.wsimport.generated.ModifyIdentityResponse;
 import com.zimbra.soap.account.wsimport.generated.NameId;
-import com.zimbra.soap.account.wsimport.generated.NewIdentity;
 import com.zimbra.soap.admin.wsimport.generated.AdminService;
 
 public class WSDLIdentitiesTest {
@@ -140,7 +139,7 @@ public class WSDLIdentitiesTest {
     public void identityTest() throws Exception {
         Utility.ensureAccountExists(testAcct);
         CreateIdentityRequest req = new CreateIdentityRequest();
-        NewIdentity newIdentity = new NewIdentity();
+        Identity newIdentity = new Identity();
         newIdentity.setName(altId);
         Attr prefFromAddr = new Attr();
         prefFromAddr.setName("zimbraPrefFromAddress");

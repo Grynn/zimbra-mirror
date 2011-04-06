@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="target" type="{urn:zimbraAdmin}effectiveRightsTargetSelector"/>
  *         &lt;element name="grantee" type="{urn:zimbraAdmin}granteeSelector"/>
- *         &lt;element name="right" type="{urn:zimbraAdmin}stringValue"/>
+ *         &lt;element name="right" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

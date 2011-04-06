@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "cursorInfo")
+@XmlType(name = "cursorInfo", namespace = "urn:zimbra")
 public class CursorInfo {
 
     @XmlAttribute

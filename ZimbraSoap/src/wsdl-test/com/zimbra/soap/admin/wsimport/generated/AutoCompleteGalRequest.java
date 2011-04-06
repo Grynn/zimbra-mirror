@@ -19,10 +19,10 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="header" type="{urn:zimbraAdmin}attributeName" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="header" type="{urn:zimbra}attributeName" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="tz" type="{urn:zimbraAdmin}calTZInfo" minOccurs="0"/>
- *         &lt;element name="locale" type="{urn:zimbraAdmin}stringValue" minOccurs="0"/>
- *         &lt;element name="cursor" type="{urn:zimbraAdmin}cursorInfo" minOccurs="0"/>
+ *         &lt;element name="locale" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="cursor" type="{urn:zimbra}cursorInfo" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="domain" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />

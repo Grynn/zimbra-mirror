@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="hostname" type="{urn:zimbraAdmin}hostStats" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="stats" type="{urn:zimbraAdmin}namedElement" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="note" type="{urn:zimbraAdmin}stringValue" minOccurs="0"/>
+ *         &lt;element name="note" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

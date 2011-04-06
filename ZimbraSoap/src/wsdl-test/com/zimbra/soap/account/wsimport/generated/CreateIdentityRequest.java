@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="identity" type="{urn:zimbraAccount}newIdentity"/>
+ *         &lt;element name="identity" type="{urn:zimbraAccount}identity"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -33,17 +33,17 @@ import javax.xml.bind.annotation.XmlType;
 public class CreateIdentityRequest {
 
     @XmlElement(required = true)
-    protected NewIdentity identity;
+    protected Identity identity;
 
     /**
      * Gets the value of the identity property.
      * 
      * @return
      *     possible object is
-     *     {@link NewIdentity }
+     *     {@link Identity }
      *     
      */
-    public NewIdentity getIdentity() {
+    public Identity getIdentity() {
         return identity;
     }
 
@@ -52,10 +52,10 @@ public class CreateIdentityRequest {
      * 
      * @param value
      *     allowed object is
-     *     {@link NewIdentity }
+     *     {@link Identity }
      *     
      */
-    public void setIdentity(NewIdentity value) {
+    public void setIdentity(Identity value) {
         this.identity = value;
     }
 
