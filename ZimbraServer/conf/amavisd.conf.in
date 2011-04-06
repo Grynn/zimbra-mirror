@@ -426,7 +426,7 @@ $banned_filename_re = new_RE(
 
 # ### http://www.clamav.net/
  ['ClamAV-clamd',
-   \&ask_daemon, ["CONTSCAN {}\n", "/var/run/clamav/clamd"],
+   \&ask_daemon, ["CONTSCAN {}\n", '127.0.0.1:3310'],
    qr/\bOK$/m, qr/\bFOUND$/m,
    qr/^.*?: (?!Infected Archive)(.*) FOUND$/m ],
 # # NOTE: run clamd under the same user as amavisd, or run it under its own
