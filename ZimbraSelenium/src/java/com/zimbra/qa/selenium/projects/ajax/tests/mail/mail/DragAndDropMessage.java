@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
+import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -43,6 +44,10 @@ public class DragAndDropMessage extends AjaxCommonTest {
 					"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
 						"<folder name='" + foldername +"' l='"+ inbox.getId() +"'/>" +
 					"</CreateFolderRequest>");
+		
+		// Click Get Mail button to view folder in list		
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		FolderItem subfolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
 
@@ -57,6 +62,10 @@ public class DragAndDropMessage extends AjaxCommonTest {
 							"</mp>" +
 						"</m>" +
 					"</SendMsgRequest>");
+		
+		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inbox);
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
 		// Get the mail item for the new message
 		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");

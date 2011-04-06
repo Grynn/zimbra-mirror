@@ -285,6 +285,10 @@ public abstract class AbsSeleniumObject {
 		ClientSessionFactory.session().selenium().mouseDown(locator);
 		logger.info("mouseDown(" + locator + ")");
 	}
+	public void sMouseDownAt(String locator, String coordString) {
+		ClientSessionFactory.session().selenium().mouseDownAt(locator, coordString);
+		logger.info("mouseDownAt(" + locator + ",'" + coordString + "')");
+	}
 
 	/**
 	 * DefaultSelenium.mouseOver()
@@ -309,7 +313,10 @@ public abstract class AbsSeleniumObject {
 		ClientSessionFactory.session().selenium().mouseMoveAt(locator, coordString);
 		logger.info("mouseMoveAt(" + locator + ",'" + coordString + "')");
 	}
-
+	public void sMouseMove(String locator) {
+		ClientSessionFactory.session().selenium().mouseMove(locator);
+		logger.info("mouseMoveAt(" + locator + ")");
+	}
 	/**
 	 * DefaultSelenium.mouseUpAt()
 	 */

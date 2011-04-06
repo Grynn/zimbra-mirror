@@ -163,23 +163,27 @@ public abstract class AbsPage extends AbsSeleniumObject {
 		logger.info("x,y coordinate of the objectToBeDroppedInto relative to objectToBeDragged = " + relative);
 		
 		// Hold the mouse down on the source
-		this.sMouseDown(locatorSource);
-		
+		this.sMouseDownAt(locatorSource, relative.toString());
+
+		SleepUtil.sleep(1000);
 		// Drag the mouse to the destination, plus the offset
 		this.sMouseMoveAt(locatorDestination, relative.toString());
-		
+
 		// Wait a bit for things to happen
 		SleepUtil.sleep(1000 * 3);
-		
+
+		this.sMouseMove(locatorDestination);
+		this.sMouseOver(locatorDestination);
+
+		SleepUtil.sleep(1000);
 		// Release the mouse
 		this.sMouseUpAt(locatorDestination, relative.toString());
-		
-		// Wait for the client to come back
-		this.zWaitForBusyOverlay();
 
-		
+		// Wait for the client to come back
+		this.zWaitForBusyOverlay();		
 
 	}
+	
 	
 	
 	/**
