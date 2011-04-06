@@ -891,8 +891,8 @@ public class PageBriefcase extends AbsTab {
 		return true;
 	}
 
-	public boolean isOptionDisabled(Locators locator) throws HarnessException {
-		return sIsElementPresent("css=td[" + locator
+	public boolean isOptionDisabled(Locators name) throws HarnessException {
+		return sIsElementPresent("css=td[" + name.locator
 				+ "]>div[class*=ZDisabledImage]");
 	}
 
