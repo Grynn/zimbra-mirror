@@ -38,6 +38,9 @@ public class ShareFolder extends AjaxCommonTest {
 				+		"<folder name='" + foldername +"' l='" + inbox.getId() +"'/>"
 				+	"</CreateFolderRequest>");
 
+		//Need to do Refresh by clicking on getmail button to see folder in the list 
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		
 		// Make sure the folder was created on the server
 		FolderItem subfolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
 		ZAssert.assertNotNull(subfolder, "Verify the folder exists on the server");

@@ -25,6 +25,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogRenameFolder;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogRenameTag;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogShare;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 
@@ -122,6 +123,10 @@ public class TreeMail extends AbsTree {
 		}else if (option == Button.B_MOVE) {
 			optionLocator= "id=POPUP_MOVE";
 			page = new DialogMove(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+
+		} else if (option == Button.B_SHARE) {
+			optionLocator= "id=POPUP_SHARE_FOLDER";
+			page = new DialogShare(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
 
 		} else {
 			throw new HarnessException("button " + option

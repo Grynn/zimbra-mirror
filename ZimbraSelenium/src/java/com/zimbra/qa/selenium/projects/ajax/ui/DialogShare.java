@@ -8,6 +8,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 
 
+
 /**
  * Represents a "Rename Folder" dialog box
  * <p>
@@ -17,8 +18,8 @@ import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 public class DialogShare extends AbsDialog {
 
 	public static class Locators {
-	
-
+		public static final String zDialogShareId = "ShareDialog";
+		public static final String zButtonsId = "ShareDialog_buttons";
 	}
 	
 	
@@ -56,13 +57,17 @@ public class DialogShare extends AbsDialog {
 	public void zSetEmailAddress(String email) throws HarnessException {
 		logger.info(myPageName() + " zSetEmailAddress("+ email +")");
 
-		String locator = "implement me";
+		String locator = "//div[@id='ShareDialog_grantee']/input";
+		
 		
 		// Make sure the locator exists
 		if ( !this.sIsElementPresent(locator) ) {
 			throw new HarnessException("zSetEmailAddress "+ locator +" is not present");
 		}
-
+		this.sFocus(locator);
+	    this.zClick(locator);
+	    zKeyboard.zTypeCharacters(email);
+		//this.sType(locator, email);
 	}
 	
 	public static class ShareRole {
@@ -131,7 +136,7 @@ public class DialogShare extends AbsDialog {
 		
 		if ( button == Button.B_OK ) {
 			
-			locator =  "implement me";
+			locator =  "//div[@id='"+ Locators.zDialogShareId +"']//div[@id='"+ Locators.zButtonsId +"']//td[text()='OK']";
 			
 		} else if ( button == Button.B_CANCEL ) {
 			
@@ -185,8 +190,21 @@ public class DialogShare extends AbsDialog {
 	@Override
 	public boolean zIsActive() throws HarnessException {
 		
-		String locator = "css=[]";
-		return ( this.sIsElementPresent(locator) );
+		logger.info(myPageName() + " zIsActive()");
+
+		String locator = "id="+ Locators.zDialogShareId;
+		
+		if ( !this.sIsElementPresent(locator) ) {
+			return (false); // Not even present
+		}
+		
+		if ( !this.zIsVisiblePerPosition(locator, 0, 0) ) {
+			return (false);	// Not visible per position
+		}
+	
+		// Yes, visible
+		logger.info(myPageName() + " zIsVisible() = true");
+		return (true);
 	}
 
 
