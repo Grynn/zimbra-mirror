@@ -11,6 +11,7 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactGroupNew.Toolbar;
 
 
 public class CreateContactGroup extends AjaxCommonTest  {
@@ -197,6 +198,20 @@ public class CreateContactGroup extends AjaxCommonTest  {
 		verification(group);
 
         //TODO: verified all selected emails in the group
+		
+	}
+
+	@Test(	description = "Check disabled buttons in contact group's new form",
+			groups = { "functional" })
+	public void CreateContactGroup_05() throws HarnessException {			
+		//open contact group form
+		FormContactGroupNew formGroup = (FormContactGroupNew)app.zPageAddressbook.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_CONTACTGROUP);
+        
+		//verify Save, Delete All, and Add (email) buttons disabled		
+		ZAssert.assertFalse(formGroup.sIsVisible(Toolbar.SAVE), "Verify contact button Save disabled ");
+		ZAssert.assertFalse(formGroup.sIsVisible(FormContactGroupNew.Locators.zDeleteAllButton), "Verify contact button Delete All disabled ");
+		ZAssert.assertFalse(formGroup.sIsVisible(FormContactGroupNew.Locators.zAddNewButton), "Verify contact button Add disabled ");
+		
 		
 	}
 
