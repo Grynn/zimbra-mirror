@@ -5,6 +5,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -117,7 +118,7 @@ public class DialogAddVersionNotes extends AbsDialog {
 	public void zDismissAddVersionNotesDlg(String parentWindow)
 			throws HarnessException {
 		zSelectWindow(PageBriefcase.pageTitle);
-
+		SleepUtil.sleepSmall();
 		if (zIsWindowOpen(parentWindow)) {
 			zSelectWindow(parentWindow);
 
