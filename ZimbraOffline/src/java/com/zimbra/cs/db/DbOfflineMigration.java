@@ -18,8 +18,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.apache.derby.iapi.error.StandardException;
-
 import com.zimbra.cs.db.DbPool.DbConnection;
 
 public class DbOfflineMigration {
@@ -100,8 +98,6 @@ public class DbOfflineMigration {
                 } else {
                     throw new DbDataCorruptedException();
                 }
-            } else if (x.getCause() instanceof StandardException) {
-                throw new DbUpdateException();
             } else {
                 throw x;
             }
@@ -155,7 +151,7 @@ public class DbOfflineMigration {
                 conn.commit();
         }
     }
-    
+
     private void migrateFromOfflineVersion4(DbConnection conn) throws Exception {
         PreparedStatement stmt = null;
         boolean success = false;
@@ -173,7 +169,7 @@ public class DbOfflineMigration {
             }
         }
     }
-    
+
     private void setNewDefaultSkin(DbConnection conn, PreparedStatement stmt, String skin) throws Exception {
         stmt = conn.prepareStatement("SELECT entry_id FROM directory" +
                 " WHERE entry_name = 'local@host.local' AND entry_type = 'acct'");

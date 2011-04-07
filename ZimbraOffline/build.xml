@@ -40,7 +40,6 @@
   <property name="server.build.dir" location="../ZimbraServer/build" />
   <property name="server.build.lib.dir" location="${server.build.dir}/dist/lib" />
   <property name="server.lib.dir" location="../ZimbraServer/lib" />
-  <property name="server.tools.lib.dir" location="../ZimbraServer/tools/lib" />
   <property name="server.classes.dir" location="${server.build.dir}/classes" />
 
   <property name="common.dir" location="../ZimbraCommon" />
@@ -99,7 +98,6 @@
   <property name="zimbra.offline.app.dir" location="${zimbra.home.dir}/app" />
   <property name="zimbra.offline.data.dir" location="${zimbra.home.dir}/data" />
 
-  <property name="zimbra.derby.dir" location="${zimbra.offline.data.dir}/derby" />
   <property name="zimbra.index.dir" location="${zimbra.offline.data.dir}/index"/>
   <property name="zimbra.store.dir" location="${zimbra.offline.data.dir}/store"/>
   <property name="zimbra.sqlite.dir" location="${zimbra.offline.data.dir}/sqlite"/>
@@ -124,27 +122,9 @@
   <property name="prism.src.dir" location="../ThirdParty/prism" />
   <property name="xulrunner.src.dir" location="../ThirdParty/xulrunner" />
   <property name="jetty.version" value="6.1.22.z6" />
-
-  <condition property="db-derby">
-    <isset property="env.ZIMBRA_OFFLINE_USE_DERBY" />
-  </condition>
-  <condition property="db-sqlite">
-    <not><isset property="db-derby"/></not>
-  </condition>
-
-  <condition property="db.driver.jar" value="derby*.jar">
-    <isset property="db-derby"/>
-  </condition>
-  <condition property="db.driver.jar" value="sqlitejdbc*.jar">
-    <isset property="db-sqlite"/>
-  </condition>
-
-  <condition property="src.db.dir" value="${src.dir}/db/derby" else="${src.dir}/db/sqlite">
-    <isset property="db-derby" />
-  </condition>
-  <condition property="server.db.dir" value="${server.src.dir}/db/derby" else="${server.src.dir}/db/sqlite">
-    <isset property="db-derby" />
-  </condition>
+  <property name="db.driver.jar" value="sqlitejdbc*.jar"/>
+  <property name="server.db.dir" value="${server.src.dir}/db/sqlite"/>
+  <property name="src.db.dir" value="${src.dir}/db/sqlite"/>
 
   <available file="${zsync.common.dir}" type="dir" property="build.exchange.ext" />
 
@@ -169,9 +149,6 @@
       <include name="**/*.jar" />
     </fileset>
     <fileset dir="${jars.dir}">
-      <include name="**/*.jar" />
-    </fileset>
-    <fileset dir="${server.tools.lib.dir}">
       <include name="**/*.jar" />
     </fileset>
   </path>
@@ -215,7 +192,7 @@
       </exec>
     </sequential>
   </macrodef>
-  
+
   <!-- Targets -->
   <target name="offline-build-init">
     <mkdir dir="${build.classes.dir}" />
@@ -397,16 +374,9 @@
     </for>
   </target>
 
-  <target name="offline-db-init" depends="offline-derby-init,offline-sqlite-init" />
+  <target name="offline-db-init" depends="offline-sqlite-init" />
 
-  <target name="offline-derby-init" if="db-derby">
-    <delete dir="${zimbra.derby.dir}"/>
-    <java classname="org.apache.derby.tools.ij" fork="true" classpathref="offline.class.path" failonerror="true">
-      <arg file="${zimbra.offline.app.dir}/db/init.sql" />
-    </java>
-  </target>
-
-  <target name="offline-sqlite-init" if="db-sqlite">
+  <target name="offline-sqlite-init">
       <!-- SQLite JDBC driver doesn't support Statement.setEscapeProcessing, which breaks the <sql/> task. -->
     <delete dir="${zimbra.sqlite.dir}"/>
     <mkdir dir="${zimbra.sqlite.dir}"/>
@@ -417,19 +387,13 @@
     </exec>
   </target>
 
-  <target name="derby-versions-init" if="db-derby">
-    <java classname="com.zimbra.cs.db.Derby" fork="true" classpathref="offline.class.path" failonerror="true">
-      <arg line="-o ${build.dir}"/>
-    </java>
-  </target>
-
-  <target name="sqlite-versions-init" if="db-sqlite">
+  <target name="sqlite-versions-init">
     <java classname="com.zimbra.cs.db.SQLite" fork="true" classpathref="offline.class.path" failonerror="true">
       <arg line="-o ${build.dir}"/>
     </java>
   </target>
 
-  <target name="db-versions-init" depends="derby-versions-init,sqlite-versions-init"/>
+  <target name="db-versions-init" depends="sqlite-versions-init"/>
 
   <target name="offline-dev-dist">
     <antcall target="offline-war" />
@@ -439,7 +403,6 @@
     </antcall>
     <antcall target="offline-zimlet-war" />
     <copy todir="${dist.dir}/conf" file="${server.config.dir}/datasource.xml" overwrite="true" />
-    <copy todir="${dist.dir}/conf" file="${config.dir}/derby.properties" overwrite="true"/>
     <copy tofile="${dist.dir}/conf/localconfig.xml" file="${config.dir}/localconfig.xml" overwrite="true" />
     <copy tofile="${dist.dir}/conf/log4j.properties" file="${config.dir}/log4j.properties" overwrite="true" />
         <copy tofile="${dist.dir}/conf/zdesktop.conf" file="${config.dir}/zdesktop.conf" overwrite="true" />
@@ -476,7 +439,7 @@
     <copy todir="${dist.dir}/jetty/etc" file="${config.dir}/webdefault.xml" overwrite="true"/>
 
     <copy todir="${dist.dir}/jetty/common/lib" overwrite="true">
-      <fileset dir="${server.build.dir}/dist/jetty/common/lib" includes="*.jar" excludes="derby.jar,sqlite*.jar,mysql*.jar,jfreechart*,testng*" />
+      <fileset dir="${server.build.dir}/dist/jetty/common/lib" includes="*.jar" excludes="sqlite*.jar,mysql*.jar,jfreechart*,testng*" />
       <fileset refid="gdata.jars"/>
     </copy>
     <delete>
@@ -503,42 +466,19 @@
       </filterset>
     </copy>
 
-    <if>
-      <isset property="db-derby"/>
-      <then>
-        <copy todir="${dist.dir}/conf" file="${config.dir}/derby.properties" overwrite="true"/>
-        <copy todir="${dist.dir}/jetty/common/lib" file="../ZimbraServer/tools/lib/derbytools.jar" overwrite="true"/>
-        <copy todir="${dist.dir}/jetty/common/lib" file="${common.jars.dir}/derby.jar" overwrite="true"/>
-        <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
-          <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
-          <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
-          <arg line="-e zimbra_class_database=com.zimbra.cs.db.Derby -f"/>
-        </java>
-        <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
-          <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
-          <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
-          <arg line="-e debug_disable_mailbox_group=false -f"/>
-        </java>
-      </then>
-    </if>
-    <if>
-      <isset property="db-sqlite"/>
-      <then>
-        <copy todir="${dist.dir}/jetty/common/lib" overwrite="true">
-          <fileset file="${common.jars.dir}/sqlite*.jar"/>
-        </copy>
-        <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
-          <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
-          <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
-          <arg line="-e zimbra_class_database=com.zimbra.cs.db.SQLite -f"/>
-        </java>
-        <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
-          <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
-          <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
-          <arg line="-e debug_disable_mailbox_group=true -f"/>
-        </java>
-      </then>
-    </if>
+    <copy todir="${dist.dir}/jetty/common/lib" overwrite="true">
+      <fileset file="${common.jars.dir}/sqlite*.jar"/>
+    </copy>
+    <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
+      <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
+      <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml"/>
+      <arg line="-e zimbra_class_database=com.zimbra.cs.db.SQLite -f"/>
+    </java>
+    <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="offline.class.path" failonerror="true">
+      <jvmarg value="-Djava.library.path=${server.build.lib.dir}"/>
+      <sysproperty key="zimbra.config" value="${dist.dir}/conf/localconfig.xml" />
+      <arg line="-e debug_disable_mailbox_group=true -f"/>
+    </java>
 
     <copy todir="${dist.dir}/lib" file="${build.dir}/zdesktop.jar" overwrite="true" />
     <copy todir="${jetty.dir}/lib" file="${build.dir}/offlinecfgtool.jar" overwrite="true" />
@@ -843,9 +783,7 @@
     <mkdir dir="${dist.data.dir}/store"/>
     <mkdir dir="${dist.data.dir}/redolog"/>
     <mkdir dir="${dist.data.dir}/redolog/archive"/>
-    <if><isset property="db-sqlite"/><then>
-      <mkdir dir="${dist.data.dir}/sqlite" />
-    </then></if>
+    <mkdir dir="${dist.data.dir}/sqlite" />
     <mkdir dir="${dist.data.dir}/zimlets-deployed"/>
 
     <mkdir dir="${dist.data.dir}/data/tmp/jetty"/>
@@ -864,15 +802,15 @@
     <replace file="${dist.app.dir}/jetty/etc/webdefault.xml" token="@production@" value="${param.production}"/>
     <replace file="${dist.data.dir}/bin/zdesktop" token="@install.app.root@" value="${param.app.dir}"/>
     <replace file="${dist.data.dir}/bin/zdesktop" token="@install.data.root@" value="${param.data.dir}"/>
-		<if>
-			<isset property="is-windows"/>
-			<then>
-				<set-assert-flag file="${dist.data.dir}/conf/zdesktop.conf"/>
-			</then>
-			<else>
-				<set-assert-flag file="${dist.data.dir}/bin/zdesktop"/>
-			</else>
-		</if>
+    <if>
+      <isset property="is-windows"/>
+      <then>
+        <set-assert-flag file="${dist.data.dir}/conf/zdesktop.conf"/>
+      </then>
+      <else>
+        <set-assert-flag file="${dist.data.dir}/bin/zdesktop"/>
+      </else>
+    </if>
 
     <chmod file="${dist.data.dir}/bin/zdesktop" perm="ugo+x" />
 
@@ -880,20 +818,20 @@
     <antcall target="offline-make-dist-ext-converter" />
   </target>
 
-	<macrodef name="set-assert-flag">
-		<attribute name="file"/>
-		<sequential>
-			<if>
-				<equals arg1="${offline.enable_assert}" arg2="true"/>
-				<then>
-					<replace file="@{file}" token="@assert_flag@" value="-ea"/>
-				</then>
-				<else>
-					<replace file="@{file}" token="@assert_flag@" value="-da"/>
-				</else>
-			</if>
-		</sequential>
-	</macrodef>
+  <macrodef name="set-assert-flag">
+    <attribute name="file"/>
+    <sequential>
+      <if>
+        <equals arg1="${offline.enable_assert}" arg2="true"/>
+        <then>
+          <replace file="@{file}" token="@assert_flag@" value="-ea"/>
+        </then>
+        <else>
+          <replace file="@{file}" token="@assert_flag@" value="-da"/>
+        </else>
+      </if>
+    </sequential>
+  </macrodef>
 
   <target name="offline-make-dist-ext" if="build.exchange.ext">
     <antcall target="offline-ext-jars"/>
