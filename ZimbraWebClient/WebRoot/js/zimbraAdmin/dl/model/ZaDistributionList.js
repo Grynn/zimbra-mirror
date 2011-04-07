@@ -821,8 +821,8 @@ ZaDistributionList.addNewMembers = function (mods, obj, dl, finishedCallback) {
 		params.callback = finishedCallback;
 	}
 	var addList = obj[ZaDistributionList.A2_addList];
-	obj[ZaDistributionList.A2_addList] = new Array();
 	command.invoke(params);
+	obj[ZaDistributionList.A2_addList] = new Array();
 	ZaDistributionList.modifyAccountDL(obj, addList, true);
 };
 ZaItem.modifyMethods["ZaDistributionList"].push(ZaDistributionList.addNewMembers);

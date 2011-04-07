@@ -151,6 +151,7 @@ ZaDLXFormView.removeMembers = function(event) {
 	var tmpCurrentAddList = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_addList);
 	var tmpSelectedList = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_membersSelected);
 	var tmpCurrentRemoveList = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_removeList);
+	var tmpOrigList = form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_origList);
 	
 	var newMemberList = AjxUtil.arraySubstract(tmpCurrentMemberList, form.getModel().getInstanceValue(form.getInstance(),ZaDistributionList.A2_membersSelected));
 	newMemberList._version = tmpCurrentMemberList._version + 1;
@@ -164,8 +165,10 @@ ZaDLXFormView.removeMembers = function(event) {
         var removeExistedList = [];
         for(var i = 0; i < tmpSelectedList.length; i++) {
                 var removedItem = tmpSelectedList[i];
-                if(!tmpCurrentAddList || tmpCurrentAddList.length == 0 ||AjxUtil.indexOf(tmpCurrentAddList,removedItem,false) < 0)
-                        removeExistedList.push(removedItem);
+                if(!tmpCurrentAddList || tmpCurrentAddList.length == 0 ||AjxUtil.indexOf(tmpCurrentAddList,removedItem,false) < 0) {
+			if(tmpOrigList && tmpOrigList.length > 0 && AjxUtil.indexOf(tmpOrigList, removedItem, false) >= 0)
+				removeExistedList.push(removedItem);
+		}
         }	
 	
 	var newRemoveList = AjxUtil.mergeArrays(tmpCurrentRemoveList,removeExistedList);	
@@ -417,7 +420,7 @@ ZaDLXFormView.addFreeFormAddressToMembers = function (event) {
 			if ((result = stdEmailRegEx.exec(tmpval)) != null) {
 				tmpval = result[2];
 			}
-			if(!AjxUtil.isValidEmailNonReg(tmpval)) {
+			if(!AjxEmailAddress.isValid(tmpval)) {
 				//how error msg
 				ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.WARNING_DL_INVALID_EMAIL,[values[i]]),null,DwtMessageDialog.WARNING_STYLE);
 				return false;
@@ -478,7 +481,9 @@ function (entry) {
 	this._containedObject[ZaDistributionList.A2_query] = "";
 	//membership related instance variables
 	this._containedObject[ZaAccount.A2_memberOf] = ZaAccountMemberOfListView.cloneMemberOf(entry);
-
+	// the origList is inited when we load the object, it won't be modified unless the first time
+	// So there is no need for me to do deep clone
+	this._containedObject[ZaDistributionList.A2_origList] = entry [ZaDistributionList.A2_origList];
 	this._containedObject[ZaAccount.A2_directMemberList + "_more"] = entry[ZaAccount.A2_directMemberList + "_more"];
 	this._containedObject[ZaAccount.A2_directMemberList + "_offset"] = entry[ZaAccount.A2_directMemberList + "_offset"];
 	this._containedObject[ZaAccount.A2_indirectMemberList + "_more"] = entry[ZaAccount.A2_indirectMemberList + "_more"];
