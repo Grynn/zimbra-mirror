@@ -445,10 +445,49 @@ ZaAccountXFormView.updateAlias = function () {
 			if(!domain || !ZaItem.hasRight(ZaDomain.RIGHT_CREATE_ALIAS, domain)) {		
 				ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_PERMISSION_CREATE_ALIAS, [domainName])) ;
 			} else {
-				arr[obj[ZaAlias.A_index]] = obj[ZaAccount.A_name];
-				this.getModel().setInstanceValue(this.getInstance(),ZaAccount.A_zimbraMailAlias, arr); 
-				this.getModel().setInstanceValue(this.getInstance(),ZaAccount.A2_alias_selection_cache, new Array());
-				this.parent.setDirty(true);
+                var viewController = null;
+				viewController = ZaApp.getInstance().getControllerById (this.parent.__internalId);
+
+				var account = null;
+				if(viewController) {
+					account = viewController._findAlias(obj[ZaAccount.A_name]);
+				}
+
+				if(account) {
+					var warning = null;
+                    switch(account.type) {
+							case ZaItem.DL:
+								if(account.name == obj[ZaAccount.A_name]) {
+									warning = AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS3,[account.name]);
+								} else {
+									warning = AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS4,[account.name, obj[ZaAccount.A_name]]);
+								}
+							break;
+							case ZaItem.ACCOUNT:
+								if(account.name == obj[ZaAccount.A_name]) {
+									warning= AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS2,[account.name]);
+								} else {
+									warning= AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS1,[account.name, obj[ZaAccount.A_name]]);
+								}
+							break;
+							case ZaItem.RESOURCE:
+								if(account.name == obj[ZaAccount.A_name]) {
+									warning = AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS5,[account.name]);
+								} else {
+									warning = AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS6,[account.name, obj[ZaAccount.A_name]]);
+								}
+							break;
+							default:
+								warning = AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS0,[obj[ZaAccount.A_name]]);
+							break;
+                    }
+					ZaApp.getInstance().getCurrentController().popupErrorDialog(warning);
+				} else {
+                    arr[obj[ZaAlias.A_index]] = obj[ZaAccount.A_name];
+                    this.getModel().setInstanceValue(this.getInstance(),ZaAccount.A_zimbraMailAlias, arr);
+                    this.getModel().setInstanceValue(this.getInstance(),ZaAccount.A2_alias_selection_cache, new Array());
+                    this.parent.setDirty(true);
+                }
 			}
 		}
 	}
@@ -487,12 +526,53 @@ ZaAccountXFormView.addAlias  = function () {
 			if(!domain || !ZaItem.hasRight(ZaDomain.RIGHT_CREATE_ALIAS, domain)) {
 				ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_PERMISSION_CREATE_ALIAS, [domainName])) ;
 			} else {
-				var instance = this.getInstance();
-				var arr = instance.attrs[ZaAccount.A_zimbraMailAlias]; 
-				arr.push(obj[ZaAccount.A_name]);
-				this.getModel().setInstanceValue(this.getInstance(),ZaAccount.A_zimbraMailAlias, arr);
-				this.getModel().setInstanceValue(this.getInstance(),ZaAccount.A2_alias_selection_cache, new Array());
-				this.parent.setDirty(true);
+				var viewController = null;
+				viewController = ZaApp.getInstance().getControllerById (this.parent.__internalId);
+				
+				var account = null; 
+				if(viewController) {
+					account = viewController._findAlias(obj[ZaAccount.A_name]);
+				}
+				
+				if(account) {
+					var warning = null;
+                    switch(account.type) {
+							case ZaItem.DL:
+								if(account.name == obj[ZaAccount.A_name]) {
+									warning = AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS3,[account.name]);
+								} else {
+									warning = AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS4,[account.name, obj[ZaAccount.A_name]]);
+								}
+							break;
+							case ZaItem.ACCOUNT:
+								if(account.name == obj[ZaAccount.A_name]) {
+									warning= AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS2,[account.name]);
+								} else {
+									warning= AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS1,[account.name, obj[ZaAccount.A_name]]);
+								}
+							break;
+							case ZaItem.RESOURCE:
+								if(account.name == obj[ZaAccount.A_name]) {
+									warning = AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS5,[account.name]);
+								} else {
+									warning = AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS6,[account.name, obj[ZaAccount.A_name]]);
+								}
+							break;
+							default:
+								warning = AjxMessageFormat.format(ZaMsg.WARNING_EACH_ALIAS0,[obj[ZaAccount.A_name]]);
+							break;
+                    }
+					ZaApp.getInstance().getCurrentController().popupErrorDialog(warning);
+				}
+				else {
+					var instance = this.getInstance();
+					var arr = instance.attrs[ZaAccount.A_zimbraMailAlias]; 
+					arr.push(obj[ZaAccount.A_name]);
+					this.getModel().setInstanceValue(this.getInstance(),ZaAccount.A_zimbraMailAlias, arr);
+					this.getModel().setInstanceValue(this.getInstance(),ZaAccount.A2_alias_selection_cache, new Array());
+					this.parent.setDirty(true);
+				}
+				
 			}
 		}
 	}
