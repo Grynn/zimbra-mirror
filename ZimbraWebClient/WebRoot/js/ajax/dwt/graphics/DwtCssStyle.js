@@ -104,29 +104,24 @@ function(htmlElement, cssPropName) {
 	} else {
 		var doc = htmlElement.ownerDocument;
 	}
-	
-	if (doc.defaultView && !AjxEnv.isSafari) {
+
+	if (doc.defaultView && doc.defaultView.getComputedStyle) {
 		var cssDecl = doc.defaultView.getComputedStyle(htmlElement, "");
-		result = cssDecl.getPropertyValue(cssPropName);
-	} else {
-		  // Convert CSS -> DOM name for IE etc
-			var tokens = cssPropName.split("-");
-			var propName = "";
-			var i;
-			var len = tokens.length;
-			for (i = 0; i < len; i++) {
-				if (i != 0) 
-					propName += tokens[i].substring(0, 1).toUpperCase();
-				else 
-					propName += tokens[i].substring(0, 1);
-				propName += tokens[i].substring(1);
-			}
-			if (htmlElement.currentStyle)
-				result = htmlElement.currentStyle[propName];
-			else if (htmlElement.style)
-				result = htmlElement.style[propName];
+		if (cssDecl) {
+			return cssDecl.getPropertyValue(cssPropName);
+		}
 	}
-	return result;
+	
+	// Convert CSS -> DOM name for IE etc
+	var tokens = cssPropName.split("-");
+	// Shift one word off the array and capitalize the rest
+	var propName = tokens.shift() + AjxUtil.map(tokens, AjxStringUtil.capitalize).join("");
+
+	if (htmlElement.currentStyle) {
+		return htmlElement.currentStyle[propName];
+	} else if (htmlElement.style) {
+		return htmlElement.style[propName];
+	}
 };
 
 DwtCssStyle.getComputedStyleObject = 
