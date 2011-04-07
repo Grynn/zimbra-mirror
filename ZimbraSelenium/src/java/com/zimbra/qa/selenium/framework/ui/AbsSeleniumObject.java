@@ -711,6 +711,18 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
+	 * DefaultSelenium.getBodyText()
+	 * 
+	 * @return
+	 */
+	public String sGetBodyText() {
+		String text = ClientSessionFactory.session().selenium().getBodyText();
+		return text;
+
+	}
+	
+
+	/**
 	 * DefaultSelenium.type()
 	 */
 	public void sType(String locator, String text) {
@@ -750,6 +762,20 @@ public abstract class AbsSeleniumObject {
 		logger.info("sSelectWindow(" + windowID + ")");
 	}
 
+	/**
+	 * DefaultSelenium.openWindow()
+	 * @param url
+	 * @param windowID
+	 */
+	public void sOpenWindow(String url,String windowID) {
+		ClientSessionFactory.session().selenium().openWindow(url, windowID);
+		logger.info("sOpenWindow(" + windowID + ")");
+	}
+	
+	public void sWaitForPopUp(String windowID,String timeout ) {
+		ClientSessionFactory.session().selenium().waitForPopUp(windowID, timeout);
+		logger.info("sWaitForPopUp(" + windowID + ")");
+	}
 	/**
 	 * DefaultSelenium.windowFocus()
 	 */

@@ -6,6 +6,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui.tasks;
 import java.util.*;
 
 import com.thoughtworks.selenium.SeleniumException;
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.TaskItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -890,5 +891,20 @@ public class PageTasks extends AbsTab {
 	   Object[] params = {subject};
 	   return (TaskItem)GeneralUtility.waitFor(null, this, false, "browseTask", params,
 	         WAIT_FOR_OPERAND.NEQ, null, 30000, 1000);
+	}
+	
+	public String  GetShowOrigBodyText(String EmailAddress, String calItemId) throws HarnessException{
+
+		try{
+			sOpenWindow(ZimbraSeleniumProperties.getBaseURL() + "/home/" + EmailAddress + "/Tasks/?id=" + calItemId + "&mime=text/plain&noAttach=1","ShowOrignal");
+			sWaitForPopUp("ShowOrignal", "3000");
+			sSelectWindow("ShowOrignal");
+			String showOrigBody=sGetBodyText().replaceAll("\\n", "").trim().replaceAll(" ", "");
+			sClose();
+			return showOrigBody;
+
+		}finally{
+			ClientSessionFactory.session().selenium().selectWindow("null");	
+		}
 	}
 }

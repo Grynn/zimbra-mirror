@@ -5,7 +5,7 @@ import java.util.*;
 import org.testng.annotations.Test;
 
 
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
+
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -153,6 +153,7 @@ public class GetTask extends AjaxCommonTest {
 			public void GetTask_03() throws HarnessException {
 
 		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
+		
 
 		// Create the message data to be sent
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
@@ -202,16 +203,12 @@ public class GetTask extends AjaxCommonTest {
 		// Verify the To, From, Subject, Body
 		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.Subject), subject, "Verify the subject matches");		
 
-		//Verify HTML content through show original window
-		ClientSessionFactory.session().selenium().openWindow(ZimbraSeleniumProperties.getBaseURL() + "/home/" + app.zGetActiveAccount().EmailAddress + "/Tasks/?id=" + calItemId + "&mime=text/plain&noAttach=1","ShowOrignal");
-		ClientSessionFactory.session().selenium().waitForPopUp("ShowOrignal", "3000");
-		ClientSessionFactory.session().selenium().selectWindow("ShowOrignal");
+		// Verify HTML content through show original window
+		String EmailAddress = app.zGetActiveAccount().EmailAddress;
+		String showOrigBody = app.zPageTasks.GetShowOrigBodyText(EmailAddress,calItemId);
+		String bodyHtml = bodyHTML.trim().replaceAll(" ", "");
+		ZAssert.assertStringContains(showOrigBody, bodyHtml,"Verify the content matches");		
 		
-		String showOrigBody =ClientSessionFactory.session().selenium().getBodyText().replaceAll("\\n", "").trim().replaceAll(" ", "");
-		String bodyHtml =bodyHTML.trim().replaceAll(" ", "");
-		ZAssert.assertStringContains(showOrigBody, bodyHtml, "Verify the content matches");
-		ClientSessionFactory.session().selenium().selectWindow("null");	
-
 	}
 
 	
