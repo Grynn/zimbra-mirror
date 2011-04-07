@@ -44,7 +44,7 @@ public class ViewContactGroup extends AjaxCommonTest  {
 	
     
 	@Test(	description = "View a contact group created via soap",
-			groups = { "functionaly" })
+			groups = { "functional" })
 	public void DisplayContactGroup_01() throws HarnessException {
 		         		
 	    // Create a contact group via Soap then select
