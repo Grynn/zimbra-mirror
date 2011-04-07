@@ -228,8 +228,9 @@ public class DbOfflineMailbox {
             } else {
                 // first, add the new mask
                 stmt = conn.prepareStatement("UPDATE " + DbMailItem.getMailItemTableName(tag) +
-                        " SET tags = tags + ?" +
-                        " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + Db.bitmaskAND("tags") + " AND NOT " + Db.bitmaskAND("tags"));
+                        " SET tags = tags + ? WHERE " + DbMailItem.IN_THIS_MAILBOX_AND +
+                        Db.getInstance().bitAND("tags", "?") + "<> 0 AND " +
+                        Db.getInstance().bitAND("tags", "?") + " = 0");
                 int pos = 1;
                 stmt.setLong(pos++, newMask);
                 pos = DbMailItem.setMailboxId(stmt, mbox, pos);
@@ -240,8 +241,8 @@ public class DbOfflineMailbox {
 
                 // then, remove the old mask
                 stmt = conn.prepareStatement("UPDATE " + DbMailItem.getMailItemTableName(tag) +
-                        " SET tags = tags - ?" +
-                        " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + Db.bitmaskAND("tags"));
+                        " SET tags = tags - ? WHERE " + DbMailItem.IN_THIS_MAILBOX_AND +
+                        Db.getInstance().bitAND("tags", "?") + " <> 0");
                 pos = 1;
                 stmt.setLong(pos++, tag.getBitmask());
                 pos = DbMailItem.setMailboxId(stmt, mbox, pos);
