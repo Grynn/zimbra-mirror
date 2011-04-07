@@ -111,7 +111,7 @@ public class PageBriefcase extends AbsTab {
 					.zGetActiveAccount() != null ? MyApplication
 					.zGetActiveAccount().EmailAddress : ZimbraAccount
 					.AccountZWC().EmailAddress;
-			locator = Locators.zBriefcaseFolderIcon_Desktop + "[id*='"
+			locator = Locators.zBriefcaseFolderIcon_Desktop.locator + "[id*='"
 					+ currentActiveEmailAddress + "']";
 		} else {
 			locator = Locators.zBriefcaseFolderIcon.locator;

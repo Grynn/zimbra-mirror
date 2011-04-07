@@ -5,6 +5,8 @@ import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsForm;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 
 public class DocumentBriefcaseNew extends AbsForm {
@@ -123,11 +125,16 @@ public class DocumentBriefcaseNew extends AbsForm {
 		// this.sMouseDown(Locators.zSaveAndCloseIconBtn);
 		// this.sMouseUp(Locators.zSaveAndCloseIconBtn);
 
-		// add version notes
-		DialogAddVersionNotes dlgAddNotes = new DialogAddVersionNotes(
-				MyApplication, ((AppAjaxClient) MyApplication).zPageBriefcase);
-
-		dlgAddNotes.zDismissAddVersionNotesDlg(pageTitle);
+		//TODO: Add Version Notes dialog hasn't existed in ZD 7.0.1, thus
+		// ignoring below the Add Version Notes dialog for Desktop.
+		// Please remove this if condition block once it is available in ZD.
+		if (ZimbraSeleniumProperties.getAppType() != AppType.DESKTOP) {
+		   // add version notes
+		   DialogAddVersionNotes dlgAddNotes = new DialogAddVersionNotes(
+		         MyApplication, ((AppAjaxClient) MyApplication).zPageBriefcase);
+		   
+		   dlgAddNotes.zDismissAddVersionNotesDlg(pageTitle);		   
+		}
 	}
 
 	@Override
