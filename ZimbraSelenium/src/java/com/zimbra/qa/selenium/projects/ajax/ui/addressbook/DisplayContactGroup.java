@@ -22,7 +22,7 @@ public class DisplayContactGroup extends AbsDisplay {
 	 */
 	public static enum Field {
      FileAs,
-     //Company,
+     Company,
      Email    
 	}
 	
@@ -71,6 +71,9 @@ public class DisplayContactGroup extends AbsDisplay {
 		  //locator = "xpath=//table[@class='contactHeaderTable NoneBg']/div[@class='contactHeader']";
 		  locatorArray.add("css=table[class*='contactHeaderTable'] div[class*='contactHeader']");
 		}
+		if ( field == Field.Company ) {			
+			  locatorArray.add("css=table[class*='contactHeaderTable'] div[class*='companyName']");
+			}		
 		else if ( field == Field.Email ) {					   			
 			getAllLocators(locatorArray,"email");
 		} 
