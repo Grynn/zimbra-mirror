@@ -39,10 +39,10 @@ public class PageSearchResults extends AbsTab {
 		sType(SEARCH_INPUT_TEXT_BOX, query);
 		sClick(SEARCH_BUTTON);
 		if(sIsElementPresent("css=div#zl__SEARCH_MANAGE td:contains('"+query+"')")) {
-			zClick(Locators.zti__AppAdmin__ADDRESS__ACCOUNT_textCell);
+			zClick(Locators.zti__ACCOUNTS);
 			return true;
 		}
-		zClick(Locators.zti__AppAdmin__ADDRESS__ACCOUNT_textCell);
+		zClick(Locators.zti__ACCOUNTS);
 		return false;
 	}
 
