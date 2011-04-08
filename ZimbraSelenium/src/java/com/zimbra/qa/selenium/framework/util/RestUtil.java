@@ -90,7 +90,7 @@ public class RestUtil {
 	// Used for determining upload content types
 	protected static MimetypesFileTypeMap contentTypeMap = new MimetypesFileTypeMap();
 
-
+	
 	/**
 	 * Create a new Rest Utility
 	 */
@@ -568,6 +568,22 @@ public class RestUtil {
 	 */
 	public String getLastResponseBody() throws HarnessException {
 		return (responseBody);
+	}
+	
+	/**
+	 * Get the last response headers as a String
+	 * @return the response headers section
+	 * @throws HarnessException
+	 */
+	public String getLastResponseHeaders() throws HarnessException {
+		String eol = System.getProperty("line.separator", "\n");
+		StringBuilder sb = new StringBuilder();
+		if ( responseHeaders != null ) {
+			for (Header h : responseHeaders) {
+				sb.append(h.toString().trim()).append(eol);
+			}
+		}
+		return new String(sb);
 	}
 	
 	/**

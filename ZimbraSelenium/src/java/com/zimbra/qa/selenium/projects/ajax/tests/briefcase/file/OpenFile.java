@@ -33,12 +33,12 @@ public class OpenFile extends AjaxCommonTest {
 
 		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-		+ "/data/public/other/testtextfile.txt";
-		
+				+ "/data/public/other/testtextfile.txt";
+
 		FileItem fileItem = new FileItem(filePath);
 
 		String fileName = fileItem.getName();
-		
+
 		final String fileText = "test";
 
 		// Upload file to server through RestUtil
@@ -80,5 +80,8 @@ public class OpenFile extends AjaxCommonTest {
 
 		ZAssert.assertStringContains(text, fileText,
 				"Verify document text through GUI");
+
+		// delete file upon test completion
+		app.zPageBriefcase.deleteFileByName(fileItem.getName());
 	}
 }

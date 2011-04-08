@@ -100,7 +100,7 @@ public class UploadFile extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Verify document is created
-		String name = app.zPageBriefcase.getText(fileName);
+		String name = app.zPageBriefcase.getItemNameFromListView(fileName);
 		ZAssert.assertEquals(name, fileName, "Verify file name through GUI");
 	}
 }

@@ -3,6 +3,8 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 
+import java.util.EnumMap;
+import java.util.Map;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.FileItem;
@@ -16,6 +18,8 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
+import com.zimbra.qa.selenium.framework.util.RestUtil;
+import org.apache.commons.httpclient.HttpStatus;
 
 /**
  * @author
@@ -83,6 +87,27 @@ public class PageBriefcase extends AbsTab {
 
 		private Locators(String locator) {
 			this.locator = locator;
+		}
+	}
+
+	public static class Response {
+		public static enum ResponsePart {
+			BODY, HEADERS
+		}
+
+		public static enum Format {
+			HTML("html"), TEXT("text"), TGZ("tgz"), XML("xml"), JSON("json"), NATIVE(
+					"native"), RAW("raw");
+
+			private String fmt;
+
+			private Format(String fmt) {
+				this.fmt = fmt;
+			}
+
+			public String getFormat() {
+				return fmt;
+			}
 		}
 	}
 
@@ -871,8 +896,8 @@ public class PageBriefcase extends AbsTab {
 
 		zSelectWindow(windowName);
 
-		zWaitForElementPresent(Locators.zFileBodyField.locator + ":contains('" + text
-				+ "')");
+		zWaitForElementPresent(Locators.zFileBodyField.locator + ":contains('"
+				+ text + "')");
 	}
 
 	public boolean isPresentInListView(String itemName) throws HarnessException {
@@ -905,7 +930,7 @@ public class PageBriefcase extends AbsTab {
 		return true;
 	}
 
-	public String getText(String itemName) throws HarnessException {
+	public String getItemNameFromListView(String itemName) throws HarnessException {
 		String itemLocator = Locators.briefcaseListView.locator
 				+ " td[width*='auto'] div:contains(" + itemName + ")";
 
@@ -942,6 +967,37 @@ public class PageBriefcase extends AbsTab {
 		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>"
 				+ "<action id='" + docId + "' op='trash'/>"
 				+ "</ItemActionRequest>");
+	}
+
+	public EnumMap<Response.ResponsePart, String> displayFile(String filename,
+			Map<String, String> params) throws HarnessException {
+		ZimbraAccount account = MyApplication.zGetActiveAccount();
+		
+		RestUtil util = new RestUtil();
+	
+		util.setAuthentication(account);
+		
+		util.setPath("/home/~/Briefcase/" + filename);
+
+		for (Map.Entry<String, String> query : params.entrySet()) {
+			util.setQueryParameter(query.getKey(), query.getValue());
+		}
+
+		if (util.doGet() != HttpStatus.SC_OK)
+			throw new HarnessException("Unable to open " + filename + " in "
+					+ util.getLastURI());
+
+		final String responseHeaders = util.getLastResponseHeaders();
+		final String responseBody = util.getLastResponseBody();
+	
+		return new EnumMap<Response.ResponsePart, String>(
+				Response.ResponsePart.class) {
+			private static final long serialVersionUID = 1L;
+			{
+				put(Response.ResponsePart.HEADERS, responseHeaders);
+				put(Response.ResponsePart.BODY, responseBody);
+			}
+		};
 	}
 
 	public void closeWindow() {

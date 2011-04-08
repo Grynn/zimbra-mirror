@@ -1,7 +1,8 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
+import java.util.EnumMap;
+import java.util.HashMap;
 import org.testng.annotations.Test;
-
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -42,8 +43,8 @@ public class CreateDocument extends AjaxCommonTest {
 
 		// Open new document page
 		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_NEW,docItem);
-		
+				.zToolbarPressButton(Button.B_NEW, docItem);
+
 		try {
 			app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
 
@@ -56,7 +57,7 @@ public class CreateDocument extends AjaxCommonTest {
 			// Save and close
 			app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
 
-			documentBriefcaseNew.zSubmit();		
+			documentBriefcaseNew.zSubmit();
 		} finally {
 			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
 		}
@@ -101,12 +102,9 @@ public class CreateDocument extends AjaxCommonTest {
 				"Verify document text through GUI");
 	}
 
-	@Test(description = "Create document using New menu pulldown menu - verify through SOAP", groups = { "functional" })
+	@Test(description = "Create document using New menu pulldown menu - verify through SOAP & RestUtil", groups = { "functional" })
 	public void CreateDocument_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
-
-		//FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
-		//		SystemFolder.Briefcase);
 
 		// Create document item
 		DocumentItem document = new DocumentItem();
@@ -130,12 +128,22 @@ public class CreateDocument extends AjaxCommonTest {
 			// Save and close
 			app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
 
-			documentBriefcaseNew.zSubmit();						
+			documentBriefcaseNew.zSubmit();
 		} finally {
 			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
 		}
-		
+
 		app.zPageBriefcase.zWaitForWindowClosed(DocumentBriefcaseNew.pageTitle);
+		
+		// Display file through RestUtil
+		EnumMap<PageBriefcase.Response.ResponsePart, String> response = app.zPageBriefcase
+				.displayFile(docName, new HashMap<String, String>() {
+					private static final long serialVersionUID = 1L;
+					{
+						put("fmt", PageBriefcase.Response.Format.NATIVE
+								.getFormat());
+					}
+				});
 
 		// Search for created document
 		account
@@ -143,20 +151,21 @@ public class CreateDocument extends AjaxCommonTest {
 						+ "<query>" + docName + "</query>" + "</SearchRequest>");
 
 		String name = account.soapSelectValue("//mail:doc", "name");
-		
+
 		ZAssert.assertStringContains(docName, name,
-				"Verify document name through GUI");	
+				"Verify document name through GUI");
 		
-		//delete file upon test completion
+		ZAssert.assertStringContains(response
+				.get(PageBriefcase.Response.ResponsePart.BODY), docText,
+				"Verify document content through GUI");
+
+		// delete file upon test completion
 		app.zPageBriefcase.deleteFileByName(docName);
 	}
 
-	@Test(description = "Create document using keyboard shortcut - verify through SOAP", groups = { "functional" })
+	@Test(description = "Create document using keyboard shortcut - verify through SOAP & RestUtil", groups = { "functional" })
 	public void CreateDocument_03() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
-
-		//FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
-		//		SystemFolder.Briefcase);
 
 		// Create document item
 		DocumentItem document = new DocumentItem();
@@ -183,24 +192,36 @@ public class CreateDocument extends AjaxCommonTest {
 			// Save and close
 			app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);
 
-			documentBriefcaseNew.zSubmit();		
+			documentBriefcaseNew.zSubmit();
 		} finally {
 			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
 		}
-		
+
 		app.zPageBriefcase.zWaitForWindowClosed(DocumentBriefcaseNew.pageTitle);
+
+		// Display file through RestUtil
+		EnumMap<PageBriefcase.Response.ResponsePart, String> response = app.zPageBriefcase
+				.displayFile(docName, new HashMap<String, String>() {
+					private static final long serialVersionUID = 1L;
+					{
+						put("fmt", PageBriefcase.Response.Format.NATIVE
+								.getFormat());
+					}
+				});
 
 		// Search for created document
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
 						+ "<query>" + docName + "</query>" + "</SearchRequest>");
 
-		String name = account.soapSelectValue("//mail:doc", "name");
-		
-		ZAssert.assertStringContains(docName, name,
-				"Verify document name through GUI");	
-		
-		//delete file upon test completion
+		ZAssert.assertStringContains(account.soapSelectValue("//mail:doc",
+				"name"), docName, "Verify document name through GUI");
+
+		ZAssert.assertStringContains(response
+				.get(PageBriefcase.Response.ResponsePart.BODY), docText,
+				"Verify document content through GUI");
+
+		// delete file upon test completion
 		app.zPageBriefcase.deleteFileByName(docName);
 	}
 }
