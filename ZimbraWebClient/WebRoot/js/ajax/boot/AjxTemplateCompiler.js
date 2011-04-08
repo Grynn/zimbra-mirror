@@ -147,11 +147,11 @@ AjxTemplate.__printLine = function(buffer, s1 /* ..., sN */) {
 
 AjxTemplate.__printStringLines = function(buffer, s1 /* ..., sN */) {
 	var offset = buffer.length;
-	for (var i = 1; i < arguments.length; i++) {
-		var s = arguments[i];
+	for (var j = 1; j < arguments.length; j++) {
+		var s = arguments[j];
 		var lines = s.split("\n");
-		for (var j = 0; j < lines.length; j++) {
-			var line = lines[j];
+		for (var i = 0; i < lines.length; i++) {
+			var line = lines[i];
 			offset = AjxTemplate.__printStringLine(buffer, line, i < lines.length - 1 ? "\n" : "");
 		}
 	}
