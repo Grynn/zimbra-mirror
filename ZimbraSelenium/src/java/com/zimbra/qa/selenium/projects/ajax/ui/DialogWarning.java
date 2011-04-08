@@ -25,6 +25,7 @@ public class DialogWarning extends AbsDialog {
 		public static DialogWarningID SendLink = new DialogWarningID("css=div[class=DwtConfirmDialog]");
 		public static DialogWarningID DeleteTagWarningMessage = new DialogWarningID("YesNoCancel");
 		public static DialogWarningID EmptyFolderWarningMessage = new DialogWarningID("OkCancel");
+	
 		protected String Id;
 		protected DialogWarningID(String id) {
 			Id = id;
@@ -96,10 +97,12 @@ public class DialogWarning extends AbsDialog {
 
 			locator = buttonsTableLocator + "//table//table//tr/td[3]/div";
 
-		}else if ( button == Button.B_OK ) {
-			
-			locator = buttonsTableLocator + "//table//table//tr/td[1]/div";
-			
+		} else if (button == Button.B_OK) {
+			if (MyDivId.contains("ErrorDialog")) {
+				locator = buttonsTableLocator + "//table//table//tr/td/div[contains(@id,'ErrorDialog_button2')]";
+			} else {
+				locator = buttonsTableLocator + "//table//table//tr/td[1]/div";
+			}
 
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);

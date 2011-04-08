@@ -19,7 +19,7 @@ public class DialogError extends DialogWarning {
 		 * General "Zimbra" server error (such as PERM_DENIED, etc.)
 		 * See: https://bugzilla.zimbra.com/show_bug.cgi?id=57207
 		 */
-		public static DialogErrorID Zimbra = new DialogErrorID("DWT30");
+		public static DialogErrorID Zimbra = new DialogErrorID("ErrorDialog");
 
 		protected DialogErrorID(String id) {
 			super(id);
