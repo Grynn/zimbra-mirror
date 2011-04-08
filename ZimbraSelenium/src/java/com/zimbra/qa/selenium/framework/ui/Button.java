@@ -61,6 +61,7 @@ public class Button {
 	public static final Button B_NO = new Button("B_NO");
 	public static final Button B_CANCEL = new Button("B_CANCEL");
 	public static final Button B_OK = new Button("B_OK");
+	public static final Button O_EDIT_LINK = new Button("O_EDIT_LINK");
 
 	// MailPage buttons and pulldown options
 	public static final Button B_GETMAIL = new Button("B_GETMAIL");

@@ -91,18 +91,24 @@ public class DialogEditFolder extends AbsDialog {
 			locator = "//div[@class='" + Locators.zEditPropertiesDialogId
 			+ "']//div[contains(@id,'_buttons')]//td[text()='Cancel']";
 
+		}else if (button == Button.B_SHARE) {
+
+			locator = "//div[@class='" + Locators.zEditPropertiesDialogId+ "']//div[contains(@id,'_buttons')]//td[text()=''Add Share...']";
+
+		} else if (button == Button.O_EDIT_LINK) {
+
+			locator = "//div[@class='" + Locators.zEditPropertiesDialogId+ "']//div[contains(@id,'_content')]//div/fieldset/div/table/tbody/tr/td/a[contains(text(),'Edit')]";
+
 		} else {
 			throw new HarnessException("Button " + button + " not implemented");
 		}
 
-		// Default behavior, click the locator
-		//
-
+		
 		// Make sure the locator was set
 		if (locator == null) {
 			throw new HarnessException("Button " + button + " not implemented");
 		}
-
+		
 		this.zClick(locator);
 
 		this.zWaitForBusyOverlay();
