@@ -40,15 +40,10 @@ public class WizardCreateAccount extends AbsWizard {
 		String CN = account.getLocalName();
 		String domain = account.getDomainName();
 		
-		sFocus(zdlg_ACCT_NAME);
-		sClick(zdlg_ACCT_NAME);
-		sType(zdlg_ACCT_NAME, CN);
 		
+		zType(zdlg_ACCT_NAME, CN);
 		
-		sFocus(zdlg_DOMAIN_NAME);
-		sClick(zdlg_DOMAIN_NAME);
-		sType(zdlg_DOMAIN_NAME, domain);
-		//zKeyboard.zTypeCharacters(domain);
+		zType(zdlg_DOMAIN_NAME, domain);
 		
 		for (String key : account.getAccountAttrs().keySet()) {
 			
@@ -56,10 +51,7 @@ public class WizardCreateAccount extends AbsWizard {
 			
 			if ( key.equals("sn")) {
 				
-				sFocus(zdlg_LAST_NAME);
-				sClick(zdlg_LAST_NAME);
-				sType(zdlg_LAST_NAME, account.getAccountAttrs().get(key));
-				//zKeyboard.zTypeCharacters( account.AccountAttrs.get(key));
+				zType(zdlg_LAST_NAME, account.getAccountAttrs().get(key));
 				continue;
 			}
 

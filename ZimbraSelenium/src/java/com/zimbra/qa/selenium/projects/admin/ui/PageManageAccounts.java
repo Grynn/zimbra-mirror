@@ -9,7 +9,6 @@ import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 
 
@@ -23,11 +22,10 @@ public class PageManageAccounts extends AbsTab {
 	public static class Locators {
 		
 		// ** OverviewTreePanel -> Addresses -> Accounts
-		public static final String zti__AppAdmin__ADDRESS__ACCOUNT_textCell = "zti__AppAdmin__ADDRESS__ACCOUNT_textCell";
+		public static final String zti__ACCOUNTS = "zti__AppAdmin__ADDRESS__ACCOUNT_textCell";
 		
 		// ** "Manage Accounts" Tab Title
-		public static final String zManageAccountIcon = "css=tr#ztab__MAIN_TAB_row div.ImgAccount";
-		//public static final String DWT93_classAttr = "css=tr#ztab__MAIN_TAB_row div#ztab__MAIN_TAB_title";
+		public static final String ztab__MANAGE_ACCOUNT_ICON = "css=tr#ztab__MAIN_TAB_row div.ImgAccount";
 		
 		// ** Menus
 		public static final String zb__ACLV__NEW_MENU_title = "xpath=//*[@id='zb__ACLV__NEW_MENU_title']";		// New Button
@@ -81,22 +79,17 @@ public class PageManageAccounts extends AbsTab {
 			throw new HarnessException("Admin Console application is not active!");
 
 		
-		boolean present = sIsElementPresent(Locators.zManageAccountIcon);
+		boolean present = sIsElementPresent(Locators.ztab__MANAGE_ACCOUNT_ICON);
 		if ( !present ) {
 			return (false);
 		}
 		
-		boolean visible = zIsVisiblePerPosition(Locators.zManageAccountIcon, 0, 0);
+		boolean visible = zIsVisiblePerPosition(Locators.ztab__MANAGE_ACCOUNT_ICON, 0, 0);
 		if ( !visible ) {
 			logger.debug("isActive() visible = "+ visible);
 			return (false);
 		}
 
-/*		String attrs = sGetAttribute(Locators.DWT93_classAttr);
-		if ( !attrs.contains("ZSelected") ) {
-			return (false);
-		}
-*/		
 		return (true);
 		
 	}
@@ -109,12 +102,11 @@ public class PageManageAccounts extends AbsTab {
 
 		if ( zIsActive() ) {
 			// This page is already active.
-			SleepUtil.sleepSmall();
 			return;
 		}
 		
 		// Click on Addresses -> Accounts
-		zClick(Locators.zti__AppAdmin__ADDRESS__ACCOUNT_textCell);
+		zClick(Locators.zti__ACCOUNTS);
 		
 		zWaitForActive();
 

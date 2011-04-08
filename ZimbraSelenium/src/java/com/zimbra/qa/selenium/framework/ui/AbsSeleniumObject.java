@@ -45,6 +45,16 @@ public abstract class AbsSeleniumObject {
 		logger.info("new " + AbsSeleniumObject.class.getCanonicalName());
 	}
 
+	
+	public boolean zIsLocatorPresent(String locator) {
+		if (!sIsElementPresent(locator)) {
+			logger.info("isVisiblePerPosition(" + locator
+					+ ") element is not present");
+			return (false);
+		}
+		return true;
+	}
+	
 	/**
 	 * Zimbra: return if the specified element is visible per style coordinates
 	 * 
@@ -57,12 +67,8 @@ public abstract class AbsSeleniumObject {
 			int topLimit) {
 
 		// Check if the locator is present
-		if (!sIsElementPresent(locator)) {
-			logger.info("isVisiblePerPosition(" + locator
-					+ ") element is not present");
-			return (false);
-		}
-
+		if(zIsLocatorPresent(locator));
+		
 		// Find the current position
 		Number left = ClientSessionFactory.session().selenium()
 				.getElementPositionLeft(locator);
@@ -87,11 +93,7 @@ public abstract class AbsSeleniumObject {
 	 */
 	public void zClick(String locator) throws HarnessException {
 		// Check if the locator is present
-		if (!sIsElementPresent(locator)) {
-			logger.info("zClick(" + locator + ") element is not present");
-			throw new HarnessException("zClick(" + locator
-					+ ") element is not present");
-		}
+		if(zIsLocatorPresent(locator));
 
 		ClientSessionFactory.session().selenium().mouseDownAt(locator, "0,0");
 		ClientSessionFactory.session().selenium().mouseUpAt(locator, "0,0");
@@ -107,11 +109,7 @@ public abstract class AbsSeleniumObject {
 	 */
 	public void zRightClick(String locator) throws HarnessException {
 		// Check if the locator is present
-		if (!sIsElementPresent(locator)) {
-			logger.info("zRightClick(" + locator + ") element is not present");
-			throw new HarnessException("zRightClick(" + locator
-					+ ") element is not present");
-		}
+		if(zIsLocatorPresent(locator));
 
 		ClientSessionFactory.session().selenium().mouseDownRightAt(locator,
 				"0,0");
@@ -152,6 +150,26 @@ public abstract class AbsSeleniumObject {
 
 	}
 
+	/**
+	 * The method writes in dialog box's input fields.
+	 * @param locator
+	 * @param value
+	 * @throws HarnessException
+	 */
+	@SuppressWarnings("deprecation")
+	public void zType(String locator, String value) throws HarnessException {
+		// Check if the locator is present
+		if(zIsLocatorPresent(locator));
+
+		
+		ClientSessionFactory.session().selenium().focus(locator);
+		ClientSessionFactory.session().selenium().clickAt(locator, "0,0");
+		ClientSessionFactory.session().selenium().type(locator, value); 
+	
+		logger.info("zType(" + locator + ","  + value + ")");	
+	}
+	
+	
 	// // ***
 	// Start: Selenium methods
 	// // ***
