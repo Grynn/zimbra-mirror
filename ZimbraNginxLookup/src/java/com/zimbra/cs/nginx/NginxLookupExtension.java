@@ -61,6 +61,7 @@ import com.zimbra.cs.account.AccessManager;
 import com.zimbra.cs.extension.ExtensionDispatcherServlet;
 import com.zimbra.cs.extension.ExtensionHttpHandler;
 import com.zimbra.cs.extension.ZimbraExtension;
+import com.zimbra.cs.ldap.LdapUtilCommon;
 import com.zimbra.cs.service.AuthProvider;
 
 public class NginxLookupExtension implements ZimbraExtension {
@@ -483,7 +484,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                                                 Set<String> extraAttrs) 
                                                 throws NginxLookupException, NamingException {
             HashMap<String, String> kv = new HashMap<String,String>();
-            kv.put(templateKey, LdapUtil.escapeSearchFilterArg(templateVal));
+            kv.put(templateKey, LdapUtilCommon.escapeSearchFilterArg(templateVal));
             String query = config.getAttr(queryTemplate);
             String base  = config.getAttr(searchBase);
             if (query == null)
