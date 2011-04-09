@@ -2,9 +2,8 @@ package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
 import java.util.EnumMap;
 import java.util.HashMap;
-
+import java.util.regex.Pattern;
 import org.testng.annotations.Test;
-
 import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.IItem;
@@ -13,6 +12,7 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.HtmlElement;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -106,15 +106,12 @@ public class EditFile extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Retrieve file text through RestUtil
-		String text = app.zPageBriefcase
-		.displayFile(fileItem.getName(), new HashMap<String, String>() {
-			private static final long serialVersionUID = 1L;
-			{
-				put("fmt", PageBriefcase.Response.Format.NATIVE
-						.getFormat());
-			}
-		}).get(PageBriefcase.Response.ResponsePart.BODY);
-		
+		HashMap<String, String> hm = new HashMap<String, String>();
+		hm.put("fmt", PageBriefcase.Response.Format.NATIVE.getFormat());
+
+		String text = app.zPageBriefcase.displayFile(fileItem.getName(), hm)
+				.get(PageBriefcase.Response.ResponsePart.BODY);
+
 		// Right click on document, select Rename
 		app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, Button.B_RENAME,
 				fileItem);
@@ -131,13 +128,12 @@ public class EditFile extends AjaxCommonTest {
 
 		// Display file through RestUtil
 		EnumMap<PageBriefcase.Response.ResponsePart, String> response = app.zPageBriefcase
-				.displayFile(fileName2, new HashMap<String, String>() {
-					private static final long serialVersionUID = 1L;
-					{
-						put("fmt", PageBriefcase.Response.Format.NATIVE
-								.getFormat());
-					}
-				});
+				.displayFile(fileName2, hm);
+
+		HtmlElement element = HtmlElement.clean(response
+				.get(PageBriefcase.Response.ResponsePart.BODY));
+		HtmlElement.evaluate(element, "//body", null, Pattern.compile(".*"
+				+ text + ".*"), 1);
 
 		ZAssert.assertEquals(response
 				.get(PageBriefcase.Response.ResponsePart.BODY), text,

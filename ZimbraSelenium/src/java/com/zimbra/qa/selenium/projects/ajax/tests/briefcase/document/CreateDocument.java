@@ -2,7 +2,9 @@ package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 import org.testng.annotations.Test;
+import com.zimbra.qa.selenium.framework.util.HtmlElement;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -134,7 +136,7 @@ public class CreateDocument extends AjaxCommonTest {
 		}
 
 		app.zPageBriefcase.zWaitForWindowClosed(DocumentBriefcaseNew.pageTitle);
-		
+
 		// Display file through RestUtil
 		EnumMap<PageBriefcase.Response.ResponsePart, String> response = app.zPageBriefcase
 				.displayFile(docName, new HashMap<String, String>() {
@@ -154,7 +156,12 @@ public class CreateDocument extends AjaxCommonTest {
 
 		ZAssert.assertStringContains(docName, name,
 				"Verify document name through GUI");
-		
+
+		HtmlElement element = HtmlElement.clean(response
+				.get(PageBriefcase.Response.ResponsePart.BODY));
+		HtmlElement.evaluate(element, "//body", null, Pattern.compile(".*"
+				+ docText + ".*"), 1);
+
 		ZAssert.assertStringContains(response
 				.get(PageBriefcase.Response.ResponsePart.BODY), docText,
 				"Verify document content through GUI");
@@ -216,6 +223,11 @@ public class CreateDocument extends AjaxCommonTest {
 
 		ZAssert.assertStringContains(account.soapSelectValue("//mail:doc",
 				"name"), docName, "Verify document name through GUI");
+
+		HtmlElement element = HtmlElement.clean(response
+				.get(PageBriefcase.Response.ResponsePart.BODY));
+		HtmlElement.evaluate(element, "//body", null, Pattern.compile(".*"
+				+ docText + ".*"), 1);
 
 		ZAssert.assertStringContains(response
 				.get(PageBriefcase.Response.ResponsePart.BODY), docText,
