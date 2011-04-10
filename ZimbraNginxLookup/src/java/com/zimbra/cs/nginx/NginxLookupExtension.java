@@ -49,7 +49,6 @@ import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.account.AuthTokenException;
 import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.account.auth.AuthMechanism;
-import com.zimbra.cs.account.ldap.LdapFilter;
 import com.zimbra.cs.account.ldap.LdapProvisioning;
 import com.zimbra.cs.account.ldap.LdapUtil;
 import com.zimbra.cs.account.ldap.ZimbraLdapContext;
@@ -62,6 +61,7 @@ import com.zimbra.cs.extension.ExtensionDispatcherServlet;
 import com.zimbra.cs.extension.ExtensionHttpHandler;
 import com.zimbra.cs.extension.ZimbraExtension;
 import com.zimbra.cs.ldap.LdapUtilCommon;
+import com.zimbra.cs.prov.ldap.LdapFilter;
 import com.zimbra.cs.service.AuthProvider;
 
 public class NginxLookupExtension implements ZimbraExtension {
