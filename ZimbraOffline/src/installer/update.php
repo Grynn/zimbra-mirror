@@ -2,9 +2,10 @@
 // update url  : https://www.zimbra.com/aus/zdesktop2/update.php
 
 $download_url_prefix = "http://files2.zimbra.com/downloads/zdesktop/updates";
-$details_url = "http://wiki.zimbra.com/index.php?title=Zimbra_Desktop_2";
+$details_url = "http://www.zimbra.com/support/documentation/zd-documentation.html";
 $license_url = "http://www.zimbra.com/license/zimbra-public-eula-2-3.html";
 $version = "@version@";
+$extension_version = "3.0.1";
 $buildid = @buildid@;
 
 $size_win32 = @size_win32@;
@@ -46,7 +47,7 @@ echo "<?xml version=\"1.0\"?>\n";
 ?>
 <updates>
 <?php if ($buildid > $oldbid) { ?>
-  <update type="major" version="<?php echo $version?>" extensionVersion="<?php echo $version?>" detailsURL="<?php echo $details_url?>" licenseURL="<?php echo $license_url?>">
+  <update type="major" version="<?php echo $version?>" extensionVersion="<?php echo $extension_version?>" detailsURL="<?php echo $details_url?>" licenseURL="<?php echo $license_url?>">
     <patch type="complete" URL="<?php echo $download_url?>" hashFunction="md5" hashValue="<?php echo $hash?>" size="<?php echo $size?>"/>
   </update>
 <?php } ?>
