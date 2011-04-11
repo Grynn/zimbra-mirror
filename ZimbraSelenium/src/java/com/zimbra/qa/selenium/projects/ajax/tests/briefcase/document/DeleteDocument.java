@@ -99,7 +99,7 @@ public class DeleteDocument extends AjaxCommonTest {
 		String id = account.soapSelectValue("//mail:SearchResponse//mail:doc",
 				"id");
 		ZAssert.assertEquals(id, docId,
-				"Verify the message was moved to the trash folder");
+				"Verify the document was moved to the trash folder");
 	}
 
 	@Test(description = "Create document through SOAP - delete using Delete Key & verify through GUI", groups = { "functional" })
@@ -279,7 +279,7 @@ public class DeleteDocument extends AjaxCommonTest {
 						"Verify document was deleted through GUI");
 	}
 
-	@Test(description = "Delete multiple messages(3) by selecting check box and delete using toolbar", groups = { "functional" })
+	@Test(description = "Delete multiple documents(3) by selecting check box and delete using toolbar", groups = { "functional" })
 	public void DeleteDocument_05() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
