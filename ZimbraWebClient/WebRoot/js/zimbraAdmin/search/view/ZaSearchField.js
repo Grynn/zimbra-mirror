@@ -626,11 +626,14 @@ ZaSearchField.prototype._getMyXForm = function() {
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIAS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCE_LIST_VIEW]) {
 		xFormObject.items.push({type: _OUTPUT_, value: ZaToolBar.getSeparatorHtml()});
 		xFormObject.items.push({type:_DWT_BUTTON_, label:ZaMsg.advanced_search, toolTipContent: ZaMsg.tt_advanced_search_open, name: "searchBuildButton",
-				cssStyle:"overflow: hidden" ,	
+				cssStyle:"overflow: hidden" , 	
                 onActivate:ZaSearchField.advancedButtonHndlr,
 				cssClass: "DwtToolbarButton ZaAdvancedSearchButton" 
 			});
 	}
+	// set the last button's width to 98 percents of its container
+	// to reserve some place between last button and its panel. 
+	xFormObject.items[numCols - 1].width = "98%";
 	return xFormObject;
 };
 
