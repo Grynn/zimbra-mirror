@@ -1046,7 +1046,9 @@ Super_Select1_XFormItem.prototype.initializeItems = function() {
 	var inputSize = this.getInheritedProperty("inputSize");
 	if(inputSize)
 		slct.inputSize = inputSize;
-
+    var valueWidth = this.getInheritedProperty("valueWidth");
+    if(valueWidth)
+        slct.width =  valueWidth;
 	this.items = [slct,anchorHlpr];
 	Composite_XFormItem.prototype.initializeItems.call(this);
 	
@@ -1066,8 +1068,9 @@ Super_Select1_XFormItem.prototype.items = [];
 SuperWiz_Select1_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPERWIZ_SELECT1_", "superwiz_select1", SuperWiz_Select1_XFormItem, Super_Select1_XFormItem);
 SuperWiz_Select1_XFormItem.prototype.labelCssClass = "xform_label_left ZaWizLabel";
-SuperWiz_Select1_XFormItem.prototype.labelCssStyle = "width:200px" ;
+SuperWiz_Select1_XFormItem.prototype.labelCssStyle = "width:194px" ; // for it has 6px padding
 SuperWiz_Select1_XFormItem.prototype.colSizes=["250px","*"];
+SuperWiz_Select1_XFormItem.prototype.valueWidth = "auto";
 SuperWiz_Select1_XFormItem.prototype.nowrap = false;
 SuperWiz_Select1_XFormItem.prototype.labelWrap = true;
 SuperWiz_Select1_XFormItem.prototype.visibilityChecks = [ZaItem.hasWritePermission];
