@@ -93,7 +93,7 @@ public class DialogShare extends AbsDialog {
 		if(role== ShareRole.Admin){
 			locator = "//div[@id='"+ Locators.zDialogShareId +"']//div[contains(@id,'_content')]//div/fieldset/div/table/tbody/tr[4]/td/input[contains(@id,'ShareRole_ADMIN')]";
 		}else if (role== ShareRole.Manager){
-			locator = "implement me";
+			locator = "//div[@id='"+ Locators.zDialogShareId +"']//div[contains(@id,'_content')]//div/fieldset/div/table/tbody/tr[3]/td/input[contains(@id,'ShareRole_MANAGER')]";
 		}else{
 			throw new HarnessException("zSetRole "+ locator +" is not present");
 		}

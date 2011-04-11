@@ -83,13 +83,11 @@ public class DialogEditFolder extends AbsDialog {
 
 		if (button == Button.B_OK) {
 
-			locator = "//div[@class='" + Locators.zEditPropertiesDialogId
-			+ "']//div[contains(@id,'_buttons')]//td[text()='OK']";
+			locator = "//div[@class='" + Locators.zEditPropertiesDialogId+ "']//div[contains(@id,'_buttons')]//td[text()='OK']";
 
 		} else if (button == Button.B_CANCEL) {
 
-			locator = "//div[@class='" + Locators.zEditPropertiesDialogId
-			+ "']//div[contains(@id,'_buttons')]//td[text()='Cancel']";
+			locator = "//div[@class='" + Locators.zEditPropertiesDialogId+ "']//div[contains(@id,'_buttons')]//td[text()='Cancel']";
 
 		}else if (button == Button.B_SHARE) {
 
@@ -98,7 +96,8 @@ public class DialogEditFolder extends AbsDialog {
 		} else if (button == Button.O_EDIT_LINK) {
 
 			locator = "//div[@class='" + Locators.zEditPropertiesDialogId+ "']//div[contains(@id,'_content')]//div/fieldset/div/table/tbody/tr/td/a[contains(text(),'Edit')]";
-
+			this.sClick(locator);
+			return (page);
 		} else {
 			throw new HarnessException("Button " + button + " not implemented");
 		}
