@@ -15,7 +15,7 @@ PATCH	:=
 
 ifdef BETA
 	include $(OPENLDAP_ROOT)/../beta_versions.def
-	PATCH	:= 
+	PATCH	:= patch -g0 -N -p1 < ../patches/ITS6898.patch;
 else
 	include $(OPENLDAP_ROOT)/../versions.def
 	PATCH	:= 
