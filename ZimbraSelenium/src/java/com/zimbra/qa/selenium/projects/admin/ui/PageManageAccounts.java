@@ -3,11 +3,9 @@
  */
 package com.zimbra.qa.selenium.projects.admin.ui;
 
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.AbsTab;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
+import java.util.*;
+
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 
@@ -112,119 +110,6 @@ public class PageManageAccounts extends AbsTab {
 
 	}
 	
-	/**
-	 * Click Previous/Next in the list
-	 * @param button
-	 * @throws HarnessException If the button is not active, throw Exception
-	 */
-	public void clickNavigation(ListNavButton button) throws HarnessException {
-		// TODO: If button is not enabled, thrown HarnessException
-		
-		// TODO: click on the button
-		
-		throw new HarnessException("implement me");
-	}
-
-	/**
-	 * Create the specified account using the Admin Console
-	 * @param account
-	 * @return
-	 * @throws HarnessException
-	 */
-	public AccountItem createAccount(AccountItem account) throws HarnessException {
-		logger.debug("createAccount(AccountItem account)" + account.getEmailAddress());
-
-		// Get the New Account Wizard
-		WizardCreateAccount wizard = getNewAccountWizard(Locators.zb__ACLV__NEW_MENU_title);
-		AccountItem a = (AccountItem)wizard.zCompleteWizard(account);
-		
-		// Return the account
-		return (a);
-	}
-
-	/**
-	 * Get the "New Account" wizard by clicking on the specified locator
-	 * @param locator "New" or "New -> Account"
-	 * @return
-	 * @throws HarnessException
-	 */
-	public WizardCreateAccount getNewAccountWizard(String locator) throws HarnessException {
-		
-		// Make sure the Manage Accounts page is showing
-		zNavigateTo();
-
-		// Click on "New"
-		sClick(locator);
-
-		WizardCreateAccount wizard = new WizardCreateAccount(this);
-		if ( !wizard.zIsOpen() )
-			throw new HarnessException("Clicking on locator "+ locator +" did not open wizard");
-		
-		// Return the Wizard object
-		return (wizard);
-	}
-
-	/**
-	 * Edit the specified account by selecting the account in the list and clicking "Edit"
-	 * @param emailaddress
-	 * @throws HarnessException
-	 */
-	public void editAccount(String emailaddress) throws HarnessException {
-		throw new HarnessException("implement me");
-	}
-
-	/**
-	 * Delete the specified account by selecting the account in the list and clicking "Delete"
-	 * @param emailaddress
-	 * @param button Click on this button in the dialog
-	 * @throws HarnessException
-	 */
-	public void deleteAccount(String emailaddress, PopupButton button) throws HarnessException {
-		throw new HarnessException("implement me");
-	}
-
-	/**
-	 * Change the password for the specified account by selecting the account in the list and clicking "Change Password"
-	 * @param emailaddress
-	 * @param password
-	 * @param confirm
-	 * @param mustChangePassword
-	 * @param button Click on this button in the dialog
-	 * @throws HarnessException
-	 */
-	public void changePasswordAccount(String emailaddress, String password, String confirm, boolean mustChangePassword, PopupButton button) throws HarnessException {
-		throw new HarnessException("implement me");
-	}
-
-	/**
-	 * Expire the account sessions for the specified account by selecting the account in the list and clicking "Expire Sessions"
-	 * @param emailaddress
-	 * @param button Click on this button in the dialog
-	 * @throws HarnessException
-	 */
-	public void expireSessionsAccount(String emailaddress, PopupButton button) throws HarnessException {
-		throw new HarnessException("implement me");
-	}
-
-
-	/**
-	 * View the mailbox for the specified account by selecting the account in the list and clicking "View Mail"
-	 * @param emailaddress
-	 * @throws HarnessException
-	 */
-	public void viewMailAccount(String emailaddress) throws HarnessException {
-		throw new HarnessException("implement me");
-	}
-
-	/**
-	 * Search Mail (opens PageEditSearch object)
-	 * @param emailaddress
-	 * @throws HarnessException
-	 */
-	public void searchMailAccount(String emailaddress) throws HarnessException {
-		throw new HarnessException("implement me");
-	}
-
 	@Override
 	public AbsPage zListItem(Action action, String item)
 			throws HarnessException {
@@ -247,15 +132,170 @@ public class PageManageAccounts extends AbsTab {
 	
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
-		// TODO Auto-generated method stub
-		return null;
+
+		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
+
+		tracer.trace("Press the "+ button +" button");
+
+		if ( button == null )
+			throw new HarnessException("Button cannot be null!");
+
+
+		// Default behavior variables
+		//
+		String locator = null;			// If set, this will be clicked
+		AbsPage page = null;	// If set, this page will be returned
+
+		// Based on the button specified, take the appropriate action(s)
+		//
+
+		if ( button == Button.B_NEW ) {
+
+			// New button
+			locator = Locators.zb__ACLV__NEW_MENU_title;
+
+			// Create the page
+			page = new WizardCreateAccount(this);
+
+			// FALL THROUGH
+			
+		} else {
+			throw new HarnessException("no logic defined for button "+ button);
+		}
+
+		if ( locator == null ) {
+			throw new HarnessException("locator was null for button "+ button);
+		}
+
+		// Default behavior, process the locator by clicking on it
+		//
+		this.zClick(locator);
+
+		// If the app is busy, wait for it to become active
+		// Is this applicable for the Admin Console?
+		this.zWaitForBusyOverlay();
+
+		// If page was specified, make sure it is active
+		if ( page != null ) {
+
+			// This function (default) throws an exception if never active
+			page.zWaitForActive();
+
+		}
+
+
+		return (page);
+
+
 	}
 
 	@Override
-	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
-			throws HarnessException {
-		// TODO Auto-generated method stub
-		return null;
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
+		
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
+		
+		if (pulldown == null)
+			throw new HarnessException("Pulldown cannot be null!");
+
+		if (option == null)
+			throw new HarnessException("Option cannot be null!");
+		
+		
+		// Default behavior variables
+		String pulldownLocator = null; // If set, this will be expanded
+		String optionLocator = null; // If set, this will be clicked
+		AbsPage page = null; // If set, this page will be returned
+
+		if (pulldown == Button.B_NEW) {
+			
+			if (option == Button.O_ACCOUNTS_ACCOUNT) {
+
+				pulldownLocator = Locators.zb__ACLV__NEW_MENU_title; // TODO: Probably need to change this to the triangle icon/pulldown
+				optionLocator = PageManageAccounts.Locators.zmi__ACLV__NEW_WIZARD_title;
+				
+				page = new WizardCreateAccount(this);
+
+				// FALL THROUGH
+
+			} else {
+				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
+			}
+		
+		} else {
+			throw new HarnessException("no logic defined for pulldown/option "
+					+ pulldown + "/" + option);
+		}
+		
+		// Default behavior
+		if (pulldownLocator != null) {
+
+			// Make sure the locator exists
+			if (!this.sIsElementPresent(pulldownLocator)) {
+				throw new HarnessException("Button " + pulldown + " option " + option + " pulldownLocator " + pulldownLocator + " not present!");
+			}
+
+			this.zClick(pulldownLocator);
+
+			// If the app is busy, wait for it to become active
+			zWaitForBusyOverlay();
+
+			if (optionLocator != null) {
+
+				// Make sure the locator exists
+				if (!this.sIsElementPresent(optionLocator)) {
+					throw new HarnessException("Button " + pulldown + " option " + option + " optionLocator " + optionLocator + " not present!");
+				}
+
+				this.zClick(optionLocator);
+
+				// If the app is busy, wait for it to become active
+				zWaitForBusyOverlay();
+			}
+
+			// If we click on pulldown/option and the page is specified, then
+			// wait for the page to go active
+			if (page != null) {
+				page.zWaitForActive();
+			}
+		}
+		
+		// Return the specified page, or null if not set
+		return (page);
+
+	}
+
+	/**
+	 * Return a list of all accounts in the current view
+	 * @return
+	 * @throws HarnessException 
+	 */
+	public List<AccountItem> zListGetAccounts() {
+		
+		/*
+
+		Need to process the div list:
+		
+		<div id="zl__ACCT_MANAGE" ...>
+		
+			<div id="zl__DWT98_rows ...>
+			
+				<div id="zli__DWT98_<accountid>" ...>
+				
+					<table>
+						<td nowrap="" width="220"> <<<=== Selenium will need some sort of identifier here
+							<nobr>email@domain.com</nobr>
+						</td>
+					</table>
+
+				</div>
+			</div>
+		</div>
+		 */
+
+		List<AccountItem> accounts = new ArrayList<AccountItem>();
+		return (accounts);
+
 	}
 
 

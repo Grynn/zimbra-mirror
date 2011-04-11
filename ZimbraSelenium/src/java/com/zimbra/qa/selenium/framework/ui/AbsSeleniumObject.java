@@ -156,7 +156,6 @@ public abstract class AbsSeleniumObject {
 	 * @param value
 	 * @throws HarnessException
 	 */
-	@SuppressWarnings("deprecation")
 	public void zType(String locator, String value) throws HarnessException {
 		// Check if the locator is present
 		if(zIsLocatorPresent(locator));

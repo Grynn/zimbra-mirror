@@ -210,6 +210,12 @@ public class Button {
 	public static final Button B_PROPOSE_NEW_TIME = new Button("B_PROPOSE_NEW_TIME");
 	public static final Button B_VIEW_ENTIRE_MESSAGE = new Button("B_VIEW_ENTIRE_MESSAGE");
 	public static final Button B_HIGHLIGHT_OBJECTS = new Button("B_HIGHLIGHT_OBJECTS");
+	
+	
+	//// Admin Console
+	
+	// Accounts buttons
+	public static final Button O_ACCOUNTS_ACCOUNT = new Button("O_ACCOUNTS_ACCOUNT");
 
 	
 	// Button properties

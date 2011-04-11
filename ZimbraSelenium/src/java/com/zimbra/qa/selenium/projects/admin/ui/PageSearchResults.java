@@ -1,12 +1,7 @@
 package com.zimbra.qa.selenium.projects.admin.ui;
 
-import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.AbsTab;
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.projects.admin.ui.PageManageAccounts.Locators;
 
 
 
@@ -35,15 +30,18 @@ public class PageSearchResults extends AbsTab {
 		throw new HarnessException("implement me");
 	}
 	
-	public Boolean getSearchResults(String query) throws HarnessException {
-		sType(SEARCH_INPUT_TEXT_BOX, query);
-		sClick(SEARCH_BUTTON);
-		if(sIsElementPresent("css=div#zl__SEARCH_MANAGE td:contains('"+query+"')")) {
-			zClick(Locators.zti__ACCOUNTS);
-			return true;
-		}
-		zClick(Locators.zti__ACCOUNTS);
-		return false;
+	/**
+	 * Enter text into the query string field
+	 * @param query
+	 * @throws HarnessException 
+	 */
+	public void zAddSearchQuery(String query) throws HarnessException {
+		logger.info(myPageName() + " zAddSearchQuery("+ query +")");
+		
+		tracer.trace("Search for the query "+ query);
+		
+		this.sType(SEARCH_INPUT_TEXT_BOX, query);
+
 	}
 
 	@Override
@@ -68,8 +66,62 @@ public class PageSearchResults extends AbsTab {
 	
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
-		// TODO Auto-generated method stub
-		return null;
+
+		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
+		
+		tracer.trace("Click button "+ button);
+
+		if ( button == null )
+			throw new HarnessException("Button cannot be null!");
+		
+		// Default behavior variables
+		//
+		String locator = null;	// If set, this will be clicked
+		AbsPage page = null;	// If set, this page will be returned
+		
+		// Based on the button specified, take the appropriate action(s)
+		//
+		
+		if ( button == Button.B_SEARCH ) {
+
+			locator = SEARCH_BUTTON;
+			page = null;
+			
+			// Make sure the button exists
+			if ( !this.sIsElementPresent(locator) )
+				throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
+			
+			// FALL THROUGH
+			
+		} else {
+			throw new HarnessException("no logic defined for button "+ button);
+		}
+
+		if ( locator == null ) {
+			throw new HarnessException("locator was null for button "+ button);
+		}
+		
+		// Default behavior, process the locator by clicking on it
+		//
+		
+		// Click it
+		this.zClick(locator);
+		
+		// If the app is busy, wait for it to become active
+		this.zWaitForBusyOverlay();
+		
+
+		// If page was specified, make sure it is active
+		if ( page != null ) {
+			
+			// This function (default) throws an exception if never active
+			page.zWaitForActive();
+			
+		}
+		
+		return (page);
+
+
 	}
 
 	@Override

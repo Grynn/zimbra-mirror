@@ -2,12 +2,11 @@ package com.zimbra.qa.selenium.projects.admin.tests.accounts;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
+import com.zimbra.common.soap.Element;
+import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.admin.core.AdminCommonTest;
 import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
-import com.zimbra.qa.selenium.projects.admin.ui.PageManageAccounts;
 import com.zimbra.qa.selenium.projects.admin.ui.WizardCreateAccount;
 
 
@@ -31,45 +30,34 @@ public class CreateAccount extends AdminCommonTest {
 	 */
 	@Test(	description = "Create a basic account",
 			groups = { "sanity" })
-			public void CreateAccount_01() throws HarnessException {
+	public void CreateAccount_01() throws HarnessException {
 
 		// Create a new account in the Admin Console
 		AccountItem account = new AccountItem();
 
-		// Use the default Create Account method
-		app.zPageManageAccounts.createAccount(account);
+		
+		
+		// Click "New"
+		WizardCreateAccount wizard = 
+			(WizardCreateAccount)app.zPageManageAccounts.zToolbarPressButton(Button.B_NEW);
+		
+		// Fill out the wizard and click Finish
+		wizard.zCompleteWizard(account);
 
+
+		
 		// Verify the account exists in the ZCS
 		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
-				"<GetAccountRequest xmlns='urn:zimbraAdmin'>" +
-				"<account by='name'>"+ account.getEmailAddress() +"</account>" +
-		"</GetAccountRequest>");
-		com.zimbra.common.soap.Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetAccountResponse/admin:account", 1); 
+						"<GetAccountRequest xmlns='urn:zimbraAdmin'>"
+				+			"<account by='name'>"+ account.getEmailAddress() +"</account>"
+				+		"</GetAccountRequest>");
+		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetAccountResponse/admin:account", 1); 
 		ZAssert.assertNotNull(response, "Verify the account is created successfully");
+		
+		
 	}
 
 
-	/**
-	 * Testcase : Verify created account is displayed in UI.
-	 * Steps :
-	 * 1. Create an account using SOAP.
-	 * 2. Verify account is present in the list.
-	 * @throws HarnessException
-	 */
-	@Test(	description = "Verify created account is present in the account list view",
-			groups = { "sanity" })
-			public void CreateAccount_02() throws HarnessException {
-
-		// Create a new account in the Admin Console using SOAP
-		AccountItem account = new AccountItem();
-		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
-				"<CreateAccountRequest xmlns='urn:zimbraAdmin'> <name>"+account.getEmailAddress()+"</name>"+
-				"<password>test123</password>" +
-		"</CreateAccountRequest>");
-
-		Boolean accountPresent = app.zPageSearchResults.getSearchResults(account.getEmailAddress());
-		ZAssert.assertTrue(accountPresent, "Verify the new account appears in the list");
-	}
 
 
 	/**
@@ -81,21 +69,28 @@ public class CreateAccount extends AdminCommonTest {
 	 */
 	@Test(	description = "Create a basic account using New->Account",
 			groups = { "sanity" })
-			public void CreateAccount_03() throws HarnessException {
+	public void CreateAccount_03() throws HarnessException {
 
 		// Create a new account in the Admin Console
 		AccountItem account = new AccountItem();
 
+		
+		
+		// Click "New" -> "Account"
 		WizardCreateAccount wizard = 
-			app.zPageManageAccounts.getNewAccountWizard(PageManageAccounts.Locators.zmi__ACLV__NEW_WIZARD_title);
+			(WizardCreateAccount)app.zPageManageAccounts.zToolbarPressPulldown(Button.B_NEW, Button.O_ACCOUNTS_ACCOUNT);
+		
+		// Fill out the wizard and click Finish
 		wizard.zCompleteWizard(account);
 
+		
+		
 		// Verify the account exists in the ZCS
 		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
-				"<GetAccountRequest xmlns='urn:zimbraAdmin'>" +
-				"<account by='name'>"+ account.getEmailAddress() +"</account>" +
-		"</GetAccountRequest>");
-		com.zimbra.common.soap.Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetAccountResponse/admin:account", 1); 
+						"<GetAccountRequest xmlns='urn:zimbraAdmin'>"
+				+			"<account by='name'>"+ account.getEmailAddress() +"</account>"
+				+		"</GetAccountRequest>");
+		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetAccountResponse/admin:account", 1); 
 		ZAssert.assertNotNull(response, "Verify the account is created successfully");
 
 
