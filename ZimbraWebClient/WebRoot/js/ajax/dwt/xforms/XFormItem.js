@@ -4146,6 +4146,7 @@ Dwt_Button_XFormItem.estimateMyWidth = function (label,withIcon,extraMargin) {
 //	type defaults
 Dwt_Button_XFormItem.prototype.labelLocation = DwtLabel.IMAGE_LEFT | DwtLabel.ALIGN_CENTER;
 Dwt_Button_XFormItem.prototype.writeElementDiv = false;
+Dwt_Button_XFormItem.prototype.autoPadding= true;
 //	methods
 
 Dwt_Button_XFormItem.prototype.insertWidget = function (form, widget, element) {
@@ -4206,10 +4207,11 @@ Dwt_Button_XFormItem.prototype.constructWidget = function () {
 			}
 			 
 			el =  widget.getHtmlElement();
-                        var tableEl = el.firstChild;
-                       	if(!tableEl.style.width){
-                        	tableEl.style.width = "100%";
-                        }
+            var tableEl = el.firstChild;
+            var isAutoPadding = this.getInheritedProperty("autoPadding");
+            if(!tableEl.style.width && isAutoPadding){
+                 tableEl.style.width = "100%";
+            }
 
 		}		
 	}catch(ex){

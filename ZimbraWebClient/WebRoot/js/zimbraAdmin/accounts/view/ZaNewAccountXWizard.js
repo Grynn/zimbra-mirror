@@ -1472,7 +1472,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 								},
 								{ref:ZaAccount.A_zimbraPrefHtmlEditorDefaultFontColor, type:_SUPERWIZ_DWT_COLORPICKER_,
 									msgName:ZaMsg.LBL_zimbraPrefHtmlEditorDefaultFontColor, label:ZaMsg.LBL_zimbraPrefHtmlEditorDefaultFontColor,
-									height: "25px", labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS
+									labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS
 								},
 								{ref:ZaAccount.A_zimbraPrefForwardReplyInOriginalFormat, 
 									colSpan:2,
@@ -1763,7 +1763,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_attachment_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_AttachmentsGrouper,						
 							items :[
-								{ref:ZaAccount.A_zimbraAttachmentsBlocked, type:_SUPER_WIZ_CHECKBOX_, 
+								{ref:ZaAccount.A_zimbraAttachmentsBlocked, type:_SUPER_WIZ_CHECKBOX_,
+                                    colSizes:["200px", "300px", "*"], colSpan:3,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_RemoveAllAttachments,
 									checkBoxLabel:ZaMsg.NAD_RemoveAllAttachments, 
@@ -1774,45 +1775,52 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 		}
 		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraMailQuota,ZaAccount.A_zimbraContactMaxNumEntries,
 			ZaAccount.A_zimbraQuotaWarnPercent,ZaAccount.A_zimbraQuotaWarnInterval,ZaAccount.A_zimbraQuotaWarnMessage],[])) {						
-			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_quota_settings",colSizes:["260px","190px","150px"],numCols:3,
+			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_quota_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_QuotaGrouper,						
 							items: [
-								{ref:ZaAccount.A_zimbraMailForwardingAddressMaxLength, type:_SUPERWIZ_TEXTFIELD_, 
+								{ref:ZaAccount.A_zimbraMailForwardingAddressMaxLength, type:_SUPERWIZ_TEXTFIELD_,
+                                    colSizes:["200px", "300px", "*"], colSpan: 1,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_zimbraMailForwardingAddressMaxLength,
 									txtBoxLabel:ZaMsg.LBL_zimbraMailForwardingAddressMaxLength, labelLocation:_LEFT_, 
 									textFieldCssClass:"admin_xform_number_input"
 								},
-								{ref:ZaAccount.A_zimbraMailForwardingAddressMaxNumAddrs, type:_SUPERWIZ_TEXTFIELD_, 
+								{ref:ZaAccount.A_zimbraMailForwardingAddressMaxNumAddrs, type:_SUPERWIZ_TEXTFIELD_,
+                                    colSizes:["200px", "300px", "*"], colSpan: 1,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_zimbraMailForwardingAddressMaxNumAddrs,
 									txtBoxLabel:ZaMsg.LBL_zimbraMailForwardingAddressMaxNumAddrs, labelLocation:_LEFT_, 
 									textFieldCssClass:"admin_xform_number_input"
 								},							
-								{ref:ZaAccount.A_zimbraMailQuota, type:_SUPERWIZ_TEXTFIELD_, 
+								{ref:ZaAccount.A_zimbraMailQuota, type:_SUPERWIZ_TEXTFIELD_,
+                                    colSizes:["200px", "300px", "*"],colSpan: 1,
 									txtBoxLabel:ZaMsg.LBL_zimbraMailQuota, msgName:ZaMsg.MSG_zimbraMailQuota,labelLocation:_LEFT_, 
 									textFieldCssClass:"admin_xform_number_input", 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
 								},
-								{ref:ZaAccount.A_zimbraContactMaxNumEntries, type:_SUPERWIZ_TEXTFIELD_, 
+								{ref:ZaAccount.A_zimbraContactMaxNumEntries, type:_SUPERWIZ_TEXTFIELD_,
+                                    colSizes:["200px", "300px", "*"], colSpan: 1,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_zimbraContactMaxNumEntries,
 									txtBoxLabel:ZaMsg.LBL_zimbraContactMaxNumEntries, labelLocation:_LEFT_, 
 									textFieldCssClass:"admin_xform_number_input"
 								},
-								{ref:ZaAccount.A_zimbraQuotaWarnPercent, type:_SUPERWIZ_TEXTFIELD_, 
+								{ref:ZaAccount.A_zimbraQuotaWarnPercent, type:_SUPERWIZ_TEXTFIELD_,
+                                    colSizes:["200px", "300px", "*"], colSpan: 1,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									txtBoxLabel:ZaMsg.LBL_zimbraQuotaWarnPercent, msgName:ZaMsg.MSG_zimbraQuotaWarnPercent,labelLocation:_LEFT_, 
 									textFieldCssClass:"admin_xform_number_input", 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
 								},
-								{ref:ZaAccount.A_zimbraQuotaWarnInterval, type:_SUPERWIZ_LIFETIME_, 
+								{ref:ZaAccount.A_zimbraQuotaWarnInterval, type:_SUPERWIZ_LIFETIME_,
+                                    colSizes:["200px", "80px", "220px", "*"], colSpan: 1,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									textFieldCssClass:"admin_xform_number_input", 
 									txtBoxLabel:ZaMsg.LBL_zimbraQuotaWarnInterval, msgName:ZaMsg.MSG_zimbraQuotaWarnInterval,labelLocation:_LEFT_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
 								},
-								{ref:ZaAccount.A_zimbraQuotaWarnMessage, type:_SUPERWIZ_TEXTAREA_, 
+								{ref:ZaAccount.A_zimbraQuotaWarnMessage, type:_SUPERWIZ_TEXTAREA_,
+                                    colSizes:["200px", "300px", "*"], colSpan: 1,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									txtBoxLabel:ZaMsg.LBL_zimbraQuotaWarnMessage, 
 									msgName:ZaMsg.MSG_zimbraQuotaWarnMessage,
@@ -1833,45 +1841,45 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 							label:ZaMsg.NAD_DataSourcePolling,						
 							items: [
                                                                 {ref:ZaAccount.A_zimbraDataSourceMinPollingInterval, type:_SUPER_LIFETIME_,
-                                                                        colSizes:["195px","80px","295px","190px"],
+                                                                        colSizes:["200px","80px","220px","*"],
                                                                         msgName:ZaMsg.MSG_zimbraDataSourceMinPollingInterval,
                                                                         txtBoxLabel:ZaMsg.LBL_zimbraDataSourceMinPollingInterval,
-                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
                                                                         nowrap:false,labelWrap:true
                                                                 },
                                                                 {ref:ZaAccount.A_zimbraDataSourcePop3PollingInterval, type:_SUPER_LIFETIME_,
-                                                                        colSizes:["195px","80px","295px","190px"],
+                                                                        colSizes:["200px","80px","220px","*"],
                                                                         msgName:ZaMsg.MSG_zimbraDataSourcePop3PollingInterval,
                                                                         txtBoxLabel:ZaMsg.LBL_zimbraDataSourcePop3PollingInterval,
-                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
                                                                         nowrap:false,labelWrap:true
                                                                 },
                                                                 {ref:ZaAccount.A_zimbraDataSourceImapPollingInterval, type:_SUPER_LIFETIME_,
-                                                                        colSizes:["195px","80px","295px","190px"],
+                                                                        colSizes:["200px","80px","220px","*"],
                                                                         msgName:ZaMsg.MSG_zimbraDataSourceImapPollingInterval,
                                                                         txtBoxLabel:ZaMsg.LBL_zimbraDataSourceImapPollingInterval,
-                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
                                                                         nowrap:false,labelWrap:true
                                                                 },
                                                                 {ref:ZaAccount.A_zimbraDataSourceCalendarPollingInterval, type:_SUPER_LIFETIME_,
-                                                                        colSizes:["195px","80px","295px","190px"],
+                                                                        colSizes:["200px","80px","220px","*"],
                                                                         msgName:ZaMsg.MSG_zimbraDataSourceCalendarPollingInterval,
                                                                         txtBoxLabel:ZaMsg.LBL_zimbraDataSourceCalendarPollingInterval,
-                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
                                                                         nowrap:false,labelWrap:true
                                                                 },
                                                                 {ref:ZaAccount.A_zimbraDataSourceRssPollingInterval, type:_SUPER_LIFETIME_,
-                                                                        colSizes:["195px","80px","295px","190px"],
+                                                                        colSizes:["200px","80px","220px","*"],
                                                                         msgName:ZaMsg.MSG_zimbraDataSourceRssPollingInterval,
                                                                         txtBoxLabel:ZaMsg.LBL_zimbraDataSourceRssPollingInterval,
-                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
                                                                         nowrap:false,labelWrap:true
                                                                 },
                                                                 {ref:ZaAccount.A_zimbraDataSourceCaldavPollingInterval, type:_SUPER_LIFETIME_,
-                                                                        colSizes:["195px","80px","295px","190px"],
+                                                                        colSizes:["200px","80px","220px","*"],
                                                                         msgName:ZaMsg.MSG_zimbraDataSourceCaldavPollingInterval,
                                                                         txtBoxLabel:ZaMsg.LBL_zimbraDataSourceCaldavPollingInterval,
-                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
                                                                         nowrap:false,labelWrap:true
                                                                 }
 
@@ -1880,28 +1888,29 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 		}
 
 				if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraProxyAllowedDomains],[])) {						
-			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_proxyalloweddomains_settings",colSizes:["auto"],numCols:1,
+			          advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_proxyalloweddomains_settings",colSizes:["200px","auto"],numCols:2,
 							label:ZaMsg.NAD_ProxyAllowedDomains,
 							items: [
               							{ ref: ZaAccount.A_zimbraProxyAllowedDomains,
-                                                                  label:ZaMsg.LBL_zimbraProxyAllowedDomains,
-                                                                  labelCssStyle:"vertical-align:top",
-                                                                  type:_SUPER_REPEAT_,
-                                                                  resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
-                                                                  repeatInstance:"",
-                                                                  addButtonLabel:ZaMsg.NAD_ProxyAddAllowedDomain ,
-                                                                  removeButtonLabel: ZaMsg.NAD_ProxyRemoveAllowedDomain,
-                                                                  showAddButton:true,
-                                                                  showRemoveButton:true,
-                                                                  showAddOnNextRow:true,
-                                                                  repeatItems: [
-                                                                  { ref:".", type:_TEXTFIELD_,
-                                                                    enableDisableChecks:[ZaItem.hasWritePermission] ,
-                                                                    visibilityChecks:[ZaItem.hasReadPermission],
-                                                                    width: "15em"
-                                                                  }
-                                                                  ]
-                                                                }
+                                               label:ZaMsg.LBL_zimbraProxyAllowedDomains,
+                                               labelCssStyle:"vertical-align:top",
+                                               type:_SUPER_REPEAT_,
+                                               colSizes:["300px", "*"],
+                                               resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+                                               repeatInstance:"",
+                                               addButtonLabel:ZaMsg.NAD_ProxyAddAllowedDomain ,
+                                               removeButtonLabel: ZaMsg.NAD_ProxyRemoveAllowedDomain,
+                                               showAddButton:true,
+                                               showRemoveButton:true,
+                                               showAddOnNextRow:true,
+                                               repeatItems: [
+                                                  { ref:".", type:_TEXTFIELD_,
+                                                    enableDisableChecks:[ZaItem.hasWritePermission] ,
+                                                    visibilityChecks:[ZaItem.hasReadPermission],
+                                                    width: "15em"
+                                                  }
+                                               ]
+                                        }
 							]
 						});
 		}
@@ -1912,15 +1921,16 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_,id:"account_password_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_PasswordGrouper,				
 							items: [
-						                { type: _DWT_ALERT_, containerCssStyle: "padding-bottom:0px",
-						                        style: DwtAlert.WARNING,iconVisible: false,
-						                        content: ZaMsg.Alert_InternalPassword
-						                },
+						        { type: _DWT_ALERT_, containerCssStyle: "padding-bottom:0px",
+						            style: DwtAlert.WARNING,iconVisible: false,
+						            content: ZaMsg.Alert_InternalPassword, colSpan:3
+						        },
 
 								{ref:ZaAccount.A_zimbraPasswordLocked, 
 									type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.NAD_PwdLocked,checkBoxLabel:ZaMsg.NAD_PwdLocked, 
 									trueValue:"TRUE", falseValue:"FALSE",
+                                    colSizes:["200px", "300px", "*"],
 									visibilityChecks:[],enableDisableChecks:[[ZaNewAccountXWizard.isAuthfromInternal, domainName,ZaAccount.A_name]]
 								},
 								{ref:ZaAccount.A_zimbraMinPwdLength, 
@@ -1930,12 +1940,14 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									txtBoxLabel:ZaMsg.LBL_zimbraMinPwdLength, 
 									labelLocation:_LEFT_, 
 									textFieldCssClass:"admin_xform_number_input",
+                                    colSizes:["200px", "300px", "*"],
 									visibilityChecks:[],enableDisableChecks:[[ZaNewAccountXWizard.isAuthfromInternal, domainName,ZaAccount.A_name]]
 								},
 								{ref:ZaAccount.A_zimbraMaxPwdLength, type:_SUPERWIZ_TEXTFIELD_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraMaxPwdLength,
 									txtBoxLabel:ZaMsg.LBL_zimbraMaxPwdLength, labelLocation:_LEFT_, 
 									textFieldCssClass:"admin_xform_number_input",
+                                    colSizes:["200px", "300px", "*"],
 									visibilityChecks:[],enableDisableChecks:[[ZaNewAccountXWizard.isAuthfromInternal, domainName,ZaAccount.A_name]]
 								},
 								{ref:ZaAccount.A_zimbraPasswordMinUpperCaseChars, 
@@ -1944,6 +1956,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									msgName:ZaMsg.MSG_zimbraPasswordMinUpperCaseChars,
 									txtBoxLabel:ZaMsg.LBL_zimbraPasswordMinUpperCaseChars, labelLocation:_LEFT_, 
 									textFieldCssClass:"admin_xform_number_input",
+                                    colSizes:["200px", "300px", "*"],
 									visibilityChecks:[],enableDisableChecks:[[ZaNewAccountXWizard.isAuthfromInternal, domainName,ZaAccount.A_name]]
 								},
 								{ref:ZaAccount.A_zimbraPasswordMinLowerCaseChars,
@@ -1952,6 +1965,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									msgName:ZaMsg.MSG_zimbraPasswordMinLowerCaseChars,
 									txtBoxLabel:ZaMsg.LBL_zimbraPasswordMinLowerCaseChars, labelLocation:_LEFT_, 
 									textFieldCssClass:"admin_xform_number_input",
+                                    colSizes:["200px", "300px", "*"],
 									visibilityChecks:[],enableDisableChecks:[[ZaNewAccountXWizard.isAuthfromInternal, domainName,ZaAccount.A_name]]
 								},
 								{ref:ZaAccount.A_zimbraPasswordMinPunctuationChars,  
@@ -1960,6 +1974,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									msgName:ZaMsg.MSG_zimbraPasswordMinPunctuationChars,
 									txtBoxLabel:ZaMsg.LBL_zimbraPasswordMinPunctuationChars, labelLocation:_LEFT_, 
 									textFieldCssClass:"admin_xform_number_input",
+                                    colSizes:["200px", "300px", "*"],
 									visibilityChecks:[],enableDisableChecks:[[ZaNewAccountXWizard.isAuthfromInternal, domainName,ZaAccount.A_name]]
 								},
 								{ref:ZaAccount.A_zimbraPasswordMinNumericChars, 
@@ -1968,6 +1983,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									msgName:ZaMsg.MSG_zimbraPasswordMinNumericChars,
 									txtBoxLabel:ZaMsg.LBL_zimbraPasswordMinNumericChars, labelLocation:_LEFT_, 
 									textFieldCssClass:"admin_xform_number_input",
+                                    colSizes:["200px", "300px", "*"],
 									visibilityChecks:[],enableDisableChecks:[[ZaNewAccountXWizard.isAuthfromInternal, domainName,ZaAccount.A_name]]
 								},
 																
@@ -1975,12 +1991,14 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									type:_SUPERWIZ_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_passMinAge,txtBoxLabel:ZaMsg.LBL_passMinAge, labelLocation:_LEFT_, 
 									textFieldCssClass:"admin_xform_number_input",
+                                    colSizes:["200px", "300px", "*"],
 									visibilityChecks:[],enableDisableChecks:[[ZaNewAccountXWizard.isAuthfromInternal, domainName,ZaAccount.A_name]]
 								},
 								{ref:ZaAccount.A_zimbraMaxPwdAge, 
 									type:_SUPERWIZ_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_passMaxAge,txtBoxLabel:ZaMsg.LBL_passMaxAge, labelLocation:_LEFT_, 
 									textFieldCssClass:"admin_xform_number_input",
+                                    colSizes:["200px", "300px", "*"],
 									visibilityChecks:[],enableDisableChecks:[[ZaNewAccountXWizard.isAuthfromInternal, domainName,ZaAccount.A_name]]
 								},
 								{ref:ZaAccount.A_zimbraEnforcePwdHistory, 
@@ -1988,6 +2006,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									msgName:ZaMsg.MSG_zimbraEnforcePwdHistory,
 									txtBoxLabel:ZaMsg.LBL_zimbraEnforcePwdHistory, labelLocation:_LEFT_, 
 									textFieldCssClass:"admin_xform_number_input",
+                                    colSizes:["200px", "300px", "*"],
 									visibilityChecks:[],enableDisableChecks:[[ZaNewAccountXWizard.isAuthfromInternal, domainName,ZaAccount.A_name]]
 								}
 							]
@@ -1995,13 +2014,13 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 		}
 		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPasswordLockoutEnabled,ZaAccount.A_zimbraPasswordLockoutMaxFailures,
 			ZaAccount.A_zimbraPasswordLockoutDuration,ZaAccount.A_zimbraPasswordLockoutFailureLifetime],[])) {						
-			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"password_lockout_settings",colSizes:["260px","190px","150px"],numCols:3,
+			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"password_lockout_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_FailedLoginGrouper,							
 							items :[
 
 								{ref:ZaAccount.A_zimbraPasswordLockoutEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.LBL_zimbraPasswordLockoutEnabled,checkBoxLabel:ZaMsg.LBL_zimbraPasswordLockoutEnabled, 
-									labelCssStyle:"width:250px;", trueValue:"TRUE", falseValue:"FALSE"
+                                    colSizes:["200px", "300px", "*"],colSpan:1, trueValue:"TRUE", falseValue:"FALSE"
 								},
 								{ref:ZaAccount.A_zimbraPasswordLockoutMaxFailures, type:_SUPERWIZ_TEXTFIELD_, 
 									enableDisableChecks: [ZaAccountXFormView.isPasswordLockoutEnabled],
@@ -2012,7 +2031,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									labelLocation:_LEFT_, 
 									textFieldCssClass:"admin_xform_number_input", 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
-									labelCssStyle:"width:250px;"
+                                    colSizes:["200px", "300px", "*"],colSpan:1
 								},
 								{ref:ZaAccount.A_zimbraPasswordLockoutDuration, type:_SUPERWIZ_LIFETIME_, 
 									enableDisableChecks: [ZaAccountXFormView.isPasswordLockoutEnabled],
@@ -2020,7 +2039,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									txtBoxLabel:ZaMsg.LBL_zimbraPasswordLockoutDuration,
 									toolTipContent:ZaMsg.TTP_zimbraPasswordLockoutDurationSub,
 									msgName:ZaMsg.MSG_zimbraPasswordLockoutDuration,
-									textFieldCssClass:"admin_xform_number_input", 
+									textFieldCssClass:"admin_xform_number_input",
+                                    colSizes:["200px", "80px", "220px", "*"],colSpan:1,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS
 								},
 								{ref:ZaAccount.A_zimbraPasswordLockoutFailureLifetime, type:_SUPERWIZ_LIFETIME_, 
@@ -2032,6 +2052,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									textFieldCssClass:"admin_xform_number_input", 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
 									labelCssStyle:"white-space:normal;",
+                                    colSizes:["200px", "80px", "220px", "*"],colSpan:1,
 									nowrap:false,labelWrap:true
 								}								
 							]
@@ -2048,25 +2069,31 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									msgName:ZaMsg.MSG_zimbraAdminAuthTokenLifetime,
 									txtBoxLabel:ZaMsg.LBL_zimbraAdminAuthTokenLifetime,
 									enableDisableChecks:[ZaAccountXFormView.isAdminAccount],
+                                    colSizes:["200px", "80px", "220px", "*"],colSpan:1,
 									enableDisableChangeEventSources:[ZaAccount.A_zimbraIsAdminAccount]
 								},							
 								{ref:ZaAccount.A_zimbraAuthTokenLifetime,
 									type:_SUPERWIZ_LIFETIME_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_zimbraAuthTokenLifetime,
+                                    colSizes:["200px", "80px", "220px", "*"],colSpan:1,
 									txtBoxLabel:ZaMsg.LBL_zimbraAuthTokenLifetime},								
 								{ref:ZaAccount.A_zimbraMailIdleSessionTimeout, 
 									type:_SUPERWIZ_LIFETIME_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_zimbraMailIdleSessionTimeout,
-									txtBoxLabel:ZaMsg.LBL_zimbraMailIdleSessionTimeout},																
+                                    colSizes:["200px", "80px", "220px", "*"],colSpan:1,
+									txtBoxLabel:ZaMsg.LBL_zimbraMailIdleSessionTimeout},
 								{ref:ZaAccount.A_zimbraMailMessageLifetime, type:_SUPERWIZ_LIFETIME2_, 
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_zimbraMailMessageLifetime,
+                                    colSizes:["200px", "80px", "220px", "*"],colSpan:1,
 									txtBoxLabel:ZaMsg.LBL_zimbraMailMessageLifetime},
-								{ref:ZaAccount.A_zimbraMailTrashLifetime, type:_SUPERWIZ_LIFETIME1_, 
+								{ref:ZaAccount.A_zimbraMailTrashLifetime, type:_SUPERWIZ_LIFETIME1_,
+                                    colSizes:["200px", "80px", "220px", "*"],colSpan:1,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraMailTrashLifetime,
 									txtBoxLabel:ZaMsg.LBL_zimbraMailTrashLifetime},
-								{ref:ZaAccount.A_zimbraMailSpamLifetime, type:_SUPERWIZ_LIFETIME1_, 
+								{ref:ZaAccount.A_zimbraMailSpamLifetime, type:_SUPERWIZ_LIFETIME1_,
+                                    colSizes:["200px", "80px", "220px", "*"],colSpan:1,
 									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 									msgName:ZaMsg.MSG_zimbraMailSpamLifetime,
 									txtBoxLabel:ZaMsg.LBL_zimbraMailSpamLifetime}
