@@ -1005,7 +1005,7 @@ SuperWiz_Zimlet_Select_XFormItem.prototype.labelWidth = "50px";
 Super_Select1_XFormItem = function () {}
 XFormItemFactory.createItemType("_SUPER_SELECT1_", "super_select1", Super_Select1_XFormItem, Super_XFormItem);
 Super_Select1_XFormItem.prototype.labelCssClass = "xform_label_left";
-Super_Select1_XFormItem.prototype.labelCssStyle = "width:275px" ;
+Super_Select1_XFormItem.prototype.labelCssStyle = "width:269px" ; // 6px for padding
 Super_Select1_XFormItem.prototype.colSizes=["275px","150px"];
 Super_Select1_XFormItem.prototype.nowrap = false;
 Super_Select1_XFormItem.prototype.labelWrap = true;
