@@ -80,7 +80,7 @@ $enable_dkim_signing = 1;    # load DKIM signing code, keys defined by dkim_key
 $unix_socketname = "$MYHOME/amavisd.sock";  # amavisd-release or amavis-milter
                # option(s) -p overrides $inet_socket_port and $unix_socketname
 
-$inet_socket_port = 10024;   # listen on this local TCP port(s)
+$inet_socket_port = [10024,10026];   # listen on this local TCP port(s)
 # $inet_socket_port = [10024,10026];  # listen on multiple TCP ports
 
 $policy_bank{'MYNETS'} = {   # mail originating from @mynetworks
@@ -96,14 +96,14 @@ $policy_bank{'ORIGINATING'} = {  # mail supposedly originating from our users
   originating => 1,  # declare that mail was submitted by our smtp client
   allow_disclaimers => %%binary VAR:zimbraDomainMandatoryMailSignatureEnabled%%,  # enables disclaimer insertion if available
   # notify administrator of locally originating malware
-  virus_admin_maps => ["virusalert\@$mydomain"],
-  spam_admin_maps  => ["virusalert\@$mydomain"],
+  virus_admin_maps => ['@@av_notify_user@@'],
+  spam_admin_maps  => ['@@av_notify_user@@'],
   warnbadhsender   => 1,
   # forward to a smtpd service providing DKIM signing service
-  forward_method => 'smtp:[127.0.0.1]:10027',
+  #forward_method => 'smtp:[127.0.0.1]:10027',
   # force MTA conversion to 7-bit (e.g. before DKIM signing)
   smtpd_discard_ehlo_keywords => ['8BITMIME'],
-  bypass_banned_checks_maps => [1],  # allow sending any file names and types
+  bypass_banned_checks_maps => [0],  # allow sending any file names and types
   terminate_dsn_on_notify_success => 0,  # don't remove NOTIFY=SUCCESS option
 };
 
