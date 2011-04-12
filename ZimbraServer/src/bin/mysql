@@ -16,6 +16,6 @@
 
 source `dirname $0`/zmshutil || exit 1
 zmsetvars mysql_directory mysql_socket zimbra_mysql_user zimbra_mysql_password
-		
+
 exec ${mysql_directory}/bin/mysql -S ${mysql_socket} \
     -u ${zimbra_mysql_user} --password=${zimbra_mysql_password} "$@"
