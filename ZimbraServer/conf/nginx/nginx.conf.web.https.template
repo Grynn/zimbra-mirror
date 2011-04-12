@@ -13,6 +13,10 @@ server
     ssl_ciphers             ${web.ssl.ciphers};
     ssl_certificate         ${ssl.crt};
     ssl_certificate_key     ${ssl.key};
+    ssl_verify_client       ${ssl.clientcertmode};
+    ssl_verify_depth        ${ssl.clientcertdepth.default};
+    ssl_client_certificate  ${ssl.clientcertca};
+
 
     location /
     {
