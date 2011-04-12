@@ -32,35 +32,39 @@ public class TreeBriefcase extends AbsTree {
 		logger.info("new " + TreeBriefcase.class.getCanonicalName());
 	}
 
-	protected AbsPage zTreeItem(Action action, Button option, FolderItem folder)
-			throws HarnessException {
-		throw new HarnessException("implement me!");
-	}
-
-	protected AbsPage zTreeItem(Action action, Button option, TagItem tag)
+	@Override
+	public AbsPage zTreeItem(Action action, Button option, IItem item)
 			throws HarnessException {
 		logger.info(myPageName() + " zTreeItem(" + action + ", " + option
-				+ ", " + tag.getName() + ")");
+				+ ", " + item.getName() + ")");
 
-		tracer.trace("Click " + action + " then " + option + " on tag "
-				+ tag.getName());
+		tracer.trace("Click " + action + " then " + option + " on item "
+				+ item.getName());
 
 		// Validate the arguments
-		if ((action == null) || (option == null) || (tag == null)) {
-			throw new HarnessException("Must define an action, option, and tag");
+		if ((action == null) || (option == null) || (item == null)) {
+			throw new HarnessException(
+					"Must define an action, option, and item");
 		}
 
 		AbsPage page = null;
 		String actionLocator = null;
 		String optionLocator = null;
 
-		if (action == Action.A_RIGHTCLICK) {
+		if (item instanceof TagItem) {
+			actionLocator = "zti__main_Briefcase__" + ((TagItem) item).getId()
+					+ "_textCell";
+		} else {
+			throw new HarnessException("Must use IItem as argument, but was "
+					+ item.getClass());
+		}
 
-			actionLocator = "zti__main_Briefcase__" + tag.getId() + "_textCell";
+		if (action == Action.A_RIGHTCLICK) {
 
 			this.zRightClick(actionLocator);
 		} else {
-			throw new HarnessException("implement me!");
+			throw new HarnessException("implement me! " + action
+					+ ": not implemented");
 		}
 
 		if (option == Button.B_TREE_NEWTAG) {
@@ -135,60 +139,42 @@ public class TreeBriefcase extends AbsTree {
 		return page;
 	}
 
-	protected AbsPage zTreeItem(Action action, TagItem tag)
-			throws HarnessException {
+	@Override
+	public AbsPage zTreeItem(Action action, IItem item) throws HarnessException {
+		logger.info(myPageName() + " zTreeItem(" + action + ", "
+				+ item.getName() + ")");
+
+		tracer.trace("Click " + action + " on item " + item.getName());
+
+		// Validate the arguments
+		if ((action == null) || (item == null)) {
+			throw new HarnessException("Must define an action, and item");
+		}
+
 		AbsPage page = null;
 		String locator = null;
 
-		locator = "zti__main_Briefcase__" + tag.getId() + "_textCell";
-
-		if (action == Action.A_LEFTCLICK) {
-
-			zWaitForBusyOverlay();
-
-			// ClientSessionFactory.session().selenium().clickAt(locator,"0,0");
-
-			// FALL THROUGH
+		if (item instanceof TagItem) {
+			locator = "zti__main_Briefcase__" + ((TagItem) item).getId()
+					+ "_textCell";
+		} else if (item instanceof FolderItem) {
+			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+				locator = Locators.briefcaseTreeView_Desktop + "[id*='"
+						+ MyApplication.zGetActiveAccount().EmailAddress + "']"
+						+ "[id$='" + ((FolderItem) item).getId()
+						+ "_imageCell']";
+			} else {
+				locator = Locators.briefcaseTreeView
+						+ ((FolderItem) item).getId() + "_imageCell]";
+			}
 		} else {
-			throw new HarnessException("Action " + action
-					+ " not yet implemented");
-		}
-
-		if (!this.sIsElementPresent(locator))
-			throw new HarnessException("Unable to locate folder in the tree "
-					+ locator);
-
-		// Default behavior. Click the locator
-		zClick(locator);
-
-		// If there is a busy overlay, wait for that to finish
-		zWaitForBusyOverlay();
-
-		if (page != null) {
-			// Wait for the page to become active, if it was specified
-			page.zWaitForActive();
-		}
-		return (page);
-	}
-
-	protected AbsPage zTreeItem(Action action, FolderItem folder)
-			throws HarnessException {
-		AbsPage page = null;
-		String locator = null;
-		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-			locator = Locators.briefcaseTreeView_Desktop + "[id*='"
-					+ MyApplication.zGetActiveAccount().EmailAddress + "']"
-					+ "[id$='" + folder.getId() + "_imageCell']";
-		} else {
-			locator = Locators.briefcaseTreeView + folder.getId()
-					+ "_imageCell]";
+			throw new HarnessException("Must use IItem as argument, but was "
+					+ item.getClass());
 		}
 
 		if (action == Action.A_LEFTCLICK) {
 
 			zWaitForBusyOverlay();
-
-			// ClientSessionFactory.session().selenium().clickAt(locator,"0,0");
 
 			// FALL THROUGH
 		} else if (action == Action.A_RIGHTCLICK) {
@@ -301,57 +287,6 @@ public class TreeBriefcase extends AbsTree {
 			page.zWaitForActive();
 		}
 		return (page);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see framework.ui.AbsTree#zTreeItem(framework.ui.Action,
-	 * framework.items.FolderItem)
-	 */
-	public AbsPage zTreeItem(Action action, IItem item) throws HarnessException {
-
-		tracer.trace("Click " + action + " on item " + item.getName());
-
-		// Validate the arguments
-		if ((action == null) || (item == null)) {
-			throw new HarnessException(
-					"Must define an action and briefcaseFolder");
-		}
-
-		if (item instanceof FolderItem) {
-			return (zTreeItem(action, (FolderItem) item));
-		} else if (item instanceof TagItem) {
-			return (zTreeItem(action, (TagItem) item));
-		} else
-			throw new HarnessException(
-					"Must use FolderItem as argument, but was "
-							+ item.getClass());
-	}
-
-	@Override
-	public AbsPage zTreeItem(Action action, Button option, IItem item)
-			throws HarnessException {
-
-		logger.info(myPageName() + " zTreeItem(" + action + ", " + option
-				+ ", " + item + ")");
-
-		tracer.trace("Click " + action + " then " + option + " on item "
-				+ item.getName());
-
-		// Validate the arguments
-		if ((action == null) || (option == null) || (item == null)) {
-			throw new HarnessException(
-					"Must define an action, option, and folder");
-		}
-
-		if (item instanceof FolderItem) {
-			return (zTreeItem(action, option, (FolderItem) item));
-		} else if (item instanceof TagItem) {
-			return (zTreeItem(action, option, (TagItem) item));
-		} else
-			throw new HarnessException("Must use IItem as argument, but was "
-					+ item.getClass());
 	}
 
 	public List<TagItem> zListGetTags() throws HarnessException {
