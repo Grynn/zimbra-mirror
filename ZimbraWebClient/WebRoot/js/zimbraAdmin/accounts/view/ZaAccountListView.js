@@ -113,13 +113,15 @@ function(account, now, isDragProxy) {
 	html[idx++] = "<tr>";
 
 	var cnt = this._headerList.length;
+        var dwtId = Dwt.getNextId();
+	var rowId = this._listType;
 	for(var i = 0; i < cnt; i++) {
 		var field = this._headerList[i]._field;
 		var IEWidth = this._headerList[i]._width  ;
 
 		if(field == "type") {
 			// type
-			html[idx++] = "<td width=" + this._headerList[i]._width + ">";
+			html[idx++] = "<td id=\"" + rowId + "_data_type_" + dwtId + "\" width=" + this._headerList[i]._width + ">";
 			switch(account.type) {
 				case ZaItem.ACCOUNT:
 					if(account.attrs[ZaAccount.A_zimbraIsAdminAccount]=="TRUE" ) {
@@ -160,17 +162,17 @@ function(account, now, isDragProxy) {
 			html[idx++] = "</td>";
 		} else if(field == ZaAccount.A_name) {
 			// name
-			html[idx++] = "<td nowrap width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
+			html[idx++] = "<td id=\"" + rowId + "_data_emailaddress_" + dwtId + "\" nowrap width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(account.name);
 			html[idx++] = "</nobr></td>";
 		} else if (field == ZaAccount.A_displayname) {
 			// display name
-			html[idx++] = "<td nowrap width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
+			html[idx++] = "<td id=\"" + rowId + "_data_displayname_" + dwtId + "\" nowrap width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaAccount.A_displayname]);
 			html[idx++] = "</nobr></td>";	
 		} else if(field == ZaAccount.A_accountStatus) {
 			// status
-			html[idx++] = "<td width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
+			html[idx++] = "<td id=\"" + rowId + "_data_status_" + dwtId + "\" width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
 			var status = "";
 			if (account.type == ZaItem.ACCOUNT) {
 				status = ZaAccount._accountStatus(account.attrs[ZaAccount.A_accountStatus]);
@@ -183,17 +185,17 @@ function(account, now, isDragProxy) {
 			html[idx++] = "</nobr></td>";		
 		} else if (field == ZaAccount.A_zimbraLastLogonTimestamp) {
 			// display last login time for accounts only
-			html[idx++] = "<td nowrap width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
+			html[idx++] = "<td id=\"" + rowId + "_data_lastlogontime_" + dwtId + "\" nowrap width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(ZaAccount.getLastLoginTime(account.attrs[ZaAccount.A_zimbraLastLogonTimestamp]));
 			html[idx++] = "</nobr></td>";	
 		} else if (field == ZaAccount.A_description) {		
 			// description
-            html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
+            html[idx++] = "<td id=\"" + rowId + "_data_description_" + dwtId + "\" width=" + this._headerList[i]._width + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(
                     ZaItem.getDescriptionValue(account.attrs[ZaAccount.A_description] ));
 			html[idx++] = "</nobr></td>";	
 		} else if (field == "target" + ZaAlias.A_targetType) {
-			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
+			html[idx++] = "<td id=\"" + rowId + "_data_targettype_" + dwtId + "\" width=" + this._headerList[i]._width + "><nobr>";
 			var targetType = account.attrs[ZaAlias.A_targetType] ;
 			var targetType_desc ;
 			if (targetType == ZaItem.ACCOUNT ) {
@@ -206,7 +208,7 @@ function(account, now, isDragProxy) {
 			html[idx++] = AjxStringUtil.htmlEncode(targetType_desc);
 			html[idx++] = "</nobr></td>";
 		} else if (field == ZaAlias.A_targetAccount) {
-			html[idx++] = "<td width=" + this._headerList[i]._width + "><nobr>";
+			html[idx++] = "<td id=\"" + rowId + "_data_targetaccount_" + dwtId + "\" width=" + this._headerList[i]._width + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaAlias.A_targetAccount]);
 			html[idx++] = "</nobr></td>";
 		}
