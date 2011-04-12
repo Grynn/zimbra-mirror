@@ -290,6 +290,28 @@ public class BeanUtils {
     }
 
     /**
+     * Remove HTML comments but do not remove the comments under style/script tags.
+     *
+     * @param html message body
+     * @return message body after removing HTML comments, if any
+     */
+    public static String stripHtmlComments(String html) {
+        String REGEX = "<(?:!(?:--[\\s\\S]*?--\\s*)?(>)\\s*|(?:script|style|SCRIPT|STYLE)[\\s\\S]*?<\\/(?:script|style|SCRIPT|STYLE)>)";
+        Pattern p = Pattern.compile(REGEX);
+        Matcher m = p.matcher(html); // get a matcher object
+        StringBuffer sb = new StringBuffer();
+        while(m.find()) {
+            if(m.group(1) != null)
+                m.appendReplacement(sb, " ");
+            else {
+                m.appendReplacement(sb, m.group());
+            }
+        }
+        m.appendTail(sb);
+        return sb.toString();
+    }
+
+    /**
      * truncat given text at length, then walk back until you hit a whitespace.
      *
      * @param text text to truncate
