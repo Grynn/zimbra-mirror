@@ -97,14 +97,16 @@ sub getLdapGlobalConfig($) {
   close(ZMPROV);
 
   while (scalar(@CONFIG) > 0)  {
-    chomp(my $line = shift(@CONFIG));
+    my $line = shift(@CONFIG);
     my ($k, $v) = $line =~ m/^(\w+):\s(.*)/;
+    if (scalar(@CONFIG) > 0) {
+      $v .= "\n";
+    }
     while ($CONFIG[0] !~ m/^\w+:\s.*/ && scalar(@CONFIG) > 0) {
-      chomp($v .= shift(@CONFIG));
+      $v .= shift(@CONFIG);
     }
 
     next if ($k =~ m/cn|objectClass/);
-    $val .= (($val eq "") ? "$v" : " $v") if ($k eq $key);
     $loaded{gcf}{$k} .= 
       (($loaded{gcf}{$k} eq "") ? "$v" : " $v");;
   }
