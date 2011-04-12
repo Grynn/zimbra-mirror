@@ -85,7 +85,13 @@ public class StafAbstract {
 	        	logger.info(getStafCommand());
 	        	
 	            StafResult = handle.submit2(StafServer, StafService, StafParms);
-	
+	            
+	            logger.info(StafResult.result);
+	        	
+	            if (StafResult.result.contains("STAFConnectionProviderConnect: Timed out connecting to endpoint")) {
+	            	throw new HarnessException(StafResult.result);					
+	            }
+	            
 	            if ( (StafResult.result != null) && (!StafResult.result.trim().equals("")) )
 	            {
 	            	if ( STAFMarshallingContext.isMarshalledData(StafResult.result) )
