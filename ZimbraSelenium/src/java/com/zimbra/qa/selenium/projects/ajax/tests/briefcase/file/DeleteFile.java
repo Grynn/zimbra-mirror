@@ -152,10 +152,76 @@ public class DeleteFile extends AjaxCommonTest {
 		
 		ZAssert.assertEquals(id, docId,
 				"Verify the file was moved to the trash folder: "
-				+ fileName + " id: " + id);
-		
-		// delete file upon test completion
-		app.zPageBriefcase.deleteFileByName(fileItem.getName());
+				+ fileName + " id: " + id);		
+	}
+	
+	@Test(description = "Upload file through RestUtil - delete using <Backspace> Key & check trash", groups = { "functional" })
+	public void DeleteFile_03() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
 
+		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
+		FolderItem trashFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Trash);
+
+		// Create file item
+		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
+				+ "/data/public/other/putty.log";
+
+		FileItem fileItem = new FileItem(filePath);
+
+		String fileName = fileItem.getName();
+		
+		Shortcut shortcut = Shortcut.S_BACKSPACE;
+
+		// Upload file to server through RestUtil
+		String attachmentId = account.uploadFile(filePath);
+
+		// Save uploaded file to briefcase through SOAP
+		account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'><doc l='"
+				+ briefcaseFolder.getId() + "'>" + "<upload id='"
+				+ attachmentId + "'/></doc></SaveDocumentRequest>");
+
+		String docId = account.soapSelectValue(
+				"//mail:SaveDocumentResponse//mail:doc", "id");
+
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
+
+		// Click on created document
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+
+		// Click the Backspace keyboard shortcut
+		DialogDeleteConfirm deleteConfirm = (DialogDeleteConfirm) app.zPageBriefcase
+				.zKeyboardShortcut(shortcut);
+
+		// Click OK on Confirmation dialog
+		deleteConfirm.zClickButton(Button.B_YES);
+
+		// refresh briefcase page
+		app.zTreeBriefcase
+				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
+
+		// Verify file was deleted from the list
+		ZAssert.assertFalse(app.zPageBriefcase.isPresentInListView(fileName),
+				"Verify file was deleted through GUI");
+		
+		// Verify document moved to Trash
+		account
+				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
+						+ "<query>in:"
+						+ trashFolder.getName()
+						+ " "
+						+ fileName
+						+ "</query>" + "</SearchRequest>");
+
+		String id = account.soapSelectValue("//mail:SearchResponse//mail:doc",
+				"id");
+		
+		ZAssert.assertEquals(id, docId,
+				"Verify the file was moved to the trash folder: "
+				+ fileName + " id: " + id);		
 	}
 }
