@@ -1,10 +1,8 @@
 package com.zimbra.qa.selenium.projects.admin.ui;
 
-import java.util.*;
-
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.*;
 
 /**
  * This class defines the Downloads page (click on "Downloads" in the header)
@@ -19,7 +17,9 @@ public class PageDownloads extends AbsTab {
 		public static final String DownloadsLink = "css=td[id='skin_container_dw'] span";
 		public static final String TabLoaded = "//div[contains(text(),'Zimbra Utilities Downloads')]";
 
-		
+		// index.html
+		public static final String IndexHtmlTitleLocator = "css=title:contains('Downloads')";
+
 	}
 	
 	public PageDownloads(AbsApplication application) {
@@ -102,58 +102,30 @@ public class PageDownloads extends AbsTab {
 	}
 
 	
-	
-	
-	
 	/**
-	 * This class refers to the http://server.com/zimbra/downloads/index.html page
-	 * @author Matt Rhoades
-	 *
+	 * Open http://server.com/zimbra/downloads/index.html
+	 * @throws HarnessException 
 	 */
-	public static class DownloadsIndex extends AbsSeleniumObject {
-	
-		public static class Locators {
-			public static String isActive = "css=title:contains('Downloads')";
-		}
-		protected List<String> windowList = Collections.synchronizedList(new ArrayList<String>());
-	
-	
-		public DownloadsIndex() {
+	public void zOpenIndexHTML() throws HarnessException {
+
+		String base = ZimbraSeleniumProperties.getBaseURL();
+		String path = "/zimbra/downloads/index.html";
+		String id = ZimbraSeleniumProperties.getUniqueString();
 		
-			logger.info("new " + DownloadsIndex.class.getName());
-
-		}
-
-		public void zCloseWindows() throws HarnessException {
-			
-			if ( windowList.isEmpty() ) {
-				logger.info("No open download windows.");
-				return;
-			}
-			
-			try {
-				
-				for (String id : windowList) {
-				
-					logger.info("Closing Downloads at ID: "+ id);
-					// this.zSeparateWindowClose(id);
-	
-				}
-				
-			} finally {
-				
-				// All windows should be closed.  Clear the ID list.
-				windowList.clear();
-				
-				// Select the main window
-				this.zSelectWindow("null");
-				ClientSessionFactory.session().selenium().windowFocus();
-				
-			}
-			
-		}
-	
+		ClientSessionFactory.session().selenium().openWindow(base + path, id);
+		this.zSelectWindow(id);
+		SleepUtil.sleepLong();
+		
+		// Make sure the page is active
+		if ( !this.sIsElementPresent(Locators.IndexHtmlTitleLocator) )
+			throw new HarnessException("index.html never became active/focused");
+		
 	}
+
+
+	
+	
+	
 
 
 }

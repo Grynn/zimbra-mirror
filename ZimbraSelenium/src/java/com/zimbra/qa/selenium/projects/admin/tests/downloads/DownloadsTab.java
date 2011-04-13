@@ -75,7 +75,7 @@ public class DownloadsTab extends AdminCommonTest {
 
 
 	@Test(	description = "Verify the Downloads Tab contains the correct FOSS vs NETWORK links",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void DownloadsTab_01() throws HarnessException {
 		
 		// Make sure common links are present
@@ -113,7 +113,7 @@ public class DownloadsTab extends AdminCommonTest {
 	}
 
 	@Test(	description = "Verify the downloads links return 200 rather than 404",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void DownloadsTab_02() throws HarnessException {
 
 		// Determine which links should be present
