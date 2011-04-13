@@ -18,8 +18,7 @@ public class PageMain extends AbsTab {
 	public static class Locators {
 		public static final String zSkinContainerLogo		= "xpath=//*[@id='skin_container_logo']";
 		public static final String zSkinContainerUsername	= "xpath=//*[@id='skin_container_username']";
-		public static final String zRefreshButton			= "zb__STALV__REFRESH_title";
-		public static final String zSkinContainerLogoff		= "css=table[class=skin_table] span[onclick=ZaZimbraAdmin.logOff();]"; 
+		public static final String zSkinContainerLogoff		= "css=table[class='skin_table'] span[onclick='ZaZimbraAdmin.logOff();']"; 
 		public static final String zSkinContainerHelp		= "xpath=//*[@id='skin_container_help']";
 		public static final String zSkinContainerDW			= "xpath=//*[@id='skin_container_dw']";
 	}
@@ -46,7 +45,7 @@ public class PageMain extends AbsTab {
 		
 
 		// Look for the Refresh Button
-		boolean present = sIsElementPresent(Locators.zRefreshButton);
+		boolean present = sIsElementPresent(Locators.zSkinContainerLogoff);
 		if ( !present ) {
 			logger.debug("isActive() present = "+ present);
 			return (false);
@@ -54,7 +53,7 @@ public class PageMain extends AbsTab {
 		
 
 		// Look for the Refresh Button. 
-		boolean visible = zIsVisiblePerPosition(Locators.zRefreshButton, 0, 0);
+		boolean visible = zIsVisiblePerPosition(Locators.zSkinContainerLogoff, 0, 0);
 		if ( !visible ) {
 			logger.debug("isActive() visible = "+ visible);
 			return (false);
@@ -93,12 +92,12 @@ public class PageMain extends AbsTab {
 		
 		zNavigateTo();
 
-		if ( !sIsElementPresent(Locators.zRefreshButton) ) {
-			throw new HarnessException("The refresh button is not present " + Locators.zRefreshButton);
+		if ( !sIsElementPresent(Locators.zSkinContainerLogoff) ) {
+			throw new HarnessException("The refresh button is not present " + Locators.zSkinContainerLogoff);
 		}
 		
-		if ( !zIsVisiblePerPosition(Locators.zRefreshButton, 10, 10) ) {
-			throw new HarnessException("The refresh button is not visible " + Locators.zRefreshButton);
+		if ( !zIsVisiblePerPosition(Locators.zSkinContainerLogoff, 10, 10) ) {
+			throw new HarnessException("The refresh button is not visible " + Locators.zSkinContainerLogoff);
 		}
 		
 		// Click on logout
