@@ -1,11 +1,17 @@
 package com.zimbra.qa.unittest;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import java.util.Map;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.io.XMLWriter;
 
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.Version;
@@ -19,7 +25,7 @@ import com.zimbra.cs.client.soap.LmcVersionCheckRequest;
 import com.zimbra.cs.client.soap.LmcVersionCheckResponse;
 import junit.framework.TestCase;
 import com.zimbra.cs.util.BuildInfo;
-
+import com.zimbra.common.localconfig.LC;
 /**
  * @author Greg Solovyev
  */
@@ -35,8 +41,74 @@ public class TestVersionCheck extends TestCase {
         Map<String, String> attrs = new HashMap<String, String>();
         attrs.put(Provisioning.A_zimbraVersionCheckURL, "http://localhost:7070/zimbra/test/testversion.xml");
         prov.modifyAttrs(config, attrs, true);
+        generateTestVersionXML();
     }
 
+    private void generateTestVersionXML() {
+    	try {
+			FileWriter fileWriter = new FileWriter(LC.mailboxd_directory.value()+"/webapps/zimbra/test/testversion.xml");
+			XMLWriter xw = new XMLWriter(fileWriter, org.dom4j.io.OutputFormat.createPrettyPrint());
+			Document doc = DocumentHelper.createDocument();
+            org.dom4j.Element rootEl = DocumentHelper.createElement("versionCheck");
+            rootEl.addAttribute("status", "1");
+            org.dom4j.Element updatesEl = DocumentHelper.createElement("updates");
+            doc.add(rootEl);
+            rootEl.add(updatesEl);
+            org.dom4j.Element updateEl = DocumentHelper.createElement("update");
+            updateEl.addAttribute("type", "major");
+            updateEl.addAttribute("shortversion", Integer.toString(Integer.parseInt(BuildInfo.MAJORVERSION)+1)+".0.0");
+            updateEl.addAttribute("version", Integer.toString(Integer.parseInt(BuildInfo.MAJORVERSION)+1)+".0.0_GA");
+            updateEl.addAttribute("platform", BuildInfo.PLATFORM);
+            updateEl.addAttribute("buildtype", BuildInfo.TYPE);
+            updateEl.addAttribute("release", Integer.toString(Integer.parseInt(BuildInfo.BUILDNUM)+10));
+            updateEl.addAttribute("critical", "0");
+            updateEl.addAttribute("updateURL", "http://www.zimbra.com/community/downloads.html");
+            updateEl.addAttribute("description", "description");
+            updatesEl.add(updateEl);
+            
+            updateEl = DocumentHelper.createElement("update");
+            updateEl.addAttribute("type", "minor");
+            updateEl.addAttribute("shortversion",String.format("%s.%d.0", BuildInfo.MAJORVERSION,Integer.parseInt(BuildInfo.MINORVERSION)+1));
+            updateEl.addAttribute("version", String.format("%s.%d.0_GA_%d", BuildInfo.MAJORVERSION,Integer.parseInt(BuildInfo.MINORVERSION)+1,Integer.parseInt(BuildInfo.BUILDNUM)+5));
+            updateEl.addAttribute("platform", BuildInfo.PLATFORM);
+            updateEl.addAttribute("buildtype", BuildInfo.TYPE);
+            updateEl.addAttribute("release", Integer.toString(Integer.parseInt(BuildInfo.BUILDNUM)+5));
+            updateEl.addAttribute("critical", "0");
+            updateEl.addAttribute("updateURL", "http://www.zimbra.com/community/downloads.html");
+            updateEl.addAttribute("description", "description");
+            updatesEl.add(updateEl);
+            
+            updateEl = DocumentHelper.createElement("update");
+            updateEl.addAttribute("type", "micro");
+            updateEl.addAttribute("shortversion",String.format("%s.%s.%d", BuildInfo.MAJORVERSION,BuildInfo.MINORVERSION,Integer.parseInt(BuildInfo.MICROVERSION)+1));
+            updateEl.addAttribute("version", String.format("%s.%s.%d_GA_%d", BuildInfo.MAJORVERSION,BuildInfo.MINORVERSION,Integer.parseInt(BuildInfo.MICROVERSION)+1,Integer.parseInt(BuildInfo.BUILDNUM)+2));
+            updateEl.addAttribute("platform", BuildInfo.PLATFORM);
+            updateEl.addAttribute("buildtype", BuildInfo.TYPE);
+            updateEl.addAttribute("release", Integer.toString(Integer.parseInt(BuildInfo.BUILDNUM)+2));
+            updateEl.addAttribute("critical", "1");
+            updateEl.addAttribute("updateURL", "http://www.zimbra.com/community/downloads.html");
+            updateEl.addAttribute("description", "description");
+            updatesEl.add(updateEl);
+            
+            updateEl = DocumentHelper.createElement("update");
+            updateEl.addAttribute("type", "build");
+            updateEl.addAttribute("shortversion",String.format("%s.%s.%s", BuildInfo.MAJORVERSION,BuildInfo.MINORVERSION,Integer.toString(Integer.parseInt(BuildInfo.MICROVERSION)+1)));
+            updateEl.addAttribute("version", String.format("%s.%s.%s_GA_%d", BuildInfo.MAJORVERSION,BuildInfo.MINORVERSION,BuildInfo.MICROVERSION,Integer.parseInt(BuildInfo.BUILDNUM)+1));
+            updateEl.addAttribute("platform", BuildInfo.PLATFORM);
+            updateEl.addAttribute("buildtype", BuildInfo.TYPE);
+            updateEl.addAttribute("release", Integer.toString(Integer.parseInt(BuildInfo.BUILDNUM)+1));
+            updateEl.addAttribute("critical", "1");
+            updateEl.addAttribute("updateURL", "http://www.zimbra.com/community/downloads.html");
+            updateEl.addAttribute("description", "description");
+            updatesEl.add(updateEl);
+            xw.write(doc);
+            xw.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail();
+		}
+    }
+    
     private void cleanup() throws Exception {
         Provisioning prov = Provisioning.getInstance();
         Config config;
@@ -45,6 +117,8 @@ public class TestVersionCheck extends TestCase {
         attrs.put(Provisioning.A_zimbraVersionCheckURL, this.versionCheckURL);
         attrs.put(Provisioning.A_zimbraVersionCheckLastResponse, this.lastResponse);
         prov.modifyAttrs(config, attrs, true);
+        File testxmlfile = new File(LC.mailboxd_directory.value()+"/webapps/zimbra/test/testversion.xml");
+        testxmlfile.delete();
     }
 
     public void tearDown() throws Exception {

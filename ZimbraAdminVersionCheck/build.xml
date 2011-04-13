@@ -18,7 +18,7 @@
 	<property name="common.classes.dir" location="${common.dir}/build/classes" />
 	<property name="common.jars.dir" location="${common.dir}/jars" />
     <property name="webapp.dir" value="/opt/zimbra/jetty/webapps/zimbra"/>
-	
+	<property name="zimbrasoap.dir" location="../ZimbraSoap" />
 	<condition property="is-windows">
 		<os family="windows" />
 	</condition>
@@ -36,6 +36,7 @@
 		<pathelement location="${common.classes.dir}" />
 		<pathelement location="${build.classes.dir}" />
 		<pathelement location="${server.classes.dir}" />
+		<pathelement location="${zimbrasoap.dir}/build/classes" />
 		<fileset dir="${common.jars.dir}">
 			<include name="**/*.jar" />
 		</fileset>
@@ -80,11 +81,11 @@
 		<delete dir="${build.dir}" />
 	</target>
 	
-	<target name="deploy" depends="stop-webserver,deploy-jar,deploy-test,start-webserver,deploy-cli,deploy-zimlet" description="Deploys the extension"/>
+	<target name="deploy" depends="stop-webserver,deploy-jar,start-webserver,deploy-cli,deploy-zimlet" description="Deploys the extension"/>
 
-	<target name="deploy-test" depends="generate-buildinfo">
+	<!--<target name="deploy-test" depends="generate-buildinfo">
 		<copy file="${build.dir}/buildinfo/testversion.xml" tofile="${webapp.dir}/test/testversion.xml"/>
-	</target>
+	</target>-->
 	<target name="deploy-jar" depends="jar" description="Copies the jar file into the extension directory">
 		<copy todir="${versioncheck.deploy.dir}">
 			<fileset dir="${build.dir}" includes="${versioncheck.jar.name}" />
@@ -174,9 +175,9 @@
 
 	 <target name="generate-buildinfo" depends="set-buildinfo-vars">
 	 	<mkdir dir="${build.dir}/buildinfo"/>
-		<copy todir="${build.dir}/buildinfo">
+		<!--<copy todir="${build.dir}/buildinfo">
 			<fileset dir="${src.dir}/testdata" includes="testversion.xml" />
-		</copy>
+		</copy>-->
 		<math result="futuremajorversion" operand1="${zimbra.buildinfo.majorversion}" operation="+" operand2="1" datatype="int"/>
 	 	<math result="futureminorversion" operand1="${zimbra.buildinfo.minorversion}" operation="+" operand2="1" datatype="int"/>
 		<math result="futuremicroversion" operand1="${zimbra.buildinfo.microversion}" operation="+" operand2="1" datatype="int"/>
@@ -193,7 +194,7 @@
         </if>
  	
 	 	<math result="futurebuildnum" operand1="${zimbra.buildinfo.buildnum}" operation="+" operand2="1" datatype="int"/>
-	 	<replace file="${build.dir}/buildinfo/testversion.xml">
+	 	<!--<replace file="${build.dir}/buildinfo/testversion.xml">
 	 		<replacefilter token="%MAJOR_VERSION%" value="${zimbra.buildinfo.majorversion}"/>
 	 		<replacefilter token="%FUTURE_MAJOR_VERSION%" value="${futuremajorversion}"/>
 	 		<replacefilter token="%MINOR_VERSION%" value="${zimbra.buildinfo.minorversion}"/>
@@ -207,7 +208,7 @@
 	 		<replacefilter token="%FUTURE_RELNUM%" value="${futurerelnum}"/>
 	 		<replacefilter token="%RELNUM%" value="${zimbra.buildinfo.relnum}"/>
 	 		<replacefilter token="%RELCLASS%" value="${zimbra.buildinfo.relclass}"/>
-	 	</replace>
+	 	</replace>-->
     </target>
 
 	<target name="start-webserver">
