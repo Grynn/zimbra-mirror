@@ -43,7 +43,9 @@ javaXmn=$(expr ${javaXmx} '*' ${mailboxd_java_heap_new_size_percent} / 100)
 #          to avoid a zmprov call here.
 #
 spnego_options_file=${zimbra_home}/conf/spnego_java_options
-spnegoJavaOptions=$(cat $spnego_options_file)
+if [ -e ${spnego_options_file} ]; then
+  spnegoJavaOptions=$(cat $spnego_options_file)
+fi
 
 #
 # Expand war files.
