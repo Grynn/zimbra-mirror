@@ -54,7 +54,7 @@ exe = {
 	}
 
 class Command:
-	P = LdapProvisioning()
+	P = Provisioning.getInstance()
 
 	@classmethod
 	def resetProvisioning(cls, type):
