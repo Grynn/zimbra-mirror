@@ -1372,7 +1372,6 @@ function() {
 		  html[idx++] = "</td>";
                 html[idx++] = "</table></div></td></tr>";
                 html[idx++] = "<tr></tr>";
-                idx = this._addRow(ZaMsg.NAD_ZimbraID, this.id, html, idx);
 
                 if(this.isExternal) {
                         idx = this._addRow(ZaMsg.NAD_MailServer, this.attrs[ZaAccount.A_zimbraMailTransport], html, idx);
