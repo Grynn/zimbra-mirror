@@ -321,6 +321,39 @@ ZaDistributionList.modifyMethod = function(mods, obj) {
 }
 ZaItem.modifyMethods["ZaDistributionList"].push(ZaDistributionList.modifyMethod);
 
+
+/**
+* Returns HTML for a tool tip for this resource.
+*/
+ZaDistributionList.prototype.getToolTip =
+function() {
+	// update/null if modified
+	if (!this._toolTip) {
+		var html = new Array(20);
+		var idx = 0;
+		html[idx++] = "<table cellpadding='0' cellspacing='0' border='0'>";
+		html[idx++] = "<tr valign='center'><td colspan='2' align='left'>";
+		html[idx++] = "<div style='border-bottom: 1px solid black; white-space:nowrap; overflow:hidden;'>";
+		html[idx++] = "<table cellpadding='0' cellspacing='0' border='0' style='width:100%;'>";
+		html[idx++] = "<tr valign='center'>";
+		html[idx++] = "<td><b>" + AjxStringUtil.htmlEncode(this.name) + "</b></td>";
+		html[idx++] = "<td align='right'>";
+	     if (this.attrs[ZaDistributionList.A_isAdminGroup] == "TRUE") {
+			    html[idx++] = AjxImg.getImageHtml("DistributionListGroup");
+         }else {
+             html[idx++] = AjxImg.getImageHtml("DistributionList");
+         }			
+		html[idx++] = "</td>";
+		html[idx++] = "</table></div></td></tr>";
+		html[idx++] = "<tr></tr>";
+		idx = this._addAttrRow(ZaItem.A_description, html, idx);
+		idx = this._addAttrRow(ZaItem.A_zimbraId, html, idx);
+		html[idx++] = "</table>";
+		this._toolTip = html.join("");
+	}
+	return this._toolTip;
+}
+
 ZaDistributionList.addRemoveAliases = function (mods, obj) {
 	//add-remove aliases
 	var tmpObjCnt = -1;

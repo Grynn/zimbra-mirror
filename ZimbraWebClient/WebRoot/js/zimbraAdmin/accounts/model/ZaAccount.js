@@ -1382,6 +1382,7 @@ function() {
                 } else {
                         idx = this._addRow(ZaMsg.NAD_MailServer, this.attrs[ZaAccount.A_mailHost], html, idx);
                 }
+                idx = this._addAttrRow(ZaItem.A_zimbraId, html, idx);
                 html[idx++] = "</table>";
                 this._toolTip = html.join("");
 		

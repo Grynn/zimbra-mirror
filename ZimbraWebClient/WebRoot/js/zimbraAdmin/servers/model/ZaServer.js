@@ -791,7 +791,7 @@ function() {
 		html[idx++] = "</td>";
 		html[idx++] = "</table></div></td></tr>";
 		html[idx++] = "<tr></tr>";
-		idx = this._addAttrRow(ZaItem.A_description, html, idx);		
+		idx = this._addAttrRow(ZaItem.A_description, html, idx);	
 		idx = this._addAttrRow(ZaItem.A_zimbraId, html, idx);
 		html[idx++] = "</table>";
 		this._toolTip = html.join("");
