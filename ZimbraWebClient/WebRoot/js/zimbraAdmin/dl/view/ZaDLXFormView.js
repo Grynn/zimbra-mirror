@@ -843,6 +843,9 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 	    
 	var cases = [];
         if(AjxEnv.isIE || AjxEnv.isFirefox){
+	var spaceHeight = "7";
+	if (AjxEnv.isIE)
+		spaceHeight = "2";
 	var case1 =
         {type:_ZATABCASE_,  caseKey:_tab1,  numCols:2,  colSizes: ["450px","420px"], id: "dl_form_members",
                   items:[
@@ -851,16 +854,24 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
                                     {type:_SPACER_, height:"5"},
                                     {type: _GROUP_, width: "98%", id: "dl_form_members_general_group", numCols: 2, colSizes:[100, "*"], items: [
                                                 {ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.MSG_LabelListName, label: ZaMsg.LBL_LabelListName,
-                                                        forceUpdate:true, tableCssStyle: "width:89", inputWidth:"100",
-                                                                id:"dl_name_field",
+                                                        forceUpdate:true, tableCssStyle: "width:100%", inputWidth:"100", domainPartWidth:"100%", 
+                                                                id:"dl_name_field", nameContainerCss: "width:100px", domainContainerWidth: "100%",
                                                                 visibilityChecks:[],
                                                                 enableDisableChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.RENAME_DL_RIGHT]]
                                                         },
                                                     {ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:ZaMsg.NAD_DisplayName, msgName:ZaMsg.NAD_DisplayName,width:"100%",
                                                         cssClass:"admin_xform_name_input", align: _LEFT_
                                                     },
-                            {type:_SPACER_, height:"3"},
-                            ZaItem.descriptionXFormItem,
+                                                    {type:_SPACER_, height:"3"},
+                                                    {
+                                                        ref:"description",  msgName:ZaMsg.NAD_Description,
+                                                        label:ZaMsg.NAD_Description, labelLocation:_LEFT_, //cssClass:"admin_xform_name_input" ,
+                                                        align:_LEFT_,
+                                                        type:_TEXTFIELD_,
+                                                        enableDisableChecks:[ZaItem.hasWritePermission] ,
+                                                        visibilityChecks:[ZaItem.hasReadPermission],
+                                                        width:"100%"
+                                                     }, 
                                                         {ref: "zimbraMailStatus", type:_CHECKBOX_, trueValue:"enabled", falseValue:"disabled", align:_LEFT_,
                                                                 nowrap:false,labelWrap:true,
                                 label:ZaMsg.DLXV_LabelEnabled, msgName:ZaMsg.DLXV_LabelEnabled, labelLocation:_LEFT_,
@@ -872,7 +883,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
                                                         }
                                                 ]
                                         },
-                                {type:_SPACER_, height:"7"},
+                                {type:_SPACER_, height:spaceHeight},
                                   {type:_ZA_TOP_GROUPER_, borderCssClass:"LeftGrouperBorder",
                                          width:"100%", numCols:1,colSizes:["auto"],
                                         label:ZaMsg.DLXV_LabelListMembers,
@@ -940,7 +951,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
                                                 ]
                                },
                                {type:_SPACER_, height:"5"},
-                                   {ref:ZaDistributionList.A2_memberPool, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource",
+                                   {ref:ZaDistributionList.A2_memberPool, type:_DWT_LIST_, height:"219", width:"100%", cssClass: "DLSource",
                                                 forceUpdate: true, widgetClass:ZaAccMiniListView, headerList:sourceHeaderList,hideHeader:false,
                                                 onSelection:ZaDLXFormView.memberPoolSelectionListener
                                         },
@@ -1015,15 +1026,24 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 				    {type:_SPACER_, height:"5"}, 						    
 				    {type: _GROUP_, width: "98%", id: "dl_form_members_general_group", numCols: 2, colSizes:[100, "*"], items: [
 				    		{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.MSG_LabelListName, label: ZaMsg.LBL_LabelListName, 
-				    			forceUpdate:true, tableCssStyle: "width:89", inputWidth:"100",
-								id:"dl_name_field",
+				    			forceUpdate:true, tableCssStyle: "width:100%", inputWidth:"100",domainPartWidth:"100%",
+								id:"dl_name_field", nameContainerCss: "width:100px", domainContainerWidth:"100%",
 								enableDisableChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.RENAME_DL_RIGHT]]
 							},
 						    {ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:ZaMsg.NAD_DisplayName, msgName:ZaMsg.NAD_DisplayName,width:"100%",
 						    	cssClass:"admin_xform_name_input", align: _LEFT_
 						    },
-			    {type:_SPACER_, height:"3"},	
-                            ZaItem.descriptionXFormItem,
+			                            {type:_SPACER_, height:"3"},  
+                                                    {
+                                                        ref:"description",  msgName:ZaMsg.NAD_Description,
+                                                        label:ZaMsg.NAD_Description, labelLocation:_LEFT_, //cssClass:"admin_xform_name_input" ,
+                                                        align:_LEFT_,
+                                                        type:_TEXTFIELD_,
+                                                        enableDisableChecks:[ZaItem.hasWritePermission] ,
+                                                        visibilityChecks:[ZaItem.hasReadPermission],
+                                                        width:"100%"
+                                                     },
+	
 							{ref: "zimbraMailStatus", type:_CHECKBOX_, trueValue:"enabled", falseValue:"disabled", align:_LEFT_,
 								nowrap:false,labelWrap:true,
                                 label:ZaMsg.DLXV_LabelEnabled, msgName:ZaMsg.DLXV_LabelEnabled, labelLocation:_LEFT_,
@@ -1103,7 +1123,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 						]
 			       },
 			       {type:_SPACER_, height:"5"},
-				   {ref:ZaDistributionList.A2_memberPool, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
+				   {ref:ZaDistributionList.A2_memberPool, type:_DWT_LIST_, height:"230", width:"98%", cssClass: "DLSource", 
 				   		forceUpdate: true, widgetClass:ZaAccMiniListView, headerList:sourceHeaderList,hideHeader:false,
 				   		onSelection:ZaDLXFormView.memberPoolSelectionListener
 				   	},

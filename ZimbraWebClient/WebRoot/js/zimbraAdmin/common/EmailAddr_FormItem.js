@@ -79,6 +79,18 @@ function () {
 	if (this._inputWidth == null) this._inputWidth = 200;
 	this.items[0].width = this._inputWidth;
 
+	this._nameContainerCss = this.getInheritedProperty("nameContainerCss");
+	if (this._nameContainerCss)
+            this.items[0].containerCssStyle = this._nameContainerCss; 
+	
+	this._inputDomainpartWidth =  this.getInheritedProperty("domainPartWidth");
+	if (this._inputDomainpartWidth)
+             this.items[2].inputWidth = this._inputDomainpartWidth; 
+
+	this._domainContainerWidth =  this.getInheritedProperty("domainContainerWidth");
+	if (this._domainContainerWidth)
+	    this.items[2].width = this._domainContainerWidth;
+
 	Composite_XFormItem.prototype.initializeItems.call(this);
 	try {
 		
