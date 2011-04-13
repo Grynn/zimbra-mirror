@@ -60,11 +60,11 @@ public class DialogAddVersionNotes extends AbsDialog {
 		if (button == Button.B_OK) {
 			locator = "css=div[class='" + Locators.zDialogClass + "'] "
 					+ "div[class='" + Locators.zDialogButtonsClass
-					+ "'] td[id*='button']:contains(OK)";
+					+ "'] td[class=ZWidgetTitle]:contains(OK)";
 		} else if (button == Button.B_CANCEL) {
 			locator = "css=div[class='" + Locators.zDialogClass + "'] "
 					+ "div[class='" + Locators.zDialogButtonsClass
-					+ "'] td:contains[id*='button']:contains(Cancel)";
+					+ "'] td[class=ZWidgetTitle]:contains(Cancel)";
 		} else {
 			throw new HarnessException("Button " + button + " not implemented");
 		}
@@ -73,7 +73,7 @@ public class DialogAddVersionNotes extends AbsDialog {
 		if (locator == null) {
 			throw new HarnessException("Button " + button + " not implemented");
 		}
-
+		
 		// Make sure the locator exists
 		if (!this.sIsElementPresent(locator)) {
 			throw new HarnessException("Button " + button + " locator "
@@ -83,7 +83,7 @@ public class DialogAddVersionNotes extends AbsDialog {
 		// if(zIsActive())
 		// zGetDisplayedText("css=div[class=" + Locators.zDialogContentClassId +
 		// "]");
-
+		
 		this.zClick(locator);
 
 		return (null);
