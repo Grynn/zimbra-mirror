@@ -64,6 +64,9 @@ public class AppAdminConsole extends AbsApplication {
 	// Searches
 	public PageEditSearch				zPageEditSearch = null;
 	
+	// Downloads page (http://server.com/zimbra/downloads/index.html
+	public PageDownloads				zPageDownloads = null;
+	
 	public AppAdminConsole() {
 		super();
 		
@@ -205,6 +208,11 @@ public class AppAdminConsole extends AbsApplication {
 		pages.put(zPageEditSearch.myPageName(), zPageEditSearch);
 
 
+		// Downloads
+		
+		zPageDownloads = new PageDownloads(this);
+		pages.put(zPageDownloads.myPageName(), zPageDownloads);
+		
 	}
 
 
