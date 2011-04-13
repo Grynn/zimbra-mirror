@@ -36,7 +36,7 @@ class Config:
 						1 : "Error", 
 						0 : "Fatal"
 						}
-		self.configFile = self.baseDir+"/conf/zmmta.cf";
+		self.configFile = self.baseDir+"/conf/zmconfigd.cf";
 		self.logFile    = self.baseDir+"/log/"+self.progname+".log";
 		self.pidFile    = self.baseDir+"/log/"+self.progname+".pid";
 		self.interval 	= 60

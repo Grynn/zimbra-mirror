@@ -244,4 +244,4 @@ class MtaConfig():
 			self.addSection(section)
 
 		dt = time.clock()-t1
-		Log.logMsg(5,"zmmta.cf loaded in %.2f seconds" % dt)
+		Log.logMsg(5,"zmconfigd.cf loaded in %.2f seconds" % dt)
