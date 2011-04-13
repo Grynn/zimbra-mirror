@@ -116,7 +116,7 @@ public class OfflineGal {
         sp.setOffset(offset);
         sp.setLimit(limit);
         if (cursor != null) {
-            SearchParams.parseCursor(cursor, mAccount.getId(), sp);
+            sp.parseCursor(cursor, mAccount.getId());
         }
         return mGalMbox.index.search(SoapProtocol.Soap12, mOpContext, sp);
     }
