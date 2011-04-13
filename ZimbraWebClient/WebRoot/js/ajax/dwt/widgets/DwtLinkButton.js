@@ -16,7 +16,7 @@ DwtLinkButton = function(params) {
 DwtLinkButton.prototype = new DwtButton;
 DwtLinkButton.prototype.constructor = DwtLinkButton;
 
-DwtButton.prototype.TEMPLATE = "dwt.Widgets#ZLinkButton";
+DwtLinkButton.prototype.TEMPLATE = "dwt.Widgets#ZLinkButton";
 
 // defaults for drop down images (set here once on prototype rather than on each button instance)
 DwtLinkButton.prototype._dropDownImg 	= "HelpPullDownArrow";
