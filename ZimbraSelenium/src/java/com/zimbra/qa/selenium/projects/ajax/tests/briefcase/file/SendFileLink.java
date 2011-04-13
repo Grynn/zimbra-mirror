@@ -11,7 +11,7 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogConfirm;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
 public class SendFileLink extends AjaxCommonTest {
@@ -54,7 +54,7 @@ public class SendFileLink extends AjaxCommonTest {
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Click on Send Link
-		DialogWarning confDlg = (DialogWarning) app.zPageBriefcase
+		DialogConfirm confDlg = (DialogConfirm) app.zPageBriefcase
 				.zToolbarPressPulldown(Button.B_SEND, Button.O_SEND_LINK);
 		
 		// Click Yes on confirmation dialog

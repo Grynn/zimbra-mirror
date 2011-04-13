@@ -13,7 +13,7 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogDeleteConfirm;
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogConfirm;
 
 public class DeleteFile extends AjaxCommonTest {
 
@@ -63,7 +63,7 @@ public class DeleteFile extends AjaxCommonTest {
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Click on Delete document icon in toolbar
-		DialogDeleteConfirm deleteConfirm = (DialogDeleteConfirm) app.zPageBriefcase
+		DialogConfirm deleteConfirm = (DialogConfirm) app.zPageBriefcase
 				.zToolbarPressButton(Button.B_DELETE, fileItem);
 
 		// Click OK on Confirmation dialog
@@ -124,7 +124,7 @@ public class DeleteFile extends AjaxCommonTest {
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Click the Delete keyboard shortcut
-		DialogDeleteConfirm deleteConfirm = (DialogDeleteConfirm) app.zPageBriefcase
+		DialogConfirm deleteConfirm = (DialogConfirm) app.zPageBriefcase
 				.zKeyboardShortcut(shortcut);
 
 		// Click OK on Confirmation dialog
@@ -194,7 +194,7 @@ public class DeleteFile extends AjaxCommonTest {
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Click the Backspace keyboard shortcut
-		DialogDeleteConfirm deleteConfirm = (DialogDeleteConfirm) app.zPageBriefcase
+		DialogConfirm deleteConfirm = (DialogConfirm) app.zPageBriefcase
 				.zKeyboardShortcut(shortcut);
 
 		// Click OK on Confirmation dialog

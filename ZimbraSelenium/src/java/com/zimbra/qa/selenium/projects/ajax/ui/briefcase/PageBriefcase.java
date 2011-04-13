@@ -271,8 +271,7 @@ public class PageBriefcase extends AbsTab {
 			if (attrs.contains("ZDisabledImage")) {
 				throw new HarnessException(button + " is disabled " + attrs);
 			}
-
-			page = new DialogDeleteConfirm(MyApplication, this);
+			page = new DialogConfirm(DialogConfirm.Confirmation.DELETE, MyApplication, this);
 		} else if (button == Button.B_OPEN_IN_SEPARATE_WINDOW) {
 			// Check if the button is disabled
 			locator = Locators.zOpenFileInSeparateWindowIconBtn.locator;
@@ -358,11 +357,10 @@ public class PageBriefcase extends AbsTab {
 				throw new HarnessException("implement me!");
 			} else if (option == Button.O_NEW_DOCUMENT) {
 				pulldownLocator = Locators.zNewMenuArrowBtn.locator;
-
-				optionLocator = "css=td[id$='_title']:contains('Document')";
+			
+				optionLocator = "css=tr[id=POPUP_NEW_DOC]>td[id$='_title']:contains('Document')";
 
 				page = new DocumentBriefcaseNew(this.MyApplication);
-
 				// FALL THROUGH
 			} else if (option == Button.O_NEW_FOLDER) {
 				throw new HarnessException("implement me!");
@@ -421,8 +419,8 @@ public class PageBriefcase extends AbsTab {
 
 				optionLocator = "css=td[id$='_title']:contains('Send link')";
 
-				page = new DialogWarning(
-						DialogWarning.DialogWarningID.SendLink,
+				page = new DialogConfirm(
+						DialogConfirm.Confirmation.SENDLINK,
 						this.MyApplication, this);
 
 				// FALL THROUGH
@@ -756,7 +754,7 @@ public class PageBriefcase extends AbsTab {
 
 				optionLocator = "css=td#zmi__Briefcase__DELETE_title:contains(Delete)";
 
-				page = new DialogDeleteConfirm(MyApplication, this);
+				page = new DialogConfirm(DialogConfirm.Confirmation.DELETE, MyApplication, this);
 
 			} else {
 				throw new HarnessException("implement action: " + action
@@ -805,13 +803,13 @@ public class PageBriefcase extends AbsTab {
 		} else if (shortcut == Shortcut.S_DELETE) {
 
 			// "Delete Document" shortcut leads to Confirmation Dialog opening
-			page = new DialogDeleteConfirm(MyApplication, this);
+			page = new DialogConfirm(DialogConfirm.Confirmation.DELETE, MyApplication, this);
 
 			keyCode = "46";
 		} else if (shortcut == Shortcut.S_BACKSPACE) {
 
 			// "Delete Document" shortcut leads to Confirmation Dialog opening
-			page = new DialogDeleteConfirm(MyApplication, this);
+			page =  new DialogConfirm(DialogConfirm.Confirmation.DELETE,MyApplication, this);
 
 			keyCode = "8";
 		} else if (shortcut == Shortcut.S_NEWTAG) {

@@ -14,7 +14,7 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogDeleteConfirm;
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogConfirm;
 
 public class DeleteDocument extends AjaxCommonTest {
 
@@ -69,7 +69,7 @@ public class DeleteDocument extends AjaxCommonTest {
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click on Delete document icon in toolbar
-		DialogDeleteConfirm deleteConfirm = (DialogDeleteConfirm) app.zPageBriefcase
+		DialogConfirm deleteConfirm = (DialogConfirm) app.zPageBriefcase
 				.zToolbarPressButton(Button.B_DELETE, docItem);
 
 		// Click OK on Confirmation dialog
@@ -143,7 +143,7 @@ public class DeleteDocument extends AjaxCommonTest {
 
 		// Click the Delete keyboard shortcut
 		// app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
-		DialogDeleteConfirm deleteConfirm = (DialogDeleteConfirm) app.zPageBriefcase
+		DialogConfirm deleteConfirm = (DialogConfirm) app.zPageBriefcase
 				.zKeyboardShortcut(shortcut);
 
 		// Click OK on Confirmation dialog
@@ -203,7 +203,7 @@ public class DeleteDocument extends AjaxCommonTest {
 
 		// Delete Document using Backspace keyboard shortcut
 		// app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
-		DialogDeleteConfirm deleteConfirm = (DialogDeleteConfirm) app.zPageBriefcase
+		DialogConfirm deleteConfirm = (DialogConfirm) app.zPageBriefcase
 				.zKeyboardShortcut(shortcut);
 
 		// Click OK on Confirmation dialog
@@ -260,7 +260,7 @@ public class DeleteDocument extends AjaxCommonTest {
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Delete Document using Right Click Context Menu
-		DialogDeleteConfirm deleteConfirm = (DialogDeleteConfirm) app.zPageBriefcase
+		DialogConfirm deleteConfirm = (DialogConfirm) app.zPageBriefcase
 				.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE, docItem);
 
 		// Click OK on Confirmation dialog
@@ -330,7 +330,7 @@ public class DeleteDocument extends AjaxCommonTest {
 		}
 
 		// Click toolbar delete button
-		DialogDeleteConfirm deleteConfirm = (DialogDeleteConfirm) app.zPageBriefcase
+		DialogConfirm deleteConfirm = (DialogConfirm) app.zPageBriefcase
 				.zToolbarPressButton(Button.B_DELETE, docItems[0]);
 
 		// Click OK on Confirmation dialog
