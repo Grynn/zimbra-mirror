@@ -79,8 +79,6 @@ public class PageMain extends AbsTab {
 		}
 		((AppAdminConsole)MyApplication).zPageLogin.login();
 
-		zWaitForActive();
-		
 	}
 
 	/**

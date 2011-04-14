@@ -31,49 +31,51 @@ public class WizardCreateAccount extends AbsWizard {
 	 */
 	@Override
 	public IItem zCompleteWizard(IItem item) throws HarnessException {
-		
-		if ( !(item instanceof AccountItem) )
-			throw new HarnessException("item must be an AccountItem, was "+ item.getClass().getCanonicalName());
-		
-		AccountItem account = (AccountItem)item;
-		
-		String CN = account.getLocalName();
-		String domain = account.getDomainName();
-		
-		
-		zType(zdlg_ACCT_NAME, CN);
-		
-		zType(zdlg_DOMAIN_NAME, domain);
-		
-		for (String key : account.getAccountAttrs().keySet()) {
-			
-			// TODO: Handle Previous/Next to find the input field, if necessary
-			
-			if ( key.equals("sn")) {
-				
-				zType(zdlg_LAST_NAME, account.getAccountAttrs().get(key));
-				continue;
+		if(zIsOpen()) {
+			if ( !(item instanceof AccountItem) )
+				throw new HarnessException("item must be an AccountItem, was "+ item.getClass().getCanonicalName());
+
+			AccountItem account = (AccountItem)item;
+
+			String CN = account.getLocalName();
+			String domain = account.getDomainName();
+
+
+			zType(zdlg_ACCT_NAME, CN);
+
+			zType(zdlg_DOMAIN_NAME, domain);
+
+			for (String key : account.getAccountAttrs().keySet()) {
+
+				// TODO: Handle Previous/Next to find the input field, if necessary
+
+				if ( key.equals("sn")) {
+
+					zType(zdlg_LAST_NAME, account.getAccountAttrs().get(key));
+					continue;
+				}
+
+				// TODO: add all account keys
+
+				throw new HarnessException("Unknown account attribute key "+ key);
+
 			}
 
-			// TODO: add all account keys
-			
-			throw new HarnessException("Unknown account attribute key "+ key);
-			
-		}
+			clickFinish();
+			return (account);
+		}else 
+			return null;
 
-		clickFinish();
-		return (account);
-		
 	}
 
 	@Override
 	public boolean zIsOpen() throws HarnessException {
-		
+
 		boolean present = sIsElementPresent(zdlg_NEW_ACCT);
 		if ( !present ) {
 			return (false);
 		}
-		
+
 		boolean visible = this.zIsVisiblePerPosition(zdlg_NEW_ACCT, 0, 0);
 		if ( !visible ) {
 			return (false);

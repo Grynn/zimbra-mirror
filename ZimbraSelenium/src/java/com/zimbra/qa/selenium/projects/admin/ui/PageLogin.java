@@ -114,7 +114,6 @@ public class PageLogin extends AbsTab {
 
 		// Wait for the app to load
 		sWaitForPageToLoad();
-		((AppAdminConsole)MyApplication).zPageMain.zWaitForActive();
 		
 		((AppAdminConsole)MyApplication).zSetActiveAcount(account);
 		
