@@ -63,11 +63,11 @@ CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_out_of_office_sent_on ON out_of_of
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_address (
    id            INTEGER UNSIGNED NOT NULL PRIMARY KEY,
    address       VARCHAR(128) NOT NULL UNIQUE,
-   contact_count INTEGER NOT NULL,
-
-   --PRIMARY KEY (id)
+   contact_count INTEGER NOT NULL
+   
+   --PRIMARY KEY (mailbox_id, id),
    --UNIQUE INDEX i_mail_address_address (mailbox_id, address),
-   --CONSTRAINT fk_mail_address_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
+   --CONSTRAINT fk_mail_address_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id) ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_address_address ON mail_address(address);
