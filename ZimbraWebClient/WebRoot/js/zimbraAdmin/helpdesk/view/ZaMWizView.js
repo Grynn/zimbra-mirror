@@ -22,7 +22,11 @@
 **/
 ZaMigrationWizView = function(parent) {
 	if (arguments.length == 0) return;
-	ZaTabView.call(this, parent,"ZaMigrationWizView");
+        ZaTabView.call(this, {
+                parent:parent,
+                iKeyName:"ZaMigrationWizView",
+                contextId:ZaId.TAB_DOWNLOADS
+        });
 	this.setScrollStyle(Dwt.SCROLL);
 	this.initForm(new Object(), this.getMyXForm())
 //	this._createHTML();
@@ -57,7 +61,7 @@ function (xModelMetaData, xFormMetaData) {
 		throw new AjxException("Metadata for XForm and/or XModel are not defined", AjxException.INVALID_PARAM, "ZaMigrationWizView.prototype.initForm");
 
 	this._localXModel = new XModel(xModelMetaData);
-	this._localXForm = new XForm(xFormMetaData, this._localXModel, null, this);
+	this._localXForm = new XForm(xFormMetaData, this._localXModel, null, this, ZaId.getTabViewId(this._contextId));
 	this._localXForm.setController(this);
 	this._localXForm.draw();
 	// This is specifically for the dwt button. If the instance is null, which here it is,
@@ -86,6 +90,7 @@ ZaMigrationWizView.myXFormModifier = function(xFormObject) {
 						items: [
 							{type:_OUTPUT_,  value:AjxImg.getImageHtml("Migration")},
 							{type:_OUTPUT_, cssStyle:"font-size:12px;", labelLocation:_NONE_, label:null,
+							id:"exchange_migration_link",
                                 value: ZaMigrationWizView.getDownloadLink(ZaMsg.MIG_WIZ_DOWNLOAD_LINK, ZaMsg.MIG_WIZ_DOWNLOAD_LINK_MSG)
                             }
 						]
@@ -108,6 +113,7 @@ ZaMigrationWizView.myXFormModifier = function(xFormObject) {
 						items: [
 							{type:_OUTPUT_,  value:AjxImg.getImageHtml("Migration")},
 							{type:_OUTPUT_, cssStyle:"font-size:12px;", labelLocation:_NONE_, label:null,
+							id:"domino_migration_link",
                                 value: ZaMigrationWizView.getDownloadLink(ZaMsg.DOMINO_MIG_WIZ_DOWNLOAD_LINK, ZaMsg.DOMINO_MIG_WIZ_DOWNLOAD_LINK_MSG)
                             }
 						]
@@ -125,9 +131,11 @@ ZaMigrationWizView.myXFormModifier = function(xFormObject) {
 						items: [
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("Migration")},
 							{type:_OUTPUT_, cssStyle:"font-size:12px;", labelLocation:_NONE_, label:null,
+							id:"pst_import_link",
                                 value: ZaMigrationWizView.getDownloadLink(ZaMsg.IMPORT_WIZ_DOWNLOAD_LINK, ZaMsg.IMPORT_WIZ_DOWNLOAD_LINK_MSG)
                             },
 							{type:_OUTPUT_, cssStyle:"font-size:12px;", labelLocation:_NONE_, label:null,
+							id:"pst_import_help_link",
                                 value:["(<A target='_blank' onclick='ZaZimbraAdmin.unloadHackCallback();' HREF='",location.pathname,"adminhelp/pdf/User Instructions for ZCS Import Wizard.pdf?locid=",AjxEnv.DEFAULT_LOCALE,"'>",ZaMsg.IMPORT_WIZ_DOWNLOAD_HELP,"</a>)"].join("")}
 						]
 					},
