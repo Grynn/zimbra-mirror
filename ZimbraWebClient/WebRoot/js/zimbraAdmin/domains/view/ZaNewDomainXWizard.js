@@ -720,7 +720,12 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 							label:ZaMsg.LBL_zimbraDomainStatus, 
 							labelLocation:_LEFT_, choices:ZaDomain.domainStatusChoices
 						},						
-						{ref:ZaDomain.A_notes, type:_TEXTAREA_, label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:250}
+						{ref:ZaDomain.A_notes, type:_TEXTAREA_, label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:250},
+						// help URL
+						{ref:ZaDomain.A_zimbraHelpAdminURL, type:_TEXTFIELD_, label:ZaMsg.Domain_zimbraHelpAdminURL, 
+						msgName:ZaMsg.Domain_zimbraHelpAdminURL, labelLocation:_LEFT_, width:200},
+                                                {ref:ZaDomain.A_zimbraHelpDelegatedURL, type:_TEXTFIELD_, label:ZaMsg.Domain_zimbraHelpDelegatedURL,
+                                                msgName:ZaMsg.Domain_zimbraHelpDelegatedURL, labelLocation:_LEFT_, width:200}
 					]
 				},
 				{type:_CASE_, caseKey:ZaNewDomainXWizard.GALMODE_STEP,numCols:2,colSizes:["220px","430px"],

@@ -168,6 +168,10 @@ ZaGlobalConfig.A_zimbraSkinLogoAppBanner = "zimbraSkinLogoAppBanner" ;
 ZaGlobalConfig.A2_blocked_extension_selection = "blocked_extension_selection";
 ZaGlobalConfig.A2_common_extension_selection = "common_extension_selection";
 
+// help URL
+ZaGlobalConfig.A_zimbraHelpAdminURL = "zimbraHelpAdminURL";
+ZaGlobalConfig.A_zimbraHelpDelegatedURL = "zimbraHelpDelegatedURL";
+
 ZaGlobalConfig.__configInstance = null;
 ZaGlobalConfig.isDirty = true;
 
@@ -411,6 +415,9 @@ ZaGlobalConfig.myXModel = {
         { id:ZaGlobalConfig.A_zimbraSkinLogoLoginBanner, ref:"attrs/" + ZaGlobalConfig.A_zimbraSkinLogoLoginBanner, type:_STRING_ },
         { id:ZaGlobalConfig.A_zimbraSkinLogoAppBanner, ref:"attrs/" + ZaGlobalConfig.A_zimbraSkinLogoAppBanner, type:_STRING_ },
 
+	// help URL
+        { id:ZaGlobalConfig.A_zimbraHelpAdminURL, ref:"attrs/" + ZaGlobalConfig.A_zimbraHelpAdminURL, type:_STRING_ },
+        { id:ZaGlobalConfig.A_zimbraHelpDelegatedURL, ref:"attrs/" + ZaGlobalConfig.A_zimbraHelpDelegatedURL, type:_STRING_ },
          //interop
         { id:ZaGlobalConfig.A_zimbraFreebusyExchangeAuthUsername, ref:"attrs/" + ZaGlobalConfig.A_zimbraFreebusyExchangeAuthUsername, type: _STRING_ },
         { id:ZaGlobalConfig.A_zimbraFreebusyExchangeAuthPassword, ref:"attrs/" + ZaGlobalConfig.A_zimbraFreebusyExchangeAuthPassword, type: _STRING_ },

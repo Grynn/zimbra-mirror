@@ -783,6 +783,19 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 				  label:ZaMsg.NAD_Notes, labelCssStyle:"vertical-align:top", width:250,
 				  onChange:ZaDomainXFormView.onFormFieldChanged});
 
+	// help URL
+	case1.items.push(
+			{ ref: ZaDomain.A_zimbraHelpAdminURL, type:_TEXTFIELD_,
+          		label:ZaMsg.Domain_zimbraHelpAdminURL, width:250,
+          		onChange:ZaDomainXFormView.onFormFieldChanged
+        		}
+		);
+        case1.items.push(
+                        { ref: ZaDomain.A_zimbraHelpDelegatedURL, type:_TEXTFIELD_,
+                        label:ZaMsg.Domain_zimbraHelpDelegatedURL, width:250,
+                        onChange:ZaDomainXFormView.onFormFieldChanged
+                        }
+                )
 	
 			
 	switchGroup.items.push(case1);

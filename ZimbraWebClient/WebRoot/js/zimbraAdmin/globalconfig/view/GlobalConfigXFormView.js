@@ -236,7 +236,15 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 							} ,
                           { ref: ZaGlobalConfig.A_zimbraFileUploadMaxSize, type: _TEXTFIELD_,
 								  label: ZaMsg.NAD_DOC_MaxUploadSize, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"
-	  						}
+	  						},
+							// help URL
+							{type: _SPACER_, height: 10},
+							{ ref: ZaGlobalConfig.A_zimbraHelpAdminURL, type: _TEXTFIELD_,
+                                                                  label: ZaMsg.Domain_zimbraHelpAdminURL, labelLocation:_LEFT_, width:200
+                                                        },
+							{ ref: ZaGlobalConfig.A_zimbraHelpDelegatedURL, type: _TEXTFIELD_,
+                                                                  label: ZaMsg.Domain_zimbraHelpDelegatedURL, labelLocation:_LEFT_, width: 200
+                                                        }
                         ]
 					}
 				]

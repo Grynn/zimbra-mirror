@@ -230,6 +230,9 @@ ZaDomain.A_zimbraDomainCOSMaxAccounts = "zimbraDomainCOSMaxAccounts" ;
 ZaDomain.A_zimbraDomainFeatureMaxAccounts = "zimbraDomainFeatureMaxAccounts" ;
 ZaDomain.A2_account_limit = "account_limit" ;
 
+// help URL
+ZaDomain.A_zimbraHelpAdminURL = "zimbraHelpAdminURL";
+ZaDomain.A_zimbraHelpDelegatedURL = "zimbraHelpDelegatedURL";
 
 //skin properties
 ZaDomain.A_zimbraSkinForegroundColor = "zimbraSkinForegroundColor" ;
@@ -446,12 +449,17 @@ function(tmpObj, newDomain) {
 	attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_notes]);
 	attr.setAttribute("n", ZaDomain.A_notes);	
 
+	// help URL
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraHelpAdminURL]);
+        attr.setAttribute("n", ZaDomain.A_zimbraHelpAdminURL);
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraHelpDelegatedURL]);
+        attr.setAttribute("n", ZaDomain.A_zimbraHelpDelegatedURL);
+
         attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraSSLCertificate]);
         attr.setAttribute("n", ZaDomain.A_zimbraSSLCertificate);
 
         attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraSSLPrivateKey]);
         attr.setAttribute("n", ZaDomain.A_zimbraSSLPrivateKey);
-
 	
 	if(tmpObj.attrs[ZaDomain.A_zimbraAuthLdapStartTlsEnabled]) {
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAuthLdapStartTlsEnabled]);
@@ -1923,6 +1931,9 @@ ZaDomain.myXModel = {
       { id:ZaDomain.A_zimbraSkinLogoLoginBanner, ref:"attrs/" + ZaDomain.A_zimbraSkinLogoLoginBanner, type:_COS_STRING_ },
       { id:ZaDomain.A_zimbraSkinLogoAppBanner, ref:"attrs/" + ZaDomain.A_zimbraSkinLogoAppBanner, type:_COS_STRING_ },
 
+	// help URL
+      { id:ZaDomain.A_zimbraHelpAdminURL, ref:"attrs/" + ZaDomain.A_zimbraHelpAdminURL, type:_COS_STRING_ },
+      { id:ZaDomain.A_zimbraHelpDelegatedURL, ref:"attrs/" + ZaDomain.A_zimbraHelpDelegatedURL, type:_COS_STRING_ },
         //interop
        { id:ZaDomain.A_zimbraFreebusyExchangeAuthUsername, ref:"attrs/" + ZaDomain.A_zimbraFreebusyExchangeAuthUsername, type: _COS_STRING_ },
        { id:ZaDomain.A_zimbraFreebusyExchangeAuthPassword, ref:"attrs/" + ZaDomain.A_zimbraFreebusyExchangeAuthPassword, type: _COS_STRING_ },
