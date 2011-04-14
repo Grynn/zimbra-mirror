@@ -182,6 +182,8 @@ public class ZContactBean implements Comparable {
 
     public boolean getIsGroup() { return mContact.getIsGroup(); }
 
+    public String getImagePart() { return mContact.getAttachmentPartName("image");}
+
     /* Comcast specific */
     public String getHomeAddress() { return mContact.getAttrs().get("homeAddress"); }
 
@@ -197,9 +199,9 @@ public class ZContactBean implements Comparable {
 
     public String getOtherAsstName() { return mContact.getAttrs().get("otherAsstName"); }
 
-    public String getOtherAnniversary() { return mContact.getAttrs().get("otherAnniversary"); }
+    public String getOtherAnniversary() { return mContact.getAttrs().get("anniversary"); }
 
-    public String getOtherCustom1() { return mContact.getAttrs().get("otherCustom1"); }
+    public String getOtherCustom1() { return mContact.getAttrs().get("custom1"); }
 
     public String getOtherCustom2() { return mContact.getAttrs().get("otherCustom2"); }
 
@@ -216,6 +218,8 @@ public class ZContactBean implements Comparable {
     public String getIMAddress1() { return mContact.getAttrs().get("imAddress1"); }
 
     public String getIMAddress2() { return mContact.getAttrs().get("imAddress2"); }
+
+    public String getIMAddress3() { return mContact.getAttrs().get("imAddress3"); }
 
     public String getWorkEmail2() { return mContact.getAttrs().get("workEmail2"); }
 
