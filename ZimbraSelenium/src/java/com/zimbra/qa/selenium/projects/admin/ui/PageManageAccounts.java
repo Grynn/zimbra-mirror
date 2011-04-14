@@ -171,15 +171,10 @@ public class PageManageAccounts extends AbsTab {
 		//
 		this.zClick(locator);
 
-		// If the app is busy, wait for it to become active
-		// Is this applicable for the Admin Console?
-		// this.zWaitForBusyOverlay();
-
 		// If page was specified, make sure it is active
-		//	if ( page != null ) {
-		//	zIsActive();
-		//	}
-
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
 
 		return (page);
 
