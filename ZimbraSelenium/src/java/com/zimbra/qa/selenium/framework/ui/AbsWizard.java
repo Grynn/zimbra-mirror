@@ -58,10 +58,6 @@ public abstract class AbsWizard extends AbsPage {
 		MyPage = page;
 	}
 	
-	/**
-	 * Determine whether this wizard is open or not
-	 */
-	public abstract boolean zIsOpen() throws HarnessException;
 	
 	/**
 	 * Fill out this wizard with the specified Item data

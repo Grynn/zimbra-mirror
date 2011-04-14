@@ -27,14 +27,6 @@ public class WizardAddACL extends AbsWizard {
 		throw new HarnessException("implement me");
 	}
 
-	/* (non-Javadoc)
-	 * @see projects.admin.ui.AbsWizard#isOpen()
-	 */
-	@Override
-	public boolean zIsOpen() throws HarnessException {
-		throw new HarnessException("implement me");
-	}
-
 	@Override
 	public String myPageName() {
 		// TODO Auto-generated method stub

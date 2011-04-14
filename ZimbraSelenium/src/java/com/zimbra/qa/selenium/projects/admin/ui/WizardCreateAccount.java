@@ -31,7 +31,7 @@ public class WizardCreateAccount extends AbsWizard {
 	 */
 	@Override
 	public IItem zCompleteWizard(IItem item) throws HarnessException {
-		if(zIsOpen()) {
+		if(zIsActive()) {
 			if ( !(item instanceof AccountItem) )
 				throw new HarnessException("item must be an AccountItem, was "+ item.getClass().getCanonicalName());
 
@@ -69,7 +69,7 @@ public class WizardCreateAccount extends AbsWizard {
 	}
 
 	@Override
-	public boolean zIsOpen() throws HarnessException {
+	public boolean zIsActive() throws HarnessException {
 
 		boolean present = sIsElementPresent(zdlg_NEW_ACCT);
 		if ( !present ) {
@@ -90,10 +90,5 @@ public class WizardCreateAccount extends AbsWizard {
 		return null;
 	}
 
-	@Override
-	public boolean zIsActive() throws HarnessException {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 }
