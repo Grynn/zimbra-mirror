@@ -17,6 +17,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 		public static final String zBodyField = "css=body";
 		public static final String zNameField = "css=[id^=DWT4]>input";
 		public static final String zEditNameField = "css=[class=DwtInputField] [input$=]";
+		public static final String zEnableVersionNotes = "css=div[class=DwtComposite] input[id=enableDesc]";
 	}
 
 	public static class Field {
@@ -120,20 +121,26 @@ public class DocumentBriefcaseNew extends AbsForm {
 			throw new HarnessException("Save & Close button is not visible "
 					+ Locators.zSaveAndCloseIconBtn);
 
-		// Click on it
-		zClick(Locators.zSaveAndCloseIconBtn);
-		// this.sMouseDown(Locators.zSaveAndCloseIconBtn);
-		// this.sMouseUp(Locators.zSaveAndCloseIconBtn);
+		if (!(sIsElementPresent(Locators.zEnableVersionNotes) && sIsChecked(Locators.zEnableVersionNotes))) {
+			// Click on it
+			zClick(Locators.zSaveAndCloseIconBtn);
+		} else {
+			// Click on it
+			// this.sMouseDown(Locators.zSaveAndCloseIconBtn);
+			// this.sMouseUp(Locators.zSaveAndCloseIconBtn);
+			zClick(Locators.zSaveAndCloseIconBtn);
 
-		//TODO: Add Version Notes dialog hasn't existed in ZD 7.0.1, thus
-		// ignoring below the Add Version Notes dialog for Desktop.
-		// Please remove this if condition block once it is available in ZD.
-		if (ZimbraSeleniumProperties.getAppType() != AppType.DESKTOP) {
-		   // add version notes
-		   DialogAddVersionNotes dlgAddNotes = new DialogAddVersionNotes(
-		         MyApplication, ((AppAjaxClient) MyApplication).zPageBriefcase);
-		   
-		   dlgAddNotes.zDismissAddVersionNotesDlg(pageTitle);		   
+			// TODO: Add Version Notes dialog hasn't existed in ZD 7.0.1, thus
+			// ignoring below the Add Version Notes dialog for Desktop.
+			// Please remove this if condition block once it is available in ZD.
+			if (ZimbraSeleniumProperties.getAppType() != AppType.DESKTOP) {
+				// add version notes
+				DialogAddVersionNotes dlgAddNotes = new DialogAddVersionNotes(
+						MyApplication,
+						((AppAjaxClient) MyApplication).zPageBriefcase);
+
+				dlgAddNotes.zDismissAddVersionNotesDlg(pageTitle);
+			}
 		}
 	}
 
