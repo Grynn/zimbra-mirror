@@ -1,7 +1,10 @@
 package com.zimbra.qa.selenium.projects.admin.ui;
 
+import java.util.*;
+
 import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 
 
 
@@ -78,6 +81,7 @@ public class PageSearchResults extends AbsTab {
 		//
 		String locator = null;	// If set, this will be clicked
 		AbsPage page = null;	// If set, this page will be returned
+		int loadDelay = 0;
 		
 		// Based on the button specified, take the appropriate action(s)
 		//
@@ -86,6 +90,7 @@ public class PageSearchResults extends AbsTab {
 
 			locator = SEARCH_BUTTON;
 			page = null;
+			loadDelay = 10000;
 			
 			// Make sure the button exists
 			if ( !this.sIsElementPresent(locator) )
@@ -116,6 +121,11 @@ public class PageSearchResults extends AbsTab {
 			
 		}
 		
+		// If a delay was specified, sleep for a bit
+		if ( loadDelay > 0 ) {
+			SleepUtil.sleep(loadDelay);
+		}
+		
 		return (page);
 
 
@@ -127,5 +137,61 @@ public class PageSearchResults extends AbsTab {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	/**
+	 * Return a list of all accounts in the current view
+	 * @return
+	 * @throws HarnessException 
+	 * @throws HarnessException 
+	 */
+	public List<AccountItem> zListGetAccounts() throws HarnessException {
+		
+		List<AccountItem> items = new ArrayList<AccountItem>();
+
+		// Make sure the button exists
+		if ( !this.sIsElementPresent("css=div[id='zl__SEARCH_MANAGE'] div[id$='__rows']") )
+			throw new HarnessException("Account Rows is not present");
+
+		// How many items are in the table?
+		String rowsLocator = "//div[@id='zl__SEARCH_MANAGE']//div[contains(@id, '__rows')]//div[contains(@id,'zli__')]";
+		int count = this.sGetXpathCount(rowsLocator);
+		logger.debug(myPageName() + " zListGetAccounts: number of accounts: "+ count);
+
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+			final String accountLocator = rowsLocator + "["+ i +"]";
+			String locator;
+
+			AccountItem item = new AccountItem();
+
+			// Type (image)
+			// ImgAdminUser ImgAccount ImgSystemResource (others?)
+			locator = accountLocator + "//td[contains(@id, 'account_data_type_')]//div";
+			if ( this.sIsElementPresent(locator) ) {
+				item.setGAccountType(this.sGetAttribute("xpath=("+ locator + ")@class"));
+			}
+
+
+			// Email Address
+			locator = accountLocator + "//td[contains(@id, 'account_data_emailaddress_')]";
+			if ( this.sIsElementPresent(locator) ) {
+				item.setGEmailAddress(this.sGetText(locator).trim());
+			}
+			
+			// Display Name
+			// Status
+			// Lost Login Time
+			// Description
+			
+
+			// Add the new item to the list
+			items.add(item);
+			logger.info(item.prettyPrint());
+		}
+
+		// Return the list of items
+		return (items);
+	}
+
 
 }

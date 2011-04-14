@@ -114,4 +114,21 @@ public class AccountItem implements IItem {
 		return (AccountAttrs);
 	}
 
+	// ImgAdminUser ImgAccount ImgSystemResource (others?)
+	protected String GAccountType = null;
+	public void setGAccountType(String imagetype) {
+		GAccountType = imagetype;
+	}
+	public String getGAccountType() {
+		return (GAccountType);
+	}
+
+	protected String GEmailAddress = null;
+	public void setGEmailAddress(String email) {
+		GEmailAddress = email;
+	}
+	public String getGEmailAddress() {
+		return (GEmailAddress);
+	}
+
 }

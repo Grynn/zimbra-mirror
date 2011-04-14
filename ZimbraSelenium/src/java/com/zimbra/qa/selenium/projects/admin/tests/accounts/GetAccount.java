@@ -54,13 +54,13 @@ public class GetAccount extends AdminCommonTest {
 		
 		
 		// Get the list of displayed accounts
-		List<AccountItem> accounts = app.zPageManageAccounts.zListGetAccounts();
+		List<AccountItem> accounts = app.zPageSearchResults.zListGetAccounts();
 		ZAssert.assertNotNull(accounts, "Verify the account list is returned");
 		
 		AccountItem found = null;
 		for (AccountItem a : accounts) {
-			logger.info("Looking for account "+ account.getEmailAddress() + " found: "+ a.getEmailAddress());
-			if ( account.getEmailAddress().equals(a.getEmailAddress()) ) {
+			logger.info("Looking for account "+ account.getEmailAddress() + " found: "+ a.getGEmailAddress());
+			if ( account.getEmailAddress().equals(a.getGEmailAddress()) ) {
 				found = a;
 				break;
 			}

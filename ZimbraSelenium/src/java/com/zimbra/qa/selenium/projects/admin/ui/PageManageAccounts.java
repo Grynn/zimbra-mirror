@@ -256,33 +256,55 @@ public class PageManageAccounts extends AbsTab {
 	 * Return a list of all accounts in the current view
 	 * @return
 	 * @throws HarnessException 
+	 * @throws HarnessException 
 	 */
-	public List<AccountItem> zListGetAccounts() {
+	public List<AccountItem> zListGetAccounts() throws HarnessException {
+		
+		List<AccountItem> items = new ArrayList<AccountItem>();
 
-		/*
+		// Make sure the button exists
+		if ( !this.sIsElementPresent("css=div[id='zl__ACCT_MANAGE'] div[id$='__rows']") )
+			throw new HarnessException("Account Rows is not present");
 
-		Need to process the div list:
+		// How many items are in the table?
+		String rowsLocator = "//div[@id='zl__ACCT_MANAGE']//div[contains(@id, '__rows')]//div[contains(@id,'zli__')]";
+		int count = this.sGetXpathCount(rowsLocator);
+		logger.debug(myPageName() + " zListGetAccounts: number of accounts: "+ count);
 
-		<div id="zl__ACCT_MANAGE" ...>
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+			final String accountLocator = rowsLocator + "["+ i +"]";
+			String locator;
 
-			<div id="zl__DWT98_rows ...>
+			AccountItem item = new AccountItem();
 
-				<div id="zli__DWT98_<accountid>" ...>
+			// Type (image)
+			// ImgAdminUser ImgAccount ImgSystemResource (others?)
+			locator = accountLocator + "//td[contains(@id, 'account_data_type_')]//div";
+			if ( this.sIsElementPresent(locator) ) {
+				item.setGAccountType(this.sGetAttribute("xpath=("+ locator + ")@class"));
+			}
 
-					<table>
-						<td nowrap="" width="220"> <<<=== Selenium will need some sort of identifier here
-							<nobr>email@domain.com</nobr>
-						</td>
-					</table>
 
-				</div>
-			</div>
-		</div>
-		 */
+			// Email Address
+			locator = accountLocator + "//td[contains(@id, 'account_data_emailaddress_')]";
+			if ( this.sIsElementPresent(locator) ) {
+				item.setGEmailAddress(this.sGetText(locator).trim());
+			}
+			
+			// Display Name
+			// Status
+			// Lost Login Time
+			// Description
+			
 
-		List<AccountItem> accounts = new ArrayList<AccountItem>();
-		return (accounts);
+			// Add the new item to the list
+			items.add(item);
+			logger.info(item.prettyPrint());
+		}
 
+		// Return the list of items
+		return (items);
 	}
 
 
