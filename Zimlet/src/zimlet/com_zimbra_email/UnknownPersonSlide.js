@@ -235,7 +235,9 @@ function(attrs) {
 		attrs["address"] = AjxStringUtil.trim(address);
 	}
 
-	attrs["rightClickForMoreOptions"] = this.emailZimlet.getMessage("rightClickForMoreOptions");
+	if (!this.emailZimlet.noRightClick) {
+		attrs["rightClickForMoreOptions"] = this.emailZimlet.getMessage("rightClickForMoreOptions");
+	}
 	attrs = this._formatTexts(attrs);
 	var iHtml = AjxTemplate.expand("com_zimbra_email.templates.Email1#ContactDetails", attrs);
 	this._setTextDivHeight(iHtml);

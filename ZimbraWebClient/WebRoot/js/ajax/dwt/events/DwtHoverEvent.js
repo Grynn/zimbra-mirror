@@ -31,6 +31,8 @@ DwtHoverEvent = function(type, delay, object, x, y) {
 DwtHoverEvent.prototype = new DwtEvent;
 DwtHoverEvent.prototype.constructor = DwtHoverEvent;
 
+DwtHoverEvent.prototype.toString = function() { return "DwtHoverEvent"; };
+
 DwtHoverEvent.prototype.reset =
 function() {
 	this.type = 0;
@@ -38,4 +40,4 @@ function() {
 	this.object = null;
 	this.x = -1;
 	this.y = -1;
-}
+};
