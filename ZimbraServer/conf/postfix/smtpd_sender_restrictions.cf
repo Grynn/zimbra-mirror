@@ -1,0 +1,5 @@
+check_sender_access regexp:/opt/zimbra/postfix/conf/tag_as_originating.re
+permit_mynetworks
+permit_sasl_authenticated
+permit_tls_clientcerts
+check_sender_access regexp:/opt/zimbra/postfix/conf/tag_as_foreign.re
