@@ -5,9 +5,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
+import com.zimbra.qa.selenium.framework.util.*;
 
 
 /**
@@ -19,11 +17,11 @@ public class PageLogin extends AbsTab {
 	
 	public static class Locators {
 		
-		public static final String zLoginDialog = "xpath=//div[@class='ZaLoginDialog']";
-		public static final String zLoginUserName = "xpath=//*[@id='ZLoginUserName']";
-		public static final String zLoginPassword = "xpath=//*[@id='ZLoginPassword']";
-		public static final String zLoginButtonContainer = "xpath=//*[@id='ZLoginButton']";
-		public static final String zLoginLicenseContainer = "xpath=//*[@id='ZLoginLicenseContainer']";
+		public static final String zLoginDialog = "css=div[class='ZaLoginDialog']";
+		public static final String zLoginUserName = "ZLoginUserName";
+		public static final String zLoginPassword = "ZLoginPassword";
+		public static final String zLoginButtonContainer = "ZLoginButton";
+		public static final String zLoginLicenseContainer = "ZLoginLicenseContainer";
 		
 	}
 
@@ -113,10 +111,12 @@ public class PageLogin extends AbsTab {
 		sClick(Locators.zLoginButtonContainer);
 
 		// Wait for the app to load
-		sWaitForPageToLoad();
+		// sWaitForPageToLoad();
+		((AppAdminConsole)MyApplication).zPageMain.zWaitForActive();
 		
 		((AppAdminConsole)MyApplication).zSetActiveAcount(account);
 		
+		SleepUtil.sleep(10000);
 	}
 	
 	/**

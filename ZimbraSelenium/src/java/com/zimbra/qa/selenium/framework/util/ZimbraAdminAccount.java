@@ -87,10 +87,14 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 			_AdminConsoleAdmin.authenticate();
 			_AdminConsoleAdmin.modifyPreferences(
 					new HashMap<String , String>() {{
-					    put("zimbraPrefAdminConsoleWarnOnExit", "TRUE");
+					    put("zimbraPrefAdminConsoleWarnOnExit", "FALSE");
 					}});
 		}
 		return (_AdminConsoleAdmin);
+	}
+	public static synchronized void ResetAccountAdminConsoleAdmin() {
+		logger.warn("AdminConsoleAdmin is being reset");
+		_AdminConsoleAdmin = null;
 	}
 	private static ZimbraAdminAccount _AdminConsoleAdmin = null;
 

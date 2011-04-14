@@ -14,6 +14,10 @@ public class HarnessException extends Exception {
 		
 		logger.error("Reset AccountZWC due to exception");
 		ZimbraAccount.ResetAccountZWC();
+		ZimbraAccount.ResetAccountHTML();
+		ZimbraAccount.ResetAccountZMC();
+		ZimbraAccount.ResetAccountZDC();
+		ZimbraAdminAccount.ResetAccountAdminConsoleAdmin();
 	}
 
 	public HarnessException(Throwable cause) {
@@ -22,6 +26,10 @@ public class HarnessException extends Exception {
 		
 		logger.error("Reset AccountZWC due to exception");
 		ZimbraAccount.ResetAccountZWC();
+		ZimbraAccount.ResetAccountHTML();
+		ZimbraAccount.ResetAccountZMC();
+		ZimbraAccount.ResetAccountZDC();
+		ZimbraAdminAccount.ResetAccountAdminConsoleAdmin();
 	}
 
 	public HarnessException(String message, Throwable cause) {
@@ -30,6 +38,10 @@ public class HarnessException extends Exception {
 		
 		logger.error("Reset AccountZWC due to exception");
 		ZimbraAccount.ResetAccountZWC();
+		ZimbraAccount.ResetAccountHTML();
+		ZimbraAccount.ResetAccountZMC();
+		ZimbraAccount.ResetAccountZDC();
+		ZimbraAdminAccount.ResetAccountAdminConsoleAdmin();
 	}
 
 }

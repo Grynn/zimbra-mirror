@@ -107,9 +107,6 @@ public class PageSearchResults extends AbsTab {
 		// Click it
 		this.zClick(locator);
 		
-		// If the app is busy, wait for it to become active
-		this.zWaitForBusyOverlay();
-		
 
 		// If page was specified, make sure it is active
 		if ( page != null ) {
