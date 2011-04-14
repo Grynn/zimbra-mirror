@@ -57,6 +57,20 @@ CREATE TABLE ${DATABASE_NAME}.out_of_office (
 
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_out_of_office_sent_on ON out_of_office(sent_on);
 
+-- -----------------------------------------------------------------------
+-- mail addresses
+-- -----------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_address (
+   id            INTEGER UNSIGNED NOT NULL PRIMARY KEY,
+   address       VARCHAR(128) NOT NULL UNIQUE,
+   contact_count INTEGER NOT NULL,
+
+   --PRIMARY KEY (id)
+   --UNIQUE INDEX i_mail_address_address (mailbox_id, address),
+   --CONSTRAINT fk_mail_address_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_address_address ON mail_address(address);
 
 -- -----------------------------------------------------------------------
 -- items in mailboxes
@@ -77,6 +91,8 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    flags         INTEGER NOT NULL DEFAULT 0,
    tags          BIGINT NOT NULL DEFAULT 0,
    sender        VARCHAR(128),
+   sender_id     INTEGER UNSIGNED DEFAULT NULL,
+   recipients    VARCHAR(128),
    subject       TEXT,
    name          VARCHAR(128),               -- namespace entry for item (e.g. tag name, folder name, document/wiki filename)
    metadata      MEDIUMTEXT,
@@ -89,7 +105,8 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
 
    -- CONSTRAINT fk_mail_item_volume_id FOREIGN KEY (volume_id) REFERENCES zimbra.volume(id),
    CONSTRAINT fk_mail_item_parent_id FOREIGN KEY (parent_id) REFERENCES mail_item(id) ON UPDATE CASCADE,
-   CONSTRAINT fk_mail_item_folder_id FOREIGN KEY (folder_id) REFERENCES mail_item(id) ON UPDATE CASCADE
+   CONSTRAINT fk_mail_item_folder_id FOREIGN KEY (folder_id) REFERENCES mail_item(id) ON UPDATE CASCADE,
+   CONSTRAINT fk_mail_item_sender_id FOREIGN KEY (sender_id) REFERENCES mail_address(id)
 );
 
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_type ON mail_item(type);                      -- for looking up folders and tags
