@@ -133,7 +133,7 @@ function(html, idx, obj, spanId, context, options) {
 	options = options || {};
 	if (options.addrBubbles) {
 		this._isBubble[spanId] = true;
-		var canExpand = obj.isGroup && obj.canExpand;
+		var canExpand = obj.isGroup && obj.canExpand && appCtxt.get("EXPAND_DL_ENABLED");
 		if (canExpand && !this._aclv) {
 			// create a ZmAutocompleteListView to handle DL expansion; it's never shown
 			var aclvParams = {
