@@ -90,7 +90,7 @@ public class FormTaskNew extends AbsForm {
 
 	}
 
-	public boolean zIsVisible() {
+	public boolean zIsVisible() throws HarnessException {
 		String locator = "//div[contains(@id,'ztb__COMPOSE')]";
 		
 		if ( !this.sIsElementPresent(locator) )

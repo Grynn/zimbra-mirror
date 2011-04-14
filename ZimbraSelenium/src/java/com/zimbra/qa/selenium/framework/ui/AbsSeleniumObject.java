@@ -54,9 +54,9 @@ public abstract class AbsSeleniumObject {
 	 * @param leftLimit
 	 * @param topLimit
 	 * @return
+	 * @throws HarnessException 
 	 */
-	public boolean zIsVisiblePerPosition(String locator, int leftLimit,
-			int topLimit) {
+	public boolean zIsVisiblePerPosition(String locator, int leftLimit, int topLimit) throws HarnessException {
 
 		// Check if the locator is present
 		if (!sIsElementPresent(locator)) {
@@ -65,17 +65,16 @@ public abstract class AbsSeleniumObject {
 		}
 
 		// Find the current position
-		Number left = ClientSessionFactory.session().selenium()
-				.getElementPositionLeft(locator);
-		Number top = ClientSessionFactory.session().selenium()
-				.getElementPositionTop(locator);
-
+		int left = sGetElementPositionLeft(locator);
+		int top = sGetElementPositionTop(locator);
+		
 		// If the position is less than the limits, then it is hidden
-		boolean hidden = ((left.intValue() < leftLimit) && (top.intValue() < topLimit));
-		logger.info("isVisiblePerPosition(" + locator + ") - (left, top) = ("
-				+ left.intValue() + ", " + top.intValue()
-				+ ") (limit, limit) = (" + leftLimit + ", " + topLimit + ") "
-				+ (!hidden));
+		boolean hidden = ((left < leftLimit) && (top < topLimit));
+		logger.info("isVisiblePerPosition(" + locator + ") - " +
+				"(left, top) = (" + left + ", " + top + ")" +
+				"(limit, limit) = (" + leftLimit + ", " + topLimit + ")  = " +
+				(!hidden));
+		
 		return (!hidden);
 	}
 
@@ -210,10 +209,14 @@ public abstract class AbsSeleniumObject {
 	 * 
 	 * @param locator
 	 */
-	public int sGetElementPositionLeft(String locator) {
-		int n = ClientSessionFactory.session().selenium().getElementPositionLeft(locator).intValue();
-		logger.info("getElementPositionLeft("+ locator +") = "+ n);
-		return (n);
+	public int sGetElementPositionLeft(String locator) throws HarnessException {
+		try {
+			int n = ClientSessionFactory.session().selenium().getElementPositionLeft(locator).intValue();
+			logger.info("getElementPositionLeft("+ locator +") = "+ n);
+			return (n);
+		} catch (SeleniumException e) {
+			throw new HarnessException(e);
+		}
 	}
 	
 	/**
@@ -221,10 +224,14 @@ public abstract class AbsSeleniumObject {
 	 * 
 	 * @param locator
 	 */
-	public int sGetElementPositionTop(String locator) {
-		int n = ClientSessionFactory.session().selenium().getElementPositionTop(locator).intValue();
-		logger.info("getElementPositionTop("+ locator +") = "+ n);
-		return (n);
+	public int sGetElementPositionTop(String locator) throws HarnessException {
+		try {
+			int n = ClientSessionFactory.session().selenium().getElementPositionTop(locator).intValue();
+			logger.info("getElementPositionTop("+ locator +") = "+ n);
+			return (n);
+		} catch (SeleniumException e) {
+			throw new HarnessException(e);
+		}
 	}
 	
 
