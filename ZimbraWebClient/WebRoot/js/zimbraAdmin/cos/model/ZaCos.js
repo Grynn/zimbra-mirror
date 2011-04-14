@@ -269,6 +269,12 @@ function (obj) {
 	if(typeof(this.attrs[ZaCos.A_zimbraMailHostPool]) == 'string'){
 		this.attrs[ZaCos.A_zimbraMailHostPool] = [this.attrs[ZaCos.A_zimbraMailHostPool]];
 	}
+        if(!this.attrs[ZaCos.A_zimbraPrefLocale]){
+		this.attrs[ZaCos.A_zimbraPrefLocale] = "en_US";
+        }
+	if(!this.attrs[ZaCos.A_zimbraPrefMailDefaultCharset]){
+                this.attrs[ZaCos.A_zimbraPrefMailDefaultCharset] = "UTF-8";
+        }
 }
 
 /**
