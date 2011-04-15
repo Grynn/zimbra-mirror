@@ -31,15 +31,7 @@ endif
 
 MODULE_BUILD	:= D/DA/DAGOLDEN/Module-Build-0.3607.tar.gz
 
-ifeq (RHEL4,$(findstring RHEL4,$(BUILD_PLATFORM)))
-	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
-endif
-
 ifeq (RHEL5,$(findstring RHEL5,$(BUILD_PLATFORM)))
-	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
-endif
-
-ifeq (SuSEES10,$(findstring SuSEES10,$(BUILD_PLATFORM)))
 	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
 endif
 
@@ -48,26 +40,6 @@ ifeq (SLES10_64,$(findstring SLES10_64,$(BUILD_PLATFORM)))
 endif
 
 ifeq (UBUNTU8,$(findstring UBUNTU8,$(BUILD_PLATFORM)))
-	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
-endif
-
-ifeq (UBUNTU6,$(findstring UBUNTU6,$(BUILD_PLATFORM)))
-	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
-endif
-
-ifeq (DEBIAN4.0,$(findstring DEBIAN4.0,$(BUILD_PLATFORM)))
-	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
-endif
-
-ifeq (F7,$(findstring F7,$(BUILD_PLATFORM)))
-	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
-endif
-
-ifeq ($(BUILD_PLATFORM), MACOSX)
-	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
-endif
-
-ifeq ($(BUILD_PLATFORM), MACOSXx86)
 	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
 endif
 
