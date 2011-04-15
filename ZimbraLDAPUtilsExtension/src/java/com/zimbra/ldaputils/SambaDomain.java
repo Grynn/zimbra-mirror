@@ -20,7 +20,7 @@ import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 
 import com.zimbra.cs.account.NamedEntry;
-import com.zimbra.cs.account.ldap.LdapUtil;
+import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
 /**
  * @author Greg Solovyev
  */
@@ -31,8 +31,8 @@ public class SambaDomain extends LDAPUtilEntry {
 	public SambaDomain(String dn, Attributes attrs, Map<String, Object> defaults)
 			throws NamingException {
 		super(dn, attrs, defaults);
-        mName = LdapUtil.getAttrString(attrs, A_sambaSID);
-        mId = LdapUtil.getAttrString(attrs, A_sambaDomainName);		
+        mName = LegacyLdapUtil.getAttrString(attrs, A_sambaSID);
+        mId = LegacyLdapUtil.getAttrString(attrs, A_sambaDomainName);		
 	}
 
     public String getId() {

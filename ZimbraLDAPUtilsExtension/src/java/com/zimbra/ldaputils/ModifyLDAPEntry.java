@@ -23,8 +23,8 @@ import javax.naming.directory.DirContext;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ZimbraLog;
 
-import com.zimbra.cs.account.ldap.LdapUtil;
 import com.zimbra.cs.account.ldap.ZimbraLdapContext;
+import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.cs.service.admin.AdminService;
 import com.zimbra.common.soap.Element;
@@ -52,7 +52,7 @@ public class ModifyLDAPEntry extends AdminDocumentHandler {
 			if(ne==null)
 				throw ServiceException.FAILURE("Cannot find an object for DN "+dn, null);
 			
-			LdapUtil.modifyAttrs(zlc, ne.getDN(), attrs, ne);
+			LegacyLdapUtil.modifyAttrs(zlc, ne.getDN(), attrs, ne);
 
 			ZimbraLog.security.info(ZimbraLog.encodeAttrs(new String[] { "cmd",
 					"SaveLDAPEntry", "dn", dn }, attrs));

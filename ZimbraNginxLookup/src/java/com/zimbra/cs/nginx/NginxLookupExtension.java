@@ -50,8 +50,8 @@ import com.zimbra.cs.account.AuthTokenException;
 import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.account.auth.AuthMechanism;
 import com.zimbra.cs.account.ldap.LdapProvisioning;
-import com.zimbra.cs.account.ldap.LdapUtil;
 import com.zimbra.cs.account.ldap.ZimbraLdapContext;
+import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Provisioning.DomainBy;
 import com.zimbra.cs.account.Account;
@@ -421,7 +421,7 @@ public class NginxLookupExtension implements ZimbraExtension {
             if (attr == null && required)
                 throw new NginxLookupException("missing attr in config: "+key);
             if (attr != null) {
-                val = LdapUtil.getAttrString(sr.getAttributes(), attr);
+                val = LegacyLdapUtil.getAttrString(sr.getAttributes(), attr);
                 if (val == null && required)
                     throw new NginxLookupException("missing attr in search result: "+attr);
             }
@@ -512,7 +512,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                 if (extraAttrs != null) {
                     Attributes attributes = sr.getAttributes();
                     for (String attr : extraAttrs) {
-                        String val = LdapUtil.getAttrString(attributes, attr);
+                        String val = LegacyLdapUtil.getAttrString(attributes, attr);
                         if (val != null)
                             sdr.extraAttrs.put(attr, val);
                     }
@@ -552,7 +552,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                    throw new NginxLookupException("query returned empty result: "+query);
                 SearchResult sr = (SearchResult) ne.next();
                 Attributes ldapAttrs = sr.getAttributes();
-                attrs = LdapUtil.getAttrs(ldapAttrs);
+                attrs = LegacyLdapUtil.getAttrs(ldapAttrs);
                 
             } finally {
                 if (ne != null)

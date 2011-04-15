@@ -19,7 +19,7 @@ import java.util.Map;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 
-import com.zimbra.cs.account.ldap.LdapUtil;
+import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
 /**
  * @author Greg Solovyev
  */
@@ -28,7 +28,7 @@ public class PosixAccount extends LDAPUtilEntry {
 	public PosixAccount(String dn, Attributes attrs,
 			Map<String, Object> defaults) throws NamingException {
 		super(dn, attrs, defaults);
-        mId = LdapUtil.getAttrString(attrs, A_uidNumber);
+        mId = LegacyLdapUtil.getAttrString(attrs, A_uidNumber);
 	}
 
     public String getId() {

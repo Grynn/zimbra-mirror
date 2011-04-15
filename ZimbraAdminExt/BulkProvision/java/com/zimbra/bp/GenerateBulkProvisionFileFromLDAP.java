@@ -38,7 +38,7 @@ import com.zimbra.cs.account.accesscontrol.Rights.Admin;
 import com.zimbra.cs.account.gal.GalOp;
 import com.zimbra.cs.account.gal.GalParams;
 import com.zimbra.cs.account.ldap.LdapGalMapRules;
-import com.zimbra.cs.account.ldap.LdapUtil;
+import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.cs.service.admin.AdminService;
 import com.zimbra.cs.service.admin.AutoCompleteGal;
@@ -113,7 +113,7 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 		String fileToken = Double.toString(Math.random()*100);
         LdapGalMapRules rules = new LdapGalMapRules(Provisioning.getInstance().getConfig(), true);
 		try {
-			SearchGalResult result = LdapUtil.searchLdapGal(galParams, GalOp.search, "*", maxResults, rules, null, null);
+			SearchGalResult result = LegacyLdapUtil.searchLdapGal(galParams, GalOp.search, "*", maxResults, rules, null, null);
 			List<GalContact> entries = result.getMatches();
 			int totalAccounts = 0;
 			int totalDomains = 0;

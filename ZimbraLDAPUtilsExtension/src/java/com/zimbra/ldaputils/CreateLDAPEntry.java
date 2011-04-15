@@ -34,8 +34,8 @@ import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.AttributeManager;
 
-import com.zimbra.cs.account.ldap.LdapUtil;
 import com.zimbra.cs.account.ldap.ZimbraLdapContext;
+import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
 
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.cs.service.admin.AdminService;
@@ -79,7 +79,7 @@ public class CreateLDAPEntry extends AdminDocumentHandler {
             zlc = new ZimbraLdapContext(true);
 
             Attributes attrs = new BasicAttributes(true);
-            LdapUtil.mapToAttrs(entryAttrs, attrs);
+            LegacyLdapUtil.mapToAttrs(entryAttrs, attrs);
 
             zlc.createEntry(dn, attrs, "createLDAPEntry");
 

@@ -20,8 +20,8 @@ import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.account.ldap.LdapUtil;
 import com.zimbra.cs.account.ldap.ZimbraLdapContext;
+import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.common.soap.Element;
 import com.zimbra.soap.ZimbraSoapContext;

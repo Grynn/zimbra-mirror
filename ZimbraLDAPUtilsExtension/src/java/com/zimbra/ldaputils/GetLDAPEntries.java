@@ -44,8 +44,8 @@ import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.Provisioning;
 
-import com.zimbra.cs.account.ldap.LdapUtil;
 import com.zimbra.cs.account.ldap.ZimbraLdapContext;
+import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
 import com.zimbra.cs.account.ldap.legacy.entry.LdapDomain;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.AdminConstants;
@@ -191,11 +191,11 @@ public class GetLDAPEntries extends AdminDocumentHandler {
                         if (dn.endsWith("cn=zimbra")) continue;
                         Attributes attrs = sr.getAttributes();
 
-                        if(Arrays.binarySearch(LdapUtil.getMultiAttrString(attrs, Provisioning.A_objectClass), "sambaDomain") > -1) {
+                        if(Arrays.binarySearch(LegacyLdapUtil.getMultiAttrString(attrs, Provisioning.A_objectClass), "sambaDomain") > -1) {
                         	visitor.visit(new SambaDomain(dn, attrs,null));                        
-                    	} else if(Arrays.binarySearch(LdapUtil.getMultiAttrString(attrs, Provisioning.A_objectClass), "posixGroup") > -1) {
+                    	} else if(Arrays.binarySearch(LegacyLdapUtil.getMultiAttrString(attrs, Provisioning.A_objectClass), "posixGroup") > -1) {
                         	visitor.visit(new PosixGroup(dn, attrs,null));
-                    	} else if(Arrays.binarySearch(LdapUtil.getMultiAttrString(attrs, Provisioning.A_objectClass), "posixAccount") > -1) {
+                    	} else if(Arrays.binarySearch(LegacyLdapUtil.getMultiAttrString(attrs, Provisioning.A_objectClass), "posixAccount") > -1) {
                         	visitor.visit(new PosixAccount(dn, attrs,null));
                     	} else {
                         	visitor.visit(new LDAPUtilEntry(dn, attrs,null));

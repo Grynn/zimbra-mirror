@@ -19,7 +19,7 @@ import java.util.Map;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 
-import com.zimbra.cs.account.ldap.LdapUtil;
+import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
 /**
  * @author Greg Solovyev
  */
@@ -29,7 +29,7 @@ public class PosixGroup extends LDAPUtilEntry {
 	public PosixGroup(String dn, Attributes attrs, Map<String, Object> defaults)
 			throws NamingException {
 		super(dn, attrs, defaults);
-        mId = LdapUtil.getAttrString(attrs, A_gidNumber);		
+        mId = LegacyLdapUtil.getAttrString(attrs, A_gidNumber);		
 	}
 
     public String getId() {
