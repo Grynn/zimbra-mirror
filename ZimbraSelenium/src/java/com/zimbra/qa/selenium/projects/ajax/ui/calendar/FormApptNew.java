@@ -2,7 +2,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui.calendar;
 
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 
 
@@ -24,7 +24,11 @@ public class FormApptNew extends AbsForm {
 	 * Defines Selenium locators for various objects in {@link FormApptNew}
 	 */
 	public static class Locators {
-		
+
+		public static final String Button_Send			= "css=div[id^='ztb__APPT'] td[id$='_SEND_INVITE_title']";
+		public static final String Button_Save			= "css=div[id^='ztb__APPT'] td[id$='_SAVE_title']";
+		public static final String Button_SaveAndClose	= "css=div[id^='ztb__APPT'] td[id$='_SAVE_title']";
+		public static final String Button_Close			= "css=div[id^='ztb__APPT'] td[id$='_CANCEL_title']";
 		
 	}
 
@@ -79,7 +83,17 @@ public class FormApptNew extends AbsForm {
 	public void zSubmit() throws HarnessException {
 		logger.info("FormMailNew.submit()");
 		
-		zToolbarPressButton(Button.B_SEND);
+		// Send: if there are attendees
+		// Save: If there are no attendees
+		
+		// If send is visible, click it
+		// Otherwise, click Save
+		String locator = "css=div[id$=_SEND_INVITE]";
+		if ( this.sIsElementPresent(locator) && this.sIsVisible(locator) ) {
+			zToolbarPressButton(Button.B_SEND);
+		} else {
+			zToolbarPressButton(Button.B_SAVE);
+		}
 
 		this.zWaitForBusyOverlay();
 
@@ -105,7 +119,7 @@ public class FormApptNew extends AbsForm {
 		
 		if ( button == Button.B_SEND ) {
 			
-			locator = "css=div[id^='ztb__APPT'] tr[id$='_SEND_INVITE_title']";
+			locator = Locators.Button_Send;
 			
 			// Click on send
 			this.zClick(locator);
@@ -127,11 +141,11 @@ public class FormApptNew extends AbsForm {
 		
 		} else if ( button == Button.B_SAVE ) {
 
-			locator = "implement me";
+			locator = Locators.Button_Save;
 			page = null;
 			
 			// FALL THROUGH
-
+		
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}
@@ -233,6 +247,20 @@ public class FormApptNew extends AbsForm {
 		return (page);
 	}
 	
+	public void zFillField(Field field, ZDate value) throws HarnessException {
+		String stringFormat;
+		
+		if ( field == Field.StartDate || field == Field.EndDate ) {
+			stringFormat = value.toMM_DD_YYYY();
+		} else if ( field == Field.StartTime || field == Field.EndTime ) {
+			stringFormat = value.tohh_mm_aa();
+		} else {
+			throw new HarnessException("zFillField() not implemented for field: "+ field);
+		}
+		
+		zFillField(field, stringFormat);
+	}
+	
 	/**
 	 * Fill in the form field with the specified text
 	 * @param field
@@ -247,10 +275,34 @@ public class FormApptNew extends AbsForm {
 		
 		if ( field == Field.Subject ) {
 			
-			locator = "css=div[id='DWT115'] td[id$='_subject']";
+			locator = "css=div[id^='APPT_COMPOSE_'] td[id$='_subject'] input";
 			
 			// FALL THROUGH
 			
+		} else if ( field == Field.StartDate ) {
+			
+			locator = "css=input[id$='_startDateField']";
+			
+			// FALL THROUGH
+
+		} else if ( field == Field.StartTime ) {
+			
+			locator = "css=td[id$='_startTimeSelect'] td[id$='_timeSelectInput'] input";
+			
+			// FALL THROUGH
+
+		} else if ( field == Field.EndDate ) {
+			
+			locator = "css=input[id$='_endDateField']";
+			
+			// FALL THROUGH
+
+		} else if ( field == Field.EndTime ) {
+			
+			locator = "css=td[id$='_endTimeSelect'] td[id$='_timeSelectInput'] input";
+			
+			// FALL THROUGH
+
 		} else if ( field == Field.Body ) {
 
 			int frames = this.sGetXpathCount("//iframe");
@@ -352,6 +404,20 @@ public class FormApptNew extends AbsForm {
 		if ( appt.getSubject() != null ) {
 			
 			zFillField(Field.Subject, appt.getSubject());
+
+		}
+		
+		if ( appt.getStartTime() != null ) {
+			
+			zFillField(Field.StartDate, appt.getStartTime());
+			zFillField(Field.StartTime, appt.getStartTime());
+
+		}
+		
+		if ( appt.getEndTime() != null ) {
+			
+			zFillField(Field.EndDate, appt.getEndTime());
+			zFillField(Field.EndTime, appt.getEndTime());
 
 		}
 		

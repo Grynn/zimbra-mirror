@@ -177,6 +177,25 @@ public class ZDate {
 		return (format("yyyyMMdd'T'HHmmss"));
 	}
 
+	/**
+	 * MM/DD/YYYY (i.e. 12/25/2011)
+	 * @return
+	 * @throws HarnessException 
+	 */
+	public String toMM_DD_YYYY() throws HarnessException {
+		return (format("MM/dd/yyyy"));
+	}
+
+	/**
+	 * hh:mm aa (i.e. 04:30 PM)
+	 * @return
+	 * @throws HarnessException 
+	 */
+	public String tohh_mm_aa() throws HarnessException {
+		return (format("hh:mm aa"));
+	}
+
+
 	public String toYYYYMMDD() throws HarnessException {
 		return (format("yyyyMMdd"));
 	}
