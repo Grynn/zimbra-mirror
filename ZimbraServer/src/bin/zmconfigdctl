@@ -153,11 +153,12 @@ stopdaemon()
 	if [ x$ctlpid != "x" ]; then
 		echo -n "Stopping zmconfigdctl..."
 		kill -15 $ctlpid 2> /dev/null
+		sleep 1
 		kill -0 $ctlpid 2> /dev/null
 		if [ $? != 0 ]; then
-		  ctlpid=""
-		  ctlrunning=0
-		  echo "success"
+			ctlpid=""
+			ctlrunning=0
+			echo "success"
 		else
 			ctlrunning=1
 			echo "failed"
