@@ -46,7 +46,7 @@ import com.zimbra.cs.account.Provisioning;
 
 import com.zimbra.cs.account.ldap.LdapUtil;
 import com.zimbra.cs.account.ldap.ZimbraLdapContext;
-import com.zimbra.cs.account.ldap.LdapDomain;
+import com.zimbra.cs.account.ldap.legacy.entry.LdapDomain;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.soap.ZimbraSoapContext;
