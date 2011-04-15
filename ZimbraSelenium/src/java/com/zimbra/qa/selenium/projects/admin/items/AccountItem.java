@@ -7,9 +7,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.*;
 
 
 public class AccountItem implements IItem {
@@ -58,10 +56,6 @@ public class AccountItem implements IItem {
 		
 	}
 
-	@Override
-	public void createUsingSOAP(ZimbraAccount account) throws HarnessException {
-		throw new HarnessException("implement me!");
-	}
 
 	@Override
 	public String prettyPrint() {
@@ -129,6 +123,35 @@ public class AccountItem implements IItem {
 	}
 	public String getGEmailAddress() {
 		return (GEmailAddress);
+	}
+
+	public static AccountItem createUsingSOAP(AccountItem account) throws HarnessException {
+		
+		StringBuilder elementPassword = new StringBuilder();
+		if ( account.Password != null ) {
+			elementPassword.append("<password>").append(account.Password).append("</password>");
+		}
+		
+		StringBuilder elementAttrs = new StringBuilder();
+		for ( Map.Entry<String,String> entry : account.AccountAttrs.entrySet() ) {
+			elementAttrs.append("<a n='").append(entry.getKey()).append("'>").append(entry.getValue()).append("</a>");
+		}
+		
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+							"<CreateAccountRequest xmlns='urn:zimbraAdmin'>"
+				+				"<name>"+ account.getEmailAddress() +"</name>"
+				+				elementPassword.toString()
+				+				elementAttrs.toString()
+				+			"</CreateAccountRequest>");
+
+		// TODO: Need to create a new AccountItem and set the account values to it, then return the new item
+		
+		return (account);
+	}
+
+	@Override
+	public void createUsingSOAP(ZimbraAccount account) throws HarnessException {
+		throw new HarnessException("not applicable for this IItem type");
 	}
 
 }

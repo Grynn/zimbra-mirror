@@ -4,11 +4,8 @@
 package com.zimbra.qa.selenium.projects.admin.ui;
 
 import com.zimbra.qa.selenium.framework.items.IItem;
-import com.zimbra.qa.selenium.framework.ui.AbsTab;
-import com.zimbra.qa.selenium.framework.ui.AbsWizard;
+import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
-import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 import com.zimbra.qa.selenium.projects.admin.items.AliasItem;
 
 
@@ -38,21 +35,13 @@ public class WizardCreateAlias extends AbsWizard {
 
 		String CN = alias.getLocalName();
 		String domain = alias.getDomainName();
-
-		//Create this account as a target account for alias
-		AccountItem account = new AccountItem();
-		String targetAccount=account.getEmailAddress();
-		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
-				"<CreateAccountRequest xmlns='urn:zimbraAdmin'>"
-				+			"<name>" + targetAccount + "</name>"
-				+			"<password>test123</password>"
-				+		"</CreateAccountRequest>");
-
+		String targetAccount = alias.getTargetAccountEmail();
 
 		sType(zdlg_ALIAS_NAME, CN);
 		sType(zdlg_ALIAS_DOMAIN_NAME, domain);
 		sType(zdlg_TARGET_ACCOUNT_NAME, targetAccount);
 		sClick(zdlg_OK);
+
 		return alias;
 
 	}
