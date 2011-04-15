@@ -185,6 +185,7 @@
 				<include name="xalan.jar" />
 			</fileset>
 			<fileset dir="${common.dir}/jars">
+				<include name="ant-tar-patched.jar" />
 				<include name="apache-log4j-extras-1.0.jar" />
 				<include name="commons-cli-1.2.jar" />
 				<include name="commons-code-1.4.jar" />
@@ -217,7 +218,7 @@
 				<attribute name="Main-Class" value="staf.Driver" />
 				<section name="staf/service/info">
 					<attribute name="Service-Class" value="com.zimbra.qa.selenium.staf.StafIntegration" />
-					<attribute name="Packaged-Jars" value="guava-r07 commons-beanutils-1.7 commons-configuration-1.5 commons-lang-2.4 ezmorph-1.0.6 htmlcleaner-2.2 json-lib-2.3-jdk15 ocutil-2.4.2 selenium-java-2.0b2 selenium-server-standalone-2.0b2 testng-5.12.1 xalan apache-log4j-extras-1.0 commons-cli-1.2 commons-code-1.4 commons-configuration-1.5 commons-httpclient-3.1 commons-logging dom4j-1.5.2 jaxen-1.1.1 libidn-1.17 log4j-1.2.16 mail resources zimbracommon zimbra-native zimbrasoap zimbrastore" />
+					<attribute name="Packaged-Jars" value="guava-r07 commons-beanutils-1.7 commons-configuration-1.5 commons-lang-2.4 ezmorph-1.0.6 htmlcleaner-2.2 json-lib-2.3-jdk15 ocutil-2.4.2 selenium-java-2.0b2 selenium-server-standalone-2.0b2 testng-5.12.1 xalan apache-log4j-extras-1.0 commons-cli-1.2 commons-code-1.4 commons-configuration-1.5 commons-httpclient-3.1 commons-logging dom4j-1.5.2 jaxen-1.1.1 libidn-1.17 log4j-1.2.16 mail resources zimbracommon zimbra-native zimbrasoap zimbrastore ant-tar-patched" />
 				</section>
 			</manifest>
 		</jar>
@@ -260,17 +261,14 @@
 	<target name="jar-staf" depends="jar-staf-selenium, jar-staf-results" description="Creates all the STAF jar files">
 	</target>
 
-
-
-
-
 	<target name="Run-ExecuteHarnessMain" depends="jar" description="Run all tests per specified arguments">
 		<property name="jarfile" value="${dist.lib.dir}/zimbraselenium.jar"/>
 		<property name="pattern" value="ajax.tests"/>
 		<property name="groups" value="always,sanity"/>
+		<property name="exclude_groups" value="skip"/>
 		<echo>Executing ...</echo>
 		<java classname="com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain"          classpathref="class.path"          fork="true" failonerror="true">
-			<arg line="-j '${jarfile}' -p ${pattern} -g ${groups} -l conf/log4j.properties  "/>				
+			<arg line="-j '${jarfile}' -p ${pattern} -g ${groups} -eg ${exclude_groups} -l conf/log4j.properties  "/>				
 		</java>
 	</target>
 

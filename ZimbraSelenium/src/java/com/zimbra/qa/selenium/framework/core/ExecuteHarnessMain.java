@@ -738,7 +738,7 @@ public class ExecuteHarnessMain {
         options.addOption(new Option("c", "config", true, "dynamic setting config properties i.e browser, server, locale... ( -c 'locale=en_US,browser=firefox' "));
 
         options.addOption(new Option("e", "exclude", true, "exclude pattern  "));
-        options.addOption(new Option("eg", "exclude groups", true, "comma separated list of groups to exclude when execute (skip)"));
+        options.addOption(new Option("eg", "exclude_groups", true, "comma separated list of groups to exclude when execute (skip)"));
         
         // Set required options
         options.getOption("j").setRequired(true);
@@ -865,7 +865,6 @@ public class ExecuteHarnessMain {
 		
 		BasicConfigurator.configure();
 
-    	
     	String result = "No results";
 		try {
 			

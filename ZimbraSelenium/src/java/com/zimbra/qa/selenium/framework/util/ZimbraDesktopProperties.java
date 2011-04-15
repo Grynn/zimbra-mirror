@@ -11,6 +11,7 @@ public class ZimbraDesktopProperties {
 
    private String _serialNumber = null;
    private String _localConfigFileLocation = null;
+   private String _userName = null;
 
    private static ZimbraDesktopProperties _instance = null;
 
@@ -18,6 +19,21 @@ public class ZimbraDesktopProperties {
 
    private ZimbraDesktopProperties() {
       logger.debug("New ZimbraDesktopProperties");
+      switch (OperatingSystem.getOSType()) {
+      case WINDOWS: case WINDOWS_XP:
+         this._userName = System.getProperty("user.name");;
+         break;
+      case LINUX: case MAC:
+         // For Linux and MAC, enforce it to "zimbra" user because
+         // TMS will shoot the staf command as root and installation & launch
+         // must be done using non-root user
+         this._userName = "zimbra";
+         break;
+      }
+   }
+
+   public String getUserName() {
+      return this._userName;
    }
 
    public static synchronized void reset() {
@@ -75,23 +91,25 @@ public class ZimbraDesktopProperties {
 
    private void init() {
       OsType osType = OperatingSystem.getOSType();
+      logger.info("currentLoggedInUser: " +
+            _userName);
 
       for (int i = 0; i < _possibleFiles.length; i++) {
-         String currentLoggedInUser = System.getProperty(
-               "user.name");
          _possibleFiles[i] = _possibleFiles[i].replace(
-               "<USER_NAME>", currentLoggedInUser);
+               "<USER_NAME>", _userName);
          if (osType == OsType.WINDOWS || osType == OsType.WINDOWS_XP) {
             if (!_possibleFiles[i].contains("C:\\")) {
                continue;
             } else {
-               logger.info("currentLoggedInUser: " +
-                     currentLoggedInUser);
-               
+               // Fall Through
+
             }
          } else {
             if (_possibleFiles[i].contains("C:\\")) {
                continue;
+            } else {
+               // Fall Through
+
             }
          }
          logger.info("Parsing XML file: " + _possibleFiles[i]);

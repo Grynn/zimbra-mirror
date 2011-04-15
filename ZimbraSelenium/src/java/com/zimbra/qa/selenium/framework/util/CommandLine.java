@@ -5,12 +5,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.Calendar;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-
-import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 
 class StreamGobbler extends Thread
 {
@@ -136,7 +135,38 @@ public class CommandLine {
 	   logger.debug("Executing command: " + command);
       Process process = Runtime.getRuntime().exec(command);
 
-      InputStream inputStream = process.getInputStream();
+      return _startStreaming(process, params);
+	}
+
+	/**
+    * Execute (tokenized) command line with parameters and return the output as a String
+    * @param command Command line to be executed
+    * @param params Parameter to be passed to STDIN
+    * @return (String) output from the console
+    * @throws IOException
+    * @throws InterruptedException
+    * @throws HarnessException 
+    */
+	public static String cmdExecWithOutput(String [] command, String[] params)
+	throws IOException, InterruptedException, HarnessException {
+	   logger.debug("Executing command: " + Arrays.toString(command));
+	   Process process = Runtime.getRuntime().exec(command);
+
+	   return _startStreaming(process, params);
+	}
+
+
+	/**
+	 * Streaming the input and output from the command line execution
+	 * @param process
+	 * @param params
+	 * @return Aggregated output from the command line execution
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	private static String _startStreaming(Process process, String[] params)
+	throws IOException, InterruptedException {
+	   InputStream inputStream = process.getInputStream();
       StreamGobbler errorGobbler = new
             StreamGobbler(process.getErrorStream());
       StreamGobbler outputGobbler = new

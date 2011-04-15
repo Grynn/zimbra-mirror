@@ -318,8 +318,9 @@ public class GeneralUtility {
     * @param tarFile
     * @param dest
     * @throws HarnessException
+    * @throws InterruptedException 
     */
-   public static void untarBaseUpgradeFile(File tarFile, File dest) throws HarnessException {  
+   public static void untarBaseUpgradeFile(File tarFile, File dest) throws HarnessException, InterruptedException {  
       if (dest == null) {
          throw new HarnessException("dest cannot be null!");
       }
@@ -329,14 +330,25 @@ public class GeneralUtility {
       }
 
       try {
-         TarInputStream tin = new TarInputStream(new GZIPInputStream(new FileInputStream(tarFile)));  
-         TarEntry tarEntry = tin.getNextEntry();  
+         logger.info("tar file is: " + tarFile.getCanonicalPath());
+         logger.info("dest path is: " + dest.getCanonicalPath());
+         logger.debug("Initializing tarFileInputStream");
+         FileInputStream tarFileInputStream = new FileInputStream(tarFile);
          
+         logger.debug("Initializing gzipInputStream");
+         GZIPInputStream gzipInputStream = new GZIPInputStream(tarFileInputStream);
+
+         logger.debug("Initializing tarInputStream");
+         TarInputStream tin = new TarInputStream(gzipInputStream);
+
+         logger.debug("Getting the entries...");
+         TarEntry tarEntry = tin.getNextEntry();  
+         logger.debug("First tarEntry is: " + tarEntry.getName());
          while (tarEntry != null) {  
             File destPath = new File(dest.toString().trim() + File.separatorChar +
                   tarEntry.getName());  
             logger.info("destPath is: " + destPath);
-            
+
             if (tarEntry.isDirectory()) {
                createDirectory(destPath);
 
@@ -349,15 +361,18 @@ public class GeneralUtility {
 
             tarEntry = tin.getNextEntry();  
 
-         }  
+         }
 
-         tin.close(); tin = null;  
+         tin.close();
+         tin = null;
 
       } catch (IOException ie) {
-         throw new HarnessException("Getting IO Exception while untarring the file from: " +
-               tarFile + " to: " + dest);
+         String message = "Getting IO Exception while untarring the file from: " +
+               tarFile + " to: " + dest;
+         logger.info(message);
+         logger.info(ie.getMessage());
+         throw new HarnessException(message);
       }
-
    }
 
    /**
@@ -391,22 +406,33 @@ public class GeneralUtility {
    }
 
    /**
-    * Delete the non-emptu directory
+    * Delete the non-empty directory
     * @param path
     * @return
     */
    public static boolean deleteDirectory(File path) {
       if( path.exists() ) {
          File[] files = path.listFiles();
-         for(int i = 0; i < files.length; i++) {
-            if(files[i].isDirectory()) {
-              deleteDirectory(files[i]);
+         logger.debug("Number of files to be deleted: " + files.length);
+         try {
+            for(int i = 0; i < files.length; i++) {
+               if(files[i].isDirectory()) {
+                  deleteDirectory(files[i]);
+               }
+               else {
+                  logger.debug("Deleting: " + files[i].getCanonicalPath());
+                  files[i].delete();
+               }
             }
-            else {
-              files[i].delete();
-            }
+            
+         } catch (IOException ie) {
+            logger.debug("Ignoring IO Exception while deleting the file");
          }
+       } else {
+          logger.debug("path doesn't exist");
        }
+
+       logger.debug("Now removing the top directory...");
        return( path.delete() );
    }
 }

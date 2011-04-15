@@ -131,7 +131,7 @@ public class DesktopInstallUtil {
          
          switch (OperatingSystem.getOSType()) {
          case LINUX:
-            String username = System.getProperty("user.name");
+            String username = ZimbraDesktopProperties.getInstance().getUserName();
             logger.info("user name is: " + username);
             String [] output = CommandLine.cmdExecWithOutput("ps -ef").split("\n");
             logger.info("output's length is: " + output.length);
@@ -293,12 +293,12 @@ public class DesktopInstallUtil {
             }
             break;
          case LINUX:
-            String username = System.getProperty("user.name");
             CommandLine.CmdExec("rm -rf /opt/zimbra/zdesktop");
-            CommandLine.CmdExec("rm -rf /home/" + username + "/zdesktop");
+            CommandLine.CmdExec("rm -rf /home/" +
+                  ZimbraDesktopProperties.getInstance().getUserName() + "/zdesktop");
             break;
          case MAC:
-            //TODO: Impelements Linux and MAC uninstallation method here
+            //TODO: Impelements MAC uninstallation method here
             break;
          }
       } else {
@@ -310,7 +310,7 @@ public class DesktopInstallUtil {
       ZimbraDesktopProperties.getInstance();
       if (ZimbraDesktopProperties.getUserFolder() != null) {
          File localProfile = new File(ZimbraDesktopProperties.getUserFolder());
-         logger.debug("Deleting Local profile...");
+         logger.debug("Deleting Local profile... : " + localProfile.getCanonicalPath());
          if (GeneralUtility.deleteDirectory(localProfile)) {
             logger.debug("Local Profile folders cannot be deleted.");
          } else {
@@ -359,6 +359,8 @@ public class DesktopInstallUtil {
 
                file = new File(installFileBinaryLocation);
 
+               logger.info("Giving full permission to installFileBinaryLocation");
+               CommandLine.cmdExecWithOutput("chmod 777 " + installFileBinaryLocation);
                logger.info("PWD: " + CommandLine.cmdExecWithOutput("pwd"));
 
                File currentDir = new File(CommandLine.cmdExecWithOutput("pwd").trim());
@@ -369,14 +371,21 @@ public class DesktopInstallUtil {
                File destinationDir = new File(destPath);
 
                logger.info("destinationDir is: " + destinationDir.getAbsolutePath());
+               logger.info("Now cleaning the destination dir...");
                if (destinationDir.exists()) {
+                  logger.info("destinationDir exists");
                   GeneralUtility.deleteDirectory(destinationDir);
+               } else {
+                  logger.info("destinationDir doesn't exist");
                }
 
+               logger.info("Creating the directory...");
                GeneralUtility.createDirectory(destinationDir);
 
+               logger.info("Untar-ing the tar file...");
                GeneralUtility.untarBaseUpgradeFile(file, destinationDir);
-               
+               logger.info("Untar-ing the tar file is successful.");
+
                installFileBinaryLocation = installFileBinaryLocation.replace(".tgz", "");
                String[] path = installFileBinaryLocation.split("/");
                logger.info("Giving full permissions to some files...");
@@ -391,9 +400,11 @@ public class DesktopInstallUtil {
                logger.info("executing installCommand");
                CommandLine.CmdExec(installCommand, params);
 
+               CommandLine.CmdExec("chmod -R 777 " + "/opt/zimbra/zdesktop");
                //CommandLine.CmdExec("su - zimbra -c ", new String[] {"zimbra"});
                String[] params2 = new String[] {"\n", "\n", "\\x03"};
-               CommandLine.CmdExec("/opt/zimbra/zdesktop/linux/user-install.pl", params2);
+               CommandLine.CmdExec("su - " + ZimbraDesktopProperties.getInstance().getUserName() +
+                     " -c \"/opt/zimbra/zdesktop/linux/user-install.pl\"", params2);
                zdProcess = getZDProcess();
 
                GeneralUtility.waitFor("com.zimbra.qa.selenium.projects.desktop.core.DesktopInstallUtil", null,
