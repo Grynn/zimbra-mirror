@@ -13,7 +13,7 @@ import com.zimbra.qa.selenium.framework.util.*;
 public class AccountItem implements IItem {
 	protected static Logger logger = LogManager.getLogger(IItem.class);
 
-	protected String Id;
+	protected static String Id;
 	
 	protected String LocalName; // Email Address is LocalName@DomainName
 	protected String DomainName;
@@ -143,7 +143,9 @@ public class AccountItem implements IItem {
 				+				elementPassword.toString()
 				+				elementAttrs.toString()
 				+			"</CreateAccountRequest>");
-
+		
+		
+		Id = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectValue("//admin:CreateAccountResponse/admin:account", "id").toString();
 		// TODO: Need to create a new AccountItem and set the account values to it, then return the new item
 		
 		return (account);
