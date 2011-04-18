@@ -25,6 +25,16 @@ zmsetvars \
 	zimbra_log_directory \
 	zmmtaconfig_listen_port
 
+# These variables are not set if run via cron.  Make sure they are set prior to execution
+if [ x"$JYTHONPATH" = "x" ]; then
+  JAVA_HOME=${zimbra_home}/java
+  PATH=${zimbra_home}/bin:${zimbra_home}/postfix/sbin:${zimbra_home}/openldap/bin:${zimbra_home}/snmp/bin:${zimbra_home}/bdb/bin:${zimbra_home}/openssl/bin:${JAVA_HOME}/bin:/usr/sbin:${PATH}
+  export PATH
+
+  JYTHONPATH="${zimbra_home}/zimbramon/pylibs"
+  export JYTHONPATH
+fi
+ 
 pid=""
 pidfile="${zimbra_log_directory}/zmconfigd.pid"
 
