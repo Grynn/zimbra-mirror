@@ -286,7 +286,7 @@ public class  ZFolderBean {
         try {
             isSpamEnabled = folderObject().getMailbox().getFeatures().getSpam();
         } catch (ServiceException e) {}
-        return (getIsMessageView() || getIsConversationView() || getIsNullView()) &&
+        return (getIsMessageView() || getIsConversationView() || getIsNullView() || getIsUnknownView()) &&
                 !(getIsDrafts() || getIsMountPoint() || getIsSearchFolder() || !StringUtil.isNullOrEmpty(getRemoteURL())) &&
                 !getId().equals(ZFolder.ID_CHATS) &&
 				((!getId().equals(ZFolder.ID_SPAM)) || isSpamEnabled);
