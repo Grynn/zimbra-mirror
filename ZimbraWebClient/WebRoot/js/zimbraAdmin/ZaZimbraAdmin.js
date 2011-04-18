@@ -712,6 +712,32 @@ function(staticFunc, icon, lbl, max_lbl_length) {
 	return html.join("");
 }
 
+/**
+* Creates an action status view
+**/
+ZaZimbraAdmin.prototype._createActionStatus =
+function() {
+	this.actionStatusView = new ZaActionStatusView(this._shell, "ZaStatus", Dwt.ABSOLUTE_STYLE);
+}
+
+/**
+ * Displays a status message.
+ *
+ * @param	{Hash}	params		a hash of parameters
+ * @param {String}	params.msg		the message
+ * @param {constant}	[params.level] ZaActionStatusView.LEVEL_INFO, ZaActionStatusView.LEVEL_WARNING, or ZaActionStatusView.LEVEL_CRITICAL
+ * @param {constant}	[params.detail] 	the details
+ * @param {constant}	[params.transitions]		the transitions
+ * @param {constant}	[params.toast]		the toast control
+ * @param {boolean}     [force]        force any displayed toasts out of the way (dismiss them and run their dismissCallback). Enqueued messages that are not yet displayed will not be displayed
+ * @param {AjxCallback}    [dismissCallback]    callback to run when the toast is dismissed (by another message using [force], or explicitly calling ZmStatusView.prototype.dismiss())
+ * @param {AjxCallback}    [finishCallback]     callback to run when the toast finishes its transitions by itself (not when dismissed)
+ */
+ZaZimbraAdmin.prototype.setActionStatusMsg =
+function(params) {
+	params = Dwt.getParams(arguments, ZaActionStatusView.MSG_PARAMS);
+	this.actionStatusView.setStatusMsg(params);
+};
 // Private methods
 
 ZaZimbraAdmin._killSplash =
@@ -796,6 +822,7 @@ function() {
 	}
 
 	if(ZaSettings.SEARCH_PANEL_ENABLED) {
+        this._createActionStatus();
 		elements[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR] = ZaApp.getInstance().getSearchBuilderToolbarController ().getSearchBuilderTBPanel();
 		elements[ZaAppViewMgr.C_SEARCH_BUILDER] = ZaApp.getInstance().getSearchBuilderController().getSearchBuilderPanel();
 	}

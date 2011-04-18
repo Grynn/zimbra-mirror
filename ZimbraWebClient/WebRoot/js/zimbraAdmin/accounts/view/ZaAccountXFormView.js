@@ -2372,7 +2372,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								}								
 							]
 						},						
-						{type:_ZA_TOP_GROUPER_, colSizes:["295px","auto"], id:"account_prefs_mail_sending",borderCssClass:"LowPadedTopGrouperBorder",
+						{type:_ZA_TOP_GROUPER_, colSizes:["275px","auto"], id:"account_prefs_mail_sending",borderCssClass:"LowPadedTopGrouperBorder",
 							label:ZaMsg.NAD_MailOptionsSending,
 							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
 								[ZaAccount.A_zimbraPrefSaveToSent,

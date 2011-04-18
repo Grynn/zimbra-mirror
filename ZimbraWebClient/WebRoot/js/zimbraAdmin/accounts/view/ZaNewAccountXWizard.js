@@ -148,7 +148,8 @@ function() {
 			//if creation took place - fire an change event
 			ZaApp.getInstance().getAccountListController().fireCreationEvent(account);
 			this.popdown();
-			ZaApp.getInstance().getCurrentController().popupMsgDialog(AjxMessageFormat.format(ZaMsg.AccountCreated,[account.name]));
+            ZaApp.getInstance().getAppCtxt().getAppController().setActionStatusMsg(AjxMessageFormat.format(ZaMsg.AccountCreated,[account.name]));
+			//ZaApp.getInstance().getCurrentController().popupMsgDialog(AjxMessageFormat.format(ZaMsg.AccountCreated,[account.name]));
 		}
 	} catch (ex) {
 		switch(ex.code) {		
