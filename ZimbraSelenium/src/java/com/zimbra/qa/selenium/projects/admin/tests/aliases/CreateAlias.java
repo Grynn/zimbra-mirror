@@ -6,11 +6,12 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
-import com.zimbra.qa.selenium.projects.admin.items.AliasItem;
+import com.zimbra.qa.selenium.projects.admin.core.AdminCommonTest;
+import com.zimbra.qa.selenium.projects.admin.items.*;
 import com.zimbra.qa.selenium.projects.admin.ui.WizardCreateAlias;
 
 
-public class CreateAlias extends AliasTest {
+public class CreateAlias extends AdminCommonTest {
 	
 	/**
 	 * Testcase : Create a basic alias.
@@ -22,9 +23,11 @@ public class CreateAlias extends AliasTest {
 			groups = { "sanity" })
 	public void CreateAlias_01() throws HarnessException {
 
-		// Create a new account in the Admin Console
+		AccountItem target = new AccountItem();
+		AccountItem.createUsingSOAP(target);
+		
 		AliasItem alias = new AliasItem();		// Create a new account in the Admin Console using SOAP
-		alias.setTargetAccountEmail(targetAccountEmail);
+		alias.setTargetAccountEmail(target.getEmailAddress());
 
 
 		// Click "New"
@@ -40,7 +43,7 @@ public class CreateAlias extends AliasTest {
 				+			"<account by='name'>"+ alias.getEmailAddress() +"</account>"
 				+		"</GetAccountRequest>");
 		String email = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectValue("//admin:account", "name");
-		ZAssert.assertEquals(email, targetAccountEmail, "Verify the alias is associated with the correct account");
+		ZAssert.assertEquals(email, target.getEmailAddress(), "Verify the alias is associated with the correct account");
 	}
 	
 	/**
@@ -54,9 +57,13 @@ public class CreateAlias extends AliasTest {
 			groups = { "sanity" })
 			public void CreateAlias_02() throws HarnessException {
 
+		AccountItem target = new AccountItem();
+		AccountItem.createUsingSOAP(target);
+		
+
 		// Create a new account in the Admin Console
 		AliasItem alias = new AliasItem();		// Create a new account in the Admin Console using SOAP
-		alias.setTargetAccountEmail(targetAccountEmail);
+		alias.setTargetAccountEmail(target.getEmailAddress());
 
 
 
@@ -73,7 +80,7 @@ public class CreateAlias extends AliasTest {
 				+			"<account by='name'>"+ alias.getEmailAddress() +"</account>"
 				+		"</GetAccountRequest>");
 		String email = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectValue("//admin:account", "name");
-		ZAssert.assertEquals(email, targetAccountEmail, "Verify the alias is associated with the correct account");
+		ZAssert.assertEquals(email, target.getEmailAddress(), "Verify the alias is associated with the correct account");
 	}
 
 }

@@ -8,10 +8,11 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
+import com.zimbra.qa.selenium.projects.admin.core.AdminCommonTest;
 import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 import com.zimbra.qa.selenium.projects.admin.items.AliasItem;
 
-public class GetAlias extends AliasTest {
+public class GetAlias extends AdminCommonTest {
 
 	/**
 	 * Testcase : Verify created alias is displayed in UI.
@@ -21,17 +22,21 @@ public class GetAlias extends AliasTest {
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Verify created alias is present in the list view",
-			groups = { "test" })
+			groups = { "smoke" })
 			public void GetAlias_01() throws HarnessException {
 
+		AccountItem target = new AccountItem();
+		AccountItem.createUsingSOAP(target);
+		
+		
 		// Create a new account in the Admin Console using SOAP
 		AliasItem alias = new AliasItem();
 		String aliasEmailAddress=alias.getEmailAddress();
 		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
-				"<AddAccountAliasRequest xmlns='urn:zimbraAdmin'>" +
-				"<id>" + targetAccountId + "</id>" +
-				"<alias>" + aliasEmailAddress + "</alias>" +
-		"</AddAccountAliasRequest>");
+						"<AddAccountAliasRequest xmlns='urn:zimbraAdmin'>"
+				+			"<id>" + target.getID() + "</id>"
+				+			"<alias>" + aliasEmailAddress + "</alias>"
+				+		"</AddAccountAliasRequest>");
 
 		// Enter the search string to find the account
 		app.zPageSearchResults.zAddSearchQuery(aliasEmailAddress);
