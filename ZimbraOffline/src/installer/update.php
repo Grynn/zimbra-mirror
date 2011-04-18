@@ -5,7 +5,7 @@ $download_url_prefix = "http://files2.zimbra.com/downloads/zdesktop/updates";
 $details_url = "http://www.zimbra.com/support/documentation/zd-documentation.html";
 $license_url = "http://www.zimbra.com/license/zimbra-public-eula-2-3.html";
 $version = "@version@";
-$extension_version = "3.0.1";
+$extension_version = "2.0.1";
 $buildid = @buildid@;
 
 $size_win32 = @size_win32@;
