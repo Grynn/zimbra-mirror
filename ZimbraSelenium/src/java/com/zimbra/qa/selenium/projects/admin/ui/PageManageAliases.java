@@ -24,10 +24,12 @@ public class PageManageAliases extends AbsTab {
 
 		// ** "Manage Aliases" Tab Title
 		public static final String ztab__MANAGE_ALIAS_ICON = "css=tr#ztab__MAIN_TAB_row div.ImgAccountAlias";
+		public static final String zb_NEW = "xpath=//*[@id='zb__ACLV__NEW_MENU_title']";		// New Button
+		public static final String zdd_NEW_MENU="css=td#zb__ACLV__NEW_MENU_dropdown div.ImgSelectPullDownArrow";
 
 		// NEW Menu
 		// TODO: define these locators
-		public static final String zmi__ACLV__NEW_WIZARD_title = "zb__ACLV__NEW_MENU_title";
+		public static final String zmi_ALAIS = "zmi__ACLV__NEW_title";
 
 
 	}
@@ -130,7 +132,7 @@ public class PageManageAliases extends AbsTab {
 		if ( button == Button.B_NEW ) {
 
 			// New button
-			locator = Locators.zmi__ACLV__NEW_WIZARD_title;
+			locator = Locators.zmi_ALAIS;
 
 			// Create the page
 			page = new WizardCreateAlias(this);
@@ -159,10 +161,74 @@ public class PageManageAliases extends AbsTab {
 	}
 
 	@Override
-	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
-	throws HarnessException {
-		// TODO Auto-generated method stub
-		return null;
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
+
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
+
+		if (pulldown == null)
+			throw new HarnessException("Pulldown cannot be null!");
+
+		if (option == null)
+			throw new HarnessException("Option cannot be null!");
+
+
+		// Default behavior variables
+		String pulldownLocator = null; // If set, this will be expanded
+		String optionLocator = null; // If set, this will be clicked
+		AbsPage page = null; // If set, this page will be returned
+
+		if (pulldown == Button.B_NEW) {
+
+			if (option == Button.O_ALIASES_ALIAS) {
+
+				pulldownLocator = Locators.zdd_NEW_MENU; 
+				optionLocator = PageManageAliases.Locators.zmi_ALAIS;
+
+				page = new WizardCreateAlias(this);
+
+				// FALL THROUGH
+
+			} else {
+				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
+			}
+
+		} else {
+			throw new HarnessException("no logic defined for pulldown/option "
+					+ pulldown + "/" + option);
+		}
+
+		// Default behavior
+		if (pulldownLocator != null) {
+
+			// Make sure the locator exists
+			if (!this.sIsElementPresent(pulldownLocator)) {
+				throw new HarnessException("Button " + pulldown + " option " + option + " pulldownLocator " + pulldownLocator + " not present!");
+			}
+
+			this.zClick(pulldownLocator);
+
+			// If the app is busy, wait for it to become active
+			//zWaitForBusyOverlay();
+
+			if (optionLocator != null) {
+
+				// Make sure the locator exists
+				if (!this.sIsElementPresent(optionLocator)) {
+					throw new HarnessException("Button " + pulldown + " option " + option + " optionLocator " + optionLocator + " not present!");
+				}
+
+				this.zClick(optionLocator);
+
+				// If the app is busy, wait for it to become active
+				//zWaitForBusyOverlay();
+			}
+
+		}
+
+		// Return the specified page, or null if not set
+		return (page);
+
 	}
 
 }

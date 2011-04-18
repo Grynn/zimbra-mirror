@@ -26,7 +26,8 @@ public class PageManageAccounts extends AbsTab {
 		public static final String ztab__MANAGE_ACCOUNT_ICON = "css=tr#ztab__MAIN_TAB_row div.ImgAccount";
 
 		// ** Menus
-		public static final String zb__ACLV__NEW_MENU_title = "xpath=//*[@id='zb__ACLV__NEW_MENU_title']";		// New Button
+		public static final String zb__ACLV__NEW_MENU_title = "xpath=//*[@id='zb__ACLV__NEW_MENU_title']";// New Button
+		public static final String zdd_NEW_MENU="css=td#zb__ACLV__NEW_MENU_dropdown div.ImgSelectPullDownArrow";
 		public static final String zb__ACLV__EDIT_title = "xpath=//*[@id='zb__ACLV__EDIT_title']";
 		public static final String zb__ACLV__DELETE_title = "xpath=//*[@id='zb__ACLV__DELETE_title']";
 		public static final String zb__ACLV__CHNG_PWD_title = "xpath=//*[@id='zb__ACLV__CHNG_PWD_title']";
@@ -170,10 +171,12 @@ public class PageManageAccounts extends AbsTab {
 		// Default behavior, process the locator by clicking on it
 		//
 		this.zClick(locator);
+		
+		
 
 		// If page was specified, make sure it is active
 		if ( page != null ) {
-			page.zWaitForActive();
+			//page.zWaitForActive();
 		}
 
 		return (page);
@@ -203,7 +206,7 @@ public class PageManageAccounts extends AbsTab {
 
 			if (option == Button.O_ACCOUNTS_ACCOUNT) {
 
-				pulldownLocator = Locators.zb__ACLV__NEW_MENU_title; // TODO: Probably need to change this to the triangle icon/pulldown
+				pulldownLocator = Locators.zdd_NEW_MENU;
 				optionLocator = PageManageAccounts.Locators.zmi__ACLV__NEW_WIZARD_title;
 
 				page = new WizardCreateAccount(this);
