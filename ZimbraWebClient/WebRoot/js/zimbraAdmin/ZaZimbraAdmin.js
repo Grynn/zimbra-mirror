@@ -559,21 +559,20 @@ function () {
 ZaZimbraAdmin.prototype._helpListener =
 function(ev) {
 	//DBG.println(AjxDebug.DBG1, "Help is clicked ...") ;
+    var acctName = ZaZimbraAdmin.currentUserLogin;
+    var domainName = acctName.split('@')[1];
+    var domain = ZaDomain.getDomainByName(domainName);
     var curAcct = ZaZimbraAdmin.currentAdminAccount;
-    if(curAcct) {
-        var domainName = curAcct[ZaAccount.A_name].split('@')[1];
-        var domain = ZaDomain.getDomainByName(domainName);
+    if(curAcct && domain) {
         var url = null;
-        if(curAcct.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount] == "TRUE")
-            url = domain.attrs[ZaDomain.A_zimbraHelpDelegatedURL];
-        else if(curAcct.attrs[ZaAccount.A_zimbraIsAdminAccount] == "TRUE")
+        if(curAcct.attrs[ZaAccount.A_zimbraIsAdminAccount] == "TRUE")
             url = domain.attrs[ZaDomain.A_zimbraHelpAdminURL];
+        else url = domain.attrs[ZaDomain.A_zimbraHelpDelegatedURL];
         if(url) {
                 window.open(url);
                 return;
-        }  
+        }
     }
-
     //skin takes the zimbraHelpAdminURL and put it into the skin hints
     var helpButton = skin && skin.hints && skin.hints.helpButton;	  
     if (helpButton && helpButton.url) {
