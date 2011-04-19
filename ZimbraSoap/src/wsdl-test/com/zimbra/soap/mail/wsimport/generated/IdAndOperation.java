@@ -4,6 +4,7 @@ package com.zimbra.soap.mail.wsimport.generated;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -29,6 +30,9 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "idAndOperation")
+@XmlSeeAlso({
+    FolderActionResult.class
+})
 public class IdAndOperation {
 
     @XmlAttribute(required = true)

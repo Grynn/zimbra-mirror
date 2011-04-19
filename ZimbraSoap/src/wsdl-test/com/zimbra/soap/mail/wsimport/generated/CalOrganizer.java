@@ -21,8 +21,8 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence>
  *         &lt;element name="xparam" type="{urn:zimbraMail}xParam" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="a" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="url" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="a" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="url" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="d" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="sentBy" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="dir" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -41,9 +41,9 @@ import javax.xml.bind.annotation.XmlType;
 public class CalOrganizer {
 
     protected List<XParam> xparam;
-    @XmlAttribute(required = true)
+    @XmlAttribute
     protected String a;
-    @XmlAttribute(required = true)
+    @XmlAttribute
     protected String url;
     @XmlAttribute
     protected String d;

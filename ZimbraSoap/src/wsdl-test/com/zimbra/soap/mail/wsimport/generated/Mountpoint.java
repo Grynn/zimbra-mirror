@@ -16,12 +16,13 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="mountpoint">
  *   &lt;complexContent>
  *     &lt;extension base="{urn:zimbraMail}folder">
- *       &lt;all>
- *       &lt;/all>
- *       &lt;attribute name="owner" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="zid" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;sequence>
+ *       &lt;/sequence>
+ *       &lt;attribute name="owner" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="zid" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="rid" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
- *       &lt;attribute name="oname" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="oname" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="reminder" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -35,14 +36,16 @@ public class Mountpoint
     extends Folder
 {
 
-    @XmlAttribute(required = true)
+    @XmlAttribute
     protected String owner;
-    @XmlAttribute(required = true)
+    @XmlAttribute
     protected String zid;
     @XmlAttribute(required = true)
     protected int rid;
-    @XmlAttribute(required = true)
+    @XmlAttribute
     protected String oname;
+    @XmlAttribute
+    protected Boolean reminder;
 
     /**
      * Gets the value of the owner property.
@@ -130,6 +133,30 @@ public class Mountpoint
      */
     public void setOname(String value) {
         this.oname = value;
+    }
+
+    /**
+     * Gets the value of the reminder property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isReminder() {
+        return reminder;
+    }
+
+    /**
+     * Sets the value of the reminder property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setReminder(Boolean value) {
+        this.reminder = value;
     }
 
 }

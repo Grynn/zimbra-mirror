@@ -33,9 +33,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "recurIdInfo")
 @XmlSeeAlso({
-    ExceptionRuleInfo.class,
     CalendarReply.class,
-    CancelRuleInfo.class
+    CancelRuleInfo.class,
+    ExceptionRuleInfo.class
 })
 public class RecurIdInfo {
 

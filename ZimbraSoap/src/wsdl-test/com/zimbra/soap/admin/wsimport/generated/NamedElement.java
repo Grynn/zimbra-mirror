@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "namedElement")
+@XmlType(name = "namedElement", namespace = "urn:zimbra")
 public class NamedElement {
 
     @XmlAttribute

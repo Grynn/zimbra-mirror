@@ -41,17 +41,17 @@ import javax.xml.bind.annotation.XmlType;
     "addOrExcludeOrExcept"
 })
 @XmlSeeAlso({
-    ExcludeRecurrenceInfo.class,
-    AddRecurrenceInfo.class
+    AddRecurrenceInfo.class,
+    ExcludeRecurrenceInfo.class
 })
 public class RecurrenceInfo {
 
     @XmlElements({
+        @XmlElement(name = "except", type = ExceptionRuleInfo.class),
         @XmlElement(name = "exclude", type = ExcludeRecurrenceInfo.class),
-        @XmlElement(name = "add", type = AddRecurrenceInfo.class),
-        @XmlElement(name = "rule", type = SimpleRepeatingRule.class),
         @XmlElement(name = "cancel", type = CancelRuleInfo.class),
-        @XmlElement(name = "except", type = ExceptionRuleInfo.class)
+        @XmlElement(name = "add", type = AddRecurrenceInfo.class),
+        @XmlElement(name = "rule", type = SimpleRepeatingRule.class)
     })
     protected List<Object> addOrExcludeOrExcept;
 
@@ -73,11 +73,11 @@ public class RecurrenceInfo {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link ExceptionRuleInfo }
      * {@link ExcludeRecurrenceInfo }
+     * {@link CancelRuleInfo }
      * {@link AddRecurrenceInfo }
      * {@link SimpleRepeatingRule }
-     * {@link CancelRuleInfo }
-     * {@link ExceptionRuleInfo }
      * 
      * 
      */

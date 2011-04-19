@@ -4,6 +4,7 @@ package com.zimbra.soap.account.wsimport.generated;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 
@@ -28,6 +29,9 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "keyValuePair", namespace = "urn:zimbra", propOrder = {
     "value"
+})
+@XmlSeeAlso({
+    ContactAttr.class
 })
 public class KeyValuePair {
 

@@ -16,10 +16,10 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="searchFolder">
  *   &lt;complexContent>
  *     &lt;extension base="{urn:zimbraMail}folder">
- *       &lt;all>
- *       &lt;/all>
+ *       &lt;sequence>
+ *       &lt;/sequence>
  *       &lt;attribute name="query" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="sortBy" type="{urn:zimbraMail}sortBy" />
+ *       &lt;attribute name="sortBy" type="{urn:zimbra}srchSortBy" />
  *       &lt;attribute name="types" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -37,7 +37,7 @@ public class SearchFolder
     @XmlAttribute
     protected String query;
     @XmlAttribute
-    protected SortBy sortBy;
+    protected SrchSortBy sortBy;
     @XmlAttribute
     protected String types;
 
@@ -70,10 +70,10 @@ public class SearchFolder
      * 
      * @return
      *     possible object is
-     *     {@link SortBy }
+     *     {@link SrchSortBy }
      *     
      */
-    public SortBy getSortBy() {
+    public SrchSortBy getSortBy() {
         return sortBy;
     }
 
@@ -82,10 +82,10 @@ public class SearchFolder
      * 
      * @param value
      *     allowed object is
-     *     {@link SortBy }
+     *     {@link SrchSortBy }
      *     
      */
-    public void setSortBy(SortBy value) {
+    public void setSortBy(SrchSortBy value) {
         this.sortBy = value;
     }
 

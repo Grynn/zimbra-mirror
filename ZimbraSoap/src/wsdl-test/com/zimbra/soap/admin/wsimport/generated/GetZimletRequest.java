@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;extension base="{urn:zimbra}attributeSelectorImpl">
  *       &lt;sequence>
- *         &lt;element name="zimlet" type="{urn:zimbraAdmin}namedElement"/>
+ *         &lt;element name="zimlet" type="{urn:zimbra}namedElement"/>
  *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>

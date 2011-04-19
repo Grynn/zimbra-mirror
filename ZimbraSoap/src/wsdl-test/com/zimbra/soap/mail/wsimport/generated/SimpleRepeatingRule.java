@@ -4,6 +4,7 @@ package com.zimbra.soap.mail.wsimport.generated;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -30,6 +31,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="bymonth" type="{urn:zimbraMail}byMonthRule" minOccurs="0"/>
  *         &lt;element name="bysetpos" type="{urn:zimbraMail}bySetPosRule" minOccurs="0"/>
  *         &lt;element name="wkst" type="{urn:zimbraMail}wkstRule" minOccurs="0"/>
+ *         &lt;element name="rule-x-name" type="{urn:zimbraMail}xNameRule" minOccurs="0"/>
  *       &lt;/all>
  *       &lt;attribute name="freq" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
@@ -58,6 +60,8 @@ public class SimpleRepeatingRule {
     protected ByMonthRule bymonth;
     protected BySetPosRule bysetpos;
     protected WkstRule wkst;
+    @XmlElement(name = "rule-x-name")
+    protected XNameRule ruleXName;
     @XmlAttribute(required = true)
     protected String freq;
 
@@ -371,6 +375,30 @@ public class SimpleRepeatingRule {
      */
     public void setWkst(WkstRule value) {
         this.wkst = value;
+    }
+
+    /**
+     * Gets the value of the ruleXName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link XNameRule }
+     *     
+     */
+    public XNameRule getRuleXName() {
+        return ruleXName;
+    }
+
+    /**
+     * Sets the value of the ruleXName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link XNameRule }
+     *     
+     */
+    public void setRuleXName(XNameRule value) {
+        this.ruleXName = value;
     }
 
     /**

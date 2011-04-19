@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *       &lt;/sequence>
- *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -27,10 +27,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "namedElement")
+@XmlType(name = "namedElement", namespace = "urn:zimbra")
 public class NamedElement {
 
-    @XmlAttribute(required = true)
+    @XmlAttribute
     protected String name;
 
     /**

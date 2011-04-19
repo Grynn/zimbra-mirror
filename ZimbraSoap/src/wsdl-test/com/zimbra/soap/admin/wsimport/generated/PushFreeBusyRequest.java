@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="domain" type="{urn:zimbraAdmin}names" minOccurs="0"/>
- *         &lt;element name="account" type="{urn:zimbraAdmin}id" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="account" type="{urn:zimbra}id" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>

@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="meta" type="{urn:zimbra}customMetadata" minOccurs="0"/>
+ *         &lt;element name="meta" type="{urn:zimbra}customMetadata" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="fr" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="e" type="{urn:zimbraMail}emailInfo" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="su" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -78,7 +78,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class MessageInfo {
 
-    protected CustomMetadata meta;
+    protected List<CustomMetadata> meta;
     protected String fr;
     protected List<EmailInfo> e;
     protected String su;
@@ -87,8 +87,8 @@ public class MessageInfo {
     protected InviteInfo inv;
     protected List<KeyValuePair> header;
     @XmlElements({
-        @XmlElement(name = "mp", type = PartInfo.class),
-        @XmlElement(name = "shr", type = ShareNotification.class)
+        @XmlElement(name = "shr", type = ShareNotification.class),
+        @XmlElement(name = "mp", type = PartInfo.class)
     })
     protected List<Object> mpOrShr;
     @XmlAttribute(required = true)
@@ -133,25 +133,30 @@ public class MessageInfo {
     /**
      * Gets the value of the meta property.
      * 
-     * @return
-     *     possible object is
-     *     {@link CustomMetadata }
-     *     
-     */
-    public CustomMetadata getMeta() {
-        return meta;
-    }
-
-    /**
-     * Sets the value of the meta property.
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the meta property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link CustomMetadata }
-     *     
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getMeta().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link CustomMetadata }
+     * 
+     * 
      */
-    public void setMeta(CustomMetadata value) {
-        this.meta = value;
+    public List<CustomMetadata> getMeta() {
+        if (meta == null) {
+            meta = new ArrayList<CustomMetadata>();
+        }
+        return this.meta;
     }
 
     /**
@@ -350,8 +355,8 @@ public class MessageInfo {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link PartInfo }
      * {@link ShareNotification }
+     * {@link PartInfo }
      * 
      * 
      */

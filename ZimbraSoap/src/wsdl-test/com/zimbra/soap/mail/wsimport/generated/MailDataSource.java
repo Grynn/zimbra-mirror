@@ -51,8 +51,8 @@ import javax.xml.bind.annotation.XmlType;
     "lastError"
 })
 @XmlSeeAlso({
-    MailCalDataSource.class,
     MailPop3DataSource.class,
+    MailCalDataSource.class,
     MailImapDataSource.class,
     MailRssDataSource.class
 })

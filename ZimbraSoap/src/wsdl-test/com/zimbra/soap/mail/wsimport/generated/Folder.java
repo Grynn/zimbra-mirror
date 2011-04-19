@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
+ *         &lt;element name="meta" type="{urn:zimbra}customMetadata" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="acl" minOccurs="0">
  *           &lt;complexType>
  *             &lt;complexContent>
@@ -39,24 +40,26 @@ import javax.xml.bind.annotation.XmlType;
  *           &lt;element ref="{urn:zimbraMail}search"/>
  *         &lt;/choice>
  *       &lt;/sequence>
- *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="l" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="f" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="color" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="rgb" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="u" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="i4u" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="view" type="{urn:zimbraMail}view" />
+ *       &lt;attribute name="rev" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="ms" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="md" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="n" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="i4n" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="s" type="{http://www.w3.org/2001/XMLSchema}long" />
- *       &lt;attribute name="view" type="{urn:zimbraMail}view" />
+ *       &lt;attribute name="i4ms" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="i4next" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="url" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="perm" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="rest" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="ms" type="{http://www.w3.org/2001/XMLSchema}int" />
- *       &lt;attribute name="ref" type="{http://www.w3.org/2001/XMLSchema}int" />
- *       &lt;attribute name="i4next" type="{http://www.w3.org/2001/XMLSchema}int" />
- *       &lt;attribute name="i4ms" type="{http://www.w3.org/2001/XMLSchema}int" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -66,23 +69,25 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "folder", propOrder = {
+    "meta",
     "acl",
     "folderOrLinkOrSearch"
 })
 @XmlSeeAlso({
-    Mountpoint.class,
-    SearchFolder.class
+    SearchFolder.class,
+    Mountpoint.class
 })
 public class Folder {
 
+    protected List<CustomMetadata> meta;
     protected Folder.Acl acl;
     @XmlElements({
+        @XmlElement(name = "search", type = SearchFolder.class),
         @XmlElement(name = "link", type = Mountpoint.class),
-        @XmlElement(name = "folder"),
-        @XmlElement(name = "search", type = SearchFolder.class)
+        @XmlElement(name = "folder")
     })
     protected List<Folder> folderOrLinkOrSearch;
-    @XmlAttribute
+    @XmlAttribute(required = true)
     protected String id;
     @XmlAttribute
     protected String name;
@@ -93,31 +98,64 @@ public class Folder {
     @XmlAttribute
     protected Integer color;
     @XmlAttribute
+    protected String rgb;
+    @XmlAttribute
     protected Integer u;
     @XmlAttribute(name = "i4u")
     protected Integer i4U;
+    @XmlAttribute
+    protected String view;
+    @XmlAttribute
+    protected Integer rev;
+    @XmlAttribute
+    protected Integer ms;
+    @XmlAttribute
+    protected Long md;
     @XmlAttribute
     protected Integer n;
     @XmlAttribute(name = "i4n")
     protected Integer i4N;
     @XmlAttribute
     protected Long s;
-    @XmlAttribute
-    protected String view;
+    @XmlAttribute(name = "i4ms")
+    protected Integer i4Ms;
+    @XmlAttribute(name = "i4next")
+    protected Integer i4Next;
     @XmlAttribute
     protected String url;
     @XmlAttribute
     protected String perm;
     @XmlAttribute
     protected String rest;
-    @XmlAttribute
-    protected Integer ms;
-    @XmlAttribute
-    protected Integer ref;
-    @XmlAttribute(name = "i4next")
-    protected Integer i4Next;
-    @XmlAttribute(name = "i4ms")
-    protected Integer i4Ms;
+
+    /**
+     * Gets the value of the meta property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the meta property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getMeta().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link CustomMetadata }
+     * 
+     * 
+     */
+    public List<CustomMetadata> getMeta() {
+        if (meta == null) {
+            meta = new ArrayList<CustomMetadata>();
+        }
+        return this.meta;
+    }
 
     /**
      * Gets the value of the acl property.
@@ -161,9 +199,9 @@ public class Folder {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link SearchFolder }
      * {@link Mountpoint }
      * {@link Folder }
-     * {@link SearchFolder }
      * 
      * 
      */
@@ -295,6 +333,30 @@ public class Folder {
     }
 
     /**
+     * Gets the value of the rgb property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getRgb() {
+        return rgb;
+    }
+
+    /**
+     * Sets the value of the rgb property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setRgb(String value) {
+        this.rgb = value;
+    }
+
+    /**
      * Gets the value of the u property.
      * 
      * @return
@@ -340,6 +402,102 @@ public class Folder {
      */
     public void setI4U(Integer value) {
         this.i4U = value;
+    }
+
+    /**
+     * Gets the value of the view property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getView() {
+        return view;
+    }
+
+    /**
+     * Sets the value of the view property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setView(String value) {
+        this.view = value;
+    }
+
+    /**
+     * Gets the value of the rev property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getRev() {
+        return rev;
+    }
+
+    /**
+     * Sets the value of the rev property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setRev(Integer value) {
+        this.rev = value;
+    }
+
+    /**
+     * Gets the value of the ms property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getMs() {
+        return ms;
+    }
+
+    /**
+     * Sets the value of the ms property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setMs(Integer value) {
+        this.ms = value;
+    }
+
+    /**
+     * Gets the value of the md property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Long }
+     *     
+     */
+    public Long getMd() {
+        return md;
+    }
+
+    /**
+     * Sets the value of the md property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Long }
+     *     
+     */
+    public void setMd(Long value) {
+        this.md = value;
     }
 
     /**
@@ -415,27 +573,51 @@ public class Folder {
     }
 
     /**
-     * Gets the value of the view property.
+     * Gets the value of the i4Ms property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Integer }
      *     
      */
-    public String getView() {
-        return view;
+    public Integer getI4Ms() {
+        return i4Ms;
     }
 
     /**
-     * Sets the value of the view property.
+     * Sets the value of the i4Ms property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Integer }
      *     
      */
-    public void setView(String value) {
-        this.view = value;
+    public void setI4Ms(Integer value) {
+        this.i4Ms = value;
+    }
+
+    /**
+     * Gets the value of the i4Next property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getI4Next() {
+        return i4Next;
+    }
+
+    /**
+     * Sets the value of the i4Next property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setI4Next(Integer value) {
+        this.i4Next = value;
     }
 
     /**
@@ -508,102 +690,6 @@ public class Folder {
      */
     public void setRest(String value) {
         this.rest = value;
-    }
-
-    /**
-     * Gets the value of the ms property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getMs() {
-        return ms;
-    }
-
-    /**
-     * Sets the value of the ms property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setMs(Integer value) {
-        this.ms = value;
-    }
-
-    /**
-     * Gets the value of the ref property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getRef() {
-        return ref;
-    }
-
-    /**
-     * Sets the value of the ref property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setRef(Integer value) {
-        this.ref = value;
-    }
-
-    /**
-     * Gets the value of the i4Next property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getI4Next() {
-        return i4Next;
-    }
-
-    /**
-     * Sets the value of the i4Next property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setI4Next(Integer value) {
-        this.i4Next = value;
-    }
-
-    /**
-     * Gets the value of the i4Ms property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getI4Ms() {
-        return i4Ms;
-    }
-
-    /**
-     * Sets the value of the i4Ms property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setI4Ms(Integer value) {
-        this.i4Ms = value;
     }
 
 

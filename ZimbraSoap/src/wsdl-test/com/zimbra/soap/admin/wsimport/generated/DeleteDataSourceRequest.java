@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;extension base="{urn:zimbraAdmin}adminAttrsImpl">
  *       &lt;sequence>
- *         &lt;element name="dataSource" type="{urn:zimbraAdmin}id"/>
+ *         &lt;element name="dataSource" type="{urn:zimbra}id"/>
  *       &lt;/sequence>
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>

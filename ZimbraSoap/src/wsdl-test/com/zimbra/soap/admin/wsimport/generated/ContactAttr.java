@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="contactAttr">
  *   &lt;simpleContent>
- *     &lt;extension base="&lt;urn:zimbraAdmin>attr">
+ *     &lt;extension base="&lt;urn:zimbra>keyValuePair">
  *       &lt;attribute name="part" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="ct" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="s" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
@@ -28,9 +28,9 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "contactAttr")
+@XmlType(name = "contactAttr", namespace = "urn:zimbra")
 public class ContactAttr
-    extends Attr
+    extends KeyValuePair
 {
 
     @XmlAttribute
