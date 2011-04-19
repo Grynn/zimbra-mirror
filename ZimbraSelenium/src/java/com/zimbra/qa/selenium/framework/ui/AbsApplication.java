@@ -5,9 +5,6 @@ import java.util.*;
 import org.apache.log4j.*;
 
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.*;
-
 
 /**
  * A <code>AbsApplication</code> object defines a Zimbra "mail client", such as

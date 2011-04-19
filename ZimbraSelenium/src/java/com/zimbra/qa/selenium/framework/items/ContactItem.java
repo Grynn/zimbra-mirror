@@ -6,11 +6,10 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.zimbra.common.soap.Element;
+import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
-
 
 /**
  * Used to define a Zimbra Contact
@@ -133,7 +132,7 @@ public class ContactItem implements IItem {
 		return (address);
 	}
 	
-	public static ContactItem createUsingSOAP(AppAjaxClient app, String ... tagIdArray ) throws HarnessException {
+	public static ContactItem createUsingSOAP(AbsApplication app, String ... tagIdArray ) throws HarnessException {
 		
 		String tagParam ="";
 		if (tagIdArray.length == 1) {
