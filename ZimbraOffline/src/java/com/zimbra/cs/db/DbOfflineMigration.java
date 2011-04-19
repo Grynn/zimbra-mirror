@@ -17,6 +17,8 @@ package com.zimbra.cs.db;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.zimbra.cs.db.DbPool.DbConnection;
 
@@ -47,6 +49,7 @@ public class DbOfflineMigration {
             int oldDbVersion = Integer.parseInt(rs.getString(1));
             rs.close();
             stmt.close();
+            conn.commit();
 
             int newDbVersion = Integer.parseInt(Versions.DB_VERSION);
             System.out.println("oldDbVersion=" + oldDbVersion + " newDbVersion=" + newDbVersion);
@@ -57,6 +60,8 @@ public class DbOfflineMigration {
                     migrateFromVersion63(conn, isTestRun);
                 case 64:
                     migrateFromVersion64(conn, isTestRun);
+                case 65:
+                    migrateFromVersion65(conn, isTestRun);
                     //if there are more versions, let it fall through
                     break;
                 default:
@@ -152,6 +157,43 @@ public class DbOfflineMigration {
         }
     }
 
+    private void migrateFromVersion65(DbConnection conn, boolean isTestRun) throws Exception {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        boolean isSuccess = false;
+        List<Integer> groupIds = new ArrayList<Integer>();
+        try {
+            //get groupId
+            stmt = conn.prepareStatement("select id from zimbra.mailbox");
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                int num = Integer.parseInt(rs.getString(1));
+                groupIds.add(num);
+                Db.getInstance().registerDatabaseInterest(conn, DbMailbox.getDatabaseName(num));
+            }
+            stmt.close();
+            rs.close();
+            
+            for (Integer id : groupIds) {
+                createMailAddressTable(conn, stmt, id);
+                createMailAddressIndex(conn, stmt, id);
+                alterMailItemTable(conn, stmt, id);
+            }
+
+            stmt = conn.prepareStatement("UPDATE zimbra.config set value='69' where name='db.version'");
+            stmt.executeUpdate();
+            stmt.close();
+
+            isSuccess = true;
+        } finally {
+            DbPool.closeStatement(stmt);
+            if (isTestRun || !isSuccess)
+                conn.rollback();
+            else
+                conn.commit();
+        }
+    }
+
     private void migrateFromOfflineVersion4(DbConnection conn) throws Exception {
         PreparedStatement stmt = null;
         boolean success = false;
@@ -188,6 +230,47 @@ public class DbOfflineMigration {
         stmt.close();
     }
 
+    private void createMailAddressTable(DbConnection conn, PreparedStatement stmt, Integer id) throws Exception {
+        StringBuilder sql = new StringBuilder();
+        sql.append("CREATE TABLE IF NOT EXISTS ")
+            .append(DbMailbox.getDatabaseName(id)).append(".").append("mail_address")
+            .append("( id INTEGER UNSIGNED NOT NULL PRIMARY KEY,")
+            .append("address VARCHAR(128) NOT NULL UNIQUE,")
+            .append("contact_count INTEGER NOT NULL")
+            .append(")");
+        stmt = conn.prepareStatement(sql.toString());
+        stmt.execute();
+        stmt.close();
+    }
+    
+    private void createMailAddressIndex(DbConnection conn, PreparedStatement stmt, Integer id) throws Exception {
+        StringBuilder sql = new StringBuilder();
+        sql.append("CREATE INDEX IF NOT EXISTS ")
+            .append(DbMailbox.getDatabaseName(id)).append(".").append("i_mail_address_address")
+            .append(" ON mail_address(address)");
+        stmt = conn.prepareStatement(sql.toString());
+        stmt.execute();
+        stmt.close();
+    }
+    
+    private void alterMailItemTable(DbConnection conn, PreparedStatement stmt, Integer id) throws Exception {
+        StringBuilder sql = new StringBuilder();
+        sql.append("ALTER TABLE ")
+            .append(DbMailbox.getDatabaseName(id)).append(".").append("mail_item")
+            .append(" ADD COLUMN recipients VARCHAR(128)");
+        stmt = conn.prepareStatement(sql.toString());
+        stmt.execute();
+        stmt.close();
+        
+        sql = new StringBuilder();
+        sql.append("ALTER TABLE ")
+            .append(DbMailbox.getDatabaseName(id)).append(".").append("mail_item")
+            .append(" ADD COLUMN sender_id INTEGER UNSIGNED DEFAULT NULL REFERENCES mail_address(id)");
+        stmt = conn.prepareStatement(sql.toString());
+        stmt.execute();
+        stmt.close();
+    }
+    
     // derby does not support "drop table if exists...", so have to do this
     // programmatically
     public void dropTableIfExists(DbConnection conn, String table)
