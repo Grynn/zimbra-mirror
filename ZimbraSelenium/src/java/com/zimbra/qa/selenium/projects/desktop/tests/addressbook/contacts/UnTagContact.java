@@ -12,8 +12,6 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.desktop.ui.Toaster;
-
 
 public class UnTagContact extends AjaxCommonTest  {
 	public UnTagContact() {

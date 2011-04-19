@@ -177,7 +177,7 @@ public class GetMessage extends AjaxCommonTest {
 		SleepUtil.sleep(5000);
 
 		// Get the HTML of the body
-		HtmlElement bodyElement = display.zGetMailPropertyAsHtml(Field.Body);
+		display.zGetMailPropertyAsHtml(Field.Body);
 
 		// TODO:
 		// Not sure which URL's to add to the mime
@@ -186,7 +186,6 @@ public class GetMessage extends AjaxCommonTest {
 		//logger.info(bodyElement.prettyPrint());
 
 	}
-
 
 	@Test(	description = "Receive a mail with a url in subject",
 			groups = { "functional" })

@@ -21,49 +21,13 @@ public class CreateTag extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 		
 	}
-	
-	@Test(	description = "Create a new tag by clicking 'new tag' on folder tree",
-			groups = { "sanity" })
-	public void CreateTag_01() throws HarnessException {
-		
-		
-		// Set the new tag name
-		String name = "tag" + ZimbraSeleniumProperties.getUniqueString();
-		
-		DialogTag dialog = null;
-		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-		   // TODO: For now, on desktop test, create the folder through New drop down menu,
-	      // until a way to identify desktop/ajax specific
-	      // test is decided.
-		   dialog = (DialogTag)app.zPageMail.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_TAG);
-		} else {
-		   dialog = (DialogTag)app.zTreeMail.zPressButton(Button.B_TREE_NEWTAG);
-		}
-		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
-		
-		// Fill out the form with the basic details
-		dialog.zSubmit(name);
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-
-		// Make sure the tag was created on the server
-		TagItem tag = app.zPageMail.zGetTagItem(app.zGetActiveAccount(), name);
-		ZAssert.assertNotNull(tag, "Verify the new folder was created");
-		
-		ZAssert.assertEquals(tag.getName(), name, "Verify the server and client tag names match");
-		
-	}
-
-	
-	
 	@Test(	description = "Create a new tag using keyboard shortcuts",
 			groups = { "functional" })
 	public void CreateTag_02() throws HarnessException {
 		
 		Shortcut shortcut = Shortcut.S_NEWTAG;
-		
-		
-		
+
 		// Set the new tag name
 		String name = "tag" + ZimbraSeleniumProperties.getUniqueString();
 		
@@ -80,8 +44,7 @@ public class CreateTag extends AjaxCommonTest {
 		ZAssert.assertNotNull(tag, "Verify the new folder was created");
 		
 		ZAssert.assertEquals(tag.getName(), name, "Verify the server and client tag names match");
-		
-		
+
 	}
 
 	@Test(	description = "Create a new tag using context menu from a tag",
@@ -124,7 +87,7 @@ public class CreateTag extends AjaxCommonTest {
 	}
 
 	@Test(	description = "Create a new tag using mail app New -> New Tag",
-			groups = { "functional" })
+			groups = { "sanity" })
 	public void CreateTag_04() throws HarnessException {
 		
 		

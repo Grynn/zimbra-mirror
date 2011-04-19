@@ -2,13 +2,6 @@ package com.zimbra.qa.selenium.projects.desktop.tests.login;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
-
-
-
 public class BasicLogin{
 	
 	public BasicLogin() {	

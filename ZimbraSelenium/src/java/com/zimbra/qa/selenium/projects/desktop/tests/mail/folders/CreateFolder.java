@@ -14,7 +14,6 @@ public class CreateFolder extends AjaxCommonTest {
 
 	private boolean _folderIsCreated = false;
 	private String _folderName = null;
-	private String _rootFolderName = null;
 	private SOAP_DESTINATION_HOST_TYPE _soapDestination = null;
 
 	public CreateFolder() {
@@ -27,54 +26,8 @@ public class CreateFolder extends AjaxCommonTest {
 
 	@BeforeMethod(alwaysRun = true)
 	public void setParameters() {
-		_rootFolderName = ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP ? defaultAccountName
-				: "Folders";
 		_soapDestination = ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP ? SOAP_DESTINATION_HOST_TYPE.CLIENT
 				: SOAP_DESTINATION_HOST_TYPE.SERVER;
-	}
-
-	@Test(description = "Create a new folder by clicking 'new folder' on folder tree", groups = { "sanity" })
-	public void CreateFolder_01() throws HarnessException {
-		_folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
-
-		FolderItem folderItem = FolderItem.importFromSOAP(app
-				.zGetActiveAccount(), FolderItem.SystemFolder.UserRoot,
-				_soapDestination, app.zGetActiveAccount().EmailAddress);
-		DialogCreateFolder createFolderDialog = null;
-
-		// TODO: For now, on desktop test, create the folder through context
-		// menu, until a way to identify desktop/ajax specific
-		// test is decided.
-		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-			createFolderDialog = (DialogCreateFolder) app.zPageMail.zListItem(Action.A_RIGHTCLICK, Button.B_TREE_NEWFOLDER, folderItem);
-		} else {
-			createFolderDialog = (DialogCreateFolder) app.zPageMail.zListItem(Action.A_LEFTCLICK, Button.B_TREE_NEWFOLDER, folderItem);
-		}
-
-		createFolderDialog.zEnterFolderName(_folderName);
-		createFolderDialog.zClickButton(Button.B_OK);
-
-		_folderIsCreated = true;
-
-		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-			// Force-sync
-			GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-
-			// Make sure the folder was created on the Desktop Server
-			FolderItem desktopFolder = FolderItem.importFromSOAP(app
-					.zGetActiveAccount(), _folderName,
-					SOAP_DESTINATION_HOST_TYPE.CLIENT,
-					app.zGetActiveAccount().EmailAddress);
-
-			ZAssert.assertNotNull(desktopFolder, "Verify the new form opened");
-			ZAssert.assertEquals(desktopFolder.getName(), _folderName,
-					"Verify the server and client folder names match");
-		}
-
-		// Make sure the folder was created on the ZCS server
-		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(),_folderName);
-		ZAssert.assertNotNull(folder, "Verify the new form opened");
-		ZAssert.assertEquals(folder.getName(), _folderName,"Verify the server and client folder names match");
 	}
 
 	@Test(description = "Create a new folder using keyboard shortcuts", groups = { "functional" })
@@ -142,7 +95,7 @@ public class CreateFolder extends AjaxCommonTest {
 				"Verify the server and client folder names match");
 	}
 
-	@Test(description = "Create a new folder using mail app New -> New Folder", groups = { "functional" })
+	@Test(description = "Create a new folder using mail app New -> New Folder", groups = { "sanity" })
 	public void CreateFolder_04() throws HarnessException {
 
 		// Set the new folder name

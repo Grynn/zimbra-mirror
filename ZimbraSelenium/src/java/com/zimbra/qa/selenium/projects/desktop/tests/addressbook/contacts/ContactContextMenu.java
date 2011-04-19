@@ -424,7 +424,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 							"</mp>" +
 						"</m>" +
 					"</SendMsgRequest>");
-		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+		MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
 
 		ContactItem contactItem = createSelectAContactItem(app.zGetActiveAccount().DisplayName, lastName, app.zGetActiveAccount().EmailAddress);
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());		
@@ -461,7 +461,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 						"</m>" +
 					"</SendMsgRequest>");
 
-		MailItem mail = MailItem.importFromSOAP(ZimbraAccount.AccountB(), "subject:("+ subject +")");
+		MailItem.importFromSOAP(ZimbraAccount.AccountB(), "subject:("+ subject +")");
 
 		ContactItem contactItem = createSelectAContactItem(app.zGetActiveAccount().DisplayName,lastName, ZimbraAccount.AccountB().EmailAddress);
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
