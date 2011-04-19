@@ -36,7 +36,7 @@ public class CreateFolder extends AjaxCommonTest {
 		Shortcut shortcut = Shortcut.S_NEWFOLDER;
 
 		// Set the new folder name
-		String name = "folder" + ZimbraSeleniumProperties.getUniqueString();
+		_folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
 
 		DialogCreateFolder dialog = (DialogCreateFolder) app.zPageMail
 				.zKeyboardShortcut(shortcut);
@@ -44,15 +44,28 @@ public class CreateFolder extends AjaxCommonTest {
 
 		// Fill out the form with the basic details
 		// TODO: does a folder in the tree need to be selected?
-		dialog.zEnterFolderName(name);
+		dialog.zEnterFolderName(_folderName);
 		dialog.zClickButton(Button.B_OK);
 
-		// Make sure the folder was created on the server
+	   // Force-sync
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      
+      // Make sure the folder was created on the Desktop Server
+      FolderItem desktopFolder = FolderItem.importFromSOAP(app
+            .zGetActiveAccount(), _folderName,
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            app.zGetActiveAccount().EmailAddress);
+
+      ZAssert.assertNotNull(desktopFolder, "Verify the new form opened");
+      ZAssert.assertEquals(desktopFolder.getName(), _folderName,
+      "Verify the server and client folder names match");
+
+      // Make sure the folder was created on the ZCS server
 		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(),
-				name);
+		      _folderName);
 		ZAssert.assertNotNull(folder, "Verify the new folder was created");
 
-		ZAssert.assertEquals(folder.getName(), name,
+		ZAssert.assertEquals(folder.getName(), _folderName,
 				"Verify the server and client folder names match");
 	}
 
@@ -72,20 +85,18 @@ public class CreateFolder extends AjaxCommonTest {
 
 		_folderIsCreated = true;
 
-		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-			// Force-sync
-			GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-
-			// Make sure the folder was created on the Desktop Server
-			FolderItem desktopFolder = FolderItem.importFromSOAP(app
-					.zGetActiveAccount(), _folderName,
-					SOAP_DESTINATION_HOST_TYPE.CLIENT,
-					app.zGetActiveAccount().EmailAddress);
-
-			ZAssert.assertNotNull(desktopFolder, "Verify the new form opened");
-			ZAssert.assertEquals(desktopFolder.getName(), _folderName,
-					"Verify the server and client folder names match");
-		}
+		// Force-sync
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		
+		// Make sure the folder was created on the Desktop Server
+		FolderItem desktopFolder = FolderItem.importFromSOAP(app
+		      .zGetActiveAccount(), _folderName,
+		      SOAP_DESTINATION_HOST_TYPE.CLIENT,
+		      app.zGetActiveAccount().EmailAddress);
+		
+		ZAssert.assertNotNull(desktopFolder, "Verify the new form opened");
+		ZAssert.assertEquals(desktopFolder.getName(), _folderName,
+		"Verify the server and client folder names match");
 
 		// Make sure the folder was created on the ZCS server
 		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(),
@@ -99,7 +110,7 @@ public class CreateFolder extends AjaxCommonTest {
 	public void CreateFolder_04() throws HarnessException {
 
 		// Set the new folder name
-		String name = "folder" + ZimbraSeleniumProperties.getUniqueString();
+	   _folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
 
 		// Create a new folder in the inbox
 		// using the context menu + New Folder
@@ -108,14 +119,29 @@ public class CreateFolder extends AjaxCommonTest {
 
 		// Fill out the form with the basic details
 		// TODO: does a folder in the tree need to be selected?
-		dialog.zEnterFolderName(name);
+		dialog.zEnterFolderName(_folderName);
 		dialog.zClickButton(Button.B_OK);
 
-		// Make sure the folder was created on the server
-		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(),name);
+		_folderIsCreated = true;
+
+      // Force-sync
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      
+      // Make sure the folder was created on the Desktop Server
+      FolderItem desktopFolder = FolderItem.importFromSOAP(app
+            .zGetActiveAccount(), _folderName,
+            SOAP_DESTINATION_HOST_TYPE.CLIENT,
+            app.zGetActiveAccount().EmailAddress);
+      
+      ZAssert.assertNotNull(desktopFolder, "Verify the new form opened");
+      ZAssert.assertEquals(desktopFolder.getName(), _folderName,
+      "Verify the server and client folder names match");
+
+      // Make sure the folder was created on the server
+		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(),_folderName);
 		ZAssert.assertNotNull(folder, "Verify the new folder was created");
 
-		ZAssert.assertEquals(folder.getName(), name,
+		ZAssert.assertEquals(folder.getName(), _folderName,
 				"Verify the server and client folder names match");
 
 	}
