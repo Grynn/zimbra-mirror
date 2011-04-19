@@ -203,6 +203,17 @@ function () {
 				}
 			}
 		}
+		
+		//check policy service
+		var numPolicyService = tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaPolicyService].length;
+                if( (numPolicyService !=  this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaPolicyService].length) || 
+                       (tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaPolicyService].join("") != this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaPolicyService].join(""))) {
+                        dirty = true;
+                }
+                for(var ix=0;ix<numPolicyService;ix++) {
+                        restrictions.push("check_policy_service "+tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaPolicyService][ix]);
+                }
+
 		//check RBLs
 		var numRBLs = tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].length;
 		if( (numRBLs !=  this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].length) ||

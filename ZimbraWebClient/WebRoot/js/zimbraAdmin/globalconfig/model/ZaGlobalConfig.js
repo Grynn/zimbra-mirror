@@ -64,8 +64,13 @@ ZaGlobalConfig.A_zimbraAdminConsoleLDAPAuthEnabled = "zimbraAdminConsoleLDAPAuth
 
 ZaGlobalConfig.A_zimbraMilterBindPort = "zimbraMilterBindPort";
 ZaGlobalConfig.A_zimbraMilterServerEnabled = "zimbraMilterServerEnabled";
-// --protocol checks
+
+
 ZaGlobalConfig.A_zimbraMtaRestriction = "zimbraMtaRestriction";
+
+// --policy service checks
+ZaGlobalConfig.A_zimbraMtaPolicyService = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_policy_service";
+// --protocol checks
 ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_invalid_hostname";
 ZaGlobalConfig.A_zimbraMtaRejectNonFqdnHostname = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_non_fqdn_hostname";
 ZaGlobalConfig.A_zimbraMtaRejectNonFqdnSender = "_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_reject_non_fqdn_sender";
@@ -230,7 +235,7 @@ ZaGlobalConfig.prototype.initFromJS = function(obj) {
 	
 	//init list of RBLs
 	this.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient] = [];
-	
+        this.attrs[ZaGlobalConfig.A_zimbraMtaPolicyService] = [];	
 	// convert restrictions to hidden fields for xform binding
 	var restrictions = this.attrs[ZaGlobalConfig.A_zimbraMtaRestriction];
 	if (restrictions) {
@@ -244,7 +249,14 @@ ZaGlobalConfig.prototype.initFromJS = function(obj) {
 				if(chunks && chunks.length>0) {
 					this.attrs[ZaGlobalConfig.A_zimbraMtaRejectRblClient].push(chunks[1]);
 				}
-			} else {
+			} else if (restrictions[i].indexOf("check_policy_service")>-1){
+				var restriction = restrictions[i];
+                                var chunks = restriction.split(" ");
+                                if(chunks && chunks.length>0) {
+                                        this.attrs[ZaGlobalConfig.A_zimbraMtaPolicyService].push(chunks[1]);
+                                }
+
+                        } else {
 				var restriction = restrictions[i];
 				this.attrs["_"+ZaGlobalConfig.A_zimbraMtaRestriction+"_"+restriction] = true;
 			}
@@ -290,7 +302,7 @@ ZaGlobalConfig.modifyMethod = function (tmods, tmpObj) {
                                 }
                         } 
                         else {
-                                var attr = soapDoc.set("a");
+                                var attr = soapDoc.set("a", "", modifyConfDoc);
                                 attr.setAttribute("n", aname);
                         }
                 } else {
@@ -367,8 +379,10 @@ ZaGlobalConfig.myXModel = {
         {id:ZaGlobalConfig.A_zimbraAdminConsoleCatchAllAddressEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaGlobalConfig.A_zimbraAdminConsoleCatchAllAddressEnabled},
 		{id:ZaGlobalConfig.A_zimbraAdminConsoleSkinEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaGlobalConfig.A_zimbraAdminConsoleSkinEnabled},
         {id:ZaGlobalConfig.A_zimbraAdminConsoleLDAPAuthEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaGlobalConfig.A_zimbraAdminConsoleLDAPAuthEnabled},    
+                //check policy service
+                { id:ZaGlobalConfig.A_zimbraMtaPolicyService, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaPolicyService, type: _LIST_, listItem:{type:_STRING_}},
 
-        //rbl check
+                //rbl check
 		{ id:ZaGlobalConfig.A_zimbraMtaRejectRblClient, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRejectRblClient, type: _LIST_, listItem:{type:_STRING_}},
 		// smtp
 		{ id:ZaGlobalConfig.A_zimbraSmtpTimeout, ref:"attrs/" + ZaGlobalConfig.A_zimbraSmtpTimeout, type:_NUMBER_, minInclusive: 0 },

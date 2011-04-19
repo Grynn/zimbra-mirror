@@ -472,6 +472,28 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 								}
 							]
 						},
+
+                                                {type:_ZA_TOP_GROUPER_,label: ZaMsg.NAD_MTA_PolicyServiceChecks,
+                                                        visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                                                                [ZaGlobalConfig.A_zimbraMtaPolicySerice
+                                                                ]]],
+                                                        visibilityChangeEventSources:[ZaGlobalConfig.A_zimbraMtaPolicyService
+                                                        ],
+                                                        items:[
+						  	{ ref: ZaGlobalConfig.A_zimbraMtaPolicyService, type: _REPEAT_,
+						  	  label: ZaMsg.NAD_MTA_policy_service,
+							  labelLocation:_LEFT_,
+							  align:_LEFT_,
+							  repeatInstance:"",
+							  showAddButton:true,
+							  showRemoveButton:true,
+							  showAddOnNextRow:true,
+							  items: [
+								{ref:".", type:_TEXTFIELD_, label:null}
+							  ]
+							}
+                                                ]},
+
 						{type:_ZA_TOP_GROUPER_,label: ZaMsg.NAD_MTA_ProtocolChecks,
                                                 	visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
                                                         	[ZaGlobalConfig.A_zimbraMtaRejectInvalidHostname,
