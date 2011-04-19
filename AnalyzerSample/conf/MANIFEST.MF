@@ -1,2 +1,1 @@
-Zimbra-Extension-Class: com.zimbra.analyzersample.AnalyzerSample
-
+Zimbra-Extension-Class: com.zimbra.analyzersample.SampleAnalyzerExtension

@@ -83,8 +83,8 @@
       <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/apache-jsieve-0.4-javadoc.jar!/"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-3.0.3.jar" sourcepath="/Users/ysasaki/.m2/repository/org/apache/lucene/lucene-core/3.0.3/lucene-core-3.0.3-sources.jar"/>
-  <classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-analyzers-3.0.3.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-3.1.0.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-analyzers-3.1.0.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/mina-core-2.0.2.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-6.1.22.z6.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/sqlite-jdbc-3.6.20.1.jar" sourcepath="/ZimbraCommon/jars-src/sqlite-jdbc-3.6.20.1-sources.jar">
