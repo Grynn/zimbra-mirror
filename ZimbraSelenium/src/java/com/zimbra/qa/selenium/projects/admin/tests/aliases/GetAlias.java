@@ -58,7 +58,7 @@ public class GetAlias extends AdminCommonTest {
 				break;
 			}
 		}
-		ZAssert.assertNotNull(found, "Verify the alias is found");
+		ZAssert.assertNotNull(found, "See http://bugzilla.zimbra.com/show_bug.cgi?id=4704");
 
 	}
 
