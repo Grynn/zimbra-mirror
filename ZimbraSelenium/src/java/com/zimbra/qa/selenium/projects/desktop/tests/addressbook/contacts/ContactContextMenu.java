@@ -428,7 +428,8 @@ public class ContactContextMenu extends AjaxCommonTest  {
 
 		ContactItem contactItem = createSelectAContactItem(app.zGetActiveAccount().DisplayName, lastName, app.zGetActiveAccount().EmailAddress);
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());		
-		
+		app.zPageAddressbook.zWaitForDesktopLoadingSpinner(5000);
+
 		//Click Find Emails->Sent To Contact
         app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_SEARCH, Button.O_SEARCH_MAIL_SENT_TO_CONTACT , contactItem.fileAs);
 
@@ -444,11 +445,11 @@ public class ContactContextMenu extends AjaxCommonTest  {
 	@Test(	description = "Right click then  click Find Emails->Received From contact",
 				groups = { "smoke" })
 	public void FindEmailsReceivedFromContact() throws HarnessException {
-		
+
 	    //Create  email sent to this contacts	
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		String lastName = "lastname " + ZimbraSeleniumProperties.getUniqueString();
-		
+
 		// Send the message from AccountB to the ZWC user
 		ZimbraAccount.AccountB().soapSend(
 					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
@@ -465,18 +466,17 @@ public class ContactContextMenu extends AjaxCommonTest  {
 
 		ContactItem contactItem = createSelectAContactItem(app.zGetActiveAccount().DisplayName,lastName, ZimbraAccount.AccountB().EmailAddress);
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		
-		
+		app.zPageAddressbook.zWaitForDesktopLoadingSpinner(5000);
+
 		//Click Find Emails->Received From Contact
         app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_SEARCH, Button.O_SEARCH_MAIL_RECEIVED_FROM_CONTACT, contactItem.fileAs);
 
-        
         // Get all the messages in the inbox
 		List<ConversationItem> messages = app.zPageMail.zListGetConversations();
 		ZAssert.assertNotNull(messages, "Verify the message list exists");
 
 		// TODO: "Verify the message is in the inbox");
-                
+
 	}
 }
 
