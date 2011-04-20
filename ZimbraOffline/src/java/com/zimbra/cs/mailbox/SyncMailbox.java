@@ -37,6 +37,7 @@ import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.redolog.op.DeleteMailbox;
 import com.zimbra.cs.session.PendingModifications;
 import com.zimbra.cs.session.PendingModifications.Change;
+import com.zimbra.cs.session.PendingModifications.ModificationKey;
 import com.zimbra.cs.store.StoreManager;
 import com.zimbra.cs.util.Zimbra;
 import com.zimbra.cs.util.ZimbraApplication;
@@ -331,8 +332,9 @@ public abstract class SyncMailbox extends DesktopMailbox {
                 if ((item.getId() >= FIRST_USER_ID || item instanceof Tag) && item.getFolderId() != ID_FOLDER_FAILURE) {
                     itemCreated(item);
                     trackChangeNew(item);
-                    if (item.getFolderId() == ID_FOLDER_OUTBOX)
+                    if (item.getFolderId() == ID_FOLDER_OUTBOX) {
                         outboxed = true;
+                    }
                 }
             }
         }
@@ -344,24 +346,15 @@ public abstract class SyncMailbox extends DesktopMailbox {
                 MailItem item = (MailItem) change.what;
                 if ((item.getId() >= FIRST_USER_ID || item instanceof Tag) && item.getFolderId() != ID_FOLDER_FAILURE) {
                     trackChangeModified(item, change.why);
-                    if (item.getFolderId() == ID_FOLDER_OUTBOX)
+                    if (item.getFolderId() == ID_FOLDER_OUTBOX) {
                         outboxed = true;
+                    }
                 }
             }
         }
         if (pms.deleted != null) {
-            for (Object delete : pms.deleted.values()) {
-                int itemId = -1;
-                if (delete instanceof MailItem) {
-                    MailItem item = (MailItem) delete; 
-                    if (item.getFolderId() == ID_FOLDER_FAILURE) {
-                        continue;
-                    }
-                    itemId = item.getId();
-                } else if (delete instanceof Integer) {
-                    itemId = ((Integer) delete).intValue();
-                }
-                if (itemId >= FIRST_USER_ID || Tag.validateId(itemId)) {
+            for (ModificationKey key : pms.deleted.keySet()) {
+                if (key.getItemId() >= FIRST_USER_ID || Tag.validateId(key.getItemId())) {
                     trackChangeDeleted();
                 }
             }
