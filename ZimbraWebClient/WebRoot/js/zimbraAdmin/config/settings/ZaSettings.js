@@ -39,7 +39,11 @@ ZaSettings.postInit = function() {
 		var cnt = ZaSettings.initMethods.length;
 		for(var i = 0; i < cnt; i++) {
 			if(typeof(ZaSettings.initMethods[i]) == "function") {
-				ZaSettings.initMethods[i].call(this);
+				try {
+					ZaSettings.initMethods[i].call(this);
+				} catch (ex) {
+				//	
+				}
 			}
 		}
 	}	
