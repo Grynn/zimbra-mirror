@@ -379,6 +379,18 @@ function(subscriberZimlet, isPrimary) {
 };
 
 // This is called by the zimlet framework.
+EmailTooltipZimlet.prototype.hoverOver =
+function(object, context, x, y, span) {
+	var shell = DwtShell.getShell(window);
+	var tooltip = shell.getToolTip();
+	tooltip.setContent('<div id="zimletTooltipDiv"/>', true);
+	this.x = x;
+	this.y = y;
+	if (!this.toolTipPoppedUp(span, object, context, document.getElementById("zimletTooltipDiv"))) {
+		tooltip.popup(x, y, true, new AjxCallback(this, this.hoverOut, object, context, span));
+	}
+};
+
 EmailTooltipZimlet.prototype.toolTipPoppedUp =
 function(spanElement, contentObjText, matchContext, canvas) {
 	var tooltip = appCtxt.getToolTipMgr().getToolTip(ZmToolTipMgr.PERSON, {address:contentObjText});
@@ -388,7 +400,9 @@ function(spanElement, contentObjText, matchContext, canvas) {
 		if (tooltipDiv) {
 			tooltipDiv.innerHTML = tooltip;
 		}
+		return false;
 	}
+	return true;
 };
 
 // This is called from the core tooltip manager.
