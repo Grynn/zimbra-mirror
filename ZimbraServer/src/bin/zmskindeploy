@@ -147,9 +147,10 @@ if [ -d img ]; then
 
     if [ -n "${IMAGE_SUBDIRS}" ]; then
         echo "Processing images..."
-        sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.img.ImageMerge \
+        sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.img.ImageMerger \
             --css-path "${BASE_URL}/skins/${SKIN_NAME}/img/" \
             --css-file "images.css" \
+            --js-file "images.css.js" \
             --output "${SKIN_DEST_DIR}/img" \
             --input "${IMAGE_SUBDIRS}" > /dev/null
         perl -pi -e 's/\@jsVersion\@/'$SIMPLE_DATE'/g' "${SKIN_DEST_DIR}/img/images.css"
@@ -164,9 +165,10 @@ if [ -d img ]; then
             fi
             IMAGE_SUBDIRS="${IMAGE_SUBDIRS}${E}"
         done
-        sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.img.ImageMerge \
+        sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.img.ImageMerger \
             --css-path "${BASE_URL}/skins/${SKIN_NAME}/img/" \
             --css-file "images_${LOCID}.css" \
+            --js-file "images.css.js" \
             --output "${SKIN_DEST_DIR}/img" \
             --input "${IMAGE_SUBDIRS}" > /dev/null
         perl -pi -e 's/\@jsVersion\@/'$SIMPLE_DATE'/g' "${SKIN_DEST_DIR}/img/images_${LOCID}.css"
