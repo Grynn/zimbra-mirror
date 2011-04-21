@@ -70,6 +70,10 @@ function (ev) {
 	} else {
 		this.getModel().setInstanceValue(this.getInstance(), ZaDistributionList.A2_membersSelected, null);
 	}
+
+    if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+		ZaDLXFormView.removeMembers.call(this, ev);
+	}
 }
 
 ZaDLXFormView.nonmemberSelectionListener =    
@@ -80,6 +84,10 @@ function (ev) {
 		this.getModel().setInstanceValue(this.getInstance(), ZaDistributionList.A2_nonmembersSelected, arr);
 	} else {
 		this.getModel().setInstanceValue(this.getInstance(), ZaDistributionList.A2_nonmembersSelected, null);
+	}
+
+    if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+		ZaAccountMemberOfListView._addSelectedLists(this.getForm(), arr);
 	}
 }
 
@@ -92,6 +100,10 @@ function (ev) {
 	} else {
 		this.getModel().setInstanceValue(this.getInstance(), ZaDistributionList.A2_memberPoolSelected, null);
 	}
+
+    if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+		ZaDLXFormView.addAddressesToMembers.call(this, ev);
+	}
 }
 
 ZaDLXFormView.directMemberSelectionListener =    
@@ -102,6 +114,10 @@ function (ev) {
 		this.getModel().setInstanceValue(this.getInstance(), ZaDistributionList.A2_directMemberSelected, arr);
 	} else {
 		this.getModel().setInstanceValue(this.getInstance(), ZaDistributionList.A2_directMemberSelected, null);
+	}
+
+    if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+		ZaAccountMemberOfListView._removeSelectedLists(this.getForm(), arr);
 	}
 }
 

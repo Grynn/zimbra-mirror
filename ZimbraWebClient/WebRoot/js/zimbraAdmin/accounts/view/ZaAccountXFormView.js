@@ -346,6 +346,10 @@ function (ev) {
 	} else {
 		this.getModel().setInstanceValue(this.getInstance(), ZaAccount.A2_nonMemberListSelected, null);
 	}
+
+    if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+		ZaAccountMemberOfListView._addSelectedLists(this.getForm(), arr);
+	}
 }
 
 ZaAccountXFormView.directMemberOfSelectionListener =
@@ -356,6 +360,10 @@ function (ev) {
 		this.getModel().setInstanceValue(this.getInstance(), ZaAccount.A2_directMemberListSelected, arr);
 	} else {
 		this.getModel().setInstanceValue(this.getInstance(), ZaAccount.A2_directMemberListSelected, null);
+	}
+
+    if (ev.detail == DwtListView.ITEM_DBL_CLICKED) {
+		ZaAccountMemberOfListView._removeSelectedLists(this.getForm(), arr);
 	}
 }
 
