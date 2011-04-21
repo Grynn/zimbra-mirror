@@ -153,7 +153,11 @@ ZaServer.A_zimbraImapProxyBindPort="zimbraImapProxyBindPort";
 ZaServer.A_zimbraImapSSLProxyBindPort="zimbraImapSSLProxyBindPort";
 ZaServer.A_zimbraPop3ProxyBindPort="zimbraPop3ProxyBindPort";
 ZaServer.A_zimbraPop3SSLProxyBindPort="zimbraPop3SSLProxyBindPort";
-ZaServer.A_zimbraReverseProxyLookupTarget = "zimbraReverseProxyLookupTarget";                    
+ZaServer.A_zimbraReverseProxyLookupTarget = "zimbraReverseProxyLookupTarget";
+
+//spnego
+ZaServer.A_zimbraSpnegoAuthPrincipal = "zimbraSpnegoAuthPrincipal";
+ZaServer.A_zimbraSpnegoAuthTargetName = "zimbraSpnegoAuthTargetName";
 // other
 ZaServer.A_zimbraScheduledTaskNumThreads = "zimbraScheduledTaskNumThreads" ;
 ZaServer.A_zimbraMailPurgeSleepInterval = "zimbraMailPurgeSleepInterval" ;
@@ -438,7 +442,9 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_zimbraMilterBindAddress, ref:"attrs/" +  ZaServer.A_zimbraMilterBindAddress, type:_LIST_, listItem:{type:_HOSTNAME_OR_IP_, maxLength: 128} },
 		{id:ZaServer.A_zimbraMilterBindPort, ref:"attrs/" +  ZaServer.A_zimbraMilterBindPort, type:_COS_PORT_},
 		{id:ZaServer.A_zimbraMilterServerEnabled, ref:"attrs/" +  ZaServer.A_zimbraMilterServerEnabled, type: _COS_ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
-
+        //spnego
+		{id:ZaServer.A_zimbraSpnegoAuthTargetName, ref:"attrs/" +  ZaServer.A_zimbraSpnegoAuthTargetName, type:_STRING_},
+        {id:ZaServer.A_zimbraSpnegoAuthPrincipal, ref:"attrs/" +  ZaServer.A_zimbraSpnegoAuthPrincipal, type:_STRING_},
 		// ...other...
 		{id:ZaServer.A_zimbraSmtpHostname, ref:"attrs/" +  ZaServer.A_zimbraSmtpHostname, type:_COS_LIST_, listItem:{type:_HOSTNAME_OR_IP_, maxLength: 256} },
 		{id:ZaServer.A_SmtpPort, ref:"attrs/" +  ZaServer.A_SmtpPort, type:_COS_PORT_},

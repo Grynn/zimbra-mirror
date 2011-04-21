@@ -175,6 +175,10 @@ GlobalConfigXFormView.INTEROP_TAB_ATTRS = [ZaGlobalConfig.A_zimbraFreebusyExchan
 	ZaGlobalConfig.A_zimbraFreebusyExchangeAuthPassword, ZaGlobalConfig.A_zimbraFreebusyExchangeUserOrg];
 GlobalConfigXFormView.INTEROP_TAB_RIGHTS = [ZaGlobalConfig.CHECK_EXCHANGE_AUTH_CONFIG_RIGHT];
 
+GlobalConfigXFormView.SPNEGO_TAB_ATTRS = [ZaGlobalConfig.A_zimbraSpnegoAuthEnabled, ZaGlobalConfig.A_zimbraSpnegoAuthRealm,
+    ZaGlobalConfig.A_zimbraSpnegoAuthErrorURL];
+GlobalConfigXFormView.SPNEGO_TAB_RIGHTS = [];
+
 GlobalConfigXFormView.SKIN_TAB_ATTRS = [ZaGlobalConfig.A_zimbraSkinForegroundColor, ZaGlobalConfig.A_zimbraSkinBackgroundColor,ZaGlobalConfig.A_zimbraSkinSecondaryColor,
 	ZaGlobalConfig.A_zimbraSkinSelectionColor, ZaGlobalConfig.A_zimbraSkinLogoURL, ZaGlobalConfig.A_zimbraSkinLogoLoginBanner, ZaGlobalConfig.A_zimbraSkinLogoAppBanner ];
 
@@ -851,7 +855,35 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                 };
         switchItems.push (case9) ;
     }
-	
+
+    if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.SPNEGO_TAB_ATTRS, GlobalConfigXFormView.SPNEGO_TAB_RIGHTS)) {
+    	_tab10 = ++this.TAB_INDEX;
+
+        tabBarChoices.push ({value:_tab10, label:ZaMsg.NAD_Tab_SPNEGO});
+        var case10 =
+                {type: _ZATABCASE_, caseKey:_tab10,
+		       colSizes:["auto"],numCols:1,id:"global_spnego_tab",
+		       items: 	[
+                        	{ type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_SPNEGO_Configure,
+                                  items :[
+							  	          { ref: ZaGlobalConfig.A_zimbraSpnegoAuthEnabled, type: _CHECKBOX_,
+							   	            label:ZaMsg.NAD_Enable_spnego, width: "20em",
+							   	            trueValue: "TRUE", falseValue: "FALSE"
+						   	              },
+                                          { ref: ZaGlobalConfig.A_zimbraSpnegoAuthRealm,
+                                            type: _TEXTFIELD_, width: "20em",
+                                            label: ZaMsg.LBL_zimbraSpnegoAuthRealm
+                                          },
+                                          { ref: ZaGlobalConfig.A_zimbraSpnegoAuthErrorURL,
+                                            type: _TEXTFIELD_, width: "20em",
+                                            label: ZaMsg.LBL_zimbraSpnegoAuthErrorURL
+                                          }
+                                         ]
+                                }
+                             	]
+                };
+        switchItems.push (case10) ;
+    }
     xFormObject.items = [
 		{ type: _DWT_ALERT_,
 		  cssClass: "DwtTabTable",
