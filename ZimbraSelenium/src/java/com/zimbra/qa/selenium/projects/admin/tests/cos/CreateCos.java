@@ -25,7 +25,7 @@ public class CreateCos extends AdminCommonTest {
 	 * Testcase : Create a basic COS
 	 * Steps :
 	 * 1. Create a COS from GUI.
-	 * 2. Verify DL is created using SOAP.
+	 * 2. Verify cos is created using SOAP.
 	 * @throws HarnessException
 	 */
 	@Test(	description = "Create a basic COS",
