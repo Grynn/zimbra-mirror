@@ -49,6 +49,7 @@ import com.zimbra.cs.account.gal.GalOp;
 import com.zimbra.cs.account.gal.GalParams;
 import com.zimbra.cs.account.ldap.LdapGalMapRules;
 import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
+import com.zimbra.cs.ldap.LdapUtilCommon;
 import com.zimbra.cs.mailbox.ACL;
 import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.MailItem;
@@ -796,9 +797,9 @@ public class BulkImportAccounts extends AdminDocumentHandler {
         // create galsync account
         Map<String, Object> accountAttrs = new HashMap<String, Object>();
         StringUtil.addToMultiMap(accountAttrs,
-                Provisioning.A_zimbraIsSystemResource, LegacyLdapUtil.LDAP_TRUE);
+                Provisioning.A_zimbraIsSystemResource, LdapUtilCommon.LDAP_TRUE);
         StringUtil.addToMultiMap(accountAttrs, Provisioning.A_zimbraHideInGal,
-                LegacyLdapUtil.LDAP_TRUE);
+                LdapUtilCommon.LDAP_TRUE);
         StringUtil.addToMultiMap(accountAttrs,
                 Provisioning.A_zimbraContactMaxNumEntries, "0");
         checkSetAttrsOnCreate(zsc, TargetType.account, acctValue, accountAttrs);
@@ -833,7 +834,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
             dsAttrs.put(Provisioning.A_zimbraDataSourcePollingInterval, "1d");
             dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, "" + folderId);
             dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled,
-                    LegacyLdapUtil.LDAP_TRUE);
+                    LdapUtilCommon.LDAP_TRUE);
             dsAttrs.put(Provisioning.A_zimbraGalStatus, "enabled");
             Provisioning.getInstance().createDataSource(galSyncAccount,
                     DataSource.Type.gal, "zimbra", dsAttrs);
