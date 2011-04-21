@@ -347,16 +347,18 @@ ZaDomain.compareACLs = function (val1, val2) {
 //Use ZaSearch.SearchDirectory
 //In order to keep the domain list synchronized with server, we use synchronous call here.
 ZaDomain.getAll =
-function(unLimited) {
+function(target) {
+	var query = "";
+	if(target) query = "(" + ZaDomain.A_domainName + "=*" + target + "*)";
 	var params = {
 //		query: ZaDomain.LOCAL_DOMAIN_QUERY,
-        query: "",
+        	query: query,
 		types:[ZaSearch.DOMAINS],
 		sortBy:ZaDomain.A_domainName,
 		offset:"0",
 		attrs:[ZaDomain.A_domainName,ZaDomain.A_zimbraDomainStatus,ZaItem.A_zimbraId, ZaDomain.A_domainType],
 		sortAscending:"1",
-		limit:(unLimited)?0:ZaDomain.MAXSEARCHRESULTS,
+		limit:ZaDomain.MAXSEARCHRESULTS,
 		ignoreTooManyResultsException: true,
 		exceptionFrom: "ZaDomain.getAll",
 		controller: ZaApp.getInstance().getCurrentController()
@@ -2286,7 +2288,7 @@ ZaDomain.prototype.modifyDomainAlias = function (form) {
 
 
 ZaDomain.getTargetDomainByName = function (targetName) {
-    var domainList = ZaDomain.getAll(true).getArray (); 
+    var domainList = ZaDomain.getAll(targetName).getArray (); 
     for (var i = 0; i < domainList.length; i ++) {
         var domain = domainList [i] ;
         if (targetName == domain.name)  {
