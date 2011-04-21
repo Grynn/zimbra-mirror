@@ -10,7 +10,7 @@ How to deploy:
 - configure Zimbra memcached client:
       zmprov mcf zimbraMemcachedClientServerList <memcached_server_host>:11211
 
-- zmmaiboxdctl restart
+- zmmailboxdctl restart
 
 
 For Cosumer Apps:
