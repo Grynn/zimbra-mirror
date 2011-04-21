@@ -6,6 +6,8 @@ import com.zimbra.qa.selenium.framework.ui.AbsForm;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 
 public class FormSignatureNew extends AbsForm {
 
@@ -91,7 +93,8 @@ public class FormSignatureNew extends AbsForm {
 		} else if (button == Button.B_CANCEL) {
 
 			locator = "id=" + Locators.zToolbarCancelID;
-			page = null;
+			page = new DialogWarning(DialogWarning.DialogWarningID.SaveSignatureChangeMessage, this.MyApplication, ((AppAjaxClient)this.MyApplication).zPageSignature);
+			
 
 		} else {
 			throw new HarnessException("no logic defined for button " + button);

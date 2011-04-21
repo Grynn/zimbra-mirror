@@ -8,6 +8,7 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
 
+
 public class PageSignature extends AbsTab{
 
 	public PageSignature(AbsApplication application) {
@@ -26,6 +27,7 @@ public class PageSignature extends AbsTab{
 	//	public static final String zSignatureListView = "//div[@class='ZmSignatureListView']/div//tbody/tr/td";
 		public static final String zSignatureListView = "//div[@class='ZmSignatureListView']";
 		public static final String zNewSignature ="//td[contains(@id,'_title') and contains (text(),'New Signature')]";
+		public static final String zDeleteSignature ="//td[contains(@id,'DWT') and contains (text(),'Delete')]";
 
 	}
 
@@ -44,6 +46,26 @@ public class PageSignature extends AbsTab{
 		return sigListViewName;
 
 	}
+	public String zGetSignatureBodyText() throws HarnessException{
+		
+		//bug 59078
+		String locator = null;
+		locator="//textarea[contains(@id,'textarea_DWT')]";
+		String textsig= this.sGetText(locator);
+		return textsig;
+
+	}
+	public String zGetHtmlSignatureBody() throws HarnessException {
+		try {
+			sSelectFrame("css=iframe[id*='DWT']");
+			String sigbodyhtml = this.sGetHtmlSource();
+			return sigbodyhtml;
+		} finally {
+			this.sSelectFrame("relative=top");
+		}
+
+	}
+	
 	@Override
 	public AbsPage zListItem(Action action, Button option, String item)
 	throws HarnessException {
@@ -86,7 +108,12 @@ public class PageSignature extends AbsTab{
 			page = new FormSignatureNew(this.MyApplication);
 
 
-		}  else {
+		}else if(button== Button.B_DELETE){
+			locator = Locators.zDeleteSignature;
+			page = null;
+			
+		}else {
+		
 			throw new HarnessException("no logic defined for button " + button);
 		}
 
