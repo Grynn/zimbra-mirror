@@ -883,6 +883,10 @@ function(content) {
 	var cont = AjxCallback.simpleClosure(this._finishHtmlModeInit, this);
 	setTimeout(cont, DwtHtmlEditor._INITDELAY);
 
+	// The onload event was originally used to continue init, but we went to setTimeout for bug 10619. That bug doesn't
+	// occur if we go back to using onload, so maybe something got fixed in FF.
+	// iFrame.onload = cont;
+
 	iFrame.src = this._blankIframeSrc || "";
 	htmlEl.appendChild(iFrame);
 
@@ -901,7 +905,7 @@ function() {
 			doc.close();
 		}
 	} catch (ex) {
-		DBG.println("XXX: Error initializing HTML mode :XXX");
+		DBG.println(AjxDebug.DBG1, "XXX: Error initializing HTML mode :XXX");
 		return;
 	}
 
@@ -920,7 +924,7 @@ function() {
 	};
 
     // most browsers need time out here
-	setTimeout(AjxCallback.simpleClosure(cont, this, doc), DwtHtmlEditor._INITDELAY);
+	setTimeout(AjxCallback.simpleClosure(cont, this, doc), DwtHtmlEditor._INITDELAY * 4);
 
 };
 
