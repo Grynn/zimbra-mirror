@@ -19,10 +19,10 @@ public class PageManageDistributionLists extends AbsTab {
 
 	public static class Locators {
 
-		// ** OverviewTreePanel -> Addresses -> Aliases
+		// ** OverviewTreePanel -> Addresses -> Distribution Lists
 		public static final String zti_DISTRIBUTION_LIST = "zti__AppAdmin__ADDRESS__DL_textCell";
 
-		// ** "Manage Aliases" Tab Title
+		// ** "Manage Distribution Lists" Tab Title
 		public static final String ztab_MANAGE_DISTRIBUTION_LIST_ICON = "css=tr#ztab__MAIN_TAB_row div.ImgDistributionList";
 		public static final String zb_NEW = "xpath=//*[@id='zb__ACLV__NEW_MENU_title']";		// New Button
 		public static final String zdd_NEW_MENU="css=td#zb__ACLV__NEW_MENU_dropdown div.ImgSelectPullDownArrow";

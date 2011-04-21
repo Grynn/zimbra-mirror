@@ -7,17 +7,15 @@ import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.projects.admin.items.DistributionListItem;
+import com.zimbra.qa.selenium.projects.admin.items.CosItem;
 
-public class PageNewDistributionList extends AbsTab {
+public class PageNewCos extends AbsTab {
 
-	//public static final String zb_INITIAL_ACCT_NAME="ztabv__UNDEFINE_2_name";
-	public static final String ztb_ACCT_NAME = "ztabv__UNDEFINE_name_2";
-	public static final String ztb_DOMAIN_NAME="ztabv__UNDEFINE_name_3_display";
-	public static final String zb_SAVE="zb__DLV__SAVE_title";
-	public static final String zb_CLOSE="zb__DLV__CLOSE_title";
-	
-	public PageNewDistributionList(AbsApplication application) {
+	public static final String ztav_COS_NAME = "ztabv__COS_EDIT_cn_2";
+	public static final String zb_SAVE="zb__COSV__SAVE_title";
+	public static final String zb_CLOSE="zb__COSV__CLOSE_title";
+
+	public PageNewCos(AbsApplication application) {
 		super(application);
 		// TODO Auto-generated constructor stub
 	}
@@ -77,20 +75,18 @@ public class PageNewDistributionList extends AbsTab {
 	
 	public IItem zEnterDetails(IItem item) throws HarnessException {
 
-		if ( !(item instanceof DistributionListItem) )
-			throw new HarnessException("item must be an DistributionListItem, was "+ item.getClass().getCanonicalName());
+		if ( !(item instanceof CosItem) )
+			throw new HarnessException("item must be an CosItem, was "+ item.getClass().getCanonicalName());
 
-		DistributionListItem dl = (DistributionListItem)item;
+		CosItem cos = (CosItem)item;
 
-		String CN = dl.getLocalName();
-		String domain = dl.getDomainName();
+		String CN = cos.getName();
 
-		sType(ztb_ACCT_NAME, CN);
-		sType(ztb_DOMAIN_NAME, domain);
+		sType(ztav_COS_NAME, CN);
 		sClick(zb_SAVE);
 		sClick(zb_CLOSE);
 
-		return dl;
+		return cos;
 
 	}
 
