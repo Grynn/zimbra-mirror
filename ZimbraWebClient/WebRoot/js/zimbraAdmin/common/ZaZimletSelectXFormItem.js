@@ -182,7 +182,7 @@ ZaZimletSelect_XFormItem.prototype.getChoiceHTML = function (itemNum, value, lab
 	for(var i=0; i<prefixes.length; i++) {
 		retVal.push("<td class=",cssClass,
 				" onclick=\"",ref, ".onSubChoiceClick(", itemNum, ", event||window.event, '",prefixes[i].value,"')\"",
-				" ondblclick=\"",ref, ".onSubChoiceDoubleClick(", itemNum, ".event||window.event, '",prefixes[i].value,"')\" id='",id,"_choice_",itemNum,"_prefix_",i,"'>",
+				" ondblclick=\"",ref, ".onSubChoiceDoubleClick(", itemNum, ", event||window.event, '",prefixes[i].value,"')\" id='",id,"_choice_",itemNum,"_prefix_",i,"'>",
 					"<table cellspacing=0 cellpadding=0><tr><td><input type=radio autocomplete='off' id='",id,"_radiochoiceitem_",itemNum,"_prefix_",i,"' name='zazimletselect_",id,"_radiogrp_",itemNum,"'></td><td>",
 				prefixes[i].label,
 				"</td></tr></table></td>");
