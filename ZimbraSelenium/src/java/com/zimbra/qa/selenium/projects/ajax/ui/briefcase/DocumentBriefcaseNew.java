@@ -47,8 +47,9 @@ public class DocumentBriefcaseNew extends AbsForm {
 		sSelectFrame(Locators.zFrame);
 		// ClientSessionFactory.session().selenium().selectFrame("css=iframe[id='DWT10',class='ZDEditor']");
 		// ClientSessionFactory.session().selenium().type("xpath=(//html/body)",text);
-		logger.info("typing Document Text" + text);
+		logger.info("typing Document Text: ");
 		sType(Locators.zBodyField, text);
+		logger.info(text);
 	}
 
 	public void typeDocumentName(String text) throws HarnessException {
@@ -102,8 +103,12 @@ public class DocumentBriefcaseNew extends AbsForm {
 					+ " locator=" + locator);
 
 		// Enter text
+		this.sFocus(locator);
+		this.sMouseOver(locator);
+		this.zClick(locator);
 		this.sType(locator, value);
-
+		logger.info("typed: " + value);
+		
 		this.zWaitForBusyOverlay();
 	}
 
@@ -151,7 +156,9 @@ public class DocumentBriefcaseNew extends AbsForm {
 		zSelectWindow(pageTitle);
 
 		zWaitForElementPresent("css=div[class='ZDToolBar ZWidget']");
-
+		
+		zWaitForElementPresent("css=table[class='ZToolbarTable']");
+		
 		zWaitForElementPresent("css=iframe[id*='DWT'][class='ZDEditor']");
 
 		zWaitForIframeText("css=iframe[id*='DWT'][class='ZDEditor']", "");
