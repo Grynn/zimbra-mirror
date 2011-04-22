@@ -551,8 +551,6 @@ function(actionMenu) {
     searchOp.setMenu(this._searchMenu);
 };
 
-
-
 EmailTooltipZimlet.prototype._resetFilterMenu =
 function() {
 	var filterItems = this._filterMenu.getItems();
@@ -769,6 +767,7 @@ function(itemId, item, ev) {
 		case "NEWCONTACT":		this._contactListener(true);	break;
 		case "ADDTOFILTER":		this._filterListener();		break;
 		case "GOTOURL":			this._goToUrlListener();	break;
+        case "COPY_TEXT":       this._copyListener(ev);	break;
 	}
 };
 
@@ -942,6 +941,14 @@ function() {
 	}
 };
 
+EmailTooltipZimlet.prototype._copyListener =
+function(ev) {
+    var textToCopy = "";
+    var actionObject = this._actionObject;
+    
+    if (actionObject) {textToCopy = actionObject.toString();}
+    if (textToCopy) {DwtClipboardManager.getInstance().copyToClipboard(textToCopy);}
+}
 /**
  * Helper function
  */
