@@ -1484,7 +1484,7 @@ public class InitialSync {
                     }
                 } catch (MailServiceException.NoSuchItemException nsie) {
                     try {
-                        ombx.createDocument(new TracelessContext(player), doc.getFolderId(), pd, doc.getType(), ud.getFlags());
+                        ombx.createDocument(new TracelessContext(player), doc.getFolderId(), pd, doc.getType(), ud.getFlags() & ~Flag.BITMASK_UNCACHED);
                     } catch (MailServiceException me) {
                         if (me.getCode().equals(MailServiceException.ALREADY_EXISTS)) {
                             // this is an edge case where a different object of
@@ -1500,7 +1500,7 @@ public class InitialSync {
                             MailItem oldItem = ombx.getItemByPath(sContext, path);
                             String newName = path + "-old";
                             ombx.rename(sContext, oldItem.mId, MailItem.Type.UNKNOWN, newName);
-                            ombx.createDocument(new TracelessContext(player), doc.getFolderId(), pd, doc.getType(), ud.getFlags());
+                            ombx.createDocument(new TracelessContext(player), doc.getFolderId(), pd, doc.getType(), ud.getFlags() & ~Flag.BITMASK_UNCACHED);
                         } else
                             throw me;
                     }
