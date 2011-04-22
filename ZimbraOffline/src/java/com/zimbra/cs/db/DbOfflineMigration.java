@@ -169,12 +169,12 @@ public class DbOfflineMigration {
             while (rs.next()) {
                 int num = Integer.parseInt(rs.getString(1));
                 groupIds.add(num);
-                Db.getInstance().registerDatabaseInterest(conn, DbMailbox.getDatabaseName(num));
             }
             stmt.close();
             rs.close();
             
             for (Integer id : groupIds) {
+                Db.getInstance().registerDatabaseInterest(conn, DbMailbox.getDatabaseName(id));
                 createMailAddressTable(conn, stmt, id);
                 createMailAddressIndex(conn, stmt, id);
                 alterMailItemTable(conn, stmt, id);
