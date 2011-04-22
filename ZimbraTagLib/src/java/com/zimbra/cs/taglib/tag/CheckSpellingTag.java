@@ -16,6 +16,8 @@ package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.soap.mail.message.CheckSpellingResponse;
+import com.zimbra.soap.mail.type.Misspelling;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
@@ -35,13 +37,13 @@ public class CheckSpellingTag extends ZimbraSimpleTag {
         try {
             ZMailbox mbox = getMailbox();
 			String trimmed = mText.trim().replaceAll("\\u00A0"," ").replaceAll("\\s\\s+"," ");
-			ZMailbox.CheckSpellingResult result = mbox.checkSpelling(trimmed);
+			CheckSpellingResponse res = mbox.checkSpelling(trimmed);
 			JspWriter out = jctxt.getOut();
 			out.print("{\"available\":");
-			out.print(result.getIsAvailable() ? "true" : "false");
+			out.print(res.isAvailable() ? "true" : "false");
 			out.println(",\"data\":[");
 			boolean firstMisspelling = true;
-			for (ZMailbox.Misspelling misspelling : result.getMisspellings()) {
+			for (Misspelling misspelling : res.getMisspelledWords()) {
 				if (!firstMisspelling) {
 					out.print(',');
 				}
@@ -49,13 +51,13 @@ public class CheckSpellingTag extends ZimbraSimpleTag {
 				out.print("{\"word\":\"");
 				out.print(misspelling.getWord());
 				out.print("\",\"suggestions\":[");
-				String[] suggestions = misspelling.getSuggestions();
-				for (int i = 0, count = suggestions.length; i < count && i < 5; i++) {
+				List<String> suggestions = misspelling.getSuggestionsList();
+				for (int i = 0, count = suggestions.size(); i < count && i < 5; i++) {
 					if (i > 0) {
 						out.print(',');
 					}
 					out.print('"');
-					out.print(suggestions[i]);
+					out.print(suggestions.get(i));
 					out.print('"');
 				}
 				out.println("]}");
