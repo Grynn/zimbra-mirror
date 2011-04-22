@@ -5,10 +5,16 @@
   <classpathentry kind="lib" path="/ZimbraCommon/jars/ant-1.7.0-ziputil-patched.jar" sourcepath="/ThirdParty/ant-1.7.0-ziputil-patched/src/java"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/ant-contrib-1.0b1.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/ant-tar-patched.jar" sourcepath="/ThirdParty/ant-tar-patched/src/java"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-cli-1.2.jar" sourcepath="/ZimbraCommon/jars-src/commons-cli-1.2-src.zip">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-cli-1.2-javadoc.zip!/"/>
+    </attributes>
+  </classpathentry>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-codec-1.4.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-collections-3.2.1.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-dbcp-1.4.jar" sourcepath="/ThirdParty/commons-dbcp/src">
     <attributes>
-      <attribute name="javadoc_location" value="http://commons.apache.org/dbcp/api-1.2.2/"/>
+      <attribute name="javadoc_location" value="http://commons.apache.org/dbcp/api-1.4/"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-fileupload-1.2.1.jar" sourcepath="/ZimbraCommon/jars-src/commons-fileupload-1.2.1-src.zip">
@@ -21,6 +27,8 @@
       <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-httpclient-3.1-javadoc.zip!/"/>
     </attributes>
   </classpathentry>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-io-1.4.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-lang-2.6.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-logging.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-pool-1.5.5.jar">
     <attributes>
@@ -97,22 +105,27 @@
       <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/guava-r07-javadoc.zip!/"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-cli-1.2.jar" sourcepath="/ZimbraCommon/jars-src/commons-cli-1.2-src.zip">
-    <attributes>
-      <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-cli-1.2-javadoc.zip!/"/>
-    </attributes>
-  </classpathentry>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/unboundid-ldapsdk-2.1.0-se.jar" sourcepath="/ZimbraCommon/jars-src/unboundid-ldapsdk-2.1.0-src.zip">
     <attributes>
       <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/unboundid-ldapsdk-2.1.0-javadoc.zip!/"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-io-1.4.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/icu4j-4.4.2.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/ews.jar" sourcepath="/ZimbraCommon/jars-src/ews.zip"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-6.1.22.z6.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/cassandra-0.7.4.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/libthrift-0.5.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/hector-core-0.7.0-29.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/perf4j-0.9.13.jar"/>
   <classpathentry kind="lib" path="jars/hsqldb.jar"/>
   <classpathentry kind="lib" path="jars/sqltool.jar"/>
+  <classpathentry kind="lib" path="jars/snakeyaml-1.6.jar"/>
+  <classpathentry kind="lib" path="jars/high-scale-lib.jar"/>
+  <classpathentry kind="lib" path="jars/concurrentlinkedhashmap-lru-1.1.jar"/>
+  <classpathentry kind="lib" path="jars/avro-1.4.0-fixes.jar"/>
+  <classpathentry kind="lib" path="jars/jug-2.0.0.jar"/>
+  <classpathentry kind="lib" path="jars/jackson-core-asl-1.8.0.jar"/>
+  <classpathentry kind="lib" path="jars/jackson-mapper-asl-1.8.0.jar"/>
   <classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
   <classpathentry combineaccessrules="false" kind="src" path="/ZimbraSoap"/>
   <classpathentry combineaccessrules="false" kind="src" path="/ZimbraIM"/>
