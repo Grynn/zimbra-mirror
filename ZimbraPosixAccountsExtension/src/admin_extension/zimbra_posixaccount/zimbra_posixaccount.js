@@ -343,7 +343,7 @@ zimbra_posixaccount_ext.ovTreeModifier = function (tree) {
 		
 		this._posixGroupTi = new DwtTreeItem({parent:this._configTi,className:"AdminTreeItem"});
 		this._posixGroupTi.setText(zimbra_posixaccount.PosixGroups);
-		this._posixGroupTi.setImage("ZimbraIcon");
+		this._posixGroupTi.setImage("Zimlet");
 		this._posixGroupTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._POSIX_GROUP_LIST);	
 		
 		try {

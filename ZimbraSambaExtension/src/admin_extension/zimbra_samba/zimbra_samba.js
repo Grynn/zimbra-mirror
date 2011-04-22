@@ -181,7 +181,7 @@ Zambra.ovTreeModifier = function (tree) {
 		}
 		this._sambaTi = new DwtTreeItem({parent:this._configTi,className:"AdminTreeItem"});
 		this._sambaTi.setText(zimbra_samba.SambaDomainsListViewTitle);
-		this._sambaTi.setImage("ZimbraIcon");
+		this._sambaTi.setImage("Zimlet");
 		this._sambaTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._SAMBA_DOMAIN_LIST);	
 		
 		try {
