@@ -847,7 +847,9 @@ DwtHtmlEditor.prototype.TEXTAREA_CLASSNAME = "DwtHtmlEditorTextArea";
 DwtHtmlEditor.prototype._initTextMode =
 function(ignorePendingContent) {
 	var htmlEl = this.getHtmlElement();
-	this._textAreaId = "textarea_" + Dwt.getNextId();
+    if (!this._textAreaId) {
+	    this._textAreaId = "textarea_" + Dwt.getNextId();
+    }
 	var textArea = document.createElement("textarea");
 	textArea.className = this.TEXTAREA_CLASSNAME;
 	textArea.id = this._textAreaId;
@@ -2233,4 +2235,12 @@ function(parentNode, regex, replaceString, mode, hits) {
 	}
 
 	return hits;
+};
+
+/*
+ * set textareaId
+ */
+DwtHtmlEditor.prototype.setTextAreaId =
+function(textAreaId) {
+    this._textAreaId = textAreaId;
 };
