@@ -177,7 +177,7 @@ public class DialogMove extends AbsDialog {
 
 		}else if (MyTab instanceof PageBriefcase ) {
 			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-			   locator = "css=div[id='" + Locators.zDialogId + "'] td[id='zti__"+
+			   locator = "css=div[id='" + Locators.zDialogId + "'] td[id^='zti__"+
 			         MyApplication.zGetActiveAccount().EmailAddress +
 			         ":ZmChooseFolderDialog_Briefcase__'][id$='" +
 			         folder.getId() +

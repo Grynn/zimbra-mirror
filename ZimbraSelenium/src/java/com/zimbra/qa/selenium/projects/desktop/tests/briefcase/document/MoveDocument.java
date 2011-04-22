@@ -47,7 +47,10 @@ public class MoveDocument extends AjaxCommonTest {
 				+ "<folder name='" + name + "' l='" + briefcaseFolderId + "'/>"
 				+ "</CreateFolderRequest>");
 
-		FolderItem folderItem = FolderItem.importFromSOAP(account, name);
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      FolderItem folderItem = FolderItem.importFromSOAP(account, name);
 
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
@@ -77,6 +80,7 @@ public class MoveDocument extends AjaxCommonTest {
 						+ "</SaveDocumentRequest>");
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 		// document.importFromSOAP(account, document.getDocName());
 
 		// refresh briefcase page

@@ -61,6 +61,9 @@ public class DeleteDocument extends AjaxCommonTest {
 		String docId = account.soapSelectValue(
 				"//mail:SaveDocumentResponse//mail:doc", "id");
 
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
@@ -75,7 +78,10 @@ public class DeleteDocument extends AjaxCommonTest {
 		// Click OK on Confirmation dialog
 		deleteConfirm.zClickButton(Button.B_YES);
 
-		// refresh briefcase page
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page
 		app.zTreeBriefcase
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 

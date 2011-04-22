@@ -5,6 +5,7 @@ import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
@@ -44,7 +45,10 @@ public class DisplayFile extends AjaxCommonTest {
 				+ "<doc l='" + briefcaseFolder.getId() + "'><upload id='"
 				+ attachmentId + "'/></doc></SaveDocumentRequest>");
 
-		// refresh briefcase page
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Verify document is created

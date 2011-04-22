@@ -78,7 +78,10 @@ public class MoveFile extends AjaxCommonTest {
 
 		// account.soapSelectNode("//mail:SaveDocumentResponse", 1);
 
-		// refresh briefcase page
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, folderItem, true);
 
 		// Click on created document
