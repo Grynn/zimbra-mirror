@@ -239,7 +239,7 @@ function (form, listArr){
 				var indirectDls = indirectArrFound.join("<br />");			
 				msg = AjxMessageFormat.format (ZaMsg.Q_REMOVE_INDIRECT_GROUP, [dlName, indirectDls]);
 				
-				var confirmMessageDialog =  new ZaMsgDialog(form.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);					
+				var confirmMessageDialog =  new ZaMsgDialog(form.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], null, ZaId.VIEW_MEMLIST);					
 				
 				confirmMessageDialog.setMessage(msg,  DwtMessageDialog.WARNING_STYLE);
 				confirmMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaAccountMemberOfListView._removeConfirmedList, null ,

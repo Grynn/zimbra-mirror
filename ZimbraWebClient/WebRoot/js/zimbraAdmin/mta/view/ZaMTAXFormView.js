@@ -245,7 +245,7 @@ ZaMTAXFormView.prototype.actionDlgCallback = function(args)  {
 }
 
 ZaMTAXFormView.prototype.showConfirmationDlg = function (action, removelist,qName, field) {
-	this.confirmMessageDialog = ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);			
+	this.confirmMessageDialog = ZaApp.getInstance().dialogs["ConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON],null,ZaId.VIEW_MTA + "_confirmMessage");			
 	if(removelist) {
 		if(field == ZaMTA.A_messages) {
 			var subst = "0";

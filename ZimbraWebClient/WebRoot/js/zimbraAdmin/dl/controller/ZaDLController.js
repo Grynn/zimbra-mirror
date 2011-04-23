@@ -166,7 +166,8 @@ function (entry) {
 		}
 	ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
 	
-	this._removeConfirmMessageDialog = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);			
+	this._removeConfirmMessageDialog = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON],
+	null, ZaId.CTR_PREFIX + ZaId.VIEW_DL + "_removeConfirm");			
 	this._UICreated = true;
 	ZaApp.getInstance()._controllers[this.getContentViewId()] = this ;
 }

@@ -144,7 +144,7 @@ function (openInNewTab, openInSearchTab) {
 	//set a selection listener on the account list view
 	this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 	this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-	this._removeConfirmMessageDialog = ZaApp.getInstance().dialogs["removeConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);			
+	this._removeConfirmMessageDialog = ZaApp.getInstance().dialogs["removeConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], null, ZaId.CTR_PREFIX + ZaId.VIEW_COSLIST + "_removeConfirm");			
 		
 	this._UICreated = true;
 }
@@ -283,7 +283,8 @@ function(ev) {
 		if(!ZaApp.getInstance().dialogs["ConfirmDeleteItemsInTabDialog"]) {
 			ZaApp.getInstance().dialogs["ConfirmDeleteItemsInTabDialog"] = 
 				new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.CANCEL_BUTTON], 
-						[ZaMsgDialog.CLOSE_TAB_DELETE_BUTTON_DESC , ZaMsgDialog.NO_DELETE_BUTTON_DESC]);			
+						[ZaMsgDialog.CLOSE_TAB_DELETE_BUTTON_DESC , ZaMsgDialog.NO_DELETE_BUTTON_DESC],
+						ZaId.CTR_PREFIX + ZaId.VIEW_COSLIST + "_ConfirmDeleteItemsInTab");			
 		}
 		
 		

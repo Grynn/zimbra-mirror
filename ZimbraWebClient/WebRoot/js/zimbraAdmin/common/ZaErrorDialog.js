@@ -19,11 +19,13 @@
 * A normal DwtMessageDialog w/ a "Report" button that will post user info to the 
 * server when clicked.
 */
-ZaErrorDialog = function(parent) {
-	if (arguments.length === 0) {return;}
+ZaErrorDialog = function(parent, contextId) {
+	//if (arguments.length === 0) {return;}
+	if(!parent) return;
 
 	var detailButton = new DwtDialog_ButtonDescriptor(ZaErrorDialog.DETAIL_BUTTON, AjxMsg.detail, DwtDialog.ALIGN_LEFT);
-	DwtMessageDialog.call(this, parent, null, null, [detailButton]);
+	var id = contextId? ZaId.getDialogId(ZaId.DLG_ERR,contextId):ZaId.getDialogId(ZaId.DLG_ERR); 
+	DwtMessageDialog.call(this, parent, null, null, [detailButton],id);
 
 	// setup the detail button
 	this._detailCell = document.getElementById(this._detailCellId);

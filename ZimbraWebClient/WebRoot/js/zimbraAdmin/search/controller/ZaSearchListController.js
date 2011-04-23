@@ -428,7 +428,7 @@ function () {
 	//set a selection listener on the account list view
 	this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 	this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
-	this._removeConfirmMessageDialog = ZaApp.getInstance().dialogs["ConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);			
+	this._removeConfirmMessageDialog = ZaApp.getInstance().dialogs["ConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON],null,ZaId.CTR_PREFIX + ZaId.VIEW_SCHLIST + "_ConfirmMessage");			
 	this._UICreated = true;
 }
 

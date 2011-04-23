@@ -46,7 +46,7 @@ DwtMessageDialog = function(params) {
 	this.addEnterListener(new AjxListener(this, this._enterListener));
 };
 
-DwtMessageDialog.PARAMS = ["parent", "className", "buttons", "extraButtons"];
+DwtMessageDialog.PARAMS = ["parent", "className", "buttons", "extraButtons", "id"];
 
 DwtMessageDialog.prototype = new DwtDialog;
 DwtMessageDialog.prototype.constructor = DwtMessageDialog;

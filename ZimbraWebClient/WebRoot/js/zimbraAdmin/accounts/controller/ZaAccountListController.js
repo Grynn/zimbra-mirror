@@ -387,7 +387,7 @@ function (openInNewTab, openInSearchTab) {
 	this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 	this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
 	if(!ZaApp.getInstance().dialogs["ConfirmMessageDialog"])
-		ZaApp.getInstance().dialogs["ConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);			
+		ZaApp.getInstance().dialogs["ConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], null, ZaId.CTR_PREFIX + ZaId.VIEW_ACCTLIST + "_ConfirmMessage");			
 	
 	this._UICreated = true;
 	
@@ -581,7 +581,7 @@ ZaAccountListController.prototype._editItem = function (item) {
 	} catch(ex) {
 		if(ex.msg) {
 			//output exception message
-			ZaApp.getInstance().dialogs["errorMsgDlg"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON]);
+			ZaApp.getInstance().dialogs["errorMsgDlg"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON], null,ZaId.CTR_PREFIX + ZaId.VIEW_ACCTLIST + "_errorMsg"); 
                        	ZaApp.getInstance().dialogs["errorMsgDlg"].setMessage(ex.msg, null, DwtMessageDialog.TITLE[DwtMessageDialog.WARNING_STYLE]);
                        	ZaApp.getInstance().dialogs["errorMsgDlg"].popup();
 		}
@@ -804,7 +804,8 @@ function(ev) {
 		if(!ZaApp.getInstance().dialogs["ConfirmDeleteItemsInTabDialog"]) {
 			ZaApp.getInstance().dialogs["ConfirmDeleteItemsInTabDialog"] = 
 				new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.CANCEL_BUTTON], 
-						[ZaMsgDialog.CLOSE_TAB_DELETE_BUTTON_DESC , ZaMsgDialog.NO_DELETE_BUTTON_DESC]);			
+						[ZaMsgDialog.CLOSE_TAB_DELETE_BUTTON_DESC , ZaMsgDialog.NO_DELETE_BUTTON_DESC],
+						ZaId.CTR_PREFIX + ZaId.VIEW_ACCTLIST + "_ConfirmDeleteItemsInTab");		
 		}
 		
 		
@@ -944,11 +945,11 @@ function (item) {
 	if(this._chngPwdDlg) {
 		try {
 			if(!this._chngPwdDlg.getPassword() || this._chngPwdDlg.getPassword().length < 1) {
-				ZaApp.getInstance().dialogs["errorMsgDlg"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON]);							
+				ZaApp.getInstance().dialogs["errorMsgDlg"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON],null,ZaId.CTR_PREFIX + ZaId.VIEW_ACCTLIST + "_errorMsg");							
 				ZaApp.getInstance().dialogs["errorMsgDlg"].setMessage(ZaMsg.ERROR_PASSWORD_REQUIRED, null, DwtMessageDialog.TITLE[DwtMessageDialog.CRITICAL_STYLE]);
 				ZaApp.getInstance().dialogs["errorMsgDlg"].popup();				
 			} else if(this._chngPwdDlg.getPassword() != this._chngPwdDlg.getConfirmPassword()) {
-				ZaApp.getInstance().dialogs["errorMsgDlg"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON]);							
+				ZaApp.getInstance().dialogs["errorMsgDlg"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON], null, ZaId.CTR_PREFIX + ZaId.VIEW_ACCTLIST + "_errorMsg");							
 				ZaApp.getInstance().dialogs["errorMsgDlg"].setMessage(ZaMsg.ERROR_PASSWORD_MISMATCH, null,DwtMessageDialog.TITLE[DwtMessageDialog.CRITICAL_STYLE]);
 				ZaApp.getInstance().dialogs["errorMsgDlg"].popup();				
 			} else {
@@ -985,13 +986,13 @@ function (item) {
 				if(szPwd.length < minPwdLen || AjxStringUtil.trim(szPwd).length < minPwdLen) { 
 					//show error msg
 					//this._chngPwdDlg.popdown();
-					ZaApp.getInstance().dialogs["errorMsgDlg"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON]);												
+					ZaApp.getInstance().dialogs["errorMsgDlg"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON],null,ZaId.CTR_PREFIX + ZaId.VIEW_ACCTLIST + "_errorMsg");									
 					ZaApp.getInstance().dialogs["errorMsgDlg"].setMessage(ZaMsg.ERROR_PASSWORD_TOOSHORT + "<br>" + String(ZaMsg.NAD_passMinLengthMsg).replace("{0}",minPwdLen), null, DwtMessageDialog.CRITICAL_STYLE, null);
 					ZaApp.getInstance().dialogs["errorMsgDlg"].popup();
 				} else if(AjxStringUtil.trim(szPwd).length > maxPwdLen) { 
 					//show error msg
 					//this._chngPwdDlg.popdown();
-					ZaApp.getInstance().dialogs["errorMsgDlg"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON]);																	
+					ZaApp.getInstance().dialogs["errorMsgDlg"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON], null, ZaId.CTR_PREFIX + ZaId.VIEW_ACCTLIST + "_errorMsg");									
 					ZaApp.getInstance().dialogs["errorMsgDlg"].setMessage(ZaMsg.ERROR_PASSWORD_TOOLONG+ "<br>" + String(ZaMsg.NAD_passMaxLengthMsg).replace("{0}",maxPwdLen), null, DwtMessageDialog.CRITICAL_STYLE, null);
 					ZaApp.getInstance().dialogs["errorMsgDlg"].popup();
 				} else {		

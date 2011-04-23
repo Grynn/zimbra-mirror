@@ -343,7 +343,7 @@ function (params) {
 		if(ZaApp.getInstance().dialogs["confirmMessageDialog"])
 			ZaApp.getInstance().dialogs["confirmMessageDialog"].popdown();
 			
-		ZaApp.getInstance().dialogs["confirmMessageDialog"] = ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.CANCEL_BUTTON]);	
+		ZaApp.getInstance().dialogs["confirmMessageDialog"]  = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.CANCEL_BUTTON], null, ZaId.CTR_PREFIX + ZaId.VIEW_STATUS + "_confirmMessage");	
 		ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(AjxMessageFormat.format(ZaMsg.WARNING_RESETING_SMTP_HOST,[obj._defaultValues.attrs[ZaServer.A_zimbraSmtpHostname].join(", "),obj._defaultValues.attrs[ZaServer.A_zimbraSmtpHostname].join(", ")]),  DwtMessageDialog.WARNING_STYLE);
 		var args;
 		var callBack = ZaServerController.prototype.runValidationStack;
@@ -373,7 +373,8 @@ function (params) {
 		if(ZaApp.getInstance().dialogs["confirmMessageDialog"])
 			ZaApp.getInstance().dialogs["confirmMessageDialog"].popdown();
 			
-		ZaApp.getInstance().dialogs["confirmMessageDialog"] = ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);	
+		ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._view.shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON],null, ZaId.CTR_PREFIX + ZaId.VIEW_STATUS + "_confirmMessage");	
+
 		ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_DELETE_VOLUMES,  DwtMessageDialog.WARNING_STYLE);
 		var args;
 		var callBack = ZaServerController.prototype.runValidationStack;

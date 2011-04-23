@@ -92,14 +92,14 @@ function(refresh) {
 
 ZaAppCtxt.prototype.getConfirmMsgDialog = function (refresh) {
 	if(!this._confirmMsgDialog || refresh) {
-		this._confirmMsgDialog = new ZaMsgDialog(this.getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON]);
+		this._confirmMsgDialog = new ZaMsgDialog(this.getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON], null, ZaId.CTR_GLOBAL + "_confirm3btn");
 	}
 	return this._confirmMsgDialog;
 }
  
 ZaAppCtxt.prototype.getConfirmMsgDialog2 = function (refresh) {
 	if(!this._confirmMessageDialog2 || refresh) {
-		this._confirmMessageDialog2 = new ZaMsgDialog(this.getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);
+		this._confirmMessageDialog2 = new ZaMsgDialog(this.getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], null, ZaId.CTR_GLOBAL + "_confirm2btn");
 	}
 	return this._confirmMessageDialog2;
 }

@@ -399,7 +399,7 @@ ZaServerXFormView.prototype.doAddVolume = function(obj) {
 ZaServerXFormView.addVolume  = function () {
 	if(this.parent.addVolumeDlg) {
 		var obj = this.parent.addVolumeDlg.getObject();
-		ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);
+		ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], null, ZaId.VIEW_STATUS + "_confirmMessage");
 		ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(AjxMessageFormat.format(ZaMsg.Q_CREATE_VOLUME,[obj[ZaServer.A_VolumeRootPath]]),DwtMessageDialog.INFO_STYLE );
 		ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, ZaServerXFormView.prototype.doAddVolume, this.parent, [obj]);
 		ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();		
@@ -519,7 +519,7 @@ ZaServerXFormView.deleteButtonListener = function () {
 	}
 	var selArr = this.getInstanceValue(ZaServer.A2_volume_selection_cache);
 	
-	ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);
+	ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], null, ZaId.VIEW_STATUS + "_confirmMessage");
 	ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_DELETE_VOLUMES,  DwtMessageDialog.WARNING_STYLE);
 	ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, ZaServerXFormView.doDeleteVolume, this, [selArr,[]]);
 	ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();		
