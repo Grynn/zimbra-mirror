@@ -42,6 +42,9 @@ class GlobalConfig(config.Config):
 		self.config = dict([(e.getKey(), e.getValue()) for e in sorted(c.output, key=lambda x: x.getKey())])
 
 		if self["zimbraSSLExcludeCipherSuites"] is not None:
+			v = self["zimbraSSLExcludeCipherSuites"]
+			v = str(v)
+			self["zimbraSSLExcludeCipherSuites"] = ' '.join(sorted(v.split(), key=str.lower))
 			self["zimbraSSLExcludeCipherSuitesXML"] = '\n'.join([''.join(('<Item>',val,'</Item>')) for val in self["zimbraSSLExcludeCipherSuites"].split()])
 
 		if self["zimbraMtaRestriction"] is not None:
