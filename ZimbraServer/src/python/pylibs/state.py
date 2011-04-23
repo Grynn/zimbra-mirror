@@ -45,7 +45,7 @@ class State:
 		"imapproxy" : 50,
 		"antispam"  : 60,
 		"antivirus" : 70,
-    	"cbpolicyd" : 72,
+		"cbpolicyd" : 72,
 		"amavis"    : 75,
 		"archiving" : 80,
 		"snmp"      : 90,
