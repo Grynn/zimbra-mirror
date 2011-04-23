@@ -12,7 +12,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 public class DocumentBriefcaseNew extends AbsForm {
 
 	public static class Locators {
-		public static final String zFrame = "css=iframe[id*='DWT']";
+		public static final String zFrame = "css=iframe[class=ZDEditor]";
 		public static final String zSaveAndCloseIconBtn = "//*[@id='DWT9_left_icon']";
 		public static final String zBodyField = "css=body";
 		public static final String zNameField = "css=[id^=DWT4]>input";
@@ -69,46 +69,51 @@ public class DocumentBriefcaseNew extends AbsForm {
 
 	public void zFillField(Field field, String value) throws HarnessException {
 
-		String locator = null;
-
 		if (field == Field.Name) {
 
-			locator = Locators.zNameField;
+			String nameFieldLocator = Locators.zNameField;
 
-			zSelectWindow("Zimbra Docs");
+			zSelectWindow(pageTitle);
 
-			// FALL THROUGH
+			// Make sure the locator exists
+			if (!this.sIsElementPresent(nameFieldLocator))
+				throw new HarnessException("Locator is not present: "
+						+ nameFieldLocator);
+
+			this.sMouseOver(nameFieldLocator);
+			this.sFocus(nameFieldLocator);
+			this.zClick(nameFieldLocator);
+			this.sType(nameFieldLocator, value);
+			logger.info("typed: " + value);
 
 		} else if (field == Field.Body) {
 
-			locator = Locators.zBodyField;
+			String iframeLocator = Locators.zFrame;
 
-			sSelectFrame(Locators.zFrame);
+			// Make sure the locator exists
+			if (!this.sIsElementPresent(iframeLocator))
+				throw new HarnessException("Locator is not present: "
+						+ iframeLocator);
 
-			// FALL THROUGH
+			this.sMouseOver(iframeLocator);
+			this.sFocus(iframeLocator);
+			this.zClick(iframeLocator);
 
+			this
+					.sGetEval("var bodytext=\""
+							+ value
+							+ "\";"
+							+ "var iframe_locator=\""
+							+ "css=iframe[class=ZDEditor][id=DWT11]"
+							+ "\";"
+							+ "var iframe_body=selenium.browserbot.findElement(iframe_locator).contentWindow.document.body;"
+							+ "if (browserVersion.isFirefox || browserVersion.isChrome){iframe_body.textContent=bodytext;}"
+							+ "else if(browserVersion.isIE){iframe_body.innerText=bodytext;}"
+							+ "else {iframe_body.innerText=bodytext;}");
 		} else {
-			throw new HarnessException("not implemented for field " + field);
+			throw new HarnessException("Not implemented field: " + field);
 		}
 
-		if (locator == null) {
-			throw new HarnessException("locator was null for field " + field);
-		}
-
-		// Default behavior, enter value into locator field
-
-		// Make sure the button exists
-		if (!this.sIsElementPresent(locator))
-			throw new HarnessException("Field is not present field=" + field
-					+ " locator=" + locator);
-
-		// Enter text
-		this.sFocus(locator);
-		this.sMouseOver(locator);
-		this.zClick(locator);
-		this.sType(locator, value);
-		logger.info("typed: " + value);
-		
 		this.zWaitForBusyOverlay();
 	}
 
@@ -156,9 +161,9 @@ public class DocumentBriefcaseNew extends AbsForm {
 		zSelectWindow(pageTitle);
 
 		zWaitForElementPresent("css=div[class='ZDToolBar ZWidget']");
-		
+
 		zWaitForElementPresent("css=table[class='ZToolbarTable']");
-		
+
 		zWaitForElementPresent("css=iframe[id*='DWT'][class='ZDEditor']");
 
 		zWaitForIframeText("css=iframe[id*='DWT'][class='ZDEditor']", "");

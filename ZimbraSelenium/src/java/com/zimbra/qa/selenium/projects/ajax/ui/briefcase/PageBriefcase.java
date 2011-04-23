@@ -49,7 +49,7 @@ public class PageBriefcase extends AbsTab {
 		public static final Locators zNewMenuLeftIconBtn = new Locators(
 				"id=zb__BDLV__NEW_MENU_left_icon");
 		public static final Locators zNewMenuArrowBtn = new Locators(
-				"css=div[id=zb__BDLV__NEW_MENU] div[class^=ImgSelectPullDownArrow]");
+				"css=td[id=zb__BDLV__NEW_MENU_dropdown] div[class^=ImgSelectPullDownArrow]");
 		public static final Locators zUploadFileIconBtn = new Locators(
 				"id=zb__BDLV__NEW_FILE_left_icon");
 		public static final Locators zEditFileIconBtn = new Locators(
@@ -271,7 +271,8 @@ public class PageBriefcase extends AbsTab {
 			if (attrs.contains("ZDisabledImage")) {
 				throw new HarnessException(button + " is disabled " + attrs);
 			}
-			page = new DialogConfirm(DialogConfirm.Confirmation.DELETE, MyApplication, this);
+			page = new DialogConfirm(DialogConfirm.Confirmation.DELETE,
+					MyApplication, this);
 		} else if (button == Button.B_OPEN_IN_SEPARATE_WINDOW) {
 			// Check if the button is disabled
 			locator = Locators.zOpenFileInSeparateWindowIconBtn.locator;
@@ -357,7 +358,7 @@ public class PageBriefcase extends AbsTab {
 				throw new HarnessException("implement me!");
 			} else if (option == Button.O_NEW_DOCUMENT) {
 				pulldownLocator = Locators.zNewMenuArrowBtn.locator;
-			
+
 				optionLocator = "css=tr[id=POPUP_NEW_DOC]>td[id$='_title']:contains('Document')";
 
 				page = new DocumentBriefcaseNew(this.MyApplication);
@@ -419,8 +420,7 @@ public class PageBriefcase extends AbsTab {
 
 				optionLocator = "css=td[id$='_title']:contains('Send link')";
 
-				page = new DialogConfirm(
-						DialogConfirm.Confirmation.SENDLINK,
+				page = new DialogConfirm(DialogConfirm.Confirmation.SENDLINK,
 						this.MyApplication, this);
 
 				// FALL THROUGH
@@ -444,10 +444,11 @@ public class PageBriefcase extends AbsTab {
 						+ " not present!");
 			}
 
-			// If the app is busy, wait for it to become active
-			zWaitForBusyOverlay();
-
-			this.zClick(pulldownLocator);
+			this.zRightClick(pulldownLocator);
+			ClientSessionFactory.session().selenium().mouseDownRight(
+					pulldownLocator);
+			ClientSessionFactory.session().selenium().mouseUpRight(
+					pulldownLocator);
 
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
@@ -582,8 +583,8 @@ public class PageBriefcase extends AbsTab {
 		String listLocator = Locators.briefcaseListView.locator;
 		String itemLocator = listLocator
 				+ " div[id^='zli__BDLV__'][class^='Row']";
-		String itemNameLocator = itemLocator
-				+ " td[width*='auto'] div:contains(" + itemName + ")";
+		String itemNameLocator = itemLocator + " div:contains(" + itemName
+				+ ")";
 
 		/*
 		 * listLocator = "div[id='zl__BDLV__rows'][class='DwtListView-Rows']";
@@ -608,15 +609,11 @@ public class PageBriefcase extends AbsTab {
 		 * HarnessException("Unable to locate item with name("+ name +")"); }
 		 */
 
-		if (!this.sIsElementPresent(listLocator))
+		if (!this.sIsElementPresent(itemLocator))
 			throw new HarnessException("List View Rows is not present "
 					+ listLocator);
 
-		if (!GeneralUtility.waitForElementPresent(this, itemNameLocator))
-			throw new HarnessException("Unable to locate item with name("
-					+ itemName + ")");
 		if (action == Action.A_LEFTCLICK) {
-
 			zWaitForElementPresent(itemNameLocator);
 
 			// Left-Click on the item
@@ -754,7 +751,8 @@ public class PageBriefcase extends AbsTab {
 
 				optionLocator = "css=td#zmi__Briefcase__DELETE_title:contains(Delete)";
 
-				page = new DialogConfirm(DialogConfirm.Confirmation.DELETE, MyApplication, this);
+				page = new DialogConfirm(DialogConfirm.Confirmation.DELETE,
+						MyApplication, this);
 
 			} else {
 				throw new HarnessException("implement action: " + action
@@ -803,13 +801,15 @@ public class PageBriefcase extends AbsTab {
 		} else if (shortcut == Shortcut.S_DELETE) {
 
 			// "Delete Document" shortcut leads to Confirmation Dialog opening
-			page = new DialogConfirm(DialogConfirm.Confirmation.DELETE, MyApplication, this);
+			page = new DialogConfirm(DialogConfirm.Confirmation.DELETE,
+					MyApplication, this);
 
 			keyCode = "46";
 		} else if (shortcut == Shortcut.S_BACKSPACE) {
 
 			// "Delete Document" shortcut leads to Confirmation Dialog opening
-			page =  new DialogConfirm(DialogConfirm.Confirmation.DELETE,MyApplication, this);
+			page = new DialogConfirm(DialogConfirm.Confirmation.DELETE,
+					MyApplication, this);
 
 			keyCode = "8";
 		} else if (shortcut == Shortcut.S_NEWTAG) {
@@ -836,6 +836,7 @@ public class PageBriefcase extends AbsTab {
 			 * if(typeof(e.initKeyboardEvent)!='undefined'){e.initEvent()}
 			 * else{e.initKeyEvent()}
 			 */
+
 			sGetEval("if(window.KeyEvent)"
 					+ "{var evObj = document.createEvent('KeyEvents');"
 					+ "evObj.initKeyEvent( 'keydown', true, true, window, false, false, false, false,"
@@ -928,7 +929,8 @@ public class PageBriefcase extends AbsTab {
 		return true;
 	}
 
-	public String getItemNameFromListView(String itemName) throws HarnessException {
+	public String getItemNameFromListView(String itemName)
+			throws HarnessException {
 		String itemLocator = Locators.briefcaseListView.locator
 				+ " td[width*='auto'] div:contains(" + itemName + ")";
 
@@ -970,11 +972,11 @@ public class PageBriefcase extends AbsTab {
 	public EnumMap<Response.ResponsePart, String> displayFile(String filename,
 			Map<String, String> params) throws HarnessException {
 		ZimbraAccount account = MyApplication.zGetActiveAccount();
-		
+
 		RestUtil util = new RestUtil();
-	
+
 		util.setAuthentication(account);
-		
+
 		util.setPath("/home/~/Briefcase/" + filename);
 
 		for (Map.Entry<String, String> query : params.entrySet()) {
@@ -987,7 +989,7 @@ public class PageBriefcase extends AbsTab {
 
 		final String responseHeaders = util.getLastResponseHeaders();
 		final String responseBody = util.getLastResponseBody();
-	
+
 		return new EnumMap<Response.ResponsePart, String>(
 				Response.ResponsePart.class) {
 			private static final long serialVersionUID = 1L;

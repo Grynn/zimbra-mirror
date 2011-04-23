@@ -1,6 +1,8 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -481,5 +483,24 @@ public class EditDocument extends AjaxCommonTest {
 		 * "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] div:contains('name')"
 		 * );
 		 */
+	}
+	
+	@AfterMethod(groups = { "always" })
+	public void afterMethod() throws HarnessException {
+		logger.info("Checking for the opened window ...");
+
+		// Check if the window is still open
+		String[] windows = ClientSessionFactory.session().selenium()
+				.getAllWindowNames();
+		for (String window : windows) {
+			if (!window.isEmpty() && !window.contains("null") && !window.contains(PageBriefcase.pageTitle)
+					&& !window.contains("main_app_window")
+					&& !window.contains("undefined")) {
+				logger.warn(window + " window was still active. Closing ...");
+				app.zPageBriefcase.zSelectWindow(window);
+				app.zPageBriefcase.closeWindow();
+			}
+		}
+		app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
 	}
 }
