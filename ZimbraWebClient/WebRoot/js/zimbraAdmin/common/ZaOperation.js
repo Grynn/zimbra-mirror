@@ -85,6 +85,10 @@ ZaOperation.CHNG_PWD = ++ZA_OP_INDEX;
 ZaOperation.CLOSE = ++ZA_OP_INDEX;
 ZaOperation.SAVE = ++ZA_OP_INDEX;
 ZaOperation.NEW_WIZARD = ++ZA_OP_INDEX;
+ZaOperation.NEW_ALIAS = ++ZA_OP_INDEX;
+ZaOperation.NEW_DL = ++ZA_OP_INDEX;
+ZaOperation.NEW_RESOURCE = ++ZA_OP_INDEX;
+ZaOperation.NEW_ADMIN = ++ZA_OP_INDEX;
 ZaOperation.PAGE_FORWARD = ++ZA_OP_INDEX;
 ZaOperation.PAGE_BACK = ++ZA_OP_INDEX;
 ZaOperation.DUPLICATE = ++ZA_OP_INDEX;
@@ -146,7 +150,11 @@ var ZaOpList = [
 	"CHNG_PWD",
 	"CLOSE",
 	"SAVE",
-	"NEW_WIZARD",
+	"NEW_ACCT",
+	"NEW_ALIAS",
+	"NEW_DL",
+	"NEW_RESOURCE",
+	"NEW_ADMIN",
 	"PAGE_FORWARD",
 	"PAGE_BACK",
 	"DUPLICATE",
