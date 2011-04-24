@@ -443,6 +443,8 @@ public class PageBriefcase extends AbsTab {
 						+ " not present!");
 			}
 
+			this.sMouseOver(pulldownLocator);
+			this.sFocus(pulldownLocator);
 			this.zRightClick(pulldownLocator);
 			ClientSessionFactory.session().selenium().mouseDownRight(
 					pulldownLocator);
