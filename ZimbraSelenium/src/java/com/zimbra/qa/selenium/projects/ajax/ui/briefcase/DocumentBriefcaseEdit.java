@@ -6,6 +6,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsForm;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseNew.Field;
 
 public class DocumentBriefcaseEdit extends AbsForm {
 
@@ -63,6 +64,54 @@ public class DocumentBriefcaseEdit extends AbsForm {
 	public void zFill(IItem item) throws HarnessException {
 	}
 
+	public void zFillField(Field field, String value) throws HarnessException {
+
+		if (field == Field.Name) {
+
+			String nameFieldLocator = Locators.zNameField;
+
+			// Make sure the locator exists
+			if (!this.sIsElementPresent(nameFieldLocator))
+				throw new HarnessException("Locator is not present: "
+						+ nameFieldLocator);
+
+			this.sMouseOver(nameFieldLocator);
+			this.sFocus(nameFieldLocator);
+			this.zClick(nameFieldLocator);
+			this.sType(nameFieldLocator, value);
+			logger.info("typed: " + value);
+
+		} else if (field == Field.Body) {
+
+			String iframeLocator = Locators.zFrame;
+
+			// Make sure the locator exists
+			if (!this.sIsElementPresent(iframeLocator))
+				throw new HarnessException("Locator is not present: "
+						+ iframeLocator);
+
+			this.sMouseOver(iframeLocator);
+			this.sFocus(iframeLocator);
+			this.zClick(iframeLocator);
+			
+			this
+					.sGetEval("var bodytext=\""
+							+ value
+							+ "\";"
+							+ "var iframe_locator=\""
+							+ iframeLocator
+							+ "\";"
+							+ "var iframe_body=selenium.browserbot.findElement(iframe_locator).contentWindow.document.body;"
+							+ "if (browserVersion.isFirefox || browserVersion.isChrome){iframe_body.textContent=bodytext;}"
+							+ "else if(browserVersion.isIE){iframe_body.innerText=bodytext;}"
+							+ "else {iframe_body.innerText=bodytext;}");
+		} else {
+			throw new HarnessException("Not implemented field: " + field);
+		}
+
+		this.zWaitForBusyOverlay();
+	}
+	
 	@Override
 	public void zSubmit() throws HarnessException {
 		zSelectWindow(docItem.getName());

@@ -110,6 +110,9 @@ public class CreateDocument extends AjaxCommonTest {
 	public void CreateDocument_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
+		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
 		// Create document item
 		DocumentItem document = new DocumentItem();
 
@@ -138,6 +141,9 @@ public class CreateDocument extends AjaxCommonTest {
 		}
 
 		app.zPageBriefcase.zWaitForWindowClosed(DocumentBriefcaseNew.pageTitle);
+		
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Display file through RestUtil
 		EnumMap<PageBriefcase.Response.ResponsePart, String> response = app.zPageBriefcase
@@ -176,6 +182,9 @@ public class CreateDocument extends AjaxCommonTest {
 	public void CreateDocument_03() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
+		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
 		// Create document item
 		DocumentItem document = new DocumentItem();
 
@@ -208,6 +217,9 @@ public class CreateDocument extends AjaxCommonTest {
 
 		app.zPageBriefcase.zWaitForWindowClosed(DocumentBriefcaseNew.pageTitle);
 
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
+		
 		// Display file through RestUtil
 		EnumMap<PageBriefcase.Response.ResponsePart, String> response = app.zPageBriefcase
 				.displayFile(docName, new HashMap<String, String>() {

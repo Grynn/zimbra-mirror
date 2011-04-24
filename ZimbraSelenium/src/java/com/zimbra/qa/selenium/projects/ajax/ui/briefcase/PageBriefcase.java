@@ -381,8 +381,7 @@ public class PageBriefcase extends AbsTab {
 		} else if (pulldown == Button.B_TAG) {
 			if (option == Button.O_TAG_NEWTAG) {
 
-				pulldownLocator = "css=td[id$='__TAG_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
-
+				pulldownLocator = "css=td[id=zb__BDLV__TAG_MENU_dropdown]>div[class='ImgSelectPullDownArrow']";
 				optionLocator = "css=td[id$='__TAG_MENU|MENU|NEWTAG_title']";
 
 				page = new DialogTag(this.MyApplication, this);
@@ -449,7 +448,7 @@ public class PageBriefcase extends AbsTab {
 					pulldownLocator);
 			ClientSessionFactory.session().selenium().mouseUpRight(
 					pulldownLocator);
-
+									
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
 
@@ -712,7 +711,7 @@ public class PageBriefcase extends AbsTab {
 			throw new HarnessException("List View Rows is not present "
 					+ listLocator);
 
-		itemlocator = listLocator + " td[width*='auto'] div:contains("
+		itemlocator = listLocator + " div:contains("
 				+ subject + ")";
 
 		if (action == Action.A_RIGHTCLICK) {
@@ -836,17 +835,24 @@ public class PageBriefcase extends AbsTab {
 			 * if(typeof(e.initKeyboardEvent)!='undefined'){e.initEvent()}
 			 * else{e.initKeyEvent()}
 			 */
-
-			sGetEval("if(window.KeyEvent)"
-					+ "{var evObj = document.createEvent('KeyEvents');"
+							
+			sGetEval("if(document.createEventObject){var body_locator=\"css=html>body\"; "
+					+ "var body=selenium.browserbot.findElement(body_locator);"
+					+ "var evObj = body.document.createEventObject();"
+					+ "evObj.keyCode="
+					+ kc
+					+ ";evObj.repeat = false;"
+					+ "body.focus(); body.fireEvent(\"onkeydown\",evObj);}"
+					+ "else{if(window.KeyEvent){var evObj = document.createEvent('KeyEvents');"
 					+ "evObj.initKeyEvent( 'keydown', true, true, window, false, false, false, false,"
-					+ kc + ", 0 );} "
-					+ "else {var evObj = document.createEvent('HTMLEvents');"
+					+ kc
+					+ ", 0 );}else {var evObj = document.createEvent('HTMLEvents');"
 					+ "evObj.initEvent( 'keydown', true, true, window, 1 );"
-					+ "evObj.keyCode = " + kc + ";}"
-					+ "var x = selenium.browserbot.findElementOrNull('"
-					+ "css=html>body" + "'); "
-					+ "x.focus(); x.dispatchEvent(evObj);");
+					+ "evObj.keyCode = "
+					+ kc
+					+ ";}var x = selenium.browserbot.findElementOrNull('"
+					+ "css=html>body"
+					+ "');x.focus(); x.dispatchEvent(evObj);}");
 		}
 
 		// If the app is busy, wait for it to become active
@@ -901,7 +907,7 @@ public class PageBriefcase extends AbsTab {
 
 	public boolean isPresentInListView(String itemName) throws HarnessException {
 		String itemLocator = Locators.briefcaseListView.locator
-				+ " td[width*='auto'] div:contains(" + itemName + ")";
+				+ " div:contains(" + itemName + ")";
 
 		return sIsElementPresent(itemLocator);
 	}
@@ -909,7 +915,7 @@ public class PageBriefcase extends AbsTab {
 	public boolean waitForPresentInListView(String itemName)
 			throws HarnessException {
 		String itemLocator = Locators.briefcaseListView.locator
-				+ " td[width*='auto'] div:contains(" + itemName + ")";
+				+ " div:contains(" + itemName + ")";
 
 		zWaitForElementPresent(itemLocator);
 		return true;
@@ -923,7 +929,7 @@ public class PageBriefcase extends AbsTab {
 	public boolean waitForDeletedFromListView(String itemName)
 			throws HarnessException {
 		String itemLocator = Locators.briefcaseListView.locator
-				+ " td[width*='auto'] div:contains(" + itemName + ")";
+				+ " div:contains(" + itemName + ")";
 
 		zWaitForElementDeleted(itemLocator);
 		return true;
@@ -932,7 +938,7 @@ public class PageBriefcase extends AbsTab {
 	public String getItemNameFromListView(String itemName)
 			throws HarnessException {
 		String itemLocator = Locators.briefcaseListView.locator
-				+ " td[width*='auto'] div:contains(" + itemName + ")";
+				+ " div:contains(" + itemName + ")";
 
 		return sGetText(itemLocator);
 	}

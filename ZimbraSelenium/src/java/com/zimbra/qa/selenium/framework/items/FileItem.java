@@ -22,7 +22,7 @@ public class FileItem implements IItem {
 	public FileItem(String path) {		
 		filePath = path;
 		String[] arr = filePath.split("/");
-		fileName = arr[arr.length - 1];
+		fileName = arr[arr.length - 1].trim();
 	}
 	
 	/**

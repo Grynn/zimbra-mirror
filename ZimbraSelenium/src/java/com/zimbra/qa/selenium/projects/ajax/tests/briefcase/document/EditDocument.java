@@ -16,6 +16,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseEdit;
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseOpen;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase;
 
@@ -157,11 +158,11 @@ public class EditDocument extends AjaxCommonTest {
 		try {
 			app.zPageBriefcase.zSelectWindow(docItem1.getName());
 
-			// Type new document text
-			documentBriefcaseEdit.typeDocumentText(docItem2.getDocText());
-
-			// Type new document name
-			documentBriefcaseEdit.typeDocumentName(docItem2.getName());
+			// Fill out the document with the data
+			documentBriefcaseEdit.zFillField(DocumentBriefcaseNew.Field.Name,
+					docItem2.getName());
+			documentBriefcaseEdit.zFillField(DocumentBriefcaseNew.Field.Body,
+					docItem2.getDocText());
 
 			// Save and close
 			documentBriefcaseEdit.zSubmit();

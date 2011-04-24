@@ -104,7 +104,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 							+ value
 							+ "\";"
 							+ "var iframe_locator=\""
-							+ "css=iframe[class=ZDEditor][id=DWT11]"
+							+ iframeLocator
 							+ "\";"
 							+ "var iframe_body=selenium.browserbot.findElement(iframe_locator).contentWindow.document.body;"
 							+ "if (browserVersion.isFirefox || browserVersion.isChrome){iframe_body.textContent=bodytext;}"

@@ -101,6 +101,6 @@ public class UploadFile extends AjaxCommonTest {
 
 		// Verify document is created
 		String name = app.zPageBriefcase.getItemNameFromListView(fileName);
-		ZAssert.assertEquals(name, fileName, "Verify file name through GUI");
+		ZAssert.assertStringContains(name, fileName, "Verify file name through GUI");
 	}
 }

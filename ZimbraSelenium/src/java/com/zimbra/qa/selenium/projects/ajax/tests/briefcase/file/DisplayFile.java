@@ -49,7 +49,7 @@ public class DisplayFile extends AjaxCommonTest {
 
 		// Verify document is created
 		String name = app.zPageBriefcase.getItemNameFromListView(fileName);
-		ZAssert.assertEquals(name, fileName, "Verify file name through GUI");
+		ZAssert.assertStringContains(name, fileName, "Verify file name through GUI");
 
 		// boolean present = app.zPageBriefcase.isPresent(docName);
 		// ZAssert.assertTrue(present, "Verify document name through GUI");
