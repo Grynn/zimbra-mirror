@@ -136,7 +136,7 @@ public class PageManageDistributionLists extends AbsTab {
 
 			 
 			// Create the page
-			page = new PageNewDistributionList(MyApplication);
+			page = new FormDistributionListsNew(MyApplication);
 
 			// FALL THROUGH
 
@@ -154,7 +154,7 @@ public class PageManageDistributionLists extends AbsTab {
 
 		// If page was specified, make sure it is active
 		if ( page != null ) {
-			//page.zWaitForActive();
+			page.zWaitForActive();
 		}
 
 		return (page);

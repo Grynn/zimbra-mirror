@@ -9,7 +9,7 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
 import com.zimbra.qa.selenium.projects.admin.core.AdminCommonTest;
 import com.zimbra.qa.selenium.projects.admin.items.DistributionListItem;
-import com.zimbra.qa.selenium.projects.admin.ui.PageNewDistributionList;
+import com.zimbra.qa.selenium.projects.admin.ui.FormDistributionListsNew;
 
 public class CreateDistributionList extends AdminCommonTest {
 	public CreateDistributionList() {
@@ -33,13 +33,11 @@ public class CreateDistributionList extends AdminCommonTest {
 		// Create a new dl in the Admin Console
 		DistributionListItem dl = new DistributionListItem();
 
-
-
 		// Click "New"
-		PageNewDistributionList page = (PageNewDistributionList)app.zPageManageDistributionList.zToolbarPressButton(Button.B_NEW);
+		FormDistributionListsNew form =(FormDistributionListsNew) app.zPageManageDistributionList.zToolbarPressButton(Button.B_NEW);
 	
-		// Fill out the necessary input fields
-		page.zEnterDetails(dl);
+		// Fill out the necessary input fields and submit
+		form.zComplete(dl);
 		
 		// Verify the dl exists in the ZCS
 		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(

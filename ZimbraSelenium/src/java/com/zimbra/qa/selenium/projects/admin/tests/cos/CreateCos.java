@@ -9,7 +9,7 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
 import com.zimbra.qa.selenium.projects.admin.core.AdminCommonTest;
 import com.zimbra.qa.selenium.projects.admin.items.CosItem;
-import com.zimbra.qa.selenium.projects.admin.ui.PageNewCos;
+import com.zimbra.qa.selenium.projects.admin.ui.FormCosNew;
 
 
 public class CreateCos extends AdminCommonTest {
@@ -36,11 +36,11 @@ public class CreateCos extends AdminCommonTest {
 		CosItem cos = new CosItem();
 
 		// Click "New"
-		PageNewCos page = (PageNewCos)app.zPageManageCOS.zToolbarPressButton(Button.B_NEW);
-		
+		FormCosNew cosForm = (FormCosNew) app.zPageManageCOS.zToolbarPressButton(Button.B_NEW);
 	
-		// Fill out the necessary input fields
-		page.zEnterDetails(cos);
+	
+		// Fill out the necessary input fields and submit
+		cosForm.zComplete(cos);
 		
 		// Verify the cos exists in the ZCS
 		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
