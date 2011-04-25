@@ -23,7 +23,7 @@ public class DragAndDropFolder extends AjaxCommonTest{
 	}
 
 	@Test(	description = "Drag one folder and Drop into other",
-			groups = { "smokey" })
+			groups = { "smoke" })
 			public void DragDropFolder_01() throws HarnessException {
 
 		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
