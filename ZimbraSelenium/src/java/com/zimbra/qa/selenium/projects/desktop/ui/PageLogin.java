@@ -11,12 +11,15 @@ public class PageLogin extends AbsTab {
 
 		// Buttons
 		public static final String zBtnLogin = "xpath=//input[@class='zLoginButton']";
-	    // Desktop-specific
+
+      // Desktop-specific
       public static final String zAddNewAccountButton = "css=td div[class*='ZPanel'][onclick*='OnAdd()']";
       public static final String zMyAccountsTab = "css=div[class$='ctive ZPanelFirstTab']";
       public static final String zBtnLoginDesktop = "css=div[id*='loginButton']";
       public static final String zDeleteButton = "css=div[class*='ZPanelInfoInner'] a[href*='OnDelete']";
-		
+		public static final String zAccountLabel = "css=div[class='ZAccountName']";
+		public static final String zEmailLabel = "css=div[class='ZAccountEmail']";
+
 		// Text Input
 		public static final String zInputUsername = "xpath=//*[@id='username']";
 		public static final String zInputPassword = "xpath=//*[@id='password']";
@@ -182,9 +185,6 @@ public class PageLogin extends AbsTab {
 		}
 		sType(locator, password);
 	}
-	
-
-	
 
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {

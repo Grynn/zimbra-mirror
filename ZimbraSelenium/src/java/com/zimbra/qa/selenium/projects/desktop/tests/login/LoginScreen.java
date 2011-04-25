@@ -7,10 +7,10 @@ import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.PageLogin;
-
 
 
 public class LoginScreen extends AjaxCommonTest {
@@ -24,18 +24,52 @@ public class LoginScreen extends AjaxCommonTest {
 
 	}
 
-	@Test(	description = "Verify the label text on the mobile client login screen",
+	@Test(	description = "Verify the label text on the Desktop client login screen with the account set",
 			groups = { "smoke" })
-	public void LoginScreen01() throws HarnessException {
-		
-		String username = app.zPageLogin.sGetText(PageLogin.Locators.zDisplayedusername);
-		ZAssert.assertEquals(username, app.zGetLocaleString("usernameLabel"), "Verify the displayed label 'username'");
-		
-		// TODO: add other displayed text
+	public void ZD_LoginScreen01() throws HarnessException {
+	   String accountName = app.zPageLogin.sGetText(PageLogin.Locators.zAccountLabel);
+	   String emailAddress = app.zPageLogin.sGetText(PageLogin.Locators.zEmailLabel);
+
+	   ZAssert.assertEquals(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zBtnLoginDesktop),
+	         true, "Desktop login button is present.");
+	   ZAssert.assertEquals(app.zPageLogin.sIsVisible(PageLogin.Locators.zBtnLoginDesktop),
+            true, "Desktop login button is visible.");
+
+	   ZAssert.assertEquals(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zAddNewAccountButton),
+            true, "Desktop Add Account Tab is present.");
+      ZAssert.assertEquals(app.zPageLogin.sIsVisible(PageLogin.Locators.zAddNewAccountButton),
+            true, "Desktop Add Account Tab is visible.");
+
+		ZAssert.assertEquals(accountName, defaultAccountName,
+		      "Verify the displayed label 'Account Name'");
+      ZAssert.assertEquals(emailAddress, ZimbraAccount.AccountZWC().EmailAddress,
+            "Verify the displayed label 'Email Address'");
 
 	}
-	
-	
+
+   @Test(   description = "Verify the label text on the Desktop client login screen without the account set",
+         groups = { "smoke" })
+   public void ZD_LoginScreen02() throws HarnessException {
+      String attribute = app.zPageLogin.sGetAttribute(PageLogin.Locators.zDeleteButton +
+            "@href");
+      deleteDesktopAccount(attribute.split("'")[3], attribute.split("'")[1],
+            "Zimbra", accountFlavor);
+
+      ZAssert.assertEquals(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zBtnLoginDesktop),
+            false, "Desktop login button is present.");
+
+      ZAssert.assertEquals(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zAddNewAccountButton),
+            true, "Desktop Add Account Tab is present.");
+      ZAssert.assertEquals(app.zPageLogin.sIsVisible(PageLogin.Locators.zAddNewAccountButton),
+            true, "Desktop Add Account Tab is visible.");
+
+      ZAssert.assertEquals(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zAccountLabel), false,
+            "Verify the displayed label 'Account Name' is present");
+      ZAssert.assertEquals(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zEmailLabel), false,
+            "Verify the displayed label 'Email Address' is present");
+
+   }
+
 	@Test(	description = "Verify the copyright on the login screen contains the current year",
 			groups = { "functional" })
 	public void LoginScreen02() throws HarnessException {

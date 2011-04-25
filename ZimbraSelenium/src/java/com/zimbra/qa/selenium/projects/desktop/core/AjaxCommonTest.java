@@ -82,7 +82,7 @@ public class AjaxCommonTest {
    private String _downloadFilePath = null;
    private String[] _executableFilePath = null;
    private String [] _params = null;
-   private final static String _accountFlavor = "Zimbra";
+   public final static String accountFlavor = "Zimbra";
    public final static String defaultAccountName = ZimbraSeleniumProperties.getUniqueString();
 
    // This variable is to track desktop current account, if new account is created
@@ -334,7 +334,7 @@ public class AjaxCommonTest {
                                             .append(connectionPort).append("/")
                                             .append("zimbra/desktop/accsetup.jsp?at=")
                                             .append(zdp.getSerialNumber()).append("&accountId=&verb=add&accountFlavor=")
-                                            .append(_accountFlavor).append("&accountName=")
+                                            .append(accountFlavor).append("&accountName=")
                                             .append(defaultAccountName).append("&email=")
                                             .append(ZimbraAccount.AccountZWC().EmailAddress).append("&password=")
                                             .append(ZimbraAccount.AccountZWC().Password).append("&host=") 
@@ -447,7 +447,7 @@ public class AjaxCommonTest {
                      String attribute = app.zPageLogin.sGetAttribute(deleteButtonLocator + "@href");
                      String accountId = attribute.split("'")[1];
                      String accountName = attribute.split("'")[3];
-                     deleteDesktopAccount(accountName, accountId, "Zimbra", _accountFlavor);
+                     deleteDesktopAccount(accountName, accountId, "Zimbra", accountFlavor);
 
                      String nthChildString = "nth-child(3)";
                      if (deleteButtonLocator.contains(nthChildString)) {
