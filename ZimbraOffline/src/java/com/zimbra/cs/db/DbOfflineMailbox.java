@@ -710,7 +710,6 @@ public class DbOfflineMailbox {
     }
 
     public static void forceDeleteMailbox(DbConnection conn, int id) throws ServiceException {
-        assert(Db.supports(Db.Capability.ROW_LEVEL_LOCKING) || Thread.holdsLock(MailboxManager.getInstance()));
         PreparedStatement stmt = null;
         try {
             // remove entry from mailbox table
@@ -727,8 +726,6 @@ public class DbOfflineMailbox {
     }
 
     public static void forceUidUpperCase(Mailbox mbox, String uid) throws ServiceException {
-        assert(Db.supports(Db.Capability.ROW_LEVEL_LOCKING) || Thread.holdsLock(mbox));
-
         DbConnection conn = mbox.getOperationConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
