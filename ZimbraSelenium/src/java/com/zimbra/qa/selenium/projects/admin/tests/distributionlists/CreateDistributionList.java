@@ -9,12 +9,11 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
 import com.zimbra.qa.selenium.projects.admin.core.AdminCommonTest;
 import com.zimbra.qa.selenium.projects.admin.items.DistributionListItem;
-import com.zimbra.qa.selenium.projects.admin.tests.accounts.CreateAccount;
 import com.zimbra.qa.selenium.projects.admin.ui.PageNewDistributionList;
 
 public class CreateDistributionList extends AdminCommonTest {
 	public CreateDistributionList() {
-		logger.info("New "+ CreateAccount.class.getCanonicalName());
+		logger.info("New "+ CreateDistributionList.class.getCanonicalName());
 
 		// All tests start at the "Distribution Lists" page
 		super.startingPage = app.zPageManageDistributionList;

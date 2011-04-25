@@ -14,6 +14,12 @@ import com.zimbra.qa.selenium.projects.admin.items.AliasItem;
 
 public class GetAlias extends AdminCommonTest {
 
+	public GetAlias() {
+		logger.info("New " + GetAlias.class.getCanonicalName());
+		
+		//All test starts at alias page
+		super.startingPage=app.zPageManageAliases;		
+	}
 	/**
 	 * Testcase : Verify created alias is displayed in UI.
 	 * Steps :

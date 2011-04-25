@@ -13,6 +13,13 @@ import com.zimbra.qa.selenium.projects.admin.ui.WizardCreateAlias;
 
 public class CreateAlias extends AdminCommonTest {
 	
+	public CreateAlias() {
+		logger.info("New " + CreateAlias.class.getCanonicalName());
+		
+		// All tests start at the "Alias" page
+		super.startingPage=app.zPageManageAliases;
+	}
+	
 	/**
 	 * Testcase : Create a basic alias.
 	 * 1. Create a alias with GUI.

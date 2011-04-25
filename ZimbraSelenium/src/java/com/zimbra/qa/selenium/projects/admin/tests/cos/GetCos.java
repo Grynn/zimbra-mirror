@@ -13,6 +13,13 @@ import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 import com.zimbra.qa.selenium.projects.admin.items.CosItem;
 
 public class GetCos extends AdminCommonTest {
+	
+	public GetCos() {
+		logger.info("New " + GetCos.class.getCanonicalName());
+		
+		//All tests starts at "Cos" page
+		super.startingPage=app.zPageManageCOS;
+	}
 	/**
 	 * Testcase : Verify created cos is displayed in UI.
 	 * Steps :

@@ -17,7 +17,7 @@ public class CreateCos extends AdminCommonTest {
 	public CreateCos() {
 		logger.info("New "+ CreateCos.class.getCanonicalName());
 
-		// All tests start at the "Accounts" page
+		// All tests start at the "Cos" page
 		super.startingPage = app.zPageManageCOS;
 	}
 	

@@ -13,6 +13,14 @@ import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 import com.zimbra.qa.selenium.projects.admin.items.DistributionListItem;
 
 public class GetDistributionList extends AdminCommonTest {
+
+	public GetDistributionList() {
+		logger.info("New "+ CreateDistributionList.class.getCanonicalName());
+
+		// All tests start at the "Distribution Lists" page
+		super.startingPage = app.zPageManageDistributionList;
+	}
+
 	/**
 	 * Testcase : Verify created dl is displayed in UI.
 	 * Steps :
