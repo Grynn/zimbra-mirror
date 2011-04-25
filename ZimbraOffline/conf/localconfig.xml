@@ -59,10 +59,10 @@
     <value>500</value>
   </key>
   <key name="sqlite_journal_mode">
-    <value>PERSIST</value>
+    <value>WAL</value>
   </key>
   <key name="sqlite_sync_mode">
-    <value>NORMAL</value>
+    <value>FULL</value>
   </key>
   <key name="ssl_allow_mismatched_certs">
     <value>false</value>
