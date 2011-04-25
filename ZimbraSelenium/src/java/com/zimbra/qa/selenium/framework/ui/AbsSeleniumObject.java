@@ -607,14 +607,14 @@ public abstract class AbsSeleniumObject {
 		logger.info("zWaitForWindow(" + name + ")");
 
 		try {
-			sWaitForCondition("{var x; for(var windowName in selenium.browserbot.openedWindows ){"
-					+ "var targetWindow = selenium.browserbot.openedWindows[windowName];"
-					+ "if((!selenium.browserbot._windowClosed(targetWindow))&&"
-					+ "(targetWindow.name == '"
-					+ name
-					+ "' || targetWindow.document.title == '"
-					+ name
-					+ "')){x=windowName;" + "}}}; x!=null;");
+			sWaitForCondition("var x; for(var windowName in selenium.browserbot.openedWindows)"
+					+ "{var targetWindow = selenium.browserbot.openedWindows[windowName];"
+					+ "if(!selenium.browserbot._windowClosed(targetWindow)&&"
+					+ "(targetWindow.name.indexOf('"
+					+ name.split("\\.")[0]
+					+ "')!=-1||targetWindow.document.title.indexOf('"
+					+ name.split("\\.")[0]
+					+ "')!=-1)){x=windowName;}};x!=null;");
 		} catch (Exception ex) {
 			throw new HarnessException(name + " never opened : ", ex);
 		}

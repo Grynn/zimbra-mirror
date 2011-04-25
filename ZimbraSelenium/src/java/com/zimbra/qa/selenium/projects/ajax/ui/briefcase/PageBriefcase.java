@@ -450,7 +450,7 @@ public class PageBriefcase extends AbsTab {
 					pulldownLocator);
 			ClientSessionFactory.session().selenium().mouseUpRight(
 					pulldownLocator);
-									
+
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
 
@@ -713,8 +713,7 @@ public class PageBriefcase extends AbsTab {
 			throw new HarnessException("List View Rows is not present "
 					+ listLocator);
 
-		itemlocator = listLocator + " div:contains("
-				+ subject + ")";
+		itemlocator = listLocator + " div:contains(" + subject + ")";
 
 		if (action == Action.A_RIGHTCLICK) {
 
@@ -837,7 +836,7 @@ public class PageBriefcase extends AbsTab {
 			 * if(typeof(e.initKeyboardEvent)!='undefined'){e.initEvent()}
 			 * else{e.initKeyEvent()}
 			 */
-							
+
 			sGetEval("if(document.createEventObject){var body_locator=\"css=html>body\"; "
 					+ "var body=selenium.browserbot.findElement(body_locator);"
 					+ "var evObj = body.document.createEventObject();"
@@ -877,15 +876,20 @@ public class PageBriefcase extends AbsTab {
 		// hit <Enter> key
 		// sKeyPressNative(Integer.toString(KeyEvent.VK_ENTER));
 
-		sGetEval("if(window.KeyEvent)"
-				+ "{var evObj = document.createEvent('KeyEvents');"
+		sGetEval("if(document.createEventObject){var x=selenium.browserbot.findElementOrNull('"
+				+ Locators.zRenameInput.locator
+				+ "');var evObj = x.document.createEventObject();"
+				+ "evObj.keyCode=13;evObj.repeat = false;"
+				+ "x.focus(); x.fireEvent(\"onkeyup\",evObj);}"
+				+ "else{if(window.KeyEvent){var evObj = document.createEvent('KeyEvents');"
 				+ "evObj.initKeyEvent( 'keyup', true, true, window, false, false, false, false, 13, 0 );} "
 				+ "else {var evObj = document.createEvent('HTMLEvents');"
 				+ "evObj.initEvent( 'keyup', true, true, window, 1 );"
 				+ "evObj.keyCode = 13;}"
 				+ "var x = selenium.browserbot.findElementOrNull('"
-				+ Locators.zRenameInput.locator + "'); "
-				+ "x.blur(); x.focus(); x.dispatchEvent(evObj);");
+				+ Locators.zRenameInput.locator
+				+ "'); "
+				+ "x.blur(); x.focus(); x.dispatchEvent(evObj);}");
 	}
 
 	public void isOpenDocLoaded(DocumentItem docItem) throws HarnessException {
@@ -1012,6 +1016,41 @@ public class PageBriefcase extends AbsTab {
 		tracer.trace("Close the separate window");
 
 		ClientSessionFactory.session().selenium().close();
+	}
+	
+	@Override
+	public  void zSelectWindow(String windowID) throws HarnessException {
+		logger.info("zSelectWindow(" + windowID + ")");
+
+		boolean found = false;
+
+		String[] windowNames = ClientSessionFactory.session().selenium()
+				.getAllWindowNames();
+
+		for (int i = 0; i < windowNames.length; i++) {
+			if (windowNames[i].contains(windowID.split("\\.")[0])) {
+				this.sSelectWindow(windowNames[i]);
+				found = true;
+				break;
+			}
+		}
+
+		if (!found) {
+			String[] windowTitles = ClientSessionFactory.session().selenium()
+					.getAllWindowTitles();
+			for (int i = 0; i < windowTitles.length; i++) {
+				if (windowTitles[i].contains(windowID.split("\\.")[0])) {
+					this.sSelectWindow(windowTitles[i]);
+					found = true;
+					break;
+				}
+			}
+		}
+
+		if (found) {
+			this.sWindowFocus();
+			this.sWindowMaximize();
+		}		
 	}
 
 	@Override

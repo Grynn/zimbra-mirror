@@ -81,8 +81,8 @@ public class EditDocument extends AjaxCommonTest {
 			// Save and close
 			documentBriefcaseEdit.zSubmit();
 		} catch (Exception ex) {
-			throw new HarnessException("error in editing document " + docItem1.getName(),
-					ex);
+			throw new HarnessException("error in editing document "
+					+ docItem1.getName(), ex);
 		} finally {
 			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
 		}
@@ -95,9 +95,8 @@ public class EditDocument extends AjaxCommonTest {
 		// ZAssert.assertStringContains(name, docName2,
 
 		// "Verify document name through GUI");
-		ZAssert.assertTrue(app.zPageBriefcase
-				.waitForPresentInListView(docItem2.getName()),
-				"Verify document name through GUI");
+		ZAssert.assertTrue(app.zPageBriefcase.waitForPresentInListView(docItem2
+				.getName()), "Verify document name through GUI");
 
 		// delete file upon test completion
 		app.zPageBriefcase.deleteFileByName(docItem2.getName());
@@ -124,7 +123,7 @@ public class EditDocument extends AjaxCommonTest {
 		DocumentItem docItem1 = new DocumentItem();
 		DocumentItem docItem2 = new DocumentItem();
 
-    	// Create document using SOAP
+		// Create document using SOAP
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<body>"
 				+ docItem1.getDocText() + "</body>" + "</html>");
 
@@ -167,8 +166,8 @@ public class EditDocument extends AjaxCommonTest {
 			// Save and close
 			documentBriefcaseEdit.zSubmit();
 		} catch (Exception ex) {
-			throw new HarnessException("error in editing document " + docItem1.getName(),
-					ex);
+			throw new HarnessException("error in editing document "
+					+ docItem1.getName(), ex);
 		} finally {
 			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
 		}
@@ -242,12 +241,16 @@ public class EditDocument extends AjaxCommonTest {
 		// Search for created document
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
-						+ "<query>" + docItem.getName() + "</query>" + "</SearchRequest>");
+						+ "<query>"
+						+ docItem.getName()
+						+ "</query>"
+						+ "</SearchRequest>");
 
 		String docId = account.soapSelectValue("//mail:doc", "id");
 		String version = account.soapSelectValue("//mail:doc", "ver");
-		
-		docItem.setDocText("editText" + ZimbraSeleniumProperties.getUniqueString());
+
+		docItem.setDocText("editText"
+				+ ZimbraSeleniumProperties.getUniqueString());
 
 		// Edit document through SOAP
 		account
@@ -266,7 +269,7 @@ public class EditDocument extends AjaxCommonTest {
 						+ "&lt;/body>&lt;/html></content>"
 						+ "</doc>"
 						+ "</SaveDocumentRequest>");
-		
+
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
@@ -341,28 +344,29 @@ public class EditDocument extends AjaxCommonTest {
 
 		app.zPageBriefcase.isEditDocLoaded(docItem);
 
-		String editText="";
-		
+		String editText = "";
+
 		// Select document window opened for editing
 		try {
 			app.zPageBriefcase.zSelectWindow(docItem.getName());
 
 			editText = "editText" + ZimbraSeleniumProperties.getUniqueString();
-			
+
 			// Fill out the document with the new data
-			documentBriefcaseEdit.typeDocumentText(editText);
+			documentBriefcaseEdit.zFillField(DocumentBriefcaseNew.Field.Body,
+					editText);
 
 			// Save and close
 			documentBriefcaseEdit.zSubmit();
 		} catch (Exception ex) {
-			throw new HarnessException("error in editing document " + docItem.getName(),
-					ex);
+			throw new HarnessException("error in editing document "
+					+ docItem.getName(), ex);
 		} finally {
 			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
 		}
-		
+
 		docItem.setDocText(editText);
-		
+
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
@@ -439,27 +443,28 @@ public class EditDocument extends AjaxCommonTest {
 		// app.zPageBriefcase.isEditDocLoaded(docName, docText);
 
 		String editDocName = "";
-		
+
 		// Select edit document window
 		try {
 			app.zPageBriefcase.zSelectWindow(docItem.getName());
 
 			// Fill out the document with the new data
-			editDocName = "editDocName" + ZimbraSeleniumProperties.getUniqueString();
-			
+			editDocName = "editDocName"
+					+ ZimbraSeleniumProperties.getUniqueString();
+
 			documentBriefcaseEdit.typeDocumentName(editDocName);
 
 			// Save and close
 			documentBriefcaseEdit.zSubmit();
 		} catch (Exception ex) {
-			throw new HarnessException("error in editing document " + docItem.getName(),
-					ex);
+			throw new HarnessException("error in editing document "
+					+ docItem.getName(), ex);
 		} finally {
 			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
 		}
 
 		docItem.setDocName(editDocName);
-		
+
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
@@ -468,7 +473,8 @@ public class EditDocument extends AjaxCommonTest {
 		// ZAssert.assertStringContains(name, docName,
 
 		// "Verify document name through GUI");
-		boolean present = app.zPageBriefcase.waitForPresentInListView(docItem.getName());
+		boolean present = app.zPageBriefcase.waitForPresentInListView(docItem
+				.getName());
 
 		ZAssert.assertTrue(present, "Verify document name through GUI");
 
@@ -485,7 +491,7 @@ public class EditDocument extends AjaxCommonTest {
 		 * );
 		 */
 	}
-	
+
 	@AfterMethod(groups = { "always" })
 	public void afterMethod() throws HarnessException {
 		logger.info("Checking for the opened window ...");
@@ -494,7 +500,8 @@ public class EditDocument extends AjaxCommonTest {
 		String[] windows = ClientSessionFactory.session().selenium()
 				.getAllWindowNames();
 		for (String window : windows) {
-			if (!window.isEmpty() && !window.contains("null") && !window.contains(PageBriefcase.pageTitle)
+			if (!window.isEmpty() && !window.contains("null")
+					&& !window.contains(PageBriefcase.pageTitle)
 					&& !window.contains("main_app_window")
 					&& !window.contains("undefined")) {
 				logger.warn(window + " window was still active. Closing ...");
