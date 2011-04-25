@@ -73,7 +73,7 @@ DwtInputField = function(params) {
 	this._hintIsVisible = false;
 	this._hint = params.hint;
 	
-	var inputFieldId = params.inputID || Dwt.getNextId();
+	var inputFieldId = params.inputId || Dwt.getNextId();
 	var errorIconId = Dwt.getNextId();
 	var htmlEl = this.getHtmlElement();
 	if (this._errorIconStyle == DwtInputField.ERROR_ICON_NONE) {
@@ -897,6 +897,9 @@ function(params) {
 	}
 	ninput.value = (params ? params.initialValue : oinput.value) || "";
 	ninput.readonly = oinput ? oinput.readonly : false;
+    if (params && params.inputId) {
+        ninput.id = params.inputId;
+    }
 
 	// add event handlers
 	ninput.onkeyup = DwtInputField._keyUpHdlr;
