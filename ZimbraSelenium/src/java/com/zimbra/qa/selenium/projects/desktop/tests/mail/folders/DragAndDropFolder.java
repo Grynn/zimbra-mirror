@@ -5,6 +5,7 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -22,7 +23,7 @@ public class DragAndDropFolder extends AjaxCommonTest{
 	}
 
 	@Test(	description = "Drag one folder and Drop into other",
-			groups = { "smoke" })
+			groups = { "smokey" })
 			public void DragDropFolder_01() throws HarnessException {
 
 		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
@@ -57,9 +58,11 @@ public class DragAndDropFolder extends AjaxCommonTest{
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
 		app.zPageMail.zDragAndDrop(
-				"//td[contains(@id, 'zti__main_Mail__" + subfolder1.getId() + "_textCell') and contains(text(), '"+ name1 + "')]",
-				"//td[contains(@id, 'zti__main_Mail__" + subfolder2.getId() + "_textCell') and contains(text(),'"+ name2 + "')]");
+				"//td[contains(@id, 'zti__" + app.zGetActiveAccount().EmailAddress + ":main_Mail__') and contains(@id, ':" + subfolder1.getId() + "_textCell') and contains(text(), '"+ name1 + "')]",
+				"//td[contains(@id, 'zti__" + app.zGetActiveAccount().EmailAddress + ":main_Mail__') and contains(@id, ':" + subfolder2.getId() + "_textCell') and contains(text(), '"+ name2 + "')]");
 
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
 		// Verify the folder is now in the other subfolder
 		subfolder1 = FolderItem.importFromSOAP(app.zGetActiveAccount(), name1);
