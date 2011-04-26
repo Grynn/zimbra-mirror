@@ -50,8 +50,8 @@ public class PageSignature extends AbsTab{
 		
 		//bug 59078
 		String locator = null;
-		locator="//textarea[contains(@id,'textarea_DWT')]";
-		String textsig= this.sGetText(locator);
+		locator="selenium.browserbot.getCurrentWindow().document.getElementById('TEXTAREA_SIGNATURE').value";
+		String textsig= this.sGetEval(locator);
 		return textsig;
 
 	}
