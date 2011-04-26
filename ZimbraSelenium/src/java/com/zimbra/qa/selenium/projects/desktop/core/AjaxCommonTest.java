@@ -415,7 +415,6 @@ public class AjaxCommonTest {
 
       case DESKTOP:
          destType = SOAP_DESTINATION_HOST_TYPE.CLIENT;
-         ZimbraAccount.AccountZWC().authenticateToMailClientHost();
 
          if (_currentAccount != ZimbraAccount.AccountZWC()) {
             app.zPageLogin.zNavigateTo();
@@ -474,6 +473,8 @@ public class AjaxCommonTest {
             addDefaultAccount();
             _currentAccount = ZimbraAccount.AccountZWC();
          }
+
+         ZimbraAccount.AccountZWC().authenticateToMailClientHost();
 
          break;
 
