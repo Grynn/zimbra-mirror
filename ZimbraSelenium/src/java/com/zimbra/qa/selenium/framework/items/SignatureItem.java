@@ -36,6 +36,8 @@ public class SignatureItem implements IItem {
 	 * The name for this tag
 	 */
 	public String gName;
+	public String dBodyText;
+	public String dBodyHtmlText;
 
 	// //
 	// FINISH: GUI Data
@@ -94,6 +96,15 @@ public class SignatureItem implements IItem {
 			item.setId(t.getAttribute("id", null));
 			// Set tag name
 			item.setName(t.getAttribute("name", null));
+			
+			Element contentBodyHtml = ZimbraAccount.SoapClient.selectNode(sig, "//acct:content[@type='text/html']");
+			Element contentBodyText = ZimbraAccount.SoapClient.selectNode(sig, "//acct:content[@type='text/plain']");
+			if ( contentBodyHtml != null ) {
+				item.dBodyHtmlText = contentBodyHtml.getText().trim();
+			}else if ( contentBodyText != null ) {
+				item.dBodyText = contentBodyText.getText().trim();
+			}
+
 
 			return (item);
 
