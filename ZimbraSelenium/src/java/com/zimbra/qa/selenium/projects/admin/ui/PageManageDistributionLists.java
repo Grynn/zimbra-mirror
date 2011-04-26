@@ -9,6 +9,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 
 
 /**
@@ -83,7 +84,7 @@ public class PageManageDistributionLists extends AbsTab {
 			return;
 		}
 
-		// Click on Addresses -> Accounts
+		// Click on Addresses -> DL
 		zClick(Locators.zti_DISTRIBUTION_LIST);
 
 		zWaitForActive();
@@ -154,7 +155,7 @@ public class PageManageDistributionLists extends AbsTab {
 
 		// If page was specified, make sure it is active
 		if ( page != null ) {
-			page.zWaitForActive();
+			SleepUtil.sleepMedium();
 		}
 
 		return (page);

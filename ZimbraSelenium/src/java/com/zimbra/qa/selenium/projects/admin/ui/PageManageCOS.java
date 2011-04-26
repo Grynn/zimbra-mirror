@@ -9,6 +9,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 
 /**
  * @author Matt Rhoades
@@ -75,7 +76,7 @@ public class PageManageCOS extends AbsTab {
 			return;
 		}
 
-		// Click on Addresses -> Accounts
+		// Click on Addresses -> COS
 		zClick(Locators.zti_COS);
 
 		zWaitForActive();
@@ -146,7 +147,7 @@ public class PageManageCOS extends AbsTab {
 
 		// If page was specified, make sure it is active
 		if ( page != null ) {
-			page.zWaitForActive();
+			SleepUtil.sleepMedium();
 		}
 
 		return (page);
