@@ -30,7 +30,7 @@ public class PageManageAliases extends AbsTab {
 
 		// NEW Menu
 		// TODO: define these locators
-		public static final String zmi_ALAIS = "zmi__ACLV__NEW_title";
+		public static final String zmi_ALAIS = "zmi__ACLV__NEW_ALIAS"; // New --> Alias
 
 
 	}

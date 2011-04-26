@@ -49,7 +49,7 @@ public class PageManageAccounts extends AbsTab {
 
 		// NEW Menu
 		// TODO: define these locators
-		public static final String zmi__ACLV__NEW_WIZARD_title = "xpath=//*[@id='zmi__ACLV__NEW_WIZARD_title']";	// New -> Account (<td class="ZWidgetTitle" id="zmi__ACLV__NEW_WIZARD_title">Account</td>)
+		public static final String zmi__ACLV__NEW_WIZARD_title = "zmi__ACLV__NEW_ACCT";	// New -> Account 
 
 
 	}
