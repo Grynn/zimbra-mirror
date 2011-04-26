@@ -614,31 +614,23 @@ public class AjaxCommonTest {
 		// then recreate a new account, but for desktop, the zimlet
 		// preferences has to be reset to default, all core zimlets are enabled
 		ZimbraAccount currentAccount = app.zGetActiveAccount();
-		if (currentAccount != null && currentAccount.accountIsDirty &&
-		      currentAccount == ZimbraAccount.AccountZWC()) {
 
-		   if (ZimbraSeleniumProperties.getAppType() == AppType.AJAX) {
-
-		      // Reset the account
-		      ZimbraAccount.ResetAccountZWC();
-
-		   } else if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-
-		      if (desktopZimlets == null) {
-		         throw new HarnessException("Desktop zimlets are null for unknown reason");
-		      }
-
-		      // Reset the zimlets preferences to default
-		      Map<String, String> defaultZimlets = new HashMap<String, String>();
-
-		      for (int i = 0; i < desktopZimlets.length; i++) {
-		         defaultZimlets.put(desktopZimlets[i], "enabled");
-		      }
-
-		      ZimbraAccount.AccountZWC().modifyZimletPreferences(defaultZimlets,
-	               SOAP_DESTINATION_HOST_TYPE.CLIENT);
-
+		if (currentAccount != null) {
+		   if (desktopZimlets == null) {
+		      throw new HarnessException("Desktop zimlets are null for unknown reason");
 		   }
+
+		   // Reset the zimlets preferences to default
+		   Map<String, String> defaultZimlets = new HashMap<String, String>();
+
+		   for (int i = 0; i < desktopZimlets.length; i++) {
+		      defaultZimlets.put(desktopZimlets[i], "enabled");
+		   }
+
+		   currentAccount.authenticateToMailClientHost();
+		   currentAccount.modifyZimletPreferences(defaultZimlets,
+		         SOAP_DESTINATION_HOST_TYPE.CLIENT);
+
 		}
 
 		logger.info("commonTestAfterMethod: finish");

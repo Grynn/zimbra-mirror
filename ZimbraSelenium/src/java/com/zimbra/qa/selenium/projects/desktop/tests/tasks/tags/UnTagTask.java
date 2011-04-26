@@ -19,7 +19,7 @@ public class UnTagTask extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Remove a tag from a Document using Toolbar -> Tag -> Remove Tag", groups = { "smoke" })
+	@Test(description = "Remove a tag from a Document using Toolbar -> Tag -> Remove Tag", groups = { "smokey" })
 	public void UnTagTask_01() throws HarnessException {
 		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
 
@@ -60,6 +60,9 @@ public class UnTagTask extends AjaxCommonTest {
 		dialogtag.zSetTagName(tagName);
 		dialogtag.zClickButton(Button.B_OK);
 
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageTasks.zWaitForDesktopLoadingSpinner(5000);
+
 		// Make sure the tag was created on the server (get the tag ID)
 		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;
 		String tagID = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tagName +"']", "id");
@@ -96,7 +99,10 @@ public class UnTagTask extends AjaxCommonTest {
 		// Click Remove Tag
 		app.zPageTasks.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_REMOVETAG);
 
-		app.zGetActiveAccount()
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageTasks.zWaitForDesktopLoadingSpinner(5000);
+
+      app.zGetActiveAccount()
 		.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='task'>"
 				+ "<query>" + subject + "</query>" + "</SearchRequest>");
 
