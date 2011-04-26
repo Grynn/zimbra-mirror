@@ -54,6 +54,9 @@ public class EditFolder extends AjaxCommonTest {
 		dialog.zSetNewName(name2);
 		dialog.zClickButton(Button.B_OK);
 
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
+
 		// Get all the folders and verify the new name appears and the old name
 		// disappears
 		app.zGetActiveAccount().soapSend(

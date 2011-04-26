@@ -22,6 +22,7 @@ public class GetConversation extends AjaxCommonTest {
 		// Make sure we are using an account with conversation view
 		super.startingAccountPreferences = new HashMap<String, String>() {{
 				    put("zimbraPrefGroupMailBy", "conversation");
+				    put("zimbraPrefReadingPaneLocation", "bottom");
 				}};
 	
 		

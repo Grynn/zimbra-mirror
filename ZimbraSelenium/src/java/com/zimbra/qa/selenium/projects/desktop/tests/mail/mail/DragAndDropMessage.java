@@ -78,10 +78,11 @@ public class DragAndDropMessage extends AjaxCommonTest {
 		
 		// Select the item
 		app.zPageMail.zDragAndDrop(
-					"css=td[id$='"+ mail.getId() +"__su']", // <td id="zlif__TV__12345__su" .../>
-					"css=div[id='zti__main_Mail__"+ subfolder.getId() +"']"); // <div id="zti__main_Mail__67890" .../>
+					"css=td[id$='"+ mail.getId() +"__su']",
+				"css=div[id^='zti__" + app.zGetActiveAccount().EmailAddress + ":main_Mail__'][id$=':" + subfolder.getId() +"']"); 
 		
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
 		// Get the message, make sure it is in the correct folder
 		app.zGetActiveAccount().soapSend(

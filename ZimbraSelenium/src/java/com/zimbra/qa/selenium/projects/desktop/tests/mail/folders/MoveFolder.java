@@ -60,7 +60,10 @@ public class MoveFolder extends AjaxCommonTest {
 		dialog.zClickTreeFolder(subfolder2);
 		dialog.zClickButton(Button.B_OK);
 		
-		// Verify the folder is now in the other subfolder
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
+
+      // Verify the folder is now in the other subfolder
 		subfolder1 = FolderItem.importFromSOAP(app.zGetActiveAccount(), name1);
 		ZAssert.assertNotNull(subfolder1, "Verify the subfolder is again available");
 		ZAssert.assertEquals(subfolder2.getId(), subfolder1.getParentId(), "Verify the subfolder's parent is now the other subfolder");

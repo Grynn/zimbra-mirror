@@ -22,6 +22,7 @@ public class FlagMail extends AjaxCommonTest {
 		// Make sure we are using an account with message view
 		super.startingAccountPreferences = new HashMap<String, String>() {{
 				    put("zimbraPrefGroupMailBy", "message");
+				    put("zimbraPrefReadingPaneLocation", "bottom");
 				}};
 		
 	}
@@ -49,7 +50,7 @@ public class FlagMail extends AjaxCommonTest {
 
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-				
+
 		// Select the item
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
 		

@@ -63,6 +63,7 @@ public class EmptyFolder extends AjaxCommonTest {
 		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(),"subject:(" + subject + ")");
 		// Click on Get Mail to refresh the folder list
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		
 		// Right click on folder, select "Mark all as read"
 		DialogWarning dialog = (DialogWarning) app.zTreeMail.zTreeItem(
 				Action.A_RIGHTCLICK, Button.B_TREE_FOLDER_EMPTY, subfolder);
@@ -70,6 +71,8 @@ public class EmptyFolder extends AjaxCommonTest {
 
 		// Dismiss it
 		dialog.zClickButton(Button.B_OK);
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
 		List<MailItem> messages = app.zPageMail.zListGetMessages();
 		ZAssert.assertNotNull(messages, "Verify the message list exists");

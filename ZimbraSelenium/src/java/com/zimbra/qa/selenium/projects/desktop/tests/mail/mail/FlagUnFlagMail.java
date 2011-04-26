@@ -24,6 +24,7 @@ public class FlagUnFlagMail extends AjaxCommonTest {
 		// Make sure we are using an account with message view
 		super.startingAccountPreferences = new HashMap<String, String>() {{
 				    put("zimbraPrefGroupMailBy", "message");
+				    put("zimbraPrefReadingPaneLocation", "bottom");
 				}};
 
 	}
@@ -79,6 +80,7 @@ public class FlagUnFlagMail extends AjaxCommonTest {
 		}
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
 		// Make sure the GUI shows "flagged"
 		ZAssert.assertNotNull(listmail, "Verify the message is in the list");

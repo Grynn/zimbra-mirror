@@ -53,8 +53,10 @@ public class RenameFolder extends AjaxCommonTest {
 		dialog.zSetNewName(name2);
 		dialog.zClickButton(Button.B_OK);
 
-		
-		// Get all the folders and verify the new name appears and the old name disappears
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
+
+      // Get all the folders and verify the new name appears and the old name disappears
 		app.zGetActiveAccount().soapSend("<GetFolderRequest xmlns = 'urn:zimbraMail'/>");
 		
 		Element[] eFolder1 = app.zGetActiveAccount().soapSelectNodes("//mail:folder[@name='"+ name1 +"']");
@@ -62,8 +64,7 @@ public class RenameFolder extends AjaxCommonTest {
 		
 		Element[] eFolder2 = app.zGetActiveAccount().soapSelectNodes("//mail:folder[@name='"+ name2 +"']");
 		ZAssert.assertEquals(eFolder2.length, 1, "Verify the new folder name exists");
-		
-		
+
 	}
 
 	
