@@ -6,8 +6,11 @@ import java.util.Map;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.items.IItem;
+import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
 
 public class AccountItem implements IItem {
@@ -15,44 +18,44 @@ public class AccountItem implements IItem {
 
 	protected static String Id;
 	
-	protected String LocalName; // Email Address is LocalName@DomainName
-	protected String DomainName;
+	protected String localName; // Email Address is LocalName@DomainName
+	protected String domainName;
 	
 	protected String Password;	// The password is encrypted in the attrs, so need to keep it separate
 
-	protected Map<String, String> AccountAttrs;
+	protected Map<String, String> accountAttrs;
 	
 	
 	public AccountItem() {
 		super();
 		
-		AccountAttrs = new HashMap<String, String>();
+		accountAttrs = new HashMap<String, String>();
 		
-		LocalName = "email" + ZimbraSeleniumProperties.getUniqueString();
-		DomainName = ZimbraSeleniumProperties.getStringProperty("testdomain");
+		localName = "email" + ZimbraSeleniumProperties.getUniqueString();
+		domainName = ZimbraSeleniumProperties.getStringProperty("testdomain");
 		Id = null;
 		
 		// Surname is required in Admin Console
-		AccountAttrs.put("sn", "Lastname"+ ZimbraSeleniumProperties.getUniqueString());
+		accountAttrs.put("sn", "Lastname"+ ZimbraSeleniumProperties.getUniqueString());
 
 	}
 	
 	public AccountItem(String emailAddress, String lastName) {
 		
-		AccountAttrs = new HashMap<String, String>();
+		accountAttrs = new HashMap<String, String>();
 		
 		if ( emailAddress.contains("@") ) {
-			LocalName = emailAddress.split("@")[0];
-			DomainName = emailAddress.split("@")[1];
+			localName = emailAddress.split("@")[0];
+			domainName = emailAddress.split("@")[1];
 		} else {
-			LocalName = emailAddress;
-			DomainName = ZimbraSeleniumProperties.getStringProperty("testdomain");
+			localName = emailAddress;
+			domainName = ZimbraSeleniumProperties.getStringProperty("testdomain");
 		}
 
 		Id = null;
 		
 		// Surname is required in Admin Console
-		AccountAttrs.put("sn", lastName);
+		accountAttrs.put("sn", lastName);
 		
 	}
 
@@ -64,7 +67,7 @@ public class AccountItem implements IItem {
 		sb.append("Email: ").append(getEmailAddress());
 		sb.append("ID: ").append(getID());
 		
-		for (Map.Entry<String, String> entry : AccountAttrs.entrySet()) {
+		for (Map.Entry<String, String> entry : accountAttrs.entrySet()) {
 			sb.append("Attr: ").append(entry.getKey()).append("=").append(entry.getValue());
 		}
 		
@@ -81,23 +84,23 @@ public class AccountItem implements IItem {
 	}
 	
 	public String getEmailAddress() {
-		return (LocalName + "@" + DomainName);
+		return (localName + "@" + domainName);
 	}
 	
 	public void setLocalName(String name) {
-		LocalName = name;
+		localName = name;
 	}
 	
 	public String getLocalName() {
-		return (LocalName);
+		return (localName);
 	}
 
 	public void setDomainName(String domain) {
-		DomainName = domain;
+		domainName = domain;
 	}
 	
 	public String getDomainName() {
-		return (DomainName);
+		return (domainName);
 	}
 	
 	public void setPassword(String password) {
@@ -105,7 +108,7 @@ public class AccountItem implements IItem {
 	}
 	
 	public Map<String, String> getAccountAttrs() {
-		return (AccountAttrs);
+		return (accountAttrs);
 	}
 
 	// ImgAdminUser ImgAccount ImgSystemResource (others?)
@@ -133,7 +136,7 @@ public class AccountItem implements IItem {
 		}
 		
 		StringBuilder elementAttrs = new StringBuilder();
-		for ( Map.Entry<String,String> entry : account.AccountAttrs.entrySet() ) {
+		for ( Map.Entry<String,String> entry : account.accountAttrs.entrySet() ) {
 			elementAttrs.append("<a n='").append(entry.getKey()).append("'>").append(entry.getValue()).append("</a>");
 		}
 		

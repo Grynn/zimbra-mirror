@@ -1,22 +1,25 @@
 package com.zimbra.qa.selenium.projects.admin.items;
 
 import com.zimbra.qa.selenium.framework.items.IItem;
-import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
 public class AliasItem implements IItem {
 
-	protected String AliasLocalName;
-	protected String AliasDomainName;
-	protected String AliasId;
-	protected String AliasTargetEmail;
-	protected String AliasTargetId;
+	protected String aliasLocalName;
+	protected String aliasDomainName;
+	protected String aliasId;
+	protected String aliasTargetEmail;
+	protected String aliasTargetId;
 	
 	public AliasItem() {
 		super();
 		
-		AliasLocalName = "alias" + ZimbraSeleniumProperties.getUniqueString();
-		AliasDomainName = ZimbraSeleniumProperties.getStringProperty("testdomain");
-		AliasId = null;	
+		aliasLocalName = "alias" + ZimbraSeleniumProperties.getUniqueString();
+		aliasDomainName = ZimbraSeleniumProperties.getStringProperty("testdomain");
+		aliasId = null;	
 	}
 	
 	@Override
@@ -37,27 +40,27 @@ public class AliasItem implements IItem {
 	}
 	
 	public String getID() {
-		return (AliasId);
+		return (aliasId);
 	}
 	
 	public String getEmailAddress() {
-		return (AliasLocalName + "@" + AliasDomainName);
+		return (aliasLocalName + "@" + aliasDomainName);
 	}
 	
 	public void setLocalName(String name) {
-		AliasLocalName = name;
+		aliasLocalName = name;
 	}
 	
 	public String getLocalName() {
-		return (AliasLocalName);
+		return (aliasLocalName);
 	}
 
 	public void setDomainName(String domain) {
-		AliasDomainName = domain;
+		aliasDomainName = domain;
 	}
 	
 	public String getDomainName() {
-		return (AliasDomainName);
+		return (aliasDomainName);
 	}
 	
 	public void setTarget(AccountItem account) throws HarnessException {
@@ -66,13 +69,13 @@ public class AliasItem implements IItem {
 		if ( (account.Id == null) || (account.Id.trim().length() == 0) )
 			throw new HarnessException("AccountItem ID is not set");
 
-		AliasTargetEmail = account.getEmailAddress();		
-		AliasTargetId = account.Id;
+		aliasTargetEmail = account.getEmailAddress();		
+		aliasTargetId = account.Id;
 
 	}
 
 	public void setTargetAccountEmail(String emailAddress) throws HarnessException {
-		if ( (AliasTargetEmail != null) && (AliasTargetEmail.equals(emailAddress)) )
+		if ( (aliasTargetEmail != null) && (aliasTargetEmail.equals(emailAddress)) )
 			return; // Nothing to update
 		
 		if ( (emailAddress == null) || (emailAddress.trim().length() == 0) )
@@ -85,16 +88,16 @@ public class AliasItem implements IItem {
                 +            "</GetAccountRequest>");
 		String id = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectValue("//admin:account", "id");
 		
-		AliasTargetEmail = emailAddress;		
-		AliasTargetId = id;
+		aliasTargetEmail = emailAddress;		
+		aliasTargetId = id;
 	}
 	
 	public String getTargetAccountEmail() {
-		return (AliasTargetEmail);
+		return (aliasTargetEmail);
 	}
 
 	public void setTargetAccountId(String id) throws HarnessException {
-		if ( (AliasTargetId != null) && (AliasTargetId.equals(id)) )
+		if ( (aliasTargetId != null) && (aliasTargetId.equals(id)) )
 			return; // Nothing to update
 		
 		if ( (id == null) || (id.trim().length() == 0) )
@@ -107,13 +110,13 @@ public class AliasItem implements IItem {
                 +            "</GetAccountRequest>");
 		String emailAddress = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectValue("//admin:account", "name");
 
-		AliasTargetEmail = emailAddress;		
-		AliasTargetId = id;
+		aliasTargetEmail = emailAddress;		
+		aliasTargetId = id;
 
 	}
 	
 	public String getTargetAccountId() {
-		return (AliasTargetId);
+		return (aliasTargetId);
 	}
 
 
