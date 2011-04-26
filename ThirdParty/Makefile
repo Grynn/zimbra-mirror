@@ -45,8 +45,7 @@ DIRS := openssl \
 	memcached \
 	nginx \
 	tcmalloc \
-	altermime \
-	rlfe
+	altermime
 
 LOGFILE := ThirdParty.make.log
 
