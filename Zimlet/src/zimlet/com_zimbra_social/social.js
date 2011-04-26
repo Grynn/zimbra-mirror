@@ -39,21 +39,13 @@ function(app, toolbar, controller, view) {
 	    view == ZmId.VIEW_CONV ||
 	    view == ZmId.VIEW_TRAD)
 	{
-		var buttonIndex = -1;
-		for (var i = 0, count = toolbar.opList.length; i < count; i++) {
-			if (toolbar.opList[i] == ZmOperation.VIEW_MENU) {
-				buttonIndex = i + 1;
-				break;
-			}
-		}
 		ZmMsg.socialBtnLabel = this.getMessage("socialize");
 		var buttonArgs = {
 			text    : ZmMsg.socialBtnLabel,
 			tooltip: this.getMessage("socializeTooltip"),
-			index: buttonIndex,
 			image: "social-icon"
 		};
-		var button = toolbar.createOp("SOCIAL_ZIMLET_TOOLBAR_BUTTON", buttonArgs);
+		var button = toolbar.createZimletOp("SOCIAL_ZIMLET_TOOLBAR_BUTTON", buttonArgs);
 		button.addSelectionListener(new AjxListener(this.miniDlg, this.miniDlg._buttonListener, [controller]));
 	}
 };
