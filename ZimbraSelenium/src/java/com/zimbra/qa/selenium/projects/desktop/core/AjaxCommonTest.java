@@ -386,6 +386,9 @@ public class AjaxCommonTest {
       _selenium.refresh();
       GeneralUtility.waitForElementPresent(app.zPageLogin,
             PageLogin.Locators.zAddNewAccountButton);
+      if (!app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDeleteButton)) {
+         ZimbraAccount.ResetAccountZWC();
+      }
    }
 
    /**
@@ -603,7 +606,7 @@ public class AjaxCommonTest {
 	@AfterMethod( groups = { "always" } )
 	public void commonTestAfterMethod() throws HarnessException {
 		logger.info("commonTestAfterMethod: start");
-		
+
 		CodeCoverage.getInstance().calculateCoverage();
 
 		// For Ajax, if account is considered dirty (modified),
