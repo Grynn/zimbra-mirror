@@ -159,9 +159,9 @@ function(domain) {
 	 * CURRENTLY use $set: kbnav. 
 	 */
 	this._kbMgr = shell.getKeyboardMgr();
-	this._kbMgr.enable(false);
-	/*this._kbMgr.registerKeyMap(new ZaKeyMap());
-	this._kbMgr.pushDefaultHandler(this);*/
+	this._kbMgr.enable(true);
+	this._kbMgr.registerKeyMap(new ZaKeyMap());
+	this._kbMgr.pushDefaultHandler(this);
     // Go!
     var lm = new ZaZimbraAdmin(appCtxt);
 }
