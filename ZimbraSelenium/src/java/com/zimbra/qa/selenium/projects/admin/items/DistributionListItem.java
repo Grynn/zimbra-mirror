@@ -20,7 +20,7 @@ public class DistributionListItem implements IItem {
 	public DistributionListItem() {
 		super();
 		
-		distributionListLocalName = "email" + ZimbraSeleniumProperties.getUniqueString();
+		distributionListLocalName = "dl" + ZimbraSeleniumProperties.getUniqueString();
 		distributionListDomainName = ZimbraSeleniumProperties.getStringProperty("testdomain");
 		Id = null;
 		
