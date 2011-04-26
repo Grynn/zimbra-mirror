@@ -309,11 +309,7 @@ public class DisplayMail extends AbsDisplay {
 			locator = "css=tr[id$='__MSG_hdrTableTopRow'] td[class~='SubjectCol']";
 
 		} else if ( field == Field.To ) {
-			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-			   locator = "css=tr[id$='_to'] td[class~='LabelColValue'] span[id$='_com_zimbra_email']";
-			} else {
-			   locator = "css=tr[id$='_to'] td[class~='LabelColValue'] span[id$='_com_zimbra_email'] span span";
-			}
+			locator = "css=tr[id$='_to'] td[class~='LabelColValue'] span[id$='_com_zimbra_email'] span span";
 
 		} else {
 			

@@ -49,7 +49,9 @@ public class RenameTag extends AjaxCommonTest {
 		dialog.zSetNewName(name2);
 		dialog.zClickButton(Button.B_OK);
 
-		
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
+
 		// Verify the tag is no longer found
 		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");
 		

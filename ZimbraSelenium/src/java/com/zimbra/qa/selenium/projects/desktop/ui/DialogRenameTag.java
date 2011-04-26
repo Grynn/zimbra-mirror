@@ -31,8 +31,10 @@ public class DialogRenameTag extends AbsDialog {
 	public void zSetNewName(String name) throws HarnessException {
 		logger.info(myPageName() + " zSetNewName("+ name +")");
 
-		String locator = "//input[@id='"+ Locators.zNewTagNameFieldId +"']";
-		
+	    //TODO: Bug 59270, 57458
+		//String locator = "//input[@id='"+ Locators.zNewTagNameFieldId +"']";
+		String locator = "css=div[class='DwtDialog WindowOuterContainer'] input[class='Field']";
+
 		// Make sure the locator exists
 		if ( !this.sIsElementPresent(locator) ) {
 			throw new HarnessException("Rename locator "+ locator +" is not present");
@@ -49,7 +51,8 @@ public class DialogRenameTag extends AbsDialog {
 		
 		if ( button == Button.B_OK ) {
 			
-			locator =  "//div[@id='"+ Locators.zRenameTagDialogId +"']//div[@id='"+ Locators.zButtonsId +"']//td[text()='OK']";
+			//locator =  "//div[@id='"+ Locators.zRenameTagDialogId +"']//div[@id='"+ Locators.zButtonsId +"']//td[text()='OK']";
+		   locator = "css=div[class='DwtDialog WindowOuterContainer'] td[class='ZWidgetTitle']:contains('OK')";
 					
 		} else if ( button == Button.B_CANCEL ) {
 			
@@ -103,7 +106,9 @@ public class DialogRenameTag extends AbsDialog {
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");
 
-		String locator = "id="+ Locators.zRenameTagDialogId;
+		//TODO: Bug 59270, 57458
+		//String locator = "id="+ Locators.zRenameTagDialogId;
+		String locator = "css=td[class='DwtDialogTitle']:contains('Rename')";
 		
 		if ( !this.sIsElementPresent(locator) ) {
 			return (false); // Not even present
