@@ -12,10 +12,8 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.Toaster;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.signature.FormSignatureNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.preferences.signature.PageSignature;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.signature.PageSignature.Locators;
 
 public class DeleteTextSignature extends AjaxCommonTest {
@@ -46,14 +44,14 @@ public class DeleteTextSignature extends AjaxCommonTest {
 	}
 
 	/**
-	 * Test case :Create signature through soap then delete and verify signature through GUI
+	 * Test case :Create signature through soap then delete and verify signature through soap
 	 * @Steps:
 	 * Create signature through soap
 	 * Delete signature using delete button.
-	 * Verify signature doesn't exist from GUI
+	 * Verify signature doesn't exist from soap
 	 * @throws HarnessException
 	 */
-	@Test(description = " Create signature through soap then delete and verify signature through GUI", groups = { "functional" })
+	@Test(description = " Delete Text signature using Delete button and verify  through soap ", groups = { "smoke" })
 	public void DeleteTextSignatures() throws HarnessException {
 
 		//Click on Mail/signature
@@ -75,22 +73,11 @@ public class DeleteTextSignature extends AjaxCommonTest {
 		//click Save
 		signew.zSubmit();
 
-		// Verify toast message
-		Toaster toast = app.zPageMain.zGetToaster();
-		String toastMsg = toast.zGetToastMessage();
-		ZAssert.assertStringContains(toastMsg, "Preferences Saved","Verify toast message: Preferences Saved");
+		// To check whether deleted signature is exist
+		app.zGetActiveAccount().soapSend("<GetSignaturesRequest xmlns='urn:zimbraAccount'/>");
 
-		// Move to preferences->Mail->Signatures
-		app.zPagePreferences.zNavigateTo();
-		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK,TreeItem.MailSignatures);
-
-		//Get the signature Name from list view
-		PageSignature pagesig = new PageSignature(app);
-		String SignatureListViewName = pagesig.zGetSignatureNameFromListView();
-
-		// Verify  signature name doesn't exist in SignatureListView
-		ZAssert.assertStringDoesNotContain(SignatureListViewName, this.sigName,
-		"Verify after Delete  signature  does not present in SignatureList view");
+		String signame = app.zGetActiveAccount().soapSelectValue("//acct:signature[@name='" + this.sigName + "']","name");
+		ZAssert.assertNull(signame, "Verify  signature is deleted");
 
 	}
 }

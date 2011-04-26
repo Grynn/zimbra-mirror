@@ -21,7 +21,7 @@ public class CancelTextSignature extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Cancel text signature", groups = { "functional" })
+	@Test(description = "Cancel text signature", groups = { "smoke" })
 	public void CancelTextSignature_01() throws HarnessException {
 
 		String sigName = "signame" + ZimbraSeleniumProperties.getUniqueString();

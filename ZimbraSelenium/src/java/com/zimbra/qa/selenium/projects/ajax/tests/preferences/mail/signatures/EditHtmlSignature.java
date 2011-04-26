@@ -10,13 +10,13 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.Toaster;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.signature.FormSignatureNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.signature.PageSignature;
@@ -58,12 +58,12 @@ public class EditHtmlSignature extends AjaxCommonTest {
 
 	/**
 	 * Test case : Create html signature through soap then Edit and verify
-	 * edited html signature through GUI
+	 * edited html signature through soap
 	 * 
 	 * @throws HarnessException
 	 */
 
-	@Test(description = "Edit and verify Html signature through GUI", groups = { "functional" })
+	@Test(description = "Edit signature through GUI and verify through soap", groups = { "smoke" })
 	public void EditHtmlSignature_01() throws HarnessException {
 
 		String sigEditName = "editsigname"+ ZimbraSeleniumProperties.getUniqueString();
@@ -75,9 +75,10 @@ public class EditHtmlSignature extends AjaxCommonTest {
 
 		// Click on Mail/signature
 		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK,TreeItem.MailSignatures);
+		SleepUtil.sleepSmall();
 
 		PageSignature pagesig = new PageSignature(app);
-		
+
 		//Select created signature signature 
 		pagesig.zClick(Locators.zSignatureListView);
 		app.zPageSignature.zClick("//td[contains(text(),'"+signature.getName()+"')]");
@@ -93,33 +94,12 @@ public class EditHtmlSignature extends AjaxCommonTest {
 		signew.zFillField(Field.SignatureHtmlBody, editbodyHTML);
 		signew.zSubmit();
 
-		// Verify toast message
-		Toaster toast = app.zPageMain.zGetToaster();
-		String toastMsg = toast.zGetToastMessage();
-		ZAssert.assertStringContains(toastMsg, "Preferences Saved",
-		"Verify toast message: Preferences Saved");
+		SignatureItem editsignature = SignatureItem.importFromSOAP(app.zGetActiveAccount(), sigEditName);
 
-		// Move to preferences->Mail->Signatures
-		app.zPagePreferences.zNavigateTo();
-		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK,TreeItem.MailSignatures);
-
-		//Select Edited signature
-		pagesig.zClick(Locators.zSignatureListView);
-		app.zPageSignature.zClick("//td[contains(text(),'"+sigEditName+"')]");
-
-		// Get the signature Name from list view
-		String SignatureListViewName = pagesig.zGetSignatureNameFromListView();		
-		String editsignaturebodytext = pagesig.zGetHtmlSignatureBody();
-
-		// Verify Edited signature name  and  body from SignatureListView
-		ZAssert
-		.assertStringDoesNotContain(SignatureListViewName,
-				this.sigName,
-				"Verify after edit 1st signature  does not present in SignatureList view");
-		ZAssert.assertStringContains(SignatureListViewName, sigEditName,
-		"Verify Edited signature  is present in SignatureList view");
-		ZAssert.assertStringContains(editsignaturebodytext, editbodyHTML,
-		"Verify edited html signature body");
+		//Verify signature name and body contents
+		ZAssert.assertEquals(editsignature.getName(),sigEditName,"Verify Edited signature name");
+		ZAssert.assertEquals(editsignature.dBodyHtmlText,editbodyHTML,"Verify Edited Html signature body");
+		ZAssert.assertStringDoesNotContain(editsignature.getName(), this.sigName, "Verify after edit 1st signature  does not present");
 
 	}
 

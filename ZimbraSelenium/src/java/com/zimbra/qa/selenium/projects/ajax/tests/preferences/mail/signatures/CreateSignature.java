@@ -2,18 +2,18 @@ package com.zimbra.qa.selenium.projects.ajax.tests.preferences.mail.signatures;
 
 import org.testng.annotations.Test;
 
+
+import com.zimbra.qa.selenium.framework.items.SignatureItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.Toaster;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.signature.FormSignatureNew;
-import com.zimbra.qa.selenium.projects.ajax.ui.preferences.signature.PageSignature;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.signature.FormSignatureNew.Field;
-import com.zimbra.qa.selenium.projects.ajax.ui.preferences.signature.PageSignature.Locators;
+
 
 public class CreateSignature extends AjaxCommonTest {
 	public CreateSignature() {
@@ -21,7 +21,7 @@ public class CreateSignature extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Create Simple text signature through GUI", groups = { "functional" })
+	@Test(description = "Create Simple text signature through GUI", groups = { "sanity" })
 	public void CreateBasicTextSignature() throws HarnessException {
 
 		String sigName = "signame" + ZimbraSeleniumProperties.getUniqueString();
@@ -32,28 +32,21 @@ public class CreateSignature extends AjaxCommonTest {
 
 		//Click on New signature button
 		FormSignatureNew signew =(FormSignatureNew) app.zPageSignature.zToolbarPressButton(Button.B_NEW);
-		
+
 		// Fill Signature Name and body
 		signew.zFillField(Field.SignatureName, sigName);
 		signew.zFillField(Field.SignatureBody, sigBody);
 		signew.zSubmit();
 
-		// Verify toast message
-		Toaster toast = app.zPageMain.zGetToaster();
-		String toastMsg = toast.zGetToastMessage();
-		ZAssert.assertStringContains(toastMsg, "Preferences Saved","Verify toast message: Preferences Saved");
-
-		// Verify Created signature name from SignatureListView
-		app.zPagePreferences.zNavigateTo();
-		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK,TreeItem.MailSignatures);		
-
-		PageSignature pagesig = new PageSignature(app);
-		String SignatureListViewName = pagesig.zGetSignatureNameFromListView();
-		ZAssert.assertStringContains(SignatureListViewName, sigName,"Verify signature  is present in SignatureList view");
+		SignatureItem signature = SignatureItem.importFromSOAP(app.zGetActiveAccount(), sigName);
+		
+		//Verify signature name and body content	
+		ZAssert.assertEquals(signature.getName(),sigName,"Verify signature Name");
+		ZAssert.assertEquals(signature.dBodyText,sigBody,"Verify Text signature body");
 	}
-	
-	
-	@Test(description = "Create Simple Html signature through GUI", groups = { "functional" })
+
+
+	@Test(description = "Create Simple Html signature through GUI", groups = { "sanity" })
 	public void CreateBasicHtmlSignature() throws HarnessException {
 
 		String sigName = "signame" + ZimbraSeleniumProperties.getUniqueString();
@@ -61,39 +54,24 @@ public class CreateSignature extends AjaxCommonTest {
 
 		// click on signature from left pane
 		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK,TreeItem.MailSignatures);
-		
+
 		//Click on New signature button
 		FormSignatureNew signew =(FormSignatureNew)app.zPageSignature.zToolbarPressButton(Button.B_NEW);
-		
+
 		//select html format from drop down
 		signew.zSelectFormat("html");
-		
+
 		// Fill Signature Name and body
 		signew.zFillField(Field.SignatureName, sigName);
 		signew.zFillField(Field.SignatureHtmlBody, sigBody);
 		signew.zSubmit();
 
-		// Verify toast message
-		Toaster toast = app.zPageMain.zGetToaster();
-		String toastMsg = toast.zGetToastMessage();
-		ZAssert.assertStringContains(toastMsg, "Preferences Saved","Verify toast message: Preferences Saved");
-
-		// Verify Created signature name from SignatureListView
-		app.zPagePreferences.zNavigateTo();
-		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK,TreeItem.MailSignatures);
-		
-		PageSignature pagesig = new PageSignature(app);
-		
-		//Select signature
-		pagesig.zClick(Locators.zSignatureListView);
-		app.zPageSignature.zClick("//td[contains(text(),'"+sigName+"')]");
-		
-		//Get the signature  name and body contents
-		String signaturebodytext = pagesig.zGetHtmlSignatureBody();		
-		String SignatureListViewName = pagesig.zGetSignatureNameFromListView();
+		SignatureItem signature = SignatureItem.importFromSOAP(app.zGetActiveAccount(), sigName);
 		
 		//Verify signature name and body contents
-		ZAssert.assertStringContains(SignatureListViewName, sigName,"Verify  html signature  is present in SignatureList view");
-		ZAssert.assertStringContains(signaturebodytext, sigBody,"Verify signature body");
+		ZAssert.assertEquals(signature.getName(),sigName,"Verify signature Name");
+		ZAssert.assertEquals(signature.dBodyHtmlText,sigBody,"Verify Html signature body");
+
+
 	}
 }
