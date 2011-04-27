@@ -4,7 +4,7 @@
 	<classpathentry kind="src" output="build/test-classes" path="src/java-test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="jars/ant-contrib-1.0b1.jar"/>
-	<classpathentry kind="lib" path="jars/bouncycastle.jar"/>
+	<classpathentry kind="lib" path="jars/bcprov-jdk15-146.jar"/>
 	<classpathentry kind="lib" path="jars/catalina-ant.jar"/>
 	<classpathentry kind="lib" path="jars/commons-codec-1.4.jar" sourcepath="/ThirdParty/commons-codec/src"/>
 	<classpathentry kind="lib" path="jars/commons-dbcp-1.4.jar" sourcepath="/ThirdParty/commons-dbcp/src">
