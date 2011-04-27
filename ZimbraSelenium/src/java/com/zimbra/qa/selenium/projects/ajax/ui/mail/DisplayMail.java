@@ -7,6 +7,7 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 
 
+
 /**
  * The <code>DisplayMail<code> object defines a read-only view of a message
  * in the Zimbra Ajax client.
@@ -34,7 +35,8 @@ public class DisplayMail extends AbsDisplay {
 		
 		public static final String zViewEntireMessage 	= "id=zv__CLV__MSG_msgTruncation_link";
 		public static final String zHighlightObjects 	= "id=zv__CLV_highlightObjects_link";
-
+		public static final String IsConViewActive 			= "css=[parentid='zv__CLV']";
+		public static final String IsMsgViewActive 			= "css=[parentid='zv__TV']";
 	}
 
 	/**
@@ -353,15 +355,10 @@ public class DisplayMail extends AbsDisplay {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		logger.warn("implement me", new Throwable());
-		
+		//logger.warn("implement me", new Throwable());
 		zWaitForZimlets();
-		
-		return (true);
+		return (sIsElementPresent(Locators.IsConViewActive) || sIsElementPresent(Locators.IsMsgViewActive) );
+				
 	}
-
-
-
-
-
+	
 }
