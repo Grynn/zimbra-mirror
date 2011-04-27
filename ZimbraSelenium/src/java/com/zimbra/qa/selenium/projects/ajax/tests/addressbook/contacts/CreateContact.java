@@ -30,7 +30,6 @@ public class CreateContact extends AjaxCommonTest  {
 	
 	
 
-
 	//can be used for other classes such as DeleteContact, MoveContact
 	public static ContactItem createBasicContact(AppAjaxClient app, FormContactNew formContactNew)throws HarnessException {
 							
@@ -66,6 +65,23 @@ public class CreateContact extends AjaxCommonTest  {
 		return contactItem;
 	}
 	
+	private DialogWarning clickCancel(ContactItem contactItem, FormContactNew formContactNew) throws HarnessException {
+			
+        // Fill in the form
+	    formContactNew.zFill(contactItem);
+	
+	    // Click Cancel
+	    DialogWarning dialogWarning = (DialogWarning) app.zPageAddressbook.zToolbarPressButton(Button.B_CANCEL);
+	    
+	    //Verify title Warning and content "Do you want to save changes?"
+	    String text="Warning";
+	    ZAssert.assertEquals(text,dialogWarning.zGetWarningTitle()," Verify title is " + text);
+	    text = "Do you want to save changes?";
+	    ZAssert.assertEquals(text,dialogWarning.zGetWarningContent()," Verify content is " + text);
+	
+	    return dialogWarning;
+	}
+	
 	@Test(	description = "Create a basic contact item by click New in page Addressbook ",
 			groups = { "sanity" })
 	public void CreateContact_01() throws HarnessException {				
@@ -81,4 +97,90 @@ public class CreateContact extends AjaxCommonTest  {
 		
 		createBasicContact(app, formContactNew);		
 	}
+	
+	@Test(	description = "Cancel creating a contact item - Click Yes",
+			groups = { "functional" })
+	public void CancelCreateContactClickYes() throws HarnessException {				
+		FormContactNew formContactNew = (FormContactNew)app.zPageAddressbook.zToolbarPressButton(Button.B_NEW);
+		
+		// Create a contact Item
+		ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
+	
+		DialogWarning dialogWarning = clickCancel(contactItem,formContactNew);
+	    		
+	    // Click Yes in popup dialog 
+	    dialogWarning.zClickButton(Button.B_YES);
+	    	    
+	    //verify toasted message 'contact created'  
+        Toaster toast = app.zPageMain.zGetToaster();
+        String toastMsg = toast.zGetToastMessage();
+        ZAssert.assertStringContains(toastMsg, "Contact Created", "Verify toast message 'Contact Created'");
+  
+	    // Verify contact  created
+  	    List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();
+		boolean isFileAsEqual=false;
+		for (ContactItem ci : contacts) {
+			if (ci.fileAs.equals(contactItem.fileAs)) {
+	            isFileAsEqual = true;	
+				break;
+			}
+		}
+		
+        ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") not existed ");
+
+
+	}
+
+	@Test(	description = "Cancel creating a contact item - Click No",
+			groups = { "functional" })
+	public void CancelCreateContactClickNo() throws HarnessException {				
+		FormContactNew formContactNew = (FormContactNew)app.zPageAddressbook.zToolbarPressButton(Button.B_NEW);
+		
+		// Create a contact Item
+		ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
+	
+		DialogWarning dialogWarning = clickCancel(contactItem,formContactNew);
+	    
+	    // Click No in popup dialog 
+	    dialogWarning.zClickButton(Button.B_NO);
+
+	    // Verify contact not created
+  	    List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();
+		boolean isFileAsEqual=false;
+		for (ContactItem ci : contacts) {
+			if (ci.fileAs.equals(contactItem.fileAs)) {
+	            isFileAsEqual = true;	
+				break;
+			}
+		}
+		
+        ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") existed ");
+
+
+	}
+
+	@Test(	description = "Cancel creating a contact item - Click Cancel",
+			groups = { "functional" })
+	public void CancelCreateContactClickCancel() throws HarnessException {		
+		FormContactNew formContactNew = (FormContactNew)app.zPageAddressbook.zToolbarPressButton(Button.B_NEW);
+		
+		// Create a contact Item
+		ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
+	
+		DialogWarning dialogWarning = clickCancel(contactItem,formContactNew);
+    
+	    // Click Cancel in popup dialog 
+	    dialogWarning.zClickButton(Button.B_CANCEL);
+	    	    
+	    // Verify page not redirect
+	    // or form contact new page is displayed
+		ZAssert.assertTrue(formContactNew.zIsActive(),"Verify new contact form is displayed");
+		
+		//Verify firstname , lastname  not changed
+        ZAssert.assertEquals(app.zPageAddressbook.sGetValue(FormContactNew.Locators.zFirstEditField),contactItem.firstName, "Verify contact firstname (" + contactItem.firstName + ") not changed ");
+        ZAssert.assertEquals(app.zPageAddressbook.sGetValue(FormContactNew.Locators.zLastEditField),contactItem.lastName, "Verify contact lastname (" + contactItem.lastName + ") not changed ");
+
+
+	}
+
 }

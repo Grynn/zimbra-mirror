@@ -9,6 +9,7 @@ import org.apache.log4j.LogManager;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
@@ -19,6 +20,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Locators;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
 
 public class PageAddressbook extends AbsTab {
@@ -250,8 +252,19 @@ public class PageAddressbook extends AbsTab {
 
 		   locator = "id="+ id;
 		   page = new FormMailNew(MyApplication);	
-
-	    } else if (isAlphabetButton(button))
+	     
+ 	    } else if ( button == Button.B_CANCEL) {
+ 	    	String id ="zb__CN__CANCEL";
+		    // Check if the button is enabled
+		    String attrs = sGetAttribute("xpath=(//div[@id='"+ id +"'])@class");
+		    if ( attrs.contains("ZDisabledImage") ) {
+			  throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
+		    }
+		    locator = "id="+ id;
+			page = new DialogWarning(DialogWarning.DialogWarningID.CancelCreateContact, this.MyApplication, ((AppAjaxClient)this.MyApplication).zPageAddressbook);
+		
+ 	    	
+ 	    } else if (isAlphabetButton(button))
           {
        	   locator=DisplayContactGroup.ALPHABET_PREFIX + button.toString() + DisplayContactGroup.ALPHABET_POSTFIX;
        	   
