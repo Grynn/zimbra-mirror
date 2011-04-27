@@ -246,6 +246,11 @@ if [ -d ${zimbra_home} ]; then
       chgrp -f ${postfix_owner} ${i}
       chmod 640 ${i}
     done 
+
+    if [ -f ${zimbra_home}/conf/my.conf ]; then
+      chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/conf/my.conf
+      chmod 640 ${zimbra_home}/conf/my.conf
+    fi
   fi
 
   if [ -d ${zimbra_home}/docs ]; then
