@@ -1229,11 +1229,10 @@ public class InitialSync {
             if (type == MailItem.Type.CHAT) {
                 msg = ombx.createChat(new TracelessContext(redo), pm, folderId, flags, tagStr);
             } else {
-                DeliveryContext deliveryCtxt = new DeliveryContext();
-
-                deliveryCtxt.setIncomingBlob(blob);
-                msg = ombx.addMessage(new TracelessContext(redo), pm, folderId,
-                        true, flags, tagStr, convId, ":API:", null, deliveryCtxt);
+                DeliveryOptions dopt = new DeliveryOptions().setFolderId(folderId).setNoICal(true);
+                dopt.setFlags(flags).setTags(tagStr).setConversationId(convId).setRecipientEmail(":API:");
+                DeliveryContext dctxt = new DeliveryContext().setIncomingBlob(blob);
+                msg = ombx.addMessage(new TracelessContext(redo), pm, dopt, dctxt);
             }
             OfflineLog.offline.debug("initial: created " + type + " (" + id + "): " + msg.getSubject());
             StoreManager.getInstance().quietDelete(blob);

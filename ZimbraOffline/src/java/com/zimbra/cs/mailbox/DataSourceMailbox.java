@@ -376,8 +376,10 @@ public class DataSourceMailbox extends SyncMailbox {
             mm.saveChanges();
 
             ParsedMessage pm = new ParsedMessage(mm, true);
-            addMessage(context, pm, Mailbox.ID_FOLDER_INBOX, true,
-                Flag.BITMASK_UNREAD | Flag.BITMASK_FROM_ME, null);
+            DeliveryOptions dopt = new DeliveryOptions().setFolderId(ID_FOLDER_INBOX);
+            dopt.setNoICal(true).setFlags(Flag.BITMASK_UNREAD | Flag.BITMASK_FROM_ME);
+            addMessage(context, pm, dopt, null);
+
             delete(context, id, MailItem.Type.MESSAGE);
             OfflineLog.offline.warn("SMTP: bounced failed send " + id + ": " +
                 error + ": " + msg.getSubject());

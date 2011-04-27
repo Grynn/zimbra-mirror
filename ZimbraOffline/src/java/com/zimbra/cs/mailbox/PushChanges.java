@@ -419,7 +419,8 @@ public class PushChanges {
 
                             mm.saveChanges(); //must call this to update the headers
                             ParsedMessage pm = new ParsedMessage(mm, true);
-                            ombx.addMessage(sContext, pm, DesktopMailbox.ID_FOLDER_INBOX, true, Flag.BITMASK_UNREAD, null);
+                            DeliveryOptions dopt = new DeliveryOptions().setFolderId(Mailbox.ID_FOLDER_INBOX).setNoICal(true).setFlags(Flag.BITMASK_UNREAD);
+                            ombx.addMessage(sContext, pm, dopt, null);
                         } catch (Exception e) {
                             OfflineLog.offline.warn("can't save warning of failed push (" + id + ")" + msg.getSubject(), e);
                         }
