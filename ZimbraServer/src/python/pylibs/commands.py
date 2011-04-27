@@ -63,7 +63,7 @@ class Command:
 		else:
 			try:
 				cls.P.flushCache(Provisioning.CacheEntryType.fromString(type), None)
-			except Exception, e:
+			except:
 				pass  # mailboxd is down, or not running here, either way we don't care.
 
 	def __init__(self, desc, name, cmd=None, func=None, args=None, base="/opt/zimbra"):
