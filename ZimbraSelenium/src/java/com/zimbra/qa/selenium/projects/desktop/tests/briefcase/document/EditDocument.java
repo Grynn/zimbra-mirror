@@ -236,10 +236,11 @@ public class EditDocument extends AjaxCommonTest {
 						+ "</doc>"
 						+ "</SaveDocumentRequest>");
 
+		// TODO: Bug 59439
 		// Search for created document
-		account
-				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
-						+ "<query>" + docItem.getName() + "</query>" + "</SearchRequest>");
+		//account
+		//		.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
+		//				+ "<query>" + docItem.getName() + "</query>" + "</SearchRequest>");
 
 		String docId = account.soapSelectValue("//mail:doc", "id");
 		String version = account.soapSelectValue("//mail:doc", "ver");
