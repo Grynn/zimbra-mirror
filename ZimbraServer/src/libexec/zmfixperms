@@ -215,6 +215,11 @@ if [ -d ${zimbra_home} ]; then
       chown -R ${root_user}:${root_group} ${zimbra_home}/convertd/lib
       chmod 755 ${zimbra_home}/convertd/lib
     fi
+    if [ ! -d ${zimbra_home}/convertd/convert ]; then
+      mkdir -p ${zimbra_home}/convertd/convert
+      chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/convertd/convert
+      chmod 700 ${zimbra_home}/convertd/convert
+    fi
   fi
 
   if [ -d ${zimbra_home}/conf ]; then
