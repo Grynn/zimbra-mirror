@@ -404,7 +404,12 @@ public class PageAddressbook extends AbsTab {
 				throw new HarnessException("Button "+ pulldown +" option "+ option +" pulldownLocator "+ pulldownLocator +" not present!");
 			}
 			
-			this.zClick(pulldownLocator);
+			if (ClientSessionFactory.session().isBrowserIE9()) {
+			  sClick(pulldownLocator);
+			}
+			else {
+			  zClick(pulldownLocator);							
+			}
 			zWaitForBusyOverlay();
 			
 			if ( optionLocator != null ) {
