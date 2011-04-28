@@ -39,14 +39,14 @@ public class TestVersionCheck extends TestCase {
         this.versionCheckURL = config.getAttr(Provisioning.A_zimbraVersionCheckURL);
         this.lastResponse = config.getAttr(Provisioning.A_zimbraVersionCheckLastResponse);
         Map<String, String> attrs = new HashMap<String, String>();
-        attrs.put(Provisioning.A_zimbraVersionCheckURL, "http://localhost:7070/zimbra/test/testversion.xml");
+        attrs.put(Provisioning.A_zimbraVersionCheckURL, "http://localhost:7070/zimbra/testversion.xml");
         prov.modifyAttrs(config, attrs, true);
         generateTestVersionXML();
     }
 
     private void generateTestVersionXML() {
     	try {
-			FileWriter fileWriter = new FileWriter(LC.mailboxd_directory.value()+"/webapps/zimbra/test/testversion.xml");
+			FileWriter fileWriter = new FileWriter(LC.mailboxd_directory.value()+"/webapps/zimbra/testversion.xml");
 			XMLWriter xw = new XMLWriter(fileWriter, org.dom4j.io.OutputFormat.createPrettyPrint());
 			Document doc = DocumentHelper.createDocument();
             org.dom4j.Element rootEl = DocumentHelper.createElement("versionCheck");
@@ -117,7 +117,7 @@ public class TestVersionCheck extends TestCase {
         attrs.put(Provisioning.A_zimbraVersionCheckURL, this.versionCheckURL);
         attrs.put(Provisioning.A_zimbraVersionCheckLastResponse, this.lastResponse);
         prov.modifyAttrs(config, attrs, true);
-        File testxmlfile = new File(LC.mailboxd_directory.value()+"/webapps/zimbra/test/testversion.xml");
+        File testxmlfile = new File(LC.mailboxd_directory.value()+"/webapps/zimbra/testversion.xml");
         testxmlfile.delete();
     }
 
