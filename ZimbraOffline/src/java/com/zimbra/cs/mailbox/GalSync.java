@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2008, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2008, 2009, 2010, 2011 Zimbra, Inc.
  *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.EnumSet;
 
 import org.dom4j.ElementHandler;
 
@@ -29,9 +28,9 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.Element.XMLElement;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.SoapProtocol;
-import com.zimbra.common.soap.Element.XMLElement;
 import com.zimbra.common.util.Constants;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
@@ -55,6 +54,10 @@ public class GalSync {
     private boolean isDisabled = false;
     private boolean isRunning = false;
     private OfflineProvisioning prov;
+    
+    private long start; //perf
+    private long networkTime;   //perf
+    private long restTime;  //perf
     
     public static GalSync getInstance() {
         return instance;
@@ -115,6 +118,7 @@ public class GalSync {
                     continue;
                 }
                 ZcsMailbox ombx = (ZcsMailbox) OfflineMailboxManager.getInstance().getMailboxByAccount(account);
+                //TODO 1. is every account on the same server has the same GAL, if so we just need to gal sync once and copy db table for these accounts.
                 sync(ombx, isOnRequest);
                 if (targetAccount != null) {
                     break;
@@ -158,8 +162,12 @@ public class GalSync {
             syncMan.syncComplete(galAccount);
             OfflineLog.offline.info("Offline GAL sync completed successfully for " + user);
         } catch (Exception e) {
+            //TODO 2. should have retry mechanism for the failed items and mark gal sync as complete, otherwise after an interval all synced items will be wiped out
             syncMan.processSyncException(galAccount, "", e, traceOn);
             OfflineLog.offline.info("Offline GAL sync failed for " + user + ": " + e.getMessage());
+            OfflineLog.offline.debug("** partial finish ** network spent : " + networkTime + " ms");
+            OfflineLog.offline.debug("** partial finish ** db spent :" + (System.currentTimeMillis() - start - networkTime - restTime) + " ms");
+            OfflineLog.offline.debug("** partial finish ** thread waiting spent : " + restTime + " ms");
         }         
     }
 
@@ -207,8 +215,10 @@ public class GalSync {
         handlers.put(GalSyncSAXHandler.PATH_RESPONSE, handler);
         handlers.put(GalSyncSAXHandler.PATH_CN, handler);
         handlers.put(GalSyncSAXHandler.PATH_DELETED, handler);
-        
+
+        start = System.currentTimeMillis();
         mbox.sendRequest(req, true, true, OfflineLC.zdesktop_gal_sync_request_timeout.intValue(), SoapProtocol.Soap12, handlers);
+        networkTime = System.currentTimeMillis() - start;
 
         Exception e = handler.getException();
         String token;
@@ -221,14 +231,21 @@ public class GalSync {
             throw ServiceException.FAILURE("unable to search GAL", null);
         }
 
+        restTime = 0;
         while (handler.getGroupCount() > 0) {
-            handler.fetchContacts();
+            OfflineLog.offline.debug("gal sync fetching " + handler.getGroupCount() + " group");
+            networkTime = handler.fetchContacts(networkTime);
             if (handler.getGroupCount() > 0) {
                 try {
                     Thread.sleep(OfflineLC.zdesktop_gal_sync_group_interval.longValue());
                 } catch (InterruptedException ie) {}
+                restTime += OfflineLC.zdesktop_gal_sync_group_interval.longValue();
             }
         }
+
+        OfflineLog.offline.debug("** network spent : " + networkTime + " ms");
+        OfflineLog.offline.debug("** db spent :" + (System.currentTimeMillis() - start - networkTime - restTime) + " ms");
+        OfflineLog.offline.debug("** thread waiting spent : " + restTime + " ms");
 
         if (fullSync) { // after a full sync, reset maintenance timer
             prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountLastRefresh,
