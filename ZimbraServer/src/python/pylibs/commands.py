@@ -113,6 +113,11 @@ class Command:
 			Log.logMsg(2, self.error)
 			raise Exception, self.error
 		else:
+			if (not output):
+				output = "UNKNOWN OUTPUT"
+			if (not error):
+				error = "UNKNOWN ERROR"
+
 			self.output = output
 			self.error = error
 			if rc:
