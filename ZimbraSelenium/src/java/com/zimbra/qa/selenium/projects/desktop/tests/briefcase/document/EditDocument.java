@@ -263,7 +263,10 @@ public class EditDocument extends AjaxCommonTest {
 						+ "&lt;/body>&lt;/html></content>"
 						+ "</doc>"
 						+ "</SaveDocumentRequest>");
-		
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
