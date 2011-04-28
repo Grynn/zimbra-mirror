@@ -57,6 +57,16 @@ public class ClientSession {
 		return (selenium);
 	}
 	
+	public boolean isBrowserIE9(){
+		String userAgent=ClientSessionFactory.session().selenium().getEval("navigator.userAgent;");
+		return ( currentBrowserName().contains("MSIE 9") ||
+				 //IE9 in compatible mode
+				  ( currentBrowserName().contains("MSIE 7") && 	 
+				    userAgent.contains("Mozilla/4.0") &&
+				    userAgent.contains("compatible")
+				  )				 				
+				);						
+	}
 	/**
 	 * Get the current Browser Name
 	 * <p>
