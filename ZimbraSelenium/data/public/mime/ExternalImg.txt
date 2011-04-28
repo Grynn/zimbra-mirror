@@ -1,0 +1,43 @@
+Return-Path: girish1@z54.puneqa.lab
+Received: from z54.puneqa.lab (LHLO z54.puneqa.lab) (10.117.82.54) by
+ z54.puneqa.lab with LMTP; Thu, 21 Apr 2011 16:14:37 +0530 (IST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by z54.puneqa.lab (Postfix) with ESMTP id C1D15204116
+	for <girish1@z54.puneqa.lab>; Thu, 21 Apr 2011 16:14:37 +0530 (IST)
+X-Virus-Scanned: amavisd-new at z54.puneqa.lab
+X-Spam-Flag: NO
+X-Spam-Score: -0.937
+X-Spam-Level: 
+X-Spam-Status: No, score=-0.937 tagged_above=-10 required=6.6
+	tests=[ALL_TRUSTED=-1, BAYES_00=-1.9, HTML_IMAGE_ONLY_04=1.172,
+	HTML_MESSAGE=0.001, MPART_ALT_DIFF=0.79, T_REMOTE_IMAGE=0.01,
+	T_RP_MATCHES_RCVD=-0.01] autolearn=no
+Received: from z54.puneqa.lab ([127.0.0.1])
+	by localhost (z54.puneqa.lab [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id Mlmkdd5Iqi25 for <girish1@z54.puneqa.lab>;
+	Thu, 21 Apr 2011 16:14:30 +0530 (IST)
+Received: from z54.puneqa.lab (z54.puneqa.lab [10.117.82.54])
+	by z54.puneqa.lab (Postfix) with ESMTP id CECC6204115
+	for <girish1@z54.puneqa.lab>; Thu, 21 Apr 2011 16:14:30 +0530 (IST)
+Date: Thu, 21 Apr 2011 16:14:29 +0530 (IST)
+From: admintest@testdoamin.com
+To: admin <admin@testdoamin.com>
+Subject: TestTrustedAddress
+Content-Type: multipart/alternative;
+ boundary="=_32bbf761-05c7-4906-addb-d192adb12f68"
+MIME-Version: 1.0
+X-Originating-IP: [10.117.82.27]
+X-Mailer: Zimbra 7.1.1_GA_3145 (ZimbraWebClient - FF3.0 (Win)/7.1.1_GA_3145)
+
+--=_32bbf761-05c7-4906-addb-d192adb12f68
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+http://l1.yimg.com/t/images/deadalien_60.jpg
+--=_32bbf761-05c7-4906-addb-d192adb12f68
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+<html><head><style type='text/css'>p { margin: 0; }</style></head><body><div style='font-family: Times New Roman; font-size: 12pt; color: #000000'><img alt="http://l1.yimg.com/t/images/deadalien_60.jpg" src="http://l1.yimg.com/t/images/deadalien_60.jpg"></div></body></html>
+--=_32bbf761-05c7-4906-addb-d192adb12f68--
+
