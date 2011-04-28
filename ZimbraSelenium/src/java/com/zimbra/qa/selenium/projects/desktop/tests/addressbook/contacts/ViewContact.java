@@ -53,7 +53,7 @@ public class ViewContact extends AjaxCommonTest  {
 	    // Select the contact 
 		DisplayContact contactView = (DisplayContact) app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contact.fileAs);
 	  
-		ZAssert.assertStringContains(contactView.zGetContactProperty(DisplayContact.Field.FileAs), contact.fileAs, "Verify contact fileAs (" + contact.fileAs + ") displayed");	
+		ZAssert.assertStringContains(contactView.zGetContactProperty(DisplayContact.Field.FileAs), contact.firstName + " " + contact.lastName, "Verify contact fileAs (" + contact.fileAs + ") displayed");	
 		
 	    ZAssert.assertStringContains(contactView.zGetContactProperty(DisplayContact.Field.Email), contact.email, "Verify contact email (" + contact.email + ") displayed");	
 		           
