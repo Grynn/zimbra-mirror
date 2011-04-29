@@ -4,8 +4,11 @@
 package com.zimbra.qa.selenium.projects.desktop.ui;
 
 import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraDesktopProperties;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.addressbook.PageAddressbook;
 import com.zimbra.qa.selenium.projects.desktop.ui.addressbook.TreeContacts;
@@ -172,4 +175,38 @@ public class AppAjaxClient extends AbsApplication {
 		return (super.zSetActiveAcount(account));
 	}
 
+	/**
+    * Delete Desktop account through HTTP Post
+    * @param accountName Account Name to be deleted
+    * @param accountId Account ID to be deleted
+    * @param accountType Account Type (usually: zimbra)
+    * @param accountFlavor Account Flavor (usually: Zimbra) 
+    * @throws HarnessException
+    */
+   public void zDeleteDesktopAccount(String accountName, String accountId,
+         String accountType, String accountFlavor) throws HarnessException {
+      String serverScheme = ZimbraSeleniumProperties.getStringProperty("server.scheme", "http");
+      String serverName = ZimbraSeleniumProperties.getStringProperty("desktop.server.host", "localhost");
+      ZimbraDesktopProperties zdp = ZimbraDesktopProperties.getInstance();
+      String connectionPort = zdp.getConnectionPort();
+      String accountDeleteUrl = new StringBuilder(serverScheme).append("://")
+            .append(serverName). append(":")
+            .append(connectionPort).append("/")
+            .append("zimbra/desktop/accsetup.jsp?at=")
+            .append(zdp.getSerialNumber()).append("&accountId=")
+            .append(accountId).append("&verb=del&accountFlavor=")
+            .append(accountFlavor).append("&accountName=")
+            .append(accountName).append("&accountType=")
+            .append(accountType).toString();
+
+      logger.info("accountDeleteUrl: " + accountDeleteUrl);
+      GeneralUtility.doHttpPost(accountDeleteUrl);
+
+      zPageLogin.sRefresh();
+      GeneralUtility.waitForElementPresent(zPageLogin,
+            PageLogin.Locators.zAddNewAccountButton);
+      if (!zPageLogin.sIsElementPresent(PageLogin.Locators.zDeleteButton)) {
+         ZimbraAccount.ResetAccountZWC();
+      }
+   }
 }

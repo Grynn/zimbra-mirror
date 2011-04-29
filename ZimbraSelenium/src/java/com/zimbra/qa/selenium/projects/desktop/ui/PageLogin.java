@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.projects.desktop.ui;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 
 
@@ -152,7 +153,21 @@ public class PageLogin extends AbsTab {
 	   ((AppAjaxClient)MyApplication).zSetActiveAcount(account);
 		
 	}
-	
+
+	/**
+	 * Removing account from login page
+	 * @throws HarnessException
+	 */
+	public void zRemoveAccount() throws HarnessException {
+	   String attribute = sGetAttribute(Locators.zDeleteButton + "@href");
+	   ((AppAjaxClient)MyApplication).zDeleteDesktopAccount(attribute.split("'")[3], attribute.split("'")[1],
+      "Zimbra", "Zimbra");
+
+	   Object[] params = {Locators.zDeleteButton};
+      GeneralUtility.waitFor(null, this, false, "sIsElementPresent",
+            params, WAIT_FOR_OPERAND.NEQ, true, 30000, 1000);
+	}
+
 	/**
 	 * Add the specified name to the login name field
 	 * @param name

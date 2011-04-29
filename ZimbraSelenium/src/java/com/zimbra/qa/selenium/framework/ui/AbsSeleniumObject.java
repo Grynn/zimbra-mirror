@@ -331,6 +331,14 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
+	 * DefaultSelenium.refresh()
+	 */
+	public void sRefresh() {
+	   ClientSessionFactory.session().selenium().refresh();
+	   logger.info("refresh the browser");
+	}
+
+	/**
 	 * DefaultSelenium.mouseUp()
 	 */
 	public void sMouseUp(String locator) {

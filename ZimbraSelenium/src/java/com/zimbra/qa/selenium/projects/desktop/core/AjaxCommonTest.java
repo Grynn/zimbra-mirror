@@ -357,41 +357,6 @@ public class AjaxCommonTest {
    }
 
    /**
-    * Delete Desktop account through HTTP Post
-    * @param accountName Account Name to be deleted
-    * @param accountId Account ID to be deleted
-    * @param accountType Account Type (usually: zimbra)
-    * @param accountFlavor Account Flavor (usually: Zimbra) 
-    * @throws HarnessException
-    */
-   public void deleteDesktopAccount(String accountName, String accountId,
-         String accountType, String accountFlavor) throws HarnessException {
-      String serverScheme = ZimbraSeleniumProperties.getStringProperty("server.scheme", "http");
-      String serverName = ZimbraSeleniumProperties.getStringProperty("desktop.server.host", "localhost");
-      ZimbraDesktopProperties zdp = ZimbraDesktopProperties.getInstance();
-      String connectionPort = zdp.getConnectionPort();
-      String accountDeleteUrl = new StringBuilder(serverScheme).append("://")
-            .append(serverName). append(":")
-            .append(connectionPort).append("/")
-            .append("zimbra/desktop/accsetup.jsp?at=")
-            .append(zdp.getSerialNumber()).append("&accountId=")
-            .append(accountId).append("&verb=del&accountFlavor=")
-            .append(accountFlavor).append("&accountName=")
-            .append(accountName).append("&accountType=")
-            .append(accountType).toString();
-
-      logger.info("accountDeleteUrl: " + accountDeleteUrl);
-      GeneralUtility.doHttpPost(accountDeleteUrl);
-
-      _selenium.refresh();
-      GeneralUtility.waitForElementPresent(app.zPageLogin,
-            PageLogin.Locators.zAddNewAccountButton);
-      if (!app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDeleteButton)) {
-         ZimbraAccount.ResetAccountZWC();
-      }
-   }
-
-   /**
     * Global BeforeMethod
     * <p>
     * <ol>
@@ -449,7 +414,7 @@ public class AjaxCommonTest {
                      String attribute = app.zPageLogin.sGetAttribute(deleteButtonLocator + "@href");
                      String accountId = attribute.split("'")[1];
                      String accountName = attribute.split("'")[3];
-                     deleteDesktopAccount(accountName, accountId, "Zimbra", accountFlavor);
+                     app.zDeleteDesktopAccount(accountName, accountId, "Zimbra", accountFlavor);
 
                      String nthChildString = "nth-child(3)";
                      if (deleteButtonLocator.contains(nthChildString)) {

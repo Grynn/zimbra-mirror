@@ -50,10 +50,7 @@ public class LoginScreen extends AjaxCommonTest {
    @Test(   description = "Verify the label text on the Desktop client login screen without the account set",
          groups = { "smoke" })
    public void ZD_LoginScreen02() throws HarnessException {
-      String attribute = app.zPageLogin.sGetAttribute(PageLogin.Locators.zDeleteButton +
-            "@href");
-      deleteDesktopAccount(attribute.split("'")[3], attribute.split("'")[1],
-            "Zimbra", accountFlavor);
+      app.zPageLogin.zRemoveAccount();
 
       ZAssert.assertEquals(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zBtnLoginDesktop),
             false, "Desktop login button is present.");
