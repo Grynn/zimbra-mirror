@@ -133,6 +133,8 @@ public class CreateDocument extends AjaxCommonTest {
 			documentBriefcaseNew.zSubmit();
 		} finally {
 			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
+			GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+			app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 		}
 
 		app.zPageBriefcase.zWaitForWindowClosed(DocumentBriefcaseNew.pageTitle);
@@ -202,6 +204,8 @@ public class CreateDocument extends AjaxCommonTest {
 			documentBriefcaseNew.zSubmit();
 		} finally {
 			app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
+			GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+         app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 		}
 
 		app.zPageBriefcase.zWaitForWindowClosed(DocumentBriefcaseNew.pageTitle);

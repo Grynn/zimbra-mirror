@@ -358,7 +358,7 @@ public class PageBriefcase extends AbsTab {
 			} else if (option == Button.O_NEW_DOCUMENT) {
 				pulldownLocator = Locators.zNewMenuArrowBtn.locator;
 			
-				optionLocator = "css=tr[id=POPUP_NEW_DOC]>td[id$='_title']:contains('Document')";
+				optionLocator = "css=table[class='DwtMenuTable'] td[id$='_title']:contains('Document')";
 
 				page = new DocumentBriefcaseNew(this.MyApplication);
 				// FALL THROUGH
