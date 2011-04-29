@@ -4,6 +4,7 @@
 package com.zimbra.qa.selenium.projects.admin.ui;
 
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
+import com.zimbra.qa.selenium.framework.ui.AbsForm;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Action;
@@ -30,7 +31,7 @@ public class PageManageDistributionLists extends AbsTab {
 
 		// NEW Menu
 		// TODO: define these locators
-		public static final String zmi_ALAIS = "zmi__ACLV__NEW_title";
+		public static final String zmi_DL = "zmi__ACLV__NEW_DL";
 
 
 	}
@@ -112,7 +113,7 @@ public class PageManageDistributionLists extends AbsTab {
 	}
 
 	
-	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
+	public AbsForm zToolbarPressButton(Button button) throws HarnessException {
 
 		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
 
@@ -125,7 +126,7 @@ public class PageManageDistributionLists extends AbsTab {
 		// Default behavior variables
 		//
 		String locator = null;			// If set, this will be clicked
-		AbsPage page = null;	// If set, this page will be returned
+		AbsForm form = null;	// If set, this page will be returned
 
 		// Based on the button specified, take the appropriate action(s)
 		//
@@ -137,7 +138,7 @@ public class PageManageDistributionLists extends AbsTab {
 
 			 
 			// Create the page
-			page = new FormDistributionListsNew(MyApplication);
+			form = new FormDistributionListsNew(MyApplication);
 
 			// FALL THROUGH
 
@@ -154,18 +155,82 @@ public class PageManageDistributionLists extends AbsTab {
 		this.zClick(locator);
 
 		// If page was specified, make sure it is active
-		if ( page != null ) {
+		if ( form != null ) {
 			SleepUtil.sleepMedium();
 		}
 
-		return (page);
+		return (form);
 
 	}
 
 	@Override
-	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
-		return null;
+	public AbsForm zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
 
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
+
+		if (pulldown == null)
+			throw new HarnessException("Pulldown cannot be null!");
+
+		if (option == null)
+			throw new HarnessException("Option cannot be null!");
+
+
+		// Default behavior variables
+		String pulldownLocator = null; // If set, this will be expanded
+		String optionLocator = null; // If set, this will be clicked
+		AbsForm form = null; // If set, this page will be returned
+
+		if (pulldown == Button.B_NEW) {
+
+			if (option == Button.O_DISTRIBUTIUONLISTS_DISTRIBUTIONLIST) {
+
+				pulldownLocator = Locators.zdd_NEW_MENU;
+				optionLocator = PageManageDistributionLists.Locators.zmi_DL;
+
+				form = new FormDistributionListsNew(MyApplication);
+
+				// FALL THROUGH
+
+			} else {
+				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
+			}
+
+		} else {
+			throw new HarnessException("no logic defined for pulldown/option "
+					+ pulldown + "/" + option);
+		}
+
+		// Default behavior
+		if (pulldownLocator != null) {
+
+			// Make sure the locator exists
+			if (!this.sIsElementPresent(pulldownLocator)) {
+				throw new HarnessException("Button " + pulldown + " option " + option + " pulldownLocator " + pulldownLocator + " not present!");
+			}
+
+			this.zClick(pulldownLocator);
+
+			// If the app is busy, wait for it to become active
+			//zWaitForBusyOverlay();
+
+			if (optionLocator != null) {
+
+				// Make sure the locator exists
+				if (!this.sIsElementPresent(optionLocator)) {
+					throw new HarnessException("Button " + pulldown + " option " + option + " optionLocator " + optionLocator + " not present!");
+				}
+
+				this.zClick(optionLocator);
+
+				// If the app is busy, wait for it to become active
+				//zWaitForBusyOverlay();
+			}
+
+		}
+
+		// Return the specified page, or null if not set
+		return (form);
 	}
 
 }

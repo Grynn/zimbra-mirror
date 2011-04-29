@@ -216,7 +216,7 @@ public class Button {
 	
 	// Accounts buttons
 	public static final Button O_ACCOUNTS_ACCOUNT = new Button("O_ACCOUNTS_ACCOUNT");
-	
+	public static final Button O_DISTRIBUTIUONLISTS_DISTRIBUTIONLIST=new Button("O_DISTRIBUTIUONLISTS_DISTRIBUTIONLIST");
 	// Aliases buttons
 	public static final Button O_ALIASES_ALIAS = new Button("O_ALIASES_ALIAS");
 

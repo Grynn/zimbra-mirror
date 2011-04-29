@@ -47,5 +47,34 @@ public class CreateDistributionList extends AdminCommonTest {
 		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetDistributionListResponse/admin:dl", 1);
 		ZAssert.assertNotNull(response, "Verify the distribution list is created successfully");
 	}
+	
+	
+	/**
+	 * 1. Create DL from UI. i.e. using New --> DL
+	 * 2. Verify DL is created using soap.
+	 * @throws HarnessException
+	 */
+	@Test(	description = "Create a basic DL. New --> DL",
+			groups = { "sanity" })
+			public void CreateDistributionList_02() throws HarnessException {
+
+		// Create a new dl in the Admin Console
+		DistributionListItem dl = new DistributionListItem();
+
+		// Click "New"
+		FormDistributionListsNew form =(FormDistributionListsNew) app.zPageManageDistributionList.zToolbarPressPulldown(Button.B_NEW, Button.O_DISTRIBUTIUONLISTS_DISTRIBUTIONLIST);
+	
+		// Fill out the necessary input fields and submit
+		form.zComplete(dl);
+		
+		// Verify the dl exists in the ZCS
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+		"<GetDistributionListRequest xmlns='urn:zimbraAdmin'>" +
+		                     "<dl by='name'>"+dl.getEmailAddress()+"</dl>"+
+		                   "</GetDistributionListRequest>");
+		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetDistributionListResponse/admin:dl", 1);
+		ZAssert.assertNotNull(response, "Verify the distribution list is created successfully");
+	}
+
 
 }
