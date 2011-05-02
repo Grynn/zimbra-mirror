@@ -52,6 +52,7 @@ public class MoveFile extends AjaxCommonTest {
 
 		// Click on created subfolder
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, subFolder);
 
 		// Create file item
@@ -113,7 +114,7 @@ public class MoveFile extends AjaxCommonTest {
 				"Verify document was moved to the selected folder");
 	}
 
-	@AfterMethod(groups = { "always" })
+	@AfterMethod(alwaysRun=true)
 	public void afterMethod() throws HarnessException {
 		logger.info("Checking for the Move Dialog ...");
 
@@ -126,5 +127,11 @@ public class MoveFile extends AjaxCommonTest {
 			dialog.zClickButton(Button.B_CANCEL);
 		}
 
+	   // This step is necessary because next test may be uploading the same
+      // file
+      // if account is not reset, ZCS will be confused, and the next
+      // uploaded file
+      // will be deleted per previous command.
+      ZimbraAccount.ResetAccountZWC();
 	}
 }

@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.desktop.tests.briefcase.file;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -72,13 +73,6 @@ public class DeleteFile extends AjaxCommonTest {
 		// refresh briefcase page
 		app.zTreeBriefcase
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
-
-		// This step is necessary because next test may be uploading the same
-		// file
-		// if ZD is not synced to ZCS, ZCS will be confused, and the next
-		// uploaded file
-		// will be deleted per previous command.
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
 		// Verify document was deleted
 		ZAssert.assertFalse(app.zPageBriefcase.isPresentInListView(fileName),
@@ -223,5 +217,15 @@ public class DeleteFile extends AjaxCommonTest {
 		ZAssert.assertEquals(id, docId,
 				"Verify the file was moved to the trash folder: "
 				+ fileName + " id: " + id);		
+	}
+
+	@AfterMethod(alwaysRun=true)
+	public void deleteFileAfterMethod() throws HarnessException {
+	   // This step is necessary because next test may be uploading the same
+      // file
+      // if account is not reset, ZCS will be confused, and the next
+      // uploaded file
+      // will be deleted per previous command.
+	   ZimbraAccount.ResetAccountZWC();
 	}
 }

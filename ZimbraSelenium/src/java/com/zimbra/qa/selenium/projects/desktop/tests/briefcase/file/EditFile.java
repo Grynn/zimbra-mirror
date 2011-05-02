@@ -3,6 +3,8 @@ package com.zimbra.qa.selenium.projects.desktop.tests.briefcase.file;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.regex.Pattern;
+
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -231,4 +233,14 @@ public class EditFile extends AjaxCommonTest {
 		// delete file upon test completion
 		app.zPageBriefcase.deleteFileByName(fileItem.getName());
 	}
+
+	@AfterMethod(alwaysRun=true)
+   public void editFileAfterMethod() throws HarnessException {
+	// This step is necessary because next test may be uploading the same
+      // file
+      // if account is not reset, ZCS will be confused, and the next
+      // uploaded file
+      // will be deleted per previous command.
+      ZimbraAccount.ResetAccountZWC();
+   }
 }
