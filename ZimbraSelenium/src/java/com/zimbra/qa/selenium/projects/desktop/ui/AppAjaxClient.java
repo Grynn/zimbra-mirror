@@ -176,15 +176,29 @@ public class AppAjaxClient extends AbsApplication {
 	}
 
 	/**
+    * Delete Desktop account through HTTP Post with last account variable defaulted to false
+    * @param accountName Account Name to be deleted
+    * @param accountId Account ID to be deleted
+    * @param accountType Account Type (usually: zimbra)
+    * @param accountFlavor Account Flavor (usually: Zimbra)
+    * @throws HarnessException
+    */
+	public void zDeleteDesktopAccount(String accountName, String accountId,
+         String accountType, String accountFlavor) throws HarnessException {
+	   zDeleteDesktopAccount(accountName, accountId, accountType, accountFlavor, false);
+   }
+
+	/**
     * Delete Desktop account through HTTP Post
     * @param accountName Account Name to be deleted
     * @param accountId Account ID to be deleted
     * @param accountType Account Type (usually: zimbra)
-    * @param accountFlavor Account Flavor (usually: Zimbra) 
+    * @param accountFlavor Account Flavor (usually: Zimbra)
+    * @param lastAccount Is this last account (for wait purpose)
     * @throws HarnessException
     */
    public void zDeleteDesktopAccount(String accountName, String accountId,
-         String accountType, String accountFlavor) throws HarnessException {
+         String accountType, String accountFlavor, boolean lastAccount) throws HarnessException {
       String serverScheme = ZimbraSeleniumProperties.getStringProperty("server.scheme", "http");
       String serverName = ZimbraSeleniumProperties.getStringProperty("desktop.server.host", "localhost");
       ZimbraDesktopProperties zdp = ZimbraDesktopProperties.getInstance();
@@ -205,7 +219,7 @@ public class AppAjaxClient extends AbsApplication {
       zPageLogin.sRefresh();
       GeneralUtility.waitForElementPresent(zPageLogin,
             PageLogin.Locators.zAddNewAccountButton);
-      if (!zPageLogin.sIsElementPresent(PageLogin.Locators.zDeleteButton)) {
+      if (lastAccount || !zPageLogin.sIsElementPresent(PageLogin.Locators.zDeleteButton)) {
          ZimbraAccount.ResetAccountZWC();
       }
    }

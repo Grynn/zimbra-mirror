@@ -161,7 +161,7 @@ public class PageLogin extends AbsTab {
 	public void zRemoveAccount() throws HarnessException {
 	   String attribute = sGetAttribute(Locators.zDeleteButton + "@href");
 	   ((AppAjaxClient)MyApplication).zDeleteDesktopAccount(attribute.split("'")[3], attribute.split("'")[1],
-      "Zimbra", "Zimbra");
+      "Zimbra", "Zimbra", true);
 
 	   Object[] params = {Locators.zDeleteButton};
       GeneralUtility.waitFor(null, this, false, "sIsElementPresent",
