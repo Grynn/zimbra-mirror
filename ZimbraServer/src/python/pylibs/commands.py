@@ -164,7 +164,7 @@ def gamau(sArgs=None, aArgs=None):
 
 	except:
 		rc = 1
-		error = sys.exc_info()[0]
+		error = str(sys.exc_info()[1])
 	return (rc, output, error)
 
 def garpu(sArgs=None, aArgs=None):
@@ -185,7 +185,7 @@ def garpu(sArgs=None, aArgs=None):
 
 	except:
 		rc = 1
-		error = sys.exc_info()[0]
+		error = str(sys.exc_info()[1])
 	return (rc, output, error)
 
 def garpb(sArgs=None, aArgs=None):
@@ -218,7 +218,7 @@ def garpb(sArgs=None, aArgs=None):
 
 	except:
 		rc = 1
-		error = sys.exc_info()[0]
+		error = str(sys.exc_info()[1])
 
 	return (rc, output, error)
 
@@ -238,7 +238,7 @@ def gamcs(sArgs=None, aArgs=None):
 
 	except:
 		rc = 1
-		error = sys.exc_info()[0]
+		error = str(sys.exc_info()[1])
 	return (rc, output, error)
 
 def getserver(sArgs=None, aArgs=None):
@@ -253,7 +253,7 @@ def getserver(sArgs=None, aArgs=None):
 
 	except:
 		rc = 1
-		error = sys.exc_info()[0]
+		error = str(sys.exc_info()[1])
 	return (rc, output, error)
 
 def getglobal(sArgs=None, aArgs=None):
@@ -268,7 +268,7 @@ def getglobal(sArgs=None, aArgs=None):
 
 	except:
 		rc = 1
-		error = sys.exc_info()[0]
+		error = str(sys.exc_info()[1])
 	return (rc, output, error)
 
 def getlocal(sArgs=None, rArgs=None):
