@@ -35,7 +35,6 @@ my %BINARIES = (
     "openldap-libs" => "2.4.25.4z",
     "openssl" => "1.0.0d",
     "tcmalloc" => "1.7",
-    "rlfe" => "0.4",
     "jetty" => "6.1.22.z6"
 );
 my $P4_CMD = "p4";
