@@ -64,7 +64,7 @@ def watchdog():
 		return
 	Log.logMsg(4, "Watchdog enabled checking services");
 
-	for service in sorted(myState.curServices().keys()):
+	for service in sorted(myState.curServices()):
 		prevstatus = myState.prevServices(service)
 		curstatus = myState.processIsRunning(service) and "running" or "stopped"
 		if prevstatus is not None and curstatus != prevstatus:
@@ -72,25 +72,26 @@ def watchdog():
 		myState.prevServices(service, curstatus)
 
 		# services need to be seen running at least once before eligible for watchdog restart
-		if curstatus == "running" and myState.watchdog(service) is None:
+		Log.logMsg(1, "Tracking service %s " % (service))
+		if curstatus == "running" and myState.getWatchdog(service) is None:
 			Log.logMsg(3, "Watchdog: service %s now available for watchdog." % (service,))
-			myState.watchdog(service,True)
+			myState.watchdogProcess[service] = True
 
-	if config.wd_all:
-		for service in sorted(myState.curServices().keys()):
-			if myState.watchdog(service) is None:
+	if myConfig.wd_all:
+		for service in sorted(myState.curServices()):
+			if myState.getWatchdog(service) is None:
 				continue
-			if (myState.lookUpConfig("SERVICE", service) and processIsNotRunning(service)):
+			if (myState.lookUpConfig("SERVICE", service) and myState.processIsNotRunning(service)):
 				Log.logMsg(2, "Watchdog: adding %s to restart list" % (service,));
 				myState.curRestarts(service, -1)
 				
 	else:
-		for service in sorted(config.wd_list):
+		for service in sorted(myConfig.wd_list):
 			Log.logMsg(4, "Watchdog: checking service %s" % (service,));
-			if myState.watchdog(service) is None:
+			if myState.getWatchdog(service) is None:
 				Log.logMsg(3, "Watchdog: skipping service %s. Service not yet available for restarts." % (service,));
 				continue
-			if (myState.lookUpConfig("SERVICE", service) and processIsNotRunning(service)):
+			if (myState.lookUpConfig("SERVICE", service) and myState.processIsNotRunning(service)):
 				Log.logMsg(2, "Watchdog: adding %s to restart list" % (service,));
 				myState.curRestarts(service, -1)
 			else:

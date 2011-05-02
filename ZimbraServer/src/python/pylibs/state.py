@@ -68,8 +68,7 @@ class State:
 		self.forcedconfig     = {}
 		self.requestedconfig     = {}
 		self.fileCache 		  = {}
-		self.watchdog         = {
-							  }
+		self.watchdogProcess         = {}
 		self.changedkeys	  = {}
 		self.lastVals		  = {}
 		self.previous         = {
@@ -101,15 +100,15 @@ class State:
 
 	def delWatchdog(self, process):
 		try:
-			del self.watchdog[process]
+			del self.watchdogProcess[process]
 		except:
 			return
 
 	def getWatchdog(self, service, state=None):
 		if state is not None:
-			self.watchdog[service] = state
+			self.watchdogProcess[service] = state
 		try:
-			return self.watchdog[service]
+			return self.watchdogProcess[service]
 		except Exception, e:
 			return None
 
