@@ -84,11 +84,14 @@ public class DocumentBriefcaseEdit extends AbsForm {
 		// this.sMouseDown(Locators.zSaveAndCloseIconBtn);
 		// this.sMouseUp(Locators.zSaveAndCloseIconBtn);
 
+		// TODO: Please uncomment below beyond 7.0.1
+		/**
 		// add version notes
 		DialogAddVersionNotes dlgAddNotes = new DialogAddVersionNotes(
 				MyApplication, ((AppAjaxClient) MyApplication).zPageBriefcase);
 
 		dlgAddNotes.zDismissAddVersionNotesDlg(docItem.getName());
+		*/
 	}
 
 	@Override
