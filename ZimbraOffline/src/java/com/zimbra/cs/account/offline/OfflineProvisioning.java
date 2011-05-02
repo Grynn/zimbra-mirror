@@ -457,11 +457,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return mMimeTypes;
     }
 
-    @Override
-    public List<Zimlet> getObjectTypes() {
-        return listAllZimlets();
-    }
-
     static final Set<String> sOfflineAttributes = new HashSet<String>(Arrays.asList(
             A_zimbraId,
             A_mail,
