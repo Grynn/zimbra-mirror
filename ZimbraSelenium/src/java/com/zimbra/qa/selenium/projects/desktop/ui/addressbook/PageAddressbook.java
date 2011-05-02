@@ -11,6 +11,7 @@ import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.*;
@@ -316,9 +317,12 @@ public class PageAddressbook extends AbsTab {
 	      FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
 	      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 	      app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
-	    
+
 	      // Select the item
 	      zListItem(Action.A_LEFTCLICK, contactItem.fileAs);
+	      Object[] params = {"css=table[class*='contactHeaderTable'] div[class*='contactHeader']"};
+	      GeneralUtility.waitFor(null, this, false, "sGetText", params, WAIT_FOR_OPERAND.EQ,
+	            contactItem.firstName + " " + contactItem.lastName, 30000, 1000);
 	      
 	      return contactItem;
 	    }
