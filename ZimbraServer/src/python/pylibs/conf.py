@@ -43,7 +43,7 @@ class Config:
 		if self.debug:
 			self.interval  = 10
 		self.restartconfig = False
-		self.watchdog 	= False
+		self.watchdog 	= True
 		self.wd_list	= [ "antivirus" ]
 		self.loglevel 	= 3
 
