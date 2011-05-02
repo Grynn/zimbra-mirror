@@ -96,6 +96,8 @@ public class ZComposeUploaderBean {
     public static final String F_contactSearchEmailQuery = "contactSearchEmailQuery";
     public static final String F_contactSearchDeptQuery = "contactSearchDeptQuery";
     public static final String F_contactLocation = "contactLocation";
+    public static final String F_nextSearchOffset = "nextSearchOffset";
+    public static final String F_prevSearchOffset = "prevSearchOffset";
     public static final String F_sendUID = "sendUID";
 
     public static final String F_addTo = "addTo";
@@ -128,6 +130,8 @@ public class ZComposeUploaderBean {
     public static final String F_actionContactCancel = "actionContactCancel";
     public static final String F_actionContactAdd = "actionContactAdd";
     public static final String F_actionContactSearch = "actionContactSearch";
+    public static final String F_actionContactSearchMore = "actionContactSearchMore";
+    public static final String F_actionContactSearchPrev = "actionContactSearchPrev";
 
     public static final String F_actionRepeatEdit = "actionRepeatEdit";
     public static final String F_actionRepeatCancel = "actionRepeatCancel";
@@ -523,6 +527,10 @@ public class ZComposeUploaderBean {
 
     public boolean getIsContactSearch() { return hasParam(F_actionContactSearch); }
 
+    public boolean getIsContactSearchMore() { return hasParam(F_actionContactSearchMore); }
+
+    public boolean getIsContactSearchPrev() { return hasParam(F_actionContactSearchPrev); }    
+
     public boolean getIsRepeatEdit() { return hasParam(F_actionRepeatEdit); }
 
     public boolean getIsRepeatCancel() { return hasParam(F_actionRepeatCancel); }
@@ -558,6 +566,11 @@ public class ZComposeUploaderBean {
     public void setPendingResources(String mPendingresources) { this.mPendingResources = mPendingresources; }
 
     public String getContactLocation() { return getParam(F_contactLocation); }
+
+    public String getNextSearchOffset() { return getParam(F_nextSearchOffset); }
+
+    public String getPrevSearchOffset() { return getParam(F_prevSearchOffset); }
+
 
     public List<ZEmailAddress>  getPendingAttendeesList() {
         try{
