@@ -39,7 +39,10 @@ public class UnTagTask extends AjaxCommonTest {
 				+		"</m>"
 				+	"</CreateTaskRequest>");
 
-		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(),subject);
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageTasks.zWaitForDesktopLoadingSpinner(5000);
+
+      TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(),subject);
 		ZAssert.assertNotNull(task, "Verify the task is created");
 
 		// Refresh the tasks view
