@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011 Zimbra, Inc.
  *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -18,15 +18,11 @@ import java.io.IOException;
 
 import javax.mail.Address;
 import javax.mail.MessagingException;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.offline.OfflineProvisioning;
-import com.zimbra.cs.mime.ParsedAddress;
-import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.FileUploadServlet;
@@ -77,32 +73,12 @@ public class OfflineMailSender extends MailSender {
             if (getUploads() != null)
                 FileUploadServlet.deleteUploads(getUploads());
 
-            // add any new contacts to the personal address book
-            if (getSaveContacts() != null) {
-                Mailbox contactMbox = mbox;
-
-                if (!acct.isFeatureContactsEnabled()) {
-                    Account localAcct = OfflineProvisioning.getOfflineInstance().getLocalAccount();
-
-                    contactMbox = MailboxManager.getInstance().getMailboxByAccount(localAcct);
-                }
-                for (InternetAddress iaddr : getSaveContacts()) {
-                    ParsedAddress addr = new ParsedAddress(iaddr);
-                    try {
-                        ParsedContact pc = new ParsedContact(addr.getAttributes());
-                        contactMbox.createContact(octxt, pc, Mailbox.ID_FOLDER_AUTO_CONTACTS, null);
-                    } catch (ServiceException e) {
-                        OfflineLog.offline.warn("ignoring error while auto-adding contact", e);
-                    }
-                }
-            }
-            
             // update contact rankings
             Address[] rcpts = getRecipients(mm);
             if (rcpts != null && rcpts.length > 0) {
                 ContactRankings.increment(acct.getId(), rcpts);
             }
-            
+
             return new ItemId(mbox, draftId);
         } catch (MessagingException me) {
             OfflineLog.offline.warn("exception occurred during SendMsg", me);

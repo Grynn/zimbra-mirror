@@ -296,8 +296,8 @@ public class DataSourceMailbox extends SyncMailbox {
             if (ds.isYahoo() && !isYBizmail) {
                 YMailSender ms = YMailSender.newInstance(ds);
                 try {
-                    ms.sendMimeMessage(context, this, saveToSent, mm, null, null,
-                        origMsgId, msg.getDraftReplyType(), identity, false);
+                    ms.sendMimeMessage(context, this, saveToSent, mm, null,
+                            origMsgId, msg.getDraftReplyType(), identity, false);
                 } catch (ServiceException e) {
                     Throwable cause = e.getCause();
                     if (cause != null && cause instanceof YMailException) {
@@ -316,7 +316,7 @@ public class DataSourceMailbox extends SyncMailbox {
             } else {
                 MailSender ms = ds.isLive() ? LMailSender.newInstance(ds) : new MailSender();
                 try {
-                    ms.sendMimeMessage(context, this, saveToSent, mm, null, null,
+                    ms.sendMimeMessage(context, this, saveToSent, mm, null,
                         origMsgId, msg.getDraftReplyType(), identity, false);
                 } catch (ServiceException e) {
                     Throwable cause = e.getCause();
