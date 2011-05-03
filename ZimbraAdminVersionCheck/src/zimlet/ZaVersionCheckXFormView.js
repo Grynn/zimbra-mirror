@@ -195,20 +195,20 @@ ZaVersionCheckXFormView.myXFormModifier = function(xFormObject, entry) {
 					items: [
 						{type:_GROUP_,
 							numCols:3,
-							colSizes:["50","100","525"],				
+							colSizes:["275","100","300"],				
 							items:[
 								{ 
 									ref:ZaVersionCheck.A_zimbraVersionCheckUpdateShortversion, 
-									type: _OUTPUT_, label:null,labelLocation:_NONE_
+									type: _OUTPUT_, label:null,labelLocation:_NONE_, containerCssStyle:"text-align:right"
 								},
 								{ 
 									ref:ZaVersionCheck.A_zimbraVersionCheckUpdateCritical, 
 									type: _OUTPUT_, label:null,labelLocation:_NONE_,
-									choices:this.criticalChoices
+									choices:this.criticalChoices, containerCssStyle:"text-align:center"
 								},
 								{ 
 									ref:ZaVersionCheck.A_zimbraVersionCheckUpdateUpdateURL, 
-									type: _URL_, label:null,labelLocation:_NONE_
+									type: _URL_, label:null,labelLocation:_NONE_, containerCssStyle:"text-align:center"
 								}
 							]
 						}
