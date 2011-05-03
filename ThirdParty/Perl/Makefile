@@ -137,7 +137,6 @@ PERL_LIBS 	:= \
 	IO::Compress::Base \
 	IO::Compress::Gzip \
 	Compress::Raw::Zlib \
-	P/PM/PMQS/Compress-Zlib-1.42.tar.gz \
 	Archive::Tar \
 	Digest::SHA1 \
 	Digest::HMAC \
