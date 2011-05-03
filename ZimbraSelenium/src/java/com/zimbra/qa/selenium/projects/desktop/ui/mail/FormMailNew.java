@@ -6,6 +6,7 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.RecipientItem.RecipientType;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.desktop.ui.*;
 
@@ -603,12 +604,14 @@ public class FormMailNew extends AbsForm {
 	}
 	
 	public boolean zHasAttachment(String name)  throws HarnessException {
-	    
-	    //verify clipper image existed, checkbox is checked, and  attachment file name
-	    
-	    return  sIsElementPresent(Locators.zAttachmentImage) &&
-	            sIsChecked(Locators.zAttachmentCheckbox) &&
-	            sIsElementPresent(Locators.zAttachmentText + "'" + name + "'" + ")");	    		   
+	    return (Boolean)GeneralUtility.waitFor(null, this, false, "zIsAttachmentReady",
+	          new Object[] {name}, WAIT_FOR_OPERAND.EQ, true, 30000, 1000);	    		   
 	}
 
+	public boolean zIsAttachmentReady(String name) {
+      //verify clipper image existed, checkbox is checked, and  attachment file name
+	   return  sIsElementPresent(Locators.zAttachmentImage) &&
+      sIsChecked(Locators.zAttachmentCheckbox) &&
+      sIsElementPresent(Locators.zAttachmentText + "'" + name + "'" + ")");   
+	}
 }
