@@ -378,9 +378,20 @@ public abstract class AbsSeleniumObject {
 	 */
 	public boolean sIsElementPresent(String locator) {
 		// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
+		if (locator.startsWith("//") || locator.startsWith("xpath")) {
+			logger.warn("FIXME: the locator " + locator + " is a xpath - should change to css");		   
+		}		
+		
+		long startTime= System.currentTimeMillis();		
 		boolean present = ((DefaultSelenium) ClientSessionFactory.session()
 				.selenium()).isElementPresent(locator);
+		long runTime= System.currentTimeMillis() - startTime;
+		// if run time > 2 sec, the locator is probably xpath; should change to css		
+		if (runTime > 2000) {
+			logger.warn("FIXME: Run time >2 sec for sIsElementPresent(" + locator + ")");		   
+		}
 		logger.info("isElementPresent(" + locator + ") = " + present);
+					
 		return (present);
 	}
 
