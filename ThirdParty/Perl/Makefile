@@ -140,7 +140,6 @@ PERL_LIBS 	:= \
 	Archive::Tar \
 	Digest::SHA1 \
 	Digest::HMAC \
-	Digest::HMAC_MD5 \
 	Convert::TNEF \
 	Convert::UUlib \
 	Net::IP \
