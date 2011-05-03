@@ -200,6 +200,9 @@ public class DeleteDocument extends AjaxCommonTest {
 						+ "</doc>"
 						+ "</SaveDocumentRequest>");
 
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
@@ -258,7 +261,10 @@ public class DeleteDocument extends AjaxCommonTest {
 						+ "</doc>"
 						+ "</SaveDocumentRequest>");
 
-		// refresh briefcase page
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
@@ -272,7 +278,10 @@ public class DeleteDocument extends AjaxCommonTest {
 		// Click OK on Confirmation dialog
 		deleteConfirm.zClickButton(Button.B_YES);
 
-		// refresh briefcase page
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page
 		app.zTreeBriefcase
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
@@ -327,7 +336,10 @@ public class DeleteDocument extends AjaxCommonTest {
 
 		}
 
-		// refresh briefcase page
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Select all three items
@@ -342,7 +354,10 @@ public class DeleteDocument extends AjaxCommonTest {
 		// Click OK on Confirmation dialog
 		deleteConfirm.zClickButton(Button.B_YES);
 
-		// refresh briefcase page
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page
 		app.zTreeBriefcase
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 

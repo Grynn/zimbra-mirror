@@ -42,11 +42,13 @@ public class TagFile extends AjaxCommonTest {
 				+ "<doc l='" + briefcaseFolder.getId() + "'><upload id='"
 				+ attachmentId + "'/></doc></SaveDocumentRequest>");
 
-		// refresh briefcase page
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Create a tag using GUI
@@ -60,6 +62,7 @@ public class TagFile extends AjaxCommonTest {
 		dialogTag.zClickButton(Button.B_OK);
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 
 		// Make sure the tag was created on the server (get the tag ID)
 		account.soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");
@@ -100,9 +103,11 @@ public class TagFile extends AjaxCommonTest {
 
 		ZAssert.assertEquals(id, tagId,
 				"Verify the tag was attached to the document");
-		
+
 		//delete file upon test completion
-		app.zPageBriefcase.deleteFileByName(fileName);		
+		app.zPageBriefcase.deleteFileByName(fileName);
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 	}
 
 	@Test(description = "Tag uploaded File using pre-existing Tag", groups = { "functional" })
@@ -139,17 +144,22 @@ public class TagFile extends AjaxCommonTest {
 		TagItem tag = TagItem.importFromSOAP(app.zGetActiveAccount(), tagName);
 		ZAssert.assertNotNull(tag, "Verify the new tag was created");
 
-		// refresh briefcase page
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on uploaded file
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Tag file selecting pre-existing tag from Toolbar drop down list
 		app.zPageBriefcase.zToolbarPressPulldown(Button.B_TAG, tag.getName());
 
-		// Make sure the tag was applied to the document
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // Make sure the tag was applied to the document
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
 						+ "<query>" + fileName + "</query>" + "</SearchRequest>");
@@ -161,6 +171,9 @@ public class TagFile extends AjaxCommonTest {
 				"Verify the tag was attached to the document");
 		
 		//delete file upon test completion
-		app.zPageBriefcase.deleteFileByName(fileName);		
+		app.zPageBriefcase.deleteFileByName(fileName);
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 	}
 }

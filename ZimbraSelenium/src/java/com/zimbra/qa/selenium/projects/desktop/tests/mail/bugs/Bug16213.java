@@ -29,6 +29,7 @@ public class Bug16213 extends AjaxCommonTest {
 		super.startingAccountPreferences = new HashMap<String, String>() {{
 			put("zimbraPrefGroupMailBy", "conversation");
 			put("zimbraPrefMessageViewHtmlPreferred", "TRUE");
+			put("zimbraPrefReadingPaneLocation", "bottom");
 		}};
 
 
@@ -44,7 +45,6 @@ public class Bug16213 extends AjaxCommonTest {
 		String MimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/private/mime/Bugs/Bug16213";
 		LmtpInject.injectFile(ZimbraAccount.AccountZWC().EmailAddress, new File(MimeFolder));
 
-		
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
@@ -73,7 +73,6 @@ public class Bug16213 extends AjaxCommonTest {
 		String MimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/private/mime/Bugs/Bug16213";
 		LmtpInject.injectFile(ZimbraAccount.AccountZWC().EmailAddress, new File(MimeFolder));
 
-		
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 

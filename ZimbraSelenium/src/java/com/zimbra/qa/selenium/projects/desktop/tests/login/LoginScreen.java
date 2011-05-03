@@ -83,7 +83,7 @@ public class LoginScreen extends AjaxCommonTest {
 	}
 
 	@Test(	description = "Verify initial focus on the login screen should be in username",
-			groups = { "functional" })
+			groups = { "skip-functional" })
 	public void LoginScreen03() throws HarnessException {
 		
 		// Get to the login screen

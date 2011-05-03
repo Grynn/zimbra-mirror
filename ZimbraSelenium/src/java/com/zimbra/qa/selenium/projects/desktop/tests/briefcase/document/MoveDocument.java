@@ -140,7 +140,10 @@ public class MoveDocument extends AjaxCommonTest {
 					subFolderNames[i]);
 		}
 
-		// refresh briefcase page
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseRootFolder,
 				true);
 
@@ -167,7 +170,10 @@ public class MoveDocument extends AjaxCommonTest {
 						+ "</doc>"
 						+ "</SaveDocumentRequest>");
 
-		// click on sub-folder1 in tree view to refresh view
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // click on sub-folder1 in tree view to refresh view
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolders[0], true);
 
 		// Click on created document in list view
@@ -181,7 +187,10 @@ public class MoveDocument extends AjaxCommonTest {
 		chooseFolder.zClickTreeFolder(subFolders[1]);
 		chooseFolder.zClickButton(Button.B_OK);
 
-		// click on sub-folder1 in tree view
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // click on sub-folder1 in tree view
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolders[0], false);
 
 		// Verify document is no longer in the sub-folder1

@@ -110,11 +110,13 @@ public class DeleteFile extends AjaxCommonTest {
 		String docId = account.soapSelectValue(
 				"//mail:SaveDocumentResponse//mail:doc", "id");
 
-		// refresh briefcase page
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Click the Delete keyboard shortcut
@@ -123,6 +125,9 @@ public class DeleteFile extends AjaxCommonTest {
 
 		// Click OK on Confirmation dialog
 		deleteConfirm.zClickButton(Button.B_YES);
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 
 		// refresh briefcase page
 		app.zTreeBriefcase
@@ -180,11 +185,13 @@ public class DeleteFile extends AjaxCommonTest {
 		String docId = account.soapSelectValue(
 				"//mail:SaveDocumentResponse//mail:doc", "id");
 
-		// refresh briefcase page
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Click the Backspace keyboard shortcut
@@ -194,7 +201,10 @@ public class DeleteFile extends AjaxCommonTest {
 		// Click OK on Confirmation dialog
 		deleteConfirm.zClickButton(Button.B_YES);
 
-		// refresh briefcase page
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page
 		app.zTreeBriefcase
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 

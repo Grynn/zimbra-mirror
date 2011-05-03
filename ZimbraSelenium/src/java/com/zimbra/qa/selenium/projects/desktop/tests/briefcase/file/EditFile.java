@@ -104,7 +104,10 @@ public class EditFile extends AjaxCommonTest {
 				+ "<doc l='" + briefcaseFolder.getId() + "'><upload id='"
 				+ attachmentId + "'/>" + "</doc></SaveDocumentRequest>");
 
-		// refresh briefcase page
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Retrieve file text through RestUtil
@@ -123,7 +126,10 @@ public class EditFile extends AjaxCommonTest {
 
 		app.zPageBriefcase.rename(fileName2);
 
-		// Verify document name through GUI
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // Verify document name through GUI
 		ZAssert.assertTrue(app.zPageBriefcase
 				.waitForPresentInListView(fileName2),
 				"Verify new file name through GUI");
@@ -172,6 +178,7 @@ public class EditFile extends AjaxCommonTest {
 		"</SaveDocumentRequest>");
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
@@ -186,6 +193,9 @@ public class EditFile extends AjaxCommonTest {
 
 		// delete file upon test completion
 		app.zPageBriefcase.deleteFileByName(fileItem.getName());
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 	}
 
 	@Test(description = "Upload file through RestUtil - Verify 'Edit' context menu is disabled", groups = { "functional" })
@@ -218,6 +228,7 @@ public class EditFile extends AjaxCommonTest {
 		"</SaveDocumentRequest>");
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
@@ -232,6 +243,9 @@ public class EditFile extends AjaxCommonTest {
 
 		// delete file upon test completion
 		app.zPageBriefcase.deleteFileByName(fileItem.getName());
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 	}
 
 	@AfterMethod(alwaysRun=true)

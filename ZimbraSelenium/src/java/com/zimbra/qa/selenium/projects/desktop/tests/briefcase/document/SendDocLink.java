@@ -56,6 +56,7 @@ public class SendDocLink extends AjaxCommonTest {
 						+ "</SaveDocumentRequest>");
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
@@ -69,6 +70,8 @@ public class SendDocLink extends AjaxCommonTest {
 		
 		// Click Yes on confirmation dialog
 		FormMailNew mailform = (FormMailNew) confDlg.zClickButton(Button.B_YES);
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 
 		// Verify the new mail form is opened
 		ZAssert.assertTrue(mailform.zIsVisible(), "Verify the new form opened");

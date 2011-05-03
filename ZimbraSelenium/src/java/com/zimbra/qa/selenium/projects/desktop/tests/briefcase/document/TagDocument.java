@@ -139,7 +139,7 @@ public class TagDocument extends AjaxCommonTest {
 						+ "</doc>"
 						+ "</SaveDocumentRequest>");
 
-		// Create a tag
+      // Create a tag
 		String tagName = "tag" + ZimbraSeleniumProperties.getUniqueString();
 
 		account.soapSend("<CreateTagRequest xmlns='urn:zimbraMail'>"
@@ -150,17 +150,22 @@ public class TagDocument extends AjaxCommonTest {
 		TagItem tag = TagItem.importFromSOAP(app.zGetActiveAccount(), tagName);
 		ZAssert.assertNotNull(tag, "Verify the new tag was created");
 
-		// refresh briefcase page
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Tag document selecting pre-existing tag from Toolbar drop down list
 		app.zPageBriefcase.zToolbarPressPulldown(Button.B_TAG, tag.getName());
 
-		// Make sure the tag was applied to the document
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // Make sure the tag was applied to the document
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
 						+ "<query>" + docName + "</query>" + "</SearchRequest>");
