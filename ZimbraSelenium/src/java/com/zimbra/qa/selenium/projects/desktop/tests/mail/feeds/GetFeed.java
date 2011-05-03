@@ -41,9 +41,11 @@ public class GetFeed extends AjaxCommonTest {
 					"<folder name='"+ foldername +"' l='"+ root.getId() +"' url='"+ feed.toString() +"'/>" +
 				"</CreateFolderRequest>");
 
-		// Click on the "Inbox" to refresh
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inbox);
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 
+      // Click on the "Inbox" to refresh
+		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inbox);
 
 		// Verify the feed exists
 		// Get all the messages in the inbox
@@ -80,7 +82,10 @@ public class GetFeed extends AjaxCommonTest {
 					"<folder name='"+ foldername +"' l='"+ root.getId() +"' url='"+ url.toString() +"'/>" +
 				"</CreateFolderRequest>");
 
-		FolderItem feed = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      FolderItem feed = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
 
 		// Click on the "Inbox" to refresh
 		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inbox);
