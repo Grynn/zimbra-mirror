@@ -108,7 +108,7 @@
   <classpathentry kind="lib" path="/ZimbraCommon/jars/icu4j-4.4.2.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/ews.jar" sourcepath="/ZimbraCommon/jars-src/ews.zip"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-6.1.22.z6.jar"/>
-  <classpathentry kind="lib" path="/ZimbraCommon/jars/cassandra-0.7.4.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/cassandra-0.7.5.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/libthrift-0.5.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/hector-core-0.7.0-29.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/perf4j-0.9.13.jar"/>
