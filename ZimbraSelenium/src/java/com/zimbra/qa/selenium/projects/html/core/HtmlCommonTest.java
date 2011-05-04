@@ -215,7 +215,7 @@ public class HtmlCommonTest {
 	 * @throws HarnessException
 	 */
 	@AfterSuite( groups = { "always" } )
-	public void commonTestAfterSuite() throws HarnessException {	
+	public void commonTestAfterSuite() throws HarnessException {
 		logger.info("commonTestAfterSuite: start");
 
 		ClientSessionFactory.session().selenium().stop();
@@ -226,35 +226,35 @@ public class HtmlCommonTest {
 
 	/**
 	 * Global AfterClass
-	 * 
+	 *
 	 * @throws HarnessException
 	 */
 	@AfterClass( groups = { "always" } )
 	public void commonTestAfterClass() throws HarnessException {
 		logger.info("commonTestAfterClass: start");
 
-		logger.info("commonTestAfterClass: finish");
+		// For Ajax and Html, if account is considered dirty (modified),
+      // then recreate a new account
+      ZimbraAccount currentAccount = app.zGetActiveAccount();
+      if (currentAccount != null 
+            && currentAccount.accountIsDirty 
+            && currentAccount == ZimbraAccount.AccountHTML()) {
+
+         ZimbraAccount.ResetAccountHTML();
+
+      }
+
+      logger.info("commonTestAfterClass: finish");
 	}
 
 	/**
 	 * Global AfterMethod
-	 * 
+	 *
 	 * @throws HarnessException
 	 */
 	@AfterMethod( groups = { "always" } )
 	public void commonTestAfterMethod() throws HarnessException {
 		logger.info("commonTestAfterMethod: start");
-
-		// For Ajax and Html, if account is considered dirty (modified),
-		// then recreate a new account
-		ZimbraAccount currentAccount = app.zGetActiveAccount();
-		if (currentAccount != null 
-				&& currentAccount.accountIsDirty 
-				&& currentAccount == ZimbraAccount.AccountHTML()) {
-
-			ZimbraAccount.ResetAccountHTML();
-
-		}
 
 		logger.info("commonTestAfterMethod: finish");
 	}

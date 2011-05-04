@@ -592,8 +592,19 @@ public class AjaxCommonTest {
 	@AfterClass( groups = { "always" } )
 	public void commonTestAfterClass() throws HarnessException {
 		logger.info("commonTestAfterClass: start");
-		
-		logger.info("commonTestAfterClass: finish");
+
+		// For Ajax, if account is considered dirty (modified),
+      // then recreate a new account, but for desktop, the zimlet
+      // preferences has to be reset to default, all core zimlets are enabled
+      ZimbraAccount currentAccount = app.zGetActiveAccount();
+      if (currentAccount != null && currentAccount.accountIsDirty &&
+            currentAccount == ZimbraAccount.AccountZWC()) {
+         // Reset the account
+         ZimbraAccount.ResetAccountZWC();
+
+      }
+
+      logger.info("commonTestAfterClass: finish");
 	}
 
 	/**
@@ -604,39 +615,8 @@ public class AjaxCommonTest {
 	@AfterMethod( groups = { "always" } )
 	public void commonTestAfterMethod() throws HarnessException {
 		logger.info("commonTestAfterMethod: start");
-		
+
 		CodeCoverage.getInstance().calculateCoverage();
-
-		// For Ajax, if account is considered dirty (modified),
-		// then recreate a new account, but for desktop, the zimlet
-		// preferences has to be reset to default, all core zimlets are enabled
-		ZimbraAccount currentAccount = app.zGetActiveAccount();
-		if (currentAccount != null && currentAccount.accountIsDirty &&
-		      currentAccount == ZimbraAccount.AccountZWC()) {
-
-		   if (ZimbraSeleniumProperties.getAppType() == AppType.AJAX) {
-
-		      // Reset the account
-		      ZimbraAccount.ResetAccountZWC();
-
-		   } else if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-
-		      if (desktopZimlets == null) {
-		         throw new HarnessException("Desktop zimlets are null for unknown reason");
-		      }
-
-		      // Reset the zimlets preferences to default
-		      Map<String, String> defaultZimlets = new HashMap<String, String>();
-
-		      for (int i = 0; i < desktopZimlets.length; i++) {
-		         defaultZimlets.put(desktopZimlets[i], "enabled");
-		      }
-
-		      ZimbraAccount.AccountZWC().modifyZimletPreferences(defaultZimlets,
-	               SOAP_DESTINATION_HOST_TYPE.CLIENT);
-
-		   }
-		}
 
 		logger.info("commonTestAfterMethod: finish");
 	}
