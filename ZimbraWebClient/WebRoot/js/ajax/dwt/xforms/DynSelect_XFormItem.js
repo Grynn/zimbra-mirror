@@ -37,6 +37,7 @@ DynSelect_XFormItem.prototype.bmolsnr = true;
 DynSelect_XFormItem.prototype.emptyText = "";
 DynSelect_XFormItem.prototype.cssClass = "dynselect";
 DynSelect_XFormItem.prototype.edited = false;
+DynSelect_XFormItem.prototype.focusable = true;
 DynSelect_XFormItem.LOAD_PAUSE = AjxEnv.isIE ? 500 : 250;	// delay between chunks
 DynSelect_XFormItem.prototype.initFormItem = function () {
 	// if we're dealing with an XFormChoices object...
@@ -61,6 +62,14 @@ DynSelect_XFormItem.prototype.initFormItem = function () {
 	if(!this.dataFetcherMethod) {
 		this.dataFetcherMethod = DynSelect_XFormItem.fetchDataDefault;
 		this.dataFetcherObject = this;
+	}
+	var currentTabId = XFormItem.getParentTabGroupId(this);
+	this.getForm().indexItem(this, this.getId()+"_display");
+	if(currentTabId) {
+		var tabGroupItem = this.getForm().getItemById(currentTabId);
+		if(tabGroupItem) {
+			tabGroupItem.tabIdOrder.push(this.getId()+"_display");
+		}
 	}
 }
 DynSelect_XFormItem.prototype.changeChoicesCallback = 
