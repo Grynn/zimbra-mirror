@@ -224,11 +224,11 @@ public class TreeMail extends AbsTree {
 	private List<FolderItem>zListGetFolders(String top) throws HarnessException {
 		List<FolderItem> items = new ArrayList<FolderItem>();
 
-		String searchLocator = top + "//div[@class='DwtComposite']";
+		String searchLocator = top + " div[class='DwtComposite']";
 
-		int count = this.sGetXpathCount(searchLocator);
+		int count = this.sGetCssCount(searchLocator);
 		for ( int i = 1; i <= count; i++) {
-			String itemLocator = searchLocator + "["+ i + "]";
+			String itemLocator = searchLocator + " div:nth-of-type("+ i +") ";
 
 			if ( !this.sIsElementPresent(itemLocator) ) {
 				continue;
@@ -236,7 +236,8 @@ public class TreeMail extends AbsTree {
 
 			String locator;
 
-			String id = sGetAttribute("xpath=("+ itemLocator +"/.)@id");
+			// Strip the ID from the DOM
+			String id = sGetAttribute(itemLocator + "[id^='zti__main_Mail__']@id");
 			if ( id == null || id.trim().length() == 0 || !(id.startsWith("zti__main_Mail__")) ) {
 				// Not a folder
 				// Maybe "Find Shares ..."
@@ -250,15 +251,12 @@ public class TreeMail extends AbsTree {
 			item.setId(id.replace("zti__main_Mail__", ""));
 
 			// Set the name
-			locator = itemLocator + "//td[contains(@id, '_textCell')]";
+			locator = itemLocator + " td[id$='_textCell']";
 			item.setName(this.sGetText(locator));
 
 			// Set the expanded boolean
-			locator = itemLocator + "//td[contains(@id, '_nodeCell')]/div";
-			if ( sIsElementPresent(locator) ) {
-				// The image could be hidden, if there are no subfolders
-				item.gSetIsExpanded("ImgNodeExpanded".equals(sGetAttribute("xpath=("+ locator + ")@class")));
-			}
+			locator = itemLocator + " td[id$='_nodeCell']>div[class*=ImgNodeExpanded]";
+			item.gSetIsExpanded( sIsElementPresent(locator) );
 
 			items.add(item);
 
@@ -277,7 +275,7 @@ public class TreeMail extends AbsTree {
 		List<FolderItem> items = new ArrayList<FolderItem>();
 
 		// Recursively fill out the list, starting with all mail folders
-		items.addAll(zListGetFolders("//div[@id='ztih__main_Mail__FOLDER']"));
+		items.addAll(zListGetFolders("div[id='ztih__main_Mail__FOLDER']"));
 
 		return (items);
 
