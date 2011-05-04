@@ -63,11 +63,13 @@ public class UnTagFile extends AjaxCommonTest {
 		 * account.soapSelectValue("//mail:doc", "ver");
 		 */
 
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Create a tag
@@ -96,6 +98,7 @@ public class UnTagFile extends AjaxCommonTest {
 		dialogTag.zClickButton(Button.B_OK);
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 
 		// Make sure the tag was created on the server (get the tag ID)
 		account.soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");
