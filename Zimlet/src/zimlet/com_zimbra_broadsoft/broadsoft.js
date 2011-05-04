@@ -899,7 +899,7 @@ function(callLogsList, category) {
 		if (countryCode.textContent) {
 			var obj = {ph: (countryCode.textContent + phoneNumber.textContent), n:name.textContent, date:this._formatDateTime(time.textContent)};
 		} else if (countryCode.text) {
-			var obj = {pn: (countryCode.text + phoneNumber.text), n:name.text, date:this._formatDateTime(time.text)};
+			var obj = {ph: (countryCode.text + phoneNumber.text), n:name.text, date:this._formatDateTime(time.text)};
 		}
 		this._callLogs[category].add(obj);
 	}
