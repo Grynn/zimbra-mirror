@@ -388,7 +388,7 @@ public abstract class AbsSeleniumObject {
 		long runTime= System.currentTimeMillis() - startTime;
 		// if run time > 2 sec, the locator is probably xpath; should change to css		
 		if (runTime > 2000) {
-			logger.warn("FIXME: Run time >2 sec for sIsElementPresent(" + locator + ")");		   
+			logger.warn("FIXME: Run time = " +  runTime +" sec for sIsElementPresent(" + locator + ")");		   
 		}
 		logger.info("isElementPresent(" + locator + ") = " + present);
 					
