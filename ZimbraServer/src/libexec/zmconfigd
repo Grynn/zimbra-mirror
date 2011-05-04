@@ -72,7 +72,8 @@ def watchdog():
 		myState.prevServices(service, curstatus)
 
 		# services need to be seen running at least once before eligible for watchdog restart
-		Log.logMsg(1, "Tracking service %s " % (service))
+		if myState.getWatchdog(service) is None:
+			Log.logMsg(1, "Tracking service %s " % (service))
 		if curstatus == "running" and myState.getWatchdog(service) is None:
 			Log.logMsg(3, "Watchdog: service %s now available for watchdog." % (service,))
 			myState.watchdogProcess[service] = True
