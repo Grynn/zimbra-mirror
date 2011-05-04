@@ -47,7 +47,7 @@ public class PageBriefcase extends AbsTab {
 		public static final Locators zNewMenuIconBtn = new Locators(
 				"id=zb__BCD__NEW_FILE_left_icon");
 		public static final Locators zNewMenuLeftIconBtn = new Locators(
-				"id=zb__BDLV__NEW_MENU_left_icon");
+				"css=td[id=zb__BDLV__NEW_MENU_left_icon]");
 		public static final Locators zNewMenuArrowBtn = new Locators(
 				"css=td[id=zb__BDLV__NEW_MENU_dropdown] div[class^=ImgSelectPullDownArrow]");
 		public static final Locators zUploadFileIconBtn = new Locators(
@@ -221,12 +221,6 @@ public class PageBriefcase extends AbsTab {
 		if (button == Button.B_NEW) {
 			// Check if the button is disabled
 			locator = Locators.zNewMenuLeftIconBtn.locator;
-
-			String attrs = sGetAttribute("css=td[" + locator + "]>div@class");
-
-			if (attrs.contains("ZDisabledImage")) {
-				throw new HarnessException(button + " is disabled " + attrs);
-			}
 
 			// Click on New Document icon
 			this.zClick(locator);
@@ -892,6 +886,15 @@ public class PageBriefcase extends AbsTab {
 				+ "x.blur(); x.focus(); x.dispatchEvent(evObj);}");
 	}
 
+	public void fireEvent(String locator, String eventName)
+			throws HarnessException {
+		logger.info("firing Event: " + eventName + " on " + locator);
+		// ClientSessionFactory.session().selenium().fireEvent(locator,eventName);
+		ClientSessionFactory.session().selenium().getEval(
+				"selenium.browserbot.triggerMouseEvent(selenium.browserbot.findElement('"
+						+ locator + "'),'" + eventName + "', null, 0, 0, 0)");
+	}
+
 	public void isOpenDocLoaded(DocumentItem docItem) throws HarnessException {
 		zWaitForWindow(docItem.getName());
 
@@ -1017,9 +1020,9 @@ public class PageBriefcase extends AbsTab {
 
 		ClientSessionFactory.session().selenium().close();
 	}
-	
+
 	@Override
-	public  void zSelectWindow(String windowID) throws HarnessException {
+	public void zSelectWindow(String windowID) throws HarnessException {
 		logger.info("zSelectWindow(" + windowID + ")");
 
 		boolean found = false;
@@ -1050,7 +1053,7 @@ public class PageBriefcase extends AbsTab {
 		if (found) {
 			this.sWindowFocus();
 			this.sWindowMaximize();
-		}		
+		}
 	}
 
 	@Override
