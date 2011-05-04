@@ -22,7 +22,7 @@ public class TreeBriefcase extends AbsTree {
 		public static final String briefcaseListView = "css=[id='zl__BDLV__rows']";
 		public static final String briefcaseTreeView = "css=[id*=zti__main_Briefcase__";
 		public static final String briefcaseTreeView_Desktop = "css=td[id*='main_Briefcase']";
-		public static final String zNewTagTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgNewTag]";
+		public static final String zNewTagTreeMenuItem = "css=tr[id=POPUP_NEW_TAG]:contains('New Tag')";
 		public static final String zRenameTagTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgRename]";
 		public static final String zDeleteTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgDelete]";
 	}
