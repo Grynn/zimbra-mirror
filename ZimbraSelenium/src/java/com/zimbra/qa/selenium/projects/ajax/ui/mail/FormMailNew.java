@@ -481,15 +481,14 @@ public class FormMailNew extends AbsForm {
 		// <tr id='zv__COMPOSEX_bcc_row' style='display: table_row' x-display='table-row' ...
 		// <tr id='zv__COMPOSEX_bcc_row' style='display: none'  x-display='table-row' ...
 		
-		String xpath = "//div[contains(@id,'zv__COMPOSE')]//tr[contains(@id,'_bcc_row')]";
-		if ( !sIsElementPresent(xpath) )
-			throw new HarnessException("Unable to locate the BCC field "+ xpath);
+		String locator;
 		
-		String locator = "xpath=("+ xpath +")@style";
-		String style = this.sGetAttribute(locator);
+		locator = "css=div[id^='zv__COMPOSE'] tr[id$='_bcc_row']";
+		if ( !sIsElementPresent(locator) )
+			throw new HarnessException("Unable to locate the BCC field "+ locator);
 		
-		logger.info(myPageName() + ".zBccIsActive() ... style="+ style);
-		return (!style.contains("none"));
+		locator = locator + "[style*=none]";
+		return (!sIsElementPresent(locator));
 	}
 
 	@Override

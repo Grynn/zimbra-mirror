@@ -443,6 +443,9 @@ public abstract class AbsSeleniumObject {
 
 	/**
 	 * DefaultSelenium.getAttribute()
+	 * Use this method if you need the value of the attribute.  If you are
+	 * checking whether an attribute contains a value, use this instead:<p>
+	 * sIsElementPresent("css=div[id='divid'][class*=ZSelected]");
 	 * 
 	 * @throws SeleniumException
 	 */
@@ -578,19 +581,18 @@ public abstract class AbsSeleniumObject {
 		logger.info("zWaitForElementEnabled(" + id + ")");
 
 		// not applicable for the element
-		if (!sIsElementPresent("xpath=//div[@id='" + id + "']")) {
+		if (!sIsElementPresent(id)) {
 			return;
 		}
 
 		for (int i = 0; i < 15; i++) {
-			String attrs = sGetAttribute("xpath=(//div[@id='" + id
-					+ "'])@class");
-			if (!attrs.contains("ZDisabled"))
+			String locator = "css=div[id='"+ id +"'][class*=ZDisabled]";
+			if ( !sIsElementPresent(locator) ) {
 				return;
+			}
 			SleepUtil.sleepSmall();
 		}
-		throw new HarnessException("Element with id=" + id
-				+ " never become enabled: ");
+		throw new HarnessException("Element with id=" + id + " never become enabled: ");
 
 	}
 
