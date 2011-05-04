@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
+import java.util.HashMap;
+
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -17,12 +19,15 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
 public class SendDocLink extends AjaxCommonTest {
 
-	public SendDocLink() {
+	@SuppressWarnings("serial")
+   public SendDocLink() {
 		logger.info("New " + SendDocLink.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
 
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String , String>() {{
+         put("zimbraPrefComposeFormat", "html");
+     }};
 	}
 
 	@Test(description = "Create document through SOAP - click Send Link, Cancel & verify through GUI", groups = { "functional" })

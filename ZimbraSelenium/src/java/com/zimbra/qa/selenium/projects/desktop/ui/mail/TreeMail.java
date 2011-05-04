@@ -524,9 +524,13 @@ public class TreeMail extends AbsTree {
 			}
 
 			String locator;
-
+//"//div[@id='ztih__" +
+//         ((AppAjaxClient)MyApplication).zGetActiveAccount().EmailAddress +
+//         ":main_Mail__FOLDER']"));
 			String id = sGetAttribute("xpath=("+ itemLocator +"/.)@id");
-			if ( id == null || id.trim().length() == 0 || !(id.startsWith("zti__main_Mail__")) ) {
+			if ( id == null || id.trim().length() == 0 ||
+			      !(id.startsWith("zti__" + ((AppAjaxClient)MyApplication).zGetActiveAccount().EmailAddress +
+               ":main_Mail__")) ) {
 				// Not a folder
 				// Maybe "Find Shares ..."
 				continue;
@@ -536,7 +540,8 @@ public class TreeMail extends AbsTree {
 
 			// Set the locator
 			// TODO: This could probably be made safer, to make sure the id matches an int pattern
-			item.setId(id.replace("zti__main_Mail__", ""));
+			item.setId(id.replace("zti__" + ((AppAjaxClient)MyApplication).zGetActiveAccount().EmailAddress +
+               ":main_Mail__", ""));
 
 			// Set the name
 			locator = itemLocator + "//td[contains(@id, '_textCell')]";
@@ -566,7 +571,9 @@ public class TreeMail extends AbsTree {
 		List<FolderItem> items = new ArrayList<FolderItem>();
 
 		// Recursively fill out the list, starting with all mail folders
-		items.addAll(zListGetFolders("//div[@id='ztih__main_Mail__FOLDER']"));
+		items.addAll(zListGetFolders("//div[@id='ztih__" +
+		      ((AppAjaxClient)MyApplication).zGetActiveAccount().EmailAddress +
+		      ":main_Mail__FOLDER']"));
 
 		return (items);
 

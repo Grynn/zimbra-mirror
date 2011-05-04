@@ -13,6 +13,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.desktop.ui.ContextMenu;
@@ -445,6 +446,13 @@ public class PageMail extends AbsTab {
 		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP &&
 				button == Button.B_GETMAIL) {
 
+		   Stafpostqueue sp = new Stafpostqueue();
+         try {
+            sp.waitForPostqueue();
+         } catch (Exception e) {
+            e.printStackTrace();
+            throw new HarnessException("Exception while doing post-queue");
+         }
 
 			// Wait for the spinner image
 			zWaitForDesktopLoadingSpinner(5000);

@@ -20,7 +20,8 @@ public class CreateTag extends AjaxCommonTest {
 
 	}
 
-	@Test(description = "Create a new tag by clicking 'new tag' on folder tree", groups = { "functional" })
+	// NOTE: Not valid for desktop test
+	@Test(description = "Create a new tag by clicking 'new tag' on folder tree", groups = { "skip-functional" })
 	public void CreateTag_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -35,7 +36,10 @@ public class CreateTag extends AjaxCommonTest {
 		dialog.zSetTagName(name);
 		dialog.zClickButton(Button.B_OK);
 
-		// Make sure the tag was created on the server
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // Make sure the tag was created on the server
 		TagItem tag = TagItem.importFromSOAP(account, name);
 		ZAssert.assertNotNull(tag, "Verify the new folder was created");
 
@@ -68,8 +72,11 @@ public class CreateTag extends AjaxCommonTest {
 		
 		SleepUtil.sleepSmall();
 		dialog.zClickButton(Button.B_OK);
-				
-		/*
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      /*
 		 * ClientSessionFactory.session().selenium().waitForCondition(
 		 * "selenium.browserbot.getUserWindow().top.appCtxt.getShell()._veilOverlay.veilZ==100"
 		 * ,"3000");ClientSessionFactory.session().selenium().fireEvent(
@@ -127,7 +134,10 @@ public class CreateTag extends AjaxCommonTest {
 		// Get the tag
 		TagItem tag1 = TagItem.importFromSOAP(account, name1);
 
-		// refresh briefcase page tags section before creating a new tag
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page tags section before creating a new tag
 		app.zTreeBriefcase
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
@@ -139,8 +149,11 @@ public class CreateTag extends AjaxCommonTest {
 		// Fill out the input field
 		dialog.zSetTagName(name2);
 		dialog.zClickButton(Button.B_OK);
-		
-		// refresh briefcase page tags section after creating a new tag
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page tags section after creating a new tag
 		app.zTreeBriefcase
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
@@ -176,7 +189,10 @@ public class CreateTag extends AjaxCommonTest {
 		dialog.zSetTagName(name);
 		dialog.zClickButton(Button.B_OK);
 	
-		// refresh briefcase page tags section after creating a new tag
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page tags section after creating a new tag
 		app.zTreeBriefcase
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 		

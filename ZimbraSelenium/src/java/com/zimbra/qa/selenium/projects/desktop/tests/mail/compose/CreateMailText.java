@@ -29,6 +29,7 @@ public class CreateMailText extends AjaxCommonTest {
 		super.startingPage = app.zPageMail;
 		super.startingAccountPreferences = new HashMap<String , String>() {{
 				    put("zimbraPrefComposeFormat", "text");
+				    put("zimbraPrefReadingPaneLocation", "bottom");
 				}};
 		
 	}
@@ -131,8 +132,11 @@ public class CreateMailText extends AjaxCommonTest {
 				
 		// Send the message
 		mailform.zSubmit();
-				
-		MailItem sent = MailItem.importFromSOAP(app.zGetActiveAccount(), "in:sent subject:("+ mail.dSubject +")");
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      MailItem sent = MailItem.importFromSOAP(app.zGetActiveAccount(), "in:sent subject:("+ mail.dSubject +")");
 		ZAssert.assertNotNull(sent, "Verify the message is in the sent folder");
 		
 		StringBuilder to = new StringBuilder();
@@ -140,7 +144,7 @@ public class CreateMailText extends AjaxCommonTest {
 			to.append(r.dEmailAddress).append(",");
 		}
 		ZAssert.assertStringContains(to.toString(), ZimbraAccount.AccountA().EmailAddress, "Verify TO contains AccountA");
-		
+
 		StringBuilder cc = new StringBuilder();
 		for (RecipientItem r: sent.dCcRecipients) {
 			cc.append(r.dEmailAddress).append(",");
@@ -149,11 +153,11 @@ public class CreateMailText extends AjaxCommonTest {
 
 		MailItem toReceived = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ mail.dSubject +")");
 		ZAssert.assertNotNull(toReceived, "Verify the TO recipient receives the message");
-		
+
 		MailItem ccReceived = MailItem.importFromSOAP(ZimbraAccount.AccountB(), "subject:("+ mail.dSubject +")");
 		ZAssert.assertNotNull(ccReceived, "Verify the CC recipient receives the message");
-		
-		
+
+
 	}
 
 	@Test(	description = "Send a mail with BCC",
@@ -213,38 +217,38 @@ public class CreateMailText extends AjaxCommonTest {
 			groups = { "functional" },
 			dataProvider = "DataProvidePriorities")
 	public void CreateMailText_05(Button option, String verify) throws HarnessException {
-		
+
 		// option: Button.B_PRIORITY_HIGH/NORMAL/LOW
 		// verify: the f field in the GetMsgResponse
-		
+
 		// Create the message data to be sent
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		String body = "body" + ZimbraSeleniumProperties.getUniqueString();
-		
-		
+
+
 		// Open the new mail form
 		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
 		ZAssert.assertNotNull(mailform, "Verify the new form opened");
-		
+
 		// Change the priority
 		mailform.zToolbarPressPulldown(Button.B_PRIORITY, option);
-		
+
 		// Fill out the rest of the form
 		mailform.zFillField(Field.To, ZimbraAccount.AccountA().EmailAddress);
 		mailform.zFillField(Field.Subject, subject);
 		mailform.zFillField(Field.Body, body);
-		
+
 		// Send the message
 		mailform.zSubmit();
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 
 		MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
 		ZAssert.assertNotNull(received, "Verify the message is received");
-		
+
 		ZAssert.assertStringContains(received.getFlags(), verify, "Verify the correct priority was sent");
-		
-		
+
 	}
 
 

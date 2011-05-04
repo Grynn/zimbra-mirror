@@ -36,7 +36,10 @@ public class RenameTag extends AjaxCommonTest {
 				+ "<tag name='" + name1 + "' color='1' />"
 				+ "</CreateTagRequest>");
 
-		// Get the tag
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // Get the tag
 		TagItem tag = TagItem.importFromSOAP(account, name1);
 		ZAssert.assertNotNull(tag, "Verify the tag was created");
 
@@ -53,7 +56,10 @@ public class RenameTag extends AjaxCommonTest {
 		dialog.zSetNewName(name2);
 		dialog.zClickButton(Button.B_OK);
 
-		// refresh briefcase page
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page
 		app.zTreeBriefcase
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 

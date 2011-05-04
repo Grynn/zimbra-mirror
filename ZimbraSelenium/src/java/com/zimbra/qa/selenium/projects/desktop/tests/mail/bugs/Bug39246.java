@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.projects.desktop.tests.mail.bugs;
 
 import java.io.File;
+import java.util.HashMap;
 
 import org.testng.annotations.Test;
 
@@ -18,7 +19,11 @@ public class Bug39246 extends AjaxCommonTest {
 		
 		// All tests start at the login page
 		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String, String>() {{
+         put("zimbraPrefGroupMailBy", "conversation");
+         put("zimbraPrefMessageViewHtmlPreferred", "TRUE");
+         put("zimbraPrefReadingPaneLocation", "bottom");
+      }};
 		
 	}
 	
@@ -37,7 +42,7 @@ public class Bug39246 extends AjaxCommonTest {
 
 		// Get Mail
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		
+
 		// Select the message
 		DisplayMail display = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 

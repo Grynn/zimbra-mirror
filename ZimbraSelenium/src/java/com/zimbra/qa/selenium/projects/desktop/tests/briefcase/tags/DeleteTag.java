@@ -35,7 +35,10 @@ public class DeleteTag extends AjaxCommonTest {
 				+ "<tag name='" + name + "' color='1' />"
 				+ "</CreateTagRequest>");
 
-		// Get the tag
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // Get the tag
 		TagItem tag = TagItem.importFromSOAP(app.zGetActiveAccount(), name);
 		ZAssert.assertNotNull(tag, "Verify the tag was created");
 
@@ -51,7 +54,10 @@ public class DeleteTag extends AjaxCommonTest {
 		// Click "Yes" to confirm
 		dialog.zClickButton(Button.B_YES);
 
-		// refresh briefcase page
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      // refresh briefcase page
 		app.zTreeBriefcase
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 

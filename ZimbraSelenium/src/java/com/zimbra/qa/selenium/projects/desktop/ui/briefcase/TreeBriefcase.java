@@ -52,8 +52,10 @@ public class TreeBriefcase extends AbsTree {
 		String optionLocator = null;
 
 		if (item instanceof TagItem) {
-			actionLocator = "zti__main_Briefcase__" + ((TagItem) item).getId()
-					+ "_textCell";
+		   actionLocator = Locators.briefcaseTreeView_Desktop + "[id*='"
+               + MyApplication.zGetActiveAccount().EmailAddress + "']"
+               + "[id$='" + ((TagItem) item).getId()
+               + "_textCell']";
 		} else {
 			throw new HarnessException("Must use IItem as argument, but was "
 					+ item.getClass());
@@ -155,18 +157,16 @@ public class TreeBriefcase extends AbsTree {
 		String locator = null;
 
 		if (item instanceof TagItem) {
-			locator = "zti__main_Briefcase__" + ((TagItem) item).getId()
-					+ "_textCell";
+		   locator = Locators.briefcaseTreeView_Desktop + "[id*='"
+               + MyApplication.zGetActiveAccount().EmailAddress + "']"
+               + "[id$='" + ((TagItem) item).getId()
+               + "_textCell']";
 		} else if (item instanceof FolderItem) {
-			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-				locator = Locators.briefcaseTreeView_Desktop + "[id*='"
-						+ MyApplication.zGetActiveAccount().EmailAddress + "']"
-						+ "[id$='" + ((FolderItem) item).getId()
-						+ "_imageCell']";
-			} else {
-				locator = Locators.briefcaseTreeView
-						+ ((FolderItem) item).getId() + "_imageCell]";
-			}
+		   locator = Locators.briefcaseTreeView_Desktop + "[id*='"
+		         + MyApplication.zGetActiveAccount().EmailAddress + "']"
+		         + "[id$='" + ((FolderItem) item).getId()
+		         + "_imageCell']";
+
 		} else {
 			throw new HarnessException("Must use IItem as argument, but was "
 					+ item.getClass());

@@ -26,8 +26,9 @@ public class ViewMail extends AjaxCommonTest {
 
 		// Make sure we are using an account with message view
 		super.startingAccountPreferences = new HashMap<String, String>() {{
-				    put("zimbraPrefGroupMailBy", "message");
-				    put("zimbraPrefMessageViewHtmlPreferred", "TRUE");
+		      put("zimbraPrefGroupMailBy", "conversation");
+				put("zimbraPrefGroupMailBy", "message");
+				put("zimbraPrefMessageViewHtmlPreferred", "TRUE");
 				}};
 
 
@@ -45,7 +46,6 @@ public class ViewMail extends AjaxCommonTest {
 
 		// Inject the example message(s)
 		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFolder));
-
 		
 		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), subject);
 		ZAssert.assertNotNull(mail, "Verify message is received");
@@ -73,11 +73,16 @@ public class ViewMail extends AjaxCommonTest {
 		final String subject = "subject13016959916873";
 		final String from = "from13016959916873@example.com";
 		final String replyto = "replyto13016959916873@example.com";
-		final String mimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email00";
+	   /**final String subject = "subject12996131112962";
+      final String from = "from12996131112962@example.com";
+      final String sender = "sender12996131112962@example.com";*/
+		final String mimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email01";
 
 		// Inject the example message(s)
 		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFolder));
 
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 		
 		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), subject);
 		ZAssert.assertNotNull(mail, "Verify message is received");
