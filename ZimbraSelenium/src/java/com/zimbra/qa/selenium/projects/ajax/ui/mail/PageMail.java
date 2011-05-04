@@ -292,12 +292,12 @@ public class PageMail extends AbsTab {
 			}
 
 			// Check if the button is enabled
-			String attrs = sGetAttribute("xpath=(//td[@id='"+ id +"']/div)@class");
-			if ( attrs.contains("ZDisabledImage") ) {
-				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
+			locator = "css=td[id='"+ id +"']>div[class*='ZDisabledImage']";
+			if ( sIsElementPresent(locator) ) {
+				throw new HarnessException("Tried clicking on "+ button +" but it was disabled: ZDisabledImage");
 			}
 
-			locator = "id="+ id;
+			locator = "css=td#" + id;
 
 
 		} else if ( button == Button.B_MOVE ) {
@@ -692,63 +692,57 @@ public class PageMail extends AbsTab {
 			throw new HarnessException("Conversation List View Rows is not present "+ Locators.zCLVRows);
 
 		// How many items are in the table?
-		int count = this.sGetXpathCount("//div[@id='zl__CLV__rows']//div[contains(@id, 'zli__CLV__')]");
+		int count = this.sGetCssCount("css=div[id='zl__CLV__rows'] div[id^='zli__CLV__']");
 		logger.debug(myPageName() + " zListGetConversations: number of conversations: "+ count);
 
 		// Get each conversation's data from the table list
 		for (int i = 1; i <= count; i++) {
-			final String convlocator = "//div[@id='zl__CLV__rows']/div["+ i +"]";
+			final String convlocator = "css=div[id='zl__CLV__rows']>div:nth-of-type("+ i +")";
 			String locator;
 
 			ConversationItem item = new ConversationItem();
 
 			// Is it checked?
-			locator = convlocator + "//div[contains(@class, 'ImgCheckboxChecked')]";
+			locator = convlocator + " div[class='ImgCheckboxChecked']";
 			item.gIsSelected = this.sIsElementPresent(locator);
 
 			// Is it expanded?
-			locator = convlocator + "//div[contains(@class, 'ImgNodeExpanded')]";
+			locator = convlocator + " div[class='ImgNodeExpanded']";
 			item.gIsExpanded = this.sIsElementPresent(locator);
 
 			// Is it flagged
 			// TODO: probably can't have boolean, need 'blank', 'disabled', 'red', and other states
-			locator = convlocator + "//div[contains(@class, 'ImgFlagRed')]";
+			locator = convlocator + " div[class='ImgFlagRed']";
 			item.gIsFlagged = this.sIsElementPresent(locator);
 
 			// What's the priority?
-			locator = convlocator +"//div[contains(@id, '__pr')]";
-			if ( !this.sIsElementPresent(locator) )
-				throw new HarnessException("Unable to locator priority field");
-			String priority = this.sGetAttribute("xpath="+locator+"@class");
-			if ( priority.equals("ImgPriorityHigh_list") ) {
+			locator = convlocator +" div[id$='__pr'][class*='ImgPriorityHigh_list']";
+			if ( this.sIsElementPresent(locator) ) {
 				item.gPriority = "high";
-			} else {
-				// TODO - handle other priorities
 			}
+			// TODO - handle other priorities
 
 
-			locator = convlocator + "//div[contains(@id, '__tg')]";
+			locator = convlocator + " div[id$='__tg']";
 			// TODO: handle tags
 
 			// Get the From
-			locator = convlocator + "//td[contains(@id, '__fr')]";
+			locator = convlocator + " td[id$='__fr']";
 			item.gFrom = this.sGetText(locator).trim();
 
 			// Get the attachment
-			locator = "xpath=("+ convlocator +"//div[contains(@id, '__at')])@class";
-			String attach = this.sGetAttribute(locator);
-			if ( attach.equals("ImgBlank_16") ) {
+			locator = convlocator +" div[id$='__at'][class*='ImgBlank_16']";
+			if ( this.sIsElementPresent(locator) ) {
 				item.gHasAttachments = false;
-			} else {
-				// TODO - handle other attachment types
 			}
+			// TODO - handle other attachment types
 
 			// Get the fragment
-			locator = convlocator + "//span[contains(@id, '__fm')]";
+			locator = convlocator + " span[id$='__fm']";
 			item.gFragment = this.sGetText(locator).trim();
 
 			// Get the subject
-			locator = convlocator + "//td[contains(@id, '__su')]";
+			locator = convlocator + " td[id$='__su']";
 			String s = this.sGetText(locator).trim();
 
 			// The subject contains the fragment, e.g. "subject - fragment", so
@@ -756,7 +750,7 @@ public class PageMail extends AbsTab {
 			item.gSubject = s.replace(item.gFragment, "").trim();
 
 			// Get the folder
-			locator = convlocator + "//nobr[contains(@id, '__fo')]";
+			locator = convlocator + " nobr[id$='__fo']";
 			if ( this.sIsElementPresent(locator) ) {
 				item.gFolder = this.sGetText(locator).trim();
 			} else {
@@ -764,7 +758,7 @@ public class PageMail extends AbsTab {
 			}
 
 			// Get the size
-			locator = convlocator + "//nobr[contains(@id, '__sz')]";
+			locator = convlocator + " nobr[id$='__sz']";
 			if ( this.sIsElementPresent(locator) ) {
 				item.gSize = this.sGetText(locator).trim();
 			} else {
@@ -772,7 +766,7 @@ public class PageMail extends AbsTab {
 			}
 
 			// Get the received date
-			locator = convlocator + "//td[contains(@id, '__dt')]";
+			locator = convlocator + " td[id$='__dt']";
 			item.gReceived = this.sGetText(locator).trim();
 
 			// Add the new item to the list
