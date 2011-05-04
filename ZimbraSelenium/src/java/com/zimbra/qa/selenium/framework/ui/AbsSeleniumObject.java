@@ -1,12 +1,19 @@
 package com.zimbra.qa.selenium.framework.ui;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
-import org.apache.log4j.*;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
-import com.thoughtworks.selenium.*;
-import com.zimbra.qa.selenium.framework.core.*;
-import com.zimbra.qa.selenium.framework.util.*;
+import com.thoughtworks.selenium.DefaultSelenium;
+import com.thoughtworks.selenium.SeleniumException;
+import com.zimbra.qa.selenium.framework.core.ClientSession;
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
+import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain;
+import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
 /**
  * The <code>AbsSeleniumObject</code> class is a base class that all "GUI"
@@ -161,6 +168,7 @@ public abstract class AbsSeleniumObject {
 	 * @param value
 	 * @throws HarnessException
 	 */
+	@SuppressWarnings("deprecation")
 	public void zType(String locator, String value) throws HarnessException {
 		// Check if the locator is present
 		if (!sIsElementPresent(locator)) {
@@ -327,6 +335,14 @@ public abstract class AbsSeleniumObject {
 	 */
 	public void sMouseOver(String locator) {
 		ClientSessionFactory.session().selenium().mouseOver(locator);
+		logger.info("mouseOver(" + locator + ")");
+	}
+
+	/**
+	 * DefaultSelenium.mouseOver()
+	 */
+	public void sMouseOut(String locator) {
+		ClientSessionFactory.session().selenium().mouseOut(locator);
 		logger.info("mouseOver(" + locator + ")");
 	}
 

@@ -159,6 +159,7 @@ public class PageManageDistributionLists extends AbsTab {
 			SleepUtil.sleepMedium();
 		}
 
+		sMouseOut(locator);
 		return (form);
 
 	}
@@ -222,6 +223,7 @@ public class PageManageDistributionLists extends AbsTab {
 				}
 
 				this.zClick(optionLocator);
+				SleepUtil.sleepMedium();
 
 				// If the app is busy, wait for it to become active
 				//zWaitForBusyOverlay();

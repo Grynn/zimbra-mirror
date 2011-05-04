@@ -185,6 +185,7 @@ public class PageManageAccounts extends AbsTab {
 			SleepUtil.sleepMedium();
 		}
 
+		sMouseOut(locator);
 		return (page);
 
 
