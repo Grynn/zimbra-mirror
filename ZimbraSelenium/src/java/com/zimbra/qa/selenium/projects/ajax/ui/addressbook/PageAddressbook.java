@@ -190,7 +190,9 @@ public class PageAddressbook extends AbsTab {
 			// For "NEW" without a specified pulldown option, just return the default item
 			// To use "NEW" with a pulldown option, see  zToolbarPressPulldown(Button, Button)
 
-			locator = "//div[@id='ztb__CNS']//td[@id='zb__CNS__NEW_MENU_title']";
+			//locator = "//div[@id='ztb__CNS']//td[@id='zb__CNS__NEW_MENU_title']";
+			
+			locator = "css=td#zb__CNS__NEW_MENU_title";			
 			page = new FormContactNew(this.MyApplication);
 
 	
@@ -198,7 +200,7 @@ public class PageAddressbook extends AbsTab {
 
 			String id = "zb__CNS__DELETE_left_icon";
 
-			if (sIsElementPresent("css=td[id=" + id + "] div[class*=ZDisabledImage]")) {
+			if (sIsElementPresent("css=td#" + id + " div[class*=ZDisabledImage]")) {
 				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ id);
 			}
 
@@ -209,7 +211,7 @@ public class PageAddressbook extends AbsTab {
 			String id = "zb__CNS__EDIT_left_icon";
 
 			
-			if (sIsElementPresent("css=td[id=" + id + "] div[class*=ZDisabledImage]")) {
+			if (sIsElementPresent("css=td#" + id + " div[class*=ZDisabledImage]")) {
 				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ id);
 			}
 
@@ -220,7 +222,7 @@ public class PageAddressbook extends AbsTab {
 
 		    String id = "zb__CNS__MOVE_left_icon";
 
-		    if (sIsElementPresent("css=td[id=" + id + "] div[class*=ZDisabledImage]")) {
+		    if (sIsElementPresent("css=td#" + id + " div[class*=ZDisabledImage]")) {
 				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ id);
 			}
 		    
@@ -229,7 +231,7 @@ public class PageAddressbook extends AbsTab {
 	    } else if ( button == Button.B_FORWARD) {
 		    String id = "zb__CNS__SEND_CONTACTS_IN_EMAIL_left_icon";
 	
-		    if (sIsElementPresent("css=td[id=" + id + "] div[class*=ZDisabledImage]")) {
+		    if (sIsElementPresent("css=td#" + id + " div[class*=ZDisabledImage]")) {
 				throw new HarnessException("Tried clicking on "+ button +" but it was disabled ");
 			}
 		   locator = "id="+ id;
