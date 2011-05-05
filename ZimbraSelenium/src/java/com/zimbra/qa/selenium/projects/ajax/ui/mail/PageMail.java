@@ -81,7 +81,7 @@ public class PageMail extends AbsTab {
 		public static final String zViewMenuCLVBtnID	= zViewIconBtnID;
 		public static final String zViewMenuTVBtnID		= "zb__TV__VIEW_MENU_left_icon";
 
-
+		public static final String zCloseIconBtn_messageWindow 	= "css=td[id=zb__MSG__CLOSE_left_icon]";
 		public static final String zCloseIconBtn_newWindow 		= "id=zb__MSG1__CLOSE_left_icon";
 		public static final String zDeleteIconBtn_newWindow 	= "id=zb__MSG1__DELETE_title";
 		public static final String zReplyIconBtn_newWindow 		= "id=zb__MSG1__REPLY_left_icon";

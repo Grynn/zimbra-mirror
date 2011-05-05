@@ -1015,6 +1015,37 @@ public class PageBriefcase extends AbsTab {
 		};
 	}
 
+	public String openUrl(String page, Map<String, String> params)
+			throws HarnessException {
+		ZimbraAccount account = MyApplication.zGetActiveAccount();
+
+		RestUtil util = new RestUtil();
+
+		util.setAuthentication(account);
+
+		if (null != page && !page.isEmpty())
+			util.setPath("/" + page);
+		util.setPath("/");
+
+		if (null != params && !params.isEmpty()) {
+			for (Map.Entry<String, String> query : params.entrySet()) {
+				util.setQueryParameter(query.getKey(), query.getValue());
+			}
+		}
+
+		if (util.doGet() != HttpStatus.SC_OK)
+			throw new HarnessException("Unable to open " + util.getLastURI());
+
+		String url = util.getLastURI().toString();
+
+		if(url.lastIndexOf('?') == url.length()-1)
+			url=url.substring(0,url.lastIndexOf('?'));
+		
+		ClientSessionFactory.session().selenium().open(url);
+
+		return url;
+	}
+
 	public void closeWindow() {
 		tracer.trace("Close the separate window");
 
