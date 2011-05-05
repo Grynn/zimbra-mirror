@@ -1024,8 +1024,9 @@ public class PageBriefcase extends AbsTab {
 		util.setAuthentication(account);
 
 		if (null != page && !page.isEmpty())
-			util.setPath("/" + page);
-		util.setPath("/");
+			util.setPath("/" + page + "/");
+		else
+			util.setPath("/");
 
 		if (null != params && !params.isEmpty()) {
 			for (Map.Entry<String, String> query : params.entrySet()) {
@@ -1038,9 +1039,9 @@ public class PageBriefcase extends AbsTab {
 
 		String url = util.getLastURI().toString();
 
-		if(url.lastIndexOf('?') == url.length()-1)
-			url=url.substring(0,url.lastIndexOf('?'));
-		
+		if (url.endsWith("?"))
+			url = url.substring(0, url.length() - 1);
+
 		ClientSessionFactory.session().selenium().open(url);
 
 		return url;
