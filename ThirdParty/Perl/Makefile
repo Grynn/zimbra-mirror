@@ -135,7 +135,6 @@ PERL_LIBS 	:= \
 	Parallel::ForkManager \
 	Package::Constants \
 	IO::Compress::Base \
-	IO::Compress::Gzip \
 	Compress::Raw::Zlib \
 	Archive::Tar \
 	Digest::SHA1 \
