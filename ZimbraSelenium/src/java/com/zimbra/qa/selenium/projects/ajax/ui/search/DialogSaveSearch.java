@@ -8,7 +8,6 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 
-
 /**
  * Represents a "Move Message" dialog box
  * <p>
@@ -18,15 +17,13 @@ import com.zimbra.qa.selenium.framework.util.SleepUtil;
 public class DialogSaveSearch extends AbsDialog {
 
 	public static class Locators {
-	
-		// See: http://bugzilla.zimbra.com/show_bug.cgi?id=55606
-		
-		public static final String zDialogId			= "ChooseFolderDialog";
-		public static final String zTitleId	 			= "ChooseFolderDialog_title";
-		public static final String zDialogContentId		= "ChooseFolderDialog_content";
-		public static final String zDialogInputId		= "ChooseFolderDialog_inputDivId";
-		public static final String zDialogInputLocator	= "css=div[id='"+ zDialogId +"'] div[id='"+ zDialogInputId +"'] > div > input";
-		public static final String zDialogButtonsId		= "ChooseFolderDialog_buttons";
+
+      public static final String zDialogId         = "SaveSearch";
+      public static final String zTitleId          = "SaveSearch_title";
+      public static final String zDialogContentId     = "SaveSearch_content";
+      public static final String zDialogInputId    = "SaveSearch_inputDivId";
+      public static final String zDialogInputLocator  = "SaveSearch_nameField";
+      public static final String zDialogButtonsId     = "SaveSearch_buttons";
 
 
 	}
@@ -78,24 +75,21 @@ public class DialogSaveSearch extends AbsDialog {
 		String locator = null;
 		
 		if ( button == Button.B_NEW ) {
-			
-			// TODO: L10N this		
-			locator = "//div[@id='"+ Locators.zDialogId +"']//div[@id='"+ Locators.zDialogButtonsId +"']//td[text()='New']";
-			throw new HarnessException("implement me!");
 
-		} else if ( button == Button.B_OK ) {
-			
-			// TODO: L10N this		
-			locator = "//div[@id='"+ Locators.zDialogId +"']//div[@id='"+ Locators.zDialogButtonsId +"']//td[text()='OK']";
+         locator = "css=div[id='" + Locators.zDialogButtonsId + "'] div[id='SaveSearch_button2']";
+         throw new HarnessException("implement me!");
 
-		} else if ( button == Button.B_CANCEL ) {
-			
-			// TODO: L10N this
-			locator = "//div[@id='"+ Locators.zDialogId +"']//div[@id='"+ Locators.zDialogButtonsId +"']//td[text()='Cancel']";
+      } else if ( button == Button.B_OK ) {
 
-		} else {
-			throw new HarnessException("Button "+ button +" not implemented");
-		}
+         locator = "css=div[id='" + Locators.zDialogButtonsId + "'] div[id='SaveSearch_button2']";
+
+      } else if ( button == Button.B_CANCEL ) {
+
+         locator = "css=div[id='" + Locators.zDialogButtonsId + "'] div[id='SaveSearch_button1']";
+
+      } else {
+         throw new HarnessException("Button "+ button +" not implemented");
+      }
 		
 		// Default behavior, click the locator
 		//

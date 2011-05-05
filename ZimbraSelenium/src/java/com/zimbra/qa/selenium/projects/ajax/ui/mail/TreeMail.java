@@ -505,7 +505,7 @@ public class TreeMail extends AbsTree {
 
 
 	/**
-	 * Used for recursively building the tree list
+	 * Used for recursively building the tree list for Mail Folders
 	 * @param top
 	 * @return
 	 * @throws HarnessException
@@ -561,6 +561,64 @@ public class TreeMail extends AbsTree {
 
 	}
 
+	/**
+    * Used for recursively building the tree list for Saved Search Folders
+    * @param top
+    * @return
+    * @throws HarnessException
+    */
+   private List<SavedSearchFolderItem>zListGetSavedSearchFolders(String top) throws HarnessException {
+      List<SavedSearchFolderItem> items = new ArrayList<SavedSearchFolderItem>();
+
+      String searchLocator = top + "//div[@class='DwtComposite']";
+
+      int count = this.sGetXpathCount(searchLocator);
+      for ( int i = 1; i <= count; i++) {
+         String itemLocator = searchLocator + "["+ i + "]";
+
+         if ( !this.sIsElementPresent(itemLocator) ) {
+            continue;
+         }
+
+         String locator;
+
+         String id = sGetAttribute("xpath=("+ itemLocator +"/.)@id");
+         if ( id == null || id.trim().length() == 0 || !(id.startsWith("zti__main_Mail__")) ) {
+            // Not a folder
+            // Maybe "Find Shares ..."
+            continue;
+         }
+
+         SavedSearchFolderItem item = new SavedSearchFolderItem();
+
+         // Set the locator
+         // TODO: This could probably be made safer, to make sure the id matches an int pattern
+         item.setId(id.replace("zti__" + ((AppAjaxClient)MyApplication).zGetActiveAccount().EmailAddress +
+               ":main_Mail__", ""));
+
+         // Set the name
+         locator = itemLocator + "//td[contains(@id, '_textCell')]";
+         item.setName(this.sGetText(locator));
+
+         // Set the expanded boolean
+         locator = itemLocator + "//td[contains(@id, '_nodeCell')]/div";
+         if ( sIsElementPresent(locator) ) {
+            // The image could be hidden, if there are no subfolders
+            //item.gSetIsExpanded("ImgNodeExpanded".equals(sGetAttribute("xpath=("+ locator + ")@class")));
+         }
+
+         items.add(item);
+
+         // Add any sub folders
+         items.addAll(zListGetSavedSearchFolders(itemLocator));
+
+
+      }
+
+      return (items);
+
+   }
+
 	public List<FolderItem> zListGetFolders() throws HarnessException {
 
 		List<FolderItem> items = new ArrayList<FolderItem>();
@@ -576,7 +634,8 @@ public class TreeMail extends AbsTree {
 
 		List<SavedSearchFolderItem> items = new ArrayList<SavedSearchFolderItem>();
 
-		// TODO: implement me!
+	// Recursively fill out the list, starting with all mail folders
+      items.addAll(zListGetSavedSearchFolders("//div[@id='ztih__main_Mail__SEARCH']"));
 
 		// Return the list of items
 		return (items);

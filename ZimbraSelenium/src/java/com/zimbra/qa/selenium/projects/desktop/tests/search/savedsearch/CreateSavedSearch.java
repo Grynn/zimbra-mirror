@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.SavedSearchFolderItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -27,8 +28,7 @@ public class CreateSavedSearch extends AjaxCommonTest  {
 		super.startingAccountPreferences = null;		
 		
 	}
-	
-	
+
 	@Test(	description = "Create a basic saved search",
 			groups = { "sanity" })
 	public void CreateSavedSearch_01() throws HarnessException {				
@@ -46,6 +46,9 @@ public class CreateSavedSearch extends AjaxCommonTest  {
 		// Save the search
 		dialog.zEnterFolderName(name);
 		dialog.zClickButton(Button.B_OK);
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
 		//Verify the saved search exists in the server
 		SavedSearchFolderItem item = SavedSearchFolderItem.importFromSOAP(app.zGetActiveAccount(), name);
