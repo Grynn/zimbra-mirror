@@ -9,7 +9,6 @@ import org.apache.log4j.LogManager;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
@@ -20,7 +19,6 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Locators;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
 
 public class PageAddressbook extends AbsTab {
@@ -73,11 +71,8 @@ public class PageAddressbook extends AbsTab {
 			((AppAjaxClient)MyApplication).zPageMain.zNavigateTo();
 		}
 
-		//make sure Addressbook  tab is selected		
-		String attrs = sGetAttribute("xpath=(//div[@id='zb__App__Contacts'])@class");		
-
-		boolean active=attrs.contains("ZSelected");
-
+		boolean active=sIsElementPresent("css=div[id='zb__App__Contacts'][class*=ZSelected]");
+			
 		String locator = null;
 		// On Zimbra Desktop, there is no Address book folder, but there is only
 		// account root folder
@@ -86,7 +81,7 @@ public class PageAddressbook extends AbsTab {
 	            AjaxCommonTest.defaultAccountName);
 	   } else {
 		   //make sure Addressbook folder is displayed
-		   locator = "xpath=//div[@id='ztih__main_Contacts__ADDRBOOK_div']";
+		   locator = "css=div#ztih__main_Contacts__ADDRBOOK_div";
 		}
 
       active &= this.sIsElementPresent(locator);		   
@@ -130,11 +125,6 @@ public class PageAddressbook extends AbsTab {
 
 		zWaitForActive();
 
-
-		//ClientSessionFactory.session().selenium().click(PageMain.Locators.zAppbarContact);
-		//zClick(PageMain.Locators.zAppbarContact);
-		//SleepUtil.sleepMedium();
-
 	}
 	public List<ContactItem> zListGetContacts() throws HarnessException {
 
@@ -142,21 +132,23 @@ public class PageAddressbook extends AbsTab {
 
 		//ensure it is in Addressbook main page
 		zNavigateTo();
-		if ( !this.sIsElementPresent("//div[@id='zv__CNS']") )
-			//maybe return empty list?????
-			throw new HarnessException("Contact List is not present "+ "//div[@id='zv__CNS']");
+		if ( !this.sIsElementPresent("id=zv__CNS") )			
+		//maybe return empty list?????
+			throw new HarnessException("Contact List is not present "+ "id='zv__CNS'");
 
 		//Get the number of contacts (String) 
-		int count = this.sGetXpathCount("//div[@id='zv__CNS']//div[contains(@id, 'zli__CNS__')]");
+		int count = this.sGetCssCount("css=div#zv__CNS div[id^=zli__CNS__]");
+		
 		logger.debug(myPageName() + " zListGetContacts: number of contacts: "+ count);
 
 		// Get each contact's data from the table list
 		for (int i = 1; i <= count; i++) {
-			String commonLocator = "//div[@id='zv__CNS']/div["+ i +"]";
+			String commonLocator = "css=div[id='zv__CNS'] div:nth-child("+ i +")";
+
 			String contactType = getContactType(commonLocator);
 		    
 			ContactItem ci=null;
-			String contactDisplayedLocator = commonLocator + "/table/tbody/tr/td[3]";
+			String contactDisplayedLocator = commonLocator + " table tbody tr td:nth-child(3)";
 			String fileAs = ClientSessionFactory.session().selenium().getText(contactDisplayedLocator);
 			
 			//check if it is a contactgroup or a contactgroup item
@@ -201,16 +193,13 @@ public class PageAddressbook extends AbsTab {
 			locator = "//div[@id='ztb__CNS']//td[@id='zb__CNS__NEW_MENU_title']";
 			page = new FormContactNew(this.MyApplication);
 
-			// FALL THROUGH
-
+	
 		} else if ( button == Button.B_DELETE ) {
 
 			String id = "zb__CNS__DELETE_left_icon";
 
-			// Check if the button is enabled
-			String attrs = sGetAttribute("xpath=(//td[@id='"+ id +"']/div)@class");
-			if ( attrs.contains("ZDisabledImage") ) {
-				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
+			if (sIsElementPresent("css=td[id=" + id + "] div[class*=ZDisabledImage]")) {
+				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ id);
 			}
 
 			locator = "id="+ id;
@@ -219,10 +208,9 @@ public class PageAddressbook extends AbsTab {
 
 			String id = "zb__CNS__EDIT_left_icon";
 
-			// Check if the button is enabled
-			String attrs = sGetAttribute("xpath=(//td[@id='"+ id +"']/div)@class");
-			if ( attrs.contains("ZDisabledImage") ) {
-				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
+			
+			if (sIsElementPresent("css=td[id=" + id + "] div[class*=ZDisabledImage]")) {
+				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ id);
 			}
 
 			locator = "id="+ id;
@@ -232,39 +220,32 @@ public class PageAddressbook extends AbsTab {
 
 		    String id = "zb__CNS__MOVE_left_icon";
 
-		    // Check if the button is enabled
-		    String attrs = sGetAttribute("xpath=(//td[@id='"+ id +"']/div)@class");
-		    if ( attrs.contains("ZDisabledImage") ) {
-			  throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
-		    }
-
+		    if (sIsElementPresent("css=td[id=" + id + "] div[class*=ZDisabledImage]")) {
+				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ id);
+			}
+		    
 		   locator = "id="+ id;
 		   page = new DialogMove(MyApplication, this);
 	    } else if ( button == Button.B_FORWARD) {
-
 		    String id = "zb__CNS__SEND_CONTACTS_IN_EMAIL_left_icon";
-
-		    // Check if the button is enabled
-		    String attrs = sGetAttribute("xpath=(//td[@id='"+ id +"']/div)@class");
-		    if ( attrs.contains("ZDisabledImage") ) {
-			  throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
-		    }
-
+	
+		    if (sIsElementPresent("css=td[id=" + id + "] div[class*=ZDisabledImage]")) {
+				throw new HarnessException("Tried clicking on "+ button +" but it was disabled ");
+			}
 		   locator = "id="+ id;
 		   page = new FormMailNew(MyApplication);	
-	     
- 	    } else if ( button == Button.B_CANCEL) {
+		   
+	    } else if ( button == Button.B_CANCEL) {
  	    	String id ="zb__CN__CANCEL";
-		    // Check if the button is enabled
-		    String attrs = sGetAttribute("xpath=(//div[@id='"+ id +"'])@class");
-		    if ( attrs.contains("ZDisabledImage") ) {
-			  throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
+		   
+		    if (sIsElementPresent("css=div[id=" + id + "][class*=ZDisabledImage]")) {
+				throw new HarnessException("Tried clicking on "+ id +" but it was disabled ");
 		    }
+
 		    locator = "id="+ id;
 			page = new DialogWarning(DialogWarning.DialogWarningID.CancelCreateContact, this.MyApplication, ((AppAjaxClient)this.MyApplication).zPageAddressbook);
-		
- 	    	
- 	    } else if (isAlphabetButton(button))
+
+	    } else if (isAlphabetButton(button))
           {
        	   locator=DisplayContactGroup.ALPHABET_PREFIX + button.toString() + DisplayContactGroup.ALPHABET_POSTFIX;
        	   
@@ -404,11 +385,12 @@ public class PageAddressbook extends AbsTab {
 				throw new HarnessException("Button "+ pulldown +" option "+ option +" pulldownLocator "+ pulldownLocator +" not present!");
 			}
 			
-			if (ClientSessionFactory.session().isBrowserIE9()) {
+			if (ClientSessionFactory.session().isBrowserIE9())
+			{ 
 			  sClick(pulldownLocator);
 			}
 			else {
-			  zClick(pulldownLocator);							
+			  zClick(pulldownLocator);
 			}
 			zWaitForBusyOverlay();
 			
@@ -434,15 +416,16 @@ public class PageAddressbook extends AbsTab {
 
 	// return the type of a contact
 	private String getContactType(String locator) {
-		String imageLocator = "xpath=(" + locator +"/table/tbody/tr/td[2]/center/div)@class";
-        String attrs = sGetAttribute(imageLocator);
-		
-		//check if it is a contactgroup or a contactgroup item
-		if ( attrs.contains(ContactGroupItem.IMAGE_CLASS) ) {
+		String imageLocator = locator +" table tbody tr td:nth-child(2) center div[class*=";
+        
+	    
+		if (sIsElementPresent(imageLocator + ContactGroupItem.IMAGE_CLASS + "]"))
+		{
 			return ContactGroupItem.IMAGE_CLASS;
-		}	
-		else if ( attrs.contains(ContactItem.IMAGE_CLASS) ) {
-			return ContactItem.IMAGE_CLASS;
+		}
+		else if (sIsElementPresent(imageLocator + ContactItem.IMAGE_CLASS + "]"))
+		{
+			return ContactItem.IMAGE_CLASS;		
 		}
 		
 		return null;
@@ -450,33 +433,35 @@ public class PageAddressbook extends AbsTab {
 	
     // return the xpath locator of a contact
 	private String getContactLocator(String contact) throws HarnessException {
-		String listLocator = "//div[@id='zv__CNS']";				
-		String rowLocator = "//div[contains(@id, 'zli__CNS__')]";
+		String listLocator = "div#zv__CNS";				
+		String rowLocator = "div[id^='zli__CNS__']";
+	    
+
 		String contactLocator = null;
 		
-		if ( !this.sIsElementPresent(listLocator) )
+		if ( !this.sIsElementPresent("css=" + listLocator) )
 			throw new HarnessException("List View Rows is not present "+ listLocator);
 
-		if ( !this.sIsElementPresent(rowLocator) )
+		if ( !this.sIsElementPresent("css=" + rowLocator) )
 			throw new HarnessException("List does not contain any items "+ rowLocator);
 
 		//Get the number of contacts (String) 
-		int count = this.sGetXpathCount(listLocator + rowLocator);
-		logger.debug(myPageName() + " zListItem: number of contacts: "+ count);
+	    int count = this.sGetCssCount("css=" + listLocator + " " + rowLocator);
+	    logger.debug(myPageName() + " zListItem: number of contacts: "+ count);
 
 		if ( count == 0 )
 			throw new HarnessException("List count was zero");
 
 		// Get each contact's data from the table list
-		for (int i = 1; i <= count; i++) {
+		for (int i = 1; i<=count; i++) { 
 
-			String itemLocator = listLocator + rowLocator + "[" + i +"]";
-
+			String itemLocator = "css=" + listLocator + " div:nth-child(" + i +")";
 			if ( !this.sIsElementPresent(itemLocator) ) {
 				throw new HarnessException("unable to locate item " + itemLocator);
 			}
 
-			String contactDisplayedLocator = itemLocator + "//td[3]";
+			String contactDisplayedLocator = itemLocator + " table tbody tr td:nth-child(3)";
+
 			String displayAs = this.sGetText(contactDisplayedLocator);
 
 			// Log this item to the debug output
@@ -498,44 +483,43 @@ public class PageAddressbook extends AbsTab {
 	
     //get selected contacts locators
 	private ArrayList<String> getSelectedContactLocator() throws HarnessException {
-        
+		String listLocator = "div#zv__CNS";				
+		String rowLocator = "div[id^='zli__CNS__']";
 		
-		String listLocator = "//div[@id='zv__CNS']";
-		String rowLocator = "//div[contains(@id, 'zli__CNS__')]";
 		
-        ArrayList<String> arrayList = new ArrayList<String>();
+	    ArrayList<String> arrayList = new ArrayList<String>();
 		
-		if ( !sIsElementPresent(listLocator) )
+		if ( !sIsElementPresent("css=" + listLocator) )
 			throw new HarnessException("List View Rows is not present "+ listLocator);
 
-		if ( !sIsElementPresent(rowLocator) )
+		if ( !sIsElementPresent("css=" + rowLocator) )
 		    return arrayList; //an empty arraylist
 			
 		//Get the number of contacts (String) 
-		int count = sGetXpathCount(listLocator + rowLocator);
+		int count = sGetCssCount("css=" + listLocator + " " + rowLocator);
 		logger.debug(myPageName() + " getSelectedContactLocator: number of contacts: "+ count);
 
 		if ( count == 0 )
 			throw new HarnessException("List count was zero");
 
 		// Get each contact's data from the table list
-		for (int i = 1; i <= count; i++) {
-
-			String itemLocator = listLocator + rowLocator + "[" + i +"]";
-
+		for (int i = 1; i<=count; i++) {
+			String itemLocator = "css=" + listLocator + " div:nth-child(" + i +")";
+        			
 			if ( !sIsElementPresent(itemLocator) ) {
-				throw new HarnessException("unable to locate item " + itemLocator);
+				logger.info("reach the end of list - unable to locate item " + itemLocator);
+				break;
 			}
-
-			if (sGetAttribute("xpath=(" +itemLocator+ ")@class").contains("Row-selected ")) {
+			
+			if (sIsElementPresent(itemLocator+ "[class*=Row-selected]")) {
 			    arrayList.add(itemLocator);
 			}
-
+			
 			// Log this item to the debug output
 			LogManager.getLogger("projects").info("getSelectedContactLocator: found selected contact "+ itemLocator);
      		
 		} 
-			
+		
 		return arrayList;
 	}
 	
@@ -610,12 +594,11 @@ public class PageAddressbook extends AbsTab {
 			zWaitForElementPresent(locator) ;
 			
 			// Check if the item is enabled
-			String attrs = sGetAttribute("xpath=(//div[@id='"+ id +"'])@class");
-			if ( attrs.contains("ZDisabled") ) {
-				throw new HarnessException("Tried clicking on "+ cmi.text +" but it was disabled "+ attrs);
+			if (sIsElementPresent("css=div[id=" + id + "][class*=ZDisabled]")) {
+				throw new HarnessException("Tried clicking on "+ cmi.text +" but it was disabled ");
 			}
-			
 
+			
 			// Mouse over the option
 			sFocus(locator);
 			sMouseOver(locator);
@@ -701,12 +684,10 @@ public class PageAddressbook extends AbsTab {
 			zWaitForElementPresent(locator) ;
 			
 			// Check if the item is enabled
-			String attrs = sGetAttribute("xpath=(//div[@id='"+ id +"'])@class");
-			if ( attrs.contains("ZDisabled") ) {
-				throw new HarnessException("Tried clicking on "+ cmi.text +" but it was disabled "+ attrs);
+			if (sIsElementPresent("css=div[id=" + id + "][class*=ZDisabled]")) {
+				throw new HarnessException("Tried clicking on "+cmi.text +" but it was disabled ");
 			}
 
-			
 		}
 		
 				
@@ -770,12 +751,12 @@ public class PageAddressbook extends AbsTab {
 		  throw new HarnessException("No selected contact/contact group ");				
 	    }
 	
-	    if (selectedContactArrayList.size() > 1) {
+	    /*if (selectedContactArrayList.size() > 1) {
 	      for (int i=0; i<selectedContactArrayList.size(); i++) {
-	    	  System.out.println(selectedContactArrayList.get(i));
+	    	  logger.info(selectedContactArrayList.get(i));
 	      }
 		  throw new HarnessException("Cannot edit more than one contact/contact group ");				
-	    }
+	    }*/
 	
         String contactType = getContactType(selectedContactArrayList.get(0));
 	
