@@ -51,6 +51,7 @@ import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.account.auth.AuthMechanism;
 import com.zimbra.cs.account.ldap.LdapProvisioning;
 import com.zimbra.cs.account.ldap.ZimbraLdapContext;
+import com.zimbra.cs.account.ldap.legacy.LegacyLdapFilter;
 import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Provisioning.DomainBy;
@@ -61,7 +62,6 @@ import com.zimbra.cs.extension.ExtensionDispatcherServlet;
 import com.zimbra.cs.extension.ExtensionHttpHandler;
 import com.zimbra.cs.extension.ZimbraExtension;
 import com.zimbra.cs.ldap.LdapUtilCommon;
-import com.zimbra.cs.prov.ldap.LdapFilter;
 import com.zimbra.cs.service.AuthProvider;
 
 public class NginxLookupExtension implements ZimbraExtension {
@@ -640,7 +640,7 @@ public class NginxLookupExtension implements ZimbraExtension {
             
             if (domainExternalRouteInfo == null) {
                 try {
-                    String filter = LdapFilter.domainByName(domainName);
+                    String filter = LegacyLdapFilter.domainByName(domainName);
                     Map<String, Object> domainAttrs = searchDir(zlc, 
                                                                 getDomainSC(config),
                                                                 config,
