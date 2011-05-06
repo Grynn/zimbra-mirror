@@ -1,15 +1,12 @@
 package com.zimbra.qa.selenium.framework.util;
 
 import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.channels.FileChannel;
+import java.net.*;
 import java.util.*;
 
 import net.sf.json.*;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.log4j.*;
 
 import com.ibm.staf.STAFResult;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
@@ -251,65 +248,45 @@ public class CodeCoverage {
 	}
 		
 		
-	private static final String CODE_COVERAGE_SOURCE_PATH = "src/CODECOVERAGE/";
-	private static final List<String> reportFiles = new ArrayList<String>() {
-		private static final long serialVersionUID = -6339218908274560120L;
-	{
-		add("jscoverage.css");
-		add("jscoverage.html");
-		add("jscoverage.js");
-		add("jscoverage-highlight.css");
-		add("jscoverage-ie.css");
-		add("jscoverage-throbber.gif");
-	}};
-
 	private void updateOutputFolder() {
 		logger.debug("updateOutputFolder()");
+		
 
-		for (String filename : reportFiles) {
+		for (String filename : CodeCoverageWebSourceFiles.filenames) {
+
 			File destination = new File(CODE_COVERAGE_DIRECTORY_PATH, filename);
 			if ( destination.exists() ) {
 				logger.info("The destination file already exists.  Assume it was written previously.");
 				continue;
 			}
-			File source = new File(CODE_COVERAGE_SOURCE_PATH, filename);
-			if ( !source.exists() ) {
-				logger.error("Unable to find report file: "+ source.getAbsolutePath());
-				continue;
-			}
+			
 			try {
-				copy(source, destination);
+
+				// Create the directory and file
+				destination.getParentFile().mkdirs();
+				destination.createNewFile();
+
+				OutputStreamWriter writer = null;
+				try {
+					writer = new OutputStreamWriter(new FileOutputStream(destination, false));
+					writer.write(CodeCoverageWebSourceFiles.getInstance().getContents(filename));
+				} finally {
+					if ( writer != null ){
+						writer.close();
+						writer = null;
+					}
+				}
+
+			} catch (FileNotFoundException e) {
+				logger.error("Unable to write "+ destination.getAbsolutePath(), e);
 			} catch (IOException e) {
-				logger.error("Unable to copy file from "+ source.getAbsolutePath() +" to "+ destination.getAbsolutePath(), e);
+				logger.error("Unable to write "+ destination.getAbsolutePath(), e);
+			} catch (HarnessException e) {
+				logger.error("Unable to write "+ destination.getAbsolutePath(), e);
 			}
+
 		}
 	}
-	
-	private static void copy(File source, File destination) throws IOException {
-		logger.debug("copy "+ source.getCanonicalPath() +" to "+ destination.getCanonicalPath());
-
-		if ( !destination.exists() ) {
-			destination.createNewFile();
-		}
-		
-		FileChannel sourceChannel = null;
-		FileChannel destinationChannel = null;
-		try {
-			sourceChannel = (new FileInputStream(source)).getChannel();
-			destinationChannel = (new FileOutputStream(destination)).getChannel();
-			destinationChannel.transferFrom(sourceChannel, 0 , sourceChannel.size());
-		} finally {
-			if ( sourceChannel != null ) {
-				sourceChannel.close();
-				sourceChannel = null;
-			}
-			if ( destinationChannel != null ) {
-				destinationChannel.close();
-				destinationChannel = null;
-			}
-		}
-	}
-
 	
     private String CODE_COVERAGE_DIRECTORY_PATH = "CODECOVERAGE";
     private String CODE_COVERAGE_DIRECTORY_FILE = "jscoverage.json";
@@ -538,6 +515,87 @@ public class CodeCoverage {
 			}
 		}
 		return instance;
+	}
+
+
+	// A class that writes the coverage website files
+	public static class CodeCoverageWebSourceFiles {
+		
+		public static final List<String> filenames =
+	        Arrays.asList(
+	        		"jscoverage-highlight.css",
+	        		"jscoverage-ie.css",
+	        		"jscoverage-throbber.gif",
+	        		"jscoverage.css",
+	        		"jscoverage.html",
+	        		"jscoverage.js");
+		
+		private Map<String, String> filecontents;
+		
+
+		public String getContents(String filename) throws HarnessException {
+			if ( !filecontents.containsKey(filename) )
+				throw new HarnessException("Invalid filename: "+ filename);
+			
+			if ( filecontents.get(filename) == null ) {
+				
+				// Contents never read.  Read them now.
+				
+				StringBuffer sb = new StringBuffer();
+				BufferedReader reader = null;
+				try {
+					try {
+						
+						InputStream stream = this.getClass().getResourceAsStream("/" +filename);
+						if ( stream == null )
+							throw new HarnessException("unable to find resource: "+ filename);
+						
+						// Convert stream to String
+						byte[] b = new byte[1024];
+						for (int n; (n = stream.read(b)) != -1;) {
+							sb.append(new String(b, 0, n));
+						}
+						
+					} finally {
+						if ( reader != null ) {
+							reader.close();
+							reader = null;
+						}
+					}
+				} catch (IOException e) {
+					throw new HarnessException(e);
+				}
+
+				// Save the contents
+				filecontents.put(filename, sb.toString());
+				
+			}
+			return (filecontents.get(filename));
+			
+		}
+		
+
+		private volatile static CodeCoverageWebSourceFiles instance;
+
+		private CodeCoverageWebSourceFiles() {
+			logger.info("new "+ CodeCoverage.class.getCanonicalName());
+			filecontents = new HashMap<String, String>();
+			for (String name : filenames) {
+				filecontents.put(name, null);
+			}
+		}
+
+		public static CodeCoverageWebSourceFiles getInstance() {
+			if(instance==null) {
+				synchronized(CodeCoverageWebSourceFiles.class){
+					if(instance == null) {
+						instance = new CodeCoverageWebSourceFiles();
+					}
+				}
+			}
+			return instance;
+		}
+
 	}
 
 

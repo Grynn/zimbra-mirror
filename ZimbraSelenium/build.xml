@@ -6,7 +6,8 @@
 	<property name="build.dir" location="build" />
 	<property name="build.classes.dir" location="${build.dir}/classes" />
 	<property name="build.resources.dir" location="${build.dir}/resources" />
-
+	<property name="build.coverage.dir" location="${build.dir}/coverage" />
+	
 	<property name="generated.dir" location="${build.dir}/generated" />
 	<property name="generated.java.dir" location="${generated.dir}/java" />
 	<property name="generated.javadocs.dir" location="${generated.dir}/javadocs" />
@@ -157,6 +158,16 @@
 		<jar destfile="${dist.lib.dir}/resources.jar" basedir="${build.resources.dir}" />
 	</target>
 
+	<target name="coverage-classes" description="Copies the coverage website files to build">
+		<copy todir="${build.coverage.dir}">
+			<fileset dir="${src.java.dir}/com/zimbra/qa/selenium/framework/util/coverage" />
+		</copy>
+	</target>
+
+	<target name="coverage-jar" depends="coverage-classes" description="Creates a jar with all coverage website files">
+		<jar destfile="${dist.lib.dir}/coverage.jar" basedir="${build.coverage.dir}" />
+	</target>
+
 	<target name="jar-staf-selenium" depends="jar, bundles-jar" description="Creates the STAF jar file for the selenium service">
 
 		<property name="build.staf.selenium" location="${build.dir}/staf/selenium" />
@@ -170,6 +181,9 @@
 		<copy todir="${build.staf.selenium.jars.dir}">
 			<fileset dir="${dist.lib.dir}">
 				<include name="resources.jar" />
+			</fileset>
+			<fileset dir="${dist.lib.dir}">
+				<include name="coverage.jar" />
 			</fileset>
 			<fileset dir="jars">
 				<include name="commons-beanutils-1.7.jar" />
@@ -218,7 +232,7 @@
 				<attribute name="Main-Class" value="staf.Driver" />
 				<section name="staf/service/info">
 					<attribute name="Service-Class" value="com.zimbra.qa.selenium.staf.StafIntegration" />
-					<attribute name="Packaged-Jars" value="guava-r07 commons-beanutils-1.7 commons-configuration-1.5 commons-lang-2.4 ezmorph-1.0.6 htmlcleaner-2.2 json-lib-2.3-jdk15 ocutil-2.4.2 selenium-java-2.0b3 selenium-server-standalone-2.0b3 testng-5.12.1 xalan apache-log4j-extras-1.0 commons-cli-1.2 commons-code-1.4 commons-configuration-1.5 commons-httpclient-3.1 commons-logging dom4j-1.5.2 jaxen-1.1.1 libidn-1.17 log4j-1.2.16 mail resources zimbracommon zimbra-native zimbrasoap zimbrastore ant-tar-patched" />
+					<attribute name="Packaged-Jars" value="guava-r07 commons-beanutils-1.7 commons-configuration-1.5 commons-lang-2.4 ezmorph-1.0.6 htmlcleaner-2.2 json-lib-2.3-jdk15 ocutil-2.4.2 selenium-java-2.0b3 selenium-server-standalone-2.0b3 testng-5.12.1 xalan apache-log4j-extras-1.0 commons-cli-1.2 commons-code-1.4 commons-configuration-1.5 commons-httpclient-3.1 commons-logging dom4j-1.5.2 jaxen-1.1.1 libidn-1.17 log4j-1.2.16 mail resources coverage zimbracommon zimbra-native zimbrasoap zimbrastore ant-tar-patched" />
 				</section>
 			</manifest>
 		</jar>
@@ -252,7 +266,7 @@
 				<attribute name="Main-Class" value="staf.Driver" />
 				<section name="staf/service/info">
 					<attribute name="Service-Class" value="com.zimbra.qa.selenium.results.ResultsStaf" />
-					<attribute name="Packaged-Jars" value="guava-r07 commons-beanutils-1.7 commons-configuration-1.5 commons-lang-2.4 ezmorph-1.0.6 htmlcleaner-2.2 json-lib-2.3-jdk15 ocutil-2.4.2 selenium-java-2.0b3 selenium-server-standalone-2.0b3 testng-5.12.1 xalan apache-log4j-extras-1.0 commons-cli-1.2 commons-code-1.4 commons-configuration-1.5 commons-httpclient-3.1 commons-logging dom4j-1.5.2 jaxen-1.1.1 libidn-1.17 log4j-1.2.16 mail resources zimbracommon zimbra-native zimbrasoap zimbrastore" />
+					<attribute name="Packaged-Jars" value="guava-r07 commons-beanutils-1.7 commons-configuration-1.5 commons-lang-2.4 ezmorph-1.0.6 htmlcleaner-2.2 json-lib-2.3-jdk15 ocutil-2.4.2 selenium-java-2.0b3 selenium-server-standalone-2.0b3 testng-5.12.1 xalan apache-log4j-extras-1.0 commons-cli-1.2 commons-code-1.4 commons-configuration-1.5 commons-httpclient-3.1 commons-logging dom4j-1.5.2 jaxen-1.1.1 libidn-1.17 log4j-1.2.16 mail resources coverage zimbracommon zimbra-native zimbrasoap zimbrastore" />
 				</section>
 			</manifest>
 		</jar>
