@@ -109,7 +109,7 @@ public class MoveDocument extends AjaxCommonTest {
 						"Verify document was moved to the selected folder");
 	}
 
-	@Test(description = "Move Document using 'm' keyboard shortcut", groups = { "unctional" })
+	@Test(description = "Move Document using 'm' keyboard shortcut", groups = { "functional" })
 	public void MoveDocument_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -177,35 +177,11 @@ public class MoveDocument extends AjaxCommonTest {
 				.zKeyboardShortcut(shortcut);
 
 		// Choose destination folder and Click OK on Confirmation dialog
-		// SleepUtil.sleepSmall();
 		chooseFolder.zClickTreeFolder(subFolders[1]);
 
 		chooseFolder.zClickButton(Button.B_OK);
-		/*
-		 * ClientSessionFactory.session().selenium().getEval("var evObj = document.createEvent('MouseEvents');"
-		 * +
-		 * "evObj.initMouseEvent( 'mouseover', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);"
-		 * +
-		 * "var x = selenium.browserbot.findElementOrNull('css=div[id=ChooseFolderDialog_button2]');"
-		 * + "x.blur; x.focus(); x.dispatchEvent(evObj);");
-		 * ClientSessionFactory.session().selenium().getEval(
-		 * "var evObj = document.createEvent('MouseEvents');" +
-		 * "evObj.initMouseEvent( 'mousedown', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);"
-		 * +
-		 * "var x = selenium.browserbot.findElementOrNull('css=div[id=ChooseFolderDialog_button2]');"
-		 * + "x.blur; x.focus();x.dispatchEvent(evObj);");
-		 * ClientSessionFactory.session
-		 * ().selenium().getEval("var evObj = document.createEvent('MouseEvents');"
-		 * +
-		 * "evObj.initMouseEvent( 'mouseup', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);"
-		 * +
-		 * "var x = selenium.browserbot.findElementOrNull('css=div[id=ChooseFolderDialog_button2]');"
-		 * + "x.blur; x.focus();x.dispatchEvent(evObj);");
-		 */
-		// SleepUtil.sleepLong();
-		// //////
-		// SleepUtil.sleepSmall();
-		app.zPageBriefcase.zClick("css=div[id=ChooseFolderDialog_button2]");
+		
+		//app.zPageBriefcase.zClick("css=div[id=ChooseFolderDialog_button2]");
 
 		// click on sub-folder1 in tree view
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolders[0], false);
