@@ -301,11 +301,15 @@ function(params) {
  */
 ZmCsfeCommand.prototype.cancel =
 function() {
+	DBG.println("req", "CSFE cancel: " + this._rpcId);
 	if (!this._rpcId) { return; }
 	this.cancelled = true;
 	var req = AjxRpc.getRpcRequestById(this._rpcId);
 	if (req) {
 		req.cancel();
+		if (AjxEnv.isFirefox3_5up) {
+			AjxRpc.removeRpcCtxt(req);
+		}
 	}
 };
 

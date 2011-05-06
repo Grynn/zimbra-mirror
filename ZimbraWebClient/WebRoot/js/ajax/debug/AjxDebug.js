@@ -533,7 +533,7 @@ function(force) {
 			this._document.close();
 			
 			var ta = new AjxTimedAction(this, AjxDebug.prototype._finishInitWindow);
-			AjxTimedAction.scheduleAction(ta, 1500);
+			AjxTimedAction.scheduleAction(ta, 2500);
 		} else {
 			this._finishInitWindow();
 
