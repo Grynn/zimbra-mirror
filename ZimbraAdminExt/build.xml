@@ -200,5 +200,10 @@
 	  	</antcall>
     </target>
 
-
+    <target name="deploy-helptooltip" description="deploy help tooltip admin extension">
+        <antcall target="deploy-zimlet">
+            <param name="ext.dir" value="HelpTooltip"/>
+            <param name="ext.name" value="com_zimbra_tooltip"/>
+        </antcall>
+    </target>
 </project>

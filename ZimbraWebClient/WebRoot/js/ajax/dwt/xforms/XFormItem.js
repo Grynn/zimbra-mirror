@@ -349,6 +349,8 @@ XFormItem.prototype.openSelectionLabel = "";
 // error handling
 XFormItem.prototype.errorLocation = _SELF_;
 
+// show help tooltip icon
+XFormItem.prototype.helpTooltip = false;
 //
 // Methods
 //
@@ -1056,11 +1058,25 @@ XFormItem.prototype.outputLabelCellHTML = function (html,  rowSpan, labelLocatio
 								"<label for='", this.getId(), "'>", label, "</label>"
 				);
 		}else{
-			html.append( "<td id=\"", this.getId(),"___label\"", 
-				this.getLabelCssString(), 
-				(rowSpan > 1 ? " rowspan=" + rowSpan : ""), ">", 
-				label
-			);
+            if(!this.getInheritedProperty("helpTooltip") ||
+               !this.getInheritedProperty("showHelpTooltip") ||
+               !this.getInheritedProperty("hideHelpTooltip") ){
+                html.append( "<td id=\"", this.getId(),"___label\"",
+                    this.getLabelCssString(),
+                    (rowSpan > 1 ? " rowspan=" + rowSpan : ""), ">",
+                    label
+                );
+            }else{
+                html.append( "<td id=\"", this.getId(),"___label\"",
+                    this.getLabelCssString(),
+                    " onclick=\"", "XFormItem.prototype.showHelpTooltip" ,
+			        ".call(" ,   this.getGlobalRef(), ", event );\" ",
+                    " onmouseout=\"", "XFormItem.prototype.hideHelpTooltip" ,
+			        ".call(" ,   this.getGlobalRef(), ", event );\" ",
+                    (rowSpan > 1 ? " rowspan=" + rowSpan : ""), ">",
+                    label
+                );
+            }
 		}
 		if (this.getRequired()) {
 			html.append("<span class='redAsteric'>*</span>");
@@ -1984,7 +2000,6 @@ function (event) {
 	var tooltip = shell.getToolTip();
 	tooltip.popdown();
 }
-
 
 
 
