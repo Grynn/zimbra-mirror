@@ -76,7 +76,7 @@ public class SavedSearchFolderItem extends com.zimbra.soap.mail.type.SearchFolde
 			item.setId(Integer.parseInt(search.getAttribute("id")));
 			item.setName(search.getAttribute("name"));
 			item.setQuery(search.getAttribute("query"));
-			item.setTypes(search.getAttribute("types"));
+			//item.setTypes(search.getAttribute("types"));
 			
 			return (item);
 			

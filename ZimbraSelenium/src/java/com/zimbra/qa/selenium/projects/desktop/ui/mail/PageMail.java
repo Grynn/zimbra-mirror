@@ -10,6 +10,7 @@ import com.zimbra.qa.selenium.framework.items.ContextMenuItem.CONTEXT_MENU_ITEM_
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
@@ -581,9 +582,11 @@ public class PageMail extends AbsTab {
 	 * @throws HarnessException
 	 */
 	public PageMailView zGetPropMailView() throws HarnessException {
-		if ( sIsElementPresent( "id="+ Locators.zViewMenuTVBtnID ) ) {
+		if ( sIsElementPresent( "id="+ Locators.zViewMenuTVBtnID ) &&
+		      zIsVisiblePerPosition("id="+ Locators.zViewMenuTVBtnID, 0, 0)) {
 			return (PageMailView.BY_MESSAGE);
-		} else if ( sIsElementPresent( "id="+ Locators.zViewMenuCLVBtnID ) ) {
+		} else if ( sIsElementPresent( "id="+ Locators.zViewMenuCLVBtnID ) &&
+		      zIsVisiblePerPosition("id="+ Locators.zViewMenuCLVBtnID, 0, 0)) {
 			return (PageMailView.BY_CONVERSATION);
 		}
 
@@ -599,17 +602,28 @@ public class PageMail extends AbsTab {
 
 		List<MailItem> items = new ArrayList<MailItem>();
 
-		// Make sure the button exists
-		if ( !this.sIsElementPresent(Locators.zTVRows) )
-			throw new HarnessException("Message List View Rows is not present "+ Locators.zTVRows);
+		String listLocator = null;
+		String rowLocator = null;
+		if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
+         listLocator = "//div[@id='zl__TV__rows']";
+         rowLocator = "//div[contains(@id, 'zli__TV__')]";
+      } else {
+         listLocator = "//div[@id='zl__CLV__rows']";
+         rowLocator = "//div[contains(@id, 'zli__CLV__')]";
+      }
 
+		// Make sure the button exists
+		if ( !this.sIsElementPresent(listLocator) )
+			throw new HarnessException("Message List View Rows is not present: "+ listLocator);
+
+		String tableLocator = listLocator + rowLocator;
 		// How many items are in the table?
-		int count = this.sGetXpathCount("//div[@id='zl__TV__rows']//div[contains(@id, 'zli__TV__')]");
+		int count = this.sGetXpathCount(tableLocator);
 		logger.debug(myPageName() + " zListGetMessages: number of messages: "+ count);
 
 		// Get each conversation's data from the table list
 		for (int i = 1; i <= count; i++) {
-			final String msglocator = "//div[@id='zl__TV__rows']/div["+ i +"]";
+			final String msglocator = listLocator + "/div["+ i +"]";
 			String locator;
 
 			MailItem item = new MailItem();

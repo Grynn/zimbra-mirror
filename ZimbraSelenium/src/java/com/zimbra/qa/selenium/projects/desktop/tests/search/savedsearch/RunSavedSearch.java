@@ -76,11 +76,10 @@ public class RunSavedSearch extends AjaxCommonTest  {
 		
 		// Refresh the folder list
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-		
+
 		// Left click on the search
 		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, item);
-		
-		
+
 		// Verify the correct messages appear
 		List<MailItem> messages = app.zPageMail.zListGetMessages();
 		ZAssert.assertNotNull(messages, "Verify the message list exists");

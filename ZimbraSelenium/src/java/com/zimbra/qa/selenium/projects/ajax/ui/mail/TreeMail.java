@@ -348,8 +348,8 @@ public class TreeMail extends AbsTree {
 		// TODO: implement me!
 
 		if ( locator == null )
-			throw new HarnessException("locator is null for action "+ action);
-
+		   locator = new StringBuffer("css=td[id^='zti__main_Mail__").
+         append(savedSearch.getId()).append("_textCell']").toString();
 
 		// Default behavior.  Click the locator
 		zClick(locator);

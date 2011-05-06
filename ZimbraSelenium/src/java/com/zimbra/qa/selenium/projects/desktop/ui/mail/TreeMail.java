@@ -345,7 +345,12 @@ public class TreeMail extends AbsTree {
 		AbsPage page = null;
 		String locator = null;
 
-		// TODO: implement me!
+		if ( action == Action.A_LEFTCLICK ) {
+		   locator = new StringBuffer("css=td[id^='zti__").
+		         append(MyApplication.zGetActiveAccount().EmailAddress).
+		         append(":main_Mail__']").append("[id$='").
+		         append(savedSearch.getId()).append("_textCell']").toString();
+		}
 
 		if ( locator == null )
 			throw new HarnessException("locator is null for action "+ action);
