@@ -305,11 +305,6 @@
 				<include name="**/*"/>
 			</fileset>
 		</copy>
-		<copy todir="${tms.dir}/src/CODECOVERAGE/">
-			<fileset dir="src/CODECOVERAGE/">
-				<include name="**/*"/>
-			</fileset>
-		</copy>
 		<copy todir="${tms.dir}/data/">
 			<fileset dir="data">
 				<include name="**/*"/>
