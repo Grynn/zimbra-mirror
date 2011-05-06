@@ -1,7 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
 import org.testng.annotations.Test;
-
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
@@ -14,7 +13,6 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
-
 import org.testng.annotations.AfterMethod;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -87,7 +85,7 @@ public class MoveDocument extends AjaxCommonTest {
 
 		// Click on 'Move selected item' icon in toolbar
 		DialogMove chooseFolder = (DialogMove) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_MOVE,docItem);
+				.zToolbarPressButton(Button.B_MOVE, docItem);
 
 		// Choose folder and click OK on Confirmation dialog
 		chooseFolder.zClickTreeFolder(folderItem);
@@ -98,18 +96,20 @@ public class MoveDocument extends AjaxCommonTest {
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
 		// Verify document was moved from the folder
-		ZAssert.assertFalse(app.zPageBriefcase.isPresentInListView(docItem.getName()),
-				"Verify document was moved from the folder");
+		ZAssert.assertFalse(app.zPageBriefcase.isPresentInListView(docItem
+				.getName()), "Verify document was moved from the folder");
 
 		// click on subfolder in tree view
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, folderItem, true);
 
 		// Verify document was moved to the selected folder
-		ZAssert.assertTrue(app.zPageBriefcase.isPresentInListView(docItem.getName()),
-				"Verify document was moved to the selected folder");
+		ZAssert
+				.assertTrue(app.zPageBriefcase.isPresentInListView(docItem
+						.getName()),
+						"Verify document was moved to the selected folder");
 	}
 
-	@Test(description = "Move Document using 'm' keyboard shortcut", groups = { "functional" })
+	@Test(description = "Move Document using 'm' keyboard shortcut", groups = { "unctional" })
 	public void MoveDocument_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -117,7 +117,7 @@ public class MoveDocument extends AjaxCommonTest {
 				SystemFolder.Briefcase);
 
 		String briefcaseRootFolderId = briefcaseRootFolder.getId();
-		
+
 		Shortcut shortcut = Shortcut.S_MOVE;
 
 		String[] subFolderNames = {
@@ -140,9 +140,6 @@ public class MoveDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseRootFolder,
 				true);
 
-		// double-click on sub-folder1 in list view
-		app.zPageBriefcase.zListItem(Action.A_DOUBLECLICK, subFolders[0]);
-
 		// Create document item
 		DocumentItem docItem = new DocumentItem();
 
@@ -163,6 +160,12 @@ public class MoveDocument extends AjaxCommonTest {
 						+ "</doc>"
 						+ "</SaveDocumentRequest>");
 
+		// double-click on sub-folder1 in list view
+		app.zPageBriefcase.zListItem(Action.A_DOUBLECLICK, subFolders[0]);
+
+		// refresh briefcase page
+		// app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseRootFolder,true);
+
 		// click on sub-folder1 in tree view to refresh view
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolders[0], true);
 
@@ -174,22 +177,51 @@ public class MoveDocument extends AjaxCommonTest {
 				.zKeyboardShortcut(shortcut);
 
 		// Choose destination folder and Click OK on Confirmation dialog
+		// SleepUtil.sleepSmall();
 		chooseFolder.zClickTreeFolder(subFolders[1]);
+
 		chooseFolder.zClickButton(Button.B_OK);
+		/*
+		 * ClientSessionFactory.session().selenium().getEval("var evObj = document.createEvent('MouseEvents');"
+		 * +
+		 * "evObj.initMouseEvent( 'mouseover', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);"
+		 * +
+		 * "var x = selenium.browserbot.findElementOrNull('css=div[id=ChooseFolderDialog_button2]');"
+		 * + "x.blur; x.focus(); x.dispatchEvent(evObj);");
+		 * ClientSessionFactory.session().selenium().getEval(
+		 * "var evObj = document.createEvent('MouseEvents');" +
+		 * "evObj.initMouseEvent( 'mousedown', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);"
+		 * +
+		 * "var x = selenium.browserbot.findElementOrNull('css=div[id=ChooseFolderDialog_button2]');"
+		 * + "x.blur; x.focus();x.dispatchEvent(evObj);");
+		 * ClientSessionFactory.session
+		 * ().selenium().getEval("var evObj = document.createEvent('MouseEvents');"
+		 * +
+		 * "evObj.initMouseEvent( 'mouseup', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);"
+		 * +
+		 * "var x = selenium.browserbot.findElementOrNull('css=div[id=ChooseFolderDialog_button2]');"
+		 * + "x.blur; x.focus();x.dispatchEvent(evObj);");
+		 */
+		// SleepUtil.sleepLong();
+		// //////
+		// SleepUtil.sleepSmall();
+		app.zPageBriefcase.zClick("css=div[id=ChooseFolderDialog_button2]");
 
 		// click on sub-folder1 in tree view
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolders[0], false);
 
 		// Verify document is no longer in the sub-folder1
-		ZAssert.assertFalse(app.zPageBriefcase.isPresentInListView(docItem.getName()),
-				"Verify document is no longer in the folder: " + subFolders[0].getName());
+		ZAssert.assertFalse(app.zPageBriefcase.isPresentInListView(docItem
+				.getName()), "Verify document is no longer in the folder: "
+				+ subFolders[0].getName());
 
 		// click on sub-folder2 in tree view
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolders[1], true);
 
 		// Verify document was moved to sub-folder2
-		ZAssert.assertTrue(app.zPageBriefcase.isPresentInListView(docItem.getName()),
-				"Verify document was moved to the folder: " + subFolders[1].getName());
+		ZAssert.assertTrue(app.zPageBriefcase.isPresentInListView(docItem
+				.getName()), "Verify document was moved to the folder: "
+				+ subFolders[1].getName());
 	}
 
 	@AfterMethod(groups = { "always" })
