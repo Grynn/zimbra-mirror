@@ -104,6 +104,11 @@ public class ExecuteHarnessMain {
 	protected String testoutputfoldername = null;
 	public void setTestOutputFolderName(String path) {
 		
+		// The Code Coverage report should exist at the root
+		File coverage = new File(path + "/coverage");
+		if ( !coverage.exists() )	coverage.mkdirs();
+		CodeCoverage.getInstance().setOutputFolder(coverage.getAbsolutePath());
+
 		String browser = ZimbraSeleniumProperties.getStringProperty(
 				ZimbraSeleniumProperties.getLocalHost() + ".browser",
 				ZimbraSeleniumProperties.getStringProperty("browser"));
@@ -136,10 +141,6 @@ public class ExecuteHarnessMain {
 		File testng = new File(testoutputfoldername + "/TestNG");
 		if ( !testng.exists() )		testng.mkdirs();
 		
-		// Also, create the CodeCoverage folder
-		File coverage = new File(testoutputfoldername + "/coverage");
-		if ( !coverage.exists() )	coverage.mkdirs();
-		CodeCoverage.getInstance().setOutputFolder(coverage.getAbsolutePath());
 		
 	}
 	
