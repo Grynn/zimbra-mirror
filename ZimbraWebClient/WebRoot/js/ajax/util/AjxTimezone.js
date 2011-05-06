@@ -502,7 +502,11 @@ AjxTimezone.GMT = "Europe/London";
  * For a real solution, there should be a UTC entry in the list
  * of known timezones.
  */
-AjxTimezone.GMT_NO_DST = "Africa/Casablanca";
+/**
+ * Bug : 59718
+ * Changed from Africa/Casablanca to Africa/Monrovia as Casablanca had 60 minutes daylight savings
+ */
+AjxTimezone.GMT_NO_DST = "Africa/Monrovia";
 
 /**
  * <strong>Note:</strong>
