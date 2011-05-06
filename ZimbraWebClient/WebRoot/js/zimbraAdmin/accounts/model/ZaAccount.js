@@ -1663,6 +1663,11 @@ ZaAccount.myXModel = {
         	constraints: {type:"method", value:
 			   function (value, form, formItem, instance) {				   
 				   if (value){
+                                                var index = value.indexOf("@");
+                                                var namePart = value.substring(0, index);
+                                                var domainPart = value.substring(index+1);
+                                                domainPart = AjxStringUtil.trim(domainPart);
+                                                value = namePart + "@" + domainPart;
 					  	if(AjxEmailAddress.isValid(value)) {
 						   return value;
 					   } else {
