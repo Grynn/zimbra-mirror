@@ -2,7 +2,6 @@ package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.FileItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
@@ -10,7 +9,6 @@ import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -85,6 +83,8 @@ public class MoveFile extends AjaxCommonTest {
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, folderItem, true);
 
+		SleepUtil.sleepVerySmall();
+		
 		// Click on created file
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
@@ -180,7 +180,7 @@ public class MoveFile extends AjaxCommonTest {
 		// app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolders[0],
 		// true);
 
-		SleepUtil.sleepSmall();
+		SleepUtil.sleepVerySmall();
 
 		// Click on created file in list view
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
@@ -204,6 +204,7 @@ public class MoveFile extends AjaxCommonTest {
 				.getName()), "Verify document is no longer in the folder: "
 				+ subFolders[0].getName());
 
+		SleepUtil.sleepVerySmall();
 		// click on sub-folder2 in tree view
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolders[1], true);
 

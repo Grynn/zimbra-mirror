@@ -81,8 +81,8 @@ public class MoveDocument extends AjaxCommonTest {
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
-		SleepUtil.sleepSmall();
-		
+		SleepUtil.sleepVerySmall();
+
 		// Click on created document
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
@@ -101,6 +101,8 @@ public class MoveDocument extends AjaxCommonTest {
 		// Verify document was moved from the folder
 		ZAssert.assertFalse(app.zPageBriefcase.isPresentInListView(docItem
 				.getName()), "Verify document was moved from the folder");
+
+		SleepUtil.sleepVerySmall();
 
 		// click on subfolder in tree view
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, folderItem, true);
@@ -174,7 +176,7 @@ public class MoveDocument extends AjaxCommonTest {
 		// app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolders[0],
 		// true);
 
-		SleepUtil.sleepSmall();
+		SleepUtil.sleepVerySmall();
 
 		// Click on created document in list view
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
@@ -190,6 +192,10 @@ public class MoveDocument extends AjaxCommonTest {
 
 		// app.zPageBriefcase.zClick("css=div[id=ChooseFolderDialog_button2]");
 
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseRootFolder,
+				true);
+
 		// click on sub-folder1 in tree view
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolders[0], false);
 
@@ -197,6 +203,8 @@ public class MoveDocument extends AjaxCommonTest {
 		ZAssert.assertFalse(app.zPageBriefcase.isPresentInListView(docItem
 				.getName()), "Verify document is no longer in the folder: "
 				+ subFolders[0].getName());
+
+		SleepUtil.sleepVerySmall();
 
 		// click on sub-folder2 in tree view
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolders[1], true);

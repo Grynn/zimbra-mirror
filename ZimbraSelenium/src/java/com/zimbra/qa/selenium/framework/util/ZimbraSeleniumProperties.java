@@ -170,6 +170,8 @@ public class ZimbraSeleniumProperties {
 		defaultProp.setProperty("adminName", "admin");
 
 		defaultProp.setProperty("adminPwd", "test123");
+		
+		defaultProp.setProperty("very_small_wait", "1000");
 
 		defaultProp.setProperty("small_wait", "1000");
 

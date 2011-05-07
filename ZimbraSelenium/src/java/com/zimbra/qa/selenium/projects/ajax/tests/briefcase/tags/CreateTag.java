@@ -66,7 +66,8 @@ public class CreateTag extends AjaxCommonTest {
 		// Fill out the input field
 		dialog.zSetTagName(name);
 		
-		SleepUtil.sleepSmall();
+		SleepUtil.sleepVerySmall();
+		
 		dialog.zClickButton(Button.B_OK);
 				
 		/*
@@ -166,10 +167,12 @@ public class CreateTag extends AjaxCommonTest {
 		app.zTreeBriefcase
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
+		SleepUtil.sleepVerySmall();
+		
 		// Create a new tag in the Briefcase using the New pull down menu + Tag
-		SleepUtil.sleepSmall();
 		DialogTag dialog = (DialogTag) app.zPageBriefcase
 				.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_TAG);
+		
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
 
 		// Fill out the input field

@@ -129,11 +129,11 @@ public class TreeBriefcase extends AbsTree {
 
 		zWaitForElementPresent(treeItemLocator);
 
-		String listItemLocator = "css=[id='zl__BDLV__rows']";
+		String listItemLocator = "css=div[id=zl__BDLV__rows][class=DwtListView-Rows]";
 
 		if (isRowAdded)
-			listItemLocator += " div[class^='Row']";
-
+			listItemLocator += ">div[id^=zli__BDLV__][class^=Row]";
+		
 		zWaitForElementPresent(listItemLocator);
 
 		return page;

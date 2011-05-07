@@ -50,6 +50,13 @@ public class SleepUtil {
 	}
 	
 	/**
+	 * Sleep a 500 msec
+	 */
+	public static void sleepVerySmall() {
+		sleep(ZimbraSeleniumProperties.getIntProperty("very_small_wait", 500));
+	}
+	
+	/**
 	 * Sleep a 1000 msec
 	 */
 	public static void sleepSmall() {
