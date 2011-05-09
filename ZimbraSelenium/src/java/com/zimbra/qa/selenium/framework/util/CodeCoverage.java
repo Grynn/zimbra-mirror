@@ -528,6 +528,7 @@ public class CodeCoverage {
 	        		"jscoverage-throbber.gif",
 	        		"jscoverage.css",
 	        		"jscoverage.html",
+	        		"index.html",
 	        		"jscoverage.js");
 		
 		private Map<String, String> filecontents;
