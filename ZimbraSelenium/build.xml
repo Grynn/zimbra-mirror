@@ -86,7 +86,7 @@
 		<ant dir="${soap.dir}" target="jar" inheritAll="false" />
 	</target>
 
-	<target name="compile" depends="build-init,bundles-jar,compile-ZimbraCommon,compile-ZimbraSoap,compile-ZimbraServer" description="Compiles the source code">
+	<target name="compile" depends="build-init,bundles-jar,coverage-jar,compile-ZimbraCommon,compile-ZimbraSoap,compile-ZimbraServer" description="Compiles the source code">
 		<echo message="compiling framework..." />
 		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path" nowarn="on">
 			<src refid="all.java.path" />
@@ -168,7 +168,7 @@
 		<jar destfile="${dist.lib.dir}/coverage.jar" basedir="${build.coverage.dir}" />
 	</target>
 
-	<target name="jar-staf-selenium" depends="jar, bundles-jar" description="Creates the STAF jar file for the selenium service">
+	<target name="jar-staf-selenium" depends="jar, bundles-jar, coverage-jar" description="Creates the STAF jar file for the selenium service">
 
 		<property name="build.staf.selenium" location="${build.dir}/staf/selenium" />
 		<property name="build.staf.selenium.jars.dir" location="${build.staf.selenium}/STAF-INF/jars" />
