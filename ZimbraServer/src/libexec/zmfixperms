@@ -252,9 +252,9 @@ if [ -d ${zimbra_home} ]; then
       chmod 640 ${i}
     done 
 
-    if [ -f ${zimbra_home}/conf/my.conf ]; then
-      chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/conf/my.conf
-      chmod 640 ${zimbra_home}/conf/my.conf
+    if [ -f ${zimbra_home}/conf/my.cnf ]; then
+      chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/conf/my.cnf
+      chmod 640 ${zimbra_home}/conf/my.cnf
     fi
   fi
 
