@@ -1,11 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.tasks;
 
 import java.util.HashMap;
-import java.util.List;
-
 import org.testng.annotations.Test;
-
-import com.zimbra.qa.selenium.framework.items.TaskItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
