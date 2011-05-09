@@ -244,6 +244,10 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 				menu.style.height = wh-WINDOW_GUTTER-parseInt(menu.style.top);								
 				this.menuDirection = OSelect1_XFormItem.MENU_DIR_DOWN;
 			}
+
+            if(!AjxEnv.isIE){
+                menu.style.height = parseInt(menu.style.height) - 11;
+            }
 			menu.style.overflow="auto";	
 			menu.getElementsByTagName("table")[0].className = this.getChoiceScrollTableCssClass();
 			menu.getElementsByTagName("table")[0].width="100%";
