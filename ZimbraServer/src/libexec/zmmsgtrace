@@ -1,0 +1,665 @@
+#!/usr/bin/perl
+#
+# ***** BEGIN LICENSE BLOCK *****
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2010, 2011 Zimbra, Inc.
+#
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.3 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+#
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# ***** END LICENSE BLOCK *****
+
+=head1 NAME
+
+zmmsgtrace - trace an email using postfix and amavis syslog data
+
+=head1 SYNOPSIS
+
+zmmsgtrace [options] [<mail-syslog-file>...]
+
+    --id|i "msgid"                # case sensitive regex
+    --sender|s "user@domain"      # case insensitive regex
+    --recipient|r "user@domain"   # case insensitive regex
+    --srchost|F "hostname_or_ip"  # case insensitive regex
+    --desthost|D "hostname_or_ip" # case insensitive regex
+    --time|t "start_ts,end_ts"    # YYYYMM[DD[HH[MM[SS]]]]
+    --year "YYYY"                 # file year if no YYYY in file
+    --nosort                      # do not sort @ARGV files by mtime
+    --debug                       verbose output useful for debugging
+    --help                        display a brief help message
+    --man                         display the entire man page
+
+  Where:
+    <mail-syslog-file> defaults to "/var/log/zimbra.log"
+
+  Files ending in '.gz', '.bz' or '.bz2' will be read using gzip or
+  bunzip2.
+
+=head1 EXAMPLE
+
+Show a trace of all messages in '/var/log/zimbra.log':
+
+  $ zmmsgtrace
+
+Show a trace of all messages in '/var/log/zimbra.log' by sender
+matching the word 'phil':
+
+  $ zmmsgtrace -s phil
+
+Show a trace of messages sent by 'phil.pearl' between '20110217' and
+'20110221' in '/var/log/zimbra.log.1.gz' and '/var/log/zimbra.log':
+
+  # note: a '.' (period) in a regex matches any character
+  $ cd /var/log
+  $ zmmsgtrace zimbra.log.1.gz zimbra.log \
+      -sender 'phil\.pearl' -srchost localhost -time 20110217,20110221
+
+Find any email sent by an email address starting with 'p' to anyone at
+'usc.edu' in all files matching /var/log/zimbra*:
+
+  # note: this regex can match more than desired!
+  $ zmmsgtrace -s '^p' -r '@usc.edu' /var/log/zimbra*
+
+  # this regex is more specific - recipient ending in "@usc.edu"
+  $ zmmsgtrace -s '^p' -r '@usc\.edu$' /var/log/zimbra*
+
+=head1 DESCRIPTION
+
+This utility, zmmsgtrace, is intended to act as a replacement for the
+original zmmsgtrace utility that was removed from ZCS distribution
+starting with ZCS 6.  This utility relies on a (centralized sys)log
+host that hold mail log (aka zimbra.log) files which contain log
+entries for amavis and postfix for the ZCS platform.
+
+This utility reads a lot of data into memory so beware of running this
+on platforms that have limited memory available.
+
+The behavior and logic of this program models much of the logic of the
+original tool.  However, most non time/date related arguments are now
+treated as perl regular expressions to allow for a more flexible means
+to trace and match message data.
+
+The behavior and logic of this program models much of the logic of the
+original tool.
+
+=head1 ADMINISTRIVIA
+
+This section describes some background and history of how this version
+of zmmsgtrace came to be and how it compares with the original
+zmmsgtrace utility.  Some additional details may be found in:
+
+=over 4
+
+=item ZCS bug# 41078: zmmsgtrace replacement
+
+L<https://bugzilla.zimbra.com/show_bug.cgi?id=41078>
+
+=back
+
+The old zmmsgtrace relied on the ZCS "logger database" which was
+removed/replaced in ZCS 6, this version reads syslog files.
+
+Command line arguments and output of this tool, is very similar to the
+original zmmsgtrace utility.
+
+This utility combines logic from zmlogger, zmlogprocess and zmmsgtrace
+from ZCS 5.
+
+=cut
+
+# notes on queries used by zmlogger, zmlogprocess and zmmsgtrace:
+#  "msgid='$searchId'"
+#  "sender like '%${sender}%'"
+#  "recipient like '%${recip}%'"
+#  "(from_host='$sourceIp' or from_IP='$sourceIp')"
+#  "(to_host='$destIp' or to_IP='$destIp')"
+#  "arrive_time >= '$startTime'"
+#  "arrive_time <= '$endTime'"
+
+use strict;
+use warnings;
+use File::Basename qw(basename);
+use Getopt::Long qw(GetOptions);
+use IO::File ();
+use Pod::Usage qw(pod2usage);
+use Time::localtime qw(localtime);
+
+my $DEBUG   = 0;                       # GLOBAL set by process_options()
+my $LOGFILE = "/var/log/zimbra.log";
+my $VERSION = "1.05";
+my $Prog    = basename($0);
+
+{
+    my %mon = (
+        Jan => '01',
+        Feb => '02',
+        Mar => '03',
+        Apr => '04',
+        May => '05',
+        Jun => '06',
+        Jul => '07',
+        Aug => '08',
+        Sep => '09',
+        Oct => '10',
+        Nov => '11',
+        Dec => '12',
+    );
+
+    # log timestamp does not contain the year
+    sub logdate_to_number {
+        my ( $ts, $yr ) = @_;
+        return unless ($ts);
+
+        # Sep 14 18:30:02
+        my @p = split( ' ', $ts );
+        my $mo = $mon{ $p[0] };
+
+        $p[2] =~ s/://g;
+
+        # MMDDHHMMSS
+        my $n = sprintf( "%4d%02d%02d%s", $yr, $mo, $p[1], $p[2] );
+        unless ( length($n) == 14 ) {
+            warn("date conversion failed: $ts => $n\n");
+            return;
+        }
+        return $n;
+    }
+
+    # convert YYYYMM[DD[HH[MM[SS]]]] to YYYYMMDDHHMMSS
+    sub time_to_number {
+        my ( $t, $max ) = @_;
+
+        # DD HH MM SS
+        my @v = $max ? ( 31, 23, 59, 60 ) : ( 0, 0, 0, 0 );
+
+        return undef unless $t;
+        return undef
+          unless $t =~ /^(\d{4})(\d{2})(\d{2})?(\d{2})?(\d{2})?(\d{2})?$/;
+        my @t = ( $1, $2, $3 || $v[0], $4 || $v[1], $5 || $v[2], $6 || $v[3] );
+        return sprintf( "%4d" . "%02d" x 5, @t );
+    }
+}
+
+sub process_options {
+    my ( %opt, @err );
+
+    # default: sort logfiles by mtime
+    $opt{sort} = 1;
+
+    # OLD: $msgId, $sender, $recip, $opt{F}, $opt{D}, $opt{t} (during)
+    GetOptions(
+        \%opt,         "id|i=s",       "sender|s=s", "recipient|r=s",
+        "srchost|F=s", "desthost|D=s", "time|t=s",   "year=i",
+        "sort!",       "debug",        "help",       "man",
+    ) or pod2usage( -verbose => 0 );
+
+    pod2usage( -message => "$Prog: version $VERSION\n", -verbose => 1 )
+      if ( $opt{help} );
+    pod2usage( -verbose => 2 ) if ( $opt{man} );
+
+    # set global DEBUG
+    $DEBUG = $opt{debug} || 0;
+
+    if ( defined $opt{year} ) {
+        push( @err, "invalid year '$opt{year}'" )
+          unless ( $opt{year} =~ /^\d{4,}$/ );
+    }
+    else {
+        $opt{year} = localtime->year() + 1900;
+    }
+
+    if ( $opt{time} ) {
+        my ( $start, $end ) = split( /\s*,\s*/, $opt{time}, 2 );
+        if ($start) {
+            $opt{_tstart} =
+              ( $start =~ /:/ )
+              ? logdate_to_number( $start, $opt{year} )
+              : time_to_number($start);
+        }
+        if ($end) {
+            $opt{_tend} =
+              ( $end =~ /:/ )
+              ? logdate_to_number( $end, $opt{year} )
+              : time_to_number( $end, "max" );
+        }
+        push( @err, "invalid time '$opt{time}'" )
+          unless ( $opt{_tstart} or $opt{_tend} );
+    }
+
+    # treat each of these args as a regexp
+    foreach my $arg (qw(id sender recipient srchost desthost)) {
+        next unless defined $opt{$arg};
+        my $val = $opt{$arg};
+        my $regex = $arg eq "id" ? qr/$val/ : qr/$val/i;
+        if ($regex) {
+            $opt{ "_" . $arg } = $regex;
+        }
+        else {
+            push( @err, "invalid regex: --$arg '$val'" );
+        }
+    }
+
+    # default: zimbra log file
+    $opt{_files} = [ ( @ARGV ? @ARGV : ($LOGFILE) ) ];
+
+    pod2usage(
+        -verbose => 1,
+        -message => join( "", map( "$Prog: $_\n", @err ) )
+    ) if (@err);
+
+    return %opt;
+}
+
+main();
+
+sub main {
+    my %opt = process_options();
+
+    print("Tracing messages\n");
+    my @info = (
+        id        => "ID %s",
+        sender    => "from %s",
+        recipient => "to %s",
+        srchost   => "received from host %s",
+        desthost  => "delivered to host %s",
+        time      => "during window (start,end) %s",
+    );
+    while (@info) {
+        my ( $key, $fmt ) = ( shift(@info), shift(@info) );
+        next unless exists $opt{$key};
+        print( "\t", sprintf( $fmt, $opt{$key} ), "\n" );
+    }
+    print("\n");
+
+    my @files = $opt{sort} ? sort_files( $opt{_files} ) : @{ $opt{_files} };
+
+    doit( \%opt, @files );
+}
+
+sub _io_file_args {
+    my ($file) = @_;
+    my $mode = "<";
+    my @ret = ( $file, $mode );
+
+    my @prog;
+    if ( $file =~ /\.gz$/ ) {
+        @prog = qw(gzip -dc);
+    }
+    elsif ( $file =~ /\.bz(?:|2)$/ ) {
+        @prog = qw(bunzip2 -dc);
+    }
+
+    if (@prog) {
+        $file = "@prog < '$file' |";
+        @ret  = ($file);
+    }
+
+    return (@ret);
+}
+
+# BUG?: assume files are in date order oldest to newest?
+sub sort_files {
+    my ($files) = @_;
+
+    my %seen;
+    my @files = grep { !$seen{$_}++ } @$files;
+
+    # stat? read first log date entry then sort?...
+    return sort { -M $b <=> -M $a } @files;
+}
+
+# Linux:
+#  Jul  1 20:08:06 host postfix/smtpd[4379]: connect from host[1.0.0.1]
+# FreeBSD:
+#  Jul  1 20:08:06 <mail.info> host postfix/smtpd[437]: connect from h[1.0.0.1]
+#  Aug 17 15:16:12 host postfix/cleanup[1419]: [ID 197553 mail.info] EC2B339E5: message-id=<rnd@som.dom>
+#  Dec 25 05:20:28 host policyd-spf[1419]: [ID 27553 mail.info] ...
+
+# use Data::Dumper; $Data::Dumper::Sortkeys = $Data::Dumper::Indent = 1;
+sub doit {
+    my ( $opt, @files ) = @_;
+
+    warn( "$Prog: total files to read: ", scalar(@files), "\n" ) if ($DEBUG);
+    my $nomatch = 0;
+
+    foreach my $file (@files) {
+        my $fh = IO::File->new( _io_file_args($file) )
+          or die("$Prog: unable to open file '$file'\n");
+        warn("$Prog: reading '$file'\n") if ($DEBUG);
+
+        my ( @msgs, %msgs, %post, %posttmp, %amav, %saved );
+        while ( my $line = <$fh> ) {
+            chomp($line);
+            $line =~ s/\s+$//;
+            next unless ($line);
+            next
+              unless (
+                $line =~ /(^\w{3} \s [\s\d]\d \s \d{2}:\d{2}:\d{2})\s
+                    (?:<[^>]+> \s)?
+                    (\S+)\s
+                    ([^[]+)\[(\d+)\]:\s
+                    (?:\[ID \s \d+ \s \w+\.\w+\] \s)?
+                    (.*)$/x
+              );
+
+            my %ent;
+            @ent{qw(log_date host app pid msg)} = ( $1, $2, $3, $4, $5 );
+
+            next unless ( $ent{app} and $ent{app} =~ /^(?:postfix|amavis)/ );
+
+            # ...: milter-discard: ...: ...; from=<> to=<> proto=... helo=<h>
+            # postfix messages like /^$qid: key=value, .../
+            if (    $ent{app} =~ /^postfix/
+                and $ent{msg} =~ /^([A-F0-9]+|NOQUEUE): (.*)/ )
+            {
+                my ( $qid, $msg ) = ( $1, $2 );
+                my $key  = $qid . ":" . $ent{host};
+                my $date = $ent{log_date};
+                my $obj  = $posttmp{$key};
+                unless ($obj) {
+                    $obj = $posttmp{$key} = {};
+                    $obj->{host} = $ent{host};
+                }
+
+                # NOQUEUE: reject: RCPT from host[1.2.3.4]: \
+                # 554 5.7.1 <u@d>: Relay access denied; \
+                # from=<u@d> to=<u@d> proto=ESMTP helo=<h.dom>
+                if ( $msg =~ s/^reject: // ) {
+                    my $ref = delete $posttmp{$key};
+                    push( @msgs, $ref );
+
+                    $ref->{messageId}  ||= "[reject:$key]";
+                    $ref->{arriveTime} ||= $date;
+
+                    my $statusmsg = "";
+                    if (
+                        $msg =~ /^RCPT\sfrom\s([^[]+)
+                                  \[(.*)\]\:   \s
+                                  ([^;]+)\;    \s
+                                  from=<(.*?)> \s
+                                  to=<(.*?)>
+                                 /x
+                      )
+                    {
+                        $ref->{prevHost} = $1;
+                        $ref->{prevIp}   = $2;
+                        $statusmsg       = $3;
+                        $ref->{sender}   = $4 || "postmaster";
+                        my $to = $5;
+                        if ( defined $to ) {
+                            my $recip = $ref->{recipList}->{$to} = {};
+                            $recip->{leaveTime} = $date;
+                            $recip->{status}    = "reject";
+                            $recip->{statusmsg} = $statusmsg;
+                        }
+                    }
+                }
+                elsif ( $msg =~ /^removed/ ) {
+                    my $ref = delete $posttmp{$key};
+                    push( @msgs, $ref );
+
+                    $ref->{messageId}  ||= "[unknown:$key]";
+                    $ref->{arriveTime} ||= $date;
+                    $msgs{ $ref->{messageId} }{$qid} = $ref;
+                }
+                elsif ( $msg =~ /^message-id=<([^>]+)>/ ) {
+                    $obj->{messageId}  = $1;
+                    $obj->{arriveTime} = $date;
+                }
+                elsif ( $msg =~ /^client=([^[]+)\[(.*)\]/ ) {
+                    $obj->{prevHost} = $1;
+                    $obj->{prevIp}   = $2;
+                }
+                elsif ( $msg =~ /^from=<(.*)>, size=(\d+)/ ) {
+                    $obj->{sender} = $1 || "postmaster";
+                    $obj->{bytes} = $2;
+                }
+
+                # to=<>, relay=, delay=, delays=, dsn=5.0.0, status=bounced ...
+                elsif (
+                    $msg =~ /^to=<([^>]*)>
+                         (?:, \s orig_to=<([^>]*)>)?,\s
+                         relay=([^[,]+)(?:\[(.*?)\](:\d+))?,\s
+                         delay=\S+, \s delays=\S+, \s dsn=\S+ \s
+                         status=(\S+) \s (.*)/x
+                  )
+                {
+                    my $recip = $1;
+                    my $ref   = $obj->{recipList}->{$recip};
+                    unless ($ref) {
+                        $ref = $obj->{recipList}->{$recip} = {};
+                    }
+
+                    $ref->{leaveTime} = $date;
+                    $ref->{origRecip} = $2 if $2;
+                    $ref->{nextHost}  = $3 . ( $5 || "" );
+                    $ref->{nextIp}    = ( $4 || "" ) . ( $5 || "" );
+                    $ref->{status}    = $6;
+                    $ref->{statusmsg} = $7;
+                    $ref->{amavisId}  = $1
+                      if ( $ref->{statusmsg} =~ / id=([^ ,]+)/ );
+                    $ref->{nextQueueId} = $1
+                      if ( $ref->{statusmsg} =~ / queued as ([^ )]+)/ );
+                }
+                else {
+                    warn("DEBUG: skip: $line\n") if ( $DEBUG > 2 );
+                }
+
+                # postfix: $posttmp{$msgid}{$fromIP}{recipList}{$recip}{amavis}
+            }
+            elsif ( $ent{app} =~ /^amavis/ ) {
+                my $msg = $ent{msg};
+                my $am_id;
+
+                $am_id = $1 if ( $msg =~ /^\(([^)]+)\)\s/ );
+
+                # msg is a continuation of a previous line
+                if ( $am_id and $msg =~ s/^\([^)]+\)\s\.\.\.// ) {
+                    $msg = ( delete( $saved{$am_id} ) || "" ) . $msg;
+                }
+
+                # msg to be continued on another line
+                if ( $am_id and $msg =~ s/\.\.\.$// ) {
+                    $saved{$am_id} = $msg;
+                    next;
+                }
+
+                next unless ( $msg =~ /(Passed|Blocked)/ );
+
+                #(15345-18-2) Passed BAD-HEADER, \
+                # MYNETS LOCAL [10.16.67.124] \
+                # <z-u-b@v.dom> -> <br@z.dom>, \
+                # quarantine: br-n@z.dom.arc, badh-Jsa8JDk6sgjA, \
+                # Message-ID: <msgid>, mail_id: Jsa8JDk6sgjA, Hits: -17.909, \
+                # size: 17168, queued_as: 72CA67C0037, 9370 ms
+                #(03564-15) Passed CLEAN, \
+                # MYNETS LOCAL [10.16.67.167] [74.63.247.127] \
+                # <usera@dom> -> <userb@dom>, \
+                # Message-ID: <msgid>, mail_id: T9JbVa1hw9P9, Hits: -1.909, \
+                # size: 2077, queued_as: qid, dkim_id=@d,noreply=u@d, 144 ms
+                #(29272-01) Passed CLEAN, \
+                # [192.168.1.20] [192.168.1.20] \
+                # <usera@dom> -> <userb@dom>, \
+                # Message-ID: <rand@h.dom>, mail_id: nwDvI7HuwIJ5, Hits: -, \
+                # size: 4089, queued_as: 48DA510E00AE, 137 ms
+                unless (
+                    $msg =~ /^\(([^)]+)\)\s            # 1 am_id (<pid>-<seq>)
+                             (Passed|Blocked)\s        # 2 disposition
+                             ([^,]+),\s                # 3 CLEAN or ...,
+                             (?:[^\[]*)?\[([^]]+)\]\s  # 4 a hostname or ip
+                             (?:\[([^]]+)\]\s)?        # 5 an ip
+                             <([^>]*)>\s               # 6 from smtp addr
+                             ->\s
+                             (<[^>]+>(?:,<[^>]+>)*),   # 7 to smtp addr
+
+                             # quarantine: .*? followed by *id: ...
+                             (?: \s quarantine: \s .+? ,(?=\s\S*(?i)id:\s))?
+
+                             (?: \s Queue-ID:   \s  ([^,]+) ,)?  # 8
+                             (?: \s Message-ID: \s <([^>]+)>,)?  # 9
+                             (?: \s Resent-Message-ID: \s <[^>]+>  ,)?
+                                 \s mail_id:    \s  \S+ ,
+                                 \s Hits:       \s (\S+),        # 10
+                                 \s size:       \s  \d+ ,
+                             (?: \s dkim_id=    \S+     ,)?
+                             (?: \s queued_as:  \s  \S+ ,)?
+                             (?: \s dkim_id=    \S+     ,)?
+                                 \s (\d+)       \s ms/x    # 11
+                  )
+                {
+                    $nomatch++;
+                    warn("$Prog: NO match: $line\n") if ($DEBUG);
+                    next;
+                }
+
+                my $id = $12 || $1;
+                $amav{$id} ||= {};
+                my $obj = $amav{$id};
+                @{$obj}{qw(log_date host)} = @ent{qw(log_date host)};
+
+                @{$obj}{
+                    qw(pid disp reason fromIP origIP sender recips queueid msgid hits ms)
+                  } = ( $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11 );
+
+            }
+            else {
+                warn("DEBUG: skip: $line\n") if ( $DEBUG > 2 );
+            }
+        }
+
+        #print( "POSTFIX:", Dumper( \%msgs ), "AMAVIS:",  Dumper( \%amav ) );
+
+        if ($nomatch) {
+            warn(
+                "$Prog: total unmatched entries in '$file': $nomatch\n",
+                "$Prog: use -debug to see unmatched lines\n"
+            );
+        }
+        warn( "$Prog: total messages in '$file': ", scalar(@msgs), "\n" )
+          if ($DEBUG);
+
+        foreach my $msg (@msgs) {
+            my $rList = $msg->{recipList};
+            my @recip = sort keys %$rList;
+            my %rorig;
+            foreach my $r (@recip) {
+                my $rec = $rList->{$r}->{origRecip};
+                $rorig{$rec}++
+                  if ( defined $rec and !exists $rList->{$rec} );
+            }
+            my @rorig = sort keys %rorig;
+
+            # we may have already processed them all...
+            next unless @recip;
+            my $indent = "\t";
+
+            if ( defined $opt->{_id} ) {
+                next unless defined $msg->{messageId};
+                next unless $msg->{messageId} =~ m/$opt->{_id}/;
+            }
+
+            if ( defined $opt->{time} ) {
+                next unless defined $msg->{arriveTime};
+                my $artime =
+                  logdate_to_number( $msg->{arriveTime}, $opt->{year} );
+                if ( defined $opt->{_tstart} ) {
+                    next if $artime < $opt->{_tstart};
+                }
+                if ( defined $opt->{_tend} ) {
+                    next if $artime > $opt->{_tend};
+                }
+            }
+
+            if ( defined $opt->{_sender} ) {
+                next unless contain( $opt->{_sender}, $msg->{sender} );
+            }
+
+            if ( defined $opt->{_recipient} ) {
+                next unless contain( $opt->{_recipient}, @recip, @rorig );
+            }
+
+            if ( defined $opt->{_srchost} ) {
+                my @prev;
+                push( @prev, $msg->{prevHost} ) if defined $msg->{prevHost};
+                push( @prev, $msg->{prevIp} )   if defined $msg->{prevIp};
+                next unless contain( $opt->{_srchost}, @prev );
+            }
+
+            if ( defined $opt->{_desthost} ) {
+                my @next =
+                  map { @{ $rList->{$_} }{qw(nextHost nextIp)} } keys %$rList;
+                @next = map { s/:\d+$//; $_ } @next;
+                next unless contain( $opt->{_desthost}, @next );
+            }
+
+            print(
+                "Message ID '$msg->{messageId}'\n",
+                ( $msg->{sender} || "unknown" ),
+                " -->\n",
+            );
+            foreach my $r (@recip) {
+                my $or = $rList->{$r}->{origRecip};
+                print( $indent, $r, ( $or ? " (originally to $or)" : () ),
+                    "\n" );
+            }
+            $indent = "  ";
+            foreach my $r (@recip) {
+                if ( $opt->{_recipient} ) {
+                    my $or = $rList->{$r}->{origRecip};
+                    next unless contain( $opt->{_recipient}, $r, $or );
+                }
+                print( $indent, "Recipient ", $r, "\n" );
+                printRecip( $indent, $msg, \%msgs, $r, \%amav );
+            }
+            print("\n");
+        }
+    }
+}
+
+sub contain {
+    my ( $regex, @values ) = @_;
+    foreach my $v (@values) {
+        return 1 if ( defined($v) and $v =~ m/$regex/ );
+    }
+    return 0;
+}
+
+sub printRecip {
+    my ( $indent, $msg, $msgs, $r, $amav ) = @_;
+    my $ref = delete $msg->{recipList}->{$r};
+
+    my $nextId = $ref->{nextQueueId};
+    my $amr    = $nextId ? $amav->{$nextId} : undef;
+    my $nmsg   = $nextId ? $msgs->{ $msg->{messageId} }->{$nextId} : undef;
+
+    my ( $at, $lt ) = ( $msg->{arriveTime}, $ref->{leaveTime} );
+    my ( $ph, $pi ) = ( @{$msg}{qw(prevHost prevIp)} );
+    my ( $st, $nh, $ni ) = ( @{$ref}{qw(status nextHost nextIp)} );
+
+    $ph ||= $msg->{host};
+    $pi ||= "";
+    ( $ph, $pi ) = ( $msg->{host}, "" ) if ( $pi eq "127.0.0.1" );
+
+    print( $indent, "$at - $ph ",
+        ( $pi ? "($pi) "     : "" ),
+        ( $nh ? "--> $nh "   : "" ),
+        ( $ni ? "($ni) "     : "" ),
+        ( $st ? "status $st" : "" ), "\n",
+    );
+    print( $indent, "  ", $ref->{statusmsg}, "\n" )
+      if ( $ref->{statusmsg} and ( !$st or $st ne "sent" ) );
+
+    print( $indent, $amr->{log_date}, " ",
+        $amr->{disp}, " by amavisd on ", $amr->{host},
+        "(",          $amr->{reason},    ")",
+        " hits: ",    $amr->{hits},      " in ",
+        $amr->{ms},   " ms\n"
+    ) if ($amr);
+
+    printRecip( $indent, $nmsg, $msgs, $r, $amav )
+      if ($nmsg);
+}
