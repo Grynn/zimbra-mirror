@@ -15,10 +15,12 @@
 package com.zimbra.cs.account.offline;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Iterator;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -29,13 +31,12 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.offline.OfflineLog;
-import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.index.SearchParams;
 import com.zimbra.cs.index.SortBy;
-import com.zimbra.cs.index.ZimbraQueryResults;
 import com.zimbra.cs.index.ZimbraHit;
+import com.zimbra.cs.index.ZimbraQueryResults;
 import com.zimbra.cs.mailbox.Contact;
+import com.zimbra.cs.mailbox.ContactAutoComplete;
 import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.MailServiceException;
@@ -43,7 +44,8 @@ import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OperationContext;
 import com.zimbra.cs.mailbox.ContactAutoComplete.AutoCompleteResult;
-import com.zimbra.cs.mailbox.ContactAutoComplete;
+import com.zimbra.cs.offline.OfflineLog;
+import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.service.util.ItemId;
 
 public class OfflineGal {
@@ -84,6 +86,12 @@ public class OfflineGal {
     }
 
     public ZimbraQueryResults search(String name, String type, String sortBy, int offset, int limit, Element cursor) throws ServiceException {
+        Set<String> names = new HashSet<String>();
+        names.add(name);
+        return search(names, type, sortBy, offset, limit, cursor);
+    }
+    
+    public ZimbraQueryResults search(Set<String> names, String type, String sortBy, int offset, int limit, Element cursor) throws ServiceException {
         String galAcctId = mAccount.getAttr(OfflineConstants.A_offlineGalAccountId, false);
         mGalMbox = null;
 
@@ -97,20 +105,36 @@ public class OfflineGal {
         mOpContext = new OperationContext(mGalMbox);
         Folder folder = getSyncFolder(mGalMbox, mOpContext, false);
 
-        name = name.trim();
-        String query = "in:\"" + folder.getName() + "\"";
-        // '.' is a special operator that matches everything.
-        if (name.length() > 0 && !name.equals(".")) {
-            // escape quotes
-            query = query + " AND contact:\"" + name.replace("\"", "\\\"") + "\"";
+        StringBuilder query = new StringBuilder("in:\"").append(folder.getName()).append("\"");
+        boolean firstName = true;
+        for (String name : names) {
+            name = name.trim();
+            // '.' is a special operator that matches everything.
+            if (name.length() > 0 && !name.equals(".")) {
+                if (firstName) {
+                    query.append(" AND (");
+                    firstName = false;
+                } else {
+                    query.append(" OR ");
+                }
+                // escape quotes
+                query.append(" contact:\"").append(name.replace("\"", "\\\"")).append("\"");
+            }
+        }
+        if (!firstName) {
+            query.append(" ) ");
         }
         if (type.equals(CTYPE_ACCOUNT)) {
-            query = query + " AND (#" + ContactConstants.A_type + ":" + CTYPE_ACCOUNT + " OR #"+ContactConstants.A_type + ":" + CTYPE_GROUP +")";
-        } else if (type.equals(CTYPE_RESOURCE)) {
-            query = query + " AND #" + ContactConstants.A_type + ":" + CTYPE_RESOURCE;
+            query.append(" AND (#").append(ContactConstants.A_type).append(":").append(CTYPE_ACCOUNT).append(" OR #").append(ContactConstants.A_type).append(":").append(CTYPE_GROUP).append(")");
+        }
+        else if (type.equals(CTYPE_RESOURCE)) {
+            query.append(" AND #").append(ContactConstants.A_type).append(":").append(CTYPE_RESOURCE);
+        }
+        else if (type.equals(CTYPE_GROUP)) {
+            query.append(" AND (#").append(ContactConstants.A_type).append(":").append(CTYPE_GROUP).append(")");
         }
         SearchParams sp = new SearchParams();
-        sp.setQueryStr(query);
+        sp.setQueryStr(query.toString());
         sp.setTypes(EnumSet.of(MailItem.Type.CONTACT));
         sp.setSortBy(sortBy);
         sp.setOffset(offset);
