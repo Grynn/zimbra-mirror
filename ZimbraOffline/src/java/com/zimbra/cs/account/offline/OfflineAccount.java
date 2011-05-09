@@ -256,6 +256,16 @@ public class OfflineAccount extends Account {
         return isDisabledDueToError;
     }
 
+    boolean isGalSyncRetryOn = true;
+    
+    public boolean isGalSyncRetryOn() {
+        return isGalSyncRetryOn;
+    }
+
+    public void setGalSyncRetryOn(boolean isGalSyncRetryOn) {
+        this.isGalSyncRetryOn = isGalSyncRetryOn;
+    }
+
     public static void main(String[] args) {
         assert new Version("4.5.9").isAtLeast(new Version("4.5"));
         assert !new Version("4.5.9").isAtLeast(new Version("4.5.11"));
