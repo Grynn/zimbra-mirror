@@ -434,12 +434,14 @@ public class CodeCoverage {
 		WebappsZimbraInstrumented	= "/opt/zimbra/jetty/webapps/instrumented" + ZimbraSeleniumProperties.getUniqueString();
 
 		try {
+			
 			StafServicePROCESS staf = new StafServicePROCESS();
 			staf.execute("zmmailboxdctl stop");
-			staf.execute("mv "+ WebappsZimbra +" "+ WebappsZimbraInstrumented);
+			staf.execute("rm -rf "+ WebappsZimbra); // Delete the instrumented code
 			staf.execute("mv "+ WebappsZimbraOriginal +" "+ WebappsZimbra);
 			staf.execute("zmmailboxdctl start");
 			staf.execute("zmcontrol status");
+			
 		} catch (HarnessException e) {
 			logger.error("Unable to instrument code.  Disabling code coverage.", e);
 		} finally {
