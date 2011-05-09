@@ -44,8 +44,8 @@ import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.Provisioning;
 
-import com.zimbra.cs.account.ldap.ZimbraLdapContext;
 import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
+import com.zimbra.cs.account.ldap.legacy.LegacyZimbraLdapContext;
 import com.zimbra.cs.account.ldap.legacy.entry.LdapDomain;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.AdminConstants;
@@ -101,11 +101,11 @@ public class GetLDAPEntries extends AdminDocumentHandler {
         return true; 
     }
     
-    public static LDAPUtilEntry getObjectByDN(String dn, ZimbraLdapContext initZlc) throws ServiceException {
-        ZimbraLdapContext zlc = initZlc;
+    public static LDAPUtilEntry getObjectByDN(String dn, LegacyZimbraLdapContext initZlc) throws ServiceException {
+        LegacyZimbraLdapContext zlc = initZlc;
         try {
             if (zlc == null)
-                zlc = new ZimbraLdapContext();
+                zlc = new LegacyZimbraLdapContext();
                
             Attributes attrs = zlc.getAttributes(dn);
             LDAPUtilEntry ne = new LDAPUtilEntry(dn, attrs,null);
@@ -119,7 +119,7 @@ public class GetLDAPEntries extends AdminDocumentHandler {
             throw ServiceException.FAILURE("unable to find dn: "+dn+" message: "+e.getMessage(), e);
         } finally {
             if (initZlc == null)
-                ZimbraLdapContext.closeContext(zlc);
+                LegacyZimbraLdapContext.closeContext(zlc);
         }
     }
     
@@ -162,9 +162,9 @@ public class GetLDAPEntries extends AdminDocumentHandler {
     void searchObjects(String query,  String base, NamedEntry.Visitor visitor)
         throws ServiceException
     {
-        ZimbraLdapContext zlc = null;
+        LegacyZimbraLdapContext zlc = null;
         try {
-            zlc = new ZimbraLdapContext();
+            zlc = new LegacyZimbraLdapContext();
             
             SearchControls searchControls = 
                 new SearchControls(SearchControls.SUBTREE_SCOPE, 0, 0, null, false, false);
@@ -218,7 +218,7 @@ public class GetLDAPEntries extends AdminDocumentHandler {
         } catch (IOException e) {
             throw ServiceException.FAILURE("unable to list all objects", e);            
         } finally {
-            ZimbraLdapContext.closeContext(zlc);
+            LegacyZimbraLdapContext.closeContext(zlc);
         }   
     }
     

@@ -23,8 +23,8 @@ import javax.naming.directory.DirContext;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ZimbraLog;
 
-import com.zimbra.cs.account.ldap.ZimbraLdapContext;
 import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
+import com.zimbra.cs.account.ldap.legacy.LegacyZimbraLdapContext;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.cs.service.admin.AdminService;
 import com.zimbra.common.soap.Element;
@@ -38,8 +38,8 @@ public class ModifyLDAPEntry extends AdminDocumentHandler {
 			throws ServiceException {
 
 		ZimbraSoapContext lc = getZimbraSoapContext(context);
-		ZimbraLdapContext zlc = null;
-		zlc = new ZimbraLdapContext(true);
+		LegacyZimbraLdapContext zlc = null;
+		zlc = new LegacyZimbraLdapContext(true);
 
 		String dn = request.getAttribute(ZimbraLDAPUtilsService.E_DN);
 		if(dn==null)
@@ -70,7 +70,7 @@ public class ModifyLDAPEntry extends AdminDocumentHandler {
             throw ServiceException.FAILURE("unable to modify attrs: "
                     + e.getMessage(), e);
         } finally {
-            ZimbraLdapContext.closeContext(zlc);
+            LegacyZimbraLdapContext.closeContext(zlc);
         }
 
 	}

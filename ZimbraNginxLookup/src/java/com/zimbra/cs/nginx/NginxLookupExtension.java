@@ -50,9 +50,9 @@ import com.zimbra.cs.account.AuthTokenException;
 import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.account.auth.AuthMechanism;
 import com.zimbra.cs.account.ldap.LdapProvisioning;
-import com.zimbra.cs.account.ldap.ZimbraLdapContext;
 import com.zimbra.cs.account.ldap.legacy.LegacyLdapFilter;
 import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
+import com.zimbra.cs.account.ldap.legacy.LegacyZimbraLdapContext;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Provisioning.DomainBy;
 import com.zimbra.cs.account.Account;
@@ -477,7 +477,7 @@ public class NginxLookupExtension implements ZimbraExtension {
          * @throws NginxLookupException
          * @throws NamingException
          */
-        private SearchDirResult searchDirectory(ZimbraLdapContext zlc, SearchControls sc, Config config, 
+        private SearchDirResult searchDirectory(LegacyZimbraLdapContext zlc, SearchControls sc, Config config, 
                                                 String queryTemplate, String searchBase, 
                                                 String templateKey, String templateVal,
                                                 Map<String, Boolean> attrs, 
@@ -537,7 +537,7 @@ public class NginxLookupExtension implements ZimbraExtension {
          * @throws NginxLookupException
          * @throws NamingException
          */
-        private Map<String, Object> searchDir(ZimbraLdapContext zlc, SearchControls sc, Config config, 
+        private Map<String, Object> searchDir(LegacyZimbraLdapContext zlc, SearchControls sc, Config config, 
                                               String query, String searchBaseConfigAttr) throws NginxLookupException, NamingException {
             
             Map<String, Object> attrs = null;
@@ -597,7 +597,7 @@ public class NginxLookupExtension implements ZimbraExtension {
             }
         }
         
-        private String getDomainNameByServerIp(ZimbraLdapContext zlc, Config config, String serverIp, String unqualifiedName) {
+        private String getDomainNameByServerIp(LegacyZimbraLdapContext zlc, Config config, String serverIp, String unqualifiedName) {
             String domainName = null;
             
             DomainInfo domainInfo = sDomainNameByVirtualIpCache.get(serverIp);
@@ -634,7 +634,7 @@ public class NginxLookupExtension implements ZimbraExtension {
             return domainName;
         }
         
-        private DomainExternalRouteInfo getDomainExternalRouteInfoByDomainName(ZimbraLdapContext zlc, Config config, 
+        private DomainExternalRouteInfo getDomainExternalRouteInfoByDomainName(LegacyZimbraLdapContext zlc, Config config, 
                 String domainName, String unqualifiedName) {
             DomainExternalRouteInfo domainExternalRouteInfo = sDomainExternalRouteByDomainNameCache.get(domainName);
             
@@ -689,7 +689,7 @@ public class NginxLookupExtension implements ZimbraExtension {
             return port;
         }
         
-        private String getPortByMailhostAndProto(ZimbraLdapContext zlc, Config config, NginxLookupRequest req, String mailhost) throws NginxLookupException {
+        private String getPortByMailhostAndProto(LegacyZimbraLdapContext zlc, Config config, NginxLookupRequest req, String mailhost) throws NginxLookupException {
             String port = null;
             
             ServerInfo serverInfo = sServerCache.get(mailhost);
@@ -737,7 +737,7 @@ public class NginxLookupExtension implements ZimbraExtension {
             return port;
         }
         
-        private String qualifyUserName(ZimbraLdapContext zlc, Config config, NginxLookupRequest req, Provisioning prov, String unqualifiedName) {
+        private String qualifyUserName(LegacyZimbraLdapContext zlc, Config config, NginxLookupRequest req, Provisioning prov, String unqualifiedName) {
             String domainName = null;
             
             if (HTTP.equalsIgnoreCase(req.proto)) {
@@ -782,7 +782,7 @@ public class NginxLookupExtension implements ZimbraExtension {
             IP address specified by req.serverIP (X-Proxy-IP request header)
             @return Fully qualified user name (or user-id), else the original user name
          */
-        private String getQualifiedUsername(ZimbraLdapContext zlc, Config config, NginxLookupRequest req) throws ServiceException, NginxLookupException
+        private String getQualifiedUsername(LegacyZimbraLdapContext zlc, Config config, NginxLookupRequest req) throws ServiceException, NginxLookupException
         {
             String aUser, cUser, qUser;
 
@@ -890,7 +890,7 @@ public class NginxLookupExtension implements ZimbraExtension {
             return null;
         }
         
-        private DomainExternalRouteInfo getDomainExternalRouteInfo(ZimbraLdapContext zlc, Config config, String addr) {
+        private DomainExternalRouteInfo getDomainExternalRouteInfo(LegacyZimbraLdapContext zlc, Config config, String addr) {
             DomainExternalRouteInfo domain = null;
             String[] parts = addr.split("@");
             if (parts.length == 2) {
@@ -904,9 +904,9 @@ public class NginxLookupExtension implements ZimbraExtension {
         }
         
         private void search(NginxLookupRequest req) throws NginxLookupException {
-            ZimbraLdapContext zlc = null;
+            LegacyZimbraLdapContext zlc = null;
             try {
-                zlc = new ZimbraLdapContext();
+                zlc = new LegacyZimbraLdapContext();
                 
                 Provisioning prov = Provisioning.getInstance();
                 Config config = prov.getConfig();
@@ -1081,7 +1081,7 @@ public class NginxLookupExtension implements ZimbraExtension {
             } catch (UnknownHostException e) {
                 throw new NginxLookupException(e);
             } finally {
-                ZimbraLdapContext.closeContext(zlc);
+                LegacyZimbraLdapContext.closeContext(zlc);
             }
         }
 

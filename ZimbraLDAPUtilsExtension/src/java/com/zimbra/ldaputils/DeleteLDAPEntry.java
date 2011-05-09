@@ -20,8 +20,8 @@ import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.account.ldap.ZimbraLdapContext;
 import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
+import com.zimbra.cs.account.ldap.legacy.LegacyZimbraLdapContext;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.common.soap.Element;
 import com.zimbra.soap.ZimbraSoapContext;
@@ -34,9 +34,9 @@ public class DeleteLDAPEntry extends AdminDocumentHandler {
 			throws ServiceException {
 		ZimbraSoapContext lc = getZimbraSoapContext(context);
 		String dn = request.getAttribute(ZimbraLDAPUtilsService.E_DN);
-		ZimbraLdapContext zlc = null;
+		LegacyZimbraLdapContext zlc = null;
 		try {
-        	zlc = new ZimbraLdapContext(true);
+        	zlc = new LegacyZimbraLdapContext(true);
             zlc.deleteChildren(dn);
             zlc.unbindEntry(dn);
     		Element response = lc.createElement(ZimbraLDAPUtilsService.DELETE_LDAP_ENTRY_RESPONSE);
@@ -45,7 +45,7 @@ public class DeleteLDAPEntry extends AdminDocumentHandler {
         } catch (NamingException e) {
             throw ServiceException.FAILURE("unable to purge dn: "+dn, e);
         } finally {
-            ZimbraLdapContext.closeContext(zlc);
+            LegacyZimbraLdapContext.closeContext(zlc);
         }
 	}
 

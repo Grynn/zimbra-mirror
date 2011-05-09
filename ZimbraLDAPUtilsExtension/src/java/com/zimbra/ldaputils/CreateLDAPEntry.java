@@ -34,8 +34,8 @@ import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.AttributeManager;
 
-import com.zimbra.cs.account.ldap.ZimbraLdapContext;
 import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
+import com.zimbra.cs.account.ldap.legacy.LegacyZimbraLdapContext;
 
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.cs.service.admin.AdminService;
@@ -74,9 +74,9 @@ public class CreateLDAPEntry extends AdminDocumentHandler {
         HashMap attrManagerContext = new HashMap();
         AttributeManager.getInstance().preModify(entryAttrs, null, attrManagerContext, true, true);
 
-        ZimbraLdapContext zlc = null;
+        LegacyZimbraLdapContext zlc = null;
         try {
-            zlc = new ZimbraLdapContext(true);
+            zlc = new LegacyZimbraLdapContext(true);
 
             Attributes attrs = new BasicAttributes(true);
             LegacyLdapUtil.mapToAttrs(entryAttrs, attrs);
@@ -90,7 +90,7 @@ public class CreateLDAPEntry extends AdminDocumentHandler {
         } catch (NameAlreadyBoundException nabe) {
             throw ZimbraLDAPUtilsServiceException.DN_EXISTS(dn);
         } finally {
-            ZimbraLdapContext.closeContext(zlc);
+            LegacyZimbraLdapContext.closeContext(zlc);
         }
     }
     
