@@ -29,7 +29,7 @@ public class EditFile extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Upload file through RestUtil - edit name & verify through GUI", groups = { "smoke" })
+	@Test(description = "Upload file through RestUtil - Edit File using Right Click Context Menu & verify through GUI", groups = { "smoke" })
 	public void EditFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -66,7 +66,7 @@ public class EditFile extends AjaxCommonTest {
 		// Click on created document
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
-		// Right click on document, select Rename
+		// Right click on File, select Rename
 		app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, Button.B_RENAME,
 				fileItem);
 
@@ -112,7 +112,7 @@ public class EditFile extends AjaxCommonTest {
 		String text = app.zPageBriefcase.displayFile(fileItem.getName(), hm)
 				.get(PageBriefcase.Response.ResponsePart.BODY);
 
-		// Right click on document, select Rename
+		// Right click on File, select Rename
 		app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, Button.B_RENAME,
 				fileItem);
 
@@ -220,7 +220,7 @@ public class EditFile extends AjaxCommonTest {
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
-		// Right Click on created document
+		// Right Click on created File
 		app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, fileItem);
 
 		// Verify 'Edit' context menu is disabled

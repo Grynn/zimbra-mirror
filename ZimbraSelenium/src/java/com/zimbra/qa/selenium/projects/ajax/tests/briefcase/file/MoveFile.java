@@ -214,6 +214,90 @@ public class MoveFile extends AjaxCommonTest {
 				+ subFolders[1].getName());
 	}
 
+	@Test(description = "Upload file through RestUtil - move using Right Click Context Menu & verify through GUI", groups = { "functional" })
+	public void MoveFile_03() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+
+		FolderItem folderItem = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
+		String briefcaseFolderId = folderItem.getId();
+
+		String name = "subFolder" + ZimbraSeleniumProperties.getUniqueString();
+
+		// Create a subfolder to move the message into i.e. Briefcase/subfolder
+		account.soapSend("<CreateFolderRequest xmlns='urn:zimbraMail'>"
+				+ "<folder name='" + name + "' l='" + briefcaseFolderId + "'/>"
+				+ "</CreateFolderRequest>");
+
+		FolderItem subFolderItem = FolderItem.importFromSOAP(account, name);
+
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, folderItem, true);
+
+		// Click on created subfolder
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, subFolderItem);
+
+		// Create file item
+		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
+				+ "/data/public/other/putty.log";
+
+		FileItem fileItem = new FileItem(filePath);
+
+		// Upload file to server through RestUtil
+		String attachmentId = account.uploadFile(filePath);
+
+		// Save uploaded file to briefcase through SOAP
+		account.soapSend(
+
+		"<SaveDocumentRequest xmlns='urn:zimbraMail'>" +
+
+		"<doc l='" + folderItem.getId() + "'>" +
+
+		"<upload id='" + attachmentId + "'/>" +
+
+		"</doc>" +
+
+		"</SaveDocumentRequest>");
+
+		// account.soapSelectNode("//mail:SaveDocumentResponse", 1);
+
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, folderItem, true);
+
+		SleepUtil.sleepVerySmall();
+		
+		// Click on created file
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+
+		// Move using Right Click Context Menu 
+		DialogMove chooseFolder = (DialogMove) app.zPageBriefcase
+		.zListItem(Action.A_RIGHTCLICK, Button.O_MOVE, fileItem);
+
+		// Click OK on Confirmation dialog
+		chooseFolder.zClickTreeFolder(subFolderItem);
+		chooseFolder.zClickButton(Button.B_OK);
+
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, folderItem, false);
+
+		// Verify document was moved from the folder
+		ZAssert.assertFalse(app.zPageBriefcase.isPresentInListView(fileItem
+				.getName()), "Verify document was moved from the folder");
+
+		// click on subfolder in tree view
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolderItem, true);
+
+		// Verify document was moved to the selected folder
+		boolean present = app.zPageBriefcase.isPresentInListView(fileItem
+				.getName());
+
+		ZAssert.assertTrue(present,
+				"Verify document was moved to the selected folder");
+	}
+
+	
 	@AfterMethod(groups = { "always" })
 	public void afterMethod() throws HarnessException {
 		logger.info("Checking for the Move Dialog ...");
