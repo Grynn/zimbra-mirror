@@ -65,6 +65,16 @@ checkrunning()
   fi
 }
 
+refresh()
+{
+    getpid
+  if [ "x$pid" = "x" ]; then
+    echo "milter server is not currently running"
+  else
+    kill -CONT $pid 2> /dev/null
+  fi
+}
+
 case "$1" in 
   start)
     checkrunning
@@ -125,6 +135,9 @@ case "$1" in
     $0 stop
     $0 start
   ;;
+  refresh)
+    refresh
+  ;;
   status)
     echo -n "Milter server is "
     checkrunning
@@ -137,7 +150,7 @@ case "$1" in
     fi
   ;;
   *)
-    echo "$0 start|stop|restart|reload|status"
+    echo "$0 start|stop|restart|reload|refresh|status"
     exit 1
   ;;
 esac
