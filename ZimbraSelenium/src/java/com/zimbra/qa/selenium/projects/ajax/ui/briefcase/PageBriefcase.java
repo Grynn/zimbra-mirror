@@ -753,6 +753,11 @@ public class PageBriefcase extends AbsTab {
 				optionLocator = "css=td#zmi__Briefcase__MOVE_title:contains(Move)";
 
 				page = new DialogMove(MyApplication, this);
+			} else if (option == Button.O_TAG_FILE) {
+
+				optionLocator = "css=td#zmi__Briefcase__TAG_MENU_title:contains('Tag File')";
+
+				page = new DialogMove(MyApplication, this);
 			} else {
 				throw new HarnessException("implement action: " + action
 						+ " option:" + option);
@@ -763,6 +768,89 @@ public class PageBriefcase extends AbsTab {
 
 			this.zWaitForBusyOverlay();
 
+			// FALL THROUGH
+
+		} else {
+			throw new HarnessException("implement me!  action = " + action);
+		}
+
+		if (page != null) {
+			page.zWaitForActive();
+		}
+
+		// Default behavior
+		return (page);
+	}
+
+	public AbsPage zListItem(Action action, Button option, String subOption,
+			IItem item) throws HarnessException {
+
+		if (action == null)
+			throw new HarnessException("action cannot be null");
+		if (option == null)
+			throw new HarnessException("button cannot be null");
+		if (subOption == null)
+			throw new HarnessException("subOption button cannot be null");
+		if (item == null)
+			throw new HarnessException("Item cannot be null or blank");
+
+		String rowItem = item.getName();
+
+		tracer.trace(action + " then " + option + " then " + subOption
+				+ " on briefcase item = " + rowItem);
+
+		logger.info(myPageName() + " zListItem(" + action + ", " + option
+				+ ", " + subOption + ", " + rowItem + ")");
+
+		AbsPage page = null;
+
+		String listLocator = Locators.briefcaseListView.locator;
+
+		String itemlocator = null;
+
+		if (!this.sIsElementPresent(listLocator))
+			throw new HarnessException("List View Rows is not present "
+					+ listLocator);
+
+		itemlocator = listLocator + " div:contains(" + rowItem + ")";
+
+		if (action == Action.A_RIGHTCLICK) {
+
+			zWaitForElementPresent(itemlocator);
+
+			// Right-Click on the item
+			this.zRightClick(itemlocator);
+
+			// Now the ContextMenu is opened
+			// Click on the specified option
+
+			String optionLocator = null;
+
+			if (option == Button.O_TAG_FILE) {
+
+				optionLocator = "css=td#zmi__Briefcase__TAG_MENU_dropdown";
+				
+			} else {
+				throw new HarnessException("implement action: " + action
+						+ " option:" + option);
+			}
+
+			// click on the option
+			this.zClick(optionLocator);
+			
+			// Now the ContextMenu option is opened
+			// Click on the specified sub option
+
+			String subOptionLocator = "css=div[id=zmi__Briefcase__TAG_MENU|MENU] [class=ZWidgetTitle]:contains("
+					+ subOption + ")";
+
+			// click on the sub option
+			this.zClick(subOptionLocator);
+
+			this.zWaitForBusyOverlay();
+
+			page = null;
+			
 			// FALL THROUGH
 
 		} else {

@@ -142,6 +142,7 @@ public class Button {
 	public static final Button O_EDIT = new Button("O_EDIT");
 	public static final Button O_OPEN = new Button("O_OPEN");
 	public static final Button O_DELETE = new Button("O_DELETE");
+	public static final Button O_TAG_FILE = new Button("O_TAG_FILE");
 	
     //Addressbook button
 	public static final Button B_EDIT = new Button("zb__CNS__EDIT");

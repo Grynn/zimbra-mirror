@@ -47,7 +47,7 @@ public class TagFile extends AjaxCommonTest {
 
 		SleepUtil.sleepVerySmall();
 		
-		// Click on created document
+		// Click on created File
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
@@ -70,7 +70,7 @@ public class TagFile extends AjaxCommonTest {
 				"//mail:GetTagResponse//mail:tag[@name='" + tagName + "']",
 				"id");
 
-		// Verify tagged document name
+		// Verify tagged File name
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
 						+ "<query>tag:"
@@ -81,9 +81,9 @@ public class TagFile extends AjaxCommonTest {
 		String name = account.soapSelectValue(
 				"//mail:SearchResponse//mail:doc", "name");
 
-		ZAssert.assertEquals(name, fileName, "Verify tagged document name");
+		ZAssert.assertEquals(name, fileName, "Verify tagged File name");
 
-		// Make sure the tag was applied to the document
+		// Make sure the tag was applied to the File
 		// account.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
 		// + "<query>in:briefcase</query></SearchRequest>");
 
@@ -101,7 +101,7 @@ public class TagFile extends AjaxCommonTest {
 				"t");
 
 		ZAssert.assertEquals(id, tagId,
-				"Verify the tag was attached to the document");
+				"Verify the tag was attached to the File");
 		
 		//delete file upon test completion
 		app.zPageBriefcase.deleteFileByName(fileName);		
@@ -153,7 +153,7 @@ public class TagFile extends AjaxCommonTest {
 		// Tag file selecting pre-existing tag from Toolbar drop down list
 		app.zPageBriefcase.zToolbarPressPulldown(Button.B_TAG, tag.getName());
 
-		// Make sure the tag was applied to the document
+		// Make sure the tag was applied to the File
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
 						+ "<query>" + fileName + "</query>" + "</SearchRequest>");
@@ -162,9 +162,71 @@ public class TagFile extends AjaxCommonTest {
 				"t");
 
 		ZAssert.assertStringContains(id, tag.getId(),
-				"Verify the tag was attached to the document");
+				"Verify the tag was attached to the File");
 		
 		//delete file upon test completion
 		app.zPageBriefcase.deleteFileByName(fileName);		
 	}
+	
+	@Test(description = "Tag uploaded File using Right Click context menu", groups = { "functional" })
+	public void TagFile_03() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+
+		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
+		// Create file item
+		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
+		+ "/data/public/other/testpptfile.ppt";
+		
+		FileItem fileItem = new FileItem(filePath);
+
+		String fileName = fileItem.getName();
+
+		// Upload file to server through RestUtil
+		String attachmentId = account.uploadFile(filePath);
+
+		// Save uploaded file to briefcase through SOAP
+		account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'>"
+				+ "<doc l='" + briefcaseFolder.getId() + "'><upload id='"
+				+ attachmentId + "'/></doc></SaveDocumentRequest>");
+
+		// Create a tag
+		String tagName = "tag" + ZimbraSeleniumProperties.getUniqueString();
+
+		account.soapSend("<CreateTagRequest xmlns='urn:zimbraMail'>"
+				+ "<tag name='" + tagName + "' color='1' />"
+				+ "</CreateTagRequest>");
+
+		// Make sure the tag was created on the server
+		TagItem tagItem = TagItem.importFromSOAP(app.zGetActiveAccount(), tagName);
+		ZAssert.assertNotNull(tagItem, "Verify the new tag was created");
+
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
+
+		SleepUtil.sleepVerySmall();
+		
+		// Click on uploaded file
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+
+		// Tag File using Right Click context menu
+		app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, Button.O_TAG_FILE, tagItem.getName(), fileItem);
+
+		// Make sure the tag was applied to the File
+		account
+				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
+						+ "<query>" + fileName + "</query>" + "</SearchRequest>");
+
+		String id = account.soapSelectValue("//mail:SearchResponse//mail:doc",
+				"t");
+
+		ZAssert.assertStringContains(id, tagItem.getId(),
+				"Verify the tag was attached to the File");
+		
+		//delete file upon test completion
+		app.zPageBriefcase.deleteFileByName(fileName);		
+	}
+	
 }
