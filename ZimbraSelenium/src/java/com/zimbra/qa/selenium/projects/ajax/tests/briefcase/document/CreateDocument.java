@@ -119,7 +119,7 @@ public class CreateDocument extends AjaxCommonTest {
 		String docName = document.getName();
 		String docText = document.getDocText();
 
-		// Open new document page using Pulldown menu
+		// Create new document page using Pulldown menu
 		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
 				.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_DOCUMENT);
 

@@ -231,4 +231,54 @@ public class DeleteFile extends AjaxCommonTest {
 				"Verify the file was moved to the trash folder: "
 				+ fileName + " id: " + id);		
 	}
+	
+	@Test(description = "Upload file through RestUtil - delete using Right Click context menu", groups = { "functional" })
+	public void DeleteFile_04() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+
+		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
+		// Create file item
+		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
+				+ "/data/public/other/putty.log";
+
+		FileItem fileItem = new FileItem(filePath);
+
+		String fileName = fileItem.getName();
+		
+		// Upload file to server through RestUtil
+		String attachmentId = account.uploadFile(filePath);
+
+		// Save uploaded file to briefcase through SOAP
+		account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'><doc l='"
+				+ briefcaseFolder.getId() + "'>" + "<upload id='"
+				+ attachmentId + "'/></doc></SaveDocumentRequest>");
+
+		// String docId = account.soapSelectValue("//mail:SaveDocumentResponse//mail:doc", "id");
+
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
+
+		SleepUtil.sleepVerySmall();
+		
+		// Click on created file
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+
+		// Delete File using Right Click Context Menu
+		DialogConfirm deleteConfirm = (DialogConfirm) app.zPageBriefcase
+				.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE, fileItem);
+
+		// Click OK on Confirmation dialog
+		deleteConfirm.zClickButton(Button.B_YES);
+
+		// refresh briefcase page
+		app.zTreeBriefcase
+				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
+
+		// Verify file was deleted from the list
+		ZAssert.assertFalse(app.zPageBriefcase.isPresentInListView(fileName),
+				"Verify file was deleted through GUI");		
+	}
 }
