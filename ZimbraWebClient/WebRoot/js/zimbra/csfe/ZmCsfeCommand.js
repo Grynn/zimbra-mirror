@@ -617,6 +617,9 @@ function(response, params) {
 	var fault = obj && obj.Body && obj.Body.Fault;
 	if (fault) {
 		// JS response with fault
+		if (AjxUtil.isString(fault) && fault.indexOf("<")==0) { // We got an xml string
+			fault = AjxXmlDoc.createFromXml(fault).toJSObject(true, false, true);
+		}
 		var ex = ZmCsfeCommand.faultToEx(fault, params);
 		if (params.asyncMode) {
 			result.set(ex, true, obj.Header);
