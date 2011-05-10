@@ -145,7 +145,7 @@ public class SendDocLink extends AjaxCommonTest {
 		// Click on created document
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
-		// Click on Send Link
+		// Click on Send Link using Right Click Context Menu
 		DialogConfirm confDlg = (DialogConfirm) app.zPageBriefcase.zListItem(
 				Action.A_RIGHTCLICK, Button.O_SEND_LINK, docItem);
 

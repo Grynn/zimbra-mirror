@@ -33,8 +33,8 @@ public class SendFileAttachment extends AjaxCommonTest {
 
 		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-		+ "/data/public/other/structure.jpg";
-		
+				+ "/data/public/other/structure.jpg";
+
 		FileItem fileItem = new FileItem(filePath);
 
 		String fileName = fileItem.getName();
@@ -46,32 +46,93 @@ public class SendFileAttachment extends AjaxCommonTest {
 		account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'>"
 				+ "<doc l='" + briefcaseFolder.getId() + "'><upload id='"
 				+ attachmentId + "'/></doc></SaveDocumentRequest>");
-		
+
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
-		// Click on created document
+		// Click on uploaded file
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
-		
+
 		// Click on Send as attachment
-		FormMailNew mailform = (FormMailNew) app.zPageBriefcase.zToolbarPressPulldown(Button.B_SEND, Button.O_SEND_AS_ATTACHMENT);
-		
+		FormMailNew mailform = (FormMailNew) app.zPageBriefcase
+				.zToolbarPressPulldown(Button.B_SEND,
+						Button.O_SEND_AS_ATTACHMENT);
+
 		// Verify the new mail form is opened
 		ZAssert.assertTrue(mailform.zIsVisible(), "Verify the new form opened");
 
-		ZAssert.assertTrue( app.zPageBriefcase.sIsElementPresent(FormMailNew.Locators.zAttachmentText + fileName + ")"), "Verify the attachment text");
-		
+		ZAssert.assertTrue(app.zPageBriefcase
+				.sIsElementPresent(FormMailNew.Locators.zAttachmentText
+						+ fileName + ")"), "Verify the attachment text");
+
 		// Cancel the message
 		// A warning dialog should appear regarding losing changes
-		DialogWarning warningDlg = (DialogWarning) mailform.zToolbarPressButton(Button.B_CANCEL);
-		
+		DialogWarning warningDlg = (DialogWarning) mailform
+				.zToolbarPressButton(Button.B_CANCEL);
+
 		ZAssert.assertNotNull(warningDlg, "Verify the dialog is returned");
-		
+
 		// Dismiss the dialog
 		warningDlg.zClickButton(Button.B_NO);
-		
+
 		warningDlg.zWaitForClose(); // Make sure the dialog is dismissed
-		
+
+		// delete file upon test completion
+		app.zPageBriefcase.deleteFileByName(fileItem.getName());
+	}
+
+	@Test(description = "Send File as attachment using Right Click Context Menu & verify through GUI", groups = { "functional" })
+	public void SendFileAttachment_02() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+
+		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+
+		// Create file item
+		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
+				+ "/data/public/other/structure.jpg";
+
+		FileItem fileItem = new FileItem(filePath);
+
+		String fileName = fileItem.getName();
+
+		// Upload file to server through RestUtil
+		String attachmentId = account.uploadFile(filePath);
+
+		// Save uploaded file to briefcase through SOAP
+		account.soapSend("<SaveDocumentRequest xmlns='urn:zimbraMail'>"
+				+ "<doc l='" + briefcaseFolder.getId() + "'><upload id='"
+				+ attachmentId + "'/></doc></SaveDocumentRequest>");
+
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
+
+		// Click on uploaded file
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+
+		// Click on Send as attachment using Right Click Context Menu
+		FormMailNew mailform = (FormMailNew) app.zPageBriefcase.zListItem(
+				Action.A_RIGHTCLICK, Button.O_SEND_AS_ATTACHMENT, fileItem);
+
+		// Verify the new mail form is opened
+		ZAssert.assertTrue(mailform.zIsVisible(), "Verify the new form opened");
+
+		ZAssert.assertTrue(app.zPageBriefcase
+				.sIsElementPresent(FormMailNew.Locators.zAttachmentText
+						+ fileName + ")"), "Verify the attachment text");
+
+		// Cancel the message
+		// A warning dialog should appear regarding losing changes
+		DialogWarning warningDlg = (DialogWarning) mailform
+				.zToolbarPressButton(Button.B_CANCEL);
+
+		ZAssert.assertNotNull(warningDlg, "Verify the dialog is returned");
+
+		// Dismiss the dialog
+		warningDlg.zClickButton(Button.B_NO);
+
+		warningDlg.zWaitForClose(); // Make sure the dialog is dismissed
+
 		// delete file upon test completion
 		app.zPageBriefcase.deleteFileByName(fileItem.getName());
 	}
