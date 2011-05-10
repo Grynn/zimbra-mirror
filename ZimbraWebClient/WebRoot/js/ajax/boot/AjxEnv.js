@@ -423,3 +423,48 @@ function() {
 
 
 AjxEnv.parseUA();
+
+// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function/bind
+/*
+if ( !Function.prototype.bind ) {
+  Function.prototype.bind = function( obj ) {
+    var slice = [].slice,
+        args = slice.call(arguments, 1),
+        self = this,
+        nop = function () {},
+        bound = function () {
+          return self.apply( this instanceof nop ? this : ( obj || {} ),
+                              args.concat( slice.call(arguments) ) );   
+        };
+    nop.prototype = self.prototype;
+    bound.prototype = new nop();
+    return bound;
+  };
+}
+*/
+
+// An alternative, simpler implementation. Not sure whether it does everything that the above version does,
+// but it should work fine as a basic callback.
+if (!Function.prototype.bind) {
+	Function.prototype.bind = function(thisObj) {
+		var that = this;
+		var args;
+                
+		if (arguments.length > 1) {
+			// optimization: create the extra array object only if needed. 
+			args = Array.prototype.slice.call(arguments, 1);
+		}
+                
+		return function () {
+			var allArgs = args;
+
+			// optimization: concat array only if needed
+			if (arguments.length > 0) {
+				allArgs = (args && args.length) ? args.concat(Array.prototype.slice.call(arguments)) : arguments;
+			}
+
+			// for some reason, IE does not like the undefined allArgs hence the below condition.
+			return allArgs ? that.apply(thisObj, allArgs) : that.apply(thisObj);
+		};
+	};
+}
