@@ -1,3 +1,4 @@
+if(ZaSettings && ZaSettings.EnabledZimlet["com_zimbra_adminversioncheck"]){
 if(window.console && window.console.log) console.log("Start loading com_zimbra_adminversioncheck.js");
 function ZaVersionCheck() {
 	ZaItem.call(this,"ZaVersionCheck");
@@ -257,5 +258,5 @@ ZaVersionCheck.versionCheckTreeModifier = function (tree) {
 
 if(ZaOverviewPanelController.treeModifiers)
 	ZaOverviewPanelController.treeModifiers.push(ZaVersionCheck.versionCheckTreeModifier);
-	
+}
 

@@ -1,3 +1,4 @@
+if(ZaSettings && ZaSettings.EnabledZimlet["com_zimbra_bulkprovision"]){
 function bulkprovision() {
 	
 }
@@ -140,3 +141,4 @@ ZaSearchListController.prototype._downloadAccountsListener =
 
      window.open("/service/afd/" + queryString);
  }
+}

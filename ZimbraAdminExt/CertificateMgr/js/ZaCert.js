@@ -1,5 +1,5 @@
 if (window.console && window.console.log) window.console.log("Loaded ZaCert.js");
-
+if(ZaSettings && ZaSettings.EnabledZimlet["com_zimbra_cert_manager"]){
 function ZaCert () {
 	ZaItem.call(this,  "ZaCert");
 	this._init();
@@ -457,4 +457,5 @@ ZaCert.getWildCardServerName = function (serverName)  {
 	}
 	
 	return serverName ;
+}
 }

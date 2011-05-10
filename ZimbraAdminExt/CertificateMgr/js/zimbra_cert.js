@@ -1,5 +1,5 @@
 if(window.console && window.console.log) console.log("Loaded zimbra_cert.js");
-
+if(ZaSettings && ZaSettings.EnabledZimlet["com_zimbra_cert_manager"]){
 if (ZaOperation) ZaOperation.INSTALLCERT = ++ZA_OP_INDEX;
 ZaItem.CERT = "cert" ;
 
@@ -25,4 +25,5 @@ function() {
 		this._controllers[ZaZimbraAdmin._CERTS_SERVER_LIST_VIEW] = new ZaCertsServerListController(this._appCtxt, this._container, this);
 	}
 	return this._controllers[ZaZimbraAdmin._CERTS_SERVER_LIST_VIEW];
+}
 }
