@@ -190,11 +190,16 @@ function () {
 }
 
 ZaSearchListController.prototype._batchSearchforDomain =
-function (domainArr, searchQueryList) {
+function (domainArr, searchQueryList, childQueries) {
 	var paramsArr;
-        var searchTypes = ZaSearch.ALIASES;
-        var searchQuery = "(uid=*)";
-        var controller = ZaApp.getInstance().getSearchListController();
+    var searchTypes = ZaSearch.ALIASES;
+    var searchQuery = "(uid=*";
+    if(!childQueries) searchQuery += ")";
+    else if(childQueries && !(childQueries instanceof Array)) searchQuery += childQueries + "*)";
+    else if(childQueries instanceof Array && childQueries.length == 1) searchQuery += childQueries[0] + "*)";
+    else if(childQueries instanceof Array && childQueries.length > 1)  searchQuery += childQueries[1] + ")";
+
+    var controller = ZaApp.getInstance().getSearchListController();
 
 	if(searchQueryList && searchQueryList instanceof Array)
 		paramsArr = searchQueryList;
@@ -244,7 +249,7 @@ function(params,resp) {
                                 }
 				
                         }
-			ZaSearchListController.prototype._batchSearchforDomain(domainArr,params.searchQueryList);
+			ZaSearchListController.prototype._batchSearchforDomain(domainArr,params.searchQueryList, params.childQueries);
                 }
         } catch (ex) {
 		this._handleException(ex, "ZaSearchListController.searchAliasDomainCallback", null, false); 
@@ -255,11 +260,17 @@ function(params,resp) {
 ZaSearchListController.searchAliasDomain =
 function (value, searchCtl,searchQueryList) {
         var busyId = Dwt.getNextId();
-	var controller = searchCtl? searchCtl:this;
-        var callback = new AjxCallback(controller, ZaSearchListController.searchAliasDomainCallback, {busyId:busyId, searchQueryList:searchQueryList});
+        var controller = searchCtl? searchCtl:this;
+
+        var query = "(" + ZaDomain.A_domainName;
+        if(value.length > 1) query += "=" + value[0] + "*)";
+        else query += "=*" + value[0] + "*)";
+
+        var callback = new AjxCallback(controller, ZaSearchListController.searchAliasDomainCallback,
+            {busyId:busyId, searchQueryList:searchQueryList, childQueries:value});
         var searchParams = {
 
-                        query: "(" + ZaDomain.A_domainName + "=*" + value + "*)",
+                        query: query,
                         types: [ZaSearch.DOMAINS],
                         sortBy: ZaDomain.A_domainName,
                         attrs: [ZaDomain.A_domainName],
@@ -278,16 +289,21 @@ ZaSearchListController._getSearchKeyWord =
 function(query) {
 	var keyword = "";
 	var sw = "zimbraDomainName=*";
+        var domflag = "@";
 	var ew = "*";
 	if(!query) return keyword;
 	var start = query.indexOf(sw);
 	if(start < 0 || start > query.length-1)
-		return keyword;
+	    return [];
 	var end = query.indexOf(ew,start+sw.length);
 	if(end > query.length-1)
-		return keyword;
-	return query.substr(start+sw.length,end-start-sw.length);
-	
+	    return [];
+	keyword = query.substr(start+sw.length,end-start-sw.length);
+        // handle the case of "str@str"
+        start = keyword.indexOf(domflag);
+	if(start < 0 || start > query.length-1)
+	    return [keyword];
+	return [keyword.substr(start+1,keyword.length),keyword.substr(0,start)];
 }
 
 /*********** Search Field Callback */
