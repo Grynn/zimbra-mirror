@@ -5,6 +5,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.MailItem;
+import com.zimbra.qa.selenium.framework.ui.Action;
+import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
@@ -46,6 +48,9 @@ public class OpenLinkToMessage extends AjaxCommonTest {
 								+ ZimbraSeleniumProperties.getUniqueString()
 								+ "</content>" + "</mp>" + "</m>"
 								+ "</SendMsgRequest>");
+		
+		// Click Get Mail button to view folder in list		
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
 		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(),
 				"subject:(" + subject + ")");

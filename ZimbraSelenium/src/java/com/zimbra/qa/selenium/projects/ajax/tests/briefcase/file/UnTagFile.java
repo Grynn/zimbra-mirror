@@ -144,5 +144,8 @@ public class UnTagFile extends AjaxCommonTest {
 
 		ZAssert.assertStringDoesNotContain(id, tagId,
 				"Verify that the tag is removed from the message");
+		
+		// delete file upon test completion
+		app.zPageBriefcase.deleteFileByName(fileItem.getName());
 	}
 }

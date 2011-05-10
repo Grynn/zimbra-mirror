@@ -71,5 +71,8 @@ public class SendFileAttachment extends AjaxCommonTest {
 		warningDlg.zClickButton(Button.B_NO);
 		
 		warningDlg.zWaitForClose(); // Make sure the dialog is dismissed
+		
+		// delete file upon test completion
+		app.zPageBriefcase.deleteFileByName(fileItem.getName());
 	}
 }

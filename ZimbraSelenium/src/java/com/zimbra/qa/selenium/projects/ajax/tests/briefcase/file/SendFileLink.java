@@ -13,6 +13,7 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogConfirm;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
@@ -74,6 +75,20 @@ public class SendFileLink extends AjaxCommonTest {
 				"Verify the link text");
 
 		// Cancel the message
-		mailform.zToolbarPressButton(Button.B_CANCEL);
+		// A warning dialog should appear regarding losing changes
+		DialogWarning warningDlg = (DialogWarning) mailform
+				.zToolbarPressButton(Button.B_CANCEL);
+
+		// temporary: check if dialog exists since it was implemented recently on send link 
+		if (warningDlg.zIsActive()) {
+			// Dismiss the dialog
+			warningDlg.zClickButton(Button.B_NO);
+
+			// Make sure the dialog is dismissed
+			warningDlg.zWaitForClose();
+		}
+		
+		// delete file upon test completion
+		app.zPageBriefcase.deleteFileByName(fileItem.getName());
 	}
 }

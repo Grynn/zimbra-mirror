@@ -741,6 +741,19 @@ public class PageBriefcase extends AbsTab {
 				page = new DocumentBriefcaseOpen(MyApplication,
 						(DocumentItem) item);
 
+			} else if (option == Button.O_SEND_LINK) {
+
+				optionLocator = "css=td#zmi__Briefcase__SEND_FILE_title:contains('Send link')";
+
+				page = new DialogConfirm(DialogConfirm.Confirmation.SENDLINK,
+						this.MyApplication, this);
+
+			} else if (option == Button.O_SEND_AS_ATTACHMENT) {
+
+				optionLocator = "css=td#zmi__Briefcase__SEND_FILE_AS_ATT_title:contains('Send as attachment')";
+
+				page = new FormMailNew(this.MyApplication);
+
 			} else if (option == Button.O_DELETE) {
 
 				optionLocator = "css=td#zmi__Briefcase__DELETE_title:contains(Delete)";
@@ -829,7 +842,7 @@ public class PageBriefcase extends AbsTab {
 			if (option == Button.O_TAG_FILE) {
 
 				optionLocator = "css=td#zmi__Briefcase__TAG_MENU_dropdown";
-				
+
 			} else {
 				throw new HarnessException("implement action: " + action
 						+ " option:" + option);
@@ -837,7 +850,7 @@ public class PageBriefcase extends AbsTab {
 
 			// click on the option
 			this.zClick(optionLocator);
-			
+
 			// Now the ContextMenu option is opened
 			// Click on the specified sub option
 
@@ -850,7 +863,7 @@ public class PageBriefcase extends AbsTab {
 			this.zWaitForBusyOverlay();
 
 			page = null;
-			
+
 			// FALL THROUGH
 
 		} else {

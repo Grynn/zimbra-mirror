@@ -334,6 +334,7 @@ public class DeleteDocument extends AjaxCommonTest {
 		// Select all three items
 		for (DocumentItem item : docItems) {
 			app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, item);
+			SleepUtil.sleepVerySmall();
 		}
 
 		// Click toolbar delete button

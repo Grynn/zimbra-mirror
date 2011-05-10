@@ -82,9 +82,9 @@ public class UploadFile extends AjaxCommonTest {
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
 		+ "/data/public/other/putty.log";
 		
-		FileItem file = new FileItem(filePath);
+		FileItem fileItem = new FileItem(filePath);
 
-		String fileName = file.getName();
+		String fileName = fileItem.getName();
 
 		// Upload file to server through RestUtil
 		String attachmentId = account.uploadFile(filePath);
@@ -102,5 +102,8 @@ public class UploadFile extends AjaxCommonTest {
 		// Verify document is created
 		String name = app.zPageBriefcase.getItemNameFromListView(fileName);
 		ZAssert.assertStringContains(name, fileName, "Verify file name through GUI");
+		
+		// delete file upon test completion
+		app.zPageBriefcase.deleteFileByName(fileItem.getName());
 	}
 }
