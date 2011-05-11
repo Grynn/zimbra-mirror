@@ -3,20 +3,32 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.items.ContextMenuItem;
+import com.zimbra.qa.selenium.framework.items.ConversationItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem;
+import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.ContextMenuItem.CONTEXT_MENU_ITEM_NAME;
-import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.framework.ui.AbsApplication;
+import com.zimbra.qa.selenium.framework.ui.AbsPage;
+import com.zimbra.qa.selenium.framework.ui.AbsTab;
+import com.zimbra.qa.selenium.framework.ui.Action;
+import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.I18N;
+import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
+import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
-import com.zimbra.qa.selenium.projects.desktop.ui.mail.PageMail.PageMailView;
+import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
 
 
 
@@ -268,7 +280,7 @@ public class PageMail extends AbsTab {
 		if ( button == Button.B_NEW ) {
 
 			// New button
-			locator = "css=div[id^='ztb__'] td[id$='__NEW_MENU_title']";
+			locator = "css=div[id$='__NEW_MENU'] td[id$='__NEW_MENU_title']";
 
 			// Create the page
 			page = new FormMailNew(this.MyApplication);
