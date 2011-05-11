@@ -416,11 +416,21 @@ public class DirectorySync {
         return e.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs).contains(OfflineProvisioning.A_offlineDn);
     }
     
-    private static Map<String, Object> scrubAttributes(Map<String, Object> attrs) {
+    private static Map<String, Object> scrubAttributes(Map<String, Object> attrs, Account acct) {
         for (Iterator<java.util.Map.Entry<String, Object>> i = attrs.entrySet().iterator(); i.hasNext();) {
             String name = i.next().getKey();
-            if (OfflineProvisioning.sOfflineAttributes.contains(name))
+            if (OfflineProvisioning.sOfflineAttributes.contains(name)) {
                 i.remove();
+            } else {
+                try {
+                    if (!AttributeManager.getInstance().inVersion(name, ((OfflineAccount)acct).getRemoteServerVersion().toString())) {
+                        i.remove();
+                    }
+                } catch (ServiceException se) {
+                    OfflineLog.offline.warn("ServiceException checking attr version; assuming it's not a valid attr",se);
+                    i.remove();
+                }
+            }
         }
         return attrs;
     }
@@ -498,7 +508,7 @@ public class DirectorySync {
         if (ident == null) {
             // if we're here and haven't locally deleted the identity, it's a new one and needs to be created
             if (!acct.getMultiAttrSet(OfflineProvisioning.A_offlineDeletedIdentity).contains(identityId)) {
-                ident = prov.createIdentity(acct, name, scrubAttributes(attrs), false);
+                ident = prov.createIdentity(acct, name, scrubAttributes(attrs, acct), false);
                 OfflineLog.offline.debug("dsync: created identity: " + acct.getName() + '/' + ident.getName());
             }
         } else {
@@ -536,7 +546,7 @@ public class DirectorySync {
         if (signature == null) {
             if (!acct.getMultiAttrSet(OfflineProvisioning.A_offlineDeletedSignature).contains(signatureId)) {
                 // if we're here and haven't locally deleted the signature, it's a new one and needs to be created
-                signature = prov.createSignature(acct, name, scrubAttributes(attrs), false);
+                signature = prov.createSignature(acct, name, scrubAttributes(attrs, acct), false);
                 OfflineLog.offline.debug("dsync: created signature: " + acct.getName() + '/' + signature.getName());
             }
         } else {
@@ -652,7 +662,7 @@ public class DirectorySync {
 
         Map<String, Object> attrs = ident.getAttrs();
         attrs.remove(OfflineProvisioning.A_offlineModifiedAttrs);
-        scrubAttributes(attrs);
+        scrubAttributes(attrs, acct);
         ZIdentity zident = new ZIdentity(ident.getName(), attrs);
 
         // create or modify the identity, as requested
@@ -705,7 +715,7 @@ public class DirectorySync {
 
         Map<String, Object> attrs = signature.getAttrs();
         attrs.remove(OfflineProvisioning.A_offlineModifiedAttrs);
-        scrubAttributes(attrs);
+        scrubAttributes(attrs, acct);
         String sigHtml = signature.getAttr(Provisioning.A_zimbraPrefMailSignatureHTML, null);
         String sigType = (sigHtml == null || sigHtml.length() == 0) ? "text/plain" : "text/html";
         ZSignature zsig = new ZSignature(signature.getId(), signature.getName(), signature.getAttr(Signature.mimeTypeToAttrName(sigType)), sigType);
