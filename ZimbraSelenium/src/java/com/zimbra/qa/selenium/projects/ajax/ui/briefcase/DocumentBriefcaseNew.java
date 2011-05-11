@@ -116,7 +116,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 		}
 
 		this.zWaitForBusyOverlay();
-		SleepUtil.sleepSmall();
+		SleepUtil.sleepVerySmall();
 	}
 
 	@Override

@@ -53,7 +53,8 @@ public class Action {
 	
 	// Briefcase page actions
 	public static final Action A_BRIEFCASE_CHECKBOX = new Action("A_BRIEFCASE_CHECKBOX");
-	
+	public static final Action A_BRIEFCASE_HEADER_CHECKBOX = new Action("A_BRIEFCASE_HEADER_CHECKBOX");
+
 	private final String ID;
 	
 	protected Action(String id) {

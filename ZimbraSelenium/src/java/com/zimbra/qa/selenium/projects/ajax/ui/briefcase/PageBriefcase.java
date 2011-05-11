@@ -82,6 +82,8 @@ public class PageBriefcase extends AbsTab {
 				"css=div[class^=RenameInput]>input");
 		public static final Locators zFileBodyField = new Locators(
 				"css=html>body");
+		public static final Locators zHeaderCheckBox = new Locators(
+				"css=div[id=zlhi__BDLV__se]");
 
 		private final String locator;
 
@@ -554,6 +556,31 @@ public class PageBriefcase extends AbsTab {
 		}
 		// Return the specified page, or null if not set
 		return (page);
+	}
+
+	public void zHeader(Action action) throws HarnessException {
+		logger.info(myPageName() + " zHeader(" + action + ")");
+
+		tracer.trace(action + " on briefcase header");
+
+		// Validate the arguments
+		if (action == null)
+			throw new HarnessException("action cannot be null!");
+
+		// Default behavior variables
+		String locator = null; // If set, this will be clicked
+
+		// Based on the action specified, take the appropriate action(s)
+		if (action == Action.A_BRIEFCASE_HEADER_CHECKBOX) {
+
+			locator = Locators.zHeaderCheckBox.locator;
+
+			// Left-Click on the header
+			this.zClick(locator);
+		} else {
+			throw new HarnessException("implement me!  action = " + action);
+		}
+		zWaitForBusyOverlay();
 	}
 
 	public AbsPage zListItem(Action action, IItem item) throws HarnessException {

@@ -1,12 +1,16 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.file;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
+
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase;
 
 public class TagFile extends AjaxCommonTest {
 
@@ -48,8 +52,10 @@ public class TagFile extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Click on created File
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		// app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, fileItem);
+		
+		// Click on header check box
+		app.zPageBriefcase.zHeader(Action.A_BRIEFCASE_HEADER_CHECKBOX);
 
 		// Create a tag using GUI
 		String tagName = "tag" + ZimbraSeleniumProperties.getUniqueString();
@@ -139,6 +145,7 @@ public class TagFile extends AjaxCommonTest {
 
 		// Make sure the tag was created on the server
 		TagItem tag = TagItem.importFromSOAP(app.zGetActiveAccount(), tagName);
+		
 		ZAssert.assertNotNull(tag, "Verify the new tag was created");
 
 		// refresh briefcase page
@@ -147,8 +154,10 @@ public class TagFile extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Click on uploaded file
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		//app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		
+		// Click on header check box
+		app.zPageBriefcase.zHeader(Action.A_BRIEFCASE_HEADER_CHECKBOX);
 
 		// Tag file selecting pre-existing tag from Toolbar drop down list
 		app.zPageBriefcase.zToolbarPressPulldown(Button.B_TAG, tag.getName());
@@ -200,6 +209,7 @@ public class TagFile extends AjaxCommonTest {
 
 		// Make sure the tag was created on the server
 		TagItem tagItem = TagItem.importFromSOAP(app.zGetActiveAccount(), tagName);
+	
 		ZAssert.assertNotNull(tagItem, "Verify the new tag was created");
 
 		// refresh briefcase page
@@ -208,8 +218,10 @@ public class TagFile extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Click on uploaded file
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		// app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, fileItem);
+		
+		// Click on header check box
+		app.zPageBriefcase.zHeader(Action.A_BRIEFCASE_HEADER_CHECKBOX);
 
 		// Tag File using Right Click context menu
 		app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, Button.O_TAG_FILE, tagItem.getName(), fileItem);
@@ -229,4 +241,22 @@ public class TagFile extends AjaxCommonTest {
 		app.zPageBriefcase.deleteFileByName(fileName);		
 	}
 	
+	@AfterMethod(groups = { "always" })
+	public void afterMethod() throws HarnessException {
+		logger.info("Checking for the opened window ...");
+
+		// Check if the window is still open
+		String[] windows = ClientSessionFactory.session().selenium()
+				.getAllWindowNames();
+		for (String window : windows) {
+			if (!window.isEmpty() && !window.contains("null") && !window.contains(PageBriefcase.pageTitle)
+					&& !window.contains("main_app_window")
+					&& !window.contains("undefined")) {
+				logger.warn(window + " window was still active. Closing ...");
+				app.zPageBriefcase.zSelectWindow(window);
+				app.zPageBriefcase.closeWindow();
+			}
+		}
+		app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
+	}
 }
