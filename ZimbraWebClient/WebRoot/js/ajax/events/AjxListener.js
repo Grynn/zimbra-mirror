@@ -37,10 +37,8 @@ AjxListener = function(obj, method, args) {
 AjxListener.prototype = new AjxCallback();
 AjxListener.prototype.constructor = AjxListener;
 
-AjxListener.prototype.toString = 
-function() {
-	return "AjxListener";
-}
+AjxListener.prototype.isAjxListener = true;
+AjxListener.prototype.toString = function() { return "AjxListener"; }
 
 /**
 * Invoke the listener function.

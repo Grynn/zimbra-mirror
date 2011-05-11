@@ -42,17 +42,10 @@ AjxCallback = function(obj, func, args) {
         this.func = func;
         this.args = args;
     }
-}
+};
 
-/**
- * Returns a string representation of the object.
- * 
- * @return		{string}		a string representation of the object
- */
-AjxCallback.prototype.toString =
-function() {
-	return "AjxCallback";
-}
+AjxCallback.prototype.isAjxCallback = true;
+AjxCallback.prototype.toString = function() { return "AjxCallback"; }
 
 AjxCallback.NOP = new AjxCallback(function(){});
 

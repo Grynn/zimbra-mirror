@@ -444,7 +444,7 @@ if ( !Function.prototype.bind ) {
 */
 
 // An alternative, simpler implementation. Not sure whether it does everything that the above version does,
-// but it should work fine as a basic callback.
+// but it should work fine as a basic closure-style callback.
 if (!Function.prototype.bind) {
 	Function.prototype.bind = function(thisObj) {
 		var that = this;
@@ -468,3 +468,13 @@ if (!Function.prototype.bind) {
 		};
 	};
 }
+
+/**
+ * This should be a temporary hack as we transition from AjxCallback to bind(). Rather
+ * than change hundreds of call sites with 'callback.run()' to see if the callback is
+ * an AjxCallback or a closure, add a run() method to Function which just invokes the
+ * closure.
+ */
+Function.prototype.run = function() {
+	return this.apply(this, arguments);
+};

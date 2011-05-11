@@ -36,8 +36,9 @@ AjxEmailAddress = function(address, type, name, dispName, isGroup) {
 	this.type = type || AjxEmailAddress.TO;
 	this.isGroup = isGroup;
 	this.canExpand = false;
-    this.isAjxEmailAddress = true;
 };
+
+AjxEmailAddress.prototype.isAjxEmailAddress = true;
 
 /**
  * Defines the "from" type.
