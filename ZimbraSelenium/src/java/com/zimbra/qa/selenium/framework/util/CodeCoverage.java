@@ -23,6 +23,13 @@ public class CodeCoverage {
 	
 	/**
 	 * The cumulative code coverage object
+	 * A map with the application JS filename as the key
+	 * "source" points to the JS file source code (optional)
+	 * "coverage" points to an array of the source code usage
+	 *  with the "array index" as the source code line number
+	 *  with "null" as "not applicable" (i.e comments)
+	 *  with "0" as "not touched"
+	 *  with ">0" as "the number of touches on that line"
 	 */
 	protected JSONObject cumulativeCoverage = null;
 	
@@ -55,15 +62,14 @@ public class CodeCoverage {
 		}
 		
 		
-		// TODO: change from BufferedWriter to Logger
+		// Write the JSON object to a file
 		BufferedWriter out = null;
 		
 		try {
 			
 			try {
 				
-				File f = new File(CODE_COVERAGE_DIRECTORY_PATH, CODE_COVERAGE_DIRECTORY_FILE);
-				out = new BufferedWriter(new FileWriter(f));
+				out = new BufferedWriter(new FileWriter(new File(CODE_COVERAGE_DIRECTORY_PATH, CODE_COVERAGE_DIRECTORY_FILE)));
 				
 				if ( cumulativeCoverage != null ) {
 					cumulativeCoverage.write(out);
@@ -166,6 +172,8 @@ public class CodeCoverage {
 	
 	private JSONArray updateCoverage(JSONArray oCoverage, JSONArray nCoverage) {
 		logger.debug("updateCoverage()");
+		
+		Integer additionalCoverage = 0;  // For debugging, keep track of the new lines covered
 
 		JSONArray array = new JSONArray();
 		
@@ -178,6 +186,7 @@ public class CodeCoverage {
 			}
 			if ( !nCoverage.getString(i).equalsIgnoreCase("null") ) {
 				newValue = Integer.parseInt(nCoverage.getString(i));
+				additionalCoverage += newValue;
 			}
 			
 			if (oldValue == null && newValue == null) {
@@ -197,6 +206,8 @@ public class CodeCoverage {
 
 		}
 
+		logger.debug("Additional lines covered:" + additionalCoverage);
+		
 		return (array);
 	}
 
@@ -218,7 +229,7 @@ public class CodeCoverage {
 
 		try {
 			
-			URL url = new URL("http://" + CoverageServer +"/zimbra/"+ filename);
+			URL url = new URL("http://" + ZimbraSeleniumProperties.getStringProperty("server.host","qa60.lab.zimbra.com") +"/zimbra/"+ filename);
 			URLConnection uc = url.openConnection();
 			BufferedReader reader = null;
 			
@@ -292,56 +303,7 @@ public class CodeCoverage {
     private String CODE_COVERAGE_DIRECTORY_FILE = "jscoverage.json";
 
 	
-    private static final String COVERAGE_SCRIPT = 
-    	      "if (! window.jscoverage_report) {\n"
-			+ "  window.jscoverage_report = function jscoverage_report(dir) {\n"
-			+ "    if(window._$jscoverage == undefined) return \"\";\n"
-			+ "    var pad = function (s) {   \n"
-			+ "          return '0000'.substr(s.length) + s; \n"
-			+ "   };\n"
-			+ "  var quote = function (s) {   \n"
-			+ "   return '\"' + s.replace(/[\\u0000-\\u001f\"\\\\\\u007f-\\uffff]/g, function (c) {  \n"
-			+ "      switch (c) {\n"
-			+ "        case '\\b':\n"
-			+ "          return '\\\\b';\n"
-			+ "        case '\\f':    \n"
-			+ "         return '\\\\f';\n"
-			+ "        case '\\n': \n"
-			+ "         return '\\\\n'; \n"
-			+ "       case '\\r':\n"
-			+ "          return '\\\\r'; \n"
-			+ "       case '\\t':\n"
-			+ "          return '\\\\t'; \n"
-			+ "       case '\"':     \n"
-			+ "         return '\\\\\"'; \n"
-			+ "       case '\\\\':\n"
-			+ "          return '\\\\\\\\';\n"
-			+ "       default:   \n"
-			+ "              return '\\\\u' + pad(c.charCodeAt(0).toString(16));\n"
-			+ "        }\n"
-			+ "      }) + '\"';\n"
-			+ "    };\n"
-			+ "\n"
-			+ "    var json = [];\n"
-			+ "    for (var file in window._$jscoverage) { \n"
-			+ "     var coverage = window._$jscoverage[file];\n"
-			+ "      var array = []; \n"
-			+ "     var length = coverage.length;\n"
-			+ "      for (var line = 0; line < length; line++) {\n"
-			+ "        var value = coverage[line];       \n"
-			+ "    if (value === undefined || value === null) {\n"
-			+ "          value = 'null';    \n"
-			+ "    }else{\n"
-			+ "          coverage[line] = 0; //stops double counting\n"
-			+ "        }\n"
-			+ "        array.push(value);}\n"
-			+ "      json.push(quote(file) + ':{\"coverage\":[' + array.join(',') + ']}');    } \n"
-			+ "   json = '{' + json.join(',') + '}';\n"
-			+ "    return json;\n"
-			+ "  };\n" 
-			+ "}; \n" 
-			+ "window.jscoverage_report()\n";
-
+    private String COVERAGE_SCRIPT = "";
 
 	private static final String WebappsZimbra = "/opt/zimbra/jetty/webapps/zimbra";
 	private String WebappsZimbraOriginal = null;
@@ -468,7 +430,6 @@ public class CodeCoverage {
 	protected boolean Enabled = false;
 	protected String Tool = "/usr/local/bin/jscoverage";
 	protected boolean EnableSourceCodeReport = false;
-	protected String CoverageServer = null;
 	
 	/**
 	 * Return a map of URL query parameters, required to enable code coverage from the Zimbra ajax app
@@ -497,15 +458,56 @@ public class CodeCoverage {
 
 	private CodeCoverage() {
 		logger.info("new "+ CodeCoverage.class.getCanonicalName());
+		
 		Enabled = ZimbraSeleniumProperties.getStringProperty("coverage.enabled", "false").equalsIgnoreCase("true");
 		
-		if ( Enabled ) {
-			Tool = ZimbraSeleniumProperties.getStringProperty("coverage.tool", "/usr/local/bin/jscoverage");
-			CoverageServer = ZimbraSeleniumProperties.getStringProperty("coverage.server", "zqa-060.eng.vmware.com");
-			EnableSourceCodeReport = ZimbraSeleniumProperties.getStringProperty("coverage.reportsource", "false").equalsIgnoreCase("true");
-			String timeout = ZimbraSeleniumProperties.getStringProperty("coverage.maxpageload.msec", "10000");
-			ZimbraSeleniumProperties.setStringProperty("selenium.maxpageload.msec", timeout);
+		if ( !Enabled )
+			return;
+		
+
+		// Read the Code Coverage JS function into a string
+		StringBuffer sb = new StringBuffer();
+		BufferedReader reader = null;
+		try {
+			try {
+				
+				InputStream stream = this.getClass().getResourceAsStream("/coverageScript.js");
+				if ( stream == null ) {
+					logger.error("unable to find resource: /coverageScript.js");
+					Enabled = false;
+					return;
+				}
+				
+				// Convert stream to String
+				byte[] b = new byte[1024];
+				for (int n; (n = stream.read(b)) != -1;) {
+					sb.append(new String(b, 0, n));
+				}
+				
+			} finally {
+				if ( reader != null ) {
+					reader.close();
+					reader = null;
+				}
+			}
+		} catch (IOException e) {
+			logger.error("unable to read resource: /coverageScript.js", e);
+			Enabled = false;
+			return;
 		}
+
+		
+		COVERAGE_SCRIPT = sb.toString();
+		
+
+		// Get the settings form config.properties
+		//
+		Tool = ZimbraSeleniumProperties.getStringProperty("coverage.tool", "/usr/local/bin/jscoverage");
+		EnableSourceCodeReport = ZimbraSeleniumProperties.getStringProperty("coverage.reportsource", "false").equalsIgnoreCase("true");
+		String timeout = ZimbraSeleniumProperties.getStringProperty("coverage.maxpageload.msec", "10000");
+		ZimbraSeleniumProperties.setStringProperty("selenium.maxpageload.msec", timeout);
+
+
 	}
 
 	public static CodeCoverage getInstance() {

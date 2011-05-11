@@ -378,12 +378,23 @@ public class ExecuteHarnessMain {
 	protected String executeCodeCoverage() throws FileNotFoundException, HarnessException, IOException {
 		
 		try {
-			
-			CodeCoverage.getInstance().instrumentServer();
-			return (executeSelenium());
-			
+
+			try {
+				
+				CodeCoverage.getInstance().instrumentServer();
+				return (executeSelenium());
+				
+			} finally {
+				
+				CodeCoverage.getInstance().instrumentServerUndo();
+				
+			}
 		} finally {
-			CodeCoverage.getInstance().instrumentServerUndo();
+			
+			// Since writing the report may require the (uninstrumented) source code, then
+			// write the coverage report last (after uninstrumenting)
+			CodeCoverage.getInstance().writeCoverage();
+			
 		}
 
 	}
