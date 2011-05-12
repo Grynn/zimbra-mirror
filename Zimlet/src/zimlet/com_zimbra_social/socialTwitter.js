@@ -80,7 +80,7 @@ function social_sortTimeObjs(a, b) {
 
 com_zimbra_socialTwitter.prototype.getTwitterTrends =
 function() {
-	var entireurl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode("http://search.twitter.com/trends.json");
+	var entireurl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode("http://api.twitter.com/1/trends.json");
 	AjxRpc.invoke(null, entireurl, null, new AjxCallback(this, this._trendsCallback), true);
 };
 
