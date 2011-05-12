@@ -615,7 +615,6 @@ public class AjaxCommonTest {
 	public void commonTestAfterMethod() throws HarnessException {
 		logger.info("commonTestAfterMethod: start");
 
-		CodeCoverage.getInstance().calculateCoverage();
 
 		logger.info("commonTestAfterMethod: finish");
 	}

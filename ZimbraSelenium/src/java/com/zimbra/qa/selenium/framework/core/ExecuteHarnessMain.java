@@ -566,6 +566,9 @@ public class ExecuteHarnessMain {
 		@Override
 		public void afterInvocation(IInvokedMethod method, ITestResult result) {
 			if ( method.isTestMethod() ) {
+				
+				CodeCoverage.getInstance().calculateCoverage();
+
 				logger.info("MethodListener: FINISH: "+ getTestCaseID(method.getTestMethod().getMethod()));
 				
 				tracer.trace("");

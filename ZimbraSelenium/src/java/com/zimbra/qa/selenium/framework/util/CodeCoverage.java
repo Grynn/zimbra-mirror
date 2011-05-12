@@ -9,16 +9,11 @@ import net.sf.json.*;
 import org.apache.log4j.*;
 
 import com.ibm.staf.STAFResult;
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
+import com.zimbra.qa.selenium.framework.core.*;
 import com.zimbra.qa.selenium.framework.util.staf.*;
 
 public class CodeCoverage {
 	protected static Logger logger = LogManager.getLogger(CodeCoverage.class);
-	
-	// For debugging ...
-	// Don't instrument server
-	private static boolean debugging = false;
-	
 	
 	
 	/**
@@ -46,53 +41,61 @@ public class CodeCoverage {
 	 * Write coverage.json to the output folder
 	 */
 	public void writeCoverage() {
+		logger.info("writeCoverage()");
 
 		if ( !Enabled ) {
 			logger.info("writeCoverage(): Code Coverage reporting is disabled");
 			return;
 		}
 	
-		logger.info("writeCoverage()");
-		logger.info("<=======><=======><=== Writing Coverage to json file ===><=======><=======>");
+		logger.debug("<=======><=======><=== Writing Coverage to json file ===><=======><=======>");
 		Date start = new Date();
 		
-		if (EnableSourceCodeReport) {
-			logger.info("writeCoverage(): Updating source files");
-			updateSourceFiles();
-		}
-		
-		
-		// Write the JSON object to a file
-		BufferedWriter out = null;
-		
 		try {
-			
-			try {
-				
-				out = new BufferedWriter(new FileWriter(new File(CODE_COVERAGE_DIRECTORY_PATH, CODE_COVERAGE_DIRECTORY_FILE)));
-				
-				if ( cumulativeCoverage != null ) {
-					cumulativeCoverage.write(out);
-				}
-				
-			} finally {
-				if (out != null) {
-					out.close();
-					out = null;
-				}
+
+
+			if (EnableSourceCodeReport) {
+				logger.debug("writeCoverage(): Updating source files");
+				updateSourceFiles();
 			}
-			
-		} catch (IOException e) {
-			logger.error("Unable to write coverage report", e);
+
+
+			// Write the JSON object to a file
+			BufferedWriter out = null;
+
+			try {
+
+				try {
+
+					out = new BufferedWriter(new FileWriter(new File(CODE_COVERAGE_DIRECTORY_PATH, CODE_COVERAGE_DIRECTORY_FILE)));
+
+					if ( cumulativeCoverage != null ) {
+						cumulativeCoverage.write(out);
+					}
+
+				} finally {
+					if (out != null) {
+						out.close();
+						out = null;
+					}
+				}
+
+			} catch (IOException e) {
+				logger.error("Unable to write coverage report", e);
+			}
+
+			// Write the other html, css, etc. files to the folder
+			createWebsiteFiles();
+
+		} finally {
+
+			// Update the total duration value
+			durationTotalUpdate(start, new Date());
+
 		}
-		
-		// Write the other html, css, etc. files to the folder
-		updateOutputFolder();
-		
-		updateTotalDuration(start, new Date());
-		
+
 		// Log how much time code coverage took
-		logger.info("CodeCoverage: took "+ getTotalDuration() +" seconds");
+		logger.info("CodeCoverage: took an additional "+ durationTotalGet() +" seconds of processing time");
 	}
 
 	/**
@@ -102,7 +105,7 @@ public class CodeCoverage {
 		logger.info("calculateCoverage()");
 
 		if ( !Enabled ) {
-			logger.info("calculateCoverage(): Code Coverage reporting is disabled");
+			logger.info("calculateCoverage(): Code Coverage is disabled");
 			return;
 		}
 
@@ -118,8 +121,12 @@ public class CodeCoverage {
 			if ( cumulativeCoverage == null ) {
 
 				// First time in, just initialize the object
-				logger.info("initalizing coverage object");
+				logger.debug("initalizing coverage object");
 				cumulativeCoverage = (JSONObject) JSONSerializer.toJSON(ClientSessionFactory.session().selenium().getEval(COVERAGE_SCRIPT));
+				
+				// Log coverage statistics
+				traceCoverage(null, cumulativeCoverage);
+				
 				return;
 				
 			}
@@ -131,7 +138,7 @@ public class CodeCoverage {
 			try {
 				
 				// Get the latest coverage
-				logger.info("getting updates to coverage object");
+				logger.debug("getting updates to coverage object");
 				jsonCoverage = (JSONObject) JSONSerializer.toJSON(ClientSessionFactory.session().selenium().getEval(COVERAGE_SCRIPT));
 
 			} catch (JSONException e) {
@@ -142,6 +149,9 @@ public class CodeCoverage {
 				throw e;
 
 			}
+			
+			// Log coverage statistics
+			traceCoverage(cumulativeCoverage, jsonCoverage);
 
 			Iterator<?> iterator = jsonCoverage.keys();
 			while (iterator.hasNext()) {
@@ -153,28 +163,130 @@ public class CodeCoverage {
 				if ( !cumulativeCoverage.containsKey(key) ) {
 					
 					// New filename, simply add the data
-					logger.info("add new filename: "+ key);
+					logger.debug("add new filename: "+ key);
 					cumulativeCoverage.put(key, jsonCoverage.getJSONObject(key));
 
 				} else {
 
 					// Sum the old data with the new updates
-					logger.info("updating filename: "+ key);
+					logger.debug("updating filename: "+ key);
 					cumulativeCoverage.getJSONObject(key).put("coverage", updateCoverage(cumulativeCoverage.getJSONObject(key).getJSONArray("coverage"), nCoverage));
 					
 				}
 
 			}
 		} finally {
-			updateTotalDuration(start, new Date());
+			durationTotalUpdate(start, new Date());
 		}
 	}
 	
+	// For logging, report how many new files were touched and how many new lines were touched
+	//
+	private void traceCoverage(JSONObject oldJSON, JSONObject newJSON) {
+		
+		int countFiles = 0;			// # of new files touched
+		int countLines = 0;			// # of new lines touched
+		int countDuplicates = 0;	// # of lines that were previously touched that were touched again
+		
+		try {
+			
+			
+			if ( oldJSON == null ) {
+				
+				// No old coverage to compare to
+				// Just count up the statistics in the new object and report it
+
+				Iterator<?> iterator = newJSON.keys();
+				while (iterator.hasNext()) {
+					String key = (String)iterator.next();
+
+					// Add 1 to the file count
+					countFiles++;
+
+					JSONArray coverage = newJSON.getJSONObject(key).getJSONArray("coverage");
+					for (int i = 0; i < coverage.size(); i++) {
+						String sValue = coverage.getString(i);
+						if ( !sValue.equalsIgnoreCase("null") ) {
+							Integer iValue = Integer.parseInt(sValue);
+							if ( iValue > 0 ) {
+
+								// Add 1 to the line count
+								countLines++;
+
+							}
+						}
+					}
+
+				}
+
+			} else {
+
+				// Old coverage object exists
+				// Count up the differences between the old object and the new object
+
+				Iterator<?> iterator = newJSON.keys();
+				while (iterator.hasNext()) {
+					String key = (String)iterator.next();
+					
+					if (oldJSON.containsKey(key)) {
+						
+						// Not a new file
+						
+						JSONArray oCoverage = oldJSON.getJSONObject(key).getJSONArray("coverage");
+						JSONArray nCoverage = newJSON.getJSONObject(key).getJSONArray("coverage");
+
+						for (int i = 0; i < nCoverage.size(); i++) {
+						
+							Integer oldValue = 0;
+							Integer newValue = 0;
+							
+							if ( (i < oCoverage.size()) && (!oCoverage.getString(i).equalsIgnoreCase("null")) ) {
+								oldValue = Integer.parseInt(oCoverage.getString(i));
+							}
+							if ( !nCoverage.getString(i).equalsIgnoreCase("null") ) {
+								newValue = Integer.parseInt(nCoverage.getString(i));
+							}
+							
+							if ( (oldValue == 0) && (newValue > 0) )
+								countLines++;
+							
+							if ( (oldValue > 0) && (newValue > oldValue) )
+								countDuplicates++;
+							
+						}
+						
+					} else {
+						
+						// New file was covered
+						// Add 1 to the file count
+						countFiles++;
+						
+						// For all new lines covered, add 1
+						JSONArray coverage = newJSON.getJSONObject(key).getJSONArray("coverage");
+						for (int i = 0; i < coverage.size(); i++) {
+							if ( (!coverage.getString(i).equalsIgnoreCase("null")) && (Integer.parseInt(coverage.getString(i)) > 0)) {
+								
+								// If the value is not null and it is greater than 0
+								// Add 1 to the line count
+								countLines++;
+				
+							}
+								
+						}
+
+					}
+					
+				}
+
+			}
+		} finally {
+			logger.info("CodeCoverage: files("+ countFiles +") lines("+ countLines +") duplicates("+ countDuplicates +")");
+		}
+	}
+
 	private JSONArray updateCoverage(JSONArray oCoverage, JSONArray nCoverage) {
 		logger.debug("updateCoverage()");
 		
-		Integer additionalCoverage = 0;  // For debugging, keep track of the new lines covered
-
 		JSONArray array = new JSONArray();
 		
 		for (int i = 0; i < nCoverage.size(); i++) {
@@ -186,7 +298,6 @@ public class CodeCoverage {
 			}
 			if ( !nCoverage.getString(i).equalsIgnoreCase("null") ) {
 				newValue = Integer.parseInt(nCoverage.getString(i));
-				additionalCoverage += newValue;
 			}
 			
 			if (oldValue == null && newValue == null) {
@@ -205,8 +316,6 @@ public class CodeCoverage {
 			array.add(oldValue + newValue);
 
 		}
-
-		logger.debug("Additional lines covered:" + additionalCoverage);
 		
 		return (array);
 	}
@@ -216,20 +325,20 @@ public class CodeCoverage {
 		
 		Iterator<?> iterator = cumulativeCoverage.keys();
 		while (iterator.hasNext()) {
-			String key = (String)iterator.next();
-			cumulativeCoverage.getJSONObject(key).put("source", updateSourceFileContent(key));
-			logger.info("Added source for "+ key);
+			String filename = (String)iterator.next();
+			cumulativeCoverage.getJSONObject(filename).put("source", getSourceFileContentAsJSONArray(filename));
+			logger.debug("Added source for "+ filename);
 		}
 	}
 	
-	private JSONArray updateSourceFileContent(String filename) {
-		logger.debug("updateSourceFileContent("+ filename +")");
+	private JSONArray getSourceFileContentAsJSONArray(String jsFilename) {
+		logger.debug("getSourceFileContentAsJSONArray("+ jsFilename +")");
 
 		JSONArray jsonSourceArray = new JSONArray();
 
 		try {
 			
-			URL url = new URL("http://" + ZimbraSeleniumProperties.getStringProperty("server.host","qa60.lab.zimbra.com") +"/zimbra/"+ filename);
+			URL url = new URL("http://" + ZimbraSeleniumProperties.getStringProperty("server.host","qa60.lab.zimbra.com") +"/zimbra/"+ jsFilename);
 			URLConnection uc = url.openConnection();
 			BufferedReader reader = null;
 			
@@ -259,15 +368,15 @@ public class CodeCoverage {
 	}
 		
 		
-	private void updateOutputFolder() {
-		logger.debug("updateOutputFolder()");
+	private void createWebsiteFiles() {
+		logger.debug("createWebsiteFiles()");
 		
 
 		for (String filename : CodeCoverageWebSourceFiles.filenames) {
 
 			File destination = new File(CODE_COVERAGE_DIRECTORY_PATH, filename);
 			if ( destination.exists() ) {
-				logger.info("The destination file already exists.  Assume it was written previously.");
+				logger.debug("The destination file already exists.  Assume it was written previously.");
 				continue;
 			}
 			
@@ -314,9 +423,10 @@ public class CodeCoverage {
 	 * 
 	 */
 	public void instrumentServerCheck() throws HarnessException {
-		
+		logger.info("instrumentServerCheck()");
+
 		if ( !Enabled ) {
-			logger.info("instrumentServerCheck(): Code Coverage reporting is disabled");
+			logger.info("instrumentServerCheck(): Code Coverage is disabled");
 			return;
 
 		}
@@ -338,39 +448,46 @@ public class CodeCoverage {
 	 * @throws HarnessException 
 	 */
 	public void instrumentServer() throws HarnessException {
-		
+		logger.info("instrumentServer()");
+
 		if ( !Enabled ) {
-			logger.info("instrumentServer(): Code Coverage reporting is disabled");
+			logger.info("instrumentServer(): Code Coverage is disabled");
 			return;
 		}
 			
-		logger.info("instrumentServer()");
 		Date start = new Date();
 
-		if ( debugging ) {
-			logger.info("instrumentServer(): debugging ... skipping ");
-			return;
-		}
-		
-		// Check that JScoverage is installed correctly
-		instrumentServerCheck();
-		
-		WebappsZimbraOriginal		= "/opt/zimbra/jetty/webapps/zimbra" + ZimbraSeleniumProperties.getUniqueString();
-		WebappsZimbraInstrumented	= "/opt/zimbra/jetty/webapps/instrumented" + ZimbraSeleniumProperties.getUniqueString();
-		
 		try {
-			StafServicePROCESS staf = new StafServicePROCESS();
-			staf.execute("zmmailboxdctl stop");
-			staf.execute(Tool +" --no-instrument=help/ "+ WebappsZimbra +" "+ WebappsZimbraInstrumented);
-			staf.execute("mv "+ WebappsZimbra +" "+ WebappsZimbraOriginal);
-			staf.execute("mv "+ WebappsZimbraInstrumented +" "+ WebappsZimbra);
-			staf.execute("zmmailboxdctl start");
-			staf.execute("zmcontrol status");
-		} catch (HarnessException e) {
-			logger.error("Unable to instrument code.  Disabling code coverage.", e);
-		}
 
-		updateTotalDuration(start, new Date());
+			if ( !InstrumentServer ) {
+				logger.info("instrumentServer(): InstrumentServer=false ... skipping ");
+				return;
+			}
+
+			// Check that JScoverage is installed correctly
+			instrumentServerCheck();
+
+			WebappsZimbraOriginal		= "/opt/zimbra/jetty/webapps/zimbra" + ZimbraSeleniumProperties.getUniqueString();
+			WebappsZimbraInstrumented	= "/opt/zimbra/jetty/webapps/instrumented" + ZimbraSeleniumProperties.getUniqueString();
+
+			try {
+				StafServicePROCESS staf = new StafServicePROCESS();
+				staf.execute("zmmailboxdctl stop");
+				staf.execute(Tool +" --no-instrument=help/ "+ WebappsZimbra +" "+ WebappsZimbraInstrumented);
+				staf.execute("mv "+ WebappsZimbra +" "+ WebappsZimbraOriginal);
+				staf.execute("mv "+ WebappsZimbraInstrumented +" "+ WebappsZimbra);
+				staf.execute("zmmailboxdctl start");
+				staf.execute("zmcontrol status");
+			} catch (HarnessException e) {
+				logger.error("Unable to instrument code.  Disabling code coverage.", e);
+			}
+
+		} finally {
+			
+			// Update the total duration value
+			durationTotalUpdate(start, new Date());
+			
+		}
 	}
 	
 	/**
@@ -379,57 +496,66 @@ public class CodeCoverage {
 	 * STAF must be installed on the client and server.  Code will be instrumented and the server restarted.
 	 */
 	public void instrumentServerUndo() throws HarnessException {
-		
+		logger.info("instrumentServerUndo()");
+
 		if ( !Enabled ) {
-			logger.info("instrumentServerUndo(): Code Coverage reporting is disabled");
+			logger.info("instrumentServerUndo(): Code Coverage is disabled");
 			return;
 		}
 			
-		logger.info("instrumentServerUndo()");
 		Date start = new Date();
 		
-		if ( debugging ) {
-			logger.info("instrumentServer(): debugging ... skipping ");
-			return;
+		try {
+
+			if ( !InstrumentServer ) {
+				logger.info("instrumentServerUndo(): InstrumentServer=false ... skipping ");
+				return;
+			}
+
+			WebappsZimbraInstrumented	= "/opt/zimbra/jetty/webapps/instrumented" + ZimbraSeleniumProperties.getUniqueString();
+
+			try {
+
+				StafServicePROCESS staf = new StafServicePROCESS();
+				staf.execute("zmmailboxdctl stop");
+				staf.execute("rm -rf "+ WebappsZimbra); // Delete the instrumented code
+				staf.execute("mv "+ WebappsZimbraOriginal +" "+ WebappsZimbra);
+				staf.execute("zmmailboxdctl start");
+				staf.execute("zmcontrol status");
+
+			} catch (HarnessException e) {
+				logger.error("Unable to instrument code (undo).  Disabling code coverage.", e);
+			} finally {
+				WebappsZimbraOriginal = null;
+				WebappsZimbraInstrumented = null;
+			}
+
+		} finally {
+
+			// Update the total duration value
+			durationTotalUpdate(start, new Date());
+
 		}
 		
-		WebappsZimbraInstrumented	= "/opt/zimbra/jetty/webapps/instrumented" + ZimbraSeleniumProperties.getUniqueString();
-
-		try {
-			
-			StafServicePROCESS staf = new StafServicePROCESS();
-			staf.execute("zmmailboxdctl stop");
-			staf.execute("rm -rf "+ WebappsZimbra); // Delete the instrumented code
-			staf.execute("mv "+ WebappsZimbraOriginal +" "+ WebappsZimbra);
-			staf.execute("zmmailboxdctl start");
-			staf.execute("zmcontrol status");
-			
-		} catch (HarnessException e) {
-			logger.error("Unable to instrument code.  Disabling code coverage.", e);
-		} finally {
-			WebappsZimbraOriginal = null;
-			WebappsZimbraInstrumented = null;
-		}
-
-		updateTotalDuration(start, new Date());
 	}
 
 	// Time data (in seconds)
-	private long totalDuration = 0;
-	protected long getTotalDuration() {
-		return (totalDuration);
+	private long durationTotal = 0;
+	protected long durationTotalGet() {
+		return (durationTotal);
 	}
-	protected void updateTotalDuration(Date start, Date finish) {
+	protected void durationTotalUpdate(Date start, Date finish) {
 		if ( start.after(finish) || start.equals(finish) ) {
 			logger.error("updateTotalDuration: start wasn't before finish");
 			return;
 		}
-		totalDuration += ((finish.getTime()/1000) - (start.getTime()/1000));
+		durationTotal += ((finish.getTime()/1000) - (start.getTime()/1000));
 	}
 
 	protected boolean Enabled = false;
 	protected String Tool = "/usr/local/bin/jscoverage";
 	protected boolean EnableSourceCodeReport = false;
+	protected boolean InstrumentServer = true;
 	
 	/**
 	 * Return a map of URL query parameters, required to enable code coverage from the Zimbra ajax app
@@ -461,8 +587,10 @@ public class CodeCoverage {
 		
 		Enabled = ZimbraSeleniumProperties.getStringProperty("coverage.enabled", "false").equalsIgnoreCase("true");
 		
-		if ( !Enabled )
+		if ( !Enabled ) {
+			logger.info("CodeCoverage(): Code Coverage is disabled");
 			return;
+		}
 		
 
 		// Read the Code Coverage JS function into a string
@@ -506,10 +634,15 @@ public class CodeCoverage {
 		EnableSourceCodeReport = ZimbraSeleniumProperties.getStringProperty("coverage.reportsource", "false").equalsIgnoreCase("true");
 		String timeout = ZimbraSeleniumProperties.getStringProperty("coverage.maxpageload.msec", "10000");
 		ZimbraSeleniumProperties.setStringProperty("selenium.maxpageload.msec", timeout);
+		InstrumentServer = ZimbraSeleniumProperties.getStringProperty("coverage.instrument", "true").equalsIgnoreCase("true");
 
 
 	}
 
+	/**
+	 * Get the CodeCoverage object
+	 * @return
+	 */
 	public static CodeCoverage getInstance() {
 		if(instance==null) {
 			synchronized(CodeCoverage.class){
@@ -583,7 +716,7 @@ public class CodeCoverage {
 		private volatile static CodeCoverageWebSourceFiles instance;
 
 		private CodeCoverageWebSourceFiles() {
-			logger.info("new "+ CodeCoverage.class.getCanonicalName());
+			logger.debug("new "+ CodeCoverage.class.getCanonicalName());
 			filecontents = new HashMap<String, String>();
 			for (String name : filenames) {
 				filecontents.put(name, null);

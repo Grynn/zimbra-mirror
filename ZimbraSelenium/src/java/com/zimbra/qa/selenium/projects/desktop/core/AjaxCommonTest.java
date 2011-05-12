@@ -573,8 +573,6 @@ public class AjaxCommonTest {
 	public void commonTestAfterMethod() throws HarnessException {
 		logger.info("commonTestAfterMethod: start");
 
-		CodeCoverage.getInstance().calculateCoverage();
-
 		// For Ajax, if account is considered dirty (modified),
 		// then recreate a new account, but for desktop, the zimlet
 		// preferences has to be reset to default, all core zimlets are enabled
