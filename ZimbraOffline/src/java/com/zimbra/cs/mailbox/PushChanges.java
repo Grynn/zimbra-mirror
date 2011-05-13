@@ -709,7 +709,7 @@ public class PushChanges {
                 id = createData.getFirst();
             }
         } catch (SoapFaultException sfe) {
-            if (suppressRssFailure && folder.getUrl() != null) {
+            if (suppressRssFailure && folder.getUrl() != null && folder.getUrl() != "") {
                 OfflineErrorUtil.reportError(ombx, folder.getId(), "failed to sync rss url ["+folder.getUrl()+"]", sfe);
                 return true;
             } else if (!sfe.getCode().equals(MailServiceException.NO_SUCH_FOLDER)) {

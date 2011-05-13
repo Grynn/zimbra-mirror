@@ -137,4 +137,9 @@ public abstract class DesktopMailbox extends Mailbox {
     protected void migrateWikiFolders() throws ServiceException {
         OfflineLog.offline.debug("wiki folder migration skipped");
     }
+
+    @Override
+    boolean isChildFolderPermitted(int folderId) {
+        return super.isChildFolderPermitted(folderId) && folderId != ID_FOLDER_OUTBOX && folderId != ID_FOLDER_NOTIFICATIONS && folderId != ID_FOLDER_FAILURE; 
+    }
 }
