@@ -82,7 +82,7 @@ def watchdog():
 		for service in sorted(myState.curServices()):
 			if myState.getWatchdog(service) is None:
 				continue
-			if (myState.lookUpConfig("SERVICE", service) and myState.processIsNotRunning(service)):
+			if (myState.serverconfig.getServices(service) and myState.processIsNotRunning(service)):
 				Log.logMsg(2, "Watchdog: adding %s to restart list" % (service,));
 				myState.curRestarts(service, -1)
 				
@@ -92,7 +92,7 @@ def watchdog():
 			if myState.getWatchdog(service) is None:
 				Log.logMsg(3, "Watchdog: skipping service %s. Service not yet available for restarts." % (service,));
 				continue
-			if (myState.lookUpConfig("SERVICE", service) and myState.processIsNotRunning(service)):
+			if (myState.serverconfig.getServices(service) and myState.processIsNotRunning(service)):
 				Log.logMsg(2, "Watchdog: adding %s to restart list" % (service,));
 				myState.curRestarts(service, -1)
 			else:
