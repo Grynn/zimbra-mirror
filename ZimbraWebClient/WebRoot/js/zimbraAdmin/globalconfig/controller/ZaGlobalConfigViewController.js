@@ -318,6 +318,7 @@ function () {
             	}
 
     }
+    ZaApp.getInstance().getAppCtxt().getAppController().setActionStatusMsg(ZaMsg.GlobalConfigModified);
 	return true;
 }
 

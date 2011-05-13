@@ -239,7 +239,8 @@ ZaDLController.prototype._saveChanges = function () {
 					}
 					return retval;
 				}
-			}				
+			}
+            ZaApp.getInstance().getAppCtxt().getAppController().setActionStatusMsg(AjxMessageFormat.format(ZaMsg.DLModified,[this._currentObject.name]));
 		} else {
 			this._currentObject = ZaItem.create(obj,ZaDistributionList,"ZaDistributionList");
             ZaApp.getInstance().getAppCtxt().getAppController().setActionStatusMsg(AjxMessageFormat.format(ZaMsg.DLCreated,[this._currentObject.name]));

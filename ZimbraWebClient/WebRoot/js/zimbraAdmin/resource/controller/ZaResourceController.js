@@ -346,6 +346,6 @@ function () {
 		}
 		return false;
 	}
-	
+    ZaApp.getInstance().getAppCtxt().getAppController().setActionStatusMsg(AjxMessageFormat.format(ZaMsg.ResourceModified,[this._currentObject.name]));
 	return true;
 };

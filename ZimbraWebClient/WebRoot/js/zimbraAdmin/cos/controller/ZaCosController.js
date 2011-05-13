@@ -724,6 +724,7 @@ function () {
             ZaApp.getInstance().getAppCtxt().getAppController().setActionStatusMsg(AjxMessageFormat.format(ZaMsg.CosCreated,[tmpObj.name]));
 		} else {
 			this._currentObject.modify(mods);
+            ZaApp.getInstance().getAppCtxt().getAppController().setActionStatusMsg(AjxMessageFormat.format(ZaMsg.CosModified,[this._currentObject.name]));
 			//if modification took place - fire a ChangeEvent
 			//changeDetails["obj"] = this._currentObject;
 			//changeDetails["mods"] = mods;
