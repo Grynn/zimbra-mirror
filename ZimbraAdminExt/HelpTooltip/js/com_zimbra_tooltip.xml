@@ -3,5 +3,7 @@
 	description="${msg.description}"
 	extension="true">
 	<include>com_zimbra_tooltip.js</include>
+    <include>ZaHelpToolTip.js</include>
+    <include>ZaHelpToolTipView.js</include>
     <disableUIUndeploy>FALSE</disableUIUndeploy>
 </zimlet>

@@ -38,17 +38,19 @@ if(XFormItem) {
             content = attributeName;
         }
 
-        var shell = DwtShell.getShell(window);
-        var tooltip = shell.getToolTip();
-        tooltip.setContent(attributeName);
-        tooltip.popup(dwtEv.docX, dwtEv.docY);
+        if(!content)
+            return;
+
+        this._helpToolTipExt = new ZaHelpToolTipAdminExtension();
+        this._helpToolTipExt.handleHover(dwtEv.docX, dwtEv.docY, content);
     }
 
     XFormItem.prototype.hideHelpTooltip =
     function (event) {
-        var shell = DwtShell.getShell(window);
-        var tooltip = shell.getToolTip();
-        tooltip.popdown();
+        if(!this._helpToolTipExt)
+           return;
+
+        this._helpToolTipExt.hoverOut();
     }
 }
 
@@ -56,20 +58,54 @@ if(Output_XFormItem) {
     Output_XFormItem.prototype.helpTooltip = false;
 }
 
-ZaHelpTooltip = function() {
 
+ZaHelpToolTipAdminExtension = function() {
+};
+
+ZaHelpToolTipAdminExtension.prototype.handleHover =
+function(x, y, attributeName) {
+    this.hoverOver = true;
+    var shell = DwtShell.getShell(window);
+    var tooltip = shell.getToolTip();
+    tooltip.setContent("<div id=\"ZaHelpToolTipAdminExtension\"></div>", true);
+    this.x = x;
+    this.y = y;
+    this.tooltip = tooltip;
+    Dwt.setHandler(tooltip._div, DwtEvent.ONMOUSEOUT, AjxCallback.simpleClosure(this.hoverOut, this));
+    this.canvas =   document.getElementById("ZaHelpToolTipAdminExtension");
+	this.slideShow = new ZaToolTipView(this, this.canvas, attributeName);
+    tooltip.popup(this.x, this.y, true);
 }
 
-ZaHelpTooltip.prototype = new ZaItem();
-ZaHelpTooltip.prototype.constructor = ZaHelpTooltip;
+ZaHelpToolTipAdminExtension.prototype.redraw =
+function() {
+    if(!this.tooltip)
+        return;
+    if(!this.x)
+        return;
+    if(!this.y)
+        return;
+    this.tooltip.popup(this.x, this.y, true);
+}
 
-ZaHelpTooltip.A_description = "description";
+ZaHelpToolTipAdminExtension.prototype.hoverOut =
+function() {
+	if(!this.tooltip) {	return;	}
 
-ZaHelpTooltip.descriptionCache = {};
-ZaHelpTooltip.cacheNumber = 0;
-ZaHelpTooltip.getDescByName = function(name) {
-    if(ZaHelpTooltip.descriptionCache[name]){
-        return ZaHelpTooltip.descriptionCache[name];
+	this._hoverOver =  false;
+	this.tooltip._poppedUp = false;//makes the tooltip sticky
+	setTimeout(AjxCallback.simpleClosure(this.popDownIfMouseNotOnSlide, this), 700);
+}
+
+ZaHelpToolTipAdminExtension.prototype.popDownIfMouseNotOnSlide =
+function() {
+    if(this._hoverOver) {
+        return;
+    } else if(this.slideShow && this.slideShow.isMouseOverTooltip) {
+        return;
+	} else if(this.tooltip) {
+        this.tooltip._poppedUp = true;//makes the tooltip non-sticky
+        this.tooltip.popdown();
     }
 }
 
