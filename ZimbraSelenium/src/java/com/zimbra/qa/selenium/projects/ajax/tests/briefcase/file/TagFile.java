@@ -52,10 +52,10 @@ public class TagFile extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Click on created File
-		// app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, fileItem);
+		app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, fileItem);
 		
 		// Click on header check box
-		app.zPageBriefcase.zHeader(Action.A_BRIEFCASE_HEADER_CHECKBOX);
+		// app.zPageBriefcase.zHeader(Action.A_BRIEFCASE_HEADER_CHECKBOX);
 
 		// Create a tag using GUI
 		String tagName = "tag" + ZimbraSeleniumProperties.getUniqueString();
@@ -154,10 +154,10 @@ public class TagFile extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Click on uploaded file
-		//app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 		
 		// Click on header check box
-		app.zPageBriefcase.zHeader(Action.A_BRIEFCASE_HEADER_CHECKBOX);
+		// app.zPageBriefcase.zHeader(Action.A_BRIEFCASE_HEADER_CHECKBOX);
 
 		// Tag file selecting pre-existing tag from Toolbar drop down list
 		app.zPageBriefcase.zToolbarPressPulldown(Button.B_TAG, tag.getName());
@@ -218,10 +218,10 @@ public class TagFile extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Click on uploaded file
-		// app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, fileItem);
+		app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, fileItem);
 		
 		// Click on header check box
-		app.zPageBriefcase.zHeader(Action.A_BRIEFCASE_HEADER_CHECKBOX);
+		// app.zPageBriefcase.zHeader(Action.A_BRIEFCASE_HEADER_CHECKBOX);
 
 		// Tag File using Right Click context menu
 		app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, Button.O_TAG_FILE, tagItem.getName(), fileItem);

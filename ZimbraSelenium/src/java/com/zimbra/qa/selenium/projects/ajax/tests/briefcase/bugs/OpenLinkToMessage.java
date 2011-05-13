@@ -53,6 +53,8 @@ public class OpenLinkToMessage extends AjaxCommonTest {
 		
 		// Click Get Mail button to view folder in list		
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		
+		SleepUtil.sleepVerySmall();
 
 		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(),
 				"subject:(" + subject + ")");
