@@ -10,12 +10,16 @@ import org.apache.log4j.*;
 
 import com.ibm.staf.STAFResult;
 import com.zimbra.qa.selenium.framework.core.*;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.framework.util.staf.*;
 
 public class CodeCoverage {
 	protected static Logger logger = LogManager.getLogger(CodeCoverage.class);
 	
-	
+	protected static final List<AppType> supportedAppTypes = Arrays.asList(
+																	AppType.AJAX,
+																	AppType.ADMIN
+																	);
 	/**
 	 * The cumulative code coverage object
 	 * A map with the application JS filename as the key
@@ -190,6 +194,10 @@ public class CodeCoverage {
 		
 		try {
 			
+			if ( newJSON == null ) {
+				// No new data
+				return;
+			}
 			
 			if ( oldJSON == null ) {
 				
@@ -323,11 +331,16 @@ public class CodeCoverage {
 	private void updateSourceFiles() {
 		logger.debug("updateSourceFiles()");
 		
+		if ( cumulativeCoverage == null ) {
+			logger.warn("updateSourceFiles(): cumulativeCoverage was null");
+			return;
+		}
+		
 		Iterator<?> iterator = cumulativeCoverage.keys();
 		while (iterator.hasNext()) {
 			String filename = (String)iterator.next();
 			cumulativeCoverage.getJSONObject(filename).put("source", getSourceFileContentAsJSONArray(filename));
-			logger.debug("Added source for "+ filename);
+			logger.debug("updateSourceFiles(): Added source for "+ filename);
 		}
 	}
 	
@@ -580,7 +593,7 @@ public class CodeCoverage {
 
 	// Singleton methods
 
-	private volatile static CodeCoverage instance;
+	private volatile static CodeCoverage instance = null;
 
 	private CodeCoverage() {
 		logger.info("new "+ CodeCoverage.class.getCanonicalName());
@@ -592,7 +605,12 @@ public class CodeCoverage {
 			return;
 		}
 		
-
+		if ( !supportedAppTypes.contains(ZimbraSeleniumProperties.getAppType())) {
+			logger.info("CodeCoverage(): code coverage does not support type "+ ZimbraSeleniumProperties.getAppType() +".  Disabling.");
+			Enabled = false;
+			return;
+		}
+		
 		// Read the Code Coverage JS function into a string
 		StringBuffer sb = new StringBuffer();
 		BufferedReader reader = null;
@@ -601,7 +619,10 @@ public class CodeCoverage {
 				
 				InputStream stream = this.getClass().getResourceAsStream("/coverageScript.js");
 				if ( stream == null ) {
-					logger.error("unable to find resource: /coverageScript.js");
+					stream = this.getClass().getResourceAsStream("/com/zimbra/qa/selenium/framework/util/coverage/coverageScript.js");
+				}
+				if ( stream == null ) {
+					logger.error("CodeCoverage(): unable to find resource: /coverageScript.js");
 					Enabled = false;
 					return;
 				}
@@ -685,6 +706,9 @@ public class CodeCoverage {
 					try {
 						
 						InputStream stream = this.getClass().getResourceAsStream("/" +filename);
+						if ( stream == null ) {
+							stream = this.getClass().getResourceAsStream("/com/zimbra/qa/selenium/framework/util/coverage/" + filename);
+						}
 						if ( stream == null )
 							throw new HarnessException("unable to find resource: "+ filename);
 						
