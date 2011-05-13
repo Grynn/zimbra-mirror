@@ -720,7 +720,8 @@ function () {
 			this._currentObject.create(tmpObj.name, mods);
 			//if creation took place - fire a CreationEvent
 			this.fireCreationEvent(this._currentObject);
-			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);	
+			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);
+            ZaApp.getInstance().getAppCtxt().getAppController().setActionStatusMsg(AjxMessageFormat.format(ZaMsg.CosCreated,[tmpObj.name]));
 		} else {
 			this._currentObject.modify(mods);
 			//if modification took place - fire a ChangeEvent

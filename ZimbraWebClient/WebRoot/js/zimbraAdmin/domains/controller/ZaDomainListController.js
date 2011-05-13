@@ -647,6 +647,7 @@ function(ev) {
 			evt.set(ZaEvent.E_CREATE, this);
 			evt.setDetails(domain);
 			this.handleCreation(evt);
+            ZaApp.getInstance().getAppCtxt().getAppController().setActionStatusMsg(AjxMessageFormat.format(ZaMsg.DomainCreated,[domain.name]));
 		}
 	} catch (ex) {
 		if(ex.code == ZmCsfeException.DOMAIN_EXISTS) {

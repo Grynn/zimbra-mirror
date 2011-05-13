@@ -242,6 +242,7 @@ ZaDLController.prototype._saveChanges = function () {
 			}				
 		} else {
 			this._currentObject = ZaItem.create(obj,ZaDistributionList,"ZaDistributionList");
+            ZaApp.getInstance().getAppCtxt().getAppController().setActionStatusMsg(AjxMessageFormat.format(ZaMsg.DLCreated,[this._currentObject.name]));
 			//this._currentObject.id = dl.id;
 		}
 				
