@@ -763,7 +763,13 @@ public class ExecuteHarnessMain {
 	        CommandLineParser parser = new GnuParser();
 	        CommandLine cmd = parser.parse(options, arguments);
 	        
-	        
+	        // Processing log4j must come first so debugging can happen
+	        if ( cmd.hasOption('l') ) {
+	        	PropertyConfigurator.configure(cmd.getOptionValue('l'));
+	        } else {
+	        	BasicConfigurator.configure();
+	        }
+	        	        
 	        if ( cmd.hasOption('h') ) {
 	    		HelpFormatter formatter = new HelpFormatter();
 	    		formatter.printHelp("ExecuteTests", options);
@@ -830,12 +836,6 @@ public class ExecuteHarnessMain {
 	        }
 	        
 	        	
-	        if ( cmd.hasOption('l') ) {
-	        	PropertyConfigurator.configure(cmd.getOptionValue('l'));
-	        } else {
-	        	BasicConfigurator.configure();
-	        }
-	        	        
 	        if ( cmd.hasOption('j') ) {
 	        	this.jarfilename = cmd.getOptionValue('j'); 
 	        }
