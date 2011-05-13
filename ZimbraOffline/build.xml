@@ -221,7 +221,7 @@
 
   <target name="offline-jar" depends="offline-compile" description="Creates the jar file">
     <jar destfile="${build.dir}/${jarfile}" basedir="${build.classes.dir}" excludes="com/zimbra/cs/offline/jsp/**"/>
-    <jar destfile="${build.dir}/offlinejsp.jar" basedir="${build.classes.dir}" includes="com/zimbra/cs/offline/common/*.class,com/zimbra/cs/offline/jsp/*.class,com/zimbra/cs/offline/backup/*.class,com/zimbra/cs/datasource/offline/*.class,com/zimbra/cs/account/offline/OfflineDataSource.class"/>
+    <jar destfile="${build.dir}/offlinejsp.jar" basedir="${build.classes.dir}" includes="com/zimbra/cs/offline/jsp/*.class"/>
     <jar destfile="${build.dir}/zdesktop.jar" basedir="${build.classes.dir}" includes="com/zimbra/cs/offline/start/Main.class,com/zimbra/cs/offline/wrapper/WrapperUtil.class" />
     <jar destfile="${build.dir}/offlinecfgtool.jar" basedir="${build.classes.dir}" includes="com/zimbra/cs/offline/OfflineConfigTool.class" />
   </target>
@@ -271,7 +271,7 @@
     </antcall>
 
     <copy todir="${dist.dir}/jetty/webapps/zimbra/WEB-INF/lib">
-      <fileset dir="${build.dir}" includes="offlinejsp.jar"/>
+      <fileset dir="${build.dir}" includes="offlinejsp.jar,${jarfile}"/>
     </copy>
 
     <!--<unzip src="${webclient.web.dir}/help/WebHelp.zip" dest="${dist.dir}/jetty/webapps/zimbra" overwrite="true"/>-->
