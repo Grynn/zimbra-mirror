@@ -355,7 +355,7 @@ public class PageBriefcase extends AbsTab {
 			} else if (option == Button.O_NEW_DOCUMENT) {
 				pulldownLocator = Locators.zNewMenuArrowBtn.locator;
 
-				optionLocator = "css=tr[id=POPUP_NEW_DOC]>td[id$='_title']:contains('Document')";
+				optionLocator = "css=tr[id=POPUP_NEW_DOC]>td[id$=_title]:contains(Document)";
 
 				page = new DocumentBriefcaseNew(this.MyApplication);
 				// FALL THROUGH
@@ -364,7 +364,7 @@ public class PageBriefcase extends AbsTab {
 			} else if (option == Button.O_NEW_TAG) {
 				pulldownLocator = Locators.zNewMenuArrowBtn.locator;
 
-				optionLocator = "css=td[id$='_title'][class=ZWidgetTitle]:contains('Tag')";
+				optionLocator = "css=td[id$=_title][class=ZWidgetTitle]:contains(Tag)";
 
 				page = new DialogTag(this.MyApplication, this);
 
@@ -459,7 +459,19 @@ public class PageBriefcase extends AbsTab {
 							+ optionLocator + " not present!");
 				}
 
-				this.zClick(optionLocator);
+				// work around for bug 59722
+				if (optionLocator.contains("Document")) {
+					for(int i = 0; i < 6; i++){
+						typeKey(optionLocator, "40", "keydown");
+						}
+					typeKey(optionLocator, "13", "keydown");
+				} else if(optionLocator.contains("Tag")){
+					for(int i = 0; i < 8; i++){
+					typeKey(optionLocator, "40", "keydown");
+					}
+					typeKey(optionLocator, "13", "keydown");
+				}else
+					this.zClick(optionLocator);
 
 				// If the app is busy, wait for it to become active
 				zWaitForBusyOverlay();
@@ -996,25 +1008,33 @@ public class PageBriefcase extends AbsTab {
 	public void rename(String text) throws HarnessException {
 		// ClientSessionFactory.session().selenium().getEval("var x = selenium.browserbot.findElementOrNull(\""+Locators.zFrame.locator+"\");if(x!=null)x=x.contentWindow.document.body;if(browserVersion.isChrome){x.textContent='"+text+"';}else if(browserVersion.isIE){x.innerText='"+text+"';}");
 		logger.info("renaming to: " + text);
+
 		zSelectWindow("Zimbra: Briefcase");
+
 		// sSelectFrame("relative=top");
+
 		sType(Locators.zRenameInput.locator, text);
-		sFocus(Locators.zRenameInput.locator);
+
+		typeKey(Locators.zRenameInput.locator, "13", "keyup");
+	}
+	
+	public void typeKey(String locator, String keycode, String event) throws HarnessException {
+		sFocus(locator);
 		// hit <Enter> key
 		// sKeyPressNative(Integer.toString(KeyEvent.VK_ENTER));
 
 		sGetEval("if(document.createEventObject){var x=selenium.browserbot.findElementOrNull('"
-				+ Locators.zRenameInput.locator
+				+ locator
 				+ "');var evObj = x.document.createEventObject();"
-				+ "evObj.keyCode=13;evObj.repeat = false;"
-				+ "x.focus(); x.fireEvent(\"onkeyup\",evObj);}"
+				+ "evObj.keyCode=" + keycode + "; evObj.repeat = false;"
+				+ "x.focus(); x.fireEvent(\"on" + event + "\",evObj);}"
 				+ "else{if(window.KeyEvent){var evObj = document.createEvent('KeyEvents');"
-				+ "evObj.initKeyEvent( 'keyup', true, true, window, false, false, false, false, 13, 0 );} "
+				+ "evObj.initKeyEvent( '" + event + "', true, true, window, false, false, false, false," + keycode + ", 0 );} "
 				+ "else {var evObj = document.createEvent('HTMLEvents');"
-				+ "evObj.initEvent( 'keyup', true, true, window, 1 );"
-				+ "evObj.keyCode = 13;}"
+				+ "evObj.initEvent( '" + event + "', true, true, window, 1 );"
+				+ "evObj.keyCode=" + keycode + ";}"
 				+ "var x = selenium.browserbot.findElementOrNull('"
-				+ Locators.zRenameInput.locator
+				+ locator
 				+ "'); "
 				+ "x.blur(); x.focus(); x.dispatchEvent(evObj);}");
 	}
