@@ -52,7 +52,7 @@ public class TagFile extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Click on created File
-		app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, fileItem);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 		
 		// Click on header check box
 		// app.zPageBriefcase.zHeader(Action.A_BRIEFCASE_HEADER_CHECKBOX);
@@ -218,7 +218,7 @@ public class TagFile extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Click on uploaded file
-		app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, fileItem);
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 		
 		// Click on header check box
 		// app.zPageBriefcase.zHeader(Action.A_BRIEFCASE_HEADER_CHECKBOX);
