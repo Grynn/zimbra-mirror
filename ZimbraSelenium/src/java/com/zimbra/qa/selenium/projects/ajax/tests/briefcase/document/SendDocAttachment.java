@@ -138,7 +138,7 @@ public class SendDocAttachment extends AjaxCommonTest {
 		ZAssert.assertTrue(mailform.zIsVisible(), "Verify the new form opened");
 
 		ZAssert.assertTrue(app.zPageBriefcase
-				.sIsElementPresent(FormMailNew.Locators.zAttachmentText
+				.zWaitForElementPresent(FormMailNew.Locators.zAttachmentText
 						+ docName + ")"), "Verify the attachment text");
 
 		// Cancel the message

@@ -526,14 +526,16 @@ public abstract class AbsSeleniumObject {
 	 * @param locator
 	 * @throws HarnessException
 	 */
-	private void sWaitForCondition(String condition) throws HarnessException {
+	private boolean sWaitForCondition(String condition) throws HarnessException {
 		logger.info("sWaitForCondition(" + condition + "), timeout="
 				+ LoadDelay);
 		try {
 			ClientSessionFactory.session().selenium().waitForCondition(
 					condition, "" + LoadDelay);
+			return true;
 		} catch (Exception ex) {
-			throw new HarnessException(condition + " never become true: ", ex);
+			logger.info(condition + " never become true: ");		
+			return false;
 		}
 	}
 
@@ -544,14 +546,10 @@ public abstract class AbsSeleniumObject {
 	 * @param locator
 	 * @throws HarnessException
 	 */
-	public void zWaitForElementPresent(String locator) throws HarnessException {
+	public boolean zWaitForElementPresent(String locator) throws HarnessException {
 		logger.info("zWaitForElementPresent(" + locator + ")");
 
-		try {
-			sWaitForCondition("selenium.isElementPresent(\"" + locator + "\")");
-		} catch (Exception ex) {
-			throw new HarnessException(locator + " never appeared : ", ex);
-		}
+		return	sWaitForCondition("selenium.isElementPresent(\"" + locator + "\")");		
 	}
 
 	/**
