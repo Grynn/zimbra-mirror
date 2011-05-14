@@ -1406,7 +1406,7 @@ function(ev) {
 	var ctrlA = false;
 	
 	if (ev.type == "keydown") {
-		if (AjxEnv.isFirefox && ev.metaKey && (ev.keyCode == 37 || ev.keyCode == 39)) { //disable CMD+right/left arrows since it does back/forward history on FF
+		if (AjxEnv.isFirefox && (ev.metaKey || ev.altKey) && (ev.keyCode == 37 || ev.keyCode == 39)) { //disable CMD+right/left arrows since it does back/forward history on FF
 			DwtUiEvent.setDhtmlBehaviour(ev, true, false);
 			retVal = false;
 		}
