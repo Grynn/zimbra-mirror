@@ -244,7 +244,16 @@ function(ev) {
 
 	var omem = DwtOutsideMouseEventMgr.INSTANCE;
 	var targetEl = DwtUiEvent.getTarget(ev);
+	DBG.println("out", "event type: " + ev.type);
 	DBG.println("out", "target: " + targetEl.id);
+	// bug 59782 - FF issues mysterious window.blur event that we should ignore
+	if (AjxEnv.isGeckoBased && ev && (ev.type == "blur") && ev.target && ev.explicitOriginalTarget &&
+		(ev.target != ev.explicitOriginalTarget)) {
+		
+		DwtUiEvent.setBehaviour(ev, false, true);
+		return true;
+	}
+	
 	for (var id in omem._byId) {
 		var runListener = true;
 		var context = omem._byId[id];
