@@ -21,6 +21,7 @@ import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.db.DbMailbox;
 import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
+import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.redolog.op.CreateFolder;
 
@@ -141,5 +142,14 @@ public abstract class DesktopMailbox extends Mailbox {
     @Override
     boolean isChildFolderPermitted(int folderId) {
         return super.isChildFolderPermitted(folderId) && folderId != ID_FOLDER_OUTBOX && folderId != ID_FOLDER_NOTIFICATIONS && folderId != ID_FOLDER_FAILURE; 
+    }
+
+    @Override
+    protected boolean needRedo(OperationContext octxt) {
+        if (OfflineLC.zdesktop_redolog_enabled.booleanValue()) {
+            return super.needRedo(octxt);
+        } else {
+            return false;
+        }
     }
 }
