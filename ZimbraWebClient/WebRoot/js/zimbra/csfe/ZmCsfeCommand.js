@@ -130,17 +130,27 @@ function() {
 };
 
 /**
- * Sets the session id.
+ * Sets the session id and, if the session id is new, designates the previous
+ * session id as stale.
  * 
  * @param	{String}	sessionId		the session id
  * 
  */
 ZmCsfeCommand.setSessionId =
-function(id) {
-	var sid = (typeof id == "number") ? id : ZmCsfeCommand.extractSessionId(id);
-	if (sid) {
-		ZmCsfeCommand._sessionId = sid;
-	}
+function(sessionId) {
+    var sid = ZmCsfeCommand.extractSessionId(sessionId);
+    if (sid) {
+        if (sid && !ZmCsfeCommand._staleSession[sid]) {
+            if (sid != ZmCsfeCommand._sessionId) {
+                if (ZmCsfeCommand._sessionId) {
+                    // Mark the old session as stale...
+                    ZmCsfeCommand._staleSession[ZmCsfeCommand._sessionId] = true;
+                }
+                // ...before accepting the new session.
+                ZmCsfeCommand._sessionId = sid;
+            }
+        }
+    }
 };
 
 ZmCsfeCommand.clearSessionId =
@@ -148,11 +158,38 @@ function() {
 	ZmCsfeCommand._sessionId = null;
 };
 
+/**
+ * Isolates the parsing of the various forms of session types that we
+ * might have to handle.
+ *
+ * @param {mixed} session Any valid session object: string, number, object,
+ * or array.
+ * @return {Number|Null} If the input contained a valid session object, the
+ * session number will be returned. If the input is not valid, null will
+ * be returned.
+ */
 ZmCsfeCommand.extractSessionId =
 function(session) {
-	if (!session) { return null; }
-	var id = (session instanceof Array) ? session[0].id : session.id;
-	return id ? parseInt(id) : null;
+    var id;
+
+    if (session instanceof Array) {
+        // Array form
+	    session = session[0].id;
+    }
+    else if (session && session.id) {
+        // Object form
+        session = session.id;
+    }
+
+    // We either have extracted the id or were given some primitive form.
+    // Whatever we have at this point, attempt conversion and clean up response.
+    id = parseInt(session, 10);
+    // Normalize response
+    if (isNaN(id)) {
+        id = null;
+    }
+
+	return id;
 };
 
 /**
@@ -645,15 +682,7 @@ function(response, params) {
 
 	// check for new session ID
 	var session = obj.Header && obj.Header.context && obj.Header.context.session;
-	var sid = session && ZmCsfeCommand.extractSessionId(session);
-	if (sid && !ZmCsfeCommand._staleSession[sid]) {
-		if (sid != ZmCsfeCommand._sessionId) {
-			if (ZmCsfeCommand._sessionId) {
-				ZmCsfeCommand._staleSession[ZmCsfeCommand._sessionId] = true;
-			}
-			ZmCsfeCommand.setSessionId(sid);
-		}
-	}
+    ZmCsfeCommand.setSessionId(session);
 
 	return params.asyncMode ? result : obj;
 };
