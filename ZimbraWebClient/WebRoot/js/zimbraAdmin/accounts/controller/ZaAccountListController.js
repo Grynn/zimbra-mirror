@@ -687,7 +687,7 @@ function(acct) {
 	try {
 		ZaApp.getInstance().dialogs["confirmMessageDialog"].popdown();
 		mods = {};
-		mods[ZaAccount.A_zimbraAuthTokenValidityValue] = (!acct.attrs[ZaAccount.A_zimbraAuthTokenValidityValue] ? 1 : ((parseInt(acct.attrs[ZaAccount.A_zimbraAuthTokenValidityValue])+1) % 9)); 
+		mods[ZaAccount.A_zimbraAuthTokenValidityValue] = (!acct.attrs[ZaAccount.A_zimbraAuthTokenValidityValue] ? 1 : ((parseInt(acct.attrs[ZaAccount.A_zimbraAuthTokenValidityValue])+1) % 9));
 		acct.modify(mods,acct);
 		//if we find we invalidate self account, we will throw an simulative exception of AUTH_EXPIRED 
 		//this exception will be handled in _handleException to redirect admin to login page  
@@ -702,6 +702,8 @@ function(acct) {
 			};
 			throw new ZmCsfeException(exParams);
 		}
+
+        ZaApp.getInstance().getAppCtxt().getAppController().setActionStatusMsg(AjxMessageFormat.format(ZaMsg.SessionInvalid,[acct.name]));
 	}catch(ex){
 		this._handleException(ex, "ZaAccountListController.expireSessions", null, false);
 	}
@@ -1006,7 +1008,7 @@ function (item) {
 				mods[ZaAccount.A_zimbraPasswordMustChange] = "TRUE";
 				item.modify(mods);
 			}
-
+            ZaApp.getInstance().getAppCtxt().getAppController().setActionStatusMsg(AjxMessageFormat.format(ZaMsg.PasswordModified,[item.name]));
 		} catch (ex) {
 			if(ex.code == ZmCsfeException.ACCT_INVALID_PASSWORD ) {
 				var szMsg = ZaMsg.ERROR_PASSWORD_INVALID;

@@ -180,6 +180,20 @@ function () {
 		if(this._currentObject.id) {
 			this._currentObject.remove();
 			this.fireRemovalEvent(this._currentObject);
+            var msgName = "";
+            switch(this._currentObject.type){
+		        case ZaItem.ACCOUNT: msgName = ZaMsg.AccountDeleted ; break ;
+                case ZaItem.DOMAIN: msgName = ZaMsg.DomainDeleted ; break ;
+		        case ZaItem.RESOURCE: msgName = ZaMsg.ResourceDeleted ; break ;
+		        case ZaItem.DL: msgName= ZaMsg.DLDeleted ; break ;
+                case ZaItem.COS: msgName = ZaMsg.CosDeleted ; break ;
+		        default: msgName = ""; break ;
+	        }
+
+            if(msgName) {
+                ZaApp.getInstance().getAppCtxt().getAppController().setActionStatusMsg(AjxMessageFormat.format(msgName,[this._currentObject.name]));
+            }
+
 		}
 		this.closeCnfrmDlg();	
 		ZaApp.getInstance().popView();		
