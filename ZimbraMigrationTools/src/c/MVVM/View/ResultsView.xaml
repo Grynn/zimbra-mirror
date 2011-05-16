@@ -1,0 +1,60 @@
+﻿<UserControl 
+    x:Class="MVVM.View.ResultsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    >
+    <UserControl.Resources>
+        <Style x:Key="itemstyleDouble" TargetType="{x:Type ListViewItem}">
+            <EventSetter Event="MouseDoubleClick" Handler="HandleDoubleClick" />
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Name="ResultsSP">
+            <TabControl Name="ResultsTC" MinHeight="270"  Margin="5">
+                <TabItem Name="AccountsTabItem" Header="Accounts">
+                    <Grid Name="AccountResultsGrid">
+                        <Grid.Background>
+                            <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
+                        </Grid.Background>
+                        <ListView Margin="5" Name="lstAccountResults" ItemsSource="{Binding AccountResultsList}" SelectedIndex="{Binding Path=CurrentAccountSelection, Mode=TwoWay}" ItemContainerStyle="{StaticResource itemstyleDouble}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridView.Columns>
+                                        <GridViewColumn  DisplayMemberBinding="{Binding Path=AccountName}">
+                                            <GridViewColumnHeader Width="140" Content=" Account" HorizontalContentAlignment="Left"/>
+                                        </GridViewColumn>
+                                        <GridViewColumn  DisplayMemberBinding="{Binding Path=AccountProgress}">
+                                            <GridViewColumnHeader Width="120" Content=" Progress" HorizontalContentAlignment="Left"/>
+                                        </GridViewColumn>
+                                        <GridViewColumn  DisplayMemberBinding="{Binding Path=NumErrs}">
+                                            <GridViewColumnHeader Width="92" Content=" Errors" HorizontalContentAlignment="Left"/>
+                                        </GridViewColumn>
+                                        <GridViewColumn  DisplayMemberBinding="{Binding Path=NumWarns}">
+                                            <GridViewColumnHeader Width="92" Content=" Warnings" HorizontalContentAlignment="Left"/>
+                                        </GridViewColumn>
+                                    </GridView.Columns>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </StackPanel>
+        <ProgressBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Height="18" Width="290" Margin="70,10,0,0" Name="pbMigrationS" Value="{Binding Path=PBValue}" HorizontalAlignment="Left" ></ProgressBar>
+        <Button Grid.Row="1" MinWidth="75" HorizontalAlignment="Right" Margin="0,10,20,0" Content="Stop" Name="buttonStop" IsEnabled="{Binding Path=EnableStop}" Command="{Binding StopCommand}"  />
+        <Label Grid.Row="2" Grid.ColumnSpan="2" Margin="76,0,0,0" MinWidth="300" HorizontalAlignment="Left" Name="labelSchedInfo" FontStyle="Italic" Content="{Binding Path=PBMsgValue}"/>
+        <Separator Grid.Row="3" Margin="12,0,12,0" VerticalAlignment="Top"/>
+        <TextBlock Grid.Row="4" Margin="10,12,30,0" Name="textBlockHelp" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Top" HorizontalAlignment="Left">
+                            <Hyperlink Command="{Binding GetAcctResultsHelpCommand}">Help</Hyperlink>
+        </TextBlock>
+        <Button Grid.Row="4" MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,100,0" Content="Open Log File" Name="buttonOpenLF" IsEnabled="{Binding OpenLogFileEnabled}" Command="{Binding OpenLogFileCommand}"  />
+        <Button Grid.Row="4" MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,20,0" Content="Exit" Name="buttonExit" Command="{Binding ExitAppCommand}"  />
+    </Grid>
+</UserControl>

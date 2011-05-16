@@ -1,0 +1,52 @@
+﻿<UserControl 
+    x:Class="MVVM.View.UsersView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Misc="clr-namespace:Misc;assembly=Misc"
+    >
+    <UserControl.Resources>
+        <Misc:CountGreaterThanZeroConverter x:Key="CountGreaterThanZeroConverter" />
+    </UserControl.Resources>
+    <Grid Name="UsersGrid">
+        <Grid.Background>
+            <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="10" Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MaxWidth="220" Width="Auto"></ColumnDefinition>
+            <ColumnDefinition MaxWidth="20" Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <GroupBox Header="Select Users" Grid.Row="1" Margin="26,32,0,0" HorizontalAlignment="Left" Name="GBUsers" VerticalAlignment="Top" Padding="20">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" HorizontalAlignment="Left"  HorizontalContentAlignment="Left" Margin="0,0,0,0"  Name="objPickerButton" Command="{Binding ObjectPickerCommand}" Width="{Binding ElementName=queryBuilderButton, Path=ActualWidth}"> Object Picker...</Button>
+                <Button Grid.Row="1" HorizontalAlignment="Left"  HorizontalContentAlignment="Left" Margin="0,20,0,0" Name="queryBuilderButton" Command="{Binding QueryBuilderCommand}" >Query Builder...</Button>
+                <Button Grid.Row="2" HorizontalAlignment="Left"  HorizontalContentAlignment="Left" Margin="0,20,0,0" Name="publicFolderButton" Command="{Binding PublicFolderCommand}" Width="{Binding ElementName=queryBuilderButton, Path=ActualWidth}">Public Folder...</Button>
+            </Grid>
+        </GroupBox>
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="26,12,0,0" HorizontalAlignment="Left" Name="textEnter" Text="User:" VerticalAlignment="Bottom"/>
+        <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="65,12,0,0" MinWidth="160" HorizontalAlignment="Center" VerticalAlignment="Bottom" Name="tbUsername" Text="{Binding Path=UsernameEntered}"/>
+        <Button Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,12,0,0" Name="plusButton" Command="{Binding AddCommand}" CommandParameter="{Binding ElementName=tbUsername,Path=Text}" MinWidth="20" MaxHeight="20" Content="=&gt;" FontFamily="Courier New" FontWeight="Bold" IsEnabled="{Binding Text.Length, ElementName=tbUsername, Converter={StaticResource CountGreaterThanZeroConverter}}"/>
+        <Button Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="5,12,0,0" Name="minusButton" IsEnabled="{Binding MinusEnabled}" Command="{Binding RemoveCommand}" MinWidth="20" MaxHeight="20" Content="&lt;=" FontFamily="Courier New" FontWeight="Bold" />
+        <ListBox Grid.Row="1" Grid.Column="2" Margin="40,40,0,0" Name="lbUsers" SelectionMode="Single" ItemsSource="{Binding UsersList}" SelectedIndex="{Binding Path=CurrentUserSelection, Mode=TwoWay}"  MinHeight="200" MinWidth="160" />
+        <Separator Grid.Row="3" Grid.ColumnSpan="3" Margin="12,16,0,0" VerticalAlignment="Top"/>
+        <Grid Name="BottomGrid" Grid.Row="3" Grid.ColumnSpan="3">
+            <TextBlock Margin="26,40,0,0" Name="textBlockHelp" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Left">
+                       <Hyperlink Command="{Binding GetUsersHelpCommand}">Help</Hyperlink>
+            </TextBlock>
+            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,40,0,0" Content="Load..." Name="loadUButton" Command="{Binding UserMapCommand}"  />
+            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="200,40,0,0" Content="Save" Name="saveUButton" Command="{Binding SaveCommand}"  />
+            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="360,40,0,0" Content="Next" Name="nextUButton" Command="{Binding NextCommand}"  />
+        </Grid>
+    </Grid>
+</UserControl>

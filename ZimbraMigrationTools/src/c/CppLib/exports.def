@@ -1,0 +1,3 @@
+LIBRARY	CPPLIB
+EXPORTS
+	DisplayProfiles				@1

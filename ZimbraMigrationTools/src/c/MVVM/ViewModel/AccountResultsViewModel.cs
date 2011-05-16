@@ -1,0 +1,215 @@
+﻿using System;
+using System.IO;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Windows;
+using System.Windows.Input;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading;
+using MVVM.Model;
+using Misc;
+
+namespace MVVM.ViewModel
+{
+    public class AccountResultsViewModel : BaseViewModel
+    {
+        readonly AccountResults m_accountResults = new AccountResults(0, "", "", 0, 0, 0, false);
+        ScheduleViewModel m_scheduleViewModel;
+
+        public AccountResultsViewModel(ScheduleViewModel scheduleViewModel, int pbValue, string pbMsgValue, string accountName, int accountProgress, int numErrs, int numWarns, bool enableStop)
+        {
+            this.m_scheduleViewModel = scheduleViewModel;
+            this.PBValue = pbValue;
+            this.PBMsgValue = pbMsgValue;
+            this.AccountName = accountName;
+            this.AccountProgress = accountProgress;
+            this.NumErrs = numErrs;
+            this.NumWarns = numWarns;
+            this.EnableStop = enableStop;
+
+            this.GetAcctResultsHelpCommand = new ActionCommand(this.GetAcctResultsHelp, () => true);
+            this.OpenLogFileCommand = new ActionCommand(this.OpenLogFile, () => true);
+            this.StopCommand = new ActionCommand(this.Stop, () => true);
+            this.ExitAppCommand = new ActionCommand(this.ExitApp, () => true);
+        }
+
+        // Commands
+        public ICommand GetAcctResultsHelpCommand
+        {
+            get;
+            private set;
+        }
+
+        private void GetAcctResultsHelp()
+        {
+            string urlString = (isBrowser) ? "http://10.20.140.218/acctresults.html" : "file:///C:/depot/main/ZimbraMigrationTools/src/c/Misc/Help/acctresults.html";
+            Process.Start(new ProcessStartInfo(urlString));
+        }
+
+        public ICommand OpenLogFileCommand
+        {
+            get;
+            private set;
+        }
+
+        private void OpenLogFile()
+        {
+            string AcctName = AccountResultsList[CurrentAccountSelection].AccountName;
+            MessageBox.Show(string.Format("Opening log file for {0}", AcctName));
+        }
+
+        public ICommand StopCommand
+        {
+            get;
+            private set;
+        }
+
+        private void Stop()
+        {
+            m_scheduleViewModel.GetBGW().CancelAsync();
+            m_scheduleViewModel.EnableMigrate = true;
+            EnableStop = !m_scheduleViewModel.EnableMigrate;
+        }
+
+        public ICommand ExitAppCommand
+        {
+            get;
+            private set;
+        }
+
+        private void ExitApp()
+        {
+            Application.Current.Shutdown();
+        }
+        //
+
+        private ObservableCollection<AccountResultsViewModel> accountResultsList = new ObservableCollection<AccountResultsViewModel>();
+        public ObservableCollection<AccountResultsViewModel> AccountResultsList
+        {
+            get { return accountResultsList; }
+        }
+
+        public int PBValue
+        {
+            get { return m_accountResults.PBValue; }
+            set
+            {
+                if (value == m_accountResults.PBValue)
+                {
+                    return;
+                }
+                m_accountResults.PBValue = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("PBValue"));
+            }
+        }
+
+        public string PBMsgValue
+        {
+            get { return m_accountResults.PBMsgValue; }
+            set
+            {
+                if (value == m_accountResults.PBMsgValue)
+                {
+                    return;
+                }
+                m_accountResults.PBMsgValue = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("PBMsgValue"));
+            }
+        }
+
+        public string AccountName
+        {
+            get { return m_accountResults.AccountName; }
+            set
+            {
+                if (value == m_accountResults.AccountName)
+                {
+                    return;
+                }
+                m_accountResults.AccountName = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("AccountName"));
+            }
+        }
+
+        public int AccountProgress
+        {
+            get { return m_accountResults.AccountProgress; }
+            set
+            {
+                if (value == m_accountResults.AccountProgress)
+                {
+                    return;
+                }
+                m_accountResults.AccountProgress = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("AccountProgress"));
+            }
+        }
+
+        public int NumErrs
+        {
+            get { return m_accountResults.NumErrs; }
+            set
+            {
+                if (value == m_accountResults.NumErrs)
+                {
+                    return;
+                }
+                m_accountResults.NumErrs = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("NumErrs"));
+            }
+        }
+
+        public int NumWarns
+        {
+            get { return m_accountResults.NumWarns; }
+            set
+            {
+                if (value == m_accountResults.NumWarns)
+                {
+                    return;
+                }
+                m_accountResults.NumWarns = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("NumWarns"));
+            }
+        }
+
+        public int CurrentAccountSelection
+        {
+            get { return m_accountResults.CurrentAccountSelection; }
+            set
+            {
+                if (value == m_accountResults.CurrentAccountSelection)
+                {
+                    return;
+                }
+                m_accountResults.CurrentAccountSelection = value;
+                OpenLogFileEnabled = (value != -1);
+                OnPropertyChanged(new PropertyChangedEventArgs("CurrentAccountSelection"));
+            }
+        }
+
+        private bool openLogFileEnabled;
+        public bool OpenLogFileEnabled
+        {
+            get { return openLogFileEnabled; }
+            set
+            {
+                openLogFileEnabled = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("OpenLogFileEnabled"));
+            }
+        }
+
+        private bool enableStop;
+        public bool EnableStop
+        {
+            get { return enableStop; }
+            set
+            {
+                enableStop = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("EnableStop"));
+            }
+        }
+    }
+}

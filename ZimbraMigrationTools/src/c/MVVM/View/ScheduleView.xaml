@@ -1,0 +1,91 @@
+﻿<UserControl 
+    x:Class="MVVM.View.ScheduleView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+    >
+    <Grid Name="ScheduleGrid">
+        <Grid.Background>
+            <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="80" Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MaxWidth="200" Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="30,45,0,0" HorizontalAlignment="Left" Name="textMigUsers" Text="Migrate these users" VerticalAlignment="Top"/>
+        <ListBox Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="30,-15,0,0" Name="lbSchedUsers" ItemsSource="{Binding SchedList}" MinHeight="200" MinWidth="150" HorizontalAlignment="Left" />
+        <!--
+        <TextBlock Grid.Row="0" Grid.Column="1" Margin="30,20,0,0" HorizontalAlignment="Left" Name="textTasks" Text="Task setup" VerticalAlignment="Top"/>
+        -->
+        <GroupBox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Margin="20,-20,0,0" Name="gbSched" VerticalAlignment="Top" MinHeight="205" MinWidth="200" Grid.RowSpan="3" Header="Schedule">
+            <Grid Name="gbGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition MinHeight="50" Height="Auto"></RowDefinition>
+                    <RowDefinition MinHeight="30" Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <!--
+                <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,30,0,0" HorizontalAlignment="Left" Name="textChoose" Text="Select a date and time" VerticalAlignment="Top"/>
+                <Grid Grid.Row="1" Grid.Column="0" Height="28" Width="195" Name="TimeGrid" Loaded="TimeGrid_Loaded">
+                </Grid>
+                -->
+                <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,20,0,0" HorizontalAlignment="Left" Name="textDate" Text="Date:" VerticalAlignment="Top"/>
+                <DatePicker Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Margin="50,5,0,0" Name="datePickerSched" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbTaskEnable, Path=IsChecked}"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Margin="10,10,0,0" HorizontalAlignment="Left" Name="textTime" Text="Time:" VerticalAlignment="Top"/>
+                <ComboBox Grid.Row="1"  Grid.Column="0" MaxWidth="35" FontSize="9" Margin="-20,5,0,0" Name="cbHour" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbTaskEnable, Path=IsChecked}">
+                    <ComboBoxItem Content="1" />
+                    <ComboBoxItem Content="2" />
+                    <ComboBoxItem Content="3" />
+                    <ComboBoxItem Content="4" />
+                    <ComboBoxItem Content="5" />
+                    <ComboBoxItem Content="6" />
+                    <ComboBoxItem Content="7" />
+                    <ComboBoxItem Content="8" />
+                    <ComboBoxItem Content="9" />
+                    <ComboBoxItem Content="10" />
+                    <ComboBoxItem Content="11" />
+                    <ComboBoxItem Content="12" />
+                </ComboBox>
+                <ComboBox Grid.Row="1"  Grid.Column="0" MaxWidth="35" FontSize="9" Margin="50,5,0,0" Name="cbMinute" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbTaskEnable, Path=IsChecked}">
+                    <ComboBoxItem Content="00" />
+                    <ComboBoxItem Content="10" />
+                    <ComboBoxItem Content="20" />
+                    <ComboBoxItem Content="30" />
+                    <ComboBoxItem Content="40" />
+                    <ComboBoxItem Content="50" />
+                </ComboBox>
+                <ComboBox Grid.Row="1"  Grid.Column="0" MaxWidth="35" FontSize="9" Margin="122,5,0,0" Name="cbAMPM" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbTaskEnable, Path=IsChecked}">
+                    <ComboBoxItem Content="AM" />
+                    <ComboBoxItem Content="PM" />
+                </ComboBox>
+                <RadioButton Grid.Row="2" Grid.Column="0" Margin="10,20,0,0" Name="rbTaskEnable" VerticalAlignment="Center" Content="Enable" IsChecked="False" HorizontalAlignment="Stretch" />
+                <RadioButton Grid.Row="2" Grid.Column="0" Margin="90,20,0,0" Name="rbTaskDisable" VerticalAlignment="Center" Content="Disable" IsChecked="True" HorizontalAlignment="Stretch" />
+                <Button Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left"  Margin="10,20,0,0" Name="sSaveButton" MinWidth="60" Command="{Binding SaveTaskCommand}" >Save Task</Button>
+                <Button Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left"  Margin="80,20,0,0" Name="tsButton" MinWidth="60" Command="{Binding GetTaskSchedulerCommand}"  >Task Scheduler...</Button>
+            </Grid>
+        </GroupBox>
+        <!--
+        <ProgressBar Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Height="18" Width="290" Margin="80,35,89,26" Name="pbMigrationS" Value="{Binding Path=PBValue}" HorizontalAlignment="Center" ></ProgressBar>
+        -->
+        <Separator Grid.Row="3" Grid.ColumnSpan="2" Margin="12,20,0,0" VerticalAlignment="Top"/>
+        <Grid Name="BottomGrid" Grid.Row="3" Grid.ColumnSpan="3">
+            <TextBlock Margin="26,35,0,0" Name="textBlockHelp" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Left">
+                       <Hyperlink Command="{Binding GetSchedHelpCommand}">Help</Hyperlink>
+            </TextBlock>
+            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,35,0,0" Content="Load" Name="loadSButton" Command="{Binding LoadCommand}"  />
+            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="200,35,0,0" Content="Save" Name="saveSButton" Command="{Binding SaveCommand}"  />
+            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="360,35,0,0" Content="Migrate" Name="migrateSButton" IsEnabled="{Binding Path=EnableMigrate}" Command="{Binding MigrateCommand}"  />
+        </Grid>
+    </Grid>
+</UserControl>
