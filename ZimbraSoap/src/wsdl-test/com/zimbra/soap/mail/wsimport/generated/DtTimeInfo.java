@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *       &lt;/sequence>
- *       &lt;attribute name="d" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="d" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="tz" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="u" type="{http://www.w3.org/2001/XMLSchema}long" />
  *     &lt;/restriction>
@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "dtTimeInfo")
 public class DtTimeInfo {
 
-    @XmlAttribute(required = true)
+    @XmlAttribute
     protected String d;
     @XmlAttribute
     protected String tz;

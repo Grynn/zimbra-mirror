@@ -19,9 +19,9 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="misspelled" type="{urn:zimbraMail}misSpelledWord" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="misspelled" type="{urn:zimbraMail}misspelling" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="available" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="available" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -35,9 +35,9 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class CheckSpellingResponse {
 
-    protected List<MisSpelledWord> misspelled;
-    @XmlAttribute
-    protected Boolean available;
+    protected List<Misspelling> misspelled;
+    @XmlAttribute(required = true)
+    protected boolean available;
 
     /**
      * Gets the value of the misspelled property.
@@ -57,13 +57,13 @@ public class CheckSpellingResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link MisSpelledWord }
+     * {@link Misspelling }
      * 
      * 
      */
-    public List<MisSpelledWord> getMisspelled() {
+    public List<Misspelling> getMisspelled() {
         if (misspelled == null) {
-            misspelled = new ArrayList<MisSpelledWord>();
+            misspelled = new ArrayList<Misspelling>();
         }
         return this.misspelled;
     }
@@ -71,24 +71,16 @@ public class CheckSpellingResponse {
     /**
      * Gets the value of the available property.
      * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
      */
-    public Boolean isAvailable() {
+    public boolean isAvailable() {
         return available;
     }
 
     /**
      * Sets the value of the available property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
      */
-    public void setAvailable(Boolean value) {
+    public void setAvailable(boolean value) {
         this.available = value;
     }
 

@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlSeeAlso({
     CalendarReply.class,
     CancelRuleInfo.class,
-    ExceptionRuleInfo.class
+    ExceptionRuleInfo.class,
+    CalReply.class
 })
 public class RecurIdInfo {
 

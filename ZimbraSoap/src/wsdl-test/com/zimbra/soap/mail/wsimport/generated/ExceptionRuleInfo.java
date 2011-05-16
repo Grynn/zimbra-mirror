@@ -15,10 +15,10 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="exceptionRuleInfo">
  *   &lt;complexContent>
  *     &lt;extension base="{urn:zimbraMail}recurIdInfo">
- *       &lt;all>
+ *       &lt;sequence>
  *         &lt;element name="add" type="{urn:zimbraMail}recurrenceInfo" minOccurs="0"/>
  *         &lt;element name="exclude" type="{urn:zimbraMail}recurrenceInfo" minOccurs="0"/>
- *       &lt;/all>
+ *       &lt;/sequence>
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>

@@ -1,6 +1,8 @@
 
 package com.zimbra.soap.mail.wsimport.generated;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -17,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="simpleRepeatingRule">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
+ *       &lt;sequence>
  *         &lt;element name="until" type="{urn:zimbraMail}dateTimeStringAttr" minOccurs="0"/>
  *         &lt;element name="count" type="{urn:zimbraMail}numAttr" minOccurs="0"/>
  *         &lt;element name="interval" type="{urn:zimbraMail}intervalRule" minOccurs="0"/>
@@ -31,8 +33,8 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="bymonth" type="{urn:zimbraMail}byMonthRule" minOccurs="0"/>
  *         &lt;element name="bysetpos" type="{urn:zimbraMail}bySetPosRule" minOccurs="0"/>
  *         &lt;element name="wkst" type="{urn:zimbraMail}wkstRule" minOccurs="0"/>
- *         &lt;element name="rule-x-name" type="{urn:zimbraMail}xNameRule" minOccurs="0"/>
- *       &lt;/all>
+ *         &lt;element name="rule-x-name" type="{urn:zimbraMail}xNameRule" maxOccurs="unbounded" minOccurs="0"/>
+ *       &lt;/sequence>
  *       &lt;attribute name="freq" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -43,7 +45,20 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "simpleRepeatingRule", propOrder = {
-
+    "until",
+    "count",
+    "interval",
+    "bysecond",
+    "byminute",
+    "byhour",
+    "byday",
+    "bymonthday",
+    "byyearday",
+    "byweekno",
+    "bymonth",
+    "bysetpos",
+    "wkst",
+    "ruleXName"
 })
 public class SimpleRepeatingRule {
 
@@ -61,7 +76,7 @@ public class SimpleRepeatingRule {
     protected BySetPosRule bysetpos;
     protected WkstRule wkst;
     @XmlElement(name = "rule-x-name")
-    protected XNameRule ruleXName;
+    protected List<XNameRule> ruleXName;
     @XmlAttribute(required = true)
     protected String freq;
 
@@ -380,25 +395,30 @@ public class SimpleRepeatingRule {
     /**
      * Gets the value of the ruleXName property.
      * 
-     * @return
-     *     possible object is
-     *     {@link XNameRule }
-     *     
-     */
-    public XNameRule getRuleXName() {
-        return ruleXName;
-    }
-
-    /**
-     * Sets the value of the ruleXName property.
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the ruleXName property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link XNameRule }
-     *     
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getRuleXName().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link XNameRule }
+     * 
+     * 
      */
-    public void setRuleXName(XNameRule value) {
-        this.ruleXName = value;
+    public List<XNameRule> getRuleXName() {
+        if (ruleXName == null) {
+            ruleXName = new ArrayList<XNameRule>();
+        }
+        return this.ruleXName;
     }
 
     /**

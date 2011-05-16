@@ -51,8 +51,8 @@ public class ConversationInfo {
     protected List<CustomMetadata> meta;
     protected String su;
     @XmlElements({
-        @XmlElement(name = "chat", type = ChatMessageInfo.class),
-        @XmlElement(name = "m")
+        @XmlElement(name = "m"),
+        @XmlElement(name = "chat", type = ChatMessageInfo.class)
     })
     protected List<MessageInfo> chatOrM;
     @XmlAttribute(required = true)
@@ -137,8 +137,8 @@ public class ConversationInfo {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link ChatMessageInfo }
      * {@link MessageInfo }
+     * {@link ChatMessageInfo }
      * 
      * 
      */

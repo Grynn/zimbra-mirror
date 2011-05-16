@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2010 Zimbra, Inc.
+ * Copyright (C) 2011 Zimbra, Inc.
  * 
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -15,26 +15,44 @@
 
 package com.zimbra.soap.mail.message;
 
+import com.google.common.base.Objects;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+
 import com.zimbra.common.soap.MailConstants;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name=MailConstants.E_EXPORT_CONTACTS_RESPONSE)
-@XmlType(propOrder = {MailConstants.E_CONTENT})
 public class ExportContactsResponse {
 
     @XmlElement(name=MailConstants.E_CONTENT, required=true)
-    private String content;
-    
-    public ExportContactsResponse() {
+    private final String content;
+
+    /**
+     * no-argument constructor wanted by JAXB
+     */
+    @SuppressWarnings("unused")
+    private ExportContactsResponse() {
+        this((String) null);
     }
-    
-    public String getContent() {
-        return content;
-    }
-    
-    public void setContent(String content) {
+
+    public ExportContactsResponse(String content) {
         this.content = content;
+    }
+
+    public String getContent() { return content; }
+
+    public Objects.ToStringHelper addToStringInfo(
+                Objects.ToStringHelper helper) {
+        return helper
+            .add("content", content);
+    }
+
+    @Override
+    public String toString() {
+        return addToStringInfo(Objects.toStringHelper(this))
+                .toString();
     }
 }

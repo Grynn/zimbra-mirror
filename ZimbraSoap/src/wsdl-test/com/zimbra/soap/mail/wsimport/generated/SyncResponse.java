@@ -56,17 +56,17 @@ public class SyncResponse {
 
     protected SyncDeletedInfo deleted;
     @XmlElements({
-        @XmlElement(name = "m", type = MessageSummary.class),
-        @XmlElement(name = "tag", type = TagInfo.class),
-        @XmlElement(name = "note", type = NoteInfo.class),
-        @XmlElement(name = "folder", type = Folder.class),
-        @XmlElement(name = "appt", type = CalendarItemInfo.class),
-        @XmlElement(name = "cn", type = ContactInfo.class),
-        @XmlElement(name = "c", type = ConversationSummary.class),
-        @XmlElement(name = "chat", type = ChatSummary.class),
-        @XmlElement(name = "doc", type = DocumentInfo.class),
         @XmlElement(name = "task", type = TaskItemInfo.class),
-        @XmlElement(name = "w", type = CommonDocumentInfo.class)
+        @XmlElement(name = "appt", type = CalendarItemInfo.class),
+        @XmlElement(name = "doc", type = DocumentInfo.class),
+        @XmlElement(name = "folder", type = Folder.class),
+        @XmlElement(name = "cn", type = ContactInfo.class),
+        @XmlElement(name = "m", type = MessageSummary.class),
+        @XmlElement(name = "c", type = ConversationSummary.class),
+        @XmlElement(name = "w", type = CommonDocumentInfo.class),
+        @XmlElement(name = "note", type = NoteInfo.class),
+        @XmlElement(name = "tag", type = TagInfo.class),
+        @XmlElement(name = "chat", type = ChatSummary.class)
     })
     protected List<Object> folderOrTagOrNote;
     @XmlAttribute(required = true)
@@ -120,17 +120,17 @@ public class SyncResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link MessageSummary }
-     * {@link TagInfo }
-     * {@link NoteInfo }
-     * {@link Folder }
-     * {@link CalendarItemInfo }
-     * {@link ContactInfo }
-     * {@link ConversationSummary }
-     * {@link ChatSummary }
-     * {@link DocumentInfo }
      * {@link TaskItemInfo }
+     * {@link CalendarItemInfo }
+     * {@link DocumentInfo }
+     * {@link Folder }
+     * {@link ContactInfo }
+     * {@link MessageSummary }
+     * {@link ConversationSummary }
      * {@link CommonDocumentInfo }
+     * {@link NoteInfo }
+     * {@link TagInfo }
+     * {@link ChatSummary }
      * 
      * 
      */

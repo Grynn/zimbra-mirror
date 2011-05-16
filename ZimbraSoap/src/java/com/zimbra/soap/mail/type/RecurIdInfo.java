@@ -40,7 +40,6 @@ public class RecurIdInfo {
     /**
      * no-argument constructor wanted by JAXB
      */
-    @SuppressWarnings("unused")
     protected RecurIdInfo() {
         this(-1, (String) null);
     }
@@ -57,13 +56,18 @@ public class RecurIdInfo {
     public String getTimezone() { return timezone; }
     public String getRecurIdZ() { return recurIdZ; }
 
-    @Override
-    public String toString() {
-        return Objects.toStringHelper(this)
+    public Objects.ToStringHelper addToStringInfo(
+                Objects.ToStringHelper helper) {
+        return helper
             .add("recurrenceRangeType", recurrenceRangeType)
             .add("recurrenceId", recurrenceId)
             .add("timezone", timezone)
-            .add("recurIdZ", recurIdZ)
-            .toString();
+            .add("recurIdZ", recurIdZ);
+    }
+
+    @Override
+    public String toString() {
+        return addToStringInfo(Objects.toStringHelper(this))
+                .toString();
     }
 }

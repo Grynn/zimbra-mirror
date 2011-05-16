@@ -25,10 +25,10 @@ import com.zimbra.common.soap.MailConstants;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class GeoInfo {
 
-    @XmlAttribute(name=MailConstants.A_CAL_GEO_LATITUDE, required=true)
+    @XmlAttribute(name=MailConstants.A_CAL_GEO_LATITUDE, required=false)
     private final String latitude;
 
-    @XmlAttribute(name=MailConstants.A_CAL_GEO_LONGITUDE, required=true)
+    @XmlAttribute(name=MailConstants.A_CAL_GEO_LONGITUDE, required=false)
     private final String longitude;
 
     /**

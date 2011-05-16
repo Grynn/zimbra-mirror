@@ -6,6 +6,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -39,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="method" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="compNum" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="rsvp" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *       &lt;attribute name="priority" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="priority" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="loc" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="percentComplete" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -91,6 +92,9 @@ import javax.xml.bind.annotation.XmlType;
     "e",
     "dur"
 })
+@XmlSeeAlso({
+    InvitationInfo.class
+})
 public class InviteComponent {
 
     protected List<String> category;
@@ -115,8 +119,8 @@ public class InviteComponent {
     protected int compNum;
     @XmlAttribute(required = true)
     protected boolean rsvp;
-    @XmlAttribute(required = true)
-    protected boolean priority;
+    @XmlAttribute
+    protected String priority;
     @XmlAttribute
     protected String name;
     @XmlAttribute
@@ -641,16 +645,24 @@ public class InviteComponent {
     /**
      * Gets the value of the priority property.
      * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
-    public boolean isPriority() {
+    public String getPriority() {
         return priority;
     }
 
     /**
      * Sets the value of the priority property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
-    public void setPriority(boolean value) {
+    public void setPriority(String value) {
         this.priority = value;
     }
 

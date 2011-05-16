@@ -19,15 +19,11 @@ import com.google.common.base.Objects;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
 
 import com.zimbra.common.soap.MailConstants;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = {})
 public class ExceptionRuleInfo extends RecurIdInfo implements RecurRuleBase {
-
-    // TODO:need to update constructor too.
 
     @XmlElement(name=MailConstants.E_CAL_ADD, required=false)
     private RecurrenceInfo add;
@@ -35,16 +31,7 @@ public class ExceptionRuleInfo extends RecurIdInfo implements RecurRuleBase {
     @XmlElement(name=MailConstants.E_CAL_EXCLUDE, required=false)
     private RecurrenceInfo exclude;
 
-    /**
-     * no-argument constructor wanted by JAXB
-     */
-    @SuppressWarnings("unused")
-    private ExceptionRuleInfo() {
-        super();
-    }
-
-    public ExceptionRuleInfo(int recurrenceRangeType, String recurrenceId) {
-        super(recurrenceRangeType, recurrenceId);
+    public ExceptionRuleInfo() {
     }
 
     public void setAdd(RecurrenceInfo add) { this.add = add; }
@@ -52,11 +39,17 @@ public class ExceptionRuleInfo extends RecurIdInfo implements RecurRuleBase {
     public RecurrenceInfo getAdd() { return add; }
     public RecurrenceInfo getExclude() { return exclude; }
 
+    public Objects.ToStringHelper addToStringInfo(
+                Objects.ToStringHelper helper) {
+        helper = super.addToStringInfo(helper);
+        return helper
+            .add("add", add)
+            .add("exclude", exclude);
+    }
+
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
-            .add("add", add)
-            .add("exclude", exclude)
-            .toString();
+        return addToStringInfo(Objects.toStringHelper(this))
+                .toString();
     }
 }

@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  *           &lt;element name="exclude" type="{urn:zimbraMail}excludeRecurrenceInfo"/>
  *           &lt;element name="except" type="{urn:zimbraMail}exceptionRuleInfo"/>
  *           &lt;element name="cancel" type="{urn:zimbraMail}cancelRuleInfo"/>
+ *           &lt;element name="dates" type="{urn:zimbraMail}singleDates"/>
  *           &lt;element name="rule" type="{urn:zimbraMail}simpleRepeatingRule"/>
  *         &lt;/choice>
  *       &lt;/sequence>
@@ -48,10 +49,11 @@ public class RecurrenceInfo {
 
     @XmlElements({
         @XmlElement(name = "except", type = ExceptionRuleInfo.class),
-        @XmlElement(name = "exclude", type = ExcludeRecurrenceInfo.class),
-        @XmlElement(name = "cancel", type = CancelRuleInfo.class),
         @XmlElement(name = "add", type = AddRecurrenceInfo.class),
-        @XmlElement(name = "rule", type = SimpleRepeatingRule.class)
+        @XmlElement(name = "rule", type = SimpleRepeatingRule.class),
+        @XmlElement(name = "exclude", type = ExcludeRecurrenceInfo.class),
+        @XmlElement(name = "dates", type = SingleDates.class),
+        @XmlElement(name = "cancel", type = CancelRuleInfo.class)
     })
     protected List<Object> addOrExcludeOrExcept;
 
@@ -74,10 +76,11 @@ public class RecurrenceInfo {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link ExceptionRuleInfo }
-     * {@link ExcludeRecurrenceInfo }
-     * {@link CancelRuleInfo }
      * {@link AddRecurrenceInfo }
      * {@link SimpleRepeatingRule }
+     * {@link ExcludeRecurrenceInfo }
+     * {@link SingleDates }
+     * {@link CancelRuleInfo }
      * 
      * 
      */
