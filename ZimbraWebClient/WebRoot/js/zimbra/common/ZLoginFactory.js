@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Web Client
- * Copyright (C) 2006, 2007, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2006, 2007, 2009, 2010, 2011 Zimbra, Inc.
  * 
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -24,6 +24,7 @@ ZLoginFactory.NEW_PASSWORD_TR_ID = "ZLoginNewPassword1Tr";
 ZLoginFactory.PASSWORD_CONFIRM_TR_ID = "ZLoginNewPassword2Tr";
 ZLoginFactory.PASSWORD_CONFIRM_ID = "newpass2";
 ZLoginFactory.LOGIN_BUTTON_ID = "ZLoginButton";
+ZLoginFactory.MORE_ID = "ZLoginMore";
 
 // Constants for tabbing through the login controls.
 ZLoginFactory.TEXT_TYPE = 0;
@@ -73,6 +74,9 @@ function(msgs) {
 		showUserField : false,
 		userNameMsg : msgs["username"] ? msgs["username"] + ':' : "",
 		
+		showMoreField : false,
+                moreMsg : msgs["more"] || "",
+
 		showPasswordField : false,
 		passwordMsg : msgs["password"] ? msgs["password"] + ':' : "",
 		
@@ -125,6 +129,10 @@ ZLoginFactory.showForm = function ()				{												this.show("ZLoginFormPanel"
 ZLoginFactory.hideForm = function () 				{												this.hide("ZLoginFormPanel");	}
 ZLoginFactory.getForm = function () 				{												return this.get("ZLoginFormPanel");	}
 
+ZLoginFactory.showMoreField = function (name)           {       this.setValue(ZLoginFactory.MORE_ID, name);                             this.show(ZLoginFactory.MORE_ID);       }
+ZLoginFactory.hideMoreField = function ()                       {                                                                                               this.hide(ZLoginFactory.MORE_ID);       }
+ZLoginFactory.getMoreField = function ()                        {                                                                                               return this.get(ZLoginFactory.MORE_ID); }
+
 ZLoginFactory.showUserField = function (name)		{	this.setValue(ZLoginFactory.USER_ID, name);				this.show(ZLoginFactory.USER_ID);	}
 ZLoginFactory.hideUserField = function () 			{												this.hide(ZLoginFactory.USER_ID);	}
 ZLoginFactory.getUserField = function () 			{												return this.get(ZLoginFactory.USER_ID);	}
@@ -164,6 +172,9 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
 				"</div>",
 				"<form name='loginForm'>",
 		 		"<table class='form' ", (params.showForm ? " " : "style='display:none'"),">",
+		 "<tr ", (params.showMoreField ? " " : "style='display:none'"), ">",
+                                        "<td><label for='", ZLoginFactory.MORE_ID, "'>",params.moreMsg,"</label></td>",
+		"</tr>",
                 "<tr ", (params.showUserField ? " " : "style='display:none'"), ">",
 		 			"<td><label for='", ZLoginFactory.USER_ID, "'>",params.userNameMsg,"</label></td>",
 		 			"<td><input id='", ZLoginFactory.USER_ID, "' name='", ZLoginFactory.USER_ID, "' class='zLoginField' type='text' size='40'  autocomplete=OFF/></td>",
