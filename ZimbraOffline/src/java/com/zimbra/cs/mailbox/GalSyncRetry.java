@@ -50,11 +50,13 @@ public final class GalSyncRetry {
         return this.mboxRetryMap.get(galMbox);
     }
 
-    public static void checkpoint(ZcsMailbox mbox, Mailbox galMbox, List<String> retryContactIds) throws ServiceException {
+    public static void checkpoint(ZcsMailbox mbox, Mailbox galMbox, List<String> retryContactIds)
+    throws ServiceException {
         LazyHolder.instance.getRetry(mbox, galMbox).checkpoint(retryContactIds);
     }
 
-    public static void retry(ZcsMailbox mbox, Mailbox galMbox, List<String> retryContactIds) throws ServiceException, IOException {
+    public static void retry(ZcsMailbox mbox, Mailbox galMbox, List<String> retryContactIds)
+    throws ServiceException, IOException {
         LazyHolder.instance.getRetry(mbox, galMbox).retry(retryContactIds);
     }
 
@@ -123,18 +125,26 @@ public final class GalSyncRetry {
         }
 
         private boolean needsRetryNow() {
-            return (((System.currentTimeMillis() - this.lastRetry) / 1000) > OfflineLC.zdesktop_gal_sync_retry_interval_secs.longValue());
+            return (((System.currentTimeMillis() - this.lastRetry) / 1000)
+                    > OfflineLC.zdesktop_gal_sync_retry_interval_secs.longValue());
         }
 
         void retry(List<String> retryIds) throws ServiceException, IOException {
             if (needsRetry()) {
                 if (needsRetryNow()) {
-                    GalSyncUtil.fetchContacts(0L, mbox, galMbox, context, syncFolder, getRetryItems(), false, ds, retryIds, "", -1, false);
-                    clearRetryItems();
-                    addRetryIds(retryIds);
-                    checkpoint();
-                    this.lastRetry = System.currentTimeMillis();
-                    OfflineLog.offline.info("Offline GAL sync retry finished");
+                    if (!retryIds.isEmpty()) {
+                        OfflineLog.offline.info("Offline GAL sync retry " + retryIds.size() + " items");
+                        String galAcctId = retryIds.get(0).split(":")[0];
+                        GalSyncUtil.fetchContacts(mbox, galMbox, context, syncFolder, getRetryItems(),
+                                false, ds, retryIds, "", galAcctId);
+                        clearRetryItems();
+                        addRetryIds(retryIds);
+                        checkpoint();
+                        this.lastRetry = System.currentTimeMillis();
+                        OfflineLog.offline.info("Offline GAL sync retry finished");
+                    } else {
+                        OfflineLog.offline.info("Offline GAL sync retry passed, no retry items");
+                    }
                 } else {
                     OfflineLog.offline.info("Offline GAL sync retry skipped, not yet time to do it");
                 }

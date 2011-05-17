@@ -230,36 +230,37 @@ public final class GalSyncUtil {
         return list;
     }
     
-    static void createContact(Mailbox mbox, OperationContext ctxt, int syncFolder, DataSource ds, ParsedContact contact, String id, String logstr, final boolean isBatch) throws ServiceException {
-        Contact c = mbox.createContact(ctxt, contact, syncFolder, null, isBatch);
-        DbDataSource.addMapping(ds, new DataSourceItem(0, c.getId(), id, null), isBatch);
+    static void createContact(Mailbox mbox, OperationContext ctxt, int syncFolder, DataSource ds, ParsedContact contact, String id, String logstr)
+        throws ServiceException {
+        Contact c = mbox.createContact(ctxt, contact, syncFolder, null);
+        DbDataSource.addMapping(ds, new DataSourceItem(0, c.getId(), id, null), true);
         OfflineLog.offline.debug("Offline GAL contact created: " + logstr);
     }
     
-    private static void saveParsedContact(Mailbox mbox, OperationContext ctxt, int syncFolder, String id, ParsedContact contact, String logstr, boolean isFullSync, DataSource ds) throws ServiceException {
+    private static void saveParsedContact(Mailbox mbox, OperationContext ctxt, int syncFolder, String id, ParsedContact contact, String logstr, boolean isFullSync, DataSource ds)
+        throws ServiceException {
         if (isFullSync) {
-            createContact(mbox, ctxt, syncFolder, ds, contact, id, logstr, true);
+            createContact(mbox, ctxt, syncFolder, ds, contact, id, logstr);
         } else {
             int itemId = GalSyncUtil.findContact(id, ds);
             if (itemId > 0) {
                 try {
-                    mbox.modifyContact(ctxt, itemId, contact, true);
+                    mbox.modifyContact(ctxt, itemId, contact);
                     OfflineLog.offline.debug("Offline GAL contact modified: " + logstr);
                 } catch (MailServiceException.NoSuchItemException e) {
                     OfflineLog.offline.warn("Offline GAL modify error - no such contact: " + logstr + " itemId=" + Integer.toString(itemId));
                 }
             } else {
-                createContact(mbox, ctxt, syncFolder, ds, contact, id, logstr, true);
+                createContact(mbox, ctxt, syncFolder, ds, contact, id, logstr);
             }
         }
     }
 
-    public static long fetchContacts(long networkTime, ZcsMailbox mbox, Mailbox galMbox, OperationContext ctxt, int syncFolder, String reqIds, boolean isFullSync, DataSource ds, List<String> retryContactIds, String token, int group, boolean isCheckpointing) throws ServiceException, IOException {
+    public static void fetchContacts(ZcsMailbox mbox, Mailbox galMbox, OperationContext ctxt, int syncFolder, String reqIds, boolean isFullSync, DataSource ds, List<String> retryContactIds,
+            String token, String galAcctId) throws ServiceException, IOException {
         XMLElement req = new XMLElement(MailConstants.GET_CONTACTS_REQUEST);
         req.addElement(AdminConstants.E_CN).addAttribute(AccountConstants.A_ID, reqIds);
-        long start = System.currentTimeMillis();
         Element response = mbox.sendRequest(req, true, true, OfflineLC.zdesktop_gal_sync_request_timeout.intValue(), SoapProtocol.Soap12);
-        networkTime += System.currentTimeMillis() - start;
 
         List<Element> contacts = response.listElements(MailConstants.E_CONTACT);
         List<String> ids = new ArrayList<String>();
@@ -276,8 +277,8 @@ public final class GalSyncUtil {
                         saveParsedContact(galMbox, ctxt, syncFolder, ids.get(index++), contact, getContactLogStr(contact), isFullSync, ds);
                     }
 
-                    if (isCheckpointing) {
-                        GalSyncCheckpointUtil.checkpoint(galMbox, token, group);
+                    if (isFullSync) {
+                        GalSyncCheckpointUtil.checkpoint(galMbox, token, galAcctId, reqIds);
                     }
                     success = true;
                 } finally {
@@ -285,7 +286,5 @@ public final class GalSyncUtil {
                 }
             }
         }
-
-        return networkTime;
     }
 }
