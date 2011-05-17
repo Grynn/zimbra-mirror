@@ -49,7 +49,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 	public void DeleteContactGroup_01() throws HarnessException {
 
 		// Create a contact group via Soap then select
-		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app);
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app,Action.A_LEFTCLICK);
 	  
     
         //delete contact group by click Delete button on toolbar
@@ -65,11 +65,27 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 	public void DeleteContactGroup_02() throws HarnessException {
 
 		// Create a contact group via Soap then select
-		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app);
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app,Action.A_LEFTCLICK);
 	  
     
         //delete contact group by click Delete on Context menu
         app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_DELETE, group.fileAs);
+       
+        //verify contact group deleted
+        VerifyContactGroupDeleted(group);
+           
+   	}
+
+	@Test(	description = "Delete a contact group selected by checkbox by click Delete button on toolbar",
+			groups = { "functional" })
+	public void DeleteContactGroup_03() throws HarnessException {
+
+		// Create a contact group via Soap then select
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app,Action.A_CHECKBOX);
+	  
+    
+        //delete contact group by click Delete button on toolbar
+        app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);
        
         //verify contact group deleted
         VerifyContactGroupDeleted(group);

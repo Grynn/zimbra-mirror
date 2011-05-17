@@ -6,11 +6,9 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.Toaster;
 
 
 public class DeleteContact extends AjaxCommonTest  {
@@ -24,43 +22,13 @@ public class DeleteContact extends AjaxCommonTest  {
 		
 	}
 	
-	@Test(	description = "Delete a contact item",
-			groups = { "smoke" })
-	public void DeleteContact_01() throws HarnessException {
+	private void VerifyContactDeleted(ContactItem contactItem) throws HarnessException{
+		  //verify toasted message 1 contact moved to Trash
+		String expectedMsg = "1 contact moved to Trash";
+	    ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
+			        expectedMsg , "Verify toast message '" + expectedMsg + "'");
 
-		 // Create a contact 
-		ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
- 
-        app.zGetActiveAccount().soapSend(
-                "<CreateContactRequest xmlns='urn:zimbraMail'>" +
-                "<cn fileAsStr='" + contactItem.lastName + "," + contactItem.firstName + "' >" +
-                "<a n='firstName'>" + contactItem.firstName +"</a>" +
-                "<a n='lastName'>" + contactItem.lastName +"</a>" +
-                "<a n='email'>" + contactItem.email + "</a>" +
-                "</cn>" +
-                "</CreateContactRequest>");
-
-        app.zGetActiveAccount().soapSelectNode("//mail:CreateContactResponse", 1);
-        
-        // Refresh the view, to pick up the new contact
-        FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
-        GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-        app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
-        
-        // Select the item
-        app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contactItem.fileAs);
-
-
-        //delete contact
-        app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);
-       
-        
-        //verify toasted message 1 contact moved to Trash
-        Toaster toast = app.zPageMain.zGetToaster();
-        String toastMsg = toast.zGetToastMessage();
-        ZAssert.assertStringContains(toastMsg, "1 contact moved to Trash", "Verify toast message '1 contact moved to Trash'");
-
-        //verify deleted contact not displayed
+	      //verify deleted contact not displayed
         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
  	           
 		boolean isFileAsEqual=false;
@@ -72,9 +40,36 @@ public class DeleteContact extends AjaxCommonTest  {
 		}
 		
         ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") deleted");
-        
+    
+	}
+	@Test(	description = "Delete a contact item",
+			groups = { "smoke" })
+	public void DeleteContact_01() throws HarnessException {
+
+		// Create a contact via soap 
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
  
-   
+        //delete contact
+        app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);
+       
+        //verify contact deleted
+        VerifyContactDeleted(contactItem);    
+   	}
+
+	@Test(	description = "Delete a contact item selected with checkbox",
+			groups = { "functional" })
+	public void DeleteContact_02() throws HarnessException {
+
+		// Create a contact via soap 
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_CHECKBOX);
+ 
+
+        //delete contact
+        app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);
+       
+        
+        //verify contact deleted
+        VerifyContactDeleted(contactItem);       
    	}
 
 }

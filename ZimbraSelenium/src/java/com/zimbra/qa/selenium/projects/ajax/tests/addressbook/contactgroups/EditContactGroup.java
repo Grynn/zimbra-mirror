@@ -78,7 +78,7 @@ public class EditContactGroup extends AjaxCommonTest  {
 	public void EditContactGroup_01() throws HarnessException {
 		
 		// Create a contact group via Soap then select
-		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app);
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
 		
 		//Click Edit on Toolbar button	
         FormContactGroupNew formContactGroupNew = (FormContactGroupNew) app.zPageAddressbook.zToolbarPressButton(Button.B_EDIT);
@@ -93,7 +93,7 @@ public class EditContactGroup extends AjaxCommonTest  {
 	public void EditContactGroup_02() throws HarnessException {
 		
 		// Create a contact group via Soap then select
-		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app);
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
 		
 		//Click Right-Click, then Edit Group on Context Menu 	
         FormContactGroupNew formContactGroupNew = (FormContactGroupNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_EDIT, group.fileAs);        

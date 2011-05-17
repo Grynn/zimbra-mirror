@@ -63,7 +63,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		String tagid = GetTagid(tagName);
 		
 		// Create a contact group via Soap then select
-		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, tagid);
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK, tagid);
 	  
     	// Untag it by click Tag->Remove Tag on toolbar 
 		app.zPageAddressbook.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_REMOVETAG);
@@ -81,7 +81,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		String tagid = GetTagid(tagName);
 		
 		// Create a contact group via Soap then select
-		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, tagid);
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK, tagid);
 	  
     	// Untag it by click Tag->Remove Tag on context menu
 		app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_TAG, Button.O_TAG_REMOVETAG , group.fileAs);

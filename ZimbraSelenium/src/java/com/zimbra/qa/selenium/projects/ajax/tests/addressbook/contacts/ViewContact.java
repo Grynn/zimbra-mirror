@@ -48,7 +48,7 @@ public class ViewContact extends AjaxCommonTest  {
 	public void DisplayContact_01() throws HarnessException {
 		         		
 	    // Create a contact via Soap then select
-		ContactItem contact = app.zPageAddressbook.createUsingSOAPSelectContact(app);
+		ContactItem contact = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
 	
 	    // Select the contact 
 		DisplayContact contactView = (DisplayContact) app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contact.fileAs);
