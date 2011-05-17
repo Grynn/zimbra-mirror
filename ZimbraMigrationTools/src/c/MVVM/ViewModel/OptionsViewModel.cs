@@ -57,23 +57,31 @@ namespace MVVM.ViewModel
         {
             System.Xml.Serialization.XmlSerializer reader =
            new System.Xml.Serialization.XmlSerializer(typeof(Config));
-            System.IO.StreamReader fileRead = new System.IO.StreamReader(
-               @"ZimbraAdminOverView.xml");
-            Config Z11 = new Config();
-            Z11 = (Config)reader.Deserialize(fileRead);
-            ImportMailOptions = Z11.importOptions.Mail;
-            ImportCalendarOptions = Z11.importOptions.Calendar;
-            ImportContactOptions = Z11.importOptions.Contacts;
-            ImportDeletedItemOptions = Z11.importOptions.DeletedItems;
-            ImportJunkOptions = Z11.importOptions.Junk;
-            ImportTaskOptions = Z11.importOptions.Tasks;
-            ImportSentOptions = Z11.importOptions.Sent;
-            ImportRuleOptions = Z11.importOptions.Rules;
+            if (File.Exists(@"ZimbraAdminOverView.xml"))
+            {
+                System.IO.StreamReader fileRead = new System.IO.StreamReader(
+                   @"ZimbraAdminOverView.xml");
+                Config Z11 = new Config();
+                Z11 = (Config)reader.Deserialize(fileRead);
+                ImportMailOptions = Z11.importOptions.Mail;
+                ImportCalendarOptions = Z11.importOptions.Calendar;
+                ImportContactOptions = Z11.importOptions.Contacts;
+                ImportDeletedItemOptions = Z11.importOptions.DeletedItems;
+                ImportJunkOptions = Z11.importOptions.Junk;
+                ImportTaskOptions = Z11.importOptions.Tasks;
+                ImportSentOptions = Z11.importOptions.Sent;
+                ImportRuleOptions = Z11.importOptions.Rules;
+                MessageBox.Show("Options information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+            else
+            {
+                MessageBox.Show("There is no options configuration stored.Please enter some options info", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
 
 
            
-            MessageBox.Show("Options information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+           // MessageBox.Show("Options information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
 
         private void Save()

@@ -63,24 +63,30 @@ namespace MVVM.ViewModel
         {
             System.Xml.Serialization.XmlSerializer reader =
             new System.Xml.Serialization.XmlSerializer(typeof(Config));
-            System.IO.StreamReader fileRead = new System.IO.StreamReader(
-               @"ZimbraAdminOverView.xml");
-            Config Z11 = new Config();
-            Z11 = (Config)reader.Deserialize(fileRead);
-            MailServerHostName = Z11.mailServer.Hostname;
-            ZimbraServerHostName = Z11.zimbraServer.HostName;
-            ZimbraPort = Z11.zimbraServer.Port;
-            ZimbraAdmin = Z11.zimbraServer.AdminAccount;
-            ZimbraAdminPasswd = Z11.zimbraServer.AdminPassword;
-            ZimbraDomain = Z11.zimbraServer.Domain;
-            OutlookProfile = Z11.mailServer.ProfileName;
+            if (File.Exists(@"ZimbraAdminOverView.xml"))
+            {
+
+                System.IO.StreamReader fileRead = new System.IO.StreamReader(
+                       @"ZimbraAdminOverView.xml");
+                Config Z11 = new Config();
+                Z11 = (Config)reader.Deserialize(fileRead);
+                MailServerHostName = Z11.mailServer.Hostname;
+                ZimbraServerHostName = Z11.zimbraServer.HostName;
+                ZimbraPort = Z11.zimbraServer.Port;
+                ZimbraAdmin = Z11.zimbraServer.AdminAccount;
+                ZimbraAdminPasswd = Z11.zimbraServer.AdminPassword;
+                ZimbraDomain = Z11.zimbraServer.Domain;
+                OutlookProfile = Z11.mailServer.ProfileName;
+                MessageBox.Show("Configuration information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+            else
+            {
+
+                MessageBox.Show("There is no configuration stored.Please enter some configuration info", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+           
             
-
-
-
-            
-            MessageBox.Show("Configuration information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-        }
+          }
 
         public ICommand SaveCommand
         {
