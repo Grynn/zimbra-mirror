@@ -344,7 +344,7 @@ public class DirectorySync {
         attrs.putAll(zgi.getAttrs());
         attrs.putAll(zgi.getPrefAttrs());
 
-        attrs = diffAttributes(acct, attrs);
+        attrs = diffAttributes(acct, acct, attrs);
 
         attrs.put(Provisioning.A_zimbraMailQuota, "0"); //legacy account correction in case an old account sync down server quota
         attrs.put(OfflineProvisioning.A_offlineRemoteServerVersion, zgi.getVersion()); //make sure always update if different
@@ -404,7 +404,7 @@ public class DirectorySync {
             Account localAccount = prov.getLocalAccount();
             //TODO: right now we're assuming zimletAttr has a single key (zimbraZimletUserProperties)
             //if that changes later may need to have diffattributes only delete from a subset of all acct attrs
-            zimletAttrs = diffAttributes(localAccount, zimletAttrs, false); //we're only looking at zimlet attrs; dont delete others
+            zimletAttrs = diffAttributes(localAccount, localAccount, zimletAttrs, false); //we're only looking at zimlet attrs; dont delete others
             if (!zimletAttrs.isEmpty()) {
                 OfflineLog.offline.info("Syncing zimlet properties from account "+acct.getName());
                 prov.modifyAttrs(localAccount, zimletAttrs, false, true, false);
@@ -435,12 +435,12 @@ public class DirectorySync {
         return attrs;
     }
 
-    private static Map<String, Object> diffAttributes(Entry e, Map<String, Object> attrs) {
-        return diffAttributes(e, attrs, true);
+    private static Map<String, Object> diffAttributes(Account acct, Entry e, Map<String, Object> attrs) {
+        return diffAttributes(acct, e, attrs, true);
     }
     
     @SuppressWarnings("unchecked")
-    private static Map<String, Object> diffAttributes(Entry e, Map<String, Object> attrs, boolean delete) {
+    private static Map<String, Object> diffAttributes(Account acct, Entry e, Map<String, Object> attrs, boolean delete) {
         // write over all unchanged account attributes
         Set<String> modified = e.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
         Map<String, Object> changes = new HashMap<String, Object>();
@@ -469,9 +469,20 @@ public class DirectorySync {
             Set<String> existing = new HashSet<String>(e.getAttrs().keySet());
             existing.removeAll(modified);
             existing.removeAll(changes.keySet());
-            for (String key : existing)
-                if (!key.startsWith("offline") && !OfflineProvisioning.sOfflineAttributes.contains(key) && !key.equals(Provisioning.A_zimbraMailSieveScript) && !key.equals(Provisioning.A_zimbraMailOutgoingSieveScript))
-                    changes.put(key, null);
+            String remoteVersion = ((OfflineAccount) acct).getRemoteServerVersion().toString();
+            for (String key : existing) {
+                if (!key.startsWith("offline") && !OfflineProvisioning.sOfflineAttributes.contains(key) && !key.equals(Provisioning.A_zimbraMailSieveScript) && !key.equals(Provisioning.A_zimbraMailOutgoingSieveScript)) {
+                    try {
+                        if (AttributeManager.getInstance().inVersion(key, remoteVersion)) {
+                            changes.put(key, null);
+                        } else {
+                            OfflineLog.offline.debug("retaining local value for missing remote attribute: %s",key);
+                        }
+                    } catch (ServiceException se) {
+                        OfflineLog.offline.error("Unable to determine in key %s is in ZCS %s",key,remoteVersion);
+                    }
+                } 
+            }
         }
         return changes;
     }
@@ -512,7 +523,7 @@ public class DirectorySync {
                 OfflineLog.offline.debug("dsync: created identity: " + acct.getName() + '/' + ident.getName());
             }
         } else {
-            prov.modifyIdentity(acct, ident.getName(), diffAttributes(ident, zident.getAttrs()), false);
+            prov.modifyIdentity(acct, ident.getName(), diffAttributes(acct, ident, zident.getAttrs()), false);
             prov.reload(ident);
             OfflineLog.offline.debug("dsync: updated identity: " + acct.getName() + '/' + ident.getName());
         }
@@ -550,7 +561,7 @@ public class DirectorySync {
                 OfflineLog.offline.debug("dsync: created signature: " + acct.getName() + '/' + signature.getName());
             }
         } else {
-            prov.modifySignature(acct, signature.getId(), diffAttributes(signature, zsig.getAttrs()), false);
+            prov.modifySignature(acct, signature.getId(), diffAttributes(acct, signature, zsig.getAttrs()), false);
             prov.reload(signature);
             OfflineLog.offline.debug("dsync: updated signature: " + acct.getName() + '/' + signature.getName());
         }
