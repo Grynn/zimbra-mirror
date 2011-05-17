@@ -90,7 +90,7 @@ namespace MVVM.ViewModel
                     if (substr == ".csv")
                     {
                         bCSV = true;
-                        try
+                        /*try
                         {
                             string names = File.ReadAllText(fDialog.FileName);
                             string[] nameTokens = names.Split(',');
@@ -103,6 +103,53 @@ namespace MVVM.ViewModel
                         catch (IOException ex)
                         {
                             MessageBox.Show(ex.Message, "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                        }*/
+                        List<string[]> parsedData = new List<string[]>();
+                        try
+                        {
+                            if (File.Exists(fDialog.FileName))
+                            {
+                                using (StreamReader readFile = new StreamReader(fDialog.FileName))
+                                {
+                                    string line;
+                                    string[] row;
+
+                                    while ((line = readFile.ReadLine()) != null)
+                                    {
+                                        row = line.Split(',');
+                                        parsedData.Add(row);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show("There is no userinformation stored.Please enter some user info", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+
+                       // for (int i = 1; i < parsedData.Count; i++)
+                        {
+                            string[] strres = new string[parsedData.Count];
+                            Users tempuser = new Users();
+
+                            for (int j = 1; j < parsedData.Count; j++)
+                            {
+                                strres = parsedData[j];
+                               
+                                tempuser.UserName = strres[0];
+                                tempuser.MappedName = strres[1];
+                                tempuser.ChangePWD = Convert.ToBoolean(strres[2]);
+                                tempuser.PWDdefault = strres[3];
+                                //string result = tempuser.UserName + "," + tempuser.MappedName +"," + tempuser.ChangePWD + "," + tempuser.PWDdefault;
+                                string result = tempuser.UserName + "," + tempuser.MappedName;
+                                UsersList.Add(result);
+                            }
+
+
                         }
                         scheduleViewModel.EnableMigrate = (scheduleViewModel.SchedList.Count > 0);
                     }
@@ -162,6 +209,28 @@ namespace MVVM.ViewModel
 
         private void Save()
         {
+            List<Users> ListofUsers = new List<Users>();
+            for (int i = 0; i < UsersList.Count; i++)
+            {
+                string users = UsersList[i];
+
+                string[] nameTokens = users.Split(',');
+
+                Users tempUser = new Users();
+                tempUser.UserName = nameTokens.GetValue(0).ToString();
+                tempUser.MappedName = nameTokens.GetValue(1).ToString();
+                //tempUser.ChangePWD = Convert.ToBoolean(nameTokens.GetValue(2).ToString());
+               // tempUser.PWDdefault = nameTokens.GetValue(3).ToString();
+
+                ListofUsers.Add(tempUser);
+
+
+
+            }
+
+            string resultcsv = Users.ToCsv<Users>(",", ListofUsers);
+
+            System.IO.File.WriteAllText(@"UserMap.csv", resultcsv);
             MessageBox.Show("Users saved", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
 
