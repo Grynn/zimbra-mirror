@@ -319,7 +319,7 @@ function(enabled) {
 			// set event handler for pull down menu if applicable
 			if (this._menu) {
 				this._setDropDownCellMouseHandlers(true);
-                if (this._dropDownEl) {
+                if (this._dropDownEl && this._dropDownImg) {
                     AjxImg.setImage(this._dropDownEl, this._dropDownImg);
                 }
             }
@@ -329,7 +329,7 @@ function(enabled) {
 			// remove event handlers for pull down menu if applicable
 			if (this._menu) {
 				this._setDropDownCellMouseHandlers(false);
-                if (this._dropDownEl) {
+                if (this._dropDownEl && this._dropDownImg) {
                     AjxImg.setDisabledImage(this._dropDownEl, this._dropDownImg);
                 }
 			}
@@ -408,7 +408,9 @@ function(menuOrCallback, shouldToggle, followIconStyle, popupAbove, popupRight) 
 				idx++;
 
 			Dwt.addClass(this.getHtmlElement(), "ZHasDropDown");
-            AjxImg.setImage(this._dropDownEl, this._dropDownImg);
+			if (this._dropDownImg) {
+            	AjxImg.setImage(this._dropDownEl, this._dropDownImg);
+			}
 
 			// set event handler if applicable
 			if (this._enabled) {
@@ -887,7 +889,9 @@ function(ev) {
     var dropDown = button._dropDownEl;
     if (button._menu && dropDown && button._dropDownHovImg && !button.noMenuBar &&
         button.isListenerRegistered(DwtEvent.SELECTION)) {
-		AjxImg.setImage(dropDown, button._dropDownHovImg);
+		if (button._dropDownHovImg) {
+			AjxImg.setImage(dropDown, button._dropDownHovImg);
+		}
     }
 	// bug fix 48266 IE hack, solution is similar to bug 36253
 	// Just rewrite the el's Child's className to trigger IE to render it
@@ -915,7 +919,7 @@ function(ev) {
     button.isActive = false;
 
     var dropDown = button._dropDownEl;
-    if (button._menu && dropDown) {
+    if (button._menu && dropDown && button._dropDownImg) {
 		AjxImg.setImage(dropDown, button._dropDownImg);
     }
 };
