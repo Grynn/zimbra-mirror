@@ -90,7 +90,7 @@ DwtSash.prototype.registerCallback =
 function(callbackFunc, callbackObj) {
 	this._callbackFunc = callbackFunc;
 	this._callbackObj = callbackObj;
-}
+};
 
 DwtSash._mouseOverHdlr =
 function(ev) {
@@ -152,7 +152,6 @@ function(ev) {
 				sash.setLocation(Dwt.DEFAULT, sash.getLocation().y + delta);
 		}
 	}
-		
 	mouseEv._stopPropagation = true;
 	mouseEv._returnValue = false;
 	mouseEv.setToDhtmlEvent(ev);
@@ -167,10 +166,13 @@ function(ev) {
 		DwtUiEvent.setBehaviour(ev, true, false);
 		return false;
 	}
-	
-	if (DwtMouseEventCapture.getTargetObj()._callbackFunc != null)
+
+	var sash = DwtMouseEventCapture.getTargetObj();
+	if (sash._callbackFunc != null) {
 		DwtMouseEventCapture.getCaptureObj().release();
-		
+	}
+
+	sash.notifyListeners(DwtEvent.ONMOUSEUP, mouseEv);
 	mouseEv._stopPropagation = true;
 	mouseEv._returnValue = false;
 	mouseEv.setToDhtmlEvent(ev);
