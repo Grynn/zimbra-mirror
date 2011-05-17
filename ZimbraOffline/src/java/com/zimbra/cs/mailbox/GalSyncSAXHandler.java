@@ -68,17 +68,17 @@ public class GalSyncSAXHandler implements ElementHandler {
     private String zcsGalAccountId = "";
     private boolean isItemIdsSorted = false;
 
-    public GalSyncSAXHandler(ZcsMailbox mainMbox, OfflineAccount galAccount, boolean fullSync, boolean trace) 
+    public GalSyncSAXHandler(ZcsMailbox mainMbox, OfflineAccount galAccount, boolean fullSync, boolean trace)
         throws ServiceException {
         this.mainMbox = mainMbox;
         this.galAccount = galAccount;
         this.fullSync = fullSync;
-        prov = OfflineProvisioning.getOfflineInstance();        
+        prov = OfflineProvisioning.getOfflineInstance();
         galMbox = MailboxManager.getInstance().getMailboxByAccountId(galAccount.getId(), false);
         context = new OperationContext(galMbox);
-        
+
         ds = GalSyncUtil.createDataSourceForAccount(galAccount);
-        
+
         syncFolder = OfflineGal.getSyncFolder(galMbox, context, fullSync).getId();
         OfflineLog.offline.debug("Offline GAL current sync folder: " + Integer.toString(syncFolder));
     }
@@ -170,7 +170,7 @@ public class GalSyncSAXHandler implements ElementHandler {
         elPath.removeHandler(PATH_CN);
         elPath.removeHandler(PATH_DELETED);
     }
-    
+
     private void handleException(Exception e, ElementPath elPath) {
         OfflineLog.offline.debug("Offline GAL exception caught",e);
         if (e instanceof ServiceException || e instanceof IOException) {
@@ -178,7 +178,7 @@ public class GalSyncSAXHandler implements ElementHandler {
         }
         unregisterHandlers(elPath);
     }
-    
+
     private void deleteContact(String id) throws ServiceException, IOException {
         int iid = GalSyncUtil.findContact(id, ds);
         if (iid > 0) {
@@ -194,21 +194,21 @@ public class GalSyncSAXHandler implements ElementHandler {
         folderIds.add(OfflineGal.getSyncFolder(galMbox, context, false).getId());
         QueryParams params = new QueryParams();
         params.setFolderIds(folderIds);
-        
+
         DbConnection conn = null;
         Set<Integer> galItemIds = null;
         synchronized (galMbox) {
             try {
-                conn = DbPool.getConnection();            
+                conn = DbPool.getConnection();
                 galItemIds = DbMailItem.getIds(galMbox, conn, params, false);
             } finally {
                 DbPool.quietClose(conn);
             }
-        }        
+        }
         if (galItemIds == null || galItemIds.size() == 0) {
             return;
         }
-        
+
         Collection<DataSourceItem> dsItems = DbDataSource.getAllMappings(ds);
         int sz = dsItems.size();
         if (sz < galItemIds.size()) { // proceed only if mapping size is less than number of gal entries
@@ -216,14 +216,14 @@ public class GalSyncSAXHandler implements ElementHandler {
             for (DataSourceItem dsi: dsItems) {
                 dsItemIds.add(dsi.itemId);
             }
-            
+
             try {
                 galItemIds.removeAll(dsItemIds);
             } catch (Exception e) {
                 OfflineLog.offline.warn("Offline GAL error in calculating set difference: " + e.getMessage());
                 return;
             }
-            
+
             if (galItemIds.size() > 100) {
                 prov.setAccountAttribute(mainMbox.getOfflineAccount(), OfflineConstants.A_offlineGalAccountSyncToken, "");
                 OfflineLog.offline.warn("Offline GAL too many unmapped items: " +
@@ -247,7 +247,7 @@ public class GalSyncSAXHandler implements ElementHandler {
         try {
             OfflineLog.offline.debug("Offline GAL running maintenance");
             removeUnmapped();
-            galMbox.optimize(null, 0);
+            galMbox.optimize(0);
             prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountLastRefresh,
                 Long.toString(System.currentTimeMillis()));
         } catch (ServiceException e) {
@@ -275,7 +275,7 @@ public class GalSyncSAXHandler implements ElementHandler {
             }
         }
     }
-    
+
     //needs to be called after item ids have been sorted
     private String removeItemIds() {
         StringBuilder builder = new StringBuilder();
@@ -305,7 +305,7 @@ public class GalSyncSAXHandler implements ElementHandler {
                 }
             }
 
-            GalSyncUtil.fetchContacts(this.mainMbox, this.galMbox, this.context, syncFolder, this.removeItemIds(), 
+            GalSyncUtil.fetchContacts(this.mainMbox, this.galMbox, this.context, syncFolder, this.removeItemIds(),
                     isFullSync, this.ds, retryContactIds, this.token, this.zcsGalAccountId);
 
             if (this.itemIds.size() > 0) {

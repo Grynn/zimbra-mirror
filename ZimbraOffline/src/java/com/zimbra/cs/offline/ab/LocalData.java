@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2008, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2008, 2009, 2010, 2011 Zimbra, Inc.
  *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -266,13 +266,16 @@ public final class LocalData {
 
     public void resetData() throws ServiceException {
         log.info("Resetting address book data for data source: %s", ds.getName());
-        synchronized (mbox) {
+        mbox.lock.lock();
+        try {
             mbox.emptyFolder(CONTEXT, Mailbox.ID_FOLDER_CONTACTS, true);
             if (syncAutoContacts()) {
                 mbox.emptyFolder(CONTEXT, Mailbox.ID_FOLDER_AUTO_CONTACTS, true);
             }
             mbox.setConfig(CONTEXT, key, null);
             DbDataSource.deleteAllMappingsInFolder(ds, Mailbox.ID_FOLDER_CONTACTS);
+        } finally {
+            mbox.lock.release();
         }
     }
 

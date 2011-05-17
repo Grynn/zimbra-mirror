@@ -1,13 +1,13 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2008, 2009, 2010 Zimbra, Inc.
- * 
+ * Copyright (C) 2008, 2009, 2010, 2011 Zimbra, Inc.
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -66,10 +66,10 @@ public class SyncSession {
         int added, updated, deleted;
 
         int total() { return added + updated + deleted; }
-        
+
+        @Override
         public String toString() {
-            return String.format("%d added, %d updated, and %d deleted",
-                                 added, updated, deleted);
+            return String.format("%d added, %d updated, and %d deleted", added, updated, deleted);
         }
     }
 
@@ -89,14 +89,18 @@ public class SyncSession {
         }
         Mailbox mbox = localData.getMailbox();
         SyncRequest req;
-        synchronized (mbox) {
+        mbox.lock.lock();
+        try {
             getLocalChanges(ss);
             ss.setLastModSequence(mbox.getLastChangeID());
             req = getSyncRequest(getLastRevision(ss));
+        } finally {
+            mbox.lock.release();
         }
         while (req != null) {
             SyncResponse res = (SyncResponse) req.send();
-            synchronized (mbox) {
+            mbox.lock.lock();
+            try {
                 getLocalChanges(ss);
                 ss.setLastRevision(String.valueOf(res.getRevision()));
                 processContactResults(req.getEvents());
@@ -109,6 +113,8 @@ public class SyncSession {
                 ss.setLastModSequence(mbox.getLastChangeID());
                 localData.saveState(ss);
                 req = hasLocalChanges() ? getSyncRequest(res.getRevision()) : null;
+            } finally {
+                mbox.lock.release();
             }
         }
     }
@@ -128,7 +134,8 @@ public class SyncSession {
         contactChanges = Collections.emptyMap();
         SyncRequest req = getSyncRequest(0);
         SyncResponse res = (SyncResponse) req.send();
-        synchronized (mbox) {
+        mbox.lock.lock();
+        try {
             processContactResults(req.getEvents());
             List<SyncResponseEvent> events = res.getEvents();
             if (!events.isEmpty()) {
@@ -139,10 +146,12 @@ public class SyncSession {
             // Remove contacts which no longer exist remotely
             localData.deleteMissingContacts(getRemoteIds(events));
             SyncState ss = new SyncState();
-            // Save new sync state 
+            // Save new sync state
             ss.setLastRevision(String.valueOf(res.getRevision()));
             ss.setLastModSequence(mbox.getLastChangeID());
             localData.saveState(ss);
+        } finally {
+            mbox.lock.release();
         }
     }
 
@@ -155,7 +164,7 @@ public class SyncSession {
         }
         return ids;
     }
-    
+
     private void getLocalChanges(SyncState ss) throws ServiceException {
         contactChanges = localData.getContactChanges(ss.getLastModSequence());
         LOG.debug("Found %d local contact changes", contactChanges.size());
@@ -164,7 +173,7 @@ public class SyncSession {
     private boolean hasLocalChanges() {
         return !contactChanges.isEmpty();
     }
-    
+
     private static int getLastRevision(SyncState ss) {
         String s = ss.getLastRevision();
         return s != null ? Integer.parseInt(s) : 0;
@@ -357,7 +366,7 @@ public class SyncSession {
             stats.added++;
         }
     }
-    
+
     private List<String> getEmailAddresses(Contact contact) {
         List<String> emails = new ArrayList<String>();
         for (Field field : contact.getFields()) {
@@ -370,7 +379,7 @@ public class SyncSession {
         }
         return emails;
     }
-    
+
     private void processEvents(List<SyncResponseEvent> events)
         throws ServiceException {
         Stats stats = new Stats();

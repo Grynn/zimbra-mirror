@@ -23,7 +23,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
-import com.zimbra.common.util.LruMap;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.offline.OfflineAccount;
@@ -284,7 +283,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
                         lastOptimizeTime = now - OPTIMIZE_INTERVAL +
                             30 * Constants.MILLIS_PER_MINUTE;
                     } else if (now - lastOptimizeTime > OPTIMIZE_INTERVAL) {
-                        optimize(null, 0);
+                        optimize(0);
                         lastOptimizeTime = now;
                     }
                 } catch (Throwable e) { // don't let exceptions kill the timer
@@ -367,7 +366,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
     void trackChangeNew(MailItem item) throws ServiceException {}
 
     void trackChangeModified(MailItem item, int changeMask) throws ServiceException {}
-    
+
     void trackChangeDeleted() throws ServiceException {}
 
     void itemCreated(MailItem item) throws ServiceException {}

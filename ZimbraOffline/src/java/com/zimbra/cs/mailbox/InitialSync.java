@@ -835,8 +835,9 @@ public class InitialSync {
 
         com.zimbra.cs.redolog.op.SetCalendarItem player = new com.zimbra.cs.redolog.op.SetCalendarItem(ombx.getId(), true, flags, tags);
         player.setData(parsed.defaultInv, parsed.exceptions, parsed.replies, parsed.nextAlarm);
-        if (parsed.defaultInv != null)
-            player.setCalendarItemPartStat(parsed.defaultInv.mInv.getPartStat());
+        if (parsed.defaultInv != null) {
+            player.setCalendarItemPartStat(parsed.defaultInv.invite.getPartStat());
+        }
         player.setCalendarItemAttrs(itemId, folderId);
         player.start(timestamp > 0 ? timestamp : System.currentTimeMillis());
 
@@ -845,10 +846,11 @@ public class InitialSync {
              ombx.setCalendarItem(ctxt, folderId, flags, tags, parsed.defaultInv, parsed.exceptions, parsed.replies, parsed.nextAlarm);
              if (OfflineLog.offline.isDebugEnabled()) {
                  String name = null;
-                 if (parsed.defaultInv != null)
-                     name = parsed.defaultInv.mInv.getName();
-                 else if (parsed.exceptions != null && parsed.exceptions.length > 0)
-                     name = parsed.exceptions[0].mInv.getName();
+                 if (parsed.defaultInv != null) {
+                     name = parsed.defaultInv.invite.getName();
+                 } else if (parsed.exceptions != null && parsed.exceptions.length > 0) {
+                     name = parsed.exceptions[0].invite.getName();
+                 }
                  OfflineLog.offline.debug("initial: created %s %d: %s", isAppointment ? "appointment" : "task", itemId, name);
              }
         } catch (Exception x) {
@@ -1072,7 +1074,7 @@ public class InitialSync {
     private boolean isAttachmentDownloadBlocked() throws ServiceException {
         return (ombx.getRemoteServerVersion().getMajor() < 7) && (Boolean.valueOf(ombx.getOfflineAccount().getAttr(ZAttrProvisioning.A_zimbraAttachmentsBlocked)));
     }
-    
+
     /**
      * GNR server sends blocking msg back if zimbraAttachmentsBlocked is set to TRUE. There is no way zd can sync with server. Generates a SyncException and user get an error report.
      * @param account account whose zimbraAttachmentBlocked attribute is set to TRUE
