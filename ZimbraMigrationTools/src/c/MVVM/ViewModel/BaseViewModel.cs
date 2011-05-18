@@ -13,7 +13,7 @@
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public Config m_config = new Config("", "", "", "", "", "", "", "", "", "", false);
+        public Config m_config = new Config("", "", "", "", "", "", "", "", "", "");
         public void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             if (PropertyChanged != null)
