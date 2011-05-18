@@ -86,7 +86,7 @@ function() {
     var itms = this._selectedItems.split(",");
     var args = "";
     for (var j = 0; j < itms.length; j++) {
-        args = args + "&c[" + itms[j] + "]=" + itms[j];
+        args = args + "&"+ AjxStringUtil.urlComponentEncode("c[" + itms[j] + "]") + "=" + AjxStringUtil.urlComponentEncode(itms[j]);
     }
 
     this._baseFeed = url_1 + args + url_2;
