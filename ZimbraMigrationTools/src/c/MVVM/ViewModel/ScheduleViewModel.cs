@@ -128,7 +128,7 @@ namespace MVVM.ViewModel
 
         public void Migrate()
         {
-            lb.SelectedIndex = 4;
+            lb.SelectedIndex = (isServer) ? 4 : 2;
             accountResultsViewModel.AccountResultsList.Clear();
             EnableMigrate = false;
             accountResultsViewModel.EnableStop = !EnableMigrate;

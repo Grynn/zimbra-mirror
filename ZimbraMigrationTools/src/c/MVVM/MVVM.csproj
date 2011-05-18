@@ -72,6 +72,7 @@
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\ConfigViewModelS.cs" />
     <Compile Include="ViewModel\ConfigViewModelU.cs" />
+    <Compile Include="ViewModel\IntroViewModel.cs" />
     <Compile Include="ViewModel\OptionsViewModel.cs" />
     <Compile Include="ViewModel\ScheduleViewModel.cs" />
     <Compile Include="ViewModel\UserResultsViewModel.cs" />
@@ -82,6 +83,9 @@
     </Compile>
     <Compile Include="View\ConfigViewU.xaml.cs">
       <DependentUpon>ConfigViewU.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\IntroView.xaml.cs">
+      <DependentUpon>IntroView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MainViewA.xaml.cs">
       <DependentUpon>MainViewA.xaml</DependentUpon>
@@ -133,6 +137,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\IntroView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\MainViewA.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -166,6 +174,9 @@
     <Resource Include="View\Images\Penguins.jpg" />
     <Resource Include="View\Images\UnknownPerson_dataNotFound.jpg" />
     <Resource Include="View\Images\vmwareLogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\bg2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

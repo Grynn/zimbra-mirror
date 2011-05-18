@@ -95,7 +95,7 @@ namespace MVVM.ViewModel
 
 
             
-            MessageBox.Show("Configuration information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            //MessageBox.Show("Configuration information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
 
         public ICommand SaveCommand

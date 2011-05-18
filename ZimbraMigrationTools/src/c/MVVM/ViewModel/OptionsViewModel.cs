@@ -71,7 +71,7 @@ namespace MVVM.ViewModel
                 ImportTaskOptions = Z11.importOptions.Tasks;
                 ImportSentOptions = Z11.importOptions.Sent;
                 ImportRuleOptions = Z11.importOptions.Rules;
-                MessageBox.Show("Options information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                //MessageBox.Show("Options information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
             else
             {
@@ -237,6 +237,21 @@ namespace MVVM.ViewModel
                 m_config.importOptions.Rules = value;
 
                 OnPropertyChanged(new PropertyChangedEventArgs("ImportRuleOptions"));
+            }
+        }
+
+        public string ImportNextButtonContent
+        {
+            get { return m_config.importOptions.NextButtonContent; }
+            set
+            {
+                if (value == m_config.importOptions.NextButtonContent)
+                {
+                    return;
+                }
+                m_config.importOptions.NextButtonContent = value;
+
+                OnPropertyChanged(new PropertyChangedEventArgs("ImportNextButtonContent"));
             }
         }
     }

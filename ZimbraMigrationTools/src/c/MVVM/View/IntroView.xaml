@@ -1,0 +1,30 @@
+﻿<UserControl 
+    x:Class="MVVM.View.IntroView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    >
+    <Grid Name="IntroGrid">
+        <Grid.Background>
+            <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="200" Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock HorizontalAlignment="Center" Margin="0,40,0,0" MaxWidth="370" Name="textBlock1Msg" Text="{Binding Path=WelcomeMsg}" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="0"/>
+        <TextBlock Grid.Row="1" Margin="0,20,0,0" Name="textBlockLicense" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Top" HorizontalAlignment="Center">
+                            <Hyperlink Command="{Binding GetIntroLicenseCommand}">VMware Zimbra License</Hyperlink>
+        </TextBlock>
+        <TextBlock Grid.Row="2" Margin="66,55,0,0" Name="textBlockHelp" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Top" HorizontalAlignment="Left">
+                            <Hyperlink Command="{Binding GetIntroHelpCommand}">Help</Hyperlink>
+        </TextBlock>
+        <TextBlock Grid.Row="2" Margin="0,55,20,0" Name="textBlockUserMig" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Top" HorizontalAlignment="Center">
+                            <Hyperlink Command="{Binding GetIntroUserMigCommand}">User Migration</Hyperlink>
+        </TextBlock>
+        <TextBlock Grid.Row="2" Margin="0,55,66,0" Name="textBlockServerMig" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Top" HorizontalAlignment="Right">
+                            <Hyperlink Command="{Binding GetIntroServerMigCommand}">Server Migration</Hyperlink>
+        </TextBlock>
+    </Grid>
+</UserControl>

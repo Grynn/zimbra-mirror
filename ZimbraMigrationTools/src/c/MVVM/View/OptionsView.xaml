@@ -68,7 +68,7 @@
             </TextBlock>
             <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,25,0,0" Content="Load" Name="loadOButton" Command="{Binding LoadCommand}"  />
             <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="200,25,0,0" Content="Save" Name="saveOButton" Command="{Binding SaveCommand}"  />
-            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="360,25,0,0" Content="Next" Name="nextOButton" Command="{Binding NextCommand}"  />
+            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="360,25,0,0" Content="{Binding Path=ImportNextButtonContent}" Name="nextOButton" Command="{Binding NextCommand}"  />
         </Grid>
     </Grid>
 </UserControl>

@@ -147,6 +147,7 @@ namespace MVVM.ViewModel
                                 //string result = tempuser.UserName + "," + tempuser.MappedName +"," + tempuser.ChangePWD + "," + tempuser.PWDdefault;
                                 string result = tempuser.UserName + "," + tempuser.MappedName;
                                 UsersList.Add(result);
+                                scheduleViewModel.SchedList.Add(tempuser.UserName);
                             }
 
 

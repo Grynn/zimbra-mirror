@@ -77,7 +77,7 @@ namespace MVVM.ViewModel
                 ZimbraAdminPasswd = Z11.zimbraServer.AdminPassword;
                 ZimbraDomain = Z11.zimbraServer.Domain;
                 OutlookProfile = Z11.mailServer.ProfileName;
-                MessageBox.Show("Configuration information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                //MessageBox.Show("Configuration information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
             else
             {

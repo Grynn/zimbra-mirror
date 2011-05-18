@@ -203,6 +203,14 @@
             set { m_Rules = value; }
         }
 
+        private string m_NextButtonContent;
+
+        public string NextButtonContent
+        {
+            get { return m_NextButtonContent; }
+            set { m_NextButtonContent = value; }
+        }
+
 
     }
 }
