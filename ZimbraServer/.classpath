@@ -114,8 +114,8 @@
   <classpathentry kind="lib" path="/ZimbraCommon/jars/perf4j-0.9.13.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/high-scale-lib-1.1.2.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/jackson-all-1.8.0.jar"/>
-  <classpathentry kind="lib" path="jars/hsqldb.jar"/>
-  <classpathentry kind="lib" path="jars/sqltool.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars-test/hsqldb-2.2.1.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars-test/sqltool-2.2.1.jar"/>
   <classpathentry kind="lib" path="jars/snakeyaml-1.6.jar"/>
   <classpathentry kind="lib" path="jars/concurrentlinkedhashmap-lru-1.1.jar"/>
   <classpathentry kind="lib" path="jars/avro-1.4.0-fixes.jar"/>
