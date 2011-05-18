@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2011 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -24,6 +24,7 @@ import java.util.UUID;
 
 import org.json.JSONException;
 
+import com.google.common.io.Closeables;
 import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
@@ -102,7 +103,7 @@ public final class GalSyncUtil {
             }
         }
     }
-    
+
     /**
      * Create a DataSource instance for gal account
      * @param galAccount
@@ -119,7 +120,7 @@ public final class GalSyncUtil {
         return new DataSource(galAccount, Type.gal, galAccount.getName(), dsId,
             new HashMap<String, Object>(), prov);
     }
-    
+
     /**
      * Retrieve a contact specified by email address from OfflineGal
      * @param requestedAcct
@@ -137,14 +138,14 @@ public final class GalSyncUtil {
                     con = (Contact) hit.getMailItem();
                 }
             } finally {
-                dlResult.doneWithSearchResults();
+                Closeables.closeQuietly(dlResult);
             }
         }
         return con;
     }
-    
+
     /**
-     * Retrieve a list of groups email addresses 
+     * Retrieve a list of groups email addresses
      * @param requestedAcct
      * @param addrs - set of email addresses to select from
      * @return - subset of addrs which are distribution lists
@@ -162,7 +163,7 @@ public final class GalSyncUtil {
                     groups.add(listName);
                 }
             } finally {
-                dlResult.doneWithSearchResults();
+                Closeables.closeQuietly(dlResult);
             }
         }
         return groups;
@@ -174,7 +175,7 @@ public final class GalSyncUtil {
               .append(" type=\"").append(contact.getFields().get(ContactConstants.A_type)).append("\"");
         return logBuf.toString();
     }
-    
+
     public static void fillContactAttrMap(ZcsMailbox mbox, Map<String, String> map) throws ServiceException {
         String fullName = map.get(ContactConstants.A_fullName);
         if (fullName == null) {
@@ -201,7 +202,7 @@ public final class GalSyncUtil {
             }
         }
     }
-    
+
     private static List<ParsedContact> getParsedContacts(ZcsMailbox mbox, List<Element> contacts, List<String> ids, List<String> retryIds) throws ServiceException {
         List<ParsedContact> list = new ArrayList<ParsedContact>();
         for (Element elt : contacts) {
@@ -229,14 +230,14 @@ public final class GalSyncUtil {
         }
         return list;
     }
-    
+
     static void createContact(Mailbox mbox, OperationContext ctxt, int syncFolder, DataSource ds, ParsedContact contact, String id, String logstr)
         throws ServiceException {
         Contact c = mbox.createContact(ctxt, contact, syncFolder, null);
         DbDataSource.addMapping(ds, new DataSourceItem(0, c.getId(), id, null), true);
         OfflineLog.offline.debug("Offline GAL contact created: " + logstr);
     }
-    
+
     private static void saveParsedContact(Mailbox mbox, OperationContext ctxt, int syncFolder, String id, ParsedContact contact, String logstr, boolean isFullSync, DataSource ds)
         throws ServiceException {
         if (isFullSync) {

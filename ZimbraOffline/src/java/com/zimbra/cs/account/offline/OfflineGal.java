@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import com.google.common.io.Closeables;
 import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
@@ -90,7 +91,7 @@ public class OfflineGal {
         names.add(name);
         return search(names, type, sortBy, offset, limit, cursor);
     }
-    
+
     public ZimbraQueryResults search(Set<String> names, String type, String sortBy, int offset, int limit, Element cursor) throws ServiceException {
         String galAcctId = mAccount.getAttr(OfflineConstants.A_offlineGalAccountId, false);
         mGalMbox = null;
@@ -188,15 +189,15 @@ public class OfflineGal {
             response.addAttribute(MailConstants.A_QUERY_OFFSET, offset);
             response.addAttribute(AccountConstants.A_MORE, zqr.hasNext());
         } finally {
-            zqr.doneWithSearchResults();
+            Closeables.closeQuietly(zqr);
         }
     }
 
     public void search(AutoCompleteResult result, String name, int limit, String type) throws ServiceException {
         ZimbraQueryResults zqr = search(name, type, "score", 0, limit, null);
-        if (zqr == null)
+        if (zqr == null) {
             return;
-
+        }
         ContactAutoComplete ac = new ContactAutoComplete(mAccount);
         try {
             while (zqr.hasNext()) {
@@ -208,7 +209,7 @@ public class OfflineGal {
                     break;
             }
         } finally {
-            zqr.doneWithSearchResults();
+            Closeables.closeQuietly(zqr);
         }
     }
 
