@@ -746,15 +746,25 @@ ZaServer.modifyMethod = function (tmpObj) {
 		hasSomething = true;
 		if (this.attrs[a] != tmpObj.attrs[a] ) {
 			if(tmpObj.attrs[a] instanceof Array) {
-				var array = tmpObj.attrs[a];
-				if (array.length > 0) {
-					for (var i = 0; i < array.length; i++) {
-						var attr = soapDoc.set("a", array[i]);
+				if (!this.attrs[a]) {
+					this.attrs[a] = [];
+				}
+
+				if (! this.attrs[a] instanceof Array) {
+					this.attrs[a] = [this.attrs[a]];
+				}
+
+				if (tmpObj.attrs[a].join(",").valueOf() !=  this.attrs[a].join(",").valueOf()) {
+					var array = tmpObj.attrs[a];
+					if (array.length > 0) {
+						for (var i = 0; i < array.length; i++) {
+							var attr = soapDoc.set("a", array[i]);
+							attr.setAttribute("n", a);
+						}
+					} else {
+						var attr = soapDoc.set("a");
 						attr.setAttribute("n", a);
 					}
-				} else {
-					var attr = soapDoc.set("a");
-					attr.setAttribute("n", a);
 				}	
 			} else {
 				var attr = soapDoc.set("a", tmpObj.attrs[a]);
