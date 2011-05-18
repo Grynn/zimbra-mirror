@@ -283,7 +283,7 @@ public class PageAddressbook extends AbsTab {
 		return (page);
 	}
 
-	public ContactGroupItem createUsingSOAPSelectContactGroup(AppAjaxClient app, String ... tagIDArray)  throws HarnessException {	
+	public ContactGroupItem createUsingSOAPSelectContactGroup(AppAjaxClient app, Action action, String ... tagIDArray)  throws HarnessException {	
 	  // Create a contact group via Soap
 	  ContactGroupItem group = ContactGroupItem.createUsingSOAP(app, tagIDArray);
 		             
@@ -300,12 +300,12 @@ public class PageAddressbook extends AbsTab {
       app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
     
       // Select the item
-      zListItem(Action.A_LEFTCLICK, group.fileAs);
+      zListItem(action, group.fileAs);
       
       return group;
     }
 
-	public ContactItem createUsingSOAPSelectContact(AppAjaxClient app, String ... tagIDArray)  throws HarnessException {	
+	public ContactItem createUsingSOAPSelectContact(AppAjaxClient app, Action action, String ... tagIDArray)  throws HarnessException {	
 		  // Create a contact via Soap
 		  ContactItem contactItem = ContactItem.createUsingSOAP(app, tagIDArray);			             
 		  contactItem.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
@@ -317,7 +317,7 @@ public class PageAddressbook extends AbsTab {
 	      app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
 	    
 	      // Select the item
-	      zListItem(Action.A_LEFTCLICK, contactItem.fileAs);
+	      zListItem(action, contactItem.fileAs);
 	      
 	      return contactItem;
 	    }
@@ -718,6 +718,30 @@ public class PageAddressbook extends AbsTab {
 			this.zClick(contactLocator);
 			//zWaitForBusyOverlay();
 			
+			ArrayList<String> selectedContactArrayList=getSelectedContactLocator();			
+	        String contactType = getContactType(selectedContactArrayList.get(0));
+		
+	        //check if it is a contact or a contact group item
+		    if ( contactType.equals(ContactGroupItem.IMAGE_CLASS)) {
+			  return  new DisplayContactGroup(MyApplication);		
+		    }
+		    else if (  contactType.equals(ContactItem.IMAGE_CLASS) ) {
+			  return new DisplayContact(MyApplication);
+		    }
+		    else {
+			  throw new HarnessException(" Error: not support the contact type");						    	
+		    }
+			
+		}
+		else if ( action == Action.A_CHECKBOX) {
+			//get the checkbox locator
+			contactLocator=contactLocator.substring(0, contactLocator.length()-2) + "1" + ")>center>div.ImgCheckboxUnchecked";
+			
+			//check the box			
+			this.zClick(contactLocator);
+			
+			//zWaitForBusyOverlay();
+						
 			ArrayList<String> selectedContactArrayList=getSelectedContactLocator();			
 	        String contactType = getContactType(selectedContactArrayList.get(0));
 		
