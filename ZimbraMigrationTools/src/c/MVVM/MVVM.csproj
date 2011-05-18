@@ -52,6 +52,7 @@
     <Compile Include="Model\Base.cs" />
     <Compile Include="Model\Config.cs" />
     <Compile Include="Model\Intro.cs" />
+    <Compile Include="Model\Options.cs" />
     <Compile Include="Model\Results.cs" />
     <Compile Include="Model\Schedule.cs" />
     <Compile Include="Model\Users.cs" />
