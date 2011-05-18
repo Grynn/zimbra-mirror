@@ -1,4 +1,8 @@
 #include "stdafx.h"
+#include "Common.h"
+#include "Zimbra/Zimbra.h"
+#include "Zimbra/Rpc.h"
+
 
 int APIENTRY wWinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
@@ -9,7 +13,9 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	UNREFERENCED_PARAMETER(nCmdShow);
-
+	
+	Zimbra::Rpc::UserSession::CreateInstance(_T("dummy profile"),L"av1@zcs2.zmexch.in.zimbra.com",L"test123",L"10.117.82.163",7071,false, false , NULL);
+	//Zimbra::Rpc::SendMsgRequest sendMsg( L"testtoken" );
 	/*
 
  	// TODO: Place code here.
@@ -44,3 +50,4 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
 	return 1;
 }
+

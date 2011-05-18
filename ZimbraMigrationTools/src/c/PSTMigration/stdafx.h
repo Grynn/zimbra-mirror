@@ -36,6 +36,14 @@
 #define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
 #endif
 
+
+
 #include <iostream>
 #include <sstream>
-#include <Windows.h>
+
+
+#include <tchar.h>
+//#include <msxml2.h>
+//#include <MapiX.h>
+//#include <Windows.h>
+

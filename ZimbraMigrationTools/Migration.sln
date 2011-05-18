@@ -32,29 +32,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Zimbra", "..\ZimbraMAPI\vcproj\ZimbraRpc.vcxproj", "{3391699B-1204-4098-8697-2E43800AABE4}"
 EndProject
 Global
-	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 4
-		SccProjectUniqueName0 = src\\c\\PSTMigration\\PSTMigration.vcxproj
-		SccProjectName0 = Perforce\u0020Project
-		SccLocalPath0 = src\\c
-		SccProvider0 = MSSCCI:Perforce\u0020SCM
-		SccProjectFilePathRelativizedFromConnection0 = PSTMigration\\
-		SccProjectUniqueName1 = ..\\ZimbraMAPI\\vcproj\\Util.vcxproj
-		SccProjectName1 = Perforce\u0020Project
-		SccLocalPath1 = ..\\ZimbraMAPI
-		SccProvider1 = MSSCCI:Perforce\u0020SCM
-		SccProjectFilePathRelativizedFromConnection1 = vcproj\\
-		SccProjectUniqueName2 = ..\\ZimbraMAPI\\vcproj\\ZimbraMime.vcxproj
-		SccProjectName2 = Perforce\u0020Project
-		SccLocalPath2 = ..\\ZimbraMAPI
-		SccProvider2 = MSSCCI:Perforce\u0020SCM
-		SccProjectFilePathRelativizedFromConnection2 = vcproj\\
-		SccProjectUniqueName3 = ..\\ZimbraMAPI\\vcproj\\ZimbraRpc.vcxproj
-		SccProjectName3 = Perforce\u0020Project
-		SccLocalPath3 = ..\\ZimbraMAPI
-		SccProvider3 = MSSCCI:Perforce\u0020SCM
-		SccProjectFilePathRelativizedFromConnection3 = vcproj\\
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		dbg|Any CPU = dbg|Any CPU
 		dbg|Mixed Platforms = dbg|Mixed Platforms
@@ -148,7 +125,8 @@ Global
 		{B4DEC736-0347-42E6-9F01-9AF82891FE82}.dbg|Win32.Build.0 = dbg|Win32
 		{B4DEC736-0347-42E6-9F01-9AF82891FE82}.dbg|x64.ActiveCfg = dbg|x64
 		{B4DEC736-0347-42E6-9F01-9AF82891FE82}.dbg|x64.Build.0 = dbg|x64
-		{B4DEC736-0347-42E6-9F01-9AF82891FE82}.dbg|x86.ActiveCfg = dbg|x64
+		{B4DEC736-0347-42E6-9F01-9AF82891FE82}.dbg|x86.ActiveCfg = dbg|Win32
+		{B4DEC736-0347-42E6-9F01-9AF82891FE82}.dbg|x86.Build.0 = dbg|Win32
 		{B4DEC736-0347-42E6-9F01-9AF82891FE82}.rtl|Any CPU.ActiveCfg = rtl|x64
 		{B4DEC736-0347-42E6-9F01-9AF82891FE82}.rtl|Any CPU.Build.0 = rtl|x64
 		{B4DEC736-0347-42E6-9F01-9AF82891FE82}.rtl|Mixed Platforms.ActiveCfg = rtl|x64
@@ -166,7 +144,8 @@ Global
 		{AD950B89-E346-4095-98BE-E91944C716AD}.dbg|Win32.Build.0 = dbg|Win32
 		{AD950B89-E346-4095-98BE-E91944C716AD}.dbg|x64.ActiveCfg = dbg|x64
 		{AD950B89-E346-4095-98BE-E91944C716AD}.dbg|x64.Build.0 = dbg|x64
-		{AD950B89-E346-4095-98BE-E91944C716AD}.dbg|x86.ActiveCfg = dbg|x64
+		{AD950B89-E346-4095-98BE-E91944C716AD}.dbg|x86.ActiveCfg = dbg|Win32
+		{AD950B89-E346-4095-98BE-E91944C716AD}.dbg|x86.Build.0 = dbg|Win32
 		{AD950B89-E346-4095-98BE-E91944C716AD}.rtl|Any CPU.ActiveCfg = rtl|x64
 		{AD950B89-E346-4095-98BE-E91944C716AD}.rtl|Any CPU.Build.0 = rtl|x64
 		{AD950B89-E346-4095-98BE-E91944C716AD}.rtl|Mixed Platforms.ActiveCfg = rtl|x64
@@ -184,7 +163,7 @@ Global
 		{A541A6A1-5677-4504-8D2D-1FB7F3F85585}.dbg|Win32.Build.0 = dbg|Win32
 		{A541A6A1-5677-4504-8D2D-1FB7F3F85585}.dbg|x64.ActiveCfg = dbg|x64
 		{A541A6A1-5677-4504-8D2D-1FB7F3F85585}.dbg|x64.Build.0 = dbg|x64
-		{A541A6A1-5677-4504-8D2D-1FB7F3F85585}.dbg|x86.ActiveCfg = dbg|x64
+		{A541A6A1-5677-4504-8D2D-1FB7F3F85585}.dbg|x86.ActiveCfg = dbg|Win32
 		{A541A6A1-5677-4504-8D2D-1FB7F3F85585}.rtl|Any CPU.ActiveCfg = rtl|x64
 		{A541A6A1-5677-4504-8D2D-1FB7F3F85585}.rtl|Any CPU.Build.0 = rtl|x64
 		{A541A6A1-5677-4504-8D2D-1FB7F3F85585}.rtl|Mixed Platforms.ActiveCfg = rtl|x64
@@ -202,7 +181,8 @@ Global
 		{3391699B-1204-4098-8697-2E43800AABE4}.dbg|Win32.Build.0 = dbg|Win32
 		{3391699B-1204-4098-8697-2E43800AABE4}.dbg|x64.ActiveCfg = dbg|x64
 		{3391699B-1204-4098-8697-2E43800AABE4}.dbg|x64.Build.0 = dbg|x64
-		{3391699B-1204-4098-8697-2E43800AABE4}.dbg|x86.ActiveCfg = dbg|x64
+		{3391699B-1204-4098-8697-2E43800AABE4}.dbg|x86.ActiveCfg = dbg|Win32
+		{3391699B-1204-4098-8697-2E43800AABE4}.dbg|x86.Build.0 = dbg|Win32
 		{3391699B-1204-4098-8697-2E43800AABE4}.rtl|Any CPU.ActiveCfg = rtl|x64
 		{3391699B-1204-4098-8697-2E43800AABE4}.rtl|Any CPU.Build.0 = rtl|x64
 		{3391699B-1204-4098-8697-2E43800AABE4}.rtl|Mixed Platforms.ActiveCfg = rtl|x64
