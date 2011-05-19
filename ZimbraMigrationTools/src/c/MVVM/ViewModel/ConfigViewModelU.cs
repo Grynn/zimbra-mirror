@@ -36,7 +36,7 @@ namespace MVVM.ViewModel
 
         private void GetConfigSourceHelp()
         {
-            string urlString = (isBrowser) ? "http://10.20.140.218/cfg.html" : "file:///C:/depot/main/ZimbraMigrationTools/src/c/Misc/Help/cfg.html";
+            string urlString = (isBrowser) ? "http://10.20.140.218/cfgU.html" : "file:///C:/depot/main/ZimbraMigrationTools/src/c/Misc/Help/cfgU.html";
             Process.Start(new ProcessStartInfo(urlString));
         }
 

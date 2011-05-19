@@ -67,15 +67,10 @@ namespace MVVM.ViewModel
 
         private void GetIntroUserMig()
         {
-            //ListBoxItem lbiUsersItem = (ListBoxItem)(lb.ItemContainerGenerator.ContainerFromIndex(2));
-            //lbiUsersItem.IsEnabled = false;
-            //ListBoxItem lbiSchedItem = (ListBoxItem)(lb.ItemContainerGenerator.ContainerFromIndex(3));
-            //lbiSchedItem.IsEnabled = false;
             m_optionsViewModel.isServer = false;
             m_optionsViewModel.ImportNextButtonContent = "Migrate";
             m_scheduleViewModel.isServer = false;
             TheViews.RemoveAt(0);
-            //TheViews.Insert(0, m_configViewModelU);
             TheViews.Add(m_configViewModelU);
             TheViews.Add(m_optionsViewModel);
             TheViews.Add(m_resultsViewModel);
@@ -96,7 +91,6 @@ namespace MVVM.ViewModel
             m_optionsViewModel.ImportNextButtonContent = "Next";
             m_scheduleViewModel.isServer = true;
             TheViews.RemoveAt(0);
-            //TheViews.Insert(0, m_configViewModelS);
             TheViews.Add(m_configViewModelS);
             TheViews.Add(m_optionsViewModel);
             TheViews.Add(m_usersViewModel);
@@ -199,15 +193,6 @@ namespace MVVM.ViewModel
 
             TheViews = new ObservableCollection<object>();
             TheViews.Add(this);
-
-/*
-            //TheViews.Add(m_configViewModelS);
-            TheViews.Add(m_optionsViewModel);
-            TheViews.Add(m_usersViewModel);
-            TheViews.Add(m_scheduleViewModel);
-            TheViews.Add(m_resultsViewModel);
- */
-
         }
 
        
