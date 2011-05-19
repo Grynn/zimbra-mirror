@@ -6,8 +6,8 @@ import java.util.*;
 import org.apache.log4j.*;
 
 import com.zimbra.common.util.ByteUtil;
-import com.zimbra.cs.lmtpserver.LmtpProtocolException;
-import com.zimbra.cs.lmtpserver.utils.LmtpClient;
+import com.zimbra.common.lmtp.LmtpClient;
+import com.zimbra.common.lmtp.LmtpProtocolException;
 import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain;
 
 /**

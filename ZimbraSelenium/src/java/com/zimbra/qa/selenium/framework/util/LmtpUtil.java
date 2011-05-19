@@ -11,8 +11,8 @@ import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.StringUtil;
-import com.zimbra.cs.lmtpserver.LmtpProtocolException;
-import com.zimbra.cs.lmtpserver.utils.LmtpClient;
+import com.zimbra.common.lmtp.LmtpClient;
+import com.zimbra.common.lmtp.LmtpProtocolException;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 
 /**

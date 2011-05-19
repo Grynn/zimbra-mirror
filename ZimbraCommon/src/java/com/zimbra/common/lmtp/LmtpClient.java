@@ -13,7 +13,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.cs.lmtpserver.utils;
+package com.zimbra.common.lmtp;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -22,12 +22,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+import com.zimbra.common.io.TcpServerInputStream;
 import com.zimbra.common.localconfig.LC;
-import com.zimbra.cs.lmtpserver.LmtpProtocolException;
-import com.zimbra.cs.server.TcpServerInputStream;
 
 public class LmtpClient {
 
@@ -144,6 +143,11 @@ public class LmtpClient {
         return sendMessage(msgStream, new String[] { recipient }, sender, logLabel, size);
     }
 
+    public boolean sendMessage(InputStream msgStream, String[] recipients, String sender, String logLabel, Long size)
+    throws IOException, LmtpProtocolException {
+        return sendMessage(msgStream, Lists.newArrayList(recipients), sender, logLabel, size);
+    }
+    
     /**
      * Sends a MIME message.
      * @param msgStream the message body
@@ -153,9 +157,8 @@ public class LmtpClient {
      * @param size the size of the data or <tt>null</tt> if not specified
      * @return <code>true</code> if the message was successfully delivered to all recipients
      */
-    public boolean sendMessage(InputStream msgStream, String[] recipients, String sender, String logLabel, Long size)
-        throws IOException, LmtpProtocolException
-    {
+    public boolean sendMessage(InputStream msgStream, Iterable<String> recipients, String sender, String logLabel, Long size)
+    throws IOException, LmtpProtocolException {
         long start = System.currentTimeMillis();
         if (mNewConnection) {
             mNewConnection = false;
@@ -188,7 +191,7 @@ public class LmtpClient {
             throw new LmtpProtocolException(mResponse);
         }
 
-        List<String> acceptedRecipients = new ArrayList<String>(recipients.length);
+        List<String> acceptedRecipients = Lists.newArrayList();
         for (String recipient : recipients) {
             sendLine("RCPT TO:<" + recipient + ">");
             if (replyOk()) {
