@@ -178,7 +178,7 @@ WebExZimlet.prototype.init = function() {
  *
  */
 WebExZimlet.prototype.initializeToolbar = function(app, toolbar, controller, viewId) {
-	if (viewId.indexOf("APPT") >= 0) {
+	if ((viewId.indexOf("APPT") >= 0) && (viewId.indexOf("APPTRO") == -1)) {
 		this._initCalendarWebexToolbar(toolbar, controller);
 	}
 };
