@@ -133,9 +133,6 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="CppLib.dll" />
-  </ItemGroup>
   <PropertyGroup>
     <StartArguments />
   </PropertyGroup>
