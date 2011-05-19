@@ -1,0 +1,8 @@
+<zimlet name="com_zimbra_example_jquery" version="0.1" description="Displays an example of handling button click using JQeury">
+  <include>jqueryexample.js</include>
+  <include>jquery.min.js</include>
+  <handlerObject>com_zimbra_example_jquery</handlerObject>
+  <zimletPanelItem label="JQuery Example" icon="zimbraIcon">
+    <toolTipText>Displays an example of handling button click using JQeury</toolTipText>
+  </zimletPanelItem>
+</zimlet>
