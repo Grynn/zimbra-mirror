@@ -110,6 +110,7 @@ public class Button {
 
 	public static final Button O_SEND_SEND_LATER = new Button("O_SEND_SEND_LATER");
 	public static final Button O_SIGNATURE_DO_NOT_ADD_SIGNATURE = new Button("O_SIGNATURE_DO_NOT_ADD_SIGNATURE");
+	public static final Button O_ADD_SIGNATURE = new Button("O_ADD_SIGNATURE");
 	public static final Button O_OPTION_FORMAT_AS_HTML = new Button("O_OPTION_FORMAT_AS_HTML");
 	public static final Button O_OPTION_FORMAT_AS_TEXT = new Button("O_OPTION_FORMAT_AS_TEXT");
 	public static final Button O_OPTION_REQUEST_READ_RECEIPT = new Button("O_OPTION_REQUEST_READ_RECEIPT");

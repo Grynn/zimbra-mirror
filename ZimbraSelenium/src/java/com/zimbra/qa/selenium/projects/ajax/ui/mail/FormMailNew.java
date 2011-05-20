@@ -519,6 +519,11 @@ public class FormMailNew extends AbsForm {
 			zFillField(Field.Body, mail.dBodyText);
 			
 		}
+		if ( mail.dBodyHtml != null ) {
+			
+			zFillField(Field.Body, mail.dBodyHtml);
+			
+		}
 		
 		// TODO: how to handle HTML body?
 		

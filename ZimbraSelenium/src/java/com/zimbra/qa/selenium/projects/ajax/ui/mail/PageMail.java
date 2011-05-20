@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
@@ -186,7 +186,7 @@ public class PageMail extends AbsTab {
 					zDesktopContextMenuItems.replace(stringToReplace, I18N.CONTEXT_MENU_ITEM_NEW_FOLDER),
 					I18N.CONTEXT_MENU_ITEM_NEW_FOLDER,
 					"div[class='ImgNewFolder']",
-			":contains('nf')"); 
+			":contains('nf')");
 
 		}
 	}
@@ -526,11 +526,17 @@ public class PageMail extends AbsTab {
 
 			page = new DialogCreateFolder(this.MyApplication, this);
 
-		} else {
+		} else if ((pulldown == Button.B_SIGNATURE)&& (option == Button.O_ADD_SIGNATURE)) {
+
+			pulldownLocator = "css=td[id$='_ADD_SIGNATURE_dropdown']>div[class='ImgSelectPullDownArrow']";
+			//optionLocator = "//td[contains(@id,'_title') and contains (text(),'sigName')]";
+
+			page = null;
+		}else {
 			throw new HarnessException("no logic defined for pulldown/option "
 					+ pulldown + "/" + option);
 		}
-		
+
 		// Default behavior
 		if (pulldownLocator != null) {
 
@@ -599,7 +605,7 @@ public class PageMail extends AbsTab {
 	/**
 	 * Return a list of all messages in the current view
 	 * @return
-	 * @throws HarnessException 
+	 * @throws HarnessException
 	 */
 	public List<MailItem> zListGetMessages() throws HarnessException {
 
@@ -706,7 +712,7 @@ public class PageMail extends AbsTab {
 	/**
 	 * Return a list of all conversations in the current view
 	 * @return
-	 * @throws HarnessException 
+	 * @throws HarnessException
 	 */
 	public List<ConversationItem> zListGetConversations() throws HarnessException {
 		logger.info(myPageName() + " getConversationList");
