@@ -81,7 +81,7 @@ DwtLabel = function(params) {
 	 */
 	this._textForeground = null;
 
-    this._createHtml();
+    this._createHtml(params.template);
     //MOW:  this.setCursor("default");
 }
 
