@@ -38,15 +38,15 @@
         <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="65,12,0,0" MinWidth="160" HorizontalAlignment="Center" VerticalAlignment="Bottom" Name="tbUsername" Text="{Binding Path=UsernameEntered}"/>
         <Button Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,12,0,0" Name="plusButton" Command="{Binding AddCommand}" CommandParameter="{Binding ElementName=tbUsername,Path=Text}" MinWidth="20" MaxHeight="20" Content="=&gt;" FontFamily="Courier New" FontWeight="Bold" IsEnabled="{Binding Text.Length, ElementName=tbUsername, Converter={StaticResource CountGreaterThanZeroConverter}}"/>
         <Button Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="5,12,0,0" Name="minusButton" IsEnabled="{Binding MinusEnabled}" Command="{Binding RemoveCommand}" MinWidth="20" MaxHeight="20" Content="&lt;=" FontFamily="Courier New" FontWeight="Bold" />
-        <ListView Grid.Row="1" Grid.Column="2" Margin="40,40,0,0" Name="lbUsers" SelectionMode="Single" ItemsSource="{Binding UsersList}" SelectedIndex="{Binding Path=CurrentUserSelection, Mode=TwoWay}" MinHeight="200" MinWidth="160" >
+        <ListView Grid.Row="1" Grid.Column="2" Margin="40,40,0,0" Name="lbUsers" SelectionMode="Single" ItemsSource="{Binding UsersList}" SelectedIndex="{Binding Path=CurrentUserSelection, Mode=TwoWay}" MinHeight="200" MaxHeight="200" MinWidth="180" MaxWidth="180" >
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
                         <GridViewColumn  DisplayMemberBinding="{Binding Path=Username}">
-                            <GridViewColumnHeader MinWidth="80" Content=" Source Name" HorizontalContentAlignment="Left"/>
+                            <GridViewColumnHeader MinWidth="90" Content=" Source Name" HorizontalContentAlignment="Left"/>
                         </GridViewColumn>
                         <GridViewColumn  DisplayMemberBinding="{Binding Path=MappedName}">
-                            <GridViewColumnHeader MinWidth="80"  Content=" Dest Name" HorizontalContentAlignment="Left"/>
+                            <GridViewColumnHeader MinWidth="90"  Content=" Dest Name" HorizontalContentAlignment="Left"/>
                         </GridViewColumn>
                     </GridView.Columns>
                     </GridView>
