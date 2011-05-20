@@ -139,7 +139,7 @@ public class PageAddressbook extends AbsTab {
 		//Get the number of contacts (String) 
 		int count = this.sGetCssCount("css=div#zv__CNS div[id^=zli__CNS__]");
 		
-		logger.debug(myPageName() + " zListGetContacts: number of contacts: "+ count);
+		logger.info(myPageName() + " zListGetContacts: number of contacts: "+ count);
 
 		// Get each contact's data from the table list
 		for (int i = 1; i <= count; i++) {
@@ -274,6 +274,26 @@ public class PageAddressbook extends AbsTab {
  		  //for addressbook alphabet button only
 		  this.sClick(locator);
 		}
+		zWaitForBusyOverlay();
+	
+		
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+		return (page);
+	}
+
+	
+	public AbsPage zShortcut(int keyEvent) throws HarnessException {
+		logger.info(myPageName() + " zClickShortcut("+ keyEvent +")");
+
+		tracer.trace("Click the shortcut "+ keyEvent );
+		
+		// Default behavior variables
+		AbsPage page = null;	// If set, this page will be returned
+
+		// Click it
+		this.zKeyboard.zTypeKeyEvent(keyEvent);		
 		zWaitForBusyOverlay();
 	
 		

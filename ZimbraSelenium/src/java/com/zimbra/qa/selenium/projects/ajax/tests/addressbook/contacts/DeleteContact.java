@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.contacts;
 
 
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 import org.testng.annotations.Test;
@@ -72,4 +73,31 @@ public class DeleteContact extends AjaxCommonTest  {
         VerifyContactDeleted(contactItem);       
    	}
 
+	@Test(	description = "Delete a contact item using keyboard short cut Del",
+			groups = { "functional" })
+	public void DeleteContact_03() throws HarnessException {
+
+		// Create a contact via soap 
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+ 
+        //delete contact
+        app.zPageAddressbook.zShortcut(KeyEvent.VK_DELETE);
+       
+        //verify contact deleted
+        VerifyContactDeleted(contactItem);    
+   	}
+	
+	@Test(	description = "Delete a contact item using keyboard short cut backspace",
+			groups = { "functional" })
+	public void DeleteContact_04() throws HarnessException {
+
+		// Create a contact via soap 
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+ 
+        //delete contact
+        app.zPageAddressbook.zShortcut(KeyEvent.VK_BACK_SPACE);
+       
+        //verify contact deleted
+        VerifyContactDeleted(contactItem);    
+   	}
 }
