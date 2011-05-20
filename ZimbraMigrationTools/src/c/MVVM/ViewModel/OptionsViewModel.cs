@@ -57,10 +57,10 @@ namespace MVVM.ViewModel
         {
             System.Xml.Serialization.XmlSerializer reader =
            new System.Xml.Serialization.XmlSerializer(typeof(Config));
-            if (File.Exists(@"ZimbraAdminOverView.xml"))
+            if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
             {
                 System.IO.StreamReader fileRead = new System.IO.StreamReader(
-                   @"ZimbraAdminOverView.xml");
+                   @"C:\Temp\ZimbraAdminOverView.xml");
                 Config Z11 = new Config();
                 Z11 = (Config)reader.Deserialize(fileRead);
                 ImportMailOptions = Z11.importOptions.Mail;
@@ -86,14 +86,14 @@ namespace MVVM.ViewModel
 
         private void Save()
         {
-            if (File.Exists(@"ZimbraAdminOverView.xml"))
-             UpdateXmlElement(@"ZimbraAdminOverView.xml", "importOptions");
+            if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
+             UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "importOptions");
             else
             {   System.Xml.Serialization.XmlSerializer writer =
                 new System.Xml.Serialization.XmlSerializer(typeof(Config));
 
                 System.IO.StreamWriter file = new System.IO.StreamWriter(
-                    @"ZimbraAdminOverView.xml");
+                    @"C:\Temp\ZimbraAdminOverView.xml");
                 writer.Serialize(file, m_config);
                 file.Close();
             }
