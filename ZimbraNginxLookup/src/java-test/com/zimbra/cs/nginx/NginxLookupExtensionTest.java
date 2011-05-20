@@ -25,6 +25,7 @@ import junit.framework.Assert;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 import com.zimbra.common.service.ServiceException;
@@ -33,12 +34,13 @@ import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.Provisioning.DomainBy;
+import com.zimbra.qa.unittest.TestLdap;
 
 /*
  * Note: restart server after each run, the lookup servlet caches things
- *       TODO: send a flush cache comand to the lookup servlet
+ *       TODO: send a flush cache command to the lookup servlet
  */
-public class NginxLookupExtensionTest {
+public class NginxLookupExtensionTest extends TestLdap {
     
     private static final String USER = "user1";
     private static final String DEFAULT_DOMAIN = "phoebe.mbp";// TODO, REremove hardcode
@@ -313,6 +315,20 @@ public class NginxLookupExtensionTest {
         getProv().modifyAttrs(domain, attrs);
     }
     
+    private static String baseDomainName() {
+        return NginxLookupExtensionTest.class.getName().toLowerCase();
+    }
+    
+    private static String getDomainName(String domainName) {
+        return domainName + "." + baseDomainName();
+    }
+    
+    @AfterClass
+    public static void cleanup() throws Exception {
+        String baseDomainName = baseDomainName();
+        TestLdap.deleteEntireBranch(baseDomainName);
+    }
+    
     @Test
     public void imap() throws Exception {
         LookupData lookupData = new LookupData(AuthMethod.plain, USER, PASSWORD, AuthProtocol.imap);
@@ -351,7 +367,7 @@ public class NginxLookupExtensionTest {
     @Test
     public void externalRouteOnAccountUseRouteOnAccount() throws Exception {
         String user = "user";
-        String domainName = "account.account.externalroute";
+        String domainName = getDomainName("account.account.externalroute");
         String quser = user + "@" + domainName;
         
         Account acct = createAccount(user, domainName);
@@ -385,7 +401,7 @@ public class NginxLookupExtensionTest {
     @Test
     public void externalRouteOnAccountUseRouteOnAccountUseRouteOnDomain() throws Exception {
         String user = "user";
-        String domainName = "account.domain.externalroute";
+        String domainName = getDomainName("account.domain.externalroute");
         String quser = user + "@" + domainName;
         
         Account acct = createAccount(user, domainName);
@@ -420,7 +436,7 @@ public class NginxLookupExtensionTest {
     @Test
     public void externalRouteOnDomainUseRouteOnAccountUseRouteOnAccount() throws Exception {
         String user = "user";
-        String domainName = "domain.account.externalroute";
+        String domainName = getDomainName("domain.account.externalroute");
         String quser = user + "@" + domainName;
         
         Account acct = createAccount(user, domainName);
@@ -455,7 +471,7 @@ public class NginxLookupExtensionTest {
     @Test
     public void externalRouteOnDomainUseRouteOnAccountUseRouteOnDomain() throws Exception {
         String user = "user";
-        String domainName = "domain.domain.externalroute";
+        String domainName = getDomainName("domain.domain.externalroute");
         String quser = user + "@" + domainName;
         
         Account acct = createAccount(user, domainName);
@@ -490,7 +506,7 @@ public class NginxLookupExtensionTest {
     @Test
     public void externalRouteOnDomainIfAccountNoExistUseRouteOnAccountUseRouteOnDomain() throws Exception {
         String user = "user";
-        String domainName = "domain.domain.acountNotExist.externalroute";
+        String domainName = getDomainName("domain.domain.acountNotExist.externalroute");
         String quser = user + "@" + domainName;
         
         Domain domain = createDomain(domainName);
