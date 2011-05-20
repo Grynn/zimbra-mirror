@@ -7,19 +7,19 @@ public class OperatingSystem {
 	private static Logger logger = LogManager.getLogger(OperatingSystem.class);
 	
 	public static boolean isWindows() {
-		return (OperatingSystem.getSingleton().os.startsWith("Windows"));
+		return (OperatingSystem.getSingleton().os.startsWith("windows"));
 	}
 	
 	public static boolean isWindowsXP() {
-		return (OperatingSystem.getSingleton().os.equals("Windows XP"));
+		return (OperatingSystem.getSingleton().os.equals("windows xp"));
 	}
 
 	public static boolean isLinux() {
-		return (OperatingSystem.getSingleton().os.startsWith("Linux"));
+		return (OperatingSystem.getSingleton().os.startsWith("linux"));
 	}
 	
 	public static boolean isMac() {
-		return (OperatingSystem.getSingleton().os.startsWith("Mac"));
+		return (OperatingSystem.getSingleton().os.startsWith("mac"));
 	}
 
 	public enum OsType {
@@ -45,8 +45,7 @@ public class OperatingSystem {
     * @return (enum: OperatingSystem.OsType) OS Type (Windows, MAC, or Linux)
     */
    public static OsType getOSType() {
-      String os = System.getProperty("os.name").toLowerCase();
-      logger.info("os.name is: " + os);
+      logger.info("os.name is: " + getSingleton().os);
       OsType osType = null;
       if (isWindows()) {
          osType = OsType.WINDOWS;
@@ -68,7 +67,7 @@ public class OperatingSystem {
     private volatile static OperatingSystem singleton;
  
     private OperatingSystem() {
-		os = System.getProperty("os.name");
+		os = System.getProperty("os.name").toLowerCase();
 		logger.info("Operating System: "+ os);
 
     }

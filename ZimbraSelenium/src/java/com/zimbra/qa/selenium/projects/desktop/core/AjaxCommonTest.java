@@ -170,6 +170,7 @@ public class AjaxCommonTest {
 		      logger.info("_uninstallAppAfterTest: " + _uninstallAppAfterTest);
 		      logger.info("_productName: " + _productName);
 		      logger.info("_branchName: " + _branchName);
+		      logger.info("osType: " + osType);
 
 		      switch (osType){
 		      case WINDOWS: case WINDOWS_XP:
@@ -202,7 +203,13 @@ public class AjaxCommonTest {
 		         break;
 
 		      case MAC:
+		         _downloadFilePath = "/download-zimbra-qa-test/";
 		         _arch = ARCH.MACOSX_X86_10_6;
+		         username = ZimbraDesktopProperties.getInstance().getUserName();
+		         command = "/Applications/Zimbra\\ Desktop/Zimbra\\ Desktop.app/Contents/MacOS/zdrun";
+
+		         _executableFilePath = new String[] {"su", "-", username, "-c", command};
+		         _params = null;
 		         //TODO: _executableFilePath
 		      }
 
@@ -239,12 +246,14 @@ public class AjaxCommonTest {
 
 		      GeneralUtility.waitFor(null, ZimbraAccount.AccountZWC(), false,
 		            "authenticateToMailClientHost", null, WAIT_FOR_OPERAND.NEQ, null, 60000, 3000);
+
 		   } else {
 		      // AJAX test
 		      ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.AJAX);
 		   }
 
 		   _selenium = ClientSessionFactory.session().selenium();
+		   logger.debug("Starting selenium");
 	      _selenium.start();
 	      _selenium.windowMaximize();
 	      _selenium.windowFocus();
@@ -279,10 +288,15 @@ public class AjaxCommonTest {
 		} catch (SeleniumException e) {
 			throw new HarnessException("Unable to open app", e);
 		} catch (Exception e) {
-         logger.info(e.getMessage());
-         e.printStackTrace();
+		   throw new HarnessException("Error in Before Suite", e);
       }
 
+		// This is needed only in Mac OS because when selenium invokes the test browser window,
+		// the window is not active (in background), thus any methods involving robot will not work
+		// properly
+		if (osType == OsType.MAC) {
+		   app.zPageMain.zMouseClick(100, 100);		   
+		}
 		logger.info("commonTestBeforeSuite: finish");		
 	}
 
@@ -383,6 +397,7 @@ public class AjaxCommonTest {
 
          if (_currentAccount != ZimbraAccount.AccountZWC()) {
             app.zPageLogin.zNavigateTo();
+
             if  (app.zPageLogin.sIsElementPresent(PageLogin.Locators.zBtnLoginDesktop)) {
                boolean bFoundOtherUser = true;
                logger.debug("Cleaning up all existing users");

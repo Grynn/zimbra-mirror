@@ -209,6 +209,7 @@ public class BuildUtility {
     */
    public static void deleteOldBuilds(File dir) {
 
+      logger.debug("Deleting old builds...");
       FilenameFilter filter = new FilenameFilter() {
 
          public boolean accept(File dir, String name) {
@@ -229,8 +230,11 @@ public class BuildUtility {
             case WINDOWS: case WINDOWS_XP:
                fileExtension = ".msi";
                break;
-            case LINUX: case MAC:
+            case LINUX:
                fileExtension = ".tgz";
+               break;
+            case MAC:
+               fileExtension = ".dmg";
                break;
             }
 
@@ -277,14 +281,19 @@ public class BuildUtility {
          String url = _getDownloadableBuildUrl(buildUrl);
          logger.info("Build URL is: " + url);
 
-         OperatingSystem.OsType osType = OperatingSystem.getOSType();
-         logger.debug("OS Type is: " + osType.toString());
-
          if (!downloadDest.trim().endsWith(Character.toString(File.separatorChar))) {
             downloadDest = downloadDest.trim() + File.separatorChar;
          }
 
-         deleteOldBuilds(new File(downloadDest));
+         logger.info("downloadDest is: " + downloadDest);
+
+         File file = new File(downloadDest);
+         if (!file.exists()) {
+            logger.info("Creating directory " + downloadDest + "...");
+            file.mkdir();
+         } else {
+            deleteOldBuilds(new File(downloadDest));
+         }
 
          logger.debug("Now downloading the file to location: " + downloadDest + " ...");
          in = new BufferedInputStream(new java.net.URL(url).openStream());
@@ -304,7 +313,7 @@ public class BuildUtility {
          }
 
       } catch (IOException ioe){
-         ioe.printStackTrace();
+         throw new HarnessException("Getting IO Exception: ", ioe);
       } finally {
          bout.flush();
          bout.close();

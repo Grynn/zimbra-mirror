@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.framework.ui;
 
 import java.awt.*;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 import org.apache.log4j.*;
@@ -46,7 +47,7 @@ public abstract class AbsPage extends AbsSeleniumObject {
 	 * A Keyboard object to send keyboard input to the screen
 	 */
 	protected Keyboard zKeyboard = new Keyboard();
-	
+
 	/**
 	 * Create this page object that exists in the specified application
 	 * @param application
@@ -183,8 +184,63 @@ public abstract class AbsPage extends AbsSeleniumObject {
 		this.zWaitForBusyOverlay();		
 
 	}
-	
-	
+
+	/**
+	 * Using java robot to do mouse click on the coordinate.
+	 * This is needed for example to bring up the browser test window to the front most, becauase
+	 * when using selenium to fire the mouse event, it won't bring the test window to the front most
+	 * Usage instance: Mac OS Before Suite
+	 * @param x coordinate x
+	 * @param y coordinate y
+	 * @throws HarnessException 
+	 */
+	public void zMouseClick(int x, int y) throws HarnessException {
+	   Mouse mouse = new Mouse();
+	   mouse.leftClick(x, y);
+	}
+
+	/**
+    * An object for interfacing with the Mouse
+    * @author Jeffry Hidayat
+    *
+    */
+	public static class Mouse {
+	   private static Logger logger = LogManager.getLogger(Mouse.class);
+	   public Mouse() {
+	      logger.info("new " + Mouse.class.getCanonicalName());
+	   }
+
+	   public void leftClick(int x, int y) throws HarnessException {
+	      logger.info("leftClick(" + x + ", " + y + ")");
+	      RobotMouse robotMouse = new RobotMouse();
+	      robotMouse.click(x, y);
+	   }
+
+	   //// ***
+      // Start: Robot methods
+      //// ***
+      private static class RobotMouse {
+         private static Logger logger = LogManager.getLogger(RobotMouse.class);
+         private Robot robot;
+
+         public RobotMouse() throws HarnessException {
+           logger.info("new " + RobotMouse.class.getCanonicalName());
+
+           try {
+              this.robot = new Robot();
+           } catch (AWTException e) {
+              throw new HarnessException(e);
+           }
+         }
+
+         public void click(int x, int y) {
+            logger.info("click(" + x + ", " + y + ")");
+            robot.mouseMove(x, y);
+            robot.mousePress(InputEvent.BUTTON1_MASK);
+            robot.mouseRelease(InputEvent.BUTTON1_MASK);
+          }
+      }
+	}
 	
 	/**
 	 * An object for interfacing with the keyboard

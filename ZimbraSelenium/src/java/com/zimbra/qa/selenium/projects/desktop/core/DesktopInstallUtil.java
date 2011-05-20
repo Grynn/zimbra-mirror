@@ -200,6 +200,10 @@ public class DesktopInstallUtil {
       case LINUX:
          isRunning = (getZDProcess() == null ? false : true);
          break;
+      case MAC:
+         // TODO:
+         isRunning = false;
+         break;
       default:
          throw new HarnessException("Implement me!");
       }
@@ -224,7 +228,9 @@ public class DesktopInstallUtil {
                CommandLine.CmdExec("kill -9 " + zdProcess.desktopServerPid);
                _resetZdProcess();
                break;
-               
+            case MAC:
+               //TODO:
+               break;
             default:
                throw new HarnessException("Implement me!");
             }

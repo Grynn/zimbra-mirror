@@ -86,7 +86,9 @@ public class ZimbraDesktopProperties {
    private final static String [] _possibleFiles = {
       "/opt/zimbra/zdesktop/conf/localconfig.xml",
       "/home/<USER_NAME>/zdesktop/conf/localconfig.xml",
-      "C:\\Documents and Settings\\<USER_NAME>\\Local Settings\\Application Data\\Zimbra\\Zimbra Desktop\\conf\\localconfig.xml"
+      "C:\\Documents and Settings\\<USER_NAME>\\Local Settings\\Application Data\\Zimbra\\Zimbra Desktop\\conf\\localconfig.xml",
+      "/opt/<USER_NAME>/Library/Zimbra\\ Desktop/conf/localconfig.xml",
+      "/opt/<USER_NAME>/Library/Zimbra Desktop/conf/localconfig.xml"
    };
 
    private void init() {
