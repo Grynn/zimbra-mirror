@@ -1410,7 +1410,7 @@ function(ev) {
 			DwtUiEvent.setDhtmlBehaviour(ev, true, false);
 			retVal = false;
 		}
-		else if (ev.keyCode == 9) {
+		else if (ev.keyCode == 9 && !ev.shiftKey) { //let shift-tab do what the browser does naturally - get back to the previous field
 			if (AjxEnv.isIE) {
 				this._handleIETabKey(!ev.shiftKey);
 				ke._stopPropagation = true;
