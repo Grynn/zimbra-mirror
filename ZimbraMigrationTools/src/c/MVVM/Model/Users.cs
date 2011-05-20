@@ -9,13 +9,25 @@ namespace MVVM.Model
     public class Users
     {
         public Users() { }
-        internal Users(string usernameEntered, int currentUserSelection)
+        internal Users(string usernameEntered, string username, string mappedname, int currentUserSelection)
         {
             this.UsernameEntered = usernameEntered;
+            this.Username = username;
+            this.MappedName = mappedname;
             this.CurrentUserSelection = currentUserSelection;
         }
 
         public string UsernameEntered
+        {
+            get; set;
+        }
+
+        public string Username
+        {
+            get; set;
+        }
+
+        public string MappedName
         {
             get; set;
         }
@@ -53,8 +65,7 @@ namespace MVVM.Model
             }
             return linie.ToString();
         }
-        public string UserName;
-        public string MappedName;
+
         public bool ChangePWD;
         public string PWDdefault;
 

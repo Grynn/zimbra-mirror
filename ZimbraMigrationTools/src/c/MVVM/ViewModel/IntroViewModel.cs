@@ -171,7 +171,7 @@ namespace MVVM.ViewModel
             m_scheduleViewModel.lb = lb;
             m_scheduleViewModel.isBrowser = false;
 
-            m_usersViewModel = new UsersViewModel(m_scheduleViewModel); // needs scheduleviewmodel so schedlist will be in sync
+            m_usersViewModel = new UsersViewModel(m_scheduleViewModel,"",""); // needs scheduleviewmodel so schedlist will be in sync
             m_usersViewModel.Name = "Users";
             m_usersViewModel.ViewTitle = "Users";
             m_usersViewModel.ImageName = "Images/UnknownPerson_dataNotFound.jpg";

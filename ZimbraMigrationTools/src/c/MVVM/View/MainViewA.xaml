@@ -4,7 +4,7 @@
         xmlns:View="clr-namespace:MVVM.View"
         xmlns:ViewModel="clr-namespace:MVVM.ViewModel"
         FontFamily="Century Schoolbook"
-        Title="FBS Prototype" Height="515" Width="600">
+        Title="Zimbra Migration" Height="515" Width="600">
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type ViewModel:IntroViewModel}">
@@ -45,7 +45,7 @@
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Name="tbAppTitle" Text="Zimbra Migration 0518" VerticalAlignment="Center" Foreground="Crimson" FontSize="18" FontWeight="Bold" FontFamily="Maiandra GD" FontStyle="Italic" HorizontalAlignment="Center" />
+            <TextBlock Grid.Row="0" Name="tbAppTitle" Text="Zimbra Migration 0520" VerticalAlignment="Center" Foreground="Crimson" FontSize="18" FontWeight="Bold" FontFamily="Maiandra GD" FontStyle="Italic" HorizontalAlignment="Center" />
             <Image Grid.Row="1" HorizontalAlignment="Center"  Margin="15,0,0,0" Name="image0" Stretch="None" VerticalAlignment="Center" Source="/MVVM;component/View/Images/vmwareLogo.png" />
         </Grid>
 

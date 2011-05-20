@@ -12,13 +12,12 @@ using Misc;
 
 namespace MVVM.ViewModel
 {
-
     public class UsersViewModel : BaseViewModel
     {
-        readonly Users m_users = new Users("", -1);
+        readonly Users m_users = new Users("", "", "", -1);
         ScheduleViewModel scheduleViewModel;
 
-        public UsersViewModel(ScheduleViewModel scheduleViewModel)
+        public UsersViewModel(ScheduleViewModel scheduleViewModel, string username, string mappedname)
         {
             this.GetUsersHelpCommand = new ActionCommand(this.GetUsersHelp, () => true);
             this.ObjectPickerCommand = new ActionCommand(this.ObjectPicker, () => true);
@@ -30,6 +29,8 @@ namespace MVVM.ViewModel
             this.SaveCommand = new ActionCommand(this.Save, () => true);
             this.NextCommand = new ActionCommand(this.Next, () => true);
             this.scheduleViewModel = scheduleViewModel;
+            this.Username = username;
+            this.MappedName = mappedname;
         }
 
 
@@ -140,14 +141,16 @@ namespace MVVM.ViewModel
                             {
                                 strres = parsedData[j];
                                
-                                tempuser.UserName = strres[0];
+                                tempuser.Username = strres[0];
                                 tempuser.MappedName = strres[1];
                                 tempuser.ChangePWD = Convert.ToBoolean(strres[2]);
                                 tempuser.PWDdefault = strres[3];
                                 //string result = tempuser.UserName + "," + tempuser.MappedName +"," + tempuser.ChangePWD + "," + tempuser.PWDdefault;
-                                string result = tempuser.UserName + "," + tempuser.MappedName;
-                                UsersList.Add(result);
-                                scheduleViewModel.SchedList.Add(tempuser.UserName);
+                                string result = tempuser.Username + "," + tempuser.MappedName;
+                                Username = strres[0];
+                                MappedName = strres[1];
+                                UsersList.Add(new UsersViewModel(null, Username, MappedName));
+                                scheduleViewModel.SchedList.Add(Username);
                             }
 
 
@@ -182,7 +185,7 @@ namespace MVVM.ViewModel
         private void Add(object value)
         {
             var name = value as string;
-            UsersList.Add(name);
+            UsersList.Add(new UsersViewModel(null, name, ""));
             UsernameEntered = "";
             scheduleViewModel.SchedList.Add(name);
             scheduleViewModel.EnableMigrate = (scheduleViewModel.SchedList.Count > 0);
@@ -213,12 +216,12 @@ namespace MVVM.ViewModel
             List<Users> ListofUsers = new List<Users>();
             for (int i = 0; i < UsersList.Count; i++)
             {
-                string users = UsersList[i];
+                string users = UsersList[i].Username + ',' + UsersList[i].MappedName;
 
                 string[] nameTokens = users.Split(',');
 
                 Users tempUser = new Users();
-                tempUser.UserName = nameTokens.GetValue(0).ToString();
+                tempUser.Username = nameTokens.GetValue(0).ToString();
                 tempUser.MappedName = nameTokens.GetValue(1).ToString();
                 //tempUser.ChangePWD = Convert.ToBoolean(nameTokens.GetValue(2).ToString());
                // tempUser.PWDdefault = nameTokens.GetValue(3).ToString();
@@ -247,8 +250,8 @@ namespace MVVM.ViewModel
         }
         ////////////////////////
 
-        private ObservableCollection<string> userslist = new ObservableCollection<string>();
-        public ObservableCollection<string> UsersList
+        private ObservableCollection<UsersViewModel> userslist = new ObservableCollection<UsersViewModel>();
+        public ObservableCollection<UsersViewModel> UsersList
         {
             get { return userslist; }
         }
@@ -264,6 +267,34 @@ namespace MVVM.ViewModel
                 }
                 m_users.UsernameEntered = value;
                 OnPropertyChanged(new PropertyChangedEventArgs("UsernameEntered"));
+            }
+        }
+
+        public string Username
+        {
+            get { return m_users.Username; }
+            set
+            {
+                if (value == m_users.Username)
+                {
+                    return;
+                }
+                m_users.Username = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("Username"));
+            }
+        }
+
+        public string MappedName
+        {
+            get { return m_users.MappedName; }
+            set
+            {
+                if (value == m_users.MappedName)
+                {
+                    return;
+                }
+                m_users.MappedName = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("MappedName"));
             }
         }
 
