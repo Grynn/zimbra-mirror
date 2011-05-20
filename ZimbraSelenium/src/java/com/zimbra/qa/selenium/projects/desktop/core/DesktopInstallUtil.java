@@ -299,12 +299,12 @@ public class DesktopInstallUtil {
             }
             break;
          case LINUX:
-            CommandLine.CmdExec("rm -rf /opt/zimbra/zdesktop");
-            CommandLine.CmdExec("rm -rf /home/" +
-                  ZimbraDesktopProperties.getInstance().getUserName() + "/zdesktop");
+            File mainDir = new File("/opt/zimbra/zdesktop");
+            GeneralUtility.deleteDirectory(mainDir);
             break;
          case MAC:
-            //TODO: Impelements MAC uninstallation method here
+            mainDir = new File("/Applications/Zimbra Desktop/");
+            GeneralUtility.deleteDirectory(mainDir);
             break;
          }
       } else {
@@ -420,7 +420,16 @@ public class DesktopInstallUtil {
                killDesktopProcess();
                break;
             case MAC:
-               // TODO: Implements installation methods for Linux and Mac
+               logger.info(CommandLine.cmdExecWithOutput(
+                     "hdiutil mount " + installFileBinaryLocation));
+               String [] command = {"cp", "-R", "/Volumes/Zimbra Desktop Installer", "/Applications"};
+               logger.info(CommandLine.cmdExecWithOutput(command, null));
+
+               command = new String[] {"installer", "-package", "/Applications/Zimbra Desktop Installer/Zimbra Desktop.mpkg", "-target", "/Volumes/Server HD"};
+               logger.info(CommandLine.cmdExecWithOutput(command, null));
+
+               command = new String[] {"hdiutil", "unmount", "/Volumes/Zimbra Desktop Installer/"};
+               logger.info(CommandLine.cmdExecWithOutput(command, null));
                break;
 
             }
@@ -463,7 +472,10 @@ public class DesktopInstallUtil {
          }
          break;
       case MAC:
-         //TODO:
+         installDir = new File("/Applications/Zimbra Desktop/Zimbra Desktop.app/Contents/MacOS/zdrun");
+         if (installDir.exists()) {
+            isDesktopInstalled = true;
+         }
          break;
       }
 
