@@ -1,0 +1,11 @@
+.video-panel {
+    position: relative;
+	padding: 10px;
+	background: none repeat scroll 0 0 #E3E9F0;
+}
+
+.youTubeImagePreview {
+   padding: 5px 5px 5px 5px;
+   background-color: black;
+   display: inline-block;
+}

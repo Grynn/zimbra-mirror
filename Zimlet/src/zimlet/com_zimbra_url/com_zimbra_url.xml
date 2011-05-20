@@ -1,5 +1,6 @@
-<zimlet name="com_zimbra_url" version="2.3" label="${msg.zimletLabel}" target="main view-window" description="${msg.description}">
+<zimlet name="com_zimbra_url" version="2.4" label="${msg.zimletLabel}" target="main view-window" description="${msg.description}">
 	<include>url.js</include>
+    <includeCSS>url.css</includeCSS>
 	<resource>blank_pixel.gif</resource>
 	<handlerObject>Com_Zimbra_Url</handlerObject>
 	<serverExtension hasKeyword="url" extensionClass="com.zimbra.cs.zimlet.handler.RegexHandler"/>
