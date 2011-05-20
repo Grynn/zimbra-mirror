@@ -73,21 +73,22 @@ function(zimlet, now, isDragProxy) {
 	html[idx++] = "<tr>";
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {
+		var cellWidth = this._getCellWidth(i, {});
 		var field = this._headerList[i]._field;
 		if(field == ZaZimlet.A_name) {	
 			// name
-			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
+			html[idx++] = "<td align='left' width=" + cellWidth + ">";
 			html[idx++] = AjxStringUtil.htmlEncode(zimlet.getLabel());
 			html[idx++] = "</td>";
 		} else if(field == ZaZimlet.A_zimbraZimletDescription) {	
 			// description
-			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
+			html[idx++] = "<td align='left' width=" + cellWidth + ">";
             var desc = ZaZimletListView.__processMessage(zimlet[ZaZimlet.A_name], zimlet.attrs[ZaZimlet.A_zimbraZimletDescription ]);
 			html[idx++] = AjxStringUtil.htmlEncode(desc);
 			html[idx++] = "</td>";
 		} else if(field == ZaZimlet.A_zimbraZimletEnabled) {	
 			// status
-			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
+			html[idx++] = "<td align='left' width=" + cellWidth + ">";
 			html[idx++] = (zimlet.attrs[ZaZimlet.A_zimbraZimletEnabled] == "TRUE") ?  AjxStringUtil.htmlEncode(ZaMsg.NAD_Enabled) :AjxStringUtil.htmlEncode(ZaMsg.NAD_Disabled) ;
 			html[idx++] = "</td>";
 		}

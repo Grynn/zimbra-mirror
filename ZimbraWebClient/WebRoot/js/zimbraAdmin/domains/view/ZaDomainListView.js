@@ -77,25 +77,26 @@ function(domain, now, isDragProxy) {
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {
 		var field = this._headerList[i]._field;
+		var cellWidth = this._getCellWidth(i, {});
 		if(field == ZaDomain.A_domainName) {
 			// name
-			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
+			html[idx++] = "<td align='left' width=" + cellWidth + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(domain.name);
 			html[idx++] = "</nobr></td>";
 		} else if(field == ZaDomain.A_description) {
 			// description		
-			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
+			html[idx++] = "<td align='left' width=" + cellWidth + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(
                     ZaItem.getDescriptionValue(domain.attrs[ZaDomain.A_description]));
 			html[idx++] = "</nobr></td>";
 		} else if(field == ZaDomain.A_zimbraDomainStatus) {
 			// description		
-			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
+			html[idx++] = "<td align='left' width=" + cellWidth + "><nobr>";
 			html[idx++] = ZaDomain._domainStatus(domain.attrs[ZaDomain.A_zimbraDomainStatus]);
 			html[idx++] = "</nobr></td>";
 		} else if (field == ZaDomain.A_domainType) {
             // domain type
-			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + "><nobr>";
+			html[idx++] = "<td align='left' width=" + cellWidth + "><nobr>";
 			html[idx++] = AjxStringUtil.htmlEncode(domain.attrs[ZaDomain.A_domainType]);
 			html[idx++] = "</nobr></td>";
         }
