@@ -210,7 +210,7 @@ public class AjaxCommonTest {
 
 		         _executableFilePath = new String[] {"su", "-", username, "-c", command};
 		         _params = null;
-		         //TODO: _executableFilePath
+
 		      }
 
 		      logger.info("_forceInstall: " + _forceInstall);
