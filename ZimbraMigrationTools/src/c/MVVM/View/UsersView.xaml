@@ -28,25 +28,27 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Button Grid.Row="0" HorizontalAlignment="Left"  HorizontalContentAlignment="Left" Margin="0,0,0,0"  Name="objPickerButton" Command="{Binding ObjectPickerCommand}" Width="{Binding ElementName=queryBuilderButton, Path=ActualWidth}"> Object Picker...</Button>
                 <Button Grid.Row="1" HorizontalAlignment="Left"  HorizontalContentAlignment="Left" Margin="0,20,0,0" Name="queryBuilderButton" Command="{Binding QueryBuilderCommand}" >Query Builder...</Button>
                 <Button Grid.Row="2" HorizontalAlignment="Left"  HorizontalContentAlignment="Left" Margin="0,20,0,0" Name="publicFolderButton" Command="{Binding PublicFolderCommand}" Width="{Binding ElementName=queryBuilderButton, Path=ActualWidth}">Public Folder...</Button>
+                <Button Grid.Row="3" HorizontalAlignment="Left"  HorizontalContentAlignment="Left" Margin="0,20,0,0" Name="loadCSVButton" Command="{Binding UserMapCommand}" Width="{Binding ElementName=queryBuilderButton, Path=ActualWidth}">Load CSV...</Button>
             </Grid>
         </GroupBox>
         <TextBlock Grid.Row="1" Grid.Column="0" Margin="26,12,0,0" HorizontalAlignment="Left" Name="textEnter" Text="User:" VerticalAlignment="Bottom"/>
         <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="65,12,0,0" MinWidth="160" HorizontalAlignment="Center" VerticalAlignment="Bottom" Name="tbUsername" Text="{Binding Path=UsernameEntered}"/>
         <Button Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,12,0,0" Name="plusButton" Command="{Binding AddCommand}" CommandParameter="{Binding ElementName=tbUsername,Path=Text}" MinWidth="20" MaxHeight="20" Content="=&gt;" FontFamily="Courier New" FontWeight="Bold" IsEnabled="{Binding Text.Length, ElementName=tbUsername, Converter={StaticResource CountGreaterThanZeroConverter}}"/>
         <Button Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="5,12,0,0" Name="minusButton" IsEnabled="{Binding MinusEnabled}" Command="{Binding RemoveCommand}" MinWidth="20" MaxHeight="20" Content="&lt;=" FontFamily="Courier New" FontWeight="Bold" />
-        <ListView Grid.Row="1" Grid.Column="2" Margin="40,40,0,0" Name="lbUsers" SelectionMode="Single" ItemsSource="{Binding UsersList}" SelectedIndex="{Binding Path=CurrentUserSelection, Mode=TwoWay}" MinHeight="200" MaxHeight="200" MinWidth="180" MaxWidth="180" >
+        <ListView Grid.Row="1" Grid.Column="2" Margin="40,40,0,0" Name="lbUsers" SelectionMode="Single" ItemsSource="{Binding UsersList}" SelectedIndex="{Binding Path=CurrentUserSelection, Mode=TwoWay}" MinHeight="240" MaxHeight="240" MinWidth="180" MaxWidth="180" >
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
                         <GridViewColumn  DisplayMemberBinding="{Binding Path=Username}">
-                            <GridViewColumnHeader MinWidth="90" Content=" Source Name" HorizontalContentAlignment="Left"/>
+                            <GridViewColumnHeader MinWidth="90" MaxWidth="90" Content=" Source Name" HorizontalContentAlignment="Left"/>
                         </GridViewColumn>
                         <GridViewColumn  DisplayMemberBinding="{Binding Path=MappedName}">
-                            <GridViewColumnHeader MinWidth="90"  Content=" Dest Name" HorizontalContentAlignment="Left"/>
+                            <GridViewColumnHeader MinWidth="90"  MaxWidth="90" Content=" Dest Name" HorizontalContentAlignment="Left"/>
                         </GridViewColumn>
                     </GridView.Columns>
                     </GridView>
@@ -57,7 +59,6 @@
             <TextBlock Margin="26,40,0,0" Name="textBlockHelp" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Left">
                        <Hyperlink Command="{Binding GetUsersHelpCommand}">Help</Hyperlink>
             </TextBlock>
-            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,40,0,0" Content="Load..." Name="loadUButton" Command="{Binding UserMapCommand}"  />
             <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="200,40,0,0" Content="Save" Name="saveUButton" Command="{Binding SaveCommand}"  />
             <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="360,40,0,0" Content="Next" Name="nextUButton" Command="{Binding NextCommand}"  />
         </Grid>
