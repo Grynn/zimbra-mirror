@@ -139,6 +139,12 @@ ZaNewAccountXWizard.prototype.createDomainAndAccount = function(domainName) {
 ZaNewAccountXWizard.prototype.finishWizard = 
 function() {
 	try {
+        if(this._containedObject.attrs[ZaAccount.A_password]) {
+            if(this._containedObject.attrs[ZaAccount.A_password] != this._containedObject[ZaAccount.A2_confirmPassword]) {
+                ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
+                return false;
+            }
+        }
 		
 		if(!ZaAccount.checkValues(this._containedObject)) {
 			return false;
