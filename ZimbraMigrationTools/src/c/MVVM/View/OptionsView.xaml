@@ -66,6 +66,7 @@
             <TextBlock Margin="26,25,0,0" Name="textBlockOHelp" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Left">
                        <Hyperlink Command="{Binding GetOptionsHelpCommand}">Help</Hyperlink>
             </TextBlock>
+            <CheckBox HorizontalAlignment="Left" VerticalAlignment="Center" Margin="100,25,0,0" Content="Test Run"  Name="CBTest"  />
             <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,25,0,0" Content="Load" Name="loadOButton" Command="{Binding LoadCommand}"  />
             <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="200,25,0,0" Content="Save" Name="saveOButton" Command="{Binding SaveCommand}"  />
             <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="360,25,0,0" Content="{Binding Path=ImportNextButtonContent}" Name="nextOButton" Command="{Binding NextCommand}"  />

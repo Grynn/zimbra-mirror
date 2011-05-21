@@ -19,7 +19,7 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Margin="30,45,0,0" HorizontalAlignment="Left" Name="textMigUsers" Text="Migrate these users" VerticalAlignment="Top"/>
-        <ListBox Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="30,-15,0,0" Name="lbSchedUsers" ItemsSource="{Binding SchedList}" MinHeight="200" MinWidth="150" HorizontalAlignment="Left" />
+        <ListBox Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="30,-15,0,0" Name="lbSchedUsers" ItemsSource="{Binding SchedList}" MinHeight="200" MaxHeight="200" MinWidth="150" HorizontalAlignment="Left" />
         <!--
         <TextBlock Grid.Row="0" Grid.Column="1" Margin="30,20,0,0" HorizontalAlignment="Left" Name="textTasks" Text="Task setup" VerticalAlignment="Top"/>
         -->
