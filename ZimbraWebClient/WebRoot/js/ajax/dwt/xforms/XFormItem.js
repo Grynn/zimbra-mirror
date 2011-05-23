@@ -3465,7 +3465,11 @@ Repeat_XFormItem.prototype.getAddButton = function () {
 		var width = this.getInheritedProperty("addButtonWidth");		
 		if (width)
 			this.addButton.width = width ;
-			
+
+        var cssStyle = this.getInheritedProperty("addButtonCSSStyle");
+		if (cssStyle)
+			this.addButton.cssStyle = cssStyle ;
+
 		if(showAddOnNextRow) {
 			this.addButton.colSpan = "*";
 		}

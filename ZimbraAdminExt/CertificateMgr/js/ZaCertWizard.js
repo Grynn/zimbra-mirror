@@ -751,7 +751,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 				style: DwtAlert.WARNING, iconVisible: false,
 				content: com_zimbra_cert_manager.CSR_EXISTS_WARNING 
 		 }, 
-		{type: _GROUP_ , colSpan:2, numCols: 2, colSizes:["150px","300px"],
+		{type: _GROUP_ , colSpan:2, numCols: 2, colSizes:["150px","*"], width:"100%",
 			  items :[
 				{	type: _GROUP_, numCols:2, colSpan: "*", colSizes:["150px","*"], items: [
 						{ type:_SPACER_, height: 10},
@@ -844,8 +844,8 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 					repeatInstance:"", 
 					showAddButton:true, 
 					showRemoveButton:true,
-                    addButtonWidth: 50,
-                    removeButtonWidth: 50,
+                    removeButtonCSSStyle:"margin-left:10px;",
+                    addButtonCSSStyle:"margin-left:10px;",
                     //showAddOnNextRow:true,
 					alwaysShowAddButton:true,
 					removeButtonLabel:com_zimbra_cert_manager.NAD_Remove,								
@@ -1041,16 +1041,17 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 	
 		cases.push (case_csr_confirm) ;
 
-    var contentW = 450 ;
+    var w = "480px" ;
     if (AjxEnv.isIE) {
-        contentW = 500 ;
+        w = "530px" ;
     }
+
     xFormObject.items = [
 			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep,
                 choices:this.stepChoices, valueChangeEventSources:[ZaModel.currentStep]},
 			{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 			{type:_SPACER_,  align:_CENTER_, valign:_TOP_},
-			{type:_SWITCH_, width:contentW, align:_LEFT_, valign:_TOP_, items:cases}
+			{type:_SWITCH_,  width:w, align:_LEFT_, valign:_TOP_, items:cases}
 		];
 };
 ZaXDialog.XFormModifiers["ZaCertWizard"].push(ZaCertWizard.myXFormModifier);
