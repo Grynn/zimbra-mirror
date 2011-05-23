@@ -186,6 +186,7 @@ namespace MVVM.ViewModel
             m_resultsViewModel.isBrowser = false;
             m_resultsViewModel.CurrentAccountSelection = -1;
 
+            m_scheduleViewModel.SetConfigUModel(m_configViewModelU);
             m_scheduleViewModel.SetUserModel(m_usersViewModel);
             m_scheduleViewModel.SetResultsModel(m_resultsViewModel);
 

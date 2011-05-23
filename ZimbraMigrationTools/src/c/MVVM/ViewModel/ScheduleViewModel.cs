@@ -17,6 +17,7 @@ namespace MVVM.ViewModel
     {
         readonly Schedule m_schedule = new Schedule(0, "", "", false);
         UsersViewModel usersViewModel;
+        ConfigViewModelU configViewModelU;
         AccountResultsViewModel accountResultsViewModel;
         BackgroundWorker bgw;
 
@@ -29,6 +30,16 @@ namespace MVVM.ViewModel
             this.SaveCommand = new ActionCommand(this.Save, () => true);
             this.MigrateCommand = new ActionCommand(this.Migrate, () => true);
             this.usersViewModel = null;
+        }
+
+        public ConfigViewModelU GetConfigUModel()
+        {
+            return configViewModelU;
+        }
+
+        public void SetConfigUModel(ConfigViewModelU configViewModelU)
+        {
+            this.configViewModelU = configViewModelU;
         }
 
         public void SetUserModel(UsersViewModel usersViewModel)

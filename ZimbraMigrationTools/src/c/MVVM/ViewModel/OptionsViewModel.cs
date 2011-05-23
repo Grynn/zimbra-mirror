@@ -110,7 +110,7 @@ namespace MVVM.ViewModel
             }
             else
             {
-                scheduleViewModel.SchedList.Add("<single user>");
+                scheduleViewModel.SchedList.Add(scheduleViewModel.GetConfigUModel().ZimbraAdmin);
                 scheduleViewModel.Migrate();
             }
         }
