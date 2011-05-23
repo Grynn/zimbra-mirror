@@ -74,17 +74,17 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">..\out\$(TargetName)\$(Configuration)\usa\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">..\out\$(Configuration)\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">..\out64\$(TargetName)\$(Configuration)\usa\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">..\out\$(TargetName)\$(Configuration)\usa\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">..\out64\$(TargetName)\$(Configuration)\usa\</IntDir>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">false</IgnoreImportLibrary>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">false</IgnoreImportLibrary>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">true</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'">..\out\$(TargetName)\$(Configuration)\usa\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'">..\out\$(Configuration)\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='rtl|x64'">..\out64\$(TargetName)\$(Configuration)\usa\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'">..\out\$(TargetName)\$(Configuration)\usa\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'">$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='rtl|x64'">..\out64\$(TargetName)\$(Configuration)\usa\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='rtl|x64'">false</LinkIncremental>
@@ -202,7 +202,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
-      <AdditionalDependencies>mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <Midl>

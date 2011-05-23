@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("ZimbraMigrationXBAP")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("VMware")]
 [assembly: AssemblyProduct("ZimbraMigrationXBAP")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
+[assembly: AssemblyCopyright("Copyright © VMware 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
