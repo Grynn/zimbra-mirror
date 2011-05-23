@@ -42,6 +42,11 @@ namespace MVVM.ViewModel
             this.configViewModelU = configViewModelU;
         }
 
+        public UsersViewModel GetUsersViewModel()
+        {
+            return usersViewModel;
+        }
+
         public void SetUserModel(UsersViewModel usersViewModel)
         {
             this.usersViewModel = usersViewModel;
