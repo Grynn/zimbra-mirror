@@ -45,7 +45,7 @@ public class DeleteContact extends AjaxCommonTest  {
 	}
 	@Test(	description = "Delete a contact item",
 			groups = { "smoke" })
-	public void DeleteContact_01() throws HarnessException {
+	public void DeleteContactByClickDeleteOnToolbar() throws HarnessException {
 
 		// Create a contact via soap 
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
@@ -59,7 +59,7 @@ public class DeleteContact extends AjaxCommonTest  {
 
 	@Test(	description = "Delete a contact item selected with checkbox",
 			groups = { "functional" })
-	public void DeleteContact_02() throws HarnessException {
+	public void DeleteContactSelectedWithCheckbox() throws HarnessException {
 
 		// Create a contact via soap 
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_CHECKBOX);
@@ -75,7 +75,7 @@ public class DeleteContact extends AjaxCommonTest  {
 
 	@Test(	description = "Delete a contact item using keyboard short cut Del",
 			groups = { "functional" })
-	public void DeleteContact_03() throws HarnessException {
+	public void DeleteContactUseShortcutDel() throws HarnessException {
 
 		// Create a contact via soap 
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
@@ -89,7 +89,7 @@ public class DeleteContact extends AjaxCommonTest  {
 	
 	@Test(	description = "Delete a contact item using keyboard short cut backspace",
 			groups = { "functional" })
-	public void DeleteContact_04() throws HarnessException {
+	public void DeleteContactUseShortcutBackspace() throws HarnessException {
 
 		// Create a contact via soap 
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);

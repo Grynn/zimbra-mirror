@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.contactgroups;
 
 
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 import org.testng.annotations.Test;
@@ -46,7 +47,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		
 	@Test(	description = "Delete a contact group by click Delete button on toolbar",
 			groups = { "smoke" })
-	public void DeleteContactGroup_01() throws HarnessException {
+	public void DeleteContactGroupByClickDeleteOnToolbar() throws HarnessException {
 
 		// Create a contact group via Soap then select
 		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app,Action.A_LEFTCLICK);
@@ -62,7 +63,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 
 	@Test(	description = "Delete a contact group by click Delete on Context Menu",
 			groups = { "functional" })
-	public void DeleteContactGroup_02() throws HarnessException {
+	public void DeleteContactGroupByClickDeleteOnContextMenu() throws HarnessException {
 
 		// Create a contact group via Soap then select
 		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app,Action.A_LEFTCLICK);
@@ -78,7 +79,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 
 	@Test(	description = "Delete a contact group selected by checkbox by click Delete button on toolbar",
 			groups = { "functional" })
-	public void DeleteContactGroup_03() throws HarnessException {
+	public void DeleteContactGroupSelectedWithCheckbox() throws HarnessException {
 
 		// Create a contact group via Soap then select
 		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app,Action.A_CHECKBOX);
@@ -92,4 +93,31 @@ public class DeleteContactGroup extends AjaxCommonTest  {
            
    	}
 
+	@Test(	description = "Delete a contact group use shortcut Del",
+			groups = { "functionali" })
+	public void DeleteContactGroupUseShortcutDel() throws HarnessException {
+
+		// Create a contact group via Soap then select
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app,Action.A_LEFTCLICK);
+	      
+        //delete contact group by click shortcut Del
+		 app.zPageAddressbook.zShortcut(KeyEvent.VK_DELETE);
+		 
+        //verify contact group deleted
+        VerifyContactGroupDeleted(group);           
+   	}
+	
+	@Test(	description = "Delete a contact group use shortcut backspace",
+			groups = { "functionali" })
+	public void DeleteContactGroupUseShortcutBackspace() throws HarnessException {
+
+		// Create a contact group via Soap then select
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app,Action.A_LEFTCLICK);
+	      
+        //delete contact group by click shortcut backspace
+		app.zPageAddressbook.zShortcut(KeyEvent.VK_BACK_SPACE);
+		 
+        //verify contact group deleted
+        VerifyContactGroupDeleted(group);           
+   	}
 }
