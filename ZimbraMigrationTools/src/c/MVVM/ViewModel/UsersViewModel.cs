@@ -199,9 +199,7 @@ namespace MVVM.ViewModel
 
         private void Remove()
         {
-            int iSavidx = CurrentUserSelection; // because RemoveAt will make the index -1
             UsersList.RemoveAt(CurrentUserSelection);
-            scheduleViewModel.SchedList.RemoveAt(iSavidx);
             scheduleViewModel.EnableMigrate = (scheduleViewModel.SchedList.Count > 0);
         }
 

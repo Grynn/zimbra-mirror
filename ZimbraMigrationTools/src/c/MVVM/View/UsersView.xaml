@@ -40,20 +40,12 @@
         <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="65,12,0,0" MinWidth="160" HorizontalAlignment="Center" VerticalAlignment="Bottom" Name="tbUsername" Text="{Binding Path=UsernameEntered}"/>
         <Button Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,12,0,0" Name="plusButton" Command="{Binding AddCommand}" CommandParameter="{Binding ElementName=tbUsername,Path=Text}" MinWidth="20" MaxHeight="20" Content="=&gt;" FontFamily="Courier New" FontWeight="Bold" IsEnabled="{Binding Text.Length, ElementName=tbUsername, Converter={StaticResource CountGreaterThanZeroConverter}}"/>
         <Button Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="5,12,0,0" Name="minusButton" IsEnabled="{Binding MinusEnabled}" Command="{Binding RemoveCommand}" MinWidth="20" MaxHeight="20" Content="&lt;=" FontFamily="Courier New" FontWeight="Bold" />
-        <ListView Grid.Row="1" Grid.Column="2" Margin="40,40,0,0" Name="lbUsers" SelectionMode="Single" ItemsSource="{Binding UsersList}" SelectedIndex="{Binding Path=CurrentUserSelection, Mode=TwoWay}" MinHeight="240" MaxHeight="240" MinWidth="180" MaxWidth="180" >
-            <ListView.View>
-                <GridView>
-                    <GridView.Columns>
-                        <GridViewColumn  DisplayMemberBinding="{Binding Path=Username}">
-                            <GridViewColumnHeader MinWidth="90" MaxWidth="90" Content=" Source Name" HorizontalContentAlignment="Left"/>
-                        </GridViewColumn>
-                        <GridViewColumn  DisplayMemberBinding="{Binding Path=MappedName}">
-                            <GridViewColumnHeader MinWidth="90"  MaxWidth="90" Content=" Dest Name" HorizontalContentAlignment="Left"/>
-                        </GridViewColumn>
-                    </GridView.Columns>
-                    </GridView>
-            </ListView.View>
-        </ListView>
+        <DataGrid Grid.Row="1" Grid.Column="2" Margin="40,40,0,0" Name="dgUsers" SelectionMode="Single" ItemsSource="{Binding UsersList}" SelectedIndex="{Binding Path=CurrentUserSelection, Mode=TwoWay}" MinHeight="240" MaxHeight="240" MinWidth="180" MaxWidth="180" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Source Name" MinWidth="90" MaxWidth="90" Binding="{Binding Path=Username}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Dest Name" MinWidth="90" MaxWidth="90" Binding="{Binding Path=MappedName}"></DataGridTextColumn>               
+            </DataGrid.Columns>
+        </DataGrid>
         <Separator Grid.Row="3" Grid.ColumnSpan="3" Margin="12,16,0,0" VerticalAlignment="Top"/>
         <Grid Name="BottomGrid" Grid.Row="3" Grid.ColumnSpan="3">
             <TextBlock Margin="26,40,0,0" Name="textBlockHelp" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Left">

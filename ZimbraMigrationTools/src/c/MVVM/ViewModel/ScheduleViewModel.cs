@@ -163,7 +163,15 @@ namespace MVVM.ViewModel
         private ObservableCollection<string> schedlist = new ObservableCollection<string>();
         public ObservableCollection<string> SchedList
         {
-            get { return schedlist; }
+            get
+            {
+                schedlist.Clear();
+                foreach (UsersViewModel obj in usersViewModel.UsersList)
+                {
+                    schedlist.Add(obj.Username);
+                }
+                return schedlist;
+            }
         }
 
         public int PBValue
