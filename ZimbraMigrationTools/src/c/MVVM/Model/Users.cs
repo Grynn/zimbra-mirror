@@ -27,7 +27,7 @@ namespace MVVM.Model
             get; set;
         }
 
-        public string MappedName
+        public string mappedName
         {
             get; set;
         }
@@ -65,7 +65,8 @@ namespace MVVM.Model
             }
             return linie.ToString();
         }
-
+        public string UserName;
+        public string MappedName;
         public bool ChangePWD;
         public string PWDdefault;
 

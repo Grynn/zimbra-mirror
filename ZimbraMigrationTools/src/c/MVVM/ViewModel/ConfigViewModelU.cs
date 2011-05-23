@@ -82,15 +82,26 @@ namespace MVVM.ViewModel
         {
             System.Xml.Serialization.XmlSerializer reader =
             new System.Xml.Serialization.XmlSerializer(typeof(Config));
-            System.IO.StreamReader fileRead = new System.IO.StreamReader(
-               @"C:\Temp\ZimbraAdminOverView.xml");
-            Config Z11 = new Config();
-            Z11 = (Config)reader.Deserialize(fileRead);
-            ZimbraPort = Z11.zimbraServer.Port;
-            ZimbraAdmin = Z11.zimbraServer.AdminAccount;
-            ZimbraAdminPasswd = Z11.zimbraServer.AdminPassword;
-            ZimbraDomain = Z11.zimbraServer.Domain;
-            OutlookProfile = Z11.mailServer.ProfileName;
+            if (File.Exists(@"C:\Temp\Users\ZimbraAdminOverView.xml"))
+            {
+                System.IO.StreamReader fileRead = new System.IO.StreamReader(
+                   @"C:\Temp\Users\ZimbraAdminOverView.xml");
+                Config Z11 = new Config();
+                Z11 = (Config)reader.Deserialize(fileRead);
+                ZimbraServerHostName = Z11.zimbraServer.HostName;
+                ZimbraPort = Z11.zimbraServer.Port;
+                ZimbraAdmin = Z11.zimbraServer.AdminAccount;
+                ZimbraAdminPasswd = Z11.zimbraServer.AdminPassword;
+                ZimbraDomain = Z11.zimbraServer.Domain;
+                OutlookProfile = Z11.mailServer.ProfileName;
+                PSTFile = Z11.mailServer.PSTFile;
+            }
+            else
+            {
+
+                MessageBox.Show("There is no configuration stored.Please enter some configuration info", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+           
 
 
 
@@ -106,9 +117,11 @@ namespace MVVM.ViewModel
 
         private void Save()
         {
-            if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
+            if (File.Exists(@"C:\Temp\Users\ZimbraAdminOverView.xml"))
             {
-                UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "zimbraServer");
+                UpdateXmlElement(@"C:\Temp\Users\ZimbraAdminOverView.xml", "mailServer");
+                UpdateXmlElement(@"C:\Temp\Users\ZimbraAdminOverView.xml", "zimbraServer");
+                
             }
 
             else
@@ -116,8 +129,11 @@ namespace MVVM.ViewModel
                 System.Xml.Serialization.XmlSerializer writer =
                 new System.Xml.Serialization.XmlSerializer(typeof(Config));
 
+                if (System.IO.Directory.Exists(@"C:\Temp\Users\") == false)
+                    System.IO.Directory.CreateDirectory(@"C:\Temp\Users\");
+
                 System.IO.StreamWriter file = new System.IO.StreamWriter(
-                    @"C:\Temp\ZimbraAdminOverView.xml");
+                    @"C:\Temp\Users\ZimbraAdminOverView.xml");
                 writer.Serialize(file, m_config);
                 file.Close();
             }
@@ -160,6 +176,7 @@ namespace MVVM.ViewModel
                     return;
                 }
                 m_config.PSTFile = value;
+                m_config.mailServer.PSTFile = value;
                 OnPropertyChanged(new PropertyChangedEventArgs("PSTFile"));
             }
         }
@@ -194,6 +211,20 @@ namespace MVVM.ViewModel
             }
         }
 
+        public string ZimbraServerHostName
+        {
+            get { return m_config.zimbraServer.HostName; }
+            set
+            {
+                if (value == m_config.zimbraServer.HostName)
+                {
+                    return;
+                }
+                m_config.zimbraServer.HostName = value;
+
+                OnPropertyChanged(new PropertyChangedEventArgs("ZimbraServerHostName"));
+            }
+        }
         public string ZimbraAdminPasswd
         {
             get { return m_config.zimbraServer.AdminPassword; }

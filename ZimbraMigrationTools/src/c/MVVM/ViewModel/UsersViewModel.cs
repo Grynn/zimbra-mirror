@@ -141,7 +141,7 @@ namespace MVVM.ViewModel
                             {
                                 strres = parsedData[j];
                                
-                                tempuser.Username = strres[0];
+                                tempuser.UserName = strres[0];
                                 tempuser.MappedName = strres[1];
                                 tempuser.ChangePWD = Convert.ToBoolean(strres[2]);
                                 tempuser.PWDdefault = strres[3];
@@ -219,7 +219,7 @@ namespace MVVM.ViewModel
                 string[] nameTokens = users.Split(',');
 
                 Users tempUser = new Users();
-                tempUser.Username = nameTokens.GetValue(0).ToString();
+                tempUser.UserName = nameTokens.GetValue(0).ToString();
                 tempUser.MappedName = nameTokens.GetValue(1).ToString();
                 //tempUser.ChangePWD = Convert.ToBoolean(nameTokens.GetValue(2).ToString());
                // tempUser.PWDdefault = nameTokens.GetValue(3).ToString();
