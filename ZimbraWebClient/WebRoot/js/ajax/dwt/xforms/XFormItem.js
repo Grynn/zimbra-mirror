@@ -4543,7 +4543,7 @@ Dwt_List_XFormItem.prototype.constructWidget = function () {
 			widget.setSize(width, height);
 		
 		//set the listDiv height
-		if (height) {
+		if (height && height != Dwt.DEFAULT) {
 			widget.setListDivHeight (height) ;
 		}
 	}		
