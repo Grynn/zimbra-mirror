@@ -24,6 +24,7 @@ import com.zimbra.cs.mailbox.SyncMailbox;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.ZcsMailbox;
+import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.soap.DocumentHandler;
 import com.zimbra.common.soap.Element;
@@ -41,7 +42,13 @@ public class OfflineSync extends DocumentHandler {
         Mailbox mbox = getRequestedMailbox(zsc);
         
         boolean isDebugTraceOn = request.getAttributeBool("debug", false);
-        
+        if (OfflineSyncManager.getInstance().isConnectionDown()) {
+            OfflineSyncManager.getInstance().setConnectionDown(false);
+        }
+        if (OfflineSyncManager.getInstance().isUILoading()) {
+            //previously missed an update from UI; no way user can press send/receive while UI is loading
+            OfflineSyncManager.getInstance().setUILoading(false);
+        }
         if (mbox instanceof SyncMailbox)
         	((SyncMailbox)mbox).sync(true, isDebugTraceOn);
         

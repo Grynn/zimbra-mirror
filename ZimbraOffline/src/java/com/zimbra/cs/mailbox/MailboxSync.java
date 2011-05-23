@@ -122,9 +122,8 @@ public class MailboxSync {
     void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {
         OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
 
-        if (!syncMan.isServiceActive()) {
-            if (isOnRequest)
-                OfflineLog.offline.debug("offline sync request ignored");
+        if (!OfflineSyncManager.getInstance().isServiceActive(isOnRequest)) {
+            //background sync ignored; offline
         } else if (ombx.lockMailboxToSync()) {
             try {
                 ombx.getAccount();
@@ -195,7 +194,7 @@ public class MailboxSync {
                         ombx.getAccount(), OfflineConstants.A_offlineLastSync,
                         Long.toString(System.currentTimeMillis()));
                 } catch (Exception e) {
-                    if (!syncMan.isServiceActive()) {
+                    if (!syncMan.isServiceActive(isOnRequest)) {
                         return;
                     } else if (ombx.isDeleting()) {
                         OfflineLog.offline.info("Mailbox \"%s\" is being deleted", ombx.getAccountName());

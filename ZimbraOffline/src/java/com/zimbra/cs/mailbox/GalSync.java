@@ -83,7 +83,7 @@ public class GalSync {
                 } catch (Throwable e) { //don't let exceptions kill the timer
                     if (e instanceof OutOfMemoryError)
                         Zimbra.halt("caught out of memory error", e);
-                    else if (OfflineSyncManager.getInstance().isServiceActive())
+                    else if (OfflineSyncManager.getInstance().isServiceActive(false))
                         OfflineLog.offline.warn("caught exception in timer ", e);
                 }
             }

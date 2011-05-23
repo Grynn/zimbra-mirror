@@ -463,9 +463,8 @@ public class DataSourceMailbox extends SyncMailbox {
 
     @Override
     public void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {
-        if (!OfflineSyncManager.getInstance().isServiceActive()) {
-            if (isOnRequest)
-                OfflineLog.offline.debug("offline sync request ignored");
+        if (!OfflineSyncManager.getInstance().isServiceActive(isOnRequest)) {
+            //ignore background sync
         } else if (lockMailboxToSync()) {
             synchronized (syncLock) {
                 if (isOnRequest && isDebugTraceOn) {
@@ -477,7 +476,7 @@ public class DataSourceMailbox extends SyncMailbox {
                     int count = sendPendingMessages(isOnRequest);
                     syncAllLocalDataSources(count > 0, isOnRequest);
                 } catch (Exception x) {
-                    if (!OfflineSyncManager.getInstance().isServiceActive())
+                    if (!OfflineSyncManager.getInstance().isServiceActive(isOnRequest))
                         return;
                     else if (isDeleting())
                         OfflineLog.offline.info("Mailbox \"%s\" is being deleted",

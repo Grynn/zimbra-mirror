@@ -553,7 +553,7 @@ public class OfflineSyncManager implements FormatListener {
 
         if (ZimbraApplication.getInstance().isShutdown()) {
             OfflineLog.offline.info("sync aborted by shutdown: " + entry.getName());
-        } else if (!isServiceActive()) {
+        } else if (!isServiceActive(false)) {
             OfflineLog.offline.info("sync aborted by network: " + entry.getName());
         } else if (isConnectionDown(exception)) {
             connectionDown(entry, null);
@@ -623,9 +623,23 @@ public class OfflineSyncManager implements FormatListener {
         return isConnectionDown;
     }
 
-    public synchronized boolean isServiceActive() {
-        return isServiceUp && !isConnectionDown &&
-            !ZimbraApplication.getInstance().isShutdown() && !isUiLoading;
+    public synchronized boolean isServiceActive(boolean onRequest) {
+        boolean active = isServiceUp && (onRequest || !isConnectionDown) &&
+                        !ZimbraApplication.getInstance().isShutdown() && !isUiLoading;
+        if (!active && onRequest && OfflineLog.offline.isDebugEnabled()) {
+            String reason = "";
+            if (!isServiceUp) {
+                reason = "service not yet initialized";
+            } else if (ZimbraApplication.getInstance().isShutdown()) {
+                reason = "application shutting down";
+            } else if (isUiLoading) {
+                reason = "UI loading";
+            } else {
+                reason = "unknown";
+            }
+            OfflineLog.offline.debug("Service not active due to: %s", reason);
+        }
+        return active;
     }
     
     /**
@@ -656,11 +670,17 @@ public class OfflineSyncManager implements FormatListener {
     }
 
     public synchronized void setUILoading(boolean b) {
+        //this mechanism can get stuck if load_end event isn't received; either due to UI or server error
         lock.lock();
         isUiLoading = b;
+        OfflineLog.offline.debug("setting uiloading to %s",b);
         if (!isUiLoading)
             waiting.signalAll();
         lock.unlock();
+    }
+    
+    public synchronized boolean isUILoading() {
+        return isUiLoading;
     }
 
     public synchronized void shutdown() {

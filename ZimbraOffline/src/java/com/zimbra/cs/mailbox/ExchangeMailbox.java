@@ -246,9 +246,8 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
         if (!isXsyncEnabled())
             return;
 
-        if (!OfflineSyncManager.getInstance().isServiceActive()) {
-            if (isOnRequest)
-                OfflineLog.offline.debug("offline sync request ignored");
+        if (!OfflineSyncManager.getInstance().isServiceActive(isOnRequest)) {
+            
         } else if (lockMailboxToSync()) {
             synchronized (syncLock) {
                 if (isOnRequest && isDebugTraceOn) {
@@ -271,7 +270,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
                     }
                     syncDataSource(count > 0, isOnRequest);
                 } catch (Exception x) {
-                    if (!OfflineSyncManager.getInstance().isServiceActive())
+                    if (!OfflineSyncManager.getInstance().isServiceActive(isOnRequest))
                         return;
                     else if (isDeleting())
                         OfflineLog.offline.info("Mailbox \"%s\" is being deleted", getAccountName());

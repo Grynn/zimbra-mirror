@@ -130,7 +130,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                 }
             } else if (x.getCode().equals(AccountServiceException.NO_SUCH_ACCOUNT)) {
                 cancelCurrentTask();
-            } else if (!OfflineSyncManager.getInstance().isServiceActive() &&
+            } else if ((!OfflineSyncManager.getInstance().isServiceActive(false)) && 
                 !x.getCode().equals(ServiceException.INTERRUPTED)) {
                 OfflineLog.offline.error(x);
             }

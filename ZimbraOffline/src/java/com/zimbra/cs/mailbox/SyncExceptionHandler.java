@@ -118,7 +118,7 @@ public class SyncExceptionHandler extends IOExceptionHandler {
                 throw ServiceException.FAILURE(message, exception);
             }
         }
-        if (!OfflineSyncManager.getInstance().isServiceActive() ||
+        if (!OfflineSyncManager.getInstance().isServiceActive(false) ||
             OfflineSyncManager.isConnectionDown(exception) ||
             OfflineSyncManager.isAuthError(exception) || OfflineSyncManager.isReceiversFault(exception) ||
             OfflineSyncManager.isMailboxInMaintenance(exception))

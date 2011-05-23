@@ -111,7 +111,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
     }
 
     boolean lockMailboxToSync() {
-        if (isDeleting() || !OfflineSyncManager.getInstance().isServiceActive())
+        if (isDeleting() || !OfflineSyncManager.getInstance().isServiceActive(false))
             return false;
         if (!mSyncRunning) {
             synchronized (this) {
@@ -260,7 +260,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
                 } catch (Throwable e) { // don't let exceptions kill the timer
                     if (e instanceof OutOfMemoryError)
                         Zimbra.halt("caught out of memory error", e);
-                    else if (OfflineSyncManager.getInstance().isServiceActive())
+                    else if (OfflineSyncManager.getInstance().isServiceActive(false))
                         OfflineLog.offline.warn("caught exception in timer ", e);
                 }
                 synchronized (lastGC) {
