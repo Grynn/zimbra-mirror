@@ -17,7 +17,7 @@ public class FormSignatureNew extends AbsForm {
 	public static class Locators {
 
 		public static final String zsignatureNameLabel = "//input[contains(@id,'_SIG_NAME')]";
-		public static final String signatureBody = "//textarea[contains(@id,'textarea_DWT')]";
+		public static final String signatureBody = "//textarea[contains(@id,'TEXTAREA_SIGNATURE')]";
 		public static final String zToolbarSaveID = "zb__PREF__SAVE_title";
 		public static final String zToolbarCancelID = "zb__PREF__CANCEL_title";
 
