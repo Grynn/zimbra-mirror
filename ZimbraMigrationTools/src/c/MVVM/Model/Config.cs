@@ -23,7 +23,7 @@
            this.zimbraServer.Domain = zimbradomain;
            this.mailServer.Hostname = mailserver;
            this.mailServer.PSTFile = pstfile;
-           this.mailServer.ProfileName = outlookProfile;
+           //this.mailServer.ProfileName = outlookProfile;
            
 
         }

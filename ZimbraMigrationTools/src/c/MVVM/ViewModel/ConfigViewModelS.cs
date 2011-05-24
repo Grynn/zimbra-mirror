@@ -25,6 +25,8 @@ namespace MVVM.ViewModel
             this.LoadCommand = new ActionCommand(this.Load, () => true);
             this.SaveCommand = new ActionCommand(this.Save, () => true);
             this.NextCommand = new ActionCommand(this.Next, () => true);
+            IsmailServer = false;
+            Isprofile = false;
         }
 
         public ICommand GetConfigSourceHelpCommand
@@ -70,13 +72,27 @@ namespace MVVM.ViewModel
                        @"C:\Temp\ZimbraAdminOverView.xml");
                 Config Z11 = new Config();
                 Z11 = (Config)reader.Deserialize(fileRead);
-                MailServerHostName = Z11.mailServer.Hostname;
+                
                 ZimbraServerHostName = Z11.zimbraServer.HostName;
                 ZimbraPort = Z11.zimbraServer.Port;
                 ZimbraAdmin = Z11.zimbraServer.AdminAccount;
                 ZimbraAdminPasswd = Z11.zimbraServer.AdminPassword;
                 ZimbraDomain = Z11.zimbraServer.Domain;
-                OutlookProfile = Z11.mailServer.ProfileName;
+
+                if (Z11.mailServer.Hostname.Length == 0)
+                {
+                    Isprofile = true;
+                    IsmailServer = false;
+                    OutlookProfile = Z11.OutlookProfile;
+                }
+                else
+                {
+                    Isprofile = false;
+                    IsmailServer = true;
+                    MailServerHostName = Z11.mailServer.Hostname;
+                    MailServerProfileName = Z11.mailServer.ProfileName;
+                }
+
                 //MessageBox.Show("Configuration information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
             else
@@ -99,6 +115,7 @@ namespace MVVM.ViewModel
             if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
             {
                 UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "mailServer");
+                UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "OutlookProfile");
                 UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "zimbraServer");
             }
 
@@ -126,6 +143,25 @@ namespace MVVM.ViewModel
             lb.SelectedIndex = 1;
         }
 
+        private bool IsProfile;
+        private bool IsMailServer;
+
+        public bool IsmailServer
+        {
+            get { return IsMailServer; }
+            set { IsMailServer = value;
+            OnPropertyChanged(new PropertyChangedEventArgs("IsmailServer"));
+            }
+        }
+
+
+        public bool Isprofile
+        {
+            get { return IsProfile; }
+            set { IsProfile = value;
+            OnPropertyChanged(new PropertyChangedEventArgs("Isprofile"));
+            }
+        }
         public string ExchangeProfile
         {
             get { return m_config.ExchangeProfile; }
@@ -150,7 +186,6 @@ namespace MVVM.ViewModel
                     return;
                 }
                 m_config.OutlookProfile = value;
-                m_config.mailServer.ProfileName= value; 
                 OnPropertyChanged(new PropertyChangedEventArgs("OutlookProfile"));
             }
         }
@@ -181,6 +216,20 @@ namespace MVVM.ViewModel
                 m_config.mailServer.Hostname = value;
 
                 OnPropertyChanged(new PropertyChangedEventArgs("MailServerHostName"));
+            }
+        }
+        public string MailServerProfileName
+        {
+            get { return m_config.mailServer.ProfileName; }
+            set
+            {
+                if (value == m_config.mailServer.ProfileName)
+                {
+                    return;
+                }
+                m_config.mailServer.ProfileName = value;
+
+                OnPropertyChanged(new PropertyChangedEventArgs("MailServerProfileName"));
             }
         }
         public string ZimbraServerHostName
