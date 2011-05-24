@@ -78,6 +78,7 @@ namespace MVVM.ViewModel
                 ZimbraAdmin = Z11.zimbraServer.AdminAccount;
                 ZimbraAdminPasswd = Z11.zimbraServer.AdminPassword;
                 ZimbraDomain = Z11.zimbraServer.Domain;
+                ZimbraSSL = Z11.zimbraServer.UseSSL;
 
                 if (Z11.mailServer.Hostname.Length == 0)
                 {
@@ -116,6 +117,7 @@ namespace MVVM.ViewModel
             {
                 UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "mailServer");
                 UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "OutlookProfile");
+                UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "PSTFile");
                 UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "zimbraServer");
             }
 
@@ -292,6 +294,22 @@ namespace MVVM.ViewModel
             }
         }
 
+        public bool ZimbraSSL
+        {
+
+            get { return m_config.zimbraServer.UseSSL; }
+            set
+            {
+                if (value == m_config.zimbraServer.UseSSL)
+                {
+                    return;
+                }
+                m_config.zimbraServer.UseSSL = value;
+
+                OnPropertyChanged(new PropertyChangedEventArgs("ZimbraSSL"));
+            }
+
+        }
        
 
       

@@ -83,10 +83,10 @@ namespace MVVM.ViewModel
         {
             System.Xml.Serialization.XmlSerializer reader =
             new System.Xml.Serialization.XmlSerializer(typeof(Config));
-            if (File.Exists(@"C:\Temp\Users\ZimbraAdminOverView.xml"))
+            if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
             {
                 System.IO.StreamReader fileRead = new System.IO.StreamReader(
-                   @"C:\Temp\Users\ZimbraAdminOverView.xml");
+                   @"C:\Temp\ZimbraAdminOverView.xml");
                 Config Z11 = new Config();
                 Z11 = (Config)reader.Deserialize(fileRead);
                 ZimbraServerHostName = Z11.zimbraServer.HostName;
@@ -94,6 +94,7 @@ namespace MVVM.ViewModel
                 ZimbraUser = Z11.zimbraServer.UserAccount;
                 ZimbraUserPasswd = Z11.zimbraServer.UserPassword;
                 ZimbraDomain = Z11.zimbraServer.Domain;
+                ZimbraSSL = Z11.zimbraServer.UseSSL;
                 if (Z11.OutlookProfile.Length == 0)
                 {
                     Isprofile = false;
@@ -132,11 +133,12 @@ namespace MVVM.ViewModel
 
         private void Save()
         {
-            if (File.Exists(@"C:\Temp\Users\ZimbraAdminOverView.xml"))
+            if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
             {
-                UpdateXmlElement(@"C:\Temp\Users\ZimbraAdminOverView.xml", "OutlookProfile");
-                 UpdateXmlElement(@"C:\Temp\Users\ZimbraAdminOverView.xml", "PSTFile");
-                UpdateXmlElement(@"C:\Temp\Users\ZimbraAdminOverView.xml", "zimbraServer");
+                UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "OutlookProfile");
+                 UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "PSTFile");
+                UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "zimbraServer");
+                UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "mailServer");
                 
                 
             }
@@ -146,11 +148,11 @@ namespace MVVM.ViewModel
                 System.Xml.Serialization.XmlSerializer writer =
                 new System.Xml.Serialization.XmlSerializer(typeof(Config));
 
-                if (System.IO.Directory.Exists(@"C:\Temp\Users\") == false)
-                    System.IO.Directory.CreateDirectory(@"C:\Temp\Users\");
+                /*if (System.IO.Directory.Exists(@"C:\Temp\") == false)
+                    System.IO.Directory.CreateDirectory(@"C:\Temp\");*/
 
                 System.IO.StreamWriter file = new System.IO.StreamWriter(
-                    @"C:\Temp\Users\ZimbraAdminOverView.xml");
+                    @"C:\Temp\ZimbraAdminOverView.xml");
                 writer.Serialize(file, m_config);
                 file.Close();
             }
@@ -292,7 +294,22 @@ namespace MVVM.ViewModel
                 OnPropertyChanged(new PropertyChangedEventArgs("ZimbraDomain"));
             }
         }
+        public bool ZimbraSSL
+        {
 
+            get { return m_config.zimbraServer.UseSSL; }
+            set
+            {
+                if (value == m_config.zimbraServer.UseSSL)
+                {
+                    return;
+                }
+                m_config.zimbraServer.UseSSL = value;
+
+                OnPropertyChanged(new PropertyChangedEventArgs("ZimbraSSL"));
+            }
+
+        }
        
 
       
