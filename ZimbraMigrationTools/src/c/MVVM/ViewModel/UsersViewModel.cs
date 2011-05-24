@@ -120,6 +120,7 @@ namespace MVVM.ViewModel
                                         row = line.Split(',');
                                         parsedData.Add(row);
                                     }
+                                    readFile.Close();
                                 }
                             }
                             else
@@ -130,6 +131,7 @@ namespace MVVM.ViewModel
                         catch (Exception e)
                         {
 
+                            string message = e.Message;
                         }
 
                        // for (int i = 1; i < parsedData.Count; i++)
@@ -233,8 +235,20 @@ namespace MVVM.ViewModel
 
             string resultcsv = Users.ToCsv<Users>(",", ListofUsers);
 
-            System.IO.File.WriteAllText(@"UserMap.csv", resultcsv);
-            MessageBox.Show("Users saved", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            bool bCSV = false;
+            Microsoft.Win32.SaveFileDialog fDialog = new Microsoft.Win32.SaveFileDialog();
+            fDialog.Filter = "User Map Files|*.xml;*.csv";
+       
+            //fDialog.CheckFileExists = true;
+            //fDialog.Multiselect = false;
+           
+            if (fDialog.ShowDialog() == true)
+            {
+                string filename = fDialog.FileName;
+                //+".csv";
+                System.IO.File.WriteAllText(filename, resultcsv);
+                MessageBox.Show("Users saved", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
         }
 
         public ICommand NextCommand
