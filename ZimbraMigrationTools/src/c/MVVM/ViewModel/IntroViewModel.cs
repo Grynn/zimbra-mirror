@@ -124,7 +124,7 @@ namespace MVVM.ViewModel
             m_configViewModelS.ImageName = "Images/CreateSpaceImage.jpg";
             m_configViewModelS.lb = lb;
             m_configViewModelS.isBrowser = false;
-            m_configViewModelS.ExchangeProfile = "";
+           // m_configViewModelS.ExchangeProfile = "";
             m_configViewModelS.OutlookProfile = "";
             m_configViewModelS.ZimbraServerHostName = "";
             m_configViewModelS.ZimbraPort = "";
@@ -133,6 +133,7 @@ namespace MVVM.ViewModel
             m_configViewModelS.ZimbraAdminPasswd = "";
             m_configViewModelS.ZimbraDomain = "";
             m_configViewModelS.OutlookProfile = "";
+            
 
             m_configViewModelU = new ConfigViewModelU();
             m_configViewModelU.Name = "ConfigViewModelU";
@@ -143,8 +144,8 @@ namespace MVVM.ViewModel
             m_configViewModelU.OutlookProfile = "";
             m_configViewModelU.ZimbraPort = "";
             m_configViewModelU.PSTFile = "";
-            m_configViewModelU.ZimbraAdmin = "";
-            m_configViewModelU.ZimbraAdminPasswd = "";
+            m_configViewModelU.ZimbraUser = "";
+            m_configViewModelU.ZimbraUserPasswd = "";
             m_configViewModelU.ZimbraDomain = "";
             m_configViewModelU.OutlookProfile = "";
 
