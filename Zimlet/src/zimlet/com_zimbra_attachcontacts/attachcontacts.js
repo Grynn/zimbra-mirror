@@ -123,23 +123,16 @@ function(request, isDraft) {
  *  Called by Framework and adds toolbar button
  */
 AttachContactsZimlet.prototype._initContactsReminderToolbar = function(toolbar, controller) {
-	if (!toolbar.getButton(AttachContactsZimlet.SEND_CONTACTS)) {
-		var opList = toolbar.opList;
-		var buttonIndex = 0;
-		for (var i = 0; i < opList.length; i++) {
-			if (opList[i] == "TAG_MENU") {
-				buttonIndex = i + 1;
-				break;
-			}
-		}
-
-		var op = AttachContactsZimlet.SEND_CONTACTS;
-		var opData = AjxUtil.hashCopy(ZmOperation.SETUP[op]);
-		opData.index = buttonIndex;
-		opData.text = this.getMessage("ACZ_Send");
-		var btn = toolbar.createOp(op, opData);
-		btn.addSelectionListener(this._contactSendListener);
+	var op = AttachContactsZimlet.SEND_CONTACTS;
+	if (toolbar.getButton(op)) {
+		return;
 	}
+
+	var opData = AjxUtil.hashCopy(ZmOperation.SETUP[op]);
+	opData.text = this.getMessage("ACZ_Send");
+	var button = toolbar.createZimletOp(op, opData);
+	button.addSelectionListener(this._contactSendListener);
+
 };
 
 
