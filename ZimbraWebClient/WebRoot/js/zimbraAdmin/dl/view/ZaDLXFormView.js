@@ -1475,20 +1475,20 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 		    		type:_DWT_LIST_, height:"200", width:"99%", cssClass: "DLSource",onSelection:ZaDLXFormView.shareSelectionListener,
 				   	multiselect:true, widgetClass:ZaSharesListView, headerList:shareHeaderList
 				},
-				{type:_GROUP_, numCols:3, width:"350px", colSizes:["150px","150px","auto"], 
+				{type:_GROUP_, numCols:3, width:"98%", colSizes:["250px","10px","auto"],
 					cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
 					items: [
-						{type:_DWT_BUTTON_, label:ZaMsg.Shares_PublishNew,width:"100px",
+						{type:_DWT_BUTTON_, label:ZaMsg.Shares_PublishNew,autoPadding:false,
 							id:"deleteShareButton",onActivate:"ZaDLXFormView.publishNewShareButtonListener.call(this,event)",
 							enableDisableChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.PUBLISH_SHARE_RIGHT]]
 						},
-						//{type:_CELLSPACER_},
-						{type:_DWT_BUTTON_, label:ZaMsg.Shares_UnPublish,width:"120px",
+						{type:_CELLSPACER_},
+						{type:_DWT_BUTTON_, label:ZaMsg.Shares_UnPublish,autoPadding:false,
 							id:"deleteShareButton",onActivate:"ZaDLXFormView.upublishShareButtonListener.call(this,event)",
 							enableDisableChangeEventSources:[ZaDistributionList.A2_published_share_selection_cache],
 							enableDisableChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.PUBLISH_SHARE_RIGHT],[XForm.checkInstanceValueNotEmty,ZaDistributionList.A2_published_share_selection_cache]]
-						},
-						{type:_CELLSPACER_}							
+						}
+						//{type:_CELLSPACER_}
 					]
 				}
 			]}
