@@ -9,8 +9,8 @@
             <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
         </Grid.Background>
         <Grid.RowDefinitions>
-            <RowDefinition MinHeight="80" Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition MinHeight="35" Height="Auto"></RowDefinition>
+            <RowDefinition MinHeight="{Binding ElementName=lbSchedUsers, Path=ActualHeight}" Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
@@ -18,13 +18,13 @@
             <ColumnDefinition MaxWidth="200" Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="0" Margin="30,45,0,0" HorizontalAlignment="Left" Name="textMigUsers" Text="Migrate these users" VerticalAlignment="Top"/>
-        <ListBox Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="30,-15,0,0" Name="lbSchedUsers" ItemsSource="{Binding SchedList}" MinHeight="200" MaxHeight="200" MinWidth="150" HorizontalAlignment="Left" />
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="30,15,0,0" HorizontalAlignment="Left" Name="textMigUsers" Text="Migrate these users" VerticalAlignment="Top"/>
+        <ListBox Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="30,0,0,0" VerticalAlignment="Top" Name="lbSchedUsers" ItemsSource="{Binding SchedList}" MinHeight="180" MaxHeight="180" MinWidth="150" HorizontalAlignment="Left" />
         <!--
         <TextBlock Grid.Row="0" Grid.Column="1" Margin="30,20,0,0" HorizontalAlignment="Left" Name="textTasks" Text="Task setup" VerticalAlignment="Top"/>
         -->
-        <GroupBox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Margin="20,-20,0,0" Name="gbSched" VerticalAlignment="Top" MinHeight="205" MinWidth="200" Grid.RowSpan="3" Header="Schedule">
-            <Grid Name="gbGrid">
+        <GroupBox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Margin="20,-8,0,0" VerticalAlignment="Top" Name="gbSched" MinHeight="188" MinWidth="200" Grid.RowSpan="3" Header="Schedule">
+            <Grid Name="gbSGrid">
                 <Grid.RowDefinitions>
                     <RowDefinition MinHeight="50" Height="Auto"></RowDefinition>
                     <RowDefinition MinHeight="30" Height="Auto"></RowDefinition>
@@ -78,6 +78,26 @@
         <!--
         <ProgressBar Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Height="18" Width="290" Margin="80,35,89,26" Name="pbMigrationS" Value="{Binding Path=PBValue}" HorizontalAlignment="Center" ></ProgressBar>
         -->
+        <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="30,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="gbProv" Header="Provisioning" Padding="10">
+            <Grid Name="gbPGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,0,0,0" HorizontalAlignment="Left" Name="textInitialPW" Text="Initial password for unprovisioned users" VerticalAlignment="Center"/>
+                <PasswordBox Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" HorizontalAlignment="Right" MinWidth="122" Name="ipwBox" />
+                <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,10,0,0" HorizontalAlignment="Left" Name="textSelectCOS" Text="Select the Class of Service" VerticalAlignment="Center"/>
+                <ComboBox Grid.Row="1" Grid.Column="1" Margin="10,5,0,0" HorizontalAlignment="Right" MaxHeight="{Binding ElementName=ipwBox, Path=ActualHeight}" MinWidth="{Binding ElementName=ipwBox, Path=ActualWidth}" Name="cbCOS" >
+                    <ComboBoxItem Content="default" IsSelected="True" />
+                    <ComboBoxItem Content="COS1" />
+                    <ComboBoxItem Content="COS2" />
+                </ComboBox>
+            </Grid>
+        </GroupBox>
         <Separator Grid.Row="3" Grid.ColumnSpan="2" Margin="12,20,0,0" VerticalAlignment="Top"/>
         <Grid Name="BottomGrid" Grid.Row="3" Grid.ColumnSpan="3">
             <TextBlock Margin="26,35,0,0" Name="textBlockHelp" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Left">
