@@ -143,7 +143,18 @@ public class AjaxCommonTest {
 
       try
 		{
-		   if (isRunningDesktopTest) {
+         _selenium = ClientSessionFactory.session().selenium();
+         logger.debug("Starting selenium");
+         _selenium.start();
+
+         // This is needed only in Mac OS because when selenium invokes the test browser window,
+         // the window is not active (in background), thus any methods involving robot will not work
+         // properly
+         if (osType == OsType.MAC) {
+            app.zPageMain.zMouseClick(100, 100);		   
+         }
+
+         if (isRunningDesktopTest) {
 		      ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.DESKTOP);
 		      
 
@@ -244,6 +255,7 @@ public class AjaxCommonTest {
 		         logger.info("App is already running...");
 		      }
 
+
 		      GeneralUtility.waitFor(null, ZimbraAccount.AccountZWC(), false,
 		            "authenticateToMailClientHost", null, WAIT_FOR_OPERAND.NEQ, null, 60000, 3000);
 
@@ -252,9 +264,6 @@ public class AjaxCommonTest {
 		      ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.AJAX);
 		   }
 
-		   _selenium = ClientSessionFactory.session().selenium();
-		   logger.debug("Starting selenium");
-	      _selenium.start();
 	      _selenium.windowMaximize();
 	      _selenium.windowFocus();
 	      _selenium.allowNativeXpath("true");
@@ -291,12 +300,6 @@ public class AjaxCommonTest {
 		   throw new HarnessException("Error in Before Suite", e);
       }
 
-		// This is needed only in Mac OS because when selenium invokes the test browser window,
-		// the window is not active (in background), thus any methods involving robot will not work
-		// properly
-		if (osType == OsType.MAC) {
-		   app.zPageMain.zMouseClick(100, 100);		   
-		}
 		logger.info("commonTestBeforeSuite: finish");		
 	}
 

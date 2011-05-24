@@ -5,8 +5,7 @@ import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsForm;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.projects.desktop.ui.AppAjaxClient;
 
 public class DocumentBriefcaseNew extends AbsForm {
@@ -68,43 +67,53 @@ public class DocumentBriefcaseNew extends AbsForm {
 
 	public void zFillField(Field field, String value) throws HarnessException {
 
-		String locator = null;
+      if (field == Field.Name) {
 
-		if (field == Field.Name) {
+         String nameFieldLocator = Locators.zNameField;
 
-			locator = Locators.zNameField;
+         zSelectWindow(pageTitle);
 
-			zSelectWindow("Zimbra Docs");
+         // Make sure the locator exists
+         if (!this.sIsElementPresent(nameFieldLocator))
+            throw new HarnessException("Locator is not present: "
+                  + nameFieldLocator);
 
-			// FALL THROUGH
+         this.sMouseOver(nameFieldLocator);
+         this.sFocus(nameFieldLocator);
+         this.zClick(nameFieldLocator);
+         this.sType(nameFieldLocator, value);
+         logger.info("typed: " + value);
 
-		} else if (field == Field.Body) {
+      } else if (field == Field.Body) {
 
-			locator = Locators.zBodyField;
+         String iframeLocator = Locators.zFrame;
 
-			sSelectFrame(Locators.zFrame);
+         // Make sure the locator exists
+         if (!this.sIsElementPresent(iframeLocator))
+            throw new HarnessException("Locator is not present: "
+                  + iframeLocator);
 
-			// FALL THROUGH
+         this.sMouseOver(iframeLocator);
+         this.sFocus(iframeLocator);
+         this.zClick(iframeLocator);
 
-		} else {
-			throw new HarnessException("not implemented for field " + field);
-		}
+         this
+               .sGetEval("var bodytext=\""
+                     + value
+                     + "\";"
+                     + "var iframe_locator=\""
+                     + iframeLocator
+                     + "\";"
+                     + "var iframe_body=selenium.browserbot.findElement(iframe_locator).contentWindow.document.body;"
+                     + "if (browserVersion.isFirefox || browserVersion.isChrome){iframe_body.textContent=bodytext;}"
+                     + "else if(browserVersion.isIE){iframe_body.innerText=bodytext;}"
+                     + "else {iframe_body.innerText=bodytext;}");
+      } else {
+         throw new HarnessException("Not implemented field: " + field);
+      }
 
-		if (locator == null) {
-			throw new HarnessException("locator was null for field " + field);
-		}
-
-		// Default behavior, enter value into locator field
-
-		// Make sure the button exists
-		if (!this.sIsElementPresent(locator))
-			throw new HarnessException("Field is not present field=" + field
-					+ " locator=" + locator);
-
-		// Enter text
-		this.sType(locator, value);
-
-		this.zWaitForBusyOverlay();
+      this.zWaitForBusyOverlay();
+      SleepUtil.sleepVerySmall();
 	}
 
 	@Override
@@ -130,17 +139,11 @@ public class DocumentBriefcaseNew extends AbsForm {
 			// this.sMouseUp(Locators.zSaveAndCloseIconBtn);
 			zClick(Locators.zSaveAndCloseIconBtn);
 
-			// TODO: Add Version Notes dialog hasn't existed in ZD 7.0.1, thus
-			// ignoring below the Add Version Notes dialog for Desktop.
-			// Please remove this if condition block once it is available in ZD.
-			if (ZimbraSeleniumProperties.getAppType() != AppType.DESKTOP) {
-				// add version notes
-				DialogAddVersionNotes dlgAddNotes = new DialogAddVersionNotes(
-						MyApplication,
-						((AppAjaxClient) MyApplication).zPageBriefcase);
-
-				dlgAddNotes.zDismissAddVersionNotesDlg(pageTitle);
-			}
+			DialogAddVersionNotes dlgAddNotes = new DialogAddVersionNotes(
+			      MyApplication,
+			      ((AppAjaxClient) MyApplication).zPageBriefcase);
+			
+			dlgAddNotes.zDismissAddVersionNotesDlg(pageTitle);
 		}
 	}
 

@@ -113,6 +113,15 @@ public class ZimbraAccount {
    }
 
    /**
+    * This is to reset the Client's authentication.
+    * Note: To be used when terminating client app.
+    */
+   public void resetClientAuthentication() {
+      logger.debug("Reset client authentication...");
+      this.MyClientAuthToken = null;
+   }
+
+   /**
     * Authenticate the user account logged into ZDC being tested to the
     * client (not ZCS)
     * @return (String) Client Authorization Token

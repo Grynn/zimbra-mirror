@@ -7,6 +7,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsDisplay;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
 public class DocumentBriefcaseOpen extends AbsDisplay {
@@ -61,6 +62,7 @@ public class DocumentBriefcaseOpen extends AbsDisplay {
 	}
 
 	public String retriveDocumentName() throws HarnessException {
+	   GeneralUtility.waitForElementPresent(this, Locators.zDocumentNameField);
 		String name = ClientSessionFactory.session().selenium().getText(
 				Locators.zDocumentNameField);
 

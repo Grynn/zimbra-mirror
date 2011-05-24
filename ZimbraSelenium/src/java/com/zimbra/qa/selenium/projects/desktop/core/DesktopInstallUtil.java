@@ -291,6 +291,8 @@ public class DesktopInstallUtil {
       } catch (InterruptedException ie) {
          ie.printStackTrace();
          throw new HarnessException("Getting Interrupted Exception");
+      } finally {
+         ZimbraAccount.AccountZWC().resetClientAuthentication();
       }
    }
 
