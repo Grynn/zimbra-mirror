@@ -1429,7 +1429,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 							forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
 							headerList:null,onSelection:ZaDLXFormView.aliasSelectionListener
 						},
- 				{type:_GROUP_, numCols:6, colSizes:["60px","10px","60px","10px","60px","auto"],
+ 				{type:_GROUP_, numCols:6, colSizes:["100px","10px","100px","10px","100px","auto"],
                                               cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
 							items: [
 								deleteAliasButton,
