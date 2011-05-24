@@ -3,6 +3,8 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui;
 
+import com.thoughtworks.selenium.DefaultSelenium;
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogError.DialogErrorID;
@@ -125,8 +127,11 @@ public class PageMain extends AbsTab {
 		}
 
 		// Click on logout
-		sClick(Locators.zLogoffButton);
-
+		//sClick(Locators.zLogoffButton);
+		// FIXME: temporary fix to replace sClick
+		// for "permission denied" bug causing skipping test cases in IE8/9 (clients zqa-081,zqa-089) 
+		((DefaultSelenium) ClientSessionFactory.session().selenium()).click(Locators.zLogoffButton);
+				
 		sWaitForPageToLoad();
 		((AppAjaxClient)MyApplication).zPageLogin.zWaitForActive();
 
