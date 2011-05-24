@@ -162,7 +162,8 @@ namespace MVVM.ViewModel
             OnPropertyChanged(new PropertyChangedEventArgs("Isprofile"));
             }
         }
-        public string ExchangeProfile
+        //we donot need exchangeprofile -cleanup
+       /* public string ExchangeProfile
         {
             get { return m_config.ExchangeProfile; }
             set
@@ -174,7 +175,7 @@ namespace MVVM.ViewModel
                 m_config.ExchangeProfile = value;
                 OnPropertyChanged(new PropertyChangedEventArgs("ExchangeProfile"));
             }
-        }
+        }*/
 
         public string OutlookProfile
         {

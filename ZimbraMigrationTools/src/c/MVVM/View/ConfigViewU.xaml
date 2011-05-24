@@ -24,10 +24,10 @@
                             <ColumnDefinition Width="*"></ColumnDefinition>
                             <ColumnDefinition Width="Auto"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <RadioButton Grid.Row="0" Grid.Column="0" Margin="30,55,5,5" Name="rbProfile" VerticalAlignment="Center" Content="Outlook Profile" GroupName="SourceGroup" HorizontalAlignment="Stretch" />
+                        <RadioButton Grid.Row="0" Grid.Column="0" Margin="30,55,5,5" Name="rbProfile" VerticalAlignment="Center" Content="Outlook Profile" GroupName="SourceGroup" HorizontalAlignment="Stretch" IsChecked="{Binding Path=Isprofile, Mode=OneWay}" />
                         <TextBox Grid.Row="0"  Grid.Column="1" Margin="10,55,0,0" Name="tbOlkProfile" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbProfile, Path=IsChecked}" Text="{Binding Path=OutlookProfile}"/>
                         <Button Grid.Row="0"  Grid.Column="2" Margin="0,55,20,0" MinWidth="20" Content="..." Name="buttonOlkProfile" Command="{Binding GetProfilesCommand}" IsEnabled="{Binding ElementName=rbProfile, Path=IsChecked}" HorizontalAlignment="Center" />
-                        <RadioButton Grid.Row="1"  Grid.Column="0" Margin="30,25,5,5" Content="PST File" Name="rbPST" VerticalAlignment="Center" GroupName="SourceGroup" />
+                        <RadioButton Grid.Row="1"  Grid.Column="0" Margin="30,25,5,5" Content="PST File" Name="rbPST" VerticalAlignment="Center" GroupName="SourceGroup" IsChecked="{Binding Path=IspST, Mode=OneWay}" />
                         <TextBox Grid.Row="1"  Grid.Column="1" Margin="10,25,0,0" Name="tbPST" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbPST, Path=IsChecked}" Text="{Binding Path=PSTFile}" HorizontalAlignment="Stretch" />
                         <Button Grid.Row="1"  Grid.Column="2" Margin="0,25,20,0" MinWidth="20" Content="..." HorizontalAlignment="Center" Name="browsePSTButton" Command="{Binding GetPSTCommand}" IsEnabled="{Binding ElementName=rbPST, Path=IsChecked}" />
                     </Grid>
@@ -45,7 +45,7 @@
                             <RowDefinition MinHeight="40" Height="Auto"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="90" />
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
@@ -56,7 +56,7 @@
                         <TextBox HorizontalAlignment="Left" MinWidth="50" Name="tbPort" VerticalAlignment="Top" Grid.Row="2" Grid.Column="1" Text="{Binding Path=ZimbraPort}"/>
                         <CheckBox Content="Use Secure Connection" Margin="-22,4,0,0" HorizontalAlignment="Center"  Name="cbSecure" VerticalAlignment="Top" Grid.Row="2" Grid.Column="1" IsChecked="{Binding Path=Secure}"/>
                         <Label Content="Username" Margin="26,0,0,0" HorizontalAlignment="Left" Name="label3" VerticalAlignment="Top" Grid.Row="3" Grid.Column="0" />
-                        <TextBox HorizontalAlignment="Left" MinWidth="240" Name="tbUser" VerticalAlignment="Top" Grid.Row="3" Grid.Column="1" Text="{Binding Path=ZimbraAdmin}"/>
+                        <TextBox HorizontalAlignment="Left" MinWidth="240" Name="tbUser" VerticalAlignment="Top" Grid.Row="3" Grid.Column="1" Text="{Binding Path=ZimbraUser}"/>
                         <Label Content="Password" Margin="26,0,0,0" HorizontalAlignment="Left" Name="label4" VerticalAlignment="Top" Grid.Row="4" Grid.Column="0"  />
                         <PasswordBox HorizontalAlignment="Left" MinWidth="240" Name="passwordBox1" VerticalAlignment="Top" Grid.Row="4" Grid.Column="1"/>
                     </Grid>

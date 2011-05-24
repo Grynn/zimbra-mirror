@@ -8,7 +8,7 @@
         public Config(string exchangeProfile, string outlookProfile, string pstFile, string zimbraserverhostname, string zimbraport,
                       string mailserver,string zimbraAdmin,string zimbrapasswd,string zimbradomain,string pstfile)
         {
-            this.ExchangeProfile = exchangeProfile;
+            //this.ExchangeProfile = exchangeProfile;
             this.OutlookProfile = outlookProfile;
             this.PSTFile = pstFile;
             this.zimbraServer = new ZimbraServer();
@@ -22,18 +22,18 @@
            this.zimbraServer.AdminPassword = zimbrapasswd;
            this.zimbraServer.Domain = zimbradomain;
            this.mailServer.Hostname = mailserver;
-           this.mailServer.PSTFile = pstfile;
+          // this.mailServer.PSTFile = pstfile;
            //this.mailServer.ProfileName = outlookProfile;
            
 
         }
 
 
-
-        public string ExchangeProfile
+        //we donot need a exchange profile..
+       /* public string ExchangeProfile
         {
             get; set;
-        }
+        }*/
 
         public string OutlookProfile
         {
@@ -125,6 +125,21 @@
         {
             get { return m_AdminPassword; }
             set { m_AdminPassword = value; }
+        }
+        private string m_UserAccount;
+
+        public string UserAccount
+        {
+            get { return m_UserAccount; }
+            set { m_UserAccount = value; }
+        }
+
+        private string m_UserPassword;
+
+        public string UserPassword
+        {
+            get { return m_UserPassword; }
+            set { m_UserPassword = value; }
         }
 
 

@@ -68,7 +68,8 @@ namespace MVVM.ViewModel
             pstDialog.Multiselect = false;
             if (pstDialog.ShowDialog() == true)
             {
-                PSTFile = pstDialog.FileName;   // update the UI
+                string result = pstDialog.FileName;
+                PSTFile = result;  // update the UI
             }
         }
 
@@ -90,11 +91,25 @@ namespace MVVM.ViewModel
                 Z11 = (Config)reader.Deserialize(fileRead);
                 ZimbraServerHostName = Z11.zimbraServer.HostName;
                 ZimbraPort = Z11.zimbraServer.Port;
-                ZimbraAdmin = Z11.zimbraServer.AdminAccount;
-                ZimbraAdminPasswd = Z11.zimbraServer.AdminPassword;
+                ZimbraUser = Z11.zimbraServer.UserAccount;
+                ZimbraUserPasswd = Z11.zimbraServer.UserPassword;
                 ZimbraDomain = Z11.zimbraServer.Domain;
-                OutlookProfile = Z11.mailServer.ProfileName;
-                PSTFile = Z11.mailServer.PSTFile;
+                if (Z11.OutlookProfile.Length == 0)
+                {
+                    Isprofile = false;
+                    IspST = true;
+
+                    PSTFile = Z11.PSTFile;
+                }
+                else
+                {
+                    Isprofile = true;
+                    IspST = false;
+                    OutlookProfile = Z11.OutlookProfile;
+
+                }
+                
+                
             }
             else
             {
@@ -119,8 +134,10 @@ namespace MVVM.ViewModel
         {
             if (File.Exists(@"C:\Temp\Users\ZimbraAdminOverView.xml"))
             {
-                UpdateXmlElement(@"C:\Temp\Users\ZimbraAdminOverView.xml", "mailServer");
+                UpdateXmlElement(@"C:\Temp\Users\ZimbraAdminOverView.xml", "OutlookProfile");
+                 UpdateXmlElement(@"C:\Temp\Users\ZimbraAdminOverView.xml", "PSTFile");
                 UpdateXmlElement(@"C:\Temp\Users\ZimbraAdminOverView.xml", "zimbraServer");
+                
                 
             }
 
@@ -145,6 +162,27 @@ namespace MVVM.ViewModel
             get;
             private set;
         }
+        private bool IsProfile;
+
+        public bool Isprofile
+        {
+            get { return IsProfile; }
+            set { IsProfile = value;
+            OnPropertyChanged(new PropertyChangedEventArgs("Isprofile"));
+            }
+        }
+        private bool IsPST;
+
+        public bool IspST
+        {
+            get { return IsPST; }
+            set
+            {
+                IsPST = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("IspST"));
+            }
+        }
+       
 
         private void Next()
         {
@@ -161,7 +199,7 @@ namespace MVVM.ViewModel
                     return;
                 }
                 m_config.OutlookProfile = value;
-                m_config.mailServer.ProfileName= value; 
+               // m_config.mailServer.ProfileName= value; 
                 OnPropertyChanged(new PropertyChangedEventArgs("OutlookProfile"));
             }
         }
@@ -176,7 +214,7 @@ namespace MVVM.ViewModel
                     return;
                 }
                 m_config.PSTFile = value;
-                m_config.mailServer.PSTFile = value;
+                //m_config.mailServer.PSTFile = value;
                 OnPropertyChanged(new PropertyChangedEventArgs("PSTFile"));
             }
         }
@@ -196,18 +234,18 @@ namespace MVVM.ViewModel
             }
         }
 
-        public string ZimbraAdmin
+        public string ZimbraUser
         {
-            get { return m_config.zimbraServer.AdminAccount; }
+            get { return m_config.zimbraServer.UserAccount; }
             set
             {
-                if (value == m_config.zimbraServer.AdminAccount)
+                if (value == m_config.zimbraServer.UserAccount)
                 {
                     return;
                 }
-                m_config.zimbraServer.AdminAccount = value;
+                m_config.zimbraServer.UserAccount = value;
 
-                OnPropertyChanged(new PropertyChangedEventArgs("ZimbraAdmin"));
+                OnPropertyChanged(new PropertyChangedEventArgs("ZimbraUser"));
             }
         }
 
@@ -225,18 +263,18 @@ namespace MVVM.ViewModel
                 OnPropertyChanged(new PropertyChangedEventArgs("ZimbraServerHostName"));
             }
         }
-        public string ZimbraAdminPasswd
+        public string ZimbraUserPasswd
         {
-            get { return m_config.zimbraServer.AdminPassword; }
+            get { return m_config.zimbraServer.UserPassword; }
             set
             {
-                if (value == m_config.zimbraServer.AdminPassword)
+                if (value == m_config.zimbraServer.UserPassword)
                 {
                     return;
                 }
-                m_config.zimbraServer.AdminPassword = value;
+                m_config.zimbraServer.UserPassword = value;
 
-                OnPropertyChanged(new PropertyChangedEventArgs("ZimbraAdminPasswd"));
+                OnPropertyChanged(new PropertyChangedEventArgs("ZimbraUserPasswd"));
             }
         }
 
