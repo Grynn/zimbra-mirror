@@ -32,6 +32,37 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Zimbra", "..\ZimbraMAPI\vcproj\ZimbraRpc.vcxproj", "{3391699B-1204-4098-8697-2E43800AABE4}"
 EndProject
 Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 10
+		SccProjectUniqueName0 = ..\\ZimbraMAPI\\vcproj\\Util.vcxproj
+		SccLocalPath0 = ..\\ZimbraMAPI
+		SccProjectFilePathRelativizedFromConnection0 = vcproj\\
+		SccProjectUniqueName1 = ..\\ZimbraMAPI\\vcproj\\ZimbraMime.vcxproj
+		SccLocalPath1 = ..\\ZimbraMAPI
+		SccProjectFilePathRelativizedFromConnection1 = vcproj\\
+		SccProjectUniqueName2 = ..\\ZimbraMAPI\\vcproj\\ZimbraRpc.vcxproj
+		SccLocalPath2 = ..\\ZimbraMAPI
+		SccProjectFilePathRelativizedFromConnection2 = vcproj\\
+		SccLocalPath3 = .
+		SccProjectUniqueName4 = src\\c\\ZimbraMigration\\ZimbraMigration.csproj
+		SccLocalPath4 = .
+		SccProjectFilePathRelativizedFromConnection4 = src\\c\\ZimbraMigration\\
+		SccProjectUniqueName5 = src\\c\\ZimbraMigrationXBAP\\ZimbraMigrationXBAP.csproj
+		SccLocalPath5 = .
+		SccProjectFilePathRelativizedFromConnection5 = src\\c\\ZimbraMigrationXBAP\\
+		SccProjectUniqueName6 = src\\c\\MVVM\\MVVM.csproj
+		SccLocalPath6 = .
+		SccProjectFilePathRelativizedFromConnection6 = src\\c\\MVVM\\
+		SccProjectUniqueName7 = src\\c\\Misc\\Misc.csproj
+		SccLocalPath7 = .
+		SccProjectFilePathRelativizedFromConnection7 = src\\c\\Misc\\
+		SccProjectUniqueName8 = src\\c\\CppLib\\CppLib.vcxproj
+		SccLocalPath8 = .
+		SccProjectFilePathRelativizedFromConnection8 = src\\c\\CppLib\\
+		SccProjectUniqueName9 = src\\c\\PSTMigration\\PSTMigration.vcxproj
+		SccLocalPath9 = .
+		SccProjectFilePathRelativizedFromConnection9 = src\\c\\PSTMigration\\
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		dbg|Win32 = dbg|Win32
 		dbg|x64 = dbg|x64
