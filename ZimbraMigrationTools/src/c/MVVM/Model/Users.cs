@@ -9,17 +9,11 @@ namespace MVVM.Model
     public class Users
     {
         public Users() { }
-        internal Users(string usernameEntered, string username, string mappedname, int currentUserSelection)
+        internal Users(string username, string mappedname, int currentUserSelection)
         {
-            this.UsernameEntered = usernameEntered;
             this.Username = username;
             this.MappedName = mappedname;
             this.CurrentUserSelection = currentUserSelection;
-        }
-
-        public string UsernameEntered
-        {
-            get; set;
         }
 
         public string Username
@@ -41,6 +35,12 @@ namespace MVVM.Model
         {
             get; set;
         }
+
+        public bool EnableNext
+        {
+            get; set;
+        }
+
         public static string ToCsv<T>(string separator, IEnumerable<T> objectlist)
         {
             Type t = typeof(T);

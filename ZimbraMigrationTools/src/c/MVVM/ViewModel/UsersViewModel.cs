@@ -14,7 +14,7 @@ namespace MVVM.ViewModel
 {
     public class UsersViewModel : BaseViewModel
     {
-        readonly Users m_users = new Users("", "", "", -1);
+        readonly Users m_users = new Users("", "", -1);
         ScheduleViewModel scheduleViewModel;
 
         public UsersViewModel(ScheduleViewModel scheduleViewModel, string username, string mappedname)
@@ -152,7 +152,7 @@ namespace MVVM.ViewModel
                                 UsersList.Add(new UsersViewModel(null, Username, MappedName));
                                 scheduleViewModel.SchedList.Add(Username);
                             }
-
+                            EnableNext = (UsersList.Count > 0);
 
                         }
                         scheduleViewModel.EnableMigrate = (scheduleViewModel.SchedList.Count > 0);
@@ -185,8 +185,8 @@ namespace MVVM.ViewModel
         private void Add(object value)
         {
             var name = value as string;
-            UsersList.Add(new UsersViewModel(null, name, ""));
-            UsernameEntered = "";
+            UsersList.Add(new UsersViewModel(null, "", ""));
+            EnableNext = (UsersList.Count > 0);
             scheduleViewModel.SchedList.Add(name);
             scheduleViewModel.EnableMigrate = (scheduleViewModel.SchedList.Count > 0);
         }
@@ -200,6 +200,7 @@ namespace MVVM.ViewModel
         private void Remove()
         {
             UsersList.RemoveAt(CurrentUserSelection);
+            EnableNext = (UsersList.Count > 0);
             scheduleViewModel.EnableMigrate = (scheduleViewModel.SchedList.Count > 0);
         }
 
@@ -253,20 +254,6 @@ namespace MVVM.ViewModel
         {
             get { return userslist; }
         }
-        
-        public string UsernameEntered
-        {
-            get { return m_users.UsernameEntered; }
-            set
-            {
-                if (value == m_users.UsernameEntered)
-                {
-                    return;
-                }
-                m_users.UsernameEntered = value;
-                OnPropertyChanged(new PropertyChangedEventArgs("UsernameEntered"));
-            }
-        }
 
         public string Username
         {
@@ -319,6 +306,17 @@ namespace MVVM.ViewModel
             {
                 minusEnabled = value;
                 OnPropertyChanged(new PropertyChangedEventArgs("MinusEnabled"));
+            }
+        }
+
+        private bool enableNext;
+        public bool EnableNext
+        {
+            get { return enableNext; }
+            set
+            {
+                enableNext = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("EnableNext"));
             }
         }
     }

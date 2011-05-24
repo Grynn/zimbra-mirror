@@ -15,7 +15,7 @@ namespace MVVM.ViewModel
 {
     public class ScheduleViewModel : BaseViewModel
     {
-        readonly Schedule m_schedule = new Schedule(0, "", "", false);
+        readonly Schedule m_schedule = new Schedule(0, "", false);
         UsersViewModel usersViewModel;
         ConfigViewModelU configViewModelU;
         AccountResultsViewModel accountResultsViewModel;

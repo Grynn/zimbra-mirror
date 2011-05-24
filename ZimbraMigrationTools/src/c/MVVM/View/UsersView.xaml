@@ -36,23 +36,21 @@
                 <Button Grid.Row="3" HorizontalAlignment="Left"  HorizontalContentAlignment="Left" Margin="0,20,0,0" Name="loadCSVButton" Command="{Binding UserMapCommand}" Width="{Binding ElementName=queryBuilderButton, Path=ActualWidth}">Load CSV...</Button>
             </Grid>
         </GroupBox>
-        <TextBlock Grid.Row="1" Grid.Column="0" Margin="26,12,0,0" HorizontalAlignment="Left" Name="textEnter" Text="User:" VerticalAlignment="Bottom"/>
-        <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="65,12,0,0" MinWidth="160" HorizontalAlignment="Center" VerticalAlignment="Bottom" Name="tbUsername" Text="{Binding Path=UsernameEntered}"/>
-        <Button Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,12,0,0" Name="plusButton" Command="{Binding AddCommand}" CommandParameter="{Binding ElementName=tbUsername,Path=Text}" MinWidth="20" MaxHeight="20" Content="=&gt;" FontFamily="Courier New" FontWeight="Bold" IsEnabled="{Binding Text.Length, ElementName=tbUsername, Converter={StaticResource CountGreaterThanZeroConverter}}"/>
-        <Button Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left" Margin="5,12,0,0" Name="minusButton" IsEnabled="{Binding MinusEnabled}" Command="{Binding RemoveCommand}" MinWidth="20" MaxHeight="20" Content="&lt;=" FontFamily="Courier New" FontWeight="Bold" />
-        <DataGrid Grid.Row="1" Grid.Column="2" Margin="40,40,0,0" Name="dgUsers" AutoGenerateColumns="False" SelectionMode="Single" ItemsSource="{Binding UsersList}" SelectedIndex="{Binding Path=CurrentUserSelection, Mode=TwoWay}" MinHeight="240" MaxHeight="240" MinWidth="180" MaxWidth="180" >
+        <DataGrid Grid.Row="1" Grid.Column="2" Margin="40,40,0,0" Name="dgUsers" AutoGenerateColumns="False" CanUserAddRows="True" SelectionMode="Single" ItemsSource="{Binding UsersList}" SelectedIndex="{Binding Path=CurrentUserSelection, Mode=TwoWay}" MinHeight="200" MaxHeight="200" MinWidth="180" MaxWidth="180" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Source Name" MinWidth="90" MaxWidth="90" Binding="{Binding Path=Username}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Dest Name" MinWidth="90" MaxWidth="90" Binding="{Binding Path=MappedName}"></DataGridTextColumn>               
             </DataGrid.Columns>
         </DataGrid>
+        <Button Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15,12,0,0" Name="plusButton" Command="{Binding AddCommand}" CommandParameter="{Binding ElementName=tbUsername,Path=Text}" MinWidth="20" MaxHeight="20" Content="+" FontFamily="Courier New" FontWeight="Bold" />
+        <Button Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="75,12,0,0" Name="minusButton" IsEnabled="{Binding MinusEnabled}" Command="{Binding RemoveCommand}" MinWidth="20" MaxHeight="20" Content="-" FontFamily="Courier New" FontWeight="Bold" />
         <Separator Grid.Row="3" Grid.ColumnSpan="3" Margin="12,16,0,0" VerticalAlignment="Top"/>
         <Grid Name="BottomGrid" Grid.Row="3" Grid.ColumnSpan="3">
             <TextBlock Margin="26,40,0,0" Name="textBlockHelp" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Left">
                        <Hyperlink Command="{Binding GetUsersHelpCommand}">Help</Hyperlink>
             </TextBlock>
             <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="200,40,0,0" Content="Save" Name="saveUButton" Command="{Binding SaveCommand}"  />
-            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="360,40,0,0" Content="Next" Name="nextUButton" Command="{Binding NextCommand}"  />
+            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="360,40,0,0" Content="Next" Name="nextUButton" Command="{Binding NextCommand}" IsEnabled="{Binding Path=EnableNext}" />
         </Grid>
     </Grid>
 </UserControl>

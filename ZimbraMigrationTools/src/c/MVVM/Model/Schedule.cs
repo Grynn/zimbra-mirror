@@ -5,7 +5,7 @@ namespace MVVM.Model
 
     public class Schedule
     {
-        internal Schedule(int pbValue, string pbMsgValue, string usernameEntered, bool EnableMigrate)
+        internal Schedule(int pbValue, string pbMsgValue, bool EnableMigrate)
         {
             this.PBValue = pbValue;
             this.PBMsgValue = pbMsgValue;
