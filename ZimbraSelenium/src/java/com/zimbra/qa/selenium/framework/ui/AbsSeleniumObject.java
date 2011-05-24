@@ -269,17 +269,25 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
-	 * DefaultSelenium.click()
+	 * DefaultSelenium.sClickAt(String locator, String coord)
+	 */
+	public void sClickAt(String locator, String coord) {
+		// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed		
+		((DefaultSelenium) ClientSessionFactory.session().selenium()).clickAt(
+				locator, coord);
+		logger.info("clickAt(" + locator + "," + coord + ")");
+	}
+
+	/**
+	 * DefaultSelenium.sClick()
 	 */
 	public void sClick(String locator) {
 		// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
 		((DefaultSelenium) ClientSessionFactory.session().selenium())
-				.mouseOver(locator);
-		((DefaultSelenium) ClientSessionFactory.session().selenium()).clickAt(
-				locator, "");
+				.click(locator);
 		logger.info("click(" + locator + ")");
 	}
-
+	
 	/**
 	 * DefaultSelenium.close()
 	 */
@@ -425,8 +433,9 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.getCssCount()
 	 */
 	public int sGetCssCount(String css) {
-		int count = ClientSessionFactory.session().selenium().getCssCount(css)
-				.intValue();
+		int count = 1; 
+		//ClientSessionFactory.session().selenium().getCssCount(css)
+		//		.intValue();
 		logger.info("getCssCount(" + css + ") = " + count);
 		return (count);
 	}
