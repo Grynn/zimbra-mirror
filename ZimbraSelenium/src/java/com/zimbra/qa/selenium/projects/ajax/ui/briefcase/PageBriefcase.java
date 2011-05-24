@@ -460,17 +460,17 @@ public class PageBriefcase extends AbsTab {
 				}
 
 				// work around for bug 59722
-				if (optionLocator.contains("Document")) {
-					for(int i = 0; i < 6; i++){
+				if (optionLocator.contains("Dc")) {
+					for (int i = 0; i < 6; i++) {
 						typeKey(optionLocator, "40", "keydown");
-						}
-					typeKey(optionLocator, "13", "keydown");
-				} else if(optionLocator.contains("Tag")){
-					for(int i = 0; i < 8; i++){
-					typeKey(optionLocator, "40", "keydown");
 					}
 					typeKey(optionLocator, "13", "keydown");
-				}else
+				} else if (optionLocator.contains("Tg")) {
+					for (int i = 0; i < 8; i++) {
+						typeKey(optionLocator, "40", "keydown");
+					}
+					typeKey(optionLocator, "13", "keydown");
+				} else
 					this.zClick(optionLocator);
 
 				// If the app is busy, wait for it to become active
@@ -880,7 +880,7 @@ public class PageBriefcase extends AbsTab {
 
 			if (option == Button.O_TAG_FILE) {
 
-				optionLocator = "css=td#zmi__Briefcase__TAG_MENU_dropdown";
+				optionLocator = "css=td#zmi__Briefcase__TAG_MENU_dropdown>div[class=ImgCascade]";
 
 			} else {
 				throw new HarnessException("implement action: " + action
@@ -1017,8 +1017,9 @@ public class PageBriefcase extends AbsTab {
 
 		typeKey(Locators.zRenameInput.locator, "13", "keyup");
 	}
-	
-	public void typeKey(String locator, String keycode, String event) throws HarnessException {
+
+	public void typeKey(String locator, String keycode, String event)
+			throws HarnessException {
 		sFocus(locator);
 		// hit <Enter> key
 		// sKeyPressNative(Integer.toString(KeyEvent.VK_ENTER));
@@ -1026,17 +1027,24 @@ public class PageBriefcase extends AbsTab {
 		sGetEval("if(document.createEventObject){var x=selenium.browserbot.findElementOrNull('"
 				+ locator
 				+ "');var evObj = x.document.createEventObject();"
-				+ "evObj.keyCode=" + keycode + "; evObj.repeat = false;"
-				+ "x.focus(); x.fireEvent(\"on" + event + "\",evObj);}"
+				+ "evObj.keyCode="
+				+ keycode
+				+ "; evObj.repeat = false; x.focus(); x.fireEvent(\"on"
+				+ event
+				+ "\",evObj);}"
 				+ "else{if(window.KeyEvent){var evObj = document.createEvent('KeyEvents');"
-				+ "evObj.initKeyEvent( '" + event + "', true, true, window, false, false, false, false," + keycode + ", 0 );} "
+				+ "evObj.initKeyEvent( '"
+				+ event
+				+ "', true, true, window, false, false, false, false,"
+				+ keycode
+				+ ", 0 );} "
 				+ "else {var evObj = document.createEvent('HTMLEvents');"
-				+ "evObj.initEvent( '" + event + "', true, true, window, 1 );"
-				+ "evObj.keyCode=" + keycode + ";}"
-				+ "var x = selenium.browserbot.findElementOrNull('"
-				+ locator
-				+ "'); "
-				+ "x.blur(); x.focus(); x.dispatchEvent(evObj);}");
+				+ "evObj.initEvent( '"
+				+ event
+				+ "', true, true, window, 1 ); evObj.keyCode="
+				+ keycode
+				+ ";} var x = selenium.browserbot.findElementOrNull('"
+				+ locator + "'); x.blur(); x.focus(); x.dispatchEvent(evObj);}");
 	}
 
 	public void fireEvent(String locator, String eventName)
