@@ -153,27 +153,27 @@ public class PageSearchResults extends AbsTab {
 			throw new HarnessException("Account Rows is not present");
 
 		// How many items are in the table?
-		String rowsLocator = "//div[@id='zl__SEARCH_MANAGE']//div[contains(@id, '__rows')]//div[contains(@id,'zli__')]";
-		int count = this.sGetXpathCount(rowsLocator);
+		String rowsLocator = "css=div#zl__SEARCH_MANAGE div[id$='__rows'] div[id^='zli__']";
+		int count = this.sGetCssCount(rowsLocator);
 		logger.debug(myPageName() + " zListGetAccounts: number of accounts: "+ count);
 
 		// Get each conversation's data from the table list
 		for (int i = 1; i <= count; i++) {
-			final String accountLocator = rowsLocator + "["+ i +"]";
+			final String accountLocator = rowsLocator + ":nth-child("+i+")";
 			String locator;
 
 			AccountItem item = new AccountItem();
 
 			// Type (image)
 			// ImgAdminUser ImgAccount ImgSystemResource (others?)
-			locator = accountLocator + "//td[contains(@id, 'account_data_type_')]//div";
+			locator = accountLocator + " td[id^='SEARCH_MANAGE_data_type'] div";
 			if ( this.sIsElementPresent(locator) ) {
-				item.setGAccountType(this.sGetAttribute("xpath=("+ locator + ")@class"));
+				item.setGAccountType(this.sGetAttribute(locator + "@class"));
 			}
 
 
 			// Email Address
-			locator = accountLocator + "//td[contains(@id, 'account_data_emailaddress_')]";
+			locator = accountLocator + " td[id^='SEARCH_MANAGE_data_emailaddress']";
 			if ( this.sIsElementPresent(locator) ) {
 				item.setGEmailAddress(this.sGetText(locator).trim());
 			}
