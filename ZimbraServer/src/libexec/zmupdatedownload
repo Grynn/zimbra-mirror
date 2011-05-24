@@ -39,7 +39,7 @@ if [ -d "${download_dir}" ]; then
   ISYNC_UB=$(cd ${download_dir}; ls zimbra-isync*.dmg 2>/dev/null)
   PST_IMPORT=$(cd ${download_dir}; ls ZCSPSTImportWizard* 2>/dev/null)
   EXCHANGE_MIG_WIZARD=$(cd ${download_dir}; ls ZCSExchangeMigrationWizard* 2>/dev/null)
-  DOMINO_MIG_WIZARD=$(cd ${download_dir}; ls ZCSDominoMigrationWizard* 2>/dv/null)
+  DOMINO_MIG_WIZARD=$(cd ${download_dir}; ls ZCSDominoMigrationWizard* 2>/dev/null)
 
   cat ${index}.in | \
     sed -e "s/@@ZCO_32BIT@@/${ZCO_32BIT}/" \
