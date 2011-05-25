@@ -1,22 +1,14 @@
 #include "common.h"
 #include <mapiutil.h>
-#include "ProfileLauncher.h"
 
 #define PR_REPLICA_VERSION PROP_TAG(PT_I8,0x664b)
 #define PR_PROFILE_HOME_SERVER_DN	PROP_TAG( PT_STRING8,	0x6612 )
 #define MDB_ONLINE ((ULONG) 0x00000100)
 #define pbGlobalProfileSectionGuid	"\x13\xDB\xB0\xC8\xAA\x05\x10\x1A\x9B\xB0\x00\xAA\x00\x2F\xC4\x5A"
 
-ProfileLauncher::ProfileLauncher(void)
-{
-}
+extern "C" {
 
-
-ProfileLauncher::~ProfileLauncher(void)
-{
-}
-
-__declspec(dllexport) int ProfileLauncher::DisplayProfiles(char* pszBuffer)
+__declspec(dllexport) int DisplayProfiles(char* pszBuffer)
 {
 	HRESULT hr = S_OK;
 	LPMAPISESSION pSession = NULL;
@@ -322,4 +314,6 @@ ERR:
 	//	MessageBox(tracemsg,_T("Error"), MB_ICONEXCLAMATION );
 	//}
 	return strlen(pszBuffer);
+}
+
 }
