@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="ActionCommand.cs" />
     <Compile Include="CountGreaterThanZeroConverter.cs" />
+    <Compile Include="ForegroundConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
