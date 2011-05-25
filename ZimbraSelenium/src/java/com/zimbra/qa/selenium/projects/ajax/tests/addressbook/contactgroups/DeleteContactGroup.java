@@ -154,8 +154,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		  }
 		  
 	      // Refresh the view, to pick up the new contact groups
-	      FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
-	      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+	      FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");	      
 	      app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
 	    
 	      // Select the items
@@ -188,5 +187,57 @@ public class DeleteContactGroup extends AjaxCommonTest  {
           ZAssert.assertTrue(count==0, "Verify contact groups " + group1.groupName + "," + group2.groupName + "," +  group3.groupName + " deleted");                  
 	}
 	
+
+	@Test(	description = "Delete contact + contact group at once",
+			groups = { "functional" })
+	public void DeleteMixOfContactAndGroup() throws HarnessException {
+		
+		 // Create a contact group via Soap
+		  ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);
+			             
+		  group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+		  String[] dlist = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
+		  for (int i=0; i<dlist.length; i++) {
+			  group.addDListMember(dlist[i]);
+		  }
+		  
+		  // Create a contact via Soap
+		  ContactItem contactItem = ContactItem.createUsingSOAP(app);			             
+		  contactItem.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+			
+		  
+	      // Refresh the view, to pick up the newly created ones
+	      FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");	      
+	      app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
+	  
+	      // Select the items
+	      app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group.fileAs);		       
+	      app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contactItem.fileAs);        
+	  
+    	  //delete contact + group by click Delete button on toolbar
+          app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);
+
+          //verify toasted message 2 contacts moved to Trash
+          String expectedMsg = "2 contacts moved to Trash";
+          ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
+	        expectedMsg , "Verify toast message '" + expectedMsg + "'");
+
+	      //verify deleted contact + group not displayed
+          List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
+	           
+          
+	      int count=0;
+	      for (ContactItem ci : contacts) {
+		    if (ci.fileAs.equals(group.groupName) ||			  
+			    ci.fileAs.equals(contactItem.fileAs)
+		      ) {
+               count++;	 			
+	  	    }
+	      }
+	
+          ZAssert.assertTrue(count==0, "Verify contact + group " + contactItem.fileAs  + "," +  group.groupName + " deleted");                  
+
+		  
+	}
 
 }
