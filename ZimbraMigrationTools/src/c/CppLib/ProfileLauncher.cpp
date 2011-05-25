@@ -1,5 +1,5 @@
-#include "stdafx.h"
 #include "common.h"
+#include <mapiutil.h>
 #include "ProfileLauncher.h"
 
 #define PR_REPLICA_VERSION PROP_TAG(PT_I8,0x664b)
