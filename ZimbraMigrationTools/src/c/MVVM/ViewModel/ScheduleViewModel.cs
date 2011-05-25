@@ -122,6 +122,23 @@ namespace MVVM.ViewModel
 
         private void Load()
         {
+            System.Xml.Serialization.XmlSerializer reader =
+          new System.Xml.Serialization.XmlSerializer(typeof(Config));
+            if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
+            {
+                System.IO.StreamReader fileRead = new System.IO.StreamReader(
+                   @"C:\Temp\ZimbraAdminOverView.xml");
+                Config Z11 = new Config();
+                Z11 = (Config)reader.Deserialize(fileRead);
+                COS = Z11.UserProvision.COS;
+                DefaultPWD = Z11.UserProvision.DefaultPWD;
+                //MessageBox.Show("Options information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+            else
+            {
+                MessageBox.Show("There is no options configuration stored.Please enter some options info", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
             MessageBox.Show("Schedule information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
 
@@ -133,6 +150,19 @@ namespace MVVM.ViewModel
 
         private void Save()
         {
+            if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
+                UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "UserProvision");
+            else
+            {
+                System.Xml.Serialization.XmlSerializer writer =
+                new System.Xml.Serialization.XmlSerializer(typeof(Config));
+
+                System.IO.StreamWriter file = new System.IO.StreamWriter(
+                    @"C:\Temp\ZimbraAdminOverView.xml");
+                writer.Serialize(file, m_config);
+                file.Close();
+            }
+
             MessageBox.Show("Schedule information saved", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
 
@@ -178,7 +208,35 @@ namespace MVVM.ViewModel
                 return schedlist;
             }
         }
+        public string COS
+        {
+            get { return m_config.UserProvision.COS; }
+            set
+            {
+                if (value == m_config.UserProvision.COS)
+                {
+                    return;
+                }
+                m_config.UserProvision.COS = value;
 
+                OnPropertyChanged(new PropertyChangedEventArgs("COS"));
+            }
+        }
+        public string DefaultPWD
+        {
+            get { return m_config.UserProvision.DefaultPWD; }
+            set
+            {
+                if (value == m_config.UserProvision.DefaultPWD)
+                {
+                    return;
+                }
+                m_config.UserProvision.DefaultPWD = value;
+
+                OnPropertyChanged(new PropertyChangedEventArgs("DefaultPWD"));
+            }
+        }
+       
         public int PBValue
         {
             get { return m_schedule.PBValue; }

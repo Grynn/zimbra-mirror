@@ -14,7 +14,10 @@
             this.zimbraServer = new ZimbraServer();
             this.mailServer = new MailServer();
             this.importOptions = new ImportOptions();
-
+            this.UserProvision = new UserProvision();
+            this.AdvancedImportOptions = new AdvancedImportOptions();
+            this.AdvancedImportOptions.FoldersToSkip= new Folder[5];
+        
 
            this.zimbraServer.HostName = zimbraserverhostname;
            this.zimbraServer.Port = zimbraport;
@@ -22,6 +25,8 @@
            this.zimbraServer.AdminPassword = zimbrapasswd;
            this.zimbraServer.Domain = zimbradomain;
            this.mailServer.Hostname = mailserver;
+            
+           
           // this.mailServer.PSTFile = pstfile;
            //this.mailServer.ProfileName = outlookProfile;
            
@@ -48,6 +53,8 @@
         public MailServer mailServer;
         public ZimbraServer zimbraServer;
         public ImportOptions importOptions;
+        public UserProvision UserProvision;
+        public AdvancedImportOptions AdvancedImportOptions;
         
         
     }
@@ -153,6 +160,27 @@
 
 
     }
+    public class UserProvision
+    {
+        private string m_COS;
+
+        public string COS
+        {
+            get { return m_COS; }
+            set { m_COS = value; }
+        }
+        private string m_defaultPWD;
+
+        public string DefaultPWD
+        {
+            get { return m_defaultPWD; }
+            set { m_defaultPWD = value; }
+        }
+
+
+    }
+
+   
 
    
 }

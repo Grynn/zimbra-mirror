@@ -79,4 +79,44 @@ namespace MVVM.Model
 
 
     }
+    public class AdvancedImportOptions
+    {
+        private DateTime m_MigrateONRAfter;
+
+        public DateTime MigrateONRAfter
+        {
+            get { return m_MigrateONRAfter; }
+            set { m_MigrateONRAfter = value; }
+        }
+
+        private string m_MaxAttachementSize;
+
+        public string MaxAttachementSize
+        {
+            get { return m_MaxAttachementSize; }
+            set { m_MaxAttachementSize = value; }
+        }
+        
+        public Folder[] FoldersToSkip;
+    }
+
+     public class Folder{
+
+         private string m_FolderName;
+
+         public string FolderName
+         {
+             get { return m_FolderName; }
+             set { m_FolderName = value; }
+         }
+
+      /*  public List<string> FoldersToSkip
+        {
+            get { return m_FoldersToSkip; }
+            set { m_FoldersToSkip = value; }
+        }
+
+         */
+
+    }
 }

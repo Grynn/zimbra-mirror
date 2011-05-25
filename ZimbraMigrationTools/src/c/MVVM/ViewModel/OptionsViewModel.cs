@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using System.Xml.Linq;
 using System.Xml;
 using System.IO;
+using System.Collections.Generic;
 
 namespace MVVM.ViewModel
 {
@@ -71,6 +72,43 @@ namespace MVVM.ViewModel
                 ImportTaskOptions = Z11.importOptions.Tasks;
                 ImportSentOptions = Z11.importOptions.Sent;
                 ImportRuleOptions = Z11.importOptions.Rules;
+
+                MigrateONRAfter = Z11.AdvancedImportOptions.MigrateONRAfter.ToLongDateString();
+                MaxAttachementSize = Z11.AdvancedImportOptions.MaxAttachementSize;
+
+                string returnval = "";
+                //foreach (Folder e in Z11.AdvancedImportOptions.FoldersToSkip.Length)
+                for(int i = 0;i <Z11.AdvancedImportOptions.FoldersToSkip.Length;i++)
+                {
+                    Folder e = Z11.AdvancedImportOptions.FoldersToSkip[i];
+                    if ( e != null)
+                    {
+                        returnval +=  e.FolderName;
+                        returnval += ",";
+                    }
+
+                }
+
+                FoldersToSkip = returnval;
+               placeholderstring = returnval;
+
+               if (MigrateONRAfter != "") 
+                    Migratedateflag = true;
+               else
+                    Migratedateflag = false;
+
+                if(MaxAttachementSize !="")
+                     Maxattachflag=true;
+                else
+                    Maxattachflag=false;
+
+                if (placeholderstring != "")
+                    Skipfolderflag = true;
+                else
+                    Skipfolderflag = false;
+
+
+                
                 //MessageBox.Show("Options information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
             else
@@ -87,9 +125,14 @@ namespace MVVM.ViewModel
         private void Save()
         {
             if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
-             UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "importOptions");
+            {
+                UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "importOptions");
+                UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "AdvancedImportOptions");
+
+            }
             else
-            {   System.Xml.Serialization.XmlSerializer writer =
+            {
+                System.Xml.Serialization.XmlSerializer writer =
                 new System.Xml.Serialization.XmlSerializer(typeof(Config));
 
                 System.IO.StreamWriter file = new System.IO.StreamWriter(
@@ -254,6 +297,94 @@ namespace MVVM.ViewModel
                 m_config.importOptions.NextButtonContent = value;
 
                 OnPropertyChanged(new PropertyChangedEventArgs("ImportNextButtonContent"));
+            }
+        }
+        public string MigrateONRAfter
+        {
+            get { return m_config.AdvancedImportOptions.MigrateONRAfter.ToLongDateString(); }
+            set
+            {
+                if (value == m_config.AdvancedImportOptions.MigrateONRAfter.ToLongDateString())
+                {
+                    return;
+                }
+                m_config.AdvancedImportOptions.MigrateONRAfter = Convert.ToDateTime(value);
+
+                OnPropertyChanged(new PropertyChangedEventArgs("MigrateONRAfter"));
+            }
+        }
+        public string MaxAttachementSize
+        {
+            get { return m_config.AdvancedImportOptions.MaxAttachementSize; }
+            set
+            {
+                if (value == m_config.AdvancedImportOptions.MaxAttachementSize)
+                {
+                    return;
+                }
+                m_config.AdvancedImportOptions.MaxAttachementSize = value;
+
+                OnPropertyChanged(new PropertyChangedEventArgs("MaxAttachementSize"));
+            }
+        }
+
+        private string placeholderstring;
+
+        public string Placeholderstring
+        {
+            get { return placeholderstring; }
+            set { placeholderstring = value;
+            OnPropertyChanged(new PropertyChangedEventArgs("Placeholderstring"));
+            }
+        }
+
+        public string FoldersToSkip
+        {
+            get
+            {
+                return Placeholderstring;
+            }
+            set
+            {
+
+                string[] nameTokens = value.Split(',');
+                for (int i = 0; i < nameTokens.Length; i++)
+                {
+                    Folder tempUser = new Folder();
+                    tempUser.FolderName = nameTokens.GetValue(i).ToString();
+                    m_config.AdvancedImportOptions.FoldersToSkip.SetValue(tempUser, i);
+
+                }
+
+                OnPropertyChanged(new PropertyChangedEventArgs("FoldersToSkip"));
+            }
+        }
+
+        private bool m_migratedateflag;
+
+        public bool Migratedateflag
+        {
+            get { return m_migratedateflag; }
+            set { m_migratedateflag = value;
+            OnPropertyChanged(new PropertyChangedEventArgs("Migratedateflag"));
+            }
+        }
+        private bool m_maxattachflag;
+
+        public bool Maxattachflag
+        {
+            get { return m_maxattachflag; }
+            set { m_maxattachflag = value;
+            OnPropertyChanged(new PropertyChangedEventArgs("Maxattachflag"));
+            }
+        }
+        private bool m_skipfolderflag;
+
+        public bool Skipfolderflag
+        {
+            get { return m_skipfolderflag; }
+            set { m_skipfolderflag = value;
+            OnPropertyChanged(new PropertyChangedEventArgs("Skipfolderflag"));
             }
         }
     }

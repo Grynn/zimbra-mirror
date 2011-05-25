@@ -171,6 +171,8 @@ namespace MVVM.ViewModel
             m_scheduleViewModel.ImageName = "Images/Penguins.jpg";
             m_scheduleViewModel.lb = lb;
             m_scheduleViewModel.isBrowser = false;
+           m_scheduleViewModel.COS = "default";
+            m_scheduleViewModel.DefaultPWD = "";
 
             m_usersViewModel = new UsersViewModel(m_scheduleViewModel,"",""); // needs scheduleviewmodel so schedlist will be in sync
             m_usersViewModel.Name = "Users";
