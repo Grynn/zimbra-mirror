@@ -37,9 +37,6 @@ import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.Provisioning.DomainBy;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.nginx.NginxLookupExtension;
-import com.zimbra.cs.servlet.ZimbraServlet;
-
-import com.zimbra.cs.nginx.NginxLookupExtension;
 
 public class TestNginxLookup extends TestCase {
     
@@ -68,9 +65,9 @@ public class TestNginxLookup extends TestCase {
     private static final String HTTP_PORT    = "7070";
     
     private static final String TEST_HOST_DOGFOOD    = "dogfood.zimbra.com";
-    private static final String TEST_HOST_IP_DOGFOOD = "207.126.229.140";
+    private static final String TEST_HOST_IP_DOGFOOD = "10.113.63.59"; // "207.126.229.140";
     private static final String TEST_HOST_CATFOOD    = "catfood.zimbra.com";
-    private static final String TEST_HOST_IP_CATFOOD = "207.126.229.141";
+    private static final String TEST_HOST_IP_CATFOOD = "10.113.63.60"; // "207.126.229.141";
     
     private static final String IMAP_EXTERNAL_HOST = TEST_HOST_DOGFOOD;
     private static final String IMAP_EXTERNAL_HOST_IP = TEST_HOST_IP_DOGFOOD;
@@ -122,15 +119,20 @@ public class TestNginxLookup extends TestCase {
     private static String ACCT2_FOREIGN_PRINCIPAL;
     
     public static class Result {
-        public Result(String status, String server, String port, String user, String wait) {
+        public Result(String status, String server, String port, String user, String wait, String password) {
             mStatus = status;
             mServer = server;
             mPort = port;
             mUser = user;
             mWait = wait;
+            mAuthToken = password;  // auth token for gssapi and certauth are returned in the password header
         }
         
         void verify(String status, String server, String port, String user, String wait) {
+            verify(status, server, port, user, wait, false);
+        }
+        
+        void verify(String status, String server, String port, String user, String wait, boolean hasAuthToken) {
             assertEquals(status, mStatus);
             assertEquals(server, mServer);
             assertEquals(port, mPort);
@@ -144,6 +146,10 @@ public class TestNginxLookup extends TestCase {
             if (user != null)
                 assertEquals(user, mUser);
             assertEquals(wait, mWait);
+            
+            if (hasAuthToken) {
+                assertNotNull(mAuthToken);
+            }
         }
         
         String mStatus;
@@ -151,6 +157,7 @@ public class TestNginxLookup extends TestCase {
         String mPort;
         String mUser;
         String mWait;
+        String mAuthToken;
     }
     
     private void modifyConfig(Map<String, Object> attrs) throws Exception {
@@ -534,6 +541,40 @@ public class TestNginxLookup extends TestCase {
         doTest("gssapi",  otherAcctLocalPart, null,  "imap",  "1",  clientIp,  nginxServerIp,  null,  acctKrb5Principal,  adminAcct,  adminPassword).verify(STATUS_LOGIN_FAILED, null, null, null, AUTH_WAIT);
         doTest("gssapi",  acctLocalPart,      null,  "imap",  "1",  clientIp,  nginxServerIp,  null,  acctKrb5Principal,  "zmnginxbogus",  adminPassword).verify(STATUS_LOGIN_FAILED, null, null, null, AUTH_WAIT);
         doTest("gssapi",  childLocalPart,     null,  "imap",  "1",  clientIp,  nginxServerIp,  null,  parentKrb5Principal,  adminAcct,  adminPassword).verify(STATUS_OK, IMAP_HOST_IP, IMAP_PORT, childEmail, null);
+    
+        // cleanup setting on global config
+        attrs.clear();
+        attrs.put(Provisioning.A_zimbraReverseProxyAdminIPAddress, "");
+        mSoapProv.modifyAttrs(config, attrs);
+    }
+    
+    public void testCertAuth() throws Exception {
+        // admin account
+        String adminAcct = "zmnginx";
+        String adminPassword = "zmnginx";  // from ZimbraServer/conf/ldap/zimbra.ldif
+        
+        // simulating nginx server IP and remote client IP.
+        // generate a unique IP for this test
+        SimpleDateFormat fmtIp =  new SimpleDateFormat("10.HH:mm:ss");
+        String nginxServerIp = fmtIp.format(new Date()); // "13.12.11.10";
+        String clientIp = "11.22.33.44"; // doesn't really matter
+        
+        // setup global config
+        Map<String, Object> attrs = new HashMap<String, Object>();
+        Config config = mSoapProv.getConfig();
+        attrs.clear();
+        attrs.put(Provisioning.A_zimbraReverseProxyAdminIPAddress, nginxServerIp);
+        mSoapProv.modifyAttrs(config, attrs);
+        
+        String acctEmail = "user1@phoebe.mbp";
+        String x509SubjectDN = "EMAILADDRESS=user1@phoebe.mbp,CN=user one,OU=Engineering,O=Example Company,L=Saratoga,ST=California,C=US";  // TODO, do not hardcode
+        
+        doTest("certauth", x509SubjectDN, null,  "http",  "1",  clientIp,  nginxServerIp,  null,  null,  adminAcct,  adminPassword).verify(STATUS_OK, HTTP_HOST_IP, HTTP_PORT, acctEmail, null, true);
+
+        // cleanup setting on global config
+        attrs.clear();
+        attrs.put(Provisioning.A_zimbraReverseProxyAdminIPAddress, "");
+        mSoapProv.modifyAttrs(config, attrs);
     }
     
     private static Result doLookupReq(HttpClient client, GetMethod method) {
@@ -545,12 +586,14 @@ public class TestNginxLookup extends TestCase {
             Header authPort = method.getResponseHeader(NginxLookupExtension.NginxLookupHandler.AUTH_PORT);
             Header authUser = method.getResponseHeader(NginxLookupExtension.NginxLookupHandler.AUTH_USER);
             Header authWait = method.getResponseHeader(NginxLookupExtension.NginxLookupHandler.AUTH_WAIT);
+            Header authPassword = method.getResponseHeader(NginxLookupExtension.NginxLookupHandler.AUTH_PASS);
             
             return new Result(authStatus==null?null:authStatus.getValue(),
                               authServer==null?null:authServer.getValue(),
                               authPort==null?null:authPort.getValue(),
                               authUser==null?null:authUser.getValue(),
-                              authWait==null?null:authWait.getValue());
+                              authWait==null?null:authWait.getValue(),
+                              authPassword==null?null:authPassword.getValue());
             
         } catch (IOException e) {
             e.printStackTrace();
@@ -606,9 +649,6 @@ public class TestNginxLookup extends TestCase {
     }
 
     public static void main(String args[]) {
-
-        TestNginxLookup t = new TestNginxLookup();
-        t.run();
-    
+        TestUtil.runTest(TestNginxLookup.class);
     }
 }

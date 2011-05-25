@@ -57,6 +57,7 @@ import com.zimbra.cs.ldap.ZLdapFilterFactory;
 import com.zimbra.cs.nginx.AbstractNginxLookupLdapHelper.SearchDirResult;
 import com.zimbra.cs.prov.ldap.LdapProv;
 import com.zimbra.cs.service.AuthProvider;
+import com.zimbra.cs.service.authenticator.ClientCertAuthenticator;
 
 public class NginxLookupExtension implements ZimbraExtension {
 
@@ -180,6 +181,7 @@ public class NginxLookupExtension implements ZimbraExtension {
         public static final String AUTHMETH_OTHER = "other";
         public static final String AUTHMETH_ZIMBRAID = "zimbraId";
         public static final String AUTHMETH_GSSAPI = "gssapi";
+        public static final String AUTHMETH_CERTAUTH = "certauth";
         
         private LdapProv prov;
         private AbstractNginxLookupLdapHelper helper;
@@ -338,6 +340,15 @@ public class NginxLookupExtension implements ZimbraExtension {
                 
                 if (req.serverIp == null)
                     throw new NginxLookupException("(GSSAPI) missing header field " + SERVER_IP);
+            } else if (req.authMethod.equalsIgnoreCase(AUTHMETH_CERTAUTH)) {
+                if (req.adminUser == null)
+                    throw new NginxLookupException("(CERTAUTH) missing header field " + AUTH_ADMIN_USER);
+                
+                if (req.adminPass == null)
+                    throw new NginxLookupException("(CERTAUTH) missing header field " + AUTH_ADMIN_PASS);
+                
+                if (req.serverIp == null)
+                    throw new NginxLookupException("(CERTAUTH) missing header field " + SERVER_IP);
             }
 
             if (req.pass == null)   /* We should not complain on null password */
@@ -368,6 +379,10 @@ public class NginxLookupExtension implements ZimbraExtension {
          *         pattern is incomplete
          */
         private static String unescapeAuthUserAndPass(String src) {
+            if (src == null) {
+                return null;
+            }
+            
             int len = src.length();
             StringBuffer sb = new StringBuffer(src.length());
             int last = 0;
@@ -447,7 +462,8 @@ public class NginxLookupExtension implements ZimbraExtension {
             AuthMechanism.doZimbraAuth(prov, null, adminAcct, req.adminPass, authCtxt);  
         }
         
-        private String genAuthToken(Account authc, Config config, NginxLookupRequest req) throws ServiceException, NginxLookupException {
+        private String genAuthToken(Account authc, Config config, NginxLookupRequest req) 
+        throws ServiceException, NginxLookupException {
             verifyNginxAdmin(config, req);
             
             try {
@@ -680,6 +696,13 @@ public class NginxLookupExtension implements ZimbraExtension {
                 if (authzIsPrincipal) {
                     qUser = gssapiAuthC.getAttr(Provisioning.A_zimbraMailDeliveryAddress);
                 }
+            } else if (req.authMethod.equalsIgnoreCase(AUTHMETH_CERTAUTH)) {
+                Account certAuthAcct = ClientCertAuthenticator.getAccountByX509SubjectDN(req.user);
+                if (certAuthAcct == null) {
+                    throw new NginxLookupException("account not found: " + req.user);
+                }
+                req.pass = genAuthToken(certAuthAcct, config, req);
+                return certAuthAcct.getName();
             }
 
             /* At this point, qUser is may not be fully qualified, and so the domain must be looked up
@@ -963,10 +986,12 @@ public class NginxLookupExtension implements ZimbraExtension {
                 resp.addHeader(AUTH_USER, authUser);
             }
 
-            /* For GSSAPI, we also need to send back the overriden authenticating ID and the auth-token as password */
-
             if (req.authMethod.equalsIgnoreCase(AUTHMETH_GSSAPI)) {
+                // For GSSAPI, we also need to send back the overriden authenticating ID and the auth-token as password
                 resp.addHeader(AUTH_ID, req.cuser);
+                resp.addHeader(AUTH_PASS, req.pass);
+            } else if (req.authMethod.equalsIgnoreCase(AUTHMETH_CERTAUTH)) {
+                // For CERTAUTH, we also need to send back the auth-token as password
                 resp.addHeader(AUTH_PASS, req.pass);
             }
         }
