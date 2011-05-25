@@ -31,15 +31,15 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "filterTestInfo")
 @XmlSeeAlso({
+    FilterTestSize.class,
+    FilterTestMimeHeader.class,
+    FilterTestTrue.class,
     FilterTestInvite.class,
     FilterTestCurrentDayOfWeek.class,
-    FilterTestSize.class,
     FilterTestAddressBook.class,
-    FilterTestMimeHeader.class,
     FilterTestCurrentTime.class,
     FilterTestHeader.class,
     FilterTestBody.class,
-    FilterTestTrue.class,
     FilterTestDate.class,
     FilterTestAttachment.class,
     FilterTestHeaderExists.class

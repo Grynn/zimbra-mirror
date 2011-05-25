@@ -52,8 +52,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "commonInstanceDataAttrs")
 @XmlSeeAlso({
-    InstanceDataAttrs.class,
-    LegacyInstanceDataAttrs.class
+    LegacyInstanceDataAttrs.class,
+    InstanceDataAttrs.class
 })
 public class CommonInstanceDataAttrs {
 

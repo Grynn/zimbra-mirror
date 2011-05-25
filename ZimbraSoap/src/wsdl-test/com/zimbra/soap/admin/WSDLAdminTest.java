@@ -990,11 +990,19 @@ public class WSDLAdminTest {
                 " - should be at least 1", len >= 1);
     }
 
-    // Getting system failure: server gren-elliots-macbook-pro.local 
+    // Getting system failure: server coco.local
     //     zimbraRemoteManagementPrivateKeyPath 
     //     (/opt/zimbra/.ssh/zimbra_identity) does not exist
+    //     Got further with :
+    //         zmlocalconfig -e zimbra_user=$USER
+    //         /opt/zimbra/bin/zmsshkeygen
+    //         cat /opt/zimbra/.ssh/zimbra_identity.pub>>$HOME/.ssh/authorized_keys
+    //     However, still get :
+    //     Caused by: java.io.IOException: There was a problem while 
+    //                connecting to wsdl.server.example.test:22
     // TODO: Re-enable when/if know how to resolve this.
-    public void getServerNIfsTestNOT() throws Exception {
+    // @Test
+    public void getServerNIfs() throws Exception {
         int len;
         ServerSelector serverSel;
         String testServerId = Utility.ensureServerExists(testServer);

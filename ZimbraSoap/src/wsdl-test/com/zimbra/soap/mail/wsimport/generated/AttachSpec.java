@@ -30,10 +30,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "attachSpec")
 @XmlSeeAlso({
-    MimePartAttachSpec.class,
     MsgAttachSpec.class,
     DocAttachSpec.class,
-    ContactAttachSpec.class
+    ContactAttachSpec.class,
+    MimePartAttachSpec.class
 })
 public class AttachSpec {
 

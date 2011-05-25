@@ -56,17 +56,17 @@ public class SyncResponse {
 
     protected SyncDeletedInfo deleted;
     @XmlElements({
+        @XmlElement(name = "chat", type = ChatSummary.class),
+        @XmlElement(name = "note", type = NoteInfo.class),
+        @XmlElement(name = "cn", type = ContactInfo.class),
+        @XmlElement(name = "tag", type = TagInfo.class),
+        @XmlElement(name = "w", type = CommonDocumentInfo.class),
+        @XmlElement(name = "c", type = ConversationSummary.class),
         @XmlElement(name = "task", type = TaskItemInfo.class),
         @XmlElement(name = "appt", type = CalendarItemInfo.class),
-        @XmlElement(name = "doc", type = DocumentInfo.class),
-        @XmlElement(name = "folder", type = Folder.class),
-        @XmlElement(name = "cn", type = ContactInfo.class),
         @XmlElement(name = "m", type = MessageSummary.class),
-        @XmlElement(name = "c", type = ConversationSummary.class),
-        @XmlElement(name = "w", type = CommonDocumentInfo.class),
-        @XmlElement(name = "note", type = NoteInfo.class),
-        @XmlElement(name = "tag", type = TagInfo.class),
-        @XmlElement(name = "chat", type = ChatSummary.class)
+        @XmlElement(name = "folder", type = Folder.class),
+        @XmlElement(name = "doc", type = DocumentInfo.class)
     })
     protected List<Object> folderOrTagOrNote;
     @XmlAttribute(required = true)
@@ -120,17 +120,17 @@ public class SyncResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
+     * {@link ChatSummary }
+     * {@link NoteInfo }
+     * {@link ContactInfo }
+     * {@link TagInfo }
+     * {@link CommonDocumentInfo }
+     * {@link ConversationSummary }
      * {@link TaskItemInfo }
      * {@link CalendarItemInfo }
-     * {@link DocumentInfo }
-     * {@link Folder }
-     * {@link ContactInfo }
      * {@link MessageSummary }
-     * {@link ConversationSummary }
-     * {@link CommonDocumentInfo }
-     * {@link NoteInfo }
-     * {@link TagInfo }
-     * {@link ChatSummary }
+     * {@link Folder }
+     * {@link DocumentInfo }
      * 
      * 
      */

@@ -1,6 +1,8 @@
 
 package com.zimbra.soap.mail.wsimport.generated;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -19,11 +21,12 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="lastError" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="a" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="l" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="enabled" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="isEnabled" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="importOnly" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="host" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="port" type="{http://www.w3.org/2001/XMLSchema}int" />
@@ -34,10 +37,12 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="emailAddress" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="useAddressForForwardReply" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="defaultSignature" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="forwardReplySignature" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="fromDisplay" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="fromAddress" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="replyToAddress" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="replyToDisplay" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="importClass" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="failingSince" type="{http://www.w3.org/2001/XMLSchema}long" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -48,17 +53,23 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "mailDataSource", propOrder = {
-    "lastError"
+    "lastError",
+    "a"
 })
 @XmlSeeAlso({
-    MailPop3DataSource.class,
-    MailCalDataSource.class,
+    MailGalDataSource.class,
     MailImapDataSource.class,
+    MailYabDataSource.class,
+    MailPop3DataSource.class,
+    MailCaldavDataSource.class,
+    MailUnknownDataSource.class,
+    MailCalDataSource.class,
     MailRssDataSource.class
 })
 public abstract class MailDataSource {
 
     protected String lastError;
+    protected List<String> a;
     @XmlAttribute
     protected String id;
     @XmlAttribute
@@ -66,7 +77,7 @@ public abstract class MailDataSource {
     @XmlAttribute
     protected String l;
     @XmlAttribute
-    protected Boolean enabled;
+    protected Boolean isEnabled;
     @XmlAttribute
     protected Boolean importOnly;
     @XmlAttribute
@@ -88,6 +99,8 @@ public abstract class MailDataSource {
     @XmlAttribute
     protected String defaultSignature;
     @XmlAttribute
+    protected String forwardReplySignature;
+    @XmlAttribute
     protected String fromDisplay;
     @XmlAttribute
     protected String fromAddress;
@@ -95,6 +108,8 @@ public abstract class MailDataSource {
     protected String replyToAddress;
     @XmlAttribute
     protected String replyToDisplay;
+    @XmlAttribute
+    protected String importClass;
     @XmlAttribute
     protected Long failingSince;
 
@@ -120,6 +135,35 @@ public abstract class MailDataSource {
      */
     public void setLastError(String value) {
         this.lastError = value;
+    }
+
+    /**
+     * Gets the value of the a property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the a property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getA().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link String }
+     * 
+     * 
+     */
+    public List<String> getA() {
+        if (a == null) {
+            a = new ArrayList<String>();
+        }
+        return this.a;
     }
 
     /**
@@ -195,27 +239,27 @@ public abstract class MailDataSource {
     }
 
     /**
-     * Gets the value of the enabled property.
+     * Gets the value of the isEnabled property.
      * 
      * @return
      *     possible object is
      *     {@link Boolean }
      *     
      */
-    public Boolean isEnabled() {
-        return enabled;
+    public Boolean isIsEnabled() {
+        return isEnabled;
     }
 
     /**
-     * Sets the value of the enabled property.
+     * Sets the value of the isEnabled property.
      * 
      * @param value
      *     allowed object is
      *     {@link Boolean }
      *     
      */
-    public void setEnabled(Boolean value) {
-        this.enabled = value;
+    public void setIsEnabled(Boolean value) {
+        this.isEnabled = value;
     }
 
     /**
@@ -459,6 +503,30 @@ public abstract class MailDataSource {
     }
 
     /**
+     * Gets the value of the forwardReplySignature property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getForwardReplySignature() {
+        return forwardReplySignature;
+    }
+
+    /**
+     * Sets the value of the forwardReplySignature property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setForwardReplySignature(String value) {
+        this.forwardReplySignature = value;
+    }
+
+    /**
      * Gets the value of the fromDisplay property.
      * 
      * @return
@@ -552,6 +620,30 @@ public abstract class MailDataSource {
      */
     public void setReplyToDisplay(String value) {
         this.replyToDisplay = value;
+    }
+
+    /**
+     * Gets the value of the importClass property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getImportClass() {
+        return importClass;
+    }
+
+    /**
+     * Sets the value of the importClass property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setImportClass(String value) {
+        this.importClass = value;
     }
 
     /**

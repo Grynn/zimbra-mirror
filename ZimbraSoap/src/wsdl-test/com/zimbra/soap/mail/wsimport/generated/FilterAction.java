@@ -30,12 +30,12 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "filterAction")
 @XmlSeeAlso({
+    FilterActionTag.class,
     FilterActionFileInto.class,
     FilterActionRedirect.class,
     FilterActionDiscard.class,
     FilterActionReply.class,
     FilterActionKeep.class,
-    FilterActionTag.class,
     FilterActionFlag.class,
     FilterActionNotify.class
 })

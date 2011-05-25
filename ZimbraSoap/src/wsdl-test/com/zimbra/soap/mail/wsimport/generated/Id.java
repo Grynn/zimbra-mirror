@@ -4,6 +4,7 @@ package com.zimbra.soap.mail.wsimport.generated;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -28,6 +29,16 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "id", namespace = "urn:zimbra")
+@XmlSeeAlso({
+    Pop3DataSourceId.class,
+    RssDataSourceId.class,
+    CaldavDataSourceId.class,
+    ImapDataSourceId.class,
+    UnknownDataSourceId.class,
+    YabDataSourceId.class,
+    GalDataSourceId.class,
+    CalDataSourceId.class
+})
 public class Id {
 
     @XmlAttribute(required = true)

@@ -39,11 +39,12 @@ import javax.xml.bind.annotation.XmlType;
     "echo"
 })
 @XmlSeeAlso({
-    CreateTaskExceptionResponse.class,
     CreateAppointmentExceptionResponse.class,
-    CreateAppointmentResponse.class,
     CreateTaskResponse.class,
-    ModifyAppointmentResponse.class
+    CreateTaskExceptionResponse.class,
+    ModifyAppointmentResponse.class,
+    SendInviteReplyResponse.class,
+    CreateAppointmentResponse.class
 })
 public class CreateCalendarItemResponse {
 

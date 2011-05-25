@@ -36,8 +36,8 @@ import javax.xml.bind.annotation.XmlType;
     "m"
 })
 @XmlSeeAlso({
-    ModifyAppointmentRequest.class,
     CreateAppointmentExceptionRequest.class,
+    ModifyAppointmentRequest.class,
     CreateAppointmentRequest.class
 })
 public class CalItemRequestBase {

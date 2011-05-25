@@ -39,9 +39,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "actionSelector")
 @XmlSeeAlso({
+    FolderActionSelector.class,
     NoteActionSelector.class,
-    ContactActionSelector.class,
-    FolderActionSelector.class
+    ContactActionSelector.class
 })
 public class ActionSelector {
 

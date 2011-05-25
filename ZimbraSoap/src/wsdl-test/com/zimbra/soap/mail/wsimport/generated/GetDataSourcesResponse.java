@@ -21,10 +21,14 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;choice maxOccurs="unbounded" minOccurs="0">
- *           &lt;element name="pop3" type="{urn:zimbraMail}mailPop3DataSource"/>
  *           &lt;element name="imap" type="{urn:zimbraMail}mailImapDataSource"/>
+ *           &lt;element name="pop3" type="{urn:zimbraMail}mailPop3DataSource"/>
+ *           &lt;element name="caldav" type="{urn:zimbraMail}mailCaldavDataSource"/>
+ *           &lt;element name="yab" type="{urn:zimbraMail}mailYabDataSource"/>
  *           &lt;element name="rss" type="{urn:zimbraMail}mailRssDataSource"/>
+ *           &lt;element name="gal" type="{urn:zimbraMail}mailGalDataSource"/>
  *           &lt;element name="cal" type="{urn:zimbraMail}mailCalDataSource"/>
+ *           &lt;element name="unknown" type="{urn:zimbraMail}mailUnknownDataSource"/>
  *         &lt;/choice>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -36,48 +40,56 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "getDataSourcesResponse", propOrder = {
-    "pop3OrImapOrRss"
+    "imapOrPop3OrCaldav"
 })
 public class GetDataSourcesResponse {
 
     @XmlElements({
-        @XmlElement(name = "cal", type = MailCalDataSource.class),
-        @XmlElement(name = "pop3", type = MailPop3DataSource.class),
+        @XmlElement(name = "rss", type = MailRssDataSource.class),
         @XmlElement(name = "imap", type = MailImapDataSource.class),
-        @XmlElement(name = "rss", type = MailRssDataSource.class)
+        @XmlElement(name = "yab", type = MailYabDataSource.class),
+        @XmlElement(name = "unknown", type = MailUnknownDataSource.class),
+        @XmlElement(name = "gal", type = MailGalDataSource.class),
+        @XmlElement(name = "cal", type = MailCalDataSource.class),
+        @XmlElement(name = "caldav", type = MailCaldavDataSource.class),
+        @XmlElement(name = "pop3", type = MailPop3DataSource.class)
     })
-    protected List<MailDataSource> pop3OrImapOrRss;
+    protected List<MailDataSource> imapOrPop3OrCaldav;
 
     /**
-     * Gets the value of the pop3OrImapOrRss property.
+     * Gets the value of the imapOrPop3OrCaldav property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the pop3OrImapOrRss property.
+     * This is why there is not a <CODE>set</CODE> method for the imapOrPop3OrCaldav property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getPop3OrImapOrRss().add(newItem);
+     *    getImapOrPop3OrCaldav().add(newItem);
      * </pre>
      * 
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link MailCalDataSource }
-     * {@link MailPop3DataSource }
-     * {@link MailImapDataSource }
      * {@link MailRssDataSource }
+     * {@link MailImapDataSource }
+     * {@link MailYabDataSource }
+     * {@link MailUnknownDataSource }
+     * {@link MailGalDataSource }
+     * {@link MailCalDataSource }
+     * {@link MailCaldavDataSource }
+     * {@link MailPop3DataSource }
      * 
      * 
      */
-    public List<MailDataSource> getPop3OrImapOrRss() {
-        if (pop3OrImapOrRss == null) {
-            pop3OrImapOrRss = new ArrayList<MailDataSource>();
+    public List<MailDataSource> getImapOrPop3OrCaldav() {
+        if (imapOrPop3OrCaldav == null) {
+            imapOrPop3OrCaldav = new ArrayList<MailDataSource>();
         }
-        return this.pop3OrImapOrRss;
+        return this.imapOrPop3OrCaldav;
     }
 
 }
