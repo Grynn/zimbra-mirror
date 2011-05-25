@@ -164,6 +164,7 @@ namespace MVVM.ViewModel
             m_optionsViewModel.ImportDeletedItemOptions = false;
             m_optionsViewModel.ImportSentOptions = false;
             m_optionsViewModel.ImportRuleOptions = false;
+            m_optionsViewModel.MigrateONRAfter = DateTime.UtcNow.ToShortDateString();
 
             m_scheduleViewModel = new ScheduleViewModel();
             m_scheduleViewModel.Name = "Schedule";

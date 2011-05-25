@@ -23,6 +23,9 @@ namespace MVVM.ViewModel
             this.LoadCommand = new ActionCommand(this.Load, () => true);
             this.SaveCommand = new ActionCommand(this.Save, () => true);
             this.NextCommand = new ActionCommand(this.Next, () => true);
+            Migratedateflag = false;
+            Maxattachflag = false;
+            Skipfolderflag = false;
         }
 
         public void SetScheduleModel(ScheduleViewModel scheduleViewModel)
@@ -81,28 +84,29 @@ namespace MVVM.ViewModel
                 for(int i = 0;i <Z11.AdvancedImportOptions.FoldersToSkip.Length;i++)
                 {
                     Folder e = Z11.AdvancedImportOptions.FoldersToSkip[i];
-                    if ( e != null)
+                    if ( (e!= null) && (e.FolderName != ""))
                     {
-                        returnval +=  e.FolderName;
-                        returnval += ",";
+                        
+                        returnval +=  e.FolderName + ",";
+                        
                     }
 
                 }
-
+                placeholderstring = returnval;
                 FoldersToSkip = returnval;
-               placeholderstring = returnval;
+             
 
-               if (MigrateONRAfter != "") 
+               if (MigrateONRAfter != null) 
                     Migratedateflag = true;
                else
                     Migratedateflag = false;
 
-                if(MaxAttachementSize !="")
-                     Maxattachflag=true;
+                if((MaxAttachementSize != "")&&(MaxAttachementSize != null))
+                     Maxattachflag = true;
                 else
-                    Maxattachflag=false;
+                    Maxattachflag = false;
 
-                if (placeholderstring != "")
+                if ((placeholderstring != "")&&(placeholderstring != null))
                     Skipfolderflag = true;
                 else
                     Skipfolderflag = false;
@@ -301,10 +305,10 @@ namespace MVVM.ViewModel
         }
         public string MigrateONRAfter
         {
-            get { return m_config.AdvancedImportOptions.MigrateONRAfter.ToLongDateString(); }
+            get { return m_config.AdvancedImportOptions.MigrateONRAfter.ToShortDateString(); }
             set
             {
-                if (value == m_config.AdvancedImportOptions.MigrateONRAfter.ToLongDateString())
+                if (value == m_config.AdvancedImportOptions.MigrateONRAfter.ToShortDateString())
                 {
                     return;
                 }
@@ -342,7 +346,7 @@ namespace MVVM.ViewModel
         {
             get
             {
-                return Placeholderstring;
+                return placeholderstring; 
             }
             set
             {
