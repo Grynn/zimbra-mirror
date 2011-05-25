@@ -40,8 +40,8 @@ public class FormDistributionListsNew extends AbsForm {
 	}
 
 	@Override
-	public void zSubmit() throws HarnessException {		sClick(zb_SAVE);
-		sClick(zb_CLOSE);
+	public void zSubmit() throws HarnessException {		zClick(zb_SAVE);
+		zClick(zb_CLOSE);
 	}
 
 	public boolean zIsActive() throws HarnessException {

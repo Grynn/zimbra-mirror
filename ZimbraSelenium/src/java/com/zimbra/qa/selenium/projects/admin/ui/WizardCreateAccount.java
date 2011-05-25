@@ -20,7 +20,7 @@ public class WizardCreateAccount extends AbsWizard {
 	public static final String zdlg_ACCT_NAME = "zdlgv__NEW_ACCT_name_2";
 	public static final String zdlg_DOMAIN_NAME="zdlgv__NEW_ACCT_name_3_display";
 	public static final String zdlg_LAST_NAME="zdlgv__NEW_ACCT_sn";
-	public static final String zdlg_OK="css=div#zdlg__MSG td[id^='OK']";
+	public static final String zdlg_OK="zdlg__MSG_button2_title";
 
 	public WizardCreateAccount(AbsTab page) {
 		super(page);
@@ -65,7 +65,7 @@ public class WizardCreateAccount extends AbsWizard {
 		clickFinish();
 		
 		// Need to dismiss the "account created" dialog.
-		sClick(zdlg_OK);
+		zClick(zdlg_OK);
 		//throw new HarnessException("See http://bugzilla.zimbra.com/show_bug.cgi?id=59013");
 		
 		 return (account);

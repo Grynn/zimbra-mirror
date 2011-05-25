@@ -94,11 +94,11 @@ public abstract class AbsWizard extends AbsPage {
 		// throw HarnessException if not enabled
 		// Click on the button
 		switch(button) {
-		case Finish : if(sIsElementPresent(FINISH_BUTTON)) sClick(FINISH_BUTTON); break;
-		case Next:if(sIsElementPresent(NEXT_BUTTON)) sClick(NEXT_BUTTON);break;
-		case Previous:if(sIsElementPresent(PREVIOUS_BUTTON))sClick(PREVIOUS_BUTTON);break;
-		case Cancel:if(sIsElementPresent(CANCEL_BUTTON))sClick(CANCEL_BUTTON);break;
-		case Help:if(sIsElementPresent(HELP_BUTTON)) sClick(HELP_BUTTON);break;
+		case Finish : if(sIsElementPresent(FINISH_BUTTON)) zClick(FINISH_BUTTON); break;
+		case Next:if(sIsElementPresent(NEXT_BUTTON)) zClick(NEXT_BUTTON);break;
+		case Previous:if(sIsElementPresent(PREVIOUS_BUTTON))zClick(PREVIOUS_BUTTON);break;
+		case Cancel:if(sIsElementPresent(CANCEL_BUTTON))zClick(CANCEL_BUTTON);break;
+		case Help:if(sIsElementPresent(HELP_BUTTON)) zClick(HELP_BUTTON);break;
 		}
 	}
 

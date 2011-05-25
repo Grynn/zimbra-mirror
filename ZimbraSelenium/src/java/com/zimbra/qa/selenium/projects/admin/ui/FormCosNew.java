@@ -39,8 +39,8 @@ public class FormCosNew extends AbsForm {
 
 	@Override
 	public void zSubmit() throws HarnessException {
-		sClick(zb_SAVE);
-		sClick(zb_CLOSE);
+		zClick(zb_SAVE);
+		zClick(zb_CLOSE);
 	}
 
 	@Override

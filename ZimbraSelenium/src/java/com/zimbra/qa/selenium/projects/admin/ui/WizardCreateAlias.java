@@ -40,7 +40,7 @@ public class WizardCreateAlias extends AbsWizard {
 		sType(zdlg_ALIAS_NAME, CN);
 		sType(zdlg_ALIAS_DOMAIN_NAME, domain);
 		sType(zdlg_TARGET_ACCOUNT_NAME, targetAccount);
-		sClick(zdlg_OK);
+		zClick(zdlg_OK);
 
 		return alias;
 
