@@ -172,7 +172,7 @@ __declspec(dllexport) int DisplayProfiles(char* pszBuffer)
 			//TRACE( _T("Could not open default message store. hr[0x%x]"), hr);
 			//MessageBox( _T("Could not open the default message store."),
 			//					_T("Message Store Error"), MB_ICONEXCLAMATION );
-			return strlen(pszBuffer);
+			return (int)strlen(pszBuffer);
 		}
 		
 		if( hr == MAPI_E_UNKNOWN_FLAGS )
@@ -190,7 +190,7 @@ __declspec(dllexport) int DisplayProfiles(char* pszBuffer)
 			//TRACE( _T("Could not open default message store. hr[0x%x]."), hr);
 			//MessageBox( _T("Could not open the default message store."),
 			//					_T("Message Store Error"), MB_ICONEXCLAMATION );
-			return strlen(pszBuffer);
+			return (int)strlen(pszBuffer);
 		}
 		
         //Open the root container
@@ -211,7 +211,7 @@ __declspec(dllexport) int DisplayProfiles(char* pszBuffer)
 				//MessageBox( _T("Invalid Profile\nThe profile may not be exchange profile."), _T("Invalid Profile"), MB_ICONEXCLAMATION );
 				if(SUCCEEDED(hr))
 					MAPIFreeBuffer(pPropVal);
-				return strlen(pszBuffer);
+				return (int)strlen(pszBuffer);
 			}
             //CImportParams::GetImportParams()->IsExchange55(pPropVal->Value.li.HighPart == 0x00050005);		
             if(SUCCEEDED(hr))
@@ -228,7 +228,7 @@ __declspec(dllexport) int DisplayProfiles(char* pszBuffer)
             else
             {
                 //MessageBox( _T("Unable to get Exchange Server Version Information.Try Re-configuring the profile."), _T("Invalid Profile"), MB_ICONEXCLAMATION );
-                return strlen(pszBuffer);
+                return (int)strlen(pszBuffer);
             }
         }
 
@@ -250,8 +250,8 @@ __declspec(dllexport) int DisplayProfiles(char* pszBuffer)
 				//Get PR_PROFILE_HOME_SERVER_DN and convert it into unicode string
 				LPWSTR lpout =	new WCHAR[strlen(pPropVals[1].Value.lpszA)+1];
 				MultiByteToWideChar(CP_ACP,MB_ERR_INVALID_CHARS,pPropVals[1].Value.lpszA,
-									strlen(pPropVals[1].Value.lpszA)+1,lpout,
-					 				strlen(pPropVals[1].Value.lpszA)+1);
+									(int)strlen(pPropVals[1].Value.lpszA)+1,lpout,
+					 				(int)strlen(pPropVals[1].Value.lpszA)+1);
 				//CString serverDN = lpout;
 				//CImportParams::GetImportParams()->ServerDN(serverDN);
 				//delete []lpout;
@@ -313,7 +313,7 @@ ERR:
 	//	TRACE(_T("%s"),tracemsg);
 	//	MessageBox(tracemsg,_T("Error"), MB_ICONEXCLAMATION );
 	//}
-	return strlen(pszBuffer);
+	return (int)strlen(pszBuffer);
 }
 
 }
