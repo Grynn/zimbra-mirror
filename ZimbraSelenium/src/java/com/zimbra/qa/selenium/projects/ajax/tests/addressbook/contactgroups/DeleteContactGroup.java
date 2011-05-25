@@ -24,7 +24,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		
 	}
 	
-	private void VerifyContactGroupDeleted(ContactGroupItem group) throws HarnessException {
+	private void VerifyContactGroupDeleted(ContactGroupItem group  ) throws HarnessException {
 		//verify toasted message 1 contact group moved to Trash
         String expectedMsg = "1 contact group moved to Trash";
         ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
@@ -94,7 +94,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
    	}
 
 	@Test(	description = "Delete a contact group use shortcut Del",
-			groups = { "functionali" })
+			groups = { "functional" })
 	public void DeleteContactGroupUseShortcutDel() throws HarnessException {
 
 		// Create a contact group via Soap then select
@@ -108,7 +108,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
    	}
 	
 	@Test(	description = "Delete a contact group use shortcut backspace",
-			groups = { "functionali" })
+			groups = { "functional" })
 	public void DeleteContactGroupUseShortcutBackspace() throws HarnessException {
 
 		// Create a contact group via Soap then select
@@ -120,4 +120,73 @@ public class DeleteContactGroup extends AjaxCommonTest  {
         //verify contact group deleted
         VerifyContactGroupDeleted(group);           
    	}
+
+	@Test(	description = "Delete multiple contact groups at once",
+			groups = { "functional" })
+	public void DeleteMultipleContactGroups() throws HarnessException {
+
+		
+		 // Create a contact group via Soap
+		  ContactGroupItem group1 = ContactGroupItem.createUsingSOAP(app);
+			             
+		  group1.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+		  String[] dlist = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
+		  for (int i=0; i<dlist.length; i++) {
+			  group1.addDListMember(dlist[i]);
+		  }
+		  
+		// Create a contact group via Soap
+		  ContactGroupItem group2 = ContactGroupItem.createUsingSOAP(app);
+			             
+		  group2.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+		  String[] dlist2 = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
+		  for (int i=0; i<dlist2.length; i++) {
+			  group2.addDListMember(dlist2[i]);
+		  }
+		  
+		// Create a contact group via Soap
+		  ContactGroupItem group3 = ContactGroupItem.createUsingSOAP(app);
+			             
+		  group3.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+		  String[] dlist3 = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
+		  for (int i=0; i<dlist3.length; i++) {
+			  group3.addDListMember(dlist[i]);
+		  }
+		  
+	      // Refresh the view, to pick up the new contact groups
+	      FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
+	      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+	      app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
+	    
+	      // Select the items
+	      app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group1.fileAs);		       
+	      app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group2.fileAs);        
+	      app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group3.fileAs);
+	       
+		
+		  //delete multiple contact groups by click Delete button on toolbar
+          app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);
+
+	      //verify toasted message 3 contacts moved to Trash
+          String expectedMsg = "3 contacts moved to Trash";
+          ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
+	        expectedMsg , "Verify toast message '" + expectedMsg + "'");
+
+          //verify deleted contact group not displayed
+          List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
+	           
+	      int count=0;
+	      for (ContactItem ci : contacts) {
+		    if (ci.fileAs.equals(group1.groupName) ||
+			  ci.fileAs.equals(group2.groupName) ||
+			  ci.fileAs.equals(group3.groupName)
+		      ) {
+               count++;	 			
+	  	    }
+	      }
+	
+          ZAssert.assertTrue(count==0, "Verify contact groups " + group1.groupName + "," + group2.groupName + "," +  group3.groupName + " deleted");                  
+	}
+	
+
 }

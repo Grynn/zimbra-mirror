@@ -100,4 +100,62 @@ public class DeleteContact extends AjaxCommonTest  {
         //verify contact deleted
         VerifyContactDeleted(contactItem);    
    	}
+	
+	@Test(	description = "Delete multi contact items",
+			groups = { "functional" })
+	public void DeleteMultipleContacts() throws HarnessException {
+
+		// Create multi contacts via soap 
+		//ContactItem contactItem1 = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_CHECKBOX);
+		//ContactItem contactItem2 = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_CHECKBOX);
+		//ContactItem contactItem3 = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_CHECKBOX);
+		
+		  // Create a contact via Soap
+		ContactItem contactItem1 = ContactItem.createUsingSOAP(app);			             
+		contactItem1.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+		  		  
+		// Create a contact via Soap
+		ContactItem contactItem2 = ContactItem.createUsingSOAP(app);			             
+		contactItem2.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+		
+		// Create a contact via Soap
+		ContactItem contactItem3 = ContactItem.createUsingSOAP(app);			             
+		contactItem3.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+		
+		  // Refresh the view, to pick up the new contact
+	    FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
+	    GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+	    app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
+	    
+	    // Select the item
+	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contactItem1.fileAs);
+	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contactItem2.fileAs);
+	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contactItem3.fileAs);
+	   
+		//delete 3 contacts
+        app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);
+        
+        
+ 
+  	   //verify toasted message 3 contact moved to Trash
+		String expectedMsg = "3 contacts moved to Trash";
+	    ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
+			        expectedMsg , "Verify toast message '" + expectedMsg + "'");
+
+	      //verify deleted contact not displayed
+        List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
+ 	           
+        int count=0;
+	      for (ContactItem ci : contacts) {
+		    if (ci.fileAs.equals(contactItem1.fileAs) ||
+			  ci.fileAs.equals(contactItem2.fileAs) ||
+			  ci.fileAs.equals(contactItem3.fileAs)
+		      ) {
+             count++;	 			
+	  	    }
+	      }
+			
+        ZAssert.assertTrue(count==0, "Verify contact fileAs (" + contactItem1.fileAs + "," + contactItem2.fileAs + "," + contactItem3.fileAs + ") deleted");
+            
+   	}
 }
