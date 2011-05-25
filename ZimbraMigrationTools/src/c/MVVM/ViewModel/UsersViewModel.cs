@@ -237,7 +237,7 @@ namespace MVVM.ViewModel
 
             bool bCSV = false;
             Microsoft.Win32.SaveFileDialog fDialog = new Microsoft.Win32.SaveFileDialog();
-            fDialog.Filter = "User Map Files|*.xml;*.csv";
+            fDialog.Filter = "User Map Files|*.csv";
        
             //fDialog.CheckFileExists = true;
             //fDialog.Multiselect = false;
