@@ -404,28 +404,37 @@ public class PageAddressbook extends AbsTab {
 	      }
 
 	   } else if ( pulldown == Button.B_NEW ) {
+		   pulldownLocator = "css=div#zb__CNS__NEW_MENU td#zb__CNS__NEW_MENU_dropdown";
+
 		   if ( option == Button.O_NEW_CONTACT ) {
-			    pulldownLocator = "css=div[id='zb__CNS__NEW_MENU'] td[id='zb__CNS__NEW_MENU_dropdown']";
 
 			    // TODO: Bug 58365 for Desktop
 			    if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
                    optionLocator="css=div[class='ActionMenu ZHasIcon'] div[class*='ZMenuItem ZWidget ZHasLeftIcon ZHasText'] table[class*='ZWidgetTable ZMenuItemTable']:contains('Contact')";                
 			    } else {
-                  optionLocator="css=tr[id='POPUP_NEW_CONTACT']";
+                  optionLocator="css=tr#POPUP_NEW_CONTACT";
                 }
 			    page = new FormContactNew(this.MyApplication);
 		   }
-		   if ( option == Button.O_NEW_CONTACTGROUP) {
-			    pulldownLocator = "css=div[id='zb__CNS__NEW_MENU'] td[id='zb__CNS__NEW_MENU_dropdown']";
-
+		   else if ( option == Button.O_NEW_CONTACTGROUP) {
+			   
 			    // TODO: Bug 58365 for Desktop
 			    if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
 			       optionLocator="css=div[class='ActionMenu ZHasIcon'] div[class*='ZMenuItem ZWidget ZHasLeftIcon ZHasText'] table[class*='ZWidgetTable ZMenuItemTable']:contains('Contact Group')";
 			    } else {
-			       optionLocator="css=tr[id='POPUP_NEW_GROUP']";
+			       optionLocator="css=tr#POPUP_NEW_GROUP";
 			    }
 				page = new FormContactGroupNew(this.MyApplication);		   
 		   }
+		   else if ( option == Button.O_NEW_TAG ) {
+			   
+		        optionLocator = "css=tr#POPUP_NEW_TAG";
+		        page = new DialogTag(this.MyApplication, this);
+		   } else {
+			   //option not suppored
+			   pulldownLocator=null;
+		   }
+		   
 	   }
 	// Default behavior
 		if ( pulldownLocator != null ) {
