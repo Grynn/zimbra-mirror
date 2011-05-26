@@ -108,7 +108,9 @@ startzmconfigd()
 	  err=1
 	  return
 	fi
-	kill -9 ${pid}
+  if [ "x${pid}" != "x" ]; then
+	  kill -9 ${pid}
+  fi
 	rm -rf ${pidfile}
 	${zimbra_home}/libexec/zmconfigd >> ${zimbra_log_directory}/zmconfigd.log 2>&1 &
 	# Bug 51682 wait for the pid file to be created, then wait 30 seconds for rewrites
