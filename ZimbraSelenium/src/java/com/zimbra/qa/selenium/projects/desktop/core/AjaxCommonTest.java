@@ -145,12 +145,14 @@ public class AjaxCommonTest {
 		{
          _selenium = ClientSessionFactory.session().selenium();
          logger.debug("Starting selenium");
-         _selenium.start();
 
          // This is needed only in Mac OS because when selenium invokes the test browser window,
          // the window is not active (in background), thus any methods involving robot will not work
          // properly
+         // Also for Mac OS, selenium start has to be at the very beginning in order for the robot to
+         // activate the browser
          if (osType == OsType.MAC) {
+            _selenium.start();
             app.zPageMain.zMouseClick(100, 100);		   
          }
 
@@ -264,7 +266,12 @@ public class AjaxCommonTest {
 		      ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.AJAX);
 		   }
 
-	      _selenium.windowMaximize();
+         // For non Mac OS, selenium start is done after the installation and app initialization.
+         if (osType != OsType.MAC) {
+            _selenium.start();
+         }
+
+         _selenium.windowMaximize();
 	      _selenium.windowFocus();
 	      _selenium.allowNativeXpath("true");
 	      _selenium.setTimeout("30000");// Use 30 second timeout for opening the browser
