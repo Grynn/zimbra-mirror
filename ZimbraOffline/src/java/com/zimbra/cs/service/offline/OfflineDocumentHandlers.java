@@ -64,19 +64,7 @@ public class OfflineDocumentHandlers {
         }
     }
 
-    static class GetWiki extends com.zimbra.cs.service.wiki.GetWiki {
-        protected String getAuthor(ZimbraSoapContext zsc) throws ServiceException {
-            return getTargetAccount(zsc).getName();
-        }
-    }
-
     static class SaveDocument extends com.zimbra.cs.service.wiki.SaveDocument {
-        protected String getAuthor(ZimbraSoapContext zsc) throws ServiceException {
-            return getTargetAccount(zsc).getName();
-        }
-    }
-
-    static class SaveWiki extends com.zimbra.cs.service.wiki.SaveWiki {
         protected String getAuthor(ZimbraSoapContext zsc) throws ServiceException {
             return getTargetAccount(zsc).getName();
         }
