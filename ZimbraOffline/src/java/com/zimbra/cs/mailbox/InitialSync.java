@@ -59,6 +59,7 @@ import com.zimbra.cs.account.offline.OfflineAccount.Version;
 import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
 import com.zimbra.cs.mailbox.MailItem.UnderlyingData;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
+import com.zimbra.cs.mailbox.Message.DraftInfo;
 import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
 import com.zimbra.cs.mailbox.calendar.ZAttendee;
 import com.zimbra.cs.mime.ParsedContact;
@@ -1034,8 +1035,17 @@ public class InitialSync {
                         if (te != null) {
                             try {
                                 ombx.recordItemSync(ud.id);
+                                DraftInfo di = null;
+                                if (ud.folderId == Mailbox.ID_FOLDER_DRAFTS) {
+                                    Metadata meta = new Metadata(ud.metadata);
+                                    Metadata draftMeta = meta.getMap(Metadata.FN_DRAFT, true);
+                                    if (draftMeta != null) {
+                                        //update the autosendtime and other draft-specific stuff
+                                        di = new DraftInfo(draftMeta);
+                                    }                                    
+                                }
                                 saveMessage(tin, te.getSize(), ud.id, ud.folderId, type, ud.date,
-                                        Flag.toBitmask(itemData.flags), ud.tags, ud.parentId);
+                                        Flag.toBitmask(itemData.flags), ud.tags, ud.parentId, di);
                                 idSet.remove(ud.id);
                             } catch (Exception x) {
                                 if (!SyncExceptionHandler.isRecoverableException(ombx, ud.id, "InitialSync.syncMessagesAsTgz", x)) {
@@ -1181,11 +1191,11 @@ public class InitialSync {
         long tags = Tag.tagsToBitmask(headers.get("X-Zimbra-Tags"));
         int convId = Integer.parseInt(headers.get("X-Zimbra-Conv"));
 
-        saveMessage(in, sizeHint, id, folderId, type, received, flags, tags, convId);
+        saveMessage(in, sizeHint, id, folderId, type, received, flags, tags, convId, null);
     }
-
+    
     private void saveMessage(InputStream in, long sizeHint, int id, int folderId, MailItem.Type type, int received,
-            int flags, long tags, int convId) throws ServiceException {
+            int flags, long tags, int convId, DraftInfo draftInfo) throws ServiceException {
         Blob blob = null;
         int bufLen = Provisioning.getInstance().getLocalServer().getMailDiskStreamingThreshold();
         CopyInputStream cs = new CopyInputStream(in, sizeHint, bufLen, bufLen);
@@ -1234,7 +1244,7 @@ public class InitialSync {
                 DeliveryOptions dopt = new DeliveryOptions().setFolderId(folderId).setNoICal(true);
                 dopt.setFlags(flags).setTags(tagStr).setConversationId(convId).setRecipientEmail(":API:");
                 DeliveryContext dctxt = new DeliveryContext().setIncomingBlob(blob);
-                msg = ombx.addMessage(new TracelessContext(redo), pm, dopt, dctxt);
+                msg = ombx.addMessage(new TracelessContext(redo), pm, dopt, dctxt, draftInfo);
             }
             OfflineLog.offline.debug("initial: created " + type + " (" + id + "): " + msg.getSubject());
             StoreManager.getInstance().quietDelete(blob);
@@ -1280,7 +1290,7 @@ public class InitialSync {
                         if (type == MailItem.Type.CHAT) {
                             ombx.updateChat(new TracelessContext(redo2), pm, id);
                         } else {
-                            ombx.saveDraft(new TracelessContext(redo2), pm, id);
+                            ombx.saveDraft(new TracelessContext(redo2), pm, id, null, null, null, null, draftInfo != null ? draftInfo.autoSendTime : 0);
                         }
                         OfflineLog.offline.debug("initial: updated " + type + " content (" + id + "): " + msg.getSubject());
                     } else {

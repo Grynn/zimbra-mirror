@@ -1155,7 +1155,7 @@ public class PushChanges {
             if (create || (mask & Change.MODIFIED_COLOR) != 0) {
                 action.addAttribute(MailConstants.A_COLOR, color);
             }
-            if (msg.isDraft() && (create || (mask & Change.MODIFIED_METADATA) != 0) && msg.getDraftAutoSendTime() != 0) {
+            if (msg.isDraft() && (create || (mask & Change.MODIFIED_CONTENT) != 0) && msg.getDraftAutoSendTime() != 0) {
                 action.addAttribute(MailConstants.A_AUTO_SEND_TIME, msg.getDraftAutoSendTime());
             }
         }
