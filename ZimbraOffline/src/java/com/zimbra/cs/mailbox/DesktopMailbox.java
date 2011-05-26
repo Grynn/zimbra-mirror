@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2008, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2008, 2009, 2010, 2011 Zimbra, Inc.
  *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -58,7 +58,7 @@ public abstract class DesktopMailbox extends Mailbox {
     private OfflineMailboxVersion offlineVersion;
     private boolean isOfflineVerCheckComplete;
 
-    public DesktopMailbox(MailboxData data) throws ServiceException {
+    public DesktopMailbox(MailboxData data) {
         super(data);
     }
 
@@ -67,13 +67,18 @@ public abstract class DesktopMailbox extends Mailbox {
     }
 
     @Override
-    protected synchronized void initialize() throws ServiceException {
-        super.initialize();
-        // set the version to CURRENT
-        Metadata md = new Metadata();
-        offlineVersion = OfflineMailboxVersion.CURRENT();
-        offlineVersion.writeToMetadata(md);
-        DbMailbox.updateConfig(this, CONFIG_OFFLINE_VERSION, md);
+    protected void initialize() throws ServiceException {
+        lock.lock();
+        try {
+            super.initialize();
+            // set the version to CURRENT
+            Metadata md = new Metadata();
+            offlineVersion = OfflineMailboxVersion.CURRENT();
+            offlineVersion.writeToMetadata(md);
+            DbMailbox.updateConfig(this, CONFIG_OFFLINE_VERSION, md);
+        } finally {
+            lock.release();
+        }
     }
 
     @Override
@@ -86,34 +91,45 @@ public abstract class DesktopMailbox extends Mailbox {
         return false;
     }
 
-    synchronized void checkOfflineVersion() throws ServiceException {
-        if (!isOfflineVerCheckComplete) {
-            if (offlineVersion == null) {
-                Metadata md = getConfig(null, CONFIG_OFFLINE_VERSION);
-                offlineVersion = OfflineMailboxVersion.fromMetadata(md);
-            }
-            if (!offlineVersion.atLeast(3)) {
-                if (!offlineVersion.atLeast(2)) {
-                    OfflineMailboxMigration.doMigrationV2(this);
+    void checkOfflineVersion() throws ServiceException {
+        lock.lock();
+        try {
+            if (!isOfflineVerCheckComplete) {
+                if (offlineVersion == null) {
+                    Metadata md = getConfig(null, CONFIG_OFFLINE_VERSION);
+                    offlineVersion = OfflineMailboxVersion.fromMetadata(md);
                 }
-                OfflineMailboxMigration.doMigrationV3(this);
-                updateOfflineVersion(OfflineMailboxVersion.CURRENT());
+                if (!offlineVersion.atLeast(3)) {
+                    if (!offlineVersion.atLeast(2)) {
+                        OfflineMailboxMigration.doMigrationV2(this);
+                    }
+                    OfflineMailboxMigration.doMigrationV3(this);
+                    updateOfflineVersion(OfflineMailboxVersion.CURRENT());
+                }
+                isOfflineVerCheckComplete = true;
             }
-            isOfflineVerCheckComplete = true;
+        } finally {
+            lock.release();
         }
     }
 
-    private synchronized void updateOfflineVersion(OfflineMailboxVersion ver)
-        throws ServiceException {
-        offlineVersion = ver;
-        Metadata md = getConfig(null, CONFIG_OFFLINE_VERSION);
-        if (md == null)
-            md = new Metadata();
-        offlineVersion.writeToMetadata(md);
-        setConfig(null, CONFIG_OFFLINE_VERSION, md);
+    private void updateOfflineVersion(OfflineMailboxVersion ver) throws ServiceException {
+        lock.lock();
+        try {
+            offlineVersion = ver;
+            Metadata md = getConfig(null, CONFIG_OFFLINE_VERSION);
+            if (md == null) {
+                md = new Metadata();
+            }
+            offlineVersion.writeToMetadata(md);
+            setConfig(null, CONFIG_OFFLINE_VERSION, md);
+        } finally {
+            lock.release();
+        }
     }
 
-    synchronized void ensureSystemFolderExists() throws ServiceException {
+    void ensureSystemFolderExists() throws ServiceException {
+        lock.lock();
         try {
             getFolderById(ID_FOLDER_FAILURE);
         } catch (MailServiceException.NoSuchItemException x) {
@@ -126,6 +142,8 @@ public abstract class DesktopMailbox extends Mailbox {
             createFolder(new TracelessContext(redo), FAILURE_PATH,
                 ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
                 MailItem.Type.MESSAGE, 0, MailItem.DEFAULT_COLOR_RGB, null);
+        } finally {
+            lock.release();
         }
     }
 
@@ -133,7 +151,7 @@ public abstract class DesktopMailbox extends Mailbox {
     public boolean dumpsterEnabled() {
         return false;
     }
-    
+
     @Override
     protected void migrateWikiFolders() throws ServiceException {
         OfflineLog.offline.debug("wiki folder migration skipped");
@@ -141,7 +159,7 @@ public abstract class DesktopMailbox extends Mailbox {
 
     @Override
     boolean isChildFolderPermitted(int folderId) {
-        return super.isChildFolderPermitted(folderId) && folderId != ID_FOLDER_OUTBOX && folderId != ID_FOLDER_NOTIFICATIONS && folderId != ID_FOLDER_FAILURE; 
+        return super.isChildFolderPermitted(folderId) && folderId != ID_FOLDER_OUTBOX && folderId != ID_FOLDER_NOTIFICATIONS && folderId != ID_FOLDER_FAILURE;
     }
 
     @Override

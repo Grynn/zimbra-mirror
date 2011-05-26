@@ -88,57 +88,62 @@ public class DataSourceMailbox extends SyncMailbox {
     }
 
     @Override
-    protected synchronized void initialize() throws ServiceException {
-        super.initialize();
-        if (hasFolders) {
-            List<Pair<Integer, String>> systemMailFolders = new ArrayList<
-                Pair<Integer, String>>();
+    protected void initialize() throws ServiceException {
+        lock.lock();
+        try {
+            super.initialize();
+            if (hasFolders) {
+                List<Pair<Integer, String>> systemMailFolders = new ArrayList<Pair<Integer, String>>();
 
-            systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_INBOX, "/Inbox"));
-            systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_TRASH, "/Trash"));
-            systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_SPAM,  "/Junk"));
-            systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_SENT,  "/Sent"));
-            // systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_DRAFTS, "/Drafts"));
-            for (Pair<Integer, String> pair : systemMailFolders) {
-                MailItem mi = getCachedItem(pair.getFirst());
-                DbMailItem.alterTag(mSyncFolderFlag, Arrays.asList(pair.getFirst()), true);
-                if (mi != null) {
-                    mi.mData.setFlag(mSyncFolderFlag);
-                }
-                if (isSyncEnabledByDefault(pair.getSecond())) {
-                    DbMailItem.alterTag(mSyncFlag, Arrays.asList(pair.getFirst()), true);
+                systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_INBOX, "/Inbox"));
+                systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_TRASH, "/Trash"));
+                systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_SPAM,  "/Junk"));
+                systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_SENT,  "/Sent"));
+                // systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_DRAFTS, "/Drafts"));
+                for (Pair<Integer, String> pair : systemMailFolders) {
+                    MailItem mi = getCachedItem(pair.getFirst());
+                    DbMailItem.alterTag(mSyncFolderFlag, Arrays.asList(pair.getFirst()), true);
                     if (mi != null) {
-                        mi.mData.setFlag(mSyncFlag);
+                        mi.mData.setFlag(mSyncFolderFlag);
+                    }
+                    if (isSyncEnabledByDefault(pair.getSecond())) {
+                        DbMailItem.alterTag(mSyncFlag, Arrays.asList(pair.getFirst()), true);
+                        if (mi != null) {
+                            mi.mData.setFlag(mSyncFlag);
+                        }
                     }
                 }
+                if (isFlat) {
+                    DbMailItem.alterTag(mNoInferiorsFlag, Arrays.asList(
+                        ID_FOLDER_INBOX, ID_FOLDER_TRASH, ID_FOLDER_SENT), true);
+                    MailItem mi = getCachedItem(ID_FOLDER_INBOX);
+                    if (mi != null) {
+                        mi.mData.setFlag(mNoInferiorsFlag);
+                    }
+                    mi = getCachedItem(ID_FOLDER_TRASH);
+                    if (mi != null) {
+                        mi.mData.setFlag(mNoInferiorsFlag);
+                    }
+                    mi = getCachedItem(ID_FOLDER_SENT);
+                    if (mi != null) {
+                        mi.mData.setFlag(mNoInferiorsFlag);
+                    }
+                }
+                OfflineDataSource ds = getDataSource();
+                if (ds.isYahoo() || ds.isGmail()) {
+                    getCachedItem(ID_FOLDER_CALENDAR).setColor(new MailItem.Color((byte) (ds.isYahoo() ? 4 : 5)));
+                }
             }
-            if (isFlat) {
-                DbMailItem.alterTag(mNoInferiorsFlag, Arrays.asList(
-                    ID_FOLDER_INBOX, ID_FOLDER_TRASH, ID_FOLDER_SENT), true);
-                MailItem mi = getCachedItem(ID_FOLDER_INBOX);
-                if (mi != null) {
-                    mi.mData.setFlag(mNoInferiorsFlag);
-                }
-                mi = getCachedItem(ID_FOLDER_TRASH);
-                if (mi != null) {
-                    mi.mData.setFlag(mNoInferiorsFlag);
-                }
-                mi = getCachedItem(ID_FOLDER_SENT);
-                if (mi != null) {
-                    mi.mData.setFlag(mNoInferiorsFlag);
-                }
-            }
-            OfflineDataSource ds = getDataSource();
-            if (ds.isYahoo() || ds.isGmail())
-                getCachedItem(ID_FOLDER_CALENDAR).setColor(new MailItem.Color(
-                    (byte)(ds.isYahoo() ? 4 : 5)));
+        } finally {
+            lock.release();
         }
     }
 
     @Override
     boolean open() throws ServiceException {
         if (super.open()) {
-            synchronized (this) {
+            lock.lock();
+            try {
                 if (hasFolders) {
                     Folder draft = getFolderById(ID_FOLDER_DRAFTS);
                     if ((draft.getFlagBitmask() & Flag.BITMASK_SYNC) != 0) {
@@ -149,6 +154,8 @@ public class DataSourceMailbox extends SyncMailbox {
                     }
                 }
                 return true;
+            } finally {
+                lock.release();
             }
         }
         return false;
@@ -171,15 +178,20 @@ public class DataSourceMailbox extends SyncMailbox {
     }
 
     @Override
-    public synchronized void alterTag(OperationContext octxt, int itemId, MailItem.Type type, int tagId, boolean addTag)
+    public void alterTag(OperationContext octxt, int itemId, MailItem.Type type, int tagId, boolean addTag)
             throws ServiceException {
-        if (tagId == Flag.ID_SYNC && addTag) {
-            Folder folder = getFolderById(itemId);
-            if ((folder.getFlagBitmask() & Flag.ID_SYNCFOLDER) == 0) {
-                throw MailServiceException.MODIFY_CONFLICT();
+        lock.lock();
+        try {
+            if (tagId == Flag.ID_SYNC && addTag) {
+                Folder folder = getFolderById(itemId);
+                if ((folder.getFlagBitmask() & Flag.ID_SYNCFOLDER) == 0) {
+                    throw MailServiceException.MODIFY_CONFLICT();
+                }
             }
+            super.alterTag(octxt, itemId, type, tagId, addTag);
+        } finally {
+            lock.release();
         }
-        super.alterTag(octxt, itemId, type, tagId, addTag);
     }
 
     private boolean isSyncEnabledByDefault(String path) throws ServiceException {
@@ -187,8 +199,7 @@ public class DataSourceMailbox extends SyncMailbox {
         return ds != null && ds.isSyncEnabledByDefault(path);
     }
 
-    private void alterSyncFolderFlag(Folder folder, boolean canSync)
-        throws ServiceException {
+    private void alterSyncFolderFlag(Folder folder, boolean canSync) throws ServiceException {
         folder.alterTag(mSyncFolderFlag, canSync);
         if (canSync) {
             folder.mData.setFlag(mSyncFolderFlag);

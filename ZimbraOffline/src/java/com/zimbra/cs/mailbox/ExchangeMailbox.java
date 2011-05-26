@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2009, 2010, 2011 Zimbra, Inc.
  *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -42,7 +42,7 @@ import com.zimbra.cs.util.ZimbraApplication;
 public class ExchangeMailbox extends ChangeTrackingMailbox {
 
     private static final String EXCHANGE_HELPER_CLASS = "com.zimbra.cs.offline.OfflineExchangeHelper";
-    private static final Class[] EXCHANGE_HELPER_CONSTRUCTOR_SIGNATURE = {
+    private static final Class<?>[] EXCHANGE_HELPER_CONSTRUCTOR_SIGNATURE = {
         Mailbox.class, DataSource.class
     };
 
@@ -69,13 +69,13 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
 
         if (isXsyncEnabled()) {
             try {
-                Class cmdClass = null;
+                Class<?> cmdClass = null;
                 try {
                     cmdClass = Class.forName(EXCHANGE_HELPER_CLASS);
                 } catch (ClassNotFoundException x) {
                     cmdClass = ExtensionUtil.findClass(EXCHANGE_HELPER_CLASS);
                 }
-                Constructor constructor = cmdClass.getConstructor(EXCHANGE_HELPER_CONSTRUCTOR_SIGNATURE);
+                Constructor<?> constructor = cmdClass.getConstructor(EXCHANGE_HELPER_CONSTRUCTOR_SIGNATURE);
                 helper = (ExchangeHelper)constructor.newInstance(new Object[] {this, getDataSource()});
             } catch (Exception x) {
                 throw ServiceException.FAILURE("failed init exchange mailbox", x);
@@ -236,9 +236,15 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
         }
     }
 
-    @Override protected synchronized void initialize() throws ServiceException {
-        super.initialize();
-        getCachedItem(ID_FOLDER_CALENDAR).setColor(new MailItem.Color((byte)1));
+    @Override
+    protected void initialize() throws ServiceException {
+        lock.lock();
+        try {
+            super.initialize();
+            getCachedItem(ID_FOLDER_CALENDAR).setColor(new MailItem.Color((byte)1));
+        } finally {
+            lock.release();
+        }
     }
 
     @Override
@@ -247,7 +253,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
             return;
 
         if (!OfflineSyncManager.getInstance().isServiceActive(isOnRequest)) {
-            
+
         } else if (lockMailboxToSync()) {
             synchronized (syncLock) {
                 if (isOnRequest && isDebugTraceOn) {

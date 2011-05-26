@@ -130,7 +130,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                 }
             } else if (x.getCode().equals(AccountServiceException.NO_SUCH_ACCOUNT)) {
                 cancelCurrentTask();
-            } else if ((!OfflineSyncManager.getInstance().isServiceActive(false)) && 
+            } else if ((!OfflineSyncManager.getInstance().isServiceActive(false)) &&
                 !x.getCode().equals(ServiceException.INTERRUPTED)) {
                 OfflineLog.offline.error(x);
             }
@@ -199,29 +199,16 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         return new URL(getSoapUri()).getHost();
     }
 
-//    @Override protected synchronized void initialize() throws ServiceException {
-//        super.initialize();
-//
-//        Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
-//        Mountpoint.create(ID_FOLDER_ARCHIVE, userRoot, "Archive", OfflineProvisioning.getOfflineInstance().getLocalAccount().getId(), Mailbox.ID_FOLDER_INBOX,
-//                          MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR);
-//    }
-
-    @Override int getInitialItemId() {
+    @Override
+    int getInitialItemId() {
         // locally-generated items must be differentiable from authentic, server-blessed ones
         return FIRST_OFFLINE_ITEM_ID;
     }
 
     /**
      * Get a tag from persistence. If useRenumbered = false, we check only the db
-     * @param octxt
-     * @param id
-     * @param useRenumbered
-     * @return
-     * @throws ServiceException
      */
-    public synchronized Tag getTagById(OperationContext octxt, int id, boolean useRenumbered)
-            throws ServiceException {
+    public Tag getTagById(OperationContext octxt, int id, boolean useRenumbered) throws ServiceException {
         if (useRenumbered) {
             return (Tag) getItemById(octxt, id, MailItem.Type.TAG);
         } else {
@@ -276,26 +263,34 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     }
 
     @Override
-    public synchronized void delete(OperationContext octxt, int[] itemIds, MailItem.Type type, TargetConstraint tcon)
+    public void delete(OperationContext octxt, int[] itemIds, MailItem.Type type, TargetConstraint tcon)
             throws ServiceException {
-        mLocalTagDeletes.clear();
+        lock.lock();
+        try {
+            mLocalTagDeletes.clear();
 
-        for (int id : itemIds) {
-            try {
-                if (id != ID_AUTO_INCREMENT) {
-                    getTagById(octxt, id);
-                    if ((getChangeMask(octxt, id, MailItem.Type.TAG) & Change.MODIFIED_CONFLICT) != 0) {
-                        mLocalTagDeletes.add(id);
+            for (int id : itemIds) {
+                try {
+                    if (id != ID_AUTO_INCREMENT) {
+                        getTagById(octxt, id);
+                        if ((getChangeMask(octxt, id, MailItem.Type.TAG) & Change.MODIFIED_CONFLICT) != 0) {
+                            mLocalTagDeletes.add(id);
+                        }
                     }
+                } catch (NoSuchItemException e) {
                 }
-            } catch (NoSuchItemException nsie) { }
 
-            try {
-                super.delete(octxt, new int[] {id}, type, tcon); //NOTE: don't call the one with single id as it will dead loop
-            } catch (Exception x) {
-                SyncExceptionHandler.localDeleteFailed(this, id, x);
-                //something is wrong, but we'll just skip since failed deleting a local item is not immediately fatal (not too good either)
+                try {
+                    // NOTE: don't call the one with single id as it will dead loop
+                    super.delete(octxt, new int[] {id}, type, tcon);
+                } catch (Exception x) {
+                    SyncExceptionHandler.localDeleteFailed(this, id, x);
+                    // something is wrong, but we'll just skip since failed deleting a local item is not immediately
+                    // fatal (not too good either)
+                }
             }
+        } finally {
+            lock.release();
         }
     }
 
@@ -308,11 +303,11 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         return tombstones;
     }
 
-    synchronized void setConversationId(OperationContext octxt, int msgId, int convId) throws ServiceException {
+    void setConversationId(OperationContext octxt, int msgId, int convId) throws ServiceException {
         // we're not allowing any magic -- we are being completely literal about the target conv id
-        if (convId <= 0 && convId != -msgId)
+        if (convId <= 0 && convId != -msgId) {
             throw MailServiceException.NO_SUCH_CONV(convId);
-
+        }
         boolean success = false;
         try {
             beginTransaction("setConversationId", octxt);
@@ -358,101 +353,112 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         }
     }
 
-    synchronized boolean renumberItem(OperationContext octxt, int id, MailItem.Type type, int newId)
-            throws ServiceException {
+    boolean renumberItem(OperationContext octxt, int id, MailItem.Type type, int newId) throws ServiceException {
         if (id == newId) {
             return true;
         } else if (id <= 0 || newId <= 0) {
             throw ServiceException.FAILURE("invalid item id when renumbering (" + id + " => " + newId + ")", null);
         }
-        boolean success = false;
+
+        lock.lock();
         try {
-            beginTransaction("renumberItem", octxt);
-            MailItem item = getItemById(id, type);
-            if (item.getId() == newId) {
-                OfflineLog.offline.info("Item already renumbered; no need to renumber (" + id + " => "+ newId + ")");
-                return true;
-            } else if (item.getId() != id) {
-                OfflineLog.offline.warn("renumbering item which may have already been renumbered (" + id + " => " + newId + ") : itemId = "+item.getId());
-            }
-            // changing a message's item id needs to purge its Conversation (virtual or real)
-            if (item instanceof Message)
-                uncacheItem(item.getParentId());
-
-            // mark old blob as disposable, but don't reindex item because INDEX_ID should still be correct
-            MailboxBlob mblob = item.getBlob();
-            if (mblob != null) {
-                // register old blob for post-commit deletion
-                item.markBlobForDeletion();
-                item.mBlob = null;
-
-                // copy blob to new id (note that item.getSavedSequence() may change again later)
-                try {
-                    MailboxBlob newBlob = StoreManager.getInstance().link(mblob, this, newId, item.getSavedSequence());
-                    markOtherItemDirty(newBlob);
-                } catch (IOException ioe) {
-                    throw ServiceException.FAILURE("could not link blob for renumbered item (" + id + " => " + newId + ")", ioe);
-                }
-            }
-
-            // update the id in the database and in memory
-            markItemDeleted(item.getType(), id);
+            boolean success = false;
             try {
-                DbOfflineMailbox.renumberItem(item, newId);
-                uncache(item);
-            } catch (ServiceException se) {
-                throw ServiceException.FAILURE("Failure renumbering item name["+item.getName()+"] subject["+item.getSubject()+"]", se);
-            }
-            item.mId = item.mData.id = newId;
-            item.markItemCreated();
+                beginTransaction("renumberItem", octxt);
+                MailItem item = getItemById(id, type);
+                if (item.getId() == newId) {
+                    OfflineLog.offline.info("Item already renumbered; no need to renumber (%d => %d)", id, newId);
+                    return true;
+                } else if (item.getId() != id) {
+                    OfflineLog.offline.warn("renumbering item which may have already been renumbered (%d => %d) : itemId = %d",
+                            id, newId, item.getId());
+                }
+                // changing a message's item id needs to purge its Conversation (virtual or real)
+                if (item instanceof Message)
+                    uncacheItem(item.getParentId());
 
-            if (item instanceof Folder || item instanceof Tag) {
-                //replace with the new item
-                cache(item);
-                if (item instanceof Folder) {
-                    //sub folders might have wrong id
-                    List<Folder> subFolders = ((Folder) item).getSubfolders(octxt);
-                    for (Folder subFolder : subFolders) {
-                        subFolder.mData.folderId = newId;
-                        subFolder.mData.parentId = newId;
-                        cache(subFolder); //make sure it's in the cache
+                // mark old blob as disposable, but don't reindex item because INDEX_ID should still be correct
+                MailboxBlob mblob = item.getBlob();
+                if (mblob != null) {
+                    // register old blob for post-commit deletion
+                    item.markBlobForDeletion();
+                    item.mBlob = null;
+
+                    // copy blob to new id (note that item.getSavedSequence() may change again later)
+                    try {
+                        MailboxBlob newBlob = StoreManager.getInstance().link(mblob, this, newId,
+                                item.getSavedSequence());
+                        markOtherItemDirty(newBlob);
+                    } catch (IOException e) {
+                        throw ServiceException.FAILURE("could not link blob for renumbered item (" + id + " => " +
+                                newId + ")", e);
                     }
-                } 
+                }
 
-                //msgs are lazy-loaded so purge is safe
-                purge(MailItem.Type.MESSAGE);
+                // update the id in the database and in memory
+                markItemDeleted(item.getType(), id);
+                try {
+                    DbOfflineMailbox.renumberItem(item, newId);
+                    uncache(item);
+                } catch (ServiceException se) {
+                    throw ServiceException.FAILURE("Failure renumbering item name[" + item.getName() + "] subject[" +
+                            item.getSubject() + "]", se);
+                }
+                item.mId = item.mData.id = newId;
+                item.markItemCreated();
+
+                if (item instanceof Folder || item instanceof Tag) {
+                    //replace with the new item
+                    cache(item);
+                    if (item instanceof Folder) {
+                        //sub folders might have wrong id
+                        List<Folder> subFolders = ((Folder) item).getSubfolders(octxt);
+                        for (Folder subFolder : subFolders) {
+                            subFolder.mData.folderId = newId;
+                            subFolder.mData.parentId = newId;
+                            cache(subFolder); //make sure it's in the cache
+                        }
+                    }
+
+                    //msgs are lazy-loaded so purge is safe
+                    purge(MailItem.Type.MESSAGE);
+                }
+                success = true;
+            } catch (MailServiceException.NoSuchItemException nsie) {
+                //item deleted from local before sync completes renumbering
+                OfflineLog.offline.info("item %d deleted from local db before sync completes renumbering to %d",
+                        id, newId);
+                TypedIdList tombstones = new TypedIdList();
+                tombstones.add(type, newId);
+                DbMailItem.writeTombstones(this, tombstones);
+                success = true;
+                return false;
+            } finally {
+                endTransaction(success);
             }
-            success = true;
-        } catch (MailServiceException.NoSuchItemException nsie) {
-            //item deleted from local before sync completes renumbering
-            OfflineLog.offline.info("item %d deleted from local db before sync completes renumbering to %d", id, newId);
-            TypedIdList tombstones = new TypedIdList();
-            tombstones.add(type, newId);
-            DbMailItem.writeTombstones(this, tombstones);
-            success = true;
-            return false;
+            mRenumbers.put(id, newId);
+            return true;
         } finally {
-            endTransaction(success);
+            lock.release();
         }
-
-        mRenumbers.put(id, newId);
-        return true;
     }
 
-    synchronized void deleteEmptyFolder(OperationContext octxt, int folderId) throws ServiceException {
+    void deleteEmptyFolder(OperationContext octxt, int folderId) throws ServiceException {
+        lock.lock();
         try {
             Folder folder = getFolderById(octxt, folderId);
-            if (folder.getItemCount() != 0 || folder.hasSubfolders())
+            if (folder.getItemCount() != 0 || folder.hasSubfolders()) {
                 throw OfflineServiceException.FOLDER_NOT_EMPTY(folderId);
+            }
+            delete(octxt, folderId, MailItem.Type.FOLDER);
         } catch (MailServiceException.NoSuchItemException nsie) {
-            ZimbraLog.mailbox.info("folder already deleted, skipping: " + folderId);
-            return;
+            ZimbraLog.mailbox.info("folder already deleted, skipping: %d", folderId);
+        } finally {
+            lock.release();
         }
-        delete(octxt, folderId, MailItem.Type.FOLDER);
     }
 
-    synchronized void syncDate(OperationContext octxt, int itemId, MailItem.Type type, int date)
-    throws ServiceException {
+    void syncDate(OperationContext octxt, int itemId, MailItem.Type type, int date) throws ServiceException {
         if (date < 0) {
             return;
         }
@@ -475,7 +481,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         }
     }
 
-    synchronized void syncMetadata(OperationContext octxt, int itemId, MailItem.Type type, int folderId, int flags,
+    void syncMetadata(OperationContext octxt, int itemId, MailItem.Type type, int folderId, int flags,
             long tags, byte color) throws ServiceException {
         boolean success = false;
         try {
@@ -483,22 +489,24 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             MailItem item = getItemById(itemId, type);
             int change_mask = getChangeMask(octxt, itemId, type);
 
-            if ((change_mask & Change.MODIFIED_FOLDER) != 0 || folderId == ID_AUTO_INCREMENT)
+            if ((change_mask & Change.MODIFIED_FOLDER) != 0 || folderId == ID_AUTO_INCREMENT) {
                 folderId = item.getFolderId();
-
-            if ((change_mask & Change.MODIFIED_COLOR) != 0 || color == ID_AUTO_INCREMENT)
+            }
+            if ((change_mask & Change.MODIFIED_COLOR) != 0 || color == ID_AUTO_INCREMENT) {
                 color = item.getColor();
-
-            if ((change_mask & Change.MODIFIED_TAGS) != 0 || tags == MailItem.TAG_UNCHANGED)
+            }
+            if ((change_mask & Change.MODIFIED_TAGS) != 0 || tags == MailItem.TAG_UNCHANGED) {
                 tags = item.getTagBitmask();
-
+            }
             if (flags == MailItem.FLAG_UNCHANGED) {
                 flags = item.getFlagBitmask();
             } else {
-                if ((change_mask & Change.MODIFIED_UNREAD) != 0)
+                if ((change_mask & Change.MODIFIED_UNREAD) != 0) {
                     flags = (item.isUnread() ? Flag.BITMASK_UNREAD : 0) | (flags & ~Flag.BITMASK_UNREAD);
-                if ((change_mask & Change.MODIFIED_FLAGS) != 0)
+                }
+                if ((change_mask & Change.MODIFIED_FLAGS) != 0) {
                     flags = item.getInternalFlagBitmask() | (flags & Flag.BITMASK_UNREAD);
+                }
             }
 
             boolean unread = (flags & Flag.BITMASK_UNREAD) > 0;
@@ -521,8 +529,8 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         }
     }
 
-    synchronized void syncFolderDefaultView(OperationContext octxt, int itemId, MailItem.Type type,
-            MailItem.Type defaultView) throws ServiceException {
+    void syncFolderDefaultView(OperationContext octxt, int itemId, MailItem.Type type, MailItem.Type defaultView)
+            throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("syncFolderDefaultView", octxt);
@@ -550,26 +558,26 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     @Override
     int getChangeMaskFilter(MailItem.Type type) {
         switch (type) {
-        case MESSAGE:
-            return PushChanges.MESSAGE_CHANGES;
-        case CHAT:
-            return PushChanges.CHAT_CHANGES;
-        case CONTACT:
-            return PushChanges.CONTACT_CHANGES;
-        case FOLDER:
-            return PushChanges.FOLDER_CHANGES;
-        case SEARCHFOLDER:
-            return PushChanges.SEARCH_CHANGES;
-        case TAG:
-            return PushChanges.TAG_CHANGES;
-        case APPOINTMENT:
-        case TASK:
-            return PushChanges.APPOINTMENT_CHANGES;
-        case WIKI:
-        case DOCUMENT:
-            return PushChanges.DOCUMENT_CHANGES;
-        default:
-            return 0;
+            case MESSAGE:
+                return PushChanges.MESSAGE_CHANGES;
+            case CHAT:
+                return PushChanges.CHAT_CHANGES;
+            case CONTACT:
+                return PushChanges.CONTACT_CHANGES;
+            case FOLDER:
+                return PushChanges.FOLDER_CHANGES;
+            case SEARCHFOLDER:
+                return PushChanges.SEARCH_CHANGES;
+            case TAG:
+                return PushChanges.TAG_CHANGES;
+            case APPOINTMENT:
+            case TASK:
+                return PushChanges.APPOINTMENT_CHANGES;
+            case WIKI:
+            case DOCUMENT:
+                return PushChanges.DOCUMENT_CHANGES;
+            default:
+                return 0;
         }
     }
 
@@ -770,48 +778,56 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     @Override
     boolean open() throws ServiceException {
         if (super.open()) {
-            synchronized (this) {
+            lock.lock();
+            try {
                 if (mMailboxSync == null) {
                     mMailboxSync = new MailboxSync(this);
                 }
                 return true;
+            } finally {
+                lock.release();
             }
         }
         return false;
     }
 
     @Override
-    public synchronized CalendarItem getCalendarItemByUid(
-                    OperationContext octxt, String uid) throws ServiceException {
-        CalendarItem item = super.getCalendarItemByUid(octxt, uid);
-        if (item == null && Db.supports(Capability.CASE_SENSITIVE_COMPARISON) && Invite.isOutlookUid(uid)) {
-            if (!uid.toLowerCase().equals(uid)) {
-                //maybe stored in db in lower case
-                item = super.getCalendarItemByUid(octxt, uid.toLowerCase());
-                if (item != null) {
-                    OfflineLog.offline.debug("coercing Outlook calitem ["+item.getId()+"] UID to upper case");
-                    boolean success = false;
-                    try {
-                        beginTransaction("forceUpperAppointment", octxt);
-                        uncache(item);
-                        DbOfflineMailbox.forceUidUpperCase(this, uid.toLowerCase());
-                        item = super.getCalendarItemByUid(octxt, uid);
-                        assert(item != null);
-                        success = true;
-                    } finally {
-                        endTransaction(success);
+    public CalendarItem getCalendarItemByUid(OperationContext octxt, String uid) throws ServiceException {
+        lock.lock();
+        try {
+            CalendarItem item = super.getCalendarItemByUid(octxt, uid);
+            if (item == null && Db.supports(Capability.CASE_SENSITIVE_COMPARISON) && Invite.isOutlookUid(uid)) {
+                if (!uid.toLowerCase().equals(uid)) {
+                    //maybe stored in db in lower case
+                    item = super.getCalendarItemByUid(octxt, uid.toLowerCase());
+                    if (item != null) {
+                        OfflineLog.offline.debug("coercing Outlook calitem [%d] UID to upper case", item.getId());
+                        boolean success = false;
+                        try {
+                            beginTransaction("forceUpperAppointment", octxt);
+                            uncache(item);
+                            DbOfflineMailbox.forceUidUpperCase(this, uid.toLowerCase());
+                            item = super.getCalendarItemByUid(octxt, uid);
+                            assert(item != null);
+                            success = true;
+                        } finally {
+                            endTransaction(success);
+                        }
                     }
-                }    
-            } else {
-                //possible that we're receiving update from unpatched zcs which is in lower case and our db is already correct
-                //return the upper case equivalent; server will keep sending lower until it's patched but should handle pushes in upper since MySQL is case insensitive
-                item = super.getCalendarItemByUid(octxt, uid.toUpperCase());
-                if (item != null) {
-                    OfflineLog.offline.debug("received lower case UID but our DB is already in upper case");
+                } else {
+                    // possible that we're receiving update from unpatched zcs which is in lower case and our db is
+                    // already correct return the upper case equivalent; server will keep sending lower until it's
+                    // patched but should handle pushes in upper since MySQL is case insensitive
+                    item = super.getCalendarItemByUid(octxt, uid.toUpperCase());
+                    if (item != null) {
+                        OfflineLog.offline.debug("received lower case UID but our DB is already in upper case");
+                    }
                 }
             }
+            return item;
+        } finally {
+            lock.release();
         }
-        return item;
     }
 
 }

@@ -30,47 +30,59 @@ import com.zimbra.cs.redolog.op.CreateFolder;
 import com.zimbra.cs.redolog.op.DeleteMailbox;
 
 public class LocalMailbox extends DesktopMailbox {
-    public LocalMailbox(MailboxData data) throws ServiceException {
+    public LocalMailbox(MailboxData data) {
         super(data);
     }
 
-    @Override synchronized void ensureSystemFolderExists() throws ServiceException {
-        super.ensureSystemFolderExists();
+    @Override
+    void ensureSystemFolderExists() throws ServiceException {
+        lock.lock();
         try {
-            getFolderById(ID_FOLDER_NOTIFICATIONS);
-        } catch (NoSuchItemException e) {
-            CreateFolder redo = new CreateFolder(getId(), NOTIFICATIONS_PATH,
-                ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
-                MailItem.Type.UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, null);
-
-            redo.setFolderId(ID_FOLDER_NOTIFICATIONS);
-            redo.start(System.currentTimeMillis());
-            createFolder(new TracelessContext(redo), NOTIFICATIONS_PATH,
-                ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
-                MailItem.Type.UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, null);
-        }
-        OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
-        for (String accountId : prov.getAllAccountIds()) {
-            Account acct = prov.get(AccountBy.id, accountId);
-            if (acct == null || prov.isGalAccount(acct) || prov.isMountpointAccount(acct))
-                continue;
+            super.ensureSystemFolderExists();
             try {
-                getFolderByName(null, ID_FOLDER_NOTIFICATIONS, accountId);
+                getFolderById(ID_FOLDER_NOTIFICATIONS);
             } catch (NoSuchItemException e) {
-                createMountpoint(null, ID_FOLDER_NOTIFICATIONS, accountId,
-                    accountId, ID_FOLDER_USER_ROOT,
-                    MailItem.Type.UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, false);
+                CreateFolder redo = new CreateFolder(getId(), NOTIFICATIONS_PATH,
+                    ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
+                    MailItem.Type.UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, null);
+
+                redo.setFolderId(ID_FOLDER_NOTIFICATIONS);
+                redo.start(System.currentTimeMillis());
+                createFolder(new TracelessContext(redo), NOTIFICATIONS_PATH,
+                    ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
+                    MailItem.Type.UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, null);
             }
+            OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
+            for (String accountId : prov.getAllAccountIds()) {
+                Account acct = prov.get(AccountBy.id, accountId);
+                if (acct == null || prov.isGalAccount(acct) || prov.isMountpointAccount(acct))
+                    continue;
+                try {
+                    getFolderByName(null, ID_FOLDER_NOTIFICATIONS, accountId);
+                } catch (NoSuchItemException e) {
+                    createMountpoint(null, ID_FOLDER_NOTIFICATIONS, accountId,
+                        accountId, ID_FOLDER_USER_ROOT,
+                        MailItem.Type.UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, false);
+                }
+            }
+        } finally {
+            lock.release();
         }
     }
 
-    @Override protected synchronized void initialize() throws ServiceException {
-        super.initialize();
-        getCachedItem(ID_FOLDER_CALENDAR).setColor(new MailItem.Color((byte)8));
-        Folder.create(ID_FOLDER_NOTIFICATIONS, this,
-            getFolderById(ID_FOLDER_USER_ROOT), NOTIFICATIONS_PATH,
-            Folder.FOLDER_IS_IMMUTABLE, MailItem.Type.UNKNOWN, 0,
-            MailItem.DEFAULT_COLOR_RGB, null, null);
+    @Override
+    protected void initialize() throws ServiceException {
+        lock.lock();
+        try {
+            super.initialize();
+            getCachedItem(ID_FOLDER_CALENDAR).setColor(new MailItem.Color((byte)8));
+            Folder.create(ID_FOLDER_NOTIFICATIONS, this,
+                getFolderById(ID_FOLDER_USER_ROOT), NOTIFICATIONS_PATH,
+                Folder.FOLDER_IS_IMMUTABLE, MailItem.Type.UNKNOWN, 0,
+                MailItem.DEFAULT_COLOR_RGB, null, null);
+        } finally {
+            lock.release();
+        }
     }
 
     @Override
@@ -90,7 +102,7 @@ public class LocalMailbox extends DesktopMailbox {
         return visible;
     }
 
-    public synchronized void forceDeleteMailbox(Mailbox mbox) throws ServiceException {
+    public void forceDeleteMailbox(Mailbox mbox) throws ServiceException {
         DeleteMailbox redoRecorder = new DeleteMailbox(mbox.getId());
         boolean success = false;
         try {
@@ -114,10 +126,11 @@ public class LocalMailbox extends DesktopMailbox {
                 MailboxManager.getInstance().markMailboxDeleted(mbox);
             }
         } finally {
-            if (success)
+            if (success) {
                 redoRecorder.commit();
-            else
+            } else {
                 redoRecorder.abort();
+            }
         }
     }
 

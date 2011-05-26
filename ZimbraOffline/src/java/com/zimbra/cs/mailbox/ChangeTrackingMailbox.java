@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2009, 2010, 2011 Zimbra, Inc.
  *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -88,7 +88,7 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
         if ((changeMask & filter) != 0)
             DbOfflineMailbox.updateChangeRecord(item, changeMask & filter);
     }
-    
+
     @Override
     void trackChangeDeleted() throws ServiceException {
         if (!isTrackingSync()) {
@@ -96,12 +96,12 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
         }
         lastChangeTime = System.currentTimeMillis();
     }
-    
+
     abstract boolean isPushType(MailItem.Type type);
-    
+
     abstract int getChangeMaskFilter(MailItem.Type type);
-    
-    synchronized boolean isPendingDelete(OperationContext octxt, int itemId, MailItem.Type type) throws ServiceException {
+
+    boolean isPendingDelete(OperationContext octxt, int itemId, MailItem.Type type) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("isPendingDelete", octxt);
@@ -114,8 +114,7 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
         }
     }
 
-    synchronized void removePendingDelete(OperationContext octxt, int itemId, MailItem.Type type)
-            throws ServiceException {
+    void removePendingDelete(OperationContext octxt, int itemId, MailItem.Type type) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("removePendingDelete", octxt);
@@ -127,7 +126,7 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
         }
     }
 
-    synchronized TypedIdList getLocalChanges(OperationContext octxt) throws ServiceException {
+    TypedIdList getLocalChanges(OperationContext octxt) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("getLocalChanges", octxt);
@@ -140,7 +139,7 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
         }
     }
 
-    public synchronized Map<Integer, Pair<Integer, Integer>> getChangeMasksAndFolders(OperationContext octxt) throws ServiceException {
+    public Map<Integer, Pair<Integer, Integer>> getChangeMasksAndFolders(OperationContext octxt) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("getChangeMasksAndFolders", octxt);
@@ -153,7 +152,7 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
         }
     }
 
-    synchronized Map<Integer, Pair<Integer, Integer>> getChangeMasksAndFlags(OperationContext octxt) throws ServiceException {
+    Map<Integer, Pair<Integer, Integer>> getChangeMasksAndFlags(OperationContext octxt) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("getChangeMasksAndFlags", octxt);
@@ -166,7 +165,7 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
         }
     }
 
-    synchronized List<Pair<Integer, Integer>> getSimpleUnreadChanges(OperationContext octxt, boolean isUnread) throws ServiceException {
+    List<Pair<Integer, Integer>> getSimpleUnreadChanges(OperationContext octxt, boolean isUnread) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("getSimpleUnreadChanges", octxt);
@@ -179,7 +178,7 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
         }
     }
 
-    synchronized Map<Integer, List<Pair<Integer, Integer>>> getFolderMoveChanges(OperationContext octxt) throws ServiceException {
+    Map<Integer, List<Pair<Integer, Integer>>> getFolderMoveChanges(OperationContext octxt) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("getFolderMoveChanges", octxt);
@@ -192,7 +191,7 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
         }
     }
 
-    synchronized Map<Integer, Integer> getItemModSequences(OperationContext octxt, int[] ids) throws ServiceException {
+    Map<Integer, Integer> getItemModSequences(OperationContext octxt, int[] ids) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("getItemModSequences", octxt);
@@ -205,7 +204,7 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
         }
     }
 
-    synchronized Map<Integer, Integer> getItemFolderIds(OperationContext octxt, int[] ids) throws ServiceException {
+    Map<Integer, Integer> getItemFolderIds(OperationContext octxt, int[] ids) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("getItemFolderIds", octxt);
@@ -218,7 +217,7 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
         }
     }
 
-    public synchronized int getChangeMask(OperationContext octxt, int id, MailItem.Type type) throws ServiceException {
+    public int getChangeMask(OperationContext octxt, int id, MailItem.Type type) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("getChangeMask", octxt);
@@ -234,8 +233,7 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
         }
     }
 
-    public synchronized void setChangeMask(OperationContext octxt, int id, MailItem.Type type, int mask)
-            throws ServiceException {
+    public void setChangeMask(OperationContext octxt, int id, MailItem.Type type, int mask) throws ServiceException {
         //TODO: make this call always non-tracking
         boolean success = false;
         try {
@@ -249,7 +247,7 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
         }
     }
 
-    public synchronized void clearTombstones(OperationContext octxt, int token) throws ServiceException {
+    public void clearTombstones(OperationContext octxt, int token) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("clearTombstones", octxt);

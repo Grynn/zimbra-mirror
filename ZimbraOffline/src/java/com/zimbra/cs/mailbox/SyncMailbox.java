@@ -88,17 +88,22 @@ public abstract class SyncMailbox extends DesktopMailbox {
     }
 
     @Override
-    protected synchronized void initialize() throws ServiceException {
-        super.initialize();
+    protected void initialize() throws ServiceException {
+        lock.lock();
+        try {
+            super.initialize();
 
-        Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
+            Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
 
-        Folder.create(ID_FOLDER_FAILURE, this, userRoot, FAILURE_PATH,
-            Folder.FOLDER_IS_IMMUTABLE, MailItem.Type.MESSAGE, 0,
-            MailItem.DEFAULT_COLOR_RGB, null, null);
-        Folder.create(ID_FOLDER_OUTBOX, this, userRoot, OUTBOX_PATH,
-            Folder.FOLDER_IS_IMMUTABLE, MailItem.Type.MESSAGE, 0,
-            MailItem.DEFAULT_COLOR_RGB, null, null);
+            Folder.create(ID_FOLDER_FAILURE, this, userRoot, FAILURE_PATH,
+                Folder.FOLDER_IS_IMMUTABLE, MailItem.Type.MESSAGE, 0,
+                MailItem.DEFAULT_COLOR_RGB, null, null);
+            Folder.create(ID_FOLDER_OUTBOX, this, userRoot, OUTBOX_PATH,
+                Folder.FOLDER_IS_IMMUTABLE, MailItem.Type.MESSAGE, 0,
+                MailItem.DEFAULT_COLOR_RGB, null, null);
+        } finally {
+            lock.release();
+        }
     }
 
     @Override
@@ -111,14 +116,18 @@ public abstract class SyncMailbox extends DesktopMailbox {
     }
 
     boolean lockMailboxToSync() {
-        if (isDeleting() || !OfflineSyncManager.getInstance().isServiceActive(false))
+        if (isDeleting() || !OfflineSyncManager.getInstance().isServiceActive(false)) {
             return false;
+        }
         if (!mSyncRunning) {
-            synchronized (this) {
+            lock.lock();
+            try {
                 if (!mSyncRunning) {
                     mSyncRunning = true;
                     return true;
                 }
+            } finally {
+                lock.release();
             }
         }
         return false;
@@ -139,12 +148,16 @@ public abstract class SyncMailbox extends DesktopMailbox {
 
     @Override
     public void deleteMailbox() throws ServiceException {
-        synchronized (this) {
-            if (isDeleting)
+        lock.lock();
+        try {
+            if (isDeleting) {
                 return;
+            }
             isDeleting = true;
             cancelCurrentTask();
             beginMaintenance(); // mailbox maintenance will cause sync to stop when writing
+        } finally {
+            lock.release();
         }
         synchronized (syncLock) { // wait for any hot sync thread to unwind
             endMaintenance(true);
@@ -152,26 +165,27 @@ public abstract class SyncMailbox extends DesktopMailbox {
         try {
             resetSyncStatus();
         } catch (ServiceException x) {
-            if (!x.getCode().equals(AccountServiceException.NO_SUCH_ACCOUNT))
+            if (!x.getCode().equals(AccountServiceException.NO_SUCH_ACCOUNT)) {
                 OfflineLog.offline.warn(x);
+            }
         }
 
         MailboxManager mm = MailboxManager.getInstance();
-        
+
         synchronized (mm) {
             unhookMailboxForDeletion();
             mm.markMailboxDeleted(this); // to remove from cache
         }
-      deleteThisMailbox();
+        deleteThisMailbox();
     }
 
-    private synchronized String unhookMailboxForDeletion()
-        throws ServiceException {
+    private String unhookMailboxForDeletion() throws ServiceException {
         String accountId = getAccountId();
         boolean success = false;
 
-        if (accountId.endsWith(DELETING_MID_SUFFIX))
+        if (accountId.endsWith(DELETING_MID_SUFFIX)) {
             return accountId;
+        }
         accountId = accountId + ":" + getId() + DELETING_MID_SUFFIX;
         try {
             beginTransaction("replaceAccountId", null);
@@ -187,19 +201,20 @@ public abstract class SyncMailbox extends DesktopMailbox {
         OfflineLog.offline.info("deleting mailbox %s %s (%s)", getId(), getAccountId(), getAccountName());
         DeleteMailbox redoRecorder = new DeleteMailbox(getId());
         boolean success = false;
-        
-        synchronized(this) {
+
+        lock.lock();
+        try {
             try {
                 beginTransaction("deleteMailbox", null, redoRecorder);
                 redoRecorder.log();
 
                 DbConnection conn = getOperationConnection();
-                
+
                 synchronized(MailboxManager.getInstance()) {
                     DbMailbox.deleteMailbox(conn, this);
                 }
                 DbMailbox.clearMailboxContent(conn, this);
-                
+
                 success = true;
             } catch (Exception e) {
                 ZimbraLog.store.warn("Unable to delete mailbox data", e);
@@ -216,6 +231,8 @@ public abstract class SyncMailbox extends DesktopMailbox {
             } catch (IOException e) {
                 ZimbraLog.store.warn("Unable to delete message data", e);
             }
+        } finally {
+            lock.release();
         }
         OfflineLog.offline.info("mailbox %s (%s) deleted", getAccountId(), getAccountName());
     }
@@ -226,63 +243,72 @@ public abstract class SyncMailbox extends DesktopMailbox {
         OfflineYAuth.deleteRawAuthManager(this);
     }
 
-    public synchronized void cancelCurrentTask() {
-        if (currentTask != null)
-            currentTask.cancel();
-        currentTask = null;
+    public void cancelCurrentTask() {
+        lock.lock();
+        try {
+            if (currentTask != null) {
+                currentTask.cancel();
+            }
+            currentTask = null;
+        } finally {
+            lock.release();
+        }
     }
 
-    protected synchronized void initSyncTimer() throws ServiceException {
-        if (isGalAcct || isMPAcct)
-            return;
-
-        cancelCurrentTask();
-        currentTask = new TimerTask() {
-            @Override
-            public void run() {
-                boolean doGC;
-                long now;
-
-                if (ZimbraApplication.getInstance().isShutdown()) {
-                    cancelCurrentTask();
-                    return;
-                }
-                try {
-                    syncOnTimer();
-                    now = System.currentTimeMillis();
-                    if (lastOptimizeTime == 0) {
-                        lastOptimizeTime = now - OPTIMIZE_INTERVAL +
-                            30 * Constants.MILLIS_PER_MINUTE;
-                    } else if (now - lastOptimizeTime > OPTIMIZE_INTERVAL) {
-                        optimize(0);
-                        lastOptimizeTime = now;
-                    }
-                } catch (Throwable e) { // don't let exceptions kill the timer
-                    if (e instanceof OutOfMemoryError)
-                        Zimbra.halt("caught out of memory error", e);
-                    else if (OfflineSyncManager.getInstance().isServiceActive(false))
-                        OfflineLog.offline.warn("caught exception in timer ", e);
-                }
-                synchronized (lastGC) {
-                    now = System.currentTimeMillis();
-                    doGC = now - lastGC.get() > 5 * 60 * Constants.MILLIS_PER_SECOND;
-                    if (doGC) {
-                        System.gc();
-                        lastGC.set(now);
-                    }
-                }
+    protected void initSyncTimer() throws ServiceException {
+        lock.lock();
+        try {
+            if (isGalAcct || isMPAcct) {
+                return;
             }
-        };
+            cancelCurrentTask();
+            currentTask = new TimerTask() {
+                @Override
+                public void run() {
+                    boolean doGC;
+                    long now;
 
-        timer = new Timer("sync-mbox-" + getAccount().getName());
-        timer.schedule(currentTask, 10 * Constants.MILLIS_PER_SECOND,
-            5 * Constants.MILLIS_PER_SECOND);
+                    if (ZimbraApplication.getInstance().isShutdown()) {
+                        cancelCurrentTask();
+                        return;
+                    }
+                    try {
+                        syncOnTimer();
+                        now = System.currentTimeMillis();
+                        if (lastOptimizeTime == 0) {
+                            lastOptimizeTime = now - OPTIMIZE_INTERVAL + 30 * Constants.MILLIS_PER_MINUTE;
+                        } else if (now - lastOptimizeTime > OPTIMIZE_INTERVAL) {
+                            optimize(0);
+                            lastOptimizeTime = now;
+                        }
+                    } catch (Throwable e) { // don't let exceptions kill the timer
+                        if (e instanceof OutOfMemoryError) {
+                            Zimbra.halt("caught out of memory error", e);
+                        } else if (OfflineSyncManager.getInstance().isServiceActive(false)) {
+                            OfflineLog.offline.warn("caught exception in timer ", e);
+                        }
+                    }
+                    synchronized (lastGC) {
+                        now = System.currentTimeMillis();
+                        doGC = now - lastGC.get() > 5 * 60 * Constants.MILLIS_PER_SECOND;
+                        if (doGC) {
+                            System.gc();
+                            lastGC.set(now);
+                        }
+                    }
+                }
+            };
+
+            timer = new Timer("sync-mbox-" + getAccount().getName());
+            timer.schedule(currentTask, 10 * Constants.MILLIS_PER_SECOND, 5 * Constants.MILLIS_PER_SECOND);
+        } finally {
+            lock.release();
+        }
     }
 
     protected abstract void syncOnTimer();
 
-    public abstract void sync(boolean isOnRequest, boolean isDebugTraceOn)
-        throws ServiceException;
+    public abstract void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException;
 
     public abstract boolean isAutoSyncDisabled();
 
