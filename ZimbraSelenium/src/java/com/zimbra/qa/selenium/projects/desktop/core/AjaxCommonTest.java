@@ -132,7 +132,7 @@ public class AjaxCommonTest {
     * @throws IOException 
     * @throws SAXException 
     */
-	@BeforeSuite( groups = { "always" } )
+	@BeforeSuite(alwaysRun=true)
 	public void commonTestBeforeSuite() throws HarnessException, IOException, InterruptedException, SAXException {
 		logger.info("commonTestBeforeSuite: start");
 
@@ -308,7 +308,7 @@ public class AjaxCommonTest {
     *
     * @throws HarnessException
     */
-	@BeforeClass( groups = { "always" } )
+	@BeforeClass(alwaysRun=true)
 	public void commonTestBeforeClass() throws HarnessException {
       logger.info("commonTestBeforeClass: start");
 
@@ -384,7 +384,7 @@ public class AjaxCommonTest {
     * <p>
     * @throws HarnessException
     */
-   @BeforeMethod( groups = { "always" } )
+   @BeforeMethod(alwaysRun=true)
 	public void commonTestBeforeMethod() throws HarnessException {
       logger.info("commonTestBeforeMethod: start");
 
@@ -453,11 +453,15 @@ public class AjaxCommonTest {
                   throw new HarnessException("Retry deleting the user timed out");
                }
             }
-            addDefaultAccount();
-            _currentAccount = ZimbraAccount.AccountZWC();
+            if (startingPage != app.zPageAddNewAccount) {
+               addDefaultAccount();
+               _currentAccount = ZimbraAccount.AccountZWC();               
+            }
          }
 
-         ZimbraAccount.AccountZWC().authenticateToMailClientHost();
+         if (startingPage != app.zPageAddNewAccount) {
+            ZimbraAccount.AccountZWC().authenticateToMailClientHost();
+         }
 
          break;
 
@@ -520,7 +524,9 @@ public class AjaxCommonTest {
             throw new HarnessException("Unable to navigate to "+ startingPage.myPageName());
          }
 
-         if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP && startingPage != app.zPageLogin) {
+         if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP &&
+               startingPage != app.zPageLogin &&
+               startingPage != app.zPageAddNewAccount) {
             if (desktopZimlets == null) {
                desktopZimlets = app.zGetActiveAccount().getAvailableZimlets(
                      SOAP_DESTINATION_HOST_TYPE.CLIENT);
@@ -548,7 +554,7 @@ public class AjaxCommonTest {
 	 * 
 	 * @throws HarnessException
 	 */
-	@AfterSuite( groups = { "always" } )
+	@AfterSuite(alwaysRun=true)
 	public void commonTestAfterSuite() throws HarnessException {	
 		logger.info("commonTestAfterSuite: start");
 
@@ -575,7 +581,7 @@ public class AjaxCommonTest {
 	 * 
 	 * @throws HarnessException
 	 */
-	@AfterClass( groups = { "always" } )
+	@AfterClass(alwaysRun=true)
 	public void commonTestAfterClass() throws HarnessException {
 		logger.info("commonTestAfterClass: start");
 		
@@ -587,7 +593,7 @@ public class AjaxCommonTest {
 	 * 
 	 * @throws HarnessException
 	 */
-	@AfterMethod( groups = { "always" } )
+	@AfterMethod(alwaysRun=true)
 	public void commonTestAfterMethod() throws HarnessException {
 		logger.info("commonTestAfterMethod: start");
 
@@ -597,7 +603,9 @@ public class AjaxCommonTest {
 		ZimbraAccount currentAccount = app.zGetActiveAccount();
 
 		if (currentAccount != null) {
-		   if (desktopZimlets == null) {
+		   if (startingPage != app.zPageLogin &&
+               startingPage != app.zPageAddNewAccount &&
+               desktopZimlets == null) {
 		      throw new HarnessException("Desktop zimlets are null for unknown reason");
 		   }
 

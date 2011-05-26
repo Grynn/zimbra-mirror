@@ -10,6 +10,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraDesktopProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.desktop.ui.accounts.PageAddNewAccount;
 import com.zimbra.qa.selenium.projects.desktop.ui.addressbook.PageAddressbook;
 import com.zimbra.qa.selenium.projects.desktop.ui.addressbook.TreeContacts;
 import com.zimbra.qa.selenium.projects.desktop.ui.briefcase.PageBriefcase;
@@ -65,6 +66,7 @@ public class AppAjaxClient extends AbsApplication {
 	public PageTasks					zPageTasks = null;
 	public PagePreferences				zPagePreferences = null;
 	public PageSignature				zPageSignature = null;
+	public PageAddNewAccount            zPageAddNewAccount = null;
 	
 	public TreeMail						zTreeMail = null;
 	public TreeContacts					zTreeContacts = null;
@@ -131,10 +133,14 @@ public class AppAjaxClient extends AbsApplication {
 
 		zTreePreferences = new TreePreferences(this);
 		trees.put(zTreePreferences.myPageName(), zTreePreferences);
+
 		// signature Preferences page
 		zPageSignature = new PageSignature(this);
 		pages.put(zPageSignature.myPageName(),zPageSignature);
-		
+
+		// Add New Account page
+		zPageAddNewAccount = new PageAddNewAccount(this);
+		pages.put(zPageAddNewAccount.myPageName(), zPageAddNewAccount);
 
 		// Configure the localization strings
 		getL10N().zAddBundlename(I18N.Catalog.I18nMsg);

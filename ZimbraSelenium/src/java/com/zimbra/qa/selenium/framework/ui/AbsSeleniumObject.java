@@ -822,6 +822,28 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
+	 * DefaultSelenium.select
+	 * @param selectLocator Locator of the dropdown-list
+	 * @param optionLocator Option locators provide different ways of specifying options of an HTML Select element (e.g. for selecting a specific option, or for asserting that the selected option satisfies a specification). There are several forms of Select Option Locator.
+	 *       label=labelPattern
+	 *       matches options based on their labels, i.e. the visible text. (This is the default.)
+	 *       label=regexp:^[Oo]ther
+	 *       value=valuePattern
+	 *       matches options based on their values.
+	 *       value=other
+	 *       id=id
+	 *       matches options based on their ids.
+	 *       id=option1index=index
+	 *       matches an option based on its index (offset from zero).
+	 *       index=2
+	 *       If no option locator prefix is provided, the default behaviour is to match on label. 
+	 */
+	public void sSelectDropDown(String selectLocator, String optionLocator) {
+	   ClientSessionFactory.session().selenium().select(selectLocator, optionLocator);
+      logger.info("sSelectDropDown(" + selectLocator+ ", " + optionLocator + ")");
+	}
+
+	/**
 	 * DefaultSeleniu.selectFrame()
 	 */
 	public void sSelectFrame(String locator) {

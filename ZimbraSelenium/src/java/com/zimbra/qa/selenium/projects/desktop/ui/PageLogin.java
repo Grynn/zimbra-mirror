@@ -33,6 +33,7 @@ public class PageLogin extends AbsTab {
 		public static final String zDisplayedremember = "xpath=//td[@class='zLoginCheckboxLabelContainer']//label[@for='remember']";
 		public static final String zDisplayedwhatsthis = "xpath=//*[@id='ZLoginWhatsThisAnchor']";
 		public static final String zDisplayedcopyright = "xpath=//div[@class='copyright']";
+		public static final String zDisplayedMessage = "css=div[id='message']";
 
 	}
 	
@@ -232,6 +233,9 @@ public class PageLogin extends AbsTab {
 		throw new HarnessException("No shortcuts supported in the login page");
 	}
 
-
+	public String zGetMessage() throws HarnessException {
+	   GeneralUtility.waitForElementPresent(this, Locators.zDisplayedMessage);
+	   return sGetText(Locators.zDisplayedMessage);
+	}
 
 }
