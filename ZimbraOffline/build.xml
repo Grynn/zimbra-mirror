@@ -1150,7 +1150,7 @@
     <fileset dir="${soap.build.dir}" includes="zimbrasoap.jar"/>
     <fileset dir="${server.build.dir}" includes="zimbrastore.jar"/>
     <fileset dir="${taglib.build.dir}" includes="zimbrataglib.jar"/>
-    <fileset dir="${webclient.jars.dir}" includes="standard.jar,servlet-api.jar"/>
+    <fileset dir="${webclient.jars.dir}" includes="servlet-api.jar"/>
     <fileset dir="${webclient.jars.dir}/jsp-2.1" includes="*.jar"/>
     <fileset dir="${jspc.src.dir}/WEB-INF/lib" includes="*.jar"/>
   </path>
