@@ -350,21 +350,27 @@ public class PageBriefcase extends AbsTab {
 		//
 
 		if (pulldown == Button.B_NEW) {
+			pulldownLocator = Locators.zNewMenuArrowBtn.locator;
 			if (option == Button.O_NEW_BRIEFCASE) {
 				throw new HarnessException("implement me!");
 			} else if (option == Button.O_NEW_DOCUMENT) {
-				pulldownLocator = Locators.zNewMenuArrowBtn.locator;
-
-				optionLocator = "css=tr[id=POPUP_NEW_DOC]>td[id$=_title]:contains(Document)";
+				if (ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+						"7.1."))
+					optionLocator = "css=tr[id=POPUP_NEW_DOC]>td[id$=_title]:contains(Document)";
+				else
+					optionLocator = "css=div#zb__BDLV__NEW_MENU_NEW_DOC";
 
 				page = new DocumentBriefcaseNew(this.MyApplication);
+
 				// FALL THROUGH
 			} else if (option == Button.O_NEW_FOLDER) {
 				throw new HarnessException("implement me!");
 			} else if (option == Button.O_NEW_TAG) {
-				pulldownLocator = Locators.zNewMenuArrowBtn.locator;
-
-				optionLocator = "css=td[id$=_title][class=ZWidgetTitle]:contains(Tag)";
+				if (ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+						"7.1."))
+					optionLocator = "css=tr[id=POPUP_NEW_TAG]>td[id$=_title]:contains(Tag)";
+				else
+					optionLocator = "css=div#zb__BDLV__NEW_MENU_NEW_TAG";
 
 				page = new DialogTag(this.MyApplication, this);
 
@@ -667,6 +673,8 @@ public class PageBriefcase extends AbsTab {
 			} else
 				page = null;
 		} else if (action == Action.A_BRIEFCASE_CHECKBOX) {
+			zWaitForElementPresent(itemNameLocator);
+
 			String checkBoxLocator = "";
 
 			int count = sGetCssCount(itemLocator);
