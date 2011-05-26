@@ -429,7 +429,7 @@ function(params) {
 
 	params.jsonRequestObj = obj;
 
-	return AjxStringUtil.objToString(obj);
+	return JSON.stringify(obj);
 };
 
 /**
@@ -630,7 +630,7 @@ function(response, params) {
 		obj = respDoc._xmlDoc.toJSObject(true, false, true);
 	} else if (!restResponse) {
 		try {
-			eval("obj=" + respDoc);
+			obj = JSON.parse(respDoc);
 		} catch (ex) {
 			if (ex.name == "SyntaxError") {
 				ex = new ZmCsfeException(null, ZmCsfeException.BAD_JSON_RESPONSE, params.methodNameStr, respDoc);
