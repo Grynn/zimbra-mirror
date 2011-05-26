@@ -81,7 +81,7 @@ public class DeleteContact extends AjaxCommonTest  {
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
  
         //delete contact
-        app.zPageAddressbook.zShortcut(KeyEvent.VK_DELETE);
+        app.zPageAddressbook.zKeyboardKeyEvent(KeyEvent.VK_DELETE);
        
         //verify contact deleted
         VerifyContactDeleted(contactItem);    
@@ -95,7 +95,7 @@ public class DeleteContact extends AjaxCommonTest  {
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
  
         //delete contact
-        app.zPageAddressbook.zShortcut(KeyEvent.VK_BACK_SPACE);
+        app.zPageAddressbook.zKeyboardKeyEvent(KeyEvent.VK_BACK_SPACE);
        
         //verify contact deleted
         VerifyContactDeleted(contactItem);    

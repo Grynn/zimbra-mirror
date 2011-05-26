@@ -26,8 +26,8 @@ public class ForwardContact extends AjaxCommonTest  {
 	}
 	
 	@Test(	description = "Forward a contact by click Forward on the toolbar",
-			groups = { "functionaly" })
-	public void ForwardContact_01() throws HarnessException {
+			groups = { "functional" })
+	public void ForwardContactByClickForwardOnToolbar() throws HarnessException {
 			
 		  // Create a contact via Soap then select
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
@@ -47,8 +47,8 @@ public class ForwardContact extends AjaxCommonTest  {
    	}
 	
 	@Test(	description = "Forward a contact by click Forward on the context menu",
-			groups = { "functionaly" })
-	public void ForwardContact_02() throws HarnessException {
+			groups = { "functional" })
+	public void ForwardContactByClickForwardOnContextmenu() throws HarnessException {
 		  // Create a contact via Soap then select
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
 	

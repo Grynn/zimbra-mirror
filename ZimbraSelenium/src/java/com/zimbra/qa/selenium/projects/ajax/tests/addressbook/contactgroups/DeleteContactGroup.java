@@ -101,7 +101,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app,Action.A_LEFTCLICK);
 	      
         //delete contact group by click shortcut Del
-		 app.zPageAddressbook.zShortcut(KeyEvent.VK_DELETE);
+		 app.zPageAddressbook.zKeyboardKeyEvent(KeyEvent.VK_DELETE);
 		 
         //verify contact group deleted
         VerifyContactGroupDeleted(group);           
@@ -115,7 +115,7 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app,Action.A_LEFTCLICK);
 	      
         //delete contact group by click shortcut backspace
-		app.zPageAddressbook.zShortcut(KeyEvent.VK_BACK_SPACE);
+		app.zPageAddressbook.zKeyboardKeyEvent(KeyEvent.VK_BACK_SPACE);
 		 
         //verify contact group deleted
         VerifyContactGroupDeleted(group);           

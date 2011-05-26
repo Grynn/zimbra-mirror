@@ -7,6 +7,9 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail.Locators;
 
 
 /**
@@ -89,7 +92,107 @@ public class TreeContacts extends AbsTree {
 		return (page);
 	}
 	
+	@Override
+	public AbsPage zTreeItem(Action action, Button option, IItem folder) throws HarnessException {
 
+		tracer.trace("Click "+ action +" then "+ option +" on folder "+ folder.getName());
+
+		// Validate the arguments
+		if ( (action == null) || (option == null) || (folder == null) ) {
+			throw new HarnessException("Must define an action, option, and addressbook");
+		}
+
+		if ( folder instanceof FolderItem ) {
+			return (zTreeItem(action, option, (FolderItem)folder));
+		} else if ( folder instanceof SavedSearchFolderItem ) {
+			return (zTreeItem(action, option, (SavedSearchFolderItem)folder));
+		//} else if ( folder instanceof ZimletItem ) {
+		//	return (zTreeItem(action, option, (ZimletItem)folder));
+		}else if ( folder instanceof TagItem ) {
+			return (zTreeItem(action, option, (TagItem)folder));
+		}
+
+		throw new HarnessException("Must use TagItem FolderItem or SavedSearchFolderItem or ZimletItem as argument, but was "+ folder.getClass());
+	}
+	
+	protected AbsPage zTreeItem(Action action, Button option, TagItem folder)
+	throws HarnessException {
+
+		if ((action == null) || (option == null) || (folder == null)) {
+			throw new HarnessException(
+			"Must define an action, option, and addressbook");
+		}
+	
+		AbsPage page = null;
+		String actionLocator = null;
+		String optionLocator = null;
+
+		TagItem t = (TagItem) folder;
+		tracer.trace("processing " + t.getName());
+
+		if (action == Action.A_LEFTCLICK) {
+
+			actionLocator = "implement me";
+
+		} else if (action == Action.A_RIGHTCLICK) {
+
+			actionLocator = "zti__main_Contacts__" + t.getId() + "_textCell";
+		
+		
+			this.zRightClick(actionLocator);
+
+			page = new DialogTag(MyApplication,
+					((AppAjaxClient) MyApplication).zPageMail);
+
+		} else {
+			throw new HarnessException("Action " + action
+					+ " not yet implemented");
+		}
+		if (option == Button.B_TREE_NEWTAG) {
+
+			optionLocator = "css=tr#POPUP_NEW_TAG";
+		} 
+		/*else if (option == Button.B_DELETE) {
+
+			optionLocator = Locators.zDeleteTreeMenuItem;
+
+			page = new DialogWarning(
+					DialogWarning.DialogWarningID.DeleteTagWarningMessage,
+					MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
+
+		} else if (option == Button.B_RENAME) {
+
+			optionLocator = Locators.zRenameTreeMenuItem;
+
+			page = new DialogRenameTag(MyApplication,
+					((AppAjaxClient) MyApplication).zPageMail);
+
+		} 
+		*/
+		else {
+			throw new HarnessException("button " + option
+					+ " not yet implemented");
+		}
+		if (actionLocator == null)
+			throw new HarnessException("locator is null for action " + action);
+		if (optionLocator == null)
+			throw new HarnessException("locator is null for option " + option);
+
+		// Default behavior. Click the locator
+		zClick(optionLocator);
+
+		// If there is a busy overlay, wait for that to finish
+		this.zWaitForBusyOverlay();
+
+		if (page != null) {
+
+			// Wait for the page to become active, if it was specified
+			page.zWaitForActive();
+		}
+
+		return (page);
+
+	}
 	@Override
 	public AbsPage zPressButton(Button button) throws HarnessException {
 		tracer.trace("Click button "+ button);
@@ -109,15 +212,11 @@ public class TreeContacts extends AbsTree {
 			
 			// FALL THROUGH
 
-		} else if ( button == Button.B_TREE_NEWTAG ) { 
-			
-			locator = null;
-			page = null;
-			
-			// TODO: implement me
-			
-			// FALL THROUGH
+		} else if ( button == Button.B_TREE_NEWTAG ) { 			
+			locator = zNewTagIcon;
 
+			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);
+				
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}
@@ -136,6 +235,9 @@ public class TreeContacts extends AbsTree {
 		// Click it
 		this.zClick(locator);
 		
+		// If the app is busy, wait for that to finish
+		this.zWaitForBusyOverlay();
+
 		// If page was specified, make sure it is active
 		if ( page != null ) {
 			
@@ -164,12 +266,6 @@ public class TreeContacts extends AbsTree {
 	}
 
 
-	@Override
-	public AbsPage zTreeItem(Action action, Button option, IItem item) throws HarnessException {
-		tracer.trace("Click "+ action +" then "+ option +" on addressbook "+ item);
-
-		throw new HarnessException("implement me!");
-	}
-
+	
 
 }

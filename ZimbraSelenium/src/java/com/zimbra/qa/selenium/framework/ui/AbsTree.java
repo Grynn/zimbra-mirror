@@ -18,6 +18,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 public abstract class AbsTree extends AbsPage {
 	protected static Logger logger = LogManager.getLogger(AbsTree.class);
 
+	public static final String zNewTagIcon = "css=td[class='overviewHeader-Text FakeAnchor']>div[class^=ImgNewTag]";
 
 
 	/**

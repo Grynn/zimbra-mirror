@@ -8,7 +8,9 @@ import org.apache.log4j.LogManager;
 
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogRenameTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
@@ -19,6 +21,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail.Locators;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
 
 public class PageAddressbook extends AbsTab {
@@ -137,7 +140,7 @@ public class PageAddressbook extends AbsTab {
 			throw new HarnessException("Contact List is not present "+ "id='zv__CNS'");
 
 		//Get the number of contacts (String) 
-		int count = this.sGetCssCount("css=div#zv__CNS div[id^=zli__CNS__]");
+		int count = this.sGetCssCount("css=div[id='zv__CNS']>div[id^=zli__CNS__]");
 		
 		logger.info(myPageName() + " zListGetContacts: number of contacts: "+ count);
 
@@ -284,8 +287,8 @@ public class PageAddressbook extends AbsTab {
 	}
 
 	
-	public AbsPage zShortcut(int keyEvent) throws HarnessException {
-		logger.info(myPageName() + " zClickShortcut("+ keyEvent +")");
+	public AbsPage zKeyboardKeyEvent(int keyEvent) throws HarnessException {
+		logger.info(myPageName() + " zKeyboardKeyEvent("+ keyEvent +")");
 
 		tracer.trace("Click the shortcut "+ keyEvent );
 		
@@ -296,6 +299,31 @@ public class PageAddressbook extends AbsTab {
 		this.zKeyboard.zTypeKeyEvent(keyEvent);		
 		zWaitForBusyOverlay();
 	
+		
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+		return (page);
+	}
+
+	public AbsPage zKeyboardShortcut(Shortcut shortcut) throws HarnessException {
+		logger.info(myPageName() + " zKeyboardShortcut("+ shortcut.getKeys() +")");
+
+		tracer.trace("Click the shortcut "+ shortcut.getKeys() );
+		
+
+		// Default behavior variables
+		AbsPage page = null;	// If set, this page will be returned
+		
+		if ( (shortcut == Shortcut.S_NEWTAG) ){
+			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);	
+		}
+
+		// Click it
+		zKeyboardTypeString(shortcut.getKeys());	
+		
+		zWaitForBusyOverlay();
+		
 		
 		if ( page != null ) {
 			page.zWaitForActive();
@@ -455,9 +483,11 @@ public class PageAddressbook extends AbsTab {
 	
     // return the xpath locator of a contact
 	private String getContactLocator(String contact) throws HarnessException {
-		String listLocator = "div#zv__CNS";				
+		String listLocator = "div[id='zv__CNS']";
+		
 		String rowLocator = "div[id^='zli__CNS__']";
 	    
+		
 
 		String contactLocator = null;
 		
@@ -468,7 +498,9 @@ public class PageAddressbook extends AbsTab {
 			throw new HarnessException("List does not contain any items "+ rowLocator);
 
 		//Get the number of contacts (String) 
-	    int count = this.sGetCssCount("css=" + listLocator + " " + rowLocator);
+	    int count = this.sGetCssCount("css=" + listLocator + ">" + rowLocator);
+		//int count = this.sGetXpathCount("xpath=//div[@id=zv__CNS]/div[contains(@id,zli__CNS__)]");
+		//int count = this.sGetXpathCount("//div[@id='zv__CNS']//div[contains(@id, 'zli__CNS__')]");
 	    logger.debug(myPageName() + " zListItem: number of contacts: "+ count);
 
 		if ( count == 0 )
@@ -518,7 +550,8 @@ public class PageAddressbook extends AbsTab {
 		    return arrayList; //an empty arraylist
 			
 		//Get the number of contacts (String) 
-		int count = sGetCssCount("css=" + listLocator + " " + rowLocator);
+		int count = sGetCssCount("css=" + listLocator + ">" + rowLocator);
+
 		logger.debug(myPageName() + " getSelectedContactLocator: number of contacts: "+ count);
 
 		if ( count == 0 )
@@ -788,6 +821,8 @@ public class PageAddressbook extends AbsTab {
 		throw new HarnessException("action not supported ");
 	
 	}
+	
+	
 
 	private AbsPage newFormSelected() throws HarnessException {
 	    AbsPage page = null;
