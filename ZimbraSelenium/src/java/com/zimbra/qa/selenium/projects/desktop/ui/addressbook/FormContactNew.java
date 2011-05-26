@@ -132,19 +132,15 @@ public class FormContactNew extends AbsForm {
 		if ( field == Field.FirstName ) {
 			
 			locator = Locators.zFirstEditField;
-			
-			// FALL THROUGH
-			
+						
 		} else if ( field == Field.LastName ) {
 			
 			locator = Locators.zLastEditField;
-			
-			// FALL THROUGH
-			
+						
 		} else {
 			throw new HarnessException("not implemented for field "+ field);
 		}
-		
+
 		if ( locator == null ) {
 			throw new HarnessException("locator was null for field "+ field);
 		}
@@ -158,9 +154,8 @@ public class FormContactNew extends AbsForm {
 		
 		// Enter text
 		this.sFocus(locator);
-		this.zClick(locator);			
-		zKeyboard.zTypeCharacters(value);
-
+		this.zClick(locator);
+		sTypeKeys(locator, value);
 
 	}
 	

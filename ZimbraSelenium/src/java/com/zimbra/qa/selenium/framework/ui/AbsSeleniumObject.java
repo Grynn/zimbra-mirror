@@ -182,8 +182,17 @@ public abstract class AbsSeleniumObject {
 	
 		logger.info("zType(" + locator + ","  + value + ")");	
 	}
-	
-	
+
+	/**
+	 * DefaultSelenium.fireEvent(locator, eventName) 
+	 * @param locator
+	 * @param eventName
+	 */
+	public void sFireEvent(String locator, String eventName) {
+	   ClientSessionFactory.session().selenium().fireEvent(locator, eventName);
+	   logger.info("fireEvent(" + locator + ", "  + eventName + ")");
+	}
+
 	// // ***
 	// Start: Selenium methods
 	// // ***

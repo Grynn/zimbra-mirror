@@ -119,9 +119,8 @@ public class FormContactGroupNew extends AbsForm {
 		// Fill out the form		
 		if (( group.groupName != null )  && (group.groupName.trim().length() >0)){
 			sFocus(Locators.zGroupnameField);
-
-			zClick(Locators.zGroupnameField);			
-			zKeyboard.zTypeCharacters(group.groupName);
+			zClick(Locators.zGroupnameField);		
+			zType(Locators.zGroupnameField, group.groupName);
 		}
 		else {
 			throw new HarnessException("Empty group name - group name is required");			
@@ -130,10 +129,9 @@ public class FormContactGroupNew extends AbsForm {
 		if ( group.getDList().length() > 0 ) {
 							
 			sFocus(Locators.zGroupAddNewTextArea);
-			zClick(Locators.zGroupAddNewTextArea);		        
-		    zKeyboard.zTypeCharacters(group.getDList());
-			
-	
+			zClick(Locators.zGroupAddNewTextArea);
+			zType(Locators.zGroupAddNewTextArea, group.getDList());
+
 			//click Add button
 		    zClick(Locators.zAddNewButton);
 		    zWaitForBusyOverlay();
