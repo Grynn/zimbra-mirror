@@ -80,19 +80,11 @@ namespace MVVM.ViewModel
                 MaxAttachementSize = Z11.AdvancedImportOptions.MaxAttachementSize;
 
                 string returnval = "";
-                //foreach (Folder e in Z11.AdvancedImportOptions.FoldersToSkip.Length)
-                for(int i = 0;i <Z11.AdvancedImportOptions.FoldersToSkip.Length;i++)
-                {
-                    Folder e = Z11.AdvancedImportOptions.FoldersToSkip[i];
-                    if ( (e!= null) && (e.FolderName != ""))
-                    {
-                        
-                        returnval +=  e.FolderName + ",";
-                        
-                    }
+                
+                returnval = ConvertToCSV(Z11.AdvancedImportOptions.FoldersToSkip, ",");
 
-                }
-                placeholderstring = returnval;
+                
+             //  placeholderstring = returnval;
                 FoldersToSkip = returnval;
              
 
@@ -350,13 +342,20 @@ namespace MVVM.ViewModel
             }
             set
             {
-
+                placeholderstring = value;
                 string[] nameTokens = value.Split(',');
-                for (int i = 0; i < nameTokens.Length; i++)
+                 int i;
+                for (i = 0; i < nameTokens.Length; i++)
                 {
                     Folder tempUser = new Folder();
                     tempUser.FolderName = nameTokens.GetValue(i).ToString();
                     m_config.AdvancedImportOptions.FoldersToSkip.SetValue(tempUser, i);
+
+                }
+                if (nameTokens.Length < 15)
+                {
+                    for (int rest= i ; rest <15; rest++)
+                    m_config.AdvancedImportOptions.FoldersToSkip.SetValue(null, i);
 
                 }
 
@@ -390,6 +389,28 @@ namespace MVVM.ViewModel
             set { m_skipfolderflag = value;
             OnPropertyChanged(new PropertyChangedEventArgs("Skipfolderflag"));
             }
+        }
+
+        public string ConvertToCSV(Folder[]objectarray,string delimiter)
+        {
+            string result;
+	        System.Text.StringBuilder sb = new System.Text.StringBuilder ();
+            foreach (Folder i in objectarray)
+	        {
+		        if (i == null)
+			        continue;
+		        sb.Append (i.FolderName);
+		        sb.Append (delimiter);
+	        }
+	        result = sb.ToString ();
+            if (result.Length > 0)
+                return (result.Substring(0, result.Length - delimiter.Length));
+            else
+                return "";
+
+
+
+
         }
     }
 }
