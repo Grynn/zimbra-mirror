@@ -44,7 +44,7 @@ public class CreateSavedSearch extends AjaxCommonTest  {
 		DialogSaveSearch dialog = (DialogSaveSearch)app.zPageSearch.zToolbarPressButton(Button.B_SEARCHSAVE);
 		
 		// Save the search
-		dialog.zEnterFolderName(name);
+		dialog.zEnterSearchName(name);
 		dialog.zClickButton(Button.B_OK);
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());

@@ -153,7 +153,7 @@ public class DialogSaveSearch extends AbsDialog {
 	 * Enter text into the move message dialog folder name field
 	 * @param folder
 	 */
-	public void zEnterFolderName(String folder) throws HarnessException {
+	public void zEnterSearchName(String folder) throws HarnessException {
 		logger.info(myPageName() + " zEnterFolderName("+ folder +")");
 		
 		tracer.trace("Enter folder name in text box "+ folder);
@@ -169,7 +169,7 @@ public class DialogSaveSearch extends AbsDialog {
 		// For some reason, the text doesn't get entered on the first try
 		this.sFocus(locator);
 		this.zClick(locator);
-		zKeyboard.zTypeCharacters(folder);
+		this.zType(locator, folder);
 
 		// Is this sleep necessary?
 		SleepUtil.sleepSmall();
