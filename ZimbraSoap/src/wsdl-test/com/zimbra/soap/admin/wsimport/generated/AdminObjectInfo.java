@@ -40,7 +40,6 @@ import javax.xml.bind.annotation.XmlType;
     DistributionListInfo.class,
     DlInfo.class,
     ServerInfo.class,
-    LocaleInfo.class,
     AliasInfo.class,
     AccountInfo.class,
     CalendarResourceInfo.class,

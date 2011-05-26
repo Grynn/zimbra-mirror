@@ -43,8 +43,8 @@ import javax.xml.bind.annotation.XmlType;
 public class GetContactsRequest {
 
     @XmlElements({
-        @XmlElement(name = "cn", type = Id.class),
-        @XmlElement(name = "a", type = AttributeName.class)
+        @XmlElement(name = "a", type = AttributeName.class),
+        @XmlElement(name = "cn", type = Id.class)
     })
     protected List<Object> aOrCn;
     @XmlAttribute
@@ -72,8 +72,8 @@ public class GetContactsRequest {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Id }
      * {@link AttributeName }
+     * {@link Id }
      * 
      * 
      */

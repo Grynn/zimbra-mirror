@@ -1395,18 +1395,6 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
-     *     returns com.zimbra.soap.admin.wsimport.generated.InitNotebookResponse
-     */
-    @WebMethod(action = "urn:zimbraAdmin/InitNotebook")
-    @WebResult(name = "InitNotebookResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
-    public InitNotebookResponse initNotebookRequest(
-        @WebParam(name = "InitNotebookRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
-        InitNotebookRequest parameters);
-
-    /**
-     * 
-     * @param parameters
-     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.MailQueueActionResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/MailQueueAction")
@@ -1834,6 +1822,18 @@ public interface AdminService {
     public RenameDistributionListResponse renameDistributionListRequest(
         @WebParam(name = "RenameDistributionListRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         RenameDistributionListRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.ResetAllLoggersResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/ResetAllLoggers")
+    @WebResult(name = "ResetAllLoggersResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public ResetAllLoggersResponse resetAllLoggersRequest(
+        @WebParam(name = "ResetAllLoggersRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        ResetAllLoggersRequest parameters);
 
     /**
      * 

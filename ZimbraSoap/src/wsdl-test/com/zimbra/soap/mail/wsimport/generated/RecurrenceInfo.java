@@ -50,10 +50,10 @@ public class RecurrenceInfo {
     @XmlElements({
         @XmlElement(name = "except", type = ExceptionRuleInfo.class),
         @XmlElement(name = "cancel", type = CancelRuleInfo.class),
-        @XmlElement(name = "add", type = AddRecurrenceInfo.class),
-        @XmlElement(name = "dates", type = SingleDates.class),
+        @XmlElement(name = "exclude", type = ExcludeRecurrenceInfo.class),
         @XmlElement(name = "rule", type = SimpleRepeatingRule.class),
-        @XmlElement(name = "exclude", type = ExcludeRecurrenceInfo.class)
+        @XmlElement(name = "dates", type = SingleDates.class),
+        @XmlElement(name = "add", type = AddRecurrenceInfo.class)
     })
     protected List<Object> addOrExcludeOrExcept;
 
@@ -77,10 +77,10 @@ public class RecurrenceInfo {
      * Objects of the following type(s) are allowed in the list
      * {@link ExceptionRuleInfo }
      * {@link CancelRuleInfo }
-     * {@link AddRecurrenceInfo }
-     * {@link SingleDates }
-     * {@link SimpleRepeatingRule }
      * {@link ExcludeRecurrenceInfo }
+     * {@link SimpleRepeatingRule }
+     * {@link SingleDates }
+     * {@link AddRecurrenceInfo }
      * 
      * 
      */

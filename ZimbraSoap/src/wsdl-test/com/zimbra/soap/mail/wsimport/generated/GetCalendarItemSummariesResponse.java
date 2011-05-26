@@ -39,8 +39,8 @@ import javax.xml.bind.annotation.XmlType;
 public class GetCalendarItemSummariesResponse {
 
     @XmlElements({
-        @XmlElement(name = "task", type = LegacyTaskData.class),
-        @XmlElement(name = "appt", type = LegacyAppointmentData.class)
+        @XmlElement(name = "appt", type = LegacyAppointmentData.class),
+        @XmlElement(name = "task", type = LegacyTaskData.class)
     })
     protected List<LegacyCalendaringData> apptOrTask;
 
@@ -62,8 +62,8 @@ public class GetCalendarItemSummariesResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link LegacyTaskData }
      * {@link LegacyAppointmentData }
+     * {@link LegacyTaskData }
      * 
      * 
      */

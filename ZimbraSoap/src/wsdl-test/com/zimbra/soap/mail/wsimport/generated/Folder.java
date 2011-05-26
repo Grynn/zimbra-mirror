@@ -83,8 +83,8 @@ public class Folder {
     protected Folder.Acl acl;
     @XmlElements({
         @XmlElement(name = "link", type = Mountpoint.class),
-        @XmlElement(name = "search", type = SearchFolder.class),
-        @XmlElement(name = "folder")
+        @XmlElement(name = "folder"),
+        @XmlElement(name = "search", type = SearchFolder.class)
     })
     protected List<Folder> folderOrLinkOrSearch;
     @XmlAttribute(required = true)
@@ -200,8 +200,8 @@ public class Folder {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link Mountpoint }
-     * {@link SearchFolder }
      * {@link Folder }
+     * {@link SearchFolder }
      * 
      * 
      */
