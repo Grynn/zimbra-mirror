@@ -233,6 +233,9 @@ ZaDomain.A2_account_limit = "account_limit" ;
 // help URL
 ZaDomain.A_zimbraHelpAdminURL = "zimbraHelpAdminURL";
 ZaDomain.A_zimbraHelpDelegatedURL = "zimbraHelpDelegatedURL";
+// login / logout URL
+ZaDomain.A_zimbraAdminConsoleLoginURL = "zimbraAdminConsoleLoginURL";
+ZaDomain.A_zimbraAdminConsoleLogoutURL = "zimbraAdminConsoleLogoutURL";
 
 //skin properties
 ZaDomain.A_zimbraSkinForegroundColor = "zimbraSkinForegroundColor" ;
@@ -452,10 +455,23 @@ function(tmpObj, newDomain) {
 	attr.setAttribute("n", ZaDomain.A_notes);	
 
 	// help URL
+    if(tmpObj.attrs[ZaDomain.A_zimbraHelpAdminURL]) {
         attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraHelpAdminURL]);
         attr.setAttribute("n", ZaDomain.A_zimbraHelpAdminURL);
+    }
+    if(tmpObj.attrs[ZaDomain.A_zimbraHelpDelegatedURL]) {
         attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraHelpDelegatedURL]);
         attr.setAttribute("n", ZaDomain.A_zimbraHelpDelegatedURL);
+    }
+	// login / logout URL
+    if(tmpObj.attrs[ZaDomain.A_zimbraAdminConsoleLoginURL]) {
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAdminConsoleLoginURL]);
+        attr.setAttribute("n", ZaDomain.A_zimbraAdminConsoleLoginURL);
+    }
+    if(tmpObj.attrs[ZaDomain.A_zimbraAdminConsoleLogoutURL]) {
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAdminConsoleLogoutURL]);
+        attr.setAttribute("n", ZaDomain.A_zimbraAdminConsoleLogoutURL);
+    }
 
         attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraSSLCertificate]);
         attr.setAttribute("n", ZaDomain.A_zimbraSSLCertificate);
@@ -1936,6 +1952,9 @@ ZaDomain.myXModel = {
 	// help URL
       { id:ZaDomain.A_zimbraHelpAdminURL, ref:"attrs/" + ZaDomain.A_zimbraHelpAdminURL, type:_COS_STRING_ },
       { id:ZaDomain.A_zimbraHelpDelegatedURL, ref:"attrs/" + ZaDomain.A_zimbraHelpDelegatedURL, type:_COS_STRING_ },
+	// login/out URL
+      { id:ZaDomain.A_zimbraAdminConsoleLoginURL, ref:"attrs/" + ZaDomain.A_zimbraAdminConsoleLoginURL, type:_COS_STRING_ },
+      { id:ZaDomain.A_zimbraAdminConsoleLogoutURL, ref:"attrs/" + ZaDomain.A_zimbraAdminConsoleLogoutURL, type:_COS_STRING_ },
         //interop
        { id:ZaDomain.A_zimbraFreebusyExchangeAuthUsername, ref:"attrs/" + ZaDomain.A_zimbraFreebusyExchangeAuthUsername, type: _COS_STRING_ },
        { id:ZaDomain.A_zimbraFreebusyExchangeAuthPassword, ref:"attrs/" + ZaDomain.A_zimbraFreebusyExchangeAuthPassword, type: _COS_STRING_ },
