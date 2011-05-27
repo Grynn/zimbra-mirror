@@ -32,13 +32,13 @@ class OfflineCos extends Cos {
 
     static OfflineCos instantiate(Provisioning prov) {
         try {
-            Map<String, Object> attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.COS, OfflineProvisioning.A_offlineDn, "default");
+            Map<String, Object> attrs = DbOfflineDirectory.readDirectoryEntry(OfflineProvisioning.EntryType.COS, OfflineProvisioning.A_offlineDn, "default");
             if (attrs == null) {
                 attrs = new HashMap<String, Object>(3);
                 attrs.put(Provisioning.A_cn, "default");
                 attrs.put(Provisioning.A_objectClass, "zimbraCOS");
                 attrs.put(Provisioning.A_zimbraId, UUID.randomUUID().toString());
-                DbOfflineDirectory.createDirectoryEntry(EntryType.COS, "default", attrs, false);
+                DbOfflineDirectory.createDirectoryEntry(OfflineProvisioning.EntryType.COS, "default", attrs, false);
             }
             
             //make sure auth token doesn't expire too soon

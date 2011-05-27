@@ -33,13 +33,13 @@ class OfflineConfig extends Config {
 
     static synchronized OfflineConfig instantiate(Provisioning provisioning) {
         try {
-            Map<String, Object> attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.CONFIG, OfflineProvisioning.A_offlineDn, "config");
+            Map<String, Object> attrs = DbOfflineDirectory.readDirectoryEntry(OfflineProvisioning.EntryType.CONFIG, OfflineProvisioning.A_offlineDn, "config");
             if (attrs == null) {
                 attrs = new HashMap<String, Object>(2);
                 attrs.put(Provisioning.A_cn, "config");
                 attrs.put(Provisioning.A_objectClass, "zimbraGlobalConfig");
                 try {
-                    DbOfflineDirectory.createDirectoryEntry(EntryType.CONFIG, "config", attrs, false);
+                    DbOfflineDirectory.createDirectoryEntry(OfflineProvisioning.EntryType.CONFIG, "config", attrs, false);
                 } catch (ServiceException x) {
                     OfflineLog.offline.error("can't save config", x); //shouldn't really happen.  see bug 34567
                 }

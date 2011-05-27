@@ -32,9 +32,9 @@ class OfflineZimlet extends Zimlet {
     static Map<String,Zimlet> instantiateAll(Provisioning prov) {
         Map<String,Zimlet> zmap = new HashMap<String,Zimlet>();
         try {
-            List<String> ids = DbOfflineDirectory.listAllDirectoryEntries(EntryType.ZIMLET);
+            List<String> ids = DbOfflineDirectory.listAllDirectoryEntries(OfflineProvisioning.EntryType.ZIMLET);
             for (String id : ids) {
-                Map<String, Object> attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ZIMLET, Provisioning.A_zimbraId, id);
+                Map<String, Object> attrs = DbOfflineDirectory.readDirectoryEntry(OfflineProvisioning.EntryType.ZIMLET, Provisioning.A_zimbraId, id);
                 if (attrs == null)
                     continue;
                 String name = (String) attrs.get(Provisioning.A_cn);
