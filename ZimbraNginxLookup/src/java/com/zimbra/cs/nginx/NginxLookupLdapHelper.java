@@ -26,6 +26,7 @@ import com.zimbra.cs.ldap.ILdapContext;
 import com.zimbra.cs.ldap.LdapClient;
 import com.zimbra.cs.ldap.LdapConstants;
 import com.zimbra.cs.ldap.LdapException;
+import com.zimbra.cs.ldap.LdapUsage;
 import com.zimbra.cs.ldap.LdapUtilCommon;
 import com.zimbra.cs.ldap.ZAttributes;
 import com.zimbra.cs.ldap.ZLdapContext;
@@ -48,7 +49,7 @@ public class NginxLookupLdapHelper extends AbstractNginxLookupLdapHelper {
 
     @Override
     ILdapContext getLdapContext() throws ServiceException {
-        return LdapClient.getContext();
+        return LdapClient.getContext(LdapUsage.NGINX_LOOKUP);
     }
 
     @Override
