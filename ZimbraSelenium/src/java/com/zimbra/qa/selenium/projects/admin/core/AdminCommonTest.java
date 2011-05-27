@@ -73,13 +73,15 @@ public class AdminCommonTest {
 		{
 			ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.ADMIN);
 
-			DefaultSelenium selenium = ClientSessionFactory.session().selenium();
-			selenium.start();
-			selenium.windowMaximize();
-			selenium.windowFocus();
-			selenium.allowNativeXpath("true");
-			selenium.setTimeout("30000");	// Use 30 second timeout for opening the browser
-			selenium.open(ZimbraSeleniumProperties.getBaseURL());
+			// Use 30 second timeout for opening the browser
+			String timeout = ZimbraSeleniumProperties.getStringProperty("selenium.maxpageload.msec", "30000");
+
+			ClientSessionFactory.session().selenium().start();
+			ClientSessionFactory.session().selenium().windowMaximize();
+			ClientSessionFactory.session().selenium().windowFocus();
+			ClientSessionFactory.session().selenium().allowNativeXpath("true");
+			ClientSessionFactory.session().selenium().setTimeout(timeout);
+			ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getBaseURL());
 			
 		} catch (SeleniumException e) {
 			logger.error("Unable to open admin app.  Is a valid cert installed?", e);
