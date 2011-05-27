@@ -386,6 +386,7 @@ public class ExecuteHarnessMain {
 				
 			} finally {
 				
+				CodeCoverage.getInstance().writeXml();
 				CodeCoverage.getInstance().instrumentServerUndo();
 				
 			}

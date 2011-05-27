@@ -7,6 +7,8 @@ import java.util.*;
 import net.sf.json.*;
 
 import org.apache.log4j.*;
+import org.dom4j.*;
+import org.dom4j.io.*;
 
 import com.ibm.staf.STAFResult;
 import com.zimbra.qa.selenium.framework.core.*;
@@ -41,6 +43,123 @@ public class CodeCoverage {
 		CODE_COVERAGE_DIRECTORY_PATH = path;
 	}
 	
+	/**
+	 * Write coverage.xml to the output folder
+	 */
+	public void writeXml() {
+		logger.info("writeXml()");
+		
+		if ( !Enabled ) {
+			logger.info("writeXml(): Code Coverage reporting is disabled");
+			return;
+		}
+		
+		if ( cumulativeCoverage == null ) {
+			logger.info("writeXml(): cumulativeCoverage was null");
+			return;
+		}
+
+		/**
+		 * Report should look like:
+		 * 
+	<?xml version="1.0" encoding="UTF-8"?>
+	<report>
+   		<stats>
+     		<packages value="158"/>
+     		<classes value="4740"/>
+     		<methods value="38102"/>
+     		<srcfiles value="3104"/>
+     		<srclines value="202617"/>
+   		</stats>
+   		<data>
+     		<all name="all classes">
+       			<coverage type="class, %" value="56%  (2642/4740)"/>
+       			<coverage type="method, %" value="43%  (16433/38102)"/>
+       			<coverage type="block, %" value="43%  (425121/979752)"/>
+       			<coverage type="line, %" value="44%  (89560/202617)"/>
+			</all>
+		</data>
+	</report>
+
+		 * 
+		 */
+
+		int countFiles = 0;
+		int countTotalLines = 0;
+		int countTotalCovered = 0;
+		int percent = 0;
+
+		Iterator<?> iterator = cumulativeCoverage.keys();
+		while (iterator.hasNext()) {
+			String key = (String)iterator.next();
+
+			// Add 1 to the file count
+			countFiles++;
+
+			JSONArray coverage = cumulativeCoverage.getJSONObject(key).getJSONArray("coverage");
+			for (int i = 0; i < coverage.size(); i++) {
+				countTotalLines++;
+				
+				String sValue = coverage.getString(i);
+				if ( !sValue.equalsIgnoreCase("null") ) {
+					Integer iValue = Integer.parseInt(sValue);
+					if ( iValue > 0 ) {
+
+						// Add 1 to the line count
+						countTotalCovered++;
+
+					}
+				}
+				
+			}
+
+		}
+
+		if ( countTotalLines > 0 ) {
+			percent = Math.round(((float)countTotalCovered * 100)/((float)countTotalLines));
+		}
+
+		Document doc = DocumentHelper.createDocument();
+		Element report = doc.addElement( "report" );
+		
+		Element stats = report.addElement( "stats" );
+		Element srcfiles = stats.addElement( "srcfiles" );
+		srcfiles.addAttribute("value", ""+ countFiles);
+		Element srclines = stats.addElement( "srclines" );
+		srclines.addAttribute("value", "" + countTotalLines);
+		
+		Element data = report.addElement( "data" );
+		Element all = data.addElement( "all" );
+		all.addAttribute( "name", "all classes" );
+		Element coverage = all.addElement( "coverage" );
+		coverage.addAttribute("type", "line, %");
+		coverage.addAttribute("value", String.format("%d%%  (%d,%d)", percent, countTotalCovered, countTotalLines));
+		
+		XMLWriter writer = null;
+		OutputFormat format = OutputFormat.createPrettyPrint();
+		
+		try  {
+
+			try {
+
+				writer = new XMLWriter(new FileWriter(CODE_COVERAGE_DIRECTORY_PATH + "/../coverage.xml", false), format);
+				writer.write(doc);
+
+			} finally {
+				if ( writer != null ) {
+					writer.close();
+					writer = null;
+				}
+			}
+
+		} catch (IOException e) {
+			logger.error("Unable to write coverage.xml", e);
+		}
+
+
+	}
+
+
 	/**
 	 * Write coverage.json to the output folder
 	 */
@@ -759,6 +878,7 @@ public class CodeCoverage {
 		}
 
 	}
+
 
 
  }
