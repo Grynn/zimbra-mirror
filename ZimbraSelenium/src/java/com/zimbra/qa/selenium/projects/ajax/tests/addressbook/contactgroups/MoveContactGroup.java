@@ -34,7 +34,7 @@ public class MoveContactGroup extends AjaxCommonTest  {
         ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
 		        expectedMsg , "Verify toast message '" + expectedMsg + "'");
 
-        //verify moved contact not displayed
+        //verify moved contact group not displayed
         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
  	           
 		boolean isFileAsEqual=false;
@@ -45,14 +45,30 @@ public class MoveContactGroup extends AjaxCommonTest  {
 			}
 		}
 		
-        ZAssert.assertFalse(isFileAsEqual, "Verify contact group fileAs (" + group.fileAs + ") not displayed");
+        ZAssert.assertFalse(isFileAsEqual, "Verify contact group fileAs (" + group.fileAs + ") not displayed in folder Contacts");
+	
+        //verify moved contact displayed in folder Emailed Contacts
+        // refresh folder Emailed Contacts
+        app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, emailedContacts);
+   	 
+        contacts = app.zPageAddressbook.zListGetContacts(); 
+         
+	    isFileAsEqual=false;
+		for (ContactItem ci : contacts) {
+			if (ci.fileAs.equals(group.fileAs)) {
+	            isFileAsEqual = true;	 
+				break;
+			}
+		}
+		
+        ZAssert.assertTrue(isFileAsEqual, "Verify contact group fileAs (" + group.fileAs + ") not displayed in folder Emailed Contacts");
 	
 	}
 	
 	
 	@Test(	description = "Move a contact group to different folder by click Move on toolbar",
 			groups = { "smoke" })
-	public void MoveContactGroup_01() throws HarnessException {
+	public void ClickMoveOnToolbar() throws HarnessException {
 		        
 		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
  		
@@ -69,7 +85,7 @@ public class MoveContactGroup extends AjaxCommonTest  {
 
 	@Test(	description = "Move a contact group to different folder by click Move on Context menu",
 			groups = { "functional" })
-	public void MoveContactGroup_02() throws HarnessException {
+	public void ClickMoveOnContextmenu() throws HarnessException {
 		        
 		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
  		

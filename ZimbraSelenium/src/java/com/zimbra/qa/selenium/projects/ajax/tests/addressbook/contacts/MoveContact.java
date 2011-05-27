@@ -26,7 +26,7 @@ public class MoveContact extends AjaxCommonTest  {
 	
 	@Test(	description = "Move a contact item to different folder",
 			groups = { "smoke" })
-	public void MoveContact_01() throws HarnessException {
+	public void ClickMoveOnToolbar() throws HarnessException {
 		
 		 // Create a contact via Soap then select
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
@@ -47,7 +47,7 @@ public class MoveContact extends AjaxCommonTest  {
         String toastMsg = toast.zGetToastMessage();
         ZAssert.assertStringContains(toastMsg, "1 contact moved to \"Emailed Contacts\"", "Verify toast message '1 contact moved to \"Emailed Contacts\"'");
 
-        //verify moved contact not displayed
+        //verify moved contact not displayed in folder Contacts
         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
  	           
 		boolean isFileAsEqual=false;
@@ -58,10 +58,28 @@ public class MoveContact extends AjaxCommonTest  {
 			}
 		}
 		
-        ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") not displayed");
+        ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") not displayed in folder Contacts");
         
  
-   
+        //verify moved contact displayed in folder Emailed Contacts
+        // refresh folder Emailed Contacts
+        app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, emailedContacts);
+   	 
+        contacts = app.zPageAddressbook.zListGetContacts(); 
+         
+		isFileAsEqual=false;
+		for (ContactItem ci : contacts) {
+			if (ci.fileAs.equals(contactItem.fileAs)) {
+	            isFileAsEqual = true;	 
+				break;
+			}
+		}
+		
+        ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") not displayed in folder Emailed Contacts");
+        
+        
+        
+        
    	}
 
 }
