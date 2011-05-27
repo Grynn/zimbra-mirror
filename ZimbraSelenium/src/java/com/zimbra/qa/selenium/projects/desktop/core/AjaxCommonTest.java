@@ -572,8 +572,6 @@ public class AjaxCommonTest {
 		}
 
 		_startDesktopClient = null;
-
-		CodeCoverage.getInstance().writeCoverage();
 		
 		ClientSessionFactory.session().selenium().stop();
 
