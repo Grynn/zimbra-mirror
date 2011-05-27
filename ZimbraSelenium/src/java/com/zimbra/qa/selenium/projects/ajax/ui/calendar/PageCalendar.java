@@ -55,8 +55,9 @@ public class PageCalendar extends AbsTab {
 		if ( button == Button.B_NEW ) {
 
 			// New button
-			locator = "css=div[id^='ztb__CLD'] td[id$='zb__CLD__NEW_MENU_title']";
-
+			// 7.X version: locator = "css=div[id^='ztb__CLD'] td[id$='zb__CLD__NEW_MENU_title']";
+			locator = "css=td#zb__CLWW__NEW_MENU_title";
+			
 			// Create the page
 			page = new FormApptNew(this.MyApplication);
 
