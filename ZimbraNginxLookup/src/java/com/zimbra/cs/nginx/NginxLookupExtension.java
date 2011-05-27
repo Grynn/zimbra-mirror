@@ -42,6 +42,7 @@ import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.account.AuthTokenException;
 import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.account.auth.AuthMechanism;
+import com.zimbra.cs.account.ldap.LdapProv;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Provisioning.DomainBy;
 import com.zimbra.cs.account.Account;
@@ -55,7 +56,6 @@ import com.zimbra.cs.ldap.ILdapContext;
 import com.zimbra.cs.ldap.ZLdapFilter;
 import com.zimbra.cs.ldap.ZLdapFilterFactory;
 import com.zimbra.cs.nginx.AbstractNginxLookupLdapHelper.SearchDirResult;
-import com.zimbra.cs.prov.ldap.LdapProv;
 import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.service.authenticator.ClientCertAuthenticator;
 

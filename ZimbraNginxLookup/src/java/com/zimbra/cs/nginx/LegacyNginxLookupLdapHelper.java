@@ -28,6 +28,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Config;
+import com.zimbra.cs.account.ldap.LdapProv;
 import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
 import com.zimbra.cs.account.ldap.legacy.LegacyZimbraLdapContext;
 import com.zimbra.cs.ldap.ILdapContext;
@@ -36,7 +37,6 @@ import com.zimbra.cs.ldap.LdapUtilCommon;
 import com.zimbra.cs.ldap.ZLdapFilter;
 import com.zimbra.cs.nginx.NginxLookupExtension.EntryNotFoundException;
 import com.zimbra.cs.nginx.NginxLookupExtension.NginxLookupException;
-import com.zimbra.cs.prov.ldap.LdapProv;
 
 /*
  * An LDAP helper using the legacy LDAP SDK.  Retire this class when the new SDK 

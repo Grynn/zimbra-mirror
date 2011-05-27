@@ -19,10 +19,10 @@ import java.util.Set;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Config;
+import com.zimbra.cs.account.ldap.LdapProv;
 import com.zimbra.cs.ldap.ILdapContext;
 import com.zimbra.cs.ldap.ZLdapFilter;
 import com.zimbra.cs.nginx.NginxLookupExtension.NginxLookupException;
-import com.zimbra.cs.prov.ldap.LdapProv;
 
 abstract class AbstractNginxLookupLdapHelper {
     

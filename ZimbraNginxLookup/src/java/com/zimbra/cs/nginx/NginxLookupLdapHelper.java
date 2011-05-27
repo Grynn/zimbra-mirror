@@ -22,6 +22,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Config;
+import com.zimbra.cs.account.ldap.LdapProv;
 import com.zimbra.cs.ldap.ILdapContext;
 import com.zimbra.cs.ldap.LdapClient;
 import com.zimbra.cs.ldap.LdapConstants;
@@ -39,7 +40,6 @@ import com.zimbra.cs.ldap.ZSearchScope;
 import com.zimbra.cs.nginx.AbstractNginxLookupLdapHelper.SearchDirResult;
 import com.zimbra.cs.nginx.NginxLookupExtension.EntryNotFoundException;
 import com.zimbra.cs.nginx.NginxLookupExtension.NginxLookupException;
-import com.zimbra.cs.prov.ldap.LdapProv;
 
 public class NginxLookupLdapHelper extends AbstractNginxLookupLdapHelper {
 
