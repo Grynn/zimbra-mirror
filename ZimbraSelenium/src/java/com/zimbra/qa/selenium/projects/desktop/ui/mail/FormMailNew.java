@@ -287,21 +287,25 @@ public class FormMailNew extends AbsForm {
 				
 				// TODO
 				pulldownLocator = Locators.zPriorityPulldown;
-				optionLocator = "css=[class='ImgPriorityHigh']";
+
+				// Have to use xpath because there is no unique identifier to select the text "High" and by using xpath, it selects the text "high" through the sibling relationship.
+				// When using the css to point to the icon, it clicks on the outside of the drop down menu
+				// , therefore it ends up closing and selecting nothing
+				optionLocator = "//div[@class='ImgPriorityHigh_list']/../../td[@class='ZWidgetTitle']";
 				page = this;
 
 			} else if ( option == Button.O_PRIORITY_NORMAL ) {
 				
 				// TODO
 				pulldownLocator = Locators.zPriorityPulldown;
-				optionLocator = "css=[class='ImgPriorityNormal']";
+				optionLocator = "css=[class='ImgPriorityNormal_list']";
 				page = this;
 
 			} else if ( option == Button.O_PRIORITY_LOW ) {
 				
 				// TODO
 				pulldownLocator = Locators.zPriorityPulldown;
-				optionLocator = "css=[class='ImgPriorityLow']";
+				optionLocator = "css=[class='ImgPriorityLow_list']";
 				page = this;
 
 			} else {
@@ -330,7 +334,7 @@ public class FormMailNew extends AbsForm {
 				if ( !this.sIsElementPresent(optionLocator) ) {
 					throw new HarnessException("Button "+ pulldown +" option "+ option +" optionLocator "+ optionLocator +" not present!");
 				}
-				
+
 				this.zClick(optionLocator);
 
 				this.zWaitForBusyOverlay();

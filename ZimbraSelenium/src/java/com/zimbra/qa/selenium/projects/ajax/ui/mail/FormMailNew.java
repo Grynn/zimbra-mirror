@@ -286,7 +286,11 @@ public class FormMailNew extends AbsForm {
 				
 				// TODO
 				pulldownLocator = Locators.zPriorityPulldown;
-				optionLocator = "css=[class='ImgPriorityHigh_list']";
+
+            // Have to use xpath because there is no unique identifier to select the text "High" and by using xpath, it selects the text "high" through the sibling relationship.
+            // When using the css to point to the icon, it clicks on the outside of the drop down menu
+            // , therefore it ends up closing and selecting nothing
+            optionLocator = "//div[@class='ImgPriorityHigh_list']/../../td[@class='ZWidgetTitle']";
 				page = this;
 
 			} else if ( option == Button.O_PRIORITY_NORMAL ) {
