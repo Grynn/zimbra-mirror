@@ -422,7 +422,7 @@ public class PageAddressbook extends AbsTab {
 			    if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
 			       optionLocator="css=div[class='ActionMenu ZHasIcon'] div[class*='ZMenuItem ZWidget ZHasLeftIcon ZHasText'] table[class*='ZWidgetTable ZMenuItemTable']:contains('Contact Group')";
 			    } else {
-			       optionLocator="css=tr#POPUP_NEW_GROUP";
+			       optionLocator="css=div#zb__CNS__NEW_MENU_NEW_GROUP";
 			    }
 				page = new FormContactGroupNew(this.MyApplication);		   
 		   }
