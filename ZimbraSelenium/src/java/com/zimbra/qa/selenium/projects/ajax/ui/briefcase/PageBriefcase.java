@@ -54,14 +54,16 @@ public class PageBriefcase extends AbsTab {
 				"id=zb__BDLV__NEW_FILE_left_icon");
 		public static final Locators zEditFileIconBtn = new Locators(
 				"id=zb__BDLV__EDIT_FILE_left_icon");
+		public static final Locators zEditFileBtn = new Locators(
+				"css=div[id=zb__BDLV__EDIT_FILE]");
 		public static final Locators zEditFileMenuItem = new Locators(
-				"id=zmi__Briefcase__EDIT_FILE_left_icon");
+				"css=div[id=zmi__Briefcase__EDIT_FILE]");
 		public static final Locators zOpenFileInSeparateWindowIconBtn = new Locators(
 				"id=zb__BDLV__NEW_BRIEFCASE_WIN_left_icon");
 		public static final Locators zDeleteIconBtn = new Locators(
 				"id=zb__BDLV__DELETE_left_icon");
 		public static final Locators zDeleteBtn = new Locators(
-				"id=zb__BDLV__DELETE");
+				"css=div[id=zb__BDLV__DELETE]");
 		public static final Locators zMoveIconBtn = new Locators(
 				"id=zb__BDLV__MOVE_left_icon");
 		public static final Locators zMoveBtn = new Locators(
@@ -248,25 +250,28 @@ public class PageBriefcase extends AbsTab {
 
 			page = null;
 		} else if (button == Button.B_EDIT_FILE) {
+
+			locator = Locators.zEditFileBtn.locator;
+
 			// Check if the button is disabled
-			locator = Locators.zEditFileIconBtn.locator;
+			String attrs = sGetAttribute(locator + "@class");
 
-			String attrs = sGetAttribute("css=td[" + locator + "]>div@class");
-
-			if (attrs.contains("ZDisabledImage")) {
+			if (attrs.contains("ZDisabled")) {
 				throw new HarnessException(button + " is disabled " + attrs);
 			}
 
 			page = new DocumentBriefcaseEdit(MyApplication, (DocumentItem) item);
 		} else if (button == Button.B_DELETE) {
+
+			locator = Locators.zDeleteBtn.locator;
+
 			// Check if the button is disabled
-			locator = Locators.zDeleteIconBtn.locator;
+			String attrs = sGetAttribute(locator + "@class");
 
-			String attrs = sGetAttribute("css=td[" + locator + "]>div@class");
-
-			if (attrs.contains("ZDisabledImage")) {
+			if (attrs.contains("ZDisabled")) {
 				throw new HarnessException(button + " is disabled " + attrs);
 			}
+
 			page = new DialogConfirm(DialogConfirm.Confirmation.DELETE,
 					MyApplication, this);
 		} else if (button == Button.B_OPEN_IN_SEPARATE_WINDOW) {
@@ -356,7 +361,7 @@ public class PageBriefcase extends AbsTab {
 			} else if (option == Button.O_NEW_DOCUMENT) {
 				if (ZimbraSeleniumProperties.zimbraGetVersionString().contains(
 						"7.1."))
-					optionLocator = "css=tr[id=POPUP_NEW_DOC]>td[id$=_title]:contains(Document)";
+					optionLocator = "css=tr[id=POPUP_NEW_DOC]";
 				else
 					optionLocator = "css=div#zb__BDLV__NEW_MENU_NEW_DOC";
 
@@ -1100,8 +1105,7 @@ public class PageBriefcase extends AbsTab {
 	}
 
 	public boolean isOptionDisabled(Locators name) throws HarnessException {
-		return sIsElementPresent("css=td[" + name.locator
-				+ "]>div[class*=ZDisabledImage]");
+		return sIsElementPresent(name.locator + "[class*=ZDisabled]");
 	}
 
 	public boolean waitForDeletedFromListView(String itemName)

@@ -13,6 +13,7 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.HtmlElement;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -179,7 +180,7 @@ public class EditFile extends AjaxCommonTest {
 
 		// Verify 'Edit' tool-bar button is disabled
 		ZAssert.assertTrue(app.zPageBriefcase
-				.isOptionDisabled(PageBriefcase.Locators.zEditFileIconBtn),
+				.isOptionDisabled(PageBriefcase.Locators.zEditFileBtn),
 				"Verify 'Edit' toolbar button is disabled");
 
 		// delete file upon test completion
@@ -219,6 +220,8 @@ public class EditFile extends AjaxCommonTest {
 
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
+		
+		SleepUtil.sleepVerySmall();
 
 		// Right Click on created File
 		app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK, fileItem);
