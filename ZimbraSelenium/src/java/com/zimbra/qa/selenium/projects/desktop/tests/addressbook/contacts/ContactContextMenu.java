@@ -18,13 +18,16 @@ import com.zimbra.qa.selenium.projects.desktop.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.desktop.ui.search.PageAdvancedSearch;
 
 public class ContactContextMenu extends AjaxCommonTest  {
-	public ContactContextMenu() {
+	@SuppressWarnings("serial")
+   public ContactContextMenu() {
 		logger.info("New "+ ContactContextMenu.class.getCanonicalName());
 		
 		// All tests start at the Address page
 		super.startingPage = app.zPageAddressbook;
 
-		super.startingAccountPreferences = null;		
+		super.startingAccountPreferences = new HashMap<String, String>() {{
+         put("zimbraPrefGroupMailBy", "conversation");
+     }};		
 		
 	}
 	
