@@ -16971,10 +16971,15 @@ sub connect_to_ldap {
   my $hostlist = ref $self->{hostname} eq 'ARRAY' ?
                      join(", ",@{$self->{hostname}}) : $self->{hostname};
   do_log(4,"connect_to_ldap: trying %s", $hostlist);
+  my $ldap_inet = 'N';
+  if ($Amavis::IO::RW::have_inet6) {
+    $ldap_inet = 'Y';
+  }
   my $ldap = Net::LDAP->new($self->{hostname},
                             port    => $self->{port},
                             version => $self->{version},
                             timeout => $self->{timeout},
+                            inet6 => $ldap_inet,
                             );
   if (!$ldap) {  # connect failed
     do_log(-1,"connect_to_ldap: unable to connect to host %s", $hostlist);
