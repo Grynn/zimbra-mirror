@@ -62,7 +62,7 @@ public class WizardCreateAccount extends AbsWizard {
 
 		}
 
-		clickFinish();
+		clickFinish(AbsWizard.Locators.ACCOUNT_DIALOG);
 		
 		// Need to dismiss the "account created" dialog.
 		zClick(zdlg_OK);

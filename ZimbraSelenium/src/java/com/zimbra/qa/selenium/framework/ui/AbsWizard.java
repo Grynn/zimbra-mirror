@@ -30,11 +30,17 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
  */
 public abstract class AbsWizard extends AbsPage {
 	protected static Logger logger = LogManager.getLogger(AbsWizard.class);
+	public static class Locators {
 	public static String CANCEL_BUTTON = "zdlg__NEW_ACCT_button1_title";
 	public static String HELP_BUTTON = "zdlg__NEW_ACCT_button10_title";
 	public static String PREVIOUS_BUTTON = "zdlg__NEW_ACCT_button11_title";
 	public static String NEXT_BUTTON = "zdlg__NEW_ACCT_button12_title";
-	public static String FINISH_BUTTON = "zdlg__NEW_ACCT_button13_title";
+	public static String FINISH_BUTTON = "_button13_title";
+	public static String ACCOUNT_DIALOG="ACCT";
+	public static String RESOURCE_DIALOG="RES";
+	}
+	public static String buttonPath="";
+	
 	
 	
 
@@ -66,27 +72,27 @@ public abstract class AbsWizard extends AbsPage {
 	 */
 	public abstract IItem zCompleteWizard(IItem item) throws HarnessException;
 	
-	public void clickHelp() throws HarnessException {
-		clickWizardButton(WizardButton.Help);
+	public void clickHelp(String dialogName) throws HarnessException {
+		clickWizardButton(WizardButton.Help,dialogName);
 	}
 	
-	public void clickCancel() throws HarnessException {
-		clickWizardButton(WizardButton.Cancel);
+	public void clickCancel(String dialogName) throws HarnessException {
+		clickWizardButton(WizardButton.Cancel,dialogName);
 	}
 	
-	public void clickPrevious() throws HarnessException {
-		clickWizardButton(WizardButton.Previous);
+	public void clickPrevious(String dialogName) throws HarnessException {
+		clickWizardButton(WizardButton.Previous,dialogName);
 	}
 
-	public void clickNext() throws HarnessException {
-		clickWizardButton(WizardButton.Next);
+	public void clickNext(String dialogName) throws HarnessException {
+		clickWizardButton(WizardButton.Next,dialogName);
 	}
 
-	public void clickFinish() throws HarnessException {
-		clickWizardButton(WizardButton.Finish);
+	public void clickFinish(String dialogName) throws HarnessException {
+		clickWizardButton(WizardButton.Finish,dialogName);
 	}
 	
-	protected void clickWizardButton(WizardButton button) throws HarnessException {
+	protected void clickWizardButton(WizardButton button, String dialogName) throws HarnessException {
 
 		// TODO: If possible, define in the abstract class
 
@@ -94,11 +100,14 @@ public abstract class AbsWizard extends AbsPage {
 		// throw HarnessException if not enabled
 		// Click on the button
 		switch(button) {
-		case Finish : if(sIsElementPresent(FINISH_BUTTON)) zClick(FINISH_BUTTON); break;
-		case Next:if(sIsElementPresent(NEXT_BUTTON)) zClick(NEXT_BUTTON);break;
-		case Previous:if(sIsElementPresent(PREVIOUS_BUTTON))zClick(PREVIOUS_BUTTON);break;
-		case Cancel:if(sIsElementPresent(CANCEL_BUTTON))zClick(CANCEL_BUTTON);break;
-		case Help:if(sIsElementPresent(HELP_BUTTON)) zClick(HELP_BUTTON);break;
+		case Finish : 
+				buttonPath="css=td[id$='_" +  dialogName + Locators.FINISH_BUTTON + "']";
+				if(sIsElementPresent(buttonPath)) zClick(buttonPath); 
+				break;
+		case Next:if(sIsElementPresent(Locators.NEXT_BUTTON)) zClick(Locators.NEXT_BUTTON);break;
+		case Previous:if(sIsElementPresent(Locators.PREVIOUS_BUTTON))zClick(Locators.PREVIOUS_BUTTON);break;
+		case Cancel:if(sIsElementPresent(Locators.CANCEL_BUTTON))zClick(Locators.CANCEL_BUTTON);break;
+		case Help:if(sIsElementPresent(Locators.HELP_BUTTON)) zClick(Locators.HELP_BUTTON);break;
 		}
 	}
 
