@@ -47,8 +47,10 @@ public class DeleteFolder extends AjaxCommonTest {
 
 		// Delete the folder using context menu
 		app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, subfolder);
-		
-		
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageMain.zWaitForDesktopLoadingSpinner(5000);
+
 		// Verify the folder is now in the trash
 		subfolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
 		ZAssert.assertNotNull(subfolder, "Verify the subfolder is again available");
