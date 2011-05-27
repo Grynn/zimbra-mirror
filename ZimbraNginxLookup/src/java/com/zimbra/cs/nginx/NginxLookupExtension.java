@@ -193,7 +193,7 @@ public class NginxLookupExtension implements ZimbraExtension {
         public NginxLookupHandler() throws ExtensionException {
             try {
                 prov = LdapProv.getInst();
-                if (prov instanceof com.zimbra.cs.account.ldap.LdapProvisioning) {
+                if (prov instanceof com.zimbra.cs.account.ldap.legacy.LegacyLdapProvisioning) {
                     helper = new LegacyNginxLookupLdapHelper(prov);
                 } else {
                     helper = new NginxLookupLdapHelper(prov);
