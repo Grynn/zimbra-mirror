@@ -25,8 +25,9 @@ public class CreateAppointment extends AjaxCommonTest {
 	}
 
 	@Test(	description = "Create a basic appointment",
-			groups = { "sanity" })
-			public void CreateAppointment_01() throws HarnessException {
+			groups = { "sanity" }
+	)
+	public void CreateAppointment_01() throws HarnessException {
 
 		// Create the message data to be sent
 		AppointmentItem appt = new AppointmentItem();
@@ -52,7 +53,7 @@ public class CreateAppointment extends AjaxCommonTest {
 		ZAssert.assertNotNull(actual, "Verify the new appointment is created");
 
 		ZAssert.assertEquals(actual.getSubject(), appt.getSubject(), "Subject: Verify the appointment data");
-		
+
 	}
 
 
