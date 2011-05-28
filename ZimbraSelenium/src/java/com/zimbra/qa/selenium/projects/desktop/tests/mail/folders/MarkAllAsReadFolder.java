@@ -59,6 +59,8 @@ public class MarkAllAsReadFolder extends AjaxCommonTest {
 		// Right click on folder, select "Mark all as read"
 		app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_FOLDER_MARKASREAD, subfolder);
 
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageMain.zWaitForDesktopLoadingSpinner(5000);
 
 		// Make sure the folder was created on the server
 		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
