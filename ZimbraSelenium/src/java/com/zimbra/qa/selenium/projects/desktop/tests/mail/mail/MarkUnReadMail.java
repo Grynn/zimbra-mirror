@@ -69,6 +69,7 @@ public class MarkUnReadMail extends AjaxCommonTest {
 		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MARKUNREAD);
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
 		// Verify the message is marked read in the server (flags attribute should not contain (u)nread)
 		mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
@@ -113,6 +114,7 @@ public class MarkUnReadMail extends AjaxCommonTest {
 		app.zPageMail.zListItem(Action.A_RIGHTCLICK, Button.O_MARK_AS_UNREAD, mail.dSubject);
 		
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
 		// Verify the message is marked read in the server (flags attribute should not contain (u)nread)
 		mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
