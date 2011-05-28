@@ -3,13 +3,13 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 
+import java.awt.event.KeyEvent;
+
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
-import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail.Locators;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
 /**
@@ -136,53 +136,53 @@ public class TreeContacts extends AbsTree {
 
 		} else if (action == Action.A_RIGHTCLICK) {
 
-			actionLocator = "zti__main_Contacts__" + t.getId() + "_textCell";
-		
-		
-			this.zRightClick(actionLocator);
-
-			page = new DialogTag(MyApplication,
-					((AppAjaxClient) MyApplication).zPageMail);
-
-		} else {
+			actionLocator = "zti__main_Contacts__" + t.getId() + "_textCell";				
+			zRightClick(actionLocator);
+         } else {
 			throw new HarnessException("Action " + action
 					+ " not yet implemented");
 		}
 		if (option == Button.B_TREE_NEWTAG) {
-
 			optionLocator = "css=tr#POPUP_NEW_TAG";
+			page = new DialogTag(MyApplication,
+					((AppAjaxClient) MyApplication).zPageAddressbook);
+
 		} 
-		/*else if (option == Button.B_DELETE) {
-
-			optionLocator = Locators.zDeleteTreeMenuItem;
-
+		else if (option == Button.B_DELETE) {
+			optionLocator = "css=tr#POPUP_DELETE";			
 			page = new DialogWarning(
 					DialogWarning.DialogWarningID.DeleteTagWarningMessage,
-					MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
+					MyApplication, ((AppAjaxClient) MyApplication).zPageAddressbook);        
+		}
+	     else if (option == Button.B_RENAME) {
+	    	optionLocator= "css=tr#POPUP_RENAME_TAG";
+			page = new DialogRenameTag(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);
 
-		} else if (option == Button.B_RENAME) {
-
-			optionLocator = Locators.zRenameTreeMenuItem;
-
-			page = new DialogRenameTag(MyApplication,
-					((AppAjaxClient) MyApplication).zPageMail);
-
-		} 
-		*/
+		} 		
 		else {
 			throw new HarnessException("button " + option
 					+ " not yet implemented");
 		}
+		
 		if (actionLocator == null)
 			throw new HarnessException("locator is null for action " + action);
 		if (optionLocator == null)
 			throw new HarnessException("locator is null for option " + option);
 
-		// Default behavior. Click the locator
-		zClick(optionLocator);
+		if (option == Button.B_DELETE) {
+			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+			zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);						
+		}
+		else {
+ 		  // Default behavior. Click the locator
+		  zClick(optionLocator);
+		}
 
+		
 		// If there is a busy overlay, wait for that to finish
-		this.zWaitForBusyOverlay();
+		zWaitForBusyOverlay();
 
 		if (page != null) {
 

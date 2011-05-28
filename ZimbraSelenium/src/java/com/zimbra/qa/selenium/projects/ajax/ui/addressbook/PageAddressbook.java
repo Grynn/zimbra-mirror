@@ -8,7 +8,6 @@ import org.apache.log4j.LogManager;
 
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogRenameTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
@@ -21,7 +20,6 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail.Locators;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
 
 public class PageAddressbook extends AbsTab {
@@ -154,7 +152,7 @@ public class PageAddressbook extends AbsTab {
 			String contactDisplayedLocator = commonLocator + " table tbody tr td:nth-child(3)";
 			String fileAs = ClientSessionFactory.session().selenium().getText(contactDisplayedLocator);
 			
-			//check if it is a contactgroup or a contactgroup item
+			//check if it is a contact or a contactgroup item
 			if ( contactType.equals(ContactGroupItem.IMAGE_CLASS)) {
                 ci=new ContactGroupItem(fileAs);
 			}
@@ -422,7 +420,7 @@ public class PageAddressbook extends AbsTab {
 			    if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
 			       optionLocator="css=div[class='ActionMenu ZHasIcon'] div[class*='ZMenuItem ZWidget ZHasLeftIcon ZHasText'] table[class*='ZWidgetTable ZMenuItemTable']:contains('Contact Group')";
 			    } else {
-			       optionLocator="css=div#zb__CNS__NEW_MENU_NEW_GROUP";
+			       optionLocator="css=tr#POPUP_NEW_GROUP";
 			    }
 				page = new FormContactGroupNew(this.MyApplication);		   
 		   }
@@ -475,7 +473,7 @@ public class PageAddressbook extends AbsTab {
 
 	// return the type of a contact
 	private String getContactType(String locator) {
-		String imageLocator = locator +" table tbody tr td:nth-child(2) center div[class*=";
+		String imageLocator = locator +" div[class*=";
         
 	    
 		if (sIsElementPresent(imageLocator + ContactGroupItem.IMAGE_CLASS + "]"))
@@ -486,7 +484,7 @@ public class PageAddressbook extends AbsTab {
 		{
 			return ContactItem.IMAGE_CLASS;		
 		}
-		
+		logger.info("contact type for " + locator + " is not a contact or contactgroup");
 		return null;
 	}
 	
