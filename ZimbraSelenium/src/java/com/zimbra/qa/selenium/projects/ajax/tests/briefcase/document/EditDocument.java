@@ -180,6 +180,8 @@ public class EditDocument extends AjaxCommonTest {
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
+		SleepUtil.sleepVerySmall();
+		
 		// Click on modified document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem2);
