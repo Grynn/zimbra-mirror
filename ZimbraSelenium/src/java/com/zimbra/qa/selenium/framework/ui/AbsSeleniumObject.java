@@ -399,6 +399,22 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
+	 * DefaultSelenium.mouseDownRight()
+	 */
+	public void sMouseDownRight(String locator) {
+		ClientSessionFactory.session().selenium().mouseDownRight(locator);
+		logger.info("mouseDownRight(" + locator + ")");
+	}
+	
+	/**
+	 * DefaultSelenium.mouseUpRight()
+	 */
+	public void sMouseUpRight(String locator) {
+		ClientSessionFactory.session().selenium().mouseUpRight(locator);
+		logger.info("mouseUpRight(" + locator + ")");
+	}
+	
+	/**
 	 * DefaultSelenium.focus()
 	 */
 	public void sFocus(String locator) {

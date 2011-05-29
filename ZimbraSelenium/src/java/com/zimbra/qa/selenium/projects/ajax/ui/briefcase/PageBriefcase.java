@@ -453,11 +453,9 @@ public class PageBriefcase extends AbsTab {
 			this.sMouseOver(pulldownLocator);
 			this.sFocus(pulldownLocator);
 			this.zRightClick(pulldownLocator);
-			ClientSessionFactory.session().selenium().mouseDownRight(
-					pulldownLocator);
-			ClientSessionFactory.session().selenium().mouseUpRight(
-					pulldownLocator);
-
+			sMouseDownRight(pulldownLocator);
+			sMouseUpRight(pulldownLocator);
+			
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
 
