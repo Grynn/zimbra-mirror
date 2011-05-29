@@ -118,8 +118,11 @@ public class CreateDocument extends AjaxCommonTest {
 
 		String docName = document.getName();
 		String docText = document.getDocText();
+		
+		// refresh briefcase page before creating a new document
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
-		// Create new document page using Pulldown menu
+		// Create a new document using New pull down menu
 		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
 				.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_DOCUMENT);
 
