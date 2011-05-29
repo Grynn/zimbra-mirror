@@ -109,13 +109,20 @@ public class CreateDocument extends AjaxCommonTest {
 	public void CreateDocument_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
+		FolderItem briefcaseFolder = FolderItem.importFromSOAP(account,
+				SystemFolder.Briefcase);
+		
 		// Create document item
 		DocumentItem document = new DocumentItem();
 
 		String docName = document.getName();
 		String docText = document.getDocText();
 
-		// Open new document page using Pulldown menu
+		// refresh briefcase page before creating a new document
+		app.zTreeBriefcase
+				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
+		
+		// Open new document page using New pull down menu
 		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
 				.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_DOCUMENT);
 
