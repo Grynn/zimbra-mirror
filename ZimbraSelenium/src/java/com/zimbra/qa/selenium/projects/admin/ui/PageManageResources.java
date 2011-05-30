@@ -31,7 +31,7 @@ public class PageManageResources extends AbsTab {
 
 		// NEW Menu
 		// TODO: define these locators
-		public static final String zmi_RESOURCE = "zmi__ACLV__NEW_title";
+		public static final String zmi_RESOURCE = "zmi__ACLV__NEW_RESOURCE";
 
 
 	}
@@ -160,13 +160,82 @@ public class PageManageResources extends AbsTab {
 			SleepUtil.sleepMedium();
 		}
 
+		sMouseOut(locator);
 		return (page);
 
 	}
 
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
-		return null;
+		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
+
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
+
+		if (pulldown == null)
+			throw new HarnessException("Pulldown cannot be null!");
+
+		if (option == null)
+			throw new HarnessException("Option cannot be null!");
+
+
+		// Default behavior variables
+		String pulldownLocator = null; // If set, this will be expanded
+		String optionLocator = null; // If set, this will be clicked
+		AbsPage page = null; // If set, this page will be returned
+
+		if (pulldown == Button.B_NEW) {
+
+			if (option == Button.O_RESOURCES_RESOURCE) {
+
+				pulldownLocator = Locators.zdd_NEW_MENU;
+				optionLocator = PageManageResources.Locators.zmi_RESOURCE;
+				
+
+				page = new WizardCreateResource(this);
+
+				// FALL THROUGH
+
+			} else {
+				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
+			}
+
+		} else {
+			throw new HarnessException("no logic defined for pulldown/option "
+					+ pulldown + "/" + option);
+		}
+
+		// Default behavior
+		if (pulldownLocator != null) {
+
+			// Make sure the locator exists
+			if (!this.sIsElementPresent(pulldownLocator)) {
+				throw new HarnessException("Button " + pulldown + " option " + option + " pulldownLocator " + pulldownLocator + " not present!");
+			}
+
+			this.zClick(pulldownLocator);
+
+			// If the app is busy, wait for it to become active
+			//zWaitForBusyOverlay();
+
+			if (optionLocator != null) {
+
+				// Make sure the locator exists
+				if (!this.sIsElementPresent(optionLocator)) {
+					throw new HarnessException("Button " + pulldown + " option " + option + " optionLocator " + optionLocator + " not present!");
+				}
+
+				this.zClick(optionLocator);
+
+				// If the app is busy, wait for it to become active
+				//zWaitForBusyOverlay();
+			}
+
+		}
+
+		// Return the specified page, or null if not set
+		return (page);
+
+
 
 	}
 

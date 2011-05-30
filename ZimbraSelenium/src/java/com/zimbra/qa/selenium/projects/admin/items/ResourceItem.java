@@ -32,7 +32,7 @@ public class ResourceItem implements IItem {
 
 	@Override
 	public String getName() {
-		return (getEmailAddress());
+		return (getLocalName());
 	}
 
 	public String getID() {
