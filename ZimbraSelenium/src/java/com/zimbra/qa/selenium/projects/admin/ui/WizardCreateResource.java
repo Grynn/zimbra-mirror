@@ -8,6 +8,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.AbsWizard;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.admin.items.AliasItem;
+import com.zimbra.qa.selenium.projects.admin.items.ResourceItem;
 //import com.zimbra.qa.selenium.projects.admin.items.ResourceItem;
 
 
@@ -29,12 +30,12 @@ public class WizardCreateResource extends AbsWizard {
 
 	@Override
 	public IItem zCompleteWizard(IItem item) throws HarnessException {
-		//TODO: Please uncomment below lines after adding ResourceItem class
-	   /**
+	   
 	   if ( !(item instanceof ResourceItem) )
 			throw new HarnessException("item must be an ResourceItem, was "+ item.getClass().getCanonicalName());
 
 		ResourceItem resource = (ResourceItem)item;
+		
 
 		String CN = resource.getLocalName();
 		String domain = resource.getDomainName();
@@ -45,8 +46,6 @@ public class WizardCreateResource extends AbsWizard {
 		clickFinish(AbsWizard.Locators.RESOURCE_DIALOG);
 
 		return resource;
-		*/
-	   return null;
 	}
 
 	@Override
