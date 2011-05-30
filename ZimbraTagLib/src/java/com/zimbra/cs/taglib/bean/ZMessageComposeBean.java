@@ -1944,8 +1944,14 @@ da body
         if (mInReplyTo != null && mInReplyTo.length() > 0)
             m.setInReplyTo(mInReplyTo);
 
-        if (mMessageId != null && mMessageId.length() > 0)
+        if (mMessageId != null && mMessageId.length() > 0 && mReplyType != null && mReplyType.length() > 0) {
             m.setOriginalMessageId(mMessageId);
+        }
+
+        if (mDraftId != null && mDraftId.length() > 0) {
+            m.setMessageId(mDraftId);
+            m.setDraftMessageId(mDraftId);
+        }
 
         if (mReplyType != null && mReplyType.length() > 0)
             m.setReplyType(mReplyType);

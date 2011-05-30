@@ -154,7 +154,7 @@ public class SendMessageTag extends ZimbraSimpleTag {
 
         m.setMessagePartsToAttach(attachments);
 
-        if (mMessageId != null && mMessageId.length() > 0)
+        if (mMessageId != null && mMessageId.length() > 0 && mReplyType != null && mReplyType.length() > 0)
             m.setOriginalMessageId(mMessageId);
 
         if (mReplyType != null && mReplyType.length() > 0)
