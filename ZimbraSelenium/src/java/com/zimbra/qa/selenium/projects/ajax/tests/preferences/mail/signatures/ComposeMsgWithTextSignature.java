@@ -72,16 +72,13 @@ public class ComposeMsgWithTextSignature extends AjaxCommonTest {
 
 		// Fill out the form with the data
 		mailform.zFill(mail);
-		// Send the message
-		app.zPageMail.zToolbarPressPulldown(Button.B_SIGNATURE,Button.O_ADD_SIGNATURE);
-
-		// Add signature		
-		app.zPageMail.zClick("css=td[id*='_title']td:contains('"+ this.sigName + "')");
-		
+		 //click Signature drop down and add signature
+		app.zPageMail.zToolbarPressPulldown(Button.B_SIGNATURE,Button.O_ADD_SIGNATURE,this.sigName);
+	
 		// Send the message
 		mailform.zSubmit();
 
-		MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountZWC(),"in:\"Inbox\"subject:(" + mail.dSubject + ")");
+		MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountZWC(),"in:inbox subject:(" + mail.dSubject + ")");
 
 		logger.debug("===========received is: " + received);
 		logger.debug("===========app is: " + app);

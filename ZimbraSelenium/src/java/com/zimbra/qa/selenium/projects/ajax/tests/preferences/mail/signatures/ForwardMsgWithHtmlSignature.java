@@ -98,8 +98,8 @@ public class ForwardMsgWithHtmlSignature extends AjaxCommonTest {
 
 
 		// Get the mail item for the new message
-		MailItem mail = MailItem.importFromSOAP(ZimbraAccount.AccountZWC(),"in:\"Inbox\"subject:("+ subject +")");
-		
+		MailItem mail = MailItem.importFromSOAP(ZimbraAccount.AccountZWC(),"in:inbox subject:(" + subject + ")");
+
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
@@ -116,11 +116,9 @@ public class ForwardMsgWithHtmlSignature extends AjaxCommonTest {
 		// Send the message
 		mailform.zSubmit();
 
-		
-		String query="subject:(" + mail.dSubject + ")";
 		ZimbraAccount.AccountB().soapSend(
 				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
-				+ "<query>" + query + "</query>" + "</SearchRequest>");
+				+ "<query>in:inbox subject:(" + mail.dSubject + ")</query>" + "</SearchRequest>");
 
 		String id = ZimbraAccount.AccountB().soapSelectValue("//mail:SearchResponse/mail:m", "id");
 
@@ -128,13 +126,13 @@ public class ForwardMsgWithHtmlSignature extends AjaxCommonTest {
 				"<GetMsgRequest xmlns='urn:zimbraMail'>" + "<m id='" + id
 				+ "' html='1'/>" + "</GetMsgRequest>");
 		Element getMsgResponse = ZimbraAccount.AccountB().soapSelectNode("//mail:GetMsgResponse", 1);
-		
+
 		MailItem received = MailItem.importFromSOAP(getMsgResponse);
-		
+
 		logger.debug("===========received is: " + received);
 		logger.debug("===========app is: " + app);
-		
-			//Verify TO, Fwd'ed Subject, HtmlBody,HtmlSignature
+
+		//Verify TO, Fwd'ed Subject, HtmlBody,HtmlSignature
 		ZAssert.assertStringContains(received.dSubject, "Fwd", "Verify the subject field contains the 'Fwd' prefix");
 		ZAssert.assertEquals(received.dFromRecipient.dEmailAddress, app.zGetActiveAccount().EmailAddress,"Verify the from field is correct");
 		ZAssert.assertEquals(received.dToRecipients.get(0).dEmailAddress,ZimbraAccount.AccountB().EmailAddress,"Verify the to field is correct");

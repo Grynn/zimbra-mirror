@@ -77,7 +77,7 @@ public class ForwardMsgWithTextSignature extends AjaxCommonTest {
 
 
 		// Get the mail item for the new message
-		MailItem mail = MailItem.importFromSOAP(ZimbraAccount.AccountZWC(),"in:\"Inbox\"subject:("+ subject +")");
+		MailItem mail = MailItem.importFromSOAP(ZimbraAccount.AccountZWC(),"in:inbox subject:(" + subject + ")");
 
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);

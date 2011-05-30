@@ -78,7 +78,7 @@ public class ReplyMsgWithTextSignature extends AjaxCommonTest {
 		"</SendMsgRequest>");
 
 		// Get the mail item for the new message
-		MailItem mail = MailItem.importFromSOAP(ZimbraAccount.AccountZWC(),"in:\"Inbox\"subject:("+ subject +")");
+		MailItem mail = MailItem.importFromSOAP(ZimbraAccount.AccountZWC(),"in:inbox subject:(" + subject + ")");
 
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
@@ -95,10 +95,9 @@ public class ReplyMsgWithTextSignature extends AjaxCommonTest {
 		// Send the message
 		mailform.zSubmit();
 
-		String query="in:inbox subject:("+ mail.dSubject +")";
 		ZimbraAccount.AccountZWC().soapSend(
 				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
-				+ "<query>" + query + "</query>" + "</SearchRequest>");
+				+ "<query>in:inbox subject:(" +mail.dSubject + ")</query>" + "</SearchRequest>");
 
 		String id = ZimbraAccount.AccountZWC().soapSelectValue("//mail:SearchResponse/mail:m", "id");
 		ZimbraAccount.AccountZWC().soapSend(

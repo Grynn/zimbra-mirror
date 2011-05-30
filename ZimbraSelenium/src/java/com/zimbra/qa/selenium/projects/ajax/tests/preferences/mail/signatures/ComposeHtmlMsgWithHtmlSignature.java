@@ -74,20 +74,19 @@ public class ComposeHtmlMsgWithHtmlSignature extends AjaxCommonTest {
 
 		// Fill out the form with the data
 		mailform.zFill(mail);
-		
-		//click Signature drop down
-		app.zPageMail.zToolbarPressPulldown(Button.B_SIGNATURE,Button.O_ADD_SIGNATURE);
-		
+
+		//click Signature drop down and add signature
+		app.zPageMail.zToolbarPressPulldown(Button.B_SIGNATURE,Button.O_ADD_SIGNATURE,this.sigName);
+
 		// Add signature		
-		app.zPageMail.zClick("css=td[id*='_title']td:contains('"+ this.sigName + "')");
-	
+		//	app.zPageMail.zClick("css=td[id*='_title']td:contains('"+ this.sigName + "')");
+
 		// Send the message
 		mailform.zSubmit();
 
-		String query="in:\"Inbox\"subject:(" + mail.dSubject + ")";
 		ZimbraAccount.AccountZWC().soapSend(
 				"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
-				+ "<query>" + query + "</query>" + "</SearchRequest>");
+				+ "<query>in:inbox subject:(" + mail.dSubject + ")</query>" + "</SearchRequest>");
 
 		String id = ZimbraAccount.AccountZWC().soapSelectValue("//mail:SearchResponse/mail:m", "id");
 
@@ -96,9 +95,9 @@ public class ComposeHtmlMsgWithHtmlSignature extends AjaxCommonTest {
 				+ "' html='1'/>" + "</GetMsgRequest>");
 		Element getMsgResponse = ZimbraAccount.AccountZWC().soapSelectNode("//mail:GetMsgResponse", 1);
 		MailItem received = MailItem.importFromSOAP(getMsgResponse);
-		
+
 		// Verify TO, Subject,html Body,html signature
-		
+
 		ZAssert.assertEquals(received.dFromRecipient.dEmailAddress, app.zGetActiveAccount().EmailAddress,"Verify the from field is correct");
 		ZAssert.assertEquals(received.dToRecipients.get(0).dEmailAddress,ZimbraAccount.AccountZWC().EmailAddress,"Verify the to field is correct");
 		ZAssert.assertEquals(received.dSubject, mail.dSubject,"Verify the subject field is correct");
