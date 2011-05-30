@@ -76,7 +76,6 @@ public class SkinResources
 	private static final String P_TEMPLATES = "templates";
 	private static final String P_COMPRESS = "compress";
 	private static final String P_CUSTOMER_DOMAIN = "customerDomain";
-	private static final String P_VERSION = "v";
 	
 	private static final String V_TRUE = "true";
 	private static final String V_FALSE = "false";
@@ -102,6 +101,8 @@ public class SkinResources
 	private static final String A_HELP_ADVANCED_URL = "zimbraHelpAdvancedURL";
 	private static final String A_HELP_DELEGATED_URL = "zimbraHelpDelegatedURL";
 	private static final String A_HELP_STANDARD_URL = "zimbraHelpStandardURL";
+
+	private static final String A_VERSION = "version";
 
 	private static final String H_USER_AGENT = "User-Agent";
 
@@ -211,7 +212,7 @@ public class SkinResources
         if (client == null) {
             client = CLIENT_ADVANCED;
         }
-        String cacheBusterVersion = req.getParameter(P_VERSION);
+        String cacheBusterVersion = (String) req.getAttribute(A_VERSION);
 
         String userAgent = getUserAgent(req);
         Map<String, String> macros = parseUserAgent(userAgent);
