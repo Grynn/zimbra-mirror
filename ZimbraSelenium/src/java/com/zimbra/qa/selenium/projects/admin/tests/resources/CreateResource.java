@@ -16,12 +16,12 @@ import com.zimbra.qa.selenium.projects.admin.ui.WizardCreateResource;
 public class CreateResource extends AdminCommonTest {
 	public CreateResource() {
 		logger.info("New " + CreateResource.class.getCanonicalName());
-		
+
 		//Every test starts at Resource page
 		super.startingPage=app.zPageManageResources;
 	}
-	
-	
+
+
 	/**
 	 * Testcase : Create a basic resource.
 	 * Steps :
@@ -35,7 +35,7 @@ public class CreateResource extends AdminCommonTest {
 
 		// Create a new resource in the Admin Console
 		ResourceItem resource = new ResourceItem();
-		
+
 
 		// Click "New"
 		WizardCreateResource wizard = 
@@ -55,7 +55,7 @@ public class CreateResource extends AdminCommonTest {
 		ZAssert.assertNotNull(response, "Verify the RESOURCE is created successfully");
 
 	}
-	
+
 	/**
 	 * Testcase : Create a basic resource.
 	 * Steps :
@@ -69,7 +69,7 @@ public class CreateResource extends AdminCommonTest {
 
 		// Create a new resource in the Admin Console
 		ResourceItem resource = new ResourceItem();
-		
+
 
 		// Click "New --> Resources"
 		WizardCreateResource wizard = 
@@ -89,6 +89,78 @@ public class CreateResource extends AdminCommonTest {
 		ZAssert.assertNotNull(response, "Verify the RESOURCE is created successfully");
 
 	}
+
+	/**
+	 * Testcase : Create a basic resource.
+	 * Steps :
+	 * 1. Create a Location resource from GUI.
+	 * 2. Verify resource is created using SOAP.
+	 * @throws HarnessException
+	 */
+	@Test(	description = "Create a basic resource",
+			groups = { "sanity" })
+			public void CreateResource_03() throws HarnessException {
+
+		// Create a new resource in the Admin Console
+		ResourceItem resource = new ResourceItem();
+
+
+		// Click "New"
+		WizardCreateResource wizard = 
+			(WizardCreateResource)app.zPageManageResources.zToolbarPressButton(Button.B_NEW);
+
+		// Fill out the wizard and click Finish
+		wizard.setResourceType(WizardCreateResource.LOCATION);
+		wizard.zCompleteWizard(resource);
+
+
+		// Verify the resource exists in the ZCS
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<GetCalendarResourceRequest xmlns='urn:zimbraAdmin'>"
+				+ 		"<calresource by='name'>" +  resource.getEmailAddress() + "</calresource>"  
+				+		"</GetCalendarResourceRequest>");
+
+		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetCalendarResourceResponse/admin:calresource", 1); 
+		ZAssert.assertNotNull(response, "Verify the RESOURCE is created successfully");
+
+	}
+	
+	/**
+	 * Testcase : Create a basic resource.
+	 * Steps :
+	 * 1. Create a Equipment resource from GUI.
+	 * 2. Verify resource is created using SOAP.
+	 * @throws HarnessException
+	 */
+	@Test(	description = "Create a basic resource",
+			groups = { "sanity" })
+			public void CreateResource_04() throws HarnessException {
+
+		// Create a new resource in the Admin Console
+		ResourceItem resource = new ResourceItem();
+
+
+		// Click "New"
+		WizardCreateResource wizard = 
+			(WizardCreateResource)app.zPageManageResources.zToolbarPressButton(Button.B_NEW);
+
+		// Fill out the wizard and click Finish
+		wizard.setResourceType(WizardCreateResource.EQUIPMENT);
+		wizard.zCompleteWizard(resource);
+
+
+		// Verify the resource exists in the ZCS
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
+				"<GetCalendarResourceRequest xmlns='urn:zimbraAdmin'>"
+				+ 		"<calresource by='name'>" +  resource.getEmailAddress() + "</calresource>"  
+				+		"</GetCalendarResourceRequest>");
+
+		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetCalendarResourceResponse/admin:calresource", 1); 
+		ZAssert.assertNotNull(response, "Verify the RESOURCE is created successfully");
+
+	}
+
+
 
 }
 
