@@ -16,37 +16,29 @@ package com.zimbra.ldaputils;
 
 import java.util.Map;
 
-import javax.naming.NamingException;
-import javax.naming.directory.DirContext;
-
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
-import com.zimbra.cs.account.ldap.legacy.LegacyZimbraLdapContext;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.soap.ZimbraSoapContext;
+
 /**
  * @author Greg Solovyev
  */
 public class DeleteLDAPEntry extends AdminDocumentHandler {
 
 	public Element handle(Element request, Map<String, Object> context)
-			throws ServiceException {
-		ZimbraSoapContext lc = getZimbraSoapContext(context);
-		String dn = request.getAttribute(ZimbraLDAPUtilsService.E_DN);
-		LegacyZimbraLdapContext zlc = null;
-		try {
-        	zlc = new LegacyZimbraLdapContext(true);
-            zlc.deleteChildren(dn);
-            zlc.unbindEntry(dn);
-    		Element response = lc.createElement(ZimbraLDAPUtilsService.DELETE_LDAP_ENTRY_RESPONSE);
-    		return response;
-            
-        } catch (NamingException e) {
-            throw ServiceException.FAILURE("unable to purge dn: "+dn, e);
-        } finally {
-            LegacyZimbraLdapContext.closeContext(zlc);
-        }
-	}
+    throws ServiceException {
+        ZimbraSoapContext lc = getZimbraSoapContext(context);
+        String dn = request.getAttribute(ZimbraLDAPUtilsService.E_DN);
+
+        LDAPUtilsHelper.getInstance().deleteLDAPEntry(dn);
+
+        ZimbraLog.security.info(ZimbraLog.encodeAttrs(
+                new String[] {"cmd", "DeleteLDAPEntry","dn", dn}));
+
+        Element response = lc.createElement(ZimbraLDAPUtilsService.DELETE_LDAP_ENTRY_RESPONSE);
+        return response;
+    }
 
 }

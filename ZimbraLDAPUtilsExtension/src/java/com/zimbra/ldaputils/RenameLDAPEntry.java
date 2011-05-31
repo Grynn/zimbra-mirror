@@ -16,15 +16,9 @@ package com.zimbra.ldaputils;
 
 import java.util.Map;
 
-import javax.naming.NameAlreadyBoundException;
-import javax.naming.NamingException;
-import javax.naming.directory.DirContext;
-
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.NamedEntry;
-import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
-import com.zimbra.cs.account.ldap.legacy.LegacyZimbraLdapContext;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.common.soap.Element;
 import com.zimbra.soap.ZimbraSoapContext;
@@ -38,30 +32,17 @@ public class RenameLDAPEntry extends AdminDocumentHandler {
 
 		ZimbraSoapContext lc = getZimbraSoapContext(context);
 		String dn = request.getAttribute(ZimbraLDAPUtilsService.E_DN);
-		String new_dn = request.getAttribute(ZimbraLDAPUtilsService.E_NEW_DN);
+		String newDN = request.getAttribute(ZimbraLDAPUtilsService.E_NEW_DN);
 
-		LegacyZimbraLdapContext zlc = null;
-		try {
-		    zlc = new LegacyZimbraLdapContext(true);
-		    zlc.renameEntry(dn, new_dn);
-    		NamedEntry ne = GetLDAPEntries.getObjectByDN(new_dn, zlc);
-    		ZimbraLog.security.info(ZimbraLog.encodeAttrs(new String[] { "cmd",
-    				"RenameLDAPEntry", "dn", dn,"new_dn",new_dn }, null));
-    		
-    		
-    		Element response = lc
-    				.createElement(ZimbraLDAPUtilsService.RENAME_LDAP_ENTRY_RESPONSE);
-    		ZimbraLDAPUtilsService.encodeLDAPEntry(response, ne);
+		NamedEntry ne = LDAPUtilsHelper.getInstance().renameLDAPEntry(dn,  newDN);
+		
+		ZimbraLog.security.info(ZimbraLog.encodeAttrs(new String[] { "cmd",
+                "RenameLDAPEntry", "dn", dn,"new_dn", newDN}, null));
+        
+        Element response = lc
+                .createElement(ZimbraLDAPUtilsService.RENAME_LDAP_ENTRY_RESPONSE);
+        ZimbraLDAPUtilsService.encodeLDAPEntry(response, ne);
 
-    		return response;
-
-		} catch (NameAlreadyBoundException nabe) {
-            throw ZimbraLDAPUtilsServiceException.DN_EXISTS(new_dn);            
-        } catch (NamingException e) {
-            throw ServiceException.FAILURE("unable to rename dn: "+dn+ "to " +new_dn, e);
-        } finally {
-            LegacyZimbraLdapContext.closeContext(zlc);
-        }
+        return response;
 	}
-
 }

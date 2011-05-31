@@ -29,6 +29,8 @@ import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.ldap.entry.LdapEntry;
 import com.zimbra.cs.account.ldap.legacy.LegacyLdapUtil;
+import com.zimbra.cs.ldap.LdapException;
+import com.zimbra.cs.ldap.ZAttributes;
 /**
  * @author Greg Solovyev
  */
@@ -36,10 +38,18 @@ public class LDAPUtilEntry extends NamedEntry  implements LdapEntry {
 
     protected String mDn;
 
+    // TODO:legacy ctor, retire
     LDAPUtilEntry(String dn, Attributes attrs, Map<String, Object> defaults) throws NamingException {
         super(LegacyLdapUtil.getAttrString(attrs, Provisioning.A_cn),
         		LegacyLdapUtil.getAttrString(attrs, Provisioning.A_cn), 
         		LegacyLdapUtil.getAttrs(attrs), defaults, null);
+        mDn = dn;
+    }
+    
+    LDAPUtilEntry(String dn, ZAttributes attrs, Map<String, Object> defaults) throws LdapException {
+        super(attrs.getAttrString(Provisioning.A_cn),
+                attrs.getAttrString(Provisioning.A_cn),
+                attrs.getAttrs(), defaults, null);
         mDn = dn;
     }
 
