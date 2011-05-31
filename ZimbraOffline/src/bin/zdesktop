@@ -171,6 +171,7 @@ JAVA_OPTIONS="-DSTART='${JETTY_HOME}/etc/start.config' -Dzimbra.home='${ZIMBRA_H
 JETTY_CONSOLE="${ZIMBRA_HOME}/log/zdesktop.out"
 JETTY_RUN="${ZIMBRA_HOME}/log"
 JETTY_PID="$JETTY_RUN/zdesktop.pid"
+SHUTDOWN_FILE="$JETTY_RUN/offline.shutdown"
 
 #####################################################
 # Run the standard server if there's nothing else to run
@@ -302,7 +303,26 @@ case "$ACTION" in
                 if ps -f -p $PID | grep $JAVA > /dev/null 2>&1 
                 then
                     echo "Already Running!!"
-                    exit 1
+                    alive=true
+                    if [ -f "$SHUTDOWN_FILE" ]
+                    then
+                        echo "shutdown in progress; waiting"
+                        timeout=15
+                        while [ $timeout -gt 0 ]; do
+                            if ps -f -p $PID | grep $JAVA > /dev/null 2>&1
+                            then
+                                sleep 1
+                                timeout=$(($timeout - 1))
+                            else
+                                alive=false
+                                break
+                            fi
+                        done
+                    fi
+                    if [ "$alive" = "true" ]
+                    then  
+                        exit 1
+                    fi
                 else
                     echo "Stale pid file removed: $JETTY_PID"
                     rm -f "$JETTY_PID"
@@ -311,6 +331,7 @@ case "$ACTION" in
         fi
 
         echo "STARTED Jetty `date`" >> "$JETTY_CONSOLE"
+        rm -f "$SHUTDOWN_FILE"
 
         nohup sh -c "exec $RUN_CMD >> '$JETTY_CONSOLE' 2>&1" >/dev/null &
         echo $! > "$JETTY_PID"
@@ -329,6 +350,8 @@ case "$ACTION" in
             echo "No pid file found: $JETTY_PID"
             exit 1
         fi
+
+        touch "$SHUTDOWN_FILE"
 
         PID=`cat "$JETTY_PID" 2>/dev/null`
         if [ -z $PID ]

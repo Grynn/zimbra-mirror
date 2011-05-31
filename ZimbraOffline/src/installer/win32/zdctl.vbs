@@ -15,11 +15,18 @@
 ' ZD service control
 '
 
-Dim sAppRoot, sScriptPath, sScriptDir, sZdLogFile, sZdOutFile, sZdAnchorFile, sZdCtlErrFile, oWMI, oShell, oFso, sCurrUser
+Dim sAppRoot, sScriptPath, sScriptDir, sZdLogFile, sZdOutFile, sZdAnchorFile, sZdCtlErrFile, oWMI, oShell, oFso, sCurrUser, iLogLevel
 
 Sub Usage()
     WScript.StdOut.WriteLine("Usage: zdctl.vbs <start|stop|shutdown>")
     WScript.Quit
+End Sub
+
+Sub LogMsg(sMsg, iLevel)
+    WScript.StdOut.WriteLine(sMsg)
+    If iLevel <= iLogLevel Then
+        oShell.LogEvent iLevel, "Zimbra Desktop: " & sMsg
+    End If
 End Sub
 
 Function IsRunning()
@@ -85,6 +92,7 @@ Sub RunCmd2(sCmd, sArgs, sImgName, sPidFile, sErrFile)
     End If
 
 	If (Not IsNull(sErrFile)) Then
+        LogMsg "Unable to get PID", 1
 		WriteLineToFile sErrFile, "Unable to get process id"
 	End If
 End Sub
@@ -126,11 +134,28 @@ Sub StartServer()
     Dim sCmd, oFile, iWaitTime 
     
     If IsRunning() Then
-        WScript.StdOut.WriteLine("ZD service already running")
-        WScript.Quit
+        If Not oFso.FileExists(sZdAnchorFile) Then
+            LogMsg "ZD service shutdown may be in progress", 2
+            iWaitTime = 30000
+   	        Do Until iWaitTime <= 0
+       	            If Not IsRunning() Then
+                        LogMsg "ZD shutdown completed, ready to start new instance", 2
+                        Exit Do
+       	            End If
+       	            WSCript.Sleep(1000)
+        	    iWaitTime = iWaitTime - 1000
+   	        Loop
+            If IsRunning() Then
+                LogMsg "Still running", 4
+                WScript.Quit
+            End If
+        Else
+            LogMsg "ZD service already running", 4
+            WScript.Quit
+        End If
     End If
 
-    WScript.StdOut.WriteLine("Starting background process. Please wait...")
+    LogMsg "Starting background process. Please wait...", 4
 
     If oFso.FileExists(sZdOutFile) Then
         oFso.DeleteFile sZdOutFile
@@ -145,12 +170,13 @@ Sub StartServer()
    	iWaitTime = 20000 
    	Do Until iWaitTime <= 0
        	If oFso.FileExists(sZdAnchorFile) Then
+            LogMsg "ZD service started", 0
            	Exit Sub
        	End If
        	WSCript.Sleep(1000)
        	iWaitTime = iWaitTime - 1000
    	Loop
-    
+    LogMsg "Failed to start ZD service", 1
     WriteLineToFile sZdCtlErrFile, "Failed to start ZD service", true
 End Sub
 
@@ -158,11 +184,11 @@ Sub StopServer()
     Dim iZdPid, iWaitTime
     
     If Not IsRunning() Then
-        WScript.StdOut.WriteLine("ZD service not running")
+        LogMsg "ZD service not running", 2
         WScript.Quit
     End If
 
-    WScript.StdOut.WriteLine("Stopping background process. Please wait...")
+    LogMsg "Stopping background process. Please wait...", 4
 
 	iZdPid = FindProcess("zdesktop.exe")
 	If IsNull(iZdPid) Then ' no running zdesktop instance found
@@ -204,6 +230,7 @@ ElseIf oArgs.Item(0) <> "start" And oArgs.Item(0) <> "stop" And oArgs.Item(0) <>
     Usage()
 End If
 
+iLogLevel = 2 ' 1 - error 2 - warn - 4 info
 sAppRoot = "@install.app.root@"
 sScriptPath = WScript.ScriptFullName
 sScriptDir = Left(sScriptPath, InStrRev(sScriptPath, WScript.ScriptName) - 2)

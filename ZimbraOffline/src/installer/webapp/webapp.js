@@ -44,7 +44,7 @@ function startStopServer(verb) {
     if (os == "winnt") {
       var systemDir = dirSvc.get("SysD", Ci.nsIFile);
       var zdesktopServer = systemDir.clone();
-      zdesktopServer.append("cscript.exe");
+      zdesktopServer.append("wscript.exe");
 
       var appRoot = WebAppProperties.getAppRoot();
       var zdesktopRoot = appRoot.parent;
@@ -121,33 +121,42 @@ function serverCheck() {
   var threadManager = Cc["@mozilla.org/thread-manager;1"].getService(Ci.nsIThreadManager);
   var appRoot = WebAppProperties.getAppRoot();
   var iniFile = appRoot.clone();
+  var tries = 0;
+  var maxTries = 3;
   iniFile.append("webapp.ini");
   do {
-    // update Uri
-    reloadWebAppIni(iniFile);
-    
-    // Check whether the server is running
-    var req = new XMLHttpRequest();
-    req.open('GET', WebAppProperties.uri, false);
-    try {
-      req.send(null);
-      if (req.status == 200)
-        return true;
-    }
-    catch(e) {
-    }
-
-    if (!startTime) {
-      // Keep trying until the server is available or 5 seconds have elapsed
-      startTime = Date.now();
-      if (!startServer())
-        break;
-    }
-    
-    // Pump events so the UI stays responsive
-    threadManager.currentThread.processNextEvent(true);
-  } while(Date.now() - startTime < 60000);
-
+	  do {
+	    // update Uri
+	    reloadWebAppIni(iniFile);
+	    
+	    // Check whether the server is running
+	    var req = new XMLHttpRequest();
+	    req.open('GET', WebAppProperties.uri, false);
+	    try {
+	      req.send(null);
+	      if (req.status == 200)
+	        return true;
+	    }
+	    catch(e) {
+	    }
+	
+	    if (!startTime) {
+	      // Keep trying until the server is available or 5 seconds have elapsed
+	      startTime = Date.now();
+	      if (!startServer())
+	        break;
+	    }
+	    
+	    // Pump events so the UI stays responsive
+	    threadManager.currentThread.processNextEvent(true);
+	  } while(Date.now() - startTime < 60000);
+	  tries++;
+	  if (!stopServer())
+          break;
+	  startTime = Date.now();
+	  if (!startServer())
+		  break;
+  } while (tries < maxTries);
   // Give up
   window.alert(bundle.GetStringFromName("StartServerFailed"));
   

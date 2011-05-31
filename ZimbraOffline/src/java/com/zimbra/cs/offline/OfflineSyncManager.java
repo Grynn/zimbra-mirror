@@ -704,6 +704,10 @@ public class OfflineSyncManager implements FormatListener {
     }
 
     public void continueOK() throws ServiceException {
+        continueOK(true);
+    }
+    
+    public void continueOK(boolean failIfConnDown) throws ServiceException {
         try {
             lock.lock();
             if (isUiLoading) {
@@ -718,65 +722,68 @@ public class OfflineSyncManager implements FormatListener {
         } finally {
             lock.unlock();
         }
-        if (isConnectionDown)
+        if (failIfConnDown && isConnectionDown)
             throw ServiceException.INTERRUPTED("network down - sync cancelled");
         else if (ZimbraApplication.getInstance().isShutdown())
             throw ServiceException.INTERRUPTED("system shutting down");
     }
 
-    private synchronized void backgroundInit() {
-        String uri = LC.zimbra_admin_service_scheme.value() + "127.0.0.1"+ ":" + LC.zimbra_admin_service_port.value() +
-        AdminConstants.ADMIN_SERVICE_URI;
-        final int LOOP_COUNT = 24 * 10;
-        int loop = 0;
-
-        while (loop++ < LOOP_COUNT) {
-            try {
-                SoapHttpTransport transport = new SoapHttpTransport(uri);
-                transport.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.getFullVersion());
-                transport.setTimeout(3000);
-                transport.setRetryCount(1);
-                transport.setRequestProtocol(SoapProtocol.Soap12);
-                transport.setResponseProtocol(SoapProtocol.Soap12);
-
-                Element request = new Element.XMLElement(AdminConstants.PING_REQUEST);
-                transport.invokeWithoutSession(request.detach());
-                OfflineLog.offline.info("service port is ready.");
-                isServiceUp = true;
-                break;
-            } catch (Exception x) {
-                if (x instanceof ConnectException || x instanceof SocketTimeoutException || x instanceof ConnectTimeoutException) {
-                    if (loop % 10 == 1)
-                        OfflineLog.offline.info("waiting for service port");
-                } else if (x instanceof NoRouteToHostException || x instanceof PortUnreachableException) {
-                    OfflineLog.offline.warn("service host or port unreachable - retrying...", x);
-                } else {
-                    OfflineLog.offline.warn("service port check failed - retrying...", x);
+    private void backgroundInit() {
+        synchronized (this) {
+            String uri = LC.zimbra_admin_service_scheme.value() + "127.0.0.1"+ ":" + LC.zimbra_admin_service_port.value() +
+            AdminConstants.ADMIN_SERVICE_URI;
+            final int LOOP_COUNT = 24 * 10;
+            int loop = 0;
+    
+            while (loop++ < LOOP_COUNT) {
+                try {
+                    SoapHttpTransport transport = new SoapHttpTransport(uri);
+                    transport.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.getFullVersion());
+                    transport.setTimeout(3000);
+                    transport.setRetryCount(1);
+                    transport.setRequestProtocol(SoapProtocol.Soap12);
+                    transport.setResponseProtocol(SoapProtocol.Soap12);
+    
+                    Element request = new Element.XMLElement(AdminConstants.PING_REQUEST);
+                    transport.invokeWithoutSession(request.detach());
+                    OfflineLog.offline.info("service port is ready.");
+                    isServiceUp = true;
+                    break;
+                } catch (Exception x) {
+                    if (x instanceof ConnectException || x instanceof SocketTimeoutException || x instanceof ConnectTimeoutException) {
+                        if (loop % 10 == 1)
+                            OfflineLog.offline.info("waiting for service port");
+                    } else if (x instanceof NoRouteToHostException || x instanceof PortUnreachableException) {
+                        OfflineLog.offline.warn("service host or port unreachable - retrying...", x);
+                    } else {
+                        OfflineLog.offline.warn("service port check failed - retrying...", x);
+                    }
+                }
+                try {
+                    Thread.sleep(250); // avoid potential tight loop
+                } catch (InterruptedException e) {}
+            }
+            if (loop == LOOP_COUNT)
+                Zimbra.halt("Zimbra Desktop Service failed to initialize. Shutting down...");
+            //load all mailboxes so that timers are kicked off
+            String[] toSkip = OfflineLC.zdesktop_sync_skip_idlist.value().split("\\s*,\\s*");
+            for (String s : toSkip) {
+                try {
+                    toSkipList.add(Integer.parseInt(s));
+                } catch (NumberFormatException x) {
+                    if (s.length() > 0)
+                        OfflineLog.offline.warn("invaid item id %s in zdesktop_sync_skip_idlist", s);
                 }
             }
-            try {
-                Thread.sleep(250); // avoid potential tight loop
-            } catch (InterruptedException e) {}
-        }
-        if (loop == LOOP_COUNT)
-            Zimbra.halt("Zimbra Desktop Service failed to initialize. Shutting down...");
-
-        //load all mailboxes so that timers are kicked off
-        String[] toSkip = OfflineLC.zdesktop_sync_skip_idlist.value().split("\\s*,\\s*");
-        for (String s : toSkip) {
-            try {
-                toSkipList.add(Integer.parseInt(s));
-            } catch (NumberFormatException x) {
-                if (s.length() > 0)
-                    OfflineLog.offline.warn("invaid item id %s in zdesktop_sync_skip_idlist", s);
-            }
-        }
+        }        
 
         try {
+            continueOK(false);
             OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
             List<Account> dsAccounts = prov.getAllDataSourceAccounts();
             for (Account dsAccount : dsAccounts) {
                 try {
+                    continueOK(false);
                     MailboxManager.getInstance().getMailboxByAccount(dsAccount);
                 }
                 catch (Exception e) {
@@ -787,6 +794,7 @@ public class OfflineSyncManager implements FormatListener {
             List<Account> syncAccounts = prov.getAllZcsAccounts();
             for (Account syncAccount : syncAccounts) {
                 try {
+                    continueOK(false);
                     MailboxManager.getInstance().getMailboxByAccount(syncAccount);
                 }
                 catch (Exception e) {
@@ -794,13 +802,16 @@ public class OfflineSyncManager implements FormatListener {
                     markAccountSyncDisabled(syncAccount, e);
                 }
             }
+            continueOK(false);
             DirectorySync.getInstance();
+            continueOK(false);
             GalSync.getInstance();
 
             // deal with left over mailboxes from interrupted delete/reset
             int[] mids = MailboxManager.getInstance().getMailboxIds();
             for (int mid : mids) {
                 try {
+                    continueOK(false);
                     MailboxManager.getInstance().getMailboxById(mid, true);
                 } catch (ServiceException x) {
                     OfflineLog.offline.warn("failed to load mailbox id=%d", mid, x);
