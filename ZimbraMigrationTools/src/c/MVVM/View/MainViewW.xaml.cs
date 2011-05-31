@@ -29,10 +29,10 @@ namespace MVVM.View
             m_introViewModel.ViewTitle = "Intro";
             m_introViewModel.ImageName = "Images/CreateSpaceImage.jpg"; // doesn't matter since LB is hidden
             m_introViewModel.lb = lbMode;
-            m_introViewModel.isBrowser = false;
+            m_introViewModel.isBrowser = true;
             Intro intro = new Intro();
             m_introViewModel.WelcomeMsg = intro.WelcomeMsg;
-            m_introViewModel.SetupViews();
+            m_introViewModel.SetupViews(true);
 
             lbMode.SelectedIndex = 0;
             DataContext = m_introViewModel;

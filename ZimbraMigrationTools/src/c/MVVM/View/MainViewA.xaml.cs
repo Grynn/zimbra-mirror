@@ -32,7 +32,7 @@ namespace MVVM.View
             m_introViewModel.isBrowser = false;
             Intro intro = new Intro();
             m_introViewModel.WelcomeMsg = intro.WelcomeMsg;
-            m_introViewModel.SetupViews();
+            m_introViewModel.SetupViews(false);
 
             lbMode.SelectedIndex = 0;
             DataContext = m_introViewModel;

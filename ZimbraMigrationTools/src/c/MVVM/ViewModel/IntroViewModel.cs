@@ -116,14 +116,14 @@ namespace MVVM.ViewModel
             }
         }
 
-        public void SetupViews()
+        public void SetupViews(bool isBrowser)
         {
             m_configViewModelS = new ConfigViewModelS();
             m_configViewModelS.Name = "ConfigViewModelS";
             m_configViewModelS.ViewTitle = "Configuration";
             m_configViewModelS.ImageName = "Images/CreateSpaceImage.jpg";
             m_configViewModelS.lb = lb;
-            m_configViewModelS.isBrowser = false;
+            m_configViewModelS.isBrowser = isBrowser;
            // m_configViewModelS.ExchangeProfile = "";
             m_configViewModelS.OutlookProfile = "";
             m_configViewModelS.ZimbraServerHostName = "";
@@ -140,7 +140,7 @@ namespace MVVM.ViewModel
             m_configViewModelU.ViewTitle = "Configuration";
             m_configViewModelU.ImageName = "Images/CreateSpaceImage.jpg";
             m_configViewModelU.lb = lb;
-            m_configViewModelU.isBrowser = false;
+            m_configViewModelU.isBrowser = isBrowser;
             m_configViewModelU.OutlookProfile = "";
             m_configViewModelU.ZimbraPort = "";
             m_configViewModelU.PSTFile = "";
@@ -155,7 +155,7 @@ namespace MVVM.ViewModel
             m_optionsViewModel.ImageName = "Images/DMR_120.jpg";
             m_optionsViewModel.lb = lb;
             m_optionsViewModel.isServer = true;
-            m_optionsViewModel.isBrowser = false;
+            m_optionsViewModel.isBrowser = isBrowser;
             m_optionsViewModel.ImportMailOptions = false;
             m_optionsViewModel.ImportTaskOptions = false;
             m_optionsViewModel.ImportCalendarOptions = false;
@@ -171,8 +171,8 @@ namespace MVVM.ViewModel
             m_scheduleViewModel.ViewTitle = "Schedule";
             m_scheduleViewModel.ImageName = "Images/Penguins.jpg";
             m_scheduleViewModel.lb = lb;
-            m_scheduleViewModel.isBrowser = false;
-           m_scheduleViewModel.COS = "default";
+            m_scheduleViewModel.isBrowser = isBrowser;
+            m_scheduleViewModel.COS = "default";
             m_scheduleViewModel.DefaultPWD = "";
 
             m_usersViewModel = new UsersViewModel(m_scheduleViewModel,"",""); // needs scheduleviewmodel so schedlist will be in sync
@@ -180,14 +180,14 @@ namespace MVVM.ViewModel
             m_usersViewModel.ViewTitle = "Users";
             m_usersViewModel.ImageName = "Images/UnknownPerson_dataNotFound.jpg";
             m_usersViewModel.lb = lb;
-            m_usersViewModel.isBrowser = false;
+            m_usersViewModel.isBrowser = isBrowser;
             m_usersViewModel.CurrentUserSelection = -1;
 
             m_resultsViewModel = new AccountResultsViewModel(m_scheduleViewModel, 0, "", "", 0, 0, 0, false);
             m_resultsViewModel.Name = "Results";
             m_resultsViewModel.ViewTitle = "Results";
             m_resultsViewModel.ImageName = "Images/NikiBest.jpg";
-            m_resultsViewModel.isBrowser = false;
+            m_resultsViewModel.isBrowser = isBrowser;
             m_resultsViewModel.CurrentAccountSelection = -1;
 
             m_scheduleViewModel.SetConfigUModel(m_configViewModelU);
