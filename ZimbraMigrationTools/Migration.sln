@@ -22,6 +22,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CppLib", "src\c\CppLib\CppL
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PSTMigration", "src\c\PSTMigration\PSTMigration.vcxproj", "{B4DEC736-0347-42E6-9F01-9AF82891FE82}"
 	ProjectSection(ProjectDependencies) = postProject
+		{76F01C7C-953B-4A0F-92D4-F3FBF50C6D71} = {76F01C7C-953B-4A0F-92D4-F3FBF50C6D71}
 		{A541A6A1-5677-4504-8D2D-1FB7F3F85585} = {A541A6A1-5677-4504-8D2D-1FB7F3F85585}
 	EndProjectSection
 EndProject
@@ -31,9 +32,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZimbraMime", "..\ZimbraMAPI
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Zimbra", "..\ZimbraMAPI\vcproj\ZimbraRpc.vcxproj", "{3391699B-1204-4098-8697-2E43800AABE4}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Exchange", "src\c\Exchange\Exchange.vcxproj", "{76F01C7C-953B-4A0F-92D4-F3FBF50C6D71}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3391699B-1204-4098-8697-2E43800AABE4} = {3391699B-1204-4098-8697-2E43800AABE4}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZimbraMigrate", "src\c\ZimbraMigrate\ZimbraMigrate.vcxproj", "{B4DED736-0147-48E6-9F01-93F82D91FE82}"
+EndProject
 Global
 	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 10
+		SccNumberOfProjects = 12
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = ..\\ZimbraMAPI\\vcproj\\Util.vcxproj
 		SccLocalPath1 = ..\\ZimbraMAPI
@@ -62,6 +70,10 @@ Global
 		SccProjectUniqueName9 = src\\c\\PSTMigration\\PSTMigration.vcxproj
 		SccLocalPath9 = .
 		SccProjectFilePathRelativizedFromConnection9 = src\\c\\PSTMigration\\
+		SccProjectUniqueName10 = src\\c\\Exchange\\Exchange.vcxproj
+		SccLocalPath10 = src\\c\\Exchange
+		SccProjectUniqueName11 = src\\c\\ZimbraMigrate\\ZimbraMigrate.vcxproj
+		SccLocalPath11 = src\\c\\ZimbraMigrate
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		dbg|Mixed Platforms = dbg|Mixed Platforms
@@ -200,6 +212,34 @@ Global
 		{3391699B-1204-4098-8697-2E43800AABE4}.rtl|x64.ActiveCfg = rtl|x64
 		{3391699B-1204-4098-8697-2E43800AABE4}.rtl|x64.Build.0 = rtl|x64
 		{3391699B-1204-4098-8697-2E43800AABE4}.rtl|x86.ActiveCfg = rtl|x64
+		{76F01C7C-953B-4A0F-92D4-F3FBF50C6D71}.dbg|Mixed Platforms.ActiveCfg = dbg|x64
+		{76F01C7C-953B-4A0F-92D4-F3FBF50C6D71}.dbg|Mixed Platforms.Build.0 = dbg|x64
+		{76F01C7C-953B-4A0F-92D4-F3FBF50C6D71}.dbg|Win32.ActiveCfg = dbg|Win32
+		{76F01C7C-953B-4A0F-92D4-F3FBF50C6D71}.dbg|Win32.Build.0 = dbg|Win32
+		{76F01C7C-953B-4A0F-92D4-F3FBF50C6D71}.dbg|x64.ActiveCfg = dbg|x64
+		{76F01C7C-953B-4A0F-92D4-F3FBF50C6D71}.dbg|x64.Build.0 = dbg|x64
+		{76F01C7C-953B-4A0F-92D4-F3FBF50C6D71}.dbg|x86.ActiveCfg = dbg|x64
+		{76F01C7C-953B-4A0F-92D4-F3FBF50C6D71}.rtl|Mixed Platforms.ActiveCfg = rtl|x64
+		{76F01C7C-953B-4A0F-92D4-F3FBF50C6D71}.rtl|Mixed Platforms.Build.0 = rtl|x64
+		{76F01C7C-953B-4A0F-92D4-F3FBF50C6D71}.rtl|Win32.ActiveCfg = rtl|Win32
+		{76F01C7C-953B-4A0F-92D4-F3FBF50C6D71}.rtl|Win32.Build.0 = rtl|Win32
+		{76F01C7C-953B-4A0F-92D4-F3FBF50C6D71}.rtl|x64.ActiveCfg = rtl|x64
+		{76F01C7C-953B-4A0F-92D4-F3FBF50C6D71}.rtl|x64.Build.0 = rtl|x64
+		{76F01C7C-953B-4A0F-92D4-F3FBF50C6D71}.rtl|x86.ActiveCfg = rtl|x64
+		{B4DED736-0147-48E6-9F01-93F82D91FE82}.dbg|Mixed Platforms.ActiveCfg = dbg|x64
+		{B4DED736-0147-48E6-9F01-93F82D91FE82}.dbg|Mixed Platforms.Build.0 = dbg|x64
+		{B4DED736-0147-48E6-9F01-93F82D91FE82}.dbg|Win32.ActiveCfg = dbg|Win32
+		{B4DED736-0147-48E6-9F01-93F82D91FE82}.dbg|Win32.Build.0 = dbg|Win32
+		{B4DED736-0147-48E6-9F01-93F82D91FE82}.dbg|x64.ActiveCfg = dbg|x64
+		{B4DED736-0147-48E6-9F01-93F82D91FE82}.dbg|x64.Build.0 = dbg|x64
+		{B4DED736-0147-48E6-9F01-93F82D91FE82}.dbg|x86.ActiveCfg = dbg|x64
+		{B4DED736-0147-48E6-9F01-93F82D91FE82}.rtl|Mixed Platforms.ActiveCfg = rtl|x64
+		{B4DED736-0147-48E6-9F01-93F82D91FE82}.rtl|Mixed Platforms.Build.0 = rtl|x64
+		{B4DED736-0147-48E6-9F01-93F82D91FE82}.rtl|Win32.ActiveCfg = rtl|Win32
+		{B4DED736-0147-48E6-9F01-93F82D91FE82}.rtl|Win32.Build.0 = rtl|Win32
+		{B4DED736-0147-48E6-9F01-93F82D91FE82}.rtl|x64.ActiveCfg = rtl|x64
+		{B4DED736-0147-48E6-9F01-93F82D91FE82}.rtl|x64.Build.0 = rtl|x64
+		{B4DED736-0147-48E6-9F01-93F82D91FE82}.rtl|x86.ActiveCfg = rtl|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

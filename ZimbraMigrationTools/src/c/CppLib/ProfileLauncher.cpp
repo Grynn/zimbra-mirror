@@ -1,5 +1,5 @@
 #include "common.h"
-#include <mapiutil.h>
+#include "commonMAPI.h"
 
 #define PR_REPLICA_VERSION PROP_TAG(PT_I8,0x664b)
 #define PR_PROFILE_HOME_SERVER_DN	PROP_TAG( PT_STRING8,	0x6612 )
