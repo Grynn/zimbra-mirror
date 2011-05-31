@@ -136,7 +136,7 @@ public abstract class AbsSeleniumObject {
 	 * @param locator, coord
 	 * @throws HarnessException
 	 */
-	public void zRightClick(String locator, String coord) throws HarnessException {
+	public void zRightClickAt(String locator, String coord) throws HarnessException {
 		
 		// Check if the locator is present
 		if (!sIsElementPresent(locator)) {
@@ -164,7 +164,7 @@ public abstract class AbsSeleniumObject {
 			throw new HarnessException("zRightClick(" + locator + ") element is not present");
 		}
 
-		ClientSessionFactory.session().selenium().mouseDownRight(locator);
+		ClientSessionFactory.session().selenium().mouseDownRight(locator);		
 		ClientSessionFactory.session().selenium().mouseUpRight(locator);
 		logger.info("zRightClick(" + locator + ")");
 	}
