@@ -86,15 +86,14 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
-	 * Execute mouseDownAt followed by mouseUpAt on the (0,0) position of a
+	 * Execute mouseDownAt followed by mouseUpAt on the coordination "(x,y)" position of a
 	 * locator
 	 * 
-	 * @param locator
+	 * @param locator, coord
 	 * @throws HarnessException
 	 */
-	public void zClick(String locator) throws HarnessException {
+	public void zClickAt(String locator, String coord) throws HarnessException {
 		
-		// Check if the locator is present
 		// Check if the locator is present
 		if (!sIsElementPresent(locator)) {
 			logger.info("zClick(" + locator + ") element is not present");
@@ -103,10 +102,52 @@ public abstract class AbsSeleniumObject {
 		}
 
 
-		ClientSessionFactory.session().selenium().mouseDownAt(locator, "0,0");
-		ClientSessionFactory.session().selenium().mouseUpAt(locator, "0,0");
+		ClientSessionFactory.session().selenium().mouseDownAt(locator, coord);
+		ClientSessionFactory.session().selenium().mouseUpAt(locator, coord);
+
+		logger.info("zClick(" + locator + "," + coord + ")");
+	}
+
+	/**
+	 * Execute mouseDown followed by mouseUp 
+	 * 
+	 * @param locator
+	 * @throws HarnessException
+	 */
+	public void zClick(String locator) throws HarnessException {
+		
+		// Check if the locator is present
+		if (!sIsElementPresent(locator)) {
+			logger.info("zClick(" + locator + ") element is not present");
+			throw new HarnessException("zClick(" + locator + ") element is not present");
+
+		}
+
+
+		ClientSessionFactory.session().selenium().mouseDown(locator);
+		ClientSessionFactory.session().selenium().mouseUp(locator);
 
 		logger.info("zClick(" + locator + ")");
+	}
+
+	/**
+	 * Execute mouseDownRight followed by mouseUpRight on a locator at a coordinator
+	 * 
+	 * @param locator, coord
+	 * @throws HarnessException
+	 */
+	public void zRightClick(String locator, String coord) throws HarnessException {
+		
+		// Check if the locator is present
+		if (!sIsElementPresent(locator)) {
+			logger.info("zRightClick(" + locator + ") element is not present");
+			throw new HarnessException("zRightClick(" + locator + ") element is not present");
+		}
+
+		ClientSessionFactory.session().selenium().mouseDownRightAt(locator,coord);
+		ClientSessionFactory.session().selenium().mouseUpRightAt(locator, coord);
+		
+		logger.info("zRightClick(" + locator + "," + coord + ")");
 	}
 
 	/**
@@ -123,13 +164,11 @@ public abstract class AbsSeleniumObject {
 			throw new HarnessException("zRightClick(" + locator + ") element is not present");
 		}
 
-		ClientSessionFactory.session().selenium().mouseDownRightAt(locator,
-				"0,0");
-		ClientSessionFactory.session().selenium()
-				.mouseUpRightAt(locator, "0,0");
+		ClientSessionFactory.session().selenium().mouseDownRight(locator);
+		ClientSessionFactory.session().selenium().mouseUpRight(locator);
 		logger.info("zRightClick(" + locator + ")");
 	}
-
+	
 	/**
 	 * Execute select on a windowID
 	 * 
