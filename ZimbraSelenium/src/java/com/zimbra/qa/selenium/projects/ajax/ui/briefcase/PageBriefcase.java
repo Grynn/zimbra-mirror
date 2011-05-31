@@ -1213,7 +1213,7 @@ public class PageBriefcase extends AbsTab {
 		if (url.endsWith("?"))
 			url = url.substring(0, url.length() - 1);
 
-		ClientSessionFactory.session().selenium().open(url);
+		this.sOpen(url);
 
 		return url;
 	}
@@ -1221,7 +1221,7 @@ public class PageBriefcase extends AbsTab {
 	public void closeWindow() {
 		tracer.trace("Close the separate window");
 
-		ClientSessionFactory.session().selenium().close();
+		this.sClose();
 	}
 
 	@Override

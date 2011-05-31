@@ -102,7 +102,7 @@ public class PageLogin extends AbsTab {
 
 		// TODO: maybe handle this in the pulldown options?
 		// Force the html client to load
-		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getBaseURL());
+		this.sOpen(ZimbraSeleniumProperties.getBaseURL());
 		
 
 	}

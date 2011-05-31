@@ -24,6 +24,21 @@ public class ZimbraSelenium extends DefaultSelenium {
 		super(serverHost, serverPort, browserStartCommand, browserURL);
 	}
 	
+	public void open(String url) {
+	    logger.info("selenium.open(" + url + ")");
+	    super.open(url);
+	}
+	
+	public void openWindow(String url, String id) {
+	    logger.info("selenium.open(" + url + ", "+ id +")");
+	    super.openWindow(url, id);
+	}
+	
+	public void close() {
+	    logger.info("selenium.close()");
+	    super.close();
+	}
+	
 	public boolean isElementPresent(String locator){		
 	    boolean result=super.isElementPresent(locator);
 	    logger.info("selenium.isElementPresent(" + locator + ") = " + result);	   	    

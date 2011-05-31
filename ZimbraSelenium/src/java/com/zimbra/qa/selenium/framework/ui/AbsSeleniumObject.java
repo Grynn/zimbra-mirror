@@ -928,9 +928,19 @@ public abstract class AbsSeleniumObject {
 	 * @param url
 	 * @param windowID
 	 */
+	public void sOpen(String url) {
+		logger.info("open("+ url +")");
+		ClientSessionFactory.session().selenium().open(url);
+	}
+	
+	/**
+	 * DefaultSelenium.openWindow()
+	 * @param url
+	 * @param windowID
+	 */
 	public void sOpenWindow(String url,String windowID) {
 		ClientSessionFactory.session().selenium().openWindow(url, windowID);
-		logger.info("sOpenWindow(" + windowID + ")");
+		logger.info("openWindow("+ url +", "+ windowID + ")");
 	}
 	
 	public void sWaitForPopUp(String windowID,String timeout ) {

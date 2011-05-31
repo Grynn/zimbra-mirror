@@ -308,6 +308,8 @@ public class CodeCoverage {
 	// For logging, report how many new files were touched and how many new lines were touched
 	//
 	private void traceCoverage(JSONObject oldJSON, JSONObject newJSON) {
+		logger.info("CodeCoverage: URL="+ ClientSessionFactory.session().selenium().getLocation());
+		
 		
 		int countFiles = 0;			// # of new files touched
 		int countLines = 0;			// # of new lines touched

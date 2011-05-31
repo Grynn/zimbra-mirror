@@ -112,7 +112,7 @@ public class PageDownloads extends AbsTab {
 		String path = "/zimbra/downloads/index.html";
 		String id = ZimbraSeleniumProperties.getUniqueString();
 		
-		ClientSessionFactory.session().selenium().openWindow(base + path, id);
+		this.sOpenWindow(base + path, id);
 		this.zSelectWindow(id);
 		SleepUtil.sleepLong();
 		
