@@ -98,10 +98,12 @@ public class CodeCoverage {
 
 			JSONArray coverage = cumulativeCoverage.getJSONObject(key).getJSONArray("coverage");
 			for (int i = 0; i < coverage.size(); i++) {
-				countTotalLines++;
 				
 				String sValue = coverage.getString(i);
 				if ( !sValue.equalsIgnoreCase("null") ) {
+					
+					countTotalLines++;
+
 					Integer iValue = Integer.parseInt(sValue);
 					if ( iValue > 0 ) {
 
