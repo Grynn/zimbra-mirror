@@ -24,6 +24,9 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
  *
  */
 public class ClientSession {
+	public static final String IE9="MSIE 9";
+	public static final String IE8="MSIE 8";
+	
 	private static Logger logger = LogManager.getLogger(ClientSession.class);
 	
 	private String name;	// A unique string identifying this session
@@ -57,10 +60,10 @@ public class ClientSession {
 		return (selenium);
 	}
 	
-	public boolean isBrowserIE9(){
+	public boolean isBrowserIE(String browserType){
 		String userAgent=ClientSessionFactory.session().selenium().getEval("navigator.userAgent;");
-		return ( currentBrowserName().contains("MSIE 9") ||
-				 //IE9 in compatible mode
+		return ( currentBrowserName().contains(browserType) ||
+				 //IE9 or 8 in compatible mode
 				  ( currentBrowserName().contains("MSIE 7") && 	 
 				    userAgent.contains("Mozilla/4.0") &&
 				    userAgent.contains("compatible")
@@ -123,6 +126,7 @@ public class ClientSession {
 		private void setBrowserAgent() {
 			if (userAgent == null) {
 				userAgent = ClientSessionFactory.session().selenium().getEval("navigator.userAgent;");
+				
 				if ( userAgent.equals("") ) {
 					userAgent = null;
 				}
@@ -136,6 +140,8 @@ public class ClientSession {
 		public String getBrowserName() {
 			setBrowserAgent();
 			String browserName = "";
+			logger.info("UserAgent: >>>>>> " + userAgent);
+					
 			if (userAgent.indexOf("Firefox/") >= 0){
 				browserName = "FF " + userAgent.split("Firefox/")[1];
 				String[] temp = browserName.split(" ");

@@ -10,6 +10,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactNew;
 
 /**
  * Used to define a Zimbra Contact
@@ -146,7 +147,7 @@ public class ContactItem implements IItem {
 	                "<CreateContactRequest xmlns='urn:zimbraMail'>" +
 	                "<cn " + tagParam + " >" +
 	                "<a n='firstName'>" + contactItem.firstName +"</a>" +
-	                "<a n='lastName'>" + contactItem.lastName +"</a>" +
+	                "<a n='lastName'>" + contactItem.lastName +"</a>" +             
 	                "<a n='email'>" + contactItem.email + "</a>" +
 	                "</cn>" +
 	                "</CreateContactRequest>");	  
@@ -169,19 +170,37 @@ public class ContactItem implements IItem {
 	 * @throws HarnessException 
 	 */
 	public static ContactItem generateContactItem(GenerateItemType type) throws HarnessException {
+		ContactItem c = new ContactItem();
+		c.firstName = "first" + ZimbraSeleniumProperties.getUniqueString();	
+		c.lastName = "last" + ZimbraSeleniumProperties.getUniqueString();
+	    c.email = "email" +  ZimbraSeleniumProperties.getUniqueString() + "@zimbra.com";
+		//default value for file as is  last , first
+		c.fileAs = c.lastName + ", " + c.firstName;
+		
 		if ( type.equals(GenerateItemType.Default) || type.equals(GenerateItemType.Basic) ) {
-			ContactItem c = new ContactItem();
-			c.firstName = "first" + ZimbraSeleniumProperties.getUniqueString();
-			c.middleName = "middle" + ZimbraSeleniumProperties.getUniqueString();
-			c.lastName = "last" + ZimbraSeleniumProperties.getUniqueString();
-		    c.email = "email" +  ZimbraSeleniumProperties.getUniqueString() + "@zimbra.com";
-			//default value for file as is  last , first
-			c.fileAs = c.lastName + ", " + c.firstName;
 			return (c);
 		}
-		
-		if ( type.equals(GenerateItemType.AllAttributes) ) {
-			throw new HarnessException("Implement me!");
+		else if ( type.equals(GenerateItemType.AllAttributes) ) {
+			c.middleName = "middle" + ZimbraSeleniumProperties.getUniqueString();
+			c.ContactAttributes.put(FormContactNew.Locators.zPrefixEditField, "p");
+			c.ContactAttributes.put(FormContactNew.Locators.zMaidenEditField, "M" );
+			c.ContactAttributes.put(FormContactNew.Locators.zSuffixEditField, "Su");
+			c.ContactAttributes.put(FormContactNew.Locators.zNicknameEditField, "Nick" );
+			c.ContactAttributes.put(FormContactNew.Locators.zDepartmentEditField, "dep" + ZimbraSeleniumProperties.getUniqueString());
+			c.ContactAttributes.put(FormContactNew.Locators.zJobTitleEditField, "jobTitle" + ZimbraSeleniumProperties.getUniqueString());
+			c.ContactAttributes.put(FormContactNew.Locators.zCompanyEditField, "company" + ZimbraSeleniumProperties.getUniqueString());
+			c.ContactAttributes.put(FormContactNew.Locators.zPhone1EditField,  ZimbraSeleniumProperties.getUniqueString());
+			c.ContactAttributes.put(FormContactNew.Locators.zIM1EditField,  ZimbraSeleniumProperties.getUniqueString());
+			c.ContactAttributes.put(FormContactNew.Locators.zStreet1TextArea, "street " + ZimbraSeleniumProperties.getUniqueString());
+			c.ContactAttributes.put(FormContactNew.Locators.zCity1EditField, "city " + ZimbraSeleniumProperties.getUniqueString());
+			c.ContactAttributes.put(FormContactNew.Locators.zState1EditField, "CA");
+			c.ContactAttributes.put(FormContactNew.Locators.zPostalCode1EditField, "95123");
+			c.ContactAttributes.put(FormContactNew.Locators.zCountry1EditField, "USA");
+			c.ContactAttributes.put(FormContactNew.Locators.zURL1EditField, "http://www.zimbra.com");
+			c.ContactAttributes.put(FormContactNew.Locators.zOther1EditField, "1985-05-24");
+			c.ContactAttributes.put(FormContactNew.Locators.zNotesEditField,  "notes " + ZimbraSeleniumProperties.getUniqueString());
+			
+			return c;
 		}
 		
 		// Default:

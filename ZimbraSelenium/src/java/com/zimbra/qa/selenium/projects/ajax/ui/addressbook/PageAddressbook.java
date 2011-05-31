@@ -122,7 +122,7 @@ public class PageAddressbook extends AbsTab {
 
 		
 		// Click on Addressbook icon
-		zClick(PageMain.Locators.zAppbarContact);
+		zClickAt(PageMain.Locators.zAppbarContact,"0,0");
 
 		zWaitForActive();
 
@@ -269,7 +269,7 @@ public class PageAddressbook extends AbsTab {
 			throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
 
 		// Click it
-		this.zClick(locator);
+		this.zClickAt(locator,"0,0");
 		
 		if (isAlphabetButton(button)) {
  		  //for addressbook alphabet button only
@@ -441,14 +441,23 @@ public class PageAddressbook extends AbsTab {
 			if ( !sIsElementPresent(pulldownLocator) ) {
 				throw new HarnessException("Button "+ pulldown +" option "+ option +" pulldownLocator "+ pulldownLocator +" not present!");
 			}
-			
-			if (ClientSessionFactory.session().isBrowserIE9())
+
+			//IE 9 browser
+			if (ClientSessionFactory.session().isBrowserIE(ClientSessionFactory.session().IE9))
 			{ 
 			  sClick(pulldownLocator);
+			 	
 			}
+			//IE 8 browser
+			if (ClientSessionFactory.session().isBrowserIE(ClientSessionFactory.session().IE9)) {				
+			  sMouseDown(pulldownLocator);
+		      sMouseUp(pulldownLocator);					
+			}
+			
 			else {
-			  zClick(pulldownLocator);
+			  zClickAt(pulldownLocator,"0,0");
 			}
+			
 			zWaitForBusyOverlay();
 			
 			if ( optionLocator != null ) {
