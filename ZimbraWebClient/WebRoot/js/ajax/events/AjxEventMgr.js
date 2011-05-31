@@ -105,3 +105,11 @@ function(eventType) {
 	}
 	return false;
 }
+
+AjxEventMgr.prototype.clearAllEvents =
+function() {
+	var listeners = this._listeners;
+    for (var eventType in listeners) {
+        this.removeAll(eventType);
+    }
+};

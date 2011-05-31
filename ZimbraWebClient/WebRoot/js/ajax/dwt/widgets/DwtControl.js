@@ -583,6 +583,7 @@ function() {
 	var ev = new DwtDisposeEvent();
 	ev.dwtObj = this;
 	this.notifyListeners(DwtEvent.DISPOSE, ev);
+    this._eventMgr.clearAllEvents();
 };
 
 /**
