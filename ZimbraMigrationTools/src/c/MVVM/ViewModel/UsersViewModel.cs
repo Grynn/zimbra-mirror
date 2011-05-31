@@ -235,7 +235,6 @@ namespace MVVM.ViewModel
 
             string resultcsv = Users.ToCsv<Users>(",", ListofUsers);
 
-            bool bCSV = false;
             Microsoft.Win32.SaveFileDialog fDialog = new Microsoft.Win32.SaveFileDialog();
             fDialog.Filter = "User Map Files|*.csv";
        

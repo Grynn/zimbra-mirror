@@ -101,14 +101,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../../../../ZimbraMAPI/src/;../../../../ZimbraMAPI/src/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../CppLib;../../../../ZimbraMAPI/src/;../../../../ZimbraMAPI/src/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_CONSOLE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <DisableSpecificWarnings>4512;4127;4996</DisableSpecificWarnings>
@@ -116,6 +116,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
+      <PrecompiledHeaderFile>common.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <AdditionalDependencies>comsupp.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -138,13 +139,13 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>../../../../ZimbraMAPI/src/;../../../../ZimbraMAPI/src/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../CppLib;../../../../ZimbraMAPI/src/;../../../../ZimbraMAPI/src/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WIN64;WIN64;_CONSOLE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4512;4127;4996</DisableSpecificWarnings>
@@ -153,6 +154,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
       <MinimalRebuild>false</MinimalRebuild>
+      <PrecompiledHeaderFile>common.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <AdditionalDependencies>ws2_32.lib;Dsuiext.lib;msxml2.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;comsupp.lib;winhttp.lib;Version.lib;dbghelp.lib;Psapi.lib;Netapi32.lib;Ex2KSdkD.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -186,11 +188,12 @@
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>false</OmitFramePointers>
       <DisableSpecificWarnings>4512;4127;4996</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>../../../../ZimbraMAPI/src/;../../../../ZimbraMAPI/src/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../CppLib;../../../../ZimbraMAPI/src/;../../../../ZimbraMAPI/src/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
       <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeaderFile>common.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -228,10 +231,11 @@
       <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
       <OmitFramePointers>false</OmitFramePointers>
       <DisableSpecificWarnings>4512;4127;4996</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>../../../../ZimbraMAPI/src/;../../../../ZimbraMAPI/src/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../CppLib;../../../../ZimbraMAPI/src/;../../../../ZimbraMAPI/src/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
+      <PrecompiledHeaderFile>common.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -272,7 +276,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PSTMigration.h" />
-    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\ZimbraMAPI\vcproj\Util.vcxproj">

@@ -1,8 +1,7 @@
-#include "stdafx.h"
-#include "Common.h"
+#include "common.h"
+#include "commonMAPI.h"
 #include "Zimbra/Zimbra.h"
 #include "Zimbra/Rpc.h"
-
 
 int main(int argc, TCHAR *argv[])
 {
