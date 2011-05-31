@@ -568,7 +568,11 @@ public class ExecuteHarnessMain {
 		public void afterInvocation(IInvokedMethod method, ITestResult result) {
 			if ( method.isTestMethod() ) {
 				
-				CodeCoverage.getInstance().calculateCoverage();
+				try {
+					CodeCoverage.getInstance().calculateCoverage();
+				} catch (HarnessException e) {
+					logger.error("Skip logging calculation", e);
+				}
 
 				logger.info("MethodListener: FINISH: "+ getTestCaseID(method.getTestMethod().getMethod()));
 				

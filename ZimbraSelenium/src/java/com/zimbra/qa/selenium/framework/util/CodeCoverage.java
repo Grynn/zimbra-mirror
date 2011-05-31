@@ -225,8 +225,9 @@ public class CodeCoverage {
 
 	/**
 	 * Update the coverage data
+	 * @throws HarnessException 
 	 */
-	public void calculateCoverage() {
+	public void calculateCoverage() throws HarnessException {
 		logger.info("calculateCoverage()");
 
 		if ( !Enabled ) {
@@ -247,7 +248,11 @@ public class CodeCoverage {
 
 				// First time in, just initialize the object
 				logger.debug("initalizing coverage object");
-				cumulativeCoverage = (JSONObject) JSONSerializer.toJSON(ClientSessionFactory.session().selenium().getEval(COVERAGE_SCRIPT));
+				try {
+					cumulativeCoverage = (JSONObject) JSONSerializer.toJSON(ClientSessionFactory.session().selenium().getEval(COVERAGE_SCRIPT));
+				} catch (net.sf.json.JSONException e) {
+					throw new HarnessException("JSON = ("+ ClientSessionFactory.session().selenium().getEval(COVERAGE_SCRIPT) +")", e);
+				}
 				
 				// Log coverage statistics
 				traceCoverage(null, cumulativeCoverage);
@@ -707,7 +712,7 @@ public class CodeCoverage {
 		//
 		String property = ZimbraSeleniumProperties.getStringProperty("coverage.query", "");
 		String appPoperty = ZimbraSeleniumProperties.getStringProperty(
-				"coverage.query"+ ZimbraSeleniumProperties.getAppType(), null );
+				"coverage.query."+ ZimbraSeleniumProperties.getAppType(), null );
 		if ( appPoperty != null ) {
 			property = appPoperty; // Override the default
 		}

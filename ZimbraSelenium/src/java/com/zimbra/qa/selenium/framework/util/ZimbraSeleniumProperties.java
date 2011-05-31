@@ -6,11 +6,8 @@ import java.net.*;
 import java.util.*;
 import java.util.Map.Entry;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
+import org.apache.commons.configuration.*;
+import org.apache.log4j.*;
 
 public class ZimbraSeleniumProperties {
 	private static final Logger logger = LogManager.getLogger(ZimbraSeleniumProperties.class);
