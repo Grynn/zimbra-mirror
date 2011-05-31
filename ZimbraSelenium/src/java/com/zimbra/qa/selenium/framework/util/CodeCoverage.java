@@ -698,7 +698,17 @@ public class CodeCoverage {
 	public Map<String, String> getQueryMap() {
 		Map<String, String> map = new HashMap<String, String>();
 		
+		// Use the app property, if specified
+		// i.e. "coverage.query.AJAX"
+		// But, if not specified, default to the non-specific property
+		// i.e. "coverage.query"
+		//
 		String property = ZimbraSeleniumProperties.getStringProperty("coverage.query", "");
+		String appPoperty = ZimbraSeleniumProperties.getStringProperty(
+				"coverage.query"+ ZimbraSeleniumProperties.getAppType(), null );
+		if ( appPoperty != null ) {
+			property = appPoperty; // Override the default
+		}
 		
 		for (String p : property.split("&")) {
 			if ( p.contains("=") ) {
