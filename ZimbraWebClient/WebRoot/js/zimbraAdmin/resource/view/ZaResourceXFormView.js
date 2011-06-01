@@ -748,7 +748,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 
     var case1 = {type:_ZATABCASE_, numCols:1,  caseKey:_tab1,
 //        height:"400px",  align:_LEFT_, valign:_TOP_,
-        items:[nameGroup,setupGroup,signatureGroup,passwordGroup,notesGroup]
+        items:[nameGroup,setupGroup,passwordGroup,signatureGroup,notesGroup]
     };
 
     cases.push(case1);

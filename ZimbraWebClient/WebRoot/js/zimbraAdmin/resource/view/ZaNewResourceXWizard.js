@@ -29,6 +29,7 @@ ZaNewResourceXWizard = function(parent) {
 	this.TAB_INDEX = 0;
 	ZaNewResourceXWizard.step1 = ++this.TAB_INDEX;
 	ZaNewResourceXWizard.step2 = ++this.TAB_INDEX;
+    ZaNewResourceXWizard.step3 = ++this.TAB_INDEX;
 	if(!ZaResource.accountStatusChoices) {
 		ZaResource.accountStatusChoices = [
 			{value:ZaResource.ACCOUNT_STATUS_ACTIVE, label:ZaResource.getAccountStatusLabel(ZaResource.ACCOUNT_STATUS_ACTIVE)}, 
@@ -39,7 +40,8 @@ ZaNewResourceXWizard = function(parent) {
 	}
 	this.stepChoices = [
 		{label:ZaMsg.TABT_ResourceProperties, value:ZaNewResourceXWizard.step1},
-		{label:ZaMsg.TABT_ResLocationContact, value:ZaNewResourceXWizard.step2}
+		{label:ZaMsg.TABT_ResLocationContact, value:ZaNewResourceXWizard.step2},
+		{label:ZaMsg.TABT_SignatureProperties, value:ZaNewResourceXWizard.step3}
 	];
     this.signatureChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "id", "name");
 	this._lastStep = this.stepChoices.length;	
@@ -452,61 +454,6 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 		
 	}
 
-	var signatureGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_Signature, id:"account_wiz_signature_group",
-		numCols:2, colSpan:2,
-	 	items:[
-			{ref:ZaResource.A2_signatureList, type:_REPEAT_, msgName:"", colSpan:2,
-				label:"", labelLocation:_NONE_,
-                addButtonLabel:ZaMsg.NAD_AddSignature, removeButtonLabel: ZaMsg.NAD_RemoveSignature,  showAddOnNextRow:true,
-                addButtonCSSStyle:"margin-left:200px",
-				showAddButton:true, showRemoveButton:true,
-                items: [
-                    {
-                        ref:".", type:_SIGNATURE_, width:"100%"
-                    }
-                ],
-                getDisplayValue: function(value){
-                    var form = this.getForm().parent;
-                    var instance = this.getInstance();
-                    var tempChoice = ZaSignature.getNewSignatureChoices(instance[ZaResource.A2_signatureList]);
-                    form.signatureChoices.setChoices(tempChoice);
-                    form.signatureChoices.dirtyChoices();
-                    return value;
-                }
-            },
-            {ref:ZaResource.A_zimbraPrefCalendarAutoAcceptSignatureId, type:_OSELECT1_,
-                msgName:ZaMsg.NAD_zimbraPrefCalendarAutoAcceptSignatureId,
-                width: "280px",
-                label:ZaMsg.NAD_zimbraPrefCalendarAutoAcceptSignatureId, labelLocation:_LEFT_,
-                visibilityChecks:[],
-                enableDisableChecks:[ZaResourceXFormView.isSignatureSelectionEnabled],
-                enableDisableChangeEventSources:[ZaResource.A2_signatureList],
-                valueChangeEventSources:[ZaResource.A2_signatureList],
-                choices:this.signatureChoices
-            },
-            {ref:ZaResource.A_zimbraPrefCalendarAutoDeclineSignatureId, type:_OSELECT1_,
-                msgName:ZaMsg.NAD_zimbraPrefCalendarAutoDeclineSignatureId,
-                width: "280px",
-                label:ZaMsg.NAD_zimbraPrefCalendarAutoDeclineSignatureId, labelLocation:_LEFT_,
-                visibilityChecks:[],
-                enableDisableChecks:[ZaResourceXFormView.isSignatureSelectionEnabled],
-                enableDisableChangeEventSources:[ZaResource.A2_signatureList],
-                valueChangeEventSources:[ZaResource.A2_signatureList],
-                choices:this.signatureChoices
-            },
-            {ref:ZaResource.A_zimbraPrefCalendarAutoDenySignatureId, type:_OSELECT1_,
-                msgName:ZaMsg.NAD_zimbraPrefCalendarAutoDenySignatureId,
-                width: "280px",
-                label:ZaMsg.NAD_zimbraPrefCalendarAutoDenySignatureId, labelLocation:_LEFT_,
-                visibilityChecks:[],
-                enableDisableChecks:[ZaResourceXFormView.isSignatureSelectionEnabled],
-                enableDisableChangeEventSources:[ZaResource.A2_signatureList],
-                valueChangeEventSources:[ZaResource.A2_signatureList],
-                choices:this.signatureChoices
-            }
-		]
-	};
-
 	var notesGroup = {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_NotesGrouper, id:"account_wiz_notes_group",
 		numCols:2,
 	 	items:[
@@ -516,10 +463,9 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 		]
 	};
 	var case1 = {type:_CASE_, numCols:1, caseKey:ZaNewResourceXWizard.step1, align:_LEFT_, valign:_TOP_,
-		items:[nameGroup,setupGroup,signatureGroup, passwordGroup,notesGroup]
+		items:[nameGroup,setupGroup,passwordGroup,notesGroup]
 	
 	};	
-	
 
 	cases.push(case1);
 
@@ -578,6 +524,65 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 					]
 				};
 	cases.push(case2);
+
+	var signatureGroup = {type:_ZAWIZGROUP_, id:"account_wiz_signature_group",
+		numCols:2, colSpan:2, width:"100%", colSizes:["200px", "auto"],
+	 	items:[
+			{ref:ZaResource.A2_signatureList, type:_REPEAT_, msgName:"", colSpan:2,
+				label:"", labelLocation:_NONE_,
+                addButtonLabel:ZaMsg.NAD_AddSignature, removeButtonLabel: ZaMsg.NAD_RemoveSignature,  showAddOnNextRow:true,
+                addButtonCSSStyle:"margin-left:200px",
+				showAddButton:true, showRemoveButton:true,
+                items: [
+                    {
+                        ref:".", type:_SIGNATURE_, width:"100%"
+                    }
+                ],
+                getDisplayValue: function(value){
+                    var form = this.getForm().parent;
+                    var instance = this.getInstance();
+                    var tempChoice = ZaSignature.getNewSignatureChoices(instance[ZaResource.A2_signatureList]);
+                    form.signatureChoices.setChoices(tempChoice);
+                    form.signatureChoices.dirtyChoices();
+                    return value;
+                }
+            },
+            {ref:ZaResource.A_zimbraPrefCalendarAutoAcceptSignatureId, type:_OSELECT1_,
+                msgName:ZaMsg.NAD_zimbraPrefCalendarAutoAcceptSignatureId,
+                width: "280px",
+                label:ZaMsg.NAD_zimbraPrefCalendarAutoAcceptSignatureId, labelLocation:_LEFT_,
+                visibilityChecks:[],
+                enableDisableChecks:[ZaResourceXFormView.isSignatureSelectionEnabled],
+                enableDisableChangeEventSources:[ZaResource.A2_signatureList],
+                valueChangeEventSources:[ZaResource.A2_signatureList],
+                choices:this.signatureChoices
+            },
+            {ref:ZaResource.A_zimbraPrefCalendarAutoDeclineSignatureId, type:_OSELECT1_,
+                msgName:ZaMsg.NAD_zimbraPrefCalendarAutoDeclineSignatureId,
+                width: "280px",
+                label:ZaMsg.NAD_zimbraPrefCalendarAutoDeclineSignatureId, labelLocation:_LEFT_,
+                visibilityChecks:[],
+                enableDisableChecks:[ZaResourceXFormView.isSignatureSelectionEnabled],
+                enableDisableChangeEventSources:[ZaResource.A2_signatureList],
+                valueChangeEventSources:[ZaResource.A2_signatureList],
+                choices:this.signatureChoices
+            },
+            {ref:ZaResource.A_zimbraPrefCalendarAutoDenySignatureId, type:_OSELECT1_,
+                msgName:ZaMsg.NAD_zimbraPrefCalendarAutoDenySignatureId,
+                width: "280px",
+                label:ZaMsg.NAD_zimbraPrefCalendarAutoDenySignatureId, labelLocation:_LEFT_,
+                visibilityChecks:[],
+                enableDisableChecks:[ZaResourceXFormView.isSignatureSelectionEnabled],
+                enableDisableChangeEventSources:[ZaResource.A2_signatureList],
+                valueChangeEventSources:[ZaResource.A2_signatureList],
+                choices:this.signatureChoices
+            }
+		]
+	};
+    var case3 = {type:_CASE_, numCols:1, caseKey:ZaNewResourceXWizard.step3, align:_LEFT_, valign:_TOP_,
+		items:[signatureGroup]
+	};
+    cases.push(case3);
 
 	xFormObject.items = [
 			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices,valueChangeEventSources:[ZaModel.currentStep]},

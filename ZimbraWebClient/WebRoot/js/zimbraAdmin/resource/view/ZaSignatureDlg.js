@@ -25,7 +25,7 @@ function() {
 		items:[
             {type:_GROUP_,isTabGroup:true,
             	items: [ //allows tab key iteration
-                	{ref:ZaSignature.A2_name, type:_TEXTFIELD_, label:ZaMsg.Dlg_SignatureName,visibilityChecks:[],enableDisableChecks:[]},
+                	{ref:ZaSignature.A2_name, type:_TEXTFIELD_, width:"300px", label:ZaMsg.Dlg_SignatureName,visibilityChecks:[],enableDisableChecks:[]},
                     {ref:ZaSignature.A2_content, type:_TEXTAREA_,
                         width:"300px", label:ZaMsg.Dlg_SignatureContent, msgName:ZaMsg.Dlg_SignatureContent,
                         labelLocation:_LEFT_,visibilityChecks:[],enableDisableChecks:[]},

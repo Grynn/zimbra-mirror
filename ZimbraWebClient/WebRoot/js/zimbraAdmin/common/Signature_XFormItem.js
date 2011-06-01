@@ -27,7 +27,7 @@ Signature_XFormItem.typeChoice = [
 ];
 
 Signature_XFormItem.prototype.items = [
-	{type:_TEXTFIELD_, ref:".", labelLocation:_LEFT_, forceUpdate:true,label:ZaMsg.Dlg_SignatureName,
+	{type:_TEXTFIELD_, ref:".", width:"300px", labelLocation:_LEFT_, forceUpdate:true,label:ZaMsg.Dlg_SignatureName,
 		//enableDisableChecks:false,
 		required:true,  labelCssStyle:"width:194px",
 		getDisplayValue:function(itemVal) {
