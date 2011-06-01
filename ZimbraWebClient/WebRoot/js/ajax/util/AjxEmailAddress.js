@@ -358,7 +358,6 @@ function(shortForm) {
 
 	if (this.name) {
 		var name = this.name.replace(/\\+"/g, '"');	// unescape double quotes (avoid double-escaping)
-		name = name.replace(/"/g, '\\"');			// escape double quotes
 		var buffer = shortForm ? [name] : ['"', name, '"'];
 		if (this.address && !shortForm) {
 			buffer.push(" <", this.address, ">");
