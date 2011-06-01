@@ -180,6 +180,7 @@ ZmCsfeException.MAINTENANCE_MODE					= "account.MAINTENANCE_MODE";
 ZmCsfeException.TOO_MANY_IDENTITIES					= "account.TOO_MANY_IDENTITIES";
 ZmCsfeException.TOO_MANY_SEARCH_RESULTS				= "account.TOO_MANY_SEARCH_RESULTS";
 ZmCsfeException.NO_SUCH_COS 						= "account.NO_SUCH_COS";
+ZmCsfeException.SIGNATURE_EXISTS                    = "account.SIGNATURE_EXISTS";
 
 ZmCsfeException.NO_SUCH_VOLUME						= "volume.NO_SUCH_VOLUME";
 ZmCsfeException.ALREADY_EXISTS						= "volume.ALREADY_EXISTS";

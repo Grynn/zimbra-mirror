@@ -612,6 +612,7 @@ ZaId.TABV_GSET_EDIT              = "V_GSET_EDIT";
 ZaId.DLG_NEW_ACCT		= "NEW_ACCT";
 ZaId.DLG_NEW_ALIAS              = "NEW_ALIAS";
 ZaId.DLG_EDIT_ALIAS             = "EDIT_ALIAS";
+ZaId.DLG_EDIT_SIGNATURE         = "EDIT_SIGNATURE";
 ZaId.DLG_NEW_RES               	= "NEW_RES";
 ZaId.DLG_NEW_ADMIN              = "NEW_ADMIN";
 ZaId.DLG_NEW_DOMAIN             = "NEW_DOMAIN";

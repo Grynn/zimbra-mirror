@@ -92,6 +92,12 @@ ZaResource.SCHEDULE_POLICY_FT = "scheduleFT";
 ZaResource.SCHEDULE_POLICY_TF = "scheduleTF";
 ZaResource.SCHEDULE_POLICY_FF = "scheduleFF";
 
+ZaResource.A_zimbraPrefCalendarAutoAcceptSignatureId = "zimbraPrefCalendarAutoAcceptSignatureId";
+ZaResource.A_zimbraPrefCalendarAutoDeclineSignatureId = "zimbraPrefCalendarAutoDeclineSignatureId";
+ZaResource.A_zimbraPrefCalendarAutoDenySignatureId = "zimbraPrefCalendarAutoDenySignatureId";
+ZaResource.A2_signatureList = "signatureList";
+ZaResource.A2_signature_selection_cache = "signatureSelectionCache";
+
 //this attributes are not used in the XML object, but is used in the model
 ZaResource.A2_schedulePolicy = "schedulePolicy";
 ZaResource.A2_autodisplayname = "autodisplayname";
@@ -215,7 +221,10 @@ function (tmpObj, resource) {
 		
 	//set all the other attrs automatically
 	for (var aname in tmpObj.attrs) {
-		if(aname == ZaResource.A_password || aname == ZaItem.A_objectClass || aname == ZaResource.A_mail) {
+		if(aname == ZaResource.A_password || aname == ZaItem.A_objectClass || aname == ZaResource.A_mail ||
+           aname == ZaResource.A_zimbraPrefCalendarAutoAcceptSignatureId ||
+           aname == ZaResource.A_zimbraPrefCalendarAutoDenySignatureId ||
+           aname == ZaResource.A_zimbraPrefCalendarAutoDeclineSignatureId     ) {
 			continue;
 		}	
 		
@@ -252,6 +261,7 @@ function (tmpObj, resource) {
 	return resource ;		
 }
 ZaItem.createMethods["ZaResource"].push(ZaResource.createMethod);
+ZaItem.createMethods["ZaResource"].push(ZaSignature.CreateAccountSignature);
 
 /**
 * @method modify
@@ -491,6 +501,7 @@ function(by, val, withCos) {
 		this[ZaAccount.A2_soapURL] = resp[ZaAccount.A2_soapURL][0]._content;
 }
 
+ZaItem.loadMethods["ZaResource"].push(ZaSignature.GetSignatures);
 ZaItem.loadMethods["ZaResource"].push(ZaResource.loadInfoMethod);
 
 ZaResource.prototype.getAutoLocationName = 
@@ -589,7 +600,11 @@ ZaResource.myXModel = {
 //		{id:ZaResource.A_description, type:_STRING_, ref:"attrs/"+ZaResource.A_description},
 		ZaItem.descriptionModelItem ,
           {id:ZaResource.A_notes, type:_STRING_, ref:"attrs/"+ZaResource.A_notes},
-		
+
+        //Signature
+        {id:ZaResource.A_zimbraPrefCalendarAutoAcceptSignatureId, type:_STRING_, ref:"attrs/"+ZaResource.A_zimbraPrefCalendarAutoAcceptSignatureId},
+        {id:ZaResource.A_zimbraPrefCalendarAutoDenySignatureId, type:_STRING_, ref:"attrs/"+ZaResource.A_zimbraPrefCalendarAutoDenySignatureId},
+        {id:ZaResource.A_zimbraPrefCalendarAutoDeclineSignatureId, type:_STRING_, ref:"attrs/"+ZaResource.A_zimbraPrefCalendarAutoDeclineSignatureId},
 		//Resource Location
 		{id:ZaResource.A_zimbraCalResSite, type:_STRING_, ref:"attrs/"+ZaResource.A_zimbraCalResSite},
 		{id:ZaResource.A_zimbraCalResBuilding, type:_STRING_, ref:"attrs/"+ZaResource.A_zimbraCalResBuilding},
@@ -625,8 +640,9 @@ ZaResource.myXModel = {
 		{id:ZaResource.A2_autoMailServer, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaResource.A2_autoCos, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaResource.A2_autoLocationName, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
-		{id:ZaAccount.A2_calFwdAddr_selection_cache, type:_LIST_}
-		
+		{id:ZaAccount.A2_calFwdAddr_selection_cache, type:_LIST_},
+        {id:ZaResource.A2_signatureList, type:_LIST_},
+        {id:ZaResource.A2_signature_selection_cache, type:_LIST_}
 	]
 };
 

@@ -255,6 +255,11 @@ OSelect1_XFormItem.prototype.showMenu = function() {
 	} else {
 		menu.getElementsByTagName("table")[0].className = this.getChoiceTableCssClass();
 	}
+
+    if(!AjxEnv.isIE && menu.clientWidth && menu.scrollWidth && (menu.scrollWidth > menu.clientWidth)){
+        menu.style.overflow="auto";
+    }
+
 	menu.style.zIndex = 1000000;
 	if (this.$hideListener == null) {
 		this.$hideListener = new AjxListener(this, this.oMouseUp);
@@ -440,7 +445,7 @@ OSelect1_XFormItem.prototype.getBounds = function(anElement, containerElement) {
 	var myBounds = new Object();
 	myBounds.left = 0;
 	myBounds.top = 0;
-	myBounds.width = anElement.clientWidth;
+	myBounds.width = anElement.clientWidth ? anElement.clientWidth: anElement.offsetWidth;
 	myBounds.height = anElement.offsetHeight;
 
 	if(!containerElement) {
