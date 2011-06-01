@@ -1,0 +1,2 @@
+^C:\WORK\ZIMBRA\MAIN\ZIMBRAMIGRATIONTOOLS\SRC\C\EXCHANGE\MAPIEXCHANGE\MAPIEXCHANGE\MAPIEXCHANGE.IDL
+/D _DEBUG /W1 /nologo /char signed /env win32 /Oicf /h "MapiExchange_i.h" /iid "MapiExchange_i.c" /proxy "MapiExchange_p.c" /tlb "Debug\MapiExchange.tlb" /robust MapiExchange.idl /D _DEBUG /W1 /nologo /char signed /env win32 /Oicf /h "MapiExchange_i.h" /iid "MapiExchange_i.c" /proxy "MapiExchange_p.c" /tlb "Debug\MapiExchange.tlb" /robust C:\WORK\ZIMBRA\MAIN\ZIMBRAMIGRATIONTOOLS\SRC\C\EXCHANGE\MAPIEXCHANGE\MAPIEXCHANGE\MAPIEXCHANGE.IDL
