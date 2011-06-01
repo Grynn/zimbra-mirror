@@ -514,6 +514,8 @@ if [ -L ${zimbra_home}/jetty ]; then
   if [ ! -d ${zimbra_home}/data/mailboxd/imap/cache ]; then
     mkdir -p ${zimbra_home}/data/mailboxd/imap/cache
   fi
+  chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/mailboxd
+  chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/mailboxd/imap
   chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/mailboxd/imap/cache
   chmod 755 ${zimbra_home}/data/mailboxd/imap/cache
 
@@ -675,6 +677,7 @@ if [ -d ${zimbra_home}/data/postfix ]; then
   chown -f ${postfix_owner} ${zimbra_home}/data/postfix
   chown -f ${postfix_owner} ${zimbra_home}/data/postfix/* 2> /dev/null
   chgrp -f ${postfix_suid_group} ${zimbra_home}/data/postfix/data
+  chown -f ${postfix_owner}:${postfix_owner} ${zimbra_home}/data/postfix/data/* 2> /dev/null
   chown -f ${root_user} ${zimbra_home}/data/postfix/spool
   chgrp -f ${root_group} ${zimbra_home}/data/postfix/spool
 fi
