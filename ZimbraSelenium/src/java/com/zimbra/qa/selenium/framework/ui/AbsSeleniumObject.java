@@ -222,6 +222,63 @@ public abstract class AbsSeleniumObject {
 		logger.info("zType(" + locator + ","  + value + ")");	
 	}
 
+	public void zKeyDown(String keyCode) throws HarnessException {
+
+		if (keyCode == null || keyCode.isEmpty())
+			throw new HarnessException("keyCode needs to be provided");
+
+		tracer.trace("keyboard shortcut " + keyCode);
+
+		for (String kc : keyCode.split(",")) {
+
+			sGetEval("if(document.createEventObject){var body_locator=\"css=html>body\"; "
+					+ "var body=selenium.browserbot.findElement(body_locator);"
+					+ "var evObj = body.document.createEventObject();"
+					+ "evObj.keyCode="
+					+ kc
+					+ ";evObj.repeat = false;"
+					+ "body.focus(); body.fireEvent(\"onkeydown\",evObj);}"
+					+ "else{if(window.KeyEvent){var evObj = document.createEvent('KeyEvents');"
+					+ "evObj.initKeyEvent( 'keydown', true, true, window, false, false, false, false,"
+					+ kc
+					+ ", 0 );}else {var evObj = document.createEvent('HTMLEvents');"
+					+ "evObj.initEvent( 'keydown', true, true, window, 1 );"
+					+ "evObj.keyCode = "
+					+ kc
+					+ ";}var x = selenium.browserbot.findElementOrNull('"
+					+ "css=html>body"
+					+ "');x.focus(); x.dispatchEvent(evObj);}");
+		}
+	}
+
+	public void zKeyEvent(String locator, String keyCode, String event)
+			throws HarnessException {
+
+		sFocus(locator);
+
+		sGetEval("if(document.createEventObject){var x=selenium.browserbot.findElementOrNull('"
+				+ locator
+				+ "');var evObj = x.document.createEventObject();"
+				+ "evObj.keyCode="
+				+ keyCode
+				+ "; evObj.repeat = false; x.focus(); x.fireEvent(\"on"
+				+ event
+				+ "\",evObj);}"
+				+ "else{if(window.KeyEvent){var evObj = document.createEvent('KeyEvents');"
+				+ "evObj.initKeyEvent( '"
+				+ event
+				+ "', true, true, window, false, false, false, false,"
+				+ keyCode
+				+ ", 0 );} "
+				+ "else {var evObj = document.createEvent('HTMLEvents');"
+				+ "evObj.initEvent( '"
+				+ event
+				+ "', true, true, window, 1 ); evObj.keyCode="
+				+ keyCode
+				+ ";} var x = selenium.browserbot.findElementOrNull('"
+				+ locator + "'); x.blur(); x.focus(); x.dispatchEvent(evObj);}");
+	}
+	
 	/**
 	 * DefaultSelenium.fireEvent(locator, eventName) 
 	 * @param locator

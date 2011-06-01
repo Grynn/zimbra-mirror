@@ -471,14 +471,14 @@ public class PageBriefcase extends AbsTab {
 				// work around for bug 59722
 				if (optionLocator.contains("Dc")) {
 					for (int i = 0; i < 6; i++) {
-						typeKey(optionLocator, "40", "keydown");
+						zKeyEvent(optionLocator, "40", "keydown");
 					}
-					typeKey(optionLocator, "13", "keydown");
+					zKeyEvent(optionLocator, "13", "keydown");
 				} else if (optionLocator.contains("Tg")) {
 					for (int i = 0; i < 8; i++) {
-						typeKey(optionLocator, "40", "keydown");
+						zKeyEvent(optionLocator, "40", "keydown");
 					}
-					typeKey(optionLocator, "13", "keydown");
+					zKeyEvent(optionLocator, "13", "keydown");
 				} else
 					this.zClickAt(optionLocator, "0,0");
 
@@ -980,31 +980,31 @@ public class PageBriefcase extends AbsTab {
 
 		// zKeyboard.zTypeCharacters(shortcut.getKeys());
 
-		for (String kc : keyCode.split(",")) {
-			/*
-			 * vare=document.createEvent('KeyboardEvent');
-			 * if(typeof(e.initKeyboardEvent)!='undefined'){e.initEvent()}
-			 * else{e.initKeyEvent()}
-			 */
+		zKeyDown(keyCode);
 
-			sGetEval("if(document.createEventObject){var body_locator=\"css=html>body\"; "
-					+ "var body=selenium.browserbot.findElement(body_locator);"
-					+ "var evObj = body.document.createEventObject();"
-					+ "evObj.keyCode="
-					+ kc
-					+ ";evObj.repeat = false;"
-					+ "body.focus(); body.fireEvent(\"onkeydown\",evObj);}"
-					+ "else{if(window.KeyEvent){var evObj = document.createEvent('KeyEvents');"
-					+ "evObj.initKeyEvent( 'keydown', true, true, window, false, false, false, false,"
-					+ kc
-					+ ", 0 );}else {var evObj = document.createEvent('HTMLEvents');"
-					+ "evObj.initEvent( 'keydown', true, true, window, 1 );"
-					+ "evObj.keyCode = "
-					+ kc
-					+ ";}var x = selenium.browserbot.findElementOrNull('"
-					+ "css=html>body"
-					+ "');x.focus(); x.dispatchEvent(evObj);}");
-		}
+		/*
+		 * for (String kc : keyCode.split(",")) {
+		 * 
+		 * //vare=document.createEvent('KeyboardEvent');
+		 * //if(typeof(e.initKeyboardEvent)!='undefined'){e.initEvent()}
+		 * //else{e.initKeyEvent()}
+		 * 
+		 * 
+		 * sGetEval(
+		 * "if(document.createEventObject){var body_locator=\"css=html>body\"; "
+		 * + "var body=selenium.browserbot.findElement(body_locator);" +
+		 * "var evObj = body.document.createEventObject();" + "evObj.keyCode=" +
+		 * kc + ";evObj.repeat = false;" +
+		 * "body.focus(); body.fireEvent(\"onkeydown\",evObj);}" +
+		 * "else{if(window.KeyEvent){var evObj = document.createEvent('KeyEvents');"
+		 * +
+		 * "evObj.initKeyEvent( 'keydown', true, true, window, false, false, false, false,"
+		 * + kc + ", 0 );}else {var evObj = document.createEvent('HTMLEvents');"
+		 * + "evObj.initEvent( 'keydown', true, true, window, 1 );" +
+		 * "evObj.keyCode = " + kc +
+		 * ";}var x = selenium.browserbot.findElementOrNull('" + "css=html>body"
+		 * + "');x.focus(); x.dispatchEvent(evObj);}"); }
+		 */
 
 		// If the app is busy, wait for it to become active
 		this.zWaitForBusyOverlay();
@@ -1026,7 +1026,7 @@ public class PageBriefcase extends AbsTab {
 
 		sType(Locators.zRenameInput.locator, text);
 
-		typeKey(Locators.zRenameInput.locator, "13", "keyup");
+		zKeyEvent(Locators.zRenameInput.locator, "13", "keyup");
 	}
 
 	public void typeKey(String locator, String keycode, String event)
