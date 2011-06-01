@@ -54,9 +54,11 @@ function() {
 Com_Zimbra_Url.THUMB_URL = "http://images.websnapr.com/?url=";
 Com_Zimbra_Url.THUMB_SIZE = 'width="200" height="150"';
 Com_Zimbra_Url.YOUTUBE_LINK_PATTERN1 = "youtube.com/watch?";
-Com_Zimbra_Url.YOUTUBE_LINK_PATTERN2 = "youtube.com/watch/v/";
+Com_Zimbra_Url.YOUTUBE_LINK_PATTERN2 = "youtube.com/v/";
+Com_Zimbra_Url.YOUTUBE_LINK_PATTERN3 = "youtu.be/";
 Com_Zimbra_Url.YOUTUBE_FEED = "http://gdata.youtube.com/feeds/api/videos/@ID?alt=jsonc&v=2";
 Com_Zimbra_Url.YOUTUBE_EMBED_URL = "www.youtube.com/embed/";
+Com_Zimbra_Url.YOUTUBE_DEFAULT_THUMBNAIL = "http://img.youtube.com/vi/@ID.jpg";
 Com_Zimbra_Url.PROTOCOL = location.protocol;
 Com_Zimbra_Url.YOUTUBE_MAX_VIDEOS = 5;
 
@@ -268,26 +270,34 @@ Com_Zimbra_Url.zeroPad = function(number, width) {
 //Begin YouTube section
 Com_Zimbra_Url.prototype._getYouTubeFeed =
 function() {
-	for (var key in this._youTubeHash) {
-		var youTubeId = this.getYouTubeId(key);
+	for (var youTubeId in this._youTubeHash) {
 		var gDataUrl = Com_Zimbra_Url.YOUTUBE_FEED;
 		gDataUrl = gDataUrl.replace("@ID", youTubeId);
 		gDataUrl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(gDataUrl);
 		var params = {
 				url: gDataUrl,
-				callback: new AjxCallback(this, this._parseYouTubeFeed, [key])
+				callback: new AjxCallback(this, this._parseYouTubeFeed, [youTubeId])
 			};
 		AjxLoader.load(params);
 	}
 };
 
 Com_Zimbra_Url.prototype._parseYouTubeFeed =
-function(url, req) {
-	var json = eval("(" + req.responseText + ")");
-	var thumbnail = json.data.thumbnail["sqDefault"];
-	var title = json.data.title;
-	this._youTubeHash[url] = {"thumbnail" : thumbnail, "title" : title};
-	this._buildYouTubeImageHtml(url);
+function(youTubeId, req) {
+	if (req.status != 200) {
+		DBG.println(AjxDebug.DBG1, "Error code in parsing YouTube Feed. Code = " + req.status);
+		var thumbnail = Com_Zimbra_Url.YOUTUBE_DEFAULT_THUMBNAIL.replace("@ID", youTubeId);
+		var title = "";
+		this._youTubeHash[youTubeId] = {"thumbnail" : thumbnail, "title" : title};
+		this._buildYouTubeImageHtml(youTubeId);
+	}
+	else {
+		var json = eval("(" + req.responseText + ")");
+		var thumbnail = json.data.thumbnail["sqDefault"];
+		var title = json.data.title;
+		this._youTubeHash[youTubeId] = {"thumbnail" : thumbnail, "title" : title};
+		this._buildYouTubeImageHtml(youTubeId);
+	}
 };
 
 /**
@@ -308,7 +318,13 @@ function(url) {
 	else {
 		index = url.indexOf(Com_Zimbra_Url.YOUTUBE_LINK_PATTERN2);
 		if (index != -1) {
-			id = AjxStringUtil.trim(url.subString(index + Com_Zimbra_Url.YOUTUBE_LINK_PATTERN2.length));
+			id = AjxStringUtil.trim(url.substring(index + Com_Zimbra_Url.YOUTUBE_LINK_PATTERN2.length));
+		}
+		else {
+			index = url.indexOf(Com_Zimbra_Url.YOUTUBE_LINK_PATTERN3);
+			if (index != -1) {
+				id = AjxStringUtil.trim(url.substring(index + Com_Zimbra_Url.YOUTUBE_LINK_PATTERN3.length));
+			}
 		}
 	}
 
@@ -316,30 +332,29 @@ function(url) {
 };
 
 Com_Zimbra_Url.prototype._showYouTubeVideo =
-function(url) {
-	if (!url) {
+function(youTubeId) {
+	if (!youTubeId) {
 		return;
 	}
-	var id = Com_Zimbra_Url.prototype.getYouTubeId(url);
-	var title = this._youTubeHash[url].title;
+	var title = this._youTubeHash[youTubeId].title;
 	var viewId = appCtxt.getCurrentViewId();
 	var widgetId = ZmId.WIDGET_VIEW + "__" + viewId + "__MSG";
 	var el = document.getElementById("youtube-video_" + viewId);
 	var iframeEl = document.getElementById("youtube-iframe_" + viewId);
 	if (el) {
 		if (!Dwt.getVisible(el)) {
-			el.innerHTML = "<br/>" + this._showYouTubeEmbed(id);
+			el.innerHTML = "<br/>" + this._showYouTubeEmbed(youTubeId);
 			Dwt.setVisible(el, true);
-			this._setYouTubeOpacity(id, true);
+			this._setYouTubeOpacity(youTubeId, true);
 		}
 		else {
-			if (iframeEl && iframeEl.src == Com_Zimbra_Url.PROTOCOL + '//www.youtube.com/embed/' + id) {
+			if (iframeEl && iframeEl.src == Com_Zimbra_Url.PROTOCOL + '//www.youtube.com/embed/' + youTubeId) {
 				Dwt.setVisible(el, false); //toggle visiblity
-				this._setYouTubeOpacity(id, false);
+				this._setYouTubeOpacity(youTubeId, false);
 			}
 			else {
-				el.innerHTML = "<br/>" + this._showYouTubeEmbed(id);
-				this._setYouTubeOpacity(id, true);
+				el.innerHTML = "<br/>" + this._showYouTubeEmbed(youTubeId);
+				this._setYouTubeOpacity(youTubeId, true);
 			}
 
 		}
@@ -373,11 +388,19 @@ function(youTubeId) {
 
 Com_Zimbra_Url.prototype._getAllYouTubeLinks =
 function(text) {
-	var youTubeArr = text.match(/(\b(((http | https)\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtube\.com\/watch\?.*\&v=)|(youtube\.com\/v\/))((-)?[0-9a-zA-Z_-]+)?(&\w+=\w+)*)\b)/gi);
+	var youTubeArr = text.match(/(\b(((http | https)\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtube\.com\/watch\?.*\&v=)|(youtube\.com\/v\/)|(youtu\.be\/))((-)?[0-9a-zA-Z_-]+)?(&\w+=\w+)*)\b)/gi);
+	var hash = {};
+	var hashCount = 0;
 	if (youTubeArr) {
-		var hash =  AjxUtil.arrayAsHash(youTubeArr);
-		//quick check to see if array w/duplicates is bigger than max before we do a loop through the hash
-		if (youTubeArr.length > Com_Zimbra_Url.YOUTUBE_MAX_VIDEOS) {
+		for (var i=0; i<youTubeArr.length; i++) {
+			var id = this.getYouTubeId(youTubeArr[i]);
+			if (!hash.hasOwnProperty(id)) {
+				hash[id] = youTubeArr[i];
+				hashCount++
+			}
+		}
+		//quick check to see if hash is bigger than max before we do a loop through the hash
+		if (hashCount > Com_Zimbra_Url.YOUTUBE_MAX_VIDEOS) {
 			var tempHash = {};
 			var size = 1;
 			for (var key in hash) {
@@ -396,19 +419,18 @@ function(text) {
 };
 
 Com_Zimbra_Url.prototype._buildYouTubeImageHtml =
-function(url) {
-	if (!this._youTubeHash || !url) {
+function(youTubeId) {
+	if (!this._youTubeHash || !youTubeId) {
 		return;
 	}
 	var viewId = appCtxt.getCurrentViewId();
-	var youTubeId = this.getYouTubeId(url);
-	var imgHtml = this._showYouTubeThumbnail(url);
+	var imgHtml = this._showYouTubeThumbnail(youTubeId);
 	var imgSpan = document.createElement("span");
 	imgSpan.style.className = "youTubeImagePreview";
 	imgSpan.innerHTML = imgHtml;
 	imgSpan.id = "YOUTUBE_" + youTubeId + "_" + viewId;
 	this._youTubeCtrl.getHtmlElement().appendChild(imgSpan);
-	this._youTubeCtrl.setData(imgSpan.id, url);
+	this._youTubeCtrl.setData(imgSpan.id, youTubeId);
 	var parentDiv = document.getElementById("youtube_" + viewId);
 	if (parentDiv) {
 		var videoDiv = document.getElementById("youtube-video_" + viewId);
@@ -416,12 +438,13 @@ function(url) {
 	}
 };
 
+
 Com_Zimbra_Url.prototype._onYouTubeClickListener =
 function(ev) {
 	if (ev && ev.target && ev.target.parentNode) {
-		var url = this._youTubeCtrl.getData(ev.target.parentNode.id);
-		if (url) {
-			this._showYouTubeVideo(url);
+		var youTubeId = this._youTubeCtrl.getData(ev.target.parentNode.id);
+		if (youTubeId) {
+			this._showYouTubeVideo(youTubeId);
 		}
 	}
 };
@@ -449,8 +472,7 @@ function(youTubeId, opacity) {
 	    img.style.opacity = 0.4;
 		img.style.filter = "alpha(opacity=40)";
 		//clear the other images opacity
-		for (var key in this._youTubeHash) {
-			var id = this.getYouTubeId(key);
+		for (var id in this._youTubeHash) {
 			if (id != youTubeId) {
 				img = document.getElementById("YOUTUBE_" + id + "_" + viewId);
 				if (img && img.firstChild) {
