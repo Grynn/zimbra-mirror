@@ -37,6 +37,7 @@ public abstract class AbsWizard extends AbsPage {
 	public static String NEXT_BUTTON = "zdlg__NEW_ACCT_button12_title";
 	public static String FINISH_BUTTON = "_button13_title";
 	public static String ACCOUNT_DIALOG="ACCT";
+	public static String DOMAIN_DIALOG="DOMAIN";
 	public static String RESOURCE_DIALOG="RES";
 	}
 	public static String buttonPath="";

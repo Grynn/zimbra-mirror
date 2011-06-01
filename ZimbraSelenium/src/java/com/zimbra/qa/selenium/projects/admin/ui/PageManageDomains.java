@@ -9,6 +9,8 @@ import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.projects.admin.ui.PageManageAccounts.Locators;
 
 
 /**
@@ -16,6 +18,14 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
  *
  */
 public class PageManageDomains extends AbsTab {
+	
+	public static class Locators {
+		public static final String zti__DOMAINS = "zti__AppAdmin__CONFIGURATION__DOMAINS_textCell";
+
+		public static final String ztab_MANAGE_DOMAIN_ICON = "css=tr#ztab__MAIN_TAB_row div.ImgDomain";
+
+		public static String zb__DMLV__NEW="zb__DMLV__NEW";
+	}
 
 	public PageManageDomains(AbsApplication application) {
 		super(application);
@@ -26,7 +36,25 @@ public class PageManageDomains extends AbsTab {
 	 */
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		throw new HarnessException("implement me");
+
+		// Make sure the Admin Console is loaded in the browser
+		if ( !MyApplication.zIsLoaded() )
+			throw new HarnessException("Admin Console application is not active!");
+
+
+		boolean present = sIsElementPresent(Locators.ztab_MANAGE_DOMAIN_ICON);
+		if ( !present ) {
+			return (false);
+		}
+
+		boolean visible = zIsVisiblePerPosition(Locators.ztab_MANAGE_DOMAIN_ICON, 0, 0);
+		if ( !visible ) {
+			logger.debug("isActive() visible = "+ visible);
+			return (false);
+		}
+
+		return (true);
+
 	}
 
 	/* (non-Javadoc)
@@ -42,7 +70,17 @@ public class PageManageDomains extends AbsTab {
 	 */
 	@Override
 	public void zNavigateTo() throws HarnessException {
-		throw new HarnessException("implement me");
+
+		if ( zIsActive() ) {
+			// This page is already active.
+			return;
+		}
+
+		// Click on Addresses -> Accounts
+		zClick(Locators.zti__DOMAINS);
+
+		zWaitForActive();
+
 	}
 
 	@Override
@@ -67,8 +105,56 @@ public class PageManageDomains extends AbsTab {
 	
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
-		// TODO Auto-generated method stub
-		return null;
+
+		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
+
+		tracer.trace("Press the "+ button +" button");
+
+		if ( button == null )
+			throw new HarnessException("Button cannot be null!");
+
+
+		// Default behavior variables
+		//
+		String locator = null;			// If set, this will be clicked
+		AbsPage page = null;	// If set, this page will be returned
+
+		// Based on the button specified, take the appropriate action(s)
+		//
+
+		if ( button == Button.B_NEW ) {
+
+			// New button
+			locator = Locators.zb__DMLV__NEW;
+
+			// Create the page
+			page = new WizardCreateDomain(this);
+
+			// FALL THROUGH
+
+		} else {
+			throw new HarnessException("no logic defined for button "+ button);
+		}
+
+		if ( locator == null ) {
+			throw new HarnessException("locator was null for button "+ button);
+		}
+
+		// Default behavior, process the locator by clicking on it
+		//
+		this.zClick(locator);
+		
+		
+
+		// If page was specified, make sure it is active
+		if ( page != null ) {
+			SleepUtil.sleepMedium();
+		}
+
+		sMouseOut(locator);
+		return (page);
+
+
 	}
 
 	@Override
