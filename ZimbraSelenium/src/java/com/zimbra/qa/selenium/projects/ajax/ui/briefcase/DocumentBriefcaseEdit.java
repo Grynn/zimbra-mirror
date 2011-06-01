@@ -77,7 +77,7 @@ public class DocumentBriefcaseEdit extends AbsForm {
 
 			this.sMouseOver(nameFieldLocator);
 			this.sFocus(nameFieldLocator);
-			this.zClick(nameFieldLocator);
+			this.zClickAt(nameFieldLocator,"0,0");
 			this.sType(nameFieldLocator, value);
 			logger.info("typed: " + value);
 
@@ -92,7 +92,7 @@ public class DocumentBriefcaseEdit extends AbsForm {
 
 			this.sMouseOver(iframeLocator);
 			this.sFocus(iframeLocator);
-			this.zClick(iframeLocator);
+			this.zClickAt(iframeLocator,"0,0");
 			
 			this
 					.sGetEval("var bodytext=\""
@@ -129,7 +129,7 @@ public class DocumentBriefcaseEdit extends AbsForm {
 					+ Locators.zSaveAndCloseIconBtn);
 
 		// Click on it
-		zClick(Locators.zSaveAndCloseIconBtn);
+		zClickAt(Locators.zSaveAndCloseIconBtn,"0,0");
 		// this.sMouseDown(Locators.zSaveAndCloseIconBtn);
 		// this.sMouseUp(Locators.zSaveAndCloseIconBtn);
 

@@ -83,7 +83,7 @@ public class DialogAddVersionNotes extends AbsDialog {
 		// zGetDisplayedText("css=div[class=" + Locators.zDialogContentClassId +
 		// "]");
 		
-		this.zClick(locator);
+		this.zClickAt(locator,"0,0");
 
 		return (null);
 	}
@@ -108,7 +108,7 @@ public class DialogAddVersionNotes extends AbsDialog {
 			throw new HarnessException("unable to find body field " + locator);
 
 		this.sFocus(locator);
-		this.zClick(locator);
+		this.zClickAt(locator,"0,0");
 		this.sType(locator, notes);
 
 		this.zWaitForBusyOverlay();

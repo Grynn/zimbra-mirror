@@ -15,6 +15,8 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.PageMail;
 
 public class OpenLinkToMessage extends AjaxCommonTest {
+	
+	String url;
 
 	@SuppressWarnings("serial")
 	public OpenLinkToMessage() {
@@ -57,6 +59,10 @@ public class OpenLinkToMessage extends AjaxCommonTest {
 		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(),
 				"subject:(" + subject + ")");
 
+		//Store opened url
+		//url = ZimbraSeleniumProperties.getBaseURL();
+		url = app.zPageBriefcase.getLocation();	
+		
 		// Open link through RestUtil
 		HashMap<String, String> hm = new HashMap<String, String>();
 		hm.put("id", mail.getId());
@@ -67,7 +73,7 @@ public class OpenLinkToMessage extends AjaxCommonTest {
 				.zWaitForElementPresent(PageMail.Locators.zCloseIconBtn_messageWindow);
 
 		app.zPageBriefcase
-				.zClick(PageMail.Locators.zCloseIconBtn_messageWindow);
+				.zClickAt(PageMail.Locators.zCloseIconBtn_messageWindow,"0,0");
 
 		ZAssert
 				.assertTrue(app.zPageBriefcase
@@ -78,7 +84,9 @@ public class OpenLinkToMessage extends AjaxCommonTest {
 	@AfterMethod(groups = { "always" })
 	public void afterMethod() throws HarnessException {
 		logger.info("Switching to Briefcase page ...");
-		app.zPageBriefcase.openUrl("", null);
+		
+		//app.zPageBriefcase.openUrl("", null);
+		app.zPageBriefcase.openUrl(url);
 
 		app.zPageBriefcase.zNavigateTo();
 	}

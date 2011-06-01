@@ -194,7 +194,7 @@ public class PageBriefcase extends AbsTab {
 			zWaitForElementPresent(locator);
 		}
 		// Click on Briefcase icon
-		zClick(PageMain.Locators.zAppbarBriefcase);
+		zClickAt(PageMain.Locators.zAppbarBriefcase, "0,0");
 
 		zWaitForBusyOverlay();
 
@@ -227,7 +227,7 @@ public class PageBriefcase extends AbsTab {
 			locator = Locators.zNewMenuLeftIconBtn.locator;
 
 			// Click on New Document icon
-			this.zClick(locator);
+			this.zClickAt(locator, "0,0");
 
 			zWaitForBusyOverlay();
 
@@ -323,7 +323,7 @@ public class PageBriefcase extends AbsTab {
 					+ locator + " button=" + button);
 
 		// Click it
-		this.zClick(locator);
+		this.zClickAt(locator, "0,0");
 
 		// If the app is busy, wait for it to become active
 		zWaitForBusyOverlay();
@@ -452,10 +452,10 @@ public class PageBriefcase extends AbsTab {
 
 			this.sMouseOver(pulldownLocator);
 			this.sFocus(pulldownLocator);
-			this.zRightClick(pulldownLocator);
+			this.zRightClickAt(pulldownLocator, "0,0");
 			sMouseDownRight(pulldownLocator);
 			sMouseUpRight(pulldownLocator);
-			
+
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
 
@@ -480,7 +480,7 @@ public class PageBriefcase extends AbsTab {
 					}
 					typeKey(optionLocator, "13", "keydown");
 				} else
-					this.zClick(optionLocator);
+					this.zClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active
 				zWaitForBusyOverlay();
@@ -549,7 +549,7 @@ public class PageBriefcase extends AbsTab {
 						+ " not present!");
 			}
 
-			this.zClick(pulldownLocator);
+			this.zClickAt(pulldownLocator, "0,0");
 
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
@@ -563,7 +563,7 @@ public class PageBriefcase extends AbsTab {
 							+ optionLocator + " not present!");
 				}
 
-				this.zClick(optionLocator);
+				this.zClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active
 				zWaitForBusyOverlay();
@@ -597,7 +597,7 @@ public class PageBriefcase extends AbsTab {
 			locator = Locators.zHeaderCheckBox.locator;
 
 			// Left-Click on the header
-			this.zClick(locator);
+			this.zClickAt(locator, "0,0");
 		} else {
 			throw new HarnessException("implement me!  action = " + action);
 		}
@@ -660,7 +660,7 @@ public class PageBriefcase extends AbsTab {
 			zWaitForElementPresent(itemNameLocator);
 
 			// Left-Click on the item
-			this.zClick(itemNameLocator);
+			this.zClickAt(itemNameLocator, "0,0");
 
 			// page = new DocumentPreview(MyApplication);
 
@@ -702,7 +702,7 @@ public class PageBriefcase extends AbsTab {
 						"Trying to check box, but it was already enabled");
 
 			// Left-Click on the Check box field
-			this.zClick(checkBoxLocator);
+			this.zClickAt(checkBoxLocator, "0,0");
 
 			// No page to return
 			page = null;
@@ -713,7 +713,7 @@ public class PageBriefcase extends AbsTab {
 			zWaitForElementPresent(itemNameLocator);
 
 			// Right-Click on the item
-			this.zRightClick(itemNameLocator);
+			this.zRightClickAt(itemNameLocator, "0,0");
 
 			// Now the ContextMenu is opened
 			// Click on the specified option
@@ -764,7 +764,7 @@ public class PageBriefcase extends AbsTab {
 			zWaitForElementPresent(itemlocator);
 
 			// Right-Click on the item
-			this.zRightClick(itemlocator);
+			this.zRightClickAt(itemlocator, "0,0");
 
 			// Now the ContextMenu is opened
 			// Click on the specified option
@@ -827,7 +827,7 @@ public class PageBriefcase extends AbsTab {
 			}
 
 			// click on the option
-			this.zClick(optionLocator);
+			this.zClickAt(optionLocator, "0,0");
 
 			this.zWaitForBusyOverlay();
 
@@ -882,7 +882,7 @@ public class PageBriefcase extends AbsTab {
 			zWaitForElementPresent(itemlocator);
 
 			// Right-Click on the item
-			this.zRightClick(itemlocator);
+			this.zRightClickAt(itemlocator, "0,0");
 
 			// Now the ContextMenu is opened
 			// Click on the specified option
@@ -899,7 +899,7 @@ public class PageBriefcase extends AbsTab {
 			}
 
 			// click on the option
-			this.zClick(optionLocator);
+			this.zClickAt(optionLocator, "0,0");
 
 			// Now the ContextMenu option is opened
 			// Click on the specified sub option
@@ -908,7 +908,7 @@ public class PageBriefcase extends AbsTab {
 					+ subOption + ")";
 
 			// click on the sub option
-			this.zClick(subOptionLocator);
+			this.zClickAt(subOptionLocator, "0,0");
 
 			this.zWaitForBusyOverlay();
 
@@ -1186,7 +1186,18 @@ public class PageBriefcase extends AbsTab {
 		};
 	}
 
-	public String openUrl(String page, Map<String, String> params)
+	public String openUrl(String url) throws HarnessException {
+
+		this.sOpen(url);
+
+		return url;
+	}
+
+	public String getLocation() {
+		return ClientSessionFactory.session().selenium().getLocation();
+	}
+
+	public String openUrl(String path, Map<String, String> params)
 			throws HarnessException {
 		ZimbraAccount account = MyApplication.zGetActiveAccount();
 
@@ -1194,8 +1205,8 @@ public class PageBriefcase extends AbsTab {
 
 		util.setAuthentication(account);
 
-		if (null != page && !page.isEmpty())
-			util.setPath("/" + page + "/");
+		if (null != path && !path.isEmpty())
+			util.setPath("/" + path + "/");
 		else
 			util.setPath("/");
 

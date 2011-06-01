@@ -121,6 +121,8 @@ public class SendFileLink extends AjaxCommonTest {
 				+ "<doc l='" + briefcaseFolder.getId() + "'><upload id='"
 				+ attachmentId + "'/></doc></SaveDocumentRequest>");
 
+		//SleepUtil.sleepVerySmall();
+		
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 

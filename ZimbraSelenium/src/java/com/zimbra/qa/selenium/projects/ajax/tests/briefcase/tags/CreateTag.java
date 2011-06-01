@@ -87,8 +87,8 @@ public class CreateTag extends AjaxCommonTest {
 		 * + "var x = selenium.browserbot.findElementOrNull('" +
 		 * "css=div[id=CreateTagDialog_button2]" + "'); " +
 		 * "x.blur; x.focus(); x.dispatchEvent(evObj);");
-		 * dialog.zClick("css=div[id=ZmTagColorMenu]");
-		 * dialog.zClick("css=td[class=ZWidgetTitle]:contains(Red)");
+		 * dialog.zClickAt("css=div[id=ZmTagColorMenu]","0,0");
+		 * dialog.zClickAt("css=td[class=ZWidgetTitle]:contains(Red)","0,0");
 		 * ClientSessionFactory.session().selenium().waitForCondition(
 		 * "selenium.browserbot.getUserWindow().top.appCtxt.getShell()._veilOverlay.activeDialogs.length==0"
 		 * ,"3000");

@@ -107,7 +107,7 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 					+ locator + " not present!");
 		}
 
-		this.zClick(locator);
+		this.zClickAt(locator,"0,0");
 
 		this.zWaitForBusyOverlay();
 
@@ -146,7 +146,7 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 			throw new HarnessException("unable to find folder in tree "
 					+ locator);
 
-		this.zClick(locator);
+		this.zClickAt(locator,"0,0");
 
 		this.zWaitForBusyOverlay();
 
@@ -173,7 +173,7 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 
 		// For some reason, the text doesn't get entered on the first try
 		this.sFocus(locator);
-		this.zClick(locator);
+		this.zClickAt(locator,"0,0");
 		this.sType(locator, folder);
 	
 		this.zWaitForBusyOverlay();

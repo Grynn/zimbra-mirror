@@ -194,7 +194,7 @@ public class MoveFile extends AjaxCommonTest {
 
 		chooseFolder.zClickButton(Button.B_OK);
 
-		// app.zPageBriefcase.zClick("css=div[id=ChooseFolderDialog_button2]");
+		// app.zPageBriefcase.zClickAt("css=div[id=ChooseFolderDialog_button2],"0,0");
 
 		// click on sub-folder1 in tree view
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolders[0], false);

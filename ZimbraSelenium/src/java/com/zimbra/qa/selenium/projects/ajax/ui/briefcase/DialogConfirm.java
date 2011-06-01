@@ -78,7 +78,7 @@ public class DialogConfirm extends AbsDialog {
 		// zGetDisplayedText("css=div[class=" + Locators.zDialogContentClassId +
 		// "]");
 
-		this.zClick(locator);
+		this.zClickAt(locator,"0,0");
 
 		// If the app is busy, wait for it to become active
 		this.zWaitForBusyOverlay();

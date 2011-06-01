@@ -83,7 +83,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 
 			this.sMouseOver(nameFieldLocator);
 			this.sFocus(nameFieldLocator);
-			this.zClick(nameFieldLocator);
+			this.zClickAt(nameFieldLocator,"0,0");
 			this.sType(nameFieldLocator, value);
 			logger.info("typed: " + value);
 
@@ -98,7 +98,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 
 			this.sMouseOver(iframeLocator);
 			this.sFocus(iframeLocator);
-			this.zClick(iframeLocator);
+			this.zClickAt(iframeLocator,"0,0");
 
 			this
 					.sGetEval("var bodytext=\""
@@ -135,12 +135,12 @@ public class DocumentBriefcaseNew extends AbsForm {
 
 		if (!(sIsElementPresent(Locators.zEnableVersionNotes) && sIsChecked(Locators.zEnableVersionNotes))) {
 			// Click on it
-			zClick(Locators.zSaveAndCloseIconBtn);
+			zClickAt(Locators.zSaveAndCloseIconBtn,"0,0");
 		} else {
 			// Click on it
 			// this.sMouseDown(Locators.zSaveAndCloseIconBtn);
 			// this.sMouseUp(Locators.zSaveAndCloseIconBtn);
-			zClick(Locators.zSaveAndCloseIconBtn);
+			zClickAt(Locators.zSaveAndCloseIconBtn,"0,0");
 
 			// TODO: Add Version Notes dialog hasn't existed in ZD 7.0.1, thus
 			// ignoring below the Add Version Notes dialog for Desktop.

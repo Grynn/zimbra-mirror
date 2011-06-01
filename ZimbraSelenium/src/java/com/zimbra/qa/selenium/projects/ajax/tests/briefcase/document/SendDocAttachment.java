@@ -122,6 +122,8 @@ public class SendDocAttachment extends AjaxCommonTest {
 						+ "</doc>"
 						+ "</SaveDocumentRequest>");
 
+		//SleepUtil.sleepVerySmall();
+		
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 

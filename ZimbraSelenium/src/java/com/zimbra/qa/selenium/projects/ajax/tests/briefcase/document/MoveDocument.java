@@ -190,7 +190,7 @@ public class MoveDocument extends AjaxCommonTest {
 
 		chooseFolder.zClickButton(Button.B_OK);
 
-		// app.zPageBriefcase.zClick("css=div[id=ChooseFolderDialog_button2]");
+		// app.zPageBriefcase.zClickAt("css=div[id=ChooseFolderDialog_button2]","0,0");
 
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseRootFolder,
