@@ -293,8 +293,10 @@ function(key, id) {
 	var items = this.getItems();
 	for (var i = 0; i < items.length; i++) {
 		var itemId = items[i].getData(key);
-		if (itemId == id)
+		if (itemId == id) {
+			items[i].index = i; //needed in some caller
 			return items[i];
+		}
 	}
 	return null;
 };
