@@ -135,7 +135,7 @@ public class CodeCoverage {
 		all.addAttribute( "name", "all classes" );
 		Element coverage = all.addElement( "coverage" );
 		coverage.addAttribute("type", "line, %");
-		coverage.addAttribute("value", String.format("%d%%  (%d,%d)", percent, countTotalCovered, countTotalLines));
+		coverage.addAttribute("value", String.format("%d%%  (%d/%d)", percent, countTotalCovered, countTotalLines));
 		
 		XMLWriter writer = null;
 		OutputFormat format = OutputFormat.createPrettyPrint();
