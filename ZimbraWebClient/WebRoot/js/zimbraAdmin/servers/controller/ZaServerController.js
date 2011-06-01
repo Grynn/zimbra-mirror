@@ -198,7 +198,7 @@ function (params) {
 	if(!obj.attrs.hasOwnProperty(ZaServer.A_zimbraMtaMyNetworks)) {
                 this.runValidationStack(params);
                 return;        
-        }
+    }
 	//find local networks
 	var locals = [];
 	var locals2 = [];
@@ -291,6 +291,8 @@ function (params) {
 				}
 									
 
+			} else {
+				throw new AjxException(ZaMsg.ERROR_MISSING_LOCAL,AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");	
 			}
 		}
 		
@@ -325,9 +327,8 @@ function (params) {
 				throw new AjxException(AjxMessageFormat.format(ZaMsg.ERROR_NOT_STARTING_ADDR,[excludeMasks[i].szCIDR,ZaServer.longToOctets(excludeMasks[i].lStartingAddr)]),AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");				
 			}
 		}		
-	} else {
-		throw new AjxException(ZaMsg.ERROR_MISSING_LOCAL,AjxException.INVALID_PARAM,"ZaServerController.prototype.validateMyNetworks");				
-	}	
+	} 
+
 	this.runValidationStack(params);
 }
 ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validateMyNetworks);

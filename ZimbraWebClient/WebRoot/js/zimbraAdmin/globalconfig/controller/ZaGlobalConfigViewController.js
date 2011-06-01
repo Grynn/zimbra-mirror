@@ -36,6 +36,7 @@ ZaGlobalConfigViewController.prototype.constructor = ZaGlobalConfigViewControlle
 ZaController.initToolbarMethods["ZaGlobalConfigViewController"] = new Array();
 ZaController.setViewMethods["ZaGlobalConfigViewController"] = [];
 ZaController.changeActionsStateMethods["ZaGlobalConfigViewController"] = [];
+ZaXFormViewController.preSaveValidationMethods["ZaGlobalConfigViewController"] = new Array();
 //qin
 ZaController.saveChangeCheckMethods["ZaGlobalConfigViewController"] = new Array();
 
@@ -322,6 +323,8 @@ function () {
 	return true;
 }
 
+ZaGlobalConfigViewController.prototype.validateMyNetworks = ZaServerController.prototype.validateMyNetworks;
+ZaXFormViewController.preSaveValidationMethods["ZaGlobalConfigViewController"].push(ZaGlobalConfigViewController.prototype.validateMyNetworks);
 
 ZaGlobalConfigViewController.prototype.openFlushCacheDlg =
 function (serverList) {
