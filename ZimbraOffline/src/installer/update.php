@@ -47,7 +47,7 @@ echo "<?xml version=\"1.0\"?>\n";
 ?>
 <updates>
 <?php if ($buildid > $oldbid) { ?>
-  <update type="major" version="<?php echo $version?>" extensionVersion="<?php echo $extension_version?>" detailsURL="<?php echo $details_url?>" licenseURL="<?php echo $license_url?>">
+  <update type="minor" version="<?php echo $version?>" extensionVersion="<?php echo $extension_version?>" detailsURL="<?php echo $details_url?>" licenseURL="<?php echo $license_url?>">
     <patch type="complete" URL="<?php echo $download_url?>" hashFunction="md5" hashValue="<?php echo $hash?>" size="<?php echo $size?>"/>
   </update>
 <?php } ?>
