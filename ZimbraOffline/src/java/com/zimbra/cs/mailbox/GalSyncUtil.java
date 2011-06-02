@@ -269,22 +269,19 @@ public final class GalSyncUtil {
 
         if (!parsedContacts.isEmpty()) {
             boolean success = false;
-            synchronized (galMbox) {
-                try {
-                    galMbox.beginTransaction("GALSync", null);
-
-                    int index = 0;
-                    for (ParsedContact contact : parsedContacts) {
-                        saveParsedContact(galMbox, ctxt, syncFolder, ids.get(index++), contact, getContactLogStr(contact), isFullSync, ds);
-                    }
-
-                    if (isFullSync) {
-                        GalSyncCheckpointUtil.checkpoint(galMbox, token, galAcctId, reqIds);
-                    }
-                    success = true;
-                } finally {
-                    galMbox.endTransaction(success);
+            try {
+                galMbox.beginTransaction("GALSync", null);
+                int index = 0;
+                for (ParsedContact contact : parsedContacts) {
+                    saveParsedContact(galMbox, ctxt, syncFolder, ids.get(index++), contact, getContactLogStr(contact), isFullSync, ds);
                 }
+
+                if (isFullSync) {
+                    GalSyncCheckpointUtil.checkpoint(galMbox, token, galAcctId, reqIds);
+                }
+                success = true;
+            } finally {
+                galMbox.endTransaction(success);
             }
         }
     }

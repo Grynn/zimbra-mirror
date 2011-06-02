@@ -286,13 +286,16 @@ public class DeltaSync {
 
         // delete any deleted folders, starting from the bottom of the tree
         if (isInitSyncDone && foldersToDelete != null && !foldersToDelete.isEmpty()) {
-            synchronized (ombx) {
+            ombx.lock.lock(); 
+            try {
                 List<Folder> folders = ombx.getFolderById(sContext, Mailbox.ID_FOLDER_ROOT).getSubfolderHierarchy();
                 Collections.reverse(folders);
                 for (Folder folder : folders) {
                     if (foldersToDelete.remove(folder.getId()))
                         processFolderDelete(folder);
                 }
+            } finally {
+                ombx.lock.release();
             }
         }
     }
@@ -418,7 +421,8 @@ public class DeltaSync {
         String searchTypes = elt.getAttribute(MailConstants.A_SEARCH_TYPES);
         String sort = elt.getAttribute(MailConstants.A_SORTBY);
 
-        synchronized (ombx) {
+        ombx.lock.lock();
+        try {
             // deal with the case where the referenced search folder doesn't exist
             Folder folder = getFolder(id);
             if (folder == null) {
@@ -453,6 +457,8 @@ public class DeltaSync {
                         change_mask | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
             }
             OfflineLog.offline.debug("delta: updated search folder (" + id + "): " + name);
+        } finally {
+            ombx.lock.release();
         }
     }
 
@@ -466,7 +472,8 @@ public class DeltaSync {
 
         int date = (int) (elt.getAttributeLong(MailConstants.A_DATE, -1000) / 1000);
 
-        synchronized (ombx) {
+        ombx.lock.lock();
+        try {
             // deal with the case where the referenced folder doesn't exist
             Folder folder = getFolder(id);
             if (folder == null) {
@@ -507,6 +514,8 @@ public class DeltaSync {
                 ombx.setChangeMask(sContext, id, itemType, change_mask | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
 
             OfflineLog.offline.debug("delta: updated folder (" + id + "): " + name);
+        } finally {
+            ombx.lock.release();
         }
     }
 
@@ -613,7 +622,8 @@ public class DeltaSync {
 
         int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
 
-        synchronized (ombx) {
+        ombx.lock.lock();
+        try {
             Tag tag = getTag(id);
 
             // we're reusing tag IDs, so it's possible that we've got a conflict with a locally-created tag with that ID
@@ -662,6 +672,8 @@ public class DeltaSync {
                 ombx.setChangeMask(sContext, id, MailItem.Type.TAG, change_mask | Change.MODIFIED_NAME);
             }
             OfflineLog.offline.debug("delta: updated tag (" + id + "): " + name);
+        } finally {
+            ombx.lock.release();
         }
     }
 
@@ -796,13 +808,16 @@ public class DeltaSync {
         }
         ParsedContact pc = (fields.isEmpty() ? null : new ParsedContact(fields, blob));
 
-        synchronized (ombx) {
+        ombx.lock.lock();
+        try {
             int change_mask = ombx.getChangeMask(sContext, id, MailItem.Type.CONTACT);
             if ((change_mask & Change.MODIFIED_CONTENT) == 0 && pc != null) {
                 ombx.modifyContact(sContext, id, pc);
             }
             ombx.syncMetadata(sContext, id, MailItem.Type.CONTACT, folderId, flags, tags, color);
             ombx.syncDate(sContext, id, MailItem.Type.CONTACT, date);
+        } finally {
+            ombx.lock.release();
         }
         OfflineLog.offline.debug("delta: updated contact (" + id + "): " + cn.getFileAsString());
     }
@@ -828,15 +843,16 @@ public class DeltaSync {
             int convId = (int) elt.getAttributeLong(MailConstants.A_CONV_ID);
 
             int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
-            synchronized (ombx) {
-                try {
-                    ombx.setConversationId(sContext, id, convId <= 0 ? -id : convId);
-                    ombx.syncMetadata(sContext, id, type, folderId, flags, tags, color);
-                    ombx.syncDate(sContext, id, type, date);
-                } catch (MailServiceException.NoSuchItemException nsie) {
-                    OfflineLog.offline.warn("NoSuchItemException in delta sync. Item ["+id+"] must have been deleted while sync was in progress");
-                    return;
-                }
+            ombx.lock.lock(); 
+            try {
+                ombx.setConversationId(sContext, id, convId <= 0 ? -id : convId);
+                ombx.syncMetadata(sContext, id, type, folderId, flags, tags, color);
+                ombx.syncDate(sContext, id, type, date);
+            } catch (MailServiceException.NoSuchItemException nsie) {
+                OfflineLog.offline.warn("NoSuchItemException in delta sync. Item ["+id+"] must have been deleted while sync was in progress");
+                return;
+            } finally {
+                ombx.lock.release();
             }
             OfflineLog.offline.debug("delta: updated " + type + " (" + id + "): " + msg.getSubject());
         } catch (Exception x) {

@@ -39,7 +39,6 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Signature;
 import com.zimbra.cs.account.Provisioning.IdentityBy;
 import com.zimbra.cs.account.Provisioning.SignatureBy;
-import com.zimbra.cs.db.DbMailbox;
 import com.zimbra.cs.filter.RuleManager;
 import com.zimbra.cs.filter.RuleRewriter;
 import com.zimbra.cs.mailbox.Mailbox;
@@ -328,10 +327,13 @@ public class DirectorySync {
         ZGetInfoResult zgi = zmbx.getAccountInfo(false);
         Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(acct);
 
-        synchronized (DbMailbox.getZimbraSynchronizer(mbox)) {
+        mbox.lock.lock();
+        try {
             synchronized (prov) {
                 syncAccount(prov, acct, zgi);
             }
+        } finally {
+            mbox.lock.release();
         }
     }
 

@@ -1283,8 +1283,8 @@ public class InitialSync {
                     redo2 = new SaveDraft(ombx.getId(), id, digest, size);
                 }
                 redo2.start(received * 1000L);
-
-                synchronized (ombx) {
+                ombx.lock.lock();
+                try  {
                     int change_mask = ombx.getChangeMask(sContext, id, type);
                     if ((change_mask & Change.MODIFIED_CONTENT) == 0) {
                         if (type == MailItem.Type.CHAT) {
@@ -1297,6 +1297,8 @@ public class InitialSync {
                         OfflineLog.offline.debug("initial: %s %d (%s) content updated locally, will overwrite remote change",
                                 type, id, msg.getSubject());
                     }
+                } finally {
+                    ombx.lock.release();
                 }
             }
         } catch (MailServiceException.NoSuchItemException nsie) {

@@ -197,13 +197,13 @@ public class GalSyncSAXHandler implements ElementHandler {
 
         DbConnection conn = null;
         Set<Integer> galItemIds = null;
-        synchronized (galMbox) {
-            try {
-                conn = DbPool.getConnection();
-                galItemIds = DbMailItem.getIds(galMbox, conn, params, false);
-            } finally {
-                DbPool.quietClose(conn);
-            }
+        galMbox.lock.lock();
+        try {
+            conn = DbPool.getConnection();
+            galItemIds = DbMailItem.getIds(galMbox, conn, params, false);
+        } finally {
+            DbPool.quietClose(conn);
+            galMbox.lock.release();
         }
         if (galItemIds == null || galItemIds.size() == 0) {
             return;

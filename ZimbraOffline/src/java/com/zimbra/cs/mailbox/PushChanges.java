@@ -182,7 +182,8 @@ public class PushChanges {
         List<Pair<Integer, Integer>> simpleUnreadChanges = null; //list of Pair<itemId,modSequence> for items marked unread locally
         Map<Integer, List<Pair<Integer, Integer>>> simpleFolderMoveChanges = null; //list of Pair<itemId,modSequence> for items locally moved, sorted by folderId in map
 
-        synchronized (ombx) {
+        ombx.lock.lock();
+        try {
             limit = ombx.getLastChangeID();
             tombstones = ombx.getTombstones(0);
             changes = ombx.getLocalChanges(sContext);
@@ -191,6 +192,8 @@ public class PushChanges {
                 simpleUnreadChanges = ombx.getSimpleUnreadChanges(sContext, true);
                 simpleFolderMoveChanges = ombx.getFolderMoveChanges(sContext);
             }
+        } finally {
+            ombx.lock.release();
         }
 
         OfflineSyncManager.getInstance().continueOK();
@@ -588,7 +591,8 @@ public class PushChanges {
         byte color;
         String name, query, searchTypes, sort;
         boolean create = false;
-        synchronized (ombx) {
+        ombx.lock.lock(); 
+        try {
             SearchFolder search = ombx.getSearchFolderById(sContext, id);
             name = search.getName();
             flags = search.getInternalFlagBitmask();
@@ -622,6 +626,8 @@ public class PushChanges {
                     .addAttribute(MailConstants.A_SEARCH_TYPES, searchTypes)
                     .addAttribute(MailConstants.A_SORT_FIELD, sort);
             }
+        } finally {
+            ombx.lock.release();
         }
 
         try {
@@ -639,7 +645,8 @@ public class PushChanges {
             OfflineLog.offline.info("push: remote search folder " + id + " has been deleted; skipping");
         }
 
-        synchronized (ombx) {
+        ombx.lock.lock();
+        try {
             SearchFolder search = ombx.getSearchFolderById(sContext, id);
             // check to see if the search was changed while we were pushing the update...
             int mask = 0;
@@ -654,6 +661,8 @@ public class PushChanges {
             // update or clear the change bitmask
             ombx.setChangeMask(sContext, id, MailItem.Type.SEARCHFOLDER, mask);
             return (mask == 0);
+        } finally {
+            ombx.lock.release();
         }
     }
 
@@ -667,7 +676,8 @@ public class PushChanges {
         String name, url;
         boolean create = false;
         Folder folder = null;
-        synchronized (ombx) {
+        ombx.lock.lock();
+        try {
             folder = ombx.getFolderById(sContext, id);
             name = folder.getName();  parentId = folder.getFolderId();  flags = folder.getInternalFlagBitmask();
             url = folder.getUrl();    color = folder.getColor();
@@ -697,6 +707,8 @@ public class PushChanges {
                 action.addAttribute(MailConstants.A_URL, url);
             }
             // FIXME: does not support ACL sync at all...
+        } finally {
+            ombx.lock.release();
         }
 
         try {
@@ -718,7 +730,8 @@ public class PushChanges {
             OfflineLog.offline.info("push: remote folder " + id + " has been deleted; skipping");
         }
 
-        synchronized (ombx) {
+        ombx.lock.lock();
+        try {
             folder = ombx.getFolderById(sContext, id);
             // check to see if the folder was changed while we were pushing the update...
             int mask = 0;
@@ -731,6 +744,8 @@ public class PushChanges {
             // update or clear the change bitmask
             ombx.setChangeMask(sContext, id, MailItem.Type.FOLDER, mask);
             return (mask == 0);
+        } finally {
+            ombx.lock.release();
         }
     }
 
@@ -741,7 +756,8 @@ public class PushChanges {
         byte color;
         String name;
         boolean create = false;
-        synchronized (ombx) {
+        ombx.lock.lock(); 
+        try {
             Tag tag = ombx.getTagById(sContext, id);
             color = tag.getColor();  name = tag.getName();
 
@@ -756,6 +772,8 @@ public class PushChanges {
                 action.addAttribute(MailConstants.A_COLOR, color);
             if (create || (mask & Change.MODIFIED_NAME) != 0)
                 action.addAttribute(MailConstants.A_NAME, name);
+        } finally {
+            ombx.lock.release();
         }
 
         try {
@@ -784,7 +802,8 @@ public class PushChanges {
             OfflineLog.offline.info("push: remote tag " + id + " has been deleted; skipping");
         }
 
-        synchronized (ombx) {
+        ombx.lock.lock();
+        try {
             Tag tag = ombx.getTagById(sContext, id);
             // check to see if the tag was changed while we were pushing the update...
             int mask = 0;
@@ -794,6 +813,8 @@ public class PushChanges {
             // update or clear the change bitmask
             ombx.setChangeMask(sContext, id, MailItem.Type.TAG, mask);
             return (mask == 0);
+        } finally {
+            ombx.lock.release();
         }
     }
 
@@ -835,7 +856,8 @@ public class PushChanges {
             return;
         }
 
-        synchronized (ombx) {
+        ombx.lock.lock();
+        try {
             Map<Integer, Integer> refresh = ombx.getItemModSequences(sContext, ids);
             for (Pair<Integer, Integer> pair : changes) {
                 int id = pair.getFirst();
@@ -853,6 +875,8 @@ public class PushChanges {
                     OfflineLog.offline.debug("push: item " + id + " deleted from local during push");
                 }
             }
+        } finally {
+            ombx.lock.release();
         }
     }
 
@@ -865,7 +889,8 @@ public class PushChanges {
         byte color;
         boolean create = false;
         Contact cn = null;
-        synchronized (ombx) {
+        ombx.lock.lock();
+        try {
             cn = ombx.getContactById(sContext, id);
             date = cn.getDate();    flags = cn.getFlagBitmask();  tags = cn.getTagBitmask();
             color = cn.getColor();  folderId = cn.getFolderId();
@@ -902,6 +927,8 @@ public class PushChanges {
             if (create || (mask & Change.MODIFIED_COLOR) != 0) {
                 cnElem.addAttribute(MailConstants.A_COLOR, color);
             }
+        } finally {
+            ombx.lock.release();
         }
 
         try {
@@ -930,7 +957,8 @@ public class PushChanges {
             throw ServiceException.FAILURE("Unable to sync contact.", e);
         }
 
-        synchronized (ombx) {
+        ombx.lock.lock();
+        try {
             cn = ombx.getContactById(sContext, id);
             // check to see if the contact was changed while we were pushing the update...
             int mask = 0;
@@ -943,6 +971,8 @@ public class PushChanges {
             // update or clear the change bitmask
             ombx.setChangeMask(sContext, id, MailItem.Type.CONTACT, mask);
             return (mask == 0);
+        } finally {
+            ombx.lock.release();
         }
     }
 
@@ -1008,11 +1038,14 @@ public class PushChanges {
         }
         MailItem item = null;
         boolean create = false;
-        synchronized (ombx) {
+        ombx.lock.lock();
+        try {
             if (id > ZcsMailbox.FIRST_OFFLINE_ITEM_ID) {
                 create = true;
             }
             item = ombx.getItemById(sContext, id, MailItem.Type.UNKNOWN);
+        } finally {
+            ombx.lock.release();
         }
 
         String digest = item.getDigest();
@@ -1059,13 +1092,16 @@ public class PushChanges {
             ombx.sendRequest(request);
         }
 
-        synchronized (ombx) {
+        ombx.lock.lock();
+        try { 
             item = ombx.getItemById(sContext, id, MailItem.Type.UNKNOWN);
             int mask = 0;
             if (!StringUtil.equal(digest, item.getDigest()))  mask |= Change.MODIFIED_CONTENT;
             if (!StringUtil.equal(name, item.getName()))      mask |= Change.MODIFIED_NAME;
             ombx.setChangeMask(sContext, id, MailItem.Type.DOCUMENT, mask);
             return (mask == 0);
+        } finally {
+            ombx.lock.release();
         }
     }
 
@@ -1111,7 +1147,8 @@ public class PushChanges {
         boolean create = false;
         boolean upload = false;
         Message msg = null;
-        synchronized (ombx) {
+        ombx.lock.lock();
+        try {
             try {
                 msg = ombx.getMessageById(sContext, id);
             } catch (NoSuchItemException x) {
@@ -1158,6 +1195,8 @@ public class PushChanges {
             if (msg.isDraft() && (create || (mask & Change.MODIFIED_CONTENT) != 0) && msg.getDraftAutoSendTime() != 0) {
                 action.addAttribute(MailConstants.A_AUTO_SEND_TIME, msg.getDraftAutoSendTime());
             }
+        } finally {
+            ombx.lock.release();
         }
 
         try {
@@ -1194,7 +1233,8 @@ public class PushChanges {
             }
         }
 
-        synchronized (ombx) {
+        ombx.lock.lock(); 
+        try {
             try {
                 msg = ombx.getMessageById(sContext, id);
             } catch (NoSuchItemException x) {
@@ -1212,6 +1252,8 @@ public class PushChanges {
             // update or clear the change bitmask
             ombx.setChangeMask(sContext, id, MailItem.Type.MESSAGE, mask);
             return (mask == 0);
+        } finally {
+            ombx.lock.release();
         }
     }
 
@@ -1228,7 +1270,8 @@ public class PushChanges {
         String uid = null;
         MailItem.Type type = isAppointment ? MailItem.Type.APPOINTMENT : MailItem.Type.TASK;
         CalendarItem cal = null;
-        synchronized (ombx) {
+        ombx.lock.lock();
+        try {
             cal = ombx.getCalendarItemById(sContext, id);
             name = cal.getSubject();
             date = cal.getDate();
@@ -1256,6 +1299,8 @@ public class PushChanges {
                 if ((mask & Change.MODIFIED_COLOR) != 0)
                     action.addAttribute(MailConstants.A_COLOR, color);
             }
+        } finally {
+            ombx.lock.release();
         }
 
         try {
@@ -1294,7 +1339,8 @@ public class PushChanges {
             OfflineLog.offline.info("push: remote calendar item " + id + " has been deleted; skipping");
         }
 
-        synchronized (ombx) {
+        ombx.lock.lock();
+        try {
             cal = ombx.getCalendarItemById(sContext, id);
             // check to see if the calendar item was changed while we were pushing the update...
             mask = 0;
@@ -1307,6 +1353,8 @@ public class PushChanges {
             // update or clear the change bitmask
             ombx.setChangeMask(sContext, id, type, mask);
             return (mask == 0);
+        } finally {
+            ombx.lock.release();
         }
     }
 }
