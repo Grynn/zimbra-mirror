@@ -48,8 +48,8 @@ function(data, more, total) {
 	// filter the domain alias
 	var withoutAlias = [];
 	for(var i = 0; data && i < data.length; i++) {
-		var targetObj = ZaDomain.getTargetDomainByName(data[i]) ;
-		if (targetObj && targetObj.attrs [ZaDomain.A_domainType] == ZaDomain.domainTypes.local){
+		//var targetObj = ZaDomain.getTargetDomainByName(data[i]) ;
+		if (data[i] && data[i].attrs [ZaDomain.A_domainType] == ZaDomain.domainTypes.local){
 			withoutAlias.push(data[i]);
 		}
 	}

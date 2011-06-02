@@ -356,6 +356,18 @@ ZaSearch.prototype.dynSelectSearchDomains = function (callArgs) {
 		params.types = [ZaSearch.DOMAINS];
 		params.callback = dataCallback;
 		params.sortBy = ZaDomain.A_domainName;
+        	params.query = "";
+        	if(!ZaZimbraAdmin.isGlobalAdmin()) {
+            		var domainNameList = ZaApp.getInstance()._domainNameList;
+            		if(domainNameList && domainNameList instanceof Array) {
+                		for(var i = 0; i < domainNameList.length; i++) {
+                    			if(!value || domainNameList[i].indexOf(value) != -1)
+                    			params.query += "(" + ZaDomain.A_domainName + "=" + domainNameList[i] + ")";
+                		}
+                		if(domainNameList.length > 1)
+                    		params.query = "(|" + params.query + ")";
+            		}
+        	} else
 		params.query = ZaSearch.getSearchDomainByNameQuery(value);
 		params.controller = ZaApp.getInstance().getCurrentController();
 		params.showBusy = true;

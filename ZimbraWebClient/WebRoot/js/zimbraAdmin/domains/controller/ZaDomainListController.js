@@ -37,6 +37,24 @@ ZaController.initPopupMenuMethods["ZaDomainListController"] = new Array();
 ZaController.changeActionsStateMethods["ZaDomainListController"] = new Array(); 
 
 ZaDomainListController.prototype.show = function (doPush,openInNewTab) {
+
+    if(!ZaZimbraAdmin.isGlobalAdmin() && this._currentQuery == "") {
+        var domainNameList = ZaApp.getInstance()._domainNameList;
+        if(domainNameList && (domainNameList instanceof Array) && domainNameList.length > 0) {
+            for(var i = 0; i < domainNameList.length; i++)
+                this._currentQuery += "(" + ZaDomain.A_domainName + "=" + domainNameList[i] + ")";
+            if(domainNameList.length > 1)
+                this._currentQuery = "(|" + this._currentQuery + ")";
+        } else {
+            this._list = new ZaItemList(ZaDomain);
+            this.numPages = 0;
+            this._searchTotal = 0;
+            if(doPush) this._show(this._list);
+            else this._updateUI(this._list);
+            return;
+        }
+    }
+
 	var busyId = Dwt.getNextId();
 	var callback = new AjxCallback(this, this.searchCallback, {openInNewTab:openInNewTab,limit:ZaDomain.RESULTSPERPAGE,CONS:ZaDomain,show:doPush, busyId:busyId});
 	var searchParams = {

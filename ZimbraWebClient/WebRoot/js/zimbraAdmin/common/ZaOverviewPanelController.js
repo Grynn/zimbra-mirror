@@ -127,6 +127,20 @@ ZaOverviewPanelController.prototype.searchDomains = function() {
 	
 //	domainListController._currentQuery = ZaDomain.LOCAL_DOMAIN_QUERY;
     domainListController._currentQuery = "";
+    if(!ZaZimbraAdmin.isGlobalAdmin()) {
+        var domainNameList = ZaApp.getInstance()._domainNameList;
+        if(!domainNameList || !(domainNameList instanceof Array) || domainNameList.length == 0) {
+            ZaApp.getInstance()._domainList =  new ZaItemList(ZaDomain);
+            return;
+        }
+        if(domainNameList && domainNameList instanceof Array) {
+            for(var i = 0; i < domainNameList.length; i++)
+                domainListController._currentQuery += "(" + ZaDomain.A_domainName + "=" + domainNameList[i] + ")";
+            if(domainNameList.length > 1)
+                domainListController._currentQuery = "(|" + domainListController._currentQuery + ")";
+        }
+    }
+
 	var searchParams = {
 			query: domainListController._currentQuery, 
 			types:[ZaSearch.DOMAINS],
@@ -436,6 +450,10 @@ function() {
 	
 			try {
 			//add domain nodes
+                                if(!ZaZimbraAdmin.isGlobalAdmin()) {
+                                    var domainNamelist = ZaDomain.getEffectiveDomainList(ZaZimbraAdmin.currentAdminAccount.id);
+                                    ZaApp.getInstance()._domainNameList = domainNamelist;
+                                }
 				this.searchDomains();
 			} catch (ex) {
 				this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
@@ -797,6 +815,15 @@ ZaOverviewPanelController.domainListTreeListener = function (ev) {
 	//if we do not have access to domains we will only get our own domain in response anyway, so no need to add a query
 //	domainListController._currentQuery = ZaDomain.LOCAL_DOMAIN_QUERY;
 	domainListController._currentQuery = "";
+        if(!ZaZimbraAdmin.isGlobalAdmin()) {
+            var domainNameList = ZaApp.getInstance()._domainNameList;
+            if(domainNameList && domainNameList instanceof Array && domainNameList.length > 0) {
+                for(var i = 0; i < domainNameList.length; i++)
+                   domainListController._currentQuery += "(" + ZaDomain.A_domainName + "=" + domainNameList[i] + ")";
+                if(domainNameList.length > 1)
+                   domainListController._currentQuery = "(|" + domainListController._currentQuery + ")";
+            }
+        }
 
 	if(ZaApp.getInstance().getCurrentController()) {
 		ZaApp.getInstance().getCurrentController().switchToNextView(domainListController, ZaDomainListController.prototype.show, true);
