@@ -27,6 +27,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 
 		super.startingAccountPreferences = new HashMap<String, String>() {{
          put("zimbraPrefGroupMailBy", "conversation");
+         put("zimbraPrefReadingPaneLocation", "bottom");
      }};		
 		
 	}
