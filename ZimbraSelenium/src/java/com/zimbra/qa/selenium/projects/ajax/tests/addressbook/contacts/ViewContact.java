@@ -45,7 +45,7 @@ public class ViewContact extends AjaxCommonTest  {
 	
 	@Test(	description = "View a contact  created via soap",
 			groups = { "functional" })
-	public void DisplayContact_01() throws HarnessException {
+	public void DisplayContactInfo_FileAsEmail() throws HarnessException {
 		         		
 	    // Create a contact via Soap then select
 		ContactItem contact = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
@@ -62,7 +62,7 @@ public class ViewContact extends AjaxCommonTest  {
 
 	@Test(	description = "Click Alphabetbar button All: Verify contact started with digit and A-Z listed ",
 			groups = { "functional" })
-	public void DisplayContact_02() throws HarnessException {
+	public void ClickAllVerifyDisplayAllContacts() throws HarnessException {
 	
 		 // Create  contacts  
 		ContactItem contact1 = createContact("B");
@@ -96,7 +96,7 @@ public class ViewContact extends AjaxCommonTest  {
 
 	@Test(	description = "Click Alphabetbar button 123: Verify contact started with digit listed and A-Z not-listed ",
 			groups = { "functional" })
-	public void DisplayContact_03() throws HarnessException {
+	public void Click123VerifyDisplayContactStartWithDigit() throws HarnessException {
 	
 		 // Create  contacts  
 		ContactItem contact1 = createContact("B");
@@ -131,7 +131,7 @@ public class ViewContact extends AjaxCommonTest  {
 
 	@Test(	description = "Click Alphabetbar button B: Verify only contact started with B|b is listed ",
 			groups = { "functional" })
-	public void DisplayContact_04() throws HarnessException {
+	public void ClickBVerifyDisplayContactStartWithBb() throws HarnessException {
 	
 		 // Create  contacts  
 		ContactItem contact1 = createContact("B");
@@ -162,7 +162,7 @@ public class ViewContact extends AjaxCommonTest  {
 			}
 				
 		}
-	
+
 		ZAssert.assertTrue(countContact==2, "Verify contact " + contact1.fileAs + "," + contact4.fileAs + " displayed, and " + contact2.fileAs + "," + contact3.fileAs + " not displayed ");
 	}
 
