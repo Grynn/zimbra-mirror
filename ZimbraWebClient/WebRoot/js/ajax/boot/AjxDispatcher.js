@@ -301,7 +301,7 @@ function(pkg, pkgWasLoaded, callback, args) {
 	}
 	
 	if (callback) {
- 		return callback.run1(args);
+ 		return callback.isAjxCallback ? callback.run1(args) : callback(args);
 	}
 };
 
