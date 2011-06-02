@@ -45,7 +45,7 @@ public class ViewContactGroup extends AjaxCommonTest  {
     
 	@Test(	description = "View a contact group created via soap",
 			groups = { "functional" })
-	public void DisplayContactGroup_01() throws HarnessException {
+	public void DisplayContactGroupInfo_Emails() throws HarnessException {
 		         		
 	    // Create a contact group via Soap then select
 		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
@@ -62,7 +62,7 @@ public class ViewContactGroup extends AjaxCommonTest  {
 
 	@Test(	description = "Click Alphabetbar button All: Verify contact groups started with digit and A-Z listed ",
 			groups = { "functional" })
-	public void DisplayContactGroup_02() throws HarnessException {
+	public void ClickAllVerifyDisplayAllContactGroups() throws HarnessException {
 	
 		 // Create  contact groups 
 		ContactGroupItem group1 = createContactGroup("B");    
@@ -96,7 +96,7 @@ public class ViewContactGroup extends AjaxCommonTest  {
 
 	@Test(	description = "Click Alphabetbar button 123: Verify contact groups started with digit listed and A-Z not-listed ",
 			groups = { "functional" })
-	public void DisplayContactGroup_03() throws HarnessException {
+	public void Click123VerifyDisplayContactStartWithDigit() throws HarnessException {
 	
 		 // Create  contact groups 
 		ContactGroupItem group1 = createContactGroup("B");    
@@ -132,7 +132,7 @@ public class ViewContactGroup extends AjaxCommonTest  {
 
 	@Test(	description = "Click Alphabetbar button B: Verify only contact groups started with B|b is listed ",
 			groups = { "functional" })
-	public void DisplayContactGroup_04() throws HarnessException {
+	public void ClickBVerifyDisplayContactStartWithBb() throws HarnessException {
 	
 		 // Create  contact groups 
 		ContactGroupItem group0 = createContactGroup("b");
