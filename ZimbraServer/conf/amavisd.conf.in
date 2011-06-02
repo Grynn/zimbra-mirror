@@ -209,15 +209,16 @@ $final_spam_destiny       = D_DISCARD;  #!!!  D_DISCARD / D_REJECT
 $warnvirusrecip = %%binary VAR:zimbraVirusWarnRecipient%%;
 $warnbannedrecip = %%binary VAR:zimbraMtaBlockedExtensionWarnRecipient%%;
 %%uncomment VAR:zimbraAmavisQuarantineAccount%%$virus_quarantine_to = '%%zimbraAmavisQuarantineAccount%%';
+$archive_quarantine_to = undef;
 
-$quarantine_method_by_ccat{CC_CLEAN.",2"} = 'local:clean/%m';
-$quarantine_method_by_ccat{CC_CLEAN.",3"} = 'local:clean/%m';
-$quarantine_method_by_ccat{CC_CLEAN.",4"} = 'local:clean/%m';
-$quarantine_to_maps_by_ccat{CC_CLEAN.",2"} = ['recip-quarantine'];
-$quarantine_to_maps_by_ccat{CC_CLEAN.",3"} = ['sender-quarantine'];
-$quarantine_to_maps_by_ccat{CC_CLEAN.",4"} = ['clean-quarantine'];
-
-include_config_files('/opt/zimbra/conf/amavisd-custom.conf');
+#$quarantine_method_by_ccat{CC_CLEAN.",2"} = 'local:clean/%m';
+#$quarantine_method_by_ccat{CC_CLEAN.",3"} = 'local:clean/%m';
+#$quarantine_method_by_ccat{CC_CLEAN.",4"} = 'local:clean/%m';
+#$quarantine_to_maps_by_ccat{CC_CLEAN.",2"} = ['recip-quarantine'];
+#$quarantine_to_maps_by_ccat{CC_CLEAN.",3"} = ['sender-quarantine'];
+#$quarantine_to_maps_by_ccat{CC_CLEAN.",4"} = ['clean-quarantine'];
+#
+#include_config_files('/opt/zimbra/conf/amavisd-custom.conf');
 # SOME OTHER VARIABLES WORTH CONSIDERING (see amavisd.conf-default for all)
 
 # $warnbadhsender,

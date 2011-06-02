@@ -14761,6 +14761,15 @@ sub do_notify_and_quarantine($$) {
     }
   }  # endfor per_recip_data
 
+  if (defined($qar_method) && $qar_method ne '') {  # archiving quarantine on sender
+    my($sender) = $msginfo->sender;
+    if ($sender ne '') {
+      my($q) = lookup(0,$sender,@{ca('archive_quarantine_to_maps')});
+      $q = $sender  if $q ne '' && $qar_method =~ /^bsmtp:/i;  # orig.recip
+      push(@q_tuples, [$qar_method,$q,'Arch'])  if defined $q && $q ne '';
+    }
+  }
+
   if ($ccat == CC_SPAM) {
     my($sqbsm) = ca('spam_quarantine_bysender_to_maps');
     if (@$sqbsm) {  # by-sender spam quarantine (hardly useful, rarely used)
