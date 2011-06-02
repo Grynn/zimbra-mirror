@@ -135,9 +135,9 @@ public class TreeContacts extends AbsTree {
 			actionLocator = "implement me";
 
 		} else if (action == Action.A_RIGHTCLICK) {
-
-			actionLocator = "zti__main_Contacts__" + t.getId() + "_textCell";				
-			zRightClick(actionLocator);
+			actionLocator = "css=div#zti__main_Contacts__" + t.getId() + "_div";				
+			zRightClickAt(actionLocator,"0,0");		
+			SleepUtil.sleepMedium();
          } else {
 			throw new HarnessException("Action " + action
 					+ " not yet implemented");
@@ -176,8 +176,10 @@ public class TreeContacts extends AbsTree {
 			zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);						
 		}
 		else {
- 		  // Default behavior. Click the locator
-		  zClick(optionLocator);
+ 		    // Default behavior. Click the locator
+		    zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+		    zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);						
+		  
 		}
 
 		
