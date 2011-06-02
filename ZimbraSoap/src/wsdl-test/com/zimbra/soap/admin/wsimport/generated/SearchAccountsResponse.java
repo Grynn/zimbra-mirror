@@ -47,10 +47,10 @@ public class SearchAccountsResponse {
 
     @XmlElements({
         @XmlElement(name = "calresource", type = CalendarResourceInfo.class),
-        @XmlElement(name = "cos", type = CosInfo.class),
-        @XmlElement(name = "alias", type = AliasInfo.class),
         @XmlElement(name = "account", type = AccountInfo.class),
+        @XmlElement(name = "cos", type = CosInfo.class),
         @XmlElement(name = "domain", type = DomainInfo.class),
+        @XmlElement(name = "alias", type = AliasInfo.class),
         @XmlElement(name = "dl", type = DistributionListInfo.class)
     })
     protected List<AdminObjectInfo> calresourceOrDlOrAlias;
@@ -78,10 +78,10 @@ public class SearchAccountsResponse {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link CalendarResourceInfo }
-     * {@link CosInfo }
-     * {@link AliasInfo }
      * {@link AccountInfo }
+     * {@link CosInfo }
      * {@link DomainInfo }
+     * {@link AliasInfo }
      * {@link DistributionListInfo }
      * 
      * 

@@ -39,6 +39,18 @@ public interface MailService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.AddCommentResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/AddComment")
+    @WebResult(name = "AddCommentResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public AddCommentResponse addCommentRequest(
+        @WebParam(name = "AddCommentRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        AddCommentRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.mail.wsimport.generated.AddTaskInviteResponse
      */
     @WebMethod(action = "urn:zimbraMail/AddTaskInvite")
@@ -87,6 +99,18 @@ public interface MailService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.AutoCompleteResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/AutoComplete")
+    @WebResult(name = "AutoCompleteResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public AutoCompleteResponse autoCompleteRequest(
+        @WebParam(name = "AutoCompleteRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        AutoCompleteRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.mail.wsimport.generated.BrowseResponse
      */
     @WebMethod(action = "urn:zimbraMail/Browse")
@@ -118,6 +142,18 @@ public interface MailService {
     public CancelTaskResponse cancelTaskRequest(
         @WebParam(name = "CancelTaskRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
         CancelTaskRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.CheckPermissionResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/CheckPermission")
+    @WebResult(name = "CheckPermissionResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public CheckPermissionResponse checkPermissionRequest(
+        @WebParam(name = "CheckPermissionRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        CheckPermissionRequest parameters);
 
     /**
      * 
@@ -363,6 +399,18 @@ public interface MailService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.DestroyWaitSetResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/DestroyWaitSet")
+    @WebResult(name = "DestroyWaitSetResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public DestroyWaitSetResponse destroyWaitSetRequest(
+        @WebParam(name = "DestroyWaitSetRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        DestroyWaitSetRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.mail.wsimport.generated.DiffDocumentResponse
      */
     @WebMethod(action = "urn:zimbraMail/DiffDocument")
@@ -519,6 +567,18 @@ public interface MailService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.GetCommentsResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/GetComments")
+    @WebResult(name = "GetCommentsResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public GetCommentsResponse getCommentsRequest(
+        @WebParam(name = "GetCommentsRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        GetCommentsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.mail.wsimport.generated.GetContactsResponse
      */
     @WebMethod(action = "urn:zimbraMail/GetContacts")
@@ -562,6 +622,18 @@ public interface MailService {
     public GetDataSourcesResponse getDataSourcesRequest(
         @WebParam(name = "GetDataSourcesRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
         GetDataSourcesRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.GetEffectiveFolderPermsResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/GetEffectiveFolderPerms")
+    @WebResult(name = "GetEffectiveFolderPermsResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public GetEffectiveFolderPermsResponse getEffectiveFolderPermsRequest(
+        @WebParam(name = "GetEffectiveFolderPermsRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        GetEffectiveFolderPermsRequest parameters);
 
     /**
      * 
@@ -699,6 +771,18 @@ public interface MailService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.GetPermissionResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/GetPermission")
+    @WebResult(name = "GetPermissionResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public GetPermissionResponse getPermissionRequest(
+        @WebParam(name = "GetPermissionRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        GetPermissionRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.mail.wsimport.generated.GetRecurResponse
      */
     @WebMethod(action = "urn:zimbraMail/GetRecur")
@@ -790,6 +874,42 @@ public interface MailService {
     public GetWorkingHoursResponse getWorkingHoursRequest(
         @WebParam(name = "GetWorkingHoursRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
         GetWorkingHoursRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.GetYahooAuthTokenResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/GetYahooAuthToken")
+    @WebResult(name = "GetYahooAuthTokenResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public GetYahooAuthTokenResponse getYahooAuthTokenRequest(
+        @WebParam(name = "GetYahooAuthTokenRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        GetYahooAuthTokenRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.GetYahooCookieResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/GetYahooCookie")
+    @WebResult(name = "GetYahooCookieResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public GetYahooCookieResponse getYahooCookieRequest(
+        @WebParam(name = "GetYahooCookieRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        GetYahooCookieRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.GrantPermissionResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/GrantPermission")
+    @WebResult(name = "GrantPermissionResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public GrantPermissionResponse grantPermissionRequest(
+        @WebParam(name = "GrantPermissionRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        GrantPermissionRequest parameters);
 
     /**
      * 
@@ -1023,6 +1143,30 @@ public interface MailService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.RankingActionResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/RankingAction")
+    @WebResult(name = "RankingActionResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public RankingActionResponse rankingActionRequest(
+        @WebParam(name = "RankingActionRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        RankingActionRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.RevokePermissionResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/RevokePermission")
+    @WebResult(name = "RevokePermissionResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public RevokePermissionResponse revokePermissionRequest(
+        @WebParam(name = "RevokePermissionRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        RevokePermissionRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.mail.wsimport.generated.SaveDocumentResponse
      */
     @WebMethod(action = "urn:zimbraMail/SaveDocument")
@@ -1174,6 +1318,18 @@ public interface MailService {
     public VerifyCodeResponse verifyCodeRequest(
         @WebParam(name = "VerifyCodeRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
         VerifyCodeRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.WaitSetResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/WaitSet")
+    @WebResult(name = "WaitSetResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public WaitSetResponse waitSetRequest(
+        @WebParam(name = "WaitSetRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        WaitSetRequest parameters);
 
     /**
      * 

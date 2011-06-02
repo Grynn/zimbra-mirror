@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "idAndType")
+@XmlType(name = "idAndType", namespace = "urn:zimbra")
 public class IdAndType {
 
     @XmlAttribute(required = true)

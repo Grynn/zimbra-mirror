@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "waitSetAddSpec")
+@XmlType(name = "waitSetAddSpec", namespace = "urn:zimbra")
 public class WaitSetAddSpec {
 
     @XmlAttribute

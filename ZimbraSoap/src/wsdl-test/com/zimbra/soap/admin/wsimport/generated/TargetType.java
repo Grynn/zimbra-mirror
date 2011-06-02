@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "targetType")
+@XmlType(name = "targetType", namespace = "urn:zimbra")
 @XmlEnum
 public enum TargetType {
 

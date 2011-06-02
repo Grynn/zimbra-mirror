@@ -60,8 +60,8 @@ public class InviteAsMP
     protected MpInviteInfo inv;
     protected List<KeyValuePair> header;
     @XmlElements({
-        @XmlElement(name = "shr", type = ShareNotification.class),
-        @XmlElement(name = "mp", type = PartInfo.class)
+        @XmlElement(name = "mp", type = PartInfo.class),
+        @XmlElement(name = "shr", type = ShareNotification.class)
     })
     protected List<Object> mpOrShr;
     @XmlAttribute
@@ -219,8 +219,8 @@ public class InviteAsMP
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link ShareNotification }
      * {@link PartInfo }
+     * {@link ShareNotification }
      * 
      * 
      */

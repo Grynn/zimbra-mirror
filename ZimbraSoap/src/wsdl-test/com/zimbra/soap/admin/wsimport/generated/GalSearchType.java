@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlType;
  * </pre>
  * 
  */
-@XmlType(name = "galSearchType")
+@XmlType(name = "galSearchType", namespace = "urn:zimbra")
 @XmlEnum
 public enum GalSearchType {
 

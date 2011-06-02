@@ -6,7 +6,6 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -25,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
- *                   &lt;element name="addAccounts" type="{urn:zimbraAdmin}waitSetAddSpec" maxOccurs="unbounded" minOccurs="0"/>
+ *                   &lt;element name="a" type="{urn:zimbra}waitSetAddSpec" maxOccurs="unbounded" minOccurs="0"/>
  *                 &lt;/sequence>
  *               &lt;/restriction>
  *             &lt;/complexContent>
@@ -36,7 +35,7 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
- *                   &lt;element name="a" type="{urn:zimbraAdmin}waitSetAddSpec" maxOccurs="unbounded" minOccurs="0"/>
+ *                   &lt;element name="a" type="{urn:zimbra}waitSetAddSpec" maxOccurs="unbounded" minOccurs="0"/>
  *                 &lt;/sequence>
  *               &lt;/restriction>
  *             &lt;/complexContent>
@@ -58,7 +57,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="seq" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="block" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="defTypes" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="timeout" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
+ *       &lt;attribute name="timeout" type="{http://www.w3.org/2001/XMLSchema}long" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -85,8 +84,8 @@ public class AdminWaitSetRequest {
     protected Boolean block;
     @XmlAttribute
     protected String defTypes;
-    @XmlAttribute(required = true)
-    protected long timeout;
+    @XmlAttribute
+    protected Long timeout;
 
     /**
      * Gets the value of the add property.
@@ -259,16 +258,24 @@ public class AdminWaitSetRequest {
     /**
      * Gets the value of the timeout property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Long }
+     *     
      */
-    public long getTimeout() {
+    public Long getTimeout() {
         return timeout;
     }
 
     /**
      * Sets the value of the timeout property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Long }
+     *     
      */
-    public void setTimeout(long value) {
+    public void setTimeout(Long value) {
         this.timeout = value;
     }
 
@@ -283,7 +290,7 @@ public class AdminWaitSetRequest {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="addAccounts" type="{urn:zimbraAdmin}waitSetAddSpec" maxOccurs="unbounded" minOccurs="0"/>
+     *         &lt;element name="a" type="{urn:zimbra}waitSetAddSpec" maxOccurs="unbounded" minOccurs="0"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>
@@ -294,26 +301,25 @@ public class AdminWaitSetRequest {
      */
     @XmlAccessorType(XmlAccessType.FIELD)
     @XmlType(name = "", propOrder = {
-        "addAccounts"
+        "a"
     })
     public static class Add {
 
-        @XmlElement(nillable = true)
-        protected List<WaitSetAddSpec> addAccounts;
+        protected List<WaitSetAddSpec> a;
 
         /**
-         * Gets the value of the addAccounts property.
+         * Gets the value of the a property.
          * 
          * <p>
          * This accessor method returns a reference to the live list,
          * not a snapshot. Therefore any modification you make to the
          * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the addAccounts property.
+         * This is why there is not a <CODE>set</CODE> method for the a property.
          * 
          * <p>
          * For example, to add a new item, do as follows:
          * <pre>
-         *    getAddAccounts().add(newItem);
+         *    getA().add(newItem);
          * </pre>
          * 
          * 
@@ -323,11 +329,11 @@ public class AdminWaitSetRequest {
          * 
          * 
          */
-        public List<WaitSetAddSpec> getAddAccounts() {
-            if (addAccounts == null) {
-                addAccounts = new ArrayList<WaitSetAddSpec>();
+        public List<WaitSetAddSpec> getA() {
+            if (a == null) {
+                a = new ArrayList<WaitSetAddSpec>();
             }
-            return this.addAccounts;
+            return this.a;
         }
 
     }
@@ -402,7 +408,7 @@ public class AdminWaitSetRequest {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="a" type="{urn:zimbraAdmin}waitSetAddSpec" maxOccurs="unbounded" minOccurs="0"/>
+     *         &lt;element name="a" type="{urn:zimbra}waitSetAddSpec" maxOccurs="unbounded" minOccurs="0"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>

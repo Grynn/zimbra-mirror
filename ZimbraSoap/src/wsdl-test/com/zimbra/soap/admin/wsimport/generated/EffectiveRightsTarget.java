@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="inDomains" type="{urn:zimbraAdmin}inDomainInfo" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="entries" type="{urn:zimbraAdmin}rightsEntriesInfo" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="type" use="required" type="{urn:zimbraAdmin}targetType" />
+ *       &lt;attribute name="type" use="required" type="{urn:zimbra}targetType" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>

@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="domain" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="limit" type="{http://www.w3.org/2001/XMLSchema}int" />
- *       &lt;attribute name="type" type="{urn:zimbraAdmin}galSearchType" />
+ *       &lt;attribute name="type" type="{urn:zimbra}galSearchType" />
  *       &lt;attribute name="galAcctId" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="includeTagDeleted" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="allowableTaskStatus" type="{http://www.w3.org/2001/XMLSchema}string" />

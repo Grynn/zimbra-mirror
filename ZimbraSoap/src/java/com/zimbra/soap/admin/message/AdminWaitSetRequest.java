@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2011 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -15,6 +15,7 @@
 
 package com.zimbra.soap.admin.message;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
@@ -30,38 +31,42 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.soap.MailConstants;
-import com.zimbra.soap.admin.type.WaitSetAddSpec;
 import com.zimbra.soap.type.Id;
+import com.zimbra.soap.type.WaitSetAddSpec;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name=AdminConstants.E_ADMIN_WAIT_SET_REQUEST)
 public class AdminWaitSetRequest {
 
-    @XmlAttribute(name=MailConstants.A_WAITSET_ID, required=true)
+    @XmlAttribute(name=MailConstants.A_WAITSET_ID /* waitSet */, required=true)
     private final String waitSetId;
 
-    @XmlAttribute(name=MailConstants.A_SEQ, required=true)
+    @XmlAttribute(name=MailConstants.A_SEQ /* seq */, required=true)
     private final String lastKnownSeqNo;
 
-    @XmlAttribute(name=MailConstants.A_BLOCK, required=false)
-    private final Boolean block;
+    @XmlAttribute(name=MailConstants.A_BLOCK /* block */, required=false)
+    private Boolean block;
 
     // default interest types required for "All" waitsets
-    @XmlAttribute(name=MailConstants.A_DEFTYPES, required=false)
-    private final String defaultInterests;
+    @XmlAttribute(name=MailConstants.A_DEFTYPES /* defTypes */, required=false)
+    private String defaultInterests;
 
-    @XmlAttribute(name=MailConstants.A_TIMEOUT, required=true)
-    private final Long timeout;
+    @XmlAttribute(name=MailConstants.A_TIMEOUT /* timeout */, required=false)
+    private Long timeout;
 
-    @XmlElementWrapper(name=MailConstants.E_WAITSET_ADD, required=false)
+    @XmlElementWrapper(name=MailConstants.E_WAITSET_ADD /* add */,
+                    required=false)
+    @XmlElement(name=MailConstants.E_A /* a */, required=false)
     private List<WaitSetAddSpec> addAccounts = Lists.newArrayList();
 
-    @XmlElementWrapper(name=MailConstants.E_WAITSET_UPDATE, required=false)
-    @XmlElement(name=MailConstants.E_A, required=false)
+    @XmlElementWrapper(name=MailConstants.E_WAITSET_UPDATE /* update */,
+                    required=false)
+    @XmlElement(name=MailConstants.E_A /* a */, required=false)
     private List<WaitSetAddSpec> updateAccounts = Lists.newArrayList();
 
-    @XmlElementWrapper(name=MailConstants.E_WAITSET_REMOVE, required=false)
-    @XmlElement(name=MailConstants.E_A, required=false)
+    @XmlElementWrapper(name=MailConstants.E_WAITSET_REMOVE /* remove */,
+                    required=false)
+    @XmlElement(name=MailConstants.E_A /* a */, required=false)
     private List<Id> removeAccounts = Lists.newArrayList();
 
     /**
@@ -69,19 +74,19 @@ public class AdminWaitSetRequest {
      */
     @SuppressWarnings("unused")
     private AdminWaitSetRequest() {
-        this((String) null, (String) null, (Boolean) null,
-                (String) null, (Long) null);
+        this((String) null, (String) null);
     }
 
-    public AdminWaitSetRequest(String waitSetId, String lastKnownSeqNo,
-                Boolean block, String defaultInterests, Long timeout) {
+    public AdminWaitSetRequest(String waitSetId, String lastKnownSeqNo) {
         this.waitSetId = waitSetId;
         this.lastKnownSeqNo = lastKnownSeqNo;
-        this.block = block;
-        this.defaultInterests = defaultInterests;
-        this.timeout = timeout;
     }
 
+    public void setBlock(Boolean block) { this.block = block; }
+    public void setDefaultInterests(String defaultInterests) {
+        this.defaultInterests = defaultInterests;
+    }
+    public void setTimeout(Long timeout) { this.timeout = timeout; }
     public void setAddAccounts(Iterable <WaitSetAddSpec> addAccounts) {
         this.addAccounts.clear();
         if (addAccounts != null) {
@@ -131,5 +136,24 @@ public class AdminWaitSetRequest {
     }
     public List<Id> getRemoveAccounts() {
         return Collections.unmodifiableList(removeAccounts);
+    }
+
+    public Objects.ToStringHelper addToStringInfo(
+                Objects.ToStringHelper helper) {
+        return helper
+            .add("waitSetId", waitSetId)
+            .add("lastKnownSeqNo", lastKnownSeqNo)
+            .add("block", block)
+            .add("defaultInterests", defaultInterests)
+            .add("timeout", timeout)
+            .add("addAccounts", addAccounts)
+            .add("updateAccounts", updateAccounts)
+            .add("removeAccounts", removeAccounts);
+    }
+
+    @Override
+    public String toString() {
+        return addToStringInfo(Objects.toStringHelper(this))
+                .toString();
     }
 }
