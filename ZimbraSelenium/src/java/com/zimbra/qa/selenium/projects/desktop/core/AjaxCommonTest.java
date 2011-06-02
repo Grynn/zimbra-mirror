@@ -567,7 +567,8 @@ public class AjaxCommonTest {
 
 		// Only for linux, kill the desktop process because
 		// in linux, the app is holding up the thread
-		if (OperatingSystem.getOSType() == OsType.LINUX) {
+		if (OperatingSystem.getOSType() == OsType.LINUX ||
+		      OperatingSystem.getOSType() == OsType.MAC) {
 		   DesktopInstallUtil.killDesktopProcess();
 		}
 

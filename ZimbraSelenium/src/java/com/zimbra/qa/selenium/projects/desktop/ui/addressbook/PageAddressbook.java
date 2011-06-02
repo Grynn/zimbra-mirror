@@ -392,7 +392,7 @@ public class PageAddressbook extends AbsTab {
 				throw new HarnessException("Button "+ pulldown +" option "+ option +" pulldownLocator "+ pulldownLocator +" not present!");
 			}
 			
-			this.zClick(pulldownLocator);
+			this.zClickAt(pulldownLocator, "0,0");
 			zWaitForBusyOverlay();
 			
 			if ( optionLocator != null ) {
@@ -400,7 +400,7 @@ public class PageAddressbook extends AbsTab {
 				// Make sure the locator exists
 				zWaitForElementPresent(optionLocator);
 				
-				zClick(optionLocator);
+				zClickAt(optionLocator, "0,0");
 				zWaitForBusyOverlay();
 
 			}
