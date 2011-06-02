@@ -5,7 +5,6 @@ package com.zimbra.qa.selenium.projects.ajax.ui;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove.Locators;
 
 
 /**
@@ -33,13 +32,13 @@ public class DialogRenameTag extends AbsDialog {
 	public void zSetNewName(String name) throws HarnessException {
 		logger.info(myPageName() + " zSetNewName("+ name +")");
 
-		String locator = "//input[@id='"+ Locators.zNewTagNameFieldId +"']";
+		String locator = "css=input#"+ Locators.zNewTagNameFieldId +"";
 		
 		// Make sure the locator exists
 		if ( !this.sIsElementPresent(locator) ) {
 			throw new HarnessException("Rename locator "+ locator +" is not present");
 		}		
-		this.sType(locator, name);		
+		sType(locator, name);		
 	}
 	
 	
@@ -50,12 +49,10 @@ public class DialogRenameTag extends AbsDialog {
 		String locator = null;
 		
 		if ( button == Button.B_OK ) {
-			
-			locator =  "//div[@id='"+ Locators.zRenameTagDialogId +"']//div[@id='"+ Locators.zButtonsId +"']//td[text()='OK']";
+			locator="css=div#RenameTagDialog_button2";
 					
 		} else if ( button == Button.B_CANCEL ) {
-			
-			locator =  "implement me";
+			locator="css=div#RenameTagDialog_button1";
 
 		} else {
 			throw new HarnessException("Button "+ button +" not implemented");
@@ -74,7 +71,7 @@ public class DialogRenameTag extends AbsDialog {
 			throw new HarnessException("Button "+ button +" locator "+ locator +" not present!");
 		}
 		
-		this.zClick(locator);
+		zClickAt(locator,"0,0");
 		
 		return (null);
 	}

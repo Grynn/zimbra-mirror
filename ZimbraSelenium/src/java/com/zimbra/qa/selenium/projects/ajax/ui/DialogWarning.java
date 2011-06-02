@@ -88,16 +88,17 @@ public class DialogWarning extends AbsDialog {
 				locator = "css=td[class=ZWidgetTitle]:contains(Yes)";				
 				page = 	new FormMailNew(this.MyApplication);
 			}else{
-				locator = buttonsTableLocator + "//table//table//tr/td[1]/div";
+				locator = "css=div#YesNoCancel_button5";
+				//locator = buttonsTableLocator + "//table//table//tr/td[1]/div";
 			}
 			
 		} else if ( button == Button.B_NO ) {
-
-			locator = buttonsTableLocator + "//table//table//tr/td[2]/div";
+			locator = "css=div#YesNoCancel_button4";			
+			//locator = buttonsTableLocator + "//table//table//tr/td[2]/div";
 
 		} else if ( button == Button.B_CANCEL ) {
-
-			locator = buttonsTableLocator + "//table//table//tr/td[3]/div";
+			locator = "css=div#YesNoCancel_button1";		
+			//locator = buttonsTableLocator + "//table//table//tr/td[3]/div";
 
 		} else if (button == Button.B_OK) {
 			if (MyDivId.contains("ErrorDialog")) {
@@ -118,10 +119,10 @@ public class DialogWarning extends AbsDialog {
 		//
 				
 		// Click it
-		this.zClick(locator);
+		zClickAt(locator,"0,0");
 		
 		// If the app is busy, wait for it to become active
-		this.zWaitForBusyOverlay();
+		zWaitForBusyOverlay();
 		
 		// If page was specified, make sure it is active
 		if ( page != null ) {

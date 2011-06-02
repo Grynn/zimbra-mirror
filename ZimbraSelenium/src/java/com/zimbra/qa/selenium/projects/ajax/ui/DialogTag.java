@@ -4,7 +4,7 @@
 package com.zimbra.qa.selenium.projects.ajax.ui;
 
 import com.zimbra.common.soap.Element;
-import com.zimbra.qa.selenium.framework.items.TagItem;
+
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
@@ -50,7 +50,7 @@ public class DialogTag extends AbsDialog {
 	public void zSetTagName(String name) throws HarnessException {
 		logger.info(myPageName() + " zSetTagName("+ name +")");
 
-		String locator = "//input[@id='"+ Locators.zTagNameFieldId +"']";
+		String locator = "css=input#"+ Locators.zTagNameFieldId ;
 		
 		// Make sure the locator exists
 		if ( !this.sIsElementPresent(locator) ) {
@@ -74,15 +74,12 @@ public class DialogTag extends AbsDialog {
 
 		String locator = null;
 		
-		if ( button == Button.B_OK ) {
-			
-			// TODO: L10N this
-			locator =  "//div[@id='"+ Locators.zTagDialogId +"']//div[@id='"+ Locators.zButtonsId +"']//td[text()='OK']";
+		if ( button == Button.B_OK ) {		
+			locator = "css=div#CreateTagDialog_button2";
 			
 		} else if ( button == Button.B_CANCEL ) {
 			
-			// TODO: L10N this
-			locator =  "//div[@id='"+ Locators.zTagDialogId +"']//div[@id='"+ Locators.zButtonsId +"']//td[text()='Cancel']";
+			locator = "css=div#CreateTagDialog_button1";
 
 		} else {
 			throw new HarnessException("Button "+ button +" not implemented");
@@ -101,7 +98,7 @@ public class DialogTag extends AbsDialog {
 			throw new HarnessException("Button "+ button +" locator "+ locator +" not present!");
 		}
 		
-		this.zClick(locator);
+		zClickAt(locator,"0,0");
 		
 		zWaitForBusyOverlay();
 		return (null);
