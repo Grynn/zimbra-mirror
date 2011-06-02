@@ -132,31 +132,37 @@ public class TreeContacts extends AbsTree {
 
 		if (action == Action.A_LEFTCLICK) {
 
-			actionLocator = "implement me";
+			throw new HarnessException("Action Left click not yet implemented");
 
-		} else if (action == Action.A_RIGHTCLICK) {
+		 } else if (action == Action.A_RIGHTCLICK) {
 			actionLocator = "css=div#zti__main_Contacts__" + t.getId() + "_div";				
 			zRightClickAt(actionLocator,"0,0");		
 			SleepUtil.sleepMedium();
          } else {
 			throw new HarnessException("Action " + action
 					+ " not yet implemented");
-		}
+		 }
+		
 		if (option == Button.B_TREE_NEWTAG) {
 			optionLocator = "css=tr#POPUP_NEW_TAG";
 			page = new DialogTag(MyApplication,
 					((AppAjaxClient) MyApplication).zPageAddressbook);
-
+		    zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
 		} 
 		else if (option == Button.B_DELETE) {
 			optionLocator = "css=tr#POPUP_DELETE";			
 			page = new DialogWarning(
 					DialogWarning.DialogWarningID.DeleteTagWarningMessage,
 					MyApplication, ((AppAjaxClient) MyApplication).zPageAddressbook);        
+			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);		
 		}
-	     else if (option == Button.B_RENAME) {
+	    else if (option == Button.B_RENAME) {
 	    	optionLocator= "css=tr#POPUP_RENAME_TAG";
 			page = new DialogRenameTag(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);
+			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
 
 		} 		
 		else {
@@ -164,30 +170,12 @@ public class TreeContacts extends AbsTree {
 					+ " not yet implemented");
 		}
 		
-		if (actionLocator == null)
-			throw new HarnessException("locator is null for action " + action);
-		if (optionLocator == null)
-			throw new HarnessException("locator is null for option " + option);
-
-		if (option == Button.B_DELETE) {
-			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-			zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);						
-		}
-		else {
- 		    // Default behavior. Click the locator
-		    zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-		    zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);						
-		  
-		}
-
+		zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);						
 		
-		// If there is a busy overlay, wait for that to finish
+			// If there is a busy overlay, wait for that to finish
 		zWaitForBusyOverlay();
 
 		if (page != null) {
-
 			// Wait for the page to become active, if it was specified
 			page.zWaitForActive();
 		}
