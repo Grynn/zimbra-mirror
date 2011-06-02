@@ -45,6 +45,7 @@ public class ContextMenuContactGroup extends AjaxCommonTest  {
 		
 		ContactGroupItem group =  createSelectAContactGroup();
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageAddressbook.zWaitForDesktopLoadingSpinner(5000);
 
 		// Select the item
         // Right click to show the menu

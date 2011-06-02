@@ -9,6 +9,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.desktop.ui.Toaster;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 
 
@@ -80,7 +81,10 @@ public class DragAndDropMessage extends AjaxCommonTest {
 		app.zPageMail.zDragAndDrop(
 					"css=td[id$='"+ mail.getId() +"__su']",
 				"css=div[id^='zti__" + app.zGetActiveAccount().EmailAddress + ":main_Mail__'][id$=':" + subfolder.getId() +"']"); 
-		
+
+		Toaster toast = app.zPageMain.zGetToaster();
+      String toastMsg = toast.zGetToastMessage();
+      ZAssert.assertStringContains(toastMsg, "1 message moved to \"" + foldername + "\"", "Verify toast message" );
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
