@@ -745,15 +745,9 @@ function(spanElement, contentObjText, matchContext, ev) {
 	if (this.tooltip) {
 		this.tooltip.popdown();
 	}
-	var addr = this._getAddress(contentObjText);
-
-	// extract addr from mailto params
-	if (this.isMailToLink(addr) && EmailTooltipZimlet.MAILTO_RE.test(addr)) {
-		addr = RegExp.$1;
-	}
 
 	this._actionObject = contentObjText;
-	this._composeListener(ev, addr);
+	this._composeListener(ev, contentObjText);
 };
 
 EmailTooltipZimlet.prototype.menuItemSelected =
