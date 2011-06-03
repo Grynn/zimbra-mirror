@@ -152,7 +152,67 @@ public class TreeMail extends AbsTree {
 	}
 
 	protected AbsPage zTreeItem(Action action, Button option, SavedSearchFolderItem savedSearchFolder) throws HarnessException {
-		throw new HarnessException("implement me!");
+	   if ( (action == null) || (option == null) || (savedSearchFolder == null) ) {
+         throw new HarnessException("Must define an action, option, and addressbook");
+      }
+      AbsPage page = null;
+      String actionLocator = null;
+      String optionLocator = null;
+      SavedSearchFolderItem f= (SavedSearchFolderItem) savedSearchFolder;
+      tracer.trace("processing " + f.getName());
+
+      if (action == Action.A_LEFTCLICK) {
+
+         actionLocator = "implement me";
+
+      } else if (action == Action.A_RIGHTCLICK) {
+
+         actionLocator = "zti__main_Mail__" + f.getId() + "_textCell";
+
+         GeneralUtility.waitForElementPresent(this, actionLocator);
+         // actionLocator= Locators.zTagsHeader;
+         this.zRightClick(actionLocator);
+
+      } else {
+ 
+         throw new HarnessException("Action " + action+ " not yet implemented");
+
+      }
+
+      if (option == Button.B_DELETE) {
+
+         optionLocator= "id=POPUP_DELETE";
+         page= null;
+
+      }  else if (option == Button.B_MOVE) {
+
+         optionLocator= "id=POPUP_MOVE";
+         page = new DialogMove(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+
+      } else if (option == Button.B_RENAME) {
+
+         optionLocator= "id=POPUP_RENAME_SEARCH";
+         page = new DialogRenameFolder(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+
+      }
+
+      if (actionLocator == null)
+         throw new HarnessException("locator is null for action " + action);
+      if (optionLocator == null)
+         throw new HarnessException("locator is null for option " + option);
+
+      // Default behavior. Click the locator
+      zClick(optionLocator);
+
+      // If there is a busy overlay, wait for that to finish
+      this.zWaitForBusyOverlay();
+
+      if (page != null) {
+
+         // Wait for the page to become active, if it was specified
+         page.zWaitForActive();
+      }
+      return page;
 	}
 
 	protected AbsPage zTreeItem(Action action, Button option, ZimletItem zimlet) throws HarnessException {
@@ -178,20 +238,14 @@ public class TreeMail extends AbsTree {
 
 		} else if (action == Action.A_RIGHTCLICK) {
 
-			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-				actionLocator = "css=[id^='zti__"
-					+ MyApplication.zGetActiveAccount().EmailAddress
-					+ ":main_Mail__'][id$=':" + t.getId() + "_textCell']";
-			} else {
-				actionLocator = "zti__main_Mail__" + t.getId() + "_textCell";
-			}
+			actionLocator = "zti__main_Mail__" + t.getId() + "_textCell";
 
 			GeneralUtility.waitForElementPresent(this, actionLocator);
 			// actionLocator= Locators.zTagsHeader;
 			this.zRightClick(actionLocator);
 
 			page = new DialogTag(MyApplication,
-					((AppAjaxClient) MyApplication).zPageMail);
+			      ((AppAjaxClient) MyApplication).zPageMail);
 
 		} else {
 			throw new HarnessException("Action " + action
