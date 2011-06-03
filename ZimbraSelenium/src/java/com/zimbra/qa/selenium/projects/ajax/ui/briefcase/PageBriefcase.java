@@ -450,11 +450,16 @@ public class PageBriefcase extends AbsTab {
 						+ " not present!");
 			}
 
-			this.sMouseOver(pulldownLocator);
-			this.sFocus(pulldownLocator);
-			this.zRightClickAt(pulldownLocator, "0,0");
-			sMouseDownRight(pulldownLocator);
-			sMouseUpRight(pulldownLocator);
+			//this.sMouseOver(pulldownLocator);
+			//this.sFocus(pulldownLocator);
+			//this.zRightClickAt(pulldownLocator, "0,0");
+			//sMouseDownRight(pulldownLocator);
+			//sMouseUpRight(pulldownLocator);
+
+			if (sGetEval("navigator.userAgent;").contains("MSIE")) {
+				zClick(pulldownLocator);
+			} else
+				zClickAt(pulldownLocator, "0,0");
 
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
