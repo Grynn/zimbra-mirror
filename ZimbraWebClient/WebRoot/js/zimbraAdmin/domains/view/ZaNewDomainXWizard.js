@@ -682,20 +682,20 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 		{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep, choices:this.stepChoices,valueChangeEventSources:[ZaModel.currentStep]},
 		{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
 		{type:_SPACER_,  align:_CENTER_, valign:_TOP_},		
-		{type: _SWITCH_,width:650,
+		{type: _SWITCH_,width:"100%",
 			items: [
-				{type:_CASE_, caseKey:ZaNewDomainXWizard.GENERAL_STEP, colSizes:["200px","450px"],numCols:2,
+				{type:_CASE_, caseKey:ZaNewDomainXWizard.GENERAL_STEP, colSizes:["200px","*"],numCols:2,
 					items: [
 						{ref:ZaDomain.A_domainName, type:_TEXTFIELD_, label:ZaMsg.Domain_DomainName,labelLocation:_LEFT_, required:true, width:200},
 						{ref:ZaDomain.A_zimbraPublicServiceHostname, type:_TEXTFIELD_, label:ZaMsg.Domain_zimbraPublicServiceHostname,labelLocation:_LEFT_, width:200},			
 						{ type: _DWT_ALERT_,containerCssStyle: "padding-bottom:0px",style: DwtAlert.INFO,
 								iconVisible: true,content: ZaMsg.Domain_InboundSMTPNote,colSpan:"*"},
-						{type:_GROUP_,colSpan:"2", colSizes:["200px","250px", "150px"],numCols:2,id:"dns_check_group",items:[
+						{type:_GROUP_,colSpan:"2", colSizes:["*"],numCols:1, width:"100%", id:"dns_check_group",items:[
 						
-							{ref: ZaDomain.A_zimbraDNSCheckHostname, type:_SUPERWIZ_TEXTFIELD_, textFieldWidth:200,
-		 						label:null,txtBoxLabel:ZaMsg.Domain_zimbraDNSCheckHostname, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal}/*, {type:_CELLSPACER_}*/	
+							{ref: ZaDomain.A_zimbraDNSCheckHostname, type:_SUPERWIZ_TEXTFIELD_, textFieldWidth:200, colSizes:["200px", "250px", "*"],
+		 						label:null,txtBoxLabel:ZaMsg.Domain_zimbraDNSCheckHostname, resetToSuperLabel:ZaMsg.NAD_ResetToGlobal}/*, {type:_CELLSPACER_}*/
 						]},	
-						{ref:ZaDomain.A_description, type:_TEXTFIELD_, label:ZaMsg.NAD_Description, labelLocation:_LEFT_, width:250},
+						{ref:ZaDomain.A_description, type:_TEXTFIELD_, label:ZaMsg.NAD_Description, labelLocation:_LEFT_, width:200},
 						{ref:ZaDomain.A_domainDefaultCOSId, type:_DYNSELECT_, 
 							toolTipContent:ZaMsg.tt_StartTypingCOSName,
 							label:ZaMsg.Domain_DefaultCOS, labelLocation:_LEFT_, 
