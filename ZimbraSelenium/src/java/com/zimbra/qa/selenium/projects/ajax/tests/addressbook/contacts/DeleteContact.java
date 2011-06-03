@@ -7,9 +7,11 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.Toaster;
 
 
 public class DeleteContact extends AjaxCommonTest  {
@@ -42,6 +44,26 @@ public class DeleteContact extends AjaxCommonTest  {
 		
         ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") deleted");
     
+
+		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
+
+
+        //verify deleted contact displayed in trash folder
+        // refresh Trash folder
+        app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, trash);
+   	 
+        contacts = app.zPageAddressbook.zListGetContacts(); 
+         
+		isFileAsEqual=false;
+		for (ContactItem ci : contacts) {
+			if (ci.fileAs.equals(contactItem.fileAs)) {
+	            isFileAsEqual = true;	 
+				break;
+			}
+		}
+		
+        ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") displayed in Trash folder");
+     
 	}
 	@Test(	description = "Delete a contact item",
 			groups = { "smoke" })
@@ -101,7 +123,23 @@ public class DeleteContact extends AjaxCommonTest  {
         VerifyContactDeleted(contactItem);    
    	}
 	
-	@Test(	description = "Delete multi contact items",
+
+	@Test(	description = "Right click then click delete",
+			groups = { "smoke" })
+	public void DeleteFromContextMenu() throws HarnessException {
+		
+		// Create a contact via soap 
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+ 
+		//select delete option
+        app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_DELETE, contactItem.fileAs);
+
+        //verify contact deleted
+        VerifyContactDeleted(contactItem);    
+                 
+   	}
+
+	@Test(	description = "Delete multiple contact items",
 			groups = { "functional" })
 	public void DeleteMultipleContacts() throws HarnessException {
 
@@ -123,7 +161,7 @@ public class DeleteContact extends AjaxCommonTest  {
 		contactItem3.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
 		
 		  // Refresh the view, to pick up the new contact
-	    FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
+	    FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);
 	    GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 	    app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
 	    

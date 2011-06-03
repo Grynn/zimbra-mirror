@@ -7,6 +7,7 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -42,6 +43,26 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		}
 		
         ZAssert.assertFalse(isFileAsEqual, "Verify contact group " + group.groupName + " deleted");        
+
+    	FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
+
+
+        //verify deleted contact displayed in trash folder
+        // refresh Trash folder
+        app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, trash);
+   	 
+        contacts = app.zPageAddressbook.zListGetContacts(); 
+         
+		isFileAsEqual=false;
+		for (ContactItem ci : contacts) {
+			if (ci.fileAs.equals(group.groupName)) {
+	            isFileAsEqual = true;	 
+				break;
+			}
+		}
+		
+        ZAssert.assertTrue(isFileAsEqual, "Verify contact group (" + group.groupName + ") displayed in Trash folder");
+
 	}
 		  
 		

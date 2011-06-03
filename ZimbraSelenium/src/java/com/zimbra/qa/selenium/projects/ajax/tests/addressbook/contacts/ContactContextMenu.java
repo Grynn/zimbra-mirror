@@ -108,37 +108,6 @@ public class ContactContextMenu extends AjaxCommonTest  {
    	}
 	
 
-	@Test(	description = "Right click then click delete",
-			groups = { "smoke" })
-	public void Delete() throws HarnessException {
-		
-		ContactItem contactItem = createSelectARandomContactItem();
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-
-        //select delete option
-        app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_DELETE, contactItem.fileAs);
-
-        //verify toasted message 1 contact moved to Trash
-        Toaster toast = app.zPageMain.zGetToaster();
-        String toastMsg = toast.zGetToastMessage();
-        ZAssert.assertStringContains(toastMsg, "1 contact moved to Trash", "Verify toast message '1 contact moved to Trash'");
-
-        GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-        //verify deleted contact not displayed
-        List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
- 	           
-		boolean isFileAsEqual=false;
-		for (ContactItem ci : contacts) {
-			if (ci.fileAs.equals(contactItem.fileAs)) {
-	            isFileAsEqual = true;	 
-				break;
-			}
-		}
-		
-        ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") deleted");
-                
-   	}
-
 	
 	@Test(	description = "Right click then click Edit",
 			groups = { "smoke" })
