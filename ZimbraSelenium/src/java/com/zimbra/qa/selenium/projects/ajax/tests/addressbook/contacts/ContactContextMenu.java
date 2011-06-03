@@ -286,7 +286,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 	
 
 	@Test(	description = "Right click then click Advanced Search",
-			groups = { "smoke" })
+			groups = { "deprecated" })
 	public void AdvancedSearch() throws HarnessException {
 	
 		ContactItem contactItem = createSelectARandomContactItem();
@@ -355,54 +355,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 	}
 
 	
-	@Test(	description = "Right click then click Tag Contact->Remove Tag",
-			groups = { "smoke" })	
-	public void ClickTagContactRemoveTag() throws HarnessException {
-		
-		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
-			
-			// Create a tag via soap
-		app.zGetActiveAccount().soapSend(
-				"<CreateTagRequest xmlns='urn:zimbraMail'>" +
-             	"<tag name='"+ tagName +"' color='1' />" +
-             "</CreateTagRequest>");
-		String tagid = app.zGetActiveAccount().soapSelectValue("//mail:CreateTagResponse/mail:tag", "id");
-
-				
-		ContactItem contactItem = createSelectARandomContactItem(tagid);
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-
-      //click Tag Contact->Remove Tag	
-      app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_TAG, Button.O_TAG_REMOVETAG , contactItem.fileAs);
-      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-      // The reason why this is not using app.zPageAddressbook.zSyncDesktopToZcs(); is because
-      // 1. The very next step is doing the verification from backend
-      // 2. Then the next step is verifying the toast message, if using the zSyncDesktopToZcs(),
-      // it will wait for spinner to disappear, which could cause the toast
-      // message to disappear before the spinner disappears
-      //TODO: remove it as checked in ???????????????????????????????????????????????????????????
-      //GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-     	
-		app.zGetActiveAccount().soapSend(
-				"<GetContactsRequest xmlns='urn:zimbraMail'>" +
-		        "<a n='t'/>"+
-		 		"<cn id='"+ contactItem.getId() +"'/>" +
-				"</GetContactsRequest>");
-	     
-		
-		
-		String contactTag = app.zGetActiveAccount().soapSelectValue("//mail:GetContactsResponse//mail:cn", "t");
 	
-	    ZAssert.assertNull(contactTag, "Verify that the tag is removed from the contact. Expected: null. Actual:" + contactTag);
-      
-	    //verify toasted message Tag \"" + tagName + "\" removed from 1 contact
-	    Toaster toast = app.zPageMain.zGetToaster();
-	    String toastMsg = toast.zGetToastMessage();
-	    ZAssert.assertStringContains(toastMsg, "Tag \"" + tagName + "\" removed from 1 contact", "Verify toast message Tag \"" + tagName + "\" removed from 1 contact");
- 
-	
-	
-	}
 	
 	@Test(	description = "Right click then  click Find Emails->Sent To contact",
 			groups = { "smoke" })
