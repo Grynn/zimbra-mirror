@@ -55,12 +55,14 @@ public class MoveSavedSearch extends AjaxCommonTest  {
 		
 		// Right click on the search, select delete
 		// TODO: can the folder move dialog be reused?  Or, do we need DialogMoveSavedSearchFolder class?
-		DialogRenameFolder dialog = (DialogRenameFolder) app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_MOVE, item1);
+		DialogMove dialog = (DialogMove) app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_MOVE, item1);
 		
 		// Rename the search
-		dialog.zSetNewName(name2);
+		dialog.zEnterFolderName(name2);
 		dialog.zClickButton(Button.B_OK);
 
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
 		// Verify the saved search exists under the other saved search
 		item1 = SavedSearchFolderItem.importFromSOAP(app.zGetActiveAccount(), name1);

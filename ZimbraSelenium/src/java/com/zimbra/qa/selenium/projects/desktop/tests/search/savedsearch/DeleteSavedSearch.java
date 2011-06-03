@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.SavedSearchFolderItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
@@ -49,7 +51,13 @@ public class DeleteSavedSearch extends AjaxCommonTest  {
 		
 		// Right click on the search, select delete
 		app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, item);
-		
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
+
+		item = SavedSearchFolderItem.importFromSOAP(app.zGetActiveAccount(), name);
+      FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
+
 		// Verify the saved search exists in the folder tree
 		List<SavedSearchFolderItem> searches = app.zTreeMail.zListGetSavedSearches();
 		ZAssert.assertNotNull(searches, "Verify the saved search list exists");
@@ -64,6 +72,7 @@ public class DeleteSavedSearch extends AjaxCommonTest  {
 			}
 		}
 		ZAssert.assertNull(found, "Verify the saved search is in the folder tree");
-
+		ZAssert.assertNotNull(item, "Verify the subfolder is again available");
+		ZAssert.assertEquals(trash.getId(), item.getParentId(), "Verify the subfolder's parent is now the trash folder ID");
 	}
 }
