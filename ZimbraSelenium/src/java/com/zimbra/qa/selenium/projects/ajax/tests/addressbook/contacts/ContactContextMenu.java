@@ -139,78 +139,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
                 
    	}
 
-	@Test(	description = "Right click then click move",
-			groups = { "functional" })
-	public void Move() throws HarnessException {
-		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
-		
-		
-		ContactItem contactItem = createSelectARandomContactItem();		
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		            
-        //select move option
-        DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_MOVE, contactItem.fileAs);
-      
-        
-        //enter the moved folder
-        dialogContactMove.zClickTreeFolder(emailedContacts);
-        dialogContactMove.zClickButton(Button.B_OK);
-
-        GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-        //verify moved contact not displayed
-        List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
- 	           
-		boolean isFileAsEqual=false;
-		for (ContactItem ci : contacts) {
-			if (ci.fileAs.equals(contactItem.fileAs)) {
-	            isFileAsEqual = true;	 
-				break;
-			}
-		}
-		
-        ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") not displayed");
-        
-   	}
-	@Test(	description = "Right click then click move, also verify toasted message",
-			groups = { "smoke" })
-	public void MoveVerifyToastedMessage() throws HarnessException {
-		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
-		
-				
-		ContactItem contactItem = createSelectARandomContactItem();
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		            
-        //select move option
-		DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_MOVE, contactItem.fileAs);
-      
-        
-        //enter the moved folder
-        dialogContactMove.zClickTreeFolder(emailedContacts);		
-        dialogContactMove.zClickButton(Button.B_OK);
-       
-        
-        //verify toasted message 1 contact moved to "Emailed Contacts"
-        Toaster toast = app.zPageMain.zGetToaster();
-        String toastMsg = toast.zGetToastMessage();
-
-        GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-        ZAssert.assertStringContains(toastMsg, "1 contact moved to \"Emailed Contacts\"", "Verify toast message '1 contact moved to \"Emailed Contacts\"'");
-
-        //verify moved contact not displayed
-        List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
- 	           
-		boolean isFileAsEqual=false;
-		for (ContactItem ci : contacts) {
-			if (ci.fileAs.equals(contactItem.fileAs)) {
-	            isFileAsEqual = true;	 
-				break;
-			}
-		}
-		
-        ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") not displayed");
-        
-   	}
-
+	
 	@Test(	description = "Right click then click Edit",
 			groups = { "smoke" })
 	public void Edit() throws HarnessException {

@@ -24,7 +24,7 @@ public class MoveContactGroup extends AjaxCommonTest  {
 		
 	}
 	
-	private void MoveGroup(FolderItem emailedContacts, ContactGroupItem group, DialogMove dialogContactMove) throws HarnessException {
+	private void MoveAndVerify(FolderItem emailedContacts, ContactGroupItem group, DialogMove dialogContactMove) throws HarnessException {
 	    //enter the moved folder
         dialogContactMove.zClickTreeFolder(emailedContacts);
         dialogContactMove.zClickButton(Button.B_OK);
@@ -79,7 +79,7 @@ public class MoveContactGroup extends AjaxCommonTest  {
         DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zToolbarPressButton(Button.B_MOVE);
      
         //move group to different folder
-        MoveGroup(emailedContacts, group, dialogContactMove);    
+        MoveAndVerify(emailedContacts, group, dialogContactMove);    
  
    	}
 
@@ -96,7 +96,24 @@ public class MoveContactGroup extends AjaxCommonTest  {
 	    DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_MOVE, group.fileAs);
 	     
         //move group to different folder
-        MoveGroup(emailedContacts, group, dialogContactMove);    
+        MoveAndVerify(emailedContacts, group, dialogContactMove);    
+ 
+   	}
+
+	@Test(	description = "Move a contact group to different folder with shortcut m",
+			groups = { "functional" })
+	public void ClickShortcutm() throws HarnessException {
+		        
+		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
+ 		
+	    // Create a contact group via Soap then select
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
+	
+        //click shortcut m
+	    DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zKeyboardShortcut(Shortcut.S_MOVE);
+    
+	    //move group to different folder
+        MoveAndVerify(emailedContacts, group, dialogContactMove);    
  
    	}
 

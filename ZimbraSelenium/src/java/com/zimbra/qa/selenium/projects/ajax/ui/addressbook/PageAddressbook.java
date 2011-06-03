@@ -262,9 +262,9 @@ public class PageAddressbook extends AbsTab {
        	   //page = ???
 	    }
 
-       zWaitForBusyOverlay();
+      
 
-	   if ( locator == null )
+	    if ( locator == null )
 			throw new HarnessException("locator was null for button "+ button);
 
 		// Default behavior, process the locator by clicking on it
@@ -275,11 +275,11 @@ public class PageAddressbook extends AbsTab {
 			throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
 
 		// Click it
-		this.zClickAt(locator,"0,0");
+		zClickAt(locator,"0,0");
 		
 		if (isAlphabetButton(button)) {
  		  //for addressbook alphabet button only
-		  this.sClick(locator);
+		  sClick(locator);
 		}
 		zWaitForBusyOverlay();
 	
@@ -322,7 +322,10 @@ public class PageAddressbook extends AbsTab {
 		if ( (shortcut == Shortcut.S_NEWTAG) ){
 			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);	
 		}
-
+		else if ( (shortcut == Shortcut.S_MOVE) ){
+			page = new DialogMove(MyApplication, this);	
+			
+		} 
 		// Click it
 		zKeyboardTypeString(shortcut.getKeys());	
 		
@@ -448,6 +451,7 @@ public class PageAddressbook extends AbsTab {
 				throw new HarnessException("Button "+ pulldown +" option "+ option +" pulldownLocator "+ pulldownLocator +" not present!");
 			}
 
+			/*
 			//IE 9 browser
 			if (ClientSessionFactory.session().isBrowserIE(ClientSessionFactory.session().IE9))
 			{ 
@@ -461,8 +465,11 @@ public class PageAddressbook extends AbsTab {
 			}
 			
 			else {
-			  zClickAt(pulldownLocator,"0,0");
-			}
+			*/
+			sClickAt(pulldownLocator,"0,0");
+			
+			zClickAt(pulldownLocator,"0,0");
+			//}
 			
 			zWaitForBusyOverlay();
 			
@@ -615,7 +622,7 @@ public class PageAddressbook extends AbsTab {
 		    ContextMenuItem sub_cmi = null;
 		    zClick(contactLocator);
 		    //zKeyboard.zTypeCharacters(Shortcut.S_RIGHTCLICK.getKeys());
-			zRightClick(contactLocator);
+			zRightClickAt(contactLocator,"0,0");
 			
 			
 			if (option == Button.B_TAG) {
@@ -837,7 +844,7 @@ public class PageAddressbook extends AbsTab {
 		}
 		else if (action == Action.A_RIGHTCLICK ) {
 			
-            this.zRightClick(contactLocator); 
+            zRightClickAt(contactLocator,"0,0"); 
             //zWaitForBusyOverlay();
     		return (new ContextMenu(MyApplication));			
 		}

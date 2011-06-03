@@ -23,22 +23,9 @@ public class MoveContact extends AjaxCommonTest  {
 		super.startingAccountPreferences = null;		
 		
 	}
-	
-	@Test(	description = "Move a contact item to different folder",
-			groups = { "smoke" })
-	public void ClickMoveOnToolbar() throws HarnessException {
+	private void MoveAndVerify(FolderItem emailedContacts, ContactItem contactItem, DialogMove dialogContactMove) throws HarnessException {
 		
-		 // Create a contact via Soap then select
-		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
-	
-	
-		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
-
-		
-        //click Move icon 
-        DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zToolbarPressButton(Button.B_MOVE);
-     
-        //enter the moved folder
+	    //enter the moved folder
         dialogContactMove.zClickTreeFolder(emailedContacts);
         dialogContactMove.zClickButton(Button.B_OK);
        
@@ -75,10 +62,63 @@ public class MoveContact extends AjaxCommonTest  {
 			}
 		}
 		
-        ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") not displayed in folder Emailed Contacts");
+        ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") displayed in folder Emailed Contacts");
+                		
+	}
+
+	@Test(	description = "Move a contact item to different folder by click shortcut m",
+			groups = { "functional" })
+	public void ClickShortcutm() throws HarnessException {
+		
+		 // Create a contact via Soap then select
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+	
+	
+		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
+
+		
+		 //click shortcut m
+	    DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zKeyboardShortcut(Shortcut.S_MOVE);
+      
+        //Move contact and verify
+        MoveAndVerify(emailedContacts,contactItem,dialogContactMove);
         
+   	}
+
+	@Test(	description = "Move a contact item to different folder by click Move on context menu",
+			groups = { "functional" })
+	public void ClickMoveOnContextmenu() throws HarnessException {
+		
+		 // Create a contact via Soap then select
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+	
+	
+		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
+
+		
+	    //click Move icon on context menu
+	    DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_MOVE, contactItem.fileAs);
+	 
+        //Move contact and verify
+        MoveAndVerify(emailedContacts,contactItem,dialogContactMove);
         
-        
+   	}
+
+	@Test(	description = "Move a contact item to different folder by click tool bar Move",
+			groups = { "smoke" })
+	public void ClickMoveOnToolbar() throws HarnessException {
+		
+		 // Create a contact via Soap then select
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+	
+	
+		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
+		
+       //click Move icon on toolbar
+        DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zToolbarPressButton(Button.B_MOVE);
+    
+        //Move contact and verify
+        MoveAndVerify(emailedContacts,contactItem,dialogContactMove);
         
    	}
 
