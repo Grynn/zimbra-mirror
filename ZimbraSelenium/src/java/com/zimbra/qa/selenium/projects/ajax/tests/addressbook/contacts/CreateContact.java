@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -59,6 +60,9 @@ public class CreateContact extends AjaxCommonTest  {
 		}
 		
         ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") existed ");
+
+	    //verify location is System folder "Contacts"
+		ZAssert.assertEquals(app.zPageAddressbook.sGetText("css=td.companyFolder"), SystemFolder.Contacts.getName(), "Verify location (folder) is " + SystemFolder.Contacts.getName());
 
 		return contactItem;
 	}
