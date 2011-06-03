@@ -80,8 +80,10 @@ public class TaskItem implements IItem {
 		this.taskBody = taskBody;
 	}
 
-	public static TaskItem importFromSOAP(Element GetMsgResponse)
-			throws HarnessException {
+	public static TaskItem importFromSOAP(Element GetMsgResponse) throws HarnessException {
+
+		if ( GetMsgResponse == null )
+			throw new HarnessException("Element cannot be null");
 
 		TaskItem task = null;
 

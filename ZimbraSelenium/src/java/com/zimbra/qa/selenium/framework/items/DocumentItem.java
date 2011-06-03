@@ -168,6 +168,9 @@ public class DocumentItem implements IItem {
 	}
 
 	public void importFromSOAP(Element response) throws HarnessException {
+		if ( response == null )
+			throw new HarnessException("Element cannot be null");
+		
 		try {
 			// Make sure we only have the DocumentResponse part
 			Element getDocumentResponse = ZimbraAccount.SoapClient.selectNode(

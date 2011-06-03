@@ -149,6 +149,9 @@ public class ConversationItem implements IItem {
 	}
 
 	public static ConversationItem importFromSOAP(Element GetMsgResponse) throws HarnessException {
+		if ( GetMsgResponse == null )
+			throw new HarnessException("Element cannot be null");
+
 		throw new HarnessException("implement me");
 	}
 

@@ -209,7 +209,9 @@ public class ContactItem implements IItem {
 	}
 
 	public static ContactItem importFromSOAP(Element GetContactsResponse) throws HarnessException {
-
+		if ( GetContactsResponse == null )
+			throw new HarnessException("Element cannot be null");
+		
 		ContactItem contact = null;
 
 		try {

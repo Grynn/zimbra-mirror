@@ -58,7 +58,9 @@ public class RecipientItem implements IItem {
 	}
 
 	public static RecipientItem importFromSOAP(Element eElement) throws HarnessException {
-		
+		if ( eElement == null )
+			throw new HarnessException("Element cannot be null");
+
 		RecipientItem recipient = null;
 		
 		try {

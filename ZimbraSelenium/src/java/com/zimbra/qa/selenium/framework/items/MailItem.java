@@ -210,7 +210,9 @@ public class MailItem implements IItem {
 	}
 
 	public static MailItem importFromSOAP(Element GetMsgResponse) throws HarnessException {
-		
+		if ( GetMsgResponse == null )
+			throw new HarnessException("Element cannot be null");
+
 		MailItem mail = null;
 		
 		try {

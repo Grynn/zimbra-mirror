@@ -62,6 +62,8 @@ public class FolderMountpointItem extends FolderItem {
 	 * @throws HarnessException
 	 */
 	public static FolderMountpointItem importFromSOAP(Element response) throws HarnessException {
+		if ( response == null )
+			throw new HarnessException("Element cannot be null");
 
 		// TODO: can the ZimbraSOAP methods be used to convert this response to item?
 		
@@ -70,9 +72,6 @@ public class FolderMountpointItem extends FolderItem {
 	    //				<link id="257" rev="2" s="198" rid="257" oname="folder12986731211244" zid="e39a1429-cf7e-466d-8a69-4f23417d2ae2" name="mountpoint12986731211246" ms="2" owner="enus12986731211247@testdomain.com" n="1" l="1" perm="rw"/>
 	    //			</GetFolderResponse>
 
-		if ( response == null )
-			throw new HarnessException("response was null");
-		
 		
 		logger.debug("importFromSOAP("+ response.prettyPrint() +")");
 		

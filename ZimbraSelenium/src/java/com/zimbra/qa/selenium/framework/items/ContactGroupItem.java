@@ -127,6 +127,9 @@ public class ContactGroupItem extends ContactItem implements IItem {
 	
 	
 	public static ContactGroupItem importFromSOAP(Element GetContactsResponse) throws HarnessException {
+		if ( GetContactsResponse == null )
+			throw new HarnessException("GetContactsResponse cannot be null");
+		
 		throw new HarnessException("implement me!");
 	}
 

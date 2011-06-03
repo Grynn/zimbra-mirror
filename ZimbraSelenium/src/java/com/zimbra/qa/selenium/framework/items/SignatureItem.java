@@ -75,8 +75,10 @@ public class SignatureItem implements IItem {
 		throw new HarnessException("implement me");
 	}
 
-	public static SignatureItem importFromSOAP(Element sig)
-			throws HarnessException {
+	public static SignatureItem importFromSOAP(Element sig) throws HarnessException {
+		
+		if ( sig == null )
+			throw new HarnessException("Element cannot be null");
 
 		SignatureItem item = null;
 

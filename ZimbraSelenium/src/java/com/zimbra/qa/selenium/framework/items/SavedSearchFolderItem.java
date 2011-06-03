@@ -55,6 +55,9 @@ public class SavedSearchFolderItem extends com.zimbra.soap.mail.type.SearchFolde
 	 * @throws HarnessException
 	 */
 	public static SavedSearchFolderItem importFromSOAP(Element search) throws HarnessException {
+		if ( search == null )
+			throw new HarnessException("Element cannot be null");
+
 		logger.debug("importFromSOAP("+ search.prettyPrint() +")");
 
 		// TODO: can the ZimbraSOAP methods be used to convert this response to item?
@@ -64,9 +67,6 @@ public class SavedSearchFolderItem extends com.zimbra.soap.mail.type.SearchFolde
 		//			<search id="..." name="..." query="..." [types="..."] [sortBy="..."] l="{folder}"/>+
 		//		</GetSearchFolderResponse>
 
-		if ( search == null )
-			throw new HarnessException("search was null");
-		
 		
 		SavedSearchFolderItem item = null;
 		
@@ -104,7 +104,7 @@ public class SavedSearchFolderItem extends com.zimbra.soap.mail.type.SearchFolde
 		// Get all the folders
 		account.soapSend("<GetSearchFolderRequest xmlns='urn:zimbraMail'/>");
 		Element search = account.soapSelectNode("//mail:search[@name='"+ name +"']", 1);
-						
+		
 		return (importFromSOAP(search));
 	}
 

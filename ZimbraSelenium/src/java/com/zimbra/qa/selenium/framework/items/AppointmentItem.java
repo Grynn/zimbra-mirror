@@ -36,6 +36,10 @@ public class AppointmentItem implements IItem {
 
 	public static AppointmentItem importFromSOAP(Element GetAppointmentResponse) throws HarnessException {
 		
+		if ( GetAppointmentResponse == null )
+			throw new HarnessException("Element cannot be null");
+		
+			
 		AppointmentItem appt = null;
 		
 		try {

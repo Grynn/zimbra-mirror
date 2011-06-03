@@ -93,6 +93,9 @@ public class TagItem implements IItem {
 
 	public static TagItem importFromSOAP(Element tag) throws HarnessException {
 
+		if ( tag == null )
+			throw new HarnessException("Element cannot be null");
+
 		TagItem item = null;
 
 		try {
