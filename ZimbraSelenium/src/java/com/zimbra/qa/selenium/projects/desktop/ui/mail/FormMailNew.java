@@ -411,7 +411,7 @@ public class FormMailNew extends AbsForm {
 
 				
 				this.sFocus(locator);
-				this.zClick(locator);
+				this.zClickAt(locator, "0,0");
 				this.zWaitForBusyOverlay();
 				this.sType(locator, value);
 				
@@ -432,7 +432,7 @@ public class FormMailNew extends AbsForm {
 						throw new HarnessException("Unable to locate compose body");
 
 					this.sFocus(locator);
-					this.zClick(locator);
+					this.zClickAt(locator, "0,0");
 					this.sType(locator, value);
 					
 				} finally {
