@@ -50,8 +50,8 @@ public class TreeMail extends AbsTree {
 		append(stringToReplace).append("_textCell").toString();
 		public static final String zNewTagIcon = "//td[contains(@class,'overviewHeader-Text FakeAnchor')]/div[contains(@class,'ImgNewTag')]";
 
-		// TODO: Implement for Desktop after bug 56273 is fixed
-		public static final String treeExpandCollapseButton = "css=div[id='ztih__main_Mail__FOLDER_div'] div[class^='ImgNode']";
+		// For mail folders tree
+		public static final String treeExpandCollapseButton = "css=div[id='zovc__main_Mail'] div[id^='DWT'][class='DwtTreeItem'] [class^='ImgNode']";
 
 		public static final String zDeleteTreeMenuItem = "//div[contains(@class,'ZMenuItem')]//tbody//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgDelete')]";
 		public static final String zRenameTreeMenuItem = "//div[contains(@class,'ZMenuItem')]//tbody//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgRename')]";

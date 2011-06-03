@@ -17,6 +17,7 @@ import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.desktop.ui.*;
+import com.zimbra.qa.selenium.projects.desktop.ui.mail.TreeMail;
 
 /**
  * The <code>AjaxCommonTest</code> class is the base test case class
@@ -493,30 +494,6 @@ public class AjaxCommonTest {
                destType);
       }
 
-      // If AccountZWC is not currently logged in, then login now
-      if ( !ZimbraAccount.AccountZWC().equals(app.zGetActiveAccount()) ) {
-         logger.debug("commonTestBeforeMethod: AccountZWC is not currently logged in");
-
-         switch (appType) {
-         case AJAX:
-            if ( app.zPageMain.zIsActive() )
-               app.zPageMain.zLogout();
-            app.zPageLogin.zLogin(ZimbraAccount.AccountZWC());
-			   
-            // Confirm
-            if ( !ZimbraAccount.AccountZWC().equals(app.zGetActiveAccount())) {
-               throw new HarnessException("Unable to authenticate as "+ ZimbraAccount.AccountZWC().EmailAddress);
-            }
-            break;
-         case DESKTOP:
-            // Fall Through
-            break;
-         default:
-            throw new HarnessException("Please add a support for appType: " + appType);
-         }
-
-      }
-
       // If a startingPage is defined, then make sure we are on that page
       if ( startingPage != null ) {
          logger.debug("commonTestBeforeMethod: startingPage is defined");
@@ -541,6 +518,14 @@ public class AjaxCommonTest {
             logger.debug("Desktop Zimlets are: ");
             for (int i = 0; i < desktopZimlets.length; i++) {
                logger.debug("==> Zimlet " + i + " is: " + desktopZimlets[i]);
+            }
+
+            // Expand the mail tree
+            if (app.zTreeMail.isCollapsed()) {
+               logger.debug("Tree is collapsed, expand it @BeforeMethod");
+               app.zTreeMail.zClickAt(TreeMail.Locators.treeExpandCollapseButton, "0,0");
+            } else {
+               logger.debug("Tree is already expanded @BeforeMethod");
             }
          }
       }

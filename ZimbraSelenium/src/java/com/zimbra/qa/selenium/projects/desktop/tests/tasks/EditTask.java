@@ -73,6 +73,9 @@ public class EditTask extends AjaxCommonTest{
 		taskedit.zFillField(Field.Subject, Newsubject);
 		taskedit.zSubmit();
 
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageTasks.zWaitForDesktopLoadingSpinner(5000);
+
 		// Get the list of tasks in the view
 		List<TaskItem> tasks = app.zPageTasks.zGetTasks();
 		ZAssert.assertNotNull(tasks, "Verify the list of edited tasks exists");

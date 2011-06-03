@@ -5,6 +5,7 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
@@ -57,6 +58,9 @@ public class EditShareFolder extends AjaxCommonTest{
 		// Send it
 		sharedialog.zClickButton(Button.B_OK);
 
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageMain.zWaitForDesktopLoadingSpinner(5000);
+
 		// Make sure that AccountA now has the share
 		ZimbraAccount.AccountA().soapSend(
 				"<GetShareInfoRequest xmlns='urn:zimbraAccount'>"
@@ -97,7 +101,10 @@ public class EditShareFolder extends AjaxCommonTest{
 		//click ok button from edit Folder properties dialog
 		editdialog.zClickButton(Button.B_OK);
 
-		ZimbraAccount.AccountA().soapSend(
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageMain.zWaitForDesktopLoadingSpinner(5000);
+
+      ZimbraAccount.AccountA().soapSend(
 				"<GetShareInfoRequest xmlns='urn:zimbraAccount'>"
 				+		"<grantee type='usr'/>"
 				+		"<owner by='name'>"+ app.zGetActiveAccount().EmailAddress +"</owner>"
