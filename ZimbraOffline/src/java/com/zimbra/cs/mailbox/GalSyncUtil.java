@@ -17,10 +17,14 @@ package com.zimbra.cs.mailbox;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.UUID;
+import java.util.Map.Entry;
 
 import org.json.JSONException;
 
@@ -30,9 +34,9 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.soap.Element;
-import com.zimbra.common.soap.Element.XMLElement;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.SoapProtocol;
+import com.zimbra.common.soap.Element.XMLElement;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.DataSource.Type;
@@ -203,8 +207,8 @@ public final class GalSyncUtil {
         }
     }
 
-    private static List<ParsedContact> getParsedContacts(ZcsMailbox mbox, List<Element> contacts, List<String> ids, List<String> retryIds) throws ServiceException {
-        List<ParsedContact> list = new ArrayList<ParsedContact>();
+    private static LinkedHashMap<String, ParsedContact> getParsedContacts(ZcsMailbox mbox, List<Element> contacts, List<String> retryIds) throws ServiceException {
+        LinkedHashMap<String,ParsedContact> parsed = new LinkedHashMap<String, ParsedContact>();
         for (Element elt : contacts) {
           String id = elt.getAttribute(AccountConstants.A_ID);
           Map<String, String> fields = new HashMap<String, String>();
@@ -216,8 +220,7 @@ public final class GalSyncUtil {
           }
           try {
               fillContactAttrMap(mbox, fields);
-              list.add(new ParsedContact(fields));
-              ids.add(id);
+              parsed.put(id, new ParsedContact(fields));
           } catch (ServiceException e) {
               retryIds.add(id);
               //TODO LC ?
@@ -228,14 +231,14 @@ public final class GalSyncUtil {
               }
           }
         }
-        return list;
+        return parsed;
     }
 
     static void createContact(Mailbox mbox, OperationContext ctxt, int syncFolder, DataSource ds, ParsedContact contact, String id, String logstr)
         throws ServiceException {
         Contact c = mbox.createContact(ctxt, contact, syncFolder, null);
         DbDataSource.addMapping(ds, new DataSourceItem(0, c.getId(), id, null), true);
-        OfflineLog.offline.debug("Offline GAL contact created: " + logstr);
+        OfflineLog.offline.debug("Offline GAL contact created: %s id: %s remoteId: %s",logstr,c.getId(),id);
     }
 
     private static void saveParsedContact(Mailbox mbox, OperationContext ctxt, int syncFolder, String id, ParsedContact contact, String logstr, boolean isFullSync, DataSource ds)
@@ -247,7 +250,7 @@ public final class GalSyncUtil {
             if (itemId > 0) {
                 try {
                     mbox.modifyContact(ctxt, itemId, contact);
-                    OfflineLog.offline.debug("Offline GAL contact modified: " + logstr);
+                    OfflineLog.offline.debug("Offline GAL contact modified: %s id: %d remoteId: %s",logstr,itemId,id);
                 } catch (MailServiceException.NoSuchItemException e) {
                     OfflineLog.offline.warn("Offline GAL modify error - no such contact: " + logstr + " itemId=" + Integer.toString(itemId));
                 }
@@ -264,20 +267,31 @@ public final class GalSyncUtil {
         Element response = mbox.sendRequest(req, true, true, OfflineLC.zdesktop_gal_sync_request_timeout.intValue(), SoapProtocol.Soap12);
 
         List<Element> contacts = response.listElements(MailConstants.E_CONTACT);
-        List<String> ids = new ArrayList<String>();
-        List<ParsedContact> parsedContacts = getParsedContacts(mbox, contacts, ids, retryContactIds);
+        LinkedHashMap<String, ParsedContact> parsedContacts = getParsedContacts(mbox, contacts, retryContactIds);
 
         if (!parsedContacts.isEmpty()) {
             boolean success = false;
             try {
                 galMbox.beginTransaction("GALSync", null);
-                int index = 0;
-                for (ParsedContact contact : parsedContacts) {
-                    saveParsedContact(galMbox, ctxt, syncFolder, ids.get(index++), contact, getContactLogStr(contact), isFullSync, ds);
-                }
-
                 if (isFullSync) {
+                    for (Entry<String, ParsedContact> entry : parsedContacts.entrySet()) {
+                        saveParsedContact(galMbox, ctxt, syncFolder, entry.getKey(), entry.getValue(), getContactLogStr(entry.getValue()), isFullSync, ds);
+                    }
                     GalSyncCheckpointUtil.checkpoint(galMbox, token, galAcctId, reqIds);
+                } else {
+                    SortedMap<Integer, String> sorted = new TreeMap<Integer, String>();
+                    for (Entry<String, ParsedContact> entry : parsedContacts.entrySet()) {
+                        int itemId = GalSyncUtil.findContact(entry.getKey(), ds);
+                        if (itemId > 0) {
+                            sorted.put(itemId, entry.getKey()); //exists, sort by local item id
+                        } else {
+                            sorted.put(Integer.MAX_VALUE, entry.getKey()); //doesn't exist; add at end; new items have highest id
+                        }
+                    } 
+                    for (String id : sorted.values()) {
+                        ParsedContact pc = parsedContacts.get(id);
+                        saveParsedContact(galMbox, ctxt, syncFolder, id, pc, getContactLogStr(pc), false, ds);
+                    }
                 }
                 success = true;
             } finally {

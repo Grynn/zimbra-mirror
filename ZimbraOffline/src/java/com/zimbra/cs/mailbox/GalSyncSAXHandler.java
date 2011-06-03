@@ -256,23 +256,30 @@ public class GalSyncSAXHandler implements ElementHandler {
     }
 
     private void saveUnparsedContact(String id, Map<String, String> map) throws ServiceException, IOException {
-        GalSyncUtil.fillContactAttrMap(this.mainMbox, map);
-        ParsedContact contact = new ParsedContact(map);
-        String logstr = GalSyncUtil.getContactLogStr(contact);
-        if (fullSync) {
-            GalSyncUtil.createContact(this.galMbox, this.context, this.syncFolder, this.ds, contact, id, logstr);
-        } else {
-            int itemId = GalSyncUtil.findContact(id, ds);
-            if (itemId > 0) {
-                try {
-                    galMbox.modifyContact(context, itemId, contact);
-                    OfflineLog.offline.debug("Offline GAL contact modified: " + logstr);
-                } catch (MailServiceException.NoSuchItemException e) {
-                    OfflineLog.offline.warn("Offline GAL modify error - no such contact: " + logstr + " itemId=" + Integer.toString(itemId));
-                }
-            } else {
+        boolean success = false;
+        try {
+            galMbox.beginTransaction("saveUnparsedContact", null);
+            GalSyncUtil.fillContactAttrMap(this.mainMbox, map);
+            ParsedContact contact = new ParsedContact(map);
+            String logstr = GalSyncUtil.getContactLogStr(contact);
+            if (fullSync) {
                 GalSyncUtil.createContact(this.galMbox, this.context, this.syncFolder, this.ds, contact, id, logstr);
+            } else {
+                int itemId = GalSyncUtil.findContact(id, ds);
+                if (itemId > 0) {
+                    try {
+                        galMbox.modifyContact(context, itemId, contact);
+                        OfflineLog.offline.debug("Offline GAL contact modified: " + logstr);
+                    } catch (MailServiceException.NoSuchItemException e) {
+                        OfflineLog.offline.warn("Offline GAL modify error - no such contact: " + logstr + " itemId=" + Integer.toString(itemId));
+                    }
+                } else {
+                    GalSyncUtil.createContact(this.galMbox, this.context, this.syncFolder, this.ds, contact, id, logstr);
+                }
             }
+            success = true;
+        } finally {
+            galMbox.endTransaction(success);
         }
     }
 
