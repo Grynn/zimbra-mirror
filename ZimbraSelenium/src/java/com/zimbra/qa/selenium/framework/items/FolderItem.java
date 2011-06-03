@@ -45,6 +45,11 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 		private SystemFolder(String foldername) {
 			name = foldername;
 		}
+	
+		public String getName() {
+			return name;
+		}
+		
 		@Override
 		public int hashCode() {
 			final int prime = 31;
