@@ -46,7 +46,7 @@ our %loaded = ();
 
 getopts('a:defhH:i:mop:rstwx:',\%options) or die "Unable to set options\n";
 
-our $ZMPROV = "/opt/zimbra/bin/zmprov -l";
+our $ZMPROV = "/opt/zimbra/bin/zmprov -l 1>/dev/null";
 our $platform = `/opt/zimbra/libexec/get_plat_tag.sh`;
 chomp ($platform);
 
