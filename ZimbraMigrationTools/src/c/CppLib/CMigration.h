@@ -15,32 +15,21 @@ public:
 	  virtual void ImportContacts() = 0;
 	  virtual void ImportCalendar() = 0;
 
-	  void DisplayMessageBox(ATL::CComBSTR msg);
+	  void DisplayMessageBox(ATL::CComBSTR Msg)
+	  {
+		  
+				MessageBox(NULL, Msg, _T("Migartion tool"), MB_OK | MB_ICONEXCLAMATION );
+	  }
 
-	  virtual void SetConfigXMLFile(ATL::CComBSTR filename);
-	  virtual void SetUserMapFile(ATL::CComBSTR filename);
+	  virtual void SetConfigXMLFile(ATL::CComBSTR filename)
+	  {
+		  XMLConfigFileName = filename;
+	  }
+	  virtual void SetUserMapFile(ATL::CComBSTR filename)
+	  {
+		  USerMapfilename = filename;
+	  }
 
 
 
 };
-
-void CMigration::DisplayMessageBox(ATL::CComBSTR Msg)
-{
-	
-				MessageBox(NULL, Msg, _T("Migartion tool"), MB_OK | MB_ICONEXCLAMATION );
-
-}
-
-void CMigration::SetConfigXMLFile(ATL::CComBSTR filename)
-{
-	XMLConfigFileName = filename;
-
-
-}
-
-void CMigration::SetUserMapFile(ATL::CComBSTR filename)
-{
-	USerMapfilename = filename;
-
-
-}
