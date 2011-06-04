@@ -320,7 +320,7 @@ function(str) {
 						doAdd = test.match(AjxEmailAddress.boundAddrPat);
 					}
 					if (doAdd) {
-						addrList.push(test);
+						addrList.push(AjxStringUtil.trim(test));
 						delimPos = pos;
 						startPos += test.length + 1;
 					}
@@ -337,7 +337,7 @@ function(str) {
 			}
 		}
 		if (delimPos == sub.length) {
-			addrList.push(sub);
+			addrList.push(AjxStringUtil.trim(sub));
 			startPos += sub.length + 1;
 		}
 	}
