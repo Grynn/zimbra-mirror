@@ -24,16 +24,18 @@ public class MoveContactGroup extends AjaxCommonTest  {
 		
 	}
 	
-	private void MoveAndVerify(FolderItem emailedContacts, ContactGroupItem group, DialogMove dialogContactMove) throws HarnessException {
+	private void MoveAndVerify(FolderItem folder, ContactGroupItem group, DialogMove dialogContactMove) throws HarnessException {
 	    //enter the moved folder
-        dialogContactMove.zClickTreeFolder(emailedContacts);
+        dialogContactMove.zClickTreeFolder(folder);
         dialogContactMove.zClickButton(Button.B_OK);
        
-        //verify toasted message 1 contact group moved to "Emailed Contacts"
-        String expectedMsg = "1 contact group moved to \"Emailed Contacts\"";
-        ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
-		        expectedMsg , "Verify toast message '" + expectedMsg + "'");
+        //verify toasted message 1 contact group moved to target folder
+        String expectedMsg = "1 contact group moved to";
+        String toastMessage = app.zPageMain.zGetToaster().zGetToastMessage();
+        ZAssert.assertStringContains(toastMessage, expectedMsg , "Verify toast message '" + expectedMsg + "'");
+        ZAssert.assertStringContains(toastMessage,folder.getName() , "Verify toast message '" + folder.getName() + "'");
 
+        
         //verify moved contact group not displayed
         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
  	           
@@ -47,9 +49,9 @@ public class MoveContactGroup extends AjaxCommonTest  {
 		
         ZAssert.assertFalse(isFileAsEqual, "Verify contact group fileAs (" + group.fileAs + ") not displayed in folder Contacts");
 	
-        //verify moved contact displayed in folder Emailed Contacts
-        // refresh folder Emailed Contacts
-        app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, emailedContacts);
+        //verify moved contact displayed in target folder
+        // refresh target folder
+        app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, folder);
    	 
         contacts = app.zPageAddressbook.zListGetContacts(); 
          
@@ -61,14 +63,14 @@ public class MoveContactGroup extends AjaxCommonTest  {
 			}
 		}
 		
-        ZAssert.assertTrue(isFileAsEqual, "Verify contact group fileAs (" + group.fileAs + ") not displayed in folder Emailed Contacts");
+        ZAssert.assertTrue(isFileAsEqual, "Verify contact group fileAs (" + group.fileAs + ") not displayed in folder " + folder.getName());
 	
 	}
 	
 	
-	@Test(	description = "Move a contact group to different folder by click Move on toolbar",
+	@Test(	description = "Move a contact group to folder Emailed Contacts by click Move on toolbar",
 			groups = { "smoke" })
-	public void ClickMoveOnToolbar() throws HarnessException {
+	public void MoveToEmailedContactsClickMoveOnToolbar() throws HarnessException {
 		        
 		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
  		
@@ -83,9 +85,26 @@ public class MoveContactGroup extends AjaxCommonTest  {
  
    	}
 
-	@Test(	description = "Move a contact group to different folder by click Move on Context menu",
+	@Test(	description = "Move a contact group to folder Trash by click Move on toolbar",
 			groups = { "functional" })
-	public void ClickMoveOnContextmenu() throws HarnessException {
+	public void MoveToTrashClickMoveOnToolbar() throws HarnessException {
+		        
+		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
+ 		
+	    // Create a contact group via Soap then select
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
+	
+        //click Move icon on toolbar
+        DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zToolbarPressButton(Button.B_MOVE);
+     
+        //move group to different folder
+        MoveAndVerify(folder, group, dialogContactMove);    
+ 
+   	}
+
+	@Test(	description = "Move a contact group to folder Emailed Contacts by click Move on Context menu",
+			groups = { "functional" })
+	public void MoveToEmailedContactsClickMoveOnContextmenu() throws HarnessException {
 		        
 		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
  		
@@ -100,9 +119,9 @@ public class MoveContactGroup extends AjaxCommonTest  {
  
    	}
 
-	@Test(	description = "Move a contact group to different folder with shortcut m",
+	@Test(	description = "Move a contact group to folder Emailed Contacts with shortcut m",
 			groups = { "functional" })
-	public void ClickShortcutm() throws HarnessException {
+	public void MoveToEmailedContactsClickShortcutm() throws HarnessException {
 		        
 		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
  		
