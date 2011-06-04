@@ -316,6 +316,7 @@ public class PageAddressbook extends AbsTab {
 	      // Refresh the view, to pick up the new contact
 	      FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
 	      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+	      zWaitForDesktopLoadingSpinner(5000);
 	      app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
 
 	      // Select the item

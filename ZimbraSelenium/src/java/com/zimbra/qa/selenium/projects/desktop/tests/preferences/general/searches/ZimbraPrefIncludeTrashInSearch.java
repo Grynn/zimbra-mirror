@@ -31,10 +31,8 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 		// Make sure we are using an account with conversation view
 		super.startingAccountPreferences = new HashMap<String, String>() {{
 				    put("zimbraPrefIncludeTrashInSearch", "TRUE");
+				    put("zimbraPrefGroupMailBy", "conversation");
 				}};
-
-			
-		
 	}
 	
 
@@ -119,13 +117,13 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 		boolean found1 = false;
 		boolean found2 = false;
 		for (ConversationItem c : items) {
-			if ( c.subject.equals(message1.dSubject) ) {
+			if ( c.gSubject.equals(message1.dSubject) ) {
 				found1 = true;
 				break;
 			}
 		}
 		for (ConversationItem c : items) {
-			if ( c.subject.equals(message2.dSubject) ) {
+			if ( c.gSubject.equals(message2.dSubject) ) {
 				found2 = true;
 				break;
 			}

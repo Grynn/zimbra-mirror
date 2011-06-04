@@ -330,30 +330,30 @@ public class TreeMail extends AbsTree {
 
 		} else if ( action == Action.A_TREE_EXPAND ) {
 
-			locator = "css=[id='zti__main_Mail__"+ folder.getId() +"_nodeCell'] div[class='ImgNodeCollapsed']";
-			if ( !this.sIsElementPresent(locator) ) {
+			locator = Locators.treeExpandCollapseButton;
+			if (!isCollapsed()) {
 				logger.warn("Trying to expand a folder that probably has no subfolders or is already expanded");
-				return (page);
+			} else {
+			   this.sMouseDown(locator);
+
+			   this.zWaitForBusyOverlay();
 			}
-
-			this.sMouseDown(locator);
-
-			this.zWaitForBusyOverlay();
 
 			// No page to return
 			return (null);
 
 		} else if ( action == Action.A_TREE_COLLAPSE ) {
 
-			locator = "css=[id='zti__main_Mail__"+ folder.getId() +"_nodeCell'] div[class='ImgNodeExpanded']";
-			if ( !this.sIsElementPresent(locator) ) {
+			locator = Locators.treeExpandCollapseButton;
+			if (isCollapsed()) {
 				logger.warn("Trying to collapse a folder that probably has no subfolders or is already collapsed");
-				return (page);
+
+			} else {
+			   this.sMouseDown(locator);
+
+			   this.zWaitForBusyOverlay();
+
 			}
-
-			this.sMouseDown(locator);
-
-			this.zWaitForBusyOverlay();
 
 			// No page to return
 			return (null);

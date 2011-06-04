@@ -440,7 +440,7 @@ public class PageBriefcase extends AbsTab {
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
 
-			this.zClick(pulldownLocator);
+			this.zClickAt(pulldownLocator, "0,0");
 
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
@@ -454,7 +454,7 @@ public class PageBriefcase extends AbsTab {
 							+ optionLocator + " not present!");
 				}
 
-				this.zClick(optionLocator);
+				this.zClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active
 				zWaitForBusyOverlay();

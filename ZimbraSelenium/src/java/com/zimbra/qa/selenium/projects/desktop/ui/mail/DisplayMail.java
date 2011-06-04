@@ -94,7 +94,7 @@ public class DisplayMail extends AbsDisplay {
 
 		} else if ( button == Button.B_HIGHLIGHT_OBJECTS ) {
 
-			locator = "css=span[id$='__TV_highlightObjects_link']";
+			locator = "css=span[id$='V_highlightObjects_link']";
 
 			this.sClick(locator);
 			
@@ -264,10 +264,10 @@ public class DisplayMail extends AbsDisplay {
 
 		} else if ( field == Field.OnBehalfOf ) {
 			
-			locator = "css=tr[id$='_obo'] span[id$='_com_zimbra_email'][class='addrBubble'] span span";
+			locator = "css=td[id$='_obo'] span[id$='_com_zimbra_email'][class='addrBubble'] span span";
 			if ( !sIsElementPresent(locator) ) {
 				// no email zimlet case
-				locator = "css=tr[id$='_obo']";
+				locator = "css=td[id$='_obo']";
 			}
 
 		} else if ( field == Field.OnBehalfOfLabel ) {

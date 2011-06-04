@@ -3,6 +3,7 @@ package com.zimbra.qa.selenium.projects.desktop.tests.mail.mail;
 import java.io.File;
 import java.util.HashMap;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.core.*;
@@ -26,8 +27,7 @@ public class ViewMail extends AjaxCommonTest {
 
 		// Make sure we are using an account with message view
 		super.startingAccountPreferences = new HashMap<String, String>() {{
-		      put("zimbraPrefGroupMailBy", "conversation");
-				put("zimbraPrefGroupMailBy", "message");
+		      put("zimbraPrefGroupMailBy", "message");
 				put("zimbraPrefMessageViewHtmlPreferred", "TRUE");
 				}};
 
@@ -73,10 +73,8 @@ public class ViewMail extends AjaxCommonTest {
 		final String subject = "subject13016959916873";
 		final String from = "from13016959916873@example.com";
 		final String replyto = "replyto13016959916873@example.com";
-	   /**final String subject = "subject12996131112962";
-      final String from = "from12996131112962@example.com";
-      final String sender = "sender12996131112962@example.com";*/
-		final String mimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email01";
+
+		final String mimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email00";
 
 		// Inject the example message(s)
 		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFolder));
@@ -98,10 +96,14 @@ public class ViewMail extends AjaxCommonTest {
 		// Verify the To, From, Subject, Body
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.ReplyTo), replyto, "Verify the Reply-To matches the 'Reply-To:' header");
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.From), from, "Verify the From matches the 'From:' header");
-		
 
-		
 	}
 
+	@AfterMethod(alwaysRun=true)
+	public void resetAccountAfterTest() {
+	   // This is necessary to reset the account in case the next test is trying to
+	   // inject the same emails, the next tests will fail.
+	   ZimbraAccount.ResetAccountZWC();
+	}
 
 }

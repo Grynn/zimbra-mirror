@@ -10,6 +10,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
@@ -59,16 +60,12 @@ public class Bug57468 extends AjaxCommonTest {
                 	"<folder name='"+ foldername +"' l='"+ inbox.getId() +"'/>" +
                 "</CreateFolderRequest>");
 
-		
-		// Click Get Mail button to refresh the tree
-		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inbox);
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageMain.zWaitForDesktopLoadingSpinner(5000);
 
-		
 		// Collapse the inbox
 		app.zTreeMail.zTreeItem(Action.A_TREE_COLLAPSE, inbox);
 
-		
-		
 		// Send a message to the test account
 		ZimbraAccount.AccountA().soapSend(
 					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
@@ -80,26 +77,27 @@ public class Bug57468 extends AjaxCommonTest {
 							"</mp>" +
 						"</m>" +
 					"</SendMsgRequest>");
-		
-		
-		
+
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
-		
 		// Verify the inbox remains collapsed
 		List<FolderItem> folders = app.zTreeMail.zListGetFolders();
 		FolderItem found = null;
+
 		for (FolderItem f : folders) {
-			if ( f.getId().equals(inbox.getId()) ) {
+		   // FolderItem id is in this format: b79df08f-e04e-4645-957b-4d773562f509:2
+		   // Thus, need to split the String with ";" and pick the second item to compare
+		   // with the folder Item ID obtained from SOAP
+		   if ( f.getId().split(":")[1].equals(inbox.getId()) ) {
 				found = f;
 				break;
 			}
 		}
 		ZAssert.assertNotNull(found, "Verify the inbox is in the folder tree");
 		
-		// Collapse the inbox if it is currently expanded
-		ZAssert.assertFalse(found.gGetIsExpanded(), "Verify that the inbox is not expanded");
+		ZAssert.assertTrue(app.zTreeMail.isCollapsed(),
+		      "Verify that the mail folder tree is collapsed");
 		
 		
 	}

@@ -50,7 +50,7 @@ public class Shortcut {
 	public static final Shortcut S_MAIL_INBOX = new Shortcut("S_MAIL_INBOX",		"i");
 	public static final Shortcut S_MAIL_INBOX2 = new Shortcut("S_MAIL_INBOX2",		"vi");
 	public static final Shortcut S_MAIL_DRAFTS = new Shortcut("S_MAIL_DRAFTS",		"vd");
-	public static final Shortcut S_MAIL_MOVETOTRASH = new Shortcut("S_MAIL_MOVETOTRASH",	".t");
+	public static final Shortcut S_MAIL_MOVETOTRASH = new Shortcut("S_MAIL_MOVETOTRASH",	"<DEL>");
 	public static final Shortcut S_MAIL_MOVETOINBOX = new Shortcut("S_MAIL_MOVETOINBOX",	".i");
 	public static final Shortcut S_MAIL_MARKFLAG = new Shortcut("S_MAIL_MARKFLAG", 	"mf");
 	public static final Shortcut S_MAIL_MARKREAD = new Shortcut("S_MAIL_MARKFLAG", 	"mr");
