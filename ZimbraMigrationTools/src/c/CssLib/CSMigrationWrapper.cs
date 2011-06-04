@@ -1,0 +1,86 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using MVVM;
+using ExchangeMigrationLib;
+using System.IO;
+
+namespace CssLib
+{
+    public class CSMigrationwrapper
+    {
+        string m_ConfigXMLFile;
+
+        public string ConfigXMLFile
+        {
+            get { return m_ConfigXMLFile; }
+            set { m_ConfigXMLFile = value; }
+        }
+        string m_UserMapFile;
+
+        public string UserMapFile
+        {
+            get { return m_UserMapFile; }
+            set { m_UserMapFile = value; }
+        }
+        string m_MailClient;
+
+        public string MailClient
+        {
+            get { return m_MailClient; }
+            set { m_MailClient = value; }
+        }
+
+        MVVM.Model.Config ConfigObj = new MVVM.Model.Config();
+        MVVM.Model.ImportOptions ImportOptions = new MVVM.Model.ImportOptions();
+        MVVM.Model.Users  users = new MVVM.Model.Users();
+
+        ExchangeMigrationLib.MapiWrapper MailWrapper;
+
+        private void CreateConfig(string Xmlfilename)
+        {
+
+
+            System.Xml.Serialization.XmlSerializer reader =
+            new System.Xml.Serialization.XmlSerializer(typeof(MVVM.Model.Config));
+            if (File.Exists(Xmlfilename))
+            {
+
+                System.IO.StreamReader fileRead = new System.IO.StreamReader(
+                       Xmlfilename);
+
+                ConfigObj = (MVVM.Model.Config)reader.Deserialize(fileRead);
+
+            }
+        }
+
+        public void Initalize()
+        {
+            CreateConfig(ConfigXMLFile);
+
+            if( MailClient == "MAPI")
+            {
+
+                 MailWrapper = new MapiWrapper();
+
+                MailWrapper.ConnectToServer(ConfigObj.zimbraServer.HostName,ConfigObj.zimbraServer.Port,ConfigObj.zimbraServer.AdminAccount);
+
+
+
+
+            }
+
+        }
+
+        public void Migrate()
+        {
+
+            MailWrapper.ImportMailOptions(ImportOptions.Mail.ToString());
+
+        }
+
+   
+    }
+    }
+
