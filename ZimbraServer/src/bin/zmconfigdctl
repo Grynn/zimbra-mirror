@@ -61,6 +61,7 @@ checkrunning()
 {
   getpid
   if [ "x$pid" = "x" -o "x$pid" = "x0" ]; then
+	pid=""
 	running=0
   else
 	kill -0 $pid 2> /dev/null
@@ -108,9 +109,9 @@ startzmconfigd()
 	  err=1
 	  return
 	fi
-  if [ "x${pid}" != "x" ]; then
-	  kill -9 ${pid}
-  fi
+	if [ "x${pid}" != "x" ]; then
+		kill -9 ${pid}
+	fi
 	rm -rf ${pidfile}
 	${zimbra_home}/libexec/zmconfigd >> ${zimbra_log_directory}/zmconfigd.log 2>&1 &
 	# Bug 51682 wait for the pid file to be created, then wait 30 seconds for rewrites
