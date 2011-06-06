@@ -39,6 +39,6 @@ ALTER TABLE $group.mail_item ADD COLUMN recipients VARCHAR(128);
 ALTER TABLE $group.mail_item_dumpster ADD COLUMN recipients VARCHAR(128);
 _EOF_
 
-  Migrate::log("Adding RECIPIENTS column to $group.MAIL_ITEM and $group.MAIL_ITEM_DUMPSTER...");
+  Migrate::logSql("Adding RECIPIENTS column to $group.MAIL_ITEM and $group.MAIL_ITEM_DUMPSTER...");
   Migrate::runSql($sql);
 }

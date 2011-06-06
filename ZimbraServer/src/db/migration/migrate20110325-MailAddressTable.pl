@@ -50,6 +50,6 @@ ALTER TABLE $group.mail_item ADD CONSTRAINT fk_mail_item_sender_id
   FOREIGN KEY (mailbox_id, sender_id) REFERENCES $group.mail_address(mailbox_id, id);
 _EOF_
 
-  Migrate::log("Creating $group.MAIL_ADDRESS table...");
+  Migrate::logSql("Creating $group.MAIL_ADDRESS table...");
   Migrate::runSql($sql);
 }
