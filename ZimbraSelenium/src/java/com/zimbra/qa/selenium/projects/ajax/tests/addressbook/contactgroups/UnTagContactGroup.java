@@ -58,7 +58,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 	
 	@Test(	description = "Untag a contact group by click Tag->Remove tag on toolbar ",
 			groups = { "smoke" })
-	public void UnTagContactGroup_01() throws HarnessException {
+	public void ClickRemoveTagToolbarButton() throws HarnessException {
 		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();	
 		String tagid = GetTagid(tagName);
 		
@@ -76,7 +76,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 
 	@Test(	description = "Untag a contact group by click Tag->Remove tag on Context Menu",
 			groups = { "functional" })
-	public void UnTagContactGroup_02() throws HarnessException {
+	public void ClickContextMenuTagGroup() throws HarnessException {
 		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();	
 		String tagid = GetTagid(tagName);
 		
