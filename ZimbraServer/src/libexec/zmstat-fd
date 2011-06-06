@@ -131,6 +131,8 @@ sub get_mboxd_pid() {
 sub sighup {
     if (!$CONSOLE) {
         $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING);
+        chown $zuid, $zgid, $LOGFILE;
+        my $fmode = 0640; chmod $fmode, $LOGFILE;
     } else {
         $ROTATE_NOW = 1;
     }
@@ -175,6 +177,7 @@ if ($CONSOLE) {
 } else {
     $LOGFH = openLogFile($LOGFILE, $HEADING);
     chown $zuid, $zgid, $LOGFILE;
+    my $fmode = 0640; chmod $fmode, $LOGFILE;
 }
 waitUntilNiceRoundSecond($interval);
 
@@ -186,6 +189,7 @@ while (1) {
     if ($currDate ne $date && !$CONSOLE) {
         $LOGFH = rotateLogFile($LOGFH, $LOGFILE, $HEADING, $date);
         chown $zuid, $zgid, $LOGFILE;
+        my $fmode = 0640; chmod $fmode, $LOGFILE;
         $date = $currDate;
     }
     $ROTATE_DEFER = 1;
