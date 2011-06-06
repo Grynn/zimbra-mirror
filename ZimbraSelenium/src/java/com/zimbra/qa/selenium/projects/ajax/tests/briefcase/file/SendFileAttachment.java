@@ -51,6 +51,8 @@ public class SendFileAttachment extends AjaxCommonTest {
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
+		SleepUtil.sleepVerySmall();
+		
 		// Click on uploaded file
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 

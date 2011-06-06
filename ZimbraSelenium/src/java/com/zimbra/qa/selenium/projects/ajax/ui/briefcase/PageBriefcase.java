@@ -361,7 +361,7 @@ public class PageBriefcase extends AbsTab {
 			} else if (option == Button.O_NEW_DOCUMENT) {
 				if (ZimbraSeleniumProperties.zimbraGetVersionString().contains(
 						"7.1."))
-					optionLocator = "css=tr[id=POPUP_NEW_DOC]";
+					optionLocator = "css=tr[id=POPUP_NEW_TAG]>td[id$=_title]:contains(Document)";
 				else
 					optionLocator = "css=div#zb__BDLV__NEW_MENU_NEW_DOC";
 
