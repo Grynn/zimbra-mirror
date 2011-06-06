@@ -21,6 +21,7 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.soap.VoiceConstants;
 import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.mime.shim.JavaMailInternetAddress;
+import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.taglib.ZJspSession;
 import com.zimbra.cs.zclient.ZFilterAction.ZDiscardAction;
 import com.zimbra.cs.zclient.ZFilterAction.ZFileIntoAction;
@@ -658,6 +659,22 @@ public class BeanUtils {
         ZMailbox mbox = ZJspSession.getZMailbox(pc);
         if (id == null) return null;
         ZFolder f = mbox.getFolderById(id);
+        if (f == null) {
+            ZGetInfoResult acctInfo = mbox.getAccountInfo(false);
+            String acctId = acctInfo.getId();
+            ItemId itemId = new ItemId(id, acctId);
+            if (!itemId.belongsTo(acctId)) {
+                try {
+                    mbox = ZJspSession.getRestMailbox(pc, ZJspSession.getAuthToken(pc), itemId.getAccountId());
+                    if (mbox != null) {
+                        f = mbox.getFolderById(id);
+                    }
+                } catch (ServiceException se) {
+                    //it's for some other acct, not a child we have permission for
+                    f = null;
+                }
+            }
+        }        
         return f == null ? null : new ZFolderBean(f);
     }
 
