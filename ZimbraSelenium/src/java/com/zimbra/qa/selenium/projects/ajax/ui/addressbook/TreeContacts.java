@@ -137,7 +137,7 @@ public class TreeContacts extends AbsTree {
 		 } else if (action == Action.A_RIGHTCLICK) {
 			actionLocator = "css=div#zti__main_Contacts__" + t.getId() + "_div";				
 			zRightClickAt(actionLocator,"0,0");		
-			SleepUtil.sleepMedium();
+			//SleepUtil.sleepMedium();
          } else {
 			throw new HarnessException("Action " + action
 					+ " not yet implemented");
@@ -170,6 +170,7 @@ public class TreeContacts extends AbsTree {
 					+ " not yet implemented");
 		}
 		
+		zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
 		
 			// If there is a busy overlay, wait for that to finish
 		zWaitForBusyOverlay();
