@@ -170,7 +170,6 @@ public class TreeContacts extends AbsTree {
 					+ " not yet implemented");
 		}
 		
-		zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);						
 		
 			// If there is a busy overlay, wait for that to finish
 		zWaitForBusyOverlay();
