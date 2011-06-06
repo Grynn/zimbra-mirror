@@ -50,7 +50,7 @@ public class TagContactGroup extends AjaxCommonTest  {
 	
 	@Test(	description = "Tag a contact group by click Tag button on toolbar",
 			groups = { "smoke" })
-	public void TagContactGroup_01() throws HarnessException {
+	public void ClickTagToolbarButton() throws HarnessException {
 	
 		// Create a contact group via Soap then select
 		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
@@ -64,7 +64,7 @@ public class TagContactGroup extends AjaxCommonTest  {
 	
 	@Test(	description = "Tag a contact group by click Tag Group on Context Menu",
 			groups = { "functional" })
-	public void TagContactGroup_02() throws HarnessException {
+	public void ClickContextMenuTagGroup() throws HarnessException {
 	
 		// Create a contact group via Soap then select
 		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);

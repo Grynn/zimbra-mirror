@@ -43,10 +43,7 @@ public class PageAddressbook extends AbsTab {
 		//TODO: contact group: "Tag Group" instead of "Tag Contact"
 		public static final ContextMenuItem CONTACT_TAG = new ContextMenuItem("zmi__Contacts__TAG_MENU","Tag Contact","div[class*='ImgTag']"," div[class='ImgCascade']");	
 		public static final ContextMenuItem CONTACT_DELETE = new ContextMenuItem("zmi__Contacts__DELETE","Delete","div[class*='ImgDelete']",":contains('Del')");
-		
-		public static final ContextMenuItem CONTACT_MOVE = new ContextMenuItem("POPUP_MOVE","Move","div[class*='ImgMoveToFolder']","");
-
-		//public static final ContextMenuItem CONTACT_MOVE = new ContextMenuItem("zmi__Contacts__MOVE","Move","div[class*='ImgMoveToFolder']","");
+		public static final ContextMenuItem CONTACT_MOVE = new ContextMenuItem("zmi__Contacts__MOVE","Move","div[class*='ImgMoveToFolder']","");
 		public static final ContextMenuItem CONTACT_PRINT = new ContextMenuItem("zmi__Contacts__PRINT_CONTACT","Print","div[class*='ImgPrint']",":contains('p')");
 	 		
 	}
@@ -451,25 +448,14 @@ public class PageAddressbook extends AbsTab {
 				throw new HarnessException("Button "+ pulldown +" option "+ option +" pulldownLocator "+ pulldownLocator +" not present!");
 			}
 
-			/*
-			//IE 9 browser
-			if (ClientSessionFactory.session().isBrowserIE(ClientSessionFactory.session().IE9))
-			{ 
-			  sClick(pulldownLocator);
-			 	
+			if (ClientSessionFactory.session().currentBrowserName().contains("IE")) {
+				//IE			
+				sClickAt(pulldownLocator,"0,0");
 			}
-			//IE 8 browser
-			if (ClientSessionFactory.session().isBrowserIE(ClientSessionFactory.session().IE9)) {				
-			  sMouseDown(pulldownLocator);
-		      sMouseUp(pulldownLocator);					
-			}
-			
 			else {
-			*/
-			sClickAt(pulldownLocator,"0,0");
-			
-			zClickAt(pulldownLocator,"0,0");
-			//}
+			    //others
+			    zClickAt(pulldownLocator,"0,0");
+			}
 			
 			zWaitForBusyOverlay();
 			
@@ -701,7 +687,8 @@ public class PageAddressbook extends AbsTab {
 			
         
 		// Click option
-		zClick(locator);
+        zClickAt(locator,"0,0");
+		
 		zWaitForBusyOverlay();
 		
 		
@@ -726,6 +713,7 @@ public class PageAddressbook extends AbsTab {
 			ContextMenuItem cmi=null;
 								
 		    zRightClickAt(contactLocator,"0,0");
+		    
 		
 			if (option == Button.B_DELETE){
                 cmi=CONTEXT_MENU.CONTACT_DELETE;				
@@ -775,11 +763,8 @@ public class PageAddressbook extends AbsTab {
 		}
 		
 				
-		// Click option	
-		//FF
-		sClickAt(locator,"0,0");
-		//IE
 		zClickAt(locator,"0,0");
+		
 		zWaitForBusyOverlay();
 		
 		
