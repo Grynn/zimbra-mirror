@@ -60,8 +60,10 @@ getctlpid()
 checkrunning()
 {
   getpid
-  if [ "x$pid" = "x" -o "x$pid" = "x0" ]; then
-	pid=""
+  if [ "x$pid" = "x0" ]; then
+    pid=`ps auxwww | grep zmconfigd | grep -v grep | grep -v zmconfigdctl |  awk '{print $2}'`
+  fi
+  if [ "x$pid" = "x" ]; then
 	running=0
   else
 	kill -0 $pid 2> /dev/null
