@@ -686,7 +686,7 @@ public class ExecuteHarnessMain {
 		public void onTestFailure(ITestResult result) {
 			testsFailed++;
 			String fullname = result.getMethod().getMethod().getDeclaringClass().getName() +"."+ result.getMethod().getMethod().getName();
-			failedTests.add(fullname.replace("com.zimbra.qa.selenium.projects.", "..."));
+			failedTests.add(fullname.replace("com.zimbra.qa.selenium.projects.", "main.projects."));
 			this.getScreenCapture(result);
 		}
 
