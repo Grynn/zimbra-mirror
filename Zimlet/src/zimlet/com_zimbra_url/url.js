@@ -543,3 +543,52 @@ function(msg) {
 
 	}
 };
+Com_Zimbra_Url.CALENDAR_URL_EXTENSION = 'ics';
+
+Com_Zimbra_Url.prototype.getActionMenu =
+function(obj, span, context) {
+    var uri = AjxStringUtil.parseURL(obj),
+        fileName = uri.fileName,
+        extension = fileName ? fileName.substring(fileName.lastIndexOf('.') + 1) : '';
+    if(!appCtxt.get(ZmApp.SETTING[ZmId.APP_CALENDAR]) ||
+        extension != Com_Zimbra_Url.CALENDAR_URL_EXTENSION) {
+        return false;
+    }
+	if (this._zimletContext._contentActionMenu instanceof AjxCallback) {
+		this._zimletContext._contentActionMenu = this._zimletContext._contentActionMenu.run();
+	}
+	// Set some global context since the parent Zimlet (Com_Zimbra_Date) will be called for
+	// right click menu options, even though the getActionMenu will get called on the sub-classes.
+	Com_Zimbra_Url._actionObject = obj;
+	Com_Zimbra_Url._actionSpan = span;
+	Com_Zimbra_Url._actionContext = context;
+	return this._zimletContext._contentActionMenu;
+};
+
+Com_Zimbra_Url.prototype.menuItemSelected =
+function(itemId, ev) {
+	switch (itemId) {
+		case "NEWCAL":		this._newCalListener(ev); break;
+		case "GOTOURL":		this._goToUrlListener(); break;
+	}
+};
+
+Com_Zimbra_Url.prototype._goToUrlListener =
+function() {
+    window.open(Com_Zimbra_Url._actionObject, "_blank");
+};
+
+Com_Zimbra_Url.prototype.getMainWindow =
+function(appId) {
+	return appCtxt.isChildWindow ? window.opener : window;
+};
+
+Com_Zimbra_Url.prototype._newCalListener =
+function(ev) {
+    var oc = appCtxt.getOverviewController();
+	var treeController = oc.getTreeController(ZmOrganizer.CALENDAR);
+
+    treeController._newListener(ev);
+    var dialog = appCtxt.getNewCalendarDialog();
+    dialog.setRemoteURL(Com_Zimbra_Url._actionObject);
+};
