@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.projects.desktop.tests.briefcase.document;
 
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.testng.annotations.AfterMethod;
@@ -249,7 +250,7 @@ public class CreateDocument extends AjaxCommonTest {
 	      logger.info("Checking for the opened window ...");
 
 	      // Check if the window is still open
-	      String[] windows = app.zPageMain.sGetAllWindowNames();
+	      List<String> windows = app.zPageMain.sGetAllWindowNames();
 	      for (String window : windows) {
 	         if (!window.isEmpty() && !window.contains("null")
 	               && !window.contains(PageBriefcase.pageTitle)
