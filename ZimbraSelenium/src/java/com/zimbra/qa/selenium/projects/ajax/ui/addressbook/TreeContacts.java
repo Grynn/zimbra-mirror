@@ -10,6 +10,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail.Locators;
 
 
 /**
@@ -183,6 +184,38 @@ public class TreeContacts extends AbsTree {
 		return (page);
 
 	}
+	
+	public AbsPage zTreeItem(Action action, String locator) throws HarnessException {
+		AbsPage page = null;
+
+
+		if ( locator == null )
+			throw new HarnessException("locator is null for action "+ action);
+
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("Unable to locator folder in tree "+ locator);
+
+		if ( action == Action.A_LEFTCLICK ) {
+
+			// FALL THROUGH
+		} else if ( action == Action.A_RIGHTCLICK ) {
+
+			// Select the folder
+			zRightClick(locator);
+            zWaitForBusyOverlay();
+			// return a context menu
+			return (new ContextMenu(MyApplication));
+
+		} else {
+			throw new HarnessException("Action "+ action +" not yet implemented");
+		}
+
+		zClickAt(locator,"0,0");
+
+		return (page);
+	}
+	
+
 	@Override
 	public AbsPage zPressButton(Button button) throws HarnessException {
 		tracer.trace("Click button "+ button);

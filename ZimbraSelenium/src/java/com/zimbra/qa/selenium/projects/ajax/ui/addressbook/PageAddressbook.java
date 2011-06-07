@@ -21,6 +21,7 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
@@ -316,13 +317,14 @@ public class PageAddressbook extends AbsTab {
 		// Default behavior variables
 		AbsPage page = null;	// If set, this page will be returned
 		
-		if ( (shortcut == Shortcut.S_NEWTAG) ){
+		if ( shortcut == Shortcut.S_NEWTAG) {
 			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);	
 		}
-		else if ( (shortcut == Shortcut.S_MOVE) ){
+		else if (shortcut == Shortcut.S_MOVE) {
 			page = new DialogMove(MyApplication, this);	
 			
 		} 
+		
 		// Click it
 		zKeyboardTypeString(shortcut.getKeys());	
 		
@@ -881,7 +883,7 @@ public class PageAddressbook extends AbsTab {
 		if ( action == Action.A_RIGHTCLICK ) {
 
 			if (option == Button.B_TREE_NEWFOLDER) {
-				ContextMenu contextMenu = (ContextMenu)((AppAjaxClient)MyApplication).zTreeMail.zTreeItem(
+				ContextMenu contextMenu = (ContextMenu)((AppAjaxClient)MyApplication).zTreeContacts.zTreeItem(
 						action, treeItemLocator);
 				page = contextMenu.zSelect(CONTEXT_MENU_ITEM_NAME.NEW_FOLDER);
 			}
@@ -890,36 +892,11 @@ public class PageAddressbook extends AbsTab {
 			}
 		} else if (action == Action.A_LEFTCLICK) {
 			if (option == Button.B_TREE_NEWFOLDER) {
-				if (ZimbraSeleniumProperties.getAppType() == AppType.AJAX) {
-					if (((AppAjaxClient)MyApplication).zTreeMail.isCollapsed()) {
-						// Expand it
-						((AppAjaxClient)MyApplication).zTreeMail.zClick(
-								TreeMail.Locators.treeExpandCollapseButton);
-						GeneralUtility.waitFor(null, ((AppAjaxClient)MyApplication).zTreeMail, false,
-								"isCollapsed", null, WAIT_FOR_OPERAND.EQ, false, 30000, 1000);
-					} else {
-						if (onRootFolder) {
-							// TODO: Bug 57414
-							// Collapse the tree and expand it again to select the root folder
-							((AppAjaxClient)MyApplication).zTreeMail.zClick(
-									TreeMail.Locators.treeExpandCollapseButton);
-
-							GeneralUtility.waitFor(null, ((AppAjaxClient)MyApplication).zTreeMail, false,
-									"isCollapsed", null, WAIT_FOR_OPERAND.EQ, true, 30000, 1000);
-
-							((AppAjaxClient)MyApplication).zTreeMail.zClick(
-									TreeMail.Locators.treeExpandCollapseButton);
-
-							page = ((AppAjaxClient)MyApplication).zTreeMail.zPressButton(option);
-						}  else {
-							// Fall Through
-						}
-					}
-
-				} else {
-					// Not available for Desktop
-					throw new HarnessException("Not Supported! Action:" + action + " Option:" + option);
-				}
+				
+				zClickAt("css=div[class^=ImgNewContactsFolder][class*=ZWidget]","0,0");
+				
+				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageAddressbook);
+			      				
 
 			} else {
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
