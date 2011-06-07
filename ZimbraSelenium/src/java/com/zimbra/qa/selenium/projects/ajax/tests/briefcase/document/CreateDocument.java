@@ -2,11 +2,11 @@ package com.zimbra.qa.selenium.projects.ajax.tests.briefcase.document;
 
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Pattern;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.util.HtmlElement;
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
@@ -262,8 +262,7 @@ public class CreateDocument extends AjaxCommonTest {
 		logger.info("Checking for the opened window ...");
 
 		// Check if the window is still open
-		String[] windows = ClientSessionFactory.session().selenium()
-				.getAllWindowNames();
+		List<String> windows = app.zPageBriefcase.sGetAllWindowNames();
 		for (String window : windows) {
 			if (!window.isEmpty() && !window.contains("null") && !window.contains(PageBriefcase.pageTitle)
 					&& !window.contains("main_app_window")

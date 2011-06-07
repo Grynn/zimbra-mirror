@@ -564,12 +564,22 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.getAllWindowTitles()
 	 */
 	public List<String> sGetAllWindowTitles() {
-		logger.info("getAllWindowNames()");
+		logger.info("getAllWindowTitles()");
 		String[] windows = ClientSessionFactory.session().selenium()
 				.getAllWindowTitles();
 		return (Arrays.asList(windows));
 	}
 
+	/**
+	 * DefaultSelenium.getAllWindowNames()
+	 */
+	public List<String> sGetAllWindowNames() {
+		logger.info("getAllWindowNames()");
+		String[] windows = ClientSessionFactory.session().selenium()
+				.getAllWindowNames();
+		return (Arrays.asList(windows));
+	}
+	
 	/**
 	 * DefaultSelenium.getAttribute()
 	 * Use this method if you need the value of the attribute.  If you are
