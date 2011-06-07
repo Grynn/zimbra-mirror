@@ -20,6 +20,7 @@ import com.zimbra.common.util.Constants;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.mailbox.MailSender;
 import com.zimbra.cs.mailbox.Mailbox;
+import com.zimbra.cs.mailbox.OperationContext;
 
 import javax.mail.Address;
 import javax.mail.MessagingException;
@@ -61,7 +62,7 @@ public class LMailSender extends MailSender {
     }
 
     @Override
-    protected Collection<Address> sendMessage(Mailbox mbox, MimeMessage mm, 
+    protected Collection<Address> sendMessage(OperationContext octxt, Mailbox mbox, MimeMessage mm, 
         Collection<RollbackData> rollbacks) throws IOException, SafeMessagingException {
         try {
         	Address[] rcpts = mm.getAllRecipients();
