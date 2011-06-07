@@ -49,7 +49,7 @@ public class PageBriefcase extends AbsTab {
 		public static final Locators zNewMenuLeftIconBtn = new Locators(
 				"css=td[id=zb__BDLV__NEW_MENU_left_icon]");
 		public static final Locators zNewMenuArrowBtn = new Locators(
-				"css=td[id=zb__BDLV__NEW_MENU_dropdown] div[class^=ImgSelectPullDownArrow]");
+				"css=div[id=zb__BDLV__NEW_MENU] div[class^=ImgSelectPullDownArrow]");
 		public static final Locators zUploadFileIconBtn = new Locators(
 				"id=zb__BDLV__NEW_FILE_left_icon");
 		public static final Locators zEditFileIconBtn = new Locators(
@@ -361,7 +361,7 @@ public class PageBriefcase extends AbsTab {
 			} else if (option == Button.O_NEW_DOCUMENT) {
 				if (ZimbraSeleniumProperties.zimbraGetVersionString().contains(
 						"7.1."))
-					optionLocator = "css=tr[id=POPUP_NEW_DOC]>td[id$=_title]:contains(Document)";
+					optionLocator = "css=tr[id=POPUP_NEW_DOC]";
 				else
 					optionLocator = "css=div#zb__BDLV__NEW_MENU_NEW_DOC";
 
@@ -450,14 +450,25 @@ public class PageBriefcase extends AbsTab {
 						+ " not present!");
 			}
 
-			//this.sMouseOver(pulldownLocator);
-			//this.sFocus(pulldownLocator);
-			//this.zRightClickAt(pulldownLocator, "0,0");
-			//sMouseDownRight(pulldownLocator);
-			//sMouseUpRight(pulldownLocator);
+			// this.sMouseOver(pulldownLocator);
+			// this.sFocus(pulldownLocator);
+			// this.zRightClickAt(pulldownLocator, "0,0");
+			// sMouseDownRight(pulldownLocator);
+			// sMouseUpRight(pulldownLocator);
 
 			if (sGetEval("navigator.userAgent;").contains("MSIE")) {
-				zClick(pulldownLocator);
+				// zClick(pulldownLocator);
+				sGetEval("if(document.createEventObject()){var evObj = document.createEventObject(); "
+						+ "var x = selenium.browserbot.findElementOrNull('"
+						+ pulldownLocator
+						+ "');"
+						+ "x.focus();x.blur();x.fireEvent('onmouseup');}"
+						+ "else{var evObj = document.createEvent('MouseEvents');"
+						+ "evObj.initMouseEvent( 'mousedown', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);"
+						+ "var x = selenium.browserbot.findElementOrNull('"
+						+ pulldownLocator
+						+ "');"
+						+ "x.focus();x.blur();x.dispatchEvent(evObj);}");
 			} else
 				zClickAt(pulldownLocator, "0,0");
 
