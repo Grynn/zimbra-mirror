@@ -42,8 +42,7 @@
                             <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
                         </Grid.Background>
                         <Grid.RowDefinitions>
-                            <RowDefinition MinHeight="60" Height="Auto"></RowDefinition>
-                            <RowDefinition MinHeight="40" Height="Auto"></RowDefinition>
+                            <RowDefinition MinHeight="80" Height="Auto"></RowDefinition>
                             <RowDefinition MinHeight="40" Height="Auto"></RowDefinition>
                             <RowDefinition MinHeight="40" Height="Auto"></RowDefinition>
                             <RowDefinition MinHeight="40" Height="Auto"></RowDefinition>
@@ -54,7 +53,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock HorizontalAlignment="Left" Margin="60,25,0,0" Name="textBlock11" Text="VMware Zimbra Server" VerticalAlignment="Top" Grid.Row="0" Grid.Column="1"/>
+                        <TextBlock HorizontalAlignment="Left" Margin="60,35,0,0" Name="textBlock11" Text="VMware Zimbra Server" VerticalAlignment="Top" Grid.Row="0" Grid.Column="1"/>
                         <Label Content="Hostname" Margin="26,0,0,0" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" />
                         <TextBox HorizontalAlignment="Left" MinWidth="240" Name="tbHost" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1"  Text="{Binding Path=ZimbraServerHostName}"/>
                         <Label Content="Admin Port" Margin="26,0,0,0" HorizontalAlignment="Left" Name="label2" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
@@ -64,11 +63,6 @@
                         <TextBox HorizontalAlignment="Left" MinWidth="240" Name="tbUser" VerticalAlignment="Top" Grid.Row="3" Grid.Column="1" Text="{Binding Path=ZimbraAdmin}"/>
                         <Label Content="Password" Margin="26,0,0,0" HorizontalAlignment="Left" Name="label4" VerticalAlignment="Top" Grid.Row="4" Grid.Column="0"  />
                         <PasswordBox HorizontalAlignment="Left" MinWidth="240" Name="passwordBox1" VerticalAlignment="Top" Grid.Row="4" Grid.Column="1"/>
-                        <Label Content="Domain" Margin="26,0,0,0" HorizontalAlignment="Left" Name="label5" VerticalAlignment="Top" Grid.Row="5" Grid.Column="0" />
-                        <ComboBox HorizontalAlignment="Left" MinWidth="240" Name="cbDomain" VerticalAlignment="Top" Grid.Row="5" Grid.Column="1" Text="{Binding Path=ZimbraDomain}">
-                            <ComboBoxItem Content="example.com" IsSelected="True" />
-                            <ComboBoxItem Content="zimbra.com" />
-                        </ComboBox>
                     </Grid>
                 </TabItem>
             </TabControl>
