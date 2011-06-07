@@ -3,6 +3,8 @@ package com.zimbra.qa.selenium.projects.desktop.tests.briefcase.document;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.regex.Pattern;
+
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.util.HtmlElement;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
@@ -241,4 +243,23 @@ public class CreateDocument extends AjaxCommonTest {
 		// delete file upon test completion
 		app.zPageBriefcase.deleteFileByName(docName);
 	}
+
+	  @AfterMethod(alwaysRun=true)
+	   public void afterMethod() throws HarnessException {
+	      logger.info("Checking for the opened window ...");
+
+	      // Check if the window is still open
+	      String[] windows = app.zPageMain.sGetAllWindowNames();
+	      for (String window : windows) {
+	         if (!window.isEmpty() && !window.contains("null")
+	               && !window.contains(PageBriefcase.pageTitle)
+	               && !window.contains("main_app_window")
+	               && !window.contains("undefined")) {
+	            logger.warn(window + " window was still active. Closing ...");
+	            app.zPageBriefcase.zSelectWindow(window);
+	            app.zPageBriefcase.closeWindow();
+	         }
+	      }
+	      app.zPageBriefcase.zSelectWindow(PageBriefcase.pageTitle);
+	   }
 }

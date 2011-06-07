@@ -314,7 +314,7 @@ public class PageBriefcase extends AbsTab {
 					+ locator + " button=" + button);
 
 		// Click it
-		this.zClick(locator);
+		this.zClickAt(locator, "0,0");
 
 		// If the app is busy, wait for it to become active
 		zWaitForBusyOverlay();
