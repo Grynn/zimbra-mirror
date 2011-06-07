@@ -18,7 +18,6 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.mailbox.MailSender;
 import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.mailbox.OperationContext;
 import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.offline.util.ymail.YMailClient;
 import com.zimbra.cs.offline.util.ymail.YMailException;
@@ -55,7 +54,7 @@ public class YMailSender extends MailSender {
     }
 
     @Override
-    protected Collection<Address> sendMessage(OperationContext octxt, Mailbox mbox,
+    protected Collection<Address> sendMessage(Mailbox mbox,
                                MimeMessage mm,
                                Collection<RollbackData> rollbacks) throws IOException {
         try {
