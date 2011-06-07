@@ -464,7 +464,7 @@ public class PageBriefcase extends AbsTab {
 						+ "');"
 						+ "x.focus();x.blur();x.fireEvent('onmouseup');}"
 						+ "else{var evObj = document.createEvent('MouseEvents');"
-						+ "evObj.initMouseEvent( 'mousedown', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);"
+						+ "evObj.initMouseEvent( 'mouseup', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);"
 						+ "var x = selenium.browserbot.findElementOrNull('"
 						+ pulldownLocator
 						+ "');"
