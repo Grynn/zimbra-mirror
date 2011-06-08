@@ -170,7 +170,7 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
 		 			"<table><tr><td width='40'><div class='ImgCritical_32'></div></td><td width='*'><span class='errorText' id='ZLoginErrorMsg'></span></td></tr></table>",
 		 			"<div style='clear:both;height:0px;'></div>",
 				"</div>",
-				"<form name='loginForm'>",
+				"<form name='loginForm' method='POST'>",
 		 		"<table class='form' ", (params.showForm ? " " : "style='display:none'"),">",
 		 "<tr ", (params.showMoreField ? " " : "style='display:none'"), ">",
 					"<td></td>",
