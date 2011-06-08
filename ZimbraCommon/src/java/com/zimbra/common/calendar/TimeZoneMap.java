@@ -12,32 +12,29 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.mailbox.calendar;
+package com.zimbra.common.calendar;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
-import com.zimbra.common.calendar.TZIDMapper;
-import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.localconfig.DebugConfig;
 import com.zimbra.common.util.ZimbraLog;
-import com.zimbra.cs.localconfig.DebugConfig;
-import com.zimbra.cs.mailbox.Metadata;
 
 public class TimeZoneMap {
 
-    static HashMap<ZRecur.ZWeekDay, Integer> sDayWeekDayMap;
+    static HashMap<ZWeekDay, Integer> sDayWeekDayMap;
     static {
-        sDayWeekDayMap = new HashMap<ZRecur.ZWeekDay, Integer>();
-        sDayWeekDayMap.put(ZRecur.ZWeekDay.SU, new Integer(java.util.Calendar.SUNDAY));
-        sDayWeekDayMap.put(ZRecur.ZWeekDay.MO, new Integer(java.util.Calendar.MONDAY));
-        sDayWeekDayMap.put(ZRecur.ZWeekDay.TU, new Integer(java.util.Calendar.TUESDAY));
-        sDayWeekDayMap.put(ZRecur.ZWeekDay.WE, new Integer(java.util.Calendar.WEDNESDAY));
-        sDayWeekDayMap.put(ZRecur.ZWeekDay.TH, new Integer(java.util.Calendar.THURSDAY));
-        sDayWeekDayMap.put(ZRecur.ZWeekDay.FR, new Integer(java.util.Calendar.FRIDAY));
-        sDayWeekDayMap.put(ZRecur.ZWeekDay.SA, new Integer(java.util.Calendar.SATURDAY));
+        sDayWeekDayMap = new HashMap<ZWeekDay, Integer>();
+        sDayWeekDayMap.put(ZWeekDay.SU, new Integer(java.util.Calendar.SUNDAY));
+        sDayWeekDayMap.put(ZWeekDay.MO, new Integer(java.util.Calendar.MONDAY));
+        sDayWeekDayMap.put(ZWeekDay.TU, new Integer(java.util.Calendar.TUESDAY));
+        sDayWeekDayMap.put(ZWeekDay.WE, new Integer(java.util.Calendar.WEDNESDAY));
+        sDayWeekDayMap.put(ZWeekDay.TH, new Integer(java.util.Calendar.THURSDAY));
+        sDayWeekDayMap.put(ZWeekDay.FR, new Integer(java.util.Calendar.FRIDAY));
+        sDayWeekDayMap.put(ZWeekDay.SA, new Integer(java.util.Calendar.SATURDAY));
     }
 
     private Map<String /* real TZID */, ICalTimeZone> mTzMap;
@@ -54,6 +51,14 @@ public class TimeZoneMap {
         mAliasMap = new HashMap<String, String>();
         mLocalTZ = localTZ;
     }
+    
+    public Map<String, ICalTimeZone> getMap() {
+        return mTzMap;
+    }
+    
+    public Map<String, String> getAliasMap() {
+        return mAliasMap;
+    }
 
     public boolean contains(ICalTimeZone tz) {
         if (tz != null)
@@ -66,7 +71,7 @@ public class TimeZoneMap {
      *
      * @param localTZ local time zone of user account
      */
-    private TimeZoneMap(Map<String, ICalTimeZone> z, Map<String, String> a, ICalTimeZone localTZ) {
+    public TimeZoneMap(Map<String, ICalTimeZone> z, Map<String, String> a, ICalTimeZone localTZ) {
         mTzMap = z;
         mAliasMap = a;
         mLocalTZ = localTZ;
@@ -89,100 +94,6 @@ public class TimeZoneMap {
 
     public Iterator<ICalTimeZone> tzIterator() {
         return mTzMap.values().iterator();
-    }
-
-    public Metadata encodeAsMetadata() {
-        Metadata meta = new Metadata();
-        Map<String /* real TZID */, Integer /* index */> tzIndex = new HashMap<String, Integer>();
-        int nextIndex = 0;
-        for (Iterator<Entry<String, ICalTimeZone>> iter = mTzMap.entrySet().iterator(); iter.hasNext(); ) {
-            Entry<String, ICalTimeZone> entry = iter.next();
-            String tzid = entry.getKey();
-            if (tzid == null || tzid.length() < 1)    // ignore null/empty TZIDs (bug 25183)
-                continue;
-            ICalTimeZone zone = entry.getValue();
-            String realTzid = zone.getID();
-            if (!tzIndex.containsKey(realTzid)) {
-                meta.put("#" + nextIndex, zone.encodeAsMetadata());
-                tzIndex.put(realTzid, nextIndex);
-                ++nextIndex;
-            }
-        }
-        for (Iterator<Entry<String, String>> iter = mAliasMap.entrySet().iterator(); iter.hasNext(); ) {
-            Entry<String, String> entry = iter.next();
-            String alias = entry.getKey();
-            String realTzid = entry.getValue();
-            if (tzIndex.containsKey(realTzid)) {
-                int index = tzIndex.get(realTzid);
-                meta.put(alias, index);
-            }
-        }
-        return meta;
-    }
-
-    /**
-     *
-     * @param meta
-     * @param localTZ local time zone of user account
-     * @return
-     * @throws ServiceException
-     */
-    public static TimeZoneMap decodeFromMetadata(Metadata meta, ICalTimeZone localTZ) throws ServiceException {
-        Map<String, ?> map = meta.asMap();
-        Map<String, String> aliasMap = new HashMap<String, String>();
-        ICalTimeZone[] tzlist = new ICalTimeZone[map.size()];
-        // first time, find the tz's
-        for (Map.Entry<String, ?> entry : map.entrySet()) {
-            String key = entry.getKey();
-            if (key != null && key.length() > 0) {  // ignore null/empty TZIDs (bug 25183)
-                if (key.charAt(0) == '#') {
-                    int idx = Integer.parseInt(key.substring(1));
-                    Metadata tzMeta = (Metadata) entry.getValue();
-                    String tzidMeta = tzMeta.get(ICalTimeZone.FN_TZID, null);
-                    if (tzidMeta != null) {
-                        ICalTimeZone tz = ICalTimeZone.decodeFromMetadata(tzMeta);
-                        if (tz != null) {
-                            String tzid = tz.getID();
-                            if (!DebugConfig.disableCalendarTZMatchByID)
-                                tzid = TZIDMapper.canonicalize(tzid);
-                            if (!tzidMeta.equals(tzid)) {
-                                aliasMap.put(tzidMeta, tzid);
-                                tz = WellKnownTimeZones.getTimeZoneById(tzid);
-                            }
-                            tzlist[idx] = tz;
-                        }
-                    }
-                }
-            }
-        }
-
-        Map<String, ICalTimeZone> tzmap = new HashMap<String, ICalTimeZone>();
-        for (ICalTimeZone tz : tzlist) {
-            if (tz != null)
-                tzmap.put(tz.getID(), tz);
-        }
-        // second time, build the real map
-        for (Map.Entry<String, ?> entry : map.entrySet()) {
-            String tzid = entry.getKey();
-            if (tzid != null && tzid.length() > 0) {  // ignore null/empty TZIDs (bug 25183)
-                if (tzid.charAt(0) != '#') {
-                    int idx = -1;
-                    try {
-                        idx = Integer.parseInt(entry.getValue().toString());
-                    } catch (NumberFormatException e) {}
-                    if (idx >= 0 && idx < tzlist.length) {
-                        ICalTimeZone tz = tzlist[idx];
-                        if (tz != null) {
-                            String realId = tz.getID();
-                            if (!realId.equals(tzid))
-                                aliasMap.put(tzid, realId);
-                        }
-                    }
-                }
-            }
-        }
-
-        return new TimeZoneMap(tzmap, aliasMap, localTZ);
     }
 
     /**

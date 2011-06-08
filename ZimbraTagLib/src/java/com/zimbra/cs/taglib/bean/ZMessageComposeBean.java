@@ -39,10 +39,10 @@ import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.PartSource;
 
+import com.zimbra.common.calendar.ParsedDuration;
 import com.zimbra.common.calendar.TZIDMapper;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.mailbox.calendar.ParsedDuration;
 import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
 import com.zimbra.cs.zclient.ZAlarm;
 import com.zimbra.cs.zclient.ZDateTime;

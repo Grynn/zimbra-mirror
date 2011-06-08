@@ -12,15 +12,13 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.mailbox.calendar;
+package com.zimbra.common.calendar;
 
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.soap.MailConstants;
+import com.zimbra.common.calendar.ZCalendar.ICalTok;
+import com.zimbra.common.calendar.ZCalendar.ZParameter;
+import com.zimbra.common.calendar.ZCalendar.ZProperty;
 import com.zimbra.common.soap.Element;
-import com.zimbra.cs.mailbox.Metadata;
-import com.zimbra.cs.mailbox.calendar.ZCalendar.ICalTok;
-import com.zimbra.cs.mailbox.calendar.ZCalendar.ZParameter;
-import com.zimbra.cs.mailbox.calendar.ZCalendar.ZProperty;
+import com.zimbra.common.soap.MailConstants;
 
 /**
  * iCalendar ATTACH property
@@ -31,13 +29,25 @@ public class Attach {
     private String mUri;
     private String mBinaryB64Data;
 
-    private Attach(String uri, String contentType) {
+    public Attach(String uri, String contentType) {
         mUri = uri;
         mContentType = contentType;
     }
 
-    private Attach(String binaryB64Data) {
+    public Attach(String binaryB64Data) {
         mBinaryB64Data = binaryB64Data;
+    }
+    
+    public String getUri() {
+        return mUri;
+    }
+    
+    public String getContentType() {
+        return mContentType;
+    }
+    
+    public String getBinaryB64Data() {
+        return mBinaryB64Data;
     }
 
     public String toString() {
@@ -64,7 +74,7 @@ public class Attach {
         return attachElem;
     }
 
-    public static Attach parse(Element element) throws ServiceException {
+    public static Attach parse(Element element) {
         String uri = element.getAttribute(MailConstants.A_CAL_ATTACH_URI, null);
         if (uri != null) {
             String ct = element.getAttribute(MailConstants.A_CAL_ATTACH_CONTENT_TYPE, null);
@@ -103,31 +113,5 @@ public class Attach {
         if (fmttype != null)
             ct = fmttype.getValue();
         return new Attach(value, ct);
-    }
-
-    private static final String FN_CONTENT_TYPE = "ct";
-    private static final String FN_URI = "uri";
-    private static final String FN_BINARY = "bin";
-
-    public Metadata encodeMetadata() {
-        Metadata meta = new Metadata();
-        if (mUri != null) {
-            meta.put(FN_URI, mUri);
-            meta.put(FN_CONTENT_TYPE, mContentType);
-        } else {
-            meta.put(FN_BINARY, mBinaryB64Data);
-        }
-        return meta;
-    }
-
-    public static Attach decodeMetadata(Metadata meta) throws ServiceException {
-        String uri = meta.get(FN_URI, null);
-        if (uri != null) {
-            String ct = meta.get(FN_CONTENT_TYPE, null);
-            return new Attach(uri, ct);
-        } else {
-            String binary = meta.get(FN_BINARY, null);
-            return new Attach(binary);
-        }
     }
 }

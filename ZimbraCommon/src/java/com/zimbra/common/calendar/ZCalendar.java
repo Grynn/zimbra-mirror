@@ -12,7 +12,7 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.mailbox.calendar;
+package com.zimbra.common.calendar;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -28,7 +28,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import com.zimbra.common.calendar.TZIDMapper;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ZimbraLog;
@@ -479,7 +478,7 @@ public class ZCalendar {
         public Iterator<ZParameter> parameterIterator() { return mParameters.iterator(); }
         public int getNumParameters() { return mParameters.size(); }
         
-        String getParameterVal(ICalTok tok, String defaultValue) { 
+        public String getParameterVal(ICalTok tok, String defaultValue) { 
             ZParameter param = findParameter(mParameters, tok); 
             if (param != null)
                 return param.getValue();
@@ -952,70 +951,6 @@ public class ZCalendar {
                         ZimbraLog.calendar.warn("Ignoring bad data at the end of text/calendar part: " + e.getMessage());
                 }
             }
-        }
-    }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        String str1 = ",foo,,bar,,b\\,az,,,";
-        List<String> list = parseCommaSepText(str1);
-        String str2 = toCommaSepText(list);
-        if (!str1.equals(str2))
-            System.err.println("Different!");
-
-        try {
-            /**
-             * ,;"\ and \n must all be escaped.  
-             */
-            {
-                String s;
-                
-                s = "This, is; my \"string\", and\\or \nI hope\r\nyou like it";
-                System.out.println("Original: "+s+"\n\n\nEscaped: "+escape(s)+"\n\n\nUnescaped:"+unescape(escape(s)));
-
-                System.out.println("\n\n\n");
-                
-                s = "\"Foo Bar Gub\"";
-                System.out.println("Unquoted:"+s+"\nQuoted:"+ZParameter.unquote(s));
-                
-                System.out.println("\n\n\n");
-                
-                s = "Blah Bar Blah";
-                System.out.println("Unquoted:"+s+"\nQuoted:"+ZParameter.unquote(s));
-                System.out.println("\n\n\n");
-
-                {
-                    s =  "\"US & Canadia -- Foo\\Bar\"";
-                    System.out.println("String = "+s);
-                    ZParameter param = new ZParameter(ICalTok.TZID, s);
-                    System.out.println("TZID   = "+param.getValue());
-                    StringWriter writer = new StringWriter();
-                    param.toICalendar(writer);
-                    System.out.println("ICAL: "+writer.toString());
-                    System.out.println("\n\n\n");
-                }
-                    
-                
-            }
-
-            if (false) {
-                File inFile = new File("c:\\test.ics");
-                FileInputStream in = new FileInputStream(inFile);
-
-                CalendarParser parser = new CalendarParserImpl();
-
-                DefaultContentHandler handler = new DefaultContentHandler();
-                parser.parse(in, "utf-8", handler);
-                ZVCalendar cal = handler.getCals().get(0);
-                System.out.println(cal.toString());
-                Invite.createFromCalendar(null, null, cal, false);
-            }
-            
-        } catch(Exception e) {
-            System.out.println("Caught exception: "+e);
-            e.printStackTrace();
         }
     }
 }

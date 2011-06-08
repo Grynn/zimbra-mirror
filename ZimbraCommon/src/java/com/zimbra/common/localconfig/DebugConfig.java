@@ -12,9 +12,8 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.localconfig;
+package com.zimbra.common.localconfig;
 
-import com.zimbra.common.localconfig.LC;
 
 /**
  * Various switches to turn features on/off, mainly for measuring the

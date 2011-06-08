@@ -16,7 +16,7 @@
 /**
  * 
  */
-package com.zimbra.cs.mailbox.calendar;
+package com.zimbra.common.calendar;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -26,10 +26,10 @@ import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.zimbra.common.calendar.ZCalendar.ICalTok;
+import com.zimbra.common.calendar.ZCalendar.ZParameter;
+import com.zimbra.common.calendar.ZCalendar.ZProperty;
 import com.zimbra.common.localconfig.LC;
-import com.zimbra.cs.mailbox.calendar.ZCalendar.ICalTok;
-import com.zimbra.cs.mailbox.calendar.ZCalendar.ZParameter;
-import com.zimbra.cs.mailbox.calendar.ZCalendar.ZProperty;
 import com.zimbra.common.service.ServiceException;
 
 public final class ParsedDateTime {
@@ -41,27 +41,6 @@ public final class ParsedDateTime {
     private static final boolean OUTLOOK_COMPAT_ALLDAY =
         LC.calendar_outlook_compatible_allday_events.booleanValue();
     
-    public static void main(String[] args) {
-        ICalTimeZone utc = ICalTimeZone.getUTC();
-    	TimeZoneMap tzmap = new TimeZoneMap(utc);
-    	try {
-            ParsedDateTime t1 = ParsedDateTime.parse("20050910", tzmap, null, utc);
-            System.out.println(t1);
-            
-            ParsedDateTime t2 = ParsedDateTime.parse("20050910T103000", tzmap, null, utc);
-            System.out.println(t2);
-            
-            ParsedDateTime t3 = ParsedDateTime.parse("20050910T103000Z", tzmap, null, utc);
-            System.out.println(t3);
-            
-            ParsedDateTime t4 = ParsedDateTime.parse("2005-09-10T10:30:00.000Z", tzmap, null, utc);
-            System.out.println(t4);
-        } catch (ParseException e) {
-            System.out.println("Caught "+e);
-            e.printStackTrace();
-        }
-    }
-
     // YYYYMMDD'T'HHMMSSss'Z' YYYY MM DD 'T' HH MM SS Z
     // or YYYY'-'MM'-'DD'T'HH':'MM':'ss'.'SSS'Z'
     static Pattern sDateTimePattern = Pattern
@@ -616,7 +595,7 @@ public final class ParsedDateTime {
         return toRet;
     }
 
-    void forceDateOnly() {
+    public void forceDateOnly() {
         mHasTime = false;
     }
 

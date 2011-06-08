@@ -12,17 +12,12 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.mailbox.calendar;
+package com.zimbra.common.calendar;
 
-import java.util.List;
-import java.util.ListIterator;
-
-import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.calendar.ZCalendar.ICalTok;
+import com.zimbra.common.calendar.ZCalendar.ZProperty;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
-import com.zimbra.cs.mailbox.Metadata;
-import com.zimbra.cs.mailbox.calendar.ZCalendar.ICalTok;
-import com.zimbra.cs.mailbox.calendar.ZCalendar.ZProperty;
 
 /**
  * iCalendar GEO property
@@ -64,13 +59,13 @@ public class Geo {
         return geo;
     }
 
-    public static Geo parse(Element geoElem) throws ServiceException {
+    public static Geo parse(Element geoElem) {
         String latitude = geoElem.getAttribute(MailConstants.A_CAL_GEO_LATITUDE, "0");
         String longitude = geoElem.getAttribute(MailConstants.A_CAL_GEO_LONGITUDE, "0");
         return new Geo(latitude, longitude);
     }
 
-    public ZProperty toZProperty() throws ServiceException {
+    public ZProperty toZProperty() {
         ZProperty prop = new ZProperty(ICalTok.GEO);
         prop.setValue(mLatitude + ";" + mLongitude);
         return prop;
@@ -83,21 +78,5 @@ public class Geo {
             return new Geo(latlon[0], latlon[1]);
         else
             return new Geo("0", "0");    
-    }
-
-    private static final String FN_LATITUDE = "lat";
-    private static final String FN_LONGITUDE = "lon";
-
-    public Metadata encodeMetadata() {
-        Metadata meta = new Metadata();
-        meta.put(FN_LATITUDE, mLatitude);
-        meta.put(FN_LONGITUDE, mLongitude);
-        return meta;
-    }
-
-    public static Geo decodeMetadata(Metadata meta) throws ServiceException {
-        String lat = meta.get(FN_LATITUDE, "0");
-        String lon = meta.get(FN_LONGITUDE, "0");
-        return new Geo(lat, lon);
     }
 }
