@@ -1,5 +1,7 @@
 <project name="UTF7" default="jar">
 
+  <import file="../ant-global.xml"/>
+    
   <path id="source.path">
 	    <pathelement location="src/java"/>
   </path>
@@ -11,11 +13,21 @@
     </javac>
   </target>
   
-  <target name="jar" depends="compile">
+  <target name="jar" depends="compile,generate-jar-version">
     <mkdir dir="build/classes/META-INF/services"/>
     <copy todir="build/classes/META-INF/services" file="conf/java.nio.charset.spi.CharsetProvider"/>
     <jar destfile="build/zimbra-charset.jar"
-          basedir="build/classes" includes="**/*.class **/java.nio.charset.spi.CharsetProvider"/>
+          basedir="build/classes" includes="**/*.class **/java.nio.charset.spi.CharsetProvider">
+        <manifest>
+            <attribute name="Main-Class" value="com.zimbra.buildinfo.Version" />
+            <attribute name="Implementation-Vendor" value="VMware, Inc."/>
+            <attribute name="Implementation-Title" value="Zimbra Charset"/>
+            <attribute name="Implementation-Version" value="${zimbra.buildinfo.version}"/>
+            <attribute name="Specification-Vendor" value="VMware, Inc."/>
+            <attribute name="Specification-Title" value="Zimbra Collaboration Suite"/>
+            <attribute name="Specification-version" value="${zimbra.buildinfo.majorversion}.${zimbra.buildinfo.minorversion}.${zimbra.buildinfo.microversion}"/>
+	      </manifest>
+    </jar>
     <delete dir="build/classes/META-INF"/>
   </target>
 

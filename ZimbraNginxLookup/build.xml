@@ -1,13 +1,8 @@
 <project name="ZimbraNginxLookup" default="jar">
-	<property name="server.dir" location="../ZimbraServer"/>
-	<property name="src.dir" location="src" />
-	<property name="src.java.dir" location="${src.dir}/java" />
-	<property name="build.dir" location="build" />
-	<property name="build.classes.dir" location="${build.dir}/classes" />
+    <import file="../ant-global.xml" />
+    
 	<property name="prod.lib.ext.dir" location="/opt/zimbra/lib/ext/nginx-lookup" />
 	<property name="jar.file" value="nginx-lookup.jar" />
-	<property name="common.dir" location="../ZimbraCommon" />
-	<property name="common.classes.dir" location="${common.dir}/build/classes" />
 
 	<path id="class.path">
 		<pathelement location="${common.classes.dir}" />
@@ -16,9 +11,12 @@
 		<fileset dir="${common.dir}/jars"><include name="**/*.jar" /></fileset>
 	</path>
 
-	<target name="jar" depends="compile">
-		<jar manifest="conf/MANIFEST.MF" destfile="${build.dir}/${jar.file}" basedir="build/classes"/>
-	</target>
+    <target name="jar" depends="compile" description="Creates the jar file">
+        <antcall target="zimbra-jar">
+            <param name="implementation.title" value="Zimbra Nginx Lookup"/>
+            <param name="zimbra.extension.class" value="com.zimbra.cs.nginx.NginxLookupExtension"/>
+        </antcall>
+    </target>
 
 	<target name="compile">
 		<ant dir="${common.dir}" target="jar" inheritAll="false" />

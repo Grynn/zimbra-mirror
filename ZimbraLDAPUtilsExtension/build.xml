@@ -1,12 +1,7 @@
-<project name="ZimbraLDAPUtils" default="deploy"> 
+<project name="ZimbraLDAPUtils" default="deploy">
+    <import file="../ant-global.xml" />
+    
 	<property name="jar.file" value="zimbraldaputils.jar" />
-	<property name="src.dir" location="src" />
-	<property name="src.java.dir" location="${src.dir}/java" />
-	<property name="build.dir" location="build" />
-	<property name="build.classes.dir" location="${build.dir}/classes" />
-	<property name="common.dir" location="../ZimbraCommon" />
-	<property name="common.classes.dir" location="${common.dir}/build/classes" />
-	<property name="zimbra.home.dir" location="/opt/zimbra" />	
 	<property name="extension.deploy.dir" location="${zimbra.home.dir}/lib/ext/zimbraldaputils"/>
 	
 	<path id="all.java.path">
@@ -44,9 +39,12 @@
 		</javac>
 	</target>
 
-	<target name="jar" depends="compile" description="Creates the jar file">
-		<jar manifest="conf/MANIFEST.MF" destfile="${build.dir}/${jar.file}" basedir="${build.classes.dir}" />
-	</target>
+    <target name="jar" depends="compile" description="Creates the jar file">
+        <antcall target="zimbra-jar">
+            <param name="implementation.title" value="Zimbra LDAP Utilities"/>
+            <param name="zimbra.extension.class" value="com.zimbra.ldaputils.ZimbraLDAPUtilsExtension"/>
+        </antcall>
+    </target>
 
 	<!-- deploy the extension -->
 	<target name="deploy" depends="jar" description="Deploy the extension">
