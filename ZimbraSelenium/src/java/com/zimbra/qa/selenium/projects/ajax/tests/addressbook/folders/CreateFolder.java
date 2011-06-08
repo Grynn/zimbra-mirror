@@ -61,7 +61,7 @@ public class CreateFolder extends AjaxCommonTest {
  
 	
 
-	@Test(description = "Create a new folder using context menu from root folder", groups = { "functional" })
+	@Test(description = "Create a new folder using context menu from root folder", groups = { "sanity" })
 	public void ClickContextMenuNewAddressbook() throws HarnessException {
 	
 		FolderItem folderItem = FolderItem.importFromSOAP(app
