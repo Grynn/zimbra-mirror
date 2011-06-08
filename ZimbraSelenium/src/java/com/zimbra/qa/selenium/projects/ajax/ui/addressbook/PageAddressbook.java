@@ -15,19 +15,19 @@ import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContextMenuItem.CONTEXT_MENU_ITEM_NAME;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
+
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
+import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.DialogCreateFolder;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
 
 public class PageAddressbook extends AbsTab {
 
+	
 	
 	public static class CONTEXT_MENU {
 		public static final String LOCATOR		= "id='zm__Contacts'";
@@ -131,6 +131,62 @@ public class PageAddressbook extends AbsTab {
 		zWaitForActive();
 
 	}
+	
+	public List<FolderItem> zListGetFolders() throws HarnessException {
+		List <FolderItem> list = new ArrayList<FolderItem>();
+		
+		//ensure it is in Addressbook main page
+		zNavigateTo();
+		
+		if ( !this.sIsElementPresent("css=div#ztih__main_Contacts__ADDRBOOK div.DwtTreeItemLevel1ChildDiv") )			
+			//maybe return empty list?????
+				throw new HarnessException("Folder List is not present "+ "div#ztih__main_Contacts__ADDRBOOK div.DwtTreeItemLevel1ChildDiv");
+
+		String startId = FolderItem.SystemFolder.Contacts.getId();
+		    
+		FolderItem folderItem = new FolderItem();
+	    folderItem.setId(startId);
+	    folderItem.setName(FolderItem.SystemFolder.Contacts.getName());
+	    
+		String id=startId;		    
+		do {
+		    id=sGetNextSiblingId(id);
+		    if ((id.length() >0)) {
+		    	  String folderName = ClientSessionFactory.session().selenium().getText("id="+id);
+		    	  
+		    	  folderItem = new FolderItem();
+		    	  folderItem.setId(id);
+		    	  folderItem.setName(folderName);
+		    	  		    	  
+		    	  logger.info(" found folder:" + folderName + " ,id:" + id);
+		    	  list.add(folderItem);
+		    }
+		}		    		    
+		while ((id.length() >0)) ;
+		    
+		id=startId;		    
+		do {
+			try {
+		    id=sGetPreviousSiblingId(id);
+			}
+			catch (Exception e) {id="";};
+			if ((id.length() >0)) {
+		    	  String folderName = ClientSessionFactory.session().selenium().getText("id="+id);
+		    	  
+		    	  folderItem = new FolderItem();
+		    	  folderItem.setId(id);
+		    	  folderItem.setName(folderName);
+		    	  		    	  
+		    	  logger.info(" found folder:" + folderName + " ,id:" + id);
+		    	  list.add(folderItem);
+		    }
+		}		    
+		while ((id.length() >0)) ;
+		    								
+		return list;
+	}
+ 	
+	
 	public List<ContactItem> zListGetContacts() throws HarnessException {
 
 		List <ContactItem> list= new ArrayList<ContactItem>();
@@ -432,10 +488,15 @@ public class PageAddressbook extends AbsTab {
 			    }
 				page = new FormContactGroupNew(this.MyApplication);		   
 		   }
-		   else if ( option == Button.O_NEW_TAG ) {
-			   
-		        optionLocator = "css=div##zb__CNS__NEW_MENU_NEW_TAG";
+		   else if ( option == Button.O_NEW_TAG ) {			   
+		        optionLocator = "css=div#zb__CNS__NEW_MENU_NEW_TAG";
 		        page = new DialogTag(this.MyApplication, this);
+		   }    
+		   else if ( option == Button.O_NEW_ADDRESSBOOK ) {					   
+			    optionLocator = "css=div#zb__CNS__NEW_MENU_NEW_ADDRBOOK";
+				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageAddressbook);			    
+							    
+
 		   } else {
 			   //option not suppored
 			   pulldownLocator=null;
@@ -854,38 +915,24 @@ public class PageAddressbook extends AbsTab {
 			throw new HarnessException("folderItem cannot be null");
 
 		String treeItemLocator = null;
-		boolean onRootFolder = false;
-
+	
 		if (folderItem.getName().equals("USER_ROOT")) {
-			onRootFolder = true;
-			switch (ZimbraSeleniumProperties.getAppType()) {
-			case AJAX:
-				treeItemLocator = TreeMail.Locators.ztih_main_Mail__FOLDER_ITEM_ID.replace(
-						TreeMail.stringToReplace, "FOLDER");
-				break;
-
-			case DESKTOP:
-				treeItemLocator = TreeMail.Locators.zTreeItems.replace(TreeMail.stringToReplace,
-						AjaxCommonTest.defaultAccountName);
-				break;
-			default:
-				throw new HarnessException("Implement me!");
-			}
+			treeItemLocator = "css=div#ztih__main_Contacts__ADDRBOOK_div";
 		} else {
 			throw new HarnessException("Implement me!");
 		}
 
 		AbsPage page = null;
-		if (treeItemLocator == null) throw new HarnessException("treeItemLocator is null, please check!");
-
-		GeneralUtility.waitForElementPresent(this, treeItemLocator);
-
+		
 		if ( action == Action.A_RIGHTCLICK ) {
-
 			if (option == Button.B_TREE_NEWFOLDER) {
-				ContextMenu contextMenu = (ContextMenu)((AppAjaxClient)MyApplication).zTreeContacts.zTreeItem(
-						action, treeItemLocator);
-				page = contextMenu.zSelect(CONTEXT_MENU_ITEM_NAME.NEW_FOLDER);
+				zRightClickAt(treeItemLocator,"0,0");
+				zWaitForBusyOverlay();
+				
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
+				
+				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageAddressbook);			    
 			}
 			else {
 				throw new HarnessException("implement action:"+ action +" option:"+ option);

@@ -32,9 +32,9 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 		public static final SystemFolder Briefcase = new SystemFolder("Briefcase");
 		public static final SystemFolder Calendar = new SystemFolder("Calendar");
 		public static final SystemFolder Chats = new SystemFolder("Chats");
-		public static final SystemFolder Contacts = new SystemFolder("Contacts");
+		public static final SystemFolder Contacts = new SystemFolder("Contacts","zti__main_Contacts__7");
 		public static final SystemFolder Drafts = new SystemFolder("Drafts");
-		public static final SystemFolder EmailedContacts = new SystemFolder("Emailed Contacts");
+		public static final SystemFolder EmailedContacts = new SystemFolder("Emailed Contacts","zti__main_Contacts__13");
 		public static final SystemFolder Inbox = new SystemFolder("Inbox");
 		public static final SystemFolder Junk = new SystemFolder("Junk");
 		public static final SystemFolder Sent = new SystemFolder("Sent");
@@ -42,10 +42,21 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 		public static final SystemFolder Trash = new SystemFolder("Trash");
 				
 		private String name;
+		private String id;
+
 		private SystemFolder(String foldername) {
 			name = foldername;
 		}
-	
+
+		private SystemFolder(String foldername, String id) {
+			name = foldername;
+			this.id=id;
+		}
+
+		public String getId(){
+			return id;
+		}
+		
 		public String getName() {
 			return name;
 		}

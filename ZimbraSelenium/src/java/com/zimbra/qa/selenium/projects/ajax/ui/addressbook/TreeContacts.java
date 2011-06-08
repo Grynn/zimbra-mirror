@@ -201,7 +201,7 @@ public class TreeContacts extends AbsTree {
 		} else if ( action == Action.A_RIGHTCLICK ) {
 
 			// Select the folder
-			zRightClick(locator);
+			zRightClickAt(locator,"0,0");
             zWaitForBusyOverlay();
 			// return a context menu
 			return (new ContextMenu(MyApplication));
