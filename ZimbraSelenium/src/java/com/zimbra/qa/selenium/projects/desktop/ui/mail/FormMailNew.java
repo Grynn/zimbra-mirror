@@ -413,7 +413,7 @@ public class FormMailNew extends AbsForm {
 				this.sFocus(locator);
 				this.zClickAt(locator, "0,0");
 				this.zWaitForBusyOverlay();
-				this.sType(locator, value);
+				this.zType(locator, value);
 				
 				return;
 				
@@ -433,7 +433,7 @@ public class FormMailNew extends AbsForm {
 
 					this.sFocus(locator);
 					this.zClickAt(locator, "0,0");
-					this.sType(locator, value);
+					this.zType(locator, value);
 					
 				} finally {
 					// Make sure to go back to the original iframe
