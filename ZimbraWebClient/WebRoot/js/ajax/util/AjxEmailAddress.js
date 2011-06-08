@@ -168,7 +168,12 @@ function(str) {
 	// What remains is the name
 	parts = str.match(AjxEmailAddress.phrasePat);
 	if (parts) {
-		name = AjxStringUtil.trim(AjxStringUtil.trim(parts[0]), false, '"');
+		name = AjxStringUtil.trim(parts[0]);
+
+		// Trim off leading and trailing quotes, but leave escaped quotes and unescape them
+		name = name.replace(/\\"/g,"&quot;");
+		name = AjxStringUtil.trim(name, null, "\"");
+		name = name.replace(/&quot;/g,"\"");
 	}
 	
 	return new AjxEmailAddress(addr, null, name);
@@ -350,15 +355,20 @@ function(str) {
  * Returns a string representation of this object.
  * 
  * @param {boolean}		shortForm	if true, return a brief version (name if available, otherwise email)
+ * @param {boolean}		forceUnescape	if true, name will not be in quotes and any quotes inside the name will be unescaped (e.g. "John \"JD\" Doe" <jd@zimbra.com> becomes John "JD" Doe <jd@zimbra.com>
  * 
  * @return	{string}		a string representation of this object
  */
 AjxEmailAddress.prototype.toString =
-function(shortForm) {
+function(shortForm, forceUnescape) {
 
 	if (this.name) {
-		var name = this.name.replace(/\\+"/g, '"');	// unescape double quotes (avoid double-escaping)
-		var buffer = shortForm ? [name] : ['"', name, '"'];
+		var name = this.name;
+		if (!shortForm && !forceUnescape) {
+			name = name.replace(/\\+"/g, '"');	// unescape double quotes (avoid double-escaping)
+			name = name.replace(/"/g,'\\"');  // escape quotes
+		}
+		var buffer = (shortForm || forceUnescape) ? [name] : ['"', name, '"'];
 		if (this.address && !shortForm) {
 			buffer.push(" <", this.address, ">");
 		}
