@@ -457,18 +457,20 @@ public class PageBriefcase extends AbsTab {
 			// sMouseUpRight(pulldownLocator);
 
 			if (sGetEval("navigator.userAgent;").contains("MSIE")) {
-				// zClick(pulldownLocator);
-				sGetEval("if(document.createEventObject()){var evObj = document.createEventObject(); "
-						+ "var x = selenium.browserbot.findElementOrNull('"
-						+ pulldownLocator
-						+ "');"
-						+ "x.focus();x.blur();x.fireEvent('onmouseup');}"
-						+ "else{var evObj = document.createEvent('MouseEvents');"
-						+ "evObj.initMouseEvent( 'mouseup', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);"
-						+ "var x = selenium.browserbot.findElementOrNull('"
-						+ pulldownLocator
-						+ "');"
-						+ "x.focus();x.blur();x.dispatchEvent(evObj);}");
+				if (pulldown == Button.B_NEW) {
+					sGetEval("if(document.createEventObject()){var evObj = document.createEventObject(); "
+							+ "var x = selenium.browserbot.findElementOrNull('"
+							+ pulldownLocator
+							+ "');"
+							+ "x.focus();x.blur();x.fireEvent('onmouseup');}"
+							+ "else{var evObj = document.createEvent('MouseEvents');"
+							+ "evObj.initMouseEvent( 'mouseup', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);"
+							+ "var x = selenium.browserbot.findElementOrNull('"
+							+ pulldownLocator
+							+ "');"
+							+ "x.focus();x.blur();x.dispatchEvent(evObj);}");
+				} else
+					zClick(pulldownLocator);
 			} else
 				zClickAt(pulldownLocator, "0,0");
 
