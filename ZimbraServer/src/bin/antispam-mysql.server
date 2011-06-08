@@ -32,7 +32,9 @@ if [ x`whoami` != "x${zimbra_user}" ]; then
   exit 1
 fi
 
-if [ x${antispam_mysql_enabled} != x"TRUE" -a \( x"$1" != x"stop" -a x"$1" != x"restart" -a x"$1" != x"reload" \) ]
+
+antispam_mysql_enabled=`echo ${antispam_mysql_enabled} | tr '[:upper:]' '[:lower:]'`
+if [ x${antispam_mysql_enabled} != x"true" -a \( x"$1" != x"stop" -a x"$1" != x"restart" -a x"$1" != x"reload" \) ]
 then
 	# antispam is not configured to use mysql db, so nothing to do here.
 	exit 0
