@@ -93,7 +93,7 @@ namespace MVVM.ViewModel
                 ZimbraPort = Z11.zimbraServer.Port;
                 ZimbraUser = Z11.zimbraServer.UserAccount;
                 ZimbraUserPasswd = Z11.zimbraServer.UserPassword;
-                ZimbraDomain = Z11.zimbraServer.Domain;
+               // ZimbraDomain = Z11.zimbraServer.Domain;
                 ZimbraSSL = Z11.zimbraServer.UseSSL;
                 if (Z11.OutlookProfile.Length == 0)
                 {
@@ -280,20 +280,7 @@ namespace MVVM.ViewModel
             }
         }
 
-        public string ZimbraDomain
-        {
-            get { return m_config.zimbraServer.Domain; }
-            set
-            {
-                if (value == m_config.zimbraServer.Domain)
-                {
-                    return;
-                }
-                m_config.zimbraServer.Domain = value;
-
-                OnPropertyChanged(new PropertyChangedEventArgs("ZimbraDomain"));
-            }
-        }
+        
         public bool ZimbraSSL
         {
 

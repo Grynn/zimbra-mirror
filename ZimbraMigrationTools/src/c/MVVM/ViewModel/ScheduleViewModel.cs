@@ -132,6 +132,8 @@ namespace MVVM.ViewModel
                 Z11 = (Config)reader.Deserialize(fileRead);
                 COS = Z11.UserProvision.COS;
                 DefaultPWD = Z11.UserProvision.DefaultPWD;
+                ZimbraDomain = Z11.UserProvision.Domain;
+                
                 //MessageBox.Show("Options information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
             else
@@ -236,7 +238,21 @@ namespace MVVM.ViewModel
                 OnPropertyChanged(new PropertyChangedEventArgs("DefaultPWD"));
             }
         }
-       
+
+        public string ZimbraDomain
+        {
+            get { return m_config.UserProvision.Domain; }
+            set
+            {
+                if (value == m_config.UserProvision.Domain)
+                {
+                    return;
+                }
+                m_config.UserProvision.Domain = value;
+
+                OnPropertyChanged(new PropertyChangedEventArgs("ZimbraDomain"));
+            }
+        }
         public int PBValue
         {
             get { return m_schedule.PBValue; }

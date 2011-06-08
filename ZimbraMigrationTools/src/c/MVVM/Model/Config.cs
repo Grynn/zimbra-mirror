@@ -23,7 +23,7 @@
            this.zimbraServer.Port = zimbraport;
            this.zimbraServer.AdminAccount = zimbraAdmin;
            this.zimbraServer.AdminPassword = zimbrapasswd;
-           this.zimbraServer.Domain = zimbradomain;
+          // this.zimbraServer.Domain = zimbradomain;
            this.mailServer.Hostname = mailserver;
             
            
@@ -150,13 +150,7 @@
         }
 
 
-        private string m_Domain;
-
-        public string Domain
-        {
-            get { return m_Domain; }
-            set { m_Domain = value; }
-        }
+       
 
 
     }
@@ -177,6 +171,13 @@
             set { m_defaultPWD = value; }
         }
 
+        private string m_Domain;
+
+        public string Domain
+        {
+            get { return m_Domain; }
+            set { m_Domain = value; }
+        }
 
     }
 

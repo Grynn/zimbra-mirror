@@ -131,7 +131,7 @@ namespace MVVM.ViewModel
             m_configViewModelS.MailServerHostName = "";
             m_configViewModelS.ZimbraAdmin = "";
             m_configViewModelS.ZimbraAdminPasswd = "";
-            m_configViewModelS.ZimbraDomain = "";
+           // m_configViewModelS.ZimbraDomain = "";
             m_configViewModelS.OutlookProfile = "";
             
 
@@ -146,7 +146,6 @@ namespace MVVM.ViewModel
             m_configViewModelU.PSTFile = "";
             m_configViewModelU.ZimbraUser = "";
             m_configViewModelU.ZimbraUserPasswd = "";
-            m_configViewModelU.ZimbraDomain = "";
             m_configViewModelU.OutlookProfile = "";
 
             m_optionsViewModel = new OptionsViewModel();
@@ -174,6 +173,7 @@ namespace MVVM.ViewModel
             m_scheduleViewModel.isBrowser = isBrowser;
             m_scheduleViewModel.COS = "default";
             m_scheduleViewModel.DefaultPWD = "";
+            m_scheduleViewModel.ZimbraDomain = "";
 
             m_usersViewModel = new UsersViewModel(m_scheduleViewModel,"",""); // needs scheduleviewmodel so schedlist will be in sync
             m_usersViewModel.Name = "Users";

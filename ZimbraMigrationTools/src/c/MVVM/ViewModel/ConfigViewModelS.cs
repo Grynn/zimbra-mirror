@@ -77,7 +77,7 @@ namespace MVVM.ViewModel
                 ZimbraPort = Z11.zimbraServer.Port;
                 ZimbraAdmin = Z11.zimbraServer.AdminAccount;
                 ZimbraAdminPasswd = Z11.zimbraServer.AdminPassword;
-                ZimbraDomain = Z11.zimbraServer.Domain;
+                //ZimbraDomain = Z11.zimbraServer.Domain;
                 ZimbraSSL = Z11.zimbraServer.UseSSL;
 
                 if (Z11.mailServer.Hostname.Length == 0)
@@ -279,20 +279,7 @@ namespace MVVM.ViewModel
             }
         }
 
-        public string ZimbraDomain
-        {
-            get { return m_config.zimbraServer.Domain; }
-            set
-            {
-                if (value == m_config.zimbraServer.Domain)
-                {
-                    return;
-                }
-                m_config.zimbraServer.Domain = value;
-
-                OnPropertyChanged(new PropertyChangedEventArgs("ZimbraDomain"));
-            }
-        }
+       
 
         public bool ZimbraSSL
         {
