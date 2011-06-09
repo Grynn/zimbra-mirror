@@ -1048,7 +1048,7 @@ function() {
 	var holderWidth = Dwt.getSize(this._holder).x;
 	var inputFontSize = DwtCssStyle.getProperty(this._input, "font-size");
 	var strW = AjxStringUtil.getWidth(val, false, inputFontSize);
-	if (AjxEnv.isWindows && AjxEnv.isFirefox) {
+	if (AjxEnv.isWindows && (AjxEnv.isFirefox || AjxEnv.isSafari || AjxEnv.isChrome) ){
 		// FF/Win: fudge factor since string is longer in INPUT than when measured in SPAN
 		strW = strW * 1.2;
 	}
