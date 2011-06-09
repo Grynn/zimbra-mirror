@@ -29,7 +29,8 @@ public class YMailImport implements DataSource.DataImport {
     public YMailImport(OfflineDataSource ds) throws ServiceException {
         imapImport = OfflineImport.imapImport(ds);
         if (ds.isContactSyncEnabled()) {
-            yabImport = OfflineImport.yabImport(ds.getContactSyncDataSource());
+//            yabImport = OfflineImport.yabImport(ds.getContactSyncDataSource());
+            yabImport = OfflineImport.ycImport(ds.getContactSyncDataSource());
         }
         if (ds.isCalendarSyncEnabled()) {
             calDavImport = OfflineImport.ycalImport(ds.getCalendarSyncDataSource());

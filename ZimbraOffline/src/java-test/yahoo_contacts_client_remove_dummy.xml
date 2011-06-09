@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<contactsync rev="99">
+    <contacts>
+        <op>remove</op>
+        <id>%s</id>
+    </contacts>
+</contactsync>

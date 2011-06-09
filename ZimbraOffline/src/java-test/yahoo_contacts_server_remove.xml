@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<contactsync xmlns="http://social.yahooapis.com/v1/schema.rng"
+    xmlns:yahoo="http://www.yahooapis.com/v1/base.rng" yahoo:rev="8"
+    yahoo:clientrev="7" yahoo:lmt="2011-06-01T19:40:39Z">
+    <addressbookreset>0</addressbookreset>
+    <contacts>
+        <op>remove</op>
+        <id>50331652</id>
+    </contacts>
+    <contacts>
+        <op>remove</op>
+        <id>50331652</id>
+    </contacts>
+</contactsync>

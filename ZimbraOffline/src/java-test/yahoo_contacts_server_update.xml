@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<contactsync xmlns="http://social.yahooapis.com/v1/schema.rng"
+    xmlns:yahoo="http://www.yahooapis.com/v1/base.rng" yahoo:rev="5"
+    yahoo:clientrev="3" yahoo:lmt="2011-06-01T19:31:10Z">
+    <addressbookreset>0</addressbookreset>
+    <contacts
+        yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/50331651"
+        yahoo:created="2011-06-01T00:58:11Z" yahoo:updated="2011-06-01T19:31:10Z">
+        <op>update</op>
+        <isConnection>false</isConnection>
+        <id>50331651</id>
+        <fields
+            yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/50331651/nickname/50331666"
+            yahoo:created="2011-06-01T00:58:11Z" yahoo:updated="2011-06-01T00:58:11Z">
+            <id>50331666</id>
+            <type>nickname</type>
+            <value>tb</value>
+            <editedBy>OWNER</editedBy>
+        </fields>
+        <fields
+            yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/50331651/birthday/50331667"
+            yahoo:created="2011-06-01T00:58:11Z" yahoo:updated="2011-06-01T00:58:11Z">
+            <id>50331667</id>
+            <type>birthday</type>
+            <value>
+                <day>1</day>
+                <month>1</month>
+                <year>1988</year>
+            </value>
+            <editedBy>OWNER</editedBy>
+        </fields>
+        <fields
+            yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/50331651/notes/50331668"
+            yahoo:created="2011-06-01T00:58:11Z" yahoo:updated="2011-06-01T00:58:11Z">
+            <id>50331668</id>
+            <type>notes</type>
+            <value>Jan-1-1988
+                12-31-2007</value>
+            <editedBy>OWNER</editedBy>
+        </fields>
+        <fields
+            yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/50331651/anniversary/50331669"
+            yahoo:created="2011-06-01T00:58:11Z" yahoo:updated="2011-06-01T00:58:11Z">
+            <id>50331669</id>
+            <type>anniversary</type>
+            <value>
+                <day>31</day>
+                <month>12</month>
+                <year>2007</year>
+            </value>
+            <editedBy>OWNER</editedBy>
+        </fields>
+        <fields
+            yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/50331651/name/50331670"
+            yahoo:created="2011-06-01T19:31:10Z" yahoo:updated="2011-06-01T19:31:10Z">
+            <id>50331670</id>
+            <type>name</type>
+            <value>
+                <givenName>Tomorrow</givenName>
+                <middleName>never</middleName>
+                <familyName>die</familyName>
+                <prefix></prefix>
+                <suffix></suffix>
+                <givenNameSound></givenNameSound>
+                <familyNameSound></familyNameSound>
+            </value>
+            <editedBy>OWNER</editedBy>
+        </fields>
+    </contacts>
+    <contacts>
+        <op>remove</op>
+        <id>1</id>
+    </contacts>
+    <contacts>
+        <op>remove</op>
+        <id>1</id>
+    </contacts>
+</contactsync>

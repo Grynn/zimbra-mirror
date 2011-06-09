@@ -14,16 +14,17 @@
  */
 package com.zimbra.cs.offline;
 
-import com.zimbra.cs.account.offline.OfflineDataSource;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.DataSource.DataImport;
+import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.datasource.imap.ImapSync;
 import com.zimbra.cs.offline.ab.gab.GabImport;
 import com.zimbra.cs.offline.ab.yab.YabImport;
-import com.zimbra.common.service.ServiceException;
-
-import java.util.Map;
-import java.util.LinkedHashMap;
-import java.util.List;
+import com.zimbra.cs.offline.ab.yc.YContactImport;
 
 public class OfflineImport implements DataImport {
     private final OfflineDataSource ds;
@@ -63,6 +64,11 @@ public class OfflineImport implements DataImport {
     public static OfflineImport yabImport(OfflineDataSource ds)
         throws ServiceException {
         return new OfflineImport(ds, new YabImport(ds), "yab", CONTACTS_INTERVAL);
+    }
+    
+    public static OfflineImport ycImport(OfflineDataSource ds)
+        throws ServiceException {
+        return new OfflineImport(ds, new YContactImport(ds), "ycontact", CONTACTS_INTERVAL);
     }
 
     public static OfflineImport gcalImport(OfflineDataSource ds)

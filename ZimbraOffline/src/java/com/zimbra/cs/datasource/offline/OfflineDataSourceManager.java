@@ -27,7 +27,7 @@ import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.offline.GMailImport;
 import com.zimbra.cs.offline.OfflineImport;
 import com.zimbra.cs.offline.YMailImport;
-import com.zimbra.cs.offline.ab.yab.YabImport;
+import com.zimbra.cs.offline.ab.yc.YContactImport;
 
 
 public class OfflineDataSourceManager extends DataSourceManager {
@@ -61,7 +61,8 @@ public class OfflineDataSourceManager extends DataSourceManager {
                     return OfflineImport.imapImport(ods);
                 }
             } else if (ds.getType() == Type.yab) {
-                return new YabImport(ods);
+//                return new YabImport(ods);
+                return new YContactImport(ods);
             }
         }
         return super.getDataImport(ds);

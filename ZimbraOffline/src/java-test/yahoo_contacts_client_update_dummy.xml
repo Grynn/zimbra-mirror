@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<contactsync rev="31">
+    <contacts>
+        <op>update</op>
+        <id>50331664</id>
+        <fields>
+            <op>update</op>
+            <id>50331768</id>
+            <type>nickname</type>
+            <value>dummy_update</value>
+        </fields>
+        <fields>
+            <op>update</op>
+            <id>50331772</id>
+            <type>jobTitle</type>
+            <value>director</value>
+        </fields>     
+        <fields>
+            <op>add</op>
+            <type>anniversary</type>
+            <value>
+                <day>13</day>
+                <month>5</month>
+                <year>2009</year>
+            </value>
+        </fields>  
+        <fields>
+            <op>update</op>
+            <id>50331774</id>
+            <type>address</type>
+            <value>
+                <street>123 cove</street>
+                <city>palo alto</city>
+                <stateOrProvince>ca</stateOrProvince>
+                <postalCode>94022</postalCode>
+                <country>United States</country>
+                <countryCode>US</countryCode>
+            </value>
+            <flags>HOME</flags>
+        </fields>                 
+    </contacts>
+</contactsync>

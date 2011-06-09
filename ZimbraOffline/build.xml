@@ -35,6 +35,9 @@
   <property name="jetty.dir" location="${dist.dir}/jetty" />
   <property name="zimlet.dir" location="../Zimlet/build/dist" />
 
+  <property name="test.src.dir" location="${src.dir}/java-test"/>
+  <property name="test.classes.dir" location="${build.dir}/test-classes"/>
+
   <property name="server.config.dir" value="../ZimbraServer/conf" />
   <property name="server.src.dir" location="../ZimbraServer/src" />
   <property name="server.build.dir" location="../ZimbraServer/build" />
@@ -211,6 +214,15 @@
     <javac destdir="${build.classes.dir}" debug="true" classpathref="offline.class.path" target="1.6">
       <src refid="all.java.path" />
     </javac>
+  </target>
+
+  <target name="offline-test-compile" depends="offline-compile">
+	<mkdir dir="${test.classes.dir}"/>
+	<javac srcdir="${test.src.dir}" destdir="${test.classes.dir}"
+		  debug="true" classpathref="offline.class.path" target="1.6"/>
+	<copy todir="${test.classes.dir}">
+	  <fileset dir="${test.src.dir}" excludes="**/*.java"/>
+	</copy>
   </target>
 
   <target name="offline-ext-jars">

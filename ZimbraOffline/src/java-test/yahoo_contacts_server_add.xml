@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<contactsync xmlns="http://social.yahooapis.com/v1/schema.rng"
+    xmlns:yahoo="http://www.yahooapis.com/v1/base.rng" yahoo:rev="2"
+    yahoo:clientrev="1" yahoo:lmt="2011-05-27T19:58:00Z">
+    <addressbookreset>0</addressbookreset>
+    <contacts
+        yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/16777218"
+        yahoo:created="2011-05-27T19:58:00Z" yahoo:updated="2011-05-27T19:58:00Z">
+        <op>add</op>
+        <isConnection>false</isConnection>
+        <id>16777218</id>
+        <fields
+            yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/16777218/nickname/16777220"
+            yahoo:created="2011-05-27T19:58:00Z" yahoo:updated="2011-05-27T19:58:00Z">
+            <id>16777220</id>
+            <type>nickname</type>
+            <value>test2</value>
+            <editedBy>OWNER</editedBy>
+        </fields>
+        <fields
+            yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/16777218/email/16777221"
+            yahoo:created="2011-05-27T19:58:00Z" yahoo:updated="2011-05-27T19:58:00Z">
+            <id>16777221</id>
+            <type>email</type>
+            <value>test2@dot.com</value>
+            <editedBy>OWNER</editedBy>
+        </fields>
+        <fields
+            yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/16777218/yahooid/16777222"
+            yahoo:created="2011-05-27T19:58:00Z" yahoo:updated="2011-05-27T19:58:00Z">
+            <id>16777222</id>
+            <type>yahooid</type>
+            <value>test2_yahooMsg</value>
+            <editedBy>OWNER</editedBy>
+        </fields>
+        <fields
+            yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/16777218/otherid/16777223"
+            yahoo:created="2011-05-27T19:58:00Z" yahoo:updated="2011-05-27T19:58:00Z">
+            <id>16777223</id>
+            <type>otherid</type>
+            <value>test2_gtalk</value>
+            <editedBy>OWNER</editedBy>
+            <flags>GOOGLE</flags>
+        </fields>
+        <fields
+            yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/16777218/phone/16777224"
+            yahoo:created="2011-05-27T19:58:00Z" yahoo:updated="2011-05-27T19:58:00Z">
+            <id>16777224</id>
+            <type>phone</type>
+            <value>123-456</value>
+            <editedBy>OWNER</editedBy>
+            <flags>MOBILE</flags>
+        </fields>
+        <fields
+            yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/16777218/phone/16777225"
+            yahoo:created="2011-05-27T19:58:00Z" yahoo:updated="2011-05-27T19:58:00Z">
+            <id>16777225</id>
+            <type>phone</type>
+            <value>789-101</value>
+            <editedBy>OWNER</editedBy>
+            <flags>MOBILE</flags>
+        </fields>
+        <fields
+            yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/16777218/jobTitle/16777226"
+            yahoo:created="2011-05-27T19:58:00Z" yahoo:updated="2011-05-27T19:58:00Z">
+            <id>16777226</id>
+            <type>jobTitle</type>
+            <value>mts</value>
+            <editedBy>OWNER</editedBy>
+        </fields>
+        <fields
+            yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/16777218/company/16777227"
+            yahoo:created="2011-05-27T19:58:00Z" yahoo:updated="2011-05-27T19:58:00Z">
+            <id>16777227</id>
+            <type>company</type>
+            <value>vm</value>
+            <editedBy>OWNER</editedBy>
+        </fields>
+        <fields
+            yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/16777218/link/16777228"
+            yahoo:created="2011-05-27T19:58:00Z" yahoo:updated="2011-05-27T19:58:00Z">
+            <id>16777228</id>
+            <type>link</type>
+            <value>http://yes.com</value>
+            <editedBy>OWNER</editedBy>
+        </fields>
+        <fields
+            yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/16777218/birthday/16777229"
+            yahoo:created="2011-05-27T19:58:00Z" yahoo:updated="2011-05-27T19:58:00Z">
+            <id>16777229</id>
+            <type>birthday</type>
+            <value>
+                <day>5</day>
+                <month>2</month>
+                <year>1988</year>
+            </value>
+            <editedBy>OWNER</editedBy>
+        </fields>
+        <fields
+            yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/16777218/anniversary/16777230"
+            yahoo:created="2011-05-27T19:58:00Z" yahoo:updated="2011-05-27T19:58:00Z">
+            <id>16777230</id>
+            <type>anniversary</type>
+            <value>
+                <day>13</day>
+                <month>3</month>
+                <year>2009</year>
+            </value>
+            <editedBy>OWNER</editedBy>
+        </fields>
+        <fields
+            yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/16777218/notes/16777231"
+            yahoo:created="2011-05-27T19:58:00Z" yahoo:updated="2011-05-27T19:58:00Z">
+            <id>16777231</id>
+            <type>notes</type>
+            <value>this is note end~</value>
+            <editedBy>OWNER</editedBy>
+        </fields>
+        <fields
+            yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/16777218/name/16777219"
+            yahoo:created="2011-05-27T19:58:00Z" yahoo:updated="2011-05-27T19:58:00Z">
+            <id>16777219</id>
+            <type>name</type>
+            <value>
+                <givenName>Harry</givenName>
+                <middleName></middleName>
+                <familyName>Milan</familyName>
+                <prefix></prefix>
+                <suffix></suffix>
+                <givenNameSound></givenNameSound>
+                <familyNameSound></familyNameSound>
+            </value>
+            <editedBy>OWNER</editedBy>
+        </fields>
+        <fields
+            yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/16777218/address/16777232"
+            yahoo:created="2011-05-27T19:58:00Z" yahoo:updated="2011-05-27T19:58:00Z">
+            <id>16777232</id>
+            <type>address</type>
+            <value>
+                <street>123 nomore ave.</street>
+                <city>palo alto</city>
+                <stateOrProvince>ca</stateOrProvince>
+                <postalCode>94304</postalCode>
+                <country>United States</country>
+                <countryCode>US</countryCode>
+            </value>
+            <editedBy>OWNER</editedBy>
+            <flags>HOME</flags>
+        </fields>
+        <fields
+            yahoo:uri="http://social.yahooapis.com/v1/user/W7B3RJNV7J3TBA246A3VZ7PJ2A/contact/16777218/address/16777233"
+            yahoo:created="2011-05-27T19:58:00Z" yahoo:updated="2011-05-27T19:58:00Z">
+            <id>16777233</id>
+            <type>address</type>
+            <value>
+                <street>3401 hilldown ave</street>
+                <city>mountain view</city>
+                <stateOrProvince>ca</stateOrProvince>
+                <postalCode>94022</postalCode>
+                <country>United States</country>
+                <countryCode>US</countryCode>
+            </value>
+            <editedBy>OWNER</editedBy>
+            <flags>WORK</flags>
+        </fields>
+    </contacts>
+</contactsync>

@@ -142,12 +142,19 @@ public final class LocalData {
     }
 
     public void deleteMapping(int itemId) throws ServiceException {
-        log.debug("Deleting entry for item: id = %d", itemId);
-        DbDataSource.deleteMappings(ds, Arrays.asList(itemId));
+        deleteMapping(itemId, false);
     }
 
-    public void updateMapping(int itemId, String remoteId, String data)
-        throws ServiceException {
+    public void deleteMapping(int itemId, boolean isBatch) throws ServiceException {
+        log.debug("Deleting entry for item: id = %d", itemId);
+        DbDataSource.deleteMappings(ds, Arrays.asList(itemId), isBatch);
+    }
+
+    public void updateMapping(int itemId, String remoteId, String data) throws ServiceException {
+        updateMapping(itemId, remoteId, data, false);
+    }
+
+    public void updateMapping(int itemId, String remoteId, String data, boolean isBatch) throws ServiceException {
         Metadata md = null;
         if (data != null) {
             md = new Metadata();
@@ -155,9 +162,9 @@ public final class LocalData {
         }
         DataSourceItem dsi = new DataSourceItem(-1, itemId, remoteId, md);
         if (DbDataSource.hasMapping(ds, itemId)) {
-            DbDataSource.updateMapping(ds, dsi);
+            DbDataSource.updateMapping(ds, dsi, isBatch);
         } else {
-            DbDataSource.addMapping(ds, dsi);
+            DbDataSource.addMapping(ds, dsi, isBatch);
         }
     }
 
