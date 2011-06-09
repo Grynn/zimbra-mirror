@@ -38,7 +38,8 @@ import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.GalContact;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.Provisioning.DomainBy;
+import com.zimbra.common.account.Key;
+import com.zimbra.common.account.Key.DomainBy;
 import com.zimbra.cs.account.Provisioning.GalMode;
 import com.zimbra.cs.account.Provisioning.SearchGalResult;
 import com.zimbra.cs.account.accesscontrol.AdminRight;
@@ -682,7 +683,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 
         for (Enumeration<String> keys = h.keys(); keys.hasMoreElements();) {
             String domainName = keys.nextElement();
-            Domain domain = prov.get(Provisioning.DomainBy.name, domainName);
+            Domain domain = prov.get(Key.DomainBy.name, domainName);
             if (domain != null) {
                 String domainMaxAccounts = domain.getAttr(Provisioning.A_zimbraDomainMaxAccounts);
                 if (domainMaxAccounts != null && domainMaxAccounts.length() > 0) {

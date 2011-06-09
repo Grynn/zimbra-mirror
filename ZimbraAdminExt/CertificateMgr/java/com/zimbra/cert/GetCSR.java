@@ -14,7 +14,6 @@
  */
 package com.zimbra.cert;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -22,22 +21,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import sun.security.x509.SubjectAlternativeNameExtension;
-
-import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
+import com.zimbra.common.account.Key.ServerBy;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
-import com.zimbra.cs.account.Provisioning.ServerBy;
 import com.zimbra.cs.account.accesscontrol.AdminRight;
 import com.zimbra.cs.account.accesscontrol.Rights.Admin;
 import com.zimbra.cs.rmgmt.RemoteManager;
 import com.zimbra.cs.rmgmt.RemoteResult;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
-import com.zimbra.cs.service.admin.AdminRightCheckPoint;
 import com.zimbra.soap.ZimbraSoapContext;
 
 
