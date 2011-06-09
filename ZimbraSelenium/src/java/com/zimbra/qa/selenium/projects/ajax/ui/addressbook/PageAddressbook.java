@@ -131,6 +131,18 @@ public class PageAddressbook extends AbsTab {
 		zWaitForActive();
 
 	}
+
+	public void zRefresh() throws HarnessException {
+		sRefresh();
+		sWaitForPageToLoad();
+								
+		zWaitForElementPresent(PageMain.Locators.zAppbarContact);		
+		
+		// Click on Addressbook tab
+		zClickAt(PageMain.Locators.zAppbarContact,"0,0");
+		zWaitForElementPresent("css=div#ztih__main_Contacts__ADDRBOOK_div");
+			
+	}
 	
 	public List<FolderItem> zListGetFolders() throws HarnessException {
 		List <FolderItem> list = new ArrayList<FolderItem>();
@@ -902,58 +914,7 @@ public class PageAddressbook extends AbsTab {
 	
 	}
 	
-	public AbsPage zListItem(Action action, Button option, FolderItem folderItem)
-	throws HarnessException {
-		logger.info(myPageName() + " zListItem("+ action +", "+ option +")");
-		tracer.trace(action +" then "+ option +" on Folder Item = "+ folderItem);
-
-		if ( action == null )
-			throw new HarnessException("action cannot be null");
-		if ( option == null )
-			throw new HarnessException("button cannot be null");
-		if ( folderItem == null )
-			throw new HarnessException("folderItem cannot be null");
-
-		String treeItemLocator = null;
 	
-		if (folderItem.getName().equals("USER_ROOT")) {
-			treeItemLocator = "css=div#ztih__main_Contacts__ADDRBOOK_div";
-		} else {
-			throw new HarnessException("Implement me!");
-		}
-
-		AbsPage page = null;
-		
-		if ( action == Action.A_RIGHTCLICK ) {
-			if (option == Button.B_TREE_NEWFOLDER) {
-				zRightClickAt(treeItemLocator,"0,0");
-				zWaitForBusyOverlay();
-				
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
-				
-				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageAddressbook);			    
-			}
-			else {
-				throw new HarnessException("implement action:"+ action +" option:"+ option);
-			}
-		} else if (action == Action.A_LEFTCLICK) {
-			if (option == Button.B_TREE_NEWFOLDER) {
-				
-				zClickAt("css=div[class^=ImgNewContactsFolder][class*=ZWidget]","0,0");
-				
-				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageAddressbook);
-			      				
-
-			} else {
-				throw new HarnessException("implement action:"+ action +" option:"+ option);
-			}
-		} else {
-			throw new HarnessException("implement action:"+ action +" option:"+ option);
-		}
-
-		return page;
-	}
 
 
 	private AbsPage newFormSelected() throws HarnessException {

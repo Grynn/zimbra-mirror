@@ -21,6 +21,8 @@ public class TreeContacts extends AbsTree {
     public static final String NEW_FOLDER="css=#ztih__main_Contacts__ADDRBOOK_table tbody tr td:nth-child(4)";
     public static final String COLLAPSE_TREE="css#ztih__main_Contacts__ADDRBOOK_nodeCell";
 	public static class Locators {
+		public static final String EXPAND_NODE  = "ImgNodeExpanded";
+		public static final String COLLAPSE_NODE= "ImgNodeCollapsed";
 	}
 	
 		
@@ -115,11 +117,73 @@ public class TreeContacts extends AbsTree {
 
 		throw new HarnessException("Must use TagItem FolderItem or SavedSearchFolderItem or ZimletItem as argument, but was "+ folder.getClass());
 	}
-	
-	protected AbsPage zTreeItem(Action action, Button option, TagItem folder)
+
+	protected AbsPage zTreeItem(Action action, Button option, FolderItem folderItem)
 	throws HarnessException {
 
-		if ((action == null) || (option == null) || (folder == null)) {
+		AbsPage page = null;
+		//String actionLocator = null;
+		//String optionLocator = null;
+
+		if ((action == null) || (option == null) || (folderItem == null)) {
+			throw new HarnessException(
+			"Must define an action, option, and addressbook");
+		}
+		logger.info(myPageName() + " zTreeItem("+ action +", "+ option + "," + folderItem.getName() +")");
+		tracer.trace(action +" then "+ option +" on Folder Item = "+ folderItem.getName());
+
+		String treeItemLocator = null;
+	
+		if (folderItem.getName().equals("USER_ROOT")) {
+			treeItemLocator = "css=div#ztih__main_Contacts__ADDRBOOK_div";
+		} else {
+			treeItemLocator = "css=div#zti__main_Contacts__" + folderItem.getId() +"_div";			
+		}
+		
+		
+		if ( action == Action.A_RIGHTCLICK ) {
+			zRightClickAt(treeItemLocator,"0,0");
+			zWaitForBusyOverlay();
+			
+			if (option == Button.B_TREE_NEWFOLDER) {				
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
+				zWaitForBusyOverlay();
+				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageAddressbook);			    
+			}
+			else if (option == Button.B_DELETE) {				
+				//POPUP_DELETE
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
+				zWaitForBusyOverlay();
+			}
+			else {
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+			}
+		} else if (action == Action.A_LEFTCLICK) {
+			if (option == Button.B_TREE_NEWFOLDER) {
+				
+				zClickAt("css=div[class^=ImgNewContactsFolder][class*=ZWidget]","0,0");
+				
+				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageAddressbook);
+			      				
+			} else {
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+			}
+		} else {
+			throw new HarnessException("implement action:"+ action +" option:"+ option);
+		}
+
+		return page;
+	}
+	
+	
+	protected AbsPage zTreeItem(Action action, Button option, TagItem t)
+	throws HarnessException {
+
+		if ((action == null) || (option == null) || (t == null)) {
 			throw new HarnessException(
 			"Must define an action, option, and addressbook");
 		}
@@ -128,7 +192,7 @@ public class TreeContacts extends AbsTree {
 		String actionLocator = null;
 		String optionLocator = null;
 
-		TagItem t = (TagItem) folder;
+		
 		tracer.trace("processing " + t.getName());
 
 		if (action == Action.A_LEFTCLICK) {
@@ -273,6 +337,20 @@ public class TreeContacts extends AbsTree {
 
 	}
 
+	//expand the folder to show folder's children
+	public void zExpand(FolderItem folderItem) throws HarnessException{
+		
+	    String locator="css=td#zti__main_Contacts__" + folderItem.getId() +"_nodeCell" + ">div." ;
+		//already expanded
+	    if (this.sIsElementPresent(locator+ Locators.EXPAND_NODE)) {
+		  return;
+	    }
+	    SleepUtil.sleepMedium();
+	    if (this.sIsElementPresent(locator+ Locators.COLLAPSE_NODE)) {
+		   sMouseDown(locator+ Locators.COLLAPSE_NODE);
+		}
+	    zWaitForElementPresent(locator+ Locators.EXPAND_NODE);
+	}
 
 	/* (non-Javadoc)
 	 * @see framework.ui.AbsTree#myPageName()
