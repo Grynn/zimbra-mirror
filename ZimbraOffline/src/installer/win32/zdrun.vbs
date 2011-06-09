@@ -69,9 +69,7 @@ Sub LaunchPrism()
     Dim sCmd, iRet 
 
     iRet = oReg.CreateKey(HKEY_CURRENT_USER, "Software\Zimbra\Zimbra Desktop\Prism")
-    If iRet = 0 Then
-        oReg.SetStringValue HKEY_CURRENT_USER, "Software\Zimbra\Zimbra Desktop\Prism", "OverridePath", sOverridePath
-    End If
+    oReg.SetStringValue HKEY_CURRENT_USER, "Software\Zimbra\Zimbra Desktop\Prism", "OverridePath", sOverridePath
 
     sCmd = Chr(34) & sAppRoot & "\win32\prism\zdclient.exe" & Chr(34)
     oShell.Run sCmd, 1, false 
@@ -204,6 +202,8 @@ Function GetDataRoot()
     oReg.GetStringValue HKEY_CURRENT_USER, "Software\Zimbra\Zimbra Desktop", "DataRoot", GetDataRoot
     If IsNull(GetDataRoot) Then
         GetDataRoot = sLocalAppDir & "\Zimbra\Zimbra Desktop"
+    Else
+        GetDataRoot = oFso.getFolder(GetDataRoot).ShortPath
     End If
 End Function
 
@@ -238,10 +238,8 @@ aUserFiles = Array("conf\keystore", "profile\prefs.js", "profile\persdict.dat", 
 sScriptPath = WScript.ScriptFullName
 sScriptDir = Left(sScriptPath, InStrRev(sScriptPath, WScript.ScriptName) - 2)
 sAppRoot = oFso.GetParentFolderName(sScriptDir)
-sLocalAppDir = oShellApp.Namespace(&H1c&).Self.Path
-If IsNonEnUsXp Then ' bug 44608
-    sLocalAppDir = (oFso.GetFolder(sLocalAppDir)).ShortPath
-End If
+sLocalAppDir = oFso.getFolder(oShellApp.Namespace(&H1c&).Self.Path).ShortPath
+
 sDataRoot = GetDataRoot()
 sVerFile = sDataRoot & "\conf\version"
 sTmpDir = sDataRoot & ".tmp"
