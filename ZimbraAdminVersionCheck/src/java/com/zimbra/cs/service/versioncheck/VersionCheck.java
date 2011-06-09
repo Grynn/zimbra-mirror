@@ -20,8 +20,9 @@ import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.util.DateUtil;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
-import com.zimbra.cs.account.Provisioning.AccountBy;
-import com.zimbra.cs.account.Provisioning.ServerBy;
+import com.zimbra.common.account.Key;
+import com.zimbra.common.account.Key.AccountBy;
+import com.zimbra.common.account.Key.ServerBy;
 import com.zimbra.cs.account.accesscontrol.AdminRight;
 import com.zimbra.cs.account.accesscontrol.Rights.Admin;
 import com.zimbra.cs.service.AuthProvider;
@@ -74,7 +75,7 @@ public class VersionCheck extends AdminDocumentHandler {
         	String updaterServerId = config.getAttr(Provisioning.A_zimbraVersionCheckServer);
 
             if (updaterServerId != null) {
-                Server server = prov.get(ServerBy.id, updaterServerId);
+                Server server = prov.get(Key.ServerBy.id, updaterServerId);
                 if (server != null && !getLocalHostId().equalsIgnoreCase(server.getId()))
                     return proxyRequest(request, context, server);
             }

@@ -20,7 +20,7 @@ import java.util.List;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.Provisioning.AccountBy;
+import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.index.SearchParams;
 import com.zimbra.cs.mailbox.Mailbox;

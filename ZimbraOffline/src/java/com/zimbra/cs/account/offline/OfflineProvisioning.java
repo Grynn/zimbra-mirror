@@ -35,6 +35,8 @@ import javax.mail.Transport;
 import javax.security.auth.login.LoginException;
 
 import com.sun.mail.smtp.SMTPTransport;
+import com.zimbra.common.account.Key;
+import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.net.TrustManagers;
@@ -798,7 +800,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public synchronized DataSource getDataSource(Account account) throws ServiceException {
         if (!isDataSourceAccount(account))
             return null;
-        return get(account, DataSourceBy.name, getDataSourceName(account));
+        return get(account, Key.DataSourceBy.name, getDataSourceName(account));
     }
 
     public synchronized List<DataSource> getAllDataSources() throws ServiceException {
@@ -854,7 +856,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     private OfflineAccount makeGranter(String name, String id, String granteeId) throws ServiceException {
-        OfflineAccount grantee = (OfflineAccount)get(Provisioning.AccountBy.id, granteeId);
+        OfflineAccount grantee = (OfflineAccount)get(Key.AccountBy.id, granteeId);
         if (grantee == null)
             throw OfflineServiceException.MOUNT_INVALID_GRANTEE();
         return makeGranter(name, id, grantee);
@@ -1491,7 +1493,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public synchronized Domain get(DomainBy keyType, String key) {
+    public synchronized Domain get(Key.DomainBy keyType, String key) {
         return null;
     }
 
@@ -1521,10 +1523,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public synchronized Cos get(CosBy keyType, String key) throws ServiceException {
-        if (keyType == CosBy.id)
+    public synchronized Cos get(Key.CosBy keyType, String key) throws ServiceException {
+        if (keyType == Key.CosBy.id)
             return mDefaultCos.getId().equalsIgnoreCase(key) ? mDefaultCos : null;
-        else if (keyType == CosBy.name)
+        else if (keyType == Key.CosBy.name)
             return mDefaultCos.getName().equalsIgnoreCase(key) ? mDefaultCos : null;
         else
             throw ServiceException.FAILURE("unsupported CosBy value: " + keyType, null);
@@ -1553,16 +1555,16 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public synchronized Server get(ServerBy keyType, String key) throws ServiceException {
+    public synchronized Server get(Key.ServerBy keyType, String key) throws ServiceException {
         if (key.toLowerCase().startsWith(OfflineConstants.SYNC_SERVER_PREFIX)) {
             synchronized(mSyncServerCache) {
                 return mSyncServerCache.get(key.toLowerCase());
             }
-        } else if (keyType == ServerBy.id)
+        } else if (keyType == Key.ServerBy.id)
             return mLocalServer.getId().equalsIgnoreCase(key) ? mLocalServer : null;
-        else if (keyType == ServerBy.name)
+        else if (keyType == Key.ServerBy.name)
             return mLocalServer.getName().equalsIgnoreCase(key) ? mLocalServer : null;
-        else if (keyType == ServerBy.serviceHostname)
+        else if (keyType == Key.ServerBy.serviceHostname)
             return mLocalServer.getAttr(A_zimbraServiceHostname, "localhost").equalsIgnoreCase(key) ? mLocalServer : null;
         else
             throw ServiceException.FAILURE("unsupported ServerBy value: " + keyType, null);
@@ -1593,7 +1595,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public synchronized DistributionList get(DistributionListBy keyType, String key) throws ServiceException {
+    public synchronized DistributionList get(Key.DistributionListBy keyType, String key) throws ServiceException {
         return null;
     }
 
@@ -1675,7 +1677,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public synchronized CalendarResource get(CalendarResourceBy keyType, String key) throws ServiceException {
+    public synchronized CalendarResource get(Key.CalendarResourceBy keyType, String key) throws ServiceException {
         throw new UnsupportedOperationException();
     }
 
@@ -1827,7 +1829,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (name.equalsIgnoreCase(DEFAULT_IDENTITY_NAME))
             throw ServiceException.INVALID_REQUEST("can't delete default identity", null);
 
-        Identity ident = get(account, IdentityBy.name, name);
+        Identity ident = get(account, Key.IdentityBy.name, name);
         if (ident == null)
             return;
 
@@ -1843,7 +1845,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         List<Identity> identities = new ArrayList<Identity>(names.size() + 1);
         identities.add(getDefaultIdentity(account));
         for (String name : names)
-            identities.add(get(account, IdentityBy.name, name));
+            identities.add(get(account, Key.IdentityBy.name, name));
         return identities;
     }
 
@@ -1858,7 +1860,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             return;
         }
 
-        Identity identity = get(account, IdentityBy.name, name);
+        Identity identity = get(account, Key.IdentityBy.name, name);
         if (identity == null)
             throw AccountServiceException.NO_SUCH_IDENTITY(name);
 
@@ -1891,21 +1893,21 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public synchronized Identity get(Account account, IdentityBy keyType, String key) throws ServiceException {
+    public synchronized Identity get(Account account, Key.IdentityBy keyType, String key) throws ServiceException {
         if (key == null) return null;
         Map<String,Object> attrs = null;
-        if (keyType == IdentityBy.name) {
+        if (keyType == Key.IdentityBy.name) {
             if (key.equalsIgnoreCase(DEFAULT_IDENTITY_NAME))
                 return getDefaultIdentity(account);
             attrs = DbOfflineDirectory.readDirectoryLeaf(EntryType.IDENTITY, account, A_offlineDn, key);
-        } else if (keyType == IdentityBy.id) {
+        } else if (keyType == Key.IdentityBy.id) {
             if (key.equalsIgnoreCase(account.getId()))
                 return getDefaultIdentity(account);
             attrs = DbOfflineDirectory.readDirectoryLeaf(EntryType.IDENTITY, account, A_zimbraId, key);
         }
-        if (attrs == null && keyType == IdentityBy.id) {
+        if (attrs == null && keyType == Key.IdentityBy.id) {
             //HACK: try DataSource as well
-            DataSource ds = get(account, DataSourceBy.id, key);
+            DataSource ds = get(account, Key.DataSourceBy.id, key);
             if (ds != null) {
                 attrs = ds.getAttrs();
                 attrs.put(A_zimbraPrefIdentityId, ds.getId());
@@ -1959,7 +1961,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.putAll(immutable);
 
         DbOfflineDirectory.createDirectoryLeaf(EntryType.SIGNATURE, account, signatureName, signatureId, attrs, markChanged);
-        Signature signature = get(account, SignatureBy.id, signatureId);
+        Signature signature = get(account, Key.SignatureBy.id, signatureId);
         mHasDirtyAccounts |= markChanged;
 
         AttributeManager.getInstance().postModify(attrs, signature, context, true);
@@ -1993,7 +1995,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     synchronized void modifySignature(Account account, String signatureId, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
-        Signature signature = get(account, SignatureBy.id, signatureId);
+        Signature signature = get(account, Key.SignatureBy.id, signatureId);
         if (signature == null)
             throw AccountServiceException.NO_SUCH_SIGNATURE(signatureId);
 
@@ -2036,7 +2038,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     synchronized void deleteSignature(Account account, String signatureId, boolean markChanged) throws ServiceException {
-        Signature signature = get(account, SignatureBy.id, signatureId);
+        Signature signature = get(account, Key.SignatureBy.id, signatureId);
         if (signature == null) return;
 
         DbOfflineDirectory.deleteDirectoryLeaf(EntryType.SIGNATURE, account, signatureId, markChanged);
@@ -2060,17 +2062,17 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         List<String> names = DbOfflineDirectory.listAllDirectoryLeaves(EntryType.SIGNATURE, account);
         List<Signature> signatures = new ArrayList<Signature>(names.size());
         for (String name : names)
-            signatures.add(get(account, SignatureBy.name, name));
+            signatures.add(get(account, Key.SignatureBy.name, name));
         return signatures;
     }
 
     @Override
-    public synchronized Signature get(Account account, SignatureBy keyType, String key) throws ServiceException {
+    public synchronized Signature get(Account account, Key.SignatureBy keyType, String key) throws ServiceException {
         if (key == null) return null;
         Map<String,Object> attrs = null;
-        if (keyType == SignatureBy.name) {
+        if (keyType == Key.SignatureBy.name) {
             attrs = DbOfflineDirectory.readDirectoryLeaf(EntryType.SIGNATURE, account, A_offlineDn, key);
-        } else if (keyType == SignatureBy.id) {
+        } else if (keyType == Key.SignatureBy.id) {
             attrs = DbOfflineDirectory.readDirectoryLeaf(EntryType.SIGNATURE, account, A_zimbraId, key);
         }
         if (attrs == null)
@@ -2147,7 +2149,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     synchronized void deleteDataSource(Account account, String dataSourceId, boolean markChanged) throws ServiceException {
-        DataSource dsrc = get(account, DataSourceBy.id, dataSourceId);
+        DataSource dsrc = get(account, Key.DataSourceBy.id, dataSourceId);
         if (dsrc == null)
             return;
         SyncErrorManager.clearErrors(dsrc);
@@ -2166,7 +2168,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             List<String> names = DbOfflineDirectory.listAllDirectoryLeaves(EntryType.DATASOURCE, account);
             sources = new ArrayList<DataSource>(names.size());
             for (String name : names)
-                sources.add(get(account, DataSourceBy.name, name));
+                sources.add(get(account, Key.DataSourceBy.name, name));
             sort(sources);
             cachedDataSources.put(account.getId(), sources);
         }
@@ -2205,7 +2207,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     void modifyDataSource(Account account, String dataSourceId, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
-        DataSource ds = get(account, DataSourceBy.id, dataSourceId);
+        DataSource ds = get(account, Key.DataSourceBy.id, dataSourceId);
         if (ds == null)
             throw AccountServiceException.NO_SUCH_DATA_SOURCE(dataSourceId);
 
@@ -2312,21 +2314,21 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public synchronized DataSource get(Account account, DataSourceBy keyType, String key) throws ServiceException {
+    public synchronized DataSource get(Account account, Key.DataSourceBy keyType, String key) throws ServiceException {
         List<DataSource> cached = cachedDataSources.get(account.getId());
         if (cached != null) {
             for (DataSource ds : cached) {
-                if (keyType == DataSourceBy.name && ds.getName().equals(key) ||
-                    keyType == DataSourceBy.id && ds.getId().equals(key))
+                if (keyType == Key.DataSourceBy.name && ds.getName().equals(key) ||
+                    keyType == Key.DataSourceBy.id && ds.getId().equals(key))
                     return ds;
             }
             return null;
         }
 
         Map<String,Object> attrs = null;
-        if (keyType == DataSourceBy.name) {
+        if (keyType == Key.DataSourceBy.name) {
             attrs = DbOfflineDirectory.readDirectoryLeaf(EntryType.DATASOURCE, account, A_offlineDn, key);
-        } else if (keyType == DataSourceBy.id) {
+        } else if (keyType == Key.DataSourceBy.id) {
             attrs = DbOfflineDirectory.readDirectoryLeaf(EntryType.DATASOURCE, account, A_zimbraId, key);
         }
         if (attrs == null)
@@ -2351,7 +2353,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public XMPPComponent get(XMPPComponentBy keyType, String key) throws ServiceException {
+    public XMPPComponent get(Key.XMPPComponentBy keyType, String key) throws ServiceException {
         throw ServiceException.FAILURE("unsupported", null);
     }
 

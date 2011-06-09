@@ -16,6 +16,7 @@ package com.zimbra.cs.service.offline;
 
 import java.util.Map;
 
+import com.zimbra.common.account.Key;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
@@ -52,7 +53,7 @@ public class OfflineConvAction extends ConvAction {
         if ((id = act.getAttribute(MailConstants.A_ID, null)) == null || (pos = id.indexOf(":")) <= 0)
             return;
         String fromAcctId = id.substring(0, pos);
-        Account fromAcct = prov.get(Provisioning.AccountBy.id, fromAcctId);
+        Account fromAcct = prov.get(Key.AccountBy.id, fromAcctId);
         if (fromAcct == null || !prov.isMountpointAccount(fromAcct)) // source is not a mountpoint...
             return;
         
@@ -61,7 +62,7 @@ public class OfflineConvAction extends ConvAction {
             return;
         String toAcctId = id.substring(0, pos);
         int folderId = Integer.parseInt(id.substring(pos + 1));
-        OfflineAccount toAcct = (OfflineAccount)prov.get(Provisioning.AccountBy.id, toAcctId);
+        OfflineAccount toAcct = (OfflineAccount)prov.get(Key.AccountBy.id, toAcctId);
         if (toAcct == null || !prov.isZcsAccount(toAcct))
             return;
         context.put(OFFLINECONV_TOACCT, toAcct);

@@ -16,7 +16,7 @@ package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.account.Entry;
-import com.zimbra.cs.account.Provisioning;
+import com.zimbra.common.account.Key;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.util.ZimbraLog;
@@ -78,7 +78,7 @@ public class GetFavIconTag extends ZimbraSimpleTag {
 			}
 
 			// get info
-			Entry info = provisioning.getDomainInfo(Provisioning.DomainBy.virtualHostname, serverName);
+			Entry info = provisioning.getDomainInfo(Key.DomainBy.virtualHostname, serverName);
 			if (info == null) {
 				info = provisioning.getConfig();
 			}

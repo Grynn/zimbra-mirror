@@ -24,7 +24,7 @@ import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.DataSource.ConnectionType;
-import com.zimbra.cs.account.Provisioning.AccountBy;
+import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZFolder;

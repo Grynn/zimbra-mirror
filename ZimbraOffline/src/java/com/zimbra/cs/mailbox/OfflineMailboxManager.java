@@ -14,6 +14,7 @@
  */
 package com.zimbra.cs.mailbox;
 
+import com.zimbra.common.account.Key;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
@@ -60,7 +61,7 @@ public class OfflineMailboxManager extends MailboxManager {
     public void notifyAllMailboxes() throws ServiceException {
         for (String acctId : getAccountIds()) {
             OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
-            Account acct = prov.get(Provisioning.AccountBy.id, acctId);
+            Account acct = prov.get(Key.AccountBy.id, acctId);
             if (acct == null || prov.isGalAccount(acct) || prov.isMountpointAccount(acct))
                 continue;
 

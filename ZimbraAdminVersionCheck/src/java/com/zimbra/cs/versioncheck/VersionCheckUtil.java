@@ -9,6 +9,8 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.common.account.Key;
+import com.zimbra.common.account.Key.ServerBy;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.SoapTransport;
@@ -16,7 +18,6 @@ import com.zimbra.common.util.CliUtil;
 import com.zimbra.cs.account.Config;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
-import com.zimbra.cs.account.Provisioning.ServerBy;
 import com.zimbra.cs.client.LmcSession;
 import com.zimbra.cs.client.soap.LmcSoapClientException;
 import com.zimbra.cs.client.soap.LmcVersionCheckRequest;
@@ -71,7 +72,7 @@ public class VersionCheckUtil extends SoapCLI {
             	String updaterServerId = config.getAttr(Provisioning.A_zimbraVersionCheckServer);
             	
                 if (updaterServerId != null) {
-                    Server server = prov.get(ServerBy.id, updaterServerId);
+                    Server server = prov.get(Key.ServerBy.id, updaterServerId);
                     if (server != null) {
                     	Server localServer = prov.getLocalServer();
                     	if (localServer!=null) { 

@@ -44,9 +44,10 @@ import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.account.auth.AuthMechanism;
 import com.zimbra.cs.account.ldap.LdapProv;
 import com.zimbra.cs.account.Domain;
-import com.zimbra.cs.account.Provisioning.DomainBy;
 import com.zimbra.cs.account.Account;
-import com.zimbra.cs.account.Provisioning.AccountBy;
+import com.zimbra.common.account.Key;
+import com.zimbra.common.account.Key.AccountBy;
+import com.zimbra.common.account.Key.DomainBy;
 import com.zimbra.cs.account.AccessManager;
 import com.zimbra.cs.extension.ExtensionDispatcherServlet;
 import com.zimbra.cs.extension.ExtensionException;
@@ -615,7 +616,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                     ZimbraLog.nginxlookup.info("looking up domain by virtualhost name");
                     Domain d = null;
                     try {
-                        d = prov.get(DomainBy.virtualHostname, req.serverHost);
+                        d = prov.get(Key.DomainBy.virtualHostname, req.serverHost);
                     } catch (ServiceException e) {
                     }
                     if (d != null) {

@@ -27,6 +27,7 @@ import org.apache.commons.httpclient.HttpVersion;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 
+import com.zimbra.common.account.Key;
 import com.zimbra.common.httpclient.HttpClientUtil;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
@@ -48,7 +49,7 @@ public class OfflineDocumentHandlers {
         throws ServiceException {
         String acctId = zsc.getRequestedAccountId();
         Provisioning prov = Provisioning.getInstance();
-        return prov.get(Provisioning.AccountBy.id, acctId);
+        return prov.get(Key.AccountBy.id, acctId);
     }
 
     static class DiffDocument extends com.zimbra.cs.service.wiki.DiffDocument {
@@ -82,10 +83,10 @@ public class OfflineDocumentHandlers {
         FileUploadServlet.Upload upload = FileUploadServlet.fetchUpload(
             OfflineConstants.LOCAL_ACCOUNT_ID, id, null);
         OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
-        Account account = prov.get(Provisioning.AccountBy.id, acctId);
+        Account account = prov.get(Key.AccountBy.id, acctId);
 
         if (prov.isMountpointAccount(account))
-            account = prov.get(Provisioning.AccountBy.id, account.getAttr(
+            account = prov.get(Key.AccountBy.id, account.getAttr(
                 OfflineProvisioning.A_offlineMountpointProxyAccountId));
         String url = account.getAttr(OfflineConstants.A_offlineRemoteServerUri);
         if (url == null)

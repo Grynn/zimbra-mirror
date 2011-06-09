@@ -26,6 +26,8 @@ import java.util.Set;
 import org.apache.commons.httpclient.Header;
 import org.dom4j.ElementHandler;
 
+import com.zimbra.common.account.Key;
+import com.zimbra.common.account.Key.ServerBy;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
@@ -41,7 +43,6 @@ import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
-import com.zimbra.cs.account.Provisioning.ServerBy;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.Db;
@@ -599,7 +600,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     }
 
     public Element sendRequestWithNotification(Element request) throws ServiceException {
-        Server server = Provisioning.getInstance().get(ServerBy.name,OfflineConstants.SYNC_SERVER_PREFIX+getAccountId());
+        Server server = Provisioning.getInstance().get(Key.ServerBy.name,OfflineConstants.SYNC_SERVER_PREFIX+getAccountId());
         if (server != null) {
             //when we first add an account, server is still null
             List<Session> soapSessions = getListeners(Session.Type.SOAP);

@@ -32,8 +32,9 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.Provisioning.AccountBy;
-import com.zimbra.cs.account.Provisioning.DomainBy;
+import com.zimbra.common.account.Key;
+import com.zimbra.common.account.Key.AccountBy;
+import com.zimbra.common.account.Key.DomainBy;
 import com.zimbra.qa.unittest.TestLdap;
 
 /*
@@ -238,11 +239,11 @@ public class NginxLookupExtensionTest extends TestLdap {
     }
     
     private Domain getDomain() throws ServiceException {
-        return getProv().get(DomainBy.name, DEFAULT_DOMAIN);
+        return getProv().get(Key.DomainBy.name, DEFAULT_DOMAIN);
     }
     
     private Domain getDomain(String name) throws ServiceException {
-        return getProv().get(DomainBy.name, name);
+        return getProv().get(Key.DomainBy.name, name);
     }
     
     private Domain createDomain(String domainName) throws ServiceException {

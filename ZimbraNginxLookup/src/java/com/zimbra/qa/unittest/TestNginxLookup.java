@@ -33,8 +33,9 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Config;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.Provisioning.AccountBy;
-import com.zimbra.cs.account.Provisioning.DomainBy;
+import com.zimbra.common.account.Key;
+import com.zimbra.common.account.Key.AccountBy;
+import com.zimbra.common.account.Key.DomainBy;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.nginx.NginxLookupExtension;
 
@@ -303,7 +304,7 @@ public class TestNginxLookup extends TestCase {
     
     
     private Domain setupExternalRouteDomain(String domainName) throws Exception {
-        Domain domain = mSoapProv.get(DomainBy.name, domainName);
+        Domain domain = mSoapProv.get(Key.DomainBy.name, domainName);
         
         if (domain == null) {
             Map<String, Object> attrs = new HashMap<String, Object>();
@@ -482,7 +483,7 @@ public class TestNginxLookup extends TestCase {
         
         // domain
         String domainName = DOMAIN;
-        Domain domain = mSoapProv.get(DomainBy.name, domainName);
+        Domain domain = mSoapProv.get(Key.DomainBy.name, domainName);
         
         // test account names
         String acctLocalPart = "gssapi-test";

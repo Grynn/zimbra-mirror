@@ -24,6 +24,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 
+import com.zimbra.common.account.Key;
+import com.zimbra.common.account.Key.IdentityBy;
+import com.zimbra.common.account.Key.SignatureBy;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.Element;
@@ -37,8 +40,6 @@ import com.zimbra.cs.account.Entry;
 import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Signature;
-import com.zimbra.cs.account.Provisioning.IdentityBy;
-import com.zimbra.cs.account.Provisioning.SignatureBy;
 import com.zimbra.cs.filter.RuleManager;
 import com.zimbra.cs.filter.RuleRewriter;
 import com.zimbra.cs.mailbox.Mailbox;
@@ -498,8 +499,8 @@ public class DirectorySync {
 
         Map<String, Object> attrs = zident.getAttrs();
 
-        Identity ident = prov.get(acct, IdentityBy.id, identityId);
-        Identity conflict = prov.get(acct, IdentityBy.name, name);
+        Identity ident = prov.get(acct, Key.IdentityBy.id, identityId);
+        Identity conflict = prov.get(acct, Key.IdentityBy.name, name);
 
         if (conflict != null && (ident == null || !conflict.getId().equals(ident.getId()))) {
             // handle any naming conflicts by renaming the *local* identity
@@ -536,8 +537,8 @@ public class DirectorySync {
         String name = zsig.getName();
         Map<String, Object> attrs = zsig.getAttrs();
 
-        Signature signature = prov.get(acct, SignatureBy.id, signatureId);
-        Signature conflict = prov.get(acct, SignatureBy.name, name);
+        Signature signature = prov.get(acct, Key.SignatureBy.id, signatureId);
+        Signature conflict = prov.get(acct, Key.SignatureBy.name, name);
 
         if (conflict != null && (signature == null || !conflict.getId().equals(signature.getId()))) {
             // handle any naming conflicts by renaming the *local* signature
@@ -637,7 +638,7 @@ public class DirectorySync {
             if (!ident.getId().equals(acct.getId()))
                 pushIdentity(prov, acct, ident, zmbx);
         for (String identityId : acct.getMultiAttrSet(OfflineProvisioning.A_offlineDeletedIdentity)) {
-            zmbx.deleteIdentity(IdentityBy.id, identityId);
+            zmbx.deleteIdentity(Key.IdentityBy.id, identityId);
             OfflineLog.offline.debug("dpush: deleted identity: " + acct.getName() + '/' + identityId);
         }
 

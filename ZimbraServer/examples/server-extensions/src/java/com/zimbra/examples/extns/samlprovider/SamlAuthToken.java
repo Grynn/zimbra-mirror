@@ -80,7 +80,7 @@ public class SamlAuthToken extends AuthToken {
         Provisioning prov = Provisioning.getInstance();
         Account acct;
         try {
-            acct = prov.get(Provisioning.AccountBy.name, subjectNameId);
+            acct = prov.get(Key.AccountBy.name, subjectNameId);
         } catch (ServiceException e) {
             ZimbraLog.extensions.error(SystemUtil.getStackTrace(e));
             return null;

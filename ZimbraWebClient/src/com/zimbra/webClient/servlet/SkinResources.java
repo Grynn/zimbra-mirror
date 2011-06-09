@@ -39,10 +39,12 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.zimbra.common.account.Key;
+import com.zimbra.common.account.Key.DomainBy;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.util.HttpUtil;
 import com.zimbra.cs.account.Entry;
-import com.zimbra.cs.account.Provisioning.DomainBy;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.util.Zimbra;
 import com.zimbra.kabuki.util.Colors;
@@ -486,7 +488,7 @@ public class SkinResources
 			;
 			provisioning.soapSetURI(soapUri);
 			String serverName = getServerName(req);
-			Entry info = provisioning.getDomainInfo(DomainBy.virtualHostname, serverName);
+			Entry info = provisioning.getDomainInfo(Key.DomainBy.virtualHostname, serverName);
 			if (info == null) {
 				info = provisioning.getConfig();
 			}

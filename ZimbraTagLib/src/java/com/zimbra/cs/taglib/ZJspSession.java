@@ -14,6 +14,7 @@
  */
 package com.zimbra.cs.taglib;
 
+import com.zimbra.common.account.Key;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.RemoteIP;
@@ -442,7 +443,7 @@ public class ZJspSession {
             options.setNoSession(true);
             options.setAuthAuthToken(false);
             options.setTargetAccount(targetAccountId);
-            options.setTargetAccountBy(Provisioning.AccountBy.id);
+            options.setTargetAccountBy(Key.AccountBy.id);
             options.setClientIp(getRemoteAddr(context));
             return ZMailbox.getMailbox(options);
         }
@@ -457,7 +458,7 @@ public class ZJspSession {
             options.setNoSession(true);
             options.setAuthAuthToken(false);
             options.setTargetAccount(targetAccountId);
-            options.setTargetAccountBy(Provisioning.AccountBy.id);
+            options.setTargetAccountBy(Key.AccountBy.id);
             options.setClientIp(getRemoteAddr(context));
             return ZMailbox.getMailbox(options);
         }

@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.zimbra.common.account.Key;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
@@ -43,7 +44,7 @@ public class OfflineServlet extends HttpServlet {
     private static String LOCALHOST_MAIL_URL;
 
     private ZMailbox.Options getMailboxOptions(String username, String password) {
-        ZMailbox.Options options = new ZMailbox.Options(username, Provisioning.AccountBy.name, password, LOCALHOST_SOAP_URL);
+        ZMailbox.Options options = new ZMailbox.Options(username, Key.AccountBy.name, password, LOCALHOST_SOAP_URL);
         options.setNoSession(false);
         return options;
     }

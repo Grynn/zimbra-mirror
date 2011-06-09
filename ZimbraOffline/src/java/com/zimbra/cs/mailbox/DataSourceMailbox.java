@@ -32,6 +32,9 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import com.zimbra.common.account.Key;
+import com.zimbra.common.account.Key.DataSourceBy;
+import com.zimbra.common.account.Key.IdentityBy;
 import com.zimbra.common.mime.MimeConstants;
 import com.zimbra.common.mime.shim.JavaMailInternetAddress;
 import com.zimbra.common.mime.shim.JavaMailMimeBodyPart;
@@ -45,8 +48,6 @@ import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.Provisioning.DataSourceBy;
-import com.zimbra.cs.account.Provisioning.IdentityBy;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -267,7 +268,7 @@ public class DataSourceMailbox extends SyncMailbox {
             OfflineAccount acct = (OfflineAccount)OfflineProvisioning.
             getOfflineInstance().getAccount(msg.getDraftAccountId());
             OfflineDataSource ds = (OfflineDataSource)OfflineProvisioning.getInstance().get(
-                acct, DataSourceBy.id, msg.getDraftIdentityId());
+                acct, Key.DataSourceBy.id, msg.getDraftIdentityId());
             Session session = null;
 
             if (ds == null)
@@ -290,7 +291,7 @@ public class DataSourceMailbox extends SyncMailbox {
                     continue;
                 }
             }
-            Identity identity = Provisioning.getInstance().get(getAccount(), IdentityBy.id, msg.getDraftIdentityId());
+            Identity identity = Provisioning.getInstance().get(getAccount(), Key.IdentityBy.id, msg.getDraftIdentityId());
             // try to avoid repeated sends of the same message by tracking "send UIDs" on SendMsg requests
             Pair<Integer, String> sendRecord = sSendUIDs.get(id);
             String sendUID = sendRecord == null || sendRecord.getFirst() != msg.getSavedSequence() ?
