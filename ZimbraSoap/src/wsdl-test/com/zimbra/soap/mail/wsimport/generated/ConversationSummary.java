@@ -6,6 +6,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -24,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="fr" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="e" type="{urn:zimbraMail}emailInfo" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="n" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="total" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="f" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -47,13 +48,16 @@ import javax.xml.bind.annotation.XmlType;
     "fr",
     "e"
 })
+@XmlSeeAlso({
+    ConversationHitInfo.class
+})
 public class ConversationSummary {
 
     protected List<CustomMetadata> meta;
     protected String su;
     protected String fr;
     protected List<EmailInfo> e;
-    @XmlAttribute(required = true)
+    @XmlAttribute
     protected String id;
     @XmlAttribute
     protected Integer n;

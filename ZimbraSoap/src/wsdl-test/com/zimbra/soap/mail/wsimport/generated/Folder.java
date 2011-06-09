@@ -82,9 +82,9 @@ public class Folder {
     protected List<CustomMetadata> meta;
     protected Folder.Acl acl;
     @XmlElements({
-        @XmlElement(name = "link", type = Mountpoint.class),
         @XmlElement(name = "folder"),
-        @XmlElement(name = "search", type = SearchFolder.class)
+        @XmlElement(name = "search", type = SearchFolder.class),
+        @XmlElement(name = "link", type = Mountpoint.class)
     })
     protected List<Folder> folderOrLinkOrSearch;
     @XmlAttribute(required = true)
@@ -199,9 +199,9 @@ public class Folder {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Mountpoint }
      * {@link Folder }
      * {@link SearchFolder }
+     * {@link Mountpoint }
      * 
      * 
      */

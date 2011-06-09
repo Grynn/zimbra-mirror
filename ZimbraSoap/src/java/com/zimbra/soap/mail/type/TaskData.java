@@ -16,5 +16,15 @@
 package com.zimbra.soap.mail.type;
 
 public class TaskData extends CalendaringData {
+    /**
+     * no-argument constructor wanted by JAXB
+     */
+    @SuppressWarnings("unused")
+    private TaskData() {
+        this((String) null, (String) null);
+    }
 
+    public TaskData(String xUid, String uid) {
+        super(xUid, uid);
+    }
 }

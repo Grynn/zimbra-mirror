@@ -36,6 +36,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="prefetch" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="resultMode" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="field" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="limit" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="offset" type="{http://www.w3.org/2001/XMLSchema}int" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -84,6 +85,8 @@ public class SearchParamsInfo {
     protected String resultMode;
     @XmlAttribute
     protected String field;
+    @XmlAttribute
+    protected Integer limit;
     @XmlAttribute
     protected Integer offset;
 
@@ -517,6 +520,30 @@ public class SearchParamsInfo {
      */
     public void setField(String value) {
         this.field = value;
+    }
+
+    /**
+     * Gets the value of the limit property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getLimit() {
+        return limit;
+    }
+
+    /**
+     * Sets the value of the limit property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setLimit(Integer value) {
+        this.limit = value;
     }
 
     /**

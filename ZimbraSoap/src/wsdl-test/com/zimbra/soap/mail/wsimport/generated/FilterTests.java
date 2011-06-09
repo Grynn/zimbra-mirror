@@ -51,18 +51,18 @@ import javax.xml.bind.annotation.XmlType;
 public class FilterTests {
 
     @XmlElements({
-        @XmlElement(name = "currentTimeTest", type = FilterTestCurrentTime.class),
-        @XmlElement(name = "headerTest", type = FilterTestHeader.class),
-        @XmlElement(name = "trueTest", type = FilterTestTrue.class),
-        @XmlElement(name = "dateTest", type = FilterTestDate.class),
-        @XmlElement(name = "headerExistsTest", type = FilterTestHeaderExists.class),
-        @XmlElement(name = "attachmentTest", type = FilterTestAttachment.class),
         @XmlElement(name = "addressBookTest", type = FilterTestAddressBook.class),
         @XmlElement(name = "bodyTest", type = FilterTestBody.class),
         @XmlElement(name = "mimeHeaderTest", type = FilterTestMimeHeader.class),
-        @XmlElement(name = "inviteTest", type = FilterTestInvite.class),
+        @XmlElement(name = "headerTest", type = FilterTestHeader.class),
+        @XmlElement(name = "dateTest", type = FilterTestDate.class),
+        @XmlElement(name = "currentDayOfWeekTest", type = FilterTestCurrentDayOfWeek.class),
+        @XmlElement(name = "attachmentTest", type = FilterTestAttachment.class),
         @XmlElement(name = "sizeTest", type = FilterTestSize.class),
-        @XmlElement(name = "currentDayOfWeekTest", type = FilterTestCurrentDayOfWeek.class)
+        @XmlElement(name = "trueTest", type = FilterTestTrue.class),
+        @XmlElement(name = "currentTimeTest", type = FilterTestCurrentTime.class),
+        @XmlElement(name = "inviteTest", type = FilterTestInvite.class),
+        @XmlElement(name = "headerExistsTest", type = FilterTestHeaderExists.class)
     })
     protected List<FilterTestInfo> headerTestOrMimeHeaderTestOrHeaderExistsTest;
     @XmlAttribute(required = true)
@@ -86,18 +86,18 @@ public class FilterTests {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link FilterTestCurrentTime }
-     * {@link FilterTestHeader }
-     * {@link FilterTestTrue }
-     * {@link FilterTestDate }
-     * {@link FilterTestHeaderExists }
-     * {@link FilterTestAttachment }
      * {@link FilterTestAddressBook }
      * {@link FilterTestBody }
      * {@link FilterTestMimeHeader }
-     * {@link FilterTestInvite }
-     * {@link FilterTestSize }
+     * {@link FilterTestHeader }
+     * {@link FilterTestDate }
      * {@link FilterTestCurrentDayOfWeek }
+     * {@link FilterTestAttachment }
+     * {@link FilterTestSize }
+     * {@link FilterTestTrue }
+     * {@link FilterTestCurrentTime }
+     * {@link FilterTestInvite }
+     * {@link FilterTestHeaderExists }
      * 
      * 
      */

@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="meta" type="{urn:zimbra}customMetadata" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="fr" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="s" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="d" type="{http://www.w3.org/2001/XMLSchema}long" />
@@ -53,13 +53,14 @@ import javax.xml.bind.annotation.XmlType;
     "fr"
 })
 @XmlSeeAlso({
-    DocumentInfo.class
+    DocumentInfo.class,
+    WikiHitInfo.class
 })
 public class CommonDocumentInfo {
 
     protected List<CustomMetadata> meta;
     protected String fr;
-    @XmlAttribute(required = true)
+    @XmlAttribute
     protected String id;
     @XmlAttribute
     protected String name;

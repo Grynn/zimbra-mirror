@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;/sequence>
  *       &lt;attribute name="sf" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="exp" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="l" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="f" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="t" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -58,7 +58,7 @@ public class ContactInfo {
     protected String sf;
     @XmlAttribute
     protected Boolean exp;
-    @XmlAttribute(required = true)
+    @XmlAttribute
     protected String id;
     @XmlAttribute
     protected String l;

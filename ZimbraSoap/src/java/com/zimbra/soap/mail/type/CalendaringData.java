@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2011 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -33,27 +33,29 @@ import com.zimbra.common.soap.MailConstants;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = {"organizer", "categories", "geo",
                         "fragment", "instances", "alarmData"})
-public class CalendaringData extends CommonCalendaringData {
+public class CalendaringData
+extends CommonCalendaringData
+implements CalendaringDataInterface {
 
-    @XmlAttribute(name=MailConstants.A_DATE, required=false)
+    @XmlAttribute(name=MailConstants.A_DATE /* d */, required=false)
     private long date;
 
-    @XmlElement(name=MailConstants.E_CAL_ORGANIZER, required=false)
+    @XmlElement(name=MailConstants.E_CAL_ORGANIZER /* or */, required=false)
     private CalOrganizer organizer;
 
-    @XmlElement(name=MailConstants.E_CAL_CATEGORY, required=false)
+    @XmlElement(name=MailConstants.E_CAL_CATEGORY /* category */, required=false)
     private List<String> categories = Lists.newArrayList();
 
-    @XmlElement(name=MailConstants.E_CAL_GEO, required=false)
+    @XmlElement(name=MailConstants.E_CAL_GEO /* geo */, required=false)
     private GeoInfo geo;
 
-    @XmlElement(name=MailConstants.E_FRAG, required=false)
+    @XmlElement(name=MailConstants.E_FRAG /* fr */, required=false)
     private String fragment;
 
-    @XmlElement(name=MailConstants.E_INSTANCE, required=false)
+    @XmlElement(name=MailConstants.E_INSTANCE /* inst */, required=false)
     private List<InstanceDataInfo> instances = Lists.newArrayList();
 
-    @XmlElement(name=MailConstants.E_CAL_ALARM_DATA, required=false)
+    @XmlElement(name=MailConstants.E_CAL_ALARM_DATA /* alarmData */, required=false)
     private AlarmDataInfo alarmData;
 
     /**
@@ -80,9 +82,8 @@ public class CalendaringData extends CommonCalendaringData {
         }
     }
 
-    public CalendaringData addCategory(String category) {
+    public void addCategory(String category) {
         this.categories.add(category);
-        return this;
     }
 
     public void setGeo(GeoInfo geo) { this.geo = geo; }
@@ -94,14 +95,14 @@ public class CalendaringData extends CommonCalendaringData {
         }
     }
 
-    public CalendaringData addInstance(InstanceDataInfo instance) {
+    public void addInstance(InstanceDataInfo instance) {
         this.instances.add(instance);
-        return this;
     }
 
     public void setAlarmData(AlarmDataInfo alarmData) {
         this.alarmData = alarmData;
     }
+
     public long getDate() { return date; }
     public CalOrganizer getOrganizer() { return organizer; }
     public List<String> getCategories() {
@@ -131,5 +132,30 @@ public class CalendaringData extends CommonCalendaringData {
     public String toString() {
         return addToStringInfo(Objects.toStringHelper(this))
                 .toString();
+    }
+
+    // Non-JAXB method needed by CalendaringDataInterface
+    public void setCalendaringInstances(
+            Iterable <InstanceDataInterface> instances) {
+        this.instances.clear();
+        if (instances != null) {
+            for (InstanceDataInterface inst : instances) {
+                addCalendaringInstance(inst);
+            }
+        }
+    }
+
+    // Non-JAXB method needed by CalendaringDataInterface
+    public void addCalendaringInstance(InstanceDataInterface instance) {
+        if (instance instanceof InstanceDataInfo) {
+            addInstance((InstanceDataInfo) instance);
+        }
+    }
+
+    // Non-JAXB method needed by CalendaringDataInterface
+    public List<InstanceDataInterface> getCalendaringInstances() {
+        List<InstanceDataInterface> insts = Lists.newArrayList();
+        Iterables.addAll(insts,instances);
+        return Collections.unmodifiableList(insts);
     }
 }

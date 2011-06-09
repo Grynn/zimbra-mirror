@@ -21,8 +21,8 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;/sequence>
  *       &lt;attribute name="nextAlarm" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="alarmInstStart" type="{http://www.w3.org/2001/XMLSchema}long" />
- *       &lt;attribute name="invId" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
- *       &lt;attribute name="compNum" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="invId" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="compNum" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="loc" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
@@ -43,10 +43,10 @@ public class AlarmDataInfo {
     protected Long nextAlarm;
     @XmlAttribute
     protected Long alarmInstStart;
-    @XmlAttribute(required = true)
-    protected int invId;
-    @XmlAttribute(required = true)
-    protected int compNum;
+    @XmlAttribute
+    protected Integer invId;
+    @XmlAttribute
+    protected Integer compNum;
     @XmlAttribute
     protected String name;
     @XmlAttribute
@@ -127,32 +127,48 @@ public class AlarmDataInfo {
     /**
      * Gets the value of the invId property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
-    public int getInvId() {
+    public Integer getInvId() {
         return invId;
     }
 
     /**
      * Sets the value of the invId property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
-    public void setInvId(int value) {
+    public void setInvId(Integer value) {
         this.invId = value;
     }
 
     /**
      * Gets the value of the compNum property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
-    public int getCompNum() {
+    public Integer getCompNum() {
         return compNum;
     }
 
     /**
      * Sets the value of the compNum property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
-    public void setCompNum(int value) {
+    public void setCompNum(Integer value) {
         this.compNum = value;
     }
 

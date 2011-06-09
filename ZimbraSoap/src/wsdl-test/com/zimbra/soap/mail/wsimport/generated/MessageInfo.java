@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  *           &lt;element name="shr" type="{urn:zimbraMail}shareNotification"/>
  *         &lt;/choice>
  *       &lt;/sequence>
- *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="cif" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="origid" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="rt" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -63,7 +63,8 @@ import javax.xml.bind.annotation.XmlType;
     "mpOrShr"
 })
 @XmlSeeAlso({
-    ChatMessageInfo.class
+    ChatMessageInfo.class,
+    MessageHitInfo.class
 })
 public class MessageInfo
     extends MessageCommon
@@ -77,11 +78,11 @@ public class MessageInfo
     protected InviteInfo inv;
     protected List<KeyValuePair> header;
     @XmlElements({
-        @XmlElement(name = "mp", type = PartInfo.class),
-        @XmlElement(name = "shr", type = ShareNotification.class)
+        @XmlElement(name = "shr", type = ShareNotification.class),
+        @XmlElement(name = "mp", type = PartInfo.class)
     })
     protected List<Object> mpOrShr;
-    @XmlAttribute(required = true)
+    @XmlAttribute
     protected String id;
     @XmlAttribute
     protected String cif;
@@ -298,8 +299,8 @@ public class MessageInfo
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link PartInfo }
      * {@link ShareNotification }
+     * {@link PartInfo }
      * 
      * 
      */

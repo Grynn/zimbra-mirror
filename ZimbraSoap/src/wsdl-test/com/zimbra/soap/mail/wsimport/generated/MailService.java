@@ -1191,6 +1191,18 @@ public interface MailService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.SearchResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/Search")
+    @WebResult(name = "SearchResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public SearchResponse searchRequest(
+        @WebParam(name = "SearchRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        SearchRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.mail.wsimport.generated.SendInviteReplyResponse
      */
     @WebMethod(action = "urn:zimbraMail/SendInviteReply")

@@ -44,10 +44,10 @@ import javax.xml.bind.annotation.XmlType;
 public class FreeBusyUserInfo {
 
     @XmlElements({
-        @XmlElement(name = "t", type = FreeBusyBUSYTENTATIVEslot.class),
-        @XmlElement(name = "b", type = FreeBusyBUSYslot.class),
         @XmlElement(name = "n", type = FreeBusyNODATAslot.class),
         @XmlElement(name = "u", type = FreeBusyBUSYUNAVAILABLEslot.class),
+        @XmlElement(name = "t", type = FreeBusyBUSYTENTATIVEslot.class),
+        @XmlElement(name = "b", type = FreeBusyBUSYslot.class),
         @XmlElement(name = "f", type = FreeBusyFREEslot.class)
     })
     protected List<FreeBusySlot> fOrBOrT;
@@ -72,10 +72,10 @@ public class FreeBusyUserInfo {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link FreeBusyBUSYTENTATIVEslot }
-     * {@link FreeBusyBUSYslot }
      * {@link FreeBusyNODATAslot }
      * {@link FreeBusyBUSYUNAVAILABLEslot }
+     * {@link FreeBusyBUSYTENTATIVEslot }
+     * {@link FreeBusyBUSYslot }
      * {@link FreeBusyFREEslot }
      * 
      * 

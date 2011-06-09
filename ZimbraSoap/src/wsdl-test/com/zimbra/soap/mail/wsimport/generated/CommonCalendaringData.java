@@ -40,6 +40,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "commonCalendaringData")
 @XmlSeeAlso({
     CalendaringData.class,
+    CalendarItemHitInfo.class,
     LegacyCalendaringData.class
 })
 public class CommonCalendaringData

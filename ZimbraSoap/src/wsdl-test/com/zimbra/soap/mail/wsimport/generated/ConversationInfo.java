@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  *           &lt;element name="m" type="{urn:zimbraMail}messageInfo"/>
  *         &lt;/choice>
  *       &lt;/sequence>
- *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="n" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="total" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="f" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -55,7 +55,7 @@ public class ConversationInfo {
         @XmlElement(name = "m")
     })
     protected List<MessageInfo> chatOrM;
-    @XmlAttribute(required = true)
+    @XmlAttribute
     protected String id;
     @XmlAttribute
     protected Integer n;

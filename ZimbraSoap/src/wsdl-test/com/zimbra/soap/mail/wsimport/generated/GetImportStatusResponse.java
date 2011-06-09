@@ -46,13 +46,13 @@ public class GetImportStatusResponse {
 
     @XmlElements({
         @XmlElement(name = "gal", type = GalImportStatusInfo.class),
-        @XmlElement(name = "yab", type = YabImportStatusInfo.class),
-        @XmlElement(name = "pop3", type = Pop3ImportStatusInfo.class),
         @XmlElement(name = "rss", type = RssImportStatusInfo.class),
-        @XmlElement(name = "caldav", type = CaldavImportStatusInfo.class),
+        @XmlElement(name = "pop3", type = Pop3ImportStatusInfo.class),
         @XmlElement(name = "unknown", type = UnknownImportStatusInfo.class),
-        @XmlElement(name = "cal", type = CalImportStatusInfo.class),
-        @XmlElement(name = "imap", type = ImapImportStatusInfo.class)
+        @XmlElement(name = "caldav", type = CaldavImportStatusInfo.class),
+        @XmlElement(name = "imap", type = ImapImportStatusInfo.class),
+        @XmlElement(name = "yab", type = YabImportStatusInfo.class),
+        @XmlElement(name = "cal", type = CalImportStatusInfo.class)
     })
     protected List<ImportStatusInfo> imapOrPop3OrCaldav;
 
@@ -75,13 +75,13 @@ public class GetImportStatusResponse {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link GalImportStatusInfo }
-     * {@link YabImportStatusInfo }
-     * {@link Pop3ImportStatusInfo }
      * {@link RssImportStatusInfo }
-     * {@link CaldavImportStatusInfo }
+     * {@link Pop3ImportStatusInfo }
      * {@link UnknownImportStatusInfo }
-     * {@link CalImportStatusInfo }
+     * {@link CaldavImportStatusInfo }
      * {@link ImapImportStatusInfo }
+     * {@link YabImportStatusInfo }
+     * {@link CalImportStatusInfo }
      * 
      * 
      */

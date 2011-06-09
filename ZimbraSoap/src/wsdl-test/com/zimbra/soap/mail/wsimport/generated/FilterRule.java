@@ -193,15 +193,15 @@ public class FilterRule {
     public static class FilterActions {
 
         @XmlElements({
-            @XmlElement(name = "actionFileInto", type = FilterActionFileInto.class),
             @XmlElement(name = "actionNotify", type = FilterActionNotify.class),
             @XmlElement(name = "actionStop", type = FilterActionStop.class),
-            @XmlElement(name = "actionDiscard", type = FilterActionDiscard.class),
-            @XmlElement(name = "actionReply", type = FilterActionReply.class),
-            @XmlElement(name = "actionTag", type = FilterActionTag.class),
-            @XmlElement(name = "actionFlag", type = FilterActionFlag.class),
+            @XmlElement(name = "actionRedirect", type = FilterActionRedirect.class),
             @XmlElement(name = "actionKeep", type = FilterActionKeep.class),
-            @XmlElement(name = "actionRedirect", type = FilterActionRedirect.class)
+            @XmlElement(name = "actionTag", type = FilterActionTag.class),
+            @XmlElement(name = "actionReply", type = FilterActionReply.class),
+            @XmlElement(name = "actionFlag", type = FilterActionFlag.class),
+            @XmlElement(name = "actionDiscard", type = FilterActionDiscard.class),
+            @XmlElement(name = "actionFileInto", type = FilterActionFileInto.class)
         })
         protected List<Object> actionKeepOrActionDiscardOrActionFileInto;
 
@@ -223,15 +223,15 @@ public class FilterRule {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link FilterActionFileInto }
          * {@link FilterActionNotify }
          * {@link FilterActionStop }
-         * {@link FilterActionDiscard }
-         * {@link FilterActionReply }
-         * {@link FilterActionTag }
-         * {@link FilterActionFlag }
-         * {@link FilterActionKeep }
          * {@link FilterActionRedirect }
+         * {@link FilterActionKeep }
+         * {@link FilterActionTag }
+         * {@link FilterActionReply }
+         * {@link FilterActionFlag }
+         * {@link FilterActionDiscard }
+         * {@link FilterActionFileInto }
          * 
          * 
          */

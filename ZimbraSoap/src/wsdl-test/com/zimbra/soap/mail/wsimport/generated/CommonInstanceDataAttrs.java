@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="fba" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="percentComplete" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="recur" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *       &lt;attribute name="priority" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="priority" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="fb" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="transp" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -70,7 +70,7 @@ public class CommonInstanceDataAttrs {
     @XmlAttribute
     protected Boolean recur;
     @XmlAttribute
-    protected Boolean priority;
+    protected String priority;
     @XmlAttribute
     protected String fb;
     @XmlAttribute
@@ -253,10 +253,10 @@ public class CommonInstanceDataAttrs {
      * 
      * @return
      *     possible object is
-     *     {@link Boolean }
+     *     {@link String }
      *     
      */
-    public Boolean isPriority() {
+    public String getPriority() {
         return priority;
     }
 
@@ -265,10 +265,10 @@ public class CommonInstanceDataAttrs {
      * 
      * @param value
      *     allowed object is
-     *     {@link Boolean }
+     *     {@link String }
      *     
      */
-    public void setPriority(Boolean value) {
+    public void setPriority(String value) {
         this.priority = value;
     }
 
