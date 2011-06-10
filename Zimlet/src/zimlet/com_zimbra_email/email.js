@@ -639,7 +639,7 @@ function(obj, span, context) {
 		addr = (this.parseMailToLink(addr)).to || addr;
 	}
 
-	if (!appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
+	if (!(appCtxt.get(ZmSetting.CONTACTS_ENABLED) || appCtxt.isOffline)) {
 		// make sure to remove adding new contact menu item if contacts are disabled
 		if (actionMenu.getOp("NEWCONTACT")) {
 			actionMenu.removeOp("NEWCONTACT");
@@ -691,7 +691,9 @@ function(obj, span, context) {
 	} else {
 		// contact not found, do a search
 		if (contactsApp && !contact && contact !== null) {
-			actionMenu.getOp("NEWCONTACT").setText(ZmMsg.loading);
+            if (actionMenu.getOp("NEWCONTACT")) {
+			    actionMenu.getOp("NEWCONTACT").setText(ZmMsg.loading);
+            }
 			var respCallback = new AjxCallback(this, this._handleResponseGetContact1, [actionMenu]);
 			contactsApp.getContactByEmail(addr, respCallback);
 		} else {
