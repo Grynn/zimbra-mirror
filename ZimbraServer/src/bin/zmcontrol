@@ -435,7 +435,14 @@ sub displayVersion {
 	} elsif ($platform =~ /DEBIAN/ || $platform =~ /UBUNTU/) {
 		my $release = `dpkg -s zimbra-core | egrep '^Version:' | sed -e 's/Version: //'`;
 		chomp $release;
-		$string = "Release $release $platform";
+    if ( -x "/opt/vmware/bin/vamicli") {
+      my $appliance_version=`/opt/vmware/bin/vamicli version --appliance | tail -2 | head -1 | awk '{print \$NF}' 2> /dev/null`;
+      chomp($appliance_version);
+      $string = "ZCA Release $appliance_version\n"
+      $string .= "ZCS Build $release"
+    } else {
+		  $string = "Release $release $platform";
+    }
 	} elsif ($platform =~ /RPL/) {
 		my $release = `conary q zimbra-core | cut -d= -f2`;
 		$string = "Release $release $platform";
@@ -446,13 +453,6 @@ sub displayVersion {
 		$string = "Release $release $platform";
 	}
 
-	#my $rc = 0xffff & system ("/opt/zimbra/bin/zmprov -l gacf > /dev/null 2>&1");
-	#if (!$rc) {
-		#$rc = 0xffff & system 
-			#("/opt/zimbra/bin/zmprov -l gacf 2> /dev/null | grep -q 'zimbraComponentAvailable: hotbackup'");
-		#if ($rc) { $string .= " FOSS edition"; }
-		#else { $string .= " NETWORK edition"; }
-	#}
   $string .=  ((-f "/opt/zimbra/bin/zmbackupquery") ? " NETWORK" : " FOSS"); 
   $string .= " edition.";
 	print "$string\n";
