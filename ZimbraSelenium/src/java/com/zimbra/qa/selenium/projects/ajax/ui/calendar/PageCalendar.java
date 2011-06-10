@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.calendar;
 
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
@@ -100,8 +101,79 @@ public class PageCalendar extends AbsTab {
 
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
-		// TODO Auto-generated method stub
-		return null;
+		logger.info(myPageName() + " zToolbarPressPulldown("+ pulldown +", "+ option +")");
+
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
+
+		if ( pulldown == null )
+			throw new HarnessException("Button cannot be null!");
+
+	    String pulldownLocator = null;	// If set, this will be expanded
+		String optionLocator = null;	// If set, this will be clicked
+		AbsPage page = null;	// If set, this page will be returned
+	  
+		if ( pulldown == Button.B_LISTVIEW ) {
+			pulldownLocator = "css=div#zb__CLD__VIEW_MENU";
+			optionLocator = "css=tr#" + option.toString();
+		    
+			if (option == Button.O_LISTVIEW_DAY) {				
+			    page = new ApptDayView(this.MyApplication);
+			} 
+			else if (option == Button.O_LISTVIEW_WEEK) {				
+			    page = new ApptWeekView(this.MyApplication);
+			}  
+			else if (option == Button.O_LISTVIEW_WORKWEEK) {				
+			    page = new ApptWorkWeekView(this.MyApplication);
+			}  
+			else if (option == Button.O_LISTVIEW_SCHEDULE) {				
+			    page = new ApptScheduleView(this.MyApplication);
+			}  
+			else if (option == Button.O_LISTVIEW_LIST) {				
+			    page = new ApptListView(this.MyApplication);
+			}  
+			else if (option == Button.O_LISTVIEW_MONTH) {				
+			    page = new ApptMonthView(this.MyApplication);
+			}  
+
+		}
+	
+		if ( pulldownLocator != null ) {
+						
+			// Make sure the locator exists
+			if ( !sIsElementPresent(pulldownLocator) ) {
+				throw new HarnessException("Button "+ pulldown +" option "+ option +" pulldownLocator "+ pulldownLocator +" not present!");
+			}
+
+			if (ClientSessionFactory.session().currentBrowserName().contains("IE")) {
+				//IE			
+				sClickAt(pulldownLocator,"0,0");
+			}
+			else {
+			    //others
+			    zClickAt(pulldownLocator,"0,0");
+			}
+			
+			zWaitForBusyOverlay();
+			
+			if ( optionLocator != null ) {
+                
+				// Make sure the locator exists
+				zWaitForElementPresent(optionLocator);
+				
+				zClick(optionLocator);
+				zWaitForBusyOverlay();
+
+			}
+			
+			// If we click on pulldown/option and the page is specified, then
+			// wait for the page to go active
+			if ( page != null ) {
+				page.zWaitForActive();
+			}
+			
+		}
+	    return page;
+		
 	}
 
 	@Override
