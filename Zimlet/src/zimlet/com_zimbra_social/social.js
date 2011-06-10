@@ -2656,7 +2656,6 @@ SocialZimlet.prototype._getCommentsHtml =
 					zimletyFiedTxt = this._socialcastReplaceAt(zimletyFiedTxt, socialcastUsersUrl);
 				} else {
 					zimletyFiedTxt = this._replaceHash(zimletyFiedTxt);
-					zimletyFiedTxt = this._replaceAt(zimletyFiedTxt, userId, tableId, screen_name);
 				}
 				html[i++] = zimletyFiedTxt + "<br><label  style='color:gray;font-size:11px'> - " + userName + "</label>";
 				html[i++] = "</TD></TR>";
