@@ -213,7 +213,14 @@ public class Button {
 	public static final Button B_VIEW_ENTIRE_MESSAGE = new Button("B_VIEW_ENTIRE_MESSAGE");
 	public static final Button B_HIGHLIGHT_OBJECTS = new Button("B_HIGHLIGHT_OBJECTS");
 	
-	
+    // Calendar	Views
+	public static final Button O_LISTVIEW_DAY = new Button("POPUP_DAY_VIEW");
+	public static final Button O_LISTVIEW_WORKWEEK = new Button("POPUP_WORK_WEEK_VIEW");
+	public static final Button O_LISTVIEW_WEEK = new Button("POPUP_WEEK_VIEW");
+	public static final Button O_LISTVIEW_MONTH = new Button("POPUP_MONTH_VIEW");
+	public static final Button O_LISTVIEW_LIST = new Button("POPUP_CAL_LIST_VIEW");
+	public static final Button O_LISTVIEW_SCHEDULE = new Button("POPUP_SCHEDULE_VIEW");
+
 	//// Admin Console
 	
 	// Accounts buttons
