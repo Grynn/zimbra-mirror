@@ -60,7 +60,7 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Vertical" Grid.RowSpan="2">
-                    <ListBox Name="lbMode" ItemsSource="{Binding TheViews}" >
+                    <ListBox Name="lbMode" Visibility="Hidden" IsEnabled="False" ItemsSource="{Binding TheViews}" >
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical">
