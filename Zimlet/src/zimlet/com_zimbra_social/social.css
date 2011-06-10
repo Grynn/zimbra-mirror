@@ -18,8 +18,16 @@
     overflow: hidden;
 }
 
+.Imgsocial_socialcastIcon {
+    background: transparent url("social_socialcast.png") no-repeat 0 0;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}
+
+
 .Imgsocial_trendIcon {
-    background: transparent url("chart_bar.png") no-repeat 0 0;
+    background: transparent url("social-twitterTrend.gif") no-repeat 0 0;
     width: 16px;
     height: 16px;
     overflow: hidden;
@@ -27,6 +35,13 @@
 
 .Imgsocial_facebookIcon {
     background: transparent url("social_fb.png") no-repeat 0 0;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}
+
+.Imgsocial_closeIcon {
+    background: transparent url("social_closeBtn.png") no-repeat 0 0;
     width: 16px;
     height: 16px;
     overflow: hidden;
@@ -82,7 +97,6 @@
 .social_axnClass {
     font-size: 16px;
     font-family: 'Lucida Grande', sans-serif;
-    overflow: auto;
 	border-width:0px 1px 0px 1px;
     border-top: 0px solid #B2B2B2;
     border-bottom: 1px solid #6E6E6E;
@@ -95,6 +109,11 @@
 
 .social_searchColor {
     background-image: url(social_bkground.gif);
+}
+
+.social_socialcastColor {
+    background:  #0D457F !important;
+    color:white;
 }
 
 .social_tweetMemeBg {

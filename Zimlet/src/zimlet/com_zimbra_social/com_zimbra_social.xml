@@ -1,14 +1,18 @@
-<zimlet name="com_zimbra_social" version="2.9" label="${msg.label}" description="${msg.description}">
+<zimlet name="com_zimbra_social" version="3.0" label="${msg.label}" description="${msg.description}">
     <include>socialTwitter.js</include>
     <include>socialFacebook.js</include>
     <include>socialTweetMeme.js</include>
     <include>socialPreferences.js</include>
     <include>socialDigg.js</include>
     <include>socialMiniDlg.js</include>
-	<include>socialOAuth.js</include>
+    <include>socialOAuth.js</include>
     <include>social.js</include>
-	<include>templates/Social.template.js</include>
-	<include>templates/OAuth.template.js</include>
+    <include>SocialcastAddAccountDlg.js</include>
+    <include>socialcast.js</include>
+    <include>base64.js</include>
+    <include>json-minified.js</include>
+    <include>templates/Social.template.js</include>
+    <include>templates/OAuth.template.js</include>
 
     <includeCSS>social.css</includeCSS>
     <resource>social-icon.png</resource>

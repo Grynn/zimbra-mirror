@@ -153,7 +153,7 @@ function() {
 	html[idx++] = this._addUpdateToCheckboxes_miniDlg();
 	html[idx++] = "<TABLE width=100%>";
 	html[idx++] = "<TR><TD style=\"width:90%;\" >";
-	html[idx++] = "<input  style=\"width:100%;height:25px\" autocomplete=\"off\" id=\"social_statusTextArea_miniDlg\" ></input>";
+	html[idx++] = "<input  style=\"width:100%;height:25px\" autocomplete=\"off\" id=\"social_statusTextArea_miniDlg\" />";
 	html[idx++] = "</TD>";
 
 	html[idx++] = "<TD rowspan=2 align=center valign='middle'>";
@@ -167,7 +167,7 @@ function() {
 	html[idx++] = "<TR><TD>";
 	html[idx++] = "<table width=100%><tr>";
 	html[idx++] = "<td align=left> <div id='social_shortenUrlButtonDIV_miniDlg' /></td>";
-	html[idx++] = "<td align=left><input type='checkbox'  id='social_autoShortenCheckbox_miniDlg'></input></td><td  nowrap=''><label style='color:#252525'>"+this.zimlet.getMessage("autoShortenUrl")+"</label></td>";
+	html[idx++] = "<td align=left><input type='checkbox'  id='social_autoShortenCheckbox_miniDlg'/></td><td  nowrap=''><label style='color:#252525'>"+this.zimlet.getMessage("autoShortenUrl")+"</label></td>";
 	html[idx++] = "<td align=left width=90%><div id='social_undoShortenURLDIV_miniDlg' style='display:none'><a  href='javascript:void(0)' id='social_undoShortenURLLink_miniDlg' style='text-decoration:underline;font-weight:bold'>"+this.zimlet.getMessage("undo")+"</a></div></td>";
 	html[idx++] = "</tr></table>";
 	html[idx++] = "</TD></TR>";

@@ -1,15 +1,17 @@
 <template id='Skin'>
 	<DIV class='overviewHeader' id='social_topSxn'>
-	<TABLE width=100%>
+	<TABLE align=center width=100%>
 	<TR><TD style='width:90%;' >
-	<input  style='width:100%;height:25px' autocomplete='off' id='social_statusTextArea' ></input>
+		<textarea  style="width:100%;height:35px;font-size:12px;overflow:auto;color:gray;resize: none;"  autocomplete="off" 	id='social_statusTextArea' >${whatAreYouDoingMsg}</textarea>
 	</TD>
 
 	<TD rowspan=2 align=center valign='middle'>
+	<div id='social_numberOfLettersAllowedDiv'>
 	<table width=100%><tr><td align=center>
 	<label style='font-size:18px;color:green;font-weight:bold' id='social_numberOfLettersAllowed'>140</label>
 	</td></tr><tr><td align=center>
 	<label>${charactersLeft}</label></td></tr></table>
+	</div>
 	</TD>
 	</TR>
 
@@ -50,14 +52,8 @@
 	<TD width=16px valign='middle'>
 	<$= AjxImg.getImageHtml("Blank_16") $>
 	</TD>
-	<TD  nowrap='' width=220px  valign='left'>
-	<label  valign='middle'  style='font-size:14px;color:black;font-weight:bold' id='social_whatareyoudoingLabel' >${whatAreYouDoingMsg}
-	</label>
-	</TD>
-	<TD width=16px valign='middle'>
-	<$= AjxImg.getImageHtml("Blank_16") $>
-	</TD>
-	<td  width=70% nowrap='' id='social_updateToCell'>${updateCheckBoxesHtml}</TD>
+
+	<td  nowrap='' id='social_updateToCell'>${updateCheckBoxesHtml}</TD>
 	<TD valign='middle' align='right'><input   style='width:150px;' type='text' autocomplete='off' id='social_searchField'></input></TD><TD valign='middle'>
 	<div  valign='middle' id='social_searchButton' />
 	</TD>
