@@ -15,6 +15,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 
@@ -144,7 +145,7 @@ public class PageAddressbook extends AbsTab {
 			
 	}
 	
-	public List<FolderItem> zListGetFolders() throws HarnessException {
+	public List<FolderItem> zListGetFolders(ZimbraAccount account) throws HarnessException {
 		List <FolderItem> list = new ArrayList<FolderItem>();
 		
 		//ensure it is in Addressbook main page
@@ -154,48 +155,20 @@ public class PageAddressbook extends AbsTab {
 			//maybe return empty list?????
 				throw new HarnessException("Folder List is not present "+ "div#ztih__main_Contacts__ADDRBOOK div.DwtTreeItemLevel1ChildDiv");
 
-		String startId = FolderItem.SystemFolder.Contacts.getId();
-		    
-		FolderItem folderItem = new FolderItem();
-	    folderItem.setId(startId);
-	    folderItem.setName(FolderItem.SystemFolder.Contacts.getName());
 	    
-		String id=startId;		    
-		do {
-		    id=sGetNextSiblingId(id);
-		    if ((id.length() >0)) {
-		    	  String folderName = ClientSessionFactory.session().selenium().getText("id="+id);
-		    	  
-		    	  folderItem = new FolderItem();
-		    	  folderItem.setId(id);
-		    	  folderItem.setName(folderName);
-		    	  		    	  
-		    	  logger.info(" found folder:" + folderName + " ,id:" + id);
-		    	  list.add(folderItem);
-		    }
-		}		    		    
-		while ((id.length() >0)) ;
-		    
-		id=startId;		    
-		do {
-			try {
-		    id=sGetPreviousSiblingId(id);
-			}
-			catch (Exception e) {id="";};
-			if ((id.length() >0)) {
-		    	  String folderName = ClientSessionFactory.session().selenium().getText("id="+id);
-		    	  
-		    	  folderItem = new FolderItem();
-		    	  folderItem.setId(id);
-		    	  folderItem.setName(folderName);
-		    	  		    	  
-		    	  logger.info(" found folder:" + folderName + " ,id:" + id);
-		    	  list.add(folderItem);
-		    }
-		}		    
-		while ((id.length() >0)) ;
-		    								
-		return list;
+	    String elements="window.document.getElementsByClassName('DWtTreeItem-Text')";
+	    int length = Integer.parseInt(sGetEval(elements + ".length"));
+	   
+	    
+	    for (int i=0; i<length; i++) {
+	        String id= sGetEval(elements + "[" + i +"].id");
+	        
+	        if (id.contains("Contacts")) {
+		       list.add(FolderItem.importFromSOAP(account, sGetText("css=td#" + id)));
+	        }
+	    }
+	    
+	    return list;
 	}
  	
 	

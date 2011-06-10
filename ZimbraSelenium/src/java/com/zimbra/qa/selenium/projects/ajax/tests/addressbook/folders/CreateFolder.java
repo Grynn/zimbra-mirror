@@ -36,7 +36,7 @@ public class CreateFolder extends AjaxCommonTest {
 
 		//Verify created folder listed on the left menu
 		boolean isFolderDisplayed=false;
-		List<FolderItem> list= app.zPageAddressbook.zListGetFolders();
+		List<FolderItem> list= app.zPageAddressbook.zListGetFolders(app.zGetActiveAccount());
 		for (FolderItem i: list) {
 			if (i.getName().equals(folderName)) {
 				isFolderDisplayed=true;
@@ -66,6 +66,19 @@ public class CreateFolder extends AjaxCommonTest {
 	public void ClickContextMenuNewAddressbook() throws HarnessException {	
 		FolderItem folderItem = FolderItem.importFromSOAP(app
 				.zGetActiveAccount(), FolderItem.SystemFolder.UserRoot,
+				_soapDestination, app.zGetActiveAccount().EmailAddress);
+		
+	
+		DialogCreateFolder createFolderDialog = (DialogCreateFolder) app.zTreeContacts.zTreeItem
+		    (Action.A_RIGHTCLICK, Button.B_TREE_NEWFOLDER,folderItem);
+		
+		CreateFolderAndVerify(createFolderDialog);
+	}
+
+	@Test(description = "Create a new folder using context menu from root folder", groups = { "smoke" })
+	public void CreateSubFolderUnderContactsClickContextMenuNewAddressbook() throws HarnessException {	
+		FolderItem folderItem = FolderItem.importFromSOAP(app
+				.zGetActiveAccount(), FolderItem.SystemFolder.Contacts,
 				_soapDestination, app.zGetActiveAccount().EmailAddress);
 		
 	
