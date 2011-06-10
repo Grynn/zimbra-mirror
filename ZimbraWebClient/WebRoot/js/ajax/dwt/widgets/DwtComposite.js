@@ -103,6 +103,48 @@ function() {
 }
 
 /**
+ * collapses consecutive separators into one. Gets rid of head or tail separators as well .
+ * Note that is does not remove the separators, just hides them so they can re-displayed as needed, next time this is called and other elements
+ * become visible
+ *
+ * this would be used on such subclasses as DwtMenu and DwtToolbar .
+ * However, currently it does not work with the toolbars, since separators there are not added as children to the toolbar composite.
+ * I tried to make it consistent with the DwtMenu approach, but it seemed a bit complicated right now.
+ * so for now I try to make it so no complete groups (items between separators) are hidden at one time. It might also be possible
+ * to do it for the toolbar using the _items HTML elements array, but probably less elegant than this approach.
+ */
+DwtComposite.prototype.cleanupSeparators =
+function() {
+	var items = this.getChildren();
+	var previousVisibleIsSeparator = true; // I lie so that upfront separator would be cleaned up
+	var lastSeparator;
+	for (var i = 0; i < items.length; i++) {
+		var item = items[i];
+		var isSeparator = item.isStyle && item.isStyle(DwtMenuItem.SEPARATOR_STYLE);
+		var isVisible = item.getVisible();
+
+		if (isSeparator) {
+			item.setVisible(!previousVisibleIsSeparator);
+			previousVisibleIsSeparator = true;
+			lastSeparator = item;
+			continue;
+		}
+
+		//not a separator
+		if (isVisible) {
+			previousVisibleIsSeparator = false;
+		}
+	}
+	//cleanup tail separator
+	if (previousVisibleIsSeparator) {
+		lastSeparator.setVisible(false);
+	}
+};
+
+
+
+
+/**
  * Gets the number of children of this composite.
  * 
  * @return {number} 		the number of composite children
