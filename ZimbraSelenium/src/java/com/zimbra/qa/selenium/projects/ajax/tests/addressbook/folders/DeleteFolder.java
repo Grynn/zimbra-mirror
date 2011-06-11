@@ -62,11 +62,50 @@ public class DeleteFolder extends AjaxCommonTest {
 		FolderItem folderItem = createFolder(userRoot);
 										
 		// Delete the folder using context menu
-		app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, folderItem);
-				
+		AbsPage page= app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, folderItem);
+
+		// Verify Delete option is enabled
+		ZAssert.assertNotNull(page, "Verify Delete option is enabled");
+
 		verifyExistInTrashFolder(folderItem);
 	}	
 
+				
+	@Test(	description = "Cannot delete an addressbook system folder- Right click, Delete",
+					groups = { "smoke" })
+	public void SystemFoldersDeleteButtonDisabledFromContextmenu() throws HarnessException {
+		
+		FolderItem folder= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);
+		ZAssert.assertNotNull(folder, "Verify can get the Contacts ");
+											
+		// Delete the folder using context menu
+		AbsPage page= app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, folder);
+
+		// Verify Delete option is disabled
+		ZAssert.assertNull(page, "Verify Delete option is disabled");
+		
+
+        folder= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
+		ZAssert.assertNotNull(folder, "Verify can get the EmailedContacts ");
+											
+		// Delete the folder using context menu
+		page= app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, folder);
+
+		// Verify Delete option is disabled
+		ZAssert.assertNull(page, "Verify Delete option is disabled");
+
+		folder= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
+		ZAssert.assertNotNull(folder, "Verify can get the Trash ");
+											
+		// Delete the folder using context menu
+		page= app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, folder);
+
+		// Verify Delete option is disabled
+		ZAssert.assertNull(page, "Verify Delete option is disabled");
+
+	}	
+
+	
 	@Test(	description = "Delete a sub folder - Right click, Delete",
 			groups = { "functional" })
 	public void DeleteSubFolderFromContextmenu() throws HarnessException {
@@ -80,8 +119,11 @@ public class DeleteFolder extends AjaxCommonTest {
 		app.zTreeContacts.zExpand(contact);
 						
 		// Delete the folder using context menu
-		app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, subFolder);
+		AbsPage page= app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, subFolder);
 				
+		// Verify Delete option is enabled
+		ZAssert.assertNotNull(page, "Verify Delete option is enabled");
+		
 		verifyExistInTrashFolder(subFolder);
 			
 	}

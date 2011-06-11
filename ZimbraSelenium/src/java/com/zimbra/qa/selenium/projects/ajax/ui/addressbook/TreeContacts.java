@@ -145,19 +145,29 @@ public class TreeContacts extends AbsTree {
 			zRightClickAt(treeItemLocator,"0,0");
 			zWaitForBusyOverlay();
 			
-			if (option == Button.B_TREE_NEWFOLDER) {				
+			if (option == Button.B_TREE_NEWFOLDER) {
+				//if option is disabled
+				if (sIsElementPresent("css=tr#POPUP_NEW_ADDRBOOK div[class='ImgNewContactsFolder ZDisabledImage']")) {
+					return page;
+				}				
+			
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
 				zWaitForBusyOverlay();
 				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageAddressbook);			    
 			}
-			else if (option == Button.B_DELETE) {				
-				//POPUP_DELETE
+			else if (option == Button.B_DELETE) {								
+				//if option is disabled
+				if (sIsElementPresent("css=tr#POPUP_DELETE div[class='ImgDelete ZDisabledImage']")) {
+					return page;
+				}
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
 				zWaitForBusyOverlay();
+				
+				page= ((AppAjaxClient)MyApplication).zPageAddressbook;
 			}
 			else {
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
@@ -341,8 +351,8 @@ public class TreeContacts extends AbsTree {
 	public void zExpand(FolderItem folderItem) throws HarnessException{
 		
 	    String locator="css=td#zti__main_Contacts__" + folderItem.getId() +"_nodeCell" + ">div." ;
-		//already expanded
-	    if (this.sIsElementPresent(locator+ Locators.EXPAND_NODE)) {
+		//already expanded or not have sub folders
+	    if (!sIsElementPresent(locator+ Locators.COLLAPSE_NODE)) {
 		  return;
 	    }
 	    SleepUtil.sleepMedium();
