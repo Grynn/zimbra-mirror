@@ -186,7 +186,7 @@ namespace MVVM.ViewModel
             m_resultsViewModel = new AccountResultsViewModel(m_scheduleViewModel, 0, "", "", 0, 0, 0, false);
             m_resultsViewModel.Name = "Results";
             m_resultsViewModel.ViewTitle = "Results";
-            m_resultsViewModel.ImageName = "Images/NikiBest.jpg";
+            m_resultsViewModel.ImageName = "Images/Bridge.jpg";
             m_resultsViewModel.isBrowser = isBrowser;
             m_resultsViewModel.CurrentAccountSelection = -1;
 
