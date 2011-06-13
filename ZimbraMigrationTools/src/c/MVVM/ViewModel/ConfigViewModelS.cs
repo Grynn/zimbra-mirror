@@ -72,7 +72,7 @@ namespace MVVM.ViewModel
                        @"C:\Temp\ZimbraAdminOverView.xml");
                 Config Z11 = new Config();
                 Z11 = (Config)reader.Deserialize(fileRead);
-                
+                fileRead.Close();
                 ZimbraServerHostName = Z11.zimbraServer.HostName;
                 ZimbraPort = Z11.zimbraServer.Port;
                 ZimbraAdmin = Z11.zimbraServer.AdminAccount;
