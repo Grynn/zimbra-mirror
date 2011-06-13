@@ -438,8 +438,8 @@ sub displayVersion {
     if ( -x "/opt/vmware/bin/vamicli") {
       my $appliance_version=`/opt/vmware/bin/vamicli version --appliance | tail -2 | head -1 | awk '{print \$NF}' 2> /dev/null`;
       chomp($appliance_version);
-      $string = "ZCA Release $appliance_version\n"
-      $string .= "ZCS Build $release"
+      $string = "ZCA Release $appliance_version\n";
+      $string .= "ZCS Build $release";
     } else {
 		  $string = "Release $release $platform";
     }
