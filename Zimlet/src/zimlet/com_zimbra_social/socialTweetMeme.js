@@ -21,9 +21,6 @@ function com_zimbra_socialTweetMeme(zimlet) {
 
 com_zimbra_socialTweetMeme.prototype.loadTweetMemeCategories =
 function() {
-    this.controller = new ZmMailApp();
-
-
 	this.allTweetMemeCats = new Array();
 	this.allTweetMemeCats.push({query:"__MOST_POPULAR__", name:this.zimlet.getMessage("mostPopular")});
 	this.allTweetMemeCats.push({query:"__MOST_RECENT__", name:this.zimlet.getMessage("mostRecent")});
