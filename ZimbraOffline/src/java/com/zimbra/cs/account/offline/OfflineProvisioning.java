@@ -95,6 +95,7 @@ import com.zimbra.cs.offline.ab.gab.GDataServiceException;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.util.OfflineUtil;
 import com.zimbra.cs.offline.util.OfflineYAuth;
+import com.zimbra.cs.offline.util.yc.oauth.OAuthManager;
 import com.zimbra.cs.util.yauth.AuthenticationException;
 import com.zimbra.cs.util.yauth.MetadataTokenStore;
 import com.zimbra.cs.wiki.WikiUtil;
@@ -130,6 +131,13 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public static final String A_zimbraPrefOfflineSocksProxyPort = "zimbraPrefOfflineSocksProxyPort";
     public static final String A_zimbraPrefOfflineSocksProxyUsername = "zimbraPrefOfflineSocksProxyUsername";
     public static final String A_zimbraPrefOfflineSocksProxyPassword = "zimbraPrefOfflineSocksProxyPassword";
+
+    public static final String A_offlineYContactTmpID = "offlineYahooContactTmpId";
+    public static final String A_offlineYContactToken = "offlineYahooContactToken";
+    public static final String A_offlineYContactTokenSecret = "offlineYahooContactTokenSecret";
+    public static final String A_offlineYContactTokenTimestamp = "offlineYahooContactTokenTimestamp";
+    public static final String A_offlineYContactTokenSessionHandle = "offlineYahooContactTokenSessionHandle";
+    public static final String A_offlineYContactVerifier = "offlineYahooContactVerifier";
 
     public enum EntryType {
         ACCOUNT("acct"), DATASOURCE("dsrc", true), IDENTITY("idnt", true), SIGNATURE("sig", true), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
@@ -766,6 +774,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             MetadataTokenStore.copyTokens(mbox, dsm.getMailbox(ds));
             MetadataTokenStore.clearTokens(mbox);
             OfflineYAuth.deleteRawAuthManager(mbox);
+            // for yahoo contact API (address book)
+            OAuthManager.persistCredential(account.getId(), (String) dsAttrs.get(A_offlineYContactToken),
+                    (String) dsAttrs.get(A_offlineYContactTokenSecret),
+                    (String) dsAttrs.get(A_offlineYContactTokenSessionHandle),
+                    (String) dsAttrs.get(A_offlineYContactTokenTimestamp),
+                    (String) dsAttrs.get(A_offlineYContactVerifier));
         }
         return account;
     }
