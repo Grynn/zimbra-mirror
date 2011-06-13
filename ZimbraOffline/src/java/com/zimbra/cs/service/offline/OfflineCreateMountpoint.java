@@ -16,6 +16,7 @@ package com.zimbra.cs.service.offline;
 
 import java.util.Map;
 
+import com.zimbra.common.mailbox.Color;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
@@ -62,7 +63,7 @@ public class OfflineCreateMountpoint extends OfflineServiceProxy {
 
         OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ((ZcsMailbox)mbox).getOfflineAccount());
         CreateMountpoint redo = new CreateMountpoint(mbox.getId(), parentId, name, ownerId, remoteId, view, flags,
-                new MailItem.Color(color), reminderEnabled);
+                new Color(color), reminderEnabled);
         redo.setId(id);
         redo.setChangeId(mod_content);
         try {

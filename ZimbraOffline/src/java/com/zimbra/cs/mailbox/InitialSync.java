@@ -34,6 +34,7 @@ import java.util.zip.ZipInputStream;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpStatus;
 
+import com.zimbra.common.mailbox.Color;
 import com.zimbra.common.mime.MimeConstants;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
@@ -441,7 +442,7 @@ public class InitialSync {
         boolean relocated = elt.getAttributeBool(A_RELOCATED, false) || !name.equals(elt.getAttribute(MailConstants.A_NAME));
 
         CreateSavedSearch redo = new CreateSavedSearch(ombx.getId(), parentId, name, query, searchTypes, sort, flags,
-                new MailItem.Color(color));
+                new Color(color));
         redo.setSearchId(id);
         redo.start(timestamp > 0 ? timestamp : System.currentTimeMillis());
 
@@ -485,7 +486,7 @@ public class InitialSync {
         String ownerName = null;
         int remoteId = 0;
         if (itemType == MailItem.Type.FOLDER) {
-            redo = new CreateFolder(ombx.getId(), name, parentId, system, view, flags, new MailItem.Color(color), url);
+            redo = new CreateFolder(ombx.getId(), name, parentId, system, view, flags, new Color(color), url);
             ((CreateFolder)redo).setFolderId(id);
         } else {
             if (!OfflineLC.zdesktop_sync_mountpoints.booleanValue()) {
@@ -504,7 +505,7 @@ public class InitialSync {
             remoteId = (int)elt.getAttributeLong(MailConstants.A_REMOTE_ID);
             OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ombx.getOfflineAccount());
 
-            redo = new CreateMountpoint(ombx.getId(), parentId, name, ownerId, remoteId, view, flags, new MailItem.Color(color), reminderEnabled);
+            redo = new CreateMountpoint(ombx.getId(), parentId, name, ownerId, remoteId, view, flags, new Color(color), reminderEnabled);
             ((CreateMountpoint)redo).setId(id);
         }
         redo.start(timestamp > 0 ? timestamp : System.currentTimeMillis());
@@ -561,7 +562,7 @@ public class InitialSync {
 
         boolean renamed = elt.getAttributeBool(A_RELOCATED, false) || !name.equals(elt.getAttribute(MailConstants.A_NAME));
 
-        CreateTag redo = new CreateTag(ombx.getId(), name, new MailItem.Color(color));
+        CreateTag redo = new CreateTag(ombx.getId(), name, new Color(color));
         redo.setTagId(id);
         redo.start(timestamp > 0 ? timestamp : System.currentTimeMillis());
 

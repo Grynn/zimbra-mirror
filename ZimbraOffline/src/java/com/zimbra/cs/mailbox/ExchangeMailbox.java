@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.zimbra.common.mailbox.Color;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
@@ -242,7 +243,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
         lock.lock();
         try {
             super.initialize();
-            getCachedItem(ID_FOLDER_CALENDAR).setColor(new MailItem.Color((byte)1));
+            getCachedItem(ID_FOLDER_CALENDAR).setColor(new Color((byte)1));
         } finally {
             lock.release();
         }

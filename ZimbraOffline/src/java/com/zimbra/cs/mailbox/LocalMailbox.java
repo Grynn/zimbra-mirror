@@ -17,6 +17,7 @@ package com.zimbra.cs.mailbox;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.zimbra.common.mailbox.Color;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
@@ -75,7 +76,7 @@ public class LocalMailbox extends DesktopMailbox {
         lock.lock();
         try {
             super.initialize();
-            getCachedItem(ID_FOLDER_CALENDAR).setColor(new MailItem.Color((byte)8));
+            getCachedItem(ID_FOLDER_CALENDAR).setColor(new Color((byte)8));
             Folder.create(ID_FOLDER_NOTIFICATIONS, this,
                 getFolderById(ID_FOLDER_USER_ROOT), NOTIFICATIONS_PATH,
                 Folder.FOLDER_IS_IMMUTABLE, MailItem.Type.UNKNOWN, 0,

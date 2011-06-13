@@ -29,6 +29,7 @@ import org.dom4j.ElementHandler;
 import com.zimbra.common.account.Key;
 import com.zimbra.common.account.Key.ServerBy;
 import com.zimbra.common.auth.ZAuthToken;
+import com.zimbra.common.mailbox.Color;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.Element;
@@ -519,7 +520,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                 index.add(item);
             }
 
-            item.setColor(new MailItem.Color(color));
+            item.setColor(new Color(color));
             item.setTags(flags, tags);
             if (getFlagById(Flag.ID_UNREAD).canTag(item)) {
                 item.alterUnread(unread);

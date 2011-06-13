@@ -35,6 +35,7 @@ import javax.mail.internet.MimeMultipart;
 import com.zimbra.common.account.Key;
 import com.zimbra.common.account.Key.DataSourceBy;
 import com.zimbra.common.account.Key.IdentityBy;
+import com.zimbra.common.mailbox.Color;
 import com.zimbra.common.mime.MimeConstants;
 import com.zimbra.common.mime.shim.JavaMailInternetAddress;
 import com.zimbra.common.mime.shim.JavaMailMimeBodyPart;
@@ -133,7 +134,7 @@ public class DataSourceMailbox extends SyncMailbox {
                 }
                 OfflineDataSource ds = getDataSource();
                 if (ds.isYahoo() || ds.isGmail()) {
-                    getCachedItem(ID_FOLDER_CALENDAR).setColor(new MailItem.Color((byte) (ds.isYahoo() ? 4 : 5)));
+                    getCachedItem(ID_FOLDER_CALENDAR).setColor(new Color((byte) (ds.isYahoo() ? 4 : 5)));
                 }
             }
         } finally {
