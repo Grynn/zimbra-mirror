@@ -61,17 +61,17 @@ class Config:
 		self.ldap_root_password = state.localconfig["ldap_root_password"]
 		self.ldap_master_url = state.localconfig["ldap_master_url"]
 		self.loglevel 	= 3
-		if state.localconfig["zmmtaconfig_log_level"] is not None:
-			self.loglevel 	= int(state.localconfig["zmmtaconfig_log_level"])
+		if state.localconfig["zmconfigd_log_level"] is not None:
+			self.loglevel 	= int(state.localconfig["zmconfigd_log_level"])
 		self.interval 	= 60
-		if state.localconfig["zmmtaconfig_interval"] is not None and state.localconfig["zmmtaconfig_interval"] != "":
-			self.interval 	= int(state.localconfig["zmmtaconfig_interval"])
+		if state.localconfig["zmconfigd_interval"] is not None and state.localconfig["zmconfigd_interval"] != "":
+			self.interval 	= int(state.localconfig["zmconfigd_interval"])
 		self.debug 		= False
-		if state.localconfig["zmmtaconfig_debug"] is not None:
-			self.debug 		= state.localconfig["zmmtaconfig_debug"]
-		if state.localconfig["zmmtaconfig_watchdog"] is not None:
-			self.watchdog	= (state.localconfig["zmmtaconfig_watchdog"].upper() != "FALSE")
-		if state.localconfig["zmmtaconfig_enable_config_restarts"] is not None:
-			self.restartconfig = (state.localconfig["zmmtaconfig_enable_config_restarts"].upper() != "FALSE")
-		if state.localconfig["zmmtaconfig_watchdog_services"] is not None:
-			self.wd_list = state.localconfig["zmmtaconfig_watchdog_services"].split()
+		if state.localconfig["zmconfigd_debug"] is not None:
+			self.debug 		= state.localconfig["zmconfigd_debug"]
+		if state.localconfig["zmconfigd_watchdog"] is not None:
+			self.watchdog	= (state.localconfig["zmconfigd_watchdog"].upper() != "FALSE")
+		if state.localconfig["zmconfigd_enable_config_restarts"] is not None:
+			self.restartconfig = (state.localconfig["zmconfigd_enable_config_restarts"].upper() != "FALSE")
+		if state.localconfig["zmconfigd_watchdog_services"] is not None:
+			self.wd_list = state.localconfig["zmconfigd_watchdog_services"].split()
