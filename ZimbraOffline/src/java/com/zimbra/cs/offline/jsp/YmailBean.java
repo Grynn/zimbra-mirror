@@ -54,7 +54,7 @@ public class YmailBean extends ImapBean {
             } catch (YContactException e) {
                 setYContactVerifyError("YContactVerifyErr");
             }
-        } else if (verb.isAdd() && isContactSyncSupported()) {
+        } else if (isContactSyncSupported() && (verb.isAdd() || verb.isModify())) {
             try {
                 OAuthToken token = OAuthManager.getTokenUsingVerifier(this.oauthTmpId, this.oauthVerifier);
                 this.ycontactToken = token.getToken();

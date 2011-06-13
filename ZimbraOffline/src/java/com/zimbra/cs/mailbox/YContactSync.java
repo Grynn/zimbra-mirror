@@ -15,6 +15,7 @@
 package com.zimbra.cs.mailbox;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -31,6 +32,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
+import com.zimbra.cs.db.DbDataSource;
 import com.zimbra.cs.db.DbDataSource.DataSourceItem;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.offline.OfflineLog;
@@ -58,6 +60,7 @@ import com.zimbra.cs.offline.util.yc.oauth.OAuthManager;
 public class YContactSync {
 
     private static DocumentBuilder builder = Xml.newDocumentBuilder();
+    private static boolean isMigrated = false;
     private final LocalData localData;
     private Set<String> contactsToRemove = new HashSet<String>();
     private List<ParsedContact> parsedContacts = new ArrayList<ParsedContact>();
@@ -183,7 +186,8 @@ public class YContactSync {
             resp = req.send();
         }
         ContactSync contactSync = new ContactSync();
-        contactSync.setClientRev(clientRev); // need to have it so we know if server updated
+        contactSync.setClientRev(clientRev); // need to have it so we know if
+                                             // server updated
         boolean isServerUpdated = resp.extract(contactSync);
         if (!isServerUpdated) {
             OfflineLog.yab.debug("Yahoo contacts are up to date.");
@@ -297,5 +301,35 @@ public class YContactSync {
         Document doc = builder.newDocument();
         Element root = doc.createElement("contactsync");
         return root.getOwnerDocument();
+    }
+
+    /**
+     * delete existing yahoo contacts so they could be synced from server again
+     * 
+     * @param ds
+     *            data source
+     * @param mbox
+     *            mail box
+     * @throws ServiceException
+     */
+    public static void migrateExistingContacts(OfflineDataSource ds) throws ServiceException {
+        if (isMigrated) {
+            return;
+        }
+        Collection<DataSourceItem> mappings = DbDataSource.getAllMappingsInFolder(ds, -1);  //YAB hard coded -1 as folder id
+        Mailbox mbox = ds.getMailbox();
+        boolean success = false;
+        try {
+            mbox.beginTransaction("yahoo-contacts-migrate", null);
+            for (DataSourceItem item : mappings) {
+                mbox.delete(null, item.itemId, MailItem.Type.CONTACT);
+            }
+            DbDataSource.deleteAllMappings(ds);
+        } catch (Exception e) {
+            throw new YContactException("exception raised when migrating existing yahoo contacts", "", false, e, null);
+        } finally {
+            mbox.endTransaction(success);
+        }
+        isMigrated = true;
     }
 }

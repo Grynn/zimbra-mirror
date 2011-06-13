@@ -84,6 +84,7 @@ import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.OperationContext;
+import com.zimbra.cs.mailbox.YContactSync;
 import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailclient.smtp.SmtpTransport;
 import com.zimbra.cs.mime.MimeTypeInfo;
@@ -2307,6 +2308,17 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (!isLocalAccount(account) && isDataSourceAccount(account)) {
             setAccountAttribute(account, A_zimbraFeatureCalendarEnabled, ds.getBooleanAttr(A_zimbraDataSourceCalendarSyncEnabled, false) ? TRUE : FALSE);
             setAccountAttribute(account, A_zimbraFeatureContactsEnabled, ds.getBooleanAttr(A_zimbraDataSourceContactSyncEnabled, false) ? TRUE : FALSE);
+        }
+        // for yahoo contact API (address book)
+        if (ds.getBooleanAttr(A_zimbraDataSourceContactSyncEnabled, false)) {
+            if (ds instanceof OfflineDataSource && ((OfflineDataSource)ds).isYahoo()) {
+                OAuthManager.persistCredential(account.getId(), ds.getAttr(A_offlineYContactToken),
+                        ds.getAttr(A_offlineYContactTokenSecret),
+                        ds.getAttr(A_offlineYContactTokenSessionHandle),
+                        ds.getAttr(A_offlineYContactTokenTimestamp),
+                        ds.getAttr(A_offlineYContactVerifier));
+                YContactSync.migrateExistingContacts((OfflineDataSource)ds);
+            }
         }
     }
 
