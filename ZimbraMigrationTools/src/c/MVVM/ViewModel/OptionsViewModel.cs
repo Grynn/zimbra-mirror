@@ -67,6 +67,7 @@ namespace MVVM.ViewModel
                    @"C:\Temp\ZimbraAdminOverView.xml");
                 Config Z11 = new Config();
                 Z11 = (Config)reader.Deserialize(fileRead);
+                fileRead.Close();
                 ImportMailOptions = Z11.importOptions.Mail;
                 ImportCalendarOptions = Z11.importOptions.Calendar;
                 ImportContactOptions = Z11.importOptions.Contacts;

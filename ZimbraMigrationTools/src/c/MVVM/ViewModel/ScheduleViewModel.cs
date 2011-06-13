@@ -130,6 +130,7 @@ namespace MVVM.ViewModel
                    @"C:\Temp\ZimbraAdminOverView.xml");
                 Config Z11 = new Config();
                 Z11 = (Config)reader.Deserialize(fileRead);
+                fileRead.Close();
                 COS = Z11.UserProvision.COS;
                 DefaultPWD = Z11.UserProvision.DefaultPWD;
                 ZimbraDomain = Z11.UserProvision.Domain;
