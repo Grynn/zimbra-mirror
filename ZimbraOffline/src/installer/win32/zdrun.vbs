@@ -198,11 +198,21 @@ Sub EnsureSingleInstance()
     Next
 End Sub
 
+Sub BuildPath(ByVal Path)
+    If Not oFso.FolderExists(Path) Then
+        BuildPath oFso.GetParentFolderName(Path)
+        oFso.CreateFolder Path
+    End If
+End Sub
+
 Function GetDataRoot()
     oReg.GetStringValue HKEY_CURRENT_USER, "Software\Zimbra\Zimbra Desktop", "DataRoot", GetDataRoot
     If IsNull(GetDataRoot) Then
         GetDataRoot = sLocalAppDir & "\Zimbra\Zimbra Desktop"
     Else
+        If Not oFso.FolderExists(GetDataRoot) Then
+            BuildPath(GetDataRoot)
+        End If
         GetDataRoot = oFso.getFolder(GetDataRoot).ShortPath
     End If
 End Function
