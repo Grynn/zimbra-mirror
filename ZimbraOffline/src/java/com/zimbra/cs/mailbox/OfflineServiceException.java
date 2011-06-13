@@ -34,6 +34,7 @@ public class OfflineServiceException extends ServiceException {
     public static final String CALDAV_LOGIN_FAILED ="offline.CALDAV_LOGIN_FAILED";
     public static final String YCALDAV_NEED_UPGRADE = "offline.YCALDAV_NEED_UPGRADE";
     public static final String GCALDAV_NEED_ENABLE = "offline.GCALDAV_NEED_ENABLE";
+    public static final String YCONTACT_NEED_VERIFY = "offline.YCONTACT_NEED_VERIFY";
     
     public static final String ITEM_ID = "itemId";
 
@@ -91,6 +92,10 @@ public class OfflineServiceException extends ServiceException {
     
     public static OfflineServiceException GCALDAV_NEED_ENABLE() {
         return new OfflineServiceException("must enable google calendar service", GCALDAV_NEED_ENABLE, RECEIVERS_FAULT); 
+    }
+    
+    public static OfflineServiceException YCONTACT_NEED_VERIFY() {
+        return new OfflineServiceException("must grant access to yahoo contact API", YCONTACT_NEED_VERIFY, RECEIVERS_FAULT);
     }
 }
 

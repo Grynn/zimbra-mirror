@@ -15,13 +15,13 @@
 package com.zimbra.cs.offline.util.yc.oauth;
 
 import java.util.Map;
-import java.util.Scanner;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.Metadata;
+import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.util.yc.YContactException;
 
@@ -37,7 +37,7 @@ public class OAuthManager {
     }
 
     private static final class LazyHolder {
-        static OAuthManager instance = new OAuthManager();
+        private static final OAuthManager instance = new OAuthManager();
     }
 
     private synchronized OAuthCredential getMboxAuthCredential(String accountId) {
@@ -49,94 +49,106 @@ public class OAuthManager {
     }
 
     public static OAuthToken getOAuthToken(String accountId) throws YContactException {
-        return LazyHolder.instance.getMboxAuthCredential(accountId).getAuthToken();
+        OAuthCredential oauth = LazyHolder.instance.getMboxAuthCredential(accountId);
+        if (oauth.authToken.isExpired()) {
+            return getRetryToken(accountId);
+        }
+        return oauth.authToken;
     }
-    
+
     public static OAuthToken getRetryToken(String accountId) throws YContactException {
         OAuthCredential oauth = LazyHolder.instance.getMboxAuthCredential(accountId);
         oauth.load();
         oauth.refreshToken();
+        oauth.persist();
         return oauth.authToken;
+    }
+
+    public static void loadCredential(String accountId) throws YContactException {
+        OAuthCredential oauth = LazyHolder.instance.getMboxAuthCredential(accountId);
+        oauth.load();
+    }
+
+    /**
+     * should only be called again per lifetime
+     */
+    public static void persistCredential(String accountId, String token, String tokenSecret, String sessionHandle,
+            String tokenTimestamp, String verifier) throws YContactException {
+        OAuthToken t = new OAuthToken(token, tokenSecret);
+        t.setSessionHandle(sessionHandle);
+        t.setLastAccessTime(Long.parseLong((tokenTimestamp)));
+        OAuthCredential oauth = new OAuthCredential(accountId, t, verifier);
+        LazyHolder.instance.mboxOAuthCredentials.put(accountId, oauth);
+        oauth.persist();
     }
 
     /**
      * first method to be called (during account setup), returns access url
      * 
-     * @param accountId accountId
+     * @param accountId
+     *            accountId
      * @return url for user to grant access
      * @throws YContactException
      */
-    public static String getAccessTokenUrl(String accountId) throws YContactException {
-        return getOAuthToken(accountId).getNextUrl();
+    public static String[] getAccessTokenURL() throws YContactException {
+        String tmpId = UUID.randomUUID().toString();
+        String url = LazyHolder.instance.getMboxAuthCredential(tmpId).getAccessURL();
+        return new String[] { url, tmpId };
     }
 
     /**
-     * second method to be called, already have auth token at this point, together with user's verifier, ready to make api calls
+     * second method to be called, already have auth token at this point,
+     * together with user's verifier, ready to make api calls
      * 
-     * @param accountId Account id
-     * @param verifier user get it back by granting access using url we provided earlier
+     * @param accountId
+     *            Account id
+     * @param verifier
+     *            user get it back by granting access using url we provided
+     *            earlier
      * @throws YContactException
      */
-    public static void setVerifier(String accountId, String verifier) throws YContactException {
+    public static OAuthToken getTokenUsingVerifier(String accountId, String verifier) throws OfflineServiceException {
         assert LazyHolder.instance.mboxOAuthCredentials.size() > 0;
         try {
             OAuthCredential oauth = LazyHolder.instance.getMboxAuthCredential(accountId);
             oauth.setVerifier(verifier);
-            oauth.persist();
-        } catch (ServiceException e) {
+            oauth.genNewToken();
+            return oauth.authToken;
+        } catch (Exception e) {
             e.printStackTrace();
-            throw new YContactException("set verifier error", "", false, e, null);
+            throw OfflineServiceException.YCONTACT_NEED_VERIFY();
         }
     }
 
     private static final class OAuthCredential {
 
         private static final String OFFLINE_YC_OAUTH = "offline_yahoo_contacts_sync";
-        private OAuthToken authToken = new OAuthToken("-1", "-1");
+        private OAuthToken authToken = OAuthToken.newToken();
         private String verifier = "-1";
         private String accountId;
-        private boolean isLoaded = false;
 
         OAuthCredential(String accountId) {
             this.accountId = accountId;
         }
 
-        public OAuthToken getAuthToken() throws YContactException {
-            try {
-                if (!this.isLoaded) {
-                    this.load();
-                    this.isLoaded = true;
-                }
-                if (this.authToken.getTokenSecret().equals("-1")) {
-                    getNewToken();
-                    this.persist();
-                } else if (this.authToken.isExpired()) {
-                    refreshToken();
-                    this.persist();
-                }
-            } catch (ServiceException e) {
-                e.printStackTrace();
-                throw new YContactException("persist verifier error", "", false, e, null);
-            }
-            return authToken;
+        OAuthCredential(String accountId, OAuthToken token, String verif) {
+            this.accountId = accountId;
+            this.authToken = token;
+            this.verifier = verif;
         }
 
-        /**
-         * should be called once per mailbox per life time
-         * 
-         * @throws YContactException
-         */
-        private void getNewToken() throws YContactException {
+        private String getAccessURL() throws YContactException {
             OAuthRequest req = new OAuthGetRequestTokenRequest(new OAuthToken());
             String resp = req.send();
             OAuthResponse response = new OAuthGetRequestTokenResponse(resp);
-//            System.out.println("paste the highlighted codes below: " + response.getToken().getNextUrl());
-//            System.out.print("Verifier: ");
-//            Scanner scan = new Scanner(System.in);
-//            this.setVerifier(scan.nextLine());
-            req = new OAuthGetTokenRequest(response.getToken(), this.verifier);
-            resp = req.send();
-            response = new OAuthGetTokenResponse(resp);
+            this.authToken = response.getToken();
+            return this.authToken.getNextUrl();
+        }
+
+        private void genNewToken() throws YContactException {
+            OAuthRequest req = new OAuthGetTokenRequest(this.authToken, this.verifier);
+            String resp = req.send();
+            OAuthResponse response = new OAuthGetTokenResponse(resp);
             this.authToken = response.getToken();
             this.authToken.setLastAccessTime(System.currentTimeMillis());
         }
@@ -151,11 +163,14 @@ public class OAuthManager {
             this.verifier = verif;
         }
 
-        //format is: verifier,token,tokenSecret,sessionHandler,timestamp
+        // format is: verifier,token,tokenSecret,sessionHandler,timestamp
         private void persist() throws YContactException {
             try {
                 Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(this.accountId);
                 Metadata md = mbox.getConfig(null, OFFLINE_YC_OAUTH);
+                if (md == null) {
+                    md = new Metadata();
+                }
                 md.put(this.accountId, this.toString());
                 mbox.setConfig(null, OFFLINE_YC_OAUTH, md);
             } catch (Exception e) {
@@ -167,11 +182,6 @@ public class OAuthManager {
             try {
                 Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(this.accountId);
                 Metadata md = mbox.getConfig(null, OFFLINE_YC_OAUTH);
-                if (md == null) {
-                    md = new Metadata();
-                    md.put(this.accountId, this);
-                    mbox.setConfig(null, OFFLINE_YC_OAUTH, md);
-                }
                 OfflineLog.yab.debug("[verifier:tokeen:token_secret:lastsynctime]: %s", md.get(this.accountId));
                 String[] tokens = md.get(this.accountId).split(",");
                 this.verifier = tokens[0];
@@ -179,7 +189,7 @@ public class OAuthManager {
                 this.authToken.setSessionHandle(tokens[3]);
                 this.authToken.setLastAccessTime(Long.parseLong(tokens[4]));
             } catch (Exception e) {
-                throw new YContactException("yahoo contact persist token error", "", false, e, null);
+                throw new YContactException("yahoo contact persist token error", e.getMessage(), false, e, null);
             }
         }
 

@@ -23,11 +23,13 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.DataSource.ConnectionType;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.zclient.ZFolder;
 
 public class XmailBean extends MailBean {
-    public XmailBean() {}
+    public XmailBean() {
+    }
 
     protected String domain;
     protected String fromDisplay = "";
@@ -48,6 +50,13 @@ public class XmailBean extends MailBean {
     protected boolean syncAllServerFolders = true;
 
     protected boolean calLoginError = false;
+
+    protected boolean ycontactVerifyError = false;
+    protected String ycontactToken = "";
+    protected String ycontactTokenSecret = "";
+    protected long ycontactTokenTimestamp = 0L;
+    protected String ycontactVerfier = "";
+    protected String ycontactSessionHandle = "";
 
     private static final String adomain = "aol.com";
     private static final String gdomain = "gmail.com";
@@ -85,35 +94,26 @@ public class XmailBean extends MailBean {
         port = ds.getPort().toString();
         connectionType = ds.getConnectionType();
         isDebugTraceEnabled = ds.isDebugTraceEnabled();
-        calendarSyncEnabled = ds.getBooleanAttr(
-            OfflineConstants.A_zimbraDataSourceCalendarSyncEnabled, false);
-        contactSyncEnabled = ds.getBooleanAttr(
-            OfflineConstants.A_zimbraDataSourceContactSyncEnabled, false);
+        calendarSyncEnabled = ds.getBooleanAttr(OfflineConstants.A_zimbraDataSourceCalendarSyncEnabled, false);
+        contactSyncEnabled = ds.getBooleanAttr(OfflineConstants.A_zimbraDataSourceContactSyncEnabled, false);
         domain = ds.getAttr(Provisioning.A_zimbraDataSourceDomain, null);
-        smtpEnabled = ds.getBooleanAttr(
-            OfflineConstants.A_zimbraDataSourceSmtpEnabled, true);
+        smtpEnabled = ds.getBooleanAttr(OfflineConstants.A_zimbraDataSourceSmtpEnabled, true);
         smtpHost = ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpHost, null);
         smtpPort = ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpPort, null);
-        isSmtpSsl = "ssl".equals(ds.getAttr(
-            OfflineConstants.A_zimbraDataSourceSmtpConnectionType));
-        isSmtpAuth = ds.getBooleanAttr(
-            OfflineConstants.A_zimbraDataSourceSmtpAuthRequired, false);
+        isSmtpSsl = "ssl".equals(ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpConnectionType));
+        isSmtpAuth = ds.getBooleanAttr(OfflineConstants.A_zimbraDataSourceSmtpAuthRequired, false);
         if (isSmtpAuth) {
-            smtpUsername = ds.getAttr(
-                OfflineConstants.A_zimbraDataSourceSmtpAuthUsername, null);
-            smtpPassword = isEmpty(ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpAuthPassword, null)) ?
-                null : JspConstants.MASKED_PASSWORD;
+            smtpUsername = ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpAuthUsername, null);
+            smtpPassword = isEmpty(ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpAuthPassword, null)) ? null
+                    : JspConstants.MASKED_PASSWORD;
         } else {
             smtpUsername = "";
             smtpPassword = "";
         }
-        syncFreqSecs = ds.getTimeIntervalSecs(
-            OfflineConstants.A_zimbraDataSourceSyncFreq,
-            OfflineConstants.DEFAULT_SYNC_FREQ / 1000);
-        syncAllServerFolders = ds.getBooleanAttr(
-            OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, false);
-        leaveOnServer = ds.getBooleanAttr(
-            Provisioning.A_zimbraDataSourceLeaveOnServer, false);
+        syncFreqSecs = ds.getTimeIntervalSecs(OfflineConstants.A_zimbraDataSourceSyncFreq,
+                OfflineConstants.DEFAULT_SYNC_FREQ / 1000);
+        syncAllServerFolders = ds.getBooleanAttr(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, false);
+        leaveOnServer = ds.getBooleanAttr(Provisioning.A_zimbraDataSourceLeaveOnServer, false);
     }
 
     @Override
@@ -122,10 +122,10 @@ public class XmailBean extends MailBean {
             return;
         try {
             Map<String, Object> dsAttrs = new HashMap<String, Object>();
-            DataSource.Type dsType = isEmpty(type) ? null :
-		DataSource.Type.fromString(type);
+            DataSource.Type dsType = isEmpty(type) ? null : DataSource.Type.fromString(type);
 
             calLoginError = false;
+            ycontactVerifyError = false;
             if (verb.isAdd() || verb.isModify()) {
                 if (dsType == null)
                     addInvalid("type");
@@ -163,120 +163,107 @@ public class XmailBean extends MailBean {
                 if (isAllOK()) {
                     dsAttrs.put(OfflineConstants.A_offlineAccountFlavor, accountFlavor);
                     dsAttrs.put(OfflineConstants.A_zimbraDataSourceAccountSetup, Provisioning.TRUE);
-                    dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled,
-                        Provisioning.TRUE);
-                    dsAttrs.put(Provisioning.A_zimbraDataSourceUsername,
-                        username);
+                    dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled, Provisioning.TRUE);
+                    dsAttrs.put(Provisioning.A_zimbraDataSourceUsername, username);
                     if (!password.equals(JspConstants.MASKED_PASSWORD))
                         dsAttrs.put(Provisioning.A_zimbraDataSourcePassword, password);
-                    dsAttrs.put(Provisioning.A_zimbraDataSourceEmailAddress,
-                        email);
-                    dsAttrs.put(Provisioning.A_zimbraPrefFromDisplay,
-                        fromDisplay);
-                    dsAttrs.put(Provisioning.A_zimbraPrefReplyToAddress,
-                        replyTo);
-                    dsAttrs.put(Provisioning.A_zimbraPrefReplyToDisplay,
-                        replyToDisplay);
+                    dsAttrs.put(Provisioning.A_zimbraDataSourceEmailAddress, email);
+                    dsAttrs.put(Provisioning.A_zimbraPrefFromDisplay, fromDisplay);
+                    dsAttrs.put(Provisioning.A_zimbraPrefReplyToAddress, replyTo);
+                    dsAttrs.put(Provisioning.A_zimbraPrefReplyToDisplay, replyToDisplay);
                     dsAttrs.put(Provisioning.A_zimbraDataSourceHost, host);
                     dsAttrs.put(Provisioning.A_zimbraDataSourcePort, port);
                     dsAttrs.put(Provisioning.A_zimbraDataSourceConnectionType, connectionType.toString());
-                    dsAttrs.put(Provisioning.A_zimbraDataSourceEnableTrace,
-                        isDebugTraceEnabled ? Provisioning.TRUE :
-                        Provisioning.FALSE);
+                    dsAttrs.put(Provisioning.A_zimbraDataSourceEnableTrace, isDebugTraceEnabled ? Provisioning.TRUE
+                            : Provisioning.FALSE);
                     if (isCalendarSyncSupported()) {
                         dsAttrs.put(OfflineConstants.A_zimbraDataSourceCalendarSyncEnabled,
-                            calendarSyncEnabled ? Provisioning.TRUE : Provisioning.FALSE);
+                                calendarSyncEnabled ? Provisioning.TRUE : Provisioning.FALSE);
                     }
                     if (isContactSyncSupported()) {
                         dsAttrs.put(OfflineConstants.A_zimbraDataSourceContactSyncEnabled,
-                            contactSyncEnabled ? Provisioning.TRUE : Provisioning.FALSE);
+                                contactSyncEnabled ? Provisioning.TRUE : Provisioning.FALSE);
                     }
-                    dsAttrs.put(Provisioning.A_zimbraDataSourceDomain,
-                        domain);
-                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpEnabled,
-                        smtpEnabled ? Provisioning.TRUE : Provisioning.FALSE);
-                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpHost,
-                        smtpHost);
-                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpPort,
-                        smtpPort);
-                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpConnectionType,
-                        (isSmtpSsl ? ConnectionType.ssl :
-                        ConnectionType.cleartext).toString());
-                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthRequired,
-                        isSmtpAuth ? Provisioning.TRUE : Provisioning.FALSE);
+                    dsAttrs.put(Provisioning.A_zimbraDataSourceDomain, domain);
+                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpEnabled, smtpEnabled ? Provisioning.TRUE
+                            : Provisioning.FALSE);
+                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpHost, smtpHost);
+                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpPort, smtpPort);
+                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpConnectionType, (isSmtpSsl ? ConnectionType.ssl
+                            : ConnectionType.cleartext).toString());
+                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthRequired, isSmtpAuth ? Provisioning.TRUE
+                            : Provisioning.FALSE);
                     if (isSmtpAuth) {
-                        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthUsername,
-                            smtpUsername);
+                        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthUsername, smtpUsername);
                         if (!smtpPassword.equals(JspConstants.MASKED_PASSWORD))
-                            dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthPassword,
-                                smtpPassword);
+                            dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthPassword, smtpPassword);
                     }
-                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncFreq,
-                        Long.toString(syncFreqSecs));
+                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncFreq, Long.toString(syncFreqSecs));
                     if (isFolderSyncSupported())
                         dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, Provisioning.TRUE);
                     if (dsType == DataSource.Type.pop3) {
-                        dsAttrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer,
-                            Boolean.toString(leaveOnServer).toUpperCase());
-                        dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId,
-                            ZFolder.ID_INBOX);
+                        dsAttrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, Boolean.toString(leaveOnServer)
+                                .toUpperCase());
+                        dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, ZFolder.ID_INBOX);
                     } else {
                         assert dsType == DataSource.Type.imap;
-                        dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId,
-                            ZFolder.ID_USER_ROOT);
+                        dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, ZFolder.ID_USER_ROOT);
                     }
                     if (sslCertAlias != null && sslCertAlias.length() > 0)
-                    	dsAttrs.put(OfflineConstants.A_zimbraDataSourceSslCertAlias, sslCertAlias);
+                        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSslCertAlias, sslCertAlias);
                 }
             }
             if (verb.isAdd()) {
-                if (email.endsWith('@' + ydomain) ||
-		    email.endsWith('@' + yjpdomain) ||
-                    email.endsWith('@' + ymdomain) ||
-		    email.endsWith('@' + yrmdomain)) {
+                if (email.endsWith('@' + ydomain) || email.endsWith('@' + yjpdomain) || email.endsWith('@' + ymdomain)
+                        || email.endsWith('@' + yrmdomain)) {
                     if (dsType == DataSource.Type.imap) {
-                        dsAttrs.put(Provisioning.A_zimbraDataSourceDomain,
-                            ydomain);
+                        dsAttrs.put(Provisioning.A_zimbraDataSourceDomain, ydomain);
                     } else {
                         addInvalid("type");
                         setError(getMessage("YMPMustUseImap"));
                     }
                 } else if (email.endsWith('@' + gdomain)) {
                     if (dsType == DataSource.Type.imap) {
-                        dsAttrs.put(Provisioning.A_zimbraDataSourceDomain,
-                            gdomain);
+                        dsAttrs.put(Provisioning.A_zimbraDataSourceDomain, gdomain);
                     } else {
                         addInvalid("type");
                         setError(getMessage("GmailMustUseImap"));
                     }
                 } else if (email.endsWith('@' + adomain)) {
                     if (dsType == DataSource.Type.imap) {
-                        dsAttrs.put(Provisioning.A_zimbraDataSourceDomain,
-                            adomain);
+                        dsAttrs.put(Provisioning.A_zimbraDataSourceDomain, adomain);
                     } else {
                         addInvalid("type");
                         setError(getMessage("AOLMustUseImap"));
                     }
                 }
-                if (isCalendarSyncSupported())
+                if (isCalendarSyncSupported()) {
                     dsAttrs.put(OfflineConstants.A_zimbraDataSourceCalendarFolderId, ZFolder.ID_CALENDAR);
+                }
+                if (isContactSyncSupported()) {
+                    // for yahoo contact oauth
+                    dsAttrs.put(OfflineProvisioning.A_offlineYContactToken, this.ycontactToken);
+                    dsAttrs.put(OfflineProvisioning.A_offlineYContactTokenSecret, this.ycontactTokenSecret);
+                    dsAttrs.put(OfflineProvisioning.A_offlineYContactTokenSessionHandle, this.ycontactSessionHandle);
+                    dsAttrs.put(OfflineProvisioning.A_offlineYContactTokenTimestamp,
+                            String.valueOf(this.ycontactTokenTimestamp));
+                    dsAttrs.put(OfflineProvisioning.A_offlineYContactVerifier, this.ycontactVerfier);
+                }
             }
             if (isAllOK()) {
                 JspProvStub stub = JspProvStub.getInstance();
                 if (verb.isAdd()) {
-                    stub.createOfflineDataSource(accountName, email, dsType,
-                        dsAttrs);
+                    stub.createOfflineDataSource(accountName, email, dsType, dsAttrs);
                 } else if (isEmpty(accountId)) {
                     setError(getMessage("AccountIdMissing"));
                 } else if (verb.isDelete()) {
                     stub.deleteOfflineDataSource(accountId);
                 } else if (verb.isModify()) {
-                    stub.modifyOfflineDataSource(accountId, accountName,
-                        dsAttrs);
+                    stub.modifyOfflineDataSource(accountId, accountName, dsAttrs);
                 } else if (verb.isReset()) {
                     stub.resetOfflineDataSource(accountId);
-    		    } else if (verb.isReindex()) {
-    		    	stub.reIndex(accountId);
+                } else if (verb.isReindex()) {
+                    stub.reIndex(accountId);
                 } else {
                     setError(getMessage("UnknownAct"));
                 }
@@ -292,13 +279,17 @@ public class XmailBean extends MailBean {
                 setCalDavLoginError("YMPSyncCalUpgradeNote");
             } else if (x.getCode().equals("offline.GCALDAV_NEED_ENABLE")) {
                 setCalDavLoginError("GmailCalDisabled");
-            } else if (!(verb != null && verb.isDelete() && x.getCode().equals(
-                "account.NO_SUCH_ACCOUNT"))) {
+            } else if (!(verb != null && verb.isDelete() && x.getCode().equals("account.NO_SUCH_ACCOUNT"))) {
                 setExceptionError(x);
             }
         } catch (Exception t) {
             setError(t.getLocalizedMessage() == null ? t.toString() : t.getLocalizedMessage());
         }
+    }
+
+    protected void setYContactVerifyError(String key) {
+        setError(getMessage(key));
+        ycontactVerifyError = true;
     }
 
     protected void setCalDavLoginError(String key) {
