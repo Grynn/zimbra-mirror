@@ -41,4 +41,4 @@ you to skip rebuilding it just to rebuild the rest of ZCS.
 Party to build Desktop.  However, you must have a licensed version of install4j.
 
 The buildZCS.sh script will do its best to make sure you have all pre-requisite software
-installed to both build Third Party and to build the ZCS product.
+installed to both build Third Party and to build the ZCS or ZD product.
