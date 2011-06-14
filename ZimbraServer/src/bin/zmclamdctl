@@ -77,11 +77,11 @@ checkrunning() {
   fi
 }
 
-ps_cmd="/bin/ps -ef"
 pskillall() {
+  ps_cmd="/bin/ps ax -o pid,ppid,command"
   killsig="$1"
   pname=`echo "$2" | sed -e 's%/%\\\/%g'`
-  plist=`${ps_cmd} | awk '{ if ( $8 ~ /'${pname}'/ ) { print $2 } }'`
+  plist=`${ps_cmd} | awk '{ if ( $3 ~ /'${pname}'/ ) { print $1 " " $2 } }' | sort -nr -k2 -k1 | awk '{ print $1 }'`
   for p in ${plist}
   do
     kill ${killsig} ${p}
@@ -151,13 +151,8 @@ case "$1" in
       cpid=`cat /opt/zimbra/log/clamd.pid`
       kill -9 "$cpid" 2> /dev/null
     fi
-    if [ "x$platform" = "xMACOSX" -o "x$platform" = "xMACOSXx86" ]; then
-      pskillall -9 freshclam
-      pskillall -9 clamd
-    else
-      pskillall -9 ${zimbra_home}/clamav/bin/freshclam
-      pskillall -9 ${zimbra_home}/clamav/sbin/clamd
-    fi
+    pskillall -9 ${zimbra_home}/clamav/bin/freshclam
+    pskillall -9 ${zimbra_home}/clamav/sbin/clamd
     exit 0
    ;;
 
