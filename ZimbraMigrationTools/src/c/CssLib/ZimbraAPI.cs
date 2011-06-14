@@ -213,9 +213,16 @@ namespace CssLib
                 WSServiceType = WebServiceClient.ServiceType.Traditional
             };
             req = CreateSoapEnvelope(ZIMBRA_API_LOGON);
-            client.InvokeService(req, out rsp);
-            ParseLogon(rsp);
-            return client.status;
+            try
+            {
+                client.InvokeService(req, out rsp);
+                ParseLogon(rsp);
+                return client.status;
+            }
+            catch (System.Net.WebException wex)
+            {
+                return -1;
+            }
         }
 
         public int GetInfo(string authToken, string url)

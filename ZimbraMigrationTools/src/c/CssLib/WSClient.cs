@@ -50,12 +50,24 @@ namespace CssLib
             HttpWebRequest webReq = this.CreateWebRequest();
 
             //write the soap envelope to request stream (req is the soap envelope)
-            using (Stream stm = webReq.GetRequestStream())
+            try
             {
-                using (StreamWriter stmw = new StreamWriter(stm))
+                using (Stream stm = webReq.GetRequestStream())
                 {
-                    stmw.Write(req);
+                    using (StreamWriter stmw = new StreamWriter(stm))
+                    {
+                        stmw.Write(req);
+                    }
                 }
+            }
+            catch (System.Net.WebException wex)
+            //catch (Exception ex)
+            {
+                Console.WriteLine(wex.Message);
+                Console.WriteLine(wex.Status);
+                status = (int)wex.Status;
+                rsp = "";
+                return;
             }
 
             //get the response from the web service
