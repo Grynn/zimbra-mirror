@@ -1200,33 +1200,33 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     {ref:ZaCos.A_zimbraMinPwdLength, 
 			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraMinPwdLength,
 			label:ZaMsg.LBL_zimbraMinPwdLength, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
-			visibilityChecks:[],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+			visibilityChecks:[ZaItem.hasWritePermission],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
 		    },
                     {ref:ZaCos.A_zimbraMaxPwdLength, 
 			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraMaxPwdLength,
 			label:ZaMsg.LBL_zimbraMaxPwdLength, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
-			visibilityChecks:[],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+			visibilityChecks:[ZaItem.hasWritePermission],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
 		    },
 
                     {ref:ZaCos.A_zimbraPasswordMinUpperCaseChars, 
 			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraPasswordMinUpperCaseChars,
 			label:ZaMsg.LBL_zimbraPasswordMinUpperCaseChars, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
-			visibilityChecks:[],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+			visibilityChecks:[ZaItem.hasWritePermission],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
 		    },
                     {ref:ZaCos.A_zimbraPasswordMinLowerCaseChars, 
 			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraPasswordMinLowerCaseChars,
 			label:ZaMsg.LBL_zimbraPasswordMinLowerCaseChars, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
-			visibilityChecks:[],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+			visibilityChecks:[ZaItem.hasWritePermission],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
 		    },
                     {ref:ZaCos.A_zimbraPasswordMinPunctuationChars, 
 			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraPasswordMinPunctuationChars,
 			label:ZaMsg.LBL_zimbraPasswordMinPunctuationChars, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
-			visibilityChecks:[],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+			visibilityChecks:[ZaItem.hasWritePermission],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
 	 	    },
                     {ref:ZaCos.A_zimbraPasswordMinNumericChars, 
 			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraPasswordMinNumericChars,
 			label:ZaMsg.LBL_zimbraPasswordMinNumericChars, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
-			visibilityChecks:[],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+			visibilityChecks:[ZaItem.hasWritePermission],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
 		    },
 
                     {ref:ZaCos.A_zimbraMinPwdAge, 
