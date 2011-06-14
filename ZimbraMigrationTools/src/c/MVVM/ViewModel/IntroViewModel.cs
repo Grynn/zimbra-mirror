@@ -101,6 +101,21 @@ namespace MVVM.ViewModel
             lb.SelectedIndex = 0;
         }
 
+        public string BuildNum
+        {
+            get { return m_intro.BuildNum; }
+            set
+            {
+                if (value == m_intro.BuildNum)
+                {
+                    return;
+                }
+                m_intro.BuildNum = value;
+
+                OnPropertyChanged(new PropertyChangedEventArgs("BuildNum"));
+            }
+        }
+
         public string WelcomeMsg
         {
             get { return m_intro.WelcomeMsg; }
