@@ -2551,7 +2551,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							],
 							cssStyle:"padding-top:5px; padding-bottom:5px"
 						},				
-						{type:_ZA_PLAIN_GROUPER_, id:"account_prefs_contacts_general",colSizes:["195px","auto"], width:"100%",
+						{type:_ZA_PLAIN_GROUPER_, id:"account_prefs_contacts_general",colSizes:["auto"],
 							//label:ZaMsg.NAD_ContactsOptions,
 							items :[
                                 {type:_GROUP_, colSizes:["275px", "auto"], numCols:2, width:"100%", items: [
@@ -2566,6 +2566,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									colSizes:["275px","275px","*"],
 									type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraPrefGalAutoCompleteEnabled,checkBoxLabel:ZaMsg.LBL_zimbraPrefGalAutoCompleteEnabled, trueValue:"TRUE", falseValue:"FALSE"}	
 								]
+                                }
 							]
 						},
 
