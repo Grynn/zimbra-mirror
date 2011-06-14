@@ -1536,7 +1536,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 							]
 						});
 		}		
-		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPrefAutoAddAddressEnabled,ZaAccount.A_zimbraPrefGalAutoCompleteEnabled,ZaAccount.A_zimbraPrefContactsPerPage],[])) {				
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPrefAutoAddAddressEnabled,ZaAccount.A_zimbraPrefGalAutoCompleteEnabled],[])) {				
 			prefItems.push({type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_contacts_header",
 							items: [
 								{type:_OUTPUT_,value:ZaMsg.NAD_ContactsOptions}
@@ -1559,12 +1559,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
                                         resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
                                         msgName:ZaMsg.LBL_zimbraPrefGalAutoCompleteEnabled,
                                         checkBoxLabel:ZaMsg.LBL_zimbraPrefGalAutoCompleteEnabled,
-                                        trueValue:"TRUE", falseValue:"FALSE"},
-                                    {ref:ZaAccount.A_zimbraPrefContactsPerPage, type:_SUPERWIZ_SELECT1_,
-                                        colSizes:["300px", "*"],
-                                        msgName:ZaMsg.MSG_zimbraPrefContactsPerPage,
-                                        label:ZaMsg.LBL_zimbraPrefContactsPerPage,
-                                        labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, valueLabel:null}
+                                        trueValue:"TRUE", falseValue:"FALSE"}
                                     ]
                                 }
                             ]

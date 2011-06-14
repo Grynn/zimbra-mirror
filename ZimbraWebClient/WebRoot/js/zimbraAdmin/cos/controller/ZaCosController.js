@@ -522,15 +522,6 @@ function () {
 		}	
 	}
 				
-	if(ZaItem.hasWritePermission(ZaCos.A_zimbraPrefContactsPerPage,tmpObj)) {		
-		if(tmpObj.attrs[ZaCos.A_zimbraPrefContactsPerPage] != null && !AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaCos.A_zimbraPrefContactsPerPage])) {
-			//show error msg
-			this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR, [ZaMsg.MSG_zimbraPrefContactsPerPage]), null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);		
-			this._errorDialog.popup();		
-			return false;
-		}
-	}
-	
 	if(ZaItem.hasWritePermission(ZaCos.A_zimbraEnforcePwdHistory,tmpObj)) {	
 		if(tmpObj.attrs[ZaCos.A_zimbraEnforcePwdHistory] != null && !AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaCos.A_zimbraEnforcePwdHistory])) {
 			//show error msg

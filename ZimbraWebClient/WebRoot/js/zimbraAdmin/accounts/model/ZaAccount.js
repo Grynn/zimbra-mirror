@@ -163,7 +163,6 @@ ZaAccount.A_zimbraPrefOutOfOfficeReply = "zimbraPrefOutOfOfficeReply";
 ZaAccount.A_zimbraPrefOutOfOfficeReplyEnabled = "zimbraPrefOutOfOfficeReplyEnabled";
 ZaAccount.A_zimbraPrefReplyToAddress = "zimbraPrefReplyToAddress";
 ZaAccount.A_zimbraPrefUseKeyboardShortcuts = "zimbraPrefUseKeyboardShortcuts";
-ZaAccount.A_zimbraPrefContactsPerPage = "zimbraPrefContactsPerPage";
 ZaAccount.A_zimbraMemberOf = "zimbraMemberOf";
 ZaAccount.A_zimbraPrefComposeInNewWindow = "zimbraPrefComposeInNewWindow";
 ZaAccount.A_zimbraPrefForwardReplyInOriginalFormat = "zimbraPrefForwardReplyInOriginalFormat";
@@ -770,17 +769,6 @@ function(tmpObj) {
 		}
 	}
 	
-	if(ZaItem.hasWritePermission(ZaAccount.A_zimbraPrefContactsPerPage,tmpObj)) {		
-		if(tmpObj.attrs[ZaAccount.A_zimbraPrefContactsPerPage] != "" && tmpObj.attrs[ZaAccount.A_zimbraPrefContactsPerPage] !=null && !AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaAccount.A_zimbraPrefContactsPerPage])) {
-			//show error msg
-			ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_INVALID_VALUE_FOR, [ZaMsg.MSG_zimbraPrefContactsPerPage])) ;
-			return false;
-		}
-	}	
-	if(ZaItem.hasWritePermission(ZaAccount.A_zimbraPrefContactsPerPage,tmpObj)) {
-		if(tmpObj.attrs[ZaAccount.A_zimbraPrefContactsPerPage])
-			tmpObj.attrs[ZaAccount.A_zimbraPrefContactsPerPage] = parseInt(tmpObj.attrs[ZaAccount.A_zimbraPrefContactsPerPage]);
-	}
 	if(ZaItem.hasWritePermission(ZaAccount.A_zimbraEnforcePwdHistory,tmpObj)) {
 		if(tmpObj.attrs[ZaAccount.A__zimbraEnforcePwdHistory] != "" && tmpObj.attrs[ZaAccount.A_zimbraEnforcePwdHistory] !=null && !AjxUtil.isNonNegativeLong(tmpObj.attrs[ZaAccount.A_zimbraEnforcePwdHistory])) {
 			//show error msg
@@ -1802,7 +1790,6 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraPrefUseKeyboardShortcuts, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefUseKeyboardShortcuts, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraAllowAnyFromAddress, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraAllowAnyFromAddress, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraAllowFromAddress,type: _LIST_, ref:"attrs/"+ZaAccount.A_zimbraAllowFromAddress, listItem:{type:_STRING_}},
-        {id:ZaAccount.A_zimbraPrefContactsPerPage, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraPrefContactsPerPage, choices:[10,25,50,100]},
         {id:ZaAccount.A_zimbraPrefComposeInNewWindow, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefComposeInNewWindow, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefForwardReplyInOriginalFormat, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefForwardReplyInOriginalFormat, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefAutoAddAddressEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefAutoAddAddressEnabled, choices:ZaModel.BOOLEAN_CHOICES},
