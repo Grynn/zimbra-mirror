@@ -23,14 +23,14 @@ import java.util.ArrayList;
 
 public class YMailImport implements DataSource.DataImport {
     private final OfflineImport imapImport;
-    private OfflineImport yabImport;
+    private OfflineImport ycImport;
     private OfflineImport calDavImport;
     
     public YMailImport(OfflineDataSource ds) throws ServiceException {
         imapImport = OfflineImport.imapImport(ds);
         if (ds.isContactSyncEnabled()) {
-//            yabImport = OfflineImport.yabImport(ds.getContactSyncDataSource());
-            yabImport = OfflineImport.ycImport(ds.getContactSyncDataSource());
+            //ycImport = OfflineImport.yabImport(ds.getContactSyncDataSource());
+            ycImport = OfflineImport.ycImport(ds.getContactSyncDataSource());
         }
         if (ds.isCalendarSyncEnabled()) {
             calDavImport = OfflineImport.ycalImport(ds.getCalendarSyncDataSource());
@@ -38,8 +38,8 @@ public class YMailImport implements DataSource.DataImport {
     }
 
     public void test() throws ServiceException {
-        if (yabImport != null) {
-            yabImport.test();
+        if (ycImport != null) {
+            ycImport.test();
         }
         if (calDavImport != null) {
             calDavImport.test();
@@ -55,9 +55,9 @@ public class YMailImport implements DataSource.DataImport {
         } catch (ServiceException e) {
             errors.add(e);
         }
-        if (yabImport != null) {
+        if (ycImport != null) {
             try {
-                yabImport.importData(folderIds, fullSync);
+                ycImport.importData(folderIds, fullSync);
             } catch (ServiceException e) {
                 errors.add(e);
             }

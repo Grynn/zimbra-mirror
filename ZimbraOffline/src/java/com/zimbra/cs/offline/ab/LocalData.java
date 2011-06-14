@@ -151,16 +151,16 @@ public final class LocalData {
     }
 
     public void updateMapping(int itemId, String remoteId, String data) throws ServiceException {
-        updateMapping(itemId, remoteId, data, false);
+        updateMapping(-1, itemId, remoteId, data, false);   //gab and yab all use -1 as folder id
     }
 
-    public void updateMapping(int itemId, String remoteId, String data, boolean isBatch) throws ServiceException {
+    public void updateMapping(int folderId, int itemId, String remoteId, String data, boolean isBatch) throws ServiceException {
         Metadata md = null;
         if (data != null) {
             md = new Metadata();
             md.put(key, data);
         }
-        DataSourceItem dsi = new DataSourceItem(-1, itemId, remoteId, md);
+        DataSourceItem dsi = new DataSourceItem(folderId, itemId, remoteId, md);
         if (DbDataSource.hasMapping(ds, itemId)) {
             DbDataSource.updateMapping(ds, dsi, isBatch);
         } else {

@@ -22,6 +22,7 @@ import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.mailbox.YContactSync;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.ab.LocalData;
+import com.zimbra.cs.offline.util.yc.YContactException;
 
 
 public class YContactImport implements DataSource.DataImport {
@@ -29,8 +30,10 @@ public class YContactImport implements DataSource.DataImport {
     private final OfflineDataSource ds;
     private YContactSync session;
     
-    public YContactImport(OfflineDataSource ds) {
+    public YContactImport(OfflineDataSource ds) throws YContactException {
         this.ds = ds;
+        //TODO it could be a good place to load oauth token, not a good place for persist it as it's 
+        //before OfflineProvisiong's createAccount in code path
     }
     @Override
     public void test() throws ServiceException {
@@ -41,16 +44,15 @@ public class YContactImport implements DataSource.DataImport {
         if (!fullSync && !new LocalData(ds).hasLocalChanges()) {
             return;
         }
-        OfflineLog.yab.info("Importing Yahoo contacts for account '%s'", ds.getName());
+        OfflineLog.yab.info("Start importing Yahoo contacts for account '%s'", ds.getName());
         if (session == null) {
             session = new YContactSync(ds);
         }
         try {
             session.sync();
         } catch (Exception e) {
-            e.printStackTrace();
-            OfflineLog.yab.info("Failed to import Yahoo contacts for account '%s'", ds.getName());
-            return;
+            OfflineLog.yab.error("Failed to import Yahoo contacts for account '%s'", ds.getName());
+            throw new YContactException("Failed to import yahoo contacts, please edit account setup and verify access.", e.getMessage(), false, e, null);
         }
         OfflineLog.yab.info("Finished importing Yahoo contacts for account '%s'", ds.getName());
     }

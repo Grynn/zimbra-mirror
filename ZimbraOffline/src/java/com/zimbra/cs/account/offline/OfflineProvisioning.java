@@ -81,6 +81,7 @@ import com.zimbra.cs.mailbox.LocalJMSession;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
+import com.zimbra.cs.mailbox.Metadata;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.OperationContext;
@@ -776,11 +777,16 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             MetadataTokenStore.clearTokens(mbox);
             OfflineYAuth.deleteRawAuthManager(mbox);
             // for yahoo contact API (address book)
-            OAuthManager.persistCredential(account.getId(), (String) dsAttrs.get(A_offlineYContactToken),
-                    (String) dsAttrs.get(A_offlineYContactTokenSecret),
-                    (String) dsAttrs.get(A_offlineYContactTokenSessionHandle),
-                    (String) dsAttrs.get(A_offlineYContactTokenTimestamp),
-                    (String) dsAttrs.get(A_offlineYContactVerifier));
+            OfflineLog.offline.info("sync contacts enabled: " + attrs.get(A_zimbraFeatureContactsEnabled));
+            if (Boolean.parseBoolean((String) (attrs.get(A_zimbraFeatureContactsEnabled)))) {
+                OAuthManager.persistCredential(account.getId(), (String) dsAttrs.get(A_offlineYContactToken),
+                        (String) dsAttrs.get(A_offlineYContactTokenSecret),
+                        (String) dsAttrs.get(A_offlineYContactTokenSessionHandle),
+                        (String) dsAttrs.get(A_offlineYContactTokenTimestamp),
+                        (String) dsAttrs.get(A_offlineYContactVerifier));
+                //create mailbox from scratch, don't need migration
+                YContactSync.skipMigration(mbox);
+            }
         }
         return account;
     }
@@ -2309,7 +2315,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             setAccountAttribute(account, A_zimbraFeatureCalendarEnabled, ds.getBooleanAttr(A_zimbraDataSourceCalendarSyncEnabled, false) ? TRUE : FALSE);
             setAccountAttribute(account, A_zimbraFeatureContactsEnabled, ds.getBooleanAttr(A_zimbraDataSourceContactSyncEnabled, false) ? TRUE : FALSE);
         }
-        // for yahoo contact API (address book)
+        //for yahoo contact sync (address book)
         if (ds.getBooleanAttr(A_zimbraDataSourceContactSyncEnabled, false)) {
             if (ds instanceof OfflineDataSource && ((OfflineDataSource)ds).isYahoo()) {
                 OAuthManager.persistCredential(account.getId(), ds.getAttr(A_offlineYContactToken),
@@ -2317,7 +2323,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                         ds.getAttr(A_offlineYContactTokenSessionHandle),
                         ds.getAttr(A_offlineYContactTokenTimestamp),
                         ds.getAttr(A_offlineYContactVerifier));
-                YContactSync.migrateExistingContacts((OfflineDataSource)ds);
+                YContactSync.migrateExistingContacts(((OfflineDataSource)ds).getContactSyncDataSource());
             }
         }
     }

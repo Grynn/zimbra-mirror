@@ -62,9 +62,12 @@ public class YContactSync {
     private static DocumentBuilder builder = Xml.newDocumentBuilder();
     private static boolean isMigrated = false;
     private final LocalData localData;
+    private static int YCONTACT_FOLDER_ID = -2;
+    public static int YAB_FOLDER_ID = -1;
     private Set<String> contactsToRemove = new HashSet<String>();
     private List<ParsedContact> parsedContacts = new ArrayList<ParsedContact>();
     private Map<String, Integer> localContactIdMap = new HashMap<String, Integer>();
+    private static String MIGRATE_FLAG = "offline-ycontact-migration";
 
     public YContactSync(DataSource ds) throws ServiceException {
         this.localData = new LocalData((OfflineDataSource) ds);
@@ -89,7 +92,9 @@ public class YContactSync {
         int clientRev = 0;
         String lastRev = ss.getLastRevision();
         if (!StringUtil.isNullOrEmpty(lastRev)) {
-            clientRev = Integer.parseInt(ss.getLastRevision());
+            try {
+                clientRev = Integer.parseInt(ss.getLastRevision());    
+            } catch (NumberFormatException e) {}
         }
         int seq = ss.getLastModSequence();
         YContactSyncResult ysyncResult = null;
@@ -201,9 +206,17 @@ public class YContactSync {
             switch (contact.getOp()) {
             case ADD:
             case UPDATE:
-                ContactData cd = new ContactData(contact);
-                ParsedContact pc = cd.getParsedContact();
-                this.parsedContacts.add(pc);
+                ContactData cd = null;
+                try {
+                    cd = new ContactData(contact);
+                    ParsedContact pc = cd.getParsedContact();
+                    this.parsedContacts.add(pc);    
+                } catch (Exception e) {
+                    OfflineLog.yab.error("yahoo contact parsing error, %s", e.getMessage());
+                    if (cd != null)
+                        OfflineLog.yab.error("error creating contact: " + cd.toString());
+                }
+                
                 break;
             case REMOVE:
                 this.contactsToRemove.add(contact.getId());
@@ -279,22 +292,22 @@ public class YContactSync {
         DataSourceItem dsi = this.localData.getReverseMapping(RemoteId.contactId(Integer.parseInt(ycContact.getId()))
                 .toString());
         this.localData.modifyContact(dsi.itemId, pc);
-        this.localData.updateMapping(dsi.itemId, dsi.remoteId, Xml.toString(ycContact.toXml(getContactSyncDocument())),
-                true);
+        this.localData.updateMapping(YCONTACT_FOLDER_ID, dsi.itemId, dsi.remoteId,
+                Xml.toString(ycContact.toXml(getContactSyncDocument())), true);
     }
 
     private void saveContact(ParsedContact pc, Contact ycContact) throws ServiceException {
         int itemId = this.localData.createContact(pc).getId();
         RemoteId rid = RemoteId.contactId(Integer.parseInt(ycContact.getId()));
-        this.localData.updateMapping(itemId, rid.toString(), Xml.toString(ycContact.toXml(getContactSyncDocument())),
-                true);
+        this.localData.updateMapping(YCONTACT_FOLDER_ID, itemId, rid.toString(),
+                Xml.toString(ycContact.toXml(getContactSyncDocument())), true);
     }
 
     private void updateContactAndAddMapping(int itemId, ParsedContact pc, Contact ycContact) throws ServiceException {
         this.localData.modifyContact(itemId, pc);
         RemoteId rid = RemoteId.contactId(Integer.parseInt(ycContact.getId()));
-        this.localData.updateMapping(itemId, rid.toString(), Xml.toString(ycContact.toXml(getContactSyncDocument())),
-                true);
+        this.localData.updateMapping(YCONTACT_FOLDER_ID, itemId, rid.toString(),
+                Xml.toString(ycContact.toXml(getContactSyncDocument())), true);
     }
 
     private static Document getContactSyncDocument() {
@@ -303,6 +316,9 @@ public class YContactSync {
         return root.getOwnerDocument();
     }
 
+    public static void setMigrated() {
+        isMigrated = true;
+    }
     /**
      * delete existing yahoo contacts so they could be synced from server again
      * 
@@ -316,20 +332,44 @@ public class YContactSync {
         if (isMigrated) {
             return;
         }
-        Collection<DataSourceItem> mappings = DbDataSource.getAllMappingsInFolder(ds, -1);  //YAB hard coded -1 as folder id
         Mailbox mbox = ds.getMailbox();
+        Metadata md = mbox.getConfig(null, MIGRATE_FLAG);
+        if (md != null) {
+            isMigrated = true;
+            return;
+        }
+        LocalData localData = new LocalData((OfflineDataSource) ds);
+        SyncState ss = localData.loadState();
+        OfflineLog.yab.debug("SyncState before migration: %s", ss);
+        if (ss == null) {
+            ss = new SyncState();
+        }
+        ss.setLastRevision("0");
+        Collection<DataSourceItem> mappings = DbDataSource.getAllMappingsInFolder(ds, YAB_FOLDER_ID);  //YAB hard coded -1 as folder id
         boolean success = false;
         try {
             mbox.beginTransaction("yahoo-contacts-migrate", null);
             for (DataSourceItem item : mappings) {
                 mbox.delete(null, item.itemId, MailItem.Type.CONTACT);
             }
-            DbDataSource.deleteAllMappings(ds);
+            DbDataSource.deleteAllMappingsInFolder(ds, YAB_FOLDER_ID, true);
+            md = new Metadata();
+            md.put("migrated", "yes");
+            mbox.setConfig(null, MIGRATE_FLAG, md);
+            localData.saveState(ss);
+            success = true;
         } catch (Exception e) {
             throw new YContactException("exception raised when migrating existing yahoo contacts", "", false, e, null);
         } finally {
             mbox.endTransaction(success);
         }
         isMigrated = true;
+    }
+
+    public static void skipMigration(Mailbox mbox) throws ServiceException {
+        isMigrated = true;
+        Metadata md = new Metadata();
+        md.put("migrated", "no-need");
+        mbox.setConfig(null, MIGRATE_FLAG, md);
     }
 }

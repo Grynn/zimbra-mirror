@@ -211,11 +211,6 @@ function onEditLink(id, keep, makeInvisible) {
     elem.focus();
 }
 
-function blockYContactDiv() {
-    elem = document.getElementById("oauthDiv");
-    elem.style.visibility = "hidden";
-}
-
 function onAuth() {
     elem = document.getElementById("oauthDiv");
     var contactCheck = document.getElementById("contactSyncEnabled");
@@ -240,7 +235,7 @@ function onAuth() {
         </c:if>
         <c:if test="${verb eq 'add' or verb eq ''}">
             document.getElementById('accountName').focus();
-            blockYContactDiv() ;
+            onAuth();
         </c:if>
     }
 
@@ -727,6 +722,7 @@ function onAuth() {
                                                     <input type="checkbox" id="contactSyncEnabled" name="contactSyncEnabled" ${bean.contactSyncEnabled ? 'checked' : ''} onclick='onAuth()'>
                                                     <label class="ZCheckboxLabel" for="contactSyncEnabled"><fmt:message key='SyncContactsInfo'/></label>
                                                     <br>
+                                                    <c:if test="${accountFlavor eq 'YMP'}">
                                                     <div id="oauthDiv">
                                                         <label class="ZFieldLabel" for="contactSyncEnabled"><fmt:message key="YContactURL" />:</label>
                                                         <a href="<c:out value="${bean.oauthURL}" escapeXml="true" />" target="_blank">Click To Verify</a>
@@ -736,6 +732,7 @@ function onAuth() {
                                                         <input type="hidden" name="oauthURL" value="${bean.oauthURL}" />
                                                         <input type="hidden" name="oauthTmpId" value="${bean.oauthTmpId}" />
                                                     </div>
+                                                    </c:if>
                                                 </td>
                                             </tr>
                                         </c:if>

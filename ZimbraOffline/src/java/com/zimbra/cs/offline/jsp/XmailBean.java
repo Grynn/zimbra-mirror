@@ -240,8 +240,10 @@ public class XmailBean extends MailBean {
                 if (isCalendarSyncSupported()) {
                     dsAttrs.put(OfflineConstants.A_zimbraDataSourceCalendarFolderId, ZFolder.ID_CALENDAR);
                 }
-                if (isContactSyncSupported()) {
-                    // for yahoo contact oauth
+            }
+            // for yahoo contact oauth
+            if (verb.isAdd() || verb.isModify()) {
+                if (contactSyncEnabled) {
                     dsAttrs.put(OfflineProvisioning.A_offlineYContactToken, this.ycontactToken);
                     dsAttrs.put(OfflineProvisioning.A_offlineYContactTokenSecret, this.ycontactTokenSecret);
                     dsAttrs.put(OfflineProvisioning.A_offlineYContactTokenSessionHandle, this.ycontactSessionHandle);

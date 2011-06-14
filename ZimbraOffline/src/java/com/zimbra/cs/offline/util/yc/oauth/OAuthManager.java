@@ -69,15 +69,18 @@ public class OAuthManager {
         oauth.load();
     }
 
-    /**
-     * should only be called again per lifetime
-     */
     public static void persistCredential(String accountId, String token, String tokenSecret, String sessionHandle,
             String tokenTimestamp, String verifier) throws YContactException {
+        OAuthCredential oauth = LazyHolder.instance.mboxOAuthCredentials.get(accountId);
+        if ((oauth != null) &&
+            (verifier != null && verifier.equals(oauth.verifier))) {
+            //might be called by OfflineProvisioning modifyDataSource right after createDataSource
+            return;
+        }
         OAuthToken t = new OAuthToken(token, tokenSecret);
         t.setSessionHandle(sessionHandle);
         t.setLastAccessTime(Long.parseLong((tokenTimestamp)));
-        OAuthCredential oauth = new OAuthCredential(accountId, t, verifier);
+        oauth = new OAuthCredential(accountId, t, verifier);
         LazyHolder.instance.mboxOAuthCredentials.put(accountId, oauth);
         oauth.persist();
     }

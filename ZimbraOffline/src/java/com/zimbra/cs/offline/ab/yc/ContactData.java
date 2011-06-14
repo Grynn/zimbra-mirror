@@ -134,7 +134,6 @@ public class ContactData {
         }
         if (newContactData.hasHomeAddressFields()) {
             Fields change = null;
-            ;
             if (oldContact.hasFieldByFlag(Type.address, Flag.home)) {
                 change = newContactData.exportNameField(Action.UPDATE);
                 List<Fields> list = oldContact.getFields(Type.address);
@@ -559,11 +558,11 @@ public class ContactData {
         case email:
             SimpleField esf = (SimpleField) field.getFieldValue();
 
-            if (!StringUtil.isNullOrEmpty(this.fields.get(A_email))) {
+            if (StringUtil.isNullOrEmpty(this.fields.get(A_email))) {
                 this.fields.put(A_email, esf.getValue());
-            } else if (!StringUtil.isNullOrEmpty(this.fields.get(A_email2))) {
+            } else if (StringUtil.isNullOrEmpty(this.fields.get(A_email2))) {
                 this.fields.put(A_email2, esf.getValue());
-            } else if (!StringUtil.isNullOrEmpty(this.fields.get(A_email3))) {
+            } else if (StringUtil.isNullOrEmpty(this.fields.get(A_email3))) {
                 this.fields.put(A_email3, esf.getValue());
             }
             break;
@@ -578,7 +577,7 @@ public class ContactData {
                 }
                 break;
             case work:
-                if (!StringUtil.isNullOrEmpty(this.fields.get(A_workPhone))) {
+                if (StringUtil.isNullOrEmpty(this.fields.get(A_workPhone))) {
                     this.fields.put(A_workPhone, psf.getValue());
                 } else {
                     this.fields.put(A_workPhone2, psf.getValue());
@@ -606,11 +605,11 @@ public class ContactData {
             break;
         case otherid:
             SimpleField osf = (SimpleField) field.getFieldValue();
-            if (!StringUtil.isNullOrEmpty(this.fields.get(A_imAddress1))) {
+            if (StringUtil.isNullOrEmpty(this.fields.get(A_imAddress1))) {
                 this.fields.put(A_imAddress1, osf.getValue());
-            } else if (!StringUtil.isNullOrEmpty(this.fields.get(A_imAddress2))) {
+            } else if (StringUtil.isNullOrEmpty(this.fields.get(A_imAddress2))) {
                 this.fields.put(A_imAddress2, osf.getValue());
-            } else if (!StringUtil.isNullOrEmpty(this.fields.get(A_imAddress3))) {
+            } else if (StringUtil.isNullOrEmpty(this.fields.get(A_imAddress3))) {
                 this.fields.put(A_imAddress3, osf.getValue());
             }
             break;
@@ -628,5 +627,9 @@ public class ContactData {
 
     private Map<String, String> getFieldData() {
         return this.fields;
+    }
+    
+    public String toString() {
+        return this.getFieldData().toString();
     }
 }
