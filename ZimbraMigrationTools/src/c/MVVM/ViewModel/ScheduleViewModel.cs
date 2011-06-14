@@ -142,7 +142,7 @@ namespace MVVM.ViewModel
                 MessageBox.Show("There is no options configuration stored.Please enter some options info", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            MessageBox.Show("Schedule information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            //MessageBox.Show("Schedule information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
 
         public ICommand SaveCommand
@@ -294,6 +294,20 @@ namespace MVVM.ViewModel
                 m_schedule.EnableMigrate = value;
                 OnPropertyChanged(new PropertyChangedEventArgs("EnableMigrate"));
             }
+        }
+
+        private ObservableCollection<string> domainlist = new ObservableCollection<string>();
+        public ObservableCollection<string> DomainList
+        {
+            get { return domainlist; }
+            set { domainlist = value; }
+        }
+
+        private ObservableCollection<string> coslist = new ObservableCollection<string>();
+        public ObservableCollection<string> CosList
+        {
+            get { return coslist; }
+            set { coslist = value; }
         }
 
         //Background thread stuff

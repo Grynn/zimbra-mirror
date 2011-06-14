@@ -58,7 +58,7 @@
                         <Label Content="Username" Margin="26,0,0,0" HorizontalAlignment="Left" Name="label3" VerticalAlignment="Top" Grid.Row="3" Grid.Column="0" />
                         <TextBox HorizontalAlignment="Left" MinWidth="240" Name="tbUser" VerticalAlignment="Top" Grid.Row="3" Grid.Column="1" Text="{Binding Path=ZimbraUser}"/>
                         <Label Content="Password" Margin="26,0,0,0" HorizontalAlignment="Left" Name="label4" VerticalAlignment="Top" Grid.Row="4" Grid.Column="0"  />
-                        <PasswordBox HorizontalAlignment="Left" MinWidth="240" Name="passwordBox1" VerticalAlignment="Top" Grid.Row="4" Grid.Column="1"/>
+                        <PasswordBox HorizontalAlignment="Left" MinWidth="240" Name="passwordBox1" VerticalAlignment="Top" Grid.Row="4" Grid.Column="1" PasswordChanged="pb_PasswordChanged"/>
                     </Grid>
                 </TabItem>
             </TabControl>

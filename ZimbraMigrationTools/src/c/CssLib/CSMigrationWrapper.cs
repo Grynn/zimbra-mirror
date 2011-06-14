@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MVVM;
+//using MVVM;
 using ExchangeMigrationLib;
 using System.IO;
 
 namespace CssLib
 {
+/*    
     public class CSMigrationwrapper
     {
         string m_ConfigXMLFile;
@@ -82,5 +83,6 @@ namespace CssLib
 
    
     }
+ */
     }
 

@@ -42,12 +42,9 @@
   <ItemGroup>
     <Compile Include="CSMigrationWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MVVM\MVVM.csproj">
-      <Project>{72F90E77-CF7F-40A5-884C-1E7B1D9A9AAC}</Project>
-      <Name>MVVM</Name>
-    </ProjectReference>
+    <Compile Include="WSClient.cs" />
+    <Compile Include="ZimbraAPI.cs" />
+    <Compile Include="ZimbraValues.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="ExchangeMigrationLib">

@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using MVVM.Model;
 using Misc;
+using CssLib;
 using System.IO;
 
 namespace MVVM.ViewModel
@@ -18,6 +19,8 @@ namespace MVVM.ViewModel
 
         /*readonly*/ // public Config m_config = new Config("", "", "", "", "", "","","","","",false);
 
+        ScheduleViewModel scheduleViewModel;
+
         public ConfigViewModelS()
         {
             this.GetConfigSourceHelpCommand = new ActionCommand(this.GetConfigSourceHelp, () => true);
@@ -27,6 +30,16 @@ namespace MVVM.ViewModel
             this.NextCommand = new ActionCommand(this.Next, () => true);
             IsmailServer = false;
             Isprofile = false;
+        }
+
+        public ScheduleViewModel GetScheduleViewModel()
+        {
+            return scheduleViewModel;
+        }
+
+        public void SetScheduleViewModel(ScheduleViewModel scheduleViewModel)
+        {
+            this.scheduleViewModel = scheduleViewModel;
         }
 
         public ICommand GetConfigSourceHelpCommand
@@ -142,7 +155,34 @@ namespace MVVM.ViewModel
 
         private void Next()
         {
-            lb.SelectedIndex = 1;
+            if ((this.ZimbraServerHostName.Length == 0) || (this.ZimbraPort.Length == 0))
+            {
+                MessageBox.Show("Please fill in the host name and port", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            ZimbraAPI zimbraAPI = new ZimbraAPI();
+            string url = "https://" + this.ZimbraServerHostName + ":" + this.ZimbraPort + "/service/admin/soap";
+            zimbraAPI.Logon(this.ZimbraAdmin, this.ZimbraAdminPasswd, url);
+            string authToken = zimbraAPI.ZValues.AuthToken;
+            if (authToken.Length > 0)
+            {
+                zimbraAPI.GetAllDomains(authToken, url);
+                foreach (string s in zimbraAPI.ZValues.Domains)
+                {
+                    scheduleViewModel.DomainList.Add(s);
+                }
+                zimbraAPI.GetAllCos(authToken, url);
+                foreach (string s in zimbraAPI.ZValues.COSes)
+                {
+                    scheduleViewModel.CosList.Add(s);
+                }
+                lb.SelectedIndex = 1;
+            }
+            else
+            {
+                MessageBox.Show("Logon Unsuccessful", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private bool IsProfile;

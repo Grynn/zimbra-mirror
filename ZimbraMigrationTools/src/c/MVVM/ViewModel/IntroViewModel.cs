@@ -209,6 +209,7 @@ namespace MVVM.ViewModel
             m_scheduleViewModel.SetUserModel(m_usersViewModel);
             m_scheduleViewModel.SetResultsModel(m_resultsViewModel);
 
+            m_configViewModelS.SetScheduleViewModel(m_scheduleViewModel);
             m_optionsViewModel.SetScheduleModel(m_scheduleViewModel);
 
             TheViews = new ObservableCollection<object>();
