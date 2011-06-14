@@ -27,7 +27,6 @@ import org.apache.commons.httpclient.Header;
 import org.dom4j.ElementHandler;
 
 import com.zimbra.common.account.Key;
-import com.zimbra.common.account.Key.ServerBy;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.mailbox.Color;
 import com.zimbra.common.service.ServiceException;
@@ -693,7 +692,8 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
 
             Element response = null;
             if (saxHandlers != null) {
-                response = transport.invoke(request.detach(), false, true, null, null, null, saxHandlers);
+                response = transport.invoke(request.detach(), false, true, null, null, null,
+                        new SoapHttpTransport.SAXResponseHandler(saxHandlers));
             } else if (noSession) {
                 if (sendAcctId)
                     response = transport.invoke(request.detach(), false, true, acct.getId());
