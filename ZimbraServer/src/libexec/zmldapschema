@@ -86,12 +86,12 @@ installAmavisSchema() {
 }
 
 installDynlistSchema() {
-  echo "Installing dynlist schema..."
-  cp -f ${zimbra_home}/openldap/etc/openldap/schema/dynlist.ldif ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{5\}dynlist.ldif
-  chown ${zimbra_user}:${zimbra_user} ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{5\}dynlist.ldif
-  chmod 600 ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{5\}dynlist.ldif
-  sed -i.orig -e '/^dn: cn=dynlist,/ s/dn: cn=dynlist,cn=schema,cn=config/dn: cn={5}dynlist/' -e '/^cn: dynlist/ s/cn: dynlist/cn: {5}dynlist/' \
-    ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{5\}dynlist.ldif
+  echo "Installing dyngroup schema..."
+  cp -f ${zimbra_home}/openldap/etc/openldap/schema/dyngroup.ldif ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{5\}dyngroup.ldif
+  chown ${zimbra_user}:${zimbra_user} ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{5\}dyngroup.ldif
+  chmod 600 ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{5\}dyngroup.ldif
+  sed -i.orig -e '/^dn: cn=dyngroup,/ s/dn: cn=dyngroup,cn=schema,cn=config/dn: cn={5}dyngroup/' -e '/^cn: dyngroup/ s/cn: dyngroup/cn: {5}dyngroup/' \
+    ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{5\}dyngroup.ldif
 }
 
 cleanup() {
