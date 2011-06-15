@@ -27,6 +27,16 @@ namespace CssLib
         }
         private List<Parameter> Parameters { get; set; }
 
+        private string lastError;
+        public string LastError
+        {
+            get { return lastError; }
+            set
+            {
+                lastError = value;
+            }
+        }
+
         private ZimbraValues zValues;
         public ZimbraValues ZValues
         {
@@ -201,6 +211,7 @@ namespace CssLib
         // API methods /////////
         public int Logon(string username, string password, string url)
         {
+            lastError = "";
             string req = "";
             string rsp = "";
             WebMethod = "AuthRequest";
@@ -213,20 +224,19 @@ namespace CssLib
                 WSServiceType = WebServiceClient.ServiceType.Traditional
             };
             req = CreateSoapEnvelope(ZIMBRA_API_LOGON);
-            try
+            client.InvokeService(req, out rsp);
+            if (client.status == 0)
             {
-                client.InvokeService(req, out rsp);
                 ParseLogon(rsp);
-                return client.status;
             }
-            catch (System.Net.WebException wex)
-            {
-                return -1;
-            }
+            lastError = client.errmsg;
+            return client.status;
+
         }
 
         public int GetInfo(string url)
         {
+            lastError = "";
             string req = "";
             string rsp = "";
             WebMethod = "GetInfoRequest";
@@ -238,12 +248,17 @@ namespace CssLib
             };
             req = CreateSoapEnvelope(ZIMBRA_API_GETINFO);
             client.InvokeService(req, out rsp);
-            ParseGetInfo(rsp);
+            if (client.status == 0)
+            {
+                ParseGetInfo(rsp);
+            }
+            lastError = client.errmsg;
             return client.status;
         }
 
         public int GetAllDomains(string url)
         {
+            lastError = "";
             string req = "";
             string rsp = "";
             WebMethod = "GetAllDomainsRequest";
@@ -254,12 +269,17 @@ namespace CssLib
             };
             req = CreateSoapEnvelope(ZIMBRA_API_GETALLDOMAIN);
             client.InvokeService(req, out rsp);
-            ParseGetAllDomain(rsp);
+            if (client.status == 0)
+            {
+                ParseGetAllDomain(rsp);
+            }
+            lastError = client.errmsg;
             return client.status;
         }
 
         public int GetAllCos(string url)
         {
+            lastError = "";
             string req = "";
             string rsp = "";
             WebMethod = "GetAllCosRequest";
@@ -270,7 +290,11 @@ namespace CssLib
             };
             req = CreateSoapEnvelope(ZIMBRA_API_GETALLCOS);
             client.InvokeService(req, out rsp);
-            ParseGetAllCos(rsp);
+            if (client.status == 0)
+            {
+                ParseGetAllCos(rsp);
+            }
+            lastError = client.errmsg;
             return client.status;
         }
         /////////////////////////

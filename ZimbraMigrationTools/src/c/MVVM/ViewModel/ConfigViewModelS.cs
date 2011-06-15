@@ -163,25 +163,29 @@ namespace MVVM.ViewModel
 
             ZimbraAPI zimbraAPI = new ZimbraAPI();
             string url = "https://" + this.ZimbraServerHostName + ":" + this.ZimbraPort + "/service/admin/soap";
-            zimbraAPI.Logon(this.ZimbraAdmin, this.ZimbraAdminPasswd, url);
-            string authToken = zimbraAPI.ZValues.AuthToken;
-            if (authToken.Length > 0)
+
+            int stat = zimbraAPI.Logon(this.ZimbraAdmin, this.ZimbraAdminPasswd, url);
+            if (stat == 0)
             {
-                zimbraAPI.GetAllDomains(url);
-                foreach (string s in zimbraAPI.ZValues.Domains)
+                string authToken = zimbraAPI.ZValues.AuthToken;
+                if (authToken.Length > 0)
                 {
-                    scheduleViewModel.DomainList.Add(s);
+                    zimbraAPI.GetAllDomains(url);
+                    foreach (string s in zimbraAPI.ZValues.Domains)
+                    {
+                        scheduleViewModel.DomainList.Add(s);
+                    }
+                    zimbraAPI.GetAllCos(url);
+                    foreach (string s in zimbraAPI.ZValues.COSes)
+                    {
+                        scheduleViewModel.CosList.Add(s);
+                    }
+                    lb.SelectedIndex = 1;
                 }
-                zimbraAPI.GetAllCos(url);
-                foreach (string s in zimbraAPI.ZValues.COSes)
-                {
-                    scheduleViewModel.CosList.Add(s);
-                }
-                lb.SelectedIndex = 1;
             }
             else
             {
-                MessageBox.Show("Logon Unsuccessful", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(string.Format("Logon Unsuccessful: {0}", zimbraAPI.LastError), "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

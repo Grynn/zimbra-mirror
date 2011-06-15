@@ -19,6 +19,8 @@ namespace CssLib
         public string Url { get; set; }
 
         public int status;
+
+        public string errmsg;
         
         private HttpWebRequest CreateWebRequest()
         {
@@ -34,6 +36,7 @@ namespace CssLib
             WebResponse response = null;
             string strResponse = "";
             status = 0;
+            errmsg = "";
             
             ServicePointManager.ServerCertificateValidationCallback =
             new RemoteCertificateValidationCallback(
@@ -63,9 +66,8 @@ namespace CssLib
             catch (System.Net.WebException wex)
             //catch (Exception ex)
             {
-                Console.WriteLine(wex.Message);
-                Console.WriteLine(wex.Status);
                 status = (int)wex.Status;
+                errmsg = wex.Message;
                 rsp = "";
                 return;
             }
@@ -75,12 +77,11 @@ namespace CssLib
             {
                 response = webReq.GetResponse();
             }
-            catch (System.Net.WebException wex)
+            catch (System.Net.WebException wex2)
             //catch (Exception ex)
             {
-                Console.WriteLine(wex.Message);
-                Console.WriteLine(wex.Status);
-                status = (int)wex.Status;
+                status = (int)wex2.Status;
+                errmsg = wex2.Message;
                 rsp = "";
                 return;
             }
