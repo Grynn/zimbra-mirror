@@ -99,11 +99,11 @@ def watchdog():
 				Log.logMsg(3, "Watchdog: service %s status is OK." % (service,));
 
 def requestListener():
-	listener_params = ("localhost",int(state.State.mState.localconfig["zmmtaconfig_listen_port"]))
+	listener_params = ("localhost",int(state.State.mState.localconfig["zmconfigd_listen_port"]))
 	try:
 		server = listener.ThreadedStreamServer(listener_params, listener.ThreadedRequestHandler)
 	except socket.error, e:
-		Log.logMsg (1, "Error creating listener socket on port %s: %s" % (state.State.mState.localconfig["zmmtaconfig_listen_port"],str(e)))
+		Log.logMsg (1, "Error creating listener socket on port %s: %s" % (state.State.mState.localconfig["zmconfigd_listen_port"],str(e)))
 		if contactService("STATUS"):
 			Log.logMsg (0, "Can't create listener socket: %s" % str(e))
 		else:
@@ -115,7 +115,7 @@ def requestListener():
 	Log.logMsg(4, "Socket listener running as %s" % server_thread.getName())
 
 def contactService(command, args=None):
-	listener_params = ("localhost",int(state.State.mState.localconfig["zmmtaconfig_listen_port"]))
+	listener_params = ("localhost",int(state.State.mState.localconfig["zmconfigd_listen_port"]))
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	message = "%s " % command
 	if args:
@@ -198,7 +198,7 @@ while True:
 		continue
 
 	try:
-		# read zmmtaconfigd config
+		# read zmconfigd config
 		myState.getMtaConfig(myConfig.configFile)
 
 		# watchdog restarts apps if they are not running
