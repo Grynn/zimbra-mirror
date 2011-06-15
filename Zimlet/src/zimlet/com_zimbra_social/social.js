@@ -1282,13 +1282,14 @@ SocialZimlet.prototype._createTreeView =
 			html[i++] = this._getTreeHeaderHTML(this.getMessage("accounts"), expandIconId);	//header
 			html[i++] = "<div class='DwtTreeItemLevel1ChildDiv' style='display: block;'>";
 			for (var j = 0; j < this.socialcastAccounts.length; j++) {
+				var streamObjs;
 				var folder = this.socialcastAccounts[j];
 				folder["name"] = folder.n;
 				folder["icon"] = "social_socialcastIcon";
 				folder["type"] = "SOCIALCAST";
 				var streams = this.getUserProperty(folder.e + "_streams");
-				if(streams != "") {
-					var streamObjs = JSON.parse(streams);
+				if(streams && streams != "") {
+					 streamObjs = JSON.parse(streams);
 				}
 				if(streamObjs && (streamObjs instanceof Array) && streamObjs.length > 0) {
 					var childExpandIconId = "social_expandIcon_" + Dwt.getNextId();
