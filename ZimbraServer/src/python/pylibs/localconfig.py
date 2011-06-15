@@ -43,8 +43,8 @@ class LocalConfig(config.Config):
 		self.config = dict([(k,v) for (k,v) in c.output])
 
 		# Set a default for this
-		if self["zmmtaconfig_listen_port"] is None:
-			self["zmmtaconfig_listen_port"] = "7171"
+		if self["zmconfigd_listen_port"] is None:
+			self["zmconfigd_listen_port"] = "7171"
 
 		dt = time.clock()-t1
 		Log.logMsg(5,"Localconfig loaded in %.2f seconds" % dt)
