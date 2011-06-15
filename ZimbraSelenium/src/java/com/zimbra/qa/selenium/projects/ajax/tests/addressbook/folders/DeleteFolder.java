@@ -109,4 +109,34 @@ public class DeleteFolder extends AjaxCommonTest {
 		verifyExistInTrashFolder(subFolder);
 			
 	}
+	
+	@Test(	description = "Drag one sub folder to Trash folder", groups = { "functional" })
+	public void DnDFromSubFolderToTrash() throws HarnessException {
+
+		FolderItem folderItemDest= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
+		ZAssert.assertNotNull(folderItemDest, "Verify can get the trash folder ");
+	
+		
+		FolderItem contact= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);
+		ZAssert.assertNotNull(contact, "Verify can get the contact ");
+
+		FolderItem folderItemSrc = CreateFolder.createNewFolderViaSoap(contact,app);
+
+		
+		// Expand parent node to show up sub folder
+		app.zTreeContacts.zExpand(contact);
+	
+		
+		app.zPageAddressbook.zDragAndDrop(
+				"css=td#zti__main_Contacts__" + folderItemSrc.getId() + "_textCell:contains("+ folderItemSrc.getName() + ")",
+				"css=td#zti__main_Contacts__" + folderItemDest.getId() + "_textCell:contains("+ folderItemDest.getName() + ")");
+			
+
+		// Verify the folder is now in the other subfolder
+		folderItemSrc = FolderItem.importFromSOAP(app.zGetActiveAccount(), folderItemSrc.getName());
+		ZAssert.assertNotNull(folderItemSrc, "Verify the subfolder is again available");
+		ZAssert.assertEquals(folderItemDest.getId(), folderItemSrc.getParentId(), "Verify the subfolder's parent is now the other subfolder");
+
+
+	}
 }
