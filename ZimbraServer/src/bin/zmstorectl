@@ -107,7 +107,7 @@ case "$1" in
       R=$?
       if [ $R -ne "0" ]; then
         echo "$i is not running."
-        if [ x"$i" != "xzmmtaconfigctl" ]; then
+        if [ x"$i" != "xzmconfigdctl" ]; then
           STATUS=$R
         fi
       fi
