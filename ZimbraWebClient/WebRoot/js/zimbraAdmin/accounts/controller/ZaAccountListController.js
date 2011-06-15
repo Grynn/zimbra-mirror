@@ -1355,8 +1355,9 @@ function () {
 		}	
 	}
  	for(var i=0;i<cnt;i++) {
-        var myitem = this._contentView.getSelection()[i];
-        if(myitem && myitem.type==ZaItem.ACCOUNT){
+        var itemObj = this._contentView.getSelection()[i];
+        if(itemObj && itemObj.type==ZaItem.ACCOUNT){
+		/*
                 myitem = this._contentView.getSelection()[i].toString();
                 var mydomain = ZaAccount.getDomain(myitem);
                 var domainObj =  ZaDomain.getDomainByName(mydomain);
@@ -1398,7 +1399,12 @@ function () {
                         this._toolbarOperations[ZaOperation.DELETE].enabled=false;
 			this._popupOperations[ZaOperation.DELETE].enabled = false;	
                 }
-
+		*/
+		// Use zimbraIsSystemAccount to determine enabled/disabled status for delete button
+		if (itemObj.attrs[ZaAccount.A_zimbraIsSystemAccount] == "TRUE") {
+                        this._toolbarOperations[ZaOperation.DELETE].enabled=false;
+                        this._popupOperations[ZaOperation.DELETE].enabled = false;
+		}
         }
         }
 }

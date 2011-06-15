@@ -917,5 +917,16 @@ function () {
 			this._popupOperations[ZaOperation.MOVE_ALIAS].enabled = false;
 		}	
 	}
+        for(var i=0;i<cnt;i++) {
+        	var itemObj = this._contentView.getSelection()[i];
+        	if(itemObj && itemObj.type==ZaItem.ACCOUNT){
+                	if (itemObj.attrs[ZaAccount.A_zimbraIsSystemAccount] == "TRUE") {
+				if(this._toolbarOperations[ZaOperation.DELETE])
+                        		this._toolbarOperations[ZaOperation.DELETE].enabled=false;
+				if(this._popupOperations[ZaOperation.DELETE])
+                        		this._popupOperations[ZaOperation.DELETE].enabled = false;
+                	}
+		}
+	}
 }
 ZaController.changeActionsStateMethods["ZaSearchListController"].push(ZaSearchListController.changeActionsStateMethod);
