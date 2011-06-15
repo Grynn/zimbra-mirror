@@ -5,6 +5,7 @@ import java.util.*;
 
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -23,6 +24,26 @@ public class CreateFolder extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
+    static FolderItem createNewFolderViaSoap(FolderItem parent, AppAjaxClient app) throws HarnessException{
+		
+		// Create a folder 
+		String name = "folder" + ZimbraSeleniumProperties.getUniqueString();
+		
+		app.zGetActiveAccount().soapSend(
+				"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+                	"<folder name='"+ name + "' view='contact' l='"+ parent.getId() +"'/>" +
+                "</CreateFolderRequest>");
+
+		// Refresh addressbook
+	    app.zPageAddressbook.zRefresh();
+
+		
+		FolderItem folderItem = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
+		ZAssert.assertNotNull(folderItem, "Verify the folderItem is available");
+
+		return folderItem;
+	}
+   
 	private void CreateFolderAndVerify(DialogCreateFolder createFolderDialog) throws HarnessException{
 		String folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
 

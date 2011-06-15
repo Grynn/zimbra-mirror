@@ -23,12 +23,9 @@ public class MoveContact extends AjaxCommonTest  {
 		super.startingAccountPreferences = null;		
 		
 	}
-	private void MoveAndVerify(FolderItem folder, ContactItem contactItem, DialogMove dialogContactMove) throws HarnessException {
+	private void  Verify(FolderItem folder, ContactItem contactItem) throws HarnessException {
 		
-	    //enter the moved folder
-        dialogContactMove.zClickTreeFolder(folder);
-        dialogContactMove.zClickButton(Button.B_OK);
-       
+	   
         //verify toasted message 1 contact moved to target folder
         String toastMessage = app.zPageMain.zGetToaster().zGetToastMessage();
         String expectedMsg = "1 contact moved to";
@@ -82,8 +79,12 @@ public class MoveContact extends AjaxCommonTest  {
 		 //click shortcut m
 	    DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zKeyboardShortcut(Shortcut.S_MOVE);
       
+	    //enter the moved folder
+        dialogContactMove.zClickTreeFolder(emailedContacts);
+        dialogContactMove.zClickButton(Button.B_OK);
+     
         //Move contact and verify
-        MoveAndVerify(emailedContacts,contactItem,dialogContactMove);
+        Verify(emailedContacts,contactItem);
         
    	}
 
@@ -101,8 +102,12 @@ public class MoveContact extends AjaxCommonTest  {
 	    //click Move icon on context menu
 	    DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_MOVE, contactItem.fileAs);
 	 
+	    //enter the moved folder
+        dialogContactMove.zClickTreeFolder(emailedContacts);
+        dialogContactMove.zClickButton(Button.B_OK);
+     
         //Move contact and verify
-        MoveAndVerify(emailedContacts,contactItem,dialogContactMove);
+        Verify(emailedContacts,contactItem);
         
    	}
 
@@ -119,28 +124,39 @@ public class MoveContact extends AjaxCommonTest  {
        //click Move icon on toolbar
         DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zToolbarPressButton(Button.B_MOVE);
     
+        //enter the moved folder
+        dialogContactMove.zClickTreeFolder(emailedContacts);
+        dialogContactMove.zClickButton(Button.B_OK);
+     
         //Move contact and verify
-        MoveAndVerify(emailedContacts,contactItem,dialogContactMove);
+        Verify(emailedContacts,contactItem);
         
    	}
 	
-	@Test(	description = "Move a contact item to trash folder by click tool bar Move",
+
+
+	@Test(	description = "Move a contact item to folder Emailed Contacts by drag and drop",
 			groups = { "functional" })
-	public void MoveToTrashClickMoveOnToolbar() throws HarnessException {
+	public void DnDToEmailedContacts() throws HarnessException {
 		
 		 // Create a contact via Soap then select
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
 	
 	
-		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
+		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
 		
-       //click Move icon on toolbar
-        DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zToolbarPressButton(Button.B_MOVE);
     
-        //Move contact and verify
-        MoveAndVerify(folder,contactItem,dialogContactMove);
+		app.zPageAddressbook.zDragAndDrop(
+				"css=td#zlif__CNS__" + contactItem.getId() + "__fileas:contains("+ contactItem.fileAs + ")",
+				"css=td#zti__main_Contacts__" + emailedContacts.getId() + "_textCell:contains("+ emailedContacts.getName() + ")");
+			
+	
+        //verify
+        Verify(emailedContacts,contactItem);
         
    	}
+	
+	
 
 }
 

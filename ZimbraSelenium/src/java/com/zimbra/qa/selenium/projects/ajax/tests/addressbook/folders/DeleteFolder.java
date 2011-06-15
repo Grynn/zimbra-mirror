@@ -21,25 +21,7 @@ public class DeleteFolder extends AjaxCommonTest {
 		
 	}
 
-	private FolderItem createFolder(FolderItem parent) throws HarnessException{
-		
-		// Create a folder 
-		String name = "folder" + ZimbraSeleniumProperties.getUniqueString();
-		
-		app.zGetActiveAccount().soapSend(
-				"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
-                	"<folder name='"+ name + "' view='contact' l='"+ parent.getId() +"'/>" +
-                "</CreateFolderRequest>");
-
-		// Refresh addressbook
-	    app.zPageAddressbook.zRefresh();
-
-		
-		FolderItem folderItem = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
-		ZAssert.assertNotNull(folderItem, "Verify the folderItem is available");
-
-		return folderItem;
-	}
+	
 	
 	private void verifyExistInTrashFolder(FolderItem folderItem) throws HarnessException {
 		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
@@ -59,7 +41,7 @@ public class DeleteFolder extends AjaxCommonTest {
 		FolderItem userRoot= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
 		ZAssert.assertNotNull(userRoot, "Verify can get the userRoot ");
 	
-		FolderItem folderItem = createFolder(userRoot);
+ 	    FolderItem folderItem = CreateFolder.createNewFolderViaSoap(userRoot,app);
 										
 		// Delete the folder using context menu
 		AbsPage page= app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, folderItem);
@@ -112,8 +94,8 @@ public class DeleteFolder extends AjaxCommonTest {
 		
 		FolderItem contact = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);
 		ZAssert.assertNotNull(contact, "Verify the folder contact is available");
-		
-		FolderItem subFolder = createFolder(contact);
+	    
+		FolderItem subFolder = CreateFolder.createNewFolderViaSoap(contact,app);
 				  
 		// Expand parent node to show up sub folder
 		app.zTreeContacts.zExpand(contact);

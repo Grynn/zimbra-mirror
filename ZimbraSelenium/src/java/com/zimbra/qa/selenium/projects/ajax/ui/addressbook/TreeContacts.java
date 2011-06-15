@@ -10,7 +10,8 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail.Locators;
+
+
 
 
 /**
@@ -148,7 +149,7 @@ public class TreeContacts extends AbsTree {
 			if (option == Button.B_TREE_NEWFOLDER) {
 				//if option is disabled
 				if (sIsElementPresent("css=tr#POPUP_NEW_ADDRBOOK div[class='ImgNewContactsFolder ZDisabledImage']")) {
-					return page;
+					return null;
 				}				
 			
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
@@ -159,7 +160,7 @@ public class TreeContacts extends AbsTree {
 			else if (option == Button.B_DELETE) {								
 				//if option is disabled
 				if (sIsElementPresent("css=tr#POPUP_DELETE div[class='ImgDelete ZDisabledImage']")) {
-					return page;
+					return null;
 				}
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
@@ -168,7 +169,38 @@ public class TreeContacts extends AbsTree {
 				zWaitForBusyOverlay();
 				
 				page= ((AppAjaxClient)MyApplication).zPageAddressbook;
-			}
+						
+		    } 
+			else if (option == Button.B_RENAME) {
+				if (sIsElementPresent("css=tr#POPUP_RENAME_FOLDER div[class='ImgRename ZDisabledImage']")) {
+					return null;
+				}
+			    zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
+				zWaitForBusyOverlay();
+				
+			    page = new DialogRenameFolder(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);
+
+			}   			
+			else if (option == Button.B_TREE_EDIT) {
+				
+				if (sIsElementPresent("css=tr#POPUP_EDIT_PROPS div[class='ImgProperties ZDisabledImage']")) {
+					return null;
+				}
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
+				zWaitForBusyOverlay();
+				
+			    page = new DialogEditFolder(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);
+
+			} 
 			else {
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 			}

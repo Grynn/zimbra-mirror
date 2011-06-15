@@ -24,11 +24,8 @@ public class MoveContactGroup extends AjaxCommonTest  {
 		
 	}
 	
-	private void MoveAndVerify(FolderItem folder, ContactGroupItem group, DialogMove dialogContactMove) throws HarnessException {
-	    //enter the moved folder
-        dialogContactMove.zClickTreeFolder(folder);
-        dialogContactMove.zClickButton(Button.B_OK);
-       
+	private void Verify(FolderItem folder, ContactGroupItem group) throws HarnessException {
+	     
         //verify toasted message 1 contact group moved to target folder
         String expectedMsg = "1 contact group moved to";
         String toastMessage = app.zPageMain.zGetToaster().zGetToastMessage();
@@ -80,27 +77,16 @@ public class MoveContactGroup extends AjaxCommonTest  {
         //click Move icon on toolbar
         DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zToolbarPressButton(Button.B_MOVE);
      
+        //enter the moved folder
+        dialogContactMove.zClickTreeFolder(emailedContacts);
+        dialogContactMove.zClickButton(Button.B_OK);
+  
         //move group to different folder
-        MoveAndVerify(emailedContacts, group, dialogContactMove);    
+        Verify(emailedContacts, group);    
  
    	}
 
-	@Test(	description = "Move a contact group to folder Trash by click Move on toolbar",
-			groups = { "functional" })
-	public void MoveToTrashClickMoveOnToolbar() throws HarnessException {
-		        
-		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
- 		
-	    // Create a contact group via Soap then select
-		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
 	
-        //click Move icon on toolbar
-        DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zToolbarPressButton(Button.B_MOVE);
-     
-        //move group to different folder
-        MoveAndVerify(folder, group, dialogContactMove);    
- 
-   	}
 
 	@Test(	description = "Move a contact group to folder Emailed Contacts by click Move on Context menu",
 			groups = { "functional" })
@@ -114,8 +100,12 @@ public class MoveContactGroup extends AjaxCommonTest  {
         //click Move icon on context menu
 	    DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_MOVE, group.fileAs);
 	     
+	    //enter the moved folder
+        dialogContactMove.zClickTreeFolder(emailedContacts);
+        dialogContactMove.zClickButton(Button.B_OK);
+  
         //move group to different folder
-        MoveAndVerify(emailedContacts, group, dialogContactMove);    
+        Verify(emailedContacts, group);    
  
    	}
 
@@ -131,10 +121,35 @@ public class MoveContactGroup extends AjaxCommonTest  {
         //click shortcut m
 	    DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zKeyboardShortcut(Shortcut.S_MOVE);
     
+	    //enter the moved folder
+        dialogContactMove.zClickTreeFolder(emailedContacts);
+        dialogContactMove.zClickButton(Button.B_OK);
+  
 	    //move group to different folder
-        MoveAndVerify(emailedContacts, group, dialogContactMove);    
+        Verify(emailedContacts, group);    
  
    	}
 
+
+	@Test(	description = "Move a contact group to folder Emailed Contacts by drag and drop",
+			groups = { "functional" })
+	public void DnDToEmailedContacts() throws HarnessException {
+		
+		   // Create a contact group via Soap then select
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
+	
+	
+		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
+		
+    
+		app.zPageAddressbook.zDragAndDrop(
+				"css=td#zlif__CNS__" + group.getId() + "__fileas:contains("+ group.fileAs + ")",
+				"css=td#zti__main_Contacts__" + emailedContacts.getId() + "_textCell:contains("+ emailedContacts.getName() + ")");
+			
+	  
+        //verify
+        Verify(emailedContacts,group);
+        
+   	}
 }
 

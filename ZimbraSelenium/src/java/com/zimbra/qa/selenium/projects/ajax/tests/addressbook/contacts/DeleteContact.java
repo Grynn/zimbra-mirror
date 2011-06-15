@@ -11,6 +11,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
 import com.zimbra.qa.selenium.projects.ajax.ui.Toaster;
 
 
@@ -67,7 +68,7 @@ public class DeleteContact extends AjaxCommonTest  {
 	}
 	@Test(	description = "Delete a contact item",
 			groups = { "smoke" })
-	public void DeleteContactByClickDeleteOnToolbar() throws HarnessException {
+	public void ClickDeleteOnToolbar() throws HarnessException {
 
 		// Create a contact via soap 
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
@@ -97,7 +98,7 @@ public class DeleteContact extends AjaxCommonTest  {
 
 	@Test(	description = "Delete a contact item using keyboard short cut Del",
 			groups = { "functional" })
-	public void DeleteContactUseShortcutDel() throws HarnessException {
+	public void UseShortcutDel() throws HarnessException {
 
 		// Create a contact via soap 
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
@@ -111,7 +112,7 @@ public class DeleteContact extends AjaxCommonTest  {
 	
 	@Test(	description = "Delete a contact item using keyboard short cut backspace",
 			groups = { "functional" })
-	public void DeleteContactUseShortcutBackspace() throws HarnessException {
+	public void UseShortcutBackspace() throws HarnessException {
 
 		// Create a contact via soap 
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
@@ -195,5 +196,48 @@ public class DeleteContact extends AjaxCommonTest  {
 			
         ZAssert.assertTrue(count==0, "Verify contact fileAs (" + contactItem1.fileAs + "," + contactItem2.fileAs + "," + contactItem3.fileAs + ") deleted");
             
+   	}
+	@Test(	description = "Move a contact item to trash folder by click tool bar Move",
+			groups = { "functional" })
+	public void ClickMoveOnToolbarMoveToTrash() throws HarnessException {
+		
+		 // Create a contact via Soap then select
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+	
+	
+		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
+		
+       //click Move icon on toolbar
+        DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zToolbarPressButton(Button.B_MOVE);
+    
+        //enter the moved folder
+        dialogContactMove.zClickTreeFolder(folder);
+        dialogContactMove.zClickButton(Button.B_OK);
+     
+        //verify
+        VerifyContactDeleted(contactItem);
+        
+   	}
+	
+	@Test(	description = "Move a contact item to trash folder by drag and drop",
+			groups = { "functional" })
+	public void DnDToTrash() throws HarnessException {
+		
+		 // Create a contact via Soap then select
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+	
+	
+		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
+		
+	    
+		app.zPageAddressbook.zDragAndDrop(
+				"css=td#zlif__CNS__" + contactItem.getId() + "__fileas:contains("+ contactItem.fileAs + ")",
+				"css=td#zti__main_Contacts__" + folder.getId() + "_textCell:contains("+ folder.getName() + ")");
+			
+	
+	     //verify
+        VerifyContactDeleted(contactItem);
+   
+         
    	}
 }
