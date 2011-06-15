@@ -218,41 +218,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
 	    
 	}
 
-	@Test(	description = "Right click then click Tag Contact->New Tag",
-			groups = { "smoke" })	
-	public void ClickTagContactNewTag() throws HarnessException {
-		ContactItem contactItem = createSelectARandomContactItem();
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
-		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
-			
-		//click Tag Contact->New Tag	
-        DialogTag dialogTag = (DialogTag) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_TAG, Button.O_TAG_NEWTAG , contactItem.fileAs);        
-    	dialogTag.zSetTagName(tagName);
-		dialogTag.zClickButton(Button.B_OK);		
-
-		// Make sure the tag was created on the server (get the tag ID)
-		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;
-		String tagID = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tagName +"']", "id");
-
-		// Make sure the tag was applied to the contact
-		app.zGetActiveAccount().soapSend(
-					"<GetContactsRequest xmlns='urn:zimbraMail'>" +
-						"<cn id='"+ contactItem.getId() +"'/>" +
-					"</GetContactsRequest>");
-		
-		String contactTags = app.zGetActiveAccount().soapSelectValue("//mail:GetContactsResponse//mail:cn", "t");
-		 
-		ZAssert.assertEquals(contactTags, tagID, "Verify the tag appears on the contact id=" +  contactItem.getId());
-		
-		//verify toasted message '1 contact tagged ...'
-		Toaster toast = app.zPageMain.zGetToaster();
-		String toastMsg = toast.zGetToastMessage();
-		ZAssert.assertStringContains(toastMsg, "1 contact tagged \"" + tagName + "\"", "Verify toast message '" + "1 contact tagged \"" + tagName + "\"'" );
- 
-	}
-
-	
 	
 	
 	@Test(	description = "Right click then  click Find Emails->Sent To contact",

@@ -20,44 +20,8 @@ public class TagContact extends AjaxCommonTest  {
 		
 	}
 	
-	@Test(	description = "Tag a contact",
-			groups = { "smoke" })
-	public void TagContact_01() throws HarnessException {
-
-		String firstName = "first" + ZimbraSeleniumProperties.getUniqueString();		
-		String lastName = "last" + ZimbraSeleniumProperties.getUniqueString();
-	    String email = "email" +  ZimbraSeleniumProperties.getUniqueString() + "@zimbra.com";
-		//default value for file as is last, first
-		String fileAs = lastName + ", " + firstName;
-	
-        app.zGetActiveAccount().soapSend(
-                "<CreateContactRequest xmlns='urn:zimbraMail'>" +
-                "<cn fileAsStr='" + fileAs + "' >" +
-                "<a n='firstName'>" + firstName +"</a>" +
-                "<a n='lastName'>" + lastName +"</a>" +
-                "<a n='email'>" + email + "</a>" +               
-                "</cn>" +            
-                "</CreateContactRequest>");
-
-        
-        ContactItem contactItem = ContactItem.importFromSOAP(app.zGetActiveAccount(), "FIELD[lastname]:" + lastName + "");
-        
-        // Refresh the view, to pick up the new contact
-        FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
-        GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-        app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
-                 
-        // Select the item
-        app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contactItem.fileAs); // contactItem.fileAs);
-
-	    String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
-		
-		// Click new tag
-		DialogTag dialogTag = (DialogTag) app.zPageAddressbook.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_NEWTAG);
-		dialogTag.zSetTagName(tagName);
-		dialogTag.zClickButton(Button.B_OK);		
-				
-	
+	// verify contact tagged with tag and toasted message
+	private void Verify(ContactItem contactItem, String tagName)throws HarnessException {
 		// Make sure the tag was created on the server (get the tag ID)
 		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;
 		String tagID = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tagName +"']", "id");
@@ -77,10 +41,63 @@ public class TagContact extends AjaxCommonTest  {
         String toastMsg = toast.zGetToastMessage();
         ZAssert.assertStringContains(toastMsg, "1 contact tagged \"" + tagName + "\"", "Verify toast message '" + "1 contact tagged \"" + tagName + "\"'" );
  
-  
+ 		
+	}
+	@Test(	description = "Tag a contact, click pulldown menu Tag->New Tag",
+			groups = { "smoke" })
+	public void ClickPulldownMenuTagNewTag() throws HarnessException {
+
+		  // Create a contact via Soap then select
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+
+	    String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
+		
+		// Click new tag
+		DialogTag dialogTag = (DialogTag) app.zPageAddressbook.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_NEWTAG);
+		dialogTag.zSetTagName(tagName);
+		dialogTag.zClickButton(Button.B_OK);		
+				
+	    Verify(contactItem, tagName);
    	}
 	
+	@Test(	description = "Right click then click Tag Contact->New Tag",
+			groups = { "smoke" })	
+	public void ClickContextMenuTagContactNewTag() throws HarnessException {
+		  // Create a contact via Soap then select
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+			
+		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
+			
+		//click Tag Contact->New Tag	
+        DialogTag dialogTag = (DialogTag) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_TAG, Button.O_TAG_NEWTAG , contactItem.fileAs);        
+    	dialogTag.zSetTagName(tagName);
+		dialogTag.zClickButton(Button.B_OK);		
+
+		Verify(contactItem, tagName); 
+	}
+
 	
+	@Test(	description = "Tag a contact by dnd on an existing tag",
+			groups = { "functional" })
+	public void DnDOnExistingTag() throws HarnessException {
+	
+		  // Create a contact via Soap then select
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+	          
+		// Create a new tag via soap
+	    TagItem tagItem = TagItem.CreateTagViaSoap(app.zGetActiveAccount());
+		
+		// Refresh to display the new tag
+		app.zPageAddressbook.zRefresh();
+	
+	    // Dnd on the new tag
+		app.zPageAddressbook.zDragAndDrop(
+				"css=td#zlif__CNS__" + contactItem.getId() + "__fileas:contains("+ contactItem.fileAs + ")",
+				"css=td#zti__main_Contacts__" + tagItem.getId() + "_textCell:contains("+ tagItem.getName() + ")");
+			
+		Verify(contactItem, tagItem.getName());
+			  
+   	}
   	
 }
 

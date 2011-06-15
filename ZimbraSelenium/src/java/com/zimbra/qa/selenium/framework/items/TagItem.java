@@ -9,6 +9,7 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.util.*;
 
 
+
 /**
  * This class represents a mail message
  * 
@@ -81,11 +82,33 @@ public class TagItem implements IItem {
 		return (dName);
 	}
 
+	//Create a new tag via soap
+	//return TagItem object
+	public static TagItem CreateTagViaSoap(ZimbraAccount account) throws HarnessException{
+		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();	
+		// Create the object
+		TagItem tagItem = new TagItem();
+		
+		//TODO color attribute shouldn't be fixed
+	   // Create a tag via soap
+		account.soapSend(
+				"<CreateTagRequest xmlns='urn:zimbraMail'>" +
+               	"<tag name='"+ tagName +"' color='1' />" +
+               "</CreateTagRequest>");
+		String tagId = account.soapSelectValue("//mail:CreateTagResponse/mail:tag", "id");
 
+		// Set the ID
+		tagItem.setId(tagId);
+		//Set tag name
+		tagItem.setName(tagName);			
+
+		return tagItem;
+	}
 	
 	/* (non-Javadoc)
 	 * @see framework.items.IItem#CreateSOAP(framework.util.ZimbraAccount)
 	 */
+	//TODO: ~ CreateViaSoap?
 	@Override
 	public void createUsingSOAP(ZimbraAccount account) throws HarnessException {
 		throw new HarnessException("implement me");

@@ -41,7 +41,7 @@ public class TagContactGroup extends AjaxCommonTest  {
 		 
 		ZAssert.assertEquals(contactTags, tagID, "Verify the tag appears on the contact id=" +  group.getId());
 		
-		//verify toasted message '1 contact tagged ...'
+		//verify toasted message '1 contact group tagged ...'
         String expectedMsg = "1 contact group tagged \"" + tagName + "\"";
         ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
 		        expectedMsg , "Verify toast message '" + expectedMsg + "'");
@@ -76,6 +76,40 @@ public class TagContactGroup extends AjaxCommonTest  {
         TagGroup(dialogTag, group);	  
    	}
 	
-  	
+	@Test(	description = "Tag a contact group by dnd on an existing tag",
+			groups = { "functional" })
+	public void DnDOnExistingTag() throws HarnessException {
+	
+		// Create a contact group via Soap then select
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
+	           
+		// Create a new tag via soap
+	    TagItem tagItem = TagItem.CreateTagViaSoap(app.zGetActiveAccount());
+		
+		// Refresh to display the new tag
+		app.zPageAddressbook.zRefresh();
+	
+	    // Dnd on the new tag
+		app.zPageAddressbook.zDragAndDrop(
+				"css=td#zlif__CNS__" + group.getId() + "__fileas:contains("+ group.fileAs + ")",
+				"css=td#zti__main_Contacts__" + tagItem.getId() + "_textCell:contains("+ tagItem.getName() + ")");
+			
+		// Make sure the tag was applied to the contact
+		app.zGetActiveAccount().soapSend(
+					"<GetContactsRequest xmlns='urn:zimbraMail'>" +
+						"<cn id='"+ group.getId() +"'/>" +
+					"</GetContactsRequest>");
+		
+		String contactTags = app.zGetActiveAccount().soapSelectValue("//mail:GetContactsResponse//mail:cn", "t");
+		 
+		ZAssert.assertEquals(contactTags, tagItem.getId(), "Verify the tag appears on the contact id=" +  group.getId());
+			
+		//verify toasted message '1 contact group tagged ...'
+        String expectedMsg = "1 contact group tagged \"" + tagItem.getName() + "\"";
+        ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
+		        expectedMsg , "Verify toast message '" + expectedMsg + "'");
+
+			  
+   	}
 }
 
