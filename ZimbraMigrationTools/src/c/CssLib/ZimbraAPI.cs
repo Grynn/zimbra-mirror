@@ -225,7 +225,7 @@ namespace CssLib
             }
         }
 
-        public int GetInfo(string authToken, string url)
+        public int GetInfo(string url)
         {
             string req = "";
             string rsp = "";
@@ -242,7 +242,7 @@ namespace CssLib
             return client.status;
         }
 
-        public int GetAllDomains(string authToken, string url)
+        public int GetAllDomains(string url)
         {
             string req = "";
             string rsp = "";
@@ -258,7 +258,7 @@ namespace CssLib
             return client.status;
         }
 
-        public int GetAllCos(string authToken, string url)
+        public int GetAllCos(string url)
         {
             string req = "";
             string rsp = "";

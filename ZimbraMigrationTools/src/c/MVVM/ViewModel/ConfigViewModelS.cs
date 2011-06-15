@@ -167,12 +167,12 @@ namespace MVVM.ViewModel
             string authToken = zimbraAPI.ZValues.AuthToken;
             if (authToken.Length > 0)
             {
-                zimbraAPI.GetAllDomains(authToken, url);
+                zimbraAPI.GetAllDomains(url);
                 foreach (string s in zimbraAPI.ZValues.Domains)
                 {
                     scheduleViewModel.DomainList.Add(s);
                 }
-                zimbraAPI.GetAllCos(authToken, url);
+                zimbraAPI.GetAllCos(url);
                 foreach (string s in zimbraAPI.ZValues.COSes)
                 {
                     scheduleViewModel.CosList.Add(s);

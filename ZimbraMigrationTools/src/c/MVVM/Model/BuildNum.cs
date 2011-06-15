@@ -6,7 +6,7 @@ namespace MVVM.Model
 
         public BuildNum()
         {
-            BUILD_NUM = "Zimbra Migration 110614";
+            BUILD_NUM = "Zimbra Migration 110615";
         }
     }
 }
