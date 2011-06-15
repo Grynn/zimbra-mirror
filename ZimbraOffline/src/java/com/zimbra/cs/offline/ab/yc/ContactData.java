@@ -135,7 +135,7 @@ public class ContactData {
         if (newContactData.hasHomeAddressFields()) {
             Fields change = null;
             if (oldContact.hasFieldByFlag(Type.address, Flag.home)) {
-                change = newContactData.exportNameField(Action.UPDATE);
+                change = newContactData.exportHomeAddress(Action.UPDATE);
                 List<Fields> list = oldContact.getFields(Type.address);
                 for (Fields f : list) {
                     if (Flag.home.equals(f.getFlag())) {
@@ -143,7 +143,7 @@ public class ContactData {
                     }
                 }
             } else {
-                newContactData.exportNameField(Action.ADD);
+                newContactData.exportHomeAddress(Action.ADD);
             }
             fieldsChangeList.add(change);
         } else {
@@ -161,9 +161,8 @@ public class ContactData {
         }
         if (newContactData.hasWorkAddressFields()) {
             Fields change = null;
-            ;
             if (oldContact.hasFieldByFlag(Type.address, Flag.work)) {
-                change = newContactData.exportNameField(Action.UPDATE);
+                change = newContactData.exportWorkAddress(Action.UPDATE);
                 List<Fields> list = oldContact.getFields(Type.address);
                 for (Fields f : list) {
                     if (Flag.work.equals(f.getFlag())) {
@@ -171,7 +170,7 @@ public class ContactData {
                     }
                 }
             } else {
-                newContactData.exportNameField(Action.ADD);
+                newContactData.exportWorkAddress(Action.ADD);
             }
             fieldsChangeList.add(change);
         } else {
@@ -202,7 +201,7 @@ public class ContactData {
         }
 
         if (newContactData.hasField(A_anniversary)) {
-            Fields change = oldContact.hasField(Type.anniversary) ? newContactData.exportBirthday(Action.UPDATE)
+            Fields change = oldContact.hasField(Type.anniversary) ? newContactData.exportAnniversary(Action.UPDATE)
                     : newContactData.exportBirthday(Action.ADD);
             if (oldContact.hasField(Type.anniversary)) {
                 change.setId(oldContact.getFields(Type.anniversary).get(0).getId());
@@ -226,6 +225,19 @@ public class ContactData {
         } else {
             if (oldContact.hasField(Type.nickname)) {
                 Fields change = ContactData.exportFieldsToRemove(oldContact.getFields(Type.nickname).get(0).getId());
+                fieldsChangeList.add(change);
+            }
+        }
+        if (newContactData.hasField(A_email)) {
+            Fields change = oldContact.hasField(Type.email) ? newContactData.exportSimpleField(Action.UPDATE,
+                    Type.email, A_email) : newContactData.exportSimpleField(Action.ADD, Type.email, A_email);
+            if (oldContact.hasField(Type.email)) {
+                change.setId(oldContact.getFields(Type.email).get(0).getId());
+            }
+            fieldsChangeList.add(change);
+        } else {
+            if (oldContact.hasField(Type.email)) {
+                Fields change = ContactData.exportFieldsToRemove(oldContact.getFields(Type.email).get(0).getId());
                 fieldsChangeList.add(change);
             }
         }

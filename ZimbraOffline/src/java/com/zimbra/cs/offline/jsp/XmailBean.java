@@ -57,6 +57,7 @@ public class XmailBean extends MailBean {
     protected long ycontactTokenTimestamp = 0L;
     protected String ycontactVerfier = "";
     protected String ycontactSessionHandle = "";
+    protected String ycontactGuid = "";
 
     private static final String adomain = "aol.com";
     private static final String gdomain = "gmail.com";
@@ -247,6 +248,7 @@ public class XmailBean extends MailBean {
                     dsAttrs.put(OfflineProvisioning.A_offlineYContactToken, this.ycontactToken);
                     dsAttrs.put(OfflineProvisioning.A_offlineYContactTokenSecret, this.ycontactTokenSecret);
                     dsAttrs.put(OfflineProvisioning.A_offlineYContactTokenSessionHandle, this.ycontactSessionHandle);
+                    dsAttrs.put(OfflineProvisioning.A_offlineYContactGuid, this.ycontactGuid);
                     dsAttrs.put(OfflineProvisioning.A_offlineYContactTokenTimestamp,
                             String.valueOf(this.ycontactTokenTimestamp));
                     dsAttrs.put(OfflineProvisioning.A_offlineYContactVerifier, this.ycontactVerfier);

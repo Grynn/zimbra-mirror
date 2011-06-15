@@ -139,6 +139,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public static final String A_offlineYContactTokenSecret = "offlineYahooContactTokenSecret";
     public static final String A_offlineYContactTokenTimestamp = "offlineYahooContactTokenTimestamp";
     public static final String A_offlineYContactTokenSessionHandle = "offlineYahooContactTokenSessionHandle";
+    public static final String A_offlineYContactGuid = "offlineYahooContactGuid";
     public static final String A_offlineYContactVerifier = "offlineYahooContactVerifier";
 
     public enum EntryType {
@@ -782,6 +783,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 OAuthManager.persistCredential(account.getId(), (String) dsAttrs.get(A_offlineYContactToken),
                         (String) dsAttrs.get(A_offlineYContactTokenSecret),
                         (String) dsAttrs.get(A_offlineYContactTokenSessionHandle),
+                        (String) dsAttrs.get(A_offlineYContactGuid),
                         (String) dsAttrs.get(A_offlineYContactTokenTimestamp),
                         (String) dsAttrs.get(A_offlineYContactVerifier));
                 //create mailbox from scratch, don't need migration
@@ -2318,12 +2320,18 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         //for yahoo contact sync (address book)
         if (ds.getBooleanAttr(A_zimbraDataSourceContactSyncEnabled, false)) {
             if (ds instanceof OfflineDataSource && ((OfflineDataSource)ds).isYahoo()) {
-                OAuthManager.persistCredential(account.getId(), ds.getAttr(A_offlineYContactToken),
-                        ds.getAttr(A_offlineYContactTokenSecret),
-                        ds.getAttr(A_offlineYContactTokenSessionHandle),
-                        ds.getAttr(A_offlineYContactTokenTimestamp),
-                        ds.getAttr(A_offlineYContactVerifier));
-                YContactSync.migrateExistingContacts(((OfflineDataSource)ds).getContactSyncDataSource());
+                if (!OAuthManager.hasOAuthToken(account.getId())) {
+                    if (ds.getAttr(A_offlineYContactVerifier) == null) {
+                        throw ServiceException.FAILURE("Need Yahoo OAuth verification. Please visit account setup page", null);
+                    }
+                    OAuthManager.persistCredential(account.getId(), ds.getAttr(A_offlineYContactToken),
+                            ds.getAttr(A_offlineYContactTokenSecret),
+                            ds.getAttr(A_offlineYContactTokenSessionHandle),
+                            ds.getAttr(A_offlineYContactGuid),
+                            ds.getAttr(A_offlineYContactTokenTimestamp),
+                            ds.getAttr(A_offlineYContactVerifier));
+                    YContactSync.migrateExistingContacts(((OfflineDataSource)ds).getContactSyncDataSource());
+                }
             }
         }
     }

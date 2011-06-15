@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.Metadata;
@@ -47,6 +48,14 @@ public class OAuthManager {
         }
         return this.mboxOAuthCredentials.get(accountId);
     }
+    
+    public static boolean hasOAuthToken(String accountId) throws YContactException {
+        if (StringUtil.isNullOrEmpty(accountId)) {
+            return false;
+        }
+        OAuthCredential oauth = LazyHolder.instance.getMboxAuthCredential(accountId);
+        return (oauth != null && !oauth.authToken.isNew());
+    }
 
     public static OAuthToken getOAuthToken(String accountId) throws YContactException {
         OAuthCredential oauth = LazyHolder.instance.getMboxAuthCredential(accountId);
@@ -70,7 +79,10 @@ public class OAuthManager {
     }
 
     public static void persistCredential(String accountId, String token, String tokenSecret, String sessionHandle,
-            String tokenTimestamp, String verifier) throws YContactException {
+            String guid, String tokenTimestamp, String verifier) throws YContactException {
+        if (StringUtil.isNullOrEmpty(verifier) && StringUtil.isNullOrEmpty(sessionHandle)) {
+            return;
+        }
         OAuthCredential oauth = LazyHolder.instance.mboxOAuthCredentials.get(accountId);
         if ((oauth != null) &&
             (verifier != null && verifier.equals(oauth.verifier))) {
@@ -79,6 +91,7 @@ public class OAuthManager {
         }
         OAuthToken t = new OAuthToken(token, tokenSecret);
         t.setSessionHandle(sessionHandle);
+        t.setGuid(guid);
         t.setLastAccessTime(Long.parseLong((tokenTimestamp)));
         oauth = new OAuthCredential(accountId, t, verifier);
         LazyHolder.instance.mboxOAuthCredentials.put(accountId, oauth);

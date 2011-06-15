@@ -105,7 +105,11 @@ public class SyncResult extends Entity implements YContactSyncResult {
                 } else if ("refid".equals(child.getNodeName())) {
                     this.refid = child.getTextContent();
                 } else if ("op".equals(child.getNodeName())) {
-                    this.op = Action.getOp(child.getTextContent());   //TODO could be "merge"
+                    try {
+                        this.op = Action.getOp(child.getTextContent());   //TODO could be "merge"
+                    } catch (IllegalArgumentException ile) {
+                        this.op = Action.UPDATE;    //TODO support merge
+                    }
                 } else if ("response".equals(child.getNodeName())) {
                     this.success = "success".equals(child.getTextContent()) ? true : false;
                 } else if ("error".equals(child.getNodeName())) {

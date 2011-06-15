@@ -14,6 +14,7 @@
  */
 package com.zimbra.cs.offline.jsp;
 
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.offline.util.yc.YContactException;
@@ -56,13 +57,16 @@ public class YmailBean extends ImapBean {
             }
         } else if (this.contactSyncEnabled && (verb.isAdd() || verb.isModify())) {
             try {
-                OAuthToken token = OAuthManager.getTokenUsingVerifier(this.oauthTmpId, this.oauthVerifier);
-                this.ycontactToken = token.getToken();
-                this.ycontactTokenSecret = token.getTokenSecret();
-                this.ycontactSessionHandle = token.getSessionHandle();
-                this.ycontactTokenTimestamp = token.getLastAccessTime();
-                this.ycontactVerfier = this.oauthVerifier;
-            } catch (OfflineServiceException e) {
+                if (accountId == null && !OAuthManager.hasOAuthToken(accountId)) {
+                    OAuthToken token = OAuthManager.getTokenUsingVerifier(this.oauthTmpId, this.oauthVerifier);
+                    this.ycontactToken = token.getToken();
+                    this.ycontactTokenSecret = token.getTokenSecret();
+                    this.ycontactSessionHandle = token.getSessionHandle();
+                    this.ycontactTokenTimestamp = token.getLastAccessTime();
+                    this.ycontactGuid = token.getGuid();
+                    this.ycontactVerfier = this.oauthVerifier;    
+                }
+            } catch (ServiceException e) {
                 if (e.getCode().equals(OfflineServiceException.YCONTACT_NEED_VERIFY)) {
                     setYContactVerifyError("YContactVerifyErr");
                 }

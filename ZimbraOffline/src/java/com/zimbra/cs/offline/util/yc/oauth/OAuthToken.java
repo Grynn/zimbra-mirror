@@ -86,6 +86,10 @@ public class OAuthToken {
         return (System.currentTimeMillis() - this.lastAccessTime) > OAuthConstants.OAUTH_TOKEN_EXPIRE_PERIOD;
     }
 
+    public boolean isNew() {
+        return "-1".equals(this.token) && "-1".equals(this.tokenSecret);
+    }
+
     public static OAuthToken newToken() {
         return new OAuthToken("-1", "-1");
     }
