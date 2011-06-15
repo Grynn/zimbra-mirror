@@ -33,7 +33,10 @@ olcAccess: {8}to attrs=zimbraId,zimbraMailAddress,zimbraMailAlias,zimbraMailCa
  eryDisabled  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmpo
  stfix,cn=appaccts,cn=zimbra" read  by dn.base="uid=zmamavis,cn=appaccts,cn=zi
  mbra" read  by * none
-olcAccess: {9}to attrs=entry  by dn.children="cn=admins,cn=zimbra" write  by *
+olcAccess: {9}to dn.subtree="cn=groups,cn=zimbra" attrs=zimbraMailAlias,member
+ ,zimbraMailStatus,entry  by dn.children="cn=admins,cn=zimbra" write  by dn.ba
+ se="uid=zmpostfix,cn=appaccts,cn=zimbra" read
+olcAccess: {10}to attrs=entry  by dn.children="cn=admins,cn=zimbra" write  by *
   read
 olcLastMod: TRUE
 olcMaxDerefDepth: 15

@@ -80,6 +80,12 @@ zimbraId: 12A0779A-88B6-11DC-AA4B-97F9DEB0B34E
 description: The zimbra amavis account
 userPassword: {SSHA}+3rEY5SCrc3KlzJxLQmm735pnRTPgnT2
 
+# place holder for global group tree
+dn: cn=groups,cn=zimbra
+objectClass: organizationalRole
+cn: groups
+description: global dynamic groups
+
 # zimlets
 dn: cn=zimlets,cn=zimbra
 objectclass: organizationalRole

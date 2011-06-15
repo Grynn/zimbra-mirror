@@ -6,6 +6,7 @@ olcModuleLoad: {0}back_hdb.la
 olcModuleLoad: {1}back_monitor.la
 olcModuleLoad: {2}syncprov.la
 olcModuleLoad: {3}accesslog.la
+olcModuleLoad: {4}dynlist.la
 structuralObjectClass: olcModuleList
 entryUUID: 1525c980-333e-102d-86f6-d562901af228
 creatorsName: cn=config
