@@ -23,7 +23,7 @@ source `dirname $0`/zmshutil || exit 1
 zmsetvars \
 	zimbra_home \
 	zimbra_log_directory \
-	zmmtaconfig_listen_port
+	zmconfigd_listen_port
 
 # These variables are not set if run via cron.  Make sure they are set prior to execution
 if [ x"$JYTHONPATH" = "x" ]; then
@@ -71,7 +71,7 @@ checkrunning()
 	  pid=""
 	  running=-1
 	else
-		status=`echo STATUS | $NC -w 10 -i 1 localhost ${zmmtaconfig_listen_port} 2>/dev/null`
+		status=`echo STATUS | $NC -w 10 -i 1 localhost ${zmconfigd_listen_port} 2>/dev/null`
 		if [ $? = 0 -a "x$status" = "xSUCCESS ACTIVE" ]; then
 			running=1
 		else
