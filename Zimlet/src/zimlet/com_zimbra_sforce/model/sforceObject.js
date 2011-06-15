@@ -116,8 +116,6 @@ function(objName, objDesc) {
 
 Com_Zimbra_SForceObject.prototype._constructListItemAsJSON =
 function(item) {
-	var name = params.name;
-	
 	var html = new Array();
 	var i = 0;
 	html[i++] = "{";

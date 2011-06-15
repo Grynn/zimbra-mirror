@@ -34,7 +34,11 @@ Com_Zimbra_SForce.SFORCE_MAIL = "SFORCE_MAIL_TB_BTN";
 Com_Zimbra_SForce.SFORCE_CONTACT_TB_BTN = "SFORCE_CONTACT_TB_BTN";
 
 Com_Zimbra_SForce.prototype.init = function() {
-	this.SERVER = Com_Zimbra_SForce.LOGIN_SERVER;
+	this.LOGIN_SERVER = this.getUserProperty("sforce_logindlg_apiURL");
+	if(!this.LOGIN_SERVER || this.LOGIN_SERVER == "") {
+		this.LOGIN_SERVER = this.getConfig("SF_API_URL");
+	}
+	this.SERVER = this.LOGIN_SERVER;
 	this.XMLNS = "urn:enterprise.soap.sforce.com";
 	this._shell = this.getShell();
 	this.loginToSFOnLaunch = this.getUserProperty("loginToSFOnLaunch") == "true";
@@ -86,6 +90,10 @@ Com_Zimbra_SForce.prototype.doDrop = function(obj) {
 Com_Zimbra_SForce.prototype.singleClicked = function() {
 	//this.login();
 	this._displayLoginDialog();
+};
+
+Com_Zimbra_SForce.prototype.doubleClicked = function() {
+	this.singleClicked();
 };
 
 /// Called by the Zimbra framework when some menu item that doesn't have an
@@ -156,6 +164,9 @@ function(obj) {
 			mainMenuItem.setMenu(subMenu);//add submenu to menuitem
 			for (var k = 0; k < this.__dynamicMenuItems.length; k++) {
 				var dmi_data = this.__dynamicMenuItems[k];
+				if(k > 10) {//only show upto 10 items
+					break;
+				}
 				var params = {image:dmi_data.icon, text:this._zimletContext.process(dmi_data.label),disImage:dmi_data.disabledIcon,style:dmi_data.style};
 				var subMenuItem = subMenu.createMenuItem(dmi_data.id, params);
 				subMenuItem.setData("xmlMenuItem", dmi_data);
@@ -167,7 +178,11 @@ function(obj) {
 					if (smiObj == "") {
 						continue;
 					}
-					var obj = eval("(" + smiObj + ")");
+					try{
+						var obj = eval("(" + smiObj + ")");
+					} catch (e) {
+						continue;
+					}
 					var label = obj.label;
 					var id = [dmi_data.itemName,"=::=",label].join("");
 					var subsubMenuItem = subsubMenu.createMenuItem(id, {image:"SFORCE-panelIcon", text:label});
@@ -470,7 +485,9 @@ function() {	//show the checkbox checked if needed
 	if (this.sforce_ignoreDomainsList) {
 		document.getElementById("sforce_logindlg_ignoreDomainsfield").value = this.sforce_ignoreDomainsList;
 	}
-
+	if(this.LOGIN_SERVER) {
+		document.getElementById("sforce_logindlg_apiURL").value = this.LOGIN_SERVER;
+	}
 	if (this.loginToSFOnLaunch) {
 		document.getElementById("sforce_logindlg_loginToSFOnLaunch").checked = true;
 	}
@@ -488,21 +505,23 @@ function() {
 	var i = 0;
 	html[i++] = "<DIV class='SForce_yellow' id='sforce_logindlg_errorDiv' style='display:none;color:red;font-weight:bold;'></DIV>";
 	html[i++] = "<DIV>";
-	html[i++] = "<TABLE class='SForce_table'  width='100%'><TR><TD style='font-weight:bold'>Salesforce User Name:</TD><TD><INPUT type='text' id='sforce_logindlg_userNamefield'></INPUT></TD></TR>";
-	html[i++] = "<TR><TD  style='font-weight:bold'>Password + SecurityToken*:</TD><TD><INPUT type='password' id='sforce_logindlg_passwordfield'></INPUT></TD></TR>";
-	html[i++] = "<TR><TD style='font-weight:bold'>Ignore emails with following domain(s):<br/><label style=\"font-size: 10px; color: gray;\">(Saperate multiple domains by comma)</label></TD><TD><INPUT type='text' id='sforce_logindlg_ignoreDomainsfield'></INPUT></TD></TR>";
+	html[i++] = "<TABLE class='SForce_table'  width='100%'><TR><TD style='font-weight:bold'>Salesforce User Name:</TD><TD><INPUT type='text' id='sforce_logindlg_userNamefield' /></TD></TR>";
+	html[i++] = "<TR><TD  style='font-weight:bold'>Password + SecurityToken*:</TD><TD><INPUT type='password' id='sforce_logindlg_passwordfield' /></TD></TR>";
+	html[i++] = "<TR><TD style='font-weight:bold'>Ignore emails with following domain(s):<br/><label style=\"font-size: 10px; color: gray;\">(Saperate multiple domains by comma)</label></TD><TD><INPUT type='text' id='sforce_logindlg_ignoreDomainsfield' /></TD></TR>";
+	html[i++] = "<TR><TD style='font-weight:bold'>Salesforce API URL:</TD><TD><INPUT type='text' id='sforce_logindlg_apiURL' /></TD></TR>";
+
 	html[i++] = "</TABLE></DIV><BR/>";
 	html[i++] = "<DIV>";
 	html[i++] = "<TABLE class='SForce_table' width='100%'>";
-	html[i++] = "<TR><TD width=18px><INPUT type='checkbox' id='sforce_logindlg_sbarShowOnlyOnResult'></INPUT></TD><TD  style='font-weight:bold'>Show Salesforce Bar only when there are Salesforce contacts<TD></TD></TR>";
+	html[i++] = "<TR><TD width=18px><INPUT type='checkbox' id='sforce_logindlg_sbarShowOnlyOnResult' /></TD><TD  style='font-weight:bold'>Show Salesforce Bar only when there are Salesforce contacts<TD></TD></TR>";
 	html[i++] = "</TABLE></DIV>";
 	html[i++] = "<DIV>";
 	html[i++] = "<TABLE class='SForce_table' width='100%'>";
-	html[i++] = "<TR><TD width=18px><INPUT type='checkbox' id='sforce_logindlg_showSendAndAddBtn'></INPUT></TD><TD  style='font-weight:bold'>Show 'Send & Add' button in mail compose toolbar<TD></TD></TR>";
+	html[i++] = "<TR><TD width=18px><INPUT type='checkbox' id='sforce_logindlg_showSendAndAddBtn'/></TD><TD  style='font-weight:bold'>Show 'Send & Add' button in mail compose toolbar<TD></TD></TR>";
 	html[i++] = "</TABLE></DIV>";
 	html[i++] = "<DIV>";
 	html[i++] = "<TABLE class='SForce_table' width='100%'>";
-	html[i++] = "<TR><TD width=18px><INPUT type='checkbox' id='sforce_logindlg_loginToSFOnLaunch'></INPUT></TD><TD  style='font-weight:bold'>Login to Salesforce when Zimbra is launched<TD></TD></TR>";
+	html[i++] = "<TR><TD width=18px><INPUT type='checkbox' id='sforce_logindlg_loginToSFOnLaunch' /></TD><TD  style='font-weight:bold'>Login to Salesforce when Zimbra is launched<TD></TD></TR>";
 	html[i++] = "</TABLE></DIV>";
 	html[i++] = "<BR/>";
 	html[i++] = "<DIV class='SForce_yellow'>";
@@ -519,7 +538,8 @@ function() {
 	var needRefresh = false;
 	var user = AjxStringUtil.trim(document.getElementById("sforce_logindlg_userNamefield").value);
 	var passwd = AjxStringUtil.trim(document.getElementById("sforce_logindlg_passwordfield").value);
-	if (user == "" || passwd == "") {
+	var sfApiUrl =  AjxStringUtil.trim(document.getElementById("sforce_logindlg_apiURL").value);
+	if (user == "" || passwd == "" || sfApiUrl == "") {
 		this._setErrorMsgToLoginDlg("Please fill your Salesforce credentials");
 		return;
 	}
@@ -527,6 +547,7 @@ function() {
 	var loginToSFOnLaunch = document.getElementById("sforce_logindlg_loginToSFOnLaunch").checked;
 	this.sforce_logindlg_sbarShowOnlyOnResult = document.getElementById("sforce_logindlg_sbarShowOnlyOnResult").checked;
 	var showSendandAddBtnVal = document.getElementById("sforce_logindlg_showSendAndAddBtn").checked;
+	this.SERVER = sfApiUrl;
 	if (showSendandAddBtnVal != this.sforce_logindlg_showSendAndAddBtn) {
 		needRefresh = true;
 		this.sforce_logindlg_showSendAndAddBtn = showSendandAddBtnVal;
@@ -542,6 +563,7 @@ function() {
 	this.setUserProperty("sforce_logindlg_sbarShowOnlyOnResult", this.sforce_logindlg_sbarShowOnlyOnResult);
 	this.setUserProperty("sforce_logindlg_showSendAndAddBtn", this.sforce_logindlg_showSendAndAddBtn);
 	this.setUserProperty("loginToSFOnLaunch", loginToSFOnLaunch);
+	this.setUserProperty("sforce_logindlg_apiURL", this.SERVER);
 	var callback = new AjxCallback(this, this._handleSaveProperties, needRefresh);
 
 	this.saveUserProperties(callback);
@@ -773,7 +795,7 @@ function() {
 	html[i++] = "<td>";
 	html[i++] = "<div id='sforce_bar_generalToolbar' style='display:none'>";
 	html[i++] = "<table class='SForce_table'>";
-	html[i++] = "<tr><td><input type=text id='sforce_bar_searchField'></input></td><td id='sforce_bar_searchBtn' width=80%></td>";
+	html[i++] = "<tr><td><input type=text id='sforce_bar_searchField' /></td><td id='sforce_bar_searchBtn' width=80%></td>";
 	html[i++] = "<td id='sforce_bar_addNotesBtn'></td><td id='sforce_bar_email2CaseBtn'></td><td><div id='sforce_bar_createNewMenuDiv'></div></td></tr></table></div>";
 	html[i++] = "</td></tr></table>";
 	html[i++] = "</DIV>";
@@ -1566,12 +1588,17 @@ function(canvas, obj) {
 	var i = 0;
 	var fields = this._sCaseTooltipFields.split(",");
 	var len = fields.length;
+	//html[i++] = "<DIV style='height: 200px; width:150px; overflow: auto;'>";
 	html[i++] = "<table  cellpadding=2 cellspacing=0 border=0>";
+	var itemsCount = 0;
 	for (var j = 0; j < len; j++) {
 		var name = fields[j];
 		var val = this._getVal(name, props);
 		if (val == "") {
 			continue;
+		}
+		if(itemsCount > 14) {
+			break;
 		}
 		if (this._sforceCaseObjectNameLabelMap[name]) {
 			name = this._sforceCaseObjectNameLabelMap[name];
@@ -1583,8 +1610,10 @@ function(canvas, obj) {
 		} else {
 			html[i++] = ["<tr align='right'><td><strong>",name, ": </strong></td><td align='left'>",val,"</td></tr>"].join("");
 		}
+		itemsCount++;
 	}
 	html[i++] = ["</table>"].join("");
+	//html[i++] = "</DIV>";
 	canvas.innerHTML = html.join("");
 };
 
@@ -1813,8 +1842,8 @@ function(typeOrObj, setResultToAddNotesMenus) {
 	var html = new Array();
 	var i = 0;
 	html[i++] = "<DIV>";
-	html[i++] = "<table class='SForce_table' width=100% cellpadding=2><tr><td colspan=3><tr><td><input type='radio' id='sforce_contactOrLeadC' name='sforce_contactOrLead' ></input>Create Contact(s)</td>";
-	html[i++] = "<td colspan=3><input  id='sforce_contactOrLeadL' type='radio' name='sforce_contactOrLead' ></input>Create Lead(s)</td></tr></table>";
+	html[i++] = "<table class='SForce_table' width=100% cellpadding=2><tr><td colspan=3><tr><td><input type='radio' id='sforce_contactOrLeadC' name='sforce_contactOrLead' />Create Contact(s)</td>";
+	html[i++] = "<td colspan=3><input  id='sforce_contactOrLeadL' type='radio' name='sforce_contactOrLead' />Create Lead(s)</td></tr></table>";
 	html[i++] = "</DIV>";
 	html[i++] = "<table width=96% align=center><tr><td>";
 	if (!setResultToAddNotesMenus) {
@@ -2475,7 +2504,7 @@ Com_Zimbra_SForce.prototype._sendAddSForce = function(ev) {
 //--------------------------------------------------------------------------------------------------------
 /// Store the default SOAP server.  Note that after a successful login, the URL
 /// may change--which is why we store it in an object instance too (this.SERVER)
-Com_Zimbra_SForce.LOGIN_SERVER = "https://www.salesforce.com/services/Soap/c/17.0";
+//Com_Zimbra_SForce.LOGIN_SERVER = "https://www.salesforce.com/services/Soap/c/17.0";
 
 Com_Zimbra_SForce._RECENT = {};
 
