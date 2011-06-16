@@ -6,7 +6,7 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
-
+import java.util.*;
 
 
 public class FormContactGroupNew extends AbsForm {
@@ -140,7 +140,45 @@ public class FormContactGroupNew extends AbsForm {
 
 					
 	}
+	
+	/*
+	 * check if the list group is empty
+	 */
+	public boolean zIsListGroupEmpty() {
+		return sIsElementPresent("css=div#zl__GRP__rows>div>table>tbody>tr>td.NoResults");			
+	}
 
+	/* return an array list of contact items displayed in the group list view
+	 * 
+	 */
+	public ArrayList<ContactItem> zListGroupRows() {
+		ArrayList<ContactItem> ciArray = new ArrayList<ContactItem>();
+		ContactItem ci=null;
+		
+	    try {
+	      int count=1;
+	      
+	      while (true) {
+	    	  String cssCommon="css=div#zl__GRP__rows>div:nth-child(" + count + ")>table>tbody>tr>";
+		      String cssName = cssCommon + "td:nth-child(2)"; 	
+		      String cssEmail= cssCommon + "td:nth-child(3)";
+		      
+	    	  ci= new ContactItem(sGetText(cssName));
+	    	  ci.setAttribute("email", sGetText(cssEmail));
+	    	  
+	    	  ciArray.add(ci);
+	    	  count++;
+	      }
+	    	
+	    } 
+	    catch (Exception e) {
+	       logger.info("reach the end of the node list");    	
+	    }
+	
+		return ciArray;
+	}
+	
+	
 	//TODO verify the list of email with separator , included in the email view
 	public boolean zIsContainedInEmailView(String list) throws HarnessException {		
 		throw new HarnessException("IMplement me");		
