@@ -207,20 +207,35 @@ public class PageCalendar extends AbsTab {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		
+
 		// Make sure the main page is active
 		if ( !((AppAjaxClient)MyApplication).zPageMain.zIsActive() ) {
 			((AppAjaxClient)MyApplication).zPageMain.zNavigateTo();
 		}
 
+		/**
+		 * 8.0:
+		 * <div 
+		 * 		id="ztb__CLD" 
+		 * 		style="position: absolute; overflow: visible; z-index: 300; left: 179px; top: 78px; width: 1280px; height: 26px;" 
+		 * 		class="ZToolbar ZWidget" 
+		 * 		parentid="z_shell">
+		 */
 		// If the "folders" tree is visible, then mail is active
-		String locator = "css=div[id$='__CAL_REFRESH']";
+		String locator = "css=div#ztb__CLD";
 
 		boolean loaded = this.sIsElementPresent(locator);
 		if ( !loaded )
 			return (false);
+
+		boolean active = this.zIsVisiblePerPosition(locator, 178, 74);
+		if ( !active )
+			return (false);
 		
-		return (loaded);
+		// html body div#z_shell.DwtShell div#ztb__CLD.ZToolbar
+		// Made it here.  The page is active.
+		return (true);
+
 	}
 	
 }
