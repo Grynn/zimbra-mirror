@@ -761,4 +761,41 @@ function () {
 	
 }
 
+ZaCos.getEffectiveCosList = function(adminId) {
 
+    var soapDoc = AjxSoapDoc.create("GetAllEffectiveRightsRequest", ZaZimbraAdmin.URN, null);
+    var elGrantee = soapDoc.set("grantee", adminId);
+    elGrantee.setAttribute("type", "usr");
+    elGrantee.setAttribute("by", "id");
+
+    var params = {};
+    params.soapDoc = soapDoc;
+    params.asyncMode = false;
+    var reqMgrParams = {
+        controller : ZaApp.getInstance().getCurrentController(),
+        busyMsg : ZaMsg.BUSY_GET_EFFICIENT_COS_LIST
+    }
+
+    var cosNameList = [];
+    try {
+        var resp = ZaRequestMgr.invoke(params, reqMgrParams);
+        if(!resp || resp.Body.GetAllEffectiveRightsResponse.Fault)
+            return cosNameList;
+        var targets = resp.Body.GetAllEffectiveRightsResponse.target;
+        for(var i = 0; i < targets.length; i++) {
+            if(targets[i].type != ZaItem.COS)
+                continue;
+            if(!targets[i].entries) continue;
+            for(var j = 0; j < targets[i].entries.length; j++) {
+                var entry = targets[i].entries[j].entry;
+                for(var k = 0; k < entry.length; k++)
+                    cosNameList.push(entry[k].name);
+            }
+            break;
+        }
+        return cosNameList;
+    } catch(ex) {
+        return cosNameList;
+    }
+
+}

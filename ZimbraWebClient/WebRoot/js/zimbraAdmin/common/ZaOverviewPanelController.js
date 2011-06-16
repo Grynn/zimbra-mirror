@@ -421,6 +421,10 @@ function() {
 				
 			try {
 				//add COS nodes
+                                if(!ZaZimbraAdmin.isGlobalAdmin()) {
+                                        var cosNamelist = ZaCos.getEffectiveCosList(ZaZimbraAdmin.currentAdminAccount.id);
+                                        ZaApp.getInstance()._cosNameList = cosNamelist;
+                                }
 				var cosList = ZaApp.getInstance().getCosList();
 				if(cosList && cosList.size()) {
 					var idHash = cosList.getIdHash();

@@ -422,6 +422,16 @@ ZaSearch.prototype.dynSelectSearchCoses = function (callArgs) {
 		params.types = [ZaSearch.COSES];
 		params.callback = dataCallback;
 		params.sortBy = ZaCos.A_name;
+                params.query = "";
+                if(!ZaZimbraAdmin.isGlobalAdmin()) {
+                        var cosNameList = ZaApp.getInstance()._cosNameList;
+                        if(cosNameList && (cosNameList instanceof Array) && cosNameList.length == 0) {
+                            for(var i = 0; i < cosNameList.length; i++)
+                                query += "(" + ZaCos.A_name + "=" + cosNameList[i] + ")";
+                            if(cosNameList.length > 1)
+                                query = "(|" + query + ")";
+                        } else params.query = ZaSearch.getSearchCosByNameQuery(value);
+                } else
 		params.query = ZaSearch.getSearchCosByNameQuery(value);
 		params.controller = ZaApp.getInstance().getCurrentController();
 		params.showBusy = true;

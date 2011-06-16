@@ -736,9 +736,24 @@ function(refresh) {
 ZaApp.prototype.getCosList =
 function(refresh) {
 	if (refresh || !this._cosList) {
+		var query = "";
+		if(!ZaZimbraAdmin.isGlobalAdmin()) {
+			var cosNameList = ZaApp.getInstance()._cosNameList;
+			if(!cosNameList || !(cosNameList instanceof Array)) {
+				ZaApp.getInstance()._cosNameList = cosNamelist = ZaCos.getEffectiveCosList(ZaZimbraAdmin.currentAdminAccount.id);	
+			}
+			if(cosNameList.length == 0) {
+				this._cosList = new ZaItemList(ZaCos);
+				return this._cosList;
+			} 
+			for(var i = 0; i < cosNameList.length; i++)
+				query += "(" + ZaCos.A_name + "=" + cosNameList[i] + ")";
+			if(cosNameList.length > 1)
+				query = "(|" + query + ")"; 
+		}
 
 		var searchParams = {
-			query: "" ,
+			query: query ,
 			types:[ZaSearch.COSES],
 			sortBy:"id",
 			offset:0,
