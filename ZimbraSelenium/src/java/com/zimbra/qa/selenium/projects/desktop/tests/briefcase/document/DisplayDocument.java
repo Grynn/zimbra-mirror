@@ -66,6 +66,8 @@ public class DisplayDocument extends AjaxCommonTest {
 
 		ZAssert.assertTrue(present, "Verify document name through GUI");
 
+		// TODO: Workaround for bug 61007
+		app.zPageBriefcase.zListItem(Action.A_BRIEFCASE_CHECKBOX, document);
 		/*
 		 * //name =ClientSessionFactory.session().selenium().getText(
 		 * "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width*='auto'] div[id^=zlif__BDLV__]"
