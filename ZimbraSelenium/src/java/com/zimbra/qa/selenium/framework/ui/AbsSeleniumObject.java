@@ -719,7 +719,20 @@ public abstract class AbsSeleniumObject {
 			throw new HarnessException(locator + " never disappeared : ", ex);
 		}
 	}
-
+	/**
+	 * zIsElementDisabled(String cssLocator) check if the element (id) 
+	 * enabled
+	 * 
+	 * @param cssLocator
+	 * @throws HarnessException
+	 */
+	public boolean zIsElementDisabled(String cssLocator) throws HarnessException {
+		logger.info("zIsElementDisabled(" + cssLocator + ")");
+		String locator = "css=" + cssLocator +"[class*=ZDisabled]";
+		
+		return sIsElementPresent(locator);
+	}
+	
 	/**
 	 * zWaitForElementEnabled(String id) Wait until the element (id) becomes
 	 * enabled
