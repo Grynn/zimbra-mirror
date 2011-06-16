@@ -298,6 +298,11 @@ public class FormTaskNew extends AbsForm {
 			   this.sFocus(locator);
 			   this.zClick(locator);
 			   zKeyboard.zTypeCharacters(value);
+			  /* if (!(sGetValue(locator).equalsIgnoreCase(value))) {
+					this.sFocus(locator);
+					this.zClick(locator);
+					sType(locator, value);
+				}*/
 			} finally {
 			   sSelectWindow("Zimbra: Tasks");
 			}
@@ -328,7 +333,7 @@ public class FormTaskNew extends AbsForm {
 	
 	@Override
 	public void zFill(IItem item) throws HarnessException {
-		logger.info(myPageName() + ".zFill(ZimbraItem)");
+	/*	logger.info(myPageName() + ".zFill(ZimbraItem)");
 		logger.info(item.prettyPrint());
 
 		// Make sure the item is a MailItem
@@ -347,7 +352,7 @@ public class FormTaskNew extends AbsForm {
 			
 			zFillField(Field.Subject, task.gettaskSubject());
 
-		}
+		}*/
 		
 		// TODO: more
 		

@@ -38,9 +38,7 @@ public class TaskItem implements IItem {
 
 	public String gDueDate;
 
-	private String taskSubject;
-
-	private String taskBody;
+	public String gtaskBody;
 
 	// //
 	// FINISH: GUI Data
@@ -52,32 +50,27 @@ public class TaskItem implements IItem {
 	public TaskItem() {
 		populateTaskData();
 	}
-
+	
+	public void setName(String name) {
+		gSubject=name;
+	}
 	public String getName() {
 		return (gSubject);
 	}
 	
-	public void populateTaskData() {
-		// TODO Auto-generated method stub
-		taskSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		taskBody = "Body" + ZimbraSeleniumProperties.getUniqueString();
-	}
-
-	public String gettaskSubject() {
-		return taskSubject;
-	}
-
-	public void settaskSubject(String taskSubject) {
-		this.taskSubject = taskSubject;
-	}
-
+	
 	public String gettaskBody() {
 
-		return taskBody;
+		return gtaskBody;
 	}
 
 	public void settaskBody(String taskBody) {
-		this.taskBody = taskBody;
+		gtaskBody = taskBody;
+	}
+	public void populateTaskData() {
+		// TODO Auto-generated method stub
+		//taskSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		//taskBody = "Body" + ZimbraSeleniumProperties.getUniqueString();
 	}
 
 	public static TaskItem importFromSOAP(Element GetMsgResponse) throws HarnessException {
@@ -97,13 +90,18 @@ public class TaskItem implements IItem {
 						"Element does not contain GetMsgResponse");
 
 			Element m = ZimbraAccount.SoapClient.selectNode(getMsgResponse,
-					"//mail:m");
+					"//mail:comp");
 			if (m == null)
 				throw new HarnessException(
 						"Element does not contain an m element");
 
 			// Create the object
 			task = new TaskItem();
+			//Set task body
+			task.settaskBody(m.getAttribute("desc", null));
+			//Set task name
+			task.setName(m.getAttribute("name",null));
+
 
 			// TODO: parse the <m/> element
 
