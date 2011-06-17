@@ -118,7 +118,7 @@ public final class LocalData {
     }
 
     private List<Integer> getTombstones(int seq, MailItem.Type type) throws ServiceException {
-        List<Integer> ids = mbox.getTombstones(seq).getIds(EnumSet.of(type));
+        List<Integer> ids = mbox.getTombstones(seq).getIds(type);
         return ids != null ? ids : Collections.<Integer>emptyList();
     }
 
