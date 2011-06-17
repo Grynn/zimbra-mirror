@@ -953,7 +953,7 @@ ZaItem.formatServerTime = function(serverStr) {
 	if(serverStr) {
 		var ajxTKServerStr = serverStr.substring(0,8) + "T" + serverStr.substring(8) ;
 		var curDate = AjxDateUtil.parseServerDateTime(ajxTKServerStr);	
-        var formatter = AjxDateFormat.getDateTimeInstance() ;
+        var formatter = AjxDateFormat.getDateTimeInstance(AjxDateFormat.LONG) ;
       	return formatter.format(curDate) ;
 	} else {
 		return "";
