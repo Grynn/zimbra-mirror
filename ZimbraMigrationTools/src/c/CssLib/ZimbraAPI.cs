@@ -9,21 +9,29 @@ namespace CssLib
 {
     public class ZimbraAPI
     {
-        internal const int ZIMBRA_API_LOGON = 1;
-        internal const int ZIMBRA_API_GETINFO = 2;
-        internal const int ZIMBRA_API_GETALLDOMAIN = 3;
-        internal const int ZIMBRA_API_GETDOMAIN = 4;
-        internal const int ZIMBRA_API_GETALLCOS = 5;
+        internal const int ZIMBRA_API_LOGONA = 1;
+        internal const int ZIMBRA_API_LOGONU = 2;
+        internal const int ZIMBRA_API_GETINFO = 3;
+        internal const int ZIMBRA_API_GETALLDOMAIN = 4;
+        internal const int ZIMBRA_API_GETDOMAIN = 5;
+        internal const int ZIMBRA_API_GETALLCOS = 6;
 
         private string _soapEnvelope =
           "<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\"><soap:Header></soap:Header><soap:Body></soap:Body></soap:Envelope>";
 
         private string WebMethod { get; set; }
 
+        private class Attrib
+        {
+            public string Name { get; set; }
+            public string Value { get; set; }
+        }
+
         private class Parameter
         {
             public string Name { get; set; }
             public string Value { get; set; }
+            public Attrib Attr { get; set; }
         }
         private List<Parameter> Parameters { get; set; }
 
@@ -57,18 +65,39 @@ namespace CssLib
         {
             string hdr = "";
             string MethodCall = "";
+            string StrParameters = string.Empty;
 
             switch (apiCall)
             {
-                case ZimbraAPI.ZIMBRA_API_LOGON:
+                case ZimbraAPI.ZIMBRA_API_LOGONA:
                     hdr = "<context xmlns=\"urn:zimbra\"><nonotify/><noqualify/><nosession/></context>";
                     MethodCall = "<" + this.WebMethod + @" xmlns=""urn:zimbraAdmin"">";
-                    string StrParameters = string.Empty;
                     if (this.Parameters != null)
                     {
                         foreach (Parameter param in this.Parameters)
                         {
                             StrParameters = StrParameters + "<" + param.Name + ">" + param.Value + "</" + param.Name + ">";
+                        }
+                    }
+                    MethodCall = MethodCall + StrParameters + "</" + this.WebMethod + ">";
+                    break;
+
+                case ZimbraAPI.ZIMBRA_API_LOGONU:
+                    hdr = "<context xmlns=\"urn:zimbra\"><nonotify/><noqualify/><nosession/></context>";
+                    MethodCall = "<" + this.WebMethod + @" xmlns=""urn:zimbraAccount"">";
+                    if (this.Parameters != null)
+                    {
+                        foreach (Parameter param in this.Parameters)
+                        {
+                            if (param.Attr != null)
+                            {
+                                StrParameters = StrParameters + "<" + param.Name + " " + param.Attr.Name + "=" + "\"" + param.Attr.Value + "\">"
+                                                                    + param.Value + "</" + param.Name + ">";
+                            }
+                            else
+                            {
+                                StrParameters = StrParameters + "<" + param.Name + ">" + param.Value + "</" + param.Name + ">";
+                            }
                         }
                     }
                     MethodCall = MethodCall + StrParameters + "</" + this.WebMethod + ">";
@@ -131,7 +160,7 @@ namespace CssLib
             return soapReason;
         }
 
-        private void ParseLogon(string rsp)
+        private void ParseLogon(string rsp, bool isAdmin)
         {
             string authToken = "";
             string isDomainAdmin = "false";
@@ -141,15 +170,21 @@ namespace CssLib
                 if (startIdx != -1)
                 {
                     XDocument xmlDoc = XDocument.Parse(rsp);
-                    XNamespace ns = "urn:zimbraAdmin";
+                    XNamespace ns = (isAdmin) ? "urn:zimbraAdmin" : "urn:zimbraAccount";
+
+                    // we'll have to deal with this -- need to figure this out later -- with GetInfo
+                    // for now, just faking -- always setting admin stuff to false if not admin -- not right
                     foreach (var objIns in xmlDoc.Descendants(ns + "AuthResponse"))
                     {
                         authToken += objIns.Element(ns + "authToken").Value;
                         isDomainAdmin = "false";
-                        var x = from a in objIns.Elements(ns + "a")
-                                where a.Attribute("n").Value == "zimbraIsDomainAdminAccount"
-                                select a.Value;
-                        isDomainAdmin = x.ElementAt(0);
+                        if (isAdmin)
+                        {
+                            var x = from a in objIns.Elements(ns + "a")
+                                    where a.Attribute("n").Value == "zimbraIsDomainAdminAccount"
+                                    select a.Value;
+                            isDomainAdmin = x.ElementAt(0);
+                        }
                     }
                 }
             }
@@ -235,25 +270,34 @@ namespace CssLib
         //////////
 
         // API methods /////////
-        public int Logon(string username, string password, string url)
+        public int Logon(string username, string password, string url, bool isAdmin)
         {
             lastError = "";
             string req = "";
             string rsp = "";
             WebMethod = "AuthRequest";
             Parameters = new List<Parameter>();
-            Parameters.Add(new Parameter { Name = "name", Value = username });
-            Parameters.Add(new Parameter { Name = "password", Value = password });
+            if (isAdmin)
+            {
+                Parameters.Add(new Parameter { Name = "name", Value = username, Attr = null });
+            }
+            else
+            {
+                Parameters.Add(new Parameter { Name = "account", Value = username, Attr = new Attrib { Name = "by", Value = "name" } });
+            }
+            Parameters.Add(new Parameter { Name = "password", Value = password, Attr = null });
+
             WebServiceClient client = new WebServiceClient
             {
                 Url = url,
                 WSServiceType = WebServiceClient.ServiceType.Traditional
             };
-            req = CreateSoapEnvelope(ZIMBRA_API_LOGON);
+            int apiCall = (isAdmin) ? ZIMBRA_API_LOGONA : ZIMBRA_API_LOGONU;
+            req = CreateSoapEnvelope(apiCall);
             client.InvokeService(req, out rsp);
             if (client.status == 0)
             {
-                ParseLogon(rsp);
+                ParseLogon(rsp, isAdmin);
             }
             else
             {

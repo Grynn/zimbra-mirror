@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using MVVM.Model;
 using Misc;
+using CssLib;
 using System.IO;
 
 namespace MVVM.ViewModel
@@ -189,7 +190,29 @@ namespace MVVM.ViewModel
 
         private void Next()
         {
-            lb.SelectedIndex = 1;
+            if ((this.ZimbraServerHostName.Length == 0) || (this.ZimbraPort.Length == 0))
+            {
+                MessageBox.Show("Please fill in the host name and port", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            ZimbraAPI zimbraAPI = new ZimbraAPI();
+            string url = "http://" + this.ZimbraServerHostName + ":" + this.ZimbraPort + "/service/soap";
+
+            int stat = zimbraAPI.Logon(this.ZimbraUser, this.ZimbraUserPasswd, url, false);
+            if (stat == 0)
+            {
+                string authToken = zimbraAPI.ZValues.AuthToken;
+                if (authToken.Length > 0)
+                {
+                    zimbraAPI.GetInfo(url);
+                    lb.SelectedIndex = 1;
+                }
+            }
+            else
+            {
+                MessageBox.Show(string.Format("Logon Unsuccessful: {0}", zimbraAPI.LastError), "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public string OutlookProfile

@@ -164,7 +164,7 @@ namespace MVVM.ViewModel
             ZimbraAPI zimbraAPI = new ZimbraAPI();
             string url = "https://" + this.ZimbraServerHostName + ":" + this.ZimbraPort + "/service/admin/soap";
 
-            int stat = zimbraAPI.Logon(this.ZimbraAdmin, this.ZimbraAdminPasswd, url);
+            int stat = zimbraAPI.Logon(this.ZimbraAdmin, this.ZimbraAdminPasswd, url, true);
             if (stat == 0)
             {
                 string authToken = zimbraAPI.ZValues.AuthToken;
