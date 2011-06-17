@@ -591,6 +591,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.DisableArchiveResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/DisableArchive")
+    @WebResult(name = "DisableArchiveResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public DisableArchiveResponse disableArchiveRequest(
+        @WebParam(name = "DisableArchiveRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        DisableArchiveRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.DumpSessionsResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/DumpSessions")
@@ -598,6 +610,18 @@ public interface AdminService {
     public DumpSessionsResponse dumpSessionsRequest(
         @WebParam(name = "DumpSessionsRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         DumpSessionsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.EnableArchiveResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/EnableArchive")
+    @WebResult(name = "EnableArchiveResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public EnableArchiveResponse enableArchiveRequest(
+        @WebParam(name = "EnableArchiveRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        EnableArchiveRequest parameters);
 
     /**
      * 
@@ -934,6 +958,18 @@ public interface AdminService {
     public GetAllZimletsResponse getAllZimletsRequest(
         @WebParam(name = "GetAllZimletsRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         GetAllZimletsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetAttributeInfoResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetAttributeInfo")
+    @WebResult(name = "GetAttributeInfoResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetAttributeInfoResponse getAttributeInfoRequest(
+        @WebParam(name = "GetAttributeInfoRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetAttributeInfoRequest parameters);
 
     /**
      * 

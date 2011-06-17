@@ -43,7 +43,7 @@ import javax.xml.bind.annotation.XmlType;
     "meta"
 })
 @XmlSeeAlso({
-    MessageSummaryInfo.class,
+    MsgWithGroupInfo.class,
     MessageSummary.class,
     MessageInfo.class,
     InviteAsMP.class

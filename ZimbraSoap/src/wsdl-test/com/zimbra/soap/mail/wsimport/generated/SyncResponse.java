@@ -56,17 +56,17 @@ public class SyncResponse {
 
     protected SyncDeletedInfo deleted;
     @XmlElements({
-        @XmlElement(name = "note", type = NoteInfo.class),
-        @XmlElement(name = "appt", type = CalendarItemInfo.class),
-        @XmlElement(name = "tag", type = TagInfo.class),
-        @XmlElement(name = "folder", type = Folder.class),
         @XmlElement(name = "doc", type = DocumentInfo.class),
-        @XmlElement(name = "c", type = ConversationSummary.class),
-        @XmlElement(name = "cn", type = ContactInfo.class),
-        @XmlElement(name = "task", type = TaskItemInfo.class),
-        @XmlElement(name = "m", type = MessageSummary.class),
+        @XmlElement(name = "note", type = NoteInfo.class),
+        @XmlElement(name = "tag", type = TagInfo.class),
         @XmlElement(name = "chat", type = ChatSummary.class),
-        @XmlElement(name = "w", type = CommonDocumentInfo.class)
+        @XmlElement(name = "m", type = MessageSummary.class),
+        @XmlElement(name = "appt", type = CalendarItemInfo.class),
+        @XmlElement(name = "cn", type = ContactInfo.class),
+        @XmlElement(name = "w", type = CommonDocumentInfo.class),
+        @XmlElement(name = "task", type = TaskItemInfo.class),
+        @XmlElement(name = "folder", type = Folder.class),
+        @XmlElement(name = "c", type = ConversationSummary.class)
     })
     protected List<Object> folderOrTagOrNote;
     @XmlAttribute(required = true)
@@ -120,17 +120,17 @@ public class SyncResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link NoteInfo }
-     * {@link CalendarItemInfo }
-     * {@link TagInfo }
-     * {@link Folder }
      * {@link DocumentInfo }
-     * {@link ConversationSummary }
-     * {@link ContactInfo }
-     * {@link TaskItemInfo }
-     * {@link MessageSummary }
+     * {@link NoteInfo }
+     * {@link TagInfo }
      * {@link ChatSummary }
+     * {@link MessageSummary }
+     * {@link CalendarItemInfo }
+     * {@link ContactInfo }
      * {@link CommonDocumentInfo }
+     * {@link TaskItemInfo }
+     * {@link Folder }
+     * {@link ConversationSummary }
      * 
      * 
      */

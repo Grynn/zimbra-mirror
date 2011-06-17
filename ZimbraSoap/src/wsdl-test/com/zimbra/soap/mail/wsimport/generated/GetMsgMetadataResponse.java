@@ -21,8 +21,8 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;choice maxOccurs="unbounded" minOccurs="0">
- *           &lt;element name="chat" type="{urn:zimbraMail}chatMessageInfo"/>
- *           &lt;element name="m" type="{urn:zimbraMail}messageInfo"/>
+ *           &lt;element name="chat" type="{urn:zimbraMail}chatSummary"/>
+ *           &lt;element name="m" type="{urn:zimbraMail}messageSummary"/>
  *         &lt;/choice>
  *       &lt;/sequence>
  *     &lt;/restriction>
@@ -39,10 +39,10 @@ import javax.xml.bind.annotation.XmlType;
 public class GetMsgMetadataResponse {
 
     @XmlElements({
-        @XmlElement(name = "chat", type = ChatMessageInfo.class),
-        @XmlElement(name = "m")
+        @XmlElement(name = "m"),
+        @XmlElement(name = "chat", type = ChatSummary.class)
     })
-    protected List<MessageInfo> chatOrM;
+    protected List<MessageSummary> chatOrM;
 
     /**
      * Gets the value of the chatOrM property.
@@ -62,14 +62,14 @@ public class GetMsgMetadataResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link ChatMessageInfo }
-     * {@link MessageInfo }
+     * {@link MessageSummary }
+     * {@link ChatSummary }
      * 
      * 
      */
-    public List<MessageInfo> getChatOrM() {
+    public List<MessageSummary> getChatOrM() {
         if (chatOrM == null) {
-            chatOrM = new ArrayList<MessageInfo>();
+            chatOrM = new ArrayList<MessageSummary>();
         }
         return this.chatOrM;
     }

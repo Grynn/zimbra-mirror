@@ -58,6 +58,7 @@ import javax.xml.bind.annotation.XmlType;
     ModifyServerRequest.class,
     ModifyAccountRequest.class,
     SmimeConfigModifications.class,
+    ArchiveSpec.class,
     DataSourceSpecifier.class,
     SmimeConfigInfo.class,
     DataSourceInfo.class,

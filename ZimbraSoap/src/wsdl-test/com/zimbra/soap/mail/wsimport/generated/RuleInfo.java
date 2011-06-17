@@ -43,9 +43,9 @@ import javax.xml.bind.annotation.XmlType;
 public class RuleInfo {
 
     @XmlElements({
-        @XmlElement(name = "action", type = RuleAction.class),
         @XmlElement(name = "g", type = RuleConditionGroup.class),
-        @XmlElement(name = "c", type = RuleCondition.class)
+        @XmlElement(name = "c", type = RuleCondition.class),
+        @XmlElement(name = "action", type = RuleAction.class)
     })
     protected List<Object> gOrCOrAction;
     @XmlAttribute(required = true)
@@ -71,9 +71,9 @@ public class RuleInfo {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link RuleAction }
      * {@link RuleConditionGroup }
      * {@link RuleCondition }
+     * {@link RuleAction }
      * 
      * 
      */

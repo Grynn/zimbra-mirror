@@ -68,17 +68,17 @@ import javax.xml.bind.annotation.XmlType;
 public class SearchResponse {
 
     @XmlElements({
-        @XmlElement(name = "note", type = NoteHitInfo.class),
-        @XmlElement(name = "cn", type = ContactInfo.class),
-        @XmlElement(name = "task", type = TaskHitInfo.class),
-        @XmlElement(name = "appt", type = AppointmentHitInfo.class),
+        @XmlElement(name = "doc", type = DocumentHitInfo.class),
         @XmlElement(name = "m", type = MessageHitInfo.class),
-        @XmlElement(name = "chat", type = ChatHitInfo.class),
+        @XmlElement(name = "note", type = NoteHitInfo.class),
         @XmlElement(name = "hit", type = SimpleSearchHit.class),
+        @XmlElement(name = "task", type = TaskHitInfo.class),
+        @XmlElement(name = "chat", type = ChatHitInfo.class),
         @XmlElement(name = "w", type = WikiHitInfo.class),
+        @XmlElement(name = "appt", type = AppointmentHitInfo.class),
+        @XmlElement(name = "cn", type = ContactInfo.class),
         @XmlElement(name = "mp", type = MessagePartHitInfo.class),
-        @XmlElement(name = "c", type = ConversationHitInfo.class),
-        @XmlElement(name = "doc", type = DocumentHitInfo.class)
+        @XmlElement(name = "c", type = ConversationHitInfo.class)
     })
     protected List<Object> hitOrCOrM;
     protected SearchResponse.Info info;
@@ -109,17 +109,17 @@ public class SearchResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link NoteHitInfo }
-     * {@link ContactInfo }
-     * {@link TaskHitInfo }
-     * {@link AppointmentHitInfo }
+     * {@link DocumentHitInfo }
      * {@link MessageHitInfo }
-     * {@link ChatHitInfo }
+     * {@link NoteHitInfo }
      * {@link SimpleSearchHit }
+     * {@link TaskHitInfo }
+     * {@link ChatHitInfo }
      * {@link WikiHitInfo }
+     * {@link AppointmentHitInfo }
+     * {@link ContactInfo }
      * {@link MessagePartHitInfo }
      * {@link ConversationHitInfo }
-     * {@link DocumentHitInfo }
      * 
      * 
      */

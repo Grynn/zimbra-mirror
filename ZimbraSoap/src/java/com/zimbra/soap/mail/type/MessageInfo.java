@@ -34,13 +34,14 @@ import com.zimbra.soap.type.KeyValuePair;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = { "fragment", "emails", "subject",
-    "messageIdHdr", "inReplyTo", "invite", "headers", "contentElems" })
+    "messageIdHeader", "inReplyTo", "invite", "headers", "contentElems" })
 public class MessageInfo extends MessageCommon {
 
     @XmlAttribute(name=MailConstants.A_ID /* id */, required=false)
     private String id;
 
-    @XmlAttribute(name=MailConstants.A_CAL_INTENDED_FOR /* cif */, required=false)
+    @XmlAttribute(name=MailConstants.A_CAL_INTENDED_FOR /* cif */,
+                    required=false)
     private String calendarIntendedFor;
 
     @XmlAttribute(name=MailConstants.A_ORIG_ID /* origid */, required=false)
@@ -52,10 +53,12 @@ public class MessageInfo extends MessageCommon {
     @XmlAttribute(name=MailConstants.A_IDENTITY_ID /* idnt */, required=false)
     private String identityId;
 
-    @XmlAttribute(name=MailConstants.A_FOR_ACCOUNT /* forAcct */, required=false)
+    @XmlAttribute(name=MailConstants.A_FOR_ACCOUNT /* forAcct */,
+                    required=false)
     private String draftAccountId;
 
-    @XmlAttribute(name=MailConstants.A_AUTO_SEND_TIME /* autoSendTime */, required=false)
+    @XmlAttribute(name=MailConstants.A_AUTO_SEND_TIME /* autoSendTime */,
+                    required=false)
     private Long draftAutoSendTime;
 
     @XmlAttribute(name=MailConstants.A_SENT_DATE /* sd */, required=false)
@@ -77,7 +80,7 @@ public class MessageInfo extends MessageCommon {
     private String subject;
 
     @XmlElement(name=MailConstants.E_MSG_ID_HDR /* mid */, required=false)
-    private String messageIdHdr;
+    private String messageIdHeader;
 
     @XmlElement(name=MailConstants.E_IN_REPLY_TO /* irt */, required=false)
     private String inReplyTo;
@@ -139,14 +142,13 @@ public class MessageInfo extends MessageCommon {
         }
     }
 
-    public MessageInfo addEmail(EmailInfo email) {
+    public void addEmail(EmailInfo email) {
         this.emails.add(email);
-        return this;
     }
 
     public void setSubject(String subject) { this.subject = subject; }
-    public void setMessageIdHdr(String messageIdHdr) {
-        this.messageIdHdr = messageIdHdr;
+    public void setMessageIdHeader(String messageIdHeader) {
+        this.messageIdHeader = messageIdHeader;
     }
     public void setInReplyTo(String inReplyTo) { this.inReplyTo = inReplyTo; }
     public void setInvite(InviteInfo invite) { this.invite = invite; }
@@ -157,9 +159,8 @@ public class MessageInfo extends MessageCommon {
         }
     }
 
-    public MessageInfo addHeader(KeyValuePair header) {
+    public void addHeader(KeyValuePair header) {
         this.headers.add(header);
-        return this;
     }
 
     public void setContentElems(Iterable <Object> contentElems) {
@@ -169,9 +170,8 @@ public class MessageInfo extends MessageCommon {
         }
     }
 
-    public MessageInfo addContentElem(Object contentElem) {
+    public void addContentElem(Object contentElem) {
         this.contentElems.add(contentElem);
-        return this;
     }
 
     public String getId() { return id; }
@@ -189,7 +189,7 @@ public class MessageInfo extends MessageCommon {
         return Collections.unmodifiableList(emails);
     }
     public String getSubject() { return subject; }
-    public String getMessageIdHdr() { return messageIdHdr; }
+    public String getMessageIdHeader() { return messageIdHeader; }
     public String getInReplyTo() { return inReplyTo; }
     public InviteInfo getInvite() { return invite; }
     public List<KeyValuePair> getHeaders() {
@@ -216,7 +216,7 @@ public class MessageInfo extends MessageCommon {
             .add("fragment", fragment)
             .add("emails", emails)
             .add("subject", subject)
-            .add("messageIdHdr", messageIdHdr)
+            .add("messageIdHeader", messageIdHeader)
             .add("inReplyTo", inReplyTo)
             .add("invite", invite)
             .add("headers", headers)

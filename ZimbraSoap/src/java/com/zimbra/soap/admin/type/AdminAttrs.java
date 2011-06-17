@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2010 Zimbra, Inc.
+ * Copyright (C) 2010, 2011 Zimbra, Inc.
  * 
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -22,8 +22,8 @@ import java.util.Map;
 import com.zimbra.common.service.ServiceException;
 
 public interface AdminAttrs {
-    public AdminAttrs setAttrs(Collection<Attr> attrs);
-    public AdminAttrsImpl setAttrs(Map<String, ? extends Object> attrs) throws ServiceException;
-    public AdminAttrs addAttr(Attr attr);
+    public void setAttrs(Iterable<Attr> attrs);
+    public void setAttrs(Map<String, ? extends Object> attrs) throws ServiceException;
+    public void addAttr(Attr attr);
     public List<Attr> getAttrs();
 }

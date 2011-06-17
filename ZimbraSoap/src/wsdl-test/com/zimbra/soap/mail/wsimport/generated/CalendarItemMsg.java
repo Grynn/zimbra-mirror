@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import org.w3c.dom.Element;
 
@@ -55,6 +56,10 @@ import org.w3c.dom.Element;
     "tz",
     "fr",
     "any"
+})
+@XmlSeeAlso({
+    MsgToSend.class,
+    SaveDraftMsg.class
 })
 public class CalendarItemMsg {
 
