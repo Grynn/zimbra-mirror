@@ -105,6 +105,32 @@ namespace CssLib
         }
 
         // Parse Methods //////////////////
+        private string ParseSoapFault(string rsperr)
+        {
+            if (rsperr.Length == 0)
+            {
+                return "";
+            }
+            if (rsperr.IndexOf("<soap:Fault>") == -1)
+            {
+                return "";
+            }
+            string soapReason = "";
+
+            XDocument xmlDoc = XDocument.Parse(rsperr);            
+            XNamespace ns = "http://www.w3.org/2003/05/soap-envelope"; 
+            IEnumerable<XElement> de =
+                from el in xmlDoc.Descendants()
+                    select el;
+                    foreach (XElement el in de)
+                        if (el.Name == ns + "Reason")
+                        {
+                            soapReason = el.Value;
+                            break;
+                        }  
+            return soapReason;
+        }
+
         private void ParseLogon(string rsp)
         {
             string authToken = "";
@@ -229,7 +255,18 @@ namespace CssLib
             {
                 ParseLogon(rsp);
             }
-            lastError = client.errmsg;
+            else
+            {
+                string soapReason = ParseSoapFault(client.errResponseMessage);
+                if (soapReason.Length > 0)
+                {
+                    lastError = soapReason;
+                }
+                else
+                {
+                    lastError = client.exceptionMessage;
+                }
+            }
             return client.status;
 
         }
@@ -252,7 +289,18 @@ namespace CssLib
             {
                 ParseGetInfo(rsp);
             }
-            lastError = client.errmsg;
+            else
+            {
+                string soapReason = ParseSoapFault(client.errResponseMessage);
+                if (soapReason.Length > 0)
+                {
+                    lastError = soapReason;
+                }
+                else
+                {
+                    lastError = client.exceptionMessage;
+                }
+            }
             return client.status;
         }
 
@@ -273,7 +321,18 @@ namespace CssLib
             {
                 ParseGetAllDomain(rsp);
             }
-            lastError = client.errmsg;
+            else
+            {
+                string soapReason = ParseSoapFault(client.errResponseMessage);
+                if (soapReason.Length > 0)
+                {
+                    lastError = soapReason;
+                }
+                else
+                {
+                    lastError = client.exceptionMessage;
+                }
+            }
             return client.status;
         }
 
@@ -294,7 +353,18 @@ namespace CssLib
             {
                 ParseGetAllCos(rsp);
             }
-            lastError = client.errmsg;
+            else
+            {
+                string soapReason = ParseSoapFault(client.errResponseMessage);
+                if (soapReason.Length > 0)
+                {
+                    lastError = soapReason;
+                }
+                else
+                {
+                    lastError = client.exceptionMessage;
+                }
+            }
             return client.status;
         }
         /////////////////////////

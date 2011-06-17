@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.IO;
+using System.Text;
 
 namespace CssLib
 {
@@ -20,7 +21,30 @@ namespace CssLib
 
         public int status;
 
-        public string errmsg;
+        public HttpStatusCode httpStatusCode;
+        public string httpStatusDescription;
+        public string exceptionMessage;
+        public string errResponseMessage;
+
+        private void setErrors(System.Net.WebException wex)
+        {
+            status = (int)wex.Status;
+            exceptionMessage = wex.Message;
+
+            if (wex.Response != null )
+            {
+                httpStatusCode = ((HttpWebResponse)wex.Response).StatusCode;
+                httpStatusDescription = ((HttpWebResponse)wex.Response).StatusDescription;
+                HttpWebResponse errResponse = (HttpWebResponse)wex.Response;
+                long rlen = errResponse.ContentLength;
+                Stream ReceiveStream = errResponse.GetResponseStream();
+                Encoding encode = System.Text.Encoding.GetEncoding("utf-8");
+                StreamReader readStream = new StreamReader(ReceiveStream, encode);
+                Char[] utf8Msg = new Char[rlen];
+                int count = readStream.Read(utf8Msg, 0, (int)rlen);
+                errResponseMessage = new string(utf8Msg);
+            }
+        }
         
         private HttpWebRequest CreateWebRequest()
         {
@@ -36,7 +60,8 @@ namespace CssLib
             WebResponse response = null;
             string strResponse = "";
             status = 0;
-            errmsg = "";
+            exceptionMessage = "";
+            errResponseMessage = "";
             
             ServicePointManager.ServerCertificateValidationCallback =
             new RemoteCertificateValidationCallback(
@@ -66,8 +91,7 @@ namespace CssLib
             catch (System.Net.WebException wex)
             //catch (Exception ex)
             {
-                status = (int)wex.Status;
-                errmsg = wex.Message;
+                setErrors(wex);
                 rsp = "";
                 return;
             }
@@ -77,11 +101,10 @@ namespace CssLib
             {
                 response = webReq.GetResponse();
             }
-            catch (System.Net.WebException wex2)
+            catch (System.Net.WebException wex)
             //catch (Exception ex)
             {
-                status = (int)wex2.Status;
-                errmsg = wex2.Message;
+                setErrors(wex);
                 rsp = "";
                 return;
             }
