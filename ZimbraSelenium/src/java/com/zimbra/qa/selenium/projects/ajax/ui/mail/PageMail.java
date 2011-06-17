@@ -213,16 +213,39 @@ public class PageMail extends AbsTab {
 			((AppAjaxClient)MyApplication).zPageMain.zNavigateTo();
 		}
 
-		// If the "folders" tree is visible, then mail is active
-		String locator = "css=div[id$='__CHECK_MAIL']";
+		String locator;
+		boolean loaded, visible;
+		
+		
+		/**
+		 * 8.0
+		 * MLV:
+		 * <div id="zb__TV__NEW_MENU" style="position: absolute; overflow: visible; z-index: 300; left: 5px; top: 78px; width: 159px; height: 24px;" class="ZToolbarButton ZWidget   ZHasDropDown       ZHasLeftIcon ZHasText" parentid="z_shell">
+		 * CLV:
+		 * <div id="zb__CLV__NEW_MENU" style="position: absolute; overflow: visible; z-index: 300; left: 5px; top: 78px; width: 159px; height: 24px;" class="ZToolbarButton ZWidget   ZHasDropDown       ZHasLeftIcon ZHasText" parentid="z_shell">
+		 * 
+		 */
+		
+		// If the "NEW" button is visible, then the app is visible
+		
+		// Check MLV first
+		locator = "css=div#zb__TV__NEW_MENU";
 
-		boolean loaded = this.sIsElementPresent(locator);
-		if ( !loaded )
-			return (false);
+		loaded = this.sIsElementPresent(locator);
+		visible = this.zIsVisiblePerPosition(locator, 4, 74);
+		if ( loaded && visible )
+			return (true);
+		
+		// Check CLV next
+		locator = "css=div#zb__CLV__NEW_MENU";
+		loaded = this.sIsElementPresent(locator);
+		visible = this.zIsVisiblePerPosition(locator, 4, 74);
+		if ( loaded && visible )
+			return (true);
 
-		boolean active = this.zIsVisiblePerPosition(locator, 4, 74);
-		return (active);
-
+		
+		// We made it here, neither were active
+		return (false);
 	}
 
 	/* (non-Javadoc)
