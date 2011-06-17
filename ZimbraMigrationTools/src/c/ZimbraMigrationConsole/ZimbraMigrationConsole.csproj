@@ -43,13 +43,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XmlConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CssLib\CssLib.csproj">
       <Project>{1E39345E-E550-4530-ABF8-4DAE702D4FFA}</Project>
       <Name>CssLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MVVM\MVVM.csproj">
+      <Project>{72F90E77-CF7F-40A5-884C-1E7B1D9A9AAC}</Project>
+      <Name>MVVM</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
