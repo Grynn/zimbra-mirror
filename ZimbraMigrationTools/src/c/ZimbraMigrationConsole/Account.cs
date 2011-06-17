@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading;
 
 namespace ZimbraMigrationConsole
 {
@@ -64,6 +65,8 @@ namespace ZimbraMigrationConsole
             ProgressChanged +=
                 new ProgressChangedEventHandler(
             accountToMigrate_ProgressChanged);
+            WorkerReportsProgress = true;
+            WorkerSupportsCancellation = true;
             MigrateOptions = MailOptions;
             RunWorkerAsync(MigrateOptions);
 
@@ -87,14 +90,27 @@ namespace ZimbraMigrationConsole
             }
             else
             {
-                TestObj.Migrate(MigrateOptions);
-                //MailWrapper.ImportMailOptions(ImportOptions.Mail.ToString());
 
-                // Report progress as a percentage of the total task.
-                int percentcomplete = (int)HighestPercentageReached + 5;
-                HighestPercentageReached = percentcomplete;
-                worker.ReportProgress(percentcomplete);
-            }
+                TestObj.Migrate(MigrateOptions);
+                
+                for (int i = 1; (i <= 10); i++)
+                {
+                    if ((worker.CancellationPending == true))
+                    {
+                        e.Cancel = true;
+                        break;
+                    }
+                    else
+                    {
+                        // Perform a time consuming operation and report progress.
+                       // TestObj.Migrate(MigrateOptions);
+                        
+                        System.Threading.Thread.Sleep(700);
+                        worker.ReportProgress((i * 10));
+                    }
+                }
+                
+              }
 
 
         }
@@ -103,6 +119,22 @@ namespace ZimbraMigrationConsole
             ProgressChangedEventArgs e)
         {
             AccountStatus = e.ProgressPercentage.ToString();
+            if (e.ProgressPercentage == 10)
+            {
+                System.Console.WriteLine("Migrating messages For UserAccount   " + AccountName.ToString());
+            }
+            if (e.ProgressPercentage == 40)
+            {
+                System.Console.WriteLine("Migrating appointments For UserAccount   " + AccountName.ToString());
+            }
+            if (e.ProgressPercentage == 60)
+            {
+                System.Console.WriteLine("Migrating contacts For UserAccount   " + AccountName.ToString());
+            }
+            if (e.ProgressPercentage == 80)
+            {
+                System.Console.WriteLine("Migrating rules For UserAccount   " + AccountName.ToString());
+            }
         }
 
         private void accountToMigrate_RunWorkerCompleted(
@@ -127,7 +159,7 @@ namespace ZimbraMigrationConsole
             {
                 // Finally, handle the case where the operation 
                 // succeeded.
-                AccountStatus = e.Result.ToString();
+                AccountStatus = "Completed";// e.Result.ToString();
             }
 
 

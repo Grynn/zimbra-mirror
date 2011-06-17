@@ -42,12 +42,17 @@ namespace ZimbraMigrationConsole
             foreach( MVVM.Model.Users user in  myXmlConfig.UserList)
             {
                 Account userAcct = new Account();
-                userAcct.InitializeMigration(myXmlConfig.ConfigObj.zimbraServer.HostName,myXmlConfig.ConfigObj.zimbraServer.Port,myXmlConfig.ConfigObj.zimbraServer.AdminAccount);
                 
-                userAcct.StartMigration(user.Username, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
-                Thread.Sleep(500);
+                System.Console.WriteLine("Connecting to to Zimbra Server \n");
+                System.Console.WriteLine("......... \n");
+                userAcct.InitializeMigration(myXmlConfig.ConfigObj.zimbraServer.HostName,myXmlConfig.ConfigObj.zimbraServer.Port,myXmlConfig.ConfigObj.zimbraServer.AdminAccount);
+                System.Console.WriteLine("Migration to Zimbra Started  for UserAccount " + user.UserName);
+                userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
+                System.Console.WriteLine("......... \n");
+                Thread.Sleep(9000);
                 
             }
+            //Thread.Sleep(18000);
         }
          
         }
