@@ -456,6 +456,8 @@ function (filter, key, value, op) {
 		if (value == "TRUE" && (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCE_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) )  filter.push(ZaSearch.RESOURCES);
 	/*}else if (key == ZaSearchOption.A_objTypeDomain) {
 		if (value == "TRUE")  filter.push(ZaSearch.DOMAINS);*/
+        }else if (key == ZaSearchOption.A_objTypeSystemAccount) {
+                if (value == "TRUE")  entry = "(" + key + "=" + value + ")" ;
 	}else if (key == ZaSearchOption.A_objTypeAccountAdmin) {
 		if (value == "TRUE")  entry = "(" + key + "=" + value + ")" ; //no * for the TRUE or FALSE value
 	}else if (ZaSearchOption.A_objTypeAccountDomainAdmin && key == ZaSearchOption.A_objTypeAccountDomainAdmin){

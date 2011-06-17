@@ -53,7 +53,9 @@ ZaController.changeActionsStateMethods["ZaAccountListController"] = new Array();
 ZaAccountListController.prototype.show = function (doPush) {
 	var busyId = Dwt.getNextId();
 	var callback = new AjxCallback(this, this.searchCallback, {limit:this.RESULTSPERPAGE,CONS:null,show:doPush,busyId:busyId});
-	
+
+	// hide the system account
+	this._currentQuery = "(&" + this._currentQuery + "(!("+ ZaAccount.A_zimbraIsSystemAccount +"=TRUE)))"	
 	var searchParams = {
 			query:this._currentQuery ,
 			types:this.searchTypes,

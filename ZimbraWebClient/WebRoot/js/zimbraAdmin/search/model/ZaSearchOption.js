@@ -43,6 +43,7 @@ ZaSearchOption.A_basic_status = ZaAccount.A_accountStatus ;
 
 ZaSearchOption.A_objTypeAccount = "option_" + ZaSearch.ACCOUNTS ;
 ZaSearchOption.A_objTypeAccountAdmin = ZaAccount.A_zimbraIsAdminAccount ;
+ZaSearchOption.A_objTypeSystemAccount = ZaAccount.A_zimbraIsSystemAccount;
 ZaSearchOption.A_enableAccountLastLoginTime_From = "enable_" + ZaAccount.A_zimbraLastLogonTimestamp + "_From" ;
 ZaSearchOption.A_enableAccountLastLoginTime_To = "enable_" + ZaAccount.A_zimbraLastLogonTimestamp + "_To" ;
 ZaSearchOption.A_includeNeverLoginedAccounts = "include_never_login_accounts" ;
@@ -83,6 +84,7 @@ function (optionId){
 			//{id: ZaSearchOption.A_basic_query, ref: "options/" + ZaSearchOption.A_basic_query, type: _STRING_},
 			{id: ZaSearchOption.A_basic_uid, ref: "options/" + ZaSearchOption.A_basic_uid, type: _STRING_},
 			{id: ZaSearchOption.A_objTypeAccountAdmin, ref: "options/" + ZaSearchOption.A_objTypeAccountAdmin, type: _STRING_},
+			{id: ZaSearchOption.A_objTypeSystemAccount, ref: "options/" + ZaSearchOption.A_objTypeSystemAccount, type: _STRING_},
 			//{id: ZaSearchOption.A_basic_cn, ref: "options/" + ZaSearchOption.A_basic_cn, type: _STRING_},
 			{id: ZaSearchOption.A_basic_sn, ref: "options/" + ZaSearchOption.A_basic_sn, type: _STRING_},
 			{id: ZaSearchOption.A_basic_displayName, ref: "options/" + ZaSearchOption.A_basic_displayName, type: _STRING_},
@@ -233,7 +235,7 @@ function (optionId, height){
 				 
 		basicItems[i-1].items.push (adminOnlyItem) ;
 	//}
-	
+
 	if (ZaSearchOption.A_objTypeAccountDomainAdmin) {
 			var domainAdminObjTypeItem = { 
 					type: _CHECKBOX_, ref:  ZaSearchOption.A_objTypeAccountDomainAdmin,
@@ -245,6 +247,16 @@ function (optionId, height){
 				 } ;
 			basicItems[i-1].items.push( domainAdminObjTypeItem ) ;
 		}
+	var systemAccountOnlyItem =
+                                { type: _CHECKBOX_, ref:  ZaSearchOption.A_objTypeSystemAccount,
+                                        trueValue:"TRUE", falseValue:"FALSE",
+                                        label: ZaMsg.SearchFilter_System_Accounts,
+                                        align: _LEFT_, labelLocation:_RIGHT_,
+                                        onChange: ZaSearchBuilderController.handleOptions,
+                                        bmolsnr:true, enableDisableChecks:[],visibilityChecks:[]
+                                 };
+
+        basicItems[i-1].items.push (systemAccountOnlyItem) ;
 	
 	var objTypeItems = [
 		{ type: _CHECKBOX_, ref:  ZaSearchOption.A_objTypeAccount,
