@@ -556,8 +556,9 @@ public class CodeCoverage {
     private String COVERAGE_SCRIPT = "";
 
 	private static final String WebappsZimbra = "/opt/zimbra/jetty/webapps/zimbra";
-	private String WebappsZimbraOriginal = null;
-	private String WebappsZimbraInstrumented = null;
+	private static final String WebappsZimbraAdmin = "/opt/zimbra/jetty/webapps/zimbraAdmin";
+	private String WebappsOriginal = null;
+	private String WebappsInstrumented = null;
 	
 	/**
 	 * Check if jscoverage is available on the server
@@ -599,36 +600,48 @@ public class CodeCoverage {
 		Date start = new Date();
 
 		try {
-
+			
 			if ( !InstrumentServer ) {
 				logger.info("instrumentServer(): InstrumentServer=false ... skipping ");
 				return;
 			}
 
-			// Check that JScoverage is installed correctly
-			instrumentServerCheck();
-
-			WebappsZimbraOriginal		= "/opt/zimbra/jetty/webapps/zimbra" + ZimbraSeleniumProperties.getUniqueString();
-			WebappsZimbraInstrumented	= "/opt/zimbra/jetty/webapps/instrumented" + ZimbraSeleniumProperties.getUniqueString();
-
-			try {
-				StafServicePROCESS staf = new StafServicePROCESS();
-				staf.execute("zmmailboxdctl stop");
-				staf.execute(Tool +" --no-instrument=help/ "+ WebappsZimbra +" "+ WebappsZimbraInstrumented);
-				staf.execute("mv "+ WebappsZimbra +" "+ WebappsZimbraOriginal);
-				staf.execute("mv "+ WebappsZimbraInstrumented +" "+ WebappsZimbra);
-				staf.execute("zmmailboxdctl start");
-				staf.execute("zmcontrol status");
-			} catch (HarnessException e) {
-				logger.error("Unable to instrument code.  Disabling code coverage.", e);
+			
+			if ( ZimbraSeleniumProperties.getAppType().equals(AppType.AJAX) ) {
+				instrumentServer(WebappsZimbra);
+			} else if ( ZimbraSeleniumProperties.getAppType().equals(AppType.ADMIN) ) {
+				instrumentServer(WebappsZimbraAdmin);
 			}
-
+		
 		} finally {
 			
 			// Update the total duration value
 			durationTotalUpdate(start, new Date());
 			
 		}
+	
+	}
+	
+	private void instrumentServer(String appfolder) throws HarnessException {
+		
+		// Check that JScoverage is installed correctly
+		instrumentServerCheck();
+
+		WebappsOriginal		= appfolder + ZimbraSeleniumProperties.getUniqueString();
+		WebappsInstrumented	= "/opt/zimbra/jetty/webapps/instrumented" + ZimbraSeleniumProperties.getUniqueString();
+
+		try {
+			StafServicePROCESS staf = new StafServicePROCESS();
+			staf.execute("zmmailboxdctl stop");
+			staf.execute(Tool +" --no-instrument=help/ "+ appfolder +" "+ WebappsInstrumented);
+			staf.execute("mv "+ appfolder +" "+ WebappsOriginal);
+			staf.execute("mv "+ WebappsInstrumented +" "+ appfolder);
+			staf.execute("zmmailboxdctl start");
+			staf.execute("zmcontrol status");
+		} catch (HarnessException e) {
+			logger.error("Unable to instrument code.  Disabling code coverage.", e);
+		}
+
 	}
 	
 	/**
@@ -653,22 +666,10 @@ public class CodeCoverage {
 				return;
 			}
 
-			WebappsZimbraInstrumented	= "/opt/zimbra/jetty/webapps/instrumented" + ZimbraSeleniumProperties.getUniqueString();
-
-			try {
-
-				StafServicePROCESS staf = new StafServicePROCESS();
-				staf.execute("zmmailboxdctl stop");
-				staf.execute("rm -rf "+ WebappsZimbra); // Delete the instrumented code
-				staf.execute("mv "+ WebappsZimbraOriginal +" "+ WebappsZimbra);
-				staf.execute("zmmailboxdctl start");
-				staf.execute("zmcontrol status");
-
-			} catch (HarnessException e) {
-				logger.error("Unable to instrument code (undo).  Disabling code coverage.", e);
-			} finally {
-				WebappsZimbraOriginal = null;
-				WebappsZimbraInstrumented = null;
+			if ( ZimbraSeleniumProperties.getAppType().equals(AppType.AJAX) ) {
+				instrumentServerUndo(WebappsZimbra);
+			} else if ( ZimbraSeleniumProperties.getAppType().equals(AppType.ADMIN) ) {
+				instrumentServerUndo(WebappsZimbraAdmin);
 			}
 
 		} finally {
@@ -678,6 +679,28 @@ public class CodeCoverage {
 
 		}
 		
+	}
+
+	private void instrumentServerUndo(String appfolder) throws HarnessException {
+
+		WebappsInstrumented	= "/opt/zimbra/jetty/webapps/instrumented" + ZimbraSeleniumProperties.getUniqueString();
+
+		try {
+
+			StafServicePROCESS staf = new StafServicePROCESS();
+			staf.execute("zmmailboxdctl stop");
+			staf.execute("rm -rf "+ appfolder); // Delete the instrumented code
+			staf.execute("mv "+ WebappsOriginal +" "+ appfolder);
+			staf.execute("zmmailboxdctl start");
+			staf.execute("zmcontrol status");
+
+		} catch (HarnessException e) {
+			logger.error("Unable to instrument code (undo).  Disabling code coverage.", e);
+		} finally {
+			WebappsOriginal = null;
+			WebappsInstrumented = null;
+		}
+
 	}
 
 	// Time data (in seconds)
