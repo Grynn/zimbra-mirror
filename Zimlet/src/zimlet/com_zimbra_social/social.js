@@ -238,13 +238,18 @@ SocialZimlet.prototype._addAccountCheckBoxListeners =
 		function() {
 			for (var accntId in this.allAccounts) {
 				var callback = AjxCallback.simpleClosure(this._saveToAccountCheckboxesPref, this, accntId);
-				Dwt.setHandler(document.getElementById(this.allAccounts[accntId].checkboxId), DwtEvent.ONCLICK, callback);
+				var domObj = document.getElementById(this.allAccounts[accntId].checkboxId);
+				if(domObj) {
+					Dwt.setHandler(domObj, DwtEvent.ONCLICK, callback);
+				}
 			}
 			for (var i = 0; i < this.socialcastAccounts.length; i++) {
 				var scAccount = this.socialcastAccounts[i];
 				var callback = AjxCallback.simpleClosure(this._updateSCCheckboxesPref, this, scAccount);
-				Dwt.setHandler(document.getElementById(scAccount.checkboxId), DwtEvent.ONCLICK, callback);
-
+				var domObj = document.getElementById(scAccount.checkboxId);
+				if(domObj) {
+					Dwt.setHandler(domObj, DwtEvent.ONCLICK, callback);
+				}
 			}
 		};
 
@@ -1282,14 +1287,13 @@ SocialZimlet.prototype._createTreeView =
 			html[i++] = this._getTreeHeaderHTML(this.getMessage("accounts"), expandIconId);	//header
 			html[i++] = "<div class='DwtTreeItemLevel1ChildDiv' style='display: block;'>";
 			for (var j = 0; j < this.socialcastAccounts.length; j++) {
-				var streamObjs;
 				var folder = this.socialcastAccounts[j];
 				folder["name"] = folder.n;
 				folder["icon"] = "social_socialcastIcon";
 				folder["type"] = "SOCIALCAST";
 				var streams = this.getUserProperty(folder.e + "_streams");
-				if(streams && streams != "") {
-					 streamObjs = JSON.parse(streams);
+				if(streams != "") {
+					var streamObjs = JSON.parse(streams);
 				}
 				if(streamObjs && (streamObjs instanceof Array) && streamObjs.length > 0) {
 					var childExpandIconId = "social_expandIcon_" + Dwt.getNextId();
