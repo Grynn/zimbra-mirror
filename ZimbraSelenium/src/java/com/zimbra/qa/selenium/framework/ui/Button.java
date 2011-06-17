@@ -213,6 +213,9 @@ public class Button {
 	public static final Button B_VIEW_ENTIRE_MESSAGE = new Button("B_VIEW_ENTIRE_MESSAGE");
 	public static final Button B_HIGHLIGHT_OBJECTS = new Button("B_HIGHLIGHT_OBJECTS");
 	
+	// Calendar Buttons
+	public static final Button B_REFRESH = new Button("B_REFRESH");
+	
     // Calendar	Views
 	public static final Button O_LISTVIEW_DAY = new Button("POPUP_DAY_VIEW");
 	public static final Button O_LISTVIEW_WORKWEEK = new Button("POPUP_WORK_WEEK_VIEW");

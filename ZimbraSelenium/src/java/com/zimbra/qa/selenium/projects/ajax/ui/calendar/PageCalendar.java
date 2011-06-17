@@ -64,6 +64,14 @@ public class PageCalendar extends AbsTab {
 
 			// FALL THROUGH
 
+		} else if ( button == Button.B_REFRESH ) {
+
+			locator = "css=td#zb__CLD__CAL_REFRESH_title";
+			
+			page = null;
+			
+			// FALL THROUGH
+			
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}

@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments.toaster;
 
 import org.testng.annotations.Test;
 
@@ -22,12 +22,13 @@ public class CreateAppointment extends AjaxCommonTest {
 
 
 	}
-
 	
-	@Test(	description = "Create a basic appointment",
-			groups = { "sanity" }
+	
+	
+	@Test(	description = "Verify Toaster message on Create Appointment",
+			groups = { "functional" }
 	)
-	public void CreateAppointment_01() throws HarnessException {
+	public void Toaster_CreateAppointment_01() throws HarnessException {
 		
 		// Create the message data to be sent
 		AppointmentItem appt = new AppointmentItem();
@@ -47,15 +48,12 @@ public class CreateAppointment extends AjaxCommonTest {
 		// Send the message
 		apptForm.zSubmit();
 			
+		//verify toasted message 'Appointment Created'  
+        String expectedMsg ="Appointment Created";
+        ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
+        		        expectedMsg , "Verify toast message '" + expectedMsg + "'");
     
-		// Verify the new appointment exists on the server
-		AppointmentItem actual = AppointmentItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ appt.getSubject() +")", appt.getStartTime().addDays(-7), appt.getEndTime().addDays(7));
-		ZAssert.assertNotNull(actual, "Verify the new appointment is created");
-
-		ZAssert.assertEquals(actual.getSubject(), appt.getSubject(), "Subject: Verify the appointment data");
-
+		
 	}
-
-	
 
 }
