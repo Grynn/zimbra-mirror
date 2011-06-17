@@ -8,10 +8,10 @@ using System.IO;
 
 namespace CssLib
 {
-/*    
+  
     public class CSMigrationwrapper
     {
-        string m_ConfigXMLFile;
+       /* string m_ConfigXMLFile;
 
         public string ConfigXMLFile
         {
@@ -24,7 +24,7 @@ namespace CssLib
         {
             get { return m_UserMapFile; }
             set { m_UserMapFile = value; }
-        }
+        }*/
         string m_MailClient;
 
         public string MailClient
@@ -33,13 +33,13 @@ namespace CssLib
             set { m_MailClient = value; }
         }
 
-        MVVM.Model.Config ConfigObj = new MVVM.Model.Config();
+     /*   MVVM.Model.Config ConfigObj = new MVVM.Model.Config();
         MVVM.Model.ImportOptions ImportOptions = new MVVM.Model.ImportOptions();
-        MVVM.Model.Users  users = new MVVM.Model.Users();
+        MVVM.Model.Users  users = new MVVM.Model.Users();*/
 
         ExchangeMigrationLib.MapiWrapper MailWrapper;
 
-        private void CreateConfig(string Xmlfilename)
+        /*private void CreateConfig(string Xmlfilename)
         {
 
 
@@ -55,17 +55,17 @@ namespace CssLib
 
             }
         }
-
-        public void Initalize()
+        */
+        public void Initalize(string HostName,string Port, string AdminAccount)
         {
-            CreateConfig(ConfigXMLFile);
+            //CreateConfig(ConfigXMLFile);
 
             if( MailClient == "MAPI")
             {
 
                  MailWrapper = new MapiWrapper();
 
-                MailWrapper.ConnectToServer(ConfigObj.zimbraServer.HostName,ConfigObj.zimbraServer.Port,ConfigObj.zimbraServer.AdminAccount);
+                MailWrapper.ConnectToServer(HostName,Port,AdminAccount);
 
 
 
@@ -74,15 +74,15 @@ namespace CssLib
 
         }
 
-        public void Migrate()
+        public void Migrate(string MailOptions)
         {
 
-            MailWrapper.ImportMailOptions(ImportOptions.Mail.ToString());
+            MailWrapper.ImportMailOptions(MailOptions);
 
         }
 
    
     }
- */
+ 
     }
 
