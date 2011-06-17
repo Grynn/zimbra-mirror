@@ -175,9 +175,11 @@ GlobalConfigXFormView.INTEROP_TAB_ATTRS = [ZaGlobalConfig.A_zimbraFreebusyExchan
 	ZaGlobalConfig.A_zimbraFreebusyExchangeAuthPassword, ZaGlobalConfig.A_zimbraFreebusyExchangeUserOrg];
 GlobalConfigXFormView.INTEROP_TAB_RIGHTS = [ZaGlobalConfig.CHECK_EXCHANGE_AUTH_CONFIG_RIGHT];
 
-GlobalConfigXFormView.SPNEGO_TAB_ATTRS = [ZaGlobalConfig.A_zimbraSpnegoAuthEnabled, ZaGlobalConfig.A_zimbraSpnegoAuthRealm,
-    ZaGlobalConfig.A_zimbraSpnegoAuthErrorURL];
-GlobalConfigXFormView.SPNEGO_TAB_RIGHTS = [];
+GlobalConfigXFormView.SSO_TAB_ATTRS = [ZaGlobalConfig.A_zimbraSpnegoAuthEnabled, ZaGlobalConfig.A_zimbraSpnegoAuthRealm,
+    ZaGlobalConfig.A_zimbraSpnegoAuthErrorURL, ZaGlobalConfig.A_zimbraWebClientLoginURL,
+    ZaGlobalConfig.A_zimbraWebClientLogoutURL, ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA,
+    ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA];
+GlobalConfigXFormView.SSO_TAB_RIGHTS = [];
 
 GlobalConfigXFormView.SKIN_TAB_ATTRS = [ZaGlobalConfig.A_zimbraSkinForegroundColor, ZaGlobalConfig.A_zimbraSkinBackgroundColor,ZaGlobalConfig.A_zimbraSkinSecondaryColor,
 	ZaGlobalConfig.A_zimbraSkinSelectionColor, ZaGlobalConfig.A_zimbraSkinLogoURL, ZaGlobalConfig.A_zimbraSkinLogoLoginBanner, ZaGlobalConfig.A_zimbraSkinLogoAppBanner ];
@@ -856,31 +858,84 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
         switchItems.push (case9) ;
     }
 
-    if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.SPNEGO_TAB_ATTRS, GlobalConfigXFormView.SPNEGO_TAB_RIGHTS)) {
+    if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.SSO_TAB_ATTRS, GlobalConfigXFormView.SSO_TAB_RIGHTS)) {
     	_tab10 = ++this.TAB_INDEX;
 
-        tabBarChoices.push ({value:_tab10, label:ZaMsg.NAD_Tab_SPNEGO});
+        tabBarChoices.push ({value:_tab10, label:ZaMsg.NAD_Tab_SSO});
         var case10 =
                 {type: _ZATABCASE_, caseKey:_tab10,
-		       colSizes:["auto"],numCols:1,id:"global_spnego_tab",
-		       items: 	[
+		            colSizes:["auto"],numCols:1,id:"global_sso_tab",
+		            items:[
                         	{ type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_SPNEGO_Configure,
-                                  items :[
+                                  items:[
 							  	          { ref: ZaGlobalConfig.A_zimbraSpnegoAuthEnabled, type: _CHECKBOX_,
-							   	            label:ZaMsg.NAD_Enable_spnego, width: "20em",
+							   	            label:ZaMsg.NAD_Enable_spnego, width: "200px",
 							   	            trueValue: "TRUE", falseValue: "FALSE"
 						   	              },
                                           { ref: ZaGlobalConfig.A_zimbraSpnegoAuthRealm,
-                                            type: _TEXTFIELD_, width: "20em",
-                                            label: ZaMsg.LBL_zimbraSpnegoAuthRealm
+                                            type: _TEXTFIELD_, width: "200px",
+                                            label: ZaMsg.LBL_zimbraSpnegoAuthRealm,
+                                            enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraSpnegoAuthEnabled],
+                                            enableDisableChecks:[[XForm.checkInstanceValue,ZaGlobalConfig.A_zimbraSpnegoAuthEnabled,'TRUE']]
                                           },
                                           { ref: ZaGlobalConfig.A_zimbraSpnegoAuthErrorURL,
-                                            type: _TEXTFIELD_, width: "20em",
-                                            label: ZaMsg.LBL_zimbraSpnegoAuthErrorURL
+                                            type: _TEXTFIELD_, width: "200px",
+                                            label: ZaMsg.LBL_zimbraSpnegoAuthErrorURL,
+                                            enableDisableChangeEventSources:[ZaGlobalConfig.A_zimbraSpnegoAuthEnabled],
+                                            enableDisableChecks:[[XForm.checkInstanceValue,ZaGlobalConfig.A_zimbraSpnegoAuthEnabled,'TRUE']]
                                           }
-                                         ]
-                                }
-                             	]
+                                  ]
+                            },
+                            { type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_WEBCLIENT_Configure,
+                                  items:[
+                                          { ref: ZaGlobalConfig.A_zimbraWebClientLoginURL,
+                                            type:_TEXTFIELD_, width:"200px",
+                                            label: ZaMsg.LBL_zimbraWebClientLoginURL
+                                          },
+                                          { ref: ZaGlobalConfig.A_zimbraWebClientLogoutURL,
+                                            type:_TEXTFIELD_, width:"200px",
+                                            label: ZaMsg.LBL_zimbraWebClientLogoutURL
+                                          },
+                                          { ref: ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA,
+									        type:_REPEAT_,
+                                            nowrap:false,labelWrap:true,
+                                            label:ZaMsg.LBL_zimbraWebClientLoginURLAllowedUA,
+                                            msgName:ZaMsg.MSG_zimbraWebClientLoginURLAllowedUA,
+                                            labelLocation:_LEFT_,
+                                            addButtonLabel:ZaMsg.NAD_Add,
+                                            align:_LEFT_,
+                                            showAddButton:true,
+                                            showRemoveButton:true,
+                                            showAddOnNextRow:true,
+                                            removeButtonLabel:ZaMsg.NAD_Remove,
+                                            items: [
+                                                {
+                                                    ref:".", type:_TEXTFIELD_, label:null,width:"200px"
+                                                }
+                                            ]
+                                          },
+                                          { ref: ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA,
+									        type:_REPEAT_,
+                                            nowrap:false,labelWrap:true,
+                                            label:ZaMsg.LBL_zimbraWebClientLogoutURLAllowedUA,
+                                            msgName:ZaMsg.MSG_zimbraWebClientLogoutURLAllowedUA,
+                                            labelLocation:_LEFT_,
+                                            addButtonLabel:ZaMsg.NAD_Add,
+                                            align:_LEFT_,
+                                            showAddButton:true,
+                                            showRemoveButton:true,
+                                            showAddOnNextRow:true,
+                                            removeButtonLabel:ZaMsg.NAD_Remove,
+                                            items: [
+                                                {
+                                                    ref:".", type:_TEXTFIELD_, label:null,width:"200px"
+                                                }
+                                            ]
+                                          }
+                                  ]
+
+                            }
+                    ]
                 };
         switchItems.push (case10) ;
     }

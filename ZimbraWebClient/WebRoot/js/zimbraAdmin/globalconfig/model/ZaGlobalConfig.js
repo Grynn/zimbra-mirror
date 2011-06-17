@@ -167,6 +167,13 @@ ZaGlobalConfig.A_zimbraSpnegoAuthEnabled = "zimbraSpnegoAuthEnabled";
 ZaGlobalConfig.A_zimbraSpnegoAuthRealm = "zimbraSpnegoAuthRealm";
 ZaGlobalConfig.A_zimbraSpnegoAuthErrorURL = "zimbraSpnegoAuthErrorURL";
 
+//sso
+ZaGlobalConfig.A_zimbraWebClientLoginURL = "zimbraWebClientLoginURL";
+ZaGlobalConfig.A_zimbraWebClientLogoutURL = "zimbraWebClientLogoutURL";
+ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA = "zimbraWebClientLoginURLAllowedUA";
+ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA = "zimbraWebClientLogoutURLAllowedUA";
+
+
 //Skin Properties
 ZaGlobalConfig.A_zimbraSkinForegroundColor = "zimbraSkinForegroundColor" ;
 ZaGlobalConfig.A_zimbraSkinBackgroundColor = "zimbraSkinBackgroundColor" ;
@@ -225,7 +232,15 @@ ZaGlobalConfig.prototype.initFromJS = function(obj) {
 	
 	if(AjxUtil.isString(this.attrs[ZaGlobalConfig.A_zimbraSmtpHostname])) {
 		this.attrs[ZaGlobalConfig.A_zimbraSmtpHostname] = [this.attrs[ZaGlobalConfig.A_zimbraSmtpHostname]];
-	}	
+	}
+
+	if(AjxUtil.isString(this.attrs[ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA])) {
+		this.attrs[ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA] = [this.attrs[ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA]];
+	}
+
+    if(AjxUtil.isString(this.attrs[ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA])) {
+		this.attrs[ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA] = [this.attrs[ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA]];
+	}
 	// convert available components to hidden fields for xform binding
 	var components = this.attrs[ZaGlobalConfig.A_zimbraComponentAvailable];
 	if (components) {
@@ -427,6 +442,11 @@ ZaGlobalConfig.myXModel = {
         { id:ZaGlobalConfig.A_zimbraSpnegoAuthEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraSpnegoAuthEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
         { id:ZaGlobalConfig.A_zimbraSpnegoAuthRealm, ref:"attrs/" + ZaGlobalConfig.A_zimbraSpnegoAuthRealm, type: _STRING_ },
         { id:ZaGlobalConfig.A_zimbraSpnegoAuthErrorURL, ref:"attrs/" + ZaGlobalConfig.A_zimbraSpnegoAuthErrorURL, type: _STRING_ },
+        //web client
+        { id:ZaGlobalConfig.A_zimbraWebClientLoginURL, ref:"attrs/" + ZaGlobalConfig.A_zimbraWebClientLoginURL, type:_STRING_, maxLength:255 },
+        { id:ZaGlobalConfig.A_zimbraWebClientLogoutURL, ref:"attrs/" + ZaGlobalConfig.A_zimbraWebClientLogoutURL, type:_STRING_, maxLength:255 },
+		{ id:ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA, ref:"attrs/" + ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA, type:_LIST_, listItem:{type:_STRING_}},
+		{ id:ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA, ref:"attrs/" + ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA, type:_LIST_, listItem:{type:_STRING_}},
         //skin properties
         { id:ZaGlobalConfig.A_zimbraSkinForegroundColor, ref:"attrs/" + ZaGlobalConfig.A_zimbraSkinForegroundColor, type: _STRING_ },
         { id:ZaGlobalConfig.A_zimbraSkinBackgroundColor, ref:"attrs/" + ZaGlobalConfig.A_zimbraSkinBackgroundColor, type: _STRING_ },

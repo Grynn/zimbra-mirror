@@ -236,6 +236,13 @@ ZaDomain.A_zimbraHelpDelegatedURL = "zimbraHelpDelegatedURL";
 // login / logout URL
 ZaDomain.A_zimbraAdminConsoleLoginURL = "zimbraAdminConsoleLoginURL";
 ZaDomain.A_zimbraAdminConsoleLogoutURL = "zimbraAdminConsoleLogoutURL";
+// Kerberos
+ZaDomain.A_zimbraAuthKerberos5Realm = "zimbraAuthKerberos5Realm";
+// web client sso
+ZaDomain.A_zimbraWebClientLoginURL = "zimbraWebClientLoginURL";
+ZaDomain.A_zimbraWebClientLogoutURL = "zimbraWebClientLogoutURL";
+ZaDomain.A_zimbraWebClientLoginURLAllowedUA = "zimbraWebClientLoginURLAllowedUA";
+ZaDomain.A_zimbraWebClientLogoutURLAllowedUA = "zimbraWebClientLogoutURLAllowedUA";
 
 //skin properties
 ZaDomain.A_zimbraSkinForegroundColor = "zimbraSkinForegroundColor" ;
@@ -487,12 +494,16 @@ function(tmpObj, newDomain) {
         attr.setAttribute("n", ZaDomain.A_zimbraAdminConsoleLogoutURL);
     }
 
+    if(tmpObj.attrs[ZaDomain.A_zimbraSSLCertificate]){
         attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraSSLCertificate]);
         attr.setAttribute("n", ZaDomain.A_zimbraSSLCertificate);
+    }
 
+    if(tmpObj.attrs[ZaDomain.A_zimbraSSLPrivateKey]){
         attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraSSLPrivateKey]);
         attr.setAttribute("n", ZaDomain.A_zimbraSSLPrivateKey);
-	
+    }
+
 	if(tmpObj.attrs[ZaDomain.A_zimbraAuthLdapStartTlsEnabled]) {
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAuthLdapStartTlsEnabled]);
 		attr.setAttribute("n", ZaDomain.A_zimbraAuthLdapStartTlsEnabled);	
@@ -615,7 +626,7 @@ function(tmpObj, newDomain) {
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_domainMaxAccounts]);
 		attr.setAttribute("n", ZaDomain.A_domainMaxAccounts);	
 	}
-	
+
 	if(tmpObj.attrs[ZaDomain.A_zimbraVirtualHostname]) {
 		if(tmpObj.attrs[ZaDomain.A_zimbraVirtualHostname] instanceof Array) {
 			var cnt = tmpObj.attrs[ZaDomain.A_zimbraVirtualHostname].length;
@@ -628,7 +639,47 @@ function(tmpObj, newDomain) {
 			attr.setAttribute("n", ZaDomain.A_zimbraVirtualHostname);					
 		}
 	}
-	
+
+    if(tmpObj.attrs[ZaDomain.A_zimbraAuthKerberos5Realm]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAuthKerberos5Realm]);
+        attr.setAttribute("n", ZaDomain.A_zimbraAuthKerberos5Realm);
+    }
+
+    if(tmpObj.attrs[ZaDomain.A_zimbraWebClientLoginURL]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraWebClientLoginURL]);
+        attr.setAttribute("n", ZaDomain.A_zimbraWebClientLoginURL);
+    }
+
+    if(tmpObj.attrs[ZaDomain.A_zimbraWebClientLogoutURL]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraWebClientLogoutURL]);
+        attr.setAttribute("n", ZaDomain.A_zimbraWebClientLogoutURL);
+    }
+
+    if(tmpObj.attrs[ZaDomain.A_zimbraWebClientLoginURLAllowedUA]) {
+    if(tmpObj.attrs[ZaDomain.A_zimbraWebClientLoginURLAllowedUA] instanceof Array) {
+			var cnt = tmpObj.attrs[ZaDomain.A_zimbraWebClientLoginURLAllowedUA].length;
+			for(var ix=0; ix<cnt; ix++) {
+				attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraWebClientLoginURLAllowedUA][ix]);
+				attr.setAttribute("n", ZaDomain.A_zimbraWebClientLoginURLAllowedUA);
+			}
+		} else {
+			attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraWebClientLoginURLAllowedUA]);
+			attr.setAttribute("n", ZaDomain.A_zimbraWebClientLoginURLAllowedUA);
+		}
+	}
+
+    if(tmpObj.attrs[ZaDomain.A_zimbraWebClientLogoutURLAllowedUA]) {
+    if(tmpObj.attrs[ZaDomain.A_zimbraWebClientLogoutURLAllowedUA] instanceof Array) {
+			var cnt = tmpObj.attrs[ZaDomain.A_zimbraWebClientLogoutURLAllowedUA].length;
+			for(var ix=0; ix<cnt; ix++) {
+				attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraWebClientLogoutURLAllowedUA][ix]);
+				attr.setAttribute("n", ZaDomain.A_zimbraWebClientLogoutURLAllowedUA);
+			}
+		} else {
+			attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraWebClientLogoutURLAllowedUA]);
+			attr.setAttribute("n", ZaDomain.A_zimbraWebClientLogoutURLAllowedUA);
+		}
+	}
 	//var command = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;	
@@ -1406,6 +1457,15 @@ function (obj) {
 		else
 			this.attrs[ZaDomain.A_zimbraVirtualHostname] = new Array();
 	}
+
+	if(AjxUtil.isString(this.attrs[ZaDomain.A_zimbraWebClientLoginURLAllowedUA])) {
+		this.attrs[ZaDomain.A_zimbraWebClientLoginURLAllowedUA] = [this.attrs[ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA]];
+	}
+
+    if(AjxUtil.isString(this.attrs[ZaDomain.A_zimbraWebClientLogoutURLAllowedUA])) {
+		this.attrs[ZaDomain.A_zimbraWebClientLogoutURLAllowedUA] = [this.attrs[ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA]];
+	}
+
 	if(!this.attrs[ZaDomain.A_AuthMech]) {
 		this.attrs[ZaDomain.A_AuthMech] = ZaDomain.AuthMech_zimbra; //default value
 	}
@@ -1652,6 +1712,7 @@ function(by, val) {
     } else {
 		var resp = respObj.Body.GetDomainResponse;
 		this.initFromJS(resp.domain[0]);
+
     }
 }
 ZaItem.loadMethods["ZaDomain"].push(ZaDomain.loadMethod);
@@ -1962,13 +2023,19 @@ ZaDomain.myXModel = {
       { id:ZaDomain.A_zimbraSkinLogoURL, ref:"attrs/" + ZaDomain.A_zimbraSkinLogoURL, type:_COS_STRING_ },
       { id:ZaDomain.A_zimbraSkinLogoLoginBanner, ref:"attrs/" + ZaDomain.A_zimbraSkinLogoLoginBanner, type:_COS_STRING_ },
       { id:ZaDomain.A_zimbraSkinLogoAppBanner, ref:"attrs/" + ZaDomain.A_zimbraSkinLogoAppBanner, type:_COS_STRING_ },
-
+      // web client redirect
+      { id:ZaDomain.A_zimbraWebClientLoginURL, ref:"attrs/" + ZaDomain.A_zimbraWebClientLoginURL, type:_COS_STRING_ },
+      { id:ZaDomain.A_zimbraWebClientLogoutURL, ref:"attrs/" + ZaDomain.A_zimbraWebClientLogoutURL, type:_COS_STRING_ },
 	// help URL
       { id:ZaDomain.A_zimbraHelpAdminURL, ref:"attrs/" + ZaDomain.A_zimbraHelpAdminURL, type:_COS_STRING_ },
       { id:ZaDomain.A_zimbraHelpDelegatedURL, ref:"attrs/" + ZaDomain.A_zimbraHelpDelegatedURL, type:_COS_STRING_ },
 	// login/out URL
       { id:ZaDomain.A_zimbraAdminConsoleLoginURL, ref:"attrs/" + ZaDomain.A_zimbraAdminConsoleLoginURL, type:_COS_STRING_ },
       { id:ZaDomain.A_zimbraAdminConsoleLogoutURL, ref:"attrs/" + ZaDomain.A_zimbraAdminConsoleLogoutURL, type:_COS_STRING_ },
+      { id:ZaDomain.A_zimbraWebClientLoginURLAllowedUA, type:_COS_LIST_, ref:"attrs/"+ZaDomain.A_zimbraWebClientLoginURLAllowedUA, listItem:{ type: _STRING_}},
+      { id:ZaDomain.A_zimbraWebClientLogoutURLAllowedUA, type:_COS_LIST_, ref:"attrs/"+ZaDomain.A_zimbraWebClientLogoutURLAllowedUA, listItem:{ type: _STRING_}},
+    //kerberos
+      { id:ZaDomain.A_zimbraAuthKerberos5Realm, type:_STRING_, ref:"attrs/"+ZaDomain.A_zimbraAuthKerberos5Realm},
         //interop
        { id:ZaDomain.A_zimbraFreebusyExchangeAuthUsername, ref:"attrs/" + ZaDomain.A_zimbraFreebusyExchangeAuthUsername, type: _COS_STRING_ },
        { id:ZaDomain.A_zimbraFreebusyExchangeAuthPassword, ref:"attrs/" + ZaDomain.A_zimbraFreebusyExchangeAuthPassword, type: _COS_STRING_ },

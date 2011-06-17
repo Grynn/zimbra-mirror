@@ -55,7 +55,7 @@ ZaNewDomainXWizard = function(parent, entry) {
 		{label:ZaMsg.GalTestResult, value:ZaNewDomainXWizard.GAL_TEST_RESULT_STEP},	
 		{label:ZaMsg.SyncConfigSummary, value:ZaNewDomainXWizard.SYNC_CONFIG_SUM_STEP},
 		{label:ZaMsg.SyncTestResult, value:ZaNewDomainXWizard.SYNC_TEST_RESULT_STEP},
-        {label:ZaMsg.Domain_URLSetting, value:ZaNewDomainXWizard.AUTH_URL_STEP},
+        {label:ZaMsg.DomainSSO, value:ZaNewDomainXWizard.AUTH_URL_STEP},
 		{label:ZaMsg.AuthMode, value:ZaNewDomainXWizard.AUTH_MODE_STEP},										
 		{label:ZaMsg.AuthSettings, value:ZaNewDomainXWizard.AUTH_CONFIG_STEP_2},								
 		{label:ZaMsg.AuthSettingsSummary, value:ZaNewDomainXWizard.AUTH_CONFIG_SUM_STEP},												
@@ -1159,12 +1159,71 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 				},
 				{type:_CASE_, caseKey:ZaNewDomainXWizard.AUTH_URL_STEP,numCols:2,colSizes:["220px","430px"],
 					items: [
-                        {ref: ZaDomain.A_zimbraAdminConsoleLoginURL, type:_TEXTFIELD_,
-                        label:ZaMsg.Domain_zimbraAdminConsoleLoginURL, width:250
-                        },
-                        { ref: ZaDomain.A_zimbraAdminConsoleLogoutURL, type:_TEXTFIELD_,
-                        label:ZaMsg.Domain_zimbraAdminConsoleLogoutURL  , width:250
-                        }
+                            { type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.Domain_URLSetting, colSpan:"*",
+                                items :[
+                                {ref: ZaDomain.A_zimbraAdminConsoleLoginURL, type:_TEXTFIELD_,
+                                label:ZaMsg.Domain_zimbraAdminConsoleLoginURL, width:250
+                                },
+                                { ref: ZaDomain.A_zimbraAdminConsoleLogoutURL, type:_TEXTFIELD_,
+                                label:ZaMsg.Domain_zimbraAdminConsoleLogoutURL  , width:250
+                                }
+                            ]},
+                            { type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_Kerberos_Configure, colSpan:"*",
+                                items :[
+                                {ref: ZaDomain.A_zimbraAuthKerberos5Realm, type:_TEXTFIELD_,
+                                label:ZaMsg.LBL_zimbraAuthKerberos5Realm, width:250
+                                }
+                            ]},
+                            { type:_ZAWIZ_TOP_GROUPER_, label: ZaMsg.NAD_WEBCLIENT_Configure, colSpan:"*",
+                                  items:[
+                                      { ref: ZaDomain.A_zimbraWebClientLoginURL,useParentTable: false,
+                                        colSpan: 2,
+                                        type:_SUPERWIZ_TEXTFIELD_, textFieldWidth: "250px",
+                                        resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                                        msgName: ZaMsg.LBL_zimbraWebClientLoginURL,
+                                        txtBoxLabel: ZaMsg.LBL_zimbraWebClientLoginURL
+                                      },
+                                      { ref: ZaDomain.A_zimbraWebClientLogoutURL,useParentTable: false,
+                                        colSpan: 2,
+                                        type:_SUPERWIZ_TEXTFIELD_, textFieldWidth: "250px",
+                                        resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                                        msgName: ZaMsg.LBL_zimbraWebClientLogoutURL,
+                                        txtBoxLabel: ZaMsg.LBL_zimbraWebClientLogoutURL
+                                      },
+                                      { ref: ZaDomain.A_zimbraWebClientLoginURLAllowedUA,
+                                        label:ZaMsg.LBL_zimbraWebClientLoginURLAllowedUA,
+                                        type:_SUPER_REPEAT_,
+                                        resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                                        repeatInstance:"",
+                                        colSizes:["250px", "150px"],
+                                        addButtonLabel:ZaMsg.NAD_Add ,
+                                        removeButtonLabel: ZaMsg.NAD_Remove,
+                                        showAddButton:true,
+                                        showRemoveButton:true,
+                                        showAddOnNextRow:true,
+                                        repeatItems: [
+                                            {ref:".", type:_TEXTFIELD_,
+                                            width: "150px"}
+                                        ]
+                                      },
+                                      { ref: ZaDomain.A_zimbraWebClientLogoutURLAllowedUA,
+                                        label:ZaMsg.LBL_zimbraWebClientLogoutURLAllowedUA,
+                                        type:_SUPER_REPEAT_,
+                                        resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                                        repeatInstance:"",
+                                        colSizes:["250px", "150px"],
+                                        addButtonLabel:ZaMsg.NAD_Add ,
+                                        removeButtonLabel: ZaMsg.NAD_Remove,
+                                        showAddButton:true,
+                                        showRemoveButton:true,
+                                        showAddOnNextRow:true,
+                                        repeatItems: [
+                                            {ref:".", type:_TEXTFIELD_,
+                                            width: "150px"}
+                                        ]
+                                      }
+                                  ]
+                            }
 					]
 				},
 				{type:_CASE_, caseKey:ZaNewDomainXWizard.AUTH_MODE_STEP, numCols:2,colSizes:["220px","430px"],					

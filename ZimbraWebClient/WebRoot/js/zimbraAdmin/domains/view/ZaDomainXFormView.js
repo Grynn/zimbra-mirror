@@ -893,7 +893,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 					colSpan:"*"
 				},
 				{ type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_URLSetting, colSpan:"*",
-                    numCols: 2, colSizes: ["300px","*"], items :[
+                    numCols: 2, colSizes: ["275px","*"], items :[
 			        {ref: ZaDomain.A_zimbraAdminConsoleLoginURL, type:_TEXTFIELD_,
           		    label:ZaMsg.Domain_zimbraAdminConsoleLoginURL, width:250,
           		    onChange:ZaDomainXFormView.onFormFieldChanged
@@ -903,7 +903,68 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
                     onChange:ZaDomainXFormView.onFormFieldChanged
                     }
                 ]},
-                { type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_AuthSetting, colSizes:["300px","*"], items :[
+				{ type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_Kerberos_Configure, colSpan:"*",
+                    numCols: 2, colSizes: ["275px","*"], items :[
+			        {ref: ZaDomain.A_zimbraAuthKerberos5Realm, type:_TEXTFIELD_,
+          		    label:ZaMsg.LBL_zimbraAuthKerberos5Realm, width:250,
+          		    onChange:ZaDomainXFormView.onFormFieldChanged
+        		    }
+                ]},
+                { type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_WEBCLIENT_Configure, colSpan:"*",
+                      items:[
+                          { ref: ZaDomain.A_zimbraWebClientLoginURL,useParentTable: false,
+                            colSizes:["275px","275px","*"], colSpan: 2,
+                            type:_SUPER_TEXTFIELD_, textFieldWidth: "250px",
+                            resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                            msgName: ZaMsg.LBL_zimbraWebClientLoginURL,
+                            txtBoxLabel: ZaMsg.LBL_zimbraWebClientLoginURL,
+                            onChange:ZaDomainXFormView.onFormFieldChanged
+                          },
+                          { ref: ZaDomain.A_zimbraWebClientLogoutURL,useParentTable: false,
+                            colSizes:["275px","275px","*"], colSpan: 2,
+                            type:_SUPER_TEXTFIELD_, textFieldWidth: "250px",
+                            resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                            msgName: ZaMsg.LBL_zimbraWebClientLogoutURL,
+                            txtBoxLabel: ZaMsg.LBL_zimbraWebClientLogoutURL,
+                            onChange:ZaDomainXFormView.onFormFieldChanged
+                          },
+                          { ref: ZaDomain.A_zimbraWebClientLoginURLAllowedUA,
+                            label:ZaMsg.LBL_zimbraWebClientLoginURLAllowedUA,
+                            type:_SUPER_REPEAT_,
+                            resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                            repeatInstance:"",
+                            colSizes:["275px", "*"],
+                            addButtonLabel:ZaMsg.NAD_Add ,
+                            removeButtonLabel: ZaMsg.NAD_Remove,
+                            showAddButton:true,
+                            showRemoveButton:true,
+                            showAddOnNextRow:true,
+                            repeatItems: [
+                                {ref:".", type:_TEXTFIELD_,
+                                width: "150px"}
+                            ],
+                            onChange:ZaDomainXFormView.onFormFieldChanged
+                     	  },
+                          { ref: ZaDomain.A_zimbraWebClientLogoutURLAllowedUA,
+                            label:ZaMsg.LBL_zimbraWebClientLogoutURLAllowedUA,
+                            type:_SUPER_REPEAT_,
+                            resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                            repeatInstance:"",
+                            colSizes:["275px", "*"],
+                            addButtonLabel:ZaMsg.NAD_Add ,
+                            removeButtonLabel: ZaMsg.NAD_Remove,
+                            showAddButton:true,
+                            showRemoveButton:true,
+                            showAddOnNextRow:true,
+                            repeatItems: [
+                                {ref:".", type:_TEXTFIELD_,
+                                width: "150px"}
+                            ],
+                            onChange:ZaDomainXFormView.onFormFieldChanged
+                          }
+                      ]
+                },
+                { type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_AuthSetting, colSizes:["275px","*"], items :[
                     {ref:ZaDomain.A_AuthMech, type:_OUTPUT_, label:ZaMsg.Domain_AuthMech, choices:this.AuthMechs},
                     {type:_GROUP_,useParentTable:true, colSpan:"*",
                         visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthMech,ZaDomain.AuthMech_ad]],
