@@ -616,6 +616,7 @@ public class ContactData {
             this.fields.put(A_nickname, nsf.getValue());
             break;
         case otherid:
+        case yahooid:
             SimpleField osf = (SimpleField) field.getFieldValue();
             if (StringUtil.isNullOrEmpty(this.fields.get(A_imAddress1))) {
                 this.fields.put(A_imAddress1, osf.getValue());
@@ -628,6 +629,15 @@ public class ContactData {
         case notes:
             SimpleField nosf = (SimpleField) field.getFieldValue();
             this.fields.put(A_notes, nosf.getValue());
+            break;
+        case guid:
+            SimpleField gsf = (SimpleField) field.getFieldValue();
+            this.fields.put(A_otherCustom1, "GUID:" + gsf.getValue());
+            break;
+        case custom:
+            SimpleField cusf = (SimpleField) field.getFieldValue();
+            this.fields.put(A_otherCustom2, "CUSTOM:" + cusf.getValue());
+            break;
         default:
             break;
         }

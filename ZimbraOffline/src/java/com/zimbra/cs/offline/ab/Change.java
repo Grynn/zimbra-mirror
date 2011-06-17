@@ -14,6 +14,9 @@
  */
 package com.zimbra.cs.offline.ab;
 
+import com.google.common.base.Objects;
+import com.google.common.base.Objects.ToStringHelper;
+
 public class Change {
     public enum Type { ADD, UPDATE, DELETE }
 
@@ -43,4 +46,11 @@ public class Change {
     public boolean isAdd() { return type == Type.ADD; }
     public boolean isUpdate() { return type == Type.UPDATE; }
     public boolean isDelete() { return type == Type.DELETE; }
+
+    @Override
+    public String toString() {
+        ToStringHelper helper = Objects.toStringHelper(this);
+        return helper.add("operation", this.type.name())
+            .add("itemId", this.itemId).toString();
+    }
 }

@@ -79,7 +79,11 @@ public class SyncResult extends Entity implements YContactSyncResult {
     }
     
     public String getRefIdByContactId(String id) {
-        return this.results.get(id).refid;
+        Result result = this.results.get(id);
+        if (result != null) {
+            return result.refid;
+        }
+        return null;
     }
 
     static class Result extends Entity {

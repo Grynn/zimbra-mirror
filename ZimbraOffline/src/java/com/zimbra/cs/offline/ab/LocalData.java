@@ -14,32 +14,30 @@
  */
 package com.zimbra.cs.offline.ab;
 
-import com.zimbra.cs.mailbox.ChangeTrackingMailbox;
-import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.mailbox.MailItem;
-import com.zimbra.cs.mailbox.Contact;
-import com.zimbra.cs.mailbox.DesktopMailbox;
-import com.zimbra.cs.mailbox.Metadata;
-import com.zimbra.cs.mailbox.OperationContext;
-import com.zimbra.cs.mailbox.SyncExceptionHandler;
-import com.zimbra.cs.mailbox.MailServiceException;
-import com.zimbra.cs.offline.OfflineLog;
-import com.zimbra.cs.mime.ParsedContact;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Log;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.db.DbDataSource;
 import com.zimbra.cs.db.DbDataSource.DataSourceItem;
-
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Collections;
-import java.util.Collection;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Set;
+import com.zimbra.cs.mailbox.ChangeTrackingMailbox;
+import com.zimbra.cs.mailbox.Contact;
+import com.zimbra.cs.mailbox.DesktopMailbox;
+import com.zimbra.cs.mailbox.MailItem;
+import com.zimbra.cs.mailbox.MailServiceException;
+import com.zimbra.cs.mailbox.Mailbox;
+import com.zimbra.cs.mailbox.Metadata;
+import com.zimbra.cs.mailbox.OperationContext;
+import com.zimbra.cs.mailbox.SyncExceptionHandler;
+import com.zimbra.cs.mime.ParsedContact;
+import com.zimbra.cs.offline.OfflineLog;
 
 public final class LocalData {
     private final OfflineDataSource ds;
@@ -146,8 +144,7 @@ public final class LocalData {
     }
 
     public void deleteMapping(int itemId, boolean isBatch) throws ServiceException {
-        log.debug("Deleting entry for item: id = %d", itemId);
-        DbDataSource.deleteMappings(ds, Arrays.asList(itemId), isBatch);
+        DbDataSource.deleteMapping(ds, itemId, isBatch);
     }
 
     public void updateMapping(int itemId, String remoteId, String data) throws ServiceException {
