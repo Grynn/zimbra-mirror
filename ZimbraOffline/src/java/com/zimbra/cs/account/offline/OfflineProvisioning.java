@@ -787,7 +787,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                         (String) dsAttrs.get(A_offlineYContactTokenTimestamp),
                         (String) dsAttrs.get(A_offlineYContactVerifier));
                 //create mailbox from scratch, don't need migration
-                YContactSync.skipMigration(mbox);
+                if (OAuthManager.hasOAuthToken(account.getId())) {
+                    setDataSourceAttribute(ds, OfflineConstants.A_offlineYContactTokenReady, TRUE);
+                    YContactSync.skipMigration(mbox);
+                }
             }
         }
         return account;
@@ -2330,7 +2333,10 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                             ds.getAttr(A_offlineYContactGuid),
                             ds.getAttr(A_offlineYContactTokenTimestamp),
                             ds.getAttr(A_offlineYContactVerifier));
-                    YContactSync.migrateExistingContacts(((OfflineDataSource)ds).getContactSyncDataSource());
+                    if (OAuthManager.hasOAuthToken(account.getId())) {
+                        setDataSourceAttribute(ds, OfflineConstants.A_offlineYContactTokenReady, TRUE);
+                        YContactSync.migrateExistingContacts(((OfflineDataSource)ds).getContactSyncDataSource());
+                    }
                 }
             }
         }

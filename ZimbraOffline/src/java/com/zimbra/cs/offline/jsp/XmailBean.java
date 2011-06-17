@@ -58,6 +58,7 @@ public class XmailBean extends MailBean {
     protected String ycontactVerfier = "";
     protected String ycontactSessionHandle = "";
     protected String ycontactGuid = "";
+    protected boolean isYcontactTokenSaved = false; //TODO: technically should be in YmailBean. Need to make reload call stub method we can implement in Ymail
 
     private static final String adomain = "aol.com";
     private static final String gdomain = "gmail.com";
@@ -115,6 +116,7 @@ public class XmailBean extends MailBean {
                 OfflineConstants.DEFAULT_SYNC_FREQ / 1000);
         syncAllServerFolders = ds.getBooleanAttr(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, false);
         leaveOnServer = ds.getBooleanAttr(Provisioning.A_zimbraDataSourceLeaveOnServer, false);
+        isYcontactTokenSaved = ds.getBooleanAttr(OfflineConstants.A_offlineYContactTokenReady, false); //TODO: technically should be in YmailBean. Need to pass ds to some stub method
     }
 
     @Override

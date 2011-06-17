@@ -57,7 +57,7 @@ public class YmailBean extends ImapBean {
             }
         } else if (this.contactSyncEnabled && (verb.isAdd() || verb.isModify())) {
             try {
-                if (accountId == null && !OAuthManager.hasOAuthToken(accountId)) {
+                if (!isYcontactTokenSaved) {
                     OAuthToken token = OAuthManager.getTokenUsingVerifier(this.oauthTmpId, this.oauthVerifier);
                     this.ycontactToken = token.getToken();
                     this.ycontactTokenSecret = token.getTokenSecret();
@@ -93,5 +93,13 @@ public class YmailBean extends ImapBean {
 
     public boolean isUsernameRequired() {
         return false;
+    }
+    
+    public boolean isYcontactTokenSaved() {
+        return isYcontactTokenSaved; 
+    }
+
+    public void setYcontactTokenSaved(boolean isYcontactTokenSaved) {
+        this.isYcontactTokenSaved = isYcontactTokenSaved;
     }
 }

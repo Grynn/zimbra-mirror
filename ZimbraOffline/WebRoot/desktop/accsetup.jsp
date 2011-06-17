@@ -723,6 +723,7 @@ function onAuth() {
                                                     <label class="ZCheckboxLabel" for="contactSyncEnabled"><fmt:message key='SyncContactsInfo'/></label>
                                                     <br>
                                                     <c:if test="${accountFlavor eq 'YMP'}">
+                                                    <input type="hidden" name="ycontactTokenSaved" value="${bean.ycontactTokenSaved}">
                                                     <div id="oauthDiv">
                                                         <label class="ZFieldLabel" for="contactSyncEnabled"><fmt:message key="YContactURL" />:</label>
                                                         <a href="<c:out value="${bean.oauthURL}" escapeXml="true" />" target="_blank">Click To Verify</a>

@@ -90,7 +90,9 @@ public interface OfflineConstants {
     
     public static final String A_offlineSslCertAlias = "offlineSslCertAlias";
     public static final String A_offlineAccountSetup = "offlineAccountSetup";
-                                                         
+    
+    public static final String A_offlineYContactTokenReady = "offlineYContactTokenReady";
+    
     public static final String A_zimbraDataSourceSmtpEnabled = "zimbraDataSourceSmtpEnabled";
     public static final String A_zimbraDataSourceSmtpHost = "zimbraDataSourceSmtpHost";
     public static final String A_zimbraDataSourceSmtpPort = "zimbraDataSourceSmtpPort";
