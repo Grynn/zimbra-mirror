@@ -284,6 +284,7 @@ public class ZimbraSeleniumProperties {
 		if ( appType == AppType.ADMIN ) {
 		
 			scheme = "https";
+			path = "/zimbraAdmin/";
 			port = "7071";
 
 		}
