@@ -93,7 +93,7 @@
   </classpathentry>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-3.2.0.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-analyzers-3.2.0.jar"/>
-  <classpathentry kind="lib" path="/ZimbraCommon/jars/mina-core-2.0.2.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/mina-core-2.0.4.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/jetty-util-6.1.22.z6.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/guava-r07.jar" sourcepath="/ZimbraCommon/jars-src/guava-src-r07.zip">
     <attributes>
