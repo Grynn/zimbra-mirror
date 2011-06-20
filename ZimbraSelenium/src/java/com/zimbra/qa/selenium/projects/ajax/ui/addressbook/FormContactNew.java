@@ -88,11 +88,12 @@ public class FormContactNew extends AbsForm {
 	protected void save() throws HarnessException {
 		logger.info("FormContactNew.save()");
 		
-		// Look for "Save"
-		boolean visible = this.sIsElementPresent(Toolbar.SAVE);
-		if ( !visible )
-			throw new HarnessException("Save button is not visible "+ Toolbar.SAVE);
-		
+		// Look for "Save"		
+		// Check if the item is enabled
+		if (zIsElementDisabled("div[" + Toolbar.SAVE + "]")) {
+			throw new HarnessException("Tried clicking on "+ Toolbar.SAVE +" but it was disabled ");
+		}
+
 		// Click on it
 		zClick(Toolbar.SAVE);
 		
@@ -151,19 +152,9 @@ public class FormContactNew extends AbsForm {
 		if ( !this.sIsElementPresent(locator) )
 			throw new HarnessException("Field is not present field="+ locator +" locator="+ value);
 		
-		if ((locator == Locators.zFirstEditField) || 
-		     (locator == Locators.zLastEditField) ||
-			 (locator == Locators.zEmail1EditField)) {
-				// Enter text
-		   sFocus(locator);
-		   zClick(locator);			
-		   zKeyboard.zTypeCharacters(value);
-		}
-		else {
-		   sType(locator,value);
-		}
-	
+		sType(locator, value);				
 	}
+	
 	
 	@Override
 	public void zFill(IItem item) throws HarnessException {
