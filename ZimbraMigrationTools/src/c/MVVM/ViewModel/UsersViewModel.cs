@@ -268,6 +268,13 @@ namespace MVVM.ViewModel
             get { return userslist; }
         }
 
+        private ObservableCollection<string> domainlist = new ObservableCollection<string>();
+        public ObservableCollection<string> DomainList
+        {
+            get { return domainlist; }
+            set { domainlist = value; }
+        }
+
         public string Username
         {
             get { return m_users.Username; }
@@ -293,6 +300,21 @@ namespace MVVM.ViewModel
                 }
                 m_users.MappedName = value;
                 OnPropertyChanged(new PropertyChangedEventArgs("MappedName"));
+            }
+        }
+
+        public string ZimbraDomain
+        {
+            get { return m_config.UserProvision.Domain; }
+            set
+            {
+                if (value == m_config.UserProvision.Domain)
+                {
+                    return;
+                }
+                m_config.UserProvision.Domain = value;
+
+                OnPropertyChanged(new PropertyChangedEventArgs("ZimbraDomain"));
             }
         }
 

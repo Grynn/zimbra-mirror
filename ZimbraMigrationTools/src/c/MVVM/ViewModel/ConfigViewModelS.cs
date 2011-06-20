@@ -20,6 +20,7 @@ namespace MVVM.ViewModel
         /*readonly*/ // public Config m_config = new Config("", "", "", "", "", "","","","","",false);
 
         ScheduleViewModel scheduleViewModel;
+        UsersViewModel usersViewModel;
 
         public ConfigViewModelS()
         {
@@ -30,6 +31,16 @@ namespace MVVM.ViewModel
             this.NextCommand = new ActionCommand(this.Next, () => true);
             IsmailServer = false;
             Isprofile = false;
+        }
+
+        public UsersViewModel GetUsersViewModel()
+        {
+            return usersViewModel;
+        }
+
+        public void SetUsersViewModel(UsersViewModel usersViewModel)
+        {
+            this.usersViewModel = usersViewModel;
         }
 
         public ScheduleViewModel GetScheduleViewModel()
@@ -170,10 +181,12 @@ namespace MVVM.ViewModel
                 string authToken = zimbraAPI.ZValues.AuthToken;
                 if (authToken.Length > 0)
                 {
+                    usersViewModel.DomainList.Clear();
+                    scheduleViewModel.CosList.Clear();
                     zimbraAPI.GetAllDomains(url);
                     foreach (string s in zimbraAPI.ZValues.Domains)
                     {
-                        scheduleViewModel.DomainList.Add(s);
+                        usersViewModel.DomainList.Add(s);
                     }
                     zimbraAPI.GetAllCos(url);
                     foreach (string s in zimbraAPI.ZValues.COSes)

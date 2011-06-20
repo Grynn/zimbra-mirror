@@ -36,21 +36,24 @@
                 <Button Grid.Row="3" HorizontalAlignment="Left"  HorizontalContentAlignment="Left" Margin="0,20,0,0" Name="loadCSVButton" Command="{Binding UserMapCommand}" Width="{Binding ElementName=queryBuilderButton, Path=ActualWidth}">Load CSV...</Button>
             </Grid>
         </GroupBox>
-        <DataGrid Grid.Row="1" Grid.Column="2" Margin="40,40,0,0" Name="dgUsers" AutoGenerateColumns="False" CanUserAddRows="True" SelectionMode="Single" ItemsSource="{Binding UsersList}" SelectedIndex="{Binding Path=CurrentUserSelection, Mode=TwoWay}" MinHeight="200" MaxHeight="200" MinWidth="180" MaxWidth="180" >
+        <DataGrid Grid.Row="1" Grid.Column="2" Margin="40,40,0,0" Name="dgUsers" AutoGenerateColumns="False" CanUserAddRows="True" SelectionMode="Single" ItemsSource="{Binding UsersList}" SelectedIndex="{Binding Path=CurrentUserSelection, Mode=TwoWay}" MinHeight="195" MaxHeight="195" MinWidth="180" MaxWidth="180" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Source Name" MinWidth="90" MaxWidth="90" Binding="{Binding Path=Username}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Dest Name" MinWidth="90" MaxWidth="90" Binding="{Binding Path=MappedName}"></DataGridTextColumn>               
             </DataGrid.Columns>
         </DataGrid>
-        <Button Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15,12,0,0" Name="plusButton" Command="{Binding AddCommand}" MinWidth="20" MaxHeight="20" Content="+" FontFamily="Courier New" FontWeight="Bold" />
-        <Button Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="75,12,0,0" Name="minusButton" IsEnabled="{Binding MinusEnabled}" Command="{Binding RemoveCommand}" MinWidth="20" MaxHeight="20" Content="-" FontFamily="Courier New" FontWeight="Bold" />
+        <Label Grid.Row="2" Grid.Column="0" Margin="20,12,0,0" Content="Import users into domain" HorizontalAlignment="Left" Name="labelDomain" VerticalAlignment="Top"/>
+        <ComboBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="25,36,0,0" HorizontalAlignment="Left" MinWidth="180" Name="cbDomain" VerticalAlignment="Center" SelectedIndex="0" ItemsSource="{Binding Path=DomainList}">
+        </ComboBox>
+        <Button Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="15,15,0,0" Name="plusButton" Command="{Binding AddCommand}" MinWidth="20" MaxHeight="20" Content="+" FontFamily="Courier New" FontWeight="Bold" />
+        <Button Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="75,15,0,0" Name="minusButton" IsEnabled="{Binding MinusEnabled}" Command="{Binding RemoveCommand}" MinWidth="20" MaxHeight="20" Content="-" FontFamily="Courier New" FontWeight="Bold" />
         <Separator Grid.Row="3" Grid.ColumnSpan="3" Margin="12,16,0,0" VerticalAlignment="Top"/>
         <Grid Name="BottomGrid" Grid.Row="3" Grid.ColumnSpan="3">
-            <TextBlock Margin="26,40,0,0" Name="textBlockHelp" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Left">
+            <TextBlock Margin="26,30,0,0" Name="textBlockHelp" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Left">
                        <Hyperlink Command="{Binding GetUsersHelpCommand}">Help</Hyperlink>
             </TextBlock>
-            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="200,40,0,0" Content="Save" Name="saveUButton" Command="{Binding SaveCommand}"  />
-            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="360,40,0,0" Content="Next" Name="nextUButton" Command="{Binding NextCommand}" IsEnabled="{Binding Path=EnableNext}" />
+            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="200,30,0,0" Content="Save" Name="saveUButton" Command="{Binding SaveCommand}"  />
+            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="360,30,0,0" Content="Next" Name="nextUButton" Command="{Binding NextCommand}" IsEnabled="{Binding Path=EnableNext}" />
         </Grid>
     </Grid>
 </UserControl>

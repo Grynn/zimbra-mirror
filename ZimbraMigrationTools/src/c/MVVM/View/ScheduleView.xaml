@@ -16,14 +16,13 @@
             <RowDefinition MinHeight="{Binding ElementName=lbSchedUsers, Path=ActualHeight}" Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition MaxWidth="200" Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0" Margin="30,15,0,0" HorizontalAlignment="Left" Name="textMigUsers" Text="Migrate these users" VerticalAlignment="Top"/>
-        <ListBox Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="30,0,0,0" VerticalAlignment="Top" Name="lbSchedUsers" ItemsSource="{Binding SchedList}" MinHeight="170" MaxHeight="170" MinWidth="150" HorizontalAlignment="Left" >
+        <ListBox Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="30,0,0,0" VerticalAlignment="Top" Name="lbSchedUsers" ItemsSource="{Binding SchedList}" MinHeight="180" MaxHeight="180" MinWidth="150" HorizontalAlignment="Left" >
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
@@ -38,7 +37,7 @@
         <!--
         <TextBlock Grid.Row="0" Grid.Column="1" Margin="30,20,0,0" HorizontalAlignment="Left" Name="textTasks" Text="Task setup" VerticalAlignment="Top"/>
         -->
-        <GroupBox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Margin="20,-8,0,0" VerticalAlignment="Top" Name="gbSched" MinHeight="178" MinWidth="200" Grid.RowSpan="3" Header="Schedule">
+        <GroupBox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" Margin="20,-8,0,0" VerticalAlignment="Top" Name="gbSched" MinHeight="188" MinWidth="200" Grid.RowSpan="3" Header="Schedule">
             <Grid Name="gbSGrid">
                 <Grid.RowDefinitions>
                     <RowDefinition MinHeight="50" Height="Auto"></RowDefinition>
@@ -93,10 +92,7 @@
         <!--
         <ProgressBar Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Height="18" Width="290" Margin="80,35,89,26" Name="pbMigrationS" Value="{Binding Path=PBValue}" HorizontalAlignment="Center" ></ProgressBar>
         -->
-        <Label Content="Import users into domain" Margin="25,9,0,0" HorizontalAlignment="Left" Name="labelDomain" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
-        <ComboBox Margin="0,12,0,0" HorizontalAlignment="Left" MinWidth="220" Name="cbDomain" VerticalAlignment="Top" Grid.Row="2" Grid.Column="1" SelectedIndex="0" ItemsSource="{Binding Path=DomainList}">
-        </ComboBox>
-        <GroupBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="30,3,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="gbProv" Header="Provisioning" Padding="10">
+        <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="30,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="gbProv" Header="Provisioning" Padding="10">
             <Grid Name="gbPGrid">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"></RowDefinition>
@@ -113,14 +109,14 @@
                 </ComboBox>
             </Grid>
         </GroupBox>
-        <Separator Grid.Row="4" Grid.ColumnSpan="2" Margin="12,10,0,0" VerticalAlignment="Top"/>
-        <Grid Name="BottomGrid" Grid.Row="4" Grid.ColumnSpan="3">
-            <TextBlock Margin="26,20,0,0" Name="textBlockHelp" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Left">
+        <Separator Grid.Row="3" Grid.ColumnSpan="2" Margin="12,20,0,0" VerticalAlignment="Top"/>
+        <Grid Name="BottomGrid" Grid.Row="3" Grid.ColumnSpan="3">
+            <TextBlock Margin="26,35,0,0" Name="textBlockHelp" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Left">
                        <Hyperlink Command="{Binding GetSchedHelpCommand}">Help</Hyperlink>
             </TextBlock>
-            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,20,0,0" Content="Load" Name="loadSButton" Command="{Binding LoadCommand}"  />
-            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="200,20,0,0" Content="Save" Name="saveSButton" Command="{Binding SaveCommand}"  />
-            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="360,20,0,0" Content="Migrate" Name="migrateSButton" IsEnabled="{Binding Path=EnableMigrate}" Command="{Binding MigrateCommand}"  />
+            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,35,0,0" Content="Load" Name="loadSButton" Command="{Binding LoadCommand}"  />
+            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="200,35,0,0" Content="Save" Name="saveSButton" Command="{Binding SaveCommand}"  />
+            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="360,35,0,0" Content="Migrate" Name="migrateSButton" IsEnabled="{Binding Path=EnableMigrate}" Command="{Binding MigrateCommand}"  />
         </Grid>
     </Grid>
 </UserControl>
