@@ -483,7 +483,7 @@ public class OfflineSyncManager implements FormatListener {
 
         if (exception instanceof ServiceException) {
             ServiceException e = (ServiceException)exception;
-            if (e.getCode().equals(ServiceException.RESOURCE_UNREACHABLE)) {
+            if (e.getCode() != null && e.getCode().equals(ServiceException.RESOURCE_UNREACHABLE)) {
                 if (e.getArgs() != null)
                     for (Argument arg : e.getArgs())
                         if (UserServlet.HTTP_STATUS_CODE.equals(arg.mName) && arg.mValue.startsWith("5"))

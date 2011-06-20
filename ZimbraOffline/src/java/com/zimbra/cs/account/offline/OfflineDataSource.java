@@ -273,15 +273,6 @@ public class OfflineDataSource extends DataSource {
         if (getType() == Type.imap) {
             ImapSync.reset(this.getId());
         }
-        if (isContactSyncEnabled() && isYahoo()) {
-            try {
-                //TODO: should store token in MetadataTokenStore so this is not needed
-                OfflineProvisioning.getOfflineInstance().setDataSourceAttribute(this,
-                                OfflineConstants.A_offlineYContactTokenReady, Provisioning.FALSE);
-            } catch (ServiceException e) {
-                OfflineLog.yab.error("Unable to remove token ready flag; may need to completely delete the account",e);
-            }
-        }
     }
 }
 

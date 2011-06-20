@@ -22,6 +22,6 @@ public class YContactException extends ServiceException {
     
     public YContactException(String message, String code, boolean isReceiversFault, Throwable cause,
             Argument[] arguments) {
-        super(message, code, isReceiversFault, cause, arguments);
+        super(message, code == null ? "YContact.FAILURE" : code, isReceiversFault, cause, arguments);
     }
 }

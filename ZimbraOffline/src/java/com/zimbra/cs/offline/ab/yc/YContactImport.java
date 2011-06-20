@@ -19,11 +19,13 @@ import java.util.List;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
+import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.mailbox.YContactSync;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.ab.LocalData;
 import com.zimbra.cs.offline.util.yc.YContactException;
 import com.zimbra.cs.offline.util.yc.oauth.OAuthException;
+import com.zimbra.cs.offline.util.yc.oauth.OAuthManager;
 
 
 public class YContactImport implements DataSource.DataImport {
@@ -45,11 +47,19 @@ public class YContactImport implements DataSource.DataImport {
         if (!fullSync && !new LocalData(ds).hasLocalChanges()) {
             return;
         }
-        OfflineLog.yab.info("Start importing Yahoo contacts for account '%s'", ds.getName());
-        if (session == null) {
-            session = new YContactSync(ds);
-        }
         try {
+            OfflineLog.yab.info("Start importing Yahoo contacts for account '%s'", ds.getName());
+            if (!OAuthManager.hasOAuthToken(ds.getAccountId())) {
+                OAuthManager.persistCredential(ds.getAccountId(), (String) ds.getAttr(OfflineProvisioning.A_offlineYContactToken),
+                                (String) ds.getAttr(OfflineProvisioning.A_offlineYContactTokenSecret),
+                                (String) ds.getAttr(OfflineProvisioning.A_offlineYContactTokenSessionHandle),
+                                (String) ds.getAttr(OfflineProvisioning.A_offlineYContactGuid),
+                                (String) ds.getAttr(OfflineProvisioning.A_offlineYContactTokenTimestamp),
+                                (String) ds.getAttr(OfflineProvisioning.A_offlineYContactVerifier));
+            }
+            if (session == null) {
+                session = new YContactSync(ds);
+            }
             session.sync();
         } catch (Exception e) {
             OfflineLog.yab.error("Failed to import Yahoo contacts for account '%s'", ds.getName());
