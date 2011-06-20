@@ -384,6 +384,16 @@ function (dt, startOfWeek) {
     return dt;
 };
 
+AjxDateUtil.getLastDayOfWeek =
+function (dt, startOfWeek) {
+    startOfWeek = startOfWeek || 0;
+    var dayOfWeekIndex = dt.getDay();
+    var dayOfWeek = (dayOfWeekIndex - startOfWeek + 7) % 7;
+    dt.setDate(dt.getDate() - dayOfWeek + 6);
+    dt.setHours(23, 59, 59, 999);
+    return dt;
+};
+
 AjxDateUtil.getWeekNumber =
 function(date, firstDayOfWeek, janDate, isISO8601WeekNum) {
 
