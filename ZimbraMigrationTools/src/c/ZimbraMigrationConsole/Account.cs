@@ -121,19 +121,35 @@ namespace ZimbraMigrationConsole
             AccountStatus = e.ProgressPercentage.ToString();
             if (e.ProgressPercentage == 10)
             {
-                System.Console.WriteLine("Migrating messages For UserAccount   " + AccountName.ToString());
+                //System.Console.WriteLine("Migrating messages For UserAccount   " + AccountName.ToString());
+                System.Console.WriteLine();
+               ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow, "Migrating messages For UserAccount   " + AccountName.ToString());
+                System.Console.WriteLine();
+                System.Console.WriteLine();
             }
             if (e.ProgressPercentage == 40)
             {
-                System.Console.WriteLine("Migrating appointments For UserAccount   " + AccountName.ToString());
+                //System.Console.WriteLine("Migrating appointments For UserAccount   " + AccountName.ToString());
+                System.Console.WriteLine();
+                ProgressUtil.RenderConsoleProgress(40, '\u2591', ConsoleColor.Green, "Migrating appointments For UserAccount   " + AccountName.ToString());
+                System.Console.WriteLine();
+                System.Console.WriteLine();
             }
             if (e.ProgressPercentage == 60)
             {
-                System.Console.WriteLine("Migrating contacts For UserAccount   " + AccountName.ToString());
+                //System.Console.WriteLine("Migrating contacts For UserAccount   " + AccountName.ToString());
+                System.Console.WriteLine();
+               ProgressUtil. RenderConsoleProgress(60, '\u2591', ConsoleColor.Yellow, "Migrating contacts For UserAccount   " + AccountName.ToString());
+                System.Console.WriteLine();
+                System.Console.WriteLine();
             }
             if (e.ProgressPercentage == 80)
             {
-                System.Console.WriteLine("Migrating rules For UserAccount   " + AccountName.ToString());
+                //System.Console.WriteLine("Migrating rules For UserAccount   " + AccountName.ToString());
+                System.Console.WriteLine();
+                ProgressUtil.RenderConsoleProgress(60, '\u2591', ConsoleColor.Green, "Migrating Rules For UserAccount   " + AccountName.ToString());
+                System.Console.WriteLine();
+                System.Console.WriteLine();
             }
         }
 
@@ -164,7 +180,5 @@ namespace ZimbraMigrationConsole
 
 
         }
-
-
     }
 }
