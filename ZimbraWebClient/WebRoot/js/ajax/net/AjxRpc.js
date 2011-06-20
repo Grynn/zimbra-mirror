@@ -91,6 +91,11 @@ function(requestStr, serverUrl, requestHeaders, callback, useGet, timeout) {
 			newEx.detail = ex.message;
 			newEx.code = AjxException.NETWORK_ERROR;
 			newEx.msg = "Network error";
+		} else if (ex instanceof XMLHttpRequestException && ex.code == 101){
+			// Chrome 
+			newEx.detail = ex.message;
+            newEx.code = AjxException.NETWORK_ERROR;
+            newEx.msg = "Network error";
 		} else {
 			newEx.detail = ex.toString();
 			newEx.code = AjxException.UNKNOWN_ERROR;

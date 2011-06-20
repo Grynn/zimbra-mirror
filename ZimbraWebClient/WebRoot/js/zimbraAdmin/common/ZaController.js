@@ -392,7 +392,8 @@ function(ex, method, params, restartOnError, obj) {
 			this.popupErrorDialog(ZaMsg.ERROR_ZCS_NOT_RUNNING, ex);
 		} else if (ex.code == ZmCsfeException.SOAP_ERROR) {
 			this.popupErrorDialog(ZaMsg.SOAP_ERROR, ex);
-		} else if (ex.code == ZmCsfeException.NETWORK_ERROR) {
+		} else if (ex.code == ZmCsfeException.NETWORK_ERROR ||
+				   ex.code == AjxException.NETWORK_ERROR) {
 			this.popupErrorDialog(ZaMsg.NETWORK_ERROR, ex);
 		} else if (ex.code ==  ZmCsfeException.SVC_PARSE_ERROR) {
 			this.popupErrorDialog(ZaMsg.PARSE_ERROR, ex);
