@@ -504,8 +504,11 @@ class State:
 							Log.logMsg(5, "Adding restart %s" % (restart,))
 							self.curRestarts(restart, -1)
 						else:
-							Log.logMsg(5, "Adding stop %s" % (restart,))
-							self.curRestarts(restart, 0)
+							if restart == "archiving" and not self.serverconfig.getServices(restart):
+								Log.logMsg(5, "%s not enabled, skipping stop" % (restart,))
+							else:
+								Log.logMsg(5, "Adding stop %s" % (restart,))
+								self.curRestarts(restart, 0)
 			else:
 				Log.logMsg(4, "Section %s did not change skipping" % (section.name,));
 
