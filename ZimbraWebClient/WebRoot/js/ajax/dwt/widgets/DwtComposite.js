@@ -121,17 +121,19 @@ function() {
 	for (var i = 0; i < items.length; i++) {
 		var item = items[i];
 		var isSeparator = item.isStyle && item.isStyle(DwtMenuItem.SEPARATOR_STYLE);
-		var isVisible = item.getVisible();
 
 		if (isSeparator) {
 			item.setVisible(!previousVisibleIsSeparator);
-			previousVisibleIsSeparator = true;
-			lastSeparator = item;
+			if (!previousVisibleIsSeparator || !lastSeparator) { //the !lastSeparator is the edge case of first item is separator. (see comment about lie above)
+				//keep track of last visible separator (if it's also last item visible overall)
+				previousVisibleIsSeparator = true;
+				lastSeparator = item;
+			}
 			continue;
 		}
 
 		//not a separator
-		if (isVisible) {
+		if (item.getVisible()) {
 			previousVisibleIsSeparator = false;
 		}
 	}
