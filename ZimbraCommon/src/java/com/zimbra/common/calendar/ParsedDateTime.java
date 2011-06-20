@@ -31,6 +31,7 @@ import com.zimbra.common.calendar.ZCalendar.ZParameter;
 import com.zimbra.common.calendar.ZCalendar.ZProperty;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.StringUtil;
 
 public final class ParsedDateTime {
     
@@ -327,6 +328,18 @@ public final class ParsedDateTime {
             == otherCal.get(java.util.Calendar.MILLISECOND);
     }
 
+    public boolean sameTimeZone(ParsedDateTime other) {
+        if (other == null) return false;
+        if (mICalTimeZone == null) {
+            return other.mICalTimeZone == null;
+        } else {
+            if (other.mICalTimeZone == null) {
+                return false;
+            } else {
+                return StringUtil.equal(mICalTimeZone.getID(), other.mICalTimeZone.getID());
+            }
+        }
+    }
 
     static final long MSECS_PER_SEC = 1000;
     static final long MSECS_PER_MIN = MSECS_PER_SEC * 60;
