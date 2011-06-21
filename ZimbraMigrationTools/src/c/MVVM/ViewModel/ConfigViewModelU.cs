@@ -197,15 +197,14 @@ namespace MVVM.ViewModel
             }
 
             ZimbraAPI zimbraAPI = new ZimbraAPI();
-            string url = "http://" + this.ZimbraServerHostName + ":" + this.ZimbraPort + "/service/soap";
 
-            int stat = zimbraAPI.Logon(this.ZimbraUser, this.ZimbraUserPasswd, url, false);
+            int stat = zimbraAPI.Logon(this.ZimbraServerHostName, this.ZimbraPort, this.ZimbraUser, this.ZimbraUserPasswd, false);
             if (stat == 0)
             {
                 string authToken = ZimbraValues.GetZimbraValues().AuthToken;
                 if (authToken.Length > 0)
                 {
-                    zimbraAPI.GetInfo(url);
+                    zimbraAPI.GetInfo();
                     lb.SelectedIndex = 1;
                 }
             }

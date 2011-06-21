@@ -173,9 +173,8 @@ namespace MVVM.ViewModel
             }
 
             ZimbraAPI zimbraAPI = new ZimbraAPI();
-            string url = "https://" + this.ZimbraServerHostName + ":" + this.ZimbraPort + "/service/admin/soap";
 
-            int stat = zimbraAPI.Logon(this.ZimbraAdmin, this.ZimbraAdminPasswd, url, true);
+            int stat = zimbraAPI.Logon(this.ZimbraServerHostName, this.ZimbraPort, this.ZimbraAdmin, this.ZimbraAdminPasswd, true);
             if (stat == 0)
             {
                 string authToken = ZimbraValues.GetZimbraValues().AuthToken;
@@ -183,12 +182,12 @@ namespace MVVM.ViewModel
                 {
                     usersViewModel.DomainList.Clear();
                     scheduleViewModel.CosList.Clear();
-                    zimbraAPI.GetAllDomains(url);
+                    zimbraAPI.GetAllDomains();
                     foreach (string s in ZimbraValues.GetZimbraValues().Domains)
                     {
                         usersViewModel.DomainList.Add(s);
                     }
-                    zimbraAPI.GetAllCos(url);
+                    zimbraAPI.GetAllCos();
                     foreach (string s in ZimbraValues.GetZimbraValues().COSes)
                     {
                         scheduleViewModel.CosList.Add(s);

@@ -9,8 +9,7 @@ namespace CssLib
         public ZimbraValues()
         {
             zimbraValues = null;
-            sHostName = "";
-            sPort = "";
+            sUrl = "";
             sAuthToken = "";
             bIsAdminAccount = true;
             bIsDomainAdminAccount = false;
@@ -29,23 +28,13 @@ namespace CssLib
 	        return zimbraValues;
         }
 
-        private string sHostName;
-        public string HostName
+        private string sUrl;
+        public string Url
         {
-            get { return sHostName; }
+            get { return sUrl; }
             set
             {
-                sHostName = value;
-            }
-        }
-
-        private string sPort;
-        public string Port
-        {
-            get { return sPort; }
-            set
-            {
-                sPort = value;
+                sUrl = value;
             }
         }
 

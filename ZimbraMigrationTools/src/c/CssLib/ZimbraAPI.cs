@@ -260,7 +260,7 @@ namespace CssLib
         //////////
 
         // API methods /////////
-        public int Logon(string username, string password, string url, bool isAdmin)
+        public int Logon(string hostname, string port, string username, string password, bool isAdmin)
         {
             lastError = "";
             string req = "";
@@ -269,17 +269,19 @@ namespace CssLib
             Parameters = new List<Parameter>();
             if (isAdmin)
             {
+                ZimbraValues.GetZimbraValues().Url = "https://" + hostname + ":" + port + "/service/admin/soap";
                 Parameters.Add(new Parameter { Name = "name", Value = username, Attr = null });
             }
             else
             {
+                ZimbraValues.GetZimbraValues().Url = "http://" + hostname + ":" + port + "/service/soap";
                 Parameters.Add(new Parameter { Name = "account", Value = username, Attr = new Attrib { Name = "by", Value = "name" } });
             }
             Parameters.Add(new Parameter { Name = "password", Value = password, Attr = null });
 
             WebServiceClient client = new WebServiceClient
             {
-                Url = url,
+                Url = ZimbraValues.GetZimbraValues().Url,
                 WSServiceType = WebServiceClient.ServiceType.Traditional
             };
             int apiCall = (isAdmin) ? ZIMBRA_API_LOGONA : ZIMBRA_API_LOGONU;
@@ -305,7 +307,7 @@ namespace CssLib
 
         }
 
-        public int GetInfo(string url)
+        public int GetInfo()
         {
             lastError = "";
             string req = "";
@@ -313,8 +315,8 @@ namespace CssLib
             WebMethod = "GetInfoRequest";
             Parameters = null;
             WebServiceClient client = new WebServiceClient
-            {   
-                Url = url,
+            {
+                Url = ZimbraValues.GetZimbraValues().Url,
                 WSServiceType = WebServiceClient.ServiceType.Traditional
             };
             req = CreateSoapEnvelope(ZIMBRA_API_GETINFO);
@@ -338,7 +340,7 @@ namespace CssLib
             return client.status;
         }
 
-        public int GetAllDomains(string url)
+        public int GetAllDomains()
         {
             lastError = "";
             string req = "";
@@ -346,7 +348,7 @@ namespace CssLib
             WebMethod = "GetAllDomainsRequest";
             WebServiceClient client = new WebServiceClient
             {
-                Url = url,
+                Url = ZimbraValues.GetZimbraValues().Url,
                 WSServiceType = WebServiceClient.ServiceType.Traditional
             };
             req = CreateSoapEnvelope(ZIMBRA_API_GETALLDOMAIN);
@@ -370,7 +372,7 @@ namespace CssLib
             return client.status;
         }
 
-        public int GetAllCos(string url)
+        public int GetAllCos()
         {
             lastError = "";
             string req = "";
@@ -378,7 +380,7 @@ namespace CssLib
             WebMethod = "GetAllCosRequest";
             WebServiceClient client = new WebServiceClient
             {
-                Url = url,
+                Url = ZimbraValues.GetZimbraValues().Url,
                 WSServiceType = WebServiceClient.ServiceType.Traditional
             };
             req = CreateSoapEnvelope(ZIMBRA_API_GETALLCOS);
