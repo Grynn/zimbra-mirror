@@ -43,7 +43,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <Label Grid.Row="2" Grid.Column="0" Margin="20,12,0,0" Content="Import users into domain" HorizontalAlignment="Left" Name="labelDomain" VerticalAlignment="Top"/>
-        <ComboBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="25,36,0,0" HorizontalAlignment="Left" MinWidth="180" Name="cbDomain" VerticalAlignment="Center" SelectedIndex="0" ItemsSource="{Binding Path=DomainList}">
+        <ComboBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="25,36,0,0" HorizontalAlignment="Left" MinWidth="180" Name="cbDomain" VerticalAlignment="Center" SelectedIndex="{Binding Path=CurrentDomainSelection, Mode=TwoWay}" ItemsSource="{Binding Path=DomainList}">
         </ComboBox>
         <Button Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="15,15,0,0" Name="plusButton" Command="{Binding AddCommand}" MinWidth="20" MaxHeight="20" Content="+" FontFamily="Courier New" FontWeight="Bold" />
         <Button Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="75,15,0,0" Name="minusButton" IsEnabled="{Binding MinusEnabled}" Command="{Binding RemoveCommand}" MinWidth="20" MaxHeight="20" Content="-" FontFamily="Courier New" FontWeight="Bold" />

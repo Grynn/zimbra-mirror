@@ -158,6 +158,24 @@ namespace MVVM.ViewModel
 
                         }
                         scheduleViewModel.EnableMigrate = (scheduleViewModel.SchedList.Count > 0);
+
+                        ///
+                        //Domain information is stored in the xml and not in  the usermap.
+                        //will have to revisit 
+
+                        System.Xml.Serialization.XmlSerializer reader =
+         new System.Xml.Serialization.XmlSerializer(typeof(Config));
+                        if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
+                        {
+                            System.IO.StreamReader fileRead = new System.IO.StreamReader(
+                               @"C:\Temp\ZimbraAdminOverView.xml");
+                            Config Z11 = new Config();
+                            Z11 = (Config)reader.Deserialize(fileRead);
+                            fileRead.Close();
+                            ZimbraDomain = Z11.UserProvision.Domain;
+                            DomainList.Add(ZimbraDomain);
+                           
+                        }
                     }
                 }
                 if (!bCSV)
@@ -248,6 +266,25 @@ namespace MVVM.ViewModel
                 System.IO.File.WriteAllText(filename, resultcsv);
                 MessageBox.Show("Users saved", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
+
+            ///Domain information gets stored in the xml 
+            /////will have to revisit.
+            ZimbraDomain = DomainList[CurrentDomainSelection];
+            if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
+            {
+               UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "UserProvision");
+            }
+
+            else
+            {
+                System.Xml.Serialization.XmlSerializer writer =
+                new System.Xml.Serialization.XmlSerializer(typeof(Config));
+
+                System.IO.StreamWriter file = new System.IO.StreamWriter(
+                    @"C:\Temp\ZimbraAdminOverView.xml");
+                writer.Serialize(file, m_config);
+                file.Close();
+            }
         }
 
         public ICommand NextCommand
@@ -272,7 +309,11 @@ namespace MVVM.ViewModel
         public ObservableCollection<string> DomainList
         {
             get { return domainlist; }
-            set { domainlist = value; }
+            set
+            {
+                domainlist = value;
+               
+            }
         }
 
         public string Username
@@ -332,6 +373,19 @@ namespace MVVM.ViewModel
                 OnPropertyChanged(new PropertyChangedEventArgs("CurrentUserSelection"));
             }
         }
+
+        public int CurrentDomainSelection
+        {
+            get { return domainselection; }
+            set
+            {
+
+                domainselection = value;
+
+                OnPropertyChanged(new PropertyChangedEventArgs("CurrentDomainSelection"));
+            }
+        }
+        private int domainselection;
 
         private bool minusEnabled;
         public bool MinusEnabled
