@@ -175,11 +175,11 @@ GlobalConfigXFormView.INTEROP_TAB_ATTRS = [ZaGlobalConfig.A_zimbraFreebusyExchan
 	ZaGlobalConfig.A_zimbraFreebusyExchangeAuthPassword, ZaGlobalConfig.A_zimbraFreebusyExchangeUserOrg];
 GlobalConfigXFormView.INTEROP_TAB_RIGHTS = [ZaGlobalConfig.CHECK_EXCHANGE_AUTH_CONFIG_RIGHT];
 
-GlobalConfigXFormView.SSO_TAB_ATTRS = [ZaGlobalConfig.A_zimbraSpnegoAuthEnabled, ZaGlobalConfig.A_zimbraSpnegoAuthRealm,
+GlobalConfigXFormView.AUTH_TAB_ATTRS = [ZaGlobalConfig.A_zimbraSpnegoAuthEnabled, ZaGlobalConfig.A_zimbraSpnegoAuthRealm,
     ZaGlobalConfig.A_zimbraSpnegoAuthErrorURL, ZaGlobalConfig.A_zimbraWebClientLoginURL,
     ZaGlobalConfig.A_zimbraWebClientLogoutURL, ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA,
     ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA];
-GlobalConfigXFormView.SSO_TAB_RIGHTS = [];
+GlobalConfigXFormView.AUTH_TAB_RIGHTS = [];
 
 GlobalConfigXFormView.SKIN_TAB_ATTRS = [ZaGlobalConfig.A_zimbraSkinForegroundColor, ZaGlobalConfig.A_zimbraSkinBackgroundColor,ZaGlobalConfig.A_zimbraSkinSecondaryColor,
 	ZaGlobalConfig.A_zimbraSkinSelectionColor, ZaGlobalConfig.A_zimbraSkinLogoURL, ZaGlobalConfig.A_zimbraSkinLogoLoginBanner, ZaGlobalConfig.A_zimbraSkinLogoAppBanner ];
@@ -858,13 +858,13 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
         switchItems.push (case9) ;
     }
 
-    if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.SSO_TAB_ATTRS, GlobalConfigXFormView.SSO_TAB_RIGHTS)) {
+    if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.AUTH_TAB_ATTRS, GlobalConfigXFormView.AUTH_TAB_RIGHTS)) {
     	_tab10 = ++this.TAB_INDEX;
 
-        tabBarChoices.push ({value:_tab10, label:ZaMsg.NAD_Tab_SSO});
+        tabBarChoices.push ({value:_tab10, label:ZaMsg.NAD_Tab_AUTH});
         var case10 =
                 {type: _ZATABCASE_, caseKey:_tab10,
-		            colSizes:["auto"],numCols:1,id:"global_sso_tab",
+		            colSizes:["auto"],numCols:1,id:"global_auth_tab",
 		            items:[
                         	{ type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_SPNEGO_Configure,
                                   items:[
