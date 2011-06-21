@@ -1324,16 +1324,6 @@ function(htmlEl,html){
 	htmlEl.innerHTML = html;
 };
 
-// Basically yields the same as el.outerHTML, but for all browsers
-Dwt.getOuterHTML = function(el) {
-	if (AjxEnv.isIE) {
-		return el.outerHTML;
-	}
-	var parent = document.createElement(el.parentNode && el.parentNode.tagName || "span");
-	parent.appendChild(el.cloneNode(true));
-	return parent.innerHTML;
-};
-
 /**
  * Sets the favicon.
  *
