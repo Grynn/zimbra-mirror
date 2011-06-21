@@ -62,7 +62,7 @@ public class YContactImport implements DataSource.DataImport {
             }
             session.sync();
         } catch (Exception e) {
-            OfflineLog.yab.error("Failed to import Yahoo contacts for account '%s'", ds.getName());
+            OfflineLog.yab.error("Failed to import Yahoo contacts for account '%s'", ds.getName(), e);
             if (e instanceof OAuthException) {
                 throw new YContactException("Failed to import yahoo contacts, please edit account setup and verify access.", 
                         e.getMessage(), false, e, null);
