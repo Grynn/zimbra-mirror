@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MVVM.Model;
 using Misc;
+using CssLib;
 
 namespace MVVM.ViewModel
 {
@@ -125,7 +126,7 @@ namespace MVVM.ViewModel
                             }
                             else
                             {
-                                MessageBox.Show("There is no userinformation stored.Please enter some user info", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                                MessageBox.Show("There is no user information stored.Please enter some user info", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
                             }
                         }
                         catch (Exception e)
@@ -287,6 +288,25 @@ namespace MVVM.ViewModel
         private void Next()
         {
             SaveDomain();
+
+            ZimbraAPI zimbraAPI = new ZimbraAPI();
+            for (int i = 0; i < UsersList.Count; i++)
+            {
+                string acctName = UsersList[i].MappedName + '@' + ZimbraDomain;
+                if (zimbraAPI.GetAccount(acctName) == 0)
+                {
+                    MessageBox.Show(string.Format("Account {0} exists", acctName), "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                if (zimbraAPI.LastError.IndexOf("no such account") != -1)
+                {
+                    MessageBox.Show(string.Format("Account {0} does not exist", acctName), "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                else
+                {
+                    MessageBox.Show(string.Format("Error accessing account {0}: {1}", acctName, zimbraAPI.LastError), "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
 
             lb.SelectedIndex = 3;
         }

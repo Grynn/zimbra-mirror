@@ -9,12 +9,19 @@ namespace CssLib
 {
     public class ZimbraAPI
     {
+        // APIs
         internal const int ZIMBRA_API_LOGONA = 1;
         internal const int ZIMBRA_API_LOGONU = 2;
         internal const int ZIMBRA_API_GETINFO = 3;
         internal const int ZIMBRA_API_GETALLDOMAIN = 4;
         internal const int ZIMBRA_API_GETDOMAIN = 5;
         internal const int ZIMBRA_API_GETALLCOS = 6;
+        internal const int ZIMBRA_API_GETACCOUNT = 7;
+        //
+
+        // Errors
+        internal const int ACCOUNT_NO_NAME = 99;
+        //
 
         private string _soapEnvelope =
           "<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\"><soap:Header></soap:Header><soap:Body></soap:Body></soap:Envelope>";
@@ -114,6 +121,29 @@ namespace CssLib
                     hdr += "</authToken></context>";
                     MethodCall = "<" + this.WebMethod + @" xmlns=""urn:zimbraAdmin""/>";
                     break;
+
+                case ZimbraAPI.ZIMBRA_API_GETACCOUNT:
+                    hdr = "<context xmlns=\"urn:zimbra\"><nonotify/><noqualify/><nosession/><sessionId></sessionId><authToken>";
+                    hdr += ZimbraValues.GetZimbraValues().AuthToken;   // set by ParseLogon
+                    hdr += "</authToken></context>";
+                    MethodCall = "<" + this.WebMethod + @" xmlns=""urn:zimbraAdmin"">";
+                    if (this.Parameters != null)
+                    {
+                        foreach (Parameter param in this.Parameters)
+                        {
+                            if (param.Attr != null)
+                            {
+                                StrParameters = StrParameters + "<" + param.Name + " " + param.Attr.Name + "=" + "\"" + param.Attr.Value + "\">"
+                                                                    + param.Value + "</" + param.Name + ">";
+                            }
+                            else
+                            {
+                                StrParameters = StrParameters + "<" + param.Name + ">" + param.Value + "</" + param.Name + ">";
+                            }
+                        }
+                    }
+                    MethodCall = MethodCall + StrParameters + "</" + this.WebMethod + ">";
+                    break;
             }
 
             StringBuilder sb = new StringBuilder(_soapEnvelope);
@@ -204,6 +234,35 @@ namespace CssLib
             }
             ZimbraValues.GetZimbraValues().AccountName = accountName;
             ZimbraValues.GetZimbraValues().ServerVersion = serverVersion;
+        }
+
+        private int ParseGetAccount(string rsp)
+        {
+            int retval = 0;
+            if (rsp != null)
+            {
+                int dIdx = rsp.IndexOf("account id=");
+                if (dIdx != -1)
+                {
+                    XDocument xmlDoc = XDocument.Parse(rsp);
+                    XNamespace ns = "urn:zimbraAdmin";
+                    foreach (var objIns in xmlDoc.Descendants(ns + "GetAccountResponse"))
+                    {
+                        foreach (XElement accountIns in objIns.Elements())
+                        {
+                            foreach (XAttribute accountAttr in accountIns.Attributes())
+                            {
+                                if (accountAttr.Name == "name")
+                                {
+                                    retval = (accountAttr.Value).Length;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return retval;
         }
 
         private void ParseGetAllDomain(string rsp)
@@ -402,6 +461,45 @@ namespace CssLib
                 }
             }
             return client.status;
+        }
+
+        public int GetAccount(string accountname)
+        {
+            int retval = 0;
+            lastError = "";
+            string req = "";
+            string rsp = "";
+            WebMethod = "GetAccountRequest";
+            Parameters = new List<Parameter>();
+            Parameters.Add(new Parameter { Name = "account", Value = accountname, Attr = new Attrib { Name = "by", Value = "name" } });
+            WebServiceClient client = new WebServiceClient
+            {
+                Url = ZimbraValues.GetZimbraValues().Url,
+                WSServiceType = WebServiceClient.ServiceType.Traditional
+            };
+            req = CreateSoapEnvelope(ZIMBRA_API_GETACCOUNT);
+            client.InvokeService(req, out rsp);
+            retval = client.status;
+            if (client.status == 0)
+            {
+                if (ParseGetAccount(rsp) == 0)  // length of name is 0 -- this is bad
+                {
+                    retval =  ACCOUNT_NO_NAME;
+                }
+            }
+            else
+            {
+                string soapReason = ParseSoapFault(client.errResponseMessage);
+                if (soapReason.Length > 0)
+                {
+                    lastError = soapReason;
+                }
+                else
+                {
+                    lastError = client.exceptionMessage;
+                }
+            }
+            return retval;
         }
         /////////////////////////
 
