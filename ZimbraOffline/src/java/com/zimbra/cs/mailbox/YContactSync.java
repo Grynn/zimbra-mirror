@@ -402,7 +402,7 @@ public class YContactSync {
         try {
             mbox.beginTransaction("yahoo-contacts-migrate", null);
             for (Integer itemId : delItemIds) {
-                mbox.delete(null, itemId, MailItem.TYPE_CONTACT);
+                mbox.delete(null, itemId, MailItem.Type.CONTACT);
             }
             DbDataSource.deleteAllMappingsInFolder(ds, YAB_FOLDER_ID, true);
             md = new Metadata();
