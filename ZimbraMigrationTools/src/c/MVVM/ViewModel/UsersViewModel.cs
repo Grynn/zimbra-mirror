@@ -173,6 +173,11 @@ namespace MVVM.ViewModel
                             Z11 = (Config)reader.Deserialize(fileRead);
                             fileRead.Close();
                             ZimbraDomain = Z11.UserProvision.Domain;
+                            if (DomainList.Count > 0)
+                            {
+                                CurrentDomainSelection = DomainList.IndexOf(ZimbraDomain);
+                            }
+                            else
                             DomainList.Add(ZimbraDomain);
                            
                         }
@@ -269,10 +274,30 @@ namespace MVVM.ViewModel
 
             ///Domain information gets stored in the xml 
             /////will have to revisit.
+            SaveDomain();
+
+        }
+
+        public ICommand NextCommand
+        {
+            get;
+            private set;
+        }
+
+        private void Next()
+        {
+            SaveDomain();
+
+            lb.SelectedIndex = 3;
+        }
+
+        private void SaveDomain()
+        {
+
             ZimbraDomain = DomainList[CurrentDomainSelection];
             if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
             {
-               UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "UserProvision");
+                UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "UserProvision");
             }
 
             else
@@ -285,17 +310,6 @@ namespace MVVM.ViewModel
                 writer.Serialize(file, m_config);
                 file.Close();
             }
-        }
-
-        public ICommand NextCommand
-        {
-            get;
-            private set;
-        }
-
-        private void Next()
-        {
-            lb.SelectedIndex = 3;
         }
         ////////////////////////
 
