@@ -229,6 +229,7 @@ function (params) {
 	var IFCounter = numIFs;
 	
 	if(obj.attrs[ZaServer.A_zimbraMtaMyNetworks]) {
+		obj.attrs[ZaServer.A_zimbraMtaMyNetworks] = AjxStringUtil.trim(obj.attrs[ZaServer.A_zimbraMtaMyNetworks],true);
 		var chunks = obj.attrs[ZaServer.A_zimbraMtaMyNetworks].split(/[\s,]+/);
 		var cnt = chunks.length;
 		var masks=[];
