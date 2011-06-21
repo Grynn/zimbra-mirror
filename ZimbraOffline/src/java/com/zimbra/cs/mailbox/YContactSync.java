@@ -18,8 +18,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -214,7 +216,7 @@ public class YContactSync {
 
         OfflineLog.yab.debug("sync response from yahoo: [clinet rev: %s, server rev: %s]\n", contactSync.getClientRev(),
                 contactSync.getYahooRev());
-
+        Set<String> removeSet = new HashSet<String>();
         for (Contact contact : contactSync.getContacts()) {
             switch (contact.getOp()) {
             case ADD:
@@ -233,10 +235,14 @@ public class YContactSync {
                 }
                 break;
             case REMOVE:
-                OfflineLog.yab.error("shouldn't have remove operation for sync all");
+                String removeId = contact.getId();
+                if (removeSet.add(removeId)) {
+                    this.contactOperations.add(new ContactRemove(removeId));    
+                }
                 break;
             }
         }
+        removeSet = null;
 
         return contactSync;
     }
@@ -260,7 +266,7 @@ public class YContactSync {
 
         boolean success = false;
         try {
-            mbox.beginTransaction("yahoo-contacts-migrate", null);
+            mbox.beginTransaction("yahoo-contacts-dbupdate", null);
             for (ContactOperation contactOp : this.contactOperations) {
                 switch (contactOp.getOp()) {
                 case ADD:
@@ -387,21 +393,28 @@ public class YContactSync {
         }
         ss.setLastRevision("0");
         Collection<DataSourceItem> mappings = DbDataSource.getAllMappingsInFolder(ds, YAB_FOLDER_ID);
-        mbox.lock.lock();
+        List<Integer> delItemIds = new ArrayList<Integer>();
+        for (DataSourceItem item : mappings) {
+            delItemIds.add(item.itemId);
+        }
+        Collections.sort(delItemIds);
+        boolean success = false;
         try {
-            for (DataSourceItem item : mappings) {
-                mbox.delete(null, item.itemId, MailItem.Type.CONTACT);
+            mbox.beginTransaction("yahoo-contacts-migrate", null);
+            for (Integer itemId : delItemIds) {
+                mbox.delete(null, itemId, MailItem.TYPE_CONTACT);
             }
-            DbDataSource.deleteAllMappingsInFolder(ds, YAB_FOLDER_ID);
+            DbDataSource.deleteAllMappingsInFolder(ds, YAB_FOLDER_ID, true);
             md = new Metadata();
             md.put("migrated", "yes");
             mbox.setConfig(null, MIGRATE_FLAG, md);
             localData.saveState(ss);
+            success = true;
         } catch (Exception e) {
             throw new YContactException("exception raised when migrating existing yahoo contacts", "", false, e,
                     null);
         } finally {
-            mbox.lock.release();
+            mbox.endTransaction(success);
         }
         isMigrated = true;
     }
