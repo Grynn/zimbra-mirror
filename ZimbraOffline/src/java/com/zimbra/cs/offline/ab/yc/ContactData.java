@@ -580,23 +580,26 @@ public class ContactData {
             break;
         case phone:
             SimpleField psf = (SimpleField) field.getFieldValue();
-            switch (field.getFlag()) {
-            case home:
-                if (!StringUtil.isNullOrEmpty(this.fields.get(A_homePhone))) {
-                    this.fields.put(A_homePhone, psf.getValue());
-                } else {
-                    this.fields.put(A_homePhone2, psf.getValue());
+            if (field.getFlag() != null) {
+                switch (field.getFlag()) {
+                case home:
+                    if (!StringUtil.isNullOrEmpty(this.fields.get(A_homePhone))) {
+                        this.fields.put(A_homePhone, psf.getValue());
+                    } else {
+                        this.fields.put(A_homePhone2, psf.getValue());
+                    }
+                    break;
+                case work:
+                    if (StringUtil.isNullOrEmpty(this.fields.get(A_workPhone))) {
+                        this.fields.put(A_workPhone, psf.getValue());
+                    } else {
+                        this.fields.put(A_workPhone2, psf.getValue());
+                    }
+                    break;
+                case mobile:
+                    this.fields.put(A_mobilePhone, psf.getValue());
                 }
                 break;
-            case work:
-                if (StringUtil.isNullOrEmpty(this.fields.get(A_workPhone))) {
-                    this.fields.put(A_workPhone, psf.getValue());
-                } else {
-                    this.fields.put(A_workPhone2, psf.getValue());
-                }
-                break;
-            case mobile:
-                this.fields.put(A_mobilePhone, psf.getValue());
             }
             break;
         case company:
