@@ -990,14 +990,26 @@ function (item) {
 				if(szPwd.length < minPwdLen || AjxStringUtil.trim(szPwd).length < minPwdLen) { 
 					//show error msg
 					//this._chngPwdDlg.popdown();
+                    var minpassMsg;
+                    if (minPwdLen > 1) {
+                        minpassMsg =  String(ZaMsg.NAD_passMinLengthMsg_p).replace("{0}",minPwdLen);
+                    } else {
+                        minpassMsg =  String(ZaMsg.NAD_passMinLengthMsg_s).replace("{0}",minPwdLen);
+                    }
 					ZaApp.getInstance().dialogs["errorMsgDlg"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON],null,ZaId.CTR_PREFIX + ZaId.VIEW_ACCTLIST + "_errorMsg");									
-					ZaApp.getInstance().dialogs["errorMsgDlg"].setMessage(ZaMsg.ERROR_PASSWORD_TOOSHORT + "<br>" + String(ZaMsg.NAD_passMinLengthMsg).replace("{0}",minPwdLen), null, DwtMessageDialog.CRITICAL_STYLE, null);
+					ZaApp.getInstance().dialogs["errorMsgDlg"].setMessage(ZaMsg.ERROR_PASSWORD_TOOSHORT + "<br>" + minpassMsg, null, DwtMessageDialog.CRITICAL_STYLE, null);
 					ZaApp.getInstance().dialogs["errorMsgDlg"].popup();
 				} else if(AjxStringUtil.trim(szPwd).length > maxPwdLen) { 
 					//show error msg
 					//this._chngPwdDlg.popdown();
-					ZaApp.getInstance().dialogs["errorMsgDlg"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON], null, ZaId.CTR_PREFIX + ZaId.VIEW_ACCTLIST + "_errorMsg");									
-					ZaApp.getInstance().dialogs["errorMsgDlg"].setMessage(ZaMsg.ERROR_PASSWORD_TOOLONG+ "<br>" + String(ZaMsg.NAD_passMaxLengthMsg).replace("{0}",maxPwdLen), null, DwtMessageDialog.CRITICAL_STYLE, null);
+					ZaApp.getInstance().dialogs["errorMsgDlg"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON], null, ZaId.CTR_PREFIX + ZaId.VIEW_ACCTLIST + "_errorMsg");
+                    var maxpassMsg;
+                    if (maxPwdLen > 1) {
+                        maxpassMsg =  String(ZaMsg.NAD_passMinLengthMsg_p).replace("{0}",minPwdLen);
+                    } else {
+                        maxpassMsg =  String(ZaMsg.NAD_passMinLengthMsg_s).replace("{0}",minPwdLen);
+                    }
+					ZaApp.getInstance().dialogs["errorMsgDlg"].setMessage(ZaMsg.ERROR_PASSWORD_TOOLONG+ "<br>" + maxpassMsg, null, DwtMessageDialog.CRITICAL_STYLE, null);
 					ZaApp.getInstance().dialogs["errorMsgDlg"].popup();
 				} else {		
 					item.changePassword(szPwd);

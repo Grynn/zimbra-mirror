@@ -462,13 +462,26 @@ function(tmpObj) {
 			} 			
 			if(tmpObj.attrs[ZaAccount.A_password].length < minPwdLen || AjxStringUtil.trim(tmpObj.attrs[ZaAccount.A_password]).length < minPwdLen) { 
 				//show error msg
-				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_TOOSHORT + "<br>" + String(ZaMsg.NAD_passMinLengthMsg).replace("{0}",minPwdLen));
+                var minpassMsg;
+                if (minPwdLen > 1) {
+                    minpassMsg =  String(ZaMsg.NAD_passMinLengthMsg_p).replace("{0}",minPwdLen);
+                } else {
+                    minpassMsg =  String(ZaMsg.NAD_passMinLengthMsg_s).replace("{0}",minPwdLen);
+                }
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_TOOSHORT + "<br>" + minpassMsg);
 				return false;		
 			}
 			
 			if(AjxStringUtil.trim(tmpObj.attrs[ZaAccount.A_password]).length > maxPwdLen) { 
 				//show error msg
-				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_TOOLONG+ "<br>" + String(ZaMsg.NAD_passMaxLengthMsg).replace("{0}",maxPwdLen));
+				//show error msg
+                var maxpassMsg;
+                if (maxPwdLen > 1) {
+                    maxpassMsg =  String(ZaMsg.NAD_passMinLengthMsg_p).replace("{0}",minPwdLen);
+                } else {
+                    maxpassMsg =  String(ZaMsg.NAD_passMinLengthMsg_s).replace("{0}",minPwdLen);
+                }
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_TOOLONG+ "<br>" + maxpassMsg);
 				return false;		
 			}
 		}
@@ -2180,8 +2193,13 @@ function (value, event, form){
                     var usedAccounts = domainObj.getUsedDomainAccounts(newDomainName );
                     if (maxDomainAccounts < usedAccounts && (!cosMaxAccounts || cosMaxAccounts.length <= 0)) {
 			form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_accountTypes,null);
-                        form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_domainLeftAccounts,
-                        AjxMessageFormat.format (ZaMsg.NAD_DomainAccountLimits, [newDomainName, usedAccounts - maxDomainAccounts]));
+                        var msg;
+                        if (usedAccounts - maxDomainAccounts > 1) {
+                            msg = AjxMessageFormat.format (ZaMsg.NAD_DomainAccountLimits_p, [newDomainName, usedAccounts - maxDomainAccounts]);
+                        } else {
+                            msg = AjxMessageFormat.format (ZaMsg.NAD_DomainAccountLimits_s, [newDomainName, usedAccounts - maxDomainAccounts]);
+                        }
+                        form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_domainLeftAccounts, msg);
 		    }else {
 			form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_domainLeftAccounts,null);
 		    }
