@@ -178,18 +178,18 @@ namespace MVVM.ViewModel
             int stat = zimbraAPI.Logon(this.ZimbraAdmin, this.ZimbraAdminPasswd, url, true);
             if (stat == 0)
             {
-                string authToken = zimbraAPI.ZValues.AuthToken;
+                string authToken = ZimbraValues.GetZimbraValues().AuthToken;
                 if (authToken.Length > 0)
                 {
                     usersViewModel.DomainList.Clear();
                     scheduleViewModel.CosList.Clear();
                     zimbraAPI.GetAllDomains(url);
-                    foreach (string s in zimbraAPI.ZValues.Domains)
+                    foreach (string s in ZimbraValues.GetZimbraValues().Domains)
                     {
                         usersViewModel.DomainList.Add(s);
                     }
                     zimbraAPI.GetAllCos(url);
-                    foreach (string s in zimbraAPI.ZValues.COSes)
+                    foreach (string s in ZimbraValues.GetZimbraValues().COSes)
                     {
                         scheduleViewModel.CosList.Add(s);
                     }

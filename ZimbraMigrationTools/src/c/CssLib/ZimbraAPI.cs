@@ -45,19 +45,9 @@ namespace CssLib
             }
         }
 
-        private ZimbraValues zValues;
-        public ZimbraValues ZValues
-        {
-            get { return zValues; }
-            set
-            {
-                zValues = value;
-            }
-        }
-
         public ZimbraAPI()
         {
-            zValues = new ZimbraValues();
+            ZimbraValues.GetZimbraValues();
         }
 
         // Method for a given soap envelope
@@ -105,7 +95,7 @@ namespace CssLib
 
                 case ZimbraAPI.ZIMBRA_API_GETINFO:
                     hdr = "<context xmlns=\"urn:zimbra\"><nonotify/><noqualify/><nosession/><sessionId></sessionId><authToken>";
-                    hdr += zValues.AuthToken;   // set by ParseLogon
+                    hdr += ZimbraValues.GetZimbraValues().AuthToken;   // set by ParseLogon
                     hdr += "</authToken></context>";
                     //MethodCall = "<" + this.WebMethod + @" xmlns=""urn:zimbraAccount""/>";
                     MethodCall = "<" + this.WebMethod + @" xmlns=""urn:zimbraAccount"" sections=""mbox""/>";
@@ -113,14 +103,14 @@ namespace CssLib
 
                 case ZimbraAPI.ZIMBRA_API_GETALLDOMAIN:
                     hdr = "<context xmlns=\"urn:zimbra\"><nonotify/><noqualify/><nosession/><sessionId></sessionId><authToken>";
-                    hdr += zValues.AuthToken;   // set by ParseLogon
+                    hdr += ZimbraValues.GetZimbraValues().AuthToken;   // set by ParseLogon
                     hdr += "</authToken></context>";
                     MethodCall = "<" + this.WebMethod + @" xmlns=""urn:zimbraAdmin""/>";
                     break;
 
                 case ZimbraAPI.ZIMBRA_API_GETALLCOS:
                     hdr = "<context xmlns=\"urn:zimbra\"><nonotify/><noqualify/><nosession/><sessionId></sessionId><authToken>";
-                    hdr += zValues.AuthToken;   // set by ParseLogon
+                    hdr += ZimbraValues.GetZimbraValues().AuthToken;   // set by ParseLogon
                     hdr += "</authToken></context>";
                     MethodCall = "<" + this.WebMethod + @" xmlns=""urn:zimbraAdmin""/>";
                     break;
@@ -188,9 +178,9 @@ namespace CssLib
                     }
                 }
             }
-            zValues.AuthToken = authToken;
-            zValues.IsAdminAccount = true;
-            zValues.IsDomainAdminAccount = (isDomainAdmin == "true");
+            ZimbraValues.GetZimbraValues().AuthToken = authToken;
+            ZimbraValues.GetZimbraValues().IsAdminAccount = true;
+            ZimbraValues.GetZimbraValues().IsDomainAdminAccount = (isDomainAdmin == "true");
         }
 
         private void ParseGetInfo(string rsp)
@@ -212,8 +202,8 @@ namespace CssLib
                     }
                 }
             }
-            zValues.AccountName = accountName;
-            zValues.ServerVersion = serverVersion;
+            ZimbraValues.GetZimbraValues().AccountName = accountName;
+            ZimbraValues.GetZimbraValues().ServerVersion = serverVersion;
         }
 
         private void ParseGetAllDomain(string rsp)
@@ -233,7 +223,7 @@ namespace CssLib
                             {
                                 if (domainAttr.Name == "name")
                                 {
-                                    zValues.Domains.Add(domainAttr.Value);
+                                    ZimbraValues.GetZimbraValues().Domains.Add(domainAttr.Value);
                                 }
                             }
                         }
@@ -259,7 +249,7 @@ namespace CssLib
                             {
                                 if (cosAttr.Name == "name")
                                 {
-                                    zValues.COSes.Add(cosAttr.Value);
+                                    ZimbraValues.GetZimbraValues().COSes.Add(cosAttr.Value);
                                 }
                             }
                         }

@@ -202,7 +202,7 @@ namespace MVVM.ViewModel
             int stat = zimbraAPI.Logon(this.ZimbraUser, this.ZimbraUserPasswd, url, false);
             if (stat == 0)
             {
-                string authToken = zimbraAPI.ZValues.AuthToken;
+                string authToken = ZimbraValues.GetZimbraValues().AuthToken;
                 if (authToken.Length > 0)
                 {
                     zimbraAPI.GetInfo(url);

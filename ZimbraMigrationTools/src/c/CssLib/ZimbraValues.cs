@@ -4,8 +4,13 @@ namespace CssLib
 {
     public class ZimbraValues
     {
+        public static ZimbraValues zimbraValues;
+
         public ZimbraValues()
         {
+            zimbraValues = null;
+            sHostName = "";
+            sPort = "";
             sAuthToken = "";
             bIsAdminAccount = true;
             bIsDomainAdminAccount = false;
@@ -13,6 +18,35 @@ namespace CssLib
             sServerVersion = "";
             lDomains = new List<string>();
             lCOSes = new List<string>();
+        }
+
+        public static ZimbraValues GetZimbraValues()
+        {
+	        if (zimbraValues == null)
+	        {
+		        zimbraValues = new ZimbraValues() ;
+	        }
+	        return zimbraValues;
+        }
+
+        private string sHostName;
+        public string HostName
+        {
+            get { return sHostName; }
+            set
+            {
+                sHostName = value;
+            }
+        }
+
+        private string sPort;
+        public string Port
+        {
+            get { return sPort; }
+            set
+            {
+                sPort = value;
+            }
         }
 
         private string sAuthToken;
