@@ -498,6 +498,38 @@ function (params) {
 }
 ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validatePop3BindPort);
 
+ZaServerController.prototype.validatePop3BindAddress = 
+function (params) {
+        if(!ZaItem.hasWritePermission(ZaServer.A_Pop3BindAddress,this._currentObject)) {
+                this.runValidationStack(params);
+                return;
+        }
+        var obj = this._view.getObject();
+	if(obj.attrs[ZaServer.A_Pop3BindAddress] != this._currentObject.attrs[ZaServer.A_Pop3BindAddress]) {
+		if(!ZaApp.getInstance().dialogs["confirmSaveDialog"]) {
+		var confirmDialog = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, 
+			[DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], null, ZaId.VIEW_STATUS + "_confirmSavePopAddr"); 
+		confirmDialog.setMessage(ZaMsg.NAD_POP_Address_Warning, DwtMessageDialog.WARNING_STYLE);
+		confirmDialog.registerCallback(DwtDialog.YES_BUTTON, ZaServerController._confirmSavePop3BindAddress, this, null);
+		ZaApp.getInstance().dialogs["confirmSaveDialog"] = confirmDialog;
+		}
+		ZaApp.getInstance().dialogs["confirmSaveDialog"].popup();
+
+	} else {
+                this.runValidationStack(params);
+                return;
+	}
+}
+ZaXFormViewController.preSaveValidationMethods["ZaServerController"].push(ZaServerController.prototype.validatePop3BindAddress);
+
+ZaServerController._confirmSavePop3BindAddress =
+function() {
+	if(ZaApp.getInstance().dialogs["confirmSaveDialog"])
+		ZaApp.getInstance().dialogs["confirmSaveDialog"].popdown();
+	ZaServerController.prototype.runValidationStack.call(this);
+}
+
+
 ZaServerController.prototype.validatePop3SSLBindPort =
 function (params) {
 	if(!ZaItem.hasWritePermission(ZaServer.A_zimbraPop3SSLBindPort,this._currentObject)) {

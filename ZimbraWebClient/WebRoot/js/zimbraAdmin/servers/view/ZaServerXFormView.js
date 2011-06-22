@@ -1115,7 +1115,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 						},
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.Global_POP_NetworkGrp,
 						  items: [
-						  	{type:_GROUP_,numCols:3,colSpan:3,colSizes:["275px","275px","150px"],
+						  	{type:_GROUP_,numCols:2,colSpan:2,colSizes:["275px","*"],//["275px","275px","150px"],
 						      	enableDisableChangeEventSources:[ZaServer.A_Pop3ServerEnabled],
 						      	enableDisableChecks:[ZaServerXFormView.getPOP3Enabled],
 						  		items:[
@@ -1126,7 +1126,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 								  	{type:_SPACER_}
 								]
 						  	},
-							{type:_GROUP_,numCols:3,colSpan:3,colSizes:["275px","275px","150px"],
+							{type:_GROUP_,numCols:2,colSpan:2,colSizes:["275px","*"],
 						      	enableDisableChangeEventSources:[ZaServer.A_Pop3ServerEnabled],
 						      	enableDisableChecks:[ZaServerXFormView.getPOP3Enabled],
 						  		items:[
@@ -1135,7 +1135,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 									 	label:ZaMsg.NAD_POP_Address,
 									  	onChange:ZaServerXFormView.onFormFieldChanged
 								  	},
-								  	{type:_SPACER_}
+									{type:_OUTPUT_,ref:".",label:"", labelLocation:_LEFT_, value: ZaMsg.NAD_POP_Address_NOTE}
 							  ]
 						  	},
 							{ ref: ZaServer.A_zimbraPop3BindPort, type:_TEXTFIELD_,
