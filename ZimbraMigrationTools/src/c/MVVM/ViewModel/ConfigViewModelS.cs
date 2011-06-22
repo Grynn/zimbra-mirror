@@ -173,7 +173,7 @@ namespace MVVM.ViewModel
 
             ZimbraAPI zimbraAPI = new ZimbraAPI();
 
-            int stat = zimbraAPI.Logon(this.ZimbraServerHostName, this.ZimbraPort, this.ZimbraAdmin, PasswdCrypt.Decrypt(this.ZimbraAdminPasswd,"ZIMBRA"), true);
+            int stat = zimbraAPI.Logon(this.ZimbraServerHostName, this.ZimbraPort, this.ZimbraAdmin,this.ZimbraAdminPasswd, true);
             if (stat == 0)
             {
                 string authToken = ZimbraValues.GetZimbraValues().AuthToken;
