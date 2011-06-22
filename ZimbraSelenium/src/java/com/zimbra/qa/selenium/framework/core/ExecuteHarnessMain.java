@@ -112,9 +112,17 @@ public class ExecuteHarnessMain {
 		String browser = ZimbraSeleniumProperties.getStringProperty(
 				ZimbraSeleniumProperties.getLocalHost() + ".browser",
 				ZimbraSeleniumProperties.getStringProperty("browser"));
-		if(browser.charAt(0) == '*')
-			browser = browser.substring(1).split(" ")[0];		
-		
+		if (browser.charAt(0) == '*') {
+			browser = browser.substring(1);
+			if ((browser.indexOf(" ")) > 0) {
+				String str = browser.split(" ")[0];
+				int i;
+				if ((i = browser.lastIndexOf("\\")) > 0) {
+					str += "_" + browser.substring(i+1);
+				}
+				browser = str;
+			}
+		}
 		// Append the app, browser, locale
 		path += "/"
 			+ ZimbraSeleniumProperties.getAppType()
