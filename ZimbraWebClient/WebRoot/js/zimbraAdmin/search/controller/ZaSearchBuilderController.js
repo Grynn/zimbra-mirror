@@ -99,10 +99,15 @@ function (value, event, form){
 		}
 
         var ref = this.getRef () ; 
-        //can't both be set
+        //can't each both be set
 		if (invertValue == "FALSE" && ref == ZaSearchOption.A_objTypeAccountDomainAdmin) {
 			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeAccountAdmin) ;
+			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeSystemAccount);
 		}else if (invertValue == "FALSE" && ref == ZaSearchOption.A_objTypeAccountAdmin) {
+			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeAccountDomainAdmin) ;
+			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeSystemAccount);
+		} else if (invertValue == "FALSE" && ref == ZaSearchOption.A_objTypeSystemAccount) {
+			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeAccountAdmin) ;
 			this.setInstanceValue (invertValue, ZaSearchOption.A_objTypeAccountDomainAdmin) ;
 		}
 
