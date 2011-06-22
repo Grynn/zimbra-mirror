@@ -1,0 +1,16 @@
+HKCR
+{
+	NoRemove CLSID
+	{
+		ForceRemove {A6A12B55-AE1E-449D-A646-19E0DB020EA2} = s 'MapiWrapper Class'
+		{
+			ForceRemove Programmable
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			TypeLib = s '{33449EAA-8056-4D28-8D42-552B7C6C8954}'
+			Version = s '1.0'
+		}
+	}
+}
