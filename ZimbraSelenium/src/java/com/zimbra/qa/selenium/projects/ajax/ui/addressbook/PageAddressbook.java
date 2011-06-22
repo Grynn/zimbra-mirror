@@ -15,13 +15,13 @@ import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
+
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.DialogCreateFolder;
+import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactGroupNew.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
@@ -48,6 +48,8 @@ public class PageAddressbook extends AbsTab {
 		public static final ContextMenuItem CONTACT_MOVE = new ContextMenuItem("zmi__Contacts__MOVE","Move","div[class*='ImgMoveToFolder']","");
 		public static final ContextMenuItem CONTACT_PRINT = new ContextMenuItem("zmi__Contacts__PRINT_CONTACT","Print","div[class*='ImgPrint']",":contains('p')");
 	 		
+		public static final ContextMenuItem CONTACT_GROUP = new ContextMenuItem("zmi__Contacts__CONTACTGROUP_MENU","Contact Group","div[class*='ImgGroup']","");
+		
 	}
 
 	
@@ -58,6 +60,9 @@ public class PageAddressbook extends AbsTab {
 			
 		public static final ContextMenuItem CONTACT_SUB_RECEIVED_FROM_CONTACT = new ContextMenuItem("POPUP_SEARCH","Received From Contact","div[class='ImgSearch']","");
 	    public static final ContextMenuItem CONTACT_SUB_SENT_TO_CONTACT = new ContextMenuItem("POPUP_SEARCH_TO","Sent To Contact","div[class='ImgSearch']","");
+	
+	    public static final ContextMenuItem CONTACT_SUB_NEW_CONTACT_GROUP = new ContextMenuItem("zmi__Contacts__CONTACTGROUP_MENU|GROUP_MENU|NEWGROUP","New Contact Group","div[class='ImgNewGroup']","");
+		
 	}
 	
 	public PageAddressbook(AbsApplication application) {
@@ -692,6 +697,13 @@ public class PageAddressbook extends AbsTab {
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_RIGHT);
 				
 			}
+			else if (option == Button.B_CONTACTGROUP) {
+				if (subOption == Button.O_NEW_CONTACTGROUP) {
+					cmi= CONTEXT_MENU.CONTACT_GROUP;
+					sub_cmi= CONTEXT_SUB_MENU.CONTACT_SUB_NEW_CONTACT_GROUP;
+					page = new SimpleFormContactGroupNew(MyApplication);
+				}				
+			}
 			else if (option == Button.B_SEARCH) {
 				cmi=CONTEXT_MENU.CONTACT_SEARCH;
 				if (subOption == Button.O_SEARCH_MAIL_SENT_TO_CONTACT) {
@@ -732,12 +744,10 @@ public class PageAddressbook extends AbsTab {
 			zWaitForElementEnabled(id);
 			
         } 
-			
-        
-		// Click option
+		
         zClickAt(locator,"0,0");
 		
-		zWaitForBusyOverlay();
+        zWaitForBusyOverlay();
 		
 		
 		
