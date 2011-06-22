@@ -52,15 +52,14 @@ public class ChangeColorFolder extends AjaxCommonTest {
 		dialog.zSetNewColor(FolderColor.Gray);
 		dialog.zClickButton(Button.B_OK);
 
-		// Get all the folders and verify the new name appears and the old name
-		// disappears
-		FolderItem subfolder2 = FolderItem.importFromSOAP(app
-				.zGetActiveAccount(), name1);
-		ZAssert.assertNotNull(subfolder2, "Verify the subfolder is available");
-
 		// Check the color
-		throw new HarnessException("implement the verification");
+		app.zGetActiveAccount().soapSend(
+				"<GetFolderRequest xmlns='urn:zimbraMail'>"
+			+		"<folder id='" + subfolder1.getId() + "'/>"
+			+	"</GetFolderRequest>");
 
+		String color = app.zGetActiveAccount().soapSelectValue("//mail:folder[@name='" + subfolder1.getName() + "']", "color");
+		ZAssert.assertEquals(color, "8", "Verify the color of the folder is set to gray (8)");
 	}
 
 }
