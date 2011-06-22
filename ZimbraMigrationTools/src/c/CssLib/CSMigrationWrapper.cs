@@ -37,7 +37,7 @@ namespace CssLib
         MVVM.Model.ImportOptions ImportOptions = new MVVM.Model.ImportOptions();
         MVVM.Model.Users  users = new MVVM.Model.Users();*/
 
-        ExchangeMigrationLib.MapiWrapper MailWrapper;
+        ExchangeMigrationLib.IMapiWrapper MailWrapper;
 
         /*private void CreateConfig(string Xmlfilename)
         {

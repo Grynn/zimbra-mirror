@@ -61,6 +61,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExchangeMigrationPS", "src\
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CssLib", "src\c\CssLib\CssLib.csproj", "{1E39345E-E550-4530-ABF8-4DAE702D4FFA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{76F01C7C-953B-4A0F-92D4-F3FBF50C6D71} = {76F01C7C-953B-4A0F-92D4-F3FBF50C6D71}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZimbraMigrationConsole", "src\c\ZimbraMigrationConsole\ZimbraMigrationConsole.csproj", "{DEBF5F38-2B24-4958-9895-A201E3C133BC}"
 EndProject
@@ -337,7 +340,6 @@ Global
 		{00B36F9B-D3C0-428C-8DBA-837E4D424E66}.dbg|Mixed Platforms.ActiveCfg = Debug|Win32
 		{00B36F9B-D3C0-428C-8DBA-837E4D424E66}.dbg|Mixed Platforms.Build.0 = Debug|Win32
 		{00B36F9B-D3C0-428C-8DBA-837E4D424E66}.dbg|Win32.ActiveCfg = dbg|Win32
-		{00B36F9B-D3C0-428C-8DBA-837E4D424E66}.dbg|Win32.Build.0 = dbg|Win32
 		{00B36F9B-D3C0-428C-8DBA-837E4D424E66}.dbg|x64.ActiveCfg = dbg|Win32
 		{00B36F9B-D3C0-428C-8DBA-837E4D424E66}.dbg|x86.ActiveCfg = dbg|Win32
 		{00B36F9B-D3C0-428C-8DBA-837E4D424E66}.rtl|Any CPU.ActiveCfg = Release|Win32
@@ -345,7 +347,6 @@ Global
 		{00B36F9B-D3C0-428C-8DBA-837E4D424E66}.rtl|Mixed Platforms.ActiveCfg = Release|Win32
 		{00B36F9B-D3C0-428C-8DBA-837E4D424E66}.rtl|Mixed Platforms.Build.0 = Release|Win32
 		{00B36F9B-D3C0-428C-8DBA-837E4D424E66}.rtl|Win32.ActiveCfg = rtl|Win32
-		{00B36F9B-D3C0-428C-8DBA-837E4D424E66}.rtl|Win32.Build.0 = rtl|Win32
 		{00B36F9B-D3C0-428C-8DBA-837E4D424E66}.rtl|x64.ActiveCfg = rtl|Win32
 		{00B36F9B-D3C0-428C-8DBA-837E4D424E66}.rtl|x86.ActiveCfg = rtl|Win32
 		{6298EDAB-74DC-4A9D-B95D-0D1223861629}.dbg|Any CPU.ActiveCfg = Debug|Win32
