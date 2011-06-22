@@ -19,7 +19,7 @@ namespace MVVM.View
 
         private void pb_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            ViewModel.ZimbraUserPasswd = passwordBox1.Password;
+            ViewModel.ZimbraUserPasswd = MVVM.Model.PasswdCrypt.Encrypt(passwordBox1.Password,"ZIMBRA");
         }
     }
 

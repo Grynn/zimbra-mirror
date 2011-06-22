@@ -117,7 +117,6 @@ namespace MVVM.ViewModel
                     MailServerHostName = Z11.mailServer.Hostname;
                     MailServerProfileName = Z11.mailServer.ProfileName;
                 }
-
                 //MessageBox.Show("Configuration information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
             else
@@ -174,7 +173,7 @@ namespace MVVM.ViewModel
 
             ZimbraAPI zimbraAPI = new ZimbraAPI();
 
-            int stat = zimbraAPI.Logon(this.ZimbraServerHostName, this.ZimbraPort, this.ZimbraAdmin, this.ZimbraAdminPasswd, true);
+            int stat = zimbraAPI.Logon(this.ZimbraServerHostName, this.ZimbraPort, this.ZimbraAdmin, PasswdCrypt.Decrypt(this.ZimbraAdminPasswd,"ZIMBRA"), true);
             if (stat == 0)
             {
                 string authToken = ZimbraValues.GetZimbraValues().AuthToken;

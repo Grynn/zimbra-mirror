@@ -8,6 +8,7 @@ namespace MVVM.View
         public ConfigViewS()
         {
             InitializeComponent();
+            
         }
 
         // Kind of a drag that we have to put these next 2 methods in here, but PasswordBox is not a dependency property,
@@ -19,7 +20,7 @@ namespace MVVM.View
 
         private void pb_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            ViewModel.ZimbraAdminPasswd = passwordBox1.Password;
+            ViewModel.ZimbraAdminPasswd = MVVM.Model.PasswdCrypt.Encrypt(passwordBox1.Password,"ZIMBRA");
         }
     }
 
