@@ -157,7 +157,7 @@
       <PrecompiledHeaderFile>common.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ws2_32.lib;Dsuiext.lib;msxml2.lib;ActiveDS.lib;adsiid.lib;comsupp.lib;winhttp.lib;Version.lib;dbghelp.lib;Psapi.lib;Netapi32.lib;Ex2KSdkD.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>

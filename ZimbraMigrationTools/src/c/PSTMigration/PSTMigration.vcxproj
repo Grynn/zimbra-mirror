@@ -72,17 +72,17 @@
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">..\out\$(Configuration)\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">..\out64\$(TargetName)\$(Configuration)\usa\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">..\out\$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">$(Configuration)\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">..\out64\$(TargetName)\$(Configuration)\usa\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">$(Configuration)\</IntDir>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">false</IgnoreImportLibrary>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">false</IgnoreImportLibrary>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">true</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'">..\out\$(Configuration)\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='rtl|x64'">..\out64\$(TargetName)\$(Configuration)\usa\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='rtl|x64'">..\out\$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'">$(Configuration)\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='rtl|x64'">..\out64\$(TargetName)\$(Configuration)\usa\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='rtl|x64'">$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='rtl|x64'">false</LinkIncremental>
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
@@ -157,7 +157,7 @@
       <PrecompiledHeaderFile>common.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ws2_32.lib;Dsuiext.lib;msxml2.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;comsupp.lib;winhttp.lib;Version.lib;dbghelp.lib;Psapi.lib;Netapi32.lib;Ex2KSdkD.lib;Rpcrt4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
@@ -243,7 +243,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
-      <AdditionalDependencies>mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <Midl>
