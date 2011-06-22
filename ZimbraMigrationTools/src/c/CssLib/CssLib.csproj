@@ -90,7 +90,7 @@
     <Compile Include="ZimbraValues.cs" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="ExchangeMigrationLib">
+    <COMReference Include="Exchange">
       <Guid>{33449EAA-8056-4D28-8D42-552B7C6C8954}</Guid>
       <VersionMajor>1</VersionMajor>
       <VersionMinor>0</VersionMinor>
