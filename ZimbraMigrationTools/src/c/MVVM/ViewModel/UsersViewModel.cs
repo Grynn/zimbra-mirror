@@ -177,7 +177,7 @@ namespace MVVM.ViewModel
                             ZimbraDomain = Z11.UserProvision.Domain;
                             if (DomainList.Count > 0)
                             {
-                                CurrentDomainSelection = DomainList.IndexOf(ZimbraDomain);
+                                CurrentDomainSelection = (ZimbraDomain == null) ? 0 : DomainList.IndexOf(ZimbraDomain);
                             }
                             else
                             DomainList.Add(ZimbraDomain);
