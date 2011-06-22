@@ -63,7 +63,7 @@ namespace CssLib
             if( MailClient == "MAPI")
             {
 
-                 MailWrapper = new MapiWrapper();
+                 MailWrapper = new Exchange.MapiWrapper();
 
                 MailWrapper.ConnectToServer(HostName,Port,AdminAccount);
 
