@@ -3,7 +3,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.mail.mail;
 import java.io.File;
 import java.util.HashMap;
 
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import com.zimbra.qa.selenium.framework.core.*;
 import com.zimbra.qa.selenium.framework.items.MailItem;
@@ -16,9 +16,11 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail.Field;
 
 public class ViewMail extends AjaxCommonTest {
 
+	boolean injected = false;
+	final String mimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email00";
 	
 	@SuppressWarnings("serial")
-	public ViewMail() {
+	public ViewMail() throws HarnessException {
 		logger.info("New "+ ViewMail.class.getCanonicalName());
 		
 		// All tests start at the login page
@@ -33,6 +35,7 @@ public class ViewMail extends AjaxCommonTest {
 
 	}
 	
+	
 	@Bugs(	ids = "57047" )
 	@Test(	description = "Receive a mail with Sender: specified",
 			groups = { "functional" })
@@ -41,10 +44,12 @@ public class ViewMail extends AjaxCommonTest {
 		final String subject = "subject12996131112962";
 		final String from = "from12996131112962@example.com";
 		final String sender = "sender12996131112962@example.com";
-		final String mimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email00";
 
-		// Inject the example message(s)
-		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFolder));
+		if ( !injected ) {
+			LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFolder));
+			injected = true;
+		}
+
 
 		
 		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), subject);
@@ -75,8 +80,11 @@ public class ViewMail extends AjaxCommonTest {
 		final String replyto = "replyto13016959916873@example.com";
 		final String mimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email00";
 
-		// Inject the example message(s)
-		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFolder));
+		if ( !injected ) {
+			LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFolder));
+			injected = true;
+		}
+
 
 		
 		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), subject);
