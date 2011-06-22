@@ -151,7 +151,7 @@ public class DialogWarning extends AbsDialog {
 	public boolean zIsActive() throws HarnessException {
 		if ( !this.sIsElementPresent(MyDivId) )
 			return (false);
-		if ( !this.zIsVisiblePerPosition(MyDivId, 225, 650) )
+		if ( !this.zIsVisiblePerPosition(MyDivId, 225, 300) )
 			return (false);
 		return (true);
 	}
