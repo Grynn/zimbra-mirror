@@ -5,7 +5,7 @@
     xmlns:Misc="clr-namespace:Misc;assembly=Misc"
     >
     <UserControl.Resources>
-        <Misc:ForegroundConverter x:Key="ForegroundConverter" />
+        <Misc:ImageConverter x:Key="ImageConverter" />
     </UserControl.Resources>
     <Grid Name="ScheduleGrid">
         <Grid.Background>
@@ -25,13 +25,14 @@
         <ListBox Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="30,0,0,0" VerticalAlignment="Top" Name="lbSchedUsers" ItemsSource="{Binding SchedList}" MinHeight="180" MaxHeight="180" MinWidth="150" HorizontalAlignment="Left" >
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel>
-                        <TextBlock Text="{Binding}" Foreground="{Binding Converter={StaticResource ForegroundConverter}}"/>
+                    <StackPanel Orientation="Horizontal" >
+                        <Image Source="{Binding Converter={StaticResource ImageConverter}}" Width="15" Height="15"></Image>
+                        <TextBlock Text="{Binding Path=username}" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
             <ListBox.ToolTip>
-                <TextBlock Margin="3" >Users appearing in Red have not been provisioned</TextBlock>  
+                <TextBlock Margin="3" >The icon next to the name shows whether or not the user has been provisioned</TextBlock>  
             </ListBox.ToolTip>
         </ListBox>        
         <!--

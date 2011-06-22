@@ -36,6 +36,11 @@ namespace MVVM.Model
             get; set;
         }
 
+        public bool IsProvisioned
+        {
+            get; set;
+        }
+
         public bool EnableNext
         {
             get; set;

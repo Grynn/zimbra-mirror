@@ -183,9 +183,9 @@ namespace MVVM.ViewModel
 
             bgw = new System.ComponentModel.BackgroundWorker();
 
-            foreach (string s in SchedList)
+            foreach (SchedUser su in SchedList)
             {
-                accountResultsViewModel.AccountResultsList.Add(new AccountResultsViewModel(this, 0, "", s, 0, 0, 0, accountResultsViewModel.EnableStop));
+                accountResultsViewModel.AccountResultsList.Add(new AccountResultsViewModel(this, 0, "", su.username, 0, 0, 0, accountResultsViewModel.EnableStop));
             }
 
             bgw.DoWork += new System.ComponentModel.DoWorkEventHandler(worker_DoWork);
@@ -197,15 +197,15 @@ namespace MVVM.ViewModel
         }
         ////////////////////////
 
-        private ObservableCollection<string> schedlist = new ObservableCollection<string>();
-        public ObservableCollection<string> SchedList
+        private ObservableCollection<SchedUser> schedlist = new ObservableCollection<SchedUser>();
+        public ObservableCollection<SchedUser> SchedList
         {
             get
             {
                 schedlist.Clear();
                 foreach (UsersViewModel obj in usersViewModel.UsersList)
                 {
-                    schedlist.Add(obj.Username);
+                    schedlist.Add(new SchedUser(obj.Username, obj.IsProvisioned));
                 }
                 return schedlist;
             }
@@ -326,7 +326,7 @@ namespace MVVM.ViewModel
             }
 
             int i = 0;           
-            foreach (string s in SchedList)
+            foreach (SchedUser su in SchedList)
             {
                 AccountResultsViewModel ar = accountResultsViewModel.AccountResultsList[i];
                 // some fake stuff

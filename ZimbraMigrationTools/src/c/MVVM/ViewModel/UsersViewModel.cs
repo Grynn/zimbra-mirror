@@ -32,6 +32,7 @@ namespace MVVM.ViewModel
             this.scheduleViewModel = scheduleViewModel;
             this.Username = username;
             this.MappedName = mappedname;
+            this.IsProvisioned = false;
         }
 
 
@@ -153,7 +154,7 @@ namespace MVVM.ViewModel
                                 Username = strres[0];
                                 MappedName = strres[1];
                                 UsersList.Add(new UsersViewModel(null, Username, MappedName));
-                                scheduleViewModel.SchedList.Add(Username);
+                                scheduleViewModel.SchedList.Add(new SchedUser(Username, false));
                             }
                             EnableNext = (UsersList.Count > 0);
 
@@ -213,7 +214,7 @@ namespace MVVM.ViewModel
             var name = value as string;
             UsersList.Add(new UsersViewModel(null, "", ""));
             EnableNext = (UsersList.Count > 0);
-            scheduleViewModel.SchedList.Add(name);
+            scheduleViewModel.SchedList.Add(new SchedUser(name, false));
             scheduleViewModel.EnableMigrate = (scheduleViewModel.SchedList.Count > 0);
         }
 
@@ -295,12 +296,14 @@ namespace MVVM.ViewModel
                 string acctName = UsersList[i].MappedName + '@' + ZimbraDomain;
                 if (zimbraAPI.GetAccount(acctName) == 0)
                 {
-                    MessageBox.Show(string.Format("Account {0} exists", acctName), "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Information);
+                    UsersList[i].IsProvisioned = true;
+                    scheduleViewModel.SchedList[i].isProvisioned = true;    // get (SchedList) in schedule view model will set again
                 }
                 else
                 if (zimbraAPI.LastError.IndexOf("no such account") != -1)
                 {
-                    MessageBox.Show(string.Format("Account {0} does not exist", acctName), "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    UsersList[i].IsProvisioned = false;                     // get (SchedList) in schedule view model will set again
+                    scheduleViewModel.SchedList[i].isProvisioned = false;
                 }
                 else
                 {
@@ -429,6 +432,17 @@ namespace MVVM.ViewModel
             {
                 minusEnabled = value;
                 OnPropertyChanged(new PropertyChangedEventArgs("MinusEnabled"));
+            }
+        }
+
+        private bool isProvisioned;
+        public bool IsProvisioned
+        {
+            get { return isProvisioned; }
+            set
+            {
+                isProvisioned = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("IsProvisioned"));
             }
         }
 
