@@ -109,7 +109,7 @@ namespace MVVM.ViewModel
             }
             else
             {
-                proc.StartInfo.Arguments = "/Create /SC ONCE /TN MigIt /TR C:\\depot\\main\\ZimbraMigrationTools\\src\\c\\out\\dbg\\ZimbraMigration.exe /ST 09:49:00" + " /SD " + dtStr;
+                proc.StartInfo.Arguments = "/Create /SC ONCE /TR C:\\depot\\main\\ZimbraMigrationTools\\src\\c\\out\\dbg\\ZimbraMigration.exe" + " /TN " + dtName + " /SD " + dtStr + " /ST " + dtTime;
             }
             proc.Start();
         }
