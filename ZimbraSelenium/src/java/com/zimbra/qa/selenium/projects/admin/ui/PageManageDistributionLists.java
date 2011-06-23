@@ -210,7 +210,7 @@ public class PageManageDistributionLists extends AbsTab {
 				throw new HarnessException("Button " + pulldown + " option " + option + " pulldownLocator " + pulldownLocator + " not present!");
 			}
 
-			this.zClick(pulldownLocator);
+			this.zClickAt(pulldownLocator,"0,0");
 
 			// If the app is busy, wait for it to become active
 			//zWaitForBusyOverlay();
