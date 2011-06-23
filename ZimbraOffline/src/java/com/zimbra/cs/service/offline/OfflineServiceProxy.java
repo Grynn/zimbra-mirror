@@ -90,6 +90,10 @@ public class OfflineServiceProxy extends DocumentHandler {
     public static OfflineServiceProxy AutoCompleteGalRequest() {
         return new OfflineServiceProxy("auto-complete gal", true, true);
     }
+    
+    public static OfflineServiceProxy CheckRecurConflictsRequest() {
+        return new OfflineServiceProxy("check recur conflicts", false, false);
+    }
 }
 
 
