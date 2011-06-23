@@ -23,8 +23,7 @@ namespace MVVM.ViewModel
 
         public ScheduleViewModel()
         {
-            this.SaveTaskCommand = new ActionCommand(this.SaveTask, () => true);
-            this.GetTaskSchedulerCommand = new ActionCommand(this.GetTaskScheduler, () => true);
+            this.ScheduleTaskCommand = new ActionCommand(this.ScheduleTask, () => true);
             this.GetSchedHelpCommand = new ActionCommand(this.GetSchedHelp, () => true);
             this.LoadCommand = new ActionCommand(this.Load, () => true);
             this.SaveCommand = new ActionCommand(this.Save, () => true);
@@ -63,25 +62,16 @@ namespace MVVM.ViewModel
         }
 
         // Commands
-        public ICommand SaveTaskCommand
+
+        public ICommand ScheduleTaskCommand
         {
             get;
             private set;
         }
 
-        private void SaveTask()
+        private void ScheduleTask()
         {
-            MessageBox.Show("Save Task", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-        }
-
-        public ICommand GetTaskSchedulerCommand
-        {
-            get;
-            private set;
-        }
-
-        private void GetTaskScheduler()
-        {
+            /*
             OperatingSystem os = System.Environment.OSVersion;
             Version v = os.Version;
             string strTaskScheduler = Environment.GetEnvironmentVariable("SYSTEMROOT");
@@ -99,6 +89,29 @@ namespace MVVM.ViewModel
                 proc.StartInfo.Arguments = "schedtasks";
                 proc.Start();
             }
+            */
+
+            OperatingSystem os = System.Environment.OSVersion;
+            Version v = os.Version;
+
+            System.Diagnostics.Process proc = new System.Diagnostics.Process();
+            proc.StartInfo.FileName = "c:\\windows\\system32\\schtasks.exe";
+
+            // set up date, time, and name for task scheduler
+            string dtStr = Convert.ToDateTime(this.ScheduleDate).ToString("MM/dd/yyyy");  // formatting in C# is nuts -- only way to get this to work
+            string dtTime = MakeTimeStr();
+            string dtName = "Migrate" + dtTime.Substring(0, 2) + dtTime.Substring(3, 2);
+            //
+
+            if (v.Major >= 6)
+            {
+                proc.StartInfo.Arguments = "/Create /SC ONCE /TR C:\\depot\\main\\ZimbraMigrationTools\\src\\c\\out\\dbg\\ZimbraMigration.exe /F /Z /V1" + " /TN " + dtName + " /SD " + dtStr + " /ST " + dtTime;
+            }
+            else
+            {
+                proc.StartInfo.Arguments = "/Create /SC ONCE /TN MigIt /TR C:\\depot\\main\\ZimbraMigrationTools\\src\\c\\out\\dbg\\ZimbraMigration.exe /ST 09:49:00" + " /SD " + dtStr;
+            }
+            proc.Start();
         }
 
         // Commands
@@ -279,6 +292,99 @@ namespace MVVM.ViewModel
                 m_schedule.EnableMigrate = value;
                 OnPropertyChanged(new PropertyChangedEventArgs("EnableMigrate"));
             }
+        }
+
+        public string ScheduleDate
+        {
+            get { return m_schedule.ScheduleDate.ToShortDateString(); }
+            set
+            {
+                if (value == m_schedule.ScheduleDate.ToShortDateString())
+                {
+                    return;
+                }
+                m_schedule.ScheduleDate = Convert.ToDateTime(value);
+
+                OnPropertyChanged(new PropertyChangedEventArgs("ScheduleDate"));
+            }
+        }
+
+        public int HrSelection
+        {
+            get { return m_schedule.HrSelection; }
+            set
+            {
+                if (value == m_schedule.HrSelection)
+                {
+                    return;
+                }
+                m_schedule.HrSelection = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("HrSelection"));
+            }
+        }
+
+        public int MinSelection
+        {
+            get { return m_schedule.MinSelection; }
+            set
+            {
+                if (value == m_schedule.MinSelection)
+                {
+                    return;
+                }
+                m_schedule.MinSelection = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("MinSelection"));
+            }
+        }
+
+        public int AMPMSelection
+        {
+            get { return m_schedule.AMPMSelection; }
+            set
+            {
+                if (value == m_schedule.AMPMSelection)
+                {
+                    return;
+                }
+                m_schedule.AMPMSelection = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("AMPMSelection"));
+            }
+        }
+
+        private string MakeTimeStr()
+        {
+            string retval = "";
+            bool bAdd12 = (AMPMSelection == 1);
+
+            switch (HrSelection)
+            {
+                case 0:  retval = (bAdd12) ? "13:" : "01:"; break;
+                case 1:  retval = (bAdd12) ? "14:" : "02:"; break;
+                case 2:  retval = (bAdd12) ? "15:" : "03:"; break;
+                case 3:  retval = (bAdd12) ? "16:" : "04:"; break;
+                case 4:  retval = (bAdd12) ? "17:" : "05:"; break;
+                case 5:  retval = (bAdd12) ? "18:" : "06:"; break;
+                case 6:  retval = (bAdd12) ? "19:" : "07:"; break;
+                case 7:  retval = (bAdd12) ? "20:" : "08:"; break;
+                case 8:  retval = (bAdd12) ? "21:" : "09:"; break;
+                case 9:  retval = (bAdd12) ? "22:" : "10:"; break;
+                case 10: retval = (bAdd12) ? "23:" : "11:"; break;
+                case 11: retval = (bAdd12) ? "12:" : "00:"; break;
+                default: retval = "00:";                    break;
+            }
+
+            switch (MinSelection)
+            {
+                case 0:     retval += "00:00"; break;
+                case 1:     retval += "10:00"; break;
+                case 2:     retval += "20:00"; break;
+                case 3:     retval += "30:00"; break;
+                case 4:     retval += "40:00"; break;
+                case 5:     retval += "50:00"; break;
+                default:    retval += "00:00"; break;
+            }
+
+            return retval;
         }
 
         private ObservableCollection<string> coslist = new ObservableCollection<string>();

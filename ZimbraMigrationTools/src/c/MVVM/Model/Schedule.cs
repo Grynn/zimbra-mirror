@@ -26,5 +26,27 @@ namespace MVVM.Model
         {
             get; set;
         }
+
+        public DateTime ScheduleDate
+        {
+            get; set;
+        }
+
+        public int HrSelection
+        {
+            get; set;
+        }
+
+        public int MinSelection
+        {
+            get;
+            set;
+        }
+
+        public int AMPMSelection
+        {
+            get;
+            set;
+        }
     }
 }

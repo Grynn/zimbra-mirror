@@ -187,6 +187,7 @@ namespace MVVM.ViewModel
             m_scheduleViewModel.isBrowser = isBrowser;
             m_scheduleViewModel.COS = "default";
             m_scheduleViewModel.DefaultPWD = "";
+            m_scheduleViewModel.ScheduleDate = DateTime.UtcNow.ToShortDateString();
 
             m_usersViewModel = new UsersViewModel(m_scheduleViewModel,"",""); // needs scheduleviewmodel so schedlist will be in sync
             m_usersViewModel.Name = "Users";
