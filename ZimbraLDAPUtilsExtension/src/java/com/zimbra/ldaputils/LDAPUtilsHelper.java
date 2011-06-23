@@ -402,7 +402,7 @@ abstract class LDAPUtilsHelper {
                     zlc = LdapClient.getContext(LdapUsage.UNITTEST);
                 }
                 
-                ZAttributes attrs = zlc.getAttributes(dn);
+                ZAttributes attrs = zlc.getAttributes(dn, null);
                 LDAPUtilEntry ne = new LDAPUtilEntry(dn, attrs,null);
                 return ne;
                 
