@@ -32,7 +32,7 @@ public class DeleteAccount extends AdminCommonTest {
  * @throws HarnessException
  */
 @Test(	description = "Delete a basic account",
-		groups = { "sanity" })
+		groups = { "smoke" })
 		public void DeleteAccount_01() throws HarnessException {
 
 	// Create a new account in the Admin Console using SOAP
@@ -64,20 +64,13 @@ public class DeleteAccount extends AdminCommonTest {
 	dialog.zClickButton(Button.B_OK);
 	
 		
-	// Enter the search string to find the account
-	app.zPageSearchResults.zAddSearchQuery(account.getEmailAddress());
-	
-	// Click search
-	app.zPageSearchResults.zToolbarPressButton(Button.B_SEARCH);
-	
-	// Get the list of displayed accounts
 	// Verify the account exists in the ZCS
 	ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
 			"<GetAccountRequest xmlns='urn:zimbraAdmin'>"
 			+			"<account by='name'>"+ account.getEmailAddress() +"</account>"
 			+		"</GetAccountRequest>");
 	Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetAccountResponse/admin:account", 1); 
-	ZAssert.assertNull(response, "Verify the account is created successfully");
+	ZAssert.assertNull(response, "Verify the account is deleted successfully");
 
 
 }
