@@ -46,8 +46,12 @@ YMapsZimlet.COUNTRY_NAMES = "(Austria|Belgium|Bulgaria|Croatia|CzechRepublic|Den
  * We further process the matched string to ignore strings w/ few common english words to ignore edge cases where simple 
  * English sentance happen to match the above pattern.
  * Also matches canadian zip codes which is 2, 3-letters alpha-numeric words  for example: "7L7 T2E"
+ * #REGEX DEV NOTES:
+ * IE hangs if we regex backtracks(when there condition appears(starts to match) but at the end actually doesnt(fails).
+ * To avoid backtracking, use lazy and atomic groups.
+ * ?? means lazy(instead of greedy). (?=(2-9words)\1 simulates "Atomic Groups"
  */
-YMapsZimlet.REGEX = "(\\d-?)+,?\\s((\\w?\\.?\\,?\\#?)+\\s){2,9}((\\d{5,7}(-\\d{4,5})?)|(([a-zA-Z]{1,2}\\d{1,2}[a-zA-Z]{1,2}\\s?)|(\\d{1,2}[a-zA-Z]{1,2}\\d{1,2}\\s?))+|"+YMapsZimlet.COUNTRY_NAMES+")";
+YMapsZimlet.REGEX = "\\d+?-??\\d{0,5},??\\s(?=((\\w+\\W+){2,9}))\\1((\\d{5,7}(-\\d{4,5})?)|(([a-zA-Z]{1,2}\\d{1,2}[a-zA-Z]{1,2}\\s?)|(\\d{1,2}[a-zA-Z]{1,2}\\d{1,2}\\s?))+|"+YMapsZimlet.COUNTRY_NAMES+")";
 
 
 /**
