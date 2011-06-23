@@ -465,7 +465,7 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
-	 * DefaultSelenium.mouseOver()
+	 * DefaultSelenium.mouseOut()
 	 */
 	public void sMouseOut(String locator) {
 		ClientSessionFactory.session().selenium().mouseOut(locator);
@@ -977,6 +977,24 @@ public abstract class AbsSeleniumObject {
 		ClientSessionFactory.session().selenium().keyPressNative(code);
 		logger.info("keyPressNative(" + code + ")");
 	}
+
+
+	/**
+	 * DefaultSelenium.keyDownNative()
+	 */
+	public void sKeyDownNative(String code) {
+		ClientSessionFactory.session().selenium().keyDownNative(code);
+		logger.info("keyDownNative(" + code + ")");
+	}
+
+	/**
+	 * DefaultSelenium.keyUpNative()
+	 */
+	public void sKeyUpNative(String code) {
+		ClientSessionFactory.session().selenium().keyUpNative(code);
+		logger.info("keyUpNative(" + code + ")");
+	}
+
 
 	/**
 	 * DefaultSelenium.select

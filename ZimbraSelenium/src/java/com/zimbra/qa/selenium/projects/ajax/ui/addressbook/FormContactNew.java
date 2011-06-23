@@ -1,5 +1,8 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 
+import java.awt.event.KeyEvent;
+
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -151,8 +154,30 @@ public class FormContactNew extends AbsForm {
 		// Make sure the button exists
 		if ( !this.sIsElementPresent(locator) )
 			throw new HarnessException("Field is not present field="+ locator +" locator="+ value);
+			
+		//The following code to simulate paste action from user (Ctrl-V) bug #
+		//Use "Notes" to store text which will be entered into clipboard (Ctrl-X)
+		sType(Locators.zNotesEditField ,value); //
+
+		//highlight text
+		String id= "editcontactform_NOTES_input";
+		ClientSessionFactory.session().selenium().getEval(
+				"this.browserbot.getUserWindow().document.getElementById('"
+				+ id + "')" + ".select()");
 		
-		sType(locator, value);				
+		//cut text and put into clipboard
+		sKeyDownNative(KeyEvent.VK_CONTROL+"");
+		sKeyPressNative(KeyEvent.VK_X+"");				
+		sKeyUpNative(KeyEvent.VK_CONTROL+"");
+
+		//paste text to the target locator
+		sFocus(locator);		
+		sKeyDownNative(KeyEvent.VK_CONTROL+"");
+		sKeyPressNative(KeyEvent.VK_V+"");				
+		sKeyUpNative(KeyEvent.VK_CONTROL+"");
+		
+		
+        
 	}
 	
 	
@@ -172,10 +197,11 @@ public class FormContactNew extends AbsForm {
 		// Fill out the form		
 		if ( contact.firstName != null ) {			
 			zFillField(Locators.zFirstEditField, contact.firstName);
+
 		}
 		
 		if ( contact.lastName != null ) {			
-			zFillField(Locators.zLastEditField, contact.lastName);
+			zFillField(Locators.zLastEditField, contact.lastName);	    
 		}
 		
 		if ( contact.middleName != null ) {			
