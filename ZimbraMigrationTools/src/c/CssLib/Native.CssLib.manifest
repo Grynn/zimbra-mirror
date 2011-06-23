@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2" xmlns="urn:schemas-microsoft-com:asm.v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <assemblyIdentity name="Native.CssLib" version="1.0.0.0" processorArchitecture="x86" type="win32" />
+  <file name="Exchange.dll" asmv2:size="141312">
+    <hash xmlns="urn:schemas-microsoft-com:asm.v2">
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>FSq569awdnyIBOvDQABlWbxTpZY=</dsig:DigestValue>
+    </hash>
+    <typelib tlbid="{33449eaa-8056-4d28-8d42-552b7c6c8954}" version="1.0" helpdir="" resourceid="0" flags="HASDISKIMAGE" />
+    <comClass clsid="{a6a12b55-ae1e-449d-a646-19e0db020ea2}" threadingModel="Apartment" tlbid="{33449eaa-8056-4d28-8d42-552b7c6c8954}" />
+  </file>
+<comInterfaceExternalProxyStub 
+    name="IMapiWrapper" 
+    iid="{C5E4267C-AE6C-4E31-956A-06D8094D0CBE}"
+    proxyStubClsid32="{00020424-0000-0000-C000-000000000046}"
+    baseInterface="{00000000-0000-0000-C000-000000000046}"
+    tlbid = "{33449EAA-8056-4D28-8D42-552B7C6C8954}" />
+
+</assembly>
