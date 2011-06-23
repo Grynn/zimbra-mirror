@@ -15,7 +15,7 @@ import com.zimbra.qa.selenium.projects.admin.items.DistributionListItem;
 public class GetDistributionList extends AdminCommonTest {
 
 	public GetDistributionList() {
-		logger.info("New "+ CreateDistributionList.class.getCanonicalName());
+		logger.info("New "+ GetDistributionList.class.getCanonicalName());
 
 		// All tests start at the "Distribution Lists" page
 		super.startingPage = app.zPageManageDistributionList;
