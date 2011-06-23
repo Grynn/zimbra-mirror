@@ -156,7 +156,7 @@ function(stepNum) {
   	if(this._containedObject.attrs[ZaDomain.A_domainName]==undefined) {
                 this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
         } else {
-                if(this._containedObject.attrs[ZaDomain.A_domainName].length > 0) {
+                if(this._containedObject.attrs[ZaDomain.A_domainName].length > 0 && this.lastErrorStep != stepNum) {
                  this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
                 } else {
                  this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
