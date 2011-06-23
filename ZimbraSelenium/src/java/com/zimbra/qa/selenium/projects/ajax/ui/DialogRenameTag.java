@@ -73,6 +73,9 @@ public class DialogRenameTag extends AbsDialog {
 		
 		zClickAt(locator,"0,0");
 		
+		// If the app is busy, wait for it to become active
+		this.zWaitForBusyOverlay();
+
 		return (null);
 	}
 
