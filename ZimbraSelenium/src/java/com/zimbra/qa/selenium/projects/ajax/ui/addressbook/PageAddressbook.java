@@ -1,5 +1,6 @@
 package  com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 
+import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ import com.zimbra.qa.selenium.framework.util.*;
 
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactGroupNew.*;
+
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
@@ -457,7 +458,6 @@ public class PageAddressbook extends AbsTab {
 
 	   } else if ( pulldown == Button.B_NEW ) {
 		   pulldownLocator = "css=div#zb__CNS__NEW_MENU td#zb__CNS__NEW_MENU_dropdown";
-
 		   if ( option == Button.O_NEW_CONTACT ) {
 
 			    // TODO: Bug 58365 for Desktop
@@ -501,13 +501,15 @@ public class PageAddressbook extends AbsTab {
 				throw new HarnessException("Button "+ pulldown +" option "+ option +" pulldownLocator "+ pulldownLocator +" not present!");
 			}
 
-			if (ClientSessionFactory.session().currentBrowserName().contains("IE")) {
-				//IE			
-				sClickAt(pulldownLocator,"0,0");
+			//central coordinate "x,y" 
+			String center= sGetElementWidth(pulldownLocator)/2 + "," + sGetElementHeight(pulldownLocator)/2;
+			if (ClientSessionFactory.session().currentBrowserName().contains("MSIE")) {
+				//IE							
+				sClickAt(pulldownLocator,center);
 			}
 			else {
 			    //others
-			    zClickAt(pulldownLocator,"0,0");
+			    zClickAt(pulldownLocator,center);
 			}
 			
 			zWaitForBusyOverlay();
@@ -755,6 +757,69 @@ public class PageAddressbook extends AbsTab {
 			page.zWaitForActive();
 		}
 		return (page);
+    
+	}
+	
+	public void zListItem(Action action, Button option ,IItem item, String contact) throws HarnessException {
+		String locator = null;			// If set, this will be clicked
+	
+		String itemLocator = null;
+		String id = null;
+        String contactLocator = getContactLocator(contact);
+        
+		tracer.trace(action +" then "+ option +" then "+ item.toString() +" on contact = "+ contact);
+
+        if ( action == Action.A_RIGHTCLICK ) {
+			ContextMenuItem cmi=null;
+		    
+		    zClick(contactLocator);
+		    
+		    zRightClickAt(contactLocator,"0,0");
+			
+			
+			if (option == Button.B_TAG) {		        
+				cmi=CONTEXT_MENU.CONTACT_TAG;
+													
+				if (item instanceof TagItem) {
+					TagItem ti = (TagItem) item;
+					itemLocator = "css=div#zmi__Contacts__TAG_MENU|MENU td[id$=title]:contains('" + ti.getName() + "')";
+					
+				}																	
+			}
+			else if (option == Button.B_CONTACTGROUP) {
+				if ( item instanceof ContactGroupItem) {
+					ContactGroupItem cgi= (ContactGroupItem) item;
+					cmi= CONTEXT_MENU.CONTACT_GROUP;
+					//itemLocator = "css=div#zmi__Contacts__CONTACTGROUP_MENU|GROUP_MENU td[id$=title]:contains('" + cgi.fileAs + "')";					
+				    itemLocator = "css=td:contains('" + cgi.fileAs + "')";
+				}				
+			}
+			
+			id = cmi.locator;
+			locator = "id="+ id;
+			
+			//  Make sure the context menu exists
+			zWaitForElementPresent(locator) ;
+			
+			// Check if the item is enabled
+			if (sIsElementPresent("css=div[id=" + id + "][class*=ZDisabled]")) {
+				throw new HarnessException("Tried clicking on "+ cmi.text +" but it was disabled ");
+			}
+			
+			// Mouse over the option
+			sFocus(locator);
+			sMouseOver(locator);
+							
+			//  Make sure the sub context menu exists			
+			zWaitForElementPresent(itemLocator) ;
+			
+			// make sure the sub context menu enabled			
+			zWaitForElementEnabled(itemLocator);
+			
+        } 
+		
+        sClickAt(itemLocator,"0,0");		
+        zWaitForBusyOverlay();
     
 	}
 	

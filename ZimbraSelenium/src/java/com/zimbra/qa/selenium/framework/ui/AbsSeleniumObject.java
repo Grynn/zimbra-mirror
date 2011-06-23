@@ -318,6 +318,36 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
+	 * DefaultSelenium.getElementHeight()
+	 * 
+	 * @param locator
+	 */
+	public int sGetElementHeight(String locator) throws HarnessException {
+		try {
+			int n = ClientSessionFactory.session().selenium().getElementHeight(locator).intValue();
+			logger.info("getElementHeight("+ locator +") = "+ n);
+			return (n);
+		} catch (SeleniumException e) {
+			throw new HarnessException(e);
+		}
+	}
+
+	/**
+	 * DefaultSelenium.getElementWidth()
+	 * 
+	 * @param locator
+	 */
+	public int sGetElementWidth(String locator) throws HarnessException {
+		try {
+			int n = ClientSessionFactory.session().selenium().getElementWidth(locator).intValue();
+			logger.info("getElementWidth("+ locator +") = "+ n);
+			return (n);
+		} catch (SeleniumException e) {
+			throw new HarnessException(e);
+		}
+	}
+
+	/**
 	 * DefaultSelenium.getElementPositionLeft()
 	 * 
 	 * @param locator
