@@ -86,7 +86,7 @@
                     <ComboBoxItem Content="AM" />
                     <ComboBoxItem Content="PM" />
                 </ComboBox>
-                <Button Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left"  Margin="55,10,0,0" Name="tsButton" MinWidth="60" Command="{Binding ScheduleTaskCommand}"  >Schedule Task</Button>
+                <Button Grid.Row="3" Grid.Column="0" HorizontalAlignment="Left"  Margin="55,10,0,0" Name="tsButton" MinWidth="60" Command="{Binding ScheduleTaskCommand}" IsEnabled="{Binding ElementName=rbTaskEnable, Path=IsChecked}">Schedule Task</Button>
             </Grid>
         </GroupBox>
         <!--
