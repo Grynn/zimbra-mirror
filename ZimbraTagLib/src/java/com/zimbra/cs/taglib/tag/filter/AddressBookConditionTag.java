@@ -1,13 +1,13 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2007, 2009, 2010 Zimbra, Inc.
- * 
+ * Copyright (C) 2007, 2008, 2009, 2010, 2011 Zimbra, Inc.
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -24,18 +24,29 @@ import javax.servlet.jsp.JspTagException;
 
 public class AddressBookConditionTag extends ZimbraSimpleTag {
 
-    private AddressBookOp mOp;
-    private String mHeader;
+    private AddressBookOp op;
+    private String header;
+    private String type;
 
+    public void setOp(String op) throws ServiceException {
+        this.op = AddressBookOp.fromString(op);
+    }
 
-    public void setHeader(String header) { mHeader = header; }
-    public void setOp(String op) throws ServiceException { mOp = AddressBookOp.fromString(op); }
+    public void setHeader(String header) {
+        this.header = header;
+    }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @Override
     public void doTag() throws JspException {
         FilterRuleTag rule = (FilterRuleTag) findAncestorWithClass(this, FilterRuleTag.class);
-        if (rule == null)
-                throw new JspTagException("The addressBookCondition tag must be used within a filterRule tag");
-        rule.addCondition(new ZAddressBookCondition(mOp, mHeader));
+        if (rule == null) {
+            throw new JspTagException("The addressBookCondition tag must be used within a filterRule tag");
+        }
+        rule.addCondition(new ZAddressBookCondition(op, header, type));
     }
 
 }
