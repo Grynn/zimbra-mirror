@@ -660,19 +660,19 @@ public class BeanUtils {
         if (id == null) return null;
         ZFolder f = mbox.getFolderById(id);
         if (f == null) {
-            ZGetInfoResult acctInfo = mbox.getAccountInfo(false);
-            String acctId = acctInfo.getId();
-            ItemId itemId = new ItemId(id, acctId);
-            if (!itemId.belongsTo(acctId)) {
-                try {
+            try {
+                ZGetInfoResult acctInfo = mbox.getAccountInfo(false);
+                String acctId = acctInfo.getId();
+                ItemId itemId = new ItemId(id, acctId);
+                if (!itemId.belongsTo(acctId)) {
                     mbox = ZJspSession.getRestMailbox(pc, ZJspSession.getAuthToken(pc), itemId.getAccountId());
                     if (mbox != null) {
                         f = mbox.getFolderById(id);
                     }
-                } catch (ServiceException se) {
-                    //it's for some other acct, not a child we have permission for
-                    f = null;
                 }
+            } catch (ServiceException se) {
+                //it's for some other acct, not a child we have permission for
+                f = null;
             }
         }        
         return f == null ? null : new ZFolderBean(f);
