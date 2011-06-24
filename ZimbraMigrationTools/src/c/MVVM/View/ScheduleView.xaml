@@ -103,9 +103,9 @@
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,0,0,0" HorizontalAlignment="Left" Name="textInitialPW" Text="Initial password for unprovisioned users" VerticalAlignment="Center"/>
-                <PasswordBox Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" HorizontalAlignment="Right" MinWidth="122" Name="ipwBox" />
+                <PasswordBox Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" HorizontalAlignment="Right" MinWidth="122" Name="ipwBox" PasswordChanged="pb_DefPasswordChanged"/>
                 <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,10,0,0" HorizontalAlignment="Left" Name="textSelectCOS" Text="Select the Class of Service" VerticalAlignment="Center"/>
-                <ComboBox Grid.Row="1" Grid.Column="1" Margin="10,5,0,0" HorizontalAlignment="Right" MaxHeight="{Binding ElementName=ipwBox, Path=ActualHeight}" MinWidth="{Binding ElementName=ipwBox, Path=ActualWidth}" Name="cbCOS" SelectedIndex="0" ItemsSource="{Binding Path=CosList}" >
+                <ComboBox Grid.Row="1" Grid.Column="1" Margin="10,5,0,0" HorizontalAlignment="Right" MaxHeight="{Binding ElementName=ipwBox, Path=ActualHeight}" MinWidth="{Binding ElementName=ipwBox, Path=ActualWidth}" Name="cbCOS" SelectedIndex="{Binding Path=CurrentCOSSelection, Mode=TwoWay}" ItemsSource="{Binding Path=CosList}" DisplayMemberPath="CosName" >
                 </ComboBox>
             </Grid>
         </GroupBox>

@@ -16,7 +16,7 @@ namespace CssLib
             sAccountName = "";
             sServerVersion = "";
             lDomains = new List<string>();
-            lCOSes = new List<string>();
+            lCOSes = new List<CosInfo>();
         }
 
         public static ZimbraValues GetZimbraValues()
@@ -98,8 +98,8 @@ namespace CssLib
             }
         }
 
-        private List<string> lCOSes;
-        public List<string> COSes
+        private List<CosInfo> lCOSes;
+        public List<CosInfo> COSes
         {
             get { return lCOSes; }
             set

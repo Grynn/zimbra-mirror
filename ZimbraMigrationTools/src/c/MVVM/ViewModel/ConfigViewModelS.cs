@@ -187,9 +187,9 @@ namespace MVVM.ViewModel
                         usersViewModel.DomainList.Add(s);
                     }
                     zimbraAPI.GetAllCos();
-                    foreach (string s in ZimbraValues.GetZimbraValues().COSes)
+                    foreach (CosInfo cosinfo in ZimbraValues.GetZimbraValues().COSes)
                     {
-                        scheduleViewModel.CosList.Add(s);
+                        scheduleViewModel.CosList.Add(new CosInfo(cosinfo.CosName, cosinfo.CosID));
                     }
                     lb.SelectedIndex = 1;
                 }

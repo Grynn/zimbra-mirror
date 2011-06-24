@@ -304,12 +304,22 @@ namespace CssLib
                     {
                         foreach (XElement cosIns in objIns.Elements())
                         {
+                            string name = "";
+                            string id = "";
                             foreach (XAttribute cosAttr in cosIns.Attributes())
                             {
                                 if (cosAttr.Name == "name")
                                 {
-                                    ZimbraValues.GetZimbraValues().COSes.Add(cosAttr.Value);
+                                    name = cosAttr.Value;
                                 }
+                                if (cosAttr.Name == "id")
+                                {
+                                    id = cosAttr.Value;
+                                }
+                            }
+                            if ((name.Length > 0) || (id.Length > 0))
+                            {
+                                ZimbraValues.GetZimbraValues().COSes.Add(new CosInfo(name, id));
                             }
                         }
                     }

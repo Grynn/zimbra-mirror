@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using MVVM.Model;
+using CssLib;
 using Misc;
 
 namespace MVVM.ViewModel
@@ -189,6 +190,11 @@ namespace MVVM.ViewModel
 
         public void Migrate()
         {
+            if (CurrentCOSSelection == -1)
+            {
+                CurrentCOSSelection = 0;
+            }
+
             lb.SelectedIndex = (isServer) ? 4 : 2;
             accountResultsViewModel.AccountResultsList.Clear();
             EnableMigrate = false;
@@ -294,6 +300,19 @@ namespace MVVM.ViewModel
             }
         }
 
+        private int cosSelection;
+        public int CurrentCOSSelection
+        {
+            get { return cosSelection; }
+            set
+            {
+
+                cosSelection = value;
+
+                OnPropertyChanged(new PropertyChangedEventArgs("CurrentCOSSelection"));
+            }
+        }
+
         public string ScheduleDate
         {
             get { return m_schedule.ScheduleDate.ToShortDateString(); }
@@ -387,8 +406,8 @@ namespace MVVM.ViewModel
             return retval;
         }
 
-        private ObservableCollection<string> coslist = new ObservableCollection<string>();
-        public ObservableCollection<string> CosList
+        private ObservableCollection<CosInfo> coslist = new ObservableCollection<CosInfo>();
+        public ObservableCollection<CosInfo> CosList
         {
             get { return coslist; }
             set { coslist = value; }
