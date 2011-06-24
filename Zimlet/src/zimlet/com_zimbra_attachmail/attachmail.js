@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Zimlets
- * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2009, 2010, 2011 Zimbra, Inc.
  * 
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -129,7 +129,6 @@ AttachMailTabView.prototype.toString = function() {
  */
 AttachMailTabView.prototype.showMe =
 function() {
-
 	DwtTabViewPage.prototype.showMe.call(this);
 	var acct = appCtxt.multiAccounts ? appCtxt.getAppViewMgr().getCurrentView().getFromAccount() : appCtxt.getActiveAccount();
 	if (this.prevAccount && (acct.id == this.prevAccount.id)) {
@@ -470,9 +469,6 @@ function() {
 	var callback = new AjxCallback(this, this._showTreeView);
 	AjxPackage.undefine("zimbraMail.mail.controller.ZmMailFolderTreeController");
 	AjxPackage.require({name:"MailCore", forceReload:true, callback:callback});
-
-
-
 };
 
 AttachMailTabView.prototype._showTreeView =
@@ -495,10 +491,9 @@ function() {
 	this._setOverview(params);
 	this.setSize(Dwt.DEFAULT, "255");
 	this._currentQuery = this._getQueryFromFolder("2");
-	this.treeView.setSelected("2");
-	this._treeListener(null, true);
+	//this.treeView.setSelected("2");
+	setTimeout(AjxCallback.simpleClosure(this.treeView.setSelected, this.treeView, 2), 100);
 };
-
 
 
 AttachMailTabView.prototype._setOverview =
@@ -517,7 +512,6 @@ function(params) {
 		overview =  opc.createOverview(ovParams);
 		overview.account = this.prevAccount;    //need to set account here before set overview so that account switch from selection list will be used to get tree data.
 		overview.set(params.treeIds);
-
 	} else if (params.account) {
 		overview.account = params.account;
 	}
@@ -634,62 +628,40 @@ function(base, item, params) {
 
 ZmAttachMailListView.prototype._getCellContents =
 function(htmlArr, idx, item, field, colIdx, params) {
-	var fragment = " - " + item.fragment;
-	var untrunced = fragment;
-	if (fragment) {
-		if (fragment.length > 100) {
-			fragment = fragment.substring(0, 96);
-		}
-		var width = this.getHtmlElement().clientWidth - 25;
-		if (!isNaN(width))
-			fragment = AjxStringUtil.clip(fragment, width);
-		if (fragment != untrunced && !fragment.match(new RegExp(".+"+AjxStringUtil.ELLIPSIS+"$"))) {
-			fragment += AjxStringUtil.ELLIPSIS;
-		}
+	var fragment = item.fragment ? AjxStringUtil.htmlEncode(item.fragment.slice(0, 80)) : "";
 
-		fragment = AjxStringUtil.htmlEncode(fragment, true);
+	var from = item.getAddress("FROM");
+	if (from.name != "") {
+		from = from.name;
 	} else {
-		fragment = "";
-	}
-
-	var from = "";
-	if (item.getAddress("FROM").name != "") {
-		from = item.getAddress("FROM").name;
-	} else {
-		from = item.getAddress("FROM").address;
+		from = from.address;
 	}
 	var attachCell = "";
+	var cols = 2;
 	if (item.hasAttach){
 		attachCell = "<td width='16px'><div class='ImgAttachment'/></td>";
+		cols = 3;
 	}
-
-	var cols = attachCell ? 3 : 2;
-	htmlArr[idx++] = "<div style=\"height:70px;border-style:solid;border-width:1px 0;cursor:pointer;border-color:#E0E0E0;\">";
+	htmlArr[idx++] = "<div class='AttachMailRowDiv'>";
 	htmlArr[idx++] = "<table width=100%>"; 
 	
-	var subject = item.subject;
-	if (subject == undefined)
-		subject = "<no subject>";
-	else  if (subject.length > 35) {
-		subject = subject.substring(0, 32) + "...";
-	}
+	var subject = item.subject ? AjxStringUtil.htmlEncode(item.subject.slice(0, 32)) : "<no subject>";
 	htmlArr[idx++] = "<tr>";
 	htmlArr[idx++] = attachCell;
-	htmlArr[idx++] = "<td align=left><span style=\"font-weight:bold;\"> " + AjxStringUtil.htmlEncode(subject) + "</span></td>";
+	htmlArr[idx++] = "<td align=left><span class='AttachMailSubject'> " + subject + "</span></td>";
 
 	htmlArr[idx++] = "<td align=right>";
 	htmlArr[idx++] = AjxDateUtil.computeDateStr(params.now || new Date(), item.date);
 	htmlArr[idx++] = "</td></tr>";
 
-	htmlArr[idx++] = "<tr><td align=left colspan="+cols+"><span style=\"font-weight:bold;font-size:14px;\"> ";
+	htmlArr[idx++] = "<tr><td align=left colspan="+cols+"><span class='AttachMailFrom'> ";
 	htmlArr[idx++] = from;
 	htmlArr[idx++] = "</span></td></tr>";
 	
 	if (fragment != "") {
-		htmlArr[idx++] = "<tr><td align=left colspan="+cols+"><span style=\"color:gray;overflow:hidden\">" + fragment + "</span></td></tr>";
+		htmlArr[idx++] = "<tr><td align=left colspan="+cols+"><span class='AttachMailFrag'>" + fragment + "</span></td></tr>";
 	}
 	htmlArr[idx++] = "</table></div>";
 	
 	return idx;
 };
-

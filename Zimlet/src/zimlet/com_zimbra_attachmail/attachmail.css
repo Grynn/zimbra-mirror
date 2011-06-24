@@ -8,3 +8,19 @@
 .AttachMailTabBox {
 	background-color:#FDFCFA;
 }
+
+.AttachMailRowDiv {
+height:70px;border-style:solid;border-width:1px 0;cursor:pointer;border-color:#E0E0E0;
+}
+
+.AttachMailSubject {
+font-weight:bold;font-size:13px;color:#2B2A2B;
+}
+.AttachMailFrom {
+    font-weight:bold;font-size:11px;color:#2B2A2B;
+}
+
+.AttachMailFrag {
+overflow:hidden;
+    color:gray;
+}
