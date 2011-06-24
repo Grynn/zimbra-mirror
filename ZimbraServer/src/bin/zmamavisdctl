@@ -50,7 +50,7 @@ checkrunning() {
   #  If no PID file or PID file is empty, then get PID from scanning the proc table.
   if [ "x$PID" = "x" ]; then
     # PID file is NULL.  Get info from proc table.
-    PID=`/bin/ps axo uname,pid,ppid,command | awk '{ if (($4 ~ /^amavisd$/) && ($5 ~ /^\(master\)$/)) { print $2 } }'`
+    PID=`/bin/ps axo user,pid,ppid,command | awk '{ if ((($4 ~ /^amavisd$/) || ($4 ~ /^\/opt\/zimbra\/amavisd\/sbin\/amavisd$/)) && ($5 ~ /^\(master\)$/)) { print $2 } }'`
   fi
   # If PID is still not set, then we cannot find any amavisd (master) process.  Assume amavisd is not running.
   if [ "x$PID" = "x" ]; then
@@ -60,11 +60,11 @@ checkrunning() {
 
   # If we get to this point the PID was defined in the PID file.  But we're not sure we trust it's validity
   # so we're going the verify it from /bin/ps output!
-  PID=`/bin/ps axo uname,pid,ppid,command | awk '{ if (($2 == '$PID') && ($4 ~ /^amavisd$/) && ($5 ~ /^\(master\)$/)) { print $2 } }'`
+  PID=`/bin/ps axo user,pid,ppid,command | awk '{ if (($2 == '$PID') && (($4 ~ /^amavisd$/) || ($4 ~ /^\/opt\/zimbra\/amavisd\/sbin\/amavisd$/)) && ($5 ~ /^\(master\)$/)) { print $2 } }'`
   # If PID is NULL now, then the PID stored in the PID file was bogus!
   # Let's try to find the true amavisd (master) process ID
   if [ "x$PID" = "x" ]; then
-    PID=`/bin/ps axo uname,pid,ppid,command | awk '{ if (($4 ~ /^amavisd$/) && ($5 ~ /^\(master\)$/)) { print $2 } }'`
+    PID=`/bin/ps axo user,pid,ppid,command | awk '{ if ((($4 ~ /^amavisd$/) || ($4 ~ /^\/opt\/zimbra\/amavisd\/sbin\/amavisd$/)) && ($5 ~ /^\(master\)$/)) { print $2 } }'`
   fi
   # If the PID is still NULL now, it really must not be running.
   if [ "x$PID" = "x" ]; then
