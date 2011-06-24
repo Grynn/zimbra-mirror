@@ -399,11 +399,11 @@ public class TreeMail extends AbsTree {
 		AbsPage page = null;
 		String locator = null;
 
-		// TODO: implement me!
+		if ( action != Action.A_LEFTCLICK ) 
+			throw new HarnessException("No implementation for Action = "+ action);
 
-		if ( locator == null )
-		   locator = new StringBuffer("css=td[id^='zti__main_Mail__").
-         append(savedSearch.getId()).append("_textCell']").toString();
+		// TODO: implement me!
+		locator = "css=td#zti__main_Mail__"+ savedSearch.getId() + "_textCell";
 
 		// Default behavior.  Click the locator
 		zClick(locator);

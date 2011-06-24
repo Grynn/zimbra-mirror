@@ -107,7 +107,7 @@ public class PageSearch extends AbsTab {
 		
 		if ( button == Button.B_SEARCH ) {
 			
-			locator = "zb__Search__SEARCH_title";
+			locator = "css=div#zb__Search__SEARCH_left_icon";
 			page = null;
 			
 			// Make sure the button exists
