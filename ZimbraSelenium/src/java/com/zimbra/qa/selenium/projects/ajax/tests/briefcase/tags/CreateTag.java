@@ -171,7 +171,7 @@ public class CreateTag extends AjaxCommonTest {
 		
 		// Create a new tag in the Briefcase using the New pull down menu + Tag
 		DialogTag dialog = (DialogTag) app.zPageBriefcase
-				.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_TAG);
+				.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_TAG, null);
 		
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
 

@@ -7,7 +7,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.MailItem;
-import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
@@ -24,8 +23,8 @@ public class OpenLinkToMessage extends AjaxCommonTest {
 	public OpenLinkToMessage() {
 		logger.info("New " + OpenLinkToMessage.class.getCanonicalName());
 
-		// test starts in the Mail tab
-		super.startingPage = app.zPageMail;
+		// test starts in the Briefcase tab
+		super.startingPage = app.zPageBriefcase;
 
 		// use an account with message view
 		super.startingAccountPreferences = new HashMap<String, String>() {
@@ -53,10 +52,13 @@ public class OpenLinkToMessage extends AjaxCommonTest {
 								+ "</content>" + "</mp>" + "</m>"
 								+ "</SendMsgRequest>");
 
+		// Temporary workaround
+		// Click on Mail tab 
+		app.zPageMain.zClickAt("id=zb__App__Mail_title", "0,0");
 		// Click Get Mail button to view folder in list
-		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		// app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
-		SleepUtil.sleepSmall();
+		SleepUtil.sleepMedium();
 
 		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(),
 				"subject:(" + subject + ")");

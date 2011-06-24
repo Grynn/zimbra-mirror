@@ -66,7 +66,7 @@ public class SendDocAttachment extends AjaxCommonTest {
 		// Click on Send as attachment
 		FormMailNew mailform = (FormMailNew) app.zPageBriefcase
 				.zToolbarPressPulldown(Button.B_SEND,
-						Button.O_SEND_AS_ATTACHMENT);
+						Button.O_SEND_AS_ATTACHMENT, docItem);
 
 		// Verify the new mail form is opened
 		ZAssert.assertTrue(mailform.zIsVisible(), "Verify the new form opened");

@@ -284,7 +284,7 @@ public class PageBriefcase extends AbsTab {
 				throw new HarnessException(button + " is disabled " + attrs);
 			}
 
-			page = new DocumentBriefcaseOpen(this.MyApplication);
+			page = new FileBriefcaseOpen(this.MyApplication);
 		} else if (button == Button.B_MOVE) {
 			// Check if the button is disabled
 			locator = Locators.zMoveIconBtn.locator;
@@ -331,9 +331,8 @@ public class PageBriefcase extends AbsTab {
 		return (page);
 	}
 
-	@Override
-	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
-			throws HarnessException {
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option,
+			IItem item) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("
 				+ pulldown + ", " + option + ")");
 
@@ -423,6 +422,35 @@ public class PageBriefcase extends AbsTab {
 			} else if (option == Button.O_SEND_LINK) {
 
 				pulldownLocator = "css=td[id$='__SEND_FILE_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+
+				optionLocator = "css=td[id$='_title']:contains('Send link')";
+
+				page = new DialogConfirm(DialogConfirm.Confirmation.SENDLINK,
+						this.MyApplication, this);
+
+				// FALL THROUGH
+			} else {
+				throw new HarnessException(
+						"no logic defined for pulldown/option " + pulldown
+								+ "/" + option);
+			}
+		} else if (pulldown == Button.B_ACTIONS) {
+
+			pulldownLocator = "css=td[id=zb__BDLV__ACTIONS_MENU_dropdown]>div[class='ImgSelectPullDownArrow']";
+
+			if (option == Button.B_LAUNCH_IN_SEPARATE_WINDOW) {
+
+				optionLocator = "css=td[id=zmi__BDLV__NEW_BRIEFCASE_WIN_title]:contains('Launch in a separate window')";
+
+				page = new FileBriefcaseOpen(this.MyApplication, item);
+			}else if (option == Button.O_SEND_AS_ATTACHMENT) {
+
+				optionLocator = "css=td[id$='_title']:contains('Send as attachment')";
+
+				page = new FormMailNew(this.MyApplication);
+
+				// FALL THROUGH
+			} else if (option == Button.O_SEND_LINK) {
 
 				optionLocator = "css=td[id$='_title']:contains('Send link')";
 
@@ -678,7 +706,12 @@ public class PageBriefcase extends AbsTab {
 			zWaitForElementPresent(itemNameLocator);
 
 			// Left-Click on the item
-			this.zClickAt(itemNameLocator, "0,0");
+			// temporary workaround for FOSS
+			if (ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+					"FOSS"))
+				zListItem(Action.A_BRIEFCASE_CHECKBOX, item);
+			else
+				this.zClickAt(itemNameLocator, "0,0");
 
 			// page = new DocumentPreview(MyApplication);
 
@@ -1312,5 +1345,12 @@ public class PageBriefcase extends AbsTab {
 			String item) throws HarnessException {
 		throw new HarnessException("implement me! : action=" + action
 				+ " subOption=" + subOption + "item=" + item);
+	}
+
+	@Override
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
+			throws HarnessException {
+		throw new HarnessException("implement me! : pulldown=" + pulldown
+				+ " option=" + option);
 	}
 }

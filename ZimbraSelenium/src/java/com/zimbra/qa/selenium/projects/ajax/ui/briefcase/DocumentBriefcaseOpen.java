@@ -21,19 +21,19 @@ public class DocumentBriefcaseOpen extends AbsDisplay {
 		public static final String zDocumentNameField = "css=[class=TbTop] b";
 	}
 
-	public String pageTitle;
-	public String pageText;
+	public String pageTitle ;
+	public String pageText ;
 
 	public DocumentBriefcaseOpen(AbsApplication application) {
 		super(application);
 		logger.info("new " + DocumentBriefcaseOpen.class.getCanonicalName());
 	}
 	
-	public DocumentBriefcaseOpen(AbsApplication application, DocumentItem document) {
+	public DocumentBriefcaseOpen(AbsApplication application, IItem item) {
 		super(application);
-		pageTitle = document.getName();
+		pageTitle = item.getName();
 		
-		pageText = document.getDocText();
+		pageText = ((DocumentItem) item).getDocText();
 		
 		logger.info("new " + DocumentBriefcaseOpen.class.getCanonicalName());
 	}

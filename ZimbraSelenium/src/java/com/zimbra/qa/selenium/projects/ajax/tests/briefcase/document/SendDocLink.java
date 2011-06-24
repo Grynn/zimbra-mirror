@@ -76,7 +76,7 @@ public class SendDocLink extends AjaxCommonTest {
 
 		// Click on Send Link
 		DialogConfirm confDlg = (DialogConfirm) app.zPageBriefcase
-				.zToolbarPressPulldown(Button.B_SEND, Button.O_SEND_LINK);
+				.zToolbarPressPulldown(Button.B_SEND, Button.O_SEND_LINK, docItem);
 
 		// Click Yes on confirmation dialog
 		FormMailNew mailform = (FormMailNew) confDlg.zClickButton(Button.B_YES);

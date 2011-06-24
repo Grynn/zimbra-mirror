@@ -39,6 +39,7 @@ public class Button {
 	public static final Button B_RENAME = new Button("B_RENAME");
 	public static final Button B_SHARE = new Button("B_SHARE");
 	public static final Button B_CLOSE = new Button("B_CLOSE");
+	public static final Button B_ACTIONS = new Button("B_ACTIONS");
 	
 	public static final Button O_NEW_MESSAGE = new Button("O_NEW_MESSAGE");
 	public static final Button O_NEW_CONTACT = new Button("O_NEW_CONTACT");
@@ -138,6 +139,7 @@ public class Button {
 	public static final Button B_UPLOAD_FILE = new Button("B_UPLOAD_FILE");
 	public static final Button B_EDIT_FILE = new Button("B_EDIT_FILE");
 	public static final Button B_OPEN_IN_SEPARATE_WINDOW = new Button("B_OPEN_IN_SEPARATE_WINDOW");
+	public static final Button B_LAUNCH_IN_SEPARATE_WINDOW = new Button("B_LAUNCH_IN_SEPARATE_WINDOW");
 	public static final Button O_SEND_AS_ATTACHMENT = new Button("O_SEND_AS_ATTACHMENT");
 	public static final Button O_SEND_LINK = new Button("O_SEND_LINK");
 	public static final Button O_EDIT = new Button("O_EDIT");

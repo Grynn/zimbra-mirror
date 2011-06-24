@@ -62,7 +62,6 @@ public class DeleteFile extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Click on Delete document icon in toolbar

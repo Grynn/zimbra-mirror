@@ -52,14 +52,18 @@ public class SendFileAttachment extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		SleepUtil.sleepVerySmall();
-		
+
 		// Click on uploaded file
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Click on Send as attachment
-		FormMailNew mailform = (FormMailNew) app.zPageBriefcase
-				.zToolbarPressPulldown(Button.B_SEND,
-						Button.O_SEND_AS_ATTACHMENT);
+		FormMailNew mailform;
+		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains("7.1."))
+			mailform = (FormMailNew) app.zPageBriefcase.zToolbarPressPulldown(
+					Button.B_SEND, Button.O_SEND_AS_ATTACHMENT, fileItem);
+		else
+			mailform = (FormMailNew) app.zPageBriefcase.zToolbarPressPulldown(
+					Button.B_ACTIONS, Button.O_SEND_AS_ATTACHMENT, fileItem);
 
 		// Verify the new mail form is opened
 		ZAssert.assertTrue(mailform.zIsVisible(), "Verify the new form opened");
@@ -107,13 +111,13 @@ public class SendFileAttachment extends AjaxCommonTest {
 				+ "<doc l='" + briefcaseFolder.getId() + "'><upload id='"
 				+ attachmentId + "'/></doc></SaveDocumentRequest>");
 
-		//SleepUtil.sleepVerySmall();
-		
+		// SleepUtil.sleepVerySmall();
+
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		SleepUtil.sleepVerySmall();
-		
+
 		// Click on uploaded file
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
@@ -123,7 +127,7 @@ public class SendFileAttachment extends AjaxCommonTest {
 
 		// Verify the new mail form is opened
 		ZAssert.assertTrue(mailform.zIsVisible(), "Verify the new form opened");
-		
+
 		ZAssert.assertTrue(app.zPageBriefcase
 				.zWaitForElementPresent(FormMailNew.Locators.zAttachmentText
 						+ fileName + ")"), "Verify the attachment text");

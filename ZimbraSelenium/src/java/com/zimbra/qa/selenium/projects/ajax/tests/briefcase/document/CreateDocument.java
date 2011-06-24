@@ -127,7 +127,7 @@ public class CreateDocument extends AjaxCommonTest {
 
 		// Create a new document using New pull down menu
 		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
-				.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_DOCUMENT);
+				.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_DOCUMENT, document);
 
 		try {
 			app.zPageBriefcase.zSelectWindow(DocumentBriefcaseNew.pageTitle);

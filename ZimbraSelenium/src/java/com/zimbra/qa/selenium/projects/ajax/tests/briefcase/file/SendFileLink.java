@@ -65,8 +65,13 @@ public class SendFileLink extends AjaxCommonTest {
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Click on Send Link
-		DialogConfirm confDlg = (DialogConfirm) app.zPageBriefcase
-				.zToolbarPressPulldown(Button.B_SEND, Button.O_SEND_LINK);
+		DialogConfirm confDlg;
+		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains("7.1."))
+			confDlg = (DialogConfirm) app.zPageBriefcase
+			.zToolbarPressPulldown(Button.B_SEND, Button.O_SEND_LINK, fileItem);
+		else
+			confDlg = (DialogConfirm) app.zPageBriefcase.zToolbarPressPulldown(
+					Button.B_ACTIONS, Button.O_SEND_LINK, fileItem);
 
 		// Click Yes on confirmation dialog
 		FormMailNew mailform = (FormMailNew) confDlg.zClickButton(Button.B_YES);

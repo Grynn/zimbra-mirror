@@ -91,7 +91,7 @@ public class UnTagFile extends AjaxCommonTest {
 
 		// Click on New Tag
 		DialogTag dialogTag = (DialogTag) app.zPageBriefcase
-				.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_NEWTAG);
+				.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_NEWTAG, null);
 
 		dialogTag.zSetTagName(tagName);
 		dialogTag.zClickButton(Button.B_OK);
@@ -129,7 +129,7 @@ public class UnTagFile extends AjaxCommonTest {
 
 		// Click Remove Tag
 		app.zPageBriefcase.zToolbarPressPulldown(Button.B_TAG,
-				Button.O_TAG_REMOVETAG);
+				Button.O_TAG_REMOVETAG, null);
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 

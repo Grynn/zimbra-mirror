@@ -9,14 +9,13 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DocumentBriefcaseOpen;
+import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.FileBriefcaseOpen;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase;
 
 public class OpenFile extends AjaxCommonTest {
@@ -58,14 +57,22 @@ public class OpenFile extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		SleepUtil.sleepVerySmall();
-		
+
 		// Click on created file
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
 		// Click on open in a separate window icon in toolbar
-		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW, fileItem);
+	
+		FileBriefcaseOpen file;
+		
+		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains("7.1."))
+			file = (FileBriefcaseOpen) app.zPageBriefcase
+					.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW,
+							fileItem);
+		else
+			file = (FileBriefcaseOpen) app.zPageBriefcase
+					.zToolbarPressPulldown(Button.B_ACTIONS,
+							Button.B_LAUNCH_IN_SEPARATE_WINDOW,fileItem);
 
 		app.zPageBriefcase.isOpenFileLoaded(fileName, fileText);
 
@@ -75,7 +82,7 @@ public class OpenFile extends AjaxCommonTest {
 		try {
 			app.zPageBriefcase.zSelectWindow(fileName);
 
-			text = documentBriefcaseOpen.retriveFileText();
+			text = file.retriveFileText();
 
 			// close
 			app.zPageBriefcase.zSelectWindow(fileName);
@@ -91,6 +98,7 @@ public class OpenFile extends AjaxCommonTest {
 		// delete file upon test completion
 		app.zPageBriefcase.deleteFileByName(fileItem.getName());
 	}
+
 	@AfterMethod(groups = { "always" })
 	public void afterMethod() throws HarnessException {
 		logger.info("Checking for the opened window ...");
@@ -99,7 +107,8 @@ public class OpenFile extends AjaxCommonTest {
 		String[] windows = ClientSessionFactory.session().selenium()
 				.getAllWindowNames();
 		for (String window : windows) {
-			if (!window.isEmpty() && !window.contains("null") && !window.contains(PageBriefcase.pageTitle)
+			if (!window.isEmpty() && !window.contains("null")
+					&& !window.contains(PageBriefcase.pageTitle)
 					&& !window.contains("main_app_window")
 					&& !window.contains("undefined")) {
 				logger.warn(window + " window was still active. Closing ...");
