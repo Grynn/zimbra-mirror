@@ -17,10 +17,12 @@ namespace CssLib
         internal const int ZIMBRA_API_GETDOMAIN = 5;
         internal const int ZIMBRA_API_GETALLCOS = 6;
         internal const int ZIMBRA_API_GETACCOUNT = 7;
+        internal const int ZIMBRA_API_CREATEACCOUNT = 8;
         //
 
         // Errors
-        internal const int ACCOUNT_NO_NAME = 99;
+        internal const int ACCOUNT_NO_NAME       = 98;
+        internal const int ACCOUNT_CREATE_FAILED = 99;
         //
 
         private string _soapEnvelope =
@@ -109,12 +111,6 @@ namespace CssLib
                     break;
 
                 case ZimbraAPI.ZIMBRA_API_GETALLDOMAIN:
-                    hdr = "<context xmlns=\"urn:zimbra\"><nonotify/><noqualify/><nosession/><sessionId></sessionId><authToken>";
-                    hdr += ZimbraValues.GetZimbraValues().AuthToken;   // set by ParseLogon
-                    hdr += "</authToken></context>";
-                    MethodCall = "<" + this.WebMethod + @" xmlns=""urn:zimbraAdmin""/>";
-                    break;
-
                 case ZimbraAPI.ZIMBRA_API_GETALLCOS:
                     hdr = "<context xmlns=\"urn:zimbra\"><nonotify/><noqualify/><nosession/><sessionId></sessionId><authToken>";
                     hdr += ZimbraValues.GetZimbraValues().AuthToken;   // set by ParseLogon
@@ -123,6 +119,7 @@ namespace CssLib
                     break;
 
                 case ZimbraAPI.ZIMBRA_API_GETACCOUNT:
+                case ZimbraAPI.ZIMBRA_API_CREATEACCOUNT:
                     hdr = "<context xmlns=\"urn:zimbra\"><nonotify/><noqualify/><nosession/><sessionId></sessionId><authToken>";
                     hdr += ZimbraValues.GetZimbraValues().AuthToken;   // set by ParseLogon
                     hdr += "</authToken></context>";
@@ -247,6 +244,35 @@ namespace CssLib
                     XDocument xmlDoc = XDocument.Parse(rsp);
                     XNamespace ns = "urn:zimbraAdmin";
                     foreach (var objIns in xmlDoc.Descendants(ns + "GetAccountResponse"))
+                    {
+                        foreach (XElement accountIns in objIns.Elements())
+                        {
+                            foreach (XAttribute accountAttr in accountIns.Attributes())
+                            {
+                                if (accountAttr.Name == "name")
+                                {
+                                    retval = (accountAttr.Value).Length;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return retval;
+        }
+
+        private int ParseCreateAccount(string rsp)
+        {
+            int retval = 0;
+            if (rsp != null)
+            {
+                int dIdx = rsp.IndexOf("account id=");
+                if (dIdx != -1)
+                {
+                    XDocument xmlDoc = XDocument.Parse(rsp);
+                    XNamespace ns = "urn:zimbraAdmin";
+                    foreach (var objIns in xmlDoc.Descendants(ns + "CreateAccountResponse"))
                     {
                         foreach (XElement accountIns in objIns.Elements())
                         {
@@ -495,6 +521,51 @@ namespace CssLib
                 if (ParseGetAccount(rsp) == 0)  // length of name is 0 -- this is bad
                 {
                     retval =  ACCOUNT_NO_NAME;
+                }
+            }
+            else
+            {
+                string soapReason = ParseSoapFault(client.errResponseMessage);
+                if (soapReason.Length > 0)
+                {
+                    lastError = soapReason;
+                }
+                else
+                {
+                    lastError = client.exceptionMessage;
+                }
+            }
+            return retval;
+        }
+
+        public int CreateAccount(string accountname, string defaultpw, string cosid)
+        {
+            int retval = 0;
+            lastError = "";
+            string req = "";
+            string rsp = "";
+            string displayname = accountname.Substring(0, accountname.IndexOf("@"));
+            string zimbraForeignPrincipal = "ad:" + displayname;
+            WebMethod = "CreateAccountRequest";
+            Parameters = new List<Parameter>();
+            Parameters.Add(new Parameter { Name = "name", Value = accountname, Attr = null });
+            Parameters.Add(new Parameter { Name = "password", Value = defaultpw, Attr = null });
+            Parameters.Add(new Parameter { Name = "a", Value = displayname, Attr = new Attrib { Name = "n", Value = "displayName" } });
+            Parameters.Add(new Parameter { Name = "a", Value = zimbraForeignPrincipal, Attr = new Attrib { Name = "n", Value = "zimbraForeignPrincipal" } });
+            Parameters.Add(new Parameter { Name = "a", Value = cosid, Attr = new Attrib { Name = "n", Value = "zimbraCOSId" } });
+            WebServiceClient client = new WebServiceClient
+            {
+                Url = ZimbraValues.GetZimbraValues().Url,
+                WSServiceType = WebServiceClient.ServiceType.Traditional
+            };
+            req = CreateSoapEnvelope(ZIMBRA_API_CREATEACCOUNT);
+            client.InvokeService(req, out rsp);
+            retval = client.status;
+            if (client.status == 0)
+            {
+                if (ParseCreateAccount(rsp) == 0)  // length of name is 0 -- this is bad
+                {
+                    retval = ACCOUNT_CREATE_FAILED;
                 }
             }
             else

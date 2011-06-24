@@ -195,6 +195,36 @@ namespace MVVM.ViewModel
                 CurrentCOSSelection = 0;
             }
 
+            ZimbraAPI zimbraAPI = new ZimbraAPI();
+            string domainName = usersViewModel.ZimbraDomain;
+            string defaultPWD = DefaultPWD;
+            string tempMessage = "";
+            bool bProvision = false;
+            for (int i = 0; i < SchedList.Count; i++)
+            {
+                if (!SchedList[i].isProvisioned)
+                {
+                    bProvision = true;
+                    string userName = (usersViewModel.UsersList[i].MappedName.Length > 0) ? usersViewModel.UsersList[i].MappedName : usersViewModel.UsersList[i].Username;
+                    string accountName = userName + "@" + domainName;
+                    string cosID = CosList[CurrentCOSSelection].CosID;
+                    if (zimbraAPI.CreateAccount(accountName, defaultPWD, cosID) == 0)
+                    {
+                        tempMessage += string.Format("{0} Provisioned", userName) + "\n";
+                        //MessageBox.Show(string.Format("{0} Provisioned", userName), "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        //MessageBox.Show(string.Format("Provision unsuccessful for {0}: {1}", userName, zimbraAPI.LastError), "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                        tempMessage += string.Format("{0} Provisioned", userName) + "\n";
+                    }
+                }
+            }
+            if (bProvision)
+            {
+                MessageBox.Show(tempMessage, "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
             lb.SelectedIndex = (isServer) ? 4 : 2;
             accountResultsViewModel.AccountResultsList.Clear();
             EnableMigrate = false;
