@@ -396,9 +396,9 @@ AjxTimezone.getOffset = function(clientId, date) {
 
 		// sorthern hemisphere
 		else {
-			isDST = month < dstMonth || month > stdMonth;
-			isDST = isDST || (month == dstMonth && day <  dstDay);
-			isDST = isDST || (month == stdMonth && day >= stdDay);
+			isDST = month < stdMonth || month > dstMonth;
+			isDST = isDST || (month == dstMonth && day >=  dstDay);
+			isDST = isDST || (month == stdMonth && day < stdDay);
 		}
 
 		return isDST ? daylight.offset : standard.offset;
