@@ -177,7 +177,7 @@ namespace MVVM.ViewModel
             m_optionsViewModel.ImportDeletedItemOptions = false;
             m_optionsViewModel.ImportSentOptions = false;
             m_optionsViewModel.ImportRuleOptions = false;
-            m_optionsViewModel.MigrateONRAfter = DateTime.UtcNow.ToShortDateString();
+            m_optionsViewModel.MigrateONRAfter = DateTime.Now.ToShortDateString();
 
             m_scheduleViewModel = new ScheduleViewModel();
             m_scheduleViewModel.Name = "Schedule";
@@ -187,7 +187,7 @@ namespace MVVM.ViewModel
             m_scheduleViewModel.isBrowser = isBrowser;
             m_scheduleViewModel.COS = "default";
             m_scheduleViewModel.DefaultPWD = "";
-            m_scheduleViewModel.ScheduleDate = DateTime.UtcNow.ToShortDateString();
+            m_scheduleViewModel.ScheduleDate = DateTime.Now.ToShortDateString();
 
             m_usersViewModel = new UsersViewModel(m_scheduleViewModel,"",""); // needs scheduleviewmodel so schedlist will be in sync
             m_usersViewModel.Name = "Users";

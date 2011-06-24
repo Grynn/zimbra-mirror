@@ -293,7 +293,8 @@ namespace MVVM.ViewModel
             ZimbraAPI zimbraAPI = new ZimbraAPI();
             for (int i = 0; i < UsersList.Count; i++)
             {
-                string acctName = UsersList[i].MappedName + '@' + ZimbraDomain;
+                string userName = (UsersList[i].MappedName.Length > 0) ? UsersList[i].MappedName : UsersList[i].Username;
+                string acctName = userName + '@' + ZimbraDomain;
                 if (zimbraAPI.GetAccount(acctName) == 0)
                 {
                     UsersList[i].IsProvisioned = true;
