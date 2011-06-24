@@ -338,6 +338,8 @@ ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_STATUS_VIEW, label:
 //ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.GLOBAL_STATS_VIEW, label: ZaMsg.UI_Comp_GlobalStatsView });
 ZaSettings.SAVE_SEARCH = "saveSearch";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SAVE_SEARCH, label: ZaMsg.UI_Comp_SaveSearch });
+ZaSettings.HELP_SEARCH = "helpSearch";
+ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.HELP_SEARCH, label: ZaMsg.UI_Comp_HelpSearch });
 ZaSettings.MAILQ_VIEW = "mailQueue";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.MAILQ_VIEW, label: ZaMsg.UI_Comp_mailQueueView });
 ZaSettings.SERVER_STATS_VIEW = "perServerStatisticsView";

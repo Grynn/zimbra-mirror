@@ -547,18 +547,23 @@ ZaSearchField.prototype._getMyXForm = function() {
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_ALL, ZaMsg.SearchFilter_All, ZaMsg.searchForAll, "SearchAll", "SearchAll", new AjxListener(this, this.allFilterSelected)));		
 	ZaSearchField.searchChoices.setChoices(newMenuOpList);
 	
-	var numCols = 4;
+	var numCols = 3;
 	var colSizes;
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		numCols = 7;
 		colSizes = ["59", "*", "80", "110", "28", "12", "110"];
 	} else {
-		colSizes = ["59", "*", "80", "110"];
-		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SAVE_SEARCH]) {
+		colSizes = ["59", "*", "80"];
+		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.HELP_SEARCH]) {
 			numCols++;
-			colSizes.push("28");
+			colSizes.push("100");
 		}
-		
+
+                if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SAVE_SEARCH]) {
+                        numCols++;
+                        colSizes.push("28");
+                }
+
 		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIAS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCE_LIST_VIEW]) {
 			numCols+=2;
 			colSizes.push("12");
@@ -605,14 +610,17 @@ ZaSearchField.prototype._getMyXForm = function() {
 				onActivate:ZaSearchField.srchButtonHndlr, 
 				cssStyle: AjxEnv.isIE ? "marginLeft: 2px;" : "marginLeft: 5px;",
 				cssClass:"DwtToolbarButton"
-			},
-			
-			{type:_DWT_BUTTON_, label: ZaMsg.help_search , toolTipContent:ZaMsg.tt_help_search, icon:"Help", name: "helpSearchButton",
-				cssStyle:"overflow: hidden" ,	
-                onActivate:ZaSearchField.helpSrchButtonHndlr, cssClass:"DwtToolbarButton"
-            }
+			}
 		]
 	};
+
+	//Help search button
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.HELP_SEARCH] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+		xFormObject.items.push(
+			{type:_DWT_BUTTON_, label: ZaMsg.help_search , toolTipContent:ZaMsg.tt_help_search, icon:"Help", name: "helpSearchButton",
+                                cssStyle:"overflow: hidden" ,onActivate:ZaSearchField.helpSrchButtonHndlr, cssClass:"DwtToolbarButton"}
+		);
+	} 
 	//Save button
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SAVE_SEARCH] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		xFormObject.items.push({type:_DWT_BUTTON_, label: null , toolTipContent:ZaMsg.tt_save_search, icon:"Save", name: "saveSearchButton",
@@ -646,7 +654,6 @@ ZaSearchField.canViewSavedSearch = function () {
     return ZaItem.hasReadPermission ("zimbraAdminSavedSearches",
                 ZaZimbraAdmin.currentAdminAccount) ;
 }
-
 
 /**
 * @param xModelMetaData - XModel metadata that describes data model
