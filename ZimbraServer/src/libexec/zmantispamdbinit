@@ -60,6 +60,7 @@ fi
 #
 echo '*' Creating database in ${antispam_mysql_data_directory}
 (cd ${antispam_mysql_directory}; ./bin/mysql_install_db \
+    --basedir=${antispam_mysql_directory} \
     --defaults-file=${antispam_mysql_mycnf} \
     --plugin_dir=${mysql_directory}/lib/mysql/plugin) \
     >> ${zimbra_log_directory}/zmantispamdbinit.log 2>&1
