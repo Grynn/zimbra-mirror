@@ -482,8 +482,8 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         }
     }
 
-    void syncMetadata(OperationContext octxt, int itemId, MailItem.Type type, int folderId, int flags,
-            long tags, byte color) throws ServiceException {
+    synchronized void syncMetadata(OperationContext octxt, int itemId, MailItem.Type type, int folderId, int flags, long tags, Color color)
+        throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("syncMetadata", octxt);
@@ -493,8 +493,8 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             if ((change_mask & Change.MODIFIED_FOLDER) != 0 || folderId == ID_AUTO_INCREMENT) {
                 folderId = item.getFolderId();
             }
-            if ((change_mask & Change.MODIFIED_COLOR) != 0 || color == ID_AUTO_INCREMENT) {
-                color = item.getColor();
+            if ((change_mask & Change.MODIFIED_COLOR) != 0 || color.getValue() == ID_AUTO_INCREMENT) {
+                color = item.getRgbColor();
             }
             if ((change_mask & Change.MODIFIED_TAGS) != 0 || tags == MailItem.TAG_UNCHANGED) {
                 tags = item.getTagBitmask();
@@ -519,7 +519,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                 index.add(item);
             }
 
-            item.setColor(new Color(color));
+            item.setColor(color);
             item.setTags(flags, tags);
             if (getFlagById(Flag.ID_UNREAD).canTag(item)) {
                 item.alterUnread(unread);

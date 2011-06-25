@@ -34,6 +34,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.dom4j.QName;
 
+import com.zimbra.common.mailbox.Color;
 import com.zimbra.common.mime.MimeConstants;
 import com.zimbra.common.mime.shim.JavaMailInternetAddress;
 import com.zimbra.common.service.ServiceException;
@@ -588,7 +589,9 @@ public class PushChanges {
         Element action = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);
 
         int flags, parentId;
-        byte color;
+        byte colorByte = 0;
+        String colorStr = null;
+        Color color;
         String name, query, searchTypes, sort;
         boolean create = false;
         ombx.lock.lock(); 
@@ -596,12 +599,18 @@ public class PushChanges {
             SearchFolder search = ombx.getSearchFolderById(sContext, id);
             name = search.getName();
             flags = search.getInternalFlagBitmask();
-            color = search.getColor();
+            color = search.getRgbColor();
             parentId = search.getFolderId();
             query = search.getQuery();
             searchTypes = search.getReturnTypes();
             sort = search.getSortField();
 
+            if (color.hasMapping()) {
+                colorByte = color.getMappedColor();
+            }
+            else {
+                colorStr = color.toString();
+            }
             int mask = ombx.getChangeMask(sContext, id, MailItem.Type.SEARCHFOLDER);
             if ((mask & Change.MODIFIED_CONFLICT) != 0) {
                 // this is a new search folder; need to push to the server
@@ -616,7 +625,12 @@ public class PushChanges {
                 action.addAttribute(MailConstants.A_FOLDER, parentId);
             }
             if (create || (mask & Change.MODIFIED_COLOR) != 0) {
-                action.addAttribute(MailConstants.A_COLOR, color);
+                if (color.hasMapping()) {
+                    action.addAttribute(MailConstants.A_COLOR, colorByte);
+                }
+                else {
+                    action.addAttribute(MailConstants.A_RGB, colorStr);
+                }
             }
             if (create || (mask & Change.MODIFIED_NAME) != 0) {
                 action.addAttribute(MailConstants.A_NAME, name);
@@ -652,7 +666,7 @@ public class PushChanges {
             int mask = 0;
             if (flags != search.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
             if (parentId != search.getFolderId())          mask |= Change.MODIFIED_NAME;
-            if (color != search.getColor())                mask |= Change.MODIFIED_COLOR;
+            if ((colorByte != search.getColor()) || (colorStr != null && !colorStr.equals(search.getRgbColor().toString())))  mask |= Change.MODIFIED_COLOR;
             if (!name.equals(search.getName()))            mask |= Change.MODIFIED_NAME;
             if (!query.equals(search.getQuery()))              mask |= Change.MODIFIED_QUERY;
             if (!searchTypes.equals(search.getReturnTypes()))  mask |= Change.MODIFIED_QUERY;
@@ -672,7 +686,9 @@ public class PushChanges {
         Element action = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);
 
         int flags, parentId;
-        byte color;
+        byte colorByte = 0;
+        String colorStr = null;
+        Color color;
         String name, url;
         boolean create = false;
         Folder folder = null;
@@ -680,8 +696,14 @@ public class PushChanges {
         try {
             folder = ombx.getFolderById(sContext, id);
             name = folder.getName();  parentId = folder.getFolderId();  flags = folder.getInternalFlagBitmask();
-            url = folder.getUrl();    color = folder.getColor();
+            url = folder.getUrl();    color = folder.getRgbColor();
 
+            if (color.hasMapping()) {
+                colorByte = color.getMappedColor();
+            }
+            else {
+                colorStr = color.toString();
+            }
             int mask = ombx.getChangeMask(sContext, id, MailItem.Type.FOLDER);
             if ((mask & Change.MODIFIED_CONFLICT) != 0) {
                 // this is a new folder; need to push to the server
@@ -698,7 +720,12 @@ public class PushChanges {
                 action.addAttribute(MailConstants.A_FOLDER, parentId);
             }
             if (create || (mask & Change.MODIFIED_COLOR) != 0) {
-                action.addAttribute(MailConstants.A_COLOR, color);
+                if (color.hasMapping()) {
+                    action.addAttribute(MailConstants.A_COLOR, colorByte);
+                }
+                else {
+                    action.addAttribute(MailConstants.A_RGB, colorStr);
+                }
             }
             if (create || (mask & Change.MODIFIED_NAME) != 0) {
                 action.addAttribute(MailConstants.A_NAME, name);
@@ -737,7 +764,7 @@ public class PushChanges {
             int mask = 0;
             if (flags != folder.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
             if (parentId != folder.getFolderId())          mask |= Change.MODIFIED_NAME;
-            if (color != folder.getColor())                mask |= Change.MODIFIED_COLOR;
+            if ((colorByte != folder.getColor()) || (colorStr != null && !colorStr.equals(folder.getRgbColor().toString())))  mask |= Change.MODIFIED_COLOR;
             if (!name.equals(folder.getName()))            mask |= Change.MODIFIED_NAME;
             if (!url.equals(folder.getUrl()))              mask |= Change.MODIFIED_URL;
 
@@ -753,14 +780,22 @@ public class PushChanges {
         Element request = new Element.XMLElement(MailConstants.TAG_ACTION_REQUEST);
         Element action = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);
 
-        byte color;
+        byte colorByte = 0;
+        String colorStr = null;
+        Color color;
         String name;
         boolean create = false;
         ombx.lock.lock(); 
         try {
             Tag tag = ombx.getTagById(sContext, id);
-            color = tag.getColor();  name = tag.getName();
+            color = tag.getRgbColor(); name = tag.getName();
 
+            if (color.hasMapping()) {
+                colorByte = color.getMappedColor();
+            }
+            else {
+                colorStr = color.toString();
+            }
             int mask = ombx.getChangeMask(sContext, id, MailItem.Type.TAG);
             if ((mask & Change.MODIFIED_CONFLICT) != 0) {
                 // this is a new tag; need to push to the server
@@ -768,8 +803,14 @@ public class PushChanges {
                 action = request.addElement(MailConstants.E_TAG);
                 create = true;
             }
-            if (create || (mask & Change.MODIFIED_COLOR) != 0)
-                action.addAttribute(MailConstants.A_COLOR, color);
+            if (create || (mask & Change.MODIFIED_COLOR) != 0) {
+                if (color.hasMapping()) {
+                    action.addAttribute(MailConstants.A_COLOR, colorByte);
+                }
+                else {
+                    action.addAttribute(MailConstants.A_RGB, colorStr);
+                }
+            }
             if (create || (mask & Change.MODIFIED_NAME) != 0)
                 action.addAttribute(MailConstants.A_NAME, name);
         } finally {
@@ -807,7 +848,7 @@ public class PushChanges {
             Tag tag = ombx.getTagById(sContext, id);
             // check to see if the tag was changed while we were pushing the update...
             int mask = 0;
-            if (color != tag.getColor())      mask |= Change.MODIFIED_COLOR;
+            if ((colorByte != tag.getColor()) || (colorStr != null && !colorStr.equals(tag.getRgbColor().toString())))  mask |= Change.MODIFIED_COLOR;
             if (!name.equals(tag.getName()))  mask |= Change.MODIFIED_NAME;
 
             // update or clear the change bitmask
@@ -886,15 +927,23 @@ public class PushChanges {
 
         int flags, folderId;
         long date, tags;
-        byte color;
+        byte colorByte = 0;
+        String colorStr = null;
+        Color color;
         boolean create = false;
         Contact cn = null;
         ombx.lock.lock();
         try {
             cn = ombx.getContactById(sContext, id);
             date = cn.getDate();    flags = cn.getFlagBitmask();  tags = cn.getTagBitmask();
-            color = cn.getColor();  folderId = cn.getFolderId();
+            color = cn.getRgbColor();  folderId = cn.getFolderId();
 
+            if (color.hasMapping()) {
+                colorByte = color.getMappedColor();
+            }
+            else {
+                colorStr = color.toString();
+            }
             int mask = ombx.getChangeMask(sContext, id, MailItem.Type.CONTACT);
             if ((mask & Change.MODIFIED_CONFLICT) != 0) {
                 // this is a new contact; need to push to the server
@@ -925,7 +974,12 @@ public class PushChanges {
                 cnElem.addAttribute(MailConstants.A_FOLDER, folderId);
             }
             if (create || (mask & Change.MODIFIED_COLOR) != 0) {
-                cnElem.addAttribute(MailConstants.A_COLOR, color);
+                if (color.hasMapping()) {
+                    cnElem.addAttribute(MailConstants.A_COLOR, colorByte);
+                }
+                else {
+                    cnElem.addAttribute(MailConstants.A_RGB, colorStr);
+                }
             }
         } finally {
             ombx.lock.release();
@@ -965,7 +1019,7 @@ public class PushChanges {
             if (flags != cn.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
             if (tags != cn.getTagBitmask())            mask |= Change.MODIFIED_TAGS;
             if (folderId != cn.getFolderId())          mask |= Change.MODIFIED_FOLDER;
-            if (color != cn.getColor())                mask |= Change.MODIFIED_COLOR;
+            if ((colorByte != cn.getColor()) || (colorStr != null && !colorStr.equals(cn.getRgbColor().toString())))  mask |= Change.MODIFIED_COLOR;
             if (date != cn.getDate())                  mask |= Change.MODIFIED_CONTENT;
 
             // update or clear the change bitmask
@@ -1143,7 +1197,9 @@ public class PushChanges {
         int flags, folderId;
         long tags;
         String digest;
-        byte color;
+        byte colorByte = 0;
+        String colorStr = null;
+        Color color;
         boolean create = false;
         boolean upload = false;
         Message msg = null;
@@ -1156,8 +1212,14 @@ public class PushChanges {
                 return false;
             }
             digest = msg.getDigest();  flags = msg.getFlagBitmask();  tags = msg.getTagBitmask();
-            color = msg.getColor();    folderId = msg.getFolderId();
+            color = msg.getRgbColor();    folderId = msg.getFolderId();
 
+            if (color.hasMapping()) {
+                colorByte = color.getMappedColor();
+            }
+            else {
+                colorStr = color.toString();
+            }
             if (folderId == DesktopMailbox.ID_FOLDER_OUTBOX)
                 return false; //don't mind anything left over in Outbox, most likely sending message failed due to server side issues
 
@@ -1190,7 +1252,12 @@ public class PushChanges {
                 action.addAttribute(MailConstants.A_FOLDER, folderId);
             }
             if (create || (mask & Change.MODIFIED_COLOR) != 0) {
-                action.addAttribute(MailConstants.A_COLOR, color);
+                if (color.hasMapping()) {
+                    action.addAttribute(MailConstants.A_COLOR, colorByte);
+                }
+                else {
+                    action.addAttribute(MailConstants.A_RGB, colorStr);
+                }
             }
             if (msg.isDraft() && (create || (mask & Change.MODIFIED_CONTENT) != 0) && msg.getDraftAutoSendTime() != 0) {
                 action.addAttribute(MailConstants.A_AUTO_SEND_TIME, msg.getDraftAutoSendTime());
@@ -1246,7 +1313,7 @@ public class PushChanges {
             if (flags != msg.getFlagBitmask())    mask |= Change.MODIFIED_FLAGS;
             if (tags != msg.getTagBitmask())      mask |= Change.MODIFIED_TAGS;
             if (folderId != msg.getFolderId())    mask |= Change.MODIFIED_FOLDER;
-            if (color != msg.getColor())          mask |= Change.MODIFIED_COLOR;
+            if ((colorByte != msg.getColor()) || (colorStr != null && !colorStr.equals(msg.getRgbColor().toString())))  mask |= Change.MODIFIED_COLOR;
             if (!StringUtil.equal(digest, msg.getDigest()))  mask |= Change.MODIFIED_CONTENT;
 
             // update or clear the change bitmask
@@ -1261,7 +1328,9 @@ public class PushChanges {
 
         int flags, folderId;
         long date, tags;
-        byte color;
+        byte colorByte = 0;
+        String colorStr = null;
+        Color color;
         int mask;
 
         Element request = null;
@@ -1278,10 +1347,16 @@ public class PushChanges {
             tags = cal.getTagBitmask();
             flags = cal.getFlagBitmask();
             folderId = cal.getFolderId();
-            color = cal.getColor();
+            color = cal.getRgbColor();
             uid = cal.getUid();
             mask = ombx.getChangeMask(sContext, id, type);
 
+            if (color.hasMapping()) {
+                colorByte = color.getMappedColor();
+            }
+            else {
+                colorStr = color.toString();
+            }
             if ((mask & Change.MODIFIED_CONFLICT) != 0 || (mask & Change.MODIFIED_CONTENT) != 0 || (mask & Change.MODIFIED_INVITE) != 0) { // need to push to the server
                 request = new Element.XMLElement(isAppointment ? MailConstants.SET_APPOINTMENT_REQUEST : MailConstants.SET_TASK_REQUEST);
                 ToXML.encodeCalendarItemSummary(request, new ItemIdFormatter(true), ombx.getOperationContext(), cal, ToXML.NOTIFY_FIELDS, true);
@@ -1296,8 +1371,14 @@ public class PushChanges {
                     action.addAttribute(MailConstants.A_FLAGS, cal.getFlagString());
                 if ((mask & Change.MODIFIED_FOLDER) != 0)
                     action.addAttribute(MailConstants.A_FOLDER, folderId);
-                if ((mask & Change.MODIFIED_COLOR) != 0)
-                    action.addAttribute(MailConstants.A_COLOR, color);
+                if ((mask & Change.MODIFIED_COLOR) != 0) {
+                    if (color.hasMapping()) {
+                        action.addAttribute(MailConstants.A_COLOR, colorByte);
+                    }
+                    else {
+                        action.addAttribute(MailConstants.A_RGB, colorStr);
+                    }
+                }
             }
         } finally {
             ombx.lock.release();
@@ -1347,7 +1428,7 @@ public class PushChanges {
             if (flags != cal.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
             if (tags != cal.getTagBitmask())            mask |= Change.MODIFIED_TAGS;
             if (folderId != cal.getFolderId())          mask |= Change.MODIFIED_FOLDER;
-            if (color != cal.getColor())                mask |= Change.MODIFIED_COLOR;
+            if ((colorByte != cal.getColor()) || (colorStr != null && !colorStr.equals(cal.getRgbColor().toString())))  mask |= Change.MODIFIED_COLOR;
             if (date != cal.getDate())                  mask |= Change.MODIFIED_CONTENT;
 
             // update or clear the change bitmask

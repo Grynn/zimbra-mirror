@@ -430,7 +430,9 @@ public class InitialSync {
     void syncSearchFolder(Element elt, int id) throws ServiceException {
         int parentId = (int) elt.getAttributeLong(MailConstants.A_FOLDER);
         String name = MailItem.normalizeItemName(elt.getAttribute(MailConstants.A_NAME));
+        String rgb = elt.getAttribute(MailConstants.A_RGB, null);
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
+        Color itemColor = rgb != null ? new Color(rgb) : new Color(color);
         int flags = Flag.toBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
 
         long timestamp = elt.getAttributeLong(MailConstants.A_DATE, -1000);
@@ -441,13 +443,12 @@ public class InitialSync {
 
         boolean relocated = elt.getAttributeBool(A_RELOCATED, false) || !name.equals(elt.getAttribute(MailConstants.A_NAME));
 
-        CreateSavedSearch redo = new CreateSavedSearch(ombx.getId(), parentId, name, query, searchTypes, sort, flags,
-                new Color(color));
+        CreateSavedSearch redo = new CreateSavedSearch(ombx.getId(), parentId, name, query, searchTypes, sort, flags, itemColor);
         redo.setSearchId(id);
         redo.start(timestamp > 0 ? timestamp : System.currentTimeMillis());
 
         try {
-            ombx.createSearchFolder(new TracelessContext(redo), parentId, name, query, searchTypes, sort, flags, color);
+            ombx.createSearchFolder(new TracelessContext(redo), parentId, name, query, searchTypes, sort, flags, itemColor);
             if (relocated) {
                 ombx.setChangeMask(sContext, id, MailItem.Type.SEARCHFOLDER,
                         Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
@@ -470,7 +471,9 @@ public class InitialSync {
         int parentId = (id == Mailbox.ID_FOLDER_ROOT) ? id : (int) elt.getAttributeLong(MailConstants.A_FOLDER);
         String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : MailItem.normalizeItemName(elt.getAttribute(MailConstants.A_NAME));
         int flags = Flag.toBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
+        String rgb = elt.getAttribute(MailConstants.A_RGB, null);
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
+        Color itemColor = rgb != null ? new Color(rgb) : new Color(color);
         MailItem.Type view = MailItem.Type.of(elt.getAttribute(MailConstants.A_DEFAULT_VIEW, null));
 
         long timestamp = elt.getAttributeLong(MailConstants.A_DATE, -1000);
@@ -486,7 +489,7 @@ public class InitialSync {
         String ownerName = null;
         int remoteId = 0;
         if (itemType == MailItem.Type.FOLDER) {
-            redo = new CreateFolder(ombx.getId(), name, parentId, system, view, flags, new Color(color), url);
+            redo = new CreateFolder(ombx.getId(), name, parentId, system, view, flags, itemColor, url);
             ((CreateFolder)redo).setFolderId(id);
         } else {
             if (!OfflineLC.zdesktop_sync_mountpoints.booleanValue()) {
@@ -505,7 +508,7 @@ public class InitialSync {
             remoteId = (int)elt.getAttributeLong(MailConstants.A_REMOTE_ID);
             OfflineProvisioning.getOfflineInstance().createMountpointAccount(ownerName, ownerId, ombx.getOfflineAccount());
 
-            redo = new CreateMountpoint(ombx.getId(), parentId, name, ownerId, remoteId, view, flags, new Color(color), reminderEnabled);
+            redo = new CreateMountpoint(ombx.getId(), parentId, name, ownerId, remoteId, view, flags, itemColor, reminderEnabled);
             ((CreateMountpoint)redo).setId(id);
         }
         redo.start(timestamp > 0 ? timestamp : System.currentTimeMillis());
@@ -513,9 +516,9 @@ public class InitialSync {
         try {
             if (itemType == MailItem.Type.FOLDER) {
                 // don't care about current feed syncpoint; sync can't be done offline
-                ombx.createFolder(new TracelessContext(redo), name, parentId, system, view, flags, color, url);
+                ombx.createFolder(new TracelessContext(redo), name, parentId, system, view, flags, itemColor, url);
             } else {
-                ombx.createMountpoint(new TracelessContext(redo), parentId, name, ownerId, remoteId, view, flags, color, reminderEnabled);
+                ombx.createMountpoint(new TracelessContext(redo), parentId, name, ownerId, remoteId, view, flags, itemColor, reminderEnabled);
             }
             if (relocated) {
                 ombx.setChangeMask(sContext, id, itemType, Change.MODIFIED_FOLDER | Change.MODIFIED_NAME);
@@ -556,19 +559,21 @@ public class InitialSync {
     void syncTag(Element elt) throws ServiceException {
         int id = (int) elt.getAttributeLong(MailConstants.A_ID);
         String name = MailItem.normalizeItemName(elt.getAttribute(MailConstants.A_NAME));
+        String rgb = elt.getAttribute(MailConstants.A_RGB, null);
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
+        Color itemColor = rgb != null ? new Color(rgb) : new Color(color);
 
         long timestamp = elt.getAttributeLong(MailConstants.A_DATE, -1000);
 
         boolean renamed = elt.getAttributeBool(A_RELOCATED, false) || !name.equals(elt.getAttribute(MailConstants.A_NAME));
 
-        CreateTag redo = new CreateTag(ombx.getId(), name, new Color(color));
+        CreateTag redo = new CreateTag(ombx.getId(), name, itemColor);
         redo.setTagId(id);
         redo.start(timestamp > 0 ? timestamp : System.currentTimeMillis());
 
         try {
             // don't care about current feed syncpoint; sync can't be done offline
-            ombx.createTag(new TracelessContext(redo), name, color);
+            ombx.createTag(new TracelessContext(redo), name, itemColor);
             if (renamed) {
                 ombx.setChangeMask(sContext, id, MailItem.Type.TAG, Change.MODIFIED_NAME);
             }
@@ -864,7 +869,9 @@ public class InitialSync {
         OfflineSyncManager.getInstance().continueOK();
         int id = (int) elt.getAttributeLong(MailConstants.A_ID);
         ombx.recordItemSync(id);
+        String rgb = elt.getAttribute(MailConstants.A_RGB, null);
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
+        Color itemColor = rgb != null ? new Color(rgb) : new Color(color);
         int flags = Flag.toBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
         String tags = elt.getAttribute(MailConstants.A_TAGS, null);
 
@@ -908,12 +915,10 @@ public class InitialSync {
 
         try {
             Contact cn = ombx.createContact(new TracelessContext(redo), pc, folderId, tags);
-            if (flags != 0) {
+            if (flags != 0)
                 ombx.setTags(sContext, id, MailItem.Type.CONTACT, flags, MailItem.TAG_UNCHANGED);
-            }
-            if (color != MailItem.DEFAULT_COLOR) {
-                ombx.setColor(sContext, id, MailItem.Type.CONTACT, color);
-            }
+            if (itemColor.getValue() != MailItem.DEFAULT_COLOR)
+                ombx.setColor(sContext, new int[] { id }, MailItem.Type.CONTACT, itemColor);
             OfflineLog.offline.debug("initial: created contact (" + id + "): " + cn.getFileAsString());
         } catch (ServiceException e) {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS) {
