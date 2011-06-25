@@ -253,12 +253,13 @@ public class PageBriefcase extends AbsTab {
 
 			locator = Locators.zEditFileBtn.locator;
 
-			// Check if the button is disabled
-			String attrs = sGetAttribute(locator + "@class");
-
-			if (attrs.contains("ZDisabled")) {
-				throw new HarnessException(button + " is disabled " + attrs);
-			}
+			/*
+			 * //Check if the button is disabled String attrs =
+			 * sGetAttribute(locator + "@class");
+			 * 
+			 * if (attrs.contains("ZDisabled")) { throw new
+			 * HarnessException(button + " is disabled " + attrs); }
+			 */
 
 			page = new DocumentBriefcaseEdit(MyApplication, (DocumentItem) item);
 		} else if (button == Button.B_DELETE) {
@@ -284,7 +285,8 @@ public class PageBriefcase extends AbsTab {
 				throw new HarnessException(button + " is disabled " + attrs);
 			}
 
-			page = new FileBriefcaseOpen(this.MyApplication);
+			page = new DocumentBriefcaseOpen(this.MyApplication);
+
 		} else if (button == Button.B_MOVE) {
 			// Check if the button is disabled
 			locator = Locators.zMoveIconBtn.locator;
@@ -442,8 +444,9 @@ public class PageBriefcase extends AbsTab {
 
 				optionLocator = "css=td[id=zmi__BDLV__NEW_BRIEFCASE_WIN_title]:contains('Launch in a separate window')";
 
-				page = new FileBriefcaseOpen(this.MyApplication, item);
-			}else if (option == Button.O_SEND_AS_ATTACHMENT) {
+				page = new DocumentBriefcaseOpen(this.MyApplication, item);
+
+			} else if (option == Button.O_SEND_AS_ATTACHMENT) {
 
 				optionLocator = "css=td[id$='_title']:contains('Send as attachment')";
 

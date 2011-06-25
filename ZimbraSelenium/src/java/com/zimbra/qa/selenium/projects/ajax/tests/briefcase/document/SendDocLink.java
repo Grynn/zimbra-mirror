@@ -14,6 +14,7 @@ import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogConfirm;
@@ -75,9 +76,14 @@ public class SendDocLink extends AjaxCommonTest {
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click on Send Link
-		DialogConfirm confDlg = (DialogConfirm) app.zPageBriefcase
-				.zToolbarPressPulldown(Button.B_SEND, Button.O_SEND_LINK, docItem);
-
+		DialogConfirm confDlg;
+		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains("7.1."))
+			confDlg = (DialogConfirm) app.zPageBriefcase
+			.zToolbarPressPulldown(Button.B_SEND, Button.O_SEND_LINK, docItem);
+		else
+			confDlg = (DialogConfirm) app.zPageBriefcase.zToolbarPressPulldown(
+					Button.B_ACTIONS, Button.O_SEND_LINK, docItem);
+	
 		// Click Yes on confirmation dialog
 		FormMailNew mailform = (FormMailNew) confDlg.zClickButton(Button.B_YES);
 

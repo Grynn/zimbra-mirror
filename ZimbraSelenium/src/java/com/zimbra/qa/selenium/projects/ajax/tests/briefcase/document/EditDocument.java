@@ -149,7 +149,6 @@ public class EditDocument extends AjaxCommonTest {
 		SleepUtil.sleepVerySmall();
 		
 		// Click on created document
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem1);
 
 		// Click on Edit document icon in toolbar
@@ -187,9 +186,16 @@ public class EditDocument extends AjaxCommonTest {
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem2);
 
 		// Click on open in a separate window icon in toolbar
-		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW, docItem2);
-
+		DocumentBriefcaseOpen documentBriefcaseOpen;
+		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains("7.1."))
+			documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
+					.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW,
+							docItem2);
+		else
+			documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
+					.zToolbarPressPulldown(Button.B_ACTIONS,
+							Button.B_LAUNCH_IN_SEPARATE_WINDOW, docItem2);
+		
 		app.zPageBriefcase.isOpenDocLoaded(docItem2);
 
 		String name = "";
@@ -285,9 +291,16 @@ public class EditDocument extends AjaxCommonTest {
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click on open in a separate window icon in toolbar
-		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW, docItem);
-
+		DocumentBriefcaseOpen documentBriefcaseOpen;
+		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains("7.1."))
+			documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
+					.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW,
+							docItem);
+		else
+			documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
+					.zToolbarPressPulldown(Button.B_ACTIONS,
+							Button.B_LAUNCH_IN_SEPARATE_WINDOW, docItem);
+		
 		app.zPageBriefcase.isOpenDocLoaded(docItem);
 
 		String text = "";
@@ -381,9 +394,16 @@ public class EditDocument extends AjaxCommonTest {
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click on open in a separate window icon in toolbar
-		DocumentBriefcaseOpen documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW, docItem);
-
+		DocumentBriefcaseOpen documentBriefcaseOpen;
+		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains("7.1."))
+			documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
+					.zToolbarPressButton(Button.B_OPEN_IN_SEPARATE_WINDOW,
+							docItem);
+		else
+			documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
+					.zToolbarPressPulldown(Button.B_ACTIONS,
+							Button.B_LAUNCH_IN_SEPARATE_WINDOW, docItem);
+		
 		app.zPageBriefcase.isOpenDocLoaded(docItem);
 
 		String text = "";

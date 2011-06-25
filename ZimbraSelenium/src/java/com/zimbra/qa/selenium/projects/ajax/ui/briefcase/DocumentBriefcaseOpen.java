@@ -21,20 +21,21 @@ public class DocumentBriefcaseOpen extends AbsDisplay {
 		public static final String zDocumentNameField = "css=[class=TbTop] b";
 	}
 
-	public String pageTitle ;
-	public String pageText ;
+	public String pageTitle;
+	public String pageText;
 
 	public DocumentBriefcaseOpen(AbsApplication application) {
 		super(application);
 		logger.info("new " + DocumentBriefcaseOpen.class.getCanonicalName());
 	}
-	
+
 	public DocumentBriefcaseOpen(AbsApplication application, IItem item) {
 		super(application);
 		pageTitle = item.getName();
 		
-		pageText = ((DocumentItem) item).getDocText();
-		
+		if (item instanceof DocumentItem)
+			pageText = ((DocumentItem) item).getDocText();
+
 		logger.info("new " + DocumentBriefcaseOpen.class.getCanonicalName());
 	}
 
@@ -42,21 +43,21 @@ public class DocumentBriefcaseOpen extends AbsDisplay {
 	public String myPageName() {
 		return this.getClass().getName();
 	}
-	
+
 	public String retriveFileText() throws HarnessException {
 		String text = sGetText(Locators.zFileBodyField);
-	
+
 		return text;
 	}
 
 	public String retriveDocumentText() throws HarnessException {
 		// ClientSessionFactory.session().selenium().selectFrame(Locators.zFrame);
 		String text = sGetText(Locators.zDocumentBodyField);
-		//if (zIsVisiblePerPosition(Locators.zDocumentBodyField, 0, 0)) {
-			// text = zGetHtml(Locators.zBodyField);
-			// text = sGetText(Locators.zBodyField);
-			//text = sGetText(Locators.zDocumentBodyField);
-		//}
+		// if (zIsVisiblePerPosition(Locators.zDocumentBodyField, 0, 0)) {
+		// text = zGetHtml(Locators.zBodyField);
+		// text = sGetText(Locators.zBodyField);
+		// text = sGetText(Locators.zDocumentBodyField);
+		// }
 		return text;
 	}
 
@@ -81,9 +82,10 @@ public class DocumentBriefcaseOpen extends AbsDisplay {
 
 		zSelectWindow(pageTitle);
 
+		if (pageText != null)
 		zWaitForElementPresent("css=td[class='ZhAppContent'] div:contains('"
 				+ pageText + "')");
-		
+
 		return true;
 	}
 

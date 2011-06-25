@@ -11,6 +11,7 @@ import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
@@ -64,10 +65,14 @@ public class SendDocAttachment extends AjaxCommonTest {
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click on Send as attachment
-		FormMailNew mailform = (FormMailNew) app.zPageBriefcase
-				.zToolbarPressPulldown(Button.B_SEND,
-						Button.O_SEND_AS_ATTACHMENT, docItem);
-
+		FormMailNew mailform;
+		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains("7.1."))
+			mailform = (FormMailNew) app.zPageBriefcase.zToolbarPressPulldown(
+					Button.B_SEND, Button.O_SEND_AS_ATTACHMENT, docItem);
+		else
+			mailform = (FormMailNew) app.zPageBriefcase.zToolbarPressPulldown(
+					Button.B_ACTIONS, Button.O_SEND_AS_ATTACHMENT, docItem);
+		
 		// Verify the new mail form is opened
 		ZAssert.assertTrue(mailform.zIsVisible(), "Verify the new form opened");
 

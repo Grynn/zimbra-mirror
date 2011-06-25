@@ -133,9 +133,7 @@ public class UnTagDocument extends AjaxCommonTest {
 
 		// Click Remove Tag
 		app.zPageBriefcase.zToolbarPressPulldown(Button.B_TAG,
-				Button.O_TAG_REMOVETAG);
-
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+				Button.O_TAG_REMOVETAG, docItem);
 
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
