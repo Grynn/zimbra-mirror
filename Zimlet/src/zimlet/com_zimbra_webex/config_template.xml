@@ -1,4 +1,4 @@
-<zimletConfig name="com_zimbra_webex" version="2.9">
+<zimletConfig name="com_zimbra_webex" version="3.0">
     <global>
         <property name="allowedDomains">*.webex.com</property>
     </global>
