@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 
+import java.util.List;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.DocumentItem;
 import com.zimbra.qa.selenium.framework.items.IItem;
@@ -80,6 +81,12 @@ public class DocumentBriefcaseOpen extends AbsDisplay {
 	public boolean zIsActive() throws HarnessException {
 		zWaitForWindow(pageTitle);
 
+		List<String> windows = sGetAllWindowNames();
+		for (String window : windows) {
+			if(window.indexOf(pageTitle.split("\\.")[0])!=-1){
+				pageTitle = window;
+			}
+		}
 		zSelectWindow(pageTitle);
 
 		if (pageText != null)
