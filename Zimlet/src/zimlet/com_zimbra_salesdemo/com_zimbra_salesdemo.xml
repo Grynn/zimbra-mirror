@@ -1,0 +1,13 @@
+<zimlet name="com_zimbra_salesdemo" version="1.0" description="Sales Demo Zimlet">
+	<include>ZmSalesDemoZimlet.js</include>
+    <include>ZmSalesDemoItemModel.js</include>
+    <include>ZmSalesDemoItem.js</include>
+    <include>templates/SalesDemo.template.js</include>
+	<includeCSS>SalesDemo.css</includeCSS>
+	<handlerObject>ZmSalesDemoZimlet</handlerObject>
+	<contentObject>
+		<matchOn>
+			<regex></regex>
+		</matchOn>
+	</contentObject>
+</zimlet>

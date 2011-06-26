@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<items>
+    <!-- Add an item (matches "SEM_12345_31122011") -->
+    <item>
+        <!-- [Required] Tooltip to be displayed-->
+        <tooltip>
+            <!-- [Required] match the below text in email body -->
+            <textToMatch>SEM_12345_31122011</textToMatch>
+            <!-- TemplateId(<zimletName>/templates/Sales.template) contains html to be displayed in tooltip -->
+            <tooltipTemplateId>TEMPLATE_FOR_SAP_SEM_ITEM_TOOLTIP</tooltipTemplateId>
+
+            <!-- When the user right-clicks.. show this context menu-->
+            <contextMenu>
+                <!--A single context menu item -->
+                <contextMenuItem>
+                    <!-- menu item name -->
+                    <name>Display Data</name>
+                    <!-- menu item's icon [this is the CSS name described in Sales.css] -->
+                    <icon>SAP_Icon</icon>
+                </contextMenuItem>
+                <!--A single context menu item -->
+                <contextMenuItem>
+                    <!-- menu item name -->
+                    <name>Change Threshold</name>
+                    <!-- menu item's icon [this is the CSS name described in Sales.css] -->
+                    <icon>SAP_Icon</icon>
+                </contextMenuItem>
+                <!--A single context menu item -->
+                <contextMenuItem>
+                    <!-- menu item name -->
+                    <name>Change date range</name>
+                    <!-- menu item's icon [this is the CSS name described in Sales.css] -->
+                    <icon>SAP_Icon</icon>
+                </contextMenuItem>
+                <!--A single context menu item -->
+                <contextMenuItem>
+                    <!-- menu item name -->
+                    <name>Drill down</name>
+                    <!-- menu item's icon [this is the CSS name described in Sales.css] -->
+                    <icon>SAP_Icon</icon>
+                </contextMenuItem>
+            </contextMenu>
+        </tooltip>
+
+
+        <!--[Optional] Show a dialog when the user clicks on the Zimlet's link -->
+        <popupDialog>
+            <!-- Template Id(<zimletName>/templates/Sales.template) contains html to be displayed in dialog -->
+            <dialogTemplateId>TEMPLATE_FOR_SAP_SEM_ITEM_DIALOG</dialogTemplateId>
+        </popupDialog>
+
+
+        <!--[Optional] add toolbar -->
+        <toolbar>
+            <!-- Toolbar Name/text -->
+            <toolbarName>SAP Toolbar</toolbarName>
+            <!-- toolbar icon -->
+            <icon>SAP_Icon</icon>
+            <!-- Template id that contains html for the toolbar. See <zimletName>/templates/Sales.template -->
+            <toolbarTemplateId>TEMPLATE_FOR_SAP_SEM_ITEM_TOOLBAR</toolbarTemplateId>
+            <!-- add toolbar buttons-->
+            <toolbarButtons>
+                <!-- A single toolbar button -->
+                <toolbarButton>
+                    <!-- toolbar button name -->
+                    <name>Change Threshold</name>
+                    <!-- toolbar button icon -->
+                    <icon>SAP_Icon</icon>
+                </toolbarButton>
+                <!-- A single toolbar button -->
+                <!-- A single toolbar button -->
+                <toolbarButton>
+                    <!-- toolbar button name -->
+                    <name>Drill down</name>
+                    <!-- toolbar button icon -->
+                    <icon>SAP_Icon</icon>
+                </toolbarButton>
+            </toolbarButtons>
+        </toolbar>
+    </item>
+
+    <!-- Add an item (matches "q2 forecast") -->
+    <item>
+        <tooltip>
+            <textToMatch>q2 forecast</textToMatch>
+            <tooltipTemplateId>TEMPLATE_FOR_Q2_FORECAST_TOOLTIP</tooltipTemplateId>
+            <contextMenu>
+                <contextMenuItem>
+                    <name>Display Data</name>
+                    <icon>Forecast_icon</icon>
+                </contextMenuItem>
+                <contextMenuItem>
+                    <name>Change Threshold</name>
+                    <icon>Forecast_icon</icon>
+                </contextMenuItem>
+                <contextMenuItem>
+                    <name>Change date range</name>
+                    <icon>Forecast_icon</icon>
+                </contextMenuItem>
+                <contextMenuItem>
+                    <name>Drill down</name>
+                    <icon>Forecast_icon</icon>
+                </contextMenuItem>
+            </contextMenu>
+        </tooltip>
+        <popupDialog>
+            <dialogTemplateId>TEMPLATE_FOR_Q2_FORECAST_DIALOG</dialogTemplateId>
+        </popupDialog>
+        <toolbar>
+            <toolbarName>Forecast Toolbar</toolbarName>
+            <icon>Forecast_icon</icon>
+            <toolbarTemplateId>TEMPLATE_FOR_Q2_FORECAST_TOOLBAR</toolbarTemplateId>
+            <toolbarButtons>
+                <toolbarButton>
+                    <name>Change Threshold</name>
+                    <icon>Forecast_icon</icon>
+                </toolbarButton>
+                <toolbarButton>
+                    <name>Drill down</name>
+                    <icon>Forecast_icon</icon>
+                </toolbarButton>
+            </toolbarButtons>
+        </toolbar>
+    </item>
+
+       <!-- Add an item (matches "patientId: 56789012345") -->
+    <item>
+        <tooltip>
+            <textToMatch>Patient ID: 56789012345</textToMatch>
+            <tooltipTemplateId>TEMPLATE_FOR_EPIC_TOOLTIP</tooltipTemplateId>
+            <contextMenu>
+                <contextMenuItem>
+                    <name>Show History</name>
+                    <icon>Epic_Icon</icon>
+                </contextMenuItem>
+                <contextMenuItem>
+                    <name>Send Alert</name>
+                    <icon>Epic_Icon</icon>
+                </contextMenuItem>
+                <contextMenuItem>
+                    <name>Escalate to MD</name>
+                    <icon>Epic_Icon</icon>
+                </contextMenuItem>
+                <contextMenuItem>
+                    <name>Drill down</name>
+                    <icon>Epic_Icon</icon>
+                </contextMenuItem>
+            </contextMenu>
+        </tooltip>
+        <popupDialog>
+            <dialogTemplateId>TEMPLATE_FOR_EPIC_DIALOG</dialogTemplateId>
+        </popupDialog>
+        <toolbar>
+            <toolbarName>Healthcare toolbar</toolbarName>
+            <icon>Epic_Icon</icon>
+            <toolbarTemplateId>TEMPLATE_FOR_EPIC_TOOLBAR</toolbarTemplateId>
+            <toolbarButtons>
+                <toolbarButton>
+                    <name>Escalate to MD</name>
+                    <icon>Epic_Icon</icon>
+                </toolbarButton>
+                <toolbarButton>
+                    <name>Send Alert</name>
+                    <icon>Epic_Icon</icon>
+                </toolbarButton>
+            </toolbarButtons>
+        </toolbar>
+    </item>
+</items>

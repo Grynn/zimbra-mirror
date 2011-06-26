@@ -1,0 +1,37 @@
+.ImgSAP_icon {
+  background: url("img/SAP_icon.jpg") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.ImgForecast_icon {
+  background: url("img/forecast_icon.gif") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+
+.ImgEpic_icon {
+  background: url("img/Epic_icon.png") no-repeat 0 0;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+}
+ .SalesZimletTooltipImageCSS {
+   width:250px;height:150px;
+ }
+
+ .SalesZimletDialogImageCSS {
+   width:450px;height:250px;
+ }
+
+ .SalesZimletToolbarImageCSS {
+   width:450px;height:250px;
+ }
+
+.SalesZimlet_yellow {
+    background: #FFFFCC;
+    border-bottom: 1px solid #6E6E6E;
+    border-right: 1px solid #6E6E6E;
+}

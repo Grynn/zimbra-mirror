@@ -1,0 +1,80 @@
+<!-- Below template is inserted in tooltip  -->
+<template id='TEMPLATE_FOR_SAP_SEM_ITEM_TOOLTIP'>
+<table align=center cellpadding='0' cellspacing='0' border='0'>
+			<tr><td><b>SEM: </b>Product Acme SEM chart for 2011</td></tr>
+            <tr><td><b>BU: </b>Desktop</td></tr>
+			<tr><td><img class='SalesZimletTooltipImageCSS' src='${zimletBaseUrl}/img/SAP_SEM_tooltipAndDlg.png'></img></td></tr>
+</table>
+</template>
+<!-- Below template is inserted in toolbar (like SAP toolbar) -->
+ <template id='TEMPLATE_FOR_SAP_SEM_ITEM_DIALOG'>
+<table align=center cellpadding='0' cellspacing='0' border='0'>
+			<tr><td><b>SAP Cockpit:</b></td></tr>
+			<tr><td><img class='SalesZimletDialogImageCSS' src='${zimletBaseUrl}/img/SAP_SEM_tooltipAndDlg.png'></img></td></tr>
+</table>
+</template>
+
+<!-- Below template is inserted in popup dialog when the user clicks on the zimlet's link  -->
+<template id='TEMPLATE_FOR_SAP_SEM_ITEM_TOOLBAR'>
+<table align=center cellpadding='0' cellspacing='0' border='0'>
+			<tr><td><b>SEM: </b>Product Acme SEM chart for 2011</td></tr>
+            <tr><td><b>BU: </b>Desktop</td></tr>
+			<tr><td><img class='SalesZimletToolbarImageCSS' src='${zimletBaseUrl}/img/SAP_SEM_toolbar.png'></img></td></tr>
+</table>
+</template>
+
+<!-- Below template is inserted in tooltip  -->
+<template id='TEMPLATE_FOR_Q2_FORECAST_TOOLTIP'>
+<table align=center cellpadding='0' cellspacing='0' border='0'>
+	<tr><td><img class='SalesZimletTooltipImageCSS' src='${zimletBaseUrl}/img/q2_forecast_tooltipAndDlg.png'></img></td></tr>
+</table>
+</template>
+
+<template id='TEMPLATE_FOR_Q2_FORECAST_DIALOG'>
+<table align=center cellpadding='0' cellspacing='0' border='0'>
+			<tr><td><img class='SalesZimletDialogImageCSS' src='${zimletBaseUrl}/img/q2_forecast_tooltipAndDlg.png'></img></td></tr>
+</table>
+</template>
+
+<template id='TEMPLATE_FOR_Q2_FORECAST_TOOLBAR'>
+<table align=center cellpadding='0' cellspacing='0' border='0'>
+			<tr><td><b>SEM: </b>Product Acme SEM chart for 2011</td></tr>
+            <tr><td><b>BU: </b>Desktop</td></tr>
+			<tr><td><img class='SalesZimletToolbarImageCSS' src='${zimletBaseUrl}/img/q2_forecast_toobar.jpg'></img></td></tr>
+</table>
+</template>
+
+        <!-- Below template is inserted in tooltip  -->
+<template id='TEMPLATE_FOR_EPIC_TOOLTIP'>
+<table align=center cellpadding='0' cellspacing='0' border='0'>
+    		<tr><td><b>Patient Name: </b>John Doe</td></tr>
+            <tr><td><b>Phone: </b>+1 650 123 1234</td></tr>
+            <tr><td><b>Problem: </b>Broken Leg</td></tr>
+            <tr><td><b>Blood Group: </b>B+</td></tr>
+            <tr><td><b>Patient Since: </b>10/10/2010</td></tr>
+	<tr><td><img class='SalesZimletTooltipImageCSS' src='${zimletBaseUrl}/img/epic_broken_leg_tooltipAndDlg.jpg'></img></td></tr>
+</table>
+</template>
+
+<template id='TEMPLATE_FOR_EPIC_DIALOG'>
+<table align=center cellpadding='0' cellspacing='0' border='0'>
+    		<tr><td><b>Patient Name: </b>John Doe</td></tr>
+            <tr><td><b>Phone: </b>+1 650 123 1234</td></tr>
+            <tr><td><b>Problem: </b>Broken Leg</td></tr>
+            <tr><td><b>Blood Group: </b>B+</td></tr>
+            <tr><td><b>Patient Since: </b>10/10/2010</td></tr>
+    <tr><td><img class='SalesZimletDialogImageCSS' src='${zimletBaseUrl}/img/epic_broken_leg_tooltipAndDlg.jpg'></img></td></tr>
+</table>
+</template>
+
+<template id='TEMPLATE_FOR_EPIC_TOOLBAR'>
+<table align=center cellpadding='0' cellspacing='0' border='0'>
+			<tr><td><b>Patient Name: </b>John Doe</td></tr>
+            <tr><td><b>Phone: </b>+1 650 123 1234</td></tr>
+            <tr><td><b>Problem: </b>Broken Leg</td></tr>
+            <tr><td><b>Blood Group: </b>B+</td></tr>
+            <tr><td><b>Patient Since: </b>10/10/2010</td></tr>
+			<tr><td><img class='SalesZimletToolbarImageCSS' src='${zimletBaseUrl}/img/epic_broken_leg_tooltipAndDlg.jpg'></img></td></tr>
+</table>
+</template>
+
