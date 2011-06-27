@@ -1,6 +1,7 @@
 package  com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 
 import java.awt.Robot;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -654,18 +655,16 @@ public class PageAddressbook extends AbsTab {
 		String locator = null;			// If set, this will be clicked
 		AbsPage page = null;	// If set, this page will be returned
 		String id = null;
-        String contactLocator = getContactLocator(contact);
         
 		tracer.trace(action +" then "+ option +" then "+ subOption +" on contact = "+ contact);
 
         if ( action == Action.A_RIGHTCLICK ) {
 			ContextMenuItem cmi=null;
 		    ContextMenuItem sub_cmi = null;
-		    zClick(contactLocator);
-		    //zKeyboard.zTypeCharacters(Shortcut.S_RIGHTCLICK.getKeys());
-			zRightClickAt(contactLocator,"0,0");
-			
-			
+		
+		    zRightClickAt(getContactLocator(contact),"0,0");
+		      
+		    
 			if (option == Button.B_TAG) {
 		        
 				cmi=CONTEXT_MENU.CONTACT_TAG;
@@ -759,23 +758,20 @@ public class PageAddressbook extends AbsTab {
 		return (page);
     
 	}
+
 	
 	public void zListItem(Action action, Button option ,IItem item, String contact) throws HarnessException {
 		String locator = null;			// If set, this will be clicked
 	
 		String itemLocator = null;
 		String id = null;
-        String contactLocator = getContactLocator(contact);
         
-		tracer.trace(action +" then "+ option +" then "+ item.toString() +" on contact = "+ contact);
-
+		tracer.trace(action +" then "+ option +" then "+ item +" on contact = "+ contact);
         if ( action == Action.A_RIGHTCLICK ) {
 			ContextMenuItem cmi=null;
 		    
-		    zClick(contactLocator);
-		    
-		    zRightClickAt(contactLocator,"0,0");
-			
+			zRightClickAt(getContactLocator(contact),"0,0");
+
 			
 			if (option == Button.B_TAG) {		        
 				cmi=CONTEXT_MENU.CONTACT_TAG;
@@ -791,7 +787,7 @@ public class PageAddressbook extends AbsTab {
 					ContactGroupItem cgi= (ContactGroupItem) item;
 					cmi= CONTEXT_MENU.CONTACT_GROUP;
 					//itemLocator = "css=div#zmi__Contacts__CONTACTGROUP_MENU|GROUP_MENU td[id$=title]:contains('" + cgi.fileAs + "')";					
-				    itemLocator = "css=td:contains('" + cgi.fileAs + "')";
+				    itemLocator = "css=td[id$=title]:contains('" + cgi.fileAs + "')";
 				}				
 			}
 			
@@ -817,9 +813,12 @@ public class PageAddressbook extends AbsTab {
 			zWaitForElementEnabled(itemLocator);
 			
         } 
-		
-        sClickAt(itemLocator,"0,0");		
+
+             
+        zClickAt(itemLocator,"0,0");		
         zWaitForBusyOverlay();
+       
+        
     
 	}
 	

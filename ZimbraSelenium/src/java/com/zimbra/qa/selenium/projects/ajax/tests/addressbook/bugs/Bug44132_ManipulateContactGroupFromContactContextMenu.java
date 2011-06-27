@@ -6,6 +6,7 @@ import java.util.*;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
+import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
@@ -93,7 +94,7 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 
 	@Test(	description = "D1 Enhancement : Add a contact to an existing group",
 			groups = { "smoke" })
-	public void AddAContactToGroup() throws HarnessException {			
+	public void Add1ContactToGroup() throws HarnessException {			
 		// Create a contact group via Soap
 		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);			             
 		group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
@@ -110,7 +111,6 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		//Add contact to existing group 
 		group.addDListMember(contactItem.email);
 	
-		//verification
 		//verify toasted message 'group saved'  
         String expectedMsg ="Group Saved";
         ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
@@ -119,6 +119,55 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 	    Verification(group);
 	}
 
+	@Test(	description = "D1 Enhancement : Add 3 contacts to an existing group",
+			groups = { "functional" })
+	public void Add3ContactsToGroup() throws HarnessException {			
+		// Create a contact group via Soap
+		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);			             
+		group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+		
+		//refresh the browser
+		app.zPageAddressbook.zRefresh();
+
+		// Create a contact via Soap
+		ContactItem contactItem1 = ContactItem.createUsingSOAP(app);			             
+		contactItem1.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+		  		  
+		// Create a contact via Soap
+		ContactItem contactItem2 = ContactItem.createUsingSOAP(app);			             
+		contactItem2.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+		
+		// Create a contact via Soap
+		ContactItem contactItem3 = ContactItem.createUsingSOAP(app);			             
+		contactItem3.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+
+		 // Refresh the view, to pick up the new contact
+	    FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);	  
+	    app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
+	    	  
+	
+	    // Select the item
+	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contactItem1.fileAs);
+	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contactItem2.fileAs);
+	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contactItem3.fileAs);
+	   				  							
+		
+		//select the contact group 
+		app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_CONTACTGROUP, group, contactItem1.fileAs);     
+
+
+		//verify toasted message 'group saved'  
+        String expectedMsg ="Group Saved";
+        ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
+        		        expectedMsg , "Verify toast message '" + expectedMsg + "'");
+    
+    	group.addDListMember(contactItem1.email);
+		group.addDListMember(contactItem2.email);
+		group.addDListMember(contactItem3.email);
+
+	    Verification(group);
+	}
+	
 	@Test(	description = "D1 Enhancement : Create a contact group with 3 contacts",
 			groups = { "functional" })
 	public void CreateContactGroupWith3Contacts() throws HarnessException {			
@@ -144,7 +193,7 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contactItem3.fileAs);
 	   				  			
 		//open contact group form
-		SimpleFormContactGroupNew simpleFormGroup = (SimpleFormContactGroupNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_CONTACTGROUP, Button.O_NEW_CONTACTGROUP , contactItem1.fileAs);     
+		SimpleFormContactGroupNew simpleFormGroup = (SimpleFormContactGroupNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_CONTACTGROUP, Button.O_NEW_CONTACTGROUP , contactItem2.fileAs);     
 		
 		  //Create contact group 
 		ContactGroupItem group = new ContactGroupItem("group_" + ZimbraSeleniumProperties.getUniqueString());
