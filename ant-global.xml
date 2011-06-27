@@ -207,5 +207,10 @@
             </else>
         </if>
     </target>
-
+    <target name="zmlocalconfig">
+      <echo>Running localconfig with with argument: ${localconfig-args}</echo>
+      <java classname="com.zimbra.cs.localconfig.LocalConfigCLI" fork="true" classpathref="class.path" failonerror="true">
+        <arg line="${localconfig-args}"/>
+      </java>
+    </target>
 </project>
