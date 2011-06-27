@@ -101,9 +101,8 @@ public abstract class AbsSeleniumObject {
 
 		}
 
-
-		ClientSessionFactory.session().selenium().mouseDownAt(locator, coord);
-		ClientSessionFactory.session().selenium().mouseUpAt(locator, coord);
+		this.sMouseDownAt(locator, coord);
+		this.sMouseUpAt(locator, coord);
 
 		logger.info("zClick(" + locator + "," + coord + ")");
 	}
@@ -123,10 +122,9 @@ public abstract class AbsSeleniumObject {
 
 		}
 
-
-		ClientSessionFactory.session().selenium().mouseDown(locator);
-		ClientSessionFactory.session().selenium().mouseUp(locator);
-
+		this.sMouseDown(locator);
+		this.sMouseUp(locator);
+		
 		logger.info("zClick(" + locator + ")");
 	}
 
@@ -144,8 +142,8 @@ public abstract class AbsSeleniumObject {
 			throw new HarnessException("zRightClick(" + locator + ") element is not present");
 		}
 
-		ClientSessionFactory.session().selenium().mouseDownRightAt(locator,coord);
-		ClientSessionFactory.session().selenium().mouseUpRightAt(locator, coord);
+		this.sMouseDownRightAt(locator, coord);
+		this.sMouseUpRightAt(locator, coord);
 		
 		logger.info("zRightClick(" + locator + "," + coord + ")");
 	}
@@ -164,8 +162,8 @@ public abstract class AbsSeleniumObject {
 			throw new HarnessException("zRightClick(" + locator + ") element is not present");
 		}
 
-		ClientSessionFactory.session().selenium().mouseDownRight(locator);		
-		ClientSessionFactory.session().selenium().mouseUpRight(locator);
+		this.sMouseDownRight(locator);		
+		this.sMouseUpRight(locator);
 		logger.info("zRightClick(" + locator + ")");
 	}
 	
@@ -190,8 +188,7 @@ public abstract class AbsSeleniumObject {
 		try {
 			String script = "this.page().findElement('" + locator
 					+ "').innerHTML";
-			String html = ClientSessionFactory.session().selenium().getEval(
-					script);
+			String html = this.sGetEval(script);
 			logger.info("zGetHtml(" + locator + ") = " + html);
 			return (html);
 		} catch (SeleniumException e) {
@@ -215,9 +212,9 @@ public abstract class AbsSeleniumObject {
 			throw new HarnessException("zType(" + locator + ") element is not present");
 		}	
 		
-		ClientSessionFactory.session().selenium().focus(locator);
-		ClientSessionFactory.session().selenium().clickAt(locator, "0,0");
-		ClientSessionFactory.session().selenium().type(locator, value); 
+		this.sFocus(locator);
+		this.sClickAt(locator, "0,0");
+		this.sType(locator, value); 
 	
 		logger.info("zType(" + locator + ","  + value + ")");	
 	}
@@ -486,6 +483,18 @@ public abstract class AbsSeleniumObject {
 		logger.info("mouseDownAt(" + locator + ",'" + coordString + "')");
 	}
 
+	
+	public void sMouseDownRightAt(String locator, String coordString) {
+		ClientSessionFactory.session().selenium().mouseDownRightAt(locator, coordString);
+		logger.info("mouseDownRightAt(" + locator + ",'" + coordString + "')");
+	}
+
+	public void sMouseUpRightAt(String locator, String coordString) {
+		ClientSessionFactory.session().selenium().mouseUpRightAt(locator, coordString);
+		logger.info("mouseUpRightAt(" + locator + ",'" + coordString + "')");
+	}
+
+
 	/**
 	 * DefaultSelenium.mouseOver()
 	 */
@@ -666,14 +675,10 @@ public abstract class AbsSeleniumObject {
 
 	/**
 	 * zIsBusyOverlay()
+	 * @throws HarnessException 
 	 */
-	public boolean zIsBusyOverlay() {
-		boolean isBusyOverlay = (ClientSessionFactory
-				.session()
-				.selenium()
-				.getEval(
-						"this.browserbot.getUserWindow().top.appCtxt.getShell().getBusy()")
-				.equals("true"));
+	public boolean zIsBusyOverlay() throws HarnessException {
+		boolean isBusyOverlay = (this.sGetEval("this.browserbot.getUserWindow().top.appCtxt.getShell().getBusy()")).equals("true");
 
 		logger.info("isBusyOverlay(" + ") = " + isBusyOverlay);
 		return (isBusyOverlay);
