@@ -115,11 +115,12 @@ function() {
 
 ZmSalesDemoZimlet.prototype.generateSpan =
 function(html, idx, obj, spanId, context) {
+	var matchedText = obj.toLowerCase();
 	var span = ZmObjectHandler.prototype.generateSpan.apply(this, arguments);
 	if(this.firstItemSinceMsgOpened) {
-		var item = this.items[obj];
-		if(item.showToolbar) {
-			this._addSalesZimletBar(obj, item);
+		var item = this.items[matchedText];
+		if(item && item.showToolbar) {
+			this._addSalesZimletBar(matchedText, item);
 			this.firstItemSinceMsgOpened = false;
 		}
 	}
