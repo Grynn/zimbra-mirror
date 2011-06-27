@@ -1,0 +1,9 @@
+README:
+This is an example of a Zimbra server extension. This extension adds "HelloWorldRequest" to zimbraAccount namespace.
+To deploy run 
+>ant deploy
+
+to test
+run 
+
+>zmsoap -m user1 -p test123 -u http://localhost:7070/service/soap -type account HelloWorldRequest
