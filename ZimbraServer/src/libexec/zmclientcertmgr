@@ -162,16 +162,30 @@ deployCerts() {
 }
 
 saveClientCertToLdap() {
-  domain=$1
+  target=$1
   current_crt=$2
-  if [ x"$domain" = "x" ]; then
-    echo "$ERROR_PREFIX Domain must be specified."
-    return
-  fi
   if [ ! -e ${current_crt} ]; then
     echo "$ERROR_PREFIX Certificate file ${current_crt} does not exist."
     return
   fi
+  
+  if [ x"$target" = "xglobal" ]; then
+    saveConfigKey "zimbraReverseProxyClientCertCA" ${current_crt} "global"
+    return
+  fi
+
+  if [ x"$target" = "xserver" ]; then
+    saveConfigKey "zimbraReverseProxyClientCertCA" ${current_crt} "server"
+    return
+  fi
+
+  domain=$target
+  
+  if [ x"$domain" = "x" ]; then
+    echo "$ERROR_PREFIX Domain must be specified."
+    return
+  fi
+
   saveConfigKey "zimbraReverseProxyClientCertCA" ${current_crt} "domain" ${domain}
 }
 
@@ -196,6 +210,8 @@ usage () {
   echo "Usage: "
   echo "  $0 -help"
   echo "  $0 savecrt <domain> <cert file>"
+  echo "  $0 savecrt server <cert file>"
+  echo "  $0 savecrt global <cert file>"
   echo
   
   exit 1;

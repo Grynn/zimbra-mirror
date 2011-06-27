@@ -49,6 +49,7 @@ build:
             --with-http_stub_status_module \
             --with-pcre \
             --with-http_upstream_zmauth_module \
+            --with-http_zm_sso_module \
             --with-mail \
             --with-mail-sasl \
             --with-mail_ssl_module \

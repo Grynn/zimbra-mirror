@@ -1,0 +1,8 @@
+zm_lookup {
+
+    zm_lookup_handlers  ${zmlookup.:handlers};
+    zm_lookup_timeout   ${zmlookup.timeout};
+    zm_lookup_handler_retry_interval ${zmlookup.retryinterval};
+    zm_lookup_master_auth_username "zmnginx";
+    zm_lookup_master_auth_password "${zmlookup.dpasswd}";
+}

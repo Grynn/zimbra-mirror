@@ -1,0 +1,28 @@
+#client cert auth
+server {
+    ${core.ipboth.enabled}listen                  [::]:${web.sso.certauth.port} default;
+    ${core.ipv4only.enabled}listen                ${web.sso.certauth.port} default;
+    ${core.ipv6only.enabled}listen                [::]:${web.sso.certauth.port} default ipv6only=on;
+
+    ssl                     on;
+    ssl_prefer_server_ciphers ${web.ssl.preferserverciphers};
+    ssl_ciphers             ${web.ssl.ciphers};
+    ssl_certificate         ${ssl.crt.default};
+    ssl_certificate_key     ${ssl.key.default};
+    ssl_verify_client       ${ssl.clientcertmode.default};
+    ssl_verify_depth        ${ssl.clientcertdepth.default};
+    ssl_client_certificate  ${ssl.clientcertca.default};
+
+    error_page 495 496 497 =403 /50x.html;
+
+    location = /certauth {
+        zm_sso certauth;
+        zm_sso_redirect_url ${web.https.port};
+    }
+
+    location / {
+        return 403; #other resource access is forbidden
+    }
+}
+
+    

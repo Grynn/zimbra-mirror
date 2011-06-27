@@ -1,0 +1,29 @@
+!{explode vhn_vip_ssl}
+
+#client cert auth
+server {
+    server_name             ${vhn}; 
+    ${core.ipboth.enabled}listen                  ${vip}:${web.sso.certauth.port};
+    ${core.ipv4only.enabled}listen                  ${vip}:${web.sso.certauth.port};
+    ${core.ipv6only.enabled}listen                  ${vip}:${web.sso.certauth.port} ipv6only=on;
+
+    ssl                     on;
+    ssl_prefer_server_ciphers ${web.ssl.preferserverciphers};
+    ssl_ciphers             ${web.ssl.ciphers};
+    ssl_certificate         ${ssl.crt};
+    ssl_certificate_key     ${ssl.key};
+    ssl_verify_client       ${ssl.clientcertmode};
+    ssl_verify_depth        ${ssl.clientcertdepth.default};
+    ssl_client_certificate  ${ssl.clientcertca};
+
+    error_page 495 496 497 =403 /50x.html;
+
+    location = /certauth {
+        zm_sso certauth;
+        zm_sso_redirect_url ${vhn}:${web.https.port};
+    }
+
+    location / {
+        return 403; #other resource access is forbidden
+    }
+}

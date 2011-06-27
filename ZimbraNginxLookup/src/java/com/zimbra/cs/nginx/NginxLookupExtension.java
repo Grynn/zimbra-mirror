@@ -350,6 +350,8 @@ public class NginxLookupExtension implements ZimbraExtension {
                 
                 if (req.serverIp == null)
                     throw new NginxLookupException("(CERTAUTH) missing header field " + SERVER_IP);
+                
+                req.user = unifyDNFormat(req.user);
             }
 
             if (req.pass == null)   /* We should not complain on null password */
@@ -369,6 +371,22 @@ public class NginxLookupExtension implements ZimbraExtension {
             }
 
             return req;
+        }
+        
+        /**
+         * The DN returned by nginx looks like:
+         * /C=US/ST=California/L=Saratoga/O=Zimbra/OU=Engineering/CN=user one/emailAddress=user1@u10
+         * This method changes the separator to ",", trim the first "/" and make
+         * "emailAddress" to "EMAILADDRESS"
+         */
+        private static String unifyDNFormat(String dn) {
+        	if (dn.startsWith("/")) {
+        		dn = dn.substring(1); //trim the first "/"
+        	}
+     
+        	dn = dn.replace("/", ",");
+        	dn = dn.replace("emailAddress", "EMAILADDRESS");
+        	return dn;
         }
         
         /**
@@ -788,6 +806,13 @@ public class NginxLookupExtension implements ZimbraExtension {
                 Provisioning prov = Provisioning.getInstance();
                 Config config = prov.getConfig();
                 String authUser = getQualifiedUsername(zlc, config, req);
+                
+                if (req.authMethod.equalsIgnoreCase(AUTHMETH_CERTAUTH)) {
+                	// for cert auth, no need to find the reault port, just
+                	// send back zm_auth_token or zm_admin_auth_token
+                	sendResult(req, "127.0.0.1", "9999", authUser);
+                	return;
+                }
                 
                 Map<String, Boolean> attrs = new HashMap<String, Boolean>();
                 attrs.put(Provisioning.A_zimbraReverseProxyMailHostAttribute, true);

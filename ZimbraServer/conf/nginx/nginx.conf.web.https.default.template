@@ -11,9 +11,6 @@ server
     ssl_ciphers             ${web.ssl.ciphers};
     ssl_certificate         ${ssl.crt.default};
     ssl_certificate_key     ${ssl.key.default};
-    ssl_verify_client       ${ssl.clientcertmode.default};
-    ssl_verify_depth        ${ssl.clientcertdepth.default};
-    ssl_client_certificate  ${ssl.clientcertca.default};
 
 
     location /
