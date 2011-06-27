@@ -461,7 +461,7 @@ function(args) {
 	var origLen = argsArray.length;
 	if (argsArray.length > 1) {
 		var lastArg = argsArray[argsArray.length - 1];
-		if (lastArg && lastArg.indexOf && ((lastArg.indexOf(" ") == -1) && (/Request|Response$/.test(lastArg)))) {
+		if (lastArg && lastArg.indexOf && (lastArg.indexOf("DebugWarn") != -1 || ((lastArg.indexOf(" ") == -1) && (/Request|Response$/.test(lastArg))))) {
 			result.linkName = lastArg;
 			argsArray.pop();
 		}
@@ -517,6 +517,7 @@ function(force) {
 											"'font-size:11px;}',",
 									"'.Content {display:block;margin:0.25em 0em;}',",
 									"'.Link {cursor: pointer;color:blue;text-decoration:underline;white-space:nowrap;width:100%;}',",
+									"'.DebugWarn {color:red;font-weight:bold;}',",
 									"'.Run {color:black; background-color:red;width:100%;font-size:18px;font-weight:bold;}',",
 									"'.RunLink {display:block;color:black;background-color:red;font-weight:bold;white-space:nowrap;width:100%;}',",
 								"'</style></head><body></body></html>'].join(\"\");}",
@@ -966,7 +967,12 @@ function(params) {
 		AjxDebug.println(type, msg);
 	}
 	if (window.DBG) {
-		window.DBG.println(window.DBG._level, msg, params.methodNameStr);
+        // Link is written here:
+        var linkName = params.methodNameStr;
+        if (!params.asyncMode) {
+            linkName = "<span class='DebugWarn'>SYNCHRONOUS </span>" + linkName;
+        }
+        window.DBG.println(window.DBG._level, msg, linkName);
 	}
 };
 
