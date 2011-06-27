@@ -219,6 +219,18 @@ public interface AccountService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.GetSMIMEPublicCertsResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/GetSMIMEPublicCerts")
+    @WebResult(name = "GetSMIMEPublicCertsResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public GetSMIMEPublicCertsResponse getSMIMEPublicCertsRequest(
+        @WebParam(name = "GetSMIMEPublicCertsRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        GetSMIMEPublicCertsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.account.wsimport.generated.GetShareInfoResponse
      */
     @WebMethod(action = "urn:zimbraAccount/GetShareInfo")

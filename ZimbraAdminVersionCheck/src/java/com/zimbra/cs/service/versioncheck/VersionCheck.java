@@ -22,7 +22,6 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.common.account.Key;
 import com.zimbra.common.account.Key.AccountBy;
-import com.zimbra.common.account.Key.ServerBy;
 import com.zimbra.cs.account.accesscontrol.AdminRight;
 import com.zimbra.cs.account.accesscontrol.Rights.Admin;
 import com.zimbra.cs.service.AuthProvider;
@@ -46,21 +45,8 @@ import com.zimbra.cs.httpclient.URLUtil;
  * @author Greg Solovyev
  */
 public class VersionCheck extends AdminDocumentHandler {
-	public static String E_UPDATES= "updates";
-	public static String E_UPDATE = "update";
-	public static String E_VERSION_CHECK = "versionCheck";
-	public static String A_VERSION_CHECK_STATUS = "status";
-	public static String A_UPDATE_TYPE = "type";
-	public static String A_CRITICAL = "critical";
-	public static String UPDATE_TYPE_MAJOR = "major";
-	public static String UPDATE_TYPE_MINOR = "minor";
-	public static String A_UPDATE_URL = "updateURL";
-	public static String A_DESCRIPTION = "description";
-	public static String A_SHORT_VERSION = "shortversion";
-	public static String A_VERSION = "version";
-	public static String A_RELEASE = "release";
-	public static String A_PLATFORM = "platform";
-	public static String A_BUILDTYPE = "buildtype";
+    public static String UPDATE_TYPE_MAJOR = "major";
+    public static String UPDATE_TYPE_MINOR = "minor";
 	
 	@Override
 	public Element handle(Element request, Map<String, Object> context)	throws ServiceException {
@@ -69,8 +55,8 @@ public class VersionCheck extends AdminDocumentHandler {
         Config config = prov.getConfig();
     	checkRight(zc, context, null, Admin.R_checkSoftwareUpdates);      
         String action = request.getAttribute(MailConstants.E_ACTION);
-    	Element response = zc.createElement(VersionCheckService.VC_RESPONSE);
-        if(action.equalsIgnoreCase(VersionCheckService.VERSION_CHECK_CHECK)) {
+    	Element response = zc.createElement(AdminConstants.VC_RESPONSE);
+        if(action.equalsIgnoreCase(AdminConstants.VERSION_CHECK_CHECK)) {
         	//check if we need to proxy to the updater server
         	String updaterServerId = config.getAttr(Provisioning.A_zimbraVersionCheckServer);
 
@@ -107,7 +93,7 @@ public class VersionCheck extends AdminDocumentHandler {
 			}
 			if (sendNotification) {
 				String fromEmail = config.getAttr(Provisioning.A_zimbraVersionCheckNotificationEmailFrom);
-				boolean hasUpdates = respDoc.getAttributeBool(A_VERSION_CHECK_STATUS, false);
+				boolean hasUpdates = respDoc.getAttributeBool(AdminConstants.A_VERSION_CHECK_STATUS, false);
 				if (hasUpdates) {
 					boolean hasCritical = false;
 					String msgTemplate = config.getAttr(Provisioning.A_zimbraVersionCheckNotificationBody);
@@ -117,7 +103,7 @@ public class VersionCheck extends AdminDocumentHandler {
 						String criticalStr = "";
 						String updateTemplate = null;
 						String prefix = null;
-						Element eUpdates = respDoc.getElement(E_UPDATES);
+						Element eUpdates = respDoc.getElement(AdminConstants.E_UPDATES);
 						int beginUpdateIndex,endUpdateIndex;
 						beginUpdateIndex = msgTemplate.indexOf("${BEGIN_UPDATE}");
 						endUpdateIndex = msgTemplate.indexOf("${END_UPDATE}",beginUpdateIndex);
@@ -133,9 +119,9 @@ public class VersionCheck extends AdminDocumentHandler {
 							updateTemplate = msgTemplate.substring(beginUpdateIndex, endUpdateIndex);
 							
 							int i=1;
-							for (Iterator<Element> iter = eUpdates.elementIterator(E_UPDATE); iter.hasNext();) {
+							for (Iterator<Element> iter = eUpdates.elementIterator(AdminConstants.E_UPDATE); iter.hasNext();) {
 								Element eUpdate = iter.next();
-								boolean isCritical = eUpdate.getAttributeBool(A_CRITICAL, false);
+								boolean isCritical = eUpdate.getAttributeBool(AdminConstants.A_CRITICAL, false);
 								if (isCritical)
 									hasCritical = true;
 
@@ -144,13 +130,13 @@ public class VersionCheck extends AdminDocumentHandler {
 								} else {
 									criticalStr = "non-critical";
 								}
-								msg = msg.concat(updateTemplate.replaceAll("\\$\\{UPDATE_URL\\}", eUpdate.getAttribute(A_UPDATE_URL))
-								.replaceAll("\\$\\{UPDATE_DESCRIPTION\\}", eUpdate.getAttribute(A_DESCRIPTION))
-								.replaceAll("\\$\\{UPDATE_VERSION\\}", eUpdate.getAttribute(A_VERSION))
-								.replaceAll("\\$\\{UPDATE_SHORT_VERSION\\}", eUpdate.getAttribute(A_SHORT_VERSION))
-								.replaceAll("\\$\\{UPDATE_RELEASE\\}", eUpdate.getAttribute(A_RELEASE))
-								.replaceAll("\\$\\{UPDATE_PLATFORM\\}", eUpdate.getAttribute(A_PLATFORM))
-								.replaceAll("\\$\\{UPDATE_BUILD_TYPE\\}", eUpdate.getAttribute(A_BUILDTYPE))
+								msg = msg.concat(updateTemplate.replaceAll("\\$\\{UPDATE_URL\\}", eUpdate.getAttribute(AdminConstants.A_UPDATE_URL))
+								.replaceAll("\\$\\{UPDATE_DESCRIPTION\\}", eUpdate.getAttribute(AdminConstants.A_DESCRIPTION))
+								.replaceAll("\\$\\{UPDATE_VERSION\\}", eUpdate.getAttribute(AdminConstants.A_VERSION))
+								.replaceAll("\\$\\{UPDATE_SHORT_VERSION\\}", eUpdate.getAttribute(AdminConstants.A_SHORT_VERSION))
+								.replaceAll("\\$\\{UPDATE_RELEASE\\}", eUpdate.getAttribute(AdminConstants.A_RELEASE))
+								.replaceAll("\\$\\{UPDATE_PLATFORM\\}", eUpdate.getAttribute(AdminConstants.A_PLATFORM))
+								.replaceAll("\\$\\{UPDATE_BUILD_TYPE\\}", eUpdate.getAttribute(AdminConstants.A_BUILDTYPE))
 								.replaceAll("\\$\\{IS_CRITICAL\\}", criticalStr)
 								.replaceAll("\\$\\{UPDATE_COUNTER\\}", Integer.toString(i))
 								.replaceAll("\\$\\{BEGIN_UPDATE\\}", "")
@@ -208,7 +194,7 @@ public class VersionCheck extends AdminDocumentHandler {
 				}
 			}
         	
-        } else if(action.equalsIgnoreCase(VersionCheckService.VERSION_CHECK_STATUS)) {
+        } else if(action.equalsIgnoreCase(AdminConstants.VERSION_CHECK_STATUS)) {
 			try {
 
 	        	String resp = config.getAttr(Provisioning.A_zimbraVersionCheckLastResponse);
@@ -216,35 +202,35 @@ public class VersionCheck extends AdminDocumentHandler {
 	        	if(resp != null) {
 		        	Element respDoc = Element.parseXML(resp);
 
-					hasUpdates = respDoc.getAttributeBool(A_VERSION_CHECK_STATUS, false);
-					Element elRespVersionCheck = response.addElement(E_VERSION_CHECK);
-					elRespVersionCheck.addAttribute(A_VERSION_CHECK_STATUS, hasUpdates);
+					hasUpdates = respDoc.getAttributeBool(AdminConstants.A_VERSION_CHECK_STATUS, false);
+					Element elRespVersionCheck = response.addElement(AdminConstants.E_VERSION_CHECK);
+					elRespVersionCheck.addAttribute(AdminConstants.A_VERSION_CHECK_STATUS, hasUpdates);
 					if(hasUpdates) {
-						Element eUpdates = respDoc.getElement(E_UPDATES);
-						Element elRespUpdates = elRespVersionCheck.addElement(E_UPDATES);
-			            for (Iterator<Element> iter = eUpdates.elementIterator(E_UPDATE); iter.hasNext(); ) {
+						Element eUpdates = respDoc.getElement(AdminConstants.E_UPDATES);
+						Element elRespUpdates = elRespVersionCheck.addElement(AdminConstants.E_UPDATES);
+			            for (Iterator<Element> iter = eUpdates.elementIterator(AdminConstants.E_UPDATE); iter.hasNext(); ) {
 			                Element eUpdate = iter.next();
-			                String updateType = eUpdate.getAttribute(A_UPDATE_TYPE);
-			                boolean isCritical = eUpdate.getAttributeBool(A_CRITICAL,false);
-			                String detailsUrl = eUpdate.getAttribute(A_UPDATE_URL);
-			                String description = eUpdate.getAttribute(A_DESCRIPTION);
-			                String version = eUpdate.getAttribute(A_VERSION);
-			                String release = eUpdate.getAttribute(A_RELEASE);
-			                String platform = eUpdate.getAttribute(A_PLATFORM);
-			                String buildtype = eUpdate.getAttribute(A_BUILDTYPE);
-			                String shortVersion = eUpdate.getAttribute(A_SHORT_VERSION);
+			                String updateType = eUpdate.getAttribute(AdminConstants.A_UPDATE_TYPE);
+			                boolean isCritical = eUpdate.getAttributeBool(AdminConstants.A_CRITICAL,false);
+			                String detailsUrl = eUpdate.getAttribute(AdminConstants.A_UPDATE_URL);
+			                String description = eUpdate.getAttribute(AdminConstants.A_DESCRIPTION);
+			                String version = eUpdate.getAttribute(AdminConstants.A_VERSION);
+			                String release = eUpdate.getAttribute(AdminConstants.A_RELEASE);
+			                String platform = eUpdate.getAttribute(AdminConstants.A_PLATFORM);
+			                String buildtype = eUpdate.getAttribute(AdminConstants.A_BUILDTYPE);
+			                String shortVersion = eUpdate.getAttribute(AdminConstants.A_SHORT_VERSION);
 			                
-			                Element elRespUpdate = elRespUpdates.addElement(E_UPDATE);
-			                elRespUpdate.addAttribute(A_UPDATE_TYPE,updateType);
-			                elRespUpdate.addAttribute(A_CRITICAL,isCritical);
-			                elRespUpdate.addAttribute(A_UPDATE_URL,detailsUrl);
-			                elRespUpdate.addAttribute(A_DESCRIPTION,description);
-			                elRespUpdate.addAttribute(A_SHORT_VERSION,shortVersion);
-			                elRespUpdate.addAttribute(A_RELEASE,release);
-			                elRespUpdate.addAttribute(A_VERSION,version);
-			                elRespUpdate.addAttribute(A_BUILDTYPE,buildtype);
-			                elRespUpdate.addAttribute(A_PLATFORM,platform);		                
-			            }					
+			                Element elRespUpdate = elRespUpdates.addElement(AdminConstants.E_UPDATE);
+			                elRespUpdate.addAttribute(AdminConstants.A_UPDATE_TYPE,updateType);
+			                elRespUpdate.addAttribute(AdminConstants.A_CRITICAL,isCritical);
+			                elRespUpdate.addAttribute(AdminConstants.A_UPDATE_URL,detailsUrl);
+			                elRespUpdate.addAttribute(AdminConstants.A_DESCRIPTION,description);
+			                elRespUpdate.addAttribute(AdminConstants.A_SHORT_VERSION,shortVersion);
+			                elRespUpdate.addAttribute(AdminConstants.A_RELEASE,release);
+			                elRespUpdate.addAttribute(AdminConstants.A_VERSION,version);
+			                elRespUpdate.addAttribute(AdminConstants.A_BUILDTYPE,buildtype);
+			                elRespUpdate.addAttribute(AdminConstants.A_PLATFORM,platform);
+			            }
 					}
 	        	}
 			} catch (DocumentException e) {

@@ -194,14 +194,14 @@ public class FilterRule {
 
         @XmlElements({
             @XmlElement(name = "actionStop", type = FilterActionStop.class),
-            @XmlElement(name = "actionFileInto", type = FilterActionFileInto.class),
+            @XmlElement(name = "actionKeep", type = FilterActionKeep.class),
             @XmlElement(name = "actionTag", type = FilterActionTag.class),
-            @XmlElement(name = "actionDiscard", type = FilterActionDiscard.class),
             @XmlElement(name = "actionRedirect", type = FilterActionRedirect.class),
-            @XmlElement(name = "actionFlag", type = FilterActionFlag.class),
-            @XmlElement(name = "actionReply", type = FilterActionReply.class),
+            @XmlElement(name = "actionDiscard", type = FilterActionDiscard.class),
+            @XmlElement(name = "actionFileInto", type = FilterActionFileInto.class),
             @XmlElement(name = "actionNotify", type = FilterActionNotify.class),
-            @XmlElement(name = "actionKeep", type = FilterActionKeep.class)
+            @XmlElement(name = "actionFlag", type = FilterActionFlag.class),
+            @XmlElement(name = "actionReply", type = FilterActionReply.class)
         })
         protected List<Object> actionKeepOrActionDiscardOrActionFileInto;
 
@@ -224,14 +224,14 @@ public class FilterRule {
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link FilterActionStop }
-         * {@link FilterActionFileInto }
+         * {@link FilterActionKeep }
          * {@link FilterActionTag }
-         * {@link FilterActionDiscard }
          * {@link FilterActionRedirect }
+         * {@link FilterActionDiscard }
+         * {@link FilterActionFileInto }
+         * {@link FilterActionNotify }
          * {@link FilterActionFlag }
          * {@link FilterActionReply }
-         * {@link FilterActionNotify }
-         * {@link FilterActionKeep }
          * 
          * 
          */

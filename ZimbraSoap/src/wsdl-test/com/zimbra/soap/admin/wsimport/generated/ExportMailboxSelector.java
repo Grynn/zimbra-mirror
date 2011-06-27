@@ -21,8 +21,8 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="dest" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="destPort" type="{http://www.w3.org/2001/XMLSchema}int" />
- *       &lt;attribute name="overwrite" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="tempDir" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="overwrite" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -41,9 +41,9 @@ public class ExportMailboxSelector {
     @XmlAttribute
     protected Integer destPort;
     @XmlAttribute
-    protected Boolean overwrite;
-    @XmlAttribute
     protected String tempDir;
+    @XmlAttribute
+    protected Boolean overwrite;
 
     /**
      * Gets the value of the name property.
@@ -118,30 +118,6 @@ public class ExportMailboxSelector {
     }
 
     /**
-     * Gets the value of the overwrite property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public Boolean isOverwrite() {
-        return overwrite;
-    }
-
-    /**
-     * Sets the value of the overwrite property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setOverwrite(Boolean value) {
-        this.overwrite = value;
-    }
-
-    /**
      * Gets the value of the tempDir property.
      * 
      * @return
@@ -163,6 +139,30 @@ public class ExportMailboxSelector {
      */
     public void setTempDir(String value) {
         this.tempDir = value;
+    }
+
+    /**
+     * Gets the value of the overwrite property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isOverwrite() {
+        return overwrite;
+    }
+
+    /**
+     * Sets the value of the overwrite property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setOverwrite(Boolean value) {
+        this.overwrite = value;
     }
 
 }

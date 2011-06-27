@@ -14,11 +14,15 @@
  */
 package com.zimbra.soap.admin;
 
+import java.io.Serializable;
 import java.util.List;
+
+import javax.xml.bind.JAXBElement;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 
 import com.zimbra.soap.admin.wsimport.generated.*;
+import com.zimbra.soap.admin.wsimport.generated.GetAdminExtensionZimletsResponse.Zimlets;
 
 import com.zimbra.soap.Utility;
 
@@ -28,6 +32,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.w3c.dom.Element;
 
 public class WSDLZimletTest {
 
@@ -135,8 +140,10 @@ public class WSDLZimletTest {
                     zimlet.getPriority() >= 0);
             Assert.assertEquals(zTag + " status", ZimletStatusSetting.ENABLED,
                     zimlet.getStatus());
-            Assert.assertFalse(zTag + " extension setting",
-                    zimlet.isExtension());
+            // ZimbraServer deployed zimlets happen to have false for all
+            // zimlets but ZimbraNetwork has some extensions.
+            // Changed test to just be for existence of "isExtension" method.
+            zimlet.isExtension();
         }
         List<ZimletStatusCos> coses = resp.getCos();
         zNum = coses.size();
@@ -161,8 +168,81 @@ public class WSDLZimletTest {
         }
     }
 
-    // TODO: Not yet implemented the Jaxb classes for this
-    // @Test
-    public void getAdminExtensionZimletsTestNOT() throws Exception {
+    //  ZimbraNetwork's "ant dev-deploy-all" installs some Admin extensions
+    //  (ZimbraServer does not)
+    @Test
+    public void getAdminExtensionZimletsTest() throws Exception {
+        AdminService nvEif = Utility.getNonValidatingAdminSvcEIF();
+        // the validator does not like the @XmlAnyElement used
+        // in AdminZimletDesc
+        Utility.addSoapAdminAuthHeader((WSBindingProvider)nvEif);
+        GetAdminExtensionZimletsRequest req = new GetAdminExtensionZimletsRequest();
+        GetAdminExtensionZimletsResponse resp = nvEif.getAdminExtensionZimletsRequest(req);
+        Assert.assertNotNull("GetAdminExtensionZimletsResponse object", resp);
+        Zimlets zimlets = resp.getZimlets();
+        Assert.assertNotNull("GetAdminExtensionZimletsResponse/zimlets object", zimlets);
+        List<AdminZimletInfo> azimlets = zimlets.getZimlet();
+        System.out.println("Number of zimlets=" + azimlets.size());
+        for (AdminZimletInfo azi : azimlets) {
+            AdminZimletContext ctx = azi.getZimletContext();
+            if (ctx != null) {
+                Assert.assertNotNull("ZimletContext baseUrl object", ctx.getBaseUrl());
+                System.out.println("zimlet context baseUrl=" + ctx.getBaseUrl());
+                Assert.assertNotNull("ZimletContext presence object", ctx.getPresence());
+                ctx.getPriority(); // optional
+            }
+            AdminZimletConfigInfo cfg = azi.getZimletConfig();
+            if (cfg != null) {
+                Assert.assertNotNull("ZimletConfig description object", cfg.getDescription());
+                Assert.assertNotNull("ZimletConfig extension object", cfg.getExtension());
+                Assert.assertNotNull("ZimletConfig name object", cfg.getName());
+                System.out.println("zimlet name=" + cfg.getName());
+                cfg.getLabel();
+                cfg.getTarget();
+                cfg.getVersion();
+                cfg.getGlobal();
+                cfg.getHost();
+            }
+            AdminZimletDesc zimletDesc = azi.getZimlet();
+            if (zimletDesc != null) {
+                Assert.assertNotNull("ZimletDesc description object", zimletDesc.getDescription());
+                Assert.assertNotNull("ZimletDesc extension object", zimletDesc.getExtension());
+                Assert.assertNotNull("ZimletDesc name object", zimletDesc.getName());
+                System.out.println("zimlet name=" + zimletDesc.getName());
+                zimletDesc.getLabel();
+                zimletDesc.getTarget();
+                zimletDesc.getVersion();
+                List<Object> objs = zimletDesc.getServerExtensionOrIncludeOrIncludeCSS();  // if @XmlAnyElement
+                // List<JAXBElement<?>> objs = zimletDesc.getServerExtensionOrIncludeOrIncludeCSS(); // if @xmlMixed
+                // List<Serializable> objs = zimletDesc.getContent(); // if nothing
+                for (Object obj : objs) {
+                    if (obj instanceof Element) {
+                        Element elem = (Element)obj;
+                        System.out.println(
+                                "getAdminExtensionZimletsTest - Element name " +
+                                elem.getLocalName());
+                    } else if (obj instanceof ZimletServerExtension) {
+                        ZimletServerExtension zse = (ZimletServerExtension) obj;
+                        Assert.assertNotNull(
+                                "ZimletDesc server extension HasKeyword object",
+                                zse.getHasKeyword());
+                        zse.getExtensionClass();
+                        zse.getRegex();
+                    } else if (obj instanceof JAXBElement) {
+                        @SuppressWarnings("rawtypes")
+                        JAXBElement jaxbElem = (JAXBElement) obj;
+                        @SuppressWarnings("rawtypes")
+                        Class klass = jaxbElem.getDeclaredType();
+                        System.out.println(
+                                "ZimletDesc klass wrapped by JAXBElement=" +
+                                klass.getName() +
+                                " elemName=" + jaxbElem.getName() +
+                                " value=" + jaxbElem.getValue().toString());
+                    }
+                }
+            }
+            @SuppressWarnings("unused")
+            Element handlerCfgElem = azi.getAny();
+        }
     }
 }

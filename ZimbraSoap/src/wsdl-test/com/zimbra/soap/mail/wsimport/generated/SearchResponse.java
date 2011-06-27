@@ -69,16 +69,16 @@ public class SearchResponse {
 
     @XmlElements({
         @XmlElement(name = "doc", type = DocumentHitInfo.class),
-        @XmlElement(name = "m", type = MessageHitInfo.class),
-        @XmlElement(name = "note", type = NoteHitInfo.class),
-        @XmlElement(name = "hit", type = SimpleSearchHit.class),
+        @XmlElement(name = "w", type = WikiHitInfo.class),
         @XmlElement(name = "task", type = TaskHitInfo.class),
         @XmlElement(name = "chat", type = ChatHitInfo.class),
-        @XmlElement(name = "w", type = WikiHitInfo.class),
         @XmlElement(name = "appt", type = AppointmentHitInfo.class),
+        @XmlElement(name = "note", type = NoteHitInfo.class),
+        @XmlElement(name = "c", type = ConversationHitInfo.class),
         @XmlElement(name = "cn", type = ContactInfo.class),
         @XmlElement(name = "mp", type = MessagePartHitInfo.class),
-        @XmlElement(name = "c", type = ConversationHitInfo.class)
+        @XmlElement(name = "m", type = MessageHitInfo.class),
+        @XmlElement(name = "hit", type = SimpleSearchHit.class)
     })
     protected List<Object> hitOrCOrM;
     protected SearchResponse.Info info;
@@ -110,16 +110,16 @@ public class SearchResponse {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link DocumentHitInfo }
-     * {@link MessageHitInfo }
-     * {@link NoteHitInfo }
-     * {@link SimpleSearchHit }
+     * {@link WikiHitInfo }
      * {@link TaskHitInfo }
      * {@link ChatHitInfo }
-     * {@link WikiHitInfo }
      * {@link AppointmentHitInfo }
+     * {@link NoteHitInfo }
+     * {@link ConversationHitInfo }
      * {@link ContactInfo }
      * {@link MessagePartHitInfo }
-     * {@link ConversationHitInfo }
+     * {@link MessageHitInfo }
+     * {@link SimpleSearchHit }
      * 
      * 
      */

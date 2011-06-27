@@ -28,6 +28,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.AdminExtConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.EmailUtil;
 import com.zimbra.common.util.StringUtil;
@@ -67,14 +68,6 @@ import com.zimbra.soap.ZimbraSoapContext;
  * @author Greg Solovyev
  */
 public class BulkImportAccounts extends AdminDocumentHandler {
-    private static final String E_status = "status";
-    private static final String E_provisionedCount = "provisionedCount";
-    private static final String E_skippedCount = "skippedCount";
-    private static final String E_totalCount = "totalCount";
-    private static final String E_reportFileToken = "fileToken";
-    private static final String E_errorCount = "errorCount";
-    private static final String E_mustChangePassword = "mustChangePassword";
-    private static final String E_createDomains = "createDomains";
 
     public static final String ERROR_INVALID_ACCOUNT_NAME = "Invalid account name. ";
     private static final int DEFAULT_PWD_LENGTH = 8;
@@ -84,8 +77,8 @@ public class BulkImportAccounts extends AdminDocumentHandler {
             throws ServiceException {
         ZimbraSoapContext zsc = getZimbraSoapContext(context);
         Map attrs = AdminService.getAttrs(request, true);
-        String op = request.getAttribute(ZimbraBulkProvisionExt.A_op);
-        Element response = zsc.createElement(ZimbraBulkProvisionService.BULK_IMPORT_ACCOUNTS_RESPONSE);
+        String op = request.getAttribute(AdminExtConstants.A_op);
+        Element response = zsc.createElement(AdminExtConstants.BULK_IMPORT_ACCOUNTS_RESPONSE);
         Provisioning prov = Provisioning.getInstance();
         if (ZimbraBulkProvisionExt.OP_PREVIEW.equalsIgnoreCase(op) || ZimbraBulkProvisionExt.OP_START_IMPORT.equalsIgnoreCase(op)) {
             int totalAccounts = 0;
@@ -93,13 +86,13 @@ public class BulkImportAccounts extends AdminDocumentHandler {
             String SMTPHost = "";
             String SMTPPort = "";
             String zimbraMailTransport = "";
-            boolean createDomains = "TRUE".equalsIgnoreCase(request.getElement(E_createDomains).getTextTrim());
+            boolean createDomains = "TRUE".equalsIgnoreCase(request.getElement(AdminExtConstants.E_createDomains).getTextTrim());
 
-            Element eSMTPHost = request.getOptionalElement(ZimbraBulkProvisionExt.E_SMTPHost);
+            Element eSMTPHost = request.getOptionalElement(AdminExtConstants.E_SMTPHost);
             if(eSMTPHost != null) {
                 SMTPHost = eSMTPHost.getTextTrim();
             }
-            Element eSMTPPort = request.getOptionalElement(ZimbraBulkProvisionExt.E_SMTPPort);
+            Element eSMTPPort = request.getOptionalElement(AdminExtConstants.E_SMTPPort);
             if(eSMTPPort != null) {
                 SMTPPort = eSMTPPort.getTextTrim();
             }
@@ -112,9 +105,9 @@ public class BulkImportAccounts extends AdminDocumentHandler {
              */
             List<Map<String, Object>> sourceEntries = new ArrayList<Map<String, Object>>();
 
-            String sourceType = request.getElement(ZimbraBulkProvisionExt.A_sourceType).getTextTrim();
+            String sourceType = request.getElement(AdminExtConstants.A_sourceType).getTextTrim();
             if (sourceType.equalsIgnoreCase(AdminFileDownload.FILE_FORMAT_BULK_CSV)) {
-                String aid = request.getElement(ZimbraBulkProvisionExt.E_attachmentID).getTextTrim();
+                String aid = request.getElement(AdminExtConstants.E_attachmentID).getTextTrim();
                 ZimbraLog.extensions.debug("Uploaded CSV file id = " + aid);
                 // response.addElement(E_attachmentID).addText(aid);
                 FileUploadServlet.Upload up = FileUploadServlet.fetchUpload(zsc.getAuthtokenAccountId(), aid, zsc.getAuthToken());
@@ -207,7 +200,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                     }
                 }
             } else if (sourceType.equalsIgnoreCase(AdminFileDownload.FILE_FORMAT_BULK_XML)) {
-                String aid = request.getElement(ZimbraBulkProvisionExt.E_attachmentID).getTextTrim();
+                String aid = request.getElement(AdminExtConstants.E_attachmentID).getTextTrim();
                 ZimbraLog.extensions.debug("Uploaded XML file id = " + aid);
                 FileUploadServlet.Upload up = FileUploadServlet.fetchUpload(zsc.getAuthtokenAccountId(), aid, zsc.getAuthToken());
                 if (up == null) {
@@ -218,26 +211,26 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                 try {
                     Document doc = reader.read(up.getInputStream());
                     org.dom4j.Element root = doc.getRootElement();
-                    if (!root.getName().equals(ZimbraBulkProvisionExt.E_ZCSImport)) {
-                        throw new DocumentException("Bulk provisioning XML file's root element must be " + ZimbraBulkProvisionExt.E_ZCSImport);
+                    if (!root.getName().equals(AdminExtConstants.E_ZCSImport)) {
+                        throw new DocumentException("Bulk provisioning XML file's root element must be " + AdminExtConstants.E_ZCSImport);
                     }
-                    Iterator iter = root.elementIterator(ZimbraBulkProvisionExt.E_ImportUsers);
+                    Iterator iter = root.elementIterator(AdminExtConstants.E_ImportUsers);
                     if (!iter.hasNext()) {
-                        throw new DocumentException("Cannot find element " + ZimbraBulkProvisionExt.E_ImportUsers + " in uploaded bulk provisioning XML file");
+                        throw new DocumentException("Cannot find element " + AdminExtConstants.E_ImportUsers + " in uploaded bulk provisioning XML file");
                     }
 
                     /**
                      * Settings from SOAP request take preference over settings in the XML file
                      */
                     if(SMTPHost.length()==0) {
-                        Iterator iterMTPHost  = root.elementIterator(ZimbraBulkProvisionExt.E_SMTPHost);
+                        Iterator iterMTPHost  = root.elementIterator(AdminExtConstants.E_SMTPHost);
                         if (iterMTPHost.hasNext()) {
                             org.dom4j.Element elSMTPHost = (org.dom4j.Element) iterMTPHost.next();
                             SMTPHost = elSMTPHost.getTextTrim();
                         }
                     }
                     if(SMTPPort.length() == 0) {
-                        Iterator iterSMTPort = root.elementIterator(ZimbraBulkProvisionExt.E_SMTPPort);
+                        Iterator iterSMTPort = root.elementIterator(AdminExtConstants.E_SMTPPort);
                         if (iterSMTPort.hasNext()) {
                             org.dom4j.Element elSMTPPort = (org.dom4j.Element) iterSMTPort.next();
                             SMTPPort = elSMTPPort.getTextTrim();
@@ -249,7 +242,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                         }
                     }
                     org.dom4j.Element elImportUsers = (org.dom4j.Element) iter.next();
-                    for (Iterator userIter = elImportUsers.elementIterator(ZimbraBulkProvisionExt.E_User); userIter.hasNext();) {
+                    for (Iterator userIter = elImportUsers.elementIterator(AdminExtConstants.E_User); userIter.hasNext();) {
                         org.dom4j.Element elUser = (org.dom4j.Element) userIter.next();
                         String userEmail = "";
                         String userFN = "";
@@ -265,10 +258,10 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                              * Migration utility <RemoteEmailAddress> takes
                              * prevalence over <ExchangeMail> element
                              */
-                            if (userEmail == "" && ZimbraBulkProvisionExt.E_ExchangeMail.equalsIgnoreCase(el.getName())) {
+                            if (userEmail == "" && AdminExtConstants.E_ExchangeMail.equalsIgnoreCase(el.getName())) {
                                 userEmail = el.getTextTrim();
                             }
-                            if (ZimbraBulkProvisionExt.E_remoteEmail.equalsIgnoreCase(el.getName())) {
+                            if (AdminExtConstants.E_remoteEmail.equalsIgnoreCase(el.getName())) {
                                 userEmail = el.getTextTrim();
                             }
                             if (Provisioning.A_displayName.equalsIgnoreCase(el.getName())) {
@@ -283,7 +276,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                                 userLN = el.getTextTrim();
                             }
 
-                            if (ZimbraBulkProvisionExt.A_password.equalsIgnoreCase(el.getName())) {
+                            if (AdminExtConstants.A_password.equalsIgnoreCase(el.getName())) {
                                 userPassword = el.getTextTrim();
                             }
 
@@ -344,11 +337,11 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                 GalParams.ExternalGalParams galParams = new GalParams.ExternalGalParams(attrs, GalOp.search);
                 LdapGalMapRules rules = new LdapGalMapRules(Provisioning.getInstance().getConfig(), true);
 
-                Element elPassword = request.getOptionalElement(ZimbraBulkProvisionExt.A_password);
-                Element elPasswordLength = request.getOptionalElement(ZimbraBulkProvisionExt.A_genPasswordLength);
+                Element elPassword = request.getOptionalElement(AdminExtConstants.A_password);
+                Element elPasswordLength = request.getOptionalElement(AdminExtConstants.A_genPasswordLength);
 
                 String generatePwd = request.getElement(
-                        ZimbraBulkProvisionExt.A_generatePassword).getTextTrim();
+                        AdminExtConstants.A_generatePassword).getTextTrim();
 
                 int genPwdLength = 0;
                 if (generatePwd == null) {
@@ -365,7 +358,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                 }
 
                 int maxResults = 0;
-                Element elMaxResults = request.getOptionalElement(ZimbraBulkProvisionExt.A_maxResults);
+                Element elMaxResults = request.getOptionalElement(AdminExtConstants.A_maxResults);
                 if (elMaxResults != null) {
                     maxResults = Integer.parseInt(elMaxResults.getTextTrim());
                 }
@@ -374,7 +367,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                 if (elPassword != null) {
                     password = elPassword.getTextTrim();
                 }
-                String mustChangePassword = request.getElement(E_mustChangePassword).getTextTrim();
+                String mustChangePassword = request.getElement(AdminExtConstants.E_mustChangePassword).getTextTrim();
                 if(SMTPPort.length()>0 && SMTPHost.length()>0) {
                     zimbraMailTransport = "smtp:" + SMTPHost + ":" + SMTPPort;
                 }
@@ -460,16 +453,16 @@ public class BulkImportAccounts extends AdminDocumentHandler {
             } else {
                 throw ServiceException.INVALID_REQUEST(sourceType
                         + " is not a valid value for parameter "
-                        + ZimbraBulkProvisionExt.A_sourceType, null);
+                        + AdminExtConstants.A_sourceType, null);
             }
             if (ZimbraBulkProvisionExt.OP_PREVIEW.equalsIgnoreCase(op)) {
                 /*
                  * Do not start the import. Just generate a preview.
                  */
-                response.addElement(ZimbraBulkProvisionExt.E_totalCount).setText(Integer.toString(totalAccounts));
-                response.addElement(ZimbraBulkProvisionExt.E_skippedAccountCount).setText(Integer.toString(totalExistingAccounts));
-                response.addElement(ZimbraBulkProvisionExt.E_SMTPHost).setText(SMTPHost);
-                response.addElement(ZimbraBulkProvisionExt.E_SMTPPort).setText(SMTPPort);
+                response.addElement(AdminExtConstants.E_totalCount).setText(Integer.toString(totalAccounts));
+                response.addElement(AdminExtConstants.E_skippedAccountCount).setText(Integer.toString(totalExistingAccounts));
+                response.addElement(AdminExtConstants.E_SMTPHost).setText(SMTPHost);
+                response.addElement(AdminExtConstants.E_SMTPPort).setText(SMTPPort);
 
             } else if (ZimbraBulkProvisionExt.OP_START_IMPORT.equalsIgnoreCase(op)) {
                 /*
@@ -488,7 +481,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                     }
                     thread.setSourceAccounts(sourceEntries);
                     thread.start();
-                    response.addElement(E_status).setText(Integer.toString(thread.getStatus()));
+                    response.addElement(AdminExtConstants.E_status).setText(Integer.toString(thread.getStatus()));
                 } else {
                     throw (BulkProvisionException.BP_NO_ACCOUNTS_TO_IMPORT());
                 }
@@ -502,16 +495,16 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                 int status = thread.getStatus();
                 if (status != BulkProvisioningThread.iSTATUS_FINISHED) {
                     thread.abort();
-                    response.addElement(E_status).setText(
+                    response.addElement(AdminExtConstants.E_status).setText(
                             Integer.toString(thread.getStatus()));
-                    response.addElement(E_provisionedCount).setText(
+                    response.addElement(AdminExtConstants.E_provisionedCount).setText(
                             Integer.toString(thread.getProvisionedCounter()));
-                    response.addElement(E_skippedCount).setText(
+                    response.addElement(AdminExtConstants.E_skippedCount).setText(
                             Integer.toString(thread.getSkippedCounter()));
-                    response.addElement(E_totalCount).setText(
+                    response.addElement(AdminExtConstants.E_totalCount).setText(
                             Integer.toString(thread.getTotalCount()));
                     if (thread.getWithErrors()) {
-                        response.addElement(E_errorCount).addText(
+                        response.addElement(AdminExtConstants.E_errorCount).addText(
                                 Integer.toString(thread.getFailCounter()));
                     }
                     status = thread.getStatus();
@@ -519,11 +512,11 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                         BulkProvisioningThread.deleteThreadInstance(zsc.getAuthtokenAccountId());
                     }
                 } else {
-                    response.addElement(E_status).setText(
+                    response.addElement(AdminExtConstants.E_status).setText(
                             Integer.toString(status));
                 }
             } else {
-                response.addElement(E_status).setText(
+                response.addElement(AdminExtConstants.E_status).setText(
                         Integer.toString(BulkProvisioningThread.iSTATUS_NOT_RUNNING));
             }
         } else if (ZimbraBulkProvisionExt.OP_GET_STATUS.equalsIgnoreCase(op)) {
@@ -531,15 +524,15 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                     zsc.getAuthtokenAccountId(), false);
             if (thread != null) {
                 int status = thread.getStatus();
-                response.addElement(E_status).setText(Integer.toString(status));
-                response.addElement(E_provisionedCount).setText(
+                response.addElement(AdminExtConstants.E_status).setText(Integer.toString(status));
+                response.addElement(AdminExtConstants.E_provisionedCount).setText(
                         Integer.toString(thread.getProvisionedCounter()));
-                response.addElement(E_skippedCount).setText(
+                response.addElement(AdminExtConstants.E_skippedCount).setText(
                         Integer.toString(thread.getSkippedCounter()));
-                response.addElement(E_totalCount).setText(
+                response.addElement(AdminExtConstants.E_totalCount).setText(
                         Integer.toString(thread.getTotalCount()));
                 if (thread.getWithErrors()) {
-                    response.addElement(E_errorCount).addText(
+                    response.addElement(AdminExtConstants.E_errorCount).addText(
                             Integer.toString(thread.getFailCounter()));
                 }
                 if (status == BulkProvisioningThread.iSTATUS_FINISHED
@@ -569,7 +562,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                                 "Failed to create CSV file with a list of provisioned accounts",
                                 e));
                     }
-                    response.addElement(E_reportFileToken).addText(fileToken);
+                    response.addElement(AdminExtConstants.E_reportFileToken).addText(fileToken);
                     /**
                      * if thread is done for whichever reason and there are
                      * errors, generate an error report
@@ -604,7 +597,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                     BulkProvisioningThread.deleteThreadInstance(zsc.getAuthtokenAccountId());
                 }
             } else {
-                response.addElement(E_status).setText(
+                response.addElement(AdminExtConstants.E_status).setText(
                         Integer.toString(BulkProvisioningThread.iSTATUS_NOT_RUNNING));
             }
         }

@@ -56,17 +56,17 @@ public class SyncResponse {
 
     protected SyncDeletedInfo deleted;
     @XmlElements({
-        @XmlElement(name = "doc", type = DocumentInfo.class),
-        @XmlElement(name = "note", type = NoteInfo.class),
+        @XmlElement(name = "cn", type = ContactInfo.class),
+        @XmlElement(name = "folder", type = Folder.class),
         @XmlElement(name = "tag", type = TagInfo.class),
+        @XmlElement(name = "appt", type = CalendarItemInfo.class),
         @XmlElement(name = "chat", type = ChatSummary.class),
         @XmlElement(name = "m", type = MessageSummary.class),
-        @XmlElement(name = "appt", type = CalendarItemInfo.class),
-        @XmlElement(name = "cn", type = ContactInfo.class),
-        @XmlElement(name = "w", type = CommonDocumentInfo.class),
         @XmlElement(name = "task", type = TaskItemInfo.class),
-        @XmlElement(name = "folder", type = Folder.class),
-        @XmlElement(name = "c", type = ConversationSummary.class)
+        @XmlElement(name = "note", type = NoteInfo.class),
+        @XmlElement(name = "c", type = ConversationSummary.class),
+        @XmlElement(name = "w", type = CommonDocumentInfo.class),
+        @XmlElement(name = "doc", type = DocumentInfo.class)
     })
     protected List<Object> folderOrTagOrNote;
     @XmlAttribute(required = true)
@@ -120,17 +120,17 @@ public class SyncResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link DocumentInfo }
-     * {@link NoteInfo }
+     * {@link ContactInfo }
+     * {@link Folder }
      * {@link TagInfo }
+     * {@link CalendarItemInfo }
      * {@link ChatSummary }
      * {@link MessageSummary }
-     * {@link CalendarItemInfo }
-     * {@link ContactInfo }
-     * {@link CommonDocumentInfo }
      * {@link TaskItemInfo }
-     * {@link Folder }
+     * {@link NoteInfo }
      * {@link ConversationSummary }
+     * {@link CommonDocumentInfo }
+     * {@link DocumentInfo }
      * 
      * 
      */

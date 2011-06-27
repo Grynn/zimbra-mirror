@@ -78,8 +78,8 @@ public class MessageInfo
     protected InviteInfo inv;
     protected List<KeyValuePair> header;
     @XmlElements({
-        @XmlElement(name = "shr", type = ShareNotification.class),
-        @XmlElement(name = "mp", type = PartInfo.class)
+        @XmlElement(name = "mp", type = PartInfo.class),
+        @XmlElement(name = "shr", type = ShareNotification.class)
     })
     protected List<Object> mpOrShr;
     @XmlAttribute
@@ -299,8 +299,8 @@ public class MessageInfo
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link ShareNotification }
      * {@link PartInfo }
+     * {@link ShareNotification }
      * 
      * 
      */

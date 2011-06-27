@@ -135,6 +135,42 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.BackupAccountQueryResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/BackupAccountQuery")
+    @WebResult(name = "BackupAccountQueryResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public BackupAccountQueryResponse backupAccountQueryRequest(
+        @WebParam(name = "BackupAccountQueryRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        BackupAccountQueryRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.BackupQueryResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/BackupQuery")
+    @WebResult(name = "BackupQueryResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public BackupQueryResponse backupQueryRequest(
+        @WebParam(name = "BackupQueryRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        BackupQueryRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.BackupResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/Backup")
+    @WebResult(name = "BackupResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public BackupResponse backupRequest(
+        @WebParam(name = "BackupRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        BackupRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.CheckAuthConfigResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/CheckAuthConfig")
@@ -651,6 +687,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.FailoverClusterServiceResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/FailoverClusterService")
+    @WebResult(name = "FailoverClusterServiceResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public FailoverClusterServiceResponse failoverClusterServiceRequest(
+        @WebParam(name = "FailoverClusterServiceRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        FailoverClusterServiceRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.FixCalendarEndTimeResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/FixCalendarEndTime")
@@ -742,6 +790,18 @@ public interface AdminService {
     public GetAdminConsoleUICompResponse getAdminConsoleUICompRequest(
         @WebParam(name = "GetAdminConsoleUICompRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         GetAdminConsoleUICompRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetAdminExtensionZimletsResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetAdminExtensionZimlets")
+    @WebResult(name = "GetAdminExtensionZimletsResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetAdminExtensionZimletsResponse getAdminExtensionZimletsRequest(
+        @WebParam(name = "GetAdminExtensionZimletsRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetAdminExtensionZimletsRequest parameters);
 
     /**
      * 
@@ -982,6 +1042,18 @@ public interface AdminService {
     public GetCalendarResourceResponse getCalendarResourceRequest(
         @WebParam(name = "GetCalendarResourceRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         GetCalendarResourceRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetClusterStatusResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetClusterStatus")
+    @WebResult(name = "GetClusterStatusResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetClusterStatusResponse getClusterStatusRequest(
+        @WebParam(name = "GetClusterStatusRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetClusterStatusRequest parameters);
 
     /**
      * 
@@ -1695,6 +1767,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.PurgeMovedMailboxResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/PurgeMovedMailbox")
+    @WebResult(name = "PurgeMovedMailboxResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public PurgeMovedMailboxResponse purgeMovedMailboxRequest(
+        @WebParam(name = "PurgeMovedMailboxRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        PurgeMovedMailboxRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.PushFreeBusyResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/PushFreeBusy")
@@ -1875,6 +1959,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.RestoreResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/Restore")
+    @WebResult(name = "RestoreResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public RestoreResponse restoreRequest(
+        @WebParam(name = "RestoreRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        RestoreRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.RevokeRightResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/RevokeRight")
@@ -1887,6 +1983,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.RolloverRedoLogResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/RolloverRedoLog")
+    @WebResult(name = "RolloverRedoLogResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public RolloverRedoLogResponse rolloverRedoLogRequest(
+        @WebParam(name = "RolloverRedoLogRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        RolloverRedoLogRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.RunUnitTestsResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/RunUnitTests")
@@ -1894,6 +2002,18 @@ public interface AdminService {
     public RunUnitTestsResponse runUnitTestsRequest(
         @WebParam(name = "RunUnitTestsRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         RunUnitTestsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.ScheduleBackupsResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/ScheduleBackups")
+    @WebResult(name = "ScheduleBackupsResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public ScheduleBackupsResponse scheduleBackupsRequest(
+        @WebParam(name = "ScheduleBackupsRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        ScheduleBackupsRequest parameters);
 
     /**
      * 
@@ -1978,5 +2098,17 @@ public interface AdminService {
     public VerifyIndexResponse verifyIndexRequest(
         @WebParam(name = "VerifyIndexRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         VerifyIndexRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.VersionCheckResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/VersionCheck")
+    @WebResult(name = "VersionCheckResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public VersionCheckResponse versionCheckRequest(
+        @WebParam(name = "VersionCheckRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        VersionCheckRequest parameters);
 
 }

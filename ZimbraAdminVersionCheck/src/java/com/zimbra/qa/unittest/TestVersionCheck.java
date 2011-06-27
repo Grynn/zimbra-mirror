@@ -13,13 +13,13 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.io.XMLWriter;
 
+import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.Version;
 import com.zimbra.cs.account.Config;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.client.LmcSession;
 import com.zimbra.cs.service.versioncheck.VersionCheck;
-import com.zimbra.cs.service.versioncheck.VersionCheckService;
 import com.zimbra.cs.versioncheck.VersionUpdate;
 import com.zimbra.cs.client.soap.LmcVersionCheckRequest;
 import com.zimbra.cs.client.soap.LmcVersionCheckResponse;
@@ -128,7 +128,7 @@ public class TestVersionCheck extends TestCase {
     public void testSOAP() throws Exception {
         LmcSession session = TestUtil.getAdminSoapSession();
         LmcVersionCheckRequest checkRequest = new LmcVersionCheckRequest();
-        checkRequest.setAction(VersionCheckService.VERSION_CHECK_CHECK);//this should retreive the new version from http://localhost:7070/zimbra/test/testversion.xml
+        checkRequest.setAction(AdminConstants.VERSION_CHECK_CHECK);//this should retreive the new version from http://localhost:7070/zimbra/test/testversion.xml
         checkRequest.setSession(session);
         String url = TestUtil.getAdminSoapUrl();
         LmcVersionCheckResponse resp = (LmcVersionCheckResponse) checkRequest.invoke(url);
@@ -144,7 +144,7 @@ public class TestVersionCheck extends TestCase {
 
         //check response from admin service
         LmcVersionCheckRequest versionRequest = new LmcVersionCheckRequest();
-        versionRequest.setAction(VersionCheckService.VERSION_CHECK_STATUS);
+        versionRequest.setAction(AdminConstants.VERSION_CHECK_STATUS);
         versionRequest.setSession(session);
         LmcVersionCheckResponse versionResp = (LmcVersionCheckResponse)versionRequest.invoke(url);
         //the test xml should contain one major update, one minor update and two micro updates (critical and non-critical)
@@ -193,9 +193,9 @@ public class TestVersionCheck extends TestCase {
         assertNotNull(resp);
         Element respDoc = Element.parseXML(resp);
         assertNotNull(respDoc);
-        boolean hasUpdates = respDoc.getAttributeBool(VersionCheck.A_VERSION_CHECK_STATUS, false);
+        boolean hasUpdates = respDoc.getAttributeBool(AdminConstants.A_VERSION_CHECK_STATUS, false);
         assertTrue("Update XML document status is not 1 or true",hasUpdates);
-        Element eUpdates = respDoc.getElement(VersionCheck.E_UPDATES);
+        Element eUpdates = respDoc.getElement(AdminConstants.E_UPDATES);
         assertNotNull(eUpdates);
         int counter=0;
         int majorCounter=0;
@@ -204,7 +204,7 @@ public class TestVersionCheck extends TestCase {
         int buildCounter=0;
         for (Element e : eUpdates.listElements()) {
             counter++;
-            String updateType = e.getAttribute(VersionCheck.A_UPDATE_TYPE);
+            String updateType = e.getAttribute(AdminConstants.A_UPDATE_TYPE);
             if(updateType.equalsIgnoreCase("major")) {
                 majorCounter++;
             } else if (updateType.equalsIgnoreCase("minor")) {

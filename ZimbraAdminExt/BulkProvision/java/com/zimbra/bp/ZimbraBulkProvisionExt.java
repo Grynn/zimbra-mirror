@@ -34,47 +34,6 @@ public class ZimbraBulkProvisionExt implements ZimbraExtension {
     public static final String EXCHANGE_IMAP = "EXCHANGE_IMAP";
     public static final String DEFAULT_INDEX_BATCH_SIZE = "40";
     
-    public static final String A_password = "password";
-    public static final String A_generatePassword = "generatePassword";
-    public static final String A_genPasswordLength = "genPasswordLength";
-    public static final String A_fileFormat = "fileFormat";
-    public static final String A_maxResults = "maxResults";
-    public static final String A_setMustChangePwd = "setMustChangePwd";
-    public static final String A_op = "op";
-    public static final String A_sourceType = "sourceType";
-    public static final String A_owner = "owner";
-    public static final String A_totalTasks = "totalTasks";
-    public static final String A_finishedTasks = "finishedTasks";
-    public static final String A_failedTasks = "failedTasks";
-    
-    public static final String E_Task = "task";
-    public static final String E_User = "User";
-    public static final String E_ExchangeMail = "ExchangeMail";
-    public static final String E_remoteEmail = "RemoteEmailAddress";
-    public static final String E_remoteIMAPLogin = "RemoteIMAPLogin";
-    public static final String E_localEmail = "LocalEmailAddress";
-    public static final String E_remoteIMAPPassword = "remoteIMAPPassword";
-    public static final String E_ZCSImport = "ZCSImport";
-    public static final String E_ImportUsers = "ImportUsers";
-    public static final String E_useAdminLogin = "UseAdminLogin";
-    public static final String E_IMAPAdminLogin = "IMAPAdminLogin";
-    public static final String E_IMAPAdminPassword = "IMAPAdminPassword";
-    public static final String E_connectionType = "ConnectionType";
-    public static final String E_SMTPHost = "SMTPHost";
-    public static final String E_SMTPPort = "SMTPPort";
-    public static final String E_IMAPHost = "IMAPHost";
-    public static final String E_IMAPPort = "IMAPPort";
-    public static final String E_attachmentID = "aid";
-    public static final String E_totalCount = "totalCount";
-    public static final String E_idleCount = "idleCount";
-    public static final String E_runningCount = "runningCount";
-    public static final String E_finishedCount = "finishedCount";
-    public static final String E_runningAccounts = "runningAccounts";
-    public static final String E_serverName = "serverName";
-    public static final String E_port = "port";
-    public static final String E_adminUserName = "adminUserName";
-    public static final String E_indexBatchSize = "indexBatchSize";
-    
     public static final String OP_GET_STATUS = "getStatus";
     public static final String OP_PREVIEW = "preview";
     public static final String OP_PREVIEW_ACTIVE_IMPORTS = "previewActiveImports";
@@ -82,8 +41,6 @@ public class ZimbraBulkProvisionExt implements ZimbraExtension {
     public static final String OP_ABORT_IMPORT = "abortImport";
     public static final String OP_DISMISS_IMPORT = "dismissImport";
     public static final String IMAP_IMPORT_DS_NAME = "__imap_import__";
-	public static final String E_skippedAccountCount = "skippedAccountCount";
-    public static final String E_sourceServerType = "sourceServerType";
 
     public void destroy() {
     }
