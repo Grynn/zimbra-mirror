@@ -14,9 +14,11 @@ ZIMBRA_HOME ?= /opt/zimbra
 ifdef BETA
 	include $(DSPAM_ROOT)/../beta_versions.def
 	MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include
+	MYSQL_LIB_DIR := $(ZIMBRA_HOME)/mysql/lib
 else
 	include $(DSPAM_ROOT)/../versions.def
 	MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include/mysql
+	MYSQL_LIB_DIR := $(ZIMBRA_HOME)/mysql/lib/mysql
 endif
 
 DSPAM_TGZ_TARGET := \
@@ -43,7 +45,7 @@ build:
 	--enable-daemon \
 	--enable-large-scale --with-storage-driver=hash_drv,mysql_drv \
 	--with-mysql-includes=$(MYSQL_INCLUDE_DIR) \
-	--with-mysql-libraries=$(ZIMBRA_HOME)/mysql/lib/mysql \
+	--with-mysql-libraries=$(MYSQL_LIB_DIR) \
 	--with-dspam-home-group=root \
 	--with-dspam-group=root \
 	--with-dspam-mode=0755 \
