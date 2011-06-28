@@ -322,3 +322,23 @@
  
  #define MAXREMATCHES (100)
  
+diff -ur openldap-2.4.26.3z/servers/slapd/back-bdb/modify.c /home/quanah/src/openldap/openldap-head/servers/slapd/back-bdb/modify.c
+--- openldap-2.4.26.3z/servers/slapd/back-bdb/modify.c	2011-06-27 16:07:38.000000000 -0700
++++ /home/quanah/src/openldap/openldap-head/servers/slapd/back-bdb/modify.c	2011-03-28 11:38:03.484583567 -0700
+@@ -153,7 +153,6 @@
+ 				mod->sm_desc->ad_cname.bv_val, 0, 0);
+ 			err = modify_delete_values( e, mod, get_permissiveModify(op),
+ 				text, textbuf, textlen );
+-			assert( err != LDAP_TYPE_OR_VALUE_EXISTS );
+ 			if( err != LDAP_SUCCESS ) {
+ 				Debug(LDAP_DEBUG_ARGS, "bdb_modify_internal: %d %s\n",
+ 					err, *text, 0);
+@@ -229,7 +228,7 @@
+ 
+  			mod->sm_op = SLAP_MOD_SOFTDEL;
+ 
+- 			if ( err == LDAP_TYPE_OR_VALUE_EXISTS ) {
++ 			if ( err == LDAP_NO_SUCH_ATTRIBUTE ) {
+  				err = LDAP_SUCCESS;
+  			}
+ 
