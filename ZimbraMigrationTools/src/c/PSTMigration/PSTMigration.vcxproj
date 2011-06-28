@@ -120,7 +120,7 @@
       <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>comsupp.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -261,6 +261,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Exchange\ExchangeUtils.cpp" />
     <ClCompile Include="PSTMigration.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">NotUsing</PrecompiledHeader>
@@ -269,6 +270,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Exchange\ExchangeUtils.h" />
     <ClInclude Include="PSTMigration.h" />
   </ItemGroup>
   <ItemGroup>

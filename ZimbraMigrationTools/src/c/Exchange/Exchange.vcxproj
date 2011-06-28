@@ -264,6 +264,7 @@
     <ClCompile Include="MapiWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ExchangeCommon.h" />
     <ClInclude Include="Exchange_i.h" />
     <ClInclude Include="MapiMigration.h" />
     <ClInclude Include="MapiWrapper.h" />

@@ -38,12 +38,17 @@
 
 
 
-#include <iostream>
-#include <sstream>
+#include "Common.h"
+#include "Zimbra/Zimbra.h"
+#include "Zimbra/Rpc.h"
 
+#include<CGuid.h>
+#include <atlbase.h>
 
-#include <tchar.h>
-//#include <msxml2.h>
-//#include <MapiX.h>
-//#include <Windows.h>
+#include<string>
+#include<vector>
 
+#include <MAPIX.h>
+
+#include <Iads.h>
+#include <adshlp.h>

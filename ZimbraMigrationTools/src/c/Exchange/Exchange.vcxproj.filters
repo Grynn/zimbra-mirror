@@ -44,6 +44,9 @@
     <ClInclude Include="Exchange_i.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="ExchangeCommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="Exchange.idl">

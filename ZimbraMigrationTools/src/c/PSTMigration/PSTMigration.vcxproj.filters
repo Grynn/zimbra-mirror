@@ -18,9 +18,15 @@
     <ClCompile Include="PSTMigration.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Exchange\ExchangeUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PSTMigration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Exchange\ExchangeUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
