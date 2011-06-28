@@ -52,7 +52,15 @@ ifeq ($(BUILD_PLATFORM), CentOS4_64)
 	SYSTEM_LIB := /usr/lib64
 endif
 
-LD_RUN_PATH := /opt/zimbra/lib:/opt/zimbra/mysql-$(MYSQL_VERSION)/lib/mysql:/opt/zimbra/openldap-$(LDAP_VERSION)/lib:/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib:/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/lib:/opt/zimbra/bdb-$(BDB_VERSION)/lib
+ifdef BETA
+	LD_RUN_PATH := /opt/zimbra/lib:/opt/zimbra/mysql-$(MYSQL_VERSION)/lib:/opt/zimbra/openldap-$(LDAP_VERSION)/lib:/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib:/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/lib:/opt/zimbra/bdb-$(BDB_VERSION)/lib
+	MYSQL_INC := /opt/zimbra/mysql-$(MYSQL_VERSION)/include
+	MYSQL_LIB := /opt/zimbra/mysql-$(MYSQL_VERSION)/lib
+else
+	LD_RUN_PATH := /opt/zimbra/lib:/opt/zimbra/mysql-$(MYSQL_VERSION)/lib/mysql:/opt/zimbra/openldap-$(LDAP_VERSION)/lib:/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib:/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/lib:/opt/zimbra/bdb-$(BDB_VERSION)/lib
+	MYSQL_INC := /opt/zimbra/mysql-$(MYSQL_VERSION)/include/mysql
+	MYSQL_LIB := /opt/zimbra/mysql-$(MYSQL_VERSION)/lib/mysql
+endif
 
 DBINC := -I/opt/zimbra/bdb-$(BDB_VERSION)/include
 DBLIB := -L/opt/zimbra/bdb-$(BDB_VERSION)/lib
@@ -117,13 +125,13 @@ endif
 	$(URANDOM) \
 	-DUSE_LDAP_SASL \
 	-I/opt/zimbra/openldap-$(LDAP_VERSION)/include \
-	-I/opt/zimbra/mysql-$(MYSQL_VERSION)/include/mysql \
+	-I$(MYSQL_INC) \
 	-I/opt/zimbra/openssl-$(OPENSSL_VERSION)/include \
 	-I/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/include/sasl -I/usr/include' \
 	AUXLIBS='$(EXTRALIBS) -L/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/lib \
 	$(DBLIB) -ldb -L/opt/zimbra/openldap-$(LDAP_VERSION)/lib $(PCRE_LIB) \
 	-lldap -llber \
-	-L/opt/zimbra/mysql-$(MYSQL_VERSION)/lib/mysql \
+	-L$(MYSQL_LIB) \
 	-L/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib \
 	-lmysqlclient -lz -lm -L$(SYSTEM_LIB) -lsasl2 -lpthread -lssl -lcrypto'; \
 	LD_RUN_PATH=$(LD_RUN_PATH) $(MAKE) $(MAKEARGS);)
