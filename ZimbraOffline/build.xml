@@ -454,6 +454,9 @@
     <copy todir="${dist.dir}/conf" file="${server.config.dir}/magic" overwrite="true" />
     <copy todir="${dist.dir}/conf" file="${config.dir}/cacerts" overwrite="true" />
     <copy todir="${dist.dir}/conf" file="${config.dir}/keystore.base" overwrite="true" />
+    <if><equals arg1="${param.development}" arg2="true"/>
+      <then><copy tofile="${dist.dir}/conf/keystore" file="${dist.dir}/conf/keystore.base" overwrite="true" /></then>
+    </if>
 
     <copy todir="${dist.dir}/jetty/etc" file="${config.dir}/jetty-6.1/start.config" overwrite="true" />
     <copy todir="${dist.dir}/jetty/etc" file="${config.dir}/webdefault.xml" overwrite="true"/>

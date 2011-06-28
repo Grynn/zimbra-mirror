@@ -15,17 +15,23 @@
 package com.zimbra.cs.offline.util.yc.oauth;
 
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
+
+import com.zimbra.common.httpclient.HttpClientUtil;
+import com.zimbra.common.util.ZimbraHttpConnectionManager;
 import com.zimbra.cs.offline.OfflineLog;
 
 public abstract class OAuthRequest {
 
     protected Map<String, String> params = new HashMap<String, String>();
     private OAuthToken token;
+    protected static HttpClient httpClient = ZimbraHttpConnectionManager.getInternalHttpConnMgr().newHttpClient();
 
     public OAuthRequest(OAuthToken token) {
         this.token = token;
@@ -80,27 +86,25 @@ public abstract class OAuthRequest {
         try {
             fillParams();
 
-            HttpURLConnection connection = (HttpURLConnection) new URL(getEndpointURL()).openConnection();
-            connection.setRequestMethod(getHttpMethod());
+            HttpMethod httpMethod = "POST".equals(getHttpMethod()) ? new PostMethod(getEndpointURL()) : new GetMethod(
+                    getEndpointURL());
             String header = OAuthHelper.extractHeader(this.params);
-            connection.setRequestProperty("Authorization", header);
-
-            connection.connect();
-            int code = connection.getResponseCode();
+            httpMethod.setRequestHeader("Authorization", header);
+            int code = HttpClientUtil.executeMethod(httpClient, httpMethod);
             if (code != 200) {
                 throw OAuthException.handle(code, getStep());
             }
-            Map<String, String> respHeaders = new HashMap<String, String>();
-            for (String key : connection.getHeaderFields().keySet()) {
-                respHeaders.put(key, connection.getHeaderFields().get(key).get(0));
-            }
-            OfflineLog.yab.debug("resp header, %s", respHeaders);
-
-            InputStream stream = connection.getInputStream();
+            InputStream stream = httpMethod.getResponseBodyAsStream();
             String resp = OAuthHelper.getStreamContents(stream);
             return resp;
         } catch (Exception e) {
-            throw new OAuthException("error when sending req at " + getStep(), "", false, e, null);
+            OfflineLog.yab.error("sending oauth request error", e);
+            StringBuilder msg = new StringBuilder();
+            msg.append("error when sending req at ").append(getStep());
+            if (e instanceof OAuthException) {
+                msg.append(" Internal reason: " + e.getMessage());
+            }
+            throw new OAuthException(msg.toString(), "", false, e, null);
         }
     }
 }

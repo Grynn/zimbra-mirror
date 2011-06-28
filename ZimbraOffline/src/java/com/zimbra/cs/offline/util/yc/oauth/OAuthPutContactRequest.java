@@ -15,11 +15,11 @@
 package com.zimbra.cs.offline.util.yc.oauth;
 
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
+
+import org.apache.commons.httpclient.methods.PutMethod;
 
 import com.google.gdata.client.authn.oauth.OAuthUtil;
+import com.zimbra.common.httpclient.HttpClientUtil;
 import com.zimbra.cs.offline.OfflineLog;
 
 public class OAuthPutContactRequest extends OAuthRequest {
@@ -63,26 +63,25 @@ public class OAuthPutContactRequest extends OAuthRequest {
         try {
             fillParams();
 
-            HttpURLConnection connection = (HttpURLConnection) new URL(getEndpointURL()).openConnection();
-            connection.setRequestMethod(getHttpMethod());
+            PutMethod putMethod = new PutMethod(getEndpointURL());
+            putMethod.setRequestBody(this.request);
             String header = OAuthHelper.extractHeader(this.params);
-            connection.setRequestProperty("Authorization", header);
-            connection.setDoOutput(true);
-            OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-            writer.write(this.request);
-            writer.close();
-
-            connection.connect();
-            int code = connection.getResponseCode();
+            putMethod.setRequestHeader("Authorization", header);
+            int code = HttpClientUtil.executeMethod(httpClient, putMethod);
             if (code != 200) {
-                OfflineLog.yab.debug("yahoo sync put failed, http error code: %s", code);
                 throw OAuthException.handle(code, getStep());
             }
-            InputStream stream = connection.getInputStream();
+            InputStream stream = putMethod.getResponseBodyAsStream();
             String resp = OAuthHelper.getStreamContents(stream);
             return resp;
         } catch (Exception e) {
-            throw new OAuthException("error when sending req at " + getStep(), "", false, e, null);
+            OfflineLog.yab.error("sending oauth put request error", e);
+            StringBuilder msg = new StringBuilder();
+            msg.append("error when sending req at ").append(getStep());
+            if (e instanceof OAuthException) {
+                msg.append(" Internal reason: " + e.getMessage());
+            }
+            throw new OAuthException(msg.toString(), "", false, e, null);
         }
     }
 }
