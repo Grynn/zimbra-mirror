@@ -52,6 +52,15 @@ ifeq ($(BUILD_PLATFORM), CentOS4_64)
 	SYSTEM_LIB := /usr/lib64
 endif
 
+ifeq ($(BUILD_PLATFORM), MACOSX)
+	MYSQL_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-powerpc
+	MYSQL_CLIENT_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-powerpc
+	PCRE_DEF := -DHAS_PCRE
+	PCRE_INCLUDE := -I/opt/zimbra/include
+	PCRE_LIB := -L/opt/zimbra/lib -lpcre
+	FD_SIZE := -DFD_SETSIZE=32768
+endif
+
 ifdef BETA
 	LD_RUN_PATH := /opt/zimbra/lib:/opt/zimbra/mysql-$(MYSQL_VERSION)/lib:/opt/zimbra/openldap-$(LDAP_VERSION)/lib:/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib:/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/lib:/opt/zimbra/bdb-$(BDB_VERSION)/lib
 	MYSQL_INC := /opt/zimbra/mysql-$(MYSQL_VERSION)/include
@@ -64,15 +73,6 @@ endif
 
 DBINC := -I/opt/zimbra/bdb-$(BDB_VERSION)/include
 DBLIB := -L/opt/zimbra/bdb-$(BDB_VERSION)/lib
-
-ifeq ($(BUILD_PLATFORM), MACOSX)
-	MYSQL_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-powerpc
-	MYSQL_CLIENT_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin8.2.0-powerpc
-	PCRE_DEF := -DHAS_PCRE
-	PCRE_INCLUDE := -I/opt/zimbra/include
-	PCRE_LIB := -L/opt/zimbra/lib -lpcre
-	FD_SIZE := -DFD_SETSIZE=32768
-endif
 
 ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
 	EXTRALIBS := -lresolv
