@@ -322,7 +322,7 @@ build:
 	done
 
 	@echo -n "Compiling perl lib DBD::mysql ..."; \
-	$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get DBI; $$CPAN::Config->{makepl_arg}.=" --nocatchstderr --mysql_config=\"$(ZIMBRA_HOME)/mysql/bin/mysql_config\""; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/lib:/opt/zimbra/mysql/lib"; force ("install", "DBD::mysql")' >> $(LOGFILE) 2>&1; \
+	$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get DBI; $$CPAN::Config->{makepl_arg}.=" --ssl --nocatchstderr --libs=\"-L$(ZIMBRA_HOME)/mysql/lib -L/opt/zimbra/openssl/lib -lmysqlclient -lpthread -lz -lm -lrt -lssl -lcrypto -ldl\" --mysql_config=\"$(ZIMBRA_HOME)/mysql/bin/mysql_config\""; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/lib:/opt/zimbra/mysql/lib:/opt/zimbra/openssl/lib"; force ("install", "DBD::mysql")' >> $(LOGFILE) 2>&1; \
 	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 
 	@for lib in $(MAIL_SPF); do \
