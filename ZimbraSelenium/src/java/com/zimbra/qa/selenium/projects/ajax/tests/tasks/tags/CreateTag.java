@@ -21,32 +21,31 @@ public class CreateTag extends AjaxCommonTest {
 
 	}
 
-	@Test(	description = "Create a new tag by clicking 'new tag' on Task page",
-			groups = { "sanity" })
-			public void CreateTag_01() throws HarnessException {
+	@Test(description = "Create a new tag by clicking 'new tag' on Task page", groups = { "sanity" })
+	public void CreateTag_01() throws HarnessException {
 
 
 		// Set the new tag name
 		String name = "tag" + ZimbraSeleniumProperties.getUniqueString();
 
 		DialogTag dialog = null;
-      if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-         // TODO: For now, on desktop test, create the folder through New drop down menu,
-         // until a way to identify desktop/ajax specific
-         // test is decided.
-         dialog = (DialogTag)app.zPageTasks.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_TAG);
-      } else {
-         dialog = (DialogTag)app.zTreeTasks.zPressButton(Button.B_TREE_NEWTAG);
-      }
+		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+			// TODO: For now, on desktop test, create the folder through New drop down menu,
+			// until a way to identify desktop/ajax specific
+			// test is decided.
+			dialog = (DialogTag)app.zPageTasks.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_TAG);
+		} else {
+			dialog = (DialogTag)app.zTreeTasks.zPressButton(Button.B_TREE_NEWTAG);
+		}
 
 		ZAssert.assertNotNull(dialog, "Verify the new tag dialog opened");
 
 		// Fill out the form with the basic details
 		dialog.zSubmit(name);
 
-      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
-      // Make sure the tag was created on the server
+		// Make sure the tag was created on the server
 		TagItem tag = app.zPageTasks.zGetTagItem(app.zGetActiveAccount(), name);
 
 		ZAssert.assertNotNull(tag, "Verify the new tag was created");
@@ -55,16 +54,17 @@ public class CreateTag extends AjaxCommonTest {
 	}
 
 
-
-	@Test(	description = "Create a new tag using keyboard shortcuts on Task apge",
-			groups = { "smoke" })
-			public void CreateTag_02() throws HarnessException {
+	@Test(description = "Create a new tag using keyboard shortcuts on Task apge", groups = { "smoke" })
+	public void CreateTag_02() throws HarnessException {
 
 		Shortcut shortcut = Shortcut.S_NEWTAG;
 		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
 
 		// Set the new tag name
 		String name = "tag" + ZimbraSeleniumProperties.getUniqueString();
+		
+		//Added explicitly boz some time focus does shifted into search input after login
+		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
 
 		DialogTag dialog = (DialogTag)app.zPageTasks.zKeyboardShortcut(shortcut);
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
@@ -72,26 +72,24 @@ public class CreateTag extends AjaxCommonTest {
 		// Fill out the form with the basic details
 		dialog.zSubmit(name);
 
-      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
 		//Need to click on Task folder explicitly so that created tag does show in tag list.
-      app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
+		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
 
 		// Make sure the tag was created on the server
-      TagItem tag = app.zPageTasks.zGetTagItem(app.zGetActiveAccount(), name);
+		TagItem tag = app.zPageTasks.zGetTagItem(app.zGetActiveAccount(), name);
 
 		ZAssert.assertNotNull(tag, "Verify the new tag was created");
 		ZAssert.assertEquals(tag.getName(), name, "Verify the server and client tag names match");
 
-
 	}
 
-	@Test(	description = "Create a new tag using context menu from a tag",
-			groups = { "smoke" })
-			public void CreateTag_03() throws HarnessException {
+	@Test(description = "Create a new tag using context menu from a tag", groups = { "smoke" })
+	public void CreateTag_03() throws HarnessException {
 
 		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
-		
+
 		// Set the new tag name
 		String name1 = "tag" + ZimbraSeleniumProperties.getUniqueString();
 		String name2 = "tag" + ZimbraSeleniumProperties.getUniqueString();
@@ -109,7 +107,7 @@ public class CreateTag extends AjaxCommonTest {
 
 		//Need to click on Task folder explicitly so that created tag does show in tag list.
 		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
-		
+
 		// Create a new tag using the context menu + New Tag
 		DialogTag dialog = (DialogTag)app.zTreeTasks.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_NEWTAG, tag2);
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
@@ -117,26 +115,25 @@ public class CreateTag extends AjaxCommonTest {
 		// Fill out the form with the basic details
 		dialog.zSubmit(name1);
 
-      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
 		// Make sure the tag was created on the server
-      TagItem tag1 = app.zPageTasks.zGetTagItem(app.zGetActiveAccount(), name1);
+		TagItem tag1 = app.zPageTasks.zGetTagItem(app.zGetActiveAccount(), name1);
 		ZAssert.assertNotNull(tag1, "Verify the new tag was created");
 
 		ZAssert.assertEquals(tag1.getName(), name1, "Verify the server and client tag names match");
 
 	}
 
-	@Test(	description = "Create a new tag using task app New -> Tag",
-			groups = { "smoke" })
-			public void CreateTag_04() throws HarnessException {
-
+	@Test(description = "Create a new tag using task app New -> Tag", groups = { "smoke" })
+	public void CreateTag_04() throws HarnessException {
 
 		// Set the new tag name
 		String name = "tag" + ZimbraSeleniumProperties.getUniqueString();
 
 		// Create a new tag in the task page using the context menu + New tag
-		DialogTag dialog = (DialogTag)app.zPageTasks.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_TAG);
+		DialogTag dialog = (DialogTag) app.zPageTasks.zToolbarPressPulldown(
+				Button.B_NEW, Button.O_NEW_TAG);
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
 
 		// Fill out the form with the basic details
@@ -148,7 +145,8 @@ public class CreateTag extends AjaxCommonTest {
 		TagItem tag = app.zPageTasks.zGetTagItem(app.zGetActiveAccount(), name);
 		ZAssert.assertNotNull(tag, "Verify the new tag was created");
 
-		ZAssert.assertEquals(tag.getName(), name, "Verify the server and client tag names match");
+		ZAssert.assertEquals(tag.getName(), name,
+		"Verify the server and client tag names match");
 
 	}
 

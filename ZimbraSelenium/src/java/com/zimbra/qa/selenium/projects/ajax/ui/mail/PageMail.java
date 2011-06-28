@@ -20,6 +20,7 @@ import com.zimbra.qa.selenium.framework.ui.I18N;
 import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
@@ -469,7 +470,9 @@ public class PageMail extends AbsTab {
 		// Default behavior, process the locator by clicking on it
 		//
 		this.zClick(locator);
-
+		
+		//need small wait so that next element gets appeared/visible  after click
+		SleepUtil.sleepMedium();
 		// If the app is busy, wait for it to become active
 		this.zWaitForBusyOverlay();
 

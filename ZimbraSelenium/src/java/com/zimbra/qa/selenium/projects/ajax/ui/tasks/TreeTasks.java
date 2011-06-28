@@ -207,7 +207,8 @@ public class TreeTasks extends AbsTree {
 		}
 		if (option == Button.B_TREE_NEWTAG) {
 			
-			optionLocator = "//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgNewTag')]";
+			//optionLocator = "//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgNewTag')]";
+			optionLocator="//div[contains(@id,'POPUP_DWT') and contains(@class,'ZHasSubMenu')]//tbody/tr[@id='POPUP_NEW_TAG']";
 
 		} else if (option == Button.B_DELETE) {
 
