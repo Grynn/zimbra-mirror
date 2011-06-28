@@ -34,6 +34,7 @@ public class PageLogin extends AbsTab {
 		public static final String zDisplayedwhatsthis = "xpath=//*[@id='ZLoginWhatsThisAnchor']";
 		public static final String zDisplayedcopyright = "xpath=//div[@class='copyright']";
 		public static final String zDisplayedMessage = "css=div[id='message']";
+		public static final String zWelcomeMessage = "css=p[class='ZWelcome']:nth-of-type(NUMBER)";
 
 	}
 	
@@ -238,4 +239,30 @@ public class PageLogin extends AbsTab {
 	   return sGetText(Locators.zDisplayedMessage);
 	}
 
+	/**
+	 * Compiling the welcome message lines into a String
+	 * @return welcome message in 1 String
+	 * @throws HarnessException
+	 */
+	public String zGetWelcomeMessage() throws HarnessException {
+	   int i = 1;
+	   boolean end = false;
+	   StringBuilder output = new StringBuilder();
+	   while (!end) {
+	      String locator = Locators.zWelcomeMessage.replaceAll("NUMBER", Integer.toString(i));
+	      if (i == 1) {
+	         GeneralUtility.waitForElementPresent(this, locator);
+	      }
+
+	      if (!sIsElementPresent(locator)) {
+	         end = true;
+	         break;
+	      }
+
+	      output.append(sGetText(locator));
+	      i++;
+	   }
+
+	   return output.toString();
+	}
 }

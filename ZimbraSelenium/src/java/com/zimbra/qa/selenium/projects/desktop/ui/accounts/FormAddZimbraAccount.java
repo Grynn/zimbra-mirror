@@ -133,4 +133,7 @@ public class FormAddZimbraAccount extends AbsForm {
       sClick(Locators.zValidateAndSaveButton);
    }
 
+   public void zCancel() throws HarnessException {
+      sClick(Locators.zCancelButton);
+   }
 }
