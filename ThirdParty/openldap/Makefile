@@ -15,7 +15,7 @@ PATCH	:=
 
 ifdef BETA
 	include $(OPENLDAP_ROOT)/../beta_versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/ITS6561.patch;
+	PATCH	:= patch -g0 -N -p1 < ../patches/ITS6561.patch; patch -g0 -N -p1 < ../patches/delta-mmr-test.patch; patch -g0 -N -p1 < ../patches/delta-mmr.patch;
 else
 	include $(OPENLDAP_ROOT)/../versions.def
 	PATCH	:= patch -g0 -N -p1 < ../patches/ITS6898.patch;
@@ -44,6 +44,7 @@ build:
 	$(PATCH) \
 	patch -g0 -N -p1 < ../patches/leopard.fix; \
 	patch -g0 -N -p1 < ../patches/index-slot-increase.patch; \
+	chmod 755 tests/scripts/test063-delta-multimaster; \
 	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(BDB_LIB_DIR) -L$(CYRUS_LIB_DIR) -L$(LDAP_LIB_DIR) -L$(LIBTOOL_LIB_DIR) \
 		 -R$(OPENSSL_LIB_DIR) -R$(BDB_LIB_DIR) -R$(CYRUS_LIB_DIR) -R$(LDAP_LIB_DIR) -R$(LIBTOOL_LIB_DIR)" \
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(BDB_LIB_DIR):$(CYRUS_LIB_DIR):$(LIBTOOL_LIB_DIR) \
