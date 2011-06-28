@@ -97,8 +97,7 @@ public class DialogCreateFolder extends AbsDialog {
 			throw new HarnessException("Button "+ button +" locator "+ locator +" not present!");
 		}
 		
-		zClick(locator);
-		
+		zClickAt(locator,"0,0");
 		zWaitForBusyOverlay();
 
 		return (page);

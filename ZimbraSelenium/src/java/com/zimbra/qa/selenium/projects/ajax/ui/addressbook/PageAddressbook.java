@@ -162,8 +162,8 @@ public class PageAddressbook extends AbsTab {
 			//maybe return empty list?????
 				throw new HarnessException("Folder List is not present "+ "div#ztih__main_Contacts__ADDRBOOK div.DwtTreeItemLevel1ChildDiv");
 
-	    
-	    String elements="window.document.getElementsByClassName('DWtTreeItem-Text')";
+	    //String elements="window.document.getElementsByClassName('DWtTreeItem-Text')";
+	    String elements="window.document.getElementById('ztih__main_Contacts__ADDRBOOK_div').nextSibling.childNodes";
 	    int length = Integer.parseInt(sGetEval(elements + ".length"));
 	   
 	    
@@ -171,7 +171,7 @@ public class PageAddressbook extends AbsTab {
 	        String id= sGetEval(elements + "[" + i +"].id");
 	        
 	        if (id.contains("Contacts")) {
-		       list.add(FolderItem.importFromSOAP(account, sGetText("css=td#" + id)));
+		       list.add(FolderItem.importFromSOAP(account, sGetText("css=td#" + id + "_textCell")));
 	        }
 	    }
 	    
