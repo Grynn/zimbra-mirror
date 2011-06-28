@@ -22,7 +22,6 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.Metadata;
-import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.util.yc.YContactException;
 
@@ -123,17 +122,12 @@ public class OAuthManager {
      *            earlier
      * @throws YContactException
      */
-    public static OAuthToken getTokenUsingVerifier(String accountId, String verifier) throws OfflineServiceException {
-        assert LazyHolder.instance.mboxOAuthCredentials.size() > 0;
-        try {
-            OAuthCredential oauth = LazyHolder.instance.getMboxAuthCredential(accountId);
-            oauth.setVerifier(verifier);
-            oauth.genNewToken();
-            return oauth.authToken;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw OfflineServiceException.YCONTACT_NEED_VERIFY();
-        }
+    public static OAuthToken getTokenUsingVerifier(String accountId, String verifier) throws YContactException {
+        assert LazyHolder.instance.mboxOAuthCredentials.get(accountId) != null;
+        OAuthCredential oauth = LazyHolder.instance.getMboxAuthCredential(accountId);
+        oauth.setVerifier(verifier);
+        oauth.genNewToken();
+        return oauth.authToken;
     }
 
     private static final class OAuthCredential {

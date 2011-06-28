@@ -16,7 +16,7 @@ package com.zimbra.cs.offline.jsp;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.DataSource;
-import com.zimbra.cs.mailbox.OfflineServiceException;
+import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.util.yc.YContactException;
 import com.zimbra.cs.offline.util.yc.oauth.OAuthManager;
 import com.zimbra.cs.offline.util.yc.oauth.OAuthToken;
@@ -53,6 +53,8 @@ public class YmailBean extends ImapBean {
                 this.oauthURL = strs[0];
                 this.oauthTmpId = strs[1];
             } catch (YContactException e) {
+                setExceptionError(e);
+                OfflineLog.yab.error("oauth getting url error", e);
                 setYContactVerifyError("YContactVerifyErr");
             }
         } else if (this.contactSyncEnabled && (verb.isAdd() || verb.isModify())) {
@@ -67,9 +69,9 @@ public class YmailBean extends ImapBean {
                     this.ycontactVerfier = this.oauthVerifier;    
                 }
             } catch (ServiceException e) {
-                if (e.getCode().equals(OfflineServiceException.YCONTACT_NEED_VERIFY)) {
-                    setYContactVerifyError("YContactVerifyErr");
-                }
+                setExceptionError(e);
+                OfflineLog.yab.error("oauth get token using verifier error", e);
+                setYContactVerifyError("YContactVerifyErr");
             }
         }
         super.doRequest();
