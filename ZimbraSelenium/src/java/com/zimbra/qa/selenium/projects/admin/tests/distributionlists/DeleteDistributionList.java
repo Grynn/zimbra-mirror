@@ -13,7 +13,7 @@ import com.zimbra.qa.selenium.projects.admin.items.DistributionListItem;
 import com.zimbra.qa.selenium.projects.admin.ui.DialogForDeleteOperation;
 
 public class DeleteDistributionList extends AdminCommonTest {
-	
+
 	public DeleteDistributionList() {
 		logger.info("New "+ DeleteDistributionList.class.getCanonicalName());
 
@@ -38,38 +38,38 @@ public class DeleteDistributionList extends AdminCommonTest {
 		String dlEmailAddress=dl.getEmailAddress();
 
 		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
-						"<CreateDistributionListRequest xmlns='urn:zimbraAdmin'>"
+				"<CreateDistributionListRequest xmlns='urn:zimbraAdmin'>"
 				+			"<name>" + dlEmailAddress + "</name>"
 				+		"</CreateDistributionListRequest>");
 
-		// Enter the search string to find the account
+		// Enter the search string to find the dl
 		app.zPageSearchResults.zAddSearchQuery(dlEmailAddress);
 
 		// Click search
 		app.zPageSearchResults.zToolbarPressButton(Button.B_SEARCH);
 
 
-
-		// Click on account to be deleted.
+		// Click on distribution list to be deleted.
 		app.zPageSearchResults.zListItem(Action.A_LEFTCLICK, dl.getEmailAddress());
-		
+
 		// Click on Delete button
 		DialogForDeleteOperation dialog = (DialogForDeleteOperation) app.zPageSearchResults.zToolbarPressButton(Button.B_DELETE);
-		
+
 		// Click Yes in Confirmation dialog
 		dialog.zClickButton(Button.B_YES);
-		
+
 		// Click Ok on "Delete Items" dialog
 		dialog.zClickButton(Button.B_OK);
-		
-		
+
+
 		// Verify the dl does not exists in the ZCS
 		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
-		"<GetDistributionListRequest xmlns='urn:zimbraAdmin'>" +
-		                     "<dl by='name'>"+dlEmailAddress+"</dl>"+
-		                   "</GetDistributionListRequest>");
+				"<GetDistributionListRequest xmlns='urn:zimbraAdmin'>" +
+				"<dl by='name'>"+dlEmailAddress+"</dl>"+
+		"</GetDistributionListRequest>");
+
 		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetDistributionListResponse/admin:dl", 1);
 		ZAssert.assertNull(response, "Verify the distribution list is deleted successfully");
 
-}
+	}
 }
