@@ -45,8 +45,8 @@ DwtListView = function(params) {
 
         var html = new Array(50);
         var idx = 0;
-        var headId = DwtId.getListViewId(this._view, DwtId.LIST_VIEW_HEADERS);
-        var colId = DwtId.getListViewId(this._view, DwtId.LIST_VIEW_ROWS);
+        var headId = Dwt.getNextId();
+        var colId = Dwt.getNextId();
         html[idx++] = "<table width='100%' cellspacing='0' cellpadding='0'><tr><td ";
         html[idx++] = "id=" + headId;
         html[idx++] = "></td></tr><tr><td ";
