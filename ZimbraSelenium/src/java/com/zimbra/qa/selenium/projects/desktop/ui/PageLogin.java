@@ -91,19 +91,22 @@ public class PageLogin extends AbsTab {
 		if ( zIsActive() ) {
 			// This page is already active.
 			return;
+
+		} else {
+
+   		// Logout
+   		if ( ((AppAjaxClient)MyApplication).zPageMain.zIsActive() ) {
+   			((AppAjaxClient)MyApplication).zPageMain.zLogout();
+   		} 
+   		// Add Account page
+   		else if (sIsElementPresent(Locators.zMyAccountsTab)) {
+   		   sClick(Locators.zMyAccountsTab);
+   		}
+
+   		zWaitForActive();
+
 		}
-		
-		
-		// Logout
-		if ( ((AppAjaxClient)MyApplication).zPageMain.zIsActive() ) {
-			((AppAjaxClient)MyApplication).zPageMain.zLogout();
-		}
-		
-		zWaitForActive();
-		
 	}
-
-
 	
 	/**
 	 * Login as the specified account

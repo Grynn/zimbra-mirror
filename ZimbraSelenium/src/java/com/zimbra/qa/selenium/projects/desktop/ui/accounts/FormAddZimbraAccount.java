@@ -4,7 +4,9 @@ import com.zimbra.qa.selenium.framework.items.DesktopAccountItem;
 import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsForm;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.projects.desktop.ui.accounts.FormAddImapAccount.Locators;
 
 public class FormAddZimbraAccount extends AbsForm {
 
@@ -134,6 +136,7 @@ public class FormAddZimbraAccount extends AbsForm {
    }
 
    public void zCancel() throws HarnessException {
+      GeneralUtility.waitForElementPresent(this, Locators.zCancelButton);
       sClick(Locators.zCancelButton);
    }
 }

@@ -50,18 +50,23 @@ public class PageAddNewAccount extends AbsTab{
          break;
       case GMAIL:
          valueLocator = "value=Gmail";
+         result = new FormAddGmailAccount(MyApplication);
          break;
       case IMAP:
          valueLocator = "value=Imap";
+         result = new FormAddImapAccount(MyApplication);
          break;
       case MICROSOFT_EXCHANGE_IMAP:
          valueLocator = "value=MSE";
+         result = new FormAddImapAccount(MyApplication);
          break;
       case POP:
          valueLocator = "value=Pop";
+         result = new FormAddPopAccount(MyApplication);
          break;
       case YAHOO:
          valueLocator = "value=YMP";
+         result = new FormAddYahooAccount(MyApplication);
          break;
       default:
          throw new HarnessException("Impelement me!");
