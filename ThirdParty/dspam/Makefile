@@ -13,14 +13,14 @@ ZIMBRA_HOME ?= /opt/zimbra
 
 ifdef BETA
 	include $(DSPAM_ROOT)/../beta_versions.def
+	MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include
 else
 	include $(DSPAM_ROOT)/../versions.def
+	MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include/mysql
 endif
 
 DSPAM_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/dspam/dspam-$(DSPAM_VERSION).tgz
-
-MYSQL_INCLUDE_DIR := $(ZIMBRA_HOME)/mysql/include/mysql
 
 files	:= $(wildcard src/dspam-$(DSPAM_VERSION).tar.gz)
 
