@@ -1,4 +1,4 @@
-#include "Exchange/ExchangeUtils.h"
+#include "../Exchange/ExchangeUtils.h"
 
 LPCWSTR lpProfileName=L"testprofile";
 LPCWSTR lpServerAddress=L"10.117.82.163";
