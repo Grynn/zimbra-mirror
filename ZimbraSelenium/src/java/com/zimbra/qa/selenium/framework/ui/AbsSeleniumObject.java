@@ -52,7 +52,159 @@ public abstract class AbsSeleniumObject {
 		logger.info("new " + AbsSeleniumObject.class.getCanonicalName());
 	}
 
+	protected class BrowserMasks {
+		
+		public static final int BrowserMaskIE		= 1 << 0;		// 1
+		public static final int BrowserMaskIE6		= 1 << 1;		// 2
+		public static final int BrowserMaskIE7		= 1 << 2;		// 4
+		public static final int BrowserMaskIE8		= 1 << 3;		// 8
+		public static final int BrowserMaskIE9		= 1 << 4;		// 16
+		public static final int BrowserMaskFF		= 1 << 5;		// ...
+		public static final int BrowserMaskFF30		= 1 << 6;		// ...
+		public static final int BrowserMaskFF35		= 1 << 7;		// ...
+		public static final int BrowserMaskFF36		= 1 << 8;		// ...
+		public static final int BrowserMaskFF40		= 1 << 9;		// ...
+		public static final int BrowserMaskFF50		= 1 << 10;		// ...
+		public static final int BrowserMaskChrome	= 1 << 11;		// ...
+		public static final int BrowserMaskChrome11	= 1 << 12;		// ...
+		public static final int BrowserMaskChrome12	= 1 << 13;		// ...
+		public static final int BrowserMaskChrome13	= 1 << 14;		// ...
+		public static final int BrowserMaskSafari	= 1 << 15;		// ...
+		public static final int BrowserMaskSafari4	= 1 << 16;		// ...
+		public static final int BrowserMaskSafari5	= 1 << 17;		// ...
+		public static final int BrowserMaskSafari6	= 1 << 18;		// ...
+		// ...
+		@SuppressWarnings("unused")
+		private static final int BrowserMaskLast	= 1 << 31;		// Can't go higher than this
 	
+	}
+	
+	// Since the browser user agent doesn't change, just set it once
+	private static String BrowserUserAgent = null;
+	private static int BrowserMask = 0;
+	
+	/**
+	 * Determine which browser is open
+	 * @param mask a mask composed of AbsSelenium.BrowserMask* values
+	 * @return true if the browser matches all mask values
+	 * @throws HarnessException
+	 */
+	protected boolean zIsBrowserMatch(int mask) throws HarnessException {
+		
+		if (BrowserUserAgent == null) {
+			BrowserUserAgent = sGetEval("navigator.userAgent;");
+			logger.info("UserAgent: (navigator.userAgent;) >>>>>> " + BrowserUserAgent);
+		}
+		
+		if (BrowserMask == 0) {
+			
+			if ( BrowserUserAgent.contains("Firefox/") ) {
+				
+				// Set the "general" browser type
+				BrowserMask |= BrowserMasks.BrowserMaskFF;
+				
+				// Set the browser version
+				
+				if ( BrowserUserAgent.contains("Firefox/3.0") ) {
+					
+					// TBD - I don't see any FF 3.0 clients in WDC
+					BrowserMask |= BrowserMasks.BrowserMaskFF30;
+
+				} else if ( BrowserUserAgent.contains("Firefox/3.5") ) {
+					
+					// Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.16) Gecko/20101130 Firefox/3.5.16
+					BrowserMask |= BrowserMasks.BrowserMaskFF35;
+					
+				} else if ( BrowserUserAgent.contains("Firefox/3.6") ) {
+					
+					// Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.2.18) Gecko/20110614 Firefox/3.6.18
+					BrowserMask |= BrowserMasks.BrowserMaskFF36;
+
+					
+				} else if ( BrowserUserAgent.contains("Firefox/4.0") ) {
+					
+					// FF 4.0: Mozilla/5.0 (Windows NT 6.0; rv:2.0) Gecko/20100101 Firefox/4.0
+					BrowserMask |= BrowserMasks.BrowserMaskFF40;
+
+				} else if ( BrowserUserAgent.contains("Firefox/5.0") ) {
+					
+					// TBD - I don't see any FF 5.0 clients in WDC
+					BrowserMask |= BrowserMasks.BrowserMaskFF50;
+
+				}
+
+				
+
+			} else if ( BrowserUserAgent.contains("MSIE") ) {
+				
+				// Set the "general" browser type
+				BrowserMask |= BrowserMasks.BrowserMaskIE;
+
+				// Set the browser version
+
+				if ( BrowserUserAgent.contains("IE6") ) {
+					
+					// TBD - I don't see any IE6 clients in WDC
+					BrowserMask |= BrowserMasks.BrowserMaskIE6;
+					
+				} else if ( BrowserUserAgent.contains("IE7") ) {
+					
+					// TBD - I don't see any IE7 clients in WDC
+					BrowserMask |= BrowserMasks.BrowserMaskIE7;
+					
+				} else if ( BrowserUserAgent.contains("IE8") ) {
+					
+					// Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022) 
+					BrowserMask |= BrowserMasks.BrowserMaskIE8;
+					
+				} else if ( BrowserUserAgent.contains("IE9") ) {
+					
+					// Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0)
+					BrowserMask |= BrowserMasks.BrowserMaskIE9;
+					
+				}
+				
+			} else if ( BrowserUserAgent.contains("Chrome/") ) { 
+				
+				// Set the "general" browser type
+				BrowserMask |= BrowserMasks.BrowserMaskChrome;
+
+				// Set the browser version
+
+				if ( BrowserUserAgent.contains("Chrome/12") ) {
+					
+					// Mozilla/5.0 (Windows NT 6.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.100 Safari/534.30
+					BrowserMask |= BrowserMasks.BrowserMaskChrome12;
+
+				} else if ( BrowserUserAgent.contains("Chrome/13") ) { 
+					
+					// Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/13.0.782.32 Safari/535.1
+					BrowserMask |= BrowserMasks.BrowserMaskChrome13;
+
+				}
+				
+			} else if ( BrowserUserAgent.contains("Safari/") ) {
+				
+				// Set the "general" browser type
+				BrowserMask |= BrowserMasks.BrowserMaskSafari;
+
+				// Set the browser version
+
+				if ( BrowserUserAgent.contains("Safari/5")) {
+					
+					// Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US) AppleWebKit/533.19.4 (KHTML, like Gecko) Version/5.0.3 Safari/533.19.4
+					BrowserMask |= BrowserMasks.BrowserMaskSafari5;
+
+				}
+				
+			}
+			
+
+		}
+		
+		return ((BrowserMask & mask) == mask);
+
+	}
 	
 	/**
 	 * Zimbra: return if the specified element is visible per style coordinates
@@ -204,7 +356,6 @@ public abstract class AbsSeleniumObject {
 	 * @param value
 	 * @throws HarnessException
 	 */
-	@SuppressWarnings("deprecation")
 	public void zType(String locator, String value) throws HarnessException {
 		// Check if the locator is present
 		if (!sIsElementPresent(locator)) {

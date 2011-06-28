@@ -34,7 +34,6 @@ public class ClientSession {
 	private ZimbraSelenium selenium = null;
 	private String applicationURL = ZimbraSeleniumProperties.getStringProperty("server.scheme", "http") 
 	+ "://" + ZimbraSeleniumProperties.getStringProperty("server.host", "localhost"); 
-	private String currentBrowserName = null;
 	private ZimbraAccount currentAccount = null;
 
 	protected ClientSession() {
@@ -60,29 +59,16 @@ public class ClientSession {
 		return (selenium);
 	}
 	
-	public boolean isBrowserIE(String browserType){
-		String userAgent=ClientSessionFactory.session().selenium().getEval("navigator.userAgent;");
-		return ( currentBrowserName().contains(browserType) ||
-				 //IE9 or 8 in compatible mode
-				  ( currentBrowserName().contains("MSIE 7") && 	 
-				    userAgent.contains("Mozilla/4.0") &&
-				    userAgent.contains("compatible")
-				  )				 				
-				);						
-	}
 	/**
 	 * Get the current Browser Name
 	 * <p>
 	 * @return
 	 */
+	@Deprecated()
 	public String currentBrowserName() {
-		if ( currentBrowserName == null ) {
-			BrowserUtil util = new BrowserUtil();
-			currentBrowserName = util.getBrowserName();
-		}
-		return (currentBrowserName);
+		return (ClientSessionFactory.session().selenium().getEval("navigator.userAgent;"));
 	}
-	
+
 	/**
 	 * Get the currently logged in user name
 	 * <p>
@@ -120,62 +106,6 @@ public class ClientSession {
 	}
 
 	
-	private class BrowserUtil extends SelNGBase {
-		private String userAgent = null;
-
-		private void setBrowserAgent() {
-			if (userAgent == null) {
-				userAgent = ClientSessionFactory.session().selenium().getEval("navigator.userAgent;");
-				
-				if ( userAgent.equals("") ) {
-					userAgent = null;
-				}
-			}
-		}
-
-		/**
-		 * Get the browser name
-		 * @return the browser name
-		 */
-		public String getBrowserName() {
-			setBrowserAgent();
-			String browserName = "";
-			logger.info("UserAgent: >>>>>> " + userAgent);
-					
-			if (userAgent.indexOf("Firefox/") >= 0){
-				browserName = "FF " + userAgent.split("Firefox/")[1];
-				String[] temp = browserName.split(" ");
-				browserName = temp[0]+ " "+ temp[1];
-			} else if (userAgent.indexOf("MSIE") >= 0) {
-				String[] arry = userAgent.split(";");
-				for (int t = 0; t < arry.length; t++) {
-					if (arry[t].indexOf("MSIE") >= 0) {
-						browserName = arry[t];
-						break;
-					}
-				}
-			} else if (userAgent.indexOf("Chrome") >= 0) {
-				String[] arry = userAgent.split("/");
-				for (int t = 0; t < arry.length; t++) {
-					if (arry[t].indexOf("Chrome") >= 0) {
-						String [] tmp = arry[t].split(" ");
-						browserName = tmp[1] + " " +tmp[0];
-						break;
-					}
-				}
-			}else if (userAgent.indexOf("Safari") >= 0) {
-				String[] arry = userAgent.split("/");
-				for (int t = 0; t < arry.length; t++) {
-					if (arry[t].indexOf("Safari") >= 0) {
-						String [] tmp = arry[t].split(" ");
-						browserName = tmp[1] + " " +tmp[0];
-						break;
-					}
-				}
-			}
-			return browserName;
-		}
 		
-	}
 
 }

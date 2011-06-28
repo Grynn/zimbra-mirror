@@ -487,7 +487,7 @@ public class PageBriefcase extends AbsTab {
 			// sMouseDownRight(pulldownLocator);
 			// sMouseUpRight(pulldownLocator);
 
-			if (sGetEval("navigator.userAgent;").contains("MSIE")) {
+			if ( zIsBrowserMatch(BrowserMasks.BrowserMaskIE) ) {
 				if (pulldown == Button.B_NEW) {
 					sGetEval("if(document.createEventObject()){var evObj = document.createEventObject(); "
 							+ "var x = selenium.browserbot.findElementOrNull('"
