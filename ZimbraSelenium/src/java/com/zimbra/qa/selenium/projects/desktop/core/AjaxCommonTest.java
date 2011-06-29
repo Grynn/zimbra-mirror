@@ -366,6 +366,7 @@ public class AjaxCommonTest {
                                             .append(emailServerName).append("&port=")
                                             .append(emailServerPort).append("&syncFreqSecs=900&debugTraceEnabled=on")
                                             .append(securityType).toString();
+                                            //.append("&dev=1&scripterrors=1").toString();
       logger.info("accountSetupUrl: " + accountSetupUrl);
       GeneralUtility.doHttpPost(accountSetupUrl);
 
@@ -374,6 +375,7 @@ public class AjaxCommonTest {
                                        .append(connectionPort).append("/")
                                        .append("?at=")
                                        .append(zdp.getSerialNumber()).toString();
+                                       //append("&dev=1&scripterrors=1").toString();
       logger.debug("Selenium is opening: " + accountUrl);
       logger.debug("Selenium is: " + _selenium);
       _selenium.open(accountUrl);
@@ -440,7 +442,9 @@ public class AjaxCommonTest {
                      String attribute = app.zPageLogin.sGetAttribute(deleteButtonLocator + "@href");
                      String accountId = attribute.split("'")[1];
                      String accountName = attribute.split("'")[3];
-                     app.zDeleteDesktopAccount(accountName, accountId, "Zimbra", accountFlavor);
+                     String accountFlavor = attribute.split("'")[5];
+                     String accountType = attribute.split("'")[7];
+                     app.zDeleteDesktopAccount(accountName, accountId, accountType, accountType);
 
                      String nthChildString = "nth-child(3)";
                      if (deleteButtonLocator.contains(nthChildString)) {
