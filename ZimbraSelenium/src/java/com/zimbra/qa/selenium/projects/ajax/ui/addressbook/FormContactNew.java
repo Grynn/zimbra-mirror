@@ -156,7 +156,7 @@ public class FormContactNew extends AbsForm {
 			throw new HarnessException("Field is not present field="+ locator +" locator="+ value);
 			
 		
-		if (sGetEval("navigator.userAgent;").contains("Chrome") ) {
+		if (zIsBrowserMatch(BrowserMasks.BrowserMaskChrome)) { 
 	        sType(locator,value);
 	        sTypeKeys(locator,value);			
 		}
