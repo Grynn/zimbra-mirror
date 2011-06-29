@@ -24,6 +24,7 @@ import com.zimbra.cs.mailbox.SyncMailbox;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.ZcsMailbox;
+import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.soap.DocumentHandler;
@@ -49,13 +50,20 @@ public class OfflineSync extends DocumentHandler {
             //previously missed an update from UI; no way user can press send/receive while UI is loading
             OfflineSyncManager.getInstance().setUILoading(false);
         }
-        if (mbox instanceof SyncMailbox)
-        	((SyncMailbox)mbox).sync(true, isDebugTraceOn);
-        
-        if (mbox instanceof ZcsMailbox) {
-            DirectorySync.getInstance().sync(mbox.getAccount(), true);
+        try {
+            if (mbox instanceof SyncMailbox)
+            	((SyncMailbox)mbox).sync(true, isDebugTraceOn);
+            
+            if (mbox instanceof ZcsMailbox) {
+                DirectorySync.getInstance().sync(mbox.getAccount(), true);
+            }
+        } catch (ServiceException se) {
+            if (ServiceException.INTERRUPTED.equals(se.getCode())) {
+                OfflineLog.offline.debug("Sync interrupted. Network status changed to down during sync");
+            } else {
+                throw se;
+            }
         }
-
         return zsc.createElement(OfflineConstants.SYNC_RESPONSE);
     }
 }

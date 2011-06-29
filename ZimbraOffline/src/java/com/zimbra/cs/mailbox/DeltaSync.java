@@ -121,6 +121,7 @@ public class DeltaSync {
                               contacts = null, appts = null, tasks = null;
         List<Integer> documents = null;
         for (Element change : response.listElements()) {
+            OfflineSyncManager.getInstance().continueOK();
             int id = (int) change.getAttributeLong(MailConstants.A_ID);
             String type = change.getName();
 

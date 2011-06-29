@@ -651,15 +651,17 @@ public class OfflineSyncManager implements FormatListener {
     }
 
     public synchronized void setConnectionDown(boolean b) {
+        boolean changed = (b != isConnectionDown);
         isConnectionDown = b;
         OfflineLog.offline.info("setting connection status to " + (b ? "down" : "up"));
         for (OfflineSyncStatus ss : syncStatusTable.values()) {
             if (ss.getSyncStatus() != SyncStatus.authfail &&
                 ss.getSyncStatus() != SyncStatus.error) {
-                if (b)
+                if (b) {
                     ss.connectionDown(null);
-                else
+                } else if (changed) {
                     ss.reset();
+                }
             }
         }
         notifyStateChange();
@@ -667,6 +669,20 @@ public class OfflineSyncManager implements FormatListener {
         if (!isConnectionDown)
             waiting.signalAll();
         lock.unlock();
+        if (b) {
+            synchronized(syncStatusTable) {
+                for (OfflineSyncStatus status: syncStatusTable.values()) {
+                    if (status.currentSyncThread != null) {
+                        try {
+                            OfflineLog.offline.info("interrupting sync thread %s",status.currentSyncThread.getName());
+                            status.currentSyncThread.interrupt();
+                        } catch (Exception e) {
+                            OfflineLog.offline.warn("Exception while interrupting sync thread",e);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public synchronized void setUILoading(boolean b) {
