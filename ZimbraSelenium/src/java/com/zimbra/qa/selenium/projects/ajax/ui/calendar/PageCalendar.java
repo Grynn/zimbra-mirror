@@ -66,7 +66,7 @@ public class PageCalendar extends AbsTab {
 
 		} else if ( button == Button.B_REFRESH ) {
 
-			locator = "css=td#zb__CLD__CAL_REFRESH_title";
+			locator = "css=td#CHECK_MAIL_left_icon>div[class='ImgRefresh']";
 			
 			page = null;
 			
