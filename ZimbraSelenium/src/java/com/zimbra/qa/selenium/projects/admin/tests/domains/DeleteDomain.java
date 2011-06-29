@@ -1,7 +1,5 @@
 package com.zimbra.qa.selenium.projects.admin.tests.domains;
 
-import java.util.List;
-
 import org.testng.annotations.Test;
 
 import com.zimbra.common.soap.Element;
@@ -11,7 +9,6 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
 import com.zimbra.qa.selenium.projects.admin.core.AdminCommonTest;
-import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 import com.zimbra.qa.selenium.projects.admin.items.DomainItem;
 import com.zimbra.qa.selenium.projects.admin.ui.DialogForDeleteOperation;
 
