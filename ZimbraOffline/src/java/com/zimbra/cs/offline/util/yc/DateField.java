@@ -51,7 +51,9 @@ public abstract class DateField extends FieldValue {
 
     @Override
     public String toString() {
-        return String.format("%s-%s-%s", year, month, day);
+        int monthValue = Integer.parseInt(month);
+        int dayValue = Integer.parseInt(day);
+        return String.format("%s-%02d-%02d", year, monthValue, dayValue);
     }
 
     @Override

@@ -80,6 +80,7 @@ public class OAuthPutContactRequest extends OAuthRequest {
             msg.append("error when sending req at ").append(getStep());
             if (e instanceof OAuthException) {
                 msg.append(" Internal reason: " + e.getMessage());
+                throw new OAuthException(msg.toString(), ((OAuthException) e).getCode(), false, e, null);
             }
             throw new OAuthException(msg.toString(), "", false, e, null);
         }

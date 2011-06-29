@@ -59,6 +59,7 @@ import com.zimbra.cs.offline.util.yc.SyncResponse;
 import com.zimbra.cs.offline.util.yc.SyncResult;
 import com.zimbra.cs.offline.util.yc.YContactException;
 import com.zimbra.cs.offline.util.yc.YContactSyncResult;
+import com.zimbra.cs.offline.util.yc.oauth.OAuthException;
 import com.zimbra.cs.offline.util.yc.oauth.OAuthManager;
 
 public class YContactSync {
@@ -103,11 +104,26 @@ public class YContactSync {
         int seq = ss.getLastModSequence();
         YContactSyncResult ysyncResult = null;
         Map<Integer, Change> localChanges = this.localData.getContactChanges(seq);
-        OfflineLog.yab.debug("yahoo contacts local changes size: %d, map: %s", localChanges.size(), localChanges.toString());
+        OfflineLog.yab.debug("yahoo contacts local changes size: %d, map: %s", localChanges.size(),
+                localChanges.toString());
         if (clientRev == 0 || localChanges.isEmpty()) {
             ysyncResult = syncFromServer(mbox, clientRev);
         } else {
-            ysyncResult = pushToServerAndSync(mbox, clientRev, localChanges);
+            try {
+                ysyncResult = pushToServerAndSync(mbox, clientRev, localChanges);
+            } catch (Exception e) {
+                if (e instanceof OAuthException) {
+                    String errCode = ((OAuthException) e).getCode();
+                    if (OAuthException.BAD_REQUEST.equals(errCode)) {
+                        OfflineLog.yab.debug("Brute force sync from server");
+                        ysyncResult = syncFromServer(mbox, 0);
+                        /**
+                         * TODO need to make choice here, either delete local contacts that don't exist on server or add them to server.
+                         * It all depends on whether the most recent action is done on server or client, which we couldn't tell.
+                         */
+                    }
+                }
+            }
         }
 
         updateDb(ss, mbox, ysyncResult);
@@ -129,8 +145,8 @@ public class YContactSync {
         }
         SyncResult syncResult = new SyncResult();
         resp.extract(syncResult);
-        OfflineLog.yab.debug("push sync result, result items: %d, diff items: %d", 
-                syncResult.getResults().size(), syncResult.getDiff().size());
+        OfflineLog.yab.debug("push sync result, result items: %d, diff items: %d", syncResult.getResults().size(),
+                syncResult.getDiff().size());
 
         for (String id : syncResult.getDiff().keySet()) {
             Contact contact = syncResult.getDiff().get(id);
@@ -139,12 +155,13 @@ public class YContactSync {
             case UPDATE:
                 ContactData cd = new ContactData(contact);
                 try {
-                    //TODO, diff part need combine what we have and delta part on server
+                    // TODO, need combine contact in zd and diff part from yahoo, we are good for now as yahoo
+                    // actually returns the whole contact in diff part
                     this.contactOperations.add(new ContactAddOrUpdate(cd.getParsedContact(), contact, true));
                 } catch (ServiceException e) {
-                    SyncExceptionHandler.syncContactFailed(mbox, -1, 
+                    SyncExceptionHandler.syncContactFailed(mbox, -1,
                             Xml.toString(contact.toXml(getContactSyncDocument())), e);
-                    OfflineLog.yab.error("yahoo contact parsing error, %s", 
+                    OfflineLog.yab.error("yahoo contact parsing error, %s",
                             Xml.toString(contact.toXml(getContactSyncDocument())));
                 }
                 break;
@@ -207,15 +224,16 @@ public class YContactSync {
             resp = req.send();
         }
         ContactSync contactSync = new ContactSync();
-        contactSync.setClientRev(clientRev); // need to have it so we know if server updated
+        contactSync.setClientRev(clientRev); // need to have it so we know if
+                                             // server updated
         boolean isServerUpdated = resp.extract(contactSync);
         if (!isServerUpdated) {
             OfflineLog.yab.debug("Yahoo contacts are up to date.");
             return contactSync;
         }
 
-        OfflineLog.yab.debug("sync response from yahoo: [clinet rev: %s, server rev: %s]\n", contactSync.getClientRev(),
-                contactSync.getYahooRev());
+        OfflineLog.yab.debug("sync response from yahoo: [clinet rev: %s, server rev: %s]\n",
+                contactSync.getClientRev(), contactSync.getYahooRev());
         Set<String> removeSet = new HashSet<String>();
         for (Contact contact : contactSync.getContacts()) {
             switch (contact.getOp()) {
@@ -226,9 +244,9 @@ public class YContactSync {
                     cd = new ContactData(contact);
                     this.contactOperations.add(new ContactAddOrUpdate(cd.getParsedContact(), contact, false));
                 } catch (ServiceException e) {
-                    SyncExceptionHandler.syncContactFailed(mbox, -1, 
+                    SyncExceptionHandler.syncContactFailed(mbox, -1,
                             Xml.toString(contact.toXml(getContactSyncDocument())), e);
-                    OfflineLog.yab.error("yahoo contact parsing error, %s", 
+                    OfflineLog.yab.error("yahoo contact parsing error, %s",
                             Xml.toString(contact.toXml(getContactSyncDocument())));
                     if (cd != null)
                         OfflineLog.yab.error("error creating contact: " + cd.toString());
@@ -237,7 +255,7 @@ public class YContactSync {
             case REMOVE:
                 String removeId = contact.getId();
                 if (removeSet.add(removeId)) {
-                    this.contactOperations.add(new ContactRemove(removeId));    
+                    this.contactOperations.add(new ContactRemove(removeId));
                 }
                 break;
             }
@@ -246,7 +264,7 @@ public class YContactSync {
 
         return contactSync;
     }
-    
+
     private void updateDb(SyncState ss, DataSourceMailbox mbox, YContactSyncResult ySyncResult) throws ServiceException {
         if (this.contactOperations.isEmpty()) {
             return;
@@ -254,12 +272,13 @@ public class YContactSync {
         int addCount = 0;
         int updateCount = 0;
 
-        //sync from server could also return "update" (contact has itemid), we need sorting for lucene indexing
+        // sync from server could also return "update" (contact has itemid), we
+        // need sorting for lucene indexing
         for (ContactOperation contactOp : this.contactOperations) {
             if (contactOp.getOp() != Action.ADD) {
                 String remoteId = RemoteId.contactId(Integer.parseInt(contactOp.getRemoteId())).toString();
                 int itemId = this.localData.getReverseMapping(remoteId).itemId;
-                contactOp.setItemId(itemId);    
+                contactOp.setItemId(itemId);
             }
         }
         Collections.sort(this.contactOperations);
@@ -275,13 +294,13 @@ public class YContactSync {
                         String refId = result.getRefIdByContactId(contactOp.getRemoteId());
                         if (refId != null) {
                             int itemId = this.localContactIdMap.get(refId);
-                            this.updateContactAndAddMapping(itemId, contactOp.getParsedContact(), 
+                            this.updateContactAndAddMapping(itemId, contactOp.getParsedContact(),
                                     contactOp.getYContact());
                         } else {
                             OfflineLog.yab.debug("** refId is null, remoteId (%s)", contactOp.getRemoteId());
                         }
                     } else {
-                        this.saveContact(contactOp.getParsedContact(), contactOp.getYContact());    
+                        this.saveContact(contactOp.getParsedContact(), contactOp.getYContact());
                     }
                     addCount++;
                     break;
@@ -302,8 +321,8 @@ public class YContactSync {
             this.localData.saveState(ss);
 
             OfflineLog.yab.debug("SyncState after sync (persisted): %s", ss);
-            OfflineLog.yab.info("Yahoo contacts synced, %d added, %d updated, %d deleted", addCount,
-                    updateCount, this.contactOperations.size() - addCount - updateCount);
+            OfflineLog.yab.info("Yahoo contacts synced, %d added, %d updated, %d deleted", addCount, updateCount,
+                    this.contactOperations.size() - addCount - updateCount);
             success = true;
         } catch (Exception e) {
             throw new YContactException("exception raised when syncing contacts to db", "", false, e, null);
@@ -330,7 +349,8 @@ public class YContactSync {
             this.localData.updateMapping(YCONTACT_FOLDER_ID, dsi.itemId, dsi.remoteId,
                     Xml.toString(ycContact.toXml(getContactSyncDocument())), true);
         } else {
-            OfflineLog.yab.error("couldn't find update contact %s", Xml.toString(ycContact.toXml(getContactSyncDocument())));
+            OfflineLog.yab.error("couldn't find update contact %s",
+                    Xml.toString(ycContact.toXml(getContactSyncDocument())));
         }
     }
 
@@ -350,7 +370,8 @@ public class YContactSync {
     }
 
     private void updateContactAndAddMapping(int itemId, ParsedContact pc, Contact ycContact) throws ServiceException {
-        this.localData.modifyContact(itemId, pc);   //should not need this if field mapping works perfect
+        this.localData.modifyContact(itemId, pc); // should not need this if
+                                                  // field mapping works perfect
         RemoteId rid = RemoteId.contactId(Integer.parseInt(ycContact.getId()));
         this.localData.updateMapping(YCONTACT_FOLDER_ID, itemId, rid.toString(),
                 Xml.toString(ycContact.toXml(getContactSyncDocument())), true);
@@ -411,8 +432,7 @@ public class YContactSync {
             localData.saveState(ss);
             success = true;
         } catch (Exception e) {
-            throw new YContactException("exception raised when migrating existing yahoo contacts", "", false, e,
-                    null);
+            throw new YContactException("exception raised when migrating existing yahoo contacts", "", false, e, null);
         } finally {
             mbox.endTransaction(success);
         }
@@ -426,4 +446,3 @@ public class YContactSync {
         mbox.setConfig(null, MIGRATE_FLAG, md);
     }
 }
-
