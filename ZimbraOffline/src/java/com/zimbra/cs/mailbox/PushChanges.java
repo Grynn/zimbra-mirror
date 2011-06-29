@@ -666,7 +666,7 @@ public class PushChanges {
             int mask = 0;
             if (flags != search.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
             if (parentId != search.getFolderId())          mask |= Change.MODIFIED_NAME;
-            if ((colorByte != search.getColor()) || (colorStr != null && !colorStr.equals(search.getRgbColor().toString())))  mask |= Change.MODIFIED_COLOR;
+            if (!color.equals(search.getRgbColor()))       mask |= Change.MODIFIED_COLOR;
             if (!name.equals(search.getName()))            mask |= Change.MODIFIED_NAME;
             if (!query.equals(search.getQuery()))              mask |= Change.MODIFIED_QUERY;
             if (!searchTypes.equals(search.getReturnTypes()))  mask |= Change.MODIFIED_QUERY;
@@ -764,7 +764,7 @@ public class PushChanges {
             int mask = 0;
             if (flags != folder.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
             if (parentId != folder.getFolderId())          mask |= Change.MODIFIED_NAME;
-            if ((colorByte != folder.getColor()) || (colorStr != null && !colorStr.equals(folder.getRgbColor().toString())))  mask |= Change.MODIFIED_COLOR;
+            if (!color.equals(folder.getRgbColor()))       mask |= Change.MODIFIED_COLOR;
             if (!name.equals(folder.getName()))            mask |= Change.MODIFIED_NAME;
             if (!url.equals(folder.getUrl()))              mask |= Change.MODIFIED_URL;
 
@@ -848,8 +848,8 @@ public class PushChanges {
             Tag tag = ombx.getTagById(sContext, id);
             // check to see if the tag was changed while we were pushing the update...
             int mask = 0;
-            if ((colorByte != tag.getColor()) || (colorStr != null && !colorStr.equals(tag.getRgbColor().toString())))  mask |= Change.MODIFIED_COLOR;
-            if (!name.equals(tag.getName()))  mask |= Change.MODIFIED_NAME;
+            if (!color.equals(tag.getRgbColor()))  mask |= Change.MODIFIED_COLOR;
+            if (!name.equals(tag.getName()))       mask |= Change.MODIFIED_NAME;
 
             // update or clear the change bitmask
             ombx.setChangeMask(sContext, id, MailItem.Type.TAG, mask);
@@ -1019,7 +1019,7 @@ public class PushChanges {
             if (flags != cn.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
             if (tags != cn.getTagBitmask())            mask |= Change.MODIFIED_TAGS;
             if (folderId != cn.getFolderId())          mask |= Change.MODIFIED_FOLDER;
-            if ((colorByte != cn.getColor()) || (colorStr != null && !colorStr.equals(cn.getRgbColor().toString())))  mask |= Change.MODIFIED_COLOR;
+            if (!color.equals(cn.getRgbColor()))       mask |= Change.MODIFIED_COLOR;
             if (date != cn.getDate())                  mask |= Change.MODIFIED_CONTENT;
 
             // update or clear the change bitmask
@@ -1313,7 +1313,7 @@ public class PushChanges {
             if (flags != msg.getFlagBitmask())    mask |= Change.MODIFIED_FLAGS;
             if (tags != msg.getTagBitmask())      mask |= Change.MODIFIED_TAGS;
             if (folderId != msg.getFolderId())    mask |= Change.MODIFIED_FOLDER;
-            if ((colorByte != msg.getColor()) || (colorStr != null && !colorStr.equals(msg.getRgbColor().toString())))  mask |= Change.MODIFIED_COLOR;
+            if (!color.equals(msg.getRgbColor()))  mask |= Change.MODIFIED_COLOR;
             if (!StringUtil.equal(digest, msg.getDigest()))  mask |= Change.MODIFIED_CONTENT;
 
             // update or clear the change bitmask
@@ -1428,7 +1428,7 @@ public class PushChanges {
             if (flags != cal.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
             if (tags != cal.getTagBitmask())            mask |= Change.MODIFIED_TAGS;
             if (folderId != cal.getFolderId())          mask |= Change.MODIFIED_FOLDER;
-            if ((colorByte != cal.getColor()) || (colorStr != null && !colorStr.equals(cal.getRgbColor().toString())))  mask |= Change.MODIFIED_COLOR;
+            if (!color.equals(cal.getRgbColor()))       mask |= Change.MODIFIED_COLOR;
             if (date != cal.getDate())                  mask |= Change.MODIFIED_CONTENT;
 
             // update or clear the change bitmask
