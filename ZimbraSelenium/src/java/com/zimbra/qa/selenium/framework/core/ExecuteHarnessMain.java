@@ -112,6 +112,10 @@ public class ExecuteHarnessMain {
 		String browser = ZimbraSeleniumProperties.getStringProperty(
 				ZimbraSeleniumProperties.getLocalHost() + ".browser",
 				ZimbraSeleniumProperties.getStringProperty("browser"));
+		
+		// Save the browser value (for logging)
+		ZimbraSeleniumProperties.setStringProperty("CalculatedBrowser", browser);
+		
 		if (browser.charAt(0) == '*') {
 			browser = browser.substring(1);
 			if ((browser.indexOf(" ")) > 0) {
@@ -371,6 +375,7 @@ public class ExecuteHarnessMain {
 		// calculate how long the tests took
 		long duration = finish.getTime() - start.getTime();
 		result.append("Duration: ").append(duration / 1000).append(" seconds\n");
+		result.append("Browser: ").append(ZimbraSeleniumProperties.getStringProperty("CalculatedBrowser", "unknown")).append('\n');
 		
 		return (result.toString());
 
