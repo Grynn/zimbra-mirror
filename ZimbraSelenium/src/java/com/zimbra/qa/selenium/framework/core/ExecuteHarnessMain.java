@@ -632,6 +632,7 @@ public class ExecuteHarnessMain {
 		
 		protected String getResults() {
 			StringBuilder sb = new StringBuilder();
+			sb.append("User Agent: ").append(ClientSessionFactory.session().currentBrowserName()).append('\n');
 			sb.append("Total Tests:   ").append(testsTotal).append('\n');
 			sb.append("Total Passed:  ").append(testsPass).append('\n');
 			sb.append("Total Failed:  ").append(testsFailed).append('\n');
