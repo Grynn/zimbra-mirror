@@ -54,7 +54,7 @@ public class DeleteResource extends AdminCommonTest {
 		app.zPageSearchResults.zToolbarPressButton(Button.B_SEARCH);
 		
 		// Click on resource to be deleted.
-		app.zPageSearchResults.zListItem(Action.A_LEFTCLICK, resource.getName());
+		app.zPageSearchResults.zListItem(Action.A_LEFTCLICK, resource.getEmailAddress());
 
 		// Click on Delete button
 		DialogForDeleteOperation dialog = (DialogForDeleteOperation) app.zPageSearchResults.zToolbarPressButton(Button.B_DELETE);
@@ -111,7 +111,7 @@ public class DeleteResource extends AdminCommonTest {
 		app.zPageSearchResults.zToolbarPressButton(Button.B_SEARCH);
 		
 		// Click on resource to be deleted.
-		app.zPageSearchResults.zListItem(Action.A_LEFTCLICK, resource.getName());
+		app.zPageSearchResults.zListItem(Action.A_LEFTCLICK, resource.getEmailAddress());
 
 		// Click on Delete button
 		DialogForDeleteOperation dialog = (DialogForDeleteOperation) app.zPageSearchResults.zToolbarPressButton(Button.B_DELETE);
