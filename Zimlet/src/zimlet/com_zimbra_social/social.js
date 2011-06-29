@@ -1292,8 +1292,12 @@ SocialZimlet.prototype._createTreeView =
 				folder["icon"] = "social_socialcastIcon";
 				folder["type"] = "SOCIALCAST";
 				var streams = this.getUserProperty(folder.e + "_streams");
-				if(streams != "") {
-					var streamObjs = JSON.parse(streams);
+				try{
+					if(streams && streams != "") {
+						var streamObjs = JSON.parse(streams);
+					}
+				} catch (e) {
+				   //ignore
 				}
 				if(streamObjs && (streamObjs instanceof Array) && streamObjs.length > 0) {
 					var childExpandIconId = "social_expandIcon_" + Dwt.getNextId();
