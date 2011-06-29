@@ -107,7 +107,7 @@ function(htmlElement, cssPropName) {
 
 	if (doc.defaultView && doc.defaultView.getComputedStyle) {
 		var cssDecl = doc.defaultView.getComputedStyle(htmlElement, "");
-		if (cssDecl) {
+		if (cssDecl && cssDecl.length > 0) { //on Chrome/Safari it returns cssDecl with length 0 for some elements for some reason. (a wild guess could be invisible items, as it happens with invite toolbar when it's invisible) So in that case fall back on the other ways.
 			return cssDecl.getPropertyValue(cssPropName);
 		}
 	}
