@@ -244,6 +244,10 @@ ZaDomain.A_zimbraWebClientLogoutURL = "zimbraWebClientLogoutURL";
 ZaDomain.A_zimbraWebClientLoginURLAllowedUA = "zimbraWebClientLoginURLAllowedUA";
 ZaDomain.A_zimbraWebClientLogoutURLAllowedUA = "zimbraWebClientLogoutURLAllowedUA";
 
+// web client authentication
+ZaDomain.A_zimbraReverseProxyClientCertMode = "zimbraReverseProxyClientCertMode";
+ZaDomain.A_zimbraMailSSLClientCertPrincipalMap = "zimbraMailSSLClientCertPrincipalMap";
+
 //skin properties
 ZaDomain.A_zimbraSkinForegroundColor = "zimbraSkinForegroundColor" ;
 ZaDomain.A_zimbraSkinBackgroundColor = "zimbraSkinBackgroundColor" ;
@@ -653,6 +657,16 @@ function(tmpObj, newDomain) {
     if(tmpObj.attrs[ZaDomain.A_zimbraWebClientLogoutURL]){
         attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraWebClientLogoutURL]);
         attr.setAttribute("n", ZaDomain.A_zimbraWebClientLogoutURL);
+    }
+
+    if(tmpObj.attrs[ZaDomain.A_zimbraReverseProxyClientCertMode]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraReverseProxyClientCertMode]);
+        attr.setAttribute("n", ZaDomain.A_zimbraReverseProxyClientCertMode);
+    }
+
+    if(tmpObj.attrs[ZaDomain.A_zimbraMailSSLClientCertPrincipalMap]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraMailSSLClientCertPrincipalMap]);
+        attr.setAttribute("n", ZaDomain.A_zimbraMailSSLClientCertPrincipalMap);
     }
 
     if(tmpObj.attrs[ZaDomain.A_zimbraWebClientLoginURLAllowedUA]) {
@@ -2026,6 +2040,9 @@ ZaDomain.myXModel = {
       // web client redirect
       { id:ZaDomain.A_zimbraWebClientLoginURL, ref:"attrs/" + ZaDomain.A_zimbraWebClientLoginURL, type:_COS_STRING_ },
       { id:ZaDomain.A_zimbraWebClientLogoutURL, ref:"attrs/" + ZaDomain.A_zimbraWebClientLogoutURL, type:_COS_STRING_ },
+    // web client authentication
+      { id:ZaDomain.A_zimbraReverseProxyClientCertMode, ref:"attrs/" + ZaDomain.A_zimbraReverseProxyClientCertMode, type:_COS_STRING_, choices:["on","off","optional"]},
+      { id:ZaDomain.A_zimbraMailSSLClientCertPrincipalMap, ref:"attrs/" + ZaDomain.A_zimbraMailSSLClientCertPrincipalMap, type:_COS_STRING_ },
 	// help URL
       { id:ZaDomain.A_zimbraHelpAdminURL, ref:"attrs/" + ZaDomain.A_zimbraHelpAdminURL, type:_COS_STRING_ },
       { id:ZaDomain.A_zimbraHelpDelegatedURL, ref:"attrs/" + ZaDomain.A_zimbraHelpDelegatedURL, type:_COS_STRING_ },

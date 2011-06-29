@@ -158,6 +158,14 @@ ZaServer.A_zimbraReverseProxyLookupTarget = "zimbraReverseProxyLookupTarget";
 //spnego
 ZaServer.A_zimbraSpnegoAuthPrincipal = "zimbraSpnegoAuthPrincipal";
 ZaServer.A_zimbraSpnegoAuthTargetName = "zimbraSpnegoAuthTargetName";
+
+// web client authentication
+ZaServer.A_zimbraMailSSLClientCertMode = "zimbraMailSSLClientCertMode";
+ZaServer.A_zimbraMailSSLClientCertPort = "zimbraMailSSLClientCertPort";
+ZaServer.A_zimbraMailSSLProxyClientCertPort = "zimbraMailSSLProxyClientCertPort";
+ZaServer.A_zimbraReverseProxyMailMode = "zimbraReverseProxyMailMode";
+ZaServer.A_zimbraReverseProxyClientCertMode = "zimbraReverseProxyClientCertMode";
+
 // other
 ZaServer.A_zimbraScheduledTaskNumThreads = "zimbraScheduledTaskNumThreads" ;
 ZaServer.A_zimbraMailPurgeSleepInterval = "zimbraMailPurgeSleepInterval" ;
@@ -445,6 +453,11 @@ ZaServer.myXModel = {
         //spnego
 		{id:ZaServer.A_zimbraSpnegoAuthTargetName, ref:"attrs/" +  ZaServer.A_zimbraSpnegoAuthTargetName, type:_STRING_},
         {id:ZaServer.A_zimbraSpnegoAuthPrincipal, ref:"attrs/" +  ZaServer.A_zimbraSpnegoAuthPrincipal, type:_STRING_},
+        {id:ZaServer.A_zimbraMailSSLClientCertMode, ref:"attrs/" +  ZaServer.A_zimbraMailSSLClientCertMode, type:_COS_STRING_, choices:["Disabled","NeedClientAuth","WantClientAuth"]},
+        {id:ZaServer.A_zimbraMailSSLClientCertPort, ref:"attrs/" +  ZaServer.A_zimbraMailSSLClientCertPort, type:_COS_PORT_},
+        {id:ZaServer.A_zimbraMailSSLProxyClientCertPort, ref:"attrs/" +  ZaServer.A_zimbraMailSSLProxyClientCertPort, type:_COS_PORT_},
+        {id:ZaServer.A_zimbraReverseProxyMailMode, ref:"attrs/" +  ZaServer.A_zimbraReverseProxyMailMode, type:_COS_STRING_, choices:["http","https","both","mixed","redirect"]},
+        {id:ZaServer.A_zimbraReverseProxyClientCertMode, ref:"attrs/" +  ZaServer.A_zimbraReverseProxyClientCertMode, type:_COS_STRING_, choices:["on","off","optional"]},
 		// ...other...
 		{id:ZaServer.A_zimbraSmtpHostname, ref:"attrs/" +  ZaServer.A_zimbraSmtpHostname, type:_COS_LIST_, listItem:{type:_HOSTNAME_OR_IP_, maxLength: 256} },
 		{id:ZaServer.A_SmtpPort, ref:"attrs/" +  ZaServer.A_SmtpPort, type:_COS_PORT_},

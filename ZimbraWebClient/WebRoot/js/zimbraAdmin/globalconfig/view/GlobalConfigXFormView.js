@@ -886,6 +886,34 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                                           }
                                   ]
                             },
+                            { type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_AUTH_ClientConfigure,
+                                  items:[
+                                        {ref:ZaGlobalConfig.A_zimbraMailSSLClientCertMode, type:_SELECT1_,
+                                          colSizes:["275px","*"],
+                                          label:ZaMsg.NAD_zimbraMailSSLClientCertMode,
+                                          labelLocation:_LEFT_
+                                        },
+                                        { ref: ZaGlobalConfig.A_zimbraMailSSLClientCertPort, type:_TEXTFIELD_,
+                                          label: ZaMsg.NAD_zimbraMailSSLClientCertPort
+                                        },
+                                        { ref: ZaGlobalConfig.A_zimbraMailSSLClientCertPrincipalMap, type:_TEXTAREA_,
+                                            label:ZaMsg.NAD_zimbraMailSSLClientCertPrincipalMap, labelCssStyle:"vertical-align:top", width:250
+                                        },
+                                        {ref:ZaGlobalConfig.A_zimbraReverseProxyClientCertMode, type:_SELECT1_,
+                                          colSizes:["275px","*"],
+                                          label:ZaMsg.NAD_zimbraReverseProxyClientCertMode,
+                                          labelLocation:_LEFT_
+                                        },
+                                        {ref:ZaGlobalConfig.A_zimbraReverseProxyMailMode, type:_SELECT1_,
+                                          colSizes:["275px","*"],
+                                          label:ZaMsg.NAD_zimbraReverseProxyMailMode,
+                                          labelLocation:_LEFT_
+                                        },
+                                        { ref: ZaGlobalConfig.A_zimbraMailSSLProxyClientCertPort, type:_TEXTFIELD_,
+                                          label: ZaMsg.NAD_zimbraMailSSLProxyClientCertPort
+                                        }
+                                  ]
+                            },
                             { type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_WEBCLIENT_Configure,
                                   items:[
                                           { ref: ZaGlobalConfig.A_zimbraWebClientLoginURL,

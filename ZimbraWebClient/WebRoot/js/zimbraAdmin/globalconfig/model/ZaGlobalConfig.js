@@ -173,6 +173,14 @@ ZaGlobalConfig.A_zimbraWebClientLogoutURL = "zimbraWebClientLogoutURL";
 ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA = "zimbraWebClientLoginURLAllowedUA";
 ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA = "zimbraWebClientLogoutURLAllowedUA";
 
+// web client authentication
+ZaGlobalConfig.A_zimbraMailSSLClientCertMode = "zimbraMailSSLClientCertMode";
+ZaGlobalConfig.A_zimbraMailSSLClientCertPort = "zimbraMailSSLClientCertPort";
+ZaGlobalConfig.A_zimbraMailSSLClientCertPrincipalMap = "zimbraMailSSLClientCertPrincipalMap";
+ZaGlobalConfig.A_zimbraReverseProxyClientCertMode = "zimbraReverseProxyClientCertMode";
+ZaGlobalConfig.A_zimbraMailSSLProxyClientCertPort = "zimbraMailSSLProxyClientCertPort";
+ZaGlobalConfig.A_zimbraReverseProxyMailMode = "zimbraReverseProxyMailMode";
+
 
 //Skin Properties
 ZaGlobalConfig.A_zimbraSkinForegroundColor = "zimbraSkinForegroundColor" ;
@@ -447,6 +455,13 @@ ZaGlobalConfig.myXModel = {
         { id:ZaGlobalConfig.A_zimbraWebClientLogoutURL, ref:"attrs/" + ZaGlobalConfig.A_zimbraWebClientLogoutURL, type:_STRING_, maxLength:255 },
 		{ id:ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA, ref:"attrs/" + ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA, type:_LIST_, listItem:{type:_STRING_}},
 		{ id:ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA, ref:"attrs/" + ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA, type:_LIST_, listItem:{type:_STRING_}},
+        // web client authentication
+        { id:ZaGlobalConfig.A_zimbraMailSSLClientCertMode, ref:"attrs/" +  ZaGlobalConfig.A_zimbraMailSSLClientCertMode, type:_STRING_, choices:["Disabled","NeedClientAuth","WantClientAuth"]},
+        { id:ZaGlobalConfig.A_zimbraMailSSLClientCertPort, ref:"attrs/" +  ZaGlobalConfig.A_zimbraMailSSLClientCertPort, type:_PORT_},
+        { id:ZaGlobalConfig.A_zimbraMailSSLProxyClientCertPort, ref:"attrs/" +  ZaGlobalConfig.A_zimbraMailSSLProxyClientCertPort, type:_PORT_},
+        { id:ZaGlobalConfig.A_zimbraReverseProxyMailMode, ref:"attrs/" +  ZaGlobalConfig.A_zimbraReverseProxyMailMode, type:_STRING_, choices:["http","https","both","mixed","redirect"]},
+        { id:ZaGlobalConfig.A_zimbraReverseProxyClientCertMode, ref:"attrs/" +  ZaGlobalConfig.A_zimbraReverseProxyClientCertMode, type:_STRING_, choices:["on","off","optional"]},
+        { id:ZaGlobalConfig.A_zimbraMailSSLClientCertPrincipalMap, ref:"attrs/" + ZaGlobalConfig.A_zimbraMailSSLClientCertPrincipalMap, type:_STRING_ },
         //skin properties
         { id:ZaGlobalConfig.A_zimbraSkinForegroundColor, ref:"attrs/" + ZaGlobalConfig.A_zimbraSkinForegroundColor, type: _STRING_ },
         { id:ZaGlobalConfig.A_zimbraSkinBackgroundColor, ref:"attrs/" + ZaGlobalConfig.A_zimbraSkinBackgroundColor, type: _STRING_ },

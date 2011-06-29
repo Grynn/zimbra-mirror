@@ -978,6 +978,38 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                                onChange: ZaServerXFormView.onFormFieldChanged
                               }
                             ]
+                        },
+                        {type:_ZA_TOP_GROUPER_, colSizes:["275px","*"], numCols:2, label:ZaMsg.NAD_AUTH_ClientConfigure,
+                            items:[
+                                {ref:ZaServer.A_zimbraMailSSLClientCertMode, type:_SUPER_SELECT1_,
+                                  colSizes:["275px","*"],
+                                  label:ZaMsg.NAD_zimbraMailSSLClientCertMode,
+                                  labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS
+                                },
+                                { ref: ZaServer.A_zimbraMailSSLClientCertPort, type:_TEXTFIELD_,
+                                  label: ZaMsg.NAD_zimbraMailSSLClientCertPort,
+                                  labelLocation:_LEFT_,
+                                  textFieldCssClass:"admin_xform_number_input",
+                                  onChange:ZaServerXFormView.onFormFieldChanged
+                                },
+                                {type: _SPACER_, height: 10 },
+                                {ref:ZaServer.A_zimbraReverseProxyClientCertMode, type:_SUPER_SELECT1_,
+                                  colSizes:["275px","*"],
+                                  label:ZaMsg.NAD_zimbraReverseProxyClientCertMode,
+                                  labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS
+                                },
+                                {ref:ZaServer.A_zimbraReverseProxyMailMode, type:_SUPER_SELECT1_,
+                                  colSizes:["275px","*"],
+                                  label:ZaMsg.NAD_zimbraReverseProxyMailMode,
+                                  labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS
+                                },
+                                { ref: ZaServer.A_zimbraMailSSLProxyClientCertPort, type:_TEXTFIELD_,
+                                  label: ZaMsg.NAD_zimbraMailSSLProxyClientCertPort,
+                                  labelLocation:_LEFT_,
+                                  textFieldCssClass:"admin_xform_number_input",
+                                  onChange:ZaServerXFormView.onFormFieldChanged
+                                }
+                            ]
                         }
 				    ]
 				};

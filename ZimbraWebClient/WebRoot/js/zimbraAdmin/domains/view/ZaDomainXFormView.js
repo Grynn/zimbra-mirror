@@ -945,6 +945,20 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
           		    onChange:ZaDomainXFormView.onFormFieldChanged
         		    }
                 ]},
+                { type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_AUTH_ClientConfigure, colSpan:"*",
+                      items:[
+                          { ref: ZaDomain.A_zimbraMailSSLClientCertPrincipalMap, type:_TEXTAREA_,
+				            label:ZaMsg.NAD_zimbraMailSSLClientCertPrincipalMap, labelCssStyle:"vertical-align:top", width:250,
+				            onChange:ZaDomainXFormView.onFormFieldChanged
+                          },
+                          {type: _SPACER_, height: 10 },
+                          {ref:ZaDomain.A_zimbraReverseProxyClientCertMode, type:_SUPER_SELECT1_,
+                            colSizes:["275px","*"],
+                            label:ZaMsg.NAD_zimbraReverseProxyClientCertMode,
+                            labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS
+                          }
+                      ]
+                },
                 { type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_WEBCLIENT_Configure, colSpan:"*",
                       items:[
                           { ref: ZaDomain.A_zimbraWebClientLoginURL,useParentTable: false,
