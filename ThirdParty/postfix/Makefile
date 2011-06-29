@@ -34,7 +34,7 @@ endif
 
 ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
 	OS_REL := 10
-	OS_PLAT := $(shell uname -p)
+	OS_PLAT := $(shell uname -m)
 	MYSQL_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin$(OS_REL)-$(OS_PLAT)
 	MYSQL_CLIENT_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin$(OS_REL)-$(OS_PLAT)
 endif 
