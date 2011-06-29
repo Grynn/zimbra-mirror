@@ -63,8 +63,8 @@ public class FormContactNew extends AbsForm {
 		public static final String NEWTAG="id=zb__CNS__TAG_MENU|MENU|NEWTAG";
 		public static final String REMOVETAG="id=zb__CNS__TAG_MENU|MENU|REMOVETAG";
 	
-		public static final String CLOSE="id=zb__CN__CANCEL";
-		public static final String SAVE="id=zb__CN__SAVE";
+		public static final String CLOSE="css=[id^=zb__CN][id$=__CANCEL]";
+		public static final String SAVE="css=[id^=zb__CN][id$=__SAVE]";
 
 	}
 		
