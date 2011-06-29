@@ -155,29 +155,36 @@ public class FormContactNew extends AbsForm {
 		if ( !this.sIsElementPresent(locator) )
 			throw new HarnessException("Field is not present field="+ locator +" locator="+ value);
 			
-		//The following code to simulate paste action from user (Ctrl-V) bug #
-		//Use "Notes" to store text which will be entered into clipboard (Ctrl-X)
-		sType(Locators.zNotesEditField ,value); //
+		
+		if (sGetEval("navigator.userAgent;").contains("Chrome") ) {
+	        sType(locator,value);
+	        sTypeKeys(locator,value);			
+		}
+		else {
+			//The following code to simulate paste action from user (Ctrl-V) bug #
+			//Use "Notes" to store text which will be entered into clipboard (Ctrl-X)
+			sType(Locators.zNotesEditField ,value); //
 
-		//highlight text
-		String id= "editcontactform_NOTES_input";
-		ClientSessionFactory.session().selenium().getEval(
-				"this.browserbot.getUserWindow().document.getElementById('"
-				+ id + "')" + ".select()");
-		
-		//cut text and put into clipboard
-		sKeyDownNative(KeyEvent.VK_CONTROL+"");
-		sKeyPressNative(KeyEvent.VK_X+"");				
-		sKeyUpNative(KeyEvent.VK_CONTROL+"");
+			//highlight text
+			String id= "editcontactform_NOTES_input";
+			ClientSessionFactory.session().selenium().getEval(
+					"this.browserbot.getUserWindow().document.getElementById('"
+					+ id + "')" + ".select()");
+			
+			//cut text and put into clipboard
+			sKeyDownNative(KeyEvent.VK_CONTROL+"");
+			sKeyPressNative(KeyEvent.VK_X+"");				
+			sKeyUpNative(KeyEvent.VK_CONTROL+"");
 
-		//paste text to the target locator
-		sFocus(locator);		
-		sKeyDownNative(KeyEvent.VK_CONTROL+"");
-		sKeyPressNative(KeyEvent.VK_V+"");				
-		sKeyUpNative(KeyEvent.VK_CONTROL+"");
-		
-		
-        
+			//paste text to the target locator
+			sFocus(locator);		
+			sKeyDownNative(KeyEvent.VK_CONTROL+"");
+			sKeyPressNative(KeyEvent.VK_V+"");				
+			sKeyUpNative(KeyEvent.VK_CONTROL+"");
+						
+		}
+			
+
 	}
 	
 	
