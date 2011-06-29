@@ -86,9 +86,12 @@ public class DisplayMail extends AbsDisplay {
 
 		if ( button == Button.B_VIEW_ENTIRE_MESSAGE ) {
 			
-			locator = Locators.zViewEntireMessage;
+			locator = "css=span[id$='__MSG_msgTruncation_link']";
 
-			this.sClick(locator);
+			if ( !this.sIsElementPresent(locator) )
+				throw new HarnessException("locator is not present for button "+ button +" : "+ locator);
+			
+			this.sClick(locator); // sClick() is required for this element
 			
 			this.zWaitForBusyOverlay();
 
@@ -96,9 +99,13 @@ public class DisplayMail extends AbsDisplay {
 
 		} else if ( button == Button.B_HIGHLIGHT_OBJECTS ) {
 
-			locator = "css=span[id$='__TV_highlightObjects_link']";
+			locator = "css=span[id$='_highlightObjects_link']";
 
-			this.sClick(locator);
+
+			if ( !this.sIsElementPresent(locator) )
+				throw new HarnessException("locator is not present for button "+ button +" : "+ locator);
+			
+			this.sClick(locator); // sClick() is required for this element
 			
 			this.zWaitForBusyOverlay();
 
@@ -133,6 +140,8 @@ public class DisplayMail extends AbsDisplay {
 		if ( locator == null )
 			throw new HarnessException("no locator defined for button "+ button);
 		
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("locator is not present for button "+ button +" : "+ locator);
 		
 		this.zClick(locator);
 		
