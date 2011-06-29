@@ -8,9 +8,11 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.DesktopAccountItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.OperatingSystem;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.accounts.FormAddGmailAccount;
 import com.zimbra.qa.selenium.projects.desktop.ui.accounts.FormAddYahooAccount;
@@ -48,6 +50,12 @@ public class CreateAccount extends AjaxCommonTest {
 
    @Test(description="Add Yahoo account to ZD client", groups = { "sanity" })
    public void addYahooAccount() throws HarnessException {
+
+      // TODO: Please remove this once issue in Mac is fixed.
+      if (OperatingSystem.getOSType() == OsType.MAC) {
+         throw new HarnessException(
+               "Fail due to bug 61517, also refers to helpzilla ticket #811085");
+      }
       String userName = ZimbraSeleniumProperties.getStringProperty("desktop.yahoo.login");
       String password = ZimbraSeleniumProperties.getStringProperty("desktop.yahoo.password");
 
@@ -68,6 +76,12 @@ public class CreateAccount extends AjaxCommonTest {
 
    @Test(description="Add Gmail account to ZD client", groups = { "sanity" })
    public void addGmailAccount() throws HarnessException {
+
+      // TODO: Please remove this once issue in Mac is fixed.
+      if (OperatingSystem.getOSType() == OsType.MAC) {
+         throw new HarnessException(
+               "Fail due to bug 61517, also refers to helpzilla ticket #811085");
+      }
       String userName = ZimbraSeleniumProperties.getStringProperty("desktop.gmail.login");
       String password = ZimbraSeleniumProperties.getStringProperty("desktop.gmail.password");
 
