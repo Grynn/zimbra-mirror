@@ -12,48 +12,55 @@
             <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
         </Grid.Background>
         <Grid.RowDefinitions>
-            <RowDefinition MinHeight="10" Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition MaxWidth="220" Width="Auto"></ColumnDefinition>
-            <ColumnDefinition MaxWidth="20" Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <GroupBox Header="Select Users" Grid.Row="1" Margin="26,32,0,0" HorizontalAlignment="Left" Name="GBUsers" VerticalAlignment="Top" Padding="20">
+        <TextBlock Grid.Row="0" HorizontalAlignment="Left" Margin="30,30,30,0" Name="usersText" Text="To select users, use the population tools, Load CSV button, or Add button.  Use Save CSV to save the user list to a new .csv file." TextWrapping="Wrap" VerticalAlignment="Top" />
+        <GroupBox Header="Population Tools" Grid.Row="1" Margin="30,20,30,0" HorizontalAlignment="Stretch" Name="GBPop" VerticalAlignment="Top" Padding="10">
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Button Grid.Row="0" HorizontalAlignment="Left"  HorizontalContentAlignment="Left" Margin="0,0,0,0"  Name="objPickerButton" Command="{Binding ObjectPickerCommand}" Width="{Binding ElementName=queryBuilderButton, Path=ActualWidth}"> Object Picker...</Button>
-                <Button Grid.Row="1" HorizontalAlignment="Left"  HorizontalContentAlignment="Left" Margin="0,20,0,0" Name="queryBuilderButton" Command="{Binding QueryBuilderCommand}" >Query Builder...</Button>
-                <Button Grid.Row="2" HorizontalAlignment="Left"  HorizontalContentAlignment="Left" Margin="0,20,0,0" Name="publicFolderButton" Command="{Binding PublicFolderCommand}" Width="{Binding ElementName=queryBuilderButton, Path=ActualWidth}">Public Folder...</Button>
-                <Button Grid.Row="3" HorizontalAlignment="Left"  HorizontalContentAlignment="Left" Margin="0,20,0,0" Name="loadCSVButton" Command="{Binding UserMapCommand}" Width="{Binding ElementName=queryBuilderButton, Path=ActualWidth}">Load CSV...</Button>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" HorizontalAlignment="Left"  HorizontalContentAlignment="Left" Name="objPickerButton" Command="{Binding ObjectPickerCommand}" Width="{Binding ElementName=queryBuilderButton, Path=ActualWidth}"> Object Picker...</Button>
+                <Button Grid.Column="1" HorizontalAlignment="Center" HorizontalContentAlignment="Left" Name="queryBuilderButton" Command="{Binding QueryBuilderCommand}" >Query Builder...</Button>
+                <Button Grid.Column="2" HorizontalAlignment="Right"  HorizontalContentAlignment="Left" Name="publicFolderButton" Command="{Binding PublicFolderCommand}" Width="{Binding ElementName=queryBuilderButton, Path=ActualWidth}">Public Folder...</Button>
             </Grid>
         </GroupBox>
-        <DataGrid Grid.Row="1" Grid.Column="2" Margin="40,40,0,0" Name="dgUsers" AutoGenerateColumns="False" CanUserAddRows="True" SelectionMode="Single" ItemsSource="{Binding UsersList}" SelectedIndex="{Binding Path=CurrentUserSelection, Mode=TwoWay}" MinHeight="195" MaxHeight="195" MinWidth="180" MaxWidth="180" >
+        <DataGrid Grid.Row="2" Margin="30,20,30,0" Name="dgUsers" AutoGenerateColumns="False" CanUserAddRows="True" SelectionMode="Single" ItemsSource="{Binding UsersList}" SelectedIndex="{Binding Path=CurrentUserSelection, Mode=TwoWay}" MinHeight="165" MaxHeight="165" MinWidth="{Binding ElementName=GBPop, Path=ActualWidth}" MaxWidth="{Binding ElementName=GBPop, Path=ActualWidth}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Source Name" MinWidth="90" MaxWidth="90" Binding="{Binding Path=Username}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Dest Name" MinWidth="90" MaxWidth="90" Binding="{Binding Path=MappedName}"></DataGridTextColumn>               
+                <DataGridTextColumn Width="*" Header="Source Name" Binding="{Binding Path=Username}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" Header="Destination Name" Binding="{Binding Path=MappedName}"></DataGridTextColumn>               
             </DataGrid.Columns>
         </DataGrid>
-        <Label Grid.Row="2" Grid.Column="0" Margin="20,12,0,0" Content="Import users into domain" HorizontalAlignment="Left" Name="labelDomain" VerticalAlignment="Top"/>
-        <ComboBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="25,36,0,0" HorizontalAlignment="Left" MinWidth="180" Name="cbDomain" VerticalAlignment="Center" SelectedIndex="{Binding Path=CurrentDomainSelection, Mode=TwoWay}" ItemsSource="{Binding Path=DomainList}">
+        <Grid Name="UserButtons" Grid.Row="3" Margin="30,20,30,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" MinWidth="75" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Name="addButton" Command="{Binding AddCommand}" Content="Add" />
+            <Button Grid.Column="1" MinWidth="75" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Name="removeButton" IsEnabled="{Binding MinusEnabled}" Command="{Binding RemoveCommand}" Content="Remove" />
+            <Button Grid.Column="2" MinWidth="75" HorizontalAlignment="Center"  HorizontalContentAlignment="Center" Name="loadCSVButton" Command="{Binding UserMapCommand}" >Load CSV...</Button>
+            <Button Grid.Column="3" MinWidth="75" HorizontalAlignment="Center"  HorizontalContentAlignment="Center" Name="saveCSVButton" Command="{Binding SaveCSVCommand}" >Save CSV...</Button>
+        </Grid>
+        <Label Grid.Row="4" Margin="20,20,0,0" Content="Import users into domain" HorizontalAlignment="Left" Name="labelDomain" VerticalAlignment="Top"/>
+        <ComboBox Grid.Row="4" Margin="180,20,0,0" HorizontalAlignment="Left" MinWidth="180" Name="cbDomain" VerticalAlignment="Center" SelectedIndex="{Binding Path=CurrentDomainSelection, Mode=TwoWay}" ItemsSource="{Binding Path=DomainList}">
         </ComboBox>
-        <Button Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="15,15,0,0" Name="plusButton" Command="{Binding AddCommand}" MinWidth="20" MaxHeight="20" Content="+" FontFamily="Courier New" FontWeight="Bold" />
-        <Button Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="75,15,0,0" Name="minusButton" IsEnabled="{Binding MinusEnabled}" Command="{Binding RemoveCommand}" MinWidth="20" MaxHeight="20" Content="-" FontFamily="Courier New" FontWeight="Bold" />
-        <Separator Grid.Row="3" Grid.ColumnSpan="3" Margin="12,16,0,0" VerticalAlignment="Top"/>
-        <Grid Name="BottomGrid" Grid.Row="3" Grid.ColumnSpan="3">
-            <TextBlock Margin="26,30,0,0" Name="textBlockHelp" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Left">
-                       <Hyperlink Command="{Binding GetUsersHelpCommand}">Help</Hyperlink>
-            </TextBlock>
-            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="200,30,0,0" Content="Save" Name="saveUButton" Command="{Binding SaveCommand}"  />
-            <Button MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="360,30,0,0" Content="Next" Name="nextUButton" Command="{Binding NextCommand}" IsEnabled="{Binding Path=EnableNext}" />
+        <Separator Grid.Row="5" Margin="5,15,5,0" VerticalAlignment="Top"/>
+        <Grid Name="BottomGrid" Grid.Row="6" >
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,10,0,0" Content="Help" Name="buttonUsersHelp" Command="{Binding GetUsersHelpCommand}"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="85,10,0,0" Content="Load" Name="buttonUsersLoad" IsEnabled="False"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="165,10,0,0" Content="Save" Name="buttonUsersSav" IsEnabled="False"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,85,0" Content="&lt; Back" Name="buttonUsersBack" Command="{Binding BackCommand}" IsEnabled="True"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,5,0" Content="Next &gt;" Name="buttonUsersNext" Command="{Binding NextCommand}" IsEnabled="{Binding Path=EnableNext}"  />
         </Grid>
     </Grid>
 </UserControl>

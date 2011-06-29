@@ -7,71 +7,43 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel>
-            <TabControl MinHeight="300"  Margin="5">
-                <TabItem Header="Source">
-                    <Grid Name="ConfigSourceGrid">
-                        <Grid.Background>
-                            <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
-                        </Grid.Background>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"></RowDefinition>
-                            <RowDefinition Height="Auto"></RowDefinition>
-                            <RowDefinition Height="Auto"></RowDefinition>
-                            <RowDefinition Height="Auto"></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <RadioButton Grid.Row="0" Grid.Column="0" Margin="30,55,5,5" Name="rbProfile" VerticalAlignment="Center" Content="Outlook Profile" GroupName="SourceGroup" HorizontalAlignment="Stretch" IsChecked="{Binding Path=Isprofile, Mode=OneWay}" />
-                        <TextBox Grid.Row="0"  Grid.Column="1" Margin="10,55,0,0" Name="tbOlkProfile" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbProfile}" Text="{Binding Path=OutlookProfile}"/>
-                        <Button Grid.Row="0"  Grid.Column="2" Margin="0,55,20,0" MinWidth="20" Content="..." Name="buttonOlkProfile" Command="{Binding GetProfilesCommand}" IsEnabled="{Binding ElementName=rbProfile}" HorizontalAlignment="Center" />
-                        <RadioButton Grid.Row="1" Grid.Column="0" Margin="30,35,5,5" Name="rbServer" VerticalAlignment="Center" Content="Exchange Server" GroupName="SourceGroup" IsChecked="{Binding Path=IsmailServer, Mode=OneWay}" HorizontalAlignment="Stretch" />
-                        <Label Grid.Row="2" Grid.Column="0" Content="Hostname/IP" Margin="54,0,0,0" HorizontalAlignment="Left" Name="labelExchHost" VerticalAlignment="Top" />
-                        <TextBox Grid.Row="2"  Grid.Column="1" Margin="10,0,0,0" Name="tbExchHost" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbServer, Path=IsChecked}" Text="{Binding Path=MailServerHostName}" />
-                        <Label Grid.Row="3" Grid.Column="0" Content="Admin ID" Margin="54,0,0,0" HorizontalAlignment="Left" Name="labelExchAdmin" VerticalAlignment="Top" />
-                        <TextBox Grid.Row="3"  Grid.Column="1" Margin="10,0,0,0" Name="tbExchAdmin" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbServer, Path=IsChecked}" Text="{Binding Path=MailServerProfileName}"/>
-                    </Grid>
-                </TabItem>
-                <TabItem Header="Destination">
-                    <Grid Name="ConfigDestGrid">
-                        <Grid.Background>
-                            <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
-                        </Grid.Background>
-                        <Grid.RowDefinitions>
-                            <RowDefinition MinHeight="80" Height="Auto"></RowDefinition>
-                            <RowDefinition MinHeight="40" Height="Auto"></RowDefinition>
-                            <RowDefinition MinHeight="40" Height="Auto"></RowDefinition>
-                            <RowDefinition MinHeight="40" Height="Auto"></RowDefinition>
-                            <RowDefinition MinHeight="40" Height="Auto"></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock HorizontalAlignment="Left" Margin="60,35,0,0" Name="textBlock11" Text="VMware Zimbra Server" VerticalAlignment="Top" Grid.Row="0" Grid.Column="1"/>
-                        <Label Content="Hostname" Margin="26,0,0,0" HorizontalAlignment="Left" Name="label1" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" />
-                        <TextBox HorizontalAlignment="Left" MinWidth="240" Name="tbHost" VerticalAlignment="Top" Grid.Row="1" Grid.Column="1"  Text="{Binding Path=ZimbraServerHostName}"/>
-                        <Label Content="Admin Port" Margin="26,0,0,0" HorizontalAlignment="Left" Name="label2" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
-                        <TextBox HorizontalAlignment="Left" MinWidth="50" Name="tbPort" VerticalAlignment="Top" Grid.Row="2" Grid.Column="1" Text="{Binding Path=ZimbraPort}"/>
-                        <CheckBox Content="Use Secure Connection" Margin="-22,4,0,0" HorizontalAlignment="Center"  Name="cbSecure" VerticalAlignment="Top" Grid.Row="2" Grid.Column="1" IsChecked="{Binding Path=ZimbraSSL}"/>
-                        <Label Content="Admin ID" Margin="26,0,0,0" HorizontalAlignment="Left" Name="label3" VerticalAlignment="Top" Grid.Row="3" Grid.Column="0" />
-                        <TextBox HorizontalAlignment="Left" MinWidth="240" Name="tbUser" VerticalAlignment="Top" Grid.Row="3" Grid.Column="1" Text="{Binding Path=ZimbraAdmin}"/>
-                        <Label Content="Password" Margin="26,0,0,0" HorizontalAlignment="Left" Name="label4" VerticalAlignment="Top" Grid.Row="4" Grid.Column="0"  />
-                        <PasswordBox HorizontalAlignment="Left" MinWidth="240" Name="passwordBox1" VerticalAlignment="Top" Grid.Row="4" Grid.Column="1" PasswordChanged="pb_PasswordChanged"/>
-                    </Grid>
-                </TabItem>
-            </TabControl>
+        <TextBlock Grid.Row="0" HorizontalAlignment="Left" Margin="30,50,30,0" Name="serverSourceText" Text="This is the source for data to be migrated.  Choose Outlook Profile if you already an Exchange Admin profile.  If not, choose Exchange Server and enter the proper credentials.  An admin profile will be created for the migration and then deleted." TextWrapping="Wrap" VerticalAlignment="Top" />
+        <StackPanel Grid.Row="1">
+            <Grid Name="ConfigSourceGrid">
+                <Grid.Background>
+                    <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
+                </Grid.Background>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <RadioButton Grid.Row="0" Grid.Column="0" Margin="30,45,5,5" Name="rbProfile" VerticalAlignment="Center" Content="Outlook Profile" GroupName="SourceGroup" HorizontalAlignment="Stretch" IsChecked="{Binding Path=Isprofile, Mode=OneWay}" />
+                <TextBox Grid.Row="0"  Grid.Column="1" Margin="10,45,0,0" Name="tbOlkProfile" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbProfile}" Text="{Binding Path=OutlookProfile}"/>
+                <Button Grid.Row="0"  Grid.Column="2" Margin="0,45,20,0" MinWidth="20" Content="..." Name="buttonOlkProfile" Command="{Binding GetProfilesCommand}" IsEnabled="{Binding ElementName=rbProfile}" HorizontalAlignment="Center" />
+                <RadioButton Grid.Row="1" Grid.Column="0" Margin="30,25,5,5" Name="rbServer" VerticalAlignment="Center" Content="Exchange Server" GroupName="SourceGroup" IsChecked="{Binding Path=IsmailServer, Mode=OneWay}" HorizontalAlignment="Stretch" />
+                <Label Grid.Row="2" Grid.Column="0" Content="Hostname/IP" Margin="54,10,0,0" HorizontalAlignment="Left" Name="labelExchHost" VerticalAlignment="Top" />
+                <TextBox Grid.Row="2"  Grid.Column="1" Margin="10,10,0,0" Name="tbExchHost" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbServer, Path=IsChecked}" Text="{Binding Path=MailServerHostName}" />
+                <Label Grid.Row="3" Grid.Column="0" Content="Admin ID" Margin="54,10,0,0" HorizontalAlignment="Left" Name="labelExchAdmin" VerticalAlignment="Top" />
+                <TextBox Grid.Row="3"  Grid.Column="1" Margin="10,10,0,0" Name="tbExchAdmin" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbServer, Path=IsChecked}" Text="{Binding Path=MailServerProfileName}"/>
+            </Grid>
         </StackPanel>
-        <TextBlock Grid.Row="1" Margin="10,12,30,0" Name="textBlockHelp" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Top" HorizontalAlignment="Left">
-                            <Hyperlink Command="{Binding GetConfigSourceHelpCommand}">Help</Hyperlink>
-        </TextBlock>
-        <Button Grid.Row="1" MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="40,10,0,0" Content="Load" Name="buttonConfigLoad" Command="{Binding LoadCommand}"  />
-        <Button Grid.Row="1" MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="200,10,0,0" Content="Save" Name="buttonConfigSav" Command="{Binding SaveCommand}"  />
-        <Button Grid.Row="1" MinWidth="75" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="360,10,0,0" Content="Next" Name="buttonConfigNext" Command="{Binding NextCommand}"  />
+        <Separator Grid.Row="2" Margin="5,140,5,0" VerticalAlignment="Top"/>
+        <Grid Name="BottomGrid" Grid.Row="3" >
+            <Button MinWidth="75" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,10,0,0" Content="Help" Name="buttonConfigHelp" Command="{Binding GetConfigSourceHelpCommand}"  />
+            <Button MinWidth="75" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="85,10,0,0" Content="Load" Name="buttonConfigLoad" Command="{Binding LoadCommand}"  />
+            <Button MinWidth="75" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="165,10,0,0" Content="Save" Name="buttonConfigSav" Command="{Binding SaveCommand}"  />
+            <Button MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,85,0" Content="&lt; Back" Name="buttonConfigBack" IsEnabled="False"  />
+            <Button MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,5,0" Content="Next &gt;" Name="buttonConfigNext" Command="{Binding NextCommand}"  />
+        </Grid>
     </Grid>
 </UserControl>

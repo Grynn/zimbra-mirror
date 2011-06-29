@@ -22,6 +22,7 @@ namespace MVVM.ViewModel
             this.GetOptionsHelpCommand = new ActionCommand(this.GetOptionsHelp, () => true);
             this.LoadCommand = new ActionCommand(this.Load, () => true);
             this.SaveCommand = new ActionCommand(this.Save, () => true);
+            this.BackCommand = new ActionCommand(this.Back, () => true);
             this.NextCommand = new ActionCommand(this.Next, () => true);
             Migratedateflag = false;
             Maxattachflag = false;
@@ -46,6 +47,12 @@ namespace MVVM.ViewModel
         }
 
         public ICommand SaveCommand
+        {
+            get;
+            private set;
+        }
+
+        public ICommand BackCommand
         {
             get;
             private set;
@@ -142,16 +149,21 @@ namespace MVVM.ViewModel
             MessageBox.Show("Options information saved", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
 
+        private void Back()
+        {
+            lb.SelectedIndex = 1;
+        }
+
         private void Next()
         {
             if (isServer)
             {
-                lb.SelectedIndex = 2;
+                lb.SelectedIndex = 3;
             }
             else
             {
-                ConfigViewModelU configViewModelU = scheduleViewModel.GetConfigUModel();
-                string name = scheduleViewModel.GetConfigUModel().ZimbraUser;
+                ConfigViewModelUDest configViewModelU = scheduleViewModel.GetConfigUDestModel();
+                string name = scheduleViewModel.GetConfigUDestModel().ZimbraUser;
                 scheduleViewModel.GetUsersViewModel().UsersList.Add(new UsersViewModel(null, name, ""));
                 scheduleViewModel.Migrate();
             }

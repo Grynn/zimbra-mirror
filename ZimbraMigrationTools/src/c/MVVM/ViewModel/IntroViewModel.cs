@@ -22,6 +22,8 @@ namespace MVVM.ViewModel
 
         private ConfigViewModelS m_configViewModelS;
         private ConfigViewModelU m_configViewModelU;
+        private ConfigViewModelSDest m_configViewModelSDest;
+        private ConfigViewModelUDest m_configViewModelUDest;
         private OptionsViewModel m_optionsViewModel;
         private UsersViewModel m_usersViewModel;
         private ScheduleViewModel m_scheduleViewModel;
@@ -30,9 +32,9 @@ namespace MVVM.ViewModel
         {
             lb = lbMode;
             this.GetIntroLicenseCommand = new ActionCommand(this.GetIntroLicense, () => true);
-            this.GetIntroHelpCommand = new ActionCommand(this.GetIntroHelp, () => true);
             this.GetIntroUserMigCommand = new ActionCommand(this.GetIntroUserMig, () => true);
             this.GetIntroServerMigCommand = new ActionCommand(this.GetIntroServerMig, () => true);
+            this.BeginCommand = new ActionCommand(this.Begin, () => true);
         }
 
         public ICommand GetIntroLicenseCommand
@@ -47,18 +49,6 @@ namespace MVVM.ViewModel
             Process.Start(new ProcessStartInfo(urlString));
         }
 
-        public ICommand GetIntroHelpCommand
-        {
-            get;
-            private set;
-        }
-
-        private void GetIntroHelp()
-        {
-            string urlString = (isBrowser) ? "http://10.20.140.218/intro.html" : "file:///C:/depot/main/ZimbraMigrationTools/src/c/Misc/Help/intro.html";
-            Process.Start(new ProcessStartInfo(urlString));
-        }
-
         public ICommand GetIntroUserMigCommand
         {
             get;
@@ -68,15 +58,7 @@ namespace MVVM.ViewModel
         private void GetIntroUserMig()
         {
             m_optionsViewModel.isServer = false;
-            m_optionsViewModel.ImportNextButtonContent = "Migrate";
             m_scheduleViewModel.isServer = false;
-            TheViews.RemoveAt(0);
-            TheViews.Add(m_configViewModelU);
-            TheViews.Add(m_optionsViewModel);
-            TheViews.Add(m_resultsViewModel);
-            lb.Visibility = Visibility.Visible;
-            lb.IsEnabled = true;
-            lb.SelectedIndex = 0;
         }
 
         public ICommand GetIntroServerMigCommand
@@ -88,14 +70,36 @@ namespace MVVM.ViewModel
         private void GetIntroServerMig()
         {
             m_optionsViewModel.isServer = true;
-            m_optionsViewModel.ImportNextButtonContent = "Next";
             m_scheduleViewModel.isServer = true;
+        }
+
+        public ICommand BeginCommand
+        {
+            get;
+            private set;
+        }
+
+        private void Begin()
+        {
             TheViews.RemoveAt(0);
-            TheViews.Add(m_configViewModelS);
-            TheViews.Add(m_optionsViewModel);
-            TheViews.Add(m_usersViewModel);
-            TheViews.Add(m_scheduleViewModel);
-            TheViews.Add(m_resultsViewModel);
+            if (m_optionsViewModel.isServer)
+            {
+                TheViews.Add(m_configViewModelS);
+                TheViews.Add(m_configViewModelSDest);
+                TheViews.Add(m_optionsViewModel);
+                TheViews.Add(m_usersViewModel);
+                TheViews.Add(m_scheduleViewModel);
+                TheViews.Add(m_resultsViewModel);
+                m_optionsViewModel.ImportNextButtonContent = "Next";
+            }
+            else
+            {
+                TheViews.Add(m_configViewModelU);
+                TheViews.Add(m_configViewModelUDest);
+                TheViews.Add(m_optionsViewModel);
+                TheViews.Add(m_resultsViewModel);
+                m_optionsViewModel.ImportNextButtonContent = "Migrate";
+            }
             lb.Visibility = Visibility.Visible;
             lb.IsEnabled = true;
             lb.SelectedIndex = 0;
@@ -135,55 +139,71 @@ namespace MVVM.ViewModel
         {
             m_configViewModelS = new ConfigViewModelS();
             m_configViewModelS.Name = "ConfigViewModelS";
-            m_configViewModelS.ViewTitle = "Configuration";
-            m_configViewModelS.ImageName = "Images/CreateSpaceImage.jpg";
+            m_configViewModelS.ViewTitle = "Source";
+            m_configViewModelS.ImageName = "Images/ConfigSource.jpg";
             m_configViewModelS.lb = lb;
             m_configViewModelS.isBrowser = isBrowser;
-           // m_configViewModelS.ExchangeProfile = "";
             m_configViewModelS.OutlookProfile = "";
-            m_configViewModelS.ZimbraServerHostName = "";
-            m_configViewModelS.ZimbraPort = "";
             m_configViewModelS.MailServerHostName = "";
-            m_configViewModelS.ZimbraAdmin = "";
-            m_configViewModelS.ZimbraAdminPasswd = "";
             m_configViewModelS.OutlookProfile = "";
             
-
             m_configViewModelU = new ConfigViewModelU();
             m_configViewModelU.Name = "ConfigViewModelU";
-            m_configViewModelU.ViewTitle = "Configuration";
-            m_configViewModelU.ImageName = "Images/CreateSpaceImage.jpg";
+            m_configViewModelU.ViewTitle = "Source";
+            m_configViewModelU.ImageName = "Images/ConfigSource.jpg";
             m_configViewModelU.lb = lb;
             m_configViewModelU.isBrowser = isBrowser;
             m_configViewModelU.OutlookProfile = "";
-            m_configViewModelU.ZimbraPort = "";
             m_configViewModelU.PSTFile = "";
-            m_configViewModelU.ZimbraUser = "";
-            m_configViewModelU.ZimbraUserPasswd = "";
             m_configViewModelU.OutlookProfile = "";
+
+            m_configViewModelSDest = new ConfigViewModelSDest();
+            m_configViewModelSDest.Name = "ConfigViewModelSDest";
+            m_configViewModelSDest.ViewTitle = "Destination";
+            m_configViewModelSDest.ImageName = "Images/ConfigDest.jpg";
+            m_configViewModelSDest.lb = lb;
+            m_configViewModelSDest.isBrowser = isBrowser;
+            m_configViewModelSDest.ZimbraServerHostName = "";
+            m_configViewModelSDest.ZimbraPort = "";
+            m_configViewModelSDest.ZimbraAdmin = "";
+            m_configViewModelSDest.ZimbraAdminPasswd = "";
+            m_configViewModelSDest.ZimbraSSL = true;
+
+            m_configViewModelUDest = new ConfigViewModelUDest();
+            m_configViewModelUDest.Name = "ConfigViewModelUDest";
+            m_configViewModelUDest.ViewTitle = "Destination";
+            m_configViewModelUDest.ImageName = "Images/ConfigDest.jpg";
+            m_configViewModelUDest.lb = lb;
+            m_configViewModelUDest.isBrowser = isBrowser;
+            m_configViewModelUDest.ZimbraServerHostName = "";
+            m_configViewModelUDest.ZimbraPort = "";
+            m_configViewModelUDest.ZimbraUser = "";
+            m_configViewModelUDest.ZimbraUserPasswd = "";
+            m_configViewModelUDest.ZimbraSSL = true;
 
             m_optionsViewModel = new OptionsViewModel();
             m_optionsViewModel.Name = "OptionsViewModel";
             m_optionsViewModel.ViewTitle = "Options";
             m_optionsViewModel.ImageName = "Images/DMR_120.jpg";
             m_optionsViewModel.lb = lb;
-            m_optionsViewModel.isServer = true;
+            m_optionsViewModel.isServer = true;     // because we start out with Server on -- wouldn't get set by command
             m_optionsViewModel.isBrowser = isBrowser;
-            m_optionsViewModel.ImportMailOptions = false;
-            m_optionsViewModel.ImportTaskOptions = false;
-            m_optionsViewModel.ImportCalendarOptions = false;
-            m_optionsViewModel.ImportContactOptions = false;
+            m_optionsViewModel.ImportMailOptions = true;
+            m_optionsViewModel.ImportTaskOptions = true;
+            m_optionsViewModel.ImportCalendarOptions = true;
+            m_optionsViewModel.ImportContactOptions = true;
+            m_optionsViewModel.ImportRuleOptions = true;
             m_optionsViewModel.ImportJunkOptions = false;
             m_optionsViewModel.ImportDeletedItemOptions = false;
             m_optionsViewModel.ImportSentOptions = false;
-            m_optionsViewModel.ImportRuleOptions = false;
             m_optionsViewModel.MigrateONRAfter = DateTime.Now.ToShortDateString();
 
             m_scheduleViewModel = new ScheduleViewModel();
             m_scheduleViewModel.Name = "Schedule";
-            m_scheduleViewModel.ViewTitle = "Schedule";
+            m_scheduleViewModel.ViewTitle = "Migrate";
             m_scheduleViewModel.ImageName = "Images/Penguins.jpg";
             m_scheduleViewModel.lb = lb;
+            m_scheduleViewModel.isServer = true;    // because we start out with Server on -- wouldn't get set by command
             m_scheduleViewModel.isBrowser = isBrowser;
             m_scheduleViewModel.COS = "default";
             m_scheduleViewModel.DefaultPWD = "";
@@ -205,12 +225,14 @@ namespace MVVM.ViewModel
             m_resultsViewModel.isBrowser = isBrowser;
             m_resultsViewModel.CurrentAccountSelection = -1;
 
-            m_scheduleViewModel.SetConfigUModel(m_configViewModelU);
+            m_scheduleViewModel.SetConfigUDestModel(m_configViewModelUDest);
             m_scheduleViewModel.SetUserModel(m_usersViewModel);
             m_scheduleViewModel.SetResultsModel(m_resultsViewModel);
 
             m_configViewModelS.SetUsersViewModel(m_usersViewModel);
             m_configViewModelS.SetScheduleViewModel(m_scheduleViewModel);
+            m_configViewModelSDest.SetUsersViewModel(m_usersViewModel);
+            m_configViewModelSDest.SetScheduleViewModel(m_scheduleViewModel);
             m_optionsViewModel.SetScheduleModel(m_scheduleViewModel);
 
             TheViews = new ObservableCollection<object>();

@@ -23,7 +23,7 @@
         public Intro Populate()
         {
             this.BuildNum = new BuildNum().BUILD_NUM;
-            this.WelcomeMsg = "This application will guide you through the process of migrating from Microsoft products to Zimbra.  You can migrate from an Exchange Server, an Outlook profile, or a PST file.\n\nSpecify the host name, port, and credentials of the destination Zimbra server.  You can choose which folders to migrate, as well as corresponding date filters.\n\nAny errors and warnings will be listed in the result set.";
+            this.WelcomeMsg = "This application will guide you through the process of migrating from Microsoft products to Zimbra.\n\nServer mode is for migrating users from an Exchange server.  User mode is for migrating one user.  Specify source and destination credentials, and then choose the folders to migrate.\n\nUsers are selected via population tools, or via comma separated Excel spreadsheet files.  You have the option of migrating immediately, previewing the migration, or scheduling it for a later time.  Any errors and warnings will be listed in the result set, and log files will be created for each migrated user.";
             return this;
         }
 

@@ -18,7 +18,7 @@ namespace MVVM.ViewModel
     {
         readonly Schedule m_schedule = new Schedule(0, "", false);
         UsersViewModel usersViewModel;
-        ConfigViewModelU configViewModelU;
+        ConfigViewModelUDest configViewModelUDest;
         AccountResultsViewModel accountResultsViewModel;
         BackgroundWorker bgw;
 
@@ -28,18 +28,20 @@ namespace MVVM.ViewModel
             this.GetSchedHelpCommand = new ActionCommand(this.GetSchedHelp, () => true);
             this.LoadCommand = new ActionCommand(this.Load, () => true);
             this.SaveCommand = new ActionCommand(this.Save, () => true);
+            this.PreviewCommand = new ActionCommand(this.Preview, () => true);
+            this.BackCommand = new ActionCommand(this.Back, () => true);
             this.MigrateCommand = new ActionCommand(this.Migrate, () => true);
             this.usersViewModel = null;
         }
 
-        public ConfigViewModelU GetConfigUModel()
+        public ConfigViewModelUDest GetConfigUDestModel()
         {
-            return configViewModelU;
+            return configViewModelUDest;
         }
 
-        public void SetConfigUModel(ConfigViewModelU configViewModelU)
+        public void SetConfigUDestModel(ConfigViewModelUDest configViewModelUDest)
         {
-            this.configViewModelU = configViewModelU;
+            this.configViewModelUDest = configViewModelUDest;
         }
 
         public UsersViewModel GetUsersViewModel()
@@ -182,6 +184,28 @@ namespace MVVM.ViewModel
             MessageBox.Show("Schedule information saved", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
 
+        public ICommand BackCommand
+        {
+            get;
+            private set;
+        }
+
+        private void Back()
+        {
+            lb.SelectedIndex = 3;
+        }
+
+        public ICommand PreviewCommand
+        {
+            get;
+            private set;
+        }
+
+        private void Preview()
+        {
+            MessageBox.Show("Test Run", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        }
+
         public ICommand MigrateCommand
         {
             get;
@@ -190,42 +214,51 @@ namespace MVVM.ViewModel
 
         public void Migrate()
         {
-            if (CurrentCOSSelection == -1)
+            if (isServer)
             {
-                CurrentCOSSelection = 0;
-            }
-
-            ZimbraAPI zimbraAPI = new ZimbraAPI();
-            string domainName = usersViewModel.ZimbraDomain;
-            string defaultPWD = DefaultPWD;
-            string tempMessage = "";
-            bool bProvision = false;
-            for (int i = 0; i < SchedList.Count; i++)
-            {
-                if (!SchedList[i].isProvisioned)
+                if (CurrentCOSSelection == -1)
                 {
-                    bProvision = true;
-                    string userName = (usersViewModel.UsersList[i].MappedName.Length > 0) ? usersViewModel.UsersList[i].MappedName : usersViewModel.UsersList[i].Username;
-                    string accountName = userName + "@" + domainName;
-                    string cosID = CosList[CurrentCOSSelection].CosID;
-                    if (zimbraAPI.CreateAccount(accountName, defaultPWD, cosID) == 0)
+                    CurrentCOSSelection = 0;
+                }
+
+                ZimbraAPI zimbraAPI = new ZimbraAPI();
+                string domainName = usersViewModel.ZimbraDomain;
+                string defaultPWD = DefaultPWD;
+                string tempMessage = "";
+                bool bProvision = false;
+                MessageBoxImage mbi = MessageBoxImage.Information;
+                for (int i = 0; i < SchedList.Count; i++)
+                {
+                    if (!SchedList[i].isProvisioned)
                     {
-                        tempMessage += string.Format("{0} Provisioned", userName) + "\n";
-                        //MessageBox.Show(string.Format("{0} Provisioned", userName), "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    else
-                    {
-                        //MessageBox.Show(string.Format("Provision unsuccessful for {0}: {1}", userName, zimbraAPI.LastError), "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
-                        tempMessage += string.Format("{0} Provisioned", userName) + "\n";
+                        bProvision = true;
+                        string userName = (usersViewModel.UsersList[i].MappedName.Length > 0) ? usersViewModel.UsersList[i].MappedName : usersViewModel.UsersList[i].Username;
+                        string accountName = userName + "@" + domainName;
+                        string cosID = CosList[CurrentCOSSelection].CosID;
+                        if (zimbraAPI.CreateAccount(accountName, defaultPWD, cosID) == 0)
+                        {
+                            tempMessage += string.Format("{0} Provisioned", userName) + "\n";
+                            //MessageBox.Show(string.Format("{0} Provisioned", userName), "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                        else
+                        {
+                            //MessageBox.Show(string.Format("Provision unsuccessful for {0}: {1}", userName, zimbraAPI.LastError), "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                            tempMessage += string.Format("Provision unsuccessful for {0}: {1}", userName, zimbraAPI.LastError) + "\n";
+                            mbi = MessageBoxImage.Error;
+                        }
                     }
                 }
+                if (bProvision)
+                {
+                    MessageBox.Show(tempMessage, "Zimbra Migration", MessageBoxButton.OK, mbi);
+                }
+                lb.SelectedIndex = 5;
             }
-            if (bProvision)
+            else
             {
-                MessageBox.Show(tempMessage, "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                lb.SelectedIndex = 3;
             }
-
-            lb.SelectedIndex = (isServer) ? 4 : 2;
+            
             accountResultsViewModel.AccountResultsList.Clear();
             EnableMigrate = false;
             accountResultsViewModel.EnableStop = !EnableMigrate;

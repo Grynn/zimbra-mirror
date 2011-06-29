@@ -27,7 +27,7 @@ namespace MVVM.View
             m_introViewModel = new IntroViewModel(lbMode);
             m_introViewModel.Name = "IntroViewModel";
             m_introViewModel.ViewTitle = "Intro";   
-            m_introViewModel.ImageName = "Images/CreateSpaceImage.jpg"; // doesn't matter since LB is hidden
+            m_introViewModel.ImageName = "Images/ConfigSource.jpg"; // doesn't matter since LB is hidden
             m_introViewModel.lb = lbMode;
             m_introViewModel.isBrowser = false;
             Intro intro = new Intro();

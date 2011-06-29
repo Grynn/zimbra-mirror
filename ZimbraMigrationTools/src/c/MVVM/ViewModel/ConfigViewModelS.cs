@@ -97,12 +97,6 @@ namespace MVVM.ViewModel
                 Config Z11 = new Config();
                 Z11 = (Config)reader.Deserialize(fileRead);
                 fileRead.Close();
-                ZimbraServerHostName = Z11.zimbraServer.HostName;
-                ZimbraPort = Z11.zimbraServer.Port;
-                ZimbraAdmin = Z11.zimbraServer.AdminAccount;
-                ZimbraAdminPasswd = Z11.zimbraServer.AdminPassword;
-                //ZimbraDomain = Z11.zimbraServer.Domain;
-                ZimbraSSL = Z11.zimbraServer.UseSSL;
 
                 if (Z11.mailServer.Hostname.Length == 0)
                 {
@@ -141,7 +135,6 @@ namespace MVVM.ViewModel
                 UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "mailServer");
                 UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "OutlookProfile");
                 UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "PSTFile");
-                UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "zimbraServer");
             }
 
             else
@@ -165,39 +158,7 @@ namespace MVVM.ViewModel
 
         private void Next()
         {
-            if ((this.ZimbraServerHostName.Length == 0) || (this.ZimbraPort.Length == 0))
-            {
-                MessageBox.Show("Please fill in the host name and port", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            ZimbraAPI zimbraAPI = new ZimbraAPI();
-
-            int stat = zimbraAPI.Logon(this.ZimbraServerHostName, this.ZimbraPort, this.ZimbraAdmin,this.ZimbraAdminPasswd, true);
-            if (stat == 0)
-            {
-                string authToken = ZimbraValues.GetZimbraValues().AuthToken;
-                if (authToken.Length > 0)
-                {
-                    usersViewModel.DomainList.Clear();
-                    scheduleViewModel.CosList.Clear();
-                    zimbraAPI.GetAllDomains();
-                    foreach (string s in ZimbraValues.GetZimbraValues().Domains)
-                    {
-                        usersViewModel.DomainList.Add(s);
-                    }
-                    zimbraAPI.GetAllCos();
-                    foreach (CosInfo cosinfo in ZimbraValues.GetZimbraValues().COSes)
-                    {
-                        scheduleViewModel.CosList.Add(new CosInfo(cosinfo.CosName, cosinfo.CosID));
-                    }
-                    lb.SelectedIndex = 1;
-                }
-            }
-            else
-            {
-                MessageBox.Show(string.Format("Logon Unsuccessful: {0}", zimbraAPI.LastError), "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            lb.SelectedIndex = 1;
         }
 
         private bool IsProfile;
@@ -219,20 +180,6 @@ namespace MVVM.ViewModel
             OnPropertyChanged(new PropertyChangedEventArgs("Isprofile"));
             }
         }
-        //we donot need exchangeprofile -cleanup
-       /* public string ExchangeProfile
-        {
-            get { return m_config.ExchangeProfile; }
-            set
-            {
-                if (value == m_config.ExchangeProfile)
-                {
-                    return;
-                }
-                m_config.ExchangeProfile = value;
-                OnPropertyChanged(new PropertyChangedEventArgs("ExchangeProfile"));
-            }
-        }*/
 
         public string OutlookProfile
         {
@@ -248,20 +195,6 @@ namespace MVVM.ViewModel
             }
         }
 
-        public string ZimbraPort
-        {
-            get { return m_config.zimbraServer.Port; }
-            set
-            {
-                if (value == m_config.zimbraServer.Port)
-                {
-                    return;
-                }
-                m_config.zimbraServer.Port = value;
-
-                OnPropertyChanged(new PropertyChangedEventArgs("ZimbraPort"));
-            }
-        }
         public string MailServerHostName
         {
             get { return m_config.mailServer.Hostname; }
@@ -276,6 +209,7 @@ namespace MVVM.ViewModel
                 OnPropertyChanged(new PropertyChangedEventArgs("MailServerHostName"));
             }
         }
+
         public string MailServerProfileName
         {
             get { return m_config.mailServer.ProfileName; }
@@ -289,71 +223,6 @@ namespace MVVM.ViewModel
 
                 OnPropertyChanged(new PropertyChangedEventArgs("MailServerProfileName"));
             }
-        }
-        public string ZimbraServerHostName
-        {
-            get { return m_config.zimbraServer.HostName; }
-            set
-            {
-                if (value == m_config.zimbraServer.HostName)
-                {
-                    return;
-                }
-                m_config.zimbraServer.HostName = value;
-
-                OnPropertyChanged(new PropertyChangedEventArgs("ZimbraServerHostName"));
-            }
-        }
-        public string ZimbraAdmin
-        {
-            get { return m_config.zimbraServer.AdminAccount; }
-            set
-            {
-                if (value == m_config.zimbraServer.AdminAccount)
-                {
-                    return;
-                }
-                m_config.zimbraServer.AdminAccount = value;
-
-                OnPropertyChanged(new PropertyChangedEventArgs("ZimbraAdmin"));
-            }
-        }
-
-        public string ZimbraAdminPasswd
-        {
-            get { return m_config.zimbraServer.AdminPassword; }
-            set
-            {
-                if (value == m_config.zimbraServer.AdminPassword)
-                {
-                    return;
-                }
-                m_config.zimbraServer.AdminPassword = value;
-
-                OnPropertyChanged(new PropertyChangedEventArgs("ZimbraAdminPasswd"));
-            }
-        }
-
-       
-
-        public bool ZimbraSSL
-        {
-
-            get { return m_config.zimbraServer.UseSSL; }
-            set
-            {
-                if (value == m_config.zimbraServer.UseSSL)
-                {
-                    return;
-                }
-                m_config.zimbraServer.UseSSL = value;
-
-                OnPropertyChanged(new PropertyChangedEventArgs("ZimbraSSL"));
-            }
-
-        }
-       
-
-      
+        }      
     }
 }

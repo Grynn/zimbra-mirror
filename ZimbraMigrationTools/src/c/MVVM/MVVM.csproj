@@ -117,7 +117,9 @@
     <Compile Include="ViewModel\AccountResultsViewModel.cs" />
     <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\ConfigViewModelS.cs" />
+    <Compile Include="ViewModel\ConfigViewModelSDest.cs" />
     <Compile Include="ViewModel\ConfigViewModelU.cs" />
+    <Compile Include="ViewModel\ConfigViewModelUDest.cs" />
     <Compile Include="ViewModel\IntroViewModel.cs" />
     <Compile Include="ViewModel\OptionsViewModel.cs" />
     <Compile Include="ViewModel\ScheduleViewModel.cs" />
@@ -127,8 +129,14 @@
     <Compile Include="View\ConfigViewS.xaml.cs">
       <DependentUpon>ConfigViewS.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ConfigViewSDest.xaml.cs">
+      <DependentUpon>ConfigViewSDest.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ConfigViewU.xaml.cs">
       <DependentUpon>ConfigViewU.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ConfigViewUDest.xaml.cs">
+      <DependentUpon>ConfigViewUDest.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\IntroView.xaml.cs">
       <DependentUpon>IntroView.xaml</DependentUpon>
@@ -183,7 +191,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\ConfigViewSDest.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\ConfigViewU.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ConfigViewUDest.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -218,12 +234,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\bg.png" />
-    <Resource Include="View\Images\CreateSpaceImage.jpg" />
     <Resource Include="View\Images\DMR_120.jpg" />
     <Resource Include="View\Images\Bridge.jpg" />
     <Resource Include="View\Images\Penguins.jpg" />
     <Resource Include="View\Images\UnknownPerson_dataNotFound.jpg" />
-    <Resource Include="View\Images\vmwareLogo.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\bg2.png" />
@@ -231,6 +245,13 @@
   <ItemGroup>
     <Resource Include="View\Images\Usernp.ico" />
     <Resource Include="View\Images\Userp.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\zimbraLogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\ConfigDest.jpg" />
+    <Resource Include="View\Images\ConfigSource.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

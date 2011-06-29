@@ -96,8 +96,9 @@
   <ItemGroup>
     <Content Include="Help\acctresults.html" />
     <Content Include="Help\cfgS.html" />
+    <Content Include="Help\cfgSDest.html" />
     <Content Include="Help\cfgU.html" />
-    <Content Include="Help\intro.html" />
+    <Content Include="Help\cfgUDest.html" />
     <Content Include="Help\options.html" />
     <Content Include="Help\sched.html" />
     <Content Include="Help\users.html" />

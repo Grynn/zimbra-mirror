@@ -27,7 +27,8 @@ namespace MVVM.ViewModel
             this.PublicFolderCommand = new ActionCommand(this.PublicFolder, () => true);
             this.AddCommand = new ActionCommand(this.Add, () => true);
             this.RemoveCommand = new ActionCommand(this.Remove, () => true);
-            this.SaveCommand = new ActionCommand(this.Save, () => true);
+            this.SaveCSVCommand = new ActionCommand(this.SaveCSV, () => true);
+            this.BackCommand = new ActionCommand(this.Back, () => true);
             this.NextCommand = new ActionCommand(this.Next, () => true);
             this.scheduleViewModel = scheduleViewModel;
             this.Username = username;
@@ -231,13 +232,13 @@ namespace MVVM.ViewModel
             scheduleViewModel.EnableMigrate = (scheduleViewModel.SchedList.Count > 0);
         }
 
-        public ICommand SaveCommand
+        public ICommand SaveCSVCommand
         {
             get;
             private set;
         }
 
-        private void Save()
+        private void SaveCSV()
         {
             List<Users> ListofUsers = new List<Users>();
             for (int i = 0; i < UsersList.Count; i++)
@@ -280,6 +281,17 @@ namespace MVVM.ViewModel
 
         }
 
+        public ICommand BackCommand
+        {
+            get;
+            private set;
+        }
+
+        private void Back()
+        {
+            lb.SelectedIndex = 2;
+        }
+
         public ICommand NextCommand
         {
             get;
@@ -288,9 +300,15 @@ namespace MVVM.ViewModel
 
         private void Next()
         {
+            ZimbraAPI zimbraAPI = new ZimbraAPI();
+            if (ZimbraValues.zimbraValues.AuthToken.Length == 0)
+            {
+                MessageBox.Show("You must log on to the Zimbra server", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             SaveDomain();
 
-            ZimbraAPI zimbraAPI = new ZimbraAPI();
             for (int i = 0; i < UsersList.Count; i++)
             {
                 string userName = (UsersList[i].MappedName.Length > 0) ? UsersList[i].MappedName : UsersList[i].Username;
@@ -312,7 +330,7 @@ namespace MVVM.ViewModel
                 }
             }
 
-            lb.SelectedIndex = 3;
+            lb.SelectedIndex = 4;
         }
 
         private void SaveDomain()

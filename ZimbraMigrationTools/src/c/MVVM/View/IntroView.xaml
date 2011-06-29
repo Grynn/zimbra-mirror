@@ -8,22 +8,29 @@
             <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
         </Grid.Background>
         <Grid.RowDefinitions>
-            <RowDefinition MinHeight="200" Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock HorizontalAlignment="Center" Margin="0,40,0,0" MaxWidth="370" Name="textBlock1Msg" Text="{Binding Path=WelcomeMsg}" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Row="0"/>
-        <TextBlock Grid.Row="1" Margin="0,20,0,0" Name="textBlockLicense" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Top" HorizontalAlignment="Center">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Left" Margin="55,40,0,0" MaxWidth="395" Name="textBlock1Msg" Text="{Binding Path=WelcomeMsg}" TextWrapping="Wrap" VerticalAlignment="Top" />
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="55,30,0,0" Name="textBlockLicense" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Top" HorizontalAlignment="Left" >
                             <Hyperlink Command="{Binding GetIntroLicenseCommand}">VMware Zimbra License</Hyperlink>
         </TextBlock>
-        <TextBlock Grid.Row="2" Margin="66,60,0,0" Name="textBlockHelp" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Top" HorizontalAlignment="Left">
-                            <Hyperlink Command="{Binding GetIntroHelpCommand}">Help</Hyperlink>
-        </TextBlock>
-        <TextBlock Grid.Row="2" Margin="-12,60,20,0" Name="textBlockUserMig" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Top" HorizontalAlignment="Center">
-                            <Hyperlink Command="{Binding GetIntroUserMigCommand}">User Migration</Hyperlink>
-        </TextBlock>
-        <TextBlock Grid.Row="2" Margin="0,60,66,0" Name="textBlockServerMig" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Top" HorizontalAlignment="Right">
-                            <Hyperlink Command="{Binding GetIntroServerMigCommand}">Server Migration</Hyperlink>
-        </TextBlock>
+        <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Left" Margin="55,25,0,0" Name="textBlockCopyright" Text="Copyright © 2006-2011 VMware, Inc.  All rights reserved." VerticalAlignment="Top" />
+        <Separator Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Margin="10,20,10,0" FontWeight="Bold" VerticalAlignment="Top"/>
+        <TextBlock Grid.Row="4" Grid.Column="0" HorizontalAlignment="Left" Margin="55,30,0,0" FontWeight="Bold" Name="textBlockMLabel" Text="Migration Type:" VerticalAlignment="Top" />
+        <RadioButton Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" Margin="0,30,0,0" FontWeight="Bold" Name="rbServerMig" VerticalAlignment="Top" Content="Server Migration" IsChecked="True" Command="{Binding GetIntroServerMigCommand}" />
+        <RadioButton Grid.Row="4" Grid.Column="1" HorizontalAlignment="Center" Margin="-12,55,0,0" FontWeight="Bold" Name="rbUserMig" VerticalAlignment="Top" Content="User Migration" IsChecked="False" Command="{Binding GetIntroUserMigCommand}" />
+        <Separator Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Margin="10,30,10,0" FontWeight="Bold" VerticalAlignment="Top"/>
+        <Button Grid.Row="6" Grid.Column="2" MinWidth="75" Margin="0,15,10,0" HorizontalAlignment="Right" VerticalAlignment="Top" Content="Begin" Name="buttonBegin" Command="{Binding BeginCommand}"  />
     </Grid>
 </UserControl>

@@ -50,11 +50,11 @@
         <ProgressBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Height="18" Width="290" Margin="70,10,0,0" Name="pbMigrationS" Value="{Binding Path=PBValue}" HorizontalAlignment="Left" ></ProgressBar>
         <Button Grid.Row="1" MinWidth="75" HorizontalAlignment="Right" Margin="0,10,20,0" Content="Stop" Name="buttonStop" IsEnabled="{Binding Path=EnableStop}" Command="{Binding StopCommand}"  />
         <Label Grid.Row="2" Grid.ColumnSpan="2" Margin="76,0,0,0" MinWidth="300" HorizontalAlignment="Left" Name="labelSchedInfo" FontStyle="Italic" Content="{Binding Path=PBMsgValue}"/>
-        <Separator Grid.Row="3" Margin="12,0,12,0" VerticalAlignment="Top"/>
-        <TextBlock Grid.Row="4" Margin="10,12,30,0" Name="textBlockHelp" FontSize="12" FontFamily="Times New Roman" VerticalAlignment="Top" HorizontalAlignment="Left">
-                            <Hyperlink Command="{Binding GetAcctResultsHelpCommand}">Help</Hyperlink>
-        </TextBlock>
-        <Button Grid.Row="4" MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,100,0" Content="Open Log File" Name="buttonOpenLF" IsEnabled="{Binding OpenLogFileEnabled}" Command="{Binding OpenLogFileCommand}"  />
-        <Button Grid.Row="4" MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,20,0" Content="Exit" Name="buttonExit" Command="{Binding ExitAppCommand}"  />
+        <Separator Grid.Row="3" Margin="5,91,5,0" VerticalAlignment="Top"/>
+        <Grid Name="BottomGrid" Grid.Row="4" Grid.ColumnSpan="2">
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,10,0,0" Content="Help" Name="buttonResultsHelp" Command="{Binding GetAcctResultsHelpCommand}"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,85,0" Content="Open Log File" Name="buttonOpenLF" IsEnabled="{Binding OpenLogFileEnabled}" Command="{Binding OpenLogFileCommand}"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,5,0" Content="Exit" Name="buttonExit" Command="{Binding ExitAppCommand}"  />
+        </Grid>
     </Grid>
 </UserControl>
