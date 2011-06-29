@@ -535,19 +535,22 @@ public class PageMail extends AbsTab {
 						"no logic defined for pulldown/option " + pulldown
 								+ "/" + option);
 			}
-		} else if ((pulldown == Button.B_NEW) && (option == Button.O_NEW_TAG)) {
-
+		} else if (pulldown == Button.B_NEW) {
+			
 			pulldownLocator = "css=td[id$='__NEW_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
-			optionLocator = "//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgNewTag')]";
+			
+			if (option == Button.O_NEW_TAG) {
+				
+				optionLocator = "css=td[id$='__NEW_MENU_NEW_TAG_left_icon']>div[class='ImgNewTag']";
+				page = new DialogTag(this.MyApplication, this);
+				
+			} else if (option == Button.O_NEW_FOLDER) {
+				
+				optionLocator = "css=td[id$='__NEW_MENU_NEW_FOLDER_left_icon']>div[class='ImgNewFolder']";
+				page = new DialogCreateFolder(this.MyApplication, this);
 
-			page = new DialogTag(this.MyApplication, this);
-		} else if ((pulldown == Button.B_NEW)&& (option == Button.O_NEW_FOLDER)) {
-
-			pulldownLocator = "css=td[id$='__NEW_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
-			optionLocator = "//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgNewFolder')]";
-
-			page = new DialogCreateFolder(this.MyApplication, this);
-
+			}
+			
 		} else if ((pulldown == Button.B_SIGNATURE)&& (option == Button.O_ADD_SIGNATURE)) {
 
 			pulldownLocator = "css=td[id$='_ADD_SIGNATURE_dropdown']>div[class='ImgSelectPullDownArrow']";
@@ -569,7 +572,9 @@ public class PageMail extends AbsTab {
 						+ " not present!");
 			}
 
-			this.zClick(pulldownLocator);
+			// 8.0 change ... need zClickAt()
+			// this.zClick(pulldownLocator);
+			this.zClickAt(pulldownLocator, "0,0");
 
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
@@ -583,7 +588,9 @@ public class PageMail extends AbsTab {
 							+ optionLocator + " not present!");
 				}
 
-				this.zClick(optionLocator);
+				// 8.0 change ... need zClickAt()
+				// this.zClick(optionLocator);
+				this.zClickAt(optionLocator, "0,0");
 
 				// If the app is busy, wait for it to become active
 				zWaitForBusyOverlay();
