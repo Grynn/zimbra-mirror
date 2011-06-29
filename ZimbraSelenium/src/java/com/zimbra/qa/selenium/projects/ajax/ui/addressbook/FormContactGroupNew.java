@@ -48,7 +48,7 @@ public class FormContactGroupNew extends AbsForm {
 
 	public static class Toolbar extends  AbsSeleniumObject{
 		
-		public static final String CANCEL="id=zb__CN2__CANCEL";
+		public static final String CANCEL="css=[id^=zb__CN][id$=__CANCEL]";
 		public static final String SAVE="css=[id^=zb__CN][id$=__SAVE_left_icon]";
 
 	}
