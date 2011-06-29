@@ -88,9 +88,6 @@ endif
 
 # Order is important here
 
-DBD_PERL_LIBS 	:= \
-	DBD::mysql \
-
 PRE_PERL_LIBS	:= \
 	Tree::DAG_Node \
 	Sub::Uplevel \
@@ -202,6 +199,9 @@ XML_PARSER := \
 
 NET_SERVER := \
 	Net-Server-0.99
+
+DBD_PERL_LIBS 	:= \
+	DBD-mysql-4.019
 
 PERL_MM_USE_DEFAULT	:= 1
 export PERL_MM_USE_DEFAULT
@@ -321,9 +321,19 @@ build:
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
-	@echo -n "Compiling perl lib DBD::mysql ..."; \
-	$(PERL) -I$(DEST_LIB_DIR) -MCPAN -e 'get DBI; $$CPAN::Config->{makepl_arg}.=" --ssl --nocatchstderr --libs=\"-L$(ZIMBRA_HOME)/mysql/lib -L/opt/zimbra/openssl/lib -lmysqlclient -lpthread -lz -lm -lrt -lssl -lcrypto -ldl\" --mysql_config=\"$(ZIMBRA_HOME)/mysql/bin/mysql_config\""; $$CPAN::Config->{make_arg} .=" LD_RUN_PATH=/opt/zimbra/lib:/opt/zimbra/mysql/lib:/opt/zimbra/openssl/lib"; force ("install", "DBD::mysql")' >> $(LOGFILE) 2>&1; \
-	if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+	@for lib in $(DBD_PERL_LIBS); do \
+		echo -n "Compiling perl lib $$lib ..."; \
+		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
+		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
+		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL --ssl --nocatchstderr \
+			--libs="-L$(ZIMBRA_HOME)/mysql/lib -L/opt/zimbra/openssl/lib -lmysqlclient -lpthread -lz -lm -lrt -lssl -lcrypto -ldl" \
+			--mysql_config="$(ZIMBRA_HOME)/mysql/bin/mysql_config"; \
+		$(SED) -i .bak -e 's#-arch x86_64 -arch i386 -arch ppc -bundle -undefined dynamic_lookup -L/usr/local/lib#-arch x86_64 -bundle -undefined dynamic_lookup#' Makefile; \
+		$(SED) -i .bak -e 's#-arch x86_64 -arch i386 -arch ppc -L/usr/local/lib#-arch x86_64#' Makefile; \
+		$(SED) -i .bak -e 's#-arch x86_64 -arch i386 -arch ppc -g -pipe -fno-common -DPERL_DARWIN -fno-strict-aliasing -I/usr/local/include#-arch x86_64 -g -pipe -fno-common -DPERL_DARWIN -fno-strict-aliasing#' Makefile; \
+		LD_RUN_PATH=/opt/zimbra/lib:/opt/zimbra/mysql/lib:/opt/zimbra/openssl/lib $(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
+		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
+	done
 
 	@for lib in $(MAIL_SPF); do \
 		echo -n "Compiling perl lib $$lib ..."; \
