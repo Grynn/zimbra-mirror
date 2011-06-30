@@ -82,18 +82,28 @@ public class StafAbstract {
 	        try
 	        {
 	        	
-	        	logger.info(getStafCommand());
+	        	logger.info("STAF Command: " + getStafCommand());
 	        	
 	            StafResult = handle.submit2(StafServer, StafService, StafParms);
 	            
-	            logger.info(StafResult.result);
-	        	
-	            if (StafResult.result.contains("STAFConnectionProviderConnect: Timed out connecting to endpoint")) {
-	            	throw new HarnessException(StafResult.result);					
-	            }
+	            if (StafResult == null)
+	            	throw new HarnessException("StafResult was null");
 	            
-	            if ( (StafResult.result != null) && (!StafResult.result.trim().equals("")) )
-	            {
+            	logger.info("STAF Response Code: "+ StafResult.rc);
+
+            	if ( StafResult.rc == STAFResult.AccessDenied ) {
+            		// Common error in WDC.  Log a helper message.
+            		logger.error("On the server, use: staf local trust set machine *.eng.vmware.com level 5");
+            	}
+
+            	if ( StafResult.rc != STAFResult.Ok ) {
+            		throw new HarnessException("Invalid STAF response code ("+ StafResult.rc +"): "+ StafResult.result);
+            	}
+
+	            if ( (StafResult.result != null) && (!StafResult.result.trim().equals("")) ) {
+	            	
+	            	logger.debug(StafResult.result);
+	            		        	
 	            	if ( STAFMarshallingContext.isMarshalledData(StafResult.result) )
 	            	{
 	            		STAFMarshallingContext mc = STAFMarshallingContext.unmarshall(StafResult.result);
@@ -106,28 +116,24 @@ public class StafAbstract {
 	            	{
 	            		StafResponse = StafResult.result;
 	            	}
+	            	
 	            }
 	
 	            return (StafResult.rc == STAFResult.Ok);
  
 			} finally {
 	        	
-				logger.info(StafResponse);
+				logger.info("STAF Response: " + StafResponse);
 				
-	            try {
-	            	
+				if (handle != null )
 					handle.unRegister();
-			    	
-				} catch (STAFException e) {
-		        	throw new HarnessException("Error unregistering with STAF, RC:" + e.rc, e);
-				}
 				
 			}
         
 		}
 		catch (STAFException e)
 		{
-        	throw new HarnessException("Error registering or unregistering with STAF, RC:" + e.rc, e);
+        	throw new HarnessException("Error registering or unregistering with STAF, RC: " + e.rc, e);
 		}
 	        	
             

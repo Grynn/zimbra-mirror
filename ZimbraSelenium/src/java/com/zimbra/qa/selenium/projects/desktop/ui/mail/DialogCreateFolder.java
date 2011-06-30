@@ -84,20 +84,16 @@ public class DialogCreateFolder extends AbsDialog {
 
 			this.zClick(locator);
 
-	      this.zWaitForBusyOverlay();
+			this.zWaitForBusyOverlay();
 
-	      // Wait for the spinner image ONLY for desktop
-         ((AppAjaxClient)MyApplication).zPageMail.zWaitForDesktopLoadingSpinner(5000);
+			// Wait for the spinner image ONLY for desktop
+			((AppAjaxClient)MyApplication).zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
-         // Check the message queue
-	      Stafpostqueue sp = new Stafpostqueue();
-	      try {
-	         sp.waitForPostqueue();
-	      } catch (Exception e) {
-	         throw new HarnessException("Getting exception while post queueing: " + e.getMessage());
-	      }
+			// Check the message queue
+			Stafpostqueue sp = new Stafpostqueue();
+			sp.waitForPostqueue();
 
-	      return (page);
+			return (page);
 
 		} else if ( button == Button.B_CANCEL ) {
 
@@ -109,19 +105,19 @@ public class DialogCreateFolder extends AbsDialog {
 
 		// Default behavior, click the locator
 		//
-		
+
 		// Make sure the locator was set
 		if ( locator == null ) {
 			throw new HarnessException("Button "+ button +" not implemented");
 		}
-		
+
 		// Make sure the locator exists
 		if ( !this.sIsElementPresent(locator) ) {
 			throw new HarnessException("Button "+ button +" locator "+ locator +" not present!");
 		}
-		
+
 		this.zClick(locator);
-		
+
 		this.zWaitForBusyOverlay();
 
 		return (page);

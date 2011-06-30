@@ -447,13 +447,8 @@ public class PageMail extends AbsTab {
 		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP &&
 				button == Button.B_GETMAIL) {
 
-		   Stafpostqueue sp = new Stafpostqueue();
-         try {
-            sp.waitForPostqueue();
-         } catch (Exception e) {
-            e.printStackTrace();
-            throw new HarnessException("Exception while doing post-queue");
-         }
+			Stafpostqueue sp = new Stafpostqueue();
+			sp.waitForPostqueue();
 
 			// Wait for the spinner image
 			zWaitForDesktopLoadingSpinner(5000);

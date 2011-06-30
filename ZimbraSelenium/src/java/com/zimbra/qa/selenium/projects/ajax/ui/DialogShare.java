@@ -163,15 +163,8 @@ public class DialogShare extends AbsDialog {
 		zWaitForBusyOverlay();
 		
 		// This dialog sends a message, so we need to check the queue
-		try {
-		
-			// Check the message queue
-			Stafpostqueue sp = new Stafpostqueue();
-			sp.waitForPostqueue();
-		
-		} catch (Exception e) {
-			throw new HarnessException("Unable to wait for message queue", e);
-		}
+		Stafpostqueue sp = new Stafpostqueue();
+		sp.waitForPostqueue();
 
 		return (null);
 	}

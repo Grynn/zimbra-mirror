@@ -102,12 +102,8 @@ public class MailApp extends CommonTest {
 		int i = 0;
 		boolean found = false;
 		
-		try{
-			Stafpostqueue sp = new Stafpostqueue();
-			sp.waitForPostqueue();
-		}catch(Exception ex){
-			ZimbraSeleniumLogger.mLog.error("Error occured using STAF service");
-		}
+		Stafpostqueue sp = new Stafpostqueue();
+		sp.waitForPostqueue();
 		
 		if (!folderName.equals("")) {
 			obj.zFolder.zClick(folderName);

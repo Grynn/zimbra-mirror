@@ -127,15 +127,8 @@ public class FormApptNew extends AbsForm {
 			this.zWaitForBusyOverlay();
 			
 			// Wait for the message to be delivered
-			try {
-			
-				// Check the message queue
-				Stafpostqueue sp = new Stafpostqueue();
-				sp.waitForPostqueue();
-			
-			} catch (Exception e) {
-				throw new HarnessException("Unable to wait for message queue", e);
-			}
+			Stafpostqueue sp = new Stafpostqueue();
+			sp.waitForPostqueue();
 			
 			return (page);
 		

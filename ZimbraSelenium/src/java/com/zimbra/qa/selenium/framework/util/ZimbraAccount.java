@@ -1012,8 +1012,9 @@ public class ZimbraAccount {
         /**
          * For certain SOAP requests, such as SendMsgRequest, a message may wind up in the
          * postfix queue.  Check that the queue is empty before proceeding
+         * @throws HarnessException 
          */
-        public void doPostfixDelay() {
+        public void doPostfixDelay() throws HarnessException {
         	
         	// If disabled, don't do anything
         	boolean enabled = ZimbraSeleniumProperties.getStringProperty("postfix.check", "true").equals("true");
@@ -1045,14 +1046,8 @@ public class ZimbraAccount {
         		if ( nodes == null )
         			continue;
         		if ( nodes.length > 0 ) {
-    				try {
-    					
-						Stafpostqueue sp = new Stafpostqueue();
-						sp.waitForPostqueue();
-
-					} catch (Exception e) {
-						logger.warn("Unable to wait for postfix queue", e);
-					}
+					Stafpostqueue sp = new Stafpostqueue();
+					sp.waitForPostqueue();
         			break;
         		}
         	}

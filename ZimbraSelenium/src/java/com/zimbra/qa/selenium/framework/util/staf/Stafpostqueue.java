@@ -9,7 +9,7 @@ public class Stafpostqueue extends StafServicePROCESS {
 
 	private static final String MailQueueIsEmpty = "Mail queue is empty";
 	
-	public boolean waitForPostqueue() throws Exception {
+	public boolean waitForPostqueue() throws HarnessException {
 		
 		// Start: Dev env hack
 		if ( DevEnvironment.isUsingDevEnvironment() ) {
