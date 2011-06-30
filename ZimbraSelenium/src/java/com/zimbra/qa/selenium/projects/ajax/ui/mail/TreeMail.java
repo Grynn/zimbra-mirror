@@ -89,7 +89,7 @@ public class TreeMail extends AbsTree {
 
 			GeneralUtility.waitForElementPresent(this, actionLocator);
 			// actionLocator= Locators.zTagsHeader;
-			this.zRightClick(actionLocator);
+			this.zRightClickAt(actionLocator,"");
 
 			page = new DialogEditFolder(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
 
@@ -138,7 +138,7 @@ public class TreeMail extends AbsTree {
 			throw new HarnessException("locator is null for option " + option);
 
 		// Default behavior. Click the locator
-		zClick(optionLocator);
+		zClickAt(optionLocator,"");
 
 		// If there is a busy overlay, wait for that to finish
 		this.zWaitForBusyOverlay();
