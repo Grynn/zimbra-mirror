@@ -1163,7 +1163,20 @@ public abstract class AbsSeleniumObject {
 		ClientSessionFactory.session().selenium().keyPressNative(code);
 		logger.info("keyPressNative(" + code + ")");
 	}
-
+	/**
+	 * DefaultSelenium.keyPress()
+	 */
+	public void sKeyPress(String locator, String code) {
+		ClientSessionFactory.session().selenium().keyPress(locator, code);
+		logger.info("keypress(" + code + ")");
+	}
+	/**
+	 * DefaultSelenium.keyUp()
+	 */
+	public void sKeyUp(String locator, String code) {
+		ClientSessionFactory.session().selenium().keyUp(locator, code);
+		logger.info("keypress(" + code + ")");
+	}
 
 	/**
 	 * DefaultSelenium.keyDownNative()
