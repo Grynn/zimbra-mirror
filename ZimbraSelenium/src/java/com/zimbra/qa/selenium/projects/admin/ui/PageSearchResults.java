@@ -118,7 +118,6 @@ public class PageSearchResults extends AbsTab {
 		//
 		String locator = null;	// If set, this will be clicked
 		AbsPage page = null;	// If set, this page will be returned
-		int loadDelay = 0;
 		
 		// Based on the button specified, take the appropriate action(s)
 		//
@@ -126,19 +125,17 @@ public class PageSearchResults extends AbsTab {
 		if ( button == Button.B_SEARCH ) {
 
 			locator = SEARCH_BUTTON;
-			page = null;
-			loadDelay = 10000;
+			page = new PageSearchResults(MyApplication);
 
 			// Make sure the button exists
 			if ( !this.sIsElementPresent(locator) )
 				throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
-
+			
 			// FALL THROUGH
 
 		} else if(button == Button.B_DELETE) {
 			locator = DELETE_BUTTON;
 			page = new DialogForDeleteOperation(this.MyApplication, null);
-			loadDelay = 10000;
 
 			// Make sure the button exists
 			if ( !this.sIsElementPresent(locator) )
