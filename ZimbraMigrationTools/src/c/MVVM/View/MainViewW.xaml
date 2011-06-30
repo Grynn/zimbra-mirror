@@ -45,18 +45,20 @@
             <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid Name="headerGrid" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Image Grid.Row="0" HorizontalAlignment="Left"  Margin="15,0,0,0" Name="image0" Stretch="None" VerticalAlignment="Center" Source="/MVVM;component/View/Images/zimbraLogo.png" />
-            <TextBlock Grid.Row="0" HorizontalAlignment="Center" Name="tbAppTitle" Text="Zimbra Migration" VerticalAlignment="Center" Foreground="Crimson" FontSize="18" FontWeight="Bold" FontFamily="Maiandra GD" FontStyle="Italic" />
-            <TextBlock Grid.Row="0" HorizontalAlignment="Right" Margin="0,0,15,0" Name="tbAppBuildnum" Text="{Binding Path=BuildNum}" VerticalAlignment="Center" Foreground="Crimson" FontSize="18" FontWeight="Bold" FontFamily="Maiandra GD" FontStyle="Italic" />
-        </Grid>
+        <Border Name="headerBorder" Grid.Row="0" Grid.Column="1" Background="WhiteSmoke"  BorderThickness="2,4,4,2" BorderBrush="DarkBlue">
+            <Grid Name="headerGrid" Grid.Row="0" Grid.Column="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Image Grid.Row="0" HorizontalAlignment="Left"  Margin="10,0,0,5" Name="image0" Stretch="None" VerticalAlignment="Center" Source="/MVVM;component/View/Images/zimbraLogo.png" />
+                <TextBlock Grid.Row="0" HorizontalAlignment="Center" Margin="-5,0,0,5" Name="tbAppTitle" Text="Zimbra Migration" VerticalAlignment="Center" Foreground="Crimson" FontSize="18" FontWeight="Bold" FontFamily="Maiandra GD" FontStyle="Italic" />
+                <TextBlock Grid.Row="0" HorizontalAlignment="Right" Margin="0,0,15,5" Name="tbAppBuildnum" Text="{Binding Path=BuildNum}" VerticalAlignment="Center" Foreground="Crimson" FontSize="18" FontWeight="Bold" FontFamily="Maiandra GD" FontStyle="Italic" />
+            </Grid>
+        </Border>
 
-        <Border Name="keyBorder" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Background="WhiteSmoke"  BorderThickness="2,2,2,2" BorderBrush="DarkBlue">
+        <Border Name="keyBorder" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Background="WhiteSmoke"  BorderThickness="4,4,2,4" BorderBrush="DarkBlue">
             <Grid>
                 <Grid.Background>
                     <ImageBrush ImageSource="/MVVM;component/View/Images/bg2.png"  />
@@ -71,7 +73,7 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical">
-                                    <Image Source="{Binding ImageName}" Width="90" Height="64" Stretch="UniformToFill"></Image>
+                                    <Image Source="{Binding ImageName}" Width="90" Height="70" Stretch="UniformToFill"></Image>
                                     <TextBlock FontFamily="Maiandra GD" FontStyle="Italic" VerticalAlignment="Center" Text="{Binding ViewTitle}"></TextBlock>
                                 </StackPanel>
                             </DataTemplate>
@@ -82,7 +84,7 @@
             </Grid>
         </Border>
 
-        <Border Name="contentBorder" Grid.Row="1" Grid.Column="1" BorderThickness="3,3,3,3" BorderBrush="DarkBlue"  Background="WhiteSmoke">
+        <Border Name="contentBorder" Grid.Row="1" Grid.Column="1" BorderThickness="2,2,4,4" BorderBrush="DarkBlue"  Background="WhiteSmoke">
             <Grid Name="contentGrid">
                 <Grid.Background>
                     <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
