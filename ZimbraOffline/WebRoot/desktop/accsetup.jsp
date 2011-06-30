@@ -213,11 +213,17 @@ function onEditLink(id, keep, makeInvisible) {
 
 function onAuth() {
     elem = document.getElementById("oauthDiv");
-    var contactCheck = document.getElementById("contactSyncEnabled");
-    if (contactCheck.checked == true) {
-        elem.style.visibility = "visible";
-    } else {
-        elem.style.visibility = "hidden";
+    if (elem) {
+	    var contactCheck = document.getElementById("contactSyncEnabled");
+	    if (contactCheck) {
+		    if (contactCheck.checked == true) {
+		        elem.style.visibility = "visible";
+		        elem.style.display = "block";
+		    } else {
+		        elem.style.visibility = "hidden";
+		        elem.style.display = "none";
+		    }
+	    }
     }
 }
 
