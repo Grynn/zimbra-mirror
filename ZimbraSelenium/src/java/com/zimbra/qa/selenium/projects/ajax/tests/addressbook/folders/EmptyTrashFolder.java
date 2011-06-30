@@ -26,10 +26,9 @@ public class EmptyTrashFolder extends AjaxCommonTest {
 		
 	}
 	
-	private void DeleteItems(ContactItem contactItem, ContactGroupItem group  ) throws HarnessException {
+	private void DeleteItems(ContactItem contactItem, ContactGroupItem group, FolderItem folderItem , FolderItem trash ) throws HarnessException {
 		 	             
-		 	
-		  
+		 			  
 	      // Refresh the view, to pick up the newly created ones
 	      FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");	      
 	      app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
@@ -61,11 +60,26 @@ public class EmptyTrashFolder extends AjaxCommonTest {
 	
           ZAssert.assertTrue(count==0, "Verify contact + group " + contactItem.fileAs  + "," +  group.groupName + " deleted");                  
 
+  		  // Delete the folder using context menu
+  		  AbsPage page= app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, folderItem);
+
+  		  // Verify Delete option is enabled
+  		  ZAssert.assertNotNull(page, "Verify Delete option is enabled");
+
+ 		
+  		  // refresh Trash folder
+          app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, trash);
+     	  
+  		  // Verify the folder is now in the trash
+  		  folderItem = FolderItem.importFromSOAP(app.zGetActiveAccount(), folderItem.getName());
+  		  ZAssert.assertNotNull(folderItem, "Verify the folder Item is again available");
+  		  ZAssert.assertEquals(trash.getId(), folderItem.getParentId(), "Verify the folder's parent is now the trash folder ID");
+
 	}
 		  
-	@Test(	description = "Delete a contact group permanently by Empty Trash folder on context menu",
+	@Test(	description = "Delete a contact, group, and folder permanently by Empty Trash folder on context menu",
 			groups = { "smoke" })
-	public void EmptyTrashFolderClickOK() throws HarnessException {
+	public void ClickOK() throws HarnessException {
 
 		// Create a contact group via Soap
 		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);
@@ -78,38 +92,33 @@ public class EmptyTrashFolder extends AjaxCommonTest {
 		// Create a contact via Soap
 	    ContactItem contactItem = ContactItem.createUsingSOAP(app);			             			
 		contactItem.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-		
-			
-		DeleteItems(contactItem, group);
-		       
+
+		// Create a new folder
+		FolderItem userRoot= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);		
+		FolderItem folderItem = CreateFolder.createNewFolderViaSoap(userRoot,app);
+
+        // Get the trash folder item
 		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
-		// refresh Trash folder
-        app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, trash);
-   	 		
-				
+		ZAssert.assertNotNull(trash, "Verify the trash is available");
+
+		// Move items to trash
+		DeleteItems(contactItem, group, folderItem, trash);
+
+		// Now open empty trash dialog
 		DialogWarning dialogWarning = (DialogWarning) app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_FOLDER_EMPTY ,trash);
 	
 		// Click OK
 		dialogWarning.zClickButton(Button.B_OK);
 		
-        //verify deleted contact group not displayed
+        //verify Trash folder is empty
         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
- 	           
-		boolean isFileAsEqual=false;
-		for (ContactItem ci : contacts) {
-			if ((ci.fileAs.equals(group.groupName)) || (ci.fileAs.equals(contactItem.fileAs))) 
-			{
-	            isFileAsEqual = true;	 
-				break;
-			}
-		}
-		
-        ZAssert.assertFalse(isFileAsEqual, "Verify contact group " + group.groupName + " deleted");        
+ 	           	
+        ZAssert.assertTrue((contacts.size()==0), "Verify Trash folder empty");        
 		
 	}
-	@Test(	description = "Cancel  Empty Trash folder on context menu",
+	@Test(	description = "Cancel Empty Trash folder option",
 			groups = { "functional" })
-	public void EmptyTrashFolderClickCancel() throws HarnessException {
+	public void ClickCancel() throws HarnessException {
 		// Create a contact group via Soap
 		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);
 		group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
@@ -122,20 +131,24 @@ public class EmptyTrashFolder extends AjaxCommonTest {
 	    ContactItem contactItem = ContactItem.createUsingSOAP(app);			             			
 		contactItem.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
 			
-		DeleteItems(contactItem, group);
-		       
-		
+		// Create a new folder
+		FolderItem userRoot= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);		
+		FolderItem folderItem = CreateFolder.createNewFolderViaSoap(userRoot,app);
+
+        // Get the trash folder item
 		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
-		// refresh Trash folder
-        app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, trash);
-   	 		
-		
+		ZAssert.assertNotNull(trash, "Verify the trash is available");
+
+		// Move items to trash
+		DeleteItems(contactItem, group, folderItem, trash);
+							
+		// Now open empty trash dialog
 		DialogWarning dialogWarning = (DialogWarning) app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_FOLDER_EMPTY ,trash);
 	
 		// Click Cancel
 		dialogWarning.zClickButton(Button.B_CANCEL);
 		
-        //verify deleted contact group still displayed
+        //verify deleted contact & group are still displayed
         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
  	           
 		int countFileExisted=0;
@@ -147,7 +160,19 @@ public class EmptyTrashFolder extends AjaxCommonTest {
 		}
 		
         ZAssert.assertTrue(countFileExisted==2, "Verify contact group " + group.groupName + " and contact " + contactItem.fileAs + " existed");        
+	
+        //verify the folder is still displayed    
+        boolean isFolderDisplayed=false;
+        List<FolderItem> list= app.zPageAddressbook.zListGetFolders(app.zGetActiveAccount(),  trash);
+		for (FolderItem i: list) {
+			if (i.getName().equals(folderItem.getName())) {
+				isFolderDisplayed=true;
+				break;
+			}
+		}
 		
+		ZAssert.assertTrue(isFolderDisplayed, "Verify the folder (" + folderItem.getName() + ") still  displayed ");		
+	
 	}
 
 
