@@ -61,15 +61,9 @@ ifeq ($(BUILD_PLATFORM), MACOSX)
 	FD_SIZE := -DFD_SETSIZE=32768
 endif
 
-ifdef BETA
-	LD_RUN_PATH := /opt/zimbra/lib:/opt/zimbra/mysql-$(MYSQL_VERSION)/lib:/opt/zimbra/openldap-$(LDAP_VERSION)/lib:/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib:/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/lib:/opt/zimbra/bdb-$(BDB_VERSION)/lib
-	MYSQL_INC := /opt/zimbra/mysql-$(MYSQL_VERSION)/include
-	MYSQL_LIB := /opt/zimbra/mysql-$(MYSQL_VERSION)/lib
-else
-	LD_RUN_PATH := /opt/zimbra/lib:/opt/zimbra/mysql-$(MYSQL_VERSION)/lib/mysql:/opt/zimbra/openldap-$(LDAP_VERSION)/lib:/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib:/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/lib:/opt/zimbra/bdb-$(BDB_VERSION)/lib
-	MYSQL_INC := /opt/zimbra/mysql-$(MYSQL_VERSION)/include/mysql
-	MYSQL_LIB := /opt/zimbra/mysql-$(MYSQL_VERSION)/lib/mysql
-endif
+LD_RUN_PATH := /opt/zimbra/lib:/opt/zimbra/mysql-$(MYSQL_VERSION)/lib:/opt/zimbra/openldap-$(LDAP_VERSION)/lib:/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib:/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/lib:/opt/zimbra/bdb-$(BDB_VERSION)/lib
+MYSQL_INC := /opt/zimbra/mysql-$(MYSQL_VERSION)/include
+MYSQL_LIB := /opt/zimbra/mysql-$(MYSQL_VERSION)/lib
 
 DBINC := -I/opt/zimbra/bdb-$(BDB_VERSION)/include
 DBLIB := -L/opt/zimbra/bdb-$(BDB_VERSION)/lib

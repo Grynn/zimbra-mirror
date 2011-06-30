@@ -18,7 +18,7 @@ ifdef BETA
 	PATCH	:= patch -g0 -N -p1 < ../patches/ITS6561.patch; patch -g0 -N -p1 < ../patches/delta-mmr-test.patch; patch -g0 -N -p1 < ../patches/delta-mmr.patch;
 else
 	include $(OPENLDAP_ROOT)/../versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/ITS6898.patch;
+	PATCH	:= patch -g0 -N -p1 < ../patches/ITS6561.patch; patch -g0 -N -p1 < ../patches/delta-mmr-test.patch; patch -g0 -N -p1 < ../patches/delta-mmr.patch;
 endif
 
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
