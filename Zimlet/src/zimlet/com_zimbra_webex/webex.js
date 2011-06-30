@@ -643,9 +643,9 @@ WebExZimlet.prototype._getCreateOrModifyMeetingRequest = function(params) {
 		var pwdStr = ["<accessControl><meetingPassword>", pwd, "</meetingPassword></accessControl>"].join("");
 	}
 	var sendWebExEmailStr = "";
-	if(params.sendWebExEmail) { //used for one-click meetings
+	//if(params.sendWebExEmail) { //used for one-click meetings
 		 sendWebExEmailStr = "<attendeeOptions><emailInvitations>TRUE</emailInvitations></attendeeOptions>";
-	}
+	//}
 	var requestBody = [
 		"<bodyContent xsi:type=\"",apiType,"\">",
 		pwdStr,
@@ -984,9 +984,10 @@ WebExZimlet.prototype._formatDate = function(d) {
  */
 WebExZimlet.prototype.postUri = function(securityParams) {
 	var companyId = securityParams ? securityParams.companyId : this._currentWebExAccount[WebExZimlet.PROP_COMPANY_ID.propId];
+	return this.getResource("httpPost.jsp")+"?companyId="+companyId;
 
-	return ZmZimletBase.PROXY +
-		   AjxStringUtil.urlComponentEncode(["https://", companyId, ".webex.com/WBXService/XMLService"].join(""));
+	//return ZmZimletBase.PROXY +
+	//	   AjxStringUtil.urlComponentEncode(["https://", companyId, ".webex.com/WBXService/XMLService"].join(""));
 };
 
 /**
@@ -1092,6 +1093,20 @@ WebExZimlet.prototype.newSecurityContext = function(securityParams) {
 		"<siteName>", companyId, "</siteName>",
 		"</securityContext>"].join("");
 };
+
+/**
+ * Returns a string containing companyId
+ *
+ * @params {hash} securityParams	a hash of parameters with login information
+ * @params {string} securityParams.name	the WebEx username
+ * @params {string} securityParams.pwd	the WebEx password
+ * @params {string} securityParams.companyId	the WebEx company Id
+ */
+WebExZimlet.prototype.getCompanyId = function(securityParams) {
+	return securityParams ? securityParams.companyId : this._currentWebExAccount[WebExZimlet.PROP_COMPANY_ID.propId];
+
+};
+
 
 /**
  * Displays Account preferences dialog.
@@ -1272,11 +1287,11 @@ WebExZimlet.prototype._isAccountConfigured = function(index) {
 	if(!this._webexZimletAccountPreferences) {
 		return false;
 	}
-	if(this._webexZimletAccountPreferences[WebExZimlet.PROP_USERNAME.propId + index] != "" && 
+	if(this._webexZimletAccountPreferences[WebExZimlet.PROP_USERNAME.propId + index] != "" &&
 			this._webexZimletAccountPreferences[WebExZimlet.PROP_USERNAME.propId + index] != "N/A"
-			&& this._webexZimletAccountPreferences[WebExZimlet.PROP_PASSWORD.propId + index] != "" && 
+			&& this._webexZimletAccountPreferences[WebExZimlet.PROP_PASSWORD.propId + index] != "" &&
 			this._webexZimletAccountPreferences[WebExZimlet.PROP_PASSWORD.propId + index] != "N/A"
-			&& this._webexZimletAccountPreferences[WebExZimlet.PROP_COMPANY_ID.propId + index] != "" && 
+			&& this._webexZimletAccountPreferences[WebExZimlet.PROP_COMPANY_ID.propId + index] != "" &&
 			this._webexZimletAccountPreferences[WebExZimlet.PROP_COMPANY_ID.propId + index] != "N/A") {
 			return true;
 	}
@@ -2133,7 +2148,7 @@ WebExZimlet.prototype._onStartLinkClicked = function(params) {
 		var requestBody = ["<bodyContent xsi:type=\"java:com.webex.service.binding.meeting.GetjoinurlMeeting\">",
 			"<meetingKey>",  params.meetingKey, "</meetingKey>","</bodyContent>"].join("");
 	}
-	var request = this.newWebExRequest(requestBody);
+	var request =  this.newWebExRequest(requestBody);
 	var result = AjxRpc.invoke(request, this.postUri(), {"Content-Type":"text/xml"}, null, false, false);
 	var objResult = this.xmlToObject(result);
 	if (!this._validateWebExResult(objResult, this.getMessage("WebExZimlet_unableToGetJoinOrHostURL"))) {
@@ -2194,7 +2209,7 @@ function(listType) {
 	if (!listType) {
 		listType = "NOW_ON";
 	}
-	var items = {"NOW_ON": this.getMessage("WebExZimlet_fromNowOn"), "TODAY" : this.getMessage("WebExZimlet_today"), 
+	var items = {"NOW_ON": this.getMessage("WebExZimlet_fromNowOn"), "TODAY" : this.getMessage("WebExZimlet_today"),
 				"TOMORROW" : this.getMessage("WebExZimlet_tomorrow"), "NEXT_7_DAYS" : this.getMessage("WebExZimlet_next7days")}
 	var html = [];
 	html.push("<select id='webExZimlet_meetingsListTypesMenu'>");
@@ -2236,7 +2251,7 @@ function(attendees) {
 		this._oneClickDlg.popup();
 		return;
 	}
-	
+
 	var postCallback = new AjxCallback(this, this._doShowOneClickDlg, attendees);
 	this._getAccPrefsMetaData(postCallback);
 };
@@ -2368,7 +2383,7 @@ function(params) {
 	}
 	newParams["duration"] = 60;
 	var tzName = "";
-	try { 
+	try {
 		tzName = appCtxt.getActiveAccount().settings.getInfoResponse.prefs._attrs.zimbraPrefTimeZoneId;
 	} catch(e) {
 		tzName = "America/Los_Angeles";//default
