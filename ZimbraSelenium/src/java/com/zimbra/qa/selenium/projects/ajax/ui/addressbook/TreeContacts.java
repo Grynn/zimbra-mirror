@@ -156,7 +156,7 @@ public class TreeContacts extends AbsTree {
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
 				zWaitForBusyOverlay();
 				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageAddressbook);			    
-			}
+			}			
 			else if (option == Button.B_DELETE) {								
 				//if option is disabled
 				if (sIsElementPresent("css=tr#POPUP_DELETE div[class='ImgDelete ZDisabledImage']")) {
@@ -201,6 +201,18 @@ public class TreeContacts extends AbsTree {
 			    page = new DialogEditFolder(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);
 
 			} 
+			else if (option == Button.B_TREE_FOLDER_EMPTY) {
+				if (this.zIsElementDisabled("css=tr#POPUP_EMPTY_FOLDER div[class='ImgEmptyFolder ZDisabledImage']")) {
+					return null;
+				}				
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
+				zWaitForBusyOverlay();		
+				
+				page = new DialogWarning(DialogWarning.DialogWarningID.EmptyFolderWarningMessage,
+						MyApplication, ((AppAjaxClient) MyApplication).zPageAddressbook);
+
+			}
 			else {
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 			}

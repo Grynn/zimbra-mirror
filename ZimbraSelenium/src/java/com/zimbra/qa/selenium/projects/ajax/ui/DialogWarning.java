@@ -97,9 +97,15 @@ public class DialogWarning extends AbsDialog {
 			//locator = buttonsTableLocator + "//table//table//tr/td[2]/div";
 
 		} else if ( button == Button.B_CANCEL ) {
-			locator = "css=div#YesNoCancel_button1";		
+			if (MyDivId.contains("OkCancel")) {
+			  locator = "css=div#OkCancel_button1";
+			}
+			else {
+			  locator = "css=div#YesNoCancel_button1";		
 			//locator = buttonsTableLocator + "//table//table//tr/td[3]/div";
-
+			}
+			
+			
 		} else if (button == Button.B_OK) {
 			if (MyDivId.contains("ErrorDialog")) {
 				locator = buttonsTableLocator + "//table//table//tr/td/div[contains(@id,'ErrorDialog_button2')]";
