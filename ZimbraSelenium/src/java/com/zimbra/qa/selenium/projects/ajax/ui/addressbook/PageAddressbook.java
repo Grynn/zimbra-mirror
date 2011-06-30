@@ -152,18 +152,15 @@ public class PageAddressbook extends AbsTab {
 			
 	}
 	
-	public List<FolderItem> zListGetFolders(ZimbraAccount account) throws HarnessException {
+	//get subFolders
+	public List<FolderItem> zListGetFolders(ZimbraAccount account, FolderItem parentFolder) throws HarnessException {
 		List <FolderItem> list = new ArrayList<FolderItem>();
-		
+		String folderId = "zti" + ((parentFolder.getName().equals("USER_ROOT"))?"h":"") + "__main_Contacts__" + ((parentFolder.getName().equals("USER_ROOT"))?"ADDRBOOK":parentFolder.getId()) +"_div";
+	
 		//ensure it is in Addressbook main page
 		zNavigateTo();
-		
-		if ( !this.sIsElementPresent("css=div#ztih__main_Contacts__ADDRBOOK div.DwtTreeItemLevel1ChildDiv") )			
-			//maybe return empty list?????
-				throw new HarnessException("Folder List is not present "+ "div#ztih__main_Contacts__ADDRBOOK div.DwtTreeItemLevel1ChildDiv");
-
-	    //String elements="window.document.getElementsByClassName('DWtTreeItem-Text')";
-	    String elements="window.document.getElementById('ztih__main_Contacts__ADDRBOOK_div').nextSibling.childNodes";
+	
+		String elements="window.document.getElementById('" + folderId + "').nextSibling.childNodes";
 	    int length = Integer.parseInt(sGetEval(elements + ".length"));
 	   
 	    
@@ -173,8 +170,8 @@ public class PageAddressbook extends AbsTab {
 	        if (id.contains("Contacts")) {
 		       list.add(FolderItem.importFromSOAP(account, sGetText("css=td#" + id + "_textCell")));
 	        }
-	    }
-	    
+	      }
+		
 	    return list;
 	}
  	

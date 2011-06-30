@@ -25,7 +25,7 @@ public class EditProperties extends AjaxCommonTest {
 		
 	}
 	
-	private void RenameAndVerify(FolderItem folderItem, DialogEditFolder dialog)
+	private void RenameAndVerify(FolderItem folderItem, DialogEditFolder dialog, FolderItem parent)
 	    throws HarnessException {
 		// Set the name, click OK
 		String oldName = folderItem.getName();
@@ -37,7 +37,7 @@ public class EditProperties extends AjaxCommonTest {
 		boolean isNewFolderDisplayed=false;
 		boolean isOldFolderDisplayed=false;
 		
-		List<FolderItem> list= app.zPageAddressbook.zListGetFolders(app.zGetActiveAccount());
+		List<FolderItem> list= app.zPageAddressbook.zListGetFolders(app.zGetActiveAccount(),parent);
 		for (FolderItem i: list) {
 			if (i.getName().equals(name)) {
 				isNewFolderDisplayed=true;			
@@ -67,7 +67,7 @@ public class EditProperties extends AjaxCommonTest {
 		//ZAssert.assertNotNull(subfolder2, "Verify the subfolder is available");
 	}
 	
-	private void RenameChangeColorAndVerify(FolderItem folderItem, DialogEditFolder dialog)
+	private void RenameChangeColorAndVerify(FolderItem folderItem, DialogEditFolder dialog, FolderItem parent)
     throws HarnessException {
 	 	// Set the name, click OK
 		String oldName = folderItem.getName();
@@ -83,7 +83,7 @@ public class EditProperties extends AjaxCommonTest {
 		boolean isNewFolderDisplayed=false;
 		boolean isOldFolderDisplayed=false;
 		
-		List<FolderItem> list= app.zPageAddressbook.zListGetFolders(app.zGetActiveAccount());
+		List<FolderItem> list= app.zPageAddressbook.zListGetFolders(app.zGetActiveAccount(),parent);
 		for (FolderItem i: list) {
 			if (i.getName().equals(name)) {
 				isNewFolderDisplayed=true;			
@@ -162,7 +162,8 @@ public class EditProperties extends AjaxCommonTest {
 		DialogEditFolder dialog = (DialogEditFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folderItem);
 		ZAssert.assertNotNull(dialog, "Verify the dialog opened");
 		
-	    RenameAndVerify(folderItem, dialog);		
+	
+	    RenameAndVerify(folderItem, dialog, userRoot);		
 	}
 
 	
@@ -181,7 +182,7 @@ public class EditProperties extends AjaxCommonTest {
 		DialogEditFolder dialog = (DialogEditFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folderItem);
 		ZAssert.assertNotNull(dialog, "Verify the dialog opened");
 			
-	    RenameAndVerify(folderItem, dialog);		
+	    RenameAndVerify(folderItem, dialog, contact);		
 	}
 		
 	 
@@ -208,7 +209,7 @@ public class EditProperties extends AjaxCommonTest {
 	     ZAssert.assertNotNull(folder, "Verify can get the Trash ");										
 	     // Rename the folder 
 		 dialog = (DialogEditFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folder);
-		 ZAssert.assertNull(folder, "Verify Edit Properties not enabled for Trash folder ");		
+		 ZAssert.assertNull(dialog, "Verify Edit Properties not enabled for Trash folder ");		
 	 }	
 
 	 
@@ -225,7 +226,7 @@ public class EditProperties extends AjaxCommonTest {
 		 DialogEditFolder dialog = (DialogEditFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folderItem);
 		 ZAssert.assertNotNull(dialog, "Verify the dialog opened");
 			
-		 RenameChangeColorAndVerify(folderItem, dialog);		
+		 RenameChangeColorAndVerify(folderItem, dialog, userRoot);		
 	 }
 
 		
@@ -243,7 +244,7 @@ public class EditProperties extends AjaxCommonTest {
 		 DialogEditFolder dialog = (DialogEditFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_TREE_EDIT, folderItem);
 		 ZAssert.assertNotNull(dialog, "Verify the dialog opened");
 				
-		 RenameChangeColorAndVerify(folderItem, dialog);		
+		 RenameChangeColorAndVerify(folderItem, dialog, contact);		
 		
     }
 

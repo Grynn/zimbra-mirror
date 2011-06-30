@@ -24,7 +24,7 @@ public class RenameFolder extends AjaxCommonTest {
 		
 	}
 	
-	private void RenameAndVerify(FolderItem folderItem, DialogRenameFolder dialog)
+	private void RenameAndVerify(FolderItem folderItem, DialogRenameFolder dialog, FolderItem parent)
 	    throws HarnessException {
 		// Set the name, click OK
 		String oldName = folderItem.getName();
@@ -36,7 +36,7 @@ public class RenameFolder extends AjaxCommonTest {
 		boolean isNewFolderDisplayed=false;
 		boolean isOldFolderDisplayed=false;
 		
-		List<FolderItem> list= app.zPageAddressbook.zListGetFolders(app.zGetActiveAccount());
+		List<FolderItem> list= app.zPageAddressbook.zListGetFolders(app.zGetActiveAccount(), parent);
 		for (FolderItem i: list) {
 			if (i.getName().equals(name)) {
 				isNewFolderDisplayed=true;			
@@ -65,7 +65,7 @@ public class RenameFolder extends AjaxCommonTest {
 		DialogRenameFolder dialog = (DialogRenameFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_RENAME, folderItem);
 		ZAssert.assertNotNull(dialog, "Verify the dialog opened");
 		
-	    RenameAndVerify(folderItem, dialog);		
+	    RenameAndVerify(folderItem, dialog, userRoot);		
 	}
 
 	
@@ -85,7 +85,7 @@ public class RenameFolder extends AjaxCommonTest {
 		DialogRenameFolder dialog = (DialogRenameFolder)app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_RENAME, folderItem);
 		ZAssert.assertNotNull(dialog, "Verify the dialog opened");
 		
-	    RenameAndVerify(folderItem, dialog);		
+	    RenameAndVerify(folderItem, dialog, contact);		
 	}
 	
 	

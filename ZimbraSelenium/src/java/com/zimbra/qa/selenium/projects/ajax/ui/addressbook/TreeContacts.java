@@ -124,7 +124,7 @@ public class TreeContacts extends AbsTree {
 
 		AbsPage page = null;
 		//String actionLocator = null;
-		//String optionLocator = null;
+		String optionLocator = null;
 
 		if ((action == null) || (option == null) || (folderItem == null)) {
 			throw new HarnessException(
@@ -148,67 +148,56 @@ public class TreeContacts extends AbsTree {
 			
 			if (option == Button.B_TREE_NEWFOLDER) {
 				//if option is disabled
-				if (sIsElementPresent("css=tr#POPUP_NEW_ADDRBOOK div[class='ImgNewContactsFolder ZDisabledImage']")) {
+				optionLocator="tr#POPUP_NEW_ADDRBOOK";
+				if (zIsElementDisabled(optionLocator + " div")) {
 					return null;
-				}				
-			
+				}			
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
-				zWaitForBusyOverlay();
+			    zWaitForBusyOverlay();
 				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageAddressbook);			    
 			}			
 			else if (option == Button.B_DELETE) {								
 				//if option is disabled
-				if (sIsElementPresent("css=tr#POPUP_DELETE div[class='ImgDelete ZDisabledImage']")) {
+				optionLocator="tr#POPUP_DELETE";
+				if (zIsElementDisabled(optionLocator + " div")) {
 					return null;
 				}
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
-				zWaitForBusyOverlay();
 				
-				page= ((AppAjaxClient)MyApplication).zPageAddressbook;
-						
+				zClickAt("css=" + optionLocator,"0,0");				
+				zWaitForBusyOverlay();
+				page= ((AppAjaxClient)MyApplication).zPageAddressbook;						
 		    } 
 			else if (option == Button.B_RENAME) {
-				if (sIsElementPresent("css=tr#POPUP_RENAME_FOLDER div[class='ImgRename ZDisabledImage']")) {
+				optionLocator="tr#POPUP_RENAME_FOLDER";
+				if (zIsElementDisabled(optionLocator + " div")) {
 					return null;
 				}
-			    zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
-				zWaitForBusyOverlay();
 				
+				zClickAt("css=" + optionLocator,"0,0");				
+				zWaitForBusyOverlay();				
 			    page = new DialogRenameFolder(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);
 
 			}   			
 			else if (option == Button.B_TREE_EDIT) {
-				
-				if (sIsElementPresent("css=tr#POPUP_EDIT_PROPS div[class='ImgProperties ZDisabledImage']")) {
+				optionLocator="tr#POPUP_EDIT_PROPS";
+				if (zIsElementDisabled(optionLocator + " div")) {
 					return null;
 				}
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
-				zWaitForBusyOverlay();
 				
+				zClickAt("css=" + optionLocator,"0,0");				
+				zWaitForBusyOverlay();				
 			    page = new DialogEditFolder(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);
 
 			} 
 			else if (option == Button.B_TREE_FOLDER_EMPTY) {
-				if (this.zIsElementDisabled("css=tr#POPUP_EMPTY_FOLDER div[class='ImgEmptyFolder ZDisabledImage']")) {
+				optionLocator="tr#POPUP_EMPTY_FOLDER";
+				if (zIsElementDisabled(optionLocator + " div")) {
 					return null;
-				}				
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
-				zWaitForBusyOverlay();		
+				}
 				
+				zClickAt("css=" + optionLocator,"0,0");				
+				zWaitForBusyOverlay();						
 				page = new DialogWarning(DialogWarning.DialogWarningID.EmptyFolderWarningMessage,
 						MyApplication, ((AppAjaxClient) MyApplication).zPageAddressbook);
 

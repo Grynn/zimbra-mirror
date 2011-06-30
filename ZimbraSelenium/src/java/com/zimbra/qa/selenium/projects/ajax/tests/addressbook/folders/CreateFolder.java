@@ -4,6 +4,7 @@ import org.testng.annotations.*;
 import java.util.*;
 
 import com.zimbra.qa.selenium.framework.items.FolderItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -44,7 +45,9 @@ public class CreateFolder extends AjaxCommonTest {
 		return folderItem;
 	}
    
-	private void CreateFolderAndVerify(DialogCreateFolder createFolderDialog) throws HarnessException{
+	private void CreateFolderAndVerify(DialogCreateFolder createFolderDialog, SystemFolder parent) throws HarnessException{
+		FolderItem parentFolder= FolderItem.importFromSOAP(app.zGetActiveAccount(), parent);
+		
 		String folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
 
 		createFolderDialog.zEnterFolderName(folderName);
@@ -57,7 +60,7 @@ public class CreateFolder extends AjaxCommonTest {
 
 		//Verify created folder listed on the left menu
 		boolean isFolderDisplayed=false;
-		List<FolderItem> list= app.zPageAddressbook.zListGetFolders(app.zGetActiveAccount());
+		List<FolderItem> list= app.zPageAddressbook.zListGetFolders(app.zGetActiveAccount(), parentFolder);
 		for (FolderItem i: list) {
 			if (i.getName().equals(folderName)) {
 				isFolderDisplayed=true;
@@ -78,7 +81,7 @@ public class CreateFolder extends AjaxCommonTest {
 		DialogCreateFolder createFolderDialog = (DialogCreateFolder) app.zTreeContacts.zTreeItem
 		   (Action.A_LEFTCLICK, Button.B_TREE_NEWFOLDER, folderItem);
 	
-		CreateFolderAndVerify(createFolderDialog);
+		CreateFolderAndVerify(createFolderDialog, FolderItem.SystemFolder.UserRoot);
 	}
  
 	
@@ -93,7 +96,7 @@ public class CreateFolder extends AjaxCommonTest {
 		DialogCreateFolder createFolderDialog = (DialogCreateFolder) app.zTreeContacts.zTreeItem
 		    (Action.A_RIGHTCLICK, Button.B_TREE_NEWFOLDER,folderItem);
 		
-		CreateFolderAndVerify(createFolderDialog);
+		CreateFolderAndVerify(createFolderDialog,FolderItem.SystemFolder.UserRoot);
 	}
 
 	@Test(description = "Create a new folder using context menu from root folder", groups = { "smoke" })
@@ -106,7 +109,7 @@ public class CreateFolder extends AjaxCommonTest {
 		DialogCreateFolder createFolderDialog = (DialogCreateFolder) app.zTreeContacts.zTreeItem
 		    (Action.A_RIGHTCLICK, Button.B_TREE_NEWFOLDER,folderItem);
 		
-		CreateFolderAndVerify(createFolderDialog);
+		CreateFolderAndVerify(createFolderDialog, FolderItem.SystemFolder.Contacts);
 	}
 
 	@Test(description = "Create a new folder using   New -> New Addressbook", groups = { "functional" })
@@ -116,7 +119,7 @@ public class CreateFolder extends AjaxCommonTest {
 		DialogCreateFolder createFolderDialog = (DialogCreateFolder) app.zPageAddressbook.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_ADDRESSBOOK);
 		ZAssert.assertNotNull(createFolderDialog, "Verify the new dialog opened");
 
-		CreateFolderAndVerify(createFolderDialog);
+		CreateFolderAndVerify(createFolderDialog, FolderItem.SystemFolder.UserRoot);
 	}
 
 
