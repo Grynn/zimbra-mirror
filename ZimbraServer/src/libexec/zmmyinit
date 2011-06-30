@@ -96,7 +96,7 @@ ${zimbra_home}/libexec/zmmycnf --innodb-buffer-pool-memory-percent \
 # Create database
 #
 echo '*' Creating database in ${mysql_data_directory}
-(cd ${mysql_directory}; ./bin/mysql_install_db \
+(cd ${mysql_directory}; ./scripts/mysql_install_db \
     --defaults-file=${mysql_mycnf}) \
     >> ${zimbra_log_directory}/zmmyinit.log 2>&1
 
