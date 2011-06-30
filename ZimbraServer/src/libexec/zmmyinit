@@ -36,7 +36,7 @@ zmassert -x ${zimbra_home}/bin/mysqladmin
 zmassert -x ${zimbra_home}/bin/mysql
 zmassert -x ${zimbra_home}/bin/zmlocalconfig
 zmassert -x ${zimbra_home}/bin/zmmypasswd
-zmassert -x ${mysql_directory}/bin/mysql_install_db
+zmassert -x ${mysql_directory}/scripts/mysql_install_db
 zmassert -r ${zimbra_db_directory}/db.sql
 zmassert -r ${zimbra_db_directory}/versions-init.sql
 
