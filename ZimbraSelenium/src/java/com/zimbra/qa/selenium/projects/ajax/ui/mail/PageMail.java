@@ -469,7 +469,7 @@ public class PageMail extends AbsTab {
 
 		// Default behavior, process the locator by clicking on it
 		//
-		this.zClick(locator);
+		this.zClickAt(locator,"0,0");
 		
 		//need small wait so that next element gets appeared/visible  after click
 		SleepUtil.sleepMedium();
