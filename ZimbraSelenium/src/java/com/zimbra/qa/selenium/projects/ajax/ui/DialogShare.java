@@ -3,6 +3,7 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui;
 
+
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
@@ -55,19 +56,20 @@ public class DialogShare extends AbsDialog {
 	}
 	
 	public void zSetEmailAddress(String email) throws HarnessException {
-		logger.info(myPageName() + " zSetEmailAddress("+ email +")");
+		logger.info(myPageName() + " zSetEmailAddress(" + email + ")");
 
-		String locator = "//div[@id='ShareDialog_grantee']/input";
-		
-		
+		String locator = "css=div#ShareDialog_grantee>input";
+
 		// Make sure the locator exists
-		if ( !this.sIsElementPresent(locator) ) {
-			throw new HarnessException("zSetEmailAddress "+ locator +" is not present");
+		if (!this.sIsElementPresent(locator)) {
+			throw new HarnessException("zSetEmailAddress " + locator
+					+ " is not present");
 		}
 		this.sFocus(locator);
-	    this.zClick(locator);
-	    zKeyboard.zTypeCharacters(email);
-		//this.sType(locator, email);
+		this.sKeyPress(locator, "\13");
+		this.sType(locator, email);
+		this.sKeyUp(locator, "\13");		
+
 	}
 	
 	public static class ShareRole {
