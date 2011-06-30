@@ -737,15 +737,13 @@ function onAuth() {
                                                 </td>
                                             </tr>
                                         </c:if>
-                                        <c:if test="${not empty bean.accountId}">
-                                            <tr id="debugTraceRow">
-                                                <td></td>
-                                                <td>
-                                                    <input type="checkbox" id="debugTraceEnabled" name="debugTraceEnabled" ${bean.debugTraceEnabled ? 'checked' : ''}>
-                                                    <label class="ZCheckboxLabel" for="debugTraceEnabled"><fmt:message key='EnableTrace'/></label>
-                                                </td>
-                                            </tr>
-                                        </c:if>
+                                        <tr id="debugTraceRow">
+                                            <td></td>
+                                            <td>
+                                                <input type="checkbox" id="debugTraceEnabled" name="debugTraceEnabled" ${bean.debugTraceEnabled ? 'checked' : ''}>
+                                                <label class="ZCheckboxLabel" for="debugTraceEnabled"><fmt:message key='EnableTrace'/></label>
+                                            </td>
+                                        </tr>
                                         <tr><td></td></tr>
                                         <tr>
                                             <td colspan=2>
