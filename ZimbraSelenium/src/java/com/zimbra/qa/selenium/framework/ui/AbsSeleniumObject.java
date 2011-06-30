@@ -1157,6 +1157,14 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
+	 * DefaultSelenium.getConfirmation()
+	 */
+	public String  sGetConfirmation() {
+	   logger.info("getConfirmation()");
+	   return ClientSessionFactory.session().selenium().getConfirmation();
+	}
+
+	/**
 	 * DefaultSelenium.keyPressNative()
 	 */
 	public void sKeyPressNative(String code) {

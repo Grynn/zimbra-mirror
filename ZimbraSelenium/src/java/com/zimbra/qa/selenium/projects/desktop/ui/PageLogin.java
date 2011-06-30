@@ -174,6 +174,20 @@ public class PageLogin extends AbsTab {
 	}
 
 	/**
+    * Removing account from login page
+    * @throws HarnessException
+    */
+   public void zRemoveAccountThroughClick() throws HarnessException {
+      sClick(Locators.zDeleteButton);
+
+      logger.debug("Selenium Confirmation: " + this.sGetConfirmation());
+
+      Object[] params = {Locators.zDeleteButton};
+      GeneralUtility.waitFor(null, this, false, "sIsElementPresent",
+            params, WAIT_FOR_OPERAND.NEQ, true, 30000, 1000);
+   }
+
+   /**
 	 * Add the specified name to the login name field
 	 * @param name
 	 * @throws HarnessException
