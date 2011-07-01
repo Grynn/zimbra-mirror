@@ -47,26 +47,31 @@ public class YmailBean extends ImapBean {
         host = email.endsWith("@yahoo.co.jp") ? "zimbra.imap.mail.yahoo.co.jp" : "zimbra.imap.mail.yahoo.com";
         connectionType = DataSource.ConnectionType.ssl;
         port = "993";
-        if (verb == null) {
-            try {
-                String[] strs = OAuthManager.getAccessTokenURL();
-                this.oauthURL = strs[0];
-                this.oauthTmpId = strs[1];
-            } catch (YContactException e) {
-                setExceptionError(e);
-                OfflineLog.yab.error("oauth getting url error", e);
-                setYContactVerifyError("YContactVerifyErr");
-            }
-        } else if (this.contactSyncEnabled && (verb.isAdd() || verb.isModify())) {
+        if (this.contactSyncEnabled && (verb.isAdd() || verb.isModify())) {
             try {
                 if (!isYcontactTokenSaved) {
-                    OAuthToken token = OAuthManager.getTokenUsingVerifier(this.oauthTmpId, this.oauthVerifier);
-                    this.ycontactToken = token.getToken();
-                    this.ycontactTokenSecret = token.getTokenSecret();
-                    this.ycontactSessionHandle = token.getSessionHandle();
-                    this.ycontactTokenTimestamp = token.getLastAccessTime();
-                    this.ycontactGuid = token.getGuid();
-                    this.ycontactVerfier = this.oauthVerifier;    
+                    if (this.oauthVerifier == null || this.oauthVerifier.length() == 0) {
+                        try {
+                            OfflineLog.yab.debug("fetching oauth url for setup page"); 
+                            String[] strs = OAuthManager.getAccessTokenURL();
+                            this.oauthURL = strs[0];
+                            this.oauthTmpId = strs[1];
+                            OfflineLog.yab.debug("populated oauth url for setup page"); 
+                            addInvalid("oauthVerifier");
+                        } catch (YContactException e) {
+                            setExceptionError(e);
+                            OfflineLog.yab.error("oauth getting url error", e);
+                            setYContactVerifyError("YContactVerifyErr");
+                        }
+                    } else {
+                        OAuthToken token = OAuthManager.getTokenUsingVerifier(this.oauthTmpId, this.oauthVerifier);
+                        this.ycontactToken = token.getToken();
+                        this.ycontactTokenSecret = token.getTokenSecret();
+                        this.ycontactSessionHandle = token.getSessionHandle();
+                        this.ycontactTokenTimestamp = token.getLastAccessTime();
+                        this.ycontactGuid = token.getGuid();
+                        this.ycontactVerfier = this.oauthVerifier;
+                    }
                 }
             } catch (ServiceException e) {
                 setExceptionError(e);

@@ -211,12 +211,30 @@ function onEditLink(id, keep, makeInvisible) {
     elem.focus();
 }
 
+function selectContactsIfOAuthRequired() {
+    <c:if test="${accountFlavor eq 'YMP'}">
+    <c:if test="${not empty bean.oauthURL or not zdf:isValid(bean, 'oauthVerifier')}">
+    elem = document.getElementById("oauthDiv");
+    if (elem) {
+        var contactCheck = document.getElementById("contactSyncEnabled");
+        contactCheck.checked = true;
+    }
+    </c:if>
+    </c:if>
+}
+
 function onAuth() {
+    <c:if test="${accountFlavor eq 'YMP'}">
+	
     elem = document.getElementById("oauthDiv");
     if (elem) {
 	    var contactCheck = document.getElementById("contactSyncEnabled");
 	    if (contactCheck) {
-		    if (contactCheck.checked == true) {
+		    var needOAuth = false;
+	        <c:if test="${not empty bean.oauthURL}">
+            needOAuth = true;
+            </c:if>
+		    if (contactCheck.checked == true && needOAuth) {
 		        elem.style.visibility = "visible";
 		        elem.style.display = "block";
 		    } else {
@@ -225,6 +243,7 @@ function onAuth() {
 		    }
 	    }
     }
+    </c:if>
 }
 
 <c:if test="${not empty accountFlavor}">
@@ -241,6 +260,9 @@ function onAuth() {
         </c:if>
         <c:if test="${verb eq 'add' or verb eq ''}">
             document.getElementById('accountName').focus();
+        </c:if>
+        <c:if test="${accountFlavor eq 'YMP'}">
+            selectContactsIfOAuthRequired();
             onAuth();
         </c:if>
     }
@@ -334,9 +356,19 @@ function onAuth() {
                                                 </div>
                                             </c:when>
                                             <c:when test="${not bean.allValid}">
-                                                <div id="message" class="ZError">
-                                                    <fmt:message key='PlsCorrectInput'/>
-                                                </div>
+                                                <c:choose>
+                                                    <c:when test="${not zdf:isValid(bean, 'oauthVerifier')}">
+		                                                <div id="message" class="ZError">
+                                                            <fmt:message key='PlsVerifyYahooOauth'/><br/>
+		                                                    <fmt:message key='PlsCorrectInput'/>
+		                                                </div>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <div id="message" class="ZError">
+                                                            <fmt:message key='PlsCorrectInput'/>
+                                                        </div>
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </c:when>
                                         </c:choose>
                                     </td>
@@ -734,7 +766,7 @@ function onAuth() {
                                                         <label class="ZFieldLabel" for="contactSyncEnabled"><fmt:message key="YContactURL" />:</label>
                                                         <a href="<c:out value="${bean.oauthURL}" escapeXml="true" />" target="_blank">Click To Verify</a>
                                                         <br>
-                                                        <label class="ZFieldLabel" for="contactSyncEnabled"><fmt:message key="YContactVerify" />:</label>
+                                                        <label class="${zdf:isValid(bean, 'oauthVerifier') ? 'ZFieldLabel' : 'ZFieldError'}" for="contactSyncEnabled"><fmt:message key="YContactVerify" />:</label>
                                                         <input class="ZField" type="text" size="6" id="oauthVerifier" name="oauthVerifier" value="${bean.oauthVerifier}" />
                                                         <input type="hidden" name="oauthURL" value="${bean.oauthURL}" />
                                                         <input type="hidden" name="oauthTmpId" value="${bean.oauthTmpId}" />
