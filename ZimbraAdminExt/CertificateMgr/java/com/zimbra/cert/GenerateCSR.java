@@ -19,6 +19,8 @@ import java.util.Map;
 
 import com.zimbra.common.account.Key.ServerBy;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.AdminConstants;
+import com.zimbra.common.soap.CertMgrConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Provisioning;
@@ -34,9 +36,10 @@ import com.zimbra.soap.ZimbraSoapContext;
 public class GenerateCSR extends AdminDocumentHandler {
     private final static String CSR_TYPE_SELF = "self" ;
     private final static String CSR_TYPE_COMM = "comm" ;
-    private final static String SUBJECT = "subject" ;
-    private final static String [] SUBJECT_ATTRS=  {"C", "ST", "L", "O", "OU", "CN"} ;
-    final static String SUBJECT_ALT_NAME = "SubjectAltName" ;
+    private final static String [] SUBJECT_ATTRS = {
+        CertMgrConstants.E_subjectAttr_C, CertMgrConstants.E_subjectAttr_ST,
+        CertMgrConstants.E_subjectAttr_L, CertMgrConstants.E_subjectAttr_O,
+        CertMgrConstants.E_subjectAttr_OU, CertMgrConstants.E_subjectAttr_CN };
     
     @Override
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
@@ -47,7 +50,7 @@ public class GenerateCSR extends AdminDocumentHandler {
         Provisioning prov = Provisioning.getInstance();
         
         Server server = null;
-        String serverId = request.getAttribute("server") ;
+        String serverId = request.getAttribute(AdminConstants.A_SERVER) ;
 
         if (serverId != null && serverId.equals(ZimbraCertMgrExt.ALL_SERVERS)) {
         	server = prov.getLocalServer() ;
@@ -62,9 +65,9 @@ public class GenerateCSR extends AdminDocumentHandler {
         ZimbraLog.security.debug("Generate the CSR info from server:  " + server.getName()) ;
         
         String cmd = ZimbraCertMgrExt.CREATE_CSR_CMD  ;
-        String newCSR = request.getAttribute("new") ;
-        String type = request.getAttribute("type") ;
-        String keysize = request.getAttribute ("keysize") ; 
+        String newCSR = request.getAttribute(CertMgrConstants.A_new);
+        String type = request.getAttribute(AdminConstants.A_TYPE);
+        String keysize = request.getAttribute (CertMgrConstants.E_KEYSIZE) ; 
         if (keysize == null || (!(keysize.equalsIgnoreCase("1024") || keysize.equalsIgnoreCase("2048")))) {
             keysize = "2048";
         }
@@ -96,8 +99,8 @@ public class GenerateCSR extends AdminDocumentHandler {
             ZimbraLog.security.info("No new CSR need to be created.");
         }
         
-        Element response = lc.createElement(ZimbraCertMgrService.GEN_CSR_RESPONSE);
-        response.addAttribute("server", server.getName());
+        Element response = lc.createElement(CertMgrConstants.GEN_CSR_RESPONSE);
+        response.addAttribute(AdminConstants.A_SERVER, server.getName());
         return response;  
     }
 
@@ -126,7 +129,7 @@ public class GenerateCSR extends AdminDocumentHandler {
         Element e = null ;
         String subjectAltNames = "" ;
       
-        for (Element a : request.listElements(SUBJECT_ALT_NAME)) {
+        for (Element a : request.listElements(CertMgrConstants.E_SUBJECT_ALT_NAME)) {
             String value = a.getText();
             if (value != null && value.length() > 0) {
                 if (subjectAltNames.length() > 0) {

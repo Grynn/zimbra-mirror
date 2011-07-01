@@ -27,6 +27,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.ActivateLicenseResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/ActivateLicense")
+    @WebResult(name = "ActivateLicenseResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public ActivateLicenseResponse activateLicenseRequest(
+        @WebParam(name = "ActivateLicenseRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        ActivateLicenseRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.AddAccountAliasResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/AddAccountAlias")
@@ -723,6 +735,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.FixCalendarTZResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/FixCalendarTZ")
+    @WebResult(name = "FixCalendarTZResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public FixCalendarTZResponse fixCalendarTZRequest(
+        @WebParam(name = "FixCalendarTZRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        FixCalendarTZRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.FlushCacheResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/FlushCache")
@@ -730,6 +754,18 @@ public interface AdminService {
     public FlushCacheResponse flushCacheRequest(
         @WebParam(name = "FlushCacheRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         FlushCacheRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GenCSRResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GenCSR")
+    @WebResult(name = "GenCSRResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GenCSRResponse genCSRRequest(
+        @WebParam(name = "GenCSRRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GenCSRRequest parameters);
 
     /**
      * 
@@ -1047,6 +1083,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetCertResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetCert")
+    @WebResult(name = "GetCertResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetCertResponse getCertRequest(
+        @WebParam(name = "GetCertRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetCertRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.GetClusterStatusResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/GetClusterStatus")
@@ -1222,6 +1270,18 @@ public interface AdminService {
     public GetLicenseInfoResponse getLicenseInfoRequest(
         @WebParam(name = "GetLicenseInfoRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         GetLicenseInfoRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetLicenseResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetLicense")
+    @WebResult(name = "GetLicenseResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetLicenseResponse getLicenseRequest(
+        @WebParam(name = "GetLicenseRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetLicenseRequest parameters);
 
     /**
      * 
@@ -1498,6 +1558,30 @@ public interface AdminService {
     public GrantRightResponse grantRightRequest(
         @WebParam(name = "GrantRightRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         GrantRightRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.InstallCertResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/InstallCert")
+    @WebResult(name = "InstallCertResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public InstallCertResponse installCertRequest(
+        @WebParam(name = "InstallCertRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        InstallCertRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.InstallLicenseResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/InstallLicense")
+    @WebResult(name = "InstallLicenseResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public InstallLicenseResponse installLicenseRequest(
+        @WebParam(name = "InstallLicenseRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        InstallLicenseRequest parameters);
 
     /**
      * 

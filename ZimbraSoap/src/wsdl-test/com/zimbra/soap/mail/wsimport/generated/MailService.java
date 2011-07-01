@@ -1263,6 +1263,18 @@ public interface MailService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.SearchConvResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/SearchConv")
+    @WebResult(name = "SearchConvResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public SearchConvResponse searchConvRequest(
+        @WebParam(name = "SearchConvRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        SearchConvRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.mail.wsimport.generated.SearchResponse
      */
     @WebMethod(action = "urn:zimbraMail/Search")

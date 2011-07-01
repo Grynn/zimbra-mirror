@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;extension base="{urn:zimbraMail}messageCommon">
  *       &lt;sequence>
  *         &lt;element name="fr" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="e" type="{urn:zimbraMail}emailWithGroupInfo" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="e" type="{urn:zimbraMail}emailInfo" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="su" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="mid" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="irt" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
@@ -68,7 +68,7 @@ public class MsgWithGroupInfo
 {
 
     protected String fr;
-    protected List<EmailWithGroupInfo> e;
+    protected List<EmailInfo> e;
     protected String su;
     protected String mid;
     protected String irt;
@@ -143,13 +143,13 @@ public class MsgWithGroupInfo
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link EmailWithGroupInfo }
+     * {@link EmailInfo }
      * 
      * 
      */
-    public List<EmailWithGroupInfo> getE() {
+    public List<EmailInfo> getE() {
         if (e == null) {
-            e = new ArrayList<EmailWithGroupInfo>();
+            e = new ArrayList<EmailInfo>();
         }
         return this.e;
     }

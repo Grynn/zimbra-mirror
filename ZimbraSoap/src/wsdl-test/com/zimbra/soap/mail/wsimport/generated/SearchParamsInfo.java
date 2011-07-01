@@ -49,7 +49,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "searchParamsInfo", namespace = "urn:zimbra")
 @XmlSeeAlso({
-    SearchRequest.class
+    SearchRequest.class,
+    SearchConvRequest.class
 })
 public class SearchParamsInfo {
 

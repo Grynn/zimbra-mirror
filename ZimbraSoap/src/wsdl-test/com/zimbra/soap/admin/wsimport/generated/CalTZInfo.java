@@ -16,10 +16,10 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="calTZInfo">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
+ *       &lt;all>
  *         &lt;element name="standard" type="{urn:zimbra}tzOnsetInfo" minOccurs="0"/>
  *         &lt;element name="daylight" type="{urn:zimbra}tzOnsetInfo" minOccurs="0"/>
- *       &lt;/sequence>
+ *       &lt;/all>
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="stdoff" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="dayoff" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
@@ -34,8 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "calTZInfo", propOrder = {
-    "standard",
-    "daylight"
+
 })
 public class CalTZInfo {
 

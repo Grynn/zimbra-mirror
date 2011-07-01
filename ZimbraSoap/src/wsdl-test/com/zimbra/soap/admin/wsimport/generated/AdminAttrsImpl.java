@@ -67,7 +67,7 @@ import javax.xml.bind.annotation.XmlType;
     XmppComponentSpec.class,
     NetworkInformation.class
 })
-public abstract class AdminAttrsImpl {
+public class AdminAttrsImpl {
 
     protected List<Attr> a;
 

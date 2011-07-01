@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.CertMgrConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.common.util.ZimbraLog;
@@ -31,9 +32,6 @@ import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
 
 public class VerifyCertKey extends AdminDocumentHandler {
-        private final static String CERT = "cert";
-        private final static String PRIVKEY = "privkey";
-        private final static String TYPE = "type";
         final static String CERT_TYPE_SELF= "self" ;
         final static String CERT_TYPE_COMM = "comm" ;
     	private Provisioning prov = null;
@@ -42,9 +40,9 @@ public class VerifyCertKey extends AdminDocumentHandler {
    	public Element handle(Element request, Map<String, Object> context) throws ServiceException {
    		ZimbraSoapContext lc = getZimbraSoapContext(context);
    		prov = Provisioning.getInstance();
-   		String certBuffer = request.getAttribute(CERT) ;
-   		String prvkeyBuffer = request.getAttribute(PRIVKEY) ;
-   		Element response = lc.createElement(ZimbraCertMgrService.VERIFY_CERTKEY_RESPONSE);
+   		String certBuffer = request.getAttribute(CertMgrConstants.E_cert) ;
+   		String prvkeyBuffer = request.getAttribute(CertMgrConstants.A_privkey) ;
+   		Element response = lc.createElement(CertMgrConstants.VERIFY_CERTKEY_RESPONSE);
 
 		String timeStamp = getCurrentTimeStamp();
 		String storedPath = ZimbraCertMgrExt.COMM_CRT_KEY_DIR + "." + timeStamp + "/";
@@ -71,7 +69,7 @@ public class VerifyCertKey extends AdminDocumentHandler {
 
 			if(certBuffer_t.length() == 0 || prvkeyBuffer_t.length() == 0) {
 				// invalid certificate or privkey, return invalid
-				response.addAttribute("verifyResult", "invalid");
+				response.addAttribute(CertMgrConstants.A_verifyResult, "invalid");
 				return response;
 			}
 
@@ -125,8 +123,8 @@ public class VerifyCertKey extends AdminDocumentHandler {
             	}
 
 		if(verifyResult)
-	        	response.addAttribute("verifyResult", "true");
-		else response.addAttribute("verifyResult", "false");
+	        	response.addAttribute(CertMgrConstants.A_verifyResult, "true");
+		else response.addAttribute(CertMgrConstants.A_verifyResult, "false");
 	        return response;
 
   		

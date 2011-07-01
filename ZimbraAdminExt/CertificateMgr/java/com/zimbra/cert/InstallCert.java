@@ -23,6 +23,8 @@ import java.util.Map;
 
 import com.zimbra.common.account.Key.ServerBy;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.AdminConstants;
+import com.zimbra.common.soap.CertMgrConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.common.util.StringUtil;
@@ -39,17 +41,11 @@ import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
 
 
-public class InstallCert extends AdminDocumentHandler {           
-    private final static String TYPE = "type" ;
-    private final static String SUBJECT = "subject" ;
+public class InstallCert extends AdminDocumentHandler {
     final static String CERT_TYPE_SELF= "self" ;
     final static String CERT_TYPE_COMM = "comm" ;
-    private final static String COMM_CERT = "comm_cert" ;
-    private final static String AID = "aid" ;
     //private final static String ALLSERVER = "allserver" ;
     private final static String ALLSERVER_FLAG = "-allserver" ;
-    private final static String VALIDATION_DAYS = "validation_days" ;
-    private final static String KEYSIZE = "keysize" ;
     private Server server = null;
     
     private Provisioning prov = null;
@@ -59,7 +55,7 @@ public class InstallCert extends AdminDocumentHandler {
         
         prov = Provisioning.getInstance();
         
-        String serverId = request.getAttribute("server") ;
+        String serverId = request.getAttribute(AdminConstants.A_SERVER) ;
         boolean isTargetAllServer = false ;
         if (serverId != null && serverId.equals(ZimbraCertMgrExt.ALL_SERVERS)) {
         	server = prov.getLocalServer() ;
@@ -76,8 +72,8 @@ public class InstallCert extends AdminDocumentHandler {
         //the deployment of certs should happen on the target server
         RemoteManager rmgr = RemoteManager.getRemoteManager(server);
         String cmd = ZimbraCertMgrExt.CREATE_CRT_CMD ;
-        String deploycrt_cmd = ZimbraCertMgrExt.DEPLOY_CERT_CMD ;         
-        String certType = request.getAttribute(TYPE) ;
+        String deploycrt_cmd = ZimbraCertMgrExt.DEPLOY_CERT_CMD ;
+        String certType = request.getAttribute(AdminConstants.A_TYPE) ;
         if (certType == null || certType.length() == 0 ) {
             throw ServiceException.INVALID_REQUEST("No valid certificate type is set", null);
         }else if (certType.equals(CERT_TYPE_SELF) || certType.equals(CERT_TYPE_COMM)) {
@@ -94,7 +90,7 @@ public class InstallCert extends AdminDocumentHandler {
         //always set the -new flag for the cmd since the ac requests for a new cert always
         cmd += " -new " ;
         
-        Element valDayEl = request.getElement(VALIDATION_DAYS) ;
+        Element valDayEl = request.getElement(CertMgrConstants.E_VALIDATION_DAYS) ;
         String validation_days = null ;
                 
         if ((valDayEl != null) && (!certType.equals("comm"))) {
@@ -104,13 +100,13 @@ public class InstallCert extends AdminDocumentHandler {
             }
         }
 
-        Element subjectEl = request.getElement(SUBJECT)  ;
+        Element subjectEl = request.getElement(CertMgrConstants.E_SUBJECT)  ;
         String subject = GenerateCSR.getSubject(subjectEl) ;
 
         String subjectAltNames = GenerateCSR.getSubjectAltNames(request) ;
 
         if (certType.equals("self")) {
-            Element keysizeEl = request.getElement (KEYSIZE) ;
+            Element keysizeEl = request.getElement (CertMgrConstants.E_KEYSIZE) ;
             String keysize = null ;
 
             if (keysizeEl != null)  {
@@ -169,8 +165,8 @@ public class InstallCert extends AdminDocumentHandler {
             throw ServiceException.FAILURE("exception occurred handling command", ioe);
         }
         
-        Element response = lc.createElement(ZimbraCertMgrService.INSTALL_CERT_RESPONSE);
-        response.addAttribute("server", server.getName());
+        Element response = lc.createElement(CertMgrConstants.INSTALL_CERT_RESPONSE);
+        response.addAttribute(AdminConstants.A_SERVER, server.getName());
         return response;    
     }
 
@@ -184,9 +180,10 @@ public class InstallCert extends AdminDocumentHandler {
         try {
             //read the cert file
             ByteArrayOutputStream completeCertChain = new ByteArrayOutputStream(8192);
-            Element certEl = request.getPathElement(new String [] {"comm_cert", "cert"});
-            String attachId = certEl.getAttribute(AID) ;
-            String filename = certEl.getAttribute("filename") ;
+            Element certEl = request.getPathElement(
+                    new String [] {CertMgrConstants.E_comm_cert, CertMgrConstants.E_cert});
+            String attachId = certEl.getAttribute(AdminConstants.A_ATTACHMENT_ID) ;
+            String filename = certEl.getAttribute(CertMgrConstants.A_FILENAME) ;
             ZimbraLog.security.debug("Certificate Filename  = " + filename + "; attid = " + attachId );
             
             up = FileUploadServlet.fetchUpload(lc.getAuthtokenAccountId(), attachId, lc.getAuthToken());
@@ -205,9 +202,11 @@ public class InstallCert extends AdminDocumentHandler {
             ByteArrayOutputStream baos = new ByteArrayOutputStream(8192);
 
 
-            Element rootCAEl = request.getPathElement(new String [] {"comm_cert", "rootCA"});
-            attachId = rootCAEl.getAttribute(AID) ;
-            filename = rootCAEl.getAttribute("filename") ;
+            Element rootCAEl = request.getPathElement(
+                    new String [] {CertMgrConstants.E_comm_cert,
+                            CertMgrConstants.E_rootCA});
+            attachId = rootCAEl.getAttribute(AdminConstants.A_ATTACHMENT_ID) ;
+            filename = rootCAEl.getAttribute(CertMgrConstants.A_FILENAME) ;
             
             ZimbraLog.security.debug("Certificate Filename  = " + filename + "; attid = " + attachId );
             
@@ -220,12 +219,14 @@ public class InstallCert extends AdminDocumentHandler {
             
             //read interemediateCA
             byte [] intermediateCA ;
-            List<Element> intermediateCAElList = request.getPathElementList(new String [] {"comm_cert", "intermediateCA"});
+            List<Element> intermediateCAElList = request.getPathElementList(
+                    new String [] {CertMgrConstants.E_comm_cert,
+                            CertMgrConstants.E_intermediateCA});
             if (intermediateCAElList != null && intermediateCAElList.size() > 0) {
                 for (int i=0; i < intermediateCAElList.size(); i ++ ) {
                     Element intemediateCAEl = intermediateCAElList.get(i);
-                    attachId = intemediateCAEl.getAttribute(AID) ;
-                    filename = intemediateCAEl.getAttribute("filename") ;
+                    attachId = intemediateCAEl.getAttribute(AdminConstants.A_ATTACHMENT_ID) ;
+                    filename = intemediateCAEl.getAttribute(CertMgrConstants.A_FILENAME) ;
                     
                     if (attachId != null && filename != null) {
                         ZimbraLog.security.debug("Certificate Filename  = " + filename + "; attid = " + attachId );

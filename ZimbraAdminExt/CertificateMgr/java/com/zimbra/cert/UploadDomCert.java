@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.soap.CertMgrConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.common.util.ZimbraLog;
@@ -22,7 +23,7 @@ public class UploadDomCert extends AdminDocumentHandler {
 
    	public Element handle(Element request, Map<String, Object> context) throws ServiceException {
    		ZimbraSoapContext lc = getZimbraSoapContext(context);
-        Element response = lc.createElement(ZimbraCertMgrService.UPLOAD_DOMCERT_RESPONSE);
+        Element response = lc.createElement(CertMgrConstants.UPLOAD_DOMCERT_RESPONSE);
 
         String attachId = null;
         String filename = null;

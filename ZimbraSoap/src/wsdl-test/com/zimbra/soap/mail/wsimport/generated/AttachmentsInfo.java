@@ -49,8 +49,8 @@ public class AttachmentsInfo {
     @XmlElements({
         @XmlElement(name = "mp", type = MimePartAttachSpec.class),
         @XmlElement(name = "doc", type = DocAttachSpec.class),
-        @XmlElement(name = "cn", type = ContactAttachSpec.class),
-        @XmlElement(name = "m", type = MsgAttachSpec.class)
+        @XmlElement(name = "m", type = MsgAttachSpec.class),
+        @XmlElement(name = "cn", type = ContactAttachSpec.class)
     })
     protected List<AttachSpec> mpOrMOrCn;
     @XmlAnyElement
@@ -78,8 +78,8 @@ public class AttachmentsInfo {
      * Objects of the following type(s) are allowed in the list
      * {@link MimePartAttachSpec }
      * {@link DocAttachSpec }
-     * {@link ContactAttachSpec }
      * {@link MsgAttachSpec }
+     * {@link ContactAttachSpec }
      * 
      * 
      */

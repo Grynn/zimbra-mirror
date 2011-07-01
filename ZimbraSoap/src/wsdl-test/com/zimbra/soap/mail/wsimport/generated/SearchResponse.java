@@ -68,17 +68,17 @@ import javax.xml.bind.annotation.XmlType;
 public class SearchResponse {
 
     @XmlElements({
-        @XmlElement(name = "doc", type = DocumentHitInfo.class),
-        @XmlElement(name = "w", type = WikiHitInfo.class),
+        @XmlElement(name = "c", type = ConversationHitInfo.class),
         @XmlElement(name = "task", type = TaskHitInfo.class),
-        @XmlElement(name = "chat", type = ChatHitInfo.class),
         @XmlElement(name = "appt", type = AppointmentHitInfo.class),
         @XmlElement(name = "note", type = NoteHitInfo.class),
-        @XmlElement(name = "c", type = ConversationHitInfo.class),
-        @XmlElement(name = "cn", type = ContactInfo.class),
         @XmlElement(name = "mp", type = MessagePartHitInfo.class),
         @XmlElement(name = "m", type = MessageHitInfo.class),
-        @XmlElement(name = "hit", type = SimpleSearchHit.class)
+        @XmlElement(name = "hit", type = SimpleSearchHit.class),
+        @XmlElement(name = "doc", type = DocumentHitInfo.class),
+        @XmlElement(name = "w", type = WikiHitInfo.class),
+        @XmlElement(name = "cn", type = ContactInfo.class),
+        @XmlElement(name = "chat", type = ChatHitInfo.class)
     })
     protected List<Object> hitOrCOrM;
     protected SearchResponse.Info info;
@@ -109,17 +109,17 @@ public class SearchResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link DocumentHitInfo }
-     * {@link WikiHitInfo }
+     * {@link ConversationHitInfo }
      * {@link TaskHitInfo }
-     * {@link ChatHitInfo }
      * {@link AppointmentHitInfo }
      * {@link NoteHitInfo }
-     * {@link ConversationHitInfo }
-     * {@link ContactInfo }
      * {@link MessagePartHitInfo }
      * {@link MessageHitInfo }
      * {@link SimpleSearchHit }
+     * {@link DocumentHitInfo }
+     * {@link WikiHitInfo }
+     * {@link ContactInfo }
+     * {@link ChatHitInfo }
      * 
      * 
      */
@@ -280,8 +280,8 @@ public class SearchResponse {
     public static class Info {
 
         @XmlElements({
-            @XmlElement(name = "spell", type = SpellingSuggestionsQueryInfo.class),
-            @XmlElement(name = "wildcard", type = WildcardExpansionQueryInfo.class)
+            @XmlElement(name = "wildcard", type = WildcardExpansionQueryInfo.class),
+            @XmlElement(name = "spell", type = SpellingSuggestionsQueryInfo.class)
         })
         protected List<Object> spellOrWildcard;
 
@@ -303,8 +303,8 @@ public class SearchResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link SpellingSuggestionsQueryInfo }
          * {@link WildcardExpansionQueryInfo }
+         * {@link SpellingSuggestionsQueryInfo }
          * 
          * 
          */

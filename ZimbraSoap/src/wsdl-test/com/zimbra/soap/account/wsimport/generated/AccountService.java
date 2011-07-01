@@ -51,6 +51,18 @@ public interface AccountService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.CheckLicenseResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/CheckLicense")
+    @WebResult(name = "CheckLicenseResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public CheckLicenseResponse checkLicenseRequest(
+        @WebParam(name = "CheckLicenseRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        CheckLicenseRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.account.wsimport.generated.CreateIdentityResponse
      */
     @WebMethod(action = "urn:zimbraAccount/CreateIdentity")

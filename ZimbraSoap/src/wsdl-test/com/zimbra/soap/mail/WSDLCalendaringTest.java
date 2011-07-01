@@ -16,16 +16,18 @@ package com.zimbra.soap.mail;
 
 import java.util.List;
 
-import com.google.common.collect.Lists;
 import com.sun.xml.ws.developer.WSBindingProvider;
 import com.zimbra.soap.Utility;
 import com.zimbra.soap.mail.wsimport.generated.CalEcho;
 import com.zimbra.soap.mail.wsimport.generated.CalOrganizer;
+import com.zimbra.soap.mail.wsimport.generated.CalendarAttendee;
 import com.zimbra.soap.mail.wsimport.generated.CalendarItemMsg;
-import com.zimbra.soap.mail.wsimport.generated.Content;
+import com.zimbra.soap.mail.wsimport.generated.CreateAppointmentRequest;
+import com.zimbra.soap.mail.wsimport.generated.CreateAppointmentResponse;
 import com.zimbra.soap.mail.wsimport.generated.CreateTaskRequest;
 import com.zimbra.soap.mail.wsimport.generated.CreateTaskResponse;
-import com.zimbra.soap.mail.wsimport.generated.ImportContact;
+import com.zimbra.soap.mail.wsimport.generated.DtTimeInfo;
+import com.zimbra.soap.mail.wsimport.generated.EmailAddrInfo;
 import com.zimbra.soap.mail.wsimport.generated.InvitationInfo;
 import com.zimbra.soap.mail.wsimport.generated.InviteAsMP;
 import com.zimbra.soap.mail.wsimport.generated.InviteComponent;
@@ -46,6 +48,7 @@ public class WSDLCalendaringTest {
 
     private final static String testAcctDomain = "wsdl.cal.example.test";
     private final static String testAcct = "wsdl1@" + testAcctDomain;
+    private final static String testAcct2 = "wsdl2@" + testAcctDomain;
 
     @BeforeClass
     public static void init() throws Exception {
@@ -59,6 +62,7 @@ public class WSDLCalendaringTest {
         // one-time cleanup code
         try {
             Utility.deleteAccountIfExists(testAcct);
+            Utility.deleteAccountIfExists(testAcct2);
             Utility.deleteDomainIfExists(testAcctDomain);
         } catch (Exception ex) {
             System.err.println("Exception " + ex.toString() + 
@@ -72,6 +76,72 @@ public class WSDLCalendaringTest {
 
     @After
     public void tearDown() throws Exception {
+    }
+
+    @Test
+    public void createAppointment() throws Exception {
+        Utility.ensureAccountExists(testAcct);
+        Utility.ensureAccountExists(testAcct2);
+        CreateAppointmentRequest req = new CreateAppointmentRequest();
+        CalendarItemMsg msg = new CalendarItemMsg();
+        msg.setL("15");
+        msg.setSu("WSDL Appointment 1");
+        InvitationInfo invite = new InvitationInfo();
+        InviteComponent inviteComp = new InviteComponent();
+        inviteComp.setFb("B");
+        inviteComp.setRsvp(true);
+        inviteComp.setMethod("REQUEST");
+        inviteComp.setLoc("Mars");
+        // TODO inviteComp.setType("event");
+        inviteComp.setName("WSDL Appointment 1");
+        inviteComp.setAllDay(false);
+        inviteComp.setTransp("O");
+        CalendarAttendee attendee = new CalendarAttendee();
+        attendee.setRsvp(true);
+        attendee.setA(testAcct2);
+        attendee.setRole("OPT");
+        attendee.setPtst("NE");
+        inviteComp.getAt().add(attendee);
+        DtTimeInfo start = new DtTimeInfo();
+        start.setD("20320627T075906");
+        inviteComp.setS(start);
+        DtTimeInfo end = new DtTimeInfo();
+        end.setD("20320627T085959");
+        inviteComp.setE(end);
+        CalOrganizer org = new CalOrganizer();
+        org.setA(testAcct);
+        org.setD("wsdl1");
+        inviteComp.setOr(org);
+        invite.setComp(inviteComp);
+        msg.setInv(invite);
+        EmailAddrInfo emailAddr = new EmailAddrInfo();
+        emailAddr.setT("t");
+        emailAddr.setA(testAcct2);
+        msg.getE().add(emailAddr);
+        MimePartInfo mp = new MimePartInfo();
+        mp.setCt("multipart/alternative");
+        MimePartInfo mpPlain = new MimePartInfo();
+        mpPlain.setCt("text/plain");
+        mpPlain.setContent("Body of the Appointment");
+        mp.getMp().add(mpPlain);
+        MimePartInfo mpHtml = new MimePartInfo();
+        mpHtml.setCt("text/html");
+        mpHtml.setContent("<html><body><b>Body</b> of the Appointment</body></html>");
+        mp.getMp().add(mpHtml);
+        msg.setMp(mp);
+        req.setM(msg);
+        req.setEcho(true);
+        Utility.addSoapAcctAuthHeaderForAcct((WSBindingProvider)mailSvcEIF,
+                testAcct);
+        CreateAppointmentResponse resp = mailSvcEIF.createAppointmentRequest(req);
+        Assert.assertNotNull("CreateAppointmentResponse object", resp);
+        Assert.assertTrue("revision", resp.getRev() >= 0);
+        Assert.assertTrue("ms", resp.getMs() >= 0);
+        Assert.assertNotNull("CreateAppointmentResponse invId", resp.getInvId());
+        Assert.assertNotNull("CreateAppointmentResponse calItemId",
+                resp.getCalItemId());
+        CalEcho echo = resp.getEcho();
+        Assert.assertNotNull("CreateAppointmentResponse echo object", echo);
     }
 
     @Test

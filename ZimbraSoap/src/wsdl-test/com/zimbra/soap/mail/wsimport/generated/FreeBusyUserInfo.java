@@ -45,10 +45,10 @@ public class FreeBusyUserInfo {
 
     @XmlElements({
         @XmlElement(name = "f", type = FreeBusyFREEslot.class),
-        @XmlElement(name = "t", type = FreeBusyBUSYTENTATIVEslot.class),
-        @XmlElement(name = "n", type = FreeBusyNODATAslot.class),
+        @XmlElement(name = "b", type = FreeBusyBUSYslot.class),
         @XmlElement(name = "u", type = FreeBusyBUSYUNAVAILABLEslot.class),
-        @XmlElement(name = "b", type = FreeBusyBUSYslot.class)
+        @XmlElement(name = "n", type = FreeBusyNODATAslot.class),
+        @XmlElement(name = "t", type = FreeBusyBUSYTENTATIVEslot.class)
     })
     protected List<FreeBusySlot> fOrBOrT;
     @XmlAttribute(required = true)
@@ -73,10 +73,10 @@ public class FreeBusyUserInfo {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link FreeBusyFREEslot }
-     * {@link FreeBusyBUSYTENTATIVEslot }
-     * {@link FreeBusyNODATAslot }
-     * {@link FreeBusyBUSYUNAVAILABLEslot }
      * {@link FreeBusyBUSYslot }
+     * {@link FreeBusyBUSYUNAVAILABLEslot }
+     * {@link FreeBusyNODATAslot }
+     * {@link FreeBusyBUSYTENTATIVEslot }
      * 
      * 
      */
