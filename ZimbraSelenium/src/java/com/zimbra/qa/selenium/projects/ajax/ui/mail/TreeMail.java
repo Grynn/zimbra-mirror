@@ -242,7 +242,7 @@ public class TreeMail extends AbsTree {
 
 			GeneralUtility.waitForElementPresent(this, actionLocator);
 			// actionLocator= Locators.zTagsHeader;
-			this.zRightClick(actionLocator);
+			this.zRightClickAt(actionLocator,"");
 
 			page = new DialogTag(MyApplication,
 			      ((AppAjaxClient) MyApplication).zPageMail);
@@ -253,7 +253,8 @@ public class TreeMail extends AbsTree {
 		}
 		if (option == Button.B_TREE_NEWTAG) {
 
-			optionLocator = "//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgNewTag')]";
+			//optionLocator = "//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgNewTag')]";
+			optionLocator="//div[contains(@id,'POPUP_DWT') and contains(@class,'ZHasSubMenu')]//tbody/tr[@id='POPUP_NEW_TAG']";
 
 		} else if (option == Button.B_DELETE) {
 
@@ -280,7 +281,7 @@ public class TreeMail extends AbsTree {
 			throw new HarnessException("locator is null for option " + option);
 
 		// Default behavior. Click the locator
-		zClick(optionLocator);
+		zClickAt(optionLocator,"");
 
 		// If there is a busy overlay, wait for that to finish
 		this.zWaitForBusyOverlay();
@@ -322,7 +323,7 @@ public class TreeMail extends AbsTree {
 			}
 
 			// Select the folder
-			this.zRightClick(locator);
+			this.zRightClickAt(locator,"");
 
 			// return a context menu
 			return (new ContextMenu(MyApplication));
@@ -367,7 +368,7 @@ public class TreeMail extends AbsTree {
 
 
 		// Default behavior.  Click the locator
-		zClick(locator);
+		zClickAt(locator,"");
 
 		// If there is a busy overlay, wait for that to finish
 		this.zWaitForBusyOverlay();
@@ -406,7 +407,7 @@ public class TreeMail extends AbsTree {
 		locator = "css=td#zti__main_Mail__"+ savedSearch.getId() + "_textCell";
 
 		// Default behavior.  Click the locator
-		zClick(locator);
+		zClickAt(locator,"");
 
 		// If the app is busy, wait until it is ready again
 		this.zWaitForBusyOverlay();

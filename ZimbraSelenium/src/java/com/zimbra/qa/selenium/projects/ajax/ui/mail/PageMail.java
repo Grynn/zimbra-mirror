@@ -1164,7 +1164,7 @@ public class PageMail extends AbsTab {
 		if ( action == Action.A_RIGHTCLICK ) {
 
 			// Right-Click on the item
-			this.zRightClick(itemlocator);
+			this.zRightClickAt(itemlocator,"");
 
 			// Now the ContextMenu is opened
 			// Click on the specified option
@@ -1201,9 +1201,12 @@ public class PageMail extends AbsTab {
 			} else if ( option == Button.O_MARK_AS_READ ) {
 
 				if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-					optionLocator = "zmi__TV__MARK_READ_title";
+					//optionLocator = "zmi__TV__MARK_READ_title";
+					
+					optionLocator="css=td[id^='zmi__TV__MARK_READ__']";
 				} else {
-					optionLocator = "zmi__CLV__MARK_READ_title";
+					//optionLocator = "zmi__CLV__MARK_READ_title";
+					optionLocator="css=td[id^='zmi__CLV__MARK_READ__']";
 				}
 
 				page = null;
@@ -1213,9 +1216,11 @@ public class PageMail extends AbsTab {
 			} else if ( option == Button.O_MARK_AS_UNREAD ) {
 
 				if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-					optionLocator = "zmi__TV__MARK_UNREAD_title";
+					//optionLocator = "zmi__TV__MARK_UNREAD_title";
+					optionLocator="css=td[id^='zmi__TV__MARK_UNREAD__']";
 				} else {
-					optionLocator = "zmi__CLV__MARK_UNREAD_title";
+					//optionLocator = "zmi__CLV__MARK_UNREAD_title";
+					optionLocator="css=td[id^='zmi__CLV__MARK_UNREAD__']";
 				}
 
 				page = null;
@@ -1229,7 +1234,7 @@ public class PageMail extends AbsTab {
 			}
 
 			// click on the option
-			this.zClick(optionLocator);
+			this.zClickAt(optionLocator,"");
 
 			this.zWaitForBusyOverlay();
 
