@@ -441,7 +441,7 @@ WebExZimlet.prototype._createOrUpdateMeeting = function(params) {
 	}
 	newParams["subject"] = appt.name;
 	newParams["loc"] = AjxStringUtil.urlComponentEncode(appt.location);
-	newParams["emails"] = appt.getAttendees(ZmCalBaseItem.PERSON);
+	newParams["emails"] = params["emails"] = appt.getAttendees(ZmCalBaseItem.PERSON);
 	newParams["duration"] = (appt.endDate.getTime() - appt.startDate.getTime()) / 60000;
 	newParams["timeZoneID"] = WebExZimlet.WebExToZimbraTZIDMap[appt.timezone];
 	newParams["pwd"] = this._currentWebExAccount[WebExZimlet.PROP_MEETING_PASSWORD.propId];
@@ -566,6 +566,43 @@ WebExZimlet.prototype._getDayInWeekStr = function(repeatWeeklyDays, appt) {
  * Create create or modify WebEx meeting request.
  *
  * @param {hash} params	a hash of parameters
+ * @params {string} params.emails meeting invitees
+ * @params {string} params.meetingkey meeting key (aka sessionkey)
+ */
+WebExZimlet.prototype._getRegisterAttendeesRequest = function(params) {
+	var emails = params.emails;
+	var sessionKey = params.meetingKey;
+	var emls = [];
+
+	var j = 0;
+	for (var i = 0; i < emails.length; i++) {
+		var a = emails[i];
+		var e = a.getEmail ? a.getEmail() : (a.getAddress ? a.getAddress() : "");
+		if (e == "" || e == undefined) {
+			continue;
+		}
+		var fn = a.getFullName ? a.getFullName() : (a.getDispName ? a.getDispName() : "");
+		emls[j++] = ["<attendees><person><email>",e, "</email>"].join("");
+
+		if (fn != "" && fn != undefined) {
+			emls[j++] = ["<name>", fn, "</name>"].join("");
+		}
+		emls[j++] = "</person>";
+		emls[j++] = ["<sessionKey>",sessionKey,"</sessionKey>"].join("");
+		emls[j++] = "</attendees>";
+	}
+	var requestBody = [
+		"<bodyContent xsi:type=\"java:com.webex.service.binding.attendee.RegisterMeetingAttendee\">",
+		 emls.join(""),
+		"</bodyContent>"].join("");
+
+	return this.newWebExRequest(requestBody);
+};
+
+/**
+ * Create create or modify WebEx meeting request.
+ *
+ * @param {hash} params	a hash of parameters
  * @param {string} params.subject meeting subject
  * @param {string} params.loc meeting location
  * @param {string} params.emails meeting invitees
@@ -587,21 +624,25 @@ WebExZimlet.prototype._getCreateOrModifyMeetingRequest = function(params) {
 	var duration = params.duration;
 	var timeZoneID = params.timeZoneID;
 	var recurrence = params.recurrence ? params.recurrence : "";
+	var sendWebExEmail = params.sendWebExEmail;
 	var emls = [];
-	var j = 0;
-	for (var i = 0; i < emails.length; i++) {
-		var a = emails[i];
-		var e = a.getEmail ? a.getEmail() : (a.getAddress ? a.getAddress() : "");
-		if (e == "" || e == undefined) {
-			continue;
-		}
-		var fn = a.getFullName ? a.getFullName() : (a.getDispName ? a.getDispName() : "");
-		emls[j++] = ["<attendee><person><email>",e, "</email>"].join("");
+	//only for oneclickMeetings, add attendees right-away
+	if(sendWebExEmail) {
+		var j = 0;
+		for (var i = 0; i < emails.length; i++) {
+			var a = emails[i];
+			var e = a.getEmail ? a.getEmail() : (a.getAddress ? a.getAddress() : "");
+			if (e == "" || e == undefined) {
+				continue;
+			}
+			var fn = a.getFullName ? a.getFullName() : (a.getDispName ? a.getDispName() : "");
+			emls[j++] = ["<attendee><person><email>",e, "</email>"].join("");
 
-		if (fn != "" && fn != undefined) {
-			emls[j++] = ["<name>", fn, "</name>"].join("");
+			if (fn != "" && fn != undefined) {
+				emls[j++] = ["<name>", fn, "</name>"].join("");
+			}
+			emls[j++] = "</person></attendee>";
 		}
-		emls[j++] = "</person></attendee>";
 	}
 	var altHosts = this._currentWebExAccount.WebExZimlet_altHosts;
 	//use altHosts set in the selectAccnt dlg
@@ -644,7 +685,7 @@ WebExZimlet.prototype._getCreateOrModifyMeetingRequest = function(params) {
 	}
 	var sendWebExEmailStr = "";
 	//if(params.sendWebExEmail) { //used for one-click meetings
-		 sendWebExEmailStr = "<attendeeOptions><emailInvitations>TRUE</emailInvitations></attendeeOptions>";
+		 sendWebExEmailStr = "<attendeeOptions><emailInvitations>TRUE</emailInvitations><auto>TRUE</auto></attendeeOptions>";
 	//}
 	var requestBody = [
 		"<bodyContent xsi:type=\"",apiType,"\">",
@@ -692,6 +733,18 @@ WebExZimlet.prototype._createOrUpdateMeetingResponseHdlr = function(params, resu
 		this.displayErrorMessage(this.getMessage("WebExZimlet_webExDidntReturnMeetingKey"), this.getMessage("WebExZimlet_webExError"));
 		return;
 	}
+	var emails = params.emails;
+	if(emails && (emails instanceof Array) && emails.length > 0) {
+		//register attendees.
+		var request = this._getRegisterAttendeesRequest({emails: params.emails, meetingKey: meetingKey})
+		var result = AjxRpc.invoke(request, this.postUri(), {"Content-Type":"text/xml"}, null, false, false);
+		var objResult = this.xmlToObject(result);
+		if (!this._validateWebExResult(objResult, this.getMessage("WebExZimlet_couldNotRegisterAttendees"))) {
+			return;
+		}
+	}
+
+	//get join meeting url..
 	var requestBody = ["<bodyContent xsi:type=\"java:com.webex.service.binding.meeting.GetjoinurlMeeting\">",
 		"<meetingKey>", meetingKey, "</meetingKey>","</bodyContent>"].join("");
 
@@ -984,10 +1037,10 @@ WebExZimlet.prototype._formatDate = function(d) {
  */
 WebExZimlet.prototype.postUri = function(securityParams) {
 	var companyId = securityParams ? securityParams.companyId : this._currentWebExAccount[WebExZimlet.PROP_COMPANY_ID.propId];
-	return this.getResource("httpPost.jsp")+"?companyId="+companyId;
+	//return this.getResource("httpPost.jsp")+"?companyId="+companyId;
 
-	//return ZmZimletBase.PROXY +
-	//	   AjxStringUtil.urlComponentEncode(["https://", companyId, ".webex.com/WBXService/XMLService"].join(""));
+	return ZmZimletBase.PROXY +
+		   AjxStringUtil.urlComponentEncode(["https://", companyId, ".webex.com/WBXService/XMLService"].join(""));
 };
 
 /**
