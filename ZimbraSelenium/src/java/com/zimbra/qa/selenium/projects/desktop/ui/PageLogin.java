@@ -164,9 +164,11 @@ public class PageLogin extends AbsTab {
 	 * @throws HarnessException
 	 */
 	public void zRemoveAccount() throws HarnessException {
+	   sRefresh();
+	   GeneralUtility.waitForElementPresent(this, Locators.zDeleteButton);
 	   String attribute = sGetAttribute(Locators.zDeleteButton + "@href");
 	   ((AppAjaxClient)MyApplication).zDeleteDesktopAccount(attribute.split("'")[3], attribute.split("'")[1],
-      "Zimbra", "Zimbra", true);
+	         attribute.split("'")[7], attribute.split("'")[7], true);
 
 	   Object[] params = {Locators.zDeleteButton};
       GeneralUtility.waitFor(null, this, false, "sIsElementPresent",
@@ -176,15 +178,19 @@ public class PageLogin extends AbsTab {
 	/**
     * Removing account from login page
     * @throws HarnessException
+    * @return The confirmation message content
     */
-   public void zRemoveAccountThroughClick() throws HarnessException {
+   public String zRemoveAccountThroughClick() throws HarnessException {
       sClick(Locators.zDeleteButton);
 
-      logger.debug("Selenium Confirmation: " + this.sGetConfirmation());
+      String confirmationMessage = this.sGetConfirmation();
+      logger.debug("Selenium Confirmation: " + confirmationMessage);
 
       Object[] params = {Locators.zDeleteButton};
       GeneralUtility.waitFor(null, this, false, "sIsElementPresent",
             params, WAIT_FOR_OPERAND.NEQ, true, 30000, 1000);
+
+      return confirmationMessage;
    }
 
    /**

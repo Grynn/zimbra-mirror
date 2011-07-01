@@ -49,7 +49,11 @@ public class DeleteAccount extends AjaxCommonTest {
       accountForm.zFill(desktopAccountItem);
       accountForm.zSubmit();
 
-      app.zPageLogin.zRemoveAccountThroughClick();
+      String confirmationMessage = app.zPageLogin.zRemoveAccountThroughClick();
+
+      ZAssert.assertEquals(confirmationMessage,
+            "Account settings and downloaded data will be deleted. Data on the server will not be affected. OK to proceed?",
+            "Verifying delete confirmation message");
 
       String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
 
@@ -79,7 +83,11 @@ public class DeleteAccount extends AjaxCommonTest {
       accountForm.zFill(desktopAccountItem);
       accountForm.zSubmit();
 
-      app.zPageLogin.zRemoveAccountThroughClick();
+      String confirmationMessage = app.zPageLogin.zRemoveAccountThroughClick();
+
+      ZAssert.assertEquals(confirmationMessage,
+            "Account settings and downloaded data will be deleted. Data on the server will not be affected. OK to proceed?",
+            "Verifying delete confirmation message");
 
       String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
 
@@ -94,7 +102,6 @@ public class DeleteAccount extends AjaxCommonTest {
 
    @Test(description="Delete the Zimbra account from ZD Client through clicking Delete Button", groups = { "smoke" })
    public void deleteZimbraAccountThruClick() throws HarnessException {
-      // TODO: Please remove this once issue in Mac is fixed.
       DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopZimbraAccountItem(
             ZimbraAccount.AccountZWC().EmailAddress,
             ZimbraAccount.AccountZWC().Password,
@@ -105,7 +112,105 @@ public class DeleteAccount extends AjaxCommonTest {
       accountForm.zFill(desktopAccountItem);
       accountForm.zSubmit();
 
-      app.zPageLogin.zRemoveAccountThroughClick();
+      String confirmationMessage = app.zPageLogin.zRemoveAccountThroughClick();
+
+      ZAssert.assertEquals(confirmationMessage,
+            "Account settings and downloaded data will be deleted. Data on the server will not be affected. OK to proceed?",
+            "Verifying delete confirmation message");
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
+   @Test(description="Delete the Yahoo! account from ZD Client through HTTP Post", groups = { "functional" })
+   public void deleteYahooAccountThruHttpPost() throws HarnessException {
+      // TODO: Please remove this once issue in Mac is fixed.
+      if (OperatingSystem.getOSType() == OsType.MAC) {
+         throw new HarnessException(
+               "Fail due to bug 61517, also refers to helpzilla ticket #811085");
+      }
+      String userName = ZimbraSeleniumProperties.getStringProperty("desktop.yahoo.login");
+      String password = ZimbraSeleniumProperties.getStringProperty("desktop.yahoo.password");
+
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopYahooAccountItem(
+            userName, password);
+
+      FormAddYahooAccount accountForm = (FormAddYahooAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.YAHOO);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zSubmit();
+
+      app.zPageLogin.zLogin(new ZimbraAccount(userName, password));
+      app.zPageLogin.zNavigateTo();
+      
+      app.zPageLogin.zRemoveAccount();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
+   @Test(description="Delete the Gmail account from ZD Client through HTTP Post", groups = { "functional" })
+   public void deleteGmailAccountThruHttpPost() throws HarnessException {
+      // TODO: Please remove this once issue in Mac is fixed.
+      if (OperatingSystem.getOSType() == OsType.MAC) {
+         throw new HarnessException(
+               "Fail due to bug 61517, also refers to helpzilla ticket #811085");
+      }
+      String userName = ZimbraSeleniumProperties.getStringProperty("desktop.gmail.login");
+      String password = ZimbraSeleniumProperties.getStringProperty("desktop.gmail.password");
+
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopGmailAccountItem(
+            userName, password);
+
+      FormAddGmailAccount accountForm = (FormAddGmailAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.GMAIL);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zSubmit();
+
+      app.zPageLogin.zLogin(new ZimbraAccount(userName, password));
+      app.zPageLogin.zNavigateTo();
+
+      app.zPageLogin.zRemoveAccount();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
+   @Test(description="Delete the Zimbra account from ZD Client through HTTP Post", groups = { "functional" })
+   public void deleteZimbraAccountThruHttpPost() throws HarnessException {
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopZimbraAccountItem(
+            ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().Password,
+            ZimbraSeleniumProperties.getStringProperty("server.port", "80"),
+            false);
+
+      FormAddZimbraAccount accountForm = (FormAddZimbraAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.ZIMBRA);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zSubmit();
+
+      app.zPageLogin.zLogin(ZimbraAccount.AccountZWC());
+      app.zPageLogin.zNavigateTo();
+
+      app.zPageLogin.zRemoveAccount();
 
       String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
 
