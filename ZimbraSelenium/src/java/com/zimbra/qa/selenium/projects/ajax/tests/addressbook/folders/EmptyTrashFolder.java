@@ -111,9 +111,12 @@ public class EmptyTrashFolder extends AjaxCommonTest {
 		dialogWarning.zClickButton(Button.B_OK);
 		
         //verify Trash folder is empty
-        List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
- 	           	
-        ZAssert.assertTrue((contacts.size()==0), "Verify Trash folder empty");        
+        List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();  	           	
+        ZAssert.assertTrue((contacts.size()==0), "Verify no contact and group in Trash folder ");   
+        
+        List<FolderItem> list= app.zPageAddressbook.zListGetFolders(app.zGetActiveAccount(),  trash);
+        ZAssert.assertTrue((list.size()==0), "Verify no folder in Trash folder");   
+        
 		
 	}
 	@Test(	description = "Cancel Empty Trash folder option",
