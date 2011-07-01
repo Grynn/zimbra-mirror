@@ -96,7 +96,7 @@ public class MoveTask extends AjaxCommonTest {
 			}
 		}
 
-		ZAssert.assertNull(found,"Verify the  task no longer  present in the task list");
+		ZAssert.assertNull(found,"Verify the  task no longer  present in the task list http://bugzilla.zimbra.com/show_bug.cgi?id=61471");
 
 		// click on subfolder in tree view
 		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, subFolder);
@@ -112,7 +112,7 @@ public class MoveTask extends AjaxCommonTest {
 				break;
 			}
 		}
-		ZAssert.assertNotNull(movetask,	"Verify the task is moved to the selected folder");
+		ZAssert.assertNotNull(movetask,	"Verify the task is moved to the selected folder http://bugzilla.zimbra.com/show_bug.cgi?id=61471");
 	}
 
 	@AfterMethod(groups = { "always" })
