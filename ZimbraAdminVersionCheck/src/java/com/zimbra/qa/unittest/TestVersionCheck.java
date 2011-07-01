@@ -39,7 +39,7 @@ public class TestVersionCheck extends TestCase {
         this.versionCheckURL = config.getAttr(Provisioning.A_zimbraVersionCheckURL);
         this.lastResponse = config.getAttr(Provisioning.A_zimbraVersionCheckLastResponse);
         Map<String, String> attrs = new HashMap<String, String>();
-        attrs.put(Provisioning.A_zimbraVersionCheckURL, "http://localhost:7070/zimbra/testversion.xml");
+        attrs.put(Provisioning.A_zimbraVersionCheckURL, "http://localhost/zimbra/testversion.xml");
         prov.modifyAttrs(config, attrs, true);
         generateTestVersionXML();
     }
@@ -128,7 +128,7 @@ public class TestVersionCheck extends TestCase {
     public void testSOAP() throws Exception {
         LmcSession session = TestUtil.getAdminSoapSession();
         LmcVersionCheckRequest checkRequest = new LmcVersionCheckRequest();
-        checkRequest.setAction(AdminConstants.VERSION_CHECK_CHECK);//this should retreive the new version from http://localhost:7070/zimbra/test/testversion.xml
+        checkRequest.setAction(AdminConstants.VERSION_CHECK_CHECK);//this should retreive the new version from http://localhost/zimbra/test/testversion.xml
         checkRequest.setSession(session);
         String url = TestUtil.getAdminSoapUrl();
         LmcVersionCheckResponse resp = (LmcVersionCheckResponse) checkRequest.invoke(url);
@@ -184,7 +184,7 @@ public class TestVersionCheck extends TestCase {
 
     public void testCheckVersion() throws Exception {
         //the idea is to test retreiving an XML and putting it into LDAP
-        VersionCheck.checkVersion(); //this should retreive the new version from http://localhost:7070/zimbra/test/testversion.xml
+        VersionCheck.checkVersion(); //this should retreive the new version from http://localhost/zimbra/test/testversion.xml
         Provisioning prov = Provisioning.getInstance();
         Config config;
         config = prov.getConfig();
