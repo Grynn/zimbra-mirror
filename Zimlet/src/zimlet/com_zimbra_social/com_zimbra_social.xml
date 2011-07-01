@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_social" version="3.0" label="${msg.label}" description="${msg.description}">
+<zimlet name="com_zimbra_social" version="3.1" label="${msg.label}" description="${msg.description}">
     <include>socialTwitter.js</include>
     <include>socialFacebook.js</include>
     <include>socialTweetMeme.js</include>
@@ -10,7 +10,7 @@
     <include>SocialcastAddAccountDlg.js</include>
     <include>socialcast.js</include>
     <include>base64.js</include>
-    <include>json-minified.js</include>
+    <include>json2.js</include>
     <include>templates/Social.template.js</include>
     <include>templates/OAuth.template.js</include>
 
