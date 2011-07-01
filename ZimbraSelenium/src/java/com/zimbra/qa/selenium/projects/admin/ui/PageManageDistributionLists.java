@@ -86,7 +86,7 @@ public class PageManageDistributionLists extends AbsTab {
 		}
 
 		// Click on Addresses -> DL
-		zClick(Locators.zti_DISTRIBUTION_LIST);
+		zClickAt(Locators.zti_DISTRIBUTION_LIST,"");
 
 		zWaitForActive();
 
@@ -152,7 +152,7 @@ public class PageManageDistributionLists extends AbsTab {
 
 		// Default behavior, process the locator by clicking on it
 		//
-		this.zClick(locator);
+		this.zClickAt(locator,"");
 
 		// If page was specified, make sure it is active
 		if ( form != null ) {
@@ -222,7 +222,7 @@ public class PageManageDistributionLists extends AbsTab {
 					throw new HarnessException("Button " + pulldown + " option " + option + " optionLocator " + optionLocator + " not present!");
 				}
 
-				this.zClick(optionLocator);
+				this.zClickAt(optionLocator,"");
 				SleepUtil.sleepMedium();
 
 				// If the app is busy, wait for it to become active

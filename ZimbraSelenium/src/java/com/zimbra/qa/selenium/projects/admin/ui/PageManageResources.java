@@ -10,7 +10,6 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.projects.admin.ui.PageManageDistributionLists.Locators;
 
 
 /**
@@ -87,7 +86,7 @@ public class PageManageResources extends AbsTab {
 		}
 
 		// Click on Addresses -> Resources
-		zClick(Locators.zti_RESOURCES);
+		zClickAt(Locators.zti_RESOURCES,"");
 
 		zWaitForActive();
 
@@ -153,7 +152,7 @@ public class PageManageResources extends AbsTab {
 
 		// Default behavior, process the locator by clicking on it
 		//
-		this.zClick(locator);
+		this.zClickAt(locator,"");
 
 		// If page was specified, make sure it is active
 		if ( page != null ) {
@@ -212,7 +211,7 @@ public class PageManageResources extends AbsTab {
 				throw new HarnessException("Button " + pulldown + " option " + option + " pulldownLocator " + pulldownLocator + " not present!");
 			}
 
-			this.zClick(pulldownLocator);
+			this.zClickAt(pulldownLocator,"");
 
 			// If the app is busy, wait for it to become active
 			//zWaitForBusyOverlay();
@@ -224,7 +223,7 @@ public class PageManageResources extends AbsTab {
 					throw new HarnessException("Button " + pulldown + " option " + option + " optionLocator " + optionLocator + " not present!");
 				}
 
-				this.zClick(optionLocator);
+				this.zClickAt(optionLocator,"");
 
 				// If the app is busy, wait for it to become active
 				//zWaitForBusyOverlay();

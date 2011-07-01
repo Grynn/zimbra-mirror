@@ -10,7 +10,6 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.projects.admin.ui.PageManageAccounts.Locators;
 
 
 /**
@@ -77,7 +76,7 @@ public class PageManageDomains extends AbsTab {
 		}
 
 		// Click on Addresses -> Accounts
-		zClick(Locators.zti__DOMAINS);
+		zClickAt(Locators.zti__DOMAINS,"");
 
 		zWaitForActive();
 
@@ -142,7 +141,7 @@ public class PageManageDomains extends AbsTab {
 
 		// Default behavior, process the locator by clicking on it
 		//
-		this.zClick(locator);
+		this.zClickAt(locator,"");
 		
 		
 

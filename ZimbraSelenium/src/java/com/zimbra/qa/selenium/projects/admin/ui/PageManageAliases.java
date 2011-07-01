@@ -27,7 +27,7 @@ public class PageManageAliases extends AbsTab {
 		public static final String ztab__MANAGE_ALIAS_ICON = "css=tr#ztab__MAIN_TAB_row div.ImgAccountAlias";
 		public static final String zb_NEW = "xpath=//*[@id='zb__ACLV__NEW_MENU_title']";		// New Button
 		public static final String zdd_NEW_MENU="css=td#zb__ACLV__NEW_MENU_dropdown div.ImgSelectPullDownArrow";
-
+		
 		// NEW Menu
 		// TODO: define these locators
 		public static final String zmi_ALAIS = "zmi__ACLV__NEW_ALIAS"; // New --> Alias
@@ -85,7 +85,7 @@ public class PageManageAliases extends AbsTab {
 		}
 
 		// Click on Addresses -> Aliases
-		zClick(Locators.zti_ALIASES);
+		zClickAt(Locators.zti_ALIASES,"");
 
 		zWaitForActive();
 
@@ -150,7 +150,7 @@ public class PageManageAliases extends AbsTab {
 
 		// Default behavior, process the locator by clicking on it
 		//
-		this.zClick(locator);
+		this.zClickAt(locator,"");
 
 		// If page was specified, make sure it is active
 		if ( page != null ) {
@@ -207,7 +207,7 @@ public class PageManageAliases extends AbsTab {
 				throw new HarnessException("Button " + pulldown + " option " + option + " pulldownLocator " + pulldownLocator + " not present!");
 			}
 
-			this.zClick(pulldownLocator);
+			this.zClickAt(pulldownLocator,"");
 
 			// If the app is busy, wait for it to become active
 			//zWaitForBusyOverlay();
@@ -219,7 +219,7 @@ public class PageManageAliases extends AbsTab {
 					throw new HarnessException("Button " + pulldown + " option " + option + " optionLocator " + optionLocator + " not present!");
 				}
 
-				this.zClick(optionLocator);
+				this.zClickAt(optionLocator,"");
 
 				// If the app is busy, wait for it to become active
 				//zWaitForBusyOverlay();

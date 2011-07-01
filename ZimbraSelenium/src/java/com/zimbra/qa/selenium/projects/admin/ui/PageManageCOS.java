@@ -77,7 +77,7 @@ public class PageManageCOS extends AbsTab {
 		}
 
 		// Click on Addresses -> COS
-		zClick(Locators.zti_COS);
+		zClickAt(Locators.zti_COS,"");
 
 		zWaitForActive();
 
@@ -143,7 +143,7 @@ public class PageManageCOS extends AbsTab {
 
 		// Default behavior, process the locator by clicking on it
 		//
-		this.zClick(locator);
+		this.zClickAt(locator,"");
 
 		// If page was specified, make sure it is active
 		if ( page != null ) {

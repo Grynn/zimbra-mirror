@@ -111,7 +111,7 @@ public class PageManageAccounts extends AbsTab {
 		}
 
 		// Click on Addresses -> Accounts
-		zClick(Locators.zti__ACCOUNTS);
+		zClickAt(Locators.zti__ACCOUNTS,"");
 
 		zWaitForActive();
 
@@ -176,7 +176,7 @@ public class PageManageAccounts extends AbsTab {
 
 		// Default behavior, process the locator by clicking on it
 		//
-		this.zClick(locator);
+		this.zClickAt(locator,"");
 		
 		
 
@@ -237,7 +237,7 @@ public class PageManageAccounts extends AbsTab {
 				throw new HarnessException("Button " + pulldown + " option " + option + " pulldownLocator " + pulldownLocator + " not present!");
 			}
 
-			this.zClick(pulldownLocator);
+			this.zClickAt(pulldownLocator,"");
 
 			// If the app is busy, wait for it to become active
 			//zWaitForBusyOverlay();
@@ -249,7 +249,7 @@ public class PageManageAccounts extends AbsTab {
 					throw new HarnessException("Button " + pulldown + " option " + option + " optionLocator " + optionLocator + " not present!");
 				}
 
-				this.zClick(optionLocator);
+				this.zClickAt(optionLocator,"");
 
 				// If the app is busy, wait for it to become active
 				//zWaitForBusyOverlay();
