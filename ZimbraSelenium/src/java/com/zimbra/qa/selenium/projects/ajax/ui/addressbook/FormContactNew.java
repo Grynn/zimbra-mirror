@@ -244,7 +244,7 @@ public class FormContactNew extends AbsForm {
 			return (false); // Not even present
 		}
 		
-		if ( !this.zIsVisiblePerPosition(locator, 0, 0) ) {
+		if ( !this.zIsVisiblePerPosition("id=editcontactform", 0, 0) ) {
 			return (false);	// Not visible per position
 		}
 	
