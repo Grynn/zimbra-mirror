@@ -288,13 +288,12 @@ public class PageAddressbook extends AbsTab {
 		   page = new FormMailNew(MyApplication);	
 		   
 	    } else if ( button == Button.B_CANCEL) {
- 	    	String id ="zb__CN__CANCEL";
-		   
-		    if (sIsElementPresent("css=div[id=" + id + "][class*=ZDisabledImage]")) {
-				throw new HarnessException("Tried clicking on "+ id +" but it was disabled ");
+ 	    	//String id ="dizb__CN__CANCEL";
+ 	    	locator = "css=div[id^=zb__CN][id$=__CANCEL]" ;
+		    if (zIsElementDisabled(locator)) {
+				throw new HarnessException("Tried clicking on "+ locator +" but it was disabled ");
 		    }
-
-		    locator = "id="+ id;
+		    
 			page = new DialogWarning(DialogWarning.DialogWarningID.CancelCreateContact, this.MyApplication, ((AppAjaxClient)this.MyApplication).zPageAddressbook);
 
 	    } else if (isAlphabetButton(button))
@@ -831,8 +830,6 @@ public class PageAddressbook extends AbsTab {
 		if ( action == Action.A_RIGHTCLICK ) {
 			ContextMenuItem cmi=null;
 								
-		    zRightClickAt(contactLocator,"0,0");
-		    
 		
 			if (option == Button.B_DELETE){
                 cmi=CONTEXT_MENU.CONTACT_DELETE;				
@@ -845,6 +842,8 @@ public class PageAddressbook extends AbsTab {
 			else if (option == Button.B_EDIT) {
 				cmi=CONTEXT_MENU.CONTACT_EDIT;				 
 				page = newFormSelected();	
+				// select the item only
+				zClickAt(contactLocator,"0,0");			    
 			}
 
 			else if (option == Button.B_NEW) {
@@ -867,6 +866,9 @@ public class PageAddressbook extends AbsTab {
 			else {
 				throw new HarnessException("option " + option + " not supported");
 			}
+			
+		    zRightClickAt(contactLocator,"0,0");
+		    
 			
 			id = cmi.locator;
 			locator = "id="+ id;
