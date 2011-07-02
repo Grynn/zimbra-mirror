@@ -96,7 +96,7 @@ import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.store.Blob;
 import com.zimbra.cs.store.StoreManager;
-import com.zimbra.cs.util.AccountUtil;
+import com.zimbra.cs.util.AccountUtil.AccountAddressMatcher;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.soap.ZimbraSoapContext;
 
@@ -679,7 +679,8 @@ public class InitialSync {
         else
             req.addAttribute(MailConstants.A_CAL_NO_NEXT_ALARM, true);
 
-           // for each <inv>
+        AccountAddressMatcher acctMatcher = new AccountAddressMatcher(account);
+        // for each <inv>
         for (Iterator<Element> iter = resp.elementIterator(MailConstants.E_INVITE); iter.hasNext();) {
             Element inv = iter.next();
             Element comp = inv.getElement(MailConstants.E_INVITE_COMPONENT);
@@ -717,7 +718,7 @@ public class InitialSync {
             HIT: {
                 for (Iterator<Element> i = comp.elementIterator(MailConstants.E_CAL_ATTENDEE); i.hasNext();) {
                     ZAttendee attendee = ZAttendee.parse(i.next());
-                    if (AccountUtil.addressMatchesAccount(account, attendee.getAddress())) {
+                    if (acctMatcher.matches(attendee.getAddress())) {
                         newInv.addAttribute(MailConstants.A_CAL_PARTSTAT, attendee.getPartStat());
                         break HIT;
                     }
