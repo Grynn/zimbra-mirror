@@ -10,7 +10,6 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.Toaster;
@@ -30,10 +29,7 @@ public class EditContact extends AjaxCommonTest  {
 		
 	}
 	
-	@Test(	description = "Edit a contact item",
-			groups = { "smoke"})
-	public void EditContact_01() throws HarnessException {
-		
+	private ContactItem CreateSelectContactItem() throws HarnessException {
 		 // Create a contact 
 		ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
  
@@ -55,14 +51,13 @@ public class EditContact extends AjaxCommonTest  {
 
         // Select the contact
         app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contactItem.fileAs);
-		
-		//Click Edit contact	
-        FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zToolbarPressButton(Button.B_EDIT);
-	    SleepUtil.sleepSmall();
-	        
-		ContactItem newContact = ContactItem.generateContactItem(GenerateItemType.Basic);
-							
-		
+
+		return contactItem;
+	}
+	
+	private void EditAndVerify(FormContactNew formContactNew, ContactItem contactItem, ContactItem newContact) 
+	     throws HarnessException
+	   {
 		//clear the form, 
 		formContactNew.zReset();
 		
@@ -105,6 +100,36 @@ public class EditContact extends AjaxCommonTest  {
       
         	    
 	}
+	
+	@Test(	description = "Edit a contact item, click Edit on toolbar",
+			groups = { "smoke"})
+	public void ClickToolbarEdit() throws HarnessException {
+		ContactItem contactItem = CreateSelectContactItem();
+				
+		//Click Edit contact	
+        FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zToolbarPressButton(Button.B_EDIT);
+	        
+        //generate the new contact
+		ContactItem newContact = ContactItem.generateContactItem(GenerateItemType.Basic);
+						
+		EditAndVerify(formContactNew, contactItem, newContact);		
+	}
 
+	
+	@Test(	description = "Edit a contact item, Right click then click Edit",
+			groups = { "smoke" })
+	public void ClickContextMenuEdit() throws HarnessException {
+		ContactItem contactItem = CreateSelectContactItem();
+		
+		//Click Edit contact	
+        FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_EDIT, contactItem.fileAs);        
+	  	        		
+		//generate the new contact
+		ContactItem newContact = ContactItem.generateContactItem(GenerateItemType.Basic);
+						
+		EditAndVerify(formContactNew, contactItem, newContact);
+        	             
+       }
+	
 }
 

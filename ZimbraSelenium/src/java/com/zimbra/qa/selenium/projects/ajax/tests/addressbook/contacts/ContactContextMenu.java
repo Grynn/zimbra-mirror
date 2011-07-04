@@ -108,61 +108,7 @@ public class ContactContextMenu extends AjaxCommonTest  {
    	}
 	
 
-	
-	@Test(	description = "Right click then click Edit",
-			groups = { "smoke" })
-	public void Edit() throws HarnessException {
-		
-		ContactItem contactItem = createSelectARandomContactItem();
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		//Click Edit contact	
-        FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_EDIT, contactItem.fileAs);        
-	  	        
-		ContactItem newContact = ContactItem.generateContactItem(GenerateItemType.Basic);							
-		
-		//clear the form, 
-		formContactNew.zReset();
-		
-        // Fill in the form
-	    formContactNew.zFill(newContact);
-	    
-		// Save the contact
-        formContactNew.zSubmit();
-		
-        
-        //verify toasted message Contact Saved
-        Toaster toast = app.zPageMain.zGetToaster();
-        String toastMsg = toast.zGetToastMessage();
-        GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-        ZAssert.assertStringContains(toastMsg, "Contact Saved", "Verify toast message 'Contact Saved'");
 
-        //verify new contact item is displayed
-        List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();   
- 	           
-		boolean isFileAsEqual=false;
-		for (ContactItem ci : contacts) {
-			if (ci.fileAs.equals(newContact.fileAs)) {
-	            isFileAsEqual = true;	 
-				break;
-			}
-		}
-		
-        ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") existed ");
-
-        
-		//verify old contact not displayed
-    	isFileAsEqual=false;
-		for (ContactItem ci : contacts) {
-			if (ci.fileAs.equals(contactItem.fileAs)) {
-	            isFileAsEqual = true;	 
-				break;
-			}
-		}
-		
-        ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") deleted");      
-        	             
-       }
-	
 	@Test(	description = "Right click then click New Email",
 			groups = { "smoke" })
 	public void NewEmail() throws HarnessException {

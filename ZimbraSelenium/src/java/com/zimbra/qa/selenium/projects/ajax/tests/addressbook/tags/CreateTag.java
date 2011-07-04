@@ -50,7 +50,9 @@ public class CreateTag extends AjaxCommonTest {
 	@Test(	description = "Create a new tag using keyboard shortcuts nt",
 			groups = { "functional" })
 	public void ClickShortcutnt() throws HarnessException {
-								
+				
+		//move cursor off the search field
+		app.zPageAddressbook.zClick("css=div#zv__CNS");
 		
 		DialogTag dialog = (DialogTag)app.zPageAddressbook.zKeyboardShortcut(Shortcut.S_NEWTAG);
 		ZAssert.assertNotNull(dialog, "Verify the new dialog opened");
