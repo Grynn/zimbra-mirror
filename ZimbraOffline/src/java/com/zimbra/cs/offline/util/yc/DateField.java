@@ -20,9 +20,9 @@ import com.zimbra.cs.offline.util.Xml;
 import com.zimbra.cs.offline.util.yc.Fields.Type;
 
 public abstract class DateField extends FieldValue {
-    private String day;
-    private String month;
-    private String year;
+    private String day = "";
+    private String month = "";
+    private String year = "";
 
     private static final String DAY = "day";
     private static final String MONTH = "month";
@@ -31,10 +31,13 @@ public abstract class DateField extends FieldValue {
     public DateField() {}
     
     public DateField(String date) {
-        String[] ymd = date.split("-");
-        this.year = ymd[0];
-        this.month = ymd[1];
-        this.day = ymd[2];
+        try {
+            String[] ymd = date.split("-");
+            this.year = ymd[0];
+            this.month = ymd[1];
+            this.day = ymd[2];    
+        } catch (Exception e) {
+        }
     }
 
     public void extractFromXml(Element e) {
@@ -51,9 +54,13 @@ public abstract class DateField extends FieldValue {
 
     @Override
     public String toString() {
-        int monthValue = Integer.parseInt(month);
-        int dayValue = Integer.parseInt(day);
-        return String.format("%s-%02d-%02d", year, monthValue, dayValue);
+        try {
+            int monthValue = Integer.parseInt(month);
+            int dayValue = Integer.parseInt(day);
+            return String.format("%s-%02d-%02d", year, monthValue, dayValue);    
+        } catch (NumberFormatException e) {
+            return "";
+        }
     }
 
     @Override
