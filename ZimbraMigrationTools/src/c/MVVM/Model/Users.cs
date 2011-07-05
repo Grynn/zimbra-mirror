@@ -50,7 +50,8 @@ namespace MVVM.Model
         {
             Type t = typeof(T);
             System.Reflection.FieldInfo[] fields = t.GetFields();
-            string header = String.Join(separator, fields.Select(f => f.Name).ToArray());
+            
+            string header = String.Join(separator + "#" , fields.Select(f => f.Name).ToArray());
             StringBuilder csvdata = new StringBuilder();
             csvdata.AppendLine(header);
             foreach (var o in objectlist)

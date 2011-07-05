@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using MVVM.Model;
 using Misc;
 using CssLib;
@@ -142,9 +143,11 @@ namespace MVVM.ViewModel
                             string[] strres = new string[parsedData.Count];
                             Users tempuser = new Users();
 
-                            for (int j = 1; j < parsedData.Count; j++)
+                            for (int j = 0; j < parsedData.Count; j++)
                             {
                                 strres = parsedData[j];
+                                if (strres.Contains("#"))
+                                    continue;
                                
                                 tempuser.UserName = strres[0];
                                 tempuser.MappedName = strres[1];
@@ -336,22 +339,33 @@ namespace MVVM.ViewModel
         private void SaveDomain()
         {
 
-            ZimbraDomain = DomainList[CurrentDomainSelection];
-            if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
-            {
-                UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "UserProvision");
-            }
 
-            else
+            try
             {
-                System.Xml.Serialization.XmlSerializer writer =
-                new System.Xml.Serialization.XmlSerializer(typeof(Config));
 
-                System.IO.StreamWriter file = new System.IO.StreamWriter(
-                    @"C:\Temp\ZimbraAdminOverView.xml");
-                writer.Serialize(file, m_config);
-                file.Close();
+                ZimbraDomain = DomainList[CurrentDomainSelection];
+                if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
+                {
+                    UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "UserProvision");
+                }
+
+                else
+                {
+                    System.Xml.Serialization.XmlSerializer writer =
+                    new System.Xml.Serialization.XmlSerializer(typeof(Config));
+
+                    System.IO.StreamWriter file = new System.IO.StreamWriter(
+                        @"C:\Temp\ZimbraAdminOverView.xml");
+                    writer.Serialize(file, m_config);
+                    file.Close();
+                }
             }
+            catch (ArgumentOutOfRangeException e)
+            {
+                string message = "CurrentDomainSelection " + e.Message;
+                MessageBox.Show(message, "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            
         }
         ////////////////////////
 
