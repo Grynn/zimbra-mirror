@@ -231,11 +231,21 @@ SearchHighlighterZimlet.prototype.addMenuButton = function(controller, menu) {
  */
 SearchHighlighterZimlet.prototype._clearSearchWordHighlights = function(controller) {
 	var msgBody;
-	var bodyEl = appCtxt.getAppViewMgr().getCurrentView().getItemView().getHtmlBodyElement();
+	var currentView = appCtxt.getAppViewMgr().getCurrentView();
+	var view;
+	if(currentView.getItemView) {
+		view = currentView.getItemView();
+	} else if(currentView.getMsgView) {
+		view = currentView.getMsgView();
+	}
+	if(!view) {
+		return;
+	}
+	var bodyEl = view.getHtmlBodyElement();
 	if (bodyEl) {
 		msgBody = bodyEl.ownerDocument;
 	} else {
-		var elId = appCtxt.getAppViewMgr().getCurrentView().getItemView().getHTMLElId();
+		var elId = view.getHTMLElId();
 		if (elId) {
 			var doc = document.getElementById(elId + "_body__iframe");
 			if (!AjxEnv.isIE) {
@@ -255,11 +265,11 @@ SearchHighlighterZimlet.prototype._clearSearchWordHighlights = function(controll
 		if (msgBody != undefined || msgBody != null) {
 			bodyObj = msgBody.getElementById(this._spanIds[i]);
 		}
-		if ((obj != undefined) && (obj.style != undefined)) {
-			obj.style.backgroundColor = "";
+		if ((obj != undefined) && (obj.className != undefined)) {
+			obj.className = "";
 		}
-		if ((bodyObj != undefined) && (bodyObj.style != undefined)) {
-			bodyObj.style.backgroundColor = "";
+		if ((bodyObj != undefined) && (bodyObj.className != undefined)) {
+			bodyObj.className = "";
 		}
 	}
 	this._spanIds = [];//reset
