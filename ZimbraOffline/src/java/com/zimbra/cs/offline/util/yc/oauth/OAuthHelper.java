@@ -30,19 +30,10 @@ import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.apache.log4j.BasicConfigurator;
-
 import com.google.gdata.client.authn.oauth.OAuthUtil;
 import com.google.gdata.util.common.util.Base64;
-import com.zimbra.common.util.Log;
-import com.zimbra.cs.offline.OfflineLog;
 
 public class OAuthHelper {
-
-    static {
-        BasicConfigurator.configure();
-        OfflineLog.yab.setLevel(Log.Level.debug);
-    }
 
     private static final String UTF_8 = "UTF-8";
     private static final String PREAMBLE = "OAuth ";
