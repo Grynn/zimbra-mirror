@@ -21,8 +21,10 @@ import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -53,9 +55,11 @@ public class SyncExceptionHandler extends IOExceptionHandler {
     private static final String DOCUMENT_SYNC_FAILED = "document sync failed";
 
     private static ConcurrentMap<Mailbox, List<SyncFailure>> ioExceptions = new ConcurrentHashMap<Mailbox, List<SyncFailure>>();
+    private static ConcurrentMap<Mailbox, Map<Long,Integer>> recurringFailureCount = new ConcurrentHashMap<Mailbox, Map<Long,Integer>>();
     
     private static int MAX_IO_EXCEPTIONS = OfflineLC.zdesktop_sync_io_exception_limit.intValue();
     private static int FAILURE_RATE_THRESHOLD = OfflineLC.zdesktop_sync_io_exception_rate.intValue();
+    private static int MAX_ITEM_EXCEPTIONS = OfflineLC.zdesktop_sync_item_io_exception_limit.intValue();
     
     public static void clearIOExceptions(Mailbox mbox) {
         ioExceptions.put(mbox, new ArrayList<SyncFailure>());
@@ -67,10 +71,27 @@ public class SyncExceptionHandler extends IOExceptionHandler {
      * @throws ServiceException - If the failure rate is exceeded
      */
     public static void checkIOExceptionRate(SyncMailbox mbox) throws ServiceException {
+        checkIOExceptionRate(mbox, mbox.getSyncCount());
+    }
+    
+    /**
+     * Check if the accumulated IOExceptions outweigh the successful syncs
+     * If there are any failures an error report is created
+     * @throws ServiceException - If the failure rate is exceeded
+     */
+    public static void checkIOExceptionRate(DesktopMailbox mbox, int syncCount) throws ServiceException {
         List<SyncFailure> failures = ioExceptions.get(mbox);
-        if (failures.size() > 0) {
-            double failureRate = mbox.getSyncCount() > 0 ? (failures.size()*1.0)/(mbox.getSyncCount()*1.0) : 1.0;
+        int newFailures = countNewFailures(mbox, failures);
+        int permanentFailures = failures.size() - newFailures;
+        if (newFailures > 0) {
+            double failureRate = (syncCount-permanentFailures) > 0 ? (newFailures*1.0)/((syncCount-permanentFailures)*1.0) : 1.0;
             boolean abortSync = failureRate * 100 >= FAILURE_RATE_THRESHOLD; 
+            //if any of the exceptions are below threshold we have to abort
+            if (!abortSync) {
+                abortSync = !arePermanentFailures(mbox, failures);
+                OfflineLog.offline.warn("Aborting sync due to one or more new IOExceptions");
+            }
+            OfflineLog.offline.warn("Creating failure report rate:%.0f%% abort? %s",failureRate*100, abortSync);
             createIOExceptionErrorReport(mbox, !abortSync);
             clearIOExceptions(mbox);
             if (abortSync) {
@@ -126,6 +147,54 @@ public class SyncExceptionHandler extends IOExceptionHandler {
         return false;
     }
     
+    private static int countNewFailures(DesktopMailbox mbox, List<SyncFailure> failures) {
+        int activeFailureSize = failures.size(); //subtract out permanent failures
+        for (SyncFailure failure : failures) {
+            if (isPermanentFailure(mbox, failure.getItemId())) {
+                activeFailureSize--;
+            }
+        }
+        return activeFailureSize;
+    }
+
+    private static boolean isPermanentFailure(DesktopMailbox mbox, long itemId) {
+        Map<Long,Integer> recur = recurringFailureCount.get(mbox);
+        if (recur == null) {
+            return false; //no recurring failures so far for this mbox
+        }
+        Integer failCount = recur.get(itemId);
+        return failCount == null ? false : failCount >= MAX_ITEM_EXCEPTIONS;
+    }
+    
+    private static boolean arePermanentFailures(DesktopMailbox mbox, List<SyncFailure> failures) {
+        Map<Long,Integer> recur = recurringFailureCount.get(mbox);
+        if (recur == null) {
+            return false; //no recurring failures so far for this mbox
+        }
+        for (SyncFailure failure : failures) {
+            Integer failCount = recur.get(failure.getItemId());
+            if (failCount == null || failCount < MAX_ITEM_EXCEPTIONS) {
+                return false;
+            }
+        }
+        //checked all; all are >= limit so it's a permanent failure
+        return true;
+    }
+    
+    private static void addRecurrence(DesktopMailbox mbox, long itemId) {
+        Map<Long,Integer> recur = recurringFailureCount.get(mbox);
+        if (recur == null) {
+            recur = new HashMap<Long, Integer>();
+            recurringFailureCount.put(mbox,recur);
+        }
+        Integer recurCount = recur.get(itemId);
+        if (recurCount == null) {
+            recurCount = new Integer(0);
+        }
+        recurCount++;
+        recur.put(itemId, recurCount);
+    }
+    
     /**
      * Process an IOException. The exception is accumulated so it can be reported later. 
      * @throws ServiceException - If the accumulated exceptions exceed the maximum allowable
@@ -133,9 +202,16 @@ public class SyncExceptionHandler extends IOExceptionHandler {
     public static void handleIOException(DesktopMailbox mbox, long itemId, String message, Exception exception) throws ServiceException {
         //lets see if we have reached IOException threshold
         List<SyncFailure> failures = ioExceptions.get(mbox);
+        if (failures == null) {
+            failures = new ArrayList<SyncFailure>();
+            ioExceptions.put(mbox, failures);
+        }
+        addRecurrence(mbox, itemId);
         failures.add(new SyncFailure(itemId,exception,message));
-        if (failures.size() >= MAX_IO_EXCEPTIONS) {
+        int numNewFailures = countNewFailures(mbox, failures);
+        if (numNewFailures >= MAX_IO_EXCEPTIONS) {
             //dump all of the failures to a single error report then throw failure
+            OfflineLog.offline.warn("Aborting sync due to %d new IOExceptions",numNewFailures);
             String failureMessage = "Multiple IOExceptions for mailbox "+mbox;
             createIOExceptionErrorReport(mbox, false);
             clearIOExceptions(mbox);

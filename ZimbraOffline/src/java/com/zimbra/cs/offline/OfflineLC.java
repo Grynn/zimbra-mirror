@@ -123,6 +123,7 @@ public class OfflineLC {
 
     public static final KnownKey zdesktop_backup_dir;
     public static final KnownKey zdesktop_sync_io_exception_limit;
+    public static final KnownKey zdesktop_sync_item_io_exception_limit;
     public static final KnownKey zdesktop_sync_io_exception_rate;
     
     static void init() {
@@ -408,6 +409,8 @@ public class OfflineLC {
         
         //number of io exceptions in a single sync which triggers abort
         zdesktop_sync_io_exception_limit = new KnownKey("zdesktop_sync_io_exception_limit", "10");
+        //number of io exceptions for a given item before it is considered 'bad' and skipped
+        zdesktop_sync_item_io_exception_limit = new KnownKey("zdesktop_sync_item_io_exception_limit", "3");
         //percentage of io exceptions/total items synced which triggers abort
         zdesktop_sync_io_exception_rate = new KnownKey("zdesktop_sync_io_exception_rate", "50");
     }
