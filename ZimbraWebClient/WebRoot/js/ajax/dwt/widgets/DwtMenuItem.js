@@ -344,7 +344,7 @@ function(event) {
 	else if (this.isStyle(DwtMenuItem.PUSH_STYLE)) {
 		if (this._menu) {
 			if (this._isMenuPoppedUp()) {
-				DwtMenu.closeActiveMenu();
+				DwtMenu.closeActiveMenu(event);
 			}
 			else {
 				this._popupMenu();
@@ -354,7 +354,7 @@ function(event) {
 	}
 	if (!this.isStyle(DwtMenuItem.CASCADE_STYLE)) {
 		if (this._selectableWithSubmenu || !this._menu || !this._menu.isPoppedUp || !this._menu.isPoppedUp()) {
-			DwtMenu.closeActiveMenu();
+			DwtMenu.closeActiveMenu(event);
 		}
 	}
 };

@@ -367,7 +367,7 @@ function(msec, x, y, kbGenerated) {
 };
 
 DwtMenu.prototype.popdown =
-function(msec) {
+function(msec, ev) {
 	if (this._style == DwtMenu.BAR_STYLE) return;
 
 	if (this._popupActionId != -1) {
@@ -377,7 +377,7 @@ function(msec) {
 		if (!this._isPoppedUp || this._popdownActionId != -1)
 			return;
 		if (msec == null || msec == 0)
-			this._doPopdown();
+			this._doPopdown(ev);
 		else
 			this._popdownActionId = AjxTimedAction.scheduleAction(this._popdownAction, msec);
 	}
@@ -1156,7 +1156,7 @@ function(incScroll) {
 };
 
 DwtMenu.prototype._doPopdown =
-function() {
+function(ev) {
 	// Notify all sub menus to pop themselves down
 	var a = this._children.getArray();
 	var s = this._children.size();
@@ -1167,7 +1167,8 @@ function() {
 	}
 	this.setZIndex(Dwt.Z_HIDDEN);
 	this.setLocation(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
-	
+	this._ev = ev;
+
 	this.notifyListeners(DwtEvent.POPDOWN, this);
 
 	var omem = DwtOutsideMouseEventMgr.INSTANCE;
@@ -1261,7 +1262,7 @@ function(ev) {
 
 		// If we've gotten here, the mousedown happened outside the active
 		// menu, so we hide it.
-		menu.popdown();
+		menu.popdown(0, ev);
 		
 		//it should remove all the active menus 
 		var cMenu = null ;
@@ -1289,8 +1290,8 @@ function() {
 };
 
 DwtMenu.closeActiveMenu =
-function() {
+function(ev) {
 	if (DwtMenu._activeMenuUp) {
-		DwtMenu._activeMenu.popdown();
+		DwtMenu._activeMenu.popdown(0, ev);
 	}
 };
