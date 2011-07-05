@@ -47,6 +47,9 @@ public class ContactGroupItem extends ContactItem implements IItem {
 
 			String domain = "@zimbra.com";
 			String groupName =  "group_" + ZimbraSeleniumProperties.getUniqueString();
+			//group name with length > 20 is automatically shorten
+			groupName = groupName.substring(0,20);
+			
 	        String emailAddress1 = "email_" + ZimbraSeleniumProperties.getUniqueString() + domain;
 	        String emailAddress2 = "email_" +  ZimbraSeleniumProperties.getUniqueString() + domain;
 	        String emailAddress3 = "email_" +  ZimbraSeleniumProperties.getUniqueString() + domain;
@@ -133,7 +136,7 @@ public class ContactGroupItem extends ContactItem implements IItem {
 		throw new HarnessException("implement me!");
 	}
 
-	public static ContactGroupItem createUsingSOAP(AbsApplication app, String ... tagIdArray ) throws HarnessException {
+	public static ContactGroupItem createUsingSOAP(AbsApplication app,  String ... tagIdArray ) throws HarnessException {
 		
 			String tagParam ="";
 			if (tagIdArray.length == 1) {

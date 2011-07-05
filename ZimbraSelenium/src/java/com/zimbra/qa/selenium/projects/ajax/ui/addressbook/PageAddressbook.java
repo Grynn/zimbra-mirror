@@ -1,7 +1,5 @@
 package  com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 
-import java.awt.Robot;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +17,7 @@ import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
 
 import com.zimbra.qa.selenium.framework.ui.*;
+
 import com.zimbra.qa.selenium.framework.util.*;
 
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
@@ -500,7 +499,7 @@ public class PageAddressbook extends AbsTab {
 
 			//central coordinate "x,y" 
 			String center= sGetElementWidth(pulldownLocator)/2 + "," + sGetElementHeight(pulldownLocator)/2;
-			if (ClientSessionFactory.session().currentBrowserName().contains("MSIE")) {
+			if ( this.zIsBrowserMatch(BrowserMasks.BrowserMaskIE)){
 				//IE							
 				sClickAt(pulldownLocator,center);
 			}

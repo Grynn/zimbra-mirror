@@ -85,7 +85,7 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		SimpleFormContactGroupNew simpleFormGroup = (SimpleFormContactGroupNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_CONTACTGROUP, Button.O_NEW_CONTACTGROUP , contactItem.fileAs);     
 		
 		  //Create contact group 
-		ContactGroupItem group = new ContactGroupItem("group_" + ZimbraSeleniumProperties.getUniqueString());
+		ContactGroupItem group = new ContactGroupItem("group_" + ZimbraSeleniumProperties.getUniqueString().substring(8));
 		group.addDListMember(contactItem.email);
 	
 		//verification
@@ -196,7 +196,7 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		SimpleFormContactGroupNew simpleFormGroup = (SimpleFormContactGroupNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_CONTACTGROUP, Button.O_NEW_CONTACTGROUP , contactItem2.fileAs);     
 		
 		  //Create contact group 
-		ContactGroupItem group = new ContactGroupItem("group_" + ZimbraSeleniumProperties.getUniqueString());
+		ContactGroupItem group = new ContactGroupItem("group_" + ZimbraSeleniumProperties.getUniqueString().substring(8));
 		group.addDListMember(contactItem1.email);
 		group.addDListMember(contactItem2.email);
 		group.addDListMember(contactItem3.email);
