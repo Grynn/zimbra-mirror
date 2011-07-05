@@ -225,6 +225,17 @@ CREATE TABLE mobile_devices (
    INDEX i_last_used_date (last_used_date)
 ) ENGINE = InnoDB;
 
+-- Tracks ACLs to be pushed to LDAP
+CREATE TABLE pending_acl_push (
+   mailbox_id  INTEGER UNSIGNED NOT NULL,
+   item_id     INTEGER UNSIGNED NOT NULL,
+   date        BIGINT UNSIGNED NOT NULL,
+
+   PRIMARY KEY (mailbox_id, item_id, date),
+   CONSTRAINT fk_pending_acl_push_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE,
+   INDEX i_date (date)
+) ENGINE = InnoDB;
+
 
 -- -----------------------------------------------------------------------
 -- IM tables (Wildfire code)
