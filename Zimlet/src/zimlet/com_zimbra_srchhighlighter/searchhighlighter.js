@@ -231,11 +231,11 @@ SearchHighlighterZimlet.prototype.addMenuButton = function(controller, menu) {
  */
 SearchHighlighterZimlet.prototype._clearSearchWordHighlights = function(controller) {
 	var msgBody;
-	var bodyEl = appCtxt.getAppViewMgr().getCurrentView().getMsgView().getHtmlBodyElement();
+	var bodyEl = appCtxt.getAppViewMgr().getCurrentView().getItemView().getHtmlBodyElement();
 	if (bodyEl) {
 		msgBody = bodyEl.ownerDocument;
 	} else {
-		var elId = appCtxt.getAppViewMgr().getCurrentView().getMsgView().getHTMLElId();
+		var elId = appCtxt.getAppViewMgr().getCurrentView().getItemView().getHTMLElId();
 		if (elId) {
 			var doc = document.getElementById(elId + "_body__iframe");
 			if (!AjxEnv.isIE) {
