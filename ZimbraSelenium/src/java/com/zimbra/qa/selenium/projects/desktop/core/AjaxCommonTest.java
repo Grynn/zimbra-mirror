@@ -78,13 +78,16 @@ public class AjaxCommonTest {
 	 * The AdminConsole application object
 	 */
 	protected AppAjaxClient app = null;
-
 	protected static OsType osType = null;
    private String _downloadFilePath = null;
    private String[] _executableFilePath = null;
    private String [] _params = null;
    public final static String accountFlavor = "Zimbra";
    public final static String defaultAccountName = ZimbraSeleniumProperties.getUniqueString();
+   public final static String yahooUserName = ZimbraSeleniumProperties.getStringProperty("desktop.yahoo.login");
+   public final static String yahooPassword = ZimbraSeleniumProperties.getStringProperty("desktop.yahoo.password");
+   public final static String gmailUserName = ZimbraSeleniumProperties.getStringProperty("desktop.gmail.login");
+   public final static String gmailPassword = ZimbraSeleniumProperties.getStringProperty("desktop.gmail.password");
 
    // This variable is to track desktop current account, if new account is created
    // then, desktop has to add that newly created account, while removing the
@@ -375,7 +378,7 @@ public class AjaxCommonTest {
                                        .append(connectionPort).append("/")
                                        .append("?at=")
                                        .append(zdp.getSerialNumber()).toString();
-                                       //append("&dev=1&scripterrors=1").toString();
+                                    //append("&dev=1&scripterrors=1").toString();
       logger.debug("Selenium is opening: " + accountUrl);
       logger.debug("Selenium is: " + _selenium);
       _selenium.open(accountUrl);

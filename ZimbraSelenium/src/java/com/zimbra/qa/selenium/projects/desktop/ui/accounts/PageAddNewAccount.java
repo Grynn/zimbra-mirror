@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.desktop.ui.accounts;
 
+import com.zimbra.qa.selenium.framework.items.DesktopAccountItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
@@ -7,6 +8,11 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.OperatingSystem;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
+import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.desktop.ui.PageLogin;
 
@@ -148,4 +154,75 @@ public class PageAddNewAccount extends AbsTab{
       return true;
    }
 
+   /**
+    * Adding Yahoo Account through UI Interaction
+    * @return DestkopAccountItem of added Yahoo account
+    * @throws HarnessException
+    */
+   public DesktopAccountItem zAddYahooAccountThruUI() throws HarnessException {
+      zNavigateTo();
+
+      // TODO: Please remove this once issue in Mac is fixed.
+      if (OperatingSystem.getOSType() == OsType.MAC) {
+         throw new HarnessException(
+               "Fail due to bug 61517, also refers to helpzilla ticket #811085");
+      }
+
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopYahooAccountItem(
+            AjaxCommonTest.yahooUserName, AjaxCommonTest.yahooPassword);
+
+      FormAddYahooAccount accountForm = (FormAddYahooAccount)((AppAjaxClient)MyApplication).
+            zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.YAHOO);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zSubmit();
+
+      return desktopAccountItem;
+   }
+
+   /**
+    * Adding Gmail Account through UI Interaction
+    * @return DestkopAccountItem of added Gmail account
+    * @throws HarnessException
+    */
+   public DesktopAccountItem zAddGmailAccountThruUI() throws HarnessException {
+      zNavigateTo();
+
+      // TODO: Please remove this once issue in Mac is fixed.
+      if (OperatingSystem.getOSType() == OsType.MAC) {
+         throw new HarnessException(
+               "Fail due to bug 61517, also refers to helpzilla ticket #811085");
+      }
+
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopGmailAccountItem(
+            AjaxCommonTest.gmailUserName, AjaxCommonTest.gmailPassword);
+
+      FormAddGmailAccount accountForm = (FormAddGmailAccount)((AppAjaxClient)MyApplication).
+            zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.GMAIL);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zSubmit();
+
+      return desktopAccountItem;
+   }
+
+   /**
+    * Adding Zimbra Account through UI Interaction
+    * @return DestkopAccountItem of added Zimbra account
+    * @throws HarnessException
+    */
+   public DesktopAccountItem zAddZimbraAccountThruUI() throws HarnessException {
+      zNavigateTo();
+
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopZimbraAccountItem(
+            ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().Password,
+            ZimbraSeleniumProperties.getStringProperty("server.port", "80"),
+            false);
+
+      FormAddZimbraAccount accountForm = (FormAddZimbraAccount)((AppAjaxClient)MyApplication).
+            zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.ZIMBRA);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zSubmit();
+
+      return desktopAccountItem;
+   }
 }
