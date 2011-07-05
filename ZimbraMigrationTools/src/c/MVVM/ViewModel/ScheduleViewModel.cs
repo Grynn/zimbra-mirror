@@ -229,11 +229,11 @@ namespace MVVM.ViewModel
                 MessageBoxImage mbi = MessageBoxImage.Information;
                 for (int i = 0; i < SchedList.Count; i++)
                 {
+                    string userName = (usersViewModel.UsersList[i].MappedName.Length > 0) ? usersViewModel.UsersList[i].MappedName : usersViewModel.UsersList[i].Username;
+                    string accountName = userName + "@" + domainName;
                     if (!SchedList[i].isProvisioned)
                     {
                         bProvision = true;
-                        string userName = (usersViewModel.UsersList[i].MappedName.Length > 0) ? usersViewModel.UsersList[i].MappedName : usersViewModel.UsersList[i].Username;
-                        string accountName = userName + "@" + domainName;
                         string cosID = CosList[CurrentCOSSelection].CosID;
                         if (zimbraAPI.CreateAccount(accountName, defaultPWD, cosID) == 0)
                         {
@@ -252,6 +252,13 @@ namespace MVVM.ViewModel
                 {
                     MessageBox.Show(tempMessage, "Zimbra Migration", MessageBoxButton.OK, mbi);
                 }
+
+                // Make sure account name is set
+                string usrName = (usersViewModel.UsersList[0].MappedName.Length > 0) ? usersViewModel.UsersList[0].MappedName : usersViewModel.UsersList[0].Username;
+                string acctName = usrName + "@" + domainName;
+                ZimbraValues.GetZimbraValues().AccountName = acctName;
+                //
+
                 lb.SelectedIndex = 5;
             }
             else

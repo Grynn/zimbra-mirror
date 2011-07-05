@@ -88,6 +88,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WSClient.cs" />
     <Compile Include="ZimbraAPI.cs" />
+    <Compile Include="ZimbraObjects.cs" />
     <Compile Include="ZimbraValues.cs" />
   </ItemGroup>
   <ItemGroup>

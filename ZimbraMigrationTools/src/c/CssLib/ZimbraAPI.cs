@@ -4,45 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using System.IO;
+using System.Reflection;
 
 namespace CssLib
 {
     public class ZimbraAPI
     {
-        // APIs
-        internal const int ZIMBRA_API_LOGONA = 1;
-        internal const int ZIMBRA_API_LOGONU = 2;
-        internal const int ZIMBRA_API_GETINFO = 3;
-        internal const int ZIMBRA_API_GETALLDOMAIN = 4;
-        internal const int ZIMBRA_API_GETDOMAIN = 5;
-        internal const int ZIMBRA_API_GETALLCOS = 6;
-        internal const int ZIMBRA_API_GETACCOUNT = 7;
-        internal const int ZIMBRA_API_CREATEACCOUNT = 8;
-        //
-
         // Errors
         internal const int ACCOUNT_NO_NAME       = 98;
         internal const int ACCOUNT_CREATE_FAILED = 99;
         //
-
-        private string _soapEnvelope =
-          "<soap:Envelope xmlns:soap=\"http://www.w3.org/2003/05/soap-envelope\"><soap:Header></soap:Header><soap:Body></soap:Body></soap:Envelope>";
-
-        private string WebMethod { get; set; }
-
-        private class Attrib
-        {
-            public string Name { get; set; }
-            public string Value { get; set; }
-        }
-
-        private class Parameter
-        {
-            public string Name { get; set; }
-            public string Value { get; set; }
-            public Attrib Attr { get; set; }
-        }
-        private List<Parameter> Parameters { get; set; }
 
         private string lastError;
         public string LastError
@@ -57,97 +28,6 @@ namespace CssLib
         public ZimbraAPI()
         {
             ZimbraValues.GetZimbraValues();
-        }
-
-        // Method for a given soap envelope
-        private string CreateSoapEnvelope(int apiCall)
-        {
-            string hdr = "";
-            string MethodCall = "";
-            string StrParameters = string.Empty;
-
-            switch (apiCall)
-            {
-                case ZimbraAPI.ZIMBRA_API_LOGONA:
-                    hdr = "<context xmlns=\"urn:zimbra\"><nonotify/><noqualify/><nosession/></context>";
-                    MethodCall = "<" + this.WebMethod + @" xmlns=""urn:zimbraAdmin"">";
-                    if (this.Parameters != null)
-                    {
-                        foreach (Parameter param in this.Parameters)
-                        {
-                            StrParameters = StrParameters + "<" + param.Name + ">" + param.Value + "</" + param.Name + ">";
-                        }
-                    }
-                    MethodCall = MethodCall + StrParameters + "</" + this.WebMethod + ">";
-                    break;
-
-                case ZimbraAPI.ZIMBRA_API_LOGONU:
-                    hdr = "<context xmlns=\"urn:zimbra\"><nonotify/><noqualify/><nosession/></context>";
-                    MethodCall = "<" + this.WebMethod + @" xmlns=""urn:zimbraAccount"">";
-                    if (this.Parameters != null)
-                    {
-                        foreach (Parameter param in this.Parameters)
-                        {
-                            if (param.Attr != null)
-                            {
-                                StrParameters = StrParameters + "<" + param.Name + " " + param.Attr.Name + "=" + "\"" + param.Attr.Value + "\">"
-                                                                    + param.Value + "</" + param.Name + ">";
-                            }
-                            else
-                            {
-                                StrParameters = StrParameters + "<" + param.Name + ">" + param.Value + "</" + param.Name + ">";
-                            }
-                        }
-                    }
-                    MethodCall = MethodCall + StrParameters + "</" + this.WebMethod + ">";
-                    break;
-
-                case ZimbraAPI.ZIMBRA_API_GETINFO:
-                    hdr = "<context xmlns=\"urn:zimbra\"><nonotify/><noqualify/><nosession/><sessionId></sessionId><authToken>";
-                    hdr += ZimbraValues.GetZimbraValues().AuthToken;   // set by ParseLogon
-                    hdr += "</authToken></context>";
-                    //MethodCall = "<" + this.WebMethod + @" xmlns=""urn:zimbraAccount""/>";
-                    MethodCall = "<" + this.WebMethod + @" xmlns=""urn:zimbraAccount"" sections=""mbox""/>";
-                    break;
-
-                case ZimbraAPI.ZIMBRA_API_GETALLDOMAIN:
-                case ZimbraAPI.ZIMBRA_API_GETALLCOS:
-                    hdr = "<context xmlns=\"urn:zimbra\"><nonotify/><noqualify/><nosession/><sessionId></sessionId><authToken>";
-                    hdr += ZimbraValues.GetZimbraValues().AuthToken;   // set by ParseLogon
-                    hdr += "</authToken></context>";
-                    MethodCall = "<" + this.WebMethod + @" xmlns=""urn:zimbraAdmin""/>";
-                    break;
-
-                case ZimbraAPI.ZIMBRA_API_GETACCOUNT:
-                case ZimbraAPI.ZIMBRA_API_CREATEACCOUNT:
-                    hdr = "<context xmlns=\"urn:zimbra\"><nonotify/><noqualify/><nosession/><sessionId></sessionId><authToken>";
-                    hdr += ZimbraValues.GetZimbraValues().AuthToken;   // set by ParseLogon
-                    hdr += "</authToken></context>";
-                    MethodCall = "<" + this.WebMethod + @" xmlns=""urn:zimbraAdmin"">";
-                    if (this.Parameters != null)
-                    {
-                        foreach (Parameter param in this.Parameters)
-                        {
-                            if (param.Attr != null)
-                            {
-                                StrParameters = StrParameters + "<" + param.Name + " " + param.Attr.Name + "=" + "\"" + param.Attr.Value + "\">"
-                                                                    + param.Value + "</" + param.Name + ">";
-                            }
-                            else
-                            {
-                                StrParameters = StrParameters + "<" + param.Name + ">" + param.Value + "</" + param.Name + ">";
-                            }
-                        }
-                    }
-                    MethodCall = MethodCall + StrParameters + "</" + this.WebMethod + ">";
-                    break;
-            }
-
-            StringBuilder sb = new StringBuilder(_soapEnvelope);
-
-            sb.Insert(sb.ToString().IndexOf("</soap:Header>"), hdr);
-            sb.Insert(sb.ToString().IndexOf("</soap:Body>"), MethodCall);
-            return sb.ToString();
         }
 
         // Parse Methods //////////////////
@@ -354,34 +234,119 @@ namespace CssLib
         }
         //////////
 
+        // private API helper methods
+
+        // example: <name>foo</name>
+        private void WriteNVPair(XmlWriter writer, string name, string value)
+        {
+            writer.WriteStartElement(name);
+            writer.WriteValue(value);
+            writer.WriteEndElement();
+        }
+
+        // example: <a n="displayName">bar</a>
+        private void WriteAttrNVPair(XmlWriter writer, string fieldType, string fieldName, string attrName, string attrValue)
+        {
+            writer.WriteStartElement(fieldType);
+            writer.WriteStartAttribute(fieldName);
+            writer.WriteString(attrName);
+            writer.WriteEndAttribute();
+            writer.WriteValue(attrValue);
+            writer.WriteEndElement();
+        }
+
+        // example: <account by="name">foo@bar.com</account>
+        private void WriteAccountBy(XmlWriter writer, string val)
+        {
+            WriteAttrNVPair(writer, "account", "by", "name", val);
+        }
+
+        private void WriteHeader(XmlWriter writer, bool bWriteSessionId, bool bWriteAuthtoken, bool bWriteAccountBy)
+        {
+            writer.WriteStartElement("Header", "http://www.w3.org/2003/05/soap-envelope");
+            writer.WriteStartElement("context", "urn:zimbra");
+            writer.WriteStartElement("nonotify");
+            writer.WriteEndElement();   // nonotify
+            writer.WriteStartElement("noqualify");
+            writer.WriteEndElement();   // noqualify
+            writer.WriteStartElement("nosession");
+            writer.WriteEndElement();   // nosession
+            if (bWriteSessionId)
+            {
+                writer.WriteStartElement("sessionId");
+                writer.WriteEndElement();   // sessionId
+            }
+            if (bWriteAuthtoken)
+            {
+                WriteNVPair(writer, "authToken", ZimbraValues.zimbraValues.AuthToken);
+            }
+            if (bWriteAccountBy)    // would only happen after a logon
+            {
+                WriteAccountBy(writer, ZimbraValues.zimbraValues.AccountName);
+            }
+            writer.WriteEndElement();   // context
+            writer.WriteEndElement();   // header
+        }
+        //
+
         // API methods /////////
         public int Logon(string hostname, string port, string username, string password, bool isAdmin)
         {
             lastError = "";
-            string req = "";
-            string rsp = "";
-            WebMethod = "AuthRequest";
-            Parameters = new List<Parameter>();
+            string urn = "";
+
             if (isAdmin)
             {
                 ZimbraValues.GetZimbraValues().Url = "https://" + hostname + ":" + port + "/service/admin/soap";
-                Parameters.Add(new Parameter { Name = "name", Value = username, Attr = null });
+                urn = "urn:zimbraAdmin";
             }
             else
             {
                 ZimbraValues.GetZimbraValues().Url = "http://" + hostname + ":" + port + "/service/soap";
-                Parameters.Add(new Parameter { Name = "account", Value = username, Attr = new Attrib { Name = "by", Value = "name" } });
+                urn = "urn:zimbraAccount"; 
             }
-            Parameters.Add(new Parameter { Name = "password", Value = password, Attr = null });
 
             WebServiceClient client = new WebServiceClient
             {
                 Url = ZimbraValues.GetZimbraValues().Url,
                 WSServiceType = WebServiceClient.ServiceType.Traditional
             };
-            int apiCall = (isAdmin) ? ZIMBRA_API_LOGONA : ZIMBRA_API_LOGONU;
-            req = CreateSoapEnvelope(apiCall);
-            client.InvokeService(req, out rsp);
+
+            StringBuilder sb = new StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.OmitXmlDeclaration = true;
+            using (XmlWriter writer = XmlWriter.Create(sb, settings))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("soap", "Envelope", "http://www.w3.org/2003/05/soap-envelope");
+
+                WriteHeader(writer, false, false, false);
+
+                // body
+                writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
+                writer.WriteStartElement("AuthRequest", urn);
+
+                if (isAdmin)
+                {
+                    WriteNVPair(writer, "name", username);
+                }
+                else
+                {
+                    WriteAccountBy(writer, username);
+                }
+
+                WriteNVPair(writer, "password", password);
+
+                writer.WriteEndElement();   // AuthRequest
+                writer.WriteEndElement();   // soap body
+                // end body
+
+                writer.WriteEndElement();   // soap envelope
+                writer.WriteEndDocument();
+            }
+
+            string rsp = "";
+            client.InvokeService(sb.ToString(), out rsp);
             if (client.status == 0)
             {
                 ParseLogon(rsp, isAdmin);
@@ -405,17 +370,36 @@ namespace CssLib
         public int GetInfo()
         {
             lastError = "";
-            string req = "";
-            string rsp = "";
-            WebMethod = "GetInfoRequest";
-            Parameters = null;
             WebServiceClient client = new WebServiceClient
             {
                 Url = ZimbraValues.GetZimbraValues().Url,
                 WSServiceType = WebServiceClient.ServiceType.Traditional
             };
-            req = CreateSoapEnvelope(ZIMBRA_API_GETINFO);
-            client.InvokeService(req, out rsp);
+
+            StringBuilder sb = new StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.OmitXmlDeclaration = true;
+            using (XmlWriter writer = XmlWriter.Create(sb, settings))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("soap", "Envelope", "http://www.w3.org/2003/05/soap-envelope");
+
+                WriteHeader(writer, true, true, false);
+
+                // body
+                writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
+                writer.WriteStartElement("GetInfoRequest", "urn:zimbraAccount");
+                writer.WriteAttributeString("sections", "mbox");
+                writer.WriteEndElement();   // GetInfoRequest
+                writer.WriteEndElement();   // soap body
+                // end body
+
+                writer.WriteEndElement();   // soap envelope
+                writer.WriteEndDocument();
+            }
+
+            string rsp = "";
+            client.InvokeService(sb.ToString(), out rsp);
             if (client.status == 0)
             {
                 ParseGetInfo(rsp);
@@ -438,16 +422,35 @@ namespace CssLib
         public int GetAllDomains()
         {
             lastError = "";
-            string req = "";
-            string rsp = "";
-            WebMethod = "GetAllDomainsRequest";
             WebServiceClient client = new WebServiceClient
             {
                 Url = ZimbraValues.GetZimbraValues().Url,
                 WSServiceType = WebServiceClient.ServiceType.Traditional
             };
-            req = CreateSoapEnvelope(ZIMBRA_API_GETALLDOMAIN);
-            client.InvokeService(req, out rsp);
+
+            StringBuilder sb = new StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.OmitXmlDeclaration = true;
+            using (XmlWriter writer = XmlWriter.Create(sb, settings))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("soap", "Envelope", "http://www.w3.org/2003/05/soap-envelope");
+
+                WriteHeader(writer, true, true, false);
+
+                // body
+                writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
+                writer.WriteStartElement("GetAllDomainsRequest", "urn:zimbraAdmin");
+                writer.WriteEndElement();   // GetAllDomainsRequest
+                writer.WriteEndElement();   // soap body
+                // end body
+
+                writer.WriteEndElement();   // soap envelope
+                writer.WriteEndDocument();
+            }
+
+            string rsp = "";
+            client.InvokeService(sb.ToString(), out rsp);
             if (client.status == 0)
             {
                 ParseGetAllDomain(rsp);
@@ -470,16 +473,35 @@ namespace CssLib
         public int GetAllCos()
         {
             lastError = "";
-            string req = "";
-            string rsp = "";
-            WebMethod = "GetAllCosRequest";
             WebServiceClient client = new WebServiceClient
             {
                 Url = ZimbraValues.GetZimbraValues().Url,
                 WSServiceType = WebServiceClient.ServiceType.Traditional
             };
-            req = CreateSoapEnvelope(ZIMBRA_API_GETALLCOS);
-            client.InvokeService(req, out rsp);
+
+            StringBuilder sb = new StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.OmitXmlDeclaration = true;
+            using (XmlWriter writer = XmlWriter.Create(sb, settings))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("soap", "Envelope", "http://www.w3.org/2003/05/soap-envelope");
+
+                WriteHeader(writer, true, true, false);
+
+                // body
+                writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
+                writer.WriteStartElement("GetAllCosRequest", "urn:zimbraAdmin");
+                writer.WriteEndElement();   // GetAllCosRequest
+                writer.WriteEndElement();   // soap body
+                // end body
+
+                writer.WriteEndElement();   // soap envelope
+                writer.WriteEndDocument();
+            }
+
+            string rsp = "";
+            client.InvokeService(sb.ToString(), out rsp);
             if (client.status == 0)
             {
                 ParseGetAllCos(rsp);
@@ -503,18 +525,38 @@ namespace CssLib
         {
             int retval = 0;
             lastError = "";
-            string req = "";
-            string rsp = "";
-            WebMethod = "GetAccountRequest";
-            Parameters = new List<Parameter>();
-            Parameters.Add(new Parameter { Name = "account", Value = accountname, Attr = new Attrib { Name = "by", Value = "name" } });
             WebServiceClient client = new WebServiceClient
             {
                 Url = ZimbraValues.GetZimbraValues().Url,
                 WSServiceType = WebServiceClient.ServiceType.Traditional
             };
-            req = CreateSoapEnvelope(ZIMBRA_API_GETACCOUNT);
-            client.InvokeService(req, out rsp);
+
+            StringBuilder sb = new StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.OmitXmlDeclaration = true;
+            using (XmlWriter writer = XmlWriter.Create(sb, settings))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("soap", "Envelope", "http://www.w3.org/2003/05/soap-envelope");
+
+                WriteHeader(writer, true, true, false);
+
+                // body
+                writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
+                writer.WriteStartElement("GetAccountRequest", "urn:zimbraAdmin");
+
+                WriteAccountBy(writer, accountname);
+
+                writer.WriteEndElement();   // GetAccountRequest
+                writer.WriteEndElement();   // soap body
+                // end body
+
+                writer.WriteEndElement();   // soap envelope
+                writer.WriteEndDocument();
+            }
+
+            string rsp = "";
+            client.InvokeService(sb.ToString(), out rsp);
             retval = client.status;
             if (client.status == 0)
             {
@@ -542,24 +584,46 @@ namespace CssLib
         {
             int retval = 0;
             lastError = "";
-            string req = "";
-            string rsp = "";
             string displayname = accountname.Substring(0, accountname.IndexOf("@"));
             string zimbraForeignPrincipal = "ad:" + displayname;
-            WebMethod = "CreateAccountRequest";
-            Parameters = new List<Parameter>();
-            Parameters.Add(new Parameter { Name = "name", Value = accountname, Attr = null });
-            Parameters.Add(new Parameter { Name = "password", Value = defaultpw, Attr = null });
-            Parameters.Add(new Parameter { Name = "a", Value = displayname, Attr = new Attrib { Name = "n", Value = "displayName" } });
-            Parameters.Add(new Parameter { Name = "a", Value = zimbraForeignPrincipal, Attr = new Attrib { Name = "n", Value = "zimbraForeignPrincipal" } });
-            Parameters.Add(new Parameter { Name = "a", Value = cosid, Attr = new Attrib { Name = "n", Value = "zimbraCOSId" } });
+
             WebServiceClient client = new WebServiceClient
             {
                 Url = ZimbraValues.GetZimbraValues().Url,
                 WSServiceType = WebServiceClient.ServiceType.Traditional
             };
-            req = CreateSoapEnvelope(ZIMBRA_API_CREATEACCOUNT);
-            client.InvokeService(req, out rsp);
+
+            StringBuilder sb = new StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.OmitXmlDeclaration = true;
+            using (XmlWriter writer = XmlWriter.Create(sb, settings))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("soap", "Envelope", "http://www.w3.org/2003/05/soap-envelope");
+
+                WriteHeader(writer, true, true, false);
+
+                // body
+                writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
+                writer.WriteStartElement("CreateAccountRequest", "urn:zimbraAdmin");
+
+                WriteNVPair(writer, "name", accountname);
+                WriteNVPair(writer, "password", defaultpw);
+
+                WriteAttrNVPair(writer, "a", "n", "displayName", displayname);
+                WriteAttrNVPair(writer, "a", "n", "zimbraForeignPrincipal", zimbraForeignPrincipal);
+                WriteAttrNVPair(writer, "a", "n", "zimbraCOSId", cosid);
+
+                writer.WriteEndElement();   // CreateAccountRequest
+                writer.WriteEndElement();   // soap body
+                // end body
+
+                writer.WriteEndElement();   // soap envelope
+                writer.WriteEndDocument();
+            }
+
+            string rsp = "";
+            client.InvokeService(sb.ToString(), out rsp);
             retval = client.status;
             if (client.status == 0)
             {
@@ -580,6 +644,55 @@ namespace CssLib
                     lastError = client.exceptionMessage;
                 }
             }
+            return retval;
+        }
+
+        public int CreateContact(ZimbraContact contact)
+        {
+            lastError = "";
+            WebServiceClient client = new WebServiceClient
+            {
+                Url = ZimbraValues.GetZimbraValues().Url,
+                WSServiceType = WebServiceClient.ServiceType.Traditional
+            };
+
+            int retval = 0;
+
+            System.Type type = typeof(ZimbraContact);
+            StringBuilder sb = new StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.OmitXmlDeclaration = true;
+            using (XmlWriter writer = XmlWriter.Create(sb, settings))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("soap", "Envelope", "http://www.w3.org/2003/05/soap-envelope");
+
+                WriteHeader(writer, true, true, true);
+
+                writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
+                writer.WriteStartElement("CreateContactRequest", "urn:zimbraMail");
+                writer.WriteStartElement("cn");
+                writer.WriteAttributeString("l", "7");
+                FieldInfo[] myFields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
+                for (int i = 0; i < myFields.Length; i++)
+                {
+                    string val = (string)myFields[i].GetValue(contact);
+                    if (val.Length > 0)
+                    {
+                        string nam = (string)myFields[i].Name;
+                        WriteAttrNVPair(writer, "a", "n", nam, val);
+                    }
+                }
+                writer.WriteEndElement();   // cn
+                writer.WriteEndElement();   // CreateContactRequest
+                writer.WriteEndElement();   // soap body
+                writer.WriteEndElement();   // soap envelope
+                writer.WriteEndDocument();
+            }
+
+            string rsp = "";
+            client.InvokeService(sb.ToString(), out rsp);
+            retval = client.status;
             return retval;
         }
         /////////////////////////
