@@ -647,6 +647,30 @@ namespace CssLib
             return retval;
         }
 
+        public void CreateContactRequest(XmlWriter writer, ZimbraContact contact, int requestId)
+        {
+            System.Type type = typeof(ZimbraContact);
+            writer.WriteStartElement("CreateContactRequest", "urn:zimbraMail");
+            if (requestId != -1)
+            {
+                writer.WriteAttributeString("requestId", requestId.ToString());
+            }
+            writer.WriteStartElement("cn");
+            writer.WriteAttributeString("l", "7");
+            FieldInfo[] myFields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
+            for (int i = 0; i < myFields.Length; i++)
+            {
+                string val = (string)myFields[i].GetValue(contact);
+                if (val.Length > 0)
+                {
+                    string nam = (string)myFields[i].Name;
+                    WriteAttrNVPair(writer, "a", "n", nam, val);
+                }
+            }
+            writer.WriteEndElement();   // cn
+            writer.WriteEndElement();   // CreateContactRequest
+        }
+
         public int CreateContact(ZimbraContact contact)
         {
             lastError = "";
@@ -658,7 +682,6 @@ namespace CssLib
 
             int retval = 0;
 
-            System.Type type = typeof(ZimbraContact);
             StringBuilder sb = new StringBuilder();
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.OmitXmlDeclaration = true;
@@ -670,21 +693,51 @@ namespace CssLib
                 WriteHeader(writer, true, true, true);
 
                 writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
-                writer.WriteStartElement("CreateContactRequest", "urn:zimbraMail");
-                writer.WriteStartElement("cn");
-                writer.WriteAttributeString("l", "7");
-                FieldInfo[] myFields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
-                for (int i = 0; i < myFields.Length; i++)
+
+                CreateContactRequest(writer, contact, -1);
+
+                writer.WriteEndElement();   // soap body
+                writer.WriteEndElement();   // soap envelope
+                writer.WriteEndDocument();
+            }
+
+            string rsp = "";
+            client.InvokeService(sb.ToString(), out rsp);
+            retval = client.status;
+            return retval;
+        }
+
+        public int CreateContacts(List<ZimbraContact> lContacts)
+        {
+            lastError = "";
+            WebServiceClient client = new WebServiceClient
+            {
+                Url = ZimbraValues.GetZimbraValues().Url,
+                WSServiceType = WebServiceClient.ServiceType.Traditional
+            };
+
+            int retval = 0;
+
+            StringBuilder sb = new StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.OmitXmlDeclaration = true;
+            using (XmlWriter writer = XmlWriter.Create(sb, settings))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("soap", "Envelope", "http://www.w3.org/2003/05/soap-envelope");
+
+                WriteHeader(writer, true, true, true);
+
+                writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
+                writer.WriteStartElement("BatchRequest", "urn:zimbra");
+
+                for (int i = 0; i < lContacts.Count; i++)
                 {
-                    string val = (string)myFields[i].GetValue(contact);
-                    if (val.Length > 0)
-                    {
-                        string nam = (string)myFields[i].Name;
-                        WriteAttrNVPair(writer, "a", "n", nam, val);
-                    }
+                    ZimbraContact contact = lContacts[i];
+                    CreateContactRequest(writer, contact, i);
                 }
-                writer.WriteEndElement();   // cn
-                writer.WriteEndElement();   // CreateContactRequest
+
+                writer.WriteEndElement();   // BatchRequest
                 writer.WriteEndElement();   // soap body
                 writer.WriteEndElement();   // soap envelope
                 writer.WriteEndDocument();
