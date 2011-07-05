@@ -31,6 +31,7 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.mailbox.ContactAutoComplete.AutoCompleteResult;
 import com.zimbra.cs.mailbox.ContactAutoComplete;
 import com.zimbra.cs.mailbox.Mailbox;
+import com.zimbra.cs.mailbox.OperationContext;
 import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.service.mail.AutoComplete;
 import com.zimbra.soap.ZimbraSoapContext;
@@ -39,9 +40,11 @@ public class OfflineAutoComplete extends AutoComplete {
 
     @Override
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
-        ZimbraSoapContext ctxt = getZimbraSoapContext(context);
+        ZimbraSoapContext zsc = getZimbraSoapContext(context);
         Account account = getRequestedAccount(getZimbraSoapContext(context));
-        Mailbox mbox = getRequestedMailbox(ctxt);
+        Mailbox mbox = getRequestedMailbox(zsc);
+        OperationContext octxt = getOperationContext(zsc, context);
+
 
         boolean galAC = (account instanceof OfflineAccount) && (mbox instanceof ZcsMailbox) &&
             account.getBooleanAttr(Provisioning.A_zimbraFeatureGalEnabled , false) &&
@@ -51,9 +54,9 @@ public class OfflineAutoComplete extends AutoComplete {
         String typeStr = request.getAttribute(MailConstants.A_TYPE, "account");
         Provisioning.GalSearchType stype = Provisioning.GalSearchType.fromString(typeStr);
         int limit = account.getContactAutoCompleteMaxResults();
-        AutoCompleteResult result = query(request, ctxt, account, true, name, limit, stype);
+        AutoCompleteResult result = query(request, zsc, account, true, name, limit, stype, octxt);
         
-        ContactAutoComplete ac = new ContactAutoComplete(account);
+        ContactAutoComplete ac = new ContactAutoComplete(account, octxt);
         if (galAC && result.entries.size() < limit) {
             int galLimit = limit - result.entries.size();
 
@@ -65,7 +68,7 @@ public class OfflineAutoComplete extends AutoComplete {
                 req.addAttribute(AccountConstants.A_LIMIT, galLimit);
                 req.addAttribute(AccountConstants.A_TYPE, typeStr);
 
-                Element resp = ((ZcsMailbox)mbox).proxyRequest(req, ctxt.getResponseProtocol(), true, "auto-complete GAL");
+                Element resp = ((ZcsMailbox)mbox).proxyRequest(req, zsc.getResponseProtocol(), true, "auto-complete GAL");
                 if (resp != null) {
                     List<Element> contacts = resp.listElements(MailConstants.E_CONTACT);
                     for (Element elt : contacts) {
@@ -82,18 +85,18 @@ public class OfflineAutoComplete extends AutoComplete {
         }
 
         if (result.entries.size() < limit)
-            autoCompleteFromOtherAccounts(request, ctxt, account, name, limit, stype, result);
+            autoCompleteFromOtherAccounts(request, zsc, account, name, limit, stype, result, octxt);
 
         if (result.entries.size() >= limit)
             result.canBeCached = false;
 
-        Element response = ctxt.createElement(MailConstants.AUTO_COMPLETE_RESPONSE);
-        toXML(response, result, ctxt.getAuthtokenAccountId());
+        Element response = zsc.createElement(MailConstants.AUTO_COMPLETE_RESPONSE);
+        toXML(response, result, zsc.getAuthtokenAccountId());
         return response;
     }
 
     public void autoCompleteFromOtherAccounts(Element request, ZimbraSoapContext ctxt, Account reqAcct,
-        String name, int limit, Provisioning.GalSearchType stype, AutoCompleteResult result) throws ServiceException {
+        String name, int limit, Provisioning.GalSearchType stype, AutoCompleteResult result, OperationContext octxt) throws ServiceException {
         OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
         List<Account> accounts = prov.getAllAccounts();
         accounts.add(0, prov.getLocalAccount());
@@ -107,7 +110,7 @@ public class OfflineAutoComplete extends AutoComplete {
                 continue;
             }
 
-            AutoCompleteResult res = query(request, ctxt, account, true, name, lmt, stype);
+            AutoCompleteResult res = query(request, ctxt, account, true, name, lmt, stype, octxt);
             if (res != null)
                 result.appendEntries(res);
 
