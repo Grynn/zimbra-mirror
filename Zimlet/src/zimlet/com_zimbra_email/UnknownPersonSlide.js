@@ -79,6 +79,9 @@ UnknownPersonSlide.prototype._handleImageLoad =
 function(img) {
 	this.emailZimlet.hideBusyImg();
 	var div = document.getElementById(UnknownPersonSlide.PHOTO_PARENT_ID);
+	if(!div) {
+		return;
+	}
 	div.innerHTML = "";
 	div.appendChild(img);
 	if (this.emailZimlet.emailAddress.indexOf(UnknownPersonSlide.DOMAIN) != -1) {
