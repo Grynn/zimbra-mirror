@@ -180,7 +180,8 @@ ZaGlobalConfig.A_zimbraMailSSLClientCertPrincipalMap = "zimbraMailSSLClientCertP
 ZaGlobalConfig.A_zimbraReverseProxyClientCertMode = "zimbraReverseProxyClientCertMode";
 ZaGlobalConfig.A_zimbraMailSSLProxyClientCertPort = "zimbraMailSSLProxyClientCertPort";
 ZaGlobalConfig.A_zimbraReverseProxyMailMode = "zimbraReverseProxyMailMode";
-
+ZaGlobalConfig.A_zimbraReverseProxyAdminIPAddress = "zimbraReverseProxyAdminIPAddress";
+ZaGlobalConfig.A_zimbraReverseProxyClientCertCA = "zimbraReverseProxyClientCertCA";
 
 //Skin Properties
 ZaGlobalConfig.A_zimbraSkinForegroundColor = "zimbraSkinForegroundColor" ;
@@ -462,6 +463,8 @@ ZaGlobalConfig.myXModel = {
         { id:ZaGlobalConfig.A_zimbraReverseProxyMailMode, ref:"attrs/" +  ZaGlobalConfig.A_zimbraReverseProxyMailMode, type:_STRING_, choices:["http","https","both","mixed","redirect"]},
         { id:ZaGlobalConfig.A_zimbraReverseProxyClientCertMode, ref:"attrs/" +  ZaGlobalConfig.A_zimbraReverseProxyClientCertMode, type:_STRING_, choices:["on","off","optional"]},
         { id:ZaGlobalConfig.A_zimbraMailSSLClientCertPrincipalMap, ref:"attrs/" + ZaGlobalConfig.A_zimbraMailSSLClientCertPrincipalMap, type:_STRING_ },
+        { id:ZaGlobalConfig.A_zimbraReverseProxyAdminIPAddress, ref:"attrs/" + ZaGlobalConfig.A_zimbraReverseProxyAdminIPAddress, type:_LIST_, listItem:{type:_STRING_, maxLength:255}},
+        { id:ZaGlobalConfig.A_zimbraReverseProxyClientCertCA, ref:"attrs/" + ZaGlobalConfig.A_zimbraReverseProxyClientCertCA, type:_STRING_},
         //skin properties
         { id:ZaGlobalConfig.A_zimbraSkinForegroundColor, ref:"attrs/" + ZaGlobalConfig.A_zimbraSkinForegroundColor, type: _STRING_ },
         { id:ZaGlobalConfig.A_zimbraSkinBackgroundColor, ref:"attrs/" + ZaGlobalConfig.A_zimbraSkinBackgroundColor, type: _STRING_ },

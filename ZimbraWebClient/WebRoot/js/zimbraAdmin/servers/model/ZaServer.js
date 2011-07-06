@@ -165,6 +165,7 @@ ZaServer.A_zimbraMailSSLClientCertPort = "zimbraMailSSLClientCertPort";
 ZaServer.A_zimbraMailSSLProxyClientCertPort = "zimbraMailSSLProxyClientCertPort";
 ZaServer.A_zimbraReverseProxyMailMode = "zimbraReverseProxyMailMode";
 ZaServer.A_zimbraReverseProxyClientCertMode = "zimbraReverseProxyClientCertMode";
+ZaServer.A_zimbraReverseProxyClientCertCA = "zimbraReverseProxyClientCertCA";
 
 // other
 ZaServer.A_zimbraScheduledTaskNumThreads = "zimbraScheduledTaskNumThreads" ;
@@ -458,6 +459,7 @@ ZaServer.myXModel = {
         {id:ZaServer.A_zimbraMailSSLProxyClientCertPort, ref:"attrs/" +  ZaServer.A_zimbraMailSSLProxyClientCertPort, type:_COS_PORT_},
         {id:ZaServer.A_zimbraReverseProxyMailMode, ref:"attrs/" +  ZaServer.A_zimbraReverseProxyMailMode, type:_COS_STRING_, choices:["http","https","both","mixed","redirect"]},
         {id:ZaServer.A_zimbraReverseProxyClientCertMode, ref:"attrs/" +  ZaServer.A_zimbraReverseProxyClientCertMode, type:_COS_STRING_, choices:["on","off","optional"]},
+        {id:ZaServer.A_zimbraReverseProxyClientCertCA, ref:"attrs/" + ZaServer.A_zimbraReverseProxyClientCertCA, type:_STRING_},
 		// ...other...
 		{id:ZaServer.A_zimbraSmtpHostname, ref:"attrs/" +  ZaServer.A_zimbraSmtpHostname, type:_COS_LIST_, listItem:{type:_HOSTNAME_OR_IP_, maxLength: 256} },
 		{id:ZaServer.A_SmtpPort, ref:"attrs/" +  ZaServer.A_SmtpPort, type:_COS_PORT_},

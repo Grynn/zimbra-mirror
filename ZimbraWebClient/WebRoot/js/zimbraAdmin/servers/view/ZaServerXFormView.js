@@ -1008,6 +1008,10 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                                   labelLocation:_LEFT_,
                                   textFieldCssClass:"admin_xform_number_input",
                                   onChange:ZaServerXFormView.onFormFieldChanged
+                                },
+                                {ref: ZaServer.A_zimbraReverseProxyClientCertCA, type:_TEXTAREA_,
+                                    label:ZaMsg.NAD_zimbraReverseProxyClientCertCA, width: 400,
+                                    onChange:ZaServerXFormView.onFormFieldChanged
                                 }
                             ]
                         }

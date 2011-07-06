@@ -247,6 +247,7 @@ ZaDomain.A_zimbraWebClientLogoutURLAllowedUA = "zimbraWebClientLogoutURLAllowedU
 // web client authentication
 ZaDomain.A_zimbraReverseProxyClientCertMode = "zimbraReverseProxyClientCertMode";
 ZaDomain.A_zimbraMailSSLClientCertPrincipalMap = "zimbraMailSSLClientCertPrincipalMap";
+ZaDomain.A_zimbraReverseProxyClientCertCA = "zimbraReverseProxyClientCertCA";
 
 //skin properties
 ZaDomain.A_zimbraSkinForegroundColor = "zimbraSkinForegroundColor" ;
@@ -667,6 +668,11 @@ function(tmpObj, newDomain) {
     if(tmpObj.attrs[ZaDomain.A_zimbraMailSSLClientCertPrincipalMap]){
         attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraMailSSLClientCertPrincipalMap]);
         attr.setAttribute("n", ZaDomain.A_zimbraMailSSLClientCertPrincipalMap);
+    }
+
+    if(tmpObj.attrs[ZaDomain.A_zimbraReverseProxyClientCertCA]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraReverseProxyClientCertCA]);
+        attr.setAttribute("n", ZaDomain.A_zimbraReverseProxyClientCertCA);
     }
 
     if(tmpObj.attrs[ZaDomain.A_zimbraWebClientLoginURLAllowedUA]) {
@@ -2043,6 +2049,7 @@ ZaDomain.myXModel = {
     // web client authentication
       { id:ZaDomain.A_zimbraReverseProxyClientCertMode, ref:"attrs/" + ZaDomain.A_zimbraReverseProxyClientCertMode, type:_COS_STRING_, choices:["on","off","optional"]},
       { id:ZaDomain.A_zimbraMailSSLClientCertPrincipalMap, ref:"attrs/" + ZaDomain.A_zimbraMailSSLClientCertPrincipalMap, type:_COS_STRING_ },
+      { id:ZaDomain.A_zimbraReverseProxyClientCertCA, ref:"attrs/" + ZaDomain.A_zimbraReverseProxyClientCertCA, type:_COS_STRING_ },
 	// help URL
       { id:ZaDomain.A_zimbraHelpAdminURL, ref:"attrs/" + ZaDomain.A_zimbraHelpAdminURL, type:_COS_STRING_ },
       { id:ZaDomain.A_zimbraHelpDelegatedURL, ref:"attrs/" + ZaDomain.A_zimbraHelpDelegatedURL, type:_COS_STRING_ },

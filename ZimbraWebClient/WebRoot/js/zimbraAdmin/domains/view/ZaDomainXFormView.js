@@ -956,6 +956,10 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
                             colSizes:["275px","*"],
                             label:ZaMsg.NAD_zimbraReverseProxyClientCertMode,
                             labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS
+                          },
+                          {ref: ZaDomain.A_zimbraReverseProxyClientCertCA, type:_TEXTAREA_,
+                            label:ZaMsg.NAD_zimbraReverseProxyClientCertCA, width: 400,
+                            onChange:ZaDomainXFormView.onFormFieldChanged
                           }
                       ]
                 },

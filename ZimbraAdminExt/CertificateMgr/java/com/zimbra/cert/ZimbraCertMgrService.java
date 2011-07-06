@@ -28,5 +28,6 @@ public class ZimbraCertMgrService implements DocumentService {
         dispatcher.registerHandler(CertMgrConstants.GET_CSR_REQUEST, new GetCSR());
 	    dispatcher.registerHandler(CertMgrConstants.VERIFY_CERTKEY_REQUEST, new VerifyCertKey());
         dispatcher.registerHandler(CertMgrConstants.UPLOAD_DOMCERT_REQUEST, new UploadDomCert());
+        dispatcher.registerHandler(CertMgrConstants.UPLOAD_PROXYCA_REQUEST, new UploadProxyCA());
     }
 }

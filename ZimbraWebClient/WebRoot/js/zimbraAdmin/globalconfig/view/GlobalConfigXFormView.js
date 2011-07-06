@@ -911,6 +911,27 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                                         },
                                         { ref: ZaGlobalConfig.A_zimbraMailSSLProxyClientCertPort, type:_TEXTFIELD_,
                                           label: ZaMsg.NAD_zimbraMailSSLProxyClientCertPort
+                                        },
+                                        {ref: ZaGlobalConfig.A_zimbraReverseProxyClientCertCA, type:_TEXTAREA_,
+                                            label:ZaMsg.NAD_zimbraReverseProxyClientCertCA, width: 400
+                                        },
+                                        { ref: ZaGlobalConfig.A_zimbraReverseProxyAdminIPAddress,
+                                            type:_REPEAT_,
+                                            nowrap:false,labelWrap:true,
+                                            label:ZaMsg.LBL_zimbraReverseProxyAdminIPAddress,
+                                            msgName:ZaMsg.MSG_zimbraReverseProxyAdminIPAddress,
+                                            labelLocation:_LEFT_,
+                                            addButtonLabel:ZaMsg.NAD_Add,
+                                            align:_LEFT_,
+                                            showAddButton:true,
+                                            showRemoveButton:true,
+                                            showAddOnNextRow:true,
+                                            removeButtonLabel:ZaMsg.NAD_Remove,
+                                            items: [
+                                                {
+                                                    ref:".", type:_TEXTFIELD_, label:null,width:"200px"
+                                                }
+                                            ]
                                         }
                                   ]
                             },

@@ -1174,6 +1174,22 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
                                 label:ZaMsg.LBL_zimbraAuthKerberos5Realm, width:250
                                 }
                             ]},
+                            { type:_ZAWIZ_TOP_GROUPER_, label: ZaMsg.NAD_AUTH_ClientConfigure, colSpan:"*",
+                                  items:[
+                                      { ref: ZaDomain.A_zimbraMailSSLClientCertPrincipalMap, labelCssStyle:"vertical-align:top", type:_TEXTAREA_,
+                                        label:ZaMsg.NAD_zimbraMailSSLClientCertPrincipalMap, width:250
+                                      },
+                                      {type: _SPACER_, height: 10 },
+                                      {ref:ZaDomain.A_zimbraReverseProxyClientCertMode, type:_SUPER_SELECT1_,
+                                        colSizes:["250px","*"],
+                                        label:ZaMsg.NAD_zimbraReverseProxyClientCertMode,
+                                        labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS
+                                      },
+                                      {ref: ZaDomain.A_zimbraReverseProxyClientCertCA, type:_TEXTAREA_,
+                                        label:ZaMsg.NAD_zimbraReverseProxyClientCertCA, width: 400
+                                      }
+                                  ]
+                            },
                             { type:_ZAWIZ_TOP_GROUPER_, label: ZaMsg.NAD_WEBCLIENT_Configure, colSpan:"*",
                                   items:[
                                       { ref: ZaDomain.A_zimbraWebClientLoginURL,useParentTable: false,
