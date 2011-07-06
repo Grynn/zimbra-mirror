@@ -8,10 +8,8 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.OperatingSystem;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
-import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.desktop.ui.PageLogin;
@@ -162,12 +160,6 @@ public class PageAddNewAccount extends AbsTab{
    public DesktopAccountItem zAddYahooAccountThruUI() throws HarnessException {
       zNavigateTo();
 
-      // TODO: Please remove this once issue in Mac is fixed.
-      if (OperatingSystem.getOSType() == OsType.MAC) {
-         throw new HarnessException(
-               "Fail due to bug 61517, also refers to helpzilla ticket #811085");
-      }
-
       DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopYahooAccountItem(
             AjaxCommonTest.yahooUserName, AjaxCommonTest.yahooPassword);
 
@@ -186,12 +178,6 @@ public class PageAddNewAccount extends AbsTab{
     */
    public DesktopAccountItem zAddGmailAccountThruUI() throws HarnessException {
       zNavigateTo();
-
-      // TODO: Please remove this once issue in Mac is fixed.
-      if (OperatingSystem.getOSType() == OsType.MAC) {
-         throw new HarnessException(
-               "Fail due to bug 61517, also refers to helpzilla ticket #811085");
-      }
 
       DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopGmailAccountItem(
             AjaxCommonTest.gmailUserName, AjaxCommonTest.gmailPassword);
