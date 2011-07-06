@@ -1316,7 +1316,9 @@ public class PageMail extends AbsTab {
 		if ((pulldown == Button.B_SIGNATURE)&& (option == Button.O_ADD_SIGNATURE)) {
 			String name = (String)dynamic;
 			logger.info(name);
-			pulldownLocator = "css=td[id$='_ADD_SIGNATURE_dropdown']>div[class='ImgSelectPullDownArrow']";
+			//pulldownLocator = "css=td[id$='_ADD_SIGNATURE_dropdown']>div[class='ImgSelectPullDownArrow']";
+			pulldownLocator="css=[id^=zb__COMPOSE][id$=__COMPOSE_OPTIONS_dropdown]";
+			optionLocator="css=td[id$='_ADD_SIGNATURE_dropdown']>div[class='ImgCascade']";
 			dynamic ="css=td[id*='_title']td:contains('"+ name + "')";
 			page = null;
 
@@ -1335,7 +1337,7 @@ public class PageMail extends AbsTab {
 						+ " not present!");
 			}
 
-			this.zClick(pulldownLocator);
+			this.zClickAt(pulldownLocator,"");
 
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
@@ -1344,12 +1346,12 @@ public class PageMail extends AbsTab {
 
 				// Make sure the locator exists
 				if (!this.sIsElementPresent(optionLocator)) {
-					throw new HarnessException("Button " + pulldown
-							+ " option " + option + " optionLocator "
-							+ optionLocator + " not present!");
+					throw new HarnessException(" option " + option
+							+ " optionLocator " + optionLocator
+							+ " not present!");
 				}
 
-				this.zClick(optionLocator);
+				this.zClickAt(optionLocator,"");
 
 				// If the app is busy, wait for it to become active
 				zWaitForBusyOverlay();
@@ -1358,12 +1360,10 @@ public class PageMail extends AbsTab {
 
 				// Make sure the locator exists
 				if (!this.sIsElementPresent(dynamic)) {
-					throw new HarnessException("Button " + pulldown
-							+ " option " + option + " optionLocator "
-							+ dynamic + " not present!");
+					throw new HarnessException(dynamic+ " not present!");
 				}
 
-				this.zClick(dynamic);
+				this.zClickAt(dynamic,"");
 
 				// If the app is busy, wait for it to become active
 				zWaitForBusyOverlay();
