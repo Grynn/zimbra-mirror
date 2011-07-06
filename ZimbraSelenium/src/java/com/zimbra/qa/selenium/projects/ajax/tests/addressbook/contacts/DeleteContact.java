@@ -12,7 +12,6 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
-import com.zimbra.qa.selenium.projects.ajax.ui.Toaster;
 
 
 public class DeleteContact extends AjaxCommonTest  {
@@ -32,38 +31,16 @@ public class DeleteContact extends AjaxCommonTest  {
 	    ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
 			        expectedMsg , "Verify toast message '" + expectedMsg + "'");
 
-	      //verify deleted contact not displayed
-        List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
- 	           
-		boolean isFileAsEqual=false;
-		for (ContactItem ci : contacts) {
-			if (ci.fileAs.equals(contactItem.fileAs)) {
-	            isFileAsEqual = true;	 
-				break;
-			}
-		}
-		
-        ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") deleted");
+	     //verify deleted contact not displayed      
+        ZAssert.assertFalse(app.zPageAddressbook.zIsContactDisplayed(contactItem), "Verify contact fileAs (" + contactItem.fileAs + ") deleted");
     
 
-		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
-
-
-        //verify deleted contact displayed in trash folder
         // refresh Trash folder
+		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
         app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, trash);
-   	 
-        contacts = app.zPageAddressbook.zListGetContacts(); 
-         
-		isFileAsEqual=false;
-		for (ContactItem ci : contacts) {
-			if (ci.fileAs.equals(contactItem.fileAs)) {
-	            isFileAsEqual = true;	 
-				break;
-			}
-		}
-		
-        ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") displayed in Trash folder");
+   	 		
+        //verify deleted contact displayed in trash folder        
+        ZAssert.assertTrue(app.zPageAddressbook.zIsContactDisplayed(contactItem), "Verify contact fileAs (" + contactItem.fileAs + ") displayed in Trash folder");
      
 	}
 	@Test(	description = "Delete a contact item",

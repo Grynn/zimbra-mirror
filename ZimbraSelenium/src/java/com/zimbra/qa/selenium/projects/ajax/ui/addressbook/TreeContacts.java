@@ -56,38 +56,26 @@ public class TreeContacts extends AbsTree {
 		
 		if ( action == Action.A_LEFTCLICK ) {
 			
-			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-			   locator = "css=td[id^='zti__" +
-			         MyApplication.zGetActiveAccount().EmailAddress +
-			         ":main_Contacts__'][id$=':" + folder.getId() +"_textCell']";
-			} else {
-			   locator = "id=zti__main_Contacts__"+ folder.getId() +"_textCell";
-			}
-
-			if ( !GeneralUtility.waitForElementPresent(this, locator) ) {
+			locator = "id=zti__main_Contacts__"+ folder.getId() +"_textCell";
+			if ( !this.sIsElementPresent(locator) ) {
 				throw new HarnessException("Unable to locator folder in tree "+ locator);
-			}
-
-			this.zClick(locator);
-			SleepUtil.sleepSmall();
+		    }
+		
+			zClick(locator);
+			zWaitForBusyOverlay();									
 			page = null;
 		}  
 		else if ( action == Action.A_RIGHTCLICK ) {
 				
-			locator = "id=zti__main_Contacts__"+ folder.getId() +"_textCell";
-				
-			if ( !this.sIsElementPresent(locator) ) {
+			locator = "id=zti__main_Contacts__"+ folder.getId() +"_textCell";				
+			if (!this.sIsElementPresent(locator) ) {
 					throw new HarnessException("Unable to locator folder in tree "+ locator);
 			}
 			
-			this.zClick(locator);			
-			zKeyboard.zTypeCharacters(Shortcut.S_RIGHTCLICK.getKeys());															
-			 
-			//TODO
-			//return a list of context menu's options
-			SleepUtil.sleepSmall();
-			page = null;
-				
+			zClick(locator);			
+			zKeyboard.zTypeCharacters(Shortcut.S_RIGHTCLICK.getKeys());			
+			zWaitForBusyOverlay();
+			page = null;				
 			
 		} else {
 			throw new HarnessException("Action "+ action +" not yet implemented");
