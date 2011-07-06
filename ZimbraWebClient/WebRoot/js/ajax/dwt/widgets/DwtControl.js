@@ -2985,6 +2985,10 @@ function(obj, mouseEv) {
  */
 DwtControl.__processMouseUpEvent =
 function(ev, obj, mouseEv) {
+	var shell = DwtShell.getShell(window);
+	var hoverMgr = shell.getHoverMgr();
+	hoverMgr.ignoreHoverOverOnClick();
+
 	if (obj._dblClickIsolation && mouseEv && (mouseEv.button == DwtMouseEvent.LEFT)) {
 		if (obj._clickPending) {
 			// wait for real dblclick event

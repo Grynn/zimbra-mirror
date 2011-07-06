@@ -20,6 +20,7 @@
 DwtHoverMgr = function() {
 	this._hoverOverAction = new AjxTimedAction(this, this._notifyHoverOver);
 	this._hoverOutAction = new AjxTimedAction(this, this._notifyHoverOut);
+	this._ignoreHoverOverOnClickAction = new AjxTimedAction(this, this._resetIgnoreHoverOverOnClick);
 }
 
 // Data
@@ -33,6 +34,7 @@ DwtHoverMgr.prototype._hoverOverActionId = -1;
 DwtHoverMgr.prototype._hoverOverListener;
 
 DwtHoverMgr.prototype._hoverOutDelay = 50;
+DwtHoverMgr.prototype._ignoreHoverOverOnClickDelay = 750;
 DwtHoverMgr.prototype._hoverOutData;
 DwtHoverMgr.prototype._hoverOutAction;
 DwtHoverMgr.prototype._hoverOutActionId = -1;
@@ -93,7 +95,20 @@ DwtHoverMgr.prototype.setHoverOutListener = function(listener) {
 	this._hoverOutListener = listener;
 };
 
+
+DwtHoverMgr.prototype.ignoreHoverOverOnClick = function() {
+	this._ignoreHoverOverOnClick = true;
+	AjxTimedAction.scheduleAction(this._ignoreHoverOverOnClickAction, this._ignoreHoverOverOnClickDelay);
+};
+
+DwtHoverMgr.prototype._resetIgnoreHoverOverOnClick = function() {
+	this._ignoreHoverOverOnClick = false;
+};
+
 DwtHoverMgr.prototype.hoverOver = function(x, y) {
+	if(this._ignoreHoverOverOnClick) {
+		return;
+	}
 	this._isHovering = true;
 	if (this._hoverOverActionId != -1) {
 		AjxTimedAction.cancelAction(this._hoverOverActionId);
