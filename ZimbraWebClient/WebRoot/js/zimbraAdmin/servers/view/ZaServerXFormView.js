@@ -992,6 +992,10 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                                   textFieldCssClass:"admin_xform_number_input",
                                   onChange:ZaServerXFormView.onFormFieldChanged
                                 },
+                                {type: _DWT_ALERT_, cssClass: "DwtTabTable", containerCssStyle: "padding-bottom:0px",
+                                  style: DwtAlert.WARNING, iconVisible: false, content: ZaMsg.Alert_Ngnix,
+                                  id:"xform_header_ngnix"
+                                },
                                 {type: _SPACER_, height: 10 },
                                 {ref:ZaServer.A_zimbraReverseProxyClientCertMode, type:_SUPER_SELECT1_,
                                   colSizes:["275px","*"],

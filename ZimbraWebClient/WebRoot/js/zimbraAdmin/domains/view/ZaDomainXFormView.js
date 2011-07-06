@@ -951,6 +951,10 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 				            label:ZaMsg.NAD_zimbraMailSSLClientCertPrincipalMap, labelCssStyle:"vertical-align:top", width:250,
 				            onChange:ZaDomainXFormView.onFormFieldChanged
                           },
+                          {type: _DWT_ALERT_, cssClass: "DwtTabTable", containerCssStyle: "padding-bottom:0px",
+                            style: DwtAlert.WARNING, iconVisible: false, content: ZaMsg.Alert_Ngnix,
+                            id:"xform_header_ngnix"
+                          },
                           {type: _SPACER_, height: 10 },
                           {ref:ZaDomain.A_zimbraReverseProxyClientCertMode, type:_SUPER_SELECT1_,
                             colSizes:["275px","*"],

@@ -899,6 +899,10 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                                         { ref: ZaGlobalConfig.A_zimbraMailSSLClientCertPrincipalMap, type:_TEXTAREA_,
                                             label:ZaMsg.NAD_zimbraMailSSLClientCertPrincipalMap, labelCssStyle:"vertical-align:top", width:250
                                         },
+                                        {type: _DWT_ALERT_, cssClass: "DwtTabTable", containerCssStyle: "padding-bottom:0px",
+                                          style: DwtAlert.WARNING, iconVisible: false, content: ZaMsg.Alert_Ngnix,
+                                          id:"xform_header_ngnix"
+                                        },
                                         {ref:ZaGlobalConfig.A_zimbraReverseProxyClientCertMode, type:_SELECT1_,
                                           colSizes:["275px","*"],
                                           label:ZaMsg.NAD_zimbraReverseProxyClientCertMode,
