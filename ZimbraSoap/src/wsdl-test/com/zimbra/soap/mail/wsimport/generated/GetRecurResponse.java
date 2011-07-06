@@ -43,8 +43,8 @@ public class GetRecurResponse {
 
     protected CalTZInfo tz;
     @XmlElements({
-        @XmlElement(name = "except", type = ExceptionItemRecur.class),
         @XmlElement(name = "comp", type = InviteItemRecur.class),
+        @XmlElement(name = "except", type = ExceptionItemRecur.class),
         @XmlElement(name = "cancel", type = CancelItemRecur.class)
     })
     protected List<CalendarItemRecur> cancelOrExceptOrComp;
@@ -91,8 +91,8 @@ public class GetRecurResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link ExceptionItemRecur }
      * {@link InviteItemRecur }
+     * {@link ExceptionItemRecur }
      * {@link CancelItemRecur }
      * 
      * 

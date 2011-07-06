@@ -56,17 +56,17 @@ public class SyncResponse {
 
     protected SyncDeletedInfo deleted;
     @XmlElements({
-        @XmlElement(name = "w", type = CommonDocumentInfo.class),
-        @XmlElement(name = "note", type = NoteInfo.class),
-        @XmlElement(name = "appt", type = CalendarItemInfo.class),
+        @XmlElement(name = "task", type = TaskItemInfo.class),
+        @XmlElement(name = "doc", type = DocumentInfo.class),
+        @XmlElement(name = "c", type = ConversationSummary.class),
         @XmlElement(name = "chat", type = ChatSummary.class),
         @XmlElement(name = "m", type = MessageSummary.class),
         @XmlElement(name = "cn", type = ContactInfo.class),
-        @XmlElement(name = "folder", type = Folder.class),
-        @XmlElement(name = "doc", type = DocumentInfo.class),
-        @XmlElement(name = "c", type = ConversationSummary.class),
         @XmlElement(name = "tag", type = TagInfo.class),
-        @XmlElement(name = "task", type = TaskItemInfo.class)
+        @XmlElement(name = "folder", type = Folder.class),
+        @XmlElement(name = "w", type = CommonDocumentInfo.class),
+        @XmlElement(name = "note", type = NoteInfo.class),
+        @XmlElement(name = "appt", type = CalendarItemInfo.class)
     })
     protected List<Object> folderOrTagOrNote;
     @XmlAttribute(required = true)
@@ -120,17 +120,17 @@ public class SyncResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link CommonDocumentInfo }
-     * {@link NoteInfo }
-     * {@link CalendarItemInfo }
+     * {@link TaskItemInfo }
+     * {@link DocumentInfo }
+     * {@link ConversationSummary }
      * {@link ChatSummary }
      * {@link MessageSummary }
      * {@link ContactInfo }
-     * {@link Folder }
-     * {@link DocumentInfo }
-     * {@link ConversationSummary }
      * {@link TagInfo }
-     * {@link TaskItemInfo }
+     * {@link Folder }
+     * {@link CommonDocumentInfo }
+     * {@link NoteInfo }
+     * {@link CalendarItemInfo }
      * 
      * 
      */

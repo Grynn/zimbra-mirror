@@ -171,6 +171,18 @@ public interface MailService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.CheckDeviceStatusResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/CheckDeviceStatus")
+    @WebResult(name = "CheckDeviceStatusResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public CheckDeviceStatusResponse checkDeviceStatusRequest(
+        @WebParam(name = "CheckDeviceStatusRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        CheckDeviceStatusRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.mail.wsimport.generated.CheckPermissionResponse
      */
     @WebMethod(action = "urn:zimbraMail/CheckPermission")
@@ -550,6 +562,30 @@ public interface MailService {
     public String generateUUIDRequest(
         @WebParam(name = "GenerateUUIDRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
         GenerateUUIDRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.GetActivityStreamResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/GetActivityStream")
+    @WebResult(name = "GetActivityStreamResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public GetActivityStreamResponse getActivityStreamRequest(
+        @WebParam(name = "GetActivityStreamRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        GetActivityStreamRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.GetAllDevicesResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/GetAllDevices")
+    @WebResult(name = "GetAllDevicesResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public GetAllDevicesResponse getAllDevicesRequest(
+        @WebParam(name = "GetAllDevicesRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        GetAllDevicesRequest parameters);
 
     /**
      * 
@@ -1203,6 +1239,18 @@ public interface MailService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.RegisterDeviceResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/RegisterDevice")
+    @WebResult(name = "RegisterDeviceResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public RegisterDeviceResponse registerDeviceRequest(
+        @WebParam(name = "RegisterDeviceRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        RegisterDeviceRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.mail.wsimport.generated.RemoveAttachmentsResponse
      */
     @WebMethod(action = "urn:zimbraMail/RemoveAttachments")
@@ -1438,6 +1486,18 @@ public interface MailService {
     public TestDataSourceResponse testDataSourceRequest(
         @WebParam(name = "TestDataSourceRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
         TestDataSourceRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.UpdateDeviceStatusResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/UpdateDeviceStatus")
+    @WebResult(name = "UpdateDeviceStatusResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public UpdateDeviceStatusResponse updateDeviceStatusRequest(
+        @WebParam(name = "UpdateDeviceStatusRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        UpdateDeviceStatusRequest parameters);
 
     /**
      * 

@@ -1179,6 +1179,42 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetDevicesCountResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetDevicesCount")
+    @WebResult(name = "GetDevicesCountResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetDevicesCountResponse getDevicesCountRequest(
+        @WebParam(name = "GetDevicesCountRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetDevicesCountRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetDevicesCountSinceLastUsedResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetDevicesCountSinceLastUsed")
+    @WebResult(name = "GetDevicesCountSinceLastUsedResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetDevicesCountSinceLastUsedResponse getDevicesCountSinceLastUsedRequest(
+        @WebParam(name = "GetDevicesCountSinceLastUsedRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetDevicesCountSinceLastUsedRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetDevicesCountUsedTodayResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetDevicesCountUsedToday")
+    @WebResult(name = "GetDevicesCountUsedTodayResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetDevicesCountUsedTodayResponse getDevicesCountUsedTodayRequest(
+        @WebParam(name = "GetDevicesCountUsedTodayRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetDevicesCountUsedTodayRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.admin.wsimport.generated.GetDistributionListMembershipResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/GetDistributionListMembership")

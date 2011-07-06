@@ -272,8 +272,8 @@ public class NestedSearchConversation {
     public static class Info {
 
         @XmlElements({
-            @XmlElement(name = "spell", type = SpellingSuggestionsQueryInfo.class),
-            @XmlElement(name = "wildcard", type = WildcardExpansionQueryInfo.class)
+            @XmlElement(name = "wildcard", type = WildcardExpansionQueryInfo.class),
+            @XmlElement(name = "spell", type = SpellingSuggestionsQueryInfo.class)
         })
         protected List<Object> spellOrWildcard;
 
@@ -295,8 +295,8 @@ public class NestedSearchConversation {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link SpellingSuggestionsQueryInfo }
          * {@link WildcardExpansionQueryInfo }
+         * {@link SpellingSuggestionsQueryInfo }
          * 
          * 
          */

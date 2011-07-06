@@ -347,4 +347,16 @@ public interface AccountService {
         @WebParam(name = "ModifyWhiteBlackListRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
         ModifyWhiteBlackListRequest parameters);
 
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.UpdateProfileResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/UpdateProfile")
+    @WebResult(name = "UpdateProfileResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public UpdateProfileResponse updateProfileRequest(
+        @WebParam(name = "UpdateProfileRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        UpdateProfileRequest parameters);
+
 }

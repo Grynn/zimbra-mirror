@@ -39,8 +39,8 @@ import javax.xml.bind.annotation.XmlType;
 public class AddMsgResponse {
 
     @XmlElements({
-        @XmlElement(name = "m"),
-        @XmlElement(name = "chat", type = ChatSummary.class)
+        @XmlElement(name = "chat", type = ChatSummary.class),
+        @XmlElement(name = "m")
     })
     protected List<MessageSummary> chatOrM;
 
@@ -62,8 +62,8 @@ public class AddMsgResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link MessageSummary }
      * {@link ChatSummary }
+     * {@link MessageSummary }
      * 
      * 
      */
