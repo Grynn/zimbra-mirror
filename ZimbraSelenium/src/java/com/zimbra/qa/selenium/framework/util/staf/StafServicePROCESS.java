@@ -4,16 +4,28 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 
 public class StafServicePROCESS extends StafAbstract {
 	
-	
-	protected int StafTimeoutMillis = 90000;
+	public static final int StafTimeoutMillisDefault = 30000;
+	private int StafTimeoutMillis = StafTimeoutMillisDefault;
 
 	public StafServicePROCESS() {
 		logger.info("new "+ StafServicePROCESS.class.getCanonicalName());
 		
 		StafService = "PROCESS";
-		StafTimeoutMillis = 30000;
 		StafParms = "START SHELL COMMAND \"ls\" RETURNSTDOUT RETURNSTDERR WAIT "+ StafTimeoutMillis;
 		
+	}
+	
+	public void setTimeout(int timeout) {
+		StafTimeoutMillis = timeout;
+	}
+	
+	public int getTimeout() {
+		return (StafTimeoutMillis);
+	}
+	
+	public int resetTimeout() {
+		StafTimeoutMillis = StafTimeoutMillisDefault;
+		return (StafTimeoutMillis);
 	}
 	
 	/**

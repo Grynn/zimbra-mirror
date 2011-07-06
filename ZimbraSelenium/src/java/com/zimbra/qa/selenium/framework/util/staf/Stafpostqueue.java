@@ -201,13 +201,13 @@ public class Stafpostqueue extends StafServicePROCESS {
 			StafParms = String
 					.format(
 							"START SHELL COMMAND \"su - -c '%s'\" RETURNSTDOUT RETURNSTDERR WAIT %d",
-							command, StafTimeoutMillis);
+							command, this.getTimeout());
 		else
 			// Running a command as 'zimbra' user.
 			StafParms = String
 					.format(
 							"START SHELL COMMAND \"su - zimbra -c '%s'\" RETURNSTDOUT RETURNSTDERR WAIT %d",
-							command, StafTimeoutMillis);
+							command, this.getTimeout());
 
 		return (getStafCommand());
 	}

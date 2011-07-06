@@ -632,12 +632,28 @@ public class CodeCoverage {
 
 		try {
 			StafServicePROCESS staf = new StafServicePROCESS();
+			
+			// Stop the server
 			staf.execute("zmmailboxdctl stop");
+			
+			// Instrument the code
+			// Instrumentation could take some time, so increase the timeout
+			staf.setTimeout(120000);
 			staf.execute(Tool +" --no-instrument=help/ "+ appfolder +" "+ WebappsInstrumented);
+			staf.resetTimeout();
+			
+			// Move the zimbra folder out of the way
 			staf.execute("mv "+ appfolder +" "+ WebappsOriginal);
+			
+			// Move the instrumented code into place
 			staf.execute("mv "+ WebappsInstrumented +" "+ appfolder);
+			
+			// Start the server
 			staf.execute("zmmailboxdctl start");
+			
+			// Log the current status
 			staf.execute("zmcontrol status");
+			
 		} catch (HarnessException e) {
 			logger.error("Unable to instrument code.  Disabling code coverage.", e);
 		}
