@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 
 
 public class DisplayContact extends  AbsDisplay {
@@ -75,7 +76,6 @@ public class DisplayContact extends  AbsDisplay {
 		logger.info("DisplayContact.zGetContactProperty(" + field + ")");
 
 		ArrayList<String> locatorArray = new ArrayList<String>();
-		
 
 		if ( field == Field.FileAs ) {			
 		    locatorArray.add("css=table[class*='contactHeaderTable'] div[class*='contactHeader']");
@@ -93,7 +93,7 @@ public class DisplayContact extends  AbsDisplay {
 		else {						
 		  throw new HarnessException("no logic defined for field "+ field);			
 		}
-		
+
 		String value = "";
 
 		for (int i=0; i<locatorArray.size(); i++) {
@@ -106,15 +106,17 @@ public class DisplayContact extends  AbsDisplay {
 		   // Make sure the element is present
 		   if ( !this.sIsElementPresent(locator) )
 			 throw new HarnessException("Unable to find the field = "+ field +" using locator = "+ locator);
-		
+
+		   Object[] param = new Object[] {locator};
+		   GeneralUtility.waitFor(null, this, false, "sGetText", param, WAIT_FOR_OPERAND.NEQ,
+		         "", 30000, 1000);
 		   // Get the element value
 		    value += this.sGetText(locator).trim();		
 		}
-		
+
 		logger.info("DisplayContact.zGetContactProperty(" + field + ") = " + value);
 		return(value);
 
-		
 	}
 
 	@Override
