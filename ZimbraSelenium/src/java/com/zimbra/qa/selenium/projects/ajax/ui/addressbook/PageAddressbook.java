@@ -173,7 +173,43 @@ public class PageAddressbook extends AbsTab {
 		
 	    return list;
 	}
- 	
+	
+	public boolean zIsContactDisplayed(ContactItem contactItem) throws HarnessException {
+        boolean isContactFound = false;
+        
+		//ensure it is in Addressbook main page
+		zNavigateTo();
+		if ( !sIsElementPresent("id=zv__CNS") )			
+		//maybe return empty list?????
+			throw new HarnessException("Contact List is not present "+ "id='zv__CNS'");
+
+		//Get the number of contacts (String) 
+		int count = this.sGetCssCount("css=div[id='zv__CNS']>div[id^=zli__CNS__]");
+		
+		logger.info(myPageName() + " zIsContactDisplayed: number of contacts: "+ count);
+
+		// Get each contact's data from the table list
+		for (int i = 1; i <= count && !isContactFound; i++) {
+			String commonLocator = "css=div[id='zv__CNS'] div:nth-child("+ i +")";
+
+			String contactType = getContactType(commonLocator);
+		    
+			String contactDisplayedLocator = commonLocator + " table tbody tr td:nth-child(3)";
+			String fileAs = ClientSessionFactory.session().selenium().getText(contactDisplayedLocator);
+			
+			isContactFound = ((contactType.equals(ContactGroupItem.IMAGE_CLASS) &&  contactItem instanceof ContactGroupItem) ||
+				  (contactType.equals(ContactItem.IMAGE_CLASS) &&  contactItem instanceof ContactItem)) &&
+				  (contactItem.fileAs.equals(fileAs));
+			
+				    	      
+		}
+
+
+		return isContactFound;		
+	}
+
+				
+	
 	
 	public List<ContactItem> zListGetContacts() throws HarnessException {
 

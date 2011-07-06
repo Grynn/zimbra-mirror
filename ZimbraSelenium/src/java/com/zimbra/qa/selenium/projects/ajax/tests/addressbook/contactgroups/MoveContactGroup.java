@@ -1,7 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.contactgroups;
 
 
-import java.util.List;
+
 
 import org.testng.annotations.Test;
 
@@ -33,34 +33,14 @@ public class MoveContactGroup extends AjaxCommonTest  {
         ZAssert.assertStringContains(toastMessage,folder.getName() , "Verify toast message '" + folder.getName() + "'");
 
         
-        //verify moved contact group not displayed
-        List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
- 	           
-		boolean isFileAsEqual=false;
-		for (ContactItem ci : contacts) {
-			if (ci.fileAs.equals(group.fileAs)) {
-	            isFileAsEqual = true;	 
-				break;
-			}
-		}
-		
-        ZAssert.assertFalse(isFileAsEqual, "Verify contact group fileAs (" + group.fileAs + ") not displayed in folder Contacts");
+        //verify moved contact group not displayed in Contact folder
+        ZAssert.assertFalse(app.zPageAddressbook.zIsContactDisplayed(group), "Verify contact group fileAs (" + group.fileAs + ") not displayed in folder Contacts");
 	
         //verify moved contact displayed in target folder
         // refresh target folder
         app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, folder);
    	 
-        contacts = app.zPageAddressbook.zListGetContacts(); 
-         
-	    isFileAsEqual=false;
-		for (ContactItem ci : contacts) {
-			if (ci.fileAs.equals(group.fileAs)) {
-	            isFileAsEqual = true;	 
-				break;
-			}
-		}
-		
-        ZAssert.assertTrue(isFileAsEqual, "Verify contact group fileAs (" + group.fileAs + ") not displayed in folder " + folder.getName());
+        ZAssert.assertTrue(app.zPageAddressbook.zIsContactDisplayed(group), "Verify contact group fileAs (" + group.fileAs + ") displayed in folder " + folder.getName());
 	
 	}
 	
