@@ -110,12 +110,16 @@ public class DisplayContactGroup extends AbsDisplay {
 	}
 	
 
-    private void getAllLocators(ArrayList<String> array, String postfix) {
+    private void getAllLocators(ArrayList<String> array, String postfix) throws HarnessException {
   	   String css= "css=div[id$='_content'][class='ZmContactInfoView'] table:nth-of-type(2) tbody tr";
        int count= this.sGetCssCount(css);
 
        for (int i=1; i<=count; i++) {
-	     array.add( css + ":nth-of-type(" + i + ")" + " td[id$='_" + postfix + "']");
+    	 String tdLocator=  css + ":nth-of-type(" + i + ")" + " td[id$='_" + postfix + "']";  
+	     if (sIsElementPresent(tdLocator)) {
+	    	 logger.info(tdLocator + " has text " + sGetText(tdLocator).trim());
+	    	 array.add(tdLocator);	    	 
+	     }
        }
     }
 
