@@ -4,6 +4,7 @@ import com.zimbra.qa.selenium.framework.items.DesktopAccountItem;
 import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsForm;
+import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.desktop.ui.PageLogin;
@@ -131,9 +132,17 @@ public class FormAddZimbraAccount extends AbsForm {
       }
    }
 
+   public void zPressButton(Button button) {
+      String locator = null;
+      if (button == Button.B_VALIDATE_AND_SAVE) {
+         locator = Locators.zValidateAndSaveButton;
+      }
+      sClick(locator);
+   }
+
    @Override
    public void zSubmit() throws HarnessException {
-      sClick(Locators.zValidateAndSaveButton);
+      zPressButton(Button.B_VALIDATE_AND_SAVE);
       GeneralUtility.waitForElementPresent(this, PageLogin.Locators.zBtnLoginDesktop);
    }
 

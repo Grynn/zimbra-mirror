@@ -26,20 +26,36 @@ public class DesktopAccountItem implements IItem {
     * @param emailAddress Email Address of Zimbra Account
     * @param password Password of Zimbra Account
     * @param port Port to access the Zimbra Accounr
+    * @param incomingServer Zimbra Mail Server, if null, then it will pick the default from config.properties
+    * @param ssl SSL triggered or not
+    * @return Desktop Zimbra Account Item
+    */
+   public static DesktopAccountItem generateDesktopZimbraAccountItem(String emailAddress,
+         String password, String port, String incomingServer, boolean ssl) {
+      DesktopAccountItem desktopAccountItem = new DesktopAccountItem();
+      desktopAccountItem.accountName = "name" + ZimbraSeleniumProperties.getUniqueString();
+      desktopAccountItem.emailAddress = emailAddress;
+      desktopAccountItem.password = password;
+      desktopAccountItem.incomingServer = (incomingServer == null) ?
+            ZimbraAccount.AccountZWC().ZimbraMailHost : incomingServer;
+      desktopAccountItem.port = port;
+      desktopAccountItem.ssl = ssl;
+
+      return desktopAccountItem;
+   }
+
+   /**
+    * Generate Desktop's Zimbra account Item with specified email address with default incoming server
+    * @param emailAddress Email Address of Zimbra Account
+    * @param password Password of Zimbra Account
+    * @param port Port to access the Zimbra Accounr
     * @param ssl SSL triggered or not
     * @return Desktop Zimbra Account Item
     */
    public static DesktopAccountItem generateDesktopZimbraAccountItem(String emailAddress,
          String password, String port, boolean ssl) {
-      DesktopAccountItem desktopAccountItem = new DesktopAccountItem();
-      desktopAccountItem.accountName = "name" + ZimbraSeleniumProperties.getUniqueString();
-      desktopAccountItem.emailAddress = emailAddress;
-      desktopAccountItem.password = password;
-      desktopAccountItem.incomingServer = ZimbraAccount.AccountZWC().ZimbraMailHost;
-      desktopAccountItem.port = port;
-      desktopAccountItem.ssl = ssl;
 
-      return desktopAccountItem;
+      return generateDesktopZimbraAccountItem(emailAddress, password, port, null, ssl);
    }
 
    /**

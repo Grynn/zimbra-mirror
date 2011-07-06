@@ -64,6 +64,9 @@ public class Button {
 	public static final Button B_OK = new Button("B_OK");
 	public static final Button O_EDIT_LINK = new Button("O_EDIT_LINK");
 
+	// Zimbra Desktop's Accounts page
+	public static final Button B_VALIDATE_AND_SAVE = new Button("B_VALIDATE_AND_SAVE");
+
 	// MailPage buttons and pulldown options
 	public static final Button B_GETMAIL = new Button("B_GETMAIL");
 	public static final Button B_LOADFEED = new Button("B_LOADFEED");
