@@ -299,6 +299,11 @@ public class BeanUtils {
     public static String stripHtmlComments(String html) {
         String REGEX = "<(?:!(?:--[\\s\\S]*?--\\s*)?(>)\\s*|(?:script|style|SCRIPT|STYLE)[\\s\\S]*?<\\/(?:script|style|SCRIPT|STYLE)>)";
         Pattern p = Pattern.compile(REGEX);
+
+        // Use quoteReplacement() to escape the replacement text so that '$' and '/', if present
+        // in the replacement text, does not hold any special meaning.
+        html = Matcher.quoteReplacement(html);
+        
         Matcher m = p.matcher(html); // get a matcher object
         StringBuffer sb = new StringBuffer();
         while(m.find()) {
