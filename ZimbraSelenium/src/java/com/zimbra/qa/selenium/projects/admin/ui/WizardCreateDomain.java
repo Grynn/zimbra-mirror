@@ -16,8 +16,10 @@ import com.zimbra.qa.selenium.projects.admin.items.DomainItem;
  */
 public class WizardCreateDomain extends AbsWizard {
 
-	public static String zdlg_DOMAIN_NAME="zdlgv__NEW_DOMAIN_zimbraDomainName";
-	
+	public static class Locators {
+		public static String zdlg_DOMAIN_NAME="zdlgv__NEW_DOMAIN_zimbraDomainName";
+	}
+
 	public WizardCreateDomain(AbsTab page) {
 		super(page);
 	}
@@ -28,18 +30,18 @@ public class WizardCreateDomain extends AbsWizard {
 		if ( !(item instanceof DomainItem) )
 			throw new HarnessException("item must be an DomainItem, was "+ item.getClass().getCanonicalName());
 
-		
+
 		DomainItem domain = (DomainItem)item;
 
 		String domainName = domain.getName();
-		
 
-		zType(zdlg_DOMAIN_NAME, domainName);
+
+		zType(Locators.zdlg_DOMAIN_NAME, domainName);
 
 
 		clickFinish(AbsWizard.Locators.DOMAIN_DIALOG);
-		
-		 return (domain);
+
+		return (domain);
 
 
 	}

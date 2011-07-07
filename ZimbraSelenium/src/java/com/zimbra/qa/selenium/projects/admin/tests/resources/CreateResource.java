@@ -110,7 +110,7 @@ public class CreateResource extends AdminCommonTest {
 			(WizardCreateResource)app.zPageManageResources.zToolbarPressButton(Button.B_NEW);
 
 		// Fill out the wizard and click Finish
-		wizard.setResourceType(WizardCreateResource.LOCATION);
+		wizard.setResourceType(WizardCreateResource.Locators.LOCATION);
 		wizard.zCompleteWizard(resource);
 
 
@@ -145,7 +145,7 @@ public class CreateResource extends AdminCommonTest {
 			(WizardCreateResource)app.zPageManageResources.zToolbarPressButton(Button.B_NEW);
 
 		// Fill out the wizard and click Finish
-		wizard.setResourceType(WizardCreateResource.EQUIPMENT);
+		wizard.setResourceType(WizardCreateResource.Locators.EQUIPMENT);
 		wizard.zCompleteWizard(resource);
 
 

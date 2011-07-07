@@ -7,11 +7,12 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.admin.items.DistributionListItem;
 
 public class FormDistributionListsNew extends AbsForm {
-	
-	public static final String ztb_ACCT_NAME = "css=input[id^='ztabv__UNDEFINE_']";
-	public static final String ztb_DOMAIN_NAME="css=input[id$='_name_3_display']";
-	public static final String zb_SAVE="zb__DLV__SAVE_title";
-	public static final String zb_CLOSE="zb__DLV__CLOSE_title";
+	public static class Locators {
+		public static final String ztb_ACCT_NAME = "css=input[id^='ztabv__UNDEFINE_']";
+		public static final String ztb_DOMAIN_NAME="css=input[id$='_name_3_display']";
+		public static final String zb_SAVE="zb__DLV__SAVE_title";
+		public static final String zb_CLOSE="zb__DLV__CLOSE_title";
+	}
 
 	public FormDistributionListsNew(AbsApplication application) {
 		super(application);
@@ -34,14 +35,14 @@ public class FormDistributionListsNew extends AbsForm {
 		String CN = dl.getLocalName();
 		String domain = dl.getDomainName();
 
-		sType(ztb_ACCT_NAME, CN);
-		sType(ztb_DOMAIN_NAME, domain);
+		sType(Locators.ztb_ACCT_NAME, CN);
+		sType(Locators.ztb_DOMAIN_NAME, domain);
 
 	}
 
 	@Override
-	public void zSubmit() throws HarnessException {		zClick(zb_SAVE);
-		zClick(zb_CLOSE);
+	public void zSubmit() throws HarnessException {		zClick(Locators.zb_SAVE);
+		zClick(Locators.zb_CLOSE);
 	}
 
 	public boolean zIsActive() throws HarnessException {

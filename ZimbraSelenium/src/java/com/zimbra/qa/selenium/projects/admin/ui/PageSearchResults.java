@@ -15,10 +15,11 @@ import com.zimbra.qa.selenium.projects.admin.items.AccountItem;
 
 
 public class PageSearchResults extends AbsTab {
-
-	public static final String SEARCH_INPUT_TEXT_BOX="_XForm_2_query";
-	public static final String SEARCH_BUTTON="css=div.ImgSearch";
-	public static final String DELETE_BUTTON="zb__SCHLV__DELETE_title";
+	public static class Locators {
+		public static final String SEARCH_INPUT_TEXT_BOX="_XForm_2_query";
+		public static final String SEARCH_BUTTON="css=div.ImgSearch";
+		public static final String DELETE_BUTTON="zb__SCHLV__DELETE_title";
+	}
 
 	public PageSearchResults(AbsApplication application) {
 		super(application);
@@ -38,7 +39,7 @@ public class PageSearchResults extends AbsTab {
 	public void zNavigateTo() throws HarnessException {
 		throw new HarnessException("implement me");
 	}
-	
+
 	/**
 	 * Enter text into the query string field
 	 * @param query
@@ -46,10 +47,10 @@ public class PageSearchResults extends AbsTab {
 	 */
 	public void zAddSearchQuery(String query) throws HarnessException {
 		logger.info(myPageName() + " zAddSearchQuery("+ query +")");
-		
+
 		tracer.trace("Search for the query "+ query);
-		
-		this.sType(SEARCH_INPUT_TEXT_BOX, query);
+
+		this.sType(Locators.SEARCH_INPUT_TEXT_BOX, query);
 
 	}
 
@@ -89,52 +90,52 @@ public class PageSearchResults extends AbsTab {
 		}
 		return page;
 	}
-	
+
 
 	@Override
 	public AbsPage zListItem(Action action, Button option, String item)
-			throws HarnessException {
+	throws HarnessException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	public AbsPage zListItem(Action action, Button option, Button subOption ,String item)
-			throws HarnessException {
+	throws HarnessException {
 		// TODO Auto-generated method stub
 		return null;	
 	}
-	
+
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 
 		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
-		
+
 		tracer.trace("Click button "+ button);
 
 		if ( button == null )
 			throw new HarnessException("Button cannot be null!");
-		
+
 		// Default behavior variables
 		//
 		String locator = null;	// If set, this will be clicked
 		AbsPage page = null;	// If set, this page will be returned
-		
+
 		// Based on the button specified, take the appropriate action(s)
 		//
-		
+
 		if ( button == Button.B_SEARCH ) {
 
-			locator = SEARCH_BUTTON;
+			locator = Locators.SEARCH_BUTTON;
 			page = new PageSearchResults(MyApplication);
 
 			// Make sure the button exists
 			if ( !this.sIsElementPresent(locator) )
 				throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
-			
+
 			// FALL THROUGH
 
 		} else if(button == Button.B_DELETE) {
-			locator = DELETE_BUTTON;
+			locator = Locators.DELETE_BUTTON;
 			page = new DialogForDeleteOperation(this.MyApplication, null);
 
 			// Make sure the button exists
@@ -149,23 +150,23 @@ public class PageSearchResults extends AbsTab {
 		if ( locator == null ) {
 			throw new HarnessException("locator was null for button "+ button);
 		}
-		
+
 		// Default behavior, process the locator by clicking on it
 		//
-		
+
 		// Click it
 		this.zClick(locator);
-		
+
 
 		// If page was specified, make sure it is active
 		if ( page != null ) {
-			
+
 			// This function (default) throws an exception if never active
 			//page.zWaitForActive();
 			SleepUtil.sleepMedium();
-			
+
 		}
-		
+
 		sMouseOut(locator);
 		return (page);
 
@@ -174,7 +175,7 @@ public class PageSearchResults extends AbsTab {
 
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
-			throws HarnessException {
+	throws HarnessException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -186,7 +187,7 @@ public class PageSearchResults extends AbsTab {
 	 * @throws HarnessException 
 	 */
 	public List<AccountItem> zListGetAccounts() throws HarnessException {
-		
+
 		List<AccountItem> items = new ArrayList<AccountItem>();
 
 		// Make sure the button exists
@@ -218,12 +219,12 @@ public class PageSearchResults extends AbsTab {
 			if ( this.sIsElementPresent(locator) ) {
 				item.setGEmailAddress(this.sGetText(locator).trim());
 			}
-			
+
 			// Display Name
 			// Status
 			// Lost Login Time
 			// Description
-			
+
 
 			// Add the new item to the list
 			items.add(item);

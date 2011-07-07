@@ -15,17 +15,19 @@ import com.zimbra.qa.selenium.projects.admin.items.ResourceItem;
  *
  */
 public class WizardCreateResource extends AbsWizard {
-	
-	public static final String zdlg_RESOURCE_NAME = "zdlgv__NEW_RES_displayName";
-	public static final String zdlg_RESOURCE_LOCAL_NAME = "zdlgv__NEW_RES_name";
-	public static final String zdlg_RESOURCE_DOMAIN_NAME="zdlgv__NEW_RES_name_2_display";
-	public static final String zdlg_OK="zdlg__NEW_ALIAS_button2_title";
-	public static final String zdlg_RESOURCE_TYPE="zdlgv__NEW_RES_zimbraCalResType_display";
-	public static final String zdlg_RESOURCE_TYPE_LOCATION="zdlgv__NEW_RES_zimbraCalResType_choice_0";
-	public static final String zdlg_RESOURCE_TYPE_EQUIPMENT="zdlgv__NEW_RES_zimbraCalResType_choice_1";
-	public static final String LOCATION="Location";
-	public static final String EQUIPMENT="Equipment";
+	public static class Locators {
+		public static final String zdlg_RESOURCE_NAME = "zdlgv__NEW_RES_displayName";
+		public static final String zdlg_RESOURCE_LOCAL_NAME = "zdlgv__NEW_RES_name";
+		public static final String zdlg_RESOURCE_DOMAIN_NAME="zdlgv__NEW_RES_name_2_display";
+		public static final String zdlg_OK="zdlg__NEW_ALIAS_button2_title";
+		public static final String zdlg_RESOURCE_TYPE="zdlgv__NEW_RES_zimbraCalResType_display";
+		public static final String zdlg_RESOURCE_TYPE_LOCATION="zdlgv__NEW_RES_zimbraCalResType_choice_0";
+		public static final String zdlg_RESOURCE_TYPE_EQUIPMENT="zdlgv__NEW_RES_zimbraCalResType_choice_1";
+		public static final String LOCATION="Location";
+		public static final String EQUIPMENT="Equipment";
+	}
 	public String resourceType="";
+
 
 	public WizardCreateResource(AbsTab page) {
 		super(page);
@@ -33,29 +35,29 @@ public class WizardCreateResource extends AbsWizard {
 
 	@Override
 	public IItem zCompleteWizard(IItem item) throws HarnessException {
-	   
-	   if ( !(item instanceof ResourceItem) )
+
+		if ( !(item instanceof ResourceItem) )
 			throw new HarnessException("item must be an ResourceItem, was "+ item.getClass().getCanonicalName());
 
 		ResourceItem resource = (ResourceItem)item;
-		
+
 
 		String CN = resource.getLocalName();
 		String domain = resource.getDomainName();
 
-		sType(zdlg_RESOURCE_NAME, CN);
-		sType(zdlg_RESOURCE_LOCAL_NAME, CN);
-		sType(zdlg_RESOURCE_DOMAIN_NAME, domain);
-		
+		sType(Locators.zdlg_RESOURCE_NAME, CN);
+		sType(Locators.zdlg_RESOURCE_LOCAL_NAME, CN);
+		sType(Locators.zdlg_RESOURCE_DOMAIN_NAME, domain);
+
 		if(resourceType!="") {
-			sClick(zdlg_RESOURCE_TYPE);
-			if(resourceType.equals(LOCATION)) {
-				sClick(zdlg_RESOURCE_TYPE_LOCATION);
-			} else if(resourceType.equals(EQUIPMENT)) {
-				sClick(zdlg_RESOURCE_TYPE_EQUIPMENT);
+			sClick(Locators.zdlg_RESOURCE_TYPE);
+			if(resourceType.equals(Locators.LOCATION)) {
+				sClick(Locators.zdlg_RESOURCE_TYPE_LOCATION);
+			} else if(resourceType.equals(Locators.EQUIPMENT)) {
+				sClick(Locators.zdlg_RESOURCE_TYPE_EQUIPMENT);
 			}
 		}
-		
+
 		clickFinish(AbsWizard.Locators.RESOURCE_DIALOG);
 
 		return resource;
@@ -72,7 +74,7 @@ public class WizardCreateResource extends AbsWizard {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
 	public String getResourceType() {
 		return resourceType;
 	}

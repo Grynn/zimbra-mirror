@@ -8,10 +8,13 @@ import com.zimbra.qa.selenium.projects.admin.items.CosItem;
 
 
 public class FormCosNew extends AbsForm {
-	
-	public static final String ztav_COS_NAME = "ztabv__COS_EDIT_cn_2";
-	public static final String zb_SAVE="zb__COSV__SAVE_title";
-	public static final String zb_CLOSE="zb__COSV__CLOSE_title";
+
+
+	public static class Locators {
+		public static final String ztav_COS_NAME = "ztabv__COS_EDIT_cn_2";
+		public static final String zb_SAVE="zb__COSV__SAVE_title";
+		public static final String zb_CLOSE="zb__COSV__CLOSE_title";
+	}
 
 
 	public FormCosNew(AbsApplication application) {
@@ -34,13 +37,13 @@ public class FormCosNew extends AbsForm {
 
 		String CN = cos.getName();
 
-		sType(ztav_COS_NAME, CN);
+		sType(Locators.ztav_COS_NAME, CN);
 	}
 
 	@Override
 	public void zSubmit() throws HarnessException {
-		zClick(zb_SAVE);
-		zClick(zb_CLOSE);
+		zClick(Locators.zb_SAVE);
+		zClick(Locators.zb_CLOSE);
 	}
 
 	@Override
