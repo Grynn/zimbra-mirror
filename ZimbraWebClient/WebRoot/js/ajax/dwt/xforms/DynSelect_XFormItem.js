@@ -163,6 +163,27 @@ DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
 
 }
 
+DynSelect_XFormItem.prototype.onKeyDown = function (value, event) {
+	var key = DwtKeyEvent.getCharCode(event);
+	if (key == DwtKeyEvent.KEY_ENTER) {
+		DwtUiEvent.setBehaviour(event, true, true); // keyup handle will see enter key
+		return false;
+	} else if (key == DwtKeyEvent.KEY_TAB) {
+		DwtUiEvent.setBehaviour(event, true, false);
+		if(this.menuUp)
+			this.hideMenu();
+
+		var currentTabId = XFormItem.getParentTabGroupId(this);
+		if(event.shiftKey)
+			this.getForm().focusPrevious(this.getId()+"_display" , currentTabId);
+		else
+			this.getForm().focusNext(this.getId()+"_display", currentTabId);
+
+		return true;
+	}
+	return true;
+}
+
 DynSelect_XFormItem.prototype.resetChoices = function () {
 	var choices = this.getChoices();
 	choices.setChoices([]);
@@ -216,9 +237,15 @@ DynSelect_XFormItem.prototype.outputHTML = function (HTMLoutput) {
 	var inputHtml;
 	var inputSize = this.getInheritedProperty("inputSize");
 	var inputWidth = this.getInheritedProperty("inputWidth");
+	var keyPressEv = " onkeypress";
+	if(!AjxEnv.isFirefox){
+		keyPressEv = " onkeydown";
+	}
+	
 	var inputWidthString = inputWidth ? "style='width:" + inputWidth + "'" : (inputSize ? "size="+inputSize : "")
 	inputHtml = ["<input type=text id=", id, "_display class=", this.getDisplayCssClass(), " value='VALUE' ", 
 				" onchange=\"",ref, ".onValueTyped(this.value, event||window.event)\"",
+				keyPressEv + "=\"", ref, ".onKeyDown(this.value, event||window.event)\"",
 				" onkeyup=\"",ref, ".onKeyUp(this.value, event||window.event)\"", inputWidthString,
 				this.getMouseoutHandlerHTML(),
 				">"].join("");
