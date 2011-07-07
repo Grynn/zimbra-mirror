@@ -131,6 +131,9 @@ function(entry) {
         }
     }
 
+    // update the domainlist
+    ZaCosXFormView._domainList = ZaApp.getInstance().getDomainList(true).getArray();
+
     if(!entry[ZaModel.currentTab])
 		this._containedObject[ZaModel.currentTab] = "1";
 	else
@@ -1183,61 +1186,61 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     { type: _DWT_ALERT_,
                       containerCssStyle: "padding-bottom:0px",
                       style: DwtAlert.WARNING,
-                      iconVisible:  (!ZaAccountXFormView.isAuthfromInternal(ZaSettings.myDomainName)),
-                      content: ((ZaAccountXFormView.isAuthfromInternal(ZaSettings.myDomainName))?ZaMsg.Alert_InternalPassword:ZaMsg.Alert_ExternalPassword)
+                      iconVisible:  (!ZaCosXFormView.isAllAuthfromInternal()),
+                      content: ((ZaCosXFormView.isAllAuthfromInternal())?ZaMsg.Alert_InternalPassword:ZaMsg.Alert_ExternalPassword)
                     },
                     {ref:ZaCos.A_zimbraPasswordLocked, type:_CHECKBOX_,
                         msgName:ZaMsg.NAD_PwdLocked,
                         label:ZaMsg.NAD_PwdLocked,
                         trueValue:"TRUE", falseValue:"FALSE",
-			visibilityChecks:[],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+			visibilityChecks:[],enableDisableChecks:[[ZaCosXFormView.isAllAuthfromInternal]]
                     },
                     {ref:ZaCos.A_zimbraMinPwdLength, 
 			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraMinPwdLength,
 			label:ZaMsg.LBL_zimbraMinPwdLength, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
-			visibilityChecks:[ZaItem.hasWritePermission],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+			visibilityChecks:[ZaItem.hasWritePermission],enableDisableChecks:[[ZaCosXFormView.isAllAuthfromInternal]]
 		    },
                     {ref:ZaCos.A_zimbraMaxPwdLength, 
 			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraMaxPwdLength,
 			label:ZaMsg.LBL_zimbraMaxPwdLength, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
-			visibilityChecks:[ZaItem.hasWritePermission],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+			visibilityChecks:[ZaItem.hasWritePermission],enableDisableChecks:[[ZaCosXFormView.isAllAuthfromInternal]]
 		    },
 
                     {ref:ZaCos.A_zimbraPasswordMinUpperCaseChars, 
 			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraPasswordMinUpperCaseChars,
 			label:ZaMsg.LBL_zimbraPasswordMinUpperCaseChars, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
-			visibilityChecks:[ZaItem.hasWritePermission],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+			visibilityChecks:[ZaItem.hasWritePermission],enableDisableChecks:[[ZaCosXFormView.isAllAuthfromInternal]]
 		    },
                     {ref:ZaCos.A_zimbraPasswordMinLowerCaseChars, 
 			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraPasswordMinLowerCaseChars,
 			label:ZaMsg.LBL_zimbraPasswordMinLowerCaseChars, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
-			visibilityChecks:[ZaItem.hasWritePermission],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+			visibilityChecks:[ZaItem.hasWritePermission],enableDisableChecks:[[ZaCosXFormView.isAllAuthfromInternal]]
 		    },
                     {ref:ZaCos.A_zimbraPasswordMinPunctuationChars, 
 			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraPasswordMinPunctuationChars,
 			label:ZaMsg.LBL_zimbraPasswordMinPunctuationChars, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
-			visibilityChecks:[ZaItem.hasWritePermission],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+			visibilityChecks:[ZaItem.hasWritePermission],enableDisableChecks:[[ZaCosXFormView.isAllAuthfromInternal]]
 	 	    },
                     {ref:ZaCos.A_zimbraPasswordMinNumericChars, 
 			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraPasswordMinNumericChars,
 			label:ZaMsg.LBL_zimbraPasswordMinNumericChars, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
-			visibilityChecks:[ZaItem.hasWritePermission],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+			visibilityChecks:[ZaItem.hasWritePermission],enableDisableChecks:[[ZaCosXFormView.isAllAuthfromInternal]]
 		    },
 
                     {ref:ZaCos.A_zimbraMinPwdAge, 
 			type:_TEXTFIELD_, msgName:ZaMsg.MSG_passMinAge,
 			label:ZaMsg.LBL_passMinAge, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
-			visibilityChecks:[],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+			visibilityChecks:[],enableDisableChecks:[[ZaCosXFormView.isAllAuthfromInternal]]
 		    },
                     {ref:ZaCos.A_zimbraMaxPwdAge, 
 			type:_TEXTFIELD_, msgName:ZaMsg.MSG_passMaxAge,
 			label:ZaMsg.LBL_passMaxAge, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
-			visibilityChecks:[],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+			visibilityChecks:[],enableDisableChecks:[[ZaCosXFormView.isAllAuthfromInternal]]
 		    },
                     {ref:ZaCos.A_zimbraEnforcePwdHistory, 
 			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraEnforcePwdHistory,
 			label:ZaMsg.LBL_zimbraEnforcePwdHistory, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
-			visibilityChecks:[],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+			visibilityChecks:[],enableDisableChecks:[[ZaCosXFormView.isAllAuthfromInternal]]
 		    }
                 ]
             },
@@ -1333,6 +1336,19 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 	];		
 };
 ZaTabView.XFormModifiers["ZaCosXFormView"].push(ZaCosXFormView.myXFormModifier);
+
+ZaCosXFormView.isAllAuthfromInternal =
+function() {
+	var isAll = true;  // is all external?
+	var domainList = ZaCosXFormView._domainList;
+	if(!domainList) return isAll;
+	for(var i = 0; i < domainList.length && isAll; i ++) {
+		var dom = domainList[i];
+		if(dom.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_zimbra)
+			isAll = false; 
+	}
+        return !isAll;
+}
 
 ZaCosXFormView.validatePollingInterval =
 function (value, event, form) {

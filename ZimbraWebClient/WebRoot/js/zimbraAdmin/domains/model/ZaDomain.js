@@ -385,7 +385,7 @@ function(target) {
 		types:[ZaSearch.DOMAINS],
 		sortBy:ZaDomain.A_domainName,
 		offset:"0",
-		attrs:[ZaDomain.A_domainName,ZaDomain.A_zimbraDomainStatus,ZaItem.A_zimbraId, ZaDomain.A_domainType],
+		attrs:[ZaDomain.A_domainName,ZaDomain.A_zimbraDomainStatus,ZaItem.A_zimbraId, ZaDomain.A_domainType, ZaDomain.A_AuthMech],
 		sortAscending:"1",
 		limit:ZaDomain.MAXSEARCHRESULTS,
 		ignoreTooManyResultsException: true,
