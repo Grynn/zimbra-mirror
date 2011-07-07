@@ -118,3 +118,17 @@
     notifempty
     compress
 }
+
+/opt/zimbra/log/cbpolicyd.log {
+    daily
+    missingok
+    rotate 7
+    notifempty
+    create 0644 USER GROUP
+    postrotate
+      kill -HUP `cat /var/run/syslog*.pid 2> /dev/null` 2> /dev/null || true
+      su - zimbra -c "/opt/zimbra/bin/zmcbpolicydctl restart" > /dev/null 2>&1 || true
+    endscript
+    compress
+}   
+
