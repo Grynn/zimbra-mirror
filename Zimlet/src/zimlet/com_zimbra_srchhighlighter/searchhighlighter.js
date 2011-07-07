@@ -167,7 +167,7 @@ function searchWordHighlighter_arrayHasEl(array, val) {
  */
 SearchHighlighterZimlet.prototype._setRegExps =
 function() {
-	this._currentSearchQuery = this._searchController.currentSearch.query;
+	this._currentSearchQuery = (this._searchController.currentSearch) ? this._searchController.currentSearch.query : null;
 	if (!this._oldSearchQuery || this._currentSearchQuery != this._oldSearchQuery) {
 		var words = this._getSearchWords(this._currentSearchQuery);
 		this._regexps = [];
