@@ -14,6 +14,8 @@ namespace ZimbraMigrationConsole
     {
         static void Main(string[] args)
         {
+
+            
             if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml") && File.Exists(@"C:\Temp\UserMap.csv"))
             {
 
@@ -28,15 +30,23 @@ namespace ZimbraMigrationConsole
                     {
                         Account userAcct = new Account();
 
-                        System.Console.WriteLine("Connecting to to Zimbra Server \n");
-                        System.Console.WriteLine("......... \n");
+                        System.Console.WriteLine();
+                        ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green, "Connecting to to Zimbra Server \n   ");
+                        System.Console.WriteLine();
+
                         ZimbraAPI zimbraAPI = new ZimbraAPI();
 
                         int stat = zimbraAPI.Logon(myXmlConfig.ConfigObj.zimbraServer.HostName, myXmlConfig.ConfigObj.zimbraServer.Port, myXmlConfig.ConfigObj.zimbraServer.AdminAccount, myXmlConfig.ConfigObj.zimbraServer.AdminPassword, true);
                         if (stat != 0)
                         {
                             zimbraAPI.LastError.Count();
-                            System.Console.WriteLine("Logon to to Zimbra Server  for adminAccount failed ");
+                           
+                            System.Console.WriteLine();
+                            ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red, "Logon to to Zimbra Server  for adminAccount failed " + myXmlConfig.ConfigObj.zimbraServer.AdminAccount );
+                            System.Console.WriteLine("......... \n");
+                            System.Console.WriteLine();
+                            Thread.Sleep(2000);
+                            return;
                         }
 
                         userAcct.InitializeMigration(myXmlConfig.ConfigObj.zimbraServer.HostName, myXmlConfig.ConfigObj.zimbraServer.Port, myXmlConfig.ConfigObj.zimbraServer.AdminAccount);
@@ -45,26 +55,53 @@ namespace ZimbraMigrationConsole
                         string acctName = user.UserName + '@' + myXmlConfig.ConfigObj.UserProvision.Domain;
                         if (zimbraAPI.GetAccount(acctName) == 0)
                         {
-                            System.Console.WriteLine("Migration to Zimbra Started  for UserAccount " + user.UserName);
+                           
+                            System.Console.WriteLine();
+                            System.Console.WriteLine();
+                            ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green, " Migration to Zimbra Started  for UserAccount " + user.UserName);
+                            System.Console.WriteLine();
+                            System.Console.WriteLine();
+
                             userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
-                            System.Console.WriteLine("......... \n");
                             Thread.Sleep(9000);
                         }
                         else
                         {
 
-                            System.Console.WriteLine("User is not provisioned on Zimbra Server " + user.UserName);
-                            System.Console.WriteLine("provisioning user " + user.UserName);
+                            System.Console.WriteLine();
+                            ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Yellow, " User is not provisioned on Zimbra Server " + user.UserName);
+                           
+                            System.Console.WriteLine();
+                            System.Console.WriteLine();
+                           
+                            ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green, " Provisioning user" + user.UserName);
+                            System.Console.WriteLine();
+                            System.Console.WriteLine();
+
                             if (zimbraAPI.CreateAccount(acctName, myXmlConfig.ConfigObj.UserProvision.DefaultPWD, myXmlConfig.ConfigObj.UserProvision.COS) == 0)
                             {
-                                System.Console.WriteLine("provisioning user success " + user.UserName);
-                                System.Console.WriteLine("Migration to Zimbra Started  for UserAccount " + user.UserName);
+                                
+                                System.Console.WriteLine();
+                                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green, " Provisioning useraccount success " + user.UserName);
+                                
+                                System.Console.WriteLine();
+                                System.Console.WriteLine();
+                                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green, " Migration to Zimbra Started  for UserAccount  " + user.UserName);
+                                System.Console.WriteLine();
+                                System.Console.WriteLine();
                                 userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
                                 System.Console.WriteLine("......... \n");
                                 Thread.Sleep(9000);
                             }
                             else
-                                System.Console.WriteLine("error provisioning user " + user.UserName);
+                            {
+                                
+                                System.Console.WriteLine();
+                                
+                                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red, " error provisioning user " + user.UserName);
+                                System.Console.WriteLine();
+                                System.Console.WriteLine();
+                            }
 
 
 
@@ -74,14 +111,22 @@ namespace ZimbraMigrationConsole
                 }
                 else
                 {
-                    System.Console.WriteLine("There are no user accounts to be migrated in the usermap file ");
+                    System.Console.WriteLine();
+                    ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red, " There are no user accounts to be migrated in the usermap file \n");
+                    System.Console.WriteLine();
                 }
             }
             else
             {
-                System.Console.WriteLine("There are no configuration or usermap files.make sure the xml and CSV files are at temp folder ");
+             
+                System.Console.WriteLine();
+                ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red, " There are no configuration or usermap files.make sure the xml and CSV files are at temp folder \n");
+                System.Console.WriteLine();
+
             }
              //Thread.Sleep(18000);
+           
+           
         }
          
         }

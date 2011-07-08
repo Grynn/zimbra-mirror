@@ -1,10 +1,13 @@
-﻿
-using System;
+﻿using System;
+using System.IO;
+using System.Text;
+
 namespace ZimbraMigrationConsole
 {
     class ProgressUtil
     {
 
+        
 
         public static void OverwriteConsoleMessage(string message)
         {
@@ -38,6 +41,15 @@ namespace ZimbraMigrationConsole
             Console.CursorTop--;
             Console.ForegroundColor = originalColor;
             Console.CursorVisible = true;
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("................\n");
+            sb.AppendLine(DateTime.Now.ToString());
+            sb.AppendLine(message);
+         
+            
+            File.AppendAllText(@"C:\Temp\ZimbraMigLog.log", sb.ToString());
+            
         }
     }
 }
