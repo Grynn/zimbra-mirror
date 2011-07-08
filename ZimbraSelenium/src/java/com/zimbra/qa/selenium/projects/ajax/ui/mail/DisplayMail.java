@@ -5,6 +5,9 @@ import java.util.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogShareAccept;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogShareDecline;
 
 
 
@@ -130,7 +133,17 @@ public class DisplayMail extends AbsDisplay {
 			
 			locator = "css=td[id$='__Inv__PROPOSE_NEW_TIME_title']";
 			page = null;
-			
+		
+		} else if ( button == Button.B_ACCEPT_SHARE ) {
+
+			locator = "css=td[id$='__Shr__SHARE_ACCEPT_title']";
+			page = new DialogShareAccept(MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
+
+		} else if ( button == Button.B_DECLINE_SHARE ) {
+
+			locator = "css=td[id$='__Shr__SHARE_DECLINE_title']";
+			page = new DialogShareDecline(MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
+
 		} else  {
 			
 			throw new HarnessException("no implementation for button: "+ button);
@@ -152,6 +165,30 @@ public class DisplayMail extends AbsDisplay {
 		}
 		
 		return (page);
+	}
+
+	/**
+	 * Return TRUE/FALSE whether the appointment Accept/Decline/Tentative buttons are present
+	 * @return
+	 * @throws HarnessException
+	 */
+	public boolean zHasShareADButtons() throws HarnessException {
+		
+		// Haven't fully baked this method.  
+		// Maybe it works.  
+		// Maybe it needs to check "visible" and/or x/y/z coordinates
+
+		List<String> locators = Arrays.asList(
+				"css=td[id$='__Shr__SHARE_ACCEPT_title']",
+				"css=td[id$='__Shr__SHARE_DECLINE_title']");
+
+		for (String locator : locators) {
+			if ( !this.sIsElementPresent(locator) )
+				return (false);
+		}
+		
+		return (true);
+
 	}
 
 	/**
