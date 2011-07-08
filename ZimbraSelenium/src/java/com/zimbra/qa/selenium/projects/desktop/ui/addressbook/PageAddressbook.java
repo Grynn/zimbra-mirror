@@ -372,8 +372,7 @@ public class PageAddressbook extends AbsTab {
                   optionLocator="css=tr[id='POPUP_NEW_CONTACT']";
                 }
 			    page = new FormContactNew(this.MyApplication);
-		   }
-		   if ( option == Button.O_NEW_CONTACTGROUP) {
+		   } else if ( option == Button.O_NEW_CONTACTGROUP) {
 			    pulldownLocator = "css=div[id='zb__CNS__NEW_MENU'] td[id='zb__CNS__NEW_MENU_dropdown']";
 
 			    // TODO: Bug 58365 for Desktop
@@ -383,7 +382,13 @@ public class PageAddressbook extends AbsTab {
 			       optionLocator="css=tr[id='POPUP_NEW_GROUP']";
 			    }
 				page = new FormContactGroupNew(this.MyApplication);		   
-		   }
+		   } else if ( option == Button.O_NEW_TAG ) {
+		      pulldownLocator = "css=div[id='zb__CNS__NEW_MENU'] td[id='zb__CNS__NEW_MENU_dropdown']";
+            optionLocator = "css=tr#POPUP_NEW_TAG";
+            page = new DialogTag(this.MyApplication, this);
+         } else {
+            throw new HarnessException("Implement me!");
+         }
 	   }
 	// Default behavior
 		if ( pulldownLocator != null ) {

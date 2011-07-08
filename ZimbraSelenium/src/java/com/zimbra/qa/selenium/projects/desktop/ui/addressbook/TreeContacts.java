@@ -7,6 +7,8 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+import com.zimbra.qa.selenium.projects.desktop.ui.AppAjaxClient;
+import com.zimbra.qa.selenium.projects.desktop.ui.DialogTag;
 
 
 /**
@@ -110,13 +112,10 @@ public class TreeContacts extends AbsTree {
 			// FALL THROUGH
 
 		} else if ( button == Button.B_TREE_NEWTAG ) { 
-			
-			locator = null;
-			page = null;
-			
-			// TODO: implement me
-			
-			// FALL THROUGH
+
+		   locator = zNewTagIcon;
+
+         page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);
 
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
@@ -135,8 +134,11 @@ public class TreeContacts extends AbsTree {
 		
 		// Click it
 		this.zClick(locator);
-		
-		// If page was specified, make sure it is active
+
+	   // If the app is busy, wait for that to finish
+      this.zWaitForBusyOverlay();
+
+      // If page was specified, make sure it is active
 		if ( page != null ) {
 			
 			// This function (default) throws an exception if never active
