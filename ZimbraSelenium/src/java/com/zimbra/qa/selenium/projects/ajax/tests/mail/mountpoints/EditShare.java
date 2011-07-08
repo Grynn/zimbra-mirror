@@ -35,27 +35,20 @@ public class EditShare extends AjaxCommonTest{
 
 		// Create a subfolder in Inbox
 		app.zGetActiveAccount().soapSend(
-				"<CreateFolderRequest xmlns='urn:zimbraMail'>"
+					"<CreateFolderRequest xmlns='urn:zimbraMail'>"
 				+		"<folder name='" + foldername +"' l='" + inbox.getId() +"'/>"
 				+	"</CreateFolderRequest>");
 
-		//Need to do Refresh by clicking on getmail button to see folder in the list 
-		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
-
-		// Make sure the folder was created on the server
 		FolderItem subfolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), foldername);
-		ZAssert.assertNotNull(subfolder, "Verify the folder exists on the server");
+		ZAssert.assertNotNull(subfolder, "Verify the new owner folder exists");
+		
+		app.zGetActiveAccount().soapSend(
+					"<FolderActionRequest xmlns='urn:zimbraMail'>"
+				+		"<action id='"+ subfolder.getId() +"' op='grant'>"
+				+			"<grant d='" + ZimbraAccount.AccountA().EmailAddress + "' gt='usr' perm='r'/>"
+				+		"</action>"
+				+	"</FolderActionRequest>");
 
-
-		// Right click on folder, select "Share"
-		DialogShare sharedialog = (DialogShare)app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_SHARE, subfolder);
-		ZAssert.assertNotNull(sharedialog, "Verify the sharing dialog pops up");
-
-		// Use defaults for all options
-		sharedialog.zSetEmailAddress(ZimbraAccount.AccountA().EmailAddress);
-
-		// Send it
-		sharedialog.zClickButton(Button.B_OK);
 
 		// Make sure that AccountA now has the share
 		ZimbraAccount.AccountA().soapSend(
@@ -73,6 +66,11 @@ public class EditShare extends AjaxCommonTest{
 		String granteeType = ZimbraAccount.AccountA().soapSelectValue("//acct:GetShareInfoResponse//acct:share[@folderPath='/Inbox/"+ foldername +"']", "granteeType");
 		ZAssert.assertEquals(granteeType, "usr", "Verify the grantee type is 'user'");
 
+		
+
+		//Need to do Refresh by clicking on getmail button to see folder in the list 
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
 
 		//Edit
 
@@ -81,8 +79,7 @@ public class EditShare extends AjaxCommonTest{
 		ZAssert.assertNotNull(editdialog, "Verify the sharing dialog pops up");
 
 		//Click Edit link on Edit properties dialog
-		editdialog.zClickButton(Button.O_EDIT_LINK);
-
+		DialogShare sharedialog = (DialogShare)editdialog.zClickButton(Button.O_EDIT_LINK);
 		ZAssert.assertTrue(sharedialog.zIsActive(), "Verify that the Share dialog is active ");
 
 		//Select Admin radio button
@@ -97,6 +94,8 @@ public class EditShare extends AjaxCommonTest{
 		//click ok button from edit Folder properties dialog
 		editdialog.zClickButton(Button.B_OK);
 
+		
+		
 		ZimbraAccount.AccountA().soapSend(
 				"<GetShareInfoRequest xmlns='urn:zimbraAccount'>"
 				+		"<grantee type='usr'/>"

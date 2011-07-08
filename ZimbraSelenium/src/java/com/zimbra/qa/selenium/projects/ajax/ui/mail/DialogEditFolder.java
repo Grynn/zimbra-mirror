@@ -5,6 +5,8 @@ package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogShare;
 
 /**
  * Represents a "Create New Folder" dialog box
@@ -96,8 +98,19 @@ public class DialogEditFolder extends AbsDialog {
 		} else if (button == Button.O_EDIT_LINK) {
 
 			locator = "//div[@class='" + Locators.zEditPropertiesDialogId+ "']//div[contains(@id,'_content')]//div/fieldset/div/table/tbody/tr/td/a[contains(text(),'Edit')]";
+			page = new DialogShare(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+			
+			// Click the link
 			this.sClick(locator);
+			this.zWaitForBusyOverlay();
+
+			// Wait for the Edit dialog to appear
+			page.zWaitForActive();
+			this.zWaitForBusyOverlay();
+
+			// Done
 			return (page);
+			
 		} else {
 			throw new HarnessException("Button " + button + " not implemented");
 		}
