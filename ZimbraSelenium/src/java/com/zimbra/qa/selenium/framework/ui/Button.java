@@ -221,15 +221,17 @@ public class Button {
 	public static final Button B_HIGHLIGHT_OBJECTS = new Button("B_HIGHLIGHT_OBJECTS");
 	
 	// Calendar Buttons
+	public static final Button B_SAVEANDCLOSE = new Button("B_SAVEANDCLOSE");
 	public static final Button B_REFRESH = new Button("B_REFRESH");
 	
     // Calendar	Views
-	public static final Button O_LISTVIEW_DAY = new Button("POPUP_DAY_VIEW");
-	public static final Button O_LISTVIEW_WORKWEEK = new Button("POPUP_WORK_WEEK_VIEW");
-	public static final Button O_LISTVIEW_WEEK = new Button("POPUP_WEEK_VIEW");
-	public static final Button O_LISTVIEW_MONTH = new Button("POPUP_MONTH_VIEW");
-	public static final Button O_LISTVIEW_LIST = new Button("POPUP_CAL_LIST_VIEW");
-	public static final Button O_LISTVIEW_SCHEDULE = new Button("POPUP_SCHEDULE_VIEW");
+	public static final Button B_VIEW = new Button("B_VIEWTOOLBAR");
+	public static final Button O_LISTVIEW_DAY = new Button("O_LISTVIEW_DAY");
+	public static final Button O_LISTVIEW_WORKWEEK = new Button("O_LISTVIEW_WORKWEEK");
+	public static final Button O_LISTVIEW_WEEK = new Button("O_LISTVIEW_WEEK");
+	public static final Button O_LISTVIEW_MONTH = new Button("O_LISTVIEW_MONTH");
+	public static final Button O_LISTVIEW_LIST = new Button("O_LISTVIEW_LIST");
+	public static final Button O_LISTVIEW_SCHEDULE = new Button("O_LISTVIEW_SCHEDULE");
 
 	//// Admin Console
 	
