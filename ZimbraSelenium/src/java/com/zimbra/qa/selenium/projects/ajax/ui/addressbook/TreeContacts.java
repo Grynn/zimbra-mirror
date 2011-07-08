@@ -3,8 +3,9 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-
+import java.awt.Robot;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -135,14 +136,29 @@ public class TreeContacts extends AbsTree {
 			zWaitForBusyOverlay();
 			
 			if (option == Button.B_TREE_NEWFOLDER) {
-				//if option is disabled
-				optionLocator="tr#POPUP_NEW_ADDRBOOK";
-				if (zIsElementDisabled(optionLocator + " div")) {
+				optionLocator="css=tr#POPUP_NEW_ADDRBOOK";
+				
+				if (zIsElementDisabled(optionLocator + ">td.ZLeftIcon>div.ImgNewContactsFolder")) {			    		
 					return null;
 				}			
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
-			    zWaitForBusyOverlay();
+				if (!this.zIsBrowserMatch(BrowserMasks.BrowserMaskChrome)) {
+				  zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				  zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
+				}
+				else {
+				   try {
+					   Robot robot=new Robot();					   
+					   String itemId="zov__main_Contacts" ;
+				       robot.mouseMove(sGetElementPositionLeft("id=" + itemId) + sGetElementWidth(optionLocator)/2,							            
+							           sGetElementPositionTop("id=zb__App__Contacts") + sGetElementHeight("id=zb__App__Contacts") +							           
+							           sGetElementPositionTop("id=" + itemId)  + sGetElementHeight(optionLocator)/2							                  
+							           );
+				       robot.mousePress(InputEvent.BUTTON1_MASK);
+                       robot.mouseRelease(InputEvent.BUTTON1_MASK);
+				   }
+				   catch (Exception e) {logger.info(e.getMessage());}				
+				}
+				zWaitForBusyOverlay();
 				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageAddressbook);			    
 			}			
 			else if (option == Button.B_DELETE) {								

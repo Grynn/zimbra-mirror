@@ -738,7 +738,7 @@ public abstract class AbsSeleniumObject {
 		if (runTime > 2000) {
 			logger.warn("FIXME: Run time = " +  runTime +" sec for sIsElementPresent(" + locator + ")");		   
 		}
-		logger.info("isElementPresent(" + locator + ") = " + present);
+		logger.info("sIsElementPresent(" + locator + ") = " + present);
 					
 		return (present);
 	}
@@ -914,7 +914,7 @@ public abstract class AbsSeleniumObject {
 	 */
 	public boolean zIsElementDisabled(String cssLocator) throws HarnessException {
 		logger.info("zIsElementDisabled(" + cssLocator + ")");
-		String locator = "css=" + cssLocator +"[class*=ZDisabled]";
+		String locator = (cssLocator.startsWith("css=")?"":"css=") + cssLocator +"[class*=ZDisabled]";
 		
 		return sIsElementPresent(locator);
 	}
