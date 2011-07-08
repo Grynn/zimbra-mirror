@@ -23,6 +23,10 @@
 #
 ###########################################################################
 
+# List contains commonly abused end user mail providers
+# "freemail" is solely used for label purposes.
+
+
 ifplugin Mail::SpamAssassin::Plugin::FreeMail
 
 # Initial import from old FreeMail.pm / 090428
@@ -210,7 +214,7 @@ freemail_domains machinecandy.com macmail.com mad.scientist.com madcrazy.com mad
 freemail_domains madonno.com madrid.com magicmail.co.za magik-net.com mail-atlas.net
 freemail_domains mail-awu.de mail-box.cz mail-center.com mail-central.com mail-jp.org
 freemail_domains mail-online.dk mail-page.com mail-x-change.com mail.austria.com mail.az
-freemail_domains mail.be mail.bg mail.bulgaria.com mail.co.za mail.com mail.dk mail.ee
+freemail_domains mail.de mail.be mail.bg mail.bulgaria.com mail.co.za mail.com mail.dk mail.ee
 freemail_domains mail.goo.ne.jp mail.gr mail.lawguru.com mail.md mail.mn mail.org mail.pf
 freemail_domains mail.pt mail.ru mail.yahoo.co.jp mail15.com mail2*.com mail3000.com mail333.com
 freemail_domains mail8.com mailandftp.com mailandnews.com mailas.com mailasia.com mailbg.com
@@ -235,7 +239,7 @@ freemail_domains mlanime.com mm.st mmail.com mobimail.mn mobsters.com mobstop.co
 freemail_domains modemnet.net modomail.com moldova.com moldovacc.com monarchy.com
 freemail_domains montana.usa.com montevideo.com.uy moomia.com moose-mail.com mosaicfx.com
 freemail_domains moscowmail.com motormania.com movemail.com mr.outblaze.com mrspender.com
-freemail_domains ms*.hinet.net mscold.com msn.com msnzone.cn mundo-r.com munich.com musician.org muslim.com
+freemail_domains ms*.hinet.net mscold.com msn.com msn.co.uk msnzone.cn mundo-r.com munich.com musician.org muslim.com
 freemail_domains muslimsonline.com mustangs.com mxs.de myblue.cc mycabin.com mycity.com mycommail.com
 freemail_domains mycool.com mydomain.com myeweb.com myfastmail.com myfunnymail.com
 freemail_domains mygamingconsoles.com myiris.com myjazzmail.com mymacmail.com mymail.dk
@@ -371,7 +375,7 @@ freemail_domains wtonetwork.com wurtele.net www.com www.consulcredit.it wyoming.
 freemail_domains x-mail.net xasa.com xfreehosting.com xmail.net xmsg.com xnmsn.cn xoom.com xtra.co.nz
 freemail_domains xpectmore.com xrea.com xsmail.com xzapmail.com y7mail.com yahala.co.il
 freemail_domains yaho.com yahoo.* yahoo.co*.* yalla.com.lb
-freemail_domains yam.com yamal.info yandex.ru yapost.com yawmail.com yebox.com yehey.com
+freemail_domains yam.com yamal.info yandex.* yapost.com yawmail.com yebox.com yehey.com
 freemail_domains yellow-jackets.com yellowstone.net yenimail.com yepmail.net yifan.net
 freemail_domains ymail.com your-mail.com yours.com yourwap.com yyhmail.com z11.com z6.com
 freemail_domains zednet.co.uk zeeman.nl zim.gov.zw ziplip.com zipmail.com.br zipmax.com
@@ -380,7 +384,7 @@ freemail_domains zoomshare.com zoznam.sk zubee.com zuvio.com zwallet.com zworg.c
 freemail_domains zybermail.com zzn.com foxmail.com
 
 # moulds / shops / etc  2010-03-17-AXB
-freemail_domains vip.163.com vip.sina.com vip.sohu.net vip.tom.com
+freemail_domains vip.163.com vip.sina.com vip.sohu.net sohu.com vip.tom.com
 
 # tunome.com / 091028
 

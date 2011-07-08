@@ -270,6 +270,11 @@ header __HAS_SUBJECT		exists:Subject
 meta MISSING_SUBJECT		!__HAS_SUBJECT
 describe MISSING_SUBJECT	Missing Subject: header
 
+# bug 6353
+header __HAS_FROM		exists:From
+meta MISSING_FROM		!__HAS_FROM
+describe MISSING_FROM		Missing From: header
+
 # bug 6149: avoid common .jp false positives
 header __GAPPY_SUBJECT		Subject =~ /\b(?:[a-z]([-_. =~\/:,*!\@\#\$\%\^&+;\"\'<>\\])\1{0,2}){4}/i
 meta GAPPY_SUBJECT              (__GAPPY_SUBJECT && !__ISO_2022_JP_DELIM)
@@ -299,7 +304,9 @@ describe X_IP			Message has X-IP header
 header   __HAS_MIMEOLE          exists:X-MimeOLE
 header   __HAS_MSMAIL_PRI       exists:X-MSMail-Priority
 header   __HAS_SQUIRRELMAIL_IN_MAILER	X-Mailer =~ /SquirrelMail\b/
-meta     MISSING_MIMEOLE	(__HAS_MSMAIL_PRI && !__HAS_MIMEOLE && !__HAS_SQUIRRELMAIL_IN_MAILER)
+# Bug 6346
+header   __HAS_OFFICE1214_IN_MAILER	X-Mailer =~ /^Microsoft (?:Office )?Outlook 1[24]\.0/
+meta     MISSING_MIMEOLE	(__HAS_MSMAIL_PRI && !__HAS_MIMEOLE && !__HAS_SQUIRRELMAIL_IN_MAILER && !__HAS_OFFICE1214_IN_MAILER)
 describe MISSING_MIMEOLE	Message has X-MSMail-Priority, but no X-MimeOLE
 
 header __HAS_X_MAILER		exists:X-Mailer
@@ -333,9 +340,6 @@ describe RCVD_FAKE_HELO_DOTCOM  Received contains a faked HELO hostname
 
 header SUBJECT_DIET		Subject =~ /\bLose .*(?:pounds|lbs|weight)/i
 describe SUBJECT_DIET		Subject talks about losing pounds
-
-header EXTRA_MPART_TYPE         Content-Type =~ /(?:\s*multipart\/)?.* type=/i
-describe EXTRA_MPART_TYPE       Header has extraneous Content-type:...type= entry
 
 
 # MIME boundary tests; spam tools use distinctive patterns.
@@ -416,7 +420,7 @@ describe __VIA_ML  Mail from a mailing list
 
 
 # must keep it in sync with http://www.iana.org/assignments/ipv4-address-space/
-header RCVD_ILLEGAL_IP     X-Spam-Relays-Untrusted =~ / (?:by|ip)=(?=\d+\.\d+\.\d+\.\d+ )(?:0|2(?:2[4-9]|[3-5]\d)|192\.0\.2|198\.51\.100|203\.0\.113)\./
+header RCVD_ILLEGAL_IP		X-Spam-Relays-Untrusted =~ / (?:by|ip)=(?=\d+\.\d+\.\d+\.\d+ )(?:0|2(?:2[4-9]|[3-5]\d)|192\.0\.2|198\.51\.100|203\.0\.113)\./
 describe RCVD_ILLEGAL_IP	Received: contains illegal IP address
 
 

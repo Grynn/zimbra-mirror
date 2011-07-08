@@ -37,7 +37,7 @@
 #
 
 
-# Last Update: 2010-12-22-AXB
+# Last Update: 2011-06-27-AXB
 
 
 
@@ -63,6 +63,7 @@ util_rb_3tld no.sapo.pt
 util_rb_3tld home.sapo.pt
 util_rb_3tld do.sapo.pt
 util_rb_3tld homepage.t-online.de
+util_rb_3tld privat.t-online.de
 util_rb_3tld web.fc2.com
 util_rb_3tld co.uk.pn
 util_rb_3tld com.au.pn
@@ -70,8 +71,9 @@ util_rb_3tld co.at.pn
 util_rb_3tld co.at.lv
 util_rb_3tld or.at.lv
 util_rb_3tld co.at.tc
-util_rb_3tld qld.edu.au                                                                                                                                                                                              
+util_rb_3tld qld.edu.au
 util_rb_3tld perso.neuf.fr
+util_rb_3tld perso.sfr.fr
 
 endif
 
@@ -272,11 +274,19 @@ util_rb_2tld myvnc.com
 util_rb_2tld blog4ever.com
 util_rb_2tld sytes.net
 util_rb_2tld multiply.com
-util_rb_2tld 80.hk                                                                                                                                                                                                   
+util_rb_2tld 80.hk
 util_rb_2tld shutterfly.com
-util_rb_2tld chez.com                                                                                                                                                                                                
+util_rb_2tld chez.com
 util_rb_2tld ce.ms
-util_rb_2tld cz.cc                                                                                                                                                                                                   
+util_rb_2tld cz.cc
 util_rb_2tld neostrada.pl
-util_rb_2tld dyndns-server.com                                                                                                                                                                                       
+util_rb_2tld dyndns-server.com
+util_rb_2tld vv.cc
+util_rb_2tld co.be
+util_rb_2tld uni.cc
+util_rb_2tld shop.co
+
+
+
+
 
