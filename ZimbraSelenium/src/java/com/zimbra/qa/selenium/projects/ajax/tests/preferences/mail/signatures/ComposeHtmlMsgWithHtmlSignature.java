@@ -76,10 +76,7 @@ public class ComposeHtmlMsgWithHtmlSignature extends AjaxCommonTest {
 		mailform.zFill(mail);
 
 		//click Signature drop down and add signature
-		app.zPageMail.zToolbarPressPulldown(Button.B_SIGNATURE,Button.O_ADD_SIGNATURE,this.sigName);
-
-		// Add signature		
-		//	app.zPageMail.zClick("css=td[id*='_title']td:contains('"+ this.sigName + "')");
+		app.zPageMail.zToolbarPressPulldown(Button.B_OPTIONS,Button.O_ADD_SIGNATURE,this.sigName);
 
 		// Send the message
 		mailform.zSubmit();

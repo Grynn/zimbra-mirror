@@ -551,7 +551,7 @@ public class PageMail extends AbsTab {
 
 			}
 			
-		} else if ((pulldown == Button.B_SIGNATURE)&& (option == Button.O_ADD_SIGNATURE)) {
+		} else if ((pulldown == Button.B_OPTIONS)&& (option == Button.O_ADD_SIGNATURE)) {
 
 			pulldownLocator = "css=td[id$='_ADD_SIGNATURE_dropdown']>div[class='ImgSelectPullDownArrow']";
 			//optionLocator = "//td[contains(@id,'_title') and contains (text(),'sigName')]";
@@ -1313,7 +1313,7 @@ public class PageMail extends AbsTab {
 		String optionLocator = null; // If set, this will be clicked
 		AbsPage page = null; // If set, this page will be returned
 
-		if ((pulldown == Button.B_SIGNATURE)&& (option == Button.O_ADD_SIGNATURE)) {
+		if ((pulldown == Button.B_OPTIONS)&& (option == Button.O_ADD_SIGNATURE)) {
 			String name = (String)dynamic;
 			logger.info(name);
 			//pulldownLocator = "css=td[id$='_ADD_SIGNATURE_dropdown']>div[class='ImgSelectPullDownArrow']";

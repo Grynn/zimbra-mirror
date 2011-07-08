@@ -73,7 +73,7 @@ public class ComposeMsgWithTextSignature extends AjaxCommonTest {
 		// Fill out the form with the data
 		mailform.zFill(mail);
 		 //click Signature drop down and add signature
-		app.zPageMail.zToolbarPressPulldown(Button.B_SIGNATURE,Button.O_ADD_SIGNATURE,this.sigName);
+		app.zPageMail.zToolbarPressPulldown(Button.B_OPTIONS,Button.O_ADD_SIGNATURE,this.sigName);
 	
 		// Send the message
 		mailform.zSubmit();
