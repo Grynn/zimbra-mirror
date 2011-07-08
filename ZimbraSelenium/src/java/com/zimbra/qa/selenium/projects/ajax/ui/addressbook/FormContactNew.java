@@ -91,12 +91,9 @@ public class FormContactNew extends AbsForm {
 	
 	protected void save() throws HarnessException {
 		logger.info("FormContactNew.save()");
-		
-		
+				
 		try {		
-		    int totalActiveInt = Integer.parseInt(sGetEval("elementArray=window.document.getElementsByClassName('ZToolbarTable').length;"));
-	       
-		    for (int i=0; i<totalActiveInt; i++) {
+		    for (int i=0; ; i++) {
 		    	String id = sGetEval("window.document.getElementsByClassName('ZToolbarTable')[" + i + "].offsetParent.id" );
 		    	if (id.startsWith("ztb") && zIsVisiblePerPosition(id, 0, 0)) {
 		    		Toolbar.SAVE = id.replaceFirst("ztb","zb") + "__SAVE";		    		
@@ -158,9 +155,7 @@ public class FormContactNew extends AbsForm {
 		
 		String prefix="css=div#";
 		try {		
-		    int totalActiveInt = Integer.parseInt(sGetEval("elementArray=window.document.getElementsByClassName('DwtMenu ZHasCheck').length;"));
-	       
-		    for (int i=0; i<totalActiveInt; i++) {
+		    for (int i=0; ; i++) {				    
 		    	String id = sGetEval("window.document.getElementsByClassName('DwtMenu ZHasCheck')[" + i + "].id" );
 		    	if (zIsVisiblePerPosition(id, 0, 0)) {
 		    		prefix = prefix + id + " ";		    		
@@ -201,6 +196,7 @@ public class FormContactNew extends AbsForm {
 	public void zFillField(String locator, String value) throws HarnessException {
 		tracer.trace("Set "+ locator +" to "+ value);
 	
+		
 		// Make sure the button exists
 		if ( !this.sIsElementPresent(locator) )
 			throw new HarnessException("Field is not present field="+ locator +" locator="+ value);
@@ -211,8 +207,11 @@ public class FormContactNew extends AbsForm {
 	        sTypeKeys(locator,value);			
 		}
 		else {
+		   //reset note 
+			sType(getLocator(Locators.zNotesEditField) ,"");
+		
 			//The following code to simulate paste action from user (Ctrl-V) bug #
-			//Use "Notes" to store text which will be entered into clipboard (Ctrl-X)
+			//Use "Notes" to store text which will be entered into clipboard (Ctrl-X)	 
 			sType(getLocator(Locators.zNotesEditField) ,value); //
 
 			//highlight text
@@ -295,9 +294,7 @@ public class FormContactNew extends AbsForm {
 
 		//set parameter zActiveEditForm		
 		try {		
-		    int totalActiveInt = Integer.parseInt(sGetEval("elementArray=window.document.getElementsByClassName('zmEditContactView').length;"));
-	       
-		    for (int i=0; i<totalActiveInt; i++) {
+		    for (int i=0; ; i++) {	  		   
 		    	String id = sGetEval("window.document.getElementsByClassName('zmEditContactView')[" + i + "].id" );
 		    	if (zIsVisiblePerPosition(id, 0, 0)) {
 		    		Locators.zActiveEditForm = id;
