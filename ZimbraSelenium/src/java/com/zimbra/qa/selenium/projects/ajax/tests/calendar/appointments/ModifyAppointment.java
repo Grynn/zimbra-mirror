@@ -50,7 +50,6 @@ public class ModifyAppointment extends AjaxCommonTest {
 		appt.setContent(editApptBody);
 		apptForm.zFill(appt);
 		apptForm.zToolbarPressButton(Button.B_SAVEANDCLOSE);
-		SleepUtil.sleepMedium();
 
 		// Verify modified appointment
 		ZAssert.assertEquals(app.zPageCalendar.zVerifyAppointmentExists(

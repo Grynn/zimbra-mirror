@@ -104,7 +104,9 @@ public class FormApptNew extends AbsForm {
 	 */
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
-		SleepUtil.sleep(2000);
+
+		SleepUtil.sleepMedium();
+		
 		tracer.trace("Click button " + button);
 
 		if (button == null)
@@ -167,6 +169,7 @@ public class FormApptNew extends AbsForm {
 		}
 
 		// Return the page, if specified
+		SleepUtil.sleepMedium();
 		return (page);
 
 	}
