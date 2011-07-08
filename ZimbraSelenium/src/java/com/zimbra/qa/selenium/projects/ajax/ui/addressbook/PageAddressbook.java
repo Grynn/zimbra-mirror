@@ -198,7 +198,7 @@ public class PageAddressbook extends AbsTab {
 		    
 			String contactDisplayedLocator = commonLocator + " table tbody tr td:nth-child(3)";
 			String fileAs = ClientSessionFactory.session().selenium().getText(contactDisplayedLocator);
-			
+			logger.info("...found "+ contactType + " - " + fileAs );
 			isContactFound = ((contactType.equals(ContactGroupItem.IMAGE_CLASS) &&  contactItem instanceof ContactGroupItem) ||
 				  (contactType.equals(ContactItem.IMAGE_CLASS) &&  contactItem instanceof ContactItem)) &&
 				  (contactItem.fileAs.equals(fileAs));
