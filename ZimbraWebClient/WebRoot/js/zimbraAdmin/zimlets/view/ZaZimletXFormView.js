@@ -34,7 +34,7 @@ ZaZimletXFormView = function(parent) {
 ZaZimletXFormView.prototype = new ZaTabView();
 ZaZimletXFormView.prototype.constructor = ZaZimletXFormView;
 ZaTabView.XFormModifiers["ZaZimletXFormView"] = new Array();
-
+ZaTabView.XFormSetObjectMethods["ZaZimletXFormView"] = new Array();
 
 /**
 * Sets the object contained in the view
@@ -64,6 +64,18 @@ function(entry) {
         this._containedObject[ZaModel.currentTab] = "1";
     else
         this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
+
+	// execute other init methods
+        if(ZaTabView.XFormSetObjectMethods["ZaZimletXFormView"]) {
+                var methods = ZaTabView.XFormSetObjectMethods["ZaZimletXFormView"];
+                var cnt = methods.length;
+                var containedObj = this._containedObject;
+                for(var i = 0; i < cnt; i++) {
+                        if(typeof(methods[i]) == "function")
+                                containedObj = methods[i].call(this, containedObj, entry);
+                }
+                this._containedObject = containedObj;
+        }
 
     this._localXForm.setInstance(this._containedObject) ;
     this.updateTab();

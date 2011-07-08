@@ -36,6 +36,7 @@ ZaDLXFormView.prototype = new ZaTabView();
 ZaDLXFormView.prototype.constructor = ZaDLXFormView;
 ZaTabView.XFormModifiers["ZaDLXFormView"] = new Array();
 ZaTabView.ObjectModifiers["ZaDLXFormView"] = [] ;
+ZaTabView.XFormSetObjectMethods["ZaDLXFormView"] = new Array();
 
 ZaDLXFormView.prototype.getTitle = 
 function () {
@@ -464,7 +465,6 @@ ZaDLXFormView.addFreeFormAddressToMembers = function (event) {
 ZaDLXFormView.prototype.setObject = 
 function (entry) {
     this._containedObject = {attrs:{}};
-
 	this._containedObject[ZaDistributionList.A2_memberList] = new Array();
 	this._containedObject[ZaDistributionList.A2_memberList]._version = 1;
 	if(entry[ZaDistributionList.A2_memberList]) {
@@ -545,7 +545,18 @@ function (entry) {
 			this._containedObject.attrs[ZaDistributionList.A_mailStatus] = "enabled";
 		}
 	}
-	this.modifyContainedObject () ;	
+        this.modifyContainedObject () ;
+	//execute others init methods
+        if(ZaTabView.XFormSetObjectMethods["ZaDLXFormView"]) {
+                var methods = ZaTabView.XFormSetObjectMethods["ZaDLXFormView"];
+                var cnt = methods.length;
+                var containedObj = this._containedObject;
+                for(var i = 0; i < cnt; i++) {
+                        if(typeof(methods[i]) == "function")
+                                containedObj = methods[i].call(this, containedObj, entry);
+                }
+                this._containedObject = containedObj;
+        }
 	this._localXForm.setInstance(this._containedObject);	
 	
 	this.updateTab();

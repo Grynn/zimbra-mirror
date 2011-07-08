@@ -36,6 +36,7 @@ ZaTabView.XFormModifiers["ZaCosXFormView"] = new Array();
 ZaCosXFormView.prototype.TAB_INDEX=0;
 ZaCosXFormView.zimletChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
 ZaCosXFormView.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
+ZaTabView.XFormSetObjectMethods["ZaCosXFormView"] = new Array();
 /**
 * @method setObject sets the object contained in the view
 * @param entry - ZaDomain object to display
@@ -44,7 +45,6 @@ ZaCosXFormView.prototype.setObject =
 function(entry) {
 	//handle the special attributes to be displayed in xform
 	entry.manageSpecialAttrs();
-	
 	this._containedObject = new Object();
 	this._containedObject.attrs = new Object();
 	
@@ -138,6 +138,18 @@ function(entry) {
 		this._containedObject[ZaModel.currentTab] = "1";
 	else
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
+
+	// execute other init methods
+        if(ZaTabView.XFormSetObjectMethods["ZaCosXFormView"]) {
+                var methods = ZaTabView.XFormSetObjectMethods["ZaCosXFormView"];
+                var cnt = methods.length;
+                var containedObj = this._containedObject;
+                for(var i = 0; i < cnt; i++) {
+                        if(typeof(methods[i]) == "function")
+                                containedObj = methods[i].call(this, containedObj, entry);
+                }
+                this._containedObject = containedObj;
+        }
 		
 	this._localXForm.setInstance(this._containedObject);
 	this.updateTab();
