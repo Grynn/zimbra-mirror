@@ -446,6 +446,34 @@ public class FormMailNew extends AbsForm {
 
 				return;
 
+			}else if ( frames == 2 ) {
+				////
+				//  As IFrame count for IE is  showing 2 so Added  respective condition for IE browser.
+				////
+
+				try {
+
+					this.sSelectFrame("css=iframe[id^='iframe_DWT']"); 
+
+					locator = "css=body";
+
+					if ( !this.sIsElementPresent(locator))
+						throw new HarnessException("Unable to locate compose body");
+
+					this.sFocus(locator);
+					this.zClickAt(locator,"");	
+					this.zKeyboard.zTypeCharacters(value);
+				} finally {
+					// Make sure to go back to the original iframe
+					this.sSelectFrame("relative=top");
+
+				}
+
+				// Is this requried?
+				this.zWaitForBusyOverlay();
+
+				return;
+
 			} else {
 				throw new HarnessException("Compose //iframe count was "+ frames);
 			}
