@@ -1,5 +1,7 @@
 package  com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 
+import java.awt.Robot;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -536,8 +538,22 @@ public class PageAddressbook extends AbsTab {
 			//central coordinate "x,y" 
 			String center= sGetElementWidth(pulldownLocator)/2 + "," + sGetElementHeight(pulldownLocator)/2;
 			if ( this.zIsBrowserMatch(BrowserMasks.BrowserMaskIE)){
-				//IE							
-				sClickAt(pulldownLocator,center);
+				// TODO check if the following code make the test case CreateContactGroup.GroupOfNewEmail() pass in wdc			
+				   try {
+					   Robot robot=new Robot();					   
+					   String itemId="zov__main_Contacts" ;
+				       robot.mouseMove(sGetElementPositionLeft(pulldownLocator) + sGetElementWidth(pulldownLocator)/2,							            
+							           sGetElementPositionTop("id=zb__App__Contacts") + sGetElementHeight("id=zb__App__Contacts") +							           
+							           sGetElementPositionTop("id=" + itemId)  + 
+							           //sGetElementPositionTop(pulldownLocator) + 
+							           sGetElementHeight(pulldownLocator)							                  
+							           );
+				       robot.mousePress(InputEvent.BUTTON1_MASK);
+                       robot.mouseRelease(InputEvent.BUTTON1_MASK);
+				   }
+				   catch (Exception e) {logger.info(e.getMessage());}		
+				 //the following code failed in wdc, but pass in my machine :
+				 //sClickAt(pulldownLocator,center);
 			}
 			else {
 			    //others
@@ -548,11 +564,13 @@ public class PageAddressbook extends AbsTab {
 			
 			if ( optionLocator != null ) {
                 
-				// Make sure the locator exists
+				// Make sure the locator exists and visible
 				zWaitForElementPresent(optionLocator);
 				
-				zClick(optionLocator);
-				zWaitForBusyOverlay();
+				if (zIsVisiblePerPosition(optionLocator,0,0)) {
+				   zClick(optionLocator);
+				   zWaitForBusyOverlay();
+				}
 
 			}
 			
