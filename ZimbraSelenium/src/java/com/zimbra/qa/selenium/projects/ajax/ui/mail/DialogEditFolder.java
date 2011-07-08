@@ -7,6 +7,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogShare;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogShareRevoke;
 
 /**
  * Represents a "Create New Folder" dialog box
@@ -94,6 +95,26 @@ public class DialogEditFolder extends AbsDialog {
 		}else if (button == Button.B_SHARE) {
 
 			locator = "//div[@class='" + Locators.zEditPropertiesDialogId+ "']//div[contains(@id,'_buttons')]//td[text()=''Add Share...']";
+
+		} else if (button == Button.O_RESEND_LINK) {
+			
+			throw new HarnessException("implement me");
+			
+		} else if (button == Button.O_REVOKE_LINK) {
+			
+			locator = "//div[@class='" + Locators.zEditPropertiesDialogId+ "']//div[contains(@id,'_content')]//div/fieldset/div/table/tbody/tr/td/a[contains(text(),'Revoke')]";
+			page = new DialogShareRevoke(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+			
+			// Click the link
+			this.sClick(locator);
+			this.zWaitForBusyOverlay();
+
+			// Wait for the Edit dialog to appear
+			page.zWaitForActive();
+			this.zWaitForBusyOverlay();
+
+			// Done
+			return (page);
 
 		} else if (button == Button.O_EDIT_LINK) {
 
