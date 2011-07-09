@@ -207,11 +207,10 @@ public class FormContactNew extends AbsForm {
 	        sTypeKeys(locator,value);			
 		}
 		else {
-		   //reset note 
-			sType(getLocator(Locators.zNotesEditField) ,"");
 		
 			//The following code to simulate paste action from user (Ctrl-V) bug #
 			//Use "Notes" to store text which will be entered into clipboard (Ctrl-X)	 
+			sFocus(getLocator(Locators.zNotesEditField));
 			sType(getLocator(Locators.zNotesEditField) ,value); //
 
 			//highlight text
@@ -292,6 +291,11 @@ public class FormContactNew extends AbsForm {
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");
 
+		if (zIsVisiblePerPosition(Locators.zActiveEditForm, 0, 0)) {
+    		logger.info("active id = " + Locators.zActiveEditForm);
+    		return true;
+    	}		    
+		
 		//set parameter zActiveEditForm		
 		try {		
 		    for (int i=0; ; i++) {	  		   

@@ -6,8 +6,6 @@ import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactNew.Locators;
-import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactNew.Toolbar;
 
 import java.util.*;
 
@@ -235,7 +233,12 @@ public class FormContactGroupNew extends AbsForm {
 	@Override
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");
-				
+			
+	  	if (zIsVisiblePerPosition(Locators.zActiveEditForm, 0, 0)) {
+    		logger.info("active id = " + Locators.zActiveEditForm);
+    		return true;
+    	}	
+	  	
 		//set parameter zActiveEditForm		
 		try {		
 		    for (int i=0;; i++) {

@@ -164,7 +164,7 @@ public class TreeContacts extends AbsTree {
 			else if (option == Button.B_DELETE) {								
 				//if option is disabled
 				optionLocator="tr#POPUP_DELETE";
-				if (zIsElementDisabled(optionLocator + " div")) {
+				if (zIsElementDisabled(optionLocator + ">td[id$=_left_icon]>div")) {
 					return null;
 				}
 				
