@@ -96,6 +96,7 @@ AjxDebug.REPLY			= "reply";		// bug 56308
 AjxDebug.SCROLL			= "scroll"; 	// bug 55775
 AjxDebug.BAD_JSON		= "bad_json"; 	// bug 57066
 AjxDebug.PREFS			= "prefs";		// bug 60942
+AjxDebug.REMINDER       = "reminder";   // bug 60692
 
 AjxDebug.BUFFER_MAX[AjxDebug.DEFAULT_TYPE]	= 0;	// this one can get big due to object dumps
 AjxDebug.BUFFER_MAX[AjxDebug.RPC]			= 200;
@@ -105,6 +106,7 @@ AjxDebug.BUFFER_MAX[AjxDebug.CALENDAR]		= 400;
 AjxDebug.BUFFER_MAX[AjxDebug.REPLY]			= 100;
 AjxDebug.BUFFER_MAX[AjxDebug.SCROLL]		= 100;
 AjxDebug.BUFFER_MAX[AjxDebug.BAD_JSON]		= 200;
+AjxDebug.BUFFER_MAX[AjxDebug.REMINDER]      = 200;
 
 AjxDebug.MAX_OUT = 25000; // max length capable of outputting an XML msg
 
