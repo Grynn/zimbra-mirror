@@ -46,7 +46,6 @@ ZaResourceXFormView = function(parent, entry) {
 ZaResourceXFormView.prototype = new ZaTabView();
 ZaResourceXFormView.prototype.constructor = ZaResourceXFormView;
 ZaTabView.XFormModifiers["ZaResourceXFormView"] = new Array();
-ZaTabView.XFormSetObjectMethods["ZaResourceXFormView"] = new Array();
 ZaResourceXFormView.TAB_INDEX=0;
 ZaResourceXFormView.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/managing_resource.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 
@@ -130,18 +129,6 @@ function(entry) {
 	else
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
 		
-
-	// execute other init methods
-        if(ZaTabView.XFormSetObjectMethods["ZaResourceXFormView"]) {
-                var methods = ZaTabView.XFormSetObjectMethods["ZaResourceXFormView"];
-                var cnt = methods.length;
-                var containedObj = this._containedObject;
-                for(var i = 0; i < cnt; i++) {
-                        if(typeof(methods[i]) == "function")
-                                containedObj = methods[i].call(this, containedObj, entry);
-                }
-                this._containedObject = containedObj;
-        }
 	this._localXForm.setInstance(this._containedObject);
 	
 	//enforce the dirty = false, so the save button after the save can be disabled.

@@ -51,7 +51,6 @@ ZaTabView.XFormModifiers["ZaAccountXFormView"] = new Array();
 ZaTabView.ObjectModifiers["ZaAccountXFormView"] = [] ;
 ZaAccountXFormView.zimletChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
 ZaAccountXFormView.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
-ZaTabView.XFormSetObjectMethods["ZaAccountXFormView"] = new Array();
 
 /**
  * * Get Tab's Icon according to different account's type
@@ -255,18 +254,6 @@ function(entry) {
 	}
 
 	this.modifyContainedObject () ;
-
-	// execute other init methods
-        if(ZaTabView.XFormSetObjectMethods["ZaAccountXFormView"]) {
-                var methods = ZaTabView.XFormSetObjectMethods["ZaAccountXFormView"];
-                var cnt = methods.length;
-                var containedObj = this._containedObject;
-                for(var i = 0; i < cnt; i++) {
-                        if(typeof(methods[i]) == "function")
-                                containedObj = methods[i].call(this, containedObj, entry);
-                }
-                this._containedObject = containedObj;
-        }
 
     this._localXForm.setInstance(this._containedObject);
     

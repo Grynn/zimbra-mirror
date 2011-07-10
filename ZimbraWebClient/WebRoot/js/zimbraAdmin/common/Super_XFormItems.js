@@ -1695,6 +1695,36 @@ function() {
 };
 
 /**
+ * _SUPER_TABCASE_
+ * 
+ * on-demand loading tab data
+*/
+
+SuperTabCase_XFormItem = function () {}
+XFormItemFactory.createItemType("_SUPER_TABCASE_", "super_tabcase", SuperTabCase_XFormItem, ZATabCase_XFormItem);
+SuperTabCase_XFormItem.prototype.loadDataMethods = [];
+
+SuperTabCase_XFormItem.prototype.show = function(isBlock) {
+        var loadMethods = this.getInheritedProperty("loadDataMethods");
+
+        if(loadMethods && loadMethods instanceof Array) {
+                var cnt = loadMethods.length;
+                for(var i = 0; i < cnt; i++) {
+                        if(loadMethods[i] == null) continue;
+                        if(typeof(loadMethods[i]) == "function") {
+                                loadMethods[i].call(this);
+                        } else if(loadMethods[i] instanceof Array) {
+                                var func = loadMethods[i].shift();
+                                if(!func || !func.apply) continue;
+                                func.apply(this, loadMethods[i]);
+                                loadMethods[i].unshift(func);
+                        }
+                }
+        }
+        Case_XFormItem.prototype.show.call(this, isBlock);
+}
+
+/**
 *	_SUPER_REPEAT_ form item type
 **/
 SuperRepeat_XFormItem = function () {}

@@ -36,7 +36,6 @@ ZaDLXFormView.prototype = new ZaTabView();
 ZaDLXFormView.prototype.constructor = ZaDLXFormView;
 ZaTabView.XFormModifiers["ZaDLXFormView"] = new Array();
 ZaTabView.ObjectModifiers["ZaDLXFormView"] = [] ;
-ZaTabView.XFormSetObjectMethods["ZaDLXFormView"] = new Array();
 
 ZaDLXFormView.prototype.getTitle = 
 function () {
@@ -546,17 +545,6 @@ function (entry) {
 		}
 	}
         this.modifyContainedObject () ;
-	//execute others init methods
-        if(ZaTabView.XFormSetObjectMethods["ZaDLXFormView"]) {
-                var methods = ZaTabView.XFormSetObjectMethods["ZaDLXFormView"];
-                var cnt = methods.length;
-                var containedObj = this._containedObject;
-                for(var i = 0; i < cnt; i++) {
-                        if(typeof(methods[i]) == "function")
-                                containedObj = methods[i].call(this, containedObj, entry);
-                }
-                this._containedObject = containedObj;
-        }
 	this._localXForm.setInstance(this._containedObject);	
 	
 	this.updateTab();
