@@ -155,10 +155,19 @@ public class DialogWarning extends AbsDialog {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
+		
 		if ( !this.sIsElementPresent(MyDivId) )
 			return (false);
-		if ( !this.zIsVisiblePerPosition(MyDivId, 225, 300) )
+		
+		// mountpionts.viewer.FlagMail seems to keep failing on this dialog, even
+		// though the PERM_DENIED dialog is showing correctly
+		//
+		// 7.X: 		if ( !this.zIsVisiblePerPosition(MyDivId, 225, 300) )
+		// 8.X: dev says any dialogs with non-negative positions should be visible, so using (0,0)
+		//
+		if ( !this.zIsVisiblePerPosition(MyDivId, 0, 0) )
 			return (false);
+		
 		return (true);
 	}
 
