@@ -170,7 +170,7 @@ public class FormContactGroupNew extends AbsForm {
 	 * check if the list group is empty
 	 */
 	public boolean zIsListGroupEmpty() {
-		return sIsElementPresent(getLocator(" div#zl__GRP__rows>div>table>tbody>tr>td.NoResults"));			
+		return sIsElementPresent(getLocator(" div#[id$=_listView].groupMembers div#zl__GRP__rows>div>table>tbody>tr>td.NoResults"));			
 	}
 
 	/* return an array list of contact items displayed in the group list view
