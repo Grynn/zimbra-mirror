@@ -782,6 +782,7 @@ public class PageAddressbook extends AbsTab {
 			// Mouse over the option
 			sFocus(locator);
 			sMouseOver(locator);
+	        zWaitForBusyOverlay();
 	
 			id = sub_cmi.locator;
 			locator = "id="+ id;
