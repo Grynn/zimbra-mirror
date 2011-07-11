@@ -709,7 +709,8 @@ public class ExecuteHarnessMain {
 		@Override
 		public void onTestSkipped(ITestResult result) {
 			testsSkipped++;	
-			skippedTests.add(result.getName());
+			String fullname = result.getMethod().getMethod().getDeclaringClass().getName() +"."+ result.getMethod().getMethod().getName();
+			skippedTests.add(fullname.replace("com.zimbra.qa.selenium.projects.", "main.projects."));
 		}
 
 		/**
