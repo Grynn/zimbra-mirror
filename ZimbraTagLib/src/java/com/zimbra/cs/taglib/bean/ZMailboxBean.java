@@ -85,6 +85,8 @@ public class ZMailboxBean {
     
     public ZFeatures getFeatures() throws ServiceException { return mMbox.getFeatures(); }
 
+    public Boolean getAdminDelegated() throws ServiceException { return mMbox.getAccountInfo(false).getAdminDelegated(); }
+
     public boolean getHasTags() throws ServiceException { return mMbox.hasTags(); }
 
     public List<String> getAvailableSkins() throws ServiceException { return mMbox.getAvailableSkins(); }
