@@ -449,13 +449,17 @@ public abstract class AbsSeleniumObject {
 				+ locator + "'); x.blur(); x.focus(); x.dispatchEvent(evObj);}");
 	}
 
-	public void zTypeText(String locator, String text, boolean bold)
+	/**
+     * Enter HTML formatted text into a iframe specified by locator.
+     * @param locator selenium locator, e.g. css=iframe[id^=’iframe_DWT’]
+     * @param html HTML string, e.g. <strong><i>foo</i></strong>
+     * @throws HarnessException
+     */
+	public void zTypeFormattedText(String locator, String html)
 			throws HarnessException {
-		if (bold) {
-			text = "<strong>" + text + "</strong>";
-		}
+		
 			sGetEval("var bodytext=\""
-					+ text
+					+ html
 					+ "\";"
 					+ "var iframe_locator=\""
 					+ locator
