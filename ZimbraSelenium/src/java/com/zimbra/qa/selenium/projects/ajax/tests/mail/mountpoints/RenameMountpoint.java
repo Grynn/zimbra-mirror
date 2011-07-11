@@ -1,13 +1,11 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.mountpoints;
 
 
-import java.util.List;
-
 import org.testng.annotations.Test;
 
+import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderMountpointItem;
-import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -15,15 +13,16 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogRenameFolder;
 
 
-public class DeleteMountpoint extends AjaxCommonTest {
+public class RenameMountpoint extends AjaxCommonTest {
 
 	private ZimbraAccount Owner = null;
 	
 	
-	public DeleteMountpoint() {
-		logger.info("New "+ DeleteMountpoint.class.getCanonicalName());
+	public RenameMountpoint() {
+		logger.info("New "+ RenameMountpoint.class.getCanonicalName());
 		
 		// All tests start at the login page
 		super.startingPage = app.zPageMail;
@@ -35,9 +34,9 @@ public class DeleteMountpoint extends AjaxCommonTest {
 		
 	}
 	
-	@Test(	description = "Delete a mountpoint to a shared folder (right click -> Delete)",
+	@Test(	description = "Rename a mountpoint (Right Click -> Rename)",
 			groups = { "smoke" })
-	public void DeleteMountpoint_01() throws HarnessException {
+	public void RenameMountpoint_01() throws HarnessException {
 		
 		// Owner creates a folder, shares it with current user
 		String ownerFoldername = "ownerfolder"+ ZimbraSeleniumProperties.getUniqueString();
@@ -75,28 +74,23 @@ public class DeleteMountpoint extends AjaxCommonTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 		
-		// Verify the mountpoint exists
-		List<FolderItem> folders = app.zTreeMail.zListGetFolders();
+		DialogRenameFolder dialog = (DialogRenameFolder)app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_RENAME, mountpoint);
+		ZAssert.assertNotNull(dialog, "Verify the dialog opened");
 		
-		FolderItem found = null;
-		for(FolderItem f : folders) {
-			if ( mountpointFoldername.equals(f.getName()) ) {
-				found = f;
-				break;
-			}
-		}
-		ZAssert.assertNotNull(found, "Verify the mountpoint exists in the folder tree");
+		// Set the name, click OK
+		String mountpointFoldername2 = "mountpoint" + ZimbraSeleniumProperties.getUniqueString();
+		dialog.zSetNewName(mountpointFoldername2);
+		dialog.zClickButton(Button.B_OK);
+
 		
+		// Get all the folders and verify the new name appears and the old name disappears
+		app.zGetActiveAccount().soapSend("<GetFolderRequest xmlns = 'urn:zimbraMail'/>");
 		
-		// Delete the folder using context menu
-		app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, mountpoint);
+		Element[] eFolder1 = app.zGetActiveAccount().soapSelectNodes("//mail:link[@name='"+ mountpointFoldername +"']");
+		ZAssert.assertEquals(eFolder1.length, 0, "Verify the old folder name no longer exists");
 		
-		
-		// Verify the folder is now in the trash
-		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
-		mountpoint = FolderMountpointItem.importFromSOAP(app.zGetActiveAccount(), mountpointFoldername);
-		ZAssert.assertNotNull(mountpoint, "Verify the subfolder is again available");
-		ZAssert.assertEquals(trash.getId(), mountpoint.getParentId(), "Verify the subfolder's parent is now the trash folder ID");
+		Element[] eFolder2 = app.zGetActiveAccount().soapSelectNodes("//mail:link[@name='"+ mountpointFoldername2 +"']");
+		ZAssert.assertEquals(eFolder2.length, 1, "Verify the new folder name exists");
 		
 	}
 
