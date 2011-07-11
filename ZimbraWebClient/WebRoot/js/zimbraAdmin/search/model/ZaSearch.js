@@ -846,8 +846,8 @@ function (resp) {
 ZaSearch.loadPredefinedSearch =
 function () {
     if (ZaSearchField.canViewSavedSearch()) {
-        var currentSavedSearches = ZaSearch.getSavedSearches().Body.GetAdminSavedSearchesResponse.search;
-       
+        //var currentSavedSearches = ZaSearch.getSavedSearches().Body.GetAdminSavedSearchesResponse.search;
+        var currentSavedSearches = ZaApp.getInstance().getSavedSearchList();
         /*
          * If we get saved search from server and have write-permission, we will         * replace all the "zimbraIsDomainAdminAccount" with "zimbraIsDelegatedA         * dminAccount" to update the query string for version update      
          */ 
@@ -856,9 +856,9 @@ function () {
  
             for (var i = 0; i < currentSavedSearches.length; i++ ){
                var currentName = currentSavedSearches[i].name;
-               var currentContent = currentSavedSearches[i]._content;
+               var currentContent = currentSavedSearches[i].query;
     
-               if (currentContent.search(/zimbraIsDomainAdminAccount/) != -1){
+               if (currentContent && currentContent.search(/zimbraIsDomainAdminAccount/) != -1){
              
                   currentContent = currentContent.replace(/zimbraIsDomainAdminAccount/g , "zimbraIsDelegatedAdminAccount"); //'g' is used for global replace
                   modifiedSearches.push ({
