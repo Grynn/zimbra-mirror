@@ -169,7 +169,9 @@ function(name, value, parent, namespace) {
 		? (namespace && useNS ? doc.createElementNS(namespace, name) : doc.createElement(name))
 		: doc.createDocumentFragment();
 
-	if (namespace && !useNS) p.setAttribute("xmlns", namespace);
+    if ((namespace !== undefined) && (namespace !== null) && !useNS) {
+        p.setAttribute("xmlns", namespace);
+    }
 
 	if (value != null) {
 		if (typeof value == "object") {
