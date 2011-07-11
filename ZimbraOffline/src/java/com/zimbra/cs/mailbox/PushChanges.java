@@ -118,7 +118,8 @@ public class PushChanges {
 
     /** The bitmask of all folder changes that we propagate to the server. */
     static final int FOLDER_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME |
-                                      Change.MODIFIED_COLOR | Change.MODIFIED_URL    | Change.MODIFIED_ACL;
+                                      Change.MODIFIED_COLOR | Change.MODIFIED_URL    | Change.MODIFIED_ACL |
+                                      Change.MODIFIED_RETENTION_POLICY;
 
     /** The bitmask of all search folder changes that we propagate to the server. */
     static final int SEARCH_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME |
