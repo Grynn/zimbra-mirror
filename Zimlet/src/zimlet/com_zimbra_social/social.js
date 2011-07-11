@@ -31,26 +31,26 @@ SocialZimlet.prototype.init =
 		};
 
 /*
-SocialZimlet.prototype.initializeToolbar =
-		function(app, toolbar, controller, view) {
+ SocialZimlet.prototype.initializeToolbar =
+ function(app, toolbar, controller, view) {
 
-			if (!this.preferences || !this.preferences.social_pref_toolbarButtonOn)
-				return;
+ if (!this.preferences || !this.preferences.social_pref_toolbarButtonOn)
+ return;
 
-			if (view == ZmId.VIEW_CONVLIST ||
-					view == ZmId.VIEW_CONV ||
-					view == ZmId.VIEW_TRAD) {
+ if (view == ZmId.VIEW_CONVLIST ||
+ view == ZmId.VIEW_CONV ||
+ view == ZmId.VIEW_TRAD) {
 
-				ZmMsg.socialBtnLabel = this.getMessage("socialize");
-				var buttonArgs = {
-					text	: ZmMsg.socialBtnLabel,
-					tooltip: this.getMessage("socializeTooltip"),
-					image: "social-icon"
-				};
-				var button = toolbar.createOp("SOCIAL_ZIMLET_TOOLBAR_BUTTON", buttonArgs);
-				button.addSelectionListener(new AjxListener(this.miniDlg, this.miniDlg._buttonListener, [controller]));
-			}
-		}; */
+ ZmMsg.socialBtnLabel = this.getMessage("socialize");
+ var buttonArgs = {
+ text	: ZmMsg.socialBtnLabel,
+ tooltip: this.getMessage("socializeTooltip"),
+ image: "social-icon"
+ };
+ var button = toolbar.createOp("SOCIAL_ZIMLET_TOOLBAR_BUTTON", buttonArgs);
+ button.addSelectionListener(new AjxListener(this.miniDlg, this.miniDlg._buttonListener, [controller]));
+ }
+ }; */
 
 SocialZimlet.prototype.toggleFields =
 		function() {
@@ -164,17 +164,32 @@ SocialZimlet.prototype.initializeVariables =
 				this.twitter.scanForUpdates("SEND_EMAIL");
 				this.setUserProperty("social_emailLastUpdateDate", todayStr, true);
 			}
-			this.socialcastDisplayedStreams = this.getUserProperty("socialcastDisplayedStreams");
-			 if(!this.socialcastDisplayedStreams) {
-				 this.socialcastDisplayedStreams = [];
-				 //un:un, n:streamName, id
-			 } else {
-				 this.socialcastDisplayedStreams = JSON.parse(this.socialcastDisplayedStreams);
-				 for(var i=0; i< this.socialcastDisplayedStreams.length; i++) {
-					 var sObj = this.socialcastDisplayedStreams[i];
-					 this.socialcastDisplayedStreamsHASH[sObj.un+sObj.n+sObj.id] = true;
-				 }
-			 }
+			var streams = this.getUserProperty("socialcastDisplayedStreams");
+			if (!streams) {
+				this.socialcastDisplayedStreams = [];
+				//un:un, n:streamName, id
+			} else {
+				try{
+					streams = JSON.parse(streams);
+				} catch (e) {
+					streams = [];
+				}
+				if(!(streams instanceof Array)) {
+					streams = [];
+				}
+				for(var i = 0; i < streams.length; i++) {
+					var sObj = streams[i];
+					var hash = sObj.un + sObj.n + sObj.id;
+					if(!this.socialcastDisplayedStreamsHASH[hash] && sObj.__s == "1") {
+						 this.socialcastDisplayedStreamsHASH[hash] = true;
+						 this.socialcastDisplayedStreams.push(sObj);
+					}
+				}
+				//for (var i = 0; i < this.socialcastDisplayedStreams.length; i++) {
+				//	var sObj = this.socialcastDisplayedStreams[i];
+				//	this.socialcastDisplayedStreamsHASH[sObj.un + sObj.n + sObj.id] = true;
+				//}
+			}
 
 			if (this.preferences.social_pref_showTweetAlertsOn) {
 				this._displayTwitterAlert();
@@ -239,7 +254,7 @@ SocialZimlet.prototype._addAccountCheckBoxListeners =
 			for (var accntId in this.allAccounts) {
 				var callback = AjxCallback.simpleClosure(this._saveToAccountCheckboxesPref, this, accntId);
 				var domObj = document.getElementById(this.allAccounts[accntId].checkboxId);
-				if(domObj) {
+				if (domObj) {
 					Dwt.setHandler(domObj, DwtEvent.ONCLICK, callback);
 				}
 			}
@@ -247,7 +262,7 @@ SocialZimlet.prototype._addAccountCheckBoxListeners =
 				var scAccount = this.socialcastAccounts[i];
 				var callback = AjxCallback.simpleClosure(this._updateSCCheckboxesPref, this, scAccount);
 				var domObj = document.getElementById(scAccount.checkboxId);
-				if(domObj) {
+				if (domObj) {
 					Dwt.setHandler(domObj, DwtEvent.ONCLICK, callback);
 				}
 			}
@@ -445,18 +460,18 @@ SocialZimlet.prototype.showNumberOfLetters =
 			//if (len > 140) {
 			//	this.updateButton.setEnabled(false);
 			//} else {
-				this.updateButton.setEnabled(true);
+			this.updateButton.setEnabled(true);
 			//}
 			//if (this.whatAreYouDoingField != "NOT_PRESENT") {
 			//	if (val.toLowerCase().indexOf("d @") == 0) {
-				//	this.whatAreYouDoingField.innerHTML = this.getMessage("sendDirectMsg");
-				//	this.whatAreYouDoingField.style.background = "yellow";
+			//	this.whatAreYouDoingField.innerHTML = this.getMessage("sendDirectMsg");
+			//	this.whatAreYouDoingField.style.background = "yellow";
 			//	} else {
-				//	this.whatAreYouDoingField.innerHTML = "";
-				//	this.whatAreYouDoingField.style.background = "";
+			//	this.whatAreYouDoingField.innerHTML = "";
+			//	this.whatAreYouDoingField.style.background = "";
 			//	}
 			//}
-			if (val.toLowerCase().indexOf("d @") == 0)  {
+			if (val.toLowerCase().indexOf("d @") == 0) {
 				appCtxt.getAppController().setStatusMsg(this.getMessage("sendDirectMsg"), ZmStatusView.LEVEL_WARNING);
 			}
 			this._updateNumberOfLettersField(len);
@@ -486,24 +501,24 @@ SocialZimlet.prototype._updateMaxAllowedCharsToUpdate =
 				if (account.type == "twitter" && account.__on == "true") {
 					this.maxAllowedCharsToUpdate = 140;
 					break;
-				} else if(account.type == "facebook" && account.__on == "true") {
+				} else if (account.type == "facebook" && account.__on == "true") {
 					this.maxAllowedCharsToUpdate = 420;
 				}
 			}
-			if(this.updateField && this.nuLettersAllowedField) {
+			if (this.updateField && this.nuLettersAllowedField) {
 				var len = this.updateField.value == this.getMessage("whatAreYouDoing") ? 0 : this.updateField.value.length;
 				this._updateNumberOfLettersField(len);
 			}
 
-	};
+		};
 
 SocialZimlet.prototype._showHideMaxAlowedCharsDiv =
 		function() {
-			 if(this.maxAllowedCharsToUpdate == -1) {
-				    this.nuLetterAllowedDiv.style.display = "none";
-			 } else {
-				 this.nuLetterAllowedDiv.style.display = "block";
-			 }
+			if (this.maxAllowedCharsToUpdate == -1) {
+				this.nuLetterAllowedDiv.style.display = "none";
+			} else {
+				this.nuLetterAllowedDiv.style.display = "block";
+			}
 		};
 
 SocialZimlet.prototype.autoShortenURL =
@@ -644,8 +659,8 @@ SocialZimlet.prototype._addUpdateToCheckboxes =
 					turnOnStr = "checked";
 				}
 				var chkbxId = this.socialcastAccounts[i].checkboxId = "social_updateToCheckbox_" + Dwt.getNextId();
-				var menuId = this.socialcastAccounts[i].menuId =  "social_socialcastMenuId_" + Dwt.getNextId();
-				html[idx++] = this._getUpdateToChkboxCellHtml(chkbxId, turnOnStr, account.name, "SOCIALCAST",true, menuId);
+				var menuId = this.socialcastAccounts[i].menuId = "social_socialcastMenuId_" + Dwt.getNextId();
+				html[idx++] = this._getUpdateToChkboxCellHtml(chkbxId, turnOnStr, account.name, "SOCIALCAST", true, menuId);
 			}
 			html[idx++] = "<td id='social_updateMenuTD'>";
 
@@ -663,84 +678,84 @@ SocialZimlet.prototype._addSocialcastGroupsMenuHndler = function() {
 	for (var i = 0; i < this.socialcastAccounts.length; i++) {
 		var account = this.socialcastAccounts[i];
 		var menuId = account.menuId;
-		if(!menuId) {
+		if (!menuId) {
 			return;
 		}
 		var div = document.getElementById(menuId);
-		if(div) {
+		if (div) {
 			//div.onclick =  (new AjxListener(this.socialcast, this.socialcast.showGroupsMenu, [account]));
 			div.onclick = AjxCallback.simpleClosure(this.socialcast.showGroupsMenu, this.socialcast, account);
 		}
 	}
 };
 /*
-SocialZimlet.prototype._setUpdateMenu = function() {
-	if(!document.getElementById("social_updateMenuTD")) {
-		return;
-	}
-	btn = new DwtButton({parent:this.getShell()});
-	btn.setText("Update To:");
-	btn.setImage("Zimbra");
-	var menu = new ZmPopupMenu(btn); //create menu
-	btn.setMenu(menu);//add menu to button
-	document.getElementById("social_updateMenuTD").appendChild(btn.getHtmlElement());
-	for (var id in this.allAccounts) {
-		var account = this.allAccounts[id];
-		var name = account.name;
-		var checked = account.__on == "true" ? true : false;
-		var id = "menuItemId4";
-		var icon = "social_twitterIcon";
-		if (account.type == "facebook") {
-			icon = "social_facebookIcon";
-		}
-		var mi = menu.createMenuItem(id, {image:icon, text:name, style:DwtMenuItem.CHECK_STYLE});
-		mi.addSelectionListener(new AjxListener(this, this._buttonListener));
-		if (checked) {
-			mi.setChecked(true, true);//sets the item as checked
-		}
-	}
-	for (var i = 0; i < this.socialcastAccounts.length; i++) {
-		turnOnStr = "";
-		var account = this.socialcastAccounts[i];
-		var name = account.n;
-		var checked = account.__on == "true" ? true : false;
-		var id = "social_updateToCheckbox_" + Dwt.getNextId();
-		var icon = "social_socialcastIcon";
-		var gm = this.getUserProperty(account.e+"_groupMemberships");
-		if(!gm) {
-			gm = [{n:"My Colleagues", id:""}];
-		} else  {
-			gm = JSON.parse(gm);
-		}
-		var mi = menu.createMenuItem(id, {image:icon, text:name, style:DwtMenuItem.CASCADE_STYLE});
-		var submenu = new ZmPopupMenu(mi); //create submenu
-		mi.setMenu(submenu);//add submenu to menuitem
+ SocialZimlet.prototype._setUpdateMenu = function() {
+ if(!document.getElementById("social_updateMenuTD")) {
+ return;
+ }
+ btn = new DwtButton({parent:this.getShell()});
+ btn.setText("Update To:");
+ btn.setImage("Zimbra");
+ var menu = new ZmPopupMenu(btn); //create menu
+ btn.setMenu(menu);//add menu to button
+ document.getElementById("social_updateMenuTD").appendChild(btn.getHtmlElement());
+ for (var id in this.allAccounts) {
+ var account = this.allAccounts[id];
+ var name = account.name;
+ var checked = account.__on == "true" ? true : false;
+ var id = "menuItemId4";
+ var icon = "social_twitterIcon";
+ if (account.type == "facebook") {
+ icon = "social_facebookIcon";
+ }
+ var mi = menu.createMenuItem(id, {image:icon, text:name, style:DwtMenuItem.CHECK_STYLE});
+ mi.addSelectionListener(new AjxListener(this, this._buttonListener));
+ if (checked) {
+ mi.setChecked(true, true);//sets the item as checked
+ }
+ }
+ for (var i = 0; i < this.socialcastAccounts.length; i++) {
+ turnOnStr = "";
+ var account = this.socialcastAccounts[i];
+ var name = account.n;
+ var checked = account.__on == "true" ? true : false;
+ var id = "social_updateToCheckbox_" + Dwt.getNextId();
+ var icon = "social_socialcastIcon";
+ var gm = this.getUserProperty(account.e+"_groupMemberships");
+ if(!gm) {
+ gm = [{n:"My Colleagues", id:""}];
+ } else  {
+ gm = JSON.parse(gm);
+ }
+ var mi = menu.createMenuItem(id, {image:icon, text:name, style:DwtMenuItem.CASCADE_STYLE});
+ var submenu = new ZmPopupMenu(mi); //create submenu
+ mi.setMenu(submenu);//add submenu to menuitem
 
-		var mi = submenu.createMenuItem(id, {image:icon, text:"My Colleagues", style:DwtMenuItem.RADIO_STYLE});
-		mi.addSelectionListener(new AjxListener(this, this._buttonListener, "socialcast_group_mycolleagues"));
-		for(var j =0; j < gm.length; j++) {
-			var group = gm[j];
-			var checked = false;
-			var id = group.id;
-			var id = "socialcast_group_id"+id;
-			var mi = submenu.createMenuItem(id, {image:icon, text:group.n, style:DwtMenuItem.RADIO_STYLE});
-			mi.addSelectionListener(new AjxListener(this, this._buttonListener, id));
-			if (checked) {
-				mi.setChecked(true, true);//sets the item as checked
-			}
-		}
-	}
-};
-  */
+ var mi = submenu.createMenuItem(id, {image:icon, text:"My Colleagues", style:DwtMenuItem.RADIO_STYLE});
+ mi.addSelectionListener(new AjxListener(this, this._buttonListener, "socialcast_group_mycolleagues"));
+ for(var j =0; j < gm.length; j++) {
+ var group = gm[j];
+ var checked = false;
+ var id = group.id;
+ var id = "socialcast_group_id"+id;
+ var mi = submenu.createMenuItem(id, {image:icon, text:group.n, style:DwtMenuItem.RADIO_STYLE});
+ mi.addSelectionListener(new AjxListener(this, this._buttonListener, id));
+ if (checked) {
+ mi.setChecked(true, true);//sets the item as checked
+ }
+ }
+ }
+ };
+ */
 SocialZimlet.prototype._getUpdateToChkboxCellHtml =
 		function(chkbxId, turnOnStr, name, type, hasMenu, menuId) {
 			type = type.toUpperCase();
 			var icon = "";
-			if(type == "FACEBOOK") {
-				  icon = "social_facebookIcon";
-			} else if(type == "TWITTER") {
+			if (type == "FACEBOOK") {
+				icon = "social_facebookIcon";
+			} else if (type == "TWITTER") {
 				icon = "social_twitterIcon";
-			} else if(type == "SOCIALCAST") {
+			} else if (type == "SOCIALCAST") {
 				icon = "social_socialcastIcon";
 			}
 			var html = [];
@@ -754,8 +769,8 @@ SocialZimlet.prototype._getUpdateToChkboxCellHtml =
 			html[idx++] = "<TD valign='middle' align=center>";
 			html[idx++] = name;
 			html[idx++] = "</td>";
-			if(hasMenu && menuId) {
-				html[idx++] = "<td><div class='ImgNodeExpanded' id='"+menuId+"'></div></td>";
+			if (hasMenu && menuId) {
+				html[idx++] = "<td><div class='ImgNodeExpanded' id='" + menuId + "'></div></td>";
 			}
 			html[idx++] = "<td width=20px></td>";
 			return html.join("");
@@ -1189,10 +1204,10 @@ SocialZimlet.prototype._handleCloseButton =
 			} else if (type == "SOCIALCAST") {
 				var tableId = params.tableId;
 				var s = this.tableIdAndSCStreamMap[tableId];
-				if(s) {
-					for(var i=0; i< this.socialcastDisplayedStreams.length; i++) {
+				if (s) {
+					for (var i = 0; i < this.socialcastDisplayedStreams.length; i++) {
 						var sObj = this.socialcastDisplayedStreams[i];
-						if(sObj.un == s.un && sObj.n == s.n && sObj.id == s.id) {
+						if (sObj.un == s.un && sObj.n == s.n && sObj.id == s.id) {
 							this.socialcastDisplayedStreams[i].__s = "0";
 							break;
 						}
@@ -1292,22 +1307,22 @@ SocialZimlet.prototype._createTreeView =
 				folder["icon"] = "social_socialcastIcon";
 				folder["type"] = "SOCIALCAST";
 				var streams = this.getUserProperty(folder.e + "_streams");
-				try{
-					if(streams && streams != "") {
+				try {
+					if (streams && streams != "") {
 						var streamObjs = JSON.parse(streams);
 					}
 				} catch (e) {
-				   //ignore
+					//ignore
 				}
-				if(streamObjs && (streamObjs instanceof Array) && streamObjs.length > 0) {
+				if (streamObjs && (streamObjs instanceof Array) && streamObjs.length > 0) {
 					var childExpandIconId = "social_expandIcon_" + Dwt.getNextId();
 					this.expandIconAndFolderTreeMap[childExpandIconId] = new Array();
 					html[i++] = this._getFolderHTML(folder, expandIconId, childExpandIconId, false, true);
-					for(var m=0; m < streamObjs.length; m++){
+					for (var m = 0; m < streamObjs.length; m++) {
 						var sObj = streamObjs[m];
 						html[i++] = this._getFolderHTML({name:sObj.n, icon:"social_socialcastIcon", account: folder, type:"SOCIALCAST", streamId:sObj.id, streamName:sObj.n}, expandIconId, childExpandIconId, true);
 					}
-				} else  {
+				} else {
 					html[i++] = this._getFolderHTML(this.socialcastAccounts[j], expandIconId);
 				}
 			}
@@ -1430,25 +1445,25 @@ SocialZimlet.prototype._getFolderHTML =
 				id = "socialTreeItem__" + folder.type + "_" + folder.account.type + "_" + folder.account.name;
 				this.treeIdAndAccountMap[id] = folder.account;
 			} else if (folder.type == "SOCIALCAST") {
-				if(folder.streamId && folder.streamName) {
-					id = "socialTreeItem__" + folder.type + "STREAM:" + folder.streamName+"==::=="+folder.streamId;
+				if (folder.streamId && folder.streamName) {
+					id = "socialTreeItem__" + folder.type + "STREAM:" + folder.streamName + "==::==" + folder.streamId;
 				} else {
 					id = "socialTreeItem__" + folder.type + "_" + folder.un;
 				}
 				this.treeIdAndAccountMap[id] = folder;
-			}  else {
+			} else {
 				id = "socialTreeItem__" + folder.type + "_" + Dwt.getNextId();
 			}
 			if (folder.type == "SEARCH") {
 				this.treeIdAndSearchMap[id] = folder.search;
 			}
-			if(expandIconId && !this.expandIconAndFolderTreeMap[expandIconId]) {
+			if (expandIconId && !this.expandIconAndFolderTreeMap[expandIconId]) {
 				this.expandIconAndFolderTreeMap[expandIconId] = new Array();
 			}
 			this.expandIconAndFolderTreeMap[expandIconId].push(id);
 
 			if (isSubFolder) {
-				if(childExpandIconId && !this.expandIconAndFolderTreeMap[childExpandIconId]) {
+				if (childExpandIconId && !this.expandIconAndFolderTreeMap[childExpandIconId]) {
 					this.expandIconAndFolderTreeMap[childExpandIconId] = new Array();
 				}
 				this.expandIconAndFolderTreeMap[childExpandIconId].push(id);
@@ -1627,7 +1642,7 @@ SocialZimlet.prototype._handleTreeClick =
 				account = this.treeIdAndAccountMap[elId];
 				var streamid;
 				var isStream = false;
-				if(elId.indexOf("STREAM:") > 0) {
+				if (elId.indexOf("STREAM:") > 0) {
 					var sObj = elId.split("STREAM:")[1];
 					var tmpArry = sObj.split("==::==");
 					var streamName = tmpArry[0];
@@ -1635,8 +1650,12 @@ SocialZimlet.prototype._handleTreeClick =
 					account = account.account;
 					isStream = true;
 				}
+				if(account.isValid) {
+					this._displaySocialcastCard(account, streamid, streamName);
+				} else {
+					this._showWarningMsg(this.getMessage("couldNotAuthenticateSC"));
+				}
 
-				this._displaySocialcastCard(account, streamid, streamName);
 				/*
 				 tableId = this._showCard({headerName:account.name, type:"SOCIALCAST",autoScroll:true});
 				 this.socialcast.getMessages(tableId, account);
@@ -1647,7 +1666,7 @@ SocialZimlet.prototype._handleTreeClick =
 				 account["__s"] = "1";//__s means shown, 1 means true
 				 */
 				//this._saveAllCardsAndPositions();
-				if(!isStream) {
+				if (!isStream) {
 					this.setUserProperty("socialcastAccounts", JSON.stringify(this.socialcastAccounts));
 				}
 			}
@@ -1659,20 +1678,22 @@ SocialZimlet.prototype._displaySocialcastCard =
 			var hdrName = streamName ? streamName : account.name;
 			var un = account.un;
 			tableId = this._showCard({headerName:hdrName, type:"SOCIALCAST",autoScroll:true});
-			if(streamId) {
+			if (streamId) {
 				this.tableIdAndSCStreamMap[tableId] = {un:un, id:streamId, n:streamName};
-				if(!this.socialcastDisplayedStreamsHASH[un + streamName + streamId]){
+				var hash = un + streamName + streamId;
+				if (!this.socialcastDisplayedStreamsHASH[hash]) {
 					this.socialcastDisplayedStreams.push({un:un, n:streamName, id:streamId, __s:"1"});
-					this.setUserProperty("socialcastDisplayedStreams", JSON.stringify(this.socialcastDisplayedStreams), true);
+				} else {
+					this.socialcastDisplayedStreamsHASH[hash].__s = "1";
 				}
-
+				this.setUserProperty("socialcastDisplayedStreams", JSON.stringify(this.socialcastDisplayedStreams), true);
 			}
 			this.tableIdAndPageNumberMap[tableId] = 1;
 			this.socialcast.getMessages(tableId, account, streamId);
 			timer = setInterval(AjxCallback.simpleClosure(this.socialcast.getMessages, this.socialcast, tableId, account, streamId), 400000);
 			this.tableIdAndTimerMap[tableId] = timer;
 			this.tableIdAndAccountMap[tableId] = account;
-			if(!streamId) {
+			if (!streamId) {
 				this.tableIdAndMarkAsReadId[tableId] = account._p;
 				account["__s"] = "1";//__s means shown, 1 means true
 			}
@@ -1743,7 +1764,7 @@ SocialZimlet.prototype._postToTweetOrFB =
 		function(ev) {
 			var event = ev || window.event;
 			var code = event.which ? event.which : event.keyCode;
-			if(code == 13) { //ignore enter key
+			if (code == 13) { //ignore enter key
 				return;
 			} else if (code == 118 && event.ctrlKey) {//see if they are pasting something
 				this.isTextPasted = true;
@@ -1850,7 +1871,7 @@ SocialZimlet.prototype.createCardView =
 				}
 				var account = this.tableIdAndAccountMap[tableId];
 				accountName = account.name;
-				if(type == "SOCIALCAST") {
+				if (type == "SOCIALCAST") {
 					socialcastUserName = account.un;
 					socialcastUsersUrl = ["https://", account.s, "/users/"].join("");
 					socialTopicsbaseUrl = ["https://", account.s, "/topics/"].join("");
@@ -2060,7 +2081,7 @@ SocialZimlet.prototype.createCardView =
 				this._zimletDiv.innerHTML = text;
 				this._objectManager.findObjectsInNode(this._zimletDiv);
 				var zimletyFiedTxt = this._zimletDiv.innerHTML;
-				if(type == "SOCIALCAST") {
+				if (type == "SOCIALCAST") {
 					zimletyFiedTxt = this._socialcastReplaceHash(zimletyFiedTxt, socialTopicsbaseUrl);
 					zimletyFiedTxt = this._socialcastReplaceAt(zimletyFiedTxt, socialcastUsersUrl);
 				} else {
@@ -2080,17 +2101,17 @@ SocialZimlet.prototype.createCardView =
 				if (type != "TWEETMEME" && type != "FACEBOOK" && type != "SOCIALCAST") {
 					html[i++] = [" <a href='javascript:void(0)' style='color:darkblue;font-size:12px;font-weight:bold' id='", this._getAccountLinkId(screen_name, tableId),
 						"'>", screen_name, ":</a> "].join("");
-				}else if(type == "SOCIALCAST") {
+				} else if (type == "SOCIALCAST") {
 					//html[i++] = "<label style='color:#262626;font-size:12px;font-weight:bold'>" + user.name + ": </label>";
 					html[i++] = [" <a href='javascript:void(0)' style='color:darkblue;font-size:12px;font-weight:bold' id='", this._getSocialcastAccountLinkId(user.url),
 						"'>", user.name, ":</a> "].join("");
-					if(recipients && recipients.length > 0) {
+					if (recipients && recipients.length > 0) {
 						html[i++] = "<label style='font-weight: bold;'> > </label>";
 						var rHtml = [];
-						for(var t = 0; t < recipients.length; t++) {
+						for (var t = 0; t < recipients.length; t++) {
 							var r = recipients[t];
 							rHtml.push([" <a href='javascript:void(0)' style='color:darkblue;font-size:12px;font-weight:bold' id='", this._getSocialcastAccountLinkId(r.url),
-										"'>", r.name, "</a> "].join(""));
+								"'>", r.name, "</a> "].join(""));
 						}
 						html[i++] = rHtml.join(",");
 					}
@@ -2162,7 +2183,7 @@ SocialZimlet.prototype.createCardView =
 					html[i++] = "<a href='javascript:void(0)' title='" + this.getMessage("commentOnThisPost") + "' style='color:gray;font-size:11px' id='" + this._getFacebookCommentLinkId(obj.post_id, tableId) + "'>" + this.getMessage("comment") + "</a>";
 				}
 				if (type == "SOCIALCAST") {
-					if(socialcastUserName != obj.user.username) {
+					if (socialcastUserName != obj.user.username) {
 						html[i++] = "<a href='javascript:void(0)' title='" + this.getMessage("likeThisPost") + "' style='color:gray;font-size:11px' id='" + this._getSCLikeLinkId(obj.id, tableId) + "'>" + this.getMessage("like") + "</a>&nbsp;&nbsp;";
 					}
 					html[i++] = "<a href='javascript:void(0)' title='" + this.getMessage("commentOnThisPost") + "' style='color:gray;font-size:11px' id='" + this._getSCCommentLinkId(obj.id, tableId) + "'>" + this.getMessage("comment") + "</a>";
@@ -2660,7 +2681,7 @@ SocialZimlet.prototype._getCommentsHtml =
 				this._zimletDiv.innerHTML = comment.text;
 				this._objectManager.findObjectsInNode(this._zimletDiv);
 				var zimletyFiedTxt = " " + this._zimletDiv.innerHTML;
-				if(accountType == "SOCIALCAST") {
+				if (accountType == "SOCIALCAST") {
 					zimletyFiedTxt = this._socialcastReplaceHash(zimletyFiedTxt, socialTopicsbaseUrl);
 					zimletyFiedTxt = this._socialcastReplaceAt(zimletyFiedTxt, socialcastUsersUrl);
 				} else {
@@ -3016,7 +3037,7 @@ SocialZimlet.prototype._replaceHash =
 			return newStr + extraStr;
 
 		};
- SocialZimlet.prototype._socialcastReplaceHash =
+SocialZimlet.prototype._socialcastReplaceHash =
 		function(text, socialTopicsbaseUrl) {
 			var re = /([^a-zA-Z0-9_-]#[a-zA-Z0-9_-]+)/gm;
 			var newStr = "";
@@ -3028,7 +3049,7 @@ SocialZimlet.prototype._replaceHash =
 				var id = "social_hashlink_" + Dwt.getNextId();
 				var url = ["<a  href='javascript:void(0)' id='", id, "'>", word, "</a>"].join("");
 				newStr = newStr + part.replace(word, url);
-				this._allSocialcastHashLinks[id] = {hasHandler:false, url: socialTopicsbaseUrl+(AjxStringUtil.trim(word.replace("#", "")))};
+				this._allSocialcastHashLinks[id] = {hasHandler:false, url: socialTopicsbaseUrl + (AjxStringUtil.trim(word.replace("#", "")))};
 				start = end;
 			}
 			var extraStr = "";
@@ -3145,7 +3166,7 @@ SocialZimlet.prototype._handleAddCommentField = function(params, ev) {
 	}
 };
 
- SocialZimlet.prototype._handleFieldFocusBlur = function(field, message, ev) {
+SocialZimlet.prototype._handleFieldFocusBlur = function(field, message, ev) {
 	var event = ev || window.event;
 	if (field.value == message) {
 		field.value = "";
@@ -3310,28 +3331,41 @@ SocialZimlet.prototype._updateAllWidgetItems =
 					}
 
 				}
-				for (var i = 0; i < this.socialcastAccounts.length; i++) {
-					var account = this.socialcastAccounts[i];
-					if (account.__s && account.__s == "0") {
-						continue;
-					}
-					this._displaySocialcastCard(account);
-				}
-				for (var i = 0; i < this.socialcastAccounts.length; i++) {
-					var account = this.socialcastAccounts[i];
-					var un = account.un;
-					for(var j=0; j< this.socialcastDisplayedStreams.length; j++) {
-						var sObj = this.socialcastDisplayedStreams[j];
-						if(un == sObj.un && sObj.__s == "1") {
-							this._displaySocialcastCard(account, sObj.id, sObj.n);
-						}
-					}
-				}
+				this._displaySocialcastCards();
 				this._saveAllCardsAndPositions();
 				this.setUserProperty("social_AllTwitterAccounts", this.getAllAccountsAsString());
-				this.setUserProperty("socialcastAccounts", JSON.stringify(this.socialcastAccounts));
+				//this.setUserProperty("socialcastAccounts", JSON.stringify(this.socialcastAccounts));
 				this.saveUserProperties();
 			}
+		};
+
+SocialZimlet.prototype._displaySocialcastCards =
+		function() {
+			var postCallback = new AjxCallback(this, this._displayAllSCCards);
+			for (var i = 0; i < this.socialcastAccounts.length; i++) {
+				var account = this.socialcastAccounts[i];
+				this.socialcast.authenticate(account, postCallback);
+			}
+		};
+
+SocialZimlet.prototype._displayAllSCCards =
+		function(account) {
+			if (!account.isValid) {
+				this._showWarningMsg(this.getMessage("couldNotAuthenticateSC"));
+				return;
+			}
+			if (account.__s && account.__s != "0") {
+				this._displaySocialcastCard(account);
+			}
+			var un = account.un;
+			for (var j = 0; j < this.socialcastDisplayedStreams.length; j++) {
+				var sObj = this.socialcastDisplayedStreams[j];
+				if (un == sObj.un && sObj.__s == "1") {
+					this._displaySocialcastCard(account, sObj.id, sObj.n);
+				}
+			}
+			this.setUserProperty("socialcastAccounts", JSON.stringify(this.socialcastAccounts));
+			this.saveUserProperties();
 		};
 
 SocialZimlet.prototype._sortAndMergeAccountsAndSearches =
@@ -3368,13 +3402,13 @@ SocialZimlet.prototype._extractJSONResponse =
 			if (response.status != 200 && response.success == false) {
 				success = false;
 			} else {
-				try{
+				try {
 					jsonObj = JSON.parse(text);
 				} catch(e) {
 				}
-				if(jsonObj) {
+				if (jsonObj) {
 					if ((jsonObj.error && jsonObj.error != "") || (jsonObj.status && jsonObj.status != "success")
-						|| (jsonObj.error_code && jsonObj.error_code != "")) {
+							|| (jsonObj.error_code && jsonObj.error_code != "")) {
 						if (jsonObj.error_code) {
 							errorCode = jsonObj.error_code;
 						}
