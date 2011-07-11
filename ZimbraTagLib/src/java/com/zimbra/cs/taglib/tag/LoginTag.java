@@ -41,6 +41,7 @@ public class LoginTag extends ZimbraSimpleTag {
     private boolean mAuthTokenInUrl;
     private boolean mRememberMe;
     private boolean mImportData;
+    private boolean mAdminPreAuth;
     private String mUrl = null;
     private String mPath = null;
     private String mVarRedirectUrl = null;
@@ -62,6 +63,8 @@ public class LoginTag extends ZimbraSimpleTag {
     public void setRememberme(boolean rememberMe) { this.mRememberMe = rememberMe; }
 
     public void setImportData(boolean importData) { this.mImportData = importData; }
+
+    public void setAdminPreAuth(boolean isAdmin) { this.mAdminPreAuth = isAdmin; }
 
     public void setAuthtoken(String authToken) { this.mAuthToken = authToken; }
 
@@ -144,7 +147,7 @@ public class LoginTag extends ZimbraSimpleTag {
             if (mVarAuthResult != null)
                 jctxt.setAttribute(mVarAuthResult, mbox.getAuthResult(), PageContext.REQUEST_SCOPE);
 
-            if (mImportData) {
+            if (mImportData && !mAdminPreAuth) {
                 mbox.importData(mbox.getAllDataSources());
             }
 
