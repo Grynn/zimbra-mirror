@@ -467,7 +467,7 @@ public abstract class AbsSeleniumObject {
 					+ locator
 					+ "\";"
 					+ "var iframe_body=selenium.browserbot.findElement(iframe_locator).contentWindow.document.body;"
-					+ "iframe_body.document.write(bodytext);");		
+					+ "iframe_body.innerHTML = bodytext;");	
 	}
 
 	/**
