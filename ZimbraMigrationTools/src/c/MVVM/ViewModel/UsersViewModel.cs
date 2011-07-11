@@ -146,7 +146,7 @@ namespace MVVM.ViewModel
                             for (int j = 0; j < parsedData.Count; j++)
                             {
                                 strres = parsedData[j];
-                                if (strres.Contains("#"))
+                                if (strres[j].Contains("#"))
                                     continue;
                                
                                 tempuser.UserName = strres[0];
