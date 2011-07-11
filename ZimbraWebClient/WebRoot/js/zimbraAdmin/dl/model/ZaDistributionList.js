@@ -50,12 +50,6 @@ ZaDistributionList.A_zimbraGroupId = "zimbraGroupId";
 ZaDistributionList.A_zimbraCreateTimestamp = "zimbraCreateTimestamp";
 
 ZaDistributionList.A_mailStatus = "zimbraMailStatus";
-ZaDistributionList.A_zimbraDistributionListSendShareMessageToNewMembers = "zimbraDistributionListSendShareMessageToNewMembers";
-ZaDistributionList.A_zimbraDistributionListSendShareMessageFromAddress = "zimbraDistributionListSendShareMessageFromAddress";
-ZaDistributionList.A2_publishedShares = "publishedShares";
-ZaDistributionList.A2_sharesPool = "sharesPool";
-ZaDistributionList.A2_sharesOwner = "sharesOwner";
-ZaDistributionList.A2_newSharePath = "newSharePath";
 ZaDistributionList.A2_members = "members";
 ZaDistributionList.A2_memberList = "memberList";
 ZaDistributionList.A2_origList = "origList";
@@ -79,8 +73,6 @@ ZaDistributionList.A2_directMemberList = "directMemberList";
 ZaDistributionList.A2_indirectMemberList = "indirectMemberList";
 ZaDistributionList.A2_nonMemberList = "nonMemberList";
 ZaDistributionList.A2_alias_selection_cache = "alias_selection_cache";
-ZaDistributionList.A2_share_selection_cache = "shares_selection_cache";
-ZaDistributionList.A2_published_share_selection_cache = "published_shares_selection_cache";
 ZaDistributionList.A_isAdminGroup = "zimbraIsAdminGroup" ;
 
 ZaDistributionList.getDLStatus = function (status) {
@@ -98,7 +90,6 @@ ZaDistributionList.ADD_DL_ALIAS_RIGHT = "addDistributionListAlias";
 ZaDistributionList.REMOVE_DL_ALIAS_RIGHT = "removeDistributionListAlias";
 ZaDistributionList.REMOVE_DL_MEMBER_RIGHT = "removeDistributionListMember";
 ZaDistributionList.ADD_DL_MEMBER_RIGHT = "addDistributionListMember";
-ZaDistributionList.PUBLISH_SHARE_RIGHT = "publishDistributionListShareInfo";
 ZaDistributionList.GET_DL_MEMBERSHIP_RIGHT = "getDistributionListMembership";
 ZaDistributionList.GET_DL_SHARE_INFO_RIGHT = "getDistributionListShareInfo";
 
@@ -668,28 +659,6 @@ ZaDistributionList.prototype.getMembers = function () {
 
 ZaItem.loadMethods["ZaDistributionList"].push(ZaDistributionList.prototype.getMembers) ;
 
-ZaDistributionList.prototype.getPublishedShareInfo = function () {
-	if (this.id == null || !ZaItem.hasRight(ZaDistributionList.GET_DL_SHARE_INFO_RIGHT, this)) {
-		return;
-	}
-	var soapDoc = AjxSoapDoc.create("GetPublishedShareInfoRequest", ZaZimbraAdmin.URN, null);
-	var dl = soapDoc.set("dl", this.id);
-	dl.setAttribute("by", "id");
-	var params = new Object();
-	params.soapDoc = soapDoc;
-	var reqMgrParams = {
-		controller : ZaApp.getInstance().getCurrentController(),
-		busyMsg : ZaMsg.BUSY_GET_SHARES
-	};
-	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetPublishedShareInfoResponse;
-	this[ZaDistributionList.A2_publishedShares] = new ZaItemList(ZaShare);	
-	if(!AjxUtil.isEmpty(resp.share)) {
-		this[ZaDistributionList.A2_publishedShares].loadFromJS(resp);
-	}
-	//GetShareInfoRequest	
-}
-ZaItem.loadMethods["ZaDistributionList"].push(ZaDistributionList.prototype.getPublishedShareInfo) ;
-
 ZaDistributionList.getUnpublishedShares = function (ownerBy, ownerVal) {
 	if (this.id == null || !ownerBy || !ownerVal || !ZaItem.hasRight(ZaDistributionList.GET_DL_SHARE_INFO_RIGHT, this)) {
 		return;
@@ -1070,15 +1039,7 @@ ZaDistributionList.myXModel = {
 		{id:(ZaAccount.A2_indirectMemberList + "_offset"), type:_LIST_},	
 		{id:(ZaAccount.A2_nonMemberList + "_more"), type:_LIST_},
 		{id:(ZaAccount.A2_nonMemberList + "_offset"), type:_LIST_},
-		{id:ZaDistributionList.A2_alias_selection_cache, type:_LIST_},
-		{id:ZaDistributionList.A2_publishedShares, type:_LIST_},
-		{id:ZaDistributionList.A_zimbraDistributionListSendShareMessageToNewMembers, ref:"attrs/"+ZaDistributionList.A_zimbraDistributionListSendShareMessageToNewMembers, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},	
-		{id:ZaDistributionList.A_zimbraDistributionListSendShareMessageFromAddress, ref:"attrs/"+ZaDistributionList.A_zimbraDistributionListSendShareMessageFromAddress, type:_STRING_},
-		{id:ZaDistributionList.A2_sharesOwner, type:_STRING_},
-		{id:ZaDistributionList.A2_sharesPool, type:_LIST_},
-		{id:ZaDistributionList.A2_newSharePath, type:_STRING_},
-		{id:ZaDistributionList.A2_share_selection_cache, type:_LIST_},
-		{id:ZaDistributionList.A2_published_share_selection_cache, type:_LIST_}	
+		{id:ZaDistributionList.A2_alias_selection_cache, type:_LIST_}
 		
 	]
 };
