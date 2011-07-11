@@ -1493,6 +1493,19 @@ public class BeanUtils {
     }
 
     /**
+     * Checks whether email features and tabs are enabled for a user or for a delegated admin access.
+     * Returns true if mail feature is enabled for a user or if zimbraFeatureAdminMailEnabled is set to
+     * true in case of delegated admin login, false otherwise.
+     */
+    public static boolean isMailEnabled(com.zimbra.cs.taglib.bean.ZMailboxBean mailbox) throws ServiceException{
+        ZFeatures features = mailbox.getFeatures();
+        if (features.getMail() && (!mailbox.getAdminDelegated() || (mailbox.getAdminDelegated() && features.getAdminMail()))) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Lightens the hex color string by a fraction of 0.3
      */
     public static String lightenColor(String color) {

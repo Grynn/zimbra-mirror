@@ -7536,4 +7536,10 @@
         <function-signature>java.lang.String getMailURL(javax.servlet.jsp.PageContext)</function-signature>
 	</function>
 
+    <function>
+		<name>isMailEnabled</name>
+		<function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isMailEnabled(com.zimbra.cs.taglib.bean.ZMailboxBean)</function-signature>
+	</function>
+
 </taglib>
