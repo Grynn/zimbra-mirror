@@ -458,6 +458,8 @@ public abstract class AbsSeleniumObject {
 	public void zTypeFormattedText(String locator, String html)
 			throws HarnessException {
 		
+			logger.info("zTypeFormattedText(" + locator + ", " + html + ")");
+
 			sGetEval("var bodytext=\""
 					+ html
 					+ "\";"
