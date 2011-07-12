@@ -798,6 +798,13 @@ public class BeanUtils {
         return isAttachmentExists(condition) ? (ZAttachmentExistsCondition) condition : null;
     }
 
+    /**
+     * Returns true if the specified object is an array or Collection.
+	 */
+    public static boolean isCollection(Object obj) {
+        return ((obj instanceof Object[]) || (obj instanceof Collection));
+    }
+
     public static boolean isKeep(ZFilterAction action) {
         return action instanceof ZKeepAction;
     }

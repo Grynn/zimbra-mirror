@@ -6995,6 +6995,12 @@
     </function>
 
     <function>
+        <name>isCollection</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isCollection(java.lang.Object)</function-signature>
+    </function>
+
+    <function>
         <name>isKeepAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isKeep(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
