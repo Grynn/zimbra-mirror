@@ -18,6 +18,7 @@ interface IMapiWrapper : IDispatch{
 	[id(1), helpstring("This method can be used to connect to ZCO server")] HRESULT ConnectToServer(BSTR ServerHostName, BSTR Port, BSTR AdminID);
 	[id(2), helpstring("Method to connect to Exchange server")] HRESULT ConnecttoXchgServer([in] BSTR HostName, BSTR ProfileName, BSTR Password);
 	[id(3), helpstring("Method to import all the options, input is the tag name for options")] HRESULT ImportMailOptions([in] BSTR OptionsTag);
+	[id(4)] HRESULT GetProfilelist([out] VARIANT* Profiles);
 };
 [
 	uuid(33449EAA-8056-4D28-8D42-552B7C6C8954),

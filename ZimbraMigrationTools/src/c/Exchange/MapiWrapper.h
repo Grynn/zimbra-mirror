@@ -4,6 +4,7 @@
 #include "resource.h"
 #include "Exchange_i.h"
 #include "MapiMigration.h"
+#include "ExchangeUtils.h"
 
 class ATL_NO_VTABLE CMapiWrapper:
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -14,6 +15,7 @@ class ATL_NO_VTABLE CMapiWrapper:
 public:
     CMapiWrapper() {
 	baseMigrationObj = new MapiMigration();
+	exchadmin= new Zimbra::ExchangeUtils::ExchangeAdmin("10.117.82.161");
     }
 
     DECLARE_REGISTRY_RESOURCEID(IDR_MAPIWRAPPER)
@@ -33,9 +35,17 @@ public:
     void FinalRelease() {}
 
     CMigration *baseMigrationObj;
+	Zimbra::ExchangeUtils::ExchangeAdmin *exchadmin;
+
     STDMETHOD(ConnectToServer)(BSTR ServerHostName, BSTR Port, BSTR AdminID);
     STDMETHOD(ConnecttoXchgServer)(BSTR HostName, BSTR ProfileName, BSTR Password);
     STDMETHOD(ImportMailOptions)(BSTR OptionsTag);
+	STDMETHOD(GetProfilelist)(VARIANT* Profiles);
+	std::vector<CComBSTR>m_vecColors;
+
+	std::wstring str_to_wstr( const std::string& str );
+
+
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(MapiWrapper), CMapiWrapper)

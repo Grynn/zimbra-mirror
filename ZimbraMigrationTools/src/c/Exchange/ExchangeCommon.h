@@ -4,6 +4,9 @@
 #include "Zimbra/Zimbra.h"
 #include "Zimbra/Rpc.h"
 
+#include "..\Util\ZimbraUtil.h"
+#include "..\Util\ZimbraLogging.h"
+
 #include<CGuid.h>
 #include <atlbase.h>
 

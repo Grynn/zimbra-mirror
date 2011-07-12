@@ -38,6 +38,7 @@ namespace CssLib
         MVVM.Model.Users  users = new MVVM.Model.Users();*/
 
         Exchange.IMapiWrapper MailWrapper;
+        
 
         /*private void CreateConfig(string Xmlfilename)
         {
@@ -78,6 +79,26 @@ namespace CssLib
         {
 
             MailWrapper.ImportMailOptions(MailOptions);
+           
+                   
+           
+
+        }
+
+        public string[] GetListofMapiProfiles()
+        {
+
+
+            object var = new object();
+
+            MailWrapper.GetProfilelist(out var);
+
+
+            string[] s = (string[])var;
+
+            return s;
+
+
 
         }
 

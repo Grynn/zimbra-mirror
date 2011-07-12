@@ -33,6 +33,9 @@
     <ClCompile Include="Exchange_i.c">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="ExchangeUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MapiMigration.h">
@@ -45,6 +48,9 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="ExchangeCommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ExchangeUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

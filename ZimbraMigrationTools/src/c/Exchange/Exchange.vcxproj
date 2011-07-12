@@ -88,7 +88,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;EXCHANGE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -104,9 +104,10 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>Exchange.def</ModuleDefinitionFile>
       <RegisterOutput>true</RegisterOutput>
+      <AdditionalOptions>"..\..\..\..\ZimbraMAPI\out\LSMSUTIL32\dbg\usa\Util.lib" "..\..\..\..\ZimbraMAPI\out\LSLIB32\dbg\usa\LSLIB32.lib" %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -254,6 +255,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='rtl|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Exchange.cpp" />
+    <ClCompile Include="ExchangeUtils.cpp" />
     <ClCompile Include="Exchange_i.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'">NotUsing</PrecompiledHeader>
@@ -265,6 +267,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExchangeCommon.h" />
+    <ClInclude Include="ExchangeUtils.h" />
     <ClInclude Include="Exchange_i.h" />
     <ClInclude Include="MapiMigration.h" />
     <ClInclude Include="MapiWrapper.h" />
