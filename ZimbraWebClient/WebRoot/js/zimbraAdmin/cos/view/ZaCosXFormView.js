@@ -207,7 +207,8 @@ ZaCosXFormView.FEATURE_TAB_ATTRS = [ZaCos.A_zimbraFeatureMailEnabled,
 	ZaCos.A_zimbraFeatureAdvancedSearchEnabled,
 	ZaCos.A_zimbraFeatureSavedSearchesEnabled,
 	ZaCos.A_zimbraFeatureInitialSearchPreferenceEnabled,
-	ZaCos.A_zimbraFeatureImportExportFolderEnabled,
+	ZaCos.A_zimbraFeatureImportFolderEnabled,
+    ZaCos.A_zimbraFeatureExportFolderEnabled,
 	ZaCos.A_zimbraDumpsterEnabled,
 	ZaCos.A_zimbraFeatureMailSendLaterEnabled,
 	ZaCos.A_zimbraFeatureFreeBusyViewEnabled,
@@ -423,7 +424,8 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 						ZaCos.A_zimbraFeatureGalEnabled,
 						ZaCos.A_zimbraFeatureMAPIConnectorEnabled,
 						ZaCos.A_zimbraFeatureGalAutoCompleteEnabled,
-						ZaCos.A_zimbraFeatureImportExportFolderEnabled,
+						ZaCos.A_zimbraFeatureImportFolderEnabled,
+                        ZaCos.A_zimbraFeatureExportFolderEnabled,
 						ZaCos.A_zimbraDumpsterEnabled
 					]]
 				],
@@ -438,8 +440,9 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     {ref:ZaCos.A_zimbraFeatureGalEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureGalEnabled,label:ZaMsg.LBL_zimbraFeatureGalEnabled, trueValue:"TRUE", falseValue:"FALSE"},
                     {ref:ZaCos.A_zimbraFeatureMAPIConnectorEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureMAPIConnectorEnabled,label:ZaMsg.LBL_zimbraFeatureMAPIConnectorEnabled, trueValue:"TRUE", falseValue:"FALSE"},
 		    {ref:ZaCos.A_zimbraFeatureGalAutoCompleteEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureGalAutoCompleteEnabled,label:ZaMsg.LBL_zimbraFeatureGalAutoCompleteEnabled, trueValue:"TRUE", falseValue:"FALSE"},
-                    {ref:ZaCos.A_zimbraFeatureImportExportFolderEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureImportExportFolderEnabled,label:ZaMsg.LBL_zimbraFeatureImportExportFolderEnabled, trueValue:"TRUE", falseValue:"FALSE"},
-		    {ref:ZaCos.A_zimbraDumpsterEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraDumpsterEnabled,label:ZaMsg.LBL_zimbraDumpsterEnabled, trueValue:"TRUE", falseValue:"FALSE"}
+                    {ref:ZaCos.A_zimbraFeatureImportFolderEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureImportFolderEnabled,label:ZaMsg.LBL_zimbraFeatureImportFolderEnabled, trueValue:"TRUE", falseValue:"FALSE"},
+		    		{ref:ZaCos.A_zimbraFeatureExportFolderEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureExportFolderEnabled,label:ZaMsg.LBL_zimbraFeatureExportFolderEnabled, trueValue:"TRUE", falseValue:"FALSE"},
+					{ref:ZaCos.A_zimbraDumpsterEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraDumpsterEnabled,label:ZaMsg.LBL_zimbraDumpsterEnabled, trueValue:"TRUE", falseValue:"FALSE"}
                 ] 
             },
             {type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_zimbraMailFeature, id:"cos_form_features_mail",
