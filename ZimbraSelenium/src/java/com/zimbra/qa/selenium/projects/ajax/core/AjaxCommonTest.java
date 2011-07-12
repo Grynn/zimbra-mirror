@@ -105,9 +105,12 @@ public class AjaxCommonTest {
 	/**
 	 * BeforeMethod variables
 	 * startingPage = the starting page before the test method starts
-	 * startingAccount = the account to log in as
+	 * startingAccountSettings = the account's settings (ModifyAccountRequest)
+	 * startingAccountPreferences = the account's preferences (ModifyPrefsRequest)
+	 * startingAccountZimletPreferences = the account's zimlet preferences (ModifyZimletPrefsRequest)
 	 */
 	protected AbsTab startingPage = null;
+	protected Map<String, String> startingAccountSettings = null;
 	protected Map<String, String> startingAccountPreferences = null;
 	protected Map<String, String> startingAccountZimletPreferences = null;
 
@@ -117,6 +120,7 @@ public class AjaxCommonTest {
 		app = new AppAjaxClient();
 
 		startingPage = app.zPageMain;
+		startingAccountSettings = new HashMap<String, String>();
 		startingAccountPreferences = new HashMap<String, String>();
 		startingAccountZimletPreferences = new HashMap<String, String>();
 	}
@@ -479,6 +483,22 @@ public class AjaxCommonTest {
          throw new HarnessException("Please add a support for appType: " + appType);
       }
 
+      // If test account features are defined, then make sure the test account
+      // uses those features
+      //
+      if ( (startingAccountSettings != null) && (!startingAccountSettings.isEmpty()) ) {
+    	  logger.debug("commonTestBeforeMethod: startingAccountSettings are defined");
+    	  StringBuilder settings = new StringBuilder();
+    	  for (Map.Entry<String, String> entry : startingAccountSettings.entrySet()) {
+    		  settings.append(String.format("<a n='%s'>%s</a>", entry.getKey(), entry.getValue()));
+    	  }
+    	  ZimbraAdminAccount.GlobalAdmin().soapSend(
+    			  "<ModifyAccountRequest xmlns='urn:zimbraAdmin'>"
+  				+		"<id>"+ ZimbraAccount.AccountZWC().ZimbraId +"</id>"
+  				+		settings.toString()
+  				+	"</ModifyAccountRequest>");
+      }
+      
       // If test account preferences are defined, then make sure the test account
       // uses those preferences
       //
