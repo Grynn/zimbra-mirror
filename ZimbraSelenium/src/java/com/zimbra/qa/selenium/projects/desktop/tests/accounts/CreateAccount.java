@@ -146,7 +146,7 @@ public class CreateAccount extends AjaxCommonTest {
       accountForm.zFill(desktopAccountItem);
       accountForm.zPressButton(Button.B_VALIDATE_AND_SAVE);
 
-      String message = app.zPageLogin.zGetMessage();
+      String message = app.zPageLogin.zGetMessage(true);
       ZAssert.assertStringContains(message,
             "Timeout when connecting to \"http://" + wrongServer + "/service/soap/\"." +
             		" Please check host/port and network connectivity.",

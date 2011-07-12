@@ -258,11 +258,20 @@ public class PageLogin extends AbsTab {
 	}
 
 	public String zGetMessage() throws HarnessException {
-	   GeneralUtility.waitForElementPresent(this, Locators.zDisplayedMessage);
-	   return sGetText(Locators.zDisplayedMessage);
+	   return zGetMessage(false);
 	}
 
-	/**
+   public String zGetMessage(boolean negativeTest) throws HarnessException {
+      if (negativeTest) {
+         GeneralUtility.waitForElementPresent(this, Locators.zDisplayedMessage, 60000);
+      } else {
+         GeneralUtility.waitForElementPresent(this, Locators.zDisplayedMessage);
+      }
+
+      return sGetText(Locators.zDisplayedMessage);
+	}
+
+   /**
 	 * Compiling the welcome message lines into a String
 	 * @return welcome message in 1 String
 	 * @throws HarnessException
