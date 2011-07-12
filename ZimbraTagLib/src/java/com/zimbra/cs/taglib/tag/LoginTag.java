@@ -64,6 +64,12 @@ public class LoginTag extends ZimbraSimpleTag {
 
     public void setImportData(boolean importData) { this.mImportData = importData; }
 
+    /**
+     * Signifies whether it is an admin proxy login ("View mail" login).
+     * If set to true, it is an admin login. Hence, do not invoke the import data
+     * request. If false, it is a normal user login, call import data request if
+     * the importData param is set to true.
+     */
     public void setAdminPreAuth(boolean isAdmin) { this.mAdminPreAuth = isAdmin; }
 
     public void setAuthtoken(String authToken) { this.mAuthToken = authToken; }

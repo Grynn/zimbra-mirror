@@ -1141,6 +1141,14 @@
         </attribute>
         <attribute>
             <description>
+                Is admin login
+            </description>
+            <name>adminPreAuth</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>
                 URL
             </description>
             <name>url</name>
