@@ -1444,7 +1444,11 @@ function(ev) {
 			this._currInsPt.collapse(false);
 		}
 		//IE Hack for Ctrl+A to create range and include all elements
-    	if(ctrlA && ev.keyCode == 65 && ev.ctrlKey) {
+
+        //bug:58569 For some I18n rightAlt key is used to print I18n characters. inn IE when right alt is pressed(rightAlt) it treats just as ctrl+A and when pressed any seq(rightAlt+a) is deleting the whole content
+        //avoided alt key when Ctrl+A seq formed (after the fix when leftCtrl+A and leftAlt+A pressed the whole text is selected and when pressed rightAlt+A (ą) is printed
+
+        if(ctrlA && ev.keyCode == 65 && ev.ctrlKey && !ev.altKey) {
         	var p = this._getParentElement();
         	while (p && (p.nodeType == 1) && (p.tagName.toLowerCase() != 'body')) {
             	p = p.parentNode;
