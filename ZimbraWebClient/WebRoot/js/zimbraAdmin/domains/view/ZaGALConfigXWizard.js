@@ -198,9 +198,11 @@ function (value, event, form) {
 	var inst = form.getInstance();
 	if(value=='FALSE') {
 		if(inst.attrs[ZaDomain.A_zimbraGalSyncLdapFilter] == "ad") {
-			inst.attrs[ZaDomain.A_GALSyncServerType] = "ad";
+			//inst.attrs[ZaDomain.A_GALSyncServerType] = "ad";
+			form.setInstanceValue("ad", ZaDomain.A_GALSyncServerType);
 		} else if(!inst.attrs[ZaDomain.A_GALSyncServerType]) {
-			inst.attrs[ZaDomain.A_GALSyncServerType] = "ldap";
+			//inst.attrs[ZaDomain.A_GALSyncServerType] = "ldap";
+			form.setInstanceValue("ldap", ZaDomain.A_GALSyncServerType);
 		}
 	} 
 //	form.setInstance(inst);
@@ -239,6 +241,19 @@ function () {
 	this.getModel().setInstanceValue(instance,ZaDomain.A2_isTestingSync,1);
 	var callback = new AjxCallback(this, ZaGALConfigXWizard.checkSyncConfigCallBack);
 	ZaDomain.testSyncSettings(instance, callback);	
+}
+
+ZaGALConfigXWizard.isGALServerType = 
+function (val) {
+	var currentVal = this.getInstanceValue(ZaDomain.A_GALSyncServerType);
+	if (!currentVal) {
+		if (val == "ldap")
+			return true;
+		else
+			return false;
+	}
+	else
+		return (currentVal == val);
 }
 
 ZaGALConfigXWizard.checkSyncConfigCallBack = function (arg) {
@@ -552,11 +567,11 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 										{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"35px"},
 										{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALServerName, width:"200px"},
 										{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"5px"},									
-										{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALServerPort,  width:"40px"},	
-										{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALUseSSL, width:"40px"}									
+										{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALServerPort,  width:"45px"},	
+										{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALUseSSL, width:"65px"}									
 									]
 								},
-								{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.Domain_GalLdapURL, repeatInstance:"", showAddButton:true, showRemoveButton:true,  
+								{ref:ZaDomain.A_GalLdapURL, type:_REPEAT_, label:ZaMsg.LBL_Domain_GalLdapURL, repeatInstance:"", showAddButton:true, showRemoveButton:true,  
 									visibilityChecks:[[ZaItem.hasWritePermission,ZaDomain.A_GalLdapURL]],
 									addButtonLabel:ZaMsg.Domain_AddURL, 
 									removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,
@@ -582,7 +597,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 						}
 					]
 				},
-				{type:_CASE_, numCols:2,colSizes:["220px","430px"],
+				{type:_CASE_, numCols:2,colSizes:["300px","*"],
 					caseKey:ZaGALConfigXWizard.GAL_CONFIG_STEP_2,
 					visibilityChangeEventSources:[ZaModel.currentStep],
 					visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaNewDomainXWizard.isDomainModeNotInternal],					
@@ -626,14 +641,14 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 								{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"35px"},
 								{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALServerName, width:"200px"},
 								{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"5px"},									
-								{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALServerPort,  width:"40px"},	
-								{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALUseSSL, width:"60px"}									
+								{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALServerPort,  width:"45px"},	
+								{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:ZaMsg.Domain_GALUseSSL, width:"65px"}									
 							]
 						},
 						{ref:ZaDomain.A_zimbraGalSyncLdapURL, type:_REPEAT_, label:ZaMsg.LBL_Domain_GalLdapURL, repeatInstance:"", showAddButton:true, showRemoveButton:true,
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALSyncUseGALSearch,"FALSE"]],
 							enableDisableChangeEventSources:[ZaDomain.A_GALSyncUseGALSearch],
-							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALSyncServerType,ZaDomain.GAL_ServerType_ad]],
+							visibilityChecks:[[ZaGALConfigXWizard.isGALServerType, ZaDomain.GAL_ServerType_ad]],
 							visibilityChangeEventSources:[ZaDomain.A_GALSyncUseGALSearch,ZaDomain.A_GALSyncServerType],							
 							addButtonLabel:ZaMsg.Domain_AddURL, 
 							removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,								
@@ -643,7 +658,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 							]
 						},
 						{ref:ZaDomain.A_zimbraGalSyncLdapURL, type:_REPEAT_, label:ZaMsg.LBL_Domain_GalLdapURL, repeatInstance:"", showAddButton:true, showRemoveButton:true,
-							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALSyncServerType,ZaDomain.GAL_ServerType_ldap]],
+							visibilityChecks:[[ZaGALConfigXWizard.isGALServerType, ZaDomain.GAL_ServerType_ldap]],
 							visibilityChangeEventSources:[ZaDomain.A_GALSyncUseGALSearch,ZaDomain.A_GALSyncServerType],							
 							enableDisableChecks:[[XForm.checkInstanceValue,ZaDomain.A_GALSyncUseGALSearch,"FALSE"]],
 							enableDisableChangeEventSources:[ZaDomain.A_GALSyncUseGALSearch,ZaDomain.A_GALSyncServerType],								
