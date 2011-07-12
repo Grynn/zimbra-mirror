@@ -187,16 +187,20 @@ public class PagePreferences extends AbsTab {
 		
 		if ( preference.equals("zimbraPrefIncludeSpamInSearch")) {
 			
-			locator = "//input[contains(@id,'_SEARCH_INCLUDES_SPAM')]";
+			locator = "css=input[id$=_SEARCH_INCLUDES_SPAM]";
 
 		} else if (preference.equals("zimbraPrefIncludeTrashInSearch")) {
 			
-			locator = "//input[contains(@id,'_SEARCH_INCLUDES_TRASH')]";
+			locator = "css=input[id$=_SEARCH_INCLUDES_TRASH]";
 
 		} else if (preference.equals("zimbraPrefShowSearchString")) {
 
-			locator = "//input[contains(@id,'_SHOW_SEARCH_STRING')]";
+			locator = "css=input[id$=_SHOW_SEARCH_STRING]";
 
+		} else if (preference.equals("zimbraPrefAutoAddAddressEnabled")) {
+
+			locator = "css=input[id$=_AUTO_ADD_ADDRESS]";
+			
 		} else {
 			throw new HarnessException("zGetCheckboxStatus() not defined for preference "+ preference);
 		}

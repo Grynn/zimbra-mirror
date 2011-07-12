@@ -27,6 +27,7 @@ public class TreePreferences extends AbsTree {
 		public final static String zGeneralImageID_Desktop = "zti__local@host.local:main_Options__PREF_PAGE_GENERAL_imageCell";
 		public final static String zsignatureTextID = "zti__main_Options__PREF_PAGE_SIGNATURES_textCell";
 		public final static String zSignatureTextID_Desktop = "zti__<EMAIL_ADDRESS>:main_Options__PREF_PAGE_SIGNATURES_textCell";
+		public final static String zAddressBookTextID = "zti__main_Options__PREF_PAGE_CONTACTS_textCell";
 	}
 	
 	public enum TreeItem {
@@ -126,7 +127,7 @@ public class TreePreferences extends AbsTree {
 		map.put(TreeItem.MailAccounts, null);
 		map.put(TreeItem.MailFilters, null);
 		map.put(TreeItem.MailTrustedAddresses, null);
-		map.put(TreeItem.AddressBook, null);
+		map.put(TreeItem.AddressBook, "id=" + Locators.zAddressBookTextID);
 		map.put(TreeItem.Calendar, null);
 		map.put(TreeItem.Sharing, null);
 		map.put(TreeItem.Notifications, null);
