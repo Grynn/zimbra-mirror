@@ -78,7 +78,7 @@ public class DisplayContact extends  AbsDisplay {
 		ArrayList<String> locatorArray = new ArrayList<String>();
 
 		if ( field == Field.FileAs ) {			
-		    locatorArray.add("css=table[class*='contactHeaderTable'] div[class*='contactHeader']");
+		    locatorArray.add("css=div[style*='display: block'] div[class*='contactHeader']");
 		}
 		else if ( field == Field.JobTitle ) {					   			
 		    locatorArray.add("css=table[class*='contactHeaderTable'] div[class='companyName']:nth-of-type(1)");
@@ -110,8 +110,9 @@ public class DisplayContact extends  AbsDisplay {
 		   Object[] param = new Object[] {locator};
 		   GeneralUtility.waitFor(null, this, false, "sGetText", param, WAIT_FOR_OPERAND.NEQ,
 		         "", 30000, 1000);
+
 		   // Get the element value
-		    value += this.sGetText(locator).trim();		
+		   value += this.sGetText(locator).trim();
 		}
 
 		logger.info("DisplayContact.zGetContactProperty(" + field + ") = " + value);
