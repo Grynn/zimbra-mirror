@@ -47,6 +47,7 @@ server
 
         # For Virtual Hosting
         proxy_set_header Host            $http_host;
+	proxy_set_header X-Forwarded-Host	$host;
 
         # Fudge inter-mailbox redirects (kludge)
         proxy_redirect http://$relhost/ http://$http_host/;

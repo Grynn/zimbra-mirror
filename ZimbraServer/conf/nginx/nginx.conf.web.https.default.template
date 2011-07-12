@@ -51,6 +51,7 @@ server
 
         # For Virtual Hosting
         proxy_set_header Host            $http_host;
+	proxy_set_header X-Forwarded-Host	$host;
 
         # Location header fudging
         # Because NGINX SSL speaks plain HTTP to upstream, therefore any
