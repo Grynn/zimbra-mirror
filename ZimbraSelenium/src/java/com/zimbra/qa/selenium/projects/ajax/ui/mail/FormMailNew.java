@@ -305,7 +305,25 @@ public class FormMailNew extends AbsForm {
 			} else {
 				throw new HarnessException("unsupported priority option "+ option);
 			}
+		
+		} else if ( pulldown == Button.B_SEND ) {
+			
+			pulldownLocator = "css=td[id$='__SEND_MENU_dropdown'] div";
+
+			if ( option == Button.O_SEND_SEND ) {
+
+				optionLocator = "css=tr#POPUP_SEND td#SEND_title";
+				page = null;
+
+			} else if ( option == Button.O_SEND_SEND_LATER ) {
 				
+				optionLocator = "css=tr#POPUP_SEND_LATER td#SEND_LATER_title";
+				page = new DialogSendLater(this.MyApplication, ((AppAjaxClient)MyApplication).zPageMail);
+
+			} else {
+				throw new HarnessException("unsupported pulldown/option "+ pulldown +"/"+ option);
+			}
+
 		} else {
 			throw new HarnessException("no logic defined for pulldown "+ pulldown);
 		}

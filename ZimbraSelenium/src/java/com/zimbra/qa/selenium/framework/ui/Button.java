@@ -114,6 +114,7 @@ public class Button {
 	public static final Button B_PRIORITY = new Button("B_PRIORITY");
 	public static final Button B_SHOWBCC = new Button("B_SHOWBCC");
 
+	public static final Button O_SEND_SEND = new Button("O_SEND_SEND");
 	public static final Button O_SEND_SEND_LATER = new Button("O_SEND_SEND_LATER");
 	public static final Button O_SIGNATURE_DO_NOT_ADD_SIGNATURE = new Button("O_SIGNATURE_DO_NOT_ADD_SIGNATURE");
 	public static final Button O_ADD_SIGNATURE = new Button("O_ADD_SIGNATURE");
