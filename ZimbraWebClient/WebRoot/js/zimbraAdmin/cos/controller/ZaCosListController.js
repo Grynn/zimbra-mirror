@@ -476,7 +476,7 @@ function (enableArray,disableArray) {
 			this._toolbarOperations[ZaOperation.EDIT].enabled=false;
 		}
 		
-		if(this._popupOperations[ZaOperation.DUPLICATE] && this._toolbarOperations[ZaOperation.DUPLICATE].enabled) {
+		if(this._popupOperations[ZaOperation.DUPLICATE] && this._popupOperations[ZaOperation.DUPLICATE].enabled) {
 			this._popupOperations[ZaOperation.DUPLICATE].enabled=false;
 		}		
 		if(this._popupOperations[ZaOperation.EDIT]) {
@@ -499,7 +499,7 @@ function (enableArray,disableArray) {
 		if(this._popupOperations[ZaOperation.DELETE]) {
 			this._popupOperations[ZaOperation.DELETE].enabled=false;
 		}	
-		if(this._popupOperations[ZaOperation.DUPLICATE] && this._toolbarOperations[ZaOperation.DUPLICATE].enabled) {
+		if(this._popupOperations[ZaOperation.DUPLICATE] && this._popupOperations[ZaOperation.DUPLICATE].enabled) {
 			this._popupOperations[ZaOperation.DUPLICATE].enabled=false;
 		}		
 	}
