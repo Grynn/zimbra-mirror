@@ -1,0 +1,12 @@
+<zimlet name="com_zimbra_hellofolders_zd" version="0.1" description="Creates Folders when clicked in different accounts in ZD">
+  <include>hellofolders.js</include>
+  <handlerObject>com_zimbra_hellofolders_zd</handlerObject>
+  <zimletPanelItem label="Hello Folders ZD" icon="zimbraIcon">
+    <toolTipText>Creates Folders when clicked in different accounts in ZD</toolTipText>
+		 <contextMenu>
+			<menuItem label="Create folder in default account" icon="MsgStatusUnread" id="hellofolderszd_defaultAccount"/>
+			<menuItem label="Create folder in active account" icon="MsgStatusUnread" id="hellofolderszd_activeAccount"/>
+			<menuItem label="Create folder in Zimbra account" icon="MsgStatusUnread" id="hellofolderszd_zimbraAccount"/>
+		</contextMenu>
+  </zimletPanelItem>
+</zimlet>
