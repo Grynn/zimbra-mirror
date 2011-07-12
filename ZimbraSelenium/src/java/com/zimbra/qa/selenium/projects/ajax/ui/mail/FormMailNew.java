@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui.mail;
 
 import java.util.List;
 
+import com.zimbra.qa.selenium.framework.core.SeleniumService;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.RecipientItem.RecipientType;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -387,7 +388,7 @@ public class FormMailNew extends AbsForm {
 			
 			// FALL THROUGH
 			
-		} else if ( field == Field.Body ) {
+		} else if (field == Field.Body) {
 
 			// For some reason, the client expects a bit of a delay here.
 			// A cancel compose will not register unless this delay is here
@@ -397,90 +398,104 @@ public class FormMailNew extends AbsForm {
 			SleepUtil.sleepLong();
 
 			int frames = this.sGetXpathCount("//iframe");
-			logger.debug("Body: # of frames: "+ frames);
+			logger.debug("Body: # of frames: " + frames);
+			String browser = SeleniumService.getInstance().getSeleniumBrowser();
+			/*
+			 * Added IE specific condition because IE recognized frame=1 for text compose and frame=2 for html compose
+			 */
+			if (browser.equalsIgnoreCase("iexplore")) {
+				if (frames == 1) {
+					// //
+					// Text compose
+					// //
 
-			if ( frames == 0 ) {
-				////
-				// Text compose
-				////
-				
-				locator = "//textarea[contains(@id,'textarea_')]";
-				
-				if ( !this.sIsElementPresent(locator))
-					throw new HarnessException("Unable to locate compose body");
+					locator = "//textarea[contains(@id,'textarea_')]";
 
-				
-				this.sFocus(locator);
-				this.zClick(locator);
-				this.zWaitForBusyOverlay();
-				this.sType(locator, value);
-				
-				return;
-				
-			} else if ( frames == 1 ) {
-				////
-				// HTML compose
-				////
-				
-				try {
-					
-					this.sSelectFrame("index=0"); // iframe index is 0 based
-					
-					locator = "//html//body";
-					
-					if ( !this.sIsElementPresent(locator))
-						throw new HarnessException("Unable to locate compose body");
+					if (!this.sIsElementPresent(locator))
+						throw new HarnessException(
+								"Unable to locate compose body");
 
 					this.sFocus(locator);
 					this.zClick(locator);
+					this.zWaitForBusyOverlay();
 					this.sType(locator, value);
-					
-				} finally {
-					// Make sure to go back to the original iframe
-					this.sSelectFrame("relative=top");
+
+					return;
+
+				} else if (frames == 2) {
+
+					locator = "css=iframe[id^='iframe_DWT']";
+
+					if (!this.sIsElementPresent(locator))
+						throw new HarnessException(
+								"Unable to locate compose body");
+
+					zTypeFormattedText(locator, value);
+
+					// Is this requried?
+					this.zWaitForBusyOverlay();
+
+					return;
 
 				}
-				
-				// Is this requried?
-				this.zWaitForBusyOverlay();
-
-				return;
-
-			}else if ( frames == 2 ) {
-				////
-				//  As IFrame count for IE is  showing 2 so Added  respective condition for IE browser.
-				////
-
-				try {
-
-					this.sSelectFrame("css=iframe[id^='iframe_DWT']"); 
-
-					locator = "css=body";
-
-					if ( !this.sIsElementPresent(locator))
-						throw new HarnessException("Unable to locate compose body");
-
-					this.sFocus(locator);
-					this.zClickAt(locator,"");	
-					this.zKeyboard.zTypeCharacters(value);
-				} finally {
-					// Make sure to go back to the original iframe
-					this.sSelectFrame("relative=top");
-
-				}
-
-				// Is this requried?
-				this.zWaitForBusyOverlay();
-
-				return;
 
 			} else {
-				throw new HarnessException("Compose //iframe count was "+ frames);
+				if (frames == 0) {
+					// //
+					// Text compose
+					// //
+
+					locator = "//textarea[contains(@id,'textarea_')]";
+
+					if (!this.sIsElementPresent(locator))
+						throw new HarnessException(
+								"Unable to locate compose body");
+
+					this.sFocus(locator);
+					this.zClick(locator);
+					this.zWaitForBusyOverlay();
+					this.sType(locator, value);
+
+					return;
+
+				} else if (frames == 1) {
+					// //
+					// HTML compose
+					// //
+
+					try {
+
+						this.sSelectFrame("index=0"); // iframe index is 0 based
+
+						locator = "//html//body";
+
+						if (!this.sIsElementPresent(locator))
+							throw new HarnessException(
+									"Unable to locate compose body");
+
+						this.sFocus(locator);
+						this.zClick(locator);
+						this.sType(locator, value);
+
+					} finally {
+						// Make sure to go back to the original iframe
+						this.sSelectFrame("relative=top");
+
+					}
+
+					// Is this requried?
+					this.zWaitForBusyOverlay();
+
+					return;
+
+				} else {
+					throw new HarnessException("Compose //iframe count was "
+							+ frames);
+				}
 			}
-			
 
 		} else {
-			throw new HarnessException("not implemented for field "+ field);
+			throw new HarnessException("not implemented for field " + field);
 		}
 		
 		if ( locator == null ) {
