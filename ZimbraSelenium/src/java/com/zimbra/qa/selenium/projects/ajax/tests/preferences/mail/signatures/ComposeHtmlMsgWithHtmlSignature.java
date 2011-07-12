@@ -22,7 +22,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
 public class ComposeHtmlMsgWithHtmlSignature extends AjaxCommonTest {
 	String sigName = "signame" + ZimbraSeleniumProperties.getUniqueString();
-	String sigBody = "Signature<strong>bold"+ ZimbraSeleniumProperties.getUniqueString() + "</strong>Signature";
+	String sigBody = "signature<strong>bold"+ ZimbraSeleniumProperties.getUniqueString() + "</strong>signature";
 	String contentHTML = XmlStringUtil.escapeXml("<html>" + "<head></head>"
 			+ "<body>" + sigBody + "</body>" + "</html>");
 
@@ -98,8 +98,8 @@ public class ComposeHtmlMsgWithHtmlSignature extends AjaxCommonTest {
 		ZAssert.assertEquals(received.dFromRecipient.dEmailAddress, app.zGetActiveAccount().EmailAddress,"Verify the from field is correct");
 		ZAssert.assertEquals(received.dToRecipients.get(0).dEmailAddress,ZimbraAccount.AccountZWC().EmailAddress,"Verify the to field is correct");
 		ZAssert.assertEquals(received.dSubject, mail.dSubject,"Verify the subject field is correct");
-		ZAssert.assertStringContains(received.dBodyHtml, mail.dBodyHtml,"Verify the body content is correct");
-		ZAssert.assertStringContains(received.dBodyHtml, this.sigBody,"Verify the signature is correct");
+		ZAssert.assertStringContains(received.dBodyHtml.toLowerCase(), mail.dBodyHtml,"Verify the body content is correct");
+		ZAssert.assertStringContains(received.dBodyHtml.toLowerCase(), this.sigBody,"Verify the signature is correct");
 
 	}
 
