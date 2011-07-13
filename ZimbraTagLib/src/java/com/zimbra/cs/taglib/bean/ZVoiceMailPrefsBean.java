@@ -125,7 +125,7 @@ public class ZVoiceMailPrefsBean extends ZCallFeatureBean {
         getFeature().setVoiceItemsPerPage(value);
     }
     
-    public void getEmailNotifTrans() {
+    public boolean getEmailNotifTrans() {
         return getFeature().getEmailNotifTrans();
     }
 
@@ -133,7 +133,7 @@ public class ZVoiceMailPrefsBean extends ZCallFeatureBean {
         getFeature().setEmailNotifTrans(value);
     }
     
-    public void getEmailNotifAttach() {
+    public boolean getEmailNotifAttach() {
         return getFeature().getEmailNotifAttach();
     }
 
