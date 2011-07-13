@@ -14,6 +14,7 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.DisplayContact;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
 
 public class AddNewContactsToEmailedContactOptIn extends AjaxCommonTest {
@@ -79,6 +80,14 @@ public class AddNewContactsToEmailedContactOptIn extends AjaxCommonTest {
 		
         ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + fileAs + ") displayed in folder Emailed Contacts");
      
+        // Select the contact 
+		DisplayContact contactView = (DisplayContact) app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, fileAs);
+	  
+		// Verify contact fileAs + email displayed
+		ZAssert.assertStringContains(contactView.zGetContactProperty(DisplayContact.Field.FileAs), fileAs, "Verify contact fileAs (" + fileAs + ") displayed");	
+		
+	    ZAssert.assertStringContains(contactView.zGetContactProperty(DisplayContact.Field.Email), ZimbraAccount.AccountA().EmailAddress, "Verify contact email (" + ZimbraAccount.AccountA().EmailAddress + ") displayed");	
+
 	}
 	
 	
