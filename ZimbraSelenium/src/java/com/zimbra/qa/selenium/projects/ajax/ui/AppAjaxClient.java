@@ -18,6 +18,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.signature.PageSignature;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageSearch;
+import com.zimbra.qa.selenium.projects.ajax.ui.social.PageSocial;
 import com.zimbra.qa.selenium.projects.ajax.ui.tasks.*;
 
 
@@ -51,6 +52,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.tasks.*;
  */
 public class AppAjaxClient extends AbsApplication {
 	
+	// Pages
 	public PageLogin					zPageLogin = null;
 	public PageMain						zPageMain = null;
 	public PageSearch					zPageSearch = null;
@@ -63,11 +65,16 @@ public class AppAjaxClient extends AbsApplication {
 	public PagePreferences				zPagePreferences = null;
 	public PageSignature				zPageSignature = null;
 	
+	// Trees
 	public TreeMail						zTreeMail = null;
 	public TreeContacts					zTreeContacts = null;
 	public TreeTasks					zTreeTasks = null;
 	public TreeBriefcase		        zTreeBriefcase = null;
 	public TreePreferences				zTreePreferences = null;
+	
+	// Zimlets
+	public PageSocial					zPageSocial = null;
+
 	
 	public AppAjaxClient() {
 		super();
@@ -131,6 +138,11 @@ public class AppAjaxClient extends AbsApplication {
 		// signature Preferences page
 		zPageSignature = new PageSignature(this);
 		pages.put(zPageSignature.myPageName(),zPageSignature);
+		
+
+		// Zimlets
+		zPageSocial = new PageSocial(this);
+		pages.put(zPageSocial.myPageName(), zPageSocial);
 		
 
 		// Configure the localization strings
