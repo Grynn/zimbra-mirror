@@ -81,11 +81,19 @@ namespace MVVM.ViewModel
                 Z11 = (Config)reader.Deserialize(fileRead);
                 fileRead.Close();
 
+
                 if (Z11.mailServer.Hostname.Length == 0)
                 {
                     Isprofile = true;
                     IsmailServer = false;
                     OutlookProfile = Z11.OutlookProfile;
+                   
+                    if (ProfileList.Count > 0)
+                    {
+                        CurrentProfileSelection = (OutlookProfile == null) ? 0 : ProfileList.IndexOf(OutlookProfile);
+                    }
+                    else
+                        ProfileList.Add(OutlookProfile);
                 }
                 else
                 {
@@ -113,6 +121,8 @@ namespace MVVM.ViewModel
 
         private void Save()
         {
+            OutlookProfile = ProfileList[CurrentProfileSelection];
+
             if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
             {
                 UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "mailServer");
