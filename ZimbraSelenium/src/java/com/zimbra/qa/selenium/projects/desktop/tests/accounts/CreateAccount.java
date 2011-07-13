@@ -69,7 +69,7 @@ public class CreateAccount extends AjaxCommonTest {
       ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account's email address is greater than 0.");
    }
 
-   @Test(description="Wrong email address format (alphabet characters only) when creating Zimbra Account", groups = { "functional1" } )
+   @Test(description="Wrong email address format (alphabet characters only) when creating Zimbra Account", groups = { "functional" } )
    public void wrongEmailAddressFormatZimbraAccount1() throws HarnessException {
 
       String wrongEmailAddress = ZimbraSeleniumProperties.getUniqueString();
@@ -100,7 +100,7 @@ public class CreateAccount extends AjaxCommonTest {
             "Added account message is displayed");
    }
 
-   @Test(description="Wrong email address format (alphabet characters and '@') when creating Zimbra Account", groups = { "functional1" } )
+   @Test(description="Wrong email address format (alphabet characters and '@') when creating Zimbra Account", groups = { "functional" } )
    public void wrongEmailAddressFormatZimbraAccount2() throws HarnessException {
 
       String wrongEmailAddress = ZimbraSeleniumProperties.getUniqueString() + "@";
@@ -221,6 +221,39 @@ public class CreateAccount extends AjaxCommonTest {
             "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
             "Verify welcome message is displayed");
 
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
+   @Test(description="Wrong server when creating Zimbra Account", groups = { "functional" } )
+   public void wrongServerZimbraAccount() throws HarnessException {
+   
+      String wrongServer = "1.1.1.1";
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopZimbraAccountItem(
+            ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().Password,
+            ZimbraSeleniumProperties.getStringProperty("server.port", "80"),
+            wrongServer,
+            false);
+   
+      FormAddZimbraAccount accountForm = (FormAddZimbraAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.ZIMBRA);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zPressButton(Button.B_VALIDATE_AND_SAVE);
+   
+      String message = app.zPageLogin.zGetMessage(true);
+      ZAssert.assertStringContains(message,
+            "Timeout when connecting to \"http://" + wrongServer + "/service/soap/\"." +
+            		" Please check host/port and network connectivity.",
+            "Verify error message of wrong incoming server address");
+   
+      app.zPageLogin.zNavigateTo();
+   
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+   
       ZAssert.assertEquals(false,
             app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
             "Added account message is displayed");
