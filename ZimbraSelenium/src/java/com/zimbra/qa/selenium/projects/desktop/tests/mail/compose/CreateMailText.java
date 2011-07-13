@@ -39,7 +39,6 @@ public class CreateMailText extends AjaxCommonTest {
 		super.startingAccountPreferences = new HashMap<String , String>() {{
 				    put("zimbraPrefComposeFormat", "text");
 				    put("zimbraPrefReadingPaneLocation", "bottom");
-				    put("zimbraPrefMessageViewHtmlPreferred", "FALSE");
 				}};
 		
 	}
@@ -260,7 +259,7 @@ public class CreateMailText extends AjaxCommonTest {
 	}
 
 	@Test(  description = "Send a mail from Yahoo to Gmail",
-         groups = { "functional1" })
+         groups = { "functional" })
    public void createMailFromYahooToGmail() throws HarnessException {
       _externalAccountTest = true;
 
