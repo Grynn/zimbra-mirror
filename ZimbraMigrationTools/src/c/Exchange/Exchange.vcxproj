@@ -255,7 +255,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='rtl|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Exchange.cpp" />
-    <ClCompile Include="ExchangeUtils.cpp" />
     <ClCompile Include="Exchange_i.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'">NotUsing</PrecompiledHeader>
@@ -263,13 +262,14 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='rtl|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="MapiMigration.cpp" />
+    <ClCompile Include="MAPIObjects.cpp" />
     <ClCompile Include="MapiWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExchangeCommon.h" />
-    <ClInclude Include="ExchangeUtils.h" />
     <ClInclude Include="Exchange_i.h" />
     <ClInclude Include="MapiMigration.h" />
+    <ClInclude Include="MAPIObjects.h" />
     <ClInclude Include="MapiWrapper.h" />
   </ItemGroup>
   <ItemGroup>

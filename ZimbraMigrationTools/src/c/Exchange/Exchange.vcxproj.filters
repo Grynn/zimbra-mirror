@@ -33,7 +33,7 @@
     <ClCompile Include="Exchange_i.c">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="ExchangeUtils.cpp">
+    <ClCompile Include="MAPIObjects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,7 +50,7 @@
     <ClInclude Include="ExchangeCommon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ExchangeUtils.h">
+    <ClInclude Include="MAPIObjects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
