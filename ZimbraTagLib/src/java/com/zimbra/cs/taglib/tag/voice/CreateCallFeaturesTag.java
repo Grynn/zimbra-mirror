@@ -60,6 +60,9 @@ public class CreateCallFeaturesTag extends CallFeaturesTagBase {
 	    newFeatures.getVoiceMailPrefs().setAnsweringLocale(mAnsweringLocale);
 	    newFeatures.getVoiceMailPrefs().setUserLocale(mUserLocale);
 
+	    newFeatures.getVoiceMailPrefs().setEmailNotifTrans(mEmailNotifTrans);
+	    newFeatures.getVoiceMailPrefs().setEmailNotifAttach(mEmailNotifAttach);
+
             getJspContext().setAttribute(mVar, newFeatures, PageContext.PAGE_SCOPE);
         } catch (ServiceException e) {
             throw new JspTagException(e);

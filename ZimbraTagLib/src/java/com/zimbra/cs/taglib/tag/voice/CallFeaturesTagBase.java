@@ -48,7 +48,10 @@ abstract public class CallFeaturesTagBase extends ZimbraSimpleTag {
 	protected Boolean mSkipPinEntry;
 	protected String mPromptLevel;
 	protected String mAnsweringLocale;
-	protected String mUserLocale;	
+	protected String mUserLocale;
+
+	protected Boolean mEmailNotifTrans;
+	protected Boolean mEmailNotifAttach;
 
 	public void setVar(String var) { mVar = var; }
 	public void setPhone(String phone) { mPhone = phone; }
@@ -100,6 +103,9 @@ abstract public class CallFeaturesTagBase extends ZimbraSimpleTag {
 	public void setAutoPlayNewMsgs(String play) { mAutoPlayNewMsgs = booleanValue(play); }
 	public void setSkipPinEntry(String skip) { mSkipPinEntry = booleanValue(skip); }
 	public void setRequirePinEntry(String require) { mSkipPinEntry = !booleanValue(require); }
+
+	public void setEmailNotifTrans(String notif) { mEmailNotifTrans = booleanValue(notif); }
+	public void setEmailNotifAttach(String notif) { mEmailNotifAttach = booleanValue(notif); }
 
 	private Boolean booleanValue(String value) {
 		return Boolean.valueOf("TRUE".equalsIgnoreCase(value) || "on".equalsIgnoreCase(value));
