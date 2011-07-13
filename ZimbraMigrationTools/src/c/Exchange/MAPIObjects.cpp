@@ -225,13 +225,13 @@ HRESULT ExchangeAdmin::GetAllProfiles(vector<string> &vProfileList)
 						}
 
 						//is it Zimbra profile?
-						ULONG i;
+						ULONG j;
 						bool bFoundZimbra=false;
-						for(i = 0; i < pRows->cRows ; i++)
+						for(j = 0; j < pRows->cRows ; j++)
 						{
-							if(PR_SERVICE_NAME == pRows->aRow[i].lpProps[0].ulPropTag) 
+							if(PR_SERVICE_NAME == pRows->aRow[j].lpProps[0].ulPropTag) 
 							{
-								if(0 == lstrcmpiW(pRows->aRow[i].lpProps[0].Value.LPSZ, L"LSMS"))
+								if(0 == lstrcmpiW(pRows->aRow[j].lpProps[0].Value.LPSZ, L"LSMS"))
 								{
 									//its a Zimbra Profile
 									bFoundZimbra = true;
