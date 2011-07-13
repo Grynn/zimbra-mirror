@@ -18,7 +18,10 @@
     <ClCompile Include="PSTMigration.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Exchange\ExchangeUtils.cpp">
+    <ClCompile Include="..\Exchange\MAPIObjects.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Exchange\MapiUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,7 +29,13 @@
     <ClInclude Include="PSTMigration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Exchange\ExchangeUtils.h">
+    <ClInclude Include="..\Exchange\MAPIObjects.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Exchange\ExchangeCommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Exchange\MapiUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

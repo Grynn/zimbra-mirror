@@ -1,4 +1,5 @@
-#include "../Exchange/ExchangeUtils.h"
+#include "stdafx.h"
+#include "..\Exchange\MAPIObjects.h"
 
 LPCWSTR lpProfileName=L"testprofile";
 LPCWSTR lpServerAddress=L"10.117.82.163";
@@ -121,7 +122,7 @@ int main(int argc, TCHAR *argv[])
 //	AdminAuth();
 //	UserAuth();
 //	ZCFileUploadTest();
-	Zimbra::ExchangeUtils::ExchangeAdmin *exchadmin= new Zimbra::ExchangeUtils::ExchangeAdmin("10.117.82.161");
+	Zimbra::MAPI::ExchangeAdmin *exchadmin= new Zimbra::MAPI::ExchangeAdmin("10.117.82.161");
 /*	
 	exchadmin->CreateProfile("test_profile@exch","appt1","test123");
 	exchadmin->SetDefaultProfile("test_profile@exch");
@@ -132,9 +133,17 @@ int main(int argc, TCHAR *argv[])
 	exchadmin->DeleteProfile("test_profile@exch");
 	delete exchadmin;
 */
-	vector<string> vProfileList;
-	exchadmin->GetAllProfiles(vProfileList);
-	vector<string>::iterator itr= vProfileList.begin();
+	try
+	{
+		exchadmin->CreateExchangeMailBox(L"new_zm12",L"z1mbr4Migration",L"CN=Administrator,CN=Users,DC=zmexch,DC=in,DC=zimbra,DC=com",L"z1mbr4Migration");
+	}
+	catch(Zimbra::MAPI::ExchangeAdminException &ex)
+	{
+		UNREFERENCED_PARAMETER(ex);
+	}
+
+	delete exchadmin;
+	return 0;
 	//exchadmin->CreateExchangeMailBox(L"new_zm12",L"z1mbr4Migration",L"CN=Administrator,CN=Users,DC=zmexch,DC=in,DC=zimbra,DC=com",L"z1mbr4Migration");
 
 	return 1;

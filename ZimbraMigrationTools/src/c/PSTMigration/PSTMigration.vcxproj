@@ -97,6 +97,7 @@
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='rtl|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='rtl|x64'" />
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">
     <ClCompile>
@@ -108,7 +109,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <DisableSpecificWarnings>4512;4127;4996</DisableSpecificWarnings>
@@ -116,7 +117,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
-      <PrecompiledHeaderFile>common.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>..\Exchange\ExchangeCommon.h</PrecompiledHeaderFile>
       <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
@@ -261,7 +262,8 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Exchange\ExchangeUtils.cpp" />
+    <ClCompile Include="..\Exchange\MAPIObjects.cpp" />
+    <ClCompile Include="..\Exchange\MapiUtils.cpp" />
     <ClCompile Include="PSTMigration.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">NotUsing</PrecompiledHeader>
@@ -270,7 +272,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Exchange\ExchangeUtils.h" />
+    <ClInclude Include="..\Exchange\ExchangeCommon.h" />
+    <ClInclude Include="..\Exchange\MAPIObjects.h" />
+    <ClInclude Include="..\Exchange\MapiUtils.h" />
     <ClInclude Include="PSTMigration.h" />
   </ItemGroup>
   <ItemGroup>
