@@ -695,6 +695,12 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 				 	items: [
 						{type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_AS_Settings,
 						  items: [
+                            { type: _DWT_ALERT_,
+                              containerCssStyle: "padding-bottom:0px",
+                              style: DwtAlert.WARNING,
+                              iconVisible: false,
+                              content: ZaMsg.Alert_AmavisdRestart
+                            },
 						  	{ ref: ZaGlobalConfig.A_zimbraSpamKillPercent, type: _INPUT_,
 						  	  label: ZaMsg.NAD_Spam_KillPercent, width: "4em"
 						  	},
