@@ -14,11 +14,6 @@ namespace MVVM.ViewModel
 {
     public class ConfigViewModelSDest : BaseViewModel
     {
-        [DllImport("CppLib.dll")]
-        public static extern int DisplayProfiles([MarshalAs(UnmanagedType.LPArray)] byte[] buffer);
-
-        /*readonly*/ // public Config m_config = new Config("", "", "", "", "", "","","","","",false);
-
         ScheduleViewModel scheduleViewModel;
         UsersViewModel usersViewModel;
 
@@ -61,12 +56,6 @@ namespace MVVM.ViewModel
         {
             string urlString = (isBrowser) ? "http://10.20.140.218/cfgSDest.html" : "file:///C:/depot/main/ZimbraMigrationTools/src/c/Misc/Help/cfgSDest.html";
             Process.Start(new ProcessStartInfo(urlString));
-        }
-
-        public ICommand GetProfilesCommand
-        {
-            get;
-            private set;
         }
 
         public ICommand LoadCommand

@@ -14,11 +14,6 @@ namespace MVVM.ViewModel
 {
     public class ConfigViewModelUDest : BaseViewModel
     {
-        [DllImport("CppLib.dll")]
-        public static extern int DisplayProfiles([MarshalAs(UnmanagedType.LPArray)] byte[] buffer);
-
-        /*readonly*/ // public Config m_config = new Config("", "", "", "", "", "","","","","",false);
-
         public ConfigViewModelUDest()
         {
             this.GetConfigDestHelpCommand = new ActionCommand(this.GetConfigDestHelp, () => true);

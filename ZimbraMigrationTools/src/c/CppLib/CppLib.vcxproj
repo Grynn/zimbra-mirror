@@ -205,7 +205,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='rtl|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="ProfileLauncher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMigration.h" />

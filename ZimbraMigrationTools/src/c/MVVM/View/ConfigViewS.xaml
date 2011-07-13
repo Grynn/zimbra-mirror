@@ -25,16 +25,14 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <RadioButton Grid.Row="0" Grid.Column="0" Margin="30,45,5,5" Name="rbProfile" VerticalAlignment="Center" Content="Outlook Profile" GroupName="SourceGroup" HorizontalAlignment="Stretch" IsChecked="{Binding Path=Isprofile, Mode=OneWay}" />
-                <TextBox Grid.Row="0"  Grid.Column="1" Margin="10,45,0,0" Name="tbOlkProfile" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbProfile}" Text="{Binding Path=OutlookProfile}"/>
-                <Button Grid.Row="0"  Grid.Column="2" Margin="0,45,20,0" MinWidth="20" Content="..." Name="buttonOlkProfile" Command="{Binding GetProfilesCommand}" IsEnabled="{Binding ElementName=rbProfile}" HorizontalAlignment="Center" />
+                <ComboBox Grid.Row="0" Grid.Column="1" Margin="10,45,20,0" Name="cbOlkProfile" VerticalAlignment="Center" SelectedIndex="{Binding Path=CurrentProfileSelection, Mode=TwoWay}" ItemsSource="{Binding Path=ProfileList}" IsEnabled="{Binding ElementName=rbProfile, Path=IsChecked}" />
                 <RadioButton Grid.Row="1" Grid.Column="0" Margin="30,25,5,5" Name="rbServer" VerticalAlignment="Center" Content="Exchange Server" GroupName="SourceGroup" IsChecked="{Binding Path=IsmailServer, Mode=OneWay}" HorizontalAlignment="Stretch" />
                 <Label Grid.Row="2" Grid.Column="0" Content="Hostname/IP" Margin="54,10,0,0" HorizontalAlignment="Left" Name="labelExchHost" VerticalAlignment="Top" />
-                <TextBox Grid.Row="2"  Grid.Column="1" Margin="10,10,0,0" Name="tbExchHost" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbServer, Path=IsChecked}" Text="{Binding Path=MailServerHostName}" />
+                <TextBox Grid.Row="2"  Grid.Column="1" Margin="10,10,20,0" Name="tbExchHost" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbServer, Path=IsChecked}" Text="{Binding Path=MailServerHostName}" />
                 <Label Grid.Row="3" Grid.Column="0" Content="Admin ID" Margin="54,10,0,0" HorizontalAlignment="Left" Name="labelExchAdmin" VerticalAlignment="Top" />
-                <TextBox Grid.Row="3"  Grid.Column="1" Margin="10,10,0,0" Name="tbExchAdmin" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbServer, Path=IsChecked}" Text="{Binding Path=MailServerProfileName}"/>
+                <TextBox Grid.Row="3"  Grid.Column="1" Margin="10,10,20,0" Name="tbExchAdmin" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbServer, Path=IsChecked}" Text="{Binding Path=MailServerProfileName}"/>
             </Grid>
         </StackPanel>
         <Separator Grid.Row="2" Margin="5,140,5,0" VerticalAlignment="Top"/>

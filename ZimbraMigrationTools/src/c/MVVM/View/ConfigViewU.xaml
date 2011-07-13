@@ -26,10 +26,9 @@
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <RadioButton Grid.Row="0" Grid.Column="0" Margin="30,55,5,5" Name="rbProfile" VerticalAlignment="Center" Content="Outlook Profile" GroupName="SourceGroup" HorizontalAlignment="Stretch" IsChecked="{Binding Path=Isprofile, Mode=OneWay}" />
-                <TextBox Grid.Row="0"  Grid.Column="1" Margin="10,55,0,0" Name="tbOlkProfile" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbProfile, Path=IsChecked}" Text="{Binding Path=OutlookProfile}"/>
-                <Button Grid.Row="0"  Grid.Column="2" Margin="0,55,20,0" MinWidth="20" Content="..." Name="buttonOlkProfile" Command="{Binding GetProfilesCommand}" IsEnabled="{Binding ElementName=rbProfile, Path=IsChecked}" HorizontalAlignment="Center" />
+                <ComboBox Grid.Row="0" Grid.Column="1" Margin="10,45,20,0" Name="cbOlkProfile" VerticalAlignment="Center" SelectedIndex="{Binding Path=CurrentProfileSelection, Mode=TwoWay}" ItemsSource="{Binding Path=ProfileList}" IsEnabled="{Binding ElementName=rbProfile, Path=IsChecked}" />
                 <RadioButton Grid.Row="1"  Grid.Column="0" Margin="30,25,5,5" Content="PST File" Name="rbPST" VerticalAlignment="Center" GroupName="SourceGroup" IsChecked="{Binding Path=IspST, Mode=OneWay}" />
-                <TextBox Grid.Row="1"  Grid.Column="1" Margin="10,25,0,0" Name="tbPST" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbPST, Path=IsChecked}" Text="{Binding Path=PSTFile}" HorizontalAlignment="Stretch" />
+                <TextBox Grid.Row="1"  Grid.Column="1" Margin="10,25,20,0" Name="tbPST" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbPST, Path=IsChecked}" Text="{Binding Path=PSTFile}" HorizontalAlignment="Stretch" />
                 <Button Grid.Row="1"  Grid.Column="2" Margin="0,25,20,0" MinWidth="20" Content="..." HorizontalAlignment="Center" Name="browsePSTButton" Command="{Binding GetPSTCommand}" IsEnabled="{Binding ElementName=rbPST, Path=IsChecked}" />
             </Grid>
         </StackPanel>

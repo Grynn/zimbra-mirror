@@ -3,6 +3,9 @@ using System.Diagnostics;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using System.Text;
 using MVVM.Model;
@@ -14,18 +17,12 @@ namespace MVVM.ViewModel
 {
     public class ConfigViewModelS : BaseViewModel
     {
-        [DllImport("CppLib.dll")]
-        public static extern int DisplayProfiles([MarshalAs(UnmanagedType.LPArray)] byte[] buffer);
-
-        /*readonly*/ // public Config m_config = new Config("", "", "", "", "", "","","","","",false);
-
         ScheduleViewModel scheduleViewModel;
         UsersViewModel usersViewModel;
 
         public ConfigViewModelS()
         {
             this.GetConfigSourceHelpCommand = new ActionCommand(this.GetConfigSourceHelp, () => true);
-            this.GetProfilesCommand = new ActionCommand(this.GetProfiles, () => true);
             this.LoadCommand = new ActionCommand(this.Load, () => true);
             this.SaveCommand = new ActionCommand(this.Save, () => true);
             this.NextCommand = new ActionCommand(this.Next, () => true);
@@ -63,20 +60,6 @@ namespace MVVM.ViewModel
         {
             string urlString = (isBrowser) ? "http://10.20.140.218/cfgS.html" : "file:///C:/depot/main/ZimbraMigrationTools/src/c/Misc/Help/cfgS.html";
             Process.Start(new ProcessStartInfo(urlString));
-        }
-
-        public ICommand GetProfilesCommand
-        {
-            get;
-            private set;
-        }
-
-        private void GetProfiles()
-        {
-            byte[] buffer = new byte[40];
-            int iRetval = DisplayProfiles(buffer);
-            string result = Encoding.ASCII.GetString(buffer, 0, iRetval);
-            OutlookProfile = result;
         }
 
         public ICommand LoadCommand
@@ -194,6 +177,30 @@ namespace MVVM.ViewModel
                 OnPropertyChanged(new PropertyChangedEventArgs("OutlookProfile"));
             }
         }
+
+        private ObservableCollection<string> profilelist = new ObservableCollection<string>();
+        public ObservableCollection<string> ProfileList
+        {
+            get { return profilelist; }
+            set
+            {
+                profilelist = value;
+
+            }
+        }
+
+        public int CurrentProfileSelection
+        {
+            get { return profileselection; }
+            set
+            {
+
+                profileselection = value;
+
+                OnPropertyChanged(new PropertyChangedEventArgs("CurrentProfileSelection"));
+            }
+        }
+        private int profileselection;
 
         public string MailServerHostName
         {

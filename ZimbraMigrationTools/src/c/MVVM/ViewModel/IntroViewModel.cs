@@ -9,9 +9,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.IO;
 using MVVM.Model;
 using Misc;
-using System.IO;
+using CssLib;
 
 namespace MVVM.ViewModel
 {
@@ -82,6 +83,13 @@ namespace MVVM.ViewModel
         private void Begin()
         {
             TheViews.RemoveAt(0);
+
+            // Get data to initialize the profile combo boxes
+            CSMigrationwrapper mw = new CssLib.CSMigrationwrapper();
+            mw.MailClient = "MAPI";
+            mw.InitializeMailClient();
+            string[] profiles = mw.GetListofMapiProfiles();
+
             if (m_optionsViewModel.isServer)
             {
                 TheViews.Add(m_configViewModelS);
@@ -90,6 +98,10 @@ namespace MVVM.ViewModel
                 TheViews.Add(m_usersViewModel);
                 TheViews.Add(m_scheduleViewModel);
                 TheViews.Add(m_resultsViewModel);
+                foreach (string s in profiles)
+                {
+                    m_configViewModelS.ProfileList.Add(s);
+                }
                 m_optionsViewModel.ImportNextButtonContent = "Next";
             }
             else
@@ -98,8 +110,13 @@ namespace MVVM.ViewModel
                 TheViews.Add(m_configViewModelUDest);
                 TheViews.Add(m_optionsViewModel);
                 TheViews.Add(m_resultsViewModel);
+                foreach (string s in profiles)
+                {
+                    m_configViewModelU.ProfileList.Add(s);
+                }
                 m_optionsViewModel.ImportNextButtonContent = "Migrate";
             }
+
             lb.Visibility = Visibility.Visible;
             lb.IsEnabled = true;
             lb.SelectedIndex = 0;
