@@ -381,17 +381,6 @@ sub updateRsyslogd {
   print ZFH "mail.*                $logfile\n";
   close(ZFH);
 
-  if ( $LOGHOST ne "" ) {
-    if ( lc($LOGHOST) eq lc($LOCALHOST) ) {
-      local $^I="~";
-      local @ARGV="/etc/rsyslog.conf";
-      while (<>) {
-        s/#\$ModLoad imudp/\$ModLoad imudp/;
-        s/#\$UDPServerRun 514/\$UDPServerRun 514/;
-        print;
-      }
-    }
-  }
 
   if ( !-f "/var/log/zimbra.log") {
     open(my $tlog, ">/var/log/zimbra.log");
