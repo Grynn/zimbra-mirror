@@ -2,11 +2,16 @@ package com.zimbra.qa.selenium.projects.desktop.tests.mail.compose;
 
 import java.util.HashMap;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.items.DesktopAccountItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.RecipientItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
+import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
@@ -14,14 +19,18 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.desktop.ui.mail.DisplayMail;
 import com.zimbra.qa.selenium.projects.desktop.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.desktop.ui.mail.FormMailNew.Field;
 
-
 public class CreateMailText extends AjaxCommonTest {
 
-	@SuppressWarnings("serial")
+   private boolean _externalAccountTest = false;
+   private String _emailSubjectCreated = null;
+
+   @SuppressWarnings("serial")
 	public CreateMailText() {
 		logger.info("New "+ CreateMailText.class.getCanonicalName());
 		
@@ -30,6 +39,7 @@ public class CreateMailText extends AjaxCommonTest {
 		super.startingAccountPreferences = new HashMap<String , String>() {{
 				    put("zimbraPrefComposeFormat", "text");
 				    put("zimbraPrefReadingPaneLocation", "bottom");
+				    put("zimbraPrefMessageViewHtmlPreferred", "FALSE");
 				}};
 		
 	}
@@ -121,8 +131,7 @@ public class CreateMailText extends AjaxCommonTest {
 		mail.dCcRecipients.add(new RecipientItem(ZimbraAccount.AccountB(), RecipientItem.RecipientType.Cc));
 		mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		mail.dBodyText = "body" + ZimbraSeleniumProperties.getUniqueString();
-		
-		
+
 		// Open the new mail form
 		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
 		ZAssert.assertNotNull(mailform, "Verify the new form opened");
@@ -203,7 +212,6 @@ public class CreateMailText extends AjaxCommonTest {
 		
 	}
 
-
 	@DataProvider(name = "DataProvidePriorities")
 	public Object[][] DataProvidePriorities() {
 	  return new Object[][] {
@@ -251,5 +259,90 @@ public class CreateMailText extends AjaxCommonTest {
 
 	}
 
+	@Test(  description = "Send a mail from Yahoo to Gmail",
+         groups = { "functional1" })
+   public void createMailFromYahooToGmail() throws HarnessException {
+      _externalAccountTest = true;
 
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddYahooAccountThruUI();
+      DesktopAccountItem destDesktopAccountItem = app.zPageAddNewAccount.zAddGmailAccountThruUI();
+
+      ZimbraAccount account = new ZimbraAccount(desktopAccountItem.emailAddress,
+            desktopAccountItem.password);
+      ZimbraAccount destAccount = new ZimbraAccount(destDesktopAccountItem.emailAddress,
+            destDesktopAccountItem.password);
+      account.authenticateToMailClientHost();
+      destAccount.authenticateToMailClientHost();
+
+      multipleAccountsSetup(account);
+
+      // Create the message data to be sent
+      MailItem mail = new MailItem();
+      mail.dToRecipients.add(new RecipientItem(destAccount));
+      mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+      mail.dBodyText = "body" + ZimbraSeleniumProperties.getUniqueString();
+
+      // Open the new mail form
+      FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
+      ZAssert.assertNotNull(mailform, "Verify the new form opened");
+
+      // Fill out the form with the data
+      mailform.zFill(mail);
+      
+      // Send the message
+      mailform.zSubmit();
+
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      //Switch the main account to be destAccount
+      app.zSetActiveAcount(destAccount);
+
+      FolderItem destInboxFolder = FolderItem.importFromSOAP(destAccount,
+            SystemFolder.Inbox, SOAP_DESTINATION_HOST_TYPE.CLIENT, destAccount.EmailAddress);
+      app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, destInboxFolder);
+
+      app.zPageMail.zSyncAndWaitForNewEmail(mail.dSubject);
+
+      DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+
+      _emailSubjectCreated = mail.dSubject;
+
+      // Verify the To, From, Subject, Body
+      ZAssert.assertEquals(   actual.zGetMailProperty(DisplayMail.Field.Subject), mail.dSubject,
+            "Verify the subject");
+      ZAssert.assertEquals(   actual.zGetMailProperty(DisplayMail.Field.From), desktopAccountItem.fullName,
+            "Verify the From matches the 'Sender:' header");
+      ZAssert.assertEquals(   actual.zGetMailProperty(DisplayMail.Field.Body), mail.dBodyText + "<br>",
+            "Verify the email body");
+   }
+
+   public void multipleAccountsSetup(ZimbraAccount mainAccount) throws HarnessException {
+      app.zPageLogin.zLogin(mainAccount);
+      super.startingPage.zNavigateTo();
+
+      FolderItem inboxFolder = FolderItem.importFromSOAP(mainAccount,
+            SystemFolder.Inbox, SOAP_DESTINATION_HOST_TYPE.CLIENT, mainAccount.EmailAddress);
+
+      app.zTreeMail.zExpandAll();
+      app.zPageMain.zWaitForDesktopLoadingSpinner(5000);
+      app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inboxFolder);
+   }
+
+   @AfterMethod(alwaysRun=true)
+   public void cleanUp() throws HarnessException {
+      if (_externalAccountTest && _emailSubjectCreated != null) {
+         // Select the item
+         app.zPageMail.zListItem(Action.A_LEFTCLICK, _emailSubjectCreated);
+
+         // Click delete
+         app.zPageMail.zToolbarPressButton(Button.B_DELETE);
+
+         GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+         app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+         _externalAccountTest = false;
+         _emailSubjectCreated = null;
+      }
+   }
 }

@@ -175,9 +175,11 @@ public class AppAjaxClient extends AbsApplication {
 
 	/* (non-Javadoc)
 	 * @see projects.admin.ui.AbsApplication#myApplicationName()
+	 * Set to public instead of protected only for desktop project to allow multiple account switching
+	 * in the middle of the tests
 	 */
 	@Override
-	protected ZimbraAccount zSetActiveAcount(ZimbraAccount account) throws HarnessException {
+	public ZimbraAccount zSetActiveAcount(ZimbraAccount account) throws HarnessException {
 		return (super.zSetActiveAcount(account));
 	}
 
@@ -217,7 +219,7 @@ public class AppAjaxClient extends AbsApplication {
             .append(accountId).append("&verb=del&accountFlavor=")
             .append(accountFlavor).append("&accountName=")
             .append(accountName).append("&accountType=")
-            .append(accountType).toString();
+            .append(accountType).toString();//append("&dev=1&scripterrors=1").toString();
 
       logger.info("accountDeleteUrl: " + accountDeleteUrl);
       GeneralUtility.doHttpPost(accountDeleteUrl);

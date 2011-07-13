@@ -805,6 +805,72 @@ public class PageMail extends AbsTab {
 		return (items);
 	}
 
+	/**
+	 * This method is meant for synching and waiting for new email especially for
+	 * non-Zimbra account since there is no control/indicator of when the new email will
+	 * arrive
+	 * @param subject Subject of email to be searched for
+	 * @throws HarnessException
+	 */
+	public void zSyncAndWaitForNewEmail(String subject) throws HarnessException {
+
+	   String listLocator;
+	   String rowLocator;
+	   String itemlocator = null;
+	   
+	   
+	   // Find the item locator
+	   //
+	   
+	   if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
+	      listLocator = "//div[@id='zl__TV__rows']";
+	      rowLocator = "//div[contains(@id, 'zli__TV__')]";
+	   } else {
+	      listLocator = "//div[@id='zl__CLV__rows']";
+	      rowLocator = "//div[contains(@id, 'zli__CLV__')]";
+	   }
+	   
+	   if ( !this.sIsElementPresent(listLocator) )
+	      throw new HarnessException("List View Rows is not present "+ listLocator);
+	   
+	   // How many items are in the table?
+	   int count = this.sGetXpathCount(listLocator + rowLocator);
+
+	   int retry = 0;
+	   int maxRetry = 30;
+	   boolean found = false;
+	   for (retry = 0; retry < maxRetry; retry++) {
+	      GeneralUtility.syncDesktopToZcsWithSoap(((AppAjaxClient)MyApplication).zGetActiveAccount());
+	      zWaitForDesktopLoadingSpinner(5000);
+
+	      logger.debug(myPageName() + " zListSelectItem: number of list items: "+ count);
+
+	      // Get each conversation's data from the table list
+	      for (int i = 1; i <= count; i++) {
+
+	         itemlocator = listLocator + "/div["+ i +"]";
+	         String subjectlocator;
+
+	         // Look for the subject
+
+	         // Subject - Fragment
+	         subjectlocator = itemlocator + "//td[contains(@id, '__su')]";
+	         String s = this.sGetText(subjectlocator).trim();
+
+	         if ( s.contains(subject) ) {
+	            found = true;
+	            break;
+	         }
+
+	         itemlocator = null;
+	      }
+
+	      if (found) {
+	         break;
+	      }
+	   }
+	   
+	}
 
 
 
@@ -831,7 +897,6 @@ public class PageMail extends AbsTab {
 			rowLocator = "//div[contains(@id, 'zli__CLV__')]";
 		}
 
-		// TODO: how to handle both messages and conversations, maybe check the view first?
 		if ( !this.sIsElementPresent(listLocator) )
 			throw new HarnessException("List View Rows is not present "+ listLocator);
 

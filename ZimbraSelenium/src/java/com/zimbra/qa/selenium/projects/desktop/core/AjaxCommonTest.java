@@ -540,13 +540,8 @@ public class AjaxCommonTest {
 					logger.debug("==> Zimlet " + i + " is: " + desktopZimlets[i]);
 				}
 
-				// Expand the mail tree
-				if (app.zTreeMail.isCollapsed()) {
-					logger.debug("Tree is collapsed, expand it @BeforeMethod");
-					app.zTreeMail.zClickAt(TreeMail.Locators.treeExpandCollapseButton, "0,0");
-				} else {
-					logger.debug("Tree is already expanded @BeforeMethod");
-				}
+				app.zTreeMail.zExpandAll();
+
 			}
 		}
 

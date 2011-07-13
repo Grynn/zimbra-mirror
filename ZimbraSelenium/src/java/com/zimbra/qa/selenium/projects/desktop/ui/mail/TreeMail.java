@@ -52,6 +52,8 @@ public class TreeMail extends AbsTree {
 
 		// For mail folders tree
 		public static final String treeExpandCollapseButton = "css=div[id='zovc__main_Mail'] div[id^='DWT'][class='DwtTreeItem'] [class^='ImgNode']";
+		public static final String multipleTrees = "css=div[id='zovc__main_Mail'] div[id^='DWT'][class^='DwtComposite ZmOverview']:nth-of-type(<NUM>)";
+		public static final String multipleTreesExpandCollapseButton = multipleTrees + " div[id^='DWT'] [class^='ImgNode']";
 
 		public static final String zDeleteTreeMenuItem = "//div[contains(@class,'ZMenuItem')]//tbody//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgDelete')]";
 		public static final String zRenameTreeMenuItem = "//div[contains(@class,'ZMenuItem')]//tbody//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgRename')]";
@@ -388,12 +390,56 @@ public class TreeMail extends AbsTree {
 	 * @return true if tree is collapsed, otherwise false
 	 */
 	public boolean isCollapsed() {
-		if (sIsElementPresent(Locators.treeExpandCollapseButton.replace(
-				"ImgNode", "ImgNodeCollapsed"))) {
-			return true;
-		} else {
-			return false;
-		}
+	   // Browse all inventory in case of multiple accounts situation
+	   int i = 1;
+	   String locator = null;
+	   String expandCollapseLocator = null;
+	   boolean isCollapsed = true;
+	   for (i = 1; i < 100; i++) {
+	      locator = Locators.multipleTrees.replace("<NUM>",
+	            Integer.toString(i));
+	      if (!sIsElementPresent(locator)) {
+	         break;
+	      } else {
+	         expandCollapseLocator = Locators.multipleTreesExpandCollapseButton.replace("<NUM>",
+	               Integer.toString(i));
+	         expandCollapseLocator = expandCollapseLocator.replace(
+	               "ImgNode", "ImgNodeCollapsed");
+	         isCollapsed = isCollapsed && sIsElementPresent(expandCollapseLocator);
+
+	         if (!isCollapsed) {
+	            break;
+	         }
+	      }
+	   }
+
+	   return isCollapsed;
+	}
+
+	public boolean zExpandAll() throws HarnessException {
+	     // Browse all inventory in case of multiple accounts situation
+      int i = 1;
+      String locator = null;
+      String expandCollapseLocator = null;
+      boolean isCollapsed = true;
+      for (i = 1; i < 100; i++) {
+         locator = Locators.multipleTrees.replace("<NUM>",
+               Integer.toString(i));
+         if (!sIsElementPresent(locator)) {
+            break;
+         } else {
+            expandCollapseLocator = Locators.multipleTreesExpandCollapseButton.replace("<NUM>",
+                  Integer.toString(i));
+            expandCollapseLocator = expandCollapseLocator.replace(
+                  "ImgNode", "ImgNodeCollapsed");
+            if (sIsElementPresent(expandCollapseLocator)) {
+               zClickAt(Locators.multipleTreesExpandCollapseButton.replace("<NUM>",
+                     Integer.toString(i)), "0,0");
+            }
+         }
+      }
+
+      return isCollapsed;
 	}
 
 	protected AbsPage zTreeItem(Action action, SavedSearchFolderItem savedSearch) throws HarnessException {
