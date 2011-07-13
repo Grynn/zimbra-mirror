@@ -25,11 +25,9 @@ public class SendLater extends AjaxCommonTest {
 		
 		// All tests start at the login page
 		super.startingPage = app.zPageMail;
-		super.startingAccountSettings = new HashMap<String , String>() {{
-		    		put("zimbraFeatureMailSendLaterEnabled", "TRUE");
-				}};
 		super.startingAccountPreferences = new HashMap<String , String>() {{
 				    put("zimbraPrefComposeFormat", "text");
+		    		put("zimbraFeatureMailSendLaterEnabled", "TRUE");
 				}};
 		
 	}

@@ -158,7 +158,20 @@ public class HtmlCommonTest {
 		//
 		if ( (startingAccountPreferences != null) && (!startingAccountPreferences.isEmpty()) ) {
 			logger.debug("commonTestBeforeMethod: startingAccountPreferences are defined");
-			ZimbraAccount.AccountHTML().modifyPreferences(startingAccountPreferences);
+
+			StringBuilder settings = new StringBuilder();
+			for (Map.Entry<String, String> entry : startingAccountPreferences.entrySet()) {
+				settings.append(String.format("<a n='%s'>%s</a>", entry.getKey(), entry.getValue()));
+			}
+			ZimbraAdminAccount.GlobalAdmin().soapSend(
+					"<ModifyAccountRequest xmlns='urn:zimbraAdmin'>"
+					+		"<id>"+ ZimbraAccount.AccountHTML().ZimbraId +"</id>"
+					+		settings.toString()
+					+	"</ModifyAccountRequest>");
+
+
+			// Set the flag so the account is reset for the next test
+			ZimbraAccount.AccountZWC().accountIsDirty = true;
 		}
 
 		// If test account zimlet preferences are defined, then make sure the test account
@@ -175,10 +188,10 @@ public class HtmlCommonTest {
 
 			if ( app.zPageMain.zIsActive() )
 				app.zPageMain.zLogout();
-			
+
 			app.zPageLogin.zLogin(ZimbraAccount.AccountHTML());
 
-				// Confirm
+			// Confirm
 			if ( !ZimbraAccount.AccountHTML().equals(app.zGetActiveAccount())) {
 				throw new HarnessException("Unable to authenticate as "+ ZimbraAccount.AccountHTML().EmailAddress);
 			}
@@ -234,17 +247,17 @@ public class HtmlCommonTest {
 		logger.info("commonTestAfterClass: start");
 
 		// For Ajax and Html, if account is considered dirty (modified),
-      // then recreate a new account
-      ZimbraAccount currentAccount = app.zGetActiveAccount();
-      if (currentAccount != null 
-            && currentAccount.accountIsDirty 
-            && currentAccount == ZimbraAccount.AccountHTML()) {
+		// then recreate a new account
+		ZimbraAccount currentAccount = app.zGetActiveAccount();
+		if (currentAccount != null 
+				&& currentAccount.accountIsDirty 
+				&& currentAccount == ZimbraAccount.AccountHTML()) {
 
-         ZimbraAccount.ResetAccountHTML();
+			ZimbraAccount.ResetAccountHTML();
 
-      }
+		}
 
-      logger.info("commonTestAfterClass: finish");
+		logger.info("commonTestAfterClass: finish");
 	}
 
 	/**
