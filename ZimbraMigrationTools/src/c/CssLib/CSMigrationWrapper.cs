@@ -57,21 +57,29 @@ namespace CssLib
             }
         }
         */
+
+        public void InitializeMailClient()
+        {
+
+            if (MailClient == "MAPI")
+            {
+
+                MailWrapper = new Exchange.MapiWrapper();
+
+              
+            }
+
+
+        }
         public void Initalize(string HostName,string Port, string AdminAccount)
         {
             //CreateConfig(ConfigXMLFile);
 
-            if( MailClient == "MAPI")
-            {
-
-                 MailWrapper = new Exchange.MapiWrapper();
-
+            
                 MailWrapper.ConnectToServer(HostName,Port,AdminAccount);
 
 
 
-
-            }
 
         }
 
