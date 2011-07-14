@@ -48,6 +48,7 @@ public class ExecuteHarnessMain {
 	/**
 	 * A Log4j logger for tracing test case steps
 	 */
+	
 	public static final String TraceLoggerName = "testcase.trace";
 	public static Logger tracer = LogManager.getLogger(TraceLoggerName);
 
@@ -618,10 +619,11 @@ public class ExecuteHarnessMain {
 	 * <p>
 	 * @author Matt Rhoades
 	 */
-	protected static class ResultListener extends TestListenerAdapter {
+	public static class ResultListener extends TestListenerAdapter {
 
 		private static final String ZimbraQABasePackage = "com.zimbra.qa.selenium";
-
+		private static ITestResult runningTestCase = null;
+		
 		private int testsTotal = 0;
 		private int testsPass = 0;
 		private int testsFailed = 0;
@@ -629,7 +631,7 @@ public class ExecuteHarnessMain {
 		private List<String> failedTests = new ArrayList<String>();
 		private List<String> skippedTests = new ArrayList<String>();
 		
-		private String outputFolder = null;
+		public static String outputFolder = null;
 
 		protected ResultListener(String folder) {
 			outputFolder = (folder == null ? "logs" : folder);
@@ -662,7 +664,7 @@ public class ExecuteHarnessMain {
 		 * @param method
 		 * @return
 		 */
-		protected String getScreenCaptureFilename(Method method) {
+		public static String getScreenCaptureFilename(Method method) {
 			String c = method.getDeclaringClass().getCanonicalName().replace(ZimbraQABasePackage, "").replace('.', '/');
 			String m = method.getName();
 			return (String.format("%s/debug/%s/%sss%d.png", outputFolder, c, m, ++screenshotcount));
@@ -673,7 +675,7 @@ public class ExecuteHarnessMain {
 		 * @param result
 		 * @return
 		 */
-		protected void getScreenCapture(ITestResult result) {
+		public static void getScreenCapture(ITestResult result) {
 			String filename = getScreenCaptureFilename(result.getMethod().getMethod());
 			logger.warn("Creating screenshot: "+ filename);
 			ClientSessionFactory.session().selenium().captureScreenshot(filename);
@@ -685,11 +687,12 @@ public class ExecuteHarnessMain {
 
 		@Override
 		public void onStart(ITestContext context) {
+			
 		}
 
 		@Override
 		public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-			this.getScreenCapture(result);
+			getScreenCapture(result);
 		}
 
 		/**
@@ -700,7 +703,7 @@ public class ExecuteHarnessMain {
 			testsFailed++;
 			String fullname = result.getMethod().getMethod().getDeclaringClass().getName() +"."+ result.getMethod().getMethod().getName();
 			failedTests.add(fullname.replace("com.zimbra.qa.selenium.projects.", "main.projects."));
-			this.getScreenCapture(result);
+			getScreenCapture(result);
 		}
 
 		/**
@@ -718,9 +721,13 @@ public class ExecuteHarnessMain {
 		 */
 		@Override
 		public void onTestStart(ITestResult result) {
+			runningTestCase = result;
 			testsTotal++;
 		}
 
+		public static void captureScreen() {
+			getScreenCapture(runningTestCase);
+		}
 		/**
 		 * Add 1 to the passed tests
 		 */
@@ -731,7 +738,7 @@ public class ExecuteHarnessMain {
 
 		@Override
 		public void onConfigurationFailure(ITestResult result) {
-			this.getScreenCapture(result);
+			getScreenCapture(result);
 		}
 
 		@Override

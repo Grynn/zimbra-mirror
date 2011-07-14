@@ -16,6 +16,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
 
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
+import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain;
 import com.zimbra.qa.selenium.framework.items.*;
 
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -197,7 +198,7 @@ public class PageAddressbook extends AbsTab {
 			String contactType = getContactType(commonLocator);
 		    
 			String contactDisplayedLocator = commonLocator + " table tbody tr td:nth-child(3)";
-			String fileAs = ClientSessionFactory.session().selenium().getText(contactDisplayedLocator);
+			String fileAs = sGetText(contactDisplayedLocator);
 			logger.info("...found "+ contactType + " - " + fileAs );
 			isContactFound = ((contactType.equals(ContactGroupItem.IMAGE_CLASS) &&  contactItem instanceof ContactGroupItem) ||
 				  (contactType.equals(ContactItem.IMAGE_CLASS) &&  contactItem instanceof ContactItem)) &&
@@ -236,7 +237,7 @@ public class PageAddressbook extends AbsTab {
 		    
 			ContactItem ci=null;
 			String contactDisplayedLocator = commonLocator + " table tbody tr td:nth-child(3)";
-			String fileAs = ClientSessionFactory.session().selenium().getText(contactDisplayedLocator);
+			String fileAs = sGetText(contactDisplayedLocator);
 		    logger.info(" found " + fileAs);
 		    
 			//check if it is a contact or a contactgroup item
@@ -797,6 +798,7 @@ public class PageAddressbook extends AbsTab {
 			
         } 
 		
+        ExecuteHarnessMain.ResultListener.captureScreen();
         zClickAt(locator,"0,0");
 		
         zWaitForBusyOverlay();
