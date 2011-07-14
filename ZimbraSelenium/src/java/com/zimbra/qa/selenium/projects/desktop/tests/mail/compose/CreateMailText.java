@@ -316,7 +316,65 @@ public class CreateMailText extends AjaxCommonTest {
             "Verify the email body");
    }
 
-   public void multipleAccountsSetup(ZimbraAccount mainAccount) throws HarnessException {
+	@Test(  description = "Send a mail from Gmail to Yahoo",
+         groups = { "functional" })
+   public void createMailFromGmailToYahoo() throws HarnessException {
+      _externalAccountTest = true;
+
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddGmailAccountThruUI();
+      DesktopAccountItem destDesktopAccountItem = app.zPageAddNewAccount.zAddYahooAccountThruUI();
+
+      ZimbraAccount account = new ZimbraAccount(desktopAccountItem.emailAddress,
+            desktopAccountItem.password);
+      ZimbraAccount destAccount = new ZimbraAccount(destDesktopAccountItem.emailAddress,
+            destDesktopAccountItem.password);
+      account.authenticateToMailClientHost();
+      destAccount.authenticateToMailClientHost();
+
+      multipleAccountsSetup(account);
+
+      // Create the message data to be sent
+      MailItem mail = new MailItem();
+      mail.dToRecipients.add(new RecipientItem(destAccount));
+      mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+      mail.dBodyText = "body" + ZimbraSeleniumProperties.getUniqueString();
+
+      // Open the new mail form
+      FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
+      ZAssert.assertNotNull(mailform, "Verify the new form opened");
+
+      // Fill out the form with the data
+      mailform.zFill(mail);
+      
+      // Send the message
+      mailform.zSubmit();
+
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+
+      //Switch the main account to be destAccount
+      app.zSetActiveAcount(destAccount);
+
+      FolderItem destInboxFolder = FolderItem.importFromSOAP(destAccount,
+            SystemFolder.Inbox, SOAP_DESTINATION_HOST_TYPE.CLIENT, destAccount.EmailAddress);
+      app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, destInboxFolder);
+
+      app.zPageMail.zSyncAndWaitForNewEmail(mail.dSubject);
+
+      DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+
+      _emailSubjectCreated = mail.dSubject;
+
+      // Verify the To, From, Subject, Body
+      ZAssert.assertEquals(   actual.zGetMailProperty(DisplayMail.Field.Subject), mail.dSubject,
+            "Verify the subject");
+      ZAssert.assertEquals(   actual.zGetMailProperty(DisplayMail.Field.From), desktopAccountItem.fullName,
+            "Verify the From matches the 'Sender:' header");
+      ZAssert.assertEquals(   actual.zGetMailProperty(DisplayMail.Field.Body), mail.dBodyText + "<br>",
+            "Verify the email body");
+   }
+
+	public void multipleAccountsSetup(ZimbraAccount mainAccount) throws HarnessException {
       app.zPageLogin.zLogin(mainAccount);
       super.startingPage.zNavigateTo();
 
@@ -342,6 +400,9 @@ public class CreateMailText extends AjaxCommonTest {
 
          _externalAccountTest = false;
          _emailSubjectCreated = null;
+         ZimbraAccount.ResetAccountZWC();
       }
    }
+
+   
 }
