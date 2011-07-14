@@ -43,8 +43,12 @@ public class ZimbraFeatureMailEnabled extends AjaxCommonTest {
 
 	}
 	
+	/**
+	 * See http://bugzilla.zimbra.com/show_bug.cgi?id=61982 - WONTFIX
+	 * @throws HarnessException
+	 */
 	@Test(	description = "Load the mail tab with just Mail enabled",
-			groups = { "functional" })
+			groups = { "deprecated" })
 	public void ZimbraFeatureMailEnabled_01() throws HarnessException {
 		
 		// Create the message data to be sent
