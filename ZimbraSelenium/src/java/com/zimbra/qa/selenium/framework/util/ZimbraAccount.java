@@ -389,7 +389,74 @@ public class ZimbraAccount {
 		return (this);
 	}
 
-	/**
+	  /**
+    * Modify user prefences using ModifyPrefsRequest with the default SERVER
+    * host destination type
+    * @param preferences Preferences to be modified through SOAP
+    * @throws HarnessException 
+    */
+   public ZimbraAccount modifyPreferences(Map<String, String> preferences) {
+      return modifyPreferences(preferences, SOAP_DESTINATION_HOST_TYPE.SERVER);
+
+   }
+
+   /**
+    * Modify user preferences using ModifyPrefsRequest
+    * @param preferences Preferences to be modified through SOAP
+    * @param destinationType The destination Host Type: SERVER or CLIENT
+    * @throws HarnessException
+    */
+   public ZimbraAccount modifyPreferences(Map<String, String> preferences,
+         SOAP_DESTINATION_HOST_TYPE destinationType) {
+
+      // Test Case Trace logging
+      for (Map.Entry<String, String> entry : preferences.entrySet()) {
+         ExecuteHarnessMain.tracer.trace(EmailAddress +" preferences: "+ entry.getKey() +"="+ entry.getValue());
+      }
+
+      
+      StringBuilder sb = new StringBuilder();
+      for (Map.Entry<String, String> entry : preferences.entrySet()) {
+         sb.append(String.format("<pref name='%s'>%s</pref>", entry.getKey(), entry.getValue()));
+         
+         
+         // If the locale preference is being changed, then remember the value
+         if ( entry.getKey().equals("zimbraPrefLocale") ) {
+            setLocalePreference(entry.getValue());
+         }
+         
+
+      }
+
+      if ( sb.length() <= 0 )
+         return (this); // Nothing to modify
+      
+      
+      try
+      {
+         
+         soapSend(
+            "<ModifyPrefsRequest xmlns='urn:zimbraAccount'>" +
+                  sb.toString() +
+            "</ModifyPrefsRequest>",
+            destinationType);
+
+         Element[] response = soapSelectNodes("//acct:ModifyPrefsResponse");
+         if ( response == null || response.length != 1 )
+            throw new HarnessException("Unable to modify preference "+ soapLastResponse());
+         
+      } catch (HarnessException e) {
+         // TODO: I would prefer to throw HarnessException here
+         logger.error("Unable to modify preference", e);
+      }
+
+      accountIsDirty = true;
+
+      return (this);
+
+   }
+
+   /**
 	 * Get all the available zimlets through SOAP from either client or server
 	 * @param info Information to look for
 	 * @param destinationType Type of SOAP destination, client or server
