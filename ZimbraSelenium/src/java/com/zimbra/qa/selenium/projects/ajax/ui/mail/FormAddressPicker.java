@@ -55,23 +55,6 @@ public class FormAddressPicker extends AbsForm {
 
 	}
 
-	public boolean zIsVisible() throws HarnessException {
-		
-		// https://bugzilla.zimbra.com/show_bug.cgi?id=62021
-		return (true);
-		
-//		String locator = "css=div[id='TODO']";
-//		
-//		if ( !this.sIsElementPresent(locator) )
-//			return (false);
-//		
-//		if ( !this.zIsVisiblePerPosition(locator, 0, 0) )
-//			return (false);
-//		
-//		return (true);
-		
-	}
-
 	@Override
 	public String myPageName() {
 		return (this.getClass().getName());

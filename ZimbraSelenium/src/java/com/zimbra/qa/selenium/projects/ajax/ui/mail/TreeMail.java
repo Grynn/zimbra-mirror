@@ -28,6 +28,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.DialogRenameTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogShare;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
+import com.zimbra.qa.selenium.projects.ajax.ui.FormRecoverDeletedItems;
 
 
 
@@ -127,6 +128,11 @@ public class TreeMail extends AbsTree {
 		} else if (option == Button.B_SHARE) {
 			optionLocator= "id=POPUP_SHARE_FOLDER";
 			page = new DialogShare(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+
+		} else if (option == Button.B_RECOVER_DELETED_ITEMS) {
+			
+			optionLocator= "css=tr#POPUP_RECOVER_DELETED_ITEMS";
+			page = new FormRecoverDeletedItems(MyApplication);
 
 		} else {
 			throw new HarnessException("button " + option

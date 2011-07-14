@@ -133,6 +133,11 @@ public class Button {
 	public static final Button O_PERSONAL_AND_SHARED_CONTACTS = new Button("O_PERSONAL_AND_SHARED_CONTACTS");
 	public static final Button O_GLOBAL_ADDRESS_LIST = new Button("O_GLOBAL_ADDRESS_LIST");
 
+	// Dumpster dialog
+	public static final Button B_RECOVER_DELETED_ITEMS = new Button("B_RECOVER_DELETED_ITEMS");
+	public static final Button B_RECOVER_TO = new Button("B_RECOVER_TO");
+
+	
 	// SearchPage buttons and pulldown options
 	public static final Button B_SEARCHTYPE = new Button("B_SEARCHTYPE");
 	public static final Button B_SEARCH = new Button("B_SEARCH");
