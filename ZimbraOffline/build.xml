@@ -1201,6 +1201,7 @@
       <fileset dir="${web.dir}/WEB-INF/tlds" />
     </copy>
     <copy file="${build.dir}/offlinejsp.jar" todir="${jspc.src.dir}/WEB-INF/lib"/>
+    <copy file="${build.dir}/${jarfile}" todir="${jspc.src.dir}/WEB-INF/lib"/>
     <fileset id='jspc.fileset' dir='${jspc.src.dir}' includes="h/*,desktop/*.jsp"/>
 
         <if><isset property="is-windows" /><then>
