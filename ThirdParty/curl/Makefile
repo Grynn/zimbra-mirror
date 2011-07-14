@@ -5,10 +5,6 @@ MAKEARGS ?= -j2
 
 BUILD_PLATFORM ?= $(shell sh $(P4_ROOT)/ZimbraBuild/rpmconf/Build/get_plat_tag.sh)
 
-ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
-	HEIMDAL_VERSION ?= 1.3.0rc1
-endif
-
 ZIMBRA_HOME ?= /opt/zimbra
 
 ifdef BETA
