@@ -1014,7 +1014,9 @@ function (item) {
 				} else {		
 					item.changePassword(szPwd);
 					this._chngPwdDlg.popdown();	//close the dialog
+                    ZaApp.getInstance().getAppCtxt().getAppController().setActionStatusMsg(AjxMessageFormat.format(ZaMsg.PasswordModified,[item.name]));
 				}
+
 			}
 			if (this._chngPwdDlg.getMustChangePassword()) {
 				//item.attrs[ZaAccount.A_zimbraPasswordMustChange] = "TRUE";
@@ -1022,7 +1024,7 @@ function (item) {
 				mods[ZaAccount.A_zimbraPasswordMustChange] = "TRUE";
 				item.modify(mods);
 			}
-            ZaApp.getInstance().getAppCtxt().getAppController().setActionStatusMsg(AjxMessageFormat.format(ZaMsg.PasswordModified,[item.name]));
+
 		} catch (ex) {
 			if(ex.code == ZmCsfeException.ACCT_INVALID_PASSWORD ) {
 				var szMsg = ZaMsg.ERROR_PASSWORD_INVALID;
