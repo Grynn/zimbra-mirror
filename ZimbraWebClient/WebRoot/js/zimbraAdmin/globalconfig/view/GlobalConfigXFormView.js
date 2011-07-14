@@ -846,10 +846,10 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
     if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.BC_TAB_ATTRS, GlobalConfigXFormView.BC_TAB_RIGHTS)) {
     	_tab9 = ++this.TAB_INDEX;
 
-        tabBarChoices.push ({value:_tab9, label:ZaMsg.Domain_Tab_Briefcase});
-        var case9 =             //skin properties
+        tabBarChoices.push ({value:_tab9, label:ZaMsg.Domain_Tab_Advanced});
+        var case9 = 
                 {type: _ZATABCASE_, caseKey:_tab9,
-		       colSizes:["auto"],numCols:1,id:"global_bc_tab",
+		       colSizes:["auto"],numCols:1,id:"global_ad_tab",
 		       items: 	[
                         	{ type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_BC_ShareConf,
                                   items :[
@@ -857,6 +857,25 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                                             type: _TEXTFIELD_, 
                                             label: ZaMsg.Domain_zimbraBasicAuthRealm
                                           }
+                                         ]
+                                },
+                                { type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_AD_EmailValidate,
+                                  items :[
+					{ ref: ZaGlobalConfig.A_zimbraMailAddressValidationRegex, type: _REPEAT_,
+					        label: ZaMsg.LBL_EmailValidate,
+					        labelLocation:_LEFT_,
+					        align:_LEFT_,
+					        repeatInstance:"",
+					        showAddButton:true,
+					        showRemoveButton:true,
+					        showAddOnNextRow:true,addButtonLabel:ZaMsg.NAD_AddRegex,
+					        removeButtonLabel:ZaMsg.NAD_RemoveRegex, 
+					        removeButtonCSSStyle: "margin-left: 50px",
+					       items: [
+					                { ref:".", type: _TEXTFIELD_, label:null
+					                }
+					        ]
+					}
                                          ]
                                 }
                              	]

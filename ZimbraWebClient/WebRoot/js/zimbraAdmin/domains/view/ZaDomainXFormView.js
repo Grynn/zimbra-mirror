@@ -1092,8 +1092,8 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 
 	if(ZaDomainXFormView.BC_TAB_ATTRS && ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.BC_TAB_ATTRS, ZaDomainXFormView.BC_TAB_RIGHTS)) {
 		tabIx = ++this.TAB_INDEX;
-		tabBar.choices.push({value:tabIx, label:ZaMsg.Domain_Tab_Briefcase});
-		var case5 = {type:_ZATABCASE_, caseKey:tabIx,
+		tabBar.choices.push({value:tabIx, label:ZaMsg.Domain_Tab_Advanced});
+		var case5 = {type:_ZATABCASE_, caseKey:tabIx,colSizes:["auto"],numCols:1,id:"domain_advanced_tab",
                         cssStyle:"padding-left:10px",
 			items : [
 				{ type: _DWT_ALERT_,
@@ -1115,7 +1115,23 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
                              		    txtBoxLabel: ZaMsg.Domain_zimbraBasicAuthRealm
 					  }	
 				         ]
-				}											
+				},
+                                { type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_AD_EmailValidate,
+                                  items :[
+					{ref:ZaDomain.A_zimbraMailAddressValidationRegex, type:_REPEAT_,
+			                      label:ZaMsg.LBL_EmailValidate, repeatInstance:"", showAddButton:true,
+			                      showRemoveButton:true,
+							addButtonLabel:ZaMsg.NAD_AddRegex, 
+							showAddOnNextRow:true,
+							removeButtonLabel:ZaMsg.NAD_RemoveRegex,
+			                    	items: [
+								{ref:".", type:_TEXTFIELD_, label:null,
+			                              enableDisableChecks:[], visibilityChecks:[],
+			                              onChange:ZaDomainXFormView.onFormFieldChanged}
+							]
+					}
+                                  ]
+                                }			
 			]
 		};
 		switchGroup.items.push(case5);

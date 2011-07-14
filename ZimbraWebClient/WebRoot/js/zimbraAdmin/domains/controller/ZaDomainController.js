@@ -258,6 +258,31 @@ function () {
 
 	if(!this.checkCertKeyValid(tmpObj.attrs[ZaDomain.A_zimbraSSLCertificate],tmpObj.attrs[ZaDomain.A_zimbraSSLPrivateKey]))
 		return false;
+	// check validation expression, which should be email-like pattern
+	if(tmpObj.attrs[ZaDomain.A_zimbraMailAddressValidationRegex]) {
+		var regList = tmpObj.attrs[ZaDomain.A_zimbraMailAddressValidationRegex];
+		var islegal = true;
+		var regval = null;
+		if(regList && regList instanceof Array) {
+			for(var i = 0; i < regList.length && islegal; i++) {
+				if (regList[i].indexOf("@") == -1) {
+					islegal = false;
+					regval = regList[i];
+				}
+			}
+		} else if(regList) {
+                        if (regList.indexOf("@") == -1) {
+				islegal = false;
+				regval = regList;
+			}
+		}
+		if(!islegal) {
+			this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_MSG_EmailValidReg, regval), 
+				null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+                        this._errorDialog.popup();
+			return islegal;
+		}
+	}
 
 	if(!haveSmth) {
 		if(tmpObj[ZaDomain.A2_gal_sync_accounts] && tmpObj[ZaDomain.A2_gal_sync_accounts][0]) { 

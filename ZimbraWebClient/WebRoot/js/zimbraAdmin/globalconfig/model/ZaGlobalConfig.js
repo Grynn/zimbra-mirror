@@ -147,6 +147,10 @@ ZaGlobalConfig.A_zimbraImapSSLProxyBindPort="zimbraImapSSLProxyBindPort";
 ZaGlobalConfig.A_zimbraPop3ProxyBindPort="zimbraPop3ProxyBindPort";
 ZaGlobalConfig.A_zimbraPop3SSLProxyBindPort="zimbraPop3SSLProxyBindPort";
 ZaGlobalConfig.A_zimbraReverseProxyLookupTarget = "zimbraReverseProxyLookupTarget";
+
+// mail validation
+ZaGlobalConfig.A_zimbraMailAddressValidationRegex = "zimbraMailAddressValidationRegex";
+
 // others
 ZaGlobalConfig.A_zimbraInstalledSkin = "zimbraInstalledSkin";
 ZaGlobalConfig.A_zimbraNewExtension = "_zimbraNewExtension";
@@ -243,6 +247,9 @@ ZaGlobalConfig.prototype.initFromJS = function(obj) {
 		this.attrs[ZaGlobalConfig.A_zimbraSmtpHostname] = [this.attrs[ZaGlobalConfig.A_zimbraSmtpHostname]];
 	}
 
+        if(AjxUtil.isString(this.attrs[ZaGlobalConfig.A_zimbraMailAddressValidationRegex])) {
+                this.attrs[ZaGlobalConfig.A_zimbraMailAddressValidationRegex] = [this.attrs[ZaGlobalConfig.A_zimbraMailAddressValidationRegex]];
+        }	
     if(AjxUtil.isString(this.attrs[ZaGlobalConfig.A_zimbraReverseProxyAdminIPAddress])) {
 		this.attrs[ZaGlobalConfig.A_zimbraReverseProxyAdminIPAddress] = [this.attrs[ZaGlobalConfig.A_zimbraReverseProxyAdminIPAddress]];
 	}
@@ -385,6 +392,7 @@ ZaGlobalConfig.myXModel = {
 		// MTA
 		{ id:ZaGlobalConfig.A_zimbraMtaAuthEnabled, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaAuthEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
 		{ id:ZaGlobalConfig.A_zimbraMtaTlsAuthOnly, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaTlsAuthOnly, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
+                { id:ZaGlobalConfig.A_zimbraMailAddressValidationRegex, ref:"attrs/" + ZaGlobalConfig.A_zimbraMailAddressValidationRegex, type:_LIST_, listItem:{ type:_STRING_, maxLength: 512} },
 		{ id:ZaGlobalConfig.A_zimbraSmtpHostname, ref:"attrs/" + ZaGlobalConfig.A_zimbraSmtpHostname, type:_LIST_, listItem:{ type:_HOSTNAME_OR_IP_, maxLength: 256} },
 		{ id:ZaGlobalConfig.A_zimbraSmtpPort, ref:"attrs/" + ZaGlobalConfig.A_zimbraSmtpPort, type:_PORT_ },
 		{ id:ZaGlobalConfig.A_zimbraMtaMaxMessageSize, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaMaxMessageSize, type: _FILE_SIZE_, units: AjxUtil.SIZE_KILOBYTES, required: true },

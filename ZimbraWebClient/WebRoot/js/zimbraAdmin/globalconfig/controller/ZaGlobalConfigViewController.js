@@ -230,6 +230,32 @@ function () {
 		}
 	}
 
+	// check validation expression, which should be email-like pattern
+        if(tmpObj.attrs[ZaGlobalConfig.A_zimbraMailAddressValidationRegex]) {
+                var regList = tmpObj.attrs[ZaGlobalConfig.A_zimbraMailAddressValidationRegex];
+                var islegal = true;
+                var regval = null;
+                if(regList && regList instanceof Array) {
+                        for(var i = 0; i < regList.length && islegal; i++) {
+                                if (regList[i].indexOf("@") == -1) {
+                                        islegal = false;
+                                        regval = regList[i];
+                                }
+                        }
+                } else if(regList) {
+                        if (regList.indexOf("@") == -1) {
+                                islegal = false;
+                                regval = regList;
+                        }
+                }
+                if(!islegal) {
+                        this._errorDialog.setMessage(AjxMessageFormat.format(ZaMsg.ERROR_MSG_EmailValidReg, regval),
+                                null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+                        this._errorDialog.popup();
+                        return islegal;
+                }
+        }
+
         //transfer the fields from the tmpObj to the _currentObject, since _currentObject is an instance of ZaDomain
         var mods = new Object();
 

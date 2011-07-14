@@ -375,7 +375,7 @@ ZaSearch.prototype.dynSelectSearchDomains = function (callArgs) {
 		params.busyId = busyId;
 		params.busyMsg = ZaMsg.BUSY_SEARCHING_DOMAINS;
 		params.skipCallbackIfCancelled = false;
-        params.attrs = [ZaDomain.A_domainName,ZaDomain.A_zimbraDomainStatus,ZaItem.A_zimbraId, ZaDomain.A_domainType];
+        params.attrs = [ZaDomain.A_domainName,ZaDomain.A_zimbraDomainStatus,ZaItem.A_zimbraId, ZaDomain.A_domainType, ZaDomain.A_zimbraMailAddressValidationRegex];
 		ZaSearch.searchDirectory(params);
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearchDomains");		

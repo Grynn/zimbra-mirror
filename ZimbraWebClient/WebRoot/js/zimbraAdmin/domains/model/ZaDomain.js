@@ -259,6 +259,9 @@ ZaDomain.A_zimbraSkinLogoURL ="zimbraSkinLogoURL" ;
 ZaDomain.A_zimbraSkinLogoLoginBanner = "zimbraSkinLogoLoginBanner" ;
 ZaDomain.A_zimbraSkinLogoAppBanner = "zimbraSkinLogoAppBanner" ;
 
+// regex of domain name
+ZaDomain.A_zimbraMailAddressValidationRegex = "zimbraMailAddressValidationRegex";
+
 ZaDomain.A_zimbraDomainAliasTargetId = "zimbraDomainAliasTargetId" ;
 ZaDomain.A2_zimbraDomainAliasTarget = "zimbraDomainAliasTargetName" ;
 ZaDomain.A_zimbraPrefTimeZoneId = "zimbraPrefTimeZoneId" ;
@@ -644,7 +647,20 @@ function(tmpObj, newDomain) {
 			attr.setAttribute("n", ZaDomain.A_zimbraVirtualHostname);					
 		}
 	}
-
+	
+        if(tmpObj.attrs[ZaDomain.A_zimbraMailAddressValidationRegex]) {
+                if(tmpObj.attrs[ZaDomain.A_zimbraMailAddressValidationRegex] instanceof Array) {
+                        var cnt = tmpObj.attrs[ZaDomain.A_zimbraMailAddressValidationRegex].length;
+                        for(var ix=0; ix<cnt; ix++) {
+                                attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraMailAddressValidationRegex][ix]);
+                                attr.setAttribute("n", ZaDomain.A_zimbraMailAddressValidationRegex);                                     
+                        }
+                } else {
+                        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraMailAddressValidationRegex]);
+                        attr.setAttribute("n", ZaDomain.A_zimbraMailAddressValidationRegex);
+                }
+        }
+	
     if(tmpObj.attrs[ZaDomain.A_zimbraAuthKerberos5Realm]){
         attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAuthKerberos5Realm]);
         attr.setAttribute("n", ZaDomain.A_zimbraAuthKerberos5Realm);
@@ -1477,6 +1493,12 @@ function (obj) {
 		else
 			this.attrs[ZaDomain.A_zimbraVirtualHostname] = new Array();
 	}
+    	if(!(this.attrs[ZaDomain.A_zimbraMailAddressValidationRegex] instanceof Array)) {
+                if(this.attrs[ZaDomain.A_zimbraMailAddressValidationRegex])
+                        this.attrs[ZaDomain.A_zimbraMailAddressValidationRegex] = [this.attrs[ZaDomain.A_zimbraMailAddressValidationRegex]];
+                else
+                        this.attrs[ZaDomain.A_zimbraMailAddressValidationRegex] = new Array();
+        }
 
 	if(AjxUtil.isString(this.attrs[ZaDomain.A_zimbraWebClientLoginURLAllowedUA])) {
 		this.attrs[ZaDomain.A_zimbraWebClientLoginURLAllowedUA] = [this.attrs[ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA]];
@@ -1855,6 +1877,8 @@ ZaDomain.myXModel = {
         {id:ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled},
         {id:ZaDomain.A_zimbraAdminConsoleLDAPAuthEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAdminConsoleLDAPAuthEnabled},    
         {id:ZaDomain.A_zimbraAdminConsoleSkinEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAdminSkinAddressEnabled},
+	// regex
+	{id:ZaDomain.A_zimbraMailAddressValidationRegex, type:_LIST_, listItem:{type:_STRING_, maxLength:512}, ref:"attrs/" + ZaDomain.A_zimbraMailAddressValidationRegex},
         {id:ZaDomain.A_zimbraVirtualHostname, type:_LIST_, listItem:{type:_STRING_, maxLength:255}, ref:"attrs/" + ZaDomain.A_zimbraVirtualHostname},
          ZaItem.descriptionModelItem,  
 	{id:ZaDomain.A_zimbraSSLCertificate, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraSSLCertificate},

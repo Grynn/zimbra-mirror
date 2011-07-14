@@ -47,10 +47,12 @@ DynSelectDomainPart_XFormItem.prototype.changeDomainChoicesCallback =
 function(data, more, total) {
 	// filter the domain alias
 	var withoutAlias = [];
+	AjxEmailAddress.customEmailValidateEegex = {};
 	for(var i = 0; data && i < data.length; i++) {
 		//var targetObj = ZaDomain.getTargetDomainByName(data[i]) ;
 		if (data[i] && data[i].attrs [ZaDomain.A_domainType] == ZaDomain.domainTypes.local){
 			withoutAlias.push(data[i]);
+			AjxEmailAddress.customEmailValidateEegex[data[i].name] = data[i].attrs[ZaDomain.A_zimbraMailAddressValidationRegex];
 		}
 	}
 	// call the default callback
@@ -202,6 +204,13 @@ EmailAddr_XFormItem.prototype.items = [
 			}else this.getParentItem()._inputDomainPart = domainPart;
             //bug: 14250, change the instance value here also even if the whole email address is invalid
 			//this.getParentItem().setInstanceValue (val) ;
+			// set the email validation regex according domain
+			var regList = AjxEmailAddress.customEmailValidateEegex[domainPart];
+			if(regList && regList instanceof Array)
+				AjxEmailAddress.customInvalidEmailPats = regList;
+			else if(regList) 
+				AjxEmailAddress.customInvalidEmailPats = [regList];
+			else AjxEmailAddress.customInvalidEmailPats = [];
 			this.getForm().itemChanged(this.getParentItem(), val, event);
 		}	
 	}

@@ -40,6 +40,7 @@ ZaNewDomainXWizard = function(parent, entry) {
 	ZaNewDomainXWizard.AUTH_CONFIG_SUM_STEP = ++this.TAB_INDEX;
 	ZaNewDomainXWizard.AUTH_TEST_RESULT_STEP = ++this.TAB_INDEX;
 	ZaNewDomainXWizard.VHOST_STEP = ++this.TAB_INDEX;
+	ZaNewDomainXWizard.ADVANCED_STEP = ++this.TAB_INDEX;
     ZaNewDomainXWizard.FEATURE_STEP = ++this.TAB_INDEX;
 	ZaNewDomainXWizard.BRIEFCASE_STEP = ++this.TAB_INDEX;
 	ZaNewDomainXWizard.NOTEBOOK_ACL_STEP = ++this.TAB_INDEX;
@@ -61,6 +62,7 @@ ZaNewDomainXWizard = function(parent, entry) {
 		{label:ZaMsg.AuthSettingsSummary, value:ZaNewDomainXWizard.AUTH_CONFIG_SUM_STEP},												
 		{label:ZaMsg.AuthTestResult, value:ZaNewDomainXWizard.AUTH_TEST_RESULT_STEP},
 		{label:ZaMsg.Domain_Tab_VirtualHost, value:ZaNewDomainXWizard.VHOST_STEP},
+		{label:ZaMsg.Domain_Tab_Advanced, value:ZaNewDomainXWizard.ADVANCED_STEP},		
         {label:ZaMsg.TABT_Feature, value:ZaNewDomainXWizard.FEATURE_STEP},
 		{label:ZaMsg.Domain_Tab_Briefcase, value:ZaNewDomainXWizard.BRIEFCASE_STEP},
 		{label:ZaMsg.Notebook_Access_Control, value:ZaNewDomainXWizard.NOTEBOOK_ACL_STEP},			
@@ -494,8 +496,8 @@ function () {
 			this.goPage(ZaNewDomainXWizard.NOTEBOOK_ACL_STEP);
 			this.changeButtonStateForStep(ZaNewDomainXWizard.NOTEBOOK_ACL_STEP);	
 		}else{
-			this.goPage(ZaNewDomainXWizard.BRIEFCASE_STEP);
-			this.changeButtonStateForStep(ZaNewDomainXWizard.BRIEFCASE_STEP);
+			this.goPage(ZaNewDomainXWizard.ADVANCED_STEP);
+			this.changeButtonStateForStep(ZaNewDomainXWizard.ADVANCED_STEP);
 		}
 	} else if (this._containedObject[ZaModel.currentStep] == ZaNewDomainXWizard.AUTH_CONFIG_SUM_STEP) {
 		if(this._containedObject.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_zimbra) {
@@ -634,7 +636,7 @@ function() {
 		this.goPage(ZaNewDomainXWizard.AUTH_TEST_RESULT_STEP);
  		//this.testAuthSettings();
 		//this.changeButtonStateForStep(ZaNewDomainXWizard.AUTH_TEST_STEP);
-	} else if(this._containedObject[ZaModel.currentStep] == ZaNewDomainXWizard.BRIEFCASE_STEP) {
+	} else if(this._containedObject[ZaModel.currentStep] == ZaNewDomainXWizard.ADVANCED_STEP) {
 		if (this._containedObject[ZaDomain.A_CreateNotebook] != "TRUE") {
 			this.goPage(this._containedObject[ZaModel.currentStep] + 2);
 			this.changeButtonStateForStep(this._containedObject[ZaModel.currentStep]);
@@ -1467,9 +1469,10 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 
 					]
 				},
-				{type:_CASE_, caseKey:ZaNewDomainXWizard.BRIEFCASE_STEP, 
+				{type:_CASE_, caseKey:ZaNewDomainXWizard.ADVANCED_STEP, numCols:1, 
 					items: [
 						{ type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_BC_ShareConf,
+							numCols:1,
                                   		  items :[
                                           		{ ref: ZaDomain.A_zimbraBasicAuthRealm,
                                             		  type: _SUPERWIZ_TEXTFIELD_, width: 250 ,
@@ -1477,7 +1480,22 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
                                             		  txtBoxLabel: ZaMsg.Domain_zimbraBasicAuthRealm
                                           		}
                                          	 ]
-                                		}	
+                                		},
+                                                { type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_AD_EmailValidate,
+							colSizes:["200px","*"], 
+                                                  items :[
+
+                                                	{ref:ZaDomain.A_zimbraMailAddressValidationRegex, type:_REPEAT_, 
+                                                		label:ZaMsg.LBL_EmailValidate, repeatInstance:"", 
+                                                		showAddButton:true, showRemoveButton:true,
+                                                                addButtonLabel:ZaMsg.NAD_AddRegex,
+                                                                showAddOnNextRow:true,
+                                                                removeButtonLabel:ZaMsg.NAD_RemoveRegex,
+                                                                items: [
+                                                                        {ref:".", type:_TEXTFIELD_, label:null,width:250}
+                                                                ]
+                                                	}
+						   ]}	
 									
 					]
 				},	
