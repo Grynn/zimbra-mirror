@@ -112,7 +112,12 @@ public class Button {
 	public static final Button B_SIGNATURE = new Button("B_SIGNATURE");
 	public static final Button B_OPTIONS = new Button("B_OPTIONS");
 	public static final Button B_PRIORITY = new Button("B_PRIORITY");
+	public static final Button B_TO = new Button("B_TO");
+	public static final Button B_CC = new Button("B_CC");
+	public static final Button B_BCC = new Button("B_BCC");
 	public static final Button B_SHOWBCC = new Button("B_SHOWBCC");
+	public static final Button B_REMOVE = new Button("B_REMOVE");
+	public static final Button B_SHOW_NAMES_FROM = new Button("B_SHOW_NAMES_FROM");
 
 	public static final Button O_SEND_SEND = new Button("O_SEND_SEND");
 	public static final Button O_SEND_SEND_LATER = new Button("O_SEND_SEND_LATER");
@@ -124,6 +129,9 @@ public class Button {
 	public static final Button O_PRIORITY_HIGH = new Button("O_PRIORITY_HIGH");
 	public static final Button O_PRIORITY_NORMAL = new Button("O_PRIORITY_NORMAL");
 	public static final Button O_PRIORITY_LOW = new Button("O_PRIORITY_LOW");
+	public static final Button O_CONTACTS = new Button("O_CONTACTS");
+	public static final Button O_PERSONAL_AND_SHARED_CONTACTS = new Button("O_PERSONAL_AND_SHARED_CONTACTS");
+	public static final Button O_GLOBAL_ADDRESS_LIST = new Button("O_GLOBAL_ADDRESS_LIST");
 
 	// SearchPage buttons and pulldown options
 	public static final Button B_SEARCHTYPE = new Button("B_SEARCHTYPE");

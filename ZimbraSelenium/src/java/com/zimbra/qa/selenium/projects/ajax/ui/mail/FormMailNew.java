@@ -199,6 +199,22 @@ public class FormMailNew extends AbsForm {
 
 			throw new HarnessException("use zToolbarPressPulldown to attach signature");
 			
+		} else if ( button == Button.B_TO ) {
+			
+			locator = "css=div[id$='__TO'] td[id$='__TO_title']";
+			page = new FormAddressPicker(this.MyApplication);
+
+		} else if ( button == Button.B_CC ) {
+			
+			throw new HarnessException("implement me");
+
+		} else if ( button == Button.B_BCC ) {
+			
+			// In the test case, make sure B_SHOWBCC was activated first
+			// (i.e. make sure BCC button is showing
+			
+			throw new HarnessException("implement me");
+
 		} else if ( button == Button.B_SHOWBCC) {
 
 			page = this;
