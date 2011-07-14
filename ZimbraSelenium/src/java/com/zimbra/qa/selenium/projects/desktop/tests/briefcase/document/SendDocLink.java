@@ -80,7 +80,7 @@ public class SendDocLink extends AjaxCommonTest {
       app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
 
 		// Verify the new mail form is opened
-		ZAssert.assertTrue(mailform.zIsVisible(), "Verify the new form opened");
+		ZAssert.assertTrue(mailform.zIsActive(), "Verify the new form opened");
 		
 		// Verify link
 		ZAssert.assertTrue(mailform.zWaitForIframeText(

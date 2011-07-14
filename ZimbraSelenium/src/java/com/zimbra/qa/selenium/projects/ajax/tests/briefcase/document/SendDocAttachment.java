@@ -74,7 +74,7 @@ public class SendDocAttachment extends AjaxCommonTest {
 					Button.B_ACTIONS, Button.O_SEND_AS_ATTACHMENT, docItem);
 		
 		// Verify the new mail form is opened
-		ZAssert.assertTrue(mailform.zIsVisible(), "Verify the new form opened");
+		ZAssert.assertTrue(mailform.zIsActive(), "Verify the new form opened");
 
 		ZAssert.assertTrue(app.zPageBriefcase
 				.sIsElementPresent(FormMailNew.Locators.zAttachmentText
@@ -142,7 +142,7 @@ public class SendDocAttachment extends AjaxCommonTest {
 				Button.O_SEND_AS_ATTACHMENT, docItem);
 
 		// Verify the new mail form is opened
-		ZAssert.assertTrue(mailform.zIsVisible(), "Verify the new form opened");
+		ZAssert.assertTrue(mailform.zIsActive(), "Verify the new form opened");
 
 		ZAssert.assertTrue(app.zPageBriefcase
 				.zWaitForElementPresent(FormMailNew.Locators.zAttachmentText

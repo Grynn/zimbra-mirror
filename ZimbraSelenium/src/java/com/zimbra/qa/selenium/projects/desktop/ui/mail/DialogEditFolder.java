@@ -53,7 +53,7 @@ public class DialogEditFolder extends AbsDialog {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		logger.info(myPageName() + " zIsVisible()");
+		logger.info(myPageName() + " zIsActive()");
 
 		logger.info(myPageName() + " zIsActive()");
 
@@ -68,7 +68,7 @@ public class DialogEditFolder extends AbsDialog {
 		}
 
 		// Yes, visible
-		logger.info(myPageName() + " zIsVisible() = true");
+		logger.info(myPageName() + " zIsActive() = true");
 		return (true);
 	}
 

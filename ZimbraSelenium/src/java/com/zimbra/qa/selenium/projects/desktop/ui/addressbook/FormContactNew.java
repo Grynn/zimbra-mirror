@@ -210,7 +210,7 @@ public class FormContactNew extends AbsForm {
 		}
 	
 		// Yes, visible
-		logger.info(myPageName() + " zIsVisible() = true");
+		logger.info(myPageName() + " zIsActive() = true");
 		return (true);
 	}
 

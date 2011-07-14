@@ -65,7 +65,7 @@ public abstract class AbsToaster extends AbsSeleniumObject {
     	throw new HarnessException("fill in later");
     }
 	
-    public boolean zIsVisible() throws HarnessException {        
+    public boolean zIsActive() throws HarnessException {        
     	return zIsVisiblePerPosition(locator,0,0);
     	
     }

@@ -100,7 +100,7 @@ public class DialogMove extends AbsDialog {
 		}
 	
 		// Yes, visible
-		logger.info(myPageName() + " zIsVisible() = true");
+		logger.info(myPageName() + " zIsActive() = true");
 		return (true);
 
 	}

@@ -88,7 +88,7 @@ public class SendDocLink extends AjaxCommonTest {
 		FormMailNew mailform = (FormMailNew) confDlg.zClickButton(Button.B_YES);
 
 		// Verify the new mail form is opened
-		ZAssert.assertTrue(mailform.zIsVisible(), "Verify the new form opened");
+		ZAssert.assertTrue(mailform.zIsActive(), "Verify the new form opened");
 
 		// Verify link
 		ZAssert.assertTrue(mailform.zWaitForIframeText(
@@ -161,7 +161,7 @@ public class SendDocLink extends AjaxCommonTest {
 		FormMailNew mailform = (FormMailNew) confDlg.zClickButton(Button.B_YES);
 
 		// Verify the new mail form is opened
-		ZAssert.assertTrue(mailform.zIsVisible(), "Verify the new form opened");
+		ZAssert.assertTrue(mailform.zIsActive(), "Verify the new form opened");
 
 		// Verify link
 		ZAssert.assertTrue(mailform.zWaitForIframeText(

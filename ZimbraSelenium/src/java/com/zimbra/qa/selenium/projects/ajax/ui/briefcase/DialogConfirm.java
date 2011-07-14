@@ -106,7 +106,7 @@ public class DialogConfirm extends AbsDialog {
 	
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		logger.info(myPageName() + " zIsVisible()");
+		logger.info(myPageName() + " zIsActive()");
 
 		String locator = "class=" + Locators.zDialogClass;
 
@@ -118,7 +118,7 @@ public class DialogConfirm extends AbsDialog {
 			return (false); // Not visible per position
 		}
 
-		logger.info(myPageName() + " zIsVisible() = true");
+		logger.info(myPageName() + " zIsActive() = true");
 		return (true);
 
 	}

@@ -93,18 +93,6 @@ public class FormMailNew extends AbsForm {
 
 	}
 
-	public boolean zIsVisible() throws HarnessException {
-		String locator = "//div[contains(@id,'ztb__COMPOSE')]";
-		
-		if ( !this.sIsElementPresent(locator) )
-			return (false);
-		
-		if ( !this.zIsVisiblePerPosition(locator, 0, 0) )
-			return (false);
-		
-		return (true);
-	}
-
 	@Override
 	public String myPageName() {
 		return (this.getClass().getName());
@@ -686,7 +674,7 @@ public class FormMailNew extends AbsForm {
 			return (false);	
 		}
 		
-		if ( !this.zIsVisiblePerPosition(locator, 150, 80) ) {
+		if ( !this.zIsVisiblePerPosition(locator, 0, 0) ) {
 			return (false);
 		}
 		

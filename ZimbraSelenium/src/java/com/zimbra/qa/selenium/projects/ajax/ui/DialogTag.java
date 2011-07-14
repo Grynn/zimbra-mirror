@@ -175,7 +175,7 @@ public class DialogTag extends AbsDialog {
 		}
 
 		// Yes, visible
-		logger.info(myPageName() + " zIsVisible() = true");
+		logger.info(myPageName() + " zIsActive() = true");
 		return (true);
 
 		//return ( this.sIsElementPresent(Locators.zTagDialogId) );
