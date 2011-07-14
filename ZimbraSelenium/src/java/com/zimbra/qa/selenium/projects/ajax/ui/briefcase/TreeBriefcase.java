@@ -61,7 +61,7 @@ public class TreeBriefcase extends AbsTree {
 
 		if (action == Action.A_RIGHTCLICK) {
 
-			this.zRightClickAt(actionLocator,"0,0");
+			this.zRightClickAt(actionLocator, "0,0");
 		} else {
 			throw new HarnessException("implement me! " + action
 					+ ": not implemented");
@@ -100,7 +100,7 @@ public class TreeBriefcase extends AbsTree {
 			throw new HarnessException("locator is null for option " + option);
 
 		// Default behavior. Click the locator
-		zClickAt(optionLocator,"0,0");
+		zClickAt(optionLocator, "0,0");
 
 		// If there is a busy overlay, wait for that to finish
 		this.zWaitForBusyOverlay();
@@ -122,8 +122,7 @@ public class TreeBriefcase extends AbsTree {
 			treeItemLocator = Locators.briefcaseTreeView_Desktop
 					+ "[class='DwtTreeItem-Text']";
 		} else {
-			treeItemLocator = Locators.briefcaseTreeView
-					+ "]";
+			treeItemLocator = Locators.briefcaseTreeView + "]";
 		}
 		AbsPage page = zTreeItem(action, item);
 
@@ -133,7 +132,7 @@ public class TreeBriefcase extends AbsTree {
 
 		if (isRowAdded)
 			listItemLocator += ">div[id^=zli__BDLV__][class^=Row]";
-		
+
 		zWaitForElementPresent(listItemLocator);
 
 		return page;
@@ -167,6 +166,22 @@ public class TreeBriefcase extends AbsTree {
 				locator = Locators.briefcaseTreeView
 						+ ((FolderItem) item).getId() + "_imageCell]";
 			}
+		} else if (item instanceof LinkItem) {
+			locator = "css=a[id$=_addshare_link]";
+			page = new DialogFindShares(MyApplication,
+					((AppAjaxClient) MyApplication).zPageBriefcase);
+
+			if (!this.sIsElementPresent(locator)) {
+				throw new HarnessException("Unable to locate link in the tree "
+						+ locator);
+			}
+
+			this.sClickAt(locator, "0,0");
+
+			zWaitForBusyOverlay();
+
+			return page;
+
 		} else {
 			throw new HarnessException("Must use IItem as argument, but was "
 					+ item.getClass());
@@ -184,7 +199,7 @@ public class TreeBriefcase extends AbsTree {
 						"Unable to locate folder in the tree " + locator);
 
 			// Select the folder
-			this.zRightClickAt(locator,"0,0");
+			this.zRightClickAt(locator, "0,0");
 
 			// return a context menu
 			return (new ContextMenu(MyApplication));
@@ -198,7 +213,7 @@ public class TreeBriefcase extends AbsTree {
 					+ locator);
 
 		// Default behavior. Click the locator
-		zClickAt(locator,"0,0");
+		zClickAt(locator, "0,0");
 
 		// If there is a busy overlay, wait for that to finish
 		zWaitForBusyOverlay();
@@ -238,13 +253,12 @@ public class TreeBriefcase extends AbsTree {
 						"Unable to locate folder in the tree " + locator);
 			}
 
-			this.zClickAt(locator,"0,0");
+			this.zClickAt(locator, "0,0");
 
 			zWaitForBusyOverlay();
 
 			return page;
 
-			// FALL THROUGH
 		} else if (button == Button.B_TREE_NEWTAG) {
 
 			locator = "css=div[class^=ImgNewTag ZWidget]";
@@ -275,7 +289,7 @@ public class TreeBriefcase extends AbsTree {
 		//
 
 		// Click it
-		this.zClickAt(locator,"0,0");
+		this.zClickAt(locator, "0,0");
 
 		// If the app is busy, wait for that to finish
 		zWaitForBusyOverlay();
