@@ -135,7 +135,7 @@ public class OfflineGal {
             query.append(" AND (#").append(ContactConstants.A_type).append(":").append(CTYPE_GROUP).append(")");
         }
         SearchParams sp = new SearchParams();
-        sp.setQueryStr(query.toString());
+        sp.setQueryString(query.toString());
         sp.setTypes(EnumSet.of(MailItem.Type.CONTACT));
         sp.setSortBy(sortBy);
         sp.setOffset(offset);
