@@ -127,7 +127,7 @@ public class DisplayContact extends  AbsDisplay {
 	
 
 	private void getAllLocators(ArrayList<String> array, String postfix) {
-	  	   String css= "css=div[id$='_content'][class='ZmContactInfoView'] table:nth-of-type(2) tbody tr";
+	  	   String css= "css=div[id$='_content'][class='ZmContactInfoView'] div[style*='display: block'] table:nth-of-type(2) tbody tr";
 	       int count= this.sGetCssCount(css);
 
 	       for (int i=1; i<=count; i++) {
