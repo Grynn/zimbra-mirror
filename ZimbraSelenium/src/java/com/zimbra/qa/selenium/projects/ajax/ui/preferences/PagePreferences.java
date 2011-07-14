@@ -201,7 +201,11 @@ public class PagePreferences extends AbsTab {
 
 			locator = "css=input[id$=_AUTO_ADD_ADDRESS]";
 			
-		} else {
+		}  else if (preference.equals("zimbraPrefAutocompleteAddressBubblesEnabled")) {
+
+			locator = "css=input[id$=_USE_ADDR_BUBBLES]";
+			
+		}else {
 			throw new HarnessException("zGetCheckboxStatus() not defined for preference "+ preference);
 		}
 		
