@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlType;
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
  *                   &lt;choice maxOccurs="unbounded" minOccurs="0">
- *                     &lt;element name="spell" type="{urn:zimbra}spellingSuggestionsQueryInfo"/>
+ *                     &lt;element name="spell" type="{urn:zimbraMail}spellingSuggestionsQueryInfo"/>
  *                     &lt;element name="wildcard" type="{urn:zimbra}wildcardExpansionQueryInfo"/>
  *                   &lt;/choice>
  *                 &lt;/sequence>
@@ -227,7 +227,7 @@ public class SearchConvResponse {
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
      *         &lt;choice maxOccurs="unbounded" minOccurs="0">
-     *           &lt;element name="spell" type="{urn:zimbra}spellingSuggestionsQueryInfo"/>
+     *           &lt;element name="spell" type="{urn:zimbraMail}spellingSuggestionsQueryInfo"/>
      *           &lt;element name="wildcard" type="{urn:zimbra}wildcardExpansionQueryInfo"/>
      *         &lt;/choice>
      *       &lt;/sequence>
@@ -245,8 +245,8 @@ public class SearchConvResponse {
     public static class Info {
 
         @XmlElements({
-            @XmlElement(name = "wildcard", type = WildcardExpansionQueryInfo.class),
-            @XmlElement(name = "spell", type = SpellingSuggestionsQueryInfo.class)
+            @XmlElement(name = "spell", type = SpellingSuggestionsQueryInfo.class),
+            @XmlElement(name = "wildcard", type = WildcardExpansionQueryInfo.class)
         })
         protected List<Object> spellOrWildcard;
 
@@ -268,8 +268,8 @@ public class SearchConvResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link WildcardExpansionQueryInfo }
          * {@link SpellingSuggestionsQueryInfo }
+         * {@link WildcardExpansionQueryInfo }
          * 
          * 
          */

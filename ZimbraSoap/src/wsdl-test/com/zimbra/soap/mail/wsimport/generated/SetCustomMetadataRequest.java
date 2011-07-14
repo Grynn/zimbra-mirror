@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="meta" type="{urn:zimbra}customMetadata" minOccurs="0"/>
+ *         &lt;element ref="{urn:zimbraMail}meta" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class SetCustomMetadataRequest {
 
-    protected CustomMetadata meta;
+    protected MailCustomMetadata meta;
     @XmlAttribute(required = true)
     protected String id;
 
@@ -42,10 +42,10 @@ public class SetCustomMetadataRequest {
      * 
      * @return
      *     possible object is
-     *     {@link CustomMetadata }
+     *     {@link MailCustomMetadata }
      *     
      */
-    public CustomMetadata getMeta() {
+    public MailCustomMetadata getMeta() {
         return meta;
     }
 
@@ -54,10 +54,10 @@ public class SetCustomMetadataRequest {
      * 
      * @param value
      *     allowed object is
-     *     {@link CustomMetadata }
+     *     {@link MailCustomMetadata }
      *     
      */
-    public void setMeta(CustomMetadata value) {
+    public void setMeta(MailCustomMetadata value) {
         this.meta = value;
     }
 

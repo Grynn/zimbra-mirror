@@ -45,14 +45,14 @@ import javax.xml.bind.annotation.XmlType;
 public class GetDataSourcesResponse {
 
     @XmlElements({
-        @XmlElement(name = "yab", type = MailYabDataSource.class),
-        @XmlElement(name = "unknown", type = MailUnknownDataSource.class),
-        @XmlElement(name = "cal", type = MailCalDataSource.class),
-        @XmlElement(name = "gal", type = MailGalDataSource.class),
         @XmlElement(name = "imap", type = MailImapDataSource.class),
         @XmlElement(name = "rss", type = MailRssDataSource.class),
         @XmlElement(name = "pop3", type = MailPop3DataSource.class),
-        @XmlElement(name = "caldav", type = MailCaldavDataSource.class)
+        @XmlElement(name = "unknown", type = MailUnknownDataSource.class),
+        @XmlElement(name = "cal", type = MailCalDataSource.class),
+        @XmlElement(name = "yab", type = MailYabDataSource.class),
+        @XmlElement(name = "caldav", type = MailCaldavDataSource.class),
+        @XmlElement(name = "gal", type = MailGalDataSource.class)
     })
     protected List<MailDataSource> imapOrPop3OrCaldav;
 
@@ -74,14 +74,14 @@ public class GetDataSourcesResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link MailYabDataSource }
-     * {@link MailUnknownDataSource }
-     * {@link MailCalDataSource }
-     * {@link MailGalDataSource }
      * {@link MailImapDataSource }
      * {@link MailRssDataSource }
      * {@link MailPop3DataSource }
+     * {@link MailUnknownDataSource }
+     * {@link MailCalDataSource }
+     * {@link MailYabDataSource }
      * {@link MailCaldavDataSource }
+     * {@link MailGalDataSource }
      * 
      * 
      */

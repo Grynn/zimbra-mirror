@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
+ *         &lt;element name="retentionPolicy" type="{urn:zimbraMail}retentionPolicy" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="recursive" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="url" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -47,7 +48,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "folderActionSelector", propOrder = {
     "grant",
-    "acl"
+    "acl",
+    "retentionPolicy"
 })
 public class FolderActionSelector
     extends ActionSelector
@@ -55,6 +57,7 @@ public class FolderActionSelector
 
     protected ActionGrantSelector grant;
     protected FolderActionSelector.Acl acl;
+    protected RetentionPolicy retentionPolicy;
     @XmlAttribute
     protected Boolean recursive;
     @XmlAttribute
@@ -112,6 +115,30 @@ public class FolderActionSelector
      */
     public void setAcl(FolderActionSelector.Acl value) {
         this.acl = value;
+    }
+
+    /**
+     * Gets the value of the retentionPolicy property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link RetentionPolicy }
+     *     
+     */
+    public RetentionPolicy getRetentionPolicy() {
+        return retentionPolicy;
+    }
+
+    /**
+     * Sets the value of the retentionPolicy property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link RetentionPolicy }
+     *     
+     */
+    public void setRetentionPolicy(RetentionPolicy value) {
+        this.retentionPolicy = value;
     }
 
     /**

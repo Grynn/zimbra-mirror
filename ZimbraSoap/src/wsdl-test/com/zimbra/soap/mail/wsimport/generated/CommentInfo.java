@@ -23,10 +23,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{urn:zimbra}meta" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element ref="{urn:zimbraMail}meta" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
+ *       &lt;attribute name="parentId" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="cr" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="email" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="f" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="t" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="color" type="{http://www.w3.org/2001/XMLSchema}byte" />
@@ -45,13 +46,15 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class CommentInfo {
 
-    @XmlElementRef(name = "meta", namespace = "urn:zimbra", type = JAXBElement.class)
+    @XmlElementRef(name = "meta", namespace = "urn:zimbraMail", type = JAXBElement.class)
     @XmlMixed
     protected List<Serializable> content;
     @XmlAttribute
+    protected String parentId;
+    @XmlAttribute
     protected String id;
     @XmlAttribute
-    protected String cr;
+    protected String email;
     @XmlAttribute
     protected String f;
     @XmlAttribute
@@ -81,8 +84,8 @@ public class CommentInfo {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link CustomMetadata }{@code >}
      * {@link String }
+     * {@link JAXBElement }{@code <}{@link MailCustomMetadata }{@code >}
      * 
      * 
      */
@@ -91,6 +94,30 @@ public class CommentInfo {
             content = new ArrayList<Serializable>();
         }
         return this.content;
+    }
+
+    /**
+     * Gets the value of the parentId property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getParentId() {
+        return parentId;
+    }
+
+    /**
+     * Sets the value of the parentId property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setParentId(String value) {
+        this.parentId = value;
     }
 
     /**
@@ -118,27 +145,27 @@ public class CommentInfo {
     }
 
     /**
-     * Gets the value of the cr property.
+     * Gets the value of the email property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getCr() {
-        return cr;
+    public String getEmail() {
+        return email;
     }
 
     /**
-     * Sets the value of the cr property.
+     * Sets the value of the email property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setCr(String value) {
-        this.cr = value;
+    public void setEmail(String value) {
+        this.email = value;
     }
 
     /**

@@ -32,13 +32,13 @@ import javax.xml.bind.annotation.XmlType;
 @XmlSeeAlso({
     GetCosRequest.class,
     SearchDirectoryRequest.class,
-    GetAccountRequest.class,
     GetServerRequest.class,
     GetXMPPComponentRequest.class,
+    GetCalendarResourceRequest.class,
+    GetAccountRequest.class,
     GetDomainRequest.class,
     GetZimletRequest.class,
-    SearchCalendarResourcesRequest.class,
-    GetCalendarResourceRequest.class
+    SearchCalendarResourcesRequest.class
 })
 public abstract class AttributeSelectorImpl {
 

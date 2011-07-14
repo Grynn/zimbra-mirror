@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="meta" type="{urn:zimbra}customMetadata" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element ref="{urn:zimbraMail}meta" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="su" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;choice maxOccurs="unbounded" minOccurs="0">
  *           &lt;element name="chat" type="{urn:zimbraMail}chatMessageInfo"/>
@@ -48,11 +48,11 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ConversationInfo {
 
-    protected List<CustomMetadata> meta;
+    protected List<MailCustomMetadata> meta;
     protected String su;
     @XmlElements({
-        @XmlElement(name = "m"),
-        @XmlElement(name = "chat", type = ChatMessageInfo.class)
+        @XmlElement(name = "chat", type = ChatMessageInfo.class),
+        @XmlElement(name = "m")
     })
     protected List<MessageInfo> chatOrM;
     @XmlAttribute
@@ -84,13 +84,13 @@ public class ConversationInfo {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link CustomMetadata }
+     * {@link MailCustomMetadata }
      * 
      * 
      */
-    public List<CustomMetadata> getMeta() {
+    public List<MailCustomMetadata> getMeta() {
         if (meta == null) {
-            meta = new ArrayList<CustomMetadata>();
+            meta = new ArrayList<MailCustomMetadata>();
         }
         return this.meta;
     }
@@ -137,8 +137,8 @@ public class ConversationInfo {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link MessageInfo }
      * {@link ChatMessageInfo }
+     * {@link MessageInfo }
      * 
      * 
      */

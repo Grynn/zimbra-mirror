@@ -19,6 +19,7 @@ import java.util.Map;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.LDAPUtilsConstants;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.soap.ZimbraSoapContext;
 
@@ -27,17 +28,17 @@ import com.zimbra.soap.ZimbraSoapContext;
  */
 public class DeleteLDAPEntry extends AdminDocumentHandler {
 
-	public Element handle(Element request, Map<String, Object> context)
+    public Element handle(Element request, Map<String, Object> context)
     throws ServiceException {
         ZimbraSoapContext lc = getZimbraSoapContext(context);
-        String dn = request.getAttribute(ZimbraLDAPUtilsService.E_DN);
+        String dn = request.getAttribute(LDAPUtilsConstants.E_DN);
 
         LDAPUtilsHelper.getInstance().deleteLDAPEntry(dn);
 
         ZimbraLog.security.info(ZimbraLog.encodeAttrs(
                 new String[] {"cmd", "DeleteLDAPEntry","dn", dn}));
 
-        Element response = lc.createElement(ZimbraLDAPUtilsService.DELETE_LDAP_ENTRY_RESPONSE);
+        Element response = lc.createElement(LDAPUtilsConstants.DELETE_LDAP_ENTRY_RESPONSE);
         return response;
     }
 

@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="sug" type="{urn:zimbra}spellingSuggestion" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="sug" type="{urn:zimbraMail}spellingSuggestion" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="word" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "spellingSuggestionsQueryInfo", namespace = "urn:zimbra", propOrder = {
+@XmlType(name = "spellingSuggestionsQueryInfo", propOrder = {
     "sug"
 })
 public class SpellingSuggestionsQueryInfo {

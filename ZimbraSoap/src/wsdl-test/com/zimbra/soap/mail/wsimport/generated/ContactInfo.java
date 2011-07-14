@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="meta" type="{urn:zimbra}customMetadata" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element ref="{urn:zimbraMail}meta" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="a" type="{urn:zimbra}contactAttr" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="sf" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -52,7 +52,7 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ContactInfo {
 
-    protected List<CustomMetadata> meta;
+    protected List<MailCustomMetadata> meta;
     protected List<ContactAttr> a;
     @XmlAttribute
     protected String sf;
@@ -105,13 +105,13 @@ public class ContactInfo {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link CustomMetadata }
+     * {@link MailCustomMetadata }
      * 
      * 
      */
-    public List<CustomMetadata> getMeta() {
+    public List<MailCustomMetadata> getMeta() {
         if (meta == null) {
-            meta = new ArrayList<CustomMetadata>();
+            meta = new ArrayList<MailCustomMetadata>();
         }
         return this.meta;
     }

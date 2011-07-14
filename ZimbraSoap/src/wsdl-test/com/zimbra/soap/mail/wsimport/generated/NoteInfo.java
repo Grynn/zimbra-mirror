@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="content" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="meta" type="{urn:zimbra}customMetadata" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element ref="{urn:zimbraMail}meta" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="rev" type="{http://www.w3.org/2001/XMLSchema}int" />
@@ -52,7 +52,7 @@ import javax.xml.bind.annotation.XmlType;
 public class NoteInfo {
 
     protected String content;
-    protected List<CustomMetadata> meta;
+    protected List<MailCustomMetadata> meta;
     @XmlAttribute
     protected String id;
     @XmlAttribute
@@ -118,13 +118,13 @@ public class NoteInfo {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link CustomMetadata }
+     * {@link MailCustomMetadata }
      * 
      * 
      */
-    public List<CustomMetadata> getMeta() {
+    public List<MailCustomMetadata> getMeta() {
         if (meta == null) {
-            meta = new ArrayList<CustomMetadata>();
+            meta = new ArrayList<MailCustomMetadata>();
         }
         return this.meta;
     }

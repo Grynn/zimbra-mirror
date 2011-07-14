@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "spellingSuggestion", namespace = "urn:zimbra")
+@XmlType(name = "spellingSuggestion")
 public class SpellingSuggestion {
 
     @XmlAttribute(required = true)

@@ -17,10 +17,10 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="createCalendarItemResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
+ *       &lt;all>
  *         &lt;element name="m" type="{urn:zimbra}id" minOccurs="0"/>
  *         &lt;element name="echo" type="{urn:zimbraMail}calEcho" minOccurs="0"/>
- *       &lt;/sequence>
+ *       &lt;/all>
  *       &lt;attribute name="calItemId" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="apptId" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="invId" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -35,8 +35,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "createCalendarItemResponse", propOrder = {
-    "m",
-    "echo"
+
 })
 @XmlSeeAlso({
     CreateAppointmentExceptionResponse.class,

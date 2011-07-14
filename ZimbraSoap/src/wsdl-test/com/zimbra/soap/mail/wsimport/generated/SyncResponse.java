@@ -56,17 +56,17 @@ public class SyncResponse {
 
     protected SyncDeletedInfo deleted;
     @XmlElements({
-        @XmlElement(name = "task", type = TaskItemInfo.class),
-        @XmlElement(name = "doc", type = DocumentInfo.class),
-        @XmlElement(name = "c", type = ConversationSummary.class),
-        @XmlElement(name = "chat", type = ChatSummary.class),
-        @XmlElement(name = "m", type = MessageSummary.class),
-        @XmlElement(name = "cn", type = ContactInfo.class),
-        @XmlElement(name = "tag", type = TagInfo.class),
-        @XmlElement(name = "folder", type = Folder.class),
         @XmlElement(name = "w", type = CommonDocumentInfo.class),
+        @XmlElement(name = "chat", type = ChatSummary.class),
+        @XmlElement(name = "c", type = ConversationSummary.class),
+        @XmlElement(name = "folder", type = Folder.class),
         @XmlElement(name = "note", type = NoteInfo.class),
-        @XmlElement(name = "appt", type = CalendarItemInfo.class)
+        @XmlElement(name = "m", type = MessageSummary.class),
+        @XmlElement(name = "appt", type = CalendarItemInfo.class),
+        @XmlElement(name = "doc", type = DocumentInfo.class),
+        @XmlElement(name = "tag", type = TagInfo.class),
+        @XmlElement(name = "task", type = TaskItemInfo.class),
+        @XmlElement(name = "cn", type = ContactInfo.class)
     })
     protected List<Object> folderOrTagOrNote;
     @XmlAttribute(required = true)
@@ -120,17 +120,17 @@ public class SyncResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link TaskItemInfo }
-     * {@link DocumentInfo }
-     * {@link ConversationSummary }
-     * {@link ChatSummary }
-     * {@link MessageSummary }
-     * {@link ContactInfo }
-     * {@link TagInfo }
-     * {@link Folder }
      * {@link CommonDocumentInfo }
+     * {@link ChatSummary }
+     * {@link ConversationSummary }
+     * {@link Folder }
      * {@link NoteInfo }
+     * {@link MessageSummary }
      * {@link CalendarItemInfo }
+     * {@link DocumentInfo }
+     * {@link TagInfo }
+     * {@link TaskItemInfo }
+     * {@link ContactInfo }
      * 
      * 
      */

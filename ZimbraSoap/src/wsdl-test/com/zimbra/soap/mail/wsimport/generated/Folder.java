@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="meta" type="{urn:zimbra}customMetadata" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element ref="{urn:zimbraMail}meta" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="acl" minOccurs="0">
  *           &lt;complexType>
  *             &lt;complexContent>
@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
+ *         &lt;element name="retentionPolicy" type="{urn:zimbraMail}retentionPolicy" minOccurs="0"/>
  *         &lt;choice maxOccurs="unbounded" minOccurs="0">
  *           &lt;element ref="{urn:zimbraMail}folder"/>
  *           &lt;element ref="{urn:zimbraMail}link"/>
@@ -71,6 +72,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "folder", propOrder = {
     "meta",
     "acl",
+    "retentionPolicy",
     "folderOrLinkOrSearch"
 })
 @XmlSeeAlso({
@@ -79,11 +81,12 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class Folder {
 
-    protected List<CustomMetadata> meta;
+    protected List<MailCustomMetadata> meta;
     protected Folder.Acl acl;
+    protected RetentionPolicy retentionPolicy;
     @XmlElements({
-        @XmlElement(name = "search", type = SearchFolder.class),
         @XmlElement(name = "link", type = Mountpoint.class),
+        @XmlElement(name = "search", type = SearchFolder.class),
         @XmlElement(name = "folder")
     })
     protected List<Folder> folderOrLinkOrSearch;
@@ -146,13 +149,13 @@ public class Folder {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link CustomMetadata }
+     * {@link MailCustomMetadata }
      * 
      * 
      */
-    public List<CustomMetadata> getMeta() {
+    public List<MailCustomMetadata> getMeta() {
         if (meta == null) {
-            meta = new ArrayList<CustomMetadata>();
+            meta = new ArrayList<MailCustomMetadata>();
         }
         return this.meta;
     }
@@ -182,6 +185,30 @@ public class Folder {
     }
 
     /**
+     * Gets the value of the retentionPolicy property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link RetentionPolicy }
+     *     
+     */
+    public RetentionPolicy getRetentionPolicy() {
+        return retentionPolicy;
+    }
+
+    /**
+     * Sets the value of the retentionPolicy property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link RetentionPolicy }
+     *     
+     */
+    public void setRetentionPolicy(RetentionPolicy value) {
+        this.retentionPolicy = value;
+    }
+
+    /**
      * Gets the value of the folderOrLinkOrSearch property.
      * 
      * <p>
@@ -199,8 +226,8 @@ public class Folder {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link SearchFolder }
      * {@link Mountpoint }
+     * {@link SearchFolder }
      * {@link Folder }
      * 
      * 

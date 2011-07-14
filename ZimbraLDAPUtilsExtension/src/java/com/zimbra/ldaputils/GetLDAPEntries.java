@@ -23,6 +23,7 @@ import com.zimbra.cs.account.NamedEntry;
 import com.zimbra.cs.account.ldap.legacy.entry.LdapDomain;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.AdminConstants;
+import com.zimbra.common.soap.LDAPUtilsConstants;
 import com.zimbra.soap.ZimbraSoapContext;
 
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
@@ -38,8 +39,8 @@ public class GetLDAPEntries extends AdminDocumentHandler {
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
 
         ZimbraSoapContext lc = getZimbraSoapContext(context);
-        
-        Element b = request.getElement(ZimbraLDAPUtilsService.E_LDAPSEARCHBASE);
+
+        Element b = request.getElement(LDAPUtilsConstants.E_LDAPSEARCHBASE);
         String ldapSearchBase;
         if(isDomainAdminOnly(lc)) {
             ldapSearchBase = ((LdapDomain)getAuthTokenAccountDomain(lc)).getDN();
@@ -58,22 +59,22 @@ public class GetLDAPEntries extends AdminDocumentHandler {
         List LDAPEntrys;
         LDAPEntrys = LDAPUtilsHelper.getInstance().searchObjects(query,ldapSearchBase,sortBy,sortAscending);
 
-        Element response = lc.createElement(ZimbraLDAPUtilsService.GET_LDAP_ENTRIES_RESPONSE);
+        Element response = lc.createElement(LDAPUtilsConstants.GET_LDAP_ENTRIES_RESPONSE);
         int i, limitMax = offset+limit;
         for (i=offset; i < limitMax && i < LDAPEntrys.size(); i++) {
             NamedEntry entry = (NamedEntry) LDAPEntrys.get(i);
             ZimbraLDAPUtilsService.encodeLDAPEntry(response,entry);
         }
 
-    	return response;
+        return response;
     }
-    
+
     /** Returns whether domain admin auth is sufficient to run this command.
      *  This should be overriden only on admin commands that can be run in a
      *  restricted "domain admin" mode. */
     public boolean domainAuthSufficient(Map<String, Object> context) {
         return true; 
     }
-    
+
 
 }

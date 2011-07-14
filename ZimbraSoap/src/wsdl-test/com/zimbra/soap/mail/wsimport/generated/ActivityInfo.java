@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="itemId" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="ver" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="itemName" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="accountId" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="email" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -52,7 +52,7 @@ public class ActivityInfo {
     @XmlAttribute
     protected String itemName;
     @XmlAttribute
-    protected String accountId;
+    protected String email;
 
     /**
      * Gets the value of the arg property.
@@ -188,27 +188,27 @@ public class ActivityInfo {
     }
 
     /**
-     * Gets the value of the accountId property.
+     * Gets the value of the email property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getAccountId() {
-        return accountId;
+    public String getEmail() {
+        return email;
     }
 
     /**
-     * Sets the value of the accountId property.
+     * Sets the value of the email property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setAccountId(String value) {
-        this.accountId = value;
+    public void setEmail(String value) {
+        this.email = value;
     }
 
 }

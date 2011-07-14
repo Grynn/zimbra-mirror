@@ -38,9 +38,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlSeeAlso({
     DomainInfo.class,
     DistributionListInfo.class,
+    AliasInfo.class,
     DlInfo.class,
     ServerInfo.class,
-    AliasInfo.class,
     AccountInfo.class,
     CalendarResourceInfo.class,
     ZimletInfo.class,

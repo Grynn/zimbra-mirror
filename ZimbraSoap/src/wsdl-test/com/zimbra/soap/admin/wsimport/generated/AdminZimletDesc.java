@@ -52,10 +52,10 @@ import org.w3c.dom.Element;
 public class AdminZimletDesc {
 
     @XmlElementRefs({
+        @XmlElementRef(name = "serverExtension", namespace = "urn:zimbraAdmin", type = JAXBElement.class),
         @XmlElementRef(name = "include", namespace = "urn:zimbraAdmin", type = JAXBElement.class),
         @XmlElementRef(name = "target", namespace = "urn:zimbraAdmin", type = JAXBElement.class),
-        @XmlElementRef(name = "includeCSS", namespace = "urn:zimbraAdmin", type = JAXBElement.class),
-        @XmlElementRef(name = "serverExtension", namespace = "urn:zimbraAdmin", type = JAXBElement.class)
+        @XmlElementRef(name = "includeCSS", namespace = "urn:zimbraAdmin", type = JAXBElement.class)
     })
     @XmlAnyElement
     protected List<Object> serverExtensionOrIncludeOrIncludeCSS;
@@ -90,11 +90,11 @@ public class AdminZimletDesc {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link JAXBElement }{@code <}{@link String }{@code >}
-     * {@link Element }
      * {@link JAXBElement }{@code <}{@link ZimletServerExtension }{@code >}
+     * {@link Element }
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
+     * {@link JAXBElement }{@code <}{@link String }{@code >}
      * 
      * 
      */

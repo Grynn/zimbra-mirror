@@ -42,9 +42,9 @@ import javax.xml.bind.annotation.XmlType;
 public class TzFixupRuleMatch {
 
     @XmlElements({
-        @XmlElement(name = "any", type = SimpleElement.class),
         @XmlElement(name = "tzid", type = Id.class),
         @XmlElement(name = "dates", type = TzFixupRuleMatchDates.class),
+        @XmlElement(name = "any", type = SimpleElement.class),
         @XmlElement(name = "nonDst", type = Offset.class),
         @XmlElement(name = "rules", type = TzFixupRuleMatchRules.class)
     })
@@ -68,9 +68,9 @@ public class TzFixupRuleMatch {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link SimpleElement }
      * {@link Id }
      * {@link TzFixupRuleMatchDates }
+     * {@link SimpleElement }
      * {@link Offset }
      * {@link TzFixupRuleMatchRules }
      * 

@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
  *                   &lt;choice maxOccurs="unbounded" minOccurs="0">
- *                     &lt;element name="spell" type="{urn:zimbra}spellingSuggestionsQueryInfo"/>
+ *                     &lt;element name="spell" type="{urn:zimbraMail}spellingSuggestionsQueryInfo"/>
  *                     &lt;element name="wildcard" type="{urn:zimbra}wildcardExpansionQueryInfo"/>
  *                   &lt;/choice>
  *                 &lt;/sequence>
@@ -69,16 +69,16 @@ public class SearchResponse {
 
     @XmlElements({
         @XmlElement(name = "appt", type = AppointmentHitInfo.class),
-        @XmlElement(name = "chat", type = ChatHitInfo.class),
         @XmlElement(name = "task", type = TaskHitInfo.class),
-        @XmlElement(name = "hit", type = SimpleSearchHit.class),
         @XmlElement(name = "w", type = WikiHitInfo.class),
-        @XmlElement(name = "m", type = MessageHitInfo.class),
         @XmlElement(name = "c", type = ConversationHitInfo.class),
-        @XmlElement(name = "note", type = NoteHitInfo.class),
-        @XmlElement(name = "cn", type = ContactInfo.class),
+        @XmlElement(name = "doc", type = DocumentHitInfo.class),
         @XmlElement(name = "mp", type = MessagePartHitInfo.class),
-        @XmlElement(name = "doc", type = DocumentHitInfo.class)
+        @XmlElement(name = "m", type = MessageHitInfo.class),
+        @XmlElement(name = "cn", type = ContactInfo.class),
+        @XmlElement(name = "note", type = NoteHitInfo.class),
+        @XmlElement(name = "hit", type = SimpleSearchHit.class),
+        @XmlElement(name = "chat", type = ChatHitInfo.class)
     })
     protected List<Object> hitOrCOrM;
     protected SearchResponse.Info info;
@@ -110,16 +110,16 @@ public class SearchResponse {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AppointmentHitInfo }
-     * {@link ChatHitInfo }
      * {@link TaskHitInfo }
-     * {@link SimpleSearchHit }
      * {@link WikiHitInfo }
-     * {@link MessageHitInfo }
      * {@link ConversationHitInfo }
-     * {@link NoteHitInfo }
-     * {@link ContactInfo }
-     * {@link MessagePartHitInfo }
      * {@link DocumentHitInfo }
+     * {@link MessagePartHitInfo }
+     * {@link MessageHitInfo }
+     * {@link ContactInfo }
+     * {@link NoteHitInfo }
+     * {@link SimpleSearchHit }
+     * {@link ChatHitInfo }
      * 
      * 
      */
@@ -262,7 +262,7 @@ public class SearchResponse {
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
      *         &lt;choice maxOccurs="unbounded" minOccurs="0">
-     *           &lt;element name="spell" type="{urn:zimbra}spellingSuggestionsQueryInfo"/>
+     *           &lt;element name="spell" type="{urn:zimbraMail}spellingSuggestionsQueryInfo"/>
      *           &lt;element name="wildcard" type="{urn:zimbra}wildcardExpansionQueryInfo"/>
      *         &lt;/choice>
      *       &lt;/sequence>
