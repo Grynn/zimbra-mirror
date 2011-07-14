@@ -39,6 +39,10 @@ AjxEmailAddress = function(address, type, name, dispName, isGroup) {
 };
 
 AjxEmailAddress.prototype.isAjxEmailAddress = true;
+/**
+ * Defines list of custom invalid RegEx patterns that are set in LDAP
+ */
+AjxEmailAddress.customInvalidEmailPats = [];
 
 /**
  * Defines the "from" type.
@@ -167,30 +171,14 @@ function(str) {
  	if (!addr) {
 		return null;
 	}
-	if(!AjxEmailAddress.customInvalidPatLoaded)  {
-		AjxEmailAddress.customInvalidEmailPats = [];
-		var customPatSetting = appCtxt.getSettings().getSetting(ZmSetting.EMAIL_VALIDATION_REGEX);
-		var cPatList = [];
-		if(customPatSetting) {
-			cPatList = customPatSetting.value;
-		}
-		for(var i=0; i< cPatList.length; i++) {
-			var pat = cPatList[i];
-			if(pat && pat != "") {
-				  AjxEmailAddress.customInvalidEmailPats.push(new RegExp(pat))
-			}
-		}
-		AjxEmailAddress.customInvalidEmailPatLength = AjxEmailAddress.customInvalidEmailPats.length;
-		AjxEmailAddress.customInvalidPatLoaded = true;
-	}
-	for(var i=0; i< AjxEmailAddress.customInvalidEmailPatLength; i++) {
+	//Invalidate if address matches any of AjxEmailAddress.customInvalidEmailPats
+	for(var i = 0; i< AjxEmailAddress.customInvalidEmailPats.length; i++) {
 	   var match = addr.match(AjxEmailAddress.customInvalidEmailPats[i]);
 		if(match) {
 			return null;
 		}
 	}
 
-	
 	// What remains is the name
 	parts = str.match(AjxEmailAddress.phrasePat);
 	if (parts) {
