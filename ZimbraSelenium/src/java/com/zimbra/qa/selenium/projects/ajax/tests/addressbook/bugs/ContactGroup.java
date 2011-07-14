@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.bugs;
 
 
+
 import java.util.*;
 
 import org.testng.annotations.Test;
@@ -8,6 +9,7 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
+import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
@@ -100,6 +102,59 @@ public class ContactGroup extends AjaxCommonTest  {
 		
 	}
 
-	
+	@Test(	description = "Click Delete Toolbar button in Edit Contact Group form",
+			groups = { "functionaly" })
+	public void Bug62026_ClickDeleteToolbarButtonInEditContactGroupForm() throws HarnessException {
+
+		// Create a contact group via Soap then select
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app,Action.A_LEFTCLICK);
+	      
+		//Click Edit on Toolbar button	
+        app.zPageAddressbook.zToolbarPressButton(Button.B_EDIT);
+    
+      
+        //Click Delete on Toolbar button	
+        app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);
+       
+    		 
+		//verify toasted message 1 contact group moved to Trash
+        String expectedMsg = "1 contact group moved to Trash";
+        ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
+		        expectedMsg , "Verify toast message '" + expectedMsg + "'");
+
+        //verify deleted contact group not displayed
+        List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
+ 	           
+		boolean isFileAsEqual=false;
+		for (ContactItem ci : contacts) {
+			if (ci.fileAs.equals(group.groupName)) {
+	            isFileAsEqual = true;	 
+				break;
+			}
+		}
+		
+        ZAssert.assertFalse(isFileAsEqual, "Verify contact group " + group.groupName + " deleted");        
+
+    	FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
+
+
+        //verify deleted contact displayed in trash folder
+        // refresh Trash folder
+        app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, trash);
+   	 
+        contacts = app.zPageAddressbook.zListGetContacts(); 
+         
+		isFileAsEqual=false;
+		for (ContactItem ci : contacts) {
+			if (ci.fileAs.equals(group.groupName)) {
+	            isFileAsEqual = true;	 
+				break;
+			}
+		}
+		
+        ZAssert.assertTrue(isFileAsEqual, "Verify contact group (" + group.groupName + ") displayed in Trash folder");
+
+
+   	}
 
 }
