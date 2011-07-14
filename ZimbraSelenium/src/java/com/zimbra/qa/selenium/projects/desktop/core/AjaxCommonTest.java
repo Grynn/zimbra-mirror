@@ -475,6 +475,7 @@ public class AjaxCommonTest {
 			}
 
 			if (startingPage != app.zPageAddNewAccount) {
+			   ZimbraAdminAccount.GlobalAdmin().authenticateToMailClientHost();
 				ZimbraAccount.AccountZWC().authenticateToMailClientHost();
 			}
 
@@ -489,8 +490,9 @@ public class AjaxCommonTest {
 		//
 		if ( (startingAccountPreferences != null) && (!startingAccountPreferences.isEmpty()) ) {
 			logger.debug("commonTestBeforeMethod: startingAccountPreferences are defined");
+         ZimbraAccount.AccountZWC().modifyPreferences(startingAccountPreferences, destType);
 
-			StringBuilder settings = new StringBuilder();
+         /**StringBuilder settings = new StringBuilder();
 			for (Map.Entry<String, String> entry : startingAccountPreferences.entrySet()) {
 				settings.append(String.format("<a n='%s'>%s</a>", entry.getKey(), entry.getValue()));
 			}
@@ -498,9 +500,9 @@ public class AjaxCommonTest {
 					"<ModifyAccountRequest xmlns='urn:zimbraAdmin'>"
 					+		"<id>"+ ZimbraAccount.AccountZWC().ZimbraId +"</id>"
 					+		settings.toString()
-					+	"</ModifyAccountRequest>");
+					+	"</ModifyAccountRequest>", destType);
 
-
+*/
 			// Set the flag so the account is reset for the next test
 			ZimbraAccount.AccountZWC().accountIsDirty = true;
 		}
