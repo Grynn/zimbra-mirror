@@ -599,7 +599,8 @@ public class PageAddressbook extends AbsTab {
 		{
 			return ContactItem.IMAGE_CLASS;		
 		}
-		logger.info("contact type for " + locator + " is not a contact or contactgroup");
+				
+		logger.info(sGetAttribute(locator+ "div@class") + " not contain neither " + ContactGroupItem.IMAGE_CLASS + " nor " + ContactItem.IMAGE_CLASS );
 		return null;
 	}
 	
