@@ -24,7 +24,7 @@ public class AddNewContactsToEmailedContactOptIn extends AjaxCommonTest {
 		super.startingPage = app.zPagePreferences;
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			{				
-				put("zimbraPrefAutoAddAddressEnabled", "TRUE");
+		 		put("zimbraPrefAutoAddAddressEnabled", "TRUE");
 			}
 		};
 	}
@@ -37,7 +37,7 @@ public class AddNewContactsToEmailedContactOptIn extends AjaxCommonTest {
 	 */
 	@Test(description = " send message to 1 receiver, the address should be added into Emailed Contact", groups = { "smoke" })
 	public void SendEmailTo1Receiver() throws HarnessException {
-		// Go to "Addressbook"
+		// Go to Preferences->"Addressbook"
 		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.AddressBook);
 
 		// Determine the status of the checkbox
@@ -88,6 +88,78 @@ public class AddNewContactsToEmailedContactOptIn extends AjaxCommonTest {
 	    ZAssert.assertStringContains(contactView.zGetContactProperty(DisplayContact.Field.Email), ZimbraAccount.AccountA().EmailAddress, "Verify contact email (" + ZimbraAccount.AccountA().EmailAddress + ") displayed");	
 
 	}
+
 	
+	/**
+	 * Test case : Opt-in Add New Contacts To emailed contact
+	 * Verify receivers' addresses of out-going mails automatically added to "Emailed Contacts" folder 
+	 * @throws HarnessException
+	 */
+	@Test(description = " send message to 2 receiver, the addresses should be added into Emailed Contact", groups = { "functional" })
+	public void SendEmailTo2Receivers() throws HarnessException {
+		// Go to Preferences->"Addressbook"
+		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.AddressBook);
+
+		// Determine the status of the checkbox
+		boolean checked = app.zPagePreferences.zGetCheckboxStatus("zimbraPrefAutoAddAddressEnabled");
+	
+		// Since zimbraPrefAutoAddAddressEnabled is set to TRUE, the checkbox should be checked
+		ZAssert.assertTrue(checked, "Verify if zimbraPrefAutoAddAddressEnabled is TRUE, the preference box is checked" );
+	
+		// Send a message to the account A
+		ZimbraAccount.AccountZWC().soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+				"<m>" +
+				"<e t='t' a='"+ ZimbraAccount.AccountA().EmailAddress +"'/>" +
+				"<e t='t' a='"+ ZimbraAccount.AccountB().EmailAddress +"'/>" +
+				"<su>subject"+ ZimbraSeleniumProperties.getUniqueString() + "</su>" +
+				"<mp ct='text/plain'>" +
+				"<content>content"+ ZimbraSeleniumProperties.getUniqueString() + "</content>" +
+				"</mp>" +
+				"</m>" +
+		        "</SendMsgRequest>");
+
+		//Click Addressbook tab
+		app.zPageAddressbook.zNavigateTo();
+		
+		//Select Emailed Contacts folder
+		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
+	    app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, emailedContacts);
+   	 
+		//Verify contacts included in Emailed Contacts folder   	     
+        List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
+        String fileAsA= ZimbraAccount.AccountA().EmailAddress.substring(0,ZimbraAccount.AccountA().EmailAddress.indexOf("@"));
+        String fileAsB= ZimbraAccount.AccountB().EmailAddress.substring(0,ZimbraAccount.AccountB().EmailAddress.indexOf("@"));
+           
+		int count=0;
+		for (ContactItem ci : contacts) {
+			if ((ci.fileAs.equals(fileAsA)) ||
+			    (ci.fileAs.equals(fileAsB)))	
+				{
+				 count++;	            
+			}
+		}
+		
+        ZAssert.assertTrue(count==2, "Verify contact fileAs (" + fileAsA + " " + fileAsB +  ") displayed in folder Emailed Contacts");
+     
+        // Select the contact 
+		DisplayContact contactView = (DisplayContact) app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, fileAsA);
+	  
+		// Verify contact fileAs + email displayed
+		ZAssert.assertStringContains(contactView.zGetContactProperty(DisplayContact.Field.FileAs), fileAsA, "Verify contact fileAs (" + fileAsA + ") displayed");	
+		
+	    ZAssert.assertStringContains(contactView.zGetContactProperty(DisplayContact.Field.Email), ZimbraAccount.AccountA().EmailAddress, "Verify contact email (" + ZimbraAccount.AccountA().EmailAddress + ") displayed");	
+
+        // Select the contact 
+         contactView = (DisplayContact) app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, fileAsB);
+	  
+		// Verify contact fileAs + email displayed
+		ZAssert.assertStringContains(contactView.zGetContactProperty(DisplayContact.Field.FileAs), fileAsB, "Verify contact fileAs (" + fileAsA + ") displayed");	
+		
+	    ZAssert.assertStringContains(contactView.zGetContactProperty(DisplayContact.Field.Email), ZimbraAccount.AccountB().EmailAddress, "Verify contact email (" + ZimbraAccount.AccountB().EmailAddress + ") displayed");	
+
+	}
+	
+
 	
 }

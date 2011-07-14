@@ -800,6 +800,7 @@ public class PageAddressbook extends AbsTab {
         } 
 		
         ExecuteHarnessMain.ResultListener.captureScreen();
+        sFocus(locator);
         zClickAt(locator,"0,0");
 		
         zWaitForBusyOverlay();
