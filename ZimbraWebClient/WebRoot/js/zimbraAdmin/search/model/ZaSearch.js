@@ -350,6 +350,7 @@ ZaSearch.prototype.dynSelectSearchDomains = function (callArgs) {
 		var value = callArgs["value"];
 		var event = callArgs["event"];
 		var callback = callArgs["callback"];
+		var applyConfig = callArgs["applyConfig"];
 		var busyId = Dwt.getNextId();
 				
 		var params = new Object();
@@ -373,6 +374,7 @@ ZaSearch.prototype.dynSelectSearchDomains = function (callArgs) {
 		params.controller = ZaApp.getInstance().getCurrentController();
 		params.showBusy = true;
 		params.busyId = busyId;
+		params.applyConfig = applyConfig;
 		params.busyMsg = ZaMsg.BUSY_SEARCHING_DOMAINS;
 		params.skipCallbackIfCancelled = false;
         params.attrs = [ZaDomain.A_domainName,ZaDomain.A_zimbraDomainStatus,ZaItem.A_zimbraId, ZaDomain.A_domainType, ZaDomain.A_zimbraMailAddressValidationRegex];
