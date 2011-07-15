@@ -25,6 +25,10 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
 	PLAT := darwin64-x86_64-cc
 endif
 
+ifeq ($(BUILD_PLATFORM), MACOSXx86_10.7)
+	PLAT := darwin64-x86_64-cc
+endif
+
 ifeq ($(BUILD_PLATFORM), MACOSX)
 	PLAT := darwin-ppc-cc
 endif

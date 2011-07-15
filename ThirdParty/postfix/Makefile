@@ -39,6 +39,13 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86_10.6)
 	MYSQL_CLIENT_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin$(OS_REL)-$(OS_PLAT)
 endif 
 
+ifeq ($(BUILD_PLATFORM), MACOSXx86_10.7)
+	OS_REL := 11
+	OS_PLAT := $(shell uname -m)
+	MYSQL_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin$(OS_REL)-$(OS_PLAT)
+	MYSQL_CLIENT_VERSION := standard-$(MYSQL_VERSION_STRING)-apple-darwin$(OS_REL)-$(OS_PLAT)
+endif 
+
 SYSTEM_LIB := /usr/lib
 
 POSTFIX_TGZ_TARGET := \

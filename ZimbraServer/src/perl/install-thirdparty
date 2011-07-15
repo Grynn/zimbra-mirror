@@ -106,6 +106,8 @@ sub getPlatformDirName() {
 	    $dirName = "MACOSXx86";
 	} elsif ($version eq "9") {
 	    $dirName = "MACOSXx86_10.5";
+        } elsif ($version eq "11") {
+	    $dirName = "MACOSXx86_10.7";
 	} else {
 	    $dirName = "MACOSXx86_10.6";
 	}
