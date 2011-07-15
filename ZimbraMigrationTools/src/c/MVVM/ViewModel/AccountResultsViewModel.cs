@@ -15,19 +15,22 @@ namespace MVVM.ViewModel
 {
     public class AccountResultsViewModel : BaseViewModel
     {
-        readonly AccountResults m_accountResults = new AccountResults(0, "", "", 0, 0, 0, false);
+        readonly AccountResults m_accountResults = new AccountResults(0, "", "", 0, "", 0, 0, false);
         ScheduleViewModel m_scheduleViewModel;
 
-        public AccountResultsViewModel(ScheduleViewModel scheduleViewModel, int pbValue, string pbMsgValue, string accountName, int accountProgress, int numErrs, int numWarns, bool enableStop)
+        public AccountResultsViewModel(ScheduleViewModel scheduleViewModel, int pbValue, string pbMsgValue, string accountName, int accountProgress, string acctProgressMsg, int numErrs, int numWarns, bool enableStop)
         {
             this.m_scheduleViewModel = scheduleViewModel;
             this.PBValue = pbValue;
             this.PBMsgValue = pbMsgValue;
             this.AccountName = accountName;
             this.AccountProgress = accountProgress;
+            this.AcctProgressMsg = acctProgressMsg;
             this.NumErrs = numErrs;
             this.NumWarns = numWarns;
             this.EnableStop = enableStop;
+
+            this.SelectedTab = "";
 
             this.GetAcctResultsHelpCommand = new ActionCommand(this.GetAcctResultsHelp, () => true);
             this.OpenLogFileCommand = new ActionCommand(this.OpenLogFile, () => true);
@@ -56,7 +59,7 @@ namespace MVVM.ViewModel
 
         private void OpenLogFile()
         {
-            string AcctName = AccountResultsList[CurrentAccountSelection].AccountName;
+            string  AcctName = ((SelectedTab == "Accounts") || (SelectedTab == "")) ? AccountResultsList[CurrentAccountSelection].AccountName : SelectedTab;
             MessageBox.Show(string.Format("Opening log file for {0}", AcctName));
         }
 
@@ -147,6 +150,20 @@ namespace MVVM.ViewModel
             }
         }
 
+        public string AcctProgressMsg
+        {
+            get { return m_accountResults.AcctProgressMsg; }
+            set
+            {
+                if (value == m_accountResults.AcctProgressMsg)
+                {
+                    return;
+                }
+                m_accountResults.AcctProgressMsg = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("AcctProgressMsg"));
+            }
+        }
+
         public int NumErrs
         {
             get { return m_accountResults.NumErrs; }
@@ -209,6 +226,20 @@ namespace MVVM.ViewModel
             {
                 enableStop = value;
                 OnPropertyChanged(new PropertyChangedEventArgs("EnableStop"));
+            }
+        }
+
+        public string SelectedTab
+        {
+            get { return m_accountResults.SelectedTab; }
+            set
+            {
+                if (value == m_accountResults.SelectedTab)
+                {
+                    return;
+                }
+                m_accountResults.SelectedTab = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("SelectedTab"));
             }
         }
     }

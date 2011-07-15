@@ -23,6 +23,11 @@ namespace MVVM.View
             this.AddHandler(CloseableTabItem.CloseTabEvent, new RoutedEventHandler(this.CloseTab));
         }
 
+        private AccountResultsViewModel ViewModel
+        {
+            get { return DataContext as AccountResultsViewModel; }
+        }
+
         protected void HandleDoubleClick(object sender, MouseButtonEventArgs e)
         {
             ListViewItem lvi = sender as ListViewItem;
@@ -35,6 +40,7 @@ namespace MVVM.View
             Grid urGrid = new Grid();
 
             ListView urListView = new ListView();
+            urListView.FontSize = 11;
             urListView.Margin = new Thickness(5);
             urListView.Name = "lstUserResults";
 
@@ -48,6 +54,7 @@ namespace MVVM.View
             GridViewColumn gvc1 = new GridViewColumn();
 
             GridViewColumnHeader gvc1H = new GridViewColumnHeader();
+            gvc1H.FontSize = 11;
             gvc1H.Width = 140;
             gvc1H.Content = "Folder";
             gvc1H.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
@@ -57,6 +64,7 @@ namespace MVVM.View
 
             GridViewColumn gvc2 = new GridViewColumn();
             GridViewColumnHeader gvc2H = new GridViewColumnHeader();
+            gvc2H.FontSize = 11;
             gvc2H.Width = 140;
             gvc2H.Content = "Name";
             gvc2H.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
@@ -66,6 +74,7 @@ namespace MVVM.View
 
             GridViewColumn gvc3 = new GridViewColumn();
             GridViewColumnHeader gvc3H = new GridViewColumnHeader();
+            gvc3H.FontSize = 11;
             gvc3H.Width = 180;
             gvc3H.Content = "Error";
             gvc3H.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
@@ -147,6 +156,16 @@ namespace MVVM.View
             {
                 MessageBox.Show(ex.Message, "ZimbraMigration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
+        }
+
+        protected void HandleGotFocus(object sender, EventArgs e)
+        {
+            TabItem ti = sender as TabItem;
+            string hdr = ti.Header.ToString();
+            ViewModel.SelectedTab = hdr;
+            System.Windows.Visibility swv = (hdr == "Accounts") ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
+            pbMigrationS.Visibility = swv;
+            labelSchedInfo.Visibility = swv;
         }
 
         private void CloseTab(object source, RoutedEventArgs args)

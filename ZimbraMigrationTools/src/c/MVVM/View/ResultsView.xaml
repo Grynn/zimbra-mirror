@@ -7,6 +7,9 @@
         <Style x:Key="itemstyleDouble" TargetType="{x:Type ListViewItem}">
             <EventSetter Event="MouseDoubleClick" Handler="HandleDoubleClick" />
         </Style>
+        <Style x:Key="itemstyleFocus" TargetType="{x:Type TabItem}">
+            <EventSetter Event="GotFocus" Handler="HandleGotFocus" />
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -17,27 +20,30 @@
             <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel Name="ResultsSP">
-            <TabControl Name="ResultsTC" MinHeight="270"  Margin="5">
-                <TabItem Name="AccountsTabItem" Header="Accounts">
+            <TabControl Name="ResultsTC" MinHeight="350"  Margin="5" ItemContainerStyle="{StaticResource itemstyleFocus}">
+                <TabItem Name="AccountsTabItem" Header="Accounts" >
                     <Grid Name="AccountResultsGrid">
                         <Grid.Background>
                             <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
                         </Grid.Background>
-                        <ListView Margin="5" Name="lstAccountResults" ItemsSource="{Binding AccountResultsList}" SelectedIndex="{Binding Path=CurrentAccountSelection, Mode=TwoWay}" ItemContainerStyle="{StaticResource itemstyleDouble}">
+                        <ListView Margin="5" FontSize="11" Name="lstAccountResults" ItemsSource="{Binding AccountResultsList}" SelectedIndex="{Binding Path=CurrentAccountSelection, Mode=TwoWay}" ItemContainerStyle="{StaticResource itemstyleDouble}">
                             <ListView.View>
                                 <GridView>
                                     <GridView.Columns>
                                         <GridViewColumn  DisplayMemberBinding="{Binding Path=AccountName}">
-                                            <GridViewColumnHeader Width="140" Content=" Account" HorizontalContentAlignment="Left"/>
+                                            <GridViewColumnHeader FontSize="11" Width="130" Content=" Account" HorizontalContentAlignment="Left"/>
                                         </GridViewColumn>
-                                        <GridViewColumn  DisplayMemberBinding="{Binding Path=AccountProgress}">
-                                            <GridViewColumnHeader Width="120" Content=" Progress" HorizontalContentAlignment="Left"/>
+                                        <GridViewColumn  DisplayMemberBinding="{Binding Path=PBMsgValue}">
+                                            <GridViewColumnHeader FontSize="11" Width="160" Content=" Status" HorizontalContentAlignment="Left"/>
+                                        </GridViewColumn>
+                                        <GridViewColumn  DisplayMemberBinding="{Binding Path=AcctProgressMsg}">
+                                            <GridViewColumnHeader FontSize="11" Width="70" Content=" Progress" HorizontalContentAlignment="Left"/>
                                         </GridViewColumn>
                                         <GridViewColumn  DisplayMemberBinding="{Binding Path=NumErrs}">
-                                            <GridViewColumnHeader Width="92" Content=" Errors" HorizontalContentAlignment="Left"/>
+                                            <GridViewColumnHeader FontSize="11" Width="44" Content=" Errs" HorizontalContentAlignment="Left"/>
                                         </GridViewColumn>
                                         <GridViewColumn  DisplayMemberBinding="{Binding Path=NumWarns}">
-                                            <GridViewColumnHeader Width="92" Content=" Warnings" HorizontalContentAlignment="Left"/>
+                                            <GridViewColumnHeader FontSize="11" Width="44" Content=" Warns" HorizontalContentAlignment="Left"/>
                                         </GridViewColumn>
                                     </GridView.Columns>
                                 </GridView>
@@ -47,14 +53,14 @@
                 </TabItem>
             </TabControl>
         </StackPanel>
-        <ProgressBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Height="18" Width="290" Margin="70,10,0,0" Name="pbMigrationS" Value="{Binding Path=PBValue}" HorizontalAlignment="Left" ></ProgressBar>
-        <Button Grid.Row="1" MinWidth="75" HorizontalAlignment="Right" Margin="0,10,20,0" Content="Stop" Name="buttonStop" IsEnabled="{Binding Path=EnableStop}" Command="{Binding StopCommand}"  />
-        <Label Grid.Row="2" Grid.ColumnSpan="2" Margin="76,0,0,0" MinWidth="300" HorizontalAlignment="Left" Name="labelSchedInfo" FontStyle="Italic" Content="{Binding Path=PBMsgValue}"/>
-        <Separator Grid.Row="3" Margin="5,91,5,0" VerticalAlignment="Top"/>
+        <ProgressBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Height="18" Width="290" Margin="70,10,0,0" Name="pbMigrationS" Visibility="Hidden" Value="{Binding Path=PBValue}" HorizontalAlignment="Left" ></ProgressBar>
+        <Label Grid.Row="2" Grid.ColumnSpan="2" Margin="76,0,0,0" MinWidth="300" HorizontalAlignment="Left" Name="labelSchedInfo" Visibility="Hidden" FontStyle="Italic" Content="{Binding Path=PBMsgValue}"/>
+        <Separator Grid.Row="3" Margin="5,14,5,0" VerticalAlignment="Top"/>
         <Grid Name="BottomGrid" Grid.Row="4" Grid.ColumnSpan="2">
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,10,0,0" Content="Help" Name="buttonResultsHelp" Command="{Binding GetAcctResultsHelpCommand}"  />
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,85,0" Content="Open Log File" Name="buttonOpenLF" IsEnabled="{Binding OpenLogFileEnabled}" Command="{Binding OpenLogFileCommand}"  />
-            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,5,0" Content="Exit" Name="buttonExit" Command="{Binding ExitAppCommand}"  />
+            <Button MinWidth="75" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="5,10,0,0" Content="Help" Name="buttonResultsHelp" Command="{Binding GetAcctResultsHelpCommand}"  />
+            <Button MinWidth="75" HorizontalAlignment="Right"  VerticalAlignment="Top" Margin="0,10,85,0" Content="Stop" Name="buttonStop" IsEnabled="{Binding Path=EnableStop}" Command="{Binding StopCommand}"  />
+            <Button MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,165,0" Content="Open Log File" Name="buttonOpenLF" IsEnabled="{Binding OpenLogFileEnabled}" Command="{Binding OpenLogFileCommand}"  />
+            <Button MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,5,0" Content="Exit" Name="buttonExit" Command="{Binding ExitAppCommand}"  />
         </Grid>
     </Grid>
 </UserControl>

@@ -235,7 +235,7 @@ namespace MVVM.ViewModel
             m_usersViewModel.isBrowser = isBrowser;
             m_usersViewModel.CurrentUserSelection = -1;
 
-            m_resultsViewModel = new AccountResultsViewModel(m_scheduleViewModel, 0, "", "", 0, 0, 0, false);
+            m_resultsViewModel = new AccountResultsViewModel(m_scheduleViewModel, 0, "", "", 0, "", 0, 0, false);
             m_resultsViewModel.Name = "Results";
             m_resultsViewModel.ViewTitle = "Results";
             m_resultsViewModel.ImageName = "Images/Bridge.jpg";

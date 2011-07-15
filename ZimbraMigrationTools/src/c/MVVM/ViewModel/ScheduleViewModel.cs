@@ -274,7 +274,7 @@ namespace MVVM.ViewModel
 
             foreach (SchedUser su in SchedList)
             {
-                accountResultsViewModel.AccountResultsList.Add(new AccountResultsViewModel(this, 0, "", su.username, 0, 0, 0, accountResultsViewModel.EnableStop));
+                accountResultsViewModel.AccountResultsList.Add(new AccountResultsViewModel(this, 0, "", su.username, 0, "", 0, 0, accountResultsViewModel.EnableStop));
             }
 
             bgw.DoWork += new System.ComponentModel.DoWorkEventHandler(worker_DoWork);
@@ -529,78 +529,134 @@ namespace MVVM.ViewModel
                 {
                     case 0:
                         ar.AccountProgress = e.ProgressPercentage;
-                        if ((e.ProgressPercentage % 15) == 0)
+                        if ((e.ProgressPercentage % 5) == 0)
                         {
+                            ar.AcctProgressMsg = "10 of 200";
                             ar.NumWarns++;
+                            ar.PBMsgValue = "Migrating messages";
                         }
                         if ((e.ProgressPercentage % 40) == 0)
                         {
+                            ar.AcctProgressMsg = "28 of 70";
                             ar.NumErrs++;
+                            ar.PBMsgValue = "Migrating appointments";
+                        }
+                        if ((e.ProgressPercentage % 60) == 0)
+                        {
+                            ar.AcctProgressMsg = "180 of 300";
+                            ar.NumErrs++;
+                            ar.PBMsgValue = "Migrating contacts";
+                        }
+                        if ((e.ProgressPercentage % 80) == 0)
+                        {
+                            ar.AcctProgressMsg = "8 of 10";
+                            ar.NumErrs++;
+                            ar.PBMsgValue = "Migrating rules";
+                        }
+                        if (e.ProgressPercentage == 100)
+                        {
+                            ar.AcctProgressMsg = "740 of 740";
+                            ar.PBMsgValue = "Migration complete";
                         }
                         break;
 
                     case 1:
-                        if ((e.ProgressPercentage == 10) || (e.ProgressPercentage == 100))
+                        if (e.ProgressPercentage == 10)
                         {
                             ar.AccountProgress = e.ProgressPercentage;
+                            ar.AcctProgressMsg = "5 of 50";
+                            ar.PBMsgValue = "Migrating messages";
                         }
                         if (e.ProgressPercentage == 50)
                         {
-                            ar.AccountProgress = e.ProgressPercentage + 7;
+                            ar.AccountProgress = e.ProgressPercentage + 6;
+                            ar.AcctProgressMsg = "28 of 50";
+                        }
+                        if (e.ProgressPercentage == 100)
+                        {
+                            ar.AccountProgress = e.ProgressPercentage;
+                            ar.AcctProgressMsg = "334 of 334";
+                            ar.PBMsgValue = "Migration complete";
                         }
                         break;
 
                     case 2:
-                        if ((e.ProgressPercentage == 20) || (e.ProgressPercentage == 100))
+                        if (e.ProgressPercentage == 10)
                         {
                             ar.AccountProgress = e.ProgressPercentage;
+                            ar.AcctProgressMsg = "6 of 60";
+                            ar.PBMsgValue = "Migrating messages";
                         }
                         if (e.ProgressPercentage == 30)
                         {
-                            ar.AccountProgress = e.ProgressPercentage - 12;
+                            ar.AccountProgress = e.ProgressPercentage - 5;
+                            ar.AcctProgressMsg = "15 of 60";
                             ar.NumErrs++;
                         }
                         if (e.ProgressPercentage == 66)
                         {
+                            ar.PBMsgValue = "Migrating rules";
                             ar.AccountProgress = e.ProgressPercentage - 1;
+                            ar.AcctProgressMsg = "6 of 9";
                             ar.NumErrs++;
                         }
-                        if (e.ProgressPercentage == 82)
+                        if (e.ProgressPercentage == 89)
                         {
                             ar.AccountProgress = e.ProgressPercentage;
+                            ar.AcctProgressMsg = "8 of 9";
                             ar.NumErrs++;
+                        }
+                        if (e.ProgressPercentage == 100)
+                        {
+                            ar.AccountProgress = e.ProgressPercentage;
+                            ar.AcctProgressMsg = "275 of 275";
+                            ar.PBMsgValue = "Migration complete";
                         }
                         break;
 
                     case 3:
-                        if ((e.ProgressPercentage == 10) || (e.ProgressPercentage == 100))
+                        if (e.ProgressPercentage == 10)
                         {
                             ar.AccountProgress = e.ProgressPercentage;
+                            ar.AcctProgressMsg = "10 of 100";
+                            ar.PBMsgValue = "Migrating messages";
                         }
                         if (e.ProgressPercentage == 30)
                         {
                             ar.AccountProgress = e.ProgressPercentage - 8;
+                            ar.AcctProgressMsg = "22 of 100";
                             ar.NumErrs++;
                         }
                         if (e.ProgressPercentage == 50)
                         {
                             ar.AccountProgress = e.ProgressPercentage - 1;
+                            ar.AcctProgressMsg = "40 of 80";
+                            ar.PBMsgValue = "Migrating appointments";
                             ar.NumErrs++;
                         }
                         if (e.ProgressPercentage == 70)
                         {
                             ar.AccountProgress = e.ProgressPercentage - 3;
+                            ar.AcctProgressMsg = "54 of 80";
                             ar.NumErrs++;
                         }
                         if (e.ProgressPercentage == 82)
                         {
                             ar.AccountProgress = e.ProgressPercentage;
+                            ar.AcctProgressMsg = "66 of 80";
                             ar.NumErrs++;
+                        }
+                        if (e.ProgressPercentage == 100)
+                        {
+                            ar.AccountProgress = e.ProgressPercentage;
+                            ar.AcctProgressMsg = "500 of 500";
+                            ar.PBMsgValue = "Migration complete";
                         }
                         break;
 
                     default:
                         ar.AccountProgress = e.ProgressPercentage;
+                        ar.AcctProgressMsg = "";
                         break;
                 }
 

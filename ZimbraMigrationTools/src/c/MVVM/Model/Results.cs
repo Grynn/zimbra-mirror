@@ -5,12 +5,13 @@ namespace MVVM.Model
 
     public class AccountResults
     {
-        internal AccountResults(int pbValue, string pbMsgValue, string accountName, int accountProgress, int numErrs, int numWarns, bool enableStop)
+        internal AccountResults(int pbValue, string pbMsgValue, string accountName, int accountProgress, string acctProgressMsg, int numErrs, int numWarns, bool enableStop)
         {
             this.PBValue = pbValue;
             this.PBMsgValue = pbMsgValue;
             this.AccountName = accountName;
             this.AccountProgress = accountProgress;
+            this.AcctProgressMsg = acctProgressMsg;
             this.NumErrs = numErrs;
             this.NumWarns = numWarns;
             this.EnableStop = enableStop;
@@ -38,6 +39,12 @@ namespace MVVM.Model
             get; set;
         }
 
+        public string AcctProgressMsg
+        {
+            get;
+            set;
+        }
+
         public int NumErrs
         {
             get; set;
@@ -61,6 +68,12 @@ namespace MVVM.Model
         }
 
         public bool EnableStop
+        {
+            get;
+            set;
+        }
+
+        public string SelectedTab
         {
             get;
             set;
