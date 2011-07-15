@@ -27,7 +27,7 @@ public class ForwardContact extends AjaxCommonTest  {
 	
 	@Test(	description = "Forward a contact by click Forward on the toolbar",
 			groups = { "functional" })
-	public void ClickForwardOnToolbar() throws HarnessException {
+	public void InDisplayViewClickForwardOnToolbar() throws HarnessException {
 			
 		  // Create a contact via Soap then select
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
@@ -48,7 +48,34 @@ public class ForwardContact extends AjaxCommonTest  {
         //close the dialog
         dialogWarning.zClickButton(Button.B_NO);
    	}
+
+	@Test(	description = "Forward an editing contact by click Forward on the toolbar",
+			groups = { "functional" })
+	public void InEditViewClickForwardOnToolbar() throws HarnessException {
+			
+		// Create a contact via Soap then select
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
 	
+		// click Edit button
+		app.zPageAddressbook.zToolbarPressButton(Button.B_EDIT);
+		
+        //click Forward icon on toolbar
+        FormMailNew formMail = (FormMailNew) app.zPageAddressbook.zToolbarPressButton(Button.B_FORWARD);
+
+        //wait for attachment link present
+        for (int i=0; (i<10) && !app.zPageAddressbook.sIsElementPresent("css=div[id$=_attachments_div] div[class='ImgAttachment']") ; i++ , SleepUtil.sleepVerySmall());
+   
+        Assert.assertTrue(formMail.zHasAttachment(contactItem.fileAs + ".vcf"), "Verify there is  attachment named: " + contactItem.fileAs );
+
+        //TODO: verify attachment file content
+        
+        //click Cancel
+        DialogWarning dialogWarning= (DialogWarning) formMail.zToolbarPressButton(Button.B_CANCEL);
+        
+        //close the dialog
+        dialogWarning.zClickButton(Button.B_NO);
+   	}
+
 	@Test(	description = "Forward a contact by click Forward on the context menu",
 			groups = { "functional" })
 	public void ClickForwardOnContextmenu() throws HarnessException {
