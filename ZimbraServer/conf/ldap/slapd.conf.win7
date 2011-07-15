@@ -29,6 +29,7 @@ moduleload	back_monitor-2-4-2.dll
 # moduleload	back_ldbm.la
 # moduleload	back_passwd.la
 # moduleload	back_shell.la
+# moduleload	dynlist.la
 
 # Sample security restrictions
 #	Require integrity protection (prevent hijacking)
@@ -167,3 +168,7 @@ access to attrs=objectclass,zimbraId,zimbraMailAddress,zimbraMailAlias,zimbraMai
 access to attrs=entry
 	by dn.children="cn=admins,cn=zimbra" write
 	by * read
+
+
+overlay dynlist
+dynlist-attrset groupOfURLs memberURL member
