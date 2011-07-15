@@ -17,6 +17,8 @@ if(window.console && window.console.log) {
     window.console.log("Starting loading com_zimbra_helptooltip.js")
 }
 
+if(ZaSettings && ZaSettings.EnabledZimlet["com_zimbra_tooltip"]){
+
 if(XFormItem) {
     XFormItem.prototype.helpTooltip = true;
 
@@ -58,6 +60,7 @@ if(Output_XFormItem) {
     Output_XFormItem.prototype.helpTooltip = false;
 }
 
+}
 
 ZaHelpToolTipAdminExtension = function() {
 };
