@@ -129,8 +129,7 @@ public class PageCalendar extends AbsTab {
 		AbsPage page = null; // If set, this page will be returned
 
 		if (pulldown == Button.B_LISTVIEW) {
-			pulldownLocator = "css=div#zb__CLD__VIEW_MENU";
-			optionLocator = "css=tr#" + option.toString();
+			pulldownLocator = "id=zb__CLD__VIEW_MENU_left_icon";
 
 			if (option == Button.O_LISTVIEW_DAY) {
 				page = new ApptDayView(this.MyApplication);
@@ -145,7 +144,6 @@ public class PageCalendar extends AbsTab {
 			} else if (option == Button.O_LISTVIEW_MONTH) {
 				page = new ApptMonthView(this.MyApplication);
 			}
-
 		}
 
 		if (pulldownLocator != null) {
@@ -168,11 +166,22 @@ public class PageCalendar extends AbsTab {
 
 			zWaitForBusyOverlay();
 
-			if (optionLocator != null) {
+			if (option != null) {
 
 				// Make sure the locator exists
-				zWaitForElementPresent(optionLocator);
-
+				if (option == Button.O_LISTVIEW_DAY) {
+					optionLocator = "id=POPUP_DAY_VIEW";
+				} else if (option == Button.O_LISTVIEW_WEEK) {
+					optionLocator = "id=POPUP_WEEK_VIEW";
+				} else if (option == Button.O_LISTVIEW_WORKWEEK) {
+					optionLocator = "id=POPUP_WORK_WEEK_VIEW";
+				} else if (option == Button.O_LISTVIEW_MONTH) {
+					optionLocator = "id=POPUP_MONTH_VIEW";
+				} else if (option == Button.O_LISTVIEW_LIST) {
+					optionLocator = "id=POPUP_CAL_LIST_VIEW";
+				} else if (option == Button.O_LISTVIEW_SCHEDULE) {
+					optionLocator = "id=POPUP_SCHEDULE_VIEW";
+				}	
 				zClick(optionLocator);
 				zWaitForBusyOverlay();
 
@@ -189,7 +198,6 @@ public class PageCalendar extends AbsTab {
 
 	}
 
-	@Override
 	public Boolean zVerifyAppointmentExists(String apptSubject)
 			throws HarnessException {
 		logger.info(myPageName() + " zVerifyAppointmentExists(" + apptSubject
@@ -226,7 +234,6 @@ public class PageCalendar extends AbsTab {
 		return (isExists);
 	}
 
-	@Override
 	public AbsPage zClickAppointment(String apptSubject)
 			throws HarnessException {
 		logger.info(myPageName() + " zClickAppointment(" + apptSubject + ")");
@@ -262,7 +269,6 @@ public class PageCalendar extends AbsTab {
 		return (page);
 	}
 
-	@Override
 	public AbsPage zDblClickAppointment(String apptSubject)
 			throws HarnessException {
 		logger
@@ -278,6 +284,8 @@ public class PageCalendar extends AbsTab {
 
 		locator = "css=td.appt_name:contains('" + apptSubject + "')";
 		SleepUtil.sleepMedium();
+		page = new FormApptNew(this.MyApplication);
+			
 		this.sDoubleClick(locator);
 		if (locator == null) {
 			throw new HarnessException("locator was null for appointment "

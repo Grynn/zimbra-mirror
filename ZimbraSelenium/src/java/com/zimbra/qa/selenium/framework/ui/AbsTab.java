@@ -231,23 +231,4 @@ public abstract class AbsTab extends AbsPage {
 		}
 
 	}
-
-	public Boolean zVerifyAppointmentExists(String apptSubject)
-			throws HarnessException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public AbsPage zClickAppointment(String apptSubject)
-			throws HarnessException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public AbsPage zDblClickAppointment(String apptSubject)
-			throws HarnessException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
