@@ -95,6 +95,12 @@ ZaXDialog.HELP_BUTTON = ++DwtDialog.LAST_BUTTON;
 ZaXDialog.prototype.popup = 
 function (loc) {
 	DwtDialog.prototype.popup.call(this, loc);
+
+        var kbMgr = this._shell.getKeyboardMgr();
+        if (kbMgr.isEnabled()){
+                kbMgr.popTabGroup(this._tabGroup);
+        }
+
 	if(this._localXForm) {
 		this._localXForm.focusFirst();
 	}
