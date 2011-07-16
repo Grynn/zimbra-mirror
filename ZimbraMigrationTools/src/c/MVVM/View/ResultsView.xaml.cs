@@ -39,8 +39,19 @@ namespace MVVM.View
 
             Grid urGrid = new Grid();
 
+            // set up the grid's rows
+            RowDefinition rowDef1 = new RowDefinition();
+            RowDefinition rowDef2 = new RowDefinition();
+            rowDef1.MaxHeight = 250;
+            rowDef2.Height = GridLength.Auto;
+            urGrid.RowDefinitions.Add(rowDef1);
+            urGrid.RowDefinitions.Add(rowDef2);
+            //
+
+            // Set up the ListView
             ListView urListView = new ListView();
             urListView.FontSize = 11;
+            urListView.SetValue(Grid.RowProperty, 0);
             urListView.Margin = new Thickness(5);
             urListView.Name = "lstUserResults";
 
@@ -65,26 +76,40 @@ namespace MVVM.View
             GridViewColumn gvc2 = new GridViewColumn();
             GridViewColumnHeader gvc2H = new GridViewColumnHeader();
             gvc2H.FontSize = 11;
-            gvc2H.Width = 140;
-            gvc2H.Content = "Name";
+            gvc2H.Width = 200;
+            gvc2H.Content = "Type";
             gvc2H.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
-            gvc2.DisplayMemberBinding = new Binding("ObjName");
+            gvc2.DisplayMemberBinding = new Binding("TypeName");
             gvc2.Header = gvc2H;
             urGridView.Columns.Add(gvc2);
 
             GridViewColumn gvc3 = new GridViewColumn();
             GridViewColumnHeader gvc3H = new GridViewColumnHeader();
             gvc3H.FontSize = 11;
-            gvc3H.Width = 180;
-            gvc3H.Content = "Error";
+            gvc3H.Width = 120;
+            gvc3H.Content = "Progress";
             gvc3H.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Left;
-            gvc3.DisplayMemberBinding = new Binding("TheErr");
+            gvc3.DisplayMemberBinding = new Binding("UserProgressMsg");
             gvc3.Header = gvc3H;
             urGridView.Columns.Add(gvc3);
 
             urListView.View = urGridView;
 
             urGrid.Children.Add(urListView);
+            //
+
+            // now create Listbox for errors
+            ListBox lbErrors = new ListBox();
+            lbErrors.FontSize = 11;
+            lbErrors.SetValue(Grid.RowProperty, 1);
+            lbErrors.Margin = new Thickness(5, 5, 5, 5);
+            lbErrors.MinHeight = 120;
+            lbErrors.MaxHeight = 120;
+            lbErrors.MinWidth = 450;
+            lbErrors.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+            lbErrors.VerticalAlignment = System.Windows.VerticalAlignment.Top;
+            urGrid.Children.Add(lbErrors);
+            //
 
             userItem.Content = urGrid;
 
@@ -94,34 +119,47 @@ namespace MVVM.View
             // Now read a .csv file to add fake data
             try
             {
-                string[] textTokens = new string[27];
+                string[] textTokens = new string[40];
                 textTokens[0] = "Inbox";
-                textTokens[1] = "Msg1";
-                textTokens[2] = "UID is incorrect";
+                textTokens[1] = "Message";
+                textTokens[2] = "8 of 95";
                 textTokens[3] = "Calendar";
-                textTokens[4] = "Appt";
-                textTokens[5] = "Invalid attachment";
-                textTokens[6] = "Calendar";
-                textTokens[7] = "Meeting3";
-                textTokens[8] = "Invalid recipient";
+                textTokens[4] = "Calendar";
+                textTokens[5] = "3 of 28";
+                textTokens[6] = "OtherCal";
+                textTokens[7] = "Calendar";
+                textTokens[8] = "1 of 5";
                 textTokens[9] = "Contacts";
-                textTokens[10] = "C100";
-                textTokens[11] = "Bad email address";
-                textTokens[12] = "Contacts";
-                textTokens[13] = "C150";
-                textTokens[14] = "Bad email address";
-                textTokens[15] = "Inbox";
-                textTokens[16] = "Foobar";
-                textTokens[17] = "Invalid character";
-                textTokens[18] = "Inbox";
-                textTokens[19] = "Testmsg";
-                textTokens[20] = "Attachment too large";
-                textTokens[21] = "Tasks";
-                textTokens[22] = "Devtask";
-                textTokens[23] = "Date out of range";
+                textTokens[10] = "Contacts";
+                textTokens[11] = "22 of 185";
+                textTokens[12] = "Tasks";
+                textTokens[13] = "Task";
+                textTokens[14] = "4 of 8";
+                textTokens[15] = "MyTasks";
+                textTokens[16] = "Task";
+                textTokens[17] = "5 of 23";
+                textTokens[18] = "Folder1";
+                textTokens[19] = "Messages";
+                textTokens[20] = "13 of 117";
+                textTokens[21] = "Folder2";
+                textTokens[22] = "Messages";
+                textTokens[23] = "24 of 128";
                 textTokens[24] = "Trash";
-                textTokens[25] = "Msg444";
-                textTokens[26] = "Invalid character";
+                textTokens[25] = "Trash";
+                textTokens[26] = "14 of 88";
+                textTokens[27] = "Inbox";
+                textTokens[28] = "Messages";
+                textTokens[29] = "103 of 267";
+                textTokens[30] = "Mybox";
+                textTokens[31] = "Messages";
+                textTokens[32] = "32 of 75";
+                textTokens[33] = "Error: Subj: Message4 - Invalid UID";
+                textTokens[34] = "Error: Subj: TestMessage - Invalid attachment";
+                textTokens[35] = "Error: Subj: StatusMeeting - Invalid recipient";
+                textTokens[36] = "Error: Name: BugzillaRule - Unsupported condition";
+                textTokens[37] = "Warning: Subj: MyTask - Date is in the past";
+                textTokens[38] = "Error: Name: Address has an unsupported format";
+                textTokens[39] = "Error: Subj: YetAnotherMsg - Attachment too large";
 
                 int iToken;
 
@@ -131,7 +169,35 @@ namespace MVVM.View
                         iToken = tabCtrl.Items.Count - 2;
                         for (int i = 0; i < 2; i++)
                         {
-                            userResults.Add(new UserResults(textTokens[iToken++], textTokens[iToken++],textTokens[iToken++]));
+                            UserResults ur = new UserResults(textTokens[iToken++], textTokens[iToken++],textTokens[iToken++]);
+                            userResults.Add(ur);
+                            if (i == 0)
+                            {
+                                ListBoxItem item = new ListBoxItem();   // hack for now -- will do it right with binding later
+                                item.Content = textTokens[33];
+                                lbErrors.Items.Add(item);
+                            }
+                            if (i == 1)
+                            {
+                                ListBoxItem item = new ListBoxItem();   // hack for now -- will do it right with binding later
+                                item.Content = textTokens[34];
+                                lbErrors.Items.Add(item);
+                            }
+                        }
+                        break;
+
+                    case 3:
+                        iToken = 27;
+                        for (int i = 0; i < 2; i++)
+                        {
+                            UserResults ur = new UserResults(textTokens[iToken++], textTokens[iToken++], textTokens[iToken++]);
+                            userResults.Add(ur);
+                            if (i == 1)
+                            {
+                                ListBoxItem item = new ListBoxItem();   // hack for now -- will do it right with binding later
+                                item.Content = textTokens[35];
+                                lbErrors.Items.Add(item);
+                            }
                         }
                         break;
 
@@ -139,7 +205,8 @@ namespace MVVM.View
                         iToken = tabCtrl.Items.Count + 2;
                         for (int i = 0; i < 3; i++)
                         {
-                            userResults.Add(new UserResults(textTokens[iToken++], textTokens[iToken++], textTokens[iToken++]));
+                            UserResults ur = new UserResults(textTokens[iToken++], textTokens[iToken++], textTokens[iToken++]);
+                            userResults.Add(ur);
                         }
                         break;
 
@@ -147,7 +214,11 @@ namespace MVVM.View
                         iToken = tabCtrl.Items.Count + 10;
                         for (int i = 0; i < 4; i++)
                         {
-                            userResults.Add(new UserResults(textTokens[iToken++], textTokens[iToken++], textTokens[iToken++]));
+                            UserResults ur = new UserResults(textTokens[iToken++], textTokens[iToken++], textTokens[iToken++]);
+                            userResults.Add(ur);
+                            ListBoxItem item = new ListBoxItem();   // hack for now -- will do it right with binding later
+                            item.Content = textTokens[i+36];
+                            lbErrors.Items.Add(item);
                         }
                         break;
                 }

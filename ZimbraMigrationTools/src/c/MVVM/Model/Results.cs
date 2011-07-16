@@ -82,14 +82,28 @@ namespace MVVM.Model
 
     public class UserResults
     {
-        internal UserResults(string folderName, string objName, string theErr)
+        internal UserResults(string folderName, string typeName, string progressMsg)
         {
             this.FolderName = folderName;
-            this.ObjName = objName;
-            this.TheErr = theErr;
+            this.TypeName = typeName;
+            this.UserProgressMsg = progressMsg;
+            this.ObjName = "";
+            this.TheErr = "";
         }
 
         public string FolderName
+        {
+            get;
+            set;
+        }
+
+        public string TypeName
+        {
+            get;
+            set;
+        }
+
+        public string UserProgressMsg
         {
             get;
             set;

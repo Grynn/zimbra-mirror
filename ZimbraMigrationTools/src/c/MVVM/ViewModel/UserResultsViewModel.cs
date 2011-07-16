@@ -41,6 +41,34 @@ namespace MVVM.ViewModel
             }
         }
 
+        public string TypeName
+        {
+            get { return m_userResults.TypeName; }
+            set
+            {
+                if (value == m_userResults.TypeName)
+                {
+                    return;
+                }
+                m_userResults.TypeName = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("TypeName"));
+            }
+        }
+
+        public string UserProgressMsg
+        {
+            get { return m_userResults.UserProgressMsg; }
+            set
+            {
+                if (value == m_userResults.UserProgressMsg)
+                {
+                    return;
+                }
+                m_userResults.UserProgressMsg = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("UserProgressMsg"));
+            }
+        }
+
         public string ObjName
         {
             get { return m_userResults.ObjName; }
