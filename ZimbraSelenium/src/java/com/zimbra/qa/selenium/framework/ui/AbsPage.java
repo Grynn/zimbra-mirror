@@ -317,10 +317,24 @@ public abstract class AbsPage extends AbsSeleniumObject {
 //				this.robot = robot;
 //		    }
 
+		    // Used to make sure num lock is not pressed
+		    private static boolean numLockHasBeenProcessed = false;
+
 		    public void type(String characters) {
 		    	logger.info("type("+ characters +")");
 		    	if (characters.equals("<DEL>")) {
 		    	   doType(KeyEvent.VK_DELETE);
+		    	} else if (characters.equals("<SHIFT><DEL>")) {
+		    		
+		    		// http://forums.oracle.com/forums/thread.sjpa?threadID=2230592&tstart=0
+		    		if ( (!numLockHasBeenProcessed) && (Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_NUM_LOCK)) ) {
+		    			logger.info("Setting KeyEvent.VK_NUM_LOCK=false");
+		    			Toolkit.getDefaultToolkit().setLockingKeyState(KeyEvent.VK_NUM_LOCK, false);
+		    			numLockHasBeenProcessed = true;
+		    		}
+
+		    		doType(KeyEvent.VK_SHIFT, KeyEvent.VK_DELETE);
+
 		    	} else {
 		    	   for (char c : characters.toCharArray()) {
 		    	      type(c);

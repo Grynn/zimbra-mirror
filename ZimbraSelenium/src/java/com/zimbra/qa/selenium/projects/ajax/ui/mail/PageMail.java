@@ -29,6 +29,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
 
 
@@ -1282,6 +1283,11 @@ public class PageMail extends AbsTab {
 			// "New Message" shortcuts result in a compose form opening
 			//page = new FormMailNew(this.MyApplication);
 			page = new DialogCreateFolder(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+		} else if ( (shortcut == Shortcut.S_MAIL_HARDELETE) ) {
+			
+			// Hard Delete shows the Warning Dialog : Are you sure you want to permanently delete it?
+			page = new DialogWarning(DialogWarning.DialogWarningID.PermanentlyDeleteTheItem,
+					MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
 		}
 
 

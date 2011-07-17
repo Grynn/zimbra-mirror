@@ -27,6 +27,7 @@ public class DialogWarning extends AbsDialog {
 		public static DialogWarningID EmptyFolderWarningMessage = new DialogWarningID("OkCancel");
 		public static DialogWarningID SaveSignatureChangeMessage = new DialogWarningID("YesNoCancel");
 		public static DialogWarningID CancelCreateContact = new DialogWarningID("YesNoCancel");
+		public static DialogWarningID PermanentlyDeleteTheItem = new DialogWarningID("OkCancel");
 
 		protected String Id;
 		protected DialogWarningID(String id) {

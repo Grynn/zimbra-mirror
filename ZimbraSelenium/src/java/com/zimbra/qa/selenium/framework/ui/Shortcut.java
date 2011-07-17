@@ -51,6 +51,7 @@ public class Shortcut {
 	public static final Shortcut S_MAIL_INBOX2 = new Shortcut("S_MAIL_INBOX2",		"vi");
 	public static final Shortcut S_MAIL_DRAFTS = new Shortcut("S_MAIL_DRAFTS",		"vd");
 	public static final Shortcut S_MAIL_MOVETOTRASH = new Shortcut("S_MAIL_MOVETOTRASH",	"<DEL>");
+	public static final Shortcut S_MAIL_HARDELETE = new Shortcut("S_MAIL_MOVETOTRASH",	"<SHIFT><DEL>");
 	public static final Shortcut S_MAIL_MOVETOINBOX = new Shortcut("S_MAIL_MOVETOINBOX",	".i");
 	public static final Shortcut S_MAIL_MARKFLAG = new Shortcut("S_MAIL_MARKFLAG", 	"mf");
 	public static final Shortcut S_MAIL_MARKREAD = new Shortcut("S_MAIL_MARKFLAG", 	"mr");
@@ -66,6 +67,7 @@ public class Shortcut {
 	public static final Shortcut S_NEWDOCUMENT = new Shortcut("S_NEWDOCUMENT", "nd");
 	public static final Shortcut S_DELETE = new Shortcut("S_DELETE", "<Delete>");
 	public static final Shortcut S_BACKSPACE = new Shortcut("S_BACKSPACE", "<Backspace>");
+
 
 	// Shortcut properties
 	private final String ID;
