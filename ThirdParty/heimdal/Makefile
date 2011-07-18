@@ -63,8 +63,7 @@ build:
 	--disable-afs-support \
 	--without-readline \
 	--without-openldap \
-	--without-hesiod \
-	--without-ipv6; \
+	--without-hesiod; \
 	cd $(HEIMDAL_SOURCE)/include; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/lib/roken; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/lib/vers; $(MAKE) $(MAKEARGS); \
