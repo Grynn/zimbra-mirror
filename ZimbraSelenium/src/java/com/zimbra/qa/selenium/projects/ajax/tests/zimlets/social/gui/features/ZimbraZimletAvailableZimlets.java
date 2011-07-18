@@ -37,8 +37,13 @@ public class ZimbraZimletAvailableZimlets extends AjaxCommonTest {
 
 	}
 	
+
+	/**
+	 * See http://bugzilla.zimbra.com/show_bug.cgi?id=61982 - WONTFIX
+	 * @throws HarnessException
+	 */
 	@Test(	description = "Load the client with just Social enabled",
-			groups = { "functional" })
+			groups = { "deprecated" })
 	public void ZimbraZimletAvailableZimlets_01() throws HarnessException {
 		
 		ZAssert.assertTrue(app.zPageSocial.zIsActive(), "Verify the social page is active");
