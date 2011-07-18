@@ -153,7 +153,7 @@ if (defined($cmd)) {
     if ($cmd eq 'start' || $cmd eq 'restart') {
         my $procs = getProcList();
         my $doNginx = $procs =~ /\bnginx\b/;
-        my $doMysql = -x getZimbraHome() . "/mysql/libexec/mysqld" ? 1 : 0;
+        my $doMysql = -x getZimbraHome() . "/mysql/bin/mysqld" ? 1 : 0;
         my $doMtaQueue = -x getZimbraHome() . "/postfix/sbin/postqueue" ? 1 : 0;
         my $outfile = getZmstatRoot() . "/zmstat.out";
         my $scriptDir = dirname($0);
