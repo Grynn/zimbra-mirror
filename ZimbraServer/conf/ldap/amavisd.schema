@@ -107,7 +107,7 @@ attributetype ( 1.3.6.1.4.1.15312.2.2.1.7
 #add: attributetypes
 attributetype ( 1.3.6.1.4.1.15312.2.2.1.8
   NAME 'amavisSpamModifiesSubj'
-  DESC 'Modifies Subject on spam'
+  DESC 'Modifies Subject on spam - no longer in use since 2.7.0'
   EQUALITY booleanMatch
   SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
   SINGLE-VALUE )
@@ -388,6 +388,138 @@ attributetype ( 1.3.6.1.4.1.15312.2.2.1.34
   SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
   SINGLE-VALUE )
 
+#dn: cn=schema
+#changetype: modify
+#add: attributetypes
+attributetype ( 1.3.6.1.4.1.15312.2.2.1.35
+  NAME 'amavisAddrExtensionVirus'
+  DESC 'Address Extension for Virus'
+  EQUALITY caseExactIA5Match
+  SUBSTR caseExactSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+  SINGLE-VALUE )
+
+#dn: cn=schema
+#changetype: modify
+#add: attributetypes
+attributetype ( 1.3.6.1.4.1.15312.2.2.1.36
+  NAME 'amavisAddrExtensionSpam'
+  DESC 'Address Extension for Spam'
+  EQUALITY caseExactIA5Match
+  SUBSTR caseExactSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+  SINGLE-VALUE )
+
+#dn: cn=schema
+#changetype: modify
+#add: attributetypes
+attributetype ( 1.3.6.1.4.1.15312.2.2.1.37
+  NAME 'amavisAddrExtensionBanned'
+  DESC 'Address Extension for Banned'
+  EQUALITY caseExactIA5Match
+  SUBSTR caseExactSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+  SINGLE-VALUE )
+
+#dn: cn=schema
+#changetype: modify
+#add: attributetypes
+attributetype ( 1.3.6.1.4.1.15312.2.2.1.38
+  NAME 'amavisAddrExtensionBadHeader'
+  DESC 'Address Extension for Bad Header'
+  EQUALITY caseExactIA5Match
+  SUBSTR caseExactSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+  SINGLE-VALUE )
+
+# NEW since 2.7.0:
+
+#dn: cn=schema
+#changetype: modify
+#add: attributetypes
+attributetype ( 1.3.6.1.4.1.15312.2.2.1.39
+  NAME 'amavisSpamTag3Level'
+  DESC 'Spam Tag3 Level'
+  EQUALITY caseIgnoreIA5Match
+  SUBSTR caseIgnoreIA5SubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+  SINGLE-VALUE )
+
+#dn: cn=schema
+#changetype: modify
+#add: attributetypes
+attributetype ( 1.3.6.1.4.1.15312.2.2.1.40
+  NAME 'amavisSpamSubjectTag3'
+  DESC 'Spam Subject Tag3'
+  EQUALITY caseExactIA5Match
+  SUBSTR caseExactSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+  SINGLE-VALUE )
+
+#dn: cn=schema
+#changetype: modify
+#add: attributetypes
+attributetype ( 1.3.6.1.4.1.15312.2.2.1.41
+  NAME 'amavisUncheckedQuarantineTo'
+  DESC 'Virus quarantine location'
+  EQUALITY caseIgnoreIA5Match
+  SUBSTR caseIgnoreIA5SubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+  SINGLE-VALUE )
+
+#dn: cn=schema
+#changetype: modify
+#add: attributetypes
+attributetype ( 1.3.6.1.4.1.15312.2.2.1.42
+  NAME 'amavisCleanQuarantineTo'
+  DESC 'Clean quarantine location'
+  EQUALITY caseIgnoreIA5Match
+  SUBSTR caseIgnoreIA5SubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+  SINGLE-VALUE )
+
+#dn: cn=schema
+#changetype: modify
+#add: attributetypes
+attributetype ( 1.3.6.1.4.1.15312.2.2.1.43
+  NAME 'amavisUncheckedLover'
+  DESC 'Unchecked Files Lover'
+  EQUALITY booleanMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+  SINGLE-VALUE )
+
+#dn: cn=schema
+#changetype: modify
+#add: attributetypes
+attributetype ( 1.3.6.1.4.1.15312.2.2.1.44
+  NAME 'amavisForwardMethod'
+  DESC 'Forward / next hop destination'
+  EQUALITY caseIgnoreIA5Match
+  SUBSTR caseIgnoreIA5SubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+
+#dn: cn=schema
+#changetype: modify
+#add: attributetypes
+attributetype ( 1.3.6.1.4.1.15312.2.2.1.45
+  NAME 'amavisSaUserConf'
+  DESC 'SpamAssassin user preferences configuration filename'
+  EQUALITY caseExactIA5Match
+  SUBSTR caseExactSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+  SINGLE-VALUE )
+
+#dn: cn=schema
+#changetype: modify
+#add: attributetypes
+attributetype ( 1.3.6.1.4.1.15312.2.2.1.46
+  NAME 'amavisSaUserName'
+  DESC 'SpamAssassin username (for Bayes and AWL lookups)'
+  EQUALITY caseExactIA5Match
+  SUBSTR caseExactSubstringsMatch
+  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256}
+  SINGLE-VALUE )
+
 
 # Classes
 #---------
@@ -420,6 +552,12 @@ objectclass ( 1.3.6.1.4.1.15312.2.2.2.1
         amavisBannedRuleNames $
         amavisSpamDsnCutoffLevel $ amavisSpamQuarantineCutoffLevel $
         amavisSpamSubjectTag $ amavisSpamSubjectTag2 $
+        amavisAddrExtensionVirus $ amavisAddrExtensionSpam $
+        amavisAddrExtensionBanned $ amavisAddrExtensionBadHeader $
+        amavisSpamTag3Level $ amavisSpamSubjectTag3 $
+        amavisUncheckedQuarantineTo $ amavisCleanQuarantineTo $
+        amavisUncheckedLover $ amavisForwardMethod $
+        amavisSaUserConf $ amavisSaUserName $
         cn $ description ) )
 
 #--------------------------------------------------------------------------
