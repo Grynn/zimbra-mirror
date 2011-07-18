@@ -4299,8 +4299,8 @@ sub make_query_keys($$$;$) {
     my(@dkeys); my($d) = $domain;
     for (;;) {               # (@).sub.example.com (@).example.com (@).com (@).
       push(@dkeys, $prepend_to_domain.'.'.$d);
-      if ($d ne '') {                                                                                                                                                                                                
-        push(@dkeys, $d);                                                                                                                                                                                            
+      if ($d ne '') {
+        push(@dkeys, $d);
       }
       last  if $d eq '';
       $d = ($d =~ /^([^.]*)\.(.*)\z/s) ? $2 : '';
