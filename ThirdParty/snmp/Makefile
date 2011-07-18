@@ -78,6 +78,7 @@ ifeq (MACOSXx86_10, $(findstring MACOSXx86_10, $(BUILD_PLATFORM)))
 	--with-openssl=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION) \
 	--disable-embedded-perl \
 	--without-perl-modules \
+	--enable-ipv6 \
 	--with-persistent-directory="$(INSTALL_PREFIX)/var"; \
 	sed -i .bak -e 's/-arch ppc//g' config.status; \
 	./config.status; \
