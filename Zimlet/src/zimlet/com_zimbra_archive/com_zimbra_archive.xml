@@ -1,0 +1,5 @@
+<zimlet name="com_zimbra_archive" version="0.1" label="${msg.label}" description="${msg.description)" target="main view-window">
+  <include>archive.js</include>
+  <includeCSS>archive.css</includeCSS>
+  <handlerObject>ZmArchiveZimlet</handlerObject>
+</zimlet>
