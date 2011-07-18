@@ -174,7 +174,7 @@ CRYPT_RANDOM := \
 	Crypt-OpenSSL-Random-0.04
 
 CRYPT_RSA := \
-	Crypt-OpenSSL-RSA-0.26
+	Crypt-OpenSSL-RSA-0.27
 
 DBFILE_PERL_LIBS := \
 	DB_File
