@@ -54,8 +54,8 @@ olcAttributeTypes: {6}( 1.3.6.1.4.1.15312.2.2.1.7 NAME 'amavisSpamKillLevel' D
  ESC 'Spam Kill Level' EQUALITY caseIgnoreIA5Match SUBSTR caseIgnoreIA5Substri
  ngsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} SINGLE-VALUE )
 olcAttributeTypes: {7}( 1.3.6.1.4.1.15312.2.2.1.8 NAME 'amavisSpamModifiesSubj
- ' DESC 'Modifies Subject on spam' EQUALITY booleanMatch SYNTAX 1.3.6.1.4.1.14
- 66.115.121.1.7 SINGLE-VALUE )
+ ' DESC 'Modifies Subject on spam - no longer in use since 2.7.0' EQUALITY boo
+ leanMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 SINGLE-VALUE )
 olcAttributeTypes: {8}( 1.3.6.1.4.1.15312.2.2.1.9 NAME 'amavisWhitelistSender'
   DESC 'White List Sender' EQUALITY caseIgnoreIA5Match SUBSTR caseIgnoreIA5Sub
  stringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
@@ -141,17 +141,48 @@ olcAttributeTypes: {33}( 1.3.6.1.4.1.15312.2.2.1.34 NAME 'amavisArchiveQuarant
  caseIgnoreIA5SubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} SINGLE
  -VALUE )
 olcAttributeTypes: {34}( 1.3.6.1.4.1.15312.2.2.1.35 NAME 'amavisAddrExtensionV
- irus' DESC 'Spam Subject Tag' EQUALITY caseExactIA5Match SUBSTR caseExactSubs
- tringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} SINGLE-VALUE )
+ irus' DESC 'Address Extension for Virus' EQUALITY caseExactIA5Match SUBSTR ca
+ seExactSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} SINGLE-VALUE
+  )
 olcAttributeTypes: {35}( 1.3.6.1.4.1.15312.2.2.1.36 NAME 'amavisAddrExtensionS
- pam' DESC 'Spam Subject Tag' EQUALITY caseExactIA5Match SUBSTR caseExactSubst
- ringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} SINGLE-VALUE )
+ pam' DESC 'Address Extension for Spam' EQUALITY caseExactIA5Match SUBSTR case
+ ExactSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} SINGLE-VALUE )
 olcAttributeTypes: {36}( 1.3.6.1.4.1.15312.2.2.1.37 NAME 'amavisAddrExtensionB
- anned' DESC 'Spam Subject Tag' EQUALITY caseExactIA5Match SUBSTR caseExactSub
- stringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} SINGLE-VALUE )
+ anned' DESC 'Address Extension for Banned' EQUALITY caseExactIA5Match SUBSTR 
+ caseExactSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} SINGLE-VAL
+ UE )
 olcAttributeTypes: {37}( 1.3.6.1.4.1.15312.2.2.1.38 NAME 'amavisAddrExtensionB
- adHeader' DESC 'Spam Subject Tag' EQUALITY caseExactIA5Match SUBSTR caseExact
- SubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} SINGLE-VALUE )
+ adHeader' DESC 'Address Extension for Bad Header' EQUALITY caseExactIA5Match 
+ SUBSTR caseExactSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} SIN
+ GLE-VALUE )
+olcAttributeTypes: {38}( 1.3.6.1.4.1.15312.2.2.1.39 NAME 'amavisSpamTag3Level'
+  DESC 'Spam Tag3 Level' EQUALITY caseIgnoreIA5Match SUBSTR caseIgnoreIA5Subst
+ ringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} SINGLE-VALUE )
+olcAttributeTypes: {39}( 1.3.6.1.4.1.15312.2.2.1.40 NAME 'amavisSpamSubjectTag
+ 3' DESC 'Spam Subject Tag3' EQUALITY caseExactIA5Match SUBSTR caseExactSubstr
+ ingsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} SINGLE-VALUE )
+olcAttributeTypes: {40}( 1.3.6.1.4.1.15312.2.2.1.41 NAME 'amavisUncheckedQuara
+ ntineTo' DESC 'Virus quarantine location' EQUALITY caseIgnoreIA5Match SUBSTR 
+ caseIgnoreIA5SubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} SINGLE
+ -VALUE )
+olcAttributeTypes: {41}( 1.3.6.1.4.1.15312.2.2.1.42 NAME 'amavisCleanQuarantin
+ eTo' DESC 'Clean quarantine location' EQUALITY caseIgnoreIA5Match SUBSTR case
+ IgnoreIA5SubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} SINGLE-VAL
+ UE )
+olcAttributeTypes: {42}( 1.3.6.1.4.1.15312.2.2.1.43 NAME 'amavisUncheckedLover
+ ' DESC 'Unchecked Files Lover' EQUALITY booleanMatch SYNTAX 1.3.6.1.4.1.1466.
+ 115.121.1.7 SINGLE-VALUE )
+olcAttributeTypes: {43}( 1.3.6.1.4.1.15312.2.2.1.44 NAME 'amavisForwardMethod'
+  DESC 'Forward / next hop destination' EQUALITY caseIgnoreIA5Match SUBSTR cas
+ eIgnoreIA5SubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
+olcAttributeTypes: {44}( 1.3.6.1.4.1.15312.2.2.1.45 NAME 'amavisSaUserConf' DE
+ SC 'SpamAssassin user preferences configuration filename' EQUALITY caseExactI
+ A5Match SUBSTR caseExactSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{
+ 256} SINGLE-VALUE )
+olcAttributeTypes: {45}( 1.3.6.1.4.1.15312.2.2.1.46 NAME 'amavisSaUserName' DE
+ SC 'SpamAssassin username (for Bayes and AWL lookups)' EQUALITY caseExactIA5M
+ atch SUBSTR caseExactSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256
+ } SINGLE-VALUE )
 olcObjectClasses: {0}( 1.3.6.1.4.1.15312.2.2.2.1 NAME 'amavisAccount' DESC 'Am
  avisd Account' SUP top AUXILIARY MAY ( amavisVirusLover $ amavisBypassVirusCh
  ecks $ amavisSpamLover $ amavisBypassSpamChecks $ amavisBannedFilesLover $ am
@@ -165,14 +196,10 @@ olcObjectClasses: {0}( 1.3.6.1.4.1.15312.2.2.2.1 NAME 'amavisAccount' DESC 'Am
  $ amavisBadHeaderAdmin $ amavisBannedRuleNames $ amavisSpamDsnCutoffLevel $ a
  mavisSpamQuarantineCutoffLevel $ amavisSpamSubjectTag $ amavisSpamSubjectTag2
   $ amavisAddrExtensionVirus $ amavisAddrExtensionSpam $ amavisAddrExtensionBa
- nned $ amavisAddrExtensionBadHeader $ cn $ description ) )
-structuralObjectClass: olcSchemaConfig
-entryUUID: 89780868-59f2-102d-9b64-5d22657ff500
-creatorsName: cn=config
-createTimestamp: 20081209040645Z
-entryCSN: 20081209040645.022675Z#000000#000#000000
-modifiersName: cn=config
-modifyTimestamp: 20081209040645Z
+ nned $ amavisAddrExtensionBadHeader $ amavisSpamTag3Level $ amavisSpamSubject
+ Tag3 $ amavisUncheckedQuarantineTo $ amavisCleanQuarantineTo $ amavisUnchecke
+ dLover $ amavisForwardMethod $ amavisSaUserConf $ amavisSaUserName $ cn $ des
+ cription ) )
 #--------------------------------------------------------------------------
 #
 # 		GNU Free Documentation License
