@@ -158,7 +158,8 @@ public class AppAjaxClient extends AbsApplication {
 	@Override
 	public boolean zIsLoaded() throws HarnessException {
 	   if (this.zPageMain.zIsActive() ||
-            this.zPageLogin.zIsActive()) {
+            this.zPageLogin.zIsActive() ||
+            this.zPageAddNewAccount.zIsActive()) {
          return true;
       } else {
          return false;
