@@ -9,3 +9,23 @@
    background-color: black;
    display: inline-block;
 }
+
+.thumb-wrapper {
+position:relative;
+float: left;
+}
+
+.play {
+position:absolute;
+float: left;
+top: 30px;
+left: 35px;
+width: 58;
+height: 41;
+z-index: 100;
+background: transparent url(play_youtube.png) no-repeat;
+}
+
+.movie-player {
+clear: both;
+}

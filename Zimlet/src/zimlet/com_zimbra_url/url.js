@@ -366,23 +366,24 @@ Com_Zimbra_Url.prototype._showYouTubeEmbed = function(youTubeId){
 	return '<iframe id="youtube-iframe_' + viewId + '" class="youtube-player" type="text/html"' +
 			'width="' + this._getYouTubeWidth() + '" '  +
 			'height="' + this._getYouTubeHeight() + '"'  +
-			'src="' + Com_Zimbra_Url.PROTOCOL + "//" +  Com_Zimbra_Url.YOUTUBE_EMBED_URL + youTubeId + '" frameborder="0"></iframe>';
+			'src="' + Com_Zimbra_Url.PROTOCOL + "//" +  Com_Zimbra_Url.YOUTUBE_EMBED_URL + youTubeId + '?autoplay=1&rel=0" frameborder="0"></iframe>';
 };
 
 Com_Zimbra_Url.prototype._getYouTubeWidth =
 function() {
-	return 320;
+	return 640;
 };
 
 Com_Zimbra_Url.prototype._getYouTubeHeight =
 function() {
-	return 190;
+	return 385;
 };
 
 Com_Zimbra_Url.prototype._showYouTubeThumbnail =
 function(youTubeId) {
 	var youTubeThumbnail = this._youTubeHash[youTubeId].thumbnail;
-	var html = "<img src='" + youTubeThumbnail + "' border='2'>";
+	var html = "<div class='thumb-wrapper'><div class='play'></div><img src='" + youTubeThumbnail + "' border='2'></div>"; 
+			   
 	return html;
 };
 
@@ -425,8 +426,8 @@ function(youTubeId) {
 	}
 	var viewId = appCtxt.getCurrentViewId();
 	var imgHtml = this._showYouTubeThumbnail(youTubeId);
-	var imgSpan = document.createElement("span");
-	imgSpan.style.className = "youTubeImagePreview";
+	var imgSpan = document.createElement("div");
+	imgSpan.className = "youTubeImagePreview";
 	imgSpan.innerHTML = imgHtml;
 	imgSpan.id = "YOUTUBE_" + youTubeId + "_" + viewId;
 	this._youTubeCtrl.getHtmlElement().appendChild(imgSpan);
@@ -441,8 +442,8 @@ function(youTubeId) {
 
 Com_Zimbra_Url.prototype._onYouTubeClickListener =
 function(ev) {
-	if (ev && ev.target && ev.target.parentNode) {
-		var youTubeId = this._youTubeCtrl.getData(ev.target.parentNode.id);
+	if (ev && ev.target && ev.target.parentNode && ev.target.parentNode.parentNode) {
+		var youTubeId = this._youTubeCtrl.getData(ev.target.parentNode.parentNode.id);
 		if (youTubeId) {
 			this._showYouTubeVideo(youTubeId);
 		}
@@ -530,6 +531,7 @@ function(msg) {
 		var videoDiv = document.createElement("div");
 		videoDiv.id = "youtube-video_" + viewId;
 		videoDiv.style.display = "none";
+		videoDiv.className = "movie-player";
 		div.appendChild(videoDiv);
 
 		var clickListener = new AjxListener(this, this._onYouTubeClickListener);
@@ -543,6 +545,7 @@ function(msg) {
 
 	}
 };
+
 Com_Zimbra_Url.CALENDAR_URL_EXTENSION = 'ics';
 
 Com_Zimbra_Url.prototype.getActionMenu =
