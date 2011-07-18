@@ -329,6 +329,16 @@ public class ZimbraAccount {
 				ZimbraPrefLocale = Locale.getDefault().toString();
 			}
 
+			if ( ZimbraSeleniumProperties.getStringProperty("soap.trace.enabled", "false").toLowerCase().equals("true") ) {
+				
+				ZimbraAdminAccount.GlobalAdmin().soapSend(
+							"<AddAccountLoggerRequest xmlns='urn:zimbraAdmin'>"
+						+		"<account by='name'>"+ EmailAddress + "</account>"
+						+		"<logger category='zimbra.soap' level='trace'/>"
+						+	"</AddAccountLoggerRequest>");
+
+			}
+			
 			// Start: Dev environment hack
 			if ( DevEnvironment.isUsingDevEnvironment() ) {
 				ZimbraMailHost = "localhost";
