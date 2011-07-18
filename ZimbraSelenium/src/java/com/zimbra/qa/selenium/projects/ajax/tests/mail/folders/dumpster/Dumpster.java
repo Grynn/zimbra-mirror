@@ -8,7 +8,6 @@ import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -71,6 +70,14 @@ public class Dumpster extends AjaxCommonTest {
 		String messageID = app.zGetActiveAccount().soapSelectValue("//mail:AddMsgResponse//mail:m", "id");
 		ZAssert.assertNotNull(messageID, "Verify the messageID exists");
 		
+		// https://bugzilla.zimbra.com/show_bug.cgi?id=62029
+		// Workaround: search for the message before deleting
+		app.zGetActiveAccount().soapSend(
+					"<SearchRequest xmlns='urn:zimbraMail' types='message'>"
+				+		"<query>subject:("+ subject +")</query>"
+				+	"</SearchRequest>");
+		
+		
 		// Delete the message, putting it in the dumpster
 		app.zGetActiveAccount().soapSend(
 				"<MsgActionRequest xmlns='urn:zimbraMail'>" 
@@ -88,10 +95,8 @@ public class Dumpster extends AjaxCommonTest {
 		ZAssert.assertNotNull(form, "Verify the 'recover deleted items' dialog pops up");
 
 		// Search for the message
-		// https://bugzilla.zimbra.com/show_bug.cgi?id=62029
-		//
-//		form.zFillField(Field.Search, body);
-//		form.zToolbarPressButton(Button.B_SEARCH);
+		form.zFillField(Field.Search, body);
+		form.zToolbarPressButton(Button.B_SEARCH);
 
 		// Click on the message
 		form.zListItem(Action.A_LEFTCLICK, subject);
@@ -105,7 +110,9 @@ public class Dumpster extends AjaxCommonTest {
 		form.zToolbarPressButton(Button.B_CLOSE);
 
 		// Verify the message is back
-		MailItem message = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+		// Work around for https://bugzilla.zimbra.com/show_bug.cgi?id=62101#c1
+		// Search by folder ID rather than by subject
+		MailItem message = MailItem.importFromSOAP(app.zGetActiveAccount(), "inid:"+ subfolder.getId());
 		ZAssert.assertNotNull(message, "Verify the message is returned to the mailbox");
 
 
