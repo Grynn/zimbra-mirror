@@ -114,7 +114,7 @@ PERL_LIBS 	:= \
 	$(MODULE_BUILD) \
 	Mail::Mailer \
 	Convert::BinHex \
-	D/DO/DONEILL/MIME-tools-5.427.tar.gz \
+	D/DO/DONEILL/MIME-tools-5.502.tar.gz \
 	SOAP::Lite \
 	Net::Telnet \
 	Config::IniFiles \
