@@ -853,7 +853,7 @@ function () {
         /*
          * If we get saved search from server and have write-permission, we will         * replace all the "zimbraIsDomainAdminAccount" with "zimbraIsDelegatedA         * dminAccount" to update the query string for version update      
          */ 
-        if ( currentSavedSearches && ( ZaSearchField.canSaveSearch() )){
+        if ( (!AjxUtil.isEmpty(currentSavedSearches)) && ( ZaSearchField.canSaveSearch() )){
             var modifiedSearches = [];
  
             for (var i = 0; i < currentSavedSearches.length; i++ ){
@@ -872,10 +872,12 @@ function () {
             
             if ( modifiedSearches.length != 0 ){
                ZaSearch.modifySavedSearches (modifiedSearches);
+               ZaSearch.SAVED_SEARCHES = savedSearchArr;
+               ZaSearch._savedSearchToBeUpdated = false ;
             }   
         }
         
-        if ((! currentSavedSearches) && (ZaSearchField.canSaveSearch())){//load the predefined searches
+        if ((AjxUtil.isEmpty(currentSavedSearches)) && (ZaSearchField.canSaveSearch())){//load the predefined searches
             //if(window.console && window.console.log) console.log("Load the predefined saved searches ...") ;
             var savedSearchArr = [] ;
             //if (!ZaSettings.isDomainAdmin) { //admin only searches
@@ -889,6 +891,8 @@ function () {
             }
 
             ZaSearch.modifySavedSearches (savedSearchArr) ;
+            ZaSearch.SAVED_SEARCHES = savedSearchArr;
+            ZaSearch._savedSearchToBeUpdated = false ;
         }
     }
 }
