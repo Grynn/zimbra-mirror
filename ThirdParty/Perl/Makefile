@@ -108,7 +108,7 @@ PERL_LIBS 	:= \
 	Net::HTTP \
 	Net::SMTP \
 	Proc::ProcessTable \
-	HTTP::Parser \
+	LWP::Protocol::https \
 	IO::Stringy \
 	E/ER/ERYQ/MIME-Lite-2.117.tar.gz \
 	$(MODULE_BUILD) \
