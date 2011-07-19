@@ -28,7 +28,6 @@ zmsetvars \
 
 
 pidfile=${zimbra_log_directory}/clamd.pid
-fpidfile=${zimbra_log_directory}/freshclam.pid
 
 if [ ! -d "/opt/zimbra/data/clamav/db" ]; then
     mkdir -p /opt/zimbra/data/clamav/db
@@ -60,19 +59,6 @@ checkrunning() {
       running=0
     else
       running=1
-    fi
-  fi
-  # freshclam
-  if [ "x$fpid" = "x" ]; then
-    frunning=0
-  else
-    kill -0 $fpid 2> /dev/null
-    if [ $? != 0 ]; then
-      rm $fpidfile
-      fpid=""
-      frunning=0
-    else
-      frunning=1
     fi
   fi
 }
@@ -110,16 +96,6 @@ case "$1" in
     fi
 
     checkrunning
-    echo -n "Starting freshclam..."
-    if [ $frunning = 1 ]; then
-      echo "freshclam is already running.";
-    else
-      ${zimbra_home}/clamav/bin/freshclam \
-        --config-file=${zimbra_home}/conf/freshclam.conf --quiet --daemon --checks=12 \
-          >> ${zimbra_log_directory}/freshclam.log 2>&1 &
-      echo "done."
-    fi
-
     echo -n "Starting clamd..."
     if [ $running = 1 ]; then
       echo "clamd is already running.";
@@ -143,35 +119,16 @@ case "$1" in
    ;;
   
   'kill')
-    if [ -f /opt/zimbra/log/freshclam.pid ]; then
-      cpid=`cat /opt/zimbra/log/freshclam.pid`
-      kill -9 "$cpid" 2> /dev/null
-    fi
     if [ -f /opt/zimbra/log/clamd.pid ]; then
       cpid=`cat /opt/zimbra/log/clamd.pid`
       kill -9 "$cpid" 2> /dev/null
     fi
-    pskillall -9 ${zimbra_home}/clamav/bin/freshclam
     pskillall -9 ${zimbra_home}/clamav/sbin/clamd
     exit 0
    ;;
 
   'stop')
     checkrunning
-    echo -n "Stopping freshclam..."
-    if [ $frunning = 0 ]; then
-      echo "freshclam is not running.";
-    else 
-      if [ x"$fpid" != "x" ]; then  
-        kill -9 "$fpid" 2> /dev/null
-        if [ $? = 0 ]; then
-          echo "done."
-        else 
-          echo "failed."
-        fi
-      fi
-    fi
-
     echo -n "Stopping clamd..."
     if [ $running = 0 ]; then
       echo "clamd is not running.";

@@ -15,7 +15,7 @@
 # 
 
 BASE=/opt/zimbra
-SCRIPTS="zmamavisdctl zmclamdctl"
+SCRIPTS="zmamavisdctl zmclamdctl zmfreshclamctl"
 
 source /opt/zimbra/.bashrc
 
@@ -31,6 +31,9 @@ case "$1" in
 	stop)
 		for i in $SCRIPTS; do
 			if [ $i = "zmclamdctl" ]; then
+				/opt/zimbra/bin/$i stop
+			fi
+			if [ $i = "zmfreshclamctl" ]; then
 				/opt/zimbra/bin/$i stop
 			fi
 		done
