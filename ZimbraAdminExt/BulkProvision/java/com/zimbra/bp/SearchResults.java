@@ -130,11 +130,11 @@ public class SearchResults {
 
         int flags = 0;
 
-        if (types.indexOf("accounts") != -1) flags |= Provisioning.SA_ACCOUNT_FLAG;
-        if (types.indexOf("aliases") != -1) flags |= Provisioning.SA_ALIAS_FLAG;
-        if (types.indexOf("distributionlists") != -1) flags |= Provisioning.SA_DISTRIBUTION_LIST_FLAG;
-        if (types.indexOf("resources") != -1) flags |= Provisioning.SA_CALENDAR_RESOURCE_FLAG;
-        if (types.indexOf("domains") != -1) flags |= Provisioning.SA_DOMAIN_FLAG;
+        if (types.indexOf("accounts") != -1) flags |= Provisioning.SD_ACCOUNT_FLAG;
+        if (types.indexOf("aliases") != -1) flags |= Provisioning.SD_ALIAS_FLAG;
+        if (types.indexOf("distributionlists") != -1) flags |= Provisioning.SD_DISTRIBUTION_LIST_FLAG;
+        if (types.indexOf("resources") != -1) flags |= Provisioning.SD_CALENDAR_RESOURCE_FLAG;
+        if (types.indexOf("domains") != -1) flags |= Provisioning.SD_DOMAIN_FLAG;
 //            if (types.indexOf("coses") != -1) flags |= Provisioning.SD_COS_FLAG;
 
         Provisioning.SearchOptions options = new Provisioning.SearchOptions();
