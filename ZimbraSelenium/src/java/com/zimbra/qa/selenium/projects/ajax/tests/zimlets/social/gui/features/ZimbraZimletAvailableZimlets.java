@@ -28,7 +28,9 @@ public class ZimbraZimletAvailableZimlets extends AjaxCommonTest {
 				    put("zimbraFeatureCalendarEnabled", "FALSE");
 				    put("zimbraFeatureTasksEnabled", "FALSE");
 				    put("zimbraFeatureBriefcasesEnabled", "FALSE");
-				    put("zimbraFeatureOptionsEnabled", "FALSE");
+
+				    // https://bugzilla.zimbra.com/show_bug.cgi?id=62161#c3
+				    // put("zimbraFeatureOptionsEnabled", "FALSE");
 				    
 				    put("zimbraZimletAvailableZimlets", "+com_zimbra_social");
 

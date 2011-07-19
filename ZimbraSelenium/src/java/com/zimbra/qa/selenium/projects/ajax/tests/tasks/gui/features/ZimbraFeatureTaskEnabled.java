@@ -32,8 +32,9 @@ public class ZimbraFeatureTaskEnabled extends AjaxCommonTest {
 				put("zimbraFeatureContactsEnabled", "FALSE");
 				put("zimbraFeatureCalendarEnabled", "FALSE");
 				put("zimbraFeatureBriefcasesEnabled", "FALSE");
-				put("zimbraFeatureOptionsEnabled", "FALSE");
-				put("zimbraZimletAvailableZimlets", "-com_zimbra_social");
+
+			    // https://bugzilla.zimbra.com/show_bug.cgi?id=62161#c3
+			    // put("zimbraFeatureOptionsEnabled", "FALSE");
 
 			}
 		};
