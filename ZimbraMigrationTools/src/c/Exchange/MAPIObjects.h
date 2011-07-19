@@ -7,20 +7,6 @@
 using namespace std;
 namespace Zimbra {namespace MAPI {
 
-class GenericException
-{
-private:
-	HRESULT m_errcode;
-	wstring m_strdescription;
-	int m_srcLine;
-	string m_srcFile;
-public:
-	GenericException(HRESULT hrErrCode, LPCWSTR lpszDescription);
-	GenericException(HRESULT hrErrCode, LPCWSTR lpszDescription,int nLine, LPCSTR strFile);
-	virtual ~GenericException(){};
-};
-
-
 class ExchangeAdminException:public GenericException
 {
 public:
@@ -37,6 +23,14 @@ public:
 	virtual ~MAPISessionException(){};
 };
 
+class MAPIStoreException:public GenericException
+{
+public:
+	MAPIStoreException(HRESULT hrErrCode, LPCWSTR lpszDescription);
+	MAPIStoreException(HRESULT hrErrCode, LPCWSTR lpszDescription,int nLine, LPCSTR strFile);
+	virtual ~MAPIStoreException(){};
+};
+
 class ExchangeAdmin
 {
 private:
@@ -51,9 +45,11 @@ public:
 	HRESULT DeleteProfile(string strProfile);
 	HRESULT GetAllProfiles(vector<string> &vProfileList);
 	HRESULT SetDefaultProfile(string strProfile);
-	HRESULT CreateExchangeMailBox(LPWSTR lpwstrNewUser, LPWSTR lpwstrNewUserPwd, LPWSTR lpwstrlogonuserDN, LPWSTR lpwstrLogonUsrPwd);
-
+	HRESULT CreateExchangeMailBox(LPWSTR lpwstrNewUser, LPWSTR lpwstrNewUserPwd, LPWSTR lpwstrlogonuser, LPWSTR lpwstrLogonUsrPwd);
+	HRESULT DeleteExchangeMailBox(LPWSTR lpwstrMailBox,LPWSTR lpwstrlogonuser, LPWSTR lpwstrLogonUsrPwd);
 };
+
+class MAPIStore;
 
 class MAPISession
 {
@@ -64,8 +60,12 @@ public:
 	MAPISession();
 	~MAPISession();
 	HRESULT Logon(LPWSTR strProfile);
-	HRESULT Logon(bool bDefaultProfile);
+	HRESULT Logon(bool bDefaultProfile=true);
 	LPMAPISESSION GetMAPISessionObject(){return m_Session;};
+	HRESULT OpenDefaultStore(MAPIStore &Store);
+	HRESULT OpenOtherStore(LPMDB OpenedStore,LPWSTR pServerDn, LPWSTR pUserDn,MAPIStore &OtherStore);
+	HRESULT OpenAddressBook(LPADRBOOK* ppAddrBook);
+	
 };
 
 class MAPIStore
@@ -74,9 +74,9 @@ private:
 	LPMDB m_Store;
 	LPMAPISESSION m_mapiSession;
 public:
-	MAPIStore(LPMAPISESSION mapisession);//returns default store
-	MAPIStore(LPMAPISESSION mapisession, LPWSTR pServerDn, LPWSTR pUserDn); // opens user's store
+	MAPIStore();
 	~MAPIStore();
+	void Initialize(LPMAPISESSION mapisession, LPMDB pMdb);
 };
 
 

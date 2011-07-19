@@ -36,6 +36,9 @@
     <ClCompile Include="MAPIObjects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MapiUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MapiMigration.h">
@@ -51,6 +54,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MAPIObjects.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GenericException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MapiUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

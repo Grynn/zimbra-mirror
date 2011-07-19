@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "..\Exchange\MAPIObjects.h"
+#include "..\Exchange\MapiUtils.h"
 
 LPCWSTR lpProfileName=L"testprofile";
 LPCWSTR lpServerAddress=L"10.117.82.163";
@@ -119,33 +120,66 @@ int main(int argc, TCHAR *argv[])
 	MAPIInitialize(NULL);
 
 	Init();
+	
 //	AdminAuth();
 //	UserAuth();
 //	ZCFileUploadTest();
 	Zimbra::MAPI::ExchangeAdmin *exchadmin= new Zimbra::MAPI::ExchangeAdmin("10.117.82.161");
-/*	
-	exchadmin->CreateProfile("test_profile@exch","appt1","test123");
-	exchadmin->SetDefaultProfile("test_profile@exch");
-	vector<string> vProfileList;
-	exchadmin->GetAllProfiles(vProfileList);
-	vector<string>::iterator itr= vProfileList.begin();
-
-	exchadmin->DeleteProfile("test_profile@exch");
-	delete exchadmin;
-*/
 	try
 	{
-		exchadmin->CreateExchangeMailBox(L"new_zm12",L"z1mbr4Migration",L"CN=Administrator,CN=Users,DC=zmexch,DC=in,DC=zimbra,DC=com",L"z1mbr4Migration");
+		try
+		{
+			exchadmin->DeleteProfile("new_zm12@exch");
+		}
+		catch(Zimbra::MAPI::ExchangeAdminException &ex)
+		{
+			UNREFERENCED_PARAMETER(ex);
+		}
+
+		try
+		{
+			exchadmin->DeleteExchangeMailBox(L"new_zm12",L"Administrator",L"z1mbr4Migration");
+		}
+		catch(Zimbra::MAPI::ExchangeAdminException &ex)
+		{
+			UNREFERENCED_PARAMETER(ex);
+		}
+		exchadmin->CreateExchangeMailBox(L"new_zm12",L"z1mbr4Migration",L"Administrator",L"z1mbr4Migration");
+		exchadmin->CreateProfile("new_zm12@exch","new_zm12","z1mbr4Migration");
+		exchadmin->SetDefaultProfile("new_zm12@exch");
 	}
 	catch(Zimbra::MAPI::ExchangeAdminException &ex)
 	{
 		UNREFERENCED_PARAMETER(ex);
 	}
 
+	
+/*
+	vector<string> vProfileList;
+	exchadmin->GetAllProfiles(vProfileList);
+	vector<string>::iterator itr= vProfileList.begin();
+
+	exchadmin->DeleteProfile("test_profile@exch");
 	delete exchadmin;
+	
+
+	vector<string> vProfileList;
+	exchadmin->GetAllProfiles(vProfileList);
+	vector<string>::iterator itr= vProfileList.begin();
+*/
+
+/*	Zimbra::MAPI::MAPISession *p_zmmapisession = new Zimbra::MAPI::MAPISession();
+	p_zmmapisession->Logon();
+	Zimbra::MAPI::MAPIStore store;
+	p_zmmapisession->OpenDefaultStore(store);
+	delete p_zmmapisession;
+*/
+
+/*	wstring userDN;
+	Zimbra::MAPI::Util::GetUserDN(L"10.117.82.161",L"Administrator",userDN);
+*/
 	return 0;
 	//exchadmin->CreateExchangeMailBox(L"new_zm12",L"z1mbr4Migration",L"CN=Administrator,CN=Users,DC=zmexch,DC=in,DC=zimbra,DC=com",L"z1mbr4Migration");
 
-	return 1;
 }
 

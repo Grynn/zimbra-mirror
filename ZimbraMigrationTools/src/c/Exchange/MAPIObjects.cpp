@@ -1,24 +1,11 @@
 #include "MAPIObjects.h"
+#include "MapiUtils.h"
 using namespace Zimbra::MAPI;
 
 
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //Exception class
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-GenericException::GenericException(HRESULT hrErrCode, LPCWSTR lpszDescription)
-{
-	m_errcode = hrErrCode;
-	m_strdescription = lpszDescription;
-};
-
-
-GenericException::GenericException(HRESULT hrErrCode, LPCWSTR lpszDescription,int nLine, LPCSTR strFile)
-{
-	m_errcode = hrErrCode;
-	m_strdescription = lpszDescription;
-	m_srcLine = nLine;
-	m_srcFile = strFile;
-}
 
 ExchangeAdminException::ExchangeAdminException(HRESULT hrErrCode, LPCWSTR lpszDescription):GenericException(hrErrCode,lpszDescription)
 {
@@ -36,6 +23,16 @@ MAPISessionException::MAPISessionException(HRESULT hrErrCode, LPCWSTR lpszDescri
 }
 
 MAPISessionException::MAPISessionException(HRESULT hrErrCode, LPCWSTR lpszDescription,int nLine, LPCSTR strFile):GenericException(hrErrCode,lpszDescription,nLine,strFile)
+{
+	//
+}
+
+MAPIStoreException::MAPIStoreException(HRESULT hrErrCode, LPCWSTR lpszDescription):GenericException(hrErrCode,lpszDescription)
+{
+	//
+}
+
+MAPIStoreException::MAPIStoreException(HRESULT hrErrCode, LPCWSTR lpszDescription,int nLine, LPCSTR strFile):GenericException(hrErrCode,lpszDescription,nLine,strFile)
 {
 	//
 }
@@ -92,7 +89,7 @@ HRESULT ExchangeAdmin::CreateProfile(string strProfileName,string strMailboxName
     SizedSPropTagArray(cptaSvc,sptCols) = { cptaSvc, PR_SERVICE_NAME, PR_SERVICE_UID };
 
 	//create new profile
-	if (FAILED(hr = m_pProfAdmin->CreateProfile((LPTSTR)strProfileName.c_str(), (LPTSTR)strPassword.c_str(),NULL,0)))//pWProfileStr,pWPasswordStr,NULL,0)))
+	if (FAILED(hr = m_pProfAdmin->CreateProfile((LPTSTR)strProfileName.c_str(), (LPTSTR)strPassword.c_str(),NULL,0)))
 	{
 		throw ExchangeAdminException(hr,L"CreateProfile(): CreateProfile Failed.",__LINE__,__FILE__);
 	}
@@ -224,15 +221,10 @@ HRESULT ExchangeAdmin::GetAllProfiles(vector<string> &vProfileList)
 						throw ExchangeAdminException(hr,L"GetAllProfiles(): QueryRows Failed.",__LINE__,__FILE__);
 					}
 
-					//is it Zimbra profile?
-					ULONG j;
-					//bool bFoundZimbra=false;
-					for(j = 0; j < pRows->cRows ; j++)
+					for(ULONG j = 0; j < pRows->cRows ; j++)
 					{
 						if(PR_SERVICE_NAME == pRows->aRow[j].lpProps[0].ulPropTag) 
 						{
-							WCHAR* tmp=pRows->aRow[j].lpProps[0].Value.LPSZ;
-							UNREFERENCED_PARAMETER(tmp);
 							//if MSExchange service
 							if(0 == lstrcmpiW(pRows->aRow[j].lpProps[0].Value.LPSZ, L"MSEMS"))
 							{
@@ -252,7 +244,7 @@ HRESULT ExchangeAdmin::GetAllProfiles(vector<string> &vProfileList)
 HRESULT ExchangeAdmin::SetDefaultProfile(string strProfile)
 {
 	HRESULT hr=S_OK;
-	if((hr = m_pProfAdmin->SetDefaultProfile((LPTSTR)strProfile.c_str(), 0))==S_OK)
+	if((hr = m_pProfAdmin->SetDefaultProfile((LPTSTR)strProfile.c_str(), 0))!=S_OK)
   	{ 
 		throw ExchangeAdminException(hr,L"SetDefaultProfile(): SetDefaultProfile Failed.",__LINE__,__FILE__);
 	}
@@ -260,13 +252,20 @@ HRESULT ExchangeAdmin::SetDefaultProfile(string strProfile)
 }
 
 
-HRESULT ExchangeAdmin::CreateExchangeMailBox(LPWSTR lpwstrNewUser, LPWSTR lpwstrNewUserPwd, LPWSTR lpwstrlogonuserDN, LPWSTR lpwstrLogonUsrPwd)
+HRESULT ExchangeAdmin::CreateExchangeMailBox(LPWSTR lpwstrNewUser, LPWSTR lpwstrNewUserPwd, LPWSTR lpwstrlogonuser, LPWSTR lpwstrLogonUsrPwd)
 {
 	HRESULT hr=S_OK;
-	Zimbra::Util::ScopedInterface<IDirectoryObject> pLogonContainer;
+	
+	//Get Logon user DN 
+	wstring LogonUserDN;
+	LPWSTR wstrServer=NULL;
+	AtoW((char*)m_strServer.c_str(),wstrServer);
+	Zimbra::MAPI::Util::GetUserDN(wstrServer,lpwstrlogonuser,LogonUserDN);
+	SafeDelete(wstrServer);
 
+	Zimbra::Util::ScopedInterface<IDirectoryObject> pLogonContainer;
 	wstring strContainer = L"LDAP://";
-	strContainer += lpwstrlogonuserDN;
+	strContainer += LogonUserDN.c_str();
 	//Get loggedin user container
 	hr = ADsOpenObject(strContainer.c_str(), NULL, NULL, ADS_SECURE_AUTHENTICATION, IID_IDirectoryObject, (void**)pLogonContainer.getptr());
 	if(FAILED(hr))
@@ -320,16 +319,22 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPWSTR lpwstrNewUser, LPWSTR lpwstr
 	FreeADsMem( pAttrInfo );
 	
 	
-	wstring twtsrlogonuserDN=lpwstrlogonuserDN;
+	wstring twtsrlogonuserDN=LogonUserDN;
 	size_t nPos = twtsrlogonuserDN.find(_T("DC="), 0);
 	wstring wstrServerDN = twtsrlogonuserDN.substr(nPos);
 	wstring wstrADSPath = _T("LDAP://CN=Users,") + wstrServerDN;
 	
 	ADSVALUE   cnValue;
 	ADSVALUE   classValue;
+	ADSVALUE   sAMValue;
+	ADSVALUE   uPNValue;	
 	ADS_ATTR_INFO  attrInfo[] = {  
 	{L"objectClass", ADS_ATTR_UPDATE, ADSTYPE_CASE_IGNORE_STRING, &classValue, 1 },
 	{L"cn", ADS_ATTR_UPDATE, ADSTYPE_CASE_IGNORE_STRING, &cnValue, 1},
+	{L"sAMAccountName", ADS_ATTR_UPDATE, 
+                       ADSTYPE_CASE_IGNORE_STRING, &sAMValue, 1},
+	{L"userPrincipalName", ADS_ATTR_UPDATE, 
+                      ADSTYPE_CASE_IGNORE_STRING, &uPNValue, 1},
 	};
 
 	DWORD dwAttrs = sizeof(attrInfo)/sizeof(ADS_ATTR_INFO); 
@@ -340,11 +345,22 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPWSTR lpwstrNewUser, LPWSTR lpwstr
 	cnValue.dwType=ADSTYPE_CASE_IGNORE_STRING;
 	cnValue.CaseIgnoreString = lpwstrNewUser;
 
-	UNREFERENCED_PARAMETER(lpwstrNewUserPwd);
+	sAMValue.dwType=ADSTYPE_CASE_IGNORE_STRING;
+	sAMValue.CaseIgnoreString = lpwstrNewUser;
+ 
+	wstring wstrMail;
+	size_t nPosMail = strLogonMail.find(_T("@"), 0);
+	wstrMail = strLogonMail.substr(nPosMail);
+	wstrMail = lpwstrNewUser + wstrMail;
+	LPWSTR upnval=(LPWSTR)wstrMail.c_str();
+
+	uPNValue.dwType=ADSTYPE_CASE_IGNORE_STRING;
+	uPNValue.CaseIgnoreString = upnval;
+
 	Zimbra::Util::ScopedInterface<IDirectoryObject> pDirContainer;
 	Zimbra::Util::ScopedInterface<IDispatch> pDisp;
 	Zimbra::Util::ScopedInterface<IADsUser> pIADNewUser;
-	wstring wstrLoggedUserName(lpwstrlogonuserDN);
+	wstring wstrLoggedUserName(LogonUserDN);
 	size_t snPos = 0;
 	size_t enPos = 0;
 	if((snPos=wstrLoggedUserName.find(L"CN="))!=wstring::npos)
@@ -450,10 +466,6 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPWSTR lpwstrNewUser, LPWSTR lpwstr
 	}
 
 	//set the mail atrribute
-	wstring wstrMail;
-	size_t nPosMail = strLogonMail.find(_T("@"), 0);
-	wstrMail = strLogonMail.substr(nPosMail);
-	wstrMail = lpwstrNewUser + wstrMail;
 	varProp.Clear();
 	varProp = wstrMail.c_str();
  	if(FAILED(hr = pIADNewUser->Put(CComBSTR( "mail"), varProp)))
@@ -504,6 +516,36 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPWSTR lpwstrNewUser, LPWSTR lpwstr
 	return hr;
 }
 
+
+HRESULT ExchangeAdmin::DeleteExchangeMailBox(LPWSTR lpwstrMailBox,LPWSTR lpwstrlogonuser, LPWSTR lpwstrLogonUsrPwd)
+{
+	HRESULT hr;
+	wstring UserDN;
+	LPWSTR wstrServer=NULL;
+	Zimbra::Util::ScopedInterface<IDirectoryObject> pDirContainer;
+
+	AtoW((char*)m_strServer.c_str(),wstrServer);
+	Zimbra::MAPI::Util::GetUserDN(wstrServer,lpwstrlogonuser,UserDN);
+	SafeDelete(wstrServer);
+
+	wstring twtsrlogonuserDN=UserDN;
+	size_t nPos = twtsrlogonuserDN.find(_T("DC="), 0);
+	wstring wstrServerDN = twtsrlogonuserDN.substr(nPos);
+	wstring wstrADSPath = _T("LDAP://CN=Users,") + wstrServerDN;
+
+	//get dir container
+	if (FAILED(hr = ADsOpenObject( wstrADSPath.c_str(), lpwstrlogonuser, lpwstrLogonUsrPwd, ADS_SECURE_AUTHENTICATION, IID_IDirectoryObject, (void**)pDirContainer.getptr())))
+	{
+		throw ExchangeAdminException(hr,L"DeleteExchangeMailBox(): ADsOpenObject Failed.",__LINE__,__FILE__);			
+	}
+	wstring mailboxcn= L"CN=";
+	mailboxcn += lpwstrMailBox;
+	hr = pDirContainer->DeleteDSObject((LPWSTR)mailboxcn.c_str());
+	pDirContainer->Release();
+	return hr;
+}
+
+
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //MAPI Session Class
 //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -550,22 +592,87 @@ HRESULT MAPISession::Logon(bool bDefaultProfile)
 	return _mapiLogon(NULL,dwFlags,m_Session);
 }
 
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-//
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-MAPIStore::MAPIStore(LPMAPISESSION mapisession):m_Store(NULL)
+HRESULT MAPISession::OpenDefaultStore(MAPIStore &Store)
 {
-	m_mapiSession = mapisession;
+	HRESULT		hr			= E_FAIL;
+	ULONG		cbDefMdbEid = 0;
+	LPENTRYID	pDefMdbEid  = NULL;
+	LPMDB		pDefaultMDB = NULL;
+
+	if( m_Session == NULL )
+		throw MAPIStoreException(hr,L"OpenDefaultStore(): m_mapiSession is NULL.",__LINE__,__FILE__);			
+	
+	if(FAILED(hr = Zimbra::MAPI::Util::HrMAPIFindDefaultMsgStore( m_Session, &cbDefMdbEid, &pDefMdbEid )))
+		throw MAPIStoreException(hr,L"OpenDefaultStore(): HrMAPIFindDefaultMsgStore Failed.",__LINE__,__FILE__);
+
+	hr = m_Session->OpenMsgStore( NULL, cbDefMdbEid, pDefMdbEid, NULL, MDB_ONLINE | MAPI_BEST_ACCESS | MDB_NO_MAIL | MDB_TEMPORARY | MDB_NO_DIALOG, &pDefaultMDB );
+	if( hr == MAPI_E_UNKNOWN_FLAGS )
+	{
+		if( FAILED(hr = m_Session->OpenMsgStore( NULL, cbDefMdbEid, pDefMdbEid, NULL, MAPI_BEST_ACCESS | MDB_NO_MAIL | MDB_TEMPORARY | MDB_NO_DIALOG, &pDefaultMDB )))
+			throw MAPIStoreException(hr,L"OpenDefaultStore(): OpenMsgStore Failed.",__LINE__,__FILE__);
+	}
+	
+	MAPIFreeBuffer( pDefMdbEid );
+	if( FAILED(hr) )
+		throw MAPIStoreException(hr,L"OpenDefaultStore(): OpenMsgStore Failed.",__LINE__,__FILE__);
+	Store.Initialize(m_Session, pDefaultMDB);
+	return S_OK;
 }
 
-MAPIStore::MAPIStore(LPMAPISESSION mapisession, LPWSTR pServerDn, LPWSTR pUserDn)
+HRESULT MAPISession::OpenOtherStore(LPMDB OpenedStore,LPWSTR pServerDn, LPWSTR pUserDn,MAPIStore &OtherStore)
 {
-	m_mapiSession = mapisession;
-	UNREFERENCED_PARAMETER(pServerDn);
-	UNREFERENCED_PARAMETER(pUserDn);
+	HRESULT hr = E_FAIL;
+	if( m_Session == NULL )
+		throw MAPIStoreException(hr,L"OpenDefaultStore(): m_mapiSession is NULL.",__LINE__,__FILE__);			
+
+	//build the dn of the store to open
+	LPWSTR pszSuffix = L"/cn=Microsoft Private MDB";
+	int iLen = wcslen( pServerDn ) +  wcslen( pszSuffix ) + 1 ;
+	LPWSTR pszStoreDN = new WCHAR[ iLen ];
+	
+	swprintf( pszStoreDN,iLen, L"%s%s", pServerDn, pszSuffix );
+
+	LPMDB pMdb = NULL;
+	hr = Zimbra::MAPI::Util::MailboxLogon( m_Session,OpenedStore, pszStoreDN, pUserDn, &pMdb );
+	delete [] pszStoreDN;
+
+	if( FAILED(hr) )
+		throw MAPIStoreException(hr,L"OpenDefaultStore(): MailboxLogon Failed.",__LINE__,__FILE__);
+
+	OtherStore.Initialize(m_Session, pMdb);
+
+	return S_OK;
+}
+
+HRESULT MAPISession::OpenAddressBook(LPADRBOOK* ppAddrBook)
+{
+	HRESULT hr=E_FAIL;
+	if(m_Session)
+	{
+		hr = m_Session->OpenAddressBook(NULL,NULL,AB_NO_DIALOG,ppAddrBook);
+	}
+	return hr;
+}
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+//MAPIStore
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+MAPIStore::MAPIStore():m_Store(NULL), m_mapiSession(NULL)
+{
+
 }
 
 MAPIStore::~MAPIStore()
 {
-
+	if (m_Store)
+		m_Store->Release();
+	m_Store= NULL;
 }
+
+void MAPIStore::Initialize(LPMAPISESSION mapisession, LPMDB pMdb)
+{
+	m_Store = pMdb;
+	m_mapiSession = mapisession;
+}
+
+
+

@@ -117,7 +117,8 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <StringPooling>true</StringPooling>
-      <PrecompiledHeaderFile>../Exchange/ExchangeCommon.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>
+      </PrecompiledHeaderFile>
       <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
@@ -273,6 +274,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Exchange\ExchangeCommon.h" />
+    <ClInclude Include="..\Exchange\GenericException.h" />
     <ClInclude Include="..\Exchange\MAPIObjects.h" />
     <ClInclude Include="..\Exchange\MapiUtils.h" />
     <ClInclude Include="PSTMigration.h" />

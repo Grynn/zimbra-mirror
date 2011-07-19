@@ -263,13 +263,16 @@
     </ClCompile>
     <ClCompile Include="MapiMigration.cpp" />
     <ClCompile Include="MAPIObjects.cpp" />
+    <ClCompile Include="MapiUtils.cpp" />
     <ClCompile Include="MapiWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExchangeCommon.h" />
     <ClInclude Include="Exchange_i.h" />
+    <ClInclude Include="GenericException.h" />
     <ClInclude Include="MapiMigration.h" />
     <ClInclude Include="MAPIObjects.h" />
+    <ClInclude Include="MapiUtils.h" />
     <ClInclude Include="MapiWrapper.h" />
   </ItemGroup>
   <ItemGroup>
