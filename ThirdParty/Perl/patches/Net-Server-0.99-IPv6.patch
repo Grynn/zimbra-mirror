@@ -1201,12 +1201,12 @@
 -
 -    if( defined $prop->{reverse_lookups} ){
 -      $prop->{peerhost} = gethostbyaddr( inet_aton($prop->{peeraddr}), AF_INET );
-+    ($prop->{peerport}, $prop->{peeraddrn}) =
-+      $sock->sockdomain == AF_INET ? Socket::sockaddr_in($prop->{udp_peer})
-+                                 : Socket6::sockaddr_in6($prop->{udp_peer});
++    if ($sock->sockdomain == AF_INET) { ($prop->{peerport}, $prop->{peeraddrn}) = Socket::sockaddr_in($prop->{udp_peer});
++    } else { ($prop->{peerport}, $prop->{peeraddrn}) = Socket6::sockaddr_in6($prop->{udp_peer});
++    }
 +    $prop->{peeraddr} = Socket6->UNIVERSAL::can('inet_ntop')
 +                   ? Socket6::inet_ntop($sock->sockdomain, $prop->{peeraddrn})
-+                   : inet_ntoa( $prop->{peeraddrn} );
++                   : Socket::inet_ntoa( $prop->{peeraddrn} );
 +  }elsif( $prop->{peername} = $sock->peername ){
 +    $prop->{peeraddrn} = $sock->peeraddr;  # binary
 +    $prop->{peeraddr} = $sock->peerhost;   # ascii
