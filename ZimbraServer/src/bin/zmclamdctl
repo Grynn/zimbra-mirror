@@ -84,9 +84,6 @@ case "$1" in
         ${zimbra_home}/data/clamav/db/daily.cvd
       cp -f ${zimbra_home}/clamav/db/main.cvd.init \
         ${zimbra_home}/data/clamav/db/main.cvd
-      # Init the db
-      ${zimbra_home}/clamav/bin/freshclam --quiet \
-        --config-file=${zimbra_home}/conf/freshclam.conf &
     fi
     if [ x$2 = "x" ]; then
       rewriteconfig
