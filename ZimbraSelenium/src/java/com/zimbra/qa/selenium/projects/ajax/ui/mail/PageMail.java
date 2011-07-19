@@ -552,6 +552,12 @@ public class PageMail extends AbsTab {
 
 			}
 			
+		} else if ( (pulldown == Button.B_ACTIONS) && (option == Button.B_REDIRECT) ) {
+			
+			pulldownLocator = "css=td[id$='__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+			optionLocator = "css=div[id$='__REDIRECT'] td[id$='__REDIRECT_title']";
+			page = new DialogRedirect(this.MyApplication, this);
+			
 		} else if ((pulldown == Button.B_OPTIONS)&& (option == Button.O_ADD_SIGNATURE)) {
 
 			pulldownLocator = "css=td[id$='_ADD_SIGNATURE_dropdown']>div[class='ImgSelectPullDownArrow']";
@@ -1226,6 +1232,18 @@ public class PageMail extends AbsTab {
 
 				page = null;
 
+
+				// FALLTHROUGH
+
+			} else if ( option == Button.B_REDIRECT ) {
+
+				if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
+					optionLocator="css=td[id^='zmi__TV__REDIRECT__'] div[class='ImgRedirect']";
+				} else {
+					optionLocator="css=td[id^='zmi__CLV__REDIRECT__'] div[class='ImgRedirect']";
+				}
+
+				page = new DialogRedirect(this.MyApplication, this);
 
 				// FALLTHROUGH
 

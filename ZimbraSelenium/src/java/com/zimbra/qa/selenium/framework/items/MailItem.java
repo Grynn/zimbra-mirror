@@ -72,6 +72,7 @@ public class MailItem implements IItem {
 	public RecipientItem dFromRecipient;
 	public RecipientItem dSenderRecipient;
 	public RecipientItem dReplyToRecipient;
+	public RecipientItem dRedirectedFromRecipient;
 	
 	
 	/**
@@ -93,7 +94,6 @@ public class MailItem implements IItem {
 	 * The autoSaveTime associated with this draft) (see soap.txt for details)
 	 */
 	public String dAutoSendTime = null;
-	
 
 	////
 	// FINISH: SOAP Data
@@ -278,6 +278,8 @@ public class MailItem implements IItem {
 					mail.dSenderRecipient = r;
 				} else if ( r.dType == RecipientItem.RecipientType.ReplyTo ) {
 					mail.dReplyToRecipient = r;
+				} else if ( r.dType == RecipientItem.RecipientType.RedirectedFrom ) {
+					mail.dRedirectedFromRecipient = r;
 				} else {
 					throw new HarnessException("Unable to parse recipient element "+ eElement.prettyPrint());
 				}
@@ -451,5 +453,6 @@ public class MailItem implements IItem {
 
 		return (sb.toString());
 	}
+
 
 }
