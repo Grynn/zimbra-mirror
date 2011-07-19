@@ -13,7 +13,6 @@ import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
-import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.DialogEditFolder.Locators;
 
 /**
  * Represents a "Specify Message Send Time" dialog box (Send Later)
