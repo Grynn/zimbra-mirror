@@ -41,9 +41,6 @@ getpid() {
   if [ -f $pidfile ]; then
     cpid=`cat $pidfile`
   fi
-  if [ -f $fpidfile ]; then
-    fpid=`cat $fpidfile`
-  fi
 }
 
 checkrunning() {
