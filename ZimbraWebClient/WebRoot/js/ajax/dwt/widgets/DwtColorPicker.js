@@ -240,6 +240,14 @@ DwtColorPicker.prototype.setDefaultColor = function (color) {
 };
 
 DwtColorPicker.__color2hex = function(s) {
+	//in IE we can't get the calculated value so for white/black we get white/black (of course it could be set the the hex value in the markup but this is more bulletproof to make sure here)
+	if (s == "white") {
+		return "#FFFFFF";
+	}
+	if (s == "black") {
+		return "#000000";
+	}
+
     var m = s && s.match(DwtColorPicker._RGB_RE);
     if (m) {
 	// each component should be in range of (0 - 255)
