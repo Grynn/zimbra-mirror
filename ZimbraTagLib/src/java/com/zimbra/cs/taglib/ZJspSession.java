@@ -1,24 +1,25 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
- * 
+ * Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011 Zimbra, Inc.
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
 package com.zimbra.cs.taglib;
 
+import com.google.common.base.Charsets;
 import com.zimbra.common.account.Key;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.RemoteIP;
-import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.taglib.bean.BeanUtils;
 import com.zimbra.cs.zclient.ZAuthResult;
 import com.zimbra.cs.zclient.ZFolder;
@@ -42,17 +43,17 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 public class ZJspSession {
- 
+
     public static final String ATTR_SESSION = ZJspSession.class.getCanonicalName()+".session";
-    private static final String ATTR_TEMP_AUTHTOKEN = ZJspSession.class.getCanonicalName()+".authToken";    
- 
+    private static final String ATTR_TEMP_AUTHTOKEN = ZJspSession.class.getCanonicalName()+".authToken";
+
     // AP-TODO: COOKIE_NAME is no longer used, retire
     public static final String COOKIE_NAME = "ZM_AUTH_TOKEN";
     public static final String ZM_LAST_SERVER_COOKIE_NAME = "ZM_LAST_SERVER";
 
-    
+
     private static final String CONFIG_ZIMBRA_SOAP_URL = "zimbra.soap.url";
-    private static final String CONFIG_ZIMBRA_JSP_SESSION_TIMEOUT = "zimbra.jsp.session.timeout";            
+    private static final String CONFIG_ZIMBRA_JSP_SESSION_TIMEOUT = "zimbra.jsp.session.timeout";
     private static final String CONFIG_ZIMBRA_SEARCH_USE_OFFSET = "zimbra.search.useoffset";
 
     public static final String Q_ZAUTHTOKEN = "zauthtoken";
@@ -62,23 +63,23 @@ public class ZJspSession {
 
     private ZMailbox mMbox;
     private ZAuthToken mAuthToken;
- 
+
     public ZJspSession(ZAuthToken authToken, ZMailbox mbox) {
         mAuthToken = authToken;
         mMbox = mbox;
     }
-    
+
     public ZMailbox getMailbox() { return mMbox; }
     public ZAuthToken getAuthToken() { return mAuthToken; }
 
     private static String sSoapUrl = null;
 
-	private static final String DEFAULT_HTTPS_PORT = "443";
-	private static final String DEFAULT_HTTP_PORT = "80";
-	private static final String RANDOM_HTTP_PORT = "0";
-	private static final String PROTO_MIXED = "mixed";
-	private static final String PROTO_HTTP = "http";
-	private static final String PROTO_HTTPS = "https";
+    private static final String DEFAULT_HTTPS_PORT = "443";
+    private static final String DEFAULT_HTTP_PORT = "80";
+    private static final String RANDOM_HTTP_PORT = "0";
+    private static final String PROTO_MIXED = "mixed";
+    private static final String PROTO_HTTP = "http";
+    private static final String PROTO_HTTPS = "https";
 
     private static final String sProtocolMode = BeanUtils.getEnvString("protocolMode", PROTO_HTTP);
     private static final boolean MODE_HTTP = sProtocolMode.equals(PROTO_HTTP);
@@ -91,12 +92,10 @@ public class ZJspSession {
 
     private static final String sAdminUrl = BeanUtils.getEnvString("adminUrl", null);
 
-    private static final RemoteIP.TrustedIPs sTrustedIPs = new RemoteIP.TrustedIPs(BeanUtils.getEnvString("trustedIPs", "").split(" "));
-
     public static boolean secureAuthTokenCookie(HttpServletRequest request) {
         String initMode = request.getParameter(Q_ZINITMODE);
         boolean currentHttps = request.getScheme().equals(PROTO_HTTPS);
-        return MODE_HTTPS || (currentHttps && (initMode == null || initMode.equals(PROTO_HTTPS))); 
+        return MODE_HTTPS || (currentHttps && (initMode == null || initMode.equals(PROTO_HTTPS)));
     }
 
     public static boolean isProtocolModeHttps() {
@@ -104,23 +103,27 @@ public class ZJspSession {
     }
 
     private static void addParam(StringBuilder query, String name, String value) {
-        if (query.length() > 0) query.append('&');
-        if (value == null) value = "";
+        if (query.length() > 0) {
+            query.append('&');
+        }
+        if (value == null) {
+            value = "";
+        }
         try {
-            query.append(name).append("=").append(URLEncoder.encode(value, "utf-8"));
-        } catch (UnsupportedEncodingException e) {
-            // this should never happen...
-            query.append(name).append("=").append(URLEncoder.encode(value));
+            query.append(name).append("=").append(URLEncoder.encode(value, Charsets.UTF_8.name()));
+        } catch (UnsupportedEncodingException never) {
+            assert false;
         }
     }
 
     private static boolean isInQueryString(HttpServletRequest req, String name) {
         String qs = req.getQueryString();
-        return (!(qs == null || qs.length() == 0)) && qs.indexOf(name + "=") != -1; 
+        return (!(qs == null || qs.length() == 0)) && qs.indexOf(name + "=") != -1;
     }
-    
+
     private static String generateQueryString(HttpServletRequest req, Map<String,String> toAdd, Set<String> toRemove) {
         StringBuilder query = new StringBuilder();
+        @SuppressWarnings("rawtypes")
         Enumeration names = req.getParameterNames();
         while (names.hasMoreElements()) {
             String name = (String) names.nextElement();
@@ -141,7 +144,7 @@ public class ZJspSession {
 
         return query.length() > 0 ? "?" + query.toString()  : "";
     }
-    
+
     private static String getRedirect(HttpServletRequest request,
                                       String protoHostPort,
                                       String path,
@@ -150,12 +153,12 @@ public class ZJspSession {
     {
         if (path == null || path.equals(""))
             path = "/";
-        
+
         String contextPath = request.getContextPath();
         if(contextPath.equals("/")) contextPath = "";
-        
+
         String qs = generateQueryString(request, paramsToAdd, paramsToRemove);
-        
+
         return protoHostPort + contextPath + path + qs;
     }
 
@@ -169,7 +172,7 @@ public class ZJspSession {
         return getRedirect(request, protoHostPort, path, paramsToAdd, paramsToRemove);
     }
 
-    
+
     private static String getRedirect(HttpServletRequest request,
                                       String proto,
                                       String host,
@@ -182,17 +185,17 @@ public class ZJspSession {
             port = (sHttpsPort != null && sHttpsPort.equals(DEFAULT_HTTPS_PORT)) ? "" : ":" + sHttpsPort;
         } else if (proto.equals(PROTO_HTTP)) {
             if (sHttpPort.equals(RANDOM_HTTP_PORT))
-            	port = ":" + LC.zimbra_admin_service_port.value();
+                port = ":" + LC.zimbra_admin_service_port.value();
             else
-            	port = sHttpPort.equals(DEFAULT_HTTP_PORT) ? "" : ":" + sHttpPort;            
+                port = sHttpPort.equals(DEFAULT_HTTP_PORT) ? "" : ":" + sHttpPort;
         } else {
             return null;
         }
-        
+
         String protoHostPort = proto + "://" + host + port;
         return getRedirect(request, protoHostPort, path, paramsToAdd, paramsToRemove);
     }
-    
+
     public static String getPostLoginRedirectUrl(PageContext context, String path, ZAuthResult authResult, boolean rememberMe, boolean needRefer) {
         HttpServletRequest request = (HttpServletRequest) context.getRequest();
         HttpServletResponse response = (HttpServletResponse) context.getResponse();
@@ -255,7 +258,7 @@ public class ZJspSession {
 
     public static String getChangePasswordUrl(PageContext context, String path) {
         HttpServletRequest request = (HttpServletRequest) context.getRequest();
-        
+
         try {
             ZMailbox mbox = getZMailbox(context);
             String publicUrl = mbox.getAccountInfo(false).getPublicURLBase();
@@ -266,7 +269,7 @@ public class ZJspSession {
         } catch (ServiceException e) {
             // fall through to use the Host header
         }
-        
+
         String proto = MODE_HTTP ? PROTO_HTTP : PROTO_HTTPS;
         return getRedirectToHostHeader(request, proto, path, null, null);
     }
@@ -337,7 +340,7 @@ public class ZJspSession {
             Map<String,String> toAdd = new HashMap<String, String>();
             toAdd.put(Q_ZLASTSERVER, "1"); // to hopefully prevent redirect loops
             return getRedirect(request, request.getScheme(), lastServer, path, toAdd, null);
-        } 
+        }
 
         if (  ((MODE_MIXED || MODE_HTTPS) && CURRENT_HTTP) || (!CURRENT_HTTP && MODE_HTTP)) {
             Map<String,String> toAdd = new HashMap<String, String>();
@@ -352,7 +355,7 @@ public class ZJspSession {
         String useOffset = (String) Config.find(context, CONFIG_ZIMBRA_SEARCH_USE_OFFSET);
         return useOffset != null && (useOffset.equalsIgnoreCase("true") || useOffset.equalsIgnoreCase("1"));
     }
-    
+
     public static synchronized String getSoapURL(PageContext context) {
         if (sSoapUrl == null) {
             sSoapUrl = (String) Config.find(context, CONFIG_ZIMBRA_SOAP_URL);
@@ -363,17 +366,17 @@ public class ZJspSession {
                 } else {
                     String httpPort;
                     if (sHttpPort.equals(RANDOM_HTTP_PORT)) // offline uses random http port
-                    	httpPort = ":" + LC.zimbra_admin_service_port.value();
+                        httpPort = ":" + LC.zimbra_admin_service_port.value();
                     else
-                    	httpPort = sHttpPort.equals(DEFAULT_HTTP_PORT) ? "" : ":" + sHttpPort;
+                        httpPort = sHttpPort.equals(DEFAULT_HTTP_PORT) ? "" : ":" + sHttpPort;
                     sSoapUrl = "http://" + sLocalHost + httpPort +"/service/soap";
                 }
             }
         }
         return sSoapUrl;
     }
-    
-    public static ZMailbox getZMailbox(PageContext context) throws JspException { 
+
+    public static ZMailbox getZMailbox(PageContext context) throws JspException {
         try {
             ZJspSession session = ZJspSession.getSession(context);
             if (session == null ) {
@@ -385,13 +388,13 @@ public class ZJspSession {
             throw new JspTagException("getMailbox", e);
         }
     }
-            
+
     public static ZAuthToken getAuthToken(PageContext context) {
         // check here first, in case we are logging in and cookie isn't set yet.
         // String authToken = (String) context.getAttribute(ATTR_TEMP_AUTHTOKEN, PageContext.REQUEST_SCOPE);
         ZAuthToken authToken = (ZAuthToken) context.getAttribute(ATTR_TEMP_AUTHTOKEN, PageContext.REQUEST_SCOPE);
         if (authToken != null) return authToken;
-        
+
         HttpServletRequest request= (HttpServletRequest) context.getRequest();
         ZAuthToken zat = new ZAuthToken(request, false);
         if (zat.isEmpty())
@@ -414,14 +417,14 @@ public class ZJspSession {
     public static ZJspSession getSession(PageContext context) throws ServiceException {
         ZJspSession sess = (ZJspSession) context.getAttribute(ATTR_SESSION, PageContext.SESSION_SCOPE);
         ZAuthToken authToken = getAuthToken(context);
-        
+
         // see if we have a session that matches auth token
         if (sess != null && sess.getAuthToken().equals(authToken)) {
             return sess;
         }
 
         if (authToken == null || authToken.isEmpty()) {
-            return null;    
+            return null;
         } else {
             // see if we can get a mailbox from the auth token
             ZMailbox.Options options = new ZMailbox.Options(authToken, getSoapURL(context));
@@ -472,7 +475,7 @@ public class ZJspSession {
             }
         }
     }
-    
+
     public static ZJspSession setSession(PageContext context, ZMailbox mbox) throws ServiceException {
         ZJspSession sess = new ZJspSession(mbox.getAuthToken(), mbox);
         // save auth token for duration of request (chicken/egg in getSession)
@@ -501,10 +504,10 @@ public class ZJspSession {
             // ignore if the session is already gone
         }
     }
-    
+
     public static String getRemoteAddr(PageContext context) {
         HttpServletRequest req = (HttpServletRequest)context.getRequest();
-        RemoteIP remoteIp = new RemoteIP(req, sTrustedIPs);
+        RemoteIP remoteIp = new RemoteIP(req, ZimbraServlet.getTrustedIPs());
         return remoteIp.getRequestIP();
     }
 
