@@ -56,10 +56,6 @@ if(XFormItem) {
     }
 }
 
-if(Output_XFormItem) {
-    Output_XFormItem.prototype.helpTooltip = false;
-}
-
 }
 
 ZaHelpToolTipAdminExtension = function() {
