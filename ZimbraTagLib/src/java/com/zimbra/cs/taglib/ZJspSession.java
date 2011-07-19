@@ -19,7 +19,6 @@ import com.zimbra.common.account.Key;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.RemoteIP;
-import com.zimbra.cs.servlet.ZimbraServlet;
 import com.zimbra.cs.taglib.bean.BeanUtils;
 import com.zimbra.cs.zclient.ZAuthResult;
 import com.zimbra.cs.zclient.ZFolder;
@@ -91,6 +90,8 @@ public class ZJspSession {
     private static final String sLocalHost = BeanUtils.getEnvString("localHost", "localhost");
 
     private static final String sAdminUrl = BeanUtils.getEnvString("adminUrl", null);
+    private static final RemoteIP.TrustedIPs TRUSTED_IPS = new RemoteIP.TrustedIPs(
+            BeanUtils.getEnvString("trustedIPs", "").split(" "));
 
     public static boolean secureAuthTokenCookie(HttpServletRequest request) {
         String initMode = request.getParameter(Q_ZINITMODE);
@@ -507,7 +508,7 @@ public class ZJspSession {
 
     public static String getRemoteAddr(PageContext context) {
         HttpServletRequest req = (HttpServletRequest)context.getRequest();
-        RemoteIP remoteIp = new RemoteIP(req, ZimbraServlet.getTrustedIPs());
+        RemoteIP remoteIp = new RemoteIP(req, TRUSTED_IPS);
         return remoteIp.getRequestIP();
     }
 
