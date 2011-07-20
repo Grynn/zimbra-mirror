@@ -49,10 +49,6 @@ if ($help) {
         usage(0);
 }
 
-if ($sid <=0) {
-   usage(0);
-}
-
 if (!($mmrURI)) {
   usage(0);
 }
@@ -91,10 +87,16 @@ if(lc($ldap_is_master) eq "true") {
                 );
   my $size = $mesg->count;
   if ($size == 0) {
-    $mesg = $ldap->modify(
-      $dn,
-      add=>{olcServerID =>"$sid"},
-    );
+    if($sid > 0) {
+      $mesg = $ldap->modify(
+        $dn,
+        add=>{olcServerID =>"$sid"},
+      );
+    } else {
+      print "Error: No Server ID exists on master and none provided.\n";
+      print "       Provide valid Server ID value via the -s option.\n";
+      exit(1);
+    }
   }
 
   my $bdn="olcDatabase={2}hdb,cn=config";
@@ -182,18 +184,28 @@ if(lc($ldap_is_master) eq "true") {
     $mesg = $ldap->modify(
       $bdn,
       add=>{olcSyncrepl=>"rid=100 provider=$mmrURI bindmethod=simple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra credentials=$ldap_replication_password filter=\"(objectclass=*)\" searchbase=\"\" logfilter=\"(&(objectClass=auditWriteObject)(reqResult=0))\" logbase=cn=accesslog scope=sub schemachecking=off type=refreshAndPersist retry=\"60 +\" syncdata=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30"},
-      replace=>{olcMirrorMode=>"TRUE"},
     );
   } elsif ($ldap_starttls_supported && $zimbra_require_interprocess_security) {
     $mesg = $ldap->modify(
       $bdn,
       add=>{olcSyncrepl=>"rid=100 provider=$mmrURI bindmethod=simple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra credentials=$ldap_replication_password starttls=critical filter=\"(objectclass=*)\" searchbase=\"\" logfilter=\"(&(objectClass=auditWriteObject)(reqResult=0))\" logbase=cn=accesslog scope=sub schemachecking=off type=refreshAndPersist retry=\"60 +\" syncdata=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30"},
-      replace=>{olcMirrorMode=>"TRUE"},
     );
   } else {
     $mesg = $ldap->modify(
       $bdn,
       add=>{olcSyncrepl=>"rid=100 provider=$mmrURI bindmethod=simple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra credentials=$ldap_replication_password filter=\"(objectclass=*)\" searchbase=\"\" logfilter=\"(&(objectClass=auditWriteObject)(reqResult=0))\" logbase=cn=accesslog scope=sub schemachecking=off type=refreshAndPersist retry=\"60 +\" syncdata=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30"},
+    );
+  }
+  $mesg = $ldap ->search(
+                    base=>"$bdn",
+                    filter=>"(&(objectClass=olcHdbConfig)(olcMirrorMode:booleanMatch:=TRUE))",
+                    scope=>"sub",
+                    attrs => ['olcMirrorMode'],
+                );
+  $size = $mesg->count;
+  if ($size == 0 ) {
+    $mesg = $ldap->modify(
+      $bdn,
       replace=>{olcMirrorMode=>"TRUE"},
     );
   }
@@ -208,11 +220,11 @@ sub usage {
 
         $msg && print STDERR "\nERROR: $msg\n";
         print STDERR <<USAGE;
-  zmldapenable-mmr -s SID -m MMRURI
+  zmldapenable-mmr [-s SID] -m MMRURI
 
   Where:
-  SID is an unique Integer Server ID for THIS LDAP Master.  It CANNOT be in use by any other LDAP master.
-  MMRURI is the LDAP URI for an alternate master.
+  SID is an unique Integer Server ID for THIS LDAP Master.  It CANNOT be in use by any other LDAP master.  Example: 2
+  MMRURI is the LDAP URI for an alternate master.  Example: ldap://ldap-master2.example.com:389/
 
 USAGE
         exit (1);
