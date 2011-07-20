@@ -32,13 +32,15 @@ if ($id ne "zimbra") {
     print STDERR "Error: must be run as zimbra user\n";
     exit (1);
 }
-my ($help,$sid,$mmrURI);
+my ($help,$sid,$mmrURI,$rid);
 $sid=0;
+$rid=100;
 
 my $opts_good = GetOptions(
         'h|help' => \$help,
         's|sid=i' => \$sid,
         'm|mmr=s' => \$mmrURI,
+        'r|rid=i' => \$rid,
 );
 
 if (!$opts_good) {
@@ -183,17 +185,17 @@ if(lc($ldap_is_master) eq "true") {
   if ($mmrURI =~ /^ldaps:/) {
     $mesg = $ldap->modify(
       $bdn,
-      add=>{olcSyncrepl=>"rid=100 provider=$mmrURI bindmethod=simple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra credentials=$ldap_replication_password filter=\"(objectclass=*)\" searchbase=\"\" logfilter=\"(&(objectClass=auditWriteObject)(reqResult=0))\" logbase=cn=accesslog scope=sub schemachecking=off type=refreshAndPersist retry=\"60 +\" syncdata=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30"},
+      add=>{olcSyncrepl=>"rid=$rid provider=$mmrURI bindmethod=simple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra credentials=$ldap_replication_password filter=\"(objectclass=*)\" searchbase=\"\" logfilter=\"(&(objectClass=auditWriteObject)(reqResult=0))\" logbase=cn=accesslog scope=sub schemachecking=off type=refreshAndPersist retry=\"60 +\" syncdata=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30"},
     );
   } elsif ($ldap_starttls_supported && $zimbra_require_interprocess_security) {
     $mesg = $ldap->modify(
       $bdn,
-      add=>{olcSyncrepl=>"rid=100 provider=$mmrURI bindmethod=simple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra credentials=$ldap_replication_password starttls=critical filter=\"(objectclass=*)\" searchbase=\"\" logfilter=\"(&(objectClass=auditWriteObject)(reqResult=0))\" logbase=cn=accesslog scope=sub schemachecking=off type=refreshAndPersist retry=\"60 +\" syncdata=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30"},
+      add=>{olcSyncrepl=>"rid=$rid provider=$mmrURI bindmethod=simple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra credentials=$ldap_replication_password starttls=critical filter=\"(objectclass=*)\" searchbase=\"\" logfilter=\"(&(objectClass=auditWriteObject)(reqResult=0))\" logbase=cn=accesslog scope=sub schemachecking=off type=refreshAndPersist retry=\"60 +\" syncdata=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30"},
     );
   } else {
     $mesg = $ldap->modify(
       $bdn,
-      add=>{olcSyncrepl=>"rid=100 provider=$mmrURI bindmethod=simple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra credentials=$ldap_replication_password filter=\"(objectclass=*)\" searchbase=\"\" logfilter=\"(&(objectClass=auditWriteObject)(reqResult=0))\" logbase=cn=accesslog scope=sub schemachecking=off type=refreshAndPersist retry=\"60 +\" syncdata=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30"},
+      add=>{olcSyncrepl=>"rid=$rid provider=$mmrURI bindmethod=simple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra credentials=$ldap_replication_password filter=\"(objectclass=*)\" searchbase=\"\" logfilter=\"(&(objectClass=auditWriteObject)(reqResult=0))\" logbase=cn=accesslog scope=sub schemachecking=off type=refreshAndPersist retry=\"60 +\" syncdata=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30"},
     );
   }
   $mesg = $ldap ->search(
@@ -220,9 +222,10 @@ sub usage {
 
         $msg && print STDERR "\nERROR: $msg\n";
         print STDERR <<USAGE;
-  zmldapenable-mmr [-s SID] -m MMRURI
+  zmldapenable-mmr [-r RID] [-s SID] -m MMRURI
 
   Where:
+  RID is a unique Integer Replication ID for this replication instance.  It must be unique inside this server.  Example: 100 Default: 100
   SID is an unique Integer Server ID for THIS LDAP Master.  It CANNOT be in use by any other LDAP master.  Example: 2
   MMRURI is the LDAP URI for an alternate master.  Example: ldap://ldap-master2.example.com:389/
 
