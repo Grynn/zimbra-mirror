@@ -24,6 +24,7 @@ import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.common.account.Key.AccountBy;
+import com.zimbra.common.account.ProvisioningConstants;
 import com.zimbra.common.datasource.DataSourceType;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.zclient.ZMailbox;
@@ -319,7 +320,7 @@ public class CalDavBean extends FormBean {
 			addInvalid("url");
 		
 	    if (isAllOK()) {
-	        dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled, Provisioning.TRUE);
+	        dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled, ProvisioningConstants.TRUE);
 	        dsAttrs.put(Provisioning.A_zimbraDataSourceName, name);
 	        dsAttrs.put(Provisioning.A_zimbraDataSourceUsername, email);
 	        dsAttrs.put(Provisioning.A_zimbraPrefFromDisplay, displayName);
@@ -331,7 +332,7 @@ public class CalDavBean extends FormBean {
 	        dsAttrs.put(Provisioning.A_zimbraDataSourcePort, port);
 	        dsAttrs.put(Provisioning.A_zimbraDataSourceAttribute, "p:"+principalPath);
 	        dsAttrs.put(Provisioning.A_zimbraDataSourceConnectionType, (isSsl ? ConnectionType.ssl : ConnectionType.cleartext).toString());
-	        dsAttrs.put(Provisioning.A_zimbraDataSourceEnableTrace, isDebugTraceEnabled ? Provisioning.TRUE : Provisioning.FALSE);
+	        dsAttrs.put(Provisioning.A_zimbraDataSourceEnableTrace, isDebugTraceEnabled ? ProvisioningConstants.TRUE : ProvisioningConstants.FALSE);
 	        
 	        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncFreq, Long.toString(syncFreqSecs));
             dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, ZFolder.ID_USER_ROOT);

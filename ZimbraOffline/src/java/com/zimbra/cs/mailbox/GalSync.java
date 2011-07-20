@@ -37,6 +37,7 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.common.account.Key.AccountBy;
+import com.zimbra.common.account.ProvisioningConstants;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineGal;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -250,7 +251,7 @@ public class GalSync {
                 Long.toString(System.currentTimeMillis()));
             //we've done a full sync, group populate is implied; as long as remote server is 7xx
             if (mbox.getRemoteServerVersion().isAtLeast7xx()) {
-                prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalGroupMembersPopulated, Provisioning.TRUE);
+                prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalGroupMembersPopulated, ProvisioningConstants.TRUE);
             }
             if (account.isGalSyncRetryOn()) {
                 GalSyncRetry.checkpoint(mbox, galMbox, this.retryContactIds);
@@ -258,7 +259,7 @@ public class GalSync {
         } else if (!galAccount.getBooleanAttr(OfflineConstants.A_offlineGalGroupMembersPopulated, false) && mbox.getRemoteServerVersion().isAtLeast7xx()) {
             //existing groups have incorrect type=account and don't have member list
             populateGroupMembers(mbox, galAccount);
-            prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalGroupMembersPopulated, Provisioning.TRUE);
+            prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalGroupMembersPopulated, ProvisioningConstants.TRUE);
         }
         prov.setAccountAttribute(account, OfflineConstants.A_offlineGalAccountSyncToken, token);
         if (fullSync) {

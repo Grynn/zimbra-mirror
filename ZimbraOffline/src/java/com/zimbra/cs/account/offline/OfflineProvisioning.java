@@ -37,6 +37,7 @@ import javax.security.auth.login.LoginException;
 import com.sun.mail.smtp.SMTPTransport;
 import com.zimbra.common.account.Key;
 import com.zimbra.common.account.Key.AccountBy;
+import com.zimbra.common.account.ProvisioningConstants;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.datasource.DataSourceType;
 import com.zimbra.common.localconfig.LC;
@@ -555,7 +556,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (!(attrs.get(A_zimbraAccountStatus) instanceof String))
             attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
 
-        attrs.put(A_offlineFeatureSmtpEnabled, TRUE);
+        attrs.put(A_offlineFeatureSmtpEnabled, ProvisioningConstants.TRUE);
         attrs.remove(A_zimbraIsAdminAccount);
         attrs.remove(A_zimbraIsDomainAdminAccount);
 
@@ -565,13 +566,13 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraPrefMailPollingInterval, OfflineLC.zdesktop_client_poll_interval.value());
 
         attrs.put(A_zimbraPrefClientType, "advanced");
-        attrs.put(A_zimbraPrefAccountTreeOpen , getAllAccounts().size() == 0 ? TRUE : FALSE);
-        attrs.put(A_zimbraFeatureSharingEnabled, TRUE);
+        attrs.put(A_zimbraPrefAccountTreeOpen , getAllAccounts().size() == 0 ? ProvisioningConstants.TRUE : ProvisioningConstants.FALSE);
+        attrs.put(A_zimbraFeatureSharingEnabled, ProvisioningConstants.TRUE);
 
         attrs.remove(A_zimbraChildAccount);
         attrs.remove(A_zimbraPrefChildVisibleAccount);
 
-        attrs.put(A_zimbraJunkMessagesIndexingEnabled, TRUE);
+        attrs.put(A_zimbraJunkMessagesIndexingEnabled, ProvisioningConstants.TRUE);
         attrs.put(A_zimbraMailQuota, "0");
         attrs.put(A_offlineGalAccountSyncToken, "");
         
@@ -723,19 +724,19 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         setDefaultAccountAttributes(attrs);
 
         Object syncEnabled = dsAttrs.get(A_zimbraDataSourceContactSyncEnabled);
-        attrs.put(A_zimbraFeatureContactsEnabled, syncEnabled == null ? FALSE : syncEnabled);
+        attrs.put(A_zimbraFeatureContactsEnabled, syncEnabled == null ? ProvisioningConstants.FALSE : syncEnabled);
         syncEnabled = dsAttrs.get(A_zimbraDataSourceCalendarSyncEnabled);
-        attrs.put(A_zimbraFeatureCalendarEnabled, syncEnabled == null ? FALSE : syncEnabled);
+        attrs.put(A_zimbraFeatureCalendarEnabled, syncEnabled == null ? ProvisioningConstants.FALSE : syncEnabled);
         syncEnabled = dsAttrs.get(A_zimbraDataSourceTaskSyncEnabled);
-        attrs.put(A_zimbraFeatureTasksEnabled, syncEnabled == null ? FALSE : syncEnabled);
+        attrs.put(A_zimbraFeatureTasksEnabled, syncEnabled == null ? ProvisioningConstants.FALSE : syncEnabled);
         syncEnabled = dsAttrs.get(A_zimbraDataSourceSmtpEnabled);
-        attrs.put(A_offlineFeatureSmtpEnabled, syncEnabled == null ? TRUE : syncEnabled);
+        attrs.put(A_offlineFeatureSmtpEnabled, syncEnabled == null ? ProvisioningConstants.TRUE : syncEnabled);
 
-        attrs.put(A_zimbraFeatureBriefcasesEnabled, FALSE);
-        attrs.put(A_zimbraFeatureGalEnabled, FALSE);
-        attrs.put(A_zimbraFeatureIMEnabled, FALSE);
-        attrs.put(A_zimbraFeatureNotebookEnabled, FALSE);
-        attrs.put(A_zimbraPrefAccountTreeOpen , getAllAccounts().size() == 0 ? TRUE : FALSE);
+        attrs.put(A_zimbraFeatureBriefcasesEnabled, ProvisioningConstants.FALSE);
+        attrs.put(A_zimbraFeatureGalEnabled, ProvisioningConstants.FALSE);
+        attrs.put(A_zimbraFeatureIMEnabled, ProvisioningConstants.FALSE);
+        attrs.put(A_zimbraFeatureNotebookEnabled, ProvisioningConstants.FALSE);
+        attrs.put(A_zimbraPrefAccountTreeOpen , getAllAccounts().size() == 0 ? ProvisioningConstants.TRUE : ProvisioningConstants.FALSE);
 
         Account account = createAccountInternal(emailAddress, accountId, attrs, false, false);
         OfflineDataSource ds = null;
@@ -769,7 +770,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                         (String) dsAttrs.get(A_offlineYContactVerifier));
                 //create mailbox from scratch, don't need migration
                 if (OAuthManager.hasOAuthToken(account.getId())) {
-                    setDataSourceAttribute(ds, OfflineConstants.A_offlineYContactTokenReady, TRUE);
+                    setDataSourceAttribute(ds, OfflineConstants.A_offlineYContactTokenReady, ProvisioningConstants.TRUE);
                     YContactSync.skipMigration(mbox);
                 }
             }
@@ -842,7 +843,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         setDefaultAccountAttributes(attrs);
 
         OfflineAccount galAcct = (OfflineAccount)createAccountInternal(name, id, attrs, true, false);
-        setAccountAttribute(galAcct, OfflineConstants.A_offlineGalGroupMembersPopulated, Provisioning.FALSE);
+        setAccountAttribute(galAcct, OfflineConstants.A_offlineGalGroupMembersPopulated, ProvisioningConstants.FALSE);
         setAccountAttribute(mainAcct, OfflineConstants.A_offlineGalAccountSyncToken, "");
         setAccountAttribute(mainAcct, OfflineConstants.A_offlineGalAccountId, galAcct.getId());
         return galAcct;
@@ -907,9 +908,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_offlineClientId, clientId);
         attrs.put(A_offlineAccountFlavor, LOCAL_ACCOUNT_FLAVOR);
         attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
-        attrs.put(A_zimbraPrefAccountTreeOpen , TRUE);
-        attrs.put(A_zimbraPrefCalendarAlwaysShowMiniCal , TRUE);
-        attrs.put(A_zimbraPrefShareContactsInAutoComplete, TRUE);
+        attrs.put(A_zimbraPrefAccountTreeOpen , ProvisioningConstants.TRUE);
+        attrs.put(A_zimbraPrefCalendarAlwaysShowMiniCal , ProvisioningConstants.TRUE);
+        attrs.put(A_zimbraPrefShareContactsInAutoComplete, ProvisioningConstants.TRUE);
         attrs.put(A_zimbraPrefGetMailAction, "update");
         attrs.put(A_zimbraPrefOfflineBackupKeep, "2");
         attrs.put(A_zimbraPrefOfflineBackupAccountId, new String[] {LOCAL_ACCOUNT_ID});
@@ -928,9 +929,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         if (!isLocalAccount(account) || enabled == null)
             return;
-        b = enabled.equals(TRUE);
+        b = enabled.equals(ProvisioningConstants.TRUE);
         if (account.isFeatureNotebookEnabled() != b)
-            ((Map<String, Object>)attrs).put(Provisioning.A_zimbraFeatureNotebookEnabled, b ? Provisioning.TRUE : Provisioning.FALSE);
+            ((Map<String, Object>)attrs).put(Provisioning.A_zimbraFeatureNotebookEnabled, b ? ProvisioningConstants.TRUE : ProvisioningConstants.FALSE);
         if (b) {
             try {
                 Mailbox mbox = MailboxManager.getInstance().getMailboxByAccount(account);
@@ -1010,9 +1011,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         attrs.putAll(immutable);
         attrs.put(A_offlineAccountFlavor, flavor);
-        attrs.put(A_zimbraPrefSearchTreeOpen, FALSE);
-        attrs.put(A_zimbraPrefTagTreeOpen , FALSE);
-        attrs.put(A_zimbraDumpsterEnabled, FALSE);
+        attrs.put(A_zimbraPrefSearchTreeOpen, ProvisioningConstants.FALSE);
+        attrs.put(A_zimbraPrefTagTreeOpen , ProvisioningConstants.FALSE);
+        attrs.put(A_zimbraDumpsterEnabled, ProvisioningConstants.FALSE);
 
         // create account entry in database
         DbOfflineDirectory.createDirectoryEntry(EntryType.ACCOUNT, emailAddress, attrs, false);
@@ -1053,44 +1054,44 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     private void setDefaultAccountAttributes(Map<String, Object> attrs) {
-        addToMap(attrs, A_zimbraAllowAnyFromAddress, TRUE);
-        addToMap(attrs, A_zimbraAttachmentsBlocked, FALSE);
+        addToMap(attrs, A_zimbraAllowAnyFromAddress, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraAttachmentsBlocked, ProvisioningConstants.FALSE);
         addToMap(attrs, A_zimbraContactMaxNumEntries, "0");
 
-        addToMap(attrs, A_zimbraFeatureAdvancedSearchEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureBriefcasesEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureCalendarEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureChangePasswordEnabled, FALSE);
-        addToMap(attrs, A_zimbraFeatureContactsEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureConversationsEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureFiltersEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureFlaggingEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureGalAutoCompleteEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureGalSyncEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureGalEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureGroupCalendarEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureHtmlComposeEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureIMEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureIdentitiesEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureInitialSearchPreferenceEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureInstantNotify, TRUE);
-        addToMap(attrs, A_zimbraFeatureMailEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureMailForwardingEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureMailPriorityEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureNewMailNotificationEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureNotebookEnabled, FALSE);
-        addToMap(attrs, A_zimbraFeatureOutOfOfficeReplyEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeaturePop3DataSourceEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeaturePortalEnabled, FALSE);
-        addToMap(attrs, A_zimbraFeatureSavedSearchesEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureSharingEnabled, FALSE);
-        addToMap(attrs, A_zimbraFeatureSkinChangeEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureTaggingEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureTasksEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureViewInHtmlEnabled, TRUE);
-        addToMap(attrs, A_zimbraFeatureVoiceEnabled, FALSE);
+        addToMap(attrs, A_zimbraFeatureAdvancedSearchEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureBriefcasesEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureCalendarEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureChangePasswordEnabled, ProvisioningConstants.FALSE);
+        addToMap(attrs, A_zimbraFeatureContactsEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureConversationsEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureFiltersEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureFlaggingEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureGalAutoCompleteEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureGalSyncEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureGalEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureGroupCalendarEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureHtmlComposeEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureIMEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureIdentitiesEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureInitialSearchPreferenceEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureInstantNotify, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureMailEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureMailForwardingEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureMailPriorityEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureNewMailNotificationEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureNotebookEnabled, ProvisioningConstants.FALSE);
+        addToMap(attrs, A_zimbraFeatureOutOfOfficeReplyEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeaturePop3DataSourceEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeaturePortalEnabled, ProvisioningConstants.FALSE);
+        addToMap(attrs, A_zimbraFeatureSavedSearchesEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureSharingEnabled, ProvisioningConstants.FALSE);
+        addToMap(attrs, A_zimbraFeatureSkinChangeEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureTaggingEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureTasksEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureViewInHtmlEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraFeatureVoiceEnabled, ProvisioningConstants.FALSE);
 
-        addToMap(attrs, A_zimbraJunkMessagesIndexingEnabled, TRUE); //always enable junk index
+        addToMap(attrs, A_zimbraJunkMessagesIndexingEnabled, ProvisioningConstants.TRUE); //always enable junk index
 
         addToMap(attrs, A_zimbraMailIdleSessionTimeout, "0");
         addToMap(attrs, A_zimbraMailMessageLifetime, "0");
@@ -1108,57 +1109,57 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
         //addToMap(attrs, A_zimbraPortalName, "velodrome2");
 
-        addToMap(attrs, A_zimbraPrefAutoAddAddressEnabled, TRUE);
-        addToMap(attrs, A_zimbraPrefCalendarAlwaysShowMiniCal, FALSE);
+        addToMap(attrs, A_zimbraPrefAutoAddAddressEnabled, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraPrefCalendarAlwaysShowMiniCal, ProvisioningConstants.FALSE);
         addToMap(attrs, A_zimbraPrefCalendarApptReminderWarningTime, "5");
         addToMap(attrs, A_zimbraPrefCalendarFirstDayOfWeek, "0");
         addToMap(attrs, A_zimbraPrefCalendarInitialView, "workWeek");
-        addToMap(attrs, A_zimbraPrefCalendarNotifyDelegatedChanges, FALSE);
-        addToMap(attrs, A_zimbraPrefCalendarUseQuickAdd, TRUE);
+        addToMap(attrs, A_zimbraPrefCalendarNotifyDelegatedChanges, ProvisioningConstants.FALSE);
+        addToMap(attrs, A_zimbraPrefCalendarUseQuickAdd, ProvisioningConstants.TRUE);
         addToMap(attrs, A_zimbraPrefComposeFormat, "text");
-        addToMap(attrs, A_zimbraPrefComposeInNewWindow, FALSE);
+        addToMap(attrs, A_zimbraPrefComposeInNewWindow, ProvisioningConstants.FALSE);
         addToMap(attrs, A_zimbraPrefContactsInitialView, "list");
         addToMap(attrs, A_zimbraPrefContactsPerPage, "25");
         addToMap(attrs, A_zimbraPrefDedupeMessagesSentToSelf, "dedupeNone");
         addToMap(attrs, A_zimbraPrefForwardIncludeOriginalText, "includeBody");
-        addToMap(attrs, A_zimbraPrefForwardReplyInOriginalFormat, FALSE);
+        addToMap(attrs, A_zimbraPrefForwardReplyInOriginalFormat, ProvisioningConstants.FALSE);
         addToMap(attrs, A_zimbraPrefForwardReplyPrefixChar, ">");
-        addToMap(attrs, A_zimbraPrefGalAutoCompleteEnabled, FALSE);
+        addToMap(attrs, A_zimbraPrefGalAutoCompleteEnabled, ProvisioningConstants.FALSE);
         addToMap(attrs, A_zimbraPrefGroupMailBy, "conversation");
         addToMap(attrs, A_zimbraPrefHtmlEditorDefaultFontColor, "#000000");
         addToMap(attrs, A_zimbraPrefHtmlEditorDefaultFontFamily, "Arial");
         addToMap(attrs, A_zimbraPrefHtmlEditorDefaultFontSize, "10pt");
-        addToMap(attrs, A_zimbraPrefIMAutoLogin, TRUE);
-        addToMap(attrs, A_zimbraPrefImapSearchFoldersEnabled, TRUE);
+        addToMap(attrs, A_zimbraPrefIMAutoLogin, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraPrefImapSearchFoldersEnabled, ProvisioningConstants.TRUE);
         addToMap(attrs, A_zimbraPrefInboxUnreadLifetime, "0");
-        addToMap(attrs, A_zimbraPrefIncludeSpamInSearch, FALSE);
-        addToMap(attrs, A_zimbraPrefIncludeTrashInSearch, FALSE);
+        addToMap(attrs, A_zimbraPrefIncludeSpamInSearch, ProvisioningConstants.FALSE);
+        addToMap(attrs, A_zimbraPrefIncludeTrashInSearch, ProvisioningConstants.FALSE);
         addToMap(attrs, A_zimbraPrefMailInitialSearch, "in:inbox");
         addToMap(attrs, A_zimbraPrefMailItemsPerPage, "50");
         addToMap(attrs, A_zimbraPrefMailPollingInterval, OfflineLC.zdesktop_client_poll_interval.value());
-        addToMap(attrs, A_zimbraPrefMailSignatureEnabled, FALSE);
+        addToMap(attrs, A_zimbraPrefMailSignatureEnabled, ProvisioningConstants.FALSE);
         addToMap(attrs, A_zimbraPrefMailSignatureStyle, "outlook");
-        addToMap(attrs, A_zimbraPrefMessageViewHtmlPreferred, TRUE);
-        addToMap(attrs, A_zimbraPrefReadingPaneEnabled, TRUE);
+        addToMap(attrs, A_zimbraPrefMessageViewHtmlPreferred, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraPrefReadingPaneEnabled, ProvisioningConstants.TRUE);
         addToMap(attrs, A_zimbraPrefReadingPaneLocation, "right");
         addToMap(attrs, A_zimbraPrefReplyIncludeOriginalText, "includeBody");
-        addToMap(attrs, A_zimbraPrefSaveToSent, TRUE);
+        addToMap(attrs, A_zimbraPrefSaveToSent, ProvisioningConstants.TRUE);
         addToMap(attrs, A_zimbraPrefSentLifetime, "0");
         addToMap(attrs, A_zimbraPrefSentMailFolder, "sent");
-        addToMap(attrs, A_zimbraPrefShowFragments, TRUE);
-        addToMap(attrs, A_zimbraPrefShowSearchString, TRUE);
-        addToMap(attrs, A_zimbraPrefUseKeyboardShortcuts, TRUE);
-        addToMap(attrs, A_zimbraPrefUseRfc2231, FALSE);
-        addToMap(attrs, A_zimbraPrefUseTimeZoneListInCalendar, FALSE);
+        addToMap(attrs, A_zimbraPrefShowFragments, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraPrefShowSearchString, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraPrefUseKeyboardShortcuts, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraPrefUseRfc2231, ProvisioningConstants.FALSE);
+        addToMap(attrs, A_zimbraPrefUseTimeZoneListInCalendar, ProvisioningConstants.FALSE);
 
         String[] skins = mLocalConfig.getMultiAttr(Provisioning.A_zimbraInstalledSkin);
         attrs.put(A_zimbraPrefSkin, skins == null || skins.length == 0 ? "yahoo" : skins[0]);
 
         attrs.put(A_zimbraPrefClientType, "advanced");
-        attrs.put(A_zimbraFeatureSharingEnabled, FALSE);
+        attrs.put(A_zimbraFeatureSharingEnabled, ProvisioningConstants.FALSE);
 
-        addToMap(attrs, A_zimbraIsAdminAccount, TRUE);
-        addToMap(attrs, A_zimbraIsDomainAdminAccount, TRUE);
+        addToMap(attrs, A_zimbraIsAdminAccount, ProvisioningConstants.TRUE);
+        addToMap(attrs, A_zimbraIsDomainAdminAccount, ProvisioningConstants.TRUE);
     }
 
     public static String getSanitizedValue(String key, String value) throws ServiceException {
@@ -1294,7 +1295,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 attrs.put(A_zimbraId, UUID.randomUUID().toString());
                 attrs.put(A_zimbraAccountStatus, ACCOUNT_STATUS_ACTIVE);
                 attrs.put(A_offlineRemotePassword, LC.zimbra_ldap_password.value());
-                attrs.put(A_zimbraIsAdminAccount, TRUE);
+                attrs.put(A_zimbraIsAdminAccount, ProvisioningConstants.TRUE);
             }
         }
 
@@ -1647,8 +1648,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             attrs.put(A_zimbraId, UUID.randomUUID().toString());
         attrs.put(A_cn, name);
         attrs.put(A_objectClass, "zimbraZimletEntry");
-        attrs.put(A_zimbraZimletEnabled, FALSE);
-        attrs.put(A_zimbraZimletIndexingEnabled, attrs.containsKey(A_zimbraZimletKeyword) ? TRUE : FALSE);
+        attrs.put(A_zimbraZimletEnabled, ProvisioningConstants.FALSE);
+        attrs.put(A_zimbraZimletIndexingEnabled, attrs.containsKey(A_zimbraZimletKeyword) ? ProvisioningConstants.TRUE : ProvisioningConstants.FALSE);
 
         DbOfflineDirectory.createDirectoryEntry(EntryType.ZIMLET, name, attrs, false);
         Zimlet zimlet = new OfflineZimlet(name, (String) attrs.get(A_zimbraId), attrs, this);
@@ -1792,7 +1793,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     synchronized Identity createIdentity(Account account, String name, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
-        if (name.equalsIgnoreCase(DEFAULT_IDENTITY_NAME))
+        if (name.equalsIgnoreCase(ProvisioningConstants.DEFAULT_IDENTITY_NAME))
             throw AccountServiceException.IDENTITY_EXISTS(name);
 
         List<Identity> existing = getAllIdentities(account);
@@ -1833,7 +1834,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     synchronized void deleteIdentity(Account account, String name, boolean markChanged) throws ServiceException {
-        if (name.equalsIgnoreCase(DEFAULT_IDENTITY_NAME))
+        if (name.equalsIgnoreCase(ProvisioningConstants.DEFAULT_IDENTITY_NAME))
             throw ServiceException.INVALID_REQUEST("can't delete default identity", null);
 
         Identity ident = get(account, Key.IdentityBy.name, name);
@@ -1862,7 +1863,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     synchronized void modifyIdentity(Account account, String name, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
-        if (name.equalsIgnoreCase(DEFAULT_IDENTITY_NAME)) {
+        if (name.equalsIgnoreCase(ProvisioningConstants.DEFAULT_IDENTITY_NAME)) {
             modifyAttrs(account, attrs, false, true, markChanged);
             return;
         }
@@ -1904,7 +1905,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (key == null) return null;
         Map<String,Object> attrs = null;
         if (keyType == Key.IdentityBy.name) {
-            if (key.equalsIgnoreCase(DEFAULT_IDENTITY_NAME))
+            if (key.equalsIgnoreCase(ProvisioningConstants.DEFAULT_IDENTITY_NAME))
                 return getDefaultIdentity(account);
             attrs = DbOfflineDirectory.readDirectoryLeaf(EntryType.IDENTITY, account, A_offlineDn, key);
         } else if (keyType == Key.IdentityBy.id) {
@@ -2125,7 +2126,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             attrs.put(A_offlineModifiedAttrs, A_offlineDn);
 
         if (isDataSourceAccount(account))
-            attrs.put(A_zimbraDataSourceEnabled, TRUE);
+            attrs.put(A_zimbraDataSourceEnabled, ProvisioningConstants.TRUE);
 
         //testDataSource(new OfflineDataSource(account, type, name, dsid, attrs));
 
@@ -2283,7 +2284,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 adjustAccountDisplayName(account, ds, attrs);
             }
 
-            attrs.put(A_zimbraDataSourceEnabled, TRUE);
+            attrs.put(A_zimbraDataSourceEnabled, ProvisioningConstants.TRUE);
         }
 
         Map<String, Object> context = new HashMap<String, Object>();
@@ -2298,8 +2299,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             AttributeManager.getInstance().postModify(attrs, ds, context, false, true);
         }
         if (!isLocalAccount(account) && isDataSourceAccount(account)) {
-            setAccountAttribute(account, A_zimbraFeatureCalendarEnabled, ds.getBooleanAttr(A_zimbraDataSourceCalendarSyncEnabled, false) ? TRUE : FALSE);
-            setAccountAttribute(account, A_zimbraFeatureContactsEnabled, ds.getBooleanAttr(A_zimbraDataSourceContactSyncEnabled, false) ? TRUE : FALSE);
+            setAccountAttribute(account, A_zimbraFeatureCalendarEnabled, ds.getBooleanAttr(A_zimbraDataSourceCalendarSyncEnabled, false) ? ProvisioningConstants.TRUE : ProvisioningConstants.FALSE);
+            setAccountAttribute(account, A_zimbraFeatureContactsEnabled, ds.getBooleanAttr(A_zimbraDataSourceContactSyncEnabled, false) ? ProvisioningConstants.TRUE : ProvisioningConstants.FALSE);
         }
         //for yahoo contact sync (address book)
         if (ds.getBooleanAttr(A_zimbraDataSourceContactSyncEnabled, false)) {
@@ -2315,7 +2316,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                             ds.getAttr(A_offlineYContactTokenTimestamp),
                             ds.getAttr(A_offlineYContactVerifier));
                     if (OAuthManager.hasOAuthToken(account.getId())) {
-                        setDataSourceAttribute(ds, OfflineConstants.A_offlineYContactTokenReady, TRUE);
+                        setDataSourceAttribute(ds, OfflineConstants.A_offlineYContactTokenReady, ProvisioningConstants.TRUE);
                         YContactSync.migrateExistingContacts(((OfflineDataSource)ds).getContactSyncDataSource());
                     }
                 }

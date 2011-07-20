@@ -19,6 +19,7 @@ import java.util.Map;
 
 import javax.mail.Session;
 
+import com.zimbra.common.account.ProvisioningConstants;
 import com.zimbra.common.datasource.DataSourceType;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
@@ -211,14 +212,14 @@ public class OfflineDataSource extends DataSource {
         OfflineProvisioning op = (OfflineProvisioning) Provisioning.getInstance();
         op.setDataSourceAttribute(
             this, OfflineProvisioning.A_zimbraDataSourceContactSyncEnabled,
-            enabled ? Provisioning.TRUE : Provisioning.FALSE);
+            enabled ? ProvisioningConstants.TRUE : ProvisioningConstants.FALSE);
     }
 
     public void setCalendarSyncEnabled(boolean enabled) throws ServiceException {
         OfflineProvisioning op = (OfflineProvisioning) Provisioning.getInstance();
         op.setDataSourceAttribute(
             this, OfflineProvisioning.A_zimbraDataSourceCalendarSyncEnabled,
-            enabled ? Provisioning.TRUE : Provisioning.FALSE);
+            enabled ? ProvisioningConstants.TRUE : ProvisioningConstants.FALSE);
     }
     
     @Override

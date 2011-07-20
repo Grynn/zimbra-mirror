@@ -48,6 +48,7 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.common.account.Key;
 import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.common.account.Key.DomainBy;
+import com.zimbra.common.account.ProvisioningConstants;
 import com.zimbra.cs.account.AccessManager;
 import com.zimbra.cs.extension.ExtensionDispatcherServlet;
 import com.zimbra.cs.extension.ExtensionException;
@@ -929,7 +930,7 @@ public class NginxLookupExtension implements ZimbraExtension {
                         } else
                             useExternalRoute = domain.useExternalRoute();
                     } else
-                        useExternalRoute = Provisioning.TRUE.equals(useExtRouteOnAcct);
+                        useExternalRoute = ProvisioningConstants.TRUE.equals(useExtRouteOnAcct);
                 }
                 
                 if (useExternalRoute) {

@@ -17,6 +17,7 @@ package com.zimbra.cs.account.offline;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.zimbra.common.account.ProvisioningConstants;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Config;
 import com.zimbra.cs.account.Provisioning;
@@ -47,10 +48,10 @@ class OfflineConfig extends Config {
             String[] skins = OfflineLC.zdesktop_skins.value().split("\\s*,\\s*");
             attrs.put(Provisioning.A_zimbraInstalledSkin, skins);
             if (!OfflineLC.zdesktop_redolog_enabled.booleanValue()) {
-                attrs.put(Provisioning.A_zimbraRedoLogEnabled, OfflineLC.zdesktop_redolog_enabled.booleanValue() ? Provisioning.TRUE : Provisioning.FALSE);
+                attrs.put(Provisioning.A_zimbraRedoLogEnabled, OfflineLC.zdesktop_redolog_enabled.booleanValue() ? ProvisioningConstants.TRUE : ProvisioningConstants.FALSE);
                 attrs.put(Provisioning.A_zimbraRedoLogFsyncIntervalMS, 0);
             }
-            attrs.put(Provisioning.A_zimbraSmtpSendAddMailer, Provisioning.FALSE);
+            attrs.put(Provisioning.A_zimbraSmtpSendAddMailer, ProvisioningConstants.FALSE);
             attrs.put(Provisioning.A_zimbraNotebookAccount, "local@host.local");
             attrs.put(Provisioning.A_zimbraMtaMaxMessageSize, OfflineLC.zdesktop_upload_size_limit.value());
 

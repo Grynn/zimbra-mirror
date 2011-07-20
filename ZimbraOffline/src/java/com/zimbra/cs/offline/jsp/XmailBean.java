@@ -17,6 +17,7 @@ package com.zimbra.cs.offline.jsp;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.zimbra.common.account.ProvisioningConstants;
 import com.zimbra.common.datasource.DataSourceType;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.SoapFaultException;
@@ -166,8 +167,8 @@ public class XmailBean extends MailBean {
                 }
                 if (isAllOK()) {
                     dsAttrs.put(OfflineConstants.A_offlineAccountFlavor, accountFlavor);
-                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceAccountSetup, Provisioning.TRUE);
-                    dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled, Provisioning.TRUE);
+                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceAccountSetup, ProvisioningConstants.TRUE);
+                    dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled, ProvisioningConstants.TRUE);
                     dsAttrs.put(Provisioning.A_zimbraDataSourceUsername, username);
                     if (!password.equals(JspConstants.MASKED_PASSWORD))
                         dsAttrs.put(Provisioning.A_zimbraDataSourcePassword, password);
@@ -178,25 +179,25 @@ public class XmailBean extends MailBean {
                     dsAttrs.put(Provisioning.A_zimbraDataSourceHost, host);
                     dsAttrs.put(Provisioning.A_zimbraDataSourcePort, port);
                     dsAttrs.put(Provisioning.A_zimbraDataSourceConnectionType, connectionType.toString());
-                    dsAttrs.put(Provisioning.A_zimbraDataSourceEnableTrace, isDebugTraceEnabled ? Provisioning.TRUE
-                            : Provisioning.FALSE);
+                    dsAttrs.put(Provisioning.A_zimbraDataSourceEnableTrace, isDebugTraceEnabled ? ProvisioningConstants.TRUE
+                            : ProvisioningConstants.FALSE);
                     if (isCalendarSyncSupported()) {
                         dsAttrs.put(OfflineConstants.A_zimbraDataSourceCalendarSyncEnabled,
-                                calendarSyncEnabled ? Provisioning.TRUE : Provisioning.FALSE);
+                                calendarSyncEnabled ? ProvisioningConstants.TRUE : ProvisioningConstants.FALSE);
                     }
                     if (isContactSyncSupported()) {
                         dsAttrs.put(OfflineConstants.A_zimbraDataSourceContactSyncEnabled,
-                                contactSyncEnabled ? Provisioning.TRUE : Provisioning.FALSE);
+                                contactSyncEnabled ? ProvisioningConstants.TRUE : ProvisioningConstants.FALSE);
                     }
                     dsAttrs.put(Provisioning.A_zimbraDataSourceDomain, domain);
-                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpEnabled, smtpEnabled ? Provisioning.TRUE
-                            : Provisioning.FALSE);
+                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpEnabled, smtpEnabled ? ProvisioningConstants.TRUE
+                            : ProvisioningConstants.FALSE);
                     dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpHost, smtpHost);
                     dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpPort, smtpPort);
                     dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpConnectionType, (isSmtpSsl ? ConnectionType.ssl
                             : ConnectionType.cleartext).toString());
-                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthRequired, isSmtpAuth ? Provisioning.TRUE
-                            : Provisioning.FALSE);
+                    dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthRequired, isSmtpAuth ? ProvisioningConstants.TRUE
+                            : ProvisioningConstants.FALSE);
                     if (isSmtpAuth) {
                         dsAttrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthUsername, smtpUsername);
                         if (!smtpPassword.equals(JspConstants.MASKED_PASSWORD))
@@ -204,7 +205,7 @@ public class XmailBean extends MailBean {
                     }
                     dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncFreq, Long.toString(syncFreqSecs));
                     if (isFolderSyncSupported())
-                        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, Provisioning.TRUE);
+                        dsAttrs.put(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, ProvisioningConstants.TRUE);
                     if (dsType == DataSourceType.pop3) {
                         dsAttrs.put(Provisioning.A_zimbraDataSourceLeaveOnServer, Boolean.toString(leaveOnServer)
                                 .toUpperCase());

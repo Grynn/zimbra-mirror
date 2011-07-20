@@ -14,6 +14,7 @@
  */
 package com.zimbra.cs.taglib.bean;
 
+import com.zimbra.common.account.ProvisioningConstants;
 import com.zimbra.common.calendar.TZIDMapper;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.HttpUtil;
@@ -535,7 +536,7 @@ public class BeanUtils {
     */
    public static boolean isProvOrAttr(PageContext pc, String attr) throws JspException, ServiceException {
        Provisioning prov = Provisioning.getInstance();
-       return prov.getConfig().getBooleanAttr(attr, false) || Provisioning.TRUE.equals(getAttr(pc, attr));
+       return prov.getConfig().getBooleanAttr(attr, false) || ProvisioningConstants.TRUE.equals(getAttr(pc, attr));
    }
 
     public static String getMailURL(PageContext pc) {
