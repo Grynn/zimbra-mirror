@@ -14,11 +14,11 @@
  */
 package com.zimbra.cs.offline.jsp;
 
-import com.zimbra.cs.account.DataSource;
+import com.zimbra.common.datasource.DataSourceType;
 
 public class PopBean extends XmailBean {
     public PopBean() {
         port = "110";
-        type = DataSource.Type.pop3.toString();
+        type = DataSourceType.pop3.toString();
     }
 }

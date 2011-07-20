@@ -29,6 +29,7 @@ import java.util.Map.Entry;
 import org.json.JSONException;
 
 import com.google.common.io.Closeables;
+import com.zimbra.common.datasource.DataSourceType;
 import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
@@ -39,7 +40,6 @@ import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.soap.Element.XMLElement;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
-import com.zimbra.cs.account.DataSource.Type;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineGal;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -121,7 +121,7 @@ public final class GalSyncUtil {
             dsId = UUID.randomUUID().toString();
             prov.setAccountAttribute(galAccount, OfflineConstants.A_offlineGalAccountDataSourceId, dsId);
         }
-        return new DataSource(galAccount, Type.gal, galAccount.getName(), dsId,
+        return new DataSource(galAccount, DataSourceType.gal, galAccount.getName(), dsId,
             new HashMap<String, Object>(), prov);
     }
 

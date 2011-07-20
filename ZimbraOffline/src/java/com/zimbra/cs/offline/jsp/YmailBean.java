@@ -20,6 +20,7 @@ import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.util.yc.YContactException;
 import com.zimbra.cs.offline.util.yc.oauth.OAuthManager;
 import com.zimbra.cs.offline.util.yc.oauth.OAuthToken;
+import com.zimbra.soap.type.DataSource.ConnectionType;
 
 public class YmailBean extends ImapBean {
 
@@ -45,7 +46,7 @@ public class YmailBean extends ImapBean {
             }
         }
         host = email.endsWith("@yahoo.co.jp") ? "zimbra.imap.mail.yahoo.co.jp" : "zimbra.imap.mail.yahoo.com";
-        connectionType = DataSource.ConnectionType.ssl;
+        connectionType = ConnectionType.ssl;
         port = "993";
         if (this.contactSyncEnabled && (verb.isAdd() || verb.isModify())) {
             try {

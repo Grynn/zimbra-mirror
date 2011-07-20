@@ -17,14 +17,15 @@ package com.zimbra.cs.offline.jsp;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.zimbra.common.datasource.DataSourceType;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.DataSource.ConnectionType;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.jsp.JspConstants.JspVerb;
 import com.zimbra.cs.zclient.ZFolder;
+import com.zimbra.soap.type.DataSource.ConnectionType;
 
 public class XsyncBean extends MailBean {
     protected String fromDisplay = "";
@@ -69,7 +70,7 @@ public class XsyncBean extends MailBean {
             return;
         try {
             Map<String, Object> dsAttrs = new HashMap<String, Object>();
-            DataSource.Type dsType = isEmpty(type) ? null : DataSource.Type.fromString(type);
+            DataSourceType dsType = isEmpty(type) ? null : DataSourceType.fromString(type);
 
             if (verb.isAdd() || verb.isModify()) {
                 if (dsType == null)

@@ -35,12 +35,12 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AccountServiceException;
-import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.GalContact;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.common.account.Key;
 import com.zimbra.common.account.Key.DomainBy;
+import com.zimbra.common.datasource.DataSourceType;
 import com.zimbra.cs.account.Provisioning.GalMode;
 import com.zimbra.cs.account.Provisioning.SearchGalResult;
 import com.zimbra.cs.account.accesscontrol.AdminRight;
@@ -831,7 +831,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                     LdapConstants.LDAP_TRUE);
             dsAttrs.put(Provisioning.A_zimbraGalStatus, "enabled");
             Provisioning.getInstance().createDataSource(galSyncAccount,
-                    DataSource.Type.gal, "zimbra", dsAttrs);
+                    DataSourceType.gal, "zimbra", dsAttrs);
         } catch (ServiceException e) {
             ZimbraLog.extensions.error(
                     "error creating datasource for GalSyncAccount", e);

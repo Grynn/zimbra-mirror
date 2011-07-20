@@ -21,13 +21,13 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.offline.common.OfflineConstants;
+import com.zimbra.soap.type.DataSource.ConnectionType;
 
 public class ZmailBean extends MailBean {
     public ZmailBean() {
         port = "443";
-        connectionType = DataSource.ConnectionType.ssl;
+        connectionType = ConnectionType.ssl;
         syncFreqSecs = 0;
         type = "zimbra";
     }
@@ -50,7 +50,7 @@ public class ZmailBean extends MailBean {
         host = account.getAttr(JspConstants.OFFLINE_REMOTE_HOST);
         port = account.getAttr(JspConstants.OFFLINE_REMOTE_PORT);
         boolean ssl = account.getBooleanAttr(JspConstants.OFFLINE_REMOTE_SSL, false);
-        connectionType = ssl ? DataSource.ConnectionType.ssl : DataSource.ConnectionType.cleartext;
+        connectionType = ssl ? ConnectionType.ssl : ConnectionType.cleartext;
         syncFreqSecs = account.getTimeIntervalSecs(OfflineConstants.A_offlineSyncFreq, 0);
         isDebugTraceEnabled = account.getBooleanAttr(OfflineConstants.A_offlineEnableTrace, false);
     }

@@ -24,6 +24,7 @@ import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.common.soap.AdminExtConstants;
 import com.zimbra.common.account.Key.AccountBy;
+import com.zimbra.common.datasource.DataSourceType;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.datasource.ImportStatus;
 import com.zimbra.cs.account.Server;
@@ -340,7 +341,7 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
                 List<DataSource> sources = Provisioning.getInstance().getAllDataSources(localAccount);
                 for (DataSource ds : sources) {
                     if (ZimbraBulkProvisionExt.IMAP_IMPORT_DS_NAME.equalsIgnoreCase(ds.getName())
-                            && ds.getType() == DataSource.Type.imap
+                            && ds.getType() == DataSourceType.imap
                             && ds.isImportOnly()
                             && "1".equalsIgnoreCase(ds.getAttr(Provisioning.A_zimbraDataSourceFolderId))) {
                         ImportStatus importStatus = DataSourceManager.getImportStatus(localAccount, ds);
@@ -531,7 +532,7 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
                     localAccount);
             for (DataSource ds : sources) {
                 if (ZimbraBulkProvisionExt.IMAP_IMPORT_DS_NAME.equalsIgnoreCase(ds.getName())
-                        && ds.getType() == DataSource.Type.imap
+                        && ds.getType() == DataSourceType.imap
                         && ds.isImportOnly()
                         && "1".equalsIgnoreCase(ds.getAttr(Provisioning.A_zimbraDataSourceFolderId))) {
                     ImportStatus importStatus = DataSourceManager.getImportStatus(
@@ -608,7 +609,7 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
         StringUtil.addToMultiMap(dsAttrs, Provisioning.A_zimbraDataSourceIsInternal, "TRUE");
         StringUtil.addToMultiMap(dsAttrs, Provisioning.A_zimbraDataSourceName,ZimbraBulkProvisionExt.IMAP_IMPORT_DS_NAME);
         StringUtil.addToMultiMap(dsAttrs,Provisioning.A_zimbraDataSourceEnabled, "TRUE");
-        DataSource importDS = Provisioning.getInstance().createDataSource(account, DataSource.Type.imap,ZimbraBulkProvisionExt.IMAP_IMPORT_DS_NAME, dsAttrs);
+        DataSource importDS = Provisioning.getInstance().createDataSource(account, DataSourceType.imap,ZimbraBulkProvisionExt.IMAP_IMPORT_DS_NAME, dsAttrs);
         Map<String, Object> accAttrs = new HashMap<String, Object>();
         StringUtil.addToMultiMap(accAttrs,Provisioning.A_zimbraBatchedIndexingSize, batchSize);
         Provisioning.getInstance().modifyAttrs(account, accAttrs, true);

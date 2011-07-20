@@ -29,6 +29,7 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.common.account.Key;
 import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.common.account.Key.DataSourceBy;
+import com.zimbra.common.datasource.DataSourceType;
 import com.zimbra.cs.account.soap.SoapProvisioning;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
@@ -119,7 +120,7 @@ public class JspProvStub {
     	return prov.get(account, Key.DataSourceBy.name, dsName);
     }
     
-    public Account createOfflineDataSource(String dsName, String email, DataSource.Type dsType, Map<String, Object> dsAttrs)
+    public Account createOfflineDataSource(String dsName, String email, DataSourceType dsType, Map<String, Object> dsAttrs)
     		throws ServiceException {
         dsAttrs.put(OfflineConstants.A_offlineDataSourceName, dsName);
         dsAttrs.put(OfflineConstants.A_offlineDataSourceType, dsType.toString());
@@ -130,7 +131,7 @@ public class JspProvStub {
     public void createOfflineCalendarDataSource(String accountId, Map<String, Object> dsAttrs)
     		throws ServiceException {
     	Account account = prov.get(AccountBy.id, accountId);
-    	DataSource.Type dsType = DataSource.Type.caldav;
+    	DataSourceType dsType = DataSourceType.caldav;
     	String name = account.getAttr(OfflineConstants.A_offlineDataSourceName) + OfflineConstants.CALDAV_DS;
     	dsAttrs.put(Provisioning.A_zimbraDataSourceName, name);
     	dsAttrs.put(OfflineConstants.A_offlineDataSourceName, name);

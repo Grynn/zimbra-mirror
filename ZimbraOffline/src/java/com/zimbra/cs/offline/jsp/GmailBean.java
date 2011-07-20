@@ -14,7 +14,7 @@
  */
 package com.zimbra.cs.offline.jsp;
 
-import com.zimbra.cs.account.DataSource;
+import com.zimbra.soap.type.DataSource.ConnectionType;
 
 public class GmailBean extends ImapBean {
     public static final String Domain = "gmail.com";
@@ -30,7 +30,7 @@ public class GmailBean extends ImapBean {
 	    username = email;
         }
 	host = "imap.gmail.com";
-        connectionType = DataSource.ConnectionType.ssl;
+        connectionType = ConnectionType.ssl;
 	port = "993";
 
 	smtpHost = "smtp.gmail.com";

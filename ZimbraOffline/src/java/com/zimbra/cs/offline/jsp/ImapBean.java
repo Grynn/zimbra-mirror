@@ -14,7 +14,7 @@
  */
 package com.zimbra.cs.offline.jsp;
 
-import com.zimbra.cs.account.DataSource;
+import com.zimbra.common.datasource.DataSourceType;
 
 public class ImapBean extends XmailBean {
 
@@ -24,7 +24,7 @@ public class ImapBean extends XmailBean {
 
     public ImapBean() {
         port = "143";
-        type = DataSource.Type.imap.toString();
+        type = DataSourceType.imap.toString();
     }
 
     public boolean isFolderSyncSupported() {

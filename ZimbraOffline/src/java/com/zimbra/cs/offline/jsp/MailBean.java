@@ -20,11 +20,11 @@ import java.util.List;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
-import com.zimbra.cs.account.DataSource.ConnectionType;
 import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZFolder;
+import com.zimbra.soap.type.DataSource.ConnectionType;
 
 public class MailBean extends FormBean {
     public MailBean() {}
@@ -41,7 +41,7 @@ public class MailBean extends FormBean {
     protected String host = "";
     protected String port = "";
 
-    protected DataSource.ConnectionType connectionType = ConnectionType.cleartext;
+    protected ConnectionType connectionType = ConnectionType.cleartext;
     
     protected long syncFreqSecs = OfflineConstants.DEFAULT_SYNC_FREQ / 1000;
 

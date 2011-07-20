@@ -23,11 +23,12 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.DataSource.ConnectionType;
 import com.zimbra.common.account.Key.AccountBy;
+import com.zimbra.common.datasource.DataSourceType;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZFolder;
+import com.zimbra.soap.type.DataSource.ConnectionType;
 
 
 public class CalDavBean extends FormBean {
@@ -56,7 +57,7 @@ public class CalDavBean extends FormBean {
 	
 	protected boolean isDebugTraceEnabled;
 	protected boolean isLoaded;
-	protected DataSource.Type type;
+	protected DataSourceType type;
 	
 	public String getAccountId() {
 		return accountId;
@@ -234,7 +235,7 @@ public class CalDavBean extends FormBean {
 			return;
 		}
 		
-    	type = DataSource.Type.caldav;
+    	type = DataSourceType.caldav;
 		if (ds == null)
 			return;
 		name = ds.getName();
@@ -243,7 +244,7 @@ public class CalDavBean extends FormBean {
 		displayName = ds.getFromDisplay();
 		host = ds.getHost();
 		port = ds.getPort().toString();
-		isSsl = ds.getConnectionType() == DataSource.ConnectionType.ssl;
+		isSsl = ds.getConnectionType() == ConnectionType.ssl;
     	String attrs[] = ds.getMultiAttr(Provisioning.A_zimbraDataSourceAttribute);
     	for (String a : attrs) {
     		if (a.startsWith("p:")) {

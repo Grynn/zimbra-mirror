@@ -19,6 +19,7 @@ import java.util.Map;
 
 import javax.mail.Session;
 
+import com.zimbra.common.datasource.DataSourceType;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
@@ -45,7 +46,7 @@ public class OfflineDataSource extends DataSource {
     private OfflineDataSource contactSyncDataSource;
     private OfflineDataSource calendarSyncDataSource;
 
-    OfflineDataSource(Account acct, DataSource.Type type, String name, String id, Map<String,Object> attrs, Provisioning prov) {
+    OfflineDataSource(Account acct, DataSourceType type, String name, String id, Map<String,Object> attrs, Provisioning prov) {
         super(acct, type, name, id, attrs, prov);
         setServiceName(getAttr(Provisioning.A_zimbraDataSourceDomain));
     }
@@ -61,7 +62,7 @@ public class OfflineDataSource extends DataSource {
     public OfflineDataSource getContactSyncDataSource() throws ServiceException {
         if (isGmail() || isYahoo()) {
             if (contactSyncDataSource == null) {
-                contactSyncDataSource = newChildDataSource(Type.contacts);
+                contactSyncDataSource = newChildDataSource(DataSourceType.contacts);
             }
         }
         return contactSyncDataSource;
@@ -70,13 +71,13 @@ public class OfflineDataSource extends DataSource {
     public OfflineDataSource getCalendarSyncDataSource() throws ServiceException {
         if (isGmail() || isYahoo()) {
             if (calendarSyncDataSource == null) {
-                calendarSyncDataSource = newChildDataSource(Type.caldav);
+                calendarSyncDataSource = newChildDataSource(DataSourceType.caldav);
             }
         }
         return calendarSyncDataSource;
     }
 
-    private OfflineDataSource newChildDataSource(Type type) throws ServiceException {
+    private OfflineDataSource newChildDataSource(DataSourceType type) throws ServiceException {
         String pass = getDecryptedPassword();
         String suffix = "-" + type.name();
         Map<String, Object> attrs = new HashMap<String, Object>(getRawAttrs());
@@ -128,7 +129,7 @@ public class OfflineDataSource extends DataSource {
 
     @Override
     public boolean isSaveToSent() {
-        return getType() == Type.pop3 || knownService == null || knownService.isSaveToSent();
+        return getType() == DataSourceType.pop3 || knownService == null || knownService.isSaveToSent();
     }
 
     public boolean isLive() {
@@ -187,7 +188,7 @@ public class OfflineDataSource extends DataSource {
     }
     
     public boolean isEmail() {
-    	return getType() == Type.imap || getType() == Type.pop3;
+    	return getType() == DataSourceType.imap || getType() == DataSourceType.pop3;
     }
     
     public boolean isSmtpEnabled() {
@@ -265,12 +266,12 @@ public class OfflineDataSource extends DataSource {
 
     @Override
     public boolean isSyncNeeded() throws ServiceException {
-        return getType() == Type.imap && ImapSync.isSyncNeeded(this);
+        return getType() == DataSourceType.imap && ImapSync.isSyncNeeded(this);
     }
 
     @Override
     public void mailboxDeleted() {
-        if (getType() == Type.imap) {
+        if (getType() == DataSourceType.imap) {
             ImapSync.reset(this.getId());
         }
     }

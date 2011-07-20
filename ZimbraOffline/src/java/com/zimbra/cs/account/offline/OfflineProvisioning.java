@@ -38,6 +38,7 @@ import com.sun.mail.smtp.SMTPTransport;
 import com.zimbra.common.account.Key;
 import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.common.auth.ZAuthToken;
+import com.zimbra.common.datasource.DataSourceType;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.net.TrustManagers;
 import com.zimbra.common.service.RemoteServiceException;
@@ -47,27 +48,7 @@ import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.SystemUtil;
 import com.zimbra.common.util.ZimbraLog;
-import com.zimbra.cs.account.Account;
-import com.zimbra.cs.account.AccountServiceException;
-import com.zimbra.cs.account.AttributeManager;
-import com.zimbra.cs.account.CalendarResource;
-import com.zimbra.cs.account.Config;
-import com.zimbra.cs.account.Cos;
-import com.zimbra.cs.account.DataSource;
-import com.zimbra.cs.account.DistributionList;
-import com.zimbra.cs.account.Domain;
-import com.zimbra.cs.account.Entry;
-import com.zimbra.cs.account.EntrySearchFilter;
-import com.zimbra.cs.account.GlobalGrant;
-import com.zimbra.cs.account.IDNUtil;
-import com.zimbra.cs.account.Identity;
-import com.zimbra.cs.account.NamedEntry;
-import com.zimbra.cs.account.NamedEntryCache;
-import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.Server;
-import com.zimbra.cs.account.Signature;
-import com.zimbra.cs.account.XMPPComponent;
-import com.zimbra.cs.account.Zimlet;
+import com.zimbra.cs.account.*;
 import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.datasource.DataSourceManager;
@@ -704,7 +685,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         String accountLabel = (String)dsAttrs.remove(A_zimbraPrefLabel);
         dsAttrs.remove(A_offlineDataSourceName);
         String dsType = (String)dsAttrs.remove(A_offlineDataSourceType);
-        DataSource.Type type = DataSource.Type.valueOf(dsType);
+        DataSourceType type = DataSourceType.valueOf(dsType);
         String dsid = UUID.randomUUID().toString();
         dsAttrs.put(A_zimbraDataSourceId, dsid);
         String sslCertAlias = (String)dsAttrs.remove(OfflineConstants.A_zimbraDataSourceSslCertAlias);
@@ -2110,21 +2091,21 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     private Map<String, List<DataSource>> cachedDataSources = new HashMap<String, List<DataSource>>();
 
     @Override
-    public synchronized DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs) throws ServiceException {
+    public synchronized DataSource createDataSource(Account account, DataSourceType type, String name, Map<String, Object> attrs) throws ServiceException {
         return createDataSource(account, type, name, attrs, false, isZcsAccount(account));
     }
 
     @Override
-    public synchronized DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs, boolean passwdAlreadyEncrypted) throws ServiceException {
+    public synchronized DataSource createDataSource(Account account, DataSourceType type, String name, Map<String, Object> attrs, boolean passwdAlreadyEncrypted) throws ServiceException {
         return createDataSource(account, type, name, attrs, passwdAlreadyEncrypted, isZcsAccount(account));
     }
 
     @Override
-    public synchronized DataSource restoreDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs) throws ServiceException {
+    public synchronized DataSource restoreDataSource(Account account, DataSourceType type, String name, Map<String, Object> attrs) throws ServiceException {
         throw OfflineServiceException.UNSUPPORTED("restoreDataSource");
     }
 
-    synchronized DataSource createDataSource(Account account, DataSource.Type type, String name, Map<String, Object> attrs, boolean passwdAlreadyEncrypted, boolean markChanged)
+    synchronized DataSource createDataSource(Account account, DataSourceType type, String name, Map<String, Object> attrs, boolean passwdAlreadyEncrypted, boolean markChanged)
     throws ServiceException {
         List<DataSource> existing = getAllDataSources(account);
         if (existing.size() >= account.getLongAttr(A_zimbraDataSourceMaxNumEntries, 20))
@@ -2384,7 +2365,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (name == null)
             return null;
 
-        DataSource.Type type = DataSource.Type.fromString((String) attrs.get(A_offlineDataSourceType));
+        DataSourceType type = DataSourceType.fromString((String) attrs.get(A_offlineDataSourceType));
         return new OfflineDataSource(account, type, name, (String) attrs.get(A_zimbraDataSourceId), attrs, this);
     }
 
