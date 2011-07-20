@@ -144,10 +144,4 @@ if ($size == 0) {
   );
 }
 
-# Add new index for zimbraMemberOf
-$mesg = $ldap->modify(
-    $dn,
-    add =>{olcDbIndex=>"zimbraMemberOf eq"},
-  );
-
 $ldap->unbind;
