@@ -7,7 +7,6 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.zimbra.common.soap.Element;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
@@ -146,16 +145,27 @@ public class ContactGroupItem extends ContactItem implements IItem {
 	        // Create a contact group 
 			ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
 		
+			StringBuilder sb= new StringBuilder("");
+			for (String e:group.dlist) {
+				sb.append("<m type='I' value='" + e + "' />");
+			}
+			
 	        app.zGetActiveAccount().soapSend(
 	                "<CreateContactRequest xmlns='urn:zimbraMail'>" +
 	                "<cn " + tagParam + " >" +
 	                "<a n='type'>group</a>" +
 	                "<a n='nickname'>" + group.groupName +"</a>" +
-	                "<a n='dlist'>" + group.getDList() + "</a>" +
 	                "<a n='fileAs'>8:" +  group.fileAs +"</a>" +
+	                sb.toString() +	                
+	                //"<a n='dlist'>" + group.getDList() + "</a>" +
+	                
+		              
 	                "</cn>" +
 	                "</CreateContactRequest>");
 
+	    	group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+			
+	    	
 	        return group;
 	}
 	
@@ -164,6 +174,16 @@ public class ContactGroupItem extends ContactItem implements IItem {
 		throw new HarnessException("implement me!");
 	}
 
+	
+	public static String getId(ZimbraAccount account) {
+		return account.soapSelectValue("//mail:CreateContactResponse/mail:cn", "id");
+	}
+	
+	public static String[] getDList(ZimbraAccount account) {
+		String[] dlist = null; //account.so .soapSelectNodes("//mail:CreateContactResponse/mail:cn/mail:m");    
+		return dlist;
+	}
+	
 	@Override
 	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();

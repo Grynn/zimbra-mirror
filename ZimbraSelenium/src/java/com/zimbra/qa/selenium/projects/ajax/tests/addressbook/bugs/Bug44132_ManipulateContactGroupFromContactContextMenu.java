@@ -6,7 +6,7 @@ import java.util.*;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
-import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
+
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
@@ -97,17 +97,18 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 	public void Add1ContactToGroup() throws HarnessException {			
 		// Create a contact group via Soap
 		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);			             
-		group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-			
-		 // Create a contact via Soap then select
-		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
-		
+					
 		//refresh the browser
 		app.zPageAddressbook.zRefresh();
+				
 		
-		//select the contact group 
+		 // Create a contact via Soap then select
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+	
+		//select the contact 
 		app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_CONTACTGROUP, group, contactItem.fileAs);     
 		
+	
 		//Add contact to existing group 
 		group.addDListMember(contactItem.email);
 	
@@ -124,23 +125,19 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 	public void Add3ContactsToGroup() throws HarnessException {			
 		// Create a contact group via Soap
 		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);			             
-		group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
 		
 		//refresh the browser
 		app.zPageAddressbook.zRefresh();
 
 		// Create a contact via Soap
 		ContactItem contactItem1 = ContactItem.createUsingSOAP(app);			             
-		contactItem1.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
 		  		  
 		// Create a contact via Soap
 		ContactItem contactItem2 = ContactItem.createUsingSOAP(app);			             
-		contactItem2.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
 		
 		// Create a contact via Soap
 		ContactItem contactItem3 = ContactItem.createUsingSOAP(app);			             
-		contactItem3.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-
+		
 		 // Refresh the view, to pick up the new contact
 	    FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);	  
 	    app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
@@ -173,15 +170,12 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 	public void CreateContactGroupWith3Contacts() throws HarnessException {			
 		  // Create a contact via Soap
 		ContactItem contactItem1 = ContactItem.createUsingSOAP(app);			             
-		contactItem1.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
 		  		  
 		// Create a contact via Soap
 		ContactItem contactItem2 = ContactItem.createUsingSOAP(app);			             
-		contactItem2.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
 		
 		// Create a contact via Soap
 		ContactItem contactItem3 = ContactItem.createUsingSOAP(app);			             
-		contactItem3.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
 		
 		  // Refresh the view, to pick up the new contact
 	    FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);	  
@@ -205,5 +199,84 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		CreateGroupVerification(simpleFormGroup, group);
 	}
 
+	@Test(	description = "D1 Enhancement : Create a contact group with one contact + one group",
+			groups = { "functionaly" })
+	public void CreateContactGroupWith1ContactAnd1Group() throws HarnessException {			
+		  // Create a contact via Soap
+		ContactItem contactItem = ContactItem.createUsingSOAP(app);			             
+		  			
+		// Create a contact group via Soap
+		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);
+			             		
+
+		  // Refresh the view, to pick up the new contact + group
+	    FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);	  
+	    app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
+	    
+	    // Select the item
+	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contactItem.fileAs);
+	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group.fileAs);
+	    
+	   				  			
+		//open contact group form
+		SimpleFormContactGroupNew simpleFormGroup = (SimpleFormContactGroupNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_CONTACTGROUP, Button.O_NEW_CONTACTGROUP , contactItem.fileAs);     
+		
+		  //Create contact group 
+		ContactGroupItem newGroup = new ContactGroupItem("group_" + ZimbraSeleniumProperties.getUniqueString().substring(8));
+		newGroup.addDListMember(contactItem.email);
+		for (int i=0; i<group.dlist.size(); i++) {
+			  newGroup.addDListMember(group.dlist.get(i));
+		}
 	
+		//verification
+		CreateGroupVerification(simpleFormGroup, newGroup);
+
+	}		
+	
+
+	@Test(	description = "D1 Enhancement : Add 1 contact + 1 group to an existing group",
+			groups = { "functionaly" })
+	public void Add1ContactAnd1GroupToExistingGroup() throws HarnessException {			
+		// Create a contact group via Soap
+		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);			             
+	
+		// Create a contact group via Soap
+		ContactGroupItem group1 = ContactGroupItem.createUsingSOAP(app);			             		
+	
+		//refresh the browser
+		app.zPageAddressbook.zRefresh();
+
+		// Create a contact via Soap
+		ContactItem contactItem1 = ContactItem.createUsingSOAP(app);			             
+		  		  
+		 
+		// Refresh the view, to pick up the new contact + group
+	    FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Contacts);	  
+	    app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
+	    	  
+	
+	    // Select the items
+	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contactItem1.fileAs);
+	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group1.fileAs);
+	   				  							
+	   
+		//select the contact group 
+		app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_CONTACTGROUP, group, group1.fileAs);     
+		
+
+		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group1.fileAs);
+	   	
+		//verify toasted message 'group saved'  
+        String expectedMsg ="Group Saved";
+        ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
+        		        expectedMsg , "Verify toast message '" + expectedMsg + "'");
+    
+    	group.addDListMember(contactItem1.email);
+    	
+    	for (int i=0; i<group1.dlist.size(); i++) {
+			  group.addDListMember(group1.dlist.get(i));
+		}
+	
+	    Verification(group);
+	}
 }

@@ -152,6 +152,8 @@ public class ContactItem implements IItem {
 	                "</cn>" +
 	                "</CreateContactRequest>");	  
 		
+		contactItem.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
+		
         return contactItem;
     }
 	

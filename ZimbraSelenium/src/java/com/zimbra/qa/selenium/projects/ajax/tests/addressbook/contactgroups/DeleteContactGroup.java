@@ -146,34 +146,17 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 	@Test(	description = "Delete multiple contact groups at once",
 			groups = { "functional" })
 	public void DeleteMultipleContactGroups() throws HarnessException {
-
 		
 		 // Create a contact group via Soap
 		  ContactGroupItem group1 = ContactGroupItem.createUsingSOAP(app);
-			             
-		  group1.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-		  String[] dlist = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
-		  for (int i=0; i<dlist.length; i++) {
-			  group1.addDListMember(dlist[i]);
-		  }
+			             		  
 		  
 		// Create a contact group via Soap
 		  ContactGroupItem group2 = ContactGroupItem.createUsingSOAP(app);
-			             
-		  group2.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-		  String[] dlist2 = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
-		  for (int i=0; i<dlist2.length; i++) {
-			  group2.addDListMember(dlist2[i]);
-		  }
 		  
 		// Create a contact group via Soap
 		  ContactGroupItem group3 = ContactGroupItem.createUsingSOAP(app);
 			             
-		  group3.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-		  String[] dlist3 = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
-		  for (int i=0; i<dlist3.length; i++) {
-			  group3.addDListMember(dlist[i]);
-		  }
 		  
 	      // Refresh the view, to pick up the new contact groups
 	      FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");	      
@@ -216,17 +199,10 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		
 		 // Create a contact group via Soap
 		  ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);
-			             
-		  group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-		  String[] dlist = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
-		  for (int i=0; i<dlist.length; i++) {
-			  group.addDListMember(dlist[i]);
-		  }
-		  
+			             		  		  
 		  // Create a contact via Soap
 		  ContactItem contactItem = ContactItem.createUsingSOAP(app);			             
-		  contactItem.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-			
+		  
 		  
 	      // Refresh the view, to pick up the newly created ones
 	      FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");	      

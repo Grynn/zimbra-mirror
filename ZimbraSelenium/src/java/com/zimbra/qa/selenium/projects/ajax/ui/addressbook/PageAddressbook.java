@@ -425,10 +425,10 @@ public class PageAddressbook extends AbsTab {
 	  ContactGroupItem group = ContactGroupItem.createUsingSOAP(app, tagIDArray);
 		             
 	  group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-	  String[] dlist = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
-	  for (int i=0; i<dlist.length; i++) {
-		  group.addDListMember(dlist[i]);
-	  }
+	  //String[] dlist = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
+	  //for (int i=0; i<dlist.length; i++) {
+	  //	  group.addDListMember(dlist[i]);
+	  //}
 	  
 	  
       // Refresh the view, to pick up the new contact
