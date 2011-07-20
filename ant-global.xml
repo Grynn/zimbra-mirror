@@ -26,6 +26,7 @@
 
     <!-- ZimbraCommon -->
     <property name="common.dir" location="${zimbra.root.dir}/ZimbraCommon"/>
+    <property name="common.src.java.dir" location="${zimbra.root.dir}/ZimbraCommon/src/java"/>
     <property name="common.classes.dir" location="${common.dir}/build/classes"/>
     <property name="common.jarfile" location="${common.dir}/build/zimbracommon.jar"/>
     <property name="common.jars.dir" location="${common.dir}/jars"/>
