@@ -53,7 +53,6 @@ import com.zimbra.common.util.tar.TarInputStream;
 import com.zimbra.common.util.zip.ZipShort;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.ZAttrProvisioning;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.account.offline.OfflineAccount.Version;
@@ -1089,7 +1088,8 @@ public class InitialSync {
     }
 
     private boolean isAttachmentDownloadBlocked() throws ServiceException {
-        return (ombx.getRemoteServerVersion().getMajor() < 7) && (Boolean.valueOf(ombx.getOfflineAccount().getAttr(ZAttrProvisioning.A_zimbraAttachmentsBlocked)));
+        return (ombx.getRemoteServerVersion().getMajor() < 7) && 
+                (Boolean.valueOf(ombx.getOfflineAccount().getAttr(Provisioning.A_zimbraAttachmentsBlocked)));
     }
 
     /**

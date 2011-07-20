@@ -46,7 +46,6 @@ import com.zimbra.common.util.ZimbraHttpConnectionManager;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.ZAttrProvisioning;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.AuthProvider;
@@ -117,7 +116,7 @@ public class AccountBackupProducer {
         GetMethod get = new GetMethod(url);
         NameValuePair[] params = new NameValuePair[] {new NameValuePair("fmt", "tgz")};
         get.setQueryString(params);
-        authtoken.encode(client, get, false, acct.getAttr(ZAttrProvisioning.A_zimbraMailHost));
+        authtoken.encode(client, get, false, acct.getAttr(Provisioning.A_zimbraMailHost));
         try {
             int statusCode = HttpClientUtil.executeMethod(client, get);
             if (statusCode != HttpStatus.SC_OK) {
@@ -304,7 +303,7 @@ public class AccountBackupProducer {
                         } catch (FileNotFoundException e) {
                             throw ServiceException.UNKNOWN_DOCUMENT("File "+backupFile+" not found", e);
                         }
-                        authtoken.encode(client, post, false, acct.getAttr(ZAttrProvisioning.A_zimbraMailHost));
+                        authtoken.encode(client, post, false, acct.getAttr(Provisioning.A_zimbraMailHost));
                         try {
                             int statusCode = HttpClientUtil.executeMethod(client, post);
                             if (statusCode != HttpStatus.SC_OK) {
