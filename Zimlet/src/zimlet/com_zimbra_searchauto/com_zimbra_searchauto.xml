@@ -1,12 +1,7 @@
-<zimlet name="com_zimbra_searchauto" version="1.2" label="Search History" description="Enables search auto-complete based on search history.">
+<zimlet name="com_zimbra_searchauto" version="2.0" label="Search History" description="Helps autocomplete prior searches">
   <include>searchauto.js</include>
   <includeCSS>searchauto.css</includeCSS>
-  <handlerObject>com_zimbra_searchauto</handlerObject>
-
-  <zimletPanelItem label="Search Auto-complete" icon="sa-panelIcon">
-    <toolTipText>Stores and auto-completes searches based on search history.</toolTipText>
-  </zimletPanelItem>
-
+  <handlerObject>ZmSearchAutoZimlet</handlerObject>
   <userProperties>
    <property type="string" name="history"  value=""/>
    <property type="string" name="turnONAutoComplete" value="false"/>
