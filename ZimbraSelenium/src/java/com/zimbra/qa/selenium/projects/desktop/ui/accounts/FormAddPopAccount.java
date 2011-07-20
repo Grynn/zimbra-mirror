@@ -19,7 +19,7 @@ public class FormAddPopAccount extends AbsForm {
 
    public FormAddPopAccount(AbsApplication application) {
       super(application);
-      logger.info("new " + FormAddZimbraAccount.class.getCanonicalName());
+      logger.info("new " + FormAddPopAccount.class.getCanonicalName());
    }
 
    @Override

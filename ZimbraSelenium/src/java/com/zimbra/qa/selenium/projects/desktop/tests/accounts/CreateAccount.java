@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.DesktopAccountItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
+import com.zimbra.qa.selenium.framework.items.DesktopAccountItem.SECURITY_TYPE;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
@@ -17,6 +18,7 @@ import com.zimbra.qa.selenium.framework.util.staf.Stafzmtlsctl.SERVER_ACCESS;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.PageLogin;
 import com.zimbra.qa.selenium.projects.desktop.ui.accounts.FormAddGmailAccount;
+import com.zimbra.qa.selenium.projects.desktop.ui.accounts.FormAddImapAccount;
 import com.zimbra.qa.selenium.projects.desktop.ui.accounts.FormAddYahooAccount;
 import com.zimbra.qa.selenium.projects.desktop.ui.accounts.FormAddZimbraAccount;
 import com.zimbra.qa.selenium.projects.desktop.ui.accounts.PageAddNewAccount.DROP_DOWN_OPTION;
@@ -113,6 +115,80 @@ public class CreateAccount extends AjaxCommonTest {
             false);
 
       FormAddZimbraAccount accountForm = (FormAddZimbraAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.ZIMBRA);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zPressButton(Button.B_VALIDATE_AND_SAVE);
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "Please correct missing or invalid input.",
+            "Verify error message of wrong email address format");
+
+      app.zPageLogin.zNavigateTo();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
+   @Test(description="Wrong email address format (alphabet characters) when creating IMAP Account", groups = { "functional2" } )
+   public void wrongEmailAddressFormatImapAccount1() throws HarnessException {
+      String wrongEmailAddress = ZimbraSeleniumProperties.getUniqueString();
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            wrongEmailAddress,
+            wrongEmailAddress,
+            AjaxCommonTest.gmailPassword,
+            AjaxCommonTest.gmailImapReceivingServer,
+            SECURITY_TYPE.SSL,
+            "993",
+            AjaxCommonTest.hotmailPopSmtpServer,
+            false,
+            "25",
+            wrongEmailAddress,
+            AjaxCommonTest.gmailPassword);
+
+      FormAddImapAccount accountForm = (FormAddImapAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.IMAP);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zPressButton(Button.B_VALIDATE_AND_SAVE);
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "Please correct missing or invalid input.",
+            "Verify error message of wrong email address format");
+
+      app.zPageLogin.zNavigateTo();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
+   @Test(description="Wrong email address format (alphabet characters and '@') when creating IMAP Account", groups = { "functional2" } )
+   public void wrongEmailAddressFormatImapAccount2() throws HarnessException {
+      String wrongEmailAddress = ZimbraSeleniumProperties.getUniqueString() + "@";
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            wrongEmailAddress,
+            wrongEmailAddress,
+            AjaxCommonTest.gmailPassword,
+            AjaxCommonTest.gmailImapReceivingServer,
+            SECURITY_TYPE.SSL,
+            "993",
+            AjaxCommonTest.hotmailPopSmtpServer,
+            false,
+            "25",
+            wrongEmailAddress,
+            AjaxCommonTest.gmailPassword);
+
+      FormAddImapAccount accountForm = (FormAddImapAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.IMAP);
       accountForm.zFill(desktopAccountItem);
       accountForm.zPressButton(Button.B_VALIDATE_AND_SAVE);
 

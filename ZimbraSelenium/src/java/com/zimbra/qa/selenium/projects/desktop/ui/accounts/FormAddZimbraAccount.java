@@ -8,7 +8,6 @@ import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.desktop.ui.PageLogin;
-import com.zimbra.qa.selenium.projects.desktop.ui.accounts.FormAddImapAccount.Locators;
 
 public class FormAddZimbraAccount extends AbsForm {
 

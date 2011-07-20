@@ -88,6 +88,10 @@ public class AjaxCommonTest {
 	public final static String yahooPassword = ZimbraSeleniumProperties.getStringProperty("desktop.yahoo.password");
 	public final static String gmailUserName = ZimbraSeleniumProperties.getStringProperty("desktop.gmail.login");
 	public final static String gmailPassword = ZimbraSeleniumProperties.getStringProperty("desktop.gmail.password");
+	public final static String gmailImapReceivingServer = "imap.gmail.com";
+	public final static String gmailImapSmtpServer = "smtp.gmail.com";
+	public final static String hotmailPopReceivingServer = "pop3.live.com";
+	public final static String hotmailPopSmtpServer = "smtp.live.com";
 
 	// This variable is to track desktop current account, if new account is created
 	// then, desktop has to add that newly created account, while removing the

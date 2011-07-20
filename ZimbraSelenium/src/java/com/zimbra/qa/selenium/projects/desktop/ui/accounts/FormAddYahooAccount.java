@@ -21,9 +21,10 @@ public class FormAddYahooAccount extends AbsForm {
       public static final String zValidateAndSaveButton = "css=div[id='saveButton']";
       public static final String zCancelButton = "css=div[id='cancelButton']";
    }
+
    public FormAddYahooAccount(AbsApplication application) {
       super(application);
-      logger.info("new " + FormAddZimbraAccount.class.getCanonicalName());
+      logger.info("new " + FormAddYahooAccount.class.getCanonicalName());
    }
 
    @Override

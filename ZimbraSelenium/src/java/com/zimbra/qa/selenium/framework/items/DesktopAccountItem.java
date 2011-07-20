@@ -19,6 +19,19 @@ public class DesktopAccountItem implements IItem {
    public String port = null;
    public boolean ssl = false;
 
+   // Needed for IMAP and POP
+   public String receivingUsernname = null;
+   public String receivingPassword = null;
+   public String receiving = null;
+   public String receivingIncomingServer = null;
+   public SECURITY_TYPE receivingSecurityType = null;
+   public String receivingPort = null;
+   public String sendingSmtpServer = null;
+   public boolean sendingThroughSsl = false;
+   public String sendingPort = null;
+   public String sendingUserName = null;
+   public String sendingPassword = null;
+
    public DesktopAccountItem() {
       super();
    }
@@ -102,6 +115,45 @@ public class DesktopAccountItem implements IItem {
       desktopAccountItem.fullName = "Gmail" + ZimbraSeleniumProperties.getUniqueString();
       desktopAccountItem.emailAddress = emailAddress;
       desktopAccountItem.password = password;
+
+      return desktopAccountItem;
+   }
+
+   public enum SECURITY_TYPE {
+      NONE,
+      SSL,
+      TLS,
+      TLS_IF_AVAILABLE
+   }
+
+
+   public static DesktopAccountItem generateDesktopImapAccountItem(
+         String emailAddress,
+         String receivingUsername,
+         String receivingPassword,
+         String receivingIncomingServer,
+         SECURITY_TYPE receivingSecurityType,
+         String receivingPort,
+         String sendingSmtpServer,
+         boolean sendingThroughSsl,
+         String sendingPort,
+         String sendingUserName,
+         String sendingPassword) throws HarnessException{
+      DesktopAccountItem desktopAccountItem = new DesktopAccountItem();
+      desktopAccountItem.accountName = "name" + ZimbraSeleniumProperties.getUniqueString();
+      desktopAccountItem.fullName = "Imap" + ZimbraSeleniumProperties.getUniqueString();
+      desktopAccountItem.emailAddress = emailAddress;
+      desktopAccountItem.receivingUsernname = receivingUsername;
+      desktopAccountItem.receivingPassword = receivingPassword;
+      desktopAccountItem.receivingIncomingServer = receivingIncomingServer;
+      desktopAccountItem.receivingSecurityType = receivingSecurityType;
+      desktopAccountItem.receivingPort = receivingPort;
+      desktopAccountItem.sendingSmtpServer = sendingSmtpServer;
+      desktopAccountItem.sendingSmtpServer = sendingSmtpServer;
+      desktopAccountItem.sendingThroughSsl = sendingThroughSsl;
+      desktopAccountItem.sendingPort = sendingPort;
+      desktopAccountItem.sendingUserName = sendingUserName;
+      desktopAccountItem.sendingPassword = sendingPassword;
 
       return desktopAccountItem;
    }

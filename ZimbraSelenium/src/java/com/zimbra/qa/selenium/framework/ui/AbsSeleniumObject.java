@@ -1157,6 +1157,14 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
+    * DefaultSelenium.uncheck()
+    */
+	public void sUncheck(String locator) {
+	   ClientSessionFactory.session().selenium().uncheck(locator);
+      logger.info("uncheck(" + locator + ")");
+	}
+
+	/**
 	 * DefaultSelenium.isChecked()
 	 */
 	public boolean sIsChecked(String locator) {

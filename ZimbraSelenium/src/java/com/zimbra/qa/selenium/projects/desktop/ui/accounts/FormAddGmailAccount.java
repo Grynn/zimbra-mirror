@@ -24,7 +24,7 @@ public class FormAddGmailAccount extends AbsForm {
 
    public FormAddGmailAccount(AbsApplication application) {
       super(application);
-      logger.info("new " + FormAddZimbraAccount.class.getCanonicalName());
+      logger.info("new " + FormAddGmailAccount.class.getCanonicalName());
    }
 
    @Override
