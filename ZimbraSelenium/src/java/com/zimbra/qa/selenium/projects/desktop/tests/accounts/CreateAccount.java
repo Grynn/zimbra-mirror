@@ -12,6 +12,8 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.staf.Stafzmtlsctl;
+import com.zimbra.qa.selenium.framework.util.staf.Stafzmtlsctl.SERVER_ACCESS;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.PageLogin;
 import com.zimbra.qa.selenium.projects.desktop.ui.accounts.FormAddGmailAccount;
@@ -346,7 +348,7 @@ public class CreateAccount extends AjaxCommonTest {
             "Added account message is displayed");
    }
 
-   @Test(description="Wrong email address when creating Yahoo Account", groups = { "functional2" })
+   @Test(description="Wrong email address when creating Yahoo Account", groups = { "functional" })
    public void wrongEmailAddressYahooAccount() throws HarnessException {
 
       String wrongEmailAddress = ZimbraSeleniumProperties.getUniqueString() + "@yahoo.com";
@@ -375,7 +377,7 @@ public class CreateAccount extends AjaxCommonTest {
             "Added account message is displayed");
    }
 
-   @Test(description="Wrong password when creating Yahoo Account", groups = { "functional2" })
+   @Test(description="Wrong password when creating Yahoo Account", groups = { "functional" })
    public void wrongPasswordYahooAccount() throws HarnessException {
 
       String wrongPassword = ZimbraSeleniumProperties.getUniqueString();
@@ -402,6 +404,12 @@ public class CreateAccount extends AjaxCommonTest {
       ZAssert.assertEquals(false,
             app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
             "Added account message is displayed");
+   }
+
+   //@Test(description="Wrong password when creating Yahoo Account", groups = { "functional2" })
+   public void testing() throws HarnessException{
+      Stafzmtlsctl test = new Stafzmtlsctl();
+      test.setServerAccess(SERVER_ACCESS.BOTH);
    }
 
    @AfterMethod(alwaysRun=true)
