@@ -14,13 +14,12 @@
  */
 package com.zimbra.soap.admin;
 
-import java.util.List;
-
 import javax.xml.ws.soap.SOAPFaultException;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 
-import com.zimbra.soap.admin.wsimport.generated.*;
+import zimbra.generated.adminclient.admin.*;
+import zimbra.generated.adminclient.ws.service.AdminService;
 
 import com.zimbra.soap.Utility;
 
@@ -71,17 +70,17 @@ public class WSDLCheckAuthConfigTest {
     public void checkAuthConfigBadAuthURLTest() throws Exception {
         Utility.ensureAccountExists(testAcct);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        CheckAuthConfigRequest req = new CheckAuthConfigRequest();
+        testCheckAuthConfigRequest req = new testCheckAuthConfigRequest();
         req.setName(testAcct);
         req.setPassword("test123");
-        Attr attr;
-        attr = new Attr(); attr.setN("zimbraAuthMech");
+        testAttr attr;
+        attr = new testAttr(); attr.setN("zimbraAuthMech");
         attr.setValue("ldap");
         req.getA().add(attr);
-        attr = new Attr(); attr.setN("zimbraAuthLdapURL");
+        attr = new testAttr(); attr.setN("zimbraAuthLdapURL");
         attr.setValue("ldaps://localhost:3269");
         req.getA().add(attr);
-        attr = new Attr(); attr.setN("zimbraAuthLdapBindDn");
+        attr = new testAttr(); attr.setN("zimbraAuthLdapBindDn");
         attr.setValue("%u@example.test");
         req.getA().add(attr);
         try {

@@ -17,11 +17,10 @@ package com.zimbra.soap.admin;
 import java.io.File;
 import java.util.List;
 
-import javax.xml.ws.soap.SOAPFaultException;
-
 import com.sun.xml.ws.developer.WSBindingProvider;
 
-import com.zimbra.soap.admin.wsimport.generated.*;
+import zimbra.generated.adminclient.admin.*;
+import zimbra.generated.adminclient.ws.service.AdminService;
 
 import com.zimbra.soap.Utility;
 
@@ -75,16 +74,16 @@ public class WSDLVolumeAdminTest {
 
     @Test
     public void getAllVolumesTest() throws Exception {
-        GetAllVolumesRequest req = new GetAllVolumesRequest();
+        testGetAllVolumesRequest req = new testGetAllVolumesRequest();
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetAllVolumesResponse resp = eif.getAllVolumesRequest(req);
+        testGetAllVolumesResponse resp = eif.getAllVolumesRequest(req);
         Assert.assertNotNull("GetAllVolumesResponse object", resp);
-        List <VolumeInfo> volumes = resp.getVolume();
+        List <testVolumeInfo> volumes = resp.getVolume();
         Assert.assertNotNull("GetAllVolumesResponse list of volumes", volumes);
         int len = volumes.size();
         Assert.assertTrue("Number of GetAllVolumesResponse children is " +
                 len + " - should be at least 2", len >= 2);
-        VolumeInfo firstVolume = volumes.get(0);
+        testVolumeInfo firstVolume = volumes.get(0);
         short id = firstVolume.getId();
         Assert.assertTrue("First Volume id is " +
                 id + " - should be at least 1", id >= 1);
@@ -117,16 +116,16 @@ public class WSDLVolumeAdminTest {
 
     @Test
     public void getCurrentVolumesTest() throws Exception {
-        GetCurrentVolumesRequest req = new GetCurrentVolumesRequest();
+        testGetCurrentVolumesRequest req = new testGetCurrentVolumesRequest();
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetCurrentVolumesResponse resp = eif.getCurrentVolumesRequest(req);
+        testGetCurrentVolumesResponse resp = eif.getCurrentVolumesRequest(req);
         Assert.assertNotNull("GetCurrentVolumesResponse object", resp);
-        List <VolumeTypeAndId> volumes = resp.getVolume();
+        List <testVolumeTypeAndId> volumes = resp.getVolume();
         Assert.assertNotNull("GetCurrentVolumesResponse list of volumes", volumes);
         int len = volumes.size();
         Assert.assertTrue("Number of GetCurrentVolumesResponse children is " +
                 len + " - should be at least 2", len >= 2);
-        VolumeTypeAndId firstVolume = volumes.get(0);
+        testVolumeTypeAndId firstVolume = volumes.get(0);
         short id = firstVolume.getId();
         Assert.assertTrue("First Volume id is " +
                 id + " - should be at least 1", id >= 1);
@@ -136,17 +135,17 @@ public class WSDLVolumeAdminTest {
     @Test
     public void modifyVolumeTest() throws Exception {
         Short volId = Utility.ensureVolumeExists(testVolume, testVolumePath);
-        GetVolumeRequest req = new GetVolumeRequest();
+        testGetVolumeRequest req = new testGetVolumeRequest();
         req.setId(volId);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetVolumeResponse resp = eif.getVolumeRequest(req);
+        testGetVolumeResponse resp = eif.getVolumeRequest(req);
         Assert.assertNotNull(resp);
-        VolumeInfo volumeInfo = resp.getVolume();
+        testVolumeInfo volumeInfo = resp.getVolume();
         volumeInfo.setCompressBlobs(false);
-        ModifyVolumeRequest modReq = new ModifyVolumeRequest();
+        testModifyVolumeRequest modReq = new testModifyVolumeRequest();
         modReq.setId(volId);
         modReq.setVolume(volumeInfo);
-        ModifyVolumeResponse modResp = eif.modifyVolumeRequest(modReq);
+        testModifyVolumeResponse modResp = eif.modifyVolumeRequest(modReq);
         Assert.assertNotNull("ModifyVolumeResponse object", modResp);
     }
 
@@ -156,29 +155,29 @@ public class WSDLVolumeAdminTest {
     // @Test
     public void setCurrentVolume() throws Exception {
         Short volId = Utility.ensureVolumeExists(testVolume, testVolumePath);
-        GetVolumeRequest req = new GetVolumeRequest();
+        testGetVolumeRequest req = new testGetVolumeRequest();
         req.setId(volId);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetVolumeResponse resp = eif.getVolumeRequest(req);
+        testGetVolumeResponse resp = eif.getVolumeRequest(req);
         Assert.assertNotNull(resp);
-        VolumeInfo volumeInfo = resp.getVolume();
+        testVolumeInfo volumeInfo = resp.getVolume();
         volumeInfo.setCompressBlobs(false);
-        SetCurrentVolumeRequest setReq = new SetCurrentVolumeRequest();
+        testSetCurrentVolumeRequest setReq = new testSetCurrentVolumeRequest();
         setReq.setId(volId);
         setReq.setType(volumeInfo.getType());
-        SetCurrentVolumeResponse setResp = eif.setCurrentVolumeRequest(setReq);
+        testSetCurrentVolumeResponse setResp = eif.setCurrentVolumeRequest(setReq);
         Assert.assertNotNull("SetCurrentVolumeResponse object", setResp);
     }
 
     @Test
     public void getVolumeTest() throws Exception {
         Short volId = Utility.ensureVolumeExists(testVolume, testVolumePath);
-        GetVolumeRequest req = new GetVolumeRequest();
+        testGetVolumeRequest req = new testGetVolumeRequest();
         req.setId(volId);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetVolumeResponse resp = eif.getVolumeRequest(req);
+        testGetVolumeResponse resp = eif.getVolumeRequest(req);
         Assert.assertNotNull(resp);
-        VolumeInfo volumeInfo = resp.getVolume();
+        testVolumeInfo volumeInfo = resp.getVolume();
         Assert.assertNotNull("<volume> object", volumeInfo);
         Assert.assertEquals("GetVolumeResponse <volume> 'name' attribute",
                 testVolume, volumeInfo.getName());
@@ -191,9 +190,9 @@ public class WSDLVolumeAdminTest {
     @Test
     public void deleteVolumeTest() throws Exception {
         Short volId = Utility.ensureVolumeExists(testVolume, testVolumePath);
-        DeleteVolumeRequest delReq = new DeleteVolumeRequest();
+        testDeleteVolumeRequest delReq = new testDeleteVolumeRequest();
         delReq.setId(volId);
-        DeleteVolumeResponse delResp = eif.deleteVolumeRequest(delReq);
+        testDeleteVolumeResponse delResp = eif.deleteVolumeRequest(delReq);
         Assert.assertNotNull("DeleteVolumeResponse object", delResp);
     }
 

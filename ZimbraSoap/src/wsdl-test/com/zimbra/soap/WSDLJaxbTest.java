@@ -14,10 +14,7 @@
  */
 package com.zimbra.soap;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Marshaller;
@@ -42,11 +39,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.w3c.dom.Node;
 
-import com.zimbra.soap.mail.wsimport.generated.ActionSelector;
-import com.zimbra.soap.mail.wsimport.generated.ContactActionSelector;
-import com.zimbra.soap.mail.wsimport.generated.ConvActionRequest;
-import com.zimbra.soap.mail.wsimport.generated.FolderActionSelector;
-import com.zimbra.soap.mail.wsimport.generated.NoteActionSelector;
+import zimbra.generated.mailclient.mail.testActionSelector;
+import zimbra.generated.mailclient.mail.testContactActionSelector;
+import zimbra.generated.mailclient.mail.testConvActionRequest;
+import zimbra.generated.mailclient.mail.testFolderActionSelector;
+import zimbra.generated.mailclient.mail.testNoteActionSelector;
 
 /**
  * Unit test for {@link GetInfoResponse} which exercises
@@ -77,26 +74,26 @@ public class WSDLJaxbTest {
      */
     @Test
     public void ConvActionRequestJaxbSubclassHandlingTest() throws Exception {
-        FolderActionSelector fas = new FolderActionSelector();
+        testFolderActionSelector fas = new testFolderActionSelector();
         fas.setId("ids");
         fas.setOp("op");
         fas.setL("folder");
         fas.setRecursive(true);
         fas.setUrl("http://url");
-        ConvActionRequest car = new ConvActionRequest();
+        testConvActionRequest car = new testConvActionRequest();
         car.setAction(fas);
 
         Class<?> ctxClasses[] = new Class<?>[] {
-            ConvActionRequest.class };
+            testConvActionRequest.class };
         JAXBContext jaxb = JAXBContext.newInstance(ctxClasses);
         Marshaller marshaller = jaxb.createMarshaller();
         DOMResult domRes = new DOMResult();
         // Specifying namespace in QName seems to cause problems,
         // however, correct namespace seems to get there, presumably
         // from package-info
-        JAXBElement<ConvActionRequest> jbe = new JAXBElement <ConvActionRequest>(
+        JAXBElement<testConvActionRequest> jbe = new JAXBElement <testConvActionRequest>(
                 new QName("ConvActionRequest"),
-                ConvActionRequest.class, car);
+                testConvActionRequest.class, car);
         marshaller.marshal(jbe, domRes);
         // marshaller.marshal(car, domRes); 
         Node docNode = domRes.getNode();
@@ -107,18 +104,18 @@ public class WSDLJaxbTest {
                 eXml.contains("recursive=\"true\""));
         Unmarshaller unmarshaller = jaxb.createUnmarshaller();
         org.w3c.dom.Document doc = toW3cDom(eXml);
-        jbe = unmarshaller.unmarshal(doc, ConvActionRequest.class);
+        jbe = unmarshaller.unmarshal(doc, testConvActionRequest.class);
         car = jbe.getValue();
-        ActionSelector as = car.getAction();
+        testActionSelector as = car.getAction();
         Assert.assertEquals("Folder attribute value",
                     "folder", as.getL());
-        if (as instanceof FolderActionSelector) {
-            fas = (FolderActionSelector)as;
+        if (as instanceof testFolderActionSelector) {
+            fas = (testFolderActionSelector)as;
             Assert.assertEquals("Url attribute value",
                         "http://url", fas.getUrl());
-        } else if (as instanceof NoteActionSelector) {
+        } else if (as instanceof testNoteActionSelector) {
             Assert.fail("got a NoteActionSelector");
-        } else if (as instanceof ContactActionSelector) {
+        } else if (as instanceof testContactActionSelector) {
             Assert.fail("got a ContactActionSelector");
         } else {
             Assert.fail("Failed to get back a FolderActionSelector");

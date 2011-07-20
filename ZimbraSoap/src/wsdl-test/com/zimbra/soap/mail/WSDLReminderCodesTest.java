@@ -18,13 +18,14 @@ import javax.xml.ws.soap.SOAPFaultException;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 import com.zimbra.soap.Utility;
-import com.zimbra.soap.mail.wsimport.generated.InvalidateReminderDeviceRequest;
-import com.zimbra.soap.mail.wsimport.generated.InvalidateReminderDeviceResponse;
-import com.zimbra.soap.mail.wsimport.generated.MailService;
-import com.zimbra.soap.mail.wsimport.generated.SendVerificationCodeRequest;
-import com.zimbra.soap.mail.wsimport.generated.SendVerificationCodeResponse;
-import com.zimbra.soap.mail.wsimport.generated.VerifyCodeRequest;
-import com.zimbra.soap.mail.wsimport.generated.VerifyCodeResponse;
+
+import zimbra.generated.mailclient.mail.testInvalidateReminderDeviceRequest;
+import zimbra.generated.mailclient.mail.testInvalidateReminderDeviceResponse;
+import zimbra.generated.mailclient.mail.testSendVerificationCodeRequest;
+import zimbra.generated.mailclient.mail.testSendVerificationCodeResponse;
+import zimbra.generated.mailclient.mail.testVerifyCodeRequest;
+import zimbra.generated.mailclient.mail.testVerifyCodeResponse;
+import zimbra.generated.mailclient.ws.service.MailService;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -70,26 +71,26 @@ public class WSDLReminderCodesTest {
     @Test
     public void reminderVerificationCodes() throws Exception {
         Utility.ensureAccountExists(testAcct);
-        SendVerificationCodeRequest req = new SendVerificationCodeRequest();
+        testSendVerificationCodeRequest req = new testSendVerificationCodeRequest();
         req.setA(testAcct);
         Utility.addSoapAcctAuthHeaderForAcct((WSBindingProvider)mailSvcEIF,
                 testAcct);
-        SendVerificationCodeResponse resp =
+        testSendVerificationCodeResponse resp =
             mailSvcEIF.sendVerificationCodeRequest(req);
         Assert.assertNotNull("SendVerificationCodeResponse object", resp);
 
-        VerifyCodeRequest vcreq = new VerifyCodeRequest();
+        testVerifyCodeRequest vcreq = new testVerifyCodeRequest();
         vcreq.setA(testAcct);
         // Would be nice to look at message sent to inbox above to get value.
         vcreq.setCode("duff");
         Utility.addSoapAcctAuthHeaderForAcct((WSBindingProvider)mailSvcEIF,
                 testAcct);
-        VerifyCodeResponse vcresp = mailSvcEIF.verifyCodeRequest(vcreq);
+        testVerifyCodeResponse vcresp = mailSvcEIF.verifyCodeRequest(vcreq);
         Assert.assertNotNull("VerifyCodeResponse object", vcresp);
         Assert.assertFalse("Success state", vcresp.isSuccess());
 
-        InvalidateReminderDeviceRequest irdreq =
-                new InvalidateReminderDeviceRequest();
+        testInvalidateReminderDeviceRequest irdreq =
+                new testInvalidateReminderDeviceRequest();
         irdreq.setA(testAcct);
         Utility.addSoapAcctAuthHeaderForAcct((WSBindingProvider)mailSvcEIF,
                 testAcct);
@@ -97,7 +98,7 @@ public class WSDLReminderCodesTest {
             // I think this only works if we provided the correct code in
             // VerifyCodeRequest.  As this testing is really just exercising
             // the parsing, not too worried.
-            InvalidateReminderDeviceResponse irdresp =
+            testInvalidateReminderDeviceResponse irdresp =
                 mailSvcEIF.invalidateReminderDeviceRequest(irdreq);
             Assert.assertNotNull("InvalidateReminderDeviceResponse object",
                     irdresp);

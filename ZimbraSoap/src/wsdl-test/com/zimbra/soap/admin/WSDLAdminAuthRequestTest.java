@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2010 Zimbra, Inc.
+ * Copyright (C) 2010, 2011 Zimbra, Inc.
  *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -22,14 +22,14 @@ import org.junit.Test;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 
-import com.zimbra.soap.admin.wsimport.generated.AccountBy;
-import com.zimbra.soap.admin.wsimport.generated.AdminService;
-import com.zimbra.soap.admin.wsimport.generated.AccountSelector;
-import com.zimbra.soap.admin.wsimport.generated.Attr;
-import com.zimbra.soap.admin.wsimport.generated.AuthRequest;
-import com.zimbra.soap.admin.wsimport.generated.AuthResponse;
-import com.zimbra.soap.admin.wsimport.generated.DelegateAuthRequest;
-import com.zimbra.soap.admin.wsimport.generated.DelegateAuthResponse;
+import zimbra.generated.adminclient.zm.testAccountBy;
+import zimbra.generated.adminclient.zm.testAccountSelector;
+import zimbra.generated.adminclient.admin.testAttr;
+import zimbra.generated.adminclient.admin.testAuthRequest;
+import zimbra.generated.adminclient.admin.testAuthResponse;
+import zimbra.generated.adminclient.admin.testDelegateAuthRequest;
+import zimbra.generated.adminclient.admin.testDelegateAuthResponse;
+import zimbra.generated.adminclient.ws.service.AdminService;
 
 import com.zimbra.soap.Utility;
 
@@ -47,14 +47,14 @@ public class WSDLAdminAuthRequestTest {
 
     @Test
     public void simple() throws Exception {
-        AuthRequest authReq = new AuthRequest();
-        AccountSelector acct = new AccountSelector();
-        acct.setBy(AccountBy.NAME);
+        testAuthRequest authReq = new testAuthRequest();
+        testAccountSelector acct = new testAccountSelector();
+        acct.setBy(testAccountBy.NAME);
         acct.setValue("admin");
         authReq.setAccount(acct);
         authReq.setPassword("test123");
         authReq.setAuthToken(null);
-        AuthResponse authResponse = eif.authRequest(authReq);
+        testAuthResponse authResponse = eif.authRequest(authReq);
         Assert.assertNotNull(authResponse);
         String authToken = authResponse.getAuthToken();
         Assert.assertNotNull(authToken);
@@ -62,16 +62,16 @@ public class WSDLAdminAuthRequestTest {
         Assert.assertTrue("authToken length should be at least 10 actual value=" + len, len >= 10);
         long lifetime = authResponse.getLifetime();
         Assert.assertTrue("lifetime value should be +ve", lifetime > 0);
-        Attr attr = authResponse.getA();
+        testAttr attr = authResponse.getA();
         Assert.assertEquals("value of <a> -", "false", attr.getValue());
         Assert.assertEquals("'n' attribute of <a> -", "zimbraIsDomainAdminAccount", attr.getN());
     }
 
     @Test
     public void badPasswd() throws Exception {
-        AuthRequest authReq = new AuthRequest();
-        AccountSelector acct = new AccountSelector();
-        acct.setBy(AccountBy.NAME);
+        testAuthRequest authReq = new testAuthRequest();
+        testAccountSelector acct = new testAccountSelector();
+        acct.setBy(testAccountBy.NAME);
         acct.setValue("admin");
         authReq.setAccount(acct);
         authReq.setPassword("BAD-ONE");
@@ -79,7 +79,7 @@ public class WSDLAdminAuthRequestTest {
         // Invoke the methods.
         try {
             @SuppressWarnings("unused")
-            AuthResponse authResponse = eif.authRequest(authReq);
+            testAuthResponse authResponse = eif.authRequest(authReq);
             Assert.fail("Should have had a fault resulting in an exception being thrown");
         } catch (SOAPFaultException sfe) {
             Assert.assertTrue(
@@ -90,9 +90,9 @@ public class WSDLAdminAuthRequestTest {
 
     @Test
     public void nonAdminUser() throws Exception {
-        AuthRequest authReq = new AuthRequest();
-        AccountSelector acct = new AccountSelector();
-        acct.setBy(AccountBy.NAME);
+        testAuthRequest authReq = new testAuthRequest();
+        testAccountSelector acct = new testAccountSelector();
+        acct.setBy(testAccountBy.NAME);
         acct.setValue("user1");
         authReq.setAccount(acct);
         authReq.setPassword("test123");
@@ -100,7 +100,7 @@ public class WSDLAdminAuthRequestTest {
         // Invoke the methods.
         try {
             @SuppressWarnings("unused")
-            AuthResponse authResponse = eif.authRequest(authReq);
+            testAuthResponse authResponse = eif.authRequest(authReq);
             Assert.fail("Should have had a fault resulting in an exception being thrown");
         } catch (SOAPFaultException sfe) {
             Assert.assertEquals("SOAP fault message - ",
@@ -112,12 +112,12 @@ public class WSDLAdminAuthRequestTest {
     @Test
     public void delegateAuth() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider) eif);
-        DelegateAuthRequest delegateAuthReq = new DelegateAuthRequest();
-        AccountSelector delegateAcct = new AccountSelector();
-        delegateAcct.setBy(AccountBy.NAME);
+        testDelegateAuthRequest delegateAuthReq = new testDelegateAuthRequest();
+        testAccountSelector delegateAcct = new testAccountSelector();
+        delegateAcct.setBy(testAccountBy.NAME);
         delegateAcct.setValue("admin");
         delegateAuthReq.setAccount(delegateAcct);
-        DelegateAuthResponse delegateAuthResp = eif.delegateAuthRequest(delegateAuthReq);
+        testDelegateAuthResponse delegateAuthResp = eif.delegateAuthRequest(delegateAuthReq);
         Assert.assertNotNull(delegateAuthResp);
         String authToken = delegateAuthResp.getAuthToken();
         Assert.assertNotNull(authToken);

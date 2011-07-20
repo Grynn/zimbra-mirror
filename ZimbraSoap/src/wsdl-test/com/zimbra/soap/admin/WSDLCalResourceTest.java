@@ -18,7 +18,8 @@ import java.util.List;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 
-import com.zimbra.soap.admin.wsimport.generated.*;
+import zimbra.generated.adminclient.admin.*;
+import zimbra.generated.adminclient.ws.service.AdminService;
 
 import com.zimbra.soap.Utility;
 
@@ -71,8 +72,8 @@ public class WSDLCalResourceTest {
         int len;
         Utility.deleteCalendarResourceIfExists(testCalRes);
         Utility.ensureDomainExists(testCalResDomain);
-        CreateCalendarResourceRequest createReq =
-                new CreateCalendarResourceRequest();
+        testCreateCalendarResourceRequest createReq =
+                new testCreateCalendarResourceRequest();
         createReq.setName(testCalRes);
         createReq.setPassword("test123");
         createReq.getA().add(Utility.mkAttr("displayName",
@@ -81,10 +82,10 @@ public class WSDLCalResourceTest {
         createReq.getA().add(Utility.mkAttr(
                 "zimbraCalResLocationDisplayName", "Harare"));
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        CreateCalendarResourceResponse resp =
+        testCreateCalendarResourceResponse resp =
                 eif.createCalendarResourceRequest(createReq);
         Assert.assertNotNull("CreateCalendarResourceResponse object", resp);
-        CalendarResourceInfo calResInfo = resp.getCalresource();
+        testCalendarResourceInfo calResInfo = resp.getCalresource();
         Assert.assertNotNull("CalendarResourceInfo object", calResInfo);
         Assert.assertEquals(
                 "createCalendarResourceResponse <calResource> 'name' attribute",
@@ -104,14 +105,14 @@ public class WSDLCalResourceTest {
         int len;
         String testCalendarResourceId = Utility.ensureCalendarResourceExists(
                 testCalRes, testCalResDisplayName);
-        GetCalendarResourceRequest getReq = new GetCalendarResourceRequest();
-        CalendarResourceSelector calResSel = new CalendarResourceSelector();
-        calResSel.setBy(CalendarResourceBy.ID);
+        testGetCalendarResourceRequest getReq = new testGetCalendarResourceRequest();
+        testCalendarResourceSelector calResSel = new testCalendarResourceSelector();
+        calResSel.setBy(testCalendarResourceBy.ID);
         calResSel.setValue(testCalendarResourceId);
         getReq.setCalresource(calResSel);
-        GetCalendarResourceResponse getResp = eif.getCalendarResourceRequest(getReq);
+        testGetCalendarResourceResponse getResp = eif.getCalendarResourceRequest(getReq);
         Assert.assertNotNull("GetCalendarResourceResponse object", getResp);
-        CalendarResourceInfo calResInfo = getResp.getCalresource();
+        testCalendarResourceInfo calResInfo = getResp.getCalresource();
         Assert.assertNotNull("CalendarResourceInfo object", calResInfo);
         Assert.assertEquals("getCalendarResourceResponse <calResource> 'name' attribute",
                 testCalRes, calResInfo.getName());
@@ -130,15 +131,15 @@ public class WSDLCalResourceTest {
         String testCalendarResourceId = Utility.ensureCalendarResourceExists(
                 testCalRes, testCalResDisplayName);
         String respId;
-        ModifyCalendarResourceRequest modReq = new ModifyCalendarResourceRequest();
+        testModifyCalendarResourceRequest modReq = new testModifyCalendarResourceRequest();
         modReq.setId(testCalendarResourceId);
-        Attr modAttr = new Attr();
+        testAttr modAttr = new testAttr();
         modAttr.setN("displayName");
         modAttr.setValue("Modified Displayname");
         modReq.getA().add(modAttr);
-        ModifyCalendarResourceResponse modResp = eif.modifyCalendarResourceRequest(modReq);
+        testModifyCalendarResourceResponse modResp = eif.modifyCalendarResourceRequest(modReq);
         Assert.assertNotNull("ModifyCalendarResourceResponse object", modResp);
-        CalendarResourceInfo calResInfo = modResp.getCalresource();
+        testCalendarResourceInfo calResInfo = modResp.getCalresource();
         Assert.assertNotNull("CalendarResourceInfo object", calResInfo);
         Assert.assertEquals("modifyCalendarResourceResponse <calResource> 'name' attribute", 
                 testCalRes, calResInfo.getName());
@@ -156,14 +157,14 @@ public class WSDLCalResourceTest {
         String testCalendarResourceId = Utility.ensureCalendarResourceExists(
                 testCalRes, testCalResDisplayName);
         String respId;
-        RenameCalendarResourceRequest renameCalendarResourceReq =
-                new RenameCalendarResourceRequest();
+        testRenameCalendarResourceRequest renameCalendarResourceReq =
+                new testRenameCalendarResourceRequest();
         renameCalendarResourceReq.setId(testCalendarResourceId);
         renameCalendarResourceReq.setNewName("foobar" + testCalRes);
-        RenameCalendarResourceResponse renameCalendarResourceResp =
+        testRenameCalendarResourceResponse renameCalendarResourceResp =
                 eif.renameCalendarResourceRequest(renameCalendarResourceReq);
         Assert.assertNotNull(renameCalendarResourceResp);
-        CalendarResourceInfo calResInfo = renameCalendarResourceResp.getCalresource();
+        testCalendarResourceInfo calResInfo = renameCalendarResourceResp.getCalresource();
         Assert.assertNotNull(calResInfo);
         Assert.assertEquals("renameCalendarResourceResponse <calResource> 'name' attribute",
                 "foobar" + testCalRes, calResInfo.getName());
@@ -178,11 +179,11 @@ public class WSDLCalResourceTest {
 
     @Test
     public void getAllCalendarResourcesTest() throws Exception {
-        GetAllCalendarResourcesRequest req = new GetAllCalendarResourcesRequest();
+        testGetAllCalendarResourcesRequest req = new testGetAllCalendarResourcesRequest();
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetAllCalendarResourcesResponse resp = eif.getAllCalendarResourcesRequest(req);
+        testGetAllCalendarResourcesResponse resp = eif.getAllCalendarResourcesRequest(req);
         Assert.assertNotNull("GetAllCalendarResourcesResponse object", resp);
-        List <CalendarResourceInfo> calResources = resp.getCalresource();
+        List <testCalendarResourceInfo> calResources = resp.getCalresource();
         int len;
         Assert.assertNotNull(
                 "GetAllCalendarResourcesResponse list of CalendarResources", calResources);
@@ -196,26 +197,26 @@ public class WSDLCalResourceTest {
     public void searchCalendarResourcesTest() throws Exception {
         String testCalendarResourceId = Utility.ensureCalendarResourceExists(
                 testCalRes, testCalResDisplayName);
-        SearchCalendarResourcesRequest req = new SearchCalendarResourcesRequest();
+        testSearchCalendarResourcesRequest req = new testSearchCalendarResourcesRequest();
         req.setApplyCos(false);
         req.setAttrs("displayName,zimbraId");
         req.setDomain(testCalResDomain);
         req.setLimit(200);
         req.setSortAscending(true);
-        EntrySearchFilterInfo filter = new EntrySearchFilterInfo();
-        EntrySearchFilterSingleCond cond = new EntrySearchFilterSingleCond();
+        testEntrySearchFilterInfo filter = new testEntrySearchFilterInfo();
+        testEntrySearchFilterSingleCond cond = new testEntrySearchFilterSingleCond();
         cond.setNot(false);
         cond.setAttr("displayName");
         cond.setOp("startswith");
         cond.setValue(testCalResDisplayName);
         filter.setCond(cond);
         req.setSearchFilter(filter);
-        SearchCalendarResourcesResponse resp =
+        testSearchCalendarResourcesResponse resp =
             eif.searchCalendarResourcesRequest(req);
         Assert.assertNotNull(resp);
         Assert.assertEquals("Total found", 1, resp.getSearchTotal());
         Assert.assertEquals("is more", false, resp.isMore());
-        List <CalendarResourceInfo> calResources = resp.getCalresource();
+        List <testCalendarResourceInfo> calResources = resp.getCalresource();
         int len;
         Assert.assertNotNull("list of CalendarResources", calResources);
         len = calResources.size();
@@ -228,9 +229,9 @@ public class WSDLCalResourceTest {
     public void deleteCalendarResourceTest() throws Exception {
         String testCalendarResourceId = Utility.ensureCalendarResourceExists(
                 testCalRes, testCalResDisplayName);
-        DeleteCalendarResourceRequest delReq = new DeleteCalendarResourceRequest();
+        testDeleteCalendarResourceRequest delReq = new testDeleteCalendarResourceRequest();
         delReq.setId(testCalendarResourceId);
-        DeleteCalendarResourceResponse delResp = eif.deleteCalendarResourceRequest(delReq);
+        testDeleteCalendarResourceResponse delResp = eif.deleteCalendarResourceRequest(delReq);
         Assert.assertNotNull(delResp);
     }
 }

@@ -18,11 +18,11 @@ import java.util.List;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 import com.zimbra.soap.Utility;
-import com.zimbra.soap.mail.wsimport.generated.AppointmentHitInfo;
-import com.zimbra.soap.mail.wsimport.generated.CalOrganizer;
-import com.zimbra.soap.mail.wsimport.generated.MailService;
-import com.zimbra.soap.mail.wsimport.generated.SearchRequest;
-import com.zimbra.soap.mail.wsimport.generated.SearchResponse;
+import zimbra.generated.mailclient.mail.testAppointmentHitInfo;
+import zimbra.generated.mailclient.mail.testCalOrganizer;
+import zimbra.generated.mailclient.mail.testSearchRequest;
+import zimbra.generated.mailclient.mail.testSearchResponse;
+import zimbra.generated.mailclient.ws.service.MailService;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -67,7 +67,7 @@ public class WSDLSearchTest {
 
     @Test
     public void user1CalSearch() throws Exception {
-        SearchRequest req = new SearchRequest();
+        testSearchRequest req = new testSearchRequest();
         req.setSortBy("none");
         req.setLimit(500);
         req.setLocale("en_US");
@@ -78,7 +78,7 @@ public class WSDLSearchTest {
         req.setQuery("every (inid:\"10\")");
         Utility.addSoapAcctAuthHeaderForAcct((WSBindingProvider)mailSvcEIF,
                 "user1");
-        SearchResponse resp = mailSvcEIF.searchRequest(req);
+        testSearchResponse resp = mailSvcEIF.searchRequest(req);
         Assert.assertNotNull("SearchResponse object", resp);
         Assert.assertEquals("SearchResponse sortBy", "none", resp.getSortBy());
         Assert.assertEquals("SearchResponse offset", new Integer(0),
@@ -88,9 +88,9 @@ public class WSDLSearchTest {
         List <Object> hits = resp.getHitOrCOrM();
         Assert.assertEquals("SearchResponse number of hits", 1, hits.size());
         Object o = hits.get(0);
-        if (o instanceof AppointmentHitInfo) {
-            AppointmentHitInfo ahi = (AppointmentHitInfo) o;
-            CalOrganizer org = ahi.getOr();
+        if (o instanceof testAppointmentHitInfo) {
+            testAppointmentHitInfo ahi = (testAppointmentHitInfo) o;
+            testCalOrganizer org = ahi.getOr();
             Assert.assertNotNull("SearchResponse/appt/or object", org);
             Assert.assertEquals("SearchResponse/appt/or @a",
                     "tom@example.zimbra.com", org.getA());

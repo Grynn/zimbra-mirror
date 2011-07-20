@@ -21,8 +21,10 @@ import javax.xml.bind.JAXBElement;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 
-import com.zimbra.soap.admin.wsimport.generated.*;
-import com.zimbra.soap.admin.wsimport.generated.GetAdminExtensionZimletsResponse.Zimlets;
+import zimbra.generated.adminclient.admin.*;
+import zimbra.generated.adminclient.admin.testGetAdminExtensionZimletsResponse.Zimlets;
+import zimbra.generated.adminclient.ws.service.AdminService;
+import zimbra.generated.adminclient.zm.testNamedElement;
 
 import com.zimbra.soap.Utility;
 
@@ -38,8 +40,6 @@ public class WSDLZimletTest {
 
     // The AdminService interface is the Java type bound to
     // the portType section of the WSDL document.
-    private final static String testAcctDomain = "wsdl.zimlets.example.test";
-    private final static String testAcct = "wsdl1@" + testAcctDomain;
     private static AdminService eif = null;
 
     @BeforeClass
@@ -72,24 +72,24 @@ public class WSDLZimletTest {
     @Test
     public void getAllZimletsTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetAllZimletsRequest req = new GetAllZimletsRequest();
+        testGetAllZimletsRequest req = new testGetAllZimletsRequest();
         req.setExclude("None");
-        GetAllZimletsResponse resp = eif.getAllZimletsRequest(req);
+        testGetAllZimletsResponse resp = eif.getAllZimletsRequest(req);
         Assert.assertNotNull("GetAllZimletsResponse object", resp);
-        List<ZimletInfo> zimlets = resp.getZimlet();
+        List<testZimletInfo> zimlets = resp.getZimlet();
         Assert.assertNotNull("zimlets list object", zimlets);
         int zNum = zimlets.size();
         Assert.assertTrue("Number of zimlets=" + zNum +
                 "is at least 4", zNum >= 4);
         int cnt = 0;
-        for (ZimletInfo zimlet : zimlets) {
+        for (testZimletInfo zimlet : zimlets) {
             cnt++;
             String tag = "zimlet " + cnt;
             Assert.assertNotNull(tag + " id", zimlet.getId());
             Assert.assertNotNull(tag + " name", zimlet.getName());
             zimlet.getHasKeyword();  // Not required
             int aCnt = 0;
-            for (Attr attr : zimlet.getA()) {
+            for (testAttr attr : zimlet.getA()) {
                 aCnt++;
                 String aTag = tag + " attr " + aCnt;
                 Assert.assertNotNull(aTag + " name", attr.getN());
@@ -101,19 +101,19 @@ public class WSDLZimletTest {
     @Test
     public void getZimletTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetZimletRequest req = new GetZimletRequest();
-        NamedElement ne = new NamedElement();
+        testGetZimletRequest req = new testGetZimletRequest();
+        testNamedElement ne = new testNamedElement();
         ne.setName("com_zimbra_url");
         req.setZimlet(ne);
-        GetZimletResponse resp = eif.getZimletRequest(req);
+        testGetZimletResponse resp = eif.getZimletRequest(req);
         Assert.assertNotNull("GetZimletResponse object", resp);
-        ZimletInfo zimlet = resp.getZimlet();
+        testZimletInfo zimlet = resp.getZimlet();
         String tag = "zimlet";
         Assert.assertNotNull(tag + " id", zimlet.getId());
         Assert.assertNotNull(tag + " name", zimlet.getName());
         zimlet.getHasKeyword();  // Not required
         int aCnt = 0;
-        for (Attr attr : zimlet.getA()) {
+        for (testAttr attr : zimlet.getA()) {
             aCnt++;
             String aTag = tag + " attr " + aCnt;
             Assert.assertNotNull(aTag + " name", attr.getN());
@@ -124,44 +124,44 @@ public class WSDLZimletTest {
     @Test
     public void getZimletStatusTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetZimletStatusRequest req = new GetZimletStatusRequest();
-        GetZimletStatusResponse resp = eif.getZimletStatusRequest(req);
+        testGetZimletStatusRequest req = new testGetZimletStatusRequest();
+        testGetZimletStatusResponse resp = eif.getZimletStatusRequest(req);
         Assert.assertNotNull("GetZimletStatusResponse object", resp);
-        ZimletStatusParent parent = resp.getZimlets();
+        testZimletStatusParent parent = resp.getZimlets();
         int zNum = parent.getZimlet().size();
         Assert.assertTrue("Number of zimlets=" + zNum +
                 "is at least 4", zNum >= 4);
         int zCnt = 0;
-        for (ZimletStatus zimlet : parent.getZimlet()) {
+        for (testZimletStatus zimlet : parent.getZimlet()) {
             zCnt++;
             String zTag = "zimlet " + zCnt;
             Assert.assertNotNull(zTag + " name", zimlet.getName());
             Assert.assertTrue(zTag + " priority >= 0",
                     zimlet.getPriority() >= 0);
-            Assert.assertEquals(zTag + " status", ZimletStatusSetting.ENABLED,
+            Assert.assertEquals(zTag + " status", testZimletStatusSetting.ENABLED,
                     zimlet.getStatus());
             // ZimbraServer deployed zimlets happen to have false for all
             // zimlets but ZimbraNetwork has some extensions.
             // Changed test to just be for existence of "isExtension" method.
             zimlet.isExtension();
         }
-        List<ZimletStatusCos> coses = resp.getCos();
+        List<testZimletStatusCos> coses = resp.getCos();
         zNum = coses.size();
         Assert.assertTrue("Number of zimlets=" + zNum +
                 "is at least 1", zNum >= 1);
         int cCnt = 0;
-        for (ZimletStatusCos cos : coses) {
+        for (testZimletStatusCos cos : coses) {
             cCnt++;
             String cTag = "cos " + cCnt;
             Assert.assertNotNull(cTag + " name", cos.getName());
             zCnt = 0;
-            for (ZimletStatus zimlet : cos.getZimlet()) {
+            for (testZimletStatus zimlet : cos.getZimlet()) {
                 zCnt++;
                 String zTag = cTag + " zimlet " + zCnt;
                 Assert.assertNotNull(zTag + " name", zimlet.getName());
                 zimlet.getPriority();  // probably null
                 Assert.assertEquals(zTag + " status",
-                        ZimletStatusSetting.ENABLED, zimlet.getStatus());
+                        testZimletStatusSetting.ENABLED, zimlet.getStatus());
                 Assert.assertFalse(zTag + " extension setting",
                         zimlet.isExtension());
             }
@@ -176,22 +176,22 @@ public class WSDLZimletTest {
         // the validator does not like the @XmlAnyElement used
         // in AdminZimletDesc
         Utility.addSoapAdminAuthHeader((WSBindingProvider)nvEif);
-        GetAdminExtensionZimletsRequest req = new GetAdminExtensionZimletsRequest();
-        GetAdminExtensionZimletsResponse resp = nvEif.getAdminExtensionZimletsRequest(req);
+        testGetAdminExtensionZimletsRequest req = new testGetAdminExtensionZimletsRequest();
+        testGetAdminExtensionZimletsResponse resp = nvEif.getAdminExtensionZimletsRequest(req);
         Assert.assertNotNull("GetAdminExtensionZimletsResponse object", resp);
         Zimlets zimlets = resp.getZimlets();
         Assert.assertNotNull("GetAdminExtensionZimletsResponse/zimlets object", zimlets);
-        List<AdminZimletInfo> azimlets = zimlets.getZimlet();
+        List<testAdminZimletInfo> azimlets = zimlets.getZimlet();
         System.out.println("Number of zimlets=" + azimlets.size());
-        for (AdminZimletInfo azi : azimlets) {
-            AdminZimletContext ctx = azi.getZimletContext();
+        for (testAdminZimletInfo azi : azimlets) {
+            testAdminZimletContext ctx = azi.getZimletContext();
             if (ctx != null) {
                 Assert.assertNotNull("ZimletContext baseUrl object", ctx.getBaseUrl());
                 System.out.println("zimlet context baseUrl=" + ctx.getBaseUrl());
                 Assert.assertNotNull("ZimletContext presence object", ctx.getPresence());
                 ctx.getPriority(); // optional
             }
-            AdminZimletConfigInfo cfg = azi.getZimletConfig();
+            testAdminZimletConfigInfo cfg = azi.getZimletConfig();
             if (cfg != null) {
                 Assert.assertNotNull("ZimletConfig description object", cfg.getDescription());
                 Assert.assertNotNull("ZimletConfig extension object", cfg.getExtension());
@@ -203,7 +203,7 @@ public class WSDLZimletTest {
                 cfg.getGlobal();
                 cfg.getHost();
             }
-            AdminZimletDesc zimletDesc = azi.getZimlet();
+            testAdminZimletDesc zimletDesc = azi.getZimlet();
             if (zimletDesc != null) {
                 Assert.assertNotNull("ZimletDesc description object", zimletDesc.getDescription());
                 Assert.assertNotNull("ZimletDesc extension object", zimletDesc.getExtension());
@@ -221,8 +221,8 @@ public class WSDLZimletTest {
                         System.out.println(
                                 "getAdminExtensionZimletsTest - Element name " +
                                 elem.getLocalName());
-                    } else if (obj instanceof ZimletServerExtension) {
-                        ZimletServerExtension zse = (ZimletServerExtension) obj;
+                    } else if (obj instanceof testZimletServerExtension) {
+                        testZimletServerExtension zse = (testZimletServerExtension) obj;
                         Assert.assertNotNull(
                                 "ZimletDesc server extension HasKeyword object",
                                 zse.getHasKeyword());

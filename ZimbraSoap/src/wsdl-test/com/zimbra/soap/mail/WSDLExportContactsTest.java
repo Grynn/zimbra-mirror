@@ -16,9 +16,9 @@ package com.zimbra.soap.mail;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 import com.zimbra.soap.Utility;
-import com.zimbra.soap.mail.wsimport.generated.ExportContactsRequest;
-import com.zimbra.soap.mail.wsimport.generated.ExportContactsResponse;
-import com.zimbra.soap.mail.wsimport.generated.MailService;
+import zimbra.generated.mailclient.mail.testExportContactsRequest;
+import zimbra.generated.mailclient.mail.testExportContactsResponse;
+import zimbra.generated.mailclient.ws.service.MailService;
 
 import org.junit.Assert;
 import org.junit.After;
@@ -48,10 +48,10 @@ public class WSDLExportContactsTest {
      */
     @Test
     public void defaultZimbraFmt() throws Exception {
-       ExportContactsRequest req = new ExportContactsRequest();
+       testExportContactsRequest req = new testExportContactsRequest();
        req.setCt("csv");
        Utility.addSoapAcctAuthHeader((WSBindingProvider)mailSvcEIF);
-       ExportContactsResponse resp = mailSvcEIF.exportContactsRequest(req);
+       testExportContactsResponse resp = mailSvcEIF.exportContactsRequest(req);
        Assert.assertNotNull("ExportContactsResponse object", resp);
        String content = resp.getContent();
        Assert.assertNotNull("<content> contents", content);
@@ -61,13 +61,13 @@ public class WSDLExportContactsTest {
     
     @Test
     public void winLiveFrenchSemicolon() throws Exception {
-       ExportContactsRequest req = new ExportContactsRequest();
+       testExportContactsRequest req = new testExportContactsRequest();
        req.setCt("csv");
        req.setCsvfmt("windows-live-mail-csv");
        req.setCsvlocale("fr");
        req.setCsvsep(";");
        Utility.addSoapAcctAuthHeader((WSBindingProvider)mailSvcEIF);
-       ExportContactsResponse resp = mailSvcEIF.exportContactsRequest(req);
+       testExportContactsResponse resp = mailSvcEIF.exportContactsRequest(req);
        Assert.assertNotNull("ExportContactsResponse object", resp);
        String content = resp.getContent();
        Assert.assertNotNull("<content> contents", content);

@@ -25,24 +25,22 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.zimbra.soap.Utility;
-import com.zimbra.soap.account.wsimport.generated.AccountService;
-import com.zimbra.soap.account.wsimport.generated.Attr;
-import com.zimbra.soap.account.wsimport.generated.CreateIdentityRequest;
-import com.zimbra.soap.account.wsimport.generated.CreateIdentityResponse;
-import com.zimbra.soap.account.wsimport.generated.DeleteIdentityRequest;
-import com.zimbra.soap.account.wsimport.generated.DeleteIdentityResponse;
-import com.zimbra.soap.account.wsimport.generated.GetIdentitiesRequest;
-import com.zimbra.soap.account.wsimport.generated.GetIdentitiesResponse;
-import com.zimbra.soap.account.wsimport.generated.Identity;
-import com.zimbra.soap.account.wsimport.generated.ModifyIdentityRequest;
-import com.zimbra.soap.account.wsimport.generated.ModifyIdentityResponse;
-import com.zimbra.soap.account.wsimport.generated.NameId;
-import com.zimbra.soap.admin.wsimport.generated.AdminService;
+import zimbra.generated.accountclient.account.testAttr;
+import zimbra.generated.accountclient.account.testCreateIdentityRequest;
+import zimbra.generated.accountclient.account.testCreateIdentityResponse;
+import zimbra.generated.accountclient.account.testDeleteIdentityRequest;
+import zimbra.generated.accountclient.account.testDeleteIdentityResponse;
+import zimbra.generated.accountclient.account.testGetIdentitiesRequest;
+import zimbra.generated.accountclient.account.testGetIdentitiesResponse;
+import zimbra.generated.accountclient.account.testIdentity;
+import zimbra.generated.accountclient.account.testModifyIdentityRequest;
+import zimbra.generated.accountclient.account.testModifyIdentityResponse;
+import zimbra.generated.accountclient.account.testNameId;
+import zimbra.generated.accountclient.ws.service.AccountService;
 
 public class WSDLIdentitiesTest {
 
     private static AccountService acctSvcEIF;
-    private static AdminService adminSvcEIF = null;
 
     private final static String testAcctDomain = "wsdl.acct.domain.example.test";
     private final static String testAcct = "wsdl1@" + testAcctDomain;
@@ -52,7 +50,6 @@ public class WSDLIdentitiesTest {
     @BeforeClass
     public static void init() throws Exception {
         Utility.setUpToAcceptAllHttpsServerCerts();
-        adminSvcEIF = Utility.getAdminSvcEIF();
         acctSvcEIF = Utility.getAcctSvcEIF();
         oneTimeTearDown();
     }
@@ -78,18 +75,18 @@ public class WSDLIdentitiesTest {
     public void tearDown() throws Exception {
     }
 
-    private void checkIdentity(Identity ident, String tag, String name) {
+    private void checkIdentity(testIdentity ident, String tag, String name) {
         Assert.assertNotNull(tag + " id", ident.getId());
         if (name == null)
             Assert.assertNotNull(tag + " name", ident.getName());
         else
             Assert.assertEquals(tag + " name", "DEFAULT", ident.getName());
-        List<Attr> attrs = ident.getA();
+        List<testAttr> attrs = ident.getA();
         Assert.assertNotNull(tag + " attrs", attrs);
         Assert.assertTrue(tag + " Number of attrs=" + attrs.size() +
                 " > 4", attrs.size() > 4);
         int aNum = 0;
-        for (Attr attr : attrs) {
+        for (testAttr attr : attrs) {
             aNum++;
             String aTag = tag + " attr " + aNum;
             Assert.assertNotNull(aTag + " name", attr.getName());
@@ -99,17 +96,17 @@ public class WSDLIdentitiesTest {
 
     private void checkIdentities(String tag, int numExpected)
     throws Exception {
-        GetIdentitiesRequest req = new GetIdentitiesRequest();
+        testGetIdentitiesRequest req = new testGetIdentitiesRequest();
         Utility.addSoapAcctAuthHeaderForAcct((WSBindingProvider)acctSvcEIF,
                 testAcct);
-        GetIdentitiesResponse resp = acctSvcEIF.getIdentitiesRequest(req);
+        testGetIdentitiesResponse resp = acctSvcEIF.getIdentitiesRequest(req);
         Assert.assertNotNull(tag + ":GetIdentitiesResponse", resp);
-        List<Identity> identities = resp.getIdentity();
+        List<testIdentity> identities = resp.getIdentity();
         Assert.assertNotNull(tag + ":identities", identities);
         Assert.assertEquals(tag + ":Number of identities",
                 numExpected, identities.size());
         int num = 0;
-        for (Identity ident : identities) {
+        for (testIdentity ident : identities) {
             num++;
             String identTag = tag + ":identity " + num;
             checkIdentity(ident, identTag, null);
@@ -119,16 +116,16 @@ public class WSDLIdentitiesTest {
     @Test
     public void getIdentitiesTest() throws Exception {
         Utility.ensureAccountExists(testAcct);
-        GetIdentitiesRequest req = new GetIdentitiesRequest();
+        testGetIdentitiesRequest req = new testGetIdentitiesRequest();
         Utility.addSoapAcctAuthHeaderForAcct((WSBindingProvider)acctSvcEIF,
                 testAcct);
-        GetIdentitiesResponse resp = acctSvcEIF.getIdentitiesRequest(req);
+        testGetIdentitiesResponse resp = acctSvcEIF.getIdentitiesRequest(req);
         Assert.assertNotNull("GetIdentitiesResponse", resp);
-        List<Identity> identities = resp.getIdentity();
+        List<testIdentity> identities = resp.getIdentity();
         Assert.assertNotNull("identities", identities);
         Assert.assertEquals("Number of identities", 1, identities.size());
         int num = 0;
-        for (Identity ident : identities) {
+        for (testIdentity ident : identities) {
             num++;
             String tag = "identity " + num;
             checkIdentity(ident, tag, "DEFAULT");
@@ -138,37 +135,37 @@ public class WSDLIdentitiesTest {
     @Test
     public void identityTest() throws Exception {
         Utility.ensureAccountExists(testAcct);
-        CreateIdentityRequest req = new CreateIdentityRequest();
-        Identity newIdentity = new Identity();
+        testCreateIdentityRequest req = new testCreateIdentityRequest();
+        testIdentity newIdentity = new testIdentity();
         newIdentity.setName(altId);
-        Attr prefFromAddr = new Attr();
+        testAttr prefFromAddr = new testAttr();
         prefFromAddr.setName("zimbraPrefFromAddress");
         prefFromAddr.setValue(testAcctAltEmail);
         newIdentity.getA().add(prefFromAddr);
         req.setIdentity(newIdentity);
         Utility.addSoapAcctAuthHeaderForAcct((WSBindingProvider)acctSvcEIF,
                 testAcct);
-        CreateIdentityResponse resp = acctSvcEIF.createIdentityRequest(req);
+        testCreateIdentityResponse resp = acctSvcEIF.createIdentityRequest(req);
         Assert.assertNotNull("CreateIdentityResponse", resp);
-        Identity ident = resp.getIdentity();
+        testIdentity ident = resp.getIdentity();
         checkIdentity(ident, "identity", null);
         checkIdentities("After Create", 2);
-        ModifyIdentityRequest modReq = new ModifyIdentityRequest();
-        Identity modIdentity = new Identity();
+        testModifyIdentityRequest modReq = new testModifyIdentityRequest();
+        testIdentity modIdentity = new testIdentity();
         modIdentity.setName(altId);
-        Attr prefAttr = new Attr();
+        testAttr prefAttr = new testAttr();
         prefAttr.setName("zimbraPrefSaveToSent");
         prefAttr.setValue("FALSE");
         modIdentity.getA().add(prefAttr);
         modReq.setIdentity(modIdentity);
-        ModifyIdentityResponse modResp = acctSvcEIF.modifyIdentityRequest(modReq);
+        testModifyIdentityResponse modResp = acctSvcEIF.modifyIdentityRequest(modReq);
         Assert.assertNotNull("ModifyIdentityResponse", modResp);
         checkIdentities("After Modify", 2);
-        DeleteIdentityRequest delReq = new DeleteIdentityRequest();
-        NameId delNameId = new NameId();
+        testDeleteIdentityRequest delReq = new testDeleteIdentityRequest();
+        testNameId delNameId = new testNameId();
         delNameId.setId(ident.getId());
         delReq.setIdentity(delNameId);
-        DeleteIdentityResponse delResp = acctSvcEIF.deleteIdentityRequest(delReq);
+        testDeleteIdentityResponse delResp = acctSvcEIF.deleteIdentityRequest(delReq);
         Assert.assertNotNull("DeleteIdentityResponse", delResp);
         checkIdentities("After Delete", 1);
     }

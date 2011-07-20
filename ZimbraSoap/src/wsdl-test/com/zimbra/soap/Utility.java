@@ -28,76 +28,73 @@ import com.sun.xml.ws.developer.SchemaValidationFeature;
 import com.sun.xml.ws.developer.WSBindingProvider;
 import com.sun.xml.bind.api.JAXBRIContext;
 
-import com.zimbra.soap.account.wsimport.generated.AccountService_Service;
-import com.zimbra.soap.account.wsimport.generated.AccountService;
-import com.zimbra.soap.account.wsimport.generated.Account;
-import com.zimbra.soap.account.wsimport.generated.By;
-import com.zimbra.soap.account.wsimport.generated.AuthRequest;
-import com.zimbra.soap.account.wsimport.generated.AuthResponse;
-import com.zimbra.soap.admin.wsimport.generated.AccountBy;
-import com.zimbra.soap.admin.wsimport.generated.AccountInfo;
-import com.zimbra.soap.admin.wsimport.generated.AccountSelector;
-import com.zimbra.soap.admin.wsimport.generated.AdminService_Service;
-import com.zimbra.soap.admin.wsimport.generated.AdminService;
-import com.zimbra.soap.admin.wsimport.generated.Attr;
-import com.zimbra.soap.admin.wsimport.generated.CalendarResourceBy;
-import com.zimbra.soap.admin.wsimport.generated.CalendarResourceInfo;
-import com.zimbra.soap.admin.wsimport.generated.CalendarResourceSelector;
-import com.zimbra.soap.admin.wsimport.generated.CosBy;
-import com.zimbra.soap.admin.wsimport.generated.CosInfo;
-import com.zimbra.soap.admin.wsimport.generated.CosSelector;
-import com.zimbra.soap.admin.wsimport.generated.CreateAccountRequest;
-import com.zimbra.soap.admin.wsimport.generated.CreateAccountResponse;
-import com.zimbra.soap.admin.wsimport.generated.CreateCalendarResourceRequest;
-import com.zimbra.soap.admin.wsimport.generated.CreateCalendarResourceResponse;
-import com.zimbra.soap.admin.wsimport.generated.CreateCosRequest;
-import com.zimbra.soap.admin.wsimport.generated.CreateCosResponse;
-import com.zimbra.soap.admin.wsimport.generated.CreateDistributionListRequest;
-import com.zimbra.soap.admin.wsimport.generated.CreateDistributionListResponse;
-import com.zimbra.soap.admin.wsimport.generated.CreateDomainRequest;
-import com.zimbra.soap.admin.wsimport.generated.CreateDomainResponse;
-import com.zimbra.soap.admin.wsimport.generated.CreateServerRequest;
-import com.zimbra.soap.admin.wsimport.generated.CreateServerResponse;
-import com.zimbra.soap.admin.wsimport.generated.CreateVolumeRequest;
-import com.zimbra.soap.admin.wsimport.generated.CreateVolumeResponse;
-import com.zimbra.soap.admin.wsimport.generated.DeleteAccountRequest;
-import com.zimbra.soap.admin.wsimport.generated.DeleteAccountResponse;
-import com.zimbra.soap.admin.wsimport.generated.DeleteCalendarResourceRequest;
-import com.zimbra.soap.admin.wsimport.generated.DeleteCalendarResourceResponse;
-import com.zimbra.soap.admin.wsimport.generated.DeleteCosRequest;
-import com.zimbra.soap.admin.wsimport.generated.DeleteCosResponse;
-import com.zimbra.soap.admin.wsimport.generated.DeleteDistributionListRequest;
-import com.zimbra.soap.admin.wsimport.generated.DeleteDomainRequest;
-import com.zimbra.soap.admin.wsimport.generated.DeleteServerRequest;
-import com.zimbra.soap.admin.wsimport.generated.DeleteVolumeRequest;
-import com.zimbra.soap.admin.wsimport.generated.DistributionListBy;
-import com.zimbra.soap.admin.wsimport.generated.DistributionListInfo;
-import com.zimbra.soap.admin.wsimport.generated.DistributionListSelector;
-import com.zimbra.soap.admin.wsimport.generated.DomainBy;
-import com.zimbra.soap.admin.wsimport.generated.DomainInfo;
-import com.zimbra.soap.admin.wsimport.generated.DomainSelector;
-import com.zimbra.soap.admin.wsimport.generated.GetAccountRequest;
-import com.zimbra.soap.admin.wsimport.generated.GetAccountResponse;
-import com.zimbra.soap.admin.wsimport.generated.GetAllVolumesRequest;
-import com.zimbra.soap.admin.wsimport.generated.GetAllVolumesResponse;
-import com.zimbra.soap.admin.wsimport.generated.GetCalendarResourceRequest;
-import com.zimbra.soap.admin.wsimport.generated.GetCalendarResourceResponse;
-import com.zimbra.soap.admin.wsimport.generated.GetCosRequest;
-import com.zimbra.soap.admin.wsimport.generated.GetCosResponse;
-import com.zimbra.soap.admin.wsimport.generated.GetDistributionListRequest;
-import com.zimbra.soap.admin.wsimport.generated.GetDistributionListResponse;
-import com.zimbra.soap.admin.wsimport.generated.GetDomainInfoRequest;
-import com.zimbra.soap.admin.wsimport.generated.GetDomainInfoResponse;
-import com.zimbra.soap.admin.wsimport.generated.GetDomainRequest;
-import com.zimbra.soap.admin.wsimport.generated.GetDomainResponse;
-import com.zimbra.soap.admin.wsimport.generated.GetServerRequest;
-import com.zimbra.soap.admin.wsimport.generated.GetServerResponse;
-import com.zimbra.soap.admin.wsimport.generated.ServerBy;
-import com.zimbra.soap.admin.wsimport.generated.ServerInfo;
-import com.zimbra.soap.admin.wsimport.generated.ServerSelector;
-import com.zimbra.soap.admin.wsimport.generated.VolumeInfo;
-import com.zimbra.soap.mail.wsimport.generated.MailService_Service;
-import com.zimbra.soap.mail.wsimport.generated.MailService;
+import zimbra.generated.accountclient.account.testAccount;
+import zimbra.generated.accountclient.account.testAuthRequest;
+import zimbra.generated.accountclient.account.testAuthResponse;
+import zimbra.generated.accountclient.account.testBy;
+import zimbra.generated.accountclient.ws.service.*;
+import zimbra.generated.adminclient.admin.testAccountInfo;
+import zimbra.generated.adminclient.admin.testAttr;
+import zimbra.generated.adminclient.admin.testCalendarResourceBy;
+import zimbra.generated.adminclient.admin.testCalendarResourceInfo;
+import zimbra.generated.adminclient.admin.testCalendarResourceSelector;
+import zimbra.generated.adminclient.admin.testCosBy;
+import zimbra.generated.adminclient.admin.testCosInfo;
+import zimbra.generated.adminclient.admin.testCosSelector;
+import zimbra.generated.adminclient.admin.testCreateAccountRequest;
+import zimbra.generated.adminclient.admin.testCreateAccountResponse;
+import zimbra.generated.adminclient.admin.testCreateCalendarResourceRequest;
+import zimbra.generated.adminclient.admin.testCreateCalendarResourceResponse;
+import zimbra.generated.adminclient.admin.testCreateCosRequest;
+import zimbra.generated.adminclient.admin.testCreateCosResponse;
+import zimbra.generated.adminclient.admin.testCreateDistributionListRequest;
+import zimbra.generated.adminclient.admin.testCreateDistributionListResponse;
+import zimbra.generated.adminclient.admin.testCreateDomainRequest;
+import zimbra.generated.adminclient.admin.testCreateDomainResponse;
+import zimbra.generated.adminclient.admin.testCreateServerRequest;
+import zimbra.generated.adminclient.admin.testCreateServerResponse;
+import zimbra.generated.adminclient.admin.testCreateVolumeRequest;
+import zimbra.generated.adminclient.admin.testCreateVolumeResponse;
+import zimbra.generated.adminclient.admin.testDeleteAccountRequest;
+import zimbra.generated.adminclient.admin.testDeleteAccountResponse;
+import zimbra.generated.adminclient.admin.testDeleteCalendarResourceRequest;
+import zimbra.generated.adminclient.admin.testDeleteCalendarResourceResponse;
+import zimbra.generated.adminclient.admin.testDeleteCosRequest;
+import zimbra.generated.adminclient.admin.testDeleteCosResponse;
+import zimbra.generated.adminclient.admin.testDeleteDistributionListRequest;
+import zimbra.generated.adminclient.admin.testDeleteDomainRequest;
+import zimbra.generated.adminclient.admin.testDeleteServerRequest;
+import zimbra.generated.adminclient.admin.testDeleteVolumeRequest;
+import zimbra.generated.adminclient.admin.testDistributionListBy;
+import zimbra.generated.adminclient.admin.testDistributionListInfo;
+import zimbra.generated.adminclient.admin.testDistributionListSelector;
+import zimbra.generated.adminclient.admin.testDomainBy;
+import zimbra.generated.adminclient.admin.testDomainInfo;
+import zimbra.generated.adminclient.admin.testDomainSelector;
+import zimbra.generated.adminclient.admin.testGetAccountRequest;
+import zimbra.generated.adminclient.admin.testGetAccountResponse;
+import zimbra.generated.adminclient.admin.testGetAllVolumesRequest;
+import zimbra.generated.adminclient.admin.testGetAllVolumesResponse;
+import zimbra.generated.adminclient.admin.testGetCalendarResourceRequest;
+import zimbra.generated.adminclient.admin.testGetCalendarResourceResponse;
+import zimbra.generated.adminclient.admin.testGetCosRequest;
+import zimbra.generated.adminclient.admin.testGetCosResponse;
+import zimbra.generated.adminclient.admin.testGetDistributionListRequest;
+import zimbra.generated.adminclient.admin.testGetDistributionListResponse;
+import zimbra.generated.adminclient.admin.testGetDomainInfoRequest;
+import zimbra.generated.adminclient.admin.testGetDomainInfoResponse;
+import zimbra.generated.adminclient.admin.testGetDomainRequest;
+import zimbra.generated.adminclient.admin.testGetDomainResponse;
+import zimbra.generated.adminclient.admin.testGetServerRequest;
+import zimbra.generated.adminclient.admin.testGetServerResponse;
+import zimbra.generated.adminclient.admin.testServerBy;
+import zimbra.generated.adminclient.admin.testServerInfo;
+import zimbra.generated.adminclient.admin.testServerSelector;
+import zimbra.generated.adminclient.admin.testVolumeInfo;
+import zimbra.generated.adminclient.ws.service.*;
+import zimbra.generated.adminclient.zm.testAccountBy;
+import zimbra.generated.adminclient.zm.testAccountSelector;
+import zimbra.generated.mailclient.ws.service.*;
 
 import org.junit.Assert;
 
@@ -161,16 +158,16 @@ public class Utility {
                     String acctName, String password)
     throws Exception {
         Utility.getAcctSvcEIF();
-        AuthRequest authReq = new AuthRequest();
-        Account acct = new Account();
-        acct.setBy(By.NAME);
+        testAuthRequest authReq = new testAuthRequest();
+        testAccount acct = new testAccount();
+        acct.setBy(testBy.NAME);
         acct.setValue(acctName);
         authReq.setAccount(acct);
         authReq.setPassword(password);
         authReq.setPreauth(null);
         authReq.setAuthToken(null);
         // Invoke the methods.
-        AuthResponse authResponse = getAcctSvcEIF().authRequest(authReq);
+        testAuthResponse authResponse = getAcctSvcEIF().authRequest(authReq);
         Assert.assertNotNull(authResponse);
         return authResponse.getAuthToken();
     }
@@ -208,16 +205,16 @@ public class Utility {
         Utility.getAdminSvcEIF();
         if (adminAuthToken == null) {
             Utility.getAdminSvcEIF();
-            com.zimbra.soap.admin.wsimport.generated.AuthRequest authReq =
-                    new com.zimbra.soap.admin.wsimport.generated.AuthRequest();
-            com.zimbra.soap.admin.wsimport.generated.AccountSelector acct =
-                    new com.zimbra.soap.admin.wsimport.generated.AccountSelector();
-            acct.setBy(com.zimbra.soap.admin.wsimport.generated.AccountBy.NAME);
+            zimbra.generated.adminclient.admin.testAuthRequest authReq =
+                new zimbra.generated.adminclient.admin.testAuthRequest();
+            zimbra.generated.adminclient.zm.testAccountSelector acct =
+                new zimbra.generated.adminclient.zm.testAccountSelector();
+            acct.setBy(zimbra.generated.adminclient.zm.testAccountBy.NAME);
             acct.setValue("admin");
             authReq.setAccount(acct);
             authReq.setPassword(DEFAULT_PASS);
             authReq.setAuthToken(null);
-            com.zimbra.soap.admin.wsimport.generated.AuthResponse authResponse =
+            zimbra.generated.adminclient.admin.testAuthResponse authResponse =
                     getAdminSvcEIF().authRequest(authReq);
             Assert.assertNotNull(authResponse);
             adminAuthToken = authResponse.getAuthToken();
@@ -288,16 +285,16 @@ public class Utility {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
         try {
             // Delete the test domain if it hasn't already been deleted
-            GetDomainRequest getReq = new GetDomainRequest();
-            DomainSelector domainSel = new DomainSelector();
-            domainSel.setBy(DomainBy.NAME);
+            testGetDomainRequest getReq = new testGetDomainRequest();
+            testDomainSelector domainSel = new testDomainSelector();
+            domainSel.setBy(testDomainBy.NAME);
             domainSel.setValue(domainName);
             getReq.setDomain(domainSel);
             getReq.setApplyConfig(true);
-            GetDomainResponse getResp = getAdminSvcEIF().getDomainRequest(getReq);
+            testGetDomainResponse getResp = getAdminSvcEIF().getDomainRequest(getReq);
             if (getResp != null) {
-                DomainInfo domainInfo = getResp.getDomain();
-                DeleteDomainRequest delReq = new DeleteDomainRequest();
+                testDomainInfo domainInfo = getResp.getDomain();
+                testDeleteDomainRequest delReq = new testDeleteDomainRequest();
                 delReq.setId(domainInfo.getId());
                 getAdminSvcEIF().deleteDomainRequest(delReq);
             }
@@ -313,16 +310,16 @@ public class Utility {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
         try {
             // Delete the test server if it hasn't already been deleted
-            GetServerRequest getSvrReq = new GetServerRequest();
-            ServerSelector svrSel = new ServerSelector();
-            svrSel.setBy(ServerBy.NAME);
+            testGetServerRequest getSvrReq = new testGetServerRequest();
+            testServerSelector svrSel = new testServerSelector();
+            svrSel.setBy(testServerBy.NAME);
             svrSel.setValue(serverName);
             getSvrReq.setServer(svrSel);
             getSvrReq.setApplyConfig(true);
-            GetServerResponse getSvrResp = getAdminSvcEIF().getServerRequest(getSvrReq);
+            testGetServerResponse getSvrResp = getAdminSvcEIF().getServerRequest(getSvrReq);
             if (getSvrResp != null) {
-                ServerInfo serverInfo = getSvrResp.getServer();
-                DeleteServerRequest delReq = new DeleteServerRequest();
+                testServerInfo serverInfo = getSvrResp.getServer();
+                testDeleteServerRequest delReq = new testDeleteServerRequest();
                 delReq.setId(serverInfo.getId());
                 getAdminSvcEIF().deleteServerRequest(delReq);
             }
@@ -338,20 +335,20 @@ public class Utility {
     throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
         try {
-            GetAccountRequest getReq = new GetAccountRequest();
-            AccountSelector accountSel = new AccountSelector();
-            accountSel.setBy(AccountBy.NAME);
+            testGetAccountRequest getReq = new testGetAccountRequest();
+            testAccountSelector accountSel = new testAccountSelector();
+            accountSel.setBy(testAccountBy.NAME);
             accountSel.setValue(accountName);
             getReq.setAccount(accountSel);
-            GetAccountResponse getResp =
+            testGetAccountResponse getResp =
                     getAdminSvcEIF().getAccountRequest(getReq);
             Assert.assertNotNull(getResp);
-            AccountInfo accountInfo = getResp.getAccount();
+            testAccountInfo accountInfo = getResp.getAccount();
             Assert.assertNotNull(accountInfo);
             String respId = accountInfo.getId();
-            DeleteAccountRequest delReq = new DeleteAccountRequest();
+            testDeleteAccountRequest delReq = new testDeleteAccountRequest();
             delReq.setId(respId);
-            DeleteAccountResponse delResp =
+            testDeleteAccountResponse delResp =
                     getAdminSvcEIF().deleteAccountRequest(delReq);
             Assert.assertNotNull(delResp);
         } catch (SOAPFaultException sfe) {
@@ -366,23 +363,23 @@ public class Utility {
     throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
         try {
-            GetCalendarResourceRequest getReq =
-                    new GetCalendarResourceRequest();
-            CalendarResourceSelector calResourceSel =
-                    new CalendarResourceSelector();
-            calResourceSel.setBy(CalendarResourceBy.NAME);
+            testGetCalendarResourceRequest getReq =
+                    new testGetCalendarResourceRequest();
+            testCalendarResourceSelector calResourceSel =
+                    new testCalendarResourceSelector();
+            calResourceSel.setBy(testCalendarResourceBy.NAME);
             calResourceSel.setValue(calResourceName);
             getReq.setCalresource(calResourceSel);
-            GetCalendarResourceResponse getResp =
+            testGetCalendarResourceResponse getResp =
                 getAdminSvcEIF().getCalendarResourceRequest(getReq);
             Assert.assertNotNull(getResp);
-            CalendarResourceInfo calResourceInfo = getResp.getCalresource();
+            testCalendarResourceInfo calResourceInfo = getResp.getCalresource();
             Assert.assertNotNull(calResourceInfo);
             String respId = calResourceInfo.getId();
-            DeleteCalendarResourceRequest delReq =
-                    new DeleteCalendarResourceRequest();
+            testDeleteCalendarResourceRequest delReq =
+                    new testDeleteCalendarResourceRequest();
             delReq.setId(respId);
-            DeleteCalendarResourceResponse delResp =
+            testDeleteCalendarResourceResponse delResp =
                 getAdminSvcEIF().deleteCalendarResourceRequest(delReq);
             Assert.assertNotNull(delResp);
         } catch (SOAPFaultException sfe) {
@@ -397,19 +394,19 @@ public class Utility {
     public static void deleteCosIfExists(String cosName) throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
         try {
-            GetCosRequest getReq = new GetCosRequest();
-            CosSelector cosSel = new CosSelector();
-            cosSel.setBy(CosBy.NAME);
+            testGetCosRequest getReq = new testGetCosRequest();
+            testCosSelector cosSel = new testCosSelector();
+            cosSel.setBy(testCosBy.NAME);
             cosSel.setValue(cosName);
             getReq.setCos(cosSel);
-            GetCosResponse getResp = getAdminSvcEIF().getCosRequest(getReq);
+            testGetCosResponse getResp = getAdminSvcEIF().getCosRequest(getReq);
             Assert.assertNotNull(getResp);
-            CosInfo cosInfo = getResp.getCos();
+            testCosInfo cosInfo = getResp.getCos();
             Assert.assertNotNull(cosInfo);
             String respId = cosInfo.getId();
-            DeleteCosRequest delReq = new DeleteCosRequest();
+            testDeleteCosRequest delReq = new testDeleteCosRequest();
             delReq.setId(respId);
-            DeleteCosResponse delResp = getAdminSvcEIF().deleteCosRequest(delReq);
+            testDeleteCosResponse delResp = getAdminSvcEIF().deleteCosRequest(delReq);
             Assert.assertNotNull(delResp);
         } catch (SOAPFaultException sfe) {
             String missive = sfe.getMessage();
@@ -421,12 +418,12 @@ public class Utility {
 
     public static void deleteVolumeIfExists(String name) throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
-        GetAllVolumesRequest gavReq = new GetAllVolumesRequest();
-        GetAllVolumesResponse gavResp =
+        testGetAllVolumesRequest gavReq = new testGetAllVolumesRequest();
+        testGetAllVolumesResponse gavResp =
                 getAdminSvcEIF().getAllVolumesRequest(gavReq);
-        for (VolumeInfo volume : gavResp.getVolume()) {
+        for (testVolumeInfo volume : gavResp.getVolume()) {
             if (name.equals(volume.getName())) {
-                DeleteVolumeRequest delReq = new DeleteVolumeRequest();
+                testDeleteVolumeRequest delReq = new testDeleteVolumeRequest();
                 delReq.setId(volume.getId());
                 getAdminSvcEIF().deleteVolumeRequest(delReq);
                 String volRootpath = volume.getRootpath();
@@ -445,15 +442,15 @@ public class Utility {
 
     public static void deleteDistributionListIfExists(String name) throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
-        GetDistributionListRequest getInfoReq = new GetDistributionListRequest();
-        DistributionListSelector dlSel = new DistributionListSelector();
-        dlSel.setBy(DistributionListBy.NAME);
+        testGetDistributionListRequest getInfoReq = new testGetDistributionListRequest();
+        testDistributionListSelector dlSel = new testDistributionListSelector();
+        dlSel.setBy(testDistributionListBy.NAME);
         dlSel.setValue(name);
         getInfoReq.setDl(dlSel);
         try {
-            GetDistributionListResponse getResp = adminSvcEIF.getDistributionListRequest(getInfoReq);
+            testGetDistributionListResponse getResp = adminSvcEIF.getDistributionListRequest(getInfoReq);
             Assert.assertNotNull(getResp);
-            DeleteDistributionListRequest delReq = new DeleteDistributionListRequest();
+            testDeleteDistributionListRequest delReq = new testDeleteDistributionListRequest();
             delReq.setId(getResp.getDl().getId());
             Assert.assertNotNull("DeleteDistributionListResponse object",
                     getAdminSvcEIF().deleteDistributionListRequest(delReq));
@@ -468,14 +465,14 @@ public class Utility {
     public static String ensureDomainExists(String domainName) throws Exception {
         String domainId = null;
         Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
-        GetDomainInfoRequest getInfoReq = new GetDomainInfoRequest();
+        testGetDomainInfoRequest getInfoReq = new testGetDomainInfoRequest();
         getInfoReq.setApplyConfig(false);
-        DomainSelector domainSel = new DomainSelector();
-        domainSel.setBy(DomainBy.NAME);
+        testDomainSelector domainSel = new testDomainSelector();
+        domainSel.setBy(testDomainBy.NAME);
         domainSel.setValue(domainName);
         getInfoReq.setDomain(domainSel);
         try {
-            GetDomainInfoResponse getInfoResp = adminSvcEIF.getDomainInfoRequest(getInfoReq);
+            testGetDomainInfoResponse getInfoResp = adminSvcEIF.getDomainInfoRequest(getInfoReq);
             Assert.assertNotNull(getInfoResp);
             domainId = getInfoResp.getDomain().getId();
             if (domainId.equals("globalconfig-dummy-id"))
@@ -486,12 +483,12 @@ public class Utility {
             return domainId;
         }
         else {
-            CreateDomainRequest req = new CreateDomainRequest();
+            testCreateDomainRequest req = new testCreateDomainRequest();
             req.setName(domainName);
             Utility.addSoapAdminAuthHeader((WSBindingProvider)adminSvcEIF);
-            CreateDomainResponse resp = adminSvcEIF.createDomainRequest(req);
+            testCreateDomainResponse resp = adminSvcEIF.createDomainRequest(req);
             Assert.assertNotNull(resp);
-            DomainInfo domainInfo = resp.getDomain();
+            testDomainInfo domainInfo = resp.getDomain();
             Assert.assertNotNull(domainInfo);
             Assert.assertEquals("createDomainResponse <domain> 'name' attribute", domainName, domainInfo.getName());
             return domainInfo.getId();
@@ -500,22 +497,22 @@ public class Utility {
 
     public static String ensureServerExists(String serverName) throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
-        GetServerRequest getInfoReq = new GetServerRequest();
-        ServerSelector serverSel = new ServerSelector();
-        serverSel.setBy(ServerBy.NAME);
+        testGetServerRequest getInfoReq = new testGetServerRequest();
+        testServerSelector serverSel = new testServerSelector();
+        serverSel.setBy(testServerBy.NAME);
         serverSel.setValue(serverName);
         getInfoReq.setServer(serverSel);
         try {
-            GetServerResponse getResp = adminSvcEIF.getServerRequest(getInfoReq);
+            testGetServerResponse getResp = adminSvcEIF.getServerRequest(getInfoReq);
             Assert.assertNotNull(getResp);
             return getResp.getServer().getId();
         } catch (SOAPFaultException sfe) {
-            CreateServerRequest createAcctReq = new CreateServerRequest();
+            testCreateServerRequest createAcctReq = new testCreateServerRequest();
             createAcctReq.setName(serverName);
             Utility.addSoapAdminAuthHeader((WSBindingProvider)adminSvcEIF);
-            CreateServerResponse resp = adminSvcEIF.createServerRequest(createAcctReq);
+            testCreateServerResponse resp = adminSvcEIF.createServerRequest(createAcctReq);
             Assert.assertNotNull(resp);
-            ServerInfo serverInfo = resp.getServer();
+            testServerInfo serverInfo = resp.getServer();
             return serverInfo.getId();
         }
     }
@@ -525,25 +522,25 @@ public class Utility {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
         String domainName = accountName.substring(accountName.indexOf('@') + 1);
         ensureDomainExists(domainName);
-        GetAccountRequest getInfoReq = new GetAccountRequest();
-        AccountSelector accountSel = new AccountSelector();
-        accountSel.setBy(AccountBy.NAME);
+        testGetAccountRequest getInfoReq = new testGetAccountRequest();
+        testAccountSelector accountSel = new testAccountSelector();
+        accountSel.setBy(testAccountBy.NAME);
         accountSel.setValue(accountName);
         getInfoReq.setAccount(accountSel);
         try {
-            GetAccountResponse getResp =
+            testGetAccountResponse getResp =
                     adminSvcEIF.getAccountRequest(getInfoReq);
             Assert.assertNotNull(getResp);
             return getResp.getAccount().getId();
         } catch (SOAPFaultException sfe) {
-            CreateAccountRequest createAcctReq = new CreateAccountRequest();
+            testCreateAccountRequest createAcctReq = new testCreateAccountRequest();
             createAcctReq.setName(accountName);
             createAcctReq.setPassword(DEFAULT_PASS);
             Utility.addSoapAdminAuthHeader((WSBindingProvider)adminSvcEIF);
-            CreateAccountResponse resp =
+            testCreateAccountResponse resp =
                     adminSvcEIF.createAccountRequest(createAcctReq);
             Assert.assertNotNull(resp);
-            AccountInfo accountInfo = resp.getAccount();
+            testAccountInfo accountInfo = resp.getAccount();
             return accountInfo.getId();
         }
     }
@@ -555,21 +552,21 @@ public class Utility {
         String domainName =
                     calResourceName.substring(calResourceName.indexOf('@') + 1);
         ensureDomainExists(domainName);
-        GetCalendarResourceRequest getInfoReq =
-                    new GetCalendarResourceRequest();
-        CalendarResourceSelector calResourceSel =
-                    new CalendarResourceSelector();
-        calResourceSel.setBy(CalendarResourceBy.NAME);
+        testGetCalendarResourceRequest getInfoReq =
+                    new testGetCalendarResourceRequest();
+        testCalendarResourceSelector calResourceSel =
+                    new testCalendarResourceSelector();
+        calResourceSel.setBy(testCalendarResourceBy.NAME);
         calResourceSel.setValue(calResourceName);
         getInfoReq.setCalresource(calResourceSel);
         try {
-            GetCalendarResourceResponse getResp =
+            testGetCalendarResourceResponse getResp =
                     adminSvcEIF.getCalendarResourceRequest(getInfoReq);
             Assert.assertNotNull(getResp);
             return getResp.getCalresource().getId();
         } catch (SOAPFaultException sfe) {
-            CreateCalendarResourceRequest createAcctReq =
-                    new CreateCalendarResourceRequest();
+            testCreateCalendarResourceRequest createAcctReq =
+                    new testCreateCalendarResourceRequest();
             createAcctReq.setName(calResourceName);
             createAcctReq.setPassword(DEFAULT_PASS);
             createAcctReq.getA().add(Utility.mkAttr("displayName", displayName));
@@ -577,10 +574,10 @@ public class Utility {
             createAcctReq.getA().add(Utility.mkAttr(
                 "zimbraCalResLocationDisplayName", "Harare"));
             Utility.addSoapAdminAuthHeader((WSBindingProvider)adminSvcEIF);
-            CreateCalendarResourceResponse resp =
+            testCreateCalendarResourceResponse resp =
                     adminSvcEIF.createCalendarResourceRequest(createAcctReq);
             Assert.assertNotNull(resp);
-            CalendarResourceInfo calResourceInfo = resp.getCalresource();
+            testCalendarResourceInfo calResourceInfo = resp.getCalresource();
             return calResourceInfo.getId();
         }
     }
@@ -604,44 +601,44 @@ public class Utility {
         String domainName = name.substring(name.indexOf('@') + 1);
         ensureDomainExists(domainName);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
-        GetDistributionListRequest getInfoReq = new GetDistributionListRequest();
-        DistributionListSelector dlSel = new DistributionListSelector();
-        dlSel.setBy(DistributionListBy.NAME);
+        testGetDistributionListRequest getInfoReq = new testGetDistributionListRequest();
+        testDistributionListSelector dlSel = new testDistributionListSelector();
+        dlSel.setBy(testDistributionListBy.NAME);
         dlSel.setValue(name);
         getInfoReq.setDl(dlSel);
         try {
-            GetDistributionListResponse getResp = adminSvcEIF.getDistributionListRequest(getInfoReq);
+            testGetDistributionListResponse getResp = adminSvcEIF.getDistributionListRequest(getInfoReq);
             Assert.assertNotNull(getResp);
             return getResp.getDl().getId();
         } catch (SOAPFaultException sfe) {
-            CreateDistributionListRequest createAcctReq = new CreateDistributionListRequest();
+            testCreateDistributionListRequest createAcctReq = new testCreateDistributionListRequest();
             createAcctReq.setName(name);
             Utility.addSoapAdminAuthHeader((WSBindingProvider)adminSvcEIF);
-            CreateDistributionListResponse resp = adminSvcEIF.createDistributionListRequest(createAcctReq);
+            testCreateDistributionListResponse resp = adminSvcEIF.createDistributionListRequest(createAcctReq);
             Assert.assertNotNull(resp);
-            DistributionListInfo dlInfo = resp.getDl();
+            testDistributionListInfo dlInfo = resp.getDl();
             return dlInfo.getId();
         }
     }
 
     public static String ensureCosExists(String cosName) throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
-        GetCosRequest getInfoReq = new GetCosRequest();
-        CosSelector cosSel = new CosSelector();
-        cosSel.setBy(CosBy.NAME);
+        testGetCosRequest getInfoReq = new testGetCosRequest();
+        testCosSelector cosSel = new testCosSelector();
+        cosSel.setBy(testCosBy.NAME);
         cosSel.setValue(cosName);
         getInfoReq.setCos(cosSel);
         try {
-            GetCosResponse getResp = adminSvcEIF.getCosRequest(getInfoReq);
+            testGetCosResponse getResp = adminSvcEIF.getCosRequest(getInfoReq);
             Assert.assertNotNull(getResp);
             return getResp.getCos().getId();
         } catch (SOAPFaultException sfe) {
-            CreateCosRequest createAcctReq = new CreateCosRequest();
+            testCreateCosRequest createAcctReq = new testCreateCosRequest();
             createAcctReq.setName(cosName);
             Utility.addSoapAdminAuthHeader((WSBindingProvider)adminSvcEIF);
-            CreateCosResponse resp = adminSvcEIF.createCosRequest(createAcctReq);
+            testCreateCosResponse resp = adminSvcEIF.createCosRequest(createAcctReq);
             Assert.assertNotNull(resp);
-            CosInfo cosInfo = resp.getCos();
+            testCosInfo cosInfo = resp.getCos();
             return cosInfo.getId();
         }
     }
@@ -649,10 +646,10 @@ public class Utility {
     public static Short ensureVolumeExists(String name, String rootPath)
     throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
-        GetAllVolumesRequest gavReq = new GetAllVolumesRequest();
-        GetAllVolumesResponse gavResp =
+        testGetAllVolumesRequest gavReq = new testGetAllVolumesRequest();
+        testGetAllVolumesResponse gavResp =
                 getAdminSvcEIF().getAllVolumesRequest(gavReq);
-        for (VolumeInfo volume : gavResp.getVolume()) {
+        for (testVolumeInfo volume : gavResp.getVolume()) {
             if (name.equals(volume.getName())) {
                 if (rootPath.equals(volume.getRootpath())) 
                     return volume.getId();
@@ -662,8 +659,8 @@ public class Utility {
         }
         Assert.assertTrue("Creating dir=" + rootPath +
                 " for volumeName=" + name, new File(rootPath).mkdir());
-        CreateVolumeRequest req = new CreateVolumeRequest();
-        VolumeInfo volume = new VolumeInfo();
+        testCreateVolumeRequest req = new testCreateVolumeRequest();
+        testVolumeInfo volume = new testVolumeInfo();
         volume.setName(name);
         volume.setRootpath(rootPath);
         volume.setCompressionThreshold(4096L);
@@ -671,9 +668,9 @@ public class Utility {
         volume.setCompressBlobs(true);
         req.setVolume(volume);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)getAdminSvcEIF());
-        CreateVolumeResponse resp = getAdminSvcEIF().createVolumeRequest(req);
+        testCreateVolumeResponse resp = getAdminSvcEIF().createVolumeRequest(req);
         Assert.assertNotNull(resp);
-        VolumeInfo volumeInfo = resp.getVolume();
+        testVolumeInfo volumeInfo = resp.getVolume();
         Assert.assertNotNull(volumeInfo);
         Assert.assertEquals("CreateVolumeResponse <volume> 'name' attribute",
                 name, volumeInfo.getName());
@@ -684,8 +681,8 @@ public class Utility {
         return testVolumeId;
     }
 
-    public static Attr mkAttr(String name, String value) {
-        Attr attr = new Attr();
+    public static testAttr mkAttr(String name, String value) {
+        testAttr attr = new testAttr();
         attr.setN(name);
         attr.setValue(value);
         return attr;

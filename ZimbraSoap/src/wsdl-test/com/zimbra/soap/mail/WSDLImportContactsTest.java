@@ -16,11 +16,11 @@ package com.zimbra.soap.mail;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 import com.zimbra.soap.Utility;
-import com.zimbra.soap.mail.wsimport.generated.ImportContactsRequest;
-import com.zimbra.soap.mail.wsimport.generated.ImportContactsResponse;
-import com.zimbra.soap.mail.wsimport.generated.Content;
-import com.zimbra.soap.mail.wsimport.generated.ImportContact;
-import com.zimbra.soap.mail.wsimport.generated.MailService;
+import zimbra.generated.mailclient.mail.testImportContactsRequest;
+import zimbra.generated.mailclient.mail.testImportContactsResponse;
+import zimbra.generated.mailclient.mail.testContent;
+import zimbra.generated.mailclient.mail.testImportContact;
+import zimbra.generated.mailclient.ws.service.MailService;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -66,9 +66,9 @@ public class WSDLImportContactsTest {
     @Test
     public void withDefaults() throws Exception {
         Utility.ensureAccountExists(testAcct);
-        ImportContactsRequest req = new ImportContactsRequest();
+        testImportContactsRequest req = new testImportContactsRequest();
         req.setCt("csv");
-        Content theContent = new Content();
+        testContent theContent = new testContent();
         StringBuilder contentB = new StringBuilder();
         contentB.append("\"email\",\"firstName\",\"lastName\"\n");
         contentB.append("\"fred@example.org\",\"Fred\",\"Flintstone\"");
@@ -76,9 +76,9 @@ public class WSDLImportContactsTest {
         req.setContent(theContent);
         Utility.addSoapAcctAuthHeaderForAcct((WSBindingProvider)mailSvcEIF,
                 testAcct);
-        ImportContactsResponse resp = mailSvcEIF.importContactsRequest(req);
+        testImportContactsResponse resp = mailSvcEIF.importContactsRequest(req);
         Assert.assertNotNull("ImportContactsResponse object", resp);
-        ImportContact contact = resp.getCn();
+        testImportContact contact = resp.getCn();
         Assert.assertNotNull("<cn> contents", contact);
         Assert.assertEquals("Number of contacts imported", 1, contact.getN());
         String ids = contact.getIds();
@@ -88,13 +88,13 @@ public class WSDLImportContactsTest {
 
     @Test
     public void winLiveGerman() throws Exception {
-        ImportContactsRequest req = new ImportContactsRequest();
+        testImportContactsRequest req = new testImportContactsRequest();
         req.setCt("csv");
         req.setCsvfmt("windows-live-mail-csv");
         req.setCsvlocale("de");
         req.setCsvsep(";");
         // req.setL(""); // TODO: Specify a valid item ID
-        Content theContent = new Content();
+        testContent theContent = new testContent();
         StringBuilder contentB = new StringBuilder();
         contentB.append("\"E-Mail-Adresse\";\"Vorname\";\"Nachname\"\n");
         contentB.append("\"ae@example.org\";\"Albert\";\"Einstein\"");
@@ -102,9 +102,9 @@ public class WSDLImportContactsTest {
         req.setContent(theContent);
         Utility.addSoapAcctAuthHeaderForAcct((WSBindingProvider)mailSvcEIF,
                 testAcct);
-        ImportContactsResponse resp = mailSvcEIF.importContactsRequest(req);
+        testImportContactsResponse resp = mailSvcEIF.importContactsRequest(req);
         Assert.assertNotNull("ImportContactsResponse object", resp);
-        ImportContact contact = resp.getCn();
+        testImportContact contact = resp.getCn();
         Assert.assertNotNull("<cn> contents", contact);
         Assert.assertEquals("Number of contacts imported", 1, contact.getN());
         String ids = contact.getIds();

@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2010 Zimbra, Inc.
+ * Copyright (C) 2010, 2011 Zimbra, Inc.
  *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -15,17 +15,16 @@
 package com.zimbra.soap.account;
 import java.util.List;
 
-import com.google.common.collect.Lists;
 import com.sun.xml.ws.developer.WSBindingProvider;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.zimbra.soap.Utility;
-import com.zimbra.soap.account.wsimport.generated.AccountService;
-import com.zimbra.soap.account.wsimport.generated.GetPrefsRequest;
-import com.zimbra.soap.account.wsimport.generated.GetPrefsResponse;
-import com.zimbra.soap.account.wsimport.generated.Pref;
+import zimbra.generated.accountclient.account.testGetPrefsRequest;
+import zimbra.generated.accountclient.account.testGetPrefsResponse;
+import zimbra.generated.accountclient.account.testPref;
+import zimbra.generated.accountclient.ws.service.AccountService;
 
 /**
  * Current assumption : user1 exists with password test123
@@ -41,28 +40,28 @@ public class WSDLGetPrefsTest {
 
     @Test
     public void simple() throws Exception {
-       GetPrefsRequest req = new GetPrefsRequest();
+       testGetPrefsRequest req = new testGetPrefsRequest();
        Utility.addSoapAcctAuthHeader((WSBindingProvider)acctSvcEIF);
-       GetPrefsResponse response = acctSvcEIF.getPrefsRequest(req);
+       testGetPrefsResponse response = acctSvcEIF.getPrefsRequest(req);
        Assert.assertNotNull(response);
-       List <Pref> respPrefs = response.getPref();
+       List <testPref> respPrefs = response.getPref();
        Assert.assertTrue("Number of preferences in response=" + respPrefs.size() + " which is less than expected", respPrefs.size() > 100);
     }
 
     @Test
     public void getTwo() throws Exception {
-       GetPrefsRequest req = new GetPrefsRequest();
+       testGetPrefsRequest req = new testGetPrefsRequest();
        Utility.addSoapAcctAuthHeader((WSBindingProvider)acctSvcEIF);
-       Pref calUserQAddPref = new Pref();
+       testPref calUserQAddPref = new testPref();
        calUserQAddPref.setName("zimbraPrefCalendarUseQuickAdd");
-       Pref zimbraPrefShowSearchString = new Pref();
+       testPref zimbraPrefShowSearchString = new testPref();
        zimbraPrefShowSearchString.setName("zimbraPrefShowSearchString");
 
        req.getPref().add(calUserQAddPref);
        req.getPref().add(zimbraPrefShowSearchString);
-       GetPrefsResponse response = acctSvcEIF.getPrefsRequest(req);
+       testGetPrefsResponse response = acctSvcEIF.getPrefsRequest(req);
        Assert.assertNotNull(response);
-       List <Pref> respPrefs = response.getPref();
+       List <testPref> respPrefs = response.getPref();
        Assert.assertEquals("Number of <pref> in response wrong.", 2, respPrefs.size());
     }
 }

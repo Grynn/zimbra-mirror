@@ -19,9 +19,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.zimbra.soap.Utility;
-import com.zimbra.soap.account.wsimport.generated.AccountService;
-import com.zimbra.soap.account.wsimport.generated.EndSessionRequest;
-import com.zimbra.soap.account.wsimport.generated.EndSessionResponse;
+import zimbra.generated.accountclient.account.testEndSessionRequest;
+import zimbra.generated.accountclient.account.testEndSessionResponse;
+import zimbra.generated.accountclient.ws.service.AccountService;
 
 /**
  * Current assumption : user1 exists with password test123
@@ -37,9 +37,9 @@ public class WSDLEndSessionTest {
 
     @Test
     public void simple() throws Exception {
-       EndSessionRequest req = new EndSessionRequest();
+       testEndSessionRequest req = new testEndSessionRequest();
        Utility.addSoapAcctAuthHeader((WSBindingProvider)acctSvcEIF);
-       EndSessionResponse response = acctSvcEIF.endSessionRequest(req);
+       testEndSessionResponse response = acctSvcEIF.endSessionRequest(req);
        Assert.assertNotNull(response);
     }
 }

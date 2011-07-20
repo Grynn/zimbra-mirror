@@ -20,10 +20,13 @@ import javax.xml.ws.soap.SOAPFaultException;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 
-import com.zimbra.soap.admin.wsimport.generated.*;
-import com.zimbra.soap.admin.wsimport.generated.DomainAdminRight.Rights;
-import com.zimbra.soap.admin.wsimport.generated.EffectiveAttrInfo.Default;
-import com.zimbra.soap.admin.wsimport.generated.GetRightsDocResponse.DomainAdminCopypasteToZimbraRightsDomainadminXmlTemplate;
+import zimbra.generated.adminclient.admin.*;
+import zimbra.generated.adminclient.admin.testDomainAdminRight.Rights;
+import zimbra.generated.adminclient.admin.testEffectiveAttrInfo.Default;
+import zimbra.generated.adminclient.admin.testGetRightsDocResponse.DomainAdminCopypasteToZimbraRightsDomainadminXmlTemplate;
+import zimbra.generated.adminclient.ws.service.AdminService;
+import zimbra.generated.adminclient.zm.testNamedElement;
+import zimbra.generated.adminclient.zm.testTargetType;
 
 import com.zimbra.soap.Utility;
 
@@ -82,26 +85,26 @@ public class WSDLAdminTest {
     @Test
     public void pingTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        PingRequest req = new PingRequest();
-        PingResponse resp = eif.pingRequest(req);
+        testPingRequest req = new testPingRequest();
+        testPingResponse resp = eif.pingRequest(req);
         Assert.assertNotNull("PingResponse object", resp);
     }
 
     @Test
     public void noopTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        NoOpRequest req = new NoOpRequest();
-        NoOpResponse resp = eif.noOpRequest(req);
+        testNoOpRequest req = new testNoOpRequest();
+        testNoOpResponse resp = eif.noOpRequest(req);
         Assert.assertNotNull("NoOpResponse object", resp);
     }
 
     @Test
     public void versionInfoTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetVersionInfoRequest req = new GetVersionInfoRequest();
-        GetVersionInfoResponse resp = eif.getVersionInfoRequest(req);
+        testGetVersionInfoRequest req = new testGetVersionInfoRequest();
+        testGetVersionInfoResponse resp = eif.getVersionInfoRequest(req);
         Assert.assertNotNull("GetVersionInfoResponse object", resp);
-        VersionInfo info = resp.getInfo();
+        testVersionInfo info = resp.getInfo();
         Assert.assertNotNull("GetVersionInfoResponse <info> object", info);
         info.getType();  // Don't care whether null or not
         Assert.assertNotNull("getVersion result", info.getVersion());
@@ -117,10 +120,10 @@ public class WSDLAdminTest {
     @Test
     public void licenseInfoTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetLicenseInfoRequest req = new GetLicenseInfoRequest();
-        GetLicenseInfoResponse resp = eif.getLicenseInfoRequest(req);
+        testGetLicenseInfoRequest req = new testGetLicenseInfoRequest();
+        testGetLicenseInfoResponse resp = eif.getLicenseInfoRequest(req);
         Assert.assertNotNull("GetLicenseInfoResponse object", resp);
-        LicenseExpirationInfo info = resp.getExpiration();
+        testLicenseExpirationInfo info = resp.getExpiration();
         Assert.assertNotNull("GetLicenseInfoResponse <info> object", info);
         Assert.assertNotNull("getDate result", info.getDate());
     }
@@ -128,16 +131,16 @@ public class WSDLAdminTest {
     @Test
     public void getServiceStatusTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetServiceStatusRequest req = new GetServiceStatusRequest();
-        GetServiceStatusResponse resp = eif.getServiceStatusRequest(req);
+        testGetServiceStatusRequest req = new testGetServiceStatusRequest();
+        testGetServiceStatusResponse resp = eif.getServiceStatusRequest(req);
         Assert.assertNotNull("GetServiceStatusResponse object", resp);
-        TimeZoneInfo tz = resp.getTimezone();
+        testTimeZoneInfo tz = resp.getTimezone();
         Assert.assertNotNull("GetServiceStatusResponse <timezone> object", tz);
         Assert.assertNotNull("GetServiceStatusResponse <timezone> displayName",
                 tz.getDisplayName());
         Assert.assertNotNull("GetServiceStatusResponse <timezone> id",
                 tz.getId());
-        List <ServiceStatus> statuses = resp.getStatus();
+        List <testServiceStatus> statuses = resp.getStatus();
         // TODO: Would be nice to test with some real statuses - looks like
         //       need logger service installed and enabled
         Assert.assertNotNull("GetServiceStatusResponse statuses list object",
@@ -147,8 +150,8 @@ public class WSDLAdminTest {
     @Test
     public void checkHealthTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        CheckHealthRequest req = new CheckHealthRequest();
-        CheckHealthResponse resp = eif.checkHealthRequest(req);
+        testCheckHealthRequest req = new testCheckHealthRequest();
+        testCheckHealthResponse resp = eif.checkHealthRequest(req);
         Assert.assertNotNull("CheckHealthResponse object", resp);
         Assert.assertTrue("isHealthy",resp.isHealthy());
     }
@@ -156,9 +159,9 @@ public class WSDLAdminTest {
     @Test
     public void checkHostnameResolveTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        CheckHostnameResolveRequest req = new CheckHostnameResolveRequest();
+        testCheckHostnameResolveRequest req = new testCheckHostnameResolveRequest();
         req.setHostname("nonexist.example.com");
-        CheckHostnameResolveResponse resp = eif.checkHostnameResolveRequest(req);
+        testCheckHostnameResolveResponse resp = eif.checkHostnameResolveRequest(req);
         Assert.assertNotNull("CheckHostnameResolveResponse object", resp);
         Assert.assertEquals("CheckHostnameResolveResponse code",
                 "check.UNKNOWN_HOST", resp.getCode());
@@ -199,12 +202,12 @@ public class WSDLAdminTest {
     public void checkDomainMXRecordTest() throws Exception {
         Utility.ensureDomainExists("zimbra.com");
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        CheckDomainMXRecordRequest req = new CheckDomainMXRecordRequest();
-        DomainSelector domainSel = new DomainSelector();
-        domainSel.setBy(DomainBy.NAME);
+        testCheckDomainMXRecordRequest req = new testCheckDomainMXRecordRequest();
+        testDomainSelector domainSel = new testDomainSelector();
+        domainSel.setBy(testDomainBy.NAME);
         domainSel.setValue("zimbra.com");
         req.setDomain(domainSel);
-        CheckDomainMXRecordResponse resp = eif.checkDomainMXRecordRequest(req);
+        testCheckDomainMXRecordResponse resp = eif.checkDomainMXRecordRequest(req);
         Assert.assertNotNull("CheckDomainMXRecordResponse object", resp);
         List <String> entries = resp.getEntry();
         int len = entries.size();
@@ -222,8 +225,8 @@ public class WSDLAdminTest {
     @Test
     public void reloadLocalConfigTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        ReloadLocalConfigRequest req = new ReloadLocalConfigRequest();
-        ReloadLocalConfigResponse resp = eif.reloadLocalConfigRequest(req);
+        testReloadLocalConfigRequest req = new testReloadLocalConfigRequest();
+        testReloadLocalConfigResponse resp = eif.reloadLocalConfigRequest(req);
         Assert.assertNotNull("ReloadLocalConfigResponse object", resp);
     }
 
@@ -250,11 +253,11 @@ public class WSDLAdminTest {
     // See GetAllConfigTest - the same Response Xml seems to work fine with
     // simple JAXB unmarshalling.
     public void getAllConfigTest_Disabled() throws Exception {
-        GetAllConfigRequest req = new GetAllConfigRequest();
+        testGetAllConfigRequest req = new testGetAllConfigRequest();
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetAllConfigResponse resp = eif.getAllConfigRequest(req);
+        testGetAllConfigResponse resp = eif.getAllConfigRequest(req);
         Assert.assertNotNull("GetAllConfigResponse object", resp);
-        List <Attr> attrs = resp.getA();
+        List <testAttr> attrs = resp.getA();
         Assert.assertNotNull("GetAllConfigResponse list of attrs", attrs);
         int len = attrs.size();
         Assert.assertTrue("Number of GetAllConfigResponse <a> children is " +
@@ -264,17 +267,17 @@ public class WSDLAdminTest {
     @Test
     public void getConfigTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetConfigRequest req = new GetConfigRequest();
-        Attr attr = new Attr();
+        testGetConfigRequest req = new testGetConfigRequest();
+        testAttr attr = new testAttr();
         attr.setN("zimbraSpamHeader");
         req.setA(attr);
-        GetConfigResponse resp = eif.getConfigRequest(req);
+        testGetConfigResponse resp = eif.getConfigRequest(req);
         Assert.assertNotNull("GetConfigResponse object", resp);
-        List <Attr> attrs = resp.getA();
+        List <testAttr> attrs = resp.getA();
         Assert.assertNotNull("GetConfigResponse list of attrs", attrs);
         int len = attrs.size();
         Assert.assertEquals("Number of GetConfigResponse <a> children" , 1, len);
-        Attr respAttr =attrs.get(0);
+        testAttr respAttr =attrs.get(0);
         Assert.assertEquals("GetConfigResponse <a> 'n' attribute",
                 "zimbraSpamHeader", respAttr.getN());
         Assert.assertEquals("GetConfigResponse <a> 'n' attribute",
@@ -286,14 +289,14 @@ public class WSDLAdminTest {
     @Test
     public void modifyConfigTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        ModifyConfigRequest req = new ModifyConfigRequest();
-        Attr attr = new Attr();
+        testModifyConfigRequest req = new testModifyConfigRequest();
+        testAttr attr = new testAttr();
         attr.setN("zimbraSpamHeader");
         attr.setValue("X-NewSpam-Flag");
         req.getA().add(attr);
-        ModifyConfigResponse resp = eif.modifyConfigRequest(req);
+        testModifyConfigResponse resp = eif.modifyConfigRequest(req);
         Assert.assertNotNull("modifyConfigResponse object", resp);
-        req = new ModifyConfigRequest();
+        req = new testModifyConfigRequest();
         attr.setValue("X-Spam-Flag");
         req.getA().add(attr);
         resp = eif.modifyConfigRequest(req);
@@ -303,10 +306,10 @@ public class WSDLAdminTest {
     @Test
     public void getAllLocalesTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetAllLocalesRequest req = new GetAllLocalesRequest();
-        GetAllLocalesResponse resp = eif.getAllLocalesRequest(req);
+        testGetAllLocalesRequest req = new testGetAllLocalesRequest();
+        testGetAllLocalesResponse resp = eif.getAllLocalesRequest(req);
         Assert.assertNotNull("GetAllLocalesResponse object", resp);
-        List <LocaleInfo> locales = resp.getLocale();
+        List <testLocaleInfo> locales = resp.getLocale();
         int len = locales.size();
         Assert.assertTrue("number of <locales> is " + len +
                 " - should be longer than 10", len > 10);
@@ -315,10 +318,10 @@ public class WSDLAdminTest {
     @Test
     public void getMailboxStatsTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetMailboxStatsRequest req = new GetMailboxStatsRequest();
-        GetMailboxStatsResponse resp = eif.getMailboxStatsRequest(req);
+        testGetMailboxStatsRequest req = new testGetMailboxStatsRequest();
+        testGetMailboxStatsResponse resp = eif.getMailboxStatsRequest(req);
         Assert.assertNotNull("GetMailboxStatsResponse object", resp);
-        MailboxStats mboxStats = resp.getStats();
+        testMailboxStats mboxStats = resp.getStats();
         Assert.assertNotNull("stats object", mboxStats);
         long numMboxes = mboxStats.getNumMboxes();
         long totalSize = mboxStats.getTotalSize();
@@ -329,12 +332,12 @@ public class WSDLAdminTest {
     @Test
     public void flushCacheTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        CacheSelector sel = new CacheSelector();
+        testCacheSelector sel = new testCacheSelector();
         sel.setAllServers(true);
-        sel.setType(CacheEntryType.DOMAIN.value());
-        FlushCacheRequest req = new FlushCacheRequest();
+        sel.setType(testCacheEntryType.DOMAIN.value());
+        testFlushCacheRequest req = new testFlushCacheRequest();
         req.setCache(sel);
-        FlushCacheResponse resp = eif.flushCacheRequest(req);
+        testFlushCacheResponse resp = eif.flushCacheRequest(req);
         Assert.assertNotNull("FlushCacheResponse object", resp);
     }
 
@@ -342,10 +345,10 @@ public class WSDLAdminTest {
     public void checkPasswordStrengthTest() throws Exception {
         String testAccountId = Utility.ensureAccountExists(testAcct);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        CheckPasswordStrengthRequest req = new CheckPasswordStrengthRequest();
+        testCheckPasswordStrengthRequest req = new testCheckPasswordStrengthRequest();
         req.setId(testAccountId);
         req.setPassword("fq$34apgGog11");
-        CheckPasswordStrengthResponse resp = eif.checkPasswordStrengthRequest(req);
+        testCheckPasswordStrengthResponse resp = eif.checkPasswordStrengthRequest(req);
         Assert.assertNotNull("CheckPasswordStrengthResponse object", resp);
         try {
             req.setPassword("a");
@@ -362,10 +365,10 @@ public class WSDLAdminTest {
     public void setPasswordTest() throws Exception {
         String testAccountId = Utility.ensureAccountExists(testAcct);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        SetPasswordRequest req = new SetPasswordRequest();
+        testSetPasswordRequest req = new testSetPasswordRequest();
         req.setId(testAccountId);
         req.setNewPassword("fq$34apgGog11");
-        SetPasswordResponse resp = eif.setPasswordRequest(req);
+        testSetPasswordResponse resp = eif.setPasswordRequest(req);
         Assert.assertNotNull("SetPasswordResponse object", resp);
     }
 
@@ -373,29 +376,29 @@ public class WSDLAdminTest {
     public void searchDirectoryTest() throws Exception {
         Utility.ensureAccountExists(testAcct);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        SearchDirectoryRequest req = new SearchDirectoryRequest();
+        testSearchDirectoryRequest req = new testSearchDirectoryRequest();
         req.setDomain(testAcctDomain);
         req.setApplyCos(true);
         req.setApplyConfig(true);
         req.setLimit(456);
         req.setMaxResults(444);
         req.setQuery("cn=*");
-        SearchDirectoryResponse resp = eif.searchDirectoryRequest(req);
+        testSearchDirectoryResponse resp = eif.searchDirectoryRequest(req);
         Assert.assertNotNull("SearchDirectoryResponse object", resp);
         Long searchTotal = resp.getSearchTotal();
         Assert.assertTrue("searchTotal " + searchTotal + " should be at least 1",
                 searchTotal >=1);
         Assert.assertFalse("value for attribute 'more'", resp.isMore());
-        List <AdminObjectInfo> entries = resp.getCalresourceOrDlOrAlias();
+        List <testAdminObjectInfo> entries = resp.getCalresourceOrDlOrAlias();
         Assert.assertTrue("number of entries in response [" + searchTotal + "] should be at least 1",
                 entries.size() >= 1);
     }
 
-    private void validateRightInfo(RightInfo rInfo, String riTag) {
-        RightsAttrs rAttrs = rInfo.getAttrs();
+    private void validateRightInfo(testRightInfo rInfo, String riTag) {
+        testRightsAttrs rAttrs = rInfo.getAttrs();
         if (null != rAttrs) {
             int aNum = 0;
-            for (Attr attr: rAttrs.getA()) {
+            for (testAttr attr: rAttrs.getA()) {
                 aNum++;
                 String aTag = riTag + " a " + aNum;
                 Assert.assertNotNull(aTag + " name", attr.getN());
@@ -413,9 +416,9 @@ public class WSDLAdminTest {
         Assert.assertNotNull("RightInfo class", rInfo.getRightClass());
         Assert.assertNotNull("RightInfo type", rInfo.getType());
         // Assert.assertNotNull("RightInfo targetType", rInfo.getTargetType());
-        ComboRights comboRights = rInfo.getRights();
+        testComboRights comboRights = rInfo.getRights();
         if (null != comboRights) {
-            for (ComboRightInfo cri : comboRights.getR()) {
+            for (testComboRightInfo cri : comboRights.getR()) {
                 Assert.assertNotNull("ComboRightInfo name", cri.getN());
                 Assert.assertNotNull("ComboRightInfo type", cri.getType());
                 // Assert.assertNotNull("ComboRightInfo targetType",
@@ -431,13 +434,13 @@ public class WSDLAdminTest {
         // the validator does not like the @XmlAnyElement used
         // in RightsAttrs
         Utility.addSoapAdminAuthHeader((WSBindingProvider)nvEif);
-        GetAllRightsRequest req = new GetAllRightsRequest();
-        GetAllRightsResponse resp = nvEif.getAllRightsRequest(req);
+        testGetAllRightsRequest req = new testGetAllRightsRequest();
+        testGetAllRightsResponse resp = nvEif.getAllRightsRequest(req);
         Assert.assertNotNull("GetAllRightsResponse object", resp);
-        List <RightInfo> rInfos = resp.getRight();
+        List <testRightInfo> rInfos = resp.getRight();
         Assert.assertNotNull("GetAllRightsResponse object", rInfos);
         int riNum = 0;
-        for (RightInfo rInfo : rInfos) {
+        for (testRightInfo rInfo : rInfos) {
             riNum++;
             String riTag = "RightInfo " + riNum;
             validateRightInfo(rInfo, riTag);
@@ -448,12 +451,12 @@ public class WSDLAdminTest {
     public void getRightTest() throws Exception {
         Utility.ensureAccountExists(testAcct);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetRightRequest req = new GetRightRequest();
+        testGetRightRequest req = new testGetRightRequest();
         req.setExpandAllAttrs(true);
         req.setRight("adminConsoleAccountRights");
-        GetRightResponse resp = eif.getRightRequest(req);
+        testGetRightResponse resp = eif.getRightRequest(req);
         Assert.assertNotNull("GetRightResponse object", resp);
-        RightInfo rInfo = resp.getRight();
+        testRightInfo rInfo = resp.getRight();
         Assert.assertNotNull("GetRightResponse RightInfo", rInfo);
         validateRightInfo(rInfo, "RightInfo");
     }
@@ -462,30 +465,30 @@ public class WSDLAdminTest {
     public void getRightsDocTest() throws Exception {
         Utility.ensureAccountExists(testAcct);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetRightsDocRequest req = new GetRightsDocRequest();
-        GetRightsDocResponse resp = eif.getRightsDocRequest(req);
+        testGetRightsDocRequest req = new testGetRightsDocRequest();
+        testGetRightsDocResponse resp = eif.getRightsDocRequest(req);
         Assert.assertNotNull("GetRightsDocResponse object", resp);
 
-        List<PackageRightsInfo> pkgRights = resp.getPackage();
+        List<testPackageRightsInfo> pkgRights = resp.getPackage();
         int pkgNum = 0;
-        for (PackageRightsInfo pkg : pkgRights) {
+        for (testPackageRightsInfo pkg : pkgRights) {
             pkgNum++;
             String pkgTag = "Package " + pkgNum;
             Assert.assertNotNull(pkgTag + " name", pkg.getName());
-            List<CmdRightsInfo> cmdRights = pkg.getCmd();
+            List<testCmdRightsInfo> cmdRights = pkg.getCmd();
             Assert.assertNotNull(pkgTag + " Cmd list", cmdRights);
             int cmdNum = 0;
-            for (CmdRightsInfo cmd : cmdRights) {
+            for (testCmdRightsInfo cmd : cmdRights) {
                 cmdNum++;
                 String cmdTag = pkgTag + " Cmd " + cmdNum;
                 Assert.assertNotNull(cmdTag + " description",
                         cmd.getDesc());
                 Assert.assertNotNull(cmdTag + " name", cmd.getName());
-                com.zimbra.soap.admin.wsimport.generated.CmdRightsInfo.Rights rInfo =
+                testCmdRightsInfo.Rights rInfo =
                     cmd.getRights();
-                List<NamedElement> rNs = rInfo.getRight();
+                List<testNamedElement> rNs = rInfo.getRight();
                 int rNum = 0;
-                for (NamedElement rn : rNs) {
+                for (testNamedElement rn : rNs) {
                     rNum++;
                     String rTag = cmdTag + " RightName " + rNum;
                     Assert.assertNotNull(rTag, rn.getName());
@@ -498,10 +501,10 @@ public class WSDLAdminTest {
             resp.getDomainAdminCopypasteToZimbraRightsDomainadminXmlTemplate();
         String tag =
             "domainAdmin-copypaste-to-zimbra-rights-domainadmin-xml-template";
-        List<DomainAdminRight> rights = domRights.getRight();
+        List<testDomainAdminRight> rights = domRights.getRight();
         Assert.assertNotNull(tag + " rights list", rights);
         int domNum = 0;
-        for (DomainAdminRight dar : rights) {
+        for (testDomainAdminRight dar : rights) {
             domNum++;
             String domTag = tag + " right " + domNum;
             Assert.assertNotNull(domTag + " name", dar.getName());
@@ -510,7 +513,7 @@ public class WSDLAdminTest {
             Rights subRights = dar.getRights();
             Assert.assertNotNull(domTag + " rights", subRights);
             int rnNum = 0;
-            for (RightWithName rWithName : subRights.getR()) {
+            for (testRightWithName rWithName : subRights.getR()) {
                 rnNum++;
                 String rnTag = domTag + " right " + rnNum;
                 Assert.assertNotNull(rnTag + " n attrib", rWithName.getN());
@@ -518,19 +521,19 @@ public class WSDLAdminTest {
         }
     }
 
-    private void checkEffectiveAttrsInfo(EffectiveAttrsInfo attrInfo,
+    private void checkEffectiveAttrsInfo(testEffectiveAttrsInfo attrInfo,
             String tag) {
         Assert.assertNotNull(tag, attrInfo);
         Assert.assertTrue(tag + " all setting", attrInfo.isAll());
-        List <EffectiveAttrInfo> attrs = attrInfo.getA();
+        List <testEffectiveAttrInfo> attrs = attrInfo.getA();
         Assert.assertNotNull(tag + " attrs", attrs);
         int attNum = 0;
-        for (EffectiveAttrInfo anAttr : attrs) {
+        for (testEffectiveAttrInfo anAttr : attrs) {
             attNum++;
             String attrTag = tag + " attr " + attNum;
             Assert.assertNotNull(attrTag, anAttr);
             Assert.assertNotNull(attrTag + " n", anAttr.getN());
-            ConstraintInfo constraint = anAttr.getConstraint();
+            testConstraintInfo constraint = anAttr.getConstraint();
             if (constraint != null) {
                 Assert.assertNotNull(attrTag + " constraint", 
                         constraint.getValues());
@@ -543,17 +546,17 @@ public class WSDLAdminTest {
         }
     }
 
-    private void checkAllEffectiveRights(EffectiveRightsInfo allEffectiveRights,
+    private void checkAllEffectiveRights(testEffectiveRightsInfo allEffectiveRights,
             String tag) {
         Assert.assertNotNull("allEffectiveRights", allEffectiveRights);
         checkEffectiveAttrsInfo(allEffectiveRights.getGetAttrs(),
                 tag + " getAttrs");
         checkEffectiveAttrsInfo(allEffectiveRights.getSetAttrs(),
                 tag + " setAttrs");
-        List <RightWithName> rights = allEffectiveRights.getRight();
+        List <testRightWithName> rights = allEffectiveRights.getRight();
         Assert.assertNotNull("rights", rights);
         int rNum = 0;
-        for (RightWithName aRight : rights) {
+        for (testRightWithName aRight : rights) {
             rNum++;
             String rTag = tag + " right " + rNum;
             Assert.assertNotNull(rTag + " name", aRight.getN());
@@ -564,33 +567,33 @@ public class WSDLAdminTest {
     public void getAllEffectiveRightsTest() throws Exception {
         Utility.ensureAccountExists(testAcct);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetAllEffectiveRightsRequest req = new GetAllEffectiveRightsRequest();
+        testGetAllEffectiveRightsRequest req = new testGetAllEffectiveRightsRequest();
         req.setExpandAllAttrs("setAttrs, getAttrs");
-        GetAllEffectiveRightsResponse resp = eif.getAllEffectiveRightsRequest(req);
+        testGetAllEffectiveRightsResponse resp = eif.getAllEffectiveRightsRequest(req);
         Assert.assertNotNull("GetAllEffectiveRightsResponse object", resp);
-        GranteeInfo grantee = resp.getGrantee();
+        testGranteeInfo grantee = resp.getGrantee();
         Assert.assertNotNull("grantee object", grantee);
         Assert.assertNotNull("grantee id", grantee.getId());
         Assert.assertNotNull("grantee name", grantee.getName());
         Assert.assertNotNull("grantee type", grantee.getType());
-        List<EffectiveRightsTarget> targets = resp.getTarget();
+        List<testEffectiveRightsTarget> targets = resp.getTarget();
         Assert.assertNotNull("list of targets", targets);
         int targNum = 0;
-        for ( EffectiveRightsTarget target : targets) {
+        for ( testEffectiveRightsTarget target : targets) {
             targNum++;
             String targTag = "target " + targNum;
             Assert.assertNotNull(targTag, target);
             Assert.assertNotNull(targTag + " type", target.getType());
             checkAllEffectiveRights(target.getAll(), targTag + " all");
             
-            List <InDomainInfo> inDomsList = target.getInDomains();
+            List <testInDomainInfo> inDomsList = target.getInDomains();
             Assert.assertNotNull("InDomains list", inDomsList);
             int inDomNum = 0;
-            for (InDomainInfo anInDom : inDomsList) {
+            for (testInDomainInfo anInDom : inDomsList) {
                 inDomNum++;
                 String inDomTag = targTag + " inDomain " + inDomNum;
                 int domNum = 0;
-                for (NamedElement dom : anInDom.getDomain()) {
+                for (testNamedElement dom : anInDom.getDomain()) {
                     domNum++;
                     String domTag = inDomTag + " domain " + domNum;
                     Assert.assertNotNull(domTag + " name", dom.getName());
@@ -598,19 +601,19 @@ public class WSDLAdminTest {
                 checkAllEffectiveRights(anInDom.getRights(), 
                         inDomTag + " rights");
             }
-            List <RightsEntriesInfo> entries = target.getEntries();
+            List <testRightsEntriesInfo> entries = target.getEntries();
             int entNum = 0;
-            for (RightsEntriesInfo entriesInfo : entries) {
+            for (testRightsEntriesInfo entriesInfo : entries) {
                 entNum++;
                 String entTag = targTag + " RightsEntries " + entNum;
                 Assert.assertNotNull(entTag, entriesInfo);
                 int entryNum = 0;
-                for (NamedElement namedEntry : entriesInfo.getEntry()) {
+                for (testNamedElement namedEntry : entriesInfo.getEntry()) {
                     entryNum++;
                     String entryTag = entTag + " entry " + entNum;
                     Assert.assertNotNull(entryTag + " name", namedEntry.getName());
                 }
-                EffectiveRightsInfo entriesInfoRights = entriesInfo.getRights();
+                testEffectiveRightsInfo entriesInfoRights = entriesInfo.getRights();
                 Assert.assertNotNull("entriesInfoRights", entriesInfoRights);
             }
         }
@@ -629,23 +632,23 @@ public class WSDLAdminTest {
         String accountId = Utility.ensureAccountExists(testAcct);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
 
-        GranteeSelector gSel = new GranteeSelector();
-        gSel.setBy(GranteeBy.NAME); // required
+        testGranteeSelector gSel = new testGranteeSelector();
+        gSel.setBy(testGranteeBy.NAME); // required
         // note - initial testing idea was to use "admin" account
         // but GetGrantsRequest won't accept an admin account
         // as the grantee - they don't need to be granted anything...
         gSel.setValue(testAcct);
-        gSel.setType(GranteeType.USR);
+        gSel.setType(testGranteeType.USR);
         gSel.setAll(true);  // required
         // password is not allowed for grantee type usr
         // gSel.setSecret("test123");
 
-        EffectiveRightsTargetSelector tSel = new EffectiveRightsTargetSelector();
-        tSel.setType(TargetType.ACCOUNT);
-        tSel.setBy(TargetBy.ID);
+        testEffectiveRightsTargetSelector tSel = new testEffectiveRightsTargetSelector();
+        tSel.setType(testTargetType.ACCOUNT);
+        tSel.setBy(testTargetBy.ID);
         tSel.setValue(accountId);
 
-        RightModifierInfo rmi = new RightModifierInfo();
+        testRightModifierInfo rmi = new testRightModifierInfo();
         // Note: if CanDelegate modifier set, target cannot be a regular user
         //       acct.
         // rmi.setCanDelegate(true);
@@ -653,35 +656,35 @@ public class WSDLAdminTest {
         rmi.setValue("viewFreeBusy");
         rmi.setSubDomain(false);
 
-        GrantRightRequest grReq = new GrantRightRequest();
+        testGrantRightRequest grReq = new testGrantRightRequest();
         grReq.setGrantee(gSel);
         grReq.setTarget(tSel);
         grReq.setRight(rmi);
 
-        GrantRightResponse grResp = eif.grantRightRequest(grReq);
+        testGrantRightResponse grResp = eif.grantRightRequest(grReq);
         Assert.assertNotNull("GrantRightResponse object", grResp);
 
-        GetGrantsRequest ggReq = new GetGrantsRequest();
+        testGetGrantsRequest ggReq = new testGetGrantsRequest();
         ggReq.setGrantee(gSel);
         ggReq.setTarget(tSel);
-        GetGrantsResponse ggResp = eif.getGrantsRequest(ggReq);
+        testGetGrantsResponse ggResp = eif.getGrantsRequest(ggReq);
         Assert.assertNotNull("GetGrantsResponse object", ggResp);
         Assert.assertTrue("Number of grants >= 1", ggResp.getGrant().size() >=1);
         int gNum = 0;
-        for (GrantInfo grant : ggResp.getGrant()) {
+        for (testGrantInfo grant : ggResp.getGrant()) {
             gNum++;
             String gTag = " grant " + gNum;
-            GranteeInfo grantee = grant.getGrantee();
+            testGranteeInfo grantee = grant.getGrantee();
             Assert.assertNotNull(gTag + " GranteeInfo", grantee);
             Assert.assertNotNull(gTag + " Grantee type", grantee.getType());
             Assert.assertNotNull(gTag + " Grantee id", grantee.getId());
             Assert.assertNotNull(gTag + " Grantee name", grantee.getName());
-            TypeIdName targ = grant.getTarget();
+            testTypeIdName targ = grant.getTarget();
             Assert.assertNotNull(gTag + " Target", targ);
             Assert.assertNotNull(gTag + " Target type", targ.getType());
             Assert.assertNotNull(gTag + " Target id", targ.getId());
             Assert.assertNotNull(gTag + " Target name", targ.getName());
-            RightModifierInfo rightMod = grant.getRight();
+            testRightModifierInfo rightMod = grant.getRight();
             Assert.assertNotNull(gTag + " Right", rightMod);
             Assert.assertNotNull(gTag + " Right value", rightMod.getValue());
         }
@@ -691,20 +694,20 @@ public class WSDLAdminTest {
     public void getEffectiveRightsTest() throws Exception {
         String accountId = Utility.ensureAccountExists(testAcct);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetEffectiveRightsRequest req = new GetEffectiveRightsRequest();
+        testGetEffectiveRightsRequest req = new testGetEffectiveRightsRequest();
         req.setExpandAllAttrs("getAttrs");
-        GranteeSelector gSel = new GranteeSelector();
-        gSel.setBy(GranteeBy.NAME);
+        testGranteeSelector gSel = new testGranteeSelector();
+        gSel.setBy(testGranteeBy.NAME);
         gSel.setValue("admin");
         req.setGrantee(gSel);
-        EffectiveRightsTargetSelector tSel = new EffectiveRightsTargetSelector();
-        tSel.setType(TargetType.ACCOUNT);
-        tSel.setBy(TargetBy.ID);
+        testEffectiveRightsTargetSelector tSel = new testEffectiveRightsTargetSelector();
+        tSel.setType(testTargetType.ACCOUNT);
+        tSel.setBy(testTargetBy.ID);
         tSel.setValue(accountId);
         req.setTarget(tSel);
-        GetEffectiveRightsResponse resp = eif.getEffectiveRightsRequest(req);
+        testGetEffectiveRightsResponse resp = eif.getEffectiveRightsRequest(req);
         Assert.assertNotNull("GetEffectiveRightsResponse object", resp);
-        GranteeInfo grantee = resp.getGrantee();
+        testGranteeInfo grantee = resp.getGrantee();
         Assert.assertNotNull("grantee object", grantee);
         Assert.assertNotNull("grantee id", grantee.getId());
         Assert.assertNotNull("grantee name", grantee.getName());
@@ -716,21 +719,21 @@ public class WSDLAdminTest {
     public void checkRightTest() throws Exception {
         String accountId = Utility.ensureAccountExists(testAcct);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        CheckRightRequest req = new CheckRightRequest();
-        GranteeSelector gSel = new GranteeSelector();
-        gSel.setBy(GranteeBy.NAME);
+        testCheckRightRequest req = new testCheckRightRequest();
+        testGranteeSelector gSel = new testGranteeSelector();
+        gSel.setBy(testGranteeBy.NAME);
         gSel.setValue("admin");
         req.setGrantee(gSel);
-        EffectiveRightsTargetSelector tSel = new EffectiveRightsTargetSelector();
-        tSel.setType(TargetType.ACCOUNT);
-        tSel.setBy(TargetBy.ID);
+        testEffectiveRightsTargetSelector tSel = new testEffectiveRightsTargetSelector();
+        tSel.setType(testTargetType.ACCOUNT);
+        tSel.setBy(testTargetBy.ID);
         tSel.setValue(accountId);
         req.setTarget(tSel);
-        CheckedRight checkedRight = new CheckedRight();
+        testCheckedRight checkedRight = new testCheckedRight();
         // from /opt/zimbra/conf/rights/zimbra-rights.xml
         checkedRight.setValue("renameAccount");
         req.setRight(checkedRight);
-        CheckRightResponse resp = eif.checkRightRequest(req);
+        testCheckRightResponse resp = eif.checkRightRequest(req);
         Assert.assertNotNull("CheckRightResponse object", resp);
         resp.isAllow();
         resp.getVia();  // will be null
@@ -739,12 +742,12 @@ public class WSDLAdminTest {
     @Test
     public void createDomainTest() throws Exception {
         Utility.deleteDomainIfExists(testDomain);
-        CreateDomainRequest req = new CreateDomainRequest();
+        testCreateDomainRequest req = new testCreateDomainRequest();
         req.setName(testDomain);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        CreateDomainResponse resp = eif.createDomainRequest(req);
+        testCreateDomainResponse resp = eif.createDomainRequest(req);
         Assert.assertNotNull(resp);
-        DomainInfo domainInfo = resp.getDomain();
+        testDomainInfo domainInfo = resp.getDomain();
         Assert.assertNotNull(domainInfo);
         Assert.assertEquals("createDomainResponse <domain> 'name' attribute",
                 testDomain, domainInfo.getName());
@@ -761,15 +764,15 @@ public class WSDLAdminTest {
     @Test
     public void getDomainInfoTest() throws Exception {
         int len;
-        DomainInfo domainInfo;
+        testDomainInfo domainInfo;
         String testDomainId = Utility.ensureDomainExists(testDomain);
-        GetDomainInfoRequest getInfoReq = new GetDomainInfoRequest();
+        testGetDomainInfoRequest getInfoReq = new testGetDomainInfoRequest();
         getInfoReq.setApplyConfig(true);
-        DomainSelector domainSel = new DomainSelector();
-        domainSel.setBy(DomainBy.ID);
+        testDomainSelector domainSel = new testDomainSelector();
+        domainSel.setBy(testDomainBy.ID);
         domainSel.setValue(testDomainId);
         getInfoReq.setDomain(domainSel);
-        GetDomainInfoResponse getInfoResp = eif.getDomainInfoRequest(getInfoReq);
+        testGetDomainInfoResponse getInfoResp = eif.getDomainInfoRequest(getInfoReq);
         Assert.assertNotNull(getInfoResp);
         domainInfo = getInfoResp.getDomain();
         Assert.assertNotNull(domainInfo);
@@ -786,15 +789,15 @@ public class WSDLAdminTest {
     @Test
     public void getDomainTest() throws Exception {
         int len;
-        DomainInfo domainInfo;
+        testDomainInfo domainInfo;
         String testDomainId = Utility.ensureDomainExists(testDomain);
-        GetDomainRequest getReq = new GetDomainRequest();
+        testGetDomainRequest getReq = new testGetDomainRequest();
         getReq.setApplyConfig(true);
-        DomainSelector domainSel = new DomainSelector();
-        domainSel.setBy(DomainBy.ID);
+        testDomainSelector domainSel = new testDomainSelector();
+        domainSel.setBy(testDomainBy.ID);
         domainSel.setValue(testDomainId);
         getReq.setDomain(domainSel);
-        GetDomainResponse getResp = eif.getDomainRequest(getReq);
+        testGetDomainResponse getResp = eif.getDomainRequest(getReq);
         Assert.assertNotNull(getResp);
         domainInfo = getResp.getDomain();
         Assert.assertNotNull(domainInfo);
@@ -811,15 +814,15 @@ public class WSDLAdminTest {
     @Test
     public void modifyDomainTest() throws Exception {
         int len;
-        DomainInfo domainInfo;
+        testDomainInfo domainInfo;
         String testDomainId = Utility.ensureDomainExists(testDomain);
-        ModifyDomainRequest modReq = new ModifyDomainRequest();
+        testModifyDomainRequest modReq = new testModifyDomainRequest();
         modReq.setId(testDomainId);
-        Attr modAttr = new Attr();
+        testAttr modAttr = new testAttr();
         modAttr.setN("zimbraGalMaxResults");
         modAttr.setValue("99");
         modReq.getA().add(modAttr);
-        ModifyDomainResponse modResp = eif.modifyDomainRequest(modReq);
+        testModifyDomainResponse modResp = eif.modifyDomainRequest(modReq);
         Assert.assertNotNull(modResp);
         domainInfo = modResp.getDomain();
         Assert.assertNotNull(domainInfo);
@@ -832,14 +835,14 @@ public class WSDLAdminTest {
         Assert.assertTrue("modifyDomainResponse <domain> has " + len +
                 " <a> children - should have at least 50", len >= 50);
 
-        GetDomainRequest getReq = new GetDomainRequest();
+        testGetDomainRequest getReq = new testGetDomainRequest();
         getReq.setApplyConfig(true);
-        DomainSelector domainSel = new DomainSelector();
-        domainSel.setBy(DomainBy.ID);
+        testDomainSelector domainSel = new testDomainSelector();
+        domainSel.setBy(testDomainBy.ID);
         domainSel.setValue(testDomainId);
         getReq.setDomain(domainSel);
         getReq.setAttrs("zimbraMailStatus,zimbraBasicAuthRealm");
-        GetDomainResponse getResp = eif.getDomainRequest(getReq);
+        testGetDomainResponse getResp = eif.getDomainRequest(getReq);
         Assert.assertNotNull(getResp);
         domainInfo = getResp.getDomain();
         Assert.assertNotNull(domainInfo);
@@ -853,11 +856,11 @@ public class WSDLAdminTest {
 
     @Test
     public void getAllDomainsTest() throws Exception {
-        GetAllDomainsRequest req = new GetAllDomainsRequest();
+        testGetAllDomainsRequest req = new testGetAllDomainsRequest();
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetAllDomainsResponse resp = eif.getAllDomainsRequest(req);
+        testGetAllDomainsResponse resp = eif.getAllDomainsRequest(req);
         Assert.assertNotNull("GetAllDomainsResponse object", resp);
-        List <DomainInfo> domainInfoList = resp.getDomain();
+        List <testDomainInfo> domainInfoList = resp.getDomain();
         int len;
         Assert.assertNotNull("GetAllDomainsResponse list of domains", domainInfoList);
         len = domainInfoList.size();
@@ -868,9 +871,9 @@ public class WSDLAdminTest {
     @Test
     public void deleteDomainTest() throws Exception {
         String testDomainId = Utility.ensureDomainExists(testDomain);
-        DeleteDomainRequest delReq = new DeleteDomainRequest();
+        testDeleteDomainRequest delReq = new testDeleteDomainRequest();
         delReq.setId(testDomainId);
-        DeleteDomainResponse delResp = eif.deleteDomainRequest(delReq);
+        testDeleteDomainResponse delResp = eif.deleteDomainRequest(delReq);
         Assert.assertNotNull(delResp);
     }
 
@@ -878,12 +881,12 @@ public class WSDLAdminTest {
     public void createServerTest() throws Exception {
         int len;
         Utility.deleteServerIfExists(testServer);
-        CreateServerRequest req = new CreateServerRequest();
+        testCreateServerRequest req = new testCreateServerRequest();
         req.setName(testServer);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        CreateServerResponse resp = eif.createServerRequest(req);
+        testCreateServerResponse resp = eif.createServerRequest(req);
         Assert.assertNotNull(resp);
-        ServerInfo serverInfo = resp.getServer();
+        testServerInfo serverInfo = resp.getServer();
         Assert.assertNotNull(serverInfo);
         Assert.assertEquals("createServerResponse <server> 'name' attribute",
                 testServer, serverInfo.getName());
@@ -899,17 +902,17 @@ public class WSDLAdminTest {
     @Test
     public void getServerTest() throws Exception {
         int len;
-        ServerSelector serverSel;
-        ServerInfo serverInfo;
+        testServerSelector serverSel;
+        testServerInfo serverInfo;
         String respId;
         String testServerId = Utility.ensureServerExists(testServer);
-        GetServerRequest getReq = new GetServerRequest();
+        testGetServerRequest getReq = new testGetServerRequest();
         getReq.setApplyConfig(true);
-        serverSel = new ServerSelector();
-        serverSel.setBy(ServerBy.ID);
+        serverSel = new testServerSelector();
+        serverSel.setBy(testServerBy.ID);
         serverSel.setValue(testServerId);
         getReq.setServer(serverSel);
-        GetServerResponse getResp = eif.getServerRequest(getReq);
+        testGetServerResponse getResp = eif.getServerRequest(getReq);
         Assert.assertNotNull(getResp);
         serverInfo = getResp.getServer();
         Assert.assertNotNull(serverInfo);
@@ -925,17 +928,17 @@ public class WSDLAdminTest {
     @Test
     public void modifyServerTest() throws Exception {
         int len;
-        ServerSelector serverSel;
-        ServerInfo serverInfo;
+        testServerSelector serverSel;
+        testServerInfo serverInfo;
         String respId;
         String testServerId = Utility.ensureServerExists(testServer);
-        ModifyServerRequest modReq = new ModifyServerRequest();
+        testModifyServerRequest modReq = new testModifyServerRequest();
         modReq.setId(testServerId);
-        Attr modAttr = new Attr();
+        testAttr modAttr = new testAttr();
         modAttr.setN("zimbraImapNumThreads");
         modAttr.setValue("199");
         modReq.getA().add(modAttr);
-        ModifyServerResponse modResp = eif.modifyServerRequest(modReq);
+        testModifyServerResponse modResp = eif.modifyServerRequest(modReq);
         Assert.assertNotNull(modResp);
         serverInfo = modResp.getServer();
         Assert.assertNotNull(serverInfo);
@@ -947,14 +950,14 @@ public class WSDLAdminTest {
         Assert.assertTrue("modifyServerResponse <server> has " + len +
                 " <a> children - should have at least 50", len >= 50);
 
-        GetServerRequest getReq = new GetServerRequest();
+        testGetServerRequest getReq = new testGetServerRequest();
         getReq.setApplyConfig(true);
-        serverSel = new ServerSelector();
-        serverSel.setBy(ServerBy.ID);
+        serverSel = new testServerSelector();
+        serverSel.setBy(testServerBy.ID);
         serverSel.setValue(testServerId);
         getReq.setServer(serverSel);
         getReq.setAttrs("zimbraImapNumThreads,zimbraServiceHostname");
-        GetServerResponse getResp = eif.getServerRequest(getReq);
+        testGetServerResponse getResp = eif.getServerRequest(getReq);
         Assert.assertNotNull(getResp);
         serverInfo = getResp.getServer();
         Assert.assertNotNull(serverInfo);
@@ -970,19 +973,19 @@ public class WSDLAdminTest {
     public void deleteServerTest() throws Exception {
         String testServerId = Utility.ensureServerExists(testServer);
         Assert.assertNotNull(testServerId);
-        DeleteServerRequest delReq = new DeleteServerRequest();
+        testDeleteServerRequest delReq = new testDeleteServerRequest();
         delReq.setId(testServerId);
-        DeleteServerResponse delResp = eif.deleteServerRequest(delReq);
+        testDeleteServerResponse delResp = eif.deleteServerRequest(delReq);
         Assert.assertNotNull(delResp);
     }
 
     @Test
     public void getAllServersTest() throws Exception {
-        GetAllServersRequest req = new GetAllServersRequest();
+        testGetAllServersRequest req = new testGetAllServersRequest();
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetAllServersResponse resp = eif.getAllServersRequest(req);
+        testGetAllServersResponse resp = eif.getAllServersRequest(req);
         Assert.assertNotNull("GetAllServersResponse object", resp);
-        List <ServerInfo> serverInfoList = resp.getServer();
+        List <testServerInfo> serverInfoList = resp.getServer();
         int len;
         Assert.assertNotNull("GetAllServersResponse list of server", serverInfoList);
         len = serverInfoList.size();
@@ -1004,20 +1007,20 @@ public class WSDLAdminTest {
     // @Test
     public void getServerNIfs() throws Exception {
         int len;
-        ServerSelector serverSel;
+        testServerSelector serverSel;
         String testServerId = Utility.ensureServerExists(testServer);
-        GetServerNIfsRequest getReq = new GetServerNIfsRequest();
-        serverSel = new ServerSelector();
-        serverSel.setBy(ServerBy.ID);
+        testGetServerNIfsRequest getReq = new testGetServerNIfsRequest();
+        serverSel = new testServerSelector();
+        serverSel.setBy(testServerBy.ID);
         serverSel.setValue(testServerId);
         getReq.setServer(serverSel);
-        GetServerNIfsResponse getResp = eif.getServerNIfsRequest(getReq);
+        testGetServerNIfsResponse getResp = eif.getServerNIfsRequest(getReq);
         Assert.assertNotNull("response object", getResp);
-        List <NetworkInformation> nis = getResp.getNi();
+        List <testNetworkInformation> nis = getResp.getNi();
         Assert.assertNotNull("List of NIs", nis);
-        NetworkInformation ni = nis.get(0);
+        testNetworkInformation ni = nis.get(0);
         Assert.assertNotNull("First NI", ni);
-        List <Attr> attrs = ni.getA();
+        List <testAttr> attrs = ni.getA();
         len = attrs.size();
         Assert.assertTrue("GetServerNIfsResponse <server> has " + len +
                 " <a> children - should have at least 2", len >= 2);
@@ -1027,12 +1030,12 @@ public class WSDLAdminTest {
     public void createCosTest() throws Exception {
         int len;
         Utility.deleteCosIfExists(testCos);
-        CreateCosRequest req = new CreateCosRequest();
+        testCreateCosRequest req = new testCreateCosRequest();
         req.setName(testCos);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        CreateCosResponse resp = eif.createCosRequest(req);
+        testCreateCosResponse resp = eif.createCosRequest(req);
         Assert.assertNotNull(resp);
-        CosInfo cosInfo = resp.getCos();
+        testCosInfo cosInfo = resp.getCos();
         Assert.assertNotNull(cosInfo);
         Assert.assertEquals("createCosResponse <cos> 'name' attribute",
                 testCos, cosInfo.getName());
@@ -1048,16 +1051,16 @@ public class WSDLAdminTest {
     @Test
     public void getCosTest() throws Exception {
         int len;
-        CosSelector cosSel;
-        CosInfo cosInfo;
+        testCosSelector cosSel;
+        testCosInfo cosInfo;
         String respId;
         String testCosId = Utility.ensureCosExists(testCos);
-        GetCosRequest getReq = new GetCosRequest();
-        cosSel = new CosSelector();
-        cosSel.setBy(CosBy.ID);
+        testGetCosRequest getReq = new testGetCosRequest();
+        cosSel = new testCosSelector();
+        cosSel.setBy(testCosBy.ID);
         cosSel.setValue(testCosId);
         getReq.setCos(cosSel);
-        GetCosResponse getResp = eif.getCosRequest(getReq);
+        testGetCosResponse getResp = eif.getCosRequest(getReq);
         Assert.assertNotNull(getResp);
         cosInfo = getResp.getCos();
         Assert.assertNotNull(cosInfo);
@@ -1073,17 +1076,17 @@ public class WSDLAdminTest {
     @Test
     public void modifyCosTest() throws Exception {
         int len;
-        CosSelector cosSel;
-        CosInfo cosInfo;
+        testCosSelector cosSel;
+        testCosInfo cosInfo;
         String respId;
         String testCosId = Utility.ensureCosExists(testCos);
-        ModifyCosRequest modReq = new ModifyCosRequest();
+        testModifyCosRequest modReq = new testModifyCosRequest();
         modReq.setId(testCosId);
-        Attr modAttr = new Attr();
+        testAttr modAttr = new testAttr();
         modAttr.setN("zimbraMailForwardingAddressMaxNumAddrs");
         modAttr.setValue("99");
         modReq.getA().add(modAttr);
-        ModifyCosResponse modResp = eif.modifyCosRequest(modReq);
+        testModifyCosResponse modResp = eif.modifyCosRequest(modReq);
         Assert.assertNotNull(modResp);
         cosInfo = modResp.getCos();
         Assert.assertNotNull(cosInfo);
@@ -1095,13 +1098,13 @@ public class WSDLAdminTest {
         Assert.assertTrue("modifyCosResponse <cos> has " + len +
                 " <a> children - should have at least 50", len >= 50);
 
-        GetCosRequest getReq = new GetCosRequest();
-        cosSel = new CosSelector();
-        cosSel.setBy(CosBy.ID);
+        testGetCosRequest getReq = new testGetCosRequest();
+        cosSel = new testCosSelector();
+        cosSel.setBy(testCosBy.ID);
         cosSel.setValue(testCosId);
         getReq.setCos(cosSel);
         getReq.setAttrs("zimbraMailForwardingAddressMaxNumAddrs");
-        GetCosResponse getResp = eif.getCosRequest(getReq);
+        testGetCosResponse getResp = eif.getCosRequest(getReq);
         Assert.assertNotNull(getResp);
         cosInfo = getResp.getCos();
         Assert.assertNotNull(cosInfo);
@@ -1111,7 +1114,7 @@ public class WSDLAdminTest {
         Assert.assertEquals("getCosResponse <cos> 'id' attribute", testCosId, respId);
         len = cosInfo.getA().size();
         Assert.assertEquals("Number of GetCosResponse <cos> <a> children", 1, len);
-        Attr maxFwdingAddrs = cosInfo.getA().get(0);
+        testAttr maxFwdingAddrs = cosInfo.getA().get(0);
         Assert.assertNotNull(maxFwdingAddrs);
         Assert.assertEquals("getCosResponse <cos> <a> 'n' attribute",
                 "zimbraMailForwardingAddressMaxNumAddrs", maxFwdingAddrs.getN());
@@ -1123,17 +1126,17 @@ public class WSDLAdminTest {
     @Test
     public void copyCosTest() throws Exception {
         int len;
-        CosSelector cosSel;
-        CosInfo cosInfo;
+        testCosSelector cosSel;
+        testCosInfo cosInfo;
         String respId;
         String testCosId = Utility.ensureCosExists(testCos);
-        CopyCosRequest copyReq = new CopyCosRequest();
+        testCopyCosRequest copyReq = new testCopyCosRequest();
         copyReq.setName(testCosCopy);
-        cosSel = new CosSelector();
-        cosSel.setBy(CosBy.ID);
+        cosSel = new testCosSelector();
+        cosSel.setBy(testCosBy.ID);
         cosSel.setValue(testCosId);
         copyReq.setCos(cosSel);
-        CopyCosResponse copyResp = eif.copyCosRequest(copyReq);
+        testCopyCosResponse copyResp = eif.copyCosRequest(copyReq);
         Assert.assertNotNull(copyResp);
         cosInfo = copyResp.getCos();
         Assert.assertNotNull(cosInfo);
@@ -1151,12 +1154,12 @@ public class WSDLAdminTest {
         int len;
         String testCosId = Utility.ensureCosExists(testCos);
         String respId;
-        RenameCosRequest renameCosReq = new RenameCosRequest();
+        testRenameCosRequest renameCosReq = new testRenameCosRequest();
         renameCosReq.setId(testCosId);
         renameCosReq.setNewName("foobar" + testCos);
-        RenameCosResponse renameCosResp = eif.renameCosRequest(renameCosReq);
+        testRenameCosResponse renameCosResp = eif.renameCosRequest(renameCosReq);
         Assert.assertNotNull(renameCosResp);
-        CosInfo cosInfo = renameCosResp.getCos();
+        testCosInfo cosInfo = renameCosResp.getCos();
         Assert.assertNotNull(cosInfo);
         Assert.assertEquals("renameCosResponse <cos> 'name' attribute",
                 "foobar" + testCos, cosInfo.getName());
@@ -1173,19 +1176,19 @@ public class WSDLAdminTest {
     public void deleteCosTest() throws Exception {
         String testCosId = Utility.ensureCosExists(testCos);
         Assert.assertNotNull(testCosId);
-        DeleteCosRequest delReq = new DeleteCosRequest();
+        testDeleteCosRequest delReq = new testDeleteCosRequest();
         delReq.setId(testCosId);
-        DeleteCosResponse delResp = eif.deleteCosRequest(delReq);
+        testDeleteCosResponse delResp = eif.deleteCosRequest(delReq);
         Assert.assertNotNull(delResp);
     }
 
     @Test
     public void getAllCosTest() throws Exception {
-        GetAllCosRequest req = new GetAllCosRequest();
+        testGetAllCosRequest req = new testGetAllCosRequest();
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetAllCosResponse resp = eif.getAllCosRequest(req);
+        testGetAllCosResponse resp = eif.getAllCosRequest(req);
         Assert.assertNotNull("GetAllCosResponse object", resp);
-        List <AnnotatedCosInfo> cosInfoList = resp.getCos();
+        List <testAnnotatedCosInfo> cosInfoList = resp.getCos();
         int len;
         Assert.assertNotNull("GetAllCosResponse list of cos", cosInfoList);
         len = cosInfoList.size();
@@ -1195,26 +1198,26 @@ public class WSDLAdminTest {
 
     @Test
     public void getMailQueueTest() throws Exception {
-        GetAllServersRequest gasReq = new GetAllServersRequest();
+        testGetAllServersRequest gasReq = new testGetAllServersRequest();
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetAllServersResponse gasResp = eif.getAllServersRequest(gasReq);
-        ServerInfo serverInfo = gasResp.getServer().get(0);
-        GetMailQueueRequest req = new GetMailQueueRequest();
-        ServerMailQueueQuery smqq = new ServerMailQueueQuery();
+        testGetAllServersResponse gasResp = eif.getAllServersRequest(gasReq);
+        testServerInfo serverInfo = gasResp.getServer().get(0);
+        testGetMailQueueRequest req = new testGetMailQueueRequest();
+        testServerMailQueueQuery smqq = new testServerMailQueueQuery();
         smqq.setName(serverInfo.getName());
-        MailQueueQuery mqq = new MailQueueQuery();
+        testMailQueueQuery mqq = new testMailQueueQuery();
         mqq.setName("Wow");  // TODO: Use a real name?
         // Note: set true -> sets off a scan which might interfere with reruns
         mqq.setScan(false);
-        QueueQuery qq = new QueueQuery();
+        testQueueQuery qq = new testQueueQuery();
         mqq.setQuery(qq);
         smqq.setQueue(mqq);
         req.setServer(smqq);
-        GetMailQueueResponse resp = eif.getMailQueueRequest(req);
+        testGetMailQueueResponse resp = eif.getMailQueueRequest(req);
         Assert.assertNotNull("GetMailQueueResponse object", resp);
-        ServerMailQueueDetails smqd = resp.getServer();
+        testServerMailQueueDetails smqd = resp.getServer();
         Assert.assertEquals("Server name", serverInfo.getName(), smqd.getName());
-        MailQueueDetails mqd = smqd.getQueue();
+        testMailQueueDetails mqd = smqd.getQueue();
         Assert.assertNotNull("MailQueueDetails object", mqd);
         mqd.getTime();
         Assert.assertEquals("queue total", 0, mqd.getTotal());
@@ -1226,25 +1229,25 @@ public class WSDLAdminTest {
 
     @Test
     public void CheckDirectoryTest() throws Exception {
-        CheckDirectoryRequest req = new CheckDirectoryRequest();
+        testCheckDirectoryRequest req = new testCheckDirectoryRequest();
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        CheckDirSelector dirSel = new CheckDirSelector();
+        testCheckDirSelector dirSel = new testCheckDirSelector();
         dirSel.setPath("/opt/zimbra/log");
         req.getDirectory().add(dirSel);
-        dirSel = new CheckDirSelector();
+        dirSel = new testCheckDirSelector();
         dirSel.setPath("/opt/zimbra/wsdlNonExistent");
         req.getDirectory().add(dirSel);
-        dirSel = new CheckDirSelector();
+        dirSel = new testCheckDirSelector();
         dirSel.setPath("/opt/zimbra/wsdlToBeCreated");
         dirSel.setCreate(true);
         req.getDirectory().add(dirSel);
-        CheckDirectoryResponse resp = eif.checkDirectoryRequest(req);
+        testCheckDirectoryResponse resp = eif.checkDirectoryRequest(req);
         Assert.assertNotNull("CheckDirectoryResponse object", resp);
-        List <DirPathInfo> dirPaths = resp.getDirectory();
+        List <testDirPathInfo> dirPaths = resp.getDirectory();
         Assert.assertNotNull("CheckDirectoryResponse list of directories", dirPaths);
         int len = dirPaths.size();
         Assert.assertEquals("Number of paths", 3, len);
-        for (DirPathInfo pathInfo : dirPaths) {
+        for (testDirPathInfo pathInfo : dirPaths) {
             String path = pathInfo.getPath();
             if (path.equals("/opt/zimbra/log")) {
                 Assert.assertEquals("isExists" + " for path=" + path, 

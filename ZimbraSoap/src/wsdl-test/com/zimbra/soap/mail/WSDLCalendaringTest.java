@@ -18,22 +18,22 @@ import java.util.List;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 import com.zimbra.soap.Utility;
-import com.zimbra.soap.mail.wsimport.generated.CalEcho;
-import com.zimbra.soap.mail.wsimport.generated.CalOrganizer;
-import com.zimbra.soap.mail.wsimport.generated.CalendarAttendee;
-import com.zimbra.soap.mail.wsimport.generated.CalendarItemMsg;
-import com.zimbra.soap.mail.wsimport.generated.CreateAppointmentRequest;
-import com.zimbra.soap.mail.wsimport.generated.CreateAppointmentResponse;
-import com.zimbra.soap.mail.wsimport.generated.CreateTaskRequest;
-import com.zimbra.soap.mail.wsimport.generated.CreateTaskResponse;
-import com.zimbra.soap.mail.wsimport.generated.DtTimeInfo;
-import com.zimbra.soap.mail.wsimport.generated.EmailAddrInfo;
-import com.zimbra.soap.mail.wsimport.generated.InvitationInfo;
-import com.zimbra.soap.mail.wsimport.generated.InviteAsMP;
-import com.zimbra.soap.mail.wsimport.generated.InviteComponent;
-import com.zimbra.soap.mail.wsimport.generated.MailService;
-import com.zimbra.soap.mail.wsimport.generated.MimePartInfo;
-import com.zimbra.soap.mail.wsimport.generated.MpInviteInfo;
+import zimbra.generated.mailclient.mail.testCalEcho;
+import zimbra.generated.mailclient.mail.testCalOrganizer;
+import zimbra.generated.mailclient.mail.testCalendarAttendee;
+import zimbra.generated.mailclient.mail.testCalendarItemMsg;
+import zimbra.generated.mailclient.mail.testCreateAppointmentRequest;
+import zimbra.generated.mailclient.mail.testCreateAppointmentResponse;
+import zimbra.generated.mailclient.mail.testCreateTaskRequest;
+import zimbra.generated.mailclient.mail.testCreateTaskResponse;
+import zimbra.generated.mailclient.mail.testDtTimeInfo;
+import zimbra.generated.mailclient.mail.testEmailAddrInfo;
+import zimbra.generated.mailclient.mail.testInvitationInfo;
+import zimbra.generated.mailclient.mail.testInviteAsMP;
+import zimbra.generated.mailclient.mail.testInviteComponent;
+import zimbra.generated.mailclient.mail.testMimePartInfo;
+import zimbra.generated.mailclient.mail.testMpInviteInfo;
+import zimbra.generated.mailclient.ws.service.MailService;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -82,12 +82,12 @@ public class WSDLCalendaringTest {
     public void createAppointment() throws Exception {
         Utility.ensureAccountExists(testAcct);
         Utility.ensureAccountExists(testAcct2);
-        CreateAppointmentRequest req = new CreateAppointmentRequest();
-        CalendarItemMsg msg = new CalendarItemMsg();
+        testCreateAppointmentRequest req = new testCreateAppointmentRequest();
+        testCalendarItemMsg msg = new testCalendarItemMsg();
         msg.setL("15");
         msg.setSu("WSDL Appointment 1");
-        InvitationInfo invite = new InvitationInfo();
-        InviteComponent inviteComp = new InviteComponent();
+        testInvitationInfo invite = new testInvitationInfo();
+        testInviteComponent inviteComp = new testInviteComponent();
         inviteComp.setFb("B");
         inviteComp.setRsvp(true);
         inviteComp.setMethod("REQUEST");
@@ -96,35 +96,35 @@ public class WSDLCalendaringTest {
         inviteComp.setName("WSDL Appointment 1");
         inviteComp.setAllDay(false);
         inviteComp.setTransp("O");
-        CalendarAttendee attendee = new CalendarAttendee();
+        testCalendarAttendee attendee = new testCalendarAttendee();
         attendee.setRsvp(true);
         attendee.setA(testAcct2);
         attendee.setRole("OPT");
         attendee.setPtst("NE");
         inviteComp.getAt().add(attendee);
-        DtTimeInfo start = new DtTimeInfo();
+        testDtTimeInfo start = new testDtTimeInfo();
         start.setD("20320627T075906");
         inviteComp.setS(start);
-        DtTimeInfo end = new DtTimeInfo();
+        testDtTimeInfo end = new testDtTimeInfo();
         end.setD("20320627T085959");
         inviteComp.setE(end);
-        CalOrganizer org = new CalOrganizer();
+        testCalOrganizer org = new testCalOrganizer();
         org.setA(testAcct);
         org.setD("wsdl1");
         inviteComp.setOr(org);
         invite.setComp(inviteComp);
         msg.setInv(invite);
-        EmailAddrInfo emailAddr = new EmailAddrInfo();
+        testEmailAddrInfo emailAddr = new testEmailAddrInfo();
         emailAddr.setT("t");
         emailAddr.setA(testAcct2);
         msg.getE().add(emailAddr);
-        MimePartInfo mp = new MimePartInfo();
+        testMimePartInfo mp = new testMimePartInfo();
         mp.setCt("multipart/alternative");
-        MimePartInfo mpPlain = new MimePartInfo();
+        testMimePartInfo mpPlain = new testMimePartInfo();
         mpPlain.setCt("text/plain");
         mpPlain.setContent("Body of the Appointment");
         mp.getMp().add(mpPlain);
-        MimePartInfo mpHtml = new MimePartInfo();
+        testMimePartInfo mpHtml = new testMimePartInfo();
         mpHtml.setCt("text/html");
         mpHtml.setContent("<html><body><b>Body</b> of the Appointment</body></html>");
         mp.getMp().add(mpHtml);
@@ -133,45 +133,45 @@ public class WSDLCalendaringTest {
         req.setEcho(true);
         Utility.addSoapAcctAuthHeaderForAcct((WSBindingProvider)mailSvcEIF,
                 testAcct);
-        CreateAppointmentResponse resp = mailSvcEIF.createAppointmentRequest(req);
+        testCreateAppointmentResponse resp = mailSvcEIF.createAppointmentRequest(req);
         Assert.assertNotNull("CreateAppointmentResponse object", resp);
         Assert.assertTrue("revision", resp.getRev() >= 0);
         Assert.assertTrue("ms", resp.getMs() >= 0);
         Assert.assertNotNull("CreateAppointmentResponse invId", resp.getInvId());
         Assert.assertNotNull("CreateAppointmentResponse calItemId",
                 resp.getCalItemId());
-        CalEcho echo = resp.getEcho();
+        testCalEcho echo = resp.getEcho();
         Assert.assertNotNull("CreateAppointmentResponse echo object", echo);
     }
 
     @Test
     public void createTask() throws Exception {
         Utility.ensureAccountExists(testAcct);
-        CreateTaskRequest req = new CreateTaskRequest();
-        CalendarItemMsg msg = new CalendarItemMsg();
+        testCreateTaskRequest req = new testCreateTaskRequest();
+        testCalendarItemMsg msg = new testCalendarItemMsg();
         msg.setL("15");
         msg.setSu("WSDL Task 1");
-        InvitationInfo invite = new InvitationInfo();
-        InviteComponent inviteComp = new InviteComponent();
+        testInvitationInfo invite = new testInvitationInfo();
+        testInviteComponent inviteComp = new testInviteComponent();
         inviteComp.setPercentComplete("0");
         inviteComp.setAllDay(true);
         inviteComp.setStatus("NEED");
         inviteComp.setPriority("5");
         inviteComp.setName("WSDL Task 1");
         inviteComp.setLoc("Mars");
-        CalOrganizer org = new CalOrganizer();
+        testCalOrganizer org = new testCalOrganizer();
         org.setA(testAcct);
         org.setD("wsdl1");
         inviteComp.setOr(org);
         invite.setComp(inviteComp);
         msg.setInv(invite);
-        MimePartInfo mp = new MimePartInfo();
+        testMimePartInfo mp = new testMimePartInfo();
         mp.setCt("multipart/alternative");
-        MimePartInfo mpPlain = new MimePartInfo();
+        testMimePartInfo mpPlain = new testMimePartInfo();
         mpPlain.setCt("text/plain");
         mpPlain.setContent("Body of the Task");
         mp.getMp().add(mpPlain);
-        MimePartInfo mpHtml = new MimePartInfo();
+        testMimePartInfo mpHtml = new testMimePartInfo();
         mpHtml.setCt("text/html");
         mpHtml.setContent("<html><body><b>Body</b> of the Task</body></html>");
         mp.getMp().add(mpHtml);
@@ -180,16 +180,16 @@ public class WSDLCalendaringTest {
         req.setEcho(true);
         Utility.addSoapAcctAuthHeaderForAcct((WSBindingProvider)mailSvcEIF,
                 testAcct);
-        CreateTaskResponse resp = mailSvcEIF.createTaskRequest(req);
+        testCreateTaskResponse resp = mailSvcEIF.createTaskRequest(req);
         Assert.assertNotNull("CreateTaskResponse object", resp);
         Assert.assertTrue("revision", resp.getRev() >= 0);
         Assert.assertTrue("ms", resp.getMs() >= 0);
         Assert.assertNotNull("CreateTaskResponse invId", resp.getInvId());
         Assert.assertNotNull("CreateTaskResponse calItemId",
                 resp.getCalItemId());
-        CalEcho echo = resp.getEcho();
+        testCalEcho echo = resp.getEcho();
         Assert.assertNotNull("CreateTaskResponse echo object", echo);
-        InviteAsMP inviteMp = echo.getM();
+        testInviteAsMP inviteMp = echo.getM();
         Assert.assertNotNull("CreateTaskResponse/echo/m object", inviteMp);
         Assert.assertNotNull("CreateTaskResponse/echo/m @id object",
                 inviteMp.getId());
@@ -211,15 +211,15 @@ public class WSDLCalendaringTest {
                 inviteMp.getL());
         Assert.assertNotNull("CreateTaskResponse/echo/m/meta object",
                 inviteMp.getMeta());
-        MpInviteInfo info = inviteMp.getInv();
+        testMpInviteInfo info = inviteMp.getInv();
         Assert.assertNotNull("CreateTaskResponse/echo/m/inv object", info);
         Assert.assertEquals("invite type", "task", info.getType());
-        List<InviteComponent> iComps = info.getComp();
+        List<testInviteComponent> iComps = info.getComp();
         Assert.assertNotNull("CreateTaskResponse/echo/m/inv/comp list ",
                 iComps);
         Assert.assertEquals("CreateTaskResponse/echo/m/inv/comp list size", 1,
                 iComps.size());
-        InviteComponent iComp = iComps.get(0);
+        testInviteComponent iComp = iComps.get(0);
         Assert.assertNotNull("CreateTaskResponse/echo/m/inv/comp @uid",
                 iComp.getUid());
         Assert.assertNotNull(
@@ -246,7 +246,7 @@ public class WSDLCalendaringTest {
         Assert.assertNotNull("CreateTaskResponse/echo/m/inv/comp @calItemId",
                 iComp.getCalItemId());
         Assert.assertNotNull("CreateTaskResponse/echo/m/inv/comp @x_uid",
-                iComp.getXUid());
+                iComp.getX_Uid());
         Assert.assertEquals("CreateTaskResponse/echo/m/inv/comp @priority",
                 "5", iComp.getPriority());
         Assert.assertEquals("CreateTaskResponse/echo/m/inv/comp @name",
@@ -263,7 +263,7 @@ public class WSDLCalendaringTest {
                 "Body of the Task", iComp.getDesc());
         Assert.assertNotNull("CreateTaskResponse/echo/m/inv/comp/descHtml",
                 iComp.getDescHtml());
-        CalOrganizer echoO = iComp.getOr();
+        testCalOrganizer echoO = iComp.getOr();
         Assert.assertNotNull("CreateTaskResponse/echo/m/inv/comp/or", echoO);
         Assert.assertNotNull("CreateTaskResponse/echo/m/inv/comp/or @url",
                 echoO.getUrl());

@@ -21,11 +21,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.zimbra.soap.Utility;
-import com.zimbra.soap.account.wsimport.generated.AccountService;
-import com.zimbra.soap.account.wsimport.generated.Account;
-import com.zimbra.soap.account.wsimport.generated.AuthRequest;
-import com.zimbra.soap.account.wsimport.generated.AuthResponse;
-import com.zimbra.soap.account.wsimport.generated.By;
+import zimbra.generated.accountclient.account.testAccount;
+import zimbra.generated.accountclient.account.testAuthRequest;
+import zimbra.generated.accountclient.account.testAuthResponse;
+import zimbra.generated.accountclient.account.testBy;
+import zimbra.generated.accountclient.ws.service.AccountService;
 
 public class WSDLAuthRequestTest {
 
@@ -43,15 +43,15 @@ public class WSDLAuthRequestTest {
      */
     @Test
     public void simple() throws Exception {
-        AuthRequest authReq = new AuthRequest();
-        Account acct = new Account();
-        acct.setBy(By.NAME);
+        testAuthRequest authReq = new testAuthRequest();
+        testAccount acct = new testAccount();
+        acct.setBy(testBy.NAME);
         acct.setValue("user1");
         authReq.setAccount(acct);
         authReq.setPassword("test123");
         authReq.setPreauth(null);
         authReq.setAuthToken(null);
-        AuthResponse authResponse = eif.authRequest(authReq);
+        testAuthResponse authResponse = eif.authRequest(authReq);
         Assert.assertNotNull(authResponse);
         String authToken = authResponse.getAuthToken();
         Assert.assertTrue(authToken != null);

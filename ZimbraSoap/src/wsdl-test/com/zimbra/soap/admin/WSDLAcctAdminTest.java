@@ -18,7 +18,9 @@ import java.util.List;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 
-import com.zimbra.soap.admin.wsimport.generated.*;
+import zimbra.generated.adminclient.admin.*;
+import zimbra.generated.adminclient.ws.service.*;
+import zimbra.generated.adminclient.zm.*;
 
 import com.zimbra.soap.Utility;
 
@@ -72,38 +74,38 @@ public class WSDLAcctAdminTest {
     public void accountAliasTest() throws Exception {
         String testAccountId = Utility.ensureAccountExists(testAcct);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        AddAccountAliasRequest req = new AddAccountAliasRequest();
+        testAddAccountAliasRequest req = new testAddAccountAliasRequest();
         req.setId(testAccountId);
         req.setAlias("alias1@" + testAcctDomain);
-        AddAccountAliasResponse resp = eif.addAccountAliasRequest(req);
+        testAddAccountAliasResponse resp = eif.addAccountAliasRequest(req);
         Assert.assertNotNull("AddAccountAliasResponse object", resp);
-        RemoveAccountAliasRequest removeReq = new RemoveAccountAliasRequest();
+        testRemoveAccountAliasRequest removeReq = new testRemoveAccountAliasRequest();
         removeReq.setId(testAccountId);
         removeReq.setAlias("alias1@" + testAcctDomain);
-        RemoveAccountAliasResponse removeResp =
+        testRemoveAccountAliasResponse removeResp =
                 eif.removeAccountAliasRequest(removeReq);
         Assert.assertNotNull("RemoveAccountAliasResponse object", removeResp);
     }
 
     @Test
     public void foreignPrincGetAccountTest() throws Exception {
-        GetAccountRequest req = new GetAccountRequest();
-        AccountSelector acct = new AccountSelector();
-        acct.setBy(AccountBy.NAME);
+        testGetAccountRequest req = new testGetAccountRequest();
+        testAccountSelector acct = new testAccountSelector();
+        acct.setBy(testAccountBy.NAME);
         acct.setValue("user1");
         req.setAccount(acct);
         req.setAttrs("zimbraForeignPrincipal");
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetAccountResponse resp = eif.getAccountRequest(req);
+        testGetAccountResponse resp = eif.getAccountRequest(req);
         Assert.assertNotNull("GetAccountResponse object", resp);
-        AccountInfo acctInfo = resp.getAccount();
+        testAccountInfo acctInfo = resp.getAccount();
         Assert.assertNotNull("AccountInfo object", acctInfo);
         Assert.assertTrue("value of <account> 'name' attribute should start with 'user1@'",
                 acctInfo.getName().startsWith("user1@"));
         int len = acctInfo.getId().length();
         Assert.assertTrue("length of <account> 'id' attribute length is " + len +
                 " - should be longer than 10", len > 10);
-        List <Attr> attrs = acctInfo.getA();
+        List <testAttr> attrs = acctInfo.getA();
         len = attrs.size();
         Assert.assertTrue("<account> has " + len +
                 " <a> children - should have only 1", len == 1);
@@ -116,13 +118,13 @@ public class WSDLAcctAdminTest {
         int len;
         Utility.deleteAccountIfExists(testAcct);
         Utility.ensureDomainExists(testAcctDomain);
-        CreateAccountRequest createAcctReq = new CreateAccountRequest();
+        testCreateAccountRequest createAcctReq = new testCreateAccountRequest();
         createAcctReq.setName(testAcct);
         createAcctReq.setPassword("test123");
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        CreateAccountResponse resp = eif.createAccountRequest(createAcctReq);
+        testCreateAccountResponse resp = eif.createAccountRequest(createAcctReq);
         Assert.assertNotNull("CreateAccountResponse object", resp);
-        AccountInfo accountInfo = resp.getAccount();
+        testAccountInfo accountInfo = resp.getAccount();
         Assert.assertNotNull("AccountInfo object", accountInfo);
         Assert.assertEquals("createAccountResponse <account> 'name' attribute",
                 testAcct, accountInfo.getName());
@@ -139,20 +141,20 @@ public class WSDLAcctAdminTest {
     public void getAccountInfoTest() throws Exception {
         int len;
         String testAccountId = Utility.ensureAccountExists(testAcct);
-        GetAccountInfoRequest getInfoReq = new GetAccountInfoRequest();
-        AccountSelector accountSel = new AccountSelector();
-        accountSel.setBy(AccountBy.ID);
+        testGetAccountInfoRequest getInfoReq = new testGetAccountInfoRequest();
+        testAccountSelector accountSel = new testAccountSelector();
+        accountSel.setBy(testAccountBy.ID);
         accountSel.setValue(testAccountId);
         getInfoReq.setAccount(accountSel);
-        GetAccountInfoResponse getInfoResp = eif.getAccountInfoRequest(getInfoReq);
+        testGetAccountInfoResponse getInfoResp = eif.getAccountInfoRequest(getInfoReq);
         Assert.assertNotNull("GetAccountInfoResponse object", getInfoResp);
-        CosInfo cos = getInfoResp.getCos();
+        testCosInfo cos = getInfoResp.getCos();
         String acctName = getInfoResp.getName();
         List <String> soapURL = getInfoResp.getSoapURL();
         String adminSoapURL = getInfoResp.getAdminSoapURL();
         String publicMailURL = getInfoResp.getPublicMailURL();
         Assert.assertEquals("<name> child of GetAccountInfoResponse", testAcct, acctName);
-        List < Attr> attrs = getInfoResp.getA();
+        List<testAttr> attrs = getInfoResp.getA();
         len = attrs.size();
         Assert.assertTrue("number of <a> children of GetAccountInfoResponse should be at least 2",
                 len >= 2);
@@ -175,15 +177,15 @@ public class WSDLAcctAdminTest {
     @Test
     public void getAccountByNameTest() throws Exception {
         String testAccountId = Utility.ensureAccountExists(testAcct);
-        GetAccountRequest req = new GetAccountRequest();
-        AccountSelector acct = new AccountSelector();
-        acct.setBy(AccountBy.NAME);
+        testGetAccountRequest req = new testGetAccountRequest();
+        testAccountSelector acct = new testAccountSelector();
+        acct.setBy(testAccountBy.NAME);
         acct.setValue(testAcct);
         req.setAccount(acct);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetAccountResponse resp = eif.getAccountRequest(req);
+        testGetAccountResponse resp = eif.getAccountRequest(req);
         Assert.assertNotNull("GetAccountResponse object", resp);
-        AccountInfo acctInfo = resp.getAccount();
+        testAccountInfo acctInfo = resp.getAccount();
         Assert.assertNotNull("AccountInfo object", acctInfo);
         Assert.assertEquals("getAccountResponse <account> 'name' attribute",
                 testAcct, acctInfo.getName());
@@ -197,14 +199,14 @@ public class WSDLAcctAdminTest {
     @Test
     public void getAccountByIdTest() throws Exception {
         String testAccountId = Utility.ensureAccountExists(testAcct);
-        GetAccountRequest getReq = new GetAccountRequest();
-        AccountSelector accountSel = new AccountSelector();
-        accountSel.setBy(AccountBy.ID);
+        testGetAccountRequest getReq = new testGetAccountRequest();
+        testAccountSelector accountSel = new testAccountSelector();
+        accountSel.setBy(testAccountBy.ID);
         accountSel.setValue(testAccountId);
         getReq.setAccount(accountSel);
-        GetAccountResponse getResp = eif.getAccountRequest(getReq);
+        testGetAccountResponse getResp = eif.getAccountRequest(getReq);
         Assert.assertNotNull("GetAccountResponse object", getResp);
-        AccountInfo accountInfo = getResp.getAccount();
+        testAccountInfo accountInfo = getResp.getAccount();
         Assert.assertNotNull("AccountInfo object", accountInfo);
         Assert.assertEquals("getAccountResponse <account> 'name' attribute",
                 testAcct, accountInfo.getName());
@@ -221,15 +223,15 @@ public class WSDLAcctAdminTest {
         int len;
         String testAccountId = Utility.ensureAccountExists(testAcct);
         String respId;
-        ModifyAccountRequest modReq = new ModifyAccountRequest();
+        testModifyAccountRequest modReq = new testModifyAccountRequest();
         modReq.setId(testAccountId);
-        Attr modAttr = new Attr();
+        testAttr modAttr = new testAttr();
         modAttr.setN("displayName");
         modAttr.setValue("Modified Displayname");
         modReq.getA().add(modAttr);
-        ModifyAccountResponse modResp = eif.modifyAccountRequest(modReq);
+        testModifyAccountResponse modResp = eif.modifyAccountRequest(modReq);
         Assert.assertNotNull("ModifyAccountResponse object", modResp);
-        AccountInfo accountInfo = modResp.getAccount();
+        testAccountInfo accountInfo = modResp.getAccount();
         Assert.assertNotNull("AccountInfo object", accountInfo);
         Assert.assertEquals("modifyAccountResponse <account> 'name' attribute", 
                 testAcct, accountInfo.getName());
@@ -246,12 +248,12 @@ public class WSDLAcctAdminTest {
         int len;
         String testAccountId = Utility.ensureAccountExists(testAcct);
         String respId;
-        RenameAccountRequest renameAccountReq = new RenameAccountRequest();
+        testRenameAccountRequest renameAccountReq = new testRenameAccountRequest();
         renameAccountReq.setId(testAccountId);
         renameAccountReq.setNewName("foobar" + testAcct);
-        RenameAccountResponse renameAccountResp = eif.renameAccountRequest(renameAccountReq);
+        testRenameAccountResponse renameAccountResp = eif.renameAccountRequest(renameAccountReq);
         Assert.assertNotNull(renameAccountResp);
-        AccountInfo accountInfo = renameAccountResp.getAccount();
+        testAccountInfo accountInfo = renameAccountResp.getAccount();
         Assert.assertNotNull(accountInfo);
         Assert.assertEquals("renameAccountResponse <account> 'name' attribute",
                 "foobar" + testAcct, accountInfo.getName());
@@ -268,12 +270,12 @@ public class WSDLAcctAdminTest {
     public void getAccountMembershipTest() throws Exception {
         int len;
         String testAccountId = Utility.ensureAccountExists(testAcct);
-        GetAccountMembershipRequest membershipReq = new GetAccountMembershipRequest();
-        AccountSelector adminAcct = new AccountSelector();
-        adminAcct.setBy(AccountBy.NAME);
+        testGetAccountMembershipRequest membershipReq = new testGetAccountMembershipRequest();
+        testAccountSelector adminAcct = new testAccountSelector();
+        adminAcct.setBy(testAccountBy.NAME);
         adminAcct.setValue("admin");
         membershipReq.setAccount(adminAcct);
-        GetAccountMembershipResponse accountMembershipResponse =
+        testGetAccountMembershipResponse accountMembershipResponse =
             eif.getAccountMembershipRequest(membershipReq);
         Assert.assertNotNull("GetAccountMembershipResponse object", accountMembershipResponse);
         // TODO: test an account where the response actually has children
@@ -282,15 +284,15 @@ public class WSDLAcctAdminTest {
                 " <dl> children - expecting 0", 0, len);
 
         // check that name did get changed.
-        GetAccountRequest getReq = new GetAccountRequest();
-        AccountSelector accountSel = new AccountSelector();
-        accountSel.setBy(AccountBy.ID);
+        testGetAccountRequest getReq = new testGetAccountRequest();
+        testAccountSelector accountSel = new testAccountSelector();
+        accountSel.setBy(testAccountBy.ID);
         accountSel.setValue(testAccountId);
         getReq.setAccount(accountSel);
         getReq.setAttrs("zimbraMailStatus,zimbraMailHost");
-        GetAccountResponse getResp = eif.getAccountRequest(getReq);
+        testGetAccountResponse getResp = eif.getAccountRequest(getReq);
         Assert.assertNotNull(getResp);
-        AccountInfo accountInfo = getResp.getAccount();
+        testAccountInfo accountInfo = getResp.getAccount();
         Assert.assertNotNull(accountInfo);
         Assert.assertEquals("getAccountResponse <account> 'name' attribute",
                 testAcct, accountInfo.getName());
@@ -304,19 +306,19 @@ public class WSDLAcctAdminTest {
     @Test
     public void deleteAccountTest() throws Exception {
         String testAccountId = Utility.ensureAccountExists(testAcct);
-        DeleteAccountRequest delReq = new DeleteAccountRequest();
+        testDeleteAccountRequest delReq = new testDeleteAccountRequest();
         delReq.setId(testAccountId);
-        DeleteAccountResponse delResp = eif.deleteAccountRequest(delReq);
+        testDeleteAccountResponse delResp = eif.deleteAccountRequest(delReq);
         Assert.assertNotNull(delResp);
     }
 
     @Test
     public void getAllAccountsTest() throws Exception {
-        GetAllAccountsRequest req = new GetAllAccountsRequest();
+        testGetAllAccountsRequest req = new testGetAllAccountsRequest();
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetAllAccountsResponse resp = eif.getAllAccountsRequest(req);
+        testGetAllAccountsResponse resp = eif.getAllAccountsRequest(req);
         Assert.assertNotNull("GetAllAccountsResponse object", resp);
-        List <AccountInfo> accountInfoList = resp.getAccount();
+        List <testAccountInfo> accountInfoList = resp.getAccount();
         int len;
         Assert.assertNotNull("GetAllAccountsResponse list of Accounts", accountInfoList);
         len = accountInfoList.size();
@@ -326,11 +328,11 @@ public class WSDLAcctAdminTest {
 
     @Test
     public void getAllAdminAccountsTest() throws Exception {
-        GetAllAdminAccountsRequest req = new GetAllAdminAccountsRequest();
+        testGetAllAdminAccountsRequest req = new testGetAllAdminAccountsRequest();
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetAllAdminAccountsResponse resp = eif.getAllAdminAccountsRequest(req);
+        testGetAllAdminAccountsResponse resp = eif.getAllAdminAccountsRequest(req);
         Assert.assertNotNull("GetAllAdminAccountsResponse object", resp);
-        List <AccountInfo> accountInfoList = resp.getAccount();
+        List <testAccountInfo> accountInfoList = resp.getAccount();
         int len;
         Assert.assertNotNull("GetAllAdminAccountsResponse list of Accounts", accountInfoList);
         len = accountInfoList.size();
@@ -344,15 +346,15 @@ public class WSDLAcctAdminTest {
         String testDomainId = Utility.ensureDomainExists(testAcctDomain);
         String testAccountId = Utility.ensureMailboxExistsForAccount(testAcct);
         String testCosId = Utility.ensureCosExists(testCos);
-        ModifyAccountRequest modReq = new ModifyAccountRequest();
+        testModifyAccountRequest modReq = new testModifyAccountRequest();
         modReq.setId(testAccountId);
-        Attr modAttr = new Attr();
+        testAttr modAttr = new testAttr();
         modAttr.setN("zimbraCOSId");
         modAttr.setValue(testCosId);
         modReq.getA().add(modAttr);
-        ModifyAccountResponse modResp = eif.modifyAccountRequest(modReq);
+        testModifyAccountResponse modResp = eif.modifyAccountRequest(modReq);
         Assert.assertNotNull("ModifyAccountResponse object", modResp);
-        AccountInfo accountInfo = modResp.getAccount();
+        testAccountInfo accountInfo = modResp.getAccount();
         Assert.assertNotNull("AccountInfo object", accountInfo);
         Assert.assertEquals("modifyAccountResponse <account> 'name' attribute", 
                 testAcct, accountInfo.getName());
@@ -362,18 +364,18 @@ public class WSDLAcctAdminTest {
         len = accountInfo.getA().size();
         Assert.assertTrue("modifyAccountResponse <account> has " + len +
                 " <a> children - should have at least 50", len >= 50);
-        CountAccountRequest req = new CountAccountRequest();
-        DomainSelector domainSel = new DomainSelector();
-        domainSel.setBy(DomainBy.ID);
+        testCountAccountRequest req = new testCountAccountRequest();
+        testDomainSelector domainSel = new testDomainSelector();
+        domainSel.setBy(testDomainBy.ID);
         domainSel.setValue(testDomainId);
         req.setDomain(domainSel);
-        CountAccountResponse resp = eif.countAccountRequest(req);
+        testCountAccountResponse resp = eif.countAccountRequest(req);
         Assert.assertNotNull(resp);
-        List <CosCountInfo> cosList = resp.getCos();
+        List<testCosCountInfo> cosList = resp.getCos();
         Assert.assertNotNull("cos list", cosList);
         len = cosList.size();
         Assert.assertTrue(len + "<cos> children present expect at least 1", len >= 1);
-        CosCountInfo firstCos = cosList.get(0);
+        testCosCountInfo firstCos = cosList.get(0);
         Assert.assertTrue(
                 "First <cos> id [" + firstCos.getId() + "] len should be longer than 10 chars",
                 firstCos.getId().length() > 10);
@@ -386,11 +388,11 @@ public class WSDLAcctAdminTest {
 
     @Test
     public void getAllMailboxesTest() throws Exception {
-        GetAllMailboxesRequest req = new GetAllMailboxesRequest();
+        testGetAllMailboxesRequest req = new testGetAllMailboxesRequest();
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetAllMailboxesResponse resp = eif.getAllMailboxesRequest(req);
+        testGetAllMailboxesResponse resp = eif.getAllMailboxesRequest(req);
         Assert.assertNotNull("GetAllMailboxesResponse object", resp);
-        List <MailboxInfo> mboxInfoList = resp.getMbox();
+        List <testMailboxInfo> mboxInfoList = resp.getMbox();
         int len;
         Assert.assertNotNull("GetAllMailboxesResponse list of Mailboxes", mboxInfoList);
         len = mboxInfoList.size();
@@ -402,13 +404,13 @@ public class WSDLAcctAdminTest {
     public void recalculateMailboxCountsTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         String accountId = Utility.ensureMailboxExistsForAccount(testAcct);
-        RecalculateMailboxCountsRequest req = new RecalculateMailboxCountsRequest();
-        MailboxByAccountIdSelector sel = new MailboxByAccountIdSelector();
+        testRecalculateMailboxCountsRequest req = new testRecalculateMailboxCountsRequest();
+        testMailboxByAccountIdSelector sel = new testMailboxByAccountIdSelector();
         sel.setId(accountId);
         req.setMbox(sel);
-        RecalculateMailboxCountsResponse resp = eif.recalculateMailboxCountsRequest(req);
+        testRecalculateMailboxCountsResponse resp = eif.recalculateMailboxCountsRequest(req);
         Assert.assertNotNull("RecalculateMailboxCountsResponse object", resp);
-        MailboxQuotaInfo quotaInfo = resp.getMbox();
+        testMailboxQuotaInfo quotaInfo = resp.getMbox();
         Assert.assertEquals("<mbox> 'id' attribute", accountId, quotaInfo.getId());
         Assert.assertTrue("RecalculateMailboxCountsResponse <mbox> 'quotaUsed' attribute=" +
                 quotaInfo.getUsed() + " should be 0 or more", quotaInfo.getUsed() >= 0);
@@ -418,23 +420,23 @@ public class WSDLAcctAdminTest {
     public void getQuotaUsageTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         Utility.ensureMailboxExistsForAccount(testAcct);
-        GetQuotaUsageRequest req = new GetQuotaUsageRequest();
+        testGetQuotaUsageRequest req = new testGetQuotaUsageRequest();
         req.setDomain(testAcctDomain);
         req.setLimit(125);
         req.setOffset(0);
         req.setSortAscending(true);
         req.setSortBy("totalUsed");
-        GetQuotaUsageResponse resp = eif.getQuotaUsageRequest(req);
+        testGetQuotaUsageResponse resp = eif.getQuotaUsageRequest(req);
         Assert.assertNotNull("GetQuotaUsageResponse object", resp);
         int total = resp.getSearchTotal();
         Assert.assertTrue("searchTotal=" + total + " should be 1 or more",
                 total >= 1);
         Assert.assertFalse("more", resp.isMore());
-        List <AccountQuotaInfo> acctQuotas = resp.getAccount();
+        List <testAccountQuotaInfo> acctQuotas = resp.getAccount();
         Assert.assertNotNull("list of accounts object", acctQuotas);
         Assert.assertEquals("Number of account objects",
                 total, acctQuotas.size());
-        AccountQuotaInfo first = acctQuotas.get(0);
+        testAccountQuotaInfo first = acctQuotas.get(0);
         Assert.assertNotNull("1st account's id", first.getId());
         Assert.assertNotNull("1st account's name", first.getName());
         Assert.assertTrue("1st account's used=" + first.getUsed() +
@@ -446,22 +448,22 @@ public class WSDLAcctAdminTest {
     private void addAcctLogger(String acctId, String category, String level)
     throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        AddAccountLoggerRequest req = new AddAccountLoggerRequest();
-        AccountSelector acct = new AccountSelector();
-        acct.setBy(AccountBy.ID);
+        testAddAccountLoggerRequest req = new testAddAccountLoggerRequest();
+        testAccountSelector acct = new testAccountSelector();
+        acct.setBy(testAccountBy.ID);
         acct.setValue(acctId);
         req.setAccount(acct);
-        LoggerInfo newLogger = new LoggerInfo();
+        testLoggerInfo newLogger = new testLoggerInfo();
         newLogger.setCategory(category);
         newLogger.setLevel(level);
         req.setLogger(newLogger);
-        AddAccountLoggerResponse resp = eif.addAccountLoggerRequest(req);
+        testAddAccountLoggerResponse resp = eif.addAccountLoggerRequest(req);
         Assert.assertNotNull("AddAccountLoggerResponse object", resp);
-        List <LoggerInfo> logger = resp.getLogger();
+        List <testLoggerInfo> logger = resp.getLogger();
         int total = logger.size();
         Assert.assertTrue("number of account logger=" + total +
                 " should be 1 or more", total >= 1);
-        LoggerInfo loggerInfo = logger.get(0);
+        testLoggerInfo loggerInfo = logger.get(0);
         Assert.assertNotNull("1st accountLogger's logger", loggerInfo);
         Assert.assertNotNull("category", loggerInfo.getCategory());
         Assert.assertNotNull("level", loggerInfo.getLevel());
@@ -470,19 +472,19 @@ public class WSDLAcctAdminTest {
     private void removeAcctLogger(String acctId, String category)
     throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        RemoveAccountLoggerRequest req = new RemoveAccountLoggerRequest();
+        testRemoveAccountLoggerRequest req = new testRemoveAccountLoggerRequest();
         if (acctId != null) {
-            AccountSelector acct = new AccountSelector();
-            acct.setBy(AccountBy.ID);
+            testAccountSelector acct = new testAccountSelector();
+            acct.setBy(testAccountBy.ID);
             acct.setValue(acctId);
             req.setAccount(acct);
         }
         if (category != null) {
-            LoggerInfo newLogger = new LoggerInfo();
+            testLoggerInfo newLogger = new testLoggerInfo();
             newLogger.setCategory(category);
             req.setLogger(newLogger);
         }
-        RemoveAccountLoggerResponse resp = eif.removeAccountLoggerRequest(req);
+        testRemoveAccountLoggerResponse resp = eif.removeAccountLoggerRequest(req);
         Assert.assertNotNull("RemoveAccountLoggerResponse object", resp);
     }
 
@@ -498,17 +500,17 @@ public class WSDLAcctAdminTest {
         String testAccountId = Utility.ensureMailboxExistsForAccount(testAcct);
         addAcctLogger(testAccountId, "zimbra.ldap", "error");
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetAllAccountLoggersRequest req = new GetAllAccountLoggersRequest();
-        GetAllAccountLoggersResponse resp = eif.getAllAccountLoggersRequest(req);
+        testGetAllAccountLoggersRequest req = new testGetAllAccountLoggersRequest();
+        testGetAllAccountLoggersResponse resp = eif.getAllAccountLoggersRequest(req);
         Assert.assertNotNull("GetAllAccountLoggersResponse object", resp);
-        List <AccountLoggerInfo> acctLoggers = resp.getAccountLogger();
+        List <testAccountLoggerInfo> acctLoggers = resp.getAccountLogger();
         int total = acctLoggers.size();
         Assert.assertTrue("number of account loggers=" + total +
                 " should be 1 or more", total >= 1);
-        AccountLoggerInfo first = acctLoggers.get(0);
+        testAccountLoggerInfo first = acctLoggers.get(0);
         Assert.assertNotNull("1st accountLogger's id", first.getId());
         Assert.assertNotNull("1st accountLogger's name", first.getName());
-        List <LoggerInfo> loggers = first.getLogger();
+        List <testLoggerInfo> loggers = first.getLogger();
         Assert.assertNotNull("1st accountLogger's loggers", loggers);
         Assert.assertNotNull("category", loggers.get(0).getCategory());
         Assert.assertNotNull("level", loggers.get(0).getLevel());
@@ -519,18 +521,18 @@ public class WSDLAcctAdminTest {
         String testAccountId = Utility.ensureMailboxExistsForAccount(testAcct);
         addAcctLogger(testAccountId, "zimbra.xsync", "debug");
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetAccountLoggersRequest req = new GetAccountLoggersRequest();
-        AccountSelector acct = new AccountSelector();
-        acct.setBy(AccountBy.ID);
+        testGetAccountLoggersRequest req = new testGetAccountLoggersRequest();
+        testAccountSelector acct = new testAccountSelector();
+        acct.setBy(testAccountBy.ID);
         acct.setValue(testAccountId);
         req.setAccount(acct);
-        GetAccountLoggersResponse resp = eif.getAccountLoggersRequest(req);
+        testGetAccountLoggersResponse resp = eif.getAccountLoggersRequest(req);
         Assert.assertNotNull("GetAccountLoggersResponse object", resp);
-        List <LoggerInfo> loggers = resp.getLogger();
+        List <testLoggerInfo> loggers = resp.getLogger();
         int total = loggers.size();
         Assert.assertTrue("number of account loggers=" + total +
                 " should be 1 or more", total >= 1);
-        LoggerInfo loggerInfo = loggers.get(0);
+        testLoggerInfo loggerInfo = loggers.get(0);
         Assert.assertNotNull("1st accountLogger's logger", loggerInfo);
         Assert.assertNotNull("category", loggerInfo.getCategory());
         Assert.assertNotNull("level", loggerInfo.getLevel());
@@ -554,15 +556,15 @@ public class WSDLAcctAdminTest {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         String testAccountId = Utility.ensureMailboxExistsForAccount(testAcct);
         addAcctLogger(testAccountId, "zimbra.misc", "debug");
-        GetAccountLoggersRequest req = new GetAccountLoggersRequest();
+        testGetAccountLoggersRequest req = new testGetAccountLoggersRequest();
         req.setId(testAccountId);
-        GetAccountLoggersResponse resp = eif.getAccountLoggersRequest(req);
+        testGetAccountLoggersResponse resp = eif.getAccountLoggersRequest(req);
         Assert.assertNotNull("GetAccountLoggersResponse object", resp);
-        List <LoggerInfo> loggers = resp.getLogger();
+        List <testLoggerInfo> loggers = resp.getLogger();
         int total = loggers.size();
         Assert.assertTrue("number of account loggers=" + total +
                 " should be 1 or more", total >= 1);
-        LoggerInfo loggerInfo = loggers.get(0);
+        testLoggerInfo loggerInfo = loggers.get(0);
         Assert.assertNotNull("1st accountLogger's logger", loggerInfo);
         Assert.assertNotNull("category", loggerInfo.getCategory());
         Assert.assertNotNull("level", loggerInfo.getLevel());
@@ -572,14 +574,14 @@ public class WSDLAcctAdminTest {
     public void reindexMailboxTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         String accountId = Utility.ensureMailboxExistsForAccount(testAcct);
-        ReIndexRequest req = new ReIndexRequest();
-        ReindexMailboxInfo sel = new ReindexMailboxInfo();
+        testReIndexRequest req = new testReIndexRequest();
+        testReindexMailboxInfo sel = new testReindexMailboxInfo();
         sel.setId(accountId);
         req.setMbox(sel);
         req.setAction("start");
-        ReIndexResponse resp = eif.reIndexRequest(req);
+        testReIndexResponse resp = eif.reIndexRequest(req);
         Assert.assertNotNull("ReIndexResponse object", resp);
-        ReindexProgressInfo progress = resp.getProgress();
+        testReindexProgressInfo progress = resp.getProgress();
         Assert.assertNull("ReIndexResponse progress object for start", progress);
         req.setAction("status");
         resp = eif.reIndexRequest(req);
@@ -603,11 +605,11 @@ public class WSDLAcctAdminTest {
     public void verifyIndexTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         String accountId = Utility.ensureMailboxExistsForAccount(testAcct);
-        VerifyIndexRequest req = new VerifyIndexRequest();
-        MailboxByAccountIdSelector sel = new MailboxByAccountIdSelector();
+        testVerifyIndexRequest req = new testVerifyIndexRequest();
+        testMailboxByAccountIdSelector sel = new testMailboxByAccountIdSelector();
         sel.setId(accountId);
         req.setMbox(sel);
-        VerifyIndexResponse resp = eif.verifyIndexRequest(req);
+        testVerifyIndexResponse resp = eif.verifyIndexRequest(req);
         Assert.assertNotNull("VerifyIndexResponse object", resp);
         resp.getMessage();
         resp.isStatus();
@@ -617,13 +619,13 @@ public class WSDLAcctAdminTest {
     public void purgeMessagesTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         String accountId = Utility.ensureMailboxExistsForAccount(testAcct);
-        PurgeMessagesRequest req = new PurgeMessagesRequest();
-        MailboxByAccountIdSelector sel = new MailboxByAccountIdSelector();
+        testPurgeMessagesRequest req = new testPurgeMessagesRequest();
+        testMailboxByAccountIdSelector sel = new testMailboxByAccountIdSelector();
         sel.setId(accountId);
         req.setMbox(sel);
-        PurgeMessagesResponse resp = eif.purgeMessagesRequest(req);
+        testPurgeMessagesResponse resp = eif.purgeMessagesRequest(req);
         Assert.assertNotNull("PurgeMessagesResponse object", resp);
-        List <MailboxWithMailboxId> mboxids = resp.getMbox();
+        List <testMailboxWithMailboxId> mboxids = resp.getMbox();
         Assert.assertNotNull("List of <mbox> elements", mboxids);
         Assert.assertEquals("Number of <mbox> elements", 1, mboxids.size());
         long mboxid = mboxids.get(0).getMbxid();
@@ -634,13 +636,13 @@ public class WSDLAcctAdminTest {
     public void getMailboxTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         String accountId = Utility.ensureMailboxExistsForAccount(testAcct);
-        GetMailboxRequest req = new GetMailboxRequest();
-        MailboxByAccountIdSelector sel = new MailboxByAccountIdSelector();
+        testGetMailboxRequest req = new testGetMailboxRequest();
+        testMailboxByAccountIdSelector sel = new testMailboxByAccountIdSelector();
         sel.setId(accountId);
         req.setMbox(sel);
-        GetMailboxResponse resp = eif.getMailboxRequest(req);
+        testGetMailboxResponse resp = eif.getMailboxRequest(req);
         Assert.assertNotNull("GetMailboxResponse object", resp);
-        MailboxWithMailboxId mboxid = resp.getMbox();
+        testMailboxWithMailboxId mboxid = resp.getMbox();
         Assert.assertNotNull("Object for <mbox> element", mboxid);
         Assert.assertTrue("mboxid = " + mboxid + " should be >0", mboxid.getMbxid() > 0);
     }
@@ -649,13 +651,13 @@ public class WSDLAcctAdminTest {
     public void deleteMailboxTest() throws Exception {
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         String accountId = Utility.ensureMailboxExistsForAccount(testAcct);
-        DeleteMailboxRequest req = new DeleteMailboxRequest();
-        MailboxByAccountIdSelector sel = new MailboxByAccountIdSelector();
+        testDeleteMailboxRequest req = new testDeleteMailboxRequest();
+        testMailboxByAccountIdSelector sel = new testMailboxByAccountIdSelector();
         sel.setId(accountId);
         req.setMbox(sel);
-        DeleteMailboxResponse resp = eif.deleteMailboxRequest(req);
+        testDeleteMailboxResponse resp = eif.deleteMailboxRequest(req);
         Assert.assertNotNull("DeleteMailboxResponse object", resp);
-        MailboxWithMailboxId mboxid = resp.getMbox();
+        testMailboxWithMailboxId mboxid = resp.getMbox();
         Assert.assertNotNull("Object for <mbox> element", mboxid);
         Assert.assertTrue("mboxid = " + mboxid + " should be >0", mboxid.getMbxid() > 0);
     }

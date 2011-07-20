@@ -18,7 +18,8 @@ import java.util.List;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 
-import com.zimbra.soap.admin.wsimport.generated.*;
+import zimbra.generated.adminclient.admin.*;
+import zimbra.generated.adminclient.ws.service.AdminService;
 
 import com.zimbra.soap.Utility;
 
@@ -71,16 +72,16 @@ public class WSDLDistListTest {
     public void dlAliasTest() throws Exception {
         String testDistributionListId = Utility.ensureDistributionListExists(testDl);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        AddDistributionListAliasRequest req = new AddDistributionListAliasRequest();
+        testAddDistributionListAliasRequest req = new testAddDistributionListAliasRequest();
         req.setId(testDistributionListId);
         req.setAlias("alias1@" + testDlDomain);
-        AddDistributionListAliasResponse resp = eif.addDistributionListAliasRequest(req);
+        testAddDistributionListAliasResponse resp = eif.addDistributionListAliasRequest(req);
         Assert.assertNotNull("AddDistributionListAliasResponse object", resp);
-        RemoveDistributionListAliasRequest removeReq =
-            new RemoveDistributionListAliasRequest();
+        testRemoveDistributionListAliasRequest removeReq =
+            new testRemoveDistributionListAliasRequest();
         removeReq.setId(testDistributionListId);
         removeReq.setAlias("alias1@" + testDlDomain);
-        RemoveDistributionListAliasResponse removeResp =
+        testRemoveDistributionListAliasResponse removeResp =
             eif.removeDistributionListAliasRequest(removeReq);
         Assert.assertNotNull("RemoveDistributionListAliasResponse object",
                 removeResp);
@@ -90,16 +91,16 @@ public class WSDLDistListTest {
     public void dlMemberTest() throws Exception {
         String testDistributionListId = Utility.ensureDistributionListExists(testDl);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        AddDistributionListMemberRequest req = new AddDistributionListMemberRequest();
+        testAddDistributionListMemberRequest req = new testAddDistributionListMemberRequest();
         req.setId(testDistributionListId);
         req.getDlm().add("fun@example.com");
-        AddDistributionListMemberResponse resp = eif.addDistributionListMemberRequest(req);
+        testAddDistributionListMemberResponse resp = eif.addDistributionListMemberRequest(req);
         Assert.assertNotNull("AddDistributionListMemberResponse object", resp);
-        RemoveDistributionListMemberRequest removeReq =
-            new RemoveDistributionListMemberRequest();
+        testRemoveDistributionListMemberRequest removeReq =
+            new testRemoveDistributionListMemberRequest();
         removeReq.setId(testDistributionListId);
         removeReq.getDlm().add("fun@example.com");
-        RemoveDistributionListMemberResponse removeResp =
+        testRemoveDistributionListMemberResponse removeResp =
             eif.removeDistributionListMemberRequest(removeReq);
         Assert.assertNotNull("RemoveDistributionListMemberResponse object",
                 removeResp);
@@ -108,15 +109,15 @@ public class WSDLDistListTest {
     @Test
     public void getDistributionListByIdTest() throws Exception {
         String testDistributionListId = Utility.ensureDistributionListExists(testDl);
-        GetDistributionListRequest req = new GetDistributionListRequest();
-        DistributionListSelector dl = new DistributionListSelector();
-        dl.setBy(DistributionListBy.ID);
+        testGetDistributionListRequest req = new testGetDistributionListRequest();
+        testDistributionListSelector dl = new testDistributionListSelector();
+        dl.setBy(testDistributionListBy.ID);
         dl.setValue(testDistributionListId);
         req.setDl(dl);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetDistributionListResponse resp = eif.getDistributionListRequest(req);
+        testGetDistributionListResponse resp = eif.getDistributionListRequest(req);
         Assert.assertNotNull("GetDistributionListResponse object", resp);
-        DistributionListInfo dlInfo = resp.getDl();
+        testDistributionListInfo dlInfo = resp.getDl();
         Assert.assertNotNull("DistributionListInfo object", dlInfo);
         Assert.assertEquals("DL name", testDl, dlInfo.getName());
         Assert.assertEquals("DL id", testDistributionListId, dlInfo.getId());
@@ -128,15 +129,15 @@ public class WSDLDistListTest {
     @Test
     public void getDistributionListByNameTest() throws Exception {
         String testDistributionListId = Utility.ensureDistributionListExists(testDl);
-        GetDistributionListRequest req = new GetDistributionListRequest();
-        DistributionListSelector dl = new DistributionListSelector();
-        dl.setBy(DistributionListBy.NAME);
+        testGetDistributionListRequest req = new testGetDistributionListRequest();
+        testDistributionListSelector dl = new testDistributionListSelector();
+        dl.setBy(testDistributionListBy.NAME);
         dl.setValue(testDl);
         req.setDl(dl);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetDistributionListResponse resp = eif.getDistributionListRequest(req);
+        testGetDistributionListResponse resp = eif.getDistributionListRequest(req);
         Assert.assertNotNull("GetDistributionListResponse object", resp);
-        DistributionListInfo dlInfo = resp.getDl();
+        testDistributionListInfo dlInfo = resp.getDl();
         Assert.assertNotNull("DistributionListInfo object", dlInfo);
         Assert.assertEquals("DL name", testDl, dlInfo.getName());
         Assert.assertEquals("DL id", testDistributionListId, dlInfo.getId());
@@ -147,14 +148,14 @@ public class WSDLDistListTest {
         int len;
         Utility.deleteDistributionListIfExists(testDl);
         Utility.ensureDomainExists(testDlDomain);
-        CreateDistributionListRequest createAcctReq =
-            new CreateDistributionListRequest();
+        testCreateDistributionListRequest createAcctReq =
+            new testCreateDistributionListRequest();
         createAcctReq.setName(testDl);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        CreateDistributionListResponse resp =
+        testCreateDistributionListResponse resp =
             eif.createDistributionListRequest(createAcctReq);
         Assert.assertNotNull("CreateDistributionListResponse object", resp);
-        DistributionListInfo dlInfo = resp.getDl();
+        testDistributionListInfo dlInfo = resp.getDl();
         Assert.assertNotNull("DistributionListInfo object", dlInfo);
         Assert.assertEquals("createDistributionListResponse <dl> 'name' attribute",
                 testDl, dlInfo.getName());
@@ -173,15 +174,15 @@ public class WSDLDistListTest {
         int len;
         String testDistributionListId = Utility.ensureDistributionListExists(testDl);
         String respId;
-        ModifyDistributionListRequest modReq = new ModifyDistributionListRequest();
+        testModifyDistributionListRequest modReq = new testModifyDistributionListRequest();
         modReq.setId(testDistributionListId);
-        Attr modAttr = new Attr();
+        testAttr modAttr = new testAttr();
         modAttr.setN("displayName");
         modAttr.setValue("Modified Displayname");
         modReq.getA().add(modAttr);
-        ModifyDistributionListResponse modResp = eif.modifyDistributionListRequest(modReq);
+        testModifyDistributionListResponse modResp = eif.modifyDistributionListRequest(modReq);
         Assert.assertNotNull("ModifyDistributionListResponse object", modResp);
-        DistributionListInfo dlInfo = modResp.getDl();
+        testDistributionListInfo dlInfo = modResp.getDl();
         Assert.assertNotNull("DistributionListInfo object", dlInfo);
         Assert.assertEquals("modifyDistributionListResponse <dl> 'name' attribute", 
                 testDl, dlInfo.getName());
@@ -198,12 +199,12 @@ public class WSDLDistListTest {
         int len;
         String testDistributionListId = Utility.ensureDistributionListExists(testDl);
         String respId;
-        RenameDistributionListRequest renameDistributionListReq = new RenameDistributionListRequest();
+        testRenameDistributionListRequest renameDistributionListReq = new testRenameDistributionListRequest();
         renameDistributionListReq.setId(testDistributionListId);
         renameDistributionListReq.setNewName("foobar" + testDl);
-        RenameDistributionListResponse renameDistributionListResp = eif.renameDistributionListRequest(renameDistributionListReq);
+        testRenameDistributionListResponse renameDistributionListResp = eif.renameDistributionListRequest(renameDistributionListReq);
         Assert.assertNotNull(renameDistributionListResp);
-        DistributionListInfo dlInfo = renameDistributionListResp.getDl();
+        testDistributionListInfo dlInfo = renameDistributionListResp.getDl();
         Assert.assertNotNull(dlInfo);
         Assert.assertEquals("renameDistributionListResponse <dl> 'name' attribute",
                 "foobar" + testDl, dlInfo.getName());
@@ -223,27 +224,27 @@ public class WSDLDistListTest {
         Utility.ensureDistributionListExists(testDl);
         String parentDlId = Utility.ensureDistributionListExists(parentDl);
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        AddDistributionListMemberRequest req =
-            new AddDistributionListMemberRequest();
+        testAddDistributionListMemberRequest req =
+            new testAddDistributionListMemberRequest();
         req.setId(parentDlId);
         req.getDlm().add(testDl);
-        AddDistributionListMemberResponse resp =
+        testAddDistributionListMemberResponse resp =
             eif.addDistributionListMemberRequest(req);
         Assert.assertNotNull("AddDistributionListMemberResponse object", resp);
-        GetDistributionListMembershipRequest membershipReq =
-            new GetDistributionListMembershipRequest();
-        DistributionListSelector adminAcct = new DistributionListSelector();
-        adminAcct.setBy(DistributionListBy.NAME);
+        testGetDistributionListMembershipRequest membershipReq =
+            new testGetDistributionListMembershipRequest();
+        testDistributionListSelector adminAcct = new testDistributionListSelector();
+        adminAcct.setBy(testDistributionListBy.NAME);
         adminAcct.setValue(testDl);
         membershipReq.setDl(adminAcct);
-        GetDistributionListMembershipResponse dlMembershipResponse =
+        testGetDistributionListMembershipResponse dlMembershipResponse =
             eif.getDistributionListMembershipRequest(membershipReq);
         Assert.assertNotNull("GetDistributionListMembershipResponse object",
                 dlMembershipResponse);
         len = dlMembershipResponse.getDl().size();
         Assert.assertEquals("Number of dls this dl is a member of", 1, len);
         int pNum = 0;
-        for (DistributionListMembershipInfo parentInfo :
+        for (testDistributionListMembershipInfo parentInfo :
                     dlMembershipResponse.getDl()) {
             pNum++;
             String pTag = "containing DL" + pNum;
@@ -255,11 +256,11 @@ public class WSDLDistListTest {
 
     @Test
     public void getAllDistributionListsTest() throws Exception {
-        GetAllDistributionListsRequest req = new GetAllDistributionListsRequest();
+        testGetAllDistributionListsRequest req = new testGetAllDistributionListsRequest();
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
-        GetAllDistributionListsResponse resp = eif.getAllDistributionListsRequest(req);
+        testGetAllDistributionListsResponse resp = eif.getAllDistributionListsRequest(req);
         Assert.assertNotNull("GetAllDistributionListsResponse object", resp);
-        List <DistributionListInfo> dlInfoList = resp.getDl();
+        List <testDistributionListInfo> dlInfoList = resp.getDl();
         int len;
         Assert.assertNotNull("GetAllDistributionListsResponse list of DistributionLists", dlInfoList);
         len = dlInfoList.size();
@@ -270,9 +271,9 @@ public class WSDLDistListTest {
     @Test
     public void deleteDistributionListTest() throws Exception {
         String testDistributionListId = Utility.ensureDistributionListExists(testDl);
-        DeleteDistributionListRequest delReq = new DeleteDistributionListRequest();
+        testDeleteDistributionListRequest delReq = new testDeleteDistributionListRequest();
         delReq.setId(testDistributionListId);
-        DeleteDistributionListResponse delResp = eif.deleteDistributionListRequest(delReq);
+        testDeleteDistributionListResponse delResp = eif.deleteDistributionListRequest(delReq);
         Assert.assertNotNull(delResp);
     }
 }
