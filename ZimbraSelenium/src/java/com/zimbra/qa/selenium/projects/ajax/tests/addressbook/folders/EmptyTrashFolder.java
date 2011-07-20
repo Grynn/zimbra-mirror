@@ -11,7 +11,6 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 
 
@@ -83,16 +82,10 @@ public class EmptyTrashFolder extends AjaxCommonTest {
 
 		// Create a contact group via Soap
 		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);
-		group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-		String[] dlist = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
-		for (int i=0; i<dlist.length; i++) {
-			  group.addDListMember(dlist[i]);
-		  }
 		  
 		// Create a contact via Soap
 	    ContactItem contactItem = ContactItem.createUsingSOAP(app);			             			
-		contactItem.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-
+	
 		// Create a new folder
 		FolderItem userRoot= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);		
 		FolderItem folderItem = CreateFolder.createNewFolderViaSoap(userRoot,app);
@@ -124,15 +117,9 @@ public class EmptyTrashFolder extends AjaxCommonTest {
 	public void ClickCancel() throws HarnessException {
 		// Create a contact group via Soap
 		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);
-		group.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
-		String[] dlist = app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn/mail:a[@n='dlist']", null).split(","); //a[2]   
-		for (int i=0; i<dlist.length; i++) {
-			  group.addDListMember(dlist[i]);
-		  }
 		  
 		// Create a contact via Soap
 	    ContactItem contactItem = ContactItem.createUsingSOAP(app);			             			
-		contactItem.setId(app.zGetActiveAccount().soapSelectValue("//mail:CreateContactResponse/mail:cn", "id"));
 			
 		// Create a new folder
 		FolderItem userRoot= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);		

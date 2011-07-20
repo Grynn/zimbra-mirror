@@ -103,7 +103,7 @@ public class ContactGroup extends AjaxCommonTest  {
 	}
 
 	@Test(	description = "Click Delete Toolbar button in Edit Contact Group form",
-			groups = { "functionaly" })
+			groups = { "functional" })
 	public void Bug62026_ClickDeleteToolbarButtonInEditContactGroupForm() throws HarnessException {
 
 		// Create a contact group via Soap then select
