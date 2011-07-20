@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 8" />
 <title>Managing Servers</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
@@ -83,10 +83,10 @@ else
 //-->
 //]]></script>
 <h1>Managing Servers</h1>
-<p>A server is a machine that has one or more of the Zimbra service packages 
- installed. During the installation, the Zimbra server is automatically 
- registered on the LDAP server. You can edit a server's records but you 
- cannot add or delete servers.</p>
+<p>A server is a machine that has one or more of the Zimbra service installed. 
+ During the installation, the Zimbra server is automatically registered 
+ on the LDAP server. You can edit a server's records but you cannot add 
+ or delete servers.</p>
 <ul>
 	<li class="P-note"><p class="note">To add server records, use the CLI 
 	 <span class="code">zmprov</span> command. 
@@ -97,12 +97,11 @@ else
 <h2>General tab</h2>
 <p>The general tab shows the following:</p>
 <ul class="whs1" type="disc">
-	<li class="p"><p style="font-weight: normal;"><b style="font-weight: bold;"><span 
-	 class="fieldnames" style="font-weight: normal;">Display name</span> 
-	 <span style="font-weight: normal;">for the server</span></b></p></li>
-	<li class="p"><p style="font-weight: normal;"><span class="fieldnames" 
-														 style="font-weight: normal;">Field 
-	 for</span> a one-line description</p></li>
+	<li class="p"><p><b style="font-weight: bold;"><span class="fieldnames" 
+														 style="font-weight: normal;">Display 
+	 name</span> for the server</b></p></li>
+	<li class="p"><p><span class="fieldnames" style="font-weight: normal;">Field 
+	 for</span> a one-line description of the server</p></li>
 	<li class="p"><p style="font-weight: normal;"><b><span class="fieldnames" 
 															 style="font-weight: normal;">Server 
 	 Host Name</span></b></p></li>
@@ -112,14 +111,19 @@ else
 	<li class="p-whs2"><p class="whs2"><span class="fieldnames" style="font-weight: normal;">LMTP 
 	 Bind Address</span>. IP address to use when connecting via LMTP</p></li>
 	<li class="p-whs2"><p class="whs2">Maximum number of scheduled tasks 
-	 that can run simultaneously</p></li>
+	 that can run. This is the number of threads that can simultaneously 
+	 process data source imports. The default is 20 threads.</p></li>
 	<li class="p-whs2"><p class="whs2">Sleep time between subsequent mailbox 
-	 purges</p></li>
+	 purges. The server manages the message purge schedule. You can configure 
+	 the duration of time that the server should &quot;rest&quot; between 
+	 purging messages. By default message purge is scheduled to run every 
+	 1 minute.</p></li>
 	<li class="p-whs2"><p class="whs2">The option to enable that the server 
-	 is a reverse proxy lookup target. If this is selected, <span style="font-weight: bold;"><b>Server&gt;IMAP&gt;Enable 
-	 clear text login</b></span> is automatically checked and grayed out.</p></li>
-	<li class="p"><p style="font-weight: normal;"><b><span style="font-weight: normal;">Notes.</span></b> 
-	 Additional free-form text regarding this server</p></li>
+	 is a reverse proxy lookup target. If this is selected, the <span style="font-weight: bold;"><b>Enable 
+	 clear text login</b></span> is automatically checked in the server IMAP 
+	 tab.</p></li>
+	<li class="p"><p><b style="font-weight: bold;">Notes.</b> Additional 
+	 free-form text regarding this server</p></li>
 </ul>
 <h3>Services tab</h3>
 <p>The Services tab shows the Zimbra services. A checkmark identifies the 
@@ -159,10 +163,10 @@ else
 <p>The POP tab shows:</p>
 <ul type="disc">
 	<li class="p"><p>POP3 service, address, and advertised name</p></li>
-	<li class="p"><p>Number of threads. The default is 10</p></li>
+	<li class="p"><p>Number of threads. The default is 100</p></li>
 	<li class="p"><p>SSL for POP3 services</p></li>
 	<li class="p"><p>Option for clear text login</p></li>
-	<li class="p"><p>Network options for Advertised name and address</p></li>
+	<li class="p"><p>Network options for advertised name and address</p></li>
 	<li class="p"><p>POP3 port numbers</p></li>
 </ul>
 <h3>Volumes tab</h3>
@@ -177,8 +181,8 @@ else
 	<li class="p"><p><span style="font-weight: bold;"><b>Volume Type</b></span>. 
 	 The volume type is either Index or Message.</p></li>
 	<li class="p"><p><span style="font-weight: bold;"><b>Compress Blobs</b></span>. 
-	 When this box is checked, message blobs whose size is above the compression 
-	 threshold are compressed.</p></li>
+	 When this box is checked, message blobs above the compression threshold 
+	 are compressed.</p></li>
 	<li class="p"><p><span style="font-weight: bold;"><b>Compression Threshold</b></span>. 
 	 Messages larger than the threshold are compressed. The default threshold 
 	 is 4096 bytes.</p></li>
@@ -193,11 +197,24 @@ else
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 <p>&#160;</p>
 <p>
-<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PickupDialog_Invoke) == 'function') PickupDialog_Invoke(e,'','Stopping Mailbox Service on a Server','stopping_mailbox_service_on_a_server.htm','Volume Management','volume_management.htm');return false;" title="Related Topics"><img src="../ss_btn_related_topics.gif" border="0" height="17" width="81" alt="Related Topics" /></a>
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PickupDialog_Invoke) == 'function') PickupDialog_Invoke(e,'','Stopping Mailbox Service on a Server','stopping_mailbox_service_on_a_server.htm','Volume Management','volume_management.htm');return false;" title=" Related Topics"><span style="font-family:Arial;font-size:8pt;font-weight:normal;font-style:normal;text-decoration:none"><nobr>  Related Topics </nobr></span></a>
 
  </p>
+<p>&#160;</p>
 <script type="text/javascript" language="JavaScript">//<![CDATA[
 if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
   WritePopupMenuLayer();

@@ -89,7 +89,7 @@ else
  that are enabled in the COS. The preferences in the COS become the default 
  settings for accounts.</p>
 <p>The COS default preferences can be changed for individual accounts, 
- and users can modify their preferences from the Zimbra Web Client Options 
+ and users can modify their preferences from the Zimbra Web Client Preferences 
  tab. &#160;The account's preferences are updated when users change their 
  options in the Web Client.</p>
 <p>The following preferences can be configured.</p>
@@ -120,13 +120,6 @@ else
 			 first. The default is the Inbox.</p></li>
 		</ul></td>
 	</tr>
-	<tr style="vertical-align: top; height: 26px;">
-		<td style="padding-right: 10px; padding-left: 10px; vertical-align: Top;" 
-			 width="662"><ul type="disc">
-			<li class="p"><p style="font-weight: bold;">Show IMAP search 
-			 folders</p></li>
-		</ul></td>
-	</tr>
 	<tr style="vertical-align: top; height: 30px;">
 		<td style="padding-right: 10px; padding-left: 10px; vertical-align: Top;" 
 			 width="662"><ul type="disc">
@@ -138,13 +131,15 @@ else
 		<td style="padding-right: 10px; padding-left: 10px; vertical-align: Top;" 
 			 width="662"><ul type="disc">
 			<li class="p"><p style="font-weight: bold;"><span style="font-weight: normal;">When</span> 
-			 Display a warning when users try to navigate away from ZCS 
-			 <span style="font-weight: normal;">is enabled, the message 
-			 displays when users click the browser Back button to leave 
-			 ZWC.</span></p></li>
-			<li class="p"><p style="font-weight: normal;">You can enable 
-			 a similar warning when administrators click the back button 
-			 to navigate from the administration console. </p></li>
+			 Display a warning when users try to navigate away from <span 
+			 style="font-weight: normal;">ZCS 
+			 is enabled, the message displays when users click the browser 
+			 Back button to leave ZWC.</span></p></li>
+			<li class="p"><p style="font-weight: normal;"><span style="font-weight: bold;"><b>Display 
+			 a warning when administrators try to navigate away from Zimbra 
+			 Administration Console. </b></span>You can enable a similar warning 
+			 when administrators click the back button to navigate from 
+			 the administration console. </p></li>
 		</ul></td>
 	</tr>
 	<tr style="vertical-align: top; height: 58px;">
@@ -213,8 +208,8 @@ else
 		<td style="padding-right: 10px; padding-left: 10px; vertical-align: Top;" 
 			 width="662"><ul type="disc">
 			<li class="p"><p><span style="font-weight: bold;"><b>Display external 
-			 images in HTML mail</b></span>. If this enabled, images send in 
-			 an email are displayed.</p></li>
+			 images in HTML mail</b></span>. If this is enabled, images sent 
+			 in an email are displayed.</p></li>
 		</ul></td>
 	</tr>
 	<tr style="vertical-align: top; height: 26px;">
@@ -305,8 +300,8 @@ else
 		<td style="padding-right: 10px; padding-left: 10px; vertical-align: Top;" 
 			 width="662"><ul type="disc">
 			<li class="p"><p><span style="font-weight: bold;"><b>Save to sent</b></span>. 
-			 A copy of messages that are sent from the account are saved 
-			 to the Sent folder.</p></li>
+			 A copy of messages that are sent from the account are automatically 
+			 saved to the Sent folder.</p></li>
 		</ul></td>
 	</tr>
 	<tr style="vertical-align: top; height: 58px;">
@@ -331,7 +326,7 @@ else
 			 experience when writing an email message. You can set it up 
 			 to compose messages as Text or HTML, set the font, size and 
 			 color to use, and</span> <span style="font-weight: bold;"><b>Always 
-			 compose in new window</b></span>. displays the compose page in 
+			 compose in new window</b></span> displays the compose page in 
 			 a new window.</p></li>
 		</ul></td>
 	</tr>
@@ -407,9 +402,9 @@ else
 		<td style="padding-right: 10px; padding-left: 10px; vertical-align: Top;" 
 			 width="662"><ul type="disc">
 			<li class="p"><p><span style="font-weight: bold;"><b>Timezone</b></span> 
-			 is used to set the default time zone for &#160;new accounts 
-			 in this COS. The time zone you set during the ZCS install 
-			 sets the default COS time zone. See <a href="setting_time_zones_for_accounts.htm">Setting 
+			 is used to set the default time zone for new accounts in this 
+			 COS. The time zone you set during the install sets the default 
+			 COS time zone. See <a href="setting_time_zones_for_accounts.htm">Setting 
 			 time zones for accounts</a>.</p></li>
 		</ul></td>
 	</tr>
@@ -492,7 +487,9 @@ else
 		<td style="padding-right: 10px; padding-left: 10px; vertical-align: Top;" 
 			 width="662"><ul type="disc">
 			<li style="font-weight: bold;"><p>Enable toaster notification 
-			 for new mail. </p></li>
+			 for new mail.<span style="font-weight: normal;"> When this 
+			 is enabled, a popup displays in ZWC when new calendar events 
+			 re received.</span> </p></li>
 		</ul></td>
 	</tr>
 	<tr style="vertical-align: top; height: 42px;">
@@ -508,7 +505,13 @@ else
 		<td style="padding-right: 10px; padding-left: 10px; vertical-align: Top;" 
 			 width="662"><ul type="disc">
 			<li style="font-weight: bold;"><p>Automatically add invites 
-			 with PUBLISH method<span style="font-weight: normal;">. </span></p></li>
+			 with PUBLISH method<span style="font-weight: normal;">. A 
+			 calendar invitation email should have method=REQUEST 
+			 in the calendar object, but some third-party email clients 
+			 incorrectly set method=PUBLISH. 
+			 &#160;These email messages are not processed as invitations 
+			 by default. &#160;You can relax the rules by enabling this 
+			 option. </span></p></li>
 		</ul></td>
 	</tr>
 	<tr style="vertical-align: top; height: 42px;">
@@ -528,7 +531,7 @@ else
 			 Users can configure who can send them messages invites in 
 			 their Calendar preferences. When Auto-decline invites is enabled, 
 			 an auto-reply message is sent to those users to let them know 
-			 they do not have permission to invite you.</span></p></li>
+			 they do not have permission to invite the user.</span></p></li>
 		</ul></td>
 	</tr>
 	<tr style="vertical-align: top; height: 42px;">
@@ -553,7 +556,7 @@ else
 		<td style="padding-right: 10px; padding-left: 10px; vertical-align: Top;" 
 			 width="662"><ul type="disc">
 			<li class="p"><p><span style="font-weight: bold;"><b>Always show 
-			 the mini-calendar</b></span>. A mini-calendar will always display 
+			 the mini-calendar</b></span>. A mini-calendar always displays 
 			 in the lower left corner of the Web client.</p></li>
 		</ul></td>
 	</tr>
@@ -570,12 +573,11 @@ else
 		<td style="padding-right: 10px; padding-left: 10px; vertical-align: Top;" 
 			 width="662"><ul type="disc">
 			<li class="p"><p><span style="font-weight: bold;"><b>Show timezone list in appointment view</b></span>. 
-			 The time zone list will be displayed when users create appointments. 
+			 The time zone list displays when users create appointments. 
 			 Users can change time zones when they set up meetings.</p></li>
 		</ul></td>
 	</tr>
 </table>
-<p>&#160;</p>
 <div style="width: 100%; position: relative;" id="footer">
 	<p>&#160;</p>
 </div>

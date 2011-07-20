@@ -1,11 +1,65 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="quotas" >
+  <topic name="Viewing Mailbox Quotas" url="managing_servers/viewing_mailbox_quotas.htm" />
+</key>
+<key name="quotas, changing" >
+  <topic name="Changing Quota Settings" url="managing_accounts/changing_quota_settings.htm" />
+</key>
+<key name="re-indexing mailbox" >
+  <topic name="Re-Indexing a Mailbox" url="managing_accounts/re-indexing_a_mailbox.htm" />
+</key>
+<key name="rejecting messages by extension" >
+  <topic name="Blocking messages with specific extensions" url="managing_global_settings/blocking_messages_with_specific_extensions.htm" />
+</key>
+<key name="relay MTA" >
+  <topic name="Relay MTA for external delivery" url="managing_global_settings/relay_mta_for_external_delivery.htm" />
+</key>
+<key name="removing a resource" >
+  <topic name="Taking a Resource Out of Service" url="managing_accounts/taking_a_resource_out_of_service.htm" />
+</key>
+<key name="rename accounts" >
+  <topic name="Renaming an Account" url="managing_accounts/renaming_an_account.htm" />
+</key>
+<key name="reports" >
+  <topic name="Daily Mail Reports" url="monitoring/daily_mail_reports.htm" />
+</key>
+<key name="resource, out of service" >
+  <topic name="Taking a Resource Out of Service" url="managing_accounts/taking_a_resource_out_of_service.htm" />
+</key>
+<key name="resources" >
+  <topic name="Creating a Resource" url="managing_accounts/managing_resource.htm" />
+</key>
+<key name="resources, about" >
+  <topic name="Manage Addresses" url="managing_accounts/provisioning_accounts.htm" />
+</key>
+<key name="resources, number used" >
+  <topic name="Manage Addresses" url="managing_accounts/provisioning_accounts.htm" />
+</key>
+<key name="root" >
+  <topic name="Global Administrator's Mailbox" url="basic_administration_tasks/adminisrator_s_mailbox.htm" />
+</key>
+<key name="save search results" >
+  <topic name="Using Search" url="search/search.htm" />
+</key>
+<key name="search" >
+  <topic name="Search for Accounts" url="search/search.htm" />
+</key>
+<key name="search by login time" >
+  <topic name="Advanced Search" url="search/advanced_search.htm" />
+</key>
+<key name="search for administrators" >
+  <topic name="Advanced Search" url="search/advanced_search.htm" />
+</key>
 <key name="search, advanced" >
   <topic name="Advanced Search" url="search/advanced_search.htm" />
 </key>
 <key name="secondary volumes" >
   <topic name="Volume Management" url="managing_servers/volume_management.htm" />
+</key>
+<key name="security policy for mobile devices" >
+  <topic name="Setting Up Zimbra Mobile Device Security Policies" url="mobile/setting_up_zimbra_mobile_device_security_policies.htm" />
 </key>
 <key name="self-signed certificates" >
   <topic name="Managing Certificates from the Administration Console" url="tools/creating_certificates.htm" />
@@ -166,6 +220,9 @@
 </key>
 <key name="volume, blob compression" >
   <topic name="Volume Management" url="managing_servers/volume_management.htm" />
+</key>
+<key name="wiping mobile devices" >
+  <topic name="Mobile Device Wipe" url="mobile/mobile_device_wipe.htm" />
 </key>
 <key name="Zimbra Web Client Versions" >
   <topic name="Setting the Default ZWC Login Version" url="managing_accounts/setting_the_devault_zwc_login_version.htm" />

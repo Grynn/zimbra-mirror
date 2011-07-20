@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 8" />
 <title>Configure the Global Address List</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
@@ -96,20 +96,20 @@ else
 	 LDAP server is used for GAL directory lookups.</p></li>
 	<li class="p"><p><span class="attribute">External</span>. External 
 	 directory servers are used for GAL directory lookups. &#160;You can 
-	 configure multiple external LDAP hosts for GAL. All 
-	 other directory services use the Zimbra LDAP service (configuration, 
-	 mail routing, etc.). &#160;When you configure the external 
-	 GAL mode, you can configure GAL search and GAL sync separately, to 
-	 configure different search settings and sync settings.</p></li>
+	 configure multiple external LDAP hosts for GAL. All other directory 
+	 services use the Zimbra LDAP service (configuration, mail routing, 
+	 etc.) &#160;&#160;When you configure the external GAL mode, you can 
+	 configure GAL search and GAL sync separately, to configure different 
+	 search settings and sync settings.</p></li>
 	<li class="p"><p><span class="attribute">Both</span>. Internal and 
 	 external directory servers are used for GAL lookups.</p></li>
 </ul>
 <p>You can configure the maximum number of search results that can be returned 
  in one GAL search. &#160;</p>
-<ul>
-	<li class="p-note"><p class="note">&#160;The 
-	 value entered in Global Settings becomes the default for domains that 
-	 do not have this value explicitly set. The default is 100 results.</p></li>
+<ul style="list-style: url('../blue_right.jpg');">
+	<li class="p-note"><p class="note">&#160;The value entered in Global 
+	 Settings becomes the default for domains that do not have this value 
+	 explicitly set. The default is 100 results.</p></li>
 </ul>
 <h3>Using GAL Sync Accounts</h3>
 <p>When you configure an internal or external GAL, a GAL sync account is 
@@ -120,10 +120,9 @@ else
 <p>If <span style="font-weight: bold;"><b>Both</b></span> is selected, a GAL sync 
  account is created for each LDAP data source. &#160;These accounts display 
  in the administration console's Accounts list. </p>
-<p>The internal GAL polling interval 
- for the account determines how often the GAL sync account syncs with the 
- LDAP server. The sync intervals can be in x days, hours, minutes or seconds. 
- </p>
+<p>The internal GAL polling interval for the account determines how often 
+ the GAL sync account syncs with the LDAP server. The sync intervals can 
+ be in x days, hours, minutes or seconds. </p>
 <p>When the GAL sync account syncs to the LDAP server the first time, all 
  GAL contacts from the LDAP are added to the galsync account's address 
  book. During subsequent syncs, the account is updated with information 
@@ -241,7 +240,7 @@ else
 <ul type="disc">
 	<li class="p"><p><span style="font-weight: bold;"><b>Autocomplete filter.</b></span> 
 	 To enable the ability to let users use the <a href="autocomplete_on_gal.htm">Autocomplete 
-	 from GAL</a> feature ,the autocomplete 
+	 from GAL</a> feature, the autocomplete 
 	 filter must be configured. For LDAP, the default GAL filter setting 
 	 is <span style="font-weight: bold;"><b>(|( 
 	 cn=%s*)( sn=%s*)( 
@@ -249,10 +248,6 @@ else
 	 <span style="font-weight: bold;"><b>adAutoComplete</b></span> 
 	 is the default filter.</p></li>
 </ul>
-<p style="margin-left: 40px;"><span style="font-weight: bold;"><b>Note:</b></span> 
- If your LDAP server performance becomes an issue when the Autocomplete 
- from GAL feature is configured, you can disable the Domain's GAL autocomplete feature in the 
- COS and Account settings.</p>
 <ul type="disc">
 	<li class="p"><p><span style="font-weight: bold;"><b>LDAP search base</b></span>. 
 	 To search within a specific part of your directory, enter a search 

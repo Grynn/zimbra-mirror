@@ -92,7 +92,7 @@ else
 	<li class="p"><p><span style="font-weight: bold;"><b>Active</b></span>. Active 
 	 is the normal status for a domain. Accounts can be created and mail 
 	 can be delivered. If an account has a different status setting, the 
-	 account status is overrides the domain status.</p></li>
+	 account status overrides the domain status.</p></li>
 	<li class="p"><p><span style="font-weight: bold;"><b>Closed</b></span>. When 
 	 a domain status is Closed, account logins are disabled and messages 
 	 are bounced. A domain status of Closed overrides an individual account's 
@@ -112,10 +112,9 @@ else
 	 is queued at the MTA, and accounts and distribution lists cannot be 
 	 created, deleted, or modified. If an account's status is Closed, the 
 	 account's status mail is not queued at the MTA.</p></li>
-	<li class="P-note"><p class="note">The domain can also be shut down. 
-	 This is done from the CLI, enter as: <span style="font-family: 'Courier New', monospace;">zmprov 
-	 desc -a zimbraDomainStatus shutdown</span>. 
-	 </p></li>
+	<li class="P-note"><p class="note">The 
+	 domain can also be shut down. This is done from the CLI, enter as: 
+	 <span style="font-family: 'Courier New', monospace;">zmprov desc -a zimbraDomainStatus shutdown</span>. </p></li>
 </ul>
 <p>&#160;</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[

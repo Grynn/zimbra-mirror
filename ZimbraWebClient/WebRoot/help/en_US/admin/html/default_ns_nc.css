@@ -150,10 +150,8 @@ SPAN.attribute {
 	font-style: normal;
 }
 P.note {
-	list-style: url(ocean_arrow_med.gif);
-	color: #000080;
-	x-next-class: note;
-	x-next-type: P;
+	list-style: url("../ocean_arrow_med.gif");
+	color: #000000;
 }
 LI.P-note {
 	list-style: url(ocean_arrow_med.gif);

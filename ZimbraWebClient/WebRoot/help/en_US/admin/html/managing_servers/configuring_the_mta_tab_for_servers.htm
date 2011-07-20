@@ -1,11 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 8" />
 <title>Configuring the MTA Tab for Servers</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
@@ -39,6 +38,7 @@ visibility:hidden; }
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
 
 </head>
+
 <body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
@@ -83,80 +83,79 @@ else
 //-->
 //]]></script>
 <h1>Configuring the MTA Tab for Servers</h1>
-<p>The following MTA settings for servers can be changed. The server settings override the global settings.</p>
+<p>The following MTA settings for servers can be changed. The server settings 
+ override the global settings.</p>
 <p>&#160;</p>
 <table style="vertical-align: top;" cellspacing="4" width="80%">
-<col style="width: 50%;" />
-<col style="width: 50%;" />
-<tr style="vertical-align: top;">
-<td style="border-top: Solid 1px #000000; border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
-<p style="font-weight: bold;">Enable authentication</p>
-</td>
-<td style="border-top: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
-<p>Enables SMTP client authentication, so users can authenticate. Only authenticated users or users from trusted networks are allowed to relay mail.</p>
-<p>&#160;</p>
-</td>
-</tr>
-<tr style="vertical-align: top;">
-<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
-<p style="font-weight: bold;">
-TLS authentication only</p>
-</td>
-<td style="border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
-<p>When checked, forces all SMTP auth to use Transaction Level Security (similar to 
-SSL) to avoid passing passwords in the clear.</p>
-<p>&#160;</p>
-</td>
-</tr>
-<tr style="vertical-align: top;">
-<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
-<p style="font-weight: bold;">Web mail MTA Hostname</p>
-</td>
-<td style="border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
-<p>The MTA that the web server connects to for sending mail.</p>
-<p>&#160;</p>
-</td>
-</tr>
-<tr style="vertical-align: top;">
-<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
-<p style="font-weight: bold;">Web mail MTA port</p>
-</td>
-<td style="border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
-<p>The default is port 25. This cannot be changed from the administration console.</p>
-<p>&#160;</p>
-</td>
-</tr>
-<tr style="vertical-align: top;">
-<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
-<p style="font-weight: bold;">Web mail MTA 
-timeout (s)</p>
-</td>
-<td style="border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
-<p>This setting determines how long the MTA will try to connect to the server.</p>
-<p>&#160;</p>
-</td>
-</tr>
-<tr style="vertical-align: top;">
-<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
-<p style="font-weight: bold;">Relay MTA for external delivery</p>
-</td>
-<td style="border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
-<p>Enter the relay host name. This is the Zimbra MTA to Gateway host.</p>
-<p>&#160;</p>
-</td>
-</tr>
-<tr style="vertical-align: top;">
-<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
-<p style="font-weight: bold;">Enable 
-DNS lookups</p>
-</td>
-<td style="border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; padding-left: 10px;">
-<p>The Zimbra MTA makes an explicit 
-DNS query for the 
-MX record of the recipient domain. The default is enabled. &#160;If this option is disabled, set a relay host in the <span style="font-weight: bold;"><b>Relay MTA for external delivery</b></span> field. &#160;</p>
-<p>&#160;</p>
-</td>
-</tr>
+	<col style="width: 50%;" />
+	<col style="width: 50%;" />
+	<tr style="vertical-align: top;">
+		<td style="border-top: Solid 1px #000000; border-right: Solid 1px #000000; 
+			 border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; 
+			 padding-left: 10px;"><p style="font-weight: bold;">Enable 
+		 authentication</p></td>
+		<td style="border-top: Solid 1px #000000; border-bottom: Solid 1px #000000; 
+			 width: 50%; padding-right: 10px; padding-left: 10px;"><p>Enables 
+		 SMTP client authentication, so users can authenticate. Only authenticated 
+		 users or users from trusted networks are allowed to relay mail.</p>
+		<p>&#160;</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; 
+			 width: 50%; padding-right: 10px; padding-left: 10px;"><p style="font-weight: bold;">TLS authentication only</p></td>
+		<td style="border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; 
+			 padding-left: 10px;"><p>When checked, forces all SMTP auth 
+		 to use Transaction Level Security (similar to SSL) 
+		 to avoid passing passwords in the clear.</p>
+		<p>&#160;</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; 
+			 width: 50%; padding-right: 10px; padding-left: 10px;"><p style="font-weight: bold;">Web 
+		 mail MTA Hostname</p></td>
+		<td style="border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; 
+			 padding-left: 10px;"><p>The MTA that the web server connects 
+		 to for sending mail.</p>
+		<p>&#160;</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; 
+			 width: 50%; padding-right: 10px; padding-left: 10px;"><p style="font-weight: bold;">Web 
+		 mail MTA port</p></td>
+		<td style="border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; 
+			 padding-left: 10px;"><p>The default is port 25. This cannot 
+		 be changed from the administration console.</p>
+		<p>&#160;</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; 
+			 width: 50%; padding-right: 10px; padding-left: 10px;"><p style="font-weight: bold;">Web 
+		 mail MTA timeout (s)</p></td>
+		<td style="border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; 
+			 padding-left: 10px;"><p>This setting determines how long the 
+		 MTA tries to connect to the server.</p>
+		<p>&#160;</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; 
+			 width: 50%; padding-right: 10px; padding-left: 10px;"><p style="font-weight: bold;">Relay 
+		 MTA for external delivery</p></td>
+		<td style="border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; 
+			 padding-left: 10px;"><p>Enter the relay host name. This is 
+		 the Zimbra MTA to Gateway host.</p>
+		<p>&#160;</p></td>
+	</tr>
+	<tr style="vertical-align: top;">
+		<td style="border-right: Solid 1px #000000; border-bottom: Solid 1px #000000; 
+			 width: 50%; padding-right: 10px; padding-left: 10px;"><p style="font-weight: bold;">Enable 
+		 DNS lookups</p></td>
+		<td style="border-bottom: Solid 1px #000000; width: 50%; padding-right: 10px; 
+			 padding-left: 10px;"><p>The Zimbra MTA makes an explicit DNS query for the MX record 
+		 of the recipient domain. The default is enabled. &#160;If this 
+		 option is disabled, set a relay host in the <span style="font-weight: bold;"><b>Relay 
+		 MTA for external delivery</b></span> field. &#160;</p>
+		<p>&#160;</p></td>
+	</tr>
 </table>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--

@@ -1,11 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 8" />
 <title>MTA SMTP Restrictions</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
@@ -39,6 +38,7 @@ visibility:hidden; }
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
 
 </head>
+
 <body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
@@ -83,36 +83,26 @@ else
 //-->
 //]]></script>
 <h1>MTA Protocol and DNS Checks</h1>
-<p>You can enable restrictions so that the MTA does not accept messages when non standard or other disapproved behavior is exhibited by an incoming SMTP client. These restrictions provide some protection against ill-behaved spam senders.</p>
+<p>You can enable restrictions so that the MTA does not accept messages 
+ when non standard or other disapproved behavior is exhibited by an incoming 
+ SMTP client. These restrictions provide some protection against ill-behaved 
+ spam senders.</p>
 <p>By default, the following SMTP protocol violators are restricted:</p>
 <ul type="disc">
-<li class="p">
-<p>Hostname in greeting violates 
-RFC</p>
-</li>
-<li class="p">
-<p>Client must greet with a fully qualified 
-hostname</p>
-</li>
-<li class="p">
-<p>Sender address must be fully qualified</p>
-</li>
+	<li class="p"><p>Hostname in greeting violates RFC</p></li>
+	<li class="p"><p>Client must greet with a fully qualified hostname</p></li>
+	<li class="p"><p>Sender address must be fully qualified</p></li>
 </ul>
 <p>The following DNS based restrictions can also be enabled:</p>
 <ul type="disc">
-<li class="p">
-<p>Client's 
-IP address</p>
-</li>
-<li class="p">
-<p>Hostname in greeting</p>
-</li>
-<li class="p">
-<p>Sender's domain</p>
-</li>
+	<li class="p"><p>Client's IP address</p></li>
+	<li class="p"><p>Hostname in greeting</p></li>
+	<li class="p"><p>Sender's domain</p></li>
 </ul>
-<p>&#160;</p>
-<p><span class="Important">Important:</span> Before setting these restrictions, identify what type of mails is received outside of your mail system. If a mail system you want to receive mail from is poorly implemented, you may have to compromise your restrictions to accommodate their messages.</p>
+<p><span class="Important">Important:</span> Before setting these restrictions, 
+ identify what type of mail is received outside of your mail system. If 
+ a mail system that you want to receive mail from is poorly implemented, 
+ you may have to compromise your restrictions to accommodate their messages.</p>
 <p>&#160;</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--

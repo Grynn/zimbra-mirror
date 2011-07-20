@@ -1,8 +1,17 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Enhancing the Zimbra Admin Console User Interface" url="admin_console_misc/enhancing_the_zimbra_admin_console_user_interface.htm" />
-<item name="Removing Admin Extension Modules" url="admin_console_misc/removing_admin_extension_modules.htm" />
-<item name="Using Search" url="search/search.htm" />
+<item name="Delegated Administration" url="da_process/delegated_administration.htm" />
+<item name="Provisioning Delegated Administrators" url="da_process/admin_wizard.htm" />
+<item name="Delegating a Domain Administrator" url="basic_administration_tasks/delegating_a_domain_administrator.htm" />
+<item name="Delegated Administration Target Types" url="da_process/delegated_administration_target_types.htm" />
+<item name="System Defined Rights" url="da_process/system_defined_rights.htm" />
+<item name="Working with the Delegated Administration Rights View Folder" url="da_process/rights.htm" />
+<item name="Manage Delegated Admin Grants" url="da_process/manage_delegated_admin_grants.htm" />
+<item name="Viewing Rights Granted to Administrators" url="da_process/viewing_rights_granted_to_administrators.htm" />
+<item name="Revoking Administrator Rights" url="da_process/revoking_administrator_rights.htm" />
+<item name="Adding Access Control Entries" url="da_process/adding_access_control_entries.htm" />
+<item name="Attribute Rights" url="da_process/inline_attribute_rights.htm" />
+<item name="ACL Tab" url="da_process/acl_tab.htm" />
 
 </tocdata>

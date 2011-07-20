@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 8" />
 <title>Installing Certificates</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
@@ -89,16 +89,16 @@ else
 	<li class="p"><p>Generate the Certificate Signing Request (CSR) that 
 	 is sent to a commercial certificate authorizer</p></li>
 	<li class="p"><p>Install the commercially signed certificate when it 
-	 has been authorized.</p></li>
+	 has been authorized</p></li>
 </ul>
 <p>To learn more about certificates, see <a href="creating_certificates.htm">Managing 
  Certificates from the Administration Console</a>.</p>
-<p>When Zimbra Appliance 
- is installed, the self-signed certificate is automatically installed and 
- can be used for testing Zimbra Appliance. 
+<p>When Zimbra Collaboration Serveris 
+ installed, the self-signed certificate is automatically installed and 
+ can be used for testing Zimbra Collaboration Server. 
  You should generate the CSR and install the 
- commercial certificate when Zimbra Appliance 
- is used in your production environment. &#160;</p>
+ commercial certificate when Zimbra Collaboration Serveris 
+ used in your production environment. &#160;</p>
 <p>When you are using a commercially signed certificate, the Certificate 
  Install Wizard is run twice:</p>
 <ul type="disc">
@@ -137,7 +137,7 @@ else
 	 ( OU). The unit name (if applicable).</p></li>
 	<li class="p"><p>Are you going to use <span style="font-weight: bold;"><b>Subject 
 	 Alternative Name</b></span> (SAN)? The input should be a valid domain 
-	 name. When SAN is used the domain name is compared with the common 
+	 name. When SAN is used, the domain name is compared with the common 
 	 name and then to the SAN to find a match. You can create multiple 
 	 SANs. When the alternate name is entered 
 	 here, the client ignores the common name and tries to match the server 
@@ -166,15 +166,14 @@ else
 <p>Now you submit the .csr 
  file to a commercial certificate authorizer. When they send the digitally 
  signed certificate back, use the Certificates Wizard to install the certificate 
- on the Zimbra Appliance.</p>
+ on the Zimbra Collaboration Server.</p>
 <h3>To install the commercial certificate</h3>
 <p>When the commercial certificate is received, save the signed certificate 
- to a folder that you can access from the ZCS administration console. Then 
+ to a folder that you can access from the administration console. Then 
  start the Certificate Installation Wizard.</p>
 <ol type="1">
-	<li class="p"><p>Select the server 
-	 that the commercial certificate was created for. Click <span style="font-weight: bold;"><b>Next</b></span>.</p></li>
-	
+	<li class="p"><p>Select the server that the commercial certificate 
+	 was created for. Click <span style="font-weight: bold;"><b>Next</b></span>.</p></li>
 	<li class="p"><p>Select <span style="font-weight: bold;"><b>Install the 
 	 commercially signed certificate</b></span>. Click <span style="font-weight: bold;"><b>Next</b></span>.</p></li>
 	<li class="p"><p>Verify that the information displayed is the correct 
@@ -184,13 +183,10 @@ else
 	<li class="p"><p>The target server is listed. Click <span style="font-weight: bold;"><b>Install</b></span>.</p></li>
 	<li class="p"><p>When the certificate is installed, you must restart 
 	 the server to apply the certificate. Restart 
-	 the server from the command line. Click <span 
-	 style="font-weight: bold;"><b>zmcontrol 
-	 stop</b></span> and 
-	 then<span style="font-weight: bold;"><b>&#160;zmcontrol start</b></span>. 
+	 the server from the command line. Enter <span 
+	 style="font-weight: bold;"><b>zmcontrol restart.</b></span> 
 	 </p></li>
 </ol>
-<p>&#160;</p>
 <p>&#160;</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
