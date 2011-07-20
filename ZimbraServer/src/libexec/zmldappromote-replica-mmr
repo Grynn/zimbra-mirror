@@ -1,0 +1,211 @@
+#!/usr/bin/perl
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2008, 2009, 2010 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.3 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# ***** END LICENSE BLOCK *****
+# 
+use strict;
+use lib '/opt/zimbra/zimbramon/lib';
+use Net::LDAP;
+use XML::Simple;
+use Getopt::Long;
+use File::Copy qw/ cp /;
+use File::Path;
+
+if ( ! -d "/opt/zimbra/openldap/etc" ) {
+  print "ERROR: openldap does not appear to be installed - exiting\n";
+  exit(1);
+}
+
+my $id = getpwuid($<);
+chomp $id;
+if ($id ne "zimbra") {
+    print STDERR "Error: must be run as zimbra user\n";
+    exit (1);
+}
+my ($help,$sid,$mmrURI);
+$sid=0;
+
+my $zmlocalconfig="/opt/zimbra/bin/zmlocalconfig";
+
+my $opts_good = GetOptions(
+        'h|help' => \$help,
+        's|sid=i' => \$sid,
+);
+
+if (!$opts_good) {
+        print STDERR "\n";
+        usage();
+}
+if ($help) {
+        usage(0);
+}
+
+if ($sid <=0) {
+   usage(0);
+}
+
+my $localxml = XMLin("/opt/zimbra/conf/localconfig.xml");
+my $ldap_root_password = $localxml->{key}->{ldap_root_password}->{value};
+chomp($ldap_root_password);
+my $ldap_is_master = $localxml->{key}->{ldap_is_master}->{value};
+chomp($ldap_is_master);
+my $zimbra_home = $localxml->{key}->{zimbra_home}->{value};
+my $ldap_replication_password = $localxml->{key}->{ldap_replication_password}->{value};
+my $ldap_starttls_supported = $localxml->{key}->{ldap_starttls_supported}->{value};
+my $zimbra_require_interprocess_security = $localxml->{key}->{zimbra_require_interprocess_security}->{value};
+
+if ($zimbra_home eq "") {
+   $zimbra_home = "/opt/zimbra";
+}
+
+if(lc($ldap_is_master) eq "true") {
+  print "Cannot run on a master.\n";
+  exit(1);
+} else {
+  my $ldap = Net::LDAP->new('ldapi://%2fopt%2fzimbra%2fopenldap%2fvar%2frun%2fldapi/') or die "$@";
+  my $mesg = $ldap->bind("cn=config", password=>"$ldap_root_password");
+  $mesg->code && die "Bind: ". $mesg->error . "\n"; 
+
+# Check to see if olcServerID is already configured.  If not, add it.
+
+  my $dn="cn=config";
+  $mesg = $ldap ->search(
+                    base=>"$dn",
+                    filter=>"(&(objectClass=olcGlobal)(olcServerID=*))",
+                    scope=>"sub",
+                    attrs => ['olcServerID'],
+                );
+  my $size = $mesg->count;
+  if ($size == 0) {
+    $mesg = $ldap->modify(
+      $dn,
+      add=>{olcServerID =>"$sid"},
+    );
+  }
+
+  my $bdn="olcDatabase={2}hdb,cn=config";
+
+#Check if master is already enabled for replication.  If so, steps are simpler.  If not, more to do.
+  $mesg = $ldap->search(
+                        base=> "cn=accesslog",
+                        filter=>"(objectClass=*)",
+                        scope => "base",
+                        attrs => ['1.1'],
+                 );
+  $size = $mesg->count;
+  if ($size != 0) {
+    print "This is not a replica.\n";
+    exit(1);
+  }
+  # Create accesslog db, add syncprov overlay, etc.
+  File::Path::mkpath("${zimbra_home}/data/ldap/accesslog/db");
+  File::Path::mkpath("${zimbra_home}/data/ldap/accesslog/logs");
+  if ( !-f "${zimbra_home}/data/ldap/accesslog/db/DB_CONFIG") {
+    if (-f "${zimbra_home}/conf/custom/ldap/DB_CONFIG.accesslog") {
+      cp("${zimbra_home}/conf/custom/ldap/DB_CONFIG.accesslog","${zimbra_home}/data/ldap/accesslog/db/DB_CONFIG");
+    } else {
+      cp("${zimbra_home}/openldap/var/openldap-data/DB_CONFIG.accesslog","${zimbra_home}/data/ldap/accesslog/db/DB_CONFIG");
+    }
+  }
+  $mesg=$ldap->add(
+    $bdn,
+    attr => [
+      objectClass=>["olcDatabaseConfig","olcHdbConfig"],
+      olcDatabase=>"{2}hdb",
+      olcDbDirectory=>"${zimbra_home}/data/ldap/accesslog/db",
+      olcSuffix=>"cn=accesslog",
+      olcAccess=>'{0}to dn.subtree="cn=accesslog"  by dn.exact="uid=zimbra,cn=admins,cn=zimbra" read  by dn.exact="cn=config" read  by dn.exact="uid=zmreplica,cn=admins,cn=zimbra" read',
+      olcLastMod=>"TRUE",
+      olcMaxDerefDepth=>"15",
+      olcReadOnly=>"FALSE",
+      olcRootDN=>"cn=config",
+      olcSizeLimit=>"unlimited",
+      olcTimeLimit=>"unlimited",
+      olcMonitoring=>"TRUE",
+      olcDbCacheSize=>"10000",
+      olcDbCheckpoint=>"64 5",
+      olcDbNoSync=>"FALSE",
+      olcDbDirtyRead=>"FALSE",
+      olcDbIDLcacheSize=>"10000",
+      olcDbIndex=>["entryCSN eq", "objectClass eq", "reqEnd eq", "reqResult eq", "reqStart eq"],
+      olcDbLinearIndex=>"FALSE",
+      olcDbMode=>"0600",
+      olcDbSearchStack=>"16",
+      olcDbShmKey=>"0",
+      olcDbCacheFree=>"1",
+      olcDbDNcacheSize=>"0",
+    ],
+  );
+  $mesg=$ldap->add(
+    'olcOverlay=syncprov,olcDatabase={2}hdb,cn=config',
+    attr => [
+      objectClass=>['olcOverlayConfig','olcSyncProvConfig'],
+      olcOverlay=>'syncprov',
+      olcSpNoPresent=>"TRUE",
+      olcSpReloadHint=>"TRUE",
+    ],
+  );
+  $mesg=>$ldap->modify(
+    'olcOverlay=syncprov,olcDatabase={3}hdb,cn=config',
+    add => [
+      olcSpCheckpoint=>'20 10',
+      olcSpSessionLog=>'500',
+    ],
+  );
+  $mesg=>$ldap->add(
+    'olcOverlay=accesslog,olcDatabase={3}hdb,cn=config',
+    attr => [
+      objectClass=>['olcOverlayConfig','olcAccessLogConfig'],
+      olcOverlay=>'accesslog',
+      olcAccessLogDB=>'cn=accesslog',
+      olcAccessLogOps=>'writes',
+      olcAccessLogSuccess=>'TRUE',
+      olcAccessLogPurge=>'01+00:00  00+04:00',
+    ],
+  );
+  $bdn="olcDatabase={3}hdb,cn=config";
+  $mesg = $ldap->modify(
+    $bdn,
+    replace=>{olcMirrorMode=>"TRUE"},
+  );
+  setLocalConfig("ldap_is_master", "true");
+}
+
+sub usage {
+
+        my ($msg) = (@_);
+
+        $msg && print STDERR "\nERROR: $msg\n";
+        print STDERR <<USAGE;
+  zmldapenable-mmr -s SID
+
+  Where:
+  SID is an unique Integer Server ID for THIS LDAP Master.  It CANNOT be in use by any other LDAP master.
+
+USAGE
+        exit (1);
+}
+
+sub setLocalConfig {
+  my $key = shift;
+  my $val = shift;
+  print "Setting local config $key=$val\n";
+  runCommand("$zmlocalconfig -f -e ${key}=\'${val}\' 2> /dev/null");
+}
+
+sub runCommand {
+  my $cmd = shift;
+  my $rc;
+  $rc = 0xffff & system("$cmd > /dev/null 2>&1 ");
+  return $rc;
+}
