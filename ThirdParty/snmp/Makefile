@@ -21,6 +21,7 @@ PERL_DEST_DIR=$(SNMP_ROOT)/../Perl/zimbramon
 PERL_DEST_LIB_DIR=$(PERL_DEST_DIR)/lib
 
 CC	:=
+PATCH	:=
 ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
@@ -31,6 +32,7 @@ ifeq (MACOSXx86_10, $(findstring MACOSXx86_10, $(BUILD_PLATFORM)))
 	ENVMOD := env LIBS="-lresolv" CPPFLAGS="-DHAVE_SSIZE_T" MACOSX_DEPLOYMENT_TARGET=10.5
 ifeq ($(BUILD_PLATFORM), MACOSXx86_10.7)
 	CC := CC=gcc-4.2
+	PATCH   := patch -g0 -N -p1 < ../patches/mac-osx-107.patch;
 endif
 endif
 ifeq ($(BUILD_PLATFORM), MACOSX)
@@ -72,6 +74,7 @@ build: $(SNMP_NAME)-$(SNMP_VERSION)
 ifeq (MACOSXx86_10, $(findstring MACOSXx86_10, $(BUILD_PLATFORM)))
 	@echo MAC $(BUILD_PLATFORM)
 	(cd $(SNMP_NAME)-$(SNMP_VERSION); \
+	$(PATCH) \
 	$(ENVMOD) $(CC) CFLAGS="-g -O2" \
 	LDFLAGS="-L$(OPENSSL_LIB_DIR) -R$(OPENSSL_LIB_DIR)" \
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR) \
