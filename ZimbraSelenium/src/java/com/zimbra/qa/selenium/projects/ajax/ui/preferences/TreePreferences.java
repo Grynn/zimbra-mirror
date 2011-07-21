@@ -122,7 +122,7 @@ public class TreePreferences extends AbsTree {
 		
 		map.put(TreeItem.General, "id=" + Locators.zGeneralTextID);
 		map.put(TreeItem.Mail, null);
-		map.put(TreeItem.MailComposing, null);
+		map.put(TreeItem.MailComposing, "css=td[id='zti__main_Options__PREF_PAGE_COMPOSING_textCell']");
 		map.put(TreeItem.MailSignatures, "id="+Locators.zsignatureTextID);
 		map.put(TreeItem.MailAccounts, null);
 		map.put(TreeItem.MailFilters, null);
