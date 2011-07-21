@@ -57,7 +57,11 @@ if (!($mmrURI)) {
 
 if ($mmrURI !~ /^ldaps?:\/\//) {
   usage(0);
-};
+}
+
+if ($mmrURI !~ /\/$/) {
+  usage(0);
+}
 
 my $localxml = XMLin("/opt/zimbra/conf/localconfig.xml");
 my $ldap_root_password = $localxml->{key}->{ldap_root_password}->{value};
