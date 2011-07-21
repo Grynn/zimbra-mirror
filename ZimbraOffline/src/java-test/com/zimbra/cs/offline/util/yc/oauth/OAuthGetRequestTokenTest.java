@@ -14,12 +14,17 @@
  */
 package com.zimbra.cs.offline.util.yc.oauth;
 
+import org.apache.log4j.BasicConfigurator;
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.zimbra.common.service.ServiceException;
 
 public class OAuthGetRequestTokenTest {
+
+    static {
+        BasicConfigurator.configure();
+    }
 
     @Test
     public void getRequestTokenTest() {
@@ -42,4 +47,8 @@ public class OAuthGetRequestTokenTest {
         Assert.assertNotNull(resp.getToken().getTokenSecret());
     }
 
+    public static void main(String[] args) {
+        OAuthGetRequestTokenTest test = new OAuthGetRequestTokenTest();
+        test.getRequestTokenTest();
+    }
 }
