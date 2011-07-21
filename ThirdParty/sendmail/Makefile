@@ -24,11 +24,16 @@ all: checksrc allclean build tar
 checksrc:
 	$(if $(files), @echo "", exit 1)
 
+CC	:=
+ifeq ($(BUILD_PLATFORM), MACOSXx86_10.7)
+	CC	:= -DconfCC=gcc-4.2
+endif
+
 build:
 	(tar xzf src/sendmail.$(SENDMAIL_VERSION).tar.gz; \
 	cp sendmail-$(SENDMAIL_VERSION)/devtools/OS/Darwin.9.x sendmail-$(SENDMAIL_VERSION)/devtools/OS/Darwin.10.x; \
 	cd sendmail-$(SENDMAIL_VERSION)/libmilter; \
-	./Build; \
+	./Build $(CC); \
 	cd ../obj.*/libmilter; \
 	mkdir -p $(ZIMBRA_HOME)/sendmail-$(SENDMAIL_VERSION)/lib; \
 	cp -p libmilter.a $(ZIMBRA_HOME)/sendmail-$(SENDMAIL_VERSION)/lib;)
