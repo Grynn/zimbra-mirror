@@ -232,7 +232,66 @@ namespace CssLib
                 }
             }
         }
+
+        private void ParseAddMsg(string rsp, out string mID)
+        {
+            mID = "";
+            if (rsp != null)
+            {
+                int midIdx = rsp.IndexOf("m id");
+                if (midIdx != -1)
+                {
+                    XDocument xmlDoc = XDocument.Parse(rsp);
+                    XNamespace ns = "urn:zimbraMail";
+                    foreach (var objIns in xmlDoc.Descendants(ns + "AddMsgResponse"))
+                    {
+                        foreach (XElement mIns in objIns.Elements())
+                        {
+                            foreach (XAttribute mAttr in mIns.Attributes())
+                            {
+                                if (mAttr.Name == "id")
+                                {
+                                    mID = mAttr.Value;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         //////////
+
+        // private UploadFile method
+        private int UploadFile(string filepath, out string uploadToken)
+        {
+            WebServiceClient client = new WebServiceClient
+            {
+                Url = "https://" + ZimbraValues.GetZimbraValues().HostName + ":" + ZimbraValues.GetZimbraValues().Port + "/service/upload?fmt=raw",
+                WSServiceType = WebServiceClient.ServiceType.Traditional
+            };
+
+            int retval = 0;
+            string rsp = "";
+            uploadToken = "";
+
+            client.InvokeUploadService(ZimbraValues.GetZimbraValues().AuthToken, filepath, out rsp);
+            retval = client.status;
+            if (retval == 0)
+            {
+                int li = rsp.LastIndexOf(",");
+                if (li != -1)
+                {
+                    // get the string with the upload token, which will have a leading ' and a trailing '\r\n -- so strip that stuff off
+                    int uti = li + 1;   // upload token index
+                    string tmp = rsp.Substring(uti, (rsp.Length - uti));
+                    int lastsinglequoteidx = tmp.LastIndexOf("'");
+                    uploadToken = tmp.Substring(1, (lastsinglequoteidx - 1));
+                }
+            }
+
+            return retval;
+        }
+        //
 
         // private API helper methods
 
@@ -350,6 +409,8 @@ namespace CssLib
             if (client.status == 0)
             {
                 ParseLogon(rsp, isAdmin);
+                ZimbraValues.GetZimbraValues().HostName = hostname;
+                ZimbraValues.GetZimbraValues().Port = port;
             }
             else
             {
@@ -748,6 +809,83 @@ namespace CssLib
             retval = client.status;
             return retval;
         }
+
+        public void AddMsgRequest(XmlWriter writer, string uploadToken, ZimbraMessage message, int requestId)
+        {
+            writer.WriteStartElement("AddMsgRequest", "urn:zimbraMail");
+            if (requestId != -1)
+            {
+                writer.WriteAttributeString("requestId", requestId.ToString());
+            }
+            writer.WriteStartElement("m");
+            writer.WriteAttributeString("aid", uploadToken);
+            writer.WriteAttributeString("l", message.folderId);
+            writer.WriteAttributeString("d", message.rcvdDate);
+            writer.WriteAttributeString("f", message.flags);
+
+            writer.WriteEndElement();   // m
+            writer.WriteEndElement();   // AddMsgRequest
+        }
+
+        public int AddMessage(string filepath, ZimbraMessage message)
+        {
+            lastError = "";
+            string uploadToken = "";
+
+            int retval = UploadFile(filepath, out uploadToken);
+            if (retval == 0)
+            {
+                WebServiceClient client = new WebServiceClient
+                {
+                    Url = ZimbraValues.GetZimbraValues().Url,
+                    WSServiceType = WebServiceClient.ServiceType.Traditional
+                };
+
+                StringBuilder sb = new StringBuilder();
+                XmlWriterSettings settings = new XmlWriterSettings();
+                settings.OmitXmlDeclaration = true;
+                using (XmlWriter writer = XmlWriter.Create(sb, settings))
+                {
+                    writer.WriteStartDocument();
+                    writer.WriteStartElement("soap", "Envelope", "http://www.w3.org/2003/05/soap-envelope");
+
+                    WriteHeader(writer, true, true, true);
+
+                    writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
+
+                    AddMsgRequest(writer, uploadToken, message, -1);
+
+                    writer.WriteEndElement();   // soap body
+                    writer.WriteEndElement();   // soap envelope
+                    writer.WriteEndDocument();
+                }
+
+                string rsp = "";
+                client.InvokeService(sb.ToString(), out rsp);
+                retval = client.status;
+                if (client.status == 0)
+                {
+                    string mID = "";
+                    ParseAddMsg(rsp, out mID);  // get the id
+                }
+                else
+                {
+                    string soapReason = ParseSoapFault(client.errResponseMessage);
+                    if (soapReason.Length > 0)
+                    {
+                        lastError = soapReason;
+                    }
+                    else
+                    {
+                        lastError = client.exceptionMessage;
+                    }
+                }
+            }
+
+            return retval;
+        }
+
+
         /////////////////////////
 
     }

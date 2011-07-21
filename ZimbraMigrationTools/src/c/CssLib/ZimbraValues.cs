@@ -88,6 +88,26 @@ namespace CssLib
             }
         }
 
+        private string sHostName;
+        public string HostName
+        {
+            get { return sHostName; }
+            set
+            {
+                sHostName = value;
+            }
+        }
+
+        private string sPort;
+        public string Port
+        {
+            get { return sPort; }
+            set
+            {
+                sPort = value;
+            }
+        }
+
         private List<string> lDomains;
         public List<string> Domains
         {

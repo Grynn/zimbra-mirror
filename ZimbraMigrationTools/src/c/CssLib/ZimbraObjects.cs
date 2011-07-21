@@ -28,5 +28,29 @@ namespace CssLib
             email = "";
         }
     }
+
+    public class ZimbraMessage
+    {
+        public string folderId;
+        public string flags;
+        public string tags;
+        public string rcvdDate;
+
+        public ZimbraMessage()
+        {
+            folderId = "";
+            flags = "";
+            tags = "";
+            rcvdDate = "";
+        }
+
+        public ZimbraMessage(string FolderId, string Flags, string Tags, string RcvdDate)
+        {
+            folderId = FolderId;
+            flags = Flags;
+            tags = Tags;
+            rcvdDate = RcvdDate;
+        }
+    }
 }
 
