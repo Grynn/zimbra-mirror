@@ -20,6 +20,7 @@ import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.PageLogin;
 import com.zimbra.qa.selenium.projects.desktop.ui.accounts.FormAddGmailAccount;
 import com.zimbra.qa.selenium.projects.desktop.ui.accounts.FormAddImapAccount;
+import com.zimbra.qa.selenium.projects.desktop.ui.accounts.FormAddPopAccount;
 import com.zimbra.qa.selenium.projects.desktop.ui.accounts.FormAddYahooAccount;
 import com.zimbra.qa.selenium.projects.desktop.ui.accounts.FormAddZimbraAccount;
 import com.zimbra.qa.selenium.projects.desktop.ui.accounts.PageAddNewAccount.DROP_DOWN_OPTION;
@@ -156,6 +157,20 @@ public class CreateAccount extends AjaxCommonTest {
       ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account's email address is greater than 0.");
    }
 
+   @Test(description="Add IMAP account to ZD client", groups = { "private" })
+   public void addImapAccount() throws HarnessException {
+
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddImapAccountThruUI();
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message, "Account added: " + desktopAccountItem.accountName, "Verify Account added message");
+
+      app.zPageLogin.zLogin(new ZimbraAccount(desktopAccountItem.emailAddress,
+            desktopAccountItem.password));
+      List<FolderItem> folders = app.zTreeMail.zListGetFolders();
+      ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account's email address is greater than 0.");
+   }
+
    @Test(description="Wrong email address format (alphabet characters only) when creating Zimbra Account", groups = { "functional" } )
    public void wrongEmailAddressFormatZimbraAccount1() throws HarnessException {
 
@@ -228,9 +243,9 @@ public class CreateAccount extends AjaxCommonTest {
             AjaxCommonTest.gmailImapReceivingServer,
             SECURITY_TYPE.SSL,
             "993",
-            AjaxCommonTest.hotmailPopSmtpServer,
-            false,
-            "25",
+            AjaxCommonTest.gmailImapSmtpServer,
+            true,
+            "465",
             AjaxCommonTest.gmailUserName,
             AjaxCommonTest.gmailPassword);
 
@@ -265,13 +280,87 @@ public class CreateAccount extends AjaxCommonTest {
             AjaxCommonTest.gmailImapReceivingServer,
             SECURITY_TYPE.SSL,
             "993",
-            AjaxCommonTest.hotmailPopSmtpServer,
-            false,
-            "25",
+            AjaxCommonTest.gmailImapSmtpServer,
+            true,
+            "465",
             AjaxCommonTest.gmailUserName,
             AjaxCommonTest.gmailPassword);
 
       FormAddImapAccount accountForm = (FormAddImapAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.IMAP);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zPressButton(Button.B_VALIDATE_AND_SAVE);
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "Please correct missing or invalid input.",
+            "Verify error message of wrong email address format");
+
+      app.zPageLogin.zNavigateTo();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
+   @Test(description="Wrong email address format (alphabet characters) when creating POP Account", groups = { "functional" } )
+   public void wrongEmailAddressFormatPopAccount1() throws HarnessException {
+      String wrongEmailAddress = ZimbraSeleniumProperties.getUniqueString();
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            wrongEmailAddress,
+            AjaxCommonTest.hotmailUserName,
+            AjaxCommonTest.hotmailPassword,
+            AjaxCommonTest.hotmailPopReceivingServer,
+            SECURITY_TYPE.SSL,
+            "993",
+            AjaxCommonTest.hotmailPopSmtpServer,
+            false,
+            "25",
+            AjaxCommonTest.hotmailUserName,
+            AjaxCommonTest.hotmailPassword);
+
+      FormAddPopAccount accountForm = (FormAddPopAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.POP);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zPressButton(Button.B_VALIDATE_AND_SAVE);
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "Please correct missing or invalid input.",
+            "Verify error message of wrong email address format");
+
+      app.zPageLogin.zNavigateTo();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
+   @Test(description="Wrong email address format (alphabet characters and '@') when creating POP Account", groups = { "functional" } )
+   public void wrongEmailAddressFormatPopAccount2() throws HarnessException {
+      String wrongEmailAddress = ZimbraSeleniumProperties.getUniqueString() + "@";
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            wrongEmailAddress,
+            AjaxCommonTest.hotmailUserName,
+            AjaxCommonTest.hotmailPassword,
+            AjaxCommonTest.hotmailPopReceivingServer,
+            SECURITY_TYPE.SSL,
+            "993",
+            AjaxCommonTest.hotmailPopSmtpServer,
+            false,
+            "25",
+            AjaxCommonTest.hotmailUserName,
+            AjaxCommonTest.hotmailPassword);
+
+      FormAddPopAccount accountForm = (FormAddPopAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.POP);
       accountForm.zFill(desktopAccountItem);
       accountForm.zPressButton(Button.B_VALIDATE_AND_SAVE);
 

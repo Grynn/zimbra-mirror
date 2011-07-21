@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.projects.desktop.ui.accounts;
 
 import com.zimbra.qa.selenium.framework.items.DesktopAccountItem;
+import com.zimbra.qa.selenium.framework.items.DesktopAccountItem.SECURITY_TYPE;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
@@ -185,6 +186,35 @@ public class PageAddNewAccount extends AbsTab{
 
       FormAddGmailAccount accountForm = (FormAddGmailAccount)((AppAjaxClient)MyApplication).
             zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.GMAIL);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zSubmit();
+
+      return desktopAccountItem;
+   }
+
+   /**
+    * Adding Imap Account through UI Interaction
+    * @return DestkopAccountItem of added Gmail account
+    * @throws HarnessException
+    */
+   public DesktopAccountItem zAddImapAccountThruUI() throws HarnessException {
+      zNavigateTo();
+
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            AjaxCommonTest.gmailUserName,
+            AjaxCommonTest.gmailUserName,
+            AjaxCommonTest.gmailPassword,
+            AjaxCommonTest.gmailImapReceivingServer,
+            SECURITY_TYPE.SSL,
+            "993",
+            AjaxCommonTest.gmailImapSmtpServer,
+            true,
+            "465",
+            AjaxCommonTest.gmailUserName,
+            AjaxCommonTest.gmailPassword);
+
+      FormAddImapAccount accountForm = (FormAddImapAccount)((AppAjaxClient)MyApplication).
+            zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.IMAP);
       accountForm.zFill(desktopAccountItem);
       accountForm.zSubmit();
 
