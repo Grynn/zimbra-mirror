@@ -3,6 +3,7 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 
@@ -36,6 +37,7 @@ public class EditContactGroup extends AjaxCommonTest  {
         // Fill in the form
 	    formContactGroupNew.zFill(newGroup);
 	    
+	  
 		// Save the contact
         formContactGroupNew.zSubmit();
 		
@@ -50,32 +52,32 @@ public class EditContactGroup extends AjaxCommonTest  {
  	           
 		boolean isFileAsEqual=false;
 		for (ContactItem ci : contacts) {
-			if (ci.fileAs.equals(newGroup.fileAs)) {
+			if (ci.fileAs.equals(newGroup.groupName)) {
 	            isFileAsEqual = true;	 
 				break;
 			}
 		}
 		
-        ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + group.fileAs + ") existed ");
+        ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + newGroup.groupName + ") existed ");
 
         
 		//verify old contact group not displayed
     	isFileAsEqual=false;
 		for (ContactItem ci : contacts) {
-			if (ci.fileAs.equals(group.fileAs)) {
+			if (ci.fileAs.equals(group.groupName)) {
 	            isFileAsEqual = true;	 
 				break;
 			}
 		}
 		
-        ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + group.fileAs + ") deleted");
+        ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + group.groupName + ") deleted");
       	
 	}
 	
 	
 	@Test(	description = "Edit a contact group by click Edit on Toolbar button",
 			groups = { "smoke"})
-	public void EditContactGroup_01() throws HarnessException {
+	public void ClickToolbarEdit() throws HarnessException {
 		
 		// Create a contact group via Soap then select
 		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
@@ -83,24 +85,40 @@ public class EditContactGroup extends AjaxCommonTest  {
 		//Click Edit on Toolbar button	
         FormContactGroupNew formContactGroupNew = (FormContactGroupNew) app.zPageAddressbook.zToolbarPressButton(Button.B_EDIT);
     
-        //Edit a contact group 
+        //Edit the contact group 
         EditGroup(formContactGroupNew, group);
 		        	    
 	}
 
 	@Test(	description = "Edit a contact group by click Edit Group on Context Menu ",
 			groups = { "functional"})
-	public void EditContactGroup_02() throws HarnessException {
+	public void ClickContextMenuEditGroup() throws HarnessException {
 		
 		// Create a contact group via Soap then select
 		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
 		
-		//Click Right-Click, then Edit Group on Context Menu 	
+		//Right-Click, then Edit Group on Context Menu 	
         FormContactGroupNew formContactGroupNew = (FormContactGroupNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_EDIT, group.fileAs);        
     	
-        //Edit a contact group
+        //Edit the contact group
         EditGroup(formContactGroupNew, group);
 		        	    
 	}
-}
+
+	@Test(	description = "Edit a contact group by double click on the contact group  ",
+			groups = { "functional"})
+	public void DoubleClickContactGroup() throws HarnessException {
+		
+		// Create a contact group via Soap then select
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
+		
+		//Double-click the contact group 	
+        FormContactGroupNew formContactGroupNew = (FormContactGroupNew) app.zPageAddressbook.zListItem(Action.A_DOUBLECLICK, group.fileAs);        
+    	
+        //Edit the contact group
+        EditGroup(formContactGroupNew, group);
+		        	    
+	}
+
+} 
 

@@ -91,7 +91,7 @@ public class DisplayContactGroup extends AbsDisplay {
 			  throw new HarnessException("locator was null for field = "+ field);
 		
 		   // Make sure the element is present
-		   if ( !this.sIsElementPresent(locator) )
+		   if ( !sIsElementPresent(locator) )
 			 throw new HarnessException("Unable to find the field = "+ field +" using locator = "+ locator);
 		
 		   // Get the element value
@@ -106,7 +106,7 @@ public class DisplayContactGroup extends AbsDisplay {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		throw new HarnessException("implement me!");
+		return sIsElementPresent("css=div#zv__CNS");
 	}
 	
 

@@ -714,7 +714,8 @@ public class PageAddressbook extends AbsTab {
 			ContextMenuItem cmi=null;
 		    ContextMenuItem sub_cmi = null;
 		
-		    zRightClickAt(getContactLocator(contact),"0,0");
+		    zRightClick(getContactLocator(contact));
+		    //zRightClickAt(getContactLocator(contact),"0,0");
 		      
 		    
 			if (option == Button.B_TAG) {
@@ -961,12 +962,12 @@ public class PageAddressbook extends AbsTab {
 	public AbsPage zListItem(Action action, String contact) throws HarnessException {
 		logger.info(myPageName() + " zListItem("+ action +", "+ contact +")");
         String contactLocator=getContactLocator(contact);
-        
+    	AbsPage page = null;	
 		tracer.trace(action +" on contact = "+ contact);
 
 		if ( action == Action.A_LEFTCLICK ) {
 			//click
-			this.zClick(contactLocator);
+			zClick(contactLocator);
 			//zWaitForBusyOverlay();
 			
 			ArrayList<String> selectedContactArrayList=getSelectedContactLocator();			
@@ -974,10 +975,10 @@ public class PageAddressbook extends AbsTab {
 		
 	        //check if it is a contact or a contact group item
 		    if ( contactType.equals(ContactGroupItem.IMAGE_CLASS)) {
-			  return  new DisplayContactGroup(MyApplication);		
+			  page = new DisplayContactGroup(MyApplication);		
 		    }
 		    else if (  contactType.equals(ContactItem.IMAGE_CLASS) ) {
-			  return new DisplayContact(MyApplication);
+			  page = new DisplayContact(MyApplication);
 		    }
 		    else {
 			  throw new HarnessException(" Error: not support the contact type");						    	
@@ -989,7 +990,7 @@ public class PageAddressbook extends AbsTab {
 			contactLocator=contactLocator.substring(0, contactLocator.length()-2) + "1" + ")>center>div.ImgCheckboxUnchecked";
 			
 			//check the box			
-			this.zClick(contactLocator);
+			zClick(contactLocator);
 			
 			//zWaitForBusyOverlay();
 						
@@ -998,10 +999,10 @@ public class PageAddressbook extends AbsTab {
 		
 	        //check if it is a contact or a contact group item
 		    if ( contactType.equals(ContactGroupItem.IMAGE_CLASS)) {
-			  return  new DisplayContactGroup(MyApplication);		
+			  page = new DisplayContactGroup(MyApplication);		
 		    }
 		    else if (  contactType.equals(ContactItem.IMAGE_CLASS) ) {
-			  return new DisplayContact(MyApplication);
+			  page = new DisplayContact(MyApplication);
 		    }
 		    else {
 			  throw new HarnessException(" Error: not support the contact type");						    	
@@ -1014,10 +1015,18 @@ public class PageAddressbook extends AbsTab {
             //zWaitForBusyOverlay();
     		return (new ContextMenu(MyApplication));			
 		}
-			
+		else if (action == Action.A_DOUBLECLICK) {
+		    sDoubleClick(contactLocator) ;		    
+		    page = newFormSelected();   
+		}
+		else {
+			throw new HarnessException("Action " + action + " not supported");
+		}
 		
-		throw new HarnessException("action not supported ");
-	
+		if (page != null) {
+		    page.zWaitForActive();
+		}
+		return page;
 	}
 	
 	
