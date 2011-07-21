@@ -88,6 +88,8 @@ public class TreePreferences extends AbsTree {
 		
 		zClick(locator);
 		
+		zWaitForBusyOverlay();
+		
 	}
 
 	/**
@@ -128,7 +130,7 @@ public class TreePreferences extends AbsTree {
 		map.put(TreeItem.MailFilters, "css=td[id='zti__main_Options__PREF_PAGE_FILTERS_textCell']");
 		map.put(TreeItem.MailTrustedAddresses, null);
 		map.put(TreeItem.AddressBook, "id=" + Locators.zAddressBookTextID);
-		map.put(TreeItem.Calendar, null);
+		map.put(TreeItem.Calendar, "css=td[id='zti__main_Options__PREF_PAGE_CALENDAR_textCell']");
 		map.put(TreeItem.Sharing, null);
 		map.put(TreeItem.Notifications, null);
 		map.put(TreeItem.ImportExport, null);

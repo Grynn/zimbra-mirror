@@ -45,13 +45,6 @@ public class ZimbraSelenium extends DefaultSelenium {
 	    return result;
 	}
 	
-	public boolean isChecked(String locator){
-	    logger.info("selenium.isChecked(" + locator + ")");	    	   	    
-		boolean result= super.isChecked(locator);
-		logger.info(result + "\n");
-	    return result;
-	}
-	
 	public void click(String locator){
 		logger.info("selenium.click(" + locator + ")" + "\n");
 		super.click(locator);
