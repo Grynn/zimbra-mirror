@@ -72,7 +72,6 @@ build: $(SNMP_NAME)-$(SNMP_VERSION)
 ifeq (MACOSXx86_10, $(findstring MACOSXx86_10, $(BUILD_PLATFORM)))
 	@echo MAC $(BUILD_PLATFORM)
 	(cd $(SNMP_NAME)-$(SNMP_VERSION); \
-	cp ../patches/darwin10.h include/net-snmp/system; \
 	$(ENVMOD) $(CC) CFLAGS="-g -O2" \
 	LDFLAGS="-L$(OPENSSL_LIB_DIR) -R$(OPENSSL_LIB_DIR)" \
 	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR) \
