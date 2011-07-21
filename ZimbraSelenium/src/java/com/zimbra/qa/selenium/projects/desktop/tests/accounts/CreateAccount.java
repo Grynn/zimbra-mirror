@@ -40,7 +40,7 @@ public class CreateAccount extends AjaxCommonTest {
       super.startingAccountPreferences = null;
    }
 
-   @Test(description="Create New Single Account (Zimbra) - Non SSL", groups = { "sanity1" })
+   @Test(description="Create New Single Account (Zimbra) - Non SSL", groups = { "sanity" })
    public void CreateSingleZimbraAccountSSL() throws HarnessException{
       Stafzmtlsctl stafzmtlsctl = new Stafzmtlsctl();
       stafzmtlsctl.setServerAccess(SERVER_ACCESS.BOTH);
@@ -59,7 +59,7 @@ public class CreateAccount extends AjaxCommonTest {
 
    }
 
-   @Test(description="Create New Single Account (Zimbra) - Non SSL", groups = { "sanity1" })
+   @Test(description="Create New Single Account (Zimbra) - Non SSL", groups = { "sanity" })
    public void CreateSingleZimbraAccountNonSSL() throws HarnessException {
 
       DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddZimbraAccountThruUI();
