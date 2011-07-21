@@ -40,14 +40,14 @@ public class CreateAccount extends AjaxCommonTest {
       super.startingAccountPreferences = null;
    }
 
-   @Test(description="Create New Single Account (Zimbra) - Non SSL", groups = { "sanity" })
+   @Test(description="Create New Single Account (Zimbra) - SSL", groups = { "sanity" })
    public void CreateSingleZimbraAccountSSL() throws HarnessException{
       Stafzmtlsctl stafzmtlsctl = new Stafzmtlsctl();
       stafzmtlsctl.setServerAccess(SERVER_ACCESS.BOTH);
       _sslIsModified = true;
 
-      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddZimbraAccountThruUI(true,
-            "443");
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddZimbraAccountThruUI(ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().Password, true, "443");
 
       String message = app.zPageLogin.zGetMessage();
       ZAssert.assertStringContains(message, "Account added: " + desktopAccountItem.accountName, "Verify Account added message");
@@ -71,6 +71,61 @@ public class CreateAccount extends AjaxCommonTest {
             desktopAccountItem.password));
       List<FolderItem> folders = app.zTreeMail.zListGetFolders();
       ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account's email address is greater than 0.");
+   }
+
+   @Test(description="Create Multiple Accounts (Zimbra) - SSL", groups = { "functional" })
+   public void CreateMultipleZimbraAccountSSL() throws HarnessException {
+      Stafzmtlsctl stafzmtlsctl = new Stafzmtlsctl();
+      stafzmtlsctl.setServerAccess(SERVER_ACCESS.BOTH);
+      _sslIsModified = true;
+
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddZimbraAccountThruUI(ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().Password, true, "443");
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message, "Account added: " + desktopAccountItem.accountName, "Verify Account added message");
+
+      DesktopAccountItem desktopAccountItem2 = app.zPageAddNewAccount.zAddZimbraAccountThruUI(ZimbraAccount.AccountA().EmailAddress,
+            ZimbraAccount.AccountA().Password, true, "443");
+
+      message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message, "Account added: " + desktopAccountItem2.accountName, "Verify Account added message");
+
+      app.zPageLogin.zLogin(new ZimbraAccount(desktopAccountItem.emailAddress,
+            desktopAccountItem.password));
+      List<FolderItem> folders = app.zTreeMail.zListGetFolders();
+      ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account1's email address is greater than 0.");
+
+      app.zSetActiveAcount(new ZimbraAccount(desktopAccountItem2.emailAddress,
+            desktopAccountItem2.password));
+      folders = app.zTreeMail.zListGetFolders();
+      ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account2's email address is greater than 0.");
+   }
+
+   @Test(description="Create Multiple Accounts (Zimbra) - Non SSL", groups = { "functional" })
+   public void CreateMultipleZimbraAccountNonSSL() throws HarnessException {
+
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddZimbraAccountThruUI(ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().Password, false, "80");
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message, "Account added: " + desktopAccountItem.accountName, "Verify Account added message");
+
+      DesktopAccountItem desktopAccountItem2 = app.zPageAddNewAccount.zAddZimbraAccountThruUI(ZimbraAccount.AccountA().EmailAddress,
+            ZimbraAccount.AccountA().Password, false, "80");
+
+      message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message, "Account added: " + desktopAccountItem2.accountName, "Verify Account added message");
+
+      app.zPageLogin.zLogin(new ZimbraAccount(desktopAccountItem.emailAddress,
+            desktopAccountItem.password));
+      List<FolderItem> folders = app.zTreeMail.zListGetFolders();
+      ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account1's email address is greater than 0.");
+
+      app.zSetActiveAcount(new ZimbraAccount(desktopAccountItem2.emailAddress,
+            desktopAccountItem2.password));
+      folders = app.zTreeMail.zListGetFolders();
+      ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account2's email address is greater than 0.");
    }
 
    @Test(description="Add Yahoo account to ZD client", groups = { "sanity" })

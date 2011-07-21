@@ -197,23 +197,27 @@ public class PageAddNewAccount extends AbsTab{
     * @throws HarnessException
     */
    public DesktopAccountItem zAddZimbraAccountThruUI() throws HarnessException {
-      return zAddZimbraAccountThruUI(false,
+      return zAddZimbraAccountThruUI(ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().Password, false,
             ZimbraSeleniumProperties.getStringProperty("server.port", "80"));
    }
 
    /**
     * Adding Zimbra Account through UI Interaction
+    * @param emailAddress Email Address
+    * @param password Password
     * @param ssl SSL is enabled?
     * @param port Port Number to connect
     * @return DestkopAccountItem of added Zimbra account
     * @throws HarnessException
     */
-   public DesktopAccountItem zAddZimbraAccountThruUI(boolean ssl, String port) throws HarnessException {
+   public DesktopAccountItem zAddZimbraAccountThruUI(String emailAddress, String password,
+         boolean ssl, String port) throws HarnessException {
       zNavigateTo();
 
       DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopZimbraAccountItem(
-            ZimbraAccount.AccountZWC().EmailAddress,
-            ZimbraAccount.AccountZWC().Password,
+            emailAddress,
+            password,
             port,
             ssl);
 
