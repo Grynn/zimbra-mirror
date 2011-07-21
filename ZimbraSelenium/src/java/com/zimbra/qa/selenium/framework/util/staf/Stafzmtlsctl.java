@@ -27,6 +27,8 @@ public class Stafzmtlsctl extends StafServicePROCESS {
 
       execute("zmtlsctl " + setting);
       execute("zmmailboxdctl restart");
+      Stafpostqueue stafpostqueue = new Stafpostqueue();
+      stafpostqueue.waitForPostqueue();
    }
 
    public boolean execute(String command) throws HarnessException {
