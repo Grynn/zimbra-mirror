@@ -3,6 +3,7 @@ package com.zimbra.qa.selenium.projects.desktop.tests.accounts;
 import java.util.List;
 
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.DesktopAccountItem;
@@ -25,6 +26,13 @@ import com.zimbra.qa.selenium.projects.desktop.ui.accounts.PageAddNewAccount.DRO
 
 public class CreateAccount extends AjaxCommonTest {
 
+   private boolean _sslIsModified = false;
+
+   @BeforeMethod
+   public void setup() {
+      _sslIsModified = false;
+   }
+
    public CreateAccount() {
       logger.info("New " + CreateAccount.class.getCanonicalName());
 
@@ -32,7 +40,26 @@ public class CreateAccount extends AjaxCommonTest {
       super.startingAccountPreferences = null;
    }
 
-   @Test(description="Create New Single Account (Zimbra) - Non SSL", groups = { "sanity" })
+   @Test(description="Create New Single Account (Zimbra) - Non SSL", groups = { "sanity1" })
+   public void CreateSingleZimbraAccountSSL() throws HarnessException{
+      Stafzmtlsctl stafzmtlsctl = new Stafzmtlsctl();
+      stafzmtlsctl.setServerAccess(SERVER_ACCESS.BOTH);
+      _sslIsModified = true;
+
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddZimbraAccountThruUI(true,
+            "443");
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message, "Account added: " + desktopAccountItem.accountName, "Verify Account added message");
+
+      app.zPageLogin.zLogin(new ZimbraAccount(desktopAccountItem.emailAddress,
+            desktopAccountItem.password));
+      List<FolderItem> folders = app.zTreeMail.zListGetFolders();
+      ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account's email address is greater than 0.");
+
+   }
+
+   @Test(description="Create New Single Account (Zimbra) - Non SSL", groups = { "sanity1" })
    public void CreateSingleZimbraAccountNonSSL() throws HarnessException {
 
       DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddZimbraAccountThruUI();
@@ -40,7 +67,8 @@ public class CreateAccount extends AjaxCommonTest {
       String message = app.zPageLogin.zGetMessage();
       ZAssert.assertStringContains(message, "Account added: " + desktopAccountItem.accountName, "Verify Account added message");
 
-      app.zPageLogin.zLogin(ZimbraAccount.AccountZWC());
+      app.zPageLogin.zLogin(new ZimbraAccount(desktopAccountItem.emailAddress,
+            desktopAccountItem.password));
       List<FolderItem> folders = app.zTreeMail.zListGetFolders();
       ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account's email address is greater than 0.");
    }
@@ -135,12 +163,12 @@ public class CreateAccount extends AjaxCommonTest {
             "Added account message is displayed");
    }
 
-   @Test(description="Wrong email address format (alphabet characters) when creating IMAP Account", groups = { "functional2" } )
+   @Test(description="Wrong email address format (alphabet characters) when creating IMAP Account", groups = { "functional" } )
    public void wrongEmailAddressFormatImapAccount1() throws HarnessException {
       String wrongEmailAddress = ZimbraSeleniumProperties.getUniqueString();
       DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
             wrongEmailAddress,
-            wrongEmailAddress,
+            AjaxCommonTest.gmailUserName,
             AjaxCommonTest.gmailPassword,
             AjaxCommonTest.gmailImapReceivingServer,
             SECURITY_TYPE.SSL,
@@ -148,7 +176,7 @@ public class CreateAccount extends AjaxCommonTest {
             AjaxCommonTest.hotmailPopSmtpServer,
             false,
             "25",
-            wrongEmailAddress,
+            AjaxCommonTest.gmailUserName,
             AjaxCommonTest.gmailPassword);
 
       FormAddImapAccount accountForm = (FormAddImapAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.IMAP);
@@ -172,12 +200,12 @@ public class CreateAccount extends AjaxCommonTest {
             "Added account message is displayed");
    }
 
-   @Test(description="Wrong email address format (alphabet characters and '@') when creating IMAP Account", groups = { "functional2" } )
+   @Test(description="Wrong email address format (alphabet characters and '@') when creating IMAP Account", groups = { "functional" } )
    public void wrongEmailAddressFormatImapAccount2() throws HarnessException {
       String wrongEmailAddress = ZimbraSeleniumProperties.getUniqueString() + "@";
       DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
             wrongEmailAddress,
-            wrongEmailAddress,
+            AjaxCommonTest.gmailUserName,
             AjaxCommonTest.gmailPassword,
             AjaxCommonTest.gmailImapReceivingServer,
             SECURITY_TYPE.SSL,
@@ -185,7 +213,7 @@ public class CreateAccount extends AjaxCommonTest {
             AjaxCommonTest.hotmailPopSmtpServer,
             false,
             "25",
-            wrongEmailAddress,
+            AjaxCommonTest.gmailUserName,
             AjaxCommonTest.gmailPassword);
 
       FormAddImapAccount accountForm = (FormAddImapAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.IMAP);
@@ -482,14 +510,13 @@ public class CreateAccount extends AjaxCommonTest {
             "Added account message is displayed");
    }
 
-   //@Test(description="Wrong password when creating Yahoo Account", groups = { "functional2" })
-   public void testing() throws HarnessException{
-      Stafzmtlsctl test = new Stafzmtlsctl();
-      test.setServerAccess(SERVER_ACCESS.BOTH);
-   }
-
    @AfterMethod(alwaysRun=true)
    public void cleanUp() throws HarnessException {
+      if (_sslIsModified) {
+         Stafzmtlsctl stafzmtlsctl = new Stafzmtlsctl();
+         stafzmtlsctl.setServerAccess(SERVER_ACCESS.HTTP);
+      }
+
       ZimbraAccount.ResetAccountZWC();
       app.zPageLogin.zNavigateTo();
    }

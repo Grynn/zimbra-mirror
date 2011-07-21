@@ -25,6 +25,7 @@ public class PageAddNewAccount extends AbsTab{
       public static final String zMicrosoftExchangeIMAPOption = zAccountDropDown + " option[value='MSE']";
       public static final String zIMAPOption = zAccountDropDown + " option[value='Imap']";
       public static final String zPopOption = zAccountDropDown + " option[value='Pop']";
+      public static final String zDisplayedMessage = "css=div[id='message']";
    }
 
    public enum DROP_DOWN_OPTION {
@@ -191,24 +192,65 @@ public class PageAddNewAccount extends AbsTab{
    }
 
    /**
-    * Adding Zimbra Account through UI Interaction
+    * Adding Zimbra Account through UI Interaction with the default SSL disabled and server port
     * @return DestkopAccountItem of added Zimbra account
     * @throws HarnessException
     */
    public DesktopAccountItem zAddZimbraAccountThruUI() throws HarnessException {
+      return zAddZimbraAccountThruUI(false,
+            ZimbraSeleniumProperties.getStringProperty("server.port", "80"));
+   }
+
+   /**
+    * Adding Zimbra Account through UI Interaction
+    * @param ssl SSL is enabled?
+    * @param port Port Number to connect
+    * @return DestkopAccountItem of added Zimbra account
+    * @throws HarnessException
+    */
+   public DesktopAccountItem zAddZimbraAccountThruUI(boolean ssl, String port) throws HarnessException {
       zNavigateTo();
 
       DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopZimbraAccountItem(
             ZimbraAccount.AccountZWC().EmailAddress,
             ZimbraAccount.AccountZWC().Password,
-            ZimbraSeleniumProperties.getStringProperty("server.port", "80"),
-            false);
+            port,
+            ssl);
 
       FormAddZimbraAccount accountForm = (FormAddZimbraAccount)((AppAjaxClient)MyApplication).
             zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.ZIMBRA);
       accountForm.zFill(desktopAccountItem);
-      accountForm.zSubmit();
+      accountForm.zSubmit(ssl);
 
       return desktopAccountItem;
    }
+
+   public String zGetMessage() throws HarnessException {
+      return zGetMessage(false);
+   }
+
+   public String zGetMessage(boolean negativeTest) throws HarnessException {
+      if (negativeTest) {
+         GeneralUtility.waitForElementPresent(this, Locators.zDisplayedMessage, 60000);
+      } else {
+         GeneralUtility.waitForElementPresent(this, Locators.zDisplayedMessage);
+      }
+
+      return sGetText(Locators.zDisplayedMessage);
+   }
+
+   /**
+    * To see the message contains specified substring message
+    * @param substring Substring message to be looked in the message
+    * @return true if the message contains specified substring message, otherwise false
+    */
+   public boolean zMessageContains(String substring) {
+      try {
+      String message = sGetText(Locators.zDisplayedMessage);
+      return message.contains(substring);
+      } catch (Exception e) {
+         return false;
+      }
+   }
+
 }
