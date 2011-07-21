@@ -343,6 +343,8 @@ INPUT[disabled='disabled'] {
 .ZError {
 	background-color: #ffefef;
 	border: 1px solid #ffd5d4;
+	word-wrap: break-word;
+	max-width: 543px
 }
 
 .ZWarning {
