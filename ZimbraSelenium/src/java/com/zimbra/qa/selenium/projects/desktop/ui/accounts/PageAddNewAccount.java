@@ -193,8 +193,8 @@ public class PageAddNewAccount extends AbsTab{
    }
 
    /**
-    * Adding Imap Account through UI Interaction
-    * @return DestkopAccountItem of added Gmail account
+    * Adding IMAP Account through UI Interaction
+    * @return DestkopAccountItem of added IMAP account
     * @throws HarnessException
     */
    public DesktopAccountItem zAddImapAccountThruUI() throws HarnessException {
@@ -215,6 +215,35 @@ public class PageAddNewAccount extends AbsTab{
 
       FormAddImapAccount accountForm = (FormAddImapAccount)((AppAjaxClient)MyApplication).
             zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.IMAP);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zSubmit();
+
+      return desktopAccountItem;
+   }
+
+   /**
+    * Adding POP Account through UI Interaction
+    * @return DestkopAccountItem of added POP account
+    * @throws HarnessException
+    */
+   public DesktopAccountItem zAddPopAccountThruUI() throws HarnessException {
+      zNavigateTo();
+
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopPopAccountItem(
+            AjaxCommonTest.hotmailUserName,
+            AjaxCommonTest.hotmailUserName,
+            AjaxCommonTest.hotmailPassword,
+            AjaxCommonTest.hotmailPopReceivingServer,
+            SECURITY_TYPE.SSL,
+            "995",
+            AjaxCommonTest.hotmailPopSmtpServer,
+            false,
+            "25",
+            AjaxCommonTest.hotmailUserName,
+            AjaxCommonTest.hotmailPassword);
+
+      FormAddPopAccount accountForm = (FormAddPopAccount)((AppAjaxClient)MyApplication).
+            zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.POP);
       accountForm.zFill(desktopAccountItem);
       accountForm.zSubmit();
 

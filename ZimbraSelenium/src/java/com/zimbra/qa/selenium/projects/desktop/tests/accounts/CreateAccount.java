@@ -171,6 +171,20 @@ public class CreateAccount extends AjaxCommonTest {
       ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account's email address is greater than 0.");
    }
 
+   @Test(description="Add POP account to ZD client", groups = { "private" })
+   public void addPopAccount() throws HarnessException {
+
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddPopAccountThruUI();
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message, "Account added: " + desktopAccountItem.accountName, "Verify Account added message");
+
+      app.zPageLogin.zLogin(new ZimbraAccount(desktopAccountItem.emailAddress,
+            desktopAccountItem.password));
+      List<FolderItem> folders = app.zTreeMail.zListGetFolders();
+      ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account's email address is greater than 0.");
+   }
+
    @Test(description="Wrong email address format (alphabet characters only) when creating Zimbra Account", groups = { "functional" } )
    public void wrongEmailAddressFormatZimbraAccount1() throws HarnessException {
 
@@ -316,7 +330,7 @@ public class CreateAccount extends AjaxCommonTest {
             AjaxCommonTest.hotmailPassword,
             AjaxCommonTest.hotmailPopReceivingServer,
             SECURITY_TYPE.SSL,
-            "993",
+            "995",
             AjaxCommonTest.hotmailPopSmtpServer,
             false,
             "25",
@@ -353,7 +367,7 @@ public class CreateAccount extends AjaxCommonTest {
             AjaxCommonTest.hotmailPassword,
             AjaxCommonTest.hotmailPopReceivingServer,
             SECURITY_TYPE.SSL,
-            "993",
+            "995",
             AjaxCommonTest.hotmailPopSmtpServer,
             false,
             "25",

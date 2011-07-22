@@ -90,6 +90,8 @@ public class AjaxCommonTest {
 	public final static String gmailPassword = ZimbraSeleniumProperties.getStringProperty("desktop.gmail.password");
 	public final static String hotmailUserName = ZimbraSeleniumProperties.getStringProperty("desktop.hotmail.login");
 	public final static String hotmailPassword = ZimbraSeleniumProperties.getStringProperty("desktop.hotmail.password");
+	public final static String hotmailUserName2 = ZimbraSeleniumProperties.getStringProperty("desktop.hotmail2.login");
+	public final static String hotmailPassword2 = ZimbraSeleniumProperties.getStringProperty("desktop.hotmail2.password");
 	public final static String gmailImapReceivingServer = "imap.gmail.com";
 	public final static String gmailImapSmtpServer = "smtp.gmail.com";
 	public final static String hotmailPopReceivingServer = "pop3.live.com";

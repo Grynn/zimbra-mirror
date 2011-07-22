@@ -868,6 +868,8 @@ public class PageMail extends AbsTab {
 	      if (found) {
 	         break;
 	      }
+
+	      count = this.sGetXpathCount(listLocator + rowLocator);
 	   }
 	   
 	}

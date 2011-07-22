@@ -369,6 +369,8 @@ public class TreeMail extends AbsTree {
 			throw new HarnessException("locator is null for action "+ action);
 
 
+		GeneralUtility.waitForElementPresent(this, locator);
+
 		// Default behavior.  Click the locator
 		zClick(locator);
 
