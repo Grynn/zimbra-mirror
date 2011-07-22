@@ -14,7 +14,17 @@ namespace ZimbraMigrationConsole
     {
         static void Main(string[] args)
         {
-            if (args.Count() == 2)
+
+           Migration Test = new Migration();
+
+            Test.test();
+
+          //  Test.MigrationClient();
+
+
+
+
+          /*  if (args.Count() == 2)
             {
                 string ConfigXmlFile = args[0];
                 string UserMapFile = args[1];
@@ -50,10 +60,10 @@ namespace ZimbraMigrationConsole
                                     System.Console.WriteLine("......... \n");
                                     System.Console.WriteLine();
                                     Thread.Sleep(2000);
-                                    return;
+                                    //return;
                                 }
 
-                                userAcct.InitializeMigration(myXmlConfig.ConfigObj.zimbraServer.HostName, myXmlConfig.ConfigObj.zimbraServer.Port, myXmlConfig.ConfigObj.zimbraServer.AdminAccount);
+                                userAcct.InitializeMigration(myXmlConfig.ConfigObj.zimbraServer.HostName, myXmlConfig.ConfigObj.zimbraServer.Port, myXmlConfig.ConfigObj.zimbraServer.AdminAccount,user);
 
 
                                 string acctName = user.UserName + '@' + myXmlConfig.ConfigObj.UserProvision.Domain;
@@ -67,7 +77,7 @@ namespace ZimbraMigrationConsole
                                     System.Console.WriteLine();
 
                                     userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
-                                    Thread.Sleep(9000);
+                                    Thread.Sleep(15000);
                                 }
                                 else
                                 {
@@ -110,6 +120,7 @@ namespace ZimbraMigrationConsole
 
 
                                 }
+                               
                                 string final = user.StatusMessage;
                             }
                         }
@@ -130,7 +141,7 @@ namespace ZimbraMigrationConsole
                     }
                 //Thread.Sleep(18000);
 
-
+                
 
             }
 
@@ -141,7 +152,7 @@ namespace ZimbraMigrationConsole
                 ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red, " Make sure the correct arguments (2) are passed \n");
                 System.Console.WriteLine();
             }
-
+            */
 
         }
         }

@@ -87,6 +87,8 @@ namespace CssLib
         {
 
             MailWrapper.ImportMailOptions(MailOptions);
+
+            
            
                    
            
@@ -105,6 +107,80 @@ namespace CssLib
             string[] s = (string[])var;
 
             return s;
+
+
+
+        }
+
+
+        public void  StartMigration(MigrationAccount Acct)
+        {
+            //Acct.Accountname = "testing";
+            Acct.TotalNoContacts = 100;
+            Acct.TotalNoMails = 1000;
+            Acct.TotalNoRules = 10;
+             Acct.TotalNoItems = 1110;
+             long count = 0;
+
+             Acct.migrationFolders[0].FolderName = "Contacts";
+             Acct.migrationFolders[0].TotalCountOFItems = 100;
+             Acct.migrationFolders[0].CurrentCountOFItems = 0;
+
+            while (count < 100)
+            {
+
+               
+
+                System.Threading.Thread.Sleep(2000);
+                Acct.migrationFolders[0].CurrentCountOFItems = Acct.migrationFolders[0].CurrentCountOFItems + 20;
+                count = count + 20;
+
+            }
+
+            Acct.migrationFolders[0].FolderName = "Mails";
+            Acct.migrationFolders[0].TotalCountOFItems = 1000;
+            Acct.migrationFolders[0].CurrentCountOFItems = 0;
+            while ((count >= 100) & (count < 1100))
+            {
+
+               
+
+                System.Threading.Thread.Sleep(2000);
+                Acct.migrationFolders[0].CurrentCountOFItems = Acct.migrationFolders[0].CurrentCountOFItems + 100;
+                count = count + 100;
+
+            }
+            Acct.migrationFolders[0].FolderName = "Rules";
+            Acct.migrationFolders[0].TotalCountOFItems = 10;
+            Acct.migrationFolders[0].CurrentCountOFItems = 0;
+
+            while (count == 1100)
+            {
+
+                
+                System.Threading.Thread.Sleep(2000);
+                Acct.migrationFolders[0].CurrentCountOFItems = Acct.migrationFolders[0].CurrentCountOFItems + 10;
+                count = count + 10;
+
+
+            }
+
+        /*   foreach (MigrationFolder mt in Acct.migrationFolders)
+           {
+
+               
+              mt.FolderName = "Contactsxx";
+              mt.TotalCountOFItems= 100;
+              mt.CurrentCountOFItems = 0;
+               //Acct.migrationFolders.Insert(i,temp);
+           }
+
+
+
+           System.Threading.Thread.Sleep(6000);
+           Acct.migrationFolders[0].CurrentCountOFItems = 30;*/
+
+           
 
 
 

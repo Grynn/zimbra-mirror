@@ -87,6 +87,7 @@
     <Compile Include="Account.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Migration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="progressutil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
