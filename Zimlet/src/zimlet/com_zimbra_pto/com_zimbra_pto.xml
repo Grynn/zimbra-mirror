@@ -1,0 +1,8 @@
+<zimlet name="com_zimbra_pto" version="0.1" label="${msg.label}" description="${msg.description}" >
+	<include>pto.js</include>
+	<includeCSS>pto.css</includeCSS>
+	<handlerObject>ZmPTOZimlet</handlerObject>
+	<zimletPanelItem label="${msg.label}" icon="pto-panelIcon">
+		<toolTipText>${msg.description}</toolTipText>
+	</zimletPanelItem>
+</zimlet>
