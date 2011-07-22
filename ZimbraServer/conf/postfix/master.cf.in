@@ -95,7 +95,7 @@ smtp-amavis unix -      -       n       -       10  smtp
 	-o smtpd_delay_reject=no
 	-o smtpd_client_restrictions=permit_mynetworks,reject
 	-o smtpd_helo_restrictions=
-  -o smtpd_milters=
+	-o smtpd_milters=
 	-o smtpd_sender_restrictions=
 	-o smtpd_recipient_restrictions=permit_mynetworks,reject
 	-o mynetworks_style=host
@@ -107,3 +107,4 @@ smtp-amavis unix -      -       n       -       10  smtp
 	-o smtpd_client_connection_count_limit=0
 	-o smtpd_client_connection_rate_limit=0
 	-o receive_override_options=no_header_body_checks,no_unknown_recipient_checks,no_address_mappings
+	-o local_header_rewrite_clients=
