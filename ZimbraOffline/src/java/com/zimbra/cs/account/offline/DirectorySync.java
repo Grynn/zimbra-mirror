@@ -28,6 +28,7 @@ import java.util.UUID;
 import com.zimbra.common.account.Key;
 import com.zimbra.common.account.Key.IdentityBy;
 import com.zimbra.common.account.Key.SignatureBy;
+import com.zimbra.common.account.SignatureUtil;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.Element;
@@ -738,7 +739,7 @@ public class DirectorySync {
         scrubAttributes(attrs, acct);
         String sigHtml = signature.getAttr(Provisioning.A_zimbraPrefMailSignatureHTML, null);
         String sigType = (sigHtml == null || sigHtml.length() == 0) ? "text/plain" : "text/html";
-        ZSignature zsig = new ZSignature(signature.getId(), signature.getName(), signature.getAttr(Signature.mimeTypeToAttrName(sigType)), sigType);
+        ZSignature zsig = new ZSignature(signature.getId(), signature.getName(), signature.getAttr(SignatureUtil.mimeTypeToAttrName(sigType)), sigType);
 
         // create or modify the signature, as requested
         if (isLocallyCreated(signature)) {
