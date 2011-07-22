@@ -8,7 +8,9 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogError;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogRenameFolder;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogError.DialogErrorID;
 
 
 public class RenameFolder extends AjaxCommonTest {
@@ -67,6 +69,45 @@ public class RenameFolder extends AjaxCommonTest {
 	}
 
 	
+	@Test(	description = "Rename a folder - set to an invalid name with ':'",
+			groups = { "functional" })
+	public void RenameFolder_02() throws HarnessException {
+		
+		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
+		ZAssert.assertNotNull(inbox, "Verify the inbox is available");
+				
+		// Create the subfolder
+		String name1 = "folder" + ZimbraSeleniumProperties.getUniqueString();
+		
+		app.zGetActiveAccount().soapSend(
+				"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+                	"<folder name='"+ name1 +"' l='"+ inbox.getId() +"'/>" +
+                "</CreateFolderRequest>");
+
+		FolderItem subfolder1 = FolderItem.importFromSOAP(app.zGetActiveAccount(), name1);
+		ZAssert.assertNotNull(subfolder1, "Verify the subfolder is available");
+		
+		
+		// Click on Get Mail to refresh the folder list
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Rename the folder using context menu
+		DialogRenameFolder dialog = (DialogRenameFolder)app.zTreeMail.zTreeItem(Action.A_RIGHTCLICK, Button.B_RENAME, subfolder1);
+		ZAssert.assertNotNull(dialog, "Verify the dialog opened");
+		
+		// Set the name, click OK
+		String name2 = "folder:folder" + ZimbraSeleniumProperties.getUniqueString();
+		dialog.zSetNewName(name2);
+		dialog.zClickButton(Button.B_OK);
+
+		DialogError error = app.zPageMain.zGetErrorDialog(DialogErrorID.InvalidFolderName);
+		ZAssert.assertTrue(error.zIsActive(), "Verify the error dialog appears");
+		
+		error.zClickButton(Button.B_OK);
+		
+		
+	}
+
 
 
 }
