@@ -3,10 +3,13 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments;
 import java.util.Calendar;
 
 import org.testng.annotations.Test;
+
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
-import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZDate;
+import com.zimbra.qa.selenium.framework.util.ZTimeZone;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 
@@ -29,7 +32,7 @@ public class ModifyAppointment extends AjaxCommonTest {
 		// Creating object for appointment data
 		AppointmentItem appt = new AppointmentItem();
 		String tz, apptSubject, apptBody, editApptSubject, editApptBody;
-		tz = ZDate.TimeZoneEST.getID();
+		tz = ZTimeZone.TimeZoneEST.getID();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
 		apptBody = ZimbraSeleniumProperties.getUniqueString();
 		editApptSubject = ZimbraSeleniumProperties.getUniqueString();

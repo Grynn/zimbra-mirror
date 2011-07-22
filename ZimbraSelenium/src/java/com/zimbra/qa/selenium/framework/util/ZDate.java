@@ -10,13 +10,6 @@ import com.zimbra.common.soap.Element;
 public class ZDate {
 	Logger logger = LogManager.getLogger(ZDate.class);
 
-	public static final TimeZone TimeZoneUTC = TimeZone.getTimeZone("UTC");
-	public static final TimeZone TimeZoneHST = TimeZone.getTimeZone("Pacific/Honolulu");
-	public static final TimeZone TimeZoneAKST = TimeZone.getTimeZone("America/Juneau");
-	public static final TimeZone TimeZonePST = TimeZone.getTimeZone("America/Los_Angeles");
-	public static final TimeZone TimeZoneMST = TimeZone.getTimeZone("America/Denver");
-	public static final TimeZone TimeZoneCST = TimeZone.getTimeZone("America/Chicago");
-	public static final TimeZone TimeZoneEST = TimeZone.getTimeZone("America/New_York");
 	
 	protected Calendar calendar = null;
 	
@@ -30,7 +23,7 @@ public class ZDate {
 	 * @param seconds, i.e. 0 through 59
 	 */
 	public ZDate(int year, int month, int monthday, int hour, int minutes, int seconds) {
-		this(year, month, monthday, hour, minutes, seconds, ZDate.TimeZoneUTC);
+		this(year, month, monthday, hour, minutes, seconds, ZTimeZone.TimeZoneUTC);
 	}
 	
 	/**
@@ -45,7 +38,7 @@ public class ZDate {
 	 * @throws HarnessException if the timezone cannot be found
 	 */
 	public ZDate(int year, int month, int monthday, int hour, int minutes, int seconds, String timezone) throws HarnessException {
-		this(year, month, monthday, hour, minutes, seconds, ZDate.getTimeZone(timezone));
+		this(year, month, monthday, hour, minutes, seconds, ZTimeZone.getTimeZone(timezone));
 	}
 	
 	/**
@@ -90,7 +83,7 @@ public class ZDate {
 		calendar = Calendar.getInstance();
 		
 		if ( (tz == null) || (tz.trim().length() == 0)) {
-			calendar = Calendar.getInstance(ZDate.TimeZoneUTC);
+			calendar = Calendar.getInstance(ZTimeZone.TimeZoneUTC);
 		} else {
 			calendar = Calendar.getInstance(TimeZone.getTimeZone(tz));
 		}
@@ -130,7 +123,7 @@ public class ZDate {
 		if ( timezone == null )
 			throw new HarnessException("TimeZone cannot be null");
 		
-		return (toTimeZone(ZDate.getTimeZone(timezone)));
+		return (toTimeZone(ZTimeZone.getTimeZone(timezone)));
 	}	
 
 	/**
@@ -169,6 +162,10 @@ public class ZDate {
 		return ( (t / 1000) * 1000); // strip any millisecond blah
 	}
 	
+	public TimeZone getTimeZone() {
+		return (calendar.getTimeZone());
+	}
+	
 	public String toYYYYMMDDTHHMMSSZ() throws HarnessException {
 		return (format("yyyyMMdd'T'HHmmss'Z'"));
 	}
@@ -201,7 +198,7 @@ public class ZDate {
 	}
 
 	public String toYYYYMMDDHHMMSSZ() throws HarnessException {
-		return (format("yyyyMMddHHmmss"));
+		return (format("yyyyMMddHHmmss'Z'"));
 	}
 
 	public String toMMM_dC_yyyy() throws HarnessException {
@@ -275,27 +272,6 @@ public class ZDate {
 		return (other);
 	}
 
-	/**
-	 * Convert a timezone string identifier to a TimeZone object
-	 * <p>
-	 * @param timezone
-	 * @return the TimeZone object
-	 * @throws HarnessException, if the timezone cannot be found
-	 */
-	public static TimeZone getTimeZone(String timezone) throws HarnessException {
-		if ( timezone == null )
-			throw new HarnessException("TimeZone string cannot be null");
-
-		for ( String t : TimeZone.getAvailableIDs() ) {
-			if ( t.equals(timezone) ) {
-				// Found it
-				return (TimeZone.getTimeZone(timezone));
-			}
-		}
-		
-		throw new HarnessException("Unable to determine the TimeZone from the string: "+ timezone);
-	}
-	
 
 	@Override
 	public String toString() {

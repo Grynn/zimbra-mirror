@@ -312,7 +312,7 @@ public class PageMail extends AbsTab {
 
 			// FALL THROUGH
 
-		} else if ( button == Button.B_GETMAIL || button == Button.B_LOADFEED ) {
+		} else if ( button == Button.B_GETMAIL || button == Button.B_LOADFEED || button == Button.B_REFRESH ) {
 
 			locator = "css=td#CHECK_MAIL_left_icon";
 			

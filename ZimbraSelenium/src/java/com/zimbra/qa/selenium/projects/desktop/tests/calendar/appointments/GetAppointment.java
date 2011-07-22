@@ -79,7 +79,7 @@ public class GetAppointment extends AjaxCommonTest {
 		ZDate endUTC   = new ZDate(2014, 1, 1, 14, 0, 0);
 		
 		// EST timezone string
-		String tz = ZDate.TimeZoneEST.getID();
+		String tz = ZTimeZone.TimeZoneEST.getID();
 
 		// Create a meeting request from AccountA to the test account
 		ZimbraAccount.AccountA().soapSend(
