@@ -25,9 +25,10 @@ public class Stafzmtlsctl extends StafServicePROCESS {
          break;
       }
 
-      execute("zmtlsctl " + setting);
-      execute("zmmailboxdctl restart");
       Stafpostqueue stafpostqueue = new Stafpostqueue();
+      execute("zmtlsctl " + setting);
+      stafpostqueue.waitForPostqueue();
+      execute("zmmailboxdctl restart");
       stafpostqueue.waitForPostqueue();
    }
 
