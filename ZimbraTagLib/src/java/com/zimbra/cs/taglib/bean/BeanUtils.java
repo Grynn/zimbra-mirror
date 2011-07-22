@@ -1589,7 +1589,7 @@ public class BeanUtils {
 	 * "Cooks" the input string. (Removes special characters that can be used to create xss attacks.)
 	 */
 	public static String cook(String in) {
-		return StringUtil.escapeHtml(in);
+		return StringUtil.escapeHtml(in).toLowerCase();
 	}
 
 	/**
