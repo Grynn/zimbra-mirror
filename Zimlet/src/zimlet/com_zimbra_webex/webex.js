@@ -690,7 +690,7 @@ WebExZimlet.prototype._getCreateOrModifyMeetingRequest = function(params) {
 	var requestBody = [
 		"<bodyContent xsi:type=\"",apiType,"\">",
 		pwdStr,
-		"<metaData><confName>", AjxStringUtil.xmlEncode(subject), "</confName>",
+		"<metaData><sessionTemplate><default>true</default></sessionTemplate><confName>", AjxStringUtil.xmlEncode(subject), "</confName>",
 		"<location>",loc,"</location></metaData>",
 		"<participants><attendees>", emls.join(""),altHostsEmls.join(""), "</attendees></participants>",
 		"<schedule>",
