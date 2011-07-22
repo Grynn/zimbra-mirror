@@ -178,6 +178,10 @@ if(lc($ldap_is_master) eq "true") {
     $bdn,
     replace=>{olcMirrorMode=>"TRUE"},
   );
+  $mesg = $ldap->modify(
+    $bdn,
+    delete=> {olcUpdateRef=>[]},
+  );
   setLocalConfig("ldap_is_master", "true");
 }
 
