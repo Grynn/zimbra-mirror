@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
 
+import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
@@ -25,6 +26,71 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		// Make sure we are using an account with conversation view
 		super.startingAccountPreferences = null;		
 		
+	}
+	
+	private ContactGroupItem CreateGroupOfGAL_ExistingContact_NewEmail() throws HarnessException {			
+		ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
+	
+		//open contact group form
+		FormContactGroupNew formGroup = (FormContactGroupNew)app.zPageAddressbook.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_CONTACTGROUP);
+	    
+		//fill in group name and email addresses
+		formGroup.zFill(group);
+	   
+	    //select GAL option
+		formGroup.select(app, FormContactGroupNew.Locators.zSearchDropdown,  FormContactGroupNew.SELECT_OPTION_TEXT_GAL);
+	
+		//find email from GAL
+		formGroup.sType(FormContactGroupNew.Locators.zFindField, ZimbraAccount.AccountB().EmailAddress);
+				
+		//click Find
+		formGroup.zClick(FormContactGroupNew.Locators.zSearchButton);
+	    app.zPageAddressbook.zWaitForBusyOverlay();		
+		
+		//add all to the email list
+		formGroup.zClick(FormContactGroupNew.Locators.zAddAllButton);
+		
+		//create contacts
+		ContactItem contact = ContactItem.createUsingSOAP(app);
+		
+		//select contacts option
+		formGroup.select(app, FormContactGroupNew.Locators.zSearchDropdown,  FormContactGroupNew.SELECT_OPTION_TEXT_CONTACTS);
+		
+		//find email from existing contacts
+		formGroup.sType(FormContactGroupNew.Locators.zFindField, contact.email);
+				
+		//click Find
+		formGroup.zClick(FormContactGroupNew.Locators.zSearchButton);
+	    app.zPageAddressbook.zWaitForBusyOverlay();		
+		
+		//add all to the email list
+		formGroup.zClick(FormContactGroupNew.Locators.zAddAllButton);
+		
+		//click Save
+		formGroup.zSubmit(); 
+	
+		//verify toasted message 'group created'  
+        String expectedMsg ="Group Created";
+        ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
+        		        expectedMsg , "Verify toast message '" + expectedMsg + "'");
+    
+	    
+        //verify group name is displayed		        
+		List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();
+		boolean isFileAsEqual=false;
+		for (ContactItem ci : contacts) {
+			if (ci.fileAs.equals(group.fileAs)) {
+	            isFileAsEqual = true;	
+				break;
+			}
+		}
+	
+		ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + group.fileAs + ") existed ");
+
+	    //verify location is System folder "Contacts"
+		ZAssert.assertEquals(app.zPageAddressbook.sGetText("css=td.companyFolder"), SystemFolder.Contacts.getName(), "Verify location (folder) is " + SystemFolder.Contacts.getName());
+
+		return group;
 	}
 	
 	private void Verification(ContactGroupItem group) throws HarnessException {
@@ -199,14 +265,14 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		CreateGroupVerification(simpleFormGroup, group);
 	}
 
-	@Test(	description = "D1 Enhancement : Create a contact group with one contact + one group",
-			groups = { "functionaly" })
+	@Test(	description = "D1 Enhancement : Create a contact group with 1 contact + 1 group",
+			groups = { "functional" })
 	public void CreateContactGroupWith1ContactAnd1Group() throws HarnessException {			
 		  // Create a contact via Soap
 		ContactItem contactItem = ContactItem.createUsingSOAP(app);			             
 		  			
-		// Create a contact group via Soap
-		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);
+		// Create a contact group 
+		ContactGroupItem group = CreateGroupOfGAL_ExistingContact_NewEmail();
 			             		
 
 		  // Refresh the view, to pick up the new contact + group
@@ -217,9 +283,9 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, contactItem.fileAs);
 	    app.zPageAddressbook.zListItem(Action.A_CHECKBOX, group.fileAs);
 	    
-	   				  			
+	
 		//open contact group form
-		SimpleFormContactGroupNew simpleFormGroup = (SimpleFormContactGroupNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_CONTACTGROUP, Button.O_NEW_CONTACTGROUP , contactItem.fileAs);     
+		SimpleFormContactGroupNew simpleFormGroup = (SimpleFormContactGroupNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_CONTACTGROUP, Button.O_NEW_CONTACTGROUP , group.fileAs);     
 		
 		  //Create contact group 
 		ContactGroupItem newGroup = new ContactGroupItem("group_" + ZimbraSeleniumProperties.getUniqueString().substring(8));
@@ -235,13 +301,13 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 	
 
 	@Test(	description = "D1 Enhancement : Add 1 contact + 1 group to an existing group",
-			groups = { "functionaly" })
+			groups = { "functional" })
 	public void Add1ContactAnd1GroupToExistingGroup() throws HarnessException {			
 		// Create a contact group via Soap
 		ContactGroupItem group = ContactGroupItem.createUsingSOAP(app);			             
 	
-		// Create a contact group via Soap
-		ContactGroupItem group1 = ContactGroupItem.createUsingSOAP(app);			             		
+		// Create a contact group 
+		ContactGroupItem group1 = CreateGroupOfGAL_ExistingContact_NewEmail();
 	
 		//refresh the browser
 		app.zPageAddressbook.zRefresh();
@@ -263,8 +329,6 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		//select the contact group 
 		app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_CONTACTGROUP, group, group1.fileAs);     
 		
-
-		app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group1.fileAs);
 	   	
 		//verify toasted message 'group saved'  
         String expectedMsg ="Group Saved";

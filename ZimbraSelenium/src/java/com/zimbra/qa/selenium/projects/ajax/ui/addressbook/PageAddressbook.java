@@ -714,8 +714,7 @@ public class PageAddressbook extends AbsTab {
 			ContextMenuItem cmi=null;
 		    ContextMenuItem sub_cmi = null;
 		
-		    zRightClick(getContactLocator(contact));
-		    //zRightClickAt(getContactLocator(contact),"0,0");
+		    zRightClickAt(getContactLocator(contact),"0,0");
 		      
 		    
 			if (option == Button.B_TAG) {
