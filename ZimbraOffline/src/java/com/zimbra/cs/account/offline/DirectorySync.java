@@ -14,6 +14,7 @@
  */
 package com.zimbra.cs.account.offline;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -56,6 +57,8 @@ import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZSignature;
 import com.zimbra.cs.zimlet.ZimletUserProperties;
+import com.zimbra.soap.account.message.ModifyPropertiesRequest;
+import com.zimbra.soap.account.type.Prop;
 
 public class DirectorySync {
 
@@ -661,7 +664,10 @@ public class DirectorySync {
             Set<String> zimletModified = localAcct.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
             if (zimletModified.contains(Provisioning.A_zimbraZimletUserProperties)) {
                 OfflineLog.offline.info("Pushing zimlet properties to remote account "+acct.getName());
-                zmbx.modifyProperties(ZimletUserProperties.getProperties(localAcct));
+                ZimletUserProperties zimletProps = ZimletUserProperties.getProperties(localAcct);
+                ModifyPropertiesRequest req = new ModifyPropertiesRequest();
+                req.setProps(new ArrayList<Prop>(zimletProps.getAllProperties()));
+                zmbx.invokeJaxb(req);
             }
             //other attrs are never synced for local acct; so it's clean no matter what
             prov.markAccountClean(localAcct);
