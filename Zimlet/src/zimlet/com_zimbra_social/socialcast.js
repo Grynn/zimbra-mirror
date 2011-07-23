@@ -71,10 +71,9 @@ com_zimbra_socialcast.prototype.getMessages = function(tableId, account, streamI
 	}
 	var hdrs = new Array();
 	hdrs["Authorization"] = authHeader;
-	//hdrs["content-type"] = "application/x-www-form-urlencoded";
-	//hdrs["content-length"] = data.length;
+
 	var feedUrl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
-	AjxRpc.invoke(data, feedUrl, hdrs, new AjxCallback(this,
+	AjxRpc.invoke(null, feedUrl, hdrs, new AjxCallback(this,
 			this._handleGetMessages, tableId), true);
 };
 
@@ -91,7 +90,7 @@ com_zimbra_socialcast.prototype.showUserProfile = function (params) {
 	hdrs["Authorization"] = authHeader;
 
 	var feedUrl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
-	AjxRpc.invoke(data, feedUrl, hdrs, new AjxCallback(this,
+	AjxRpc.invoke(null, feedUrl, hdrs, new AjxCallback(this,
 			this._handleShowUserProfile, params), true);
 };
 
@@ -113,10 +112,8 @@ com_zimbra_socialcast.prototype.setSocialcastStreams = function(params) {
 	var url = [ "https://", account.s, "/api/streams.json"].join("");
 	var hdrs = new Array();
 	hdrs["Authorization"] = authHeader;
-	//hdrs["content-type"] = "application/x-www-form-urlencoded";
-	//hdrs["content-length"] = data.length;
 	var feedUrl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
-	AjxRpc.invoke(data, feedUrl, hdrs, new AjxCallback(this,
+	AjxRpc.invoke(null, feedUrl, hdrs, new AjxCallback(this,
 			this._handleSetSocialcastStreams, params), true);
 };
 
@@ -150,10 +147,8 @@ com_zimbra_socialcast.prototype.setGroupMemberships = function(params) {
 	var url = [ "https://", account.s, "/api/group_memberships.json"].join("");
 	var hdrs = new Array();
 	hdrs["Authorization"] = authHeader;
-	//hdrs["content-type"] = "application/x-www-form-urlencoded";
-	//hdrs["content-length"] = data.length;
 	var feedUrl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
-	AjxRpc.invoke(data, feedUrl, hdrs, new AjxCallback(this,
+	AjxRpc.invoke(null, feedUrl, hdrs, new AjxCallback(this,
 			this._handleGetGroupMemberships, params), true);
 };
 
@@ -423,8 +418,6 @@ com_zimbra_socialcast.prototype.showGroupsMenu = function(account, ev) {
 	}
 	var icon = "social_socialcastIcon";
 	var menu = new ZmActionMenu({parent:DwtShell.getShell(window), menuItems:ZmOperation.NONE});
-	//var params = {image:data.icon, text:this.process(data.label),disImage:data.disabledIcon};
-	//var item = menu.createMenuItem(data.id, params);
 	var groupId = this.zimlet.getUserProperty(accEmail + "_selectedGroupId");
 	if (!groupId) {
 		groupId = "";

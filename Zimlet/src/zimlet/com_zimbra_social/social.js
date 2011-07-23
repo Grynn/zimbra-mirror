@@ -3161,7 +3161,7 @@ SocialZimlet.prototype._handleAddCommentField = function(params, ev) {
 	this._handleFieldFocusBlur(field, message, ev);
 
 	var event = ev || window.event;
-	if (event.type == "blur" && field.value == "" || field.value == this.getMessage("writeAComment")) {
+	if (event && event.type == "blur" && field.value == "" || field.value == this.getMessage("writeAComment")) {
 		document.getElementById(params.commentBoxId).style.display = "none";
 	}
 };
@@ -3172,7 +3172,7 @@ SocialZimlet.prototype._handleFieldFocusBlur = function(field, message, ev) {
 		field.value = "";
 		field.style.color = "black";
 	}
-	if (event.type == "blur" && field.value == "" || field.value == message) {
+	if (event && event.type == "blur" && field.value == "" || field.value == message) {
 		field.value = message;
 		field.style.color = "gray";
 	}
@@ -3184,6 +3184,12 @@ SocialZimlet.prototype.addReplyText = function(val) {
 	statusField.value = val + " ";//allow a space
 	statusField.focus();
 	this.showNumberOfLetters();
+	this.setFieldFocused(statusField);
+};
+
+SocialZimlet.prototype.setFieldFocused = function(field) {
+	field.focus();
+	field.style.color = "black";
 };
 
 SocialZimlet.prototype.getAllAccountsAsString = function() {
