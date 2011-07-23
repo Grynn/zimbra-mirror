@@ -40,13 +40,15 @@ ZaDomainCertUpload.getUploadFormHtml = function() {
 	var uri = appContextPath + "/../service/upload?fmt=extended";
 	var html = [];
 	var idx = 0;
+    var width = '210';
+    if(AjxEnv.isIE) width = '150';
 	html[idx++] = "<div><form method='POST' action='";
 	html[idx++] = uri;
 	html[idx++] = "' id='";
 	html[idx++] = ZaDomainCertUpload.uploadCertFormId;
 	html[idx++] = "' enctype='multipart/form-data'>" ;
 	html[idx++] = "<div><table border=0 cellspacing=0 cellpadding=2 style='table-layout: fixed;'> " ;
-	html[idx++] = "<colgroup><col width=210/><col width='*' /><col width=50 /></colgroup>";
+	html[idx++] = "<colgroup><col width=" + width + "/><col width='*' /><col width=50 /></colgroup>";
 
 	html[idx++] = "<tbody><tr><td>" + ZaMsg.NAD_DomainSSLCertificate + ":</td>";
 	html[idx++] = "<td><input type=file  name='certFile' size='40'></input></td><td></td></tr>";
