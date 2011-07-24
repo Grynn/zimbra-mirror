@@ -768,6 +768,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
                                                 {ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.MSG_LabelListName, label: ZaMsg.LBL_LabelListName,
                                                         forceUpdate:true, tableCssStyle: "width:100%", inputWidth:"100", domainPartWidth:"100%", 
                                                                 id:"dl_name_field", nameContainerCss: "width:100px", domainContainerWidth: "100%",
+								midContainerCss: "width:20px",
                                                                 visibilityChecks:[],
                                                                 enableDisableChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.RENAME_DL_RIGHT]]
                                                         },
@@ -940,6 +941,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 				    		{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.MSG_LabelListName, label: ZaMsg.LBL_LabelListName, 
 				    			forceUpdate:true, tableCssStyle: "width:100%", inputWidth:"100",domainPartWidth:"100%",
 								id:"dl_name_field", nameContainerCss: "width:100px", domainContainerWidth:"100%",
+							midContainerCss: "width:20px",
 								                                                                                                                              visibilityChecks:[],
 								enableDisableChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.RENAME_DL_RIGHT]]
 							},
