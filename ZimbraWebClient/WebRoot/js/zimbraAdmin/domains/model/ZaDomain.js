@@ -249,6 +249,32 @@ ZaDomain.A_zimbraReverseProxyClientCertMode = "zimbraReverseProxyClientCertMode"
 ZaDomain.A_zimbraMailSSLClientCertPrincipalMap = "zimbraMailSSLClientCertPrincipalMap";
 ZaDomain.A_zimbraReverseProxyClientCertCA = "zimbraReverseProxyClientCertCA";
 
+// Provision
+ZaDomain.A_zimbraAutoProvMode = "zimbraAutoProvMode";
+ZaDomain.A_zimbraAutoProvAuthMech = "zimbraAutoProvAuthMech";
+ZaDomain.A_zimbraAutoProvLdapURL = "zimbraAutoProvLdapURL";
+ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled = "zimbraAutoProvLdapStartTlsEnabled";
+ZaDomain.A_zimbraAutoProvLdapAdminBindDn = "zimbraAutoProvLdapAdminBindDn";
+ZaDomain.A_zimbraAutoProvLdapAdminBindPassword = "zimbraAutoProvLdapAdminBindPassword";
+ZaDomain.A_zimbraAutoProvLdapSearchBase = "zimbraAutoProvLdapSearchBase";
+ZaDomain.A_zimbraAutoProvLdapSearchFilter = "zimbraAutoProvLdapSearchFilter";
+ZaDomain.A_zimbraAutoProvLdapBindDn = "zimbraAutoProvLdapBindDn";
+ZaDomain.A_zimbraAutoProvAccountNameMap = "zimbraAutoProvAccountNameMap";
+ZaDomain.A_zimbraAutoProvAttrMap = "zimbraAutoProvAttrMap";
+ZaDomain.A_zimbraAutoProvNotificationFromAddress = "zimbraAutoProvNotificationFromAddress";
+ZaDomain.A_zimbraAutoProvBatchSize = "zimbraAutoProvBatchSize";
+ZaDomain.A_zimbraAutoProvLastPolledTimestamp = "zimbraAutoProvLastPolledTimestamp";
+ZaDomain.A2_zimbraAutoProvModeEAGEREnabled = ZaDomain.A_zimbraAutoProvMode + "_EAGER";
+ZaDomain.A2_zimbraAutoProvModeLAZYEnabled = ZaDomain.A_zimbraAutoProvMode + "_LAZY";
+ZaDomain.A2_zimbraAutoProvModeMANUALEnabled = ZaDomain.A_zimbraAutoProvMode + "_MANUAL";
+ZaDomain.A2_zimbraAutoProvAuthMechLDAPEnabled = ZaDomain.A_zimbraAutoProvAuthMech + "_LDAP";
+ZaDomain.A2_zimbraAutoProvAuthMechPREAUTHEnabled = ZaDomain.A_zimbraAutoProvAuthMech + "_PREAUTH";
+ZaDomain.A2_zimbraAutoProvAuthMechKRB5Enabled = ZaDomain.A_zimbraAutoProvAuthMech + "_KRB5";
+ZaDomain.A2_zimbraAutoProvAuthMechSPNEGOEnabled = ZaDomain.A_zimbraAutoProvAuthMech + "_SPNEGO";
+ZaDomain.A2_zimbraAutoProvServerList = "zimbraAutoProvServerList";
+ZaDomain.A2_zimbraAutoProvSelectedServerList = "zimbraAutoProvSelectedDomainList";
+ZaDomain.A2_zimbraAutoProvPollingInterval = "zimbraAutoProvPollingInterval";
+
 //skin properties
 ZaDomain.A_zimbraSkinForegroundColor = "zimbraSkinForegroundColor" ;
 ZaDomain.A_zimbraSkinBackgroundColor = "zimbraSkinBackgroundColor" ;
@@ -829,6 +855,20 @@ ZaDomain.canConfigureGal = function (obj) {
 		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraGalSyncLdapBindDn,obj)
 		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraGalSyncLdapBindPassword,obj));
 }
+ZaDomain.canConfigureAutoProv = function (obj) {
+	return (ZaItem.hasRight(ZaDomain.A_zimbraAutoProvMode,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraAutoProvAuthMech,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraAutoProvLdapURL,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraAutoProvLdapAdminBindDn,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraAutoProvLdapAdminBindPassword,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraAutoProvLdapSearchBase,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraAutoProvLdapSearchFilter,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraAutoProvLdapBindDn,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraAutoProvAccountNameMap,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraAutoProvAttrMap,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraAutoProvNotificationFromAddress,obj)
+		&& ZaItem.hasWritePermission(ZaDomain.A_zimbraAutoProvBatchSize,obj));
+}
 
 ZaDomain.canConfigureWiki = function (obj) {
 	if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_ACCOUNT,obj) && ZaItem.hasWritePermission(ZaDomain.A_zimbraNotebookAccount,obj) && ZaItem.hasRight(ZaDomain.RIGHT_ADMIN_LOGIN_AS,obj))
@@ -1331,6 +1371,173 @@ function(tmpObj) {
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDomainResponse;	
 	this.initFromJS(resp.domain[0]);
+	ZaDomain.putDomainToCache(this);
+}
+
+ZaDomain.modifyAutoPovSettings = function(tmpObj) {
+	var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
+	soapDoc.setMethodAttribute("onerror", "stop");
+
+    // modify domain
+	var modifyDomainDoc = soapDoc.set("ModifyDomainRequest", null, null, ZaZimbraAdmin.URN);
+	soapDoc.set("id", this.id,modifyDomainDoc);
+    var attr;
+
+    if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvMode]) {
+        if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvMode] instanceof Array) {
+            var cnt =  tmpObj.attrs[ZaDomain.A_zimbraAutoProvMode].length;
+            for(var i = 0; i < cnt; i ++) {
+				attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvMode][i],modifyDomainDoc);
+				attr.setAttribute("n", ZaDomain.A_zimbraAutoProvMode);
+            }
+        } else {
+				attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvMode],modifyDomainDoc);
+				attr.setAttribute("n", ZaDomain.A_zimbraAutoProvMode);
+        }
+    }
+
+    if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvAuthMech]) {
+        if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvAuthMech] instanceof Array) {
+            var cnt =  tmpObj.attrs[ZaDomain.A_zimbraAutoProvAuthMech].length;
+            for(var i = 0; i < cnt; i ++) {
+				attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvAuthMech][i],modifyDomainDoc);
+				attr.setAttribute("n", ZaDomain.A_zimbraAutoProvAuthMech);
+            }
+        } else {
+				attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvAuthMech],modifyDomainDoc);
+				attr.setAttribute("n", ZaDomain.A_zimbraAutoProvAuthMech);
+        }
+    }
+    if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvAttrMap]) {
+        if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvAttrMap] instanceof Array) {
+            var cnt =  tmpObj.attrs[ZaDomain.A_zimbraAutoProvAttrMap].length;
+            for(var i = 0; i < cnt; i ++) {
+				attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvAttrMap][i],modifyDomainDoc);
+				attr.setAttribute("n", ZaDomain.A_zimbraAutoProvAttrMap);
+            }
+        } else {
+				attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvAttrMap],modifyDomainDoc);
+				attr.setAttribute("n", ZaDomain.A_zimbraAutoProvAttrMap);
+        }
+    }
+    if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvLdapURL]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvLdapURL],modifyDomainDoc);
+        attr.setAttribute("n", ZaDomain.A_zimbraAutoProvLdapURL);
+    }
+    if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled],modifyDomainDoc);
+        attr.setAttribute("n", ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled);
+    }
+    if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindDn]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindDn],modifyDomainDoc);
+        attr.setAttribute("n", ZaDomain.A_zimbraAutoProvLdapAdminBindDn);
+    }
+    if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword],modifyDomainDoc);
+        attr.setAttribute("n", ZaDomain.A_zimbraAutoProvLdapAdminBindPassword);
+    }
+    if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvLdapSearchBase]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvLdapSearchBase],modifyDomainDoc);
+        attr.setAttribute("n", ZaDomain.A_zimbraAutoProvLdapSearchBase);
+    }
+    if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvLdapSearchFilter]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvLdapSearchFilter],modifyDomainDoc);
+        attr.setAttribute("n", ZaDomain.A_zimbraAutoProvLdapSearchFilter);
+    }
+    if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvLdapBindDn]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvLdapBindDn],modifyDomainDoc);
+        attr.setAttribute("n", ZaDomain.A_zimbraAutoProvLdapBindDn);
+    }
+    if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvAccountNameMap]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvAccountNameMap],modifyDomainDoc);
+        attr.setAttribute("n", ZaDomain.A_zimbraAutoProvAccountNameMap);
+    }
+    if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvNotificationFromAddress]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvNotificationFromAddress],modifyDomainDoc);
+        attr.setAttribute("n", ZaDomain.A_zimbraAutoProvNotificationFromAddress);
+    }
+    if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvBatchSize]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvBatchSize],modifyDomainDoc);
+        attr.setAttribute("n", ZaDomain.A_zimbraAutoProvBatchSize);
+    }
+    if(tmpObj.attrs[ZaDomain.A_zimbraAutoProvLastPolledTimestamp]){
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAutoProvLastPolledTimestamp],modifyDomainDoc);
+        attr.setAttribute("n", ZaDomain.A_zimbraAutoProvLastPolledTimestamp);
+    }
+
+    // scheduled domain list in server config
+    if(tmpObj[ZaDomain.A2_zimbraAutoProvSelectedServerList]
+            && tmpObj[ZaDomain.A2_zimbraAutoProvSelectedServerList].getArray().length > 0) {
+        var modifyServerDoc = null;
+        var selectedList = tmpObj[ZaDomain.A2_zimbraAutoProvSelectedServerList].getArray();
+        var serverList = tmpObj[ZaDomain.A2_zimbraAutoProvServerList];
+        var cnt = selectedList.length;
+        for (var i = 0; i < cnt; i++) {
+            var server = null;
+            for(var j = 0; j < serverList.length; j++) {
+                if(selectedList[i] == serverList[j].name)
+                    server = serverList[j];
+            }
+            if(server) {
+                var scheduledDomains = server.attrs[ZaServer.A_zimbraAutoProvScheduledDomains];
+                modifyServerDoc = soapDoc.set("ModifyServerRequest", null, null, ZaZimbraAdmin.URN);
+                soapDoc.set("id", server.id,modifyServerDoc);
+                var isExist = false;
+                for(var i = 0; scheduledDomains && i < scheduledDomains.length; i++) {
+                    attr = soapDoc.set("a", scheduledDomains[i],modifyServerDoc);
+                    attr.setAttribute("n", ZaServer.A_zimbraAutoProvScheduledDomains);
+                    if(scheduledDomains[i] == this.name) isExist = true;
+                }
+                if(!isExist) {
+                    attr = soapDoc.set("a", this.name,modifyServerDoc);
+                    attr.setAttribute("n", ZaServer.A_zimbraAutoProvScheduledDomains);
+                }
+                if(tmpObj[ZaDomain.A2_zimbraAutoProvPollingInterval]) {
+                    attr = soapDoc.set("a",tmpObj[ZaDomain.A2_zimbraAutoProvPollingInterval],modifyServerDoc);
+                    attr.setAttribute("n", ZaServer.A_zimbraAutoProvPollingInterval);
+                }
+            }
+        }
+
+    }
+	try {
+		params = new Object();
+		params.soapDoc = soapDoc;
+		var reqMgrParams ={
+			controller:ZaApp.getInstance().getCurrentController(),
+			busyMsg : ZaMsg.BUSY_MODIFY_DOMAIN,
+			showBusy:true
+		}
+		var respObj = ZaRequestMgr.invoke(params, reqMgrParams);
+		if(respObj.isException && respObj.isException()) {
+			ZaApp.getInstance().getCurrentController()._handleException(respObj.getException(), "ZaDomain.modifyAutoPovSettings", null, false);
+		    hasError  = true ;
+            lastException = ex ;
+        } else if(respObj.Body.BatchResponse.Fault) {
+			var fault = respObj.Body.BatchResponse.Fault;
+			if(fault instanceof Array)
+				fault = fault[0];
+
+			if (fault) {
+				// JS response with fault
+				var ex = ZmCsfeCommand.faultToEx(fault);
+				ZaApp.getInstance().getCurrentController()._handleException(ex,"ZaDomain.modifyGalSettings", null, false);
+                hasError = true ;
+                lastException = ex ;
+            }
+		} else {
+			var batchResp = respObj.Body.BatchResponse;
+			var resp = batchResp.ModifyDomainResponse[0];
+			this.initFromJS(resp.domain[0]);
+		}
+	} catch (ex) {
+		//show the error and go on
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDomain.modifyAutoPovSettings", null, false);
+	    hasError = true ;
+        lastException = ex ;
+	}
+
+	this.refresh(false,true);
 	ZaDomain.putDomainToCache(this);
 }
 
@@ -1937,8 +2144,31 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_GALSyncTestResultCode, type:_STRING_},		
 		{id:ZaDomain.A_GALSampleQuery, type:_STRING_,required:true},
 		{id:ZaDomain.A_AuthUseBindPassword, type:_STRING_,type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},		
-		{id:ZaDomain.A_AuthLdapSearchBindPasswordConfirm, type:_STRING_},				
-		
+		{id:ZaDomain.A_AuthLdapSearchBindPasswordConfirm, type:_STRING_},
+        // provision
+		{id:ZaDomain.A_zimbraAutoProvLdapURL, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvLdapURL, maxLength:256},
+        {id:ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled},
+        {id:ZaDomain.A_zimbraAutoProvLdapAdminBindDn, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvLdapAdminBindDn, maxLength:256},
+        {id:ZaDomain.A_zimbraAutoProvLdapAdminBindPassword, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvLdapAdminBindPassword, maxLength:256},
+        {id:ZaDomain.A_zimbraAutoProvLdapSearchBase, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvLdapSearchBase, maxLength:256},
+        {id:ZaDomain.A_zimbraAutoProvLdapSearchFilter, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvLdapSearchFilter, maxLength:256},
+        {id:ZaDomain.A_zimbraAutoProvLdapBindDn, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvLdapBindDn, maxLength:256},
+        {id:ZaDomain.A_zimbraAutoProvAccountNameMap, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvAccountNameMap, maxLength:256},
+        {id:ZaDomain.A_zimbraAutoProvNotificationFromAddress, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvNotificationFromAddress, maxLength:256},
+        {id:ZaDomain.A_zimbraAutoProvBatchSize, type:_NUMBER_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvBatchSize, maxInclusive:2147483647, minInclusive:0},
+        {id:ZaDomain.A_zimbraAutoProvLastPolledTimestamp, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvLastPolledTimestamp, maxLength:256},
+        {id:ZaDomain.A_zimbraAutoProvAttrMap, type:_LIST_, listItem:{type:_STRING_, maxLength:255}, ref:"attrs/" + ZaDomain.A_zimbraAutoProvAttrMap},
+		{id:ZaDomain.A2_zimbraAutoProvModeEAGEREnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaDomain.A2_zimbraAutoProvModeEAGEREnabled},
+		{id:ZaDomain.A2_zimbraAutoProvModeLAZYEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaDomain.A2_zimbraAutoProvModeLAZYEnabled},
+		{id:ZaDomain.A2_zimbraAutoProvModeMANUALEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaDomain.A2_zimbraAutoProvModeMANUALEnabled},
+		{id:ZaDomain.A2_zimbraAutoProvAuthMechLDAPEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaDomain.A2_zimbraAutoProvAuthMechLDAPEnabled},
+		{id:ZaDomain.A2_zimbraAutoProvAuthMechPREAUTHEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaDomain.A2_zimbraAutoProvAuthMechPREAUTHEnabled},
+		{id:ZaDomain.A2_zimbraAutoProvAuthMechKRB5Enabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaDomain.A2_zimbraAutoProvAuthMechKRB5Enabled},
+		{id:ZaDomain.A2_zimbraAutoProvAuthMechSPNEGOEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaDomain.A2_zimbraAutoProvAuthMechSPNEGOEnabled},
+        {id:ZaDomain.A2_zimbraAutoProvServerList, type:_LIST_, ref:ZaDomain.A2_zimbraAutoProvServerList},
+        {id:ZaDomain.A2_zimbraAutoProvSelectedServerList, type:_LIST_},
+        {id:ZaDomain.A2_zimbraAutoProvPollingInterval, ref: ZaDomain.A2_zimbraAutoProvPollingInterval, type: _MLIFETIME_, minInclusive: 0 },
+
 		{id:ZaDomain.A_zimbraPrefTimeZoneId,type:_STRING_, ref:"attrs/"+ZaDomain.A_zimbraPrefTimeZoneId, choices:ZaSettings.timeZoneChoices},
         {id:ZaModel.currentStep, type:_NUMBER_, ref:ZaModel.currentStep, maxInclusive:2147483647},
 		{id:ZaDomain.A2_acl_selection_cache, type:_LIST_},

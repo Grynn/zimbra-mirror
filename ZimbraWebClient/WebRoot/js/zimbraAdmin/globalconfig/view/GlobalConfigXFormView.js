@@ -556,7 +556,21 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 							  ]/*,
 							  onRemove:GlobalConfigXFormView.onRepeatRemove*/
 						  	}
-						]}
+						]},
+                        { type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_AutoProvision_Setting,
+                        items :[
+                            {ref:ZaGlobalConfig.A_zimbraAutoProvBatchSize, type:_TEXTFIELD_, label:ZaMsg.LBL_zimbraAutoProvBatchSize,
+                                autoSaveValue:true, labelLocation:_LEFT_,
+                                cssClass:"admin_xform_number_input"
+                            },
+                            {ref:ZaGlobalConfig.A_zimbraAutoProvPollingInterval, type:_LIFETIME_,
+                                colSizes:["70px","70px","*"],
+                                label:ZaMsg.LBL_zimbraAutoProvPollingInterval,
+                                colSpan:2,nowrap:false,labelWrap:true
+                            }
+                        ]
+                        },
+                        {type: _SPACER_, height: 10 },
 
 				]};
         switchItems.push (case3) ;
@@ -849,36 +863,36 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
         tabBarChoices.push ({value:_tab9, label:ZaMsg.Domain_Tab_Advanced});
         var case9 = 
                 {type: _ZATABCASE_, caseKey:_tab9,
-		       colSizes:["auto"],numCols:1,id:"global_ad_tab",
-		       items: 	[
-                        	{ type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_BC_ShareConf,
-                                  items :[
-                                          { ref: ZaGlobalConfig.A_zimbraBasicAuthRealm,
-                                            type: _TEXTFIELD_, 
-                                            label: ZaMsg.Domain_zimbraBasicAuthRealm
-                                          }
-                                         ]
-                                },
-                                { type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_AD_EmailValidate,
-                                  items :[
-					{ ref: ZaGlobalConfig.A_zimbraMailAddressValidationRegex, type: _REPEAT_,
-					        label: ZaMsg.LBL_EmailValidate,
-					        labelLocation:_LEFT_,
-					        align:_LEFT_,
-					        repeatInstance:"",
-					        showAddButton:true,
-					        showRemoveButton:true,
-					        showAddOnNextRow:true,addButtonLabel:ZaMsg.NAD_AddRegex,
-					        removeButtonLabel:ZaMsg.NAD_RemoveRegex, 
-					        removeButtonCSSStyle: "margin-left: 50px",
-					       items: [
+		            colSizes:["auto"],numCols:1,id:"global_ad_tab",
+		            items: 	[
+                        { type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_BC_ShareConf,
+                        items :[
+                            { ref: ZaGlobalConfig.A_zimbraBasicAuthRealm,
+                                type: _TEXTFIELD_,
+                                label: ZaMsg.Domain_zimbraBasicAuthRealm
+                            }
+                        ]
+                        },
+                        { type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_AD_EmailValidate,
+                            items :[
+					        { ref: ZaGlobalConfig.A_zimbraMailAddressValidationRegex, type: _REPEAT_,
+                                label: ZaMsg.LBL_EmailValidate,
+                                labelLocation:_LEFT_,
+                                align:_LEFT_,
+                                repeatInstance:"",
+                                showAddButton:true,
+                                showRemoveButton:true,
+                                showAddOnNextRow:true,addButtonLabel:ZaMsg.NAD_AddRegex,
+                                removeButtonLabel:ZaMsg.NAD_RemoveRegex,
+                                removeButtonCSSStyle: "margin-left: 50px",
+                                items: [
 					                { ref:".", type: _TEXTFIELD_, label:null
 					                }
-					        ]
-					}
-                                         ]
-                                }
-                             	]
+					            ]
+					        }
+                            ]
+                        }
+                    ]
                 };
         switchItems.push (case9) ;
     }

@@ -618,6 +618,7 @@ ZaId.DLG_NEW_ADMIN              = "NEW_ADMIN";
 ZaId.DLG_NEW_DOMAIN             = "NEW_DOMAIN";
 ZaId.DLG_ZIM_DEPLOY             = "ZIM_DEPLOY";
 ZaId.DLG_AUTH_CONFIG            = "AUTH_CONFIG";
+ZaId.DLG_AUTPROV_CONFIG         = "AUTOPROV_CONFIG";
 
 ZaId.DLG_MSG			= "MSG";
 ZaId.DLG_ERR			= "ERR";

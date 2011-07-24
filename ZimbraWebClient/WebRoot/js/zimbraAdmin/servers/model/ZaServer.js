@@ -159,6 +159,10 @@ ZaServer.A_zimbraReverseProxyLookupTarget = "zimbraReverseProxyLookupTarget";
 ZaServer.A_zimbraSpnegoAuthPrincipal = "zimbraSpnegoAuthPrincipal";
 ZaServer.A_zimbraSpnegoAuthTargetName = "zimbraSpnegoAuthTargetName";
 
+// Auto provision
+ZaServer.A_zimbraAutoProvPollingInterval = "zimbraAutoProvPollingInterval";
+ZaServer.A_zimbraAutoProvScheduledDomains = "zimbraAutoProvScheduledDomains";
+
 // web client authentication
 ZaServer.A_zimbraMailSSLClientCertMode = "zimbraMailSSLClientCertMode";
 ZaServer.A_zimbraMailSSLClientCertPort = "zimbraMailSSLClientCertPort";
@@ -489,7 +493,10 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_zimbraImapSSLProxyBindPort, ref:"attrs/" +  ZaServer.A_zimbraImapSSLProxyBindPort, type:_COS_PORT_ },
 		{id:ZaServer.A_zimbraPop3ProxyBindPort, ref:"attrs/" +  ZaServer.A_zimbraPop3ProxyBindPort, type:_COS_PORT_ },
 		{id:ZaServer.A_zimbraPop3SSLProxyBindPort, ref:"attrs/" +  ZaServer.A_zimbraPop3SSLProxyBindPort, type:_COS_PORT_ },
-		
+
+        // auto provision
+        {id:ZaServer.A_zimbraAutoProvPollingInterval, ref:"attrs/" + ZaServer.A_zimbraAutoProvPollingInterval, type: _COS_MLIFETIME_, minInclusive: 0 },
+        {id:ZaServer.A_zimbraAutoProvScheduledDomains, ref:"attrs/" +  ZaServer.A_zimbraAutoProvScheduledDomains, type:_LIST_, listItem:{type:_STRING_, maxLength: 256} },
 		{id:ZaServer.A_ImapCleartextLoginEnabled, ref:"attrs/" + ZaServer.A_ImapCleartextLoginEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},		
 		{id:ZaServer.A_RedologEnabled, ref:"attrs/" + ZaServer.A_RedologEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},		
 		{id:ZaServer.A_RedologLogPath, ref:"attrs/" + ZaServer.A_RedologLogPath, type:_STRING_},		
@@ -986,7 +993,10 @@ ZaServer.prototype.initFromJS = function(server) {
         if(this._defaultValues && this._defaultValues.attrs[ZaServer.A_zimbraMilterBindAddress] && !(this._defaultValues.attrs[ZaServer.A_zimbraMilterBindAddress]  instanceof Array)) {
                 this._defaultValues.attrs[ZaServer.A_zimbraMilterBindAddress]  = [this._defaultValues.attrs[ZaServer.A_zimbraMilterBindAddress]];
         }
-	
+
+	if(this.attrs[ZaServer.A_zimbraAutoProvScheduledDomains] && !(this.attrs[ZaServer.A_zimbraAutoProvScheduledDomains] instanceof Array)) {
+        this.attrs[ZaServer.A_zimbraAutoProvScheduledDomains] = [this.attrs[ZaServer.A_zimbraAutoProvScheduledDomains]];
+    }
 
 }
 

@@ -845,7 +845,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 					      items: [
 					      	{type:_SUPER_REPEAT_, ref:ZaServer.A_zimbraSmtpHostname, 
 					      		label:ZaMsg.LBL_zimbraSmtpHostname,
-					            colSizes:["305px"],
+					            colSizes:["310px","150px","*"], colSpan:2,
 								resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
 								repeatInstance:"", 
 								showAddButton:true, 
@@ -920,7 +920,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                               checkBoxLabel:ZaMsg.NAD_MTA_MilterServerEnabled
                             },
 							
-							{type:_REPEAT_, ref:ZaServer.A_zimbraMilterBindAddress, 
+							{type:_REPEAT_, ref:ZaServer.A_zimbraMilterBindAddress,
 					      		label:ZaMsg.NAD_MTA_MilterBindAddress,
 								resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
 								repeatInstance:"", 
@@ -947,16 +947,33 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 							{ref:ZaServer.A_zimbraMilterBindPort, type:_OUTPUT_, label:ZaMsg.NAD_MTA_MilterBindPort}
                            ]
                         },
-                        {type:_ZA_TOP_GROUPER_, colSizes:["275px","*"], numCols:2, label:ZaMsg.NAD_SPNEGO_Configure,
+                        {type:_ZA_TOP_GROUPER_, colSizes:["275px","*"], numCols:2, label:ZaMsg.NAD_AutoProvision_Setting,
                             items:[
-                              {ref:ZaServer.A_zimbraSpnegoAuthPrincipal, type:_TEXTFIELD_,
-                               label:ZaMsg.NAD_MTA_SpnegoAuthPrincipal, width: "20em",
-                               onChange: ZaServerXFormView.onFormFieldChanged
-                              },
-                              {ref:ZaServer.A_zimbraSpnegoAuthTargetName, type:_TEXTFIELD_,
-                               label:ZaMsg.NAD_MTA_SpnegoAuthTargetName, width: "20em",
-                               onChange: ZaServerXFormView.onFormFieldChanged
-                              }
+                                {ref:ZaServer.A_zimbraAutoProvPollingInterval, type:_SUPER_LIFETIME_,
+                                    colSizes:["275px","70px","240px","150px","*"],
+                                    txtBoxLabel:ZaMsg.LBL_zimbraAutoProvPollingInterval,
+                                    resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                    useParentTable: false,
+                                    nowrap:false,labelWrap:true
+                                },
+                                {type:_REPEAT_, ref:ZaServer.A_zimbraAutoProvScheduledDomains,
+                                    label:ZaMsg.LBL_zimbraAutoProvScheduledDomains,
+                                    repeatInstance:"",
+                                    showAddButton:true,
+                                    showRemoveButton:true,
+                                    showAddOnNextRow:true,
+                                    addButtonLabel:ZaMsg.NAD_Add ,
+                                    removeButtonLabel:ZaMsg.NAD_Remove ,
+                                    removeButtonCSSStyle: "margin-left: 50px",
+                                    bnolsnr:true,
+                                    items:[
+                                    { type:_TEXTFIELD_,ref:".",
+                                       enableDisableChecks:[],
+                                       visibilityChecks:[],
+                                       bnolsnr:true
+                                    }
+                                    ]
+					      		}
                             ]
                         }
 				    ]

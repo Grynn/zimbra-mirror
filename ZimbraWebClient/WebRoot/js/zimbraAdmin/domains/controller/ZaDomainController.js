@@ -131,6 +131,13 @@ function () {
 		this._toolbarOrder.push(ZaOperation.CHECK_MX_RECORD);	   	
 	}
 
+	if(ZaDomain.canConfigureAutoProv(this._currentObject)) {
+		this._toolbarOperations[ZaOperation.AUTOPROV_WIZARD]=new ZaOperation(ZaOperation.AUTOPROV_WIZARD,ZaMsg.DTBB_AutoProvConfigWiz,
+                ZaMsg.DTBB_AutoProvConfigWiz_tt, "Backup", "BackupDis",
+                new AjxListener(this, ZaDomainController.prototype._autoProvWizButtonListener));
+		this._toolbarOrder.push(ZaOperation.AUTOPROV_WIZARD);
+	}
+
 }
 ZaController.initToolbarMethods["ZaDomainController"].push(ZaDomainController.initToolbarMethod);
 
@@ -481,12 +488,24 @@ function(ev) {
 ZaDomainController.prototype._authWizButtonListener =
 function(ev) {
 	try {
-		this._authWizard = ZaApp.getInstance().dialogs["authWizard"] =  new ZaAuthConfigXWizard(this._container);	
+		this._authWizard = ZaApp.getInstance().dialogs["authWizard"] =  new ZaAuthConfigXWizard(this._container);
 		this._authWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainController.prototype._finishAuthButtonListener, this, null);			
 		this._authWizard.setObject(this._currentObject);
 		this._authWizard.popup();
 	} catch (ex) {
 			this._handleException(ex, "ZaDomainController.prototype._showAuthWizard", null, false);
+	}
+}
+
+ZaDomainController.prototype._autoProvWizButtonListener =
+function(ev) {
+	try {
+		this._autoProvWizard = ZaApp.getInstance().dialogs["autoProvWizard"] =  new ZaAutoProvConfigXWizard(this._container);
+		this._autoProvWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainController.prototype._finishAutoProvButtonListener, this, null);
+		this._autoProvWizard.setObject(this._currentObject);
+		this._autoProvWizard.popup();
+	} catch (ex) {
+			this._handleException(ex, "ZaDomainController.prototype._autoProvWizButtonListener", null, false);
 	}
 }
 
@@ -544,6 +563,19 @@ function(ev) {
 		this._notifyAllOpenTabs();
 	} catch (ex) {
 		this._handleException(ex, "ZaDomainController.prototype._finishAuthButtonListener", null, false);
+	}
+	return;
+}
+
+ZaDomainController.prototype._finishAutoProvButtonListener =
+function(ev) {
+	try {
+		ZaDomain.modifyAutoPovSettings.call(this._currentObject,this._autoProvWizard.getObject());
+		this._view.setObject(this._currentObject);
+		this._autoProvWizard.popdown();
+		this._notifyAllOpenTabs();
+	} catch (ex) {
+		this._handleException(ex, "ZaDomainController.prototype._finishAutoProvButtonListener", null, false);
 	}
 	return;
 }

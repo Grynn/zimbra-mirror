@@ -177,6 +177,10 @@ ZaGlobalConfig.A_zimbraWebClientLogoutURL = "zimbraWebClientLogoutURL";
 ZaGlobalConfig.A_zimbraWebClientLoginURLAllowedUA = "zimbraWebClientLoginURLAllowedUA";
 ZaGlobalConfig.A_zimbraWebClientLogoutURLAllowedUA = "zimbraWebClientLogoutURLAllowedUA";
 
+// Auto provision
+ZaGlobalConfig.A_zimbraAutoProvBatchSize = "zimbraAutoProvBatchSize";
+ZaGlobalConfig.A_zimbraAutoProvPollingInterval = "zimbraAutoProvPollingInterval";
+
 // web client authentication
 ZaGlobalConfig.A_zimbraMailSSLClientCertMode = "zimbraMailSSLClientCertMode";
 ZaGlobalConfig.A_zimbraMailSSLClientCertPort = "zimbraMailSSLClientCertPort";
@@ -487,6 +491,9 @@ ZaGlobalConfig.myXModel = {
         { id:ZaGlobalConfig.A_zimbraSkinLogoLoginBanner, ref:"attrs/" + ZaGlobalConfig.A_zimbraSkinLogoLoginBanner, type:_STRING_ },
         { id:ZaGlobalConfig.A_zimbraSkinLogoAppBanner, ref:"attrs/" + ZaGlobalConfig.A_zimbraSkinLogoAppBanner, type:_STRING_ },
 
+        // auto provision
+        { id:ZaGlobalConfig.A_zimbraAutoProvBatchSize, type:_NUMBER_, ref:"attrs/" + ZaGlobalConfig.A_zimbraAutoProvBatchSize, maxInclusive:2147483647, minInclusive:0},
+        { id:ZaGlobalConfig.A_zimbraAutoProvPollingInterval, ref:"attrs/" + ZaGlobalConfig.A_zimbraAutoProvPollingInterval, type: _LIFETIME_NUMBER_, minInclusive: 0, fractionDigits: 0 },
 	// help URL
         { id:ZaGlobalConfig.A_zimbraHelpAdminURL, ref:"attrs/" + ZaGlobalConfig.A_zimbraHelpAdminURL, type:_STRING_ },
         { id:ZaGlobalConfig.A_zimbraHelpDelegatedURL, ref:"attrs/" + ZaGlobalConfig.A_zimbraHelpDelegatedURL, type:_STRING_ },
