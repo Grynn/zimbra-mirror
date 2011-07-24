@@ -283,7 +283,7 @@ DynSelect_XFormItem.prototype.onClick = function(event) {
 	if(!this.edited && this.getInheritedProperty("editable")) {
 		this.showInputTooltip(event);
 	} else {
-		if(choices && choices.values && choices.values.length) {
+		if(choices && choices.values && choices.values.length && !(choices.values[0] instanceof XFormChoices)) {
 			this.showMenu();
 		}
 	}
