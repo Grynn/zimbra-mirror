@@ -247,7 +247,7 @@ ZaVersionCheck.versionCheckTreeModifier = function (tree) {
 	
 		this._versionCheckTi = new DwtTreeItem({parent:this._toolsTi,className:"AdminTreeItem"});
 		this._versionCheckTi.setText(com_zimbra_adminversioncheck.OVP_versionCheck);
-		this._versionCheckTi.setImage("Refresh");
+		this._versionCheckTi.setImage("AdminRefresh");
 		this._versionCheckTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._VERSION_CHECK_VIEW);	
 		
 		if(ZaOverviewPanelController.overviewTreeListeners) {
