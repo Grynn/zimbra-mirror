@@ -132,7 +132,7 @@ public class TreePreferences extends AbsTree {
 		map.put(TreeItem.AddressBook, "id=" + Locators.zAddressBookTextID);
 		map.put(TreeItem.Calendar, "css=td[id='zti__main_Options__PREF_PAGE_CALENDAR_textCell']");
 		map.put(TreeItem.Sharing, null);
-		map.put(TreeItem.Notifications, null);
+		map.put(TreeItem.Notifications, "css=td[id='zti__main_Options__PREF_PAGE_NOTIFICATIONS_textCell']");
 		map.put(TreeItem.ImportExport, null);
 		map.put(TreeItem.Shortcuts, null);
 		map.put(TreeItem.Zimlets, null);
