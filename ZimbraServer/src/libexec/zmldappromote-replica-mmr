@@ -32,7 +32,7 @@ if ($id ne "zimbra") {
     print STDERR "Error: must be run as zimbra user\n";
     exit (1);
 }
-my ($help,$sid,$mmrURI);
+my ($help,$sid);
 $sid=0;
 
 my $zmlocalconfig="/opt/zimbra/bin/zmlocalconfig";
