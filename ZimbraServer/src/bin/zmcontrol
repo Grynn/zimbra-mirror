@@ -454,8 +454,30 @@ sub displayVersion {
 	}
 
   $string .=  ((-f "/opt/zimbra/bin/zmbackupquery") ? " NETWORK" : " FOSS"); 
-  $string .= " edition.";
-	print "$string\n";
+  $string .= " edition";
+
+  my $patch = "";
+  if (open(HIST_FILE, $zimbra_home . "/.install_history")) {
+    my $hline;
+    while ($hline = <HIST_FILE>) {
+      my $entry;
+  
+      chomp($hline);
+      (undef, $entry) = split(': ', $hline);
+      if ($entry =~ /CONFIGURED patch/) {
+        $patch = substr($entry, 16)
+      }
+      if ($entry =~ /INSTALL SESSION START/) {
+        $patch = "";
+      }
+    }
+    close(HIST_FILE);
+  }
+  if ($patch ne "") {
+    $string .= ", Patch $patch";
+  }
+
+	print "$string.\n";
 }
 
 sub checkAvailableSpace {
