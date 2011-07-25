@@ -1,139 +1,64 @@
 #include "MapiUtils.h"
 
-HRESULT Zimbra::MAPI::Util::HrMAPIFindDefaultMsgStore( IN LPMAPISESSION lplhSession, OUT ULONG *lpcbeid, OUT LPENTRYID *lppeid)
+HRESULT Zimbra::MAPI::Util::HrMAPIFindDefaultMsgStore(LPMAPISESSION lplhSession, SBinary &bin)
 {   
-    HRESULT     hr      = NOERROR;
-    HRESULT     hrT     = NOERROR;
-    SCODE       sc      = 0;
-    LPMAPITABLE lpTable = NULL;
-    LPSRowSet   lpRows  = NULL;
-    LPENTRYID   lpeid   = NULL;
-    ULONG       cbeid   = 0;
+    HRESULT     hr     = S_OK;
     ULONG       cRows   = 0;
     ULONG       i       = 0;
+	bin.lpb =NULL; bin.cb=0;
+	Zimbra::Util::ScopedInterface<IMAPITable> lpTable;
+	Zimbra::Util::ScopedRowSet lpRows(NULL);
 
-    SizedSPropTagArray(2, rgPropTagArray) =
-    {
-        2,
-        {
-            PR_DEFAULT_STORE,
-            PR_ENTRYID
-        }
-    };
+    SizedSPropTagArray(2, rgPropTagArray) = {2,{PR_DEFAULT_STORE,PR_ENTRYID }};
 
     // Get the list of available message stores from MAPI
-    hrT = lplhSession->GetMsgStoresTable(0, &lpTable);
-
-    if(FAILED(hrT))
-    {
-        hr = E_FAIL;
-        goto cleanup;
-    }
-
-    // Get the row count for the message recipient table
-    hrT = lpTable->GetRowCount(0, &cRows);
-
-    if(FAILED(hrT))
-    {
-        hr = (E_FAIL);
-        goto cleanup;
-    }
-
-    // Set the columns to return
-    hrT = lpTable->SetColumns((LPSPropTagArray)&rgPropTagArray, 0);
-
-    if(FAILED(hrT))
-    {
-        hr = (E_FAIL);
-        goto cleanup;
-    }
-
-    // Go to the beginning of the recipient table for the envelope
-    hrT = lpTable->SeekRow(BOOKMARK_BEGINNING, 0, NULL);
-
-    if(FAILED(hrT))
-    {
-        hr = (E_FAIL);
-        goto cleanup;
-    }
-
+    if(FAILED(hr = lplhSession->GetMsgStoresTable(0, lpTable.getptr())))
+		throw MapiUtilsException(hr, L"Util:: HrMAPIFindDefaultMsgStore(): GetMsgStoresTable Failed.",__LINE__,__FILE__);
+	
+	// Get the row count for the message recipient table
+    if(FAILED(hr = lpTable->GetRowCount(0, &cRows)))
+		throw MapiUtilsException(hr, L"Util:: HrMAPIFindDefaultMsgStore(): GetRowCount Failed.",__LINE__,__FILE__);
+	
+	// Set the columns to return
+    if(FAILED(hr = lpTable->SetColumns((LPSPropTagArray)&rgPropTagArray, 0)))
+		throw MapiUtilsException(hr, L"Util:: HrMAPIFindDefaultMsgStore(): SetColumns Failed.",__LINE__,__FILE__);    
+    
+	// Go to the beginning of the recipient table for the envelope
+    if(FAILED(hr = lpTable->SeekRow(BOOKMARK_BEGINNING, 0, NULL)))
+		throw MapiUtilsException(hr, L"Util:: HrMAPIFindDefaultMsgStore(): SeekRow Failed.",__LINE__,__FILE__);    
+    
     // Read all the rows of the table
-    hrT = lpTable->QueryRows(cRows, 0, &lpRows);
+    if(FAILED(hr = lpTable->QueryRows(cRows, 0, lpRows.getptr())))
+		throw MapiUtilsException(hr, L"Util:: HrMAPIFindDefaultMsgStore(): QueryRows Failed.",__LINE__,__FILE__);    
 
-    if(SUCCEEDED(hrT) && (lpRows != NULL) && (lpRows->cRows == 0))
+    if(lpRows->cRows == 0)
     {
-        FreeProws(lpRows);
-
-        hrT = MAPI_E_NOT_FOUND;
+        return MAPI_E_NOT_FOUND;
     }
-
-    if(FAILED(hrT) || (lpRows == NULL))
-    {
-        if(hrT != MAPI_E_NOT_FOUND)
-        {
-            hr = (E_FAIL);
-        }
-        else
-        {
-            hr = (MAPI_E_NOT_FOUND);
-        }
-
-        goto cleanup;
-    }
-
-
+	
     for(i = 0; i < cRows; i++)
     {
         if(lpRows->aRow[i].lpProps[0].Value.b == TRUE)
         {
-            cbeid = lpRows->aRow[i].lpProps[1].Value.bin.cb;
-
-            sc = MAPIAllocateBuffer(cbeid, (void **)&lpeid);
-
-            if(FAILED(sc))
-            {
-                cbeid = 0;
-                lpeid = NULL;
-
-                hr = (E_OUTOFMEMORY);
-                goto cleanup;
-            }
-
-            // Copy entry ID of message store
-            CopyMemory(
-                lpeid,
-                lpRows->aRow[i].lpProps[1].Value.bin.lpb,
-                cbeid);
-
-            break;
+			bin.cb = lpRows->aRow[i].lpProps[1].Value.bin.cb;
+			if(FAILED(MAPIAllocateBuffer(bin.cb, (void **)&bin.lpb)))
+				throw MapiUtilsException(hr, L"Util:: HrMAPIFindDefaultMsgStore(): MAPIAllocateBuffer Failed.",__LINE__,__FILE__);    
+			// Copy entry ID of message store
+			CopyMemory(bin.lpb, lpRows->aRow[i].lpProps[1].Value.bin.lpb, bin.cb);
+			break;
         }
     }
-
-    if(lpeid == NULL)
-    {
-        hr = (E_FAIL);
-    }
-
-cleanup:
-
-    if(lpRows != NULL)
-    {
-        FreeProws(lpRows);
-    }
-
-    UlRelease(lpTable);
-
-    *lpcbeid = cbeid;
-    *lppeid = lpeid;
-
-    return(hr);
+	if(bin.lpb==NULL)
+		return MAPI_E_NOT_FOUND;
+	return hr;
 }
 
 
 HRESULT Zimbra::MAPI::Util::MailboxLogon( LPMAPISESSION pSession, LPMDB pMdb, LPWSTR pStoreDn, LPWSTR pMailboxDn, LPMDB* ppMdb )
 {
-    ULONG       cbeid   = 0;      // count of bytes in entry ID
-    LPENTRYID   lpeid   = NULL;   // Entry ID of default store
+    SBinary storeEID;
+	storeEID.cb=0; storeEID.lpb=NULL;
+	Zimbra::Util::ScopedBuffer<BYTE> pB(storeEID.lpb);
 	LPEXCHANGEMANAGESTORE pXManageStore = NULL;
 	HRESULT hr = S_OK;
 
@@ -149,10 +74,12 @@ HRESULT Zimbra::MAPI::Util::MailboxLogon( LPMAPISESSION pSession, LPMDB pMdb, LP
 	{
 		SafeDelete(pStoreDnA);
 		SafeDelete(pMailboxDnA);
-		throw MapiUtilsException(hr, L"",__LINE__,__FILE__);
+		throw MapiUtilsException(hr, L"Util:: MailboxLogon(): QueryInterface Failed.",__LINE__,__FILE__);
 	}
 
-    hr = pXManageStore->CreateStoreEntryID(  pStoreDnA, pMailboxDnA, OPENSTORE_HOME_LOGON | OPENSTORE_USE_ADMIN_PRIVILEGE | OPENSTORE_TAKE_OWNERSHIP, &cbeid, &lpeid);
+	hr = pXManageStore->CreateStoreEntryID(  pStoreDnA, pMailboxDnA, 
+		OPENSTORE_HOME_LOGON | OPENSTORE_USE_ADMIN_PRIVILEGE | OPENSTORE_TAKE_OWNERSHIP, 
+		&storeEID.cb, (LPENTRYID*)&storeEID.lpb);
 	SafeDelete(pStoreDnA);
 	SafeDelete(pMailboxDnA);
 	if( pXManageStore != NULL ) 
@@ -160,90 +87,24 @@ HRESULT Zimbra::MAPI::Util::MailboxLogon( LPMAPISESSION pSession, LPMDB pMdb, LP
 
 	if( FAILED(hr) )
 	{
-		throw MapiUtilsException(hr, L"",__LINE__,__FILE__);
+		throw MapiUtilsException(hr, L"Util:: MailboxLogon(): CreateStoreEntryID Failed.",__LINE__,__FILE__);
 	}
 
-    hr = pSession->OpenMsgStore( 0, cbeid, lpeid, NULL, MDB_ONLINE | MAPI_BEST_ACCESS | MDB_NO_MAIL | MDB_TEMPORARY | MDB_NO_DIALOG , ppMdb);
+	hr = pSession->OpenMsgStore( 0, storeEID.cb, (LPENTRYID)storeEID.lpb, NULL, 
+		MDB_ONLINE | MAPI_BEST_ACCESS | MDB_NO_MAIL | MDB_TEMPORARY | MDB_NO_DIALOG , ppMdb);
 	if( hr == MAPI_E_UNKNOWN_FLAGS )
 	{
-		hr = pSession->OpenMsgStore( 0, cbeid, lpeid, NULL, MAPI_BEST_ACCESS | MDB_NO_MAIL | MDB_TEMPORARY | MDB_NO_DIALOG, ppMdb);
+		hr = pSession->OpenMsgStore( 0, storeEID.cb, (LPENTRYID)storeEID.lpb, NULL,
+			MAPI_BEST_ACCESS | MDB_NO_MAIL | MDB_TEMPORARY | MDB_NO_DIALOG, ppMdb);
 	}
-	MAPIFreeBuffer(lpeid);
-
 	if( FAILED(hr) )
 	{
-		throw MapiUtilsException(hr, L"",__LINE__,__FILE__);
+		throw MapiUtilsException(hr, L"Util:: MailboxLogon(): OpenMsgStore Failed.",__LINE__,__FILE__);
 	}
 	
-    return( S_OK);
+    return hr;
 }
 
-
-HRESULT Zimbra::MAPI::Util::GetUserDnAndServerDnFromProfile( LPMAPISESSION pSession, LPSTR& pExchangeServerDn, LPSTR& pExchangeUserDn )
-{
-	HRESULT hr = S_OK;
-	LPSERVICEADMIN pServiceAdmin = NULL;
-	LPPROFSECT pProfileSection = NULL;
-	SizedSPropTagArray( 2, profileProps ) = {2, { PR_PROFILE_HOME_SERVER_DN, PR_PROFILE_USER }};
-	ULONG nVals;
-	LPSPropValue pPropValues = NULL;
-
-	hr = pSession->AdminServices( 0, &pServiceAdmin );
-	if( FAILED(hr) )
-	{
-		return hr;
-	}
-
-
-	hr = pServiceAdmin->OpenProfileSection( (LPMAPIUID) GLOBAL_PROFILE_SECTION_GUID, NULL, 0, &pProfileSection );
-	pServiceAdmin->Release();
-
-	if( FAILED(hr) )
-	{
-		return hr;
-	}
-
-	
-    
-	hr = pProfileSection->GetProps( (LPSPropTagArray)&profileProps, 0, &nVals, &pPropValues );
-	pProfileSection->Release();
-
-	if( FAILED(hr) )
-	{
-		if( pPropValues != NULL )
-			MAPIFreeBuffer( pPropValues );
-		return hr;
-	}
-
-
-	if( nVals != 2 )
-	{
-		if( pPropValues != NULL )
-			MAPIFreeBuffer( pPropValues );
-		return E_FAIL;
-	}
-
-
-	if( pPropValues[0].ulPropTag != PR_PROFILE_HOME_SERVER_DN &&
-		pPropValues[1].ulPropTag != PR_PROFILE_USER )
-	{
-		if( pPropValues != NULL )
-			MAPIFreeBuffer( pPropValues );
-		return E_FAIL;
-	}
-
-	size_t len = strlen( pPropValues[0].Value.lpszA );
-	pExchangeServerDn = new CHAR[len+1];
-	strcpy( pExchangeServerDn, pPropValues[0].Value.lpszA );
-
-	len = strlen( pPropValues[1].Value.lpszA );
-	pExchangeUserDn = new CHAR[len+1];
-	strcpy( pExchangeUserDn, pPropValues[1].Value.lpszA );
-
-	if( pPropValues != NULL )
-			MAPIFreeBuffer( pPropValues );
-	return S_OK;
-}
 
 HRESULT Zimbra::MAPI::Util::GetUserDN(LPCWSTR lpszServer, LPCWSTR lpszUser, wstring &wstruserdn)
 {
@@ -315,6 +176,66 @@ HRESULT Zimbra::MAPI::Util::GetUserDN(LPCWSTR lpszServer, LPCWSTR lpszUser, wstr
 	}
 	pDirSearch->CloseSearchHandle( hSearch );
 	if(wstruserdn.empty())
-		throw MapiUtilsException(hr, L"Util::GetUserDN(): ADsOpenObject Failed.",__LINE__,__FILE__);
+		throw MapiUtilsException(hr, L"Util::GetUserDN(): S_ADS_NOMORE_ROWS.",__LINE__,__FILE__);
+	return S_OK;
+}
+
+
+HRESULT Zimbra::MAPI::Util::GetUserDnAndServerDnFromProfile( LPMAPISESSION pSession, LPSTR& pExchangeServerDn, LPSTR& pExchangeUserDn )
+{
+	HRESULT hr = S_OK;
+	ULONG nVals=0;
+	Zimbra::Util::ScopedInterface<IMsgServiceAdmin> pServiceAdmin ; 
+	Zimbra::Util::ScopedInterface<IProfSect>  pProfileSection;
+	Zimbra::Util::ScopedBuffer<SPropValue> pPropValues; 
+
+	SizedSPropTagArray( 2, profileProps ) = {2, { PR_PROFILE_HOME_SERVER_DN, PR_PROFILE_USER }};
+		
+	if(FAILED(hr = pSession->AdminServices( 0, pServiceAdmin.getptr() )))
+	{
+		throw MapiUtilsException(hr, L"Util::GetUserDnAndServerDnFromProfile(): AdminServices.",__LINE__,__FILE__);
+	}
+	if( FAILED(hr = pServiceAdmin->OpenProfileSection( (LPMAPIUID) GLOBAL_PROFILE_SECTION_GUID, NULL, 0, 
+		pProfileSection.getptr())))
+	{
+		throw MapiUtilsException(hr, L"Util::GetUserDnAndServerDnFromProfile(): OpenProfileSection.",__LINE__,__FILE__);
+	}
+	if( FAILED(hr = pProfileSection->GetProps( (LPSPropTagArray)&profileProps, 0, &nVals, pPropValues.getptr() )))
+	{
+		throw MapiUtilsException(hr, L"Util::GetUserDnAndServerDnFromProfile(): GetProps.",__LINE__,__FILE__);
+	}
+	if( nVals != 2 )
+	{
+		throw MapiUtilsException(hr, L"Util::GetUserDnAndServerDnFromProfile(): nVals not 2.",__LINE__,__FILE__);
+	}
+	if( pPropValues[0].ulPropTag != PR_PROFILE_HOME_SERVER_DN &&
+		pPropValues[1].ulPropTag != PR_PROFILE_USER )
+	{
+		throw MapiUtilsException(hr, L"Util::GetUserDnAndServerDnFromProfile(): ulPropTag error.",__LINE__,__FILE__);
+	}
+	size_t len = strlen( pPropValues[0].Value.lpszA );
+	pExchangeServerDn = new CHAR[len+1];
+	strcpy( pExchangeServerDn, pPropValues[0].Value.lpszA );
+
+	len = strlen( pPropValues[1].Value.lpszA );
+	pExchangeUserDn = new CHAR[len+1];
+	strcpy( pExchangeUserDn, pPropValues[1].Value.lpszA );
+
+	return S_OK;
+}
+
+HRESULT Zimbra::MAPI::Util::HrMAPIFindIPMSubtree(LPMDB lpMdb, SBinary &bin)
+{
+	Zimbra::Util::ScopedBuffer<SPropValue> lpEID; 
+	HRESULT hr=S_OK;
+	if(FAILED(hr= HrGetOneProp(lpMdb,PR_IPM_SUBTREE_ENTRYID, lpEID.getptr())))
+		throw MapiUtilsException(hr, L"Util::HrMAPIFindIPMSubtree(): HrGetOneProp Failed.",__LINE__,__FILE__);
+
+	bin.cb = lpEID->Value.bin.cb;
+	if(FAILED(MAPIAllocateBuffer(lpEID->Value.bin.cb, (void **)&bin.lpb)))
+		throw MapiUtilsException(hr, L"Util:: HrMAPIFindDefaultMsgStore(): MAPIAllocateBuffer Failed.",__LINE__,__FILE__);    
+			// Copy entry ID of message store
+	CopyMemory(bin.lpb, lpEID->Value.bin.lpb, lpEID->Value.bin.cb);
+	
 	return S_OK;
 }

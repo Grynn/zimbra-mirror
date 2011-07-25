@@ -26,9 +26,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PSTMigration.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Exchange\MAPIObjects.h">
       <Filter>Header Files</Filter>
     </ClInclude>

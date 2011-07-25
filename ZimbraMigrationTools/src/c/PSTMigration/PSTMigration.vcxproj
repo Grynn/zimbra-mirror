@@ -277,7 +277,6 @@
     <ClInclude Include="..\Exchange\GenericException.h" />
     <ClInclude Include="..\Exchange\MAPIObjects.h" />
     <ClInclude Include="..\Exchange\MapiUtils.h" />
-    <ClInclude Include="PSTMigration.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\ZimbraMAPI\vcproj\Util.vcxproj">

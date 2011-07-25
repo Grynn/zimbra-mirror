@@ -471,11 +471,11 @@ namespace Zimbra{
 	namespace MAPI {
 		namespace Util {
 
-HRESULT HrMAPIFindDefaultMsgStore( IN LPMAPISESSION lplhSession, OUT ULONG *lpcbeid, OUT LPENTRYID *lppeid);
+HRESULT HrMAPIFindDefaultMsgStore( LPMAPISESSION lplhSession, SBinary &bin);
 HRESULT MailboxLogon( LPMAPISESSION pSession, LPMDB pMdb, LPWSTR pStoreDn, LPWSTR pMailboxDn, LPMDB* ppMdb );
-HRESULT GetUserDnAndServerDnFromProfile( LPMAPISESSION pSession, LPSTR& pExchangeServerDn, LPSTR& pExchangeUserDn );
 HRESULT GetUserDN(LPCWSTR lpszServer, LPCWSTR lpszUser, wstring &wstruserdn);
-
+HRESULT GetUserDnAndServerDnFromProfile( LPMAPISESSION pSession, LPSTR& pExchangeServerDn, LPSTR& pExchangeUserDn );
+HRESULT HrMAPIFindIPMSubtree(LPMDB lpMdb, SBinary &bin);
 		}
 	}
 }

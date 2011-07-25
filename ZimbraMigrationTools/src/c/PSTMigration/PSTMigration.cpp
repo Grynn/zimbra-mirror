@@ -111,6 +111,26 @@ void ZCFileUploadTest()
 	}
 }
 
+bool iterate_folders(Zimbra::MAPI::MAPIFolder &folder)
+{
+	Zimbra::MAPI::FolderIterator folderIter;
+	folder.GetFolderIterator( folderIter );
+
+	Zimbra::MAPI::MAPIFolder childFolder;
+	BOOL bMore = TRUE;
+	while( bMore)
+	{
+		bMore = folderIter.GetNext( childFolder );
+		if(bMore)
+			printf("FolderName: %S \n",childFolder.Name().c_str());
+		if( bMore )
+		{
+			iterate_folders(childFolder);
+		}		
+	}
+	return true;
+}
+
 int main(int argc, TCHAR *argv[])
 {
 	UNREFERENCED_PARAMETER(argc);
@@ -124,6 +144,7 @@ int main(int argc, TCHAR *argv[])
 //	AdminAuth();
 //	UserAuth();
 //	ZCFileUploadTest();
+/*
 	Zimbra::MAPI::ExchangeAdmin *exchadmin= new Zimbra::MAPI::ExchangeAdmin("10.117.82.161");
 	try
 	{
@@ -153,7 +174,7 @@ int main(int argc, TCHAR *argv[])
 		UNREFERENCED_PARAMETER(ex);
 	}
 
-	
+*/	
 /*
 	vector<string> vProfileList;
 	exchadmin->GetAllProfiles(vProfileList);
@@ -168,12 +189,17 @@ int main(int argc, TCHAR *argv[])
 	vector<string>::iterator itr= vProfileList.begin();
 */
 
-/*	Zimbra::MAPI::MAPISession *p_zmmapisession = new Zimbra::MAPI::MAPISession();
+	Zimbra::MAPI::MAPISession *p_zmmapisession = new Zimbra::MAPI::MAPISession();
 	p_zmmapisession->Logon();
 	Zimbra::MAPI::MAPIStore store;
 	p_zmmapisession->OpenDefaultStore(store);
+
+	Zimbra::MAPI::MAPIFolder rootFolder;
+	store.GetRootFolder(rootFolder);
+	
+	iterate_folders(rootFolder);
 	delete p_zmmapisession;
-*/
+
 
 /*	wstring userDN;
 	Zimbra::MAPI::Util::GetUserDN(L"10.117.82.161",L"Administrator",userDN);
