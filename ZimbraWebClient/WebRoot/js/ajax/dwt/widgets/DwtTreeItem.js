@@ -428,6 +428,11 @@ DwtTreeItem.prototype.handleKeyAction =
 function(actionCode, ev) {
 
 	switch (actionCode) {
+		
+		case DwtKeyMap.ENTER:
+			this._tree.setEnterSelection(this, true);
+			break;
+
 
 		case DwtKeyMap.NEXT: {
 			var ti = this._tree._getNextTreeItem(true);

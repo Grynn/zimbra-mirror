@@ -57,6 +57,10 @@ DwtTree = function(params) {
 
 	this._selectedItems = new AjxVector();
 	this._selEv = new DwtSelectionEvent(true);
+	this._selByClickEv = new DwtSelectionEvent(true);
+	this._selByClickEv.clicked = true;
+	this._selByEnterEv = new DwtSelectionEvent(true);
+	this._selByEnterEv.enter = true;
 };
 
 DwtTree.PARAMS = ["parent", "style", "className", "posStyle"];
@@ -199,6 +203,15 @@ DwtTree.prototype.getSelection =
 function() {
 	return this._selectedItems.getArray();
 };
+
+DwtTree.prototype.setEnterSelection =
+function(treeItem, kbNavEvent) {
+	if (!treeItem) {
+		return;
+	}
+	this._notifyListeners(DwtEvent.SELECTION, [treeItem], DwtTree.ITEM_SELECTED, null, this._selByEnterEv, kbNavEvent);
+};
+
 
 DwtTree.prototype.setSelection =
 function(treeItem, skipNotify, kbNavEvent, noFocus) {
@@ -415,23 +428,23 @@ function(item, ev) {
 				a[i]._setSelected(false);
 			}
 			// Notify listeners of deselection
-			this._notifyListeners(DwtEvent.SELECTION, this._selectedItems.getArray(), DwtTree.ITEM_DESELECTED, ev, this._selEv);
+			this._notifyListeners(DwtEvent.SELECTION, this._selectedItems.getArray(), DwtTree.ITEM_DESELECTED, ev, this._selByClickEv);
 			this._selectedItems.removeAll();
 		}
 		this._selectedItems.add(item);
 		if (item._setSelected(true)) {
-			this._notifyListeners(DwtEvent.SELECTION, [item], DwtTree.ITEM_SELECTED, ev, this._selEv);
+			this._notifyListeners(DwtEvent.SELECTION, [item], DwtTree.ITEM_SELECTED, ev, this._selByClickEv);
 		}
 	} else {
 		if (ev.ctrlKey) {
 			if (this._selectedItems.contains(item)) {
 				this._selectedItems.remove(item);
 				item._setSelected(false);
-				this._notifyListeners(DwtEvent.SELECTION, [item], DwtTree.ITEM_DESELECTED, ev, this._selEv);
+				this._notifyListeners(DwtEvent.SELECTION, [item], DwtTree.ITEM_DESELECTED, ev, this._selByClickEv);
 			} else {
 				this._selectedItems.add(item);
 				if (item._setSelected(true)) {
-					this._notifyListeners(DwtEvent.SELECTION, [item], DwtTree.ITEM_SELECTED, ev, this._selEv);
+					this._notifyListeners(DwtEvent.SELECTION, [item], DwtTree.ITEM_SELECTED, ev, this._selByClickEv);
 				}
 			}
 		} else {

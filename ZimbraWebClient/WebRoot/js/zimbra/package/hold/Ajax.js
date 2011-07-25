@@ -109,6 +109,7 @@ AjxPackage.require("ajax.dwt.widgets.DwtToolTip");
 AjxPackage.require("ajax.dwt.widgets.DwtTreeItem");
 AjxPackage.require("ajax.dwt.widgets.DwtTree");
 AjxPackage.require("ajax.dwt.widgets.DwtCalendar");
+AjxPackage.require("ajax.dwt.widgets.DwtFolderChooser");
 AjxPackage.require("ajax.dwt.widgets.DwtPropertyPage");
 AjxPackage.require("ajax.dwt.widgets.DwtTabView");
 AjxPackage.require("ajax.dwt.widgets.DwtWizardDialog");

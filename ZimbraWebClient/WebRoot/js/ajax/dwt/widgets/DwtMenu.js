@@ -896,7 +896,14 @@ function(which) {
 		currItem = this._children.get(which);
 	}
 	// While the current item is not enabled or is a separator, try another
-	while (currItem && (currItem.isStyle(DwtMenuItem.SEPARATOR_STYLE) || !currItem.getEnabled() || !currItem.getVisible())) {
+	while (currItem) {
+		if (!currItem.isStyle) { //this is not a DwtMenuItem. e.g. it's DwtFolderChooser
+			currItem.focus();
+			break;
+		}
+		else if (!currItem.isStyle(DwtMenuItem.SEPARATOR_STYLE) && currItem.getEnabled() && currItem.getVisible()) {
+			break;
+		}
 		currItem = (which === false) ? this._children.getPrev(currItem) : this._children.getNext(currItem);
 	}
 	if (!currItem) { return; }
