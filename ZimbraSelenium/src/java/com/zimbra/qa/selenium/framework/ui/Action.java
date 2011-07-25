@@ -51,7 +51,8 @@ public class Action {
 	// Tree actions
 	public static final Action A_TREE_EXPAND = new Action("A_TREE_EXPAND");
 	public static final Action A_TREE_COLLAPSE = new Action("A_TREE_COLLAPSE");
-	
+	public static final Action A_TREE_CHECKBOX = new Action("A_TREE_CHECKBOX");
+
 	// Briefcase page actions
 	public static final Action A_BRIEFCASE_CHECKBOX = new Action("A_BRIEFCASE_CHECKBOX");
 	public static final Action A_BRIEFCASE_HEADER_CHECKBOX = new Action("A_BRIEFCASE_HEADER_CHECKBOX");

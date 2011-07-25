@@ -26,6 +26,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogRenameFolder;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogRenameTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogShare;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogShareFind;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.FormRecoverDeletedItems;
@@ -458,7 +459,28 @@ public class TreeMail extends AbsTree {
 						+ locator);
 			}
 			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
-		}else {
+			
+		} else if ( button == Button.B_TREE_FIND_SHARES ) {
+			
+			locator = "css=a[id$='_addshare_link']";
+			if (!this.sIsElementPresent(locator)) {
+				throw new HarnessException("Unable to locator folder in tree " + locator);
+			}
+
+			page = new DialogShareFind(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+
+			// Use sClick, not default zClick
+			this.sClick(locator);
+
+			// If the app is busy, wait for that to finish
+			this.zWaitForBusyOverlay();
+
+			// This function (default) throws an exception if never active
+			page.zWaitForActive();
+
+			return (page);
+
+		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}
 
