@@ -669,20 +669,6 @@ public class OfflineSyncManager implements FormatListener {
         if (!isConnectionDown)
             waiting.signalAll();
         lock.unlock();
-        if (b) {
-            synchronized(syncStatusTable) {
-                for (OfflineSyncStatus status: syncStatusTable.values()) {
-                    if (status.currentSyncThread != null) {
-                        try {
-                            OfflineLog.offline.info("interrupting sync thread %s",status.currentSyncThread.getName());
-                            status.currentSyncThread.interrupt();
-                        } catch (Exception e) {
-                            OfflineLog.offline.warn("Exception while interrupting sync thread",e);
-                        }
-                    }
-                }
-            }
-        }
     }
 
     public synchronized void setUILoading(boolean b) {
