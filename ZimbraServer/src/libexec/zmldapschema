@@ -73,7 +73,7 @@ installZimbraSchema() {
   chown ${zimbra_user}:${zimbra_user} ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{4\}zimbra.ldif
   chmod 600 ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{4\}zimbra.ldif
   sed -i.orig -e '/^dn: cn=zimbra,/ s/dn: cn=zimbra,cn=schema,cn=config/dn: cn={4}zimbra/' -e '/^cn: zimbra/ s/cn: zimbra/cn: {4}zimbra/' \
-    ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{5\}zimbra.ldif
+    ${zimbra_home}/data/ldap/config/cn\=config/cn\=schema/cn\=\{4\}zimbra.ldif
 }
 
 installAmavisSchema() {
