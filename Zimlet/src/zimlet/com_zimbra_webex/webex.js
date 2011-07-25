@@ -180,7 +180,42 @@ WebExZimlet.prototype.init = function() {
 WebExZimlet.prototype.initializeToolbar = function(app, toolbar, controller, viewId) {
 	if ((viewId.indexOf("APPT") >= 0) && (viewId.indexOf("APPTRO") == -1)) {
 		this._initCalendarWebexToolbar(toolbar, controller);
+	} else 	if (viewId == ZmId.VIEW_CONVLIST || viewId == ZmId.VIEW_CONV || viewId == ZmId.VIEW_TRAD || viewId == "CNS" || viewId == "CLD") {
+
+		var op = toolbar.getOp(ZmId.OP_ACTIONS_MENU);
+		if(op) {
+			var menu = op.getMenu();
+			if(menu) {
+				if(menu.getMenuItem("WEBEX_ZIMLET_START_QUICK_MEETING")) {
+					return;
+				}
+				var mi = menu.createMenuItem("WEBEX_ZIMLET_START_QUICK_MEETING", {image:"WEBEX-panelIcon", text:this.getMessage("WebExZimlet_startQuickWebExMeeting")});
+				mi.addSelectionListener(new AjxListener(this, this._handleQuickMeetingMenuClick, controller));
+			}
+		}
 	}
+};
+
+WebExZimlet.prototype._handleQuickMeetingMenuClick = function(controller) {
+	var items = controller.getSelection();
+	if(!items instanceof Array) {
+		this._showOneClickDlg("");
+		return;
+	}
+	var type = items[0].type;
+	var obj;
+	var emails = [];
+	if (type == "CONV") {
+		obj = items[0].getFirstHotMsg();
+		emails = obj.getEmails().getArray();
+	} else if(type == "MSG") {
+		obj = items[0];
+		emails = obj.getEmails().getArray();
+	} else if(type == "CONTACT") {
+		emails = this._getEmailsFromContacts(items);
+	}
+	var emails = emails instanceof Array ?  emails.join(";") : "";
+	this._showOneClickDlg(emails);
 };
 
 /**
@@ -2326,8 +2361,61 @@ function(attendees) {
 	this._oneClickDlg = new ZmDialog({parent: this.getShell(), title:this.getMessage("WebExZimlet_startQuickWebExMeeting"), view:this._oneClickDlgView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
 	this._oneClickDlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._oneClickDlgOkBtnListner));
 	this._addAutoCompleteHandler();
+	this._addToButton();
 	this._setAttendeesToOneClickDlg(attendees);
 	this._oneClickDlg.popup();
+};
+
+WebExZimlet.prototype._addToButton =
+function(attendees) {
+	var btn = new DwtButton({parent:this.getShell()});
+	btn.setText(ZmMsg.to);
+	btn.addSelectionListener(new AjxListener(this, this._handleToButton));
+	document.getElementById("webexZimlet__oneClickMeeting_toButton").appendChild(btn.getHtmlElement());
+};
+
+WebExZimlet.prototype._handleToButton =
+function(ev) {
+	if (!this._contactPicker) {
+		AjxDispatcher.require("ContactsCore");
+		var buttonInfo = [{id:AjxEmailAddress.TO, label : ZmMsg[AjxEmailAddress.TYPE_STRING[AjxEmailAddress.TO]]}];
+
+		this._contactPicker = new ZmContactPicker(buttonInfo);
+		this._contactPicker.registerCallback(DwtDialog.OK_BUTTON, this._contactPickerOkCallback, this);
+	}
+	this._contactPicker.popup();
+};
+
+WebExZimlet.prototype._contactPickerOkCallback =
+function(addrVec) {
+	var addrAdded = false;
+	used = {};
+	var addrList = [];
+	var addrs = addrVec && addrVec.getArray();
+	if (addrs && addrs.length) {
+		for (var i = 0, len = addrs.length; i < len; i++) {
+			var addr = addrs[i];
+			var email = addr.isAjxEmailAddress ? addr && addr.getAddress() : addr;
+			if (!email) { continue; }
+			email = email.toLowerCase();
+			if (!used[email]) {
+				addrList.push(addr.address);
+				used[email] = true;
+				addrAdded = true;
+			}
+		}
+		var field = document.getElementById("webExZimlet_oneClickAttendeesField");
+		var existingAddrs = AjxEmailAddress.parseEmailString(field.value).good.getArray();
+		var eAddrs = [];
+		var len = existingAddrs.length;
+		for(var i = 0; i < len; i++) {
+			eAddrs.push(existingAddrs[i].address);
+		}
+		addrList = eAddrs.concat(addrList);
+		var addrStr = addrList.join(AjxEmailAddress.SEPARATOR);
+		field.value = addrStr;
+	}
+	this._contactPicker.popdown();
 };
 
 /**
@@ -2387,8 +2475,10 @@ function(selectHtml) {
 
 	var html = [];
 	html.push("<table class='webExZimlet_table' width=100%>");
-	html.push("<tr><td>", this.getMessage("WebExZimlet_webExAccntToUse"), " </td><td>", selectHtml, "</td></tr>");
-	html.push("<tr><td>", this.getMessage("WebExZimlet_addAttendees"), "</td><td><input  style='width:300px' type='text' id='webExZimlet_oneClickAttendeesField'> </input></td></tr>");
+	html.push("<tr><td width=30px colspan=2>", this.getMessage("WebExZimlet_webExAccntToUse"), " </td><td>", selectHtml, "</td></tr>");
+	html.push("<tr>",
+			"<td width=30px></td><td width=15px id='webexZimlet__oneClickMeeting_toButton'></td>",
+			"<td><input  style='width:400px' type='text' id='webExZimlet_oneClickAttendeesField'> </input></td></tr>");
 	html.push("</table>");
 	return html.join("");
 };
@@ -2399,15 +2489,16 @@ function(selectHtml) {
  */
 WebExZimlet.prototype._oneClickDlgOkBtnListner =
 function() {
-	this._oneClickDlg.popdown();
 	var accntNumber = document.getElementById("webExZimlet_oneClickAccountSelect").value;
-	var attendees = document.getElementById("webExZimlet_oneClickAttendeesField").value;
+	var attendees = this._getValidEmailsAsString("webExZimlet_oneClickAttendeesField");
+	if(attendees == "") {
+		return;
+	}
 	var params = {accntNumber:accntNumber, attendees:attendees};
-
-
 	var postCallback2 = new AjxCallback(this, this._createOneClickMeetingAndLaunch, params);
 	var postCallback = new AjxCallback(this, this._getGeneralPrefsMetaData, postCallback2);
 	this._getAccPrefsMetaData(postCallback);
+	this._oneClickDlg.popdown();
 };
 
 /**
@@ -2618,17 +2709,41 @@ WebExZimlet.prototype.mailDropped = function(msgObj) {
  * @param {ZmContact} objContact Contact
  */
 WebExZimlet.prototype.contactDropped = function(objContact) {
+	var emails = this._getEmailsFromContacts(objContact);
+	this._showOneClickDlg(emails.join(";"));
+};
+
+WebExZimlet.prototype._getEmailsFromContacts = function(objContact) {
 	if (!(objContact instanceof Array)) {
 		objContact = [objContact];
 	}
-	var emails = []
+	var emails = [];
 	for (var i = 0; i < objContact.length; i++) {
 		var c = objContact[i];
+		//when drag-drop, c.attr is null but when passed from ActionMenu, c.attr has the info
+		c = c.attr || c._attr ? (c.attr ? c.attr : c._attr) : c;
 		var e = c.email ? c.email : (c.email2 ? c.email2 : (c.email3 ? c.email3 : ""));
 		if (e != "" && e != undefined && e != "undefined") {
 			emails.push(e);
 		}
 	}
-	this._showOneClickDlg(emails.join(";"));
+	return emails;
+};
+
+WebExZimlet.prototype._getValidEmailsAsString = function(fieldId) {
+    var el = document.getElementById(fieldId);
+    if (el) {
+        var val = el.value;
+        if (val != "") {
+            var parsed = AjxEmailAddress.parseEmailString(val);
+            var badAddrs = parsed.bad.getArray().toString();
+            if (badAddrs != "") {
+                this._showErrorMessage(this.getMessage("cannotContinueInvalidEmails") + "<br>"+ badAddrs);
+                return "";
+            }
+            var ccEmails = parsed.good.size() ? parsed.good.getArray() : parsed.all.getArray();
+        }
+    }
+    return ccEmails.join(";");
 };
 
