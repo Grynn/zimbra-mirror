@@ -13,5 +13,5 @@
 # basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
 # ***** END LICENSE BLOCK *****
 # 
-
+export TMP=/opt/zimbra/data/tmp
 exec `dirname $0`/zmjava -Djava.io.tmpdir=/opt/zimbra/data/tmp -Dpython.cachedir=/opt/zimbra/data/tmp/jython-cachedir org.python.util.jython "$@"
