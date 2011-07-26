@@ -87,12 +87,12 @@ public class ExecuteHarnessMain {
 	/**
 	 * The list of groups to execute
 	 */
-	public List<String> groups = Arrays.asList("always", "sanity");
+	public ArrayList<String> groups = new ArrayList<String>(Arrays.asList("always", "sanity"));
 
 	/**
 	 * The list of groups to exclude
 	 */
-	public List<String> excludeGroups = Arrays.asList("skip");
+	public ArrayList<String> excludeGroups = new ArrayList<String>(Arrays.asList("skip"));
 		
 	/**
 	 * The suite verbosity
@@ -306,7 +306,13 @@ public class ExecuteHarnessMain {
 	 */
 	protected List<XmlSuite> getXmlSuiteList() throws HarnessException {
 
-		
+		// Add network or foss based on the server version
+		if ( ZimbraSeleniumProperties.zimbraGetVersionString().toLowerCase().contains("network") ) {
+			excludeGroups.add("foss");
+		} else {
+			excludeGroups.add("network");
+		}
+
 		// Only one suite per run in the zimbra process (subject to change)
 		XmlSuite suite = new XmlSuite();
 		suite.setName("zimbra");
@@ -869,13 +875,13 @@ public class ExecuteHarnessMain {
 	        if ( cmd.hasOption('g') ) {
 	        	// Remove spaces and split on commas
 	        	String[] values = cmd.getOptionValue('g').replaceAll("\\s+", "").split(",");
-	        	this.groups = Arrays.asList(values);
+	        	this.groups = new ArrayList<String>(Arrays.asList(values));
 	        }
 	      
 	        if ( cmd.hasOption("eg") ) {
 	        	// Remove spaces and split on commas
 	        	String[] values = cmd.getOptionValue("eg").replaceAll("\\s+", "").split(",");
-	        	this.excludeGroups = Arrays.asList(values);
+	        	this.excludeGroups = new ArrayList<String>(Arrays.asList(values));
 	        }
 	        
 	        if ( cmd.hasOption('v') ) {

@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.staf;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain;
@@ -23,7 +24,7 @@ public class Driver {
         
         harness.jarfilename = "jarfile.jar";
         harness.classfilter = "projects.mobile.tests";
-        harness.groups = Arrays.asList("always", "sanity");
+        harness.groups = new ArrayList<String>(Arrays.asList("always", "sanity"));
         
         // Execute!
 		String response = harness.execute();

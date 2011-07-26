@@ -127,7 +127,7 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
         mLog.info("valueLog="+ valueLog);
         
         // Since multiple GROUP arguments can be specified, process each one
-        List<String> valueGroup = new ArrayList<String>();
+        ArrayList<String> valueGroup = new ArrayList<String>();
         for (int i = 1; i <= request.optionTimes(argGroup); i++) {
         	String g = request.optionValue(argGroup, i);
         	valueGroup.add(g);
@@ -136,7 +136,7 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
         }
         if ( valueGroup.isEmpty() ) {
         	// If no groups were specified, default to sanity
-        	valueGroup = Arrays.asList("always", "sanity");
+        	valueGroup = new ArrayList<String>(Arrays.asList("always", "sanity"));
             mLog.info("valueGroup=always,sanity");
         }
         
