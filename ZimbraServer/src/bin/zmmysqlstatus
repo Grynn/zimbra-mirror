@@ -199,7 +199,7 @@ print("\n");
 
 # Print the interesting part of InnoDB status
 print("InnoDB Status:\n");
-@results = runSql("SHOW INNODB STATUS");
+@results = runSql("SHOW ENGINE INNODB STATUS");
 @results = split(/\\n/, $results[0]);
 my $printLine = 0;
 foreach my $line (@results) {
