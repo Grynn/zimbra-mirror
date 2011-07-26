@@ -2,7 +2,7 @@
 
 #include "common.h"
 #include "MapiWrapper.h"
-#include "ExchangeCommon.h"
+#include "MAPICommon.h"
 
 
 #define PR_PROFILE_UNRESOLVED_NAME 0x6607001e

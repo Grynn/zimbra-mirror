@@ -4,7 +4,7 @@
 #include "resource.h"
 #include "Exchange_i.h"
 #include "MapiMigration.h"
-#include "MAPIObjects.h"
+#include "ExchangeAdmin.h"
 
 class ATL_NO_VTABLE CMapiWrapper:
     public CComObjectRootEx<CComSingleThreadModel>,

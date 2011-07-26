@@ -24,18 +24,42 @@
     <ClCompile Include="..\Exchange\MapiUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Exchange\ExchangeAdmin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Exchange\MAPISession.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Exchange\MAPIStore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Exchange\MAPITableIterator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Exchange\MAPIObjects.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Exchange\ExchangeCommon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Exchange\MapiUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Exchange\GenericException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Exchange\MAPICommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Exchange\ExchangeAdmin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Exchange\MAPISession.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Exchange\MAPIStore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Exchange\MAPITableIterator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -33,10 +33,10 @@
     <ClCompile Include="Exchange_i.c">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="MAPIObjects.cpp">
+    <ClCompile Include="MapiUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MapiUtils.cpp">
+    <ClCompile Include="ExchangeAdmin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,16 +50,16 @@
     <ClInclude Include="Exchange_i.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="ExchangeCommon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MAPIObjects.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GenericException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MapiUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MAPICommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ExchangeAdmin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

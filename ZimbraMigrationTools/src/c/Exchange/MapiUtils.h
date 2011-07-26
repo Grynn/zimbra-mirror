@@ -1,5 +1,5 @@
 #pragma once
-#include "ExchangeCommon.h"
+#include "MAPICommon.h"
 
 #define pidExchangeXmitReservedMin		0x3FE0
 #define pidExchangeNonXmitReservedMin	0x65E0

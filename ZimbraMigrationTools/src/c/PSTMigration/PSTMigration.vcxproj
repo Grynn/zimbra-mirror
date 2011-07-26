@@ -263,7 +263,11 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Exchange\ExchangeAdmin.cpp" />
     <ClCompile Include="..\Exchange\MAPIObjects.cpp" />
+    <ClCompile Include="..\Exchange\MAPISession.cpp" />
+    <ClCompile Include="..\Exchange\MAPIStore.cpp" />
+    <ClCompile Include="..\Exchange\MAPITableIterator.cpp" />
     <ClCompile Include="..\Exchange\MapiUtils.cpp" />
     <ClCompile Include="PSTMigration.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='rtl|Win32'">NotUsing</PrecompiledHeader>
@@ -273,9 +277,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Exchange\ExchangeCommon.h" />
+    <ClInclude Include="..\Exchange\ExchangeAdmin.h" />
+    <ClInclude Include="..\Exchange\MAPICommon.h" />
     <ClInclude Include="..\Exchange\GenericException.h" />
     <ClInclude Include="..\Exchange\MAPIObjects.h" />
+    <ClInclude Include="..\Exchange\MAPISession.h" />
+    <ClInclude Include="..\Exchange\MAPIStore.h" />
+    <ClInclude Include="..\Exchange\MAPITableIterator.h" />
     <ClInclude Include="..\Exchange\MapiUtils.h" />
   </ItemGroup>
   <ItemGroup>

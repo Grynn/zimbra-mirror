@@ -1,4 +1,7 @@
 #include "stdafx.h"
+#include "..\Exchange\ExchangeAdmin.h"
+#include "..\Exchange\MAPISession.h"
+#include "..\Exchange\MAPIStore.h"
 #include "..\Exchange\MAPIObjects.h"
 #include "..\Exchange\MapiUtils.h"
 
@@ -122,7 +125,11 @@ bool iterate_folders(Zimbra::MAPI::MAPIFolder &folder)
 	{
 		bMore = folderIter.GetNext( childFolder );
 		if(bMore)
-			printf("FolderName: %S \n",childFolder.Name().c_str());
+		{
+			ULONG itemCount=0;
+			childFolder.GetItemCount(itemCount);
+			printf("FolderName: %S ----- %d\n",childFolder.Name().c_str(),itemCount );
+		}
 		if( bMore )
 		{
 			iterate_folders(childFolder);

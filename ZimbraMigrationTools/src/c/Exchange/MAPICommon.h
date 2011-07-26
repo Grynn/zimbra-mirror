@@ -21,6 +21,10 @@
 
 #include "GenericException.h"
 
+
+#define PR_PROFILE_UNRESOLVED_NAME 0x6607001e
+#define PR_PROFILE_UNRESOLVED_SERVER 0x6608001e
+
 // use this flag on OpenMsgStore to force cached mode connections
 // to read remote data and not local data
 #define MDB_ONLINE ((ULONG) 0x00000100)
