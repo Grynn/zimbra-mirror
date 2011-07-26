@@ -1333,7 +1333,6 @@ function(htmlEl,html){
  */
 Dwt.setFavIcon =
 function(iconURL) {
-	return; // Unsupported on IE. Too CPU heavy on FF. Now seems too CPU heavy on Chrome too. Let's disable this.
 
 	// Look for an existing fav icon to modify.
 	var favIcon = null;
