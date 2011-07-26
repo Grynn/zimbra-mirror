@@ -78,6 +78,10 @@ case "$1" in
       fi
       if [ ! -f ${dbfile} ]; then
         ${zimbra_home}/libexec/zmcbpolicydinit
+        if [ $? != 0 ]; then
+          echo "Unable to initialize cbpolicyd database." 
+          exit 1
+        fi
       fi
       if [ x$2 = "x" ]; then
         rewriteconfig
