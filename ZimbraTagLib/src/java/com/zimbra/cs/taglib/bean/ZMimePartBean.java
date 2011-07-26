@@ -15,7 +15,7 @@
 
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZMessage.ZMimePart;
+import com.zimbra.client.ZMessage.ZMimePart;
 
 import java.util.Arrays;
 import java.util.HashMap;

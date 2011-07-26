@@ -18,7 +18,7 @@
 <%@ page language="java" import="java.net.*, java.util.*,com.zimbra.common.util.*, com.zimbra.cs.util.*, com.zimbra.cs.servlet.*"%>
 <%@ page language="java" import="java.io.*, org.apache.commons.httpclient.methods.multipart.*"%>
 <%@ page language="java" import="com.zimbra.cs.service.*" %>
-<%@ page language="java" import="com.zimbra.cs.zclient.*" %>
+<%@ page language="java" import="com.zimbra.client.*" %>
 
 <%@ page import="org.apache.commons.fileupload.*,org.apache.commons.fileupload.disk.*, org.apache.commons.io.*, java.util.*,
 java.io.File, java.lang.Exception" %>

@@ -17,7 +17,7 @@ package com.zimbra.cs.taglib.tag.briefcase;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.taglib.bean.ZMessageComposeBean;
 import com.zimbra.cs.taglib.bean.ZMessageBean;
-import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.client.ZMailbox;
 import com.zimbra.common.service.ServiceException;
 
 import javax.servlet.jsp.JspException;

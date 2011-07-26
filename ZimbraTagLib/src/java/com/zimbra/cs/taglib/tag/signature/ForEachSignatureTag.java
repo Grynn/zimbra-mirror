@@ -16,8 +16,8 @@ package com.zimbra.cs.taglib.tag.signature;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZSignature;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZSignature;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;

@@ -16,7 +16,7 @@ package com.zimbra.webClient.servlet;
 
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.taglib.ZJspSession;
-import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.client.ZMailbox;
 
 import java.io.*;
 import java.util.*;

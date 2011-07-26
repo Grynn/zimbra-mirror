@@ -19,12 +19,12 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZMessageBean;
 import com.zimbra.cs.taglib.bean.ZMessageComposeBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
-import com.zimbra.cs.zclient.ZDateTime;
-import com.zimbra.cs.zclient.ZInvite;
-import com.zimbra.cs.zclient.ZInvite.ZComponent;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
-import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
+import com.zimbra.client.ZDateTime;
+import com.zimbra.client.ZInvite;
+import com.zimbra.client.ZInvite.ZComponent;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZMailbox.ZOutgoingMessage;
+import com.zimbra.client.ZMailbox.ZOutgoingMessage.MessagePart;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;

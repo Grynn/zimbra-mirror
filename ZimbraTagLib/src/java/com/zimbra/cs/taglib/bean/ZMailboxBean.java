@@ -15,15 +15,15 @@
 package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.zclient.ZContact;
-import com.zimbra.cs.zclient.ZFeatures;
-import com.zimbra.cs.zclient.ZFilterRule;
-import com.zimbra.cs.zclient.ZFolder;
-import com.zimbra.cs.zclient.ZGetInfoResult;
-import com.zimbra.cs.zclient.ZIdentity;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZPrefs;
-import com.zimbra.cs.zclient.ZSignature;
+import com.zimbra.client.ZContact;
+import com.zimbra.client.ZFeatures;
+import com.zimbra.client.ZFilterRule;
+import com.zimbra.client.ZFolder;
+import com.zimbra.client.ZGetInfoResult;
+import com.zimbra.client.ZIdentity;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZPrefs;
+import com.zimbra.client.ZSignature;
 
 import java.net.URI;
 import java.util.Collection;

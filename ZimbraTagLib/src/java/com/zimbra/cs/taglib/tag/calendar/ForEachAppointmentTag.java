@@ -17,7 +17,7 @@ package com.zimbra.cs.taglib.tag.calendar;
 
 import com.zimbra.cs.taglib.bean.ZApptSummariesBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
-import com.zimbra.cs.zclient.ZAppointmentHit;
+import com.zimbra.client.ZAppointmentHit;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;

@@ -32,7 +32,7 @@ import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.account.soap.SoapProvisioning;
-import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.client.ZMailbox;
 
 
 public class OfflineServlet extends HttpServlet {

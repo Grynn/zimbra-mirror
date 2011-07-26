@@ -17,9 +17,9 @@ package com.zimbra.cs.taglib.tag.filter;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.taglib.bean.ZTagLibException;
-import com.zimbra.cs.zclient.ZFilterRule;
-import com.zimbra.cs.zclient.ZFilterRules;
-import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.client.ZFilterRule;
+import com.zimbra.client.ZFilterRules;
+import com.zimbra.client.ZMailbox;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;

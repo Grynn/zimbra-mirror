@@ -14,8 +14,8 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZEmailAddress;
-import com.zimbra.cs.zclient.ZMessageHit;
+import com.zimbra.client.ZEmailAddress;
+import com.zimbra.client.ZMessageHit;
 
 import java.util.Date;
 import java.util.List;

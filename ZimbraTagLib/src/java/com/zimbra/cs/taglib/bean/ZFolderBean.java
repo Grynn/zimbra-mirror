@@ -17,13 +17,13 @@ package com.zimbra.cs.taglib.bean;
 import com.zimbra.common.soap.VoiceConstants;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.zclient.ZFolder;
-import com.zimbra.cs.zclient.ZFolder.Color;
-import com.zimbra.cs.zclient.ZFolder.View;
-import com.zimbra.cs.zclient.ZGrant;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZMountpoint;
-import com.zimbra.cs.zclient.ZSearchFolder;
+import com.zimbra.client.ZFolder;
+import com.zimbra.client.ZFolder.Color;
+import com.zimbra.client.ZFolder.View;
+import com.zimbra.client.ZGrant;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZMountpoint;
+import com.zimbra.client.ZSearchFolder;
 
 import java.util.List;
 

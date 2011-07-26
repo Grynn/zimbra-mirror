@@ -15,8 +15,8 @@
 
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZPhone;
-import com.zimbra.cs.zclient.ZVoiceMailItemHit;
+import com.zimbra.client.ZPhone;
+import com.zimbra.client.ZVoiceMailItemHit;
 import com.zimbra.common.service.ServiceException;
 
 import java.util.Date;

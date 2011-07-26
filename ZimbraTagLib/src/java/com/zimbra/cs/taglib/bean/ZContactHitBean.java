@@ -14,8 +14,8 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZContactHit;
-import com.zimbra.cs.zclient.ZEmailAddress;
+import com.zimbra.client.ZContactHit;
+import com.zimbra.client.ZEmailAddress;
 
 public class ZContactHitBean extends ZSearchHitBean {
     

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="ZimbraSelenium" default="jar" basedir=".">
-	
+
+    <import file="../ant-global.xml" />
 	<property name="build.version" value="6.0.0" />
 
-	<property name="build.dir" location="build" />
 	<property name="build.classes.dir" location="${build.dir}/classes" />
 	<property name="build.resources.dir" location="${build.dir}/resources" />
 	<property name="build.coverage.dir" location="${build.dir}/coverage" />
@@ -22,11 +22,7 @@
 
 	<property name="webclient.dir" location="../ZimbraWebClient" />
 	<property name="native.dir" location="../ZimbraNative" />
-	<property name="server.dir" location="../ZimbraServer" />
-	<property name="common.dir" location="../ZimbraCommon" />
-	<property name="soap.dir" location="../ZimbraSoap" />
 	<property name="zimlet.dir" location="../Zimlet" />
-
 
 	<path id="class.path">
 		<pathelement location="${build.classes.dir}" />
@@ -39,17 +35,10 @@
 		<fileset dir="${common.dir}/jars">
 			<include name="**/*.jar" />
 		</fileset>
-		<fileset dir="${common.dir}/build">
-			<include name="zimbracommon.jar" />
-		</fileset>
-
-		<fileset dir="${soap.dir}/build">
-			<include name="zimbrasoap.jar" />
-		</fileset>
-
-		<fileset dir="${server.dir}/build">
-			<include name="zimbrastore.jar" />
-		</fileset>
+		<fileset file="${common.jarfile}" />
+		<fileset file="${soap.jarfile}" />
+                <fileset file="${client.jarfile}" />
+		<fileset file="${server.jarfile}" />
 	</path>
 
 	<path id="all.java.path">
@@ -213,18 +202,11 @@
 				<include name="mail.jar" />
 				<include name="guava-*.jar" />
 			</fileset>
-			<fileset dir="${common.dir}/build">
-				<include name="zimbracommon.jar" />
-			</fileset>
-			<fileset dir="${native.dir}/build">
-				<include name="zimbra-native.jar" />
-			</fileset>
-			<fileset dir="${soap.dir}/build">
-				<include name="zimbrasoap.jar" />
-			</fileset>
-			<fileset dir="${server.dir}/build">
-				<include name="zimbrastore.jar" />
-			</fileset>
+			<fileset file="${common.jarfile}" />
+			<fileset file="${native.jarfile}" />
+			<fileset file="${soap.jarfile}" />
+                        <fileset file="${client.jarfile}" />
+			<fileset file="${server.jarfile}" />
 		</copy>
 
 		<jar destfile="${dist.lib.dir}/zimbrastaf.jar" basedir="${build.staf.selenium}">
@@ -232,7 +214,7 @@
 				<attribute name="Main-Class" value="staf.Driver" />
 				<section name="staf/service/info">
 					<attribute name="Service-Class" value="com.zimbra.qa.selenium.staf.StafIntegration" />
-					<attribute name="Packaged-Jars" value="guava-r09 commons-beanutils-1.7 commons-configuration-1.5 commons-lang-2.4 ezmorph-1.0.6 htmlcleaner-2.2 json-lib-2.3-jdk15 ocutil-2.4.2 selenium-java-2.0b2 selenium-server-standalone-2.0b2 testng-5.12.1 xalan apache-log4j-extras-1.0 commons-cli-1.2 commons-code-1.4 commons-configuration-1.5 commons-httpclient-3.1 commons-logging dom4j-1.5.2 jaxen-1.1.1 libidn-1.17 log4j-1.2.16 mail resources coverage zimbracommon zimbra-native zimbrasoap zimbrastore ant-tar-patched" />
+					<attribute name="Packaged-Jars" value="guava-r09 commons-beanutils-1.7 commons-configuration-1.5 commons-lang-2.4 ezmorph-1.0.6 htmlcleaner-2.2 json-lib-2.3-jdk15 ocutil-2.4.2 selenium-java-2.0b2 selenium-server-standalone-2.0b2 testng-5.12.1 xalan apache-log4j-extras-1.0 commons-cli-1.2 commons-code-1.4 commons-configuration-1.5 commons-httpclient-3.1 commons-logging dom4j-1.5.2 jaxen-1.1.1 libidn-1.17 log4j-1.2.16 mail resources coverage zimbracommon zimbra-native zimbrasoap zimbraclient zimbrastore ant-tar-patched" />
 				</section>
 			</manifest>
 		</jar>
@@ -266,7 +248,7 @@
 				<attribute name="Main-Class" value="staf.Driver" />
 				<section name="staf/service/info">
 					<attribute name="Service-Class" value="com.zimbra.qa.selenium.results.ResultsStaf" />
-					<attribute name="Packaged-Jars" value="guava-r09 commons-beanutils-1.7 commons-configuration-1.5 commons-lang-2.4 ezmorph-1.0.6 htmlcleaner-2.2 json-lib-2.3-jdk15 ocutil-2.4.2 selenium-java-2.0b2 selenium-server-standalone-2.0b2 testng-5.12.1 xalan apache-log4j-extras-1.0 commons-cli-1.2 commons-code-1.4 commons-configuration-1.5 commons-httpclient-3.1 commons-logging dom4j-1.5.2 jaxen-1.1.1 libidn-1.17 log4j-1.2.16 mail resources coverage zimbracommon zimbra-native zimbrasoap zimbrastore" />
+					<attribute name="Packaged-Jars" value="guava-r09 commons-beanutils-1.7 commons-configuration-1.5 commons-lang-2.4 ezmorph-1.0.6 htmlcleaner-2.2 json-lib-2.3-jdk15 ocutil-2.4.2 selenium-java-2.0b2 selenium-server-standalone-2.0b2 testng-5.12.1 xalan apache-log4j-extras-1.0 commons-cli-1.2 commons-code-1.4 commons-configuration-1.5 commons-httpclient-3.1 commons-logging dom4j-1.5.2 jaxen-1.1.1 libidn-1.17 log4j-1.2.16 mail resources coverage zimbracommon zimbra-native zimbrasoap zimbraclient zimbrastore" />
 				</section>
 			</manifest>
 		</jar>

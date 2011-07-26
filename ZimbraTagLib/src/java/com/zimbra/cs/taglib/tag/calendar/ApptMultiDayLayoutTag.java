@@ -23,7 +23,7 @@ import com.zimbra.cs.taglib.bean.ZApptSummariesBean;
 import com.zimbra.cs.taglib.bean.ZApptAllDayLayoutBean;
 import com.zimbra.cs.taglib.bean.BeanUtils;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
-import com.zimbra.cs.zclient.ZAppointmentHit;
+import com.zimbra.client.ZAppointmentHit;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;

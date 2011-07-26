@@ -15,8 +15,8 @@
 
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZCallFeature;
-import com.zimbra.cs.zclient.ZPhone;
+import com.zimbra.client.ZCallFeature;
+import com.zimbra.client.ZPhone;
 import com.zimbra.common.soap.VoiceConstants;
 import com.zimbra.common.service.ServiceException;
 

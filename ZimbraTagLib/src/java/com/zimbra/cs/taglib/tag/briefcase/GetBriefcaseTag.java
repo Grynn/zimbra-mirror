@@ -16,7 +16,7 @@ package com.zimbra.cs.taglib.tag.briefcase;
 
 import com.zimbra.cs.taglib.bean.*;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
-import com.zimbra.cs.zclient.*;
+import com.zimbra.client.*;
 
 import com.zimbra.common.service.ServiceException;
 

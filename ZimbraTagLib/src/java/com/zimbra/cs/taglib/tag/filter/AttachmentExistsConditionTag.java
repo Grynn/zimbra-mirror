@@ -16,7 +16,7 @@ package com.zimbra.cs.taglib.tag.filter;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
-import com.zimbra.cs.zclient.ZFilterCondition.ZAttachmentExistsCondition;
+import com.zimbra.client.ZFilterCondition.ZAttachmentExistsCondition;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;

@@ -18,8 +18,8 @@ package com.zimbra.cs.taglib.tag.calendar;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZFileUploaderBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZMailbox.ZImportAppointmentsResult;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZMailbox.ZImportAppointmentsResult;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;

@@ -83,9 +83,9 @@ import com.zimbra.cs.offline.util.yc.oauth.OAuthManager;
 import com.zimbra.cs.util.yauth.AuthenticationException;
 import com.zimbra.cs.util.yauth.MetadataTokenStore;
 import com.zimbra.cs.wiki.WikiUtil;
-import com.zimbra.cs.zclient.ZGetInfoResult;
-import com.zimbra.cs.zclient.ZIdentity;
-import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.client.ZGetInfoResult;
+import com.zimbra.client.ZIdentity;
+import com.zimbra.client.ZMailbox;
 
 public class OfflineProvisioning extends Provisioning implements OfflineConstants {
 

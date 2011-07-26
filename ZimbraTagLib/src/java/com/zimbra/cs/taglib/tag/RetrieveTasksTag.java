@@ -21,10 +21,10 @@ import javax.servlet.jsp.JspTagException;
 import com.zimbra.cs.taglib.tag.i18n.I18nUtil;
 import java.io.IOException;
 
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZFolder;
-import com.zimbra.cs.zclient.ZSearchFolder;
-import com.zimbra.cs.zclient.ZSearchParams;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZFolder;
+import com.zimbra.client.ZSearchFolder;
+import com.zimbra.client.ZSearchParams;
 import com.zimbra.cs.taglib.bean.ZFolderBean;
 import com.zimbra.common.service.ServiceException;
 

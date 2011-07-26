@@ -19,7 +19,7 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 import com.zimbra.cs.taglib.ZJspSession;
-import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.client.ZMailbox;
 
 public abstract class ZimbraSimpleTag extends SimpleTagSupport {
 

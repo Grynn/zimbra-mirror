@@ -14,7 +14,7 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZSearchHit;
+import com.zimbra.client.ZSearchHit;
 
 public abstract class ZSearchHitBean {
 

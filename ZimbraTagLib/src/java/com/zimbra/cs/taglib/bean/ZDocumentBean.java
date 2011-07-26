@@ -17,7 +17,7 @@ package com.zimbra.cs.taglib.bean;
 import java.util.Date;
 
 import com.zimbra.common.mime.ContentType;
-import com.zimbra.cs.zclient.ZDocument;
+import com.zimbra.client.ZDocument;
 
 public class ZDocumentBean {
 

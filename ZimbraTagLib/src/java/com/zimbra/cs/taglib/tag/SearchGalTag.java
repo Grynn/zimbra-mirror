@@ -17,8 +17,8 @@ package com.zimbra.cs.taglib.tag;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.cs.taglib.bean.ZSearchGalResultBean;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZMailbox.GalEntryType;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZMailbox.GalEntryType;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;

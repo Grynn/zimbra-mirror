@@ -15,7 +15,7 @@
 
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZVoiceMailPrefs;
+import com.zimbra.client.ZVoiceMailPrefs;
 
 import com.zimbra.common.soap.VoiceConstants;
 

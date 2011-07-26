@@ -15,7 +15,7 @@
 package com.zimbra.cs.taglib.tag.filter;
 
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
-import com.zimbra.cs.zclient.ZFilterAction.ZTagAction;
+import com.zimbra.client.ZFilterAction.ZTagAction;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;

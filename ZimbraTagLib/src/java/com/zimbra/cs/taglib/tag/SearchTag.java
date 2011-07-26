@@ -16,11 +16,11 @@ package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZSearchResultBean;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZMailbox.Fetch;
-import com.zimbra.cs.zclient.ZMailbox.SearchSortBy;
-import com.zimbra.cs.zclient.ZSearchParams;
-import com.zimbra.cs.zclient.ZSearchResult;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZMailbox.Fetch;
+import com.zimbra.client.ZMailbox.SearchSortBy;
+import com.zimbra.client.ZSearchParams;
+import com.zimbra.client.ZSearchResult;
 import com.zimbra.common.util.MapUtil;
 
 import javax.servlet.jsp.JspContext;

@@ -4,9 +4,9 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZGrantBean;
 import com.zimbra.cs.taglib.bean.ZMimePartBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
-import com.zimbra.cs.zclient.ZEmailAddress;
-import com.zimbra.cs.zclient.ZGrant;
-import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.client.ZEmailAddress;
+import com.zimbra.client.ZGrant;
+import com.zimbra.client.ZMailbox;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;

@@ -22,8 +22,8 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.cs.offline.common.OfflineConstants;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZFolder;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZFolder;
 import com.zimbra.soap.type.DataSource.ConnectionType;
 
 public class MailBean extends FormBean {

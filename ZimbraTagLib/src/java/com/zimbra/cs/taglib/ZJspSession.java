@@ -20,9 +20,9 @@ import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.RemoteIP;
 import com.zimbra.cs.taglib.bean.BeanUtils;
-import com.zimbra.cs.zclient.ZAuthResult;
-import com.zimbra.cs.zclient.ZFolder;
-import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.client.ZAuthResult;
+import com.zimbra.client.ZFolder;
+import com.zimbra.client.ZMailbox;
 import com.zimbra.common.localconfig.LC;
 
 import javax.servlet.http.Cookie;

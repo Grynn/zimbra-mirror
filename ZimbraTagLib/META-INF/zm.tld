@@ -17,7 +17,7 @@
         <body-content>empty</body-content>        
         <variable>
             <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.zclient.ZMailbox.ZSendMessageResponse</variable-class>
+            <variable-class>com.zimbra.client.ZMailbox.ZSendMessageResponse</variable-class>
             <scope>AT_END</scope>
         </variable>
         <attribute>
@@ -158,7 +158,7 @@
         <body-content>empty</body-content>
         <variable>
             <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.zclient.ZMailbox.ZSendInviteReplyResult</variable-class>
+            <variable-class>com.zimbra.client.ZMailbox.ZSendInviteReplyResult</variable-class>
             <scope>AT_END</scope>
         </variable>
         <attribute>
@@ -186,7 +186,7 @@
         <body-content>empty</body-content>
         <variable>
             <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.zclient.ZMessage</variable-class>
+            <variable-class>com.zimbra.client.ZMessage</variable-class>
             <scope>AT_END</scope>
         </variable>
         <attribute>
@@ -581,7 +581,7 @@
         <body-content>scriptless</body-content>
         <variable>
             <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.zclient.ZSignature</variable-class>
+            <variable-class>com.zimbra.client.ZSignature</variable-class>
             <scope>NESTED</scope>
         </variable>
         <attribute>
@@ -1064,7 +1064,7 @@
         </variable>
         <variable>
             <name-from-attribute>varAuthResult</name-from-attribute>
-            <variable-class>com.zimbra.cs.zclient.ZAuthResult</variable-class>
+            <variable-class>com.zimbra.client.ZAuthResult</variable-class>
             <scope>AT_END</scope>
         </variable>
         <attribute>
@@ -3945,7 +3945,7 @@
 
         <variable>
             <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.zclient.ZFilterRule</variable-class>
+            <variable-class>com.zimbra.client.ZFilterRule</variable-class>
             <scope>AT_END</scope>
         </variable>
 
@@ -4339,7 +4339,7 @@
             <name>rule</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>com.zimbra.cs.zclient.ZFilterRule</type>
+            <type>com.zimbra.client.ZFilterRule</type>
         </attribute>
     </tag>
 
@@ -4361,7 +4361,7 @@
             <name>rule</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>com.zimbra.cs.zclient.ZFilterRule</type>
+            <type>com.zimbra.client.ZFilterRule</type>
         </attribute>
 
         <attribute>
@@ -4756,7 +4756,7 @@
         <body-content>scriptless</body-content>
         <variable>
             <name-from-attribute>var</name-from-attribute>
-            <variable-class>com.zimbra.cs.zclient.ZAppointmentHit</variable-class>
+            <variable-class>com.zimbra.client.ZAppointmentHit</variable-class>
             <scope>NESTED</scope>
         </variable>
         <attribute>
@@ -4928,7 +4928,7 @@
          <body-content>empty</body-content>
          <variable>
              <name-from-attribute>var</name-from-attribute>
-             <variable-class>com.zimbra.cs.zclient.ZMailbox.ZAppointmentResult</variable-class>
+             <variable-class>com.zimbra.client.ZMailbox.ZAppointmentResult</variable-class>
              <scope>AT_END</scope>
          </variable>
          <attribute>
@@ -5032,7 +5032,7 @@
          <body-content>empty</body-content>
          <variable>
              <name-from-attribute>var</name-from-attribute>
-             <variable-class>com.zimbra.cs.zclient.ZMailbox.ZAppointmentResult</variable-class>
+             <variable-class>com.zimbra.client.ZMailbox.ZAppointmentResult</variable-class>
              <scope>AT_END</scope>
          </variable>
          <attribute>
@@ -5387,7 +5387,7 @@
          <body-content>empty</body-content>
          <variable>
              <name-from-attribute>var</name-from-attribute>
-             <variable-class>com.zimbra.cs.zclient.ZMailbox.ZImportContactsResult</variable-class>
+             <variable-class>com.zimbra.client.ZMailbox.ZImportContactsResult</variable-class>
              <scope>AT_END</scope>
          </variable>
          <attribute>
@@ -5433,7 +5433,7 @@
          <body-content>empty</body-content>
          <variable>
              <name-from-attribute>var</name-from-attribute>
-             <variable-class>com.zimbra.cs.zclient.ZMailbox.ZImportAppointmentsResult</variable-class>
+             <variable-class>com.zimbra.client.ZMailbox.ZImportAppointmentsResult</variable-class>
              <scope>AT_END</scope>
          </variable>
          <attribute>
@@ -6962,7 +6962,7 @@
     <function>
         <name>isAddressBookCondition</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>boolean isAddressBook(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+        <function-signature>boolean isAddressBook(com.zimbra.client.ZFilterCondition)</function-signature>
     </function>
 
 	<function>
@@ -6974,79 +6974,79 @@
     <function>
         <name>getAddressBook</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>com.zimbra.cs.zclient.ZFilterCondition.ZAddressBookCondition getAddressBook(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+        <function-signature>com.zimbra.client.ZFilterCondition.ZAddressBookCondition getAddressBook(com.zimbra.client.ZFilterCondition)</function-signature>
     </function>
 
     <function>
         <name>isBodyCondition</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>boolean isBody(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+        <function-signature>boolean isBody(com.zimbra.client.ZFilterCondition)</function-signature>
     </function>
 
     <function>
         <name>getBody</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>com.zimbra.cs.zclient.ZFilterCondition.ZBodyCondition getBody(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+        <function-signature>com.zimbra.client.ZFilterCondition.ZBodyCondition getBody(com.zimbra.client.ZFilterCondition)</function-signature>
     </function>
 
     <function>
         <name>isSizeCondition</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>boolean isSize(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+        <function-signature>boolean isSize(com.zimbra.client.ZFilterCondition)</function-signature>
     </function>
 
     <function>
         <name>getSize</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>com.zimbra.cs.zclient.ZFilterCondition.ZSizeCondition getSize(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+        <function-signature>com.zimbra.client.ZFilterCondition.ZSizeCondition getSize(com.zimbra.client.ZFilterCondition)</function-signature>
     </function>
 
     <function>
         <name>isDateCondition</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>boolean isDate(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+        <function-signature>boolean isDate(com.zimbra.client.ZFilterCondition)</function-signature>
     </function>
 
     <function>
         <name>getDate</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>com.zimbra.cs.zclient.ZFilterCondition.ZDateCondition getDate(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+        <function-signature>com.zimbra.client.ZFilterCondition.ZDateCondition getDate(com.zimbra.client.ZFilterCondition)</function-signature>
     </function>
 
     <function>
         <name>isHeaderCondition</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>boolean isHeader(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+        <function-signature>boolean isHeader(com.zimbra.client.ZFilterCondition)</function-signature>
     </function>
 
     <function>
         <name>getHeader</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>com.zimbra.cs.zclient.ZFilterCondition.ZHeaderCondition getHeader(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+        <function-signature>com.zimbra.client.ZFilterCondition.ZHeaderCondition getHeader(com.zimbra.client.ZFilterCondition)</function-signature>
     </function>
 
     <function>
         <name>isHeaderExistsCondition</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>boolean isHeaderExists(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+        <function-signature>boolean isHeaderExists(com.zimbra.client.ZFilterCondition)</function-signature>
     </function>
 
     <function>
         <name>getHeaderExists</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>com.zimbra.cs.zclient.ZFilterCondition.ZHeaderExistsCondition getHeaderExists(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+        <function-signature>com.zimbra.client.ZFilterCondition.ZHeaderExistsCondition getHeaderExists(com.zimbra.client.ZFilterCondition)</function-signature>
     </function>
 
     <function>
         <name>isAttachmentExistsCondition</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>boolean isAttachmentExists(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+        <function-signature>boolean isAttachmentExists(com.zimbra.client.ZFilterCondition)</function-signature>
     </function>
 
     <function>
         <name>getAttachmentExists</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>com.zimbra.cs.zclient.ZFilterCondition.ZAttachmentExistsCondition getAttachmentExists(com.zimbra.cs.zclient.ZFilterCondition)</function-signature>
+        <function-signature>com.zimbra.client.ZFilterCondition.ZAttachmentExistsCondition getAttachmentExists(com.zimbra.client.ZFilterCondition)</function-signature>
     </function>
 
     <function>
@@ -7058,67 +7058,67 @@
     <function>
         <name>isKeepAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>boolean isKeep(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+        <function-signature>boolean isKeep(com.zimbra.client.ZFilterAction)</function-signature>
     </function>
 
     <function>
         <name>isStopAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>boolean isStop(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+        <function-signature>boolean isStop(com.zimbra.client.ZFilterAction)</function-signature>
     </function>
 
     <function>
         <name>isDiscardAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>boolean isDiscard(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+        <function-signature>boolean isDiscard(com.zimbra.client.ZFilterAction)</function-signature>
     </function>
 
     <function>
         <name>isFileIntoAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>boolean isFileInto(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+        <function-signature>boolean isFileInto(com.zimbra.client.ZFilterAction)</function-signature>
     </function>
 
     <function>
         <name>isTagAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>boolean isTag(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+        <function-signature>boolean isTag(com.zimbra.client.ZFilterAction)</function-signature>
     </function>
 
     <function>
         <name>isFlagAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>boolean isFlag(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+        <function-signature>boolean isFlag(com.zimbra.client.ZFilterAction)</function-signature>
     </function>
 
     <function>
         <name>isRedirectAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>boolean isRedirect(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+        <function-signature>boolean isRedirect(com.zimbra.client.ZFilterAction)</function-signature>
     </function>
 
     <function>
         <name>getTagAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>com.zimbra.cs.zclient.ZFilterAction.ZTagAction getTag(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+        <function-signature>com.zimbra.client.ZFilterAction.ZTagAction getTag(com.zimbra.client.ZFilterAction)</function-signature>
     </function>
 
     <function>
         <name>getFlagAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>com.zimbra.cs.zclient.ZFilterAction.ZMarkAction getFlag(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+        <function-signature>com.zimbra.client.ZFilterAction.ZMarkAction getFlag(com.zimbra.client.ZFilterAction)</function-signature>
     </function>
 
     <function>
         <name>getRedirectAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>com.zimbra.cs.zclient.ZFilterAction.ZRedirectAction getRedirect(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+        <function-signature>com.zimbra.client.ZFilterAction.ZRedirectAction getRedirect(com.zimbra.client.ZFilterAction)</function-signature>
     </function>
 
     <function>
         <name>getFileIntoAction</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>com.zimbra.cs.zclient.ZFilterAction.ZFileIntoAction getFileInto(com.zimbra.cs.zclient.ZFilterAction)</function-signature>
+        <function-signature>com.zimbra.client.ZFilterAction.ZFileIntoAction getFileInto(com.zimbra.client.ZFilterAction)</function-signature>
     </function>
 
     <function>
@@ -7358,7 +7358,7 @@
     <function>
         <name>getRepeatBlurb</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.lang.String getRepeatBlurb(com.zimbra.cs.zclient.ZSimpleRecurrence,javax.servlet.jsp.PageContext,java.util.TimeZone,java.util.Date)</function-signature>
+        <function-signature>java.lang.String getRepeatBlurb(com.zimbra.client.ZSimpleRecurrence,javax.servlet.jsp.PageContext,java.util.TimeZone,java.util.Date)</function-signature>
     </function>
 
     <function>
@@ -7370,7 +7370,7 @@
     <function>
         <name>getMyAttendee</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>com.zimbra.cs.zclient.ZInvite.ZAttendee getMyAttendee(com.zimbra.cs.zclient.ZInvite,com.zimbra.cs.taglib.bean.ZMailboxBean)</function-signature>
+        <function-signature>com.zimbra.client.ZInvite.ZAttendee getMyAttendee(com.zimbra.client.ZInvite,com.zimbra.cs.taglib.bean.ZMailboxBean)</function-signature>
     </function>
 
     <function>
@@ -7476,7 +7476,7 @@
     <function>
         <name>getDisplayCaller</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
-        <function-signature>java.lang.String getDisplayCaller(javax.servlet.jsp.PageContext, com.zimbra.cs.zclient.ZPhone)</function-signature>
+        <function-signature>java.lang.String getDisplayCaller(javax.servlet.jsp.PageContext, com.zimbra.client.ZPhone)</function-signature>
     </function>
 
     <function>

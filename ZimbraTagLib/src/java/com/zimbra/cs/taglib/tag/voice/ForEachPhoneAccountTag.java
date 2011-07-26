@@ -16,8 +16,8 @@ package com.zimbra.cs.taglib.tag.voice;
 
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.taglib.bean.ZPhoneAccountBean;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZPhoneAccount;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZPhoneAccount;
 import com.zimbra.common.service.ServiceException;
 
 import javax.servlet.jsp.JspException;

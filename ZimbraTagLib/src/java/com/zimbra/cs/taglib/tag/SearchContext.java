@@ -21,10 +21,10 @@ import com.google.common.base.Strings;
 import com.google.common.collect.MapMaker;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.*;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZSearchParams;
-import com.zimbra.cs.zclient.ZSearchPagerResult;
-import com.zimbra.cs.zclient.ZPhoneAccount;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZSearchParams;
+import com.zimbra.client.ZSearchPagerResult;
+import com.zimbra.client.ZPhoneAccount;
 
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;

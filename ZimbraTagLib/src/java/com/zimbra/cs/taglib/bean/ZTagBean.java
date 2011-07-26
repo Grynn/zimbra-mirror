@@ -14,7 +14,7 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZTag;
+import com.zimbra.client.ZTag;
 
 public class ZTagBean {
 

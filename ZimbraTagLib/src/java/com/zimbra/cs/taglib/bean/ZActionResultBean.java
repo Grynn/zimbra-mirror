@@ -14,7 +14,7 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZMailbox.ZActionResult;
+import com.zimbra.client.ZMailbox.ZActionResult;
 
 public class ZActionResultBean {
 

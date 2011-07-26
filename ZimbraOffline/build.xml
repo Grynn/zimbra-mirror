@@ -1,5 +1,6 @@
-
 <project name="ZimbraOffline" default="offline-jar">
+
+  <import file="../ant-global.xml" />
 
   <property file="build.properties"/>
   <property environment="env" />
@@ -19,48 +20,20 @@
 
   <property name="jarfile" value="zimbraoffline.jar" />
   <property name="config.dir" value="conf" />
-  <property name="jars.dir" location="jars" />
-  <property name="src.dir" location="src" />
-  <property name="src.java.dir" location="${src.dir}/java" />
-  <property name="src.zimlet.dir" location="${src.dir}/zimlet" />
   <property name='web.dir' value='WebRoot'/>
-  <property name="build.dir" location="build" />
-  <property name="build.classes.dir" location="${build.dir}/classes" />
   <property name="build.src.java.dir" location="${build.dir}/src/java" />
   <property name="build.web.dir" location="build/WebRoot" />
-  <property name="dist.dir" location="${build.dir}/dist" />
   <property name="dist.app.dir" location="${dist.dir}/app"/>
   <property name="dist.data.dir" location="${dist.dir}/data"/>
   <property name="dist.db.dir" location="${dist.dir}/db" />
   <property name="jetty.dir" location="${dist.dir}/jetty" />
   <property name="zimlet.dir" location="../Zimlet/build/dist" />
 
-  <property name="test.src.dir" location="${src.dir}/java-test"/>
-  <property name="test.classes.dir" location="${build.dir}/test-classes"/>
-
-  <property name="server.config.dir" value="../ZimbraServer/conf" />
   <property name="server.src.dir" location="../ZimbraServer/src" />
   <property name="server.build.dir" location="../ZimbraServer/build" />
   <property name="server.build.lib.dir" location="${server.build.dir}/dist/lib" />
   <property name="server.lib.dir" location="../ZimbraServer/lib" />
-  <property name="server.classes.dir" location="${server.build.dir}/classes" />
 
-  <property name="common.dir" location="../ZimbraCommon" />
-  <property name="common.build.dir" location="${common.dir}/build" />
-  <property name="common.classes.dir" location="${common.dir}/build/classes" />
-  <property name="common.jars.dir" location="${common.dir}/jars" />
-
-  <property name="soap.dir" location="../ZimbraSoap"/>
-  <property name="soap.build.dir" location="${soap.dir}/build"/>
-  <property name="soap.classes.dir" location="${soap.build.dir}/classes"/>
-
-  <property name="im.dir" location="../ZimbraIM" />
-  <property name="im.jars.dir" location="${im.dir}/jars" />
-  <property name="im.classes.dir" location="${im.dir}/build/classes" />
-
-  <property name="taglib.dir" location="../ZimbraTagLib"/>
-  <property name="taglib.build.dir" location="${taglib.dir}/build"/>
-  <property name="taglib.build.classes.dir" location="${taglib.build.dir}/classes"/>
   <property name="webclient.dir" location="../ZimbraWebClient" />
   <property name="webclient.build.dir" location="${webclient.dir}/build" />
   <property name="webclient.jars.dir" location="${webclient.dir}/jars" />
@@ -78,15 +51,6 @@
 
   <property name="offlineext.jar.file" value="offlineext.jar" />
   <property name="offlineext.dist.dir" location="${dist.dir}/ext/offline"/>
-
-  <condition property="is-windows">
-    <os family="windows" />
-  </condition>
-  <condition property="is-unix">
-    <not>
-      <os family="windows" />
-    </not>
-  </condition>
 
   <condition property="bundle-jre">
     <not>
@@ -111,8 +75,6 @@
   <property name="build.reindex_ij" location="${dist.db.dir}/reindex_ij.sql" />
 
   <property name="server.warfile" location="${server.build.dir}/service.war" />
-  <property name="server.jarfile" location="${server.build.dir}/zimbrastore.jar" />
-  <property name="common.jarfile" location="${common.dir}/build/zimbracommon.jar" />
 
   <property name="ical4j.jar" value="ical4j-0.9.16-patched.jar" />
 
@@ -139,13 +101,10 @@
     <include name="jsr305.jar"/>
   </fileset>
 
-  <path id="all.java.path">
-    <pathelement location="${src.java.dir}" />
-  </path>
-
   <path id="offline.class.path">
     <pathelement location="${common.classes.dir}" />
     <pathelement location="${soap.classes.dir}" />
+    <pathelement location="${client.classes.dir}" />
     <pathelement location="${build.classes.dir}" />
     <pathelement location="${server.classes.dir}" />
     <fileset dir="${common.jars.dir}">
@@ -205,7 +164,7 @@
   </target>
 
   <target name="offline-compile" depends="offline-build-init" description="Compiles the source code">
-    <ant dir="${common.dir}" target="jar" inheritAll="false" />
+    <ant dir="${client.dir}" target="jar" inheritAll="false" />
     <ant dir="../ZimbraServer" target="dev-dist" inheritAll="false">
       <property name="zimbra.buildinfo.version" value="${offline.version}"/>
       <property name="zimbra.buildinfo.type" value="${offline.appid}"/>
@@ -246,6 +205,7 @@
       <ant dir="../ZimbraSyncClient" target="clean" inheritAll="false" />
     </then></if>
     <ant dir="../ZimbraCommon" target="clean" inheritAll="false" />
+    <ant dir="../ZimbraClient" target="clean" inheritAll="false" />
     <ant dir="../ZimbraServer" target="clean" inheritAll="false" />
     <ant dir="../ZimbraWebClient" target="clean" inheritAll="false" />
   </target>
@@ -422,18 +382,18 @@
       <param name="param.production" value="${param.production}" />
     </antcall>
     <antcall target="offline-zimlet-war" />
-    <copy todir="${dist.dir}/conf" file="${server.config.dir}/datasource.xml" overwrite="true" />
+    <copy todir="${dist.dir}/conf" file="${server.conf.dir}/datasource.xml" overwrite="true" />
     <copy tofile="${dist.dir}/conf/localconfig.xml" file="${config.dir}/localconfig.xml" overwrite="true" />
     <copy tofile="${dist.dir}/conf/log4j.properties" file="${config.dir}/log4j.properties" overwrite="true" />
         <copy tofile="${dist.dir}/conf/zdesktop.conf" file="${config.dir}/zdesktop.conf" overwrite="true" />
-    <copy tofile="${dist.dir}/conf/timezones.ics" file="${server.config.dir}/timezones.ics" overwrite="true" />
+    <copy tofile="${dist.dir}/conf/timezones.ics" file="${server.conf.dir}/timezones.ics" overwrite="true" />
     <if><isset property="is-windows" /><then>
-      <win-copy-binary dst="${dist.dir}/conf/zimbra-contact-fields.xml" src="${server.config.dir}/contacts/zimbra-contact-fields.xml" />
+      <win-copy-binary dst="${dist.dir}/conf/zimbra-contact-fields.xml" src="${server.conf.dir}/contacts/zimbra-contact-fields.xml" />
     </then><else>
-      <copy tofile="${dist.dir}/conf/zimbra-contact-fields.xml" file="${server.config.dir}/contacts/zimbra-contact-fields.xml" overwrite="true" />
+      <copy tofile="${dist.dir}/conf/zimbra-contact-fields.xml" file="${server.conf.dir}/contacts/zimbra-contact-fields.xml" overwrite="true" />
     </else></if>
     <copy todir="${dist.dir}/conf/msgs" overwrite="true">
-      <fileset dir="${server.config.dir}/msgs" />
+      <fileset dir="${server.conf.dir}/msgs" />
     </copy>
     <copy todir="${dist.dir}/conf/attrs" overwrite="true">
       <fileset dir="${server.build.dir}/attrs" />
@@ -442,7 +402,7 @@
       <fileset dir="${config.dir}/attrs" />
     </copy>
     <copy todir="${dist.dir}/conf/rights" overwrite="true">
-      <fileset dir="${server.config.dir}/rights" excludes="*admin*" />
+      <fileset dir="${server.conf.dir}/rights" excludes="*admin*" />
     </copy>
     <if><isset property="is-windows" /><then>
       <fixcrlf srcdir="${dist.dir}/conf" eol="unix" includes="**" excludes="zimbra-contact-fields.xml" />
@@ -450,8 +410,8 @@
       <fixcrlf srcdir="${dist.dir}/conf" eol="unix" includes="**" />
     </else></if>
 
-    <copy todir="${dist.dir}/conf" file="${server.config.dir}/globs2" overwrite="true" />
-    <copy todir="${dist.dir}/conf" file="${server.config.dir}/magic" overwrite="true" />
+    <copy todir="${dist.dir}/conf" file="${server.conf.dir}/globs2" overwrite="true" />
+    <copy todir="${dist.dir}/conf" file="${server.conf.dir}/magic" overwrite="true" />
     <copy todir="${dist.dir}/conf" file="${config.dir}/cacerts" overwrite="true" />
     <copy todir="${dist.dir}/conf" file="${config.dir}/keystore.base" overwrite="true" />
     <if><equals arg1="${param.development}" arg2="true"/>
@@ -474,7 +434,7 @@
       <fileset file="${common.jars.dir}/apache-log4j-extras-1.0.jar"/>
       <fileset file="${common.jars.dir}/slf4j*.jar"/>
     </copy>
-    <copy tofile="${dist.dir}/jetty/resources/log4j.properties" file="${server.config.dir}/jetty-6.1/log4j.properties.production" overwrite="true" />
+    <copy tofile="${dist.dir}/jetty/resources/log4j.properties" file="${server.conf.dir}/jetty-6.1/log4j.properties.production" overwrite="true" />
 
     <!-- db schema, config and jars -->
     <antcall target="db-versions-init" />
@@ -1161,10 +1121,11 @@
     <pathelement path="${webclient.build.dir}/classes" />
     <pathelement path="${dist.dir}/jetty/resources" />
     <fileset dir="${common.jars.dir}" includes="*.jar"/>
-    <fileset dir="${common.build.dir}" includes="zimbracommon.jar"/>
-    <fileset dir="${soap.build.dir}" includes="zimbrasoap.jar"/>
-    <fileset dir="${server.build.dir}" includes="zimbrastore.jar"/>
-    <fileset dir="${taglib.build.dir}" includes="zimbrataglib.jar"/>
+    <fileset file="${common.jarfile}" />
+    <fileset file="${soap.jarfile}" />
+    <fileset file="${client.jarfile}" />
+    <fileset file="${server.jarfile}" />
+    <fileset file="${taglib.jarfile}" />
     <fileset dir="${webclient.jars.dir}" includes="servlet-api.jar"/>
     <fileset dir="${webclient.jars.dir}/jsp-2.1" includes="*.jar"/>
     <fileset dir="${jspc.src.dir}/WEB-INF/lib" includes="*.jar"/>

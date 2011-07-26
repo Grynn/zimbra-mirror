@@ -25,7 +25,7 @@ import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.jsp.JspConstants.JspVerb;
-import com.zimbra.cs.zclient.ZFolder;
+import com.zimbra.client.ZFolder;
 import com.zimbra.soap.type.DataSource.ConnectionType;
 
 public class XsyncBean extends MailBean {

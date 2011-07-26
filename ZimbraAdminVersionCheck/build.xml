@@ -1,32 +1,13 @@
 <project name="ZimbraAdminVersionCheck" default="jar">
-	
+
+    <import file="../ant-global.xml" />
+
 	<!-- Properties -->
 	
 	<property name="jar.file" value="zimbraadminversioncheck.jar" />
-	<property name="src.dir" location="src" />
-	<property name="src.java.dir" location="${src.dir}/java" />
-	<property name="src.libexec.dir" location="${src.dir}/libexec" />
-	<property name="src.zimlet.dir" location="${src.dir}/zimlet" />
-	<property name="build.dir" location="build" />
-	<property name="build.zimlet.dir" location="${build.dir}/zimlet" />
-	<property name="build.classes.dir" location="${build.dir}/classes" />
-	<property name="server.classes.dir" location="../ZimbraServer/build/classes" />
-	<property name="zimbra.home.dir" location="/opt/zimbra" />
 	<property name="versioncheck.deploy.dir" location="${zimbra.home.dir}/lib/ext/zimbraadminversioncheck" />
 	<property name="versioncheck.jar.name" value="zimbraadminversioncheck.jar" />
-	<property name="common.dir" location="../ZimbraCommon" />
-	<property name="common.classes.dir" location="${common.dir}/build/classes" />
-	<property name="common.jars.dir" location="${common.dir}/jars" />
-    <property name="webapp.dir" value="/opt/zimbra/jetty/webapps/zimbra"/>
-	<property name="zimbrasoap.dir" location="../ZimbraSoap" />
-	<condition property="is-windows">
-		<os family="windows" />
-	</condition>
-	<condition property="is-unix">
-		<not>
-			<os family="windows" />
-		</not>
-	</condition>
+        <property name="webapp.dir" value="/opt/zimbra/jetty/webapps/zimbra"/>
 
 	<path id="all.java.path">
 		<pathelement location="${src.java.dir}" />
@@ -36,7 +17,8 @@
 		<pathelement location="${common.classes.dir}" />
 		<pathelement location="${build.classes.dir}" />
 		<pathelement location="${server.classes.dir}" />
-		<pathelement location="${zimbrasoap.dir}/build/classes" />
+		<pathelement location="${soap.classes.dir}" />
+                <pathelement location="${client.classes.dir}" />
 		<fileset dir="${common.jars.dir}">
 			<include name="**/*.jar" />
 		</fileset>
@@ -50,6 +32,7 @@
 
 	<target name="compile" depends="build-init" description="Compiles the source code">
 		<ant dir="${common.dir}" target="jar" inheritAll="false" />
+                <ant dir="${client.dir}" target="jar" inheritAll="false" />
 		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path">
 			<src refid="all.java.path" />
 		</javac>

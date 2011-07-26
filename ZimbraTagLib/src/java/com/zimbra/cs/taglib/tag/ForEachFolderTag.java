@@ -16,9 +16,9 @@ package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZFolderBean;
-import com.zimbra.cs.zclient.ZFolder;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZSearchFolder;
+import com.zimbra.client.ZFolder;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZSearchFolder;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;

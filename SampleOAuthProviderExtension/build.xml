@@ -1,4 +1,6 @@
 <project name="SampleOAuthProvider" default="package">
+    <import file="../ant-global.xml" />
+
 	<property name="jar.file" value="sampleoauthprov.jar" />
 	<property name="src.dir" location="src" />
 	<property name="src.java.dir" location="${src.dir}/java" />
@@ -32,6 +34,7 @@
 		<pathelement location="${common.classes.dir}" />
 		<pathelement location="${build.classes.dir}" />
 		<pathelement location="${zimbraServer.dir}/build/classes"/>
+                <pathelement location="${client.classes.dir}" />
 		<fileset dir="${common.dir}/jars">
 			<include name="**/*.jar"/>
 		</fileset>
@@ -42,6 +45,7 @@
 
 	<target name="compile" depends="build-init" description="Compiles the source code">
 		<ant dir="${common.dir}" target="jar" inheritAll="false" />
+                <ant dir="${client.dir}" target="jar" inheritAll="false" />
 		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path">
 			<src refid="all.java.path" />
 		</javac>

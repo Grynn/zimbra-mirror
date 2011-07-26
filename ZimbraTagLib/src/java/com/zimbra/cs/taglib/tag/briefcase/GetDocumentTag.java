@@ -19,8 +19,8 @@ import com.zimbra.cs.taglib.bean.ZMessageComposeBean;
 import com.zimbra.cs.taglib.bean.ZMessageBean;
 import com.zimbra.cs.taglib.bean.ZMailboxBean;
 import com.zimbra.cs.taglib.bean.ZDocumentBean;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZDocument;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZDocument;
 import com.zimbra.common.service.ServiceException;
 
 import javax.servlet.jsp.JspException;

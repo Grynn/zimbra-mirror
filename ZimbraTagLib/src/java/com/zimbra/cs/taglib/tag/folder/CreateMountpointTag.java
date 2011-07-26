@@ -17,9 +17,9 @@ package com.zimbra.cs.taglib.tag.folder;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZFolderBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
-import com.zimbra.cs.zclient.ZFolder;
-import com.zimbra.cs.zclient.ZMailbox.OwnerBy;
-import com.zimbra.cs.zclient.ZMailbox.SharedItemBy;
+import com.zimbra.client.ZFolder;
+import com.zimbra.client.ZMailbox.OwnerBy;
+import com.zimbra.client.ZMailbox.SharedItemBy;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;

@@ -15,8 +15,8 @@
 package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.cs.taglib.ZJspSession;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZPrefs;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZPrefs;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.StringUtil;

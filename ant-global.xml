@@ -14,12 +14,19 @@
     <property name="src.java.dir" location="src/java" />
     <property name="src.bin.dir" location="src/bin" />
     <property name="src.libexec.dir" location="src/libexec" />
+    <property name="src.zimlet.dir" location="src/zimlet" />
     <property name="jars.dir" location="jars" />
     <property name="build.dir" location="build" />
+    <property name="dist.dir" location="build/dist" />
     <property name="build.classes.dir" location="${build.dir}/classes" />
+    <property name="build.zimlet.dir" location="${build.dir}/zimlet" />
     <property name="test.dir" location="${build.dir}/test"/>
     <property name="test.src.dir" location="src/java-test"/>
     <property name="test.classes.dir" location="${build.dir}/test-classes"/>
+
+    <path id="all.java.path">
+        <pathelement location="${src.java.dir}" />
+    </path>
 
     <!-- Standard install paths -->
     <property name="zimbra.home.dir" location="/opt/zimbra" />
@@ -31,22 +38,39 @@
     <property name="common.jarfile" location="${common.dir}/build/zimbracommon.jar"/>
     <property name="common.jars.dir" location="${common.dir}/jars"/>
 
+    <!-- ZimbraNative -->
+    <property name="native.dir" location="${zimbra.root.dir}/ZimbraNative" />
+    <property name="native.classes.dir" location="${native.dir}/build/classes" />
+    <property name="native.jarfile" location="${native.dir}/build/zimbra-native.jar" />
+
     <!-- ZimbraServer -->
     <property name="server.dir" location="${zimbra.root.dir}/ZimbraServer"/>
     <property name="server.classes.dir" location="${server.dir}/build/classes"/>
     <property name="server.jarfile" location="${server.dir}/build/zimbrastore.jar"/>
     <property name="server.jars.dir" location="${server.dir}/jars"/>
+    <property name="server.conf.dir" location="${server.dir}/conf"/>
 
     <!-- ZimbraSoap -->
     <property name="soap.dir" location="${zimbra.root.dir}/ZimbraSoap"/>
     <property name="soap.classes.dir" location="${soap.dir}/build/classes"/>
     <property name="soap.jarfile" location="${soap.dir}/build/zimbrasoap.jar"/>
 
+    <!-- ZimbraClient -->
+    <property name="client.dir" location="${zimbra.root.dir}/ZimbraClient"/>
+    <property name="client.classes.dir" location="${client.dir}/build/classes"/>
+    <property name="client.jarfile" location="${client.dir}/build/zimbraclient.jar"/>
+
     <!-- ZimbraIM -->
     <property name="im.dir" location="${zimbra.root.dir}/ZimbraIM"/>
     <property name="im.classes.dir" location="${im.dir}/build/classes"/>
     <property name="im.jarfile" location="${im.dir}/build/zimbraim.jar"/>
     <property name="im.jars.dir" location="${im.dir}/jars"/>
+
+    <!-- ZimbraTagLib -->
+    <property name="taglib.dir" location="${zimbra.root.dir}/ZimbraTagLib"/>
+    <property name="taglib.classes.dir" location="${taglib.dir}/build/classes"/>
+    <property name="taglib.jarfile" location="${taglib.dir}/build/zimbrataglib.jar"/>
+    <property name="taglib.jars.dir" location="${taglib.dir}/jars"/>
 
     <!-- Platform -->
     <condition property="native.os" value="MacOSX">
@@ -145,10 +169,48 @@
     <property name="zimbra.buildinfo.all"
               value="Version: ${zimbra.buildinfo.version}; Type: ${zimbra.buildinfo.type}; Release: ${zimbra.buildinfo.release}; Built: ${zimbra.buildinfo.date}; Host: ${zimbra.buildinfo.host}"/>
 
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
 
-    <!-- Create the Version class that prints the version of the jarfile.  This class
-         is the Main-Class in the jarfile's manifest. -->
-    <target name="generate-jar-version">
+    <target name="compile" description="Compiles from in src/java into build/classes.">
+        <mkdir dir="${build.classes.dir}" />
+        <javac destdir="${build.classes.dir}" debug="true" classpathref="class.path" target="${javac.target}">
+            <src refid="all.java.path" />
+        </javac>
+    </target>
+
+    <target name="test-compile" depends="compile">
+        <mkdir dir="${test.classes.dir}"/>
+        <javac srcdir="${test.src.dir}" destdir="${test.classes.dir}"
+               debug="true" classpathref="class.path" target="${javac.target}"/>
+    </target>
+
+    <target name="test" depends="test-compile" description="Run unit tests">
+        <property name="test.path" refid="class.path"/>
+        <delete dir="${test.dir}" quiet="true"/>
+        <mkdir dir="${test.dir}/output"/>
+        <mkdir dir="${test.dir}/report"/>
+        <junit printsummary="on" failureproperty="junit.failure" tempdir="${test.dir}">
+            <classpath refid="class.path"/>
+            <classpath path="${test.classes.dir}"/>
+            <assertions><enable/></assertions>
+            <formatter type="xml"/>
+            <batchtest todir="${test.dir}/output">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/*Test.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+        <junitreport todir="${test.dir}/report">
+            <fileset dir="${test.dir}/output"/>
+            <report todir="${test.dir}/report"/>
+        </junitreport>
+        <echo>Test Report: ${test.dir}/report/index.html</echo>
+        <fail if="junit.failure" message="Unit test failed"/>
+    </target>
+
+    <target name="generate-jar-version" description="Creates the Version class that prints the version of the jarfile.  This class is the Main-Class in the jarfile's manifest.">
         <fail unless="build.dir" />
         <fail unless="build.classes.dir" />
 
@@ -174,10 +236,7 @@
         <javac destdir="${build.classes.dir}" debug="true" target="${javac.target}" srcdir="${build.dir}/buildinfo" />
     </target>
 
-    <!-- Build a standard jar file that prints its version info when executed.  Optionally
-         sets the Zimbra-Extension-Class attribute in the manifest if the zimbra.extension.class
-         property is set. -->
-    <target name="zimbra-jar" depends="generate-jar-version">
+    <target name="zimbra-jar" depends="generate-jar-version" description="Builds a standard jar file that prints its version info when executed.  Optionally sets the Zimbra-Extension-Class attribute in the manifest if the zimbra.extension.class property is set.">
         <fail unless="jar.file"/>
         <fail unless="implementation.title"/>
 

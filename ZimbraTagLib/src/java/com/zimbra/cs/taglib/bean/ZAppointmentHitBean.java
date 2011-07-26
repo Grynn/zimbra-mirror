@@ -14,7 +14,7 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZAppointmentHit;
+import com.zimbra.client.ZAppointmentHit;
 
 public class ZAppointmentHitBean extends ZSearchHitBean {
 

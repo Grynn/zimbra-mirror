@@ -17,7 +17,7 @@ package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.VoiceConstants;
-import com.zimbra.cs.zclient.ZCallFeatures;
+import com.zimbra.client.ZCallFeatures;
 
 public class ZCallFeaturesBean {
 

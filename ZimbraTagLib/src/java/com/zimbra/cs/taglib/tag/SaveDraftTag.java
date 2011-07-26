@@ -15,12 +15,12 @@
 package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.zclient.ZEmailAddress;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
-import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.AttachedMessagePart;
-import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
-import com.zimbra.cs.zclient.ZMessage;
+import com.zimbra.client.ZEmailAddress;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZMailbox.ZOutgoingMessage;
+import com.zimbra.client.ZMailbox.ZOutgoingMessage.AttachedMessagePart;
+import com.zimbra.client.ZMailbox.ZOutgoingMessage.MessagePart;
+import com.zimbra.client.ZMessage;
 import com.zimbra.cs.taglib.bean.ZMessageComposeBean;
 
 import javax.servlet.jsp.JspContext;

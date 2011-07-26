@@ -15,8 +15,8 @@
 package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.cs.taglib.bean.ZMessageComposeBean.MessageAttachment;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZEmailAddress;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZEmailAddress;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Provisioning;

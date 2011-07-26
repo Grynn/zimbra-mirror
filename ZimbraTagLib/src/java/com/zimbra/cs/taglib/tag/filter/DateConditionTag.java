@@ -17,8 +17,8 @@ package com.zimbra.cs.taglib.tag.filter;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.taglib.bean.ZTagLibException;
-import com.zimbra.cs.zclient.ZFilterCondition.DateOp;
-import com.zimbra.cs.zclient.ZFilterCondition.ZDateCondition;
+import com.zimbra.client.ZFilterCondition.DateOp;
+import com.zimbra.client.ZFilterCondition.ZDateCondition;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;

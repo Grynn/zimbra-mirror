@@ -15,7 +15,7 @@
 package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.client.ZMailbox;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;

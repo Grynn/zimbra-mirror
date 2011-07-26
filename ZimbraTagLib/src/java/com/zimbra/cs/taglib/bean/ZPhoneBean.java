@@ -14,7 +14,7 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZPhone;
+import com.zimbra.client.ZPhone;
 import com.zimbra.common.service.ServiceException;
 
 public class ZPhoneBean {

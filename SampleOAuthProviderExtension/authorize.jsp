@@ -45,7 +45,7 @@
 
 <c:if test="${not empty authResult}">
 	  <%
-	  com.zimbra.cs.zclient.ZAuthResult zar = (com.zimbra.cs.zclient.ZAuthResult) pageContext.findAttribute("authResult");
+	  com.zimbra.client.ZAuthResult zar = (com.zimbra.client.ZAuthResult) pageContext.findAttribute("authResult");
 	  com.zimbra.common.auth.ZAuthToken zat = (com.zimbra.common.auth.ZAuthToken) zar.getAuthToken();
 
 	  request.setAttribute("ZM_AUTH_TOKEN",zat.getValue());

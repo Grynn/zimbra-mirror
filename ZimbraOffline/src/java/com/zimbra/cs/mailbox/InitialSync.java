@@ -96,7 +96,7 @@ import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.store.Blob;
 import com.zimbra.cs.store.StoreManager;
 import com.zimbra.cs.util.AccountUtil.AccountAddressMatcher;
-import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.client.ZMailbox;
 import com.zimbra.soap.ZimbraSoapContext;
 
 public class InitialSync {

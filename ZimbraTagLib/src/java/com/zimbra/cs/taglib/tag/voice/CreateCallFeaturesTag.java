@@ -19,9 +19,9 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZCallFeaturesBean;
 import com.zimbra.cs.taglib.bean.ZCallForwardingBean;
 import com.zimbra.cs.taglib.bean.ZSelectiveCallForwardingBean;
-import com.zimbra.cs.zclient.ZCallFeatures;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZPhoneAccount;
+import com.zimbra.client.ZCallFeatures;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZPhoneAccount;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;

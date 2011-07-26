@@ -16,7 +16,7 @@ package com.zimbra.cs.taglib.tag.item;
 
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.taglib.bean.ZActionResultBean;
-import com.zimbra.cs.zclient.ZMailbox.ZActionResult;
+import com.zimbra.client.ZMailbox.ZActionResult;
 import com.zimbra.common.service.ServiceException;
 
 import javax.servlet.jsp.JspException;

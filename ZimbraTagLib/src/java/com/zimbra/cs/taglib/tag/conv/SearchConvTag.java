@@ -18,10 +18,10 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZSearchResultBean;
 import com.zimbra.cs.taglib.tag.SearchContext;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZMailbox.Fetch;
-import com.zimbra.cs.zclient.ZSearchPagerResult;
-import com.zimbra.cs.zclient.ZSearchParams;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZMailbox.Fetch;
+import com.zimbra.client.ZSearchPagerResult;
+import com.zimbra.client.ZSearchParams;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.jsp.JspException;

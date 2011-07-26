@@ -20,7 +20,7 @@ import org.testng.annotations.Test;
 import com.thoughtworks.selenium.Selenium;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.service.admin.GetConfig;
-import com.zimbra.cs.zclient.ZFolder;
+import com.zimbra.client.ZFolder;
 import com.zimbra.qa.selenium.framework.core.*;
 import com.zimbra.qa.selenium.framework.util.LmtpUtil;
 import com.zimbra.qa.selenium.framework.util.RetryFailedTests;

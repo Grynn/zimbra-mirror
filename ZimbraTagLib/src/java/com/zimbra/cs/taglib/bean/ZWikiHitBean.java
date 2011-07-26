@@ -14,8 +14,8 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZDocument;
-import com.zimbra.cs.zclient.ZWikiHit;
+import com.zimbra.client.ZDocument;
+import com.zimbra.client.ZWikiHit;
 
 import java.util.Date;
 

@@ -33,8 +33,8 @@ import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.common.zclient.ZClientException;
 import com.zimbra.cs.taglib.ZJspSession;
 import com.zimbra.cs.taglib.tag.TagUtil.JsonDebugListener;
-import com.zimbra.cs.zclient.ZFolder;
-import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.client.ZFolder;
+import com.zimbra.client.ZMailbox;
 
 public class GetInfoJSONTag extends ZimbraSimpleTag {
 

@@ -32,16 +32,16 @@ import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.jsp.ConfigServlet;
 import com.zimbra.cs.offline.jsp.JspProvStub;
 import com.zimbra.cs.offline.jsp.XsyncBean;
-import com.zimbra.cs.zclient.ZContact;
-import com.zimbra.cs.zclient.ZEmailAddress;
-import com.zimbra.cs.zclient.ZFolder;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZMessage;
-import com.zimbra.cs.zclient.ZSearchParams;
-import com.zimbra.cs.zclient.ZTag;
-import com.zimbra.cs.zclient.ZMailbox.ZAttachmentInfo;
-import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage;
-import com.zimbra.cs.zclient.ZMailbox.ZOutgoingMessage.MessagePart;
+import com.zimbra.client.ZContact;
+import com.zimbra.client.ZEmailAddress;
+import com.zimbra.client.ZFolder;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZMessage;
+import com.zimbra.client.ZSearchParams;
+import com.zimbra.client.ZTag;
+import com.zimbra.client.ZMailbox.ZAttachmentInfo;
+import com.zimbra.client.ZMailbox.ZOutgoingMessage;
+import com.zimbra.client.ZMailbox.ZOutgoingMessage.MessagePart;
 
 import junit.framework.TestCase;
 

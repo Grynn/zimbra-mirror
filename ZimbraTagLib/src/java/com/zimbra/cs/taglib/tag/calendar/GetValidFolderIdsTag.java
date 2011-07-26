@@ -4,7 +4,7 @@ package com.zimbra.cs.taglib.tag.calendar;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZMailboxBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
-import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.client.ZMailbox;
 
 
 import javax.servlet.jsp.JspContext;

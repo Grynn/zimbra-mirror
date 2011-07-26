@@ -19,10 +19,10 @@ import com.zimbra.cs.taglib.bean.ZApptSummariesBean;
 import com.zimbra.cs.taglib.bean.ZMailboxBean;
 import com.zimbra.cs.taglib.bean.ZMiniCalBean;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
-import com.zimbra.cs.zclient.ZAppointmentHit;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZMailbox.ZApptSummaryResult;
-import com.zimbra.cs.zclient.ZSearchParams;
+import com.zimbra.client.ZAppointmentHit;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZMailbox.ZApptSummaryResult;
+import com.zimbra.client.ZSearchParams;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;

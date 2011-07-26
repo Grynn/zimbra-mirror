@@ -20,12 +20,12 @@ import com.zimbra.cs.taglib.ZJspSession;
 import com.zimbra.cs.taglib.bean.ZFolderBean;
 import com.zimbra.cs.taglib.bean.ZTagBean;
 import com.zimbra.cs.taglib.bean.ZPhoneAccountBean;
-import com.zimbra.cs.zclient.ZFolder;
-import com.zimbra.cs.zclient.ZMailbox;
-import com.zimbra.cs.zclient.ZSearchFolder;
-import com.zimbra.cs.zclient.ZSearchParams;
-import com.zimbra.cs.zclient.ZTag;
-import com.zimbra.cs.zclient.ZPhoneAccount;
+import com.zimbra.client.ZFolder;
+import com.zimbra.client.ZMailbox;
+import com.zimbra.client.ZSearchFolder;
+import com.zimbra.client.ZSearchParams;
+import com.zimbra.client.ZTag;
+import com.zimbra.client.ZPhoneAccount;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.jsp.JspException;

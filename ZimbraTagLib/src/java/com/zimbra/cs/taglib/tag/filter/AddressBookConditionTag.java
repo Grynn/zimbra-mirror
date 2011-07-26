@@ -16,8 +16,8 @@ package com.zimbra.cs.taglib.tag.filter;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
-import com.zimbra.cs.zclient.ZFilterCondition.AddressBookOp;
-import com.zimbra.cs.zclient.ZFilterCondition.ZAddressBookCondition;
+import com.zimbra.client.ZFilterCondition.AddressBookOp;
+import com.zimbra.client.ZFilterCondition.ZAddressBookCondition;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;

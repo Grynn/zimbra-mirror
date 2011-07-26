@@ -15,7 +15,7 @@
 
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZAppointmentHit;
+import com.zimbra.client.ZAppointmentHit;
 
 import java.util.Collections;
 import java.util.List;

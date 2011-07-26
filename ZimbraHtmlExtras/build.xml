@@ -1,30 +1,10 @@
 <project name="ZimbraHtmlExtras" default="war">
 
+    <import file="../ant-global.xml"/>
+
     <property environment="env"/>
 
-    <property name="build.dir" location="build"/>
-
-    <property name="server.dir" location="../ZimbraServer"/>
-    <property name="server.build.dir" location="${server.dir}/build"/>
-    <property name="server.build.classes.dir" location="${server.build.dir}/classes"/>
-
-    <property name="common.dir" location="../ZimbraCommon"/>
-    <property name="common.build.dir" location="${common.dir}/build"/>
-    <property name="common.build.classes.dir" location="${common.build.dir}/classes"/>
-    <property name="common.jars.dir" location="${common.dir}/jars"/>
-
-    <property name="soap.dir" location="../ZimbraSoap"/>
-    <property name="soap.build.dir" location="${soap.dir}/build"/>
-    <property name="soap.build.classes.dir" location="${soap.build.dir}/classes"/>
-
-    <property name="zimbratl.dir" location="../ZimbraTagLib"/>
-    <property name="zimbratl.build.dir" location="${zimbratl.dir}/build"/>
-    <property name="zimbratl.build.classes.dir" location="${zimbratl.build.dir}/classes"/>
-    <property name="zimbratl.jars.dir" location="${zimbratl.dir}/jars"/>
-    
     <property name="warfile" location="${build.dir}/zmail.war"/>
-
-    <property name="jars.dir" location="jars"/>
 
     <condition property="deploy.dir" value="${env.DEPLOY_DIR}">
         <isset property="env.DEPLOY_DIR"/>
@@ -51,15 +31,15 @@
     <property name="deploy.path" value="/zmail"/>
 
     <path id="class.path">
-        <pathelement location="${server.build.classes.dir}"/>
-        <pathelement location="${soap.build.classes.dir}"/>
+        <pathelement location="${server.classes.dir}"/>
+        <pathelement location="${soap.classes.dir}"/>
         <fileset dir="${jars.dir}">
             <include name="**/*.jar"/>
         </fileset>
         <fileset dir="${common.jars.dir}">
             <include name="**/*.jar"/>
         </fileset>
-        <fileset dir="${zimbratl.jars.dir}">
+        <fileset dir="${taglib.jars.dir}">
             <include name="**/*.jar"/>
         </fileset>
     </path>
@@ -74,7 +54,7 @@
     <target name="compile-external" depends="build-init">
         <ant dir="${server.dir}" target="jar" inheritAll="false"/>
         <ant dir="${common.dir}" target="jar" inheritAll="false"/>
-        <ant dir="${zimbratl.dir}" target="jar" inheritAll="false"/>
+        <ant dir="${taglib.dir}" target="jar" inheritAll="false"/>
     </target>
 
     <target name="clean" depends="build-init" description="Removes any built/temporary files">
@@ -101,10 +81,10 @@
     
     <target name="war" depends="build-init">
         <war warfile="${warfile}" webxml="WEB-INF/web.xml">
-            <lib dir="${server.build.dir}" includes="zimbrastore.jar"/>
-            <lib dir="${common.build.dir}" includes="zimbracommon.jar"/>
-            <lib dir="${soap.build.dir}" includes="zimbrasoap.jar"/>
-            <lib dir="${zimbratl.build.dir}" includes="zimbrataglib.jar"/>
+            <lib file="${server.jarfile}"/>
+            <lib file="${common.jarfile}"/>
+            <lib file="${soap.jarfile}"/>
+            <lib file="${taglib.jarfile}"/>
             <lib dir="${common.jars.dir}" includes="**.jar" excludes="${war.exclude}"/>
             <lib dir="${jars.dir}" includes="**.jar" excludes="${war.exclude}"/>
             <webinf dir="WEB-INF" includes="**" excludes="**/web.xml"/>

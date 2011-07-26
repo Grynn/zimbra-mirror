@@ -1,29 +1,15 @@
 <project name="ZimbraTagLib" default="jar">
 
+    <import file="../ant-global.xml" />
+
     <property environment="env"/>
 
     <property name="root.dir" location=""/>
     <property name="build.dir" location="build"/>
 
-    <property name="server.dir" location="../ZimbraServer"/>
-    <property name="server.build.dir" location="${server.dir}/build"/>
-    <property name="server.build.classes.dir" location="${server.build.dir}/classes"/>
-
-    <property name="common.dir" location="../ZimbraCommon"/>
-    <property name="common.build.dir" location="${common.dir}/build"/>
-    <property name="common.build.classes.dir" location="${common.build.dir}/classes"/>
-    <property name="common.jars.dir" location="${common.dir}/jars"/>
-
-    <property name="soap.dir" location="../ZimbraSoap"/>
-    <property name="soap.classes.dir" location="${soap.dir}/build/classes"/>
-
     <property name="webinf.dir" location="WEB-INF"/>
 
-    <property name="jars.dir" location="jars"/>
-
-    <property name="src.dir" location="src"/>
-
-	<property name="jarfile" location="${build.dir}/zimbrataglib.jar" />
+    <property name="jarfile" location="${build.dir}/zimbrataglib.jar" />
 
     <condition property='isProduction' value='true'>
         <or>
@@ -47,8 +33,9 @@
     </condition>
 
     <path id="class.path">
-        <pathelement location="${server.build.classes.dir}"/>
+        <pathelement location="${server.classes.dir}"/>
     	<pathelement location="${soap.classes.dir}"/>
+        <pathelement location="${client.classes.dir}"/>
     	
         <fileset dir="${jars.dir}">
             <include name="**/*.jar"/>
@@ -58,14 +45,8 @@
             <include name="**/*.jar"/>
         </fileset>
 
-        <fileset dir="${server.build.dir}">
-            <include name="zimbrastore.jar"/>
-        </fileset>
-
-        <fileset dir="${common.build.dir}">
-            <include name="zimbracommon.jar"/>
-        </fileset>
-
+        <fileset file="${server.jarfile}"/>
+        <fileset file="${common.jarfile}"/>
     </path>
 
 

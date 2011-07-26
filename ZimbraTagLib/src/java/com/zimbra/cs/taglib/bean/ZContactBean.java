@@ -16,8 +16,8 @@ package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.mailbox.Contact;
-import com.zimbra.cs.zclient.ZContact;
-import com.zimbra.cs.zclient.ZEmailAddress;
+import com.zimbra.client.ZContact;
+import com.zimbra.client.ZEmailAddress;
 
 import java.util.List;
 import java.util.Map;

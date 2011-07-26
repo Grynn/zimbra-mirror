@@ -14,9 +14,9 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZContact;
-import com.zimbra.cs.zclient.ZMailbox.ZSearchGalResult;
-import com.zimbra.cs.zclient.ZMailbox.GalEntryType;
+import com.zimbra.client.ZContact;
+import com.zimbra.client.ZMailbox.ZSearchGalResult;
+import com.zimbra.client.ZMailbox.GalEntryType;
 
 import java.util.ArrayList;
 import java.util.List;

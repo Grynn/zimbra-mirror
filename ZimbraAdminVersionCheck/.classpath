@@ -34,5 +34,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-httpclient-3.1-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraClient"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

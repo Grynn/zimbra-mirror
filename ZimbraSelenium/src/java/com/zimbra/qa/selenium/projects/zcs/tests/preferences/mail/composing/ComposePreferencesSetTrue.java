@@ -16,8 +16,8 @@ import org.testng.annotations.Test;
 
 import com.thoughtworks.selenium.Selenium;
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.zclient.ZFolder;
-import com.zimbra.cs.zclient.ZInvite.ZRole;
+import com.zimbra.client.ZFolder;
+import com.zimbra.client.ZInvite.ZRole;
 import com.zimbra.qa.selenium.framework.core.*;
 import com.zimbra.qa.selenium.framework.util.RetryFailedTests;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;

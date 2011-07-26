@@ -15,8 +15,8 @@
 package com.zimbra.cs.taglib.tag.filter;
 
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
-import com.zimbra.cs.zclient.ZFilterCondition.SizeOp;
-import com.zimbra.cs.zclient.ZFilterCondition.ZSizeCondition;
+import com.zimbra.client.ZFilterCondition.SizeOp;
+import com.zimbra.client.ZFilterCondition.ZSizeCondition;
 import com.zimbra.common.service.ServiceException;
 
 import javax.servlet.jsp.JspException;

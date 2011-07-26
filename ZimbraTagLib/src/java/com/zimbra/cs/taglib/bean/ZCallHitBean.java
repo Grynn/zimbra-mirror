@@ -15,8 +15,8 @@
 
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZCallHit;
-import com.zimbra.cs.zclient.ZPhone;
+import com.zimbra.client.ZCallHit;
+import com.zimbra.client.ZPhone;
 
 import java.util.Date;
 

@@ -15,7 +15,7 @@
 package com.zimbra.cs.taglib.tag;
 
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.client.ZMailbox;
 import com.zimbra.soap.mail.message.CheckSpellingResponse;
 import com.zimbra.soap.mail.type.Misspelling;
 

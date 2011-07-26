@@ -14,8 +14,8 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.*;
-import com.zimbra.cs.zclient.ZSearchResult.ZConversationSummary;
+import com.zimbra.client.*;
+import com.zimbra.client.ZSearchResult.ZConversationSummary;
 
 import java.util.ArrayList;
 import java.util.List;

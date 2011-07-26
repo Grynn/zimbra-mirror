@@ -14,8 +14,8 @@
  */
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZDocumentHit;
-import com.zimbra.cs.zclient.ZDocument;
+import com.zimbra.client.ZDocumentHit;
+import com.zimbra.client.ZDocument;
 import java.util.Date;
 
 public class ZDocumentHitBean extends ZSearchHitBean {

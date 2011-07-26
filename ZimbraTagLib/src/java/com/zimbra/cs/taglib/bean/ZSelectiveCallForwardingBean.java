@@ -15,8 +15,8 @@
 
 package com.zimbra.cs.taglib.bean;
 
-import com.zimbra.cs.zclient.ZPhone;
-import com.zimbra.cs.zclient.ZSelectiveCallForwarding;
+import com.zimbra.client.ZPhone;
+import com.zimbra.client.ZSelectiveCallForwarding;
 
 import java.util.ArrayList;
 import java.util.List;

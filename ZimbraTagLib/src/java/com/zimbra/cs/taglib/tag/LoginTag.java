@@ -19,7 +19,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.HttpUtil;
 import com.zimbra.common.util.ZimbraCookie;
 import com.zimbra.cs.taglib.ZJspSession;
-import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.client.ZMailbox;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

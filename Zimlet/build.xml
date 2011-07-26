@@ -38,6 +38,9 @@
     <property name="soap.dir" location="../ZimbraSoap"/>
     <property name="soap.classes.dir" location="${soap.dir}/build/classes"/>
 
+    <property name="client.dir" location="../ZimbraClient"/>
+    <property name="client.classes.dir" location="${client.dir}/build/classes"/>
+
 	<property name="webinf.dir" location="WebRoot/WEB-INF" />
 	<property name="server.dir" location="../ZimbraServer" />
 	<property name="server.classes.dir" location="${server.dir}/build/classes" />

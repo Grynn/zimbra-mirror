@@ -15,11 +15,11 @@
 package com.zimbra.cs.taglib.bean;
 
 import com.zimbra.common.util.DateUtil;
-import com.zimbra.cs.zclient.ZEmailAddress;
-import com.zimbra.cs.zclient.ZInvite;
-import com.zimbra.cs.zclient.ZMessage;
-import com.zimbra.cs.zclient.ZMessage.ZMimePart;
-import com.zimbra.cs.zclient.ZShare;
+import com.zimbra.client.ZEmailAddress;
+import com.zimbra.client.ZInvite;
+import com.zimbra.client.ZMessage;
+import com.zimbra.client.ZMessage.ZMimePart;
+import com.zimbra.client.ZShare;
 
 import java.util.*;
 import java.util.regex.Matcher;
