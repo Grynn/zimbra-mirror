@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.framework.util.staf;
 
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 
 public class Stafzmtlsctl extends StafServicePROCESS {
 
@@ -25,16 +26,22 @@ public class Stafzmtlsctl extends StafServicePROCESS {
          break;
       }
 
-      Stafpostqueue stafpostqueue = new Stafpostqueue();
       execute("zmtlsctl " + setting);
-      stafpostqueue.waitForPostqueue();
       execute("zmmailboxdctl restart");
-      stafpostqueue.waitForPostqueue();
+
+      // Hardcoded 10 seconds sleep is required here, if this still doesn't work, then
+      // we have to do the most robust way, wait for HTTP GET to return status 200 
+      SleepUtil.sleep(10000);
    }
 
    public boolean execute(String command) throws HarnessException {
       setCommand(command);
-      return (super.execute());
+      boolean output = super.execute();
+
+      Stafpostqueue stafpostqueue = new Stafpostqueue();
+      stafpostqueue.waitForPostqueue();
+
+      return output;
    }
 
    protected String setCommand(String command) {
