@@ -34,6 +34,8 @@
 
 	<path id="class.path">
 		<pathelement location="${common.classes.dir}" />
+                <pathelement location="${soap.classes.dir}" />
+                <pathelement location="${client.classes.dir}" />
 		<pathelement location="${build.classes.dir}" />
 		<fileset dir="jars">
 			<include name="**/*.jar"/>
