@@ -51,6 +51,7 @@ public class TreeMail extends AbsTree {
 		public static final String ztih_main_Mail__FOLDER_ITEM_ID = new StringBuffer("ztih__main_Mail__").
 		append(stringToReplace).append("_textCell").toString();
 		public static final String zNewTagIcon = "//td[contains(@class,'overviewHeader-Text FakeAnchor')]/div[contains(@class,'ImgNewTag')]";
+		public static final String zShowRemainingFolders = "css=td#zti__main_Mail__-3_textCell";
 
 		// TODO: Implement for Desktop after bug 56273 is fixed
 		public static final String treeExpandCollapseButton = "css=div[id='ztih__main_Mail__FOLDER_div'] div[class^='ImgNode']";
@@ -480,6 +481,17 @@ public class TreeMail extends AbsTree {
 
 			return (page);
 
+		}else if (button == Button.B_TREE_SHOW_REMAINING_FOLDERS ) {
+
+			locator = Locators.zShowRemainingFolders;
+			page = null;
+
+			if (!this.sIsElementPresent(locator)) {
+				throw new HarnessException("Unable to find 'show remaining folders' in tree " + locator);
+			}
+			
+			// FALL THROUGH
+			
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}

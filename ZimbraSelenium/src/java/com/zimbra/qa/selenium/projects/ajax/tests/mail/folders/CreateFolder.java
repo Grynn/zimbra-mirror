@@ -14,7 +14,6 @@ public class CreateFolder extends AjaxCommonTest {
 
 	private boolean _folderIsCreated = false;
 	private String _folderName = null;
-	private String _rootFolderName = null;
 	private SOAP_DESTINATION_HOST_TYPE _soapDestination = null;
 
 	public CreateFolder() {
@@ -27,8 +26,6 @@ public class CreateFolder extends AjaxCommonTest {
 
 	@BeforeMethod(alwaysRun = true)
 	public void setParameters() {
-		_rootFolderName = ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP ? defaultAccountName
-				: "Folders";
 		_soapDestination = ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP ? SOAP_DESTINATION_HOST_TYPE.CLIENT
 				: SOAP_DESTINATION_HOST_TYPE.SERVER;
 	}

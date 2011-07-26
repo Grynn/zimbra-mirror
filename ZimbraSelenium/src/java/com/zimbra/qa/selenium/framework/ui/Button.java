@@ -230,6 +230,7 @@ public class Button {
 	public static final Button B_TREE_FOLDER_MARKASREAD = new Button("B_TREE_FOLDER_MARKASREAD");
 	public static final Button B_TREE_FOLDER_EXPANDALL = new Button("B_TREE_FOLDER_EXPANDALL");
 	public static final Button B_TREE_FOLDER_EMPTY = new Button("B_TREE_FOLDER_EMPTY");
+	public static final Button B_TREE_SHOW_REMAINING_FOLDERS = new Button("B_TREE_SHOW_REMAINING_FOLDERS");
 
 	// Mail 'Display' buttons
 	public static final Button B_ACCEPT = new Button("B_ACCEPT");
