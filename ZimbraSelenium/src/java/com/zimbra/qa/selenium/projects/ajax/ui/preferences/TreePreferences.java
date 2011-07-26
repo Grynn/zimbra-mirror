@@ -37,9 +37,10 @@ public class TreePreferences extends AbsTree {
 		Calendar,
 		Sharing,
 		Notifications,
+		MobileDevices,
 		ImportExport,
 		Shortcuts,
-		Zimlets
+		Zimlets 
 	}
 		
 	
@@ -133,6 +134,7 @@ public class TreePreferences extends AbsTree {
 		map.put(TreeItem.Calendar, "css=td[id='zti__main_Options__PREF_PAGE_CALENDAR_textCell']");
 		map.put(TreeItem.Sharing, null);
 		map.put(TreeItem.Notifications, "css=td[id='zti__main_Options__PREF_PAGE_NOTIFICATIONS_textCell']");
+		map.put(TreeItem.MobileDevices, "css=td[id='zti__main_Options__PREF_PAGE_MOBILE_textCell']");
 		map.put(TreeItem.ImportExport, null);
 		map.put(TreeItem.Shortcuts, "css=td[id='zti__main_Options__PREF_PAGE_SHORTCUTS_textCell']");
 		map.put(TreeItem.Zimlets, null);
