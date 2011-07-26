@@ -677,10 +677,10 @@ public class BeanUtils {
                     }
                 }
             } catch (ServiceException se) {
-                //it's for some other acct, not a child we have permission for
-                f = null;
+               //it's for some other acct, not a child we have permission for
+               f = null;
             }
-        }        
+        }
         return f == null ? null : new ZFolderBean(f);
     }
 
@@ -903,7 +903,7 @@ public class BeanUtils {
          cal.set(Calendar.DAY_OF_MONTH, 1);
          int dow = cal.get(Calendar.DAY_OF_WEEK);
          if (dow == prefFirstDayOfWeek) {
-             cal.add(Calendar.DAY_OF_MONTH, -7);
+//             cal.add(Calendar.DAY_OF_MONTH, -7);
          } else {
              cal.add(Calendar.DAY_OF_MONTH, - ((dow+(7-((int)prefFirstDayOfWeek)))%7));
          }
@@ -929,6 +929,26 @@ public class BeanUtils {
         } else if ("week".equalsIgnoreCase(view)) {
                 if (dow != prefFirstDayOfWeek)
                     cal.add(Calendar.DAY_OF_MONTH, - (((dow-1) + (7- (int)prefFirstDayOfWeek)) % 7));
+        }
+        return cal;
+    }
+
+    public static Calendar getStartOfMultiDayView(java.util.Calendar date, long prefFirstDayOfWeek, String view) {
+
+         Calendar cal = Calendar.getInstance(date.getTimeZone());
+         cal.setTimeInMillis(date.getTimeInMillis());
+         cal.set(Calendar.HOUR_OF_DAY, 0);
+         cal.set(Calendar.MINUTE, 0);
+         cal.set(Calendar.SECOND, 0);
+         cal.set(Calendar.MILLISECOND, 0);
+         int dow = cal.get(Calendar.DAY_OF_WEEK);
+
+        // pref goes 0-6, Calendar goes 1-7
+        if ("week".equalsIgnoreCase(view)) {
+                if (dow != prefFirstDayOfWeek)
+                    cal.add(Calendar.DAY_OF_MONTH, - (((dow-1) + (7- (int)prefFirstDayOfWeek)) % 7));
+        } else if ("workWeek".equalsIgnoreCase(view)) {
+                cal.add(Calendar.DAY_OF_MONTH, - (dow -1));
         }
         return cal;
     }
@@ -996,10 +1016,30 @@ public class BeanUtils {
 
     }
 
+    public static int getNumDays(Calendar day1, Calendar day2) {
+        long startTime = day1.getTimeInMillis();
+        long endTime = day2.getTimeInMillis();
+        int numDays = (int) ((endTime - startTime)/MSECS_PER_DAY);
+
+        return numDays;
+    }
+
     public static int getYear(Calendar cal) { return cal.get(Calendar.YEAR); }
     public static int getMonth(Calendar cal) { return cal.get(Calendar.MONTH); }
     public static int getDay(Calendar cal) { return cal.get(Calendar.DAY_OF_MONTH); }
     public static int getDayOfWeek(Calendar cal) { return cal.get(Calendar.DAY_OF_WEEK); }
+    
+    public static List<Boolean> getWorkDays(String wdays) {
+        List<Boolean> workDays = new ArrayList<Boolean>();
+        String inpWdays [] = wdays.split(",");
+        for(int index = 0; index < 7; index++)
+            workDays.add(index, false);
+        for(String day:inpWdays) {
+            workDays.remove(Integer.parseInt(day));
+            workDays.add(Integer.parseInt(day),true);
+        }
+        return workDays;
+    }
 
     /** Given the checkedCalendars folder id, returns the canonical folder id for mountpoints
      * @return canonical folder ids in case of mountpoints, local folder ids otherwise
@@ -1042,9 +1082,11 @@ public class BeanUtils {
 
     private static final long MSECS_PER_MINUTE = 1000*60;
     private static final long MSECS_PER_HOUR = MSECS_PER_MINUTE * 60;
+    private static final long MSECS_PER_DAY = MSECS_PER_HOUR * 24;
 
     public static long MSECS_PER_MINUTE() { return MSECS_PER_MINUTE; }
     public static long MSECS_PER_HOUR() { return MSECS_PER_HOUR; }
+    public static long MSECS_PER_DAY() { return MSECS_PER_DAY; }
 
 	public static String getCanonicalId(TimeZone tz) {
 		return TZIDMapper.canonicalize(tz.getID());

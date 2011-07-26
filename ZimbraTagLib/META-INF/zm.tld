@@ -4841,6 +4841,20 @@
         </attribute>
 
         <attribute>
+            <description>number of work days</description>
+            <name>wdays</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+       </attribute>
+
+        <attribute>
+            <description>day from which the week starts</description>
+            <name>weekStart</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
             <description>default starting hour, inclusive </description>
             <name>hourstart</name>
             <required>true</required>
@@ -4851,6 +4865,20 @@
             <description>default ending hour, exclusive</description>
             <name>hourend</name>
             <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>default starting minute, inclusive </description>
+            <name>minstart</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+        <attribute>
+            <description>default ending minute, exclusive</description>
+            <name>minend</name>
+            <required>false</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
 
@@ -4870,6 +4898,13 @@
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.util.TimeZone</type>
+        </attribute>
+
+        <attribute>
+            <description>print request</description>
+            <name>isprint</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
         </attribute>
 
     </tag>
@@ -7099,6 +7134,12 @@
     </function>
 
     <function>
+        <name>getStartOfMultiDayView</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.util.Calendar getStartOfMultiDayView(java.util.Calendar,long,java.lang.String)</function-signature>
+    </function>
+
+    <function>
         <name>getCurrentDay</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.util.Calendar getCurrentDay(java.util.Calendar)</function-signature>
@@ -7171,6 +7212,12 @@
     </function>
 
     <function>
+        <name>getNumDays</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>int getNumDays(java.util.Calendar,java.util.Calendar)</function-signature>
+    </function>
+
+    <function>
         <name>getYear</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>int getYear(java.util.Calendar)</function-signature>
@@ -7210,6 +7257,12 @@
         <name>getCanonicalFolderIds</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>java.lang.String getCanonicalFolderIds(com.zimbra.cs.taglib.bean.ZMailboxBean, java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>getWorkDays</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.util.List&lt;java.lang.Boolean&gt; getWorkDays(java.lang.String)</function-signature>
     </function>
 
     <function>
