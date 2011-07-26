@@ -11,3 +11,10 @@ table.AttachContacts_table input[type="text"]{
 	height:20px;
 	padding:2px 4px;
 }
+
+.AttachContactRow {
+    border-style: solid;
+    border-width: 1px 0;
+    cursor: pointer;
+    border-color: #E0E0E0;
+}
