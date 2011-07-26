@@ -15,10 +15,6 @@
 # 
 use strict;
 use lib qw(/opt/zimbra/zimbramon/lib /opt/zimbra/libexec/scripts);
-use Net::DNS;
-use Socket;
-use Net::LDAP;
-use Net::LDAP::LDIF;
 use Getopt::Long;
 
 my (%c,%loaded,%saved,$rc);
