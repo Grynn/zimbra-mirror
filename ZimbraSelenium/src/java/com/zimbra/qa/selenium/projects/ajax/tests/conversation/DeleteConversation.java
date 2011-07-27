@@ -1,12 +1,17 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.conversation;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.items.ConversationItem;
-import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.items.MailItem;
+import com.zimbra.qa.selenium.framework.ui.Action;
+import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZAssert;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
 
@@ -54,11 +59,11 @@ public class DeleteConversation extends AjaxCommonTest {
 		// Click delete
 		app.zPageMail.zToolbarPressButton(Button.B_DELETE);
 		
-		List<ConversationItem> conversations = app.zPageMail.zListGetConversations();
+		List<MailItem> conversations = app.zPageMail.zListGetMessages();
 		ZAssert.assertNotNull(conversations, "Verify the conversation list exists");
 
 		boolean found = false;
-		for (ConversationItem c : conversations) {
+		for (MailItem c : conversations) {
 			logger.info("Subject: looking for "+ subject +" found: "+ c.gSubject);
 			if ( subject.equals(c.gSubject) ) {
 				found = true;

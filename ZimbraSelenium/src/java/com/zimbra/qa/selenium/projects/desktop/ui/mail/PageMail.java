@@ -729,7 +729,7 @@ public class PageMail extends AbsTab {
 
 			// Is it expanded?
 			locator = convlocator + "//div[contains(@class, 'ImgNodeExpanded')]";
-			item.gIsExpanded = this.sIsElementPresent(locator);
+			// item.gIsExpanded = this.sIsElementPresent(locator);
 
 			// Is it flagged
 			// TODO: probably can't have boolean, need 'blank', 'disabled', 'red', and other states

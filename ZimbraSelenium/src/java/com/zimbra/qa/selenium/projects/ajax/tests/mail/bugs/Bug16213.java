@@ -1,13 +1,19 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.bugs;
 
 import java.io.File;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.items.ConversationItem;
-import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.items.MailItem;
+import com.zimbra.qa.selenium.framework.ui.Action;
+import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.LmtpInject;
+import com.zimbra.qa.selenium.framework.util.ZAssert;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail.Field;
@@ -48,9 +54,9 @@ public class Bug16213 extends AjaxCommonTest {
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
-		List<ConversationItem> items = app.zPageMail.zListGetConversations();
-		ConversationItem found = null;
-		for ( ConversationItem item : items ) {
+		List<MailItem> items = app.zPageMail.zListGetMessages();
+		MailItem found = null;
+		for ( MailItem item : items ) {
 			if ( item.gSubject.contains(subject) ) {
 				found = item;
 				break;

@@ -47,6 +47,7 @@ public class Action {
 	public static final Action A_MAIL_FLAG = new Action("A_MAIL_FLAG");
 	public static final Action A_MAIL_UNFLAG = new Action("A_MAIL_UNFLAG");
 	public static final Action A_MAIL_EXPANDCONVERSATION = new Action("A_MAIL_EXPANDCONVERSATION");
+	public static final Action A_MAIL_COLLAPSECONVERSATION = new Action("A_MAIL_COLLAPSECONVERSATION");
 	
 	// Tree actions
 	public static final Action A_TREE_EXPAND = new Action("A_TREE_EXPAND");

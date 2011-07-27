@@ -5,14 +5,12 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.items.ConversationItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.RecipientItem;
 import com.zimbra.qa.selenium.framework.items.RecipientItem.RecipientType;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -115,18 +113,18 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 		app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
 		
 		// Verify that both messages are in the list
-		List<ConversationItem> items = app.zPageMail.zListGetConversations();
+		List<MailItem> items = app.zPageMail.zListGetMessages();
 		
 		boolean found1 = false;
 		boolean found2 = false;
-		for (ConversationItem c : items) {
-			if ( c.subject.equals(message1.dSubject) ) {
+		for (MailItem c : items) {
+			if ( c.dSubject.equals(message1.dSubject) ) {
 				found1 = true;
 				break;
 			}
 		}
-		for (ConversationItem c : items) {
-			if ( c.subject.equals(message2.dSubject) ) {
+		for (MailItem c : items) {
+			if ( c.dSubject.equals(message2.dSubject) ) {
 				found2 = true;
 				break;
 			}

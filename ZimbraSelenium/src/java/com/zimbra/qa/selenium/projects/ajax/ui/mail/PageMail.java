@@ -217,8 +217,8 @@ public class PageMail extends AbsTab {
 
 		String locator;
 		boolean loaded, visible;
-		
-		
+
+
 		/**
 		 * 8.0
 		 * MLV:
@@ -227,9 +227,9 @@ public class PageMail extends AbsTab {
 		 * <div id="zb__CLV__NEW_MENU" style="position: absolute; overflow: visible; z-index: 300; left: 5px; top: 78px; width: 159px; height: 24px;" class="ZToolbarButton ZWidget   ZHasDropDown       ZHasLeftIcon ZHasText" parentid="z_shell">
 		 * 
 		 */
-		
+
 		// If the "NEW" button is visible, then the app is visible
-		
+
 		// Check MLV first
 		locator = "css=div#zb__TV__NEW_MENU";
 
@@ -237,7 +237,7 @@ public class PageMail extends AbsTab {
 		visible = this.zIsVisiblePerPosition(locator, 4, 74);
 		if ( loaded && visible )
 			return (true);
-		
+
 		// Check CLV next
 		locator = "css=div#zb__CLV__NEW_MENU";
 		loaded = this.sIsElementPresent(locator);
@@ -245,7 +245,7 @@ public class PageMail extends AbsTab {
 		if ( loaded && visible )
 			return (true);
 
-		
+
 		// We made it here, neither were active
 		return (false);
 	}
@@ -315,7 +315,7 @@ public class PageMail extends AbsTab {
 		} else if ( button == Button.B_GETMAIL || button == Button.B_LOADFEED || button == Button.B_REFRESH ) {
 
 			locator = "css=td#CHECK_MAIL_left_icon";
-			
+
 		} else if ( button == Button.B_DELETE ) {
 
 			String id;
@@ -471,7 +471,7 @@ public class PageMail extends AbsTab {
 		// Default behavior, process the locator by clicking on it
 		//
 		this.zClickAt(locator,"0,0");
-		
+
 		//need small wait so that next element gets appeared/visible  after click
 		SleepUtil.sleepMedium();
 		// If the app is busy, wait for it to become active
@@ -534,30 +534,30 @@ public class PageMail extends AbsTab {
 			} else {
 				throw new HarnessException(
 						"no logic defined for pulldown/option " + pulldown
-								+ "/" + option);
+						+ "/" + option);
 			}
 		} else if (pulldown == Button.B_NEW) {
-			
+
 			pulldownLocator = "css=td[id$='__NEW_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
-			
+
 			if (option == Button.O_NEW_TAG) {
-				
+
 				optionLocator = "css=td[id$='__NEW_MENU_NEW_TAG_left_icon']>div[class='ImgNewTag']";
 				page = new DialogTag(this.MyApplication, this);
-				
+
 			} else if (option == Button.O_NEW_FOLDER) {
-				
+
 				optionLocator = "css=td[id$='__NEW_MENU_NEW_FOLDER_left_icon']>div[class='ImgNewFolder']";
 				page = new DialogCreateFolder(this.MyApplication, this);
 
 			}
-			
+
 		} else if ( (pulldown == Button.B_ACTIONS) && (option == Button.B_REDIRECT) ) {
-			
+
 			pulldownLocator = "css=td[id$='__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
 			optionLocator = "css=div[id$='__REDIRECT'] td[id$='__REDIRECT_title']";
 			page = new DialogRedirect(this.MyApplication, this);
-			
+
 		} else if ((pulldown == Button.B_OPTIONS)&& (option == Button.O_ADD_SIGNATURE)) {
 
 			pulldownLocator = "css=td[id$='_ADD_SIGNATURE_dropdown']>div[class='ImgSelectPullDownArrow']";
@@ -628,36 +628,142 @@ public class PageMail extends AbsTab {
 	 */
 	public PageMailView zGetPropMailView() throws HarnessException {
 		if ( sIsElementPresent( "id="+ Locators.zViewMenuTVBtnID ) &&
-		      zIsVisiblePerPosition("id="+ Locators.zViewMenuTVBtnID, 0, 0)) {
+				zIsVisiblePerPosition("id="+ Locators.zViewMenuTVBtnID, 0, 0)) {
 			return (PageMailView.BY_MESSAGE);
 		} else if ( sIsElementPresent( "id="+ Locators.zViewMenuCLVBtnID ) &&
-		      zIsVisiblePerPosition("id="+ Locators.zViewMenuCLVBtnID, 0, 0)) {
+				zIsVisiblePerPosition("id="+ Locators.zViewMenuCLVBtnID, 0, 0)) {
 			return (PageMailView.BY_CONVERSATION);
 		}
 
 		throw new HarnessException("Unable to determine the Page Mail View");
 	}
 
+	private MailItem parseMessageRow(String top) throws HarnessException {
+		MailItem item = null;
+		
+		if ( top.contains("CLV") ) {
+			item = new ConversationItem();
+			
+			if ( this.sIsElementPresent(top.trim() + "[class*='ZmConvExpanded']"))
+				((ConversationItem)item).gIsConvExpanded = true;
+			
+		} else if ( top.contains("TV") )  {
+			item = new MailItem();
+		} else {
+			throw new HarnessException("Unknown message row type "+ top);
+		}
+		
+		String msglocator = top;
+		String locator;
+		
+		// Is it checked?
+		locator = msglocator + " div[class*='ImgCheckboxChecked']";
+		item.gIsSelected = this.sIsElementPresent(locator);
+
+		// Is it flagged
+		// TODO: probably can't have boolean, need 'blank', 'disabled', 'red', and other states
+		locator = msglocator + " div[class*='ImgFlagRed']";
+		item.gIsFlagged = this.sIsElementPresent(locator);
+
+		// Is it high priority?
+		locator = msglocator + " div[id$='__pr'][class*=ImgPriorityHigh_list]";
+		if ( this.sIsElementPresent(locator) )
+			item.gPriority = "high";
+		// TODO - handle other priorities
+
+
+		locator = msglocator + " div[id$='__tg']";
+		// TODO: handle tags
+
+		// Get the From
+		locator = msglocator + " [id$='__fr']";
+		item.gFrom = this.sGetText(locator).trim();
+
+		// Get the attachment
+		locator = msglocator + " div[id$='__at'][class*=ImgBlank_16]";
+		if ( this.sIsElementPresent(locator) ) {
+			item.gHasAttachments = false;
+		} else {
+			// TODO - handle other attachment types
+		}
+
+		// Get the fragment and the subject
+		locator = msglocator + " span[id$='__fm']";
+		if ( this.sIsElementPresent(locator) ) {
+			
+			item.gFragment = this.sGetText(locator).trim();
+			
+			// Get the subject
+			locator = msglocator + " td[id$='__su']";
+			String subject = this.sGetText(locator).trim();
+
+			// The subject contains the fragment, e.g. "subject - fragment", so
+			// strip it off
+			item.gSubject = subject.replace(item.gFragment, "").trim();
+
+			
+		} else {
+
+			// Conversation items's fragment is in the subject field
+			locator = msglocator + " td[id$='__su']";
+			item.gFragment = this.sGetText(locator).trim();
+
+			// TODO: should the subject be parsed from the conversation container?
+			// For now, just set it to blank
+			item.gSubject = "";
+
+		}
+
+
+		// Get the folder
+		locator = msglocator + " nobr[id$='__fo']";
+		if ( this.sIsElementPresent(locator) ) {
+			item.gFolder = this.sGetText(locator).trim();
+		} else {
+			item.gFolder = "";
+		}
+
+		// Get the size
+		locator = msglocator + " nobr[id$='__sz']";
+		if ( this.sIsElementPresent(locator) ) {
+			item.gSize = this.sGetText(locator).trim();
+		} else {
+			item.gSize = "";
+		}
+
+		// Get the received date
+		locator = msglocator + " td[id$='__dt']";
+		item.gReceived = this.sGetText(locator).trim();
+
+
+		return (item);
+	}
+	
 	/**
-	 * Return a list of all messages in the current view
+	 * Return a list of all messages in the current view.<p>
+	 * <p>
+	 * For conversations, a ConversationItem (extends MailItem) is returned for the containing row.  If the
+	 * conversation is expanded, then the expanded messages are also returned in the list.<p>
+	 * <p>
+	 * 
 	 * @return
 	 * @throws HarnessException
 	 */
 	public List<MailItem> zListGetMessages() throws HarnessException {
 
-	   List<MailItem> items = new ArrayList<MailItem>();
+		List<MailItem> items = new ArrayList<MailItem>();
 
-      String listLocator = null;
-      String rowLocator = null;
-      if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-         listLocator = "css=div[id='zl__TV__rows']";
-         rowLocator = "div[id^='zli__TV__']";
-      } else {
-         listLocator = "css=div[id='zl__CLV__rows']";
-         rowLocator = "div[id^='zli__CLV__']";
-      }
+		String listLocator = null;
+		String rowLocator = null;
+		if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
+			listLocator = "css=div[id='zl__TV__rows']";
+			rowLocator = "div[id^='zli__TV__']";
+		} else {
+			listLocator = "css=div[id='zl__CLV__rows']";
+			rowLocator = "div[id^='zli__CLV__']";
+		}
 
-      // Make sure the button exists
+		// Make sure the button exists
 		if ( !this.sIsElementPresent(listLocator) )
 			throw new HarnessException("Message List View Rows is not present: " + listLocator);
 
@@ -668,75 +774,9 @@ public class PageMail extends AbsTab {
 
 		// Get each conversation's data from the table list
 		for (int i = 1; i <= count; i++) {
-			final String msglocator = listLocator + " div:nth-of-type("+ i +") ";
-			String locator;
-
-			MailItem item = new MailItem();
-
-			// Is it checked?
-			locator = msglocator + " div[class*='ImgCheckboxChecked']";
-			item.gIsSelected = this.sIsElementPresent(locator);
-
-			// Is it flagged
-			// TODO: probably can't have boolean, need 'blank', 'disabled', 'red', and other states
-			locator = msglocator + " div[class*='ImgFlagRed']";
-			item.gIsFlagged = this.sIsElementPresent(locator);
-
-			// Is it high priority?
-			locator = msglocator + " div[id$='__pr'][class*=ImgPriorityHigh_list]";
-			if ( this.sIsElementPresent(locator) )
-				item.gPriority = "high";
-			// TODO - handle other priorities
-
-
-			locator = msglocator + " div[id$='__tg']";
-			// TODO: handle tags
-
-			// Get the From
-			locator = msglocator + " [id$='__fr']";
-			item.gFrom = this.sGetText(locator).trim();
-
-			// Get the attachment
-			locator = msglocator + " div[id$='__at'][class*=ImgBlank_16]";
-			if ( this.sIsElementPresent(locator) ) {
-				item.gHasAttachments = false;
-			} else {
-				// TODO - handle other attachment types
-			}
-
-			// Get the fragment
-			locator = msglocator + " span[id$='__fm']";
-			item.gFragment = this.sGetText(locator).trim();
-
-			// Get the subject
-			locator = msglocator + " td[id$='__su']";
-			String subject = this.sGetText(locator).trim();
-
-			// The subject contains the fragment, e.g. "subject - fragment", so
-			// strip it off
-			item.gSubject = subject.replace(item.gFragment, "").trim();
-
-			// Get the folder
-			locator = msglocator + " nobr[id$='__fo']";
-			if ( this.sIsElementPresent(locator) ) {
-				item.gFolder = this.sGetText(locator).trim();
-			} else {
-				item.gFolder = "";
-			}
-
-			// Get the size
-			locator = msglocator + " nobr[id$='__sz']";
-			if ( this.sIsElementPresent(locator) ) {
-				item.gSize = this.sGetText(locator).trim();
-			} else {
-				item.gSize = "";
-			}
-
-			// Get the received date
-			locator = msglocator + " td[id$='__dt']";
-			item.gReceived = this.sGetText(locator).trim();
 
 			// Add the new item to the list
+			MailItem item = parseMessageRow(listLocator + " div:nth-of-type("+ i +") ");
 			items.add(item);
 			logger.info(item.prettyPrint());
 		}
@@ -744,108 +784,6 @@ public class PageMail extends AbsTab {
 		// Return the list of items
 		return (items);
 	}
-
-	/**
-	 * Return a list of all conversations in the current view
-	 * @return
-	 * @throws HarnessException
-	 */
-	public List<ConversationItem> zListGetConversations() throws HarnessException {
-		logger.info(myPageName() + " getConversationList");
-
-		List<ConversationItem> items = new ArrayList<ConversationItem>();
-
-		// Make sure the button exists
-		if ( !this.sIsElementPresent(Locators.zCLVRows) )
-			throw new HarnessException("Conversation List View Rows is not present "+ Locators.zCLVRows);
-
-		// How many items are in the table?
-		int count = this.sGetCssCount("css=div[id='zl__CLV__rows'] div[id^='zli__CLV__']");
-		logger.debug(myPageName() + " zListGetConversations: number of conversations: "+ count);
-
-		// Get each conversation's data from the table list
-		for (int i = 1; i <= count; i++) {
-			final String convlocator = "css=div[id='zl__CLV__rows']>div:nth-of-type("+ i +")";
-			String locator;
-
-			ConversationItem item = new ConversationItem();
-
-			// Is it checked?
-			locator = convlocator + " div[class='ImgCheckboxChecked']";
-			item.gIsSelected = this.sIsElementPresent(locator);
-
-			// Is it expanded?
-			locator = convlocator + " div[class='ImgNodeExpanded']";
-			item.gIsExpanded = this.sIsElementPresent(locator);
-
-			// Is it flagged
-			// TODO: probably can't have boolean, need 'blank', 'disabled', 'red', and other states
-			locator = convlocator + " div[class='ImgFlagRed']";
-			item.gIsFlagged = this.sIsElementPresent(locator);
-
-			// What's the priority?
-			locator = convlocator +" div[id$='__pr'][class*='ImgPriorityHigh_list']";
-			if ( this.sIsElementPresent(locator) ) {
-				item.gPriority = "high";
-			}
-			// TODO - handle other priorities
-
-
-			locator = convlocator + " div[id$='__tg']";
-			// TODO: handle tags
-
-			// Get the From
-			locator = convlocator + " td[id$='__fr']";
-			item.gFrom = this.sGetText(locator).trim();
-
-			// Get the attachment
-			locator = convlocator +" div[id$='__at'][class*='ImgBlank_16']";
-			if ( this.sIsElementPresent(locator) ) {
-				item.gHasAttachments = false;
-			}
-			// TODO - handle other attachment types
-
-			// Get the fragment
-			locator = convlocator + " span[id$='__fm']";
-			item.gFragment = this.sGetText(locator).trim();
-
-			// Get the subject
-			locator = convlocator + " td[id$='__su']";
-			String s = this.sGetText(locator).trim();
-
-			// The subject contains the fragment, e.g. "subject - fragment", so
-			// strip it off
-			item.gSubject = s.replace(item.gFragment, "").trim();
-
-			// Get the folder
-			locator = convlocator + " nobr[id$='__fo']";
-			if ( this.sIsElementPresent(locator) ) {
-				item.gFolder = this.sGetText(locator).trim();
-			} else {
-				item.gFolder = "";
-			}
-
-			// Get the size
-			locator = convlocator + " nobr[id$='__sz']";
-			if ( this.sIsElementPresent(locator) ) {
-				item.gSize = this.sGetText(locator).trim();
-			} else {
-				item.gSize = "";
-			}
-
-			// Get the received date
-			locator = convlocator + " td[id$='__dt']";
-			item.gReceived = this.sGetText(locator).trim();
-
-			// Add the new item to the list
-			items.add(item);
-			logger.info(item.prettyPrint());
-		}
-
-		// Return the list of items
-		return (items);
-	}
-
 
 
 
@@ -975,7 +913,39 @@ public class PageMail extends AbsTab {
 
 		} else if ( action == Action.A_MAIL_EXPANDCONVERSATION ) {
 
-			throw new HarnessException("implement me!  action = "+ action);
+			String selectlocator = itemlocator + "//div[contains(@id, '__ex')]";
+			if ( !this.sIsElementPresent(selectlocator) )
+				throw new HarnessException("Checkbox locator is not present "+ selectlocator);
+
+			String image = this.sGetAttribute("xpath="+ selectlocator +"@class");
+			if ( image.equals("ImgNodeExpanded") )
+				throw new HarnessException("Trying to expand, but conversation was alread expanded");
+
+			// Left-Click on the flag field
+			this.zClick(selectlocator);
+
+			this.zWaitForBusyOverlay();
+
+			// No page to return
+			page = null;
+
+		} else if ( action == Action.A_MAIL_COLLAPSECONVERSATION ) {
+
+			String selectlocator = itemlocator + "//div[contains(@id, '__ex')]";
+			if ( !this.sIsElementPresent(selectlocator) )
+				throw new HarnessException("Checkbox locator is not present "+ selectlocator);
+
+			String image = this.sGetAttribute("xpath="+ selectlocator +"@class");
+			if ( image.equals("ImgNodeCollapsed") )
+				throw new HarnessException("Trying to collapse, but conversation was alread collapsed");
+
+			// Left-Click on the flag field
+			this.zClick(selectlocator);
+
+			this.zWaitForBusyOverlay();
+
+			// No page to return
+			page = null;
 
 		} else if ( (action == Action.A_MAIL_FLAG) || (action == Action.A_MAIL_UNFLAG) ) {
 			// Both FLAG and UNFLAG have the same action and result
@@ -1209,7 +1179,7 @@ public class PageMail extends AbsTab {
 
 				if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
 					//optionLocator = "zmi__TV__MARK_READ_title";
-					
+
 					optionLocator="css=td[id^='zmi__TV__MARK_READ__']";
 				} else {
 					//optionLocator = "zmi__CLV__MARK_READ_title";
@@ -1302,7 +1272,7 @@ public class PageMail extends AbsTab {
 			//page = new FormMailNew(this.MyApplication);
 			page = new DialogCreateFolder(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
 		} else if ( (shortcut == Shortcut.S_MAIL_HARDELETE) ) {
-			
+
 			// Hard Delete shows the Warning Dialog : Are you sure you want to permanently delete it?
 			page = new DialogWarning(DialogWarning.DialogWarningID.PermanentlyDeleteTheItem,
 					MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
