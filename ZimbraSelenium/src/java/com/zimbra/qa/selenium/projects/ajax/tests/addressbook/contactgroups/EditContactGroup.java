@@ -3,7 +3,7 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain;
+
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 
@@ -118,6 +118,29 @@ public class EditContactGroup extends AjaxCommonTest  {
         //Edit the contact group
         EditGroup(formContactGroupNew, group);
 		        	    
+	}
+
+	@Test(	description = "Cancel Editing a contact group by click Close",
+			groups = { "functional"})
+	public void NoEditClickToolbarClose() throws HarnessException {
+		
+		// Create a contact group via Soap then select
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
+		
+		//Click Edit on Toolbar button	
+        app.zPageAddressbook.zToolbarPressButton(Button.B_EDIT);
+  
+		//Click Close on Toolbar button	
+        app.zPageAddressbook.zToolbarPressButton(Button.B_CLOSE);
+             	
+        // Select the contact group
+		DisplayContactGroup groupView = (DisplayContactGroup) app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group.fileAs);
+	  
+		ZAssert.assertStringContains(groupView.zGetContactProperty(DisplayContactGroup.Field.Company), group.fileAs  , "Verify contact group email (" + group.fileAs + ") displayed");	
+		
+		for (int i=0; i<group.dlist.size(); i++) {
+	       ZAssert.assertStringContains(groupView.zGetContactProperty(DisplayContactGroup.Field.Email), group.dlist.get(i), "Verify contact group email (" + group.dlist.get(i) + ") displayed");	
+		}         
 	}
 
 } 

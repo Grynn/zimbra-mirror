@@ -4,15 +4,12 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.ContactItem;
-import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.Toaster;
 import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.*;
 
 
@@ -119,6 +116,24 @@ public class EditContact extends AjaxCommonTest  {
 		EditAndVerify(formContactNew, contactItem);
         	             
        }
+
+	@Test(	description = "Cancel Editing a contact by click Close",
+			groups = { "functional"})
+	public void NoEditClickToolbarClose() throws HarnessException {
+		
+	    ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+		
+		//Click Edit 	
+        app.zPageAddressbook.zToolbarPressButton(Button.B_EDIT);
+	
+		//Click Close on Toolbar button	
+        app.zPageAddressbook.zToolbarPressButton(Button.B_CLOSE);
+             	
+        // Select the contact 
+		DisplayContact contactView = (DisplayContact) app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contactItem.fileAs);
+	  
+		ZAssert.assertNotNull(contactView," Verify contact " + contactItem + " is displayed");
+	}
 
 }
 

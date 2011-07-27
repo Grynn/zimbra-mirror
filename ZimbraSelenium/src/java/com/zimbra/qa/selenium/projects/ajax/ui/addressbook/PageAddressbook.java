@@ -15,7 +15,6 @@ import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
 
-import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.core.ExecuteHarnessMain;
 import com.zimbra.qa.selenium.framework.items.*;
 
@@ -334,7 +333,14 @@ public class PageAddressbook extends AbsTab {
 		    }
 		    
 			page = new DialogWarning(DialogWarning.DialogWarningID.CancelCreateContact, this.MyApplication, ((AppAjaxClient)this.MyApplication).zPageAddressbook);
+	    //click close without changing contact contents
+	    } else if ( button == Button.B_CLOSE){
+ 	    	locator = "css=div[id^=zb__CN][id$=__CANCEL]" ;
+		    if (zIsElementDisabled(locator)) {
+				throw new HarnessException("Tried clicking on "+ locator +" but it was disabled ");
+		    }		    			
 
+		    		
 	    } else if (isAlphabetButton(button))
           {
        	   locator=DisplayContactGroup.ALPHABET_PREFIX + button.toString() + DisplayContactGroup.ALPHABET_POSTFIX;
@@ -352,7 +358,7 @@ public class PageAddressbook extends AbsTab {
 		//
 
 		// Make sure the button exists
-		if ( !this.sIsElementPresent(locator) )
+		if ( !sIsElementPresent(locator) )
 			throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
 
 		// Click it
