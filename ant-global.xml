@@ -184,6 +184,9 @@
         <mkdir dir="${test.classes.dir}"/>
         <javac srcdir="${test.src.dir}" destdir="${test.classes.dir}"
                debug="true" classpathref="class.path" target="${javac.target}"/>
+        <copy todir="${test.classes.dir}">
+            <fileset dir="${test.src.dir}" excludes="**/*.java"/>
+        </copy>
     </target>
 
     <target name="test" depends="test-compile" description="Run unit tests">
