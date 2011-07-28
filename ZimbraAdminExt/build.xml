@@ -26,6 +26,8 @@
 	<property name="common.dir" location="../ZimbraCommon" />
 	<property name="common.classes.dir" location="${common.dir}/build/classes" />
 	<property name="common.jars.dir" location="${common.dir}/jars" />
+	<property name="client.dir" location="../ZimbraClient" />
+	<property name="client.classes.dir" location="${client.dir}/build/classes" />
 
 	<!-- build -->
 	<property name="build.classes.dir" location="${build.dir}/classes" />
@@ -65,6 +67,7 @@
 	</target>
 		
 	<path id="class.path">
+		<pathelement location="${client.classes.dir}" />
 		<pathelement location="${common.classes.dir}" />
 		<pathelement location="${network.classes.dir}" />		
 		<pathelement location="${build.classes.dir}" />

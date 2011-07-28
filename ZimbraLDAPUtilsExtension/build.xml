@@ -24,6 +24,7 @@
 	</condition>	
 
 	<path id="class.path">
+		<pathelement location="${client.classes.dir}" />
 		<pathelement location="${common.classes.dir}" />
 		<pathelement location="${build.classes.dir}" />
 		<pathelement location="${zimbraServer.dir}/build/classes"/>

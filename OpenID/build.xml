@@ -17,10 +17,12 @@
 
 	<property name="zimbraServer.dir" value="../ZimbraServer"/>
 	<property name="zimbraCommon.dir" value="../ZimbraCommon"/>
+	<property name="zimbraClient.dir" value="../ZimbraClient"/>
 
 	<path id="class.path">
 		<pathelement location="${build.classes.dir}" />
 		<pathelement location="${zimbraServer.dir}/build/classes"/>
+		<pathelement location="${zimbraClient.dir}/build/classes"/>
 		<pathelement location="${zimbraCommon.dir}/build/classes"/>
         <fileset dir="${zimbraCommon.dir}/jars">
             <include name="**/*.jar"/>
