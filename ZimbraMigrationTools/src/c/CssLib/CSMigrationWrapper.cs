@@ -113,8 +113,20 @@ namespace CssLib
         }
 
 
+        public void GetListofMapiFolders()
+        {
+
+            UDTFolder[] folders;
+            MapiWrapper M1 = new MapiWrapper();
+            folders = (UDTFolder[]) M1.UDTFolderSequence(0, 10);
+            string name = folders[0].Name;
+
+        }
+
         public void  StartMigration(MigrationAccount Acct)
         {
+
+            //GetListofMapiFolders();
             //Acct.Accountname = "testing";
             Acct.TotalNoContacts = 100;
             Acct.TotalNoMails = 1000;

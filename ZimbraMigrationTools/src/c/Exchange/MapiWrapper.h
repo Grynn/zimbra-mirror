@@ -16,6 +16,12 @@ public:
     CMapiWrapper() {
 	baseMigrationObj = new MapiMigration();
 	exchadmin= new Zimbra::MAPI::ExchangeAdmin("10.117.82.161");
+
+	 CComBSTR str = _T("Unnamed");
+    m_pUDT.Value = 0; //default value zero (0)
+    m_pUDT.Name = ::SysAllocString( str ); //default name "Unnamed"
+	m_pUDT.Type = ::SysAllocString( L"Type" ); 
+   
     }
 
     DECLARE_REGISTRY_RESOURCEID(IDR_MAPIWRAPPER)
@@ -41,9 +47,28 @@ public:
     STDMETHOD(ConnecttoXchgServer)(BSTR HostName, BSTR ProfileName, BSTR Password);
     STDMETHOD(ImportMailOptions)(BSTR OptionsTag);
 	STDMETHOD(GetProfilelist)(VARIANT* Profiles);
+
+	STDMETHOD(get_UDTFolder)(UDTFolder *pUDT);
+	STDMETHOD(put_UDTFolder)(UDTFolder *pUDT);
+
+	STDMETHOD(UDTFolderSequence)(/*[in]*/ long start, 
+                           /*[in]*/ long length, 
+                           /*[out, retval]*/ SAFEARRAY **SequenceArr);
+	
+	
+
+	
+
 	std::vector<CComBSTR>m_vecColors;
 
 	std::wstring str_to_wstr( const std::string& str );
+
+	protected:
+	 UDTFolder m_pUDT;
+	  HRESULT SequenceByElement(long start, long length, SAFEARRAY *SequenceArr);
+      HRESULT SequenceByData(long start, long length, SAFEARRAY *SequenceArr);
+     // HRESULT IsUDTFolderArray( SAFEARRAY *pUDTArr, bool &isDynamic );
+
 
 
 };
