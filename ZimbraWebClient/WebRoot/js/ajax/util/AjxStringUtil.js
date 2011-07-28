@@ -1702,4 +1702,248 @@ function(name, value, prependSpace, useDoubleQuotes, jsEscape, htmlEscape) {
     retVal += AjxStringUtil.quoteString(value, useDoubleQuotes);
 
     return retVal;
-}
+};
+
+// regexes for parsing msg body content so we can figure out what was quoted and what's new
+AjxStringUtil.MSG_REGEXES = [
+	{
+		// the two most popular quote characters, < and |
+		type:	"QUOTED",
+		regex:	/^\s*(>|\|)/
+	},
+	{
+		// marker for Original or Forwarded message, used by ZCS and others
+		type:	"ORIG_SEP_STRONG",
+		regex:	new RegExp("^\\s*--+\\s*(" + AjxMsg.origMsg + "|" + AjxMsg.forwardedMessage + ")\\s*--+\\s*$", "i")
+	},
+	{
+		// in case a client doesn't use the exact words above
+		type:	"ORIG_SEP_WEAK",
+		regex:	/^\s*--+\s*[\w\s]+\s*--+$/
+	},
+	{
+		// one of the commonly quoted email headers
+		type:	"HEADER",
+		regex:	new RegExp("^\\s*(" + [AjxMsg.from, AjxMsg.to, AjxMsg.subject, AjxMsg.date, AjxMsg.sent, AjxMsg.cc].join("|") + ")")
+	},
+	{
+		// some clients use a series of underscores as a text-mode separator
+		type:	"LINE",
+		regex:	/^\s*_{5,}\s*$/
+	},
+	{
+		// prefatory summary such as '"John Doe" <jdoe@a.com> wrote:'
+		// recognized by the word "wrote" at the end, and the presence of an email
+		type:	"WROTE_STRONG",
+		regex:	new RegExp("^.*\\w+@\\w+.*" + AjxMsg.wrote + "\\s*$")
+	},
+	{
+		// in case client doesn't use the word "wrote" (maybe "scribbled" or something cute like that)
+		type:	"WROTE_WEAK",
+		regex:	/^.*\w+@\w+.*:\s*$/
+	},
+	{
+		// single line with [snipped] or such
+		type:	"BRACKET",
+		regex:	/^\s*\[\w ]\s*$/
+	}/*,
+	{
+		// internet style signature separator
+		type:	"SIG_SEP",
+		regex:	/^- ?-[^-]\s*$/
+	}*/
+];
+
+AjxStringUtil.MSG_REGEXES_HTML = [
+	{
+		// HTML-encoded <, or a |
+		type:	"QUOTED",
+		regex:	/^\s*(&gt;|\|)/
+	},
+	{
+		// ZCS HTML separator
+		type:	"ORIG_SEP_STRONG",
+		regex:	/^<hr id="zwchr">/
+	},
+	{
+		// Outlook
+		type:	"ORIG_SEP_STRONG",
+		regex:	/^<hr size="2" width="100%" align="center">/
+	},
+	{
+		// generic separator (eg Outlook)
+		type:	"ORIG_SEP_WEAK",
+		regex:	/^<hr/
+	}
+];
+
+// recognize blank lines
+AjxStringUtil.BLANK_RE = /^\s*$/;
+
+// for finding preface split across two lines
+AjxStringUtil.WROTE_RE = new RegExp("\\b" + AjxMsg.wrote + "\\s*$");
+AjxStringUtil.EMAIL_RE = /[^@\s]+@[A-Za-z0-9\-]{2,}(\.[A-Za-z0-9\-]{2,})+/;
+
+/**
+ * Analyze the text and return what appears to be original (as opposed to quoted) content. We
+ * look for separators commonly used by mail clients, as well as prefixes that indicate that
+ * a line is being quoted.
+ * 
+ * This is particularly tricky in HTML, since we have to look at both tags and content, and
+ * because HTML content is a tree rather than a set of serial lines. We don't convert HTML to
+ * a tree and walk it. It's easier for now to convert to a set of lines and approach it much
+ * like we do text. That means we may have some unclosed tags in what we return, but browsers
+ * are used to that.
+ * 
+ * TODO: real HTML parsing
+ * TODO: this probably doesn't work in PRE sections
+ * 
+ * @param {string}	text		message body content
+ */
+AjxStringUtil.getOriginalContent =
+function(text, isHtml) {
+
+	if (!text) { return ""; }
+	var results = [];
+	
+	isHtml = isHtml || /<br|<div|<html/i.test(text);
+	
+	var lines = isHtml ? text.replace("<", "\n<", "g").split("\n") :
+						 text.split(AjxStringUtil.SPLIT_RE);
+	
+	var curType;
+	var curBlock = [];
+	for (var i = 0; i < lines.length; i++) {
+		var type = "UNKNOWN";
+		var line = lines[i];
+		
+		if (isHtml && line.toLowerCase().indexOf("<blockquote") == 0) {
+			results.push({type:curType, block:curBlock.join("\n")});
+			curBlock = [];
+			type = curType = "QUOTED";
+			curBlock.push(line);
+			while (line.toLowerCase().indexOf("</blockquote>") == -1 && (i < lines.length - 1)) {
+				line = lines[++i];
+				curBlock.push(line);
+			}
+			continue;
+		}
+		
+		// for HTML, test the line with the tags left in
+		var tagMatch = false;
+		if (isHtml) {
+			for (var j = 0; j < AjxStringUtil.MSG_REGEXES_HTML.length; j++) {
+				var msgTest = AjxStringUtil.MSG_REGEXES_HTML[j];
+				var regex = msgTest.regex;
+				if (regex.test(line.toLowerCase())) {
+					type = msgTest.type;
+					tagMatch = true;
+					break;	// first match wins
+				}
+			}
+		}
+
+		// for HTML, remove the tags so that we test the content
+		var testLine = isHtml ? AjxStringUtil.stripTags(line) : line;
+		if (type == "UNKNOWN") {
+			for (var j = 0; j < AjxStringUtil.MSG_REGEXES.length; j++) {
+				var msgTest = AjxStringUtil.MSG_REGEXES[j];
+				var regex = msgTest.regex;
+				if (regex.test(testLine.toLowerCase())) {
+					type = msgTest.type;
+					break;	// first match wins
+				}
+			}
+		}
+		
+		// WROTE can run across several lines. If we detect "wrote:" at the end of a line, look back
+		// at contiguous non-blank lines for an email address.
+		if (AjxStringUtil.WROTE_RE.test(testLine) && type != "WROTE_STRONG" && type != "WROTE_WEAK") {
+			var testBlock = [], isWrote = false;
+			for (var j = curBlock.length - 1; j >= 0; j--) {
+				var line1 = curBlock[j];
+				var testLine1 = isHtml ? AjxStringUtil.stripTags(line1) : line1;
+				if (AjxStringUtil.BLANK_RE.test(testLine1)) {
+					break;
+				}
+				curBlock.pop();
+				testBlock.unshift(line1);
+			}
+			for (var j = 0; j < testBlock.length; j++) {
+				var line1 = testBlock[j];
+				var testLine1 = isHtml ? AjxStringUtil.stripTags(line1) : line1;
+				if (AjxStringUtil.EMAIL_RE.test(testLine1)) {
+					isWrote = true;
+				}
+			}
+			if (isWrote) {
+				type = "WROTE_STRONG";
+				line = [testBlock.join("\n"), line].join("\n");
+			}
+		}
+		
+		// blank lines are just added to the current block
+		if (!tagMatch && AjxStringUtil.BLANK_RE.test(testLine)) {
+			curBlock.push(line);
+			continue;
+		}
+		
+		// see if we're switching to a new type; if so, package up what we have so far
+		if (curType) {
+			if (curType != type) {
+				var lastResult = results[results.length - 1];
+				// for HTML, consider UNKNOWN following HEADER to be part of HEADER (since the header
+				// and its value are typically surrounded by different sets of tags)
+				if (isHtml && (lastResult && lastResult.type == "HEADER") && curType == "UNKNOWN") {
+					lastResult.block = [lastResult.block, curBlock.join("\n")].join("\n");
+				}
+				else {
+					results.push({type:curType, block:curBlock.join("\n")});
+				}
+				curBlock = [];
+				curType = type;
+			}
+		}
+		else {
+			curType = type;
+		}
+		curBlock.push(line);
+	}
+	if (curBlock.length) {
+		var lastResult = results[results.length - 1];
+		if (isHtml && (lastResult && lastResult.type == "HEADER") && curType == "UNKNOWN") {
+			lastResult.block = [lastResult.block, curBlock.join("\n")].join("\n");
+		}
+		else {
+			results.push({type:curType, block:curBlock.join("\n")});
+		}
+	}
+	
+	var count = {};
+	var firstUnknown;
+	for (var i = 0; i < results.length; i++) {
+		var result = results[i];
+		var type = result.type;
+		count[type] = (count[type] != null) ? count[type] + 1 : 1;
+		if (!firstUnknown && type == "UNKNOWN") {
+			firstUnknown = result.block;
+		}
+	}
+	
+	// Done parsing. See if we have a sequence of blocks that identifies original vs quoted content.
+	var original;
+	var numBlocks = results.length;
+	if ((numBlocks == 2 && count["UNKNOWN"] == 1 && count["QUOTED"] == 1) ||
+		(numBlocks >= 2 && results[0].type == "UNKNOWN" && results[1].type == "ORIG_SEP_STRONG") ||
+		(numBlocks >= 3 && results[0].type == "UNKNOWN" && results[1].type == "ORIG_SEP_WEAK" && results[2].type == "HEADER") ||
+		(numBlocks >= 3 && results[0].type == "UNKNOWN" && results[1].type == "LINE" && results[2].type == "HEADER") ||
+		(numBlocks >= 3 && results[0].type == "UNKNOWN" && results[1].type == "WROTE_WEAK" && results[2].type == "QUOTED") ||
+		(numBlocks >= 2 && results[0].type == "UNKNOWN" && results[1].type == "WROTE_STRONG") ||
+		(numBlocks >= 2 && results[0].type == "WROTE_STRONG" && count["UNKNOWN"] == 1)) {
+
+		original = firstUnknown;
+	}
+
+	return original || text;
+};
+
