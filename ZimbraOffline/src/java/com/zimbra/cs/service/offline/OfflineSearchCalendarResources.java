@@ -22,6 +22,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.service.account.SearchCalendarResources;
 import com.zimbra.soap.ZimbraSoapContext;
@@ -30,35 +31,40 @@ public class OfflineSearchCalendarResources extends SearchCalendarResources {
 
     @Override
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
-        Element response = OfflineServiceProxy.SearchCalendarResources().handle(request, context);
         ZimbraSoapContext ctxt = getZimbraSoapContext(context);
         Account acct = getRequestedAccount(ctxt);
+        boolean needFullName = false;
+        boolean needEmail = false;
         if (acct instanceof OfflineAccount) {
             OfflineAccount oAcct = (OfflineAccount) acct;
             if (!oAcct.getRemoteServerVersion().isAtLeast7xx())
             {
-                //if email is requested, make sure response includes it
-                boolean needEmail = false;
                 String attrs = request.getAttribute(AccountConstants.E_ATTRS, null);
                 if (attrs != null) {
-                    String[] attrArr = attrs.split(",");
-                    for (String attr : attrArr) {
-                        if (attr.equals(ContactConstants.A_email)) {
-                            needEmail = true;
-                            break;
-                        }
+                    if (attrs.matches("(^|.*,)("+ContactConstants.A_fullName+")($|,.*)")) {
+                        request.addAttribute(AccountConstants.E_ATTRS, attrs+","+Provisioning.A_displayName);
+                        needFullName = true;
+                    }
+                    if (attrs.matches("(^|.*,)("+ContactConstants.A_email+")($|,.*)")) {
+                        needEmail = true;
                     }
                 }
-                if (needEmail) {
-                    Iterator<Element> calResources = response.elementIterator(AccountConstants.E_CALENDAR_RESOURCE); 
-                        while (calResources.hasNext()) {
-                            Element calResource = calResources.next();
-                            //if email not in response from ZCS even when requested; use name instead 
-                            if (calResource.getAttribute(ContactConstants.A_email, null) == null && calResource.getAttribute(AccountConstants.A_NAME, null) != null) {
-                                calResource.addAttribute(ContactConstants.A_email, calResource.getAttribute(AccountConstants.A_NAME));
-                            }
-                        }
-                    }
+            }
+        }
+        Element response = OfflineServiceProxy.SearchCalendarResources().handle(request, context);
+        if (needEmail || needFullName) {
+            Iterator<Element> calResources = response.elementIterator(AccountConstants.E_CALENDAR_RESOURCE);
+            while (calResources.hasNext()) {
+                Element calResource = calResources.next();
+                //copy email from name if needed
+                Element attrs = calResource.getElement("_attrs");
+                if (needEmail && calResource.getAttribute(ContactConstants.A_email, null) == null && calResource.getAttribute(AccountConstants.A_NAME, null) != null) {
+                    attrs.addAttribute(ContactConstants.A_email, calResource.getAttribute(AccountConstants.A_NAME));
+                }
+                //copy fullName from displayName if needed
+                if (needFullName && calResource.getAttribute(ContactConstants.A_fullName, null) == null && calResource.getAttribute(Provisioning.A_displayName, null) != null) {
+                    attrs.addAttribute(ContactConstants.A_fullName, calResource.getAttribute(Provisioning.A_displayName));
+                }
             }
         }
         return response;
