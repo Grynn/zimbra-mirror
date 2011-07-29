@@ -120,6 +120,29 @@ namespace CssLib
             MapiWrapper M1 = new MapiWrapper();
             folders = (UDTFolder[]) M1.UDTFolderSequence(0, 10);
             string name = folders[0].Name;
+            FolderType type = folders[0].Type;
+            /*UDTItem item;
+            item.EntryId = "000-444-444";
+            item.Type = FolderType.Mail;
+            item.CreationDate = DateTime.Now;
+            M1.set_UDTItem( ref item);
+            UDTItem i1 = M1.get_UDTItem();*/
+
+
+           
+
+
+        }
+
+
+        public void GetListofItems()
+        {
+            MapiWrapper M1 = new MapiWrapper();
+            UDTItem[] Items;
+            Items = (UDTItem[])M1.UDTItemSequence(0, 5);
+            DateTime cdate = (DateTime)Items[0].CreationDate;
+            FolderType types = Items[0].Type;
+            string entryid = Items[0].EntryId;
 
         }
 
@@ -127,6 +150,7 @@ namespace CssLib
         {
 
             //GetListofMapiFolders();
+            //GetListofItems();
             //Acct.Accountname = "testing";
             Acct.TotalNoContacts = 100;
             Acct.TotalNoMails = 1000;

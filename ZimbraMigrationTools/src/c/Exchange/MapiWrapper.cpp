@@ -3,13 +3,27 @@
 #include "common.h"
 #include "MapiWrapper.h"
 #include "MAPICommon.h"
-
+#include<ATLComTime.h>
 
 #define PR_PROFILE_UNRESOLVED_NAME 0x6607001e
 #define PR_PROFILE_UNRESOLVED_SERVER 0x6608001e
 
 //C5E4267B-AE6C-4E31-956A-06D8094D0CBE
 const IID UDTVariable_IID = { 0xC5E4267B, 
+                              0xAE6C,
+                              0x4E31, {
+                                       0x95,
+                                       0x6A,
+                                       0x06,
+                                       0xD8,
+                                       0x09,
+                                       0x4D,
+                                       0x0C,
+                                       0xBE
+                                      }
+                            }; 
+
+const IID UDTItem_IID = { 0xC5E4267A, 
                               0xAE6C,
                               0x4E31, {
                                        0x95,
@@ -122,15 +136,16 @@ STDMETHODIMP CMapiWrapper::get_UDTFolder(UDTFolder *pUDT)
 	 if( !pUDT ) 
         return( E_POINTER );
 
-    pUDT->Value = m_pUDT.Value;  //return value
+    pUDT->Items = m_pUDT.Items;  //return value
 
     ::SysFreeString( pUDT->Name );   //free old (previous) name
      pUDT->Name = ::SysAllocString( m_pUDT.Name );  //copy new name
 
     /*::VariantClear( &pUDT->Type );  //free old special value
     ::VariantCopy( &pUDT->Type, &m_pUDT.Type ); //copy new special value*/
-	 ::SysFreeString( pUDT->Type );   //free old (previous) name
-     pUDT->Type = ::SysAllocString( m_pUDT.Type );  //copy new name
+	// ::SysFreeString( pUDT->Type );   //free old (previous) name
+	 
+     pUDT->Type = m_pUDT.Type;  //copy new name
 
 
 	return S_OK;
@@ -145,7 +160,7 @@ STDMETHODIMP CMapiWrapper::put_UDTFolder(UDTFolder *pUDT)
     if( !pUDT->Name )
         return( E_POINTER );
 
-    m_pUDT.Value = pUDT->Value;  //easy assignment
+    m_pUDT.Items = pUDT->Items;  //easy assignment
 
     ::SysFreeString( m_pUDT.Name );  //free the previous string first
     m_pUDT.Name = ::SysAllocString( pUDT->Name );   //make a copy of the incoming
@@ -153,8 +168,55 @@ STDMETHODIMP CMapiWrapper::put_UDTFolder(UDTFolder *pUDT)
    /* ::VariantClear( &m_pUDT.Special );   //free the previous variant first
     ::VariantCopy( &m_pUDT.Special, &pUDT->Special );   //make a copy*/
 
-     ::SysFreeString( m_pUDT.Type );  //free the previous string first
-    m_pUDT.Type = ::SysAllocString( pUDT->Type );   //make a copy of the incoming
+   //  ::SysFreeString( m_pUDT.Type );  //free the previous string first
+    m_pUDT.Type = pUDT->Type ;   //make a copy of the incoming
+
+
+	return S_OK;
+}
+
+
+
+STDMETHODIMP CMapiWrapper::get_UDTItem(UDTItem *pUDTItem)
+{
+	// TODO: Add your implementation code here
+	if( !pUDTItem ) 
+        return( E_POINTER );
+
+    pUDTItem->Type= m_pUDTItem.Type;  //return value
+
+    ::SysFreeString( pUDTItem->EntryId );   //free old (previous) name
+     pUDTItem->EntryId = ::SysAllocString( m_pUDTItem.EntryId );  //copy new name
+
+    /*::VariantClear( &pUDT->Type );  //free old special value
+    ::VariantCopy( &pUDT->Type, &m_pUDT.Type ); //copy new special value*/
+	// ::SysFreeString( pUDT->Type );   //free old (previous) name
+	 
+    pUDTItem->CreationDate = m_pUDTItem.CreationDate;  //copy new name
+
+
+	return S_OK;
+}
+
+
+STDMETHODIMP CMapiWrapper::put_UDTItem(UDTItem *pUDTItem)
+{
+	// TODO: Add your implementation code here
+	if( !pUDTItem ) 
+        return( E_POINTER );
+    if( !pUDTItem->EntryId )
+        return( E_POINTER );
+
+    m_pUDTItem.Type = pUDTItem->Type;  //easy assignment
+
+    ::SysFreeString( m_pUDTItem.EntryId );  //free the previous string first
+    m_pUDTItem.EntryId = ::SysAllocString( pUDTItem->EntryId );   //make a copy of the incoming
+
+   /* ::VariantClear( &m_pUDT.Special );   //free the previous variant first
+    ::VariantCopy( &m_pUDT.Special, &pUDT->Special );   //make a copy*/
+
+   //  ::SysFreeString( m_pUDT.Type );  //free the previous string first
+    m_pUDTItem.CreationDate = pUDTItem->CreationDate ;   //make a copy of the incoming
 
 
 	return S_OK;
@@ -244,8 +306,8 @@ HRESULT CMapiWrapper::SequenceByElement(long start, long length, SAFEARRAY *Sequ
         
        
 		a_udt.Name= L"test";
-		a_udt.Value = 10 +i;
-		a_udt.Type = L"Mail";
+		a_udt.Items = 10 +i;
+		a_udt.Type = Mail;
 
 
 
@@ -267,6 +329,96 @@ HRESULT CMapiWrapper::SequenceByElement(long start, long length, SAFEARRAY *Sequ
 }
 
 
+STDMETHODIMP CMapiWrapper::UDTItemSequence(long start, long length, SAFEARRAY **SequenceArr )
+{
+    if( !SequenceArr ) 
+        return( E_POINTER );
+
+    if( length <= 0 ) { 
+        HRESULT hr = Error( _T("Length must be greater than zero") );
+        return( hr ); 
+    }
+
+    if( *SequenceArr != NULL ) {
+        ::SafeArrayDestroy( *SequenceArr );
+        *SequenceArr = NULL;
+    } 
+
+	//////////////////////////////////////////////////
+    //here starts the actual creation of the array
+    //////////////////////////////////////////////////
+    IRecordInfo *pUdtRecordInfo = NULL;
+    HRESULT hr = GetRecordInfoFromGuids( LIBID_Exchange,  
+                                         1, 0, 
+                                         0,
+                                         UDTItem_IID,
+                                         &pUdtRecordInfo );
+    if( FAILED( hr ) ) {
+       /* HRESULT hr2 = Error( _T("Can not create RecordInfo interface for"
+                                "UDTVariable") );*/
+        return( hr ); //Return original HRESULT hr2 is for debug only
+    }
+    
+    SAFEARRAYBOUND rgsabound[1];
+    rgsabound[0].lLbound = 0;
+    rgsabound[0].cElements =length;//
+
+    *SequenceArr = ::SafeArrayCreateEx( VT_RECORD, 1, rgsabound, pUdtRecordInfo );
+
+    pUdtRecordInfo->Release(); //do not forget to release the interface
+    if( *SequenceArr == NULL ) {
+      /*  HRESULT hr = Error( _T("Can not create array of UDTVariable "
+                               "structures") );*/
+        return( hr );
+    }
+	  hr = SequenceByItemElement( start, length, *SequenceArr );
+    //hr = SequenceByData( start, length, *SequenceArr );
+
+	return S_OK;
+}
+
+HRESULT CMapiWrapper::SequenceByItemElement(long start, long length, SAFEARRAY *SequenceArr)
+{
+
+    long lBound = 0;
+
+    VARIANT         a_variant;
+    UDTItem   a_udt;
+    
+    HRESULT hr = SafeArrayGetLBound( SequenceArr, 1, &lBound );
+    if( FAILED( hr ) ) return( hr );
+    
+    BSTR strDefPart = ::SysAllocString( L"Named  " );
+    
+        ::VariantInit( &a_variant );
+    for( long i = lBound; i<length; i++, start++ ) {
+        
+   
+		a_udt.EntryId= L"444-44444-444400000";
+		
+		a_udt.Type = Mail;
+
+		
+
+
+		a_udt.CreationDate.vt=VT_DATE;
+		a_udt.CreationDate.date=COleDateTime::GetCurrentTime();
+
+		put_UDTItem(&a_udt);
+
+
+
+        hr = ::SafeArrayPutElement( SequenceArr, &i, (void*)&a_udt );
+        if( FAILED(hr) ) 
+            return( hr );
+
+        
+    }
+	::VariantClear( &a_variant ); //frees the Name string
+    ::SysFreeString( strDefPart );
+
+    return( S_OK );
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //////
@@ -290,7 +442,7 @@ HRESULT CMapiWrapper::SequenceByData(long start, long length, SAFEARRAY *Sequenc
 
     for( long i = 0; i<length; i++, start++, p_udt++ ) {
         a_variant = NULL;
-        p_udt->Value = start;    //i holds the sequence value
+        p_udt->Items = start;    //i holds the sequence value
         
        /* if( i & 1 ) {
             p_udt->Special.vt = VT_R8;
