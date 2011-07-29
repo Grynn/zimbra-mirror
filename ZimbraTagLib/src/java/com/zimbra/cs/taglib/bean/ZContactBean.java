@@ -182,7 +182,7 @@ public class ZContactBean implements Comparable {
 
     public boolean getIsGroup() { return mContact.getIsGroup(); }
 
-    public String getImagePart() { return mContact.getAttachmentPartName("image");}
+    public String getImagePart() { return (mContact.getAttachmentPartInfo("image") != null ? mContact.getAttachmentPartName("image") : null);}
 
     /* Comcast specific */
     public String getHomeAddress() { return mContact.getAttrs().get("homeAddress"); }
