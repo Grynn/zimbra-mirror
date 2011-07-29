@@ -7,6 +7,8 @@ import com.zimbra.qa.selenium.framework.ui.AbsForm;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
+import com.zimbra.qa.selenium.projects.desktop.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.desktop.ui.PageLogin;
 
 public class FormAddImapAccount extends AbsForm {
@@ -72,37 +74,37 @@ public class FormAddImapAccount extends AbsForm {
       DesktopAccountItem desktopAccountItem  = (DesktopAccountItem) item;
 
       // Fill out the form
-      if (desktopAccountItem.accountName != null ||
+      if (desktopAccountItem.accountName != null &&
             !desktopAccountItem.accountName.equals("")) {
          sType(Locators.zAccountNameField, desktopAccountItem.accountName);
       }
 
-      if (desktopAccountItem.emailAddress != null ||
+      if (desktopAccountItem.emailAddress != null &&
             !desktopAccountItem.emailAddress.equals("")) {
          sType(Locators.zEmailAddressField, desktopAccountItem.emailAddress);
       }
 
-      if (desktopAccountItem.fullName != null ||
+      if (desktopAccountItem.fullName != null &&
             !desktopAccountItem.fullName.equals("")) {
          sType(Locators.zFullNameField, desktopAccountItem.fullName);
       }
 
-      if (desktopAccountItem.receivingUsernname != null ||
+      if (desktopAccountItem.receivingUsernname != null &&
             !desktopAccountItem.receivingUsernname.equals("")) {
          sType(Locators.zReceivingUserNameField, desktopAccountItem.receivingUsernname);
       }
 
-      if (desktopAccountItem.receivingPassword != null ||
+      if (desktopAccountItem.receivingPassword != null &&
             !desktopAccountItem.receivingPassword.equals("")) {
          sType(Locators.zReceivingPasswordField, desktopAccountItem.receivingPassword);
       }
 
-      if (desktopAccountItem.receivingIncomingServer != null ||
+      if (desktopAccountItem.receivingIncomingServer != null &&
             !desktopAccountItem.receivingIncomingServer.equals("")) {
          sType(Locators.zReceivingServerField, desktopAccountItem.receivingIncomingServer);
       }
 
-      if (desktopAccountItem.receivingPassword != null ||
+      if (desktopAccountItem.receivingPassword != null &&
             !desktopAccountItem.receivingPassword.equals("")) {
          sType(Locators.zReceivingPasswordField, desktopAccountItem.receivingPassword);
       }
@@ -130,7 +132,7 @@ public class FormAddImapAccount extends AbsForm {
          sClick(radioButtonLocator);
       }
 
-      if (desktopAccountItem.receivingPort != null ||
+      if (desktopAccountItem.receivingPort != null &&
             !desktopAccountItem.receivingPort.equals("")) {
 
          if (!sGetText(Locators.zReceivingPortField).equals(
@@ -145,12 +147,12 @@ public class FormAddImapAccount extends AbsForm {
 
       }
 
-      if (desktopAccountItem.sendingSmtpServer != null ||
+      if (desktopAccountItem.sendingSmtpServer != null &&
             !desktopAccountItem.sendingSmtpServer.equals("")) {
          sType(Locators.zSendingServerField, desktopAccountItem.sendingSmtpServer);
       }
 
-      if (desktopAccountItem.sendingPassword != null ||
+      if (desktopAccountItem.sendingPassword != null &&
             !desktopAccountItem.sendingPassword.equals("")) {
          sType(Locators.zSendingPasswordField, desktopAccountItem.sendingPassword);
       }
@@ -161,7 +163,7 @@ public class FormAddImapAccount extends AbsForm {
          sUncheck(Locators.zSendingSSLCheckbox);
       }
 
-      if (desktopAccountItem.sendingPort != null ||
+      if (desktopAccountItem.sendingPort != null &&
             !desktopAccountItem.sendingPort.equals("")) {
 
          if (!sGetText(Locators.zSendingPortField).equals(
@@ -195,7 +197,25 @@ public class FormAddImapAccount extends AbsForm {
 
    @Override
    public void zSubmit() throws HarnessException {
+      zSubmit(false);
+   }
+
+   public void zSubmit(boolean ssl) throws HarnessException {
       zPressButton(Button.B_VALIDATE_AND_SAVE);
+      if (ssl) {
+         Object[] params = {"Invalid or untrusted server SSL certificate"};
+         boolean messageAppears = (Boolean)GeneralUtility.waitFor(null, ((AppAjaxClient)MyApplication).zPageAddNewAccount, false, "zMessageContains",
+               params, WAIT_FOR_OPERAND.EQ, true, 30000, 1000);
+
+         if (messageAppears) {
+            // Accept Untrusted Certificate
+            zPressButton(Button.B_VALIDATE_AND_SAVE);
+         } else {
+            // Fall through
+            logger.debug("This may be not the first time adding a SSL account to the ZCS server");
+         }
+      }
+
       GeneralUtility.waitForElementPresent(this, PageLogin.Locators.zBtnLoginDesktop);
    }
 

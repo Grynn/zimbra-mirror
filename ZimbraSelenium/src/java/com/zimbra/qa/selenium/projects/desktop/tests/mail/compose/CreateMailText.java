@@ -383,7 +383,7 @@ public class CreateMailText extends AjaxCommonTest {
       _externalAccountTest = true;
 
       DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddPopAccountThruUI();
-      DesktopAccountItem destDesktopAccountItem = app.zPageAddNewAccount.zAddImapAccountThruUI();
+      DesktopAccountItem destDesktopAccountItem = app.zPageAddNewAccount.zAddGmailImapAccountThruUI();
 
       ZimbraAccount account = new ZimbraAccount(desktopAccountItem.emailAddress,
             desktopAccountItem.password);
@@ -440,7 +440,7 @@ public class CreateMailText extends AjaxCommonTest {
    public void createMailFromImapToPop() throws HarnessException {
       _externalAccountTest = true;
 
-      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddImapAccountThruUI();
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddGmailImapAccountThruUI();
       //DesktopAccountItem destDesktopAccountItem = app.zPageAddNewAccount.zAddPopAccountThruUI();
       app.zPageAddNewAccount.zNavigateTo();
       DesktopAccountItem destDesktopAccountItem = DesktopAccountItem.generateDesktopPopAccountItem(

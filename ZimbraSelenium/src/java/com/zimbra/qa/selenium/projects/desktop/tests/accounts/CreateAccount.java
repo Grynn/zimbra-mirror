@@ -157,10 +157,10 @@ public class CreateAccount extends AjaxCommonTest {
       ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account's email address is greater than 0.");
    }
 
-   @Test(description="Add IMAP account to ZD client", groups = { "private" })
-   public void addImapAccount() throws HarnessException {
+   @Test(description="Add Gmail IMAP account to ZD client", groups = { "private" })
+   public void addGmailImapAccount() throws HarnessException {
 
-      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddImapAccountThruUI();
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddGmailImapAccountThruUI();
 
       String message = app.zPageLogin.zGetMessage();
       ZAssert.assertStringContains(message, "Account added: " + desktopAccountItem.accountName, "Verify Account added message");
@@ -171,8 +171,172 @@ public class CreateAccount extends AjaxCommonTest {
       ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account's email address is greater than 0.");
    }
 
-   @Test(description="Add POP account to ZD client", groups = { "private" })
-   public void addPopAccount() throws HarnessException {
+   @Test(description="Add Zimbra IMAP (SSL) account to ZD client with Sending Mail set to SSL", groups = { "smoke" })
+   public void addZimbraImapSslSendingSslAccount() throws HarnessException {
+      Stafzmtlsctl stafzmtlsctl = new Stafzmtlsctl();
+      stafzmtlsctl.setServerAccess(SERVER_ACCESS.BOTH);
+      _sslIsModified = true;
+
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddZimbraImapAccountThruUI(ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().Password,
+            ZimbraSeleniumProperties.getStringProperty("server.host", "localhost"),
+            true,
+            "465");
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message, "Account added: " + desktopAccountItem.accountName, "Verify Account added message");
+
+      app.zPageLogin.zLogin(new ZimbraAccount(desktopAccountItem.emailAddress,
+            desktopAccountItem.password));
+      List<FolderItem> folders = app.zTreeMail.zListGetFolders();
+      ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account's email address is greater than 0.");
+   }
+
+   @Test(description="Add Zimbra IMAP (SSL) account to ZD client with Sending Mail set to non SSL", groups = { "smoke" })
+   public void addZimbraImapSslSendingNonSslAccount() throws HarnessException {
+      Stafzmtlsctl stafzmtlsctl = new Stafzmtlsctl();
+      stafzmtlsctl.setServerAccess(SERVER_ACCESS.BOTH);
+      _sslIsModified = true;
+
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddZimbraImapAccountThruUI(ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().Password,
+            ZimbraSeleniumProperties.getStringProperty("server.host", "localhost"),
+            false,
+            "25");
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message, "Account added: " + desktopAccountItem.accountName, "Verify Account added message");
+
+      app.zPageLogin.zLogin(new ZimbraAccount(desktopAccountItem.emailAddress,
+            desktopAccountItem.password));
+      List<FolderItem> folders = app.zTreeMail.zListGetFolders();
+      ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account's email address is greater than 0.");
+   }
+
+   @Test(description="Failure in adding Zimbra IMAP account with Receiving Mail security set to None",
+         groups = { "functional" })
+   public void addZimbraImapNonSslAccount() throws HarnessException {
+
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().Password,
+            ZimbraSeleniumProperties.getStringProperty("server.host", "localhost"),
+            SECURITY_TYPE.NONE,
+            null,
+            ZimbraSeleniumProperties.getStringProperty("server.host", "localhost"),
+            false,
+            null,
+            ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().Password);
+
+      FormAddImapAccount accountForm = (FormAddImapAccount)app.
+            zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.IMAP);
+      accountForm.zFill(desktopAccountItem);
+
+      accountForm.zPressButton(Button.B_VALIDATE_AND_SAVE);
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "User account authentication failed. Please check username and password.",
+            "Verify error message of disabled cleartext login");
+
+      app.zPageLogin.zNavigateTo();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
+   @Test(description="Add Zimbra POP (SSL) account to ZD client with Sending Mail set to SSL", groups = { "smoke" })
+   public void addZimbraPopSslSendingSslAccount() throws HarnessException {
+      Stafzmtlsctl stafzmtlsctl = new Stafzmtlsctl();
+      stafzmtlsctl.setServerAccess(SERVER_ACCESS.BOTH);
+      _sslIsModified = true;
+
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddZimbraPopAccountThruUI(ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().Password,
+            ZimbraSeleniumProperties.getStringProperty("server.host", "localhost"),
+            true,
+            "465");
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message, "Account added: " + desktopAccountItem.accountName, "Verify Account added message");
+
+      app.zPageLogin.zLogin(new ZimbraAccount(desktopAccountItem.emailAddress,
+            desktopAccountItem.password));
+      List<FolderItem> folders = app.zTreeMail.zListGetFolders();
+      ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account's email address is greater than 0.");
+   }
+
+   @Test(description="Add Zimbra POP (SSL) account to ZD client with Sending Mail set to non SSL", groups = { "smoke" })
+   public void addZimbraPopSslSendingNonSslAccount() throws HarnessException {
+      Stafzmtlsctl stafzmtlsctl = new Stafzmtlsctl();
+      stafzmtlsctl.setServerAccess(SERVER_ACCESS.BOTH);
+      _sslIsModified = true;
+
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddZimbraPopAccountThruUI(ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().Password,
+            ZimbraSeleniumProperties.getStringProperty("server.host", "localhost"),
+            false,
+            "25");
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message, "Account added: " + desktopAccountItem.accountName, "Verify Account added message");
+
+      app.zPageLogin.zLogin(new ZimbraAccount(desktopAccountItem.emailAddress,
+            desktopAccountItem.password));
+      List<FolderItem> folders = app.zTreeMail.zListGetFolders();
+      ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account's email address is greater than 0.");
+   }
+
+   @Test(description="Failure in adding Zimbra POP account with Receiving Mail security set to None",
+         groups = { "functional" })
+   public void addZimbraPopNonSslAccount() throws HarnessException {
+
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopPopAccountItem(
+            ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().Password,
+            ZimbraSeleniumProperties.getStringProperty("server.host", "localhost"),
+            SECURITY_TYPE.NONE,
+            null,
+            ZimbraSeleniumProperties.getStringProperty("server.host", "localhost"),
+            false,
+            null,
+            ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().Password);
+
+      FormAddPopAccount accountForm = (FormAddPopAccount)app.
+            zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.POP);
+      accountForm.zFill(desktopAccountItem);
+
+      accountForm.zPressButton(Button.B_VALIDATE_AND_SAVE);
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "User account authentication failed. Please check username and password.",
+            "Verify error message of disabled cleartext login");
+
+      app.zPageLogin.zNavigateTo();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
+   @Test(description="Add Hotmail POP account to ZD client", groups = { "private" })
+   public void addHotmailPopAccount() throws HarnessException {
 
       DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddPopAccountThruUI();
 
