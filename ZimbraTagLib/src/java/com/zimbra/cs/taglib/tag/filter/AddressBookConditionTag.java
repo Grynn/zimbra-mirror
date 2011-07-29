@@ -26,7 +26,6 @@ public class AddressBookConditionTag extends ZimbraSimpleTag {
 
     private AddressBookOp op;
     private String header;
-    private String type;
 
     public void setOp(String op) throws ServiceException {
         this.op = AddressBookOp.fromString(op);
@@ -36,17 +35,13 @@ public class AddressBookConditionTag extends ZimbraSimpleTag {
         this.header = header;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
     @Override
     public void doTag() throws JspException {
         FilterRuleTag rule = (FilterRuleTag) findAncestorWithClass(this, FilterRuleTag.class);
         if (rule == null) {
             throw new JspTagException("The addressBookCondition tag must be used within a filterRule tag");
         }
-        rule.addCondition(new ZAddressBookCondition(op, header, type));
+        rule.addCondition(new ZAddressBookCondition(op, header));
     }
 
 }
