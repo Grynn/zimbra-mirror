@@ -1188,7 +1188,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     { type: _DWT_ALERT_,
                       containerCssStyle: "padding-bottom:0px",
                       style: DwtAlert.WARNING,
-                      iconVisible:  (!ZaCosXFormView.isAllAuthfromInternal()),
+                      iconVisible:  false,
                       content: ((ZaCosXFormView.isAllAuthfromInternal())?ZaMsg.Alert_InternalPassword:ZaMsg.Alert_ExternalPassword)
                     },
                     {ref:ZaCos.A_zimbraPasswordLocked, type:_CHECKBOX_,
