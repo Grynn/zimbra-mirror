@@ -963,8 +963,8 @@ ZaItem.formatServerTime = function(serverStr) {
 ZaItem.getZeroIsUnlimitedItem = function () {
     var item= { type: _DWT_ALERT_,
 //              containerCssStyle: "padding-top:20px;width:400px;",
-              style: DwtAlert.WARNING,
-              iconVisible: false,
+              style: DwtAlert.INFORMATION,
+              iconVisible: true,
               content: ZaMsg.NAD_ZERO_UNLIMETED
             } ;
     return item ;
