@@ -123,7 +123,9 @@ function (ev) {
 			if (this._contentView) this._contentView.setUI();
 			if(ZaApp.getInstance().getCurrentController() == this) {
 				this.show();			
-			}
+			} else if(this.objType && ev.type==this.objType && this._UICreated) {
+                this.show(false);
+            }
 			this.changeActionsState();			
 		}
 	}

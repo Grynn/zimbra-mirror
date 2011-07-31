@@ -184,20 +184,6 @@ function (entry) {
 	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 }
 
-ZaDomainController.prototype.saveButtonListener =
-function(ev) {
-	try {
-		if(this._saveChanges()) {
-			this._view.setDirty(false);
-			if(this._toolbar)
-				this._toolbar.getButton(ZaOperation.SAVE).setEnabled(false);		
-		}
-	} catch (ex) {
-		this._handleException(ex, "ZaDomainController.prototype.saveButtonListener", null, false);
-	}
-	return;
-}
-
 ZaDomainController.prototype._saveChanges = 
 function () {
 	var tmpObj = this._view.getObject();
