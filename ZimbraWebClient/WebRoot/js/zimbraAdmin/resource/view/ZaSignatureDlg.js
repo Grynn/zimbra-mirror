@@ -28,10 +28,7 @@ function() {
                 	{ref:ZaSignature.A2_name, type:_TEXTFIELD_, width:"300px", label:ZaMsg.Dlg_SignatureName,visibilityChecks:[],enableDisableChecks:[]},
                     {ref:ZaSignature.A2_content, type:_TEXTAREA_,
                         width:"300px", label:ZaMsg.Dlg_SignatureContent, msgName:ZaMsg.Dlg_SignatureContent,
-                        labelLocation:_LEFT_,visibilityChecks:[],enableDisableChecks:[]},
-                    {ref:ZaSignature.A2_type, type:_OSELECT1_, label:ZaMsg.Dlg_SignatureType,
-                        msgName:ZaMsg.Dlg_SignatureType, labelLocation:_LEFT_, choices:ZaSignature.signatureTypeChoices
-                    }
+                        labelLocation:_LEFT_,visibilityChecks:[],enableDisableChecks:[]}
                 ]
             }
         ]
