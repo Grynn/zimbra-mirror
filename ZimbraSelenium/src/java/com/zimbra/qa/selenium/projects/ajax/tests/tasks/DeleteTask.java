@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.testng.annotations.*;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -195,7 +196,7 @@ public class DeleteTask extends AjaxCommonTest {
 		ZAssert.assertNull(found, "Verify the task is no longer present");
 	
 	}
-
+	@Bugs(ids="56467")
 	@Test(	description = "Delete a task by selecting and typing '.t' shortcut",
 			groups = { "functional" } )
 	public void DeleteTask_04() throws HarnessException {
