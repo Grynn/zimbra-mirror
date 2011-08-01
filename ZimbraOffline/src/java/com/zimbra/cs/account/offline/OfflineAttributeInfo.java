@@ -13,26 +13,25 @@ import com.zimbra.cs.account.AttributeOrder;
 import com.zimbra.cs.account.AttributeServerType;
 import com.zimbra.cs.account.AttributeType;
 import com.zimbra.cs.offline.OfflineLog;
-import com.zimbra.cs.util.BuildInfo;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * @author vmahajan
  */
 public class OfflineAttributeInfo extends AttributeInfo {
 
-    public OfflineAttributeInfo(String attrName, int id, String parentId, int groupId, AttributeCallback callback,
-                                AttributeType type, AttributeOrder order, String value, boolean immutable, String min,
-                                String max, AttributeCardinality cardinality, Set<AttributeClass> requiredIn,
-                                Set<AttributeClass> optionalIn, Set<AttributeFlag> flags, List<String> globalConfigValues,
-                                List<String> defaultCOSValues, List<String> globalConfigValuesUpgrade,
-                                List<String> defaultCOSValuesUpgrade, String description, List<AttributeServerType> requiresRestart,
-                                Version since, Version deprecatedSince) {
+    public OfflineAttributeInfo(
+            String attrName, int id, String parentId, int groupId, AttributeCallback callback,
+            AttributeType type, AttributeOrder order, String value, boolean immutable, String min,
+            String max, AttributeCardinality cardinality, Set<AttributeClass> requiredIn,
+            Set<AttributeClass> optionalIn, Set<AttributeFlag> flags, List<String> globalConfigValues,
+            List<String> defaultCOSValues, List<String> globalConfigValuesUpgrade,
+            List<String> defaultCOSValuesUpgrade, String description, List<AttributeServerType> requiresRestart,
+            Version since, Version deprecatedSince) {
         super(attrName, id, parentId, groupId, callback, type, order, value, immutable, min, max, cardinality,
-              requiredIn, optionalIn, flags, globalConfigValues, defaultCOSValues, globalConfigValuesUpgrade,
+              requiredIn, optionalIn, flags, globalConfigValues, defaultCOSValues, null, globalConfigValuesUpgrade,
               defaultCOSValuesUpgrade, description, requiresRestart, since, deprecatedSince);
     }
 
