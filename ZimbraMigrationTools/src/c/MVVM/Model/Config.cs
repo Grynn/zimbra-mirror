@@ -25,8 +25,8 @@
            this.zimbraServer.AdminPassword = zimbrapasswd;
           // this.zimbraServer.Domain = zimbradomain;
            this.mailServer.Hostname = mailserver;
-            
-           
+
+           this.GeneralOptions = new GeneralOptions();
           // this.mailServer.PSTFile = pstfile;
            //this.mailServer.ProfileName = outlookProfile;
            
@@ -55,6 +55,8 @@
         public ImportOptions importOptions;
         public UserProvision UserProvision;
         public AdvancedImportOptions AdvancedImportOptions;
+        public GeneralOptions GeneralOptions;
+
         
         
     }
@@ -178,6 +180,48 @@
             get { return m_Domain; }
             set { m_Domain = value; }
         }
+
+    }
+
+    public class GeneralOptions
+    {
+        private Int32 MaxThreadCnt;
+
+        public Int32 MaxThreadCount
+        {
+            get { return MaxThreadCnt; }
+            set { MaxThreadCnt = value; }
+        }
+        private Int32 MaxErrorCnt;
+
+        public Int32 MaxErrorCount
+        {
+            get { return MaxErrorCnt; }
+            set { MaxErrorCnt = value; }
+        }
+        private Int32 MaxWarningCnt;
+
+        public Int32 MaxWarningCount
+        {
+            get { return MaxWarningCnt; }
+            set { MaxWarningCnt = value; }
+        }
+        private Boolean EnableLog;
+
+        public Boolean Enablelog
+        {
+            get { return EnableLog; }
+            set { EnableLog = value; }
+        }
+        private string LogFileLocation;
+
+        public string LogFilelocation
+        {
+            get { return LogFileLocation; }
+            set { LogFileLocation = value; }
+        }
+
+
 
     }
 

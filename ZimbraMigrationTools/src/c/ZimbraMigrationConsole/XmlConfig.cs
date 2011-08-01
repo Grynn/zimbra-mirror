@@ -51,6 +51,57 @@ namespace ZimbraMigrationConsole
 
         }
 
+        public void InitializeGeneralConfig(string args1)
+        {
+            string[] parameters = args1.Split('&');
+            string[] Thread= (string[])Array.FindAll(parameters, s =>s.Contains("-T"));
+
+            if (Thread.Length > 0)
+            {
+                ConfigObj.GeneralOptions.MaxThreadCount = Convert.ToInt32(Thread[0].Substring(2));
+                //ConfigObj.GeneralOptions.MaxThreadCount = Convert.ToInt32(args1.Substring((args1.IndexOf("-T") + 2),1));
+
+            }
+            string[] Error = (string[])Array.FindAll(parameters, s => s.Contains("-E"));
+
+            if (Error.Length > 0)
+            {
+                ConfigObj.GeneralOptions.MaxErrorCount = Convert.ToInt32(Error[0].Substring(2));
+                //ConfigObj.GeneralOptions.MaxThreadCount = Convert.ToInt32(args1.Substring((args1.IndexOf("-T") + 2),1));
+
+            }
+            string[] Warns = (string[])Array.FindAll(parameters, s => s.Contains("-W"));
+
+            if (Warns.Length > 0)
+            {
+                ConfigObj.GeneralOptions.MaxWarningCount = Convert.ToInt32(Warns[0].Substring(2));
+                //ConfigObj.GeneralOptions.MaxThreadCount = Convert.ToInt32(args1.Substring((args1.IndexOf("-T") + 2),1));
+
+            }
+
+            string[] Enablelog = (string[])Array.FindAll(parameters, s => s.Contains("-L"));
+            if (Enablelog.Length > 0)
+            {
+                ConfigObj.GeneralOptions.Enablelog = Convert.ToBoolean(Enablelog[0].Substring(2));
+                if (ConfigObj.GeneralOptions.Enablelog)
+                {
+                    string[] FileLoc = (string[])Array.FindAll(parameters, s => s.Contains("-Loc"));
+                    if (FileLoc.Length > 0)
+                    {
+                        ConfigObj.GeneralOptions.LogFilelocation = FileLoc[0].Substring(4);
+                    }
+                }
+                //ConfigObj.GeneralOptions.MaxThreadCount = Convert.ToInt32(args1.Substring((args1.IndexOf("-T") + 2),1));
+
+            }
+           
+             
+
+
+
+
+        }
+
         public void GetUserList()
         {
 
