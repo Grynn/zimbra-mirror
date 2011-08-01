@@ -350,7 +350,7 @@
  passed to new or run may be either a scalar containing a single
  host or an arrayref of hosts - if the hosts array is shorter than
 --- Net-Server-0.99/lib/Net/Server/Proto/SSLEAY.pm.orig	2010-07-09 09:44:48.000000000 -0700
-+++ Net-Server-0.99/lib/Net/Server/Proto/SSLEAY.pm	2011-08-01 10:40:35.033627960 -0700
++++ Net-Server-0.99/lib/Net/Server/Proto/SSLEAY.pm	2011-08-01 11:08:19.183613424 -0700
 @@ -22,156 +22,254 @@
  package Net::Server::Proto::SSLEAY;
  
@@ -481,8 +481,8 @@
 +    push(@bind_tuples, [AF_INET6,$host,$port], [AF_INET,$host,$port]);
 +  }else{  # we do have IO::Socket::INET6, it handles inet6 as well as inet
 +    # obtain a list of IP addresses for $host, resolve port name
-+    my @res1 = getaddrinfo($host, $port,
-+                           AF_UNSPEC, SOCK_STREAM, 0, AI_PASSIVE);
++    my @res1 = getaddrinfo($host, $port, AF_UNSPEC, SOCK_STREAM, 0,
++                           AI_PASSIVE|AI_ADDRCONFIG);
 +    die "Unresolvable [$host]:$port: $res1[0]"  if @res1 < 5;
 +    while (@res1 >= 5) {
 +      my($afam, $socktype, $proto, $saddr, $canonname);
@@ -777,7 +777,7 @@
      no strict 'refs';
      *{__PACKAGE__."::${prop}"} = sub {
 --- Net-Server-0.99/lib/Net/Server/Proto/SSL.pm.orig	2010-05-04 20:13:03.000000000 -0700
-+++ Net-Server-0.99/lib/Net/Server/Proto/SSL.pm	2011-08-01 10:40:11.143625372 -0700
++++ Net-Server-0.99/lib/Net/Server/Proto/SSL.pm	2011-08-01 11:08:50.503627241 -0700
 @@ -22,14 +22,47 @@
  package Net::Server::Proto::SSL;
  
@@ -889,8 +889,8 @@
 +    push(@bind_tuples, [AF_INET6,$host,$port], [AF_INET,$host,$port]);
 +  }else{  # we do have IO::Socket::INET6, it handles inet6 as well as inet
 +    # obtain a list of IP addresses for $host, resolve port name
-+    my @res1 = getaddrinfo($host, $port,
-+                           AF_UNSPEC, SOCK_STREAM, 0, AI_PASSIVE);
++    my @res1 = getaddrinfo($host, $port, AF_UNSPEC, SOCK_STREAM, 0,
++                           AI_PASSIVE|AI_ADDRCONFIG);
 +    die "Unresolvable [$host]:$port: $res1[0]"  if @res1 < 5;
 +    while (@res1 >= 5) {
 +      my($afam, $socktype, $proto, $saddr, $canonname);
@@ -1125,7 +1125,7 @@
  Protocol module for Net::Server.  This module implements a
  secure socket layer over tcp (also known as SSL).
 --- Net-Server-0.99/lib/Net/Server/Proto/TCP.pm.orig	2011-08-01 10:24:36.463625993 -0700
-+++ Net-Server-0.99/lib/Net/Server/Proto/TCP.pm	2011-08-01 10:26:15.993627691 -0700
++++ Net-Server-0.99/lib/Net/Server/Proto/TCP.pm	2011-08-01 11:08:27.283623011 -0700
 @@ -22,11 +22,22 @@
  package Net::Server::Proto::TCP;
  
@@ -1191,8 +1191,8 @@
 +    push(@bind_tuples, [AF_INET6,$host,$port], [AF_INET,$host,$port]);
 +  }else{  # we do have IO::Socket::INET6, it handles inet6 as well as inet
 +    # obtain a list of IP addresses for $host, resolve port name
-+    my @res1 = getaddrinfo($host, $port,
-+                           AF_UNSPEC, SOCK_STREAM, 0, AI_PASSIVE);
++    my @res1 = getaddrinfo($host, $port, AF_UNSPEC, SOCK_STREAM, 0,
++                           AI_PASSIVE|AI_ADDRCONFIG);
 +    die "Unresolvable [$host]:$port: $res1[0]"  if @res1 < 5;
 +    while (@res1 >= 5) {
 +      my($afam, $socktype, $proto, $saddr, $canonname);
