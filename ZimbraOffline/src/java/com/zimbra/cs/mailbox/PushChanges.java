@@ -1180,10 +1180,10 @@ public class PushChanges {
                 SyncExceptionHandler.Revision rev = new SyncExceptionHandler.Revision();
                 rev.editor = e.getAttribute(MailConstants.A_CREATOR);
                 rev.version = (int)e.getAttributeLong(MailConstants.A_VERSION);
-                rev.modifiedDate = e.getAttributeLong(MailConstants.A_MODIFIED_DATE);
+                rev.modifiedDate = e.getAttributeLong(MailConstants.A_DATE);
                 revisions.add(rev);
             }
-            revInfo.add(new RevisionInfo(ver, e.getAttributeLong(MailConstants.A_MODIFIED_DATE), (int) e.getAttributeLong(MailConstants.A_FOLDER)));
+            revInfo.add(new RevisionInfo(ver, e.getAttributeLong(MailConstants.A_DATE), (int) e.getAttributeLong(MailConstants.A_FOLDER)));
         }
         if (conflict) {
             SyncExceptionHandler.logDocumentEditConflict(ombx, item, revisions);

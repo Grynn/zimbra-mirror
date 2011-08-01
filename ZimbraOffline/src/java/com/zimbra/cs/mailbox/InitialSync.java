@@ -1351,7 +1351,7 @@ public class InitialSync {
 
         MailItem.Type type = doc.getName().equals(MailConstants.E_WIKIWORD) ? MailItem.Type.WIKI : MailItem.Type.DOCUMENT;
         int folderId = (int) doc.getAttributeLong(MailConstants.A_FOLDER);
-        long modifiedDate = doc.getAttributeLong(MailConstants.A_MODIFIED_DATE);
+        long modifiedDate = doc.getAttributeLong(MailConstants.A_DATE);
         String lastEditedBy = doc.getAttribute(MailConstants.A_LAST_EDITED_BY);
         String itemIdStr = doc.getAttribute(MailConstants.A_ID);
         int idFromXml = Integer.parseInt(itemIdStr);
