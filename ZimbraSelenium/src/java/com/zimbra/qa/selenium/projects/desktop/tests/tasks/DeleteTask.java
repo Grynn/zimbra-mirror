@@ -233,7 +233,7 @@ public class DeleteTask extends AjaxCommonTest {
 
 		
 		// Use Delete Keyboard Shortcut
-		app.zPageTasks.zKeyboardShortcut(Shortcut.S_MAIL_MOVETOTRASH);
+		app.zPageTasks.zKeyboardShortcut(Shortcut.S_DELETE);
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageTasks.zWaitForDesktopLoadingSpinner(5000);
