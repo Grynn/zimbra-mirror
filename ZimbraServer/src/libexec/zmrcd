@@ -78,6 +78,9 @@ my %REGEX_CHECKED_COMMANDS = (
    "zmloggerhostmap"  => {
      regex => '[a-zA-Z0-9\\/\\.\\-_:@ ]*',
      program=>"/opt/zimbra/bin/zmloggerhostmap",},
+   "rsync" => {
+     regex => '[\'"a-zA-Z0-9\\/\\.\\-_:@ ]*',
+     program => "rsync"},
 );
 
 my %allhosts = ();
@@ -93,6 +96,19 @@ my $thishost = trim(`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_server_hostna
 my $enable_logging = uc(trim(`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_zmrcd_logging_enabled 2> /dev/null`));
 $enable_logging = "FALSE" unless $enable_logging;
 
+
+sub logMsg($) {
+  my $msg = shift;
+  print STDOUT "$msg\n";
+  print LOG "$msg\n" if ($enable_logging eq "TRUE");
+}
+
+sub logError($) {
+  my $msg = shift;
+  print STDERR "ERROR: $msg\n";
+  print LOG "$msg\n" if ($enable_logging eq "TRUE");
+  #logMsg("ERROR: $msg");
+}
 
 sub runRemoteCommand {
   my $host = shift;
@@ -285,17 +301,4 @@ while (<>) {
   close(LOG) if ($enable_logging eq "TRUE");
   exit 0;
 
-}
-
-sub logMsg() {
-  my ($msg) = @_;
-  print STDOUT "$msg\n";
-  print LOG "$msg\n" if ($enable_logging eq "TRUE");
-}
-
-sub logError() {
-  my ($msg) = @_;
-  print STDERR "ERROR: $msg\n";
-  print LOG "$msg\n" if ($enable_logging eq "TRUE");
-  #logMsg("ERROR: $msg");
 }
