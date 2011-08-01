@@ -5,6 +5,7 @@ import java.util.List;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -24,7 +25,7 @@ public class MoveTask extends AjaxCommonTest {
 
 		super.startingAccountPreferences = null;
 	}
-
+	@Bugs(ids="61471")
 	@Test(description = "Create document through SOAP - move & verify through GUI", groups = { "smoke" })
 	public void MoveTask_01() throws HarnessException {
 
