@@ -1,0 +1,4 @@
+<zimlet name="com_zimbra_insertshareurl" version="0.1" label="${msg.label}" description="${msg.description}">
+  <include>insertshareurl.js</include>
+  <handlerObject>ZmInsertShareURL</handlerObject>
+</zimlet>
