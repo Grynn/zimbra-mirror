@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.framework.util.staf;
 
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
 public class Stafzmtlsctl extends StafServicePROCESS {
 
@@ -14,6 +15,13 @@ public class Stafzmtlsctl extends StafServicePROCESS {
    public void setServerAccess(SERVER_ACCESS serverAccess)
    throws HarnessException {
       String setting = null;
+
+      execute("zmprov gs `zmhostname` ZimbraMailMode");
+      String serverName = ZimbraSeleniumProperties.getStringProperty("server.host", "localhost");
+      String mode = StafResponse.split(serverName)[1].split("}")[0].split("zimbraMailMode:")[1].trim();
+
+      logger.info("Current server access mode: " + mode);
+
       switch (serverAccess) {
       case HTTP:
          setting = "http";
@@ -26,12 +34,19 @@ public class Stafzmtlsctl extends StafServicePROCESS {
          break;
       }
 
-      execute("zmtlsctl " + setting);
-      execute("zmmailboxdctl restart");
-
-      // Hardcoded 10 seconds sleep is required here, if this still doesn't work, then
-      // we have to do the most robust way, wait for HTTP GET to return status 200 
-      SleepUtil.sleep(10000);
+      logger.info("Expected server access: " + setting);
+      
+      if (!mode.equals(setting)) {
+         logger.debug("Set the server access mode to " + setting);
+         execute("zmtlsctl " + setting);
+         execute("zmmailboxdctl restart");
+         
+         // Hardcoded 20 seconds sleep is required here, if this still doesn't work, then
+         // we have to do the most robust way, wait for HTTP GET to return status 200 
+         SleepUtil.sleep(20000);         
+      } else {
+         logger.info("Current and expected server access modes are the same already");
+      }
    }
 
    public boolean execute(String command) throws HarnessException {

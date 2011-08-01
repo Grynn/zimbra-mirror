@@ -836,7 +836,7 @@ public class CreateAccount extends AjaxCommonTest {
    public void cleanUp() throws HarnessException {
       if (_sslIsModified) {
          Stafzmtlsctl stafzmtlsctl = new Stafzmtlsctl();
-         stafzmtlsctl.setServerAccess(SERVER_ACCESS.HTTP);
+         stafzmtlsctl.setServerAccess(SERVER_ACCESS.BOTH);
       }
 
       ZimbraAccount.ResetAccountZWC();
