@@ -118,13 +118,13 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 		boolean found1 = false;
 		boolean found2 = false;
 		for (MailItem c : items) {
-			if ( c.dSubject.equals(message1.dSubject) ) {
+			if ( message1.dSubject.equals(c.gSubject) ) {
 				found1 = true;
 				break;
 			}
 		}
 		for (MailItem c : items) {
-			if ( c.dSubject.equals(message2.dSubject) ) {
+			if ( message2.dSubject.equals(c.gSubject) ) {
 				found2 = true;
 				break;
 			}
