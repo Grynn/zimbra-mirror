@@ -114,10 +114,6 @@ public class SkinResources
 	private static final String T_CSS = "css";
 	private static final String T_HTML = "html";
 	private static final String T_JAVASCRIPT = "javascript";
-	private static final String T_BMP = "bmp";
-	private static final String T_PNG = "png";
-	private static final String T_GIF = "gif";
-	private static final String T_JPG = "jpg";
 
 	private static final String N_SKIN = "skin";
 	private static final String N_IMAGES = "images";
@@ -146,10 +142,6 @@ public class SkinResources
 		TYPES.put("html", "text/html");
 		TYPES.put("js", "text/javascript");
 		TYPES.put("plain", "text/plain");
-		TYPES.put("bmp", "image/bmp");
-		TYPES.put("png", "image/png");
-		TYPES.put("gif", "image/gif");
-		TYPES.put("jpg", "image/jpg");
 	}
 
 	//
@@ -223,7 +215,6 @@ public class SkinResources
 			client = CLIENT_ADVANCED;
 		}
 		String cacheBusterVersion = (String) req.getAttribute(A_VERSION);
-		boolean isBinary = (type != null && (type.equals(T_BMP) || type.equals(T_PNG) || type.equals(T_GIF) || type.equals(T_JPG)));
 
 		String userAgent = getUserAgent(req);
 		Map<String, String> macros = parseUserAgent(userAgent);
@@ -244,7 +235,6 @@ public class SkinResources
 		String compressStr = req.getParameter(P_COMPRESS);
 		boolean compress =
 			LC.zimbra_web_generate_gzip.booleanValue() &&
-			!isBinary &&
 			(compressStr != null && (compressStr.equals("true") || compressStr.equals("1")))
 		;
 		compress = compress && macros.get("MSIE_6") == null;
@@ -270,10 +260,6 @@ public class SkinResources
 		// generate buffer
 		String buffer = null;
 		File file = !debug ? getCacheFile(cacheId) : null;
-
-		if (isBinary) { // We got an image (or other binary), serve it directly
-			file = new File(getServletContext().getRealPath("/") + getRequestURI(req));
-		} else 
 		if (file == null || !file.exists()) {
 			if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: generating buffer");
 			buffer = generate(req, resp, cacheId, macros, type, client, locale, templates, cacheBusterVersion);
@@ -305,8 +291,7 @@ public class SkinResources
 							}
 						}
 
-						public EvaluatorException runtimeError(String message, String sourceName,
-															   int line, String lineSource, int lineOffset) {
+						public EvaluatorException runtimeError(String message, String sourceName, int line, String lineSource, int lineOffset) {
 							error(message, sourceName, line, lineSource, lineOffset);
 							return new EvaluatorException(message);
 						}
@@ -607,10 +592,6 @@ public class SkinResources
 					if (ZimbraLog.webclient.isDebugEnabled())
 						ZimbraLog.webclient.debug("DEBUG: !file.exists() " + file.getAbsolutePath());
 				}
-				if (!file.exists()) {
-					ZimbraLog.webclient.debug("DEBUG: !file.exists() " + file.getAbsolutePath() + ". Using path from URI instead (" + rootDir + uri + ")");
-					file = new File(rootDir + uri);
-				}
 				files.add(file);
 				if (type.equals(T_CSS) || type.equals(T_JAVASCRIPT)) {
 					addLocaleFiles(files, requestedLocale, dir, filename, ext);
@@ -881,26 +862,13 @@ public class SkinResources
 
 	private static String getContentType(String uri) {
 		int index = uri.lastIndexOf('/');
-		String uriPart = uri;
 		if (index != -1) {
-			uriPart = uri.substring(0, index);
+			uri = uri.substring(0, index);
 		}
-		
-		index = uriPart.lastIndexOf('/');
-		String key = index != -1 ? uriPart.substring(index + 1) : null;
+		index = uri.lastIndexOf('/');
+		String key = index != -1 ? uri.substring(index + 1) : "plain";
 		String type = TYPES.get(key);
-		if (type != null) {
-			return type;
-		}
-		
-		index = uri.lastIndexOf(".");
-		key = index != -1 ? uri.substring(index + 1) : null;
-		type = TYPES.get(key);
-		if (type != null) {
-			return type;
-		}
-		
-		return TYPES.get("plain");
+		return type != null ? type : TYPES.get("plain");
 	}
 
 	private static String getUserAgent(HttpServletRequest req) {
