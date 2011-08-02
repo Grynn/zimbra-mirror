@@ -3,6 +3,7 @@ package com.zimbra.qa.selenium.projects.desktop.ui.addressbook;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactNew.Locators;
 
 
 
@@ -41,7 +42,13 @@ public class FormContactNew extends AbsForm {
 		public static final String zOther1EditField = "id=*_OTHER";
 		public static final String zNotesEditField = "id=editcontactform_NOTES_input";
 
-			
+		public static final String zPrefixCheckbox = "css=td.ZWidgetTitle:contains('Prefix')";
+      public static final String zMiddleCheckbox = "css=td.ZWidgetTitle:contains('Middle')";
+      public static final String zMaidenCheckbox = "css=td.ZWidgetTitle:contains('Maiden')";
+      public static final String zSuffixCheckbox = "css=td.ZWidgetTitle:contains('Suffix')";
+      public static final String zNicknameCheckbox = "css=td.ZWidgetTitle:contains('Nickname')";
+      public static final String zDepartmentCheckbox = "css=td.ZWidgetTitle:contains('Department')";
+
 	}
 
 	public static class Toolbar extends  AbsSeleniumObject{
@@ -122,7 +129,21 @@ public class FormContactNew extends AbsForm {
 		}
 
 	}
-	
+
+	public void zDisplayHiddenName() throws HarnessException {
+      zClick(Locators.zContactDetailsIconBtn); 
+      zClick(Locators.zPrefixCheckbox);
+      zClick(Locators.zContactDetailsIconBtn); 
+      zClick(Locators.zMiddleCheckbox);
+      zClick(Locators.zContactDetailsIconBtn); 
+      zClick(Locators.zMaidenCheckbox);
+      zClick(Locators.zContactDetailsIconBtn); 
+      zClick(Locators.zSuffixCheckbox);
+      zClick(Locators.zContactDetailsIconBtn); 
+      zClick(Locators.zNicknameCheckbox);
+      zClick(Locators.zContactDetailsIconBtn); 
+      zClick(Locators.zDepartmentCheckbox);
+   }
 
 	public void zFillField(Field field, String value) throws HarnessException {
 		tracer.trace("Set "+ field +" to "+ value);

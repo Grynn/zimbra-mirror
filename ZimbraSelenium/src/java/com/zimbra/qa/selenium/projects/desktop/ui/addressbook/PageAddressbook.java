@@ -13,6 +13,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
+import com.zimbra.qa.selenium.projects.desktop.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.*;
 import com.zimbra.qa.selenium.projects.desktop.ui.mail.FormMailNew;
@@ -249,6 +250,15 @@ public class PageAddressbook extends AbsTab {
 		   locator = "id="+ id;
 		   page = new FormMailNew(MyApplication);	
 
+	    } else if ( button == Button.B_CANCEL) {
+	         String id ="zb__CN__CANCEL";
+	         
+	         if (sIsElementPresent("css=div[id=" + id + "][class*=ZDisabledImage]")) {
+	           throw new HarnessException("Tried clicking on "+ id +" but it was disabled ");
+	         }
+
+	         locator = "id="+ id;
+	         page = new DialogWarning(DialogWarning.DialogWarningID.CancelCreateContact, this.MyApplication, ((AppAjaxClient)this.MyApplication).zPageAddressbook);
 	    } else if (isAlphabetButton(button))
           {
        	   locator=DisplayContactGroup.ALPHABET_PREFIX + button.toString() + DisplayContactGroup.ALPHABET_POSTFIX;
