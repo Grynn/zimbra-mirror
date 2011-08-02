@@ -1,0 +1,261 @@
+
+END USER SOFTWARE LICENSE AGREEMENT
+IMPORTANT - READ CAREFULLY CAUTION:
+
+
+IF YOU INSTALL OR USE THIS SOFTWARE, THE FOLLOWING TERMS WILL APPLY.
+
+
+1. LICENSE GRANT. Subject to the terms and conditions of this End User Software
+License Agreement ("Agreement"), Autonomy, Inc. or Verity, Inc. a part of the
+Autonomy group, as applicable, ("Autonomy") grants you ("Licensee" a personal,
+nonexclusive, non-transferable, non-assignable and non-sublicenseable, limited
+license to use the software identified in an Autonomy Product Schedule signed
+by Licensee, in binary executable form only (the "Software"), only in
+accordance with the accompanying technical documentation ("Documentation";
+collectively with the Software, the "Product"), and only as specified in the
+applicable Autonomy Product Use Certificate and Product Schedule attached
+thereto (collectively, the "Product Schedule"). "Software" does not refer to
+source code and no license is granted with respect to source code of any kind.
+Licensee acknowledges that the Software may be shipped with certain libraries
+and other code that are not licensed under this Agreement, but rather are
+provided to Licensee pursuant to the terms and conditions of separate
+open-source license agreements ("Open Source Code"). Such separate license
+terms are provided on the Product disc in the ThirdPartyLicense.txt file. Any
+support warranty or indemnification Autonomy provides for the Product does not
+extend to Open Source Code. Each Product Schedule shall be subject to the terms
+and conditions of this Agreement, provided, however, that any conflict between
+the terms and conditions of this Agreement and any Product Schedule shall be
+resolved in favor of the Product Schedule. Except as expressly set forth in
+this Agreement, Licensee shall not (directly or indirectly, in whole or in
+part): (i) make more copies of the Product than the number of copies permitted
+on the applicable Product Schedule, except for one (1) copy of the Software
+solely for archival purposes; (ii) cause or permit any reverse engineering,
+decompilation, modification, translation or disassembly of the Software; (iii)
+sell, rent, sublicense, distribute, disclose, publish, assign, commercially
+share (including time share), or otherwise transfer any rights in the Product
+without Autonomy's prior written consent; (iv) use the Software for service
+bureau services including, without limitation, providing third party hosting,
+or third party application integration or application service provider type
+services, or for any similar services; (v) permit any third party application
+to access the collection of data indexed by the Software, or use the Software
+to create or populate any other collection (except with Autonomy's prior
+written consent); and (viii) will not, and will not permit to be done, anything
+which shall adversely affect Autonomy's right, title or interest in or to the
+Software. Notwithstanding the terms to the contrary in this section, to the
+extent that the Product includes any Open Source Code that is licensed under
+the GNU Lesser General Public License ("LGPL Code") or Apache Code, Licensee
+may modify the Open Source Code in the Product for Licensee's own use and
+reverse-engineer the Open Source Code in the Product solely to the extent
+necessary to debug Licensee's modifications, in both cases solely to the extent
+necessary for Licensee to modify the LGPL Code and/or Apache Code and relink
+the modified LGPL Code/Apache Code to the Product. Title and ownership of all
+proprietary rights, including any copyright, patent, trade secret, trademark or
+other intellectual property rights, in and to the Product and any copies
+thereof, including all updates, enhancements and modifications to the Software,
+is and will at all times remain the property of Autonomy and its licensors.
+Autonomy and its licensors retain all right, title and interest in and to the
+Product that are not specifically granted to Licensee hereunder. Licensee shall
+not remove or obliterate any copyright, trademark or proprietary rights notice
+of Autonomy or its licensors from the Product and shall reproduce all such
+notices on all authorized copies of the Product.
+
+
+2. TERM AND TERMINATION. This Agreement may be terminated earlier by either
+party on thirty (30) days written notice if the other party breaches any
+material obligation hereunder and such breach is not cured within such thirty
+(30) day period, unless such breach cannot be cured, in which case this
+Agreement shall immediately terminate upon notice of termination. Without
+prejudice to any other rights to which it may be entitled, Autonomy may give
+notice in writing to Licensee terminating this Agreement with immediate effect
+if Licensee: (a) becomes insolvent, (b) makes an assignment for the benefit of
+creditors, (c) files or has filed against it a petition in bankruptcy or
+seeking reorganization, (d) has a receiver appointed, (e) ceases conducting
+business in the normal course, or (f) institutes any proceeding for liquidation
+or winding up; provided, however, that, in the case any of the foregoing is
+involuntary, Licensee shall only be in breach if such petition or proceeding
+has not been dismissed within thirty (30) days. Upon termination, Licensee
+shall immediately remove and cease to use the Product and will return to
+Autonomy or destroy all copies of the Product or any part thereof (in any form
+or media), and certify in writing to Autonomy that Licensee has complied with
+the foregoing obligations.
+
+
+3. SUPPORT. Licensee may elect to purchase and receive maintenance and support
+services for Software in accordance with the Autonomy Support Program Terms and
+Conditions, available at
+http://www.autonomy.com/content/Support/TermsAndConditions.html ("Support
+Services"). 4. LIMITED WARRANTY AND DISCLAIMER. Autonomy warrants to Licensee
+that for a period of thirty (30) days from the date of initial delivery of the
+Software to Licensee, the Software will substantially perform in accordance
+with Autonomy's standard data sheets (available at
+http://www.autonomy.com/datasheets). This warranty applies only to problems
+reported by Licensee to Autonomy during the aforesaid warranty period. The
+foregoing warranty shall not apply to any Software that has been modified other
+than by Autonomy, or that has been improperly installed or used in any manner
+other than as authorized under this Agreement. LICENSEE'S SOLE AND EXCLUSIVE
+REMEDY UNDER ANY WARRANTY SHALL BE LIMITED, AT AUTONOMY'S DISCRETION, TO
+SUPPORT OR REPLACEMENT OF THE SOFTWARE. TO THE FULLEST EXTENT PERMITTED BY
+APPLICABLE LAW, AUTONOMY AND ITS LICENSORS DISCLAIM ANY AND ALL OTHER
+WARRANTIES, EXPRESS OR IMPLIED, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. EXCEPT FOR THE LIMITED WARRANTY PROVIDED PURSUANT TO THIS
+SECTION
+
+
+4. THE PRODUCT IS PROVIDED "AS IS". AUTONOMY DOES NOT WARRANT THAT THE SOFTWARE
+OR THE FUNCTIONS CONTAINED IN THE SOFTWARE WILL MEET LICENSEE'S REQUIREMENTS,
+OPERATE WITHOUT INTERRUPTION OR BE ERROR FREE. Some states or jurisdictions do
+not allow the exclusion of implied warranties or limitations on how long an
+implied warranty may last, so the above limitations may not apply to Licensee.
+To the extent permissible, any implied warranties are limited to thirty (30)
+days. This warranty gives Licensee specific legal rights. Licensee may have
+other rights, which vary from state to state or jurisdiction to jurisdiction.
+For further warranty information, contact Autonomy's Legal Department at One
+Market, Spear Tower, 19th Floor, San Francisco, California 94105.
+
+5. LIMITATION OF LIABILITY. IN NO EVENT WILL AUTONOMY OR ITS LICENSORS BE
+LIABLE FOR SPECIAL, INDIRECT, INCIDENTAL OR CONSEQUENTIAL DAMAGES (INCLUDING,
+WITHOUT LIMITATION, LOST PROFITS, BUSINESS INTERRUPTION, AND LOSS OR INACCURACY
+OF INFORMATION), REGARDLESS OF THE FORM OF ACTION, EVEN IF THE CLAIM WAS
+REASONABLY FORESEEABLE OR IF AUTONOMY WAS ADVISED OF THE POSSIBILITY OF SUCH
+DAMAGES. IN NO EVENT WILL AUTONOMY'S OR ITS LICENSORS' AGGREGATE LIABILITY
+UNDER ANY AND ALL CLAIMS ARISING OUT OF THIS AGREEMENT EXCEED THE LICENSE FEES
+PAID BY LICENSEE TO AUTONOMY FOR THE APPLICABLE SOFTWARE DURING THE TWELVE (12)
+MONTH PERIOD PRECEDING THE INITIAL EVENT RESULTING IN SUCH CLAIMS. Some states
+or jurisdictions do not allow the exclusion or limitation of incidental,
+consequential or special damages, so the above exclusions and limitations may
+not apply to Licensee.
+
+
+6. CONFIDENTIALITY. Except as expressly and unambiguously permitted hereunder,
+each party shall hold in confidence and not use or disclose any materials or
+information disclosed by the other party that are confidential or proprietary,
+or which may be reasonably regarded as the confidential information of the
+other party ("Confidential Information"). Confidential Information will also
+include the Software, Documentation, and any new product information or the
+results of any benchmark or similar tests on the Software conducted by Licensee
+or divulged by Licensee to Autonomy. Each party shall treat the other party's
+Confidential Information with at least the same degree of care it uses to
+prevent unauthorized disclosure or use of its own Confidential Information, but
+in no event less than reasonable care. Confidential Information will not
+include any materials or information that the recipient can prove (i) is now,
+or later becomes, through no act or failure to act on the part of the receiving
+party, generally known or available to the public; (ii) is known by the
+receiving party at the time of disclosure as evidenced by its records; (iii) is
+furnished to the receiving party by a third party, as a matter of right and
+without restriction on disclosure; (iv) is independently developed by the
+receiving party without any breach of this Agreement; (v) is the subject of a
+written permission to disclose provided by the disclosing party; or (vi) is
+disclosed in response to a valid order of a court or other governmental body.
+
+
+7. FEES, PAYMENT AND DELIVERY. Invoices for license fees and support fees shall
+be rendered to Licensee upon Autonomy's shipment of the Software. Unless
+otherwise indicated in the Product Schedule, Licensee shall pay Autonomy the
+fees set forth in the applicable invoice within thirty (30) days from the date
+of invoice. All fees are exclusive of shipping, taxes, duties and other similar
+fees, all of which shall be the responsibility of and shall be paid by
+Licensee. A charge of one and one-half (1 1/2) percent per month will be
+applied to all overdue invoices. Licensee agrees to pay for all reasonable
+costs (including reasonable attorneys' fees) incurred in collecting past due
+amounts under this Agreement. All shipments shall be ExWorks point of
+manufacture (per Incoterms 2000). Delivery may be electronic, such as via FTP.
+
+
+8. INTELLECTUAL PROPERTY RIGHTS. Licensee agrees to promptly notify Autonomy of
+any known or suspected infringement or breach of Autonomy's proprietary rights.
+Autonomy shall have the exclusive right to institute infringement or other
+appropriate legal action against any alleged, prospective or actual
+infringement of Autonomy's intellectual and other proprietary rights in the
+Software, and shall retain all money received from such action. If the Software
+or the operation of the Software becomes or, in Autonomy's opinion is likely to
+become, the subject of a claim that it infringes the rights of any third party,
+Licensee will permit Autonomy, at Autonomy's expense, to either: (i) procure
+the right for Licensee to continue using the Software, or (ii) replace and
+modify the Software so that it becomes non-infringing; provided that, if
+neither of the foregoing alternatives is reasonable, Licensee will return the
+Software to Autonomy and Autonomy will refund the price paid by Licensee for
+the returned Software, depreciated on a straight-line basis over a five year
+period, whereupon this Agreement shall terminate immediately. Notwithstanding
+the foregoing, Autonomy shall not be liable for any such claim that arises as a
+result of: (a) any modification of the Software by any party other than
+Autonomy; (b) use of the Software otherwise than in accordance with the
+Documentation; (c) combination of the Software with hardware or other software,
+if such claim would have been avoided by not so combining the Software; or (d)
+use of a superseded release of Software if the infringement would have been
+avoided by the timely implementation of an update supplied by Autonomy. THE
+FOREGOING STATES LICENSEE'S SOLE AND EXCLUSIVE REMEDY WITH RESPECT TO CLAIMS OF
+INFRINGEMENT OF THIRD PARTY PROPRIETARY RIGHTS OF ANY KIND.
+
+9. GOVERNMENT END USERS. The Software (a) was developed at private expense, is
+existing computer software and no part of it was developed with government
+funds; (b) is a trade secret of Autonomy for all purposes of the Freedom of
+Information Act; (c) is commercial computer software submitted with only those
+rights provided in the Agreement; (d) in all respects is proprietary data
+belonging solely to Autonomy; and (e) is unpublished and all rights are
+reserved under the copyright laws of the United States. For units of the
+Department of Defense (DoD) this Software is licensed only with the rights
+specified in this Agreement, and use, duplication or disclosure of the Software
+is subject to the restrictions in this Agreement.
+
+
+10. MARKETING, PUBLICITY AND BRANDING. Licensee agrees that Autonomy may use
+Licensee's name to identify Licensee as an Autonomy customer. Licensee agrees
+to place the Autonomy brand logo (e.g.,"Powered by Autonomy") on Licensee's
+World Wide Web site, intranet or equivalent site, as applicable, in reasonable
+proximity to any area thereof which provides functionality related to
+Licensee's Use of the Software. Each party's use of the other party's
+trademarks and logos will be in accordance with such other party's policies in
+effect from time to time.
+
+
+11. GENERAL. Capitalized terms used but not defined herein shall have the
+meaning ascribed to them in the applicable Product Schedule. This Agreement
+together with each applicable Product Schedule, contains the full and complete
+understanding of the parties as to the subject matter hereof and may not be
+altered or modified, except by written amendment which expressly refers to this
+Agreement and which is duly executed by both Autonomy and Licensee. If any
+purchase order made pursuant to this Agreement contains any terms which are
+inconsistent with, or in addition to, this Agreement, such inconsistent or
+additional purchase order terms shall be of no effect. Licensee shall not
+transfer or assign this Agreement or any rights or obligations hereunder under
+operation of law, change of control, or otherwise, without the prior written
+consent of Autonomy. Any attempted assignment or transfer in violation of the
+foregoing will be void. Licensee agrees that it will not export or re-export
+the Product without the appropriate United States Government or any other
+government licenses. This Agreement will be governed and interpreted in
+accordance with the laws of the United States and the State of California,
+without giving effect to principles of conflicts of law. The parties agree that
+the United Nations Convention on Contracts for the International Sales of Goods
+is specifically excluded from application to this Agreement. Any litigation
+relating to the formation, interpretation or alleged breach of this Agreement
+must be brought exclusively in the state and federal courts having jurisdiction
+in San Francisco, California, and the parties irrevocably consent to the
+jurisdiction of such courts. All notices required under this Agreement shall be
+in writing and shall be deemed effective: (i) one (1) day after deposit with a
+commercial overnight carrier, with written verification of actual receipt or
+(ii) upon confirmation of receipt generated by the sending device, if sent by
+facsimile. All notices must be delivered to the Legal Department of the other
+party to the address on the applicable Product Schedule or to such other
+address as a party may designate by written notice. Autonomy will have the
+right to inspect Licensee's books and records at Licensee's facility as
+reasonably necessary to verify that Licensee's use of the Product complies with
+this Agreement. Autonomy shall provide Licensee with reasonable notice prior to
+any inspections. Autonomy shall bear all costs and expenses associated with the
+exercise of these rights, unless such inspection reveals that Licensee is not
+in compliance with this Agreement, in which case, Licensee shall pay Autonomy
+the reasonable costs of such inspection plus any additional license fees
+related to unauthorized use of the Software. If any part of this Agreement is
+found void and unenforceable, it will not affect the validity of the balance of
+the Agreement, which shall remain valid and enforceable according to its terms.
+The failure of a party to insist on the performance of an obligation hereunder
+shall not be deemed to be a waiver of such obligation or of any other
+obligation. Sections 1 (excluding the license grant), 2, 4, 5, 6, 7, 9 and 11
+of this Agreement shall survive any termination or expiration of this
+Agreement. The parties acknowledge and agree that a material breach of this
+Agreement adversely affecting Autonomy's proprietary rights would cause
+irreparable harm to Autonomy for which a remedy at law would be inadequate and
+that Autonomy shall be entitled to injunctive relief in addition to any
+remedies it may have hereunder or at law.
+
