@@ -64,6 +64,7 @@
         <classes dir="../ZimbraSoap/build/classes" />
         <classes dir="../ZimbraIM/build/classes" />
         <classes dir="../ZimbraServer/build/classes" />
+        <classes dir="../ZimbraClient/build/classes" />
       </webApp>
 
       <webApp name="ZimbraWebClient" warfile="${jetty_run_base}/jetty/webapps/zimbra" contextpath="/zimbra">
