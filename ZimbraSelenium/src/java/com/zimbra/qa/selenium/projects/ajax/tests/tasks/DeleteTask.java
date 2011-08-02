@@ -234,7 +234,7 @@ public class DeleteTask extends AjaxCommonTest {
 
 		
 		// Use Delete Keyboard Shortcut
-		app.zPageTasks.zKeyboardShortcut(Shortcut.S_DELETE);
+		app.zPageTasks.zKeyboardShortcut(Shortcut.S_MAIL_MOVETOTRASH);
 		
 		
 		List<TaskItem> tasks = app.zPageTasks.zGetTasks();

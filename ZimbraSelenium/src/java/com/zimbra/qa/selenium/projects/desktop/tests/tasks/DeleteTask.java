@@ -196,7 +196,7 @@ public class DeleteTask extends AjaxCommonTest {
 	
 	}
 
-	@Test(	description = "Delete a task by selecting and typing '<DEL>' shortcut",
+	@Test(	description = "Delete a task by selecting and typing '.t' shortcut",
 			groups = { "functional" } )
 	public void DeleteTask_04() throws HarnessException {
 		
@@ -233,7 +233,7 @@ public class DeleteTask extends AjaxCommonTest {
 
 		
 		// Use Delete Keyboard Shortcut
-		app.zPageTasks.zKeyboardShortcut(Shortcut.S_DELETE);
+		app.zPageTasks.zKeyboardShortcut(Shortcut.S_MAIL_MOVETOTRASH);
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageTasks.zWaitForDesktopLoadingSpinner(5000);
