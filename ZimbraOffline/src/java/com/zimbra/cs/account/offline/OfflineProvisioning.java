@@ -603,7 +603,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return account.getAttr(A_offlineRemoteServerUri, null) != null;
     }
 
-    private void testDataSource(OfflineDataSource ds) throws ServiceException {
+    public void testDataSource(OfflineDataSource ds) throws ServiceException {
         try {
             DataSourceManager.test(ds);
         } catch (ServiceException x) {
