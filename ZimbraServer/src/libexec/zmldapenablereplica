@@ -48,7 +48,12 @@ if [ $u != ${zimbra_user} ]; then
     exit 1
 fi
 
-ldap_master_host=`echo ${ldap_master_url} | sed -e 's|ldaps*://\([^:]*\):*.*|\1|'`
+lmr=${ldap_master_url}
+mmr=`expr index "$lmr" ' '`
+if [ $mmr -ne 0 ]; then
+  lmr=${ldap_master_url%% *}  
+fi
+ldap_master_host=`echo ${lmr} | sed -e 's|ldaps*://\([^:]*\):*.*|\1|'`
 
 # ldap commands
 LDA="${zimbra_home}/openldap/bin/ldapadd"
@@ -100,24 +105,18 @@ verifyLdapInstalled() {
 }
 
 verifyLdap() {
-	echo -n "Verifying ldap on ${ldap_master_url}..."
-	mmr=`expr index "$ldap_master_url" ' '`
-	if [ $mmr -ne 0 ]; then
-		echo "FAILED"
-		echo "ERROR: ldap_master_url cannot be multi-valued on a replica"
-		exit 1
-	fi
-        num=`expr match "$ldap_master_url" 'ldaps*'`
+	echo -n "Verifying ldap on ${lmr}..."
+        num=`expr match "$lmr" 'ldaps*'`
         if [ "$num" -eq 5 ]; then
 		TLS=
 	else
 		TLS=-Z
 	fi
-	ARGS="-x ${TLS} -s base -b cn=zimbra -H ${ldap_master_url} -D ${zimbra_ldap_userdn} -w ${zimbra_ldap_password}"
+	ARGS="-x ${TLS} -s base -b cn=zimbra -H ${lmr} -D ${zimbra_ldap_userdn} -w ${zimbra_ldap_password}"
 	OUTPUT=`$LDS $ARGS 2>&1`
 	if [ $? -ne 0 ]; then
 		echo "FAILED"
-		echo "ERROR: Unable to verify ldap connection on ${ldap_master_url} - exiting"
+		echo "ERROR: Unable to verify ldap connection on ${lmr} - exiting"
 		echo "$LDS $ARGS"
 		echo $OUTPUT
 		exit 1
@@ -173,13 +172,13 @@ enableSyncProv() {
 createLdapConfig() {
 	# Verify syncprov isn't already enabled on the db
 	echo -n "Enabling sync replication on replica..."
-        num=`expr match "$ldap_master_url" 'ldaps*'`
+        num=`expr match "$lmr" 'ldaps*'`
         if [ "$num" -eq 5 ]; then
 	cat >> ${zimbra_tmp_directory}/syncprov-replica.mod.$$<<EOF
 dn: olcDatabase={2}hdb,cn=config
 changetype: modify
 add: olcSyncrepl
-olcSyncrepl: rid=100 provider=${ldap_master_url} bindmethod=si
+olcSyncrepl: rid=100 provider=${lmr} bindmethod=si
  mple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra c
  redentials=${ldap_replication_password} filter="(objectclass=*)" searchbase=""
   logfilter="(&(objectClass=auditWriteObject)(reqResult=0))" logbase=cn=access
@@ -187,7 +186,7 @@ olcSyncrepl: rid=100 provider=${ldap_master_url} bindmethod=si
  a=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30
 -
 add: olcUpdateRef
-olcUpdateRef: ${ldap_master_url}
+olcUpdateRef: ${lmr}
 -
 EOF
 	elif [ ${ldap_starttls_supported} -eq 1 -a ${zimbra_require_interprocess_security} -eq 1 ]; then
@@ -195,7 +194,7 @@ EOF
 dn: olcDatabase={2}hdb,cn=config
 changetype: modify
 add: olcSyncrepl
-olcSyncrepl: rid=100 provider=${ldap_master_url} bindmethod=si
+olcSyncrepl: rid=100 provider=${lmr} bindmethod=si
  mple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra c
  redentials=${ldap_replication_password} starttls=critical filter="(objectclass=*)" searchbase=""
   logfilter="(&(objectClass=auditWriteObject)(reqResult=0))" logbase=cn=access
@@ -203,7 +202,7 @@ olcSyncrepl: rid=100 provider=${ldap_master_url} bindmethod=si
  a=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30
 -
 add: olcUpdateRef
-olcUpdateRef: ${ldap_master_url}
+olcUpdateRef: ${lmr}
 -
 EOF
 	else
@@ -211,7 +210,7 @@ EOF
 dn: olcDatabase={2}hdb,cn=config
 changetype: modify
 add: olcSyncrepl
-olcSyncrepl: rid=100 provider=${ldap_master_url} bindmethod=si
+olcSyncrepl: rid=100 provider=${lmr} bindmethod=si
  mple timeout=0 network-timeout=0 binddn=uid=zmreplica,cn=admins,cn=zimbra c
  redentials=${ldap_replication_password} filter="(objectclass=*)" searchbase=""
   logfilter="(&(objectClass=auditWriteObject)(reqResult=0))" logbase=cn=access
@@ -219,7 +218,7 @@ olcSyncrepl: rid=100 provider=${ldap_master_url} bindmethod=si
  a=accesslog tls_cacertdir=/opt/zimbra/conf/ca keepalive=240:10:30
 -
 add: olcUpdateRef
-olcUpdateRef: ${ldap_master_url}
+olcUpdateRef: ${lmr}
 -
 EOF
 	fi
@@ -266,13 +265,13 @@ enableLdapService() {
 
 updateLdapHost() {
 	echo -n "Setting ldap_url on ${zimbra_server_hostname}...";
-	${zimbra_home}/bin/zmlocalconfig -f -e ldap_url="${proto}://${zimbra_server_hostname}:${ldap_port} ${ldap_master_url}"
+	${zimbra_home}/bin/zmlocalconfig -f -e ldap_url="${proto}://${zimbra_server_hostname}:${ldap_port} ${lmr}"
 	echo "done"
 }
 
 resetLdapUrl() {
 	echo -n "Resetting ldap_url on ${zimbra_server_hostname}...";
-	${zimbra_home}/bin/zmlocalconfig -f -e ldap_url="${ldap_master_url}"
+	${zimbra_home}/bin/zmlocalconfig -f -e ldap_url="${lmr}"
 	echo "done"
 }
 
