@@ -549,7 +549,7 @@ public class DirectorySync {
             // XXX: if the signature has been renamed locally, no need to rename the conflict
             Map<String, Object> resolution = new HashMap<String, Object>(1);
             resolution.put(Provisioning.A_zimbraSignatureName, name + '{' + UUID.randomUUID().toString() + '}');
-            prov.modifySignature(acct, signature.getId(), resolution);
+            prov.modifySignature(acct, signature == null ? conflict.getId() : signature.getId(), resolution);
             OfflineLog.offline.debug("dsync: detected conflict and renamed signature: " + acct.getName() + '/' + conflict.getName());
         }
 
