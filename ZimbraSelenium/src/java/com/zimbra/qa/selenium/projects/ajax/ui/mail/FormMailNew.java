@@ -312,12 +312,40 @@ public class FormMailNew extends AbsForm {
 		
 		} else if ( pulldown == Button.B_SEND ) {
 			
-			pulldownLocator = "css=td[id$='__SEND_MENU_dropdown'] div";
+			pulldownLocator = "css=div[id$='__SEND_MENU'] td[id$='__SEND_MENU_dropdown']>div";
 
 			if ( option == Button.O_SEND_SEND ) {
 
+				// This action requires a 'wait for postfix queue'
 				optionLocator = "css=tr#POPUP_SEND td#SEND_title";
 				page = null;
+				
+				// Make sure the locator exists
+				if ( !this.sIsElementPresent(pulldownLocator) ) {
+					throw new HarnessException("Button "+ pulldown +" option "+ option +" pulldownLocator "+ pulldownLocator +" not present!");
+				}
+				
+				this.zClick(pulldownLocator);
+
+				this.zWaitForBusyOverlay();
+				
+				// Make sure the locator exists
+				if ( !this.sIsElementPresent(optionLocator) ) {
+					throw new HarnessException("Button "+ pulldown +" option "+ option +" optionLocator "+ optionLocator +" not present!");
+				}
+					
+				this.zClick(optionLocator);
+
+				this.zWaitForBusyOverlay();
+
+				// Wait for the message to be delivered
+				Stafpostqueue sp = new Stafpostqueue();
+				sp.waitForPostqueue();
+			
+				
+				return (page);
+				
+
 
 			} else if ( option == Button.O_SEND_SEND_LATER ) {
 				
