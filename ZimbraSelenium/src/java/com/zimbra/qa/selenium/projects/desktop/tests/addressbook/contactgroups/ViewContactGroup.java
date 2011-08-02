@@ -48,7 +48,7 @@ public class ViewContactGroup extends AjaxCommonTest  {
 	public void DisplayContactGroup_01() throws HarnessException {
 		         		
 	    // Create a contact group via Soap then select
-		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app);
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
 	
 	    // Select the contact group
 		DisplayContactGroup groupView = (DisplayContactGroup) app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, group.fileAs);

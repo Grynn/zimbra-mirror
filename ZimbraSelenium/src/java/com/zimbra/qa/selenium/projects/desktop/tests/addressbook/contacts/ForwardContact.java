@@ -30,7 +30,7 @@ public class ForwardContact extends AjaxCommonTest  {
 	public void ForwardContact_01() throws HarnessException {
 			
 		  // Create a contact via Soap then select
-		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app);
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
 	
         //click Forward icon on toolbar
         FormMailNew formMail = (FormMailNew) app.zPageAddressbook.zToolbarPressButton(Button.B_FORWARD);
@@ -50,7 +50,7 @@ public class ForwardContact extends AjaxCommonTest  {
 			groups = { "functional" })
 	public void ForwardContact_02() throws HarnessException {
 		  // Create a contact via Soap then select
-		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app);
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
 	
         //click Forward icon on context menu
         FormMailNew formMail = (FormMailNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_FORWARD, contactItem.fileAs);        

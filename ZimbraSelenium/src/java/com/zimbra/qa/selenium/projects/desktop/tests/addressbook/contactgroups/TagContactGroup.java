@@ -53,7 +53,7 @@ public class TagContactGroup extends AjaxCommonTest  {
 	public void TagContactGroup_01() throws HarnessException {
 	
 		// Create a contact group via Soap then select
-		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app);
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
 	           
 		// Click new tag on Tag->New Tag on toolbar
 		DialogTag dialogTag = (DialogTag) app.zPageAddressbook.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_NEWTAG);
@@ -67,7 +67,7 @@ public class TagContactGroup extends AjaxCommonTest  {
 	public void TagContactGroup_02() throws HarnessException {
 	
 		// Create a contact group via Soap then select
-		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app);
+		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
 	           
 		// Click Tag Group on context menu
         DialogTag dialogTag = (DialogTag) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_TAG, Button.O_TAG_NEWTAG , group.fileAs);        
