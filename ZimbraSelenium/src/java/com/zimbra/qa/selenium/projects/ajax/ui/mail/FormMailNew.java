@@ -325,7 +325,10 @@ public class FormMailNew extends AbsForm {
 					throw new HarnessException("Button "+ pulldown +" option "+ option +" pulldownLocator "+ pulldownLocator +" not present!");
 				}
 				
-				this.zClick(pulldownLocator);
+				// For some reason, zClick() activates the entire button, not the pulldown
+				// As a work around use right click
+				// this.zClick(pulldownLocator);
+				this.zRightClick(pulldownLocator);
 
 				this.zWaitForBusyOverlay();
 				
@@ -351,6 +354,32 @@ public class FormMailNew extends AbsForm {
 				
 				optionLocator = "css=tr#POPUP_SEND_LATER td#SEND_LATER_title";
 				page = new DialogSendLater(this.MyApplication, ((AppAjaxClient)MyApplication).zPageMail);
+
+				// Make sure the locator exists
+				if ( !this.sIsElementPresent(pulldownLocator) ) {
+					throw new HarnessException("Button "+ pulldown +" option "+ option +" pulldownLocator "+ pulldownLocator +" not present!");
+				}
+				
+				// For some reason, zClick() activates the entire button, not the pulldown
+				// As a work around use right click
+				// this.zClick(pulldownLocator);
+				this.zRightClick(pulldownLocator);
+
+				this.zWaitForBusyOverlay();
+				
+				// Make sure the locator exists
+				if ( !this.sIsElementPresent(optionLocator) ) {
+					throw new HarnessException("Button "+ pulldown +" option "+ option +" optionLocator "+ optionLocator +" not present!");
+				}
+					
+				this.zClick(optionLocator);
+
+				this.zWaitForBusyOverlay();
+
+
+				page.zWaitForActive();
+				
+				return (page);
 
 			} else {
 				throw new HarnessException("unsupported pulldown/option "+ pulldown +"/"+ option);
