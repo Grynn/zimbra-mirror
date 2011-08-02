@@ -101,6 +101,12 @@ verifyLdapInstalled() {
 
 verifyLdap() {
 	echo -n "Verifying ldap on ${ldap_master_url}..."
+	mmr=`expr index "$ldap_master_url" ' '`
+	if [ $mmr -ne 0 ]; then
+		echo "FAILED"
+		echo "ERROR: ldap_master_url cannot be multi-valued on a replica"
+		exit 1
+	fi
         num=`expr match "$ldap_master_url" 'ldaps*'`
         if [ "$num" -eq 5 ]; then
 		TLS=
