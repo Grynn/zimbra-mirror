@@ -94,7 +94,11 @@ public class YMailClient {
 
     private static SoapHttpTransport getTransport(Auth auth) {
         SoapHttpTransport transport =
-            new SoapHttpTransport(SOAP_URL + "?" + getQueryString(auth));
+            new SoapHttpTransport(SOAP_URL + "?" + getQueryString(auth)) {
+            public boolean generateContextHeader() {
+                return false;
+            }
+        }; 
         transport.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.getFullVersion());
         transport.setRequestProtocol(SoapProtocol.Soap11);
         transport.setResponseProtocol(SoapProtocol.Soap11);
