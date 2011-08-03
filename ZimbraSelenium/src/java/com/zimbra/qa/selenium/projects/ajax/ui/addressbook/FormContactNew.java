@@ -6,6 +6,7 @@ import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
 
 
 
@@ -44,8 +45,10 @@ public class FormContactNew extends AbsForm {
 		public static String zURL1EditField = "css=div#EDITCONTACTFORM_URL_0 input";
 		public static String zOther1EditField = "css=div#EDITCONTACTFORM_OTHER_0 input";
 		public static String zNotesEditField = "css=textarea#EDITCONTACTFORM_NOTES_input";
-
-			
+        public static String zLocation = "css=td#EDITCONTACTFORM_FOLDER_title";
+        public static String zFileAs = "css=td#EDITCONTACTFORM_FILE_AS_title";
+        
+        
 		public static final String zPrefixCheckbox = "td.ZWidgetTitle:contains('Prefix')";
 		public static final String zMiddleCheckbox = "td.ZWidgetTitle:contains('Middle')";
 		public static final String zMaidenCheckbox = "td.ZWidgetTitle:contains('Maiden')";
@@ -88,6 +91,23 @@ public class FormContactNew extends AbsForm {
 		save();
 	}
 	
+	//click on a button such as Locations/File As
+	public AbsPage zClick(Button button, AbsTab tab) throws HarnessException {
+		logger.info("FormContactNew.zClick(" + button.toString() + ",...)");
+		AbsPage page=null;
+		
+		if (button == Button.B_MOVE) {
+			page = new DialogMove(MyApplication, tab);
+		}
+		
+		zClick(getLocator(Locators.zLocation));
+		zWaitForBusyOverlay();		
+		
+		if (page != null) {
+			page.zWaitForActive();
+		}
+		return page;
+	}
 	
 	protected void save() throws HarnessException {
 		logger.info("FormContactNew.save()");

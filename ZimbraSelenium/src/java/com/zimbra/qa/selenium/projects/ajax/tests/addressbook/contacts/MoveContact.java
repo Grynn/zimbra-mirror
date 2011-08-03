@@ -11,6 +11,8 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactGroupNew;
+import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactNew;
 
 
 public class MoveContact extends AjaxCommonTest  {
@@ -83,7 +85,7 @@ public class MoveContact extends AjaxCommonTest  {
         dialogContactMove.zClickTreeFolder(emailedContacts);
         dialogContactMove.zClickButton(Button.B_OK);
      
-        //Move contact and verify
+        //Verify
         Verify(emailedContacts,contactItem);
         
    	}
@@ -106,7 +108,7 @@ public class MoveContact extends AjaxCommonTest  {
         dialogContactMove.zClickTreeFolder(emailedContacts);
         dialogContactMove.zClickButton(Button.B_OK);
      
-        //Move contact and verify
+        //Verify
         Verify(emailedContacts,contactItem);
         
    	}
@@ -128,7 +130,7 @@ public class MoveContact extends AjaxCommonTest  {
         dialogContactMove.zClickTreeFolder(emailedContacts);
         dialogContactMove.zClickButton(Button.B_OK);
      
-        //Move contact and verify
+        //Verify
         Verify(emailedContacts,contactItem);
         
    	}
@@ -152,6 +154,34 @@ public class MoveContact extends AjaxCommonTest  {
 			
 	
         //verify
+        Verify(emailedContacts,contactItem);
+        
+   	}
+	
+	@Test(	description = "Move a contact item to folder Emailed Contacts by click toolbar Edit then Location",
+			groups = { "functional" })
+	public void MoveToEmailedContactsClickToolbarEditThenLocation() throws HarnessException {
+		
+		 // Create a contact via Soap then select
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+	
+	
+		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
+		
+		//Click Edit contact	
+        FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zToolbarPressButton(Button.B_EDIT);
+	  
+        //Click Location
+        DialogMove dialogContactMove = (DialogMove) formContactNew.zClick(Button.B_MOVE, app.zPageAddressbook);
+        
+        //enter the moved folder
+        dialogContactMove.zClickTreeFolder(emailedContacts);
+        dialogContactMove.zClickButton(Button.B_OK);
+      
+        //Click Save
+        formContactNew.zSubmit();
+        
+        //Verify
         Verify(emailedContacts,contactItem);
         
    	}
