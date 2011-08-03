@@ -42,7 +42,7 @@ void AdminAuth()
 void UserAuth()
 {
 	Zimbra::Util::ScopedInterface<IXMLDOMDocument2> pResponseXml;
-	m_pConnection = new Zimbra::Rpc::Connection(lpServerAddress,nPort, 
+	m_pConnection = new Zimbra::Rpc::Connection(_T("Migration"),lpServerAddress,nPort, 
 					false, 0, L"");
 
 	m_pConnection->SetCurrentUser((LPWSTR)lpAccountUser);
@@ -87,7 +87,7 @@ void ZCFileUploadTest()
 {
 	Zimbra::Rpc::UserSession *session = Zimbra::Rpc::UserSession::CreateInstance(lpProfileName, lpAccountUser, lpAccountUserPwd, lpServerAddress, nPort, 0,0, L"",false);
 	Zimbra::Rpc::UserSession::SetProfileName(lpProfileName);
-	Zimbra::Rpc::ZimbraConnection* z_pConnection=new Zimbra::Rpc::ZimbraConnection( lpServerAddress, nPort, 
+	Zimbra::Rpc::ZimbraConnection* z_pConnection=new Zimbra::Rpc::ZimbraConnection( _T("Migration"), lpServerAddress, nPort, 
 					false, 0, L"");
     z_pConnection->SetProfileName( lpProfileName );
 	
