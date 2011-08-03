@@ -10,7 +10,9 @@ public class PageLogin extends AbsTab {
 	public static class Locators {
 
 		// Buttons
-		public static final String zBtnLogin = "xpath=//input[@class='zLoginButton']";
+		public static final String zBtnLogin = "css=input[class='zLoginButton']";
+		
+		
 	    // Desktop-specific
       public static final String zAddNewAccountButton = "css=td div[class*='ZPanel'][onclick*='OnAdd()']";
       public static final String zMyAccountsTab = "css=div[class$='ctive ZPanelFirstTab']";
@@ -18,17 +20,13 @@ public class PageLogin extends AbsTab {
       public static final String zDeleteButton = "css=div[class*='ZPanelInfoInner'] a[href*='OnDelete']";
 		
 		// Text Input
-		public static final String zInputUsername = "xpath=//*[@id='username']";
-		public static final String zInputPassword = "xpath=//*[@id='password']";
-		public static final String zInputRemember = "xpath=//*[@id='remember']";
+		public static final String zInputUsername = "css=input[id='username']";
+		public static final String zInputPassword = "css=input[id='password']";
+		public static final String zInputRemember = "css=input[id='remember']";
 		
 		// Displayed text
-		public static final String zDisplayedZLoginAppName = "xpath=//*[@id='ZLoginAppName']";
-		public static final String zDisplayedusername = "xpath=//form[@name='loginForm']//label[@for='username']";
-		public static final String zDisplayedpassword = "xpath=//td[@class='zLoginLabelContainer']//label[@for='password']";
-		public static final String zDisplayedremember = "xpath=//td[@class='zLoginCheckboxLabelContainer']//label[@for='remember']";
-		public static final String zDisplayedwhatsthis = "xpath=//*[@id='ZLoginWhatsThisAnchor']";
-		public static final String zDisplayedcopyright = "xpath=//div[@class='copyright']";
+		public static final String zDisplayedusername = "css=form[name='loginForm'] label[for='username']";
+		public static final String zDisplayedcopyright = "css=div[class='copyright']";
 
 	}
 	
