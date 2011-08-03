@@ -832,4 +832,8 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         }
     }
 
+    @Override
+    public boolean isNewItemIdValid(int id) {
+        return true;
+    }
 }
