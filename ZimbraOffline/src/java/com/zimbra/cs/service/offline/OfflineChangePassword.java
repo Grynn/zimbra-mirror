@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.zimbra.common.account.ProvisioningConstants;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.Element;
@@ -51,7 +52,7 @@ public class OfflineChangePassword extends DocumentHandler {
         Map<String, Object> attrs = new HashMap<String, Object>();
         String status = "fail";
         if (prov.isZcsAccount(acct)) {
-            attrs.put(OfflineConstants.A_offlineAccountSetup, Provisioning.TRUE); //flag so modify validates
+            attrs.put(OfflineConstants.A_offlineAccountSetup, ProvisioningConstants.TRUE); //flag so modify validates
             attrs.put(OfflineConstants.A_offlineRemotePassword, newPass);
             prov.modifyAttrs(acct, attrs);
             status = "success";
