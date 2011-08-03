@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "AdminExtService", targetNamespace = "urn:zimbraAdminExt", wsdlLocation = "file:/p4/gelliot_main/ZimbraSoap/build/classes/com/zimbra/soap/AdminExtService.wsdl")
+@WebServiceClient(name = "AdminExtService", targetNamespace = "urn:zimbraAdminExt", wsdlLocation = "file:/p4/gelliot_coco/ZimbraSoap/build/classes/com/zimbra/soap/AdminExtService.wsdl")
 public class AdminExtService_Service
     extends Service
 {
@@ -30,9 +30,9 @@ public class AdminExtService_Service
         try {
             URL baseUrl;
             baseUrl = zimbra.generated.adminextclient.ws.service.AdminExtService_Service.class.getResource(".");
-            url = new URL(baseUrl, "file:/p4/gelliot_main/ZimbraSoap/build/classes/com/zimbra/soap/AdminExtService.wsdl");
+            url = new URL(baseUrl, "file:/p4/gelliot_coco/ZimbraSoap/build/classes/com/zimbra/soap/AdminExtService.wsdl");
         } catch (MalformedURLException e) {
-            logger.warn("Failed to create URL for the wsdl Location: 'file:/p4/gelliot_main/ZimbraSoap/build/classes/com/zimbra/soap/AdminExtService.wsdl', retrying as a local file");
+            logger.warn("Failed to create URL for the wsdl Location: 'file:/p4/gelliot_coco/ZimbraSoap/build/classes/com/zimbra/soap/AdminExtService.wsdl', retrying as a local file");
             logger.warn(e.getMessage());
         }
         ADMINEXTSERVICE_WSDL_LOCATION = url;

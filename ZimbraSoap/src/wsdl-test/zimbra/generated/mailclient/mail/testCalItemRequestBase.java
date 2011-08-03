@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="max" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="html" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="neuter" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="forcesend" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -51,6 +52,8 @@ public class testCalItemRequestBase {
     protected Boolean html;
     @XmlAttribute(name = "neuter")
     protected Boolean neuter;
+    @XmlAttribute(name = "forcesend")
+    protected Boolean forcesend;
 
     /**
      * Gets the value of the m property.
@@ -170,6 +173,30 @@ public class testCalItemRequestBase {
      */
     public void setNeuter(Boolean value) {
         this.neuter = value;
+    }
+
+    /**
+     * Gets the value of the forcesend property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isForcesend() {
+        return forcesend;
+    }
+
+    /**
+     * Sets the value of the forcesend property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setForcesend(Boolean value) {
+        this.forcesend = value;
     }
 
 }

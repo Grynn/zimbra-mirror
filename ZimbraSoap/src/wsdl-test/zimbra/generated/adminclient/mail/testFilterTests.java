@@ -51,18 +51,18 @@ import javax.xml.bind.annotation.XmlType;
 public class testFilterTests {
 
     @XmlElements({
-        @XmlElement(name = "currentDayOfWeekTest", type = testFilterTestCurrentDayOfWeek.class),
-        @XmlElement(name = "bodyTest", type = testFilterTestBody.class),
+        @XmlElement(name = "mimeHeaderTest", type = testFilterTestMimeHeader.class),
+        @XmlElement(name = "dateTest", type = testFilterTestDate.class),
+        @XmlElement(name = "addressBookTest", type = testFilterTestAddressBook.class),
         @XmlElement(name = "headerTest", type = testFilterTestHeader.class),
         @XmlElement(name = "currentTimeTest", type = testFilterTestCurrentTime.class),
+        @XmlElement(name = "inviteTest", type = testFilterTestInvite.class),
+        @XmlElement(name = "bodyTest", type = testFilterTestBody.class),
         @XmlElement(name = "attachmentTest", type = testFilterTestAttachment.class),
+        @XmlElement(name = "currentDayOfWeekTest", type = testFilterTestCurrentDayOfWeek.class),
         @XmlElement(name = "sizeTest", type = testFilterTestSize.class),
-        @XmlElement(name = "mimeHeaderTest", type = testFilterTestMimeHeader.class),
         @XmlElement(name = "trueTest", type = testFilterTestTrue.class),
-        @XmlElement(name = "addressBookTest", type = testFilterTestAddressBook.class),
-        @XmlElement(name = "headerExistsTest", type = testFilterTestHeaderExists.class),
-        @XmlElement(name = "dateTest", type = testFilterTestDate.class),
-        @XmlElement(name = "inviteTest", type = testFilterTestInvite.class)
+        @XmlElement(name = "headerExistsTest", type = testFilterTestHeaderExists.class)
     })
     protected List<testFilterTestInfo> headerTestOrMimeHeaderTestOrHeaderExistsTest;
     @XmlAttribute(name = "condition", required = true)
@@ -86,18 +86,18 @@ public class testFilterTests {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testFilterTestCurrentDayOfWeek }
-     * {@link testFilterTestBody }
+     * {@link testFilterTestMimeHeader }
+     * {@link testFilterTestDate }
+     * {@link testFilterTestAddressBook }
      * {@link testFilterTestHeader }
      * {@link testFilterTestCurrentTime }
-     * {@link testFilterTestAttachment }
-     * {@link testFilterTestSize }
-     * {@link testFilterTestMimeHeader }
-     * {@link testFilterTestTrue }
-     * {@link testFilterTestAddressBook }
-     * {@link testFilterTestHeaderExists }
-     * {@link testFilterTestDate }
      * {@link testFilterTestInvite }
+     * {@link testFilterTestBody }
+     * {@link testFilterTestAttachment }
+     * {@link testFilterTestCurrentDayOfWeek }
+     * {@link testFilterTestSize }
+     * {@link testFilterTestTrue }
+     * {@link testFilterTestHeaderExists }
      * 
      * 
      */

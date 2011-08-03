@@ -51,8 +51,8 @@ public class testCheckRecurConflictsRequest {
     protected List<testCalTZInfo> tz;
     @XmlElements({
         @XmlElement(name = "cancel", type = testExpandedRecurrenceCancel.class),
-        @XmlElement(name = "except", type = testExpandedRecurrenceException.class),
-        @XmlElement(name = "comp", type = testExpandedRecurrenceInvite.class)
+        @XmlElement(name = "comp", type = testExpandedRecurrenceInvite.class),
+        @XmlElement(name = "except", type = testExpandedRecurrenceException.class)
     })
     protected List<testExpandedRecurrenceComponent> cancelOrCompOrExcept;
     protected List<testFreeBusyUserSpec> usr;
@@ -113,8 +113,8 @@ public class testCheckRecurConflictsRequest {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link testExpandedRecurrenceCancel }
-     * {@link testExpandedRecurrenceException }
      * {@link testExpandedRecurrenceInvite }
+     * {@link testExpandedRecurrenceException }
      * 
      * 
      */

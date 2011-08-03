@@ -420,9 +420,9 @@ import zimbra.generated.adminclient.admin.testVersionCheckResponse;
 @WebService(name = "AdminService", targetNamespace = "urn:zimbraAdmin")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    zimbra.generated.adminclient.zm.ObjectFactory.class,
+    zimbra.generated.adminclient.mail.ObjectFactory.class,
     zimbra.generated.adminclient.admin.ObjectFactory.class,
-    zimbra.generated.adminclient.mail.ObjectFactory.class
+    zimbra.generated.adminclient.zm.ObjectFactory.class
 })
 public interface AdminService {
 

@@ -51,18 +51,18 @@ import javax.xml.bind.annotation.XmlType;
 public class testFilterTests {
 
     @XmlElements({
-        @XmlElement(name = "attachmentTest", type = testFilterTestAttachment.class),
-        @XmlElement(name = "dateTest", type = testFilterTestDate.class),
-        @XmlElement(name = "sizeTest", type = testFilterTestSize.class),
-        @XmlElement(name = "headerExistsTest", type = testFilterTestHeaderExists.class),
-        @XmlElement(name = "currentTimeTest", type = testFilterTestCurrentTime.class),
-        @XmlElement(name = "inviteTest", type = testFilterTestInvite.class),
-        @XmlElement(name = "bodyTest", type = testFilterTestBody.class),
         @XmlElement(name = "mimeHeaderTest", type = testFilterTestMimeHeader.class),
-        @XmlElement(name = "addressBookTest", type = testFilterTestAddressBook.class),
-        @XmlElement(name = "trueTest", type = testFilterTestTrue.class),
+        @XmlElement(name = "attachmentTest", type = testFilterTestAttachment.class),
+        @XmlElement(name = "headerExistsTest", type = testFilterTestHeaderExists.class),
+        @XmlElement(name = "headerTest", type = testFilterTestHeader.class),
+        @XmlElement(name = "currentTimeTest", type = testFilterTestCurrentTime.class),
         @XmlElement(name = "currentDayOfWeekTest", type = testFilterTestCurrentDayOfWeek.class),
-        @XmlElement(name = "headerTest", type = testFilterTestHeader.class)
+        @XmlElement(name = "dateTest", type = testFilterTestDate.class),
+        @XmlElement(name = "trueTest", type = testFilterTestTrue.class),
+        @XmlElement(name = "inviteTest", type = testFilterTestInvite.class),
+        @XmlElement(name = "addressBookTest", type = testFilterTestAddressBook.class),
+        @XmlElement(name = "bodyTest", type = testFilterTestBody.class),
+        @XmlElement(name = "sizeTest", type = testFilterTestSize.class)
     })
     protected List<testFilterTestInfo> headerTestOrMimeHeaderTestOrHeaderExistsTest;
     @XmlAttribute(name = "condition", required = true)
@@ -86,18 +86,18 @@ public class testFilterTests {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testFilterTestAttachment }
-     * {@link testFilterTestDate }
-     * {@link testFilterTestSize }
-     * {@link testFilterTestHeaderExists }
-     * {@link testFilterTestCurrentTime }
-     * {@link testFilterTestInvite }
-     * {@link testFilterTestBody }
      * {@link testFilterTestMimeHeader }
-     * {@link testFilterTestAddressBook }
-     * {@link testFilterTestTrue }
-     * {@link testFilterTestCurrentDayOfWeek }
+     * {@link testFilterTestAttachment }
+     * {@link testFilterTestHeaderExists }
      * {@link testFilterTestHeader }
+     * {@link testFilterTestCurrentTime }
+     * {@link testFilterTestCurrentDayOfWeek }
+     * {@link testFilterTestDate }
+     * {@link testFilterTestTrue }
+     * {@link testFilterTestInvite }
+     * {@link testFilterTestAddressBook }
+     * {@link testFilterTestBody }
+     * {@link testFilterTestSize }
      * 
      * 
      */

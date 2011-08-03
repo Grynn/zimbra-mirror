@@ -39,8 +39,8 @@ import javax.xml.bind.annotation.XmlType;
 public class testGetTaskSummariesResponse {
 
     @XmlElements({
-        @XmlElement(name = "task", type = testLegacyTaskData.class),
-        @XmlElement(name = "appt", type = testLegacyAppointmentData.class)
+        @XmlElement(name = "appt", type = testLegacyAppointmentData.class),
+        @XmlElement(name = "task", type = testLegacyTaskData.class)
     })
     protected List<testLegacyCalendaringData> apptOrTask;
 
@@ -62,8 +62,8 @@ public class testGetTaskSummariesResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testLegacyTaskData }
      * {@link testLegacyAppointmentData }
+     * {@link testLegacyTaskData }
      * 
      * 
      */

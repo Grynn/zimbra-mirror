@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="calresource"/>
  *     &lt;enumeration value="cos"/>
  *     &lt;enumeration value="dl"/>
+ *     &lt;enumeration value="group"/>
  *     &lt;enumeration value="domain"/>
  *     &lt;enumeration value="server"/>
  *     &lt;enumeration value="xmppcomponent"/>
@@ -41,6 +42,8 @@ public enum testTargetType {
     COS("cos"),
     @XmlEnumValue("dl")
     DL("dl"),
+    @XmlEnumValue("group")
+    GROUP("group"),
     @XmlEnumValue("domain")
     DOMAIN("domain"),
     @XmlEnumValue("server")

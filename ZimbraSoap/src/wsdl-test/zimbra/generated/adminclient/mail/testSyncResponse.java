@@ -56,17 +56,17 @@ public class testSyncResponse {
 
     protected testSyncDeletedInfo deleted;
     @XmlElements({
-        @XmlElement(name = "c", type = testConversationSummary.class),
         @XmlElement(name = "chat", type = testChatSummary.class),
-        @XmlElement(name = "tag", type = testTagInfo.class),
-        @XmlElement(name = "m", type = testMessageSummary.class),
-        @XmlElement(name = "folder", type = testFolder.class),
-        @XmlElement(name = "doc", type = testDocumentInfo.class),
-        @XmlElement(name = "task", type = testTaskItemInfo.class),
         @XmlElement(name = "cn", type = testContactInfo.class),
         @XmlElement(name = "w", type = testCommonDocumentInfo.class),
+        @XmlElement(name = "task", type = testTaskItemInfo.class),
+        @XmlElement(name = "m", type = testMessageSummary.class),
+        @XmlElement(name = "doc", type = testDocumentInfo.class),
+        @XmlElement(name = "folder", type = testFolder.class),
+        @XmlElement(name = "note", type = testNoteInfo.class),
         @XmlElement(name = "appt", type = testCalendarItemInfo.class),
-        @XmlElement(name = "note", type = testNoteInfo.class)
+        @XmlElement(name = "c", type = testConversationSummary.class),
+        @XmlElement(name = "tag", type = testTagInfo.class)
     })
     protected List<Object> folderOrTagOrNote;
     @XmlAttribute(name = "md", required = true)
@@ -120,17 +120,17 @@ public class testSyncResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testConversationSummary }
      * {@link testChatSummary }
-     * {@link testTagInfo }
-     * {@link testMessageSummary }
-     * {@link testFolder }
-     * {@link testDocumentInfo }
-     * {@link testTaskItemInfo }
      * {@link testContactInfo }
      * {@link testCommonDocumentInfo }
-     * {@link testCalendarItemInfo }
+     * {@link testTaskItemInfo }
+     * {@link testMessageSummary }
+     * {@link testDocumentInfo }
+     * {@link testFolder }
      * {@link testNoteInfo }
+     * {@link testCalendarItemInfo }
+     * {@link testConversationSummary }
+     * {@link testTagInfo }
      * 
      * 
      */

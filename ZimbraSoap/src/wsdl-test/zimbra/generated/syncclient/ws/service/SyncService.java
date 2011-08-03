@@ -30,8 +30,8 @@ import zimbra.generated.syncclient.sync.testSuspendDeviceResponse;
 @WebService(name = "SyncService", targetNamespace = "urn:zimbraSync")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    zimbra.generated.syncclient.zm.ObjectFactory.class,
-    zimbra.generated.syncclient.sync.ObjectFactory.class
+    zimbra.generated.syncclient.sync.ObjectFactory.class,
+    zimbra.generated.syncclient.zm.ObjectFactory.class
 })
 public interface SyncService {
 

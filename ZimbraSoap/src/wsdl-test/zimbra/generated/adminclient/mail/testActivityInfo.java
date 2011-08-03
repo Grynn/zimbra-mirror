@@ -24,9 +24,8 @@ import zimbra.generated.adminclient.zm.testNamedValue;
  *       &lt;/sequence>
  *       &lt;attribute name="op" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="ts" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
- *       &lt;attribute name="itemId" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="itemId" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="ver" type="{http://www.w3.org/2001/XMLSchema}int" />
- *       &lt;attribute name="itemName" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="email" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -47,11 +46,9 @@ public class testActivityInfo {
     @XmlAttribute(name = "ts", required = true)
     protected long ts;
     @XmlAttribute(name = "itemId", required = true)
-    protected int itemId;
+    protected String itemId;
     @XmlAttribute(name = "ver")
     protected Integer ver;
-    @XmlAttribute(name = "itemName")
-    protected String itemName;
     @XmlAttribute(name = "email")
     protected String email;
 
@@ -127,16 +124,24 @@ public class testActivityInfo {
     /**
      * Gets the value of the itemId property.
      * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
-    public int getItemId() {
+    public String getItemId() {
         return itemId;
     }
 
     /**
      * Sets the value of the itemId property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
-    public void setItemId(int value) {
+    public void setItemId(String value) {
         this.itemId = value;
     }
 
@@ -162,30 +167,6 @@ public class testActivityInfo {
      */
     public void setVer(Integer value) {
         this.ver = value;
-    }
-
-    /**
-     * Gets the value of the itemName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getItemName() {
-        return itemName;
-    }
-
-    /**
-     * Sets the value of the itemName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setItemName(String value) {
-        this.itemName = value;
     }
 
     /**

@@ -246,8 +246,8 @@ public class testSearchConvResponse {
     public static class Info {
 
         @XmlElements({
-            @XmlElement(name = "wildcard", type = testWildcardExpansionQueryInfo.class),
-            @XmlElement(name = "spell", type = testSpellingSuggestionsQueryInfo.class)
+            @XmlElement(name = "spell", type = testSpellingSuggestionsQueryInfo.class),
+            @XmlElement(name = "wildcard", type = testWildcardExpansionQueryInfo.class)
         })
         protected List<Object> spellOrWildcard;
 
@@ -269,8 +269,8 @@ public class testSearchConvResponse {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link testWildcardExpansionQueryInfo }
          * {@link testSpellingSuggestionsQueryInfo }
+         * {@link testWildcardExpansionQueryInfo }
          * 
          * 
          */

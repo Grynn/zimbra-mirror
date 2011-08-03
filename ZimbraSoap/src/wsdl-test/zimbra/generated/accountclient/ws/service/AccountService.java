@@ -74,8 +74,8 @@ import zimbra.generated.accountclient.account.testUpdateProfileResponse;
 @WebService(name = "AccountService", targetNamespace = "urn:zimbraAccount")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    zimbra.generated.accountclient.account.ObjectFactory.class,
-    zimbra.generated.accountclient.zm.ObjectFactory.class
+    zimbra.generated.accountclient.zm.ObjectFactory.class,
+    zimbra.generated.accountclient.account.ObjectFactory.class
 })
 public interface AccountService {
 
