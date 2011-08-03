@@ -90,8 +90,8 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item_dumpster (
    flags         INTEGER NOT NULL DEFAULT 0,
    tags          BIGINT NOT NULL DEFAULT 0,
    sender        VARCHAR(128),
-   subject       TEXT,
    recipients    VARCHAR(128),
+   subject       TEXT,
    name          VARCHAR(128),               -- namespace entry for item (e.g. tag name, folder name, document filename)
    metadata      MEDIUMTEXT,
    mod_metadata  INTEGER UNSIGNED NOT NULL,  -- change number for last row modification
