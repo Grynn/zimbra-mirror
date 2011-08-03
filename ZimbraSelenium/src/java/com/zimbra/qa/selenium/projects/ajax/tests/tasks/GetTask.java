@@ -158,7 +158,7 @@ public class GetTask extends AjaxCommonTest {
 		// Create the message data to be sent
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		String bodyText = "text" + ZimbraSeleniumProperties.getUniqueString();
-		String bodyHTML = "text <strong>bold"+ ZimbraSeleniumProperties.getUniqueString() +"</strong> text";
+		String bodyHTML = "text<strong>bold"+ ZimbraSeleniumProperties.getUniqueString() +"</strong>text";
 		String contentHTML = XmlStringUtil.escapeXml(
 				"<html>" +
 				"<head></head>" +
@@ -185,8 +185,8 @@ public class GetTask extends AjaxCommonTest {
 				"</m>" +
 		"</CreateTaskRequest>");
 
-		String calItemId = app.zGetActiveAccount().soapSelectValue(
-				"//mail:CreateTaskResponse", "calItemId");
+	/*	String calItemId = app.zGetActiveAccount().soapSelectValue(
+				"//mail:CreateTaskResponse", "calItemId");*/
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
@@ -202,12 +202,16 @@ public class GetTask extends AjaxCommonTest {
 
 		// Verify the To, From, Subject, Body
 		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.Subject), subject, "Verify the subject matches");		
+		
+		// Verify HTML content
+		String htmlbodytext = app.zPageTasks.zGetHtmlBodyText();
+		ZAssert.assertStringContains(htmlbodytext.toLowerCase(), bodyHTML,"Verify the html content of task body");
 
 		// Verify HTML content through show original window
-		String EmailAddress = app.zGetActiveAccount().EmailAddress;
+	/*	String EmailAddress = app.zGetActiveAccount().EmailAddress;
 		String showOrigBody = app.zPageTasks.GetShowOrigBodyText(EmailAddress,calItemId);
 		String bodyHtml = bodyHTML.trim().replaceAll(" ", "");
-		ZAssert.assertStringContains(showOrigBody, bodyHtml,"Verify the content matches");		
+		ZAssert.assertStringContains(showOrigBody, bodyHtml,"Verify the content matches");	*/	
 		
 	}
 
