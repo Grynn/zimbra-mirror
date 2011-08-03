@@ -6,7 +6,7 @@
 #include "..\Exchange\MapiUtils.h"
 
 LPCWSTR lpProfileName=L"testprofile";
-LPCWSTR lpServerAddress=L"10.117.82.163";
+LPCWSTR lpServerAddress=L"10.117.82.161";
 LPCWSTR lpAdminUser = L"admin@zcs2.zmexch.in.zimbra.com";
 LPCWSTR lpAccountUser = L"av1@zcs2.zmexch.in.zimbra.com";
 LPCWSTR lpAccountUserPwd=L"test123";
@@ -114,6 +114,21 @@ void ZCFileUploadTest()
 	}
 }
 
+//get messages
+void travrese_folder(Zimbra::MAPI::MAPIFolder &folder)
+{
+	Zimbra::MAPI::MessageIterator msgIter;
+	folder.GetMessageIterator( msgIter );
+	Zimbra::MAPI::MAPIMessage msg;
+	while (msgIter.GetNext(msg))
+	{
+		LPTSTR subject=NULL;
+		if(msg.Subject(&subject))
+			printf("\tsubject--%S\n",subject);
+	}
+}
+
+//iterate folders hierarchy
 bool iterate_folders(Zimbra::MAPI::MAPIFolder &folder)
 {
 	Zimbra::MAPI::FolderIterator folderIter;
@@ -129,6 +144,8 @@ bool iterate_folders(Zimbra::MAPI::MAPIFolder &folder)
 			ULONG itemCount=0;
 			childFolder.GetItemCount(itemCount);
 			printf("FolderName: %S ----- %d\n",childFolder.Name().c_str(),itemCount );
+			
+			travrese_folder(childFolder);
 		}
 		if( bMore )
 		{
@@ -197,12 +214,27 @@ int main(int argc, TCHAR *argv[])
 */
 
 	Zimbra::MAPI::MAPISession *p_zmmapisession = new Zimbra::MAPI::MAPISession();
-	p_zmmapisession->Logon();
-	Zimbra::MAPI::MAPIStore store;
-	p_zmmapisession->OpenDefaultStore(store);
+	p_zmmapisession->Logon(L"Outlook");
+	Zimbra::MAPI::MAPIStore defaultStore;
+	Zimbra::MAPI::MAPIStore userStore;
+	p_zmmapisession->OpenDefaultStore(defaultStore);
+
+	LPSTR ExchangeServerDN=NULL;
+	LPSTR ExchangeUserDN=NULL;
+	Zimbra::MAPI::Util::GetUserDnAndServerDnFromProfile(p_zmmapisession->GetMAPISessionObject(), ExchangeServerDN, ExchangeUserDN);
+
+	LPWSTR pwstrExchangeServerDN=NULL;
+	AtoW(ExchangeServerDN,pwstrExchangeServerDN);
+
+	wstring wstruserdn;
+	Zimbra::MAPI::Util::GetUserDN(lpServerAddress, L"appt1",wstruserdn);
+	p_zmmapisession->OpenOtherStore(defaultStore.GetInternalMAPIStore(),pwstrExchangeServerDN, (LPWSTR)wstruserdn.c_str(),userStore);
+	SafeDelete(ExchangeServerDN);
+	SafeDelete(ExchangeUserDN);
+	SafeDelete(pwstrExchangeServerDN);
 
 	Zimbra::MAPI::MAPIFolder rootFolder;
-	store.GetRootFolder(rootFolder);
+	userStore.GetRootFolder(rootFolder);
 	
 	iterate_folders(rootFolder);
 	delete p_zmmapisession;

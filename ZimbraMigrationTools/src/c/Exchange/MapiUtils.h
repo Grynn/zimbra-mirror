@@ -476,6 +476,7 @@ HRESULT MailboxLogon( LPMAPISESSION pSession, LPMDB pMdb, LPWSTR pStoreDn, LPWST
 HRESULT GetUserDN(LPCWSTR lpszServer, LPCWSTR lpszUser, wstring &wstruserdn);
 HRESULT GetUserDnAndServerDnFromProfile( LPMAPISESSION pSession, LPSTR& pExchangeServerDn, LPSTR& pExchangeUserDn );
 HRESULT HrMAPIFindIPMSubtree(LPMDB lpMdb, SBinary &bin);
+ULONG IMAPHeaderInfoPropTag( LPMAPIPROP lpMapiProp );
 		}
 	}
 }

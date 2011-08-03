@@ -13,6 +13,14 @@ public:
 	virtual ~MAPIFolderException(){};
 };
 
+class MAPIMessageException:public GenericException
+{
+public:
+	MAPIMessageException(HRESULT hrErrCode, LPCWSTR lpszDescription);
+	MAPIMessageException(HRESULT hrErrCode, LPCWSTR lpszDescription,int nLine, LPCSTR strFile);
+	virtual ~MAPIMessageException(){};
+};
+
 class MAPIFolder;
 //Folder Iterator class
 class FolderIterator:public MAPITableIterator
@@ -31,7 +39,9 @@ public:
 	~FolderIterator();
 	virtual LPSPropTagArray GetProps();
 	virtual LPSSortOrderSet GetSortOrder(){return NULL;}
-	virtual LPSRestriction GetRestriction(int isContact = 0){UNREFERENCED_PARAMETER(isContact); return NULL;}
+	virtual LPSRestriction GetRestriction(ULONG TypeMask,FILETIME startDate){UNREFERENCED_PARAMETER(TypeMask);
+	                                                                          UNREFERENCED_PARAMETER(startDate);
+																			  return NULL;}
 	BOOL GetNext( MAPIFolder& folder );
 };
 
@@ -40,7 +50,8 @@ class MAPIMessage;
 class MessageIterator:public MAPITableIterator
 {
 private:
-	typedef enum _MessageIterPropTagIdx{ MI_ENTRYID, MI_DATE, NMSGPROPS } MessageIterPropTagIdx;
+	class MIRestriction;
+	typedef enum _MessageIterPropTagIdx{ MI_ENTRYID, MI_LONGTERM_ENTRYID_FROM_TABLE, MI_DATE, MI_MESSAGE_CLASS, NMSGPROPS } MessageIterPropTagIdx;
 	typedef struct _MessageIterPropTags
 	{
 		ULONG cValues;
@@ -59,19 +70,114 @@ public:
 	virtual ~MessageIterator();
 	virtual LPSPropTagArray GetProps();
 	virtual LPSSortOrderSet GetSortOrder();
-	virtual LPSRestriction GetRestriction(int isContact = 0);
+	virtual LPSRestriction GetRestriction(ULONG TypeMask, FILETIME startDate);
 	BOOL GetNext( MAPIMessage& msg );
 	BOOL GetNext( __int64& date, SBinary& bin );
-
 protected:
-	static MessageIterPropTags  _props;
-	static MessageIterSortOrder _sortOrder;
-	//static MessageIterator::MIRestriction _restriction;
+	static MessageIterPropTags  m_props;
+	static MessageIterSortOrder m_sortOrder;
+	static MessageIterator::MIRestriction m_restriction;
 };
 
+//Restriction class
+class MessageIterator::MIRestriction
+{
+public:
+	MIRestriction();
+	~MIRestriction();		
+	LPSRestriction GetRestriction(ULONG TypeMask, FILETIME startDate);
+private:
+	SRestriction pR[25];
+	SPropValue _propValCont;
+	SPropValue _propValMail;
+	SPropValue _propValCTime;
+	SPropValue _propValSTime;
+	SPropValue _propValCanbeMail;
+	SPropValue _propValCanbeMailPost;
+
+	SPropValue _propValAppt;
+	LPWSTR _pApptClass;
+
+	SPropValue _propValTask;
+	LPWSTR _pTaskClass;
+
+	SPropValue _propValReqAndRes;
+	LPWSTR _pReqAndResClass;
+
+	SPropValue _propValDistList;
+	LPWSTR _pDistListClass;
+
+	LPWSTR _pContactClass;
+	LPWSTR _pMailClass;
+
+	SPropValue _propValIMAPHeaderOnly;
+};
+//MAPIMessage Clasc
 class MAPIMessage
 {
+private:
+	//order of the message properties in _pMessagePropVals
+	typedef enum _MessagePropIndex 
+	{ 
+		MESSAGE_CLASS,		MESSAGE_FLAGS,		MESSAGE_DATE, 
+		SENDER_ADDRTYPE,	SENDER_EMAIL_ADDR,	SENDER_NAME,
+		SENDER_ENTRYID,		SUBJECT,			TEXT_BODY,
+		HTML_BODY,			INTERNET_CPID,		MESSAGE_CODEPAGE,
+		LAST_VERB_EXECUTED,	FLAG_STATUS,		ENTRYID,
+		SENT_ADDRTYPE,		SENT_ENTRYID,		SENT_EMAIL_ADDR,
+		SENT_NAME,			REPLY_NAMES,		REPLY_ENTRIES,
+		MIME_HEADERS,		IMPORTANCE,			INTERNET_MESSAGE_ID,
+		DELIVERY_DATE,		URL_NAME,			MESSAGE_SIZE,
+        STORE_SUPPORT_MASK, RTF_IN_SYNC,        NMSGPROPS
+	} MessagePropIndex ;
 
+	//defined so a static variable can hold the message props to retrieve
+	typedef struct _MessagePropTags
+	{
+		ULONG cValues;
+		ULONG aulPropTags[NMSGPROPS];
+	} MessagePropTags ;
+
+	//order of the recipient properties in each row of _pRecipRows
+	typedef enum _RecipientPropIndex 
+	{
+		RDISPLAY_NAME, RENTRYID, RADDRTYPE, REMAIL_ADDRESS, RRECIPIENT_TYPE, RNPROPS
+	} RecipientPropIndex;
+
+	//defined so a static variable can hold the recipient properties to retrieve
+	typedef struct _RecipientPropTags
+	{
+		ULONG cValues;
+		ULONG aulPropTags[RNPROPS];
+	} RecipientPropTags;
+
+	//order of the recipient properties in each row of _pRecipRows
+	typedef enum _ReplyToPropIndex 
+	{
+		REPLYTO_DISPLAY_NAME, REPLYTO_ENTRYID, REPLYTO_ADDRTYPE, REPLYTO_EMAIL_ADDRESS, NREPLYTOPROPS
+	} ReplyToPropIndex;
+
+	//defined so a static variable can hold the recipient properties to retrieve
+	typedef struct _ReplyToPropTags
+	{
+		ULONG cValues;
+		ULONG aulPropTags[NREPLYTOPROPS];
+	} ReplyToPropTags;
+
+	LPMESSAGE	m_pMessage;
+	LPSPropValue m_pMessagePropVals;
+	LPSRowSet	m_pRecipientRows;
+
+	static MessagePropTags m_messagePropTags;
+	static RecipientPropTags m_recipientPropTags;
+	static ReplyToPropTags m_replyToPropTags;
+
+public:
+	MAPIMessage();
+	~MAPIMessage();
+	void Initialize(LPMESSAGE pMessage);
+	void InternalFree();
+	bool Subject(LPTSTR* ppSubject);
 };
 
 //MapiFolder class
@@ -92,6 +198,8 @@ public:
 	wstring Name() { return m_displayname;}
 };
 
+//global declaration
+static ULONG g_ulIMAPHeaderInfoPropTag=PR_NULL;
 } //namespace MAPI
 
 }//namespace Zimbra

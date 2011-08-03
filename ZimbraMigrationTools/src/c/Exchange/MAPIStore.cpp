@@ -39,6 +39,7 @@ void MAPIStore::Initialize(LPMAPISESSION mapisession, LPMDB pMdb)
 {
 	m_Store = pMdb;
 	m_mapiSession = mapisession;
+	g_ulIMAPHeaderInfoPropTag = Zimbra::MAPI::Util::IMAPHeaderInfoPropTag(m_Store);
 }
 
 HRESULT MAPIStore::CompareEntryIDs( SBinary* pBin1, SBinary* pBin2, ULONG &lpulResult)

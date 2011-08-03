@@ -24,7 +24,7 @@ MAPITableIterator::~MAPITableIterator()
 	}
 }
 
-void MAPITableIterator::Initialize(LPMAPITABLE pTable, LPMAPIFOLDER pFolder )
+void MAPITableIterator::Initialize(LPMAPITABLE pTable, LPMAPIFOLDER pFolder,ULONG ulItemTypeMask )
 {
 	HRESULT hr = S_OK;
 	if( m_pTable != NULL )
@@ -47,31 +47,10 @@ void MAPITableIterator::Initialize(LPMAPITABLE pTable, LPMAPIFOLDER pFolder )
 	if( FAILED(hr) )
 		throw GenericException(hr,L"MAPITableIterator::Initialize():SetColumns Failed.",__LINE__,__FILE__);
 	
-	if(GetRestriction() != NULL )
-	{
-		ULONG cVals = 0;
-		int isContact = 0;
-		LPSPropValue pPropVals = NULL;
-
-		//Checking if the parent folder is of Contacts
-		SizedSPropTagArray( 1, tags ) = { 1, {PR_CONTAINER_CLASS} };
-		m_pParentFolder->GetProps( (LPSPropTagArray)&tags, 0, &cVals, &pPropVals );
-		if( (cVals != 0) && (pPropVals->ulPropTag == PR_CONTAINER_CLASS ))
-		{
-			LPWSTR pwszClass = pPropVals->Value.lpszW;
-			if( wcsicmp(pwszClass, L"IPF.Contact") == 0 )
-				isContact = 1;
-		}
-		if( pPropVals != NULL )
-		{
-			MAPIFreeBuffer( pPropVals );
-			pPropVals = NULL;
-		}
-
-		if(FAILED(hr = m_pTable->Restrict( GetRestriction(isContact), 0 )))
+	//to remove
+	FILETIME tmpTime={0,0};
+	if(FAILED(hr = m_pTable->Restrict( GetRestriction(ulItemTypeMask,tmpTime), 0 )))
 			throw GenericException(hr,L"MAPITableIterator::Initialize():Restrict Failed.",__LINE__,__FILE__);
-	}
-
 	if( GetSortOrder() != NULL )
 	{
 		if(FAILED(hr = m_pTable->SortTable( GetSortOrder(), 0 )))

@@ -92,7 +92,12 @@ HRESULT Zimbra::MAPI::Util::MailboxLogon( LPMAPISESSION pSession, LPMDB pMdb, LP
 
 	hr = pSession->OpenMsgStore( 0, storeEID.cb, (LPENTRYID)storeEID.lpb, NULL, 
 		MDB_ONLINE | MAPI_BEST_ACCESS | MDB_NO_MAIL | MDB_TEMPORARY | MDB_NO_DIALOG , ppMdb);
-	if( hr == MAPI_E_UNKNOWN_FLAGS )
+	if(hr == MAPI_E_FAILONEPROVIDER)
+	{
+		hr = pSession->OpenMsgStore( NULL, storeEID.cb, (LPENTRYID)storeEID.lpb, NULL,
+		MDB_ONLINE | MAPI_BEST_ACCESS, ppMdb );
+	}
+	else if( hr == MAPI_E_UNKNOWN_FLAGS )
 	{
 		hr = pSession->OpenMsgStore( 0, storeEID.cb, (LPENTRYID)storeEID.lpb, NULL,
 			MAPI_BEST_ACCESS | MDB_NO_MAIL | MDB_TEMPORARY | MDB_NO_DIALOG, ppMdb);
@@ -135,7 +140,7 @@ HRESULT Zimbra::MAPI::Util::GetUserDN(LPCWSTR lpszServer, LPCWSTR lpszUser, wstr
 
 	pDirSearch->SetSearchPreference( searchPrefs, 2 );
 	//Retrieve the "distinguishedName" attribute for the specified dn
-	LPWSTR pAttributes =  L"distinguishedName";
+	LPWSTR pAttributes =  L"legacyExchangeDN";
 	hr = pDirSearch->ExecuteSearch( (LPWSTR)strFilter.c_str(), &pAttributes, 1, &hSearch );
 
 	if( FAILED(hr) )
@@ -238,4 +243,30 @@ HRESULT Zimbra::MAPI::Util::HrMAPIFindIPMSubtree(LPMDB lpMdb, SBinary &bin)
 	CopyMemory(bin.lpb, lpEID->Value.bin.lpb, lpEID->Value.bin.cb);
 	
 	return S_OK;
+}
+
+ULONG Zimbra::MAPI::Util::IMAPHeaderInfoPropTag( LPMAPIPROP lpMapiProp )
+{
+	HRESULT         hRes = S_OK;
+	LPSPropTagArray lpNamedPropTag = NULL;
+	MAPINAMEID      NamedID = {0};
+	LPMAPINAMEID    lpNamedID = NULL;
+
+	ULONG ulIMAPHeaderPropTag = PR_NULL ;
+
+	NamedID.lpguid = (LPGUID) &PSETID_COMMON;
+	NamedID.ulKind = MNID_ID;
+	NamedID.Kind.lID = DISPID_HEADER_ITEM;
+	lpNamedID = &NamedID;
+
+	hRes = lpMapiProp->GetIDsFromNames(1, &lpNamedID, NULL, &lpNamedPropTag);
+
+	if( SUCCEEDED( hRes ) && PROP_TYPE(lpNamedPropTag->aulPropTag[0]) != PT_ERROR )
+	{
+		lpNamedPropTag->aulPropTag[0] = CHANGE_PROP_TYPE(lpNamedPropTag->aulPropTag[0], PT_LONG);
+		ulIMAPHeaderPropTag = lpNamedPropTag->aulPropTag[0] ;
+	}
+	MAPIFreeBuffer(lpNamedPropTag);
+
+	return ulIMAPHeaderPropTag;
 }

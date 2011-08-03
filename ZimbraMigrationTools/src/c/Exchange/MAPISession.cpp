@@ -49,7 +49,7 @@ HRESULT MAPISession::_mapiLogon(LPWSTR strProfile, DWORD dwFlags, LPMAPISESSION 
 
 HRESULT MAPISession::Logon(LPWSTR strProfile)
 {
-	DWORD dwFlags = MAPI_EXTENDED | MAPI_NEW_SESSION | MAPI_EXPLICIT_PROFILE | MAPI_NO_MAIL | fMapiUnicode;
+	DWORD dwFlags = MAPI_EXTENDED | MAPI_NEW_SESSION | MAPI_EXPLICIT_PROFILE | MAPI_NO_MAIL | MAPI_LOGON_UI |fMapiUnicode;
 	return _mapiLogon(strProfile,dwFlags,m_Session);
 }
 
@@ -79,10 +79,15 @@ HRESULT MAPISession::OpenDefaultStore(MAPIStore &Store)
 
 	hr = m_Session->OpenMsgStore( NULL, defMsgStoreEID.cb, (LPENTRYID)defMsgStoreEID.lpb, NULL,
 		MDB_ONLINE | MAPI_BEST_ACCESS | MDB_NO_MAIL | MDB_TEMPORARY | MDB_NO_DIALOG, &pDefaultMDB );
-	if( hr == MAPI_E_UNKNOWN_FLAGS )
+	if(hr == MAPI_E_FAILONEPROVIDER)
 	{
-		if( FAILED(hr = m_Session->OpenMsgStore( NULL, defMsgStoreEID.cb, (LPENTRYID)defMsgStoreEID.lpb, NULL, MAPI_BEST_ACCESS | MDB_NO_MAIL | MDB_TEMPORARY | MDB_NO_DIALOG, &pDefaultMDB )))
-			throw MAPISessionException(hr,L"OpenDefaultStore(): OpenMsgStore Failed.",__LINE__,__FILE__);
+		hr = m_Session->OpenMsgStore( NULL, defMsgStoreEID.cb, (LPENTRYID)defMsgStoreEID.lpb, NULL,
+		MDB_ONLINE | MAPI_BEST_ACCESS | MDB_NO_MAIL | MDB_TEMPORARY, &pDefaultMDB );
+	}
+	else if( hr == MAPI_E_UNKNOWN_FLAGS )
+	{
+		hr = m_Session->OpenMsgStore( NULL, defMsgStoreEID.cb, (LPENTRYID)defMsgStoreEID.lpb, NULL, 
+			MAPI_BEST_ACCESS | MDB_NO_MAIL | MDB_TEMPORARY | MDB_NO_DIALOG, &pDefaultMDB );
 	}
 	
 	if( FAILED(hr) )

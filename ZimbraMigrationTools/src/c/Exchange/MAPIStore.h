@@ -25,6 +25,7 @@ public:
 	void Initialize(LPMAPISESSION mapisession, LPMDB pMdb);
 	HRESULT CompareEntryIDs( SBinary* pBin1, SBinary* pBin2, ULONG &lpulResult);
 	HRESULT GetRootFolder(MAPIFolder &rootFolder);
+	LPMDB GetInternalMAPIStore(){return m_Store;}
 };
 
 

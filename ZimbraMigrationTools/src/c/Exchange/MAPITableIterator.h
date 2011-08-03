@@ -17,12 +17,11 @@ protected:
 public:
 	MAPITableIterator();
 	virtual ~MAPITableIterator();
-	virtual void Initialize( LPMAPITABLE pTable, LPMAPIFOLDER pFolder );
+	virtual void Initialize( LPMAPITABLE pTable, LPMAPIFOLDER pFolder,ULONG ulItemTypeMask=ZCM_ALL);
 	virtual LPSPropTagArray GetProps() = 0;
 	virtual LPSSortOrderSet GetSortOrder() = 0;
-	virtual LPSRestriction GetRestriction(int isContact = 0) = 0;
+	virtual LPSRestriction GetRestriction(ULONG TypeMask, FILETIME startDate) = 0;
 	SRow* GetNext();
-
 };
 
 }
