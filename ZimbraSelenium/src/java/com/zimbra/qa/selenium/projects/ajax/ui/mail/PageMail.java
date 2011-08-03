@@ -407,17 +407,7 @@ public class PageMail extends AbsTab {
 
 		} else if ( (button == Button.B_RESPORTSPAM) || (button == Button.B_RESPORTNOTSPAM) ) {
 
-			page = null;
-			locator = "css=div[id$='__SPAM']";
-			if ( !this.sIsElementPresent(locator) ) {
-				throw new HarnessException("Spam icon not present "+ button);
-			}
-
-			// Check if the button is enabled
-			String attrs = sGetAttribute("xpath=(//div[contains(@id,'__SPAM')])@class");
-			if ( attrs.contains("ZDisabled") ) {
-				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
-			}
+			return (this.zToolbarPressPulldown(Button.B_ACTIONS, button));
 
 		} else if ( button == Button.B_TAG ) {
 
@@ -557,6 +547,17 @@ public class PageMail extends AbsTab {
 			pulldownLocator = "css=td[id$='__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
 			optionLocator = "css=div[id$='__REDIRECT'] td[id$='__REDIRECT_title']";
 			page = new DialogRedirect(this.MyApplication, this);
+
+		} else if ( (pulldown == Button.B_ACTIONS) && ((option == Button.B_RESPORTSPAM) || (option == Button.B_RESPORTNOTSPAM)) ) {
+
+			if ( this.zIsVisiblePerPosition("css=div#ztb__CLV", 0, 0) ) {
+				pulldownLocator = "css=td[id$='zb__CLV__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+				optionLocator = "css=div[id='zm__CLV'] tr[id='POPUP_SPAM'] td[id='zmi__CLV__SPAM_title']";
+			} else {
+				pulldownLocator = "css=td[id='zb__TV__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+				optionLocator = "css=div[id='zm__TV'] tr[id='POPUP_SPAM'] td[id='zmi__TV__SPAM_title']";
+			}
+			page = null;
 
 		} else if ((pulldown == Button.B_OPTIONS)&& (option == Button.O_ADD_SIGNATURE)) {
 
