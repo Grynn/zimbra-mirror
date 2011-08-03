@@ -8,7 +8,6 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
-import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -63,8 +62,8 @@ public class Bug57468 extends AjaxCommonTest {
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageMain.zWaitForDesktopLoadingSpinner(5000);
 
-		// Collapse the inbox
-		app.zTreeMail.zTreeItem(Action.A_TREE_COLLAPSE, inbox);
+		// Collapse all the mail folder trees
+		app.zTreeMail.zCollapseAll();
 
 		// Send a message to the test account
 		ZimbraAccount.AccountA().soapSend(

@@ -444,6 +444,32 @@ public class TreeMail extends AbsTree {
       return isCollapsed;
 	}
 
+	public boolean zCollapseAll() throws HarnessException {
+      // Browse all inventory in case of multiple accounts situation
+	   int i = 1;
+	   String locator = null;
+	   String expandCollapseLocator = null;
+	   boolean isCollapsed = true;
+	   for (i = 1; i < 100; i++) {
+	      locator = Locators.multipleTrees.replace("<NUM>",
+	            Integer.toString(i));
+	      if (!sIsElementPresent(locator)) {
+	         break;
+	      } else {
+	         expandCollapseLocator = Locators.multipleTreesExpandCollapseButton.replace("<NUM>",
+	               Integer.toString(i));
+	         expandCollapseLocator = expandCollapseLocator.replace(
+	               "ImgNode", "ImgNodeExpanded");
+	         if (sIsElementPresent(expandCollapseLocator)) {
+	            zClickAt(Locators.multipleTreesExpandCollapseButton.replace("<NUM>",
+	                  Integer.toString(i)), "0,0");
+	         }
+	      }
+	   }
+
+	   return isCollapsed;
+	}
+
 	protected AbsPage zTreeItem(Action action, SavedSearchFolderItem savedSearch) throws HarnessException {
 		AbsPage page = null;
 		String locator = null;

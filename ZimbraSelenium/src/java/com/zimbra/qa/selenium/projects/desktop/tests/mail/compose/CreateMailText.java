@@ -69,6 +69,7 @@ public class CreateMailText extends AjaxCommonTest {
 		mailform.zSubmit();
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
 		MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ mail.dSubject +")");
 
@@ -114,6 +115,7 @@ public class CreateMailText extends AjaxCommonTest {
 		mailform.zSubmit();
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
 		// From the receipient end, make sure the message is received
 		MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ mail.dSubject +")");
@@ -145,7 +147,7 @@ public class CreateMailText extends AjaxCommonTest {
 		mailform.zSubmit();
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+      app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
       MailItem sent = MailItem.importFromSOAP(app.zGetActiveAccount(), "in:sent subject:("+ mail.dSubject +")");
 		ZAssert.assertNotNull(sent, "Verify the message is in the sent folder");
@@ -195,6 +197,7 @@ public class CreateMailText extends AjaxCommonTest {
 		mailform.zSubmit();
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+		app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 				
 		MailItem sent = MailItem.importFromSOAP(app.zGetActiveAccount(), "in:sent subject:("+ mail.dSubject +")");
 		ZAssert.assertNotNull(sent, "Verify the message is in the sent folder");
@@ -252,7 +255,7 @@ public class CreateMailText extends AjaxCommonTest {
 		mailform.zSubmit();
 
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-      app.zPageBriefcase.zWaitForDesktopLoadingSpinner(5000);
+      app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
 		MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
 		ZAssert.assertNotNull(received, "Verify the message is received");
@@ -295,7 +298,7 @@ public class CreateMailText extends AjaxCommonTest {
       mailform.zSubmit();
 
       GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-      app.zPageMain.zWaitForDesktopLoadingSpinner(5000);
+      app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
       //Switch the main account to be destAccount
       app.zSetActiveAcount(destAccount);
@@ -353,7 +356,7 @@ public class CreateMailText extends AjaxCommonTest {
       mailform.zSubmit();
 
       GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-      app.zPageMain.zWaitForDesktopLoadingSpinner(5000);
+      app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
       //Switch the main account to be destAccount
       app.zSetActiveAcount(destAccount);
@@ -411,7 +414,7 @@ public class CreateMailText extends AjaxCommonTest {
       mailform.zSubmit();
 
       GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-      app.zPageMain.zWaitForDesktopLoadingSpinner(5000);
+      app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
       //Switch the main account to be destAccount
       app.zSetActiveAcount(destAccount);
@@ -487,7 +490,7 @@ public class CreateMailText extends AjaxCommonTest {
       mailform.zSubmit();
 
       GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-      app.zPageMain.zWaitForDesktopLoadingSpinner(5000);
+      app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
       //Switch the main account to be destAccount
       app.zSetActiveAcount(destAccount);
@@ -543,7 +546,7 @@ public class CreateMailText extends AjaxCommonTest {
       mailform.zSubmit();
 
       GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-      app.zPageMain.zWaitForDesktopLoadingSpinner(5000);
+      app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
       //Switch the main account to be destAccount
       app.zSetActiveAcount(destAccount);
@@ -599,7 +602,7 @@ public class CreateMailText extends AjaxCommonTest {
       mailform.zSubmit();
 
       GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-      app.zPageMain.zWaitForDesktopLoadingSpinner(5000);
+      app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
       //Switch the main account to be destAccount
       app.zSetActiveAcount(destAccount);
