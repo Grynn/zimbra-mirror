@@ -104,7 +104,7 @@ public class PageTasks extends AbsTab {
 
 		tracer.trace("Navigate to "+ this.myPageName());
 
-		this.zClick(PageMain.Locators.zAppbarTasks);
+		this.zClickAt(PageMain.Locators.zAppbarTasks,"");
 
 		this.zWaitForBusyOverlay();
 
@@ -895,5 +895,15 @@ public class PageTasks extends AbsTab {
 		}finally{
 			ClientSessionFactory.session().selenium().selectWindow("null");	
 		}
+	}
+	public String zGetHtmlBodyText() throws HarnessException {
+		try {
+			sSelectFrame("css=iframe[id*='zv__MSG_body__iframe']");
+			String bodyhtml = this.sGetHtmlSource();
+			return bodyhtml;
+		} finally {
+			this.sSelectFrame("relative=top");
+		}
+
 	}
 }
