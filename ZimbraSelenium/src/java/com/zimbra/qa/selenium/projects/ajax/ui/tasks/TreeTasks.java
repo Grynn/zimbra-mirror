@@ -13,6 +13,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
 
 
+
 /**
  * @author Matt Rhoades
  *
@@ -60,6 +61,22 @@ public class TreeTasks extends AbsTree {
 						+ locator);
 			}
 			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageTasks);
+		}else if (button == Button.B_TREE_NEWTASKLIST) {
+
+			locator = "css=div[id=ztih__main_Tasks__TASK] div[class^=ImgNewTaskList ZWidget]";
+			page = new DialogCreateTaskFolder(MyApplication,((AppAjaxClient) MyApplication).zPageTasks);
+
+			if (!this.sIsElementPresent(locator)) {
+				throw new HarnessException(
+						"Unable to locate folder in the tree " + locator);
+			}
+
+			this.zClickAt(locator, "0,0");
+
+			zWaitForBusyOverlay();
+
+			return page;
+
 		} else {
 			throw new HarnessException("no logic defined for button " + button);
 		}
@@ -69,7 +86,7 @@ public class TreeTasks extends AbsTree {
 		}
 
 		// Click it
-		this.zClick(locator);
+		this.zClickAt(locator,"");
 
 		// If the app is busy, wait for that to finish
 		this.zWaitForBusyOverlay();
