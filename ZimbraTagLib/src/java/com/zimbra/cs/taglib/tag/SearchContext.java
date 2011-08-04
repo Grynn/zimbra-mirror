@@ -30,9 +30,9 @@ import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 
 public final class SearchContext {
-
-    private static final AtomicLong NEXT_SEARCH_CONTEXT = new AtomicLong(1L);
-    private static final int MAX_QUERY_CACHE = 10;
+    private static final String CACHE_ATTR = "SearchContext.cache";
+    private static final AtomicLong ID_GEN = new AtomicLong(1L);
+    private static final int CACHE_SIZE = 10;
 
     private String mTitle; // title to put in html page
     private String mBackTo; // text to use for "back to..."
@@ -101,15 +101,15 @@ public final class SearchContext {
     private int mItemIndex; // index into search results
     private String mId; // my search context id
 
-    public static SearchContext getSearchContext(PageContext ctxt, String searchContext) {
-        if (Strings.isNullOrEmpty(searchContext)) {
+    public static SearchContext getSearchContext(PageContext ctxt, String key) {
+        if (Strings.isNullOrEmpty(key)) {
             return null;
         }
-        return getSearchContextCache(ctxt).get(searchContext);
+        return getSearchContextCache(ctxt).get(key);
     }
 
     public static SearchContext newSearchContext(PageContext ctxt) {
-        SearchContext sc = new SearchContext(String.valueOf(NEXT_SEARCH_CONTEXT.getAndIncrement()));
+        SearchContext sc = new SearchContext(String.valueOf(ID_GEN.getAndIncrement()));
         getSearchContextCache(ctxt).put(sc.getId(), sc);
         return sc;
     }
@@ -117,11 +117,11 @@ public final class SearchContext {
     private static Map<String, SearchContext> getSearchContextCache(PageContext ctxt) {
         synchronized (ctxt.getSession()) {
             @SuppressWarnings("unchecked")
-            Map<String, SearchContext> cache = (Map<String, SearchContext>) ctxt.getAttribute(
-                    "SearchTag.queryCache", PageContext.SESSION_SCOPE);
+            Map<String, SearchContext> cache = (Map<String, SearchContext>) ctxt.getAttribute(CACHE_ATTR,
+                    PageContext.SESSION_SCOPE);
             if (cache == null) {
-                cache = new MapMaker().concurrencyLevel(1).maximumSize(MAX_QUERY_CACHE).makeMap();
-                ctxt.setAttribute("SearchTag.queryCache", cache, PageContext.SESSION_SCOPE);
+                cache = new MapMaker().concurrencyLevel(1).maximumSize(CACHE_SIZE).makeMap();
+                ctxt.setAttribute(CACHE_ATTR, cache, PageContext.SESSION_SCOPE);
             }
             return cache;
         }

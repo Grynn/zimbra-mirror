@@ -1,19 +1,20 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
- * 
+ * Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011 Zimbra, Inc.
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
 package com.zimbra.cs.taglib.tag;
 
+import com.google.common.collect.MapMaker;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.ZSearchResultBean;
 import com.zimbra.client.ZMailbox;
@@ -21,22 +22,21 @@ import com.zimbra.client.ZMailbox.Fetch;
 import com.zimbra.client.ZMailbox.SearchSortBy;
 import com.zimbra.client.ZSearchParams;
 import com.zimbra.client.ZSearchResult;
-import com.zimbra.common.util.MapUtil;
 
-import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import java.io.IOException;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicLong;
 
-public class SearchTag extends ZimbraSimpleTag {
+public final class SearchTag extends ZimbraSimpleTag {
 
-    private static long sNextSearchContext = 1;
-
+    private static final AtomicLong ID_GEN = new AtomicLong(1L);
     private static final int DEFAULT_SEARCH_LIMIT = 25;
-    private static final int MAX_QUERY_CACHE = 20;
+    private static final int CACHE_SIZE = 20;
+    private static final String CACHE_ATTR = "SearchTag.cache";
 
     private String mVar;
     private long mSearchContext;
@@ -55,7 +55,7 @@ public class SearchTag extends ZimbraSimpleTag {
     private TimeZone mTimeZone;
     private Fetch mFetch;
     private String mField = null;
-    
+
     public void setVar(String var) { this.mVar = var; }
 
     public void setTypes(String types) { this.mTypes = types; }
@@ -94,12 +94,9 @@ public class SearchTag extends ZimbraSimpleTag {
 
     public void setSearchContext(long context) { this.mSearchContext = context; }
 
-    private static synchronized long nextSearchContext() {
-        return sNextSearchContext++;
-    }
-
+    @Override
     public void doTag() throws JspException, IOException {
-        JspContext jctxt = getJspContext();
+        PageContext jctxt = (PageContext) getJspContext();
         try {
             ZMailbox mbox = getMailbox();
 
@@ -132,7 +129,7 @@ public class SearchTag extends ZimbraSimpleTag {
             ZSearchResult searchResults = mConvId == null ? mbox.search(params) : mbox.searchConversation(mConvId, params);
 
             if (mSearchContext != 0) {
-                SearchContext sc = getSearchContext(jctxt, mSearchContext);
+                SearchContext sc = getSearchContextCache(jctxt).get(mSearchContext);
                 if (sc == null) mSearchContext = 0;
                 else sc.setSearchResult(searchResults);
             }
@@ -148,31 +145,29 @@ public class SearchTag extends ZimbraSimpleTag {
         }
     }
 
-    private static Map getSearchContextCache(JspContext ctxt) {
-        Map cache = (Map) ctxt.getAttribute("SearchTag.queryCache", PageContext.SESSION_SCOPE);
-        if (cache == null) {
-            cache = MapUtil.newLruMap(MAX_QUERY_CACHE);
-            ctxt.setAttribute("SearchTag.queryCache", cache, PageContext.SESSION_SCOPE);
+    private static Map<Long, SearchContext> getSearchContextCache(PageContext ctxt) {
+        synchronized (ctxt.getSession()) {
+            @SuppressWarnings("unchecked")
+            Map<Long, SearchContext> cache = (Map<Long, SearchContext>) ctxt.getAttribute(CACHE_ATTR,
+                    PageContext.SESSION_SCOPE);
+            if (cache == null) {
+                cache = new MapMaker().concurrencyLevel(1).maximumSize(CACHE_SIZE).makeMap();
+                ctxt.setAttribute(CACHE_ATTR, cache, PageContext.SESSION_SCOPE);
+            }
+            return cache;
         }
-
-        return cache;
     }
 
-    static SearchContext getSearchContext(JspContext ctxt, long searchContext) {
-        Map cache = getSearchContextCache(ctxt);
-        return (SearchContext) cache.get(searchContext);
-    }
-
-    static long putSearchContext(JspContext ctxt, ZSearchResult result) {
-        long context = nextSearchContext();
-        Map cache = getSearchContextCache(ctxt);
+    private static long putSearchContext(PageContext ctxt, ZSearchResult result) {
+        long id = ID_GEN.getAndIncrement();
+        Map<Long, SearchContext> cache = getSearchContextCache(ctxt);
         SearchContext sc = new SearchContext();
         sc.setSearchResult(result);
-        cache.put(context, sc);
-        return context;
+        cache.put(id, sc);
+        return id;
     }
 
-    public static class SearchContext {
+    public static final class SearchContext {
         private ZSearchResult mResult;
 
         public ZSearchResult getSearchResult() {
