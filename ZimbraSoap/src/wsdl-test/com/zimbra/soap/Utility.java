@@ -107,6 +107,7 @@ public class Utility {
     private static AdminService adminSvcEIF = null;
     private static AdminService nvAdminSvcEIF = null;
     private static MailService mailSvcEIF = null;
+    private static MailService nvMailSvcEIF = null;
     private static String adminAuthToken = null;
     private static Map<String,String> acctAuthToks = Maps.newHashMap();
 
@@ -260,6 +261,14 @@ public class Utility {
             Utility.setMailSvcEIF(mailSvc.getMailServicePort(feature));
         }
         return mailSvcEIF;
+    }
+
+    public static MailService getNonValidatingMailSvcEIF() throws Exception {
+        if (nvMailSvcEIF == null) {
+            MailService_Service mailSvc = new MailService_Service();
+            nvMailSvcEIF = mailSvc.getMailServicePort();
+        }
+        return nvMailSvcEIF;
     }
 
     public static void setUpToAcceptAllHttpsServerCerts() {
