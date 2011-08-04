@@ -195,16 +195,49 @@ function(imageName, styleStr, attrStr, wrapInTable, _disabled) {
                     ctx.clearRect(0,0,width,height);
 
                     ctx.save();
-                    ctx.drawImage(document.getElementById(maskName),mask.l,mask.t);
-                    ctx.globalCompositeOperation = "source-out";
-                    ctx.fillStyle = color;
-                    ctx.fillRect(0,0,width,height);
-                    ctx.restore();
-
-                    ctx.drawImage(document.getElementById(overlayName),overlay.l,overlay.t);
-                    ctx.restore();
-
-                    overlay[color] = canvas.toDataURL();
+	                var imgId = attrStr;
+	                if (!imgId) {
+		                imgId = Dwt.getNextId("CANVAS_IMG_");  //create an imgId in case we need to update the img.src for an element without an id
+		                attrStr = "img='" + imgId + "'";
+	                }
+	                else {
+		                var match = attrStr.match(/id=[\"\']([^\"\']+)[\"\']+/);
+		                if (match && match.length > 1) {
+			                imgId = match[1]; //extract the ID value
+		                }
+		                AjxDebug.println(AjxDebug.TAG_ICON, "imgId = " + imgId);
+	                }
+	                var maskElement = document.getElementById(maskName);
+	                var overlayElement = document.getElementById(overlayName);
+	                if (!maskElement.complete || !overlayElement.complete) {
+		                AjxDebug.println(AjxDebug.TAG_ICON, "mask status = " + maskElement.complete + " for " + imgId);
+		                AjxDebug.println(AjxDebug.TAG_ICON, "overlay status = " + overlayElement.complete + " for " + imgId);
+						var maskImg = new Image();
+						maskImg.onload = function() {
+							AjxDebug.println(AjxDebug.TAG_ICON, "mask image loaded");
+							var overlayImg = new Image();
+							overlayImg.onload = function() {
+								AjxImg._drawCanvasImage(ctx, maskElement, overlayElement, mask, overlay, color, width, height)
+								AjxDebug.println(AjxDebug.TAG_ICON, "overlay image loaded");
+								var el = document.getElementById(imgId);
+								if (el) {
+									AjxDebug.println(AjxDebug.TAG_ICON, "element found for id = " + imgId);
+									el.src = canvas.toDataURL();
+									overlay[color] = canvas.toDataURL(); //only save if successful
+								}
+								else {
+									AjxDebug.println(AjxDebug.TAG_ICON, "no element found for id = " + imgId);
+								}
+							}
+							overlayImg.src = document.getElementById(overlayName).src;
+	                    }
+	                    maskImg.src = document.getElementById(maskName).src;
+	                }
+	                else {
+		                //image already downloaded
+		                AjxImg._drawCanvasImage(ctx, maskElement, overlayElement, mask, overlay, color, width, height);
+		                overlay[color] = canvas.toDataURL();
+	                }
                 }
 
                 html = [
@@ -251,4 +284,29 @@ function(imageName, imageStyleStr, attrStr, label, containerClassName) {
     ];
 
 	return html.join("");
+};
+
+/**
+ * Helper method to draw the image using both the mask image and the overlay image
+ * 
+ * @param ctx  {Object} canvas context
+ * @param maskImg   {HtmlElement} mask image object
+ * @param overlayImg {HtmlElement} overlay image object
+ * @param mask  {Object} mask object
+ * @param overlay {Object} overlay object
+ * @param color {String} color for fill
+ * @param width {int} width
+ * @param height {int} height
+ * 
+ * @private
+ */
+AjxImg._drawCanvasImage = 
+function(ctx, maskImg, overlayImg, mask, overlay, color, width, height) {
+	ctx.drawImage(maskImg, mask.l, mask.t);
+	ctx.globalCompositeOperation = "source-out";
+	ctx.fillStyle = color;
+	ctx.fillRect(0, 0, width, height);
+	ctx.restore();
+	ctx.drawImage(overlayImg, overlay.l, overlay.t);
+	ctx.restore();	
 };
