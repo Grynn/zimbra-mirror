@@ -45,19 +45,15 @@ public class DialogMove extends AbsDialog {
 
 		if (button == Button.B_NEW) {
 
-			// TODO: L10N this
-			locator = "//div[@id='" + Locators.zDialogId + "']//div[@id='"+ Locators.zDialogButtonsId + "']//td[text()='New']";
-			throw new HarnessException("implement me!");
+			locator = "css=div[id='ChooseFolderDialog_buttons'] td[id^='New_'] td[id$='_title']";
 
 		} else if (button == Button.B_OK) {
 
-			// TODO: L10N this
-			locator = "//div[@id='" + Locators.zDialogId + "']//div[@id='"+ Locators.zDialogButtonsId + "']//td[text()='OK']";
+			locator = "css=div[id='ChooseFolderDialog_buttons'] td[id^='OK_'] td[id$='_title']";
 
 		} else if (button == Button.B_CANCEL) {
 
-			// TODO: L10N this
-			locator = "//div[@id='" + Locators.zDialogId + "']//div[@id='"+ Locators.zDialogButtonsId + "']//td[text()='Cancel']";
+			locator = "css=div[id='ChooseFolderDialog_buttons'] td[id^='Cancel_'] td[id$='_title']";
 
 		} else {
 			throw new HarnessException("Button " + button + " not implemented");
@@ -89,7 +85,7 @@ public class DialogMove extends AbsDialog {
 
 		logger.info(myPageName() + " zIsActive()");
 
-		String locator = "id="+ Locators.zDialogId;
+		String locator = "css=div[id='"+ Locators.zDialogId +"']";
 		
 		if ( !this.sIsElementPresent(locator) ) {
 			return (false); // Not even present
@@ -110,7 +106,7 @@ public class DialogMove extends AbsDialog {
 	 * @param folder
 	 */
 	public void zEnterFolderName(String folder) throws HarnessException {
-		String locator = "//div[contains(@id, '_inputDivId')]/div/input";
+		String locator = "css=div[id='ChooseFolderDialog_inputDivId']>div>input";
 		
 		if ( !this.sIsElementPresent(locator) )
 			throw new HarnessException("unable to find folder name field "+ locator);
