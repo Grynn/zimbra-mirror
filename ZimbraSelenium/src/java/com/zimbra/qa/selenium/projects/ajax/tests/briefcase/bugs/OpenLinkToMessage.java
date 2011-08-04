@@ -95,7 +95,7 @@ public class OpenLinkToMessage extends AjaxCommonTest {
 
 		ZAssert
 				.assertTrue(app.zPageBriefcase
-						.sIsElementPresent(PageMail.Locators.zTVRows),
+						.sIsElementPresent(PageMail.Locators.cssTVRowsLocator),
 						"Verify List View Rows are displayed after message pane is closed");
 	}
 

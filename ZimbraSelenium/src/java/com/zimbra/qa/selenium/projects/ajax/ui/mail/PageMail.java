@@ -174,9 +174,10 @@ public class PageMail extends AbsTab {
 		//			+ localize(locator.mail) + "_title";
 
 
-		public static final String zCLVRows			= "zl__CLV__rows";
-		public static final String zTVRows			= "zl__TV__rows";
-
+//		public static final String zCLVRows			= "zl__CLV__rows";
+//		public static final String zTVRows			= "zl__TV__rows";
+		public static final String cssTVRowsLocator	= "css=div#zl__TV__rows";
+		
 		public static class CONTEXT_MENU {
 			// TODO: Until https://bugzilla.zimbra.com/show_bug.cgi?id=56273 is fixed, ContextMenuItem will be defined using the text content
 			public static String stringToReplace = "<ITEM_NAME>";
@@ -672,12 +673,10 @@ public class PageMail extends AbsTab {
 	 * @throws HarnessException
 	 */
 	public PageMailView zGetPropMailView() throws HarnessException {
-		if ( sIsElementPresent( "id="+ Locators.zViewMenuTVBtnID ) &&
-				zIsVisiblePerPosition("id="+ Locators.zViewMenuTVBtnID, 0, 0)) {
-			return (PageMailView.BY_MESSAGE);
-		} else if ( sIsElementPresent( "id="+ Locators.zViewMenuCLVBtnID ) &&
-				zIsVisiblePerPosition("id="+ Locators.zViewMenuCLVBtnID, 0, 0)) {
+		if ( this.zIsVisiblePerPosition("css=div#zv__CLV", 0, 0) ) {
 			return (PageMailView.BY_CONVERSATION);
+		} else if ( this.zIsVisiblePerPosition("css=div#zv__TV", 0, 0) ) {
+			return (PageMailView.BY_MESSAGE);
 		}
 
 		throw new HarnessException("Unable to determine the Page Mail View");
@@ -838,6 +837,12 @@ public class PageMail extends AbsTab {
 
 		tracer.trace(action +" on subject = "+ subject);
 
+		if ( action == null )
+			throw new HarnessException("action cannot be null");
+		
+		if ( subject == null )
+			throw new HarnessException("subject cannot be null");
+		
 		AbsPage page = null;
 		String listLocator;
 		String rowLocator;
@@ -848,11 +853,11 @@ public class PageMail extends AbsTab {
 		//
 
 		if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-			listLocator = "//div[@id='zl__TV__rows']";
-			rowLocator = "//div[contains(@id, 'zli__TV__')]";
+			listLocator = "css=div[id='zl__TV__rows']";
+			rowLocator = "div[id^='zli__TV__']";
 		} else {
-			listLocator = "//div[@id='zl__CLV__rows']";
-			rowLocator = "//div[contains(@id, 'zli__CLV__')]";
+			listLocator = "css=div[id='zl__CLV__rows']";
+			rowLocator = "div[id^='zli__CLV__']";
 		}
 
 		// TODO: how to handle both messages and conversations, maybe check the view first?
@@ -860,20 +865,14 @@ public class PageMail extends AbsTab {
 			throw new HarnessException("List View Rows is not present "+ listLocator);
 
 		// How many items are in the table?
-		int count = this.sGetXpathCount(listLocator + rowLocator);
+		int count = this.sGetCssCount(listLocator + " " + rowLocator);
 		logger.debug(myPageName() + " zListSelectItem: number of list items: "+ count);
 
 		// Get each conversation's data from the table list
 		for (int i = 1; i <= count; i++) {
 
-			itemlocator = listLocator + "/div["+ i +"]";
-			String subjectlocator;
-
-			// Look for the subject
-
-			// Subject - Fragment
-			subjectlocator = itemlocator + "//td[contains(@id, '__su')]";
-			String s = this.sGetText(subjectlocator).trim();
+			itemlocator = listLocator + " div:nth-of-type("+ i +") ";
+			String s = this.sGetText(itemlocator + " td[id$='__su']").trim();
 
 			if ( s.contains(subject) ) {
 				break; // found it
@@ -918,11 +917,11 @@ public class PageMail extends AbsTab {
 
 		} else if ( action == Action.A_MAIL_CHECKBOX ) {
 
-			String selectlocator = itemlocator + "//div[contains(@id, '__se')]";
+			String selectlocator = itemlocator + " div[id$='__se']";
 			if ( !this.sIsElementPresent(selectlocator) )
 				throw new HarnessException("Checkbox locator is not present "+ selectlocator);
 
-			String image = this.sGetAttribute("xpath="+ selectlocator +"@class");
+			String image = this.sGetAttribute(selectlocator +"@class");
 			if ( image.equals("ImgCheckboxChecked") )
 				throw new HarnessException("Trying to check box, but it was already enabled");
 
@@ -938,11 +937,11 @@ public class PageMail extends AbsTab {
 
 		} else if ( action == Action.A_MAIL_UNCHECKBOX ) {
 
-			String selectlocator = itemlocator + "//div[contains(@id, '__se')]";
+			String selectlocator = itemlocator + " div[id$='__se']";
 			if ( !this.sIsElementPresent(selectlocator) )
 				throw new HarnessException("Checkbox locator is not present "+ selectlocator);
 
-			String image = this.sGetAttribute("xpath="+ selectlocator +"@class");
+			String image = this.sGetAttribute(selectlocator +"@class");
 			if ( image.equals("ImgCheckboxUnchecked") )
 				throw new HarnessException("Trying to uncheck box, but it was already disabled");
 
@@ -958,11 +957,11 @@ public class PageMail extends AbsTab {
 
 		} else if ( action == Action.A_MAIL_EXPANDCONVERSATION ) {
 
-			String selectlocator = itemlocator + "//div[contains(@id, '__ex')]";
+			String selectlocator = itemlocator + " div[id$='__ex']";
 			if ( !this.sIsElementPresent(selectlocator) )
 				throw new HarnessException("Checkbox locator is not present "+ selectlocator);
 
-			String image = this.sGetAttribute("xpath="+ selectlocator +"@class");
+			String image = this.sGetAttribute(selectlocator +"@class");
 			if ( image.equals("ImgNodeExpanded") )
 				throw new HarnessException("Trying to expand, but conversation was alread expanded");
 
@@ -976,11 +975,11 @@ public class PageMail extends AbsTab {
 
 		} else if ( action == Action.A_MAIL_COLLAPSECONVERSATION ) {
 
-			String selectlocator = itemlocator + "//div[contains(@id, '__ex')]";
+			String selectlocator = itemlocator + " div[$id$='__ex']";
 			if ( !this.sIsElementPresent(selectlocator) )
 				throw new HarnessException("Checkbox locator is not present "+ selectlocator);
 
-			String image = this.sGetAttribute("xpath="+ selectlocator +"@class");
+			String image = this.sGetAttribute(selectlocator +"@class");
 			if ( image.equals("ImgNodeCollapsed") )
 				throw new HarnessException("Trying to collapse, but conversation was alread collapsed");
 
@@ -995,7 +994,7 @@ public class PageMail extends AbsTab {
 		} else if ( (action == Action.A_MAIL_FLAG) || (action == Action.A_MAIL_UNFLAG) ) {
 			// Both FLAG and UNFLAG have the same action and result
 
-			String flaglocator = itemlocator + "//div[contains(@id, '__fg')]";
+			String flaglocator = itemlocator + " div[id$='__fg']";
 
 			// Left-Click on the flag field
 			this.zClick(flaglocator);
