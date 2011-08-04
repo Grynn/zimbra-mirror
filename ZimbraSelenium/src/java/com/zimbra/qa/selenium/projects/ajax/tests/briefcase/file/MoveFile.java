@@ -47,14 +47,13 @@ public class MoveFile extends AjaxCommonTest {
 				+ "<folder name='" + name + "' l='" + briefcaseFolderId + "'/>"
 				+ "</CreateFolderRequest>");
 
-		FolderItem subFolder = FolderItem.importFromSOAP(account, name);
+		FolderItem subFolderItem = FolderItem.importFromSOAP(account, name);
 
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, folderItem, true);
 
-		// Click on created subfolder
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, subFolder);
+		// Click on created subfolder		
+		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, subFolderItem);
 
 		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
@@ -88,14 +87,20 @@ public class MoveFile extends AjaxCommonTest {
 		// Click on created file
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
-		// Click on Move selected item icon in toolbar
+		// Click on 'Move selected item' icon in toolbar
+		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+		"8.0.")){
+			// Click move -> subfolder
+			app.zPageBriefcase.zToolbarPressPulldown(Button.B_MOVE, subFolderItem);
+		}else{
 		DialogMove chooseFolder = (DialogMove) app.zPageBriefcase
 				.zToolbarPressButton(Button.B_MOVE, fileItem);
 
 		// Click OK on Confirmation dialog
-		chooseFolder.zClickTreeFolder(subFolder);
+		chooseFolder.zClickTreeFolder(subFolderItem);
 		chooseFolder.zClickButton(Button.B_OK);
-
+		}
+		
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, folderItem, false);
 
@@ -104,7 +109,7 @@ public class MoveFile extends AjaxCommonTest {
 				.getName()), "Verify document was moved from the folder");
 
 		// click on subfolder in tree view
-		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolder, true);
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, subFolderItem, true);
 
 		// Verify document was moved to the selected folder
 		boolean present = app.zPageBriefcase.isPresentInListView(fileItem

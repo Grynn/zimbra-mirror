@@ -87,13 +87,19 @@ public class MoveDocument extends AjaxCommonTest {
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click on 'Move selected item' icon in toolbar
+		if (ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+		"8.0.")){
+			// Click move -> subfolder
+			app.zPageBriefcase.zToolbarPressPulldown(Button.B_MOVE, subFolderItem);
+		}else{
 		DialogMove chooseFolder = (DialogMove) app.zPageBriefcase
 				.zToolbarPressButton(Button.B_MOVE, docItem);
-
+		
 		// Choose folder and click OK on Confirmation dialog
 		chooseFolder.zClickTreeFolder(subFolderItem);
 		chooseFolder.zClickButton(Button.B_OK);
-
+		}
+		
 		// refresh briefcase page
 		app.zTreeBriefcase
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);

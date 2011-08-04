@@ -6,6 +6,8 @@ package com.zimbra.qa.selenium.projects.ajax.ui.briefcase;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder.Locators;
 
 /**
  * Represents a "Create New Briefcase Folder" dialog box
@@ -21,20 +23,21 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 
 		public static final String zDialogContentId = "ChooseFolderDialog_content";
 
-		// TODO: Tree
-		public static final String zDialogInputId = "ChooseFolderDialog_inputDivId";
-		public static final String zDialogInputLocator = "css=div[id='"
-				+ zDialogId + "'] div[id='" + zDialogInputId
-				+ "'] > div > input";
+		// Textfields
+		public static final String zNameField = "css=input[id$='_name'][class*='Field']";
 
+		// Buttons
 		public static final String zDialogButtonsId = "ChooseFolderDialog_buttons";
+		public static final String zOkButton = "css=tr>td>div[id*='button2']";
+		public static final String zCancelButton = "css=tr>td>div[id*='button1']";
 
 	}
 
 	public DialogCreateBriefcaseFolder(AbsApplication application, AbsTab tab) {
 		super(application, tab);
-		
-		logger.info("new " + DialogCreateBriefcaseFolder.class.getCanonicalName());
+
+		logger.info("new "
+				+ DialogCreateBriefcaseFolder.class.getCanonicalName());
 
 	}
 
@@ -72,22 +75,18 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 	public AbsPage zClickButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zClickButton(" + button + ")");
 
-		tracer.trace("Click dialog button "+ button);
+		tracer.trace("Click dialog button " + button);
 
 		AbsPage page = null;
 		String locator = null;
 
 		if (button == Button.B_OK) {
 
-			// TODO: L10N this
-			locator = "//div[@id='" + Locators.zDialogId + "']//div[@id='"
-					+ Locators.zDialogButtonsId + "']//td[text()='OK']";
+			locator = Locators.zOkButton;
 
 		} else if (button == Button.B_CANCEL) {
 
-			// TODO: L10N this
-			locator = "//div[@id='" + Locators.zDialogId + "']//div[@id='"
-					+ Locators.zDialogButtonsId + "']//td[text()='Cancel']";
+			locator = Locators.zCancelButton;
 
 		} else {
 			throw new HarnessException("Button " + button + " not implemented");
@@ -107,10 +106,14 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 					+ locator + " not present!");
 		}
 
-		this.zClickAt(locator,"0,0");
+		this.zClickAt(locator, "0,0");
 
 		this.zWaitForBusyOverlay();
 
+		//Check the message queue
+		//Stafpostqueue sp = new Stafpostqueue();
+		//sp.waitForPostqueue();
+		
 		return (page);
 	}
 
@@ -133,20 +136,20 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 	public void zClickTreeFolder(FolderItem folder) throws HarnessException {
 		logger.info(myPageName() + " zClickTreeFolder(" + folder + ")");
 
-		tracer.trace("Click on tree briefcase with name "+ folder.getName());
+		tracer.trace("Click on tree briefcase with name " + folder.getName());
 
 		if (folder == null)
 			throw new HarnessException("folder must not be null");
 
 		String locator = "css=div[id='" + Locators.zDialogId
-				+ "'] td[id='zti__ZmChooseFolderDialog_Mail__" + folder.getId()
+				+ "'] td[id='zti__ZmChooseFolderDialog_Briefcase__" + folder.getId()
 				+ "_textCell']";
 
 		if (!this.sIsElementPresent(locator))
 			throw new HarnessException("unable to find folder in tree "
 					+ locator);
 
-		this.zClickAt(locator,"0,0");
+		this.zClickAt(locator, "0,0");
 
 		this.zWaitForBusyOverlay();
 
@@ -160,12 +163,12 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 	public void zEnterFolderName(String folder) throws HarnessException {
 		logger.info(myPageName() + " zEnterFolderName(" + folder + ")");
 
-		tracer.trace("Enter briefcase name in text box "+ folder);
+		tracer.trace("Enter briefcase name in text box " + folder);
 
 		if (folder == null)
 			throw new HarnessException("folder must not be null");
 
-		String locator = Locators.zDialogInputLocator;
+		String locator = Locators.zNameField;
 
 		if (!this.sIsElementPresent(locator))
 			throw new HarnessException("unable to find folder name field "
@@ -173,11 +176,10 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 
 		// For some reason, the text doesn't get entered on the first try
 		this.sFocus(locator);
-		this.zClickAt(locator,"0,0");
+		this.zClickAt(locator, "0,0");
 		this.sType(locator, folder);
-	
-		this.zWaitForBusyOverlay();
 
+		this.zWaitForBusyOverlay();
 	}
 
 	public enum FolderColor {
@@ -192,7 +194,7 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 	public void zEnterFolderColor(FolderColor color) throws HarnessException {
 		logger.info(myPageName() + " zEnterFolderColor(" + color + ")");
 
-		tracer.trace("Enter color "+ color);
+		tracer.trace("Enter color " + color);
 
 		if (color == null)
 			throw new HarnessException("folder must not be null");

@@ -13,10 +13,12 @@ import com.zimbra.qa.selenium.framework.items.IItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.framework.util.RestUtil;
 import org.apache.commons.httpclient.HttpStatus;
@@ -466,9 +468,52 @@ public class PageBriefcase extends AbsTab {
 						"no logic defined for pulldown/option " + pulldown
 								+ "/" + option);
 			}
+		} else if (pulldown == Button.B_MOVE) {
+
+			if (option == Button.O_NEW_FOLDER) {
+
+				// Check if we are CLV or MV
+				if (this.zIsVisiblePerPosition("css=div#ztb__CLV", 0, 0)) {
+					pulldownLocator = "css=td#zb__CLV__MOVE_MENU_dropdown>div";
+				} else {
+					pulldownLocator = "css=td#zb__TV__MOVE_MENU_dropdown>div";
+				}
+				optionLocator = "css=div[class='DwtFolderChooser'] div[id$='_newButtonDivId'] td[id$='_title']";
+				page = new DialogCreateFolder(this.MyApplication, this);
+
+			} else {
+				throw new HarnessException("no logic defined for B_MOVE and "
+						+ option);
+			}
+
+			// Make sure the locator exists
+			if (!this.sIsElementPresent(pulldownLocator)) {
+				throw new HarnessException(pulldownLocator + " not present!");
+			}
+
+			// 8.0 change ... need zClickAt()
+			// this.zClick(pulldownLocator);
+			this.zClickAt(pulldownLocator, "0,0");
+
+			// If the app is busy, wait for it to become active
+			zWaitForBusyOverlay();
+
+			if (!this.sIsElementPresent(optionLocator)) {
+				throw new HarnessException(optionLocator + " not present!");
+			}
+
+			this.zClick(optionLocator);
+
+			// If the app is busy, wait for it to become active
+			zWaitForBusyOverlay();
+
+			page.zWaitForActive();
+
+			return (page);
+
 		} else {
-			throw new HarnessException("no logic defined for pulldown "
-					+ pulldown);
+			throw new HarnessException("no logic defined for pulldown/option "
+					+ pulldown + "/" + option);
 		}
 
 		// Default behavior
@@ -487,7 +532,7 @@ public class PageBriefcase extends AbsTab {
 			// sMouseDownRight(pulldownLocator);
 			// sMouseUpRight(pulldownLocator);
 
-			if ( zIsBrowserMatch(BrowserMasks.BrowserMaskIE) ) {
+			if (zIsBrowserMatch(BrowserMasks.BrowserMaskIE)) {
 				if (pulldown == Button.B_NEW) {
 					sGetEval("if(document.createEventObject()){var evObj = document.createEventObject(); "
 							+ "var x = selenium.browserbot.findElementOrNull('"
@@ -618,6 +663,88 @@ public class PageBriefcase extends AbsTab {
 				zWaitForBusyOverlay();
 			}
 
+			// If we click on pulldown/option and the page is specified, then
+			// wait for the page to go active
+			if (page != null) {
+				page.zWaitForActive();
+			}
+		}
+		// Return the specified page, or null if not set
+		return (page);
+	}
+
+	/**
+	 * Activate a pulldown with dynamic values, such as "Move to folder" and
+	 * "Add a tag".
+	 * 
+	 * @param pulldown
+	 *            the toolbar button to press
+	 * @param dynamic
+	 *            the toolbar item to click such as FolderItem or TagItem
+	 * @throws HarnessException
+	 */
+	public AbsPage zToolbarPressPulldown(Button pulldown, Object dynamic)
+			throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("
+				+ pulldown + ", " + dynamic + ")");
+
+		tracer.trace("Click pulldown " + pulldown + " then " + dynamic);
+
+		if (pulldown == null)
+			throw new HarnessException("Pulldown cannot be null!");
+
+		if (dynamic == null)
+			throw new HarnessException("Option cannot be null!");
+
+		// Default behavior variables
+		String pulldownLocator = null; // If set, this will be expanded
+		String optionLocator = null; // If set, this will be clicked
+		AbsPage page = null; // If set, this page will be returned
+
+		if (pulldown == Button.B_MOVE) {
+
+			if (!(dynamic instanceof FolderItem))
+				throw new HarnessException("if pulldown = " + Button.B_MOVE
+						+ ", then dynamic must be FolderItem");
+
+			FolderItem folder = (FolderItem) dynamic;
+
+			pulldownLocator = "css=td#zb__BDLV__MOVE_MENU_dropdown>div";
+			optionLocator = "css=td#zti__DwtFolderChooser_BriefcaseBDLV__"
+						+ folder.getId() + "_textCell";
+			
+			page = null;
+		} else {
+			throw new HarnessException("no logic defined for pulldown/dynamic "
+					+ pulldown + "/" + dynamic);
+		}
+		// Default behavior
+		if (pulldownLocator != null) {
+			// Make sure the locator exists
+			if (!this.sIsElementPresent(pulldownLocator)) {
+				throw new HarnessException("Button " + pulldown
+						+ " pulldownLocator " + pulldownLocator
+						+ " not present!");
+			}
+			this.zClickAt(pulldownLocator, "");
+
+			// If the app is busy, wait for it to become active
+			zWaitForBusyOverlay();
+
+			SleepUtil.sleepVerySmall();
+
+			if (optionLocator != null) {
+				// Make sure the locator exists
+				if (!this.sIsElementPresent(optionLocator)) {
+					throw new HarnessException(" dynamic " + dynamic
+							+ " optionLocator " + optionLocator
+							+ " not present!");
+				}
+				this.zClickAt(optionLocator, "");
+
+				// If the app is busy, wait for it to become active
+				zWaitForBusyOverlay();
+			}
 			// If we click on pulldown/option and the page is specified, then
 			// wait for the page to go active
 			if (page != null) {
