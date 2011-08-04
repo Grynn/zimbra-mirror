@@ -145,7 +145,7 @@ public class SyncSession {
             // Process local changes and determine changes to push
             processLocalContactChanges(localChanges.values());
             // Process remote group changes
-            if (!contacts.isEmpty()) {
+            if (!groups.isEmpty()) {
                 lastRevGrp = new DateTime(getLastUpdatedGrp(groups) + 1);
                 state.setLastRevisionGroup(lastRevGrp.toString());
                 processGroups(groups);
