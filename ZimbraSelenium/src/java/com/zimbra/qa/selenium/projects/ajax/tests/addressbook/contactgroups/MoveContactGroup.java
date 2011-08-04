@@ -45,7 +45,7 @@ public class MoveContactGroup extends AjaxCommonTest  {
 	}
 	
 	
-	@Test(	description = "Move a contact group to folder Emailed Contacts by click Move on toolbar",
+	@Test(	description = "Move a contact group to folder Emailed Contacts by click Move dropdown on toolbar",
 			groups = { "smoke" })
 	public void MoveToEmailedContactsClickMoveOnToolbar() throws HarnessException {
 		        
@@ -55,12 +55,8 @@ public class MoveContactGroup extends AjaxCommonTest  {
 		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
 	
         //click Move icon on toolbar
-        DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zToolbarPressButton(Button.B_MOVE);
-     
-        //enter the moved folder
-        dialogContactMove.zClickTreeFolder(emailedContacts);
-        dialogContactMove.zClickButton(Button.B_OK);
-  
+        app.zPageAddressbook.zToolbarPressPulldown(Button.B_MOVE,emailedContacts);
+        
         //move group to different folder
         Verify(emailedContacts, group);    
  
@@ -97,7 +93,7 @@ public class MoveContactGroup extends AjaxCommonTest  {
  		
 	    // Create a contact group via Soap then select
 		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
-	
+	 
         //click shortcut m
 	    DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zKeyboardShortcut(Shortcut.S_MOVE);
     
