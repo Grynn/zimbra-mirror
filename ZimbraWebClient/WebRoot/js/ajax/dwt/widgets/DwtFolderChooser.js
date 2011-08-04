@@ -37,12 +37,43 @@ DwtFolderChooser = function(params) {
 	this._opc = appCtxt.getOverviewController();
 	this._treeView = {};
 	this._folderTreeDivId = this._htmlElId + "_folderTreeDivId";
-	this._newButtonDivId = this._htmlElId + "_newButtonDivId";
 
 	this._skipNotifyOnPage = false;
 	this._uuid = Dwt.getNextId();
 
 	this._treeViewListener = this._treeViewSelectionListener.bind(this);
+
+	var moveMenu = params.parent;
+	moveMenu._addItem(this, params.index); //this is what DwtMenuItem does. Allows this item to be in the menu items table - better for layout purposes such as consistent widths
+
+	//add separator menu item on the move menu (the parent)
+	new DwtMenuItem({parent:moveMenu, style:DwtMenuItem.SEPARATOR_STYLE});
+
+	// add static "New Folder" menu item
+	var newFolderItem = this._newButton = new DwtMenuItem({parent:moveMenu, id: moveMenu.getHTMLElId() + "|NEWFOLDER"});
+	var newText = ZmMsg.newFolder;
+	var newImage = "NewFolder";
+	var newShortcut = ZmKeyMap.NEW_FOLDER;
+	var appName = appCtxt.getCurrentAppName();
+	if (appName == ZmApp.CALENDAR) {
+		newText = ZmMsg.newCalendar;
+		newImage = "NewAppointment";
+		newShortcut = ZmKeyMap.NEW_CALENDAR;
+	}
+	if (appName == ZmApp.TASKS) {
+		newText = ZmMsg.newTaskFolder;
+		newImage = "NewTaskList";
+	}
+	if (appName == ZmApp.CONTACTS) {
+		newText = ZmMsg.newAddrBook;
+		newImage = "NewContactsFolder";
+	}
+
+	newFolderItem.setText(newText);
+	newFolderItem.setImage(newImage);
+	newFolderItem.setShortcut(appCtxt.getShortcutHint(this._keyMap, newShortcut));
+
+	newFolderItem.addSelectionListener(this._showNewDialog.bind(this));
 
 	this._init();
 
@@ -292,33 +323,11 @@ function() {
 	var idx = 0;
 
 	html[idx++] =	"<table cellspacing='0' cellpadding='0' style='border-collapse:collapse;'>";
-	html[idx++] =		"<tr><td style='padding-bottom:5px;'><div id='" + this._folderTreeDivId + "'>";
-	html[idx++] =		"</div></td></tr>";
-	html[idx++] =		"<tr><td style='border-top:1px solid black; padding-top:5px;'><div id='" + this._newButtonDivId + "'>";
+	html[idx++] =		"<tr><td><div id='" + this._folderTreeDivId + "'>";
 	html[idx++] =		"</div></td></tr>";
 	html[idx++] =	"</table>";
 
 	this.getHtmlElement().innerHTML = html.join("");
-
-	var newButton = this._newButton = new DwtButton({parent: DwtShell.getShell(window)});
-	newButton.dontStealFocus();
-	newButton.setSize(Dwt.DEFAULT);
-	newButton.setAlign(DwtLabel.ALIGN_LEFT);
-	var newText = ZmMsg.newFolder;
-	var appName = appCtxt.getCurrentAppName();
-	if (appName == ZmApp.CALENDAR) {
-		newText = ZmMsg.newCalendar;
-	}
-	if (appName == ZmApp.TASKS) {
-		newText = ZmMsg.newTaskFolder;
-	}
-	if (appName == ZmApp.CONTACTS) {
-		newText = ZmMsg.newAddrBook;
-	}
-
-	newButton.setText(newText);
-	newButton.reparentHtmlElement(this._newButtonDivId);
-	newButton.addSelectionListener(this._showNewDialog.bind(this));
 
 };
 
