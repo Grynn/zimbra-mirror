@@ -1017,11 +1017,11 @@ public class PageMail extends AbsTab {
 		//
 
 		if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-			listLocator = "//div[@id='zl__TV__rows']";
-			rowLocator = "//div[contains(@id, 'zli__TV__')]";
+			listLocator = "css=div[id='zl__TV__rows']";
+			rowLocator = "div[id^='zli__TV__']";
 		} else {
-			listLocator = "//div[@id='zl__CLV__rows']";
-			rowLocator = "//div[contains(@id, 'zli__CLV__')]";
+			listLocator = "css=div[id='zl__CLV__rows']";
+			rowLocator = "div[id^='zli__CLV__']";
 		}
 
 		// TODO: how to handle both messages and conversations, maybe check the view first?
@@ -1029,20 +1029,14 @@ public class PageMail extends AbsTab {
 			throw new HarnessException("List View Rows is not present "+ listLocator);
 
 		// How many items are in the table?
-		int count = this.sGetXpathCount(listLocator + rowLocator);
+		int count = this.sGetCssCount(listLocator + " " + rowLocator);
 		logger.debug(myPageName() + " zListSelectItem: number of list items: "+ count);
 
 		// Get each conversation's data from the table list
 		for (int i = 1; i <= count; i++) {
 
-			itemlocator = listLocator + "/div["+ i +"]";
-			String subjectlocator;
-
-			// Look for the subject
-
-			// Subject - Fragment
-			subjectlocator = itemlocator + "//td[contains(@id, '__su')]";
-			String s = this.sGetText(subjectlocator).trim();
+			itemlocator = listLocator + " div:nth-of-type("+ i +") ";
+			String s = this.sGetText(itemlocator + " td[id$='__su']").trim();
 
 			if ( s.contains(subject) ) {
 				break; // found it
@@ -1054,6 +1048,7 @@ public class PageMail extends AbsTab {
 		if ( itemlocator == null ) {
 			throw new HarnessException("Unable to locate item with subject("+ subject +")");
 		}
+
 
 		if ( action == Action.A_RIGHTCLICK ) {
 
@@ -1071,22 +1066,16 @@ public class PageMail extends AbsTab {
 				// <div id="zmi__CLV__Par__DELETE" ... By Conversation
 
 				if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-					optionLocator = "zmi__TV__DELETE";
+					optionLocator = "css=div#zmi__TV__DELETE";
 				} else {
-					optionLocator = "zmi__CLV__Par__DELETE";
+					optionLocator = "css=div#zmi__CLV__Par__DELETE";
 				}
 
 				page = null;
 
 			} else if (option == Button.B_TREE_NEWFOLDER) {
 
-				String treeItemLocator = null;
-				if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-					treeItemLocator = TreeMail.Locators.zTreeItems.replace(TreeMail.stringToReplace,
-							AjaxCommonTest.defaultAccountName);
-				} else {
-					treeItemLocator = TreeMail.Locators.ztih_main_Mail__FOLDER_ITEM_ID.replace(TreeMail.stringToReplace, "FOLDER");
-				}
+				String treeItemLocator = TreeMail.Locators.ztih_main_Mail__FOLDER_ITEM_ID.replace(TreeMail.stringToReplace, "FOLDER");
 
 				GeneralUtility.waitForElementPresent(this, treeItemLocator);
 				ContextMenu contextMenu = (ContextMenu)((AppAjaxClient)MyApplication).zTreeMail.zTreeItem(Action.A_RIGHTCLICK, treeItemLocator);

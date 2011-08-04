@@ -312,7 +312,7 @@ public class FormApptNew extends AbsForm {
 
 		} else if (field == Field.Body) {
 
-			int frames = this.sGetXpathCount("//iframe");
+			int frames = this.sGetCssCount("css=iframe");
 			logger.info("Body: # of frames: " + frames);
 
 			if (frames == 0) {
@@ -320,7 +320,7 @@ public class FormApptNew extends AbsForm {
 				// Text compose
 				// //
 
-				locator = "//textarea[contains(@id,'textarea_')]";
+				locator = "css=textarea[id*='textarea_']";
 
 				if (!this.sIsElementPresent(locator))
 					throw new HarnessException("Unable to locate compose body");
@@ -344,7 +344,7 @@ public class FormApptNew extends AbsForm {
 																		// is 0
 																		// based
 
-					locator = "//html//body";
+					locator = "css=html body";
 
 					if (!this.sIsElementPresent(locator))
 						throw new HarnessException(
@@ -378,7 +378,7 @@ public class FormApptNew extends AbsForm {
 																		// is 0
 																		// based
 
-					locator = "//html//body";
+					locator = "css=html body";
 
 					if (!this.sIsElementPresent(locator))
 						throw new HarnessException(

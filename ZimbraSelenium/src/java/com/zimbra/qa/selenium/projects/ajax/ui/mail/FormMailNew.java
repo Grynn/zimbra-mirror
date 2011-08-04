@@ -476,7 +476,7 @@ public class FormMailNew extends AbsForm {
 			//
 			SleepUtil.sleepLong();
 
-			int frames = this.sGetXpathCount("//iframe");
+			int frames = this.sGetCssCount("css=iframe");
 			logger.debug("Body: # of frames: " + frames);
 			String browser = SeleniumService.getInstance().getSeleniumBrowser();
 			/*
@@ -488,7 +488,7 @@ public class FormMailNew extends AbsForm {
 					// Text compose
 					// //
 
-					locator = "//textarea[contains(@id,'textarea_')]";
+					locator = "css=textarea[id*='textarea_']";
 
 					if (!this.sIsElementPresent(locator))
 						throw new HarnessException(
@@ -524,7 +524,7 @@ public class FormMailNew extends AbsForm {
 					// Text compose
 					// //
 
-					locator = "//textarea[contains(@id,'textarea_')]";
+					locator = "css=textarea[id*='textarea_']";
 
 					if (!this.sIsElementPresent(locator))
 						throw new HarnessException(
@@ -546,7 +546,7 @@ public class FormMailNew extends AbsForm {
 
 						this.sSelectFrame("index=0"); // iframe index is 0 based
 
-						locator = "//html//body";
+						locator = "css=html body";
 
 						if (!this.sIsElementPresent(locator))
 							throw new HarnessException(
@@ -568,8 +568,7 @@ public class FormMailNew extends AbsForm {
 					return;
 
 				} else {
-					throw new HarnessException("Compose //iframe count was "
-							+ frames);
+					throw new HarnessException("Compose //iframe count was " + frames);
 				}
 			}
 

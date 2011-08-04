@@ -18,14 +18,15 @@ public class FormSignatureNew extends AbsForm {
 
 	public static class Locators {
 
-		public static final String zsignatureNameLabel = "//input[contains(@id,'_SIG_NAME')]";
-		public static final String signatureBody = "//textarea[contains(@id,'TEXTAREA_SIGNATURE')]";
+		public static final String zsignatureNameLabel = "css=input[id*='_SIG_NAME']";
+		public static final String signatureBody = "css=textarea[id*='TEXTAREA_SIGNATURE']";
 		public static final String zToolbarSaveID = "zb__PREF__SAVE_title";
 		public static final String zToolbarCancelID = "zb__PREF__CANCEL_title";
 
 		public static final String zSaveChangesYes = "id=DWT241_title";
 		public static final String zSaveChangesNo = "id=DWT242_title";
 		public static final String zSaveChangesCancel = "id=DWT243_title";
+		// TODO: Need to I18N these locators
 		public static final String formatAsText = "//td[contains(@id,'_title') and contains (text(),'Format As Plain Text')]";
 		public static final String formatAsHtml = "//td[contains(@id,'_title') and contains (text(),'Format As HTML')]";
 		public static final String zFrame = "css=iframe[id*='DWT']";

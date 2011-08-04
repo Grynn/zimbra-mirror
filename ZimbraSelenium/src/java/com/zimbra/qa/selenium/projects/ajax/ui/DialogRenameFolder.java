@@ -31,7 +31,7 @@ public class DialogRenameFolder extends AbsDialog {
 	public void zSetNewName(String name) throws HarnessException {
 		logger.info(myPageName() + " zSetNewName("+ name +")");
 
-		String locator = "//input[@id='"+ Locators.zNewFolderNameFieldId +"']";
+		String locator = "css=input[id='"+ Locators.zNewFolderNameFieldId +"']";
 		
 		// Make sure the locator exists
 		if ( !this.sIsElementPresent(locator) ) {
@@ -51,11 +51,11 @@ public class DialogRenameFolder extends AbsDialog {
 		
 		if ( button == Button.B_OK ) {
 			
-			locator =  "//div[@id='"+ Locators.zDialogRenameId +"']//div[@id='"+ Locators.zButtonsId +"']//td[text()='OK']";
+			locator = "css=div[id='RenameFolderDialog_buttons'] td[id^='OK_'] td[id$='_title']";
 			
 		} else if ( button == Button.B_CANCEL ) {
 			
-			locator =  "implement me";
+			locator = "css=div[id='RenameFolderDialog_buttons'] td[id^='Cancel_'] td[id$='_title']";
 
 		} else {
 			throw new HarnessException("Button "+ button +" not implemented");
@@ -106,7 +106,7 @@ public class DialogRenameFolder extends AbsDialog {
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");
 
-		String locator = "id="+ Locators.zDialogRenameId;
+		String locator = "css=div[id='"+ Locators.zDialogRenameId +"']";
 		
 		if ( !this.sIsElementPresent(locator) ) {
 			return (false); // Not even present
