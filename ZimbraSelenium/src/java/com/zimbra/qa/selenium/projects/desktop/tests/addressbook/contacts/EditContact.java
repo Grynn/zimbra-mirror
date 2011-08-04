@@ -10,7 +10,6 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.Toaster;
@@ -30,81 +29,103 @@ public class EditContact extends AjaxCommonTest  {
 		
 	}
 	
-	@Test(	description = "Edit a contact item",
-			groups = { "smoke"})
-	public void EditContact_01() throws HarnessException {
-		
-		 // Create a contact 
-		ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
- 
-        app.zGetActiveAccount().soapSend(
-                "<CreateContactRequest xmlns='urn:zimbraMail'>" +
-                "<cn fileAsStr='" + contactItem.lastName + "," + contactItem.firstName + "' >" +
-                "<a n='firstName'>" + contactItem.firstName +"</a>" +
-                "<a n='lastName'>" + contactItem.lastName +"</a>" +
-                "<a n='email'>" + contactItem.email + "</a>" +
-                "</cn>" +
-                "</CreateContactRequest>");
+   private ContactItem _createSelectContactItem() throws HarnessException {
+      // Create a contact 
+      ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
 
-        app.zGetActiveAccount().soapSelectNode("//mail:CreateContactResponse", 1);
+      app.zGetActiveAccount().soapSend(
+            "<CreateContactRequest xmlns='urn:zimbraMail'>" +
+            "<cn fileAsStr='" + contactItem.lastName + "," + contactItem.firstName + "' >" +
+            "<a n='firstName'>" + contactItem.firstName +"</a>" +
+            "<a n='lastName'>" + contactItem.lastName +"</a>" +
+            "<a n='email'>" + contactItem.email + "</a>" +
+            "</cn>" +
+            "</CreateContactRequest>");
 
-        // Refresh the view, to pick up the new contact
-        FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
-        GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-        app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
+      app.zGetActiveAccount().soapSelectNode("//mail:CreateContactResponse", 1);
 
-        // Select the contact
-        app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contactItem.fileAs);
-		
-		//Click Edit contact	
-        FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zToolbarPressButton(Button.B_EDIT);
-	    SleepUtil.sleepSmall();
-	        
-		ContactItem newContact = ContactItem.generateContactItem(GenerateItemType.Basic);
-							
-		
-		//clear the form, 
-		formContactNew.zReset();
-		
-        // Fill in the form
-	    formContactNew.zFill(newContact);
-	    
-		// Save the contact
-        formContactNew.zSubmit();
-		
-        
-        //verify toasted message Contact Saved
-        Toaster toast = app.zPageMain.zGetToaster();
-        String toastMsg = toast.zGetToastMessage();
-        ZAssert.assertStringContains(toastMsg, "Contact Saved", "Verify toast message 'Contact Saved'");
+      // Refresh the view, to pick up the new contact
+      FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageAddressbook.zWaitForDesktopLoadingSpinner(5000);
+      app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
 
-        //verify new contact item is displayed
-        List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();   
- 	           
-		boolean isFileAsEqual=false;
-		for (ContactItem ci : contacts) {
-			if (ci.fileAs.equals(newContact.fileAs)) {
-	            isFileAsEqual = true;	 
-				break;
-			}
-		}
-		
-        ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") existed ");
+      // Select the contact
+      app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contactItem.fileAs);
 
-        
-		//verify old contact not displayed
-    	isFileAsEqual=false;
-		for (ContactItem ci : contacts) {
-			if (ci.fileAs.equals(contactItem.fileAs)) {
-	            isFileAsEqual = true;	 
-				break;
-			}
-		}
-		
-        ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") deleted");
+      return contactItem;
+   }
+  
+   private void _editAndVerify(FormContactNew formContactNew, ContactItem contactItem, ContactItem newContact) 
+   throws HarnessException {
+      //clear the form, 
+      formContactNew.zReset();
+
+      // Fill in the form
+      formContactNew.zFill(newContact);
       
-        	    
-	}
+      // Save the contact
+      formContactNew.zSubmit();
+
+      //verify toasted message Contact Saved
+      Toaster toast = app.zPageMain.zGetToaster();
+      String toastMsg = toast.zGetToastMessage();
+      ZAssert.assertStringContains(toastMsg, "Contact Saved", "Verify toast message 'Contact Saved'");
+
+      //verify new contact item is displayed
+      List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();   
+
+      boolean isFileAsEqual=false;
+      for (ContactItem ci : contacts) {
+         if (ci.fileAs.equals(newContact.fileAs)) {
+            isFileAsEqual = true;    
+            break;
+         }
+      }
+
+      ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") existed ");
+
+      //verify old contact not displayed
+      isFileAsEqual=false;
+      for (ContactItem ci : contacts) {
+         if (ci.fileAs.equals(contactItem.fileAs)) {
+            isFileAsEqual = true;    
+            break;
+         }
+      }
+
+      ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") deleted");
+
+   }
+
+   @Test(   description = "Edit a contact item, click Edit on toolbar",
+   groups = { "smoke"})
+   public void ClickToolbarEdit() throws HarnessException {
+      ContactItem contactItem = _createSelectContactItem();
+
+      //Click Edit contact 
+      FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zToolbarPressButton(Button.B_EDIT);
+
+      //generate the new contact
+      ContactItem newContact = ContactItem.generateContactItem(GenerateItemType.Basic);
+
+      _editAndVerify(formContactNew, contactItem, newContact);     
+   }
+
+   @Test(   description = "Edit a contact item, Right click then click Edit",
+   groups = { "smoke" })
+   public void ClickContextMenuEdit() throws HarnessException {
+      ContactItem contactItem = _createSelectContactItem();
+
+      //Click Edit contact 
+      FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zListItem(Action.A_RIGHTCLICK, Button.B_EDIT, contactItem.fileAs);        
+
+      //generate the new contact
+      ContactItem newContact = ContactItem.generateContactItem(GenerateItemType.Basic);
+
+      _editAndVerify(formContactNew, contactItem, newContact);
+
+   }
 
 }
 
