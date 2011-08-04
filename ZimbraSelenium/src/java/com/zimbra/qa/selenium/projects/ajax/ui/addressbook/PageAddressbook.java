@@ -535,6 +535,7 @@ public class PageAddressbook extends AbsTab {
 		   }
 		   
 	   }
+	 
 	// Default behavior
 		if ( pulldownLocator != null ) {
 						
@@ -592,6 +593,68 @@ public class PageAddressbook extends AbsTab {
 	    return page;
 	}
 
+	
+	public AbsPage zToolbarPressPulldown(Button pulldown, IItem item) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ item +")");
+
+		tracer.trace("Click pulldown "+ pulldown +" then "+ item);
+
+		if ( pulldown == null )
+			throw new HarnessException("Button cannot be null!");
+
+
+		// Default behavior variables
+		//
+		String pulldownLocator = null;	// If set, this will be expanded
+		String optionLocator = null;	// If set, this will be clicked
+		AbsPage page = null;	// If set, this page will be returned
+	   if ( pulldown == Button.B_MOVE ) {
+		
+	      if ( item instanceof FolderItem) {
+             FolderItem folder = (FolderItem) item;
+	         pulldownLocator = "css=td#zb__CNS__MOVE_MENU_dropdown.ZDropDown";
+	         optionLocator   = "css=td#zti__DwtFolderChooser_ContactsCNS__" + folder.getId() + "_textCell.DwtTreeItem-Text";
+	         //TODO page=?	         
+	      }
+	   }
+	   
+	   if ( pulldownLocator != null ) {
+						
+			// Make sure the locator exists
+			if ( !sIsElementPresent(pulldownLocator) ) {
+				throw new HarnessException("Button "+ pulldown +" folder "+ item +" pulldownLocator "+ pulldownLocator +" not present!");
+			}
+
+			//central coordinate "x,y" 
+			String center= sGetElementWidth(pulldownLocator)/2 + "," + sGetElementHeight(pulldownLocator)/2;
+			zClickAt(pulldownLocator,center);
+			
+			zWaitForBusyOverlay();
+			
+			if ( optionLocator != null ) {
+               
+				// Make sure the locator exists and visible
+				zWaitForElementPresent(optionLocator);
+				
+				if (zIsVisiblePerPosition(optionLocator,0,0)) {
+				   zClick(optionLocator);
+				   zWaitForBusyOverlay();
+				}
+
+			}
+			
+			// If we click on pulldown/option and the page is specified, then
+			// wait for the page to go active
+			if ( page != null ) {
+				page.zWaitForActive();
+			}
+			
+		}
+	    return page;
+	   	   
+	}
+	
+	
 	// return the type of a contact
 	private String getContactType(String locator) {
 		String imageLocator = locator +" div[class*=";

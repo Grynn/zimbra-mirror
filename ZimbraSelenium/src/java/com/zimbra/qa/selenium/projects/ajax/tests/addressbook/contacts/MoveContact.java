@@ -123,13 +123,10 @@ public class MoveContact extends AjaxCommonTest  {
 	
 		FolderItem emailedContacts = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.EmailedContacts);
 		
-       //click Move icon on toolbar
-        DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zToolbarPressButton(Button.B_MOVE);
+       //click Move dropdown on toolbar
+        app.zPageAddressbook.zToolbarPressPulldown(Button.B_MOVE,emailedContacts);
     
-        //enter the moved folder
-        dialogContactMove.zClickTreeFolder(emailedContacts);
-        dialogContactMove.zClickButton(Button.B_OK);
-     
+   
         //Verify
         Verify(emailedContacts,contactItem);
         
