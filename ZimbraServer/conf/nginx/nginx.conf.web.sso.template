@@ -14,14 +14,14 @@ server {
     ssl_certificate_key     ${ssl.key};
     ssl_verify_client       ${ssl.clientcertmode};
     ssl_verify_depth        ${ssl.clientcertdepth.default};
-    ssl_client_certificate  ${ssl.clientcertca};
+${web.sso.certauth.enabled}    ssl_client_certificate  ${ssl.clientcertca};
 
     error_page 495 496 497 =403 /50x.html;
 
-    location = /certauth {
-        zm_sso certauth;
-        zm_sso_redirect_url ${vhn}:${web.https.port};
-    }
+${web.sso.certauth.enabled}    location = /certauth {
+${web.sso.certauth.enabled}        zm_sso certauth;
+${web.sso.certauth.enabled}        zm_sso_redirect_url ${vhn}:${web.https.port};
+${web.sso.certauth.enabled}    }
 
     location / {
         return 403; #other resource access is forbidden

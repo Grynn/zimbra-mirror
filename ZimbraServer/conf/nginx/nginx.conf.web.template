@@ -21,6 +21,6 @@ http
     ${web.http.enabled}include ${core.includes}/${core.cprefix}.web.http.default;
     ${web.https.enabled}include ${core.includes}/${core.cprefix}.web.https;
     ${web.https.enabled}include ${core.includes}/${core.cprefix}.web.https.default;
-    ${web.sso.enabled}include ${core.includes}/${core.cprefix}.web.sso;
-    ${web.sso.enabled}include ${core.includes}/${core.cprefix}.web.sso.default;
+    include ${core.includes}/${core.cprefix}.web.sso;
+    include ${core.includes}/${core.cprefix}.web.sso.default;
 }
