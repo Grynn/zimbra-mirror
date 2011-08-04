@@ -109,6 +109,17 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 	public void gSetIsExpanded(boolean expanded) {
 		gIsExpanded = expanded;
 	}
+	
+	/**
+	 * Whether or not the folder is currently selected
+	 */
+	protected boolean gIsSelected = false;
+	public boolean gGetIsSelected() {
+		return (gIsSelected);
+	}
+	public void gSetIsSelected(boolean selected) {
+		gIsSelected = selected;
+	}
 
 	public void createUsingSOAP(ZimbraAccount account) throws HarnessException {
 		

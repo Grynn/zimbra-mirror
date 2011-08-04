@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.IItem;
+import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.SavedSearchFolderItem;
 import com.zimbra.qa.selenium.framework.items.TagItem;
 import com.zimbra.qa.selenium.framework.items.ZimletItem;
@@ -599,52 +600,73 @@ public class TreeMail extends AbsTree {
 	}
 
 
+	private FolderItem parseFolderRow(String id) throws HarnessException {
+	
+		String locator;
+
+		FolderItem item = new FolderItem();
+
+		item.setId(id);
+
+		// Set the name
+		locator = "css=div[id='zti__main_Mail__"+ id +"'] td[id$='_textCell']";
+		item.setName(this.sGetText(locator));
+
+		// Set the expanded boolean
+		locator = "css=div[id='zti__main_Mail__"+ id +"'] td[id$='_nodeCell']>div";
+		if ( sIsElementPresent(locator) ) {
+			// The image could be hidden, if there are no subfolders
+			item.gSetIsExpanded("ImgNodeExpanded".equals(sGetAttribute(locator + "@class")));
+		}
+		
+		// Set the selected boolean
+		locator = "css=div[id='zti__main_Mail__"+ id +"'] div[id='zti__main_Mail__"+ id +"_div']";
+		if ( sIsElementPresent(locator) ) {
+			item.gSetIsSelected("DwtTreeItem-selected".equals(sGetAttribute(locator + "@class")));
+		}
+
+		// TODO: color
+
+		return (item);
+	}
+	
 	/**
 	 * Used for recursively building the tree list for Mail Folders
-	 * @param top
+	 * @param css
 	 * @return
 	 * @throws HarnessException
 	 */
-	private List<FolderItem>zListGetFolders(String top) throws HarnessException {
+	private List<FolderItem> zListGetFolders(String css) throws HarnessException {
 		List<FolderItem> items = new ArrayList<FolderItem>();
 
-		String searchLocator = top + "//div[@class='DwtComposite']";
+		String searchLocator = css + " div[class='DwtComposite']";
 
-		int count = this.sGetXpathCount(searchLocator);
+		int count = this.sGetCssCount(searchLocator);
+		logger.debug(myPageName() + " zListGetFolders: number of folders: "+ count);
+
 		for ( int i = 1; i <= count; i++) {
-			String itemLocator = searchLocator + "["+ i + "]";
+			String itemLocator = searchLocator + ":nth-child("+i+")";
 
 			if ( !this.sIsElementPresent(itemLocator) ) {
 				continue;
 			}
+			
+			String identifier = sGetAttribute(itemLocator +"@id");
+			logger.debug(myPageName() + " identifier: "+ identifier);
 
-			String locator;
-
-			String id = sGetAttribute("xpath=("+ itemLocator +"/.)@id");
-			if ( id == null || id.trim().length() == 0 || !(id.startsWith("zti__main_Mail__")) ) {
+			if ( identifier == null || identifier.trim().length() == 0 || !(identifier.startsWith("zti__main_Mail__")) ) {
 				// Not a folder
 				// Maybe "Find Shares ..."
 				continue;
 			}
 
-			FolderItem item = new FolderItem();
-
 			// Set the locator
 			// TODO: This could probably be made safer, to make sure the id matches an int pattern
-			item.setId(id.replace("zti__main_Mail__", ""));
+			String id = identifier.replace("zti__main_Mail__", "");
 
-			// Set the name
-			locator = itemLocator + "//td[contains(@id, '_textCell')]";
-			item.setName(this.sGetText(locator));
-
-			// Set the expanded boolean
-			locator = itemLocator + "//td[contains(@id, '_nodeCell')]/div";
-			if ( sIsElementPresent(locator) ) {
-				// The image could be hidden, if there are no subfolders
-				item.gSetIsExpanded("ImgNodeExpanded".equals(sGetAttribute("xpath=("+ locator + ")@class")));
-			}
-
+			FolderItem item = this.parseFolderRow(id);
 			items.add(item);
+			logger.info(item.prettyPrint());
 
 			// Add any sub folders
 			items.addAll(zListGetFolders(itemLocator));
@@ -719,7 +741,7 @@ public class TreeMail extends AbsTree {
 		List<FolderItem> items = new ArrayList<FolderItem>();
 
 		// Recursively fill out the list, starting with all mail folders
-		items.addAll(zListGetFolders("//div[@id='ztih__main_Mail__FOLDER']"));
+		items.addAll(zListGetFolders("css=div[id='ztih__main_Mail__FOLDER']"));
 
 		return (items);
 
