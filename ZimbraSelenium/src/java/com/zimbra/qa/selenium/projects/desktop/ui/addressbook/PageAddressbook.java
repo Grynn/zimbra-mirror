@@ -716,46 +716,64 @@ public class PageAddressbook extends AbsTab {
 		}
 		return (page);
 
-		
 	}
 
 	@Override
 	public AbsPage zListItem(Action action, String contact) throws HarnessException {
 		logger.info(myPageName() + " zListItem("+ action +", "+ contact +")");
-        String contactLocator=getContactLocator(contact);
-        
+		String contactLocator = getContactLocator(contact);
+
 		tracer.trace(action +" on contact = "+ contact);
 
 		if ( action == Action.A_LEFTCLICK ) {
 			//click
 			this.zClick(contactLocator);
 			//zWaitForBusyOverlay();
-			
+
 			ArrayList<String> selectedContactArrayList=getSelectedContactLocator();			
-	        String contactType = getContactType(selectedContactArrayList.get(0));
-		
-	        //check if it is a contact or a contact group item
-		    if ( contactType.equals(ContactGroupItem.IMAGE_CLASS)) {
-			  return  new DisplayContactGroup(MyApplication);		
-		    }
-		    else if (  contactType.equals(ContactItem.IMAGE_CLASS) ) {
-			  return new DisplayContact(MyApplication);
-		    }
-		    else {
-			  throw new HarnessException(" Error: not support the contact type");						    	
-		    }
-			
-		}
-		else if (action == Action.A_RIGHTCLICK ) {
-			
+			String contactType = getContactType(selectedContactArrayList.get(0));
+
+			//check if it is a contact or a contact group item
+			if ( contactType.equals(ContactGroupItem.IMAGE_CLASS)) {
+			   return  new DisplayContactGroup(MyApplication);		
+			}
+			else if (  contactType.equals(ContactItem.IMAGE_CLASS) ) {
+			   return new DisplayContact(MyApplication);
+			}
+			else {
+			   throw new HarnessException(" Error: not support the contact type");						    	
+			}
+
+		} else if ( action == Action.A_CHECKBOX) {
+		   logger.info("==== > contactLocator is : " + contactLocator);
+         //get the checkbox locator
+         contactLocator = contactLocator.substring(0, contactLocator.length() - 2) + "1]/center/div";
+
+         //check the box
+         this.zClickAt(contactLocator, zGetCenterPoint(contactLocator));
+
+         //zWaitForBusyOverlay();
+
+         ArrayList<String> selectedContactArrayList=getSelectedContactLocator();       
+         String contactType = getContactType(selectedContactArrayList.get(0));
+
+         //check if it is a contact or a contact group item
+         if ( contactType.equals(ContactGroupItem.IMAGE_CLASS)) {
+            return  new DisplayContactGroup(MyApplication);     
+         } else if (  contactType.equals(ContactItem.IMAGE_CLASS) ) {
+            return new DisplayContact(MyApplication);
+         } else {
+            throw new HarnessException(" Error: not support the contact type");                        
+         }
+
+      } else if (action == Action.A_RIGHTCLICK ) {
+
             this.zRightClick(contactLocator); 
             //zWaitForBusyOverlay();
     		return (new ContextMenu(MyApplication));			
 		}
-			
-		
+
 		throw new HarnessException("action not supported ");
-	
 	}
 
 	private AbsPage newFormSelected() throws HarnessException {

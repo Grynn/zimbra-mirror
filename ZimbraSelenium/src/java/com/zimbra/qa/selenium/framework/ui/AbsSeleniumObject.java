@@ -650,6 +650,17 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
+	 * Ger Center point of item in "(x,y)" format based on given locator
+	 * @param locator
+	 * @return
+	 */
+	public String zGetCenterPoint(String locator) {
+	   String centerHeight = Integer.toString(ClientSessionFactory.session().selenium().getElementHeight(locator).intValue() / 2);
+	   String centerWidth = Integer.toString(ClientSessionFactory.session().selenium().getElementWidth(locator).intValue() / 2);
+	   return new StringBuilder("(").append(centerWidth).append(",").append(centerHeight).append(")").toString();
+	}
+
+	/**
 	 * DefaultSelenium.waitForPageToLoad()
 	 */
 	public void sWaitForPageToLoad() {
