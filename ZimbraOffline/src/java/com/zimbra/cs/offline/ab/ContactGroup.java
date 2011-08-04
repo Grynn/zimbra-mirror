@@ -24,8 +24,8 @@ import java.util.HashMap;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.HashSet;
 import java.util.Arrays;
+import java.util.TreeSet;
 
 public class ContactGroup {
     private final String name;
@@ -37,7 +37,7 @@ public class ContactGroup {
 
     public ContactGroup(String name) {
         this.name = name;
-        emails = new HashSet<String>();
+        emails = new TreeSet<String>();
     }
 
     public ContactGroup(Contact contact) throws ServiceException {
@@ -45,15 +45,23 @@ public class ContactGroup {
             throw new IllegalArgumentException("Not a contact group: " + contact);
         }
         name = contact.get(ContactConstants.A_nickname);
-        emails = new HashSet<String>();
+        emails = new TreeSet<String>();
         String dlist = contact.get(ContactConstants.A_dlist);
         if (dlist != null) {
             emails.addAll(Arrays.asList(dlist.trim().split(",")));
         }
     }
-    
+
     public String getName() {
         return name;
+    }
+
+    public boolean hasEmail(String mapEmail) {
+        for(String email : emails) {
+            if(email.contains(mapEmail))
+                return true;
+        }
+        return false;
     }
 
     public boolean isEmpty() throws ServiceException {
@@ -73,7 +81,21 @@ public class ContactGroup {
         fields.put(ContactConstants.A_dlist, join(emails, ","));
         return new ParsedContact(fields);
     }
-    
+
+    public Set<String> adjustEmail() {
+        Set<String> storeEmails = new TreeSet<String>();
+        String tempDlist = join(this.emails, ",");
+        storeEmails.addAll(emails);
+        this.emails.clear();
+        this.emails.addAll(Arrays.asList(tempDlist.trim().split(",")));
+        return storeEmails;
+    }
+
+    public void resetEmail(Set<String> list) {
+        this.emails.clear();
+        this.emails.addAll(list);
+    }
+
     private static String join(Collection<?> parts, String delimiter) {
         StringBuilder sb = new StringBuilder();
         Iterator<?> it = parts.iterator();
@@ -94,7 +116,7 @@ public class ContactGroup {
         }
         return false;
     }
-    
+
     @Override
     public String toString() {
         return String.format("{name=%s,dlist=%s}", name, emails);

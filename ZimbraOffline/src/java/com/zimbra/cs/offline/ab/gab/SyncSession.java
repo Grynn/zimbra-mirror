@@ -36,6 +36,7 @@ import com.google.gdata.data.contacts.ContactGroupEntry;
 import com.google.gdata.data.contacts.SystemGroup;
 import com.google.gdata.data.BaseEntry;
 import com.google.gdata.data.DateTime;
+import com.google.gdata.data.TextConstruct;
 import com.google.gdata.data.extensions.Email;
 
 import java.util.List;
@@ -50,6 +51,8 @@ import java.util.logging.Logger;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class SyncSession {
     private final LocalData localData;
@@ -118,12 +121,17 @@ public class SyncSession {
             lastRev = new DateTime(getLastUpdated(contacts) + 1);
             state.setLastRevision(lastRev.toString());
         }
+        String revGrp = state.getlastRevisionGroup();
+        DateTime lastRevGrp = revGrp != null ? DateTime.parseDateTime(revGrp) : null;
+        // Get the system group for all new contacts
         List<ContactGroupEntry> groups = service.getGroupFeed(null, lastRev).getEntries();
         // Get the system group for all new contacts
         myContactsUrl = getSystemGroupUrl(groups, "Contacts");
+        if(myContactsUrl == null) {
+            myContactsUrl = state.getlastContactURL();
+        }
         LOG.debug("System group 'My Contacts' url = " + myContactsUrl);
         int seq = state.getLastModSequence();
-        List<SyncRequest> contactRequests;
         mbox.lock.lock();
         try {
             // Get local changes since last sync (none if resetting)
@@ -135,9 +143,11 @@ public class SyncSession {
                 processRemoteContacts(contacts);
             }
             // Process local changes and determine changes to push
-            contactRequests = processLocalContactChanges(localChanges.values());
+            processLocalContactChanges(localChanges.values());
             // Process remote group changes
             if (!contacts.isEmpty()) {
+                lastRevGrp = new DateTime(getLastUpdatedGrp(groups) + 1);
+                state.setLastRevisionGroup(lastRevGrp.toString());
                 processGroups(groups);
             }
             // If resetting, then remove local contacts deleted remotely
@@ -148,13 +158,18 @@ public class SyncSession {
         } finally {
             mbox.lock.release();
         }
-        // Push local changes to remote
-        pushContactChanges(contactRequests);
-        int errors = contactRequests.size();
-        if (errors > 0) {
-            LOG.debug("Contact sync had %d error(s)", errors);
-        }
         localData.saveState(state);
+    }
+
+    private static long getLastUpdatedGrp(List<ContactGroupEntry> contacts) {
+        long updated = 0;
+        for (ContactGroupEntry contact : contacts) {
+            long time = contact .getUpdated().getValue();
+            if (time > updated) {
+                updated = time;
+            }
+        }
+        return updated;
     }
 
     private static long getLastUpdated(List<ContactEntry> contacts) {
@@ -384,27 +399,69 @@ public class SyncSession {
         return entry.getEditLink().getHref();
     }
 
-    private List<SyncRequest> processLocalContactChanges(Collection<Change> changes)
-        throws ServiceException {
+    private void processLocalContactChanges(Collection<Change> changes)
+    throws ServiceException, IOException {
         LOG.debug("Found %d local contact changes", changes.size());
         List<SyncRequest> reqs = new ArrayList<SyncRequest>();
+        // Push local changes to remote right away to avoid conflicts while update and delete
         for (Change change : changes) {
-            SyncRequest req = processLocalContactChange(change);
-            if (req != null) {
-                reqs.add(req);
+            Contact contact = localData.getContact(change.getItemId());
+            if (!ContactGroup.isContactGroup(contact)) {
+                processLocalContactChange(change, reqs);
             }
         }
-        return reqs;
+        pushContactChanges(reqs);
+        if (reqs.size() > 0) {
+            LOG.debug("Contact Group sync had %d error(s)", reqs.size());
+            reqs.clear();
+	}
+	for (Change change : changes) {
+            Contact contact = localData.getContact(change.getItemId());
+            if (ContactGroup.isContactGroup(contact)) {
+                processLocalContactChange(change, reqs);
+                pushContactChanges(reqs);
+                if (reqs.size() > 0) {
+                    LOG.debug("Contact Group sync had %d error(s)", reqs.size());
+                    reqs.clear();
+                }
+            }
+        }
     }
 
-    private SyncRequest processLocalContactChange(Change change)
+    private void processLocalContactChange(Change change, List<SyncRequest> reqs)
         throws ServiceException {
         int id = change.getItemId();
+        DataSourceItem dsi = localData.getMapping(id);
         if (change.isAdd() || change.isUpdate()) {
             Contact contact = localData.getContact(id);
             if (ContactGroup.isContactGroup(contact)) {
-                // Delete mapping so contact group will no longer be synced
-                localData.deleteMapping(id);
+                ContactGroup cd = new ContactGroup(contact);
+                if (change.isAdd()) {
+                    ContactGroupEntry entry = new ContactGroupEntry();
+                    entry.setTitle(TextConstruct.plainText(cd.getName()));
+                    entry.setId(myContactsUrl);
+                    SyncRequest req = SyncRequest.insert(this, id, entry);
+                    try {
+                        req.execute();
+                    } catch (IOException e) {
+                        throw ServiceException.FAILURE("New Contact Group add failed", null);
+                    }
+                    updateEntry(req.getItemId(), req.getEntry());
+                    emailCompare(cd, req.getEntry().getId(), reqs);
+                } else {
+                    try {
+                        ContactGroupEntry entry = service.getGroupFeed(new URL(dsi.remoteId));
+                        emailCompare(cd, entry.getId(), reqs);
+                        if (!getName(entry).equals(cd.getName())) {
+                            entry.setTitle(TextConstruct.plainText(cd.getName()));
+                            reqs.add(SyncRequest.update(this, id, entry));
+                        }
+                    } catch (MalformedURLException e) {
+                        throw ServiceException.FAILURE("Bad URL format: " + dsi.remoteId, null);
+                    } catch (IOException e) {
+                        throw ServiceException.FAILURE("Remote connection while retriving the group feed failed", null);
+                    }
+                }
             } else {
                 ContactData cd = new ContactData(contact);
                 SyncRequest req;
@@ -423,21 +480,63 @@ public class SyncSession {
                     LOG.debug("Photo added for contact id " + contact.getId());
                     req.setPhoto(Ab.getContent(contact, photo), photo.getContentType());
                 }
-                return req;
+                reqs.add(req);
             }
         } else if (change.isDelete()) {
-            DataSourceItem dsi = localData.getMapping(id);
             if (dsi.remoteId != null && Gab.isGroupId(dsi.remoteId)) {
-                // Remove mapping for deleted contact group
-                localData.deleteMapping(id);
+                try {
+                    ContactGroupEntry entry = service.getGroupFeed(new URL(dsi.remoteId));
+                    reqs.add(SyncRequest.delete(this, id, entry));
+                } catch (MalformedURLException e) {
+                    throw ServiceException.FAILURE("Bad URL format: " + dsi.remoteId, null);
+                } catch (IOException e) {
+                    throw ServiceException.FAILURE("Remote connection while retriving the group feed failed", null);
+                }
             } else {
                 ContactEntry entry = getEntry(dsi, ContactEntry.class);
                 if (entry != null) {
-                    return SyncRequest.delete(this, id, entry);
+                    reqs.add(SyncRequest.delete(this, id, entry));
                 }
             }
         }
-        return null;
+    }
+
+    private void emailCompare(ContactGroup localGroup, String entryID, List<SyncRequest> reqs)
+    throws ServiceException {
+        Collection<DataSourceItem> mappings = localData.getAllContactMappings();
+        for (DataSourceItem dsi : mappings) {
+            if (Gab.isContactId(dsi.remoteId)) {
+                ContactEntry contact = getEntry(dsi, ContactEntry.class);
+                if (contact.hasGroupMembershipInfos() && contact.hasEmailAddresses()) {
+                    boolean check = false;
+                    boolean update = false;
+                    for (GroupMembershipInfo gmi : contact.getGroupMembershipInfos()) {
+                        if (!isDeleted(gmi)) {
+                            if (localGroup.hasEmail(getPrimaryEmail(contact).getAddress())) {
+                                //update the contacts group membership info
+                                update = true;
+                                if(entryID.equals(gmi.getHref())) {
+                                    check = true;
+                                    break;
+                                }
+                            } else if (entryID.equals(gmi.getHref())) {
+                                //delete the contacts group membership info
+                                contact.getGroupMembershipInfos().remove(gmi);
+                                reqs.add(SyncRequest.update(this, dsi.itemId, contact));
+                                break;
+                            }
+                        }
+                    }
+                    if (update && !check) {
+                        GroupMembershipInfo localgmi = new GroupMembershipInfo();
+                        localgmi.setDeleted(false);
+                        localgmi.setHref(entryID);
+                        contact.addGroupMembershipInfo(localgmi);
+                        reqs.add(SyncRequest.update(this, dsi.itemId, contact));
+                    }
+                }
+            }
+        }
     }
 
     private void updateGroupMembershipInfos(ContactEntry entry, Contact contact) {

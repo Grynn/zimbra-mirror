@@ -36,6 +36,7 @@ import com.google.gdata.data.DateTime;
 import com.google.gdata.data.Link;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.contacts.ContactFeed;
+import com.google.gdata.data.contacts.ContactGroupEntry;
 import com.google.gdata.data.contacts.ContactGroupFeed;
 
 import java.net.URL;
@@ -76,6 +77,16 @@ class GabService {
     public ContactGroupFeed getGroupFeed(DateTime updatedMin, DateTime updatedMax)
         throws IOException, ServiceException {
         return getFeed(groupFeedUrl, ContactGroupFeed.class, updatedMin, updatedMax);
+    }
+
+    public ContactGroupEntry getGroupFeed(URL groupFeedUrl)
+        throws IOException, ServiceException {
+        try {
+            return cs.getEntry(groupFeedUrl, ContactGroupEntry.class);
+        } catch (com.google.gdata.util.ServiceException e) {
+            throw ServiceException.FAILURE(
+                "Unable to retrieve feed: " + groupFeedUrl, e);
+        }
     }
 
     private <T extends BaseFeed> T getFeed(URL feedUrl, Class <T> feedClass,

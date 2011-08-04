@@ -47,6 +47,7 @@ public final class LocalData {
 
     private static final String KEY_GAB = "GAB";
     private static final String KEY_YAB = "YAB";
+    public static int GAB_FOLDER_ID = -1;
 
     public static final OperationContext CONTEXT =
         new ChangeTrackingMailbox.TracelessContext();
@@ -168,7 +169,7 @@ public final class LocalData {
     public Collection<DataSourceItem> getAllContactMappings()
         throws ServiceException {
         // Excludes auto-contacts which have no groups
-        return DbDataSource.getAllMappingsInFolder(ds, Mailbox.ID_FOLDER_CONTACTS);
+        return DbDataSource.getAllMappingsInFolder(ds, GAB_FOLDER_ID);
     }
 
     public Contact getContact(int id) throws ServiceException {
