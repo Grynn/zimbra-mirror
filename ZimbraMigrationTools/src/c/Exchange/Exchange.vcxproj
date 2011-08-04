@@ -88,7 +88,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;EXCHANGE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -263,15 +263,23 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='rtl|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="MapiMigration.cpp" />
+    <ClCompile Include="MAPIObjects.cpp" />
+    <ClCompile Include="MAPISession.cpp" />
+    <ClCompile Include="MAPIStore.cpp" />
+    <ClCompile Include="MAPITableIterator.cpp" />
     <ClCompile Include="MapiUtils.cpp" />
     <ClCompile Include="MapiWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Exchange.h" />
     <ClInclude Include="ExchangeAdmin.h" />
     <ClInclude Include="Exchange_i.h" />
     <ClInclude Include="GenericException.h" />
-    <ClInclude Include="MAPICommon.h" />
     <ClInclude Include="MapiMigration.h" />
+    <ClInclude Include="MAPIObjects.h" />
+    <ClInclude Include="MAPISession.h" />
+    <ClInclude Include="MAPIStore.h" />
+    <ClInclude Include="MAPITableIterator.h" />
     <ClInclude Include="MapiUtils.h" />
     <ClInclude Include="MapiWrapper.h" />
   </ItemGroup>

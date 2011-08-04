@@ -1,5 +1,4 @@
 #include "common.h"
-#include "commonMAPI.h"
 #include "Exchange.h"
 
 // Used to determine whether the DLL can be unloaded by OLE.
@@ -8,7 +7,7 @@ STDAPI DllCanUnloadNow(void) {
 }
 
 // Returns a class factory to create an object of the requested type.
-STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv) {
+STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv) {
     return _AtlModule.DllGetClassObject(rclsid, riid, ppv);
 }
 
@@ -16,12 +15,14 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv) {
 STDAPI DllRegisterServer(void) {
     // registers object, typelib and all interfaces in typelib
     HRESULT hr = _AtlModule.DllRegisterServer();
+
     return hr;
 }
 
 // DllUnregisterServer - Removes entries from the system registry.
 STDAPI DllUnregisterServer(void) {
     HRESULT hr = _AtlModule.DllUnregisterServer();
+
     return hr;
 }
 
@@ -31,17 +32,15 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine) {
     static const wchar_t szUserSwitch[] = L"user";
 
     if (pszCmdLine != NULL) {
-	if (_wcsnicmp(pszCmdLine, szUserSwitch, _countof(szUserSwitch)) == 0) {
-	    ATL::AtlSetPerUserRegistration(true);
-	}
+        if (_wcsnicmp(pszCmdLine, szUserSwitch, _countof(szUserSwitch)) == 0)
+            ATL::AtlSetPerUserRegistration(true);
     }
-    if (bInstall) {	
-	hr = DllRegisterServer();
-	if (FAILED(hr)) {
-	    DllUnregisterServer();
-	}
+    if (bInstall) {
+        hr = DllRegisterServer();
+        if (FAILED(hr))
+            DllUnregisterServer();
     } else {
-	hr = DllUnregisterServer();
+        hr = DllUnregisterServer();
     }
     return hr;
 }

@@ -7,91 +7,88 @@
 import "oaidl.idl";
 import "ocidl.idl";
 
-
 typedef enum FolderType{
-Mail = 1,
-Contacts = 2,
-Calendar = 3,
+    Mail = 1,
+    Contacts = 2,
+    Calendar = 3,
 }FolderType;
 
-typedef
-    [
-        uuid(C5E4267B-AE6C-4E31-956A-06D8094D0CBE),
-        version(1.0),
-        helpstring("A UDT for folder objects")
-    ]
-    struct UDTFolder {
-        [helpstring("Type of Folder")]    FolderType  Type;
-        [helpstring("Name of the Folder")]    BSTR     Name;
-        [helpstring("Total Items in the Folder")]   long     Items;
-    } UDTFolder;
+typedef [
+    uuid(C5E4267B-AE6C-4E31-956A-06D8094D0CBE),
+    version(1.0),
+    helpstring("A UDT for folder objects")
+]
 
-	typedef
-    [
-        uuid(C5E4267A-AE6C-4E31-956A-06D8094D0CBE),
-        version(1.0),
-        helpstring("A UDT for Item objects")
-    ]
-    struct UDTItem {
-        [helpstring("Type of Item")]    FolderType  Type;
-        [helpstring("EntryID of the Item")]    BSTR     EntryId;
-        [helpstring("Creation Date of the  Items in the Folder")]   VARIANT     CreationDate;
-    } UDTItem;
+struct UDTFolder {
+    [helpstring("Type of Folder")] FolderType Type;
+    [helpstring("Name of the Folder")] BSTR Name;
+    [helpstring("Total Items in the Folder")] long Items;
+} UDTFolder;
 
+typedef [
+    uuid(C5E4267A-AE6C-4E31-956A-06D8094D0CBE),
+    version(1.0),
+    helpstring("A UDT for Item objects")
+]
+
+struct UDTItem {
+    [helpstring("Type of Item")] FolderType Type;
+    [helpstring("EntryID of the Item")] BSTR EntryId;
+    [helpstring("Creation Date of the  Items in the Folder")] VARIANT CreationDate;
+} UDTItem;
 
 [
-	object,
-	uuid(C5E4267C-AE6C-4E31-956A-06D8094D0CBE),
-	dual,
-	nonextensible,
-	pointer_default(unique)
+    object,
+    uuid(C5E4267C-AE6C-4E31-956A-06D8094D0CBE),
+    dual,
+    nonextensible,
+    pointer_default(unique)
 ]
-interface IMapiWrapper : IDispatch{
-	[id(1), helpstring("This method can be used to connect to ZCO server")] HRESULT ConnectToServer(BSTR ServerHostName, BSTR Port, BSTR AdminID);
-	[id(2), helpstring("Method to connect to Exchange server")] HRESULT ConnecttoXchgServer([in] BSTR HostName, BSTR ProfileName, BSTR Password);
-	[id(3), helpstring("Method to import all the options, input is the tag name for options")] HRESULT ImportMailOptions([in] BSTR OptionsTag);
-	[id(4)] HRESULT GetProfilelist([out] VARIANT* Profiles);
 
-		[propget, id(0), helpstring("Returns a UDT Folder in the UDTObject")] 
-                HRESULT UDTFolder([out, retval]        
-                   UDTFolder *pUDT);
-        [propput, id(0), helpstring("Sets a UDT Folder in the UDTObject")]
-                HRESULT UDTFolder([in]       
-                  UDTFolder *pUDT);
+interface IMapiWrapper : IDispatch {
+    [id(1), helpstring("This method can be used to connect to ZCO server")] HRESULT ConnectToServer(BSTR ServerHostName, BSTR Port, BSTR AdminID);
+    [id(2), helpstring("Method to connect to Exchange server")] HRESULT ConnecttoXchgServer([in] BSTR HostName, BSTR ProfileName, BSTR Password);
+    [id(3), helpstring("Method to import all the options, input is the tag name for options")] HRESULT ImportMailOptions([in] BSTR OptionsTag);
+    [id(4)] HRESULT GetProfilelist([out] VARIANT* Profiles);
 
-		[propget, id(6), helpstring("Returns a UDT Item in the UDTObject")] 
-                HRESULT UDTItem([out, retval]        
-                   UDTItem *pUDTItem);
-        [propput, id(6), helpstring("Sets a UDT Item in the UDTObject")]
-                HRESULT UDTItem([in]       
-                  UDTItem *pUDTItem);
+    [propget, id(0), helpstring("Returns a UDT Folder in the UDTObject")] 
+    HRESULT UDTFolder([out, retval]        
+    UDTFolder *pUDT);
 
+    [propput, id(0), helpstring("Sets a UDT Folder in the UDTObject")]
+    HRESULT UDTFolder([in]       
+    UDTFolder *pUDT);
 
+    [propget, id(6), helpstring("Returns a UDT Item in the UDTObject")] 
+    HRESULT UDTItem([out, retval]        
+    UDTItem *pUDTItem);
 
-[id(5), helpstring("Return successive named values")] 
-            HRESULT UDTFolderSequence([in] long start,
-                                [in] long length, 
-                                [out, retval] SAFEARRAY(UDTFolder) *SequenceArr);
+    [propput, id(6), helpstring("Sets a UDT Item in the UDTObject")]
+    HRESULT UDTItem([in]       
+    UDTItem *pUDTItem);
 
-			[id(7), helpstring("Return successive named Item values")] 
-            HRESULT UDTItemSequence([in] long start,
-                                [in] long length, 
-                                [out, retval] SAFEARRAY(UDTItem) *SequenceArr);
+    [id(5), helpstring("Return successive named values")] 
+    HRESULT UDTFolderSequence([in] long start,
+    [in] long length, 
+    [out, retval] SAFEARRAY(UDTFolder) *SequenceArr);
 
+    [id(7), helpstring("Return successive named Item values")] 
+    HRESULT UDTItemSequence([in] long start,
+    [in] long length, 
+    [out, retval] SAFEARRAY(UDTItem) *SequenceArr);
 };
+
 [
-	uuid(33449EAA-8056-4D28-8D42-552B7C6C8954),
-	version(1.0),
+    uuid(33449EAA-8056-4D28-8D42-552B7C6C8954),
+    version(1.0),
 ]
-library Exchange
-{
-	importlib("stdole2.tlb");
-	[
-		uuid(A6A12B55-AE1E-449D-A646-19E0DB020EA2)		
-	]
-	coclass MapiWrapper
-	{
-		[default] interface IMapiWrapper;
-	};
-};
 
+library Exchange {
+    importlib("stdole2.tlb");
+    [
+	uuid(A6A12B55-AE1E-449D-A646-19E0DB020EA2)		
+    ]
+    coclass MapiWrapper {
+	[default] interface IMapiWrapper;
+    };
+};

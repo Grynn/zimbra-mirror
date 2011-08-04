@@ -39,6 +39,18 @@
     <ClCompile Include="ExchangeAdmin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MAPIObjects.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MAPITableIterator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MAPISession.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MAPIStore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MapiMigration.h">
@@ -56,10 +68,22 @@
     <ClInclude Include="MapiUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MAPICommon.h">
+    <ClInclude Include="ExchangeAdmin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ExchangeAdmin.h">
+    <ClInclude Include="MAPITableIterator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MAPIObjects.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MAPISession.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MAPIStore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Exchange.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

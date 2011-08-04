@@ -47,9 +47,6 @@
     <ClInclude Include="..\Exchange\GenericException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Exchange\MAPICommon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Exchange\ExchangeAdmin.h">
       <Filter>Header Files</Filter>
     </ClInclude>

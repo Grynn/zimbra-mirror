@@ -1,9 +1,11 @@
-#include "stdafx.h"
+#include "common.h"
+#include "..\Exchange\Exchange.h"
 #include "..\Exchange\ExchangeAdmin.h"
 #include "..\Exchange\MAPISession.h"
 #include "..\Exchange\MAPIStore.h"
 #include "..\Exchange\MAPIObjects.h"
 #include "..\Exchange\MapiUtils.h"
+#include "Zimbra/RPC.h"
 
 LPCWSTR lpProfileName=L"testprofile";
 LPCWSTR lpServerAddress=L"10.117.82.161";
