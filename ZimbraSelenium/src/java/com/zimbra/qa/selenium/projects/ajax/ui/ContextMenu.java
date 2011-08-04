@@ -119,11 +119,11 @@ public class ContextMenu extends AbsDisplay {
 		}
 		
 		//TODO: check for visible		
-		if ( !this.sIsElementPresent("xpath=//div[@" +typeLocator + "]"))
-			throw new HarnessException("Context Menu List is not present(visible) "+ "//div[@id='zm__Contacts']");
+		if ( !this.sIsElementPresent("css=div[" +typeLocator + "]"))
+			throw new HarnessException("Context Menu List is not present(visible) "+ "css=div[" +typeLocator + "]");
 
 		//Get the number of context menu item including separator  
-		int count = this.sGetXpathCount("//div[@" + typeLocator + "]/table/tbody/tr");
+		int count = sGetCssCount("css=div[" +typeLocator + "]>table>tbody>tr");
 		
 		logger.debug(myPageName() + " zListGetContextMenuItems: number of context menu item including separators: "+ count);
 		System.out.println(myPageName() + " zListGetContextMenuItems: number of context menu item including separators: "+ count);
@@ -132,7 +132,7 @@ public class ContextMenu extends AbsDisplay {
 		for (int i = 1; i <= count; i++) {
 			//get id attribute
 			String id = sGetAttribute("xpath=(//div[@" + typeLocator + "]/table/tbody/tr["+ i +"]/td/div)@id");
-						
+            		    				
 			ContextMenuItem ci  = getContextMenuItem(id, contextMenuItemObjects);		    						
 			list.add(ci);	    	      
 		}
