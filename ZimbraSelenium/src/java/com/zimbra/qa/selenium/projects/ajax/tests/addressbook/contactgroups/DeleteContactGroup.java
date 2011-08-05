@@ -11,7 +11,7 @@ import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
+
 
 
 
@@ -238,21 +238,18 @@ public class DeleteContactGroup extends AjaxCommonTest  {
 		  
 	}
 	
-	@Test(	description = "Move a contact group to folder Trash by click Move on toolbar",
+	@Test(	description = "Move a contact group to folder Trash by expand Move dropdown then select Trash",
 			groups = { "functional" })
-	public void MoveToTrashClickMoveOnToolbar() throws HarnessException {
+	public void MoveToTrashFromMoveDropdownOnToolbar() throws HarnessException {
 		        
 		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
  		
 	    // Create a contact group via Soap then select
 		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK);
 	
-        //click Move icon on toolbar
-        DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zToolbarPressButton(Button.B_MOVE);
-     
-        //enter the moved folder
-        dialogContactMove.zClickTreeFolder(folder);
-        dialogContactMove.zClickButton(Button.B_OK);
+        	
+        //click Move dropdown on toolbar then select Trash
+        app.zPageAddressbook.zToolbarPressPulldown(Button.B_MOVE,folder);
   
        
         //verify contact group deleted

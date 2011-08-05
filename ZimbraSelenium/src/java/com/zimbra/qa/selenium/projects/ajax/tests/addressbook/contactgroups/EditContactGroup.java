@@ -36,11 +36,7 @@ public class EditContactGroup extends AjaxCommonTest  {
         // Fill in the form
 	    formContactGroupNew.zFill(newGroup);
 	    
-	  
-		// Save the contact
-        formContactGroupNew.zSubmit();
-		
-      
+	        
     	// Click Close
 	    DialogWarning dialogWarning = (DialogWarning) app.zPageAddressbook.zToolbarPressButton(Button.B_CANCEL);
 	    
@@ -240,7 +236,7 @@ public class EditContactGroup extends AjaxCommonTest  {
 	    // Click Yes in popup dialog 
 	    dialogWarning.zClickButton(Button.B_YES);
 
-        //verify toasted message Contact Saved
+        //verify toasted message Group Saved
         String expectedMsg ="Group Saved";
         ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
         		        expectedMsg , "Verify toast message '" + expectedMsg + "'");

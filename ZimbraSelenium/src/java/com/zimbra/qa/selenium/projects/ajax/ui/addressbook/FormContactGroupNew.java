@@ -257,6 +257,53 @@ public class FormContactGroupNew extends AbsForm {
 		
 		return false;					
 	}
+	
+	public void selectFolder(FolderItem folder) throws HarnessException {
+		//expand the menu
+		zClick(Locators.zFolderDropdown);
+		zWaitForBusyOverlay();
+		
+		
+		//assume only one menu expanded at a time
+		String id = null;
+		int i = sGetCssCount("css=div.DwtMenu") -1;
+		
+		//folder menu usually located at the end, so go backward  
+		try {		
+		    for (; i>=0; i--) {
+		    	id = sGetEval("window.document.getElementsByClassName('DwtMenu')[" + i + "].id" );
+		    	if (zIsVisiblePerPosition(id, 0, 0)) {
+		    		break;
+		    	}		    					    	
+	        }	
+		}
+		catch (Exception e) {
+			logger.info(e.getMessage());
+			throw new HarnessException(" cannot select folder " + folder.getName());
+		}
+		
+		//found folder menu
+		if ((i >=  0) && (id != null)) {
+           String commonLocator="css=div#" +id + ">table>tbody>tr";
+	       int numOfFolders= sGetCssCount(commonLocator);
+		   String folderLocator= null;
+		   int j=1;
+		   
+           for (; j<=numOfFolders; j++) {
+        	   folderLocator = commonLocator+ ":nth-of-type(" + j +")";
+        	   if (sGetText(folderLocator).equals(folder.getName())) {
+        		  break; 
+        	   }
+           }
+
+		   if ((j <=numOfFolders) && (folderLocator !=null) ){
+			 zClick(folderLocator + ">td>div>table>tbody>tr>td:nth-of-type(3).ZWidgetTitle");
+			 zWaitForBusyOverlay();
+			 return;
+		   }
+		}
+		throw new HarnessException ("cannot found folder " + folder.getName());
+	}
 
 	public void select(AppAjaxClient app, String dropdown, String option) throws HarnessException {
 		

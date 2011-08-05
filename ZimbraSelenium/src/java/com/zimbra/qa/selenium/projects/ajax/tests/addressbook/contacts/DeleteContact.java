@@ -174,9 +174,9 @@ public class DeleteContact extends AjaxCommonTest  {
         ZAssert.assertTrue(count==0, "Verify contact fileAs (" + contactItem1.fileAs + "," + contactItem2.fileAs + "," + contactItem3.fileAs + ") deleted");
             
    	}
-	@Test(	description = "Move a contact item to trash folder by click tool bar Move",
+	@Test(	description = "Move a contact item to trash folder by expand Move dropdown on toolbar, then select Trash",
 			groups = { "functional" })
-	public void ClickMoveOnToolbarMoveToTrash() throws HarnessException {
+	public void MoveToTrashFromMoveDropdownOnToolbar() throws HarnessException {
 		
 		 // Create a contact via Soap then select
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
@@ -184,12 +184,9 @@ public class DeleteContact extends AjaxCommonTest  {
 	
 		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Trash);
 		
-       //click Move icon on toolbar
-        DialogMove dialogContactMove = (DialogMove) app.zPageAddressbook.zToolbarPressButton(Button.B_MOVE);
-    
-        //enter the moved folder
-        dialogContactMove.zClickTreeFolder(folder);
-        dialogContactMove.zClickButton(Button.B_OK);
+	    //click Move dropdown on toolbar then select Trash
+        app.zPageAddressbook.zToolbarPressPulldown(Button.B_MOVE,folder);
+  
      
         //verify
         VerifyContactDeleted(contactItem);
