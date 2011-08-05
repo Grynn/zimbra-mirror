@@ -1,0 +1,4 @@
+<zimlet name="com_zimbra_photohelper" label="Photo Helper" version="0.1" description="Creates Photo URL for People Search">
+    <include>photohelper.js</include>
+    <handlerObject>com_zimbra_photohelper</handlerObject>
+</zimlet>
