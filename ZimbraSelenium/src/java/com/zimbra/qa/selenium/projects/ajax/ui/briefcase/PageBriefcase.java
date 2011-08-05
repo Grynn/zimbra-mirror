@@ -1149,6 +1149,13 @@ public class PageBriefcase extends AbsTab {
 			page = new DialogTag(MyApplication, this);
 
 			keyCode = "78,84";
+		} else if (shortcut == Shortcut.S_NEWFOLDER) {
+
+			// "NEW Folder" shortcut opens "Create New Folder" dialog
+			//due to the bug #63029 it opens dialog with Mail tree view
+			page = new DialogCreateFolder(MyApplication, this);
+
+			keyCode = "78,70";
 		} else if (shortcut == Shortcut.S_MOVE) {
 
 			// "Move" shortcut opens "Choose Folder" dialog
