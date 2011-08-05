@@ -1,18 +1,18 @@
 package com.zimbra.qa.selenium.projects.desktop.ui.addressbook;
 
+import java.awt.event.KeyEvent;
+
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactNew.Locators;
-
-
 
 public class FormContactNew extends AbsForm {
-	
+
 	public static class Locators {
-		
+
 		public static final String zNewContactMenuIconBtn = "id=zb__CNS__NEW_MENU_left_icon";
-		
+
 		public static final String zPrefixEditField = "id=editcontactform_PREFIX_input";
 		public static final String zFirstEditField = "id=editcontactform_FIRST_input";
 		public static final String zMiddleEditField = "id=editcontactform_MIDDLE_input";
@@ -28,21 +28,21 @@ public class FormContactNew extends AbsForm {
 		public static final String zRemoveImageLink = "id=editcontactform_REMOVE_IMAGE";
 		public static final String zContactsFolder_NewUI = "id=editcontactform_FOLDER_left_icon";
 		public static final String zContactDetailsIconBtn = "id=editcontactform_DETAILS";
-        // TODO need fixed id for email
-		public static final String zEmail1EditField = "id=editcontactform_EMAIL_*";
-		public static final String zWorkEmail1EditField = "xpath=//div[@id='editcontactform_EMAIL_1']/input[contains(@id,'editcontactform_EMAIL_DWT')]";
-		public static final String zPhone1EditField = "id=*_PHONE";
-		public static final String zIM1EditField = "id=*_IM";
-		public static final String zStreet1TextArea = "id=*STREET";
-		public static final String zCity1EditField = "id=*_CITY";
-		public static final String zState1EditField = "id=*_STATE";
-		public static final String zPostalCode1EditField = "id=*_ZIP";
-		public static final String zCountry1EditField = "id=*_COUNTRY";
-		public static final String zURL1EditField = "id=*_URL";
-		public static final String zOther1EditField = "id=*_OTHER";
-		public static final String zNotesEditField = "id=editcontactform_NOTES_input";
 
-		public static final String zPrefixCheckbox = "css=td.ZWidgetTitle:contains('Prefix')";
+		public static final String zEmail1EditField = "css=input[id^=editcontactform_EMAIL_]";
+      public static final String zWorkEmail1EditField = "css=div#editcontactform_EMAIL_1 input[id^=editcontactform_EMAIL_DWT]";
+      public static final String zPhone1EditField = "css=div#editcontactform_PHONE_0 input";
+      public static final String zIM1EditField = "css=div#editcontactform_IM_0 input";
+      public static final String zStreet1TextArea = "css=div#editcontactform_ADDRESS_0_STREET textarea";
+      public static final String zCity1EditField = "css=div#editcontactform_ADDRESS_0_CITY input";
+      public static final String zState1EditField = "css=div#editcontactform_ADDRESS_0_STATE input";
+      public static final String zPostalCode1EditField = "css=div#editcontactform_ADDRESS_0_ZIP input";
+      public static final String zCountry1EditField = "css=div#editcontactform_ADDRESS_0_COUNTRY input";
+      public static final String zURL1EditField = "css=div#editcontactform_URL_0 input";
+      public static final String zOther1EditField = "css=div#editcontactform_OTHER_0 input";
+      public static final String zNotesEditField = "css=textarea#editcontactform_NOTES_input";
+
+      public static final String zPrefixCheckbox = "css=td.ZWidgetTitle:contains('Prefix')";
       public static final String zMiddleCheckbox = "css=td.ZWidgetTitle:contains('Middle')";
       public static final String zMaidenCheckbox = "css=td.ZWidgetTitle:contains('Maiden')";
       public static final String zSuffixCheckbox = "css=td.ZWidgetTitle:contains('Suffix')";
@@ -145,76 +145,89 @@ public class FormContactNew extends AbsForm {
       zClick(Locators.zDepartmentCheckbox);
    }
 
-	public void zFillField(Field field, String value) throws HarnessException {
-		tracer.trace("Set "+ field +" to "+ value);
+   public void zFillField(String locator, String value) throws HarnessException {
+      tracer.trace("Set "+ locator +" to "+ value);
+   
+      // Make sure the button exists
+      if ( !this.sIsElementPresent(locator) )
+         throw new HarnessException("Field is not present field="+ locator +" value="+ value);
+         
+      
+      if (zIsBrowserMatch(BrowserMasks.BrowserMaskChrome)) { 
+           sType(locator,value);
+           sTypeKeys(locator,value);         
+      }
+      else {
+         //The following code to simulate paste action from user (Ctrl-V) bug #
+         //Use "Notes" to store text which will be entered into clipboard (Ctrl-X)
+         sType(Locators.zNotesEditField ,value); //
 
-		String locator = null;
-		
-		if ( field == Field.FirstName ) {
-			
-			locator = Locators.zFirstEditField;
-						
-		} else if ( field == Field.LastName ) {
-			
-			locator = Locators.zLastEditField;
-						
-		} else {
-			throw new HarnessException("not implemented for field "+ field);
-		}
+         //highlight text
+         String id= "editcontactform_NOTES_input";
+         ClientSessionFactory.session().selenium().getEval(
+               "this.browserbot.getUserWindow().document.getElementById('"
+               + id + "')" + ".select()");
+         
+         //cut text and put into clipboard
+         sKeyDownNative(KeyEvent.VK_CONTROL+"");
+         sKeyPressNative(KeyEvent.VK_X+"");           
+         sKeyUpNative(KeyEvent.VK_CONTROL+"");
 
-		if ( locator == null ) {
-			throw new HarnessException("locator was null for field "+ field);
-		}
-		
-		// Default behavior, enter value into locator field
-		//
-		
-		// Make sure the button exists
-		if ( !this.sIsElementPresent(locator) )
-			throw new HarnessException("Field is not present field="+ field +" locator="+ locator);
-		
-		// Enter text
-		this.sFocus(locator);
-		this.zClick(locator);
-		sTypeKeys(locator, value);
-
-	}
+         //paste text to the target locator
+         sFocus(locator);     
+         sKeyDownNative(KeyEvent.VK_CONTROL+"");
+         sKeyPressNative(KeyEvent.VK_V+"");           
+         sKeyUpNative(KeyEvent.VK_CONTROL+"");
+                  
+      }
+        
+   }
 	
 	@Override
-	public void zFill(IItem item) throws HarnessException {
-		logger.info("FormMailNew.fill(IItem)");
-		logger.info(item.prettyPrint());
+   public void zFill(IItem item) throws HarnessException {
+      logger.info("FormMailNew.fill(IItem)");
+      logger.info(item.prettyPrint());
 
-		// Make sure the item is a ContactItem
-		if ( !(item instanceof ContactItem) ) {
-			throw new HarnessException("Invalid item type - must be ContactItem");
-		}
-		
-		// Convert object to ContactItem
-		ContactItem contact = (ContactItem) item;
-		
-		// Fill out the form		
-		if ( contact.firstName != null ) {
-			
-			zFillField(Field.FirstName, contact.firstName);
+      // Make sure the item is a ContactItem
+      if ( !(item instanceof ContactItem) ) {
+         throw new HarnessException("Invalid item type - must be ContactItem");
+      }
 
-		}
-		
-		if ( contact.lastName != null ) {
-			
-			zFillField(Field.LastName, contact.lastName);
+      // Convert object to ContactItem
+      ContactItem contact = (ContactItem) item;
+      
+      // Fill out the form    
+      if ( contact.firstName != null ) {        
+         zFillField(Locators.zFirstEditField, contact.firstName);
 
+      }
+      
+      if ( contact.lastName != null ) {         
+         zFillField(Locators.zLastEditField, contact.lastName);       
+      }
+      
+      if ( contact.middleName != null ) {       
+         zFillField(Locators.zMiddleEditField, contact.lastName);
+      }
+      
+      if ( contact.email != null ) {         
+         zFillField(Locators.zEmail1EditField, contact.email);
+      }
+      
+      if (contact.ContactAttributes.size() >0) {
+         for ( String key:contact.ContactAttributes.keySet()) {
+            zFillField(key, contact.ContactAttributes.get(key));
+         }
+      }
+      
+      //TODO: need fix xpath for zEmail1EditField
+      //if ( contact.email != null ) {       
+      // this.sType(Locators.zEmail1EditField, contact.email);
+      //}
 
-		}
-		
-		//TODO: need fix xpath for zEmail1EditField
-		//if ( contact.email != null ) {			
-		//	this.sType(Locators.zEmail1EditField, contact.email);
-		//}
-
-		SleepUtil.sleepMedium();
-			
-	}
+      SleepUtil.sleepMedium();
+         
+   }
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
