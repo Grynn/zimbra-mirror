@@ -3,15 +3,26 @@
  */
 package com.zimbra.qa.selenium.projects.ajax.ui.tasks;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.thoughtworks.selenium.SeleniumException;
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.items.TaskItem;
-import com.zimbra.qa.selenium.framework.ui.*;
-import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
-import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.framework.ui.AbsApplication;
+import com.zimbra.qa.selenium.framework.ui.AbsPage;
+import com.zimbra.qa.selenium.framework.ui.AbsTab;
+import com.zimbra.qa.selenium.framework.ui.Action;
+import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.Shortcut;
+import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZAssert;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
+import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
+import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
 
 
 /**
@@ -22,22 +33,19 @@ public class PageTasks extends AbsTab {
 
 	public static class Locators {
 
-		public static final String zv__TKL = "zv__TKL";
-		public static final String zl__TKL__rows = "zl__TKL__rows";
-		public static final String zl__TKL__headers = "zl__TKL__headers";
-		public static final String _newTaskBannerId = "_newTaskBannerId";
-		public static final String _upComingTaskListHdr = "_upComingTaskListHdr";
+		public static final String zl__TKL__rowsID = "zl__TKL__rows";
+		public static final String _newTaskBannerID = "_newTaskBannerId";
+		public static final String _upComingTaskListHdrID = "_upComingTaskListHdr";
 		public static final String zli__TKL__ = "zli__TKL__"; // Each task item:
 		// <div
 		// id='zli__TKL__<item
 		// id>' .../>
 		public static final String zb__TKE1__SAVE_left_icon = "zb__TKE1__SAVE_left_icon";
 		public static final String taskListView = "css=div[id='zl__TKL__rows'][class='DwtListView-Rows']";
-		//public static final String taskbodyView = "css=div[id='zl__TKL__rows'][class='DwtListView-Rows']";
 		public static final String zTasksTab = "zb__App__Tasks";
 		public static final String zNewTask = "zb__TKL__NEW_MENU_left_icon";
 		public static final String zNewTaskDropDown = "css=td[id$='__NEW_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
-		public static final String zNewTagMenuItem= "//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgNewTag')]";
+		public static final String zNewTagMenuItem= "css=td[id$='_left_icon']>div[class='ImgNewTag']";
 	}
 
 	public PageTasks(AbsApplication application) {
@@ -60,8 +68,8 @@ public class PageTasks extends AbsTab {
 			((AppAjaxClient) MyApplication).zPageMain.zNavigateTo();
 		}
 
-		String locator = "zb__App__Tasks";
-		String rowLocator = "//div[@id='" + Locators.zl__TKL__rows + "']/div";
+		String id = "zb__App__Tasks";
+		String rowLocator = "css=div[id='" + Locators.zl__TKL__rowsID + "']>div";
 
 		boolean loaded = this.sIsElementPresent(rowLocator);
 		if (!loaded)
@@ -70,7 +78,7 @@ public class PageTasks extends AbsTab {
 		//	String selected = this.sGetAttribute("xpath=(//div[@id='" + locator + "'])@class");
 		//	return (selected.contains("ZSelected"));
 
-		return(this.sIsElementPresent("css=div[id='"+ locator +"'][class*=ZSelected]"));
+		return(this.sIsElementPresent("css=div[id='"+ id +"'][class*=ZSelected]"));
 
 	}
 
@@ -104,7 +112,7 @@ public class PageTasks extends AbsTab {
 
 		tracer.trace("Navigate to "+ this.myPageName());
 
-		this.zClickAt(PageMain.Locators.zAppbarTasks,"");
+		this.zClickAt(PageMain.Locators.zAppbarTasks, "");
 
 		this.zWaitForBusyOverlay();
 
@@ -136,51 +144,59 @@ public class PageTasks extends AbsTab {
 
 		AbsPage page = null;
 		String itemLocator = null;
-		String itemSubject = null;
 
 		// How many items are in the table?
-		findTask(subject);
-		String rowLocator = "//div[@id='" + Locators.zl__TKL__rows + "']/div";
-		int count = this.sGetXpathCount(rowLocator);
+		// findTask(subject);
+		String rowLocator = "css=div[id='" + Locators.zl__TKL__rowsID + "']>div";
+		int count = this.sGetCssCount(rowLocator);
 		logger.debug(myPageName() + " zListItem: number of rows: " + count);
+
+		if ( count < 1 ) 
+			throw new HarnessException("No tasks in the list!");
 
 		// Get each conversation's data from the table list
 		for (int i = 1; i <= count; i++) {
+			
+			itemLocator = rowLocator + ":nth-of-type("+ i +")";
+			if ( !this.sIsElementPresent(itemLocator) )
+				throw new HarnessException("Item Locator not present: "+ itemLocator);
 
-			itemLocator = rowLocator + "[" + i + "]";
-			String id = this.sGetAttribute("xpath=(" + itemLocator + ")@id");
-			String locator = null;
+			String id;
+			try {
+				id = this.sGetAttribute(itemLocator + "@id");
+				if ( id == null )
+					throw new HarnessException("id was null: "+ itemLocator + "@id");
+				if ( !id.startsWith(Locators.zli__TKL__) )
+					continue; // _newTaskBannerId, etc.
 
-			// Skip any invalid IDs
-			if ((id == null) || (id.trim().length() == 0))
+			} catch (SeleniumException e) {
+				logger.warn("No ID on item: "+ itemLocator);
 				continue;
-
-			// Look for zli__TKL__258
-			if (id.contains(Locators.zli__TKL__)) {
-				// Found a task
-
-				// What is the subject?
-				locator = itemLocator + "//td[5]";
-				itemSubject = this.sGetText(locator).trim();
-
-				if ((itemSubject == null) || (itemSubject.trim().length() == 0)) {
-					logger.debug("found empty task subject");
-					continue;
-				}
-
-				if (itemSubject.equals(subject)) {
-					// Found it
-					break;
-				}
-
 			}
+
+			String subjectLocator = "css=div[id='"+ id +"'] td[id$='_su']";
+			if ( !this.sIsElementPresent(subjectLocator) )
+				throw new HarnessException("Subject Locator not present: "+ subjectLocator);
+			
+			String itemSubject = this.sGetText(subjectLocator);
+			if ((itemSubject == null) || (itemSubject.trim().length() == 0)) {
+				logger.debug("found empty task subject");
+				continue;
+			}
+			
+			if (itemSubject.equals(subject)) {
+				// Found it
+				break;
+			}
+			
+			itemLocator = null;
 		}
 
 		if (itemLocator == null) {
-			throw new HarnessException("Unable to locate item with subject("
-					+ subject + ")");
+			throw new HarnessException("Unable to locate item with subject(" + subject + ")");
 		}
 
+		
 		if (action == Action.A_LEFTCLICK) {
 
 			// Left-Click on the item
@@ -213,20 +229,13 @@ public class PageTasks extends AbsTab {
 
 		} else if (action == Action.A_MAIL_CHECKBOX) {
 
-			String selectlocator = itemLocator + "//div[contains(@id, '__se')]";
+			String selectlocator = itemLocator + " div[id$='__se']";
 			if (!this.sIsElementPresent(selectlocator))
 				throw new HarnessException("Checkbox locator is not present "
 						+ selectlocator);
 
-			/*	String image = this.sGetAttribute("xpath=" + selectlocator
-					+ "@class");
-			if (image.equals("ImgCheckboxChecked"))
-				throw new HarnessException(
-				"Trying to check box, but it was already enabled");*/
-
-			if (this.sIsElementPresent("css=div[id='"+ selectlocator +"'][class*=ImgCheckboxChecked]"))
-				throw new HarnessException(
-				"Trying to check box, but it was already enabled");
+			if (this.sIsElementPresent(selectlocator +"[class*=ImgCheckboxChecked]"))
+				throw new HarnessException("Trying to check box, but it was already enabled");
 
 			// Left-Click on the flag field
 
@@ -240,22 +249,17 @@ public class PageTasks extends AbsTab {
 
 		} else if (action == Action.A_MAIL_UNCHECKBOX) {
 
-			String selectlocator = itemLocator + "//div[contains(@id, '__se')]";
+			String selectlocator = itemLocator + " div[id$='__se']";
 			if (!this.sIsElementPresent(selectlocator))
 				throw new HarnessException("Checkbox locator is not present "
 						+ selectlocator);
 
-			/*	String image = this.sGetAttribute("xpath=" + selectlocator
-					+ "@class");
-			if (image.equals("ImgCheckboxUnchecked"))
-				throw new HarnessException(
-				"Trying to uncheck box, but it was already disabled");*/
-			if (this.sIsElementPresent("css=div[id='"+ selectlocator +"'][class*=ImgCheckboxUnchecked]"))
-				throw new HarnessException(
-				"Trying to uncheck box, but it was already disabled");
-			// Left-Click on the flag field
-			this.zClick(selectlocator);
+			if (this.sIsElementPresent(selectlocator +"[class*=ImgCheckboxChecked]"))
+				throw new HarnessException("Trying to uncheck box, but it was already disabled");
 
+			// Left-Click on the flag field
+
+			this.zClick(selectlocator);
 			this.zWaitForBusyOverlay();
 
 			// No page to return
@@ -282,6 +286,7 @@ public class PageTasks extends AbsTab {
 
 		throw new HarnessException("implement me!");
 	}
+	
 	@Override
 	public AbsPage zListItem(Action action, Button option, String subject)
 	throws HarnessException {
@@ -297,51 +302,61 @@ public class PageTasks extends AbsTab {
 		if (subject == null || subject.trim().length() == 0)
 			throw new HarnessException("subject cannot be null or blank");
 
-		String rowLocator = null;
 		String itemLocator = null;
 		AbsPage page = null;
 
+		
 		// How many items are in the table?
-		rowLocator = "//div[@id='" + Locators.zl__TKL__rows + "']/div";
-		int count = this.sGetXpathCount(rowLocator);
+		// findTask(subject);
+		String rowLocator = "css=div[id='" + Locators.zl__TKL__rowsID + "']>div";
+		int count = this.sGetCssCount(rowLocator);
 		logger.debug(myPageName() + " zListItem: number of rows: " + count);
+
+		if ( count < 1 ) 
+			throw new HarnessException("No tasks in the list!");
 
 		// Get each conversation's data from the table list
 		for (int i = 1; i <= count; i++) {
+			
+			itemLocator = rowLocator + ":nth-of-type("+ i +")";
+			if ( !this.sIsElementPresent(itemLocator) )
+				throw new HarnessException("Item Locator not present: "+ itemLocator);
 
-			itemLocator = rowLocator + "[" + i + "]";
-			String id = this.sGetAttribute("xpath=(" + itemLocator + ")@id");
-			String locator = null;
+			String id;
+			try {
+				id = this.sGetAttribute(itemLocator + "@id");
+				if ( id == null )
+					throw new HarnessException("id was null: "+ itemLocator + "@id");
+				if ( !id.startsWith(Locators.zli__TKL__) )
+					continue; // _newTaskBannerId, etc.
 
-			// Skip any invalid IDs
-			if ((id == null) || (id.trim().length() == 0))
+			} catch (SeleniumException e) {
+				logger.warn("No ID on item: "+ itemLocator);
 				continue;
-
-			// Look for zli__TKL__258
-			if (id.contains(Locators.zli__TKL__)) {
-				// Found a task
-
-				// What is the subject?
-				locator = itemLocator + "//td[5]";
-				String itemSubject = this.sGetText(locator).trim();
-
-				if ((itemSubject == null) || (itemSubject.trim().length() == 0)) {
-					logger.debug("found empty task subject");
-					continue;
-				}
-
-				if (itemSubject.equals(subject)) {
-					// Found it
-					break;
-				}
-
 			}
+
+			String subjectLocator = "css=div[id='"+ id +"'] td[id$='_su']";
+			if ( !this.sIsElementPresent(subjectLocator) )
+				throw new HarnessException("Subject Locator not present: "+ subjectLocator);
+			
+			String itemSubject = this.sGetText(subjectLocator);
+			if ((itemSubject == null) || (itemSubject.trim().length() == 0)) {
+				logger.debug("found empty task subject");
+				continue;
+			}
+			
+			if (itemSubject.equals(subject)) {
+				// Found it
+				break;
+			}
+			
+			itemLocator = null;
 		}
 
 		if (itemLocator == null) {
-			throw new HarnessException("Unable to locate item with subject("
-					+ subject + ")");
+			throw new HarnessException("Unable to locate item with subject(" + subject + ")");
 		}
+
 
 		if (action == Action.A_RIGHTCLICK) {
 
@@ -398,7 +413,14 @@ public class PageTasks extends AbsTab {
 
 		// Based on the button specified, take the appropriate action(s)
 		//
-		if (button == Button.B_NEW) {
+		if (button == Button.B_REFRESH) {
+
+			locator = "css=td#CHECK_MAIL_left_icon";
+			page = null;
+			
+			// FALLTHROUGH
+
+		} else if (button == Button.B_NEW) {
 
 			// New button
 			locator = Locators.zNewTask;
@@ -602,100 +624,59 @@ public class PageTasks extends AbsTab {
 	}
 
 	/**
-	 * Get all tasks in the specified section
-	 * 
-	 * @param status
+	 * Given a task ID, look for the GUI display of the item
+	 * @param css Locator to the task row (i.e. css=div[id='zli__TKL__261'])
 	 * @return
 	 * @throws HarnessException
 	 */
-	public List<TaskItem> zGetTasks(TaskStatus status) throws HarnessException {
+	private TaskItem parseTaskRow(String css) throws HarnessException {
+		logger.info("TASK: " + css);		
+		// See http://bugzilla.zimbra.com/show_bug.cgi?id=56452
 
-		List<TaskItem> items = null;
+		if ( !this.sIsElementPresent(css) )
+			throw new HarnessException("Unable to locate task: "+ css);
+		
+		
+		TaskItem item = new TaskItem();
 
-		// The task page has the following under the zl__TKL__rows div:
-		// <div id='_newTaskBannerId' .../> -- enter a new task
-		// <div id='_upComingTaskListHdr' .../> -- Past due
-		// <div id='zli__TKL__267' .../> -- Task item
-		// <div id='zli__TKL__299' .../> -- Task item
-		// <div id='_upComingTaskListHdr' .../> -- Upcoming
-		// <div id='zli__TKL__271' .../> -- Task item
-		// <div id='zli__TKL__278' .../> -- Task item
-		// <div id='zli__TKL__275' .../> -- Task item
-		// <div id='_upComingTaskListHdr' .../> -- No due date
-		// <div id='zli__TKL__284' .../> -- Task item
-		// <div id='zli__TKL__290' .../> -- Task item
 
-		// How many items are in the table?
-		String rowLocator = "//div[@id='" + Locators.zl__TKL__rows + "']";
-		int count = this.sGetXpathCount(rowLocator);
-		logger.debug(myPageName() + " zGetTasks: number of rows: " + count);
+		// Is it checked?
+		// <div id="zlif__TKL__258__se" style="" class="ImgCheckboxUnchecked"></div>
+		item.gIsChecked = this.sIsElementPresent(css + " div[id$='__se'][class='ImgCheckboxChecked']");
 
-		// Get each conversation's data from the table list
-		for (int i = 1; i <= count; i++) {
-			String tasklocator = rowLocator + "/div[" + i + "]";
+		// TODO: handle tags
+		// Is it tagged?
+		// <div id="zlif__TKL__258__tg" style="" class="ImgBlank_16"></div>
+		this.sIsElementPresent(css + " div[id$='__tg'][class='ImgBlank_16']");
 
-			String id = this.sGetAttribute("xpath=(" + tasklocator + ")@id");
-			if (Locators._newTaskBannerId.equals(id)) {
-				// Skip the "Add New Task" row
-				continue;
-			} else if (Locators._upComingTaskListHdr.equals(id)) {
-				// Found a status separator
-
-				String text = this.sGetText(tasklocator);
-				if (("Past Due".equals(text)) && (status == TaskStatus.PastDue)) {
-
-					items = new ArrayList<TaskItem>();
-					continue;
-
-				} else if (("Upcoming".equals(text))
-						&& (status == TaskStatus.Upcoming)) {
-
-					items = new ArrayList<TaskItem>();
-					continue;
-
-				} else if (("No Due Date".equals(text))
-						&& (status == TaskStatus.NoDueDate)) {
-
-					items = new ArrayList<TaskItem>();
-					continue;
-
-				}
-
-				// If a list already exists, then we've just completed it
-				if (items != null)
-					return (items);
-
-			} else if (id.contains(Locators.zli__TKL__)) {
-				// Found a task
-
-				// If the list is initialized, then we are in the correct list
-				// section
-				if (items == null)
-					continue;
-
-				TaskItem item = new TaskItem();
-
-				// TODO: extract the info from the GUI
-
-				items.add(item);
-				logger.info(item.prettyPrint());
-
-			} else {
-				logger.warn("Unknown task row ID: " + id);
-				continue;
-			}
+		// What's the priority?
+		item.gPriority = "normal";
+		if ( this.sIsElementPresent(css + " td[id$='__pr'] div[class*='ImgPriorityHigh_list']") )  {
+			item.gPriority = "high";
+		} else if ( this.sIsElementPresent(css + "td[id$='__pr'] div[class*='ImgPriorityLow_list']") )  {
+			
+		} else {
+			item.gPriority = "normal";
 		}
 
-		// If items is still null, then we didn't find any matching tasks
-		// Just return an empty list
-		if (items == null)
-			items = new ArrayList<TaskItem>();
+		// Is there an attachment?
+		item.gHasAttachments = this.sIsElementPresent(css + " div[id$='__at'][class*='ImgAttachment']");		
+		
+		// Get the subject
+		item.gSubject = this.sGetText(css + " td[id$='__su']").trim();
 
-		// Return the list of items
-		return (items);
+		// Get the status
+		item.gStatus = this.sGetText(css + " td[id$='__st']").trim();
 
+		// Get the % complete
+		item.gPercentComplete = this.sGetText(css + " td[id$='__pc']").trim();
+
+		// Get the due date
+		item.gDueDate = this.sGetText(css + " td[id$='__dt']").trim();
+
+		return (item);
 	}
-
+	
 	/**
 	 * Get all tasks from the current view
 	 * 
@@ -720,97 +701,40 @@ public class PageTasks extends AbsTab {
 		// <div id='zli__TKL__290' .../> -- Task item
 
 		// How many items are in the table?
-		//String rowLocator= "css=div[id='"+ Locators.zl__TKL__rows +"'] div";
-		String rowLocator = "//div[@id='" + Locators.zl__TKL__rows + "']/div";
-		int count = this.sGetXpathCount(rowLocator);
+		// findTask(subject);
+		String rowLocator = "css=div[id='" + Locators.zl__TKL__rowsID + "']>div";
+		int count = this.sGetCssCount(rowLocator);
 		logger.debug(myPageName() + " zGetTasks: number of rows: " + count);
+
+		if ( count < 1 ) 
+			throw new HarnessException("No tasks in the list!");
 
 		// Get each conversation's data from the table list
 		for (int i = 1; i <= count; i++) {
-
-			String itemLocator = rowLocator + "[" + i + "]";
+			
+			String itemLocator = rowLocator + ":nth-of-type("+ i +")";
+			if ( !this.sIsElementPresent(itemLocator) )
+				throw new HarnessException("Item Locator not present: "+ itemLocator);
 
 			String id;
 			try {
-				id = this.sGetAttribute("xpath=(" + itemLocator + ")@id");
+				id = this.sGetAttribute(itemLocator + "@id");
+				if ( id == null )
+					throw new HarnessException("id was null: "+ itemLocator + "@id");
+				if ( !id.startsWith(Locators.zli__TKL__) )
+					continue; // _newTaskBannerId, etc.
+
 			} catch (SeleniumException e) {
-				// Make sure there is an ID
-				logger.warn("Task row didn't have ID.  Probably normal if message is 'Could not find element attribute' => "+ e.getMessage());
+				logger.warn("No ID on item: "+ itemLocator);
 				continue;
 			}
 
-			String locator = null;
-			//	String attr = null;
 
-			// Skip any invalid IDs
-			if ((id == null) || (id.trim().length() == 0))
-				continue;
+			// Found a task
 
-			// Look for zli__TKL__258
-			if (id.contains(Locators.zli__TKL__)) {
-				// Found a task
-
-				TaskItem item = new TaskItem();
-
-				logger.info("TASK: " + id);
-
-				// Is it checked?
-				// <div id="zlif__TKL__258__se" style=""
-				// class="ImgCheckboxUnchecked"></div>
-				locator = itemLocator
-				+ "//div[contains(@class, 'ImgCheckboxUnchecked')]";
-				item.gIsChecked = this.sIsElementPresent(locator);
-
-				// Is it tagged?
-				// <div id="zlif__TKL__258__tg" style=""
-				// class="ImgBlank_16"></div>
-				locator = itemLocator + "//div[contains(@id, '__tg')]";
-				// TODO: handle tags
-
-				// What's the priority?
-				locator = itemLocator
-				+ "//td[contains(@id, '__pr')]/center/div";
-				if (!this.sIsElementPresent(locator)) {
-					item.gPriority = "normal";
-				} else {
-					locator = "css=div#zl__TKL__rows tr[id$='__rw'] td[id$='__pr'] center div[class*='ImgPriorityHigh']";
-					logger.info(this.sIsElementPresent(locator));
-					if (this.sIsElementPresent(locator)) {
-						item.gPriority = "high";
-					} else{
-						item.gPriority = "low";
-					}
-				}
-
-				// Is there an attachment?
-				locator= "css=div#zl__TKL__rows tr[id$='__rw'] td.Attach div[id$='__at'][class*='ImgBlank']";
-				if (this.sIsElementPresent(locator)) {
-					item.gHasAttachments = false;
-				} else {
-					// TODO - handle other attachment types
-				}
-				// See http://bugzilla.zimbra.com/show_bug.cgi?id=56452
-
-				// Get the subject
-				locator = itemLocator + "//td[5]";
-				item.gSubject = this.sGetText(locator).trim();
-
-				// Get the status
-				locator = itemLocator + "//td[6]";
-				item.gStatus = this.sGetText(locator).trim();
-
-				// Get the % complete
-				locator = itemLocator + "//td[7]";
-				item.gPercentComplete = this.sGetText(locator).trim();
-
-				// Get the due date
-				locator = itemLocator + "//td[8]";
-				item.gDueDate = this.sGetText(locator).trim();
-
-				items.add(item);
-				logger.info(item.prettyPrint());
-
-			}
+			TaskItem item = parseTaskRow("css=div[id='"+ id +"']");
+			items.add(item);
+			logger.info(item.prettyPrint());
 
 		}
 
@@ -870,17 +794,17 @@ public class PageTasks extends AbsTab {
 		return found;
 	}
 
-	/**
-	 * Dynamically wait (for 30 secs) until the task with the specified subject is found
-	 * @param subject Subject of the task to be searched for
-	 * @return TaskItem with the specified subject
-	 * @throws HarnessException
-	 */
-	public TaskItem findTask(String subject) throws HarnessException {
-		Object[] params = {subject};
-		return (TaskItem)GeneralUtility.waitFor(null, this, false, "browseTask", params,
-				WAIT_FOR_OPERAND.NEQ, null, 30000, 1000);
-	}
+//	/**
+//	 * Dynamically wait (for 30 secs) until the task with the specified subject is found
+//	 * @param subject Subject of the task to be searched for
+//	 * @return TaskItem with the specified subject
+//	 * @throws HarnessException
+//	 */
+//	public TaskItem findTask(String subject) throws HarnessException {
+//		Object[] params = {subject};
+//		return (TaskItem)GeneralUtility.waitFor(null, this, false, "browseTask", params,
+//				WAIT_FOR_OPERAND.NEQ, null, 30000, 1000);
+//	}
 
 	public String  GetShowOrigBodyText(String EmailAddress, String calItemId) throws HarnessException{
 
@@ -896,6 +820,7 @@ public class PageTasks extends AbsTab {
 			ClientSessionFactory.session().selenium().selectWindow("null");	
 		}
 	}
+	
 	public String zGetHtmlBodyText() throws HarnessException {
 		try {
 			sSelectFrame("css=iframe[id*='zv__MSG_body__iframe']");
@@ -906,4 +831,5 @@ public class PageTasks extends AbsTab {
 		}
 
 	}
+
 }

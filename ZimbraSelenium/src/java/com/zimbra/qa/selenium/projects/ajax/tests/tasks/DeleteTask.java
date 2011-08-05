@@ -56,6 +56,7 @@ public class DeleteTask extends AjaxCommonTest {
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 
 		// Refresh the tasks view
+		app.zPageTasks.zToolbarPressButton(Button.B_REFRESH);
 		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
 						
 		// Select the item
@@ -109,6 +110,7 @@ public class DeleteTask extends AjaxCommonTest {
 		ZAssert.assertNotNull(task, "Verify the task is created");
 		
 		// Refresh the tasks view
+		app.zPageTasks.zToolbarPressButton(Button.B_REFRESH);
 		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
 						
 		// Select the item
@@ -171,6 +173,7 @@ public class DeleteTask extends AjaxCommonTest {
 		ZAssert.assertNotNull(task, "Verify the task is created");
 		
 		// Refresh the tasks view
+		app.zPageTasks.zToolbarPressButton(Button.B_REFRESH);
 		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
 						
 		// Select the item
@@ -227,6 +230,7 @@ public class DeleteTask extends AjaxCommonTest {
 		ZAssert.assertNotNull(task, "Verify the task is created");
 		
 		// Refresh the tasks view
+		app.zPageTasks.zToolbarPressButton(Button.B_REFRESH);
 		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
 						
 		// Select the item
@@ -321,6 +325,7 @@ public class DeleteTask extends AjaxCommonTest {
 		ZAssert.assertNotNull(task3, "Verify the task is created");
 
 		// Refresh the tasks view
+		app.zPageTasks.zToolbarPressButton(Button.B_REFRESH);
 		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
 						
 		// Select the items
@@ -387,6 +392,7 @@ public class DeleteTask extends AjaxCommonTest {
 		ZAssert.assertNotNull(task, "Verify the task is created");
 		
 		// Refresh the tasks view
+		app.zPageTasks.zToolbarPressButton(Button.B_REFRESH);
 		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
 						
 		// Select the item
