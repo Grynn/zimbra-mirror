@@ -524,11 +524,10 @@ public class FormMailNew extends AbsForm {
 					// Text compose
 					// //
 
-					locator = "css=textarea[id*='textarea_']";
+					locator = "css=textarea[class='DwtHtmlEditorTextArea']";
 
 					if (!this.sIsElementPresent(locator))
-						throw new HarnessException(
-								"Unable to locate compose body");
+						throw new HarnessException("Unable to locate compose body");
 
 					this.sFocus(locator);
 					this.zClick(locator);
