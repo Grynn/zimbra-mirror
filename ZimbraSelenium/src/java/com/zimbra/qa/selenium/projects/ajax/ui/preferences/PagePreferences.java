@@ -25,6 +25,7 @@ public class PagePreferences extends AbsTab {
 	
 	public static class Locators {
 		
+		public static final String zPreferencesMainID = "zov__main_Options";
 		// Preferences Toolbar: Save, Cancel
 		public static final String zToolbarSaveID = "zb__PREF__SAVE_title";
 		public static final String zToolbarCancelID = "zb__PREF__CANCEL_title";
@@ -72,7 +73,7 @@ public class PagePreferences extends AbsTab {
 		if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
 		   locator = "css=div[id='zov__local@host.local:main_Options']";
 		} else {
-		   locator = "xpath=//div[@id='zov__main_Options']";
+			locator = "css=div#"+ Locators.zPreferencesMainID;
 		}
 		
 		boolean loaded = this.sIsElementPresent(locator);
