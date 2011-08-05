@@ -120,7 +120,7 @@ public class PageAddressbook extends AbsTab {
 			throw new HarnessException("Can't locate addressbook icon");
 		}
 
-		
+
 		// Click on Addressbook icon
 		zClick(PageMain.Locators.zAppbarContact);
 
@@ -150,11 +150,11 @@ public class PageAddressbook extends AbsTab {
 		for (int i = 1; i <= count; i++) {
 			String commonLocator = "//div[@id='zv__CNS']/div["+ i +"]";
 			String contactType = getContactType(commonLocator);
-		    
+
 			ContactItem ci=null;
 			String contactDisplayedLocator = commonLocator + "/table/tbody/tr/td[3]";
 			String fileAs = ClientSessionFactory.session().selenium().getText(contactDisplayedLocator);
-			
+
 			//check if it is a contactgroup or a contactgroup item
 			if ( contactType.equals(ContactGroupItem.IMAGE_CLASS)) {
                 ci=new ContactGroupItem(fileAs);
@@ -165,15 +165,39 @@ public class PageAddressbook extends AbsTab {
 			else {
 				throw new HarnessException("Image not neither conntact group nor contact.");		
 			}
-			
+
 			list.add(ci);	    	      
 		}
-
 
 		return list;		
 	}
 
-				
+	public AbsPage zKeyboardShortcut(Shortcut shortcut) throws HarnessException {
+      logger.info(myPageName() + " zKeyboardShortcut("+ shortcut.getKeys() +")");
+
+      tracer.trace("Click the shortcut "+ shortcut.getKeys() );
+
+      // Default behavior variables
+      AbsPage page = null; // If set, this page will be returned
+
+      if ( (shortcut == Shortcut.S_NEWTAG) ){
+         page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);  
+      }
+      else if ( (shortcut == Shortcut.S_MOVE) ){
+         page = new DialogMove(MyApplication, this);  
+
+      }
+      // Click it
+      zKeyboardTypeString(shortcut.getKeys());  
+
+      zWaitForBusyOverlay();
+
+      if ( page != null ) {
+         page.zWaitForActive();
+      }
+      return (page);
+   }
+
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
