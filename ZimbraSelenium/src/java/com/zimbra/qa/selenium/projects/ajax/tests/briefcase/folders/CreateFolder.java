@@ -56,7 +56,7 @@ public class CreateFolder extends AjaxCommonTest {
 				"Verify the server and client folder names match");
 	}
 
-	@Test(description = "Create a new folder using 'nf' keyboard shortcut", groups = { "unctional" })
+	@Test(description = "Create a new folder using 'nf' keyboard shortcut", groups = { "functional" })
 	public void CreateFolder_02() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -93,7 +93,7 @@ public class CreateFolder extends AjaxCommonTest {
 		ZAssert.assertEquals(folder.getName(), name,
 				"Verify the server and client folder names match");
 	}	
-
+		
 	@AfterMethod(groups = { "always" })
 	public void createFolderTestCleanup() {
 		if (_folderIsCreated) {
