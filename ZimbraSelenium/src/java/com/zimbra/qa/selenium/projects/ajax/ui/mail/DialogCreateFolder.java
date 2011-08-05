@@ -89,9 +89,10 @@ public class DialogCreateFolder extends AbsDialog {
 			// Wait for the spinner image ONLY for desktop
 			((AppAjaxClient)MyApplication).zPageMail.zWaitForDesktopLoadingSpinner(5000);
 
-			// Check the message queue
-			Stafpostqueue sp = new Stafpostqueue();
-			sp.waitForPostqueue();
+			// This dialog doesn't send a message, so we don't need 
+			// to check the message queue
+			// Stafpostqueue sp = new Stafpostqueue();
+			// sp.waitForPostqueue();
 
 			return (page);
 
