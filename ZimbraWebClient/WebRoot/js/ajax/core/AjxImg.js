@@ -198,7 +198,7 @@ function(imageName, styleStr, attrStr, wrapInTable, _disabled) {
 	                var imgId = attrStr;
 	                if (!imgId) {
 		                imgId = Dwt.getNextId("CANVAS_IMG_");  //create an imgId in case we need to update the img.src for an element without an id
-		                attrStr = "img='" + imgId + "'";
+		                attrStr = "id='" + imgId + "'";
 	                }
 	                else {
 		                var match = attrStr.match(/id=[\"\']([^\"\']+)[\"\']+/);
@@ -217,7 +217,7 @@ function(imageName, styleStr, attrStr, wrapInTable, _disabled) {
 							AjxDebug.println(AjxDebug.TAG_ICON, "mask image loaded");
 							var overlayImg = new Image();
 							overlayImg.onload = function() {
-								AjxImg._drawCanvasImage(ctx, maskElement, overlayElement, mask, overlay, color, width, height)
+								AjxImg._drawCanvasImage(ctx, maskImg, overlayImg, mask, overlay, color, width, height)
 								AjxDebug.println(AjxDebug.TAG_ICON, "overlay image loaded");
 								var el = document.getElementById(imgId);
 								if (el) {
