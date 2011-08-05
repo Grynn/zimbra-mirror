@@ -190,7 +190,7 @@ namespace CssLib
             Acct.migrationFolders[0].TotalCountOFItems = 10;
             Acct.migrationFolders[0].CurrentCountOFItems = 0;
 
-            while (count == 1100)
+            while ((count >= 1100) & (count <= 1110))
             {
 
                 

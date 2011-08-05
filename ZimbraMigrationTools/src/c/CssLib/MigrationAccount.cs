@@ -11,11 +11,13 @@ namespace CssLib
         public MigrationAccount()
         {
             Accountname = "";
+            Accountnum = -1;
 
             migrationFolders = new List<MigrationFolder>();
         }
 
      	private string AccountName;
+        private int AccountNum;
 
         private Int64 TotalMails;
         private Int64 TotalContacts;
@@ -90,6 +92,21 @@ namespace CssLib
 				this.AccountName = value;
 			}
 		}
+        public int Accountnum
+        {
+            get
+            {
+                return this.AccountNum;
+            }
+            set
+            {
+                if (OnChanged != null)
+                {
+                    OnChanged(this, new MigrationObjectEventArgs("AccountNum", this.AccountNum, value));
+                }
+                this.AccountNum = value;
+            }
+        }
         public Int64 TotalNoMails
         {
             get { return TotalMails; }
@@ -198,6 +215,23 @@ namespace CssLib
 				}
               CurrentCountofItems = value;
           }
+        }
+
+        private int AccountNum;
+        public int Accountnum
+        {
+            get
+            {
+                return this.AccountNum;
+            }
+            set
+            {
+                if (OnChanged != null)
+                {
+                    OnChanged(this, new MigrationObjectEventArgs("AccountNum", this.AccountNum, value));
+                }
+                this.AccountNum = value;
+            }
         }
        /* private string statusMessage;
         private string errorMessage;*/
