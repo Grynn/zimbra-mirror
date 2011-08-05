@@ -5,8 +5,10 @@ import java.util.Calendar;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
+import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZDate;
 import com.zimbra.qa.selenium.framework.util.ZTimeZone;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -65,7 +67,9 @@ public class ModifyAppointment extends AjaxCommonTest {
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 
         // Open appointment & modify subject, body and save it
-        FormApptNew apptForm = (FormApptNew) app.zPageCalendar.zDblClickAppointment(apptSubject);
+        app.zPageCalendar.zListItem(Action.A_DOUBLECLICK, apptSubject);
+        SleepUtil.sleepMedium();
+        FormApptNew apptForm = new FormApptNew(app);
         appt.setSubject(editApptSubject);
         appt.setContent(editApptBody);
         apptForm.zFill(appt);

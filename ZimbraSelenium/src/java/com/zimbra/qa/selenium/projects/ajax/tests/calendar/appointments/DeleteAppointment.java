@@ -1,14 +1,25 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments;
 
-import org.testng.annotations.Test;
+import java.util.Calendar;
 
+import org.testng.annotations.Test;
+import com.zimbra.qa.selenium.framework.items.AppointmentItem;
+import com.zimbra.qa.selenium.framework.ui.AbsApplication;
+import com.zimbra.qa.selenium.framework.ui.AbsDialog;
+import com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject;
+import com.zimbra.qa.selenium.framework.ui.Action;
+import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning.DialogWarningID;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.FormApptNew;
 
 
+@SuppressWarnings("unused")
 public class DeleteAppointment extends AjaxCommonTest {
 
-	
 	public DeleteAppointment() {
 		logger.info("New "+ DeleteAppointment.class.getCanonicalName());
 		
@@ -25,34 +36,44 @@ public class DeleteAppointment extends AjaxCommonTest {
 			groups = { "smoke" })
 	public void DeleteAppointment_01() throws HarnessException {
 		
-		// Create the message data to be sent
-		String subject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
-		String content = "content" + ZimbraSeleniumProperties.getUniqueString();
-		ZDate startUTC = new ZDate(2014, 12, 25, 12, 0, 0);
-		ZDate endUTC   = new ZDate(2014, 12, 25, 14, 0, 0);
-
-		// Create an appointment
-		app.zGetActiveAccount().soapSend(
-					"<CreateAppointmentRequest xmlns='urn:zimbraMail'>" +
-						"<m>" +
-							"<inv>" +
-								"<comp status='CONF' fb='B' class='PUB' transp='O' allDay='0' name='"+ subject +"' >" +
-									"<s d='"+ startUTC.toYYYYMMDDTHHMMSSZ() +"'/>" +
-									"<e d='"+ endUTC.toYYYYMMDDTHHMMSSZ() +"'/>" +
-									"<or a='"+ app.zGetActiveAccount().EmailAddress + "'/>" +
-								"</comp>" +
-							"</inv>" +
-							"<su>"+ subject + "</su>" +
-							"<mp ct='text/plain'>" +
-							"<content>"+ content +"</content>" +
-							"</mp>" +
-						"</m>" +
-					"</CreateAppointmentRequest>");
+		// Creating object for appointment data
+		String tz, apptSubject, apptBody;
+		tz = ZTimeZone.TimeZoneEST.getID();
+		apptSubject = ZimbraSeleniumProperties.getUniqueString();
+		apptBody = ZimbraSeleniumProperties.getUniqueString();
 		
-
+		// Absolute dates in UTC zone
+		Calendar now = Calendar.getInstance();
+		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
+		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		
+        app.zGetActiveAccount().soapSend(
+                          "<CreateAppointmentRequest xmlns='urn:zimbraMail'>" +
+                               "<m>"+
+                               "<inv method='REQUEST' type='event' fb='B' transp='O' allDay='0' name='"+ apptSubject +"'>"+
+                               "<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
+                               "<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
+                               "<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+                               "</inv>" +
+                               "<mp content-type='text/plain'>" +
+                               "<content>"+ apptBody +"</content>" +
+                               "</mp>" +
+                               "<su>"+ apptSubject +"</su>" +
+                               "</m>" +
+                         "</CreateAppointmentRequest>");
+        String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse//mail:appt", "id");
+        
+        // Switch to work week view
+        app.zPageCalendar.zToolbarPressPulldown(Button.B_LISTVIEW, Button.O_LISTVIEW_WORKWEEK);
+        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+        SleepUtil.sleepMedium();
+        
+        // Right click to appointment and delete it
+        app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE_MENU, apptSubject);
+        SleepUtil.sleepSmall();
+        DialogWarning warning = new DialogWarning(DialogWarningID.DeleteAppointment, this.app, ((AppAjaxClient)this.app).zPageCalendar);
+        warning.zClickButton(Button.B_YES);
+		warning.zWaitForClose();
+
 	}
-
-
-
 }

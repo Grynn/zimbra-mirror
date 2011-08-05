@@ -28,6 +28,8 @@ public class DialogWarning extends AbsDialog {
 		public static DialogWarningID SaveSignatureChangeMessage = new DialogWarningID("YesNoCancel");
 		public static DialogWarningID CancelCreateContact = new DialogWarningID("YesNoCancel");
 		public static DialogWarningID PermanentlyDeleteTheItem = new DialogWarningID("OkCancel");
+		
+		public static DialogWarningID DeleteAppointment = new DialogWarningID("YesNo");
 
 		protected String Id;
 		protected DialogWarningID(String id) {
@@ -79,7 +81,6 @@ public class DialogWarning extends AbsDialog {
 		String locator = null;
 		AbsPage page = null; 		// Does this ever result in a page being returned?
 		
-
 		// See http://bugzilla.zimbra.com/show_bug.cgi?id=54560
 		// Need unique id's for the buttons
 		String buttonsTableLocator = "//div[@id='"+ MyDivId +"']//div[contains(@id, '_buttons')]";

@@ -243,11 +243,10 @@ public class Button {
 	public static final Button B_VIEW_ENTIRE_MESSAGE = new Button("B_VIEW_ENTIRE_MESSAGE");
 	public static final Button B_HIGHLIGHT_OBJECTS = new Button("B_HIGHLIGHT_OBJECTS");
 	
-	// Calendar Buttons
+	// Calendar
 	public static final Button B_SAVEANDCLOSE = new Button("B_SAVEANDCLOSE");
 	public static final Button B_REFRESH = new Button("B_REFRESH");
 	
-    // Calendar	Views
 	public static final Button B_VIEW = new Button("B_VIEWTOOLBAR");
 	public static final Button O_LISTVIEW_DAY = new Button("O_LISTVIEW_DAY");
 	public static final Button O_LISTVIEW_WORKWEEK = new Button("O_LISTVIEW_WORKWEEK");
@@ -255,6 +254,52 @@ public class Button {
 	public static final Button O_LISTVIEW_MONTH = new Button("O_LISTVIEW_MONTH");
 	public static final Button O_LISTVIEW_LIST = new Button("O_LISTVIEW_LIST");
 	public static final Button O_LISTVIEW_SCHEDULE = new Button("O_LISTVIEW_SCHEDULE");
+	
+	public static final Button O_VIEW_DAY_MENU = new Button("O_VIEW_DAY_MENU");
+	public static final Button O_VIEW_WORK_WEEK_MENU = new Button("O_VIEW_WORK_WEEK_MENU");
+	public static final Button O_VIEW_WEEK_MENU = new Button("O_VIEW_WEEK_MENU");
+	public static final Button O_VIEW_MONTH_MENU = new Button("O_VIEW_MONTH_MENU");
+	public static final Button O_VIEW_LIST_MENU = new Button("O_VIEW_LIST_MENU");
+	public static final Button O_VIEW_SCHEDULE_MENU = new Button("O_VIEW_SCHEDULE_MENU");
+	public static final Button O_OPEN_MENU = new Button("O_OPEN_MENU");
+	public static final Button O_PRINT_MENU = new Button("O_PRINT_MENU");
+	public static final Button O_ACCEPT_MENU = new Button("O_ACCEPT_MENU");
+	public static final Button O_TENTATIVE_MENU = new Button("O_TENTATIVE_MENU");
+	public static final Button O_DECLINE_MENU = new Button("O_DECLINE_MENU");
+	public static final Button O_EDIT_REPLY_MENU = new Button("O_EDIT_REPLY_MENU");
+	public static final Button O_EDIT_REPLY_ACCEPT_SUB_MENU = new Button("O_EDIT_REPLY_ACCEPT_SUB_MENU");
+	public static final Button O_EDIT_REPLY_TENTATIVE_SUB_MENU = new Button("O_EDIT_REPLY_TENTATIVE_SUB_MENU");
+	public static final Button O_EDIT_REPLY_DECLINE_SUB_MENU = new Button("O_EDIT_REPLY_DECLINE_SUB_MENU");
+	public static final Button O_PROPOSE_NEW_TIME_MENU = new Button("O_PROPOSE_NEW_TIME_MENU");
+	public static final Button O_CREATE_A_COPY_MENU = new Button("O_CREATE_A_COPY_MENU");
+	public static final Button O_REPLY_MENU = new Button("O_REPLY_MENU");
+	public static final Button O_REPLY_TO_ALL_MENU = new Button("O_REPLY_TO_ALL_MENU");
+	public static final Button O_FORWARD_MENU = new Button("O_FORWARD_MENU");
+	public static final Button O_DELETE_MENU = new Button("O_DELETE_MENU");
+	public static final Button O_CANCEL_MENU = new Button("O_CANCEL_MENU");
+	public static final Button O_MOVE_MENU = new Button("O_MOVE_MENU");
+	public static final Button O_TAG_APPOINTMENT_MENU = new Button("O_TAG_APPOINTMENT_MENU");
+	public static final Button O_TAG_APPOINTMENT_NEW_TAG_SUB_MENU = new Button("O_TAG_APPOINTMENT_NEW_TAG_SUB_MENU");
+	public static final Button O_TAG_APPOINTMENT_REMOVE_TAG_SUB_MENU = new Button("O_TAG_APPOINTMENT_REMOVE_TAG_SUB_MENU");
+	public static final Button O_SHOW_ORIGINAL_MENU = new Button("O_SHOW_ORIGINAL_MENU");
+	public static final Button O_QUICK_COMMANDS_MENU = new Button("O_QUICK_COMMANDS_MENU");
+	public static final Button O_INSTANCE_MENU = new Button("O_INSTANCE_MENU");
+	public static final Button O_SERIES_MENU = new Button("O_SERIES_MENU");
+	public static final Button O_OPEN_INSTANCE_MENU = new Button("O_OPEN_INSTANCE_MENU");
+	public static final Button O_FORWARD_INSTANCE_MENU = new Button("O_FORWARD_INSTANCE_MENU");
+	public static final Button O_DELETE_INSTANCE_MENU = new Button("O_DELETE_INSTANCE_MENU");
+	public static final Button O_OPEN_SERIES_MENU = new Button("O_OPEN_SERIES_MENU");
+	public static final Button O_FORWARD_SERIES_MENU = new Button("O_FORWARD_SERIES_MENU");
+	public static final Button O_NEW_APPOINTMENT_MENU = new Button("O_NEW_APPOINTMENT_MENU");
+	public static final Button O_NEW_ALL_DAY_APPOINTMENT_MENU = new Button("O_NEW_ALL_DAY_APPOINTMENT_MENU");
+	public static final Button O_GO_TO_TODAY_MENU = new Button("O_GO_TO_TODAY_MENU");
+	public static final Button O_VIEW_MENU = new Button("O_VIEW_MENU");
+	public static final Button O_VIEW_DAY_SUB_MENU = new Button("O_VIEW_DAY_SUB_MENU");
+	public static final Button O_VIEW_WORK_WEEK_SUB_MENU = new Button("O_VIEW_WORK_WEEK_SUB_MENU");
+	public static final Button O_VIEW_WEEK_SUB_MENU = new Button("O_VIEW_WEEK_SUB_MENU");
+	public static final Button O_VIEW_MONTH_SUB_MENU = new Button("O_VIEW_MONTH_SUB_MENU");
+	public static final Button O_VIEW_LIST_SUB_MENU = new Button("O_VIEW_LIST_SUB_MENU");
+	public static final Button O_VIEW_SCHEDULE_SUB_MENU = new Button("O_VIEW_SCHEDULE_SUB_MENU");
 
 	//// Admin Console
 	
