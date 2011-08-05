@@ -770,6 +770,16 @@ public class PageMail extends AbsTab {
 
 			// FALL THROUGH
 
+		} else if ( action == Action.A_DOUBLECLICK ) {
+
+			// Double-Click on the item
+			this.sDoubleClick(itemlocator);
+
+			this.zWaitForBusyOverlay();
+
+			page = null;
+			
+			// FALL THROUGH
 		} else if ( action == Action.A_CTRLSELECT ) {
 
 			throw new HarnessException("implement me!  action = "+ action);
@@ -1377,6 +1387,7 @@ public class PageMail extends AbsTab {
 
 		
 	}
+
 
 
 }
