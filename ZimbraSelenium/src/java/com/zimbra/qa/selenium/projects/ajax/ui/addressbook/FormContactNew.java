@@ -17,6 +17,7 @@ public class FormContactNew extends AbsForm {
 		public static final String zNewContactMenuIconBtn = "id=zb__CNS__NEW_MENU_left_icon";
 		public static String zActiveEditForm = "editcontactform";
 		
+		public static String zFullnameField = "id=EDITCONTACTFORM_FULLNAME";
 		public static String zPrefixEditField = "id=EDITCONTACTFORM_PREFIX_input";
 		public static String zFirstEditField = "id=EDITCONTACTFORM_FIRST_input";
 		public static String zMiddleEditField = "id=EDITCONTACTFORM_MIDDLE_input";
@@ -46,9 +47,18 @@ public class FormContactNew extends AbsForm {
 		public static String zOther1EditField = "css=div#EDITCONTACTFORM_OTHER_0 input";
 		public static String zNotesEditField = "css=textarea#EDITCONTACTFORM_NOTES_input";
         public static String zLocation = "css=td#EDITCONTACTFORM_FOLDER_title";
-        public static String zFileAs = "css=td#EDITCONTACTFORM_FILE_AS_title";
-        
-        
+
+        //fileAs dropdown elements
+        public static String zFileAsTitle = "css=td#EDITCONTACTFORM_FILE_AS_title";
+        public static String zFileAsDropdown = "css=td#EDITCONTACTFORM_FILE_AS_dropdown>div.ImgSelectPullDownArrow";        
+        public static String zFileAsLastCommaFirst ="td.ZWidgetTitle:contains('Last, First')";
+        public static String zFileAsFirstLast = "td.ZWidgetTitle:contains('First Last')";
+        public static String zFileAsCompany = "td.ZWidgetTitle:contains('Company')";     
+        public static String zFileAsLastCommaFirstCompany = "td.ZWidgetTitle:contains('Last, First (Company)')";
+        public static String zFileAsFirstLastCompany = "td.ZWidgetTitle:contains('First Last (Company)')";
+        public static String zFileAsCompanyLastCommaFirst = "td.ZWidgetTitle:contains('Company (Last, First)')";
+        public static String zFileAsCompanyFirstLast = "td.ZWidgetTitle:contains('Company (First Last)')";
+       
 		public static final String zPrefixCheckbox = "td.ZWidgetTitle:contains('Prefix')";
 		public static final String zMiddleCheckbox = "td.ZWidgetTitle:contains('Middle')";
 		public static final String zMaidenCheckbox = "td.ZWidgetTitle:contains('Maiden')";
@@ -56,6 +66,7 @@ public class FormContactNew extends AbsForm {
 		public static final String zNicknameCheckbox = "td.ZWidgetTitle:contains('Nickname')";
 		public static final String zDepartmentCheckbox = "td.ZWidgetTitle:contains('Department')";
 
+		 
 	}
 
 	public static class Toolbar extends  AbsSeleniumObject{
@@ -72,6 +83,7 @@ public class FormContactNew extends AbsForm {
 
 	}
 		
+	private String activeMenuId="";
 	
 	public FormContactNew(AbsApplication application) {
 		super(application);
@@ -95,13 +107,21 @@ public class FormContactNew extends AbsForm {
 	public AbsPage zClick(Button button, AbsTab tab) throws HarnessException {
 		logger.info("FormContactNew.zClick(" + button.toString() + ",...)");
 		AbsPage page=null;
+		String locator="";
 		
 		if (button == Button.B_MOVE) {
 			page = new DialogMove(MyApplication, tab);
+			locator=getLocator(Locators.zLocation);
+		}
+		//
+		else if (button == Button.B_FILEAS) {			
+			locator=getLocator(Locators.zFileAsDropdown);			
 		}
 		
-		zClick(getLocator(Locators.zLocation));
+		zClick(locator);
 		zWaitForBusyOverlay();		
+		
+		findActiveMenuId();
 		
 		if (page != null) {
 			page.zWaitForActive();
@@ -112,6 +132,7 @@ public class FormContactNew extends AbsForm {
 	protected void save() throws HarnessException {
 		logger.info("FormContactNew.save()");
 				
+		//TODO: implement code for IE
 		try {		
 		    for (int i=0; ; i++) {
 		    	String id = sGetEval("window.document.getElementsByClassName('ZToolbarTable')[" + i + "].offsetParent.id" );
@@ -212,7 +233,83 @@ public class FormContactNew extends AbsForm {
 		zClick(prefix + Locators.zDepartmentCheckbox);
 		zWaitForBusyOverlay();
 	}
-
+	
+	private void findActiveMenuId() {
+		try {		
+		    for (int i=0; ; i++) {				    
+		    	String id = sGetEval("window.document.getElementsByClassName('DwtMenu')[" + i + "].id" );
+		    	if (zIsVisiblePerPosition(id, 0, 0)) {
+		    		logger.info("active menu id = " + id);
+		    		activeMenuId=id;
+		    		break;
+		    	}		    					    	
+	        }	
+		}
+		catch (Exception e) {
+			logger.info(e.getMessage());
+		}		
+	}
+	
+    public void selectFileAs(String fileAsOption) throws HarnessException {
+    	if (sIsVisible("css=" + fileAsOption)) {
+    		if (!zIsVisiblePerPosition(activeMenuId, 0, 0)) {	    			    				
+    			findActiveMenuId();
+    		}
+    		zClick("css=div#" + activeMenuId + " " + fileAsOption);
+    		zWaitForBusyOverlay();
+    	}
+    	else {
+    		throw new HarnessException(fileAsOption + " is not visible" );
+    	}
+    }
+	
+    public String contactFullName(ContactItem contactItem, String fileAsOption) throws HarnessException{
+    	String fullName=null;
+    	
+        //Last, First
+    	if (fileAsOption == Locators.zFileAsLastCommaFirst) {
+    		fullName = contactItem.lastName + ", " + contactItem.firstName;
+    	} 
+    	//First Last
+    	else if (fileAsOption == Locators.zFileAsFirstLast) {
+    		fullName = contactItem.firstName + " " + contactItem.lastName;
+    	}     	     	
+    	//Company
+    	else if (fileAsOption == Locators.zFileAsCompany) {
+    		fullName = contactItem.company;
+    	}
+    	//Last, First (Company)
+    	else if (fileAsOption == Locators.zFileAsLastCommaFirstCompany) {
+    		fullName = contactItem.lastName + ", " + contactItem.firstName + " ("
+    		+ contactItem.company + ")";
+    	}
+    	//First Last (Company)
+    	else if (fileAsOption == Locators.zFileAsFirstLastCompany) {
+    		fullName = contactItem.firstName + " " + contactItem.lastName + " ("
+    		+ contactItem.company + ")";
+    	} 
+       	//Company (Last, First)
+    	else if (fileAsOption == Locators.zFileAsCompanyLastCommaFirst) {
+    		fullName = contactItem.company + " (" 
+    		         + contactItem.lastName + ", " + contactItem.firstName + ")";
+    	} 
+    	//Company (First Last)
+    	else if (fileAsOption == Locators.zFileAsCompanyFirstLast) {
+    		fullName = contactItem.company + " (" 
+    		         + contactItem.firstName + " " + contactItem.lastName + ")";
+    	}
+    	else {
+    		throw new HarnessException(fileAsOption + " not supported");
+    	}
+    	return fullName;
+    }
+    
+    
+	public String getDisplayedContactHeader() throws HarnessException {
+		return sGetText(getLocator(Locators.zFullnameField));
+	}
+	
+	
 	public void zFillField(String locator, String value) throws HarnessException {
 		tracer.trace("Set "+ locator +" to "+ value);
 	
@@ -273,9 +370,7 @@ public class FormContactNew extends AbsForm {
 		// Fill out the form		
 		if ( contact.firstName != null ) {			
 			zFillField(getLocator(Locators.zFirstEditField), contact.firstName);
-
-		}
-		
+		}		
 		if ( contact.lastName != null ) {			
 			zFillField(getLocator(Locators.zLastEditField), contact.lastName);	    
 		}
@@ -287,7 +382,11 @@ public class FormContactNew extends AbsForm {
 		if ( contact.email != null ) {			
 			zFillField(getLocator(Locators.zEmail1EditField), contact.email);
 		}
-		
+
+		if ( contact.company != null ) {			
+			zFillField(getLocator(Locators.zCompanyEditField), contact.company);
+		}
+
 		if (contact.ContactAttributes.size() >0) {
 			for ( String key:contact.ContactAttributes.keySet()) {
 				zFillField(getLocator(key), contact.ContactAttributes.get(key));
@@ -317,6 +416,7 @@ public class FormContactNew extends AbsForm {
     	}		    
 		
 		//set parameter zActiveEditForm		
+		//TODO: implement code for IE
 		try {		
 		    for (int i=0; ; i++) {	  		   
 		    	String id = sGetEval("window.document.getElementsByClassName('zmEditContactView')[" + i + "].id" );

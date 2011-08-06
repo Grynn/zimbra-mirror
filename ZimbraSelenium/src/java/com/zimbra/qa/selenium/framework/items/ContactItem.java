@@ -28,6 +28,7 @@ public class ContactItem implements IItem {
 	public String middleName = null;
 	public String lastName = null;
 	public String email = null;
+	public String company = null;
 	public HashMap<String, String> ContactAttributes = new HashMap<String, String>();
 	
 	public FolderItem AddressBook = null;
@@ -91,17 +92,19 @@ public class ContactItem implements IItem {
 		// Process any special attributes here
 		if ( key.equals("email") )
 			email = value;
-		if ( key.equals("firstName"))
+		else if ( key.equals("firstName"))
 			firstName = value;
-		if ( key.equals("middleName"))
+		else if ( key.equals("middleName"))
 			middleName = value;
-		if ( key.equals("lastName"))
+		else if ( key.equals("lastName"))
 			lastName = value;
-		
-		// Set the map
-		ContactAttributes.put(key, value);
-		
-		return (ContactAttributes.get(key));
+		else if ( key.equals("company"))
+			company = value;		
+		else {
+		    // add to the map
+		    ContactAttributes.put(key, value);
+		}
+		return value;
 	}
 	
 	/**
@@ -149,6 +152,7 @@ public class ContactItem implements IItem {
 	                "<a n='firstName'>" + contactItem.firstName +"</a>" +
 	                "<a n='lastName'>" + contactItem.lastName +"</a>" +             
 	                "<a n='email'>" + contactItem.email + "</a>" +
+	                "<a n='company'>" + contactItem.company + "</a>" +
 	                "</cn>" +
 	                "</CreateContactRequest>");	  
 		
@@ -178,6 +182,7 @@ public class ContactItem implements IItem {
 	    c.email = "email" +  ZimbraSeleniumProperties.getUniqueString() + "@zimbra.com";
 		//default value for file as is  last , first
 		c.fileAs = c.lastName + ", " + c.firstName;
+		c.company = "company" + ZimbraSeleniumProperties.getUniqueString();
 		
 		if ( type.equals(GenerateItemType.Default) || type.equals(GenerateItemType.Basic) ) {
 			return (c);
@@ -190,7 +195,7 @@ public class ContactItem implements IItem {
 			c.ContactAttributes.put(FormContactNew.Locators.zNicknameEditField, "Nick" );
 			c.ContactAttributes.put(FormContactNew.Locators.zDepartmentEditField, "dep" + ZimbraSeleniumProperties.getUniqueString());
 			c.ContactAttributes.put(FormContactNew.Locators.zJobTitleEditField, "jobTitle" + ZimbraSeleniumProperties.getUniqueString());
-			c.ContactAttributes.put(FormContactNew.Locators.zCompanyEditField, "company" + ZimbraSeleniumProperties.getUniqueString());
+			//c.ContactAttributes.put(FormContactNew.Locators.zCompanyEditField, "company" + ZimbraSeleniumProperties.getUniqueString());
 			c.ContactAttributes.put(FormContactNew.Locators.zPhone1EditField,  ZimbraSeleniumProperties.getUniqueString());
 			c.ContactAttributes.put(FormContactNew.Locators.zIM1EditField,  ZimbraSeleniumProperties.getUniqueString());
 			c.ContactAttributes.put(FormContactNew.Locators.zStreet1TextArea, "street " + ZimbraSeleniumProperties.getUniqueString());

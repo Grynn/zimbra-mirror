@@ -170,8 +170,10 @@ public class Button {
 	
     //Addressbook button
 	public static final Button B_EDIT = new Button("zb__CNS__EDIT");
+	public static final Button B_FILEAS = new Button("td$=_FILE_AS_select_container");
+	
 	public static final Button B_CONTACTGROUP = new Button("zmi__Contacts__CONTACTGROUP_MENU");
-
+  
 	public static final Button O_SEARCH_MAIL_SENT_TO_CONTACT = new Button("O_SEARCH_MAIL_SENT_TO_CONTACT");
 	public static final Button O_SEARCH_MAIL_RECEIVED_FROM_CONTACT = new Button("O_SEARCH_MAIL_RECEIVED_FROM_CONTACT");
 	 

@@ -11,6 +11,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactNew.Locators;
 
 
 public class ViewContact extends AjaxCommonTest  {
@@ -43,22 +44,7 @@ public class ViewContact extends AjaxCommonTest  {
 		}
 		
 	
-	@Test(	description = "View a contact  created via soap",
-			groups = { "functional" })
-	public void DisplayContactInfo_FileAsEmail() throws HarnessException {
-		         		
-	    // Create a contact via Soap then select
-		ContactItem contact = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
 	
-	    // Select the contact 
-		DisplayContact contactView = (DisplayContact) app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contact.fileAs);
-	  
-		ZAssert.assertStringContains(contactView.zGetContactProperty(DisplayContact.Field.FileAs), contact.fileAs, "Verify contact fileAs (" + contact.fileAs + ") displayed");	
-		
-	    ZAssert.assertStringContains(contactView.zGetContactProperty(DisplayContact.Field.Email), contact.email, "Verify contact email (" + contact.email + ") displayed");	
-		           
-	    //TODO: add more verification
-   	}
 
 	@Test(	description = "Click Alphabetbar button All: Verify contact started with digit and A-Z listed ",
 			groups = { "functional" })
@@ -218,5 +204,112 @@ public class ViewContact extends AjaxCommonTest  {
 
         }
 	}   
+	
+	private void FileAs(String fileAsOption) throws HarnessException{
+		   // Create a contact via Soap then select
+		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+	
+		// Open the contact in Edit view
+        FormContactNew formContactNew = (FormContactNew) app.zPageAddressbook.zToolbarPressButton(Button.B_EDIT);
+	
+        // open FileAs menu
+        formContactNew.zClick(Button.B_FILEAS,app.zPageAddressbook);
+        
+		// select option Last, First 
+        formContactNew.selectFileAs(fileAsOption);
+
+        contactItem.fileAs = formContactNew.contactFullName(contactItem,fileAsOption);
+
+        // verify fullname display correctly        
+        ZAssert.assertEquals(
+        	formContactNew.getDisplayedContactHeader(),
+            contactItem.fileAs,
+            "Verify fullname displayed correctly"
+        );
+        
+        // Click Save
+        formContactNew.zSubmit();        
+        
+    	//verify contact is displayed as FileAs
+		List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();
+		boolean foundContact=false;
+		for (ContactItem ci : contacts) {
+			if (ci.fileAs.equals(contactItem.fileAs)) 
+			{
+				foundContact=true;
+				break;
+			}			
+		}
+	
+		ZAssert.assertTrue(foundContact, "Verify contact (" + contactItem.fileAs + ") displayed ");
+
+        
+	}
+	
+	@Test(	description = "View a contact, display view should be First Last",
+			groups = { "functional" })
+	public void DisplayContactInfo_FileAsEmail() throws HarnessException {		         	
+	    // Create a contact via Soap then select
+		ContactItem contact = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
+	
+	    // Select the contact  
+		DisplayContact contactView = (DisplayContact) app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contact.fileAs);
+	  
+		ZAssert.assertStringContains(contactView.zGetContactProperty(DisplayContact.Field.FileAs), contact.fileAs, "Verify contact fileAs (" + contact.fileAs + ") displayed");	
+		
+	    ZAssert.assertStringContains(contactView.zGetContactProperty(DisplayContact.Field.Email), contact.email, "Verify contact email (" + contact.email + ") displayed");			           
+	}
+
+	//First Last 
+	@Test(	description = "View a contact, file as First Last",
+			groups = { "functional" })
+	public void FileAsFirstLast() throws HarnessException {		         		
+	     FileAs(FormContactNew.Locators.zFileAsFirstLast); 		           
+   	}
+
+	//Last, First
+	@Test(	description = "View a contact, file as Last, First",
+			groups = { "functional" })
+	public void FileAsLastCommaFirst() throws HarnessException {		         		
+	     FileAs(FormContactNew.Locators.zFileAsLastCommaFirst); 		           
+   	}
+	
+    //Company(Last, First)
+	@Test(	description = "View a contact, file as Company(Last, First)",
+			groups = { "functional" })
+	public void FileAsCompanyLastCommaFirst() throws HarnessException {		         		
+	     FileAs(FormContactNew.Locators.zFileAsCompanyLastCommaFirst); 		           
+   	}
+
+	//Company
+	@Test(	description = "View a contact, file as Company",
+			groups = { "functional" })
+	public void FileAsCompany() throws HarnessException {		         		
+	     FileAs(FormContactNew.Locators.zFileAsCompany); 		           
+   	}
+
+	//Last, First (Company)
+	@Test(	description = "View a contact, file as Last, First (Company)",
+			groups = { "functional" })
+	public void FileAsLastCommaFirstCompany() throws HarnessException {		         		
+	     FileAs(FormContactNew.Locators.zFileAsLastCommaFirstCompany); 		           
+   	}
+
+	
+	//First Last (Company)
+	@Test(	description = "View a contact, file as First Last (Company)",
+			groups = { "functional" })
+	public void FileAsFirstLastCompany() throws HarnessException {		         		
+	     FileAs(FormContactNew.Locators.zFileAsFirstLastCompany); 		           
+   	}
+
+	//Company (First Last)
+	@Test(	description = "View a contact, file as Company (First Last)",
+			groups = { "functional" })
+	public void FileAsCompanyFirstLast() throws HarnessException {		         		
+	     FileAs(FormContactNew.Locators.zFileAsCompanyFirstLast); 		           
+   	}
+
+
 }
 
