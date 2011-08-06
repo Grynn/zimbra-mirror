@@ -15,17 +15,6 @@
 CREATE DATABASE ${DATABASE_NAME}
 DEFAULT CHARACTER SET utf8;
 
-CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_address (
-   mailbox_id    INTEGER UNSIGNED NOT NULL,
-   id            INTEGER UNSIGNED NOT NULL,
-   address       VARCHAR(128) NOT NULL,
-   contact_count INTEGER NOT NULL,
-
-   PRIMARY KEY (mailbox_id, id),
-   UNIQUE INDEX i_mail_address_address (mailbox_id, address),
-   CONSTRAINT fk_mail_address_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id) ON DELETE CASCADE
-) ENGINE = InnoDB;
-
 CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    mailbox_id    INTEGER UNSIGNED NOT NULL,
    id            INTEGER UNSIGNED NOT NULL,
@@ -42,7 +31,6 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    flags         INTEGER NOT NULL DEFAULT 0,
    tags          BIGINT NOT NULL DEFAULT 0,
    sender        VARCHAR(128),
-   sender_id     INTEGER UNSIGNED DEFAULT NULL,
    recipients    VARCHAR(128),
    subject       TEXT,
    name          VARCHAR(128),               -- namespace entry for item (e.g. tag name, folder name, document filename)
@@ -70,7 +58,6 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    CONSTRAINT fk_mail_item_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id),
    CONSTRAINT fk_mail_item_parent_id FOREIGN KEY (mailbox_id, parent_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id),
    CONSTRAINT fk_mail_item_folder_id FOREIGN KEY (mailbox_id, folder_id) REFERENCES ${DATABASE_NAME}.mail_item(mailbox_id, id),
-   CONSTRAINT fk_mail_item_sender_id FOREIGN KEY (mailbox_id, sender_id) REFERENCES ${DATABASE_NAME}.mail_address(mailbox_id, id),
    CONSTRAINT fk_mail_item_volume_id FOREIGN KEY (volume_id) REFERENCES zimbra.volume(id)
 ) ENGINE = InnoDB;
 
