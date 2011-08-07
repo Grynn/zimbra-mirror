@@ -710,6 +710,7 @@ function(ev) {
 
 	ev = DwtUiEvent.getEvent(ev, this);
 	var kbMgr = DwtKeyboardMgr.__shell.getKeyboardMgr();
+	ev.focusObj = null;
 	if (kbMgr._evtMgr.notifyListeners(DwtEvent.ONKEYDOWN, ev) === false) {
 		return false;
 	};
