@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.folders.showremaining;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.testng.annotations.Test;
@@ -16,12 +17,15 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
 public class ShowRemaining extends AjaxCommonTest {
 
+	@SuppressWarnings("serial")
 	public ShowRemaining() {
 		logger.info("New "+ ShowRemaining.class.getCanonicalName());
 		
 		// All tests start at the login page
 		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String, String>() {{
+		    put("zimbraPrefGroupMailBy", "message"); // Make this account "dirty" so that the folder tree doesn't slow down other accounts
+		}};
 		
 	}
 	
@@ -73,7 +77,7 @@ public class ShowRemaining extends AjaxCommonTest {
 				break;
 			}
 		}
-		ZAssert.assertNotNull(found, "Verify the folder was in the tree");
+		ZAssert.assertNotNull(found, "Verify the folder "+ name + " was in the tree");
 
 		
 	}	

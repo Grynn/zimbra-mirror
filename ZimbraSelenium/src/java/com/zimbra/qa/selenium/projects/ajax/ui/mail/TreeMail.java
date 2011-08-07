@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.IItem;
-import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.SavedSearchFolderItem;
 import com.zimbra.qa.selenium.framework.items.TagItem;
 import com.zimbra.qa.selenium.framework.items.ZimletItem;
@@ -657,6 +656,7 @@ public class TreeMail extends AbsTree {
 			if ( identifier == null || identifier.trim().length() == 0 || !(identifier.startsWith("zti__main_Mail__")) ) {
 				// Not a folder
 				// Maybe "Find Shares ..."
+				count++; // Add one more to the total 'count' for this 'unknown' item
 				continue;
 			}
 

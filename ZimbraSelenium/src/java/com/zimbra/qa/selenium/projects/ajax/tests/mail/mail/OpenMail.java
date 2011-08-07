@@ -65,6 +65,8 @@ public class OpenMail extends AjaxCommonTest {
 		
 		SleepUtil.sleep(5000);
 		
+		throw new HarnessException("implement verification!");
+		
 	}
 
 
