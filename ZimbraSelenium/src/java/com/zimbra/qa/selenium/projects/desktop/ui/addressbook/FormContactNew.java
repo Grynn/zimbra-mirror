@@ -160,25 +160,19 @@ public class FormContactNew extends AbsForm {
       else {
          //The following code to simulate paste action from user (Ctrl-V) bug #
          //Use "Notes" to store text which will be entered into clipboard (Ctrl-X)
-         sType(Locators.zNotesEditField ,value); //
+         //sType(Locators.zNotesEditField ,value); //
 
          //highlight text
          String id= "editcontactform_NOTES_input";
          ClientSessionFactory.session().selenium().getEval(
                "this.browserbot.getUserWindow().document.getElementById('"
                + id + "')" + ".select()");
-         
-         //cut text and put into clipboard
-         sKeyDownNative(KeyEvent.VK_CONTROL+"");
-         sKeyPressNative(KeyEvent.VK_X+"");           
-         sKeyUpNative(KeyEvent.VK_CONTROL+"");
 
-         //paste text to the target locator
-         sFocus(locator);     
-         sKeyDownNative(KeyEvent.VK_CONTROL+"");
-         sKeyPressNative(KeyEvent.VK_V+"");           
-         sKeyUpNative(KeyEvent.VK_CONTROL+"");
-                  
+         // Enter text
+         this.sFocus(locator);
+         this.zClick(locator);
+         zTypeKeys(locator, value);
+
       }
         
    }

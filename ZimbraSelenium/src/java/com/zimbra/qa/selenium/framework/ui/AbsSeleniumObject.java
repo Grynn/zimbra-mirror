@@ -392,6 +392,20 @@ public abstract class AbsSeleniumObject {
 		logger.info("zType(" + locator + "," + value + ")");
 	}
 
+	/**
+	 * This method uses sTypeKeys to simulate the activation of textfield,
+	 * then change the property internally through sType method
+	 * The weakness of sTypeKeys is some characters such as '.' don't get
+	 * printed to the textfield
+	 * @param locator
+	 * @param value
+	 */
+	public void zTypeKeys(String locator, String value) {
+	   sTypeKeys(locator, value);
+	   sType(locator, value);
+	   logger.info("zTypeKeys(" + locator + "," + value + ")");
+	}
+
 	public void zKeyDown(String keyCode) throws HarnessException {
 
 		if (keyCode == null || keyCode.isEmpty())
