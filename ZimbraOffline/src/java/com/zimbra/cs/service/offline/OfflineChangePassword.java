@@ -20,16 +20,22 @@ import java.util.List;
 import java.util.Map;
 
 import com.zimbra.common.account.ProvisioningConstants;
+import com.zimbra.common.service.RemoteServiceException;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.util.OfflineYAuth;
+import com.zimbra.cs.util.yauth.AuthenticationException;
+import com.zimbra.cs.util.yauth.ErrorCode;
 import com.zimbra.soap.DocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
 
@@ -51,34 +57,54 @@ public class OfflineChangePassword extends DocumentHandler {
         
         Map<String, Object> attrs = new HashMap<String, Object>();
         String status = "fail";
-        if (prov.isZcsAccount(acct)) {
-            attrs.put(OfflineConstants.A_offlineAccountSetup, ProvisioningConstants.TRUE); //flag so modify validates
-            attrs.put(OfflineConstants.A_offlineRemotePassword, newPass);
-            prov.modifyAttrs(acct, attrs);
-            status = "success";
-        } else {
-            List<DataSource> dataSources = acct.getAllDataSources();
-            if (dataSources != null) {
-                for (DataSource ds : dataSources) {
-                    boolean needModify = false;
-                    if (ds.getAttr(Provisioning.A_zimbraDataSourcePassword) != null) {
-                        attrs.put(Provisioning.A_zimbraDataSourcePassword, newPass);
-                        needModify = true;
-                    }
-                    if (ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpAuthPassword) != null) {
-                        attrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthPassword, newPass);
-                        needModify = true;
-                    }
-                    if (needModify) {
-                        String domain = ds.getAttr(Provisioning.A_zimbraDataSourceDomain);
-                        if ("yahoo.com".equals(domain)) {
-                            OfflineYAuth.removeToken(ds);
+        try {
+            if (prov.isZcsAccount(acct)) {
+                attrs.put(OfflineConstants.A_offlineAccountSetup, ProvisioningConstants.TRUE); //flag so modify validates
+                attrs.put(OfflineConstants.A_offlineRemotePassword, newPass);
+                prov.modifyAttrs(acct, attrs);
+                status = "success";
+            } else {
+                List<DataSource> dataSources = acct.getAllDataSources();
+                if (dataSources != null) {
+                    for (DataSource ds : dataSources) {
+                        boolean needModify = false;
+                        if (ds.getAttr(Provisioning.A_zimbraDataSourcePassword) != null) {
+                            attrs.put(Provisioning.A_zimbraDataSourcePassword, newPass);
+                            needModify = true;
                         }
-                        prov.modifyDataSource(acct, ds.getId(), attrs);
-                        prov.testDataSource((OfflineDataSource) ds);
-                        status = "success";
+                        if (ds.getAttr(OfflineConstants.A_zimbraDataSourceSmtpAuthPassword) != null) {
+                            attrs.put(OfflineConstants.A_zimbraDataSourceSmtpAuthPassword, newPass);
+                            needModify = true;
+                        }
+                        if (needModify) {
+                            String domain = ds.getAttr(Provisioning.A_zimbraDataSourceDomain);
+                            if ("yahoo.com".equals(domain)) {
+                                OfflineYAuth.removeToken(ds);
+                            }
+                            prov.modifyDataSource(acct, ds.getId(), attrs);
+                            prov.testDataSource((OfflineDataSource) ds);
+                            status = "success";
+                        }
                     }
                 }
+            }
+        } catch (ServiceException se) {
+            boolean badPass = false;
+            if (AccountServiceException.AUTH_FAILED.equals(se.getCode()) || RemoteServiceException.AUTH_FAILURE.equals(se.getCode())) {
+                badPass = true;
+            } else if (se instanceof AuthenticationException) {
+                AuthenticationException ae = (AuthenticationException) se;
+                if (ae.getErrorCode() == ErrorCode.INVALID_PASSWORD) {
+                    badPass = true;
+                }
+            }
+            if (!badPass) {
+                throw se;
+            } else {
+                if (acct instanceof OfflineAccount && ((OfflineAccount) acct).isDebugTraceEnabled()) {
+                    OfflineLog.offline.debug("unable to save new password due to exception",se);
+                }
+                //if acct debug is on dump to log before failing
             }
         }
         Element response = getResponseElement(zsc);
