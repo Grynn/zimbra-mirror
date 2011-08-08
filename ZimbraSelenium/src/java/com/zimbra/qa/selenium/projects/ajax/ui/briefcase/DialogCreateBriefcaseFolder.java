@@ -53,8 +53,8 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");
 
-		String locator = "id=" + Locators.zDialogId;
-
+		String locator = Locators.zNameField;
+	
 		if (!this.sIsElementPresent(locator)) {
 			return (false); // Not even present
 		}
