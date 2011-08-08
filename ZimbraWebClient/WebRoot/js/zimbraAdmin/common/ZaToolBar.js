@@ -76,9 +76,9 @@ ZaToolBar.prototype.init = function () {
 			if(opList[ix] instanceof ZaOperation) {
 				if(opList[ix].id == ZaOperation.SEP) {
 					this._createSeparator();
-                } else if (opList[btnOrder[ix]].id == ZaOperation.LEFT_BRACKET) {
+                } else if (opList[ix].id == ZaOperation.LEFT_BRACKET) {
                     this._createLeftBracket();
-                } else if (opList[btnOrder[ix]].id == ZaOperation.RIGHT_BRACKET) {
+                } else if (opList[ix].id == ZaOperation.RIGHT_BRACKET) {
                     this._createRightBracket();
 				} else if (opList[ix].id == ZaOperation.NONE) {
 					this.addFiller();
