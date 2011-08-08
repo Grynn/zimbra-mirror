@@ -45,7 +45,7 @@ public class ViewContact extends AjaxCommonTest  {
 	
 	@Test(	description = "View a contact  created via soap",
 			groups = { "functional" })
-	public void DisplayContact_01() throws HarnessException {
+	public void DisplayContactInfo_FileAsEmail() throws HarnessException {
 		         		
 	    // Create a contact via Soap then select
 		ContactItem contact = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
@@ -62,7 +62,7 @@ public class ViewContact extends AjaxCommonTest  {
 
 	@Test(	description = "Click Alphabetbar button All: Verify contact started with digit and A-Z listed ",
 			groups = { "functional" })
-	public void DisplayContact_02() throws HarnessException {
+	public void ClickAllVerifyDisplayAllContacts() throws HarnessException {
 	
 		 // Create  contacts  
 		ContactItem contact1 = createContact("B");
@@ -96,7 +96,7 @@ public class ViewContact extends AjaxCommonTest  {
 
 	@Test(	description = "Click Alphabetbar button 123: Verify contact started with digit listed and A-Z not-listed ",
 			groups = { "functional" })
-	public void DisplayContact_03() throws HarnessException {
+	public void Click123VerifyDisplayContactStartWithDigit() throws HarnessException {
 	
 		 // Create  contacts  
 		ContactItem contact1 = createContact("B");
@@ -131,7 +131,7 @@ public class ViewContact extends AjaxCommonTest  {
 
 	@Test(	description = "Click Alphabetbar button B: Verify only contact started with B|b is listed ",
 			groups = { "functional" })
-	public void DisplayContact_04() throws HarnessException {
+	public void ClickBVerifyDisplayContactStartWithBb() throws HarnessException {
 	
 		 // Create  contacts  
 		ContactItem contact1 = createContact("B");
@@ -166,5 +166,62 @@ public class ViewContact extends AjaxCommonTest  {
 		ZAssert.assertTrue(countContact==2, "Verify contact " + contact1.fileAs + "," + contact4.fileAs + " displayed, and " + contact2.fileAs + "," + contact3.fileAs + " not displayed ");
 	}
 
+	@Test(  description = "Click all Alphabetbar buttons: Verify only contact started with the alphabet is listed ",
+   groups = { "functional" })
+   public void ClickAllAlphabetBarButtons() throws HarnessException {
+
+	   // Create contact 
+	   ContactItem[] cgiArray = new ContactItem[26];
+      Button[] buttonArray = 
+      {Button.B_AB_A,Button.B_AB_B,Button.B_AB_C,Button.B_AB_D,Button.B_AB_E,Button.B_AB_F,Button.B_AB_G,
+            Button.B_AB_H,Button.B_AB_I,Button.B_AB_J,Button.B_AB_K,Button.B_AB_L,Button.B_AB_M,Button.B_AB_N,
+            Button.B_AB_O,Button.B_AB_P,Button.B_AB_Q,Button.B_AB_R,Button.B_AB_S,Button.B_AB_T,Button.B_AB_U,
+            Button.B_AB_V,Button.B_AB_W,Button.B_AB_X,Button.B_AB_Y,Button.B_AB_Z};
+
+      for (int i=0; i<26; i++) {
+         cgiArray[i] =  createContact(Character.toString((char)((int)'a' + i)));
+      }     
+
+      // Refresh the view, to pick up the new contact
+      FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(),
+            "Contacts");
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageAddressbook.zWaitForDesktopLoadingSpinner(5000);
+
+      app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
+
+      for (int i = 0; i < 26; i++) {
+         //click button
+         app.zPageAddressbook.zToolbarPressButton(buttonArray[i]);
+
+         //verify contact started with button name listed
+         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();
+         int countGroup= 0;
+         for (ContactItem ci : contacts) {
+            if (ci.fileAs.equals(cgiArray[i].fileAs) ||
+                  ci.fileAs.equals(cgiArray[i].fileAs)) 
+            {
+               countGroup++;
+            }
+
+         }
+
+         ZAssert.assertTrue(countGroup==1, "Verify contact " +
+               cgiArray[i].fileAs + " displayed");
+
+         // Delete the verified contact to save time going through it in contact list
+         // for subsequent test cases.
+         app.zPageAddressbook.zListItem(Action.A_CHECKBOX, cgiArray[i].fileAs);
+
+         app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);
+
+         String expectedMsg = "1 contact moved to Trash";
+         ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
+               expectedMsg , "Verify toast message '" + expectedMsg + "'");
+
+         GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+         app.zPageAddressbook.zWaitForDesktopLoadingSpinner(5000);
+      }
+	}   
 }
 
