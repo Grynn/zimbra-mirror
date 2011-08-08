@@ -777,7 +777,7 @@ public class PageMail extends AbsTab {
 
 			this.zWaitForBusyOverlay();
 
-			page = null;
+			page = new DisplayMail(MyApplication);
 			
 			// FALL THROUGH
 		} else if ( action == Action.A_CTRLSELECT ) {

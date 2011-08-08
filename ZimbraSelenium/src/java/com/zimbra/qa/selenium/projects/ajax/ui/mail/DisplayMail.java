@@ -32,14 +32,18 @@ public class DisplayMail extends AbsDisplay {
 	 * Defines Selenium locators for various objects in {@link DisplayMail}
 	 */
 	public static class Locators {
-		public static final String zSubject				= "css=[class='LabelColValue SubjectCol']";
-		public static final String zDate 				= "css=[class='LabelColValue DateCol']";
-
+				
+		public static final String IsConViewActive 			= "css=div[id='zv__CLV']";
+		public static final String IsMsgViewActive 			= "css=div[id='zv__TV']";
 		
-		public static final String zViewEntireMessage 	= "id=zv__CLV__MSG_msgTruncation_link";
-		public static final String zHighlightObjects 	= "id=zv__CLV_highlightObjects_link";
-		public static final String IsConViewActive 			= "css=[parentid='zv__CLV']";
-		public static final String IsMsgViewActive 			= "css=[parentid='zv__TV']";
+		public static final String MessageViewPreviewAtBottomCSS		= "css=div[id='zv__TV__MSG']";
+		public static final String MessageViewPreviewAtRightCSS			= "css=div[id='zv__TV__MSG']";
+		public static final String MessageViewOpenMessageCSS			= "css=div[id='zv__MSG1__MSG']";
+		
+		public static final String ConversationViewPreviewAtBottomCSS	= "css=div[id='zv__CLV__MSG']";
+		public static final String ConversationViewPreviewAtRightCSS	= "css=div[id='zv__CLV__MSG']";
+		public static final String ConversationViewOpenMessageCSS		= "css=TODO#TODO";
+
 	}
 
 	/**
@@ -59,6 +63,8 @@ public class DisplayMail extends AbsDisplay {
 		Body
 	}
 	
+	public String ContainerLocator = Locators.MessageViewPreviewAtBottomCSS;
+	
 
 	/**
 	 * Protected constuctor for this object.  Only classes within
@@ -70,7 +76,6 @@ public class DisplayMail extends AbsDisplay {
 		super(application);
 		
 		logger.info("new " + DisplayMail.class.getCanonicalName());
-
 	}
 	
 	@Override
@@ -89,7 +94,7 @@ public class DisplayMail extends AbsDisplay {
 
 		if ( button == Button.B_VIEW_ENTIRE_MESSAGE ) {
 			
-			locator = "css=span[id$='__MSG_msgTruncation_link']";
+			locator = this.ContainerLocator + " span[id$='__MSG_msgTruncation_link']";
 
 			if ( !this.sIsElementPresent(locator) )
 				throw new HarnessException("locator is not present for button "+ button +" : "+ locator);
@@ -102,7 +107,7 @@ public class DisplayMail extends AbsDisplay {
 
 		} else if ( button == Button.B_HIGHLIGHT_OBJECTS ) {
 
-			locator = "css=span[id$='_highlightObjects_link']";
+			locator = this.ContainerLocator + " span[id$='_highlightObjects_link']";
 
 
 			if ( !this.sIsElementPresent(locator) )
@@ -116,32 +121,32 @@ public class DisplayMail extends AbsDisplay {
 
 		} else if ( button == Button.B_ACCEPT ) {
 			
-			locator = "css=td[id$='__Inv__REPLY_ACCEPT_title']";
+			locator = this.ContainerLocator + " td[id$='__Inv__REPLY_ACCEPT_title']";
 			page = null;
 			
 		} else if ( button == Button.B_DECLINE ) {
 			
-			locator = "css=td[id$='__Inv__REPLY_TENTATIVE_title']";
+			locator = this.ContainerLocator + " td[id$='__Inv__REPLY_TENTATIVE_title']";
 			page = null;
 		
 		} else if ( button == Button.B_TENTATIVE ) {
 			
-			locator = "css=td[id$='__Inv__REPLY_DECLINE_title']";
+			locator = this.ContainerLocator + " td[id$='__Inv__REPLY_DECLINE_title']";
 			page = null;
 			
 		} else if ( button == Button.B_PROPOSE_NEW_TIME ) {
 			
-			locator = "css=td[id$='__Inv__PROPOSE_NEW_TIME_title']";
+			locator = this.ContainerLocator + " td[id$='__Inv__PROPOSE_NEW_TIME_title']";
 			page = null;
 		
 		} else if ( button == Button.B_ACCEPT_SHARE ) {
 
-			locator = "css=td[id$='__Shr__SHARE_ACCEPT_title']";
+			locator = this.ContainerLocator + " td[id$='__Shr__SHARE_ACCEPT_title']";
 			page = new DialogShareAccept(MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
 
 		} else if ( button == Button.B_DECLINE_SHARE ) {
 
-			locator = "css=td[id$='__Shr__SHARE_DECLINE_title']";
+			locator = this.ContainerLocator + " td[id$='__Shr__SHARE_DECLINE_title']";
 			page = new DialogShareDecline(MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
 
 		} else  {
@@ -179,8 +184,8 @@ public class DisplayMail extends AbsDisplay {
 		// Maybe it needs to check "visible" and/or x/y/z coordinates
 
 		List<String> locators = Arrays.asList(
-				"css=td[id$='__Shr__SHARE_ACCEPT_title']",
-				"css=td[id$='__Shr__SHARE_DECLINE_title']");
+				this.ContainerLocator + " td[id$='__Shr__SHARE_ACCEPT_title']",
+				this.ContainerLocator + " td[id$='__Shr__SHARE_DECLINE_title']");
 
 		for (String locator : locators) {
 			if ( !this.sIsElementPresent(locator) )
@@ -203,10 +208,10 @@ public class DisplayMail extends AbsDisplay {
 		// Maybe it needs to check "visible" and/or x/y/z coordinates
 
 		List<String> locators = Arrays.asList(
-				"css=td[id$='__Inv__REPLY_ACCEPT_title']",
-				"css=td[id$='__Inv__REPLY_TENTATIVE_title']",
-				"css=td[id$='__Inv__REPLY_DECLINE_title']",
-				"css=td[id$='__Inv__PROPOSE_NEW_TIME_title']");
+				this.ContainerLocator + " td[id$='__Inv__REPLY_ACCEPT_title']",
+				this.ContainerLocator + " td[id$='__Inv__REPLY_TENTATIVE_title']",
+				this.ContainerLocator + " td[id$='__Inv__REPLY_DECLINE_title']",
+				this.ContainerLocator + " td[id$='__Inv__PROPOSE_NEW_TIME_title']");
 
 		for (String locator : locators) {
 			if ( !this.sIsElementPresent(locator) )
@@ -274,7 +279,7 @@ public class DisplayMail extends AbsDisplay {
 			 */
 			try {
 				
-				this.sSelectFrame("//iframe[contains(@id, '__MSG_body__iframe')]");
+				this.sSelectFrame("//iframe[contains(@id, '_body__iframe')]");
 				
 				String bodyLocator = "css=body";
 				
@@ -296,47 +301,47 @@ public class DisplayMail extends AbsDisplay {
 
 		} else if ( field == Field.Cc ) {
 			
-			locator = "css=tr[id$='_cc'] td[class~='LabelColValue'] span[id$='_com_zimbra_email'] span span";
+			locator = this.ContainerLocator + " tr[id$='_cc'] td[class~='LabelColValue'] span[id$='_com_zimbra_email'] span span";
 			if ( !sIsElementPresent(locator) ) {
 				// no email zimlet case
-				locator = "css=tr[id$='_cc'] td[class~='LabelColValue']";
+				locator = this.ContainerLocator + " tr[id$='_cc'] td[class~='LabelColValue']";
 			}
 			
 		} else if ( field == Field.From ) {
 			
-			locator = "css=tr[id$='_from'] span[id$='_com_zimbra_email'] span span";
+			locator = this.ContainerLocator + " tr[id$='_from'] span[id$='_com_zimbra_email'] span span";
 			if ( !sIsElementPresent(locator) ) {
 				// no email zimlet case
-				locator = "css=tr[id$='_from']";
+				locator = this.ContainerLocator + " tr[id$='_from']";
 			}
 
 		} else if ( field == Field.OnBehalfOf ) {
 			
-			locator = "css=td[id$='_obo'] span[id$='_com_zimbra_email'] span span";
+			locator = this.ContainerLocator + " td[id$='_obo'] span[id$='_com_zimbra_email'] span span";
 			if ( !sIsElementPresent(locator) ) {
 				// no email zimlet case
-				locator = "css=td[id$='_obo']";
+				locator = this.ContainerLocator + " td[id$='_obo']";
 			}
 
 		} else if ( field == Field.OnBehalfOfLabel ) {
 			
-			locator = "css=td[id$='_obo_label']";
+			locator = this.ContainerLocator + " td[id$='_obo_label']";
 
 		} else if ( field == Field.ReplyTo ) {
 			
-			locator = "css=tr[id$='_reply to'] span[id$='_com_zimbra_email'] span span";
+			locator = this.ContainerLocator + " tr[id$='_reply to'] span[id$='_com_zimbra_email'] span span";
 			if ( !sIsElementPresent(locator) ) {
 				// no email zimlet case
-				locator = "css=tr[id$='_reply to']";
+				locator = this.ContainerLocator + " tr[id$='_reply to']";
 			}
 
 		} else if ( field == Field.ReceivedDate ) {
 			
-			locator = "css=tr[id$='__MSG_hdrTableTopRow'] td[class~='DateCol']";
+			locator = this.ContainerLocator + " tr[id$='_hdrTableTopRow'] td[class~='DateCol']";
 
 		} else if ( field == Field.ReceivedTime ) {
 			
-			String timeAndDateLocator = "css=td[class~='DateCol']";
+			String timeAndDateLocator = this.ContainerLocator + " td[class~='DateCol']";
 
 			// Make sure the subject is present
 			if ( !this.sIsElementPresent(timeAndDateLocator) )
@@ -354,13 +359,13 @@ public class DisplayMail extends AbsDisplay {
 
 		} else if ( field == Field.Subject ) {
 			
-			locator = "css=tr[id$='__MSG_hdrTableTopRow'] td[class~='SubjectCol']";
+			locator = this.ContainerLocator + " tr[id$='_hdrTableTopRow'] td[class~='SubjectCol']";
 
 		} else if ( field == Field.To ) {
 			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-			   locator = "css=tr[id$='_to'] td[class~='LabelColValue'] span[id$='_com_zimbra_email']";
+			   locator = this.ContainerLocator + " tr[id$='_to'] td[class~='LabelColValue'] span[id$='_com_zimbra_email']";
 			} else {
-			   locator = "css=tr[id$='_to'] td[class~='LabelColValue'] span[id$='_com_zimbra_email'] span span";
+			   locator = this.ContainerLocator + " tr[id$='_to'] td[class~='LabelColValue'] span[id$='_com_zimbra_email'] span span";
 			}
 
 		} else {
@@ -403,7 +408,34 @@ public class DisplayMail extends AbsDisplay {
 	public boolean zIsActive() throws HarnessException {
 		//logger.warn("implement me", new Throwable());
 		zWaitForZimlets();
-		return (sIsElementPresent(Locators.IsConViewActive) || sIsElementPresent(Locators.IsMsgViewActive) );
+		
+		// Determine which <div/> contains this preview
+		// Use this 'top' css for all subsequent parsing
+		
+		if ( this.zIsVisiblePerPosition(Locators.MessageViewOpenMessageCSS, 0, 0) ) {
+			ContainerLocator = Locators.MessageViewOpenMessageCSS;
+		} else if ( this.zIsVisiblePerPosition(Locators.IsMsgViewActive, 0, 0)) {
+			if ( this.zIsVisiblePerPosition(Locators.MessageViewPreviewAtBottomCSS, 0, 0) ) {
+				ContainerLocator = Locators.MessageViewPreviewAtBottomCSS;
+			} else if ( this.zIsVisiblePerPosition(Locators.MessageViewPreviewAtRightCSS, 0, 0) ) {
+				ContainerLocator = Locators.MessageViewPreviewAtRightCSS;
+			} else {
+				throw new HarnessException("Unable to determine the current open view");				
+			}
+		} else if ( this.zIsVisiblePerPosition(Locators.IsConViewActive, 0, 0) ) {
+			if ( this.zIsVisiblePerPosition(Locators.ConversationViewPreviewAtBottomCSS, 0, 0) ) {
+				ContainerLocator = Locators.ConversationViewPreviewAtBottomCSS;
+			} else if ( this.zIsVisiblePerPosition(Locators.ConversationViewPreviewAtRightCSS, 0, 0) ){
+				ContainerLocator = Locators.ConversationViewPreviewAtRightCSS;
+			} else {
+				throw new HarnessException("Unable to determine the current open view");
+			}
+		} else {
+			throw new HarnessException("Unable to determine the current open view");
+		}
+		
+
+		return (sIsElementPresent(this.ContainerLocator) );
 				
 	}
 	
