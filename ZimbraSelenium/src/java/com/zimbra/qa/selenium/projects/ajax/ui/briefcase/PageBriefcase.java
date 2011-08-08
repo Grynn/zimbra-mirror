@@ -337,8 +337,8 @@ public class PageBriefcase extends AbsTab {
 
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option,
 			IItem item) throws HarnessException {
-		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("
-				+ pulldown + ", " + option + ")");
+		logger.info(myPageName() + " zToolbarPressPulldown(" + pulldown + ", "
+				+ option + ")");
 
 		tracer.trace("Click pulldown " + pulldown + " then " + option);
 
@@ -349,18 +349,23 @@ public class PageBriefcase extends AbsTab {
 			throw new HarnessException("Option cannot be null!");
 
 		// Default behavior variables
-		//
 		String pulldownLocator = null; // If set, this will be expanded
 		String optionLocator = null; // If set, this will be clicked
 		AbsPage page = null; // If set, this page will be returned
 
 		// Based on the button specified, take the appropriate action(s)
-		//
-
 		if (pulldown == Button.B_NEW) {
 			pulldownLocator = Locators.zNewMenuArrowBtn.locator;
 			if (option == Button.O_NEW_BRIEFCASE) {
-				throw new HarnessException("implement me!");
+				if (ZimbraSeleniumProperties.zimbraGetVersionString().contains(
+						"7.1."))
+					optionLocator = "css=tr[id=POPUP_NEW_BRIEFCASE]";
+				else
+					optionLocator = "css=div#zb__BDLV__NEW_MENU_NEW_BRIEFCASE";
+
+				page = new DialogCreateBriefcaseFolder(this.MyApplication,((AppAjaxClient) MyApplication).zPageBriefcase);
+
+				// FALL THROUGH
 			} else if (option == Button.O_NEW_DOCUMENT) {
 				if (ZimbraSeleniumProperties.zimbraGetVersionString().contains(
 						"7.1."))
@@ -711,8 +716,8 @@ public class PageBriefcase extends AbsTab {
 
 			pulldownLocator = "css=td#zb__BDLV__MOVE_MENU_dropdown>div";
 			optionLocator = "css=td#zti__DwtFolderChooser_BriefcaseBDLV__"
-						+ folder.getId() + "_textCell";
-			
+					+ folder.getId() + "_textCell";
+
 			page = null;
 		} else {
 			throw new HarnessException("no logic defined for pulldown/dynamic "
@@ -1152,7 +1157,7 @@ public class PageBriefcase extends AbsTab {
 		} else if (shortcut == Shortcut.S_NEWFOLDER) {
 
 			// "NEW Folder" shortcut opens "Create New Folder" dialog
-			//due to the bug #63029 it opens dialog with Mail tree view
+			// due to the bug #63029 it opens dialog with Mail tree view
 			page = new DialogCreateFolder(MyApplication, this);
 
 			keyCode = "78,70";
