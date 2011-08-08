@@ -32,6 +32,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='dbg|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -108,6 +109,9 @@
       <Command>
       </Command>
     </PostBuildEvent>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">
     <ClCompile>
@@ -205,9 +209,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='rtl|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="Testunmanaged.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CMigration.h" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="Testunmanaged.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
