@@ -1,1 +1,18 @@
-⼯筻低䑟偅久䕄䍎䕉絓ൽ⼊ 楍牣獯景⁴楖畳污䌠⬫朠湥牥瑡摥椠据畬敤映汩⹥਍⼯唠敳⁤祢䔠捸慨杮⹥捲਍⼯਍搣晥湩⁥䑉当剐䩏䅎䕍††††††††††〱ര⌊敤楦敮䤠剄䕟䍘䅈䝎⁅†††††††††ㄠ㄰਍搣晥湩⁥䑉归䅍䥐剗偁䕐⁒††††††††〱ശഊ⼊ 敎瑸搠晥畡瑬瘠污敵⁳潦⁲敮⁷扯敪瑣൳⼊യ⌊晩敤⁦偁呓䑕佉䥟噎䭏䑅਍椣湦敤⁦偁呓䑕佉剟䅅佄䱎彙奓䉍䱏൓⌊敤楦敮张偁当䕎员剟卅問䍒彅䅖啌⁅†††㈠㄰਍搣晥湩⁥䅟卐也塅彔佃䵍乁彄䅖啌⁅††††㈳㘷സ⌊敤楦敮张偁当䕎员䍟乏剔䱏噟䱁䕕††††㈠㄰਍搣晥湩⁥䅟卐也塅彔奓䕍彄䅖啌⁅†††††〱ഷ⌊湥楤൦⌊湥楤൦
+//{{NO_DEPENDENCIES}}
+// Microsoft Visual C++ generated include file.
+// Used by Exchange.rc
+//
+#define IDS_PROJNAME                    100
+#define IDR_EXCHANGE                    101
+#define IDR_MAPIWRAPPER                 106
+
+// Next default values for new objects
+// 
+#ifdef APSTUDIO_INVOKED
+#ifndef APSTUDIO_READONLY_SYMBOLS
+#define _APS_NEXT_RESOURCE_VALUE        201
+#define _APS_NEXT_COMMAND_VALUE         32768
+#define _APS_NEXT_CONTROL_VALUE         201
+#define _APS_NEXT_SYMED_VALUE           107
+#endif
+#endif
