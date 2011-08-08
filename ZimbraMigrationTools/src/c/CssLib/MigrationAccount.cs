@@ -27,6 +27,11 @@ namespace CssLib
         private Int64 TotalSent;
         private Int64 TotalItems;
 
+        private Int64 TotalErrors;
+        private Int64 TotalWarnings;
+        private ObservableCollection<string> ErrorList = new ObservableCollection<string>();
+        private ObservableCollection<string> WarningList = new ObservableCollection<string>();
+
         public List<MigrationFolder> migrationFolders;
 
         /*public MigrationFolder MigrationFolders
@@ -156,6 +161,58 @@ namespace CssLib
             }
         }
 
+        public Int64 TotalNoErrors
+        {
+            get { return TotalErrors; }
+            set
+            {
+                if (OnChanged != null)
+                {
+                    OnChanged(this, new MigrationObjectEventArgs("TotalNoErrors", this.TotalErrors, value));
+                }
+                TotalErrors = value;
+            }
+        }
+
+        public Int64 TotalNoWarnings
+        {
+            get { return TotalWarnings; }
+            set
+            {
+                if (OnChanged != null)
+                {
+                    OnChanged(this, new MigrationObjectEventArgs("TotalNoWarnings", this.TotalWarnings, value));
+                }
+                TotalWarnings = value;
+            }
+        }
+
+        public ObservableCollection<string> ErrorMsgList
+        {
+            get { return ErrorList; }
+            set
+            {
+                if (OnChanged != null)
+                {
+                    OnChanged(this, new MigrationObjectEventArgs("ErrorMsgList", this.ErrorList, value));
+                }
+                ErrorList = value;
+            }
+        }
+
+        public ObservableCollection<string> WarningMsgList
+        {
+            get { return WarningList; }
+            set
+            {
+                if (OnChanged != null)
+                {
+                    OnChanged(this, new MigrationObjectEventArgs("WarningMsgList", this.WarningList, value));
+                }
+                WarningList = value;
+            }
+        }
+
 		public System.DateTime dateRaised
 		{
 			get
@@ -171,8 +228,8 @@ namespace CssLib
 				this.dtmDateRaised = value;
 			}
 		}
-
 	}
+
     public class MigrationFolder
     {
         public event MigrationObjectEventHandler OnChanged;

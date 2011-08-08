@@ -155,14 +155,38 @@ namespace CssLib
             Acct.TotalNoContacts = 100;
             Acct.TotalNoMails = 1000;
             Acct.TotalNoRules = 10;
-             Acct.TotalNoItems = 1110;
+            Acct.TotalNoItems = 1110;
+            //Acct.TotalNoErrors = 0;   don't set these -- adds 1 when it shouldn't
+            //Acct.TotalNoWarnings = 0;
+            //Acct.LastErrorMsg = "";
+            //Acct.LastWarningMsg = "";
              long count = 0;
 
+             long totalCount = 0;
+             switch (Acct.Accountnum)
+             {
+                 case 0:
+                     totalCount = 100;
+                     break;
+                 case 1:
+                     totalCount = 200;
+                     break;
+                 case 2:
+                     totalCount = 300;
+                     break;
+                 case 3:
+                     totalCount = 400;
+                     break;
+                 default:
+                     totalCount = 100;
+                     break;
+             }
+
              Acct.migrationFolders[0].FolderName = "Contacts";
-             Acct.migrationFolders[0].TotalCountOFItems = 100;
+             Acct.migrationFolders[0].TotalCountOFItems = totalCount;
              Acct.migrationFolders[0].CurrentCountOFItems = 0;
 
-            while (count < 100)
+            while (count < totalCount)
             {
 
                
@@ -173,12 +197,67 @@ namespace CssLib
 
             }
 
-            Acct.migrationFolders[0].FolderName = "Mails";
-            Acct.migrationFolders[0].TotalCountOFItems = 1000;
-            Acct.migrationFolders[0].CurrentCountOFItems = 0;
-            while ((count >= 100) & (count < 1100))
+            switch (Acct.Accountnum)
             {
+                case 0:
+                    totalCount = 700;
+                    break;
+                case 1:
+                    totalCount = 800;
+                    break;
+                case 2:
+                    totalCount = 900;
+                    break;
+                case 3:
+                    totalCount = 1000;
+                    break;
+                default:
+                    totalCount = 1100;
+                    break;
+            }
 
+            Acct.migrationFolders[0].FolderName = "Mails";
+            Acct.migrationFolders[0].TotalCountOFItems = totalCount;
+            Acct.migrationFolders[0].CurrentCountOFItems = 0;
+            while ((count >= 100) & (count < totalCount))
+            {
+                if (Acct.Accountnum == 0)
+                {
+                    if (count == 200)
+                    {
+                        Acct.TotalNoErrors++;
+                        Acct.ErrorMsgList.Add("Invalid UID");
+                    }
+                    if (count == 400)
+                    {
+                        Acct.TotalNoErrors++;
+                        Acct.ErrorMsgList.Add("Invalid attachment");
+                    }
+                    if (count == 500)
+                    {
+                        Acct.TotalNoErrors++;
+                        Acct.ErrorMsgList.Add("Invalid attachment");
+                    }
+                }
+
+                if (Acct.Accountnum == 1)
+                {
+                    if (count == 300)
+                    {
+                        Acct.TotalNoErrors++;
+                        Acct.ErrorMsgList.Add("Invalid recipient");
+                    }
+                    if (count == 400)
+                    {
+                        Acct.TotalNoWarnings++;
+                        Acct.WarningMsgList.Add("Unsupported address format");
+                    }
+                    if (count == 600)
+                    {
+                        Acct.TotalNoWarnings++;
+                        Acct.WarningMsgList.Add("Message size too large");
+                    }
+                }
                
 
                 System.Threading.Thread.Sleep(2000);
@@ -186,11 +265,32 @@ namespace CssLib
                 count = count + 100;
 
             }
+
+            switch (Acct.Accountnum)
+            {
+                case 0:
+                    totalCount = 11;
+                    break;
+                case 1:
+                    totalCount = 12;
+                    break;
+                case 2:
+                    totalCount = 13
+                        ; break;
+                case 3:
+                    totalCount = 14;
+                    break;
+                default:
+                    totalCount = 10;
+                    break;
+            }
+
             Acct.migrationFolders[0].FolderName = "Rules";
-            Acct.migrationFolders[0].TotalCountOFItems = 10;
+            Acct.migrationFolders[0].TotalCountOFItems = totalCount;
             Acct.migrationFolders[0].CurrentCountOFItems = 0;
 
-            while ((count >= 1100) & (count <= 1110))
+            long tempCount = count;
+            while ((count >= tempCount) & (count <= (tempCount + 10)))
             {
 
                 
