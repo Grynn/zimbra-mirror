@@ -5,6 +5,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsForm;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.I18N;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
@@ -22,13 +23,9 @@ public class FormSignatureNew extends AbsForm {
 		public static final String signatureBody = "css=textarea[id*='TEXTAREA_SIGNATURE']";
 		public static final String zToolbarSaveID = "zb__PREF__SAVE_title";
 		public static final String zToolbarCancelID = "zb__PREF__CANCEL_title";
-
-		public static final String zSaveChangesYes = "id=DWT241_title";
-		public static final String zSaveChangesNo = "id=DWT242_title";
-		public static final String zSaveChangesCancel = "id=DWT243_title";
 		// TODO: Need to I18N these locators
-		public static final String formatAsText = "//td[contains(@id,'_title') and contains (text(),'Format As Plain Text')]";
-		public static final String formatAsHtml = "//td[contains(@id,'_title') and contains (text(),'Format As HTML')]";
+		public static final String formatAsText = "//td[contains(@id,'_title') and contains (text(),'"+I18N.FORMAT_AS_PLAIN_TEXT+"')]";
+		public static final String formatAsHtml = "//td[contains(@id,'_title') and contains (text(),'"+I18N.FORMAT_AS_HTML_TEXT+"')]";
 		public static final String zFrame = "css=iframe[id*='DWT']";
 		public static final String zHtmlBodyField = "css=body";
 	}
@@ -115,7 +112,7 @@ public class FormSignatureNew extends AbsForm {
 					+ locator + " button=" + button);
 
 		// Click it
-		this.zClick(locator);
+		this.zClickAt(locator,"");
 
 		return (page);
 	}
@@ -144,12 +141,12 @@ public class FormSignatureNew extends AbsForm {
 		} else if (field == Field.SignatureBody) {
 			locator = Locators.signatureBody;
 			this.sFocus(locator);
-			this.zClick(locator);
+			this.zClickAt(locator,"");
 			zKeyboard.zTypeCharacters(value);
 
 			if (!(sGetValue(locator).equalsIgnoreCase(value))) {
 				this.sFocus(locator);
-				this.zClick(locator);
+				this.zClickAt(locator,"");
 				sType(locator, value);
 			}
 			return;
@@ -159,7 +156,7 @@ public class FormSignatureNew extends AbsForm {
 			try{
 			sSelectFrame(Locators.zFrame);
 			this.sFocus(locator);
-			this.zClick(locator);
+			this.zClickAt(locator,"");
 			sType(locator, value);
 			}finally{
 				sSelectFrame("relative=top");
@@ -178,12 +175,12 @@ public class FormSignatureNew extends AbsForm {
 
 		// Enter text
 		this.sFocus(locator);
-		this.zClick(locator);
+		this.zClickAt(locator,"");
 		zKeyboard.zTypeCharacters(value);
 
 		if (!(sGetValue(locator).equalsIgnoreCase(value))) {
 			this.sFocus(locator);
-			this.zClick(locator);
+			this.zClickAt(locator,"");
 			sType(locator, value);
 		}
 

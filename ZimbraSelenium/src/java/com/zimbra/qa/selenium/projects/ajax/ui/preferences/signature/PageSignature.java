@@ -5,6 +5,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.I18N;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
 
@@ -20,14 +21,9 @@ public class PageSignature extends AbsTab{
 		// Preferences Toolbar: Save, Cancel
 		public static final String zToolbarSaveID = "zb__PREF__SAVE_title";
 		public static final String zToolbarCancelID = "zb__PREF__CANCEL_title";
-
-		public static final String zSaveChangesYes = "id=DWT241_title";
-		public static final String zSaveChangesNo = "id=DWT242_title";
-		public static final String zSaveChangesCancel = "id=DWT243_title";
-	//	public static final String zSignatureListView = "//div[@class='ZmSignatureListView']/div//tbody/tr/td";
 		public static final String zSignatureListView = "//div[@class='ZmSignatureListView']";
-		public static final String zNewSignature ="//td[contains(@id,'_title') and contains (text(),'New Signature')]";
-		public static final String zDeleteSignature ="//td[contains(@id,'DWT') and contains (text(),'Delete')]";
+		public static final String zNewSignature ="//td[contains(@id,'_title') and contains (text(),'"+I18N.NEW_SIGNATURE+"')]";
+		public static final String zDeleteSignature ="//td[contains(@id,'DWT') and contains (text(),'"+I18N.DELETE+"')]";
 
 	}
 
@@ -123,7 +119,7 @@ public class PageSignature extends AbsTab{
 
 		// Default behavior, process the locator by clicking on it
 	
-		this.zClick(locator);
+		this.zClickAt(locator,"");
 
 		// If the app is busy, wait for it to become active
 		this.zWaitForBusyOverlay();

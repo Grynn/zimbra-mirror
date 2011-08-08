@@ -34,6 +34,11 @@ public class I18N {
 	
     public static final String CONTEXT_MENU_ITEM_NEW_FOLDER = "New Folder"; // TODO: ZmMsg: key: newFolder
     public static final String CONTEXT_MENU_ITEM_DELETE = "Delete"; // TODO: ZMsg: key: del (?)
+    public static final String FORMAT_AS_PLAIN_TEXT= "Format As Plain Text";
+    public static final String FORMAT_AS_HTML_TEXT= "Format As HTML";
+    public static final String NEW_SIGNATURE= "New Signature";
+    public static final String DELETE= "Delete";
+    
 
 	/**
 	 * My current Locale
