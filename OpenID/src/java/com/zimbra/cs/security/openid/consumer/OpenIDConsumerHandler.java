@@ -179,9 +179,7 @@ public class OpenIDConsumerHandler extends ExtensionHttpHandler {
                 if (server == null) {
                     throw new ServletException("Server not found corresponding to account " + acct.getName());
                 }
-                resp.sendRedirect(ZimbraServlet.getServiceUrl(server,
-                                                              prov.getDomain(acct),
-                                                              server.getAttr(Provisioning.A_zimbraMailURL)));
+                resp.sendRedirect(server.getMailURL());
             } else {
                 // user already has a valid login session => this request is for
                 // "linking" open-id with the user account
