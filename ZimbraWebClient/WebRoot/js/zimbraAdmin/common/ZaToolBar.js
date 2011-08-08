@@ -54,6 +54,10 @@ ZaToolBar.prototype.init = function () {
 			if(opList[btnOrder[ix]] && opList[btnOrder[ix]] instanceof ZaOperation) {
 				if(opList[btnOrder[ix]].id == ZaOperation.SEP) {
 					this._createSeparator();
+                } else if (opList[btnOrder[ix]].id == ZaOperation.LEFT_BRACKET) {
+                    this._createLeftBracket();
+                } else if (opList[btnOrder[ix]].id == ZaOperation.RIGHT_BRACKET) {
+                    this._createRightBracket();
 				} else if (opList[btnOrder[ix]].id == ZaOperation.NONE) {
 					this.addFiller();
 				} else if (opList[btnOrder[ix]].id == ZaOperation.LABEL) {
@@ -72,6 +76,10 @@ ZaToolBar.prototype.init = function () {
 			if(opList[ix] instanceof ZaOperation) {
 				if(opList[ix].id == ZaOperation.SEP) {
 					this._createSeparator();
+                } else if (opList[btnOrder[ix]].id == ZaOperation.LEFT_BRACKET) {
+                    this._createLeftBracket();
+                } else if (opList[btnOrder[ix]].id == ZaOperation.RIGHT_BRACKET) {
+                    this._createRightBracket();
 				} else if (opList[ix].id == ZaOperation.NONE) {
 					this.addFiller();
 				} else if (opList[ix].id == ZaOperation.LABEL) {
@@ -274,6 +282,31 @@ function () {
 	return "<div class=\"vertSep\"/>";
 }
 
+ZaToolBar.prototype._createLeftBracket =
+function() {
+	var ctrl = new DwtControl(this);
+	var html = ZaToolBar.getLeftBracketHtml ();
+	ctrl.setContent(html);
+}
+
+ZaToolBar.getLeftBracketHtml =
+function () {
+	return "<div class=\"ZaLeftBracket\"/>";
+}
+
+
+ZaToolBar.prototype._createRightBracket =
+function() {
+	var ctrl = new DwtControl(this);
+	var html = ZaToolBar.getRightBracketHtml ();
+	ctrl.setContent(html);
+}
+
+ZaToolBar.getRightBracketHtml =
+function () {
+	return "<div class=\"ZaRightBracket\"/>";
+}
+
 ZaToolBar.prototype._buttonId =
 function(button) {
 	return button.getData("_buttonId");
@@ -295,9 +328,11 @@ function () {
         if (this._btnOrder [i] == ZaOperation.NONE ) {
             index = i ;
             break ;
-        } else if (this._btnOrder[i] == ZaOperation.SEP) {//There is no need to show SEP in popup menu
-		continue;
-	} else { //duplicate the operation.
+        } else if (this._btnOrder[i] == ZaOperation.SEP ||
+                   this._btnOrder[i] == ZaOperation.LEFT_BRACKET  ||
+                   this._btnOrder[i] == ZaOperation.RIGHT_BRACKET) {//There is no need to show SEP in popup menu
+		    continue;
+	    } else { //duplicate the operation.
             var op =  this._opList [this._btnOrder [i]] ;
             if (op != null ) {
                 this._moreActionsMenuList.push (ZaOperation.duplicate(op)) ;
@@ -343,7 +378,15 @@ ZaToolBar.prototype.getAlwaysVisibleButtonWidths = function () {
             if (this._btnOrder [i] == ZaOperation.SEP){
                w += 5; // for seperator, we give it a fixed value.
             }
-            
+
+            if (this._btnOrder [i] == ZaOperation.LEFT_BRACKET){
+               w += 7; // for seperator, we give it a fixed value.
+            }
+
+            if (this._btnOrder [i] == ZaOperation.RIGHT_BRACKET){
+               w += 7; // for seperator, we give it a fixed value.
+            }
+
             if (b && b.getVisible()) {
                 w += b.getW () ;
             }
