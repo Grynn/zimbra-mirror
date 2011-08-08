@@ -127,7 +127,7 @@ public class CreateFolder extends AjaxCommonTest {
 				"Verify the server and client folder names match");
 	}
 
-	@Test(description = "Create a new folder using Briefcase app New -> New Briefcase", groups = { "unctional" })
+	@Test(description = "Create a new Briefcase folder using Briefcase app toolbar pulldown: New -> New Briefcase", groups = { "functional" })
 	public void CreateFolder_04() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
