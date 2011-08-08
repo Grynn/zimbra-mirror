@@ -223,6 +223,7 @@ public:
     HRESULT GetFolderIterator(FolderIterator &folderIter);
 
     wstring Name() { return m_displayname; }
+	SBinary EntryID() {return m_EntryID;}
 };
 
 // global declaration
