@@ -45,7 +45,7 @@
             <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Border Name="headerBorder" Grid.Row="0" Grid.Column="1" Background="WhiteSmoke"  BorderThickness="2,4,4,2" BorderBrush="DarkBlue">
+        <Border Name="headerBorder" Grid.Row="0" Grid.Column="1" Background="WhiteSmoke"  BorderThickness="2,4,4,2" BorderBrush="DarkSlateGray">
             <Grid Name="headerGrid" Grid.Row="0" Grid.Column="1" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"></RowDefinition>
@@ -58,10 +58,10 @@
             </Grid>
         </Border>
 
-        <Border Name="keyBorder" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Background="WhiteSmoke"  BorderThickness="4,4,2,4" BorderBrush="DarkBlue">
+        <Border Name="keyBorder" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Background="WhiteSmoke"  BorderThickness="4,4,2,4" BorderBrush="DarkSlateGray">
             <Grid>
                 <Grid.Background>
-                    <ImageBrush ImageSource="/MVVM;component/View/Images/bg2.png" />
+                    <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png" />
                 </Grid.Background>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"></RowDefinition>
@@ -84,7 +84,7 @@
             </Grid>
         </Border>
 
-        <Border Name="contentBorder" Grid.Row="1" Grid.Column="1" BorderThickness="2,2,4,4" BorderBrush="DarkBlue"  Background="WhiteSmoke">
+        <Border Name="contentBorder" Grid.Row="1" Grid.Column="1" BorderThickness="2,2,4,4" BorderBrush="DarkSlateGray"  Background="WhiteSmoke">
             <Grid Name="contentGrid">
                 <Grid.Background>
                     <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
