@@ -18,6 +18,7 @@ namespace MVVM.ViewModel
         readonly AccountResults m_accountResults = new AccountResults(0, "", "", 0, "", 0, 0, false);
         ScheduleViewModel m_scheduleViewModel;
         int m_accountnum;
+        int m_AccountOnTab;
 
         public AccountResultsViewModel(ScheduleViewModel scheduleViewModel, int accountNum, int pbValue, string pbMsgValue, string userpbMsgValue, string accountName, int accountProgress, string acctProgressMsg, int numErrs, int numWarns, bool enableStop)
         {
@@ -34,6 +35,7 @@ namespace MVVM.ViewModel
             this.EnableStop = enableStop;
 
             this.SelectedTab = "";
+            this.m_AccountOnTab = -1;
 
             this.GetAcctResultsHelpCommand = new ActionCommand(this.GetAcctResultsHelp, () => true);
             this.OpenLogFileCommand = new ActionCommand(this.OpenLogFile, () => true);
@@ -271,6 +273,12 @@ namespace MVVM.ViewModel
                 m_accountResults.SelectedTab = value;
                 OnPropertyChanged(new PropertyChangedEventArgs("SelectedTab"));
             }
+        }
+
+        public int AccountOnTab
+        {
+            get { return m_AccountOnTab; }
+            set { m_AccountOnTab = value; }
         }
     }
 }

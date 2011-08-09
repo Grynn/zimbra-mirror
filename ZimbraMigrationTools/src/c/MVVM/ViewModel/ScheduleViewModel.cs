@@ -514,8 +514,6 @@ namespace MVVM.ViewModel
             MyAcct.migrationFolders.Insert(0, MyFolder);
             CSMigrationwrapper mw = new CSMigrationwrapper();
 
-            bgwlist[num].ReportProgress(accountResultsViewModel.AccountResultsList[num].PBValue);
-
             mw.StartMigration(MyAcct);
             accountResultsViewModel.AccountResultsList[num].PBMsgValue = "Migration complete";
             accountResultsViewModel.AccountResultsList[num].AcctProgressMsg = "Complete";
@@ -523,6 +521,13 @@ namespace MVVM.ViewModel
 
         private void worker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
+            // We want to update the main accountResultViewModel, but we have to make sure we only do it for
+            // the account whose tab has the focus.  That's why we check against accountResultsViewModel.AccountOnTab
+            if ((int)e.UserState == accountResultsViewModel.AccountOnTab)
+            {
+                accountResultsViewModel.AccountProgress = e.ProgressPercentage;
+                accountResultsViewModel.PBValue = e.ProgressPercentage;
+            }
         }
 
         private void worker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
@@ -598,9 +603,8 @@ namespace MVVM.ViewModel
 
             string msg2 = "{0} of {1}";
             ar.AcctProgressMsg = String.Format(msg2, f.CurrentCountOFItems, f.TotalCountOFItems);
-            Thread.Sleep(100);  // to make sure the UI gets updated
 
-            // temporary -- eventually, for each account, get totals of all, and figure out incr
+            // temporary -- eventually, for each account, get totals of all, and figure out incr            
             int incr = 0;
             switch (f.Accountnum)
             {
@@ -613,6 +617,7 @@ namespace MVVM.ViewModel
             ////////
 
             accountResultsViewModel.AccountResultsList[f.Accountnum].PBValue += incr;
+            bgwlist[f.Accountnum].ReportProgress(ar.PBValue, f.Accountnum);
         }
     }
 }

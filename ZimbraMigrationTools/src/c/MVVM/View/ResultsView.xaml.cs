@@ -163,10 +163,6 @@ namespace MVVM.View
 
                 int iToken;
 
-                int sel = ViewModel.CurrentAccountSelection;
-                ViewModel.PBValue = ViewModel.AccountResultsList[sel].PBValue;
-                ViewModel.UserPBMsgValue = ViewModel.AccountResultsList[sel].PBMsgValue;
-
                 switch (tabCtrl.Items.Count)
                 {
                     case 2:
@@ -255,6 +251,7 @@ namespace MVVM.View
             {
                 ViewModel.PBValue = ViewModel.AccountResultsList[accountnum].PBValue;
                 ViewModel.UserPBMsgValue = ViewModel.AccountResultsList[accountnum].PBMsgValue;
+                ViewModel.AccountOnTab = accountnum;
             }
             
 
