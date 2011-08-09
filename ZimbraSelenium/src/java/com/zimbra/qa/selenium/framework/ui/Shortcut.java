@@ -43,6 +43,7 @@ public class Shortcut {
 	public static final Shortcut S_MOVE = new Shortcut("S_MOVE",					"m");
 	public static final Shortcut S_MAIL_TAG = new Shortcut("S_MAIL_TAG",			"t");
 	public static final Shortcut S_MAIL_REMOVETAG = new Shortcut("S_MAIL_REMOVETAG",		"u");
+	public static final Shortcut S_ESCAPE = new Shortcut("S_ESCAPE",		"Esc");
 
 	// Open the assistnat
 	public static final Shortcut S_ASSISTANT = new Shortcut("S_ASSISTANT", "`");
