@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
@@ -27,205 +28,155 @@ public class CreateContactGroup extends AjaxCommonTest  {
 	}
 		
 	
-	private void verification(ContactGroupItem group) throws HarnessException {
-		//verify toasted message 'group created'  
-        String expectedMsg = "Group Created";
-        ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
-        		        expectedMsg , "Verify toast message '" + expectedMsg + "'");
+   private void _verification(ContactGroupItem group) throws HarnessException {
+      //verify toasted message 'group created'  
+      String expectedMsg ="Group Created";
+      ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
+            expectedMsg , "Verify toast message '" + expectedMsg + "'");
 
-        //verify group name is displayed		        
-		List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();
-		boolean isFileAsEqual=false;
-		for (ContactItem ci : contacts) {
-		   logger.debug("ContactItem: " + ci.fileAs);
-			if (ci.fileAs.equals(group.fileAs)) {
-	            isFileAsEqual = true;	
-				break;
-			}
-		}
+      //verify group name is displayed             
+      List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();
+      boolean isFileAsEqual=false;
+      for (ContactItem ci : contacts) {
+         if (ci.fileAs.equals(group.fileAs)) {
+            isFileAsEqual = true;   
+            break;
+         }
+      }
 
-		ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + group.fileAs + ") existed ");
+      ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + group.fileAs + ") existed ");
 
-	    //TODO verify group members are displayed		
-	}
-	
-	
-	@Test(	description = "Create a basic contact group",
-			groups = { "sanity" })
-	public void CreateContactGroup_01() throws HarnessException {			
+      //verify location is System folder "Contacts"
+      ZAssert.assertEquals(app.zPageAddressbook.sGetText("css=td.companyFolder"), SystemFolder.Contacts.getName(), "Verify location (folder) is " + SystemFolder.Contacts.getName());
+   }
+   
+   
+   @Test(   description = "Create a basic contact group",
+         groups = { "sanity" })
+   public void GroupOfNewEmail() throws HarnessException {        
 
-	    //Create random contact group data 
-		ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
-	
-		//open contact group form
-		FormContactGroupNew formGroup = (FormContactGroupNew)app.zPageAddressbook.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_CONTACTGROUP);
-    
-		//fill in group name and email addresses
-		formGroup.zFill(group);
-	   
-		//click Save
-		formGroup.zSubmit(); 
-	
-		//verification
-		verification(group);
-	}
+      //Create random contact group data 
+      ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
 
-	// Not valid desktop test because there is no way in telling when
-	// the GAL sync is completed, please look at bugs: 54906, 59422
-	/**
-	@Test(	description = "Create a contact group with GAL",
-			groups = { "functionaly" })
-	public void CreateContactGroup_02() throws HarnessException {			
-	    //Create random contact group data 
-		ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
+      //open contact group form
+      FormContactGroupNew formGroup = (FormContactGroupNew)app.zPageAddressbook.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_CONTACTGROUP);
 
-	   ZimbraAccount testAccount = ZimbraAccount.AccountB();
-	   GeneralUtility.syncDesktopGALToZcsWithSoap(app.zGetActiveAccount());
-	   app.zPageAddressbook.zWaitForDesktopLoadingSpinner(5000);
+      //fill in group name and email addresses
+      formGroup.zFill(group);
 
-		//open contact group form
-		FormContactGroupNew formGroup = (FormContactGroupNew)app.zPageAddressbook.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_CONTACTGROUP);
-    
-		//fill in group name
-		formGroup.sType(FormContactGroupNew.Locators.zGroupnameField, group.groupName);		
-		
-        //select GAL option
-		formGroup.select(app, FormContactGroupNew.Locators.zSearchDropdown,  FormContactGroupNew.SELECT_OPTION_TEXT_GAL);
-		
-		//find email from GAL
-		formGroup.sType(FormContactGroupNew.Locators.zFindField, testAccount.EmailAddress);
-				
-		//click Find
-		formGroup.zClick(FormContactGroupNew.Locators.zSearchButton);
-      app.zPageAddressbook.zWaitForBusyOverlay();		
-		
-		//add all to the email list
-		formGroup.zClick(FormContactGroupNew.Locators.zAddAllButton);
-		
-		//TODO: verify email add to the email area		
-	   
-		//click Save
-		formGroup.zSubmit(); 
-	
-		//verification
-		verification(group);
-	}*/
+      //click Save
+      formGroup.zSubmit(); 
 
-	@Test(	description = "Create a contact group with existing contacts",
-			groups = { "functional" })
-	public void CreateContactGroup_03() throws HarnessException {			
-	   //create contacts
-	   ContactItem contact = ContactItem.createUsingSOAP(app);
-	   GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-	   app.zPageAddressbook.zWaitForDesktopLoadingSpinner(5000);
+      //verification
+      _verification(group);
+   }
 
-	   //Create random contact group data 
-		ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
-	
-		//open contact group form
-		FormContactGroupNew formGroup = (FormContactGroupNew)app.zPageAddressbook.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_CONTACTGROUP);
-        
-		//fill in group name
-		formGroup.sType(FormContactGroupNew.Locators.zGroupnameField, group.groupName);		
-			
-	
-		//select contacts option
-		formGroup.select(app, FormContactGroupNew.Locators.zSearchDropdown,  FormContactGroupNew.SELECT_OPTION_TEXT_CONTACTS);
-			
-		//find email from existing contacts
-		formGroup.sType(FormContactGroupNew.Locators.zFindField, contact.email);
-				
-		//click Find
-		formGroup.zClick(FormContactGroupNew.Locators.zSearchButton);
-        app.zPageAddressbook.zWaitForBusyOverlay();		
-      
-        
-		//add all to the email list
-		formGroup.zClick(FormContactGroupNew.Locators.zAddAllButton);
-		
-		//TODO: verify email add to the email area		
-	   
-		//click Save
-		formGroup.zSubmit(); 
-		
-		//verification
-		verification(group);
+   @Test(   description = "Create a contact group with existing contacts",
+         groups = { "functional" })
+   public void GroupOfExistingContact() throws HarnessException {       
+      //Create random contact group data 
+      ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
 
-		
-	}
+      //open contact group form
+      FormContactGroupNew formGroup = (FormContactGroupNew)app.zPageAddressbook.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_CONTACTGROUP);
 
-	@Test(	description = "Create a contact group with GAL + existing contacts + new emails",
-			groups = { "functional" })
-	public void CreateContactGroup_04() throws HarnessException {
-	   //create contacts
-	   ContactItem contact = ContactItem.createUsingSOAP(app);
+      //fill in group name
+      formGroup.sType(FormContactGroupNew.Locators.zGroupnameField, group.groupName);     
 
-	   ZimbraAccount testAccount = ZimbraAccount.AccountB();
+      //create contacts
+      ContactItem contact = ContactItem.createUsingSOAP(app);
       GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
       app.zPageAddressbook.zWaitForDesktopLoadingSpinner(5000);
 
+      //select contacts option
+      formGroup.select(app, FormContactGroupNew.Locators.zSearchDropdown,  FormContactGroupNew.SELECT_OPTION_TEXT_CONTACTS);
+
+      //find email from existing contacts
+      formGroup.sType(FormContactGroupNew.Locators.zFindField, contact.email);
+
+      //click Find
+      formGroup.zClick(FormContactGroupNew.Locators.zSearchButton);
+      app.zPageAddressbook.zWaitForBusyOverlay();      
+
+      //add all to the email list
+      formGroup.zClick(FormContactGroupNew.Locators.zAddAllButton);
+
+      //TODO: verify email add to the email area      
+
+      //click Save
+      formGroup.zSubmit(); 
+
+      //verification
+      _verification(group);
+
+   }
+
+   @Test(   description = "Create a contact group with GAL + existing contacts + new emails",
+         groups = { "functional" })
+   public void GroupOfGAL_ExistingContact_sNewEmail() throws HarnessException {        
       //Create random contact group data 
-		ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
-	
-		//open contact group form
-		FormContactGroupNew formGroup = (FormContactGroupNew)app.zPageAddressbook.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_CONTACTGROUP);
-        
-		//fill in group name and email addresses
-		formGroup.zFill(group);
-	   
-        //select GAL option
-		formGroup.select(app, FormContactGroupNew.Locators.zSearchDropdown,  FormContactGroupNew.SELECT_OPTION_TEXT_GAL);
-	
-		//find email from GAL
-		formGroup.sType(FormContactGroupNew.Locators.zFindField, testAccount.EmailAddress);
-				
-		//click Find
-		formGroup.zClick(FormContactGroupNew.Locators.zSearchButton);
-        app.zPageAddressbook.zWaitForBusyOverlay();		
-		
-		//add all to the email list
-		formGroup.zClick(FormContactGroupNew.Locators.zAddAllButton);
-		
-		
-		//select contacts option
-		formGroup.select(app, FormContactGroupNew.Locators.zSearchDropdown,  FormContactGroupNew.SELECT_OPTION_TEXT_CONTACTS);
-		
-		//find email from existing contacts
-		formGroup.sType(FormContactGroupNew.Locators.zFindField, contact.email);
-				
-		//click Find
-		formGroup.zClick(FormContactGroupNew.Locators.zSearchButton);
-        app.zPageAddressbook.zWaitForBusyOverlay();		
-		
-		//add all to the email list
-		formGroup.zClick(FormContactGroupNew.Locators.zAddAllButton);
-		
-		
-		
-		//TODO: verify email add to the email area		
-	   
-		//click Save
-		formGroup.zSubmit(); 
-	
-		//verification
-		verification(group);
+      ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
 
-        //TODO: verified all selected emails in the group
-		
-	}
+      //open contact group form
+      FormContactGroupNew formGroup = (FormContactGroupNew)app.zPageAddressbook.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_CONTACTGROUP);
 
-	@Test(	description = "Check disabled buttons in contact group's new form",
-			groups = { "functional" })
-	public void CreateContactGroup_05() throws HarnessException {			
-		//open contact group form
-		FormContactGroupNew formGroup = (FormContactGroupNew)app.zPageAddressbook.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_CONTACTGROUP);
-        
-		//verify Save, Delete All, and Add (email) buttons disabled		
-		ZAssert.assertTrue(formGroup.sIsVisible(Toolbar.SAVE), "Verify contact button Save Enabled ");
-		ZAssert.assertTrue(formGroup.sIsVisible(FormContactGroupNew.Locators.zDeleteAllButton), "Verify contact button Delete All disabled ");
-		ZAssert.assertTrue(formGroup.sIsVisible(FormContactGroupNew.Locators.zAddNewButton), "Verify contact button Add disabled ");
-		
-		
-	}
+      //fill in group name and email addresses
+      formGroup.zFill(group);
+
+      //select GAL option
+      formGroup.select(app, FormContactGroupNew.Locators.zSearchDropdown,  FormContactGroupNew.SELECT_OPTION_TEXT_GAL);
+
+      //find email from GAL
+      formGroup.sType(FormContactGroupNew.Locators.zFindField, ZimbraAccount.AccountB().EmailAddress);
+
+      //click Find
+      formGroup.zClick(FormContactGroupNew.Locators.zSearchButton);
+      app.zPageAddressbook.zWaitForBusyOverlay();      
+
+      //add all to the email list
+      formGroup.zClick(FormContactGroupNew.Locators.zAddAllButton);
+
+      //create contacts
+      ContactItem contact = ContactItem.createUsingSOAP(app);
+      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+      app.zPageAddressbook.zWaitForDesktopLoadingSpinner(5000);
+
+      //select contacts option
+      formGroup.select(app, FormContactGroupNew.Locators.zSearchDropdown,  FormContactGroupNew.SELECT_OPTION_TEXT_CONTACTS);
+
+      //find email from existing contacts
+      formGroup.sType(FormContactGroupNew.Locators.zFindField, contact.email);
+
+      //click Find
+      formGroup.zClick(FormContactGroupNew.Locators.zSearchButton);
+      app.zPageAddressbook.zWaitForBusyOverlay();      
+
+      //add all to the email list
+      formGroup.zClick(FormContactGroupNew.Locators.zAddAllButton);
+
+      //TODO: verify email add to the email area      
+
+      //click Save
+      formGroup.zSubmit(); 
+
+      //verification
+      _verification(group);
+
+      //TODO: verified all selected emails in the group
+
+   }
+
+   @Test(   description = "Check disabled buttons in contact group's new form",
+         groups = { "functional" })
+   public void VerifyButtonsDisable() throws HarnessException {         
+      //open contact group form
+      FormContactGroupNew formGroup = (FormContactGroupNew)app.zPageAddressbook.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_CONTACTGROUP);
+
+      //verify Save, Delete All, and Add (email) buttons disabled    
+      ZAssert.assertFalse(formGroup.sIsVisible(Toolbar.SAVE), "Verify contact button Save disabled ");
+      ZAssert.assertFalse(formGroup.sIsVisible(FormContactGroupNew.Locators.zDeleteAllButton), "Verify contact button Delete All disabled ");
+      ZAssert.assertFalse(formGroup.sIsVisible(FormContactGroupNew.Locators.zAddNewButton), "Verify contact button Add disabled ");
+
+   }
 
 }
