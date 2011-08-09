@@ -32,7 +32,7 @@ check:
 
 build:
 	tar xzf src/httpd-$(HTTPD_VERSION).tar.gz
-	(cd httpd-$(HTTPD_VERSION); $(ENVMOD) LDFLAGS="-L/opt/zimbra/convertd/lib -R/opt/zimbra/convertd/lib -L/opt/zimbra/openssl-$(OPENSSL_VERSION) -R/opt/zimbra/openssl-$(OPENSSL_VERSION)"  CFLAGS="-g -O2" ./configure --prefix=/opt/zimbra/httpd-$(HTTPD_VERSION) --enable-so --with-included-apr --enable-ssl --with-ssl=/opt/zimbra/openssl-$(OPENSSL_VERSION); $(MAKE) $(MAKEARGS); $(MAKE) install)
+	(cd httpd-$(HTTPD_VERSION); $(ENVMOD) LDFLAGS="-L/opt/zimbra/convertd/lib -R/opt/zimbra/convertd/lib -L/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib -R/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib"  CFLAGS="-g -O2" ./configure --prefix=/opt/zimbra/httpd-$(HTTPD_VERSION) --enable-so --with-included-apr --enable-ssl --with-ssl=/opt/zimbra/openssl-$(OPENSSL_VERSION); $(MAKE) $(MAKEARGS); $(MAKE) install)
 
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/apache-httpd
