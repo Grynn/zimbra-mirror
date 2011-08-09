@@ -999,8 +999,7 @@ public abstract class AbsSeleniumObject {
 	 * @param cssLocator
 	 * @throws HarnessException
 	 */
-	public boolean zIsElementDisabled(String cssLocator)
-			throws HarnessException {
+	public boolean zIsElementDisabled(String cssLocator) throws HarnessException {
 		logger.info("zIsElementDisabled(" + cssLocator + ")");
 		String locator = (cssLocator.startsWith("css=") ? "" : "css=")
 				+ cssLocator + "[class*=ZDisabled]";
@@ -1015,23 +1014,16 @@ public abstract class AbsSeleniumObject {
 	 * @param id
 	 * @throws HarnessException
 	 */
-	public void zWaitForElementEnabled(String id) throws HarnessException {
-		logger.info("zWaitForElementEnabled(" + id + ")");
+	public void zWaitForElementEnabled(String cssLocator) throws HarnessException {
+		logger.info("zWaitForElementEnabled(" + cssLocator + ")");
 
-		// not applicable for the element
-		if (!sIsElementPresent(id)) {
-			return;
-		}
-
-		for (int i = 0; i < 15; i++) {
-			String locator = "css=div[id='" + id + "'][class*=ZDisabled]";
-			if (!sIsElementPresent(locator)) {
+		for (int i = 0; i < 15; i++) {			
+			if (!zIsElementDisabled(cssLocator)) {
 				return;
 			}
 			SleepUtil.sleepSmall();
 		}
-		throw new HarnessException("Element with id=" + id
-				+ " never become enabled: ");
+		throw new HarnessException("Element " + cssLocator + " never become enabled: ");
 
 	}
 

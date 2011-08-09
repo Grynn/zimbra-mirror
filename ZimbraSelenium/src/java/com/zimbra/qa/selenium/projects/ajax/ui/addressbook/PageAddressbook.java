@@ -25,6 +25,7 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
+import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactNew.Locators;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
@@ -58,13 +59,13 @@ public class PageAddressbook extends AbsTab {
 	
 	public static class CONTEXT_SUB_MENU {
 				
-		public static final ContextMenuItem CONTACT_SUB_NEW_TAG = new ContextMenuItem("zmi__Contacts__TAG_MENU|MENU|NEWTAG","New Tag","div[class='ImgNewTag']",":contains('nt')");
-		public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("zmi__Contacts__TAG_MENU|MENU|REMOVETAG","Remove Tag","div[class='ImgDeleteTag']","");
+		public static final ContextMenuItem CONTACT_SUB_NEW_TAG = new ContextMenuItem("div#zmi__Contacts__TAG_MENU|MENU|NEWTAG","New Tag","div[class='ImgNewTag']",":contains('nt')");
+		public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("div#zmi__Contacts__TAG_MENU|MENU|REMOVETAG","Remove Tag","div[class='ImgDeleteTag']","");
 			
-		public static final ContextMenuItem CONTACT_SUB_RECEIVED_FROM_CONTACT = new ContextMenuItem("POPUP_SEARCH","Received From Contact","div[class='ImgSearch']","");
-	    public static final ContextMenuItem CONTACT_SUB_SENT_TO_CONTACT = new ContextMenuItem("POPUP_SEARCH_TO","Sent To Contact","div[class='ImgSearch']","");
+		public static final ContextMenuItem CONTACT_SUB_RECEIVED_FROM_CONTACT = new ContextMenuItem("tr#POPUP_SEARCH","Received From Contact","div[class='ImgSearch']","");
+	    public static final ContextMenuItem CONTACT_SUB_SENT_TO_CONTACT = new ContextMenuItem("tr#POPUP_SEARCH_TO","Sent To Contact","div[class='ImgSearch']","");
 	
-	    public static final ContextMenuItem CONTACT_SUB_NEW_CONTACT_GROUP = new ContextMenuItem("zmi__Contacts__CONTACTGROUP_MENU|GROUP_MENU|NEWGROUP","New Contact Group","div[class='ImgNewGroup']","");
+	    public static final ContextMenuItem CONTACT_SUB_NEW_CONTACT_GROUP = new ContextMenuItem("div#zmi__Contacts__CONTACTGROUP_MENU|GROUP_MENU|NEWGROUP","New Contact Group","div[class='ImgNewGroup']","");
 		
 	}
 	
@@ -776,7 +777,8 @@ public class PageAddressbook extends AbsTab {
 		String locator = null;			// If set, this will be clicked
 		AbsPage page = null;	// If set, this page will be returned
 		String id = null;
-        
+		String parentLocator = null;
+		
 		tracer.trace(action +" then "+ option +" then "+ subOption +" on contact = "+ contact);
 
         if ( action == Action.A_RIGHTCLICK ) {
@@ -836,6 +838,26 @@ public class PageAddressbook extends AbsTab {
 				else if (subOption == Button.O_SEARCH_MAIL_RECEIVED_FROM_CONTACT) {
 					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_RECEIVED_FROM_CONTACT;
 					page = ((AppAjaxClient)MyApplication).zPageMail;
+					
+					//find parent id
+					try {		
+					    for (int i=0; ; i++) {	  		   
+					    	parentLocator = sGetEval("window.document.getElementsByClassName('ActionMenu ZHasIcon')[" + i + "].id" );
+					    	if ( zIsVisiblePerPosition(parentLocator, 0, 0) &&
+					             parentLocator.startsWith("POPUP_DWT") ) {					    		
+					    		logger.info("parent = " + parentLocator);
+					    		parentLocator = "div#" + parentLocator;
+					    		break;
+					    	}		    					    	
+				        }
+					    
+					}
+					catch (Exception e) {
+						parentLocator=null;
+						logger.info("cannot find parent id for " + sub_cmi.locator + " " + e.getMessage());
+					}
+					
+					
 				}
 					
 			}
@@ -846,29 +868,33 @@ public class PageAddressbook extends AbsTab {
 			zWaitForElementPresent(locator) ;
 			
 			// Check if the item is enabled
-			if (sIsElementPresent("css=div[id=" + id + "][class*=ZDisabled]")) {
+			if (zIsElementDisabled("div#" + id )) {
 				throw new HarnessException("Tried clicking on "+ cmi.text +" but it was disabled ");
 			}
 
+		    
 			
 			// Mouse over the option
 			sFocus(locator);
 			sMouseOver(locator);
 	        zWaitForBusyOverlay();
 	
-			id = sub_cmi.locator;
-			locator = "id="+ id;
-		
-			
+	    	if (parentLocator!= null) {
+				locator = "css=" + parentLocator + " " + sub_cmi.locator;
+		    }
+	    	else {
+	            locator = "css=" + sub_cmi.locator;
+	    	}
 			//  Make sure the sub context menu exists			
 			zWaitForElementPresent(locator) ;
 			
 			// make sure the sub context menu enabled			
-			zWaitForElementEnabled(id);
+			zWaitForElementEnabled(locator);
 			
         } 
 		
         ExecuteHarnessMain.ResultListener.captureScreen();
+   
         sFocus(locator);
         sMouseOver(locator);
         zClickAt(locator,"0,0");
@@ -935,7 +961,7 @@ public class PageAddressbook extends AbsTab {
 			zWaitForElementPresent(itemLocator) ;
 			
 			// make sure the sub context menu enabled			
-			zWaitForElementEnabled(itemLocator);
+			zWaitForElementEnabled("div#" + itemLocator);
 			
         } 
 
