@@ -69,7 +69,6 @@ public class DeltaSync {
         return isync;
     }
 
-
     public static String sync(ZcsMailbox ombx) throws ServiceException {
         return new DeltaSync(ombx).sync();
     }
@@ -82,7 +81,8 @@ public class DeltaSync {
         String newToken;
         // keep delta sync'ing until the server tells us the delta sync is complete ("more=0")
         do {
-            Element request = new Element.XMLElement(MailConstants.SYNC_REQUEST).addAttribute(MailConstants.A_TOKEN, oldToken).addAttribute(MailConstants.A_TYPED_DELETES, true);
+            Element request = new Element.XMLElement(MailConstants.SYNC_REQUEST).addAttribute(MailConstants.A_TOKEN,
+                    oldToken).addAttribute(MailConstants.A_TYPED_DELETES, true);
             response = ombx.sendRequestWithNotification(request);
             newToken = response.getAttribute(MailConstants.A_TOKEN);
 
@@ -112,14 +112,18 @@ public class DeltaSync {
         }
 
         // sync down metadata changes and note items that need to be downloaded in full
-        Map<Integer, List<Integer>> messages = new HashMap<Integer, List<Integer>>(),
-                                    modmsgs =  new HashMap<Integer, List<Integer>>(),
-                                    chats =    new HashMap<Integer, List<Integer>>(),
-                                    modchats = new HashMap<Integer, List<Integer>>();
-        Map<Integer, Integer> deltamsgs =  new HashMap<Integer,Integer>(),
-                              deltachats = new HashMap<Integer,Integer>(),
-                              contacts = null, appts = null, tasks = null;
-        List<Integer> documents = null;
+        Map<Integer, List<Integer>> messages = new HashMap<Integer, List<Integer>>();
+        Map<Integer, List<Integer>> modmsgs = new HashMap<Integer, List<Integer>>();
+        Map<Integer, List<Integer>> chats = new HashMap<Integer, List<Integer>>();
+        Map<Integer, List<Integer>> modchats = new HashMap<Integer, List<Integer>>();
+        Map<Integer, Integer> deltamsgs = new HashMap<Integer, Integer>();
+        Map<Integer, Integer> deltachats = new HashMap<Integer, Integer>();
+        Map<Integer, Integer> contacts = new HashMap<Integer, Integer>();
+        Map<Integer, Integer> appts = new HashMap<Integer, Integer>();
+        Map<Integer, Integer> tasks = new HashMap<Integer, Integer>();
+        List<Integer> documents = new ArrayList<Integer>();
+        List<Element> lastToSyncItems = new ArrayList<Element>();
+
         for (Element change : response.listElements()) {
             OfflineSyncManager.getInstance().continueOK();
             int id = (int) change.getAttributeLong(MailConstants.A_ID);
@@ -130,121 +134,69 @@ public class DeltaSync {
                 continue;
             }
 
-            int folderId = (id == Mailbox.ID_FOLDER_ROOT ? Mailbox.ID_FOLDER_ROOT : (int) change.getAttributeLong(MailConstants.A_FOLDER));
-            if (!isInitSyncDone && getFolder(folderId) == null)
+            int folderId = (id == Mailbox.ID_FOLDER_ROOT ? Mailbox.ID_FOLDER_ROOT : (int) change
+                    .getAttributeLong(MailConstants.A_FOLDER));
+            if (!isInitSyncDone && getFolder(folderId) == null) {
                 continue;
-            boolean create = (change.getAttribute(MailConstants.A_FLAGS, null) == null);
-
-            if (type.equals(MailConstants.E_MSG)) {
-                if (!OfflineLC.zdesktop_sync_messages.booleanValue()) {
-                    continue;
-                }
-                if (OfflineSyncManager.getInstance().isInSkipList(id)) {
-                    OfflineLog.offline.warn("Skipped message id=%d per zdesktop_sync_skip_idlist", id);
-                    continue;
-                }
-
-                if (ombx.isPendingDelete(sContext, id, MailItem.Type.MESSAGE)) {
-                    continue;
-                }
-                if (create) {
-                    triageNewMessage(id, folderId, change, messages, modmsgs, deltamsgs);
-                } else {
-                    syncMessage(change, folderId, MailItem.Type.MESSAGE);
-                }
-            } else if (type.equals(MailConstants.E_CHAT)) {
-                if (!OfflineLC.zdesktop_sync_chats.booleanValue())
-                    continue;
-                if (OfflineSyncManager.getInstance().isInSkipList(id)) {
-                    OfflineLog.offline.warn("Skipped chat id=%d per zdesktop_sync_skip_idlist", id);
-                    continue;
-                }
-
-                if (ombx.isPendingDelete(sContext, id, MailItem.Type.CHAT)) {
-                    continue;
-                }
-                if (create) {
-                    triageNewMessage(id, folderId, change, chats, modchats, deltachats);
-                } else {
-                    syncMessage(change, folderId, MailItem.Type.CHAT);
-                }
-            } else if (type.equals(MailConstants.E_CONTACT)) {
-                if (!OfflineLC.zdesktop_sync_contacts.booleanValue())
-                    continue;
-                if (OfflineSyncManager.getInstance().isInSkipList(id)) {
-                    OfflineLog.offline.warn("Skipped contact id=%d per zdesktop_sync_skip_idlist", id);
-                    continue;
-                }
-
-                if (ombx.isPendingDelete(sContext, id, MailItem.Type.CONTACT))
-                    continue;
-
-                if (create)
-                    (contacts == null ? contacts = new HashMap<Integer,Integer>() : contacts).put(id, folderId);
-                else
-                    syncContact(change, folderId);
-            } else if (type.equals(MailConstants.E_APPOINTMENT)) {
-                if (!OfflineLC.zdesktop_sync_appointments.booleanValue())
-                    continue;
-                if (OfflineSyncManager.getInstance().isInSkipList(id)) {
-                    OfflineLog.offline.warn("Skipped appointment id=%d per zdesktop_sync_skip_idlist", id);
-                    continue;
-                }
-
-                if (ombx.isPendingDelete(sContext, id, MailItem.Type.APPOINTMENT))
-                    continue;
-
-                (appts == null ? appts = new HashMap<Integer,Integer>() : appts).put(id, folderId);
-            } else if (type.equals(MailConstants.E_TASK)) {
-                if (!OfflineLC.zdesktop_sync_tasks.booleanValue())
-                    continue;
-                if (OfflineSyncManager.getInstance().isInSkipList(id)) {
-                    OfflineLog.offline.warn("Skipped task id=%d per zdesktop_sync_skip_idlist", id);
-                    continue;
-                }
-
-                if (ombx.isPendingDelete(sContext, id, MailItem.Type.TASK))
-                    continue;
-
-                (tasks == null ? tasks = new HashMap<Integer,Integer>() : tasks).put(id, folderId);
-            } else if (type.equals(MailConstants.E_DOC)) {
-                if (!OfflineLC.zdesktop_sync_documents.booleanValue() ||
-                        !ombx.getRemoteServerVersion().isAtLeast(InitialSync.sMinDocumentSyncVersion))
-                    continue;
-                if (OfflineSyncManager.getInstance().isInSkipList(id)) {
-                    OfflineLog.offline.warn("Skipped document id=%d per zdesktop_sync_skip_idlist", id);
-                    continue;
-                }
-
-                if (ombx.isPendingDelete(sContext, id, MailItem.Type.UNKNOWN))
-                    continue;
-
-                (documents == null ? documents = new ArrayList<Integer>() : documents).add(id);
-            } else if (type.equals(MailConstants.E_WIKIWORD)) {
-                continue;   //no longer support wiki since zd7
-            } else if (InitialSync.KNOWN_FOLDER_TYPES.contains(type)) {
-                // can't tell new folders from modified ones, so might as well go through the initial sync process
-                syncContainer(change, id);
             }
+
+            // for bug 32238, sync trash folder last
+            if (folderId == Mailbox.ID_FOLDER_TRASH || folderId == Mailbox.ID_FOLDER_SPAM) {
+                lastToSyncItems.add(change);
+                continue;
+            }
+
+            prepareSync(messages, modmsgs, chats, modchats, deltamsgs, deltachats, contacts, appts, tasks, documents,
+                    change, folderId);
         }
 
+        syncItems(isInitSyncDone, foldersToDelete, messages, modmsgs, chats, modchats, deltamsgs, deltachats, contacts,
+                appts, tasks, documents);
+
+        messages.clear();
+        modmsgs.clear();
+        chats.clear();
+        modchats.clear();
+        deltamsgs.clear();
+        deltachats.clear();
+        contacts.clear();
+        appts.clear();
+        tasks.clear();
+        documents.clear();
+
+        for (Element change : lastToSyncItems) {
+            OfflineSyncManager.getInstance().continueOK();
+            prepareSync(messages, modmsgs, chats, modchats, deltamsgs, deltachats, contacts, appts, tasks, documents,
+                    change, Mailbox.ID_FOLDER_TRASH);
+        }
+
+        syncItems(isInitSyncDone, foldersToDelete, messages, modmsgs, chats, modchats, deltamsgs, deltachats, contacts,
+                appts, tasks, documents);
+    }
+
+    private void syncItems(boolean isInitSyncDone, Set<Integer> foldersToDelete, Map<Integer, List<Integer>> messages,
+            Map<Integer, List<Integer>> modmsgs, Map<Integer, List<Integer>> chats,
+            Map<Integer, List<Integer>> modchats, Map<Integer, Integer> deltamsgs, Map<Integer, Integer> deltachats,
+            Map<Integer, Integer> contacts, Map<Integer, Integer> appts, Map<Integer, Integer> tasks,
+            List<Integer> documents) throws ServiceException {
         // for messages, chats, and contacts that are created or had their content modified, fetch new content
         if (OfflineLC.zdesktop_sync_messages.booleanValue() && !deltamsgs.isEmpty()) {
             Element request = new Element.XMLElement(MailConstants.GET_MSG_METADATA_REQUEST);
-            request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_IDS, StringUtil.join(",", deltamsgs.keySet()));
+            request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_IDS,
+                    StringUtil.join(",", deltamsgs.keySet()));
             for (Element elt : ombx.sendRequest(request).listElements()) {
                 syncMessage(elt, deltamsgs.get((int) elt.getAttributeLong(MailConstants.A_ID)), MailItem.Type.MESSAGE);
             }
         }
 
-        //sync appointments before messages so that new invite messages can be linked to appointments
-        if (OfflineLC.zdesktop_sync_appointments.booleanValue() && appts != null) {
-            for (Map.Entry<Integer,Integer> entry : appts.entrySet())
+        // sync appointments before messages so that new invite messages can be linked to appointments
+        if (OfflineLC.zdesktop_sync_appointments.booleanValue() && !appts.isEmpty()) {
+            for (Map.Entry<Integer, Integer> entry : appts.entrySet())
                 getInitialSync().syncCalendarItem(entry.getKey(), entry.getValue(), true);
         }
 
-        if (OfflineLC.zdesktop_sync_tasks.booleanValue() && tasks != null) {
-            for (Map.Entry<Integer,Integer> entry : tasks.entrySet())
+        if (OfflineLC.zdesktop_sync_tasks.booleanValue() && !tasks.isEmpty()) {
+            for (Map.Entry<Integer, Integer> entry : tasks.entrySet())
                 getInitialSync().syncCalendarItem(entry.getKey(), entry.getValue(), false);
         }
 
@@ -259,7 +211,8 @@ public class DeltaSync {
 
         if (OfflineLC.zdesktop_sync_chats.booleanValue() && !deltachats.isEmpty()) {
             Element request = new Element.XMLElement(MailConstants.GET_MSG_METADATA_REQUEST);
-            request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_IDS, StringUtil.join(",", deltachats.keySet()));
+            request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_IDS,
+                    StringUtil.join(",", deltachats.keySet()));
             for (Element elt : ombx.sendRequest(request).listElements()) {
                 syncMessage(elt, deltachats.get((int) elt.getAttributeLong(MailConstants.A_ID)), MailItem.Type.CHAT);
             }
@@ -274,12 +227,12 @@ public class DeltaSync {
             }
         }
 
-        if (OfflineLC.zdesktop_sync_contacts.booleanValue() && contacts != null) {
+        if (OfflineLC.zdesktop_sync_contacts.booleanValue() && !contacts.isEmpty()) {
             for (Element elt : InitialSync.fetchContacts(ombx, StringUtil.join(",", contacts.keySet())))
                 getInitialSync().syncContact(elt, contacts.get((int) elt.getAttributeLong(MailConstants.A_ID)));
         }
 
-        if (isInitSyncDone && OfflineLC.zdesktop_sync_documents.booleanValue() && documents != null)
+        if (isInitSyncDone && OfflineLC.zdesktop_sync_documents.booleanValue() && !documents.isEmpty())
             try {
                 syncDocuments(documents);
             } catch (Exception t) {
@@ -302,6 +255,106 @@ public class DeltaSync {
         }
     }
 
+    private void prepareSync(Map<Integer, List<Integer>> messages, Map<Integer, List<Integer>> modmsgs,
+            Map<Integer, List<Integer>> chats, Map<Integer, List<Integer>> modchats, Map<Integer, Integer> deltamsgs,
+            Map<Integer, Integer> deltachats, Map<Integer, Integer> contacts, Map<Integer, Integer> appts,
+            Map<Integer, Integer> tasks, List<Integer> documents, Element change, int folderId) throws ServiceException {
+        int id = (int) change.getAttributeLong(MailConstants.A_ID);
+        String type = change.getName();
+        boolean create = (change.getAttribute(MailConstants.A_FLAGS, null) == null);
+        if (type.equals(MailConstants.E_MSG)) {
+            if (!OfflineLC.zdesktop_sync_messages.booleanValue())
+                return;
+            if (OfflineSyncManager.getInstance().isInSkipList(id)) {
+                OfflineLog.offline.warn("Skipped message id=%d per zdesktop_sync_skip_idlist", id);
+                return;
+            }
+
+            if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_MESSAGE))
+                return;
+
+            if (create) {
+                triageNewMessage(id, folderId, change, messages, modmsgs, deltamsgs);
+            } else {
+                syncMessage(change, folderId, MailItem.TYPE_MESSAGE);
+            }
+        } else if (type.equals(MailConstants.E_CHAT)) {
+            if (!OfflineLC.zdesktop_sync_chats.booleanValue())
+                return;
+            if (OfflineSyncManager.getInstance().isInSkipList(id)) {
+                OfflineLog.offline.warn("Skipped chat id=%d per zdesktop_sync_skip_idlist", id);
+                return;
+            }
+
+            if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_CHAT))
+                return;
+
+            if (create) {
+                triageNewMessage(id, folderId, change, chats, modchats, deltachats);
+            } else {
+                syncMessage(change, folderId, MailItem.TYPE_CHAT);
+            }
+        } else if (type.equals(MailConstants.E_CONTACT)) {
+            if (!OfflineLC.zdesktop_sync_contacts.booleanValue())
+                return;
+            if (OfflineSyncManager.getInstance().isInSkipList(id)) {
+                OfflineLog.offline.warn("Skipped contact id=%d per zdesktop_sync_skip_idlist", id);
+                return;
+            }
+
+            if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_CONTACT))
+                return;
+
+            if (create) {
+                contacts.put(id, folderId);
+            } else {
+                syncContact(change, folderId);
+            }
+        } else if (type.equals(MailConstants.E_APPOINTMENT)) {
+            if (!OfflineLC.zdesktop_sync_appointments.booleanValue())
+                return;
+            if (OfflineSyncManager.getInstance().isInSkipList(id)) {
+                OfflineLog.offline.warn("Skipped appointment id=%d per zdesktop_sync_skip_idlist", id);
+                return;
+            }
+
+            if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_APPOINTMENT))
+                return;
+
+            appts.put(id, folderId);
+        } else if (type.equals(MailConstants.E_TASK)) {
+            if (!OfflineLC.zdesktop_sync_tasks.booleanValue())
+                return;
+            if (OfflineSyncManager.getInstance().isInSkipList(id)) {
+                OfflineLog.offline.warn("Skipped task id=%d per zdesktop_sync_skip_idlist", id);
+                return;
+            }
+
+            if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_TASK))
+                return;
+
+            tasks.put(id, folderId);
+        } else if (type.equals(MailConstants.E_DOC)) {
+            if (!OfflineLC.zdesktop_sync_documents.booleanValue()
+                    || !ombx.getRemoteServerVersion().isAtLeast(InitialSync.sMinDocumentSyncVersion))
+                return;
+            if (OfflineSyncManager.getInstance().isInSkipList(id)) {
+                OfflineLog.offline.warn("Skipped document id=%d per zdesktop_sync_skip_idlist", id);
+                return;
+            }
+
+            if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_UNKNOWN))
+                return;
+
+            documents.add(id);
+        } else if (type.equals(MailConstants.E_WIKIWORD)) {
+            return;
+        } else if (InitialSync.KNOWN_FOLDER_TYPES.contains(type)) {
+            // can't tell new folders from modified ones, so might as well go through the initial sync process
+            syncContainer(change, id);
+        }
+    }
+
     private void triageNewMessage(int id, int folderId, Element change, Map<Integer, List<Integer>> messages, Map<Integer, List<Integer>> modmsgs,
             Map<Integer, Integer> deltamsgs) throws ServiceException {
         try {
@@ -311,7 +364,8 @@ public class DeltaSync {
             else if (msg.getModifiedSequence() != change.getAttributeLong(MailConstants.A_MODIFIED_SEQUENCE))
                 deltamsgs.put(id, folderId);
             else
-                OfflineLog.offline.debug("message %d (%s) already in sync", id, msg.getSubject()); //could be because we are rerunning a failed sync
+                // could be because we are rerunning a failed sync
+                OfflineLog.offline.debug("message %d (%s) already in sync", id, msg.getSubject());
         } catch (MailServiceException.NoSuchItemException e) {
             addToMapByFolderId(id, folderId, messages);
         }
@@ -360,8 +414,8 @@ public class DeltaSync {
             // tag numbering conflict issues: don't delete tags we've created locally
             if ((ombx.getChangeMask(sContext, id, MailItem.Type.TAG) & Change.MODIFIED_CONFLICT) != 0) {
                 continue;
-            }
-            leafIds.add(id);  tagIds.add(id);
+            leafIds.add(id);
+            tagIds.add(id);
         }
 
         // delete all the leaves now
@@ -483,7 +537,8 @@ public class DeltaSync {
             // deal with the case where the referenced folder doesn't exist
             Folder folder = getFolder(id);
             if (folder == null) {
-                // if it's been locally deleted but not pushed to the server yet, just return and let the delete happen later
+                // if it's been locally deleted but not pushed to the server
+                // yet, just return and let the delete happen later
                 if (ombx.isPendingDelete(sContext, id, itemType))
                     return;
                 // resolve any naming conflicts and actually create the folder
@@ -540,24 +595,28 @@ public class DeltaSync {
         // if the folder was moved/renamed locally, that trumps any changes made remotely
         int parentId = (id == Mailbox.ID_FOLDER_ROOT) ? id : (int) elt.getAttributeLong(MailConstants.A_FOLDER);
         if ((change_mask & Change.MODIFIED_FOLDER) != 0) {
-            parentId = local.getFolderId();  elt.addAttribute(MailConstants.A_FOLDER, parentId);
+            parentId = local.getFolderId();
+            elt.addAttribute(MailConstants.A_FOLDER, parentId);
         }
 
         String name = (id == Mailbox.ID_FOLDER_ROOT) ? "ROOT" : elt.getAttribute(MailConstants.A_NAME);
         if ((change_mask & Change.MODIFIED_NAME) != 0 && !mSyncRenames.contains(id)) {
-            name = local.getName();  elt.addAttribute(MailConstants.A_NAME, name);
+            name = local.getName();
+            elt.addAttribute(MailConstants.A_NAME, name);
         } else {
             // handle the off-chance that the server's folder name is invalid
             String validName = MailItem.normalizeItemName(name);
             if (!validName.equals(name)) {
-                name = validName;  elt.addAttribute(MailConstants.A_NAME, name).addAttribute(InitialSync.A_RELOCATED, true);
+                name = validName;
+                elt.addAttribute(MailConstants.A_NAME, name).addAttribute(InitialSync.A_RELOCATED, true);
             }
         }
 
         // if the parent folder doesn't exist or is of an incompatible type, default to using the top-level user folder as the container
         Folder parent = getFolder(parentId);
         if (parent == null || !parent.canContain(type)) {
-            parentId = Mailbox.ID_FOLDER_USER_ROOT;  parent = getFolder(parentId);
+            parentId = Mailbox.ID_FOLDER_USER_ROOT;
+            parent = getFolder(parentId);
             elt.addAttribute(MailConstants.A_FOLDER, parentId).addAttribute(InitialSync.A_RELOCATED, true);
         }
 
@@ -572,7 +631,8 @@ public class DeltaSync {
                 else
                     newName = name + uuid;
 
-                if (local == null && (conflict_mask & Change.MODIFIED_CONFLICT) != 0 && isCompatibleFolder(conflict, elt, type)) {
+                if (local == null && (conflict_mask & Change.MODIFIED_CONFLICT) != 0
+                        && isCompatibleFolder(conflict, elt, type)) {
                     // if the new and existing folders are identical and being created, try to merge them
                     ombx.renumberItem(sContext, conflict.getId(), type, id);
                     ombx.setChangeMask(sContext, id, type, conflict_mask & ~Change.MODIFIED_CONFLICT);
@@ -688,12 +748,14 @@ public class DeltaSync {
 
         String name = elt.getAttribute(MailConstants.A_NAME);
         if ((change_mask & Change.MODIFIED_NAME) != 0 && !mSyncRenames.contains(id)) {
-            name = local.getName();  elt.addAttribute(MailConstants.A_NAME, name);
+            name = local.getName();
+            elt.addAttribute(MailConstants.A_NAME, name);
         } else {
             // handle the off-chance that the server's folder name is invalid
             String validName = MailItem.normalizeItemName(name);
             if (!validName.equals(name)) {
-                name = validName;  elt.addAttribute(MailConstants.A_NAME, name).addAttribute(InitialSync.A_RELOCATED, true);
+                name = validName;
+                elt.addAttribute(MailConstants.A_NAME, name).addAttribute(InitialSync.A_RELOCATED, true);
             }
         }
 
@@ -799,7 +861,7 @@ public class DeltaSync {
             else
                 fields.put(eField.getAttribute(Element.XMLElement.A_ATTR_NAME), eField.getText());
         }
-        assert(fields.isEmpty() || hasBlob == ((flags & Flag.BITMASK_ATTACHED) != 0));
+        assert (fields.isEmpty() || hasBlob == ((flags & Flag.BITMASK_ATTACHED) != 0));
 
         int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
 
@@ -859,17 +921,20 @@ public class DeltaSync {
                     ombx.syncMetadata(sContext, id, type, folderId, flags, tags, itemColor);
                     ombx.syncDate(sContext, id, type, date);
                 } catch (MailServiceException.NoSuchItemException nsie) {
-                    OfflineLog.offline.warn("NoSuchItemException in delta sync. Item ["+id+"] must have been deleted while sync was in progress");
+                    OfflineLog.offline.warn("NoSuchItemException in delta sync. Item [" + id
+                            + "] must have been deleted while sync was in progress");
                     return;
                 }
             }
-            OfflineLog.offline.debug("delta: updated " + type + " (" + id + "): " + msg.getSubject());
+            OfflineLog.offline.debug("delta: updated " + MailItem.getNameForType(type) + " (" + id + "): "
+                    + msg.getSubject());
         } catch (Exception x) {
-            if (x instanceof ServiceException && ((ServiceException)x).getCode().equals(MailServiceException.NO_SUCH_FOLDER)) {
-                //message could be moved during
+            if (x instanceof ServiceException
+                    && ((ServiceException) x).getCode().equals(MailServiceException.NO_SUCH_FOLDER)) {
+                // message could be moved during
                 OfflineLog.offline.debug("delta: moved" + type + " (" + id + ")");
             } else {
-                if(!SyncExceptionHandler.isRecoverableException(ombx, id, "DeltaSync.syncMessage", x)) {
+                if (!SyncExceptionHandler.isRecoverableException(ombx, id, "DeltaSync.syncMessage", x)) {
                     SyncExceptionHandler.syncMessageFailed(ombx, id, x);
                 }
             }
@@ -880,24 +945,28 @@ public class DeltaSync {
         StringBuilder query = null;
         if (ombx.getRemoteServerVersion().isAtLeast(InitialSync.sDocumentSyncHistoryVersion)) {
             for (int docId : documents) {
-                if (query == null)
+                if (query == null) {
                     query = new StringBuilder("list=");
-                else
+                } else {
                     query.append(",");
+                }
                 query.append(docId);
             }
-            getInitialSync().syncDocument(query.toString());
+            if (query != null) {
+                getInitialSync().syncDocument(query.toString());
+            }
         } else {
             for (int docId : documents) {
-                if (query == null)
+                if (query == null) {
                     query = new StringBuilder("item:{");
-                else
+                } else {
                     query.append(",");
+                }
                 query.append(docId);
             }
             query.append("}");
             Element request = new Element.XMLElement(MailConstants.SEARCH_REQUEST);
-            request.addAttribute(MailConstants.A_QUERY_LIMIT, 1024);  // XXX pagination
+            request.addAttribute(MailConstants.A_QUERY_LIMIT, 1024); // XXX pagination
             request.addAttribute(MailConstants.A_TYPES, "wiki,document");
             request.addElement(MailConstants.E_QUERY).setText(query.toString());
             if (ombx.getOfflineAccount().isDebugTraceEnabled())
@@ -909,7 +978,7 @@ public class DeltaSync {
                 OfflineLog.response.debug(response);
 
             for (Element doc : response.listElements(MailConstants.E_DOC))
-            	getInitialSync().syncDocument(doc);
-    	}
+                getInitialSync().syncDocument(doc);
+        }
     }
 }

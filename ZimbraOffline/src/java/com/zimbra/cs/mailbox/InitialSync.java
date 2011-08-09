@@ -292,6 +292,7 @@ public class InitialSync {
             prioritySync(elt, Mailbox.ID_FOLDER_DRAFTS);
             prioritySync(elt, Mailbox.ID_FOLDER_INBOX);
             prioritySync(elt, Mailbox.ID_FOLDER_CALENDAR);
+            prioritySync(elt, Mailbox.ID_FOLDER_TASKS);
             prioritySync(elt, Mailbox.ID_FOLDER_CONTACTS);
             prioritySync(elt, Mailbox.ID_FOLDER_AUTO_CONTACTS);
             prioritySync(elt, Mailbox.ID_FOLDER_NOTEBOOK);
