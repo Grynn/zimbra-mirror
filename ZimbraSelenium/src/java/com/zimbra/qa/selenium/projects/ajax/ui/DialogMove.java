@@ -32,8 +32,7 @@ public class DialogMove extends AbsDialog {
 
 	@Override
 	public String myPageName() {
-		// TODO Auto-generated method stub
-		return null;
+		return (this.getClass().getName());
 	}
 
 	@Override
