@@ -1158,7 +1158,7 @@ public class PageBriefcase extends AbsTab {
 
 			// "NEW Folder" shortcut opens "Create New Folder" dialog
 			// due to the bug #63029 it opens dialog with Mail tree view
-			page = new DialogCreateFolder(MyApplication, this);
+			page = new DialogCreateBriefcaseFolder(MyApplication, this);
 
 			keyCode = "78,70";
 		} else if (shortcut == Shortcut.S_MOVE) {

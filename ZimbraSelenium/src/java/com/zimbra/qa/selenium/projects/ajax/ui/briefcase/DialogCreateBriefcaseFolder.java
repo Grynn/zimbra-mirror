@@ -24,11 +24,11 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 		public static final String zTitle = "css=td[id^=CreateNewFolderDialog__]:contains(Create New Briefcase Folder)";
 		
 		// Textfields
-		public static final String zNameField = "css=div[id^=CreateNewFolderDialog__]:contains(Create New Briefcase Folder) td>input.Field";
+		public static final String zNameField = "css=div[id^=CreateNewFolderDialog]:contains(Create New Briefcase Folder) td>input.Field";
 		// Buttons
 		public static final String zDialogButtonsId = "ChooseFolderDialog_buttons";
-		public static final String zOkButton = "css=td[id^=OK] td[id^=CreateNewFolderDialog__]:contains(OK)";
-		public static final String zCancelButton = "css=td[id^=Cancel] td[id^=CreateNewFolderDialog__]:contains(Cancel)";
+		public static final String zOkButton = "css=td[id^=OK] td[id^=CreateNewFolderDialog]:contains(OK)";									
+		public static final String zCancelButton = "css=td[id^=Cancel] td[id^=CreateNewFolderDialog]:contains(Cancel)";
 
 	}
 
@@ -98,7 +98,7 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 		if (locator == null) {
 			throw new HarnessException("Button " + button + " not implemented");
 		}
-
+		
 		// Make sure the locator exists
 		if (!this.sIsElementPresent(locator)) {
 			throw new HarnessException("Button " + button + " locator "

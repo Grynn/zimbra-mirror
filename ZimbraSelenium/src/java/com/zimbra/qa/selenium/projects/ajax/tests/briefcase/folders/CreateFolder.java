@@ -68,7 +68,7 @@ public class CreateFolder extends AjaxCommonTest {
 
 		// "NEW Folder" shortcut opens "Create New Folder" dialog
 		// due to the bug #63029 it opens dialog with Mail tree view
-		DialogCreateFolder createFolderDialog = (DialogCreateFolder) app.zPageBriefcase
+		DialogCreateBriefcaseFolder createFolderDialog = (DialogCreateBriefcaseFolder) app.zPageBriefcase
 				.zKeyboardShortcut(shortcut);
 
 		ZAssert.assertNotNull(createFolderDialog,
