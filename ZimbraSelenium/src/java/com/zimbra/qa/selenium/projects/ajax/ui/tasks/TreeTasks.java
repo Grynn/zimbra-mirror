@@ -19,17 +19,16 @@ import com.zimbra.qa.selenium.projects.ajax.ui.*;
  *
  */
 public class TreeTasks extends AbsTree {
-
+	
 	public static class Locators {
 		public static final String ztih__main_Tasks__ZIMLET_ID = "ztih__main_Tasks__ZIMLET";
 		public static final String ztih__main_Mail__ZIMLET_nodeCell_ID = "ztih__main_Mail__ZIMLET_nodeCell";
 		public static final String zNewTagIcon = "//td[contains(@class,'overviewHeader-Text FakeAnchor')]/div[contains(@class,'ImgNewTag')]";
 		public static final String zTagsHeader = "//td[contains(@id,'ztih__main_Tasks__TAG_textCell')]";
-		public static final String zDeleteTreeMenuItem = "//div[contains(@class,'ZMenuItem')]//tbody//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgDelete')]";
+	//	public static final String zDeleteTreeMenuItem = "//div[contains(@class,'ZMenuItem')]//tbody//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgDelete')]";
 		public static final String zRenameTreeMenuItem = "//div[contains(@class,'ZMenuItem')]//tbody//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgRename')]";
+		public static final String zDeleteTreeMenuItem = "css=tr#POPUP_DELETE";
 	}
-	
-	
 	
 		
 	
@@ -230,6 +229,7 @@ public class TreeTasks extends AbsTree {
 		} else if (option == Button.B_DELETE) {
 
 			optionLocator = Locators.zDeleteTreeMenuItem;
+			//optionLocator = "css=tr#POPUP_DELETE";
 
 			page = new DialogWarning(
 					DialogWarning.DialogWarningID.DeleteTagWarningMessage,
@@ -265,7 +265,95 @@ public class TreeTasks extends AbsTree {
 		return (page);
 	}
 
+	public AbsPage zTreeItem(Action action, Button option, FolderItem folderItem)
+			throws HarnessException {
 
+		tracer.trace(action + " on folder = " + folderItem.getName());
+		if (action == null)
+			throw new HarnessException("action cannot be null");
+		if (option == null)
+			throw new HarnessException("button cannot be null");
+		if (folderItem == null)
+			throw new HarnessException("folder cannot be null");
+
+		AbsPage page = null;
+		String actionLocator = null;
+		String optionLocator = null;
+		// String locator = null;
+
+		if (!(folderItem instanceof FolderItem))
+			throw new HarnessException("folder must be of type FolderItem");
+
+		// TODO: should be TaskListItem?
+		FolderItem f = (FolderItem) folderItem;
+
+		if (action == Action.A_LEFTCLICK) {
+			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+				actionLocator = "css=[id^='zti__"
+						+ MyApplication.zGetActiveAccount().EmailAddress
+						+ ":main_Tasks__'][id$=':" + f.getId() + "_textCell']";
+			} else {
+				actionLocator = "zti__main_Tasks__" + f.getId() + "_textCell";
+			}
+
+			// FALL THROUGH
+
+		} else if (action == Action.A_RIGHTCLICK) {
+
+			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
+				actionLocator = "css=[id^='zti__"
+						+ MyApplication.zGetActiveAccount().EmailAddress
+						+ ":main_Tasks__'][id$=':" + f.getId() + "_textCell']";
+			} else {
+				actionLocator = "zti__main_Tasks__" + f.getId() + "_textCell";
+			}
+
+			// Select the folder
+			this.zRightClickAt(actionLocator,"0,0");
+
+		} else {
+			throw new HarnessException("Action " + action
+					+ " not yet implemented");
+		}
+
+		if (option == Button.B_DELETE) {
+
+			 optionLocator = Locators.zDeleteTreeMenuItem;
+			//optionLocator = "css=tr#POPUP_DELETE";
+			page = new DialogConfirm(DialogConfirm.Confirmation.DELETE,
+					MyApplication, ((AppAjaxClient) MyApplication).zPageTasks);
+
+		} else if (option == Button.B_RENAME) {
+
+			optionLocator = Locators.zRenameTreeMenuItem;
+
+			page = new DialogRenameTag(MyApplication,
+					((AppAjaxClient) MyApplication).zPageTasks);
+
+		} else {
+			throw new HarnessException("button " + option
+					+ " not yet implemented");
+		}
+		if (actionLocator == null)
+			throw new HarnessException("locator is null for action " + action);
+		if (optionLocator == null)
+			throw new HarnessException("locator is null for option " + option);
+
+		// Default behavior. Click the locator
+		zClickAt(optionLocator, "");
+
+		// If there is a busy overlay, wait for that to finish
+		this.zWaitForBusyOverlay();
+
+		if (page != null) {
+
+			// Wait for the page to become active, if it was specified
+			page.zWaitForActive();
+		}
+
+		return (page);
+
+	}
 
 
 	/* (non-Javadoc)
