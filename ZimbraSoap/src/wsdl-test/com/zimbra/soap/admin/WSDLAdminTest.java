@@ -230,8 +230,9 @@ public class WSDLAdminTest {
         Assert.assertNotNull("ReloadLocalConfigResponse object", resp);
     }
 
-    // TODO: re-enable when later version of Metro is in use.  
-    // @Test
+    // This WAS failing but appears to be working now.
+    // Notes from previous failure:
+    // re-enable when later version of Metro is in use.
     // Currently failing with a NullPointerException at :
     // at com.sun.xml.stream.buffer.AbstractProcessor.readFromNextStructure(AbstractProcessor.java:189)
     // at com.sun.xml.stream.buffer.AbstractProcessor.readStructure(AbstractProcessor.java:163)
@@ -252,7 +253,8 @@ public class WSDLAdminTest {
     // but would require jumping through hoops.
     // See GetAllConfigTest - the same Response Xml seems to work fine with
     // simple JAXB unmarshalling.
-    public void getAllConfigTest_Disabled() throws Exception {
+    @Test
+    public void getAllConfigTest() throws Exception {
         testGetAllConfigRequest req = new testGetAllConfigRequest();
         Utility.addSoapAdminAuthHeader((WSBindingProvider)eif);
         testGetAllConfigResponse resp = eif.getAllConfigRequest(req);
