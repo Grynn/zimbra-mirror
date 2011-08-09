@@ -332,9 +332,37 @@ public class PageMail extends AbsTab {
 			this.zWaitForBusyOverlay();
 			return (null);
 
+		} else if ( button == Button.B_MAIL_LIST_SORTBY_FROM ) {
+
+			locator = "css=td[id='zlh__TV__fr'] td[id='zlhl__TV__fr']";
+			this.zClick(locator);
+			this.zWaitForBusyOverlay();
+			return (null);
+
+		} else if ( button == Button.B_MAIL_LIST_SORTBY_ATTACHMENT ) {
+
+			locator = "css=td[id='zlh__TV__at'] div[class='ImgAttachment']";
+			this.zClick(locator);
+			this.zWaitForBusyOverlay();
+			return (null);
+
 		} else if ( button == Button.B_MAIL_LIST_SORTBY_SUBJECT ) {
 
 			locator = "css=td[id='zlh__TV__su'] td[id='zlhl__TV__su']";
+			this.zClick(locator);
+			this.zWaitForBusyOverlay();
+			return (null);
+
+		} else if ( button == Button.B_MAIL_LIST_SORTBY_SIZE ) {
+
+			locator = "css=td[id='zlh__TV__sz'] td[id='zlhl__TV__sz']";
+			this.zClick(locator);
+			this.zWaitForBusyOverlay();
+			return (null);
+
+		} else if ( button == Button.B_MAIL_LIST_SORTBY_RECEIVED ) {
+
+			locator = "css=td[id='zlh__TV__dt'] td[id='zlhl__TV__dt']";
 			this.zClick(locator);
 			this.zWaitForBusyOverlay();
 			return (null);

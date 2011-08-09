@@ -93,6 +93,7 @@ public class Button {
 	// MailPage list buttons (sort by options)
 	public static final Button B_MAIL_LIST_SORTBY_FLAGGED = new Button("B_MAIL_LIST_SORTBY_FLAGGED");;
 	public static final Button B_MAIL_LIST_SORTBY_FROM = new Button("B_MAIL_LIST_SORTBY_FROM");;
+	public static final Button B_MAIL_LIST_SORTBY_ATTACHMENT = new Button("B_MAIL_LIST_SORTBY_ATTACHMENT");
 	public static final Button B_MAIL_LIST_SORTBY_SUBJECT = new Button("B_MAIL_LIST_SORTBY_SUBJECT");;
 	public static final Button B_MAIL_LIST_SORTBY_SIZE = new Button("B_MAIL_LIST_SORTBY_SIZE");;
 	public static final Button B_MAIL_LIST_SORTBY_RECEIVED = new Button("B_MAIL_LIST_SORTBY_RECEIVED");;
