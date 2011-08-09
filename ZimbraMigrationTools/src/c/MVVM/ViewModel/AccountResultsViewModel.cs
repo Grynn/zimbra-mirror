@@ -19,20 +19,19 @@ namespace MVVM.ViewModel
         ScheduleViewModel m_scheduleViewModel;
         int m_accountnum;
 
-        public AccountResultsViewModel(ScheduleViewModel scheduleViewModel, int accountNum, int pbValue, string pbMsgValue, string accountName, int accountProgress, string acctProgressMsg, int numErrs, int numWarns, bool enableStop)
+        public AccountResultsViewModel(ScheduleViewModel scheduleViewModel, int accountNum, int pbValue, string pbMsgValue, string userpbMsgValue, string accountName, int accountProgress, string acctProgressMsg, int numErrs, int numWarns, bool enableStop)
         {
             this.m_scheduleViewModel = scheduleViewModel;
             this.m_accountnum = accountNum;
             this.PBValue = pbValue;
             this.PBMsgValue = pbMsgValue;
+            this.UserPBMsgValue = userpbMsgValue;
             this.AccountName = accountName;
             this.AccountProgress = accountProgress;
             this.AcctProgressMsg = acctProgressMsg;
             this.NumErrs = numErrs;
             this.NumWarns = numWarns;
             this.EnableStop = enableStop;
-
-            this.UserPBMsgValue = "";
 
             this.SelectedTab = "";
 

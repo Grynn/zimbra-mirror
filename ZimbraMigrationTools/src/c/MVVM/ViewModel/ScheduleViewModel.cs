@@ -267,7 +267,7 @@ namespace MVVM.ViewModel
             int num = 0;
             foreach (SchedUser su in SchedList)
             {
-                accountResultsViewModel.AccountResultsList.Add(new AccountResultsViewModel(this, num++, 0, "", su.username, 0, "", 0, 0, accountResultsViewModel.EnableStop));
+                accountResultsViewModel.AccountResultsList.Add(new AccountResultsViewModel(this, num++, 0, "", "", su.username, 0, "", 0, 0, accountResultsViewModel.EnableStop));
             }
 
             num = 0;
