@@ -1171,7 +1171,7 @@ public class PageMail extends AbsTab {
 
 	@Override
 	public AbsPage zKeyboardShortcut(Shortcut shortcut) throws HarnessException {
-
+		String	keyCode;
 		if (shortcut == null)
 			throw new HarnessException("Shortcut cannot be null");
 
@@ -1204,12 +1204,22 @@ public class PageMail extends AbsTab {
 			
 			page = new DialogAssistant(MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
 
+		}else if(shortcut== Shortcut.S_ESCAPE){
+			page = new DialogWarning(
+					DialogWarning.DialogWarningID.SaveCurrentMessageAsDraft,
+					this.MyApplication,
+					((AppAjaxClient)this.MyApplication).zPageMail);	
+			
+			keyCode = "27";
+			zKeyDown(keyCode);
+			return page;
+			
 		} else {
 			
 			throw new HarnessException("No logic for shortcut : "+ shortcut);
 		}
 
-
+		
 		zKeyboard.zTypeCharacters(shortcut.getKeys());
 
 		// If the app is busy, wait for it to become active
