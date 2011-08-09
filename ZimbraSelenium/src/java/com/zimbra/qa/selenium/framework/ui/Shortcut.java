@@ -44,7 +44,9 @@ public class Shortcut {
 	public static final Shortcut S_MAIL_TAG = new Shortcut("S_MAIL_TAG",			"t");
 	public static final Shortcut S_MAIL_REMOVETAG = new Shortcut("S_MAIL_REMOVETAG",		"u");
 
-	
+	// Open the assistnat
+	public static final Shortcut S_ASSISTANT = new Shortcut("S_ASSISTANT", "`");
+
 	// Mail shortcuts
 	public static final Shortcut S_MAIL_GETMAIL = new Shortcut("S_MAIL_GETMAIL",	"=");
 	public static final Shortcut S_MAIL_INBOX = new Shortcut("S_MAIL_INBOX",		"i");
@@ -67,6 +69,7 @@ public class Shortcut {
 	public static final Shortcut S_NEWDOCUMENT = new Shortcut("S_NEWDOCUMENT", "nd");
 	public static final Shortcut S_DELETE = new Shortcut("S_DELETE", "<Delete>");
 	public static final Shortcut S_BACKSPACE = new Shortcut("S_BACKSPACE", "<Backspace>");
+
 
 
 	// Shortcut properties

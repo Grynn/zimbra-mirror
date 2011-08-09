@@ -27,6 +27,7 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogAssistant;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
@@ -1199,6 +1200,13 @@ public class PageMail extends AbsTab {
 			// Hard Delete shows the Warning Dialog : Are you sure you want to permanently delete it?
 			page = new DialogWarning(DialogWarning.DialogWarningID.PermanentlyDeleteTheItem,
 					MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
+		} else if ( shortcut == Shortcut.S_ASSISTANT ) {
+			
+			page = new DialogAssistant(MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
+
+		} else {
+			
+			throw new HarnessException("No logic for shortcut : "+ shortcut);
 		}
 
 

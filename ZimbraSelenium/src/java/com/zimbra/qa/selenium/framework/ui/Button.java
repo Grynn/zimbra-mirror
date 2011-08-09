@@ -41,6 +41,8 @@ public class Button {
 	public static final Button B_CLOSE = new Button("B_CLOSE");
 	public static final Button B_ACTIONS = new Button("B_ACTIONS");
 	public static final Button B_REDIRECT = new Button("B_REDIRECT");
+	public static final Button B_HELP = new Button("B_HELP");
+
 
 	public static final Button O_NEW_MESSAGE = new Button("O_NEW_MESSAGE");
 	public static final Button O_NEW_CONTACT = new Button("O_NEW_CONTACT");
