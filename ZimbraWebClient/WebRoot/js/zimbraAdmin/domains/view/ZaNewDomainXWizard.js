@@ -734,7 +734,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
                                                 msgName:ZaMsg.Domain_zimbraHelpDelegatedURL, labelLocation:_LEFT_, width:200}
 					]
 				},
-				{type:_CASE_, caseKey:ZaNewDomainXWizard.GALMODE_STEP,numCols:2,colSizes:["220px","430px"],
+				{type:_CASE_, caseKey:ZaNewDomainXWizard.GALMODE_STEP,numCols:2,colSizes:["220px","450px"],
 					items: [
 						{ref:ZaDomain.A_zimbraGalMode, type:_OSELECT1_, label:ZaMsg.Domain_GalMode, labelLocation:_LEFT_, choices:this.GALModes, onChange:ZaNewDomainXWizard.onGalModeChange},
 						{ref:ZaDomain.A_zimbraGalMaxResults, type:_TEXTFIELD_, label:ZaMsg.LBL_zimbraGalMaxResults, msgName:ZaMsg.MSG_zimbraGalMaxResults, labelLocation:_LEFT_, width:100},
@@ -1246,7 +1246,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
                             }
 					]
 				},
-				{type:_CASE_, caseKey:ZaNewDomainXWizard.AUTH_MODE_STEP, numCols:2,colSizes:["220px","430px"],					
+				{type:_CASE_, caseKey:ZaNewDomainXWizard.AUTH_MODE_STEP, numCols:2,colSizes:["220px","450px"],					
 					items:[
 						{type:_OSELECT1_, label:ZaMsg.Domain_AuthMech, choices:this.AuthMechs, ref:ZaDomain.A_AuthMech, onChange:ZaNewDomainXWizard.onAuthMechChange},
 						{type:_GROUP_, numCols:2,colSizes:["220px","auto"],colSpan:2,
@@ -1430,7 +1430,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 					
 					]
 				},
-				{type:_CASE_, caseKey:ZaNewDomainXWizard.VHOST_STEP, 
+				{type:_CASE_, caseKey:ZaNewDomainXWizard.VHOST_STEP, numCols:2,colSizes:["220px","450px"],
 					items:[
 						{type:_DWT_ALERT_,content:null,ref:ZaDomain.A_domainName,
 							getDisplayValue: function (itemVal) {
@@ -1484,7 +1484,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
                                                   items :[
 
                                                 	{ref:ZaDomain.A_zimbraMailAddressValidationRegex, type:_REPEAT_, 
-                                                		label:ZaMsg.LBL_EmailValidate, repeatInstance:"", 
+                                                		label:ZaMsg.LBL_EmailValidate, repeatInstance:"", labelWrap:true,
                                                 		showAddButton:true, showRemoveButton:true,
                                                                 addButtonLabel:ZaMsg.NAD_AddRegex,
                                                                 showAddOnNextRow:true,
@@ -1497,9 +1497,9 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 									
 					]
 				},	
-				{type:_CASE_, caseKey:ZaNewDomainXWizard.NOTEBOOK_ACL_STEP, 
+				{type:_CASE_, caseKey:ZaNewDomainXWizard.NOTEBOOK_ACL_STEP,numCols:2,colSizes:["220px","450px"],	 
 					items: [
-						{type:_ZAWIZ_TOP_GROUPER_,label:ZaMsg.Domain_GlobalAcl,colSizes:["200px","300px"],  width: "500px",
+						{type:_ZAWIZ_TOP_GROUPER_,label:ZaMsg.Domain_GlobalAcl,colSizes:["200px","450px"],  width: "500px",colSpan:"2",
 							items:[
 								{ref:ZaDomain.A_NotebookDomainACLs, type:_ACL_, label:ZaMsg.LBL_ACL_Dom+":",labelLocation:_LEFT_,
 									visibleBoxes:{r:true,w:true,a:false,i:true,d:true,x:false}
@@ -1517,14 +1517,14 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 							]
 						},
 						{type:_SPACER_, height:10},
-						{type:_ZAWIZ_TOP_GROUPER_, numCols:1, colSizes:["100%"], label:ZaMsg.Domain_PerGrp_Acl,width:"500px",
+						{type:_ZAWIZ_TOP_GROUPER_, numCols:1, colSizes:["100%"], label:ZaMsg.Domain_PerGrp_Acl,width:"500px",colSpan:"2",
 							items:[
 								{type:_REPEAT_, ref:ZaDomain.A_NotebookGroupACLs,width:"100%",
 									label:null, 
 									repeatInstance:{name:"test@test.com",acl:{r:0,w:0,i:0,d:0,a:0,x:0}}, 
 									showAddButton:true, showRemoveButton:true, 
 									addButtonLabel:ZaMsg.Domain_AddGrpAcl, 
-									addButtonWidth: 100,
+									addButtonWidth: 150,
 									showAddOnNextRow:true,
 									removeButtonLabel:ZaMsg.Domain_REPEAT_REMOVE,								
 									removeButtonWidth:80,											
@@ -1540,7 +1540,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 							]
 						},
 						{type:_SPACER_, height:10},
-						{type:_ZAWIZ_TOP_GROUPER_, numCols:1,colSizes:["100%"],label:ZaMsg.Domain_PerUsr_Acl, width: "500px",
+						{type:_ZAWIZ_TOP_GROUPER_, numCols:1,colSizes:["100%"],label:ZaMsg.Domain_PerUsr_Acl, width: "500px",colSpan:"2",
 							items:[
 								{type:_REPEAT_, ref:ZaDomain.A_NotebookUserACLs,width:"100%",
 									label:null, 
@@ -1567,7 +1567,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 						}					
 					]
 				},							
-				{type:_CASE_, caseKey:ZaNewDomainXWizard.CONFIG_COMPLETE_STEP,
+				{type:_CASE_, caseKey:ZaNewDomainXWizard.CONFIG_COMPLETE_STEP,colSizes:["250px","450px"],
 					items: [
 						{type:_OUTPUT_, value:ZaMsg.Domain_Config_Complete}
 					]
