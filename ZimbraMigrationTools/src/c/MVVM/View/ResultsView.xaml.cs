@@ -163,6 +163,10 @@ namespace MVVM.View
 
                 int iToken;
 
+                int sel = ViewModel.CurrentAccountSelection;
+                ViewModel.PBValue = ViewModel.AccountResultsList[sel].PBValue;
+                ViewModel.UserPBMsgValue = ViewModel.AccountResultsList[sel].PBMsgValue;
+
                 switch (tabCtrl.Items.Count)
                 {
                     case 2:
@@ -234,9 +238,31 @@ namespace MVVM.View
             TabItem ti = sender as TabItem;
             string hdr = ti.Header.ToString();
             ViewModel.SelectedTab = hdr;
+
+            int accountnum = -1;
+            if (hdr != "Accounts")
+            {
+                for (int i = 0; i < ViewModel.AccountResultsList.Count; i++)
+                {
+                    if (hdr == ViewModel.AccountResultsList[i].AccountName)
+                    {
+                        accountnum = ViewModel.AccountResultsList[i].GetAccountNum();
+                        break;
+                    }
+                }
+            }
+            if (accountnum != -1)
+            {
+                ViewModel.PBValue = ViewModel.AccountResultsList[accountnum].PBValue;
+                ViewModel.UserPBMsgValue = ViewModel.AccountResultsList[accountnum].PBMsgValue;
+            }
+            
+
+            // show the progress bar if an account tab has the focus
             System.Windows.Visibility swv = (hdr == "Accounts") ? System.Windows.Visibility.Hidden : System.Windows.Visibility.Visible;
             pbMigrationS.Visibility = swv;
             labelSchedInfo.Visibility = swv;
+            //
         }
 
         private void CloseTab(object source, RoutedEventArgs args)

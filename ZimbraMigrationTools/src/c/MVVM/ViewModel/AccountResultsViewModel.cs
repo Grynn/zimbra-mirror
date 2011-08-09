@@ -17,10 +17,12 @@ namespace MVVM.ViewModel
     {
         readonly AccountResults m_accountResults = new AccountResults(0, "", "", 0, "", 0, 0, false);
         ScheduleViewModel m_scheduleViewModel;
+        int m_accountnum;
 
-        public AccountResultsViewModel(ScheduleViewModel scheduleViewModel, int pbValue, string pbMsgValue, string accountName, int accountProgress, string acctProgressMsg, int numErrs, int numWarns, bool enableStop)
+        public AccountResultsViewModel(ScheduleViewModel scheduleViewModel, int accountNum, int pbValue, string pbMsgValue, string accountName, int accountProgress, string acctProgressMsg, int numErrs, int numWarns, bool enableStop)
         {
             this.m_scheduleViewModel = scheduleViewModel;
+            this.m_accountnum = accountNum;
             this.PBValue = pbValue;
             this.PBMsgValue = pbMsgValue;
             this.AccountName = accountName;
@@ -30,12 +32,24 @@ namespace MVVM.ViewModel
             this.NumWarns = numWarns;
             this.EnableStop = enableStop;
 
+            this.UserPBMsgValue = "";
+
             this.SelectedTab = "";
 
             this.GetAcctResultsHelpCommand = new ActionCommand(this.GetAcctResultsHelp, () => true);
             this.OpenLogFileCommand = new ActionCommand(this.OpenLogFile, () => true);
             this.StopCommand = new ActionCommand(this.Stop, () => true);
             this.ExitAppCommand = new ActionCommand(this.ExitApp, () => true);
+        }
+
+        public ScheduleViewModel GetScheduleViewModel()
+        {
+            return m_scheduleViewModel;
+        }
+
+        public int GetAccountNum()
+        {
+            return m_accountnum;
         }
 
         // Commands
@@ -71,7 +85,10 @@ namespace MVVM.ViewModel
 
         private void Stop()
         {
-            m_scheduleViewModel.GetBGW().CancelAsync();
+            for (int i = 0; i < m_scheduleViewModel.BGWList.Count; i++)
+            {
+                m_scheduleViewModel.BGWList[i].CancelAsync();
+            }
             m_scheduleViewModel.EnableMigrate = true;
             EnableStop = !m_scheduleViewModel.EnableMigrate;
         }
@@ -119,6 +136,20 @@ namespace MVVM.ViewModel
                 }
                 m_accountResults.PBMsgValue = value;
                 OnPropertyChanged(new PropertyChangedEventArgs("PBMsgValue"));
+            }
+        }
+
+        public string UserPBMsgValue
+        {
+            get { return m_accountResults.UserPBMsgValue; }
+            set
+            {
+                if (value == m_accountResults.UserPBMsgValue)
+                {
+                    return;
+                }
+                m_accountResults.UserPBMsgValue = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("UserPBMsgValue"));
             }
         }
 

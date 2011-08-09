@@ -15,6 +15,7 @@ namespace MVVM.Model
             this.NumErrs = numErrs;
             this.NumWarns = numWarns;
             this.EnableStop = enableStop;
+            this.UserPBMsgValue = "";
         }
 
         public int PBValue
@@ -24,6 +25,12 @@ namespace MVVM.Model
         }
 
         public string PBMsgValue
+        {
+            get;
+            set;
+        }
+
+        public string UserPBMsgValue
         {
             get;
             set;

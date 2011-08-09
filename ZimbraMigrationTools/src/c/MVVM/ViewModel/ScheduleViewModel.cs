@@ -20,7 +20,6 @@ namespace MVVM.ViewModel
         UsersViewModel usersViewModel;
         ConfigViewModelUDest configViewModelUDest;
         AccountResultsViewModel accountResultsViewModel;
-        BackgroundWorker bgw;
 
         public ScheduleViewModel()
         {
@@ -57,11 +56,6 @@ namespace MVVM.ViewModel
         public void SetResultsModel(AccountResultsViewModel accountResultsViewModel)
         {
             this.accountResultsViewModel = accountResultsViewModel;
-        }
-
-        public BackgroundWorker GetBGW()
-        {
-            return bgw;
         }
 
         // Commands
@@ -270,21 +264,40 @@ namespace MVVM.ViewModel
             EnableMigrate = false;
             accountResultsViewModel.EnableStop = !EnableMigrate;
 
-            bgw = new System.ComponentModel.BackgroundWorker();
-
+            int num = 0;
             foreach (SchedUser su in SchedList)
             {
-                accountResultsViewModel.AccountResultsList.Add(new AccountResultsViewModel(this, 0, "", su.username, 0, "", 0, 0, accountResultsViewModel.EnableStop));
+                accountResultsViewModel.AccountResultsList.Add(new AccountResultsViewModel(this, num++, 0, "", su.username, 0, "", 0, 0, accountResultsViewModel.EnableStop));
             }
 
-            bgw.DoWork += new System.ComponentModel.DoWorkEventHandler(worker_DoWork);
-            bgw.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(worker_ProgressChanged);
-            bgw.WorkerReportsProgress = true;
-            bgw.WorkerSupportsCancellation = true;
-            bgw.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
-            bgw.RunWorkerAsync();
+            num = 0;
+            foreach (SchedUser su in SchedList)
+            {
+                BackgroundWorker bgw = new System.ComponentModel.BackgroundWorker();
+                bgw.DoWork += new System.ComponentModel.DoWorkEventHandler(worker_DoWork);
+                bgw.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(worker_ProgressChanged);
+                bgw.WorkerReportsProgress = true;
+                bgw.WorkerSupportsCancellation = true;
+                bgw.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
+                bgw.RunWorkerAsync(num++);
+                bgwlist.Add(bgw);
+            }
         }
         ////////////////////////
+
+        private ObservableCollection<BackgroundWorker> bgwlist = new ObservableCollection<BackgroundWorker>();
+        public ObservableCollection<BackgroundWorker> BGWList
+        {
+            get { return bgwlist; }
+            set { bgwlist = value; }
+        }
+
+        private ObservableCollection<DoWorkEventArgs> eventArglist = new ObservableCollection<DoWorkEventArgs>();
+        public ObservableCollection<DoWorkEventArgs> EventArgList
+        {
+            get { return eventArglist; }
+            set { eventArglist = value; }
+        }
 
         private ObservableCollection<SchedUser> schedlist = new ObservableCollection<SchedUser>();
         public ObservableCollection<SchedUser> SchedList
@@ -486,189 +499,40 @@ namespace MVVM.ViewModel
         //Background thread stuff
         private void worker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            while (accountResultsViewModel.PBValue != 100)
-            {
-                if (bgw.CancellationPending)
-                {
-                    e.Cancel = true;
-                    return;
-                }
-                accountResultsViewModel.PBValue += 2;
-                bgw.ReportProgress(accountResultsViewModel.PBValue);
-                Thread.Sleep(250);
-                System.Windows.Threading.Dispatcher.CurrentDispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Background,
-                                          new System.Threading.ThreadStart(delegate { }));
-            }
+            eventArglist.Add(e);
+
+            int num = (int)e.Argument;
+            MigrationAccount MyAcct = new MigrationAccount();
+            MyAcct.Accountname = accountResultsViewModel.AccountResultsList[num].AccountName;
+            MyAcct.Accountnum = num;
+            MyAcct.OnChanged += new MigrationObjectEventHandler(Acct_OnAcctChanged);
+
+            MigrationFolder MyFolder = new MigrationFolder();
+            MyFolder.Accountnum = num;
+            MyFolder.OnChanged += new MigrationObjectEventHandler(Folder_OnChanged);
+
+            MyAcct.migrationFolders.Insert(0, MyFolder);
+            CSMigrationwrapper mw = new CSMigrationwrapper();
+
+            bgwlist[num].ReportProgress(accountResultsViewModel.AccountResultsList[num].PBValue);
+
+            mw.StartMigration(MyAcct);
+            accountResultsViewModel.AccountResultsList[num].PBMsgValue = "Migration complete";
+            accountResultsViewModel.AccountResultsList[num].AcctProgressMsg = "Complete";
         }
 
         private void worker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
-            if (e.ProgressPercentage == 2)
-            {
-                accountResultsViewModel.PBMsgValue = "Migrating messages";
-            }
-            if (e.ProgressPercentage == 30)
-            {
-                accountResultsViewModel.PBMsgValue = "Migrating appointments";
-            }
-            if (e.ProgressPercentage == 60)
-            {
-                accountResultsViewModel.PBMsgValue = "Migrating contacts";
-            }
-            if (e.ProgressPercentage == 80)
-            {
-                accountResultsViewModel.PBMsgValue = "Migrating rules";
-            }
-
-            int i = 0;           
-            foreach (SchedUser su in SchedList)
-            {
-                AccountResultsViewModel ar = accountResultsViewModel.AccountResultsList[i];
-                // some fake stuff
-                switch (i)
-                {
-                    case 0:
-                        ar.AccountProgress = e.ProgressPercentage;
-                        if ((e.ProgressPercentage % 5) == 0)
-                        {
-                            ar.AcctProgressMsg = "10 of 200";
-                            ar.NumWarns++;
-                            ar.PBMsgValue = "Migrating messages";
-                        }
-                        if ((e.ProgressPercentage % 40) == 0)
-                        {
-                            ar.AcctProgressMsg = "28 of 70";
-                            ar.NumErrs++;
-                            ar.PBMsgValue = "Migrating appointments";
-                        }
-                        if ((e.ProgressPercentage % 60) == 0)
-                        {
-                            ar.AcctProgressMsg = "180 of 300";
-                            ar.NumErrs++;
-                            ar.PBMsgValue = "Migrating contacts";
-                        }
-                        if ((e.ProgressPercentage % 80) == 0)
-                        {
-                            ar.AcctProgressMsg = "8 of 10";
-                            ar.NumErrs++;
-                            ar.PBMsgValue = "Migrating rules";
-                        }
-                        if (e.ProgressPercentage == 100)
-                        {
-                            ar.AcctProgressMsg = "740 of 740";
-                            ar.PBMsgValue = "Migration complete";
-                        }
-                        break;
-
-                    case 1:
-                        if (e.ProgressPercentage == 10)
-                        {
-                            ar.AccountProgress = e.ProgressPercentage;
-                            ar.AcctProgressMsg = "5 of 50";
-                            ar.PBMsgValue = "Migrating messages";
-                        }
-                        if (e.ProgressPercentage == 50)
-                        {
-                            ar.AccountProgress = e.ProgressPercentage + 6;
-                            ar.AcctProgressMsg = "28 of 50";
-                        }
-                        if (e.ProgressPercentage == 100)
-                        {
-                            ar.AccountProgress = e.ProgressPercentage;
-                            ar.AcctProgressMsg = "334 of 334";
-                            ar.PBMsgValue = "Migration complete";
-                        }
-                        break;
-
-                    case 2:
-                        if (e.ProgressPercentage == 10)
-                        {
-                            ar.AccountProgress = e.ProgressPercentage;
-                            ar.AcctProgressMsg = "6 of 60";
-                            ar.PBMsgValue = "Migrating messages";
-                        }
-                        if (e.ProgressPercentage == 30)
-                        {
-                            ar.AccountProgress = e.ProgressPercentage - 5;
-                            ar.AcctProgressMsg = "15 of 60";
-                            ar.NumErrs++;
-                        }
-                        if (e.ProgressPercentage == 66)
-                        {
-                            ar.PBMsgValue = "Migrating rules";
-                            ar.AccountProgress = e.ProgressPercentage - 1;
-                            ar.AcctProgressMsg = "6 of 9";
-                            ar.NumErrs++;
-                        }
-                        if (e.ProgressPercentage == 89)
-                        {
-                            ar.AccountProgress = e.ProgressPercentage;
-                            ar.AcctProgressMsg = "8 of 9";
-                            ar.NumErrs++;
-                        }
-                        if (e.ProgressPercentage == 100)
-                        {
-                            ar.AccountProgress = e.ProgressPercentage;
-                            ar.AcctProgressMsg = "275 of 275";
-                            ar.PBMsgValue = "Migration complete";
-                        }
-                        break;
-
-                    case 3:
-                        if (e.ProgressPercentage == 10)
-                        {
-                            ar.AccountProgress = e.ProgressPercentage;
-                            ar.AcctProgressMsg = "10 of 100";
-                            ar.PBMsgValue = "Migrating messages";
-                        }
-                        if (e.ProgressPercentage == 30)
-                        {
-                            ar.AccountProgress = e.ProgressPercentage - 8;
-                            ar.AcctProgressMsg = "22 of 100";
-                            ar.NumErrs++;
-                        }
-                        if (e.ProgressPercentage == 50)
-                        {
-                            ar.AccountProgress = e.ProgressPercentage - 1;
-                            ar.AcctProgressMsg = "40 of 80";
-                            ar.PBMsgValue = "Migrating appointments";
-                            ar.NumErrs++;
-                        }
-                        if (e.ProgressPercentage == 70)
-                        {
-                            ar.AccountProgress = e.ProgressPercentage - 3;
-                            ar.AcctProgressMsg = "54 of 80";
-                            ar.NumErrs++;
-                        }
-                        if (e.ProgressPercentage == 82)
-                        {
-                            ar.AccountProgress = e.ProgressPercentage;
-                            ar.AcctProgressMsg = "66 of 80";
-                            ar.NumErrs++;
-                        }
-                        if (e.ProgressPercentage == 100)
-                        {
-                            ar.AccountProgress = e.ProgressPercentage;
-                            ar.AcctProgressMsg = "500 of 500";
-                            ar.PBMsgValue = "Migration complete";
-                        }
-                        break;
-
-                    default:
-                        ar.AccountProgress = e.ProgressPercentage;
-                        ar.AcctProgressMsg = "";
-                        break;
-                }
-
-                i++;
-            }
-            
         }
 
         private void worker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             if (e.Cancelled)
             {
+                for (int i = 0; i < accountResultsViewModel.AccountResultsList.Count; i++)  // hate to set them all, but do it for now
+                {
+                    accountResultsViewModel.AccountResultsList[i].PBMsgValue = "Migration canceled";
+                }
                 accountResultsViewModel.PBMsgValue = "Migration canceled";
             }
             else if (e.Error != null)
@@ -683,6 +547,72 @@ namespace MVVM.ViewModel
                 SchedList.Clear();
                 usersViewModel.UsersList.Clear();
             }
+        }
+
+
+        public void Acct_OnAcctChanged(object sender, MigrationObjectEventArgs e)                         
+        {
+            string msg = "";
+            MigrationAccount a = (MigrationAccount)sender;
+            AccountResultsViewModel ar = accountResultsViewModel.AccountResultsList[a.Accountnum];
+            if (e.PropertyName == "TotalNoErrors")
+            {
+                ar.NumErrs = (int)a.TotalNoErrors + 1;      // this happens first
+            }
+            else
+            if (e.PropertyName == "TotalNoWarnings")
+            {
+                ar.NumWarns = (int)a.TotalNoWarnings + 1;   // this happens first
+            }
+            else
+            if (e.PropertyName == "LastErrorMsg")
+            {
+            }
+            else
+            if (e.PropertyName == "LastWarningMsg")
+            {
+            }
+            else
+            {
+                msg = "Begin {0} Migration";
+                ar.PBMsgValue = String.Format(msg, a.Accountname);
+                accountResultsViewModel.PBMsgValue = String.Format(msg, a.Accountname);  // for the user results window
+            }
+        }
+
+        public void Folder_OnChanged(object sender, MigrationObjectEventArgs e)                                  
+        {
+
+            MigrationFolder f = (MigrationFolder)sender;
+            AccountResultsViewModel ar = accountResultsViewModel.AccountResultsList[f.Accountnum];
+
+            if (bgwlist[f.Accountnum].CancellationPending)
+            {
+                eventArglist[f.Accountnum].Cancel = true;
+                return;
+            }
+
+            string msg1 = "Migrating {0}";
+            ar.PBMsgValue = String.Format(msg1, f.FolderName);
+            accountResultsViewModel.PBMsgValue = String.Format(msg1, f.FolderName); // for the user results window
+
+            string msg2 = "{0} of {1}";
+            ar.AcctProgressMsg = String.Format(msg2, f.CurrentCountOFItems, f.TotalCountOFItems);
+            Thread.Sleep(100);  // to make sure the UI gets updated
+
+            // temporary -- eventually, for each account, get totals of all, and figure out incr
+            int incr = 0;
+            switch (f.Accountnum)
+            {
+                case 0:     incr = 5; break;
+                case 1:     incr = 4; break;
+                case 2:     incr = 4; break;
+                case 3:     incr = 3; break;
+                default:    incr = 5; break;
+            }
+            ////////
+
+            accountResultsViewModel.AccountResultsList[f.Accountnum].PBValue += incr;
         }
     }
 }

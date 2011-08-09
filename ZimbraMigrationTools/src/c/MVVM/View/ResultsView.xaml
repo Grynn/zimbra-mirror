@@ -54,7 +54,7 @@
             </TabControl>
         </StackPanel>
         <ProgressBar Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Height="18" Width="290" Margin="70,10,0,0" Name="pbMigrationS" Visibility="Hidden" Value="{Binding Path=PBValue}" HorizontalAlignment="Left" ></ProgressBar>
-        <Label Grid.Row="2" Grid.ColumnSpan="2" Margin="76,0,0,0" MinWidth="300" HorizontalAlignment="Left" Name="labelSchedInfo" Visibility="Hidden" FontStyle="Italic" Content="{Binding Path=PBMsgValue}"/>
+        <Label Grid.Row="2" Grid.ColumnSpan="2" Margin="76,0,0,0" MinWidth="300" HorizontalAlignment="Left" Name="labelSchedInfo" Visibility="Hidden" FontStyle="Italic" Content="{Binding Path=UserPBMsgValue}"/>
         <Separator Grid.Row="3" Margin="5,14,5,0" VerticalAlignment="Top"/>
         <Grid Name="BottomGrid" Grid.Row="4" Grid.ColumnSpan="2">
             <Button MinWidth="75" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="5,10,0,0" Content="Help" Name="buttonResultsHelp" Command="{Binding GetAcctResultsHelpCommand}"  />
