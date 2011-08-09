@@ -35,6 +35,7 @@ import com.zimbra.cs.mailbox.OperationContext;
 import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.service.mail.AutoComplete;
 import com.zimbra.soap.ZimbraSoapContext;
+import com.zimbra.soap.type.GalSearchType;
 
 public class OfflineAutoComplete extends AutoComplete {
 
@@ -52,7 +53,7 @@ public class OfflineAutoComplete extends AutoComplete {
 
         String name = request.getAttribute(MailConstants.A_NAME);
         String typeStr = request.getAttribute(MailConstants.A_TYPE, "account");
-        Provisioning.GalSearchType stype = Provisioning.GalSearchType.fromString(typeStr);
+        GalSearchType stype = GalSearchType.fromString(typeStr);
         int limit = account.getContactAutoCompleteMaxResults();
         AutoCompleteResult result = query(request, zsc, account, true, name, limit, stype, octxt);
         
@@ -96,7 +97,7 @@ public class OfflineAutoComplete extends AutoComplete {
     }
 
     public void autoCompleteFromOtherAccounts(Element request, ZimbraSoapContext ctxt, Account reqAcct,
-        String name, int limit, Provisioning.GalSearchType stype, AutoCompleteResult result, OperationContext octxt) throws ServiceException {
+        String name, int limit, GalSearchType stype, AutoCompleteResult result, OperationContext octxt) throws ServiceException {
         OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
         List<Account> accounts = prov.getAllAccounts();
         accounts.add(0, prov.getLocalAccount());

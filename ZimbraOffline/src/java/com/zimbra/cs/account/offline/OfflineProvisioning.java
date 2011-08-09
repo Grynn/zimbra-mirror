@@ -86,6 +86,7 @@ import com.zimbra.cs.wiki.WikiUtil;
 import com.zimbra.client.ZGetInfoResult;
 import com.zimbra.client.ZIdentity;
 import com.zimbra.client.ZMailbox;
+import com.zimbra.soap.type.GalSearchType;
 
 public class OfflineProvisioning extends Provisioning implements OfflineConstants {
 
