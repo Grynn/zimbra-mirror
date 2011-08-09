@@ -28,6 +28,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.dom4j.DocumentException;
+import org.dom4j.InvalidXPathException;
 
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.net.SocketFactories;
@@ -1094,34 +1095,41 @@ public class ZimbraAccount {
 		  * @param context
 		  * @param xpath
 		  * @return
+		 * @throws HarnessException 
 		  * @throws HarnessException 
 		  */
 		 @SuppressWarnings("unchecked")
 		 public static Element[] selectNodes(Element context, String xpath) {
 			 if ( context == null )
 				 return (null);
-			 org.dom4j.Element d4context = context.toXML();
-			 org.dom4j.XPath Xpath = d4context.createXPath(xpath);
-			 Xpath.setNamespaceURIs(getURIs());
-			 org.dom4j.Node node;
-			 List dom4jElements = Xpath.selectNodes(d4context);
 
-			 List<Element> zimbraElements = new ArrayList<Element>();
-			 Iterator iter = dom4jElements.iterator();
-			 while (iter.hasNext()) {
-				 node = (org.dom4j.Node)iter.next();
-				 if (node instanceof org.dom4j.Element) {
-					 Element zimbraElement = Element.convertDOM((org.dom4j.Element) node);
-					 zimbraElements.add(zimbraElement);
+			 try {
+				 org.dom4j.Element d4context = context.toXML();
+				 org.dom4j.XPath Xpath = d4context.createXPath(xpath);
+				 Xpath.setNamespaceURIs(getURIs());
+				 org.dom4j.Node node;
+				 List dom4jElements = Xpath.selectNodes(d4context);
+
+				 List<Element> zimbraElements = new ArrayList<Element>();
+				 Iterator iter = dom4jElements.iterator();
+				 while (iter.hasNext()) {
+					 node = (org.dom4j.Node)iter.next();
+					 if (node instanceof org.dom4j.Element) {
+						 Element zimbraElement = Element.convertDOM((org.dom4j.Element) node);
+						 zimbraElements.add(zimbraElement);
+					 }
 				 }
-			 }
 
-			 int size = zimbraElements.size();
-			 Element[] retVal = new Element[size];
-			 for (int i = 0; i < size; i++) {
-				 retVal[i] = zimbraElements.get(i);
+				 int size = zimbraElements.size();
+				 Element[] retVal = new Element[size];
+				 for (int i = 0; i < size; i++) {
+					 retVal[i] = zimbraElements.get(i);
+				 }
+				 return (retVal);
+			 } catch (InvalidXPathException e) {
+				 LogManager.getRootLogger().error("Unable to select nodes", e);
+				 throw e;
 			 }
-			 return (retVal);
 		 }
 
 		 /**

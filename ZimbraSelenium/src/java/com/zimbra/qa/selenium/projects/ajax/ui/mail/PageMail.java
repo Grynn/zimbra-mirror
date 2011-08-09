@@ -332,6 +332,13 @@ public class PageMail extends AbsTab {
 			this.zWaitForBusyOverlay();
 			return (null);
 
+		} else if ( button == Button.B_MAIL_LIST_SORTBY_SUBJECT ) {
+
+			locator = "css=td[id='zlh__TV__su'] td[id='zlhl__TV__su']";
+			this.zClick(locator);
+			this.zWaitForBusyOverlay();
+			return (null);
+
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}
