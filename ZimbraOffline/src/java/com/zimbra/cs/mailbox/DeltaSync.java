@@ -270,13 +270,13 @@ public class DeltaSync {
                 return;
             }
 
-            if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_MESSAGE))
+            if (ombx.isPendingDelete(sContext, id, MailItem.Type.MESSAGE))
                 return;
 
             if (create) {
                 triageNewMessage(id, folderId, change, messages, modmsgs, deltamsgs);
             } else {
-                syncMessage(change, folderId, MailItem.TYPE_MESSAGE);
+                syncMessage(change, folderId, MailItem.Type.MESSAGE);
             }
         } else if (type.equals(MailConstants.E_CHAT)) {
             if (!OfflineLC.zdesktop_sync_chats.booleanValue())
@@ -286,13 +286,13 @@ public class DeltaSync {
                 return;
             }
 
-            if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_CHAT))
+            if (ombx.isPendingDelete(sContext, id, MailItem.Type.CHAT))
                 return;
 
             if (create) {
                 triageNewMessage(id, folderId, change, chats, modchats, deltachats);
             } else {
-                syncMessage(change, folderId, MailItem.TYPE_CHAT);
+                syncMessage(change, folderId, MailItem.Type.CHAT);
             }
         } else if (type.equals(MailConstants.E_CONTACT)) {
             if (!OfflineLC.zdesktop_sync_contacts.booleanValue())
@@ -302,7 +302,7 @@ public class DeltaSync {
                 return;
             }
 
-            if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_CONTACT))
+            if (ombx.isPendingDelete(sContext, id, MailItem.Type.CONTACT))
                 return;
 
             if (create) {
@@ -318,7 +318,7 @@ public class DeltaSync {
                 return;
             }
 
-            if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_APPOINTMENT))
+            if (ombx.isPendingDelete(sContext, id, MailItem.Type.APPOINTMENT))
                 return;
 
             appts.put(id, folderId);
@@ -330,7 +330,7 @@ public class DeltaSync {
                 return;
             }
 
-            if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_TASK))
+            if (ombx.isPendingDelete(sContext, id, MailItem.Type.TASK))
                 return;
 
             tasks.put(id, folderId);
@@ -343,7 +343,7 @@ public class DeltaSync {
                 return;
             }
 
-            if (ombx.isPendingDelete(sContext, id, MailItem.TYPE_UNKNOWN))
+            if (ombx.isPendingDelete(sContext, id, MailItem.Type.UNKNOWN))
                 return;
 
             documents.add(id);
@@ -412,7 +412,7 @@ public class DeltaSync {
                 continue;
             }
             // tag numbering conflict issues: don't delete tags we've created locally
-            if ((ombx.getChangeMask(sContext, id, MailItem.Type.TAG) & Change.MODIFIED_CONFLICT) != 0) {
+            if ((ombx.getChangeMask(sContext, id, MailItem.Type.TAG) & Change.MODIFIED_CONFLICT) != 0)
                 continue;
             leafIds.add(id);
             tagIds.add(id);
@@ -420,8 +420,8 @@ public class DeltaSync {
 
         // delete all the leaves now
         int idx = 0, ids[] = new int[leafIds.size()];
-        for (int id : leafIds) {
-            ids[idx++] = id;
+        for (int leafId : leafIds) {
+            ids[idx++] = leafId;
         }
         ombx.delete(sContext, ids, MailItem.Type.UNKNOWN, null);
         OfflineLog.offline.debug("delta: deleted leaves: " + Arrays.toString(ids));
@@ -926,7 +926,7 @@ public class DeltaSync {
                     return;
                 }
             }
-            OfflineLog.offline.debug("delta: updated " + MailItem.getNameForType(type) + " (" + id + "): "
+            OfflineLog.offline.debug("delta: updated " + type + " (" + id + "): "
                     + msg.getSubject());
         } catch (Exception x) {
             if (x instanceof ServiceException
