@@ -88,11 +88,12 @@ public class TreeBriefcase extends AbsTree {
 
 			optionLocator = Locators.zDeleteTreeMenuItem;
 
-			page = new DialogWarning(
-					DialogWarning.DialogWarningID.DeleteTagWarningMessage,
-					MyApplication,
-					((AppAjaxClient) MyApplication).zPageBriefcase);
-
+			if (item instanceof TagItem) {
+				page = new DialogWarning(
+						DialogWarning.DialogWarningID.DeleteTagWarningMessage,
+						MyApplication,
+						((AppAjaxClient) MyApplication).zPageBriefcase);
+			}
 		} else if (option == Button.B_TREE_NEWFOLDER) {
 
 			optionLocator = Locators.zNewFolderTreeMenuItem;
@@ -126,8 +127,7 @@ public class TreeBriefcase extends AbsTree {
 
 		tracer.trace("Click " + action + " on folder " + item.getName());
 
-		String treeItemLocator = Locators.briefcaseTreeView
-				+ "]";
+		String treeItemLocator = Locators.briefcaseTreeView + "]";
 
 		AbsPage page = zTreeItem(action, item);
 

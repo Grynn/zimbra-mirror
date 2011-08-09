@@ -7,7 +7,6 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogCreateBriefcaseFolder;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
 
 public class CreateFolder extends AjaxCommonTest {
 
