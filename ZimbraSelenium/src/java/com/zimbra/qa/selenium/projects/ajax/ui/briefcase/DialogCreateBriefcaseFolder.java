@@ -21,13 +21,14 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 
 		public static final String zDialogContentId = "ChooseFolderDialog_content";
 
+		public static final String zTitle = "css=td[id^=CreateNewFolderDialog__]:contains(Create New Briefcase Folder)";
+		
 		// Textfields
-		public static final String zNameField = "css=input[id$='_name'][class*='Field']";
-
+		public static final String zNameField = "css=div[id^=CreateNewFolderDialog__]:contains(Create New Briefcase Folder) td>input.Field";
 		// Buttons
 		public static final String zDialogButtonsId = "ChooseFolderDialog_buttons";
-		public static final String zOkButton = "css=tr>td>div[id*='button2']";
-		public static final String zCancelButton = "css=tr>td>div[id*='button1']";
+		public static final String zOkButton = "css=td[id^=OK] td[id^=CreateNewFolderDialog__]:contains(OK)";
+		public static final String zCancelButton = "css=td[id^=Cancel] td[id^=CreateNewFolderDialog__]:contains(Cancel)";
 
 	}
 
@@ -105,7 +106,7 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 		}
 
 		this.zClickAt(locator, "0,0");
-
+		
 		this.zWaitForBusyOverlay();
 
 		//Check the message queue
@@ -167,7 +168,7 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 			throw new HarnessException("folder must not be null");
 
 		String locator = Locators.zNameField;
-
+		
 		if (!this.sIsElementPresent(locator))
 			throw new HarnessException("unable to find folder name field "
 					+ locator);

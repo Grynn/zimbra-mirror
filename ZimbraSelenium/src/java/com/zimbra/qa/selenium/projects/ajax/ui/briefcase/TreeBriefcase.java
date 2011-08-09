@@ -95,7 +95,7 @@ public class TreeBriefcase extends AbsTree {
 
 		} else if (option == Button.B_TREE_NEWFOLDER) {
 
-			optionLocator = Locators.zNewTagTreeMenuItem;
+			optionLocator = Locators.zNewFolderTreeMenuItem;
 
 			page = new DialogCreateBriefcaseFolder(MyApplication,
 					((AppAjaxClient) MyApplication).zPageBriefcase);
