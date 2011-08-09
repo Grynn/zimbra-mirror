@@ -30,7 +30,7 @@ public class EditFile extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Upload file through RestUtil - Edit File using Right Click Context Menu & verify through GUI", groups = { "smoke" })
+	@Test(description = "Upload file through RestUtil - Rename File using Right Click Context Menu & verify through GUI", groups = { "smoke" })
 	public void EditFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
