@@ -706,7 +706,9 @@ ZaDLXFormView.MEMBEROF_TAB_RIGHTS = [ZaDistributionList.GET_DL_MEMBERSHIP_RIGHT]
 ZaDLXFormView.ALIASES_TAB_ATTRS = [ZaAccount.A_zimbraMailAlias];
 ZaDLXFormView.ALIASES_TAB_RIGHTS = [ZaDistributionList.ADD_DL_ALIAS_RIGHT,ZaDistributionList.REMOVE_DL_ALIAS_RIGHT];
 
-
+ZaDLXFormView.PREF_TAB_ATTRS = [ZaDistributionList.A_zimbraPrefReplyToEnabled, ZaDistributionList.A_zimbraPrefReplyToDisplay,
+    ZaDistributionList.A_zimbraPrefReplyToAddress];
+ZaDLXFormView.PREF_TAB_RIGHTS = [];
 
 ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {	
 	var sourceHeaderList = new Array();
@@ -725,7 +727,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
     
     this.tabChoices = new Array();
 	
-	var _tab1, _tab2, _tab3, _tab4;
+	var _tab1, _tab2, _tab3, _tab4, _tab5;
 	_tab1 = ++this.TAB_INDEX;
 	this.tabChoices.push({value:_tab1, label:ZaMsg.DLXV_TabMembers});
 
@@ -742,6 +744,11 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 	if(ZaTabView.isTAB_ENABLED(entry,ZaDLXFormView.ALIASES_TAB_ATTRS, ZaDLXFormView.ALIASES_TAB_RIGHTS)) {
 		_tab4 = ++this.TAB_INDEX;
 		this.tabChoices.push({value:_tab4, label:ZaMsg.TABT_Aliases});	
+	}
+
+	if(ZaTabView.isTAB_ENABLED(entry,ZaDLXFormView.PREF_TAB_ATTRS, ZaDLXFormView.PREF_TAB_RIGHTS)) {
+		_tab5 = ++this.TAB_INDEX;
+		this.tabChoices.push({value:_tab5, label:ZaMsg.TABT_Preferences});
 	}
 
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
@@ -1340,6 +1347,61 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 			]
 		};
 		cases.push(case4);
+	}
+
+	if(_tab5) {
+		var case5 =
+		{type:_ZATABCASE_, caseKey:_tab5, colSpan:"*",
+			items:[
+			    {type:_SPACER_, height:5},
+			    {type:_SPACER_, height:5},
+			    {type:_CELLSPACER_, width:10 },
+                {type:_TOP_GROUPER_, label:ZaMsg.NAD_MailOptionsReceiving, id:"dl_pref_replyto_group",
+                    colSpan: "*", numCols: 2, colSizes:[275, "*"],
+                    visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,[
+                            ZaDistributionList.A_zimbraPrefReplyToEnabled,
+                            ZaDistributionList.A_zimbraPrefReplyToDisplay,
+                            ZaDistributionList.A_zimbraPrefReplyToAddress
+                    ]]],
+                    visibilityChangeEventSources:[],
+                    items: [
+                        {ref:ZaDistributionList.A_zimbraPrefReplyToEnabled, type:_CHECKBOX_,
+                            visibilityChecks:[[ZaItem.hasReadPermission, ZaDistributionList.A_zimbraPrefReplyToEnabled]],
+                            label:ZaMsg.DLXV_ReplayToEnabled, trueValue:"TRUE", falseValue:"FALSE"
+                        },
+                        {ref:ZaDistributionList.A_zimbraPrefReplyToDisplay, type:_TEXTFIELD_,
+                            label:ZaMsg.DLXV_ReplayToAddrDisplay, labelLocation:_LEFT_, containerCssStyle:"padding-left:3px;",
+                            emptyText: ZaMsg.DLXV_ReplayToAddrEmptyText,
+                            visibilityChecks:[[ZaItem.hasReadPermission, ZaDistributionList.A_zimbraPrefReplyToDisplay]],
+                            enableDisableChecks:[[XForm.checkInstanceValue,ZaDistributionList.A_zimbraPrefReplyToEnabled,"TRUE"],
+                            [ZaItem.hasWritePermission,ZaDistributionList.A_zimbraPrefReplyToAddress]],
+                            enableDisableChangeEventSources:[ZaDistributionList.A_zimbraPrefReplyToEnabled],width:"15em"
+                        },
+                        {type:_DYNSELECT_, ref:ZaDistributionList.A_zimbraPrefReplyToAddress, dataFetcherClass:ZaSearch,
+                            dataFetcherMethod:ZaSearch.prototype.dynSelectSearch,
+                            dataFetcherTypes:[ZaSearch.ACCOUNTS, ZaSearch.RESOURCES, ZaSearch.DLS],
+                            dataFetcherAttrs:[ZaItem.A_zimbraId, ZaItem.A_cn, ZaAccount.A_name, ZaAccount.A_displayname, ZaAccount.A_mail],
+                            label:ZaMsg.DLXV_ReplayToAddr,labelLocation:_LEFT_,
+                            emptyText: ZaMsg.DLXV_ReplayToAddrEmptyText,
+                            width:"35em", inputWidth:"35em", editable:true, forceUpdate:true,
+                            choices:new XFormChoices([], XFormChoices.OBJECT_LIST, "name", "name"),
+                            visibilityChecks:[[ZaItem.hasReadPermission, ZaDistributionList.A_zimbraPrefReplyToAddress]],
+                            enableDisableChangeEventSources:[ZaDistributionList.A_zimbraPrefReplyToEnabled],
+                            enableDisableChecks:[[XForm.checkInstanceValue,ZaDistributionList.A_zimbraPrefReplyToEnabled,"TRUE"],
+                            [ZaItem.hasWritePermission,ZaDistributionList.A_zimbraPrefReplyToAddress]],
+                            onChange: function(value, event, form){
+                                if (value instanceof ZaItem ) {
+                                    this.setInstanceValue(value.name);
+                                } else {
+                                    this.setInstanceValue(value);
+                                }
+                            }
+                        }
+                   ]
+                }
+			]
+		};
+		cases.push(case5);
 	}
 
     var headerItems = [{type:_AJX_IMAGE_, src:"Group_32", label:null, rowSpan:3},

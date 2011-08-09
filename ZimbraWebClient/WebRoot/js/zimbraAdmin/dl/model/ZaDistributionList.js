@@ -75,6 +75,10 @@ ZaDistributionList.A2_nonMemberList = "nonMemberList";
 ZaDistributionList.A2_alias_selection_cache = "alias_selection_cache";
 ZaDistributionList.A_isAdminGroup = "zimbraIsAdminGroup" ;
 
+ZaDistributionList.A_zimbraPrefReplyToAddress = "zimbraPrefReplyToAddress";
+ZaDistributionList.A_zimbraPrefReplyToDisplay = "zimbraPrefReplyToDisplay";
+ZaDistributionList.A_zimbraPrefReplyToEnabled = "zimbraPrefReplyToEnabled";
+
 ZaDistributionList.getDLStatus = function (status) {
     if (status == "enabled") {
         return ZaMsg.DL_Status_enabled ;
@@ -939,7 +943,9 @@ ZaDistributionList.myXModel = {
 		{id:(ZaAccount.A2_indirectMemberList + "_offset"), type:_LIST_},	
 		{id:(ZaAccount.A2_nonMemberList + "_more"), type:_LIST_},
 		{id:(ZaAccount.A2_nonMemberList + "_offset"), type:_LIST_},
-		{id:ZaDistributionList.A2_alias_selection_cache, type:_LIST_}
-		
+		{id:ZaDistributionList.A2_alias_selection_cache, type:_LIST_},
+        {id:ZaDistributionList.A_zimbraPrefReplyToEnabled, type:_ENUM_, ref:"attrs/"+ZaDistributionList.A_zimbraPrefReplyToEnabled, choices:ZaModel.BOOLEAN_CHOICES},
+		{id:ZaDistributionList.A_zimbraPrefReplyToDisplay, type:_STRING_, ref:"attrs/"+ZaDistributionList.A_zimbraPrefReplyToDisplay},
+        {id:ZaDistributionList.A_zimbraPrefReplyToAddress, type:_EMAIL_ADDRESS_, ref:"attrs/"+ZaDistributionList.A_zimbraPrefReplyToAddress}
 	]
 };
