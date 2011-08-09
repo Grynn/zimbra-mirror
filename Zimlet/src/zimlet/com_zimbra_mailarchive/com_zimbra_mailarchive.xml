@@ -1,0 +1,5 @@
+<zimlet name="com_zimbra_mailarchive" version="0.1" label="${msg.label}" description="${msg.description)" target="main view-window">
+  <include>mailarchive.js</include>
+  <includeCSS>mailarchive.css</includeCSS>
+  <handlerObject>ZmArchiveZimlet</handlerObject>
+</zimlet>
