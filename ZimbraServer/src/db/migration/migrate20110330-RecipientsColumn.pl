@@ -19,13 +19,13 @@ use Migrate;
 
 ########################################################################################################################
 
-Migrate::verifySchemaVersion(68);
+Migrate::verifySchemaVersion(67);
 
 foreach my $group (Migrate::getMailboxGroups()) {
   addRecipientsColumn($group);
 }
 
-Migrate::updateSchemaVersion(68, 69);
+Migrate::updateSchemaVersion(67, 68);
 
 exit(0);
 
