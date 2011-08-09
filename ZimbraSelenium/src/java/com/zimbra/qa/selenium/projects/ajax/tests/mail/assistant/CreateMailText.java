@@ -33,7 +33,7 @@ public class CreateMailText extends AjaxCommonTest {
 		
 		// Create the message data to be sent
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		String command = "mail subject \"" + subject + "\" to: "+ ZimbraAccount.AccountA().EmailAddress + " body: foo";
+		String command = "mail \"" + subject + "\" to: "+ ZimbraAccount.AccountA().EmailAddress + " body: foo";
 
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
