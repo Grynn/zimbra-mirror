@@ -31,7 +31,7 @@ endif
 
 MODULE_BUILD	:= D/DA/DAGOLDEN/Module-Build-0.3607.tar.gz
 
-ifeq (RHEL4,$(findstring RHEL5,$(BUILD_PLATFORM)))
+ifeq (RHEL4,$(findstring RHEL4,$(BUILD_PLATFORM)))
 	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
 endif
 
