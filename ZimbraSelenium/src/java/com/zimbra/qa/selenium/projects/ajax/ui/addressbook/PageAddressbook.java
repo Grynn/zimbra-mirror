@@ -11,6 +11,7 @@ import org.apache.log4j.LogManager;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogAssistant;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
@@ -411,12 +412,18 @@ public class PageAddressbook extends AbsTab {
 			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);	
 		}
 		else if (shortcut == Shortcut.S_MOVE) {
-			page = new DialogMove(MyApplication, this);	
-			
+			page = new DialogMove(MyApplication, this);				
 		} 
+		else if ( shortcut == Shortcut.S_ASSISTANT ) {			
+			page = new DialogAssistant(MyApplication, ((AppAjaxClient) MyApplication).zPageAddressbook);
+		}
+	    else {		
+		   throw new HarnessException("No logic for shortcut : "+ shortcut);
+	    }
 		
 		// Click it
-		zKeyboardTypeString(shortcut.getKeys());	
+		//zKeyboardTypeString(shortcut.getKeys());	
+		zKeyboard.zTypeCharacters(shortcut.getKeys());
 		
 		zWaitForBusyOverlay();
 		
