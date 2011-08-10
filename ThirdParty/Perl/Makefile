@@ -32,11 +32,13 @@ endif
 MODULE_BUILD	:= D/DA/DAGOLDEN/Module-Build-0.3607.tar.gz
 MODULE_WWW	:= LWP::Protocol::https
 MODULE_NETADDR_IP	:= NetAddr::IP
+MODULE_EXTUTIL_MAKEMAKER	:= M/MS/MSCHWERN/ExtUtils-MakeMaker-6.58.tar.gz
 
 ifeq (RHEL4,$(findstring RHEL4,$(BUILD_PLATFORM)))
 	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
 	MODULE_WWW	:= G/GA/GAAS/libwww-perl-5.837.tar.gz
 	MODULE_NETADDR_IP	:= M/MI/MIKER/NetAddr-IP-4.040.tar.gz
+	MODULE_EXTUTIL_MAKEMAKER	:= M/MS/MSCHWERN/ExtUtils-MakeMaker-6.56.tar.gz
 endif
 
 ifeq (RHEL5,$(findstring RHEL5,$(BUILD_PLATFORM)))
@@ -99,6 +101,7 @@ endif
 PRE_PERL_LIBS	:= \
 	Tree::DAG_Node \
 	Sub::Uplevel \
+	Test::Simple \
 	Test::Exception \
 	Test::Warn
 
@@ -107,8 +110,12 @@ PERL_LIBS 	:= \
 	Scalar::Util \
 	IO::Socket::SSL \
 	Socket6 \
+	$(MODULE_EXTUTIL_MAKEMAKER) \
 	DBI \
+	Compress::Raw::Bzip2 \
+	IO::Compress \
 	IO::Zlib \
+	Carp::Clan \
 	Bit::Vector \
 	HTML::Tagset \
 	HTML::Parser \
@@ -121,9 +128,18 @@ PERL_LIBS 	:= \
 	IO::Stringy \
 	E/ER/ERYQ/MIME-Lite-2.117.tar.gz \
 	$(MODULE_BUILD) \
+	Date::Parse \
+	Pod::Escapes \
+	Pod::Simple \
+	Test::Pod \
 	Mail::Mailer \
 	Convert::BinHex \
+	Test::Tester \
+	Test::NoWarnings \
+	Test::Deep \
 	D/DS/DSKOLL/MIME-tools-5.502.tar.gz \
+	Task::Weaken \
+	Class::Inspector \
 	SOAP::Lite \
 	Net::Telnet \
 	Config::IniFiles \
@@ -131,6 +147,9 @@ PERL_LIBS 	:= \
 	Cache::FastMmap \
 	Device::SerialPort \
 	Date::Calc \
+	Devel::Symdump \
+	Pod::Coverage \
+	Test::Pod::Coverage \
 	S/SB/SBECK/Date-Manip-5.56.tar.gz \
 	Date::Parse \
 	Time::HiRes \
@@ -147,6 +166,7 @@ PERL_LIBS 	:= \
 	Convert::TNEF \
 	Convert::UUlib \
 	Net::IP \
+	Digest::SHA \
 	Net::DNS \
 	File::Tail \
 	File::Temp \
@@ -156,7 +176,6 @@ PERL_LIBS 	:= \
 	Getopt::Easy \
 	Crypt::SaltedHash \
 	Archive::Zip  \
-	Digest::SHA \
 	Error \
 	Mail::DKIM \
 	K/KH/KHAMPTON/XML-SAX-Base-1.04.tar.gz \
