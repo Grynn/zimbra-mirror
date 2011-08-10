@@ -244,11 +244,11 @@
     <Resource Include="View\Images\Userp.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="View\Images\zimbraLogo.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="View\Images\ConfigDest.jpg" />
     <Resource Include="View\Images\ConfigSource.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\Images\AppBanner.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

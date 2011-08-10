@@ -45,16 +45,16 @@
             <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Border Name="headerBorder" Grid.Row="0" Grid.Column="1" Background="WhiteSmoke"  BorderThickness="2,4,4,2" BorderBrush="DarkSlateGray">
+        <Border Name="headerBorder" Grid.Row="0" Grid.Column="1" Background="Black" BorderThickness="2,4,4,2" BorderBrush="DarkSlateGray">
             <Grid Name="headerGrid" Grid.Row="0" Grid.Column="1" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
-                <Image Grid.Row="0" HorizontalAlignment="Left"  Margin="10,0,0,5" Name="image0" Stretch="None" VerticalAlignment="Center" Source="/MVVM;component/View/Images/zimbraLogo.png" />
-                <TextBlock Grid.Row="0" HorizontalAlignment="Center" Margin="-5,0,0,5" Name="tbAppTitle" Text="Zimbra Migration" VerticalAlignment="Center" Foreground="Crimson" FontSize="18" FontWeight="Bold" FontFamily="Maiandra GD" FontStyle="Italic" />
-                <TextBlock Grid.Row="0" HorizontalAlignment="Right" Margin="0,0,15,5" Name="tbAppBuildnum" Text="{Binding Path=BuildNum}" VerticalAlignment="Center" Foreground="Crimson" FontSize="18" FontWeight="Bold" FontFamily="Maiandra GD" FontStyle="Italic" />
+                <Image Grid.Row="0" HorizontalAlignment="Left"  Margin="0,2,0,5" Name="image0" Stretch="None" VerticalAlignment="Center" Source="/MVVM;component/View/Images/AppBanner.png" />
+                <TextBlock Grid.Row="0" HorizontalAlignment="Center" Margin="-5,0,0,5" Name="tbAppTitle" Text="Migration" VerticalAlignment="Center" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="Lucida Bright" FontStyle="Normal" />
+                <TextBlock Grid.Row="0" HorizontalAlignment="Right" Margin="0,0,15,5" Name="tbAppBuildnum" Text="{Binding Path=BuildNum}" VerticalAlignment="Center" Foreground="White" FontSize="16" FontWeight="Bold" FontFamily="Lucida Bright" FontStyle="Normal" />
             </Grid>
         </Border>
 
