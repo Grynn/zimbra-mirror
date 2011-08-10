@@ -953,6 +953,13 @@ ZaZimbraAdmin.isGlobalAdmin = function () {
             && (ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE'));
 }
 
+ZaZimbraAdmin.hasGlobalDomainListAccess = function () {
+    return (ZaZimbraAdmin.isGlobalAdmin() || ZaDomain.globalRights[ZaDomain.RIGHT_LIST_DOMAIN]);
+}
+
+ZaZimbraAdmin.hasGlobalCOSSListAccess = function () {
+	return (ZaZimbraAdmin.isGlobalAdmin() || ZaCos.globalRights[ZaCos.RIGHT_LIST_COS]);
+}
 
 ZaAboutDialog = function(parent, className, title, w, h) {
 	if (arguments.length == 0) return;

@@ -36,7 +36,7 @@ ZaController.changeActionsStateMethods["ZaCosListController"] = new Array();
 
 ZaCosListController.prototype.show = function (doPush,openInNewTab) {
 
-    if(!ZaZimbraAdmin.isGlobalAdmin() && this._currentQuery == "") {
+    if(!ZaZimbraAdmin.hasGlobalCOSSListAccess() && this._currentQuery == "") {
         var cosNameList = ZaApp.getInstance()._cosNameList;
         if(!cosNameList || !(cosNameList instanceof Array) || cosNameList.length == 0) {
             this._list = new ZaItemList(ZaCos);

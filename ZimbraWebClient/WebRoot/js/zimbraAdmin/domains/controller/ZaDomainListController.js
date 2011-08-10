@@ -38,7 +38,7 @@ ZaController.changeActionsStateMethods["ZaDomainListController"] = new Array();
 
 ZaDomainListController.prototype.show = function (doPush,openInNewTab) {
 
-    if(!ZaZimbraAdmin.isGlobalAdmin() && this._currentQuery == "") {
+    if(!ZaZimbraAdmin.hasGlobalDomainListAccess() && this._currentQuery == "") {
         var domainNameList = ZaApp.getInstance()._domainNameList;
         if(domainNameList && (domainNameList instanceof Array) && domainNameList.length > 0) {
             for(var i = 0; i < domainNameList.length; i++)

@@ -127,7 +127,7 @@ ZaOverviewPanelController.prototype.searchDomains = function() {
 	
 //	domainListController._currentQuery = ZaDomain.LOCAL_DOMAIN_QUERY;
     domainListController._currentQuery = "";
-    if(!ZaZimbraAdmin.isGlobalAdmin()) {
+    if(!ZaZimbraAdmin.hasGlobalDomainListAccess()) {
         var domainNameList = ZaApp.getInstance()._domainNameList;
         if(!domainNameList || !(domainNameList instanceof Array) || domainNameList.length == 0) {
             ZaApp.getInstance()._domainList =  new ZaItemList(ZaDomain);
@@ -406,7 +406,7 @@ function() {
         }
     }
 
-        if(!ZaZimbraAdmin.isGlobalAdmin()) {
+        if(!ZaZimbraAdmin.hasGlobalCOSSListAccess()) {
                var domainNamelist = ZaDomain.getEffectiveDomainList(ZaZimbraAdmin.currentAdminAccount.id);
                ZaApp.getInstance()._domainNameList = domainNamelist;
 
