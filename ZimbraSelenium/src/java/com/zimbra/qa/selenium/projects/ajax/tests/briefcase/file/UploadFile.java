@@ -55,19 +55,18 @@ public class UploadFile extends AjaxCommonTest {
 
 		account.soapSelectNode("//mail:SaveDocumentResponse", 1);
 
-		// Verify file name through SOAP
-		// import from soap
+		// search the uploaded file
 		app.zGetActiveAccount().soapSend(
 				"<SearchRequest xmlns='urn:zimbraMail' types='document'>"
 						+ "<query>" + fileName + "</query>"
 						+ "</SearchRequest>");
 
+		// Verify file name through SOAP
 		String name = account.soapSelectValue("//mail:doc", "name");
-		String id = account.soapSelectValue("//mail:doc", "id");
-		
 		ZAssert.assertEquals(name, fileName, "Verify file name through SOAP");
 		
 		//delete file upon test completion
+		String id = account.soapSelectValue("//mail:doc", "id");
 		app.zPageBriefcase.deleteFileById(id);
 	}
 

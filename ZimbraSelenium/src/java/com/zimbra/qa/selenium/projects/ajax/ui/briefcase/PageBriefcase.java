@@ -1014,6 +1014,11 @@ public class PageBriefcase extends AbsTab {
 				optionLocator = "css=td#zmi__Briefcase__CHECKIN_title:contains('Check In File')";
 
 				page = new DialogCheckInFile(MyApplication, this);
+			} else if (option == Button.O_DISCARD_CHECK_OUT) {
+
+				optionLocator = "css=td#zmi__Briefcase__DISCARD_CHECKOUT_title:contains('Discard Check Out')";
+
+				page = null;
 			} else {
 				throw new HarnessException("implement action: " + action
 						+ " option:" + option);
