@@ -337,7 +337,11 @@ public abstract class AbsPage extends AbsSeleniumObject {
 
 		    	} else {
 		    	   for (char c : characters.toCharArray()) {
-		    	      type(c);
+		    	      try {
+		    		   type(c);
+		    	      }catch (Exception e) {
+						e.printStackTrace();
+					}
 		    	   }
 		    	}
 		    	
@@ -421,8 +425,10 @@ public abstract class AbsPage extends AbsSeleniumObject {
 		        case '^': doType(KeyEvent.VK_CIRCUMFLEX); break;
 		        case '&': doType(KeyEvent.VK_AMPERSAND); break;
 		        case '*': doType(KeyEvent.VK_ASTERISK); break;
-		        case '(': doType(KeyEvent.VK_LEFT_PARENTHESIS); break;
-		        case ')': doType(KeyEvent.VK_RIGHT_PARENTHESIS); break;
+		        //case '(': doType(KeyEvent.VK_LEFT_PARENTHESIS); break;
+		        // case ')': doType(KeyEvent.VK_RIGHT_PARENTHESIS); break;
+		        case '(': doType(KeyEvent.VK_SHIFT,KeyEvent.VK_9); break;
+		        case ')': doType(KeyEvent.VK_SHIFT,KeyEvent.VK_0); break;		      
 		       // case '_': doType(KeyEvent.VK_UNDERSCORE); break;
 		        case '_': doType(KeyEvent.VK_SHIFT, KeyEvent.VK_MINUS); break;
 		        
