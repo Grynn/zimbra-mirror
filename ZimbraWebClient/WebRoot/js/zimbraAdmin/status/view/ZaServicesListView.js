@@ -108,7 +108,7 @@ function(html, idx, item, onlyServiceInfo, serviceName) {
 				html[idx++] = "><table cellpadding=0 cellspacing=0 border=0 style='table-layout:fixed;'>";
 				html[idx++] = "<tr>";
 
-				html[idx++] = "<td width=\"12px\" aligh=left onclick=\'javascript:ZaServicesListView.expand(event, this)\'>";
+				html[idx++] = "<td width=\"14px\" aligh=left onclick=\'javascript:ZaServicesListView.expand(event, this)\'>";
 				html[idx++] = AjxImg.getImageHtml("NodeExpanded");
 				html[idx++] = "</td>";
 			
@@ -121,7 +121,7 @@ function(html, idx, item, onlyServiceInfo, serviceName) {
 					html[idx++] = "&nbsp;";
 				}
 				html[idx++] = "</td>";			
-
+                                html[idx++] = "<td>";   
 				html[idx++] = AjxStringUtil.htmlEncode(item.name);
 
 				html[idx++] = "</td>";
