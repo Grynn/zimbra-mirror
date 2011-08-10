@@ -347,6 +347,7 @@ function() {
 
 		AjxEnv.browser = "[unknown]";
 		if (AjxEnv.isOpera) 				{	AjxEnv.browser = "OPERA";	}
+		else if (AjxEnv.isChrome)			{	AjxEnv.browser = "GC" + browserVersion;	}
 		else if (AjxEnv.isSafari3up)		{	AjxEnv.browser = "SAF3";	}
 		else if (AjxEnv.isSafari)			{	AjxEnv.browser = "SAF";		}
 		else if (AjxEnv.isCamino)			{	AjxEnv.browser = "CAM";		}
