@@ -969,10 +969,10 @@ ZaController.prototype._showAccountsView = function (defaultType, ev) {
 		//var domainList = [];
 		var cnt = domainList.length;
 		if(cnt>0) {
-			queryChunks.push("(");	
+			queryChunks.push("(|");
 		}
+		
 		for(var i = 0; i < cnt; i++) {
-			queryChunks.push("|");
 			queryChunks.push("(zimbraMailDeliveryAddress=*@");
 			queryChunks.push(domainList[i].name);
 			queryChunks.push(")");
