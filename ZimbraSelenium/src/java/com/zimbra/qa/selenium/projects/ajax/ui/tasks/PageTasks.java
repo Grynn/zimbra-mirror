@@ -20,8 +20,10 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogAssistant;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.PageMain;
 
 
@@ -744,7 +746,7 @@ public class PageTasks extends AbsTab {
 	}
 	@Override
 	public AbsPage zKeyboardShortcut(Shortcut shortcut) throws HarnessException {
-
+		String keyCode = "";
 		if (shortcut == null)
 			throw new HarnessException("Shortcut cannot be null");
 
@@ -757,9 +759,26 @@ public class PageTasks extends AbsTab {
 			// "New Message" shortcuts result in a compose form opening
 			//page = new FormMailNew(this.MyApplication);
 			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageTasks);
+			keyCode = "78,84";
+			
+		}else if(shortcut== Shortcut.S_ESCAPE){
+			page = new DialogWarning(
+					DialogWarning.DialogWarningID.SaveTaskChangeMessage,
+					this.MyApplication,
+					((AppAjaxClient)this.MyApplication).zPageTasks);	
+			
+			keyCode = "27";
+			
+		}else if ( shortcut == Shortcut.S_ASSISTANT ) {			
+			page = new DialogAssistant(MyApplication, ((AppAjaxClient) MyApplication).zPageTasks);
+			keyCode= "192";
+			
+		}else{
+			throw new HarnessException("implement shortcut: " + shortcut);
 		}
-
-		zKeyboard.zTypeCharacters(shortcut.getKeys());
+		
+		zKeyDown(keyCode);
+		//zKeyboard.zTypeCharacters(shortcut.getKeys());
 
 		// If the app is busy, wait for it to become active
 		this.zWaitForBusyOverlay();
