@@ -52,5 +52,32 @@ namespace CssLib
             rcvdDate = RcvdDate;
         }
     }
+
+    public class ZimbraFolder
+    {
+        public string name;
+        public string parent;
+        public string view;
+        public string color;
+        public string flags;
+
+        public ZimbraFolder()
+        {
+            name = "";
+            parent = "";
+            view = "";
+            color = "";
+            flags = "";
+        }
+
+        public ZimbraFolder(string Name, string Parent, string View, string Color, string Flags)
+        {
+            name = Name;
+            parent = Parent;
+            view = View;
+            color = Color;
+            flags = Flags;
+        }
+    }
 }
 

@@ -31,6 +31,7 @@ namespace CssLib
         }
 
         // Parse Methods //////////////////
+        // [note that we don't have Parse methods for CreateContact, CreateFolder, etc.]
         private string ParseSoapFault(string rsperr)
         {
             if (rsperr.Length == 0)
@@ -233,6 +234,7 @@ namespace CssLib
             }
         }
 
+        // may not need this -- it's here anyway for now
         private void ParseAddMsg(string rsp, out string mID)
         {
             mID = "";
@@ -882,6 +884,70 @@ namespace CssLib
                 }
             }
 
+            return retval;
+        }
+
+        public void CreateFolderRequest(XmlWriter writer, ZimbraFolder folder, int requestId)
+        {
+            System.Type type = typeof(ZimbraContact);
+            writer.WriteStartElement("CreateFolderRequest", "urn:zimbraMail");
+            if (requestId != -1)
+            {
+                writer.WriteAttributeString("requestId", requestId.ToString());
+            }
+            writer.WriteStartElement("folder");
+            writer.WriteAttributeString("name", folder.name);
+            writer.WriteAttributeString("l", folder.parent);
+            if (folder.view.Length > 0)
+            {
+                writer.WriteAttributeString("view", folder.view);
+            }
+            if (folder.color.Length > 0)
+            {
+                writer.WriteAttributeString("color", folder.color);
+            }
+            if (folder.flags.Length > 0)
+            {
+                writer.WriteAttributeString("f", folder.flags);
+            }
+
+            writer.WriteEndElement();   // folder
+            writer.WriteEndElement();   // CreateFolderRequest
+        }
+
+        public int CreateFolder(ZimbraFolder folder)
+        {
+            lastError = "";
+            WebServiceClient client = new WebServiceClient
+            {
+                Url = ZimbraValues.GetZimbraValues().Url,
+                WSServiceType = WebServiceClient.ServiceType.Traditional
+            };
+
+            int retval = 0;
+
+            StringBuilder sb = new StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.OmitXmlDeclaration = true;
+            using (XmlWriter writer = XmlWriter.Create(sb, settings))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("soap", "Envelope", "http://www.w3.org/2003/05/soap-envelope");
+
+                WriteHeader(writer, true, true, true);
+
+                writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
+
+                CreateFolderRequest(writer, folder, -1);
+
+                writer.WriteEndElement();   // soap body
+                writer.WriteEndElement();   // soap envelope
+                writer.WriteEndDocument();
+            }
+
+            string rsp = "";
+            client.InvokeService(sb.ToString(), out rsp);
+            retval = client.status;
             return retval;
         }
 
