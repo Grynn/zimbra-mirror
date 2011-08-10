@@ -832,6 +832,87 @@ public class CreateAccount extends AjaxCommonTest {
             "Added account message is displayed");
    }
 
+   @Test(description="Failure in attempting to create duplicated gmail accounts", groups = { "functional" })
+   public void createDuplicatedGmailAccount() throws HarnessException {
+      // Adding the gmail account
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddGmailAccountThruUI();
+
+      // Trying to add the same gmail account
+      app.zPageAddNewAccount.zNavigateTo();
+      FormAddGmailAccount accountForm = (FormAddGmailAccount)app.zPageAddNewAccount.zDropDownListSelect(
+            DROP_DOWN_OPTION.GMAIL);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zSubmit();
+
+      // Verifying error message
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "account.ACCOUNT_EXISTS: email address already exists: ",
+            "Verify error message of wrong password");
+
+      app.zPageLogin.zNavigateTo();
+
+      // Verifying in login page, the first added account is still there
+      ZAssert.assertTrue(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDeleteButton),
+            "Delete account link exists");
+      ZAssert.assertTrue(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zBtnLoginDesktop),
+            "Launch Zimbra Dekstop Button exists");
+   }
+
+   @Test(description="Failure in attempting to create duplicated Yahoo! accounts", groups = { "functional" })
+   public void createDuplicatedYahooAccount() throws HarnessException {
+      // Adding the Yahoo! account
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddYahooAccountThruUI();
+
+      // Trying to add the same Yahoo! account
+      app.zPageAddNewAccount.zNavigateTo();
+      FormAddYahooAccount accountForm = (FormAddYahooAccount)app.zPageAddNewAccount.zDropDownListSelect(
+            DROP_DOWN_OPTION.YAHOO);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zSubmit();
+
+      // Verifying error message
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "account.ACCOUNT_EXISTS: email address already exists: ",
+            "Verify error message of wrong password");
+
+      app.zPageLogin.zNavigateTo();
+
+      // Verifying in login page, the first added account is still there
+      ZAssert.assertTrue(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDeleteButton),
+            "Delete account link exists");
+      ZAssert.assertTrue(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zBtnLoginDesktop),
+            "Launch Zimbra Dekstop Button exists");
+   }
+
+   @Test(description="Failure in attempting to create duplicated Zimbra accounts", groups = { "functional" })
+   public void createDuplicatedZimbraAccount() throws HarnessException {
+      // Adding the Zimbra account
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddZimbraAccountThruUI();
+
+      // Trying to add the same Zimbra account
+      app.zPageAddNewAccount.zNavigateTo();
+      FormAddZimbraAccount accountForm = (FormAddZimbraAccount)app.zPageAddNewAccount.zDropDownListSelect(
+            DROP_DOWN_OPTION.ZIMBRA);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zSubmit();
+
+      // Verifying error message
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "account.ACCOUNT_EXISTS: email address already exists: ",
+            "Verify error message of wrong password");
+
+      app.zPageLogin.zNavigateTo();
+
+      // Verifying in login page, the first added account is still there
+      ZAssert.assertTrue(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDeleteButton),
+            "Delete account link exists");
+      ZAssert.assertTrue(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zBtnLoginDesktop),
+            "Launch Zimbra Dekstop Button exists");
+   }
+
    @AfterMethod(alwaysRun=true)
    public void cleanUp() throws HarnessException {
       if (_sslIsModified) {
