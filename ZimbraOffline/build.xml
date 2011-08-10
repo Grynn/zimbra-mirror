@@ -800,6 +800,10 @@
 
     <antcall target="offline-make-dist-ext"/>
     <antcall target="offline-make-dist-ext-converter" />
+  	<!-- remove junit.jar -->
+    <delete>
+      <fileset dir="${dist.dir}" includes="**/junit*.jar"/>
+    </delete>
   </target>
 
   <macrodef name="set-assert-flag">
