@@ -30,9 +30,11 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
 endif
 
 MODULE_BUILD	:= D/DA/DAGOLDEN/Module-Build-0.3607.tar.gz
+MODULE_WWW	:= LWP::Protocol::https
 
 ifeq (RHEL4,$(findstring RHEL4,$(BUILD_PLATFORM)))
 	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
+	MODULE_WWW	:= G/GA/GAAS/libwww-perl-5.837.tar.gz
 endif
 
 ifeq (RHEL5,$(findstring RHEL5,$(BUILD_PLATFORM)))
@@ -113,7 +115,7 @@ PERL_LIBS 	:= \
 	Net::SMTP \
 	Proc::ProcessTable \
 	HTTP::Parser \
-	LWP::Protocol::https \
+	$(MODULE_WWW) \
 	IO::Stringy \
 	E/ER/ERYQ/MIME-Lite-2.117.tar.gz \
 	$(MODULE_BUILD) \
