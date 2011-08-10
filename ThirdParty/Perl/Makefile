@@ -29,10 +29,10 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
 	DEST_BIN_DIR  :=	$(DEST_DIR)/bin
 endif
 
-MODULE_BUILD	:= D/DA/DAGOLDEN/Module-Build-0.3607.tar.gz
+MODULE_BUILD	:= Module::Build
 MODULE_WWW	:= LWP::Protocol::https
 MODULE_NETADDR_IP	:= NetAddr::IP
-MODULE_EXTUTIL_MAKEMAKER	:= M/MS/MSCHWERN/ExtUtils-MakeMaker-6.58.tar.gz
+MODULE_EXTUTIL_MAKEMAKER	:= ExtUtils::MakeMaker
 
 ifeq (RHEL4,$(findstring RHEL4,$(BUILD_PLATFORM)))
 	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
