@@ -70,6 +70,13 @@ public class DialogAssistant extends AbsDialog {
 			
 			// FALL THROUGH
 
+		}else if ( button == Button.B_MORE_DETAILS ) {			
+			
+			locator = buttonsTableLocator + " td[id^='More Details'] td[id$='_title']";
+			page = null; // TODO
+			
+			// FALL THROUGH
+
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}
