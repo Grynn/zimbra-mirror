@@ -69,6 +69,7 @@ public class Button {
 	public static final Button O_EDIT_LINK = new Button("O_EDIT_LINK");
 	public static final Button O_REVOKE_LINK = new Button("O_REVOKE_LINK");
 	public static final Button O_RESEND_LINK = new Button("O_RESEND_LINK");
+	public static final Button B_MORE_DETAILS = new Button("B_MORE_DETAILS");
 
 	// Zimbra Desktop's Accounts page
 	public static final Button B_VALIDATE_AND_SAVE = new Button("B_VALIDATE_AND_SAVE");
