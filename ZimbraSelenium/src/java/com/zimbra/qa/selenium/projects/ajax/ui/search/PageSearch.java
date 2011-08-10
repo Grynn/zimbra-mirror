@@ -6,6 +6,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui.search;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
+import java.util.*;
 
 
 /**
@@ -16,13 +17,38 @@ public class PageSearch extends AbsTab {
 
 	public static class Locators {
 		
-		public static final String zActiveLocator = "id=zb__Search__SEARCH";
+		public static final String zActiveLocator = "css=div#ztb_search";
 		
-		public static final String zSearchInput = "//input[@class='search_input']";
-		public static final String zSearchButton = "id=zb__Search__SEARCH_title";
+		public static final String zSearchInput = "css=input#zi_search_inputfield";
+		public static final String zSearchButton = "css=td#zb__Search__SAVE_left_icon";
 		
 	}
-	
+
+	private boolean zIsIncludeSharedItems=false;
+	private static HashMap<Button,String> imagesMap             = new HashMap<Button,String>();
+	private static HashMap<Button,String> imagesIncludeShareMap = new HashMap<Button,String>();
+	{	
+		imagesMap.put(Button.O_SEARCHTYPE_ALL,"ImgGlobe");
+		imagesIncludeShareMap.put(Button.O_SEARCHTYPE_ALL,"ImgGlobe");
+		
+		imagesMap.put(Button.O_SEARCHTYPE_EMAIL,"ImgMessage");
+		imagesIncludeShareMap.put(Button.O_SEARCHTYPE_EMAIL,"ImgSharedMailFolder");
+		
+		imagesMap.put(Button.O_SEARCHTYPE_CONTACTS,"ImgContact");
+		imagesIncludeShareMap.put(Button.O_SEARCHTYPE_CONTACTS,"ImgSharedContactsFolder");
+
+		imagesMap.put(Button.O_SEARCHTYPE_GAL,"ImgGAL");
+		imagesIncludeShareMap.put(Button.O_SEARCHTYPE_GAL,"ImgGAL");
+		
+		imagesMap.put(Button.O_SEARCHTYPE_APPOINTMENTS,"ImgAppointment");
+		imagesIncludeShareMap.put(Button.O_SEARCHTYPE_APPOINTMENTS,"ImgAppointment");
+		
+		imagesMap.put(Button.O_SEARCHTYPE_TASKS,"ImgTasksApp");
+		imagesIncludeShareMap.put(Button.O_SEARCHTYPE_TASKS,"ImgSharedTaskList");
+		
+		imagesMap.put(Button.O_SEARCHTYPE_FILES,"ImgDoc");
+		imagesIncludeShareMap.put(Button.O_SEARCHTYPE_FILES,"ImgDoc");		
+	}
 	
 	public PageSearch(AbsApplication application) {
 		super(application);
@@ -42,7 +68,7 @@ public class PageSearch extends AbsTab {
 			throw new HarnessException("Application is not active!");
 		
 
-		// Look for the Logout button
+		// Look for the search toolbar button
 		boolean present = sIsElementPresent(Locators.zActiveLocator);
 		if ( !present ) {
 			logger.debug("isActive() present = "+ present);
@@ -107,26 +133,23 @@ public class PageSearch extends AbsTab {
 		
 		if ( button == Button.B_SEARCH ) {
 			
-			locator = "css=div#zb__Search__SEARCH_left_icon";
+			locator = "css=div#ztb_search_searchButton";
 			page = null;
 			
 			// Make sure the button exists
-			if ( !this.sIsElementPresent(locator) )
+			if ( !sIsElementPresent(locator) )
 				throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
-			
-			// FALL THROUGH
 			
 		} else if ( button == Button.B_SEARCHSAVE ) {
 			
-			locator = "zb__Search__SAVE_title";
+			locator = "css=td#ztb_search_saveButton";
 			page = new DialogSaveSearch(MyApplication, this);
 			
 			// Make sure the button exists
-			if ( !this.sIsElementPresent(locator) )
+			if ( !sIsElementPresent(locator) )
 				throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
 			
-			// FALL THROUGH
-			
+		/*	IronMaiden does not support Advanced Search 
 		} else if ( button == Button.B_SEARCHADVANCED ) {
 			
 			locator = "zb__Search__ADV_title";
@@ -137,7 +160,7 @@ public class PageSearch extends AbsTab {
 				throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
 			
 			// FALL THROUGH
-			
+			*/
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}
@@ -150,10 +173,10 @@ public class PageSearch extends AbsTab {
 		//
 		
 		// Click it
-		this.zClick(locator);
+		sClick(locator);
 		
 		// If the app is busy, wait for it to become active
-		this.zWaitForBusyOverlay();
+		zWaitForBusyOverlay();
 		
 
 		// If page was specified, make sure it is active
@@ -189,27 +212,25 @@ public class PageSearch extends AbsTab {
 		//
 		
 		if ( pulldown == Button.B_SEARCHTYPE ) {
-
-			if ( option == Button.O_SEARCHTYPE_ALL ) {
-
-				pulldownLocator = "implement me";
-				optionLocator = "implement me";
-				page = null;
-				
+			pulldownLocator = "css=td#ztb_search_searchMenuButton";
+			
+			if ( option == Button.O_SEARCHTYPE_ALL ) {        
+				optionLocator = "css=div#zmi__Search__ANY";		
 			} else if ( option == Button.O_SEARCHTYPE_EMAIL ) {
-				throw new HarnessException("implement me!");
+				optionLocator = "css=div#zmi__Search__MAIL";		
 			} else if ( option == Button.O_SEARCHTYPE_CONTACTS ) {
-				throw new HarnessException("implement me!");
+				optionLocator = "css=div#zmi__Search__CONTACT";		
 			} else if ( option == Button.O_SEARCHTYPE_GAL ) {
-				throw new HarnessException("implement me!");
+				optionLocator = "css=div#zmi__Search__GAL";		
 			} else if ( option == Button.O_SEARCHTYPE_APPOINTMENTS ) {
-				throw new HarnessException("implement me!");
+				optionLocator = "css=div#zmi__Search__APPT";		
 			} else if ( option == Button.O_SEARCHTYPE_TASKS ) {
-				throw new HarnessException("implement me!");
+				optionLocator = "css=div#zmi__Search__TASK";		
 			} else if ( option == Button.O_SEARCHTYPE_FILES ) {
-				throw new HarnessException("implement me!");
+				optionLocator = "css=div#zmi__Search__BRIEFCASE_ITEM";		
 			} else if ( option == Button.O_SEARCHTYPE_INCLUDESHARED ) {
-				throw new HarnessException("implement me!");
+				optionLocator = "css=div#zmi__Search__SHARED";		
+				
 			} else {
 				throw new HarnessException("no logic defined for pulldown/option "+ pulldown +"/"+ option);
 			}
@@ -244,13 +265,20 @@ public class PageSearch extends AbsTab {
 				// If the app is busy, wait for it to become active
 				this.zWaitForBusyOverlay();
 				
-
+				if ( option == Button.O_SEARCHTYPE_INCLUDESHARED ) {
+				   zIsIncludeSharedItems = !zIsIncludeSharedItems; 
+				}
+				
 			}
 			
 			// If we click on pulldown/option and the page is specified, then
 			// wait for the page to go active
 			if ( page != null ) {
 				page.zWaitForActive();
+			}
+			
+			if (!zIsSearchType(option)) {
+				throw new HarnessException("Not able to change search type "+ option ); 
 			}
 			
 		}
@@ -290,7 +318,18 @@ public class PageSearch extends AbsTab {
 	}
 	
 
-
+    public boolean zIsSearchType(Button button) throws HarnessException
+    {
+    	String imageClass=null;
+        if (zIsIncludeSharedItems) {
+        	imageClass = imagesIncludeShareMap.get(button);
+        }
+        else {
+        	imageClass = imagesMap.get(button);
+        }
+            
+    	return sIsElementPresent("css=td#zb__Search__MENU_left_icon>div." + imageClass);
+    }
 	
 
 }
