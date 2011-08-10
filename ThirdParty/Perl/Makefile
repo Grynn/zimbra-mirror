@@ -113,7 +113,7 @@ PERL_LIBS 	:= \
 	$(MODULE_EXTUTIL_MAKEMAKER) \
 	DBI \
 	Compress::Raw::Bzip2 \
-	IO::Compress \
+	IO::Compress::Base \
 	IO::Zlib \
 	Carp::Clan \
 	Bit::Vector \
