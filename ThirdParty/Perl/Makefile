@@ -31,10 +31,12 @@ endif
 
 MODULE_BUILD	:= D/DA/DAGOLDEN/Module-Build-0.3607.tar.gz
 MODULE_WWW	:= LWP::Protocol::https
+MODULE_NETADDR_IP	:= NetAddr::IP
 
 ifeq (RHEL4,$(findstring RHEL4,$(BUILD_PLATFORM)))
 	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
 	MODULE_WWW	:= G/GA/GAAS/libwww-perl-5.837.tar.gz
+	MODULE_NETADDR_IP	:= M/MI/MIKER/NetAddr-IP-4.040.tar.gz
 endif
 
 ifeq (RHEL5,$(findstring RHEL5,$(BUILD_PLATFORM)))
@@ -161,7 +163,7 @@ PERL_LIBS 	:= \
 	XML::SAX::Expat \
 	XML::Simple \
 	IO::Socket::INET6 \
-	NetAddr::IP \
+	$(MODULE_NETADDR_IP) \
 	Net::DNS::Resolver::Programmable \
 	version \
 	Geography::Countries \
