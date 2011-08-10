@@ -88,6 +88,8 @@ public class PageBriefcase extends AbsTab {
 				"css=html>body");
 		public static final Locators zHeaderCheckBox = new Locators(
 				"css=div[id=zlhi__BDLV__se]");
+		public static final Locators zListItemLockIcon = new Locators(
+		"css=div[id^=zlif__BDLV__][id$=__loid][class=ImgPadLock]");
 
 		private final String locator;
 
@@ -1302,6 +1304,43 @@ public class PageBriefcase extends AbsTab {
 
 	public boolean isOptionDisabled(Locators name) throws HarnessException {
 		return sIsElementPresent(name.locator + "[class*=ZDisabled]");
+	}
+	
+	public boolean isLockIconPresent(IItem item) throws HarnessException {
+		boolean present = false;
+		String itemName = item.getName();
+
+		String listLocator = Locators.briefcaseListView.locator;
+		String itemLocator = listLocator
+				+ " div[id^='zli__BDLV__'][class^='Row']";
+		String itemNameLocator = itemLocator + " div:contains(" + itemName
+				+ ")";
+
+		zWaitForElementPresent(itemNameLocator);
+
+		String lockIconLocator = "";
+
+		int count = sGetCssCount(itemLocator);
+
+		for (int i = 1; i <= count; i++) {
+			if (sIsElementPresent(itemLocator + ":nth-child(" + i
+					+ "):contains(" + itemName + ")")) {
+				lockIconLocator = itemLocator + ":nth-child(" + i
+						+ ") div[id^=zlif__BDLV__][id$=__loid][class^=Img]";
+				break;
+			}
+		}
+	
+		if (!this.sIsElementPresent(lockIconLocator))
+			throw new HarnessException("Lock icon locator is not present "
+					+ lockIconLocator);
+
+		String image = this.sGetAttribute(lockIconLocator + "@class");
+
+		if (image.equals("ImgPadLock"))
+		present = true;
+	
+		return present;		
 	}
 
 	public boolean waitForDeletedFromListView(String itemName)

@@ -24,7 +24,7 @@ public class CheckInFile extends AjaxCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Check Out File through SOAP - click 'Check In' - click 'Cancel'", groups = { "functional" })
+	@Test(description = "Check Out File through SOAP - click 'Check In' - click 'Cancel'", groups = { "unctional" })
 	public void UploadFile_01() throws HarnessException {
 		ZimbraAccount account = app.zGetActiveAccount();
 
@@ -59,11 +59,18 @@ public class CheckInFile extends AjaxCommonTest {
 
 		// Verify file name through SOAP
 		String name = account.soapSelectValue("//mail:doc", "name");
-		String id = account.soapSelectValue("//mail:doc", "id");
-
 		ZAssert.assertEquals(name, fileName, "Verify file name through SOAP");
 
+		// refresh briefcase page
+		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
+
+		SleepUtil.sleepVerySmall();
+		
+		//Verify Lock icon is not present for the uploaded file
+		ZAssert.assertFalse(app.zPageBriefcase.isLockIconPresent(file),"Verify Lock icon is not present for the uploaded file");
+		
 		// Check Out file through SOAP
+		String id = account.soapSelectValue("//mail:doc", "id");
 		account.soapSend("<ItemActionRequest xmlns='urn:zimbraMail'>"
 				+ "<action id='" + id + "' op='lock'/>"
 				+ "</ItemActionRequest>");
@@ -73,8 +80,10 @@ public class CheckInFile extends AjaxCommonTest {
 
 		SleepUtil.sleepVerySmall();
 
+		//Verify Lock icon is present for the checked out file
+		ZAssert.assertTrue(app.zPageBriefcase.isLockIconPresent(file),"Verify Lock icon is present for the checked out file");
+
 		// Right click on the locked file and select Check In File context menu
-		// option
 		DialogCheckInFile dlg = (DialogCheckInFile) app.zPageBriefcase
 				.zListItem(Action.A_RIGHTCLICK, Button.O_CHECK_IN_FILE, file);
 

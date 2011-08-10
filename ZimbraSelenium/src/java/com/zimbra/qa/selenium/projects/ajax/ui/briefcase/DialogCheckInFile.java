@@ -9,7 +9,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
  */
 public class DialogCheckInFile extends AbsDialog {
 	public static class Locators {
-		public static final String zDialogClass = "DwtDialog";
+		public static final String zDialogClass = "css=div.DwtDialog:contains(Check In File to Briefcase)";
 		public static final String zTitleCLass =  "DwtDialogTitle";
 		public static final String zTitle	 	= "Check In File to Briefcase";
 		public static final String zDialogButtonsClass = "DwtDialogButtonBar";
@@ -31,7 +31,7 @@ public class DialogCheckInFile extends AbsDialog {
 
 		logger.info(myPageName() + " zIsActive()");
 
-		String locator = "css=div."+ Locators.zDialogClass;
+		String locator = Locators.zDialogClass;
 		
 		if ( !this.sIsElementPresent(locator) ) {
 			return (false); // Not even present
@@ -54,8 +54,8 @@ public class DialogCheckInFile extends AbsDialog {
 		String locator = null;
 
 		if (button == Button.B_CANCEL) {
-			locator = "css=div[class='" + Locators.zDialogClass + "'] "
-			+ "div[class='" + Locators.zDialogButtonsClass
+			locator = Locators.zDialogClass
+			+ " div[class='" + Locators.zDialogButtonsClass
 			+ "'] td[class=ZWidgetTitle]:contains(Cancel)";			
 		} else {
 			throw new HarnessException("Button " + button + " not implemented");
