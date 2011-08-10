@@ -196,7 +196,21 @@ ZaCos.A_zimbraPasswordLockoutDuration = "zimbraPasswordLockoutDuration";
 ZaCos.A_zimbraPasswordLockoutMaxFailures = "zimbraPasswordLockoutMaxFailures";
 ZaCos.A_zimbraPasswordLockoutFailureLifetime = "zimbraPasswordLockoutFailureLifetime";
 
+//sharing
+ZaCos.A_zimbraLimitInternalShareLifetime = "zimbraLimitInternalShareLifetime"; 
+ZaCos.A_zimbraInternalShareLifetime = "zimbraInternalShareLifetime";
+ZaCos.A_zimbraLimitExternalShareLifetime = "zimbraLimitExternalShareLifetime"; 
+ZaCos.A_zimbraExternalShareLifetime = "zimbraExternalShareLifetime";
+ZaCos.A_zimbraExternalSharingEnabled = "zimbraExternalSharingEnabled";
+
+//file retension
+ZaCos.A_zimbraNumFileVersionsToKeep = "zimbraNumFileVersionsToKeep";
+ZaCos.A_zimbraUnaccessedFileLifetime = "zimbraUnaccessedFileLifetime";
+ZaCos.A_zimbraFileTrashLifetime = "zimbraFileTrashLifetime";
+ZaCos.A_zimbraFileSendExpirationWarning = "zimbraFileSendExpirationWarning";
+ZaCos.A_zimbraFileExpirationWarningDays = "zimbraFileExpirationWarningDays";
 // right
+ZaCos.RIGHT_LIST_COS = "listCos";
 ZaCos.RIGHT_LIST_ZIMLET = "listZimlet";
 ZaCos.RIGHT_GET_ZIMLET = "getZimlet";
 ZaCos.RIGHT_GET_HOSTNAME = "zimbraVirtualHostname";
@@ -255,6 +269,11 @@ function (by, val) {
 		}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetCosResponse;
 	this.initFromJS(resp.cos[0]);
+	this.attrs[ZaCos.A_zimbraLimitInternalShareLifetime] = "FALSE";
+	this.attrs[ZaCos.A_zimbraLimitExternalShareLifetime] = "FALSE";
+	this.attrs[ZaCos.A_zimbraExternalSharingEnabled] = "TRUE";
+	this.attrs[ZaCos.A_zimbraFileSendExpirationWarning] = "owner";
+	this.attrs[ZaCos.A_zimbraFileExpirationWarningDays] = 7;
 }
 ZaItem.loadMethods["ZaCos"].push(ZaCos.loadMethod);
 
@@ -717,7 +736,23 @@ ZaCos.myXModel = {
         {id:ZaCos.A_zimbraPasswordLockoutMaxFailures, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraPasswordLockoutMaxFailures, maxInclusive:2147483647, minInclusive:0},
         {id:ZaCos.A_zimbraPasswordLockoutFailureLifetime, type:_MLIFETIME_, ref:"attrs/"+ZaCos.A_zimbraPasswordLockoutFailureLifetime},
         //interop
-        {id:ZaCos.A_zimbraFreebusyExchangeUserOrg ,type:_STRING_, ref:"attrs/"+ZaCos.A_zimbraFreebusyExchangeUserOrg }
+        {id:ZaCos.A_zimbraFreebusyExchangeUserOrg ,type:_STRING_, ref:"attrs/"+ZaCos.A_zimbraFreebusyExchangeUserOrg },
+        
+        //sharing
+        {id:ZaCos.A_zimbraInternalShareLifetime, type:_MLIFETIME_, ref:"attrs/"+ZaCos.A_zimbraInternalShareLifetime},
+        {id:ZaCos.A_zimbraLimitInternalShareLifetime, types:_ENUM_, ref:"attrs/"+ZaCos.A_zimbraLimitInternalShareLifetime,  choices:ZaModel.BOOLEAN_CHOICES},
+        {id:ZaCos.A_zimbraExternalShareLifetime, type:_MLIFETIME_, ref:"attrs/"+ZaCos.A_zimbraExternalShareLifetime},
+        {id:ZaCos.A_zimbraLimitExternalShareLifetime, types:_ENUM_, ref:"attrs/"+ZaCos.A_zimbraLimitExternalShareLifetime,  choices:ZaModel.BOOLEAN_CHOICES},
+        {id:ZaCos.A_zimbraExternalSharingEnabled, types:_ENUM_, ref:"attrs/"+ZaCos.A_zimbraExternalSharingEnabled,  choices:ZaModel.BOOLEAN_CHOICES},
+        
+        //file retension
+        {id:ZaCos.A_zimbraFileTrashLifetime, type:_MLIFETIME_, ref:"attrs/"+ZaCos.A_zimbraFileTrashLifetime},
+        {id:ZaCos.A_zimbraUnaccessedFileLifetime, type:_MLIFETIME_, ref:"attrs/"+ZaCos.A_zimbraUnaccessedFileLifetime},
+        {id:ZaCos.A_zimbraNumFileVersionsToKeep, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraNumFileVersionsToKeep, maxInclusive:2147483647, minInclusive:0},
+        {id:ZaCos.A_zimbraFileSendExpirationWarning, type:_ENUM_, ref:"attrs/"+ZaCos.A_zimbraFileSendExpirationWarning,
+        	choices:["none", "owner", "all"]
+        },
+        {id:ZaCos.A_zimbraFileExpirationWarningDays, type:_MLIFETIME_, ref:"attrs/"+ZaCos.A_zimbraFileExpirationWarningDays}
     ]
 };
 
@@ -762,7 +797,7 @@ function () {
 	}	
 	
 }
-
+ZaCos.globalRights = {};
 ZaCos.getEffectiveCosList = function(adminId) {
 
     var soapDoc = AjxSoapDoc.create("GetAllEffectiveRightsRequest", ZaZimbraAdmin.URN, null);
@@ -787,7 +822,17 @@ ZaCos.getEffectiveCosList = function(adminId) {
         for(var i = 0; i < targets.length; i++) {
             if(targets[i].type != ZaItem.COS)
                 continue;
-            if(!targets[i].entries) continue;
+            if(!targets[i].entries && !targets[i].all) continue;
+            
+            if(targets[i].all) { 
+            	//we have access to all domains
+            	if(targets[i].all.length && targets[i].all[0] && targets[i].all[0].right && targets[i].all[0].right.length) {
+            		for(var j=0;j<targets[i].all[0].right.length;j++) {
+            			ZaCos.globalRights[targets[i].all[0].right[j].n] = true;
+            		}
+            	}
+            }
+            
             for(var j = 0; j < targets[i].entries.length; j++) {
                 var entry = targets[i].entries[j].entry;
                 for(var k = 0; k < entry.length; k++)
