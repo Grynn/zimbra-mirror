@@ -86,8 +86,6 @@ public class DialogAddVersionNotes extends AbsDialog {
 		
 		this.zClickAt(locator,"0,0");
 		
-		this.zWaitForBusyOverlay();
-
 		return (null);
 	}
 
