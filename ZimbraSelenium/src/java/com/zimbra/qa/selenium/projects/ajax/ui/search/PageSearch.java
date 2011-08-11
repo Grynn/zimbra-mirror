@@ -5,6 +5,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui.search;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import java.util.*;
 
@@ -132,8 +133,7 @@ public class PageSearch extends AbsTab {
 		//
 		
 		if ( button == Button.B_SEARCH ) {
-			
-			locator = "css=div#ztb_search_searchButton";
+			locator = "css=div#zb__Search__SEARCH>div#zb__Search__SEARCH_left_icon>div.ImgSearch2";
 			page = null;
 			
 			// Make sure the button exists
@@ -171,9 +171,9 @@ public class PageSearch extends AbsTab {
 		
 		// Default behavior, process the locator by clicking on it
 		//
-		
+	
 		// Click it
-		sClick(locator);
+		zClick(locator);
 		
 		// If the app is busy, wait for it to become active
 		zWaitForBusyOverlay();
@@ -313,7 +313,7 @@ public class PageSearch extends AbsTab {
 		tracer.trace("Search for the query "+ query);
 
 		
-		this.sType(Locators.zSearchInput, query);
+		this.zTypeKeys(Locators.zSearchInput, query);
 
 	}
 	
