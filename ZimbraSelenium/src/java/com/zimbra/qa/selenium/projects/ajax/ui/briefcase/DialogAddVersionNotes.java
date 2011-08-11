@@ -110,9 +110,7 @@ public class DialogAddVersionNotes extends AbsDialog {
 
 		this.sFocus(locator);
 		this.zClickAt(locator,"0,0");
-		this.sType(locator, notes);
-
-		this.zWaitForBusyOverlay();
+		this.sType(locator, notes);		
 	}
 
 	public void zDismissAddVersionNotesDlg(String parentWindow)
