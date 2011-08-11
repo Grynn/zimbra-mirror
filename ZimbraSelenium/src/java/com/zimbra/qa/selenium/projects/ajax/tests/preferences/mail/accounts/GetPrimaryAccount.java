@@ -1,7 +1,5 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.preferences.mail.accounts;
 
-import java.util.HashMap;
-
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.ui.Action;
@@ -25,7 +23,7 @@ public class GetPrimaryAccount extends AjaxCommonTest {
 			description = "View the accounts preference page shows the default primary account",
 			groups = { "functional" }
 			)
-	public void GetPrimaryAccount() throws HarnessException {
+	public void GetPrimaryAccount_01() throws HarnessException {
 
 		
 		// Navigate to preferences -> notifications
