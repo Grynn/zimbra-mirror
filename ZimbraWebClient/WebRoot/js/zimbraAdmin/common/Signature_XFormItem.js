@@ -69,7 +69,7 @@ Signature_XFormItem.prototype.items = [
 			newVal["content"] = contentVal;
 			this.getForm().itemChanged(this.getParentItem(), newVal, event);
 		}
-	},
+	}/*,  Comment it but not delete for it might be used in future
     {ref:".", type:_OSELECT1_, label:ZaMsg.Dlg_SignatureType,
         msgName:ZaMsg.Dlg_SignatureType, labelLocation:_LEFT_,labelCssStyle:"width:194px",
         choices:Signature_XFormItem.typeChoice,
@@ -89,5 +89,5 @@ Signature_XFormItem.prototype.items = [
             newVal["type"] = typeVal;
             this.getForm().itemChanged(this.getParentItem(), newVal, event);
         }
-    }
+    }*/
 ];
