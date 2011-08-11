@@ -102,6 +102,31 @@ saveConfigKey() {
   fi
 }
 
+cleanConfigKey() {
+  local key=$1
+  local location=$2
+  if [ $location = "global" ]; then
+    local zmprov_opts="mcf"
+  elif [ $location = "server" ]; then
+    local zmprov_opts="ms ${zimbra_server_hostname}"
+  elif [ $location = "domain" ]; then
+    local domain=$3
+    local zmprov_opts="md ${domain}"
+  else 
+    echo "Unknown config section $location"
+    return
+  fi
+
+  echo -n "** Clean $location config key $key..."
+  su - zimbra -c "${zimbra_home}/bin/zmprov -m -l -- ${zmprov_opts} ${key} \"\" 2> /dev/null"
+  if [ $? = 0 ]; then
+    echo "done."
+  else
+    echo "failed."
+  fi
+}
+
+
 loadConfigKey() {
   local key=$1
   local file=$2
@@ -189,6 +214,29 @@ saveClientCertToLdap() {
   saveConfigKey "zimbraReverseProxyClientCertCA" ${current_crt} "domain" ${domain}
 }
 
+cleanClientCertFromLdap() {
+  target=$1
+  if [ x"$target" = "xglobal" ]; then
+    cleanConfigKey "zimbraReverseProxyClientCertCA" "global"
+    return
+  fi
+
+  if [ x"$target" = "xserver" ]; then
+    cleanConfigKey "zimbraReverseProxyClientCertCA" "server"
+    return
+  fi
+
+  domain=$target
+  
+  if [ x"$domain" = "x" ]; then
+    echo "$ERROR_PREFIX Domain must be specified."
+    return
+  fi
+
+  cleanConfigKey "zimbraReverseProxyClientCertCA" "domain" ${domain}
+}
+
+
 getClientCertFromLdap() {
   domain=$1
   if [ x"$domain" = "x" ]; then
@@ -208,10 +256,13 @@ getClientCertFromLdap() {
 
 usage () {
   echo "Usage: "
-  echo "  $0 -help"
+  echo "  $0 -h | --help"
   echo "  $0 savecrt <domain> <cert file>"
   echo "  $0 savecrt server <cert file>"
   echo "  $0 savecrt global <cert file>"
+  echo "  $0 cleancrt <domain>"
+  echo "  $0 cleancrt server"
+  echo "  $0 cleancrt global"
   echo
   
   exit 1;
@@ -228,6 +279,8 @@ shift
 # check for valid usage
 if [ x"$ACTION" = "xsavecrt" ]; then
   saveClientCertToLdap $@
+elif [ x"$ACTION" = "xcleancrt" ]; then
+  cleanClientCertFromLdap $@
 elif [ x"$ACTION" = "x-help" -o x"$ACTION" = "xhelp" -o x"$ACTION" = "x-h" -o x"$ACTION" = "x--help" ]; then
   usage 
 else

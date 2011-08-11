@@ -11,7 +11,6 @@ server {
     ssl_certificate_key     ${ssl.key.default};
     ssl_verify_client       ${ssl.clientcertmode.default};
     ssl_verify_depth        ${ssl.clientcertdepth.default};
-${web.sso.certauth.default.enabled}     ssl_client_certificate  ${ssl.clientcertca.default};
 
     error_page 495 496 497 =403 /50x.html;
 
