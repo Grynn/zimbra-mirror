@@ -25,7 +25,6 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import java.io.IOException;
 import java.util.List;
-import org.apache.commons.lang.StringEscapeUtils;
 
 public class MoveFilterRuleTag extends ZimbraSimpleTag {
 
@@ -47,10 +46,8 @@ public class MoveFilterRuleTag extends ZimbraSimpleTag {
             ZFilterRules zrules = mbox.getIncomingFilterRules(true);
             List<ZFilterRule> rules = zrules.getRules();
             int index = -1;
-            // unescape the input filer rule name
-            String ruleName = StringEscapeUtils.unescapeXml(mName);
             for (int i=0; i < rules.size(); i++) {
-                if (rules.get(i).getName().equalsIgnoreCase(ruleName)) {
+                if (rules.get(i).getName().equalsIgnoreCase(mName)) {
                     index = i;
                     break;
                 }

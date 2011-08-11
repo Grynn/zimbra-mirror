@@ -26,8 +26,6 @@ import javax.servlet.jsp.JspTagException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang.StringEscapeUtils;
-
 
 public class DeleteFilterRuleTag extends ZimbraSimpleTag {
 
@@ -41,10 +39,8 @@ public class DeleteFilterRuleTag extends ZimbraSimpleTag {
             ZFilterRules rules = mbox.getIncomingFilterRules(true);
             List<ZFilterRule> newRules = new ArrayList<ZFilterRule>();
             boolean found = false;
-            // unescape the input filter rule name
-            String ruleName = StringEscapeUtils.unescapeXml(mName); 
             for (ZFilterRule rule: rules.getRules()) {
-                if (rule.getName().equalsIgnoreCase(ruleName)) {
+                if (rule.getName().equalsIgnoreCase(mName)) {
                     found = true;
                 } else {
                     newRules.add(rule);
