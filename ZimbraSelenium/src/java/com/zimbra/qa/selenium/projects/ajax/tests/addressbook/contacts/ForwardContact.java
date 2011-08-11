@@ -36,7 +36,7 @@ public class ForwardContact extends AjaxCommonTest  {
         FormMailNew formMail = (FormMailNew) app.zPageAddressbook.zToolbarPressButton(Button.B_FORWARD);
 
         //wait for attachment link present
-        for (int i=0; (i<10) && !app.zPageAddressbook.sIsElementPresent("css=div[id$=_attachments_div] div[class='ImgAttachment']") ; i++ , SleepUtil.sleepVerySmall());
+        for (int i=0; (i<20) && !app.zPageAddressbook.sIsElementPresent("css=div[id$=_attachments_div] div[class='ImgAttachment']") ; i++ , SleepUtil.sleepVerySmall());
    
         Assert.assertTrue(formMail.zHasAttachment(contactItem.fileAs + ".vcf"), "Verify there is  attachment named: " + contactItem.fileAs );
 
@@ -63,7 +63,7 @@ public class ForwardContact extends AjaxCommonTest  {
         FormMailNew formMail = (FormMailNew) app.zPageAddressbook.zToolbarPressButton(Button.B_FORWARD);
 
         //wait for attachment link present
-        for (int i=0; (i<10) && !app.zPageAddressbook.sIsElementPresent("css=div[id$=_attachments_div] div[class='ImgAttachment']") ; i++ , SleepUtil.sleepVerySmall());
+        for (int i=0; (i<20) && !app.zPageAddressbook.sIsElementPresent("css=div[id$=_attachments_div] div[class='ImgAttachment']") ; i++ , SleepUtil.sleepVerySmall());
    
         Assert.assertTrue(formMail.zHasAttachment(contactItem.fileAs + ".vcf"), "Verify there is  attachment named: " + contactItem.fileAs );
 
@@ -87,7 +87,7 @@ public class ForwardContact extends AjaxCommonTest  {
         
         
         //wait for attachment link present
-        for (int i=0; (i<10) && !app.zPageAddressbook.sIsElementPresent("css=div[id$=_attachments_div] div[class='ImgAttachment']") ; i++ , SleepUtil.sleepVerySmall());
+        for (int i=0; (i<20) && !app.zPageAddressbook.sIsElementPresent("css=div[id$=_attachments_div] div[class='ImgAttachment']") ; i++ , SleepUtil.sleepVerySmall());
         	
                 
         Assert.assertTrue(formMail.zHasAttachment(contactItem.fileAs + ".vcf"), "Verify there is  attachment named: " + contactItem.fileAs);
