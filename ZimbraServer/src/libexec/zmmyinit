@@ -126,6 +126,12 @@ echo '*' Loading schema ${zimbra_db_directory}/db.sql
 ${zimbra_home}/bin/mysql -u root --password= < \
     ${zimbra_db_directory}/db.sql
 
+if [ -f "${zimbra_db_directory}/create_sharing_database.sql" ];then
+  echo '*' Loading schema ${zimbra_db_directory}/create_sharing_database.sql 
+  ${zimbra_home}/bin/mysql -u root --password= < \
+      ${zimbra_db_directory}/create_sharing_database.sql
+fi
+
 echo '*' Loading version from ${zimbra_db_directory}/versions-init.sql
 ${zimbra_home}/bin/mysql -u root --password= < \
     ${zimbra_db_directory}/versions-init.sql
