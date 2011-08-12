@@ -59,10 +59,14 @@ ZaSettings.postInit = function() {
 ZaSettings.initRights = function () {
 	ZaSettings.ENABLED_UI_COMPONENTS=[];
 	ZaZimbraAdmin.currentAdminAccount = new ZaAccount();
-	if(ZaZimbraAdmin.currentAdminId) {
-		ZaZimbraAdmin.currentAdminAccount.load("id", ZaZimbraAdmin.currentAdminId,false,true);
-	} else {
-		ZaZimbraAdmin.currentAdminAccount.load("name", ZaZimbraAdmin.currentUserLogin,false,true);
+	try {
+		if(ZaZimbraAdmin.currentAdminId) {
+			ZaZimbraAdmin.currentAdminAccount.load("id", ZaZimbraAdmin.currentAdminId,false,true);
+		} else {
+			ZaZimbraAdmin.currentAdminAccount.load("name", ZaZimbraAdmin.currentUserLogin,false,true);
+		}
+	} catch (ex) {
+		//account may fail to load due to failing admin extensions 
 	}
 	if(AjxUtil.isEmpty(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents])) {
 		ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraAdminConsoleUIComponents] = [];
