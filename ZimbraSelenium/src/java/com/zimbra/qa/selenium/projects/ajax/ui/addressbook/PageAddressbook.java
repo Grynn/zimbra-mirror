@@ -809,8 +809,10 @@ public class PageAddressbook extends AbsTab {
 					page = null;	
 				}
 				
-				//For Chrome and Safari only
+				
+				//For Safari 
 				// as an alternative for sMouseOver(locator) 
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
@@ -822,11 +824,12 @@ public class PageAddressbook extends AbsTab {
                 if (  contactType.equals(ContactItem.IMAGE_CLASS) ) {
     				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
     				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-    				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+    				
 			    }
 				
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_RIGHT);
-				
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
+						
 			}
 			else if (option == Button.B_CONTACTGROUP) {
 				if (subOption == Button.O_NEW_CONTACTGROUP) {
