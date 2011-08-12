@@ -24,7 +24,7 @@ public class FormAddressPicker extends AbsForm {
 	 * Defines Selenium locators for various objects in {@link FormAddressPicker}
 	 */
 	public static class Locators {
-		
+		public static final String ZmContactPickerLocatorCSS = "css=div[id='ZmContactPicker']";
 	}
 
 	public static class Field {
@@ -91,18 +91,17 @@ public class FormAddressPicker extends AbsForm {
 		
 		if ( button == Button.B_OK ) {
 			
-			locator = "css=TODO#TODO";
+			locator = "css=div[id='ZmContactPicker_buttons'] td[id^='OK_'] td[id$='_title']";
 			page = null;
 			
 			// FALL THROUGH
 
 		} else if ( button == Button.B_CANCEL ) {
 
-			locator = "css=TODO#TODO";
+			locator = "css=div[id='ZmContactPicker_buttons'] td[id^='Cancel_'] td[id$='_title']";
 			page = null;
 			
 			// FALL THROUGH
-			throw new HarnessException("implement me");
 
 		} else if ( button == Button.B_TO ) {
 
@@ -110,7 +109,6 @@ public class FormAddressPicker extends AbsForm {
 			page = null;
 			
 			// FALL THROUGH
-			throw new HarnessException("implement me");
 
 		} else if ( button == Button.B_CC ) {
 
@@ -118,7 +116,6 @@ public class FormAddressPicker extends AbsForm {
 			page = null;
 			
 			// FALL THROUGH
-			throw new HarnessException("implement me");
 
 		} else if ( button == Button.B_BCC ) {
 
@@ -126,24 +123,20 @@ public class FormAddressPicker extends AbsForm {
 			page = null;
 			
 			// FALL THROUGH
-			throw new HarnessException("implement me");
 
 		} else if ( button == Button.B_REMOVE ) {
 
-			locator = "css=TODO#TODO";
+			locator = "css=td[id='ZmContactPicker_searchButton'] td[id$='_title']";
 			page = null;
 			
 			// FALL THROUGH
-			throw new HarnessException("implement me");
-
 			
 		} else if ( button == Button.B_SEARCH ) {
 
-			locator = "css=TODO#TODO";
+			locator = "css=td[id='ZmContactPicker_searchButton'] td[id$='_title']";
 			page = null;
 			
 			// FALL THROUGH
-			throw new HarnessException("implement me");
 			
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
@@ -206,9 +199,10 @@ public class FormAddressPicker extends AbsForm {
 		
 		if ( pulldown == Button.B_SHOW_NAMES_FROM ) {
 			
+			pulldownLocator = "css=td[id='ZmContactPicker_listSelect'] div[class='ImgSelectPullDownArrow']";
+
 			if ( option == Button.O_CONTACTS ) {
 				
-				pulldownLocator = "css=TODO#TODO";
 	            optionLocator = "css=TODO#TODO";
 				page = null;
 
@@ -216,7 +210,6 @@ public class FormAddressPicker extends AbsForm {
 
 			} else if ( option == Button.O_PERSONAL_AND_SHARED_CONTACTS ) {
 				
-				pulldownLocator = "css=TODO#TODO";
 	            optionLocator = "css=TODO#TODO";
 				page = null;
 
@@ -224,7 +217,6 @@ public class FormAddressPicker extends AbsForm {
 
 			} else if ( option == Button.O_GLOBAL_ADDRESS_LIST ) {
 				
-				pulldownLocator = "css=TODO#TODO";
 	            optionLocator = "css=TODO#TODO";
 				page = null;
 
@@ -289,7 +281,7 @@ public class FormAddressPicker extends AbsForm {
 		
 		if ( field == Field.Search ) {
 			
-			locator = "css=TODO#TODO";
+			locator = "css=input[id='ZmContactPicker_searchField']";
 			
 			// FALL THROUGH
 			
@@ -333,19 +325,17 @@ public class FormAddressPicker extends AbsForm {
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");
 		
-		
 		// https://bugzilla.zimbra.com/show_bug.cgi?id=62021
-		return (true);
+
+		String locator = Locators.ZmContactPickerLocatorCSS;
 		
-//		String locator = "css=div[id='TODO']";
-//		
-//		if ( !this.sIsElementPresent(locator) )
-//			return (false);
-//		
-//		if ( !this.zIsVisiblePerPosition(locator, 0, 0) )
-//			return (false);
-//		
-//		return (true);
+		if ( !this.sIsElementPresent(locator) )
+			return (false);
+		
+		if ( !this.zIsVisiblePerPosition(locator, 0, 0) )
+			return (false);
+		
+		return (true);
 		
 	}
 	
