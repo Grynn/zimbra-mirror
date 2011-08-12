@@ -20,6 +20,7 @@ import com.zimbra.client.ZFilterRule;
 import com.zimbra.client.ZMailbox;
 import com.zimbra.client.ZFilterRules;
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.StringUtil;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -46,8 +47,8 @@ public class ModifyFilterRuleTag extends ZimbraSimpleTag {
             boolean origFound = false;
 
             for (ZFilterRule rule: rules.getRules()) {
-
-                if (rule.getName().equalsIgnoreCase(mOriginalName)) {
+                String ruleName = StringUtil.escapeHtml(rule.getName());
+                if (ruleName.equalsIgnoreCase(mOriginalName)) {
                     newRules.add(mRule);
                     origFound = true;
                 } else if (rule.getName().equalsIgnoreCase(mRule.getName())) {

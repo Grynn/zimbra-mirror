@@ -15,6 +15,7 @@
 package com.zimbra.cs.taglib.tag.filter;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.taglib.bean.ZTagLibException;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.client.ZFilterRule;
@@ -47,7 +48,8 @@ public class MoveFilterRuleTag extends ZimbraSimpleTag {
             List<ZFilterRule> rules = zrules.getRules();
             int index = -1;
             for (int i=0; i < rules.size(); i++) {
-                if (rules.get(i).getName().equalsIgnoreCase(mName)) {
+                String ruleName = StringUtil.escapeHtml(rules.get(i).getName());
+                if (ruleName.equalsIgnoreCase(mName)) {
                     index = i;
                     break;
                 }

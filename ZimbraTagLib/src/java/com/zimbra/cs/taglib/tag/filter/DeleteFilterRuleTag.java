@@ -15,6 +15,7 @@
 package com.zimbra.cs.taglib.tag.filter;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.taglib.tag.ZimbraSimpleTag;
 import com.zimbra.cs.taglib.bean.ZTagLibException;
 import com.zimbra.client.ZFilterRule;
@@ -40,7 +41,8 @@ public class DeleteFilterRuleTag extends ZimbraSimpleTag {
             List<ZFilterRule> newRules = new ArrayList<ZFilterRule>();
             boolean found = false;
             for (ZFilterRule rule: rules.getRules()) {
-                if (rule.getName().equalsIgnoreCase(mName)) {
+                String ruleName = StringUtil.escapeHtml(rule.getName());
+                if (ruleName.equalsIgnoreCase(mName)) {
                     found = true;
                 } else {
                     newRules.add(rule);
