@@ -20,7 +20,7 @@ public class DialogError extends DialogWarning {
 		 * See: https://bugzilla.zimbra.com/show_bug.cgi?id=57207
 		 */
 		public static final DialogErrorID Zimbra = new DialogErrorID("ErrorDialog");
-		public static final DialogErrorID InvalidFolderName = new DialogErrorID("DWT124");;
+		public static final DialogErrorID InvalidFolderName = new DialogErrorID("ZmMsgDialog");;
 
 		protected DialogErrorID(String id) {
 			super(id);
