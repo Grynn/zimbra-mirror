@@ -39,7 +39,8 @@ public class Stafzmtlsctl extends StafServicePROCESS {
       if (!mode.equals(setting)) {
          logger.debug("Set the server access mode to " + setting);
          execute("zmtlsctl " + setting);
-         execute("zmconfigdctl reload");
+         //execute("zmconfigdctl reload");
+         SleepUtil.sleep(60000);
          execute("zmmailboxdctl restart");
          
          // Hardcoded 20 seconds sleep is required here, if this still doesn't work, then
