@@ -8,9 +8,11 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.TaskItem;
 import com.zimbra.qa.selenium.framework.ui.AbsDialog;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
 import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Field;
 
@@ -22,7 +24,7 @@ public class CancelTask extends AjaxCommonTest {
 		super.startingPage = app.zPageTasks;
 
 		super.startingAccountPreferences = new HashMap<String , String>() {{
-         put("zimbraPrefComposeFormat", "html");
+       // put("zimbraPrefComposeFormat", "html");
       }};
 	}
 	/**
@@ -50,6 +52,42 @@ public class CancelTask extends AjaxCommonTest {
 		//Click Cancel , to cancel the compose
 		AbsDialog warning = (AbsDialog) taskNew.zToolbarPressButton(Button.B_CANCEL);
 		ZAssert.assertNotNull(warning, "Verify the dialog is returned");
+
+		//Click No button of warning dialog
+		warning.zClickButton(Button.B_NO);
+
+		List<TaskItem> tasks = app.zPageTasks.zGetTasks();
+
+		TaskItem found = null;
+		for (TaskItem t : tasks) {
+			logger.info("Subject: looking for " + subject + " found: "
+					+ t.gSubject);
+			if (subject.equals(t.gSubject)) {
+				found = t;
+				break;
+			}
+		}
+
+		ZAssert.assertNull(found, "Verify the task is no longer present in task list");
+
+	}
+	@Test(description = "Cancel composing of new task using Esc shortcut", groups = { "functional" })
+	public void CancelTask_02() throws HarnessException {
+
+		Shortcut shortcut = Shortcut.S_ESCAPE;
+		String subject = "task" + ZimbraSeleniumProperties.getUniqueString();
+		String body = "taskbody" + ZimbraSeleniumProperties.getUniqueString();
+		
+		//Click NEW button
+		FormTaskNew taskNew = (FormTaskNew) app.zPageTasks.zToolbarPressButton(Button.B_NEW);
+		
+		//Fill out resulting form		
+		taskNew.zFillField(Field.Subject, subject);
+		taskNew.zFillField(Field.Body, body);
+				
+		//Click Escape shortcut 'Esc'	
+		DialogWarning warning =(DialogWarning)app.zPageTasks.zKeyboardShortcut(shortcut);
+		ZAssert.assertNotNull(warning, "Verify the dialog is opened");
 
 		//Click No button of warning dialog
 		warning.zClickButton(Button.B_NO);
