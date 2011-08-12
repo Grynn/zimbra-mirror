@@ -62,7 +62,7 @@ public class FormTaskNew extends AbsForm {
 		public static final Field Subject = new Field("Subject");
 		public static final Field Location = new Field("Location");
 		public static final Field Body = new Field("Body");
-		
+		public static final Field HtmlBody = new Field("HtmlBody");
 		
 		private String field;
 		private Field(String name) {
@@ -280,6 +280,19 @@ public class FormTaskNew extends AbsForm {
 		   }
 
 		} else if (field == Field.Body) {
+			locator = "css=textarea[id*='textarea_']";
+			this.sFocus(locator);
+			this.zClick(locator);
+			zKeyboard.zTypeCharacters(value);
+
+			if (!(sGetValue(locator).equalsIgnoreCase(value))) {
+				this.sFocus(locator);
+				this.zClick(locator);
+				sType(locator, value);
+			}
+			return;
+
+		}else if (field == Field.HtmlBody) {
 			locator = Locators.zBodyField;
 			try {
 			   sSelectFrame(Locators.zFrame);

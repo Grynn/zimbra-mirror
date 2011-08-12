@@ -511,7 +511,7 @@ public class PageTasks extends AbsTab {
 
 		// Default behavior, process the locator by clicking on it
 		//
-		this.zClick(locator);
+		this.zClickAt(locator,"");
 
 		// If the app is busy, wait for it to become active
 		this.zWaitForBusyOverlay();
