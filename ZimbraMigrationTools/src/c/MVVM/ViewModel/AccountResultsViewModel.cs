@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using MVVM.Model;
+using CssLib;
 using Misc;
 
 namespace MVVM.ViewModel
@@ -110,6 +111,18 @@ namespace MVVM.ViewModel
         public ObservableCollection<AccountResultsViewModel> AccountResultsList
         {
             get { return accountResultsList; }
+        }
+
+        private ObservableCollection<FolderInfo> accountFolderInfoList = new ObservableCollection<FolderInfo>();
+        public ObservableCollection<FolderInfo> AccountFolderInfoList
+        {
+            get { return accountFolderInfoList; }
+        }
+
+        private ObservableCollection<ProblemInfo> accountProblemsList = new ObservableCollection<ProblemInfo>();
+        public ObservableCollection<ProblemInfo> AccountProblemsList
+        {
+            get { return accountProblemsList; }
         }
 
         public int PBValue

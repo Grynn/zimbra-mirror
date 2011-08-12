@@ -158,8 +158,6 @@ namespace CssLib
             Acct.TotalNoItems = 1110;
             //Acct.TotalNoErrors = 0;   don't set these -- adds 1 when it shouldn't
             //Acct.TotalNoWarnings = 0;
-            //Acct.LastErrorMsg = "";
-            //Acct.LastWarningMsg = "";
              long count = 0;
 
              long totalCount = 0;
@@ -193,9 +191,20 @@ namespace CssLib
 
                 System.Threading.Thread.Sleep(2000);
                 Acct.migrationFolders[0].CurrentCountOFItems = Acct.migrationFolders[0].CurrentCountOFItems + 20;
+
+                if (Acct.Accountnum == 0)
+                {
+                    if (count == 60)
+                    {
+                        Acct.LastProblemInfo = new ProblemInfo("John Doe", "Invalid character", ProblemInfo.TYPE_ERR);
+                        Acct.TotalNoErrors++;
+                    }
+                }
                 count = count + 20;
 
             }
+
+            Acct.migrationFolders[0].LastFolderInfo = new FolderInfo("Contacts", "Contact", string.Format("{0} of {1}", totalCount.ToString(), totalCount.ToString()));
 
             switch (Acct.Accountnum)
             {
@@ -225,18 +234,18 @@ namespace CssLib
                 {
                     if (count == 200)
                     {
+                        Acct.LastProblemInfo = new ProblemInfo("Message4", "Invalid UID", ProblemInfo.TYPE_ERR);
                         Acct.TotalNoErrors++;
-                        Acct.ErrorMsgList.Add("Invalid UID");
                     }
                     if (count == 400)
                     {
+                        Acct.LastProblemInfo = new ProblemInfo("TestMessage", "Invalid Attachment", ProblemInfo.TYPE_ERR);
                         Acct.TotalNoErrors++;
-                        Acct.ErrorMsgList.Add("Invalid attachment");
                     }
                     if (count == 500)
                     {
+                        Acct.LastProblemInfo = new ProblemInfo("AnotherTest", "Address has an unsupported format", ProblemInfo.TYPE_ERR);
                         Acct.TotalNoErrors++;
-                        Acct.ErrorMsgList.Add("Invalid attachment");
                     }
                 }
 
@@ -244,18 +253,18 @@ namespace CssLib
                 {
                     if (count == 300)
                     {
+                        Acct.LastProblemInfo = new ProblemInfo("Status Report", "Illegal recipient", ProblemInfo.TYPE_ERR);
                         Acct.TotalNoErrors++;
-                        Acct.ErrorMsgList.Add("Invalid recipient");
                     }
                     if (count == 400)
                     {
+                        Acct.LastProblemInfo = new ProblemInfo("Company picnic", "Unsupported encoding", ProblemInfo.TYPE_WARN);
                         Acct.TotalNoWarnings++;
-                        Acct.WarningMsgList.Add("Unsupported address format");
                     }
                     if (count == 600)
                     {
+                        Acct.LastProblemInfo = new ProblemInfo("Last call", "Duplicate UID", ProblemInfo.TYPE_WARN);
                         Acct.TotalNoWarnings++;
-                        Acct.WarningMsgList.Add("Message size too large");
                     }
                 }
                
@@ -265,6 +274,8 @@ namespace CssLib
                 count = count + 100;
 
             }
+
+            Acct.migrationFolders[0].LastFolderInfo = new FolderInfo("Inbox", "Message", string.Format("{0} of {1}", totalCount.ToString(), totalCount.ToString()));
 
             switch (Acct.Accountnum)
             {
@@ -296,10 +307,20 @@ namespace CssLib
                 
                 System.Threading.Thread.Sleep(2000);
                 Acct.migrationFolders[0].CurrentCountOFItems = Acct.migrationFolders[0].CurrentCountOFItems + 10;
+                if (Acct.Accountnum == 0)
+                {
+                    if (count == 710)
+                    {
+                        Acct.LastProblemInfo = new ProblemInfo("BugzillaRule", "Unsupported condition", ProblemInfo.TYPE_ERR);
+                        Acct.TotalNoErrors++;
+                    }
+                }
                 count = count + 10;
 
 
             }
+
+            Acct.migrationFolders[0].LastFolderInfo = new FolderInfo("Inbox", "Rule", string.Format("{0} of {1}", totalCount.ToString(), totalCount.ToString()));
 
         /*   foreach (MigrationFolder mt in Acct.migrationFolders)
            {

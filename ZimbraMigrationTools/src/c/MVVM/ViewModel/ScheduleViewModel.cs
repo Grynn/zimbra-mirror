@@ -563,19 +563,13 @@ namespace MVVM.ViewModel
             if (e.PropertyName == "TotalNoErrors")
             {
                 ar.NumErrs = (int)a.TotalNoErrors + 1;      // this happens first
+                ar.AccountProblemsList.Add(a.LastProblemInfo);
             }
             else
             if (e.PropertyName == "TotalNoWarnings")
             {
                 ar.NumWarns = (int)a.TotalNoWarnings + 1;   // this happens first
-            }
-            else
-            if (e.PropertyName == "LastErrorMsg")
-            {
-            }
-            else
-            if (e.PropertyName == "LastWarningMsg")
-            {
+                ar.AccountProblemsList.Add(a.LastProblemInfo);
             }
             else
             {
@@ -618,6 +612,14 @@ namespace MVVM.ViewModel
 
             accountResultsViewModel.AccountResultsList[f.Accountnum].PBValue += incr;
             bgwlist[f.Accountnum].ReportProgress(ar.PBValue, f.Accountnum);
+
+            if (e.PropertyName == "FolderName")
+            {
+                if (e.OldValue != null)
+                {
+                    ar.AccountFolderInfoList.Add(f.LastFolderInfo);
+                }
+            }
         }
     }
 }

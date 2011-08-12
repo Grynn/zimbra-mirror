@@ -29,8 +29,7 @@ namespace CssLib
 
         private Int64 TotalErrors;
         private Int64 TotalWarnings;
-        private ObservableCollection<string> ErrorList = new ObservableCollection<string>();
-        private ObservableCollection<string> WarningList = new ObservableCollection<string>();
+        private ProblemInfo lastProblemInfo;
 
         public List<MigrationFolder> migrationFolders;
 
@@ -187,29 +186,17 @@ namespace CssLib
             }
         }
 
-        public ObservableCollection<string> ErrorMsgList
+        public ProblemInfo LastProblemInfo 
         {
-            get { return ErrorList; }
+            get { return lastProblemInfo; }
             set
             {
-                if (OnChanged != null)
-                {
-                    OnChanged(this, new MigrationObjectEventArgs("ErrorMsgList", this.ErrorList, value));
-                }
-                ErrorList = value;
-            }
-        }
-
-        public ObservableCollection<string> WarningMsgList
-        {
-            get { return WarningList; }
-            set
-            {
-                if (OnChanged != null)
-                {
-                    OnChanged(this, new MigrationObjectEventArgs("WarningMsgList", this.WarningList, value));
-                }
-                WarningList = value;
+                // won't want this if the LastProblemInfo is updated every time the error warning count increases
+                //if (OnChanged != null)
+                //{
+                //    OnChanged(this, new MigrationObjectEventArgs("LastProblemInfo", this.lastProblemInfo, value));
+                //}
+                lastProblemInfo = value;
             }
         }
 
@@ -274,6 +261,21 @@ namespace CssLib
           }
         }
 
+        private FolderInfo lastFolderInfo;
+
+        public FolderInfo LastFolderInfo
+        {
+            get { return lastFolderInfo; }
+            set
+            {   // handled when folder name changes
+                //if (OnChanged != null)
+                //{
+                //    OnChanged(this, new MigrationObjectEventArgs("LastFolder", this.lastFolderInfo, value));
+                //}
+                lastFolderInfo = value;
+            }
+        }
+
         private int AccountNum;
         public int Accountnum
         {
@@ -303,6 +305,83 @@ namespace CssLib
 
     }
 
+    public class FolderInfo 
+    {
+        private string folderName;
+        private string folderType;
+        private string folderProgress;
+
+        public FolderInfo(string foldername, string foldertype, string folderprogress)
+        {
+            this.folderName = foldername;
+            this.folderType = foldertype;
+            this.folderProgress = folderprogress;
+        }
+
+        public string FolderName
+        {
+            get { return folderName; }
+            set { folderName = value; }
+        }
+
+        public string FolderType
+        {
+            get { return folderType; }
+            set { folderType = value; }
+        }
+
+        public string FolderProgress
+        {
+            get { return folderProgress; }
+            set { folderProgress = value; }
+        }
+    }
+
+    public class ProblemInfo
+    {
+        public const int TYPE_ERR =  1;
+        public const int TYPE_WARN = 2;
+
+        private string objectName;
+        private string msg;
+        private int msgType;
+        private string formattedMsg;
+
+        public ProblemInfo(string objectname, string themsg, int msgtype)
+        {
+            this.objectName = objectname;
+            this.msg = themsg;
+            this.msgType = msgtype;
+            this.formattedMsg = (msgType == ProblemInfo.TYPE_ERR) ? "Error: " : "Warning: ";
+            this.formattedMsg += objectName + " -- ";
+            formattedMsg += msg;
+        }
+
+        public string ObjectName
+        {
+            get { return objectName; }
+            set { objectName = value; }
+        }
+
+        public string Msg
+        {
+            get { return msg; }
+            set { msg = value; }
+        }
+
+        public int MsgType
+        {
+            get { return msgType; }
+            set { msgType = value; }
+        }
+
+        public string FormattedMsg
+        {
+            get { return formattedMsg; }
+            set { formattedMsg = value; }
+        }
+
+    }
   
 	public class MigrationObjectEventArgs : EventArgs 
 	{

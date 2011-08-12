@@ -68,33 +68,5 @@ namespace MVVM.ViewModel
                 OnPropertyChanged(new PropertyChangedEventArgs("UserProgressMsg"));
             }
         }
-
-        public string ObjName
-        {
-            get { return m_userResults.ObjName; }
-            set
-            {
-                if (value == m_userResults.ObjName)
-                {
-                    return;
-                }
-                m_userResults.ObjName = value;
-                OnPropertyChanged(new PropertyChangedEventArgs("ObjName"));
-            }
-        }
-
-        public string TheErr
-        {
-            get { return m_userResults.TheErr; }
-            set
-            {
-                if (value == m_userResults.TheErr)
-                {
-                    return;
-                }
-                m_userResults.TheErr = value;
-                OnPropertyChanged(new PropertyChangedEventArgs("TheErr"));
-            }
-        }
     }
 }

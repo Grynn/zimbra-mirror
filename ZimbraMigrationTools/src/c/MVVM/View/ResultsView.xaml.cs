@@ -12,11 +12,16 @@ using System.Windows.Media;
 using MVVM.Model;
 using MVVM.ViewModel;
 using MVVM.View.CTI;
+using CssLib;
 
 namespace MVVM.View
 {
     public partial class ResultsView
     {
+        ListView[] urListView = new ListView[16];
+        ListBox [] lbErrors = new ListBox[16];
+        int iTabCount = 0;
+
         public ResultsView()
         {
             InitializeComponent();
@@ -28,14 +33,44 @@ namespace MVVM.View
             get { return DataContext as AccountResultsViewModel; }
         }
 
+        private int GetAcctNum(string hdr)
+        {
+            int accountnum = -1;
+            for (int i = 0; i < ViewModel.AccountResultsList.Count; i++)
+            {
+                if (hdr == ViewModel.AccountResultsList[i].AccountName)
+                {
+                    accountnum = ViewModel.AccountResultsList[i].GetAccountNum();
+                    break;
+                }
+            }
+            return accountnum;
+        }
+
         protected void HandleDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            if (iTabCount == 16)
+            {
+                MessageBox.Show(string.Format("Only 16 tabs may be open at a time", MessageBoxButton.OK, MessageBoxImage.Error));
+                return;
+            }
+
             ListViewItem lvi = sender as ListViewItem;
             var content = lvi.Content as AccountResultsViewModel;
 
             TabControl tabCtrl = FindParent(lvi, typeof(TabControl)) as TabControl;
             CloseableTabItem userItem = new CloseableTabItem();
             userItem.Header = content.AccountName;
+
+            // get accountnum so we can keep the listboxes and listviews straight
+            int accountnum = GetAcctNum((string)userItem.Header);
+            if (urListView[accountnum] != null)
+            {
+                MessageBox.Show(string.Format("There is already an open tab for {0}", (string)userItem.Header, MessageBoxButton.OK, MessageBoxImage.Error));
+                return;
+            }
+
+            iTabCount++;
 
             Grid urGrid = new Grid();
 
@@ -49,16 +84,11 @@ namespace MVVM.View
             //
 
             // Set up the ListView
-            ListView urListView = new ListView();
-            urListView.FontSize = 11;
-            urListView.SetValue(Grid.RowProperty, 0);
-            urListView.Margin = new Thickness(5);
-            urListView.Name = "lstUserResults";
-
-            ObservableCollection<UserResults> userResults = new ObservableCollection<UserResults>();    // bind to dynamic data
-            Binding binding = new Binding();
-            binding.Source = userResults;
-            BindingOperations.SetBinding(urListView, ListView.ItemsSourceProperty, binding);
+            urListView[accountnum] = new ListView();
+            urListView[accountnum].FontSize = 11;
+            urListView[accountnum].SetValue(Grid.RowProperty, 0);
+            urListView[accountnum].Margin = new Thickness(5);
+            urListView[accountnum].Name = "lstUserResults";
 
             GridView urGridView = new GridView();
 
@@ -93,140 +123,28 @@ namespace MVVM.View
             gvc3.Header = gvc3H;
             urGridView.Columns.Add(gvc3);
 
-            urListView.View = urGridView;
+            urListView[accountnum].View = urGridView;
 
-            urGrid.Children.Add(urListView);
+            urGrid.Children.Add(urListView[accountnum]);
             //
 
             // now create Listbox for errors
-            ListBox lbErrors = new ListBox();
-            lbErrors.FontSize = 11;
-            lbErrors.SetValue(Grid.RowProperty, 1);
-            lbErrors.Margin = new Thickness(5, 5, 5, 5);
-            lbErrors.MinHeight = 120;
-            lbErrors.MaxHeight = 120;
-            lbErrors.MinWidth = 450;
-            lbErrors.HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
-            lbErrors.VerticalAlignment = System.Windows.VerticalAlignment.Top;
-            urGrid.Children.Add(lbErrors);
+            lbErrors[accountnum] = new ListBox();
+            lbErrors[accountnum].FontSize = 11;
+            lbErrors[accountnum].SetValue(Grid.RowProperty, 1);
+            lbErrors[accountnum].Margin = new Thickness(5, 5, 5, 5);
+            lbErrors[accountnum].MinHeight = 120;
+            lbErrors[accountnum].MaxHeight = 120;
+            lbErrors[accountnum].MinWidth = 450;
+            lbErrors[accountnum].HorizontalAlignment = System.Windows.HorizontalAlignment.Stretch;
+            lbErrors[accountnum].VerticalAlignment = System.Windows.VerticalAlignment.Top;
+            urGrid.Children.Add(lbErrors[accountnum]);
             //
 
             userItem.Content = urGrid;
 
             tabCtrl.Items.Add(userItem);
             userItem.IsSelected = true;
-
-            // Now read a .csv file to add fake data
-            try
-            {
-                string[] textTokens = new string[40];
-                textTokens[0] = "Inbox";
-                textTokens[1] = "Message";
-                textTokens[2] = "8 of 95";
-                textTokens[3] = "Calendar";
-                textTokens[4] = "Calendar";
-                textTokens[5] = "3 of 28";
-                textTokens[6] = "OtherCal";
-                textTokens[7] = "Calendar";
-                textTokens[8] = "1 of 5";
-                textTokens[9] = "Contacts";
-                textTokens[10] = "Contacts";
-                textTokens[11] = "22 of 185";
-                textTokens[12] = "Tasks";
-                textTokens[13] = "Task";
-                textTokens[14] = "4 of 8";
-                textTokens[15] = "MyTasks";
-                textTokens[16] = "Task";
-                textTokens[17] = "5 of 23";
-                textTokens[18] = "Folder1";
-                textTokens[19] = "Messages";
-                textTokens[20] = "13 of 117";
-                textTokens[21] = "Folder2";
-                textTokens[22] = "Messages";
-                textTokens[23] = "24 of 128";
-                textTokens[24] = "Trash";
-                textTokens[25] = "Trash";
-                textTokens[26] = "14 of 88";
-                textTokens[27] = "Inbox";
-                textTokens[28] = "Messages";
-                textTokens[29] = "103 of 267";
-                textTokens[30] = "Mybox";
-                textTokens[31] = "Messages";
-                textTokens[32] = "32 of 75";
-                textTokens[33] = "Error: Subj: Message4 - Invalid UID";
-                textTokens[34] = "Error: Subj: TestMessage - Invalid attachment";
-                textTokens[35] = "Error: Subj: StatusMeeting - Invalid recipient";
-                textTokens[36] = "Error: Name: BugzillaRule - Unsupported condition";
-                textTokens[37] = "Warning: Subj: MyTask - Date is in the past";
-                textTokens[38] = "Error: Name: Address has an unsupported format";
-                textTokens[39] = "Error: Subj: YetAnotherMsg - Attachment too large";
-
-                int iToken;
-
-                switch (tabCtrl.Items.Count)
-                {
-                    case 2:
-                        iToken = tabCtrl.Items.Count - 2;
-                        for (int i = 0; i < 2; i++)
-                        {
-                            UserResults ur = new UserResults(textTokens[iToken++], textTokens[iToken++],textTokens[iToken++]);
-                            userResults.Add(ur);
-                            if (i == 0)
-                            {
-                                ListBoxItem item = new ListBoxItem();   // hack for now -- will do it right with binding later
-                                item.Content = textTokens[33];
-                                lbErrors.Items.Add(item);
-                            }
-                            if (i == 1)
-                            {
-                                ListBoxItem item = new ListBoxItem();   // hack for now -- will do it right with binding later
-                                item.Content = textTokens[34];
-                                lbErrors.Items.Add(item);
-                            }
-                        }
-                        break;
-
-                    case 3:
-                        iToken = 27;
-                        for (int i = 0; i < 2; i++)
-                        {
-                            UserResults ur = new UserResults(textTokens[iToken++], textTokens[iToken++], textTokens[iToken++]);
-                            userResults.Add(ur);
-                            if (i == 1)
-                            {
-                                ListBoxItem item = new ListBoxItem();   // hack for now -- will do it right with binding later
-                                item.Content = textTokens[35];
-                                lbErrors.Items.Add(item);
-                            }
-                        }
-                        break;
-
-                    case 4:
-                        iToken = tabCtrl.Items.Count + 2;
-                        for (int i = 0; i < 3; i++)
-                        {
-                            UserResults ur = new UserResults(textTokens[iToken++], textTokens[iToken++], textTokens[iToken++]);
-                            userResults.Add(ur);
-                        }
-                        break;
-
-                    case 5:
-                        iToken = tabCtrl.Items.Count + 10;
-                        for (int i = 0; i < 4; i++)
-                        {
-                            UserResults ur = new UserResults(textTokens[iToken++], textTokens[iToken++], textTokens[iToken++]);
-                            userResults.Add(ur);
-                            ListBoxItem item = new ListBoxItem();   // hack for now -- will do it right with binding later
-                            item.Content = textTokens[i+36];
-                            lbErrors.Items.Add(item);
-                        }
-                        break;
-                }
-            }
-            catch (IOException ex)
-            {
-                MessageBox.Show(ex.Message, "ZimbraMigration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-            }
         }
 
         protected void HandleGotFocus(object sender, EventArgs e)
@@ -234,24 +152,45 @@ namespace MVVM.View
             TabItem ti = sender as TabItem;
             string hdr = ti.Header.ToString();
             ViewModel.SelectedTab = hdr;
-
             int accountnum = -1;
+
             if (hdr != "Accounts")
             {
-                for (int i = 0; i < ViewModel.AccountResultsList.Count; i++)
-                {
-                    if (hdr == ViewModel.AccountResultsList[i].AccountName)
-                    {
-                        accountnum = ViewModel.AccountResultsList[i].GetAccountNum();
-                        break;
-                    }
-                }
+                accountnum = GetAcctNum(hdr);
             }
             if (accountnum != -1)
             {
                 ViewModel.PBValue = ViewModel.AccountResultsList[accountnum].PBValue;
                 ViewModel.UserPBMsgValue = ViewModel.AccountResultsList[accountnum].PBMsgValue;
                 ViewModel.AccountOnTab = accountnum;
+
+                ObservableCollection<UserResults> userResultsList = new ObservableCollection<UserResults>();
+                Binding binding = new Binding();
+                binding.Source = userResultsList;
+                BindingOperations.SetBinding(urListView[accountnum], ListView.ItemsSourceProperty, binding);
+
+                AccountResultsViewModel ar = ViewModel.AccountResultsList[accountnum];
+                for (int i = 0; i < ar.AccountFolderInfoList.Count; i++)
+                {
+                    FolderInfo folderInfo = ar.AccountFolderInfoList[i];
+                    if (folderInfo != null)
+                    {
+                        UserResults ur = new UserResults(folderInfo.FolderName, folderInfo.FolderType, folderInfo.FolderProgress);
+                        userResultsList.Add(ur);
+                    }
+                }
+
+                lbErrors[accountnum].Items.Clear();
+                for (int i = 0; i < ar.AccountProblemsList.Count; i++)
+                {
+                    ProblemInfo problemInfo = ar.AccountProblemsList[i];
+                    if (problemInfo != null)
+                    {
+                        ListBoxItem item = new ListBoxItem();   // hack for now -- will do it right with binding later
+                        item.Content = problemInfo.FormattedMsg;
+                        lbErrors[accountnum].Items.Add(item);
+                    }
+                }
             }
             
 
@@ -270,7 +209,11 @@ namespace MVVM.View
                 TabControl tabControl = tabItem.Parent as TabControl;
                 if (tabControl != null)
                 {
+                    int accountnum = GetAcctNum((string)tabItem.Header);
                     tabControl.Items.Remove(tabItem);
+                    urListView[accountnum] = null;
+                    lbErrors[accountnum] = null;
+                    iTabCount--;
                 }
             }
         }

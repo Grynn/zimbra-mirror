@@ -94,8 +94,6 @@ namespace MVVM.Model
             this.FolderName = folderName;
             this.TypeName = typeName;
             this.UserProgressMsg = progressMsg;
-            this.ObjName = "";
-            this.TheErr = "";
         }
 
         public string FolderName
@@ -111,18 +109,6 @@ namespace MVVM.Model
         }
 
         public string UserProgressMsg
-        {
-            get;
-            set;
-        }
-
-        public string ObjName
-        {
-            get;
-            set;
-        }
-
-        public string TheErr
         {
             get;
             set;
