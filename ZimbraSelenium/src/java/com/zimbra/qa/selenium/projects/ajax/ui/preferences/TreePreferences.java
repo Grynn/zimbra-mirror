@@ -137,7 +137,7 @@ public class TreePreferences extends AbsTree {
 		map.put(TreeItem.MobileDevices, "css=td[id='zti__main_Options__PREF_PAGE_MOBILE_textCell']");
 		map.put(TreeItem.ImportExport, "css=td[id='zti__main_Options__PREF_PAGE_IMPORT_EXPORT_textCell']");
 		map.put(TreeItem.Shortcuts, "css=td[id='zti__main_Options__PREF_PAGE_SHORTCUTS_textCell']");
-		map.put(TreeItem.Zimlets, null);
+		map.put(TreeItem.Zimlets, "css=td[id='zti__main_Options__PREF_PAGE_PREF_ZIMLETS_textCell']");
 		
 		return (Collections.unmodifiableMap(map));
 	}
