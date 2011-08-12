@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
@@ -71,10 +72,10 @@ public class FindShare extends AjaxCommonTest {
 		dialog.zClickButton(Button.B_SEARCH);
 
 		// Check the folder item
-		List<FolderItem> items = dialog.zListGetFolders();
-		FolderItem found = null;
-		for (FolderItem f : items) {
-			if ( f.getName().contains(ownerFoldername) ) { 
+		List<String> items = dialog.zListGetFolders();
+		String found = null;
+		for ( String f : items) {
+			if ( f.contains(ownerFoldername) ) { 
 				// Found it!
 				found = f;
 				break;
@@ -82,9 +83,12 @@ public class FindShare extends AjaxCommonTest {
 		}
 		
 		ZAssert.assertNotNull(found, "verify the shared folder shows up in the tree");
+		
+		
+		// Check the box and add the share
 		dialog.zTreeItem(Action.A_TREE_CHECKBOX, found);
 		
-		// Close the dialog box
+
 		dialog.zClickButton(Button.B_ADD);
 
 		
@@ -93,15 +97,13 @@ public class FindShare extends AjaxCommonTest {
 		app.zGetActiveAccount().soapSend(
 				"<GetFolderRequest xmlns='urn:zimbraMail'/>");
 		
-		String mountpointID = app.zGetActiveAccount().soapSelectValue("//mail:mountpoint", "id");
-		ZAssert.assertEquals(mountpointID, "TODO", "Verify the mountpoint is listed in the folder tree");
+		Element[] nodes = app.zGetActiveAccount().soapSelectNodes("//mail:link[@owner='"+ Owner.EmailAddress +"']");
+		ZAssert.assertGreaterThan(nodes.length, 0, "Verify the mountpoint is listed in the folder tree");
+
+		String rid = app.zGetActiveAccount().soapSelectValue("//mail:link[@owner='"+ Owner.EmailAddress +"']", "rid");
+		ZAssert.assertEquals(rid, ownerFolder.getId(), "Verify the mountpoint is listed in the folder tree");
 	}
 
-	
 
-	
-
-
-	
 
 }

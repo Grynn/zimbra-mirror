@@ -7,7 +7,6 @@ package com.zimbra.qa.selenium.projects.ajax.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsDialog;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
@@ -28,13 +27,15 @@ public class DialogShareFind extends AbsDialog {
 
 	public static class Locators {
 		
-		public static final String zDialogLocator		= "css=div[class*='ZmShareSearchDialog']";
+		public static final String zDialogLocatorCSS	= "css=div[id='ZmShareSearchDialog']";
 		
-		public static final String zEmailInputLocator	= zDialogLocator + " input[id$='_EMAIL_input']";
+		public static final String zFolderListTop		= zDialogLocatorCSS + " div[class='DwtTreeItemChildDiv']";
+
+		public static final String zEmailInputLocator	= "css=input[id='ZmShareSearchView_EMAIL_input']";
 		
-		public static final String zButtonSearchLocator	= zDialogLocator + " td[id$='_SEARCH_title']";
-		public static final String zButtonAddLocator	= zDialogLocator + " td[id$='_button2_title']";
-		public static final String zButtonCancelLocator	= zDialogLocator + " td[id$='_button1_title']";
+		public static final String zButtonSearchLocator	= "css=div[id='ZmShareSearchView_SEARCH'] td[id$='_title']";
+		public static final String zButtonAddLocator	= "css=div[id='ZmShareSearchDialog_buttons'] td[id^='OK_'] td[id$='_title']";
+		public static final String zButtonCancelLocator	= "css=div[id='ZmShareSearchDialog_buttons'] td[id^='Cancel_'] td[id$='_title']";
 
 	}
 	
@@ -121,12 +122,12 @@ public class DialogShareFind extends AbsDialog {
 	 * @return
 	 * @throws HarnessException 
 	 */
-	public List<FolderItem> zListGetFolders() throws HarnessException {
+	public List<String> zListGetFolders() throws HarnessException {
 		logger.info(myPageName() + " zListGetFolders()");
 		
-		List<FolderItem> items = new ArrayList<FolderItem>();
+		List<String> items = new ArrayList<String>();
 		
-		items.addAll(this.zListGetFolders("//div[contains(@class,'ZmShareSearchDialog')"));
+		items.addAll(this.zListGetFolders(Locators.zFolderListTop));
 
 		return (items);
 
@@ -138,32 +139,78 @@ public class DialogShareFind extends AbsDialog {
 	 * @return
 	 * @throws HarnessException
 	 */
-	private List<FolderItem>zListGetFolders(String top) throws HarnessException {
-
-		// See example in "TreeMail.zListGetFolder(string top)"
-		// See http://bugzilla.zimbra.com/show_bug.cgi?id=62470
+	private List<String>  zListGetFolders(String top) throws HarnessException {
+		List<String> items = new ArrayList<String>();
 		
-		throw new HarnessException("implement me: http://bugzilla.zimbra.com/show_bug.cgi?id=62470");
+		String rowLocator = top + ">div";
+		int count = this.sGetCssCount(rowLocator);
+		for (int i = 1; i <= count; i++ ) {
+			String itemLocator = rowLocator + ":nth-of-type("+ i +")";
+			
+			String foldername = this.sGetText(itemLocator + " td[id$='_textCell']");
+			items.add(foldername);
+			
+		}
 
-
+		return (items);
 	}
 
+	/**
+	 * Get the table locator for the entry that contains the name
+	 * @param name
+	 * @return
+	 * @throws HarnessException 
+	 */
+	private String zGetLocator(String name) throws HarnessException {
+		String topLocator = Locators.zFolderListTop;
+		String rowLocator = topLocator + ">div";
+		
+		int count = this.sGetCssCount(rowLocator);
+		for (int i = 1; i <= count; i++ ) {
+			String itemLocator = rowLocator + ":nth-of-type("+ i +")";
+			
+			String foldername = this.sGetText(itemLocator + " td[id$='_textCell']");
+			if ( foldername.toLowerCase().contains(name.toLowerCase()) ) {
+				return (itemLocator);
+			}			
+		}
+
+		throw new HarnessException("Foldername "+ name +" does not exist!");
+
+	}
+	
+	
 	/**
 	 * Take an action on an item in the tree list (e.g. ACTION.A_TREE_CHECKBOX)
 	 * @param Action
 	 * @param FolderItem
 	 * @throws HarnessException 
 	 */
-	public AbsPage zTreeItem(Action action, FolderItem folder) throws HarnessException {
+	public AbsPage zTreeItem(Action action, String folder) throws HarnessException {
 		AbsPage page = null;
-		String locator = null;
+		String locator = this.zGetLocator(folder);
 
+		String itemLocator = this.zGetLocator(folder);
+		
 		if ( action == Action.A_TREE_CHECKBOX ) {
 			
-			locator = "TODO#TODO";
+			// See https://bugzilla.zimbra.com/show_bug.cgi?id=63350
+			locator = itemLocator + " div[class='ZTreeItemCheckbox']";
+			page = null;
 
+			this.zClickAt(locator, "0,0");
+			
+			this.zWaitForBusyOverlay();
+			
+			return (page);
+			
+		} else if ( action == Action.A_TREE_COLLAPSE ) {
+			
+			locator = null;
+			page = null;
+			
 			// FALL THROUGH
-
+			
 		} else {
 			throw new HarnessException("Action "+ action +" not yet implemented");
 		}
@@ -253,7 +300,7 @@ public class DialogShareFind extends AbsDialog {
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");
 
-		String locator = Locators.zDialogLocator;
+		String locator = Locators.zDialogLocatorCSS;
 		
 		if ( !this.sIsElementPresent(locator) ) {
 			return (false); // Not even present
