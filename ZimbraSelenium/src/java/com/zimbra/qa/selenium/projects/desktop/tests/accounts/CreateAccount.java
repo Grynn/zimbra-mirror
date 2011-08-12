@@ -832,8 +832,8 @@ public class CreateAccount extends AjaxCommonTest {
             "Added account message is displayed");
    }
 
-   @Test(description="Failure in attempting to create duplicated gmail accounts", groups = { "functional" })
-   public void createDuplicatedGmailAccount() throws HarnessException {
+   @Test(description="Failure in attempting to add duplicated gmail accounts", groups = { "functional" })
+   public void addDuplicatedGmailAccount() throws HarnessException {
       // Adding the gmail account
       DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddGmailAccountThruUI();
 
@@ -859,8 +859,8 @@ public class CreateAccount extends AjaxCommonTest {
             "Launch Zimbra Dekstop Button exists");
    }
 
-   @Test(description="Failure in attempting to create duplicated Yahoo! accounts", groups = { "functional" })
-   public void createDuplicatedYahooAccount() throws HarnessException {
+   @Test(description="Failure in attempting to add duplicated Yahoo! accounts", groups = { "functional" })
+   public void addDuplicatedYahooAccount() throws HarnessException {
       // Adding the Yahoo! account
       DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddYahooAccountThruUI();
 
@@ -886,8 +886,8 @@ public class CreateAccount extends AjaxCommonTest {
             "Launch Zimbra Dekstop Button exists");
    }
 
-   @Test(description="Failure in attempting to create duplicated Zimbra accounts", groups = { "functional" })
-   public void createDuplicatedZimbraAccount() throws HarnessException {
+   @Test(description="Failure in attempting to add duplicated Zimbra accounts", groups = { "functional" })
+   public void addDuplicatedZimbraAccount() throws HarnessException {
       // Adding the Zimbra account
       DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddZimbraAccountThruUI();
 
@@ -896,6 +896,152 @@ public class CreateAccount extends AjaxCommonTest {
       FormAddZimbraAccount accountForm = (FormAddZimbraAccount)app.zPageAddNewAccount.zDropDownListSelect(
             DROP_DOWN_OPTION.ZIMBRA);
       accountForm.zFill(desktopAccountItem);
+      accountForm.zSubmit();
+
+      // Verifying error message
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "account.ACCOUNT_EXISTS: email address already exists: ",
+            "Verify error message of wrong password");
+
+      app.zPageLogin.zNavigateTo();
+
+      // Verifying in login page, the first added account is still there
+      ZAssert.assertTrue(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDeleteButton),
+            "Delete account link exists");
+      ZAssert.assertTrue(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zBtnLoginDesktop),
+            "Launch Zimbra Dekstop Button exists");
+   }
+
+   @Test(description="Failure in attempting to add duplicated Zimbra IMAP accounts", groups = { "functional" })
+   public void addDuplicatedZimbraImapAccount() throws HarnessException {
+      // Adding the Zimbra IMAP account
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddZimbraImapAccountThruUI(
+            ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().Password,
+            ZimbraSeleniumProperties.getStringProperty("server.host", "localhost"),
+            true,
+            "465");
+
+      // Trying to add the same Zimbra IMAP account
+      app.zPageAddNewAccount.zNavigateTo();
+      FormAddImapAccount accountForm = (FormAddImapAccount)app.zPageAddNewAccount.zDropDownListSelect(
+            DROP_DOWN_OPTION.IMAP);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zSubmit();
+
+      // Verifying error message
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "account.ACCOUNT_EXISTS: email address already exists: ",
+            "Verify error message of wrong password");
+
+      app.zPageLogin.zNavigateTo();
+
+      // Verifying in login page, the first added account is still there
+      ZAssert.assertTrue(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDeleteButton),
+            "Delete account link exists");
+      ZAssert.assertTrue(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zBtnLoginDesktop),
+            "Launch Zimbra Dekstop Button exists");
+   }
+
+   @Test(description="Failure in attempting to add duplicated Zimbra POP accounts", groups = { "functional" })
+   public void addDuplicatedZimbraPopAccount() throws HarnessException {
+      // Adding the Zimbra POP account
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddZimbraPopAccountThruUI(
+            ZimbraAccount.AccountZWC().EmailAddress,
+            ZimbraAccount.AccountZWC().Password,
+            ZimbraSeleniumProperties.getStringProperty("server.host", "localhost"),
+            true,
+            "465");
+
+      // Trying to add the same Zimbra POP account
+      app.zPageAddNewAccount.zNavigateTo();
+      FormAddPopAccount accountForm = (FormAddPopAccount)app.zPageAddNewAccount.zDropDownListSelect(
+            DROP_DOWN_OPTION.POP);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zSubmit();
+
+      // Verifying error message
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "account.ACCOUNT_EXISTS: email address already exists: ",
+            "Verify error message of wrong password");
+
+      app.zPageLogin.zNavigateTo();
+
+      // Verifying in login page, the first added account is still there
+      ZAssert.assertTrue(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDeleteButton),
+            "Delete account link exists");
+      ZAssert.assertTrue(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zBtnLoginDesktop),
+            "Launch Zimbra Dekstop Button exists");
+   }
+
+   @Test(description="Failure in attempting to add Zimbra IMAP account, where the same Zimbra account being used already exists",
+         groups = { "functional" })
+   public void addImapAccountWithPreExistingZimbraAccount() throws HarnessException {
+      // Adding the Zimbra account
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddZimbraAccountThruUI();
+
+      DesktopAccountItem desktopImapAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            desktopAccountItem.emailAddress,
+            desktopAccountItem.emailAddress,
+            desktopAccountItem.password,
+            desktopAccountItem.incomingServer,
+            SECURITY_TYPE.SSL,
+            null,
+            desktopAccountItem.incomingServer,
+            true,
+            "465",
+            desktopAccountItem.emailAddress,
+            desktopAccountItem.password);
+
+      // Trying to add the same Zimbra IMAP account
+      app.zPageAddNewAccount.zNavigateTo();
+      FormAddImapAccount accountForm = (FormAddImapAccount)app.zPageAddNewAccount.zDropDownListSelect(
+            DROP_DOWN_OPTION.IMAP);
+      accountForm.zFill(desktopImapAccountItem);
+      accountForm.zSubmit();
+
+      // Verifying error message
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "account.ACCOUNT_EXISTS: email address already exists: ",
+            "Verify error message of wrong password");
+
+      app.zPageLogin.zNavigateTo();
+
+      // Verifying in login page, the first added account is still there
+      ZAssert.assertTrue(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDeleteButton),
+            "Delete account link exists");
+      ZAssert.assertTrue(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zBtnLoginDesktop),
+            "Launch Zimbra Dekstop Button exists");
+   }
+
+   @Test(description="Failure in attempting to add Zimbra POP account, where the same Zimbra account being used already exists",
+         groups = { "functional" })
+   public void addPopAccountWithPreExistingZimbraAccount() throws HarnessException {
+      // Adding the Zimbra account
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddZimbraAccountThruUI();
+
+      DesktopAccountItem desktopPopAccountItem = DesktopAccountItem.generateDesktopPopAccountItem(
+            desktopAccountItem.emailAddress,
+            desktopAccountItem.emailAddress,
+            desktopAccountItem.password,
+            desktopAccountItem.incomingServer,
+            SECURITY_TYPE.SSL,
+            null,
+            desktopAccountItem.incomingServer,
+            true,
+            "465",
+            desktopAccountItem.emailAddress,
+            desktopAccountItem.password);
+
+      // Trying to add the same Zimbra POP account
+      app.zPageAddNewAccount.zNavigateTo();
+      FormAddPopAccount accountForm = (FormAddPopAccount)app.zPageAddNewAccount.zDropDownListSelect(
+            DROP_DOWN_OPTION.POP);
+      accountForm.zFill(desktopPopAccountItem);
       accountForm.zSubmit();
 
       // Verifying error message
