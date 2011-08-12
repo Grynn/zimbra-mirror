@@ -12,6 +12,8 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning.DialogWarningID;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogSendLater;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
@@ -36,6 +38,10 @@ public class SendLater extends AjaxCommonTest {
 			groups = { "smoke" })
 	public void SendLater_01() throws HarnessException {
 		
+		if (true) {
+			// Until bug 63353 is fixed, the other two tests will fail.  Fail this test for now.
+			throw new HarnessException("See http://bugzilla.zimbra.com/show_bug.cgi?id=63353");
+		}
 		
 		// Create the message data to be sent
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
@@ -55,7 +61,11 @@ public class SendLater extends AjaxCommonTest {
 		// Don't change the default information.  Just click OK.
 		dialog.zClickButton(Button.B_OK);
 		
-
+		DialogWarning warning = (DialogWarning) app.zPageMain.zGetWarningDialog(DialogWarningID.SelectedTimeIsInPast);
+		if ( warning.zIsActive() ) {
+			warning.zClickButton(Button.B_OK);
+		}
+		
 		// Difficult to determine how to verify.  If we searched drafts, the message already
 		// may have been sent.
 		//

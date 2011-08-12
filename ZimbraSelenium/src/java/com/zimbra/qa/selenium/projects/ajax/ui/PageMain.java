@@ -6,6 +6,7 @@ package com.zimbra.qa.selenium.projects.ajax.ui;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogError.DialogErrorID;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning.DialogWarningID;
 
 
 /**
@@ -39,6 +40,10 @@ public class PageMain extends AbsTab {
 	
 	public Toaster zGetToaster() throws HarnessException {
 		return (new Toaster(this.MyApplication));
+	}
+	
+	public DialogWarning zGetWarningDialog(DialogWarningID zimbra) {
+		return (new DialogWarning(zimbra, this.MyApplication, this));
 	}
 	
 	public DialogError zGetErrorDialog(DialogErrorID zimbra) {

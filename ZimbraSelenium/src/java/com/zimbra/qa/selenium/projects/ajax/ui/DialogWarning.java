@@ -35,6 +35,9 @@ public class DialogWarning extends AbsDialog {
 		
 		public static DialogWarningID DeleteAppointment = new DialogWarningID("YesNo");
 
+		// See bug: http://bugzilla.zimbra.com/show_bug.cgi?id=63353
+		public static DialogWarningID SelectedTimeIsInPast = new DialogWarningID("DWT213");
+		
 		protected String Id;
 		protected DialogWarningID(String id) {
 			Id = id;

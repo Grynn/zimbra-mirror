@@ -32,18 +32,18 @@ public class DialogSendLater extends AbsDialog {
 		
 		// Main dialog locator
 		// TODO: need to update this locator https://bugzilla.zimbra.com/show_bug.cgi?id=61935
-		public static final String SendLaterDialogLocator		= "css=TODO#TODO";
+		public static final String SendLaterDialogLocatorCSS	= "css=div[id='ZmTimeDialog']";
 
 		// Fields
-		public static final String FieldDateLocator				= "css=TODO#TODO";
-		public static final String FieldTimeLocator				= "css=TODO#TODO";
+		public static final String FieldDateLocator				= SendLaterDialogLocatorCSS + " input[id='ZmTimeDialog_date']";
+		public static final String FieldTimeLocator				= SendLaterDialogLocatorCSS + " input[id='ZmTimeInputSelect_startTimeInput']";
 
 		// Pulldowns
-		public static final String PulldownTimezoneLocator		= "css=TODO#TODO";
+		public static final String PulldownTimezoneLocator		= SendLaterDialogLocatorCSS + " div[id='ZmTimeDialog_buttons'] td[id='TimeZoneSelect_dropdown'] div[class='ImgSelectPullDownArrow']";
 
 		// Buttons
-		public static final String ButtonOkButtonLocator		= "css=TODO#TODO";
-		public static final String ButtonCancelButtonLocator	= "css=TODO#TODO";
+		public static final String ButtonOkButtonLocator		= SendLaterDialogLocatorCSS + " div[id='ZmTimeDialog_buttons'] td[id^='OK_'] td[id$='_title']";
+		public static final String ButtonCancelButtonLocator	= SendLaterDialogLocatorCSS + " div[id='ZmTimeDialog_buttons'] td[id^='Cancel'] td[id$='_title']";
 	}
 	
 	
@@ -67,7 +67,7 @@ public class DialogSendLater extends AbsDialog {
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsVisible()");
 
-		String locator = Locators.SendLaterDialogLocator;
+		String locator = Locators.SendLaterDialogLocatorCSS;
 		
 		if ( !this.sIsElementPresent(locator) ) {
 			return (false); // Not even present
@@ -186,13 +186,13 @@ public class DialogSendLater extends AbsDialog {
 
 			// TODO: need to INTL
 			SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-			value = format.format(calendar);
+			value = format.format(calendar.getTime());
 			
 		} else if (field == Field.Time ) {
 			
 			// TODO: need to INTL
 			SimpleDateFormat format = new SimpleDateFormat("HH:mm a");
-			value = format.format(calendar);
+			value = format.format(calendar.getTime());
 
 		} else if ( field == Field.Timezone ) {
 			
