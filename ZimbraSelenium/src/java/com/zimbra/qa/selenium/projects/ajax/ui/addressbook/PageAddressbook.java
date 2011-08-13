@@ -507,7 +507,8 @@ public class PageAddressbook extends AbsTab {
 	      }
 
 	   } else if ( pulldown == Button.B_NEW ) {
-		   pulldownLocator = "css=td#zb__CNS__NEW_MENU_dropdown";
+		   
+		   pulldownLocator = "css=div[id^=zb__CN][id$=__NEW_MENU] td#zb__CNS__NEW_MENU_dropdown";
 		   if ( option == Button.O_NEW_CONTACT ) {
 
 			    // TODO: Bug 58365 for Desktop
@@ -849,25 +850,6 @@ public class PageAddressbook extends AbsTab {
 					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_RECEIVED_FROM_CONTACT;
 					page = ((AppAjaxClient)MyApplication).zPageMail;
 					
-					//find parent id
-					try {		
-					    for (int i=0; ; i++) {	  		   
-					    	parentLocator = sGetEval("window.document.getElementsByClassName('ActionMenu ZHasIcon')[" + i + "].id" );
-					    	if ( zIsVisiblePerPosition(parentLocator, 0, 0) &&
-					             parentLocator.startsWith("POPUP_DWT") ) {					    		
-					    		logger.info("parent = " + parentLocator);
-					    		parentLocator = "div#" + parentLocator;
-					    		break;
-					    	}		    					    	
-				        }
-					    
-					}
-					catch (Exception e) {
-						parentLocator=null;
-						logger.info("cannot find parent id for " + sub_cmi.locator + " " + e.getMessage());
-					}
-					
-					
 				}
 					
 			}
@@ -889,9 +871,37 @@ public class PageAddressbook extends AbsTab {
 			sMouseOver(locator);
 	        zWaitForBusyOverlay();
 	
-	    	if (parentLocator!= null) {
-				locator = "css=" + parentLocator + " " + sub_cmi.locator;
-		    }
+			if (option == Button.B_SEARCH) {
+				
+				//find parent locators
+		    	
+				try {
+					
+					int total= Integer.parseInt(sGetEval("window.document.getElementById('z_shell').childNodes.length")) -1;
+				
+				    for (int i=total; i>=0 ; i--, parentLocator=null) {	  		   
+				    	parentLocator = sGetEval("window.document.getElementById('z_shell').childNodes[" + i + "].id" );
+				    	if ( parentLocator.startsWith("POPUP_DWT") && zIsVisiblePerPosition(parentLocator, 0, 0))
+				        {					    		
+				    		logger.info("parent = " + parentLocator);
+				    		parentLocator = "div#" + parentLocator;
+				    		break;
+				    	}		    					    	
+			        }
+			
+				  
+				}
+			    catch (Exception e) {
+					parentLocator=null;
+					logger.info("cannot find parent id for " + sub_cmi.locator + " " + e.getMessage());
+				}
+				
+				
+			
+	    	    if (parentLocator != null) {
+				    locator = "css=" + parentLocator + " " + sub_cmi.locator;
+		        }			
+			}
 	    	else {
 	            locator = "css=" + sub_cmi.locator;
 	    	}
