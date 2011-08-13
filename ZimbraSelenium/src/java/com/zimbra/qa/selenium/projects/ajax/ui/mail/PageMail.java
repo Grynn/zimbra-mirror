@@ -1218,28 +1218,34 @@ public class PageMail extends AbsTab {
 				(shortcut == Shortcut.S_NEWMESSAGE) ||
 				(shortcut == Shortcut.S_NEWMESSAGE2) )
 		{
+			
 			// "New Message" shortcuts result in a compose form opening
 			page = new FormMailNew(this.MyApplication);
+			
 		}else if ( (shortcut == Shortcut.S_NEWTAG) ){
 
 			// "New Message" shortcuts result in a compose form opening
 			//page = new FormMailNew(this.MyApplication);
 			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+			
 		}else if ( (shortcut == Shortcut.S_NEWFOLDER) ){
 
 			// "New Message" shortcuts result in a compose form opening
 			//page = new FormMailNew(this.MyApplication);
 			page = new DialogCreateFolder(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+			
 		} else if ( (shortcut == Shortcut.S_MAIL_HARDELETE) ) {
 
 			// Hard Delete shows the Warning Dialog : Are you sure you want to permanently delete it?
 			page = new DialogWarning(DialogWarning.DialogWarningID.PermanentlyDeleteTheItem,
 					MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
+			
 		} else if ( shortcut == Shortcut.S_ASSISTANT ) {
 			
 			page = new DialogAssistant(MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
 
-		}else if(shortcut== Shortcut.S_ESCAPE){
+		} else if(shortcut== Shortcut.S_ESCAPE) {
+			
 			page = new DialogWarning(
 					DialogWarning.DialogWarningID.SaveCurrentMessageAsDraft,
 					this.MyApplication,
@@ -1249,9 +1255,11 @@ public class PageMail extends AbsTab {
 			zKeyDown(keyCode);
 			return page;
 			
-		} else {
-			
-			throw new HarnessException("No logic for shortcut : "+ shortcut);
+// By default, just type the shortcut and return null page
+//		} else {
+//			
+//			throw new HarnessException("No logic for shortcut : "+ shortcut);
+//			
 		}
 
 		
