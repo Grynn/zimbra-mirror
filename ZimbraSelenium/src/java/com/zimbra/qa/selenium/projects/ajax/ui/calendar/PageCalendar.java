@@ -455,6 +455,27 @@ public class PageCalendar extends AbsTab {
 		return (page);
 	}
 
+	@Override
+	public AbsPage zKeyboardShortcut(Shortcut shortcut) throws HarnessException {
+		AbsPage page = null;
+		
+		if ( shortcut == Shortcut.S_ASSISTANT ) {
+			page = new DialogAssistant(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+		}
+		
+		zKeyboard.zTypeCharacters(shortcut.getKeys());
+
+		// If the app is busy, wait for it to become active
+		this.zWaitForBusyOverlay();
+
+		// If a page is specified, wait for it to become active
+		if ( page != null ) {
+			page.zWaitForActive();	// This method throws a HarnessException if never active
+		}
+		return (page);
+
+	}
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
