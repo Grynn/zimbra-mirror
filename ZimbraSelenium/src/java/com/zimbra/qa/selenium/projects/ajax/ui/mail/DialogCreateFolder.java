@@ -8,7 +8,6 @@ import java.net.URL;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 
 /**
@@ -23,14 +22,14 @@ public class DialogCreateFolder extends AbsDialog {
 
 	public static class Locators {
 	
-	   public static final String zDialogId = "css=div[class*='DwtDialog WindowOuterContainer']";
+		public static final String DialogDivLocatorCSS = "css=div[id='CreateNewFolderDialog']";
 
-      // Textfields
-      public static final String zNameField = "css=input[id$='_name'][class*='Field']";
-
+		// Textfields
+		public static final String DialogNameLocatorCSS = "css=input[id='CreateNewFolderDialog_name']";
+		
       // Buttons
-      public static final String zOkButton = "css=tr>td>div[id*='button2']";
-      public static final String zCancelButton = "css=tr>td>div[id*='button1']";
+	      public static final String zOkButton = "css=div[id='CreateNewFolderDialog_buttons'] td[id^='OK_'] td[id$='_title']";
+	      public static final String zCancelButton = "css=div[id='CreateNewFolderDialog_buttons'] td[id^='Cancel_'] td[id$='_title']";
 	}
 	
 	
@@ -54,7 +53,7 @@ public class DialogCreateFolder extends AbsDialog {
 	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsActive()");
 
-		String locator = Locators.zNameField;
+		String locator = Locators.DialogDivLocatorCSS;
 		
 		if ( !this.sIsElementPresent(locator) ) {
 			return (false); // Not even present
@@ -149,7 +148,7 @@ public class DialogCreateFolder extends AbsDialog {
 		if ( folder == null ) 
 			throw new HarnessException("folder must not be null");
 		
-		String locator = "css=div[id='"+ Locators.zDialogId +"'] td[id='zti__ZmChooseFolderDialog_Mail__"+ folder.getId() +"_textCell']";
+		String locator = Locators.DialogDivLocatorCSS + " td[id='zti__ZmChooseFolderDialog_Mail__"+ folder.getId() +"_textCell']";
 		
 		if ( !this.sIsElementPresent(locator) )
 			throw new HarnessException("unable to find folder in tree "+ locator);
@@ -172,7 +171,7 @@ public class DialogCreateFolder extends AbsDialog {
 		if ( folder == null ) 
 			throw new HarnessException("folder must not be null");
 
-		String locator = Locators.zNameField;
+		String locator = Locators.DialogNameLocatorCSS;
 
 		if ( !this.sIsElementPresent(locator) )
 			throw new HarnessException("unable to find folder name field "+ locator);
@@ -215,7 +214,7 @@ public class DialogCreateFolder extends AbsDialog {
 
 
 	public void zClickSubscribeFeed(boolean b) throws HarnessException {
-		String locator = "CreateNewFolderDialog_remote";
+		String locator = "css=input[id='CreateNewFolderDialog_remote']";
 		
 		if ( !this.sIsElementPresent(locator) ) {
 			throw new HarnessException(locator + " no present!");
