@@ -129,7 +129,6 @@ function() {
 // create bubble for address in header
 EmailTooltipZimlet.prototype.generateSpan =
 function(html, idx, obj, spanId, context, options) {
-
 	options = options || {};
 	if (options.addrBubbles) {
 		this._isBubble[spanId] = true;
@@ -839,9 +838,7 @@ function(ev, addr) {
 	this.popdown();
 
 	var obj = this._actionObject;
-	if (!addr) {
-		addr = this._getAddress(obj) || "";
-	}
+	addr = addr ? this._getAddress(addr) : (obj ? this._getAddress(obj) : "");
 
 	var params = {};
 	var inNewWindow = (!appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && ev.shiftKey) ||
