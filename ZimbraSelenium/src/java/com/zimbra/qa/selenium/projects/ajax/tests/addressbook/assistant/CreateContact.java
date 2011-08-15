@@ -7,12 +7,14 @@ import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.ContactItem;
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
+import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogAssistant;
+import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.DisplayContact;
 
 
 public class CreateContact extends AjaxCommonTest {
@@ -43,20 +45,21 @@ public class CreateContact extends AjaxCommonTest {
 		assistant.zEnterCommand(command);
 		assistant.zClickButton(Button.B_OK);
 		
-		// verify contact created
+	  
+	    // verify contact created
 		List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
  	           
         boolean isContactItemDisplayed=false;
 	    for (ContactItem ci : contacts) {
-		    if (ci.fileAs.equals(contactItem.fileAs)) 
+		    if (ci.fileAs.toLowerCase().contains(contactItem.firstName)) 
 			   {
               isContactItemDisplayed=true;
               break;
 	  	    }
 	      }
 			
-        ZAssert.assertTrue(isContactItemDisplayed, "Verify contact fileAs (" + contactItem.fileAs + " displayed");
-    
+        ZAssert.assertTrue(isContactItemDisplayed, "Verify contact fileAs (" + contactItem.firstName + " displayed");
+        
 
 	}
 
