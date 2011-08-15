@@ -913,10 +913,10 @@ function(which) {
 	var mev = new DwtMouseEvent();
 	if (this.__currentItem) {
 		this._setMouseEvent(mev, {dwtObj:this.__currentItem});
-		this.__currentItem.notifyListeners(DwtEvent.ONMOUSEOUT, mev);
+		this.__currentItem.notifyListeners(AjxEnv.isIE ? DwtEvent.ONMOUSELEAVE : DwtEvent.ONMOUSEOUT, mev);
 	}
 	this._setMouseEvent(mev, {dwtObj:currItem});
-	currItem.notifyListeners(DwtEvent.ONMOUSEOVER, mev);	// mouseover selects a menu item
+	currItem.notifyListeners(AjxEnv.isIE ? DwtEvent.ONMOUSEENTER : DwtEvent.ONMOUSEOVER, mev);	// mouseover selects a menu item
 	this.__currentItem = currItem;
 	this.scrollToItem(currItem, true);
 };
