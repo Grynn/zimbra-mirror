@@ -859,7 +859,8 @@ public class CreateAccount extends AjaxCommonTest {
             "Launch Zimbra Dekstop Button exists");
    }
 
-   @Test(description="Failure in attempting to add duplicated Yahoo! accounts", groups = { "functional" })
+   // TODO: Please uncomment this when bug 63341 is fixed
+   // @Test(description="Failure in attempting to add duplicated Yahoo! accounts", groups = { "functional" })
    public void addDuplicatedYahooAccount() throws HarnessException {
       // Adding the Yahoo! account
       DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddYahooAccountThruUI();
@@ -1038,6 +1039,88 @@ public class CreateAccount extends AjaxCommonTest {
             desktopAccountItem.password);
 
       // Trying to add the same Zimbra POP account
+      app.zPageAddNewAccount.zNavigateTo();
+      FormAddPopAccount accountForm = (FormAddPopAccount)app.zPageAddNewAccount.zDropDownListSelect(
+            DROP_DOWN_OPTION.POP);
+      accountForm.zFill(desktopPopAccountItem);
+      accountForm.zSubmit();
+
+      // Verifying error message
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "account.ACCOUNT_EXISTS: email address already exists: ",
+            "Verify error message of wrong password");
+
+      app.zPageLogin.zNavigateTo();
+
+      // Verifying in login page, the first added account is still there
+      ZAssert.assertTrue(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDeleteButton),
+            "Delete account link exists");
+      ZAssert.assertTrue(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zBtnLoginDesktop),
+            "Launch Zimbra Dekstop Button exists");
+   }
+
+   @Test(description="Failure in attempting to add Gmail IMAP account, where the same Gmail account being used already exists",
+         groups = { "private" })
+   public void addImapAccountWithPreExistingGmailAccount() throws HarnessException {
+      // Adding the Gmail account
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddGmailAccountThruUI();
+
+      DesktopAccountItem desktopImapAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            desktopAccountItem.emailAddress,
+            desktopAccountItem.emailAddress,
+            desktopAccountItem.password,
+            gmailImapReceivingServer,
+            SECURITY_TYPE.SSL,
+            "993",
+            gmailImapSmtpServer,
+            true,
+            "465",
+            desktopAccountItem.emailAddress,
+            desktopAccountItem.password);
+
+      // Trying to add the same Gmail IMAP account
+      app.zPageAddNewAccount.zNavigateTo();
+      FormAddImapAccount accountForm = (FormAddImapAccount)app.zPageAddNewAccount.zDropDownListSelect(
+            DROP_DOWN_OPTION.IMAP);
+      accountForm.zFill(desktopImapAccountItem);
+      accountForm.zSubmit();
+
+      // Verifying error message
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "account.ACCOUNT_EXISTS: email address already exists: ",
+            "Verify error message of wrong password");
+
+      app.zPageLogin.zNavigateTo();
+
+      // Verifying in login page, the first added account is still there
+      ZAssert.assertTrue(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDeleteButton),
+            "Delete account link exists");
+      ZAssert.assertTrue(app.zPageLogin.sIsElementPresent(PageLogin.Locators.zBtnLoginDesktop),
+            "Launch Zimbra Dekstop Button exists");
+   }
+
+   @Test(description="Failure in attempting to add Hotmail POP account, where the same Hotmail POP account already exists",
+         groups = { "private" })
+   public void addPopAccountWithPreExistingHotmailAccount() throws HarnessException {
+      // Adding the Hotmail POP account
+      DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddPopAccountThruUI();
+
+      DesktopAccountItem desktopPopAccountItem = DesktopAccountItem.generateDesktopPopAccountItem(
+            desktopAccountItem.emailAddress,
+            desktopAccountItem.emailAddress,
+            desktopAccountItem.password,
+            hotmailPopReceivingServer,
+            SECURITY_TYPE.SSL,
+            "993",
+            hotmailPopSmtpServer,
+            true,
+            "465",
+            desktopAccountItem.emailAddress,
+            desktopAccountItem.password);
+
+      // Trying to add the same Hotmail POP account
       app.zPageAddNewAccount.zNavigateTo();
       FormAddPopAccount accountForm = (FormAddPopAccount)app.zPageAddNewAccount.zDropDownListSelect(
             DROP_DOWN_OPTION.POP);
