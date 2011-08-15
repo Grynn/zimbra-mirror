@@ -770,7 +770,7 @@ com_zimbra_socialPreferences.prototype._showWelcomeDlg = function() {
 	this._getWelView = new DwtComposite(this.zimlet.getShell());
 	this._getWelView.getHtmlElement().style.overflow = "auto";
 	this._getWelView.getHtmlElement().innerHTML = this._createWelView();
-	this._getwelDialog = this.zimlet._createDialog({title:this.zimlet.getMessage("zimbraSocial"), view:this._getWelView, standardButtons:[DwtDialog.OK_BUTTON]});
+	this._getwelDialog = this.zimlet._createDialog({title:this.zimlet.getMessage("zimbraSocial"), view:this._getWelView, standardButtons:[DwtDialog.OK_BUTTON], id: "SocialZimlet_WelcomeDlg"});
 	this._getwelDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okWelBtnListener));
 	this._getwelDialog.popup();
 	this._setWelCheckboxes();
@@ -780,7 +780,7 @@ com_zimbra_socialPreferences.prototype._createWelView =
 function() {
 	var html = new Array();
 	var i = 0;
-	html[i++] = "<DIV  class='social_yellow'>";
+	html[i++] = "<DIV  id='SocialZimlet_WelcomeDlgTxt' class='social_yellow'>";
 	html[i++] = " <h3 align=center>"+this.zimlet.getMessage("welcome")+"</h3>";
 	html[i++] = "<b>"+this.zimlet.getMessage("gettingStarted")+"</b><br/>";
 	html[i++] = "<ul>";
@@ -794,7 +794,7 @@ function() {
 
 	html[i++] = "<li>"+this.zimlet.getMessage("thingsToDo5")+"</li>";
 	html[i++] = "</ul>";
-	html[i++] = this.zimlet.getMessage("takeA")+" <label style=\"color:blue;text-decoration: underline;font-weight:bold\"><a href='http://wiki.zimbra.com/index.php?title=Social' target=\"_blank\">"+
+	html[i++] = this.zimlet.getMessage("takeA")+" <label id='SocialZimlet_takeATourLnk' style=\"color:blue;text-decoration: underline;font-weight:bold\"><a href='http://wiki.zimbra.com/index.php?title=Social' target=\"_blank\">"+
 		this.zimlet.getMessage("quickTour")+"</a></label> "+this.zimlet.getMessage("forExtraHelp");
 	html[i++] = "<br/><br/><input type='checkbox' id='social_pref_dontShowWelcomeScreenOn' /><b/>"+ this.zimlet.getMessage("dontShowMeThisAgain");
 	html[i++] = "</DIV>";
