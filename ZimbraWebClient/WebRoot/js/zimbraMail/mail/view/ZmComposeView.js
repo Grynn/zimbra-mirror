@@ -2109,6 +2109,10 @@ function(action, msg, extraBodyText) {
 	}
 
 	extraBodyText = extraBodyText || "";
+	if (htmlMode) {
+		extraBodyText = extraBodyText.replace(/\n/g, "<br>");
+	}
+
 	var preText;
 	if (sigPre) {
 		if (extraBodyText) {
