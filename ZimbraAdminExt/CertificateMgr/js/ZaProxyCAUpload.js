@@ -3,7 +3,7 @@ ZaProxyCAUpload = function() {}
 
 ZaProxyCAUpload.myXFormModifier = function(xFormObject) {
     var uploadCertUI =
-        {type:_GROUP_,  numCols: 2, colSizes: ["150px","*"], colSpan: "*",
+        {type:_GROUP_,  numCols: 2, colSizes: ["250px","100px"], colSpan: "*",
             cssStyle: "margin-bottom: 10px;margin-left: 270px",
             items: [
             {type:_OUTPUT_, value: ZaProxyCAUpload.getUploadFormHtml(this) },
@@ -41,7 +41,7 @@ ZaTabView.XFormModifiers["ZaDomainXFormView"].push(ZaProxyCAUpload.myXFormModifi
 
 ZaProxyCAUpload.myDlgXFormModifier = function(xFormObject) {
     var uploadCertUI =
-        {type:_GROUP_,  numCols: 2, colSizes: ["150px","*"], colSpan: "*",
+        {type:_GROUP_,  numCols: 2, colSizes: ["250px","100px"], colSpan: "*",
             cssStyle: "margin-bottom: 10px;margin-left: 195px",
             items: [
             {type:_OUTPUT_, value: ZaProxyCAUpload.getUploadFormHtml(this) },
@@ -107,7 +107,7 @@ ZaProxyCAUpload.getUploadFormHtml = function(caller) {
 	html[idx++] = ZaProxyCAUpload.getUploadCertFormId(caller);// ZaProxyCAUpload.uploadCertFormId; //
 	html[idx++] = "' enctype='multipart/form-data'>" ;
 	html[idx++] = "<div><table border=0 cellspacing=0 cellpadding=2 style='table-layout: fixed;'> " ;
-	html[idx++] = "<colgroup><col width='*' /><col width=50 /></colgroup>";
+	html[idx++] = "<colgroup><col width='250' /><col width=50 /></colgroup>";
 
 	html[idx++] = "<tbody><td><input type=file  name='certFile' size='30'></input></td><td></td></tr>";
 
