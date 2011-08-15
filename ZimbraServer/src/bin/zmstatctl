@@ -129,6 +129,7 @@ my $TOOL_MYSQL = 'zmstat-mysql';
 my $TOOL_CONVERTD = 'zmstat-convertd';
 my $TOOL_NGINX = 'zmstat-nginx';
 my $TOOL_MTAQUEUE = 'zmstat-mtaqueue';
+my $TOOL_LDAP = 'zmstat-ldap';
 
 my $cmd = $ARGV[0];
 if (defined($cmd)) {
@@ -155,6 +156,7 @@ if (defined($cmd)) {
         my $doNginx = $procs =~ /\bnginx\b/;
         my $doMysql = -x getZimbraHome() . "/mysql/bin/mysqld" ? 1 : 0;
         my $doMtaQueue = -x getZimbraHome() . "/postfix/sbin/postqueue" ? 1 : 0;
+	my $doLdap = -x getZimbraHome() . "/openldap/sbin/slapd" ? 1 : 0;
         my $outfile = getZmstatRoot() . "/zmstat.out";
         my $scriptDir = dirname($0);
         my $parentDir = dirname($scriptDir);
@@ -186,6 +188,11 @@ if (defined($cmd)) {
         }
         if ($doNginx) {
             my $cmd = "$toolpath/$TOOL_NGINX";
+            print "Invoking: $cmd\n";
+            system("$cmd >> $outfile 2>&1 &");
+        }
+        if ($doLdap) {
+            my $cmd = "$toolpath/$TOOL_LDAP";
             print "Invoking: $cmd\n";
             system("$cmd >> $outfile 2>&1 &");
         }
