@@ -813,7 +813,7 @@ namespace CssLib
             return retval;
         }
 
-        public void AddMsgRequest(XmlWriter writer, string uploadToken, ZimbraMessage message, int requestId)
+        public void AddMsgRequest(XmlWriter writer, string uploadToken, ZimbraMessage message, bool isInline, int requestId)
         {
             writer.WriteStartElement("AddMsgRequest", "urn:zimbraMail");
             if (requestId != -1)
@@ -821,21 +821,36 @@ namespace CssLib
                 writer.WriteAttributeString("requestId", requestId.ToString());
             }
             writer.WriteStartElement("m");
-            writer.WriteAttributeString("aid", uploadToken);
             writer.WriteAttributeString("l", message.folderId);
             writer.WriteAttributeString("d", message.rcvdDate);
             writer.WriteAttributeString("f", message.flags);
+            if (!isInline)
+            {
+                writer.WriteAttributeString("aid", uploadToken);
+            }
+            else
+            {
+                WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(uploadToken)));
+            }
 
             writer.WriteEndElement();   // m
             writer.WriteEndElement();   // AddMsgRequest
         }
 
-        public int AddMessage(string filepath, ZimbraMessage message)
+        public int AddMessage(string filepath, ZimbraMessage message, bool isInline)
         {
             lastError = "";
             string uploadToken = "";
+            int retval = 0;
 
-            int retval = UploadFile(filepath, out uploadToken);
+            if (!isInline)
+            {
+                retval = UploadFile(filepath, out uploadToken);
+            }
+            else
+            {
+                uploadToken = filepath;
+            }
             if (retval == 0)
             {
                 WebServiceClient client = new WebServiceClient
@@ -856,7 +871,7 @@ namespace CssLib
 
                     writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
 
-                    AddMsgRequest(writer, uploadToken, message, -1);
+                    AddMsgRequest(writer, uploadToken, message, isInline, -1);
 
                     writer.WriteEndElement();   // soap body
                     writer.WriteEndElement();   // soap envelope
@@ -925,7 +940,7 @@ namespace CssLib
                     if (ufretval == 0)
                     {
                         ZimbraMessage message = lMessages[i];
-                        AddMsgRequest(writer, uploadToken, message, -1);
+                        AddMsgRequest(writer, uploadToken, message, false, -1);
                     }
                 }
 
