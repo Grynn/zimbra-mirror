@@ -27,7 +27,6 @@ SocialZimlet.prototype.init =
 		function() {
 			this.initializeVariables();
 			this._createsocialApp();
-
 		};
 
 /*
@@ -574,9 +573,10 @@ SocialZimlet.prototype.twitterSearchKeyHdlr =
 SocialZimlet.prototype._twitterSearchBtnListener =
 		function() {
 			var val = document.getElementById("social_searchField").value;
-			if (AjxStringUtil.trim(val) == "") {
+			if (AjxStringUtil.trim(val) == "" || val.indexOf("<") >= 0 || val.length > 20) {
 				return;
 			}
+
 			var tableId = this._showCard({headerName:val, type:"SEARCH", autoScroll:true});
 			var sParams = {query:val, tableId:tableId, type:"SEARCH"};
 			this.twitter.twitterSearch(sParams);
@@ -651,8 +651,8 @@ SocialZimlet.prototype._addUpdateToCheckboxes =
 				html[idx++] = this._getUpdateToChkboxCellHtml(chkbxId, turnOnStr, this.allAccounts[id].name, this.allAccounts[id].type);
 
 			}
-
 			for (var i = 0; i < this.socialcastAccounts.length; i++) {
+				hasAccounts = true;
 				turnOnStr = "";
 				var account = this.socialcastAccounts[i];
 				if (account.__on == "true") {
@@ -1133,7 +1133,8 @@ SocialZimlet.prototype._doRefreshFeeds =
 			} else if (type == "FACEBOOK") {
 				this.facebook._fbGetStream(tableId, this.tableIdAndAccountMap[tableId]);
 			} else if (type == "SOCIALCAST") {
-				this.socialcast.getMessages(tableId, this.tableIdAndAccountMap[tableId], this.tableIdAndSCStreamMap[tableId].id);
+				var scStreamId = this.tableIdAndSCStreamMap[tableId] ? this.tableIdAndSCStreamMap[tableId].id : null;
+				this.socialcast.getMessages(tableId, this.tableIdAndAccountMap[tableId], scStreamId);
 			}
 		};
 
@@ -2078,7 +2079,7 @@ SocialZimlet.prototype.createCardView =
 				if (this._zimletDiv == undefined) {
 					this._zimletDiv = document.createElement("div");
 				}
-				this._zimletDiv.innerHTML = text;
+				this._zimletDiv.innerHTML = AjxStringUtil.htmlEncode(text);
 				this._objectManager.findObjectsInNode(this._zimletDiv);
 				var zimletyFiedTxt = this._zimletDiv.innerHTML;
 				if (type == "SOCIALCAST") {
@@ -2678,7 +2679,7 @@ SocialZimlet.prototype._getCommentsHtml =
 				html[i++] = "</div>";
 				html[i++] = "</TD><TD class='social_fbcommentText'>";
 				//pass it through zimlets to get url, phone, emoticons etc
-				this._zimletDiv.innerHTML = comment.text;
+				this._zimletDiv.innerHTML = AjxStringUtil.htmlEncode(comment.text);
 				this._objectManager.findObjectsInNode(this._zimletDiv);
 				var zimletyFiedTxt = " " + this._zimletDiv.innerHTML;
 				if (accountType == "SOCIALCAST") {
