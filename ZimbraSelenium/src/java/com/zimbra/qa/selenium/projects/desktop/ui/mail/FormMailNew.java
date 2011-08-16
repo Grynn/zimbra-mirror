@@ -8,11 +8,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 import com.zimbra.qa.selenium.projects.desktop.ui.*;
-
-
-
 
 /**
  * The <code>FormMailNew<code> object defines a compose new message view
@@ -395,7 +391,7 @@ public class FormMailNew extends AbsForm {
 				this.sFocus(locator);
 				this.zClickAt(locator, "0,0");
 				this.zWaitForBusyOverlay();
-				this.zType(locator, value);
+				this.zTypeKeys(locator, value);
 				
 				return;
 				
@@ -415,7 +411,7 @@ public class FormMailNew extends AbsForm {
 
 					this.sFocus(locator);
 					this.zClickAt(locator, "0,0");
-					this.zType(locator, value);
+					this.zTypeKeys(locator, value);
 					
 				} finally {
 					// Make sure to go back to the original iframe
