@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_searchauto" version="2.0" label="Search History" description="Helps autocomplete prior searches">
+<zimlet name="com_zimbra_searchauto" version="2.1" label="Search History" description="Helps autocomplete prior searches">
   <include>searchauto.js</include>
   <includeCSS>searchauto.css</includeCSS>
   <handlerObject>ZmSearchAutoZimlet</handlerObject>
