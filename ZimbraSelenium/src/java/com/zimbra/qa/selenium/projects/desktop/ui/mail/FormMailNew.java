@@ -8,6 +8,7 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 import com.zimbra.qa.selenium.projects.desktop.ui.*;
 
 
@@ -481,35 +482,40 @@ public class FormMailNew extends AbsForm {
 		if ( !(item instanceof MailItem) ) {
 			throw new HarnessException("Invalid item type - must be MailItem");
 		}
-		
+
 		// Convert object to MailItem
 		MailItem mail = (MailItem) item;
-		
+
 		// Fill out the form
 		//
-		
+
 		// Handle the subject
 		if ( mail.dSubject != null ) {
-			
+
 			zFillField(Field.Subject, mail.dSubject);
 
 		}
-		
+
 		if ( mail.dBodyText != null ) {
-			
+
 			zFillField(Field.Body, mail.dBodyText);
-			
+
 		}
-		
+
+		if ( mail.dBodyHtml != null ) {
+
+         zFillField(Field.Body, mail.dBodyHtml);
+
+      }
 		// TODO: how to handle HTML body?
-		
+
 		// Handle the Recipient list, which can be a combination
 		// of To, Cc, Bcc, and From
 		StringBuilder to = null;
 		StringBuilder cc = null;
 		StringBuilder bcc = null;
 		StringBuilder from = null;
-		
+
 		// Convert the list of recipients to a semicolon separated string
 		List<RecipientItem> recipients = mail.dAllRecipients();
 		if ( recipients != null ) {
