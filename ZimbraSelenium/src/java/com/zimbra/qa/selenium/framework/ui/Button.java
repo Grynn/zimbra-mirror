@@ -227,7 +227,7 @@ public class Button {
 	
 	// Task buttons
 	public static final Button B_TASK_FILTERBY = new Button("B_TASK_FILTERBY");
-	public static final Button B_TASK_MARKCOMPLETED = new Button("B_TASK_FILTERBY");
+	public static final Button B_TASK_MARKCOMPLETED = new Button("B_TASK_MARKCOMPLETED");
 
 	
 	// Tree buttons
