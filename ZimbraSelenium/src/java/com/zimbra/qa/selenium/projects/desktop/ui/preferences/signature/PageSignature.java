@@ -26,6 +26,7 @@ public class PageSignature extends AbsTab{
 	//	public static final String zSignatureListView = "//div[@class='ZmSignatureListView']/div//tbody/tr/td";
 		public static final String zSignatureListView = "//div[@class='ZmSignatureListView']";
 		public static final String zNewSignature ="//td[contains(@id,'_title') and contains (text(),'New Signature')]";
+		public static final String zDeleteSignature ="//td[contains(@id,'DWT') and contains (text(),'Delete')]";
 
 	}
 
@@ -86,7 +87,11 @@ public class PageSignature extends AbsTab{
 			page = new FormSignatureNew(this.MyApplication);
 
 
-		}  else {
+		}  else if(button== Button.B_DELETE) {
+         locator = Locators.zDeleteSignature;
+         page = null;
+         
+      } else {
 			throw new HarnessException("no logic defined for button " + button);
 		}
 
