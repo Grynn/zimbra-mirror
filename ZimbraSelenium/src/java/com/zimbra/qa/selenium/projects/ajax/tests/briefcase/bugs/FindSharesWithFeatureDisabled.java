@@ -15,7 +15,8 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.DialogFindShares;
 
 public class FindSharesWithFeatureDisabled extends AjaxCommonTest {
-String url;
+	String url;
+
 	@SuppressWarnings("serial")
 	public FindSharesWithFeatureDisabled() {
 		logger.info("New "
@@ -44,16 +45,27 @@ String url;
 		LinkItem link = new LinkItem();
 
 		// refresh briefcase page
-		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
+		app.zTreeBriefcase
+				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
 
 		// Click on Find shares link
-		DialogFindShares dialog = (DialogFindShares) app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, link);
+		DialogFindShares dialog = (DialogFindShares) app.zTreeBriefcase
+				.zTreeItem(Action.A_LEFTCLICK, link);
 
 		// Verify Find Shares dialog is opened
 		ZAssert.assertTrue(dialog.zIsActive(),
-		"Verify Find Shares dialog is opened");
-		
+				"Verify Find Shares dialog is opened");
+
+		/*
+		 * check tree itme check box
+		 * ClientSessionFactory.session().selenium().getEval(
+		 * "selenium.browserbot.triggerMouseEvent(selenium.browserbot.findElement('"
+		 * +
+		 * "css=div.DwtTreeItemLevel1ChildDiv:contains(enus13130974715803) div#ZmShareTreeItem_12_checkbox"
+		 * + "'),'" + "click" + "', null, 0, 0, 0)");
+		 */
+
 		// Dismiss the dialog
-		dialog.zClickButton(Button.B_CANCEL);	
-	}	
+		dialog.zClickButton(Button.B_CANCEL);
+	}
 }

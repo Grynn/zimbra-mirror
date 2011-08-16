@@ -78,7 +78,7 @@ public class OpenLinkToMessage extends AjaxCommonTest {
 
 			for (String p : query.split("&")) {
 				if (p.contains("=")) {
-					map.put(p.split("=")[0], p.split("=")[1]);
+					map.put(p.split("=")[0], p.split("=")[1].substring(0,1));
 				}
 			}
 		}
@@ -93,6 +93,8 @@ public class OpenLinkToMessage extends AjaxCommonTest {
 		app.zPageBriefcase.zClickAt(
 				PageMail.Locators.zCloseIconBtn_messageWindow, "0,0");
 
+		SleepUtil.sleepVerySmall();
+		
 		ZAssert
 				.assertTrue(app.zPageBriefcase
 						.sIsElementPresent(PageMail.Locators.cssTVRowsLocator),

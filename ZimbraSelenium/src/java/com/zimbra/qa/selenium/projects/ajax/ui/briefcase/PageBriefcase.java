@@ -988,7 +988,7 @@ public class PageBriefcase extends AbsTab {
 
 			} else if (option == Button.O_SEND_AS_ATTACHMENT) {
 
-				optionLocator = "css=td#zmi__Briefcase__SEND_FILE_AS_ATT_title:contains('Send as attachment')";
+				optionLocator = "css=div#zmi__Briefcase__SEND_FILE_AS_ATT:contains(Send as attachment(s))";
 
 				page = new FormMailNew(this.MyApplication);
 
