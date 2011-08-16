@@ -20,7 +20,8 @@ import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactNew;
  */
 public class ContactItem implements IItem {
 	protected static Logger logger = LogManager.getLogger(IItem.class);
-	public static final String IMAGE_CLASS   = "ImgContact";
+	public static final String IMAGE_CLASS       = "ImgContact";
+	public static final String GAL_IMAGE_CLASS   = "ImgGALContact";
 
 	public String fileAs = null;	
 	public String type = null;

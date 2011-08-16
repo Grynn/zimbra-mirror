@@ -5,8 +5,8 @@ package com.zimbra.qa.selenium.projects.ajax.ui.search;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
+import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import java.util.*;
 
 
@@ -134,7 +134,7 @@ public class PageSearch extends AbsTab {
 		
 		if ( button == Button.B_SEARCH ) {
 			locator = "css=div#zb__Search__SEARCH>div#zb__Search__SEARCH_left_icon>div.ImgSearch2";
-			page = null;
+			page = new DisplayAllItemTypesSearchResults(((AppAjaxClient)MyApplication));
 			
 			// Make sure the button exists
 			if ( !sIsElementPresent(locator) )
@@ -215,7 +215,7 @@ public class PageSearch extends AbsTab {
 			pulldownLocator = "css=td#ztb_search_searchMenuButton";
 			
 			if ( option == Button.O_SEARCHTYPE_ALL ) {        
-				optionLocator = "css=div#zmi__Search__ANY";		
+				optionLocator = "css=div#zmi__Search__ANY";						
 			} else if ( option == Button.O_SEARCHTYPE_EMAIL ) {
 				optionLocator = "css=div#zmi__Search__MAIL";		
 			} else if ( option == Button.O_SEARCHTYPE_CONTACTS ) {

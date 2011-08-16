@@ -212,8 +212,55 @@ public class PageAddressbook extends AbsTab {
 		return isContactFound;		
 	}
 
+    // only return the list with a certain contact type				
+	// contactType should be one of ContactGroupItem.IMAGE_CLASS , ContactItem.IMAGE_CLASS	
+	public List<ContactItem> zListGetContacts(String contactType) throws HarnessException {
+
+		List <ContactItem> list= new ArrayList<ContactItem>();
+
+		//ensure it is in Addressbook main page
+		zNavigateTo();
+		if ( !this.sIsElementPresent("id=zv__CNS") )			
+		//maybe return empty list?????
+			throw new HarnessException("Contact List is not present "+ "id='zv__CNS'");
+
+		//Get the number of contacts (String) 
+		int count = this.sGetCssCount("css=div[id='zv__CNS']>div[id^=zli__CNS__]");
+		
+		logger.info(myPageName() + " zListGetContacts: number of contacts: "+ count);
+
+		// Get each contact's data from the table list
+		for (int i = 1; i <= count; i++) {
+			String commonLocator = "css=div[id='zv__CNS'] div:nth-child("+ i +")";
+
+		    
+			if (sIsElementPresent(commonLocator + " div[class*=" + contactType + "]")) {
 				
-	
+			    ContactItem ci=null;
+			    String contactDisplayedLocator = commonLocator + " table tbody tr td:nth-child(3)";
+			    String fileAs = sGetText(contactDisplayedLocator);
+		        logger.info(" found " + fileAs);
+		    
+		        //check contact type
+		        if ( contactType.equals(ContactGroupItem.IMAGE_CLASS)) {
+		        	ci=new ContactGroupItem(fileAs);
+		        }
+		        else if (  contactType.equals(ContactItem.IMAGE_CLASS) ||
+		        		   contactType.equals(ContactItem.GAL_IMAGE_CLASS)) {
+		        	ci=new ContactItem(fileAs);		    			
+		        }
+		        else {
+		        	throw new HarnessException("Image not neither conntact group nor contact.");		
+		        }
+			
+		        list.add(ci);	    	      
+			}
+		}
+
+
+		return list;		
+	}
+
 	
 	public List<ContactItem> zListGetContacts() throws HarnessException {
 
