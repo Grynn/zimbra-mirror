@@ -12,7 +12,7 @@ class ATL_NO_VTABLE CMapiWrapper: public CComObjectRootEx<CComSingleThreadModel>
 public:
     CMapiWrapper() {
         baseMigrationObj = new MapiMigration();
-        exchadmin = new Zimbra::MAPI::ExchangeAdmin("10.117.82.161");
+        exchadmin = new Zimbra::MAPI::ExchangeAdmin(L"10.117.82.161");
 
         CComBSTR str = _T("Unnamed");
         m_pUDT.Items = 0;               // default value zero (0)

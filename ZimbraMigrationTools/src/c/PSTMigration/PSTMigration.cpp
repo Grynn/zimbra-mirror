@@ -114,12 +114,12 @@ void ZCFileUploadTest()
 
 void CreateExchangeMailBox()
 {
-	Zimbra::MAPI::ExchangeAdmin *exchadmin= new Zimbra::MAPI::ExchangeAdmin("10.117.82.161");
+	Zimbra::MAPI::ExchangeAdmin *exchadmin= new Zimbra::MAPI::ExchangeAdmin(L"10.117.82.161");
 	try
 	{
 		try
 		{
-			exchadmin->DeleteProfile("new_zm12@exch");
+			exchadmin->DeleteProfile(Zimbra::MAPI::DEFAULT_ADMIN_PROFILE_NAME);
 		}
 		catch(Zimbra::MAPI::ExchangeAdminException &ex)
 		{
@@ -128,15 +128,18 @@ void CreateExchangeMailBox()
 
 		try
 		{
-			exchadmin->DeleteExchangeMailBox(L"new_zm12",L"Administrator",L"z1mbr4Migration");
+			exchadmin->DeleteExchangeMailBox(Zimbra::MAPI::DEFAULT_ADMIN_MAILBOX_NAME,
+				L"Administrator",L"z1mbr4Migration");
 		}
 		catch(Zimbra::MAPI::ExchangeAdminException &ex)
 		{
 			UNREFERENCED_PARAMETER(ex);
 		}
-		exchadmin->CreateExchangeMailBox(L"new_zm12",L"z1mbr4Migration",L"Administrator",L"z1mbr4Migration");
-		exchadmin->CreateProfile("new_zm12@exch","new_zm12","z1mbr4Migration");
-		exchadmin->SetDefaultProfile("new_zm12@exch");
+		exchadmin->CreateExchangeMailBox(Zimbra::MAPI::DEFAULT_ADMIN_MAILBOX_NAME,Zimbra::MAPI::DEFAULT_ADMIN_PASSWORD,
+			L"Administrator",L"z1mbr4Migration");
+		exchadmin->CreateProfile(Zimbra::MAPI::DEFAULT_ADMIN_PROFILE_NAME,
+			Zimbra::MAPI::DEFAULT_ADMIN_MAILBOX_NAME,Zimbra::MAPI::DEFAULT_ADMIN_PASSWORD);
+		exchadmin->SetDefaultProfile(Zimbra::MAPI::DEFAULT_ADMIN_PROFILE_NAME);
 	}
 	catch(Zimbra::MAPI::ExchangeAdminException &ex)
 	{
@@ -148,7 +151,7 @@ void CreateExchangeMailBox()
 
 void GetAllProfiles()
 {
-	Zimbra::MAPI::ExchangeAdmin *exchadmin= new Zimbra::MAPI::ExchangeAdmin("10.117.82.161");
+	Zimbra::MAPI::ExchangeAdmin *exchadmin= new Zimbra::MAPI::ExchangeAdmin(L"10.117.82.161");
 	vector<string> vProfileList;
 	exchadmin->GetAllProfiles(vProfileList);
 	vector<string>::iterator itr= vProfileList.begin();
@@ -158,21 +161,28 @@ void GetAllProfiles()
 void GetUserDN()
 {
 	wstring userDN;
-	Zimbra::MAPI::Util::GetUserDN(L"10.117.82.161",L"Administrator",userDN);
+	wstring lagcyName;
+	Zimbra::MAPI::Util::GetUserDNAndLegacyName(L"10.117.82.161",L"Administrator",userDN,lagcyName);
 }
 
-int main(int argc, TCHAR *argv[])
+void ExchangeMigrationSetupTest()
 {
-	UNREFERENCED_PARAMETER(argc);
-	UNREFERENCED_PARAMETER(argv);
-	
-//	AdminAuth();
-//	UserAuth();
-//	ZCFileUploadTest();
-//	CreateExchangeMailBox();
-//	GetAllProfiles();	
+	ExchangeMigrationSetup *exchmigsetup = new ExchangeMigrationSetup(L"10.117.82.161",
+		L"Administrator",L"z1mbr4Migration");
+	exchmigsetup->Setup();
+	vector<string> vProfileList;
+	exchmigsetup->GetAllProfiles(vProfileList);
+	vector<string>::iterator itr= vProfileList.begin();
+	while(itr != vProfileList.end())
+	{
+		printf("%s\n" ,((string)*itr).c_str());
+		itr++ ;
+	}
+	delete exchmigsetup;
+}
 
-
+void MAPIAccessAPITest()
+{
 	tree<Folder_Data> tr;
 	//Create class instance with Exchange server hostname/IP, Outlook admin profile name, Exchange mailbox to be migrated
 	Zimbra::MAPI::MAPIAccessAPI *maapi = new Zimbra::MAPI::MAPIAccessAPI(L"10.117.82.161",L"Outlook",L"appt1");
@@ -188,6 +198,23 @@ int main(int argc, TCHAR *argv[])
 
 	//free it
 	delete maapi;
+}
+
+int main(int argc, TCHAR *argv[])
+{
+	UNREFERENCED_PARAMETER(argc);
+	UNREFERENCED_PARAMETER(argv);
+	
+//	AdminAuth();
+//	UserAuth();
+//	ZCFileUploadTest();
+//	CreateExchangeMailBox();
+//	GetAllProfiles();	
+	MAPIAccessAPITest();
+
+	//ExchangeMigrationSetupTest();
+	//CreateExchangeMailBox();
+	
 	return 0;
 }
 

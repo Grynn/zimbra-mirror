@@ -30,7 +30,7 @@ MAPIAccessAPI::~MAPIAccessAPI() {
 // Open MAPI sessiona and Open Stores
 HRESULT MAPIAccessAPI::OpenSessionAndStore() {
     HRESULT hr = S_OK;
-    wstring wstruserdn;
+    wstring wstruserdn; wstring legacyName;
     LPSTR ExchangeServerDN = NULL;
     LPSTR ExchangeUserDN = NULL;
     LPWSTR pwstrExchangeServerDN = NULL;
@@ -56,11 +56,11 @@ HRESULT MAPIAccessAPI::OpenSessionAndStore() {
     AtoW(ExchangeServerDN, pwstrExchangeServerDN);
 
     // Get DN of user to be migrated
-    Zimbra::MAPI::Util::GetUserDN(m_strExchangeHostName.c_str(),
-        m_strUserName.c_str(), wstruserdn);
+	Zimbra::MAPI::Util::GetUserDNAndLegacyName(m_strExchangeHostName.c_str(),
+        m_strUserName.c_str(), wstruserdn,legacyName);
     hr = m_zmmapisession->OpenOtherStore(
             m_defaultStore->GetInternalMAPIStore(), pwstrExchangeServerDN,
-            (LPWSTR)wstruserdn.c_str(), *m_userStore);
+            (LPWSTR)legacyName.c_str(), *m_userStore);
     if (hr != S_OK)
         goto CLEAN_UP;
 CLEAN_UP:
@@ -157,9 +157,11 @@ void MAPIAccessAPI::travrese_folder(Zimbra::MAPI::MAPIFolder &folder) {
         Zimbra::MAPI::MAPIMessage *msg = new Zimbra::MAPI::MAPIMessage();
         bContinue = msgIter->GetNext(*msg);
         if (bContinue) {
-            LPTSTR subject = NULL;
-            if (msg->Subject(&subject))
-                printf("\tsubject--%S\n", subject);
+            Zimbra::Util::ScopedBuffer<WCHAR> subject ;
+			if (msg->Subject(subject.getptr()))
+			{
+				printf("\tsubject--%S\n", subject.get());
+			}
         }
         delete msg;
     }

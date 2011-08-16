@@ -246,10 +246,9 @@ LPSRestriction MessageIterator::GetRestriction(ULONG TypeMask, FILETIME startDat
 }
 
 BOOL MessageIterator::GetNext(MAPIMessage &msg) {
-    SRow *pRow = MAPITableIterator::GetNext();
 
-    if (pRow == NULL) {
-        // msg.InternalFree();
+    SRow *pRow = MAPITableIterator::GetNext();
+	if (pRow == NULL) {
         return FALSE;
     }
     LPMESSAGE pMessage = NULL;
@@ -672,13 +671,16 @@ void MAPIMessage::InternalFree() {
 }
 
 bool MAPIMessage::Subject(LPTSTR *ppSubject) {
+	HRESULT hr=S_OK;
     if (PROP_TYPE(m_pMessagePropVals[SUBJECT].ulPropTag) != PT_ERROR) {
         int nLen = (int)_tcslen(m_pMessagePropVals[SUBJECT].Value.LPSZ);
         LPTSTR pSubject = m_pMessagePropVals[SUBJECT].Value.LPSZ;
-        MAPIAllocateBuffer((nLen + 1) * sizeof (TCHAR), (LPVOID *)ppSubject);
+       if(SUCCEEDED(hr= MAPIAllocateBuffer((nLen + 1) * sizeof (TCHAR), (LPVOID *)ppSubject)))
+	   {
         ZeroMemory(*ppSubject, (nLen + 1) * sizeof (TCHAR));
         _tcscpy(*ppSubject, pSubject);
         return true;
+	   }
     }
     *ppSubject = NULL;
     return false;

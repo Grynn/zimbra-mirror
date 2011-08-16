@@ -110,8 +110,8 @@ HRESULT Zimbra::MAPI::Util::MailboxLogon(LPMAPISESSION pSession, LPMDB pMdb, LPW
     return hr;
 }
 
-HRESULT Zimbra::MAPI::Util::GetUserDN(LPCWSTR lpszServer, LPCWSTR lpszUser,
-    wstring &wstruserdn) {
+HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR lpszUser,
+    wstring &wstruserdn,wstring &wstrlegacyname) {
     wstruserdn = L"";
 
     // Get IDirectorySearch Object
@@ -122,7 +122,7 @@ HRESULT Zimbra::MAPI::Util::GetUserDN(LPCWSTR lpszServer, LPCWSTR lpszUser,
             strADServer.c_str(), NULL, NULL, ADS_SECURE_AUTHENTICATION, IID_IDirectorySearch,
             (void **)&pDirSearch);
     if (((FAILED(hr))))
-        throw MapiUtilsException(hr, L"Util::GetUserDN(): ADsOpenObject Failed.", __LINE__,
+        throw MapiUtilsException(hr, L"Util::GetUserDNAndLegacyName(): ADsOpenObject Failed.", __LINE__,
             __FILE__);
     wstring strFilter = _T("(&(objectClass=organizationalPerson)(cn=");
     strFilter += lpszUser;
@@ -143,18 +143,25 @@ HRESULT Zimbra::MAPI::Util::GetUserDN(LPCWSTR lpszServer, LPCWSTR lpszUser,
     pDirSearch->SetSearchPreference(searchPrefs, 2);
 
     // Retrieve the "distinguishedName" attribute for the specified dn
-    LPWSTR pAttributes = L"legacyExchangeDN";
-    hr = pDirSearch->ExecuteSearch((LPWSTR)strFilter.c_str(), &pAttributes, 1, &hSearch);
+	LPWSTR pAttributes[] = {L"distinguishedName",L"legacyExchangeDN"};
+    hr = pDirSearch->ExecuteSearch((LPWSTR)strFilter.c_str(), pAttributes, 2, &hSearch);
     if (FAILED(hr))
-        throw MapiUtilsException(hr, L"Util:: GetUserDN(): ExecuteSearch() Failed.", __LINE__,
+        throw MapiUtilsException(hr, L"Util:: GetUserDNAndLegacyName(): ExecuteSearch() Failed.", __LINE__,
             __FILE__);
     ADS_SEARCH_COLUMN dnCol;
     while (SUCCEEDED(hr = pDirSearch->GetNextRow(hSearch))) {
         if (S_OK == hr) {
-            hr = pDirSearch->GetColumn(hSearch, pAttributes, &dnCol);
+			//distinguishedName
+            hr = pDirSearch->GetColumn(hSearch, pAttributes[0], &dnCol);
             if (FAILED(hr))
                 break;
             wstruserdn = dnCol.pADsValues->CaseIgnoreString;
+			//legacyExchangeDN
+			hr = pDirSearch->GetColumn(hSearch, pAttributes[1], &dnCol);
+            if (FAILED(hr))
+                break;
+            wstrlegacyname = dnCol.pADsValues->CaseIgnoreString;
+
             pDirSearch->CloseSearchHandle(hSearch);
             return S_OK;
         } else if (S_ADS_NOMORE_ROWS == hr) {
@@ -171,8 +178,8 @@ HRESULT Zimbra::MAPI::Util::GetUserDN(LPCWSTR lpszServer, LPCWSTR lpszUser,
         }
     }
     pDirSearch->CloseSearchHandle(hSearch);
-    if (wstruserdn.empty())
-        throw MapiUtilsException(hr, L"Util::GetUserDN(): S_ADS_NOMORE_ROWS.", __LINE__,
+	if (wstruserdn.empty() || wstrlegacyname.empty())
+        throw MapiUtilsException(hr, L"Util::GetUserDNAndLegacyName(): S_ADS_NOMORE_ROWS.", __LINE__,
             __FILE__);
     return S_OK;
 }

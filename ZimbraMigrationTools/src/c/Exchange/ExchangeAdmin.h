@@ -13,23 +13,41 @@ public:
 class ExchangeAdmin {
 private:
     LPPROFADMIN m_pProfAdmin;
-    string m_strServer;
-
+    wstring m_strServer;
 private:
     HRESULT Init();
-
 public:
-    ExchangeAdmin(string strExchangeServer);
+    ExchangeAdmin(wstring strExchangeServer);
     ~ExchangeAdmin();
-    HRESULT CreateProfile(string strProfileName, string strMailboxName, string strPassword);
-    HRESULT DeleteProfile(string strProfile);
+    HRESULT CreateProfile(wstring strProfileName, wstring strMailboxName, wstring strPassword);
+    HRESULT DeleteProfile(wstring strProfile);
     HRESULT GetAllProfiles(vector<string> &vProfileList);
-    HRESULT SetDefaultProfile(string strProfile);
-    HRESULT CreateExchangeMailBox(LPWSTR lpwstrNewUser, LPWSTR lpwstrNewUserPwd,
-    LPWSTR lpwstrlogonuser,
-    LPWSTR lpwstrLogonUsrPwd);
-    HRESULT DeleteExchangeMailBox(LPWSTR lpwstrMailBox, LPWSTR lpwstrlogonuser,
-    LPWSTR lpwstrLogonUsrPwd);
+    HRESULT SetDefaultProfile(wstring strProfile);
+    HRESULT CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpwstrNewUserPwd,
+    LPCWSTR lpwstrlogonuser,
+    LPCWSTR lpwstrLogonUsrPwd);
+    HRESULT DeleteExchangeMailBox(LPCWSTR lpwstrMailBox, LPCWSTR lpwstrlogonuser,
+    LPCWSTR lpwstrLogonUsrPwd);
 };
+
+class ExchangeMigrationSetup
+{
+private:
+	ExchangeAdmin *m_exchAdmin;
+	wstring m_strServer;
+	wstring m_ExchangeAdminName;
+	wstring m_ExchangeAdminPwd;
+public:
+	ExchangeMigrationSetup(LPCWSTR strExhangeHost,
+		LPCWSTR ExchangeAdminName, LPCWSTR ExchangeAdminPwd);
+	~ExchangeMigrationSetup();
+	HRESULT Setup();
+	HRESULT Clean();
+	HRESULT GetAllProfiles(vector<string> &vProfileList);
+};
+
+const LPCWSTR DEFAULT_ADMIN_PROFILE_NAME = L"zm_prof";
+const LPCWSTR DEFAULT_ADMIN_MAILBOX_NAME = L"zm_mbox";
+const LPCWSTR DEFAULT_ADMIN_PASSWORD	 = L"z1mbr4Migration";
 }
 }

@@ -65,7 +65,7 @@ namespace Util {
 HRESULT HrMAPIFindDefaultMsgStore(LPMAPISESSION lplhSession, SBinary &bin);
 HRESULT MailboxLogon(LPMAPISESSION pSession, LPMDB pMdb, LPWSTR pStoreDn, LPWSTR pMailboxDn,
     LPMDB *ppMdb);
-HRESULT GetUserDN(LPCWSTR lpszServer, LPCWSTR lpszUser, wstring &wstruserdn);
+HRESULT GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR lpszUser, wstring &wstruserdn,wstring &wstrlegacyname);
 HRESULT GetUserDnAndServerDnFromProfile(LPMAPISESSION pSession, LPSTR &pExchangeServerDn,
     LPSTR &pExchangeUserDn);
 HRESULT HrMAPIFindIPMSubtree(LPMDB lpMdb, SBinary &bin);
