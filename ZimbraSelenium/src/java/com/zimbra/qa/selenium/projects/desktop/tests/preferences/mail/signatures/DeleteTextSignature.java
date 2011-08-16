@@ -1,12 +1,12 @@
 package com.zimbra.qa.selenium.projects.desktop.tests.preferences.mail.signatures;
 
 import org.testng.annotations.Test;
+
 import com.zimbra.qa.selenium.framework.items.SignatureItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -14,29 +14,25 @@ import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.preferences.TreePreferences.TreeItem;
 import com.zimbra.qa.selenium.projects.desktop.ui.preferences.signature.FormSignatureNew;
-import com.zimbra.qa.selenium.projects.desktop.ui.preferences.signature.PageSignature;
 import com.zimbra.qa.selenium.projects.desktop.ui.preferences.signature.PageSignature.Locators;
 
-public class DeleteHtmlSignature extends AjaxCommonTest {
+public class DeleteTextSignature extends AjaxCommonTest {
+   String sigName = "signame" + ZimbraSeleniumProperties.getUniqueString();
+   String sigBody = "sigbody" + ZimbraSeleniumProperties.getUniqueString();
 
-   String sigHtmlName = "signame" + ZimbraSeleniumProperties.getUniqueString();
-   String bodyHTML = "text<strong>bold"+ ZimbraSeleniumProperties.getUniqueString() + "</strong>text";
-   String contentHTML = XmlStringUtil.escapeXml("<html>" + "<head></head>"
-         + "<body>" + bodyHTML + "</body>" + "</html>");
-
-   public DeleteHtmlSignature() throws HarnessException {
+   public DeleteTextSignature() throws HarnessException{
       super.startingPage = app.zPagePreferences;
       super.startingAccountPreferences = null;
    }
 
-   public void _createHtmlSignature(ZimbraAccount account) throws HarnessException {
-
+   private void _createSignature(ZimbraAccount account) throws HarnessException {
+      System.out.println(this.sigName);
       account.authenticate(SOAP_DESTINATION_HOST_TYPE.SERVER);
       account.soapSend(
             "<CreateSignatureRequest xmlns='urn:zimbraAccount'>"
-            + "<signature name='" + this.sigHtmlName + "' >"
-            + "<content type='text/html'>'" + this.contentHTML
-            + "'</content>" + "</signature>"
+            + "<signature name='" + this.sigName + "' >"
+            + "<content type='text/plain'>" + this.sigBody
+            + "</content>" + "</signature>"
             + "</CreateSignatureRequest>");
 
       // Refresh is needed by synching ZD to ZCS, then reload the page by logging out,
@@ -49,31 +45,30 @@ public class DeleteHtmlSignature extends AjaxCommonTest {
    }
 
    /**
-    * Test case :Create Html signature through soap then delete and verify signature through GUI
+    * Test case :Create signature through soap then delete and verify signature through soap
     * @Steps:
-    * Create Html signature through soap
+    * Create signature through soap
     * Delete signature using delete button.
     * Verify signature doesn't exist from soap
     * @throws HarnessException
     */
-   @Test(description = "Delete Html signature using Delete button and verify through soap", groups = { "smoke" })
-   public void DeletetHtmlSignature_01() throws HarnessException {
+   @Test(description = " Delete Text signature using Delete button and verify  through soap ", groups = { "smoke" })
+   public void DeleteTextSignatures() throws HarnessException {
 
-      _createHtmlSignature(app.zGetActiveAccount());
+      _createSignature(app.zGetActiveAccount());
 
-      // Click on Mail/signature
+      //Click on Mail/signature
       app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK,TreeItem.MailSignatures);
 
-      //Verify HTML Signature is created
-      SignatureItem signature = SignatureItem.importFromSOAP(app.zGetActiveAccount(), this.sigHtmlName);
-      ZAssert.assertEquals(signature.getName(), this.sigHtmlName,"verified Html Signature name ");    
+      //Signature is created
+      SignatureItem signature = SignatureItem.importFromSOAP(app.zGetActiveAccount(), this.sigName);
+      ZAssert.assertEquals(signature.getName(), this.sigName, "verified Text Signature is created");
 
-      PageSignature pagesig = new PageSignature(app);
-      FormSignatureNew signew = new FormSignatureNew(app);
+      FormSignatureNew signew = new FormSignatureNew(app); 
 
-      //Select created signature signature 
-      pagesig.zClick(Locators.zSignatureListView);
-      app.zPageSignature.zClick("//td[contains(text(),'"+signature.getName()+"')]");   
+      //Select signature which is to be Delete
+      signew.zClick(Locators.zSignatureListView);
+      signew.zClick("//td[contains(text(),'"+signature.getName()+"')]");
 
       //click Delete button
       app.zPageSignature.zToolbarPressButton(Button.B_DELETE);
@@ -86,9 +81,8 @@ public class DeleteHtmlSignature extends AjaxCommonTest {
       // To check whether deleted signature is exist
       app.zGetActiveAccount().soapSend("<GetSignaturesRequest xmlns='urn:zimbraAccount'/>");
 
-      String signame = app.zGetActiveAccount().soapSelectValue("//acct:signature[@name='" + this.sigHtmlName + "']","name");
+      String signame = app.zGetActiveAccount().soapSelectValue("//acct:signature[@name='" + this.sigName + "']","name");
       ZAssert.assertNull(signame, "Verify  signature is deleted");
 
    }
-
 }

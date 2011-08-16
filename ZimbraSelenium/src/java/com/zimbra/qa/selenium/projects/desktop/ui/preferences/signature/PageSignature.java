@@ -109,7 +109,27 @@ public class PageSignature extends AbsTab{
 		return (page);
 	}
 
-	@Override
+	public String zGetSignatureBodyText() throws HarnessException{
+
+	   //bug 59078
+	   String locator = null;
+	   locator="selenium.browserbot.getCurrentWindow().document.getElementById('TEXTAREA_SIGNATURE').value";
+	   String textsig= this.sGetEval(locator);
+	   return textsig;
+
+	}
+
+	public String zGetHtmlSignatureBody() throws HarnessException {
+	   try {
+	      sSelectFrame("css=iframe[id*='DWT']");
+	      String sigbodyhtml = this.sGetHtmlSource();
+	      return sigbodyhtml;
+	   } finally {
+	      this.sSelectFrame("relative=top");
+	   }
+	}
+
+	   @Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
 	throws HarnessException {
 		// TODO Auto-generated method stub
