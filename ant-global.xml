@@ -21,6 +21,7 @@
     <property name="build.classes.dir" location="${build.dir}/classes" />
     <property name="build.zimlet.dir" location="${build.dir}/zimlet" />
     <property name="test.dir" location="${build.dir}/test"/>
+    <property name="itest.dir" location="${build.dir}/itest"/>
     <property name="test.src.dir" location="src/java-test"/>
     <property name="test.classes.dir" location="${build.dir}/test-classes"/>
 
@@ -202,6 +203,7 @@
             <batchtest todir="${test.dir}/output">
                 <fileset dir="${test.src.dir}">
                     <include name="**/*Test.java"/>
+                    <exclude name="**/*ITest.java"/>
                 </fileset>
             </batchtest>
         </junit>
@@ -211,6 +213,30 @@
         </junitreport>
         <echo>Test Report: ${test.dir}/report/index.html</echo>
         <fail if="junit.failure" message="Unit test failed"/>
+    </target>
+
+    <target name="integration-test" depends="test-compile" description="Run integration tests">
+        <property name="test.path" refid="class.path"/>
+        <delete dir="${itest.dir}" quiet="true"/>
+        <mkdir dir="${itest.dir}/output"/>
+        <mkdir dir="${itest.dir}/report"/>
+        <junit printsummary="on" failureproperty="junit.failure" tempdir="${itest.dir}">
+            <classpath refid="class.path"/>
+            <classpath path="${test.classes.dir}"/>
+            <assertions><enable/></assertions>
+            <formatter type="xml"/>
+            <batchtest todir="${itest.dir}/output">
+                <fileset dir="${test.src.dir}">
+                    <include name="**/*ITest.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+        <junitreport todir="${itest.dir}/report">
+            <fileset dir="${itest.dir}/output"/>
+            <report todir="${itest.dir}/report"/>
+        </junitreport>
+        <echo>Test Report: ${itest.dir}/report/index.html</echo>
+        <fail if="junit.failure" message="Integration test failed"/>
     </target>
 
     <target name="generate-jar-version" description="Creates the Version class that prints the version of the jarfile.  This class is the Main-Class in the jarfile's manifest.">
