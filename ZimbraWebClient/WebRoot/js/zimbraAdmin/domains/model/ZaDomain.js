@@ -274,6 +274,13 @@ ZaDomain.A2_zimbraAutoProvAuthMechSPNEGOEnabled = ZaDomain.A_zimbraAutoProvAuthM
 ZaDomain.A2_zimbraAutoProvServerList = "zimbraAutoProvServerList";
 ZaDomain.A2_zimbraAutoProvSelectedServerList = "zimbraAutoProvSelectedDomainList";
 ZaDomain.A2_zimbraAutoProvPollingInterval = "zimbraAutoProvPollingInterval";
+ZaDomain.A2_zimbraAutoProvSearchActivated = "zimbraAutoProvSearchAcctActivated";
+ZaDomain.A2_zimbraAutoProvAccountPool = "zimbraAutoProvAccountPool";
+ZaDomain.A2_zimbraAutoProvAccountPoolPageNum = "zimbraAutoProvAccountPoolPageNum";
+ZaDomain.A2_zimbraAutoProvAccountSrcSelectedPool = "zimbraAutoProvAccountSrcSelectedPool";
+ZaDomain.A2_zimbraAutoProvAccountTargetPool = "zimbraAutoProvAccountTargetPool";
+ZaDomain.A2_zimbraAutoProvAccountTgtSelectedPool = "zimbraAutoProvAccountTgtSelectedPool";
+ZaDomain.A2_zimbraAutoProvAccountPoolPageTotal = "zimbraAutoProvAccountPoolPageTotal";
 
 //skin properties
 ZaDomain.A_zimbraSkinForegroundColor = "zimbraSkinForegroundColor" ;
@@ -2170,6 +2177,13 @@ ZaDomain.myXModel = {
         {id:ZaDomain.A2_zimbraAutoProvServerList, type:_LIST_, ref:ZaDomain.A2_zimbraAutoProvServerList},
         {id:ZaDomain.A2_zimbraAutoProvSelectedServerList, type:_LIST_},
         {id:ZaDomain.A2_zimbraAutoProvPollingInterval, ref: ZaDomain.A2_zimbraAutoProvPollingInterval, type: _MLIFETIME_, minInclusive: 0 },
+        {id:ZaDomain.A2_zimbraAutoProvSearchActivated, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaDomain.A2_zimbraAutoProvSearchActivated},
+        {id:ZaDomain.A2_zimbraAutoProvAccountPool,type:_LIST_,ref:ZaDomain.A2_zimbraAutoProvAccountPool},
+        {id:ZaDomain.A2_zimbraAutoProvAccountPoolPageNum,ref:ZaDomain.A2_zimbraAutoProvAccountPoolPageNum, type:_NUMBER_,defaultValue:1},
+        {id:ZaDomain.A2_zimbraAutoProvAccountSrcSelectedPool,type:_LIST_,ref:ZaDomain.A2_zimbraAutoProvAccountSrcSelectedPool},
+        {id:ZaDomain.A2_zimbraAutoProvAccountTargetPool,type:_LIST_,ref:ZaDomain.A2_zimbraAutoProvAccountTargetPool},
+        {id:ZaDomain.A2_zimbraAutoProvAccountTgtSelectedPool,type:_LIST_,ref:ZaDomain.A2_zimbraAutoProvAccountTgtSelectedPool},
+        {id:ZaDomain.A2_zimbraAutoProvAccountPoolPageTotal,ref:ZaDomain.A2_zimbraAutoProvAccountPoolPageTotal, type:_NUMBER_,defaultValue:1},
 
 		{id:ZaDomain.A_zimbraPrefTimeZoneId,type:_STRING_, ref:"attrs/"+ZaDomain.A_zimbraPrefTimeZoneId, choices:ZaSettings.timeZoneChoices},
         {id:ZaModel.currentStep, type:_NUMBER_, ref:ZaModel.currentStep, maxInclusive:2147483647},

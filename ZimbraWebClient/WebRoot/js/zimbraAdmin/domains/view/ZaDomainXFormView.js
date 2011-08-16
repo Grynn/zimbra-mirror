@@ -631,6 +631,21 @@ function(value, form) {
 	return val;
 }
 
+ZaDomainXFormView.manualAutoProvisionListener = function () {
+	try {
+        var formPage = this.getForm().parent;
+        var instance = this.getInstance();
+        if(!formPage.handleManualProvDlg) {
+            formPage.handleManualProvDlg = new ZaManualProvConfigDialog(ZaApp.getInstance().getAppCtxt().getShell(), "700px", "350px",ZaMsg.DLG_TITILE_MANUAL_PROV);
+            formPage.handleManualProvDlg.registerCallback(DwtDialog.OK_BUTTON, ZaManualProvConfigDialog.finishConfig, this.getForm(), null);
+        }
+        formPage.handleManualProvDlg.setObject(instance);
+        formPage.handleManualProvDlg.popup();
+	} catch (ex) {
+        ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDomainXFormView.manualAutoProvisionListener", null, false);
+	}
+}
+
 ZaDomainXFormView.GAL_TAB_ATTRS = [ZaDomain.A_zimbraGalMode,ZaDomain.A_zimbraGalMaxResults,ZaDomain.A_GalLdapFilter,
 	ZaDomain.A_zimbraGalAutoCompleteLdapFilter,ZaDomain.A_GalLdapSearchBase,ZaDomain.A_GalLdapURL,ZaDomain.A_GalLdapBindDn];
 ZaDomainXFormView.GAL_TAB_RIGHTS = [];
@@ -1489,6 +1504,18 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
                         visibilityChecks: [[XForm.checkInstanceValue,ZaDomain.A2_zimbraAutoProvModeEAGEREnabled,"TRUE"]],
                         visibilityChangeEventSources:[ZaDomain.A2_zimbraAutoProvModeEAGEREnabled],
                         labelLocation:_LEFT_
+                    },
+                    {type: _SPACER_, height: 15 },
+                    {type: _GROUP_, colSpan:2, numCols:3, colSizes: ["350px", "20px", "*" ],
+                        visibilityChecks: [[XForm.checkInstanceValue,ZaDomain.A2_zimbraAutoProvModeMANUALEnabled,"TRUE"]],
+                        visibilityChangeEventSources:[ZaDomain.A2_zimbraAutoProvModeMANUALEnabled],
+                        items :[
+                            {type:_CELLSPACER_ },
+                            {type: _DWT_BUTTON_ , colSpan: 2, label: ZaMsg.LBL_ManualProvision, width: "10em",
+                              onActivate: ZaDomainXFormView.manualAutoProvisionListener
+                            },
+                            {type:_CELLSPACER_}
+                         ]
                     }
                 ]}
             ]
