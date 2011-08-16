@@ -11,6 +11,7 @@ namespace CssLib
     public class ZimbraAPI
     {
         // Errors
+        internal const int INCONSISTENT_LISTS    = 91;
         internal const int ACCOUNT_NO_NAME       = 98;
         internal const int ACCOUNT_CREATE_FAILED = 99;
         //
@@ -883,6 +884,60 @@ namespace CssLib
                     }
                 }
             }
+
+            return retval;
+        }
+
+        public int AddMessages(List<string> lFilePaths, List<ZimbraMessage> lMessages)
+        {
+            if (lFilePaths.Count != lMessages.Count)
+            {
+                return INCONSISTENT_LISTS;
+            }
+
+            int retval = 0;
+            int ufretval = 0;
+            lastError = "";
+            string uploadToken = "";
+
+            WebServiceClient client = new WebServiceClient
+            {
+                Url = ZimbraValues.GetZimbraValues().Url,
+                WSServiceType = WebServiceClient.ServiceType.Traditional
+            };
+
+            StringBuilder sb = new StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.OmitXmlDeclaration = true;
+            using (XmlWriter writer = XmlWriter.Create(sb, settings))
+            {
+                writer.WriteStartDocument();
+                writer.WriteStartElement("soap", "Envelope", "http://www.w3.org/2003/05/soap-envelope");
+
+                WriteHeader(writer, true, true, true);
+
+                writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
+                writer.WriteStartElement("BatchRequest", "urn:zimbra");
+
+                for (int i = 0; i < lFilePaths.Count; i++)
+                {
+                    ufretval = UploadFile(lFilePaths[i], out uploadToken);
+                    if (ufretval == 0)
+                    {
+                        ZimbraMessage message = lMessages[i];
+                        AddMsgRequest(writer, uploadToken, message, -1);
+                    }
+                }
+
+                writer.WriteEndElement();   // BatchRequest
+                writer.WriteEndElement();   // soap body
+                writer.WriteEndElement();   // soap envelope
+                writer.WriteEndDocument();
+            }
+
+            string rsp = "";
+            client.InvokeService(sb.ToString(), out rsp);
+            retval = client.status;
 
             return retval;
         }
