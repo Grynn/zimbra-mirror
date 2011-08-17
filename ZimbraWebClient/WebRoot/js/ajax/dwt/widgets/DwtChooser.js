@@ -552,14 +552,14 @@ function(buttonInfo) {
 	this._buttonId = {};
 	if (this._buttonInfo.length == 1) {
 		if (!this._buttonInfo[0].id) {
-			this._buttonInfo[0].id = Dwt.getNextId();
+			this._buttonInfo[0].id = Dwt.getNextId("DwtChooserButtonInfo_");
 		}
 		this._activeButtonId = this._buttonInfo[0].id;
 	}
 	for (var i = 0; i < this._buttonInfo.length; i++) {
 		var id = this._buttonInfo[i].id;
-		this._buttonDivId[id] = Dwt.getNextId();
-		this._buttonId[id] = Dwt.getNextId();
+		this._buttonDivId[id] = Dwt.getNextId("DwtChooserButtonDiv_");
+		this._buttonId[id] = Dwt.getNextId("DwtChooserButton_");
 	}
 	this._hasMultiButtons = (this._buttonInfo.length > 1);
 };
@@ -596,7 +596,7 @@ function() {
 	this.targetListView.addSelectionListener(new AjxListener(this, this._targetListener));
 
 	// create and add the remove button
-	this._removeButtonId = Dwt.getNextId();
+	this._removeButtonId = Dwt.getNextId("DwtChooserRemoveButton_");
 	this._removeButton = this._setupButton(DwtChooser.REMOVE_BTN_ID, this._removeButtonId, this._removeButtonDivId, AjxMsg.remove);
 	this._removeButton.addSelectionListener(new AjxListener(this, this._removeButtonListener));
 
