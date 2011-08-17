@@ -313,15 +313,19 @@ ZaCosXFormView.ADVANCED_TAB_ATTRS = [ZaCos.A_zimbraAttachmentsBlocked,
 ];
 ZaCosXFormView.ADVANCED_TAB_RIGHTS = [];
 
-ZaCosXFormView.SHARING_TAB_ATTRS = [];
-ZaCosXFormView.SHARING_TAB_RIGHTS = [];
-ZaCosXFormView.RETENTION_TAB_ATTRS = [];
+ZaCosXFormView.INTERNAL_SHARING_TAB_ATTRS = [ZaCos.A_zimbraLimitInternalShareLifetime,ZaCos.A_zimbraInternalShareLifetime];
+ZaCosXFormView.INTERNAL_SHARING_TAB_RIGHTS = [];
+
+ZaCosXFormView.EXTERNAL_SHARING_TAB_ATTRS = [ZaCos.A_zimbraLimitExternalShareLifetime,ZaCos.A_zimbraExternalShareLifetime];
+ZaCosXFormView.EXTERNAL_SHARING_TAB_RIGHTS = [];
+
+ZaCosXFormView.RETENTION_TAB_ATTRS = [ZaCos.A_zimbraFileSendExpirationWarning,ZaCos.A_zimbraFileExpirationWarningDays];
 ZaCosXFormView.RETENTION_TAB_RIGHTS = [];
 
 ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {	
     this.tabChoices = new Array();
 	var _tab1 = ++this.TAB_INDEX;
-	var _tab2, _tab3, _tab4, _tab5, _tab6, _tab7, _tab8, _tab9;
+	var _tab2, _tab3, _tab4, _tab5, _tab6, _tab7, _tab8, _tab9, _tab10;
 	
 	var headerItems = [	{type:_AJX_IMAGE_, src:"COS_32", label:null,rowSpan:2},
 							{type:_OUTPUT_, ref:ZaCos.A_name, label:null,cssClass:"AdminTitle",
@@ -372,16 +376,22 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
         this.tabChoices.push({value:_tab7, label:ZaMsg.TABT_Advanced});
     }
     
-    if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.SHARING_TAB_ATTRS, ZaCosXFormView.SHARING_TAB_RIGHTS)) {
+    if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.INTERNAL_SHARING_TAB_ATTRS, ZaCosXFormView.INTERNAL_SHARING_TAB_RIGHTS)) {
     	_tab8 = ++this.TAB_INDEX;
-        this.tabChoices.push({value:_tab8, label:ZaMsg.TABT_ShareExpiration});
+        this.tabChoices.push({value:_tab8, label:ZaMsg.TABT_InternalSharing});
     }
     
+
+    if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.EXTERNAL_SHARING_TAB_ATTRS, ZaCosXFormView.EXTERNAL_SHARING_TAB_RIGHTS)) {
+    	_tab9 = ++this.TAB_INDEX;
+        this.tabChoices.push({value:_tab9, label:ZaMsg.TABT_ExternalSharing});
+    }
     
     if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.RETENTION_TAB_ATTRS, ZaCosXFormView.RETENTION_TAB_RIGHTS)) {
-    	_tab9 = ++this.TAB_INDEX;
-        this.tabChoices.push({value:_tab9, label:ZaMsg.TABT_FileRetention});
+    	_tab10 = ++this.TAB_INDEX;
+        this.tabChoices.push({value:_tab10, label:ZaMsg.TABT_FileRetention});
     }
+    
     var cases = [];
 	var case1 = {type:_ZATABCASE_,caseKey:_tab1,numCols:1,colSizes:["auto"]};
 
@@ -1344,7 +1354,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
         cases.push(case7);
         
         if(_tab8) {
-        	var case8 = {type:_ZATABCASE_, colSizes:["275px","auto"], caseKey:_tab8, id:"cos_form_sharing_tab"};
+        	var case8 = {type:_ZATABCASE_, colSizes:["275px","auto"], caseKey:_tab8, id:"cos_form_internal_sharing_tab"};
         	var case8Items = [
         	    {type:_ZA_TOP_GROUPER_, id:"cos_internal_sharing_expiration_settings", colSizes:["275px","auto"],colSpan:2,
         	    	label:ZaMsg.NAD_InternalShareExpirationGrouper,
@@ -1380,7 +1390,15 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                                enableDisableChecks:[[XForm.checkInstanceValue,ZaCos.A_zimbraLimitInternalShareLifetime,"TRUE"]]
                            }   
         	    	]
-        	    },
+        	    }
+        	];
+            case8.items = case8Items;
+            cases.push(case8);    	
+        }
+        
+        if(_tab9) {
+        	var case9 = {type:_ZATABCASE_, colSizes:["275px","auto"], caseKey:_tab9, id:"cos_form_external_sharing_tab"};
+        	var case9Items = [
         	    {type:_ZA_TOP_GROUPER_, id:"cos_external_sharing_expiration_settings", colSizes:["275px","auto"],colSpan:2,
         	    	label:ZaMsg.NAD_ExternalShareExpirationGrouper,
         	    	items:[
@@ -1429,13 +1447,13 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
         	    }
         
         	];
-            case8.items = case8Items;
-            cases.push(case8);    	
+            case9.items = case9Items;
+            cases.push(case9);    	
         }
         
-        if(_tab9) {
-        	var case9 = {type:_ZATABCASE_, colSizes:["275px","auto"], caseKey:_tab9, id:"cos_form_sharing_tab"};
-        	var case9Items = [
+        if(_tab10) {
+        	var case10 = {type:_ZATABCASE_, colSizes:["275px","auto"], caseKey:_tab10, id:"cos_form_share_expiration_tab"};
+        	var case10Items = [
     		   {type: _SPACER_ , height: "10px" },
                { type: _DWT_ALERT_,
                    containerCssStyle: "padding-bottom:0px",
@@ -1514,8 +1532,8 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
               }
         
         	];
-            case9.items = case9Items;
-            cases.push(case9);    	
+            case10.items = case10Items;
+            cases.push(case10);    	
         }        
     }
     
