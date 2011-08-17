@@ -269,11 +269,6 @@ function (by, val) {
 		}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetCosResponse;
 	this.initFromJS(resp.cos[0]);
-	this.attrs[ZaCos.A_zimbraLimitInternalShareLifetime] = "FALSE";
-	this.attrs[ZaCos.A_zimbraLimitExternalShareLifetime] = "FALSE";
-	this.attrs[ZaCos.A_zimbraExternalSharingEnabled] = "TRUE";
-	this.attrs[ZaCos.A_zimbraFileSendExpirationWarning] = "owner";
-	this.attrs[ZaCos.A_zimbraFileExpirationWarningDays] = 7;
 }
 ZaItem.loadMethods["ZaCos"].push(ZaCos.loadMethod);
 

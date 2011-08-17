@@ -313,10 +313,15 @@ ZaCosXFormView.ADVANCED_TAB_ATTRS = [ZaCos.A_zimbraAttachmentsBlocked,
 ];
 ZaCosXFormView.ADVANCED_TAB_RIGHTS = [];
 
+ZaCosXFormView.SHARING_TAB_ATTRS = [];
+ZaCosXFormView.SHARING_TAB_RIGHTS = [];
+ZaCosXFormView.RETENTION_TAB_ATTRS = [];
+ZaCosXFormView.RETENTION_TAB_RIGHTS = [];
+
 ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {	
     this.tabChoices = new Array();
 	var _tab1 = ++this.TAB_INDEX;
-	var _tab2, _tab3, _tab4, _tab5, _tab6, _tab7;
+	var _tab2, _tab3, _tab4, _tab5, _tab6, _tab7, _tab8, _tab9;
 	
 	var headerItems = [	{type:_AJX_IMAGE_, src:"COS_32", label:null,rowSpan:2},
 							{type:_OUTPUT_, ref:ZaCos.A_name, label:null,cssClass:"AdminTitle",
@@ -367,7 +372,17 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
         this.tabChoices.push({value:_tab7, label:ZaMsg.TABT_Advanced});
     }
     
-	var cases = [];
+    if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.SHARING_TAB_ATTRS, ZaCosXFormView.SHARING_TAB_RIGHTS)) {
+    	_tab8 = ++this.TAB_INDEX;
+        this.tabChoices.push({value:_tab8, label:ZaMsg.TABT_ShareExpiration});
+    }
+    
+    
+    if(ZaTabView.isTAB_ENABLED(entry,ZaCosXFormView.RETENTION_TAB_ATTRS, ZaCosXFormView.RETENTION_TAB_RIGHTS)) {
+    	_tab9 = ++this.TAB_INDEX;
+        this.tabChoices.push({value:_tab9, label:ZaMsg.TABT_FileRetention});
+    }
+    var cases = [];
 	var case1 = {type:_ZATABCASE_,caseKey:_tab1,numCols:1,colSizes:["auto"]};
 
     var case1Items = [
@@ -1064,7 +1079,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
         case6.items = case6Items;
         cases.push(case6);
     }
-
+    
     if(_tab7) {
         var case7 = {type:_ZATABCASE_, numCols:1, colSizes:["auto"], caseKey:_tab7, id:"cos_form_advanced_tab"};
         var case7Items = [
@@ -1327,6 +1342,181 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 
         case7.items = case7Items;
         cases.push(case7);
+        
+        if(_tab8) {
+        	var case8 = {type:_ZATABCASE_, colSizes:["275px","auto"], caseKey:_tab8, id:"cos_form_sharing_tab"};
+        	var case8Items = [
+        	    {type:_ZA_TOP_GROUPER_, id:"cos_internal_sharing_expiration_settings", colSizes:["275px","auto"],colSpan:2,
+        	    	label:ZaMsg.NAD_InternalShareExpirationGrouper,
+        	    	items:[
+        	    	       {ref:ZaCos.A_zimbraLimitInternalShareLifetime, 
+        	    	    	   type:_RADIO_,
+        	    	    	   label:ZaMsg.DoNotLimitInternalShareLifetime,
+        	    	    	   groupname:"internal_share_radio",
+        	    	    	   updateElement:function () {
+    								this.getElement().checked = "FALSE" == this.getInstanceValue(ZaCos.A_zimbraLimitInternalShareLifetime);
+    						   },
+    						   elementChanged: function(elementValue,instanceValue, event) {
+    								this.setInstanceValue("FALSE",ZaCos.A_zimbraLimitInternalShareLifetime);
+    								this.getForm().parent.setDirty(true);
+    						   }
+        	    	       },
+        	    	       {ref:ZaCos.A_zimbraLimitInternalShareLifetime,
+        	    	    	   type:_RADIO_,
+        	    	    	   label:ZaMsg.LimitInternalShareLifetime,
+        	    	    	   groupname:"internal_share_radio",
+        	    	    	   updateElement:function () {
+    								this.getElement().checked = this.getInstanceValue(ZaCos.A_zimbraLimitInternalShareLifetime);
+    						   },
+    						   elementChanged: function(elementValue,instanceValue, event) {
+    								this.setInstanceValue("TRUE",ZaCos.A_zimbraLimitInternalShareLifetime);
+    								this.getForm().parent.setDirty(true);
+    						   }
+        	    	       },
+        	    	       {ref:ZaCos.A_zimbraInternalShareLifetime, type:_LIFETIME_,
+                               label:ZaMsg.LBL_zimbraInternalShareLifetime, labelLocation:_LEFT_,
+                               labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true,
+                               enableDisableChangeEventSources:[ZaCos.A_zimbraLimitInternalShareLifetime],
+                               enableDisableChecks:[[XForm.checkInstanceValue,ZaCos.A_zimbraLimitInternalShareLifetime,"TRUE"]]
+                           }   
+        	    	]
+        	    },
+        	    {type:_ZA_TOP_GROUPER_, id:"cos_external_sharing_expiration_settings", colSizes:["275px","auto"],colSpan:2,
+        	    	label:ZaMsg.NAD_ExternalShareExpirationGrouper,
+        	    	items:[
+        	    		   {type: _SPACER_ , height: "10px" },
+        	    	       {ref:ZaCos.A_zimbraExternalSharingEnabled, 
+        	    	    	   type:_CHECKBOX_,
+        	    	    	   label:ZaMsg.AllowExternalSharing,
+        	    	    	   labelLocation:_RIGHT_, trueValue:"TRUE", falseValue:"FALSE",
+        	    	    	   align:_RIGHT_
+        	    	       },
+        	    	       {ref:ZaCos.A_zimbraLimitExternalShareLifetime, 
+        	    	    	   type:_RADIO_,
+        	    	    	   label:ZaMsg.DoNotLimitExternalShareLifetime,
+        	    	    	   groupname:"external_share_radio",
+        	    	    	   updateElement:function () {
+    								this.getElement().checked = "FALSE" == this.getInstanceValue(ZaCos.A_zimbraLimitExternalShareLifetime);
+    						   },
+    						   elementChanged: function(elementValue,instanceValue, event) {
+    								this.setInstanceValue("FALSE",ZaCos.A_zimbraLimitExternalShareLifetime);
+    								this.getForm().parent.setDirty(true);
+    						   },
+                               enableDisableChangeEventSources:[ZaCos.A_zimbraExternalSharingEnabled],
+                               enableDisableChecks:[[XForm.checkInstanceValue,ZaCos.A_zimbraExternalSharingEnabled,"TRUE"]]						 						   
+        	    	       },
+        	    	       {ref:ZaCos.A_zimbraLimitExternalShareLifetime,
+        	    	    	   type:_RADIO_,
+        	    	    	   label:ZaMsg.LimitExternalShareLifetime,
+        	    	    	   groupname:"external_share_radio",
+        	    	    	   updateElement:function () {
+    								this.getElement().checked = this.getInstanceValue(ZaCos.A_zimbraLimitExternalShareLifetime);
+    						   },
+    						   elementChanged: function(elementValue,instanceValue, event) {
+    								this.setInstanceValue("TRUE",ZaCos.A_zimbraLimitExternalShareLifetime);
+    								this.getForm().parent.setDirty(true);
+    						   },
+                               enableDisableChangeEventSources:[ZaCos.A_zimbraExternalSharingEnabled],
+                               enableDisableChecks:[[XForm.checkInstanceValue,ZaCos.A_zimbraExternalSharingEnabled,"TRUE"]]						   
+        	    	       },
+        	    	       {ref:ZaCos.A_zimbraExternalShareLifetime, type:_LIFETIME_,
+                               label:ZaMsg.LBL_zimbraExternalShareLifetime, labelLocation:_LEFT_,
+                               labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true,
+                               enableDisableChangeEventSources:[ZaCos.A_zimbraLimitExternalShareLifetime,ZaCos.A_zimbraExternalSharingEnabled],
+                               enableDisableChecks:[[XForm.checkInstanceValue,ZaCos.A_zimbraLimitExternalShareLifetime,"TRUE"],[XForm.checkInstanceValue,ZaCos.A_zimbraExternalSharingEnabled,"TRUE"]]
+                           }   
+        	    	]
+        	    }
+        
+        	];
+            case8.items = case8Items;
+            cases.push(case8);    	
+        }
+        
+        if(_tab9) {
+        	var case9 = {type:_ZATABCASE_, colSizes:["275px","auto"], caseKey:_tab9, id:"cos_form_sharing_tab"};
+        	var case9Items = [
+    		   {type: _SPACER_ , height: "10px" },
+               { type: _DWT_ALERT_,
+                   containerCssStyle: "padding-bottom:0px",
+                   style: DwtAlert.INFO,
+                   iconVisible:false,colSpan:2,
+                   content:ZaMsg.FileRetentionNote
+               },
+    	       {ref:ZaCos.A_zimbraFileTrashLifetime, type:_LIFETIME_,
+                   label:ZaMsg.LBL_zimbraFileTrashLifetime, labelLocation:_LEFT_,
+                   labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
+               },
+               {ref:ZaCos.A_zimbraUnaccessedFileLifetime, type:_LIFETIME_,
+                   label:ZaMsg.LBL_zimbraUnaccessedFileLifetime, labelLocation:_LEFT_,
+                   labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
+               },               
+               {type: _DWT_ALERT_,
+                   containerCssStyle: "padding-bottom:0px",
+                   style: DwtAlert.INFO,
+                   iconVisible: false,
+                   content:ZaMsg.zimbraFileSendExpirationWarningNote,
+                   colSpan:2
+               },               
+               {ref:ZaCos.A_zimbraFileSendExpirationWarning, 
+            	   	type:_RADIO_, 
+            	   	groupname:"expiration_warning_radio",
+            	   	label:ZaMsg.LBL_zimbraFileSendExpirationWarningOwner,
+            	   	updateElement:function () {
+            	   		this.getElement().checked = this.getInstanceValue(ZaCos.A_zimbraFileSendExpirationWarning) == "owner";
+			   		},
+			   		elementChanged: function(elementValue,instanceValue, event) {
+			   			this.setInstanceValue("owner",ZaCos.A_zimbraFileSendExpirationWarning);
+			   			this.getForm().parent.setDirty(true);
+			   		}
+               },
+               {ref:ZaCos.A_zimbraFileSendExpirationWarning, 
+           	   		type:_RADIO_, 
+	           	   	groupname:"expiration_warning_radio",
+	           	   	label:ZaMsg.LBL_zimbraFileSendExpirationWarningEveryone,
+	           	   	updateElement:function () {
+	           	   		this.getElement().checked = this.getInstanceValue(ZaCos.A_zimbraFileSendExpirationWarning) == "all";
+				   	},
+				   	elementChanged: function(elementValue,instanceValue, event) {
+				   		this.setInstanceValue("all",ZaCos.A_zimbraFileSendExpirationWarning);
+				   		this.getForm().parent.setDirty(true);
+				   	}
+               },
+               {ref:ZaCos.A_zimbraFileSendExpirationWarning, 
+	           	   	type:_RADIO_, 
+	           	   	groupname:"expiration_warning_radio",
+	           	   	label:ZaMsg.LBL_zimbraFileSendExpirationWarningNot,
+	           	   	updateElement:function () {
+	           	   		this.getElement().checked = this.getInstanceValue(ZaCos.A_zimbraFileSendExpirationWarning) == "none";
+				   	},
+				   	elementChanged: function(elementValue,instanceValue, event) {
+				   		this.setInstanceValue("none",ZaCos.A_zimbraFileSendExpirationWarning);
+				   		this.getForm().parent.setDirty(true);
+				   	}
+              },               
+              {ref:ZaCos.A_zimbraFileExpirationWarningDays, type:_TEXTFIELD_,
+                   label:ZaMsg.LBL_zimbraFileExpirationWarningDays, labelLocation:_LEFT_,
+                   cssClass:"admin_xform_number_input",
+                   enableDisableChecks:[[XForm.checkInstanceValueNot,ZaCos.A_zimbraFileSendExpirationWarning,"none"]],
+                   enableDisableChangeEventSources:[ZaCos.A_zimbraFileSendExpirationWarning]
+              },
+              {type: _DWT_ALERT_,
+                  containerCssStyle: "padding-bottom:0px",
+                  style: DwtAlert.INFO,
+                  iconVisible: false,
+                  content:ZaMsg.zimbraNumFileVersionsToKeepNote,
+                  colSpan:2
+              },
+              {ref:ZaCos.A_zimbraNumFileVersionsToKeep, type:_TEXTFIELD_,
+                   msgName:ZaMsg.MSG_zimbraNumFileVersionsToKeep,
+                   label:ZaMsg.LBL_zimbraNumFileVersionsToKeep, labelLocation:_LEFT_,
+                   cssClass:"admin_xform_number_input"
+              }
+        
+        	];
+            case9.items = case9Items;
+            cases.push(case9);    	
+        }        
     }
     
     xFormObject.tableCssStyle = "width:100%;overflow:auto;";
