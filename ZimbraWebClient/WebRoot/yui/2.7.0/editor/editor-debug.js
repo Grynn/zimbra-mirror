@@ -4608,17 +4608,20 @@ var Dom = YAHOO.util.Dom,
                     buttons: [
                         { group: 'fontstyle', label: 'Font Name and Size',
                             buttons: [
-                                { type: 'select', label: 'Arial', value: 'fontname', disabled: true,
+                                { type: 'select', label: 'Sans Serif', value: 'fontname', disabled: true,
                                     menu: [
-                                        { text: 'Arial', checked: true },
-                                        { text: 'Arial Black' },
-                                        { text: 'Comic Sans MS' },
-                                        { text: 'Courier New' },
-                                        { text: 'Lucida Console' },
-                                        { text: 'Tahoma' },
-                                        { text: 'Times New Roman' },
-                                        { text: 'Trebuchet MS' },
-                                        { text: 'Verdana' }
+                                        { text: 'Sans Serif', value: 'arial, helvetica, sans-serif', checked: true },
+                                        { text: 'Serif', value: 'times new roman, new york, times, serif' },
+                                        { text: 'Wide Block', value: 'arial black,avant garde' },
+                                        { text: 'Monospaced', value: 'courier new, courier, monaco, monospace, sans-serif' },
+                                        { text: 'Comic', value: 'comic sans ms, comic sans, sans-serif' },
+                                        { text: 'Console', value: 'lucida console, sans-serif' },
+                                        { text: 'Garamond', value: 'garamond, new york, times, serif' },
+                                        { text: 'Elegant', value: 'georgia, serif' },
+                                        { text: 'Professional', value: 'tahoma, new york, times, serif' },
+                                        { text: 'Terminal', value: 'terminal, monaco' },
+                                        { text: 'Modern', value: 'trebuchet ms, sans-serif' },
+                                        { text: 'Wide', value: 'verdana, helvetica, sans-serif' }
                                     ]
                                 },
                                 { type: 'spin', label: '13', value: 'fontsize', range: [ 9, 75 ], disabled: true }
@@ -7544,17 +7547,21 @@ var Dom = YAHOO.util.Dom,
                 buttons: [
                     { group: 'fontstyle', label: 'Font Name and Size',
                         buttons: [
-                            { type: 'select', label: 'Arial', value: 'fontname', disabled: true,
+                            { type: 'select', label: 'Sans Serif', value: 'fontname', disabled: true,
                                 menu: [
-                                    { text: 'Arial', checked: true },
-                                    { text: 'Arial Black' },
-                                    { text: 'Comic Sans MS' },
-                                    { text: 'Courier New' },
-                                    { text: 'Lucida Console' },
-                                    { text: 'Tahoma' },
-                                    { text: 'Times New Roman' },
-                                    { text: 'Trebuchet MS' },
-                                    { text: 'Verdana' }
+                                    { text: 'Sans Serif', value: 'arial', checked: true },
+                                        { text: 'Sans Serif', value: 'arial, helvetica, sans-serif'},
+                                        { text: 'Serif', value: 'times new roman, new york, times, serif' },
+                                        { text: 'Wide Block', value: 'arial black,avant garde' },
+                                        { text: 'Monospaced', value: 'courier new, courier, monaco, monospace, sans-serif' },
+                                        { text: 'Comic', value: 'comic sans ms, comic sans, sans-serif' },
+                                        { text: 'Console', value: 'lucida console, sans-serif' },
+                                        { text: 'Garamond', value: 'garamond, new york, times, serif' },
+                                        { text: 'Elegant', value: 'georgia, serif' },
+                                        { text: 'Professional', value: 'tahoma, new york, times, serif' },
+                                        { text: 'Terminal', value: 'terminal, monaco' },
+                                        { text: 'Modern', value: 'trebuchet ms, sans-serif' },
+                                        { text: 'Wide', value: 'verdana, helvetica, sans-serif' }
                                 ]
                             },
                             { type: 'spin', label: '13', value: 'fontsize', range: [ 9, 75 ], disabled: true }
