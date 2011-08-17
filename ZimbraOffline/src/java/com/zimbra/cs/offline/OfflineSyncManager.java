@@ -68,9 +68,9 @@ import com.zimbra.cs.offline.common.OfflineConstants.SyncStatus;
 import com.zimbra.cs.service.UserServlet;
 import com.zimbra.cs.service.UserServletContext;
 import com.zimbra.cs.service.formatter.ArchiveFormatter;
+import com.zimbra.cs.service.formatter.ArchiveFormatter.Resolve;
 import com.zimbra.cs.service.formatter.FormatListener;
 import com.zimbra.cs.service.formatter.Formatter;
-import com.zimbra.cs.service.formatter.ArchiveFormatter.Resolve;
 import com.zimbra.cs.util.Zimbra;
 import com.zimbra.cs.util.ZimbraApplication;
 import com.zimbra.cs.util.yauth.AuthenticationException;
@@ -614,12 +614,14 @@ public class OfflineSyncManager implements FormatListener {
         return toSkipList.contains(itemId);
     }
 
-    private boolean isConnectionDown = false, isServiceUp = false, isUiLoading = false;
+    private volatile boolean isConnectionDown = false;
+    private volatile boolean isServiceUp = false;
+    private volatile boolean isUiLoading = false;
     private Lock lock = new ReentrantLock();
     private Condition waiting  = lock.newCondition(); 
-    private int suspendCount = 0;  
+    private volatile int suspendCount = 0;
 
-    public synchronized boolean isConnectionDown() {
+    public boolean isConnectionDown() {
         return isConnectionDown;
     }
 
@@ -646,7 +648,7 @@ public class OfflineSyncManager implements FormatListener {
      * Returns true once ZD jetty is listening on configured host/port (e.g. localhost:7733)
      * Does not care if remote connection is down; only local
      */
-    public synchronized boolean isServiceUp () {
+    public boolean isServiceUp () {
         return isServiceUp;
     }
 
@@ -675,13 +677,14 @@ public class OfflineSyncManager implements FormatListener {
         //this mechanism can get stuck if load_end event isn't received; either due to UI or server error
         lock.lock();
         isUiLoading = b;
-        OfflineLog.offline.debug("setting uiloading to %s",b);
-        if (!isUiLoading)
+        OfflineLog.offline.debug("setting uiloading to %s", b);
+        if (!isUiLoading) {
             waiting.signalAll();
+        }
         lock.unlock();
     }
-    
-    public synchronized boolean isUILoading() {
+
+    public boolean isUILoading() {
         return isUiLoading;
     }
 
@@ -871,7 +874,6 @@ public class OfflineSyncManager implements FormatListener {
         } else {
             OfflineLog.offline.warn("cannot mark non-offline account as disabled sync.");
         }
-        
     }
 
     private long lastClientPing;
