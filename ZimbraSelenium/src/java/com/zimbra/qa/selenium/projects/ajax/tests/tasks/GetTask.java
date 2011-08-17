@@ -6,13 +6,21 @@ import org.testng.annotations.Test;
 
 
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.tasks.DisplayTask;
+import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.tasks.DisplayTask.Field;
+//import com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Field;;
+
+
+
+
+
 
 
 public class GetTask extends AjaxCommonTest {
@@ -329,6 +337,91 @@ public class GetTask extends AjaxCommonTest {
 		}
 		ZAssert.assertNotNull(found, "Verify the task is present");
 		
+	}
+	/**
+	 * Test Case:- Task list view fields (Percentage) are not updated after editing
+	 * 1.Create and verify a new task through soap
+	 * 2.Select same task and click "Mark As Completed" option from tool bar
+	 * 3.Preview pane shows Percentage field with 100% value
+	 * 4.Create new task through GUI and save it
+	 * 4.Observed Task list view
+	 * 6.Select Previous task and see preview pane headers
+	 * 7.It should show Percentage field  with 100% value.
+	 * @throws HarnessException
+	 */
+	@Bugs(ids="63357")
+	@Test(	description = "Task list view fields (Percentage) are not updated after editing ",
+			groups = { "smoke" })
+	public void GetTask_06() throws HarnessException {
+		
+		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
+		
+		
+		String subject = "task"+ ZimbraSeleniumProperties.getUniqueString();
+		String content = "content"+ ZimbraSeleniumProperties.getUniqueString();
+		String newsubject = "newtask"+ ZimbraSeleniumProperties.getUniqueString();
+		String newcontent = "content"+ ZimbraSeleniumProperties.getUniqueString();
+		
+				
+		app.zGetActiveAccount().soapSend(
+				"<CreateTaskRequest xmlns='urn:zimbraMail'>" +
+					"<m >" +
+			        	"<inv>" +
+			        		"<comp name='"+ subject +"'>" +
+			        			"<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+			        		"</comp>" +
+			        	"</inv>" +
+			        	"<su>"+ subject +"</su>" +
+			        	"<mp ct='text/plain'>" +
+			        		"<content>"+ content +"</content>" +
+			        	"</mp>" +
+					"</m>" +
+				"</CreateTaskRequest>");
+
+		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+
+		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
+		ZAssert.assertNotNull(task, "Verify the task is created");
+		
+		// Refresh the tasks view
+		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
+
+		// Select the message so that it shows in the reading pane
+		DisplayTask actual = (DisplayTask) app.zPageTasks.zListItem(Action.A_LEFTCLICK, subject);
+		
+		//Click on Mark As Completed button 
+		app.zPageTasks.zToolbarPressButton(Button.B_TASK_MARKCOMPLETED);
+
+		// Verify the Subject, Body,Percentage
+		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.Subject), subject, "Verify the subject matches");
+		ZAssert.assertStringContains(	actual.zGetTaskProperty(Field.Body), content, "Verify the body matches");
+		ZAssert.assertEquals(	actual.zGetTaskProperty(Field.Percentage), "100%", "Verify the percentage matches");
+		
+		//Create new task through GUI 
+		FormTaskNew taskNew = (FormTaskNew) app.zPageTasks.zToolbarPressButton(Button.B_NEW);
+		// Fill out the resulting form
+		taskNew.zFillField(com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Field.Subject, newsubject);
+		taskNew.zFillField(com.zimbra.qa.selenium.projects.ajax.ui.tasks.FormTaskNew.Field.Body, newcontent);
+				
+		/**
+		 * Purposefully  add this locator for this test case only
+		 * Does not find generic locator for save button, its keep on changing
+		 * css=div[id^='ztb__TKE']  tr[id^='ztb__TKE'] td[id$='__SAVE_title'] doesn't working for updated task 
+		 */
+		
+		//Click Save
+		app.zPageTasks.zClickAt("css=td[id='zb__TKE2__SAVE_title']", "0,0");
+		
+		SleepUtil.sleepMedium();
+		
+		//Verify new task
+		TaskItem newtask = TaskItem.importFromSOAP(app.zGetActiveAccount(), newsubject);
+		ZAssert.assertEquals(newtask.getName(), newsubject, "Verify task subject");			
+		
+		//Select Previous task  and verify it should show  Percentage field as 100%		
+		DisplayTask actual1 = (DisplayTask) app.zPageTasks.zListItem(Action.A_LEFTCLICK, subject);
+		ZAssert.assertEquals(actual1.zGetTaskProperty(Field.Percentage), "100%", "Verify the percentage field does present and  matches");
+
 	}
 
 
