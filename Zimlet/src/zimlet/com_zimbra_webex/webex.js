@@ -856,8 +856,19 @@ WebExZimlet.prototype._updateMeetingBodyAndSave = function(params) {
 	//delay to avoid race condition b/w setting content and sending msg
 	if(!params.dontSaveMeeting) {
 		setTimeout(AjxCallback.simpleClosure(this._saveAppt, this, params.apptController), 500);
+	} else {
+		this._showModifyAlertDialog();
 	}
 };
+
+WebExZimlet.prototype._showModifyAlertDialog = function() {
+	if (!this._modifyAlertDlg) {
+		this._modifyAlertDlg = new DwtMessageDialog({parent:this.getShell(), buttons:[DwtDialog.OK_BUTTON]});
+		this._modifyAlertDlg.setMessage(this.getMessage("modifyAlertNotice"));
+	}
+	this._modifyAlertDlg.popup();
+};
+
 /**
  * Saves appointment
  * @param {ZmApptController} Appointment Controller
@@ -869,6 +880,7 @@ WebExZimlet.prototype._saveAppt = function(apptController) {
 		apptController._saveListener();
 	}
 	appCtxt.getAppController().setStatusMsg(this.getMessage("WebExZimlet_successfullyCreatedWebEx"), ZmStatusView.LEVEL_INFO);
+	this._showModifyAlertDialog();
 };
 
 /**
