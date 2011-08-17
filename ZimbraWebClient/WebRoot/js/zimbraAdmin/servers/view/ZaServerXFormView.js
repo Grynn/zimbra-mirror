@@ -854,7 +854,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 								addButtonLabel:ZaMsg.Add_zimbraSmtpHostname, 
 								removeButtonLabel:ZaMsg.Remove_zimbraSmtpHostname,
 								removeButtonCSSStyle: "margin-left: 5px",
-								bnolsnr:true,
+								bmolsnr:true,
 					      		repeatItems:[
 								{ 
 								  type:_TEXTFIELD_,ref:".",
@@ -862,7 +862,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 								  cssClass:"admin_xform_name_input",
 								  enableDisableChecks:[],
 								  visibilityChecks:[],
-								  bnolsnr:true,
+								  bmolsnr:true,
 								  elementChanged: function(elementValue,instanceValue, event) {
 									this.getForm().itemChanged(this, elementValue, event);
 									this.getForm().itemChanged(this.getParentItem(), elementValue, event);
@@ -930,12 +930,12 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 								addButtonLabel:ZaMsg.NAD_MTA_AddBindAddress , 
 								removeButtonLabel:ZaMsg.NAD_MTA_RemoveBindAddress ,
 								removeButtonCSSStyle: "margin-left: 50px",
-								bnolsnr:true,
+								bmolsnr:true,
 					      	    items:[
 								{ type:_TEXTFIELD_,ref:".",
 								   enableDisableChecks:[],
 								   visibilityChecks:[],
-								   bnolsnr:true,
+								   bmolsnr:true,
 								   elementChanged: function(elementValue,instanceValue, event) {
 									this.getForm().itemChanged(this, elementValue, event);
 									this.getForm().itemChanged(this.getParentItem(), elementValue, event);
@@ -965,12 +965,12 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
                                     addButtonLabel:ZaMsg.NAD_Add ,
                                     removeButtonLabel:ZaMsg.NAD_Remove ,
                                     removeButtonCSSStyle: "margin-left: 50px",
-                                    bnolsnr:true,
+                                    bmolsnr:true,
                                     items:[
                                     { type:_TEXTFIELD_,ref:".",
                                        enableDisableChecks:[],
                                        visibilityChecks:[],
-                                       bnolsnr:true
+                                       bmolsnr:true
                                     }
                                     ]
 					      		}
