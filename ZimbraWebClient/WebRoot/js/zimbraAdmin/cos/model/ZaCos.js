@@ -196,13 +196,6 @@ ZaCos.A_zimbraPasswordLockoutDuration = "zimbraPasswordLockoutDuration";
 ZaCos.A_zimbraPasswordLockoutMaxFailures = "zimbraPasswordLockoutMaxFailures";
 ZaCos.A_zimbraPasswordLockoutFailureLifetime = "zimbraPasswordLockoutFailureLifetime";
 
-//sharing
-ZaCos.A_zimbraLimitInternalShareLifetime = "zimbraLimitInternalShareLifetime"; 
-ZaCos.A_zimbraInternalShareLifetime = "zimbraInternalShareLifetime";
-ZaCos.A_zimbraLimitExternalShareLifetime = "zimbraLimitExternalShareLifetime"; 
-ZaCos.A_zimbraExternalShareLifetime = "zimbraExternalShareLifetime";
-ZaCos.A_zimbraExternalSharingEnabled = "zimbraExternalSharingEnabled";
-
 //file retension
 ZaCos.A_zimbraNumFileVersionsToKeep = "zimbraNumFileVersionsToKeep";
 ZaCos.A_zimbraUnaccessedFileLifetime = "zimbraUnaccessedFileLifetime";
@@ -733,12 +726,6 @@ ZaCos.myXModel = {
         //interop
         {id:ZaCos.A_zimbraFreebusyExchangeUserOrg ,type:_STRING_, ref:"attrs/"+ZaCos.A_zimbraFreebusyExchangeUserOrg },
         
-        //sharing
-        {id:ZaCos.A_zimbraInternalShareLifetime, type:_MLIFETIME_, ref:"attrs/"+ZaCos.A_zimbraInternalShareLifetime},
-        {id:ZaCos.A_zimbraLimitInternalShareLifetime, types:_ENUM_, ref:"attrs/"+ZaCos.A_zimbraLimitInternalShareLifetime,  choices:ZaModel.BOOLEAN_CHOICES},
-        {id:ZaCos.A_zimbraExternalShareLifetime, type:_MLIFETIME_, ref:"attrs/"+ZaCos.A_zimbraExternalShareLifetime},
-        {id:ZaCos.A_zimbraLimitExternalShareLifetime, types:_ENUM_, ref:"attrs/"+ZaCos.A_zimbraLimitExternalShareLifetime,  choices:ZaModel.BOOLEAN_CHOICES},
-        {id:ZaCos.A_zimbraExternalSharingEnabled, types:_ENUM_, ref:"attrs/"+ZaCos.A_zimbraExternalSharingEnabled,  choices:ZaModel.BOOLEAN_CHOICES},
         
         //file retension
         {id:ZaCos.A_zimbraFileTrashLifetime, type:_MLIFETIME_, ref:"attrs/"+ZaCos.A_zimbraFileTrashLifetime},
