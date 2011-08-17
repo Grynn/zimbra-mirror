@@ -48,6 +48,7 @@ public class PageTasks extends AbsTab {
 		public static final String zNewTask = "zb__TKL__NEW_MENU_left_icon";
 		public static final String zNewTaskDropDown = "css=td[id$='__NEW_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
 		public static final String zNewTagMenuItem= "css=td[id$='_left_icon']>div[class='ImgNewTag']";
+		public static final String zMarkAsCompleted = "css=div#zb__TKL__MARK_AS_COMPLETED";
 	}
 
 	public PageTasks(AbsApplication application) {
@@ -157,9 +158,10 @@ public class PageTasks extends AbsTab {
 			throw new HarnessException("No tasks in the list!");
 
 		// Get each conversation's data from the table list
-		for (int i = 1; i <= count; i++) {
+		itemLocator = rowLocator + ":first-child";
+		for (int i = 1; i < count; i++) {
 			
-			itemLocator = rowLocator + ":nth-of-type("+ i +")";
+			itemLocator = itemLocator + " + div ";
 			if ( !this.sIsElementPresent(itemLocator) )
 				throw new HarnessException("Item Locator not present: "+ itemLocator);
 
@@ -185,7 +187,9 @@ public class PageTasks extends AbsTab {
 				logger.debug("found empty task subject");
 				continue;
 			}
-			
+			if(!itemSubject.equals(subject)){
+				continue;
+			}
 			if (itemSubject.equals(subject)) {
 				// Found it
 				break;
@@ -500,7 +504,9 @@ public class PageTasks extends AbsTab {
 		} else if (button == Button.B_TASK_FILTERBY) {
 			throw new HarnessException("implement me");
 		} else if (button == Button.B_TASK_MARKCOMPLETED) {
-			throw new HarnessException("implement me");
+			locator= Locators.zMarkAsCompleted;		
+			page = null;
+			
 		} else {
 			throw new HarnessException("no logic defined for button " + button);
 		}
