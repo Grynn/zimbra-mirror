@@ -50,8 +50,11 @@ server
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
         # For Virtual Hosting
-        proxy_set_header Host            $http_host;
-	proxy_set_header X-Forwarded-Host	$host;
+        set $virtual_host $http_host;
+        if ($virtual_host = '') {
+            set $virtual_host $server_addr:$server_port;
+        }
+        proxy_set_header Host            $virtual_host;
 
         # Location header fudging
         # Because NGINX SSL speaks plain HTTP to upstream, therefore any
@@ -104,7 +107,11 @@ server
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
         # For Virtual Hosting
-        proxy_set_header Host            $http_host;
+        set $virtual_host $http_host;
+        if ($virtual_host = '') {
+            set $virtual_host $server_addr:$server_port;
+        }
+        proxy_set_header Host            $virtual_host;
 
         # Location header fudging
         # Because NGINX SSL speaks plain HTTP to upstream, therefore any
