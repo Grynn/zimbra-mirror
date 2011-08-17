@@ -46,6 +46,16 @@ public:
 	HRESULT GetAllProfiles(vector<string> &vProfileList);
 };
 
+class ExchangeOps {
+private:
+	static ExchangeMigrationSetup *m_exchmigsetup;
+	static bool Initialized;
+public:
+	static HRESULT CreateAdminProfile(LPCWSTR lpIPAddr, LPCWSTR lpAdminUsername,
+								LPCWSTR	lpAdminPassword);
+	static HRESULT DeleteAdminProfile();
+};
+
 const LPCWSTR DEFAULT_ADMIN_PROFILE_NAME = L"zm_prof";
 const LPCWSTR DEFAULT_ADMIN_MAILBOX_NAME = L"zm_mbox";
 const LPCWSTR DEFAULT_ADMIN_PASSWORD	 = L"z1mbr4Migration";

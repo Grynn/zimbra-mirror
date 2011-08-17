@@ -126,12 +126,23 @@ HRESULT ExchangeAdmin::CreateProfile(wstring strProfileName, wstring strMailboxN
 		rgval[1].Value.lpszA = (LPSTR)strMBName.get();
 		
         // Configure the message service by using the previous properties.
-        if (FAILED(hr =
+		int trails = 5;
+		int itrTrials=0;
+		hr=0x81002746;
+		while((hr==0x81002746)&&(itrTrials<trails))
+		{
+			hr = pSvcAdmin->ConfigureMsgService((LPMAPIUID)pSvcRows->aRow->lpProps[iSvcUID].
+                            Value.bin.lpb, NULL, 0, 2, rgval);
+			if(hr==0x81002746)
+				Sleep(5000);
+			itrTrials++;
+		}
+        if (FAILED(hr))/* =
                     pSvcAdmin->ConfigureMsgService((LPMAPIUID)pSvcRows->aRow->lpProps[iSvcUID].
-                            Value.bin.lpb,
-                        NULL, 0, 2, rgval))) {
-            wcscpy(errDescrption, L"CreateProfile(): ConfigureMsgService Failed.");
+                            Value.bin.lpb,NULL, 0, 2, rgval)))*/ {
+			wcscpy(errDescrption, L"CreateProfile(): ConfigureMsgService Failed.");
             goto CRT_PROFILE_EXIT;
+			
         }
 
     }
@@ -588,4 +599,29 @@ HRESULT ExchangeMigrationSetup::Clean()
 HRESULT ExchangeMigrationSetup::GetAllProfiles(vector<string> &vProfileList)
 {
 	return m_exchAdmin->GetAllProfiles(vProfileList);
+}
+
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// ExchangeOps
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+bool ExchangeOps::Initialized = false;
+ExchangeMigrationSetup *ExchangeOps::m_exchmigsetup = NULL;
+
+HRESULT ExchangeOps::CreateAdminProfile(LPCWSTR lpIPAddr, LPCWSTR lpAdminUsername,
+								LPCWSTR	lpAdminPassword)
+{
+	if(!Initialized) {
+		m_exchmigsetup = new ExchangeMigrationSetup(lpIPAddr, lpAdminUsername, lpAdminPassword);
+		Initialized = true;
+	}
+	m_exchmigsetup->Setup();
+	return S_OK;
+}
+
+HRESULT ExchangeOps::DeleteAdminProfile()
+{
+	m_exchmigsetup->Clean();
+	delete m_exchmigsetup;
+	Initialized = false;
+	return S_OK;
 }

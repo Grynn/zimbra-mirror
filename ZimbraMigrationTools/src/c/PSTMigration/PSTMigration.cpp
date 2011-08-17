@@ -167,9 +167,10 @@ void GetUserDN()
 
 void ExchangeMigrationSetupTest()
 {
-	ExchangeMigrationSetup *exchmigsetup = new ExchangeMigrationSetup(L"10.117.82.161",
+/*	ExchangeMigrationSetup *exchmigsetup = new ExchangeMigrationSetup(L"10.117.82.161",
 		L"Administrator",L"z1mbr4Migration");
 	exchmigsetup->Setup();
+	
 	vector<string> vProfileList;
 	exchmigsetup->GetAllProfiles(vProfileList);
 	vector<string>::iterator itr= vProfileList.begin();
@@ -178,7 +179,14 @@ void ExchangeMigrationSetupTest()
 		printf("%s\n" ,((string)*itr).c_str());
 		itr++ ;
 	}
+
+	exchmigsetup->Clean();
 	delete exchmigsetup;
+	*/
+	ExchangeOps::CreateAdminProfile(L"10.117.82.161",
+		L"Administrator",L"z1mbr4Migration");
+	ExchangeOps::DeleteAdminProfile();
+
 }
 
 void MAPIAccessAPITest()
@@ -210,9 +218,9 @@ int main(int argc, TCHAR *argv[])
 //	ZCFileUploadTest();
 //	CreateExchangeMailBox();
 //	GetAllProfiles();	
-	MAPIAccessAPITest();
+//	MAPIAccessAPITest();
 
-	//ExchangeMigrationSetupTest();
+	ExchangeMigrationSetupTest();
 	//CreateExchangeMailBox();
 	
 	return 0;
