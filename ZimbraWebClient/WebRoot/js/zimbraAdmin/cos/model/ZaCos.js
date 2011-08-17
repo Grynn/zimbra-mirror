@@ -22,14 +22,11 @@
 **/
 ZaCos = function() {
 	ZaItem.call(this,"ZaCos");
-	this.attrs = new Object();
-//	this[ZaCos.A_zimbraMailHostPoolInternal] = new AjxVector();
-	this.id = "";
-	this.name="";	
-	this.type = ZaItem.COS;
+	this._init();
 }
 ZaItem.loadMethods["ZaCos"] = new Array();
 ZaItem.modifyMethods["ZaCos"] = new Array();
+ZaItem.initMethods["ZaCos"] = new Array();
 
 ZaCos.prototype = new ZaItem;
 ZaCos.prototype.constructor = ZaCos;
@@ -244,6 +241,15 @@ ZaCos.DELETE_COS_RIGHT = "deleteCos";
 //internal attributes - do not send these to the server
 //ZaCos.A_zimbraMailAllServersInternal = "allserversarray";
 //ZaCos.A_zimbraMailHostPoolInternal = "hostpoolarray";
+
+ZaCos.initMethod = function () {
+	this.attrs = new Object();
+	this.id = "";
+	this.name="";
+	this.type = ZaItem.COS;
+}
+ZaItem.initMethods["ZaCos"].push(ZaCos.initMethod);
+
 
 ZaCos.loadMethod =
 function (by, val) {
