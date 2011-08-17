@@ -49,11 +49,12 @@ public class FormTaskNew extends AbsForm {
 		public static final String zBodyField = "css=body";
 		public static final String zNameField = "css=[id^=DWT4] [input$=]";
 		public static final String zEditNameField = "css=[class=DwtInputField] [input$=]";
-		public static final String zSaveTask = "zb__TKE1__SAVE_left_icon";
-		public static final String zTasksubjField = "//td[contains(@id,'zv__TKE1_subject')]/div/input";
+		public static final String zSaveTask = "css=div[id^='ztb__TKE']  tr[id^='ztb__TKE'] td[id$='__SAVE_title']";
+		//public static final String zTasksubjField = "//td[contains(@id,'zv__TKE1_subject')]/div/input";
+		public static final String zTasksubjField = "css=td[id$='_subject'] div input";
 		public static final String zTasksubjFieldDesktop = "//td[contains(@id,'_subject')]/div/input";
 		public static final String zCancelTask = "zb__TKE1__CANCEL_left_icon";
-
+		
 		
 	}
 
@@ -364,8 +365,8 @@ public class FormTaskNew extends AbsForm {
 		logger.info(myPageName() + " zIsActive()");
 		
 		// Look for the div
-		String locator = "css=td[id='zv__TKE1_subject']";
-		
+		//String locator = "css=td[id='zv__TKE1_subject']";css=td[id$='_subject']
+		String locator = "css=td[id$='_subject']";
 		if ( !this.sIsElementPresent(locator) ) {
 			return (false);	
 		}
