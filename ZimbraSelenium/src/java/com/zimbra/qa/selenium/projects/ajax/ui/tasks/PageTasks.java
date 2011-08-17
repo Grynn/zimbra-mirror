@@ -16,6 +16,7 @@ import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
@@ -46,9 +47,10 @@ public class PageTasks extends AbsTab {
 		public static final String taskListView = "css=div[id='zl__TKL__rows'][class='DwtListView-Rows']";
 		public static final String zTasksTab = "zb__App__Tasks";
 		public static final String zNewTask = "zb__TKL__NEW_MENU_left_icon";
-		public static final String zNewTaskDropDown = "css=td[id$='__NEW_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+		public static final String zNewTaskDropDown = "css=td[id='zb__TKL__NEW_MENU_dropdown']>div";
 		public static final String zNewTagMenuItem= "css=td[id$='_left_icon']>div[class='ImgNewTag']";
 		public static final String zMarkAsCompleted = "css=div#zb__TKL__MARK_AS_COMPLETED";
+		public static final String zNewTaskMenuItem ="css=div#zb__TKL__NEW_MENU_NEW_TASK";
 	}
 
 	public PageTasks(AbsApplication application) {
@@ -576,11 +578,18 @@ public class PageTasks extends AbsTab {
 			if(option == Button.O_NEW_TAG){
 
 				pulldownLocator = Locators.zNewTaskDropDown;
-
 				optionLocator= Locators.zNewTagMenuItem;
 
 				page = new DialogTag(this.MyApplication, this);
-			}else{
+			}else if(option==Button.O_NEW_TASK){
+				
+				pulldownLocator = Locators.zNewTaskDropDown;
+				optionLocator= Locators.zNewTaskMenuItem;
+				
+				page = new FormTaskNew(this.MyApplication);
+				
+			}
+			else{
 				throw new HarnessException(	"no logic defined for pulldown/option " + pulldown+ "/" + option);
 			}
 
@@ -595,8 +604,8 @@ public class PageTasks extends AbsTab {
 						+ " not present!");
 			}
 
-			this.zClick(pulldownLocator);
-
+			this.zClickAt(pulldownLocator,"");
+			SleepUtil.sleepMedium();
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
 
@@ -609,7 +618,7 @@ public class PageTasks extends AbsTab {
 							+ optionLocator + " not present!");
 				}
 
-				this.zClick(optionLocator);
+				this.zClickAt(optionLocator,"");
 
 				// If the app is busy, wait for it to become active
 				zWaitForBusyOverlay();
@@ -717,10 +726,13 @@ public class PageTasks extends AbsTab {
 		if ( count < 1 ) 
 			throw new HarnessException("No tasks in the list!");
 
-		// Get each conversation's data from the table list
-		for (int i = 1; i <= count; i++) {
+		
+		String itemLocator = rowLocator + ":first-child";			
 			
-			String itemLocator = rowLocator + ":nth-of-type("+ i +")";
+		// Get each conversation's data from the table list
+		for (int i = 1; i <count; i++) {
+			itemLocator = itemLocator + " + div ";
+			//String itemLocator = rowLocator + ":nth-of-type("+ i +")";
 			if ( !this.sIsElementPresent(itemLocator) )
 				throw new HarnessException("Item Locator not present: "+ itemLocator);
 
