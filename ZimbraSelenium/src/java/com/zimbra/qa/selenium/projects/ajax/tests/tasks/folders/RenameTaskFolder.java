@@ -31,7 +31,7 @@ public class RenameTaskFolder extends AjaxCommonTest {
 
 	
 	
-	@Test(description = "Rename Task list -right click delete", groups = { "functional" })
+	@Test(description = "Rename Task list -right click Rename", groups = { "functional" })
 	public void RenameTaskFolder_01() throws HarnessException {
 		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
 		ZAssert.assertNotNull(taskFolder, "Verify the task is available");
