@@ -867,6 +867,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public synchronized void createMountpointAccount(String name, String id, OfflineAccount account) throws ServiceException {
         String granteeId = account.getId();
         DbOfflineDirectory.GranterEntry ge = DbOfflineDirectory.readGranter(name, granteeId);
+        if (ge != null && !id.equals(ge.id)) {
+            DbOfflineDirectory.deleteGranter(name, ge.id);
+            mGranterCache.remove(ge.name, ge.id);
+            ge = null;
+        }
         if (ge == null) {
             DbOfflineDirectory.createGranterEntry(name, id, granteeId);
             makeGranter(name, id, account);
