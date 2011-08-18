@@ -791,6 +791,11 @@ public class PageTasks extends AbsTab {
 			page = new DialogAssistant(MyApplication, ((AppAjaxClient) MyApplication).zPageTasks);
 			keyCode= "192";
 			
+		}else if ( shortcut == Shortcut.S_NEWTASK ) {			
+			//page = new DialogAssistant(MyApplication, ((AppAjaxClient) MyApplication).zPageTasks);
+			page= new FormTaskNew(this.MyApplication);
+			keyCode= "78,75";
+			
 		}else{
 			throw new HarnessException("implement shortcut: " + shortcut);
 		}
