@@ -102,6 +102,36 @@ public class CreateTask extends AjaxCommonTest {
 		ZAssert.assertEquals(task.gettaskBody().trim(), body.trim(),"Verify the task body");
 
 	}
+	/**
+	 * Test Case :Create new task using keyboard shortcut NK (New Task)
+	 * Open new Task 
+	 * Enter Subject and body
+	 * Press 'NK' shortcut 
+	 * New Task page should get open
+	 * Fill required inputs and save it
+	 * Task should show in list 
+	 * @throws HarnessException
+	 */
+	@Test(description = "Create new task using keyboard shortcut 'NK'- Verify through Soap", groups = { "smoke" })
+	public void CreateTask_04() throws HarnessException {
+
+		Shortcut shortcut = Shortcut.S_NEWTASK;
+		String subject = "task" + ZimbraSeleniumProperties.getUniqueString();
+		String body = "taskbody" + ZimbraSeleniumProperties.getUniqueString();
+		
+		//Click NEW Task shortcut "NK"
+		FormTaskNew taskNew = (FormTaskNew) app.zPageTasks.zKeyboardShortcut(shortcut);
+		
+		//Fill out resulting form		
+		taskNew.zFillField(Field.Subject, subject);
+		taskNew.zFillField(Field.Body, body);
+		taskNew.zSubmit();		
+
+		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
+		ZAssert.assertEquals(task.getName(), subject, "Verify task subject");
+		ZAssert.assertEquals(task.gettaskBody().trim(), body.trim(), "Verify the task body");
+
+	}
 
 
 }
