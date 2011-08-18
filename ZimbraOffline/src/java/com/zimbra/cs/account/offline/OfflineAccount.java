@@ -32,6 +32,7 @@ public class OfflineAccount extends Account {
     public static class Version {
         private static Version v6 = new Version("6.0.0");
         private static Version v7 = new Version("7.0.0");
+        private static Version v8 = new Version("8.0.0");
 
         private int major;
         private int minor;
@@ -75,6 +76,10 @@ public class OfflineAccount extends Account {
         
         public boolean isAtLeast7xx() {
             return isAtLeast(v7);
+        }
+
+        public boolean isAtLeast8xx() {
+            return isAtLeast(v8);
         }
 
         public String toString() { return "" + major + "." + minor + "." + maintenance; }

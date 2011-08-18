@@ -69,6 +69,10 @@ public class DeltaSync {
         return isync;
     }
 
+    private TagSync getTagSync() {
+        return ombx.getTagSync();
+    }
+
     public static String sync(ZcsMailbox ombx) throws ServiceException {
         return new DeltaSync(ombx).sync();
     }
@@ -395,6 +399,14 @@ public class DeltaSync {
             boolean isFolder = InitialSync.KNOWN_FOLDER_TYPES.contains(deltype.getName());
             for (String idStr : deltype.getAttribute(MailConstants.A_IDS).split(",")) {
                 Integer id = Integer.valueOf(idStr);
+                if (isTag) {
+                    id = getTagSync().localTagId(id);
+                    if (!Tag.validateId(id)) {
+                        //if it's an overflow still need to delete the mapping
+                        getTagSync().removeTagMapping(id);
+                        continue;
+                    }
+                }
                 Integer mask = ombx.getChangeMask(sContext, id, type);
                 // tag numbering conflict issues: don't delete tags we've created locally
                 if (isTag && (mask & Change.MODIFIED_CONFLICT) != 0)
@@ -405,17 +417,19 @@ public class DeltaSync {
             }
         }
 
-        // temporary workaround because tags are left off the "typed delete" list up to 4.5.2
-        for (String idStr : delement.getAttribute(MailConstants.A_IDS).split(",")) {
-            Integer id = Integer.valueOf(idStr);
-            if (id < MailItem.TAG_ID_OFFSET || id >= MailItem.TAG_ID_OFFSET + MailItem.MAX_TAG_COUNT || tagIds.contains(id)) {
-                continue;
+        if (!ombx.getRemoteServerVersion().isAtLeast7xx()) {
+            //original comment below indicates it's just for 4.5.1 and earlier...but not worth the time to regression test against ZCS 5+6
+            // temporary workaround because tags are left off the "typed delete" list up to 4.5.2
+            for (String idStr : delement.getAttribute(MailConstants.A_IDS).split(",")) {
+                Integer id = Integer.valueOf(idStr);
+                if (id < MailItem.TAG_ID_OFFSET || id >= MailItem.TAG_ID_OFFSET + MailItem.MAX_TAG_COUNT || tagIds.contains(id))
+                    continue;
+                // tag numbering conflict issues: don't delete tags we've created locally
+                if ((ombx.getChangeMask(sContext, id, MailItem.Type.TAG) & Change.MODIFIED_CONFLICT) != 0)
+                    continue;
+                leafIds.add(id);
+                tagIds.add(id);
             }
-            // tag numbering conflict issues: don't delete tags we've created locally
-            if ((ombx.getChangeMask(sContext, id, MailItem.Type.TAG) & Change.MODIFIED_CONFLICT) != 0)
-                continue;
-            leafIds.add(id);
-            tagIds.add(id);
         }
 
         // delete all the leaves now
@@ -429,6 +443,7 @@ public class DeltaSync {
         // avoid some nasty corner cases caused by tag id reuse
         for (int tagId : tagIds) {
             ombx.removePendingDelete(sContext, tagId, MailItem.Type.TAG);
+            getTagSync().removeTagMapping(tagId);
         }
         // save the folder deletes for later
         return (foldersToDelete.isEmpty() ? null : foldersToDelete);
@@ -682,7 +697,7 @@ public class DeltaSync {
     }
 
     void syncTag(Element elt) throws ServiceException {
-        int id = (int) elt.getAttributeLong(MailConstants.A_ID);
+        int id = getTagSync().localTagId(elt);
         String name = elt.getAttribute(MailConstants.A_NAME);
         String rgb = elt.getAttribute(MailConstants.A_RGB, null);
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
@@ -692,7 +707,10 @@ public class DeltaSync {
 
         ombx.lock.lock();
         try {
-            Tag tag = getTag(id);
+            Tag tag = null;
+            if (id > 0) {
+                tag = getTag(id);
+            }
 
             // we're reusing tag IDs, so it's possible that we've got a conflict with a locally-created tag with that ID
             if (tag != null && !name.equalsIgnoreCase(tag.getName()) &&
@@ -717,7 +735,8 @@ public class DeltaSync {
                     getInitialSync().syncTag(elt);
                     return;
                 } else {
-                    tag = getTag(id);
+                    tag = getTag(getTagSync().localTagId(elt)); //should be mapped now; but id was set to -1 while we tried to map
+                    id = tag.getId();
                 }
             }
 
@@ -766,9 +785,8 @@ public class DeltaSync {
         int conflict_mask = ombx.getChangeMask(sContext, conflict.getId(), MailItem.Type.TAG);
         if (conflict.getId() == id) {
             // new tag remotely, new tag locally, same name
-            if ((conflict_mask & Change.MODIFIED_CONFLICT) != 0) {
-                ombx.setChangeMask(sContext, id, MailItem.Type.TAG, conflict_mask & ~Change.MODIFIED_CONFLICT);
-            }
+            if ((conflict_mask & Change.MODIFIED_CONFLICT) != 0)
+                ombx.setChangeMask(sContext, conflict.getId(), MailItem.Type.TAG, conflict_mask & ~Change.MODIFIED_CONFLICT);
             return false;
         }
 
@@ -780,8 +798,12 @@ public class DeltaSync {
         }
         if (local == null && (conflict_mask & Change.MODIFIED_CONFLICT) != 0) {
             // if the new and existing tags are identical and being created, try to merge them
-            ombx.renumberItem(sContext, conflict.getId(), MailItem.Type.TAG, id);
-            ombx.setChangeMask(sContext, id, MailItem.Type.TAG, conflict_mask & ~Change.MODIFIED_CONFLICT);
+            if (getTagSync().isMappingRequired()) {
+                getTagSync().mapTag(Integer.valueOf(elt.getAttribute(MailConstants.A_ID)), conflict.getId());
+            } else {
+                ombx.renumberItem(sContext, conflict.getId(), MailItem.Type.TAG, id);
+            }
+            ombx.setChangeMask(sContext, conflict.getId(), MailItem.Type.TAG, conflict_mask & ~Change.MODIFIED_CONFLICT);
             return false;
         } else if ((conflict_mask & Change.MODIFIED_NAME) != 0) {
             // the local user also renamed the tag, so the local client wins
@@ -851,7 +873,7 @@ public class DeltaSync {
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
         Color itemColor = rgb != null ? new Color(rgb) : new Color(color);
         int flags = Flag.toBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
-        long tags = Tag.tagsToBitmask(elt.getAttribute(MailConstants.A_TAGS, null));
+        long tags = Tag.tagsToBitmask(getTagSync().localTagsFromElement(elt, null));
 
         boolean hasBlob = false;
         Map<String, String> fields = new HashMap<String, String>();
@@ -911,7 +933,7 @@ public class DeltaSync {
             byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
             Color itemColor = rgb != null ? new Color(rgb) : new Color(color);
             int flags = Flag.toBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
-            long tags = Tag.tagsToBitmask(elt.getAttribute(MailConstants.A_TAGS, null));
+            long tags = Tag.tagsToBitmask(getTagSync().localTagsFromElement(elt, null));
             int convId = (int) elt.getAttributeLong(MailConstants.A_CONV_ID);
 
             int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);

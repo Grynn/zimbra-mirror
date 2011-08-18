@@ -51,7 +51,6 @@ import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.tar.TarEntry;
 import com.zimbra.common.util.tar.TarInputStream;
 import com.zimbra.common.util.zip.ZipShort;
-import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -150,6 +149,10 @@ public class InitialSync {
 
     ZcsMailbox getMailbox() {
         return ombx;
+    }
+
+    private TagSync getTagSync() {
+        return ombx.getTagSync();
     }
 
     private DeltaSync getDeltaSync() {
@@ -566,23 +569,44 @@ public class InitialSync {
         long timestamp = elt.getAttributeLong(MailConstants.A_DATE, -1000);
 
         boolean renamed = elt.getAttributeBool(A_RELOCATED, false) || !name.equals(elt.getAttribute(MailConstants.A_NAME));
-
+        //get data source mapping for the tag if any exists
+        //if it already exists spill into delta sync
+        //otherwise find next available tag id (i.e. let auto-inc handle it)
+        //if none (i.e. already 63 tags) map but do not sync.
+        int remoteId = id;
+        if (getTagSync().isMappingRequired(remoteId)) {
+            if (getTagSync().mappingExists(remoteId)) {
+                getDeltaSync().syncTag(elt);
+                return;
+            } else {
+                id = Mailbox.ID_AUTO_INCREMENT;
+            }
+        }
         CreateTag redo = new CreateTag(ombx.getId(), name, itemColor);
         redo.setTagId(id);
         redo.start(timestamp > 0 ? timestamp : System.currentTimeMillis());
 
         try {
             // don't care about current feed syncpoint; sync can't be done offline
-            ombx.createTag(new TracelessContext(redo), name, itemColor);
+            Tag tag = ombx.createTag(new TracelessContext(redo), name, itemColor);
+            id = tag.getId();
             if (renamed) {
                 ombx.setChangeMask(sContext, id, MailItem.Type.TAG, Change.MODIFIED_NAME);
             }
+            if (getTagSync().isMappingRequired()) {
+                getTagSync().mapTag(remoteId, id);
+            }
             OfflineLog.offline.debug("initial: created tag (" + id + "): " + name);
         } catch (ServiceException e) {
-            if (e.getCode() != MailServiceException.ALREADY_EXISTS) {
-                throw e;
+            if (e.getCode() == MailServiceException.TOO_MANY_TAGS && getTagSync().isMappingRequired()) {
+                //tag won't exist, but we still need to track it
+                getTagSync().mapOverflowTag(remoteId);
+            } else {
+                if (e.getCode() != MailServiceException.ALREADY_EXISTS) {
+                    throw e;
+                }
+                getDeltaSync().syncTag(elt);
             }
-            getDeltaSync().syncTag(elt);
         }
     }
 
@@ -632,12 +656,12 @@ public class InitialSync {
             Element calElement = response.getElement(isAppointment ? MailConstants.E_APPOINTMENT : MailConstants.E_TASK);
             String flagsStr = calElement.getAttribute(MailConstants.A_FLAGS, null);
             int flags = flagsStr != null ? Flag.toBitmask(flagsStr) : 0;
-            String tagsStr = calElement.getAttribute(MailConstants.A_TAGS, null);
+            String tagsStr = getTagSync().localTagsFromElement(calElement, null);
             long tags = tagsStr != null ? Tag.tagsToBitmask(tagsStr) : 0;
 
             long timestamp = calElement.getAttributeLong(MailConstants.A_CAL_DATETIME, -1000);
 
-            Element setCalRequest = makeSetCalRequest(calElement, new RemoteInviteMimeLocator(ombx), null, ombx.getAccount(), isAppointment);
+            Element setCalRequest = makeSetCalRequest(calElement, new RemoteInviteMimeLocator(ombx), null, ombx.getOfflineAccount(), isAppointment, false, getTagSync());
             if (ombx.getOfflineAccount().isDebugTraceEnabled())
                 OfflineLog.offline.debug(setCalRequest.prettyPrint());
 
@@ -666,13 +690,13 @@ public class InitialSync {
     }
 
     //Massage the GetAppointmentResponse/GetTaskResponse into a SetAppointmentReqeust/SetTaskRequest
-    static Element makeSetCalRequest(Element resp, InviteMimeLocator imLocator, ZMailbox remoteZMailbox, Account account, boolean isAppointment) throws ServiceException {
+    static Element makeSetCalRequest(Element resp, InviteMimeLocator imLocator, ZMailbox remoteZMailbox, OfflineAccount account, boolean isAppointment, boolean outbound, TagSync tagSync) throws ServiceException {
         String calId = resp.getAttribute(MailConstants.A_ID);
 
         Element req = new Element.XMLElement(isAppointment ? MailConstants.SET_APPOINTMENT_REQUEST : MailConstants.SET_TASK_REQUEST);
         req.addAttribute(MailConstants.A_FOLDER, resp.getAttribute(MailConstants.A_FOLDER));
         req.addAttribute(MailConstants.A_FLAGS, resp.getAttribute(MailConstants.A_FLAGS, ""));
-        req.addAttribute(MailConstants.A_TAGS, resp.getAttribute(MailConstants.A_TAGS, ""));
+        tagSync.addTagsAttr(req, resp, outbound);
         long nextAlarm = resp.getAttributeLong(MailConstants.A_CAL_NEXT_ALARM, 0);
         if (nextAlarm > 0)
             req.addAttribute(MailConstants.A_CAL_NEXT_ALARM, nextAlarm);
@@ -874,7 +898,7 @@ public class InitialSync {
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
         Color itemColor = rgb != null ? new Color(rgb) : new Color(color);
         int flags = Flag.toBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
-        String tags = elt.getAttribute(MailConstants.A_TAGS, null);
+        String tags = getTagSync().localTagsFromElement(elt, null);
 
         Map<String, String> fields = new HashMap<String, String>();
         for (Element eField : elt.listElements())
@@ -1049,10 +1073,16 @@ public class InitialSync {
                                     if (draftMeta != null) {
                                         //update the autosendtime and other draft-specific stuff
                                         di = new DraftInfo(draftMeta);
-                                    }                                    
+                                    }
                                 }
-                                saveMessage(tin, te.getSize(), ud.id, ud.folderId, type, ud.date,
-                                        Flag.toBitmask(itemData.flags), ud.tags, ud.parentId, di);
+                                long tagMask = ud.tags;
+                                if (getTagSync().isMappingRequired()) {
+                                    String tagNames = itemData.tags;
+                                    tagMask = Tag.tagsToBitmask(getTagSync().localTagsFromNames(tagNames, "\u0000", ",")); 
+                                }
+                                saveMessage(tin, te.getSize(), ud.id, ud.folderId,
+                                    type, ud.date, Flag.toBitmask(itemData.flags),
+                                    tagMask, ud.parentId, di);
                                 idSet.remove(ud.id);
                             } catch (Exception x) {
                                 if (!SyncExceptionHandler.isRecoverableException(ombx, ud.id, "InitialSync.syncMessagesAsTgz", x)) {
@@ -1196,7 +1226,7 @@ public class InitialSync {
             MailItem.Type type) throws ServiceException {
         int received = (int) (Long.parseLong(headers.get("X-Zimbra-Received")) / 1000);
         int flags = Flag.toBitmask(headers.get("X-Zimbra-Flags"));
-        long tags = Tag.tagsToBitmask(headers.get("X-Zimbra-Tags"));
+        long tags = Tag.tagsToBitmask(getTagSync().localTagsFromHeader(headers));
         int convId = Integer.parseInt(headers.get("X-Zimbra-Conv"));
 
         saveMessage(in, sizeHint, id, folderId, type, received, flags, tags, convId, null);
@@ -1361,7 +1391,6 @@ public class InitialSync {
         String contentType = doc.getAttribute(MailConstants.A_CONTENT_TYPE, "text/html");
         String description = doc.getAttribute(MailConstants.A_DESC, null);
         int flags = Flag.toBitmask(doc.getAttribute(MailConstants.A_FLAGS, null));
-        //String tags = doc.getAttribute(MailConstants.A_TAGS, null);
         int version = (int) doc.getAttributeLong(MailConstants.A_VERSION);
         InputStream rs = null;
         OfflineAccount acct = ombx.getOfflineAccount();

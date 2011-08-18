@@ -832,6 +832,15 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         }
     }
 
+    private TagSync tagSync;
+
+    TagSync getTagSync() {
+        if (tagSync == null) {
+            tagSync = new TagSync(this);
+        }
+        return tagSync;
+    }
+
     @Override
     public boolean isNewItemIdValid(int id) {
         return true;

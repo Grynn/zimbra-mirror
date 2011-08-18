@@ -167,6 +167,9 @@ public class PushChanges {
         return mZMailbox;
     }
 
+    private TagSync getTagSync() {
+        return ombx.getTagSync();
+    }
 
     public static boolean sync(ZcsMailbox ombx, boolean isOnRequest) throws ServiceException {
         return new PushChanges(ombx).sync(isOnRequest);
@@ -208,7 +211,7 @@ public class PushChanges {
         List<Integer> tagDeletes = tombstones.getIds(MailItem.Type.TAG);
         if (tagDeletes != null && !tagDeletes.isEmpty()) {
             Element request = new Element.XMLElement(MailConstants.TAG_ACTION_REQUEST);
-            request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_HARD_DELETE).addAttribute(MailConstants.A_ID, concatenateIds(tagDeletes));
+            request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_HARD_DELETE).addAttribute(MailConstants.A_ID, concatenateIds(getTagSync().remoteIds(tagDeletes)));
             ombx.sendRequest(request);
             OfflineLog.offline.debug("push: pushed tag deletes: " + tagDeletes);
             tombstones.remove(MailItem.Type.TAG);
@@ -779,7 +782,7 @@ public class PushChanges {
 
     private boolean syncTag(int id) throws ServiceException {
         Element request = new Element.XMLElement(MailConstants.TAG_ACTION_REQUEST);
-        Element action = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);
+        Element action = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, getTagSync().remoteTagId(id));
 
         byte colorByte = 0;
         String colorStr = null;
@@ -804,13 +807,11 @@ public class PushChanges {
                 action = request.addElement(MailConstants.E_TAG);
                 create = true;
             }
-            if (create || (mask & Change.MODIFIED_COLOR) != 0) {
-                if (color.hasMapping()) {
-                    action.addAttribute(MailConstants.A_COLOR, colorByte);
-                }
-                else {
-                    action.addAttribute(MailConstants.A_RGB, colorStr);
-                }
+            //in ZCS 7 & 8 tagaction op=update seems to reset color if not specified on request...so always encode it
+            if (color.hasMapping()) {
+                action.addAttribute(MailConstants.A_COLOR, colorByte);
+            } else {
+                action.addAttribute(MailConstants.A_RGB, colorStr);
             }
             if (create || (mask & Change.MODIFIED_NAME) != 0)
                 action.addAttribute(MailConstants.A_NAME, name);
@@ -821,9 +822,9 @@ public class PushChanges {
         try {
             Pair<Integer,Integer> createData = pushRequest(request, create, id, MailItem.Type.TAG, name, Mailbox.ID_FOLDER_TAGS);
             if (create) {
-                int newId = createData.getFirst();
+                int newId = getTagSync().getOrMapLocalIdFromRemote(createData.getFirst(), id);
                 // first, deal with more headaches caused by reusing tag ids
-                if (id != createData.getFirst() && DeltaSync.getTag(ombx, newId) != null) {
+                if (id != newId && DeltaSync.getTag(ombx, newId) != null) {
                     int renumber = DeltaSync.getAvailableTagId(ombx);
                     if (renumber < 0) {
                         ombx.delete(sContext, newId, MailItem.Type.TAG);
@@ -969,7 +970,7 @@ public class PushChanges {
                 cnElem.addAttribute(MailConstants.A_FLAGS, Flag.toString(flags));
             }
             if (create || (mask & Change.MODIFIED_TAGS) != 0) {
-                cnElem.addAttribute(MailConstants.A_TAGS, cn.getTagString());
+                cnElem = getTagSync().addOutboundTagsAttr(cnElem, cn.getTagString());
             }
             if (create || (mask & Change.MODIFIED_FOLDER) != 0) {
                 cnElem.addAttribute(MailConstants.A_FOLDER, folderId);
@@ -1142,7 +1143,7 @@ public class PushChanges {
             Element request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
             Element action = request.addElement(MailConstants.E_ACTION);
             action.addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE);
-            action.addAttribute(MailConstants.A_TAGS, item.getTagString());
+            action = getTagSync().addOutboundTagsAttr(action, item.getTagString()); 
             action.addAttribute(MailConstants.A_ID, id);
             ombx.sendRequest(request);
         }
@@ -1247,7 +1248,7 @@ public class PushChanges {
                 action.addAttribute(MailConstants.A_FLAGS, Flag.toString(flags));
             }
             if (create || (mask & Change.MODIFIED_TAGS) != 0) {
-                action.addAttribute(MailConstants.A_TAGS, msg.getTagString());
+                action = getTagSync().addOutboundTagsAttr(action, msg.getTagString());
             }
             if (create || (mask & Change.MODIFIED_FOLDER) != 0) {
                 action.addAttribute(MailConstants.A_FOLDER, folderId);
@@ -1361,13 +1362,13 @@ public class PushChanges {
             if ((mask & Change.MODIFIED_CONFLICT) != 0 || (mask & Change.MODIFIED_CONTENT) != 0 || (mask & Change.MODIFIED_INVITE) != 0) { // need to push to the server
                 request = new Element.XMLElement(isAppointment ? MailConstants.SET_APPOINTMENT_REQUEST : MailConstants.SET_TASK_REQUEST);
                 ToXML.encodeCalendarItemSummary(request, new ItemIdFormatter(true), ombx.getOperationContext(), cal, ToXML.NOTIFY_FIELDS, true);
-                request = InitialSync.makeSetCalRequest(request.getElement(isAppointment ? MailConstants.E_APPOINTMENT : MailConstants.E_TASK), new LocalInviteMimeLocator(ombx), getZMailbox(), ombx.getAccount(), isAppointment);
+                request = InitialSync.makeSetCalRequest(request.getElement(isAppointment ? MailConstants.E_APPOINTMENT : MailConstants.E_TASK), new LocalInviteMimeLocator(ombx), getZMailbox(), ombx.getOfflineAccount(), isAppointment, true, getTagSync());
                 create = true; //content mod is considered same as create since we use SetAppointment for both
             } else {
                 request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
                 Element action = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);
                 if ((mask & Change.MODIFIED_TAGS) != 0)
-                    action.addAttribute(MailConstants.A_TAGS, cal.getTagString());
+                    action = getTagSync().addOutboundTagsAttr(action, cal.getTagString());
                 if ((mask & Change.MODIFIED_FLAGS) != 0)
                     action.addAttribute(MailConstants.A_FLAGS, cal.getFlagString());
                 if ((mask & Change.MODIFIED_FOLDER) != 0)

@@ -34,6 +34,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.security.auth.login.LoginException;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.sun.mail.smtp.SMTPTransport;
 import com.zimbra.common.account.Key;
 import com.zimbra.common.account.Key.AccountBy;
@@ -193,6 +194,19 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         mGranterCache = new NamedEntryCache<Account>(64, LC.ldap_cache_account_maxage.intValue() * Constants.MILLIS_PER_MINUTE);
         DbPool.disableUsageWarning();
     }
+
+    @VisibleForTesting
+    protected OfflineProvisioning(boolean extend) {
+        mLocalConfig = null;
+        mLocalServer = null;
+        mDefaultCos = null;
+        mMimeTypes = null;
+        mZimlets = null;
+        mSyncServerCache = null;
+        mAccountCache = null;
+        mGranterCache = null;
+    }
+
 
     public ZMailbox newZMailbox(OfflineAccount account, String serviceUri) throws ServiceException {
         ZMailbox.Options options;
