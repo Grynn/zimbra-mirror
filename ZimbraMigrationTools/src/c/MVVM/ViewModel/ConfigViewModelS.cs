@@ -82,7 +82,7 @@ namespace MVVM.ViewModel
                 fileRead.Close();
 
 
-                if (Z11.mailServer.Hostname.Length == 0)
+                if (Z11.mailServer.SourceHostname.Length == 0)
                 {
                     Isprofile = true;
                     IsmailServer = false;
@@ -99,15 +99,16 @@ namespace MVVM.ViewModel
                 {
                     Isprofile = false;
                     IsmailServer = true;
-                    MailServerHostName = Z11.mailServer.Hostname;
-                    MailServerProfileName = Z11.mailServer.ProfileName;
+                    MailServerHostName = Z11.mailServer.SourceHostname;
+                    MailServerAdminID = Z11.mailServer.SourceAdminID;
+                    MailServerAdminPwd = Z11.mailServer.SourceAdminPwd;
                 }
                 //MessageBox.Show("Configuration information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
             else
             {
 
-                MessageBox.Show("There is no configuration stored.Please enter some configuration info", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("There is no configuration stored.Pl;ease enter some configuration info", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
             }
            
             
@@ -214,32 +215,47 @@ namespace MVVM.ViewModel
 
         public string MailServerHostName
         {
-            get { return m_config.mailServer.Hostname; }
+            get { return m_config.mailServer.SourceHostname; }
             set
             {
-                if (value == m_config.mailServer.Hostname)
+                if (value == m_config.mailServer.SourceHostname)
                 {
                     return;
                 }
-                m_config.mailServer.Hostname = value;
+                m_config.mailServer.SourceHostname = value;
 
                 OnPropertyChanged(new PropertyChangedEventArgs("MailServerHostName"));
             }
         }
 
-        public string MailServerProfileName
+        public string MailServerAdminID
         {
-            get { return m_config.mailServer.ProfileName; }
+            get { return m_config.mailServer.SourceAdminID; }
             set
             {
-                if (value == m_config.mailServer.ProfileName)
+                if (value == m_config.mailServer.SourceAdminID)
                 {
                     return;
                 }
-                m_config.mailServer.ProfileName = value;
+                m_config.mailServer.SourceAdminID = value;
 
-                OnPropertyChanged(new PropertyChangedEventArgs("MailServerProfileName"));
+                OnPropertyChanged(new PropertyChangedEventArgs("MailServerAdminID"));
             }
-        }      
+        }
+
+        public string MailServerAdminPwd
+        {
+            get { return m_config.mailServer.SourceAdminPwd; }
+            set
+            {
+                if (value == m_config.mailServer.SourceAdminPwd)
+                {
+                    return;
+                }
+                m_config.mailServer.SourceAdminPwd = value;
+
+                OnPropertyChanged(new PropertyChangedEventArgs("MailServerAdminPwd"));
+            }
+        }
     }
 }

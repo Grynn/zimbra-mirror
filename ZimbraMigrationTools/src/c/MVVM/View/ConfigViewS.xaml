@@ -21,6 +21,7 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -32,16 +33,18 @@
                 <Label Grid.Row="2" Grid.Column="0" Content="Hostname/IP" Margin="54,10,0,0" HorizontalAlignment="Left" Name="labelExchHost" VerticalAlignment="Top" />
                 <TextBox Grid.Row="2"  Grid.Column="1" Margin="10,10,20,0" Name="tbExchHost" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbServer, Path=IsChecked}" Text="{Binding Path=MailServerHostName}" />
                 <Label Grid.Row="3" Grid.Column="0" Content="Admin ID" Margin="54,10,0,0" HorizontalAlignment="Left" Name="labelExchAdmin" VerticalAlignment="Top" />
-                <TextBox Grid.Row="3"  Grid.Column="1" Margin="10,10,20,0" Name="tbExchAdmin" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbServer, Path=IsChecked}" Text="{Binding Path=MailServerProfileName}"/>
+                <TextBox Grid.Row="3"  Grid.Column="1" Margin="10,10,20,0" Name="tbExchAdmin" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbServer, Path=IsChecked}" Text="{Binding Path=MailServerAdminID}"/>
+                <Label Grid.Row="4" Grid.Column="0" Content="Admin Password" Margin="54,10,0,0" HorizontalAlignment="Left" Name="labelExchAdminPwd" VerticalAlignment="Top" />
+                <PasswordBox Grid.Row="4"  Grid.Column="1" Margin="10,10,20,0" Name="pbBoxExchAdminPwd" VerticalAlignment="Center" PasswordChanged="pb_SourcePwdChanged"/>
             </Grid>
         </StackPanel>
-        <Separator Grid.Row="2" Margin="5,140,5,0" VerticalAlignment="Top"/>
+        <Separator Grid.Row="2" Margin="5,105,5,0" VerticalAlignment="Top"/>
         <Grid Name="BottomGrid" Grid.Row="3" >
-            <Button MinWidth="75" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,10,0,0" Content="Help" Name="buttonConfigHelp" Command="{Binding GetConfigSourceHelpCommand}"  />
-            <Button MinWidth="75" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="85,10,0,0" Content="Load" Name="buttonConfigLoad" Command="{Binding LoadCommand}"  />
-            <Button MinWidth="75" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="165,10,0,0" Content="Save" Name="buttonConfigSav" Command="{Binding SaveCommand}"  />
-            <Button MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,85,0" Content="&lt; Back" Name="buttonConfigBack" IsEnabled="False"  />
-            <Button MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,5,0" Content="Next &gt;" Name="buttonConfigNext" Command="{Binding NextCommand}"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,10,0,0" Content="Help" Name="buttonConfigHelp" Command="{Binding GetConfigSourceHelpCommand}"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="85,10,0,0" Content="Load" Name="buttonConfigLoad" Command="{Binding LoadCommand}"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="165,10,0,0" Content="Save" Name="buttonConfigSav" Command="{Binding SaveCommand}"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,85,0" Content="&lt; Back" Name="buttonConfigBack" IsEnabled="False"  />
+            <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,5,0" Content="Next &gt;" Name="buttonConfigNext" Command="{Binding NextCommand}"  />
         </Grid>
     </Grid>
 </UserControl>

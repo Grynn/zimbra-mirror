@@ -162,7 +162,8 @@ namespace MVVM.ViewModel
             m_configViewModelS.isBrowser = isBrowser;
             m_configViewModelS.OutlookProfile = "";
             m_configViewModelS.MailServerHostName = "";
-            m_configViewModelS.OutlookProfile = "";
+            m_configViewModelS.MailServerAdminID = "";
+            m_configViewModelS.MailServerAdminPwd = "";
             
             m_configViewModelU = new ConfigViewModelU();
             m_configViewModelU.Name = "ConfigViewModelU";

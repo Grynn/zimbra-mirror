@@ -5,10 +5,9 @@
     public class Config
     {
         public Config() {}
-        public Config(string exchangeProfile, string outlookProfile, string pstFile, string zimbraserverhostname, string zimbraport,
-                      string mailserver,string zimbraAdmin,string zimbrapasswd,string zimbradomain,string pstfile)
+        public Config(string mailserver, string srcAdminId, string srcAdminPwd, string outlookProfile, string pstFile, string zimbraserverhostname, string zimbraport,
+                      string zimbraAdmin,string zimbrapasswd,string zimbradomain,string pstfile)
         {
-            //this.ExchangeProfile = exchangeProfile;
             this.OutlookProfile = outlookProfile;
             this.PSTFile = pstFile;
             this.zimbraServer = new ZimbraServer();
@@ -19,12 +18,14 @@
             this.AdvancedImportOptions.FoldersToSkip= new Folder[5];
         
 
-           this.zimbraServer.HostName = zimbraserverhostname;
+           this.zimbraServer.ZimbraHostname = zimbraserverhostname;
            this.zimbraServer.Port = zimbraport;
-           this.zimbraServer.AdminAccount = zimbraAdmin;
-           this.zimbraServer.AdminPassword = zimbrapasswd;
+           this.zimbraServer.ZimbraAdminID = zimbraAdmin;
+           this.zimbraServer.ZimbraAdminPwd = zimbrapasswd;
           // this.zimbraServer.Domain = zimbradomain;
-           this.mailServer.Hostname = mailserver;
+           this.mailServer.SourceHostname = mailserver;
+           this.mailServer.SourceAdminID = srcAdminId;
+           this.mailServer.SourceAdminPwd = srcAdminPwd;
 
            this.GeneralOptions = new GeneralOptions();
           // this.mailServer.PSTFile = pstfile;
@@ -63,27 +64,30 @@
     public class MailServer
     {
 
-        private string m_Hostname;
+        private string m_SourceHostname;
 
-        public string Hostname
+        public string SourceHostname
         {
-            get { return m_Hostname; }
-            set { m_Hostname = value; }
+            get { return m_SourceHostname; }
+            set { m_SourceHostname = value; }
         }
-        private string m_AdminAccount;
 
-        public string AdminAccount
-        {
-            get { return m_AdminAccount; }
-            set { m_AdminAccount = value; }
-        }
-        private string m_ProfileName;
+        private string m_SourceAdminID;
 
-        public string ProfileName
+        public string SourceAdminID
         {
-            get { return m_ProfileName; }
-            set { m_ProfileName = value; }
+            get { return m_SourceAdminID; }
+            set { m_SourceAdminID = value; }
         }
+
+        private string m_SourceAdminPwd;
+
+        public string SourceAdminPwd
+        {
+            get { return m_SourceAdminPwd; }
+            set { m_SourceAdminPwd = value; }
+        }
+
         private string m_PSTFile;
 
         public string PSTFile
@@ -95,12 +99,12 @@
     public class ZimbraServer
     {
 
-        private string m_HostName;
+        private string m_ZimbraHostname;
 
-        public string HostName
+        public string ZimbraHostname
         {
-            get { return m_HostName; }
-            set { m_HostName = value; }
+            get { return m_ZimbraHostname; }
+            set { m_ZimbraHostname = value; }
         }
 
 
@@ -120,20 +124,20 @@
             set { m_UseSSL = value; }
         }
 
-        private string m_AdminAccount;
+        private string m_ZimbraAdminID;
 
-        public string AdminAccount
+        public string ZimbraAdminID
         {
-            get { return m_AdminAccount; }
-            set { m_AdminAccount = value; }
+            get { return m_ZimbraAdminID; }
+            set { m_ZimbraAdminID = value; }
         }
 
-        private string m_AdminPassword;
+        private string m_ZimbraAdminPwd;
 
-        public string AdminPassword
+        public string ZimbraAdminPwd
         {
-            get { return m_AdminPassword; }
-            set { m_AdminPassword = value; }
+            get { return m_ZimbraAdminPwd; }
+            set { m_ZimbraAdminPwd = value; }
         }
         private string m_UserAccount;
 

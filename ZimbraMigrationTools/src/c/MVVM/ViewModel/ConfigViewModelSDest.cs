@@ -76,10 +76,10 @@ namespace MVVM.ViewModel
                 Config Z11 = new Config();
                 Z11 = (Config)reader.Deserialize(fileRead);
                 fileRead.Close();
-                ZimbraServerHostName = Z11.zimbraServer.HostName;
+                ZimbraServerHostName = Z11.zimbraServer.ZimbraHostname;
                 ZimbraPort = Z11.zimbraServer.Port;
-                ZimbraAdmin = Z11.zimbraServer.AdminAccount;
-                ZimbraAdminPasswd = Z11.zimbraServer.AdminPassword;
+                ZimbraAdmin = Z11.zimbraServer.ZimbraAdminID;
+                ZimbraAdminPasswd = Z11.zimbraServer.ZimbraAdminPwd;
                 ZimbraSSL = Z11.zimbraServer.UseSSL;
             }
             else
@@ -188,28 +188,28 @@ namespace MVVM.ViewModel
 
         public string ZimbraServerHostName
         {
-            get { return m_config.zimbraServer.HostName; }
+            get { return m_config.zimbraServer.ZimbraHostname; }
             set
             {
-                if (value == m_config.zimbraServer.HostName)
+                if (value == m_config.zimbraServer.ZimbraHostname)
                 {
                     return;
                 }
-                m_config.zimbraServer.HostName = value;
+                m_config.zimbraServer.ZimbraHostname = value;
 
                 OnPropertyChanged(new PropertyChangedEventArgs("ZimbraServerHostName"));
             }
         }
         public string ZimbraAdmin
         {
-            get { return m_config.zimbraServer.AdminAccount; }
+            get { return m_config.zimbraServer.ZimbraAdminID; }
             set
             {
-                if (value == m_config.zimbraServer.AdminAccount)
+                if (value == m_config.zimbraServer.ZimbraAdminID)
                 {
                     return;
                 }
-                m_config.zimbraServer.AdminAccount = value;
+                m_config.zimbraServer.ZimbraAdminID = value;
 
                 OnPropertyChanged(new PropertyChangedEventArgs("ZimbraAdmin"));
             }
@@ -217,14 +217,14 @@ namespace MVVM.ViewModel
 
         public string ZimbraAdminPasswd
         {
-            get { return m_config.zimbraServer.AdminPassword; }
+            get { return m_config.zimbraServer.ZimbraAdminPwd; }
             set
             {
-                if (value == m_config.zimbraServer.AdminPassword)
+                if (value == m_config.zimbraServer.ZimbraAdminPwd)
                 {
                     return;
                 }
-                m_config.zimbraServer.AdminPassword = value;
+                m_config.zimbraServer.ZimbraAdminPwd = value;
 
                 OnPropertyChanged(new PropertyChangedEventArgs("ZimbraAdminPasswd"));
             }

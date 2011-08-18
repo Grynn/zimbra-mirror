@@ -52,7 +52,7 @@ namespace MVVM.ViewModel
                 Config Z11 = new Config();
                 Z11 = (Config)reader.Deserialize(fileRead);
                 fileRead.Close();
-                ZimbraServerHostName = Z11.zimbraServer.HostName;
+                ZimbraServerHostName = Z11.zimbraServer.ZimbraHostname;
                 ZimbraPort = Z11.zimbraServer.Port;
                 ZimbraUser = Z11.zimbraServer.UserAccount;
                 ZimbraUserPasswd = Z11.zimbraServer.UserPassword;
@@ -169,14 +169,14 @@ namespace MVVM.ViewModel
 
         public string ZimbraServerHostName
         {
-            get { return m_config.zimbraServer.HostName; }
+            get { return m_config.zimbraServer.ZimbraHostname; }
             set
             {
-                if (value == m_config.zimbraServer.HostName)
+                if (value == m_config.zimbraServer.ZimbraHostname)
                 {
                     return;
                 }
-                m_config.zimbraServer.HostName = value;
+                m_config.zimbraServer.ZimbraHostname = value;
 
                 OnPropertyChanged(new PropertyChangedEventArgs("ZimbraServerHostName"));
             }
