@@ -1926,7 +1926,7 @@ function(element, next) {
  */
 DwtListView.prototype._scrollList =
 function(itemDiv) {
-	DwtControl._scrollIntoView(itemDiv, itemDiv.parentNode);
+	Dwt.scrollIntoView(itemDiv, itemDiv.parentNode);
 };
 
 DwtListView.prototype._setRowHeight =

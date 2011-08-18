@@ -2389,34 +2389,6 @@ function(loc) {
 };
 
 /**
- * Resets the scrollTop of container (if necessary) to ensure that element is visible.
- * 
- * @param {Element}		element		the element to be made visible
- * @param {Element}		container	the containing element to possibly scroll
- * @private
- */
-DwtControl._scrollIntoView =
-function(element, container) {
-	
-	if (!element || !container) { return; }
-	
-	var elementTop = Dwt.toWindow(element, 0, 0, null, null, DwtPoint.tmp).y;
-	var containerTop = Dwt.toWindow(container, 0, 0, null, null, DwtPoint.tmp).y + container.scrollTop;
-
-	var diff = elementTop - containerTop;
-	if (diff < 0) {
-		container.scrollTop += diff;
-	} else {
-		var containerH = Dwt.getSize(container, DwtPoint.tmp).y;
-		var elementH = Dwt.getSize(element, DwtPoint.tmp).y;
-		diff = (elementTop + elementH) - (containerTop + containerH);
-		if (diff > 0) {
-			container.scrollTop += diff;
-		}
-	}
-};
-
-/**
  * Handles scrolling of a drop area for an object being dragged. The scrolling is based on proximity to
  * the top or bottom edge of the area (only vertical scrolling is done). The scrolling is done via a
  * looping timer, so that the scrolling is smooth and does not depend on additional mouse movement.

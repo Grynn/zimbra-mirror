@@ -1473,3 +1473,31 @@ function(el1, el2) {
 
 	return !(left1 > right2 || right1 < left2 || top1 > bottom2 || bottom1 < top2);
 };
+
+/**
+ * Resets the scrollTop of container (if necessary) to ensure that element is visible.
+ * 
+ * @param {Element}		element		the element to be made visible
+ * @param {Element}		container	the containing element to possibly scroll
+ * @private
+ */
+Dwt.scrollIntoView =
+function(element, container) {
+	
+	if (!element || !container) { return; }
+	
+	var elementTop = Dwt.toWindow(element, 0, 0, null, null, DwtPoint.tmp).y;
+	var containerTop = Dwt.toWindow(container, 0, 0, null, null, DwtPoint.tmp).y + container.scrollTop;
+
+	var diff = elementTop - containerTop;
+	if (diff < 0) {
+		container.scrollTop += diff;
+	} else {
+		var containerH = Dwt.getSize(container, DwtPoint.tmp).y;
+		var elementH = Dwt.getSize(element, DwtPoint.tmp).y;
+		diff = (elementTop + elementH) - (containerTop + containerH);
+		if (diff > 0) {
+			container.scrollTop += diff;
+		}
+	}
+};
