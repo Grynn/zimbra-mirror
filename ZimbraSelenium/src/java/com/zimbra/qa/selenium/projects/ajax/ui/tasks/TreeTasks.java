@@ -26,8 +26,9 @@ public class TreeTasks extends AbsTree {
 		public static final String zNewTagIcon = "//td[contains(@class,'overviewHeader-Text FakeAnchor')]/div[contains(@class,'ImgNewTag')]";
 		public static final String zTagsHeader = "//td[contains(@id,'ztih__main_Tasks__TAG_textCell')]";
 	//	public static final String zDeleteTreeMenuItem = "//div[contains(@class,'ZMenuItem')]//tbody//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgDelete')]";
-		public static final String zRenameTreeMenuItem = "//div[contains(@class,'ZMenuItem')]//tbody//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgRename')]";
+	//	public static final String zRenameTreeMenuItem = "//div[contains(@class,'ZMenuItem')]//tbody//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgRename')]";
 		public static final String zDeleteTreeMenuItem = "css=tr#POPUP_DELETE";
+		public static final String zRenameTreeMenuItem ="css=tr#POPUP_RENAME_FOLDER";
 	}
 	
 		
@@ -327,7 +328,7 @@ public class TreeTasks extends AbsTree {
 
 			optionLocator = Locators.zRenameTreeMenuItem;
 
-			page = new DialogRenameTag(MyApplication,
+			page = new DialogRenameFolder(MyApplication,
 					((AppAjaxClient) MyApplication).zPageTasks);
 
 		} else {
