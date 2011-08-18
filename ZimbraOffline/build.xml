@@ -1,6 +1,10 @@
 <project name="ZimbraOffline" default="offline-jar">
 
+  <property name="zd.home.dir" value="/opt/zimbra/zdesktop dev"/>
+  <property name="zimbra.home.dir" value="${zd.home.dir}"/>
+
   <import file="../ant-global.xml" />
+  
 
   <property file="build.properties"/>
   <property environment="env" />
@@ -58,9 +62,6 @@
     </not>
   </condition>
 
-  <!-- offline must be able to run from a path with spaces. here we have default dev installation -->
-  <!-- path contain space characters so that if this is broken, we can catch it right away.       -->
-  <property name="zimbra.home.dir" value="/opt/zimbra/zdesktop dev"/>
 
   <property name="zimbra.offline.app.dir" location="${zimbra.home.dir}/app" />
   <property name="zimbra.offline.data.dir" location="${zimbra.home.dir}/data" />
@@ -164,8 +165,11 @@
   </target>
 
   <target name="offline-compile" depends="offline-build-init" description="Compiles the source code">
-    <ant dir="${client.dir}" target="jar" inheritAll="false" />
+    <ant dir="${client.dir}" target="jar" inheritAll="false" >
+      <property name="zimbra.home.dir" value="${zd.home.dir}"/>
+    </ant>
     <ant dir="../ZimbraServer" target="dev-dist" inheritAll="false">
+      <property name="zimbra.home.dir" value="${zd.home.dir}"/>
       <property name="zimbra.buildinfo.version" value="${offline.version}"/>
       <property name="zimbra.buildinfo.type" value="${offline.appid}"/>
       <property name="zimbra.buildinfo.release" value="${offline.name}"/>
@@ -185,9 +189,15 @@
   </target>
 
   <target name="offline-ext-jars">
-    <ant dir="${zsync.common.dir}" target="jar" inheritAll="false" />
-    <ant dir="${zsync.client.dir}" target="jar" inheritAll="false" />
-    <ant dir="${zdext.dir}" target="jar" inheritAll="false" />
+    <ant dir="${zsync.common.dir}" target="jar" inheritAll="false" >
+      <property name="zimbra.home.dir" value="${zd.home.dir}"/>
+  	</ant>
+    <ant dir="${zsync.client.dir}" target="jar" inheritAll="false">
+	  <property name="zimbra.home.dir" value="${zd.home.dir}"/>
+    </ant>
+    <ant dir="${zdext.dir}" target="jar" inheritAll="false" >
+	  <property name="zimbra.home.dir" value="${zd.home.dir}"/>
+    </ant>
   </target>
 
   <target name="offline-jar" depends="offline-compile" description="Creates the jar file">
@@ -201,13 +211,25 @@
   <target name="offline-clean" description="Removes build files and undeploys extension">
     <delete dir="${build.dir}" />
     <if><isset property="build.exchange.ext" /><then>
-      <ant dir="../ZimbraSyncCommon" target="clean" inheritAll="false" />
-      <ant dir="../ZimbraSyncClient" target="clean" inheritAll="false" />
+      <ant dir="../ZimbraSyncCommon" target="clean" inheritAll="false" >
+        <property name="zimbra.home.dir" value="${zd.home.dir}"/>
+      </ant>
+      <ant dir="../ZimbraSyncClient" target="clean" inheritAll="false" >
+        <property name="zimbra.home.dir" value="${zd.home.dir}"/>
+      </ant>
     </then></if>
-    <ant dir="../ZimbraCommon" target="clean" inheritAll="false" />
-    <ant dir="../ZimbraClient" target="clean" inheritAll="false" />
-    <ant dir="../ZimbraServer" target="clean" inheritAll="false" />
-    <ant dir="../ZimbraWebClient" target="clean" inheritAll="false" />
+    <ant dir="../ZimbraCommon" target="clean" inheritAll="false" >
+	  <property name="zimbra.home.dir" value="${zd.home.dir}"/>
+    </ant>
+    <ant dir="../ZimbraClient" target="clean" inheritAll="false" >
+      <property name="zimbra.home.dir" value="${zd.home.dir}"/>
+    </ant>
+    <ant dir="../ZimbraServer" target="clean" inheritAll="false" >
+      <property name="zimbra.home.dir" value="${zd.home.dir}"/>
+    </ant>
+    <ant dir="../ZimbraWebClient" target="clean" inheritAll="false" >
+      <property name="zimbra.home.dir" value="${zd.home.dir}"/>
+    </ant>
   </target>
 
   <target name="offline-webroot">
@@ -231,7 +253,8 @@
     <ant dir="../ZimbraWebClient" target="war" inheritAll="false" >
       <property name="zimbra.buildinfo.version" value="${offline.version}"/>
       <property name="zimbra.buildinfo.release" value="${offline.buildid}"/>
-  	</ant>
+      <property name="zimbra.home.dir" value="${zd.home.dir}"/>
+    </ant>
     <unzip src="${zimbra.warfile}" dest="${dist.dir}/jetty/webapps/zimbra" overwrite="true"/>
     <delete dir="${dist.dir}/jetty/webapps/zimbra/help"/>
     <tstamp><format property="build.simpleDate" pattern="yyMMddHHmmss" /></tstamp>
@@ -664,9 +687,15 @@
 
   <target name="offline-build-zimlets">
     <antcall target="offline-build-zd-zimlets" />
-    <ant dir="../Zimlet" target="clean" inheritAll="false" />
-    <ant dir="../Zimlet" target="package-zimlets" inheritAll="false" />
-    <ant dir="../Zimlet" target="package-zimlets-offline" inheritAll="false" />
+    <ant dir="../Zimlet" target="clean" inheritAll="false" >
+      <property name="zimbra.home.dir" value="${zd.home.dir}"/>
+    </ant>
+    <ant dir="../Zimlet" target="package-zimlets" inheritAll="false" >
+      <property name="zimbra.home.dir" value="${zd.home.dir}"/>
+    </ant>
+    <ant dir="../Zimlet" target="package-zimlets-offline" inheritAll="false" >
+      <property name="zimbra.home.dir" value="${zd.home.dir}"/>
+    </ant>
     <copy todir="${dist.data.dir}/zimlets" overwrite="true">
       <fileset dir="../Zimlet/build/dist/zimlets" includes="*.zip" excludes="com_zimbra_local.zip,com_zimbra_ymemoticons.zip"/>
       <fileset dir="../Zimlet/build/dist/zimlets-offline" includes="*.zip" />
@@ -1021,7 +1050,9 @@
     <copy tofile="${dist.app.dir}/linux/prism/chrome/webrunner/content/icon128.png" file="src/installer/resources/launcher_128x128.png" overwrite="true"/>
 
     <!-- unzip zimbra drag and drop extension -->
-    <ant dir="../ZimbraWebClient" target="ffext-reset-the-world" inheritAll="false"/>
+    <ant dir="../ZimbraWebClient" target="ffext-reset-the-world" inheritAll="false">
+      <property name="zimbra.home.dir" value="${zd.home.dir}"/>
+  	</ant>
     <mkdir dir="${dist.data.dir}/profile/extensions/zimbradnd@zimbra.com"/>
     <unzip src="../ZimbraWebClient/ffext/build/ZimbraDnD.xpi" dest="${dist.data.dir}/profile/extensions/zimbradnd@zimbra.com" overwrite="true"/>
 
@@ -1108,6 +1139,7 @@
 
   <target name="offline-dev-sync">
     <ant dir="../ZimbraWebClient" target="dev-sync" inheritAll="false">
+      <property name="zimbra.home.dir" value="${zd.home.dir}"/>
       <property name="webapp.dir" value="${jetty.home.dir}/webapps/zimbra/"/>
     </ant>
     <antcall target="offline-sync-jsp-opt"/>
