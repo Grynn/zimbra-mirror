@@ -225,7 +225,10 @@ function (openInNewTab, openInSearchTab) {
 	this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 	this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
 	this._removeConfirmMessageDialog = ZaApp.getInstance().dialogs["removeConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON],null,ZaId.CTR_PREFIX + ZaId.VIEW_DMLIST + "_removeConfirm");			
-		
+	this._forceRemoveMessageDialog = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON],null,ZaId.CTR_PREFIX + ZaId.VIEW_DMLIST + "_forceRemoveConfirm");
+    this._forceRemoveMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaDomainListController.prototype._forceDeleteDomainCallback, this);
+    this._forceRemoveMessageDialog._button[DwtDialog.YES_BUTTON].setText(ZaMsg.FORCE_DELETE_BUTTON);
+
 	this._UICreated = true;
 }
 
@@ -476,6 +479,7 @@ function () {
 
 ZaDomainListController.getDlMsgFromList =
 function (listArr) {
+    var i = 0;
 	var	dlgMsg = "<br><ul>";
 	for(var key in listArr) {
 		if(i > 19) {
@@ -508,17 +512,20 @@ function (listArr) {
 
 ZaDomainListController.prototype._deleteDomainsCallback = 
 function () {
-	var successRemList=new Array();
+    if(!this._successRemList)
+	    this._successRemList=new Array();
 	for(var key in this._removeList) {
-		if(this._removeList[key]) {
+		if(this._removeList[key] && AjxUtil.indexOf(this._successRemList, this._removeList[key]) == -1) {
 			try {
 				this._removeList[key].remove();
-				successRemList.push(this._removeList[key]);					
+                this.fireRemovalEvent(this._removeList[key]);
+				this._successRemList.push(this._removeList[key]);
 			} catch (ex) {
 				this._removeConfirmMessageDialog.popdown();
 				if(ex.code == ZmCsfeException.DOMAIN_NOT_EMPTY) {
-					this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_NOT_EMPTY, null, DwtMessageDialog.CRITICAL_STYLE, null);
-					this._errorDialog.popup();			
+                    this._forceDeleteDomain(this._removeList[key]);
+					//this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_NOT_EMPTY, null, DwtMessageDialog.CRITICAL_STYLE, null);
+					//this._errorDialog.popup();
 				} else {
 					this._handleException(ex, "ZaDomainListController.prototype._deleteDomainsCallback", null, false);				
 				}
@@ -527,7 +534,7 @@ function () {
 		}
 		this._list.remove(this._removeList[key]); //remove from the list
 	}
-	this.fireRemovalEvent(successRemList); 		
+	this.fireRemovalEvent(this._successRemList);
 	this._removeConfirmMessageDialog.popdown();
 	this._contentView.setUI();
 	this.show();
@@ -537,6 +544,84 @@ ZaDomainListController.prototype._donotDeleteDomainsCallback =
 function () {
 	this._removeList = new Array();
 	this._removeConfirmMessageDialog.popdown();
+}
+
+ZaDomainListController.prototype._getAllAccountDomain =
+function (domainName) {
+    if (domainName) {
+        var controller = ZaApp.getInstance().getCurrentController();
+        var busyId = Dwt.getNextId();
+
+        controller._currentQuery = "" ;
+        var searchTypes = [ZaSearch.ACCOUNTS, ZaSearch.DLS, ZaSearch.ALIASES, ZaSearch.RESOURCES] ;
+
+        if(controller.setSearchTypes)
+            controller.setSearchTypes(searchTypes);
+	    controller._currentDomain = domainName;
+	    controller.fetchAttrs = AjxBuffer.concat(ZaAlias.searchAttributes,",",
+                        ZaDistributionList.searchAttributes,",",
+                        ZaResource.searchAttributes,",",
+                        ZaSearch.standardAttributes);
+
+        var searchParams = {
+            query:controller._currentQuery,
+            domain: controller._currentDomain,
+            types:searchTypes,
+            attrs:controller.fetchAttrs,
+            controller: controller,
+            showBusy:true,
+            busyId:busyId,
+            busyMsg:ZaMsg.BUSY_SEARCHING
+        }
+        var resp = ZaSearch.searchDirectory(searchParams);
+        if(resp && resp.Body.SearchDirectoryResponse) {
+            var response = resp.Body.SearchDirectoryResponse;
+            var acctlist = new ZaItemList(ZaAccount);
+            acctlist.loadFromJS(response);
+            return acctlist.getArray();
+        } else return null;
+    }else {
+        var currentController = ZaApp.getInstance().getCurrentController () ;
+        currentController.popupErrorDialog(ZaMsg.ERROR_NO_DOMAIN_NAME) ;
+    }
+    return null;
+}
+
+ZaDomainListController.prototype._forceDeleteDomain =
+function (domain) {
+    var acctlist = this._getAllAccountDomain(domain.name);
+    if(acctlist && acctlist.length > 0) {
+        var sysacctNum = 0;
+        var regularacctNum = 0;
+        for (var i = 0; i < acctlist.length; i++) {
+            if(acctlist[i].attrs[ZaAccount.A_zimbraIsSystemAccount] == "TRUE")
+                sysacctNum ++;
+            else regularacctNum++;
+        }
+        this._forceRemoveAccountList = acctlist;
+        this._forceRemoveDomain = domain;
+        var dlgMsg = AjxMessageFormat.format(ZaMsg.Q_FORCE_DELETE_DOMAIN, [domain.name, sysacctNum, regularacctNum]);
+        dlgMsg += ZaDomainListController.getDlMsgFromList (this._forceRemoveAccountList);
+        this._forceRemoveMessageDialog.setMessage(dlgMsg, DwtMessageDialog.INFO_STYLE);
+        this._forceRemoveMessageDialog.popup();
+    }
+}
+
+ZaDomainListController.prototype._forceDeleteDomainCallback =
+function() {
+    this._forceRemoveMessageDialog.popdown();
+    var acctList = this._forceRemoveAccountList;
+    var dom = this._forceRemoveDomain;
+    if(!acctList || !dom) return;
+    try {
+        for(var i = 0; i < acctList.length; i++) {
+            acctList[i].remove();
+        }
+        this._forceRemoveAccountList = null;
+        this._deleteDomainsCallback();
+    } catch (ex) {
+        this._handleException(ex, "ZaDomainListController.prototype._forceDeleteDomainCallback", null, false);
+    }
 }
 
 ZaDomainListController.changeActionsStateMethod = 
