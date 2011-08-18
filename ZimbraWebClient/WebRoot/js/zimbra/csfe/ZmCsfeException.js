@@ -182,6 +182,7 @@ ZmCsfeException.TOO_MANY_SEARCH_RESULTS				= "account.TOO_MANY_SEARCH_RESULTS";
 ZmCsfeException.NO_SUCH_COS 						= "account.NO_SUCH_COS";
 ZmCsfeException.SIGNATURE_EXISTS                    = "account.SIGNATURE_EXISTS";
 
+ZmCsfeException.CANNOT_CHANGE_VOLUME = "volume.CANNOT_CHANGE_TYPE_OF_CURRVOL";
 ZmCsfeException.NO_SUCH_VOLUME						= "volume.NO_SUCH_VOLUME";
 ZmCsfeException.ALREADY_EXISTS						= "volume.ALREADY_EXISTS";
 ZmCsfeException.VOLUME_NO_SUCH_PATH					= "volume.NO_SUCH_PATH";

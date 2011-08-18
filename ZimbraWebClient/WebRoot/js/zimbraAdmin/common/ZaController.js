@@ -412,6 +412,8 @@ function(ex, method, params, restartOnError, obj) {
 			this.popupErrorDialog(ZaMsg.ERROR_INVALID_VOLUME_PATH, ex);
 		} else if(ex.code == ZmCsfeException.NO_SUCH_VOLUME) {
 			this.popupErrorDialog(ZaMsg.ERROR_NO_SUCH_VOLUME, ex);
+		}else if (ex.code == ZmCsfeException.CANNOT_CHANGE_VOLUME) {
+                	this.popupErrorDialog(ZaMsg.ERROR_CANNOT_CHANGE_VOLUME, ex);
 		} else if(ex.code == ZmCsfeException.ALREADY_EXISTS) {
 			this.popupErrorDialog(ZaMsg.ERROR_VOLUME_ALREADY_EXISTS, ex);
 		} else if(ex.code == ZmCsfeException.LICENSE_ERROR) {
