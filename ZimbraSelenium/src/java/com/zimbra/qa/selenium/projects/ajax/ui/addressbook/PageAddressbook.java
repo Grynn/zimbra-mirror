@@ -833,6 +833,7 @@ public class PageAddressbook extends AbsTab {
 		AbsPage page = null;	// If set, this page will be returned
 		String id = null;
 		String parentLocator = null;
+		String extraLocator="";
 		
 		tracer.trace(action +" then "+ option +" then "+ subOption +" on contact = "+ contact);
 
@@ -854,6 +855,8 @@ public class PageAddressbook extends AbsTab {
 				
 				else if (subOption == Button.O_TAG_REMOVETAG) {
 					sub_cmi = CONTEXT_SUB_MENU.CONTACT_SUB_REMOVE_TAG;
+					//extraLocator = " td#zmi__Contacts__TAG_MENU|MENU|REMOVETAG_title";
+					//parentLocator= "div#zmi__Contacts__TAG_MENU|MENU";
 					page = null;	
 				}
 				
@@ -876,8 +879,7 @@ public class PageAddressbook extends AbsTab {
 			    }
 				
 				zKeyboard.zTypeKeyEvent(KeyEvent.VK_RIGHT);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);
-						
+					
 			}
 			else if (option == Button.B_CONTACTGROUP) {
 				if (subOption == Button.O_NEW_CONTACTGROUP) {
@@ -943,14 +945,13 @@ public class PageAddressbook extends AbsTab {
 					logger.info("cannot find parent id for " + sub_cmi.locator + " " + e.getMessage());
 				}
 				
-				
+			}			
 			
-	    	    if (parentLocator != null) {
-				    locator = "css=" + parentLocator + " " + sub_cmi.locator;
-		        }			
+	    	if (parentLocator != null) {
+				locator = "css=" + parentLocator + " " + sub_cmi.locator + extraLocator;		        			
 			}
 	    	else {
-	            locator = "css=" + sub_cmi.locator;
+	            locator = "css=" + sub_cmi.locator + extraLocator;
 	    	}
 			//  Make sure the sub context menu exists			
 			zWaitForElementPresent(locator) ;
@@ -964,7 +965,7 @@ public class PageAddressbook extends AbsTab {
    
         sFocus(locator);
         sMouseOver(locator);
-        zClickAt(locator,"0,0");
+        zClickAt(locator, "0,0");
 		
         zWaitForBusyOverlay();
 		
