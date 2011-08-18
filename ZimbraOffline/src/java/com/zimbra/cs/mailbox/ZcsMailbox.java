@@ -482,7 +482,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         }
     }
 
-    synchronized void syncMetadata(OperationContext octxt, int itemId, MailItem.Type type, int folderId, int flags, long tags, Color color)
+    void syncMetadata(OperationContext octxt, int itemId, MailItem.Type type, int folderId, int flags, long tags, Color color)
         throws ServiceException {
         boolean success = false;
         try {

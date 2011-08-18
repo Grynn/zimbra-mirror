@@ -937,16 +937,17 @@ public class DeltaSync {
             int convId = (int) elt.getAttributeLong(MailConstants.A_CONV_ID);
 
             int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
-            synchronized (ombx) {
-                try {
-                    ombx.setConversationId(sContext, id, convId <= 0 ? -id : convId);
-                    ombx.syncMetadata(sContext, id, type, folderId, flags, tags, itemColor);
-                    ombx.syncDate(sContext, id, type, date);
-                } catch (MailServiceException.NoSuchItemException nsie) {
-                    OfflineLog.offline.warn("NoSuchItemException in delta sync. Item [" + id
-                            + "] must have been deleted while sync was in progress");
-                    return;
-                }
+            ombx.lock.lock();
+            try {
+                ombx.setConversationId(sContext, id, convId <= 0 ? -id : convId);
+                ombx.syncMetadata(sContext, id, type, folderId, flags, tags, itemColor);
+                ombx.syncDate(sContext, id, type, date);
+            } catch (MailServiceException.NoSuchItemException nsie) {
+                OfflineLog.offline.warn("NoSuchItemException in delta sync. Item [" + id
+                        + "] must have been deleted while sync was in progress");
+                return;
+            } finally {
+                ombx.lock.release();
             }
             OfflineLog.offline.debug("delta: updated " + type + " (" + id + "): "
                     + msg.getSubject());
