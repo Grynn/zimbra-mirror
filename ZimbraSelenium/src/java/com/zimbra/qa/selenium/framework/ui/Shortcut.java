@@ -71,7 +71,8 @@ public class Shortcut {
 	public static final Shortcut S_DELETE = new Shortcut("S_DELETE", "<Delete>");
 	public static final Shortcut S_BACKSPACE = new Shortcut("S_BACKSPACE", "<Backspace>");
 
-
+	//Task shortcut
+	public static final Shortcut S_NEWTASK = new Shortcut("S_NEWTASK", "nk");
 
 	// Shortcut properties
 	private final String ID;
