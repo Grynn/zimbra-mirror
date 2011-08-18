@@ -183,9 +183,10 @@ void ExchangeMigrationSetupTest()
 	exchmigsetup->Clean();
 	delete exchmigsetup;
 	*/
-	ExchangeOps::CreateAdminProfile(L"10.117.82.161",
-		L"Administrator",L"z1mbr4Migration");
-	ExchangeOps::DeleteAdminProfile();
+	//If Profile exists, rest are Optional else rest 3 params must be there!!!
+	//ExchangeOps::Init("Profile", ExchangeIP[optional], AdminName[Optional], AdminPwd[Optional]);
+	ExchangeOps::GlobalInit(L"Outlook");//L"10.117.82.161",L"Administrator",L"z1mbr4Migration");
+	ExchangeOps::GlobalUninit();
 
 }
 

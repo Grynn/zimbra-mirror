@@ -51,9 +51,9 @@ private:
 	static ExchangeMigrationSetup *m_exchmigsetup;
 	static bool Initialized;
 public:
-	static HRESULT CreateAdminProfile(LPCWSTR lpIPAddr, LPCWSTR lpAdminUsername,
-								LPCWSTR	lpAdminPassword);
-	static HRESULT DeleteAdminProfile();
+	static HRESULT GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername=NULL,
+								LPCWSTR	lpAdminPassword=NULL);
+	static HRESULT GlobalUninit();
 };
 
 const LPCWSTR DEFAULT_ADMIN_PROFILE_NAME = L"zm_prof";

@@ -270,7 +270,7 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
     if (FAILED(hr)) {
         if (hr == 0x8007052e) {         // credentials are not valid
             hr = ADsOpenObject(
-                    (LPTSTR)strContainer.c_str(), lpwstrLogonUsrPwd, NULL,
+                    (LPTSTR)strContainer.c_str(), lpwstrlogonuser,lpwstrLogonUsrPwd,
                     ADS_SECURE_AUTHENTICATION,
                     IID_IDirectoryObject, (void **)&pLogonContainer);
             if (FAILED(hr))
@@ -607,21 +607,27 @@ HRESULT ExchangeMigrationSetup::GetAllProfiles(vector<string> &vProfileList)
 bool ExchangeOps::Initialized = false;
 ExchangeMigrationSetup *ExchangeOps::m_exchmigsetup = NULL;
 
-HRESULT ExchangeOps::CreateAdminProfile(LPCWSTR lpIPAddr, LPCWSTR lpAdminUsername,
+HRESULT ExchangeOps::GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername,
 								LPCWSTR	lpAdminPassword)
 {
-	if(!Initialized) {
-		m_exchmigsetup = new ExchangeMigrationSetup(lpIPAddr, lpAdminUsername, lpAdminPassword);
-		Initialized = true;
+	//if lpAdminUsername is NULL then we assume that Outlook admin profile exists and we should use it
+	//else create a Admin mailbox and create corresponding profile on local machine
+	if(lpAdminUsername) {
+		if(!Initialized) {
+			m_exchmigsetup = new ExchangeMigrationSetup(lpMAPITarget, lpAdminUsername, lpAdminPassword);
+			Initialized = true;
+		}
+		m_exchmigsetup->Setup();
 	}
-	m_exchmigsetup->Setup();
 	return S_OK;
 }
 
-HRESULT ExchangeOps::DeleteAdminProfile()
+HRESULT ExchangeOps::GlobalUninit()
 {
-	m_exchmigsetup->Clean();
-	delete m_exchmigsetup;
+	if(Initialized) {
+		m_exchmigsetup->Clean();
+		delete m_exchmigsetup;
+	}
 	Initialized = false;
 	return S_OK;
 }
