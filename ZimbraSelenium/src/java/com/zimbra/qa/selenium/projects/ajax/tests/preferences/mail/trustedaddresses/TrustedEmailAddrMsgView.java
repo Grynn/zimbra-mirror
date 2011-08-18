@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.preferences.mail.TrustedAddresses;
+package com.zimbra.qa.selenium.projects.ajax.tests.preferences.mail.trustedaddresses;
 
 import java.io.File;
 import java.util.HashMap;
