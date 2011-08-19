@@ -21,6 +21,7 @@ import com.zimbra.qa.selenium.framework.items.*;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 
+
 import com.zimbra.qa.selenium.framework.util.*;
 
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
@@ -62,7 +63,9 @@ public class PageAddressbook extends AbsTab {
 				
 		public static final ContextMenuItem CONTACT_SUB_NEW_TAG = new ContextMenuItem("div#zmi__Contacts__TAG_MENU|MENU|NEWTAG","New Tag","div[class='ImgNewTag']",":contains('nt')");
 		public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("div#zmi__Contacts__TAG_MENU|MENU|REMOVETAG","Remove Tag","div[class='ImgDeleteTag']","");
-			
+		//public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("td#zmi__Contacts__TAG_MENU|MENU|REMOVETAG_title","Remove Tag","div[class='ImgDeleteTag']","");
+
+		
 		public static final ContextMenuItem CONTACT_SUB_RECEIVED_FROM_CONTACT = new ContextMenuItem("tr#POPUP_SEARCH","Received From Contact","div[class='ImgSearch']","");
 	    public static final ContextMenuItem CONTACT_SUB_SENT_TO_CONTACT = new ContextMenuItem("tr#POPUP_SEARCH_TO","Sent To Contact","div[class='ImgSearch']","");
 	
@@ -863,23 +866,25 @@ public class PageAddressbook extends AbsTab {
 				
 				//For Safari 
 				// as an alternative for sMouseOver(locator) 
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-				
-				ArrayList<String> selectedContactArrayList=getSelectedContactLocator();			
-		        String contactType = getContactType(selectedContactArrayList.get(0));
-			
-		        //check if it is a contact 
-                if (  contactType.equals(ContactItem.IMAGE_CLASS) ) {
-    				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-    				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-    				
-			    }
-				
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_RIGHT);
+			    if (zIsBrowserMatch(BrowserMasks.BrowserMaskSafari)) {
+					zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+					zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+					zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+					zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
 					
+					ArrayList<String> selectedContactArrayList=getSelectedContactLocator();			
+			        String contactType = getContactType(selectedContactArrayList.get(0));
+				
+			        //check if it is a contact 
+	                if (  contactType.equals(ContactItem.IMAGE_CLASS) ) {
+	    				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+	    				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+	    				
+				    }
+					
+					zKeyboard.zTypeKeyEvent(KeyEvent.VK_RIGHT);
+			    }		
+			    
 			}
 			else if (option == Button.B_CONTACTGROUP) {
 				if (subOption == Button.O_NEW_CONTACTGROUP) {
@@ -953,6 +958,8 @@ public class PageAddressbook extends AbsTab {
 	    	else {
 	            locator = "css=" + sub_cmi.locator + extraLocator;
 	    	}
+	    	
+	    	
 			//  Make sure the sub context menu exists			
 			zWaitForElementPresent(locator) ;
 			
@@ -963,12 +970,31 @@ public class PageAddressbook extends AbsTab {
 		
         ExecuteHarnessMain.ResultListener.captureScreen();
    
-        sFocus(locator);
-        sMouseOver(locator);
-        zClickAt(locator, "0,0");
-		
-        zWaitForBusyOverlay();
-		
+      
+    	if (option == Button.B_TAG) {
+    		//int numItems = this.sGetCssCount("css=div#zmi__Contacts__TAG_MENU|MENU>table>tbody>tr") -1;
+    		int numItems = Integer.parseInt(sGetEval("window.document.getElementById('zmi__Contacts__TAG_MENU|MENU').childNodes[0].childNodes[0].childNodes.length")) -1;
+    		
+    		
+    		for (int i=0; i<numItems -2; i++) {
+    			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);									
+    		}
+    		if (subOption == Button.O_TAG_NEWTAG) {
+    			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);												
+    		}
+			
+			else if (subOption == Button.O_TAG_REMOVETAG) {
+    			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);									
+    			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);									
+			}
+    		zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);											
+    	}
+    	else {
+    		sFocus(locator);
+            sMouseOver(locator);
+            zClickAt(locator, "0,0");
+     	}
+       zWaitForBusyOverlay();
 		
 		
 		if ( page != null ) {
