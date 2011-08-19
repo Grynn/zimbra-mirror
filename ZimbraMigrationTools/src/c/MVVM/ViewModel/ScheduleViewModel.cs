@@ -228,6 +228,11 @@ namespace MVVM.ViewModel
                     if (!SchedList[i].isProvisioned)
                     {
                         bProvision = true;
+                        if (defaultPWD.Length == 0)
+                        {
+                            MessageBox.Show("Please provide an initial password", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                            return;
+                        }
                         string cosID = CosList[CurrentCOSSelection].CosID;
                         if (zimbraAPI.CreateAccount(accountName, defaultPWD, cosID) == 0)
                         {
