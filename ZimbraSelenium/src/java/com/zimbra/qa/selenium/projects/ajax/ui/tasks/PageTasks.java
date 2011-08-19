@@ -51,6 +51,7 @@ public class PageTasks extends AbsTab {
 		public static final String zNewTagMenuItem= "css=td[id$='_left_icon']>div[class='ImgNewTag']";
 		public static final String zMarkAsCompleted = "css=div#zb__TKL__MARK_AS_COMPLETED";
 		public static final String zNewTaskMenuItem ="css=div#zb__TKL__NEW_MENU_NEW_TASK";
+		public static final String zNewTaskFolderMenuItem ="css=div#zb__TKL__NEW_MENU_NEW_TASK_FOLDER";
 	}
 
 	public PageTasks(AbsApplication application) {
@@ -587,6 +588,13 @@ public class PageTasks extends AbsTab {
 				optionLocator= Locators.zNewTaskMenuItem;
 				
 				page = new FormTaskNew(this.MyApplication);
+				
+			}else if(option==Button.O_NEW_TASKFOLDER){
+				
+				pulldownLocator = Locators.zNewTaskDropDown;
+				optionLocator= Locators.zNewTaskFolderMenuItem;
+				
+				page = new DialogCreateTaskFolder(this.MyApplication, this);
 				
 			}
 			else{
