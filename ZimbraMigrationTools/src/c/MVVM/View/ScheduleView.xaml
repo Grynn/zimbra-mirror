@@ -112,7 +112,7 @@
                 </ComboBox>
             </Grid>
         </GroupBox>
-        <Separator Grid.Row="3" Margin="5,46,5,0" VerticalAlignment="Top"/>
+        <Separator Grid.Row="3" Margin="5,32,5,0" VerticalAlignment="Top"/>
         <Grid Name="BottomGrid" Grid.Row="4" Grid.ColumnSpan="2">
             <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,10,0,0" Content="Help" Name="buttonMigrateHelp" Command="{Binding GetSchedHelpCommand}"  />
             <Button MinWidth="75" MinHeight="21" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="85,10,0,0" Content="Load" Name="buttonMigrateLoad" Command="{Binding LoadCommand}"  />
