@@ -49,6 +49,33 @@ public class CreateTaskFolder extends AjaxCommonTest {
 		ZAssert.assertNotNull(folder, "Verify task folder is created");
 		ZAssert.assertEquals(folder.getName(), _folderName,"Verify the server and client folder names match");
 	}
+	
+	@Test(description = "Create a new tasklist using tasks app New -> New Task Folder", groups = { "functional" })
+	public void CreateTaskFolder_02() throws HarnessException {
+		ZimbraAccount account = app.zGetActiveAccount();
+
+		FolderItem taskFolder = FolderItem.importFromSOAP(account,SystemFolder.Tasks);
+		
+		_folderName = "taskfolder" + ZimbraSeleniumProperties.getUniqueString();
+		
+		//Create folder
+		DialogCreateTaskFolder createTaskFolderDialog =(DialogCreateTaskFolder)app.zPageTasks.zToolbarPressPulldown(Button.B_NEW, Button.O_NEW_TASKFOLDER);
+		
+		createTaskFolderDialog.zEnterFolderName(_folderName);
+		createTaskFolderDialog.zClickButton(Button.B_OK);
+		
+		_folderIsCreated = true;
+		
+		SleepUtil.sleepVerySmall();
+		
+		// refresh task page
+		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
+				
+		// Make sure the task folder was created on the ZCS server
+		FolderItem folder = FolderItem.importFromSOAP(app.zGetActiveAccount(),_folderName);
+		ZAssert.assertNotNull(folder, "Verify task folder is created");
+		ZAssert.assertEquals(folder.getName(), _folderName,"Verify the server and client folder names match");
+	}
 
 	@AfterMethod(groups = { "always" })
 	public void createFolderTestCleanup() {
