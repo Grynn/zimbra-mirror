@@ -720,7 +720,7 @@ WebExZimlet.prototype._getCreateOrModifyMeetingRequest = function(params) {
 	}
 	var sendWebExEmailStr = "";
 	//if(params.sendWebExEmail) { //used for one-click meetings
-		 sendWebExEmailStr = "<attendeeOptions><emailInvitations>TRUE</emailInvitations><auto>TRUE</auto></attendeeOptions>";
+		 sendWebExEmailStr = "<attendeeOptions><emailInvitations>TRUE</emailInvitations></attendeeOptions>";
 	//}
 	var requestBody = [
 		"<bodyContent xsi:type=\"",apiType,"\">",
