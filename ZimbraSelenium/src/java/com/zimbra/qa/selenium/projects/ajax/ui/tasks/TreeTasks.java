@@ -10,6 +10,8 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogEditFolder;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail.Locators;
 
 
 
@@ -29,6 +31,7 @@ public class TreeTasks extends AbsTree {
 	//	public static final String zRenameTreeMenuItem = "//div[contains(@class,'ZMenuItem')]//tbody//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgRename')]";
 		public static final String zDeleteTreeMenuItem = "css=tr#POPUP_DELETE";
 		public static final String zRenameTreeMenuItem ="css=tr#POPUP_RENAME_FOLDER";
+		public static final String zEditTreeMenuItem ="css=tr#POPUP_EDIT_PROPS";
 	}
 	
 		
@@ -331,7 +334,12 @@ public class TreeTasks extends AbsTree {
 			page = new DialogRenameFolder(MyApplication,
 					((AppAjaxClient) MyApplication).zPageTasks);
 
-		} else {
+		}else if (option == Button.B_TREE_EDIT) {
+
+			optionLocator = Locators.zEditTreeMenuItem;
+			page = new DialogEditFolder(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+
+		}  else {
 			throw new HarnessException("button " + option
 					+ " not yet implemented");
 		}
