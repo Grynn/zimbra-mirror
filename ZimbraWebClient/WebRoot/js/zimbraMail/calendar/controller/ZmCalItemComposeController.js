@@ -368,17 +368,17 @@ function() {
 		var m = new DwtMenu({parent:optionsButton});
 		optionsButton.setMenu(m);
 
-		var mi = new DwtMenuItem({parent:m, style:DwtMenuItem.RADIO_STYLE});
+		var mi = new DwtMenuItem({parent:m, style:DwtMenuItem.RADIO_STYLE, id:[ZmId.WIDGET_MENU_ITEM,this.viewId,ZmOperation.FORMAT_HTML].join("_")});
 		mi.setImage("HtmlDoc");
 		mi.setText(ZmMsg.formatAsHtml);
 		mi.setData(ZmHtmlEditor._VALUE, DwtHtmlEditor.HTML);
-		mi.addSelectionListener(new AjxListener(this, this._formatListener));
+        mi.addSelectionListener(new AjxListener(this, this._formatListener));
 
-		mi = new DwtMenuItem({parent:m, style:DwtMenuItem.RADIO_STYLE});
+		mi = new DwtMenuItem({parent:m, style:DwtMenuItem.RADIO_STYLE, id:[ZmId.WIDGET_MENU_ITEM,this.viewId,ZmOperation.FORMAT_TEXT].join("_")});
 		mi.setImage("GenericDoc");
 		mi.setText(ZmMsg.formatAsText);
 		mi.setData(ZmHtmlEditor._VALUE, DwtHtmlEditor.TEXT);
-		mi.addSelectionListener(new AjxListener(this, this._formatListener));
+        mi.addSelectionListener(new AjxListener(this, this._formatListener));
 	}
 
 	this._toolbar.addSelectionListener(ZmOperation.SPELL_CHECK, new AjxListener(this, this._spellCheckListener));
