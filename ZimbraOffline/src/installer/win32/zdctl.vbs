@@ -18,12 +18,16 @@
 Dim sAppRoot, sScriptPath, sScriptDir, sZdLogFile, sZdOutFile, sZdAnchorFile, sZdCtlErrFile, oWMI, oShell, oFso, sCurrUser, iLogLevel
 
 Sub Usage()
-    WScript.StdOut.WriteLine("Usage: zdctl.vbs <start|stop|shutdown>")
+    If (InStr(Wscript.FullName,"cscript") > 0) Then
+        WScript.StdOut.WriteLine("Usage: zdctl.vbs <start|stop|shutdown>")
+    End If
     WScript.Quit
 End Sub
 
 Sub LogMsg(sMsg, iLevel)
-    WScript.StdOut.WriteLine(sMsg)
+    If (InStr(Wscript.FullName,"cscript") > 0) Then
+        WScript.StdOut.WriteLine(sMsg)
+    End If
     If iLevel <= iLogLevel Then
         oShell.LogEvent iLevel, "Zimbra Desktop: " & sMsg
     End If
