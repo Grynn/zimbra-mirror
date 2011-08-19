@@ -33,9 +33,8 @@ public class EditHtmlSignature extends AjaxCommonTest {
    }
 
    private void _createHtmlSignature(ZimbraAccount account) throws HarnessException {
-      System.out.println(this.sigName);
-      ZimbraAccount.AccountZWC().authenticate(SOAP_DESTINATION_HOST_TYPE.SERVER);
-      ZimbraAccount.AccountZWC().soapSend(
+      account.authenticate(SOAP_DESTINATION_HOST_TYPE.SERVER);
+      account.soapSend(
             "<CreateSignatureRequest xmlns='urn:zimbraAccount'>"
             + "<signature name='" + this.sigName + "' >"
             + "<content type='text/html'>'" + this.contentHTML

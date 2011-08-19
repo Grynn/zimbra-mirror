@@ -98,6 +98,7 @@ public class ReplyMsgWithHtmlSignature extends AjaxCommonTest {
             "</m>" +
       "</SendMsgRequest>");
 
+      SleepUtil.sleepSmall();
 
       // Get the mail item for the new message
       MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(),"in:inbox subject:(" + subject + ")");
