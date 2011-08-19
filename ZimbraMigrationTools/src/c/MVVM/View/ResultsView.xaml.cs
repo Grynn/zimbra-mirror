@@ -66,7 +66,15 @@ namespace MVVM.View
             int accountnum = GetAcctNum((string)userItem.Header);
             if (urListView[accountnum] != null)
             {
-                MessageBox.Show(string.Format("There is already an open tab for {0}", (string)userItem.Header, MessageBoxButton.OK, MessageBoxImage.Error));
+                for (int i = 0; i < tabCtrl.Items.Count; i++)
+                {
+                    TabItem item = (TabItem)tabCtrl.Items[i];
+                    if (item.Header.ToString() == content.AccountName)
+                    {
+                        tabCtrl.SelectedIndex = i;
+                        break;
+                    }
+                }
                 return;
             }
 
