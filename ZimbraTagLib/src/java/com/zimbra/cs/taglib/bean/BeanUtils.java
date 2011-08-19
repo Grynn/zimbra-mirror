@@ -850,6 +850,23 @@ public class BeanUtils {
         return isRedirect(action) ? (ZRedirectAction) action : null;
     }
 
+    /**
+     * Given the filter rule, check whether all the actions of the filter
+     * are set to "Discard".
+     * @param Filter rule
+     * @return true if all the actions of the filter are set to "Discard",
+     * false otherwise
+     */
+    public static boolean isDiscardFilter(ZFilterRule rule) {
+        List<com.zimbra.client.ZFilterAction> actions = rule.getActions();
+        for (ZFilterAction action: actions) {
+            if (!isDiscard(action) && !isStop(action)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static Calendar getCalendarMidnight(long time, TimeZone tz) {
         Calendar cal = tz == null ? Calendar.getInstance() : Calendar.getInstance(tz);
         cal.setTimeInMillis(time);
