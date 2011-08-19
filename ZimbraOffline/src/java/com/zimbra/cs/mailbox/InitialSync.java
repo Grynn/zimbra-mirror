@@ -61,6 +61,7 @@ import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.Message.DraftInfo;
 import com.zimbra.cs.mailbox.calendar.IcalXmlStrMap;
 import com.zimbra.cs.mailbox.calendar.ZAttendee;
+import com.zimbra.cs.mailbox.util.TagUtil;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.mime.ParsedDocument;
 import com.zimbra.cs.mime.ParsedMessage;
@@ -598,15 +599,10 @@ public class InitialSync {
             }
             OfflineLog.offline.debug("initial: created tag (" + id + "): " + name);
         } catch (ServiceException e) {
-            if (e.getCode() == MailServiceException.TOO_MANY_TAGS && getTagSync().isMappingRequired()) {
-                //tag won't exist, but we still need to track it
-                getTagSync().mapOverflowTag(remoteId);
-            } else {
-                if (e.getCode() != MailServiceException.ALREADY_EXISTS) {
-                    throw e;
-                }
-                getDeltaSync().syncTag(elt);
+            if (e.getCode() != MailServiceException.ALREADY_EXISTS) {
+                throw e;
             }
+            getDeltaSync().syncTag(elt);
         }
     }
 
@@ -654,10 +650,8 @@ public class InitialSync {
             //OfflineLog.offline.debug(response.prettyPrint());
 
             Element calElement = response.getElement(isAppointment ? MailConstants.E_APPOINTMENT : MailConstants.E_TASK);
-            String flagsStr = calElement.getAttribute(MailConstants.A_FLAGS, null);
-            int flags = flagsStr != null ? Flag.toBitmask(flagsStr) : 0;
-            String tagsStr = getTagSync().localTagsFromElement(calElement, null);
-            long tags = tagsStr != null ? Tag.tagsToBitmask(tagsStr) : 0;
+            int flags = Flag.toBitmask(calElement.getAttribute(MailConstants.A_FLAGS, null));
+            String[] tags = TagUtil.parseTags(calElement, ombx, sContext);
 
             long timestamp = calElement.getAttributeLong(MailConstants.A_CAL_DATETIME, -1000);
 
@@ -696,7 +690,8 @@ public class InitialSync {
         Element req = new Element.XMLElement(isAppointment ? MailConstants.SET_APPOINTMENT_REQUEST : MailConstants.SET_TASK_REQUEST);
         req.addAttribute(MailConstants.A_FOLDER, resp.getAttribute(MailConstants.A_FOLDER));
         req.addAttribute(MailConstants.A_FLAGS, resp.getAttribute(MailConstants.A_FLAGS, ""));
-        tagSync.addTagsAttr(req, resp, outbound);
+        req.addAttribute(MailConstants.A_TAG_NAMES, resp.getAttribute(MailConstants.A_TAG_NAMES, ""));
+        req.addAttribute(MailConstants.A_TAGS, resp.getAttribute(MailConstants.A_TAGS, ""));
         long nextAlarm = resp.getAttributeLong(MailConstants.A_CAL_NEXT_ALARM, 0);
         if (nextAlarm > 0)
             req.addAttribute(MailConstants.A_CAL_NEXT_ALARM, nextAlarm);
@@ -856,8 +851,9 @@ public class InitialSync {
         return req;
     }
 
-    private void setCalendarItem(Element request, int itemId, int folderId, long timestamp, int flags, long tags,
-            boolean isAppointment) throws ServiceException {
+    private void setCalendarItem(Element request, int itemId, int folderId, long timestamp, int flags, String[] tags,
+            boolean isAppointment)
+    throws ServiceException {
         // make a fake context to trick the parser so that we can reuse the soap parsing code
         ZimbraSoapContext zsc = new ZimbraSoapContext(AuthProvider.getAuthToken(getMailbox().getAccount()),
                 getMailbox().getAccountId(), SoapProtocol.Soap12, SoapProtocol.Soap12);
@@ -898,7 +894,7 @@ public class InitialSync {
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
         Color itemColor = rgb != null ? new Color(rgb) : new Color(color);
         int flags = Flag.toBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
-        String tags = getTagSync().localTagsFromElement(elt, null);
+        String[] tags = TagUtil.parseTags(elt, ombx, sContext);
 
         Map<String, String> fields = new HashMap<String, String>();
         for (Element eField : elt.listElements())
@@ -1075,14 +1071,8 @@ public class InitialSync {
                                         di = new DraftInfo(draftMeta);
                                     }
                                 }
-                                long tagMask = ud.tags;
-                                if (getTagSync().isMappingRequired()) {
-                                    String tagNames = itemData.tags;
-                                    tagMask = Tag.tagsToBitmask(getTagSync().localTagsFromNames(tagNames, "\u0000", ",")); 
-                                }
-                                saveMessage(tin, te.getSize(), ud.id, ud.folderId,
-                                    type, ud.date, Flag.toBitmask(itemData.flags),
-                                    tagMask, ud.parentId, di);
+                                saveMessage(tin, te.getSize(), ud.id, ud.folderId, type, ud.date,
+                                        Flag.toBitmask(itemData.flags), ud.getTags(), ud.parentId, di);
                                 idSet.remove(ud.id);
                             } catch (Exception x) {
                                 if (!SyncExceptionHandler.isRecoverableException(ombx, ud.id, "InitialSync.syncMessagesAsTgz", x)) {
@@ -1226,14 +1216,15 @@ public class InitialSync {
             MailItem.Type type) throws ServiceException {
         int received = (int) (Long.parseLong(headers.get("X-Zimbra-Received")) / 1000);
         int flags = Flag.toBitmask(headers.get("X-Zimbra-Flags"));
-        long tags = Tag.tagsToBitmask(getTagSync().localTagsFromHeader(headers));
+        String[] tags = TagUtil.decodeTags(headers.get("X-Zimbra-Tag-Names"));
         int convId = Integer.parseInt(headers.get("X-Zimbra-Conv"));
 
         saveMessage(in, sizeHint, id, folderId, type, received, flags, tags, convId, null);
     }
     
     private void saveMessage(InputStream in, long sizeHint, int id, int folderId, MailItem.Type type, int received,
-            int flags, long tags, int convId, DraftInfo draftInfo) throws ServiceException {
+            int flags, String[] tags, int convId, DraftInfo draftInfo)
+    throws ServiceException {
         Blob blob = null;
         int bufLen = Provisioning.getInstance().getLocalServer().getMailDiskStreamingThreshold();
         CopyInputStream cs = new CopyInputStream(in, sizeHint, bufLen, bufLen);
@@ -1243,11 +1234,11 @@ public class InitialSync {
         ParsedMessage pm = null;
         CreateMessage redo;
         int size = 0;
-        String tagStr = Tag.bitmaskToTags(tags);
 
         OfflineSyncManager.getInstance().continueOK();
-        if (convId < 0)
+        if (convId < 0) {
             convId = Mailbox.ID_AUTO_INCREMENT;
+        }
         try {
             blob = StoreManager.getInstance().storeIncoming(cs, null);
             data = bs.isPartial() ? null : bs.getBuffer();
@@ -1263,10 +1254,10 @@ public class InitialSync {
                 received * 1000L, false));
 
             if (type == MailItem.Type.CHAT) {
-                redo = new CreateChat(ombx.getId(), digest, size, folderId, flags, tagStr);
+                redo = new CreateChat(ombx.getId(), digest, size, folderId, flags, tags);
             } else {
                 redo = new CreateMessage(ombx.getId(), null, received, false,
-                        digest, size, folderId, true, flags, tagStr, null);
+                        digest, size, folderId, true, flags, tags, null);
             }
             cs.release();
             redo.setMessageId(id);
@@ -1277,10 +1268,10 @@ public class InitialSync {
             // XXX: need to call with noICal = false
             Message msg;
             if (type == MailItem.Type.CHAT) {
-                msg = ombx.createChat(new TracelessContext(redo), pm, folderId, flags, tagStr);
+                msg = ombx.createChat(new TracelessContext(redo), pm, folderId, flags, tags);
             } else {
                 DeliveryOptions dopt = new DeliveryOptions().setFolderId(folderId).setNoICal(true);
-                dopt.setFlags(flags).setTags(tagStr).setConversationId(convId).setRecipientEmail(":API:");
+                dopt.setFlags(flags).setTags(tags).setConversationId(convId).setRecipientEmail(":API:");
                 DeliveryContext dctxt = new DeliveryContext().setIncomingBlob(blob);
                 msg = ombx.addMessage(new TracelessContext(redo), pm, dopt, dctxt, draftInfo);
             }
@@ -1316,7 +1307,7 @@ public class InitialSync {
             if (type == MailItem.Type.CHAT || msg.isDraft()) { //other messages are immutable so no content change
                 CreateMessage redo2 = null;
                 if (type == MailItem.Type.CHAT) {
-                    redo2 = new SaveChat(ombx.getId(), id, digest, size, folderId, flags, tagStr);
+                    redo2 = new SaveChat(ombx.getId(), id, digest, size, folderId, flags, tags);
                 } else {
                     redo2 = new SaveDraft(ombx.getId(), id, digest, size);
                 }
@@ -1351,7 +1342,7 @@ public class InitialSync {
         // use this data to generate the XML entry used in message delta sync
         Element sync = new Element.XMLElement(Sync.elementNameForType(type)).addAttribute(MailConstants.A_ID, id);
         sync.addAttribute(MailConstants.A_FLAGS, Flag.toString(flags))
-                .addAttribute(MailConstants.A_TAGS, tagStr)
+                .addAttribute(MailConstants.A_TAG_NAMES, TagUtil.encodeTags(tags))
                 .addAttribute(MailConstants.A_CONV_ID, convId);
         sync.addAttribute(MailConstants.A_DATE, received * 1000L);
         getDeltaSync().syncMessage(sync, folderId, type);
@@ -1557,7 +1548,7 @@ public class InitialSync {
                 }
                 int flags = doc.getFlagBitmask();
                 if (flags != 0) {
-                    ombx.setTags(sContext, id, doc.getType(), flags, doc.getTagBitmask());
+                    ombx.setTags(sContext, id, doc.getType(), flags, doc.getTags());
                 }
                 ombx.syncDate(sContext, id, doc.getType(), (int)(doc.getDate() / 1000L));
                 //ombx.setSyncedVersionForMailItem(itemIdStr, version);

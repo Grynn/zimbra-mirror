@@ -75,6 +75,7 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.mail_item (
    unread        INTEGER UNSIGNED,           -- stored separately from the other flags so we can index it
    flags         INTEGER NOT NULL DEFAULT 0,
    tags          BIGINT NOT NULL DEFAULT 0,
+   tag_names     TEXT,
    sender        VARCHAR(128),
    recipients    VARCHAR(128),
    subject       TEXT,
@@ -96,13 +97,8 @@ CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_type ON mail_item(type);
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_parent_id ON mail_item(parent_id);            -- for looking up a parent\'s children
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_folder_id_date ON mail_item(folder_id, date DESC); -- for looking up by folder and sorting by date
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_index_id ON mail_item(index_id);              -- for looking up based on search results
-CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_unread ON mail_item(unread);                  -- there should be a small number of items with unread=TRUE
-                                                                         --   no compound index on (unread, date), so we save space at
-                                                                         --   the expense of sorting a small number of rows
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_date ON mail_item(date DESC);                 -- fallback index in case other constraints are not specified
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_mod_metadata ON mail_item(mod_metadata);      -- used by the sync code
-CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_tags_date ON mail_item(tags, date DESC);      -- for tag searches
-CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_flags_date ON mail_item(flags, date DESC);    -- for flag searches
 CREATE INDEX IF NOT EXISTS ${DATABASE_NAME}.i_mail_item_change_mask ON mail_item(change_mask);  -- for figuring out which items to push during sync
 
 -- -----------------------------------------------------------------------
@@ -124,6 +120,32 @@ CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.revision (
 
    PRIMARY KEY (item_id, version),
    CONSTRAINT fk_revision_item_id FOREIGN KEY (item_id) REFERENCES mail_item(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- -----------------------------------------------------------------------
+-- tags and flags
+-- -----------------------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.tag (
+   id            INTEGER UNSIGNED NOT NULL PRIMARY KEY,
+   name          VARCHAR(128) NOT NULL,
+   color         BIGINT,
+   item_count    INTEGER NOT NULL DEFAULT 0,
+   unread        INTEGER NOT NULL DEFAULT 0,
+   listed        BOOLEAN NOT NULL DEFAULT FALSE,
+   sequence      INTEGER UNSIGNED NOT NULL,
+   policy        VARCHAR(1024),
+
+   UNIQUE (name)
+);
+
+CREATE TABLE IF NOT EXISTS ${DATABASE_NAME}.tagged_item (
+   tag_id        INTEGER UNSIGNED NOT NULL,
+   item_id       INTEGER UNSIGNED NOT NULL,
+
+   UNIQUE (tag_id, item_id),
+   CONSTRAINT fk_tagged_item_tag FOREIGN KEY (tag_id) REFERENCES tag(id) ON DELETE CASCADE ON UPDATE CASCADE,
+   CONSTRAINT fk_tagged_item_item FOREIGN KEY (item_id) REFERENCES mail_item(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- -----------------------------------------------------------------------

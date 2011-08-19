@@ -350,7 +350,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
         }
         if (pms.deleted != null) {
             for (ModificationKey key : pms.deleted.keySet()) {
-                if (key.getItemId() >= FIRST_USER_ID || Tag.validateId(key.getItemId())) {
+                if (key.getItemId() >= FIRST_USER_ID) {
                     trackChangeDeleted();
                 }
             }

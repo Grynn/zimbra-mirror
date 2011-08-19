@@ -69,7 +69,7 @@ public class DbOfflineMailbox {
             stmt.close();
 
             // then update all the dependent rows (foreign keys)
-            if (item.isTagged(Flag.ID_VERSIONED)) {
+            if (item.isTagged(Flag.FlagInfo.VERSIONED)) {
                 // update REVISION.ITEM_ID
                 stmt = conn.prepareStatement("UPDATE " + DbMailItem.getRevisionTableName(mbox) +
                         " SET item_id = ?" +
@@ -143,10 +143,6 @@ public class DbOfflineMailbox {
             stmt.setInt(pos++, item.getId());
             stmt.executeUpdate();
             stmt.close();
-
-            if (type == MailItem.Type.TAG) {
-                updateTagBitmask(conn, (Tag) item, newId);
-            }
         } catch (SQLException e) {
             throw ServiceException.FAILURE("renumbering " + type + " (" + item.getId() + " => " + newId + ")", e);
         } finally {
@@ -197,58 +193,8 @@ public class DbOfflineMailbox {
                 stmt.executeUpdate();
                 stmt.close();
             }
-
-            if (type == MailItem.Type.TAG) {
-                updateTagBitmask(conn, (Tag) item, newId);
-            }
         } catch (SQLException e) {
             throw ServiceException.FAILURE("renumbering " + type + " (" + item.getId() + " => " + newId + ")", e);
-        } finally {
-            DbPool.closeStatement(stmt);
-        }
-    }
-
-    // handle reworking tag bitmasks for other mail items
-    private static void updateTagBitmask(DbConnection conn, Tag tag, int newId) throws SQLException, ServiceException {
-        Mailbox mbox = tag.getMailbox();
-        long newMask = 1L << Tag.getIndex(newId);
-
-        PreparedStatement stmt = null;
-        try {
-            if (Db.supports(Db.Capability.BITWISE_OPERATIONS)) {
-                stmt = conn.prepareStatement("UPDATE " + DbMailItem.getMailItemTableName(tag) +
-                        " SET tags = (tags & ?) | ?" +
-                        " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "tags & ?");
-                int pos = 1;
-                stmt.setLong(pos++, ~tag.getBitmask());
-                stmt.setLong(pos++, newMask);
-                pos = DbMailItem.setMailboxId(stmt, mbox, pos);
-                stmt.setLong(pos++, tag.getBitmask());
-                stmt.executeUpdate();
-            } else {
-                // first, add the new mask
-                stmt = conn.prepareStatement("UPDATE " + DbMailItem.getMailItemTableName(tag) +
-                        " SET tags = tags + ? WHERE " + DbMailItem.IN_THIS_MAILBOX_AND +
-                        Db.getInstance().bitAND("tags", "?") + "<> 0 AND " +
-                        Db.getInstance().bitAND("tags", "?") + " = 0");
-                int pos = 1;
-                stmt.setLong(pos++, newMask);
-                pos = DbMailItem.setMailboxId(stmt, mbox, pos);
-                stmt.setLong(pos++, tag.getBitmask());
-                stmt.setLong(pos++, newMask);
-                stmt.executeUpdate();
-                stmt.close();
-
-                // then, remove the old mask
-                stmt = conn.prepareStatement("UPDATE " + DbMailItem.getMailItemTableName(tag) +
-                        " SET tags = tags - ? WHERE " + DbMailItem.IN_THIS_MAILBOX_AND +
-                        Db.getInstance().bitAND("tags", "?") + " <> 0");
-                pos = 1;
-                stmt.setLong(pos++, tag.getBitmask());
-                pos = DbMailItem.setMailboxId(stmt, mbox, pos);
-                stmt.setLong(pos++, tag.getBitmask());
-                stmt.executeUpdate();
-            }
         } finally {
             DbPool.closeStatement(stmt);
         }

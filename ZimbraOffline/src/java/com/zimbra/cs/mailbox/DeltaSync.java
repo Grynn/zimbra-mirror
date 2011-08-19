@@ -30,6 +30,7 @@ import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
+import com.zimbra.cs.mailbox.util.TagUtil;
 import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.offline.Offline;
 import com.zimbra.cs.offline.OfflineLC;
@@ -401,7 +402,7 @@ public class DeltaSync {
                 Integer id = Integer.valueOf(idStr);
                 if (isTag) {
                     id = getTagSync().localTagId(id);
-                    if (!Tag.validateId(id)) {
+                    if (!TagSync.validateId(id)) {
                         //if it's an overflow still need to delete the mapping
                         getTagSync().removeTagMapping(id);
                         continue;
@@ -412,23 +413,9 @@ public class DeltaSync {
                 if (isTag && (mask & Change.MODIFIED_CONFLICT) != 0)
                     continue;
                 (isFolder ? foldersToDelete : leafIds).add(id);
-                if (isTag)
+                if (isTag) {
                     tagIds.add(id);
-            }
-        }
-
-        if (!ombx.getRemoteServerVersion().isAtLeast7xx()) {
-            //original comment below indicates it's just for 4.5.1 and earlier...but not worth the time to regression test against ZCS 5+6
-            // temporary workaround because tags are left off the "typed delete" list up to 4.5.2
-            for (String idStr : delement.getAttribute(MailConstants.A_IDS).split(",")) {
-                Integer id = Integer.valueOf(idStr);
-                if (id < MailItem.TAG_ID_OFFSET || id >= MailItem.TAG_ID_OFFSET + MailItem.MAX_TAG_COUNT || tagIds.contains(id))
-                    continue;
-                // tag numbering conflict issues: don't delete tags we've created locally
-                if ((ombx.getChangeMask(sContext, id, MailItem.Type.TAG) & Change.MODIFIED_CONFLICT) != 0)
-                    continue;
-                leafIds.add(id);
-                tagIds.add(id);
+                }
             }
         }
 
@@ -520,9 +507,10 @@ public class DeltaSync {
 
             int change_mask = ombx.getChangeMask(sContext, id, MailItem.Type.SEARCHFOLDER);
             ombx.rename(sContext, id, MailItem.Type.SEARCHFOLDER, name, parentId);
-            if ((change_mask & Change.MODIFIED_QUERY) == 0)
+            if ((change_mask & Change.MODIFIED_QUERY) == 0) {
                 ombx.modifySearchFolder(sContext, id, query, searchTypes, sort);
-            ombx.syncMetadata(sContext, id, MailItem.Type.SEARCHFOLDER, parentId, flags, 0, itemColor);
+            }
+            ombx.syncMetadata(sContext, id, MailItem.Type.SEARCHFOLDER, parentId, flags, null, itemColor);
             ombx.syncDate(sContext, id, MailItem.Type.SEARCHFOLDER, date);
 
             if (elt.getAttributeBool(InitialSync.A_RELOCATED, false)) {
@@ -582,7 +570,7 @@ public class DeltaSync {
 
             if (itemType == MailItem.Type.FOLDER) {
                 // don't care about current feed syncpoint; sync can't be done offline
-                ombx.syncMetadata(sContext, id, MailItem.Type.FOLDER, parentId, flags, 0, itemColor);
+                ombx.syncMetadata(sContext, id, MailItem.Type.FOLDER, parentId, flags, null, itemColor);
                 ombx.syncDate(sContext, id, MailItem.Type.FOLDER, date);
             }
 
@@ -604,7 +592,7 @@ public class DeltaSync {
     }
 
     private boolean resolveFolderConflicts(Element elt, int id, MailItem.Type type, Folder local)
-            throws ServiceException {
+    throws ServiceException {
         int change_mask = (local == null ? 0 : ombx.getChangeMask(sContext, id, type));
 
         // if the folder was moved/renamed locally, that trumps any changes made remotely
@@ -712,18 +700,6 @@ public class DeltaSync {
                 tag = getTag(id);
             }
 
-            // we're reusing tag IDs, so it's possible that we've got a conflict with a locally-created tag with that ID
-            if (tag != null && !name.equalsIgnoreCase(tag.getName()) &&
-                    (ombx.getChangeMask(sContext, id, MailItem.Type.TAG) & Change.MODIFIED_CONFLICT) != 0) {
-                int newId = getAvailableTagId(ombx);
-                if (newId < 0) {
-                    ombx.delete(sContext, id, MailItem.Type.TAG);
-                } else {
-                    ombx.renumberItem(sContext, id, MailItem.Type.TAG, newId);
-                }
-                tag = null;
-            }
-
             // deal with the case where the referenced tag doesn't exist
             if (tag == null) {
                 // if it's been locally deleted but not pushed to the server yet, just return and let the delete happen later
@@ -820,14 +796,6 @@ public class DeltaSync {
         return true;
     }
 
-    static int getAvailableTagId(Mailbox mbox) throws ServiceException {
-        int tagId;
-        for (tagId = MailItem.TAG_ID_OFFSET + MailItem.MAX_TAG_COUNT - 1; tagId >= MailItem.TAG_ID_OFFSET; tagId--)
-            if (getTag(mbox, tagId) == null)
-                break;
-        return (tagId < MailItem.TAG_ID_OFFSET ? -1 : tagId);
-    }
-
     private Tag getTag(int id) throws ServiceException {
         return getTag(ombx, id);
     }
@@ -873,7 +841,7 @@ public class DeltaSync {
         byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
         Color itemColor = rgb != null ? new Color(rgb) : new Color(color);
         int flags = Flag.toBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
-        long tags = Tag.tagsToBitmask(getTagSync().localTagsFromElement(elt, null));
+        String[] tags = TagUtil.parseTags(elt, ombx, sContext);
 
         boolean hasBlob = false;
         Map<String, String> fields = new HashMap<String, String>();
@@ -924,8 +892,9 @@ public class DeltaSync {
                 msg = ombx.getMessageById(sContext, id);
             } catch (MailServiceException.NoSuchItemException nsie) {
                 // if it's been locally deleted but not pushed to the server yet, just return and let the delete happen later
-                if (!ombx.isPendingDelete(sContext, id, type))
+                if (!ombx.isPendingDelete(sContext, id, type)) {
                     getInitialSync().syncMessage(id, folderId, type);
+                }
                 return;
             }
 
@@ -933,7 +902,7 @@ public class DeltaSync {
             byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
             Color itemColor = rgb != null ? new Color(rgb) : new Color(color);
             int flags = Flag.toBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
-            long tags = Tag.tagsToBitmask(getTagSync().localTagsFromElement(elt, null));
+            String[] tags = TagUtil.parseTags(elt, ombx, sContext);
             int convId = (int) elt.getAttributeLong(MailConstants.A_CONV_ID);
 
             int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);

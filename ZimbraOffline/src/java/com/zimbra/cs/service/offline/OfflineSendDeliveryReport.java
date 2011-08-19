@@ -72,7 +72,7 @@ public class OfflineSendDeliveryReport extends SendDeliveryReport {
         sendReport(getSenderAccount(zsc), msg, false, zsc.getRequestIP(), zsc.getUserAgent(), authToken);
 
         // then mark the message as \Notified
-        mbox.alterTag(octxt, msgid, MailItem.Type.MESSAGE, Flag.ID_NOTIFIED, true);
+        mbox.alterTag(octxt, msgid, MailItem.Type.MESSAGE, Flag.FlagInfo.NOTIFIED, true, null);
 
         Element response = zsc.createElement(MailConstants.SEND_REPORT_RESPONSE);
         return response;

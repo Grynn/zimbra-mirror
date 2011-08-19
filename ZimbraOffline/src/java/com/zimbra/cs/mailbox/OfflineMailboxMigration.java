@@ -77,13 +77,13 @@ class OfflineMailboxMigration {
             mbox.setFolderDefaultView(null, folderId, MailItem.Type.APPOINTMENT);
         }
         if ((folder.getFlagBitmask() & Flag.BITMASK_CHECKED) == 0) {
-            mbox.alterTag(null, folderId, MailItem.Type.FOLDER, Flag.ID_CHECKED, true);
+            mbox.alterTag(null, folderId, MailItem.Type.FOLDER, Flag.FlagInfo.CHECKED, true, null);
         }
         if ((folder.getFlagBitmask() & Flag.BITMASK_SYNC) != 0) {
-            mbox.alterTag(null, folderId, MailItem.Type.FOLDER, Flag.ID_SYNC, false);
+            mbox.alterTag(null, folderId, MailItem.Type.FOLDER, Flag.FlagInfo.SYNC, false, null);
         }
         if ((folder.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0) {
-            mbox.alterTag(null, folderId, MailItem.Type.FOLDER, Flag.ID_SYNCFOLDER, false);
+            mbox.alterTag(null, folderId, MailItem.Type.FOLDER, Flag.FlagInfo.SYNCFOLDER, false, null);
         }
         ImapFolder imapFolder = DbImapFolder.getImapFolders(mbox, ds).getByItemId(folderId);
         if (imapFolder != null) {

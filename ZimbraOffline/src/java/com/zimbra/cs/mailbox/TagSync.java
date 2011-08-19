@@ -84,6 +84,12 @@ public class TagSync {
         return ds;
     }
 
+    static int TAG_ID_OFFSET = 64, MAX_TAG_COUNT = 63;
+
+    static boolean validateId(int tagId) {
+        return tagId >= TAG_ID_OFFSET && tagId < TAG_ID_OFFSET + MAX_TAG_COUNT;
+    }
+
     /**
      * Returns comma-separated list of tag ids from element.
      * If the remote server is less than 8.0 this is read directly from 't' attribute
@@ -109,7 +115,7 @@ public class TagSync {
         StringBuilder sb = new StringBuilder();
         for (String remoteTag : remoteTags.split(",")) {
             int localId = localTagId(Integer.valueOf(remoteTag));
-            if (!Tag.validateId(localId)) {
+            if (!validateId(localId)) {
                 continue;
             } else {
                 sb.append(localId).append(",");
@@ -345,7 +351,7 @@ public class TagSync {
      * @throws ServiceException
      */
     public void mapTag(int remote, int id) throws ServiceException {
-        if (!Tag.validateId(id)) {
+        if (!validateId(id)) {
             throw MailServiceException.NO_SUCH_TAG(id);
         }
         mapTagInternal(remote, id);
@@ -364,7 +370,7 @@ public class TagSync {
      * @throws ServiceException
      */
     public void mapOverflowTag(int remote) throws ServiceException {
-        int max = Tag.TAG_ID_OFFSET;
+        int max = TAG_ID_OFFSET;
         Collection<DataSourceItem> items = DataSourceDbMapping.getInstance().getAllMappingsInFolder(tagDs, Mailbox.ID_FOLDER_TAGS);
         for (DataSourceItem item : items) {
             if (item.itemId > max) {
@@ -392,7 +398,7 @@ public class TagSync {
      * @throws ServiceException
      */
     public boolean isMappingRequired(int remoteId) throws ServiceException {
-        if (!mappingRequired && !Tag.validateId(remoteId)) {
+        if (!mappingRequired && !validateId(remoteId)) {
             OfflineLog.offline.info("Detected new tag ID outside valid range; enabling tag mapping");
             enableTagDataSource(mbox);
         }

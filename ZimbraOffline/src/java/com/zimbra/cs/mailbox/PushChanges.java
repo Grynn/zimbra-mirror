@@ -54,6 +54,7 @@ import com.zimbra.cs.mailbox.Contact.Attachment;
 import com.zimbra.cs.mailbox.InitialSync.InviteMimeLocator;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.calendar.Invite;
+import com.zimbra.cs.mailbox.util.TagUtil;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.mime.ParsedContact;
@@ -813,8 +814,9 @@ public class PushChanges {
             } else {
                 action.addAttribute(MailConstants.A_RGB, colorStr);
             }
-            if (create || (mask & Change.MODIFIED_NAME) != 0)
+            if (create || (mask & Change.MODIFIED_NAME) != 0) {
                 action.addAttribute(MailConstants.A_NAME, name);
+            }
         } finally {
             ombx.lock.release();
         }
@@ -822,16 +824,7 @@ public class PushChanges {
         try {
             Pair<Integer,Integer> createData = pushRequest(request, create, id, MailItem.Type.TAG, name, Mailbox.ID_FOLDER_TAGS);
             if (create) {
-                int newId = getTagSync().getOrMapLocalIdFromRemote(createData.getFirst(), id);
-                // first, deal with more headaches caused by reusing tag ids
-                if (id != newId && DeltaSync.getTag(ombx, newId) != null) {
-                    int renumber = DeltaSync.getAvailableTagId(ombx);
-                    if (renumber < 0) {
-                        ombx.delete(sContext, newId, MailItem.Type.TAG);
-                    } else {
-                        ombx.renumberItem(sContext, newId, MailItem.Type.TAG, renumber);
-                    }
-                }
+                int newId = createData.getFirst();
                 // make sure the old item matches the new item...
                 if (!ombx.renumberItem(sContext, id, MailItem.Type.TAG, newId)) {
                     return true;
@@ -928,7 +921,8 @@ public class PushChanges {
         Element cnElem = request.addElement(MailConstants.E_CONTACT).addAttribute(MailConstants.A_ID, id);
 
         int flags, folderId;
-        long date, tags;
+        String[] tags;
+        long date;
         byte colorByte = 0;
         String colorStr = null;
         Color color;
@@ -937,7 +931,7 @@ public class PushChanges {
         ombx.lock.lock();
         try {
             cn = ombx.getContactById(sContext, id);
-            date = cn.getDate();    flags = cn.getFlagBitmask();  tags = cn.getTagBitmask();
+            date = cn.getDate();    flags = cn.getFlagBitmask();  tags = cn.getTags();
             color = cn.getRgbColor();  folderId = cn.getFolderId();
 
             if (color.hasMapping()) {
@@ -970,7 +964,8 @@ public class PushChanges {
                 cnElem.addAttribute(MailConstants.A_FLAGS, Flag.toString(flags));
             }
             if (create || (mask & Change.MODIFIED_TAGS) != 0) {
-                cnElem = getTagSync().addOutboundTagsAttr(cnElem, cn.getTagString());
+                cnElem.addAttribute(MailConstants.A_TAG_NAMES, TagUtil.encodeTags(tags));
+                cnElem.addAttribute(MailConstants.A_TAGS, TagUtil.getTagIdString(cn));
             }
             if (create || (mask & Change.MODIFIED_FOLDER) != 0) {
                 cnElem.addAttribute(MailConstants.A_FOLDER, folderId);
@@ -1018,11 +1013,11 @@ public class PushChanges {
             cn = ombx.getContactById(sContext, id);
             // check to see if the contact was changed while we were pushing the update...
             int mask = 0;
-            if (flags != cn.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
-            if (tags != cn.getTagBitmask())            mask |= Change.MODIFIED_TAGS;
-            if (folderId != cn.getFolderId())          mask |= Change.MODIFIED_FOLDER;
-            if (!color.equals(cn.getRgbColor()))       mask |= Change.MODIFIED_COLOR;
-            if (date != cn.getDate())                  mask |= Change.MODIFIED_CONTENT;
+            if (flags != cn.getInternalFlagBitmask())    mask |= Change.MODIFIED_FLAGS;
+            if (!TagUtil.tagsMatch(tags, cn.getTags()))  mask |= Change.MODIFIED_TAGS;
+            if (folderId != cn.getFolderId())            mask |= Change.MODIFIED_FOLDER;
+            if (!color.equals(cn.getRgbColor()))         mask |= Change.MODIFIED_COLOR;
+            if (date != cn.getDate())                    mask |= Change.MODIFIED_CONTENT;
 
             // update or clear the change bitmask
             ombx.setChangeMask(sContext, id, MailItem.Type.CONTACT, mask);
@@ -1143,7 +1138,8 @@ public class PushChanges {
             Element request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
             Element action = request.addElement(MailConstants.E_ACTION);
             action.addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE);
-            action = getTagSync().addOutboundTagsAttr(action, item.getTagString()); 
+            action.addAttribute(MailConstants.A_TAG_NAMES, TagUtil.encodeTags(item.getTags()));
+            action.addAttribute(MailConstants.A_TAGS, TagUtil.getTagIdString(item));
             action.addAttribute(MailConstants.A_ID, id);
             ombx.sendRequest(request);
         }
@@ -1197,7 +1193,7 @@ public class PushChanges {
         Element action = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);
 
         int flags, folderId;
-        long tags;
+        String[] tags;
         String digest;
         byte colorByte = 0;
         String colorStr = null;
@@ -1213,7 +1209,7 @@ public class PushChanges {
                 OfflineLog.offline.debug("push: message %d deleted before push", id);
                 return false;
             }
-            digest = msg.getDigest();  flags = msg.getFlagBitmask();  tags = msg.getTagBitmask();
+            digest = msg.getDigest();  flags = msg.getFlagBitmask();  tags = msg.getTags();
             color = msg.getRgbColor();    folderId = msg.getFolderId();
 
             if (color.hasMapping()) {
@@ -1248,7 +1244,8 @@ public class PushChanges {
                 action.addAttribute(MailConstants.A_FLAGS, Flag.toString(flags));
             }
             if (create || (mask & Change.MODIFIED_TAGS) != 0) {
-                action = getTagSync().addOutboundTagsAttr(action, msg.getTagString());
+                action.addAttribute(MailConstants.A_TAG_NAMES, TagUtil.encodeTags(msg.getTags()));
+                action.addAttribute(MailConstants.A_TAGS, TagUtil.getTagIdString(msg));
             }
             if (create || (mask & Change.MODIFIED_FOLDER) != 0) {
                 action.addAttribute(MailConstants.A_FOLDER, folderId);
@@ -1312,9 +1309,9 @@ public class PushChanges {
             }
             // check to see if the message was changed while we were pushing the update...
             int mask = 0;
-            if (flags != msg.getFlagBitmask())    mask |= Change.MODIFIED_FLAGS;
-            if (tags != msg.getTagBitmask())      mask |= Change.MODIFIED_TAGS;
-            if (folderId != msg.getFolderId())    mask |= Change.MODIFIED_FOLDER;
+            if (flags != msg.getFlagBitmask())               mask |= Change.MODIFIED_FLAGS;
+            if (!TagUtil.tagsMatch(tags, msg.getTags()))     mask |= Change.MODIFIED_TAGS;
+            if (folderId != msg.getFolderId())               mask |= Change.MODIFIED_FOLDER;
             if (!color.equals(msg.getRgbColor()))  mask |= Change.MODIFIED_COLOR;
             if (!StringUtil.equal(digest, msg.getDigest()))  mask |= Change.MODIFIED_CONTENT;
 
@@ -1327,9 +1324,9 @@ public class PushChanges {
     }
 
     private boolean syncCalendarItem(int id, boolean isAppointment) throws ServiceException {
-
         int flags, folderId;
-        long date, tags;
+        long date;
+        String[] tags;
         byte colorByte = 0;
         String colorStr = null;
         Color color;
@@ -1346,7 +1343,7 @@ public class PushChanges {
             cal = ombx.getCalendarItemById(sContext, id);
             name = cal.getSubject();
             date = cal.getDate();
-            tags = cal.getTagBitmask();
+            tags = cal.getTags();
             flags = cal.getFlagBitmask();
             folderId = cal.getFolderId();
             color = cal.getRgbColor();
@@ -1367,12 +1364,16 @@ public class PushChanges {
             } else {
                 request = new Element.XMLElement(MailConstants.ITEM_ACTION_REQUEST);
                 Element action = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);
-                if ((mask & Change.MODIFIED_TAGS) != 0)
-                    action = getTagSync().addOutboundTagsAttr(action, cal.getTagString());
-                if ((mask & Change.MODIFIED_FLAGS) != 0)
+                if ((mask & Change.MODIFIED_TAGS) != 0) {
+                    action.addAttribute(MailConstants.A_TAG_NAMES, TagUtil.encodeTags(cal.getTags()));
+                    action.addAttribute(MailConstants.A_TAGS, TagUtil.getTagIdString(cal));
+                }
+                if ((mask & Change.MODIFIED_FLAGS) != 0) {
                     action.addAttribute(MailConstants.A_FLAGS, cal.getFlagString());
-                if ((mask & Change.MODIFIED_FOLDER) != 0)
+                }
+                if ((mask & Change.MODIFIED_FOLDER) != 0) {
                     action.addAttribute(MailConstants.A_FOLDER, folderId);
+                }
                 if ((mask & Change.MODIFIED_COLOR) != 0) {
                     if (color.hasMapping()) {
                         action.addAttribute(MailConstants.A_COLOR, colorByte);
@@ -1405,7 +1406,7 @@ public class PushChanges {
                             assert(uidSame);
                         } else if (cal.getId() != calItem.getId()) {
                             OfflineLog.offline.warn("Deleting ZD cal item %d with same UID as existing %d",cal.getId(), calItem.getId());
-                            ombx.delete(sContext, cal, null);
+                            ombx.delete(sContext, cal.getId(), cal.getType(), null);
                         }
                     } catch (NoSuchItemException nsie) {
                         if (!ombx.renumberItem(sContext, id, type, serverItemId))
@@ -1427,11 +1428,11 @@ public class PushChanges {
             cal = ombx.getCalendarItemById(sContext, id);
             // check to see if the calendar item was changed while we were pushing the update...
             mask = 0;
-            if (flags != cal.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
-            if (tags != cal.getTagBitmask())            mask |= Change.MODIFIED_TAGS;
-            if (folderId != cal.getFolderId())          mask |= Change.MODIFIED_FOLDER;
-            if (!color.equals(cal.getRgbColor()))       mask |= Change.MODIFIED_COLOR;
-            if (date != cal.getDate())                  mask |= Change.MODIFIED_CONTENT;
+            if (flags != cal.getInternalFlagBitmask())    mask |= Change.MODIFIED_FLAGS;
+            if (!TagUtil.tagsMatch(tags, cal.getTags()))  mask |= Change.MODIFIED_TAGS;
+            if (folderId != cal.getFolderId())            mask |= Change.MODIFIED_FOLDER;
+            if (!color.equals(cal.getRgbColor()))         mask |= Change.MODIFIED_COLOR;
+            if (date != cal.getDate())                    mask |= Change.MODIFIED_CONTENT;
 
             // update or clear the change bitmask
             ombx.setChangeMask(sContext, id, type, mask);

@@ -54,7 +54,8 @@ import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.datasource.DataSourceManager;
-import com.zimbra.cs.db.DbMailItem;
+import com.zimbra.cs.db.DbTag;
+import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
 import com.zimbra.cs.mailbox.MailSender.SafeSendFailedException;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mime.MailboxBlobDataSource;
@@ -106,20 +107,19 @@ public class DataSourceMailbox extends SyncMailbox {
                 // systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_DRAFTS, "/Drafts"));
                 for (Pair<Integer, String> pair : systemMailFolders) {
                     MailItem mi = getCachedItem(pair.getFirst());
-                    DbMailItem.alterTag(mSyncFolderFlag, Arrays.asList(pair.getFirst()), true);
+                    DbTag.alterTag(mSyncFolderFlag, Arrays.asList(pair.getFirst()), true);
                     if (mi != null) {
                         mi.mData.setFlag(mSyncFolderFlag);
                     }
                     if (isSyncEnabledByDefault(pair.getSecond())) {
-                        DbMailItem.alterTag(mSyncFlag, Arrays.asList(pair.getFirst()), true);
+                        DbTag.alterTag(mSyncFlag, Arrays.asList(pair.getFirst()), true);
                         if (mi != null) {
                             mi.mData.setFlag(mSyncFlag);
                         }
                     }
                 }
                 if (isFlat) {
-                    DbMailItem.alterTag(mNoInferiorsFlag, Arrays.asList(
-                        ID_FOLDER_INBOX, ID_FOLDER_TRASH, ID_FOLDER_SENT), true);
+                    DbTag.alterTag(mNoInferiorsFlag, Arrays.asList(ID_FOLDER_INBOX, ID_FOLDER_TRASH, ID_FOLDER_SENT), true);
                     MailItem mi = getCachedItem(ID_FOLDER_INBOX);
                     if (mi != null) {
                         mi.mData.setFlag(mNoInferiorsFlag);
@@ -151,10 +151,10 @@ public class DataSourceMailbox extends SyncMailbox {
                 if (hasFolders) {
                     Folder draft = getFolderById(ID_FOLDER_DRAFTS);
                     if ((draft.getFlagBitmask() & Flag.BITMASK_SYNC) != 0) {
-                        alterTag(null, ID_FOLDER_DRAFTS, MailItem.Type.FOLDER, Flag.ID_SYNC, false);
+                        alterTag(null, ID_FOLDER_DRAFTS, MailItem.Type.FOLDER, Flag.FlagInfo.SYNC, false, null);
                     }
                     if ((draft.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0) {
-                        alterTag(null, ID_FOLDER_DRAFTS, MailItem.Type.FOLDER, Flag.ID_SYNCFOLDER, false);
+                        alterTag(null, ID_FOLDER_DRAFTS, MailItem.Type.FOLDER, Flag.FlagInfo.SYNCFOLDER, false, null);
                     }
                 }
                 return true;
@@ -182,17 +182,17 @@ public class DataSourceMailbox extends SyncMailbox {
     }
 
     @Override
-    public void alterTag(OperationContext octxt, int itemId, MailItem.Type type, int tagId, boolean addTag)
-            throws ServiceException {
+    public void alterTag(OperationContext octxt, int itemId, MailItem.Type type, Flag.FlagInfo finfo, boolean addTag, TargetConstraint tcon)
+    throws ServiceException {
         lock.lock();
         try {
-            if (tagId == Flag.ID_SYNC && addTag) {
+            if (finfo == Flag.FlagInfo.SYNC && addTag) {
                 Folder folder = getFolderById(itemId);
                 if ((folder.getFlagBitmask() & Flag.ID_SYNCFOLDER) == 0) {
                     throw MailServiceException.MODIFY_CONFLICT();
                 }
             }
-            super.alterTag(octxt, itemId, type, tagId, addTag);
+            super.alterTag(octxt, itemId, type, finfo, addTag, tcon);
         } finally {
             lock.release();
         }

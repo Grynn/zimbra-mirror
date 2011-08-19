@@ -168,7 +168,7 @@ public class TagSyncTest {
     public void overflowTag() throws ServiceException {
         TagSync tagSync = initTagSync(V_OTHER);
         int i = 0;
-        for (i = Tag.TAG_ID_OFFSET ; i < Tag.MAX_TAG_COUNT+Tag.TAG_ID_OFFSET; i++) {
+        for (i = TagSync.TAG_ID_OFFSET ; i < TagSync.MAX_TAG_COUNT + TagSync.TAG_ID_OFFSET; i++) {
             tagSync.mapTag(100000+i, i);
         }
         boolean found = false;
