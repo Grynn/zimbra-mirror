@@ -45,6 +45,8 @@ public class PromptToTurnOffAutoreply extends AjaxCommonTest {
 			ZAssert.assertTrue(alert.zIsActive(),
 					"Verify turn off auto-reply alert dialog is displayed");
 
+			alert.zCheckboxSet(true);
+			
 			alert.zClickButton(Button.B_NO);
 		}
 

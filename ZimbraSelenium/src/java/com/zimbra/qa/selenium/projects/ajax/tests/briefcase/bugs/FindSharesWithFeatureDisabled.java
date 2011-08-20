@@ -57,7 +57,7 @@ public class FindSharesWithFeatureDisabled extends AjaxCommonTest {
 				"Verify Find Shares dialog is opened");
 
 		/*
-		 * check tree itme check box
+		 * check tree item check box
 		 * ClientSessionFactory.session().selenium().getEval(
 		 * "selenium.browserbot.triggerMouseEvent(selenium.browserbot.findElement('"
 		 * +
