@@ -1481,10 +1481,27 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
                     {ref:ZaDomain.A_zimbraAutoProvLdapBindDn, type:_OUTPUT_,
                         label:ZaMsg.LBL_zimbraAutoProvLdapBindDn, labelLocation:_LEFT_
                     },
-                    {ref:ZaDomain.A2_zimbraAutoProvPollingInterval, type:_OUTPUT_,
+                    {ref:"zimbraAutoProvPollingInterval_display", type:_OUTPUT_,
                         label:ZaMsg.LBL_zimbraAutoProvPollingInterval, labelLocation:_LEFT_,
                         visibilityChecks: [[XForm.checkInstanceValue,ZaDomain.A2_zimbraAutoProvModeEAGEREnabled,"TRUE"]],
-                        visibilityChangeEventSources:[ZaDomain.A2_zimbraAutoProvModeEAGEREnabled]
+                        visibilityChangeEventSources:[ZaDomain.A2_zimbraAutoProvModeEAGEREnabled],
+                        getDisplayValue:function() {
+                            var val = [];
+                            var instance = this.getInstance();
+                            for(var i = 0; i < instance[ZaDomain.A2_zimbraAutoProvServerList].length; i++) {
+                                var server = instance[ZaDomain.A2_zimbraAutoProvServerList][i];
+                                var scheduledDomains = server.attrs[ZaServer.A_zimbraAutoProvScheduledDomains];
+                                for(var j = 0; scheduledDomains && j < scheduledDomains.length; j++) {
+                                    if(scheduledDomains[j] == instance.name) {
+                                        var interval = "default";
+                                        if (server.attrs[ZaServer.A_zimbraAutoProvPollingInterval])
+                                            interval = server.attrs[ZaServer.A_zimbraAutoProvPollingInterval];
+                                        val.push(server.name + "(" + interval + ")");
+                                    }
+                                }
+                            }
+                            return val.join(",");
+                        }
                     },
                     {ref:ZaDomain.A2_zimbraAutoProvSelectedServerList, type:_OUTPUT_,
                         getDisplayValue:function() {
