@@ -63,42 +63,51 @@ namespace MVVM.ViewModel
             private set;
         }
 
+        public void LoadConfig(Config config)
+        {
+            if (config.OutlookProfile.Length == 0)
+            {
+                Isprofile = false;
+                IspST = true;
+
+                PSTFile = config.PSTFile;
+            }
+            else
+            {
+                Isprofile = true;
+                IspST = false;
+                OutlookProfile = config.OutlookProfile;
+                if (ProfileList.Count > 0)
+                {
+                    CurrentProfileSelection = (OutlookProfile == null) ? 0 : ProfileList.IndexOf(OutlookProfile);
+                }
+                else
+                    ProfileList.Add(OutlookProfile);
+            }
+        }
+
         private void Load()
         {
             System.Xml.Serialization.XmlSerializer reader =
             new System.Xml.Serialization.XmlSerializer(typeof(Config));
-            if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
-            {
-                System.IO.StreamReader fileRead = new System.IO.StreamReader(
-                   @"C:\Temp\ZimbraAdminOverView.xml");
-                Config Z11 = new Config();
-                Z11 = (Config)reader.Deserialize(fileRead);
-                fileRead.Close();
-                if (Z11.OutlookProfile.Length == 0)
-                {
-                    Isprofile = false;
-                    IspST = true;
 
-                    PSTFile = Z11.PSTFile;
+            Microsoft.Win32.OpenFileDialog fDialog = new Microsoft.Win32.OpenFileDialog();
+            fDialog.Filter = "Config Files|*.xml";
+            fDialog.CheckFileExists = true;
+            fDialog.Multiselect = false;
+            if (fDialog.ShowDialog() == true)
+            {
+                if (File.Exists(fDialog.FileName))
+                {
+                    System.IO.StreamReader fileRead = new System.IO.StreamReader(fDialog.FileName);
+
+                    Config config = new Config();
+                    config = (Config)reader.Deserialize(fileRead);
+                    fileRead.Close();
+                    LoadConfig(config);
+                    ((ConfigViewModelUDest)ViewModelPtrs[(int)ViewType.USRDEST]).LoadConfig(config);
+                    ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).LoadConfig(config);
                 }
-                else
-                {
-                    Isprofile = true;
-                    IspST = false;
-                    OutlookProfile = Z11.OutlookProfile;
-                    if (ProfileList.Count > 0)
-                    {
-                        CurrentProfileSelection = (OutlookProfile == null) ? 0 : ProfileList.IndexOf(OutlookProfile);
-                    }
-                    else
-                        ProfileList.Add(OutlookProfile);
-
-                }             
-            }
-            else
-            {
-
-                MessageBox.Show("There is no configuration stored.Please enter some configuration info", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -108,32 +117,43 @@ namespace MVVM.ViewModel
             private set;
         }
 
+        public void SaveConfig(string XmlfileName)
+        {
+            UpdateXmlElement(XmlfileName, "OutlookProfile");
+            UpdateXmlElement(XmlfileName, "PSTFile");
+            UpdateXmlElement(XmlfileName, "mailServer");
+        }
+
         private void Save()
         {
-            OutlookProfile = ProfileList[CurrentProfileSelection];
-            if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
+            if (CurrentProfileSelection > -1)
             {
-                UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "OutlookProfile");
-                UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "PSTFile");
-                UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "mailServer");
-                
-                
+                OutlookProfile = ProfileList[CurrentProfileSelection];
             }
 
-            else
+            Microsoft.Win32.SaveFileDialog fDialog = new Microsoft.Win32.SaveFileDialog();
+            fDialog.Filter = "Config Files|*.xml";
+            if (fDialog.ShowDialog() == true)
             {
-                System.Xml.Serialization.XmlSerializer writer =
-                new System.Xml.Serialization.XmlSerializer(typeof(Config));
+                if (File.Exists(fDialog.FileName))
+                {
+                    SaveConfig(fDialog.FileName);
+                    ((ConfigViewModelUDest)ViewModelPtrs[(int)ViewType.USRDEST]).SaveConfig(fDialog.FileName);
+                    ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).SaveConfig(fDialog.FileName);
+                }
+                else
+                {
+                    System.Xml.Serialization.XmlSerializer writer =
+                    new System.Xml.Serialization.XmlSerializer(typeof(Config));
 
-                /*if (System.IO.Directory.Exists(@"C:\Temp\") == false)
-                    System.IO.Directory.CreateDirectory(@"C:\Temp\");*/
+                    /*if (System.IO.Directory.Exists(@"C:\Temp\") == false)
+                        System.IO.Directory.CreateDirectory(@"C:\Temp\");*/
 
-                System.IO.StreamWriter file = new System.IO.StreamWriter(
-                    @"C:\Temp\ZimbraAdminOverView.xml");
-                writer.Serialize(file, m_config);
-                file.Close();
+                    System.IO.StreamWriter file = new System.IO.StreamWriter(fDialog.FileName);
+                    writer.Serialize(file, m_config);
+                    file.Close();
+                }
             }
-            MessageBox.Show("Configuration information saved", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
 
         public ICommand NextCommand

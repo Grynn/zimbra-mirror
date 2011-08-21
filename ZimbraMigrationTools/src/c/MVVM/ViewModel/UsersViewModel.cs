@@ -17,9 +17,8 @@ namespace MVVM.ViewModel
     public class UsersViewModel : BaseViewModel
     {
         readonly Users m_users = new Users("", "", -1);
-        ScheduleViewModel scheduleViewModel;
 
-        public UsersViewModel(ScheduleViewModel scheduleViewModel, string username, string mappedname)
+        public UsersViewModel(string username, string mappedname)
         {
             this.GetUsersHelpCommand = new ActionCommand(this.GetUsersHelp, () => true);
             this.ObjectPickerCommand = new ActionCommand(this.ObjectPicker, () => true);
@@ -31,7 +30,6 @@ namespace MVVM.ViewModel
             this.SaveCSVCommand = new ActionCommand(this.SaveCSV, () => true);
             this.BackCommand = new ActionCommand(this.Back, () => true);
             this.NextCommand = new ActionCommand(this.Next, () => true);
-            this.scheduleViewModel = scheduleViewModel;
             this.Username = username;
             this.MappedName = mappedname;
             this.IsProvisioned = false;
@@ -81,6 +79,7 @@ namespace MVVM.ViewModel
 
         private void UserMap()
         {
+            ScheduleViewModel scheduleViewModel = ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
             bool bCSV = false;
             Microsoft.Win32.OpenFileDialog fDialog = new Microsoft.Win32.OpenFileDialog();
             fDialog.Filter = "User Map Files|*.xml;*.csv";
@@ -157,7 +156,7 @@ namespace MVVM.ViewModel
                                 string result = tempuser.Username + "," + tempuser.MappedName;
                                 Username = strres[0];
                                 MappedName = strres[1];
-                                UsersList.Add(new UsersViewModel(null, Username, MappedName));
+                                UsersList.Add(new UsersViewModel(Username, MappedName));
                                 scheduleViewModel.SchedList.Add(new SchedUser(Username, false));
                             }
                             EnableNext = (UsersList.Count > 0);
@@ -170,11 +169,11 @@ namespace MVVM.ViewModel
                         //will have to revisit 
 
                         System.Xml.Serialization.XmlSerializer reader =
-         new System.Xml.Serialization.XmlSerializer(typeof(Config));
-                        if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
+                            new System.Xml.Serialization.XmlSerializer(typeof(Config));
+                        if (File.Exists(scheduleViewModel.GetConfigFile()))
                         {
                             System.IO.StreamReader fileRead = new System.IO.StreamReader(
-                               @"C:\Temp\ZimbraAdminOverView.xml");
+                               scheduleViewModel.GetConfigFile());
                             Config Z11 = new Config();
                             Z11 = (Config)reader.Deserialize(fileRead);
                             fileRead.Close();
@@ -187,6 +186,7 @@ namespace MVVM.ViewModel
                             DomainList.Add(ZimbraDomain);
                            
                         }
+                        scheduleViewModel.SetUsermapFile(fDialog.FileName);
                     }
                 }
                 if (!bCSV)
@@ -216,8 +216,9 @@ namespace MVVM.ViewModel
         private void Add(object value)
         {
             var name = value as string;
-            UsersList.Add(new UsersViewModel(null, "", ""));
+            UsersList.Add(new UsersViewModel("", ""));
             EnableNext = (UsersList.Count > 0);
+            ScheduleViewModel scheduleViewModel = ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
             scheduleViewModel.SchedList.Add(new SchedUser(name, false));
             scheduleViewModel.EnableMigrate = (scheduleViewModel.SchedList.Count > 0);
         }
@@ -232,6 +233,7 @@ namespace MVVM.ViewModel
         {
             UsersList.RemoveAt(CurrentUserSelection);
             EnableNext = (UsersList.Count > 0);
+            ScheduleViewModel scheduleViewModel = ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
             scheduleViewModel.EnableMigrate = (scheduleViewModel.SchedList.Count > 0);
         }
 
@@ -269,13 +271,14 @@ namespace MVVM.ViewModel
        
             //fDialog.CheckFileExists = true;
             //fDialog.Multiselect = false;
-           
+
+            ScheduleViewModel scheduleViewModel = ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
             if (fDialog.ShowDialog() == true)
             {
                 string filename = fDialog.FileName;
                 //+".csv";
                 System.IO.File.WriteAllText(filename, resultcsv);
-                MessageBox.Show("Users saved", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                scheduleViewModel.SetUsermapFile(filename);
             }
 
             ///Domain information gets stored in the xml 
@@ -312,6 +315,8 @@ namespace MVVM.ViewModel
 
             SaveDomain();
 
+            ScheduleViewModel scheduleViewModel = ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
+
             for (int i = 0; i < UsersList.Count; i++)
             {
                 string userName = (UsersList[i].MappedName.Length > 0) ? UsersList[i].MappedName : UsersList[i].Username;
@@ -342,22 +347,25 @@ namespace MVVM.ViewModel
 
             try
             {
-
+                ScheduleViewModel scheduleViewModel = ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
                 ZimbraDomain = DomainList[CurrentDomainSelection];
-                if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
+                if (scheduleViewModel.GetConfigFile().Length > 0)
                 {
-                    UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "UserProvision");
-                }
+                    if (File.Exists(scheduleViewModel.GetConfigFile()))
+                    {
+                        UpdateXmlElement(scheduleViewModel.GetConfigFile(), "UserProvision");
+                    }
 
-                else
-                {
-                    System.Xml.Serialization.XmlSerializer writer =
-                    new System.Xml.Serialization.XmlSerializer(typeof(Config));
+                    else
+                    {
+                        System.Xml.Serialization.XmlSerializer writer =
+                        new System.Xml.Serialization.XmlSerializer(typeof(Config));
 
-                    System.IO.StreamWriter file = new System.IO.StreamWriter(
-                        @"C:\Temp\ZimbraAdminOverView.xml");
-                    writer.Serialize(file, m_config);
-                    file.Close();
+                        System.IO.StreamWriter file = new System.IO.StreamWriter(
+                            scheduleViewModel.GetConfigFile());
+                        writer.Serialize(file, m_config);
+                        file.Close();
+                    }
                 }
             }
             catch (ArgumentOutOfRangeException e)

@@ -17,45 +17,33 @@ namespace MVVM.ViewModel
     public class ScheduleViewModel : BaseViewModel
     {
         readonly Schedule m_schedule = new Schedule(0, "", false);
-        UsersViewModel usersViewModel;
-        ConfigViewModelUDest configViewModelUDest;
-        AccountResultsViewModel accountResultsViewModel;
+        string m_configFile;
+        string m_usermapFile;
 
         public ScheduleViewModel()
         {
             this.ScheduleTaskCommand = new ActionCommand(this.ScheduleTask, () => true);
             this.GetSchedHelpCommand = new ActionCommand(this.GetSchedHelp, () => true);
-            this.LoadCommand = new ActionCommand(this.Load, () => true);
-            this.SaveCommand = new ActionCommand(this.Save, () => true);
             this.PreviewCommand = new ActionCommand(this.Preview, () => true);
             this.BackCommand = new ActionCommand(this.Back, () => true);
             this.MigrateCommand = new ActionCommand(this.Migrate, () => true);
-            this.usersViewModel = null;
+            m_configFile = "";
+            m_usermapFile = "";
         }
 
-        public ConfigViewModelUDest GetConfigUDestModel()
+        public string GetConfigFile()
         {
-            return configViewModelUDest;
+            return m_configFile;
         }
 
-        public void SetConfigUDestModel(ConfigViewModelUDest configViewModelUDest)
+        public void SetConfigFile(string configFile)
         {
-            this.configViewModelUDest = configViewModelUDest;
+            this.m_configFile = configFile;
         }
 
-        public UsersViewModel GetUsersViewModel()
+        public void SetUsermapFile(string usermapFile)
         {
-            return usersViewModel;
-        }
-
-        public void SetUserModel(UsersViewModel usersViewModel)
-        {
-            this.usersViewModel = usersViewModel;
-        }
-
-        public void SetResultsModel(AccountResultsViewModel accountResultsViewModel)
-        {
-            this.accountResultsViewModel = accountResultsViewModel;
+            this.m_usermapFile = usermapFile;
         }
 
         // Commands
@@ -88,6 +76,12 @@ namespace MVVM.ViewModel
             }
             */
 
+            if ((m_configFile.Length == 0) || (m_usermapFile.Length == 0))
+            {
+                MessageBox.Show("There must be a config file and usermap file", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             OperatingSystem os = System.Environment.OSVersion;
             Version v = os.Version;
 
@@ -100,14 +94,26 @@ namespace MVVM.ViewModel
             string dtName = "Migrate" + dtTime.Substring(0, 2) + dtTime.Substring(3, 2);
             //
 
+            proc.StartInfo.Arguments = "/Create /SC ONCE /TR ";
+            proc.StartInfo.Arguments += @"""";
+            proc.StartInfo.Arguments += @"\";
+            proc.StartInfo.Arguments += @"""";
+            proc.StartInfo.Arguments += Environment.CurrentDirectory;
+            proc.StartInfo.Arguments += @"\";
+            proc.StartInfo.Arguments += "ZimbraMigrationConsole.exe";
+            proc.StartInfo.Arguments += @"\";
+            proc.StartInfo.Arguments += @"""";
+            proc.StartInfo.Arguments += " ";
+
+            proc.StartInfo.Arguments += m_configFile + " ";
+            proc.StartInfo.Arguments += m_usermapFile + " ";
+            proc.StartInfo.Arguments += @"""";
             if (v.Major >= 6)
             {
-                proc.StartInfo.Arguments = "/Create /SC ONCE /TR C:\\depot\\main\\ZimbraMigrationTools\\src\\c\\out\\dbg\\ZimbraMigration.exe /F /Z /V1" + " /TN " + dtName + " /SD " + dtStr + " /ST " + dtTime;
+                proc.StartInfo.Arguments += "/F /Z /V1";
             }
-            else
-            {
-                proc.StartInfo.Arguments = "/Create /SC ONCE /TR C:\\depot\\main\\ZimbraMigrationTools\\src\\c\\out\\dbg\\ZimbraMigration.exe" + " /TN " + dtName + " /SD " + dtStr + " /ST " + dtTime;
-            }
+            proc.StartInfo.Arguments += " /TN " + dtName + " /SD " + dtStr + " /ST " + dtTime;
+
             proc.Start();
         }
 
@@ -122,60 +128,6 @@ namespace MVVM.ViewModel
         {
             string urlString = (isBrowser) ? "http://10.20.140.218/sched.html" : "file:///C:/depot/main/ZimbraMigrationTools/src/c/Misc/Help/sched.html";
             Process.Start(new ProcessStartInfo(urlString));
-        }
-
-        public ICommand LoadCommand
-        {
-            get;
-            private set;
-        }
-
-        private void Load()
-        {
-            System.Xml.Serialization.XmlSerializer reader =
-          new System.Xml.Serialization.XmlSerializer(typeof(Config));
-            if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
-            {
-                System.IO.StreamReader fileRead = new System.IO.StreamReader(
-                   @"C:\Temp\ZimbraAdminOverView.xml");
-                Config Z11 = new Config();
-                Z11 = (Config)reader.Deserialize(fileRead);
-                fileRead.Close();
-                COS = Z11.UserProvision.COS;
-                DefaultPWD = Z11.UserProvision.DefaultPWD;
-                
-                //MessageBox.Show("Options information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-            }
-            else
-            {
-                MessageBox.Show("There is no options configuration stored.Please enter some options info", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
-            //MessageBox.Show("Schedule information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-        }
-
-        public ICommand SaveCommand
-        {
-            get;
-            private set;
-        }
-
-        private void Save()
-        {
-            if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
-                UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "UserProvision");
-            else
-            {
-                System.Xml.Serialization.XmlSerializer writer =
-                new System.Xml.Serialization.XmlSerializer(typeof(Config));
-
-                System.IO.StreamWriter file = new System.IO.StreamWriter(
-                    @"C:\Temp\ZimbraAdminOverView.xml");
-                writer.Serialize(file, m_config);
-                file.Close();
-            }
-
-            MessageBox.Show("Schedule information saved", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
 
         public ICommand BackCommand
@@ -215,6 +167,7 @@ namespace MVVM.ViewModel
                     CurrentCOSSelection = 0;
                 }
 
+                UsersViewModel usersViewModel = ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
                 ZimbraAPI zimbraAPI = new ZimbraAPI();
                 string domainName = usersViewModel.ZimbraDomain;
                 string defaultPWD = DefaultPWD;
@@ -264,7 +217,8 @@ namespace MVVM.ViewModel
             {
                 lb.SelectedIndex = 3;
             }
-            
+
+            AccountResultsViewModel accountResultsViewModel = ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);
             accountResultsViewModel.AccountResultsList.Clear();
             EnableMigrate = false;
             accountResultsViewModel.EnableStop = !EnableMigrate;
@@ -310,6 +264,7 @@ namespace MVVM.ViewModel
             get
             {
                 schedlist.Clear();
+                UsersViewModel usersViewModel = ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
                 foreach (UsersViewModel obj in usersViewModel.UsersList)
                 {
                     schedlist.Add(new SchedUser(obj.Username, obj.IsProvisioned));
@@ -508,6 +463,7 @@ namespace MVVM.ViewModel
 
             int num = (int)e.Argument;
             MigrationAccount MyAcct = new MigrationAccount();
+            AccountResultsViewModel accountResultsViewModel = ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);
             MyAcct.Accountname = accountResultsViewModel.AccountResultsList[num].AccountName;
             MyAcct.Accountnum = num;
             MyAcct.OnChanged += new MigrationObjectEventHandler(Acct_OnAcctChanged);
@@ -528,6 +484,7 @@ namespace MVVM.ViewModel
         {
             // We want to update the main accountResultViewModel, but we have to make sure we only do it for
             // the account whose tab has the focus.  That's why we check against accountResultsViewModel.AccountOnTab
+            AccountResultsViewModel accountResultsViewModel = ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);
             if ((int)e.UserState == accountResultsViewModel.AccountOnTab)
             {
                 accountResultsViewModel.AccountProgress = e.ProgressPercentage;
@@ -537,6 +494,7 @@ namespace MVVM.ViewModel
 
         private void worker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
+            AccountResultsViewModel accountResultsViewModel = ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);
             if (e.Cancelled)
             {
                 for (int i = 0; i < accountResultsViewModel.AccountResultsList.Count; i++)  // hate to set them all, but do it for now
@@ -555,6 +513,7 @@ namespace MVVM.ViewModel
                 EnableMigrate = false;
                 accountResultsViewModel.EnableStop = false;
                 SchedList.Clear();
+                UsersViewModel usersViewModel = ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
                 usersViewModel.UsersList.Clear();
             }
         }
@@ -564,6 +523,7 @@ namespace MVVM.ViewModel
         {
             string msg = "";
             MigrationAccount a = (MigrationAccount)sender;
+            AccountResultsViewModel accountResultsViewModel = ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);    // main one
             AccountResultsViewModel ar = accountResultsViewModel.AccountResultsList[a.Accountnum];
             if (e.PropertyName == "TotalNoErrors")
             {
@@ -588,6 +548,7 @@ namespace MVVM.ViewModel
         {
 
             MigrationFolder f = (MigrationFolder)sender;
+            AccountResultsViewModel accountResultsViewModel = ((AccountResultsViewModel)ViewModelPtrs[(int)ViewType.RESULTS]);    // main one
             AccountResultsViewModel ar = accountResultsViewModel.AccountResultsList[f.Accountnum];
 
             if (bgwlist[f.Accountnum].CancellationPending)

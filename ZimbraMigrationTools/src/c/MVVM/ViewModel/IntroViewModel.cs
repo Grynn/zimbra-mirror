@@ -58,8 +58,8 @@ namespace MVVM.ViewModel
 
         private void GetIntroUserMig()
         {
-            m_optionsViewModel.isServer = false;
-            m_scheduleViewModel.isServer = false;
+            BaseViewModel.isServer = false;
+            BaseViewModel.isServer = false;
         }
 
         public ICommand GetIntroServerMigCommand
@@ -70,8 +70,8 @@ namespace MVVM.ViewModel
 
         private void GetIntroServerMig()
         {
-            m_optionsViewModel.isServer = true;
-            m_scheduleViewModel.isServer = true;
+            BaseViewModel.isServer = true;
+            BaseViewModel.isServer = true;
         }
 
         public ICommand BeginCommand
@@ -90,8 +90,9 @@ namespace MVVM.ViewModel
             mw.InitializeMailClient();
             string[] profiles = mw.GetListofMapiProfiles();
 
-            if (m_optionsViewModel.isServer)
+            if (BaseViewModel.isServer)
             {
+                BaseViewModel.isServer = true;
                 TheViews.Add(m_configViewModelS);
                 TheViews.Add(m_configViewModelSDest);
                 TheViews.Add(m_optionsViewModel);
@@ -106,6 +107,7 @@ namespace MVVM.ViewModel
             }
             else
             {
+                BaseViewModel.isServer = false;
                 TheViews.Add(m_configViewModelU);
                 TheViews.Add(m_configViewModelUDest);
                 TheViews.Add(m_optionsViewModel);
@@ -152,8 +154,29 @@ namespace MVVM.ViewModel
             }
         }
 
+        public void SetupViewModelPtrs()
+        {
+            for (int i = 0; i < (int)ViewType.MAX; i++)
+            {
+                ViewModelPtrs[i] = null;
+            }
+
+            ViewModelPtrs[(int)ViewType.INTRO] = this;
+            ViewModelPtrs[(int)ViewType.SVRSRC] = m_configViewModelS;
+            ViewModelPtrs[(int)ViewType.USRSRC] = m_configViewModelU;
+            ViewModelPtrs[(int)ViewType.SVRDEST] = m_configViewModelSDest;
+            ViewModelPtrs[(int)ViewType.USRDEST] = m_configViewModelUDest;
+            ViewModelPtrs[(int)ViewType.OPTIONS] = m_optionsViewModel;
+            ViewModelPtrs[(int)ViewType.USERS] = m_usersViewModel;
+            ViewModelPtrs[(int)ViewType.SCHED] = m_scheduleViewModel;
+            ViewModelPtrs[(int)ViewType.RESULTS] = m_resultsViewModel;
+        }
+
+
         public void SetupViews(bool isBrowser)
         {
+            BaseViewModel.isServer = true;  // because we start out with Server on -- wouldn't get set by command
+
             m_configViewModelS = new ConfigViewModelS();
             m_configViewModelS.Name = "ConfigViewModelS";
             m_configViewModelS.ViewTitle = "Source";
@@ -203,8 +226,7 @@ namespace MVVM.ViewModel
             m_optionsViewModel.Name = "OptionsViewModel";
             m_optionsViewModel.ViewTitle = "Options";
             m_optionsViewModel.ImageName = "Images/DMR_120.jpg";
-            m_optionsViewModel.lb = lb;
-            m_optionsViewModel.isServer = true;     // because we start out with Server on -- wouldn't get set by command
+            m_optionsViewModel.lb = lb;     
             m_optionsViewModel.isBrowser = isBrowser;
             m_optionsViewModel.ImportMailOptions = true;
             m_optionsViewModel.ImportTaskOptions = true;
@@ -221,13 +243,12 @@ namespace MVVM.ViewModel
             m_scheduleViewModel.ViewTitle = "Migrate";
             m_scheduleViewModel.ImageName = "Images/Penguins.jpg";
             m_scheduleViewModel.lb = lb;
-            m_scheduleViewModel.isServer = true;    // because we start out with Server on -- wouldn't get set by command
             m_scheduleViewModel.isBrowser = isBrowser;
             m_scheduleViewModel.COS = "default";
             m_scheduleViewModel.DefaultPWD = "";
             m_scheduleViewModel.ScheduleDate = DateTime.Now.ToShortDateString();
 
-            m_usersViewModel = new UsersViewModel(m_scheduleViewModel,"",""); // needs scheduleviewmodel so schedlist will be in sync
+            m_usersViewModel = new UsersViewModel("", "");
             m_usersViewModel.Name = "Users";
             m_usersViewModel.ViewTitle = "Users";
             m_usersViewModel.ImageName = "Images/UnknownPerson_dataNotFound.jpg";
@@ -243,15 +264,7 @@ namespace MVVM.ViewModel
             m_resultsViewModel.isBrowser = isBrowser;
             m_resultsViewModel.CurrentAccountSelection = -1;
 
-            m_scheduleViewModel.SetConfigUDestModel(m_configViewModelUDest);
-            m_scheduleViewModel.SetUserModel(m_usersViewModel);
-            m_scheduleViewModel.SetResultsModel(m_resultsViewModel);
-
-            m_configViewModelS.SetUsersViewModel(m_usersViewModel);
-            m_configViewModelS.SetScheduleViewModel(m_scheduleViewModel);
-            m_configViewModelSDest.SetUsersViewModel(m_usersViewModel);
-            m_configViewModelSDest.SetScheduleViewModel(m_scheduleViewModel);
-            m_optionsViewModel.SetScheduleModel(m_scheduleViewModel);
+            SetupViewModelPtrs();
 
             TheViews = new ObservableCollection<object>();
             TheViews.Add(this);

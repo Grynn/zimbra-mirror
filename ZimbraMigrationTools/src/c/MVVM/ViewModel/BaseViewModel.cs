@@ -11,6 +11,20 @@
 
     public class BaseViewModel : INotifyPropertyChanged
     {
+        public enum ViewType
+        {
+            INTRO,
+            SVRSRC,
+            USRSRC,
+            SVRDEST,
+            USRDEST,
+            OPTIONS,
+            USERS,
+            SCHED,
+            RESULTS,
+            MAX
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Config m_config = new Config("", "", "", "", "", "", "", "", "", "", "");
@@ -26,8 +40,11 @@
         public string ViewTitle { get; set; }
         public string ImageName { get; set; }
         public ListBox lb { get; set; }
-        public bool isServer { get; set; }
+        public static bool isServer { get; set; }
         public bool isBrowser { get; set; }
+
+        public static Object[] ViewModelPtrs = new Object[(int)ViewType.MAX];
+
         public void UpdateXmlElement(string XmlfileName, string XmlelementName)
         {
 
@@ -65,15 +82,7 @@
             child.ReplaceWith(newimport);
 
             xmlDoc.LoadXml(viewXmlElem.ToString());
-            xmlDoc.Save(XmlfileName);
-
-           
-
-
-
+            xmlDoc.Save(XmlfileName);       
         }
-
-    }
-
-    
+    } 
 }

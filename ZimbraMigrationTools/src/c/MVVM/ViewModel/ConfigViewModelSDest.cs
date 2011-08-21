@@ -14,9 +14,6 @@ namespace MVVM.ViewModel
 {
     public class ConfigViewModelSDest : BaseViewModel
     {
-        ScheduleViewModel scheduleViewModel;
-        UsersViewModel usersViewModel;
-
         public ConfigViewModelSDest()
         {
             this.GetConfigDestHelpCommand = new ActionCommand(this.GetConfigDestHelp, () => true);
@@ -24,26 +21,6 @@ namespace MVVM.ViewModel
             this.SaveCommand = new ActionCommand(this.Save, () => true);
             this.BackCommand = new ActionCommand(this.Back, () => true);
             this.NextCommand = new ActionCommand(this.Next, () => true);
-        }
-
-        public UsersViewModel GetUsersViewModel()
-        {
-            return usersViewModel;
-        }
-
-        public void SetUsersViewModel(UsersViewModel usersViewModel)
-        {
-            this.usersViewModel = usersViewModel;
-        }
-
-        public ScheduleViewModel GetScheduleViewModel()
-        {
-            return scheduleViewModel;
-        }
-
-        public void SetScheduleViewModel(ScheduleViewModel scheduleViewModel)
-        {
-            this.scheduleViewModel = scheduleViewModel;
         }
 
         public ICommand GetConfigDestHelpCommand
@@ -64,32 +41,40 @@ namespace MVVM.ViewModel
             private set;
         }
 
+        public void LoadConfig(Config config)
+        {
+            ZimbraServerHostName = config.zimbraServer.ZimbraHostname;
+            ZimbraPort = config.zimbraServer.Port;
+            ZimbraAdmin = config.zimbraServer.ZimbraAdminID;
+            ZimbraAdminPasswd = config.zimbraServer.ZimbraAdminPwd;
+            ZimbraSSL = config.zimbraServer.UseSSL;
+        }
+
         private void Load()
         {
             System.Xml.Serialization.XmlSerializer reader =
             new System.Xml.Serialization.XmlSerializer(typeof(Config));
-            if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
-            {
 
-                System.IO.StreamReader fileRead = new System.IO.StreamReader(
-                       @"C:\Temp\ZimbraAdminOverView.xml");
-                Config Z11 = new Config();
-                Z11 = (Config)reader.Deserialize(fileRead);
-                fileRead.Close();
-                ZimbraServerHostName = Z11.zimbraServer.ZimbraHostname;
-                ZimbraPort = Z11.zimbraServer.Port;
-                ZimbraAdmin = Z11.zimbraServer.ZimbraAdminID;
-                ZimbraAdminPasswd = Z11.zimbraServer.ZimbraAdminPwd;
-                ZimbraSSL = Z11.zimbraServer.UseSSL;
-            }
-            else
+            Microsoft.Win32.OpenFileDialog fDialog = new Microsoft.Win32.OpenFileDialog();
+            fDialog.Filter = "Config Files|*.xml";
+            fDialog.CheckFileExists = true;
+            fDialog.Multiselect = false;
+            if (fDialog.ShowDialog() == true)
             {
+                if (File.Exists(fDialog.FileName))
+                {
 
-                MessageBox.Show("There is no configuration stored.Please enter some configuration info", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-           
-            
-          }
+                    System.IO.StreamReader fileRead = new System.IO.StreamReader(fDialog.FileName);
+                    Config config = new Config();
+                    config = (Config)reader.Deserialize(fileRead);
+                    fileRead.Close();
+                    LoadConfig(config);
+                    ((ConfigViewModelS)ViewModelPtrs[(int)ViewType.SVRSRC]).LoadConfig(config);
+                    ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).LoadConfig(config);
+                    ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]).SetConfigFile(fDialog.FileName);
+                }
+            }                
+         }
 
         public ICommand SaveCommand
         {
@@ -97,24 +82,34 @@ namespace MVVM.ViewModel
             private set;
         }
 
+        public void SaveConfig(string XmlfileName)
+        {
+            UpdateXmlElement(XmlfileName, "zimbraServer");
+        }
+
         private void Save()
         {
-            if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
+            Microsoft.Win32.SaveFileDialog fDialog = new Microsoft.Win32.SaveFileDialog();
+            fDialog.Filter = "Config Files|*.xml";
+            if (fDialog.ShowDialog() == true)
             {
-                UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "zimbraServer");
-            }
+                if (File.Exists(fDialog.FileName))
+                {
+                    SaveConfig(fDialog.FileName);
+                    ((ConfigViewModelS)ViewModelPtrs[(int)ViewType.SVRSRC]).SaveConfig(fDialog.FileName);
+                    ((OptionsViewModel)ViewModelPtrs[(int)ViewType.OPTIONS]).SaveConfig(fDialog.FileName);
+                }
+                else
+                {
+                    System.Xml.Serialization.XmlSerializer writer =
+                    new System.Xml.Serialization.XmlSerializer(typeof(Config));
 
-            else
-            {
-                System.Xml.Serialization.XmlSerializer writer =
-                new System.Xml.Serialization.XmlSerializer(typeof(Config));
-
-                System.IO.StreamWriter file = new System.IO.StreamWriter(
-                    @"C:\Temp\ZimbraAdminOverView.xml");
-                writer.Serialize(file, m_config);
-                file.Close();
+                    System.IO.StreamWriter file = new System.IO.StreamWriter(fDialog.FileName);
+                    writer.Serialize(file, m_config);
+                    file.Close();
+                }
+                ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]).SetConfigFile(fDialog.FileName);
             }
-            MessageBox.Show("Configuration information saved", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
 
         public ICommand BackCommand
@@ -150,6 +145,8 @@ namespace MVVM.ViewModel
                 string authToken = ZimbraValues.GetZimbraValues().AuthToken;
                 if (authToken.Length > 0)
                 {
+                    UsersViewModel usersViewModel = ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
+                    ScheduleViewModel scheduleViewModel = ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
                     usersViewModel.DomainList.Clear();
                     scheduleViewModel.CosList.Clear();
                     zimbraAPI.GetAllDomains();

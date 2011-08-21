@@ -15,8 +15,6 @@ namespace MVVM.ViewModel
 {
     public class OptionsViewModel : BaseViewModel
     {
-        ScheduleViewModel scheduleViewModel;
-       // public Config m_config = new Config("", "", "", "", "", "", "", "", "", "", false);
         public OptionsViewModel()
         {
             this.GetOptionsHelpCommand = new ActionCommand(this.GetOptionsHelp, () => true);
@@ -27,11 +25,6 @@ namespace MVVM.ViewModel
             Migratedateflag = false;
             Maxattachflag = false;
             Skipfolderflag = false;
-        }
-
-        public void SetScheduleModel(ScheduleViewModel scheduleViewModel)
-        {
-            this.scheduleViewModel = scheduleViewModel;
         }
 
         public ICommand GetOptionsHelpCommand
@@ -64,89 +57,119 @@ namespace MVVM.ViewModel
             private set;
         }
 
+        public void LoadConfig(Config config)
+        {
+            ImportMailOptions = config.importOptions.Mail;
+            ImportCalendarOptions = config.importOptions.Calendar;
+            ImportContactOptions = config.importOptions.Contacts;
+            ImportDeletedItemOptions = config.importOptions.DeletedItems;
+            ImportJunkOptions = config.importOptions.Junk;
+            ImportTaskOptions = config.importOptions.Tasks;
+            ImportSentOptions = config.importOptions.Sent;
+            ImportRuleOptions = config.importOptions.Rules;
+
+            MigrateONRAfter = config.AdvancedImportOptions.MigrateONRAfter.ToLongDateString();
+            MaxAttachementSize = config.AdvancedImportOptions.MaxAttachementSize;
+
+            string returnval = "";
+
+            returnval = ConvertToCSV(config.AdvancedImportOptions.FoldersToSkip, ",");
+
+
+            //  placeholderstring = returnval;
+            FoldersToSkip = returnval;
+
+
+            if (MigrateONRAfter != null)
+                Migratedateflag = true;
+            else
+                Migratedateflag = false;
+
+            if ((MaxAttachementSize != "") && (MaxAttachementSize != null))
+                Maxattachflag = true;
+            else
+                Maxattachflag = false;
+
+            if ((placeholderstring != "") && (placeholderstring != null))
+                Skipfolderflag = true;
+            else
+                Skipfolderflag = false;
+        }
+
         private void Load()
         {
             System.Xml.Serialization.XmlSerializer reader =
-           new System.Xml.Serialization.XmlSerializer(typeof(Config));
-            if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
+            new System.Xml.Serialization.XmlSerializer(typeof(Config));
+
+            Microsoft.Win32.OpenFileDialog fDialog = new Microsoft.Win32.OpenFileDialog();
+            fDialog.Filter = "Config Files|*.xml";
+            fDialog.CheckFileExists = true;
+            fDialog.Multiselect = false;
+            if (fDialog.ShowDialog() == true)
             {
-                System.IO.StreamReader fileRead = new System.IO.StreamReader(
-                   @"C:\Temp\ZimbraAdminOverView.xml");
-                Config Z11 = new Config();
-                Z11 = (Config)reader.Deserialize(fileRead);
-                fileRead.Close();
-                ImportMailOptions = Z11.importOptions.Mail;
-                ImportCalendarOptions = Z11.importOptions.Calendar;
-                ImportContactOptions = Z11.importOptions.Contacts;
-                ImportDeletedItemOptions = Z11.importOptions.DeletedItems;
-                ImportJunkOptions = Z11.importOptions.Junk;
-                ImportTaskOptions = Z11.importOptions.Tasks;
-                ImportSentOptions = Z11.importOptions.Sent;
-                ImportRuleOptions = Z11.importOptions.Rules;
-
-                MigrateONRAfter = Z11.AdvancedImportOptions.MigrateONRAfter.ToLongDateString();
-                MaxAttachementSize = Z11.AdvancedImportOptions.MaxAttachementSize;
-
-                string returnval = "";
-                
-                returnval = ConvertToCSV(Z11.AdvancedImportOptions.FoldersToSkip, ",");
-
-                
-             //  placeholderstring = returnval;
-                FoldersToSkip = returnval;
-             
-
-               if (MigrateONRAfter != null) 
-                    Migratedateflag = true;
-               else
-                    Migratedateflag = false;
-
-                if((MaxAttachementSize != "")&&(MaxAttachementSize != null))
-                     Maxattachflag = true;
+                if (File.Exists(fDialog.FileName))
+                {
+                    System.IO.StreamReader fileRead = new System.IO.StreamReader(fDialog.FileName);
+                    Config config = new Config();
+                    config = (Config)reader.Deserialize(fileRead);
+                    fileRead.Close();
+                    LoadConfig(config);
+                    if (isServer)
+                    {
+                        ((ConfigViewModelS)ViewModelPtrs[(int)ViewType.SVRSRC]).LoadConfig(config);
+                        ((ConfigViewModelSDest)ViewModelPtrs[(int)ViewType.SVRDEST]).LoadConfig(config);
+                    }
+                    else
+                    {
+                        ((ConfigViewModelU)ViewModelPtrs[(int)ViewType.USRSRC]).LoadConfig(config);
+                        ((ConfigViewModelUDest)ViewModelPtrs[(int)ViewType.USRDEST]).LoadConfig(config);
+                    }
+                    ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]).SetConfigFile(fDialog.FileName);
+                }
                 else
-                    Maxattachflag = false;
-
-                if ((placeholderstring != "")&&(placeholderstring != null))
-                    Skipfolderflag = true;
-                else
-                    Skipfolderflag = false;
-
-
-                
-                //MessageBox.Show("Options information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                {
+                    MessageBox.Show("There is no options configuration stored.  Please enter some options info", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-            else
-            {
-                MessageBox.Show("There is no options configuration stored.Please enter some options info", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+        }
 
-
-
-           
-           // MessageBox.Show("Options information loaded", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        public void SaveConfig(string XmlfileName)
+        {
+            UpdateXmlElement(XmlfileName, "importOptions");
+            UpdateXmlElement(XmlfileName, "AdvancedImportOptions");
         }
 
         private void Save()
         {
-            if (File.Exists(@"C:\Temp\ZimbraAdminOverView.xml"))
+            Microsoft.Win32.SaveFileDialog fDialog = new Microsoft.Win32.SaveFileDialog();
+            fDialog.Filter = "Config Files|*.xml";
+            if (fDialog.ShowDialog() == true)
             {
-                UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "importOptions");
-                UpdateXmlElement(@"C:\Temp\ZimbraAdminOverView.xml", "AdvancedImportOptions");
+                if (File.Exists(fDialog.FileName))
+                {
+                    SaveConfig(fDialog.FileName);
+                    if (isServer)
+                    {
+                        ((ConfigViewModelS)ViewModelPtrs[(int)ViewType.SVRSRC]).SaveConfig(fDialog.FileName);
+                        ((ConfigViewModelSDest)ViewModelPtrs[(int)ViewType.SVRDEST]).SaveConfig(fDialog.FileName);
+                    }
+                    else
+                    {
+                        ((ConfigViewModelU)ViewModelPtrs[(int)ViewType.USRSRC]).SaveConfig(fDialog.FileName);
+                        ((ConfigViewModelUDest)ViewModelPtrs[(int)ViewType.USRDEST]).SaveConfig(fDialog.FileName);
+                    }
+                }
+                else
+                {
+                    System.Xml.Serialization.XmlSerializer writer =
+                    new System.Xml.Serialization.XmlSerializer(typeof(Config));
 
-            }
-            else
-            {
-                System.Xml.Serialization.XmlSerializer writer =
-                new System.Xml.Serialization.XmlSerializer(typeof(Config));
-
-                System.IO.StreamWriter file = new System.IO.StreamWriter(
-                    @"C:\Temp\ZimbraAdminOverView.xml");
-                writer.Serialize(file, m_config);
-                file.Close();
-            }
-
-           
-            MessageBox.Show("Options information saved", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    System.IO.StreamWriter file = new System.IO.StreamWriter(fDialog.FileName);
+                    writer.Serialize(file, m_config);
+                    file.Close();
+                }
+                ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]).SetConfigFile(fDialog.FileName);
+            }   
         }
 
         private void Back()
@@ -162,9 +185,11 @@ namespace MVVM.ViewModel
             }
             else
             {
-                ConfigViewModelUDest configViewModelU = scheduleViewModel.GetConfigUDestModel();
-                string name = scheduleViewModel.GetConfigUDestModel().ZimbraUser;
-                scheduleViewModel.GetUsersViewModel().UsersList.Add(new UsersViewModel(null, name, ""));
+                ConfigViewModelUDest configViewModelUDest = ((ConfigViewModelUDest)ViewModelPtrs[(int)ViewType.USRDEST]);
+                UsersViewModel usersViewModel = ((UsersViewModel)ViewModelPtrs[(int)ViewType.USERS]);
+                ScheduleViewModel scheduleViewModel = ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
+                string name = configViewModelUDest.ZimbraUser;
+                usersViewModel.UsersList.Add(new UsersViewModel(name, ""));
                 scheduleViewModel.Migrate();
             }
         }
