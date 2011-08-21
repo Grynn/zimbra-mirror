@@ -51,7 +51,7 @@ public class DbOfflineMigration {
             stmt.close();
             conn.commit();
 
-            int newDbVersion = Integer.parseInt(Versions.DB_VERSION);
+            int newDbVersion = Versions.DB_VERSION;
             System.out.println("oldDbVersion=" + oldDbVersion + " newDbVersion=" + newDbVersion);
 
             if (oldDbVersion != newDbVersion) {
