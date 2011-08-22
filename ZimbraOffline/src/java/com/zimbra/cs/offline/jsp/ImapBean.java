@@ -14,7 +14,7 @@
  */
 package com.zimbra.cs.offline.jsp;
 
-import com.zimbra.common.datasource.DataSourceType;
+import com.zimbra.soap.admin.type.DataSourceType;
 
 public class ImapBean extends XmailBean {
 

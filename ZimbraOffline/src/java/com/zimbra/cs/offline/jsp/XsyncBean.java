@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.zimbra.common.account.ProvisioningConstants;
-import com.zimbra.common.datasource.DataSourceType;
+import com.zimbra.soap.admin.type.DataSourceType;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.cs.account.DataSource;

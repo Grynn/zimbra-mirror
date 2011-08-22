@@ -29,7 +29,7 @@ import java.util.Map.Entry;
 import org.json.JSONException;
 
 import com.google.common.io.Closeables;
-import com.zimbra.common.datasource.DataSourceType;
+import com.zimbra.soap.admin.type.DataSourceType;
 import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;

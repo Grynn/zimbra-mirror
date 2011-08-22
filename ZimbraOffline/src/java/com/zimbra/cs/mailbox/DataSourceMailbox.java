@@ -35,7 +35,7 @@ import javax.mail.internet.MimeMultipart;
 import com.zimbra.common.account.Key;
 import com.zimbra.common.account.Key.DataSourceBy;
 import com.zimbra.common.account.Key.IdentityBy;
-import com.zimbra.common.datasource.DataSourceType;
+import com.zimbra.soap.admin.type.DataSourceType;
 import com.zimbra.common.mailbox.Color;
 import com.zimbra.common.mime.MimeConstants;
 import com.zimbra.common.mime.shim.JavaMailInternetAddress;
