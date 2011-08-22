@@ -359,8 +359,7 @@ function onAuth() {
                                                 <c:choose>
                                                     <c:when test="${not zdf:isValid(bean, 'oauthVerifier')}">
 		                                                <div id="message" class="ZError">
-                                                            <fmt:message key='PlsVerifyYahooOauth'/><br/>
-		                                                    <fmt:message key='PlsCorrectInput'/>
+                                                            <fmt:message key='PlsVerifyYahooOauth'/>
 		                                                </div>
                                                     </c:when>
                                                     <c:otherwise>
@@ -764,7 +763,7 @@ function onAuth() {
                                                     <input type="hidden" name="ycontactTokenSaved" value="${bean.ycontactTokenSaved}">
                                                     <div id="oauthDiv">
                                                         <label class="ZFieldLabel" for="contactSyncEnabled"><fmt:message key="YContactURL" />:</label>
-                                                        <a href="<c:out value="${bean.oauthURL}" escapeXml="true" />" target="_blank">Click To Verify</a>
+                                                        <a href="<c:out value="${bean.oauthURL}" escapeXml="true" />" target="_blank"><fmt:message key="YContactClickToVerify" /></a>
                                                         <br>
                                                         <label class="${zdf:isValid(bean, 'oauthVerifier') ? 'ZFieldLabel' : 'ZFieldError'}" for="contactSyncEnabled"><fmt:message key="YContactVerify" />:</label>
                                                         <input class="ZField" type="text" size="6" id="oauthVerifier" name="oauthVerifier" value="${bean.oauthVerifier}" />

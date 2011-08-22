@@ -20,11 +20,11 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.YContactSync;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.ab.LocalData;
 import com.zimbra.cs.offline.util.yc.YContactException;
-import com.zimbra.cs.offline.util.yc.oauth.OAuthException;
 import com.zimbra.cs.offline.util.yc.oauth.OAuthManager;
 
 
@@ -47,6 +47,7 @@ public class YContactImport implements DataSource.DataImport {
         if (!fullSync && !new LocalData(ds).hasLocalChanges()) {
             return;
         }
+
         try {
             OfflineLog.yab.info("Start importing Yahoo contacts for account '%s'", ds.getName());
             if (!OAuthManager.hasOAuthToken(ds.getAccountId())) {
@@ -63,11 +64,7 @@ public class YContactImport implements DataSource.DataImport {
             session.sync();
         } catch (Exception e) {
             OfflineLog.yab.error("Failed to import Yahoo contacts for account '%s'", ds.getName(), e);
-            if (e instanceof OAuthException) {
-                throw new YContactException("Failed to import yahoo contacts, please edit account setup and verify access.", 
-                        e.getMessage(), false, e, null);
-            }
-            throw new YContactException("Failed to import yahoo contacts.", e.getMessage(), false, e, null);
+            throw OfflineServiceException.YCONTACT_NEED_VERIFY();
         }
         OfflineLog.yab.info("Finished importing Yahoo contacts for account '%s'", ds.getName());
     }
