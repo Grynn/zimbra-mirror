@@ -1,7 +1,6 @@
 package  com.zimbra.qa.selenium.projects.ajax.ui.addressbook;
 
-import java.awt.Robot;
-import java.awt.event.InputEvent;
+
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,7 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 
-import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.FormContactNew.Locators;
+
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAdvancedSearch;
@@ -430,25 +429,6 @@ public class PageAddressbook extends AbsTab {
 	}
 
 	
-	public AbsPage zKeyboardKeyEvent(int keyEvent) throws HarnessException {
-		logger.info(myPageName() + " zKeyboardKeyEvent("+ keyEvent +")");
-
-		tracer.trace("Click the shortcut "+ keyEvent );
-		
-		// Default behavior variables
-		AbsPage page = null;	// If set, this page will be returned
-
-		// Click it
-		this.zKeyboard.zTypeKeyEvent(keyEvent);		
-		zWaitForBusyOverlay();
-	
-		
-		if ( page != null ) {
-			page.zWaitForActive();
-		}
-		return (page);
-	}
-
 	public AbsPage zKeyboardShortcut(Shortcut shortcut) throws HarnessException {
 		logger.info(myPageName() + " zKeyboardShortcut("+ shortcut.getKeys() +")");
 
@@ -606,22 +586,14 @@ public class PageAddressbook extends AbsTab {
 			//central coordinate "x,y" 
 			String center= sGetElementWidth(pulldownLocator)/2 + "," + sGetElementHeight(pulldownLocator)/2;
 			if ( this.zIsBrowserMatch(BrowserMasks.BrowserMaskIE)){
+			 				 
 				// TODO check if the following code make the test case CreateContactGroup.GroupOfNewEmail() pass in wdc			
-				   try {
-					   Robot robot=new Robot();					   
-					   String itemId="zov__main_Contacts" ;
-				       robot.mouseMove(sGetElementPositionLeft(pulldownLocator) + sGetElementWidth(pulldownLocator)/2,							            
-							           sGetElementPositionTop("id=zb__App__Contacts") + sGetElementHeight("id=zb__App__Contacts") +							           
-							           sGetElementPositionTop("id=" + itemId)  + 
-							           //sGetElementPositionTop(pulldownLocator) + 
-							           sGetElementHeight(pulldownLocator)							                  
-							           );
-				       robot.mousePress(InputEvent.BUTTON1_MASK);
-                       robot.mouseRelease(InputEvent.BUTTON1_MASK);
-				   }
-				   catch (Exception e) {logger.info(e.getMessage());}		
-				 //the following code failed in wdc, but pass in my machine :
-				 //sClickAt(pulldownLocator,center);
+			    sGetEval("var evObj = document.createEventObject();" 
+						+ "var x = selenium.browserbot.findElementOrNull('" + pulldownLocator + "');"
+						+ "x.focus();x.blur();x.fireEvent('onclick');");
+
+				//the following code failed in wdc, but pass in my machine :
+				//sClickAt(pulldownLocator,center);
 			}
 			else {
 			    //others
@@ -864,26 +836,6 @@ public class PageAddressbook extends AbsTab {
 				}
 				
 				
-				//For Safari 
-				// as an alternative for sMouseOver(locator) 
-			    if (zIsBrowserMatch(BrowserMasks.BrowserMaskSafari)) {
-					zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-					zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-					zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-					zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-					
-					ArrayList<String> selectedContactArrayList=getSelectedContactLocator();			
-			        String contactType = getContactType(selectedContactArrayList.get(0));
-				
-			        //check if it is a contact 
-	                if (  contactType.equals(ContactItem.IMAGE_CLASS) ) {
-	    				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-	    				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
-	    				
-				    }
-					
-					zKeyboard.zTypeKeyEvent(KeyEvent.VK_RIGHT);
-			    }		
 			    
 			}
 			else if (option == Button.B_CONTACTGROUP) {
@@ -918,12 +870,33 @@ public class PageAddressbook extends AbsTab {
 				throw new HarnessException("Tried clicking on "+ cmi.text +" but it was disabled ");
 			}
 
-		    
+			//For Safari 
+			// as an alternative for sMouseOver(locator) 
+		    if (zIsBrowserMatch(BrowserMasks.BrowserMaskSafari)) {
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				
+				ArrayList<String> selectedContactArrayList=getSelectedContactLocator();			
+		        String contactType = getContactType(selectedContactArrayList.get(0));
 			
-			// Mouse over the option
-			sFocus(locator);
-			sMouseOver(locator);
-	        zWaitForBusyOverlay();
+		        //check if it is a contact 
+                if (  contactType.equals(ContactItem.IMAGE_CLASS) ) {
+    				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+    				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+    				
+			    }
+				
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_RIGHT);
+		    }		
+		    else {    			
+			 // Mouse over the option
+			 sFocus(locator);
+			 sMouseOver(locator);
+		    }
+			 
+		    zWaitForBusyOverlay();
 	
 			if (option == Button.B_SEARCH) {
 				
@@ -979,12 +952,9 @@ public class PageAddressbook extends AbsTab {
     		for (int i=0; i<numItems -2; i++) {
     			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);									
     		}
-    		if (subOption == Button.O_TAG_NEWTAG) {
-    			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);												
-    		}
-			
-			else if (subOption == Button.O_TAG_REMOVETAG) {
-    			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);									
+    			
+    		zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);												
+    		if (subOption == Button.O_TAG_REMOVETAG) {
     			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);									
 			}
     		zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);											
