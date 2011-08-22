@@ -86,7 +86,8 @@ public class TagSync {
     static int TAG_ID_OFFSET = 64, MAX_TAG_COUNT = 63;
 
     static boolean validateId(int tagId) {
-        return tagId >= TAG_ID_OFFSET && tagId < TAG_ID_OFFSET + MAX_TAG_COUNT;
+        return true; //TODO: cleanup 7.x backward compat. preemptive validation doesn't work in reverse; 7.x will always create tag IDs that are valid in 8.0
+//        return tagId >= TAG_ID_OFFSET && tagId < TAG_ID_OFFSET + MAX_TAG_COUNT;
     }
 
     /**
