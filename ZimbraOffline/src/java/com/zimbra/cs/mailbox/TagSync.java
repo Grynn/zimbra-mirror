@@ -55,9 +55,6 @@ public class TagSync {
         try {
             if (!mbox.getRemoteServerVersion().isAtLeast8xx()) {
                 enableTagDataSource(mbox);
-                localIdFromRemote = new LruMap<Integer, Integer>(64);
-                remoteIdFromLocal = new LruMap<Integer, Integer>(64);
-                localIdsByName    = new LruMap<String, Integer>(64);
             }
         } catch (ServiceException e) {
             OfflineLog.offline.error("Unable to intialize tag datasource due to exception.",e);
@@ -65,23 +62,25 @@ public class TagSync {
     }
 
     private void enableTagDataSource(ZcsMailbox mbox) throws ServiceException {
+        localIdFromRemote = new LruMap<Integer, Integer>(64);
+        remoteIdFromLocal = new LruMap<Integer, Integer>(64);
+        localIdsByName    = new LruMap<String, Integer>(64);
         mappingRequired = true;
-        tagDs = getTagDataSource(mbox.getOfflineAccount());
+        initTagDataSource(mbox.getOfflineAccount());
     }
 
-    private DataSource getTagDataSource(OfflineAccount account) throws ServiceException {
+    private void initTagDataSource(OfflineAccount account) throws ServiceException {
         OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
-        DataSource ds = account.getDataSourceByName(dsName);
-        if (ds == null) {
+        tagDs = account.getDataSourceByName(dsName);
+        if (tagDs == null) {
             OfflineLog.offline.debug("initializing tag datasource");
-            ds = prov.createDataSource(account, DataSourceType.tagmap, dsName, new HashMap<String, Object>());
+            tagDs = prov.createDataSource(account, DataSourceType.tagmap, dsName, new HashMap<String, Object>());
             //initially any previously existing local tags also have same ID as remote.
             List<Tag> tags = mbox.getTagList(null);
             for (Tag tag : tags) {
                 mapTag(tag.getId(), tag.getId());
             }
         }
-        return ds;
     }
 
     static int TAG_ID_OFFSET = 64, MAX_TAG_COUNT = 63;
@@ -147,7 +146,7 @@ public class TagSync {
      * @throws ServiceException
      */
     public int localTagId(int id) throws ServiceException {
-        if (!mappingRequired) {
+        if (!isMappingRequired(id)) {
             return id;
         }
         try {
