@@ -1,0 +1,10 @@
+<zimletConfig name="com_zimbra_example_encrypt" version="0.1">
+
+  <global>
+    <!-- Add header name is "X-Encrypt" and its value is "YES"-->
+    <property name="X-Encrypt">YES</property>
+
+    <!--  You can add multiple custom headers as well. Simple load & set them in the Zimlet -->
+     <!-- <property name="CustomHeader2">Value2</property>  -->
+  </global>
+</zimletConfig>

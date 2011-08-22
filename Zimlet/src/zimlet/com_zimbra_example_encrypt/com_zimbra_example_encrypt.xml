@@ -1,0 +1,4 @@
+<zimlet name="com_zimbra_example_encrypt" version="0.1" label="${msg.label}" description="${msg.description}" view="main compose-window">
+  <include>exampleencrypt.js</include>
+  <handlerObject>ZmExampleEncryptZimlet</handlerObject>
+</zimlet>
