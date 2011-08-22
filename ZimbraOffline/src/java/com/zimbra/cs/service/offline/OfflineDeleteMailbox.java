@@ -25,12 +25,10 @@ import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
-import com.zimbra.cs.account.Provisioning;
 import com.zimbra.common.account.Key.AccountBy;
 import com.zimbra.cs.account.accesscontrol.Rights.Admin;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
-import com.zimbra.cs.im.IMPersona;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
 import com.zimbra.cs.offline.OfflineSyncManager;
@@ -68,7 +66,6 @@ public class OfflineDeleteMailbox extends DeleteMailbox {
         }
 
         if (account != null) {
-            IMPersona.deleteIMPersona(account.getName());
             
             if (prov.isZcsAccount(account)) {
                 prov.setAccountAttribute(account, OfflineConstants.A_offlineGalAccountSyncToken, ""); // to trigger full gal sync
