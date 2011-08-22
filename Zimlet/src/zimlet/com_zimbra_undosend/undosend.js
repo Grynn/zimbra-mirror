@@ -115,6 +115,12 @@ function(controller) {
 	this._viewIdAndParamsMap[viewId] = {tab:tab, title:title, undoLinkId:undoLinkId, timerSpanId:timerSpanId, sendNowId:sendNowId};
 	this._viewIdAndStatusesMap[viewId] = {undoLinkClicked:false, sendNowLinkClicked:false,  currentCounter:this._totalWaitTimeInSeconds};
 
+	//clear auto-save timer to ensure there are no left-over drafts
+	if(controller._autoSaveTimer) {
+		clearInterval(controller._autoSaveTimer);
+		controller._autoSaveTimer = null;
+	}
+
 	if(!appCtxt.isChildWindow) {
 		this.appViewMgr.popView(true, viewId);
 		controller.inactive = false; //IMPORTANT! make sure to set this so this view isnt reused
