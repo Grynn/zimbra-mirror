@@ -20,5 +20,9 @@ public:
         m_srcFile = strFile;
     }
 
+    HRESULT ErrCode() { return m_errcode; }
+    std::wstring Description() { return m_strdescription; }
+    int SrcLine() { return m_srcLine; }
+    std::string SrcFile() { return m_srcFile; }
     virtual ~GenericException() {}
 };

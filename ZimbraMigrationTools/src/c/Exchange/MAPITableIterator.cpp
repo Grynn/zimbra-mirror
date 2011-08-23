@@ -6,7 +6,7 @@
 // MAPITableIterator
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 MAPITableIterator::MAPITableIterator(): m_pTable(NULL), m_pParentFolder(NULL), m_pRows(NULL),
-    m_currRow(0), m_batchSize(50), m_rowsVisited(0), m_totalRows(0)
+    m_currRow(0), m_batchSize(5000), m_rowsVisited(0), m_totalRows(0)
 {}
 
 MAPITableIterator::~MAPITableIterator() {
@@ -36,30 +36,35 @@ void MAPITableIterator::Initialize(LPMAPITABLE pTable, LPMAPIFOLDER pFolder,
     m_pTable = pTable;
 
     hr = m_pTable->SetColumns(GetProps(), 0);
-    if (FAILED(hr))
+    if (FAILED(hr)) {
         throw GenericException(hr, L"MAPITableIterator::Initialize():SetColumns Failed.",
             __LINE__,
             __FILE__);
+    }
     // to remove
     FILETIME tmpTime = { 0, 0 };
-    if (FAILED(hr = m_pTable->Restrict(GetRestriction(ulItemTypeMask, tmpTime), 0)))
+    if (FAILED(hr = m_pTable->Restrict(GetRestriction(ulItemTypeMask, tmpTime), 0))) {
         throw GenericException(hr, L"MAPITableIterator::Initialize():Restrict Failed.",
             __LINE__,
             __FILE__);
+    }
     if (GetSortOrder() != NULL) {
-        if (FAILED(hr = m_pTable->SortTable(GetSortOrder(), 0)))
+        if (FAILED(hr = m_pTable->SortTable(GetSortOrder(), 0))) {
             throw GenericException(hr, L"MAPITableIterator::Initialize():SortTable Failed.",
                 __LINE__,
                 __FILE__);
+        }
     }
-    if (FAILED(hr = m_pTable->GetRowCount(0, &m_totalRows)))
+    if (FAILED(hr = m_pTable->GetRowCount(0, &m_totalRows))) {
         throw GenericException(hr, L"MAPITableIterator::Initialize():GetRowCount Failed.",
             __LINE__,
             __FILE__);
-    if (FAILED(hr = m_pTable->QueryRows(m_batchSize, 0, &m_pRows)))
+    }
+    if (FAILED(hr = m_pTable->QueryRows(m_batchSize, 0, &m_pRows))) {
         throw GenericException(hr, L"MAPITableIterator::Initialize():QueryRows Failed.",
             __LINE__,
             __FILE__);
+    }
 }
 
 SRow *MAPITableIterator::GetNext() {
@@ -85,10 +90,11 @@ SRow *MAPITableIterator::GetNext() {
                 m_rowsVisited += m_batchSize - m_pRows->cRows;
             }
         }
-        if (FAILED(hr))
+        if (FAILED(hr)) {
             throw GenericException(hr, L"MAPITableIterator::GetNext():QueryRows Failed.",
                 __LINE__,
                 __FILE__);
+        }
         m_currRow = 0;
     }
     if (!m_pRows->cRows)

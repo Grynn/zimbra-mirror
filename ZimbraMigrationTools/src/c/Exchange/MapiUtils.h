@@ -50,6 +50,44 @@ inline void SafeDelete(LPSTR &pStr) {
     }
 }
 
+inline LPTSTR LongToHexString(LONG l) {
+    LPTSTR pRetVal = new TCHAR[34];
+
+    *pRetVal = _T('x');
+    _ltot(l, pRetVal + 1, 16);
+    return pRetVal;
+}
+
+inline LPTSTR Int32ToString(int i) {
+    LPTSTR pRetVal = new TCHAR[34];
+
+    _itot(i, pRetVal, 10);
+    return pRetVal;
+}
+
+#define UNICODE_EXCEPTION_STRING L"ErrCode:%s Description:%s SrcFile:%s SrcLine:%s"
+inline LPTSTR FromatExceptionInfo(HRESULT errCode, LPWSTR errDescription, LPSTR srcFile,
+    int srcLine) {
+    LPWSTR lpBuffer = NULL;
+    LPWSTR lpstrSrcFile = NULL;
+
+    LPWSTR lpstrErrCode = LongToHexString(errCode);
+    LPWSTR lpstrSrecline = Int32ToString(srcLine);
+
+    AtoW(srcFile, lpstrSrcFile);
+
+    long totalLen = wcslen(lpstrErrCode) + wcslen(errDescription) + wcslen(lpstrSrcFile) +
+        wcslen(lpstrSrecline) + (sizeof (WCHAR) * 2);
+    lpBuffer = new TCHAR[totalLen * sizeof (WCHAR)];
+    wsprintf(lpBuffer, UNICODE_EXCEPTION_STRING, lpstrErrCode, errDescription, lpstrSrcFile,
+        lpstrSrecline);
+
+    delete[] lpstrErrCode;
+    delete[] lpstrSrecline;
+    delete[] lpstrSrcFile;
+    return lpBuffer;
+}
+
 class MapiUtilsException: public GenericException {
 public:
     MapiUtilsException(HRESULT hrErrCode, LPCWSTR lpszDescription): GenericException(hrErrCode,
@@ -65,7 +103,8 @@ namespace Util {
 HRESULT HrMAPIFindDefaultMsgStore(LPMAPISESSION lplhSession, SBinary &bin);
 HRESULT MailboxLogon(LPMAPISESSION pSession, LPMDB pMdb, LPWSTR pStoreDn, LPWSTR pMailboxDn,
     LPMDB *ppMdb);
-HRESULT GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR lpszUser, wstring &wstruserdn,wstring &wstrlegacyname);
+HRESULT GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR lpszUser, wstring &wstruserdn,
+    wstring &wstrlegacyname);
 HRESULT GetUserDnAndServerDnFromProfile(LPMAPISESSION pSession, LPSTR &pExchangeServerDn,
     LPSTR &pExchangeUserDn);
 HRESULT HrMAPIFindIPMSubtree(LPMDB lpMdb, SBinary &bin);

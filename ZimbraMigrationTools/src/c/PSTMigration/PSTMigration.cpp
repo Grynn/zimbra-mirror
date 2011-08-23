@@ -185,9 +185,11 @@ void ExchangeMigrationSetupTest()
 	*/
 	//If Profile exists, rest are Optional else rest 3 params must be there!!!
 	//ExchangeOps::Init("Profile", ExchangeIP[optional], AdminName[Optional], AdminPwd[Optional]);
-	ExchangeOps::GlobalInit(L"Outlook");//L"10.117.82.161",L"Administrator",L"z1mbr4Migration");
-	ExchangeOps::GlobalUninit();
+	LPCWSTR lpwstrStatus=ExchangeOps::GlobalInit(L"10.117.82.161",L"Administrator",L"z1mbr4Migration");
+	delete[]lpwstrStatus; 
 
+	lpwstrStatus=ExchangeOps::GlobalUninit();
+	delete[]lpwstrStatus;	
 }
 
 void MAPIAccessAPITest()

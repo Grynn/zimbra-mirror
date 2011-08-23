@@ -14,8 +14,10 @@ class ExchangeAdmin {
 private:
     LPPROFADMIN m_pProfAdmin;
     wstring m_strServer;
+
 private:
     HRESULT Init();
+
 public:
     ExchangeAdmin(wstring strExchangeServer);
     ~ExchangeAdmin();
@@ -30,34 +32,35 @@ public:
     LPCWSTR lpwstrLogonUsrPwd);
 };
 
-class ExchangeMigrationSetup
-{
+class ExchangeMigrationSetup {
 private:
-	ExchangeAdmin *m_exchAdmin;
-	wstring m_strServer;
-	wstring m_ExchangeAdminName;
-	wstring m_ExchangeAdminPwd;
+    ExchangeAdmin *m_exchAdmin;
+    wstring m_strServer;
+    wstring m_ExchangeAdminName;
+    wstring m_ExchangeAdminPwd;
+
 public:
-	ExchangeMigrationSetup(LPCWSTR strExhangeHost,
-		LPCWSTR ExchangeAdminName, LPCWSTR ExchangeAdminPwd);
-	~ExchangeMigrationSetup();
-	HRESULT Setup();
-	HRESULT Clean();
-	HRESULT GetAllProfiles(vector<string> &vProfileList);
+    ExchangeMigrationSetup(LPCWSTR strExhangeHost, LPCWSTR ExchangeAdminName,
+    LPCWSTR ExchangeAdminPwd);
+    ~ExchangeMigrationSetup();
+    HRESULT Setup();
+    HRESULT Clean();
+    HRESULT GetAllProfiles(vector<string> &vProfileList);
 };
 
 class ExchangeOps {
 private:
-	static ExchangeMigrationSetup *m_exchmigsetup;
-	static bool Initialized;
+    static ExchangeMigrationSetup *m_exchmigsetup;
+    static bool Initialized;
+
 public:
-	static HRESULT GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername=NULL,
-								LPCWSTR	lpAdminPassword=NULL);
-	static HRESULT GlobalUninit();
+    static LPCWSTR GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername = NULL,
+    LPCWSTR lpAdminPassword = NULL);
+    static LPCWSTR GlobalUninit();
 };
 
 const LPCWSTR DEFAULT_ADMIN_PROFILE_NAME = L"zm_prof";
 const LPCWSTR DEFAULT_ADMIN_MAILBOX_NAME = L"zm_mbox";
-const LPCWSTR DEFAULT_ADMIN_PASSWORD	 = L"z1mbr4Migration";
+const LPCWSTR DEFAULT_ADMIN_PASSWORD = L"z1mbr4Migration";
 }
 }

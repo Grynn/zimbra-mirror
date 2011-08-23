@@ -37,7 +37,9 @@ ExchangeAdmin::~ExchangeAdmin() {
 
 HRESULT ExchangeAdmin::Init() {
     HRESULT hr = S_OK;
-	Zimbra::Mapi::Memory::SetMemAllocRoutines( NULL, MAPIAllocateBuffer, MAPIAllocateMore, MAPIFreeBuffer );
+
+    Zimbra::Mapi::Memory::SetMemAllocRoutines(NULL, MAPIAllocateBuffer, MAPIAllocateMore,
+        MAPIFreeBuffer);
     if (FAILED(hr = MAPIInitialize(NULL)))
         throw ExchangeAdminException(
             hr, L"Init(): MAPIInitialize Failed.", __LINE__, __FILE__);
@@ -51,10 +53,11 @@ HRESULT ExchangeAdmin::Init() {
 HRESULT ExchangeAdmin::CreateProfile(wstring strProfileName, wstring strMailboxName,
     wstring strPassword) {
     HRESULT hr = S_OK;
-	Zimbra::Util::ScopedBuffer<char> strServer;
-	Zimbra::Util::ScopedBuffer<char> strMBName;
-	Zimbra::Util::ScopedBuffer<char> strProfName;
-	Zimbra::Util::ScopedBuffer<char> strProfPwd;
+
+    Zimbra::Util::ScopedBuffer<char> strServer;
+    Zimbra::Util::ScopedBuffer<char> strMBName;
+    Zimbra::Util::ScopedBuffer<char> strProfName;
+    Zimbra::Util::ScopedBuffer<char> strProfPwd;
     Zimbra::Util::ScopedInterface<IMsgServiceAdmin> pSvcAdmin;
     Zimbra::Util::ScopedInterface<IMAPITable> pMsgSvcTable;
     Zimbra::Util::ScopedRowSet pSvcRows;
@@ -63,15 +66,17 @@ HRESULT ExchangeAdmin::CreateProfile(wstring strProfileName, wstring strMailboxN
     SRestriction sres;
     WCHAR errDescrption[256] = {};
 
+    hr = MAPIInitialize(NULL);
+
     // Columns to get from HrQueryAllRows.
     enum { iSvcName, iSvcUID, cptaSvc };
     SizedSPropTagArray(cptaSvc, sptCols) = { cptaSvc, PR_SERVICE_NAME, PR_SERVICE_UID };
-	WtoA((LPWSTR)strProfileName.c_str(),strProfName.getref());
-	WtoA((LPWSTR)strPassword.c_str(),strProfPwd.getref());
+    WtoA((LPWSTR)strProfileName.c_str(), strProfName.getref());
+    WtoA((LPWSTR)strPassword.c_str(), strProfPwd.getref());
     // create new profile
     if (FAILED(hr =
-		m_pProfAdmin->CreateProfile((LPTSTR)strProfName.get(),
-		(LPTSTR)strProfPwd.get(),
+                m_pProfAdmin->CreateProfile((LPTSTR)strProfName.get(),
+                    (LPTSTR)strProfPwd.get(),
                     NULL,
                     0))) {
         throw ExchangeAdminException(
@@ -115,39 +120,37 @@ HRESULT ExchangeAdmin::CreateProfile(wstring strProfileName, wstring strMailboxN
     if (pSvcRows->cRows > 0) {
         // First, the exchange server name.
         ZeroMemory(&rgval[0], sizeof (SPropValue));
-        rgval[0].ulPropTag = PR_PROFILE_UNRESOLVED_SERVER;		
-		WtoA((LPWSTR)m_strServer.c_str(),strServer.getref());
-		rgval[0].Value.lpszA = (LPSTR)strServer.get();
-		
+        rgval[0].ulPropTag = PR_PROFILE_UNRESOLVED_SERVER;
+        WtoA((LPWSTR)m_strServer.c_str(), strServer.getref());
+        rgval[0].Value.lpszA = (LPSTR)strServer.get();
+
         // Next, the user's AD name.
         ZeroMemory(&rgval[1], sizeof (SPropValue));
-        rgval[1].ulPropTag = PR_PROFILE_UNRESOLVED_NAME;		
-		WtoA((LPWSTR)strMailboxName.c_str(),strMBName.getref());		
-		rgval[1].Value.lpszA = (LPSTR)strMBName.get();
-		
-        // Configure the message service by using the previous properties.
-		int trails = 5;
-		int itrTrials=0;
-		hr=0x81002746;
-		while((hr==0x81002746)&&(itrTrials<trails))
-		{
-			hr = pSvcAdmin->ConfigureMsgService((LPMAPIUID)pSvcRows->aRow->lpProps[iSvcUID].
-                            Value.bin.lpb, NULL, 0, 2, rgval);
-			if(hr==0x81002746)
-				Sleep(5000);
-			itrTrials++;
-		}
-        if (FAILED(hr))/* =
-                    pSvcAdmin->ConfigureMsgService((LPMAPIUID)pSvcRows->aRow->lpProps[iSvcUID].
-                            Value.bin.lpb,NULL, 0, 2, rgval)))*/ {
-			wcscpy(errDescrption, L"CreateProfile(): ConfigureMsgService Failed.");
-            goto CRT_PROFILE_EXIT;
-			
-        }
+        rgval[1].ulPropTag = PR_PROFILE_UNRESOLVED_NAME;
+        WtoA((LPWSTR)strMailboxName.c_str(), strMBName.getref());
+        rgval[1].Value.lpszA = (LPSTR)strMBName.get();
 
+        // Configure the message service by using the previous properties.
+        int trails = 10;
+        int itrTrials = 0;
+        hr = 0x81002746;                // WSAECONNRESET
+        while ((hr == 0x81002746) && (itrTrials < trails)) {
+            hr = pSvcAdmin->ConfigureMsgService((LPMAPIUID)pSvcRows->aRow->lpProps[iSvcUID].
+                        Value.bin.lpb, NULL, 0, 2, rgval);
+            if (hr == 0x81002746)
+                Sleep(5000);
+            itrTrials++;
+        }
+        if (FAILED(hr)) {
+            /* =
+             * pSvcAdmin->ConfigureMsgService((LPMAPIUID)pSvcRows->aRow->lpProps[iSvcUID].
+             *   Value.bin.lpb,NULL, 0, 2, rgval)))*/
+            wcscpy(errDescrption, L"CreateProfile(): ConfigureMsgService Failed.");
+            goto CRT_PROFILE_EXIT;
+        }
     }
 CRT_PROFILE_EXIT:
-	if (hr != S_OK) {
+    if (hr != S_OK) {
         DeleteProfile(strProfileName);
         throw ExchangeAdminException(hr, errDescrption, __LINE__,
             __FILE__);
@@ -158,11 +161,11 @@ CRT_PROFILE_EXIT:
 HRESULT ExchangeAdmin::DeleteProfile(wstring strProfile) {
     HRESULT hr = S_OK;
 
-	Zimbra::Util::ScopedBuffer<char> strProfName;
-	WtoA((LPWSTR)strProfile.c_str(),strProfName.getref());
+    Zimbra::Util::ScopedBuffer<char> strProfName;
+    WtoA((LPWSTR)strProfile.c_str(), strProfName.getref());
     // delete profile
     if (FAILED(hr =
-		m_pProfAdmin->DeleteProfile((LPTSTR)strProfName.get(),
+                m_pProfAdmin->DeleteProfile((LPTSTR)strProfName.get(),
                     0)))
         throw ExchangeAdminException(
             hr, L"DeleteProfile(): DeleteProfile Failed.", __LINE__, __FILE__);
@@ -257,8 +260,10 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
     // Get Logon user DN
     wstring LogonUserDN;
     wstring legacyName;
-    Zimbra::MAPI::Util::GetUserDNAndLegacyName(m_strServer.c_str(), lpwstrlogonuser, LogonUserDN,legacyName);
-    
+
+    Zimbra::MAPI::Util::GetUserDNAndLegacyName(
+        m_strServer.c_str(), lpwstrlogonuser, LogonUserDN, legacyName);
+
     Zimbra::Util::ScopedInterface<IDirectoryObject> pLogonContainer;
     wstring strContainer = L"LDAP://";
     strContainer += LogonUserDN.c_str();
@@ -270,7 +275,7 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
     if (FAILED(hr)) {
         if (hr == 0x8007052e) {         // credentials are not valid
             hr = ADsOpenObject(
-                    (LPTSTR)strContainer.c_str(), lpwstrlogonuser,lpwstrLogonUsrPwd,
+                    (LPTSTR)strContainer.c_str(), lpwstrlogonuser, lpwstrLogonUsrPwd,
                     ADS_SECURE_AUTHENTICATION,
                     IID_IDirectoryObject, (void **)&pLogonContainer);
             if (FAILED(hr))
@@ -511,10 +516,12 @@ HRESULT ExchangeAdmin::DeleteExchangeMailBox(LPCWSTR lpwstrMailBox, LPCWSTR lpws
     HRESULT hr;
     wstring UserDN;
     wstring LegacyName;
-	Zimbra::Util::ScopedInterface<IDirectoryObject> pDirContainer;
 
-    Zimbra::MAPI::Util::GetUserDNAndLegacyName(m_strServer.c_str(), lpwstrlogonuser, UserDN, LegacyName);
-    
+    Zimbra::Util::ScopedInterface<IDirectoryObject> pDirContainer;
+
+    Zimbra::MAPI::Util::GetUserDNAndLegacyName(
+        m_strServer.c_str(), lpwstrlogonuser, UserDN, LegacyName);
+
     wstring twtsrlogonuserDN = UserDN;
     size_t nPos = twtsrlogonuserDN.find(_T("DC="), 0);
     wstring wstrServerDN = twtsrlogonuserDN.substr(nPos);
@@ -536,69 +543,61 @@ HRESULT ExchangeAdmin::DeleteExchangeMailBox(LPCWSTR lpwstrMailBox, LPCWSTR lpws
 // ExchangeMigrationSetup
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ExchangeMigrationSetup::ExchangeMigrationSetup(LPCWSTR strExhangeHost,
-	LPCWSTR ExchangeAdminName, LPCWSTR ExchangeAdminPwd)
-{
-	m_strServer = strExhangeHost;
-	m_ExchangeAdminName = ExchangeAdminName;
-	m_ExchangeAdminPwd = ExchangeAdminPwd;
-	m_exchAdmin = new ExchangeAdmin(m_strServer);
-}
-ExchangeMigrationSetup::~ExchangeMigrationSetup()
-{
-	delete m_exchAdmin;
-}
-	
-HRESULT ExchangeMigrationSetup::Setup()
-{
-	Clean();
-
-	try	{
-		m_exchAdmin->CreateExchangeMailBox(DEFAULT_ADMIN_MAILBOX_NAME,
-			DEFAULT_ADMIN_PASSWORD,m_ExchangeAdminName.c_str(),m_ExchangeAdminPwd.c_str());
-	}
-	catch(Zimbra::MAPI::ExchangeAdminException &ex)	{
-		//To do .. logs entry
-		UNREFERENCED_PARAMETER(ex);
-		throw;
-	}
-
-	try	{
-		m_exchAdmin->CreateProfile(DEFAULT_ADMIN_PROFILE_NAME,
-			DEFAULT_ADMIN_MAILBOX_NAME,DEFAULT_ADMIN_PASSWORD);
-	}
-	catch(Zimbra::MAPI::ExchangeAdminException &ex)	{
-		//To do .. logs entry
-		UNREFERENCED_PARAMETER(ex);
-		throw;
-	}		
-	return S_OK;
+    LPCWSTR ExchangeAdminName,
+    LPCWSTR ExchangeAdminPwd) {
+    m_strServer = strExhangeHost;
+    m_ExchangeAdminName = ExchangeAdminName;
+    m_ExchangeAdminPwd = ExchangeAdminPwd;
+    m_exchAdmin = new ExchangeAdmin(m_strServer);
 }
 
-HRESULT ExchangeMigrationSetup::Clean()
-{
-	try	{
-		m_exchAdmin->DeleteProfile(DEFAULT_ADMIN_PROFILE_NAME);
-	}
-	catch(Zimbra::MAPI::ExchangeAdminException &ex)	{
-		//To do.. log entry
-		UNREFERENCED_PARAMETER(ex);
-	}
-
-	try	{
-		m_exchAdmin->DeleteExchangeMailBox(DEFAULT_ADMIN_MAILBOX_NAME,
-			m_ExchangeAdminName.c_str(),m_ExchangeAdminPwd.c_str());
-	}
-	catch(Zimbra::MAPI::ExchangeAdminException &ex)	{
-		//To do .. logs entry
-		UNREFERENCED_PARAMETER(ex);
-	}
-
-	return S_OK;
+ExchangeMigrationSetup::~ExchangeMigrationSetup() {
+    delete m_exchAdmin;
 }
 
-HRESULT ExchangeMigrationSetup::GetAllProfiles(vector<string> &vProfileList)
-{
-	return m_exchAdmin->GetAllProfiles(vProfileList);
+HRESULT ExchangeMigrationSetup::Setup() {
+    Clean();
+
+    try {
+        m_exchAdmin->CreateExchangeMailBox(DEFAULT_ADMIN_MAILBOX_NAME,
+            DEFAULT_ADMIN_PASSWORD, m_ExchangeAdminName.c_str(), m_ExchangeAdminPwd.c_str());
+    } catch (Zimbra::MAPI::ExchangeAdminException &ex) {
+        // To do .. logs entry
+        UNREFERENCED_PARAMETER(ex);
+        throw;
+    }
+    try {
+        m_exchAdmin->CreateProfile(DEFAULT_ADMIN_PROFILE_NAME,
+            DEFAULT_ADMIN_MAILBOX_NAME, DEFAULT_ADMIN_PASSWORD);
+    } catch (Zimbra::MAPI::ExchangeAdminException &ex) {
+        // To do .. logs entry
+        UNREFERENCED_PARAMETER(ex);
+        throw;
+    }
+    return S_OK;
+}
+
+HRESULT ExchangeMigrationSetup::Clean() {
+    try {
+        m_exchAdmin->DeleteProfile(DEFAULT_ADMIN_PROFILE_NAME);
+    } catch (Zimbra::MAPI::ExchangeAdminException &ex) {
+        // To do.. log entry
+        UNREFERENCED_PARAMETER(ex);
+        throw;
+    }
+    try {
+        m_exchAdmin->DeleteExchangeMailBox(DEFAULT_ADMIN_MAILBOX_NAME,
+            m_ExchangeAdminName.c_str(), m_ExchangeAdminPwd.c_str());
+    } catch (Zimbra::MAPI::ExchangeAdminException &ex) {
+        // To do .. logs entry
+        UNREFERENCED_PARAMETER(ex);
+        throw;
+    }
+    return S_OK;
+}
+
+HRESULT ExchangeMigrationSetup::GetAllProfiles(vector<string> &vProfileList) {
+    return m_exchAdmin->GetAllProfiles(vProfileList);
 }
 
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -607,27 +606,40 @@ HRESULT ExchangeMigrationSetup::GetAllProfiles(vector<string> &vProfileList)
 bool ExchangeOps::Initialized = false;
 ExchangeMigrationSetup *ExchangeOps::m_exchmigsetup = NULL;
 
-HRESULT ExchangeOps::GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername,
-								LPCWSTR	lpAdminPassword)
-{
-	//if lpAdminUsername is NULL then we assume that Outlook admin profile exists and we should use it
-	//else create a Admin mailbox and create corresponding profile on local machine
-	if(lpAdminUsername) {
-		if(!Initialized) {
-			m_exchmigsetup = new ExchangeMigrationSetup(lpMAPITarget, lpAdminUsername, lpAdminPassword);
-			Initialized = true;
-		}
-		m_exchmigsetup->Setup();
-	}
-	return S_OK;
+LPCWSTR ExchangeOps::GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername,
+    LPCWSTR lpAdminPassword) {
+    LPCWSTR lpwstrStatus = NULL;
+
+    // if lpAdminUsername is NULL then we assume that Outlook admin profile exists and we should use it
+    // else create a Admin mailbox and create corresponding profile on local machine
+    if (lpAdminUsername) {
+        if (!Initialized) {
+            m_exchmigsetup = new ExchangeMigrationSetup(lpMAPITarget, lpAdminUsername,
+                    lpAdminPassword);
+            Initialized = true;
+        }
+        try {
+            m_exchmigsetup->Setup();
+        } catch (Zimbra::MAPI::ExchangeAdminException &ex) {
+            lpwstrStatus = FromatExceptionInfo(ex.ErrCode(), (LPWSTR)ex.Description().c_str(),
+                    (LPSTR)ex.SrcFile().c_str(), ex.SrcLine());
+        }
+    }
+    return lpwstrStatus;
 }
 
-HRESULT ExchangeOps::GlobalUninit()
-{
-	if(Initialized) {
-		m_exchmigsetup->Clean();
-		delete m_exchmigsetup;
-	}
-	Initialized = false;
-	return S_OK;
+LPCWSTR ExchangeOps::GlobalUninit() {
+    LPCWSTR lpwstrStatus = NULL;
+
+    if (Initialized) {
+        try {
+            m_exchmigsetup->Clean();
+            delete m_exchmigsetup;
+        } catch (Zimbra::MAPI::ExchangeAdminException &ex) {
+            lpwstrStatus = FromatExceptionInfo(ex.ErrCode(), (LPWSTR)ex.Description().c_str(),
+                    (LPSTR)ex.SrcFile().c_str(), ex.SrcLine());
+        }
+    }
+    Initialized = false;
+    return lpwstrStatus;
 }
