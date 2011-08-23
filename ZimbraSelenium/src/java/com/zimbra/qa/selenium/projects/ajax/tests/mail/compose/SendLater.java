@@ -38,10 +38,6 @@ public class SendLater extends AjaxCommonTest {
 			groups = { "smoke" })
 	public void SendLater_01() throws HarnessException {
 		
-		if (true) {
-			// Until bug 63353 is fixed, the other two tests will fail.  Fail this test for now.
-			throw new HarnessException("See http://bugzilla.zimbra.com/show_bug.cgi?id=63353");
-		}
 		
 		// Create the message data to be sent
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();

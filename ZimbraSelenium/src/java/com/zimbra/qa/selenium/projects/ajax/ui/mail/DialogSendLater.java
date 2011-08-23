@@ -32,18 +32,18 @@ public class DialogSendLater extends AbsDialog {
 		
 		// Main dialog locator
 		// TODO: need to update this locator https://bugzilla.zimbra.com/show_bug.cgi?id=61935
-		public static final String SendLaterDialogLocatorCSS	= "css=div[id='ZmTimeDialog']";
+		public static final String SendLaterDialogLocatorCSS	= "css=div[id^='ZmTimeDialog']";
 
 		// Fields
-		public static final String FieldDateLocator				= SendLaterDialogLocatorCSS + " input[id='ZmTimeDialog_date']";
-		public static final String FieldTimeLocator				= SendLaterDialogLocatorCSS + " input[id='ZmTimeInputSelect_startTimeInput']";
+		public static final String FieldDateLocator				= SendLaterDialogLocatorCSS + " input[id$='_date']";
+		public static final String FieldTimeLocator				= SendLaterDialogLocatorCSS + " input[id$='_startTimeInput']";
 
 		// Pulldowns
-		public static final String PulldownTimezoneLocator		= SendLaterDialogLocatorCSS + " div[id='ZmTimeDialog_buttons'] td[id='TimeZoneSelect_dropdown'] div[class='ImgSelectPullDownArrow']";
+		public static final String PulldownTimezoneLocator		= SendLaterDialogLocatorCSS + " div[id$='_buttons'] td[id$='_dropdown'] div[class='ImgSelectPullDownArrow']";
 
 		// Buttons
-		public static final String ButtonOkButtonLocator		= SendLaterDialogLocatorCSS + " div[id='ZmTimeDialog_buttons'] td[id^='OK_'] td[id$='_title']";
-		public static final String ButtonCancelButtonLocator	= SendLaterDialogLocatorCSS + " div[id='ZmTimeDialog_buttons'] td[id^='Cancel'] td[id$='_title']";
+		public static final String ButtonOkButtonLocator		= SendLaterDialogLocatorCSS + " div[id$='_buttons'] td[id^='OK_'] td[id$='_title']";
+		public static final String ButtonCancelButtonLocator	= SendLaterDialogLocatorCSS + " div[id$='_buttons'] td[id^='Cancel'] td[id$='_title']";
 	}
 	
 	
