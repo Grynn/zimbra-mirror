@@ -5,7 +5,6 @@ package com.zimbra.qa.selenium.projects.ajax.ui.search;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
 import java.util.*;
 
@@ -134,7 +133,11 @@ public class PageSearch extends AbsTab {
 		
 		if ( button == Button.B_SEARCH ) {
 			locator = "css=div#zb__Search__SEARCH>div#zb__Search__SEARCH_left_icon>div.ImgSearch2";
-			page = new DisplayAllItemTypesSearchResults(((AppAjaxClient)MyApplication));
+			
+			// for all item types
+			if (zIsSearchType(Button.O_SEARCHTYPE_ALL)) {
+			    page = new PageAllItemTypes(((AppAjaxClient)MyApplication));
+			}
 			
 			// Make sure the button exists
 			if ( !sIsElementPresent(locator) )

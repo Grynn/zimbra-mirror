@@ -1,20 +1,18 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.search;
 
-import java.util.List;
+import java.util.*;
 
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.ContactItem;
 import com.zimbra.qa.selenium.framework.items.ContactItem.GenerateItemType;
-import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
-import com.zimbra.qa.selenium.framework.util.ZAssert;
-import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.*;
+import com.zimbra.qa.selenium.framework.items.*;
 
-import com.zimbra.qa.selenium.framework.ui.Action;
-import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.*;
+
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAllItemTypes;
 
 public class ContactSearch extends AjaxCommonTest {
 	
@@ -31,33 +29,43 @@ public class ContactSearch extends AjaxCommonTest {
 	}
 	
 	@Test( description = "select all, search contact in Addressbook + gal ",
-			groups = { "functional" })
+			groups = { "functionaly" })
 	public void searchAll() throws HarnessException {
-		// Create a contact via soap 
+		// Search a contact item 		
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
-		DisplayAllItemTypesSearchResults resultView = null;
+		PageAllItemTypes resultPage = null;
 		
 		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_ALL);
 		app.zPageSearch.zAddSearchQuery(contactItem.firstName);
-		resultView = (DisplayAllItemTypesSearchResults) app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
-		//TODO :verify result
-		//ZAssert.assertTrue(re, "Verify contact " + contactItem.fileAs + " displayed");
+		resultPage = (PageAllItemTypes) app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
 		
-		String name=ZimbraAccount.AccountA().DisplayName;
-		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_ALL);
-		app.zPageSearch.zAddSearchQuery(name);
-		resultView = (DisplayAllItemTypesSearchResults) app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
-		List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
-         
+		ArrayList<AllItemTypesItem> items = resultPage.zListItems();		        
         boolean isFound=false;
-	      for (ContactItem ci : contacts) {
-		    if (ci.fileAs.equals(name)) {
+	      for (AllItemTypesItem item : items) {
+		    if (item.from.equals(contactItem.fileAs)) {
 		    	isFound = true;
 		    	break;
 	  	    }
 	      }
 			
-        ZAssert.assertTrue(isFound, "Verify contact " + name + " displayed");
+        ZAssert.assertTrue(isFound, "Verify contact " + contactItem.fileAs + " displayed");
+		
+		// Search a GAL item
+		String name=ZimbraAccount.AccountA().DisplayName;
+		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_ALL);
+		app.zPageSearch.zAddSearchQuery(name);
+		resultPage = (PageAllItemTypes) app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
+		
+		items = resultPage.zListItems();		        
+        isFound=false;
+	      for (AllItemTypesItem item : items) {
+		    if (item.from.equals(ZimbraAccount.AccountA().DisplayName)) {
+		    	isFound = true;
+		    	break;
+	  	    }
+	      }
+			
+        ZAssert.assertTrue(isFound, "Verify GAL contact " + ZimbraAccount.AccountA().DisplayName + " displayed");
 
 	}
 
