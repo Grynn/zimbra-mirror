@@ -2,6 +2,8 @@
 using System.Windows.Navigation;
 using System.Windows.Controls;
 using System.Windows.Markup;
+using System.Windows.Media;
+using System.Windows.Input;
 using System.Windows;
 using System.Collections;
 using System.Collections.Generic;
@@ -37,5 +39,20 @@ namespace MVVM.View
             lbMode.SelectedIndex = 0;
             DataContext = m_introViewModel;
         }
+
+        private void ImageMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is Image)
+            {
+                ImageSource SelectedImageSource = ((Image)sender).Source;
+                string str = SelectedImageSource.ToString();
+                if (str.EndsWith("Penguins.jpg"))
+                {
+                    UsersViewModel usersViewModel = m_introViewModel.GetUsersViewModel();
+                    usersViewModel.ValidateUsersList();
+                }
+            }
+        }
+
     }
 }

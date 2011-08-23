@@ -73,7 +73,7 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical">
-                                    <Image Source="{Binding ImageName}" Width="90" Height="70" Stretch="UniformToFill"></Image>
+                                    <Image Source="{Binding ImageName}" Width="90" Height="70" MouseDown="ImageMouseDown" Stretch="UniformToFill"></Image>
                                     <TextBlock FontFamily="Maiandra GD" FontStyle="Italic" VerticalAlignment="Center" Text="{Binding ViewTitle}"></TextBlock>
                                 </StackPanel>
                             </DataTemplate>

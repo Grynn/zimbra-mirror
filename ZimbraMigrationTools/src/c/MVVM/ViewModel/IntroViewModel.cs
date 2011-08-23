@@ -38,6 +38,11 @@ namespace MVVM.ViewModel
             this.BeginCommand = new ActionCommand(this.Begin, () => true);
         }
 
+        public UsersViewModel GetUsersViewModel()
+        {
+            return m_usersViewModel;
+        }
+
         public ICommand GetIntroLicenseCommand
         {
             get;
