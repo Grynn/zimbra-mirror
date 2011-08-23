@@ -4,9 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Misc="clr-namespace:Misc;assembly=Misc"
     >
-    <UserControl.Resources>
-        <Misc:CountGreaterThanZeroConverter x:Key="CountGreaterThanZeroConverter" />
-    </UserControl.Resources>
     <Grid Name="UsersGrid">
         <Grid.Background>
             <ImageBrush ImageSource="/MVVM;component/View/Images/bg.png"  />
