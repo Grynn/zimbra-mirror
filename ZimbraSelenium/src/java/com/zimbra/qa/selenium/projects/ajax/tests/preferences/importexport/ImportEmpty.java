@@ -38,7 +38,7 @@ public class ImportEmpty extends AjaxCommonTest {
 		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.ImportExport);
 
 		// TODO: See https://bugzilla.zimbra.com/show_bug.cgi?id=63289
-		app.zPagePreferences.zClick("css=td[id='DWT256_title']");
+		app.zPagePreferences.zClick("css=div[id='IMPORT_BUTTON'] td[id$='_title']");
 		
 		// Should probably verify toaster that says "Must Specify Import File"
 		
