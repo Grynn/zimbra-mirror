@@ -51,6 +51,8 @@ import com.zimbra.kabuki.util.Colors;
 
 import java.awt.Color;
 
+import java.net.URLEncoder;
+
 /**
  * TODO: Clean up this code!
  */
@@ -601,7 +603,7 @@ public class SkinResources
 			for (File file : files) {
 				if (!file.exists()) {
 					out.print(commentStart);
-					out.print("Error: file doesn't exist - " + file.getAbsolutePath().replaceAll("^.*/webapps/",""));
+					out.print("Error: file doesn't exist - " + URLEncoder.encode(file.getAbsolutePath().replaceAll("^.*/webapps/", ""), "UTF-8"));
 					out.println(commentEnd);
 					out.println();
 					continue;
