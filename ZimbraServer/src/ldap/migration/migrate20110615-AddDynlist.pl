@@ -127,8 +127,8 @@ foreach my $domain (@DOMAINS) {
 
 #Add acl for postfix
 my $dn=$bdn;
-my $acl='{9}to dn.subtree="cn=groups,cn=zimbra" attrs=zimbraMailAlias,member,zimbraMailStatus,entry  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" read';
-my $aclsearch='to dn.subtree="cn=groups,cn=zimbra" attrs=zimbraMailAlias,member,zimbraMailStatus,entry  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" read';
+my ($entry,@attrvals,$aclNumber,$attrMod);
+my $aclsearch='to attrs=zimbraId,zimbraMailAddress,zimbraMailAlias,zimbraMailCanonicalAddress,zimbraMailCatchAllAddress,zimbraMailCatchAllCanonicalAddress,zimbraMailCatchAllForwardingAddress,zimbraMailDeliveryAddress,zimbraMailForwardingAddress,zimbraPrefMailForwardingAddress,zimbraMailHost,zimbraMailStatus,zimbraMailTransport,zimbraDomainName,zimbraDomainType,zimbraPrefMailLocalDeliveryDisabled  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" read  by dn.base ="uid=zmamavis,cn=appaccts,cn=zimbra" read  by \* none';
 $mesg = $ldap ->search(
                     base=>"$bdn",
                     filter=>"(olcAccess=$aclsearch)",
@@ -137,6 +137,72 @@ $mesg = $ldap ->search(
                 );
 
 my $size = $mesg->count;
+if ($size != 0)  {
+  $entry=$mesg->entry($size-1);
+  @attrvals=$entry->get_value("olcAccess");
+  $aclNumber=-1;
+  $attrMod="";
+  foreach my $attr (@attrvals) {
+    if ($attr =~ /to attrs=zimbraId/) {
+      ($aclNumber) = $attr =~ /^\{(\d+)\}*/;
+      $attrMod=$attr;
+    }
+  }
+  if ($aclNumber != -1 && $attrMod ne "") {
+    $attrMod =~ s/zimbraPrefMailLocalDeliveryDisabled  /zimbraPrefMailLocalDeliveryDisabled,member,memberURL,zimbraMemberOf  /;
+    $mesg = $ldap->modify(
+        $dn,
+        delete => {olcAccess => "{$aclNumber}"},
+    );
+    $mesg = $ldap->modify(
+        $dn,
+        add =>{olcAccess=>"$attrMod"},
+    );
+  }
+} else {
+  $aclsearch='to attrs=zimbraId,zimbraMailAddress,zimbraMailAlias,zimbraMailCanonicalAddress,zimbraMailCatchAllAddress,zimbraMailCatchAllCanonicalAddress,zimbraMailCatchAllForwardingAddress,zimbraMailDeliveryAddress,zimbraMailForwardingAddress,zimbraPrefMailForwardingAddress,zimbraMailHost,zimbraMailStatus,zimbraMailTransport,zimbraDomainName,zimbraDomainType,zimbraPrefMailLocalDeliveryDisabled  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" read  by dn.base ="uid=zmamavis,cn=appaccts,cn=zimbra" read  by \* read';
+  $mesg = $ldap ->search(
+                    base=>"$bdn",
+                    filter=>"(olcAccess=$aclsearch)",
+                    scope=>"base",
+                    attrs => ['olcAccess'],
+                );
+  $size = $mesg->count;
+  if ($size != 0) {
+    $entry=$mesg->entry($size-1);
+    @attrvals=$entry->get_value("olcAccess");
+    $aclNumber=-1;
+    $attrMod="";
+    foreach my $attr (@attrvals) {
+      if ($attr =~ /to attrs=zimbraId/) {
+        ($aclNumber) = $attr =~ /^\{(\d+)\}*/;
+        $attrMod=$attr;
+      }
+    }
+    if ($aclNumber != -1 && $attrMod ne "") {
+      $attrMod =~ s/zimbraPrefMailLocalDeliveryDisabled  /zimbraPrefMailLocalDeliveryDisabled,member,memberURL,zimbraMemberOf  /;
+      $mesg = $ldap->modify(
+          $dn,
+          delete => {olcAccess => "{$aclNumber}"},
+      );
+      $mesg = $ldap->modify(
+          $dn,
+          add =>{olcAccess=>"$attrMod"},
+      );
+    }
+  }
+}
+
+my $acl='{9}to dn.subtree="cn=groups,cn=zimbra" attrs=zimbraMailAlias,member,zimbraMailStatus,entry  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" read';
+$aclsearch='to dn.subtree="cn=groups,cn=zimbra" attrs=zimbraMailAlias,member,zimbraMailStatus,entry  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmpostfix,cn=appaccts,cn=zimbra" read';
+$mesg = $ldap ->search(
+                    base=>"$bdn",
+                    filter=>"(olcAccess=$aclsearch)",
+                    scope=>"base",
+                    attrs => ['olcAccess'],
+                );
+
+$size = $mesg->count;
 if ($size == 0) {
   $mesg = $ldap->modify(
     $dn,
