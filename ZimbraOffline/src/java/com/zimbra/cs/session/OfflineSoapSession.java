@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
+import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.service.util.ItemIdFormatter;
 
@@ -69,4 +70,13 @@ public class OfflineSoapSession extends SoapSession {
         }
     }
 
+    @Override
+    public RegisterNotificationResult registerNotificationConnection(final PushChannel sc) throws ServiceException {
+        RegisterNotificationResult result = super.registerNotificationConnection(sc);
+        if (result == RegisterNotificationResult.BLOCKING && OfflineSyncManager.getInstance().hasPendingStatusChanges()) {
+            //if any pending sync state changes make it DATA_READY
+            result = RegisterNotificationResult.DATA_READY; 
+        }
+        return result;
+    }
 }

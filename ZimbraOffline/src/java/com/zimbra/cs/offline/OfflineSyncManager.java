@@ -90,6 +90,14 @@ public class OfflineSyncManager implements FormatListener {
     private static final String A_ZDSYNC_MESSAGE = "message";
     private static final String A_ZDSYNC_UNREAD = "unread";
 
+    private boolean pendingStatusChanges = false;
+
+    public boolean hasPendingStatusChanges() {
+        synchronized (syncStatusTable) {
+            return pendingStatusChanges;
+        }
+    }
+
     private static class SyncError {
         String message;
         Throwable t;
@@ -346,6 +354,7 @@ public class OfflineSyncManager implements FormatListener {
            }
         }
         synchronized (syncStatusTable) {
+            pendingStatusChanges = true;
             b = getStatus(entry).syncStart();
         }
         lock.unlock();
@@ -356,6 +365,7 @@ public class OfflineSyncManager implements FormatListener {
     public void syncComplete(NamedEntry entry) {
         boolean b;
         synchronized (syncStatusTable) {
+            pendingStatusChanges = true;
             b = getStatus(entry).syncComplete();
         }
         if (b)
@@ -373,6 +383,7 @@ public class OfflineSyncManager implements FormatListener {
 
     private void connectionDown(NamedEntry entry, String code) {
         synchronized (syncStatusTable) {
+            pendingStatusChanges = true;
             getStatus(entry).connectionDown(code);
         }
         notifyStateChange();
@@ -380,6 +391,7 @@ public class OfflineSyncManager implements FormatListener {
 
     private void authFailed(NamedEntry entry, String code, String password) {
         synchronized (syncStatusTable) {
+            pendingStatusChanges = true;
             getStatus(entry).authFailed(code, password);
         }
         notifyStateChange();
@@ -387,6 +399,7 @@ public class OfflineSyncManager implements FormatListener {
 
     private void syncFailed(NamedEntry entry, String code, String message, Throwable t) {
         synchronized (syncStatusTable) {
+            pendingStatusChanges = true;
             getStatus(entry).syncFailed(code, message, t);
         }
         notifyStateChange();
@@ -402,6 +415,7 @@ public class OfflineSyncManager implements FormatListener {
 
     public void authSuccess(NamedEntry entry, String password, ZAuthToken token, long expires) {
         synchronized (syncStatusTable) {
+            pendingStatusChanges = true;
             getStatus(entry).authSuccess(password, token, expires);
         }
     }
@@ -838,6 +852,9 @@ public class OfflineSyncManager implements FormatListener {
         </zdsync>
      */
     public void encode(Element context) throws ServiceException {
+        synchronized (syncStatusTable) {
+            pendingStatusChanges = false;
+        }
         OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
         Element zdsync = context.addUniqueElement(ZDSYNC_ZDSYNC);
         List<Account> accounts = prov.getAllAccounts();
