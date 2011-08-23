@@ -113,6 +113,7 @@ PERL_LIBS 	:= \
 	$(MODULE_EXTUTIL_MAKEMAKER) \
 	DBI \
 	Compress::Raw::Bzip2 \
+	Compress::Raw::Zlib \
 	IO::Compress::Base \
 	IO::Zlib \
 	Carp::Clan \
@@ -159,7 +160,6 @@ PERL_LIBS 	:= \
 	Parallel::ForkManager \
 	Package::Constants \
 	IO::Compress::Base \
-	Compress::Raw::Zlib \
 	Archive::Tar \
 	Digest::SHA1 \
 	Digest::HMAC \
