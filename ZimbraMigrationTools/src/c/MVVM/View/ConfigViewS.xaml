@@ -35,7 +35,7 @@
                 <Label Grid.Row="3" Grid.Column="0" Content="Admin ID" Margin="54,10,0,0" HorizontalAlignment="Left" Name="labelExchAdmin" VerticalAlignment="Top" />
                 <TextBox Grid.Row="3"  Grid.Column="1" Margin="10,10,20,0" Name="tbExchAdmin" VerticalAlignment="Center" IsEnabled="{Binding ElementName=rbServer, Path=IsChecked}" Text="{Binding Path=MailServerAdminID}"/>
                 <Label Grid.Row="4" Grid.Column="0" Content="Admin Password" Margin="54,10,0,0" HorizontalAlignment="Left" Name="labelExchAdminPwd" VerticalAlignment="Top" />
-                <PasswordBox Grid.Row="4"  Grid.Column="1" Margin="10,10,20,0" Name="pbBoxExchAdminPwd" VerticalAlignment="Center" PasswordChanged="pb_SourcePwdChanged"/>
+                <PasswordBox Grid.Row="4"  Grid.Column="1" Margin="10,10,20,0" Name="pbBoxExchAdminPwd" VerticalAlignment="Center" PasswordChanged="pb_SourcePwdChanged" IsEnabled="{Binding ElementName=rbServer, Path=IsChecked}" />
             </Grid>
         </StackPanel>
         <Separator Grid.Row="2" Margin="5,105,5,0" VerticalAlignment="Top"/>

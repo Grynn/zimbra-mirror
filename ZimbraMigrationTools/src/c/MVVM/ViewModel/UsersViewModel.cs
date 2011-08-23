@@ -306,6 +306,10 @@ namespace MVVM.ViewModel
 
         private void Next()
         {
+            if (!ValidateUsersList())
+            {
+                return;
+            }
             ZimbraAPI zimbraAPI = new ZimbraAPI();
             if (ZimbraValues.zimbraValues.AuthToken.Length == 0)
             {
@@ -339,6 +343,61 @@ namespace MVVM.ViewModel
             }
 
             lb.SelectedIndex = 4;
+        }
+
+        public const int TYPE_USERNAME = 1;
+        public const int TYPE_MAPNAME = 2;
+
+        private bool isDuplicate(string nam, int type)
+        {
+            bool bRetval = false;
+            int iHitCount = 0;
+            for (int i = 0; i < UsersList.Count; i++)
+            {
+                string nam2 = (type == TYPE_USERNAME) ? UsersList[i].Username : UsersList[i].MappedName;
+                if (nam == nam2)
+                {
+                    iHitCount++;
+                    if (iHitCount == 2)
+                    {
+                        bRetval = true;
+                        break;
+                    }
+                }
+            }
+            return bRetval;
+        }
+
+        public bool ValidateUsersList()
+        // Make sure there are no blanks or duplicates in the list; remove them if there are.
+        // If we get down to no items, disable the Next button.
+        {
+            for (int i = UsersList.Count -1; i >= 0; i--)
+            {
+                if (UsersList[i].Username.Length == 0)
+                {
+                    UsersList.RemoveAt(i);
+                }
+                else
+                if (isDuplicate(UsersList[i].Username, TYPE_USERNAME))
+                {
+                    UsersList.RemoveAt(i);
+                }
+                else
+                if (UsersList[i].MappedName.Length > 0)
+                {
+                    if (isDuplicate(UsersList[i].MappedName, TYPE_MAPNAME))
+                    {
+                        UsersList.RemoveAt(i);
+                    }
+                }
+            }
+            if (UsersList.Count == 0)
+            {
+                EnableNext = false;
+                return false;
+            }
+            return true;
         }
 
         private void SaveDomain()
