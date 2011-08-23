@@ -117,6 +117,7 @@ PERL_LIBS 	:= \
 	IO::Compress::Base \
 	IO::Zlib \
 	Carp::Clan \
+	Storable \
 	Bit::Vector \
 	HTML::Tagset \
 	HTML::Parser \
