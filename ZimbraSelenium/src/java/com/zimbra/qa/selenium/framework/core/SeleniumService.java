@@ -268,10 +268,16 @@ public class SeleniumService {
 			return;
 
 		try {
-			CommandLine.CmdExec("taskkill /f /t /im iexplore.exe");
-			CommandLine.CmdExec("taskkill /f /t /im firefox.exe");
-			CommandLine.CmdExec("taskkill /f /t /im Safari.exe");
-			CommandLine.CmdExec("taskkill /f /t /im chrome.exe");
+			if (SeleniumBrowser.contains("iexplore")) {
+			    CommandLine.CmdExec("taskkill /f /t /im iexplore.exe");
+			} else if (SeleniumBrowser.contains("firefox")) {
+				CommandLine.CmdExec("taskkill /f /t /im firefox.exe");
+			} else if (SeleniumBrowser.contains("safariproxy")) {
+			    CommandLine.CmdExec("taskkill /f /t /im safari.exe");
+			} else if (SeleniumBrowser.contains("chrome")) {
+				CommandLine.CmdExec("taskkill /f /t /im chrome.exe");
+			}
+			
 		} catch (IOException e) {
 			throw new HarnessException("Unable to kill browsers", e);
 		} catch (InterruptedException e) {
