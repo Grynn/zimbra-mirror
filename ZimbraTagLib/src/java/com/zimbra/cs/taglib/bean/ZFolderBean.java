@@ -389,13 +389,13 @@ public class  ZFolderBean {
     public String getImage() {
         if (getIsSearchFolder()) {
             return "startup/ImgSearchFolder.png";
-        } else if (getIsAppointmentView()) {
+        } else if (getIsAppointmentView() || (getParentId().equals(ZFolder.ID_CALENDAR) && getIsUnknownView())) {
             if (getIsMountPoint()) {
                 return "calendar/ImgSharedCalendarFolder.png";
             } else {
                 return "calendar/ImgCalendarFolder.png";
             }
-        } else if (getIsContactView()) {
+        } else if (getIsContactView() || (getParentId().equals(ZFolder.ID_CONTACTS) && getIsUnknownView())) {
             if (getIsMountPoint()) {
                 return "contacts/ImgSharedContactsFolder.png";
             } else if (getIsAutoContacts()) {
@@ -403,7 +403,7 @@ public class  ZFolderBean {
             } else {
                 return "contacts/ImgContactsFolder.png";
             }
-        } else if (getIsTaskView()) {
+        } else if (getIsTaskView() || (getParentId().equals(ZFolder.ID_TASKS) && getIsUnknownView())) {
             if (getIsMountPoint()) {
                 return "tasks/ImgSharedTaskList.png";
             } else {
