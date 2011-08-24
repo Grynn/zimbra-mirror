@@ -414,20 +414,20 @@ STDMETHODIMP CMapiWrapper::GetFolderObjects(VARIANT* vObjects)
 	SafeArrayAccessData(psa,(void**)&pfolders);
 	for (int i = 0;i < 2; i ++)
 	{
-		CComPtr<IfolderObject> pIStatistics;
+		CComPtr<IfolderObject> pIFolderObject;
 		//Isampleobj* pIStatistics;
-		hr = CoCreateInstance(CLSID_folderObject, NULL, CLSCTX_ALL, IID_IfolderObject, reinterpret_cast<void **>(&pIStatistics)); 
+		hr = CoCreateInstance(CLSID_folderObject, NULL, CLSCTX_ALL, IID_IfolderObject, reinterpret_cast<void **>(&pIFolderObject)); 
 		if (SUCCEEDED(hr)) 
 		{
-				pIStatistics->put_Name(L"testoing"); // so far so good 
-				pIStatistics->put_Id(12222);
-				pIStatistics->put_ParentPath(L"\\Inbox\\personal\\mine");
+				pIFolderObject->put_Name(L"testoing"); // so far so good 
+				pIFolderObject->put_Id(12222);
+				pIFolderObject->put_ParentPath(L"\\Inbox\\personal\\mine");
 		}
 		if(FAILED(hr))
 		{
 			return S_FALSE;
 		}
-		 pIStatistics.CopyTo(&pfolders[i]);
+		 pIFolderObject.CopyTo(&pfolders[i]);
 	}
 
 	SafeArrayUnaccessData(psa);
