@@ -7,6 +7,8 @@
 import "oaidl.idl";
 import "ocidl.idl";
 
+
+
 typedef enum FolderType{
     Mail = 1,
     Contacts = 2,
@@ -37,6 +39,22 @@ struct UDTItem {
     [helpstring("Creation Date of the  Items in the Folder")] VARIANT CreationDate;
 } UDTItem;
 
+
+[
+	object,
+	uuid(68895A46-5AEB-436A-B661-17FDFD7A0CE2),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface IfolderObject : IDispatch{
+	[propget, id(1)] HRESULT Name([out, retval] BSTR* pVal);
+	[propput, id(1)] HRESULT Name([in] BSTR newVal);
+	[propget, id(2)] HRESULT Id([out, retval] LONG* pVal);
+	[propput, id(2)] HRESULT Id([in] LONG newVal);
+	[propget, id(3)] HRESULT ParentPath([out, retval] BSTR* pVal);
+	[propput, id(3)] HRESULT ParentPath([in] BSTR newVal);
+};
 [
     object,
     uuid(C5E4267C-AE6C-4E31-956A-06D8094D0CBE),
@@ -76,6 +94,16 @@ interface IMapiWrapper : IDispatch {
     HRESULT UDTItemSequence([in] long start,
     [in] long length, 
     [out, retval] SAFEARRAY(UDTItem) *SequenceArr);
+
+	/* [id(8), helpstring("Return successive folderobject values")] 
+            HRESULT GetFolderObjects([in] long start,
+                                [in] long length, 
+                                [out, retval] SAFEARRAY(IfolderObject) *Folders);*/
+
+	[id(9), helpstring("method to retreive folder objects")]
+			HRESULT  GetFolderObjects([out, retval] VARIANT* vObjects);
+
+
 };
 
 [
@@ -91,4 +119,12 @@ library Exchange {
     coclass MapiWrapper {
 	[default] interface IMapiWrapper;
     };
+	[
+		uuid(9D8CDCEC-28FE-4C15-8763-C174B17B815D)		
+	]
+	coclass folderObject
+	{
+		[default] interface IfolderObject;
+	};
 };
+//import "shobjidl.idl";

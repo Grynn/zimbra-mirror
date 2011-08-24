@@ -2,6 +2,7 @@
 
 #pragma once
 #include "MapiMigration.h"
+#include "folderObject.h"
 
 class ATL_NO_VTABLE CMapiWrapper: public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CMapiWrapper,
@@ -70,6 +71,12 @@ public:
     std::vector<CComBSTR> m_vecColors;
 
     std::wstring str_to_wstr(const std::string &str);
+
+	///STDMETHOD(GetFolderObjects)(/*[in]*/ long start, 
+       //                    /*[in]*/ long length, 
+         //                  /*[out, retval]*/ SAFEARRAY **SequenceArr);
+	
+	STDMETHOD(GetFolderObjects)(/*[out, retval]*/ VARIANT* vObjects);
 
 protected:
     UDTFolder m_pUDT;

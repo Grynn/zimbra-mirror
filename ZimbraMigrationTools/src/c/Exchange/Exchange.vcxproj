@@ -262,6 +262,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='rtl|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="folderObject.cpp" />
     <ClCompile Include="MAPIAccessAPI.cpp" />
     <ClCompile Include="MapiMigration.cpp" />
     <ClCompile Include="MAPIObjects.cpp" />
@@ -275,6 +276,7 @@
     <ClInclude Include="Exchange.h" />
     <ClInclude Include="ExchangeAdmin.h" />
     <ClInclude Include="Exchange_i.h" />
+    <ClInclude Include="folderObject.h" />
     <ClInclude Include="GenericException.h" />
     <ClInclude Include="MAPIAccessAPI.h" />
     <ClInclude Include="MapiMigration.h" />
@@ -284,6 +286,7 @@
     <ClInclude Include="MAPITableIterator.h" />
     <ClInclude Include="MapiUtils.h" />
     <ClInclude Include="MapiWrapper.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="tree.h" />
   </ItemGroup>
   <ItemGroup>
@@ -305,6 +308,7 @@
   <ItemGroup>
     <None Include="Exchange.def" />
     <None Include="Exchange.rgs" />
+    <None Include="folderObject.rgs" />
     <None Include="MapiWrapper.rgs" />
   </ItemGroup>
   <ItemGroup>

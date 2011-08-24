@@ -402,6 +402,87 @@ HRESULT CMapiWrapper::SequenceByData(long start, long length, SAFEARRAY *Sequenc
     return hr;
 }
 
+STDMETHODIMP CMapiWrapper::GetFolderObjects(VARIANT* vObjects)
+{
+	HRESULT hr = S_OK;
+	VariantInit(vObjects);
+	vObjects->vt = VT_ARRAY |VT_DISPATCH;
+	SAFEARRAY* psa;
+	SAFEARRAYBOUND bounds ={2,0};
+	psa = SafeArrayCreate(VT_DISPATCH,1,&bounds);
+	IfolderObject** pfolders;
+	SafeArrayAccessData(psa,(void**)&pfolders);
+	for (int i = 0;i < 2; i ++)
+	{
+		CComPtr<IfolderObject> pIStatistics;
+		//Isampleobj* pIStatistics;
+		hr = CoCreateInstance(CLSID_folderObject, NULL, CLSCTX_ALL, IID_IfolderObject, reinterpret_cast<void **>(&pIStatistics)); 
+		if (SUCCEEDED(hr)) 
+		{
+				pIStatistics->put_Name(L"testoing"); // so far so good 
+				pIStatistics->put_Id(12222);
+				pIStatistics->put_ParentPath(L"\\Inbox\\personal\\mine");
+		}
+		if(FAILED(hr))
+		{
+			return S_FALSE;
+		}
+		 pIStatistics.CopyTo(&pfolders[i]);
+	}
+
+	SafeArrayUnaccessData(psa);
+	vObjects->parray = psa;
+
+	return hr;
+
+
+
+}
+
+/*STDMETHODIMP CMapiWrapper::GetFolderObjects(long start, long length, SAFEARRAY **SequenceArr )
+{
+    
+		SAFEARRAYBOUND dimensions[1];   
+		dimensions[0].cElements = length;    
+		dimensions[0].lLbound = start;    
+	
+ 
+//		*SequenceArr = SafeArrayCreate(VT_DISPATCH, 1, dimensions); 
+		*SequenceArr = SafeArrayCreate(VT_UNKNOWN, 1, dimensions); 
+ 
+ 
+ long result ;
+		for (long i = 0; i < length; i++) 
+		{ 
+			long indices[1]; 
+			indices[0] = 0; 
+	
+			CComPtr<IfolderObject> pIFolder;
+			CComPtr<IUnknown> pUnk;
+			 //HRESULT hr = CoCreateInstance(CLSID_folderObject, NULL, CLSCTX_ALL, IID_IfolderObject, reinterpret_cast<void **>(&pIFolder)); 
+			HRESULT hr = CoCreateInstance(CLSID_folderObject, NULL, CLSCTX_ALL, _uuidof(IUnknown), reinterpret_cast<void **>(&pUnk)); 
+            if (SUCCEEDED(hr)) 
+
+	 pUnk->QueryInterface(IID_IfolderObject,pIFolder);
+			
+
+			pIFolder->put_Name(L"testoing"); // so far so good 
+ 
+			//long result = SafeArrayPutElement(pEquationsStatistics, indices, pIStatistics); 
+		result = SafeArrayPutElement(*SequenceArr, indices, pIFolder); 
+ 
+     
+			indices[0]++; 
+		}
+
+SafeArrayUnaccessData(*SequenceArr); 
+
+
+return S_OK;
+}*/
+
+
+
 // ////////////////////////////////////////////////////////////////////////////
 // ////
 // ////////////////////////////////////////////////////////////////////////////

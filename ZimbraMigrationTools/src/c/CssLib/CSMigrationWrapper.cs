@@ -116,11 +116,11 @@ namespace CssLib
         public void GetListofMapiFolders()
         {
 
-            UDTFolder[] folders;
+          /*  UDTFolder[] folders;
             MapiWrapper M1 = new MapiWrapper();
             folders = (UDTFolder[]) M1.UDTFolderSequence(0, 10);
             string name = folders[0].Name;
-            FolderType type = folders[0].Type;
+            FolderType type = folders[0].Type;*/
             /*UDTItem item;
             item.EntryId = "000-444-444";
             item.Type = FolderType.Mail;
@@ -128,7 +128,16 @@ namespace CssLib
             M1.set_UDTItem( ref item);
             UDTItem i1 = M1.get_UDTItem();*/
 
+            MapiWrapper M1 = new MapiWrapper();
+            object[] objectArray;
+            objectArray = M1.GetFolderObjects();
 
+            folderObject[] Folders = Array.ConvertAll(objectArray, folder => (folderObject)folder);
+
+            string name = Folders[0].Name;
+            long id = Folders[0].Id;
+
+            string path = Folders[0].ParentPath;
            
 
 
@@ -149,7 +158,7 @@ namespace CssLib
         public void  StartMigration(MigrationAccount Acct)
         {
 
-            //GetListofMapiFolders();
+            GetListofMapiFolders();
             //GetListofItems();
             //Acct.Accountname = "testing";
             Acct.TotalNoContacts = 100;
