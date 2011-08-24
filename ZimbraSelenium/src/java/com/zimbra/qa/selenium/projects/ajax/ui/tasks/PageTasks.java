@@ -486,7 +486,8 @@ public class PageTasks extends AbsTab {
 
 		} else if (button == Button.B_SAVE) {
 			locator = "zb__TKE1__SAVE_left_icon";
-			page = new FormTaskNew(this.MyApplication);
+			page = null;
+			//page = new FormTaskNew(this.MyApplication);
 
 		} else if (button == Button.B_TAG) {
 
