@@ -82,15 +82,10 @@ public class TreeMail extends AbsTree {
 
 		} else if (action == Action.A_RIGHTCLICK) {
 
-			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-				actionLocator = "css=[id^='zti__" + MyApplication.zGetActiveAccount().EmailAddress +
-				":main_Mail__'][id$=':" + f.getId() + "_textCell']";
-			} else {
-				actionLocator = "zti__main_Mail__" + f.getId() + "_textCell";
-			}
+		   actionLocator = "css=[id^='zti__" + MyApplication.zGetActiveAccount().EmailAddress +
+		   ":main_Mail__'] td:contains('" + f.getName() + "')";
 
 			GeneralUtility.waitForElementPresent(this, actionLocator);
-			// actionLocator= Locators.zTagsHeader;
 			this.zRightClick(actionLocator);
 
 			page = new DialogEditFolder(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
@@ -235,13 +230,9 @@ public class TreeMail extends AbsTree {
 
 		} else if (action == Action.A_RIGHTCLICK) {
 
-			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-				actionLocator = "css=[id^='zti__"
-					+ MyApplication.zGetActiveAccount().EmailAddress
-					+ ":main_Mail__'][id$=':" + t.getId() + "_textCell']";
-			} else {
-				actionLocator = "zti__main_Mail__" + t.getId() + "_textCell";
-			}
+		   actionLocator = "css=[id^='zti__"
+		      + MyApplication.zGetActiveAccount().EmailAddress
+		      + ":main_Mail__'] td:contains('" + t.getName() + "')";
 
 			GeneralUtility.waitForElementPresent(this, actionLocator);
 			// actionLocator= Locators.zTagsHeader;
@@ -315,14 +306,10 @@ public class TreeMail extends AbsTree {
 			// FALL THROUGH
 
 		} else if ( action == Action.A_RIGHTCLICK ) {
-			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-				locator = new StringBuffer("css=td[id^='zti__").
-				append(MyApplication.zGetActiveAccount().EmailAddress).
-				append(":main_Mail__']").append("[id$='").
-				append(folder.getId()).append("_textCell']").toString();
-			} else {
-				locator = "id=zti__main_Mail__"+ folder.getId() +"_textCell";
-			}
+		   locator = new StringBuffer("css=td[id^='zti__").
+		         append(MyApplication.zGetActiveAccount().EmailAddress).
+		         append(":main_Mail__']").append(":contains('").
+		         append(folder.getName()).append("')").toString();
 
 			// Select the folder
 			this.zRightClick(locator);

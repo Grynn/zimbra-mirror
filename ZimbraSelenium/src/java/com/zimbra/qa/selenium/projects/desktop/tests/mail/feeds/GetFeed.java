@@ -22,6 +22,7 @@ public class GetFeed extends AjaxCommonTest {
 			private static final long serialVersionUID = 6578132883123088454L;
 		{
 		    put("zimbraPrefGroupMailBy", "message");
+		    put("zimbraPrefReadingPaneLocation", "bottom");
 		}};
 	}
 

@@ -25,12 +25,12 @@ public class GetMail extends AjaxCommonTest {
 		// Make sure we are using an account with message view
 		super.startingAccountPreferences = new HashMap<String, String>() {{
 				    put("zimbraPrefGroupMailBy", "message");
+				    put("zimbraPrefReadingPaneLocation", "bottom");
 				    put("zimbraPrefMessageViewHtmlPreferred", "TRUE");
 				}};
 
-
 	}
-	
+
 	@Test(	description = "View a mail in a mountpoint",
 			groups = { "functional" })
 	public void GetMail_01() throws HarnessException {
