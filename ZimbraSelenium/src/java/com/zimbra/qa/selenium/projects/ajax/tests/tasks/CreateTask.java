@@ -2,12 +2,16 @@ package com.zimbra.qa.selenium.projects.ajax.tests.tasks;
 
 import java.util.HashMap;
 import org.testng.annotations.Test;
+
+import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.TaskItem;
+import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
@@ -22,6 +26,7 @@ public class CreateTask extends AjaxCommonTest {
 		super.startingPage = app.zPageTasks;
 		super.startingAccountPreferences = new HashMap<String , String>() {{
 			put("zimbraPrefComposeFormat", "html");
+			put("zimbraPrefGroupMailBy", "message");
 		}};
 	}
 
@@ -132,6 +137,44 @@ public class CreateTask extends AjaxCommonTest {
 		ZAssert.assertEquals(task.gettaskBody().trim(), body.trim(), "Verify the task body");
 
 	}
+	
+	@Test(	description = "Create Tasks, using 'Right Click' Mail subject -> 'Create Task'-Verify through Soap",
+			groups = { "smoke" })
+	public void CreateTask_05() throws HarnessException {
+		
+		app.zPageMail.zNavigateTo();
+		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();	
 
+		// Send a message to the account
+		ZimbraAccount.AccountA().soapSend(
+					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+						"<m>" +
+							"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+							"<su>"+ subject +"</su>" +
+							"<mp ct='text/plain'>" +
+								"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+							"</mp>" +
+						"</m>" +
+					"</SendMsgRequest>");
+		
+		// Get the mail item for the new message
+		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		
+		//Click on subject
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+		
+		//Right click subject >> select Create Task menu item
+		app.zPageMail.zListItem(Action.A_RIGHTCLICK, Button.O_CREATE_TASK, mail.dSubject);
+		
+		//click save
+		app.zPageTasks.zToolbarPressButton(Button.B_SAVE);
+		
+		//Verify task created.
+		TaskItem task = TaskItem.importFromSOAP(app.zGetActiveAccount(), subject);
+		ZAssert.assertEquals(task.getName(), subject, "Verify task subject");
+	}
 
 }
