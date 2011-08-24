@@ -66,8 +66,6 @@ HRESULT ExchangeAdmin::CreateProfile(wstring strProfileName, wstring strMailboxN
     SRestriction sres;
     WCHAR errDescrption[256] = {};
 
-    hr = MAPIInitialize(NULL);
-
     // Columns to get from HrQueryAllRows.
     enum { iSvcName, iSvcUID, cptaSvc };
     SizedSPropTagArray(cptaSvc, sptCols) = { cptaSvc, PR_SERVICE_NAME, PR_SERVICE_UID };
@@ -92,7 +90,7 @@ HRESULT ExchangeAdmin::CreateProfile(wstring strProfileName, wstring strMailboxN
         goto CRT_PROFILE_EXIT;
     }
     // Create the new message service for Exchange.
-    if (FAILED(hr = pSvcAdmin->CreateMsgService((LPTSTR)"MSEMS", L"MSEMS", NULL, NULL))) {
+    if (FAILED(hr = pSvcAdmin->CreateMsgService((LPTSTR)"MSEMS", (LPTSTR)"MSEMS", NULL, NULL))) {
         wcscpy(errDescrption, L"CreateProfile(): CreateMsgService Failed.");
         goto CRT_PROFILE_EXIT;
     }
@@ -138,7 +136,7 @@ HRESULT ExchangeAdmin::CreateProfile(wstring strProfileName, wstring strMailboxN
             hr = pSvcAdmin->ConfigureMsgService((LPMAPIUID)pSvcRows->aRow->lpProps[iSvcUID].
                         Value.bin.lpb, NULL, 0, 2, rgval);
             if (hr == 0x81002746)
-                Sleep(5000);
+                Sleep(30000);
             itrTrials++;
         }
         if (FAILED(hr)) {
@@ -166,7 +164,7 @@ HRESULT ExchangeAdmin::DeleteProfile(wstring strProfile) {
     // delete profile
     if (FAILED(hr =
                 m_pProfAdmin->DeleteProfile((LPTSTR)strProfName.get(),
-                    0)))
+				0))&&(hr!=MAPI_E_NOT_FOUND))
         throw ExchangeAdminException(
             hr, L"DeleteProfile(): DeleteProfile Failed.", __LINE__, __FILE__);
     return hr;
