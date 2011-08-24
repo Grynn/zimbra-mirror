@@ -72,6 +72,13 @@ public class TaskItem implements IItem {
 		//taskSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		//taskBody = "Body" + ZimbraSeleniumProperties.getUniqueString();
 	}
+	public String myId;
+	public String getId() {
+		return (myId);
+	}
+	public void setId(String id) {
+		myId=id;
+	}
 
 	public static TaskItem importFromSOAP(Element GetMsgResponse) throws HarnessException {
 
@@ -85,12 +92,11 @@ public class TaskItem implements IItem {
 			// Make sure we only have the GetMsgResponse part
 			Element getMsgResponse = ZimbraAccount.SoapClient.selectNode(
 					GetMsgResponse, "//mail:GetMsgResponse");
+			
 			if (getMsgResponse == null)
 				throw new HarnessException(
 						"Element does not contain GetMsgResponse");
-
-			Element m = ZimbraAccount.SoapClient.selectNode(getMsgResponse,
-					"//mail:comp");
+			Element m = ZimbraAccount.SoapClient.selectNode(getMsgResponse,"//mail:comp");
 			if (m == null)
 				throw new HarnessException(
 						"Element does not contain an m element");
@@ -101,7 +107,8 @@ public class TaskItem implements IItem {
 			task.settaskBody(m.getAttribute("desc", null));
 			//Set task name
 			task.setName(m.getAttribute("name",null));
-
+			//Set task id
+			task.setId(m.getAttribute("calItemId", null));
 
 			// TODO: parse the <m/> element
 
