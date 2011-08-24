@@ -19,7 +19,7 @@ use Migrate;
 
 ########################################################################################################################
 
-Migrate::verifySchemaVersion(69);
+Migrate::verifySchemaVersion(83);
 
 foreach my $group (Migrate::getMailboxGroups()) {
   addTagTable($group);
@@ -29,7 +29,7 @@ foreach my $group (Migrate::getMailboxGroups()) {
 #  dropTagIndexes($group);
 }
 
-Migrate::updateSchemaVersion(69, 70);
+Migrate::updateSchemaVersion(83, 84);
 
 exit(0);
 

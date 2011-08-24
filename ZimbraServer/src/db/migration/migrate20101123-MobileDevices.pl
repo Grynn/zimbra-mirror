@@ -22,7 +22,7 @@ Migrate::verifySchemaVersion(65);
 
 addLastUsedDateColumn();
 
-Migrate::updateSchemaVersion(65, 66);
+Migrate::updateSchemaVersion(65, 80);
 
 exit(0);
 

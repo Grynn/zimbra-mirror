@@ -18,11 +18,11 @@
 use strict;
 use Migrate;
 
-Migrate::verifySchemaVersion(66);
+Migrate::verifySchemaVersion(80);
 
 addDeviceInformationColumns();
 
-Migrate::updateSchemaVersion(66, 67);
+Migrate::updateSchemaVersion(80, 81);
 
 exit(0);
 

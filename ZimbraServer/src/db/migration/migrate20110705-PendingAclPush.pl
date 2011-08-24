@@ -18,7 +18,7 @@
 use strict;
 use Migrate;
 
-Migrate::verifySchemaVersion(68);
+Migrate::verifySchemaVersion(82);
 
 my $sqlStmt = <<_SQL_;
 CREATE TABLE pending_acl_push (
@@ -34,6 +34,6 @@ _SQL_
 
 Migrate::runSql($sqlStmt);
 
-Migrate::updateSchemaVersion(68, 69);
+Migrate::updateSchemaVersion(82, 83);
 
 exit(0);
