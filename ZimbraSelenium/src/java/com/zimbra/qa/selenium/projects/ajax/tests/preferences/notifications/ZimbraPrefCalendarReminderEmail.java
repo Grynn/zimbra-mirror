@@ -36,7 +36,7 @@ public class ZimbraPrefCalendarReminderEmail extends AjaxCommonTest {
 
 		
 		// Set the address
-		String locator = "css=div[id$='_EMAIL']>input[id$='_EMAIL_input']";
+		String locator = "css=div[id='ZmNotificationsPage'] input[id='ZmNotificationsPage_EMAIL_input']";
 		
 		// To activate the Search button, need to focus/click
 		app.zPagePreferences.sFocus(locator);
