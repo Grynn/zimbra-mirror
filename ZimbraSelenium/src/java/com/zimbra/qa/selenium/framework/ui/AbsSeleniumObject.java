@@ -855,6 +855,15 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
+	 * DefaultSelenium.getAllWindowIds()
+	 */
+	public List<String> sGetAllWindowIds() {
+		logger.info("getAllWindowIds()");
+		String[] ids = ClientSessionFactory.session().selenium().getAllWindowIds();
+		return (Arrays.asList(ids));
+	}
+
+	/**
 	 * DefaultSelenium.getAllWindowNames()
 	 */
 	public List<String> sGetAllWindowNames() {

@@ -270,6 +270,11 @@ public class PagePreferences extends AbsTab {
 			locator = "id="+ Locators.zToolbarCancelID;
 			page = null;
 						
+		} else if ( button == Button.B_CHANGE_PASSWORD ) {
+			
+			locator = "css=td[id='CHANGE_PASSWORD_title']";
+			page = new DialogChangePassword(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);
+	
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}

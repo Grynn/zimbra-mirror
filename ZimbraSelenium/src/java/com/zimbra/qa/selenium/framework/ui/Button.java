@@ -317,6 +317,9 @@ public class Button {
 	public static final Button O_VIEW_LIST_SUB_MENU = new Button("O_VIEW_LIST_SUB_MENU");
 	public static final Button O_VIEW_SCHEDULE_SUB_MENU = new Button("O_VIEW_SCHEDULE_SUB_MENU");
 
+	// Preferences
+	public static final Button B_CHANGE_PASSWORD = new Button("B_CHANGE_PASSWORD");
+
 	//// Admin Console
 	
 	// Accounts buttons
