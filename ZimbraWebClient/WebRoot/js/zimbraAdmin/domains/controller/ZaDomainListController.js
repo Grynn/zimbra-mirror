@@ -227,6 +227,7 @@ function (openInNewTab, openInSearchTab) {
 	this._removeConfirmMessageDialog = ZaApp.getInstance().dialogs["removeConfirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON],null,ZaId.CTR_PREFIX + ZaId.VIEW_DMLIST + "_removeConfirm");			
 	this._forceRemoveMessageDialog = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON],null,ZaId.CTR_PREFIX + ZaId.VIEW_DMLIST + "_forceRemoveConfirm");
     this._forceRemoveMessageDialog.registerCallback(DwtDialog.YES_BUTTON, ZaDomainListController.prototype._forceDeleteDomainCallback, this);
+    this._forceRemoveMessageDialog.registerCallback(DwtDialog.NO_BUTTON, ZaDomainListController.prototype._donotForceDeleteDomainsCallback, this);
     this._forceRemoveMessageDialog._button[DwtDialog.YES_BUTTON].setText(ZaMsg.FORCE_DELETE_BUTTON);
 
 	this._UICreated = true;
@@ -531,10 +532,11 @@ function () {
 				}
 				return;
 			}
-		}
-		this._list.remove(this._removeList[key]); //remove from the list
+		    this._list.remove(this._removeList[key]); //remove from the list
+        }
 	}
 	this.fireRemovalEvent(this._successRemList);
+    this._successRemList = null;
 	this._removeConfirmMessageDialog.popdown();
 	this._contentView.setUI();
 	this.show();
@@ -621,6 +623,15 @@ function() {
         this._deleteDomainsCallback();
     } catch (ex) {
         this._handleException(ex, "ZaDomainListController.prototype._forceDeleteDomainCallback", null, false);
+    }
+}
+
+ZaDomainListController.prototype._donotForceDeleteDomainsCallback =
+function () {
+    this._forceRemoveMessageDialog.popdown();
+    if(this._forceRemoveDomain) {
+        AjxUtil.arrayRemove(this._removeList,this._forceRemoveDomain);
+        this._deleteDomainsCallback();
     }
 }
 
