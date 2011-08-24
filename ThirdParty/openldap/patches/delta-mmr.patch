@@ -1,6 +1,6 @@
---- openldap-2.4.26/servers/slapd/syncrepl.c.orig
-+++ openldap-2.4.26/servers/slapd/syncrepl.c
-@@ -144,6 +144,9 @@ static struct berval * slap_uuidstr_from_normalized(
+--- openldap-2.4.26/servers/slapd/syncrepl.c.orig	2011-06-30 08:13:36.000000000 -0700
++++ openldap-2.4.26/servers/slapd/syncrepl.c	2011-08-24 16:33:16.313811118 -0700
+@@ -144,6 +144,9 @@
  static int syncrepl_add_glue_ancestors(
  	Operation* op, Entry *e );
  
@@ -10,7 +10,7 @@
  /* callback functions */
  static int dn_callback( Operation *, SlapReply * );
  static int nonpresent_callback( Operation *, SlapReply * );
-@@ -151,6 +154,36 @@ static int null_callback( Operation *, SlapReply * );
+@@ -151,6 +154,36 @@
  
  static AttributeDescription *sync_descs[4];
  
@@ -47,7 +47,7 @@
  static const char *
  syncrepl_state2str( int state )
  {
-@@ -171,12 +204,35 @@ syncrepl_state2str( int state )
+@@ -171,12 +204,35 @@
  	return "UNKNOWN";
  }
  
@@ -83,7 +83,7 @@
  	if ( !sync_descs[0] ) {
  		sync_descs[0] = slap_schema.si_ad_objectClass;
  		sync_descs[1] = slap_schema.si_ad_structuralObjectClass;
-@@ -330,33 +386,6 @@ init_syncrepl(syncinfo_t *si)
+@@ -330,33 +386,6 @@
  	si->si_exattrs = exattrs;	
  }
  
@@ -117,7 +117,7 @@
  static int
  ldap_sync_search(
  	syncinfo_t *si,
-@@ -560,6 +589,7 @@ check_syncprov(
+@@ -560,6 +589,7 @@
  		slap_compose_sync_cookie( NULL, &si->si_syncCookie.octet_str,
  			si->si_syncCookie.ctxcsn, si->si_syncCookie.rid,
  			si->si_syncCookie.sid );
@@ -125,7 +125,7 @@
  	}
  	ldap_pvt_thread_mutex_unlock( &si->si_cookieState->cs_mutex );
  	return changed;
-@@ -1745,6 +1775,358 @@ syncrepl_changelog_mods(
+@@ -1751,6 +1781,360 @@
  	return -1;	/* FIXME */
  }
  
@@ -190,6 +190,8 @@
 +				for (i=0; i<mod->sml_numvals; i++)
 +					mod->sml_nvalues[i] = modlist->sml_nvalues[i];
 +				BER_BVZERO(&mod->sml_nvalues[i]);
++			} else {
++				mod->sml_nvalues = NULL;
 +			}
 +		}
 +		if ( match < 0 && modlist->sml_op == LDAP_MOD_REPLACE )
@@ -484,7 +486,7 @@
  static int
  syncrepl_message_to_op(
  	syncinfo_t	*si,
-@@ -1904,9 +2286,20 @@ syncrepl_message_to_op(
+@@ -1910,9 +2294,20 @@
  			if ( e == op->ora_e )
  				be_entry_release_w( op, op->ora_e );
  		} else {
