@@ -319,10 +319,18 @@ public class AjaxCommonTest {
 			}
 
 			// Handle http://wiki.zimbra.com/wiki/File:ZimbraSeleniumScreenshotPopups1.jpeg
+			// START REF: https://bugzilla.zimbra.com/show_bug.cgi?id=63711
+			// Depending on how bug 63711 is implemented, need to add/update/remove the 
+			// code below.  Checking for a dialog after login is too generic - it
+			// could miss other un-wanted dialog boxes that are bugs.
+			//
 			DialogError dialog = app.zPageMain.zGetErrorDialog(DialogErrorID.ZmMsgDialog);
 			if ( dialog.zIsActive() ) {
 				dialog.zClickButton(Button.B_OK);
 			}
+			//
+			// END REF: https://bugzilla.zimbra.com/show_bug.cgi?id=63711
+
 			
 		}
 
