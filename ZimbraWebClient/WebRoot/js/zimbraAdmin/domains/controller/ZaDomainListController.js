@@ -145,7 +145,7 @@ function () {
 	this._popupOperations[ZaOperation.VIEW_DOMAIN_ACCOUNTS]=new ZaOperation(ZaOperation.VIEW_DOMAIN_ACCOUNTS,ZaMsg.Domain_view_accounts, ZaMsg.Domain_view_accounts_tt, "Search", "SearchDis", new AjxListener(this, this.viewAccountsButtonListener));
 	this._popupOperations[ZaOperation.GAL_WIZARD]=new ZaOperation(ZaOperation.GAL_WIZARD,ZaMsg.DTBB_GAlConfigWiz, ZaMsg.DTBB_GAlConfigWiz_tt, "GALWizard", "GALWizardDis", new AjxListener(this, ZaDomainListController.prototype._galWizButtonListener));   		
 	this._popupOperations[ZaOperation.AUTH_WIZARD]=new ZaOperation(ZaOperation.AUTH_WIZARD,ZaMsg.DTBB_AuthConfigWiz, ZaMsg.DTBB_AuthConfigWiz_tt, "AuthWizard", "AuthWizardDis", new AjxListener(this, ZaDomainListController.prototype._authWizButtonListener));
-    this._popupOperations[ZaOperation.AUTOPROV_WIZARD]=new ZaOperation(ZaOperation.AUTOPROV_WIZARD,ZaMsg.DTBB_AutoPovConfigWiz, ZaMsg.DTBB_AutoProvConfigWiz_tt, "Backup", "BackupDis", new AjxListener(this, ZaDomainListController.prototype._autoProvWizButtonListener));
+    this._popupOperations[ZaOperation.AUTOPROV_WIZARD]=new ZaOperation(ZaOperation.AUTOPROV_WIZARD,ZaMsg.DTBB_AutoProvConfigWiz, ZaMsg.DTBB_AutoProvConfigWiz_tt, "Backup", "BackupDis", new AjxListener(this, ZaDomainListController.prototype._autoProvWizButtonListener));
 
 }
 ZaController.initPopupMenuMethods["ZaDomainListController"].push(ZaDomainListController.initPopupMenuMethod);
@@ -738,7 +738,7 @@ function () {
 		if(this._popupOperations[ZaOperation.AUTH_WIZARD])
 			this._popupOperations[ZaOperation.AUTH_WIZARD].enabled=false;
 
-		if(this._popupOperations[ZaOperation.AUTORPOV_WIZARD])
+		if(this._popupOperations[ZaOperation.AUTOPROV_WIZARD])
 			this._popupOperations[ZaOperation.AUTOPROV_WIZARD].enabled=false;
 
 		if(this._popupOperations[ZaOperation.GAL_WIZARD])
