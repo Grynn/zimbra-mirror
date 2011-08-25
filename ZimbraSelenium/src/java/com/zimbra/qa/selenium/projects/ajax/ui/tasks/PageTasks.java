@@ -48,7 +48,7 @@ public class PageTasks extends AbsTab {
 		public static final String zTasksTab = "zb__App__Tasks";
 		public static final String zNewTask = "zb__TKL__NEW_MENU_left_icon";
 		public static final String zNewTaskDropDown = "css=td[id='zb__TKL__NEW_MENU_dropdown']>div";
-		public static final String zNewTagMenuItem= "css=td[id$='_left_icon']>div[class='ImgNewTag']";
+		public static final String zNewTagMenuItem= "css=td[id$='__TKL__NEW_MENU_NEW_TAG_title']";
 		public static final String zMarkAsCompleted = "css=div#zb__TKL__MARK_AS_COMPLETED";
 		public static final String zNewTaskMenuItem ="css=div#zb__TKL__NEW_MENU_NEW_TASK";
 		public static final String zNewTaskFolderMenuItem ="css=div#zb__TKL__NEW_MENU_NEW_TASK_FOLDER";
