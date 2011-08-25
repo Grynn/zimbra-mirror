@@ -23,9 +23,18 @@ all: checksrc allclean build tar
 checksrc:
 	$(if $(files), @echo "", exit 1)
 
+POPT_INCLUDE	:=
+POPT_LDFLAGS	:=
+
+ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
+	POPT_INCLUDE := CPPFLAGS="-I/opt/zimbra/include"
+	POPT_LDFLAGS := LDFLAGS="-L/opt/zimbra/lib"
+endif
+
 build: $(RSYNC_NAME)-$(RSYNC_VERSION)
-	echo NON_MAC $(BUILD_PLATFORM)
 	(cd $(RSYNC_NAME)-$(RSYNC_VERSION); \
+	$(POPT_LDFLAGS) \
+	$(POPT_INCLUDE) \
 	CFLAGS="-g -O2" \
  	./configure --prefix=$(INSTALL_PREFIX) \
 	--localstatedir=$(ZIMBRA_HOME)/data/tmp \
