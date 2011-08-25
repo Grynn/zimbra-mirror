@@ -105,28 +105,28 @@ public class FormAddressPicker extends AbsForm {
 
 		} else if ( button == Button.B_TO ) {
 
-			locator = "css=TODO#TODO";
+			locator = "css=div[id='ZmContactPicker'] div[id='DwtChooserButtonDiv_1'] td[id$='_title']";
 			page = null;
 			
 			// FALL THROUGH
 
 		} else if ( button == Button.B_CC ) {
 
-			locator = "css=TODO#TODO";
+			locator = "css=div[id='ZmContactPicker'] div[id='DwtChooserButtonDiv_2'] td[id$='_title']";
 			page = null;
 			
 			// FALL THROUGH
 
 		} else if ( button == Button.B_BCC ) {
 
-			locator = "css=TODO#TODO";
+			locator = "css=div[id='ZmContactPicker'] div[id='DwtChooserButtonDiv_3'] td[id$='_title']";
 			page = null;
 			
 			// FALL THROUGH
 
 		} else if ( button == Button.B_REMOVE ) {
 
-			locator = "css=td[id='ZmContactPicker_searchButton'] td[id$='_title']";
+			locator = "css=div[id='DwtChooserRemoveButton_1'] td[id$='_title']";
 			page = null;
 			
 			// FALL THROUGH
@@ -307,7 +307,8 @@ public class FormAddressPicker extends AbsForm {
 		this.zWaitForBusyOverlay();
 
 		// Enter text
-		this.sType(locator, value);
+		this.zKeyboard.zTypeCharacters(value);
+		// this.sType(locator, value);
 		
 		this.zWaitForBusyOverlay();
 

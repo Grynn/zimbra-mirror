@@ -16,11 +16,11 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormAddressPicker;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
 
-public class AddCc extends AjaxCommonTest {
+public class AddBcc extends AjaxCommonTest {
 
 	@SuppressWarnings("serial")
-	public AddCc() {
-		logger.info("New "+ AddCc.class.getCanonicalName());
+	public AddBcc() {
+		logger.info("New "+ AddBcc.class.getCanonicalName());
 		
 		// All tests start at the login page
 		super.startingPage = app.zPageMail;
@@ -30,14 +30,14 @@ public class AddCc extends AjaxCommonTest {
 		
 	}
 	
-	@Test(	description = "Select a 'Cc' address in the addresspicker",
+	@Test(	description = "Select a 'Bcc' address in the addresspicker",
 			groups = { "functional" })
-	public void AddCc_01() throws HarnessException {
+	public void AddBcc_01() throws HarnessException {
 		
 		// The account must exist before the picker is opened
 		// Log it to initialize it
-		logger.info("Will add the following account to the Cc:" + ZimbraAccount.AccountB().EmailAddress);
-
+		logger.info("Will add the following account to the Bcc:" + ZimbraAccount.AccountB().EmailAddress);
+		
 		// Create the message data to be sent
 		MailItem mail = new MailItem();
 		mail.dToRecipients.add(new RecipientItem(ZimbraAccount.AccountA()));
@@ -52,14 +52,14 @@ public class AddCc extends AjaxCommonTest {
 		
 		mailform.zFill(mail);
 
-		// Open the addresspicker by clicking Cc
+		// Open the addresspicker by clicking To
 		
 		FormAddressPicker pickerform = (FormAddressPicker)mailform.zToolbarPressButton(Button.B_CC);
 		ZAssert.assertTrue(pickerform.zIsActive(), "Verify the address picker opened corectly");
 		
 		pickerform.zFillField(FormAddressPicker.Field.Search, ZimbraAccount.AccountB().EmailAddress);
 		pickerform.zToolbarPressButton(Button.B_SEARCH);
-		pickerform.zToolbarPressButton(Button.B_CC);
+		pickerform.zToolbarPressButton(Button.B_BCC);
 		pickerform.zSubmit();
 		
 		// Addresspicker should now be closed
@@ -69,7 +69,7 @@ public class AddCc extends AjaxCommonTest {
 
 		MailItem sent = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ mail.dSubject +")");
 		ZAssert.assertNotNull(sent, "Verify the message appears in the sent folder");
-		ZAssert.assertEquals(sent.dCcRecipients.get(0).dEmailAddress, ZimbraAccount.AccountB().EmailAddress, "Verify the 'cc' field is correct");		
+		ZAssert.assertEquals(sent.dBccRecipients.get(0).dEmailAddress, ZimbraAccount.AccountB().EmailAddress, "Verify the 'cc' field is correct");		
 		
 	}
 

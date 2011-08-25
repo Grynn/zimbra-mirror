@@ -34,7 +34,10 @@ public class AddTo extends AjaxCommonTest {
 			groups = { "functional" })
 	public void AddTo_01() throws HarnessException {
 		
-		
+		// The account must exist before the picker is opened
+		// Log it to initialize it
+		logger.info("Will add the following account to the To:" + ZimbraAccount.AccountB().EmailAddress);
+
 		// Create the message data to be sent
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		

@@ -194,7 +194,8 @@ public class FormMailNew extends AbsForm {
 
 		} else if ( button == Button.B_CC ) {
 			
-			throw new HarnessException("implement me");
+			locator = "css=div[id$='__CC'] td[id$='__CC_title']";
+			page = new FormAddressPicker(this.MyApplication);
 
 		} else if ( button == Button.B_BCC ) {
 			
