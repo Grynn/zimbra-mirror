@@ -41,6 +41,7 @@ DIRS := openssl \
 	postfix \
 	dspam \
 	rrdtool \
+	rsync \
 	snmp \
 	memcached \
 	nginx \
