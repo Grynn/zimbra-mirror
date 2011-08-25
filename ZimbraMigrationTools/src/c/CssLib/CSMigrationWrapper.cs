@@ -147,19 +147,36 @@ namespace CssLib
         public void GetListofItems()
         {
             MapiWrapper M1 = new MapiWrapper();
-            UDTItem[] Items;
+            /*UDTItem[] Items;
             Items = (UDTItem[])M1.UDTItemSequence(0, 5);
             DateTime cdate = (DateTime)Items[0].CreationDate;
             FolderType types = Items[0].Type;
-            string entryid = Items[0].EntryId;
+            string entryid = Items[0].EntryId;*/
+
+            object[] objectArray;
+            objectArray = M1.GetFolderObjects();
+
+            folderObject[] Folders = Array.ConvertAll(objectArray, folder => (folderObject)folder);
+
+
+            ItemObject SI1 = new ItemObject();
+            SI1.Id = "2131323";
+            SI1.Type = FolderType.Mail;
+            SI1.Parentfolder = Folders[0];
+
+            folderObject s2 = SI1.Parentfolder;
+
+            string firstname = s2.Name;
+            string path = s2.ParentPath;
+
 
         }
 
         public void  StartMigration(MigrationAccount Acct)
         {
 
-            GetListofMapiFolders();
-            //GetListofItems();
+            //GetListofMapiFolders();
+            GetListofItems();
             //Acct.Accountname = "testing";
             Acct.TotalNoContacts = 100;
             Acct.TotalNoMails = 1000;

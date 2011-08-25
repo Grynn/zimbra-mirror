@@ -107,6 +107,23 @@ interface IMapiWrapper : IDispatch {
 };
 
 [
+	object,
+	uuid(0E3233A0-5359-44FF-B98F-BB0A69D4A948),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface IItemObject : IDispatch{
+	[propget, id(1)] HRESULT ID([out, retval] BSTR* pVal);
+	[propput, id(1)] HRESULT ID([in] BSTR newVal);
+	[propget, id(2)] HRESULT Type([out, retval] FolderType* pVal);
+	[propput, id(2)] HRESULT Type([in] FolderType newVal);
+	[propget, id(3)] HRESULT CreationDate([out, retval] VARIANT* pVal);
+	[propput, id(3)] HRESULT CreationDate([in] VARIANT newVal);
+	[propget, id(4)] HRESULT Parentfolder([out, retval] IfolderObject** pVal);
+	[propput, id(4)] HRESULT Parentfolder([in] IfolderObject* newVal);
+};
+[
     uuid(33449EAA-8056-4D28-8D42-552B7C6C8954),
     version(1.0),
 ]
@@ -125,6 +142,13 @@ library Exchange {
 	coclass folderObject
 	{
 		[default] interface IfolderObject;
+	};
+	[
+		uuid(1315040C-D7DA-4C7F-8500-BD9917546D15)		
+	]
+	coclass ItemObject
+	{
+		[default] interface IItemObject;
 	};
 };
 //import "shobjidl.idl";

@@ -99,6 +99,7 @@ END
 IDR_EXCHANGE            REGISTRY                "Exchange.rgs"
 IDR_MAPIWRAPPER         REGISTRY                "MapiWrapper.rgs"
 IDR_FOLDEROBJECT        REGISTRY                "folderObject.rgs"
+IDR_ITEMOBJECT          REGISTRY                "ItemObject.rgs"
 
 /////////////////////////////////////////////////////////////////////////////
 //
