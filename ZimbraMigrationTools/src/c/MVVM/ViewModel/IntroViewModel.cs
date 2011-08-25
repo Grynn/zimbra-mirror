@@ -29,6 +29,7 @@ namespace MVVM.ViewModel
         private UsersViewModel m_usersViewModel;
         private ScheduleViewModel m_scheduleViewModel;
         private AccountResultsViewModel m_resultsViewModel;
+        public CSMigrationwrapper mw;
         public IntroViewModel(ListBox lbMode)
         {
             lb = lbMode;
@@ -36,6 +37,7 @@ namespace MVVM.ViewModel
             this.GetIntroUserMigCommand = new ActionCommand(this.GetIntroUserMig, () => true);
             this.GetIntroServerMigCommand = new ActionCommand(this.GetIntroServerMig, () => true);
             this.BeginCommand = new ActionCommand(this.Begin, () => true);
+            mw = new CssLib.CSMigrationwrapper();
         }
 
         public UsersViewModel GetUsersViewModel()
@@ -90,9 +92,8 @@ namespace MVVM.ViewModel
             TheViews.RemoveAt(0);
 
             // Get data to initialize the profile combo boxes
-            CSMigrationwrapper mw = new CssLib.CSMigrationwrapper();
             mw.MailClient = "MAPI";
-            mw.InitializeMailClient();
+            mw.InitializeInterop();
             string[] profiles = mw.GetListofMapiProfiles();
 
             if (BaseViewModel.isServer)

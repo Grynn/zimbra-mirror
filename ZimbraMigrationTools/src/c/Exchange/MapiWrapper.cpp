@@ -57,13 +57,14 @@ STDMETHODIMP CMapiWrapper::ConnectToServer(BSTR ServerHostName, BSTR Port, BSTR 
     return S_OK;
 }
 
-STDMETHODIMP CMapiWrapper::ConnecttoXchgServer(BSTR HostName, BSTR ProfileName,
-    BSTR Password) {
-    (void)HostName;
-    (void)ProfileName;
-    (void)Password;
-    baseMigrationObj->Connecttoserver();
-    return S_OK;
+STDMETHODIMP CMapiWrapper::GlobalInit(BSTR* pMAPITarget, BSTR* pAdminUser, BSTR* pAdminPassword, BSTR* pErrorText) {
+	(void)pMAPITarget;
+    (void)pAdminUser;
+    (void)pAdminPassword;
+	(void)pErrorText;
+	LPCWSTR lpszErrorText = ExchangeOps::GlobalInit(L"FBSSBS2008.fssbs2k8.local",L"fbs",L"Test7777");
+	*pErrorText = (lpszErrorText) ? CComBSTR(lpszErrorText) : CComBSTR("");
+	return S_OK;
 }
 
 STDMETHODIMP CMapiWrapper::ImportMailOptions(BSTR OptionsTag) {

@@ -58,41 +58,40 @@ namespace CssLib
         }
         */
 
-        public void InitializeMailClient()
+        public void InitializeInterop()
         {
-
             if (MailClient == "MAPI")
             {
 
-                MailWrapper = new Exchange.MapiWrapper();
-
-              
+                MailWrapper = new Exchange.MapiWrapper();              
             }
-
-
         }
+
+        
+        
+        public string InitializeMailClient(string Target, string AdminUser, string AdminPassword)
+        {
+            string s = "";
+            if (MailClient == "MAPI")
+            {
+                MailWrapper = new Exchange.MapiWrapper();
+                s = MailWrapper.GlobalInit(Target, AdminUser, AdminPassword);
+            }
+            return s;
+        }
+        
+         
+
         public void Initalize(string HostName,string Port, string AdminAccount)
         {
-            //CreateConfig(ConfigXMLFile);
-
-            
+            //CreateConfig(ConfigXMLFile);            
                 MailWrapper.ConnectToServer(HostName,Port,AdminAccount);
-
-
-
-
         }
 
         public void Migrate(string MailOptions)
         {
 
-            MailWrapper.ImportMailOptions(MailOptions);
-
-            
-           
-                   
-           
-
+            MailWrapper.ImportMailOptions(MailOptions);                                                     
         }
 
         public string[] GetListofMapiProfiles()
