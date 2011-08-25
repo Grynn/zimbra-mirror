@@ -145,7 +145,7 @@ public class PageSearch extends AbsTab {
 			
 		} else if ( button == Button.B_SEARCHSAVE ) {
 			
-			locator = "css=td#ztb_search_saveButton";
+			locator = "css=div[id='zb__Search__SAVE'] td[id='zb__Search__SAVE_left_icon']";
 			page = new DialogSaveSearch(MyApplication, this);
 			
 			// Make sure the button exists
