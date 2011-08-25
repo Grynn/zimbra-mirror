@@ -198,7 +198,9 @@ public class DialogShareFind extends AbsDialog {
 			locator = itemLocator + " div[class='ZTreeItemCheckbox']";
 			page = null;
 
-			this.zClickAt(locator, "0,0");
+			// https://bugzilla.zimbra.com/show_bug.cgi?id=63350#c5
+			// this.zClickAt(locator, "0,0");
+			this.sClick(locator);
 			
 			this.zWaitForBusyOverlay();
 			
