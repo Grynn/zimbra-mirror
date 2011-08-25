@@ -517,8 +517,18 @@ HRESULT ExchangeAdmin::DeleteExchangeMailBox(LPCWSTR lpwstrMailBox, LPCWSTR lpws
 
     Zimbra::Util::ScopedInterface<IDirectoryObject> pDirContainer;
 
-    Zimbra::MAPI::Util::GetUserDNAndLegacyName(
-        m_strServer.c_str(), lpwstrlogonuser, UserDN, LegacyName);
+    try {
+	Zimbra::MAPI::Util::GetUserDNAndLegacyName(
+        m_strServer.c_str(), lpwstrlogonuser, UserDN, LegacyName); 
+	} catch (Zimbra::MAPI::ExchangeAdminException &ex) {
+		// To do .. logs entry
+        UNREFERENCED_PARAMETER(ex);
+        throw;
+	} catch (MapiUtilsException &ex) {
+		UNREFERENCED_PARAMETER(ex);
+		// To do .. logs entry
+        throw;
+	}
 
     wstring twtsrlogonuserDN = UserDN;
     size_t nPos = twtsrlogonuserDN.find(_T("DC="), 0);
@@ -563,7 +573,11 @@ HRESULT ExchangeMigrationSetup::Setup() {
         // To do .. logs entry
         UNREFERENCED_PARAMETER(ex);
         throw;
-    }
+    } catch (MapiUtilsException &ex) {
+		// To do .. logs entry
+		UNREFERENCED_PARAMETER(ex);
+        throw;
+	}
     try {
         m_exchAdmin->CreateProfile(DEFAULT_ADMIN_PROFILE_NAME,
             DEFAULT_ADMIN_MAILBOX_NAME, DEFAULT_ADMIN_PASSWORD);
@@ -590,7 +604,11 @@ HRESULT ExchangeMigrationSetup::Clean() {
         // To do .. logs entry
         UNREFERENCED_PARAMETER(ex);
         throw;
-    }
+	} catch (MapiUtilsException &ex) {	
+		// To do .. logs entry
+		UNREFERENCED_PARAMETER(ex);
+        throw;
+	}
     return S_OK;
 }
 
@@ -621,7 +639,10 @@ LPCWSTR ExchangeOps::GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername,
         } catch (Zimbra::MAPI::ExchangeAdminException &ex) {
             lpwstrStatus = FromatExceptionInfo(ex.ErrCode(), (LPWSTR)ex.Description().c_str(),
                     (LPSTR)ex.SrcFile().c_str(), ex.SrcLine());
-        }
+        } catch (MapiUtilsException &ex) {	
+            lpwstrStatus = FromatExceptionInfo(ex.ErrCode(), (LPWSTR)ex.Description().c_str(),
+                    (LPSTR)ex.SrcFile().c_str(), ex.SrcLine());
+		}
     }
     return lpwstrStatus;
 }
@@ -636,7 +657,10 @@ LPCWSTR ExchangeOps::GlobalUninit() {
         } catch (Zimbra::MAPI::ExchangeAdminException &ex) {
             lpwstrStatus = FromatExceptionInfo(ex.ErrCode(), (LPWSTR)ex.Description().c_str(),
                     (LPSTR)ex.SrcFile().c_str(), ex.SrcLine());
-        }
+        } catch (MapiUtilsException &ex) {	
+            lpwstrStatus = FromatExceptionInfo(ex.ErrCode(), (LPWSTR)ex.Description().c_str(),
+                    (LPSTR)ex.SrcFile().c_str(), ex.SrcLine());
+		}
     }
     Initialized = false;
     return lpwstrStatus;
