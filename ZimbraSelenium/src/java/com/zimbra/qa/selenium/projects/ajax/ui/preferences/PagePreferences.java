@@ -275,6 +275,11 @@ public class PagePreferences extends AbsTab {
 			locator = "css=td[id='CHANGE_PASSWORD_title']";
 			page = new DialogChangePassword(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);
 	
+		} else if ( button == Button.B_NEW_FILTER ) {
+			
+			locator = "css=div[id='zb__FRV__ADD_FILTER_RULE'] td[id$='_title']";
+			page = new DialogEditFilter(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);
+	
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}

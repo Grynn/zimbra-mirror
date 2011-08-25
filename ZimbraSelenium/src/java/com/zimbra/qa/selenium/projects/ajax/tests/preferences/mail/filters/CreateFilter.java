@@ -4,10 +4,14 @@ import org.testng.annotations.Test;
 
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.ui.Action;
+import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.preferences.DialogEditFilter;
+import com.zimbra.qa.selenium.projects.ajax.ui.preferences.DialogEditFilter.ConditionConstraint;
+import com.zimbra.qa.selenium.projects.ajax.ui.preferences.DialogEditFilter.ConditionType;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
 
 
@@ -28,6 +32,7 @@ public class CreateFilter extends AjaxCommonTest {
 	public void CreateFilter_01() throws HarnessException {
 
 		String filterName = "filter"+ ZimbraSeleniumProperties.getUniqueString();
+		String conditionValue = "contains"+ ZimbraSeleniumProperties.getUniqueString();
 
 		
 		// Navigate to preferences -> mail -> composing
@@ -37,18 +42,21 @@ public class CreateFilter extends AjaxCommonTest {
 		// **
 		
 		// Click "Add New"
+		DialogEditFilter dialog = (DialogEditFilter)app.zPagePreferences.zToolbarPressButton(Button.B_NEW_FILTER);
 		
 		// Give a name
+		dialog.zSetFilterName(filterName);
 		
 		// Give a criteria
+		dialog.zAddFilterCriteria(ConditionType.Subject, ConditionConstraint.Contains, conditionValue);
 		
 		// Give an action (if necessary)
-		
+		// dialog.zAddFilterAction();
+
 		// Save
+		dialog.zClickButton(Button.B_OK);
 		
-		
-		// Click save
-		
+				
 		
 		// Verify the filter is created
 		app.zGetActiveAccount().soapSend(

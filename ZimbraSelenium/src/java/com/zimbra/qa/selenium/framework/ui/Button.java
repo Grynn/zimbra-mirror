@@ -319,6 +319,8 @@ public class Button {
 
 	// Preferences
 	public static final Button B_CHANGE_PASSWORD = new Button("B_CHANGE_PASSWORD");
+	public static final Button B_NEW_FILTER = new Button("B_NEW_FILTER");
+
 
 	//// Admin Console
 	
