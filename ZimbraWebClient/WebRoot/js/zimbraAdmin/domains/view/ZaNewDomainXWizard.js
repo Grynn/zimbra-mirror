@@ -1391,16 +1391,18 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 					]
 				},
 
-				{type:_CASE_, numCols:1, caseKey: ZaNewDomainXWizard.AUTH_TEST_RESULT_STEP,
+				{type:_CASE_, numCols:1, caseKey: ZaNewDomainXWizard.AUTH_TEST_RESULT_STEP,colSizes:["220px","450px"],
 					visibilityChecks:[Case_XFormItem.prototype.isCurrentTab,ZaNewDomainXWizard.isAuthMechNotZimbra],
 					visibilityChangeEventSources:[ZaModel.currentStep],
 					items: [
-						{type:_GROUP_, 
-							visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthTestResultCode,ZaDomain.Check_OK]],
+						{type:_DWT_ALERT_,
+							colSpan:"2",
+							iconVisible: false,
+							align:_CENTER_,				
+							style: DwtAlert.INFORMATION,
+        						visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthTestResultCode,ZaDomain.Check_OK]],
 							visibilityChangeEventSources:[ZaDomain.A_AuthTestResultCode],
-							items: [
-								{type:_OUTPUT_, value:ZaMsg.Domain_AuthTestSuccessful, alignment:_CENTER_}
-							]
+							content:ZaMsg.Domain_AuthTestSuccessful, alignment:_CENTER_
 						},
 				    	{type:_DWT_ALERT_,content:ZaMsg.Domain_AuthTestSkipped,
 							ref:null,
