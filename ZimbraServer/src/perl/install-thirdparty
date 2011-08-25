@@ -34,6 +34,7 @@ my %BINARIES = (
     "openldap" => "2.4.26.3z",
     "openldap-libs" => "2.4.26.3z",
     "openssl" => "1.0.0d",
+    "rsync" => "3.0.8",
     "tcmalloc" => "1.7",
     "jetty" => "6.1.22.z6"
 );
