@@ -11,15 +11,15 @@ import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
 
 
-public class ZimbraPrefComposeFormatHtml extends AjaxCommonTest {
+public class ZimbraPrefComposeFormatText extends AjaxCommonTest {
 
 	@SuppressWarnings("serial")
-	public ZimbraPrefComposeFormatHtml() {
+	public ZimbraPrefComposeFormatText() {
 		
 		super.startingPage = app.zPagePreferences;
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			{
-				put("zimbraPrefComposeFormat", "text");
+				put("zimbraPrefComposeFormat", "html");
 			}
 		};
 	}
@@ -34,17 +34,17 @@ public class ZimbraPrefComposeFormatHtml extends AjaxCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(
-			description = "Set zimbraPrefComposeFormat to 'html'",
+			description = "Set zimbraPrefComposeFormat to 'text'",
 			groups = { "functional" }
 			)
-	public void ZimbraPrefComposeFormatHtml_01() throws HarnessException {
+	public void ZimbraPrefComposeFormatText_01() throws HarnessException {
 
 		// Navigate to preferences -> mail -> composing
 		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.MailComposing);
-		
+
 		// Click radio button for compose = html
 		// See http://bugzilla.zimbra.com/show_bug.cgi?id=62322
-		app.zPagePreferences.sClick("css=input[id='COMPOSE_AS_HTML_input']");
+		app.zPagePreferences.sClick("css=input[id='COMPOSE_AS_TEXT_input']");
 				
 		// Click save
 		app.zPagePreferences.zToolbarPressButton(Button.B_SAVE);
@@ -55,7 +55,7 @@ public class ZimbraPrefComposeFormatHtml extends AjaxCommonTest {
 				+		"</GetPrefsRequest>");
 		
 		String value = app.zGetActiveAccount().soapSelectValue("//acct:pref[@name='zimbraPrefComposeFormat']", null);
-		ZAssert.assertEquals(value, "html", "Verify the preference was changed to 'html'");
+		ZAssert.assertEquals(value, "text", "Verify the preference was changed to 'text'");
 		
 	}
 }
