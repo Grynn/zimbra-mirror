@@ -28,9 +28,9 @@ public class ContactSearch extends AjaxCommonTest {
 
 	}
 	
-	@Test( description = "select all, search contact in Addressbook + gal ",
-			groups = { "functionaly" })
-	public void searchAll() throws HarnessException {
+	@Test( description = "select all, search existed contact in Addressbook ",
+			groups = { "functional" })
+	public void SelectAllItemTypesSearchExistedContac() throws HarnessException {
 		// Search a contact item 		
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
 		PageAllItemTypes resultPage = null;
@@ -49,29 +49,35 @@ public class ContactSearch extends AjaxCommonTest {
 	      }
 			
         ZAssert.assertTrue(isFound, "Verify contact " + contactItem.fileAs + " displayed");
-		
+	}
+	
+	@Test( description = "select all, search gal contact ",
+			groups = { "functional" })
+	public void SelectAllItemTypesSearchGALContact() throws HarnessException {
+	
 		// Search a GAL item
 		String name=ZimbraAccount.AccountA().DisplayName;
 		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_ALL);
 		app.zPageSearch.zAddSearchQuery(name);
-		resultPage = (PageAllItemTypes) app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
+		PageAllItemTypes resultPage = (PageAllItemTypes) app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
 		
-		items = resultPage.zListItems();		        
-        isFound=false;
+		ArrayList<AllItemTypesItem> items = resultPage.zListItems();		        
+
+        boolean isFound=false;
 	      for (AllItemTypesItem item : items) {
 		    if (item.from.equals(ZimbraAccount.AccountA().DisplayName)) {
 		    	isFound = true;
 		    	break;
 	  	    }
 	      }
-			
+  
         ZAssert.assertTrue(isFound, "Verify GAL contact " + ZimbraAccount.AccountA().DisplayName + " displayed");
 
 	}
 
 	@Test(	description = "select contact, search a contact existing in addressbook  ",
 			groups = { "functional" })
-	public void searchContactInAddressbook() throws HarnessException {
+	public void searchExistedContact() throws HarnessException {
 		// Create a contact via soap 
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
  

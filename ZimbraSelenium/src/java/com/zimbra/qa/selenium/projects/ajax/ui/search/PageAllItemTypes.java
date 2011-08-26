@@ -102,31 +102,36 @@ public class PageAllItemTypes extends AbsTab {
 	 */
 	public ArrayList<AllItemTypesItem> zListItems() throws HarnessException {
 		logger.info("PageAllItemTypes.zListItems()");
-		int numRow = this.sGetCssCount("css=div#zl__MX__rows");
+		int numRow = Integer.parseInt(sGetEval("window.document.getElementById('zl__MX__rows').childNodes.length"));
         
 		ArrayList<AllItemTypesItem> list= new ArrayList<AllItemTypesItem>(numRow);
 			
 		for (int i=0; i <numRow; i++) {
-           StringBuilder id = new StringBuilder(sGetEval("window.document.getElementById('zl__MX__rows').childNodes[" + i + "].id") + "__fr");
-           //StringBuilder id = new StringBuilder(sGetEval("window.document.getElementById('zl__MX__rows').childNodes[" + i + "].id") );
+           //StringBuilder id = new StringBuilder(sGetEval("window.document.getElementById('zl__MX__rows').childNodes[" + i + "].id") + "__fr");
+           StringBuilder id = new StringBuilder(sGetEval("window.document.getElementById('zl__MX__rows').childNodes[" + i + "].id") );
 
-           id.insert(3,'f');
-           AllItemTypesItem item = new AllItemTypesItem("","",sGetText("css=td#"+id.toString()).trim(),"","","");
-/*           //String cssPrefix = "css=tr#" + id +" ";
-           String cssPrefix = "xpath=(//";
-           AllItemTypesItem item = new AllItemTypesItem(
-               	//sGetAttribute(cssPrefix + Locators.TAG + "@class"), sGetAttribute(cssPrefix + Locators.IMAGE + "@class"),	  
-               	//"","","",""
-               	//sGetText(cssPrefix + Locators.FROM), sGetAttribute(cssPrefix + Locators.ATTACHMENT + "@class"),
-               	//sGetText(cssPrefix + Locators.SUBJECT), sGetText(cssPrefix + Locators.DATE)
-
-        		 "", sGetAttribute(cssPrefix + "div[@id=" + id + "__ty])" + "@class"),	  
-        	    sGetText(cssPrefix + Locators.FROM), sGetAttribute(cssPrefix + Locators.ATTACHMENT + "@class"),
-        	    sGetText(cssPrefix + Locators.SUBJECT), sGetText(cssPrefix + Locators.DATE)
-                ); 
-  */
-           list.add(item);
-           logger.info(item.prettyPrint());   
+           try {
+	           id.insert(3,'f');
+	           AllItemTypesItem item = new AllItemTypesItem("","",sGetText("css=tr#"+id.toString()+"__rw>td:nth-of-type(4)"),"","","");
+	/*           //String cssPrefix = "css=tr#" + id +" ";
+	           String cssPrefix = "xpath=(//";
+	           AllItemTypesItem item = new AllItemTypesItem(
+	               	//sGetAttribute(cssPrefix + Locators.TAG + "@class"), sGetAttribute(cssPrefix + Locators.IMAGE + "@class"),	  
+	               	//"","","",""
+	               	//sGetText(cssPrefix + Locators.FROM), sGetAttribute(cssPrefix + Locators.ATTACHMENT + "@class"),
+	               	//sGetText(cssPrefix + Locators.SUBJECT), sGetText(cssPrefix + Locators.DATE)
+	
+	        		 "", sGetAttribute(cssPrefix + "div[@id=" + id + "__ty])" + "@class"),	  
+	        	    sGetText(cssPrefix + Locators.FROM), sGetAttribute(cssPrefix + Locators.ATTACHMENT + "@class"),
+	        	    sGetText(cssPrefix + Locators.SUBJECT), sGetText(cssPrefix + Locators.DATE)
+	                ); 
+	  */
+	           list.add(item);
+	           logger.info(item.prettyPrint());
+           }
+           catch (Exception e) {
+        	   logger.info(" It is not a valid item " + e.getMessage());
+           }
 		}			
 		
 		return list;		
@@ -135,8 +140,8 @@ public class PageAllItemTypes extends AbsTab {
 	
 	@Override
 	public boolean zIsActive() throws HarnessException {
-			
-		return (this.sIsVisible(Locators.CONTAINER));
+		zWaitForElementPresent(Locators.CONTAINER);	
+		return (sIsVisible(Locators.CONTAINER));
 				
 	}
 	
