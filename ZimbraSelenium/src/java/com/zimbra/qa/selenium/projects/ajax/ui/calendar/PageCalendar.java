@@ -1,5 +1,6 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.calendar;
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,6 +95,81 @@ public class PageCalendar extends AbsTab {
 		logger.info("new " + PageCalendar.class.getCanonicalName());
 	}
 
+	private AbsPage zListItemListView(Action action, String subject) throws HarnessException {
+
+		// The default locator points at the subject
+		String locator = "css=div[id='zl__CLL__rows'] td[id$='__su']:contains('" + subject + "')";
+		AbsPage page = null;
+
+				
+		if ( action == Action.A_LEFTCLICK ) {
+
+			// Left-Click on the item
+			this.zClickAt(locator,"");
+			this.zWaitForBusyOverlay();
+
+			page = null;
+			
+			// FALL THROUGH
+
+		} else if ( action == Action.A_CHECKBOX || action == Action.A_UNCHECKBOX ) {
+
+			// Find the locator to the row
+			locator = null;
+			int count = this.sGetCssCount("css=div[id='zl__CLL__rows']>div");
+			for (int i = 1; i <= count; i++) {
+
+				String itemLocator = "css=div[id='zl__CLL__rows']>div:nth-of-type("+ i +")";
+				String s = this.sGetText(itemLocator + " td[id$='__su']").trim();
+
+				if ( s.contains(subject) ) {
+					locator = itemLocator;
+					break; // found it
+				}
+
+			}
+			
+			if ( locator == null )
+				throw new HarnessException("Unable to locate row with subject: "+ subject);
+			
+			String selectLocator = locator + " div[id$='__se']";
+			if ( !this.sIsElementPresent(selectLocator) )
+				throw new HarnessException("Checkbox locator is not present "+ selectLocator);
+
+			if ( action == Action.A_CHECKBOX ) {
+				if ( this.sIsElementPresent(selectLocator +"[class*='ImgCheckboxChecked']"))
+					throw new HarnessException("Trying to check box, but it was already checked");
+			} else if ( action == Action.A_UNCHECKBOX ) {
+				if ( this.sIsElementPresent(selectLocator +"[class*='ImgCheckboxUnchecked']"))
+					throw new HarnessException("Trying to uncheck box, but it was already unchecked");
+			}
+
+
+			// Left-Click on the flag field
+			this.zClick(selectLocator);
+
+			this.zWaitForBusyOverlay();
+
+			// No page to return
+			page = null;
+
+			// FALL THROUGH
+				
+		} else {
+			throw new HarnessException("implement me!  action = "+ action);
+		}
+		
+		// Action should take place in the if/else block.
+		// No need to take action on a locator at this point.
+		
+		// If a page was specified, make sure it is active
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+		
+		return (page);
+	}
+	
 	@Override
 	public AbsPage zListItem(Action action, String subject) throws HarnessException {
 		
@@ -110,6 +186,15 @@ public class PageCalendar extends AbsTab {
 		String locator = null;
 		AbsPage page = null;
 
+		// See note below about the locator TODO task.
+		// As a work around, for the List-view tests, redirect to a sub-method
+		if ( this.zIsVisiblePerPosition(Locators.CalendarViewListCSS, 0, 0) ) {
+			return (zListItemListView(action, subject));
+		}
+		
+		// TODO: this locator seems too generic for all the views that are possible
+		// int the calendar.  I'm not sure it will be possible to make it generic
+		// across the views.  It will likely need to be implemented per view.
 		locator = "css=td.appt_name:contains('" + subject + "')";
 		SleepUtil.sleepMedium();
 		
@@ -443,6 +528,15 @@ public class PageCalendar extends AbsTab {
 			page = null;
 			// FALL THROUGH
 
+		} else if (button == Button.B_DELETE) {
+			
+			locator = "css=td[id='zb__CLD__DELETE_title']";
+			page = new DialogConfirm(
+					DialogConfirm.Confirmation.DELETE,
+					MyApplication, 
+					((AppAjaxClient) MyApplication).zPageCalendar);
+
+
 		} else {
 			throw new HarnessException("no logic defined for button " + button);
 		}
@@ -469,12 +563,40 @@ public class PageCalendar extends AbsTab {
 		return (page);
 	}
 
+	public AbsPage zKeyboardKeyEvent(int keyEvent) throws HarnessException {
+		AbsPage page = null;
+		
+		if ( keyEvent == KeyEvent.VK_DELETE || keyEvent == KeyEvent.VK_BACK_SPACE ) {
+			page = new DialogConfirm(
+					DialogConfirm.Confirmation.DELETE,
+					MyApplication, 
+					((AppAjaxClient) MyApplication).zPageCalendar);
+		}
+
+		this.zKeyboard.zTypeKeyEvent(keyEvent);
+
+		// If the app is busy, wait for it to become active
+		this.zWaitForBusyOverlay();
+
+		// If a page is specified, wait for it to become active
+		if ( page != null ) {
+			page.zWaitForActive();	// This method throws a HarnessException if never active
+		}
+		
+		return (page);
+	}
+
 	@Override
 	public AbsPage zKeyboardShortcut(Shortcut shortcut) throws HarnessException {
 		AbsPage page = null;
 		
 		if ( shortcut == Shortcut.S_ASSISTANT ) {
 			page = new DialogAssistant(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+		} else if ( shortcut == Shortcut.S_MAIL_MOVETOTRASH ) {
+			page = new DialogConfirm(
+					DialogConfirm.Confirmation.DELETE,
+					MyApplication, 
+					((AppAjaxClient) MyApplication).zPageCalendar);
 		}
 		
 		zKeyboard.zTypeCharacters(shortcut.getKeys());
@@ -704,12 +826,20 @@ public class PageCalendar extends AbsTab {
 	private List<AppointmentItem> zListGetAppointmentsListView() throws HarnessException {
 		List<AppointmentItem> items = new ArrayList<AppointmentItem>();
 
-		String listLocator = "css=div[id='zl__CLL__rows']>div[id^='zli__CLL__']";
+		String divLocator = "css=div[id='zl__CLL__rows']";
+		String listLocator = divLocator +">div[id^='zli__CLL__']";
 		String rowLocator = null;
 
-		// Make sure the button exists
-		if ( !this.sIsElementPresent(listLocator) )
-			throw new HarnessException("List View Rows is not present: " + listLocator);
+		// Make sure the div exists
+		if ( !this.sIsElementPresent(divLocator) ) {
+			throw new HarnessException("List View Rows is not present: " + divLocator);
+		}
+		
+		// If the list doesn't exist, then no items are present
+		if ( !this.sIsElementPresent(listLocator) ) {
+			// return an empty list
+			return (items);
+		}
 
 		// How many items are in the table?
 		int count = this.sGetCssCount(listLocator);
