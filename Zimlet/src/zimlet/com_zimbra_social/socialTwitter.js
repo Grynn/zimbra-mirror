@@ -463,7 +463,7 @@ function(showAlertObj) {
 	hdr[j++] = "<TABLE width=500px>";
 	hdr[j++] = "<TR><TD align=left>";
 	hdr[j++] = "<label style='font-weight:bold;font-size:13px;color:blue';font-family:'Lucida Grande',sans-serif;>";
-	hdr[j++] = AjxMessageFormat.format(this.zimlet.getMessage("youHaveXUnreadTweets"), totalUnreadCount); 
+	hdr[j++] = AjxMessageFormat.format(this.zimlet.getMessage("youHaveXUnreadTweets"), totalUnreadCount);
 	hdr[j++] = "</label>";
 	hdr[j++] = "</td>";
 	hdr[j++] = "</tr>";
@@ -610,11 +610,12 @@ function() {
 com_zimbra_socialTwitter.prototype._handleOAuthResult =
 function(result) {
 	if (!result.success) {
-		if (result.httpResponse) {
-			this.zimlet.showWarningMsg(result.httpResponse.text);
-		} else {
-			this.zimlet.showWarningMsg(this.zimlet.getMessage("unknownError"));
-		}
+		var errorDialog = appCtxt.getErrorDialog();
+		errorDialog.reset();
+		var msg = result.httpResponse && result.httpResponse.status ? "HTTP ERROR "+ result.httpResponse.status : this.zimlet.getMessage("unknownError");
+		var detailStr = result.httpResponse && result.httpResponse.text ? result.httpResponse.text : this.zimlet.getMessage("unknownError");
+		errorDialog.setMessage(msg, detailStr, DwtMessageDialog.CRITICAL_STYLE, ZmMsg.zimbraTitle);
+		errorDialog.popup();
 		return;
 	}
 
