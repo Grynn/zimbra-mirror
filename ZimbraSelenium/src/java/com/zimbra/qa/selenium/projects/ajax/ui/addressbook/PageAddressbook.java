@@ -959,9 +959,24 @@ public class PageAddressbook extends AbsTab {
 			}
     		zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);											
     	}
+    	else if (option == Button.B_CONTACTGROUP) {
+    		if (subOption == Button.O_NEW_CONTACTGROUP) {
+				
+    			int numItems = Integer.parseInt(sGetEval("window.document.getElementById('zmi__Contacts__CONTACTGROUP_MENU|GROUP_MENU').childNodes[0].childNodes[0].childNodes.length")) -1;
+    		   		
+    			for (int i=0; i<numItems -1; i++) {
+    				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);									
+    			}
+    			
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);									    			    		
+    		    zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);											
+    
+    		}    		
+    	}
     	else {
     		sFocus(locator);
             sMouseOver(locator);
+            //jClick(locator);
             zClickAt(locator, "0,0");
      	}
        zWaitForBusyOverlay();
