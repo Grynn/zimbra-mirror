@@ -22,7 +22,7 @@ public class PageSocial extends AbsTab {
 
 
 	public static class Locators {
-
+		public static final String StatusTextAreaLocatorCSS = "css=textarea[id='social_statusTextArea']";
 	}
 
 
@@ -33,6 +33,20 @@ public class PageSocial extends AbsTab {
 
 	}
 
+	/**
+	 * Dismiss the 'welcome' popup if it is showing
+	 * @throws HarnessException 
+	 */
+	private boolean zDismissWelcomeDialog() throws HarnessException {
+		// TODO: see https://bugzilla.zimbra.com/show_bug.cgi?id=61984
+		DialogSocialZimletWelcome dialog = new DialogSocialZimletWelcome(MyApplication, ((AppAjaxClient) MyApplication).zPageSocial);
+		if ( dialog.zIsActive() ) {
+			dialog.zClickButton(Button.B_OK);
+			return (true);
+		}
+		return (false);
+	}
+	
 	/* (non-Javadoc)
 	 * @see projects.admin.ui.AbsPage#isActive()
 	 */
@@ -44,8 +58,19 @@ public class PageSocial extends AbsTab {
 			((AppAjaxClient)MyApplication).zPageMain.zNavigateTo();
 		}
 
+		// Need to rethink just blindly dismissing this dialog - what if the test case needs to verify it?
+		this.zDismissWelcomeDialog();
 		
-		// TODO: see https://bugzilla.zimbra.com/show_bug.cgi?id=61984
+		boolean present = this.sIsElementPresent(Locators.StatusTextAreaLocatorCSS);
+		if ( !present ) {
+			return (false);
+		}
+		
+		boolean visible = this.zIsVisiblePerPosition(Locators.StatusTextAreaLocatorCSS, 0, 0);
+		if ( !visible ) {
+			return (false);
+		}
+		
 		return (true);
 	}
 
