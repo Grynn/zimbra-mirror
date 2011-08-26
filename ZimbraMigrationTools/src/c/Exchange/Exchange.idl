@@ -122,6 +122,7 @@ interface IItemObject : IDispatch{
 	[propput, id(3)] HRESULT CreationDate([in] VARIANT newVal);
 	[propget, id(4)] HRESULT Parentfolder([out, retval] IfolderObject** pVal);
 	[propput, id(4)] HRESULT Parentfolder([in] IfolderObject* newVal);
+	[id(5)] HRESULT GetDataForItem([out, retval] VARIANT* pVal);
 };
 [
     uuid(33449EAA-8056-4D28-8D42-552B7C6C8954),

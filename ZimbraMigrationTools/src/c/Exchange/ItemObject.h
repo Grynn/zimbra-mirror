@@ -75,7 +75,7 @@ public:
 	STDMETHOD(put_Parentfolder)(IfolderObject* newVal);
 	STDMETHOD(get_CreationDate)(VARIANT* pVal);
 	STDMETHOD(put_CreationDate)(VARIANT newVal);
-
+	STDMETHOD(GetDataForItem)(VARIANT* pVal);
 
 };
 

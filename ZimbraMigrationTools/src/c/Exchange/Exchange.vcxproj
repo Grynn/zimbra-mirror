@@ -246,6 +246,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ContactObj.cpp" />
     <ClCompile Include="dllmain.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">false</CompileAsManaged>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">Create</PrecompiledHeader>
@@ -274,6 +275,7 @@
     <ClCompile Include="MapiWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ContactObj.h" />
     <ClInclude Include="Exchange.h" />
     <ClInclude Include="ExchangeAdmin.h" />
     <ClInclude Include="Exchange_i.h" />

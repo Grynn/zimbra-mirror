@@ -160,13 +160,29 @@ namespace CssLib
 
             ItemObject SI1 = new ItemObject();
             SI1.Id = "2131323";
-            SI1.Type = FolderType.Mail;
+            SI1.Type = FolderType.Contacts;
             SI1.Parentfolder = Folders[0];
 
             folderObject s2 = SI1.Parentfolder;
 
             string firstname = s2.Name;
             string path = s2.ParentPath;
+
+            
+            string[,] data = SI1.GetDataForItem();
+            
+               int bound0 = data.GetUpperBound(0);
+              
+               Dictionary<string, string> dict = new Dictionary<string, string>();
+
+               for (int i = 0; i <= bound0; i++)
+               {
+                   string Key = data[0, i]; 
+                   string Value = data[1, i];
+                   dict.Add(Key, Value);
+                  // Console.WriteLine("{0}, {1}", so1, so2);
+               }
+
 
 
         }
