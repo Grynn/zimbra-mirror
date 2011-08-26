@@ -28,6 +28,9 @@ public:
     HRESULT OpenOtherStore(LPMDB OpenedStore, LPWSTR pServerDn, LPWSTR pUserDn,
     MAPIStore &OtherStore);
     HRESULT OpenAddressBook(LPADRBOOK *ppAddrBook);
+	HRESULT OpenEntry(ULONG cbEntryID,LPENTRYID lpEntryID,LPCIID lpInterface,
+		ULONG ulFlags,ULONG FAR * lpulObjType,LPUNKNOWN FAR * lppUnk );
+	HRESULT CompareEntryIDs(SBinary *pBin1, SBinary *pBin2, ULONG &lpulResult);
 };
 }
 }

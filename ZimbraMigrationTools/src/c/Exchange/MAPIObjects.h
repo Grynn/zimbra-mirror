@@ -212,16 +212,19 @@ private:
     LPMAPIFOLDER m_folder;
     wstring m_displayname;
     SBinary m_EntryID;
-
+	MAPISession *m_session;
+	wstring m_folderpath;
+	wstring FindFolderPath();
 public:
     MAPIFolder();
+	MAPIFolder( MAPISession &session);
     ~MAPIFolder();
     MAPIFolder(const MAPIFolder &folder);
     void Initialize(LPMAPIFOLDER pFolder, LPTSTR displayName, LPSBinary pEntryId);
     HRESULT GetItemCount(ULONG &ulCount);
     HRESULT GetMessageIterator(MessageIterator &msgIterator);
     HRESULT GetFolderIterator(FolderIterator &folderIter);
-
+	wstring GetFolderPath(){return m_folderpath;}
     wstring Name() { return m_displayname; }
 	SBinary EntryID() {return m_EntryID;}
 };

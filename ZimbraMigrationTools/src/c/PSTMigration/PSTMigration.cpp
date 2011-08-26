@@ -162,7 +162,7 @@ void GetUserDN()
 {
 	wstring userDN;
 	wstring lagcyName;
-	Zimbra::MAPI::Util::GetUserDNAndLegacyName(L"10.117.82.161",L"Administrator",userDN,lagcyName);
+	Zimbra::MAPI::Util::GetUserDNAndLegacyName(L"10.117.82.161",L"Administrator",NULL,userDN,lagcyName);
 }
 
 void ExchangeMigrationSetupTest()
@@ -185,7 +185,7 @@ void ExchangeMigrationSetupTest()
 	*/
 	//If Profile exists, rest are Optional else rest 3 params must be there!!!
 	//ExchangeOps::Init("Profile", ExchangeIP[optional], AdminName[Optional], AdminPwd[Optional]);
-	LPCWSTR lpwstrStatus=ExchangeOps::GlobalInit(L"10.117.82.161",L"Administrator",L"z1mbr4Migration");
+	LPCWSTR lpwstrStatus=ExchangeOps::GlobalInit(L"10.117.82.161",L"Administrator",L"z1mbr4Migration");//(L"10.20.141.161", L"fbs",L"Test7777");//
 	delete[]lpwstrStatus; 
 
 	lpwstrStatus=ExchangeOps::GlobalUninit();
@@ -211,6 +211,19 @@ void MAPIAccessAPITest()
 	delete maapi;
 }
 
+void MAPIAccessAPITestV()
+{
+	vector<Folder_Data> vfolderlist;
+	//Create class instance with Exchange server hostname/IP, Outlook admin profile name, Exchange mailbox to be migrated
+	Zimbra::MAPI::MAPIAccessAPI *maapi = new Zimbra::MAPI::MAPIAccessAPI(L"10.117.82.161",L"Outlook",L"appt1");
+
+	//Init session and stores
+	maapi->Initialize();
+
+	//Get all folders
+	maapi->GetRootFolderHierarchyV(vfolderlist);
+}
+
 int main(int argc, TCHAR *argv[])
 {
 	UNREFERENCED_PARAMETER(argc);
@@ -221,9 +234,11 @@ int main(int argc, TCHAR *argv[])
 //	ZCFileUploadTest();
 //	CreateExchangeMailBox();
 //	GetAllProfiles();	
-//	MAPIAccessAPITest();
-
-	ExchangeMigrationSetupTest();
+	//MAPIAccessAPITest();
+	
+	MAPIAccessAPITestV();
+	//Zimbra::MAPI::Util::ReverseDelimitedString(L"lb1/tv2/cr3/Inbox/TopFolder",L"/");
+	//ExchangeMigrationSetupTest();
 	//CreateExchangeMailBox();
 	
 	return 0;

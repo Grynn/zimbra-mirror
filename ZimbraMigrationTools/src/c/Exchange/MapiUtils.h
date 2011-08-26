@@ -103,12 +103,14 @@ namespace Util {
 HRESULT HrMAPIFindDefaultMsgStore(LPMAPISESSION lplhSession, SBinary &bin);
 HRESULT MailboxLogon(LPMAPISESSION pSession, LPMDB pMdb, LPWSTR pStoreDn, LPWSTR pMailboxDn,
     LPMDB *ppMdb);
-HRESULT GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR lpszUser, wstring &wstruserdn,
+HRESULT GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR lpszUser, LPCWSTR lpszPwd, wstring &wstruserdn,
     wstring &wstrlegacyname);
 HRESULT GetUserDnAndServerDnFromProfile(LPMAPISESSION pSession, LPSTR &pExchangeServerDn,
     LPSTR &pExchangeUserDn);
 HRESULT HrMAPIFindIPMSubtree(LPMDB lpMdb, SBinary &bin);
 ULONG IMAPHeaderInfoPropTag(LPMAPIPROP lpMapiProp);
+HRESULT CopyEntryID(SBinary &src, SBinary &dest);
+wstring ReverseDelimitedString(wstring wstrString, WCHAR* delimiter);
 }
 }
 }

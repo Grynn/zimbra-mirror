@@ -3,8 +3,10 @@
 namespace Zimbra {
 namespace MAPI {
 struct _Folder_Data {
-    wstring name;
+    wstring name;	
     SBinary sbin;
+	wstring parentpath;
+	long zimbraid;
     Zimbra::MAPI::MAPIFolder *mapifolder;
 };
 
@@ -23,6 +25,7 @@ private:
     HRESULT OpenSessionAndStore();
     bool iterate_folders(Zimbra::MAPI::MAPIFolder &folder, tree<Folder_Data> &tr,
     tree<Folder_Data>::iterator tritr);
+	HRESULT Iterate_foldersV(Zimbra::MAPI::MAPIFolder &folder, vector<Folder_Data> &fd);
     void travrese_folder(Zimbra::MAPI::MAPIFolder &folder);
     HRESULT MAPIAccessAPI::GetFolderHierarchy(Zimbra::MAPI::MAPIFolder rootFolder,
     tree<Folder_Data> &tr);
@@ -32,6 +35,7 @@ public:
     ~MAPIAccessAPI();
     HRESULT Initialize();
     HRESULT GetRootFolderHierarchy(tree<Folder_Data> &tr);
+	HRESULT GetRootFolderHierarchyV(vector<Folder_Data> &vfolderlist);
     HRESULT IterateTree(tree<Folder_Data> &tr);
 };
 }

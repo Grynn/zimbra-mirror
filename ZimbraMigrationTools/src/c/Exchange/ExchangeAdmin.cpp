@@ -260,7 +260,7 @@ HRESULT ExchangeAdmin::CreateExchangeMailBox(LPCWSTR lpwstrNewUser, LPCWSTR lpws
     wstring legacyName;
 
     Zimbra::MAPI::Util::GetUserDNAndLegacyName(
-        m_strServer.c_str(), lpwstrlogonuser, LogonUserDN, legacyName);
+        m_strServer.c_str(), lpwstrlogonuser,lpwstrLogonUsrPwd, LogonUserDN, legacyName);
 
     Zimbra::Util::ScopedInterface<IDirectoryObject> pLogonContainer;
     wstring strContainer = L"LDAP://";
@@ -519,7 +519,7 @@ HRESULT ExchangeAdmin::DeleteExchangeMailBox(LPCWSTR lpwstrMailBox, LPCWSTR lpws
 
     try {
 	Zimbra::MAPI::Util::GetUserDNAndLegacyName(
-        m_strServer.c_str(), lpwstrlogonuser, UserDN, LegacyName); 
+        m_strServer.c_str(), lpwstrlogonuser,lpwstrLogonUsrPwd, UserDN, LegacyName); 
 	} catch (Zimbra::MAPI::ExchangeAdminException &ex) {
 		// To do .. logs entry
         UNREFERENCED_PARAMETER(ex);
@@ -564,7 +564,7 @@ ExchangeMigrationSetup::~ExchangeMigrationSetup() {
 }
 
 HRESULT ExchangeMigrationSetup::Setup() {
-    Clean();
+	Clean();
 
     try {
         m_exchAdmin->CreateExchangeMailBox(DEFAULT_ADMIN_MAILBOX_NAME,

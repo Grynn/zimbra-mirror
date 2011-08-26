@@ -126,3 +126,17 @@ HRESULT MAPISession::OpenAddressBook(LPADRBOOK *ppAddrBook) {
         hr = m_Session->OpenAddressBook(NULL, NULL, AB_NO_DIALOG, ppAddrBook);
     return hr;
 }
+
+HRESULT MAPISession::OpenEntry(ULONG cbEntryID,LPENTRYID lpEntryID,LPCIID lpInterface,
+		ULONG ulFlags,ULONG FAR * lpulObjType,LPUNKNOWN FAR * lppUnk )
+{
+	return m_Session->OpenEntry(cbEntryID, lpEntryID, lpInterface, ulFlags, lpulObjType, lppUnk);
+}
+
+HRESULT MAPISession::CompareEntryIDs(SBinary *pBin1, SBinary *pBin2, ULONG &lpulResult) {
+    HRESULT hr = S_OK;
+    hr =
+        m_Session->CompareEntryIDs(pBin1->cb, (LPENTRYID)(pBin1->lpb), pBin2->cb,
+            (LPENTRYID)(pBin2->lpb), 0, &lpulResult);
+    return hr;
+}

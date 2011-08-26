@@ -110,7 +110,7 @@ HRESULT Zimbra::MAPI::Util::MailboxLogon(LPMAPISESSION pSession, LPMDB pMdb, LPW
     return hr;
 }
 
-HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR lpszUser,
+HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR lpszUser, LPCWSTR lpszPwd,
     wstring &wstruserdn,wstring &wstrlegacyname) {
     wstruserdn = L"";
 
@@ -119,7 +119,7 @@ HRESULT Zimbra::MAPI::Util::GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR l
     wstring strADServer = L"LDAP://";
     strADServer += lpszServer;
     HRESULT hr = ADsOpenObject(
-            strADServer.c_str(), NULL, NULL, ADS_SECURE_AUTHENTICATION, IID_IDirectorySearch,
+            strADServer.c_str(), lpszUser/*NULL*/,lpszPwd /*NULL*/, ADS_SECURE_AUTHENTICATION, IID_IDirectorySearch,
             (void **)&pDirSearch);
     if (((FAILED(hr))))
         throw MapiUtilsException(hr, L"Util::GetUserDNAndLegacyName(): ADsOpenObject Failed.", __LINE__,
@@ -272,4 +272,33 @@ ULONG Zimbra::MAPI::Util::IMAPHeaderInfoPropTag(LPMAPIPROP lpMapiProp) {
     MAPIFreeBuffer(lpNamedPropTag);
 
     return ulIMAPHeaderPropTag;
+}
+
+HRESULT Zimbra::MAPI::Util::CopyEntryID(SBinary &src, SBinary &dest)
+{
+	HRESULT hr=S_OK;
+	dest.cb = src.cb;
+    hr=MAPIAllocateBuffer(src.cb, (LPVOID *)&(dest.lpb));
+    memcpy(dest.lpb, src.lpb, dest.cb);
+	return hr;
+}
+
+wstring Zimbra::MAPI::Util::ReverseDelimitedString(wstring wstrString, WCHAR* delimiter)
+{
+	wstring wstrresult=L"";
+	//get last pos
+	wstring::size_type lastPos = wstrString.length();
+	//get first last delimiter
+	wstring::size_type pos = wstrString.rfind(delimiter, lastPos);
+
+	//till npos
+    while (wstring::npos != pos && wstring::npos != lastPos)
+    {
+        wstrresult= wstrresult+wstrString.substr(pos+1, lastPos-pos)+delimiter;
+		lastPos = pos-1;
+        pos = wstrString.rfind(delimiter, lastPos);
+    }
+	//add till last pos
+	wstrresult= wstrresult+wstrString.substr(pos+1, lastPos-pos);
+	return wstrresult;
 }

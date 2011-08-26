@@ -72,11 +72,16 @@ BOOL FolderIterator::GetNext(MAPIFolder &folder) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // MAPIFolder
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-MAPIFolder::MAPIFolder(): m_folder(NULL) {
+MAPIFolder::MAPIFolder(): m_folder(NULL),m_session(NULL) {
     m_EntryID.cb = 0;
     m_EntryID.lpb = NULL;
 }
 
+MAPIFolder::MAPIFolder(MAPISession &session): m_folder(NULL) {
+    m_EntryID.cb = 0;
+    m_EntryID.lpb = NULL;
+	m_session = &session;
+}
 MAPIFolder::~MAPIFolder() {
     if (m_folder != NULL)
         UlRelease(m_folder);
@@ -105,6 +110,75 @@ void MAPIFolder::Initialize(LPMAPIFOLDER pFolder, LPTSTR displayName, LPSBinary 
     m_EntryID.cb = pEntryId->cb;
     MAPIAllocateBuffer(m_EntryID.cb, (LPVOID *)&(m_EntryID.lpb));
     memcpy(m_EntryID.lpb, pEntryId->lpb, m_EntryID.cb);
+	if(m_session)
+	{
+		wstring wstrFolderPath = FindFolderPath();
+		m_folderpath = wstrFolderPath;
+	}
+}
+
+wstring MAPIFolder::FindFolderPath()
+{
+	HRESULT hr=S_OK;
+	ULONG ulResult=FALSE;
+	wstring wstrPath=m_displayname;
+	LPSPropValue pPropVal = NULL ;
+	ULONG ulType = 0 ;
+	LPMAPIFOLDER lpMAPIFolder = NULL ;
+	SBinary prevEntryID = {0};
+
+	//Make copy of prev EntryID
+	Zimbra::MAPI::Util::CopyEntryID(m_EntryID,prevEntryID);
+	//Get parent ENTRYID
+	if(SUCCEEDED(hr=HrGetOneProp(m_folder,PR_PARENT_ENTRYID,&pPropVal)))
+	{
+		while(!ulResult)
+		{
+			//compare entryID with previous
+			m_session->CompareEntryIDs(&prevEntryID,&pPropVal->Value.bin,ulResult);
+			//Free PrevEntryID
+			MAPIFreeBuffer( prevEntryID.lpb );
+			prevEntryID.lpb = NULL;
+			if(ulResult)
+			{
+				if(pPropVal)
+					MAPIFreeBuffer( pPropVal );
+				continue;
+			}
+			//Get Parent MAPI Folder
+			if(SUCCEEDED(hr=m_session->OpenEntry(pPropVal->Value.bin.cb,(LPENTRYID)pPropVal->Value.bin.lpb,
+					NULL, 0, &ulType, (LPUNKNOWN*)&lpMAPIFolder )))
+			{
+				//Get parent folder name
+				LPSPropValue pDisplayPropVal = NULL ;
+				if(SUCCEEDED(hr=HrGetOneProp(lpMAPIFolder,PR_DISPLAY_NAME,&pDisplayPropVal))) 
+				{
+					wstrPath= wstrPath+L"/"+pDisplayPropVal->Value.lpszW;
+					MAPIFreeBuffer(pDisplayPropVal);
+					pDisplayPropVal = NULL ;
+				}	
+				//Make copy of prev EntryID
+				Zimbra::MAPI::Util::CopyEntryID(pPropVal->Value.bin,prevEntryID);
+				//free parent folder entryID
+				MAPIFreeBuffer( pPropVal );
+				pPropVal = NULL;
+
+				//Get parent's parent entry ID
+				if(!SUCCEEDED(hr=HrGetOneProp(lpMAPIFolder,PR_PARENT_ENTRYID,&pPropVal))) 
+				{
+					ulResult = TRUE;
+				}
+				//free parent folder
+				lpMAPIFolder->Release();
+			}
+			else
+			{
+				ulResult = TRUE;
+			}
+		}
+	}
+	wstrPath=Zimbra::MAPI::Util::ReverseDelimitedString(wstrPath,L"/");
+	return wstrPath;
 }
 
 HRESULT MAPIFolder::GetItemCount(ULONG &ulCount) {
