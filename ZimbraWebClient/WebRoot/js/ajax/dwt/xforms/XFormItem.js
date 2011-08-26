@@ -4154,8 +4154,13 @@ Dwt_Adaptor_XFormItem.prototype._addCssStylesToDwtWidget = function () {
 Dwt_Button_XFormItem = function() {}
 XFormItemFactory.createItemType("_DWT_BUTTON_", "dwt_button", Dwt_Button_XFormItem, Dwt_Adaptor_XFormItem)
 Dwt_Button_XFormItem.estimateMyWidth = function (label,withIcon,extraMargin) {
-	var width = (String(label).length/2)*XForm.FONT_WIDTH1 + (String(label).length/2)*XForm.FONT_WIDTH2 + 14;
-	if(withIcon)
+    var width;
+    if(ZaZimbraAdmin.LOCALE=="ja"||ZaZimbraAdmin.LOCALE=="ko"||ZaZimbraAdmin.LOCALE=="zh_CN"||ZaZimbraAdmin.LOCALE=="zh_HK")
+         width = (String(label).length)*XForm.FONT_WIDTH1 + (String(label).length)*XForm.FONT_WIDTH2 + 14;
+    else
+	     width = (String(label).length/2)*XForm.FONT_WIDTH1 + (String(label).length/2)*XForm.FONT_WIDTH2 + 14;
+
+    if(withIcon)
 		width = width + 24;
 	
 	if(extraMargin>0)
