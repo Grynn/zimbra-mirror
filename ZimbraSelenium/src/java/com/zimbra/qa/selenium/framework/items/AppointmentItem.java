@@ -20,8 +20,15 @@ public class AppointmentItem implements IItem {
 	////
 	// GUI values
 	////
+	protected boolean gIsChecked = false;
+	protected boolean gIsTagged = false;
+	protected boolean gHasAttachments = false;
 	protected String gSubject = null;
+	protected String gFragment = null;
 	protected String gLocation = null;
+	protected String gStatus = null;
+	protected String gCalendar = null;
+	protected boolean gIsRecurring = false;
 	protected String gStart = null;
 	protected String gEnd = null;
 
@@ -139,13 +146,38 @@ public class AppointmentItem implements IItem {
 	@Override
 	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(AppointmentItem.class.getSimpleName()).append('\n');
+		sb.append(MailItem.class.getSimpleName()).append('\n');
+		sb.append('\n').append(prettyPrintSOAP());
+		sb.append('\n').append(prettyPrintGUI());
+		return (sb.toString());
+	}
+
+	public String prettyPrintSOAP() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("SOAP Data:\n");
 		sb.append("Subject: ").append(dSubject).append('\n');
 		sb.append("Location: ").append(dLocation).append('\n');
 		sb.append("Start: ").append(dStart).append('\n');
 		sb.append("End: ").append(dEnd).append('\n');
 		return (sb.toString());
+		
 	}
+
+	public String prettyPrintGUI() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("GUI Data:\n");
+		sb.append("Is Checked: ").append(gIsChecked).append('\n');
+		sb.append("Is Tagged: ").append(gIsTagged).append('\n');
+		sb.append("Is Recurring: ").append(gIsRecurring).append('\n');
+		sb.append("Has Attachments: ").append(gHasAttachments).append('\n');
+		sb.append("Subject: ").append(gSubject).append('\n');
+		sb.append("Fragment: ").append(gFragment).append('\n');
+		sb.append("Location: ").append(gLocation).append('\n');
+		sb.append("Start: ").append(gStart).append('\n');
+		sb.append("End: ").append(gEnd).append('\n');
+		return (sb.toString());
+	}
+
 
 	public void setSubject(String subject) {
 		dSubject = subject;
@@ -186,5 +218,63 @@ public class AppointmentItem implements IItem {
 	public ZDate getEndTime() {
 		return (dEnd);
 	}
+
+	public boolean getGIsChecked() {
+		return (gIsChecked);
+	}
+
+	public boolean getGIsTagged() {
+		return (gIsTagged);
+	}
+
+	public boolean getGHasAttachment() {
+		return (gHasAttachments);
+	}
+
+	public String getGSubject() {
+		return (gSubject);
+	}
+
+	public String getGFragment() {
+		return (gFragment);
+	}
+
+	public boolean getGIsRecurring() {
+		return (gIsRecurring);
+	}
+
+	public String getGStartDate() {
+		return (gStart);
+	}
+
+	public void setGIsChecked(boolean checked) {
+		gIsChecked = checked;		
+	}
+
+	public void setGIsTagged(boolean tagged) {
+		gIsTagged = tagged;		
+	}
+
+	public void setGHasAttachment(boolean hasAttachment) {
+		gHasAttachments = hasAttachment;
+	}
+
+	public void setGSubject(String subject) {
+		gSubject = subject;		
+	}
+
+	public void setGFragment(String fragment) {
+		gFragment = fragment;
+	}
+
+	public void setGIsRecurring(boolean recurring) {
+		gIsRecurring = recurring;
+	}
+
+	public void setGStartDate(String start) {
+		gStart = start;
+	}
+
+
 
 }

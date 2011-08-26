@@ -1,6 +1,11 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.calendar;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
+import com.zimbra.qa.selenium.framework.items.AppointmentItem;
+import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.ContextMenuItem.CONTEXT_MENU_ITEM_NAME;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -72,6 +77,15 @@ public class PageCalendar extends AbsTab {
         // Radio button
         public static final String OpenThisInstanceRadioButton = "id=";
         public static final String OpenThisSeriesRadioButton = "id=";
+        
+        
+        public static final String CalendarViewListCSS		= "css=div[id='zv__CLL']";
+        public static final String CalendarViewDayCSS		= "css=div[class='ImgCalendarDayGrid']";
+        public static final String CalendarViewWorkWeekCSS	= "css=div[id='TODO']";
+        public static final String CalendarViewWeekCSS		= "css=div[id='TODO']";
+        public static final String CalendarViewMonthCSS		= "css=div[id='TODO']";
+        public static final String CalendarViewScheduleCSS	= "css=div[id='TODO']";
+        
 	}
 
 	public PageCalendar(AbsApplication application) {
@@ -617,6 +631,142 @@ public class PageCalendar extends AbsTab {
 		// Made it here. The page is active.
 		return (true);
 
+	}
+
+	private AppointmentItem parseListViewRow(String rowLocator) throws HarnessException {
+		String locator;
+		
+		AppointmentItem item = new AppointmentItem();
+		
+		// Is the item checked/unchecked?
+		locator = rowLocator + " div[id=$='__se'][class='ImgCheckboxChecked']";
+		item.setGIsChecked(this.sIsElementPresent(locator));
+
+		// Is the item tagged/untagged
+		locator = rowLocator + " div[id=$='__tg'][class='ImgBlank_16']";
+		if ( this.sIsElementPresent(locator) ) {
+			// Not tagged
+		} else {
+			// Tagged : TODO
+		}
+
+		// Is there an attachment?
+		locator = rowLocator + " div[id=$='__at'][class='ImgAttachment']";
+		item.setGHasAttachment(this.sIsElementPresent(locator));
+		
+		// Get the fragment and the subject
+		locator = rowLocator + " span[id$='__fm']";
+		if ( this.sIsElementPresent(locator) ) {
+			
+			String fragment = this.sGetText(locator).trim();
+			
+			// Get the subject
+			locator = rowLocator + " td[id$='__su']";
+			String subject = this.sGetText(locator).trim();
+
+			// The subject contains the fragment, e.g. "subject - fragment", so
+			// strip it off
+			item.setGFragment(fragment);
+			item.setGSubject(subject.replace(fragment, "").trim());
+
+			
+		} else {
+
+			// Only the subject is present
+			locator = rowLocator + " td[id$='__su']";
+			item.setGSubject(this.sGetText(locator).trim());
+
+		}
+
+		
+		// What is the location
+		// TODO: see http://bugzilla.zimbra.com/show_bug.cgi?id=63883
+		
+		// What is the status
+		// TODO: see http://bugzilla.zimbra.com/show_bug.cgi?id=63883
+
+		// What calendar is it in
+		// TODO
+		
+		// Is it recurring
+		locator = rowLocator + " div[id=$='__re'][class='ImgApptRecur']";
+		item.setGIsRecurring(this.sIsElementPresent(locator));
+
+		// What is the start date
+		locator = rowLocator + " td[id$='__dt']";
+		item.setGStartDate(this.sGetText(locator));
+
+		
+		return (item);
+
+	}
+	
+	private List<AppointmentItem> zListGetAppointmentsListView() throws HarnessException {
+		List<AppointmentItem> items = new ArrayList<AppointmentItem>();
+
+		String listLocator = "css=div[id='zl__CLL__rows']>div[id^='zli__CLL__']";
+		String rowLocator = null;
+
+		// Make sure the button exists
+		if ( !this.sIsElementPresent(listLocator) )
+			throw new HarnessException("List View Rows is not present: " + listLocator);
+
+		// How many items are in the table?
+		int count = this.sGetCssCount(listLocator);
+		logger.debug(myPageName() + " zListGetAppointmentsListView: number of appointments: "+ count);
+
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+
+			// Add the new item to the list
+			AppointmentItem item = parseListViewRow(listLocator + ":nth-of-type("+ i +")");
+			items.add(item);
+			logger.info(item.prettyPrint());
+			
+		}
+
+		// Return the list of items
+		return (items);
+
+	}
+	
+	private List<AppointmentItem> zListGetAppointmentsDayView() throws HarnessException {
+		throw new HarnessException("implement me");
+	}
+	
+	private List<AppointmentItem> zListGetAppointmentsWorkWeekView() throws HarnessException {
+		throw new HarnessException("implement me");
+	}
+	
+	private List<AppointmentItem> zListGetAppointmentsWeekView() throws HarnessException {
+		throw new HarnessException("implement me");
+	}
+	
+	private List<AppointmentItem> zListGetAppointmentsMonthView() throws HarnessException {
+		throw new HarnessException("implement me");
+	}
+	
+	private List<AppointmentItem> zListGetAppointmentsScheduleView() throws HarnessException {
+		throw new HarnessException("implement me");
+	}
+	
+	public List<AppointmentItem> zListGetAppointments() throws HarnessException {
+
+		if ( this.zIsVisiblePerPosition(Locators.CalendarViewListCSS, 0, 0) ) {
+			return (zListGetAppointmentsListView());
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewDayCSS, 0, 0) ) {
+			return (zListGetAppointmentsDayView());
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewWorkWeekCSS, 0, 0) ) {
+			return (zListGetAppointmentsDayView());
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewWeekCSS, 0, 0) ) {
+			return (zListGetAppointmentsDayView());
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewMonthCSS, 0, 0) ) {
+			return (zListGetAppointmentsDayView());
+		} else if ( this.zIsVisiblePerPosition(Locators.CalendarViewScheduleCSS, 0, 0) ) {
+			return (zListGetAppointmentsDayView());
+		} else {
+			throw new HarnessException("Unknown calendar view");
+		}
 	}
 
 }
