@@ -112,7 +112,10 @@ namespace MVVM.ViewModel
         {
             if (CurrentProfileSelection > -1)
             {
-                OutlookProfile = ProfileList[CurrentProfileSelection];
+                if (ProfileList.Count > 0)
+                {
+                    OutlookProfile = ProfileList[CurrentProfileSelection];
+                }
             }
 
             Microsoft.Win32.SaveFileDialog fDialog = new Microsoft.Win32.SaveFileDialog();
