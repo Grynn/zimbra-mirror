@@ -135,12 +135,20 @@ verifyAccesslog() {
 }
 
 verifySyncProv() {
-	# Verify that the syncprov overlay doesn't already exist
+	# Verify that the syncprov overlay doesn't already exist on master
 	ARGS="-x -H ldapi:/// -D cn=config -w ${ldap_root_password} -b olcOverlay={0}syncprov,olcDatabase={2}hdb,cn=config -s base"
 	OUTPUT=`$LDS $ARGS 2>&1`
 	if [ $? -eq 0 ]; then
 		echo 'Error: Syncprov already enabled. Exiting...'
 		exit 1
+	else
+		# Verify that the syncprov overlay doesn't already exist on replica
+		ARGS="-x -H ldapi:/// -D cn=config -w ${ldap_root_password} -b olcOverlay={2}syncprov,olcDatabase={2}hdb,cn=config -s base"
+		OUTPUT=`$LDS $ARGS 2>&1`
+		if [ $? -eq 0 ]; then
+			echo 'Error: Syncprov already enabled. Exiting...'
+			exit 1
+		fi
 	fi
 }
 
