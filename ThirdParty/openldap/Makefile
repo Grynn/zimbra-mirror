@@ -15,10 +15,10 @@ PATCH	:=
 
 ifdef BETA
 	include $(OPENLDAP_ROOT)/../beta_versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/ITS6561.patch; patch -g0 -N -p1 < ../patches/delta-mmr-test.patch; patch -g0 -N -p1 < ../patches/delta-mmr.patch; patch -g0 -N -p1 < ../patches/ITS6983.patch;
+	PATCH	:= patch -g0 -N -p1 < ../patches/ITS6561.patch; patch -g0 -N -p1 < ../patches/delta-mmr-test.patch; patch -g0 -N -p1 < ../patches/delta-mmr.patch; patch -g0 -N -p1 < ../patches/ITS6983.patch; patch -g0 -N -p1 < ../patches/ITS7030.patch;
 else
 	include $(OPENLDAP_ROOT)/../versions.def
-	PATCH	:= patch -g0 -N -p1 < ../patches/ITS6561.patch; patch -g0 -N -p1 < ../patches/delta-mmr-test.patch; patch -g0 -N -p1 < ../patches/delta-mmr.patch; patch -g0 -N -p1 < ../patches/ITS6983.patch;
+	PATCH	:= patch -g0 -N -p1 < ../patches/ITS6561.patch; patch -g0 -N -p1 < ../patches/delta-mmr-test.patch; patch -g0 -N -p1 < ../patches/delta-mmr.patch; patch -g0 -N -p1 < ../patches/ITS6983.patch; patch -g0 -N -p1 < ../patches/ITS7030.patch;
 endif
 
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
