@@ -29,7 +29,7 @@ public class ContactSearch extends AjaxCommonTest {
 	}
 	
 	@Test( description = "select all, search existed contact in Addressbook ",
-			groups = { "functional" })
+			groups = { "deprecated" })
 	public void SelectAllItemTypesSearchExistedContac() throws HarnessException {
 		// Search a contact item 		
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
@@ -52,7 +52,7 @@ public class ContactSearch extends AjaxCommonTest {
 	}
 	
 	@Test( description = "select all, search gal contact ",
-			groups = { "functional" })
+			groups = { "deprecated" })
 	public void SelectAllItemTypesSearchGALContact() throws HarnessException {
 	
 		// Search a GAL item
