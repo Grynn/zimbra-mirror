@@ -1,5 +1,5 @@
---- openldap-2.4.26/servers/slapd/syncrepl.c.orig	2011-06-30 08:13:36.000000000 -0700
-+++ openldap-2.4.26/servers/slapd/syncrepl.c	2011-08-24 16:33:16.313811118 -0700
+--- openldap-2.4.26/servers/slapd/syncrepl.c.orig	2011-08-26 17:13:46.612123331 -0700
++++ openldap-2.4.26/servers/slapd/syncrepl.c	2011-08-26 17:14:44.712097906 -0700
 @@ -144,6 +144,9 @@
  static int syncrepl_add_glue_ancestors(
  	Operation* op, Entry *e );
@@ -125,7 +125,7 @@
  	}
  	ldap_pvt_thread_mutex_unlock( &si->si_cookieState->cs_mutex );
  	return changed;
-@@ -1751,6 +1781,360 @@
+@@ -1751,6 +1781,363 @@
  	return -1;	/* FIXME */
  }
  
@@ -193,6 +193,9 @@
 +			} else {
 +				mod->sml_nvalues = NULL;
 +			}
++		} else {
++			mod->sml_values = NULL;
++			mod->sml_nvalues = NULL;
 +		}
 +		if ( match < 0 && modlist->sml_op == LDAP_MOD_REPLACE )
 +			mod->sml_op = LDAP_MOD_ADD;
@@ -486,7 +489,7 @@
  static int
  syncrepl_message_to_op(
  	syncinfo_t	*si,
-@@ -1910,9 +2294,20 @@
+@@ -1910,9 +2297,20 @@
  			if ( e == op->ora_e )
  				be_entry_release_w( op, op->ora_e );
  		} else {
