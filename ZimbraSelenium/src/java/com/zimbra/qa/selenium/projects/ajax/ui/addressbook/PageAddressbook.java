@@ -737,15 +737,14 @@ public class PageAddressbook extends AbsTab {
 				throw new HarnessException("unable to locate item " + itemLocator);
 			}
 
-			String contactDisplayedLocator = itemLocator + " table tbody tr td:nth-child(3)";
-
-			String displayAs = this.sGetText(contactDisplayedLocator);
+		
+			String displayAs = sGetText(itemLocator);
 
 			// Log this item to the debug output
 			LogManager.getLogger("projects").info("zListItem: found contact "+ displayAs);
 
 			if ( contact.equals(displayAs) ) {
-			   contactLocator = contactDisplayedLocator;
+			   contactLocator = itemLocator;
 			   break;
 			}
      		

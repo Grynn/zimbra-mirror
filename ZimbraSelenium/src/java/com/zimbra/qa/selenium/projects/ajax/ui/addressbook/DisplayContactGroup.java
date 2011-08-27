@@ -111,8 +111,10 @@ public class DisplayContactGroup extends AbsDisplay {
 	
 
     private void getAllLocators(ArrayList<String> array, String postfix) throws HarnessException {
-  	   String css= "css=div[id$='_content'][class='ZmContactInfoView'] table:nth-of-type(2) tbody tr";
-       int count= this.sGetCssCount(css);
+  	   //String css= "css=div[id$='_content'][class='ZmContactInfoView'] table:nth-of-type(2) tbody tr";
+  	   String css= "css=div[id$='_content'][class='ZmContactInfoView'] table.contactHeaderTable";
+     
+  	   int count= this.sGetCssCount(css);
 
        for (int i=1; i<=count; i++) {
     	 String tdLocator=  css + ":nth-of-type(" + i + ")" + " td[id$='_" + postfix + "']";  
