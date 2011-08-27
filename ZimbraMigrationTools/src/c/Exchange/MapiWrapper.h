@@ -78,6 +78,8 @@ public:
 	
 	STDMETHOD(GetFolderObjects)(/*[out, retval]*/ VARIANT* vObjects);
 
+	STDMETHOD(GlobalUninit)(BSTR* pErrorText);
+
 protected:
     UDTFolder m_pUDT;
     UDTItem m_pUDTItem;

@@ -103,6 +103,10 @@ interface IMapiWrapper : IDispatch {
 	[id(9), helpstring("method to retreive folder objects")]
 			HRESULT  GetFolderObjects([out, retval] VARIANT* vObjects);
 
+	[id(10), helpstring("Disonnect from the mail server")] 
+	         HRESULT GlobalUninit([out,retval] BSTR* pErrorText);
+
+
 
 };
 

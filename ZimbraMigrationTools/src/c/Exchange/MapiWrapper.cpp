@@ -440,6 +440,13 @@ STDMETHODIMP CMapiWrapper::GetFolderObjects(VARIANT* vObjects)
 
 }
 
+STDMETHODIMP CMapiWrapper::GlobalUninit(BSTR* pErrorText) {
+	(void)pErrorText;
+	LPCWSTR lpszErrorText = ExchangeOps::GlobalUninit();
+	*pErrorText = (lpszErrorText) ? CComBSTR(lpszErrorText) : CComBSTR("");
+	return S_OK;
+}
+
 /*STDMETHODIMP CMapiWrapper::GetFolderObjects(long start, long length, SAFEARRAY **SequenceArr )
 {
     

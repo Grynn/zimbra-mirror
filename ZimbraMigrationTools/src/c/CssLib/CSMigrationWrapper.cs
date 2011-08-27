@@ -79,6 +79,18 @@ namespace CssLib
             }
             return s;
         }
+
+
+        public string UninitializeMailClient()
+        {
+            string s = "";
+            if (MailClient == "MAPI")
+            {
+                MailWrapper = new Exchange.MapiWrapper();
+                s = MailWrapper.GlobalUninit();
+            }
+            return s;
+        }
         
          
 
