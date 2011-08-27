@@ -63,6 +63,11 @@ public class FindSharesWithFeatureDisabled extends AjaxCommonTest {
 		 * +
 		 * "css=div.DwtTreeItemLevel1ChildDiv:contains(enus13130974715803) div#ZmShareTreeItem_12_checkbox"
 		 * + "'),'" + "click" + "', null, 0, 0, 0)");
+		 * 
+		 * get notifications by email
+		 * ClientSessionFactory.session().selenium().sGetEval(
+		 * "var x = selenium.browserbot.findElementOrNull('css=div[id$=_EMAIL][class^=DwtInputField]>input[id$=_EMAIL_input]');x.value"
+		 * );
 		 */
 
 		// Dismiss the dialog
