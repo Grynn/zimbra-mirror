@@ -591,12 +591,18 @@ public class PageCalendar extends AbsTab {
 		AbsPage page = null;
 		
 		if ( shortcut == Shortcut.S_ASSISTANT ) {
+			
 			page = new DialogAssistant(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
-		} else if ( shortcut == Shortcut.S_MAIL_MOVETOTRASH ) {
+			
+		} else if ( 
+				shortcut == Shortcut.S_MAIL_MOVETOTRASH ||
+				shortcut == Shortcut.S_MAIL_HARDELETE ) {
+			
 			page = new DialogConfirm(
 					DialogConfirm.Confirmation.DELETE,
 					MyApplication, 
 					((AppAjaxClient) MyApplication).zPageCalendar);
+			
 		}
 		
 		zKeyboard.zTypeCharacters(shortcut.getKeys());
