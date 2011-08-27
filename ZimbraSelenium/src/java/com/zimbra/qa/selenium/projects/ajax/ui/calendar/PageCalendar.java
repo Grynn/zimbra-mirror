@@ -96,6 +96,7 @@ public class PageCalendar extends AbsTab {
 	}
 
 	private AbsPage zListItemListView(Action action, String subject) throws HarnessException {
+		logger.info(myPageName() + " zListItemListView("+ action +", "+ subject +")");
 
 		// The default locator points at the subject
 		String locator = "css=div[id='zl__CLL__rows'] td[id$='__su']:contains('" + subject + "')";
@@ -223,6 +224,132 @@ public class PageCalendar extends AbsTab {
 		return (new ContextMenu(MyApplication));
 	}
 
+	private AbsPage zListItemListView(Action action, Button option, String subject) throws HarnessException {
+		logger.info(myPageName() + " zListItemListView("+ action +", "+ option +", "+ subject +")");
+
+		// The default locator points at the subject
+		String itemlocator = "css=div[id='zl__CLL__rows'] td[id$='__su']:contains('" + subject + "')";
+		String optionLocator = null;
+		AbsPage page = null;
+
+				
+		if ( action == Action.A_RIGHTCLICK ) {
+
+			// Right-Click on the item
+			this.zRightClickAt(itemlocator,"");
+
+			// Now the ContextMenu is opened
+			// Click on the specified option
+
+
+			if (option == Button.O_OPEN_MENU) {
+
+				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__VIEW_APPOINTMENT'] td[id$='_title']";
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if (option == Button.O_PRINT_MENU) {
+
+				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__PRINT'] td[id$='_title']";
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if ( option == Button.O_ACCEPT_MENU ) {
+
+				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__REPLY_ACCEPT'] td[id$='_title']";
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if ( option == Button.O_TENTATIVE_MENU ) {
+
+				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__REPLY_TENTATIVE'] td[id$='_title']";
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if ( option == Button.O_DECLINE_MENU ) {
+
+				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__REPLY_DECLINE'] td[id$='_title']";
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if ( option == Button.O_PROPOSE_NEW_TIME_MENU ) {
+
+				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__PROPOSE_NEW_TIME'] td[id$='_title']";
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if ( option == Button.O_CREATE_A_COPY_MENU ) {
+
+				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__DUPLICATE_APPT'] td[id$='_title']";
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if ( option == Button.O_REPLY ) {
+
+				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__REPLY'] td[id$='_title']";
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if ( option == Button.O_REPLY_TO_ALL ) {
+
+				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__REPLY_ALL'] td[id$='_title']";
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if ( option == Button.O_FORWARD ) {
+
+				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__FORWARD_APPT'] td[id$='_title']";
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if ( option == Button.O_DELETE ) {
+
+				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__DELETE'] td[id$='_title']";
+				page = new DialogConfirm(
+						DialogConfirm.Confirmation.DELETE,
+						MyApplication, 
+						((AppAjaxClient) MyApplication).zPageCalendar);
+
+			} else if ( option == Button.O_MOVE ) {
+
+				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__MOVE'] td[id$='_title']";
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if ( option == Button.O_TAG_APPOINTMENT_MENU ) {
+
+				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__TAG_MENU'] td[id$='_title']";
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if ( option == Button.O_SHOW_ORIGINAL_MENU ) {
+
+				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__SHOW_ORIG'] td[id$='_title']";
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			} else if ( option == Button.O_QUICK_COMMANDS_MENU ) {
+
+				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__QUICK_COMMANDS'] td[id$='_title']";
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+
+			}
+			else {
+				throw new HarnessException("implement action:"+ action +" option:"+ option);
+			}
+
+			// click on the option
+			this.zClickAt(optionLocator,"");
+
+			this.zWaitForBusyOverlay();
+
+			// FALL THROUGH
+
+		
+		} else {
+			throw new HarnessException("implement me!  action = "+ action);
+		}
+		
+		// Action should take place in the if/else block.
+		// No need to take action on a locator at this point.
+		
+		if ( page != null ) {
+			page.zWaitForActive();
+		}
+
+
+		// Default behavior
+		return (page);
+
+	}
+
 	@Override
 	public AbsPage zListItem(Action action, Button option, String subject)
 			throws HarnessException {
@@ -236,6 +363,11 @@ public class PageCalendar extends AbsTab {
 			throw new HarnessException("button cannot be null");
 		if ( subject == null || subject.trim().length() == 0)
 			throw new HarnessException("subject cannot be null or blank");
+
+		// If we are in list view, route to that method
+		if ( this.zIsVisiblePerPosition(Locators.CalendarViewListCSS, 0, 0) ) {
+			return (zListItemListView(action, option, subject));
+		}
 
 		// Default behavior variables
 		String locator = null;
@@ -567,10 +699,12 @@ public class PageCalendar extends AbsTab {
 		AbsPage page = null;
 		
 		if ( keyEvent == KeyEvent.VK_DELETE || keyEvent == KeyEvent.VK_BACK_SPACE ) {
+			
 			page = new DialogConfirm(
 					DialogConfirm.Confirmation.DELETE,
 					MyApplication, 
 					((AppAjaxClient) MyApplication).zPageCalendar);
+			
 		}
 
 		this.zKeyboard.zTypeKeyEvent(keyEvent);

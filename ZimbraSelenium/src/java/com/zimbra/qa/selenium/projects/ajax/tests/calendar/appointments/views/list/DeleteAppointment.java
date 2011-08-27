@@ -431,7 +431,60 @@ public class DeleteAppointment extends AjaxCommonTest {
 	@Test(	description = "Delete a appt using context menu delete button",
 			groups = { "functional" })
 	public void DeleteAppointment_06() throws HarnessException {
-		throw new HarnessException("implement me!");
+
+
+		// Create the appointment on the server
+		// Create the message data to be sent
+		String subject = "appointment" + ZimbraSeleniumProperties.getUniqueString();
+
+
+		// Absolute dates in UTC zone
+		Calendar now = Calendar.getInstance();
+		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
+		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
+
+		// EST timezone string
+		String tz = ZTimeZone.TimeZoneEST.getID();
+
+		// Create an appointment
+		app.zGetActiveAccount().soapSend(
+					"<CreateAppointmentRequest xmlns='urn:zimbraMail'>"
+				+		"<m>"
+				+			"<inv>"
+				+				"<comp status='CONF' fb='B' class='PUB' transp='O' allDay='0' name='"+ subject +"' >"
+				+					"<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>"
+				+					"<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>"
+				+					"<or a='"+ app.zGetActiveAccount().EmailAddress + "'/>"
+				+				"</comp>"
+				+			"</inv>"
+				+			"<su>"+ subject + "</su>"
+				+			"<mp ct='text/plain'>"
+				+				"<content>content</content>"
+				+			"</mp>"
+				+		"</m>"
+				+	"</CreateAppointmentRequest>");
+
+
+		// Refresh the calendar
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+
+		// Right click the item, select delete
+		DialogConfirm dialog = (DialogConfirm)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE, subject);
+		dialog.zClickButton(Button.B_YES);
+
+
+		// Verify the appointment is gone
+		AppointmentItem found = null;
+		List<AppointmentItem> appts = app.zPageCalendar.zListGetAppointments();
+		for (AppointmentItem item : appts) {
+			if ( subject.contains(item.getGSubject()) ) {
+				found = item;
+				break;
+			}
+		}
+
+		ZAssert.assertNull(found, "Verify the appointment is no longer in the list");
+
 	}
 
 	@Test(	description = "Hard-delete a appt by selecting and typing 'shift-del' shortcut",
