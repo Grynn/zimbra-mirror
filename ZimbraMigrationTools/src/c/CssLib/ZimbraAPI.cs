@@ -711,9 +711,8 @@ namespace CssLib
             return retval;
         }
 
-        public void CreateContactRequest(XmlWriter writer, ZimbraContact contact, int requestId)
+        public void CreateContactRequest(XmlWriter writer, Dictionary<string, string> contact, int requestId)
         {
-            System.Type type = typeof(ZimbraContact);
             writer.WriteStartElement("CreateContactRequest", "urn:zimbraMail");
             if (requestId != -1)
             {
@@ -721,21 +720,19 @@ namespace CssLib
             }
             writer.WriteStartElement("cn");
             writer.WriteAttributeString("l", "7");
-            FieldInfo[] myFields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
-            for (int i = 0; i < myFields.Length; i++)
+            
+            foreach (KeyValuePair<string, string> pair in contact)
             {
-                string val = (string)myFields[i].GetValue(contact);
-                if (val.Length > 0)
-                {
-                    string nam = (string)myFields[i].Name;
-                    WriteAttrNVPair(writer, "a", "n", nam, val);
-                }
+                string nam = pair.Key;
+                string val = pair.Value;
+                WriteAttrNVPair(writer, "a", "n", nam, val);
             }
+            
             writer.WriteEndElement();   // cn
             writer.WriteEndElement();   // CreateContactRequest
         }
 
-        public int CreateContact(ZimbraContact contact)
+        public int CreateContact(Dictionary<string, string> contact)
         {
             lastError = "";
             WebServiceClient client = new WebServiceClient
@@ -771,7 +768,7 @@ namespace CssLib
             return retval;
         }
 
-        public int CreateContacts(List<ZimbraContact> lContacts)
+        public int CreateContacts(List<Dictionary<string, string>> lContacts)
         {
             lastError = "";
             WebServiceClient client = new WebServiceClient
@@ -797,7 +794,7 @@ namespace CssLib
 
                 for (int i = 0; i < lContacts.Count; i++)
                 {
-                    ZimbraContact contact = lContacts[i];
+                    Dictionary<string, string> contact = lContacts[i];
                     CreateContactRequest(writer, contact, i);
                 }
 
@@ -959,7 +956,6 @@ namespace CssLib
 
         public void CreateFolderRequest(XmlWriter writer, ZimbraFolder folder, int requestId)
         {
-            System.Type type = typeof(ZimbraContact);
             writer.WriteStartElement("CreateFolderRequest", "urn:zimbraMail");
             if (requestId != -1)
             {
