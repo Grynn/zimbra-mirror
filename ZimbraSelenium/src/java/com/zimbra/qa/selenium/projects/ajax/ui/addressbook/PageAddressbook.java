@@ -732,7 +732,7 @@ public class PageAddressbook extends AbsTab {
 		// Get each contact's data from the table list
 		for (int i = 1; i<=count; i++) { 
 
-			String itemLocator = "css=" + listLocator + " div:nth-child(" + i +")";
+			String itemLocator = "css=" + listLocator + ">div:nth-child(" + i +")";
 			if ( !this.sIsElementPresent(itemLocator) ) {
 				throw new HarnessException("unable to locate item " + itemLocator);
 			}
@@ -1159,8 +1159,9 @@ public class PageAddressbook extends AbsTab {
 		}
 		else if ( action == Action.A_CHECKBOX) {
 			//get the checkbox locator
-			contactLocator=contactLocator.substring(0, contactLocator.length()-2) + "1" + ") div.ImgCheckboxUnchecked";
-			
+//			contactLocator=contactLocator.substring(0, contactLocator.length()-2) + "1" + ") div.ImgCheckboxUnchecked";
+			contactLocator=contactLocator + " div.ImgCheckboxUnchecked";
+					
 			//check the box			
 			zClick(contactLocator);
 			
