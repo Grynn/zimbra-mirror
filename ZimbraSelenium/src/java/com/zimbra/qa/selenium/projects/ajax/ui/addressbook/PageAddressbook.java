@@ -1159,7 +1159,7 @@ public class PageAddressbook extends AbsTab {
 		}
 		else if ( action == Action.A_CHECKBOX) {
 			//get the checkbox locator
-			contactLocator=contactLocator.substring(0, contactLocator.length()-2) + "1" + ")>center>div.ImgCheckboxUnchecked";
+			contactLocator=contactLocator.substring(0, contactLocator.length()-2) + "1" + ") div.ImgCheckboxUnchecked";
 			
 			//check the box			
 			zClick(contactLocator);
