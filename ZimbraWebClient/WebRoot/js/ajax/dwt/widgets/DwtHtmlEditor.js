@@ -891,10 +891,22 @@ function(content) {
 	// occur if we go back to using onload, so maybe something got fixed in FF.
 	// iFrame.onload = cont;
 
+    if( this._isPasteEnabled ){
+        var pastecont = AjxCallback.simpleClosure(this._registerPasteEvent, this);
+        iFrame.onload = pastecont;
+    }
 	iFrame.src = this._blankIframeSrc || "";
 	htmlEl.appendChild(iFrame);
 
 	return iFrame;
+};
+
+DwtHtmlEditor.prototype._registerPasteEvent = function(){
+    var editor = this,
+        doc = editor._getIframeDoc();
+    //Always unregister event handler as safari and chrome fires multiple times if registered multiple
+    editor._unregisterEditorEventHandler(doc,"paste");
+    editor._registerEditorEventHandler(doc,"paste");
 };
 
 DwtHtmlEditor.prototype._finishHtmlModeInit =
