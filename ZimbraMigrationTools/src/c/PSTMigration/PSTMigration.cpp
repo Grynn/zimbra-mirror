@@ -192,7 +192,7 @@ void ExchangeMigrationSetupTest()
 	delete[]lpwstrStatus;	
 }
 
-void MAPIAccessAPITest()
+void MAPIAccessAPITest_tr()
 {
 	tree<Folder_Data> tr;
 	//Create class instance with Exchange server hostname/IP, Outlook admin profile name, Exchange mailbox to be migrated
@@ -202,10 +202,10 @@ void MAPIAccessAPITest()
 	maapi->Initialize();
 
 	//Get all folders
-	maapi->GetRootFolderHierarchy(tr);
+	maapi->GetRootFolderHierarchy_tr(tr);
 
 	//iterate over folders
-	maapi->IterateTree(tr);
+	maapi->IterateTree_tr(tr);
 
 	//free it
 	delete maapi;
@@ -215,13 +215,16 @@ void MAPIAccessAPITestV()
 {
 	vector<Folder_Data> vfolderlist;
 	//Create class instance with Exchange server hostname/IP, Outlook admin profile name, Exchange mailbox to be migrated
-	Zimbra::MAPI::MAPIAccessAPI *maapi = new Zimbra::MAPI::MAPIAccessAPI(L"10.117.82.161",L"Outlook",L"appt1");
+	Zimbra::MAPI::MAPIAccessAPI *maapi = new Zimbra::MAPI::MAPIAccessAPI(L"10.117.82.161",L"Outlook",L"administrator");
 
 	//Init session and stores
 	maapi->Initialize();
 
 	//Get all folders
-	maapi->GetRootFolderHierarchyV(vfolderlist);
+	maapi->GetRootFolderHierarchy(vfolderlist);
+
+	maapi->IterateVectorList(vfolderlist);
+	delete maapi;
 }
 
 int main(int argc, TCHAR *argv[])
@@ -234,7 +237,7 @@ int main(int argc, TCHAR *argv[])
 //	ZCFileUploadTest();
 //	CreateExchangeMailBox();
 //	GetAllProfiles();	
-	//MAPIAccessAPITest();
+	//MAPIAccessAPITest_tr();
 	
 	MAPIAccessAPITestV();
 	//Zimbra::MAPI::Util::ReverseDelimitedString(L"lb1/tv2/cr3/Inbox/TopFolder",L"/");

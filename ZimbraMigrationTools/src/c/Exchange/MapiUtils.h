@@ -1,5 +1,7 @@
 #pragma once
 
+#define PR_IPM_OTHERSPECIALFOLDERS_ENTRYID	PROP_TAG( PT_MV_BINARY, 0x36D8)
+
 inline void HexStrFromBSTR(_bstr_t bstr, LPTSTR &szHex) {
     int i = 0;
     int len = bstr.length();
@@ -108,6 +110,12 @@ HRESULT GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR lpszUser, LPCWSTR lps
 HRESULT GetUserDnAndServerDnFromProfile(LPMAPISESSION pSession, LPSTR &pExchangeServerDn,
     LPSTR &pExchangeUserDn);
 HRESULT HrMAPIFindIPMSubtree(LPMDB lpMdb, SBinary &bin);
+HRESULT GetMdbSpecialFolders(IN LPMDB lpMdb, IN OUT SBinaryArray* pEntryIds);
+HRESULT GetInboxSpecialFolders(LPMAPIFOLDER pInbox, SBinaryArray* pEntryIds);
+HRESULT GetAllSpecialFolders(IN LPMDB lpMdb, IN OUT SBinaryArray* pEntryIds);
+HRESULT FreeAllSpecialFolders(IN SBinaryArray* lpSFIds);
+ExchangeSpecialFolderId GetExchangeSpecialFolderId(IN LPMAPISESSION lpSession, IN ULONG cbEntryId, IN LPENTRYID pFolderEntryId, SBinaryArray* pEntryIds);
+
 ULONG IMAPHeaderInfoPropTag(LPMAPIPROP lpMapiProp);
 HRESULT CopyEntryID(SBinary &src, SBinary &dest);
 wstring ReverseDelimitedString(wstring wstrString, WCHAR* delimiter);

@@ -16,15 +16,15 @@ class MAPIStore {
 private:
     LPMDB m_Store;
     LPMAPISESSION m_mapiSession;
-
+	SBinaryArray m_specialFolderIds;
 public:
     MAPIStore();
     ~MAPIStore();
     void Initialize(LPMAPISESSION mapisession, LPMDB pMdb);
     HRESULT CompareEntryIDs(SBinary *pBin1, SBinary *pBin2, ULONG &lpulResult);
     HRESULT GetRootFolder(MAPIFolder &rootFolder);
-
-    LPMDB GetInternalMAPIStore() { return m_Store; }
+	LPMDB GetInternalMAPIStore() { return m_Store; }
+	SBinaryArray GetSpecialFolderIds(){return m_specialFolderIds;}
 };
 }
 }

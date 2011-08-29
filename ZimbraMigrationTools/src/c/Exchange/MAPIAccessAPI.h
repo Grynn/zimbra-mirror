@@ -2,15 +2,14 @@
 
 namespace Zimbra {
 namespace MAPI {
-struct _Folder_Data {
+
+typedef struct _Folder_Data {
     wstring name;	
     SBinary sbin;
-	wstring parentpath;
+	wstring folderpath;
 	long zimbraid;
     Zimbra::MAPI::MAPIFolder *mapifolder;
-};
-
-typedef _Folder_Data Folder_Data;
+}Folder_Data;
 
 class MAPIAccessAPI {
 private:
@@ -23,20 +22,25 @@ private:
     Zimbra::MAPI::MAPIFolder *m_rootFolder;
 
     HRESULT OpenSessionAndStore();
-    bool iterate_folders(Zimbra::MAPI::MAPIFolder &folder, tree<Folder_Data> &tr,
-    tree<Folder_Data>::iterator tritr);
-	HRESULT Iterate_foldersV(Zimbra::MAPI::MAPIFolder &folder, vector<Folder_Data> &fd);
+    HRESULT Iterate_folders(Zimbra::MAPI::MAPIFolder &folder, vector<Folder_Data> &fd);
     void travrese_folder(Zimbra::MAPI::MAPIFolder &folder);
-    HRESULT MAPIAccessAPI::GetFolderHierarchy(Zimbra::MAPI::MAPIFolder rootFolder,
+    
+
+	bool iterate_folders_tr(Zimbra::MAPI::MAPIFolder &folder, tree<Folder_Data> &tr,
+    tree<Folder_Data>::iterator tritr);
+	HRESULT MAPIAccessAPI::GetFolderHierarchy_tr(Zimbra::MAPI::MAPIFolder rootFolder,
     tree<Folder_Data> &tr);
 
 public:
     MAPIAccessAPI(wstring strExchangeHostName, wstring strAdminProfileName, wstring strUserName);
     ~MAPIAccessAPI();
     HRESULT Initialize();
-    HRESULT GetRootFolderHierarchy(tree<Folder_Data> &tr);
-	HRESULT GetRootFolderHierarchyV(vector<Folder_Data> &vfolderlist);
-    HRESULT IterateTree(tree<Folder_Data> &tr);
+    HRESULT GetRootFolderHierarchy(vector<Folder_Data> &vfolderlist);
+	HRESULT IterateVectorList(vector<Folder_Data> &vFolderList);
+    
+	HRESULT GetRootFolderHierarchy_tr(tree<Folder_Data> &tr);
+	HRESULT IterateTree_tr(tree<Folder_Data> &tr);
+	
 };
 }
 }

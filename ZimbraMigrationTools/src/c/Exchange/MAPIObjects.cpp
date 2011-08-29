@@ -72,15 +72,16 @@ BOOL FolderIterator::GetNext(MAPIFolder &folder) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // MAPIFolder
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-MAPIFolder::MAPIFolder(): m_folder(NULL),m_session(NULL) {
+MAPIFolder::MAPIFolder(): m_folder(NULL),m_session(NULL),m_store(NULL) {
     m_EntryID.cb = 0;
     m_EntryID.lpb = NULL;
 }
 
-MAPIFolder::MAPIFolder(MAPISession &session): m_folder(NULL) {
+MAPIFolder::MAPIFolder(MAPISession &session, MAPIStore &store): m_folder(NULL) {
     m_EntryID.cb = 0;
     m_EntryID.lpb = NULL;
 	m_session = &session;
+	m_store = &store;
 }
 MAPIFolder::~MAPIFolder() {
     if (m_folder != NULL)
@@ -117,8 +118,41 @@ void MAPIFolder::Initialize(LPMAPIFOLDER pFolder, LPTSTR displayName, LPSBinary 
 	}
 }
 
+ExchangeSpecialFolderId MAPIFolder::GetExchangeFolderId()
+{
+	if(m_store && m_session)
+	{
+		SBinaryArray specialFolderIds= m_store->GetSpecialFolderIds();
+		return Zimbra::MAPI::Util::GetExchangeSpecialFolderId( 
+			m_session->GetMAPISessionObject(), m_EntryID.cb, (LPENTRYID)(m_EntryID.lpb), &specialFolderIds);
+	}
+	return SPECIAL_FOLDER_ID_NONE;
+}
+
+
+ZimbraSpecialFolderId MAPIFolder::GetZimbraFolderId()
+{
+	ZimbraSpecialFolderId ZimbraSpecialFolderIdArray[TOTAL_NUM_SPECIAL_FOLDERS]={
+	ZM_INBOX,ZM_ROOT,ZM_CALENDAR,
+	ZM_CONTACTS,ZM_DRAFTS,ZM_SFID_NONE/*JOURNAL*/,
+	ZM_SFID_NONE/*NOTES*/,ZM_TASKS,ZM_SFID_NONE/*OUTBOX*/,
+	ZM_SENT_MAIL,ZM_TRASH,ZM_SFID_NONE/*SYNC_CONFLICTS*/,
+	ZM_SFID_NONE/*SYNC_ISSUES*/,ZM_SFID_NONE/*SYNC_LOCAL_FAILURES*/,ZM_SFID_NONE/*SYNC_SERVER_FAILURES*/,
+	ZM_SPAM};
+
+	if(m_store && m_session)
+	{
+		return ZimbraSpecialFolderIdArray[(int)GetExchangeFolderId()];	
+	}
+	return ZM_SFID_NONE;
+}
+
 wstring MAPIFolder::FindFolderPath()
 {
+	//return if no session object to compare ids
+	if(!m_session)
+		return L"";
+
 	HRESULT hr=S_OK;
 	ULONG ulResult=FALSE;
 	wstring wstrPath=m_displayname;

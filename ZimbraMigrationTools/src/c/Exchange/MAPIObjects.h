@@ -206,6 +206,41 @@ public:
     bool Subject(LPTSTR *ppSubject);
 };
 
+//Exchange System folder enumeration
+typedef enum _ExchangeSpecialFolderId
+{
+	INBOX = 0,
+	IPM_SUBTREE = 1,
+	CALENDAR = 2,
+	CONTACTS = 3,
+	DRAFTS = 4,
+	JOURNAL = 5,
+	NOTE = 6,
+	TASK = 7,
+	OUTBOX = 8,
+	SENTMAIL = 9,
+	TRASH = 10,			
+	SYNC_CONFLICTS = 11,
+	SYNC_ISSUES = 12,
+	SYNC_LOCAL_FAILURES = 13,
+	SYNC_SERVER_FAILURES = 14,
+	JUNK_MAIL = 15,
+	TOTAL_NUM_SPECIAL_FOLDERS = 16,
+
+	SPECIAL_FOLDER_ID_NONE = 1000
+}ExchangeSpecialFolderId;
+
+//Zimbra system folder enumeration
+typedef enum _ZimbraSpecialFolderId { ZM_SFID_MIN = 0, 
+	ZM_SFID_NONE=0, 
+	ZM_ROOT=1, 
+	ZM_INBOX, ZM_TRASH, ZM_SPAM, 
+    ZM_SENT_MAIL, ZM_DRAFTS, ZM_CONTACTS,  ZM_TAGS, ZM_CONVERSATIONS, ZM_CALENDAR, 
+   	ZM_MAILBOX_ROOT, ZM_WIKI, ZM_EMAILEDCONTACTS, ZM_CHATS, ZM_TASKS, ZM_SFID_MAX 
+}ZimbraSpecialFolderId;
+
+
+
 // MapiFolder class
 class MAPIFolder {
 private:
@@ -213,13 +248,14 @@ private:
     wstring m_displayname;
     SBinary m_EntryID;
 	MAPISession *m_session;
+	MAPIStore *m_store;
 	wstring m_folderpath;
 	wstring FindFolderPath();
 public:
     MAPIFolder();
-	MAPIFolder( MAPISession &session);
+	MAPIFolder( MAPISession &session, MAPIStore &store);
     ~MAPIFolder();
-    MAPIFolder(const MAPIFolder &folder);
+	MAPIFolder(const MAPIFolder &folder);
     void Initialize(LPMAPIFOLDER pFolder, LPTSTR displayName, LPSBinary pEntryId);
     HRESULT GetItemCount(ULONG &ulCount);
     HRESULT GetMessageIterator(MessageIterator &msgIterator);
@@ -227,6 +263,9 @@ public:
 	wstring GetFolderPath(){return m_folderpath;}
     wstring Name() { return m_displayname; }
 	SBinary EntryID() {return m_EntryID;}
+	ExchangeSpecialFolderId GetExchangeFolderId();
+	ZimbraSpecialFolderId GetZimbraFolderId();
+
 };
 
 // global declaration

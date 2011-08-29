@@ -1,6 +1,48 @@
 #include "common.h"
 #include "Exchange.h"
 
+
+/** special folder stuff **/
+inline void SFAddEidBin( UINT propIdx, LPSPropValue lpProps, UINT folderId, SBinaryArray* pEntryIds )
+{
+	if( PROP_TYPE(lpProps[ propIdx ].ulPropTag) == PT_ERROR )
+	{
+		pEntryIds->lpbin[ folderId ].cb  = 0;
+		pEntryIds->lpbin[ folderId ].lpb = NULL;
+	}
+	else
+	{
+		ULONG size  = lpProps[ propIdx ].Value.bin.cb;
+		pEntryIds->lpbin[ folderId ].cb = size;
+		
+		MAPIAllocateBuffer( size,  (LPVOID*)&(pEntryIds->lpbin[ folderId ].lpb) );
+		memcpy( pEntryIds->lpbin[ folderId ].lpb, lpProps[ propIdx ].Value.bin.lpb, size );
+	}
+}
+
+
+inline void SFAddEidMVBin( UINT mvIdx, UINT propIdx, LPSPropValue lpProps, UINT folderId, SBinaryArray* pEntryIds )
+{
+	if( PROP_TYPE(lpProps[ propIdx ].ulPropTag) == PT_ERROR )
+	{
+		pEntryIds->lpbin[ folderId ].cb  = 0;
+		pEntryIds->lpbin[ folderId ].lpb = NULL;
+	}
+	else if( lpProps[ propIdx ].Value.MVbin.cValues > mvIdx )
+	{
+		ULONG size  = lpProps[ propIdx ].Value.MVbin.lpbin[mvIdx].cb;
+		pEntryIds->lpbin[ folderId ].cb = size;
+		
+		MAPIAllocateBuffer( size,  (LPVOID*)&(pEntryIds->lpbin[ folderId ].lpb) );
+		memcpy( pEntryIds->lpbin[ folderId ].lpb, (lpProps[ propIdx ].Value.MVbin.lpbin[mvIdx].lpb), size );
+	}
+	else
+	{
+		pEntryIds->lpbin[ folderId ].cb  = 0;
+		pEntryIds->lpbin[ folderId ].lpb = NULL;
+	}
+}
+
 HRESULT Zimbra::MAPI::Util::HrMAPIFindDefaultMsgStore(LPMAPISESSION lplhSession,
     SBinary &bin) {
     HRESULT hr = S_OK;
@@ -301,4 +343,157 @@ wstring Zimbra::MAPI::Util::ReverseDelimitedString(wstring wstrString, WCHAR* de
 	//add till last pos
 	wstrresult= wstrresult+wstrString.substr(pos+1, lastPos-pos);
 	return wstrresult;
+}
+
+HRESULT Zimbra::MAPI::Util::GetMdbSpecialFolders( IN LPMDB lpMdb, IN OUT SBinaryArray* pEntryIds )
+{
+	HRESULT hr = S_OK;
+	ULONG cValues = 0;
+	LPSPropValue lpProps = 0;
+	enum{FSUB, FOUT, FSENT, FTRASH, FNPROPS };
+	SizedSPropTagArray( FNPROPS, rgSFProps ) = 
+	{ FNPROPS, { 
+		PR_IPM_SUBTREE_ENTRYID,
+		PR_IPM_OUTBOX_ENTRYID,
+		PR_IPM_SENTMAIL_ENTRYID,
+		PR_IPM_WASTEBASKET_ENTRYID,
+	}};
+
+	hr = lpMdb->GetProps( (LPSPropTagArray)&rgSFProps, 0, &cValues, &lpProps );
+	if( FAILED(hr) )
+	{
+		goto cleanup;
+	}
+
+	SFAddEidBin( FSUB,   lpProps, IPM_SUBTREE, pEntryIds );
+	SFAddEidBin( FOUT,   lpProps, OUTBOX,      pEntryIds );
+	SFAddEidBin( FSENT,  lpProps, SENTMAIL,    pEntryIds );
+	SFAddEidBin( FTRASH, lpProps, TRASH,       pEntryIds );
+
+cleanup:
+	MAPIFreeBuffer(lpProps);
+	return hr;
+}
+
+HRESULT Zimbra::MAPI::Util::GetInboxSpecialFolders( LPMAPIFOLDER pInbox, SBinaryArray* pEntryIds )
+{
+	HRESULT hr = S_OK;
+	ULONG cValues = 0;
+	LPSPropValue lpProps = 0;
+	enum{FCAL, FCONTACT, FDRAFTS, FJOURNAL, FNOTE, FTASK, FOTHER, FNPROPS };
+	SizedSPropTagArray( FNPROPS, rgSFProps ) = 
+	{ FNPROPS, { 
+		PR_IPM_APPOINTMENT_ENTRYID,
+		PR_IPM_CONTACT_ENTRYID,
+		PR_IPM_DRAFTS_ENTRYID,
+		PR_IPM_JOURNAL_ENTRYID,
+		PR_IPM_NOTE_ENTRYID,
+		PR_IPM_TASK_ENTRYID,
+		PR_IPM_OTHERSPECIALFOLDERS_ENTRYID
+	}};
+
+	hr = pInbox->GetProps( (LPSPropTagArray)&rgSFProps, 0, &cValues, &lpProps );
+	if( FAILED(hr) )
+	{
+		goto cleanup;
+	}
+
+	SFAddEidBin( FCAL,     lpProps, CALENDAR, pEntryIds );
+	SFAddEidBin( FCONTACT, lpProps, CONTACTS, pEntryIds );
+	SFAddEidBin( FDRAFTS,  lpProps, DRAFTS,   pEntryIds );
+	SFAddEidBin( FJOURNAL, lpProps, JOURNAL,  pEntryIds );
+	SFAddEidBin( FNOTE,    lpProps, NOTE,     pEntryIds );
+	SFAddEidBin( FTASK,    lpProps, TASK,     pEntryIds );
+
+	if( PROP_TYPE(lpProps[ FOTHER ].ulPropTag != PT_ERROR ) )
+	{
+		SFAddEidMVBin( 0, FOTHER, lpProps, SYNC_CONFLICTS, pEntryIds );
+		SFAddEidMVBin( 1, FOTHER, lpProps, SYNC_ISSUES, pEntryIds );
+		SFAddEidMVBin( 2, FOTHER, lpProps, SYNC_LOCAL_FAILURES, pEntryIds );
+		SFAddEidMVBin( 3, FOTHER, lpProps, SYNC_SERVER_FAILURES, pEntryIds );
+		SFAddEidMVBin( 4, FOTHER, lpProps, JUNK_MAIL, pEntryIds );	
+	}
+cleanup:
+	MAPIFreeBuffer(lpProps);
+	return hr;
+}
+
+HRESULT Zimbra::MAPI::Util::GetAllSpecialFolders( IN LPMDB lpMdb, IN OUT SBinaryArray* pEntryIds )
+{
+	HRESULT hr = S_OK;
+	LPMAPIFOLDER pInbox = NULL;
+	ULONG obj = 0;
+	pEntryIds->cValues = 0;
+	pEntryIds->cValues = NULL;
+
+	//create the memory for the pointers to the entry ids...
+	hr = MAPIAllocateBuffer( TOTAL_NUM_SPECIAL_FOLDERS * sizeof(SBinary), (LPVOID*)&(pEntryIds->lpbin) );
+	memset( pEntryIds->lpbin, 0, TOTAL_NUM_SPECIAL_FOLDERS * sizeof(SBinary) );
+	if( FAILED(hr) )
+	{
+		goto cleanup;
+	}
+	pEntryIds->cValues = TOTAL_NUM_SPECIAL_FOLDERS;
+
+	//get the props on the mdb
+	hr = GetMdbSpecialFolders( lpMdb, pEntryIds );
+	if( FAILED(hr) )
+	{
+		goto cleanup;
+	}
+    	
+	//get the inbox folder entry id's
+	hr = lpMdb->GetReceiveFolder( NULL, 0, &(pEntryIds->lpbin[INBOX].cb), (LPENTRYID*)&(pEntryIds->lpbin[INBOX].lpb), NULL );
+	if( FAILED(hr) )
+	{
+		pEntryIds->lpbin[INBOX].cb = 0;
+		pEntryIds->lpbin[INBOX].lpb = NULL;
+		goto cleanup;
+	}
+
+	hr = lpMdb->OpenEntry(pEntryIds->lpbin[INBOX].cb, (LPENTRYID)(pEntryIds->lpbin[INBOX].lpb), NULL, MAPI_DEFERRED_ERRORS, &obj, (LPUNKNOWN*)&pInbox );
+	if( FAILED(hr) )
+	{
+		goto cleanup;
+	}
+
+	//get the props on the inbox folder
+	hr = GetInboxSpecialFolders( pInbox, pEntryIds );
+	if( FAILED(hr) )
+	{
+		goto cleanup;
+	}
+cleanup:
+	UlRelease( pInbox );
+	return hr;
+}
+
+HRESULT Zimbra::MAPI::Util::FreeAllSpecialFolders( IN SBinaryArray* lpSFIds )
+{
+	HRESULT hr = S_OK;
+	if( lpSFIds == NULL )
+		return hr;
+
+	SBinary* pBin = lpSFIds->lpbin;
+	for( ULONG i = 0; i < lpSFIds->cValues; i++, pBin++ )
+	{
+		if( pBin->cb > 0 && pBin->lpb != NULL )
+			hr = MAPIFreeBuffer( pBin->lpb );
+	}
+	hr = MAPIFreeBuffer( lpSFIds->lpbin );
+	return hr;
+}
+
+ExchangeSpecialFolderId Zimbra::MAPI::Util::GetExchangeSpecialFolderId(IN LPMAPISESSION lpSession, 
+	IN ULONG cbEntryId, IN LPENTRYID pFolderEntryId, SBinaryArray* pEntryIds)
+{
+	SBinary* pCurr = pEntryIds->lpbin;
+	for( ULONG i = 0; i < pEntryIds->cValues; i++, pCurr++ )
+	{
+		ULONG bResult = 0;
+		lpSession->CompareEntryIDs( cbEntryId, pFolderEntryId, pCurr->cb, (LPENTRYID)pCurr->lpb, 0, &bResult );
+		if( bResult )
+			return (ExchangeSpecialFolderId)i;
+	}
+	return SPECIAL_FOLDER_ID_NONE;
 }

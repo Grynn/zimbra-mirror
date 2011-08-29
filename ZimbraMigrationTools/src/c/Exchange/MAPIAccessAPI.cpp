@@ -35,34 +35,38 @@ HRESULT MAPIAccessAPI::OpenSessionAndStore() {
     LPSTR ExchangeUserDN = NULL;
     LPWSTR pwstrExchangeServerDN = NULL;
 
-    // Logon into Admin profile
-    m_zmmapisession = new Zimbra::MAPI::MAPISession();
-    hr = m_zmmapisession->Logon((LPWSTR)m_strAdminProfileName.c_str());
-    if (hr != S_OK)
-        goto CLEAN_UP;
-    m_defaultStore = new Zimbra::MAPI::MAPIStore();
-    m_userStore = new Zimbra::MAPI::MAPIStore();
+	try{
+		// Logon into Admin profile
+		m_zmmapisession = new Zimbra::MAPI::MAPISession();
+		hr = m_zmmapisession->Logon((LPWSTR)m_strAdminProfileName.c_str());
+		if (hr != S_OK)
+			goto CLEAN_UP;
+		m_defaultStore = new Zimbra::MAPI::MAPIStore();
+		m_userStore = new Zimbra::MAPI::MAPIStore();
 
-    // Open Admin default store
-    hr = m_zmmapisession->OpenDefaultStore(*m_defaultStore);
-    if (hr != S_OK)
-        goto CLEAN_UP;
-    // Get Exchange Server DN
-    hr = Zimbra::MAPI::Util::GetUserDnAndServerDnFromProfile(
-            m_zmmapisession->GetMAPISessionObject(),
-            ExchangeServerDN, ExchangeUserDN);
-    if (hr != S_OK)
-        goto CLEAN_UP;
-    AtoW(ExchangeServerDN, pwstrExchangeServerDN);
+		// Open Admin default store
+		hr = m_zmmapisession->OpenDefaultStore(*m_defaultStore);
+		if (hr != S_OK)
+			goto CLEAN_UP;
+		// Get Exchange Server DN
+		hr = Zimbra::MAPI::Util::GetUserDnAndServerDnFromProfile(
+				m_zmmapisession->GetMAPISessionObject(),
+				ExchangeServerDN, ExchangeUserDN);
+		if (hr != S_OK)
+			goto CLEAN_UP;
+		AtoW(ExchangeServerDN, pwstrExchangeServerDN);
 
-    // Get DN of user to be migrated
-	Zimbra::MAPI::Util::GetUserDNAndLegacyName(m_strExchangeHostName.c_str(),
-        m_strUserName.c_str(),NULL, wstruserdn,legacyName);
-    hr = m_zmmapisession->OpenOtherStore(
-            m_defaultStore->GetInternalMAPIStore(), pwstrExchangeServerDN,
-            (LPWSTR)legacyName.c_str(), *m_userStore);
-    if (hr != S_OK)
-        goto CLEAN_UP;
+		// Get DN of user to be migrated
+		Zimbra::MAPI::Util::GetUserDNAndLegacyName(m_strExchangeHostName.c_str(),
+			m_strUserName.c_str(),NULL, wstruserdn,legacyName);
+		hr = m_zmmapisession->OpenOtherStore(
+				m_defaultStore->GetInternalMAPIStore(), pwstrExchangeServerDN,
+				(LPWSTR)legacyName.c_str(), *m_userStore);
+		if (hr != S_OK)
+			goto CLEAN_UP;
+	}catch(GenericException &ge){
+		hr= ge.ErrCode();
+	}
 CLEAN_UP:
     SafeDelete(ExchangeServerDN);
     SafeDelete(ExchangeUserDN);
@@ -74,23 +78,32 @@ CLEAN_UP:
 // Get root folders
 HRESULT MAPIAccessAPI::Initialize() {
     HRESULT hr = S_OK;
-
-    hr = OpenSessionAndStore();
-    if (hr != S_OK)
-        return hr;
-    // Get root folder from user store
-    m_rootFolder = new Zimbra::MAPI::MAPIFolder(*m_zmmapisession);
-    hr = m_userStore->GetRootFolder(*m_rootFolder);
+	try {
+		hr = OpenSessionAndStore();
+	    if (hr != S_OK)
+			return hr;
+		// Get root folder from user store
+		m_rootFolder = new Zimbra::MAPI::MAPIFolder(*m_zmmapisession, *m_defaultStore);
+		hr = m_userStore->GetRootFolder(*m_rootFolder);
+	}catch(GenericException &ge) {
+		hr= ge.ErrCode();
+	}
     return hr;
 }
 
 
-HRESULT MAPIAccessAPI::GetRootFolderHierarchyV(vector<Folder_Data> &vfolderlist)
+HRESULT MAPIAccessAPI::GetRootFolderHierarchy(vector<Folder_Data> &vfolderlist)
 {
-	return Iterate_foldersV(*m_rootFolder, vfolderlist);
+	HRESULT hr=S_OK;
+	try{
+		hr= Iterate_folders(*m_rootFolder, vfolderlist);
+	}catch(GenericException &ge) {
+		hr= ge.ErrCode();
+	}
+	return hr;
 }
 
-HRESULT MAPIAccessAPI::Iterate_foldersV(Zimbra::MAPI::MAPIFolder &folder, vector<Folder_Data> &fd)
+HRESULT MAPIAccessAPI::Iterate_folders(Zimbra::MAPI::MAPIFolder &folder, vector<Folder_Data> &fd)
 {
 	Zimbra::MAPI::FolderIterator *folderIter = new Zimbra::MAPI::FolderIterator;
 
@@ -100,7 +113,7 @@ HRESULT MAPIAccessAPI::Iterate_foldersV(Zimbra::MAPI::MAPIFolder &folder, vector
     while (bMore) {
 		ULONG itemCount = 0;
 		// delete them while clearing the tree nodes
-        Zimbra::MAPI::MAPIFolder *childFolder = new Zimbra::MAPI::MAPIFolder(*m_zmmapisession);
+        Zimbra::MAPI::MAPIFolder *childFolder = new Zimbra::MAPI::MAPIFolder(*m_zmmapisession,*m_defaultStore);
         bMore = folderIter->GetNext(*childFolder);
         if (bMore) {
             childFolder->GetItemCount(itemCount);
@@ -118,14 +131,18 @@ HRESULT MAPIAccessAPI::Iterate_foldersV(Zimbra::MAPI::MAPIFolder &folder, vector
             memcpy(flderdata.sbin.lpb, sbin.lpb, sbin.cb);
 
 			//folder path
-			flderdata.parentpath = childFolder->GetFolderPath();
+			flderdata.folderpath = childFolder->GetFolderPath();
+
+			//ExchangeFolderID
+			flderdata.zimbraid = (long)childFolder->GetZimbraFolderId();
+
             // Store mapi folder reference
 			flderdata.mapifolder = childFolder;
 			//append
 			fd.push_back(flderdata);
 		}
 		if (bMore) {
-            Iterate_foldersV(*childFolder, fd);
+            Iterate_folders(*childFolder, fd);
         } else {
             delete childFolder;
             childFolder = NULL;
@@ -135,25 +152,40 @@ HRESULT MAPIAccessAPI::Iterate_foldersV(Zimbra::MAPI::MAPIFolder &folder, vector
 	folderIter = NULL;
     return true;
 }
+
+HRESULT MAPIAccessAPI::IterateVectorList(vector<Folder_Data> &vFolderList)
+{
+	vector<Folder_Data>::iterator it;
+	for(it=vFolderList.begin();it!=vFolderList.end();it++)
+	{
+		printf("==================    FolderName:%S    ============\n", (*it).mapifolder->Name().c_str());
+		travrese_folder(*(*it).mapifolder);
+		// cleanup
+        MAPIFreeBuffer((*it).sbin.lpb);
+		delete (*it).mapifolder;
+	}
+	return S_OK;
+}
+
 //>>>>>>>>>>>>>>TREE Impl>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // Get Folder hierarchy
-HRESULT MAPIAccessAPI::GetFolderHierarchy(Zimbra::MAPI::MAPIFolder rootFolder,
+HRESULT MAPIAccessAPI::GetFolderHierarchy_tr(Zimbra::MAPI::MAPIFolder rootFolder,
     tree<Folder_Data> &tr) {
     tree<Folder_Data>::iterator top = tr.begin();
     Folder_Data rootFolderData;
     rootFolderData.name = L"root";
     tree<Folder_Data>::iterator root = tr.insert(top, rootFolderData);
-    iterate_folders(rootFolder, tr, root);
+    iterate_folders_tr(rootFolder, tr, root);
     return S_OK;
 }
 
 // Get root folder hierarchy
-HRESULT MAPIAccessAPI::GetRootFolderHierarchy(tree<Folder_Data> &tr) {
-    return GetFolderHierarchy(*m_rootFolder, tr);
+HRESULT MAPIAccessAPI::GetRootFolderHierarchy_tr(tree<Folder_Data> &tr) {
+    return GetFolderHierarchy_tr(*m_rootFolder, tr);
 }
 
 // iterate given folder hierarchy
-bool MAPIAccessAPI::iterate_folders(Zimbra::MAPI::MAPIFolder &folder, tree<Folder_Data> &tr,
+bool MAPIAccessAPI::iterate_folders_tr(Zimbra::MAPI::MAPIFolder &folder, tree<Folder_Data> &tr,
     tree<Folder_Data>::iterator tritr) {
     Zimbra::MAPI::FolderIterator *folderIter = new Zimbra::MAPI::FolderIterator;
 
@@ -186,7 +218,7 @@ bool MAPIAccessAPI::iterate_folders(Zimbra::MAPI::MAPIFolder &folder, tree<Folde
             itrMore = tr.append_child(tritr, flderdata);
         }
         if (bMore) {
-            iterate_folders(*childFolder, tr, itrMore);
+            iterate_folders_tr(*childFolder, tr, itrMore);
         } else {
             delete childFolder;
             childFolder = NULL;
@@ -219,7 +251,7 @@ void MAPIAccessAPI::travrese_folder(Zimbra::MAPI::MAPIFolder &folder) {
 }
 
 //
-HRESULT MAPIAccessAPI::IterateTree(tree<Folder_Data> &tr) {
+HRESULT MAPIAccessAPI::IterateTree_tr(tree<Folder_Data> &tr) {
     tree<Folder_Data>::iterator loc = tr.begin();
     wcout << (LPTSTR)(*loc).name.c_str() << endl;
     if (loc != tr.end()) {
