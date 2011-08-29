@@ -232,7 +232,9 @@ public class ZJspSession {
         String host;
         if (needRefer) {
             host = authResult.getRefer();
-            toAdd.put(Q_ZAUTHTOKEN, authResult.getAuthToken().getValue());
+//            Do not append the authToken in the redirect URL. If needRefer is set, let the
+//            client send it as a separate param. 
+//            toAdd.put(Q_ZAUTHTOKEN, authResult.getAuthToken().getValue());
             if (rememberMe) {
                 toAdd.put(Q_ZREMBERME, "1");
                 Cookie lastServerCookie = new Cookie(ZJspSession.ZM_LAST_SERVER_COOKIE_NAME, host);
