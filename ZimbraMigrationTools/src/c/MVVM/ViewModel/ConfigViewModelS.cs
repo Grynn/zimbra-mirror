@@ -23,8 +23,9 @@ namespace MVVM.ViewModel
             this.LoadCommand = new ActionCommand(this.Load, () => true);
             this.SaveCommand = new ActionCommand(this.Save, () => true);
             this.NextCommand = new ActionCommand(this.Next, () => true);
-            IsmailServer = false;
             Isprofile = false;
+            IsmailServer = false;
+            CSEnableNext = false;
         }
 
         public ICommand GetConfigSourceHelpCommand
@@ -150,6 +151,26 @@ namespace MVVM.ViewModel
 
         private void Next()
         {
+            string ret;
+            CSMigrationwrapper mw = ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).mw;
+            if (IsProfile)
+            {
+                ret = mw.InitializeMailClient(ProfileList[CurrentProfileSelection], "", "");
+            }
+            else
+            {
+                if ((MailServerHostName.Length == 0) || (MailServerAdminID.Length == 0) || (MailServerAdminPwd.Length == 0))
+                {
+                    MessageBox.Show("Please enter all source mail server credentials", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                ret = mw.InitializeMailClient(MailServerHostName, MailServerAdminID, MailServerAdminPwd);
+            }
+            if (ret.Length > 0)
+            {
+                MessageBox.Show(ret, "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             lb.SelectedIndex = 1;
         }
 
@@ -159,8 +180,11 @@ namespace MVVM.ViewModel
         public bool IsmailServer
         {
             get { return IsMailServer; }
-            set { IsMailServer = value;
-            OnPropertyChanged(new PropertyChangedEventArgs("IsmailServer"));
+            set 
+            { 
+                IsMailServer = value;
+                CSEnableNext = true;
+                OnPropertyChanged(new PropertyChangedEventArgs("IsmailServer"));
             }
         }
 
@@ -168,8 +192,11 @@ namespace MVVM.ViewModel
         public bool Isprofile
         {
             get { return IsProfile; }
-            set { IsProfile = value;
-            OnPropertyChanged(new PropertyChangedEventArgs("Isprofile"));
+            set
+            {
+                IsProfile = value; 
+                CSEnableNext = true;
+                OnPropertyChanged(new PropertyChangedEventArgs("Isprofile"));
             }
         }
 
@@ -253,6 +280,17 @@ namespace MVVM.ViewModel
                 m_config.mailServer.SourceAdminPwd = value;
 
                 OnPropertyChanged(new PropertyChangedEventArgs("MailServerAdminPwd"));
+            }
+        }
+
+        private bool csenableNext;
+        public bool CSEnableNext
+        {
+            get { return csenableNext; }
+            set
+            {
+                csenableNext = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("CSEnableNext"));
             }
         }
     }

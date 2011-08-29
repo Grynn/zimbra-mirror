@@ -92,6 +92,10 @@ namespace MVVM.ViewModel
                 m_scheduleViewModel.BGWList[i].CancelAsync();
             }
             m_scheduleViewModel.EnableMigrate = true;
+
+            CSMigrationwrapper mw = ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).mw;
+            string ret = mw.UninitializeMailClient();
+
             EnableStop = !m_scheduleViewModel.EnableMigrate;
         }
 
@@ -103,6 +107,9 @@ namespace MVVM.ViewModel
 
         private void ExitApp()
         {
+            CSMigrationwrapper mw = ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).mw;
+            string ret = mw.UninitializeMailClient();
+
             Application.Current.Shutdown();
         }
         //

@@ -51,6 +51,11 @@
             get; set;
         }
 
+        public bool CSEnableNext
+        {
+            get; set;
+        }
+
         public MailServer mailServer;
         public ZimbraServer zimbraServer;
         public ImportOptions importOptions;
