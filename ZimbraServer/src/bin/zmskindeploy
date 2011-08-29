@@ -127,7 +127,7 @@ pushd $SKIN_WORK_DIR > /dev/null
 TEMPLATES=`find . -type f -name \*.template`
 if [ -n "${TEMPLATES}" ]; then
     echo "Processing templates..."
-    sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.common.util.TemplateCompiler \
+    ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.common.util.TemplateCompiler \
         --prefix "${SKIN_NAME}" \
         --authoritative \
         --inputdir "${SKIN_WORK_DIR}" \
@@ -147,7 +147,7 @@ if [ -d img ]; then
 
     if [ -n "${IMAGE_SUBDIRS}" ]; then
         echo "Processing images..."
-        sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.img.ImageMerger \
+        ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.img.ImageMerger \
             --css-path "${BASE_URL}/skins/${SKIN_NAME}/img/" \
             --css-file "images.css" \
             --js-file "images.css.js" \
@@ -165,7 +165,7 @@ if [ -d img ]; then
             fi
             IMAGE_SUBDIRS="${IMAGE_SUBDIRS}${E}"
         done
-        sh ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.img.ImageMerger \
+        ${BIN_ROOT}/zmjava -cp "$CP" com.zimbra.kabuki.tools.img.ImageMerger \
             --css-path "${BASE_URL}/skins/${SKIN_NAME}/img/" \
             --css-file "images_${LOCID}.css" \
             --js-file "images.css.js" \
