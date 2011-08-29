@@ -1521,7 +1521,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
                         visibilityChecks: [[XForm.checkInstanceValue,ZaDomain.A2_zimbraAutoProvModeEAGEREnabled,"TRUE"]],
                         visibilityChangeEventSources:[ZaDomain.A2_zimbraAutoProvModeEAGEREnabled],
                         labelLocation:_LEFT_
-                    },
+                    }/*,
                     {type: _SPACER_, height: 15 },
                     {type: _GROUP_, colSpan:2, numCols:3, colSizes: ["350px", "20px", "*" ],
                         visibilityChecks: [[XForm.checkInstanceValue,ZaDomain.A2_zimbraAutoProvModeMANUALEnabled,"TRUE"]],
@@ -1533,7 +1533,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
                             },
                             {type:_CELLSPACER_}
                          ]
-                    }
+                    }*/
                 ]}
             ]
         };

@@ -639,6 +639,7 @@ function (value) {
 }
 
 /////////////////////////////
+/*
 ZaServerOptionList = function(parent,className) {
 	DwtListView.call(this, parent, null);//, Dwt.ABSOLUTE_STYLE);
 }
@@ -670,3 +671,4 @@ function(item) {
 	div.innerHTML = html.join("");
 	return div;
 }
+*/

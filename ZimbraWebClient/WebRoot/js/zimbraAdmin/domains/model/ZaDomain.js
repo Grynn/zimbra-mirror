@@ -2163,7 +2163,7 @@ ZaDomain.myXModel = {
         {id:ZaDomain.A_zimbraAutoProvLdapSearchFilter, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvLdapSearchFilter, maxLength:256},
         {id:ZaDomain.A_zimbraAutoProvLdapBindDn, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvLdapBindDn, maxLength:256},
         {id:ZaDomain.A_zimbraAutoProvAccountNameMap, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvAccountNameMap, maxLength:256},
-        {id:ZaDomain.A_zimbraAutoProvNotificationFromAddress, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvNotificationFromAddress, maxLength:256},
+        {id:ZaDomain.A_zimbraAutoProvNotificationFromAddress, type:_EMAIL_ADDRESS_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvNotificationFromAddress, maxLength:256},
         {id:ZaDomain.A_zimbraAutoProvBatchSize, type:_NUMBER_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvBatchSize, maxInclusive:2147483647, minInclusive:0},
         {id:ZaDomain.A_zimbraAutoProvLastPolledTimestamp, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraAutoProvLastPolledTimestamp, maxLength:256},
         {id:ZaDomain.A_zimbraAutoProvAttrMap, type:_LIST_, listItem:{type:_STRING_, maxLength:255}, ref:"attrs/" + ZaDomain.A_zimbraAutoProvAttrMap},

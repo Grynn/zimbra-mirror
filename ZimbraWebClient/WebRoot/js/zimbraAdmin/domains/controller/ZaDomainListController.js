@@ -392,8 +392,13 @@ function(ev) {
 			var item = this._contentView.getSelection()[0];
 			this._currentObject = item;
 			item.load("name", item.attrs[ZaDomain.A_domainName],false,true);
-			this._autoProvWizard = ZaApp.getInstance().dialogs["authWizard"] = new ZaAutoProvConfigXWizard(this._container);
-			this._autoProvWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishAutoProvButtonListener, this, null);
+			//this._autoProvWizard = ZaApp.getInstance().dialogs["authWizard"] = new ZaAutoProvConfigXWizard(this._container);
+			//this._autoProvWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishAutoProvButtonListener, this, null);
+            if(!ZaApp.getInstance().dialogs["autoProvWizard"]) {
+			    this._autoProvWizard = ZaApp.getInstance().dialogs["autoProvWizard"] = new ZaTaskAutoProvDialog(this._container, ZaMsg.NAD_AutoProvConfigTitle);//ZaAutoProvConfigXWizard(this._container);
+			    this._autoProvWizard.registerCallback(DwtDialog.OK_BUTTON, ZaDomainListController.prototype._finishAutoProvButtonListener, this, null);
+            }
+            item.currentTab = "1";
 			this._autoProvWizard.setObject(item);
 			this._autoProvWizard.popup();
 		}
@@ -870,7 +875,13 @@ function(ev) {
 ZaDomainListController.prototype._finishAutoProvButtonListener =
 function(ev) {
 	try {
-		ZaDomain.modifyAutoPovSettings.call(this._currentObject,this._autoProvWizard.getObject());
+        if(!this._autoProvWizard._checkGeneralConfig() || !this._autoProvWizard._checkEagerConfig()
+                || !this._autoProvWizard._checkLazyConfig()) {
+            return;
+        }
+        var savedObj = this._autoProvWizard.getObject();
+        this._autoProvWizard._combineConfigureValues(savedObj);
+		ZaDomain.modifyAutoPovSettings.call(this._currentObject,savedObj);
 		this._fireDomainChangeEvent(this._currentObject);
 		this._autoProvWizard.popdown();
 		this._notifyAllOpenTabs();
