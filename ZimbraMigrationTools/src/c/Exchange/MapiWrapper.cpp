@@ -62,7 +62,7 @@ STDMETHODIMP CMapiWrapper::GlobalInit(BSTR* pMAPITarget, BSTR* pAdminUser, BSTR*
     (void)pAdminUser;
     (void)pAdminPassword;
 	(void)pErrorText;
-	LPCWSTR lpszErrorText = ExchangeOps::GlobalInit(L"FBSSBS2008.fssbs2k8.local",L"fbs",L"Test7777");
+	LPCWSTR lpszErrorText = ExchangeOps::GlobalInit((LPCWSTR)pMAPITarget, (LPCWSTR)pAdminUser, (LPCWSTR)pErrorText);
 	*pErrorText = (lpszErrorText) ? CComBSTR(lpszErrorText) : CComBSTR("");
 	return S_OK;
 }
