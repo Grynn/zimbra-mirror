@@ -72,9 +72,10 @@ public class SendDocAttachment extends AjaxCommonTest {
 		else
 			mailform = (FormMailNew) app.zPageBriefcase.zToolbarPressPulldown(
 					Button.B_ACTIONS, Button.O_SEND_AS_ATTACHMENT, docItem);
-		
-		// Verify the new mail form is opened
-		ZAssert.assertTrue(mailform.zIsActive(), "Verify the new form opened");
+
+		// Verify the new mail form has attachment
+		ZAssert.assertTrue(mailform.zHasAttachment(docName),
+				"Verify the new  mail form has attachment");
 
 		ZAssert.assertTrue(app.zPageBriefcase
 				.sIsElementPresent(FormMailNew.Locators.zAttachmentText
@@ -91,8 +92,8 @@ public class SendDocAttachment extends AjaxCommonTest {
 		warningDlg.zClickButton(Button.B_NO);
 
 		// Make sure the dialog is dismissed
-		warningDlg.zWaitForClose(); 
-		
+		warningDlg.zWaitForClose();
+
 		// delete document upon test completion
 		app.zPageBriefcase.deleteFileByName(docItem.getName());
 	}
@@ -127,8 +128,8 @@ public class SendDocAttachment extends AjaxCommonTest {
 						+ "</doc>"
 						+ "</SaveDocumentRequest>");
 
-		//SleepUtil.sleepVerySmall();
-		
+		// SleepUtil.sleepVerySmall();
+
 		// refresh briefcase page
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
@@ -138,11 +139,12 @@ public class SendDocAttachment extends AjaxCommonTest {
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
 		// Click on Send as attachment using Right Click Context Menu
-		FormMailNew mailform = (FormMailNew) app.zPageBriefcase.zListItem(Action.A_RIGHTCLICK,
-				Button.O_SEND_AS_ATTACHMENT, docItem);
+		FormMailNew mailform = (FormMailNew) app.zPageBriefcase.zListItem(
+				Action.A_RIGHTCLICK, Button.O_SEND_AS_ATTACHMENT, docItem);
 
-		// Verify the new mail form is opened
-		ZAssert.assertTrue(mailform.zIsActive(), "Verify the new form opened");
+		// Verify the new mail form has attachment
+		ZAssert.assertTrue(mailform.zHasAttachment(docName),
+				"Verify the new  mail form has attachment");
 
 		ZAssert.assertTrue(app.zPageBriefcase
 				.zWaitForElementPresent(FormMailNew.Locators.zAttachmentText
@@ -159,7 +161,7 @@ public class SendDocAttachment extends AjaxCommonTest {
 		warningDlg.zClickButton(Button.B_NO);
 
 		warningDlg.zWaitForClose(); // Make sure the dialog is dismissed
-		
+
 		// delete document upon test completion
 		app.zPageBriefcase.deleteFileByName(docItem.getName());
 	}

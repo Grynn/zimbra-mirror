@@ -65,8 +65,9 @@ public class SendFileAttachment extends AjaxCommonTest {
 			mailform = (FormMailNew) app.zPageBriefcase.zToolbarPressPulldown(
 					Button.B_ACTIONS, Button.O_SEND_AS_ATTACHMENT, fileItem);
 
-		// Verify the new mail form is opened
-		ZAssert.assertTrue(mailform.zIsActive(), "Verify the new form opened");
+		// Verify the new mail form has attachment
+		ZAssert.assertTrue(mailform.zHasAttachment(fileName),
+				"Verify the new  mail form has attachment");
 
 		ZAssert.assertTrue(app.zPageBriefcase
 				.sIsElementPresent(FormMailNew.Locators.zAttachmentText
@@ -125,8 +126,9 @@ public class SendFileAttachment extends AjaxCommonTest {
 		FormMailNew mailform = (FormMailNew) app.zPageBriefcase.zListItem(
 				Action.A_RIGHTCLICK, Button.O_SEND_AS_ATTACHMENT, fileItem);
 
-		// Verify the new mail form is opened
-		ZAssert.assertTrue(mailform.zIsActive(), "Verify the new form opened");
+		// Verify the new mail form has attachment
+		ZAssert.assertTrue(mailform.zHasAttachment(fileName),
+				"Verify the new  mail form has attachment");
 
 		ZAssert.assertTrue(app.zPageBriefcase
 				.zWaitForElementPresent(FormMailNew.Locators.zAttachmentText

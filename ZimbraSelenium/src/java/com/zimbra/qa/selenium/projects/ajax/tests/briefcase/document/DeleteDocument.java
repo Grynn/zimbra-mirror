@@ -66,7 +66,7 @@ public class DeleteDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		SleepUtil.sleepVerySmall();
-		
+
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
@@ -101,6 +101,10 @@ public class DeleteDocument extends AjaxCommonTest {
 
 		String id = account.soapSelectValue("//mail:SearchResponse//mail:doc",
 				"id");
+
+		ZAssert.assertNotNull(id,
+				"Verify the search response returns the document id");
+
 		ZAssert.assertEquals(id, docId,
 				"Verify the document was moved to the trash folder");
 	}
@@ -141,7 +145,7 @@ public class DeleteDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		SleepUtil.sleepVerySmall();
-		
+
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
@@ -203,7 +207,7 @@ public class DeleteDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		SleepUtil.sleepVerySmall();
-		
+
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
@@ -347,7 +351,7 @@ public class DeleteDocument extends AjaxCommonTest {
 		// refresh briefcase page
 		app.zTreeBriefcase
 				.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, false);
-		
+
 		SleepUtil.sleepVerySmall();
 
 		// Verify items are deleted);
@@ -371,6 +375,9 @@ public class DeleteDocument extends AjaxCommonTest {
 
 			String id = account.soapSelectValue(
 					"//mail:SearchResponse//mail:doc", "id");
+
+			ZAssert.assertNotNull(id,
+					"Verify the search response returns the document id");
 
 			ZAssert
 					.assertEquals(docId, id, "Verify the deleted document: "

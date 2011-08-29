@@ -28,8 +28,8 @@ public class UnTagFile extends AjaxCommonTest {
 
 		// Create file item
 		String filePath = ZimbraSeleniumProperties.getBaseDirectory()
-		+ "/data/public/other/com_zimbra_ymaps.zip";
-		
+				+ "/data/public/other/com_zimbra_ymaps.zip";
+
 		FileItem fileItem = new FileItem(filePath);
 
 		// Upload file to server through RestUtil
@@ -67,7 +67,7 @@ public class UnTagFile extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		SleepUtil.sleepVerySmall();
-		
+
 		// Click on created document
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
@@ -115,9 +115,10 @@ public class UnTagFile extends AjaxCommonTest {
 
 		String id = account.soapSelectValue("//mail:SearchResponse//mail:doc",
 				"t");
-		
-		ZAssert.assertNotNull(id, "Verify the search results contain the document");
-				
+
+		ZAssert.assertNotNull(id,
+				"Verify the search response returns the document tag id");
+
 		ZAssert.assertEquals(id, tagId,
 				"Verify the tag was attached to the document");
 
@@ -125,7 +126,7 @@ public class UnTagFile extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		SleepUtil.sleepVerySmall();
-		
+
 		// Click on tagged document
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, fileItem);
 
@@ -146,7 +147,7 @@ public class UnTagFile extends AjaxCommonTest {
 
 		ZAssert.assertStringDoesNotContain(id, tagId,
 				"Verify that the tag is removed from the message");
-		
+
 		// delete file upon test completion
 		app.zPageBriefcase.deleteFileByName(fileItem.getName());
 	}

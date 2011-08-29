@@ -37,7 +37,7 @@ public class OpenLinkToMessage extends AjaxCommonTest {
 
 	@Bugs(ids = "56802")
 	@Test(description = "Open link to the message - Verify List View Rows are displayed after message closed", groups = { "functional" })
-	public void OpenLink_01() throws HarnessException {
+	public void OpenLinkToMessage_01() throws HarnessException {
 		// Create the message data to be sent
 		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 

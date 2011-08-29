@@ -590,9 +590,11 @@ public class PageBriefcase extends AbsTab {
 			// If we click on pulldown/option and the page is specified, then
 			// wait for the page to go active
 			if (page != null) {
-				page.zWaitForActive();
-				if (option == Button.O_SEND_AS_ATTACHMENT)
+				if (option == Button.O_SEND_AS_ATTACHMENT){
 					zWaitForElementPresent("css=div[id$=_attachments_div] a[class='AttLink']");
+					return page;
+				} else
+				page.zWaitForActive();
 			}
 		}
 		// Return the specified page, or null if not set
@@ -1036,6 +1038,10 @@ public class PageBriefcase extends AbsTab {
 		}
 
 		if (page != null) {
+			if (option == Button.O_SEND_AS_ATTACHMENT){
+				zWaitForElementPresent("css=div[id$=_attachments_div] a[class='AttLink']");
+				return page;
+			} else
 			page.zWaitForActive();
 		}
 

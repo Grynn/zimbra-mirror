@@ -73,7 +73,7 @@ public class UnTagDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		SleepUtil.sleepVerySmall();
-		
+
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
@@ -115,10 +115,16 @@ public class UnTagDocument extends AjaxCommonTest {
 		// Make sure the tag was applied to the document
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
-						+ "<query>" + docItem.getName() + "</query>" + "</SearchRequest>");
+						+ "<query>"
+						+ docItem.getName()
+						+ "</query>"
+						+ "</SearchRequest>");
 
 		String id = account.soapSelectValue("//mail:SearchResponse//mail:doc",
 				"t");
+
+		ZAssert.assertNotNull(id,
+				"Verify the search response returns the document tag id");
 
 		ZAssert.assertEquals(id, tagId,
 				"Verify the tag was attached to the document");
@@ -127,7 +133,7 @@ public class UnTagDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		SleepUtil.sleepVerySmall();
-		
+
 		// Click on tagged document
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem);
 
@@ -137,7 +143,10 @@ public class UnTagDocument extends AjaxCommonTest {
 
 		account
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
-						+ "<query>" + docItem.getName() + "</query>" + "</SearchRequest>");
+						+ "<query>"
+						+ docItem.getName()
+						+ "</query>"
+						+ "</SearchRequest>");
 
 		id = account.soapSelectValue("//mail:SearchResponse//mail:doc", "t");
 

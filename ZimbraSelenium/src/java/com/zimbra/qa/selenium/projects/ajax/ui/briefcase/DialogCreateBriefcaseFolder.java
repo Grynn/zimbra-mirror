@@ -24,7 +24,7 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 		public static final String zTitle = "css=td[id^=CreateNewFolderDialog__]:contains(Create New Briefcase Folder)";
 		
 		// Textfields
-		public static final String zNameField = "css=div[id^=CreateNewFolderDialog]:contains(Create New) td>input.Field";
+		public static final String zNameField = "css=div[id^=CreateNewFolderDialog]:contains(Create New Briefcase Folder) td>input.Field";
 		// Buttons
 		public static final String zDialogButtonsId = "ChooseFolderDialog_buttons";
 		public static final String zOkButton = "css=td[id^=OK] td[id^=CreateNewFolderDialog]:contains(OK)";									

@@ -179,8 +179,11 @@ public class CreateDocument extends AjaxCommonTest {
 
 		String name = account.soapSelectValue("//mail:doc", "name");
 
+		ZAssert.assertNotNull(name,
+				"Verify the search response returns the document name");
+
 		ZAssert.assertStringContains(docName, name,
-				"Verify document name through GUI");
+				"Verify document name through SOAP");
 
 		HtmlElement element = HtmlElement.clean(response
 				.get(PageBriefcase.Response.ResponsePart.BODY));
@@ -252,8 +255,14 @@ public class CreateDocument extends AjaxCommonTest {
 				.soapSend("<SearchRequest xmlns='urn:zimbraMail' types='document'>"
 						+ "<query>" + docName + "</query>" + "</SearchRequest>");
 
-		ZAssert.assertStringContains(account.soapSelectValue("//mail:doc",
-				"name"), docName, "Verify document name through GUI");
+		String name = account.soapSelectValue(
+				"//mail:SearchResponse//mail:doc", "name");
+
+		ZAssert.assertNotNull(name,
+				"Verify the search response returns the document name");
+
+		ZAssert.assertStringContains(name, docName,
+				"Verify document name through SOAP");
 
 		HtmlElement element = HtmlElement.clean(response
 				.get(PageBriefcase.Response.ResponsePart.BODY));

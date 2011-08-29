@@ -63,7 +63,7 @@ public class EditDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		SleepUtil.sleepVerySmall();
-		
+
 		// Click on created document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem1);
@@ -147,7 +147,7 @@ public class EditDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		SleepUtil.sleepVerySmall();
-		
+
 		// Click on created document
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem1);
 
@@ -180,7 +180,7 @@ public class EditDocument extends AjaxCommonTest {
 		app.zTreeBriefcase.zTreeItem(Action.A_LEFTCLICK, briefcaseFolder, true);
 
 		SleepUtil.sleepVerySmall();
-		
+
 		// Click on modified document
 		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
 		app.zPageBriefcase.zListItem(Action.A_LEFTCLICK, docItem2);
@@ -195,7 +195,7 @@ public class EditDocument extends AjaxCommonTest {
 			documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
 					.zToolbarPressPulldown(Button.B_ACTIONS,
 							Button.B_LAUNCH_IN_SEPARATE_WINDOW, docItem2);
-		
+
 		app.zPageBriefcase.isOpenDocLoaded(docItem2);
 
 		String name = "";
@@ -260,7 +260,14 @@ public class EditDocument extends AjaxCommonTest {
 						+ "</SearchRequest>");
 
 		String docId = account.soapSelectValue("//mail:doc", "id");
+
+		ZAssert.assertNotNull(docId,
+				"Verify the search response returns the document id");
+
 		String version = account.soapSelectValue("//mail:doc", "ver");
+
+		ZAssert.assertNotNull(docId,
+				"Verify the search response returns the document version");
 
 		docItem.setDocText("editText"
 				+ ZimbraSeleniumProperties.getUniqueString());
@@ -300,7 +307,7 @@ public class EditDocument extends AjaxCommonTest {
 			documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
 					.zToolbarPressPulldown(Button.B_ACTIONS,
 							Button.B_LAUNCH_IN_SEPARATE_WINDOW, docItem);
-		
+
 		app.zPageBriefcase.isOpenDocLoaded(docItem);
 
 		String text = "";
@@ -403,7 +410,7 @@ public class EditDocument extends AjaxCommonTest {
 			documentBriefcaseOpen = (DocumentBriefcaseOpen) app.zPageBriefcase
 					.zToolbarPressPulldown(Button.B_ACTIONS,
 							Button.B_LAUNCH_IN_SEPARATE_WINDOW, docItem);
-		
+
 		app.zPageBriefcase.isOpenDocLoaded(docItem);
 
 		String text = "";
