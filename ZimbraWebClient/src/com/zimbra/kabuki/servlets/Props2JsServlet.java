@@ -254,11 +254,20 @@ public class Props2JsServlet extends HttpServlet {
         return req.getLocale();
     }
 
+	private String getCommentSafeString(String st) {
+		return st.replaceAll("<", "") //make sure you can't start a "script" tag within the comment cuz genius IE supposedly exectutes it
+				.replaceAll("\n", ""); //make sure no newline can be injected to start a malicious script too
+
+	}
+
     protected byte[] getBuffer(HttpServletRequest req,
         Locale locale, String uri) throws IOException {
         BufferStream bos = new BufferStream(24 * 1024);
         DataOutputStream out = new DataOutputStream(bos);
-        out.writeBytes("// Locale: " + locale + '\n');
+		String sanitizedLocale = locale.toString()
+				.replaceAll("<", "") //make sure you can't start a "script" tag within the comment cuz genius IE supposedly exectutes it
+				.replaceAll("\n", ""); //make sure no newline can be injected to start a malicious script too
+		out.writeBytes("// Locale: " + getCommentSafeString(locale.toString()) + '\n');
 
         // tokenize the list of patterns
         List<String> patternsList = this.getBasenamePatternsList(req);
@@ -316,7 +325,7 @@ public class Props2JsServlet extends HttpServlet {
         String basedir, String dirname, String classname) throws IOException {
         String basename = basedir + classname;
 
-        out.writeBytes("// Basename: " + basename + '\n');
+        out.writeBytes("// Basename: " + getCommentSafeString(basename) + '\n');
         for (List<String> basenames : basenamePatterns) {
             try {
                 ClassLoader parentLoader = this.getClass().getClassLoader();
