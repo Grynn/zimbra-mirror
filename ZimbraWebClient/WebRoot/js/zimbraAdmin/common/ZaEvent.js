@@ -59,6 +59,7 @@ ZaEvent.S_CLUSTER_STATUS = ZaEvent.EVENT_SOURCE_INDEX++;
 ZaEvent.S_DL 			 = ZaEvent.EVENT_SOURCE_INDEX++;
 ZaEvent.S_MTA			 = ZaEvent.EVENT_SOURCE_INDEX++;
 ZaEvent.S_ZIMLET		 = ZaEvent.EVENT_SOURCE_INDEX++;
+ZaEvent.S_HOME		 = ZaEvent.EVENT_SOURCE_INDEX++;
 // Event types
 ZaEvent.EVENT_TYPES_INDEX = 1;
 ZaEvent.E_CREATE		= ZaEvent.EVENT_TYPES_INDEX++;

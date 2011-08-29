@@ -307,7 +307,10 @@ function() {
 
 	this._overviewPanel.setScrollStyle(DwtControl.SCROLL);
     ZaSearch.loadPredefinedSearch() ;
-    this._buildFolderTree();
+    if (!appNewUI)
+        this._buildFolderTree();
+    else
+        this._buildNewFolderTree();
 	//this._overviewPanel.getFolderTree().setSelection(this._inboxTreeItem);
 	this._overviewPanel.zShow(true);
 }
@@ -683,12 +686,83 @@ function() {
     }
 }
 
+ZaId.PANEL_HOME = "Home";
+
+ZaOverviewPanelController.prototype._buildNewFolderTree =
+function() {
+	var tree = this._overviewPanel.getFolderTree();
+	var l = new AjxListener(this, this._overviewTreeListener);
+	tree.addSelectionListener(l);
+    // Home is always added;
+    var home = new ZaTreeItemData({parent:"",
+                                   id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME, true),
+                                   mappingId:ZaZimbraAdmin._HOME_VIEW,
+                                   text:"Home"});
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._HOME_VIEW] = ZaOverviewPanelController.homeTreeListener;
+    tree.setRootData(home);
+
+    var  ti = new ZaTreeItemData({
+                                    parent:"Home",
+                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "monHV"),
+                                    text: "Monitor",
+                                    mappingId: ZaZimbraAdmin._MONITOR_HOME_VIEW});
+    tree.addTreeItemData(ti);
+
+    var  ti = new ZaTreeItemData({
+                                    parent:"Home/Monitor",
+                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "serverstatusHV"),
+                                    text: "Server Status",
+                                    mappingId: ZaZimbraAdmin._SERVER_STATUS_VIEW});
+    tree.addTreeItemData(ti);
+
+    ti = new ZaTreeItemData({
+                                    parent:"Home",
+                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "manActHV"),
+                                    text: "Manage Accounts",
+                                    count: 2,
+                                    mappingId: ZaZimbraAdmin._MANAGE_ACCOUNT_HOME_VIEW});
+    tree.addTreeItemData(ti);
+
+    ti = new ZaTreeItemData({
+                                    parent:"Home",
+                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "adminHV"),
+                                    text: "Administrator",
+                                    mappingId: ZaZimbraAdmin._ADMINISTRATION_HOME_VIEW});
+    tree.addTreeItemData(ti);
+
+    ti = new ZaTreeItemData({
+                                    parent:"Home",
+                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "magHV"),
+                                    text: "Magration and Set-up",
+                                    mappingId: ZaZimbraAdmin._MIGRATION_HOME_VIEW});
+    tree.addTreeItemData(ti);
+
+    ti = new ZaTreeItemData({
+                                    parent:"Home",
+                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "searchHV"),
+                                    text: "Search",
+                                    mappingId: ZaZimbraAdmin._SEARCH_HOME_VIEW});
+    tree.addTreeItemData(ti);
+
+    /*
+	//Instrumentation code start
+	if(ZaOverviewPanelController.treeModifiers) {
+		var methods = ZaOverviewPanelController.treeModifiers;
+		var cnt = methods.length;
+		for(var i = 0; i < cnt; i++) {
+			if(typeof(methods[i]) == "function") {
+				methods[i].call(this,tree);
+			}
+		}
+	} */
+}
 
 
 ZaOverviewPanelController.prototype._overviewTreeListener =
 function(ev) {
 	try {
-		var eventHandler = null ;
+		var eventHandler = null;
+
 		var treeItemType = ev.item.getData(ZaOverviewPanelController._TID);
 		if (treeItemType != null && 
 			ZaOverviewPanelController.overviewTreeListeners[treeItemType] &&
@@ -715,6 +789,13 @@ function(ev) {
 }
 
 /* default tree listeners */
+ZaOverviewPanelController.homeTreeListener = function (ev) {
+	if(ZaApp.getInstance().getCurrentController()) {
+		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getHomeViewController(),ZaHomeController.prototype.show, null);
+	} else {
+		ZaApp.getInstance().getHomeViewController().show();
+	}
+}
 
 ZaOverviewPanelController.cosTreeListener = function (ev) {
 	if(ZaApp.getInstance().getCurrentController()) {
@@ -946,4 +1027,5 @@ function (itemType) {
                                 searchListController._searchField.cosFilterSelected(); break ;
 		}
 	}
-} 
+}
+

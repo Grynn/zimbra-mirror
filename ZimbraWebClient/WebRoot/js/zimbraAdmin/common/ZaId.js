@@ -536,7 +536,7 @@ ZaId.VIEW_SCH               	= "SCHV";
 
 ZaId.VIEW_MTA			= "MTAV";
 
-
+ZaId.VIEW_HOME          = "HOMEV";
 /* Operation  */
 ZaId.OP_NEW_ACCT		= "NEW_ACCT";
 ZaId.OP_EDIT_ACCT		= "EDIT_ACCT";

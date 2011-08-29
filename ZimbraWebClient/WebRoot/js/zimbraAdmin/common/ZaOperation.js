@@ -138,6 +138,7 @@ ZaOperation.MORE_ACTIONS = ++ZA_OP_INDEX;
 ZaOperation.EXPIRE_SESSION = ++ZA_OP_INDEX;
 ZaOperation.ADD_DOMAIN_ALIAS = ++ZA_OP_INDEX;
 ZaOperation.INSTALL_DOMAIN_CERT = ++ZA_OP_INDEX;
+ZaOperation.LOGOFF = ++ZA_OP_INDEX;
 // For Appliance
 ZaOperation.LEFT_BRACKET = ++ZA_OP_INDEX;
 ZaOperation.RIGHT_BRACKET = ++ZA_OP_INDEX;
@@ -206,6 +207,7 @@ var ZaOpList = [
 	"EXPIRE_SESSION",
 	"ADD_DOMAIN_ALIAS",
 	"INSTALL_DOMAIN_CERT",
+    "LOGOFF",
     "LEFT_BRACKET",
     "RIGHT_BRACKET"
 	/* other operation name */

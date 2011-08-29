@@ -101,6 +101,7 @@ ZaAppViewMgr.LAYOUT_VERTICAL = 1;	// top to bottom, full width, last element get
 // used when coming back from pop shield callbacks
 ZaAppViewMgr.PENDING_VIEW = "ZaAppViewMgr.PENDgING_VIEW";
 
+
 // components
 ZaAppViewMgr.C_BANNER					= "BANNER";
 ZaAppViewMgr.C_SEARCH					= "SEARCH";
@@ -134,8 +135,42 @@ ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_SASH]					= ZaSettings.SKIN_SASH_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_APP_TABS]				= ZaSettings.SKIN_APP_TABS_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_LOGIN_MESSAGE]	        = ZaSettings.SKIN_LOGIN_MSG_ID;
 
-// Public methods
+if (appNewUI) {
+// components
+ZaAppViewMgr.C_BANNER					= "BANNER";
+ZaAppViewMgr.C_SEARCH					= "SEARCH";
 
+ZaAppViewMgr.C_TREE_TOP				    = "TREE TOP";
+ZaAppViewMgr.C_TREE						= "TREE";
+ZaAppViewMgr.C_TREE_FOOTER				= "TREE FOOTER";
+
+ZaAppViewMgr.C_APP_HEADER				= "APP HEADER";
+ZaAppViewMgr.C_APP_CONTENT			    = "APP CONTENT";
+ZaAppViewMgr.C_APP_FOOTER				= "APP FOOTER";
+
+ZaAppViewMgr.C_TOOL_HEADER				= "TOOL HEADER";
+ZaAppViewMgr.C_TOOL				        = "TOOL";
+ZaAppViewMgr.C_TOOL_FOOTER				= "TOOL FOOTER";
+
+// keys for getting container IDs
+ZaAppViewMgr.CONT_ID_KEY = new Object();
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_BANNER]					= ZaSettings.SKIN_LOGO_ID;
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_SEARCH]					= ZaSettings.SKIN_SEARCH_ID;
+
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TREE_TOP]			    = ZaSettings.SKIN_TREE_TOP_ID;
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TREE]					= ZaSettings.SKIN_TREE_ID;
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TREE_FOOTER]			= ZaSettings.SKIN_TREE_FOOTER_ID;
+
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_APP_HEADER]			    = ZaSettings.SKIN_APP_HEADER_ID;
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_APP_CONTENT]			= ZaSettings.SKIN_APP_MAIN_ID;
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_APP_FOOTER]			    = ZaSettings.SKIN_APP_MAIN_FOOTER_ID;
+
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TOOL_HEADER]			= ZaSettings.SKIN_TOOL_HEADER_ID;
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TOOL]				    = ZaSettings.SKIN_TOOL_ID;
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TOOL_FOOTER]	        = ZaSettings.SKIN_TOOL_FOOTER_ID;
+}
+
+// Public methods
 ZaAppViewMgr.prototype.toString = 
 function() {
 	return "ZaAppViewMgr";
@@ -269,20 +304,20 @@ function(components, doFit, noSetZ) {
 		
 		if (!noSetZ)
 			comp.zShow(true);
-		
+
 		if (cid == ZaAppViewMgr.C_SEARCH_BUILDER  || cid == ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR ) {
 			//this._components[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR].setLocation(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
 			DBG.println(AjxDebug.DBG1, "Enforce Z-index to hidden " + cid) ;
 			comp.zShow(false);
 		}
                 
-                if (cid == ZaAppViewMgr.C_SEARCH_BUILDER_SASH){
-                        comp.zShow(false);
-                        if(this._sbSashSupported){
-                             comp.registerCallback(this._sbAppSashCallback, this);
-                        }
-                        comp.setCursor("default");
+        if (cid == ZaAppViewMgr.C_SEARCH_BUILDER_SASH){
+                comp.zShow(false);
+                if(this._sbSashSupported){
+                     comp.registerCallback(this._sbAppSashCallback, this);
                 }
+                comp.setCursor("default");
+        }
                 
 		if (cid == ZaAppViewMgr.C_SASH) {
 			if (this._sashSupported){
@@ -321,6 +356,25 @@ ZaAppViewMgr.prototype.fitAll = function () {
                 ZaAppViewMgr.C_CURRENT_APP, /*ZaAppViewMgr.C_APP_CHOOSER,*/ ZaAppViewMgr.C_APP_TABS,
 				ZaAppViewMgr.C_TREE,ZaAppViewMgr.C_SASH,
 				/*ZaAppViewMgr.C_TREE_FOOTER,*/ ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT];
+
+    if (appNewUI) {
+       list = [
+            ZaAppViewMgr.C_BANNER,
+            ZaAppViewMgr.C_SEARCH,
+
+            ZaAppViewMgr.C_TREE_TOP	,
+            ZaAppViewMgr.C_TREE	,
+            ZaAppViewMgr.C_TREE_FOOTER ,
+
+            ZaAppViewMgr.C_APP_HEADER,
+            ZaAppViewMgr.C_APP_CONTENT,
+            ZaAppViewMgr.C_APP_FOOTER,
+
+            ZaAppViewMgr.C_TOOL_HEADER ,
+            ZaAppViewMgr.C_TOOL ,
+            ZaAppViewMgr.C_TOOL_FOOTER
+       ];
+    }
 	this._stickToGrid(list);
 }
 ZaAppViewMgr.prototype._stickToGrid = 
@@ -414,6 +468,21 @@ function(ev) {
 		} else {
 			if (deltaHeight) {
 				var list = [ZaAppViewMgr.C_APP_CHOOSER, ZaAppViewMgr.C_SASH, ZaAppViewMgr.C_APP_CONTENT,ZaAppViewMgr.C_TREE, ZaAppViewMgr.C_STATUS];
+    if (appNewUI) {
+       list = [
+            ZaAppViewMgr.C_TREE_TOP	,
+            ZaAppViewMgr.C_TREE	,
+            ZaAppViewMgr.C_TREE_FOOTER ,
+
+            ZaAppViewMgr.C_APP_HEADER,
+            ZaAppViewMgr.C_APP_CONTENT,
+            ZaAppViewMgr.C_APP_FOOTER,
+
+            ZaAppViewMgr.C_TOOL_HEADER ,
+            ZaAppViewMgr.C_TOOL ,
+            ZaAppViewMgr.C_TOOL_FOOTER
+       ];
+    }
 				this._stickToGrid(list);
 			}
 			if (deltaWidth) {
@@ -421,6 +490,20 @@ function(ev) {
 							ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT, 
 							ZaAppViewMgr.C_SEARCH,
 							ZaAppViewMgr.C_SEARCH_BUILDER, ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR, ZaAppViewMgr.C_SEARCH_BUILDER_SASH];
+    if (appNewUI) {
+       list = [
+            ZaAppViewMgr.C_BANNER,
+            ZaAppViewMgr.C_SEARCH,
+
+            ZaAppViewMgr.C_APP_HEADER,
+            ZaAppViewMgr.C_APP_CONTENT,
+            ZaAppViewMgr.C_APP_FOOTER,
+
+            ZaAppViewMgr.C_TOOL_HEADER ,
+            ZaAppViewMgr.C_TOOL ,
+            ZaAppViewMgr.C_TOOL_FOOTER
+       ];
+    }
 				this._stickToGrid(list);
 			}
 		}
@@ -440,6 +523,8 @@ function(viewId, show) {
 			elements[cid].zShow(true);
 		}
 		this._stickToGrid(list);
+        ////// May be need to changed to app header...
+        if (!appNewUI)
 		this._setTitle(viewId);
 	} else {
 		for (var cid in elements) {

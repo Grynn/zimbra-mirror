@@ -51,6 +51,7 @@ AjxPackage.require("zimbraAdmin.common.Signature_XFormItem");
 AjxPackage.require("zimbraAdmin.common.Super_XFormItems");
 AjxPackage.require("zimbraAdmin.common.ZaSplashScreen");
 AjxPackage.require("zimbraAdmin.common.ZaCurrentAppToolBar");
+AjxPackage.require("zimbraAdmin.common.ZaCrtAppTreeHeader");
 AjxPackage.require("zimbraAdmin.common.ZaServerVersionInfo");
 AjxPackage.require("zimbraAdmin.common.MenuButton_XFormItem");
 AjxPackage.require("zimbraAdmin.common.ZaAutoCompleteListView");
@@ -64,6 +65,9 @@ AjxPackage.require("zimbraAdmin.common.ZaAppTabGroup");
 AjxPackage.require("zimbraAdmin.common.ZaAppTab");
 AjxPackage.require("zimbraAdmin.common.ZaRequestMgr");
 AjxPackage.require("zimbraAdmin.common.ZaActionStatusView");
+AjxPackage.require("zimbraAdmin.common.ZaTreeItem");
+AjxPackage.require("zimbraAdmin.common.ZaTree");
+AjxPackage.require("zimbraAdmin.common.ZaCurrentAppBar");
 
 //
 // Admin UI Specific components
@@ -72,6 +76,7 @@ AjxPackage.require("zimbraAdmin.common.ZaActionStatusView");
 // controllers
 AjxPackage.require("zimbraAdmin.common.ZaOverviewPanelController");
 AjxPackage.require("zimbraAdmin.common.ZaOperation");
+AjxPackage.require("zimbraAdmin.home.controller.ZaHomeController");
 AjxPackage.require("zimbraAdmin.accounts.controller.ZaAccountListController");
 AjxPackage.require("zimbraAdmin.accounts.controller.ZaAccountViewController");
 //AjxPackage.require("zimbraAdmin.accounts.controller.ZaAccAliasesController");
@@ -118,6 +123,7 @@ AjxPackage.require("zimbraAdmin.status.model.ZaStatus");
 AjxPackage.require("zimbraAdmin.mta.model.ZaMTA");
 
 // view
+AjxPackage.require("zimbraAdmin.home.view.ZaHomeXFormView");
 AjxPackage.require("zimbraAdmin.accounts.view.ZaAccountXFormView");
 AjxPackage.require("zimbraAdmin.accounts.view.ZaAccChangePwdXDlg");
 AjxPackage.require("zimbraAdmin.accounts.view.ZaEditAliasXDialog");
