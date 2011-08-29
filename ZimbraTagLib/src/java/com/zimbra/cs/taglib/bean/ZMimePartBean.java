@@ -78,8 +78,7 @@ public class ZMimePartBean {
                     CT_MULTI_ALT,
                     CT_MULTI_MIXED,
                     CT_MULTI_RELATED,
-                    CT_MULTI_APPLE_DBL,
-                    CT_TEXT_CAL
+                    CT_MULTI_APPLE_DBL
             ));
 
     public static boolean isIgnoredPArt(ZMimePart part) {
