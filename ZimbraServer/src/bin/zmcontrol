@@ -58,11 +58,29 @@ my %startorder = (
 	"antispam" 	=> 60,
 	"antivirus"	=> 70,
 	"archiving"	=> 80,
-  "cbpolicyd" => 85,
+	"cbpolicyd"	=> 85,
 	"snmp" 		=> 90,
 	"spell" 	=> 100,
 	"mta" 		=> 110,
 	"stats"		=> 120,
+);
+
+my %stoporder = ( 
+	"ldap" 		=> 0,
+	"logger" 	=> 10,
+	"convertd"	=> 20,
+	"mailbox" 	=> 30,
+	"memcached"	=> 40,
+	"imapproxy"	=> 50,
+	"antispam" 	=> 60,
+	"antivirus"	=> 70,
+	"archiving"	=> 80,
+	"cbpolicyd"	=> 85,
+	"snmp" 		=> 90,
+	"spell" 	=> 100,
+	"mta" 		=> 110,
+	"stats"		=> 120,
+	"zmconfigd"	=> 130,
 );
 
 my %allservices = ( 
@@ -80,7 +98,7 @@ my %allservices = (
 	"imapproxy" => "/opt/zimbra/bin/zmproxyctl",
 	"stats" => "/opt/zimbra/bin/zmstatctl",
 	"zmconfigd" => "/opt/zimbra/bin/zmconfigdctl",
-  "cbpolicyd" => "/opt/zimbra/bin/zmcbpolicydctl",
+	"cbpolicyd" => "/opt/zimbra/bin/zmcbpolicydctl",
 );
 
 my %rewrites = ( 
@@ -99,7 +117,7 @@ my %DESC = (
 	"startup" => "Start services",
 	"stop" => "Stop services",
 	"shutdown" => "Stop services",
-  "restart" => "Restart services",
+	"restart" => "Restart services",
 	#"maintenance" => "Toggle maintenance mode",
 	"status" => "Display service status",
 );
@@ -109,7 +127,7 @@ my %COMMANDS = (
 	"startup" => \&doStartup,
 	"stop" => \&doShutdown,
 	"shutdown" => \&doShutdown,
-  "restart" => \&doRestart,
+	"restart" => \&doRestart,
 	#"maintenance" => \&setMaintenanceMode,
 	"status" => \&doStatus,
 );
@@ -119,7 +137,7 @@ my %REMOTECOMMANDS = (
 	"startup" => "startup",
 	"stop" => "shutdown",
 	"shutdown" => "shutdown",
-  "restart" => "restart",
+	"restart" => "restart",
 	#"maintenance" => "maintenance",
 	"status" => "status",
 );
@@ -296,7 +314,7 @@ sub doShutdown {
 	print "Host $localHostName\n";
 	my $rc = 0;
 	my $rrc = 0;
-	foreach (sort {$startorder{$b} <=> $startorder{$a}} keys %allservices) {
+	foreach (sort {$stoporder{$b} <=> $stoporder{$a}} keys %allservices) {
 		Zimbra::Mon::Logger::Log ("info", "Stopping $_ via zmcontrol");
 		if ($_ eq "ldap" && !(-d "/opt/zimbra/openldap/sbin") ) { next; }
 		if ($_ eq "mta" && !(-d "/opt/zimbra/postfix/libexec") ) { next; }
