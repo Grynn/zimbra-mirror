@@ -157,7 +157,7 @@ public class CreateAccount extends AjaxCommonTest {
       ZAssert.assertGreaterThan(folders.size(), 0, "Folder with the active account's email address is greater than 0.");
    }
 
-   @Test(description="Add Gmail IMAP account to ZD client", groups = { "private" })
+   @Test(description="Add Gmail IMAP account to ZD client", groups = { "sanity" })
    public void addGmailImapAccount() throws HarnessException {
 
       DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddGmailImapAccountThruUI();
@@ -832,6 +832,174 @@ public class CreateAccount extends AjaxCommonTest {
             "Added account message is displayed");
    }
 
+   @Test(description="Wrong Receiving username when creating Gmail IMAP Account", groups = { "functional" })
+   public void wrongReceivingUsernameGmailIMAPAccount() throws HarnessException {
+
+      String wrongUsername = ZimbraSeleniumProperties.getUniqueString();
+
+      DesktopAccountItem desktopImapAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            gmailUserName,
+            wrongUsername,
+            gmailPassword,
+            gmailImapReceivingServer,
+            SECURITY_TYPE.SSL,
+            "993",
+            gmailImapSmtpServer,
+            true,
+            "465",
+            gmailUserName,
+            gmailPassword);
+
+      // Trying to add the same Gmail IMAP account
+      app.zPageAddNewAccount.zNavigateTo();
+      FormAddImapAccount accountForm = (FormAddImapAccount)app.zPageAddNewAccount.zDropDownListSelect(
+            DROP_DOWN_OPTION.IMAP);
+      accountForm.zFill(desktopImapAccountItem);
+      accountForm.zSubmit();
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "User account authentication failed. Please check username and password.",
+            "Verify error message of wrong password");
+
+      app.zPageLogin.zNavigateTo();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
+   @Test(description="Wrong Receiving password when creating Gmail IMAP Account", groups = { "functional" })
+   public void wrongReceivingPasswordGmailIMAPAccount() throws HarnessException {
+
+      String wrongPassword = ZimbraSeleniumProperties.getUniqueString();
+
+      DesktopAccountItem desktopImapAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            gmailUserName,
+            gmailUserName,
+            wrongPassword,
+            gmailImapReceivingServer,
+            SECURITY_TYPE.SSL,
+            "993",
+            gmailImapSmtpServer,
+            true,
+            "465",
+            gmailUserName,
+            gmailPassword);
+
+      // Trying to add the same Gmail IMAP account
+      app.zPageAddNewAccount.zNavigateTo();
+      FormAddImapAccount accountForm = (FormAddImapAccount)app.zPageAddNewAccount.zDropDownListSelect(
+            DROP_DOWN_OPTION.IMAP);
+      accountForm.zFill(desktopImapAccountItem);
+      accountForm.zSubmit();
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "User account authentication failed. Please check username and password.",
+            "Verify error message of wrong password");
+
+      app.zPageLogin.zNavigateTo();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
+   @Test(description="Wrong Sending username when creating Gmail IMAP Account", groups = { "functional" })
+   public void wrongSendingUsernameGmailIMAPAccount() throws HarnessException {
+
+      String wrongUsername = ZimbraSeleniumProperties.getUniqueString();
+
+      DesktopAccountItem desktopImapAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            gmailUserName,
+            gmailUserName,
+            gmailPassword,
+            gmailImapReceivingServer,
+            SECURITY_TYPE.SSL,
+            "993",
+            gmailImapSmtpServer,
+            true,
+            "465",
+            wrongUsername,
+            gmailPassword);
+
+      // Trying to add the same Gmail IMAP account
+      app.zPageAddNewAccount.zNavigateTo();
+      FormAddImapAccount accountForm = (FormAddImapAccount)app.zPageAddNewAccount.zDropDownListSelect(
+            DROP_DOWN_OPTION.IMAP);
+      accountForm.zFill(desktopImapAccountItem);
+      accountForm.zSubmit();
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "SMTP authentication failed. Please check SMTP username and password.",
+            "Verify error message of wrong password");
+
+      app.zPageLogin.zNavigateTo();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
+   @Test(description="Wrong Sending password when creating Gmail IMAP Account", groups = { "functional" })
+   public void wrongSendingPasswordGmailIMAPAccount() throws HarnessException {
+
+      String wrongPassword = ZimbraSeleniumProperties.getUniqueString();
+
+      DesktopAccountItem desktopImapAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            gmailUserName,
+            gmailUserName,
+            gmailPassword,
+            gmailImapReceivingServer,
+            SECURITY_TYPE.SSL,
+            "993",
+            gmailImapSmtpServer,
+            true,
+            "465",
+            gmailUserName,
+            wrongPassword);
+
+      // Trying to add the same Gmail IMAP account
+      app.zPageAddNewAccount.zNavigateTo();
+      FormAddImapAccount accountForm = (FormAddImapAccount)app.zPageAddNewAccount.zDropDownListSelect(
+            DROP_DOWN_OPTION.IMAP);
+      accountForm.zFill(desktopImapAccountItem);
+      accountForm.zSubmit();
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "SMTP authentication failed. Please check SMTP username and password.",
+            "Verify error message of wrong password");
+
+      app.zPageLogin.zNavigateTo();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
    @Test(description="Failure in attempting to add duplicated gmail accounts", groups = { "functional" })
    public void addDuplicatedGmailAccount() throws HarnessException {
       // Adding the gmail account
@@ -1061,7 +1229,7 @@ public class CreateAccount extends AjaxCommonTest {
    }
 
    @Test(description="Failure in attempting to add Gmail IMAP account, where the same Gmail account being used already exists",
-         groups = { "private" })
+         groups = { "functional" })
    public void addImapAccountWithPreExistingGmailAccount() throws HarnessException {
       // Adding the Gmail account
       DesktopAccountItem desktopAccountItem = app.zPageAddNewAccount.zAddGmailAccountThruUI();
