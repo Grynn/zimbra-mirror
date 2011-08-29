@@ -273,13 +273,28 @@ public class PagePreferences extends AbsTab {
 		} else if ( button == Button.B_CHANGE_PASSWORD ) {
 			
 			locator = "css=td[id='CHANGE_PASSWORD_title']";
-			page = new DialogChangePassword(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);
+			page = new DialogChangePassword(MyApplication,((AppAjaxClient) MyApplication).zPagePreferences);
 	
 		} else if ( button == Button.B_NEW_FILTER ) {
 			
 			locator = "css=div[id='zb__FRV__ADD_FILTER_RULE'] td[id$='_title']";
-			page = new DialogEditFilter(MyApplication,((AppAjaxClient) MyApplication).zPageAddressbook);
+			page = new DialogEditFilter(MyApplication,((AppAjaxClient) MyApplication).zPagePreferences);
 	
+		} else if ( button == Button.B_NEW_QUICK_COMMAND ) {
+			
+			locator = "css=div[id='zb__QCV__ADD_QUICK_COMMAND'] td[id$='_title']";
+			page = new DialogEditQuickCommand(MyApplication,((AppAjaxClient) MyApplication).zPagePreferences);
+
+		} else if ( button == Button.B_EDIT_QUICK_COMMAND ) {
+			
+			locator = "css=div[id='zb__QCV__EDIT_QUICK_COMMAND'] td[id$='_title']";
+			page = new DialogEditQuickCommand(MyApplication,((AppAjaxClient) MyApplication).zPagePreferences);
+
+		} else if ( button == Button.B_DELETE_QUICK_COMMAND ) {
+			
+			locator = "css=div[id='zb__QCV__REMOEV_QUICK_COMMAND'] td[id$='_title']";
+			throw new HarnessException("See https://bugzilla.zimbra.com/show_bug.cgi?id=63931");
+			
 		} else {
 			throw new HarnessException("no logic defined for button "+ button);
 		}

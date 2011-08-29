@@ -318,8 +318,11 @@ public class Button {
 	public static final Button O_VIEW_SCHEDULE_SUB_MENU = new Button("O_VIEW_SCHEDULE_SUB_MENU");
 
 	// Preferences
-	public static final Button B_CHANGE_PASSWORD = new Button("B_CHANGE_PASSWORD");
-	public static final Button B_NEW_FILTER = new Button("B_NEW_FILTER");
+	public static final Button B_CHANGE_PASSWORD 		= new Button("B_CHANGE_PASSWORD");
+	public static final Button B_NEW_FILTER 			= new Button("B_NEW_FILTER");
+	public static final Button B_NEW_QUICK_COMMAND		= new Button("B_NEW_QUICK_COMMAND");
+	public static final Button B_EDIT_QUICK_COMMAND		= new Button("B_EDIT_QUICK_COMMAND");
+	public static final Button B_DELETE_QUICK_COMMAND	= new Button("B_DELETE_QUICK_COMMAND");
 
 
 	//// Admin Console
