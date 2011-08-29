@@ -150,7 +150,7 @@ public class CreateContactGroup extends AjaxCommonTest  {
 
 	@Test(	description = "Create a contact group with GAL + existing contacts + new emails",
 			groups = { "functional" })
-	public void GroupOfGAL_ExistingContact_sNewEmail() throws HarnessException {			
+	public void GroupOfGAL_ExistingContact_NewEmail() throws HarnessException {			
 		//Create random contact group data 
 		ContactGroupItem group = ContactGroupItem.generateContactItem(GenerateItemType.Basic);
 	
