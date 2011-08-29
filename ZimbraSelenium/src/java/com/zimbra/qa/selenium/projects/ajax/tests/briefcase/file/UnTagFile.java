@@ -115,7 +115,9 @@ public class UnTagFile extends AjaxCommonTest {
 
 		String id = account.soapSelectValue("//mail:SearchResponse//mail:doc",
 				"t");
-
+		
+		ZAssert.assertNotNull(id, "Verify the search results contain the document");
+				
 		ZAssert.assertEquals(id, tagId,
 				"Verify the tag was attached to the document");
 

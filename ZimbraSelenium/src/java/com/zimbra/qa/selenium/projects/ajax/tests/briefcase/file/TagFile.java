@@ -234,6 +234,8 @@ public class TagFile extends AjaxCommonTest {
 		String id = account.soapSelectValue("//mail:SearchResponse//mail:doc",
 				"t");
 
+		ZAssert.assertNotNull(id, "Verify the search results contain the document");
+		
 		ZAssert.assertStringContains(id, tagItem.getId(),
 				"Verify the tag was attached to the File");
 		
