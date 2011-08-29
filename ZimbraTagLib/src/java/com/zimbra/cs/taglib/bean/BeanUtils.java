@@ -1553,7 +1553,7 @@ public class BeanUtils {
         for (String str : allowedUA) {
             pattern = Pattern.compile(str);
             m = pattern.matcher(ua.getUserAgent());
-            if (m.find())
+            if (m != null && m.find())
                 return true;
         }
         return false;
