@@ -7549,8 +7549,7 @@ var Dom = YAHOO.util.Dom,
                         buttons: [
                             { type: 'select', label: 'Sans Serif', value: 'fontname', disabled: true,
                                 menu: [
-                                    { text: 'Sans Serif', value: 'arial', checked: true },
-                                        { text: 'Sans Serif', value: 'arial, helvetica, sans-serif'},
+                                    	{ text: 'Sans Serif', value: 'arial, helvetica, sans-serif', checked: true },
                                         { text: 'Serif', value: 'times new roman, new york, times, serif' },
                                         { text: 'Wide Block', value: 'arial black,avant garde' },
                                         { text: 'Monospaced', value: 'courier new, courier, monaco, monospace, sans-serif' },

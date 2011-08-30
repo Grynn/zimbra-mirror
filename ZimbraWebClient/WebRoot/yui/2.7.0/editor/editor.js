@@ -4549,7 +4549,7 @@ var Dom = YAHOO.util.Dom,
                     buttons: [
                         { group: 'fontstyle', label: 'Font Name and Size',
                             buttons: [
-                                { type: 'select', value: 'fontname', disabled: true,
+                                { type: 'select', label: 'Sans Serif', value: 'fontname', disabled: true,
                                     menu: [
                                         { text: 'Sans Serif', value: 'arial, helvetica, sans-serif', checked: true },
                                         { text: 'Serif', value: 'times new roman, new york, times, serif' },
@@ -7456,7 +7456,7 @@ var Dom = YAHOO.util.Dom,
                 buttons: [
                     { group: 'fontstyle', label: 'Font Name and Size',
                         buttons: [
-                            { type: 'select', value: 'fontname', disabled: true,
+                            { type: 'select', label: 'Sans Serif', value: 'fontname', disabled: true,
                                 menu: [
                                     	{ text: 'Sans Serif', value: 'arial, helvetica, sans-serif', checked: true },
                                         { text: 'Serif', value: 'times new roman, new york, times, serif' },
