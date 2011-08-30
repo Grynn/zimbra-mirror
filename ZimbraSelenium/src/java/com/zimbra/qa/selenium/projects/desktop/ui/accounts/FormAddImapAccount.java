@@ -152,11 +152,6 @@ public class FormAddImapAccount extends AbsForm {
          sType(Locators.zSendingServerField, desktopAccountItem.sendingSmtpServer);
       }
 
-      if (desktopAccountItem.sendingPassword != null &&
-            !desktopAccountItem.sendingPassword.equals("")) {
-         sType(Locators.zSendingPasswordField, desktopAccountItem.sendingPassword);
-      }
-
       if (desktopAccountItem.sendingThroughSsl) {
          sCheck(Locators.zSendingSSLCheckbox);
       } else {
