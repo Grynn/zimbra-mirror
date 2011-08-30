@@ -20,7 +20,7 @@ public class BasicLogin extends OctopusCommonTest {
 
 	}
 
-	@Test(description = "Login to the Octopus client", groups = { "nity" })
+	@Test(description = "Login to the Octopus client", groups = { "sanity" })
 	public void BasicLogin01() throws HarnessException {
 		// Login
 		app.zPageLogin.zLogin(gAdmin);
