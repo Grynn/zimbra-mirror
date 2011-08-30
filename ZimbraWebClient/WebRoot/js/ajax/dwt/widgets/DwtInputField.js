@@ -158,10 +158,9 @@ DwtInputField = function(params) {
 DwtInputField.prototype = new DwtComposite;
 DwtInputField.prototype.constructor = DwtInputField;
 
-DwtInputField.prototype.toString =
-function() {
-	return "DwtInputField";
-};
+DwtInputField.prototype.isDwtInputField = true;
+DwtInputField.prototype.isInputControl = true;
+DwtInputField.prototype.toString = function() { return "DwtInputField"; };
 
 //
 // Constants

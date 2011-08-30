@@ -50,10 +50,9 @@ DwtCheckbox = function(params) {
 DwtCheckbox.prototype = new DwtControl;
 DwtCheckbox.prototype.constructor = DwtCheckbox;
 
-DwtCheckbox.prototype.toString =
-function() {
-	return "DwtCheckbox";
-};
+DwtCheckbox.prototype.isDwtCheckbox = true;
+DwtCheckbox.prototype.isInputControl = true;
+DwtCheckbox.prototype.toString = function() { return "DwtCheckbox"; };
 
 //
 // Constants

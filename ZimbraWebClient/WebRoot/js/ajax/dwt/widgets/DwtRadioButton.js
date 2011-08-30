@@ -51,9 +51,9 @@ DwtRadioButton.PARAMS = DwtCheckbox.PARAMS;
 DwtRadioButton.prototype = new DwtCheckbox;
 DwtRadioButton.prototype.constructor = DwtRadioButton;
 
-DwtRadioButton.prototype.toString = function() {
-	return "DwtRadioButton";
-};
+DwtRadioButton.prototype.isDwtRadioButton = true;
+DwtRadioButton.prototype.isInputControl = true;
+DwtRadioButton.prototype.toString = function() { return "DwtRadioButton"; };
 
 //
 // Data

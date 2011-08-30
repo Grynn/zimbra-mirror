@@ -354,21 +354,21 @@ DwtControl.DEFAULT = Dwt.DEFAULT;
  * 
  * @private
  */
-DwtControl._NO_DRAG = 1;
+DwtControl._NO_DRAG = "NO_DRAG";
 
 /**
  * Defines "drag" in progress.
  *
  * @private
  */
-DwtControl._DRAGGING = 2;
+DwtControl._DRAGGING = "DRAGGING";
 
 /**
  * Defines "drag rejected".
  * 
  * @private
  */
-DwtControl._DRAG_REJECTED = 3;
+DwtControl._DRAG_REJECTED = "DRAG_REJECTED";
 
 /**
  * Defines "drag threshold".

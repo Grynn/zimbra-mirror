@@ -55,15 +55,13 @@
 DwtOutsideMouseEventMgr = function() {
 
 	this._reset();
-	this._mouseEventListener = new AjxListener(null, DwtOutsideMouseEventMgr._mouseEventHdlr);
+	this._mouseEventListener = DwtOutsideMouseEventMgr._mouseEventHdlr.bind(null);
 	DwtOutsideMouseEventMgr.INSTANCE = this;
 	this.id = "DwtOutsideMouseEventMgr";
 };
 
-DwtOutsideMouseEventMgr.prototype.toString =
-function() {
-	return "DwtOutsideMouseEventMgr";
-};
+DwtOutsideMouseEventMgr.prototype.isDwtOutsideMouseEventMgr = true;
+DwtOutsideMouseEventMgr.prototype.toString = function() { return "DwtOutsideMouseEventMgr"; };
 
 DwtOutsideMouseEventMgr.EVENTS = [DwtEvent.ONMOUSEDOWN, DwtEvent.ONMOUSEWHEEL];
 DwtOutsideMouseEventMgr.EVENTS_HASH = AjxUtil.arrayAsHash(DwtOutsideMouseEventMgr.EVENTS);
@@ -76,7 +74,7 @@ DwtOutsideMouseEventMgr.EVENTS_HASH = AjxUtil.arrayAsHash(DwtOutsideMouseEventMg
  * @param {DwtControl}	params.obj				control on behalf of whom we're listening
  * @param {string}		params.elementId		ID of reference element, if other than control's HTML element
  * @param {AjxListener}	params.outsideListener	listener to call when we get an outside mouse event
- * @param {boolean}		params.noWindowBlur		if true, don't listen from window blur events; useful for dev
+ * @param {boolean}		params.noWindowBlur		if true, don't listen for window blur events; useful for dev
  */
 DwtOutsideMouseEventMgr.prototype.startListening =
 function(params) {
@@ -89,7 +87,7 @@ function(params) {
 	if (!this._menuCapObj) {
 		// we only need a single menu capture object, create it lazily
 		var mecParams = {
-			id:		this.id,
+			id:				this.id,
 			hardCapture:	false,
 			mouseDownHdlr:	DwtOutsideMouseEventMgr._mouseEventHdlr,
 			mouseWheelHdlr:	DwtOutsideMouseEventMgr._mouseEventHdlr
@@ -97,19 +95,19 @@ function(params) {
 		this._menuCapObj = new DwtMouseEventCapture(mecParams);
 	}
 
-	var elementId = params.elementId ||
-		(params.obj && params.obj.getHTMLElId && params.obj.getHTMLElId());
+	var elementId = params.elementId || (params.obj && params.obj.getHTMLElId && params.obj.getHTMLElId());
+	DBG.println("out", "add element ID " + elementId + " for ID " + id);
 
 	var context = this._byId[id];
 	if (context) {
 		// second and subsequent calls with same ID will just add element IDs; typical case is submenu
-		DBG.println("out", "add element ID " + elementId + " for ID " + id);
-		context.elementIds.push(elementId);
+		if (elementId) {
+			context.elementIds.push(elementId);
+		}
 		DBG.println("out", "element IDs: " + context.elementIds);
 		return;
 	}
 	else {
-		DBG.println("out", "element ID: " + elementId);
 		context = this._byId[id] = {
 			id:					id,
 			obj:				params.obj,
@@ -154,7 +152,7 @@ function(params) {
  * @param {string}		params.id			unique ID for this listening session
  * @param {DwtControl}	params.obj			control on behalf of whom we're listening
  * @param {string}		params.elementId	ID of element to remove from listening context
- * @param {boolean}		params.noWindowBlur	if true, don't listen from window blur events; useful for dev
+ * @param {boolean}		params.noWindowBlur	if true, don't listen for window blur events; useful for dev
  */
 DwtOutsideMouseEventMgr.prototype.stopListening =
 function(params) {
@@ -165,10 +163,10 @@ function(params) {
 	var id = params.id;
 	var context = this._byId[id];
 	if (!context) { return; }
+	DBG.println("out", "stop listening: " + id);
 
 	var elIds = context.elementIds;
 	var elementId = params.elementId || (params.obj && params.obj.getHTMLElId());
-	DBG.println("out", "stop listening: " + elementId);
 	if (elementId) {
 		AjxUtil.arrayRemove(elIds, elementId);
 		if (elIds.length > 0) {
@@ -262,7 +260,7 @@ function(ev) {
 		for (var i = 0; i < elementIds.length; i++) {
 			DBG.println("out", "check: " + elementIds[i]);
 			var el = document.getElementById(elementIds[i]);
-			if (Dwt.isAncestor(el, targetEl)) {
+			if (el && targetEl && Dwt.isAncestor(el, targetEl)) {
 				runListener = false;
 				break;
 			}

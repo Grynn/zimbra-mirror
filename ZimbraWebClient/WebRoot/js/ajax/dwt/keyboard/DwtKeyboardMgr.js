@@ -468,11 +468,8 @@ function(focusObj) {
 
 	if (!focusObj) { return; }
 	
-	var dwtInputCtrl = (Dwt.instanceOf(focusObj, "DwtInputField") ||
-						Dwt.instanceOf(focusObj, "DwtHtmlEditor") ||
-						Dwt.instanceOf(focusObj, "DwtCheckbox") ||
-						Dwt.instanceOf(focusObj, "DwtRadioButton") ||
-						Dwt.instanceOf(focusObj, "ZmAdvancedHtmlEditor"));
+	var dwtInputCtrl = focusObj.isInputControl;
+	
 //	DBG.println("kbnav", "DwtKeyboardMgr._doGrabFocus: " + focusObj);
 	DBG.println("focus", "DwtKeyboardMgr._doGrabFocus: " + focusObj);
 	if (dwtInputCtrl || !(focusObj instanceof DwtControl)) {
@@ -816,6 +813,7 @@ function(ev) {
 
 	// First see if the control that currently has focus can handle the key event
 	var obj = ev.focusObj || kbMgr.__focusObj;
+	DBG.println("focus", "DwtKeyboardMgr::__keyDownHdlr - focus object: " + obj);
 	if (obj && (obj.handleKeyAction) && (kbMgr.__dwtCtrlHasFocus || kbMgr.__dwtInputCtrl || (obj.hasFocus && obj.hasFocus()))) {
 //		DBG.println("kbnav", obj + " has focus: " + obj.hasFocus());
 		handled = kbMgr.__dispatchKeyEvent(obj, kev);
@@ -832,6 +830,13 @@ function(ev) {
 		handled = kbMgr.__dispatchKeyEvent(kbMgr.__currDefaultHandler, kev);
 	}
 
+	// see if we should let browser handle the event as well; note that we need to set the 'handled' var rather than
+	// just the 'propagate' one below, since the keyboard mgr isn't built for both it and the browser to handle the event.
+	if (kev.forcePropagate) {
+		handled = DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
+		kev.forcePropagate = false;
+	}
+	
 	kbMgr.__kbEventStatus = handled;
 	var propagate = (handled == DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED);
 
