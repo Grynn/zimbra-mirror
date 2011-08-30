@@ -25,7 +25,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
 public class ReplyAllMsgWithHtmlSignature extends AjaxCommonTest {
 	String sigName = "signame" + ZimbraSeleniumProperties.getUniqueString();
-	String sigBody = "Signature<strong>bold"+ ZimbraSeleniumProperties.getUniqueString() + "</strong>Signature";
+	String sigBody = "signature<b>bold"+ ZimbraSeleniumProperties.getUniqueString() + "</b>signature";
 	String contentHTMLSig = XmlStringUtil.escapeXml("<html>" + "<head></head>"
 			+ "<body>" + sigBody + "</body>" + "</html>");
 
@@ -63,7 +63,7 @@ public class ReplyAllMsgWithHtmlSignature extends AjaxCommonTest {
 	 * @throws HarnessException
 	 */
 	@Test(description = " ReplyAll Msg with html signature and Verify signature through soap", groups = { "functional" })
-	public void ReplyMsgWithHtmlSignature_01() throws HarnessException {
+	public void ReplyAllMsgWithHtmlSignature_01() throws HarnessException {
 
 		//Verify Signature
 		SignatureItem signature = SignatureItem.importFromSOAP(app.zGetActiveAccount(), this.sigName);
@@ -71,7 +71,7 @@ public class ReplyAllMsgWithHtmlSignature extends AjaxCommonTest {
 
 		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
 		String bodyText = "text" + ZimbraSeleniumProperties.getUniqueString();
-		String bodyHTML = "text <strong>bold"+ ZimbraSeleniumProperties.getUniqueString() +"</strong> text";
+		String bodyHTML = "text <b>bold"+ ZimbraSeleniumProperties.getUniqueString() +"</b> text";
 		String contentHTML = XmlStringUtil.escapeXml("<html>" + "<head></head>"
 				+ "<body>" + bodyHTML + "<br></br>" + "</body>" + "</html>");
 		String signatureContent = XmlStringUtil.escapeXml("<html>"
@@ -135,8 +135,8 @@ public class ReplyAllMsgWithHtmlSignature extends AjaxCommonTest {
 		ZAssert.assertStringContains(received.dSubject, "Re", "Verify the subject field contains the 'Re' prefix");
 		ZAssert.assertEquals(received.dFromRecipient.dEmailAddress, app.zGetActiveAccount().EmailAddress,"Verify the from field is correct");
 		ZAssert.assertEquals(received.dToRecipients.get(0).dEmailAddress,ZimbraAccount.AccountZWC().EmailAddress,"Verify the to field is correct");
-		ZAssert.assertStringContains(received.dBodyHtml, bodyHTML,"Verify the body content is correct");
-		ZAssert.assertStringContains(received.dBodyHtml, this.sigBody,"Verify the signature is correct");
+		ZAssert.assertStringContains(received.dBodyHtml.toLowerCase(), bodyHTML,"Verify the body content is correct");
+		ZAssert.assertStringContains(received.dBodyHtml.toLowerCase(), this.sigBody,"Verify the signature is correct");
 
 	}
 }

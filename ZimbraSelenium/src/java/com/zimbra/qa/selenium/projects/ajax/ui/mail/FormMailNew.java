@@ -504,8 +504,8 @@ public class FormMailNew extends AbsForm {
 
 				} else if (frames == 2) {
 
-					locator = "css=iframe[id^='iframe_DWT']";
-
+					//locator = "css=iframe[id^='iframe_DWT']";
+					locator ="css=iframe[id$='_content_ifr']";
 					if (!this.sIsElementPresent(locator))
 						throw new HarnessException(
 								"Unable to locate compose body");

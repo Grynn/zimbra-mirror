@@ -22,7 +22,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 
 public class ComposeHtmlMsgWithHtmlSignature extends AjaxCommonTest {
 	String sigName = "signame" + ZimbraSeleniumProperties.getUniqueString();
-	String sigBody = "signature<strong>bold"+ ZimbraSeleniumProperties.getUniqueString() + "</strong>signature";
+	String sigBody = "signature<b>bold"+ ZimbraSeleniumProperties.getUniqueString() + "</b>signature";
 	String contentHTML = XmlStringUtil.escapeXml("<html>" + "<head></head>"
 			+ "<body>" + sigBody + "</body>" + "</html>");
 
@@ -66,7 +66,7 @@ public class ComposeHtmlMsgWithHtmlSignature extends AjaxCommonTest {
 		MailItem mail = new MailItem();
 		mail.dToRecipients.add(new RecipientItem(ZimbraAccount.AccountZWC()));
 		mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		mail.dBodyHtml = "body<strong>bold"+ ZimbraSeleniumProperties.getUniqueString()+"</strong>body";
+		mail.dBodyHtml = "body<b>bold"+ ZimbraSeleniumProperties.getUniqueString()+"</b>body";
 
 		// Open the new mail form
 		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
@@ -94,6 +94,8 @@ public class ComposeHtmlMsgWithHtmlSignature extends AjaxCommonTest {
 		MailItem received = MailItem.importFromSOAP(getMsgResponse);
 
 		// Verify TO, Subject,html Body,html signature
+		logger.info(received.dBodyHtml.toLowerCase());
+		logger.info(mail.dBodyHtml);
 
 		ZAssert.assertEquals(received.dFromRecipient.dEmailAddress, app.zGetActiveAccount().EmailAddress,"Verify the from field is correct");
 		ZAssert.assertEquals(received.dToRecipients.get(0).dEmailAddress,ZimbraAccount.AccountZWC().EmailAddress,"Verify the to field is correct");
