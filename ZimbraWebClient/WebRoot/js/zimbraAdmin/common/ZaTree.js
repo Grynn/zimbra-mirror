@@ -193,7 +193,7 @@ function (showRootNode) {
             nextTi.setData(ZaOverviewPanelController._TID, currentNextNode.mappingId);
             nextTi.setData("dataItem", currentNextNode);
             for (var key in this._data) {
-                this.setData(key, this._data[key]);
+                this.setData(key, currentNextNode._data[key]);
             }
         }
     }
