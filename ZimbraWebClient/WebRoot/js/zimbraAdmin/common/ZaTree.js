@@ -183,7 +183,7 @@ function (showRootNode) {
         ti.setData(ZaOverviewPanelController._TID, currentAddNode.mappingId);
         ti.setData("dataItem", currentAddNode);
         for (j = 0; j < currentAddNode.childrenData.size(); j++) {
-            var currentNextNode =  currentAddNode.childrenData.get(i);
+            var currentNextNode =  currentAddNode.childrenData.get(j);
             nextTi = new ZaTreeItem({parent:ti,className:"AdminTreeItem",id:currentNextNode.id});
             nextTi.setText(currentNextNode.text);
             nextTi.setImage(currentNextNode.image);

@@ -72,6 +72,11 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
             }]
     };
 
+    var startChoices = [{label: "1", value: "create domain..."},
+                        {label: "2", value: "create new account..."},
+                        {label: "3", value: "..."}];
+    var migrationChoices = [{label: "1", value: "Step one"}];
+    var helpChoices = [{value:"Search Zimbra Help"}, {value:"Download Zimbra Administrator Guide"}];
     var case1 = {type:_ZATABCASE_, numCols: 4,  colSizes:["25%", "25%", "25%", "25%"], caseKey:1,
 //        height:"400px",  align:_LEFT_, valign:_TOP_,
         items:[
@@ -83,6 +88,9 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
             {type:_OUTPUT_, label: "Status:", value: "running"},
             {type:_SPACER_, colSpan: "2"},
 			{type:_SEPARATOR_, align:_CENTER_, valign:_TOP_},
+            {type:_HOMEGROUP_, headerLabel: "Get Started with Zimbra", colSpan: "2", valign:_TOP_, contentChoices: startChoices},
+            {type:_HOMEGROUP_, headerLabel: "Migrate Accounts", colSpan: "2", valign:_TOP_, contentChoices:  migrationChoices},
+            {type:_HOMEGROUP_, headerLabel: "Zimbra Help", colSpan:"2", valign:_TOP_,  contentChoices: helpChoices}
         ]
     };
 
