@@ -121,6 +121,7 @@ ZaTreeItemData = function(params) {
     this.count = params.count;
     this.mappingId = params.mappingId;
     this.callback = params.callback;
+    this._data = {};
     this.childrenData = new AjxVector();
 }
 
@@ -130,6 +131,16 @@ ZaTreeItemData.prototype.addChild =
 function(child, index) {
 	this.childrenData.add(child, index);
     child.parentObject = this;
+};
+
+ZaTreeItemData.prototype.setData =
+function(key, value) {
+    this._data[key] = value;
+};
+
+ZaTreeItemData.prototype.getData =
+function(key) {
+    return this._data[key];
 };
 
 ZaTreeItemData.prototype.removeChild =

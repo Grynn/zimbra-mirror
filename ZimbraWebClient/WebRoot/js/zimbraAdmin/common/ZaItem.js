@@ -49,6 +49,7 @@ ZaItem.SERVER = "server";
 ZaItem.ZIMLET = "zimlet";
 ZaItem.MAILQ_ITEM = "message";
 ZaItem.MAILQ = "mailque";
+ZaItem.HOME = "home";
 ZaItem.A_objectClass = "objectClass";
 ZaItem.A_zimbraId = "zimbraId";
 ZaItem.A_cn = "cn" ;

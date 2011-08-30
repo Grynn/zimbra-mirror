@@ -182,6 +182,9 @@ function (showRootNode) {
         ti.setImage(currentAddNode.image);
         ti.setData(ZaOverviewPanelController._TID, currentAddNode.mappingId);
         ti.setData("dataItem", currentAddNode);
+        for (var key in this._data) {
+            this.setData(key, this._data[key]);
+        }
         for (j = 0; j < currentAddNode.childrenData.size(); j++) {
             var currentNextNode =  currentAddNode.childrenData.get(j);
             nextTi = new ZaTreeItem({parent:ti,className:"AdminTreeItem",id:currentNextNode.id});
@@ -189,6 +192,9 @@ function (showRootNode) {
             nextTi.setImage(currentNextNode.image);
             nextTi.setData(ZaOverviewPanelController._TID, currentNextNode.mappingId);
             nextTi.setData("dataItem", currentNextNode);
+            for (var key in this._data) {
+                this.setData(key, this._data[key]);
+            }
         }
     }
 

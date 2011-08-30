@@ -11,7 +11,7 @@ ZaHomeXFormView = function(parent, entry) {
 		iKeyName:"ZaHomeXFormView",
 		contextId:ZaId.VIEW_HOME
 	});
-	this.initForm(ZaResource.myXModel,this.getMyXForm(entry), null);
+	this.initForm(ZaHome.myXModel,this.getMyXForm(entry), null);
 	this._localXForm.setController(ZaApp.getInstance());
 }
 
@@ -81,9 +81,9 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
 //        height:"400px",  align:_LEFT_, valign:_TOP_,
         items:[
             {type:_SPACER_, colSpan: "4", height:20},
-            {type:_OUTPUT_, label:"VMWare Zimbra Version:", value: "7.0.1"},
+            {type:_OUTPUT_, label:"VMWare Zimbra Version:", ref: ZaHome.A2_version},
             {type:_OUTPUT_, label:"Resouce Usage:", value: "tenative"},
-            {type:_OUTPUT_, label:"Accounts:", value: "test@zimbra.com"},
+            {type:_OUTPUT_, label:"Accounts:", ref: ZaHome.A2_account},
             {type:_SPACER_, colSpan: "2"},
             {type:_OUTPUT_, label: "Status:", value: "running"},
             {type:_SPACER_, colSpan: "2"},

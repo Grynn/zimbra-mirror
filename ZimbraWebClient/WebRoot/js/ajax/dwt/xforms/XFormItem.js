@@ -3076,7 +3076,8 @@ XFormItemFactory.createItemType("_HOMEGROUP_", "homegroup", HomeGroup_XFormItem,
 //	type defaults
 HomeGroup_XFormItem.prototype.headCss = "homeGroupHeader";
 HomeGroup_XFormItem.prototype.numCols = 1;
-HomeGroup_XFormItem.prototype.width = "100%";
+HomeGroup_XFormItem.prototype.width = "90%";
+HomeGroup_XFormItem.prototype.cssStyle = "margin-left:5%; margin-top: 10px;";
 HomeGroup_XFormItem.prototype.headerLabel = "Home Group";
 HomeGroup_XFormItem.prototype.initializeItems = function () {
     this.items = [];
@@ -3087,7 +3088,8 @@ HomeGroup_XFormItem.prototype.initializeItems = function () {
     if (!choices[0].label)
         this.items[1].numCols = 1;
     for (var i = 0; i < choices.length; i ++) {
-        content.push({type:_OUTPUT_, label: choices[i].label, value: choices[i].value});
+        content.push({type:_OUTPUT_, label: choices[i].label,
+                        value: choices[i].value, containerCssStyle:"color:blue"});
     }
     Group_XFormItem.prototype.initializeItems.call(this);
 }
@@ -3096,13 +3098,15 @@ HomeGroup_XFormItem.prototype.getHeaderItems =
 function () {
     var headerLabel = this.getInheritedProperty("headerLabel");
     var headerCss = this.getInheritedProperty("headCss");
-    var headerItems = { type:_COMPOSITE_, numCols:3, items:[
-        {type:_AJX_IMAGE_, value: "NodeExpanded"},
-        {type:_OUTPUT_, value: headerLabel},
-        {type:_AJX_IMAGE_, value: "Help"}
-        ],
-        cssClass:headerCss
-    };
+    var headerItems = { type:_COMPOSITE_, numCols:3, width:"100%",
+            colSizes:["20px", "100%", "20px"],
+            items:[
+                {type:_AJX_IMAGE_, value: "NodeExpanded"},
+                {type:_OUTPUT_, value: headerLabel},
+                {type:_AJX_IMAGE_, value: "Help"}
+            ],
+            cssClass:headerCss
+        };
     return headerItems;
 }
 

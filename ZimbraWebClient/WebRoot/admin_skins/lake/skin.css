@@ -485,3 +485,9 @@ body						{	@ChromeBg@	}
 .DwtLinkButtonTable {
     height  :   100%;
 }
+
+/*Here start for new ui*/
+.homeGroupHeader {
+    background-color:#FAFAFA;
+    height:24px;
+}

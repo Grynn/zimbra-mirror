@@ -56,20 +56,21 @@ function(viewId) {
 
 ZaHomeController.prototype.show =
 function(entry) {
-    entry = {};
     if (!this._UICreated)  {
         this._contentView = this._view = new this.tabConstructor(this._container, entry);
         var elements = new Object();
         elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
 
         ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements) ;
+        ZaApp.getInstance()._controllers[this.getContentViewId()] = this ;
+        entry = new ZaHome();
+        entry.load("", "", true);
+        entry[ZaModel.currentTab] = "1";
+        entry[ZaModel.currentStep] = 1;
+        this._currentObject = entry;
+        //this._view.setDirty(false);
+        this._view.setObject(entry);
         this._UICreated = true;
     }
-	ZaApp.getInstance()._controllers[this.getContentViewId()] = this ;
     ZaApp.getInstance().pushView(this.getContentViewId()) ;
-    entry[ZaModel.currentTab] = "1";
-    entry[ZaModel.currentStep] = 1;
-    this._currentObject = entry;
-    this._view.setDirty(false);
-    this._view.setObject(entry);
 }
