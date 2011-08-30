@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Windows;
+using CssLib;
 
 namespace ZimbraMigration
 {
@@ -12,5 +13,16 @@ namespace ZimbraMigration
     /// </summary>
     public partial class App : Application
     {
+
+        private void Application_Exit(object sender, ExitEventArgs e)
+        {
+            CSMigrationwrapper mw = new CSMigrationwrapper();
+            mw.MailClient = "MAPI";
+            string s = mw.UninitializeMailClient();
+            if (s.Length > 0)
+            {
+                MessageBox.Show(s, "Shutdown error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }
