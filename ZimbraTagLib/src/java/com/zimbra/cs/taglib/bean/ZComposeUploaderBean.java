@@ -176,6 +176,7 @@ public class ZComposeUploaderBean {
     private static final long DEFAULT_MAX_SIZE = 10 * 1024 * 1024;
 
     private boolean mIsUpload;
+    private boolean mIsLimitExceeded = false;
     private List<FileItem> mItems;
     private ZMessageComposeBean mComposeBean;
     private String mPendingTo;
@@ -189,8 +190,7 @@ public class ZComposeUploaderBean {
 
     @SuppressWarnings("unchecked")
     public ZComposeUploaderBean(PageContext pageContext, ZMailbox mailbox) throws JspTagException, ServiceException {
-        HttpServletRequest req = (HttpServletRequest) pageContext.getRequest();
-
+        HttpServletRequest req = (HttpServletRequest) pageContext.getRequest();        
         //bug:32865
         boolean limitByFileUploadMaxSize = (req.getParameter(F_limitByFileUploadMaxSize) != null);
         ServletFileUpload upload = getUploader(limitByFileUploadMaxSize);
@@ -205,7 +205,9 @@ public class ZComposeUploaderBean {
             }
         } catch (FileUploadBase.SizeLimitExceededException e) {
             // at least one file was over max allowed size
-            throw new JspTagException(ZTagLibException.UPLOAD_SIZE_LIMIT_EXCEEDED("size limit exceeded", e));
+            mIsLimitExceeded = true;
+            mComposeBean = getComposeBean(pageContext, null, mailbox);
+//          throw new JspTagException(ZTagLibException.UPLOAD_SIZE_LIMIT_EXCEEDED("size limit exceeded", e));
         } catch (FileUploadBase.InvalidContentTypeException e) {
             // at least one file was of a type not allowed
             throw new JspTagException(ZTagLibException.UPLOAD_FAILED(e.getMessage(), e));
@@ -219,6 +221,7 @@ public class ZComposeUploaderBean {
         ZMessageComposeBean compose = new ZMessageComposeBean(pageContext);
         StringBuilder addTo = null, addCc = null, addBcc = null, addAttendees = null, addResources = null;
 
+        if (items != null) {
         for (FileItem item : items) {
             if (!item.isFormField()) {
                 // deal with attachment uploads later
@@ -248,7 +251,7 @@ public class ZComposeUploaderBean {
                     if(nameId.length > 1 ){
                         compose.setCheckedAttachmentName(nameId[0],nameId[1]);
                     }else{
-                        compose.setCheckedAttachmentName(nameId[0],null);                        
+                        compose.setCheckedAttachmentName(nameId[0],null);
                     }
                 } else if (name.equals(F_uploadedAttachment)) {
                     compose.setUploadedAttachment(value);
@@ -272,7 +275,7 @@ public class ZComposeUploaderBean {
                     if (addResources == null) addResources = new StringBuilder();
                     if (addResources.length() > 0) addResources.append(", ");
                     addResources.append(value);
-				} else if (name.equals(F_pendingTo)) {
+                } else if (name.equals(F_pendingTo)) {
                     mPendingTo = value;
                 } else if (name.equals(F_pendingCc)) {
                     mPendingCc = value;
@@ -282,7 +285,7 @@ public class ZComposeUploaderBean {
                     mPendingAttendees = value;
                 } else if (name.equals(F_pendingResources)) {
                     mPendingResources = value;
-				} else if (name.startsWith("orig_repeat")) {
+                } else if (name.startsWith("orig_repeat")) {
                     mOrigRepeatParams.put(name, value);
                 } else {
                     // normalize action params from image submits
@@ -299,7 +302,7 @@ public class ZComposeUploaderBean {
             }
 
         }
-
+        }
         if (getIsRepeatCancel()) {
             // override repeat* attrs with any orig_repeat* attrs
             for (Entry<String,String> entry : mOrigRepeatParams.entrySet()) {
@@ -494,6 +497,8 @@ public class ZComposeUploaderBean {
     }
 
     public boolean getIsUpload() { return mIsUpload;}
+
+    public boolean getIsLimitExceeded() { return mIsLimitExceeded; }
 
     public ZMessageComposeBean getCompose() { return mComposeBean; }
 
