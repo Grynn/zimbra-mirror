@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
-
-import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.*;
@@ -25,8 +23,8 @@ public class MoveTask extends AjaxCommonTest {
 
 		super.startingAccountPreferences = null;
 	}
-	@Bugs(ids="61471")
-	@Test(description = "Create document through SOAP - move & verify through GUI", groups = { "smoke" })
+	//@Bugs(ids="61471")
+	@Test(description = "Create task through SOAP - move & verify through GUI", groups = { "smoke" })
 	public void MoveTask_01() throws HarnessException {
 
 		FolderItem taskFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Tasks);
@@ -70,17 +68,8 @@ public class MoveTask extends AjaxCommonTest {
 
 		// Refresh the tasks view
 		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
-
-		// Select the item
-		app.zPageTasks.zListItem(Action.A_LEFTCLICK, subject);
-
-		// Click on Move selected item icon in toolbar
-		DialogMove dialogmove = (DialogMove) app.zPageTasks.zToolbarPressButton(Button.B_MOVE);
-		ZAssert.assertTrue(dialogmove.zIsActive(), "Verify that the dialog is active or not");
-
-		// Click OK on Confirmation dialog
-		dialogmove.zClickTreeFolder(subFolder);
-		dialogmove.zClickButton(Button.B_OK);
+		
+		app.zPageTasks.zToolbarPressPulldown(Button.B_MOVE, subFolder);
 
 		// refresh tasks page
 		app.zTreeTasks.zTreeItem(Action.A_LEFTCLICK, taskFolder);
@@ -113,7 +102,7 @@ public class MoveTask extends AjaxCommonTest {
 				break;
 			}
 		}
-		ZAssert.assertNotNull(movetask,	"Verify the task is moved to the selected folder http://bugzilla.zimbra.com/show_bug.cgi?id=61471");
+		ZAssert.assertNotNull(movetask,	"Verify the task is moved to the selected folder");
 	}
 
 	@AfterMethod(groups = { "always" })
