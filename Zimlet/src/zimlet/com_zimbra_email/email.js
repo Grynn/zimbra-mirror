@@ -601,6 +601,9 @@ function(ev){
 		rule = new ZmFilterRule();
 		rule.addAction(ZmFilterRule.A_KEEP);
 	}
+	else {
+		rule = this._rules.getRuleByName(rule.name) || rule;
+	}
 
 	var addr = this._getAddress(this._actionObject);
 	if (AjxUtil.isString(addr) && this.isMailToLink(addr)) {
