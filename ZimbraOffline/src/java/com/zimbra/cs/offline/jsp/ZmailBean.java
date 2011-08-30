@@ -22,8 +22,9 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.DataSource.ConnectionType;
 import com.zimbra.cs.offline.common.OfflineConstants;
-import com.zimbra.soap.type.DataSource.ConnectionType;
+import com.zimbra.cs.offline.jsp.JspConstants.JspVerb;
 
 public class ZmailBean extends MailBean {
     public ZmailBean() {
@@ -150,5 +151,31 @@ public class ZmailBean extends MailBean {
     public void setPassword(String input) {
         this.password = input;
     }
-}
 
+    public static String createAccount(String accountName, String username, String password, String email, String host, int port, boolean isSSL) throws Exception {
+        ZmailBean xb = new ZmailBean();
+        xb.verb = JspVerb.add;
+        xb.type = "xsync";
+        xb.accountFlavor = "Xsync";
+        xb.accountName = accountName;
+        xb.username = username;
+        xb.password = password;
+        xb.email = email;
+        xb.host = host;
+        xb.port = "" + port;
+        xb.connectionType = isSSL ? ConnectionType.ssl : ConnectionType.cleartext;
+        xb.isDebugTraceEnabled = true;
+        xb.syncFreqSecs=-1;
+        xb.doRequest();
+        if (xb.getError() != null)
+            throw new RuntimeException(xb.getError());
+        return xb.accountId;
+    }
+
+    public static void deleteAccount(String accountId) throws Exception {
+        ZmailBean xb = new ZmailBean();
+        xb.verb = JspVerb.del;
+        xb.accountId = accountId;
+        xb.doRequest();
+    }
+}
