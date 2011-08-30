@@ -20,7 +20,6 @@
 			<menuItem label="${msg.newContact}" icon="Edit" id="NEWCONTACT"/>
 			<menuItem label="${msg.addToFilter}" icon="AddFilter" id="ADDTOFILTER"/>
 			<menuItem label="${msg.goToUrl}" icon="URL" id="GOTOURL"/>
-            <menuItem label="${msg.copy}" icon="copy" id="COPY_TEXT"/>
 		</contextMenu>
 	</contentObject>
 </zimlet>

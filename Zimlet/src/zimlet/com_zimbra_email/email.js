@@ -192,7 +192,7 @@ function(ev) {
 		this._composeListener(ev, bubble.address);
 	}
 	else if (this._bubbleList) {
-		this._bubbleList.selectText(bubble);
+		this._bubbleList.selectAddressText();
 	}
 };
 
@@ -765,7 +765,6 @@ function(itemId, item, ev) {
 		case "NEWCONTACT":		this._contactListener(true);	break;
 		case "ADDTOFILTER":		this._filterListener();		break;
 		case "GOTOURL":			this._goToUrlListener();	break;
-        case "COPY_TEXT":       this._copyListener(ev);	break;
 	}
 };
 
@@ -937,14 +936,6 @@ function() {
 	}
 };
 
-EmailTooltipZimlet.prototype._copyListener =
-function(ev) {
-    var textToCopy = "";
-    var actionObject = this._actionObject;
-    
-    if (actionObject) {textToCopy = actionObject.toString();}
-    if (textToCopy) {DwtClipboardManager.getInstance().copyToClipboard(textToCopy);}
-}
 /**
  * Helper function
  */
