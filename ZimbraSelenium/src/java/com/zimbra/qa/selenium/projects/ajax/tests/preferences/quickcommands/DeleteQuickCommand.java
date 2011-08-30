@@ -3,6 +3,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.preferences.quickcommands;
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.ui.Action;
+import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
@@ -24,18 +25,16 @@ public class DeleteQuickCommand extends AjaxCommonTest {
 			)
 	public void DeleteQuickCommand_01() throws HarnessException {
 		
-		// Create a quick command
-//		app.zGetActiveAccount().soapSend(
-//					"<ModifyPrefsRequest xmlns='urn:zimbraAccount'>"
-//				+		"<pref name='zimbraPrefQuickCommand'>{'id':1,'itemTypeId':'MSG','name':'asdf','description':'asdf','isActive':true,'actions':[{'id':1,'typeId':'actionFlag','value':'flagged','isActive':true}]}</pref>"
-//				+	"</ModifyPrefsRequest>");
 		
 		// Navigate to preferences -> notifications
 		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.QuickCommands);
 
-		
+		// Select the quick command
+		// TODO: implement me!
+
 		// Click "Delete"
-		// TODO:
+		app.zPagePreferences.zToolbarPressButton(Button.B_DELETE_QUICK_COMMAND);
+		throw new HarnessException("See https://bugzilla.zimbra.com/show_bug.cgi?id=63931");
 		
 		// Get the quick commands from the server.  Verify the quick command is not there.
 		

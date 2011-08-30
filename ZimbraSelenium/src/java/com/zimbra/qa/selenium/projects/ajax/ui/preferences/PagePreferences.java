@@ -292,7 +292,7 @@ public class PagePreferences extends AbsTab {
 
 		} else if ( button == Button.B_DELETE_QUICK_COMMAND ) {
 			
-			locator = "css=div[id='zb__QCV__REMOEV_QUICK_COMMAND'] td[id$='_title']";
+			locator = "css=div[id='zb__QCV__REMOVE_QUICK_COMMAND'] td[id$='_title']";
 			throw new HarnessException("See https://bugzilla.zimbra.com/show_bug.cgi?id=63931");
 			
 		} else {
