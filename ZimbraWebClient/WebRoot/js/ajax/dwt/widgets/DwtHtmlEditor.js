@@ -536,6 +536,9 @@ DwtHtmlEditor.prototype.applyCellProperties = function(table, cells, props) {
 	var last_row = true;
 	for (var row_i = cells.length; --row_i >= 0;) {
 		var row = cells[row_i];
+		if (!row) {
+			continue;
+		}
 		var first_row = (row_i == 0);
 		var last_col = true;
 		for (var cell_i = row.length; --cell_i >= 0;) {
