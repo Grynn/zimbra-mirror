@@ -376,12 +376,12 @@ public class  ZFolderBean {
     }
 
     public static String getRgbColor(Color color, View view) {
-        int colorIndex = color.getValue();
+        int colorIndex = (int) color.getValue();
         if (color == Color.defaultColor) {
             if (view == View.contact || view == View.task)
-                colorIndex = Color.gray.getValue();
+                colorIndex = (int) Color.gray.getValue();
             else
-                colorIndex = Color.orange.getValue();
+                colorIndex = (int) Color.orange.getValue();
         }
         return ZFolder.RGB_COLORS[colorIndex];
     }
