@@ -14,10 +14,7 @@
  */
 
 
-body {
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#4d96c8), to(#1b355e));
-  background-image: -moz-linear-gradient(top, #4d96c8, #1b355e);
-}
+body						{	@ChromeBg@	}
 
 /* classes for the skin around the various pieces of the app */
 
