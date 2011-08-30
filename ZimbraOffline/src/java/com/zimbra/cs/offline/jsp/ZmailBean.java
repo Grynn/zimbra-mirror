@@ -22,6 +22,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.account.DataSource.ConnectionType;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.jsp.JspConstants.JspVerb;
@@ -110,6 +111,7 @@ public class ZmailBean extends MailBean {
                     } else if (verb.isReset()) {
                         stub.resetOfflineAccount(accountId);
                     } else if (verb.isDelete()) {
+                        OfflineLog.offline.debug("deleting account %s",accountId);
                         stub.deleteOfflineAccount(accountId);
                     } else if (verb.isReindex()) {
                         stub.reIndex(accountId);

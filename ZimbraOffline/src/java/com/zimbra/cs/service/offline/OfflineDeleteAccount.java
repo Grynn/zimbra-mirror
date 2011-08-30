@@ -33,6 +33,7 @@ import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
+import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.admin.DeleteAccount;
 import com.zimbra.soap.ZimbraSoapContext;
 
@@ -52,17 +53,21 @@ public class OfflineDeleteAccount extends DeleteAccount {
         if (account == null)
             throw AccountServiceException.NO_SUCH_ACCOUNT(id);
 
+        OfflineLog.offline.debug("delete account request received for acct %s",account.getName());
         checkAccountRight(zsc, account, Admin.R_deleteAccount);        
         if (account instanceof OfflineAccount)
         {
             if (((OfflineAccount)account).isDisabledDueToError()) {
+                OfflineLog.offline.debug("deleting bad mailbox");
                 OfflineMailboxManager omgr = (OfflineMailboxManager) MailboxManager.getInstance();
                 omgr.purgeBadMailboxByAccountId(account.getId());
             } else {
                 Mailbox mbox = Provisioning.onLocalServer(account) ? 
                         MailboxManager.getInstance().getMailboxByAccount(account, false) : null;
-                if (mbox != null)
+                if (mbox != null) {
+                    OfflineLog.offline.debug("deleting mailbox");
                     mbox.deleteMailbox();
+                }
             }
         }
         prov.deleteAccount(id);
