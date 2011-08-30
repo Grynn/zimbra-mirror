@@ -57,12 +57,12 @@ STDMETHODIMP CMapiWrapper::ConnectToServer(BSTR ServerHostName, BSTR Port, BSTR 
     return S_OK;
 }
 
-STDMETHODIMP CMapiWrapper::GlobalInit(BSTR* pMAPITarget, BSTR* pAdminUser, BSTR* pAdminPassword, BSTR* pErrorText) {
+STDMETHODIMP CMapiWrapper::GlobalInit(BSTR pMAPITarget, BSTR pAdminUser, BSTR pAdminPassword, BSTR* pErrorText) {
 	(void)pMAPITarget;
     (void)pAdminUser;
     (void)pAdminPassword;
 	(void)pErrorText;
-	LPCWSTR lpszErrorText = ExchangeOps::GlobalInit((LPCWSTR)pMAPITarget, (LPCWSTR)pAdminUser, (LPCWSTR)pErrorText);
+	LPCWSTR lpszErrorText = ExchangeOps::GlobalInit((LPCWSTR)pMAPITarget, (LPCWSTR)pAdminUser, (LPCWSTR)pAdminPassword);
 	*pErrorText = (lpszErrorText) ? CComBSTR(lpszErrorText) : CComBSTR("");
 	return S_OK;
 }

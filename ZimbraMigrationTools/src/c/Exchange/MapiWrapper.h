@@ -46,7 +46,7 @@ public:
     Zimbra::MAPI::ExchangeAdmin *exchadmin;
 
     STDMETHOD(ConnectToServer) (BSTR ServerHostName, BSTR Port, BSTR AdminID);
-    STDMETHOD(GlobalInit)(BSTR* pMAPITarget, BSTR* pAdminUser, BSTR* pAdminPassword, BSTR* pErrorText);
+    STDMETHOD(GlobalInit)(BSTR pMAPITarget, BSTR pAdminUser, BSTR pAdminPassword, BSTR* pErrorText);
     STDMETHOD(ImportMailOptions) (BSTR OptionsTag);
     STDMETHOD(GetProfilelist) (VARIANT * Profiles);
 
