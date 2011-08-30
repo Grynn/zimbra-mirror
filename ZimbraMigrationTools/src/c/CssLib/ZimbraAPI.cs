@@ -954,7 +954,7 @@ namespace CssLib
             return retval;
         }
 
-        public void CreateFolderRequest(XmlWriter writer, ZimbraFolder folder, int requestId)
+        private void CreateFolderRequest(XmlWriter writer, ZimbraFolder folder, int requestId)
         {
             writer.WriteStartElement("CreateFolderRequest", "urn:zimbraMail");
             if (requestId != -1)
@@ -981,7 +981,7 @@ namespace CssLib
             writer.WriteEndElement();   // CreateFolderRequest
         }
 
-        public int CreateFolder(ZimbraFolder folder)
+        private int DoCreateFolder(ZimbraFolder folder)
         {
             lastError = "";
             WebServiceClient client = new WebServiceClient
@@ -1017,6 +1017,15 @@ namespace CssLib
             return retval;
         }
 
+        public int CreateFolder(string Name, string Parent, string View, string Color, string Flags)
+        {
+            return DoCreateFolder(new ZimbraFolder(Name, Parent, View, Color, Flags));
+        }
+
+        public int CreateFolder(string Name, string Parent)
+        {
+            return DoCreateFolder(new ZimbraFolder(Name, Parent, "", "", ""));
+        }
 
         /////////////////////////
 
