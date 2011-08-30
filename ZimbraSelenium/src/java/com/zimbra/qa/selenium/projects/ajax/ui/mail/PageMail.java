@@ -1289,18 +1289,21 @@ public class PageMail extends AbsTab {
 
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option,String dynamic) throws HarnessException {
 		//logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
-		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option +" then "+ dynamic);
+		
+		
 		if (pulldown == null)
 			throw new HarnessException("Pulldown cannot be null!");
-
 		if (option == null)
 			throw new HarnessException("Option cannot be null!");
 		if (dynamic == null)
 			throw new HarnessException("dynamic string cannot be null!");
+		
+		
 		// Default behavior variables
-
 		String pulldownLocator = null; // If set, this will be expanded
 		String optionLocator = null; // If set, this will be clicked
+		String dynamicLocator = null; // If set, this will be clicked
 		AbsPage page = null; // If set, this page will be returned
 
 		if ((pulldown == Button.B_OPTIONS)&& (option == Button.O_ADD_SIGNATURE)) {
@@ -1309,8 +1312,23 @@ public class PageMail extends AbsTab {
 			//pulldownLocator = "css=td[id$='_ADD_SIGNATURE_dropdown']>div[class='ImgSelectPullDownArrow']";
 			pulldownLocator="css=[id^=zb__COMPOSE][id$=__COMPOSE_OPTIONS_dropdown]";
 			optionLocator="css=td[id$='_ADD_SIGNATURE_dropdown']>div[class='ImgCascade']";
-			dynamic ="css=td[id*='_title']td:contains('"+ name + "')";
+			dynamicLocator ="css=td[id*='_title']td:contains('"+ name + "')";
 			page = null;
+
+		} else if ( (pulldown == Button.B_ACTIONS) && (option == Button.O_QUICK_COMMANDS_MENU) ) {
+
+			if ( !(dynamic instanceof String) ) 
+				throw new HarnessException("dynamic must be a string!  "+ dynamic.getClass().getCanonicalName());
+
+			String quickcommand = (String)dynamic;
+			logger.info("Click on Quick Command: "+ quickcommand);
+			
+			pulldownLocator	= "css=td[id='zb__TV__ACTIONS_MENU_dropdown'] div[class='ImgSelectPullDownArrow']";
+			optionLocator	= "css=div[id='zmi__TV__QUICK_COMMANDS'] td[id$='_title']";
+			dynamicLocator	= "css=div[id='POPUP_DWT30'] td[id$='_title']:contains('"+ quickcommand + "')";
+			page = null;
+
+			// FALL THROUGH
 
 		} else {
 			throw new HarnessException("no logic defined for pulldown/option "
@@ -1345,15 +1363,16 @@ public class PageMail extends AbsTab {
 
 				// If the app is busy, wait for it to become active
 				zWaitForBusyOverlay();
+
 			}
-			if (dynamic != null) {
+			if (dynamicLocator != null) {
 
 				// Make sure the locator exists
-				if (!this.sIsElementPresent(dynamic)) {
-					throw new HarnessException(dynamic+ " not present!");
+				if (!this.sIsElementPresent(dynamicLocator)) {
+					throw new HarnessException(dynamicLocator+ " not present!");
 				}
 
-				this.zClickAt(dynamic,"");
+				this.zClickAt(dynamicLocator,"");
 
 				// If the app is busy, wait for it to become active
 				zWaitForBusyOverlay();
@@ -1364,7 +1383,9 @@ public class PageMail extends AbsTab {
 			if (page != null) {
 				page.zWaitForActive();
 			}
+			
 		}
+		
 		// Return the specified page, or null if not set
 		return (page);
 

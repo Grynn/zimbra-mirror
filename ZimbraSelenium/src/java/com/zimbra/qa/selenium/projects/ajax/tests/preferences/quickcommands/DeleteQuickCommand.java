@@ -5,11 +5,11 @@ import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.core.AjaxQuickCommandTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
 
 
-public class DeleteQuickCommand extends AjaxCommonTest {
+public class DeleteQuickCommand extends AjaxQuickCommandTest {
 
 	public DeleteQuickCommand() {
 		
