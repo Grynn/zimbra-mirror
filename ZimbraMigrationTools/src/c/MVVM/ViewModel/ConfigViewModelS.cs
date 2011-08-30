@@ -155,7 +155,7 @@ namespace MVVM.ViewModel
             CSMigrationwrapper mw = ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).mw;
             if (IsProfile)
             {
-                ret = mw.InitializeMailClient(ProfileList[CurrentProfileSelection], "", "");
+                ret = mw.InitializeMailClient(ProfileList[CurrentProfileSelection], null, null);
             }
             else
             {
