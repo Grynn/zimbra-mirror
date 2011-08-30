@@ -203,7 +203,7 @@ public class ZimbraSeleniumProperties {
 	 * App type
 	 */
 	public enum AppType {
-		AJAX, HTML, MOBILE, DESKTOP, ADMIN, APPLIANCE
+		AJAX, HTML, MOBILE, DESKTOP, ADMIN, APPLIANCE, OCTOPUS
 	}
 	
 	private static AppType appType = AppType.AJAX;
@@ -286,6 +286,12 @@ public class ZimbraSeleniumProperties {
 			scheme = "https";
 			path = "/zimbraAdmin/";
 			port = "7071";
+
+		}
+
+		if ( appType == AppType.OCTOPUS ) {
+			
+			// FALL THROUGH
 
 		}
 
