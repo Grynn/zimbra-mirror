@@ -123,4 +123,9 @@ server
         # Fudge inter-mailbox redirects (kludge)
         proxy_redirect http://$relhost/ https://$http_host/;
     }
+
+    location ~* ^/zmerror_.*\.html$ {
+        # for custom error pages, internal use only
+        internal;
+    }
 }

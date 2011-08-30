@@ -17,6 +17,10 @@ http
     ${web.:routehandlers}
     zmroute_timeout ${web.routetimeout};
 
+    #custom error pages for upstream connection errors
+    error_page 502 /zmerror_upstream_bad.html;
+    error_page 504 /zmerror_upstream_timeout.html;
+
     ${ssl.clientcertca.enabled}ssl_client_certificate  ${ssl.clientcertca.default};
 
     ${web.http.enabled}include ${core.includes}/${core.cprefix}.web.http;
