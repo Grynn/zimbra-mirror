@@ -31,7 +31,7 @@ getPubKey() {
 replacePubKey() {
 	server=$1
 	key=$2
-
+  echo "Updating keys for $server"
 	keyhost=`echo ${key} | awk '{print $3}'`
 
 	echo "${authkeys}" > ${tempkeysfile}
@@ -52,7 +52,13 @@ replacePubKey() {
 command=\"/opt/zimbra/libexec/zmrcd\" ${key}"
 	
 	/bin/rm -f ${tempkeysfile} ${tempkeysfile}.new
+}
 
+updateAllServers() {
+  for s in ${servers}; do
+    echo "Updating authkeys on remote server $s"
+    echo "HOST:$s zmupdateauthkeys" | /opt/zimbra/libexec/zmrc $s
+  done
 }
 
 # Get all the public keys from ldap, and replace them in 
@@ -68,7 +74,7 @@ if [ ! -d ${zimbra_tmp_directory} ]; then
   mkdir -p ${zimbra_tmp_directory} > /dev/null 2>&1
 fi
 
-tempkeysfile="${zimbra_tmp_directory}/auth_keys.tmp"
+tempkeysfile=`mktemp -t auth_keys.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
 
 if [ -f $authkeysfile ]; then
 	authkeys=`cat ${authkeysfile}`
@@ -78,8 +84,13 @@ fi
 
 servers=`${zmprov} gas`
 
+#
+if [ x$1 == "x-a" ]; then
+ updateAllServers
+fi
+
 for s in ${servers}; do
-	echo "updating ${s}"
+	echo "Updating keys for ${s}"
 	getPubKey ${s}
 	if [ "x$pubkey" != "x" ]; then
 		replacePubKey ${s} "${pubkey}"
@@ -89,10 +100,6 @@ for s in ${servers}; do
 done
 
 echo "Updating ${authkeysfile}"
-echo ""
-
-echo "${authkeys}" > ${tempkeysfile}
-
-mv ${tempkeysfile} ${authkeysfile}
+echo "${authkeys}" > ${tempkeysfile} && mv ${tempkeysfile} ${authkeysfile}
 chmod 644 ${authkeysfile}
 
