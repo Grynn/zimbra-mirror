@@ -16,6 +16,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTree;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
@@ -52,16 +53,16 @@ public class TreeCalendar extends AbsTree {
 		}
 		tracer.trace("processing " + folder.getName());
 
-		AbsPage page = null;
-		String actionLocator = null;
+		String actionLocator = String.format("css=td[id='zti__main_Calendar__%s_textCell']", folder.getId()); // default
 		String optionLocator = null;
+		AbsPage page = null;
 
 		// Special case for clicking on "Calendars" header rather than a specific Calendar Item
 		if ( folder.getName().equals("USER_ROOT") ) {
 			
 			if ( (action == Action.A_RIGHTCLICK) && (option == Button.O_NEW_CALENDAR || option == Button.O_NEW_FOLDER) ) {
 				
-				actionLocator = "css=td[id='ztih__main_Calendar__CALENDAR_textCell']";
+				actionLocator = "css=td[id='ztih__main_Calendar__CALENDAR_textCell']"; // override the default
 				optionLocator = "css=table[class$='MenuTable'] td[id$='_title']:contains(New Calendar)";
 				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageCalendar);
 
@@ -79,6 +80,23 @@ public class TreeCalendar extends AbsTree {
 
 		}
 		
+		if ( (action == Action.A_RIGHTCLICK) && (option == Button.B_DELETE) ) {
+
+			// Use default actionLocator
+			optionLocator = "css=tr[id='POPUP_DELETE'] td[id$='_title']";
+			page = null;
+
+			// After  clicking REFRESH, sometimes the links don't appear right away
+			GeneralUtility.waitForElementPresent(this, actionLocator);
+			
+			this.zRightClick(actionLocator);
+			this.zClick(optionLocator);
+			this.zWaitForBusyOverlay();
+
+			return (page);
+
+		}
+
 		if (actionLocator == null)
 			throw new HarnessException("locator is null for action " + action);
 		if (optionLocator == null)
