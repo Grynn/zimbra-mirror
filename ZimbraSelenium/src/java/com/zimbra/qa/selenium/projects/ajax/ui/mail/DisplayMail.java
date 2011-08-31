@@ -33,15 +33,15 @@ public class DisplayMail extends AbsDisplay {
 	 */
 	public static class Locators {
 				
-		public static final String IsConViewActive 			= "css=div[id='zv__CLV']";
+		public static final String IsConViewActive 			= "css=div[id='zv__CLV2']";
 		public static final String IsMsgViewActive 			= "css=div[id='zv__TV']";
 		
 		public static final String MessageViewPreviewAtBottomCSS		= "css=div[id='zv__TV__MSG']";
 		public static final String MessageViewPreviewAtRightCSS			= "css=div[id='zv__TV__MSG']";
 		public static final String MessageViewOpenMessageCSS			= "css=div[id='zv__MSG1__MSG']";
 		
-		public static final String ConversationViewPreviewAtBottomCSS	= "css=div[id='zv__CLV__MSG']";
-		public static final String ConversationViewPreviewAtRightCSS	= "css=div[id='zv__CLV__MSG']";
+		public static final String ConversationViewPreviewAtBottomCSS	= "css=div[id='zv__CLV2__MSG']";
+		public static final String ConversationViewPreviewAtRightCSS	= "css=div[id='zv__CLV2__MSG']";
 		public static final String ConversationViewOpenMessageCSS		= "css=TODO#TODO";
 
 	}

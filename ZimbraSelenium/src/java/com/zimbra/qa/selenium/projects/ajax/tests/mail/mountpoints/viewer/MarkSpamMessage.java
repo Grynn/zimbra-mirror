@@ -94,7 +94,7 @@ public class MarkSpamMessage extends AjaxCommonTest {
 		
 		// Verify spam button is inactive
 		String id = "zmi__TV__SPAM";
-		if ( app.zPageMail.zIsVisiblePerPosition("css=div#ztb__CLV", 0, 0) ) {
+		if ( app.zPageMail.zIsVisiblePerPosition("css=div#ztb__CLV2", 0, 0) ) {
 			id = "zmi__CLV__SPAM";
 		}
 

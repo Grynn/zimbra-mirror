@@ -44,10 +44,10 @@ public class PageMail extends AbsTab {
 
 	public static class Locators {
 
-		public static final String zPrintIconBtnID 		= "zb__CLV__PRINT_left_icon";
-		public static final String zTagMenuDropdownBtnID	= "zb__CLV__TAG_MENU_dropdown";
+		public static final String zPrintIconBtnID 		= "zb__CLV2__PRINT_left_icon";
+		public static final String zTagMenuDropdownBtnID	= "zb__CLV2__TAG_MENU_dropdown";
 		public static final String zDetachIconBtnID		= "zb__TV__DETACH_left_icon";
-		public static final String zViewMenuDropdownBtnID	= "zb__CLV__VIEW_MENU_dropdown";
+		public static final String zViewMenuDropdownBtnID	= "zb__CLV2__VIEW_MENU_dropdown";
 
 		public static final String zCloseIconBtn_messageWindow 	= "css=td[id=zb__MSG__CLOSE_left_icon]";
 		public static final String cssTVRowsLocator	= "css=div#zl__TV__rows";
@@ -99,7 +99,7 @@ public class PageMail extends AbsTab {
 		 * MLV:
 		 * <div id="zb__TV__NEW_MENU" style="position: absolute; overflow: visible; z-index: 300; left: 5px; top: 78px; width: 159px; height: 24px;" class="ZToolbarButton ZWidget   ZHasDropDown       ZHasLeftIcon ZHasText" parentid="z_shell">
 		 * CLV:
-		 * <div id="zb__CLV__NEW_MENU" style="position: absolute; overflow: visible; z-index: 300; left: 5px; top: 78px; width: 159px; height: 24px;" class="ZToolbarButton ZWidget   ZHasDropDown       ZHasLeftIcon ZHasText" parentid="z_shell">
+		 * <div id="zb__CLV2__NEW_MENU" style="position: absolute; overflow: visible; z-index: 300; left: 5px; top: 78px; width: 159px; height: 24px;" class="ZToolbarButton ZWidget   ZHasDropDown       ZHasLeftIcon ZHasText" parentid="z_shell">
 		 * 
 		 */
 
@@ -114,7 +114,7 @@ public class PageMail extends AbsTab {
 			return (true);
 
 		// Check CLV next
-		locator = "css=div#zb__CLV__NEW_MENU";
+		locator = "css=div#zb__CLV2__NEW_MENU";
 		loaded = this.sIsElementPresent(locator);
 		visible = this.zIsVisiblePerPosition(locator, 4, 74);
 		if ( loaded && visible )
@@ -197,7 +197,7 @@ public class PageMail extends AbsTab {
 			if ( zGetPropMailView() == PageMailView.BY_MESSAGE ) {
 				id = "zb__TV__DELETE_left_icon";
 			} else {
-				id = "zb__CLV__DELETE_left_icon";
+				id = "zb__CLV2__DELETE_left_icon";
 			}
 
 			// Check if the button is enabled
@@ -467,9 +467,9 @@ public class PageMail extends AbsTab {
 
 		} else if ( (pulldown == Button.B_ACTIONS) && ((option == Button.B_RESPORTSPAM) || (option == Button.B_RESPORTNOTSPAM)) ) {
 
-			if ( this.zIsVisiblePerPosition("css=div#ztb__CLV", 0, 0) ) {
-				pulldownLocator = "css=td[id$='zb__CLV__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
-				optionLocator = "css=div[id='zm__CLV'] tr[id='POPUP_SPAM'] td[id='zmi__CLV__SPAM_title']";
+			if ( this.zIsVisiblePerPosition("css=div#ztb__CLV2", 0, 0) ) {
+				pulldownLocator = "css=td[id$='zb__CLV2__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+				optionLocator = "css=div[id='zm__CLV2'] tr[id='POPUP_SPAM'] td[id='zmi__CLV__SPAM_title']";
 			} else {
 				pulldownLocator = "css=td[id='zb__TV__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
 				optionLocator = "css=div[id='zm__TV'] tr[id='POPUP_SPAM'] td[id='zmi__TV__SPAM_title']";
@@ -488,8 +488,8 @@ public class PageMail extends AbsTab {
 			if ( option == Button.O_NEW_FOLDER ) {
 				
 				// Check if we are CLV or MV
-				if ( this.zIsVisiblePerPosition("css=div#ztb__CLV", 0, 0) ) {
-					pulldownLocator = "css=td#zb__CLV__MOVE_MENU_dropdown>div";
+				if ( this.zIsVisiblePerPosition("css=div#ztb__CLV2", 0, 0) ) {
+					pulldownLocator = "css=td#zb__CLV2__MOVE_MENU_dropdown>div";
 				} else {
 					pulldownLocator = "css=td#zb__TV__MOVE_MENU_dropdown>div";
 				}
@@ -589,7 +589,7 @@ public class PageMail extends AbsTab {
 	 * @throws HarnessException
 	 */
 	public PageMailView zGetPropMailView() throws HarnessException {
-		if ( this.zIsVisiblePerPosition("css=div#zv__CLV", 0, 0) ) {
+		if ( this.zIsVisiblePerPosition("css=div#zv__CLV2", 0, 0) ) {
 			return (PageMailView.BY_CONVERSATION);
 		} else if ( this.zIsVisiblePerPosition("css=div#zv__TV", 0, 0) ) {
 			return (PageMailView.BY_MESSAGE);
@@ -1426,8 +1426,8 @@ public class PageMail extends AbsTab {
 			FolderItem folder = (FolderItem)dynamic;
 			
 			// Check if we are CLV or MV
-			if ( this.zIsVisiblePerPosition("css=div#ztb__CLV", 0, 0) ) {
-				pulldownLocator = "css=td#zb__CLV__MOVE_MENU_dropdown>div";
+			if ( this.zIsVisiblePerPosition("css=div#ztb__CLV2", 0, 0) ) {
+				pulldownLocator = "css=td#zb__CLV2__MOVE_MENU_dropdown>div";
 				optionLocator = "css=td#zti__DwtFolderChooser_MailCLV__"+ folder.getId() + "_textCell";
 			} else {
 				pulldownLocator = "css=td#zb__TV__MOVE_MENU_dropdown>div";
