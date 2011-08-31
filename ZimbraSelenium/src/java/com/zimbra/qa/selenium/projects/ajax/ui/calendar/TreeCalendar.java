@@ -422,18 +422,18 @@ public class TreeCalendar extends AbsTree {
 		item.setId(id);
 
 		// Set the name
-		locator = "css=div[id='zti__main_Mail__"+ id +"'] td[id$='_textCell']";
+		locator = "css=div[id='zti__main_Calendar__"+ id +"'] td[id$='_textCell']";
 		item.setName(this.sGetText(locator));
 
 		// Set the expanded boolean
-		locator = "css=div[id='zti__main_Mail__"+ id +"'] td[id$='_nodeCell']>div";
+		locator = "css=div[id='zti__main_Calendar__"+ id +"'] td[id$='_nodeCell']>div";
 		if ( sIsElementPresent(locator) ) {
 			// The image could be hidden, if there are no subfolders
 			item.gSetIsExpanded("ImgNodeExpanded".equals(sGetAttribute(locator + "@class")));
 		}
 		
 		// Set the selected boolean
-		locator = "css=div[id='zti__main_Mail__"+ id +"'] div[id='zti__main_Mail__"+ id +"_div']";
+		locator = "css=div[id='zti__main_Calendar__"+ id +"'] div[id='zti__main_Calendar__"+ id +"_div']";
 		if ( sIsElementPresent(locator) ) {
 			item.gSetIsSelected("DwtTreeItem-selected".equals(sGetAttribute(locator + "@class")));
 		}
@@ -467,7 +467,7 @@ public class TreeCalendar extends AbsTree {
 			String identifier = sGetAttribute(itemLocator +"@id");
 			logger.debug(myPageName() + " identifier: "+ identifier);
 
-			if ( identifier == null || identifier.trim().length() == 0 || !(identifier.startsWith("zti__main_Mail__")) ) {
+			if ( identifier == null || identifier.trim().length() == 0 || !(identifier.startsWith("zti__main_Calendar__")) ) {
 				// Not a folder
 				// Maybe "Find Shares ..."
 				count++; // Add one more to the total 'count' for this 'unknown' item
@@ -476,7 +476,7 @@ public class TreeCalendar extends AbsTree {
 
 			// Set the locator
 			// TODO: This could probably be made safer, to make sure the id matches an int pattern
-			String id = identifier.replace("zti__main_Mail__", "");
+			String id = identifier.replace("zti__main_Calendar__", "");
 
 			FolderItem item = this.parseFolderRow(id);
 			items.add(item);
@@ -555,7 +555,7 @@ public class TreeCalendar extends AbsTree {
 		List<FolderItem> items = new ArrayList<FolderItem>();
 
 		// Recursively fill out the list, starting with all mail folders
-		items.addAll(zListGetFolders("css=div[id='ztih__main_Mail__FOLDER']"));
+		items.addAll(zListGetFolders("css=div[id='ztih__main_Calendar__CALENDAR']"));
 
 		return (items);
 
