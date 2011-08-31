@@ -4,6 +4,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.projects.octopus.core.OctopusCommonTest;
 
 public class BasicLogin extends OctopusCommonTest {
@@ -11,19 +12,21 @@ public class BasicLogin extends OctopusCommonTest {
 	public BasicLogin() {
 		logger.info("New " + BasicLogin.class.getCanonicalName());
 
-		// All tests start at the login page
-		super.startingPage = app.zPageLogin;
-		super.startingAccount = null;
-
+		// All tests start at the Octopus page
+		super.startingPage = app.zPageOctopus;
+		super.startingAccountPreferences = null;
 	}
 
 	@Test(description = "Login to the Octopus client", groups = { "sanity" })
 	public void BasicLogin01() throws HarnessException {
 		// Login
-		app.zPageLogin.zLogin(gAdmin);
+		if(!startingPage.zIsActive())
+		app.zPageLogin.zLogin(ZimbraAccount.AccountZMC());
+		
+		app.zPageOctopus.zWaitForActive();
 
 		// Verify main page becomes active
-		ZAssert.assertTrue(app.zPageMain.zIsActive(),
+		ZAssert.assertTrue(app.zPageOctopus.zIsActive(),
 				"Verify that the account is logged in");
 	}
 }

@@ -6,13 +6,13 @@ package com.zimbra.qa.selenium.projects.octopus.ui;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
-import com.zimbra.qa.selenium.projects.octopus.ui.PageMain;
+import com.zimbra.qa.selenium.projects.octopus.ui.PageOctopus;
 
 public class AppOctopusClient extends AbsApplication {
 
 	// Pages
 	public PageLogin zPageLogin = null;
-	public PageMain zPageMain = null;
+	public PageOctopus zPageOctopus = null;
 
 	public AppOctopusClient() {
 		super();
@@ -23,9 +23,9 @@ public class AppOctopusClient extends AbsApplication {
 		zPageLogin = new PageLogin(this);
 		pages.put(zPageLogin.myPageName(), zPageLogin);
 
-		// Main page
-		zPageMain = new PageMain(this);
-		pages.put(zPageMain.myPageName(), zPageMain);
+		// Octopus page
+		zPageOctopus = new PageOctopus(this);
+		pages.put(zPageOctopus.myPageName(), zPageOctopus);
 
 		// Configure the localization strings
 		getL10N().zAddBundlename(I18N.Catalog.I18nMsg);
@@ -35,14 +35,9 @@ public class AppOctopusClient extends AbsApplication {
 		getL10N().zAddBundlename(I18N.Catalog.ZmMsg);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see projects.admin.ui.AbsApplication#isLoaded()
-	 */
 	@Override
 	public boolean zIsLoaded() throws HarnessException {
-		if (this.zPageMain.zIsActive() || this.zPageLogin.zIsActive()) {
+		if (this.zPageOctopus.zIsActive() || this.zPageLogin.zIsActive()) {
 			return true;
 		} else {
 			return false;
@@ -54,10 +49,12 @@ public class AppOctopusClient extends AbsApplication {
 		return ("Octopus Client");
 	}
 
-	@Override
-	protected ZimbraAccount zSetActiveAcount(ZimbraAccount account)
+	public ZimbraAccount zSetActiveAcount(ZimbraAccount account)
 			throws HarnessException {
 		return (super.zSetActiveAcount(account));
 	}
-
+	
+	public ZimbraAccount zGetActiveAcount() {
+		return (super.zGetActiveAccount());
+	}
 }

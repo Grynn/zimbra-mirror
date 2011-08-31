@@ -66,8 +66,8 @@ public class PageLogin extends AbsTab {
 
 
 		// Logout
-		if ( ((AppOctopusClient)MyApplication).zPageMain.zIsActive() ) {
-			((AppOctopusClient)MyApplication).zPageMain.zLogout();
+		if ( ((AppOctopusClient)MyApplication).zPageOctopus.zIsActive() ) {
+			((AppOctopusClient)MyApplication).zPageOctopus.zLogout();
 		}
 
 		zWaitForActive();
@@ -96,7 +96,7 @@ public class PageLogin extends AbsTab {
 
 		// Wait for the app to load
 		sWaitForPageToLoad();
-		((AppOctopusClient)MyApplication).zPageMain.zWaitForActive();
+		((AppOctopusClient)MyApplication).zPageOctopus.zWaitForActive();
 
 		((AppOctopusClient)MyApplication).zSetActiveAcount(account);
 

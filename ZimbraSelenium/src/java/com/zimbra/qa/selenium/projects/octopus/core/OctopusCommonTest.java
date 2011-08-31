@@ -1,5 +1,9 @@
 package com.zimbra.qa.selenium.projects.octopus.core;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.testng.annotations.AfterClass;
@@ -8,57 +12,92 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
+import org.xml.sax.SAXException;
+import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleniumException;
+
 import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
+import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 import com.zimbra.qa.selenium.projects.octopus.ui.AppOctopusClient;
+import com.zimbra.qa.selenium.projects.octopus.ui.DialogError;
+import com.zimbra.qa.selenium.projects.octopus.ui.DialogError.DialogErrorID;
+import com.zimbra.qa.selenium.framework.util.*;
 
 public class OctopusCommonTest {
 	protected static Logger logger = LogManager
 			.getLogger(OctopusCommonTest.class);
-	protected final ZimbraAdminAccount gAdmin = ZimbraAdminAccount
-			.GlobalAdmin();
-	protected AppOctopusClient app = null;
+	private static DefaultSelenium _selenium = null;
+	protected static OsType osType = null;
 	protected AbsTab startingPage = null;
-	protected ZimbraAdminAccount startingAccount = null;
+	protected Map<String, String> startingAccountPreferences = null;
+	protected Map<String, String> startingAccountZimletPreferences = null;
+	public final static String defaultAccountName = ZimbraSeleniumProperties
+			.getUniqueString();
+	protected AppOctopusClient app;
 
 	protected OctopusCommonTest() {
 		logger.info("New " + OctopusCommonTest.class.getCanonicalName());
+
 		app = new AppOctopusClient();
-		startingPage = app.zPageMain;
-		startingAccount = gAdmin;
+
+		startingPage = app.zPageOctopus;
+		startingAccountPreferences = new HashMap<String, String>();
+		startingAccountZimletPreferences = new HashMap<String, String>();
 	}
 
 	@BeforeSuite(groups = { "always" })
-	public void commonTestBeforeSuite() throws HarnessException {
+	public void commonTestBeforeSuite() throws HarnessException, IOException,
+			InterruptedException, SAXException {
+		logger.info("commonTestBeforeSuite: start");
 
-		logger.info("commonTestBeforeSuite");
-
+		// Make sure there is a new default account
+		ZimbraAccount.ResetAccountZWC();
+		osType = OperatingSystem.getOSType();
 		try {
 			ZimbraSeleniumProperties
 					.setAppType(ZimbraSeleniumProperties.AppType.OCTOPUS);
+			_selenium = ClientSessionFactory.session().selenium();
+			_selenium.start();
+			_selenium.windowMaximize();
+			_selenium.windowFocus();
+			_selenium.allowNativeXpath("true");
+			_selenium.setTimeout("30000");// Use 30 second timeout for opening
+			int maxRetry = 10;
+			int retry = 0;
+			boolean appIsReady = false;
+			while (retry < maxRetry && !appIsReady) {
+				try {
+					logger.info("Retry #" + retry);
+					retry++;
+					_selenium.open(ZimbraSeleniumProperties.getBaseURL());
+					appIsReady = true;
+				} catch (SeleniumException e) {
+					if (retry == maxRetry) {
+						logger.error("Unable to open admin app."
+								+ "  Is a valid cert installed?", e);
+						throw e;
+					} else {
+						logger.info("App is still not ready...", e);
+						SleepUtil.sleep(10000);
+						continue;
+					}
+				}
+			}
+			logger.info("App is ready!");
 
-			// Use 30 second timeout for opening the browser
-			String timeout = ZimbraSeleniumProperties.getStringProperty(
-					"selenium.maxpageload.msec", "30000");
-
-			ClientSessionFactory.session().selenium().start();
-			ClientSessionFactory.session().selenium().windowMaximize();
-			ClientSessionFactory.session().selenium().windowFocus();
-			ClientSessionFactory.session().selenium().allowNativeXpath("true");
-			ClientSessionFactory.session().selenium().setTimeout(timeout);
-			ClientSessionFactory.session().selenium().open(
-					ZimbraSeleniumProperties.getBaseURL());
 		} catch (SeleniumException e) {
-			logger.error(
-					"Unable to open octopus app.  Is a valid cert installed?",
-					e);
-			throw e;
+			throw new HarnessException("Unable to open app", e);
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+			e.printStackTrace();
 		}
-
+		logger.info("commonTestBeforeSuite: finish");
 	}
 
 	/**
@@ -68,15 +107,12 @@ public class OctopusCommonTest {
 	 */
 	@BeforeClass(groups = { "always" })
 	public void commonTestBeforeClass() throws HarnessException {
-		logger.info("commonTestBeforeClass");
-
+		logger.info("commonTestBeforeClass: start");
+		logger.info("commonTestBeforeClass: finish");
 	}
-
+	
 	/**
 	 * Global BeforeMethod
-	 * 
-	 * 1. For all tests, make sure the CommonTest.startingPage is active 2. For
-	 * all tests, make sure the logged in user is
 	 * 
 	 * @throws HarnessException
 	 */
@@ -84,24 +120,53 @@ public class OctopusCommonTest {
 	public void commonTestBeforeMethod() throws HarnessException {
 		logger.info("commonTestBeforeMethod: start");
 
-		// If a startinAccount is defined, then make sure we are authenticated
-		// as that user
-		if (startingAccount != null) {
-			logger.debug("commonTestBeforeMethod: startingAccount is defined");
+		// If test account preferences are defined, then make sure the test
+		// account
+		// uses those preferences
+		//
+		if ((startingAccountPreferences != null)
+				&& (!startingAccountPreferences.isEmpty())) {
+			logger
+					.debug("commonTestBeforeMethod: startingAccountPreferences are defined");
 
-			if (!startingAccount.equals(app.zGetActiveAccount())) {
-
-				if (app.zPageMain.zIsActive())
-					app.zPageMain.zLogout();
-				app.zPageLogin.zLogin(startingAccount);
-
+			StringBuilder settings = new StringBuilder();
+			for (Map.Entry<String, String> entry : startingAccountPreferences
+					.entrySet()) {
+				settings.append(String.format("<a n='%s'>%s</a>", entry
+						.getKey(), entry.getValue()));
 			}
+			ZimbraAdminAccount.GlobalAdmin().soapSend(
+					"<ModifyAccountRequest xmlns='urn:zimbraAdmin'>" + "<id>"
+							+ ZimbraAccount.AccountZWC().ZimbraId + "</id>"
+							+ settings.toString() + "</ModifyAccountRequest>");
+
+			// Set the flag so the account is reset for the next test
+			ZimbraAccount.AccountZWC().accountIsDirty = true;
+		}
+
+		// If AccountZWC is not currently logged in, then login now
+		if (!ZimbraAccount.AccountZWC().equals(app.zGetActiveAccount())) {
+			logger
+					.debug("commonTestBeforeMethod: AccountZWC is not currently logged in");
+
+			if (app.zPageOctopus.zIsActive())
+				app.zPageOctopus.zLogout();
+			app.zPageLogin.zLogin(ZimbraAccount.AccountZWC());
 
 			// Confirm
-			if (!startingAccount.equals(app.zGetActiveAccount())) {
+			if (!ZimbraAccount.AccountZWC().equals(app.zGetActiveAccount())) {
 				throw new HarnessException("Unable to authenticate as "
-						+ startingAccount.EmailAddress);
+						+ ZimbraAccount.AccountZWC().EmailAddress);
 			}
+
+			DialogError dialog = app.zPageOctopus
+					.zGetErrorDialog(DialogErrorID.ZmMsgDialog);
+			if (dialog.zIsActive()) {
+				dialog.zClickButton(Button.B_OK);
+			}
+			//
+			// END REF: https://bugzilla.zimbra.com/show_bug.cgi?id=63711
+
 		}
 
 		// If a startingPage is defined, then make sure we are on that page
@@ -120,13 +185,16 @@ public class OctopusCommonTest {
 			}
 
 		}
-
+		
 		logger.info("commonTestBeforeMethod: finish");
-
 	}
 
 	/**
 	 * Global AfterSuite
+	 * <p>
+	 * <ol>
+	 * <li>Stop the DefaultSelenium client</li>
+	 * </ol>
 	 * 
 	 * @throws HarnessException
 	 */
@@ -137,7 +205,6 @@ public class OctopusCommonTest {
 		ClientSessionFactory.session().selenium().stop();
 
 		logger.info("commonTestAfterSuite: finish");
-
 	}
 
 	/**
@@ -149,6 +216,13 @@ public class OctopusCommonTest {
 	public void commonTestAfterClass() throws HarnessException {
 		logger.info("commonTestAfterClass: start");
 
+		// if account is considered dirty (modified),
+		ZimbraAccount currentAccount = app.zGetActiveAccount();
+		if (currentAccount != null && currentAccount.accountIsDirty
+				&& currentAccount == ZimbraAccount.AccountZWC()) {
+			// Reset the account
+			ZimbraAccount.ResetAccountZWC();
+		}
 		logger.info("commonTestAfterClass: finish");
 	}
 
@@ -160,8 +234,6 @@ public class OctopusCommonTest {
 	@AfterMethod(groups = { "always" })
 	public void commonTestAfterMethod() throws HarnessException {
 		logger.info("commonTestAfterMethod: start");
-
 		logger.info("commonTestAfterMethod: finish");
 	}
-
 }

@@ -3,24 +3,28 @@
  */
 package com.zimbra.qa.selenium.projects.octopus.ui;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.httpclient.HttpStatus;
+
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError;
 import com.zimbra.qa.selenium.projects.octopus.ui.DialogError.DialogErrorID;
 
-public class PageMain extends AbsTab {
+public class PageOctopus extends AbsTab {
 
 	public static class Locators {
-
-		public static final String zLogoffButton = "css=td[id=skin_container_logoff] a";
-		public static final String zAppbarBriefcase = "css=td[id='zb__App__Briefcase_left_icon']";
+		public static final String zSignOutButton = "css=div.header-links>a.(headerLink signOutLink):contains(sign out)";
 		public static final String zTabMyFiles = "css=div.octopus-tab-label:contains(My Files)";
 	}
 
-	public PageMain(AbsApplication application) {
+	public PageOctopus(AbsApplication application) {
 		super(application);
 
-		logger.info("new " + PageMain.class.getCanonicalName());
+		logger.info("new " + PageOctopus.class.getCanonicalName());
 
 	}
 
@@ -36,7 +40,7 @@ public class PageMain extends AbsTab {
 	public boolean zIsActive() throws HarnessException {
 		// Look for the My Files tab
 		boolean present = sIsElementPresent(Locators.zTabMyFiles);
-		sIsElementPresent("css=div.octopus-tab-label:contains(My Files)");
+		sIsElementPresent(Locators.zTabMyFiles);
 
 		if (!present) {
 			logger.debug("isActive() present = " + present);
@@ -59,8 +63,7 @@ public class PageMain extends AbsTab {
 			return;
 		}
 
-		// 1. Logout
-		// 2. Login as the default account
+		// Login as the default account
 		if (!((AppOctopusClient) MyApplication).zPageLogin.zIsActive()) {
 			((AppOctopusClient) MyApplication).zPageLogin.zNavigateTo();
 		}
@@ -76,19 +79,31 @@ public class PageMain extends AbsTab {
 	 * @throws HarnessException
 	 */
 	public void zLogout() throws HarnessException {
-		logger.debug("logout()");
+		logger.debug("PageOctopus logout()");
 
 		tracer.trace("Logout of the " + MyApplication.myApplicationName());
 
 		zNavigateTo();
 
-		if (!sIsElementPresent(Locators.zLogoffButton)) {
-			throw new HarnessException("The logoff button is not present "
-					+ Locators.zLogoffButton);
+		// logout
+		String url = this.getLocation();
+
+		// Open url through RestUtil
+		Map<String, String> map = new HashMap<String, String>();
+
+		if (url.contains("?") && !url.endsWith("?")) {
+			String query = url.split("\\?")[1];
+
+			for (String p : query.split("&")) {
+				if (p.contains("=")) {
+					map.put(p.split("=")[0], p.split("=")[1].substring(0, 1));
+				}
+			}
 		}
 
-		// Click on logout
-		sClick(Locators.zLogoffButton);
+		map.put("loginOp", "logout");
+
+		this.openUrl("", map);
 
 		sWaitForPageToLoad();
 		((AppOctopusClient) MyApplication).zPageLogin.zWaitForActive();
@@ -97,14 +112,55 @@ public class PageMain extends AbsTab {
 
 	}
 
+	public String getLocation() {
+		return ClientSessionFactory.session().selenium().getLocation();
+	}
+
+	public String openUrl(String url) throws HarnessException {
+
+		this.sOpen(url);
+
+		return url;
+	}
+
+	public String openUrl(String path, Map<String, String> params)
+			throws HarnessException {
+		ZimbraAccount account = ((AppOctopusClient) MyApplication)
+				.zGetActiveAccount();
+		if (null == account)
+			account = ZimbraAccount.AccountZWC();
+		
+		RestUtil util = new RestUtil();
+
+		util.setAuthentication(account);
+
+		if (null != path && !path.isEmpty())
+			util.setPath("/" + path + "/");
+		else
+			util.setPath("/");
+
+		if (null != params && !params.isEmpty()) {
+			for (Map.Entry<String, String> query : params.entrySet()) {
+				util.setQueryParameter(query.getKey(), query.getValue());
+			}
+		}
+
+		if (util.doGet() != HttpStatus.SC_OK)
+			throw new HarnessException("Unable to open " + util.getLastURI());
+
+		String url = util.getLastURI().toString();
+
+		if (url.endsWith("?"))
+			url = url.substring(0, url.length() - 1);
+
+		this.sOpen(url);
+
+		return url;
+	}
+
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
-
-		// Q. Should the tabs or help or logout be processed here?
-		// A. I don't think those are considered "toolbars", so don't handle
-		// here for now (Matt)
 		throw new HarnessException("Main page does not have a Toolbar");
-
 	}
 
 	@Override
@@ -130,28 +186,4 @@ public class PageMain extends AbsTab {
 			String item) throws HarnessException {
 		throw new HarnessException("Main page does not have lists");
 	}
-
-	/**
-	 * Close any extra compose tabs
-	 */
-	public void zCloseComposeTabs() throws HarnessException {
-
-		String locator = "css=td[id^='ztb_appChooser_item_'] div[id^='zb__App__tab_COMPOSE']";
-		if (sIsElementPresent(locator)) {
-			logger.debug("Found compose tabs");
-
-			int count = this.sGetCssCount(locator);
-			for (int i = 1; i <= count; i++) {
-				final String composeLocator = locator + ":nth-child(" + i
-						+ ") td[id$='_left_icon']";
-				if (!sIsElementPresent(composeLocator))
-					throw new HarnessException(
-							"Unable to find compose tab close icon "
-									+ composeLocator);
-				this.zClick(composeLocator);
-				this.zWaitForBusyOverlay();
-			}
-		}
-	}
-
 }
