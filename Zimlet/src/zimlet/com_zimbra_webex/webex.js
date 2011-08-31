@@ -598,13 +598,13 @@ WebExZimlet.prototype._getDayInWeekStr = function(repeatWeeklyDays, appt) {
 };
 
 /**
- * Create create or modify WebEx meeting request.
+ * Gets createMeetingAttendeeRequest XML
  *
  * @param {hash} params	a hash of parameters
  * @params {string} params.emails meeting invitees
  * @params {string} params.meetingkey meeting key (aka sessionkey)
  */
-WebExZimlet.prototype._getRegisterAttendeesRequest = function(params) {
+WebExZimlet.prototype._getCreateAttendeesRequest = function(params) {
 	var emails = params.emails;
 	var sessionKey = params.meetingKey;
 	var emls = [];
@@ -617,17 +617,23 @@ WebExZimlet.prototype._getRegisterAttendeesRequest = function(params) {
 			continue;
 		}
 		var fn = a.getFullName ? a.getFullName() : (a.getDispName ? a.getDispName() : "");
-		emls[j++] = ["<attendees><person><email>",e, "</email>"].join("");
+		if(i != 0) {
+			emls[j++] = "<attendees>";
+		}
+		emls[j++] = ["<person><email>",e, "</email>"].join("");
 
 		if (fn != "" && fn != undefined) {
 			emls[j++] = ["<name>", fn, "</name>"].join("");
 		}
 		emls[j++] = "</person>";
+		emls[j++] = "<joinStatus>INVITE</joinStatus>";
 		emls[j++] = ["<sessionKey>",sessionKey,"</sessionKey>"].join("");
-		emls[j++] = "</attendees>";
+		if(i != 0) {
+			emls[j++] = "</attendees>";
+		}
 	}
 	var requestBody = [
-		"<bodyContent xsi:type=\"java:com.webex.service.binding.attendee.RegisterMeetingAttendee\">",
+		"<bodyContent xsi:type=\"java:com.webex.service.binding.attendee.CreateMeetingAttendee\">",
 		 emls.join(""),
 		"</bodyContent>"].join("");
 
@@ -771,7 +777,7 @@ WebExZimlet.prototype._createOrUpdateMeetingResponseHdlr = function(params, resu
 	var emails = params.emails;
 	if(emails && (emails instanceof Array) && emails.length > 0) {
 		//register attendees.
-		var request = this._getRegisterAttendeesRequest({emails: params.emails, meetingKey: meetingKey})
+		var request = this._getCreateAttendeesRequest({emails: params.emails, meetingKey: meetingKey})
 		var result = AjxRpc.invoke(request, this.postUri(), {"Content-Type":"text/xml"}, null, false, false);
 		var objResult = this.xmlToObject(result);
 		if (!this._validateWebExResult(objResult, this.getMessage("WebExZimlet_couldNotRegisterAttendees"))) {
