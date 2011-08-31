@@ -12,6 +12,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.TreeContacts;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.PageBriefcase;
 import com.zimbra.qa.selenium.projects.ajax.ui.briefcase.TreeBriefcase;
 import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar;
+import com.zimbra.qa.selenium.projects.ajax.ui.calendar.TreeCalendar;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.*;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.PagePreferences;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences;
@@ -68,6 +69,7 @@ public class AppAjaxClient extends AbsApplication {
 	// Trees
 	public TreeMail						zTreeMail = null;
 	public TreeContacts					zTreeContacts = null;
+	public TreeCalendar					zTreeCalendar = null;
 	public TreeTasks					zTreeTasks = null;
 	public TreeBriefcase		        zTreeBriefcase = null;
 	public TreePreferences				zTreePreferences = null;
@@ -114,6 +116,9 @@ public class AppAjaxClient extends AbsApplication {
 		// Calendar page
 		zPageCalendar = new PageCalendar(this);
 		pages.put(zPageCalendar.myPageName(), zPageCalendar);
+		
+		zTreeCalendar = new TreeCalendar(this);
+		trees.put(zTreeCalendar.myPageName(), zTreeCalendar);
 		
 		// PageBriefcase page
 		zPageBriefcase = new PageBriefcase(this);

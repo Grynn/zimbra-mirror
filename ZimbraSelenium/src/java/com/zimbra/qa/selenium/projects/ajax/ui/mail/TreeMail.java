@@ -521,7 +521,7 @@ public class TreeMail extends AbsTree {
 
 	}
 
-	public AbsPage zTreeItem(Action action, String locator) throws HarnessException {
+	protected AbsPage zTreeItem(Action action, String locator) throws HarnessException {
 		AbsPage page = null;
 
 

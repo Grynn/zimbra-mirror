@@ -67,6 +67,9 @@ public class Shortcut {
 	// Tag shortcuts
 	public static final Shortcut S_NEWTAG = new Shortcut("S_NEWTAG", "nt");
 	
+	// Calendar shortcuts
+	public static final Shortcut S_NEWCALENDAR = new Shortcut("S_NEWCALENDAR", "nl");
+
 	// Briefcase shortcuts
 	public static final Shortcut S_NEWDOCUMENT = new Shortcut("S_NEWDOCUMENT", "nd");
 	public static final Shortcut S_DELETE = new Shortcut("S_DELETE", "<Delete>");
@@ -74,6 +77,7 @@ public class Shortcut {
 
 	//Task shortcut
 	public static final Shortcut S_NEWTASK = new Shortcut("S_NEWTASK", "nk");
+
 
 	// Shortcut properties
 	private final String ID;

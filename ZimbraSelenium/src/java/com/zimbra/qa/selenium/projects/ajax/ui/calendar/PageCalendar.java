@@ -13,6 +13,7 @@ import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.*;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogRedirect;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.TreeMail;
@@ -737,6 +738,10 @@ public class PageCalendar extends AbsTab {
 					MyApplication, 
 					((AppAjaxClient) MyApplication).zPageCalendar);
 			
+		} else if ( shortcut == Shortcut.S_NEWCALENDAR ) {
+			
+			page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageCalendar);
+			
 		}
 		
 		zKeyboard.zTypeCharacters(shortcut.getKeys());
@@ -768,35 +773,70 @@ public class PageCalendar extends AbsTab {
 		String optionLocator = null; // If set, this will be clicked
 		AbsPage page = null; // If set, this page will be returned
 
-		if (pulldown == Button.B_LISTVIEW) {
+		if ( pulldown == Button.B_NEW ) {
+			
+			if ( option == Button.O_NEW_CALENDAR || option == Button.O_NEW_FOLDER) {
+				
+				pulldownLocator = "css=div[id='zb__CLWW__NEW_MENU'] td[id$='_dropdown'] div[class='ImgSelectPullDownArrow']";
+				optionLocator = "css=div[id='zb__CLWW__NEW_MENU_NEW_CALENDAR'] td[id$='_title']";
+				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageCalendar);
+
+			} else {
+				
+				throw new HarnessException("No logic defined for pulldown " + pulldown + " and option " + option);
+				
+			}
+			
+		} else if (pulldown == Button.B_LISTVIEW) {
+			
 			pulldownLocator = "id=zb__CLD__VIEW_MENU_left_icon";
 
 			if (option == Button.O_LISTVIEW_DAY) {
+
+				optionLocator = "id=POPUP_DAY_VIEW";
 				page = new ApptDayView(this.MyApplication);
+				
 			} else if (option == Button.O_LISTVIEW_WEEK) {
+
+				optionLocator = "id=POPUP_WEEK_VIEW";
 				page = new ApptWeekView(this.MyApplication);
+				
 			} else if (option == Button.O_LISTVIEW_WORKWEEK) {
+
+				optionLocator = "id=POPUP_WORK_WEEK_VIEW";
 				page = new ApptWorkWeekView(this.MyApplication);
+				
 			} else if (option == Button.O_LISTVIEW_SCHEDULE) {
+				
+				optionLocator = "id=POPUP_SCHEDULE_VIEW";
 				page = new ApptScheduleView(this.MyApplication);
+				
 			} else if (option == Button.O_LISTVIEW_LIST) {
+				
+				optionLocator = "id=POPUP_CAL_LIST_VIEW";
 				page = new ApptListView(this.MyApplication);
+				
 			} else if (option == Button.O_LISTVIEW_MONTH) {
+
+				optionLocator = "id=POPUP_MONTH_VIEW";
 				page = new ApptMonthView(this.MyApplication);
+				
 			}
+			
+		} else {
+			
+			throw new HarnessException("No logic defined for pulldown " + pulldown + " and option " + option);
+
 		}
 
 		if (pulldownLocator != null) {
 
 			// Make sure the locator exists
 			if (!sIsElementPresent(pulldownLocator)) {
-				throw new HarnessException("Button " + pulldown + " option "
-						+ option + " pulldownLocator " + pulldownLocator
-						+ " not present!");
+				throw new HarnessException("Button " + pulldown + " option " + option + " pulldownLocator " + pulldownLocator + " not present!");
 			}
 
-			if (ClientSessionFactory.session().currentBrowserName().contains(
-					"IE")) {
+			if (ClientSessionFactory.session().currentBrowserName().contains("IE")) {
 				// IE
 				sClickAt(pulldownLocator, "0,0");
 			} else {
@@ -806,22 +846,8 @@ public class PageCalendar extends AbsTab {
 
 			zWaitForBusyOverlay();
 
-			if (option != null) {
+			if (optionLocator != null) {
 
-				// Make sure the locator exists
-				if (option == Button.O_LISTVIEW_DAY) {
-					optionLocator = "id=POPUP_DAY_VIEW";
-				} else if (option == Button.O_LISTVIEW_WEEK) {
-					optionLocator = "id=POPUP_WEEK_VIEW";
-				} else if (option == Button.O_LISTVIEW_WORKWEEK) {
-					optionLocator = "id=POPUP_WORK_WEEK_VIEW";
-				} else if (option == Button.O_LISTVIEW_MONTH) {
-					optionLocator = "id=POPUP_MONTH_VIEW";
-				} else if (option == Button.O_LISTVIEW_LIST) {
-					optionLocator = "id=POPUP_CAL_LIST_VIEW";
-				} else if (option == Button.O_LISTVIEW_SCHEDULE) {
-					optionLocator = "id=POPUP_SCHEDULE_VIEW";
-				}	
 				zClick(optionLocator);
 				zWaitForBusyOverlay();
 
