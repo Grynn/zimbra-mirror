@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Web Client
- * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 Zimbra, Inc.
  * 
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -182,10 +182,9 @@ function() {
 ZmComposeController.prototype.doAction =
 function(params) {
 
+	AjxDebug.println(AjxDebug.REPLY, "-------------- " + params.action + " ----------------------------------");
 	var ac = window.parentAppCtxt || window.appCtxt;
-	if (params.action == ZmOperation.REPLY) {
-		AjxDebug.println(AjxDebug.REPLY, "------------------------------------------------");
-		AjxDebug.println(AjxDebug.REPLY, "ZmComposeController::doAction - REPLY");
+	if (params.action == ZmOperation.REPLY || params.action == ZmOperation.REPLY_ALL) {
 		var str = ["Browser: " + AjxEnv.browser,
 				   "Offline: " + Boolean(ac.isOffline),
 				   "Multi accts: " + ac.multiAccounts,
@@ -216,10 +215,6 @@ function(params) {
 	} else {
 		this._setView(params);
 		this._listController = params.listController;
-	}
-
-	if (params.action == ZmOperation.REPLY) {
-		AjxDebug.println(AjxDebug.REPLY, "+++++++++++++++++++++++++++++++++++++++++++++++++");
 	}
 };
 
@@ -896,7 +891,6 @@ function(params) {
 
 	this._composeMode = params.composeMode || this._getComposeMode(msg, identity);
 	AjxDebug.println(AjxDebug.REPLY, "ZmComposeController::_setView - Compose mode: " + this._composeMode);
-	this._curIncOptions = null;
 
 	if (this._needComposeViewRefresh) {
 		this._composeView.dispose();
@@ -909,7 +903,7 @@ function(params) {
 		this.initComposeView(null, this._composeMode);
 		cv = this._composeView;
 	} else {
-		cv.setComposeMode(this._composeMode);
+		cv.setComposeMode(this._composeMode, false, true);
 	}
 
 	if (identity) {
@@ -924,6 +918,10 @@ function(params) {
 
 	this._setAddSignatureVisibility();
 
+	this._setOptionsMenu();
+	this._curIncOptions = null;
+	cv.set(params);
+	appCtxt.notifyZimlets("initializeToolbar", [this._app, this._toolbar, this, this.viewId], {waitUntilLoaded:true});
 
     if (params.readReceipt) {
         var menu = this._optionsMenu[this._action];
@@ -1472,7 +1470,7 @@ function(ev) {
 // Cancel button was pressed
 ZmComposeController.prototype._cancelListener =
 function(ev) {
-	AjxDebug.println(AjxDebug.REPLY, "Reset compose view: _cancelListener");
+	AjxDebug.println(AjxDebug.REPLY, "ZmComposeController: _cancelListener");
 	this._cancelCompose();
 };
 

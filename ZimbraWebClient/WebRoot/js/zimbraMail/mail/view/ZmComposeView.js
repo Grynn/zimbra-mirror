@@ -877,7 +877,7 @@ function(msg, docIds) {
 
 // Sets the mode ZmHtmlEditor should be in.
 ZmComposeView.prototype.setComposeMode =
-function(composeMode, switchPreface) {
+function(composeMode, switchPreface, dontReplaceContent) {
 
 	if (composeMode == this._composeMode) { return; }
 	
@@ -928,10 +928,11 @@ function(composeMode, switchPreface) {
 			// Do the mode switch
 			this._htmlEditor.setMode(composeMode, true);
 			
-			if (this._action != ZmOperation.DRAFT) {
+			if (this._action != ZmOperation.DRAFT && !dontReplaceContent) {
 				baseContent = AjxStringUtil.convertToHtml(baseContent, true);
 				baseContent = baseContent.replace(/\n/g,"<br/>");
-				// Re-set the whole body, with optional replied/forwarded msg and signature automatically added. baseContent is the text that the user may have written before switching
+				// Re-set the whole body, with optional replied/forwarded msg and signature automatically added.
+				// baseContent is the text that the user may have written before switching
 				this._setBody(this._action, this._msg || null, baseContent || "\n", null, true);
 			}
 		} else {
@@ -1285,7 +1286,7 @@ function(bEnableInputs) {
 	this.cleanupAttachments(true);
 
 	this._resetBodySize();
-
+	this._controller._curIncOptions = null;
 	this._msgAttId = null;
 	this._clearFormValue();
 
@@ -2034,7 +2035,7 @@ function(action, msg, extraBodyText) {
 						  prefix:	ac.get(ZmSetting.REPLY_USE_PREFIX),
 						  headers:	ac.get(ZmSetting.REPLY_INCLUDE_HEADERS)};
 		} else if (isDraft) {
-			incOptions = {what:			ZmSetting.INC_BODY};
+			incOptions = {what:		ZmSetting.INC_BODY};
 		} else if (action == ZmOperation.FORWARD_INLINE) {
 			incOptions = {what:		ZmSetting.INC_BODY,
 						  prefix:	ac.get(ZmSetting.FORWARD_USE_PREFIX),
