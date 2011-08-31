@@ -66,10 +66,31 @@ class ServerConfig(config.Config):
 				elif (v == "mta"):
 					self.serviceconfig["sasl"] = "zimbraServiceEnabled"
 
+		if self["zimbraIPMode"] is not None:
+			self["zimbraIPv4BindAddress"] = "127.0.0.1"
+			v = self["zimbraIPMode"]
+			v = str(v)
+			v = v.lower()
+			if v == "ipv4":
+				self["zimbraLocalBindAddress"] = "127.0.0.1"
+				self["zimbraPostconfProtocol"] = "ipv4"
+				self["zimbraAmavisListenSockets"] = "'10024','10026'"
+			if v == "ipv6":
+				self["zimbraLocalBindAddress"] = "::1"
+				self["zimbraPostconfProtocol"] = "ipv6"
+				self["zimbraAmavisListenSockets"] = "'[::1]:10024','[::1]:10026'"
+			if v == "both":
+				self["zimbraLocalBindAddress"] = "::1"
+				self["zimbraPostconfProtocol"] = "all"
+				self["zimbraAmavisListenSockets"] = "'10024','10026','[::1]:10024','[::1]:10026'"
+
 		milter = None
 		if (self["zimbraMilterServerEnabled"] == "TRUE"):
 			if self["zimbraMilterBindAddress"] is None:
-				self["zimbraMilterBindAddress"] = "127.0.0.1"
+				if self["zimbraIPMode"] == "ipv6":
+					self["zimbraMilterBindAddress"] = "::1"
+				else:
+					self["zimbraMilterBindAddress"] = "127.0.0.1"
 			milter = "inet:%s:%s" % (self["zimbraMilterBindAddress"],self["zimbraMilterBindPort"])
 
 		if self["zimbraMtaSmtpdMilters"] is not None and milter is not None:

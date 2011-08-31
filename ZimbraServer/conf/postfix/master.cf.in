@@ -85,7 +85,7 @@ smtp-amavis unix -      -       n       -       10  smtp
 	-o smtp_send_xforward_command=yes
 	-o disable_dns_lookups=yes
 	-o max_use=20
-127.0.0.1:10025 inet n  -       n       -       -  smtpd
+%%zimbraLocalBindAddress%%:10025 inet n  -       n       -       -  smtpd
 	-o content_filter=
 	-o local_recipient_maps=
 	-o virtual_mailbox_maps=
@@ -99,7 +99,7 @@ smtp-amavis unix -      -       n       -       10  smtp
 	-o smtpd_sender_restrictions=
 	-o smtpd_recipient_restrictions=permit_mynetworks,reject
 	-o mynetworks_style=host
-	-o mynetworks=127.0.0.0/8
+	-o mynetworks=127.0.0.0/8,[::1]/128
 	-o strict_rfc821_envelopes=yes
 	-o smtpd_error_sleep_time=0
 	-o smtpd_soft_error_limit=1001

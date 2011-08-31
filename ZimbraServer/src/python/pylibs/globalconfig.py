@@ -54,5 +54,23 @@ class GlobalConfig(config.Config):
 			self["zimbraMtaRestriction"] = q
 			self["zimbraMtaRestrictionRBLs"] = ' '.join(p)
 
+		if self["zimbraIPMode"] is not None:
+			self["zimbraIPv4BindAddress"] = "127.0.0.1"
+			v = self["zimbraIPMode"]
+			v = str(v)
+			v = v.lower()
+			if v == "ipv4":
+				self["zimbraLocalBindAddress"] = "127.0.0.1"
+				self["zimbraPostconfProtocol"] = "ipv4"
+				self["zimbraAmavisListenSockets"] = "'10024','10026'"
+			if v == "ipv6":
+				self["zimbraLocalBindAddress"] = "::1"
+				self["zimbraPostconfProtocol"] = "ipv6"
+				self["zimbraAmavisListenSockets"] = "'[::1]:10024','[::1]:10026'"
+			if v == "both":
+				self["zimbraLocalBindAddress"] = "::1"
+				self["zimbraPostconfProtocol"] = "all"
+				self["zimbraAmavisListenSockets"] = "'10024','10026','[::1]:10024','[::1]:10026'"
+
 		dt = time.clock()-t1
 		Log.logMsg(5,"globalconfig loaded in %.2f seconds" % dt)
