@@ -20,6 +20,7 @@ import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogMove;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogShareFind;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
@@ -104,6 +105,17 @@ public class TreeCalendar extends AbsTree {
 			// See http://bugzilla.zimbra.com/show_bug.cgi?id=64023 ... POPUP_ needs to be updated
 			optionLocator = "css=div[id^='POPUP_'] tr[id='POPUP_EDIT_PROPS'] td[id$='_title']";
 			page = new DialogEditFolder(MyApplication,((AppAjaxClient) MyApplication).zPageCalendar);
+
+			this.zRightClick(actionLocator);
+
+			// FALL THROUGH
+
+		} else if ( (action == Action.A_RIGHTCLICK) && (option == Button.B_MOVE) ) {
+			
+			// Use default actionLocator
+			// See http://bugzilla.zimbra.com/show_bug.cgi?id=64023 ... POPUP_ needs to be updated
+			optionLocator = "css=div[id^='POPUP_'] tr[id='POPUP_MOVE'] td[id$='_title']";
+			page = new DialogMove(MyApplication,((AppAjaxClient) MyApplication).zPageCalendar);
 
 			this.zRightClick(actionLocator);
 
