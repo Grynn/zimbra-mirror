@@ -2,6 +2,7 @@
 #include "Exchange.h"
 #include "MAPIAccessAPI.h"
 
+
 // Initialize with Exchange Sever hostname, Outlook Admin profile name, Exchange mailbox name to be migrated
 MAPIAccessAPI::MAPIAccessAPI(wstring strExchangeHostName, wstring strAdminProfileName,
     wstring strUserName): m_zmmapisession(NULL), m_userStore(NULL), m_defaultStore(NULL),
@@ -153,8 +154,10 @@ HRESULT MAPIAccessAPI::Iterate_folders(Zimbra::MAPI::MAPIFolder &folder, vector<
     return true;
 }
 
-HRESULT MAPIAccessAPI::IterateVectorList(vector<Folder_Data> &vFolderList)
+HRESULT MAPIAccessAPI::IterateVectorList(vector<Folder_Data> &vFolderList,CSingleton * Log)
 {
+	
+	Log->doSomething(DBG ,"In MAPIACCESSAPI iterate folders");
 	vector<Folder_Data>::iterator it;
 	for(it=vFolderList.begin();it!=vFolderList.end();it++)
 	{

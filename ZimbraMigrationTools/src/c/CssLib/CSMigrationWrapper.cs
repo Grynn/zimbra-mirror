@@ -139,9 +139,15 @@ namespace CssLib
             M1.set_UDTItem( ref item);
             UDTItem i1 = M1.get_UDTItem();*/
 
-            MapiWrapper M1 = new MapiWrapper();
+           /* MapiWrapper M1 = new MapiWrapper();
             object[] objectArray;
-            objectArray = M1.GetFolderObjects();
+            objectArray = M1.GetFolderObjects();*/
+
+            UserObject O1 = new UserObject();
+            O1.InitializeUser("ksomasil", "MAPI");
+            object[] objectArray;
+            objectArray = O1.GetFolderObjects();
+
 
             folderObject[] Folders = Array.ConvertAll(objectArray, folder => (folderObject)folder);
 
@@ -168,6 +174,10 @@ namespace CssLib
             objectArray = M1.GetFolderObjects();
 
             folderObject[] Folders = Array.ConvertAll(objectArray, folder => (folderObject)folder);
+
+            string name = Folders[0].Name;
+            string pathss = Folders[0].ParentPath;
+            long id = Folders[0].Id;
 
 
             ItemObject SI1 = new ItemObject();
@@ -201,9 +211,9 @@ namespace CssLib
 
         public void  StartMigration(MigrationAccount Acct)
         {
-
-            //GetListofMapiFolders();
-            GetListofItems();
+            
+            GetListofMapiFolders();
+           // GetListofItems();
             //Acct.Accountname = "testing";
             Acct.TotalNoContacts = 100;
             Acct.TotalNoMails = 1000;

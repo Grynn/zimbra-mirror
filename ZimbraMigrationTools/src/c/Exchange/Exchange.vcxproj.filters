@@ -63,6 +63,9 @@
     <ClCompile Include="ContactObj.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UserObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MapiMigration.h">
@@ -116,6 +119,9 @@
     <ClInclude Include="ContactObj.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UserObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="Exchange.idl">
@@ -136,6 +142,9 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="ItemObject.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="UserObject.rgs">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

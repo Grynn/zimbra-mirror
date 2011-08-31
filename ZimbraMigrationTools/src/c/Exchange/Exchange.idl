@@ -129,6 +129,18 @@ interface IItemObject : IDispatch{
 	[id(5)] HRESULT GetDataForItem([out, retval] VARIANT* pVal);
 };
 [
+	object,
+	uuid(9DAB1C90-D4BD-4696-898C-DAB5B069BA93),
+	dual,
+	nonextensible,
+	pointer_default(unique)
+]
+interface IUserObject : IDispatch{
+	[id(1)] HRESULT InitializeUser([in] BSTR UserID,[in] BSTR MailType);
+	[id(2), helpstring("method to retreive folder objects")]
+			HRESULT  GetFolderObjects([out, retval] VARIANT* vObjects);
+};
+[
     uuid(33449EAA-8056-4D28-8D42-552B7C6C8954),
     version(1.0),
 ]
@@ -154,6 +166,13 @@ library Exchange {
 	coclass ItemObject
 	{
 		[default] interface IItemObject;
+	};
+	[
+		uuid(A798CB91-5A5A-4B37-BFA7-11F08CB4770F)		
+	]
+	coclass UserObject
+	{
+		[default] interface IUserObject;
 	};
 };
 //import "shobjidl.idl";

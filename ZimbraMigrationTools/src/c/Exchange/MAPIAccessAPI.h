@@ -1,4 +1,5 @@
 #pragma once
+#include "logger.h"
 
 namespace Zimbra {
 namespace MAPI {
@@ -36,7 +37,7 @@ public:
     ~MAPIAccessAPI();
     HRESULT Initialize();
     HRESULT GetRootFolderHierarchy(vector<Folder_Data> &vfolderlist);
-	HRESULT IterateVectorList(vector<Folder_Data> &vFolderList);
+	HRESULT IterateVectorList(vector<Folder_Data> &vFolderList,CSingleton * Log);
     
 	HRESULT GetRootFolderHierarchy_tr(tree<Folder_Data> &tr);
 	HRESULT IterateTree_tr(tree<Folder_Data> &tr);
