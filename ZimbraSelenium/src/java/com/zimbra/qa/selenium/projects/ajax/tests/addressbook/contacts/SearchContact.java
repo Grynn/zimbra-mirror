@@ -81,15 +81,18 @@ public class SearchContact extends AjaxCommonTest {
 		// Create a contact via soap 
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
  
+		// search for firstname
 		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_CONTACTS);	 		
 		app.zPageSearch.zAddSearchQuery(contactItem.firstName);
 		app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
 		ZAssert.assertTrue(app.zPageAddressbook.zIsContactDisplayed(contactItem), "Verify contact " + contactItem.fileAs + " displayed");
 				
+		// search for lastname
 		app.zPageSearch.zAddSearchQuery(contactItem.lastName);
 		app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
 		ZAssert.assertTrue(app.zPageAddressbook.zIsContactDisplayed(contactItem), "Verify contact " + contactItem.fileAs + " displayed");
 	
+		// search for email
 		app.zPageSearch.zAddSearchQuery(contactItem.email.substring(0,contactItem.email.indexOf('@')));
 		app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
 		ZAssert.assertTrue(app.zPageAddressbook.zIsContactDisplayed(contactItem), "Verify contact " + contactItem.fileAs + " displayed");
@@ -109,7 +112,7 @@ public class SearchContact extends AjaxCommonTest {
 	}
 
 	@Test (	description = "select GAL, search a contact in GAL ",
-			groups = { "functionaly" })
+			groups = { "functional" })
 	public void searchExistGAL() throws HarnessException {
 		// search for display name
 		String name=ZimbraAccount.AccountA().DisplayName;
