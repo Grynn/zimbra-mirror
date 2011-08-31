@@ -78,7 +78,6 @@ public class ViewMail extends AjaxCommonTest {
 		final String subject = "subject13016959916873";
 		final String from = "from13016959916873@example.com";
 		final String replyto = "replyto13016959916873@example.com";
-		final String mimeFolder = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/email00";
 
 		if ( !injected ) {
 			LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFolder));
@@ -100,6 +99,40 @@ public class ViewMail extends AjaxCommonTest {
 
 		// Verify the To, From, Subject, Body
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.ReplyTo), replyto, "Verify the Reply-To matches the 'Reply-To:' header");
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.From), from, "Verify the From matches the 'From:' header");
+		
+
+		
+	}
+
+	@Bugs(	ids = "61575")
+	@Test(	description = "Receive a mail with Resent-From: specified",
+			groups = { "functional" })
+	public void ViewMail_03() throws HarnessException {
+		
+		final String subject = "subject13147509564213";
+		final String from = "from13011239916873@example.com";
+		final String resentfrom = "resentfrom13016943216873@example.com";
+
+		if ( !injected ) {
+			LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFolder));
+			injected = true;
+		}
+
+
+		
+		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), subject);
+		ZAssert.assertNotNull(mail, "Verify message is received");
+		ZAssert.assertEquals(resentfrom, mail.dRedirectedFromRecipient.dEmailAddress, "Verify the Resent-From matches");
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Select the message so that it shows in the reading pane
+		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+
+		// Verify the To, From, Subject, Body
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.ResentFrom), resentfrom, "Verify the Resent-From matches the 'Resent-From:' header");
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.From), from, "Verify the From matches the 'From:' header");
 		
 

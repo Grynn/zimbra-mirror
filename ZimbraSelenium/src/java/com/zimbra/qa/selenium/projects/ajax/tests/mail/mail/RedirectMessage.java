@@ -35,6 +35,7 @@ public class RedirectMessage extends AjaxCommonTest {
 		
 	}
 	
+	@Bugs(ids = "14110")
 	@Test(	description = "Redirect message, using 'Redirect' toolbar button",
 			groups = { "smoke" })
 	public void RedirectMessage_01() throws HarnessException {
@@ -126,6 +127,8 @@ public class RedirectMessage extends AjaxCommonTest {
 
 
 	}
+
+
 
 
 }
