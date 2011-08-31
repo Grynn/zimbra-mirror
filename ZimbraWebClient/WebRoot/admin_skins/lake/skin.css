@@ -490,4 +490,6 @@ body						{	@ChromeBg@	}
 .homeGroupHeader {
     background-color:#FAFAFA;
     height:24px;
+    display: table-cell;
+    vertical-align: middle;
 }

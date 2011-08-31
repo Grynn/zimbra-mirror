@@ -2063,8 +2063,18 @@ Output_XFormItem.prototype.getDisplayValue = function(newValue) {
 
 Output_XFormItem.prototype.updateElement = function (newValue) {
 	var el = this.getElement();
-	if(el)
+	if(el) {
+	    //set the onClick event handler
+	    var clickMethod = this.getClickHandlerHTML();
+	    var htmlWithEvent = null ;
+	    if (clickMethod != null && clickMethod != "") {
+		    htmlWithEvent = "<div " + this.getClickHandlerHTML() +
+		 				">" + newValue + "</div>" ;
+	    }
+
+        newValue = htmlWithEvent || newValue;
 		this.getElement().innerHTML = newValue;
+    }
 }
 
 Output_XFormItem.prototype.initFormItem = function () {
@@ -3088,8 +3098,12 @@ HomeGroup_XFormItem.prototype.initializeItems = function () {
     if (!choices[0].label)
         this.items[1].numCols = 1;
     for (var i = 0; i < choices.length; i ++) {
-        content.push({type:_OUTPUT_, label: choices[i].label,
-                        value: choices[i].value, containerCssStyle:"color:blue"});
+        var currentItem = {type:_OUTPUT_, label: choices[i].label,
+                        value: choices[i].value, containerCssStyle:"color:blue;cursor:pointer"};
+        if (choices[i].onClick) {
+            currentItem.onClick = choices[i].onClick;
+        }
+        content.push(currentItem);
     }
     Group_XFormItem.prototype.initializeItems.call(this);
 }

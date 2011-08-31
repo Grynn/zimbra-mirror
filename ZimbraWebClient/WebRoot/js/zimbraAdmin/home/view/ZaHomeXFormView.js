@@ -61,6 +61,23 @@ function(entry) {
     this._localXForm.setInstance(this._containedObject);
 }
 
+ZaHomeXFormView.onCreateDomain = function(ev) {
+    ZaDomainListController.prototype._newButtonListener.call(ZaApp.getInstance().getCurrentController(), ev);
+}
+
+ZaHomeXFormView.onCreateAccount = function(ev) {
+    ZaAccountListController.prototype._newAccountListener.call(ZaApp.getInstance().getCurrentController(), ev);
+}
+
+ZaHomeXFormView.onSearchZimbraHelp = function(ev) {
+    var url = "http://support.zimbra.com/help/index.php";
+    window.open(url, "_blank");
+}
+
+ZaHomeXFormView.onDownloadGuide = function(ev) {
+    ZaZimbraAdmin.prototype._dwListener.call(ZaZimbraAdmin.getInstance());
+}
+
 ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
     var cases = [];
 
@@ -72,11 +89,12 @@ ZaHomeXFormView.myXFormModifier = function(xFormObject, entry) {
             }]
     };
 
-    var startChoices = [{label: "1", value: "create domain..."},
-                        {label: "2", value: "create new account..."},
+    var startChoices = [{label: "1", value: "create domain...", onClick: ZaHomeXFormView.onCreateDomain },
+                        {label: "2", value: "create new account...", onClick: ZaHomeXFormView.onCreateAccount},
                         {label: "3", value: "..."}];
     var migrationChoices = [{label: "1", value: "Step one"}];
-    var helpChoices = [{value:"Search Zimbra Help"}, {value:"Download Zimbra Administrator Guide"}];
+    var helpChoices = [{value:"Search Zimbra Help", onClick:ZaHomeXFormView.onSearchZimbraHelp},
+                       {value:"Download Zimbra Administrator Guide", onClick:ZaHomeXFormView.onDownloadGuide}];
     var case1 = {type:_ZATABCASE_, numCols: 4,  colSizes:["25%", "25%", "25%", "25%"], caseKey:1,
 //        height:"400px",  align:_LEFT_, valign:_TOP_,
         items:[
