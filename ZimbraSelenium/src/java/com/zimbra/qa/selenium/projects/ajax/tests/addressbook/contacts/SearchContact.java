@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.search;
+package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.contacts;
 
 import java.util.*;
 
@@ -14,11 +14,11 @@ import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.search.PageAllItemTypes;
 
-public class ContactSearch extends AjaxCommonTest {
+public class SearchContact extends AjaxCommonTest {
 	
 	
-	public ContactSearch() {
-		logger.info("New "+ ContactSearch.class.getCanonicalName());
+	public SearchContact() {
+		logger.info("New "+ SearchContact.class.getCanonicalName());
 		
 		// All tests start at the login page
 		super.startingPage = app.zPageAddressbook;
@@ -77,7 +77,7 @@ public class ContactSearch extends AjaxCommonTest {
 
 	@Test(	description = "select contact, search a contact existing in addressbook  ",
 			groups = { "functional" })
-	public void searchExistedContact() throws HarnessException {
+	public void searchExistContact() throws HarnessException {
 		// Create a contact via soap 
 		ContactItem contactItem = app.zPageAddressbook.createUsingSOAPSelectContact(app, Action.A_LEFTCLICK);
  
@@ -109,8 +109,9 @@ public class ContactSearch extends AjaxCommonTest {
 	}
 
 	@Test (	description = "select GAL, search a contact in GAL ",
-			groups = { "functional" })
-	public void searchGAL() throws HarnessException {
+			groups = { "functionaly" })
+	public void searchExistGAL() throws HarnessException {
+		// search for display name
 		String name=ZimbraAccount.AccountA().DisplayName;
 		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_GAL);			
 		app.zPageSearch.zAddSearchQuery(name);
@@ -128,6 +129,38 @@ public class ContactSearch extends AjaxCommonTest {
 			
         ZAssert.assertTrue(isFound, "Verify contact " + name + " displayed");
 
+        // search for email address        
+		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_GAL);			
+		app.zPageSearch.zAddSearchQuery(ZimbraAccount.AccountA().EmailAddress);
+		app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
+				
+		contacts = app.zPageAddressbook.zListGetContacts(ContactItem.GAL_IMAGE_CLASS); 
+ 	           
+        isFound=false;
+	      for (ContactItem ci : contacts) {
+		    if (ci.fileAs.equals(name)) {
+		    	isFound = true;
+		    	break;
+	  	    }
+	      }
+			
+        ZAssert.assertTrue(isFound, "Verify contact " + name + " displayed");
 
 	}
+
+	@Test (	description = "select GAL, search a non existed contact",
+			groups = { "functional" })
+	public void searchNonExistGAL() throws HarnessException {
+		String name=ZimbraSeleniumProperties.getUniqueString();
+		app.zPageSearch.zToolbarPressPulldown(Button.B_SEARCHTYPE, Button.O_SEARCHTYPE_GAL);			
+		app.zPageSearch.zAddSearchQuery(name);
+		app.zPageSearch.zToolbarPressButton(Button.B_SEARCH);
+		
+		List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(ContactItem.GAL_IMAGE_CLASS); 
+ 	                  			
+        ZAssert.assertTrue(contacts.size()==0, "Verify contact " + name + "not  displayed");
+
+
+	}
+
 }
