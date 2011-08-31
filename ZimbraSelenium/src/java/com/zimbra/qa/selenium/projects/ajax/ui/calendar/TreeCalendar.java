@@ -53,7 +53,7 @@ public class TreeCalendar extends AbsTree {
 		}
 		tracer.trace("processing " + folder.getName());
 
-		String actionLocator = String.format("css=td[id='zti__main_Calendar__%s_textCell']", folder.getId()); // default
+		String actionLocator = String.format("css=div[id='zti__main_Calendar__%s'] td[id$='_textCell']", folder.getId());
 		String optionLocator = null;
 		AbsPage page = null;
 
@@ -62,6 +62,8 @@ public class TreeCalendar extends AbsTree {
 			
 			if ( (action == Action.A_RIGHTCLICK) && (option == Button.O_NEW_CALENDAR || option == Button.O_NEW_FOLDER) ) {
 				
+				// TODO: I18N
+
 				actionLocator = "css=td[id='ztih__main_Calendar__CALENDAR_textCell']"; // override the default
 				optionLocator = "css=table[class$='MenuTable'] td[id$='_title']:contains(New Calendar)";
 				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageCalendar);
@@ -83,14 +85,15 @@ public class TreeCalendar extends AbsTree {
 		if ( (action == Action.A_RIGHTCLICK) && (option == Button.B_DELETE) ) {
 
 			// Use default actionLocator
-			optionLocator = "css=tr[id='POPUP_DELETE'] td[id$='_title']";
+			// See http://bugzilla.zimbra.com/show_bug.cgi?id=64023 ... POPUP_ needs to be updated
+			optionLocator = "css=div[id^='POPUP_'] tr[id='POPUP_DELETE'] td[id$='_title']";
 			page = null;
 
 			// After  clicking REFRESH, sometimes the links don't appear right away
 			GeneralUtility.waitForElementPresent(this, actionLocator);
 			
 			this.zRightClick(actionLocator);
-			this.zClick(optionLocator);
+			this.zClickAt(optionLocator,"");
 			this.zWaitForBusyOverlay();
 
 			return (page);
