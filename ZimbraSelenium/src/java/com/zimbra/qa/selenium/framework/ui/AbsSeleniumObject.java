@@ -1239,6 +1239,18 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
+	 * DefaultSelenium.getTitle()
+	 * 
+	 * @return
+	 */
+	public String sGetTitle() {
+		String text = ClientSessionFactory.session().selenium().getTitle();
+		logger.info("DefaultSelenium.getTitle() = " + text);
+		return text;
+
+	}
+
+	/**
 	 * DefaultSelenium.type()
 	 */
 	public void sType(String locator, String text) {

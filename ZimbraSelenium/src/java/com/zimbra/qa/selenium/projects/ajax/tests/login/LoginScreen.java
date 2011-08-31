@@ -5,6 +5,7 @@ import java.util.GregorianCalendar;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -24,7 +25,7 @@ public class LoginScreen extends AjaxCommonTest {
 
 	}
 
-	@Test(	description = "Verify the label text on the mobile client login screen",
+	@Test(	description = "Verify the label text on the ajax client login screen",
 			groups = { "smoke" })
 	public void LoginScreen01() throws HarnessException {
 		
@@ -81,5 +82,18 @@ public class LoginScreen extends AjaxCommonTest {
 		
 	}
 
+
+	@Bugs(ids = "50457")
+	@Test(	description = "Verify 'web client' rather than 'collaboration suite'",
+			groups = { "functional" })
+	public void LoginScreen05() throws HarnessException {
+		
+
+		String title = app.zPageLogin.sGetTitle();
+		
+		// TODO: Need to I18N
+		ZAssert.assertStringContains(title, "Web Client", "Verify 'web client' rather than 'collaboration suite'");
+		
+	}
 
 }
