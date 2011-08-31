@@ -223,7 +223,7 @@ void MAPIAccessAPITestV()
 	//Get all folders
 	maapi->GetRootFolderHierarchy(vfolderlist);
 
-	maapi->IterateVectorList(vfolderlist);
+//	maapi->IterateVectorList(vfolderlist);
 	delete maapi;
 }
 
