@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.mail.folders;
+package com.zimbra.qa.selenium.projects.ajax.tests.calendar.calendars;
 
 import org.testng.annotations.Test;
 
@@ -10,34 +10,34 @@ import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 
-public class DragAndDropFolder extends AjaxCommonTest{
+public class DragAndDropCalendar extends AjaxCommonTest{
 
-	public DragAndDropFolder(){
-		logger.info("New "+ DragAndDropFolder.class.getCanonicalName());
+	public DragAndDropCalendar(){
+		logger.info("New "+ DragAndDropCalendar.class.getCanonicalName());
 
 		// All tests start at the login page
-		super.startingPage = app.zPageMail;
+		super.startingPage = app.zPageCalendar;
 		super.startingAccountPreferences = null;
 
 	}
 
-	@Test(	description = "Drag one folder and Drop into other",
+	@Test(	description = "Drag one calendar and Drop into other",
 			groups = { "smoke" })
-	public void DragDropFolder_01() throws HarnessException {
+	public void DragDropCalendar_01() throws HarnessException {
 
-		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
-		ZAssert.assertNotNull(inbox, "Verify the inbox is available");
+		FolderItem root = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
+		ZAssert.assertNotNull(root, "Verify the inbox is available");
 
 
 		// Create two subfolders in the inbox
 		// One folder to Drag
 		// Another folder to drop into
-		String name1 = "folder" + ZimbraSeleniumProperties.getUniqueString();
-		String name2 = "folder" + ZimbraSeleniumProperties.getUniqueString();
+		String name1 = "calendar" + ZimbraSeleniumProperties.getUniqueString();
+		String name2 = "calendar" + ZimbraSeleniumProperties.getUniqueString();
 
 		app.zGetActiveAccount().soapSend(
 					"<CreateFolderRequest xmlns='urn:zimbraMail'>"
-				+		"<folder name='"+ name1 +"' l='"+ inbox.getId() +"'/>"
+				+		"<folder name='"+ name1 +"' l='"+ root.getId() +"' view='appointment'/>"
 				+	"</CreateFolderRequest>");
 
 
@@ -45,8 +45,8 @@ public class DragAndDropFolder extends AjaxCommonTest{
 		ZAssert.assertNotNull(subfolder1, "Verify the first subfolder is available");
 
 		app.zGetActiveAccount().soapSend(
-					"<CreateFolderRequest xmlns='urn:zimbraMail'>"
-				+		"<folder name='"+ name2 +"' l='"+ inbox.getId() +"'/>"
+				"<CreateFolderRequest xmlns='urn:zimbraMail'>"
+				+		"<folder name='"+ name2 +"' l='"+ root.getId() +"' view='appointment'/>"
 				+	"</CreateFolderRequest>");
 
 		FolderItem subfolder2 = FolderItem.importFromSOAP(app.zGetActiveAccount(), name2);
@@ -54,13 +54,16 @@ public class DragAndDropFolder extends AjaxCommonTest{
 
 
 		// Click on Get Mail to refresh the folder list
-		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
 
-		app.zPageMail.zDragAndDrop(
-				"//td[contains(@id, 'zti__main_Mail__" + subfolder1.getId() + "_textCell') and contains(text(), '"+ name1 + "')]",
-				"//td[contains(@id, 'zti__main_Mail__" + subfolder2.getId() + "_textCell') and contains(text(),'"+ name2 + "')]");
+//		app.zPageMail.zDragAndDrop(
+//				"//td[contains(@id, 'zti__main_Calendar__" + subfolder1.getId() + "_textCell') and contains(text(), '"+ name1 + "')]",
+//				"//td[contains(@id, 'zti__main_Calendar__" + subfolder2.getId() + "_textCell') and contains(text(),'"+ name2 + "')]");
 
-
+		app.zPageCalendar.zDragAndDrop(
+				String.format("css=td[id='zti__main_Calendar__%s_textCell']", subfolder1.getId()),
+				String.format("css=td[id='zti__main_Calendar__%s_textCell']", subfolder2.getId()) );
+		
 		// Verify the folder is now in the other subfolder
 		subfolder1 = FolderItem.importFromSOAP(app.zGetActiveAccount(), name1);
 		ZAssert.assertNotNull(subfolder1, "Verify the subfolder is again available");
