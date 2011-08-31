@@ -23,6 +23,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.ContextMenu;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogShareFind;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogTag;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogEditFolder;
 
 
 
@@ -82,6 +83,10 @@ public class TreeCalendar extends AbsTree {
 
 		}
 		
+		// After  clicking REFRESH, sometimes the links don't appear right away
+		GeneralUtility.waitForElementPresent(this, actionLocator);
+		
+
 		if ( (action == Action.A_RIGHTCLICK) && (option == Button.B_DELETE) ) {
 
 			// Use default actionLocator
@@ -89,16 +94,25 @@ public class TreeCalendar extends AbsTree {
 			optionLocator = "css=div[id^='POPUP_'] tr[id='POPUP_DELETE'] td[id$='_title']";
 			page = null;
 
-			// After  clicking REFRESH, sometimes the links don't appear right away
-			GeneralUtility.waitForElementPresent(this, actionLocator);
-			
 			this.zRightClick(actionLocator);
-			this.zClickAt(optionLocator,"");
-			this.zWaitForBusyOverlay();
 
-			return (page);
+			// FALL THROUGH
+			
+		} else if ( (action == Action.A_RIGHTCLICK) && (option == Button.B_TREE_EDIT) ) {
+			
+			// Use default actionLocator
+			// See http://bugzilla.zimbra.com/show_bug.cgi?id=64023 ... POPUP_ needs to be updated
+			optionLocator = "css=div[id^='POPUP_'] tr[id='POPUP_EDIT_PROPS'] td[id$='_title']";
+			page = new DialogEditFolder(MyApplication,((AppAjaxClient) MyApplication).zPageCalendar);
 
+			this.zRightClick(actionLocator);
+
+			// FALL THROUGH
+
+		} else {
+			throw new HarnessException("No logic defined for action "+ action +" with option "+ option);
 		}
+
 
 		if (actionLocator == null)
 			throw new HarnessException("locator is null for action " + action);
