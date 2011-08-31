@@ -189,7 +189,12 @@ function() {
 	return this._currentView;
 }
 
-
+ZaAppViewMgr.prototype.getCurrentViewContent =
+function() {
+    var elements = this._views[this._currentView];
+	var content = elements[ZaAppViewMgr.C_APP_CONTENT];
+	return content;
+}
 /**
 * Creates an app view from the given components and puts it in an app container.
 *

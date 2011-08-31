@@ -719,7 +719,6 @@ function() {
                                     parent:"Home",
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "manActHV"),
                                     text: "Manage Accounts",
-                                    count: 2,
                                     mappingId: ZaZimbraAdmin._MANAGE_ACCOUNT_HOME_VIEW});
     tree.addTreeItemData(accountMgr);
 
@@ -1088,3 +1087,87 @@ function (itemType) {
 	}
 }
 
+// Temporary hard code  here
+// It will be rmoved in futher
+ZaOverviewPanelController.basePath = "Home/Manage Accounts/";
+ZaOverviewPanelController.prototype.addAccountItem =
+function(item, currentView) {
+    if (!currentView) {
+        currentView = ZaApp.getInstance().getAppViewMgr().getCurrentViewContent();
+        if (!currentView)
+            return;
+        if (!currentView.getTabChoices)
+            return;
+        if (!currentView.getTabChoices())
+            return;
+    }
+
+    var tabChoices = currentView.getTabChoices();
+	var type = item.type;
+    var relativePath = ZaMsg.OVP_accounts;
+	if (type == ZaItem.ACCOUNT) {
+        relativePath = ZaMsg.OVP_accounts;
+	} else if (type == ZaItem.DL) {
+        relativePath = ZaMsg.OVP_distributionLists;
+	} else if (type == ZaItem.RESOURCE ){
+        relativePath = ZaMsg.OVP_resources;
+	} else if (type == ZaItem.ALIAS) {
+		if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_ACCOUNT) {
+            relativePath = ZaMsg.OVP_accounts;
+		}else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_DL){
+            relativePath =  ZaMsg.OVP_distributionLists;
+		}else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_RESOURCE) {
+            relativePath = ZaMsg.OVP_resources;
+        }
+	}
+
+    var tree = this.getOverviewPanel().getFolderTree();
+    var parentPath = ZaOverviewPanelController.basePath + relativePath;
+    var parentDataItem = tree.getTreeItemDataByPath (parentPath);
+    var index = parentDataItem.getChildrenNum();
+    var name = item.name;
+    var nameId = ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,"actLstHV",index);
+    var nameDataItem =   new ZaTreeItemData({
+                            parent:parentPath,
+                            mappingId: ZaZimbraAdmin._XFORM_VIEW,
+                            id:nameId,
+                            text: name});
+    var namePath = parentPath + ZaTree.SEPERATOR + name;
+
+    tree.addTreeItemData(nameDataItem);
+    var currentTabItem;
+    var currentTabInfo;
+    for (var i = 0; i <  tabChoices.length; i++) {
+        currentTabInfo = tabChoices[i];
+        currentTabItem =   new ZaTreeItemData({
+                            parent:namePath,
+                            id:DwtId._makeId(nameId, i+1),
+                            mappingId: ZaZimbraAdmin._XFORM_TAB_VIEW,
+                            text: currentTabInfo.label});
+        currentTabItem.setData("tabValue", currentTabInfo.value);
+        tree.addTreeItemData(currentTabItem);
+        if (i == 0) {
+            nameDataItem.setData("firstTab", currentTabInfo.value);
+        }
+    }
+
+    if (! ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._XFORM_VIEW])
+        ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._XFORM_VIEW] = ZaOverviewPanelController.xformTreeListener;
+    if (! ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._XFORM_TAB_VIEW])
+        ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._XFORM_TAB_VIEW] = ZaOverviewPanelController.xformTabTreeListener;
+    tree.setSelectionByPath(namePath, true);
+}
+
+ZaOverviewPanelController.xformTabTreeListener = function(ev) {
+    var stepValue = ev.item.getData("dataItem").getData("tabValue");
+    var currentView = ZaApp.getInstance().getAppViewMgr().getCurrentViewContent();
+    currentView._localXForm.setInstanceValue(stepValue, ZaModel.currentTab);
+    currentView._localXForm.refresh() ;
+}
+
+ZaOverviewPanelController.xformTreeListener = function(ev) {
+    var stepValue = ev.item.getData("dataItem").getData("firstTab");
+    var currentView = ZaApp.getInstance().getAppViewMgr().getCurrentViewContent();
+    currentView._localXForm.setInstanceValue(stepValue, ZaModel.currentTab);
+    currentView._localXForm.refresh() ;
+}

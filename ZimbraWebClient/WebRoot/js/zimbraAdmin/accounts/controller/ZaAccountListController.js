@@ -533,6 +533,7 @@ function(ev) {
 	}
 }
 
+
 ZaAccountListController.prototype._editItem = function (item) {
 	if(this.changeAcStateAcId) {
 		AjxTimedAction.cancelAction(this.changeAcStateAcId);
@@ -546,21 +547,24 @@ ZaAccountListController.prototype._editItem = function (item) {
 	var type = item.type;
 	var viewContstructor = ZaAccountXFormView;
 	if (type == ZaItem.ACCOUNT) {
-		viewContstructor = ZaAccountXFormView;	
+		viewContstructor = ZaAccountXFormView;
 	} else if (type == ZaItem.DL) {
-		viewContstructor = ZaDLXFormView;	
+		viewContstructor = ZaDLXFormView;
 	} else if (type == ZaItem.RESOURCE ){
 		viewContstructor = ZaResourceXFormView;
 	} else if (type == ZaItem.ALIAS) {
-		if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_ACCOUNT) {	
-			viewController = ZaAccountXFormView;
+		if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_ACCOUNT) {
+			viewContstructor = ZaAccountXFormView;
 		}else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_DL){
-		    viewController = ZaDLXFormView;
-		}
+		    viewContstructor = ZaDLXFormView;
+		}else if (item.attrs[ZaAlias.A_targetType] == ZaAlias.TARGET_TYPE_RESOURCE) {
+            viewContstructor = ZaResourceXFormView;
+        }
 	}
 	
 	try {	
 	   if (! this.selectExistingTabByItemId(itemId,viewContstructor)){
+
 //		DBG.println("TYPE == ", item.type);
 		if (type == ZaItem.ACCOUNT) {
 			//this._selectedItem = ev.item;
@@ -580,6 +584,11 @@ ZaAccountListController.prototype._editItem = function (item) {
 		} else if (type == ZaItem.RESOURCE ){
 			ZaApp.getInstance().getResourceController(itemId).show(item, true);
 		}
+
+        if (appNewUI) {
+            ZaZimbraAdmin.getInstance().getOverviewPanelController().addAccountItem(item);
+
+        }
 	   }
 	} catch(ex) {
 		if(ex.msg) {

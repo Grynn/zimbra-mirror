@@ -3397,15 +3397,28 @@ nowrap:false, labelWrap:true,
 	}
 	
 	xFormObject.tableCssStyle="width:100%;";
-	xFormObject.items = [
-			{type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header",
-				items: [
-					{type:_GROUP_,	numCols:4,colSizes:["90px","350px","100px","*"],items:headerItems}
-				],
-				cssStyle:"padding-top:5px; padding-bottom:5px"
-			},
-			{type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:this.tabChoices,cssClass:"ZaTabBar", id:"xform_tabbar"},
-			{type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:cases}
-	];
+    if (!appNewUI) {
+        xFormObject.items = [
+                {type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header",
+                    items: [
+                        {type:_GROUP_,	numCols:4,colSizes:["90px","350px","100px","*"],items:headerItems}
+                    ],
+                    cssStyle:"padding-top:5px; padding-bottom:5px"
+                },
+                {type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:this.tabChoices,cssClass:"ZaTabBar", id:"xform_tabbar"},
+                {type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:cases}
+        ];
+    } else {
+	    xFormObject.items = [
+                {type:_SPACER_, height:"0px"}, // a hook here to keep the switch item's index for zimlet issue.
+                {type:_SPACER_, height:"0px"},
+                {type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:cases}
+	    ];
+    }
 };
 ZaTabView.XFormModifiers["ZaAccountXFormView"].push(ZaAccountXFormView.myXFormModifier);
+
+ZaAccountXFormView.prototype.getTabChoices =
+function() {
+    return this.tabChoices;
+}

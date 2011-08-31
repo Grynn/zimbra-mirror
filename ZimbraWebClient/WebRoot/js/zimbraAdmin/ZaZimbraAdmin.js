@@ -93,6 +93,8 @@ ZaZimbraAdmin._MIGRATION_HOME_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._SEARCH_HOME_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._SERVER_STATUS_VIEW =  ZaZimbraAdmin.VIEW_INDEX++;
 ZaZimbraAdmin._HOME_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._XFORM_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
+ZaZimbraAdmin._XFORM_TAB_VIEW = ZaZimbraAdmin.VIEW_INDEX++;
 
 // do not change the name of the cookie! SoapServlet looks for it
 ZaZimbraAdmin._COOKIE_NAME = "ZM_ADMIN_AUTH_TOKEN";

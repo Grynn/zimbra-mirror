@@ -152,3 +152,8 @@ ZaTreeItemData.prototype.isLeaf =
 function() {
    return this.childrenData.size() == 0;
 }
+
+ZaTreeItemData.prototype.getChildrenNum =
+function() {
+   return this.childrenData.size();
+}
