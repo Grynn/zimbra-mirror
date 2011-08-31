@@ -715,13 +715,13 @@ function() {
                                     mappingId: ZaZimbraAdmin._SERVER_STATUS_VIEW});
     tree.addTreeItemData(ti);
 
-    ti = new ZaTreeItemData({
+    var accountMgr = new ZaTreeItemData({
                                     parent:"Home",
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "manActHV"),
                                     text: "Manage Accounts",
                                     count: 2,
                                     mappingId: ZaZimbraAdmin._MANAGE_ACCOUNT_HOME_VIEW});
-    tree.addTreeItemData(ti);
+    tree.addTreeItemData(accountMgr);
 
     ti = new ZaTreeItemData({
                                     parent:"Home",
@@ -755,6 +755,51 @@ function() {
 			}
 		}
 	} */
+
+
+    if(accountMgr) {
+        var refpath = accountMgr.parent? accountMgr.parent + "/" + accountMgr.text:"Home";
+        var acctitem =  new ZaTreeItemData({
+                                parent:refpath,
+                                id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "actLstHV"),
+                                text: ZaMsg.OVP_accounts,
+                                count: 0,
+                                mappingId: ZaZimbraAdmin._ACCOUNTS_LIST_VIEW});     //ZaZimbraAdmin._ACCOUNT_LIST_VIEW
+        acctitem.setData("TreeItemType", ZaItem.ACCOUNT);
+        tree.addTreeItemData(acctitem);
+
+        var aliaitem =  new ZaTreeItemData({
+                                parent:refpath,
+                                id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "aliaLstHV"),
+                                text: ZaMsg.OVP_aliases,
+                                count: 0,
+                                mappingId: ZaZimbraAdmin._ALIASES_LIST_VIEW});
+        aliaitem.setData("TreeItemType", ZaItem.ALIAS);
+        tree.addTreeItemData(aliaitem);
+
+        var dlitem =  new ZaTreeItemData({
+                                parent:refpath,
+                                id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "aliaLstHV"),
+                                text: ZaMsg.OVP_distributionLists,
+                                count: 0,
+                                mappingId: ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW});
+        dlitem.setData("TreeItemType", ZaItem.DL);
+        tree.addTreeItemData(dlitem);
+
+        var resourceitem =  new ZaTreeItemData({
+                                parent:refpath,
+                                id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "aliaLstHV"),
+                                text: ZaMsg.OVP_resources,
+                                count: 0,
+                                mappingId: ZaZimbraAdmin._RESOURCE_VIEW});
+        resourceitem.setData("TreeItemType", ZaItem.RESOURCE);
+        tree.addTreeItemData(resourceitem);
+    }
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ACCOUNTS_LIST_VIEW] = ZaOverviewPanelController.accountListTreeListener;
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._ALIASES_LIST_VIEW] = ZaOverviewPanelController.aliasListTreeListener;
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DISTRIBUTION_LISTS_LIST_VIEW] = ZaOverviewPanelController.dlListTreeListener;
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._RESOURCE_VIEW] = ZaOverviewPanelController.resourceListTreeListener;
+    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._MANAGE_ACCOUNT_HOME_VIEW] = ZaOverviewPanelController.manageAccountTreeListener;
 }
 
 
@@ -1004,6 +1049,20 @@ ZaOverviewPanelController.postqByServerTreeListener = function (ev) {
 	}
 }
 
+ZaOverviewPanelController.manageAccountTreeListener = function (ev) {
+    var accountStat =  ZaApp.getInstance().getAccountStats();
+    var tree = this._overviewPanel.getFolderTree();
+    var childitems = ev.item.getChildren();
+//    var absPath = tree.getABPath(ev.item.getData("dataItem")) ;//+ "/" +;
+//    var childitem = tree.getTreeItemDataByPath(absPath + "/Accounts");
+//    childitem.setCount();
+
+    for(var i = 0; i < childitems.length; i++) {
+        var child = childitems[i];
+        var attr = child.getData("dataItem").getData("TreeItemType");
+        child.setCount(accountStat[attr]);
+    }
+}
 
 ZaOverviewPanelController.prototype._modifySearchMenuButton = 
 function (itemType) {

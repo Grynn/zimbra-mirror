@@ -81,6 +81,7 @@ function (list, openInNewTab, openInSearchTab) {
 //	ZaApp.getInstance().pushView(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW);
 	ZaApp.getInstance().pushView(this.getContentViewId (), openInNewTab, openInSearchTab);
 	this.updateToolbar();
+    if(appNewUI) return;
 	//TODO: need to standardize the way to handle the tab.
 	//hacking: currently, dllistview, aliasListView, accountListView and resourceListView share the same controller instance. It is BAD!
 	//It should be changed when we allow the list view to be open in a new tab
@@ -369,14 +370,18 @@ function (openInNewTab, openInSearchTab) {
 		
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-	//ZaApp.getInstance().createView(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW, elements);
-	var tabParams = {
-		openInNewTab: false,
-		tabId: this.getContentViewId(),
-		tab: openInSearchTab ? this.getSearchTab() : this.getMainTab() 
-	}
-	ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams);
+    if (!appNewUI) {
+        elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+        //ZaApp.getInstance().createView(ZaZimbraAdmin._ACCOUNTS_LIST_VIEW, elements);
+        var tabParams = {
+            openInNewTab: false,
+            tabId: this.getContentViewId(),
+            tab: openInSearchTab ? this.getSearchTab() : this.getMainTab()
+        }
+	    ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams);
+    }
+    else
+        ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
 	
 	this._initPopupMenu();
 	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations, ZaId.VIEW_ACCTLIST, ZaId.MENU_POP);

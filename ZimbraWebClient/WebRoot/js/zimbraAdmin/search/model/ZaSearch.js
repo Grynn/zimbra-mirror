@@ -532,6 +532,70 @@ function (domainName, types, pagenum, orderby, isascending, attrs, limit) {
 	return ZaSearch.search("", types, pagenum, orderby, isascending,  attrs, limit, domainName);
 }
 
+ZaSearch.getAccountStats =
+function() {
+	var soapDoc, params, retObj;
+    retObj = {};
+    retObj[ZaItem.ACCOUNT] = 0;
+    retObj[ZaItem.ALIAS] = 0;
+    retObj[ZaItem.RESOURCE] = 0;
+    retObj[ZaItem.DL] = 0;
+
+	//batch the rest of the requests
+	soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
+    soapDoc.setMethodAttribute("onerror", "continue");
+
+    //ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES,ZaSearch.DOMAINS, ZaSearch.COSES
+    var accDoc = soapDoc.set("SearchDirectoryRequest", null, null, ZaZimbraAdmin.URN);
+	accDoc.setAttribute("limit", "1");
+    var elBy = soapDoc.set("query", "", accDoc);
+    //elBy.setAttribute("by", by);
+    soapDoc.set("limit", 1, accDoc);
+    soapDoc.set("types", ZaSearch.ACCOUNTS, accDoc);
+
+    accDoc = soapDoc.set("SearchDirectoryRequest", null, null, ZaZimbraAdmin.URN);
+	accDoc.setAttribute("limit", "1");
+    elBy = soapDoc.set("query", "", accDoc);
+    soapDoc.set("limit", 1, accDoc);
+    soapDoc.set("types", ZaSearch.ALIASES, accDoc);
+
+    accDoc = soapDoc.set("SearchDirectoryRequest", null, null, ZaZimbraAdmin.URN);
+	accDoc.setAttribute("limit", "1");
+    elBy = soapDoc.set("query", "", accDoc);
+    soapDoc.set("limit", 1, accDoc);
+    soapDoc.set("types", ZaSearch.RESOURCES, accDoc);
+
+    accDoc = soapDoc.set("SearchDirectoryRequest", null, null, ZaZimbraAdmin.URN);
+	accDoc.setAttribute("limit", "1");
+    elBy = soapDoc.set("query", "", accDoc);
+    soapDoc.set("limit", 1, accDoc);
+    soapDoc.set("types", ZaSearch.DLS, accDoc);
+
+    params = new Object();
+    params.soapDoc = soapDoc;
+    var reqMgrParams ={
+        controller:ZaApp.getInstance().getCurrentController()
+    }
+    var respObj = ZaRequestMgr.invoke(params, reqMgrParams);
+    if(respObj && respObj.Body.BatchResponse) {
+        var response = respObj.Body.BatchResponse.SearchDirectoryResponse;
+        var attr;
+        for(var i = 0; i < response.length; i++) {
+            //if(response[i].account) retObj[ZaSearch.ACCOUNTS] = response[i].searchTotal;
+            //else if(response[i].account) retObj[ZaSearch.ACCOUNTS] = response[i].searchTotal;
+            if(response[i][ZaItem.ACCOUNT])  attr = ZaItem.ACCOUNT;
+            else if(response[i][ZaItem.ALIAS])  attr = ZaItem.ALIAS;
+            else if(response[i][ZaItem.RESOURCE])  attr = ZaItem.RESOURCE;
+            else if(response[i][ZaItem.DL])  attr = ZaItem.DL;
+            else attr = null;
+
+            if(attr)
+                retObj[attr] = response[i].searchTotal;
+        }
+    }
+    return retObj;
+}
+
 ZaSearch.getSearchCosByNameQuery =
 function(n) {
 	if (n == null || n == "") {

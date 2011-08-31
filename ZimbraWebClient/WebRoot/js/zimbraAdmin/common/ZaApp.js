@@ -810,6 +810,14 @@ function(refresh) {
 	return this._accountList;	
 }*/
 
+ZaApp.prototype.getAccountStats =
+function(refresh) {
+    if (refresh || this._accountStats == null) {
+        this._accountStats = ZaSearch.getAccountStats();
+    }
+    return this._accountStats;
+}
+
 ZaApp.prototype.getGlobalConfig =
 function(refresh) {
 	if (refresh || this._globalConfig == null) {

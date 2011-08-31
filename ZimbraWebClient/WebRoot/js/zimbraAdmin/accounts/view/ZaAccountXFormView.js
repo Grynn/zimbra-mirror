@@ -262,7 +262,8 @@ function(entry) {
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, this.formDirtyLsnr);	
 	
 	//update the tab
-	this.updateTab();
+    if (!appNewUI)
+	    this.updateTab();
 }
 
 ZaAccountXFormView.gotNoSkins = function() {
