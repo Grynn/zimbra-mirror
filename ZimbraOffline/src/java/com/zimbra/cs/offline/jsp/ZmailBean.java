@@ -22,8 +22,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.account.DataSource;
-import com.zimbra.cs.account.DataSource.ConnectionType;
+import com.zimbra.soap.type.DataSource.ConnectionType;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.offline.jsp.JspConstants.JspVerb;
 
