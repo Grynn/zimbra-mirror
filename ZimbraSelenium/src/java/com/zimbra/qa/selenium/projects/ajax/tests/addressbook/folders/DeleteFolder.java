@@ -1,5 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.addressbook.folders;
 
+import java.awt.event.KeyEvent;
+
 import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -137,6 +139,24 @@ public class DeleteFolder extends AjaxCommonTest {
 		ZAssert.assertNotNull(folderItemSrc, "Verify the subfolder is again available");
 		ZAssert.assertEquals(folderItemDest.getId(), folderItemSrc.getParentId(), "Verify the subfolder's parent is now the other subfolder");
 
-
 	}
+
+	@Test(	description = "Delete an addressbook folder- Use shortcut Del",
+			groups = { "functional" })
+	public void UseShortcutDel() throws HarnessException {
+		
+		FolderItem userRoot= FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.UserRoot);
+		ZAssert.assertNotNull(userRoot, "Verify can get the userRoot ");
+	
+ 	    FolderItem folderItem = CreateFolder.createNewFolderViaSoap(userRoot,app);
+										
+ 	    // select folder
+ 	    app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, folderItem);
+		
+ 	    // Delete the folder using shortcut Del		
+	    app.zPageAddressbook.zKeyboardKeyEvent(KeyEvent.VK_DELETE);
+		
+		verifyExistInTrashFolder(folderItem);
+	}	
+
 }
