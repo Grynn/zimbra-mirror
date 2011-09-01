@@ -59,16 +59,17 @@ public class EmptyTrashFolder extends AjaxCommonTest {
 	
           ZAssert.assertTrue(count==0, "Verify contact + group " + contactItem.fileAs  + "," +  group.groupName + " deleted");                  
 
-  		  // Delete the folder using context menu
-  		  AbsPage page= app.zTreeContacts.zTreeItem(Action.A_RIGHTCLICK, Button.B_DELETE, folderItem);
+          //Dnd folder to trash
+  		  app.zPageAddressbook.zDragAndDrop(
+				"css=td#zti__main_Contacts__" + folderItem.getId() + "_textCell:contains("+ folderItem.getName() + ")",
+				"css=td#zti__main_Contacts__" + trash.getId() + "_textCell:contains("+ trash.getName() + ")");
+			
 
-  		  // Verify Delete option is enabled
-  		  ZAssert.assertNotNull(page, "Verify Delete option is enabled");
-
- 		
+		
   		  // refresh Trash folder
           app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, trash);
      	  
+   
   		  // Verify the folder is now in the trash
   		  folderItem = FolderItem.importFromSOAP(app.zGetActiveAccount(), folderItem.getName());
   		  ZAssert.assertNotNull(folderItem, "Verify the folder Item is again available");
