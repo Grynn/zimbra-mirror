@@ -130,8 +130,9 @@ public class ContactContextMenu extends AjaxCommonTest  {
         //Verify Form New mail is active
         ZAssert.assertTrue(formMailNew.zIsActive(),"Verify Form New Mail is active");
         
-        //Verify contactItem.email displayed in the "To" field
-        ZAssert.assertTrue(app.zPageAddressbook.sGetText(FormMailNew.Locators.zBubbleToField).contains(contactItem.email), "Verify contact email displayed in field To - expected " + contactItem.email + " - was " + app.zPageAddressbook.sGetText(FormMailNew.Locators.zBubbleToField));
+        //Verify contactItem.first contactItem.last displayed in the "To" field
+        ZAssert.assertTrue(app.zPageAddressbook.sGetText(FormMailNew.Locators.zBubbleToField).contains(contactItem.firstName + " "  + contactItem.lastName),
+        		     "Verify contact email displayed in field To - expected " + contactItem.firstName + " " +  contactItem.lastName +" - was " + app.zPageAddressbook.sGetText(FormMailNew.Locators.zBubbleToField));
         
         //TODO: Verify send email
 	}
