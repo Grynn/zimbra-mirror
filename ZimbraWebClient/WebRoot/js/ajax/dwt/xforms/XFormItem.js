@@ -2768,10 +2768,11 @@ Dwt_Image_XFormItem.prototype.updateElement = function (src) {
  		var style = this.getCssStyle();
 		style = style || "";
 		styleStr = "style='position:relative;'";
+
 		if (src) {
-			output = ["<div class='", src, "' ", styleStr, " ></div>"].join("");
+			output = ["<div class='", src, "' ", styleStr, this.getClickHandlerHTML(), " ></div>"].join("");
 		} else {
-			output = ["<div ", styleStr, " ></div>"].join(""); 		
+			output = ["<div ", styleStr, this.getClickHandlerHTML(), " ></div>"].join("");
 		}
  	}
  	this.getContainer().innerHTML = output;
@@ -3080,7 +3081,9 @@ Group_XFormItem.prototype.updateVisibility = function () {
 	}	
 }
 
-HomeGroup_XFormItem = function() {}
+HomeGroup_XFormItem = function() {
+    this.expanded = true;
+}
 XFormItemFactory.createItemType("_HOMEGROUP_", "homegroup", HomeGroup_XFormItem, Group_XFormItem)
 
 //	type defaults
@@ -3089,6 +3092,8 @@ HomeGroup_XFormItem.prototype.numCols = 1;
 HomeGroup_XFormItem.prototype.width = "90%";
 HomeGroup_XFormItem.prototype.cssStyle = "margin-left:5%; margin-top: 10px;";
 HomeGroup_XFormItem.prototype.headerLabel = "Home Group";
+HomeGroup_XFormItem.prototype.expandedImg =  "ImgNodeExpanded";
+HomeGroup_XFormItem.prototype.collapsedImg =  "ImgNodeCollapsed";
 HomeGroup_XFormItem.prototype.initializeItems = function () {
     this.items = [];
     this.items[0] = this.getHeaderItems();
@@ -3108,6 +3113,20 @@ HomeGroup_XFormItem.prototype.initializeItems = function () {
     Group_XFormItem.prototype.initializeItems.call(this);
 }
 
+HomeGroup_XFormItem.prototype.onClick = function(ev) {
+    var homeItem = this.getParentItem().getParentItem();
+    var contentContainer = homeItem.items[1];
+    if (homeItem.expanded) {
+        homeItem.expanded = false;
+        this.updateElement(homeItem.collapsedImg);
+        contentContainer.hide();
+    } else {
+        homeItem.expanded = true;
+        this.updateElement(homeItem.expandedImg);
+        contentContainer.show();
+    }
+}
+
 HomeGroup_XFormItem.prototype.getHeaderItems =
 function () {
     var headerLabel = this.getInheritedProperty("headerLabel");
@@ -3115,7 +3134,7 @@ function () {
     var headerItems = { type:_COMPOSITE_, numCols:3, width:"100%",
             colSizes:["20px", "100%", "20px"],
             items:[
-                {type:_AJX_IMAGE_, value: "NodeExpanded"},
+                {type:_DWT_IMAGE_, value: this.expandedImg, onClick:this.onClick},
                 {type:_OUTPUT_, value: headerLabel},
                 {type:_AJX_IMAGE_, value: "Help"}
             ],
