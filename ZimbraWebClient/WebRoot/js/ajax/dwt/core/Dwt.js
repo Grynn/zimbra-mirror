@@ -1501,3 +1501,51 @@ function(element, container) {
 		}
 	}
 };
+
+/**
+ * Sets up a hidden div for performance metrics.  Use to set the start of object rendering
+ * @param id {String}
+ * @param date {Date}
+ */
+Dwt.setLoadingTime = 
+function(id, date) {
+	if (!window.isPerfMetric) {
+		return;
+	}
+	if (!date) {
+		date = new Date();
+	}
+	id += "_loading";
+	var div = document.getElementById(id);
+	if (!div) {
+		div = document.createElement("div");
+		div.id = id;
+		div.style.display = "none";
+		document.body.appendChild(div);
+	}
+	div.innerHTML = date.getTime();
+};
+
+/**
+ * Sets up a hidden div for performance metrics.  Use to set the end of object rendering
+ * @param id {String}
+ * @param date {Date}
+ */
+Dwt.setLoadedTime = 
+function(id, date) {
+	if (!window.isPerfMetric) {
+		return;
+	}
+	if (!date) {
+		date = new Date();
+	} 
+	id += "_loaded";
+	var div = document.getElementById(id);
+	if (!div) {
+		div = document.createElement("div");
+		div.id = id;
+		div.style.display = "none";
+		document.body.appendChild(div);
+	}
+	div.innerHTML = date.getTime();
+};
