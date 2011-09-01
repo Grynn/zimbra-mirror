@@ -25,69 +25,68 @@ public class PageCalendar extends AbsTab {
 	public static class Locators {
 		// Buttons
 		public static final String NewButton = "css=td#zb__CLWW__NEW_MENU_title";
-		public static final String RefreshButton = "css=td#CHECK_MAIL_left_icon>div[class='ImgRefresh']";
 		public static final String ViewButton = "id=zb__CLD__VIEW_MENU_dropdown";
-		
+
 		// Menus
 		public static final String ViewDayMenu = "id=POPUP_DAY_VIEW";
-        public static final String ViewWorkWeekMenu = "id=POPUP_WORK_WEEK_VIEW";
-        public static final String ViewWeekMenu = "id=POPUP_WEEK_VIEW";
-        public static final String ViewMonthMenu = "id=POPUP_MONTH_VIEW";
-        public static final String ViewListMenu = "id=POPUP_CAL_LIST_VIEW";
-        public static final String ViewScheduleMenu = "id=POPUP_SCHEDULE_VIEW";
-        public static final String OpenMenu = "id=zmi__Calendar__VIEW_APPOINTMENT_title";
-        public static final String PrintMenu = "id=zmi__Calendar__PRINT_title";
-        public static final String AcceptMenu = "id=zmi__Calendar__REPLY_ACCEPT_title";
-        public static final String TentativeMenu = "id=zmi__Calendar__REPLY_TENTATIVE_title";
-        public static final String DeclineMenu = "id=zmi__Calendar__REPLY_DECLINE_title";
-        public static final String EditReplyMenu = "id=zmi__Calendar__INVITE_REPLY_MENU_title";
-        public static final String EditReplyAcceptSubMenu = "id=POPUP_EDIT_REPLY_ACCEPT";
-        public static final String EditReplyTentativeSubMenu = "id=POPUP_EDIT_REPLY_TENTATIVE";
-        public static final String EditReplyDeclineSubMenu = "id=POPUP_EDIT_REPLY_DECLINE";
-        public static final String ProposeNewTimeMenu = "id=zmi__Calendar__PROPOSE_NEW_TIME_title";
-        public static final String CreateACopyMenu = "id=zmi__Calendar__DUPLICATE_APPT_title";
-        public static final String ReplyMenu = "id=zmi__Calendar__REPLY_title";
-        public static final String ReplyToAllMenu = "id=zmi__Calendar__REPLY_ALL_title";
-        public static final String ForwardMenu = "id=zmi__Calendar__FORWARD_APPT_title";
-        public static final String DeleteMenu = "id=zmi__Calendar__DELETE_title";
-        public static final String CancelMenu = "id=zmi__Calendar__CANCEL_title";
-        public static final String MoveMenu = "id=zmi__Calendar__MOVE_title";
-        public static final String TagAppointmentMenu = "id=zmi__Calendar__TAG_MENU_title";
-        public static final String TagAppointmentNewTagSubMenu = "id=zmi__Calendar__TAG_MENU|MENU|NEWTAG_title";
-        public static final String TagAppointmentRemoveTagSubMenu = "id=zmi__Calendar__TAG_MENU|MENU|REMOVETAG_title";
-        public static final String ShowOriginalMenu = "id=zmi__Calendar__SHOW_ORIG_title";
-        public static final String QuickCommandsMenu = "id=zmi__Calendar__QUICK_COMMANDS_title";
-        public static final String InstanceMenu = "id=POPUP_VIEW_APPT_INSTANCE";
-        public static final String SeriesMenu = "id=POPUP_VIEW_APPT_SERIES";
-        public static final String OpenInstanceMenu = "id=zmi__Calendar__OPEN_APPT_INSTANCE_title";
-        public static final String ForwardInstanceMenu = "id=zmi__Calendar__FORWARD_APPT_INSTANCE_title";
-        public static final String DeleteInstanceMenu = "id=zmi__Calendar__DELETE_INSTANCE_title";
-        public static final String OpenSeriesMenu = "id=zmi__Calendar__OPEN_APPT_SERIES_title";
-        public static final String ForwardSeriesMenu = "id=zmi__Calendar__FORWARD_APPT_SERIES_title";
-        public static final String DeleteSeriesMenu = "id=zmi__Calendar__DELETE_SERIES_title";
-        public static final String NewAppointmentMenu = "id=POPUP_NEW_APPT";
-        public static final String NewAllDayAppointmentMenu = "id=POPUP_NEW_ALLDAY_APPT";
-        public static final String GoToTodayMenu = "id=POPUP_TODAY";
-        public static final String ViewMenu = "id=POPUP_CAL_VIEW_MENU";
-        public static final String ViewDaySubMenu = "id=POPUP_DAY_VIEW";
-        public static final String ViewWorkWeekSubMenu = "id=POPUP_WORK_WEEK_VIEW";
-        public static final String ViewWeekSubMenu = "id=POPUP_WEEK_VIEW";
-        public static final String ViewMonthSubMenu = "id=POPUP_MONTH_VIEW";
-        public static final String ViewListSubMenu = "id=POPUP_CAL_LIST_VIEW";
-        public static final String ViewScheduleSubMenu = "id=POPUP_SCHEDULE_VIEW";
-        
-        // Radio button
-        public static final String OpenThisInstanceRadioButton = "id=";
-        public static final String OpenThisSeriesRadioButton = "id=";
-        
-        
-        public static final String CalendarViewListCSS		= "css=div[id='zv__CLL']";
-        public static final String CalendarViewDayCSS		= "css=div[class='ImgCalendarDayGrid']";
-        public static final String CalendarViewWorkWeekCSS	= "css=div[id='TODO']";
-        public static final String CalendarViewWeekCSS		= "css=div[id='TODO']";
-        public static final String CalendarViewMonthCSS		= "css=div[id='TODO']";
-        public static final String CalendarViewScheduleCSS	= "css=div[id='TODO']";
-        
+		public static final String ViewWorkWeekMenu = "id=POPUP_WORK_WEEK_VIEW";
+		public static final String ViewWeekMenu = "id=POPUP_WEEK_VIEW";
+		public static final String ViewMonthMenu = "id=POPUP_MONTH_VIEW";
+		public static final String ViewListMenu = "id=POPUP_CAL_LIST_VIEW";
+		public static final String ViewScheduleMenu = "id=POPUP_SCHEDULE_VIEW";
+		public static final String OpenMenu = "id=zmi__Calendar__VIEW_APPOINTMENT_title";
+		public static final String PrintMenu = "id=zmi__Calendar__PRINT_title";
+		public static final String AcceptMenu = "id=zmi__Calendar__REPLY_ACCEPT_title";
+		public static final String TentativeMenu = "id=zmi__Calendar__REPLY_TENTATIVE_title";
+		public static final String DeclineMenu = "id=zmi__Calendar__REPLY_DECLINE_title";
+		public static final String EditReplyMenu = "id=zmi__Calendar__INVITE_REPLY_MENU_title";
+		public static final String EditReplyAcceptSubMenu = "id=POPUP_EDIT_REPLY_ACCEPT";
+		public static final String EditReplyTentativeSubMenu = "id=POPUP_EDIT_REPLY_TENTATIVE";
+		public static final String EditReplyDeclineSubMenu = "id=POPUP_EDIT_REPLY_DECLINE";
+		public static final String ProposeNewTimeMenu = "id=zmi__Calendar__PROPOSE_NEW_TIME_title";
+		public static final String CreateACopyMenu = "id=zmi__Calendar__DUPLICATE_APPT_title";
+		public static final String ReplyMenu = "id=zmi__Calendar__REPLY_title";
+		public static final String ReplyToAllMenu = "id=zmi__Calendar__REPLY_ALL_title";
+		public static final String ForwardMenu = "id=zmi__Calendar__FORWARD_APPT_title";
+		public static final String DeleteMenu = "id=zmi__Calendar__DELETE_title";
+		public static final String CancelMenu = "id=zmi__Calendar__CANCEL_title";
+		public static final String MoveMenu = "id=zmi__Calendar__MOVE_title";
+		public static final String TagAppointmentMenu = "id=zmi__Calendar__TAG_MENU_title";
+		public static final String TagAppointmentNewTagSubMenu = "id=zmi__Calendar__TAG_MENU|MENU|NEWTAG_title";
+		public static final String TagAppointmentRemoveTagSubMenu = "id=zmi__Calendar__TAG_MENU|MENU|REMOVETAG_title";
+		public static final String ShowOriginalMenu = "id=zmi__Calendar__SHOW_ORIG_title";
+		public static final String QuickCommandsMenu = "id=zmi__Calendar__QUICK_COMMANDS_title";
+		public static final String InstanceMenu = "id=POPUP_VIEW_APPT_INSTANCE";
+		public static final String SeriesMenu = "id=POPUP_VIEW_APPT_SERIES";
+		public static final String OpenInstanceMenu = "id=zmi__Calendar__OPEN_APPT_INSTANCE_title";
+		public static final String ForwardInstanceMenu = "id=zmi__Calendar__FORWARD_APPT_INSTANCE_title";
+		public static final String DeleteInstanceMenu = "id=zmi__Calendar__DELETE_INSTANCE_title";
+		public static final String OpenSeriesMenu = "id=zmi__Calendar__OPEN_APPT_SERIES_title";
+		public static final String ForwardSeriesMenu = "id=zmi__Calendar__FORWARD_APPT_SERIES_title";
+		public static final String DeleteSeriesMenu = "id=zmi__Calendar__DELETE_SERIES_title";
+		public static final String NewAppointmentMenu = "id=POPUP_NEW_APPT";
+		public static final String NewAllDayAppointmentMenu = "id=POPUP_NEW_ALLDAY_APPT";
+		public static final String GoToTodayMenu = "id=POPUP_TODAY";
+		public static final String ViewMenu = "id=POPUP_CAL_VIEW_MENU";
+		public static final String ViewDaySubMenu = "id=POPUP_DAY_VIEW";
+		public static final String ViewWorkWeekSubMenu = "id=POPUP_WORK_WEEK_VIEW";
+		public static final String ViewWeekSubMenu = "id=POPUP_WEEK_VIEW";
+		public static final String ViewMonthSubMenu = "id=POPUP_MONTH_VIEW";
+		public static final String ViewListSubMenu = "id=POPUP_CAL_LIST_VIEW";
+		public static final String ViewScheduleSubMenu = "id=POPUP_SCHEDULE_VIEW";
+
+		// Radio button
+		public static final String OpenThisInstanceRadioButton = "id=";
+		public static final String OpenThisSeriesRadioButton = "id=";
+
+
+		public static final String CalendarViewListCSS		= "css=div[id='zv__CLL']";
+		public static final String CalendarViewDayCSS		= "css=div[class='ImgCalendarDayGrid']";
+		public static final String CalendarViewWorkWeekCSS	= "css=div[id='TODO']";
+		public static final String CalendarViewWeekCSS		= "css=div[id='TODO']";
+		public static final String CalendarViewMonthCSS		= "css=div[id='TODO']";
+		public static final String CalendarViewScheduleCSS	= "css=div[id='TODO']";
+
 	}
 
 	public PageCalendar(AbsApplication application) {
@@ -103,7 +102,7 @@ public class PageCalendar extends AbsTab {
 		String locator = "css=div[id='zl__CLL__rows'] td[id$='__su']:contains('" + subject + "')";
 		AbsPage page = null;
 
-				
+
 		if ( action == Action.A_LEFTCLICK ) {
 
 			// Left-Click on the item
@@ -111,7 +110,7 @@ public class PageCalendar extends AbsTab {
 			this.zWaitForBusyOverlay();
 
 			page = null;
-			
+
 			// FALL THROUGH
 
 		} else if ( action == Action.A_CHECKBOX || action == Action.A_UNCHECKBOX ) {
@@ -130,10 +129,10 @@ public class PageCalendar extends AbsTab {
 				}
 
 			}
-			
+
 			if ( locator == null )
 				throw new HarnessException("Unable to locate row with subject: "+ subject);
-			
+
 			String selectLocator = locator + " div[id$='__se']";
 			if ( !this.sIsElementPresent(selectLocator) )
 				throw new HarnessException("Checkbox locator is not present "+ selectLocator);
@@ -156,34 +155,34 @@ public class PageCalendar extends AbsTab {
 			page = null;
 
 			// FALL THROUGH
-				
+
 		} else {
 			throw new HarnessException("implement me!  action = "+ action);
 		}
-		
+
 		// Action should take place in the if/else block.
 		// No need to take action on a locator at this point.
-		
+
 		// If a page was specified, make sure it is active
 		if ( page != null ) {
 			page.zWaitForActive();
 		}
-		
+
 		return (page);
 	}
-	
+
 	@Override
 	public AbsPage zListItem(Action action, String subject) throws HarnessException {
-		
+
 		logger.info(myPageName() + " zListItem("+ action +", "+ subject +")");
 		tracer.trace(action +" on subject = "+ subject);
 
 		if ( action == null )
 			throw new HarnessException("action cannot be null");
-		
+
 		if ( subject == null )
 			throw new HarnessException("subject cannot be null");
-		
+
 		// Default behavior variables
 		String locator = null;
 		AbsPage page = null;
@@ -193,31 +192,31 @@ public class PageCalendar extends AbsTab {
 		if ( this.zIsVisiblePerPosition(Locators.CalendarViewListCSS, 0, 0) ) {
 			return (zListItemListView(action, subject));
 		}
-		
+
 		// TODO: this locator seems too generic for all the views that are possible
 		// int the calendar.  I'm not sure it will be possible to make it generic
 		// across the views.  It will likely need to be implemented per view.
 		locator = "css=td.appt_name:contains('" + subject + "')";
 		SleepUtil.sleepMedium();
-		
+
 		if ( action == Action.A_LEFTCLICK ) {
 			this.zClickAt(locator, "");
-			
+
 		} else if ( action == Action.A_RIGHTCLICK ) {
 			this.zRightClickAt(locator, "");
-			
+
 		} else if ( action == Action.A_DOUBLECLICK) {
 			this.sDoubleClick(locator);
-			
+
 		} else if ( action == Action.A_DOUBLECLICK) { //need to add action for iselement present
 			this.sIsElementPresent(locator);
-			
+
 		} else {
 			throw new HarnessException("implement me!  action = "+ action);
 		}
-		
+
 		this.zWaitForBusyOverlay();
-		
+
 		if ( page != null ) {
 			page.zWaitForActive();
 		}
@@ -233,7 +232,7 @@ public class PageCalendar extends AbsTab {
 		String optionLocator = null;
 		AbsPage page = null;
 
-				
+
 		if ( action == Action.A_RIGHTCLICK ) {
 
 			// Right-Click on the item
@@ -333,14 +332,14 @@ public class PageCalendar extends AbsTab {
 
 			// FALL THROUGH
 
-		
+
 		} else {
 			throw new HarnessException("implement me!  action = "+ action);
 		}
-		
+
 		// Action should take place in the if/else block.
 		// No need to take action on a locator at this point.
-		
+
 		if ( page != null ) {
 			page.zWaitForActive();
 		}
@@ -353,11 +352,11 @@ public class PageCalendar extends AbsTab {
 
 	@Override
 	public AbsPage zListItem(Action action, Button option, String subject)
-			throws HarnessException {
-		
+	throws HarnessException {
+
 		logger.info(myPageName() + " zListItem("+ action +", "+ option +", "+ subject +")");
 		tracer.trace(action +" then "+ option +" on subject = "+ subject);
-		
+
 		if ( action == null )
 			throw new HarnessException("action cannot be null");
 		if ( option == null )
@@ -374,10 +373,10 @@ public class PageCalendar extends AbsTab {
 		String locator = null;
 		AbsPage page = null;
 		String optionLocator;
-		
+
 		locator = "css=td.appt_name:contains('" + subject + "')";
 		SleepUtil.sleepMedium();
-		
+
 		if (action == Action.A_RIGHTCLICK) {
 			if (option == Button.O_VIEW_DAY_MENU) {
 				optionLocator = Locators.ViewDayMenu;
@@ -518,21 +517,21 @@ public class PageCalendar extends AbsTab {
 			else {
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 			}
-			
+
 		} else {
 			throw new HarnessException("implement me!  action = "+ action);
 		}
-		
+
 		this.zRightClickAt(locator, "");
 		SleepUtil.sleepSmall();
 		this.zClickAt(optionLocator, "");
 		SleepUtil.sleepSmall();
 		this.zWaitForBusyOverlay();
-		
+
 		if ( page != null ) {
 			page.zWaitForActive();
 		}
-		
+
 		return (new ContextMenu(MyApplication));
 	}
 
@@ -542,7 +541,7 @@ public class PageCalendar extends AbsTab {
 
 		logger.info(myPageName() + " zListItem("+ action +", "+ option +", "+ subOption +", "+ subject +")");
 		tracer.trace(action +" then "+ option + "," + subOption + " on item = "+ subject);
-		
+
 		if ( action == null )
 			throw new HarnessException("action cannot be null");
 		if ( option == null || subOption == null )
@@ -555,14 +554,14 @@ public class PageCalendar extends AbsTab {
 		AbsPage page = null;
 		String optionLocator = null;
 		String subOptionLocator = null;
-		
+
 		locator = "css=td.appt_name:contains('" + subject + "')";
 		SleepUtil.sleepMedium();
-		
+
 		if (action == Action.A_RIGHTCLICK) {
 			if (option == Button.O_VIEW_MENU) {
 				optionLocator = Locators.ViewMenu;
-				
+
 				if (subOption == Button.O_VIEW_DAY_SUB_MENU) {
 					subOptionLocator = Locators.ViewDaySubMenu;
 
@@ -581,23 +580,23 @@ public class PageCalendar extends AbsTab {
 				} else if (option == Button.O_VIEW_SCHEDULE_SUB_MENU) {
 					subOptionLocator = Locators.ViewScheduleSubMenu;
 				}
-				
+
 			} else if (option == Button.O_EDIT_REPLY_MENU) {
 				optionLocator = Locators.EditReplyMenu;
-				
+
 				if (subOption == Button.O_EDIT_REPLY_ACCEPT_SUB_MENU) {
 					subOptionLocator = Locators.EditReplyAcceptSubMenu;
 
 				} else if (subOption == Button.O_EDIT_REPLY_TENTATIVE_SUB_MENU) {
 					subOptionLocator = Locators.EditReplyTentativeSubMenu;
-					
+
 				} else if (subOption == Button.O_EDIT_REPLY_DECLINE_SUB_MENU) {
 					subOptionLocator = Locators.EditReplyDeclineSubMenu;
 				}
 
 			} else if (option == Button.O_TAG_APPOINTMENT_MENU) {
 				optionLocator = Locators.TagAppointmentMenu;
-				
+
 				if (subOption == Button.O_TAG_APPOINTMENT_NEW_TAG_SUB_MENU) {
 					subOptionLocator = Locators.TagAppointmentNewTagSubMenu;
 
@@ -608,24 +607,24 @@ public class PageCalendar extends AbsTab {
 			else {
 				throw new HarnessException("implement action:"+ action +" option:"+ option);
 			}
-			
+
 		} else {
 			throw new HarnessException("implement me!  action = "+ action);
 		}
-		
+
 		this.zRightClickAt(locator, "");
 		this.sMouseMoveAt(optionLocator, "");
 		SleepUtil.sleepMedium();
 		this.zClickAt(subOptionLocator, "");
-		
+
 		this.zWaitForBusyOverlay();
-		
+
 		if ( page != null ) {
 			page.zWaitForActive();
 		}
-		
+
 		return (new ContextMenu(MyApplication));
-		
+
 	}
 
 	@Override
@@ -645,7 +644,11 @@ public class PageCalendar extends AbsTab {
 		// Based on the button specified, take the appropriate action(s)
 		//
 
-		if (button == Button.B_NEW) {
+		if (button == Button.B_REFRESH) {
+			
+			return (((AppAjaxClient)this.MyApplication).zPageMain.zToolbarPressButton(Button.B_REFRESH));
+
+		} else if (button == Button.B_NEW) {
 
 			// New button
 			// 7.X version: locator =
@@ -656,13 +659,8 @@ public class PageCalendar extends AbsTab {
 			page = new FormApptNew(this.MyApplication);
 			// FALL THROUGH
 
-		} else if (button == Button.B_REFRESH) {
-			locator = Locators.RefreshButton;
-			page = null;
-			// FALL THROUGH
-
 		} else if (button == Button.B_DELETE) {
-			
+
 			locator = "css=td[id='zb__CLD__DELETE_title']";
 			page = new DialogConfirm(
 					DialogConfirm.Confirmation.DELETE,
@@ -698,14 +696,14 @@ public class PageCalendar extends AbsTab {
 
 	public AbsPage zKeyboardKeyEvent(int keyEvent) throws HarnessException {
 		AbsPage page = null;
-		
+
 		if ( keyEvent == KeyEvent.VK_DELETE || keyEvent == KeyEvent.VK_BACK_SPACE ) {
-			
+
 			page = new DialogConfirm(
 					DialogConfirm.Confirmation.DELETE,
 					MyApplication, 
 					((AppAjaxClient) MyApplication).zPageCalendar);
-			
+
 		}
 
 		this.zKeyboard.zTypeKeyEvent(keyEvent);
@@ -717,33 +715,33 @@ public class PageCalendar extends AbsTab {
 		if ( page != null ) {
 			page.zWaitForActive();	// This method throws a HarnessException if never active
 		}
-		
+
 		return (page);
 	}
 
 	@Override
 	public AbsPage zKeyboardShortcut(Shortcut shortcut) throws HarnessException {
 		AbsPage page = null;
-		
+
 		if ( shortcut == Shortcut.S_ASSISTANT ) {
-			
+
 			page = new DialogAssistant(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
-			
+
 		} else if ( 
 				shortcut == Shortcut.S_MAIL_MOVETOTRASH ||
 				shortcut == Shortcut.S_MAIL_HARDELETE ) {
-			
+
 			page = new DialogConfirm(
 					DialogConfirm.Confirmation.DELETE,
 					MyApplication, 
 					((AppAjaxClient) MyApplication).zPageCalendar);
-			
+
 		} else if ( shortcut == Shortcut.S_NEWCALENDAR ) {
-			
+
 			page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageCalendar);
-			
+
 		}
-		
+
 		zKeyboard.zTypeCharacters(shortcut.getKeys());
 
 		// If the app is busy, wait for it to become active
@@ -760,7 +758,7 @@ public class PageCalendar extends AbsTab {
 	@SuppressWarnings("deprecation")
 	@Override
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
-			throws HarnessException {
+	throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressPulldown(" + pulldown + ", "
 				+ option + ")");
 
@@ -774,57 +772,57 @@ public class PageCalendar extends AbsTab {
 		AbsPage page = null; // If set, this page will be returned
 
 		if ( pulldown == Button.B_NEW ) {
-			
+
 			if ( option == Button.O_NEW_CALENDAR || option == Button.O_NEW_FOLDER) {
-				
+
 				pulldownLocator = "css=div[id='zb__CLWW__NEW_MENU'] td[id$='_dropdown'] div[class='ImgSelectPullDownArrow']";
 				optionLocator = "css=div[id='zb__CLWW__NEW_MENU_NEW_CALENDAR'] td[id$='_title']";
 				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageCalendar);
 
 			} else {
-				
+
 				throw new HarnessException("No logic defined for pulldown " + pulldown + " and option " + option);
-				
+
 			}
-			
+
 		} else if (pulldown == Button.B_LISTVIEW) {
-			
+
 			pulldownLocator = "id=zb__CLD__VIEW_MENU_left_icon";
 
 			if (option == Button.O_LISTVIEW_DAY) {
 
 				optionLocator = "id=POPUP_DAY_VIEW";
 				page = new ApptDayView(this.MyApplication);
-				
+
 			} else if (option == Button.O_LISTVIEW_WEEK) {
 
 				optionLocator = "id=POPUP_WEEK_VIEW";
 				page = new ApptWeekView(this.MyApplication);
-				
+
 			} else if (option == Button.O_LISTVIEW_WORKWEEK) {
 
 				optionLocator = "id=POPUP_WORK_WEEK_VIEW";
 				page = new ApptWorkWeekView(this.MyApplication);
-				
+
 			} else if (option == Button.O_LISTVIEW_SCHEDULE) {
-				
+
 				optionLocator = "id=POPUP_SCHEDULE_VIEW";
 				page = new ApptScheduleView(this.MyApplication);
-				
+
 			} else if (option == Button.O_LISTVIEW_LIST) {
-				
+
 				optionLocator = "id=POPUP_CAL_LIST_VIEW";
 				page = new ApptListView(this.MyApplication);
-				
+
 			} else if (option == Button.O_LISTVIEW_MONTH) {
 
 				optionLocator = "id=POPUP_MONTH_VIEW";
 				page = new ApptMonthView(this.MyApplication);
-				
+
 			}
-			
+
 		} else {
-			
+
 			throw new HarnessException("No logic defined for pulldown " + pulldown + " and option " + option);
 
 		}
@@ -923,9 +921,9 @@ public class PageCalendar extends AbsTab {
 
 	private AppointmentItem parseListViewRow(String rowLocator) throws HarnessException {
 		String locator;
-		
+
 		AppointmentItem item = new AppointmentItem();
-		
+
 		// Is the item checked/unchecked?
 		locator = rowLocator + " div[id=$='__se'][class='ImgCheckboxChecked']";
 		item.setGIsChecked(this.sIsElementPresent(locator));
@@ -941,13 +939,13 @@ public class PageCalendar extends AbsTab {
 		// Is there an attachment?
 		locator = rowLocator + " div[id=$='__at'][class='ImgAttachment']";
 		item.setGHasAttachment(this.sIsElementPresent(locator));
-		
+
 		// Get the fragment and the subject
 		locator = rowLocator + " span[id$='__fm']";
 		if ( this.sIsElementPresent(locator) ) {
-			
+
 			String fragment = this.sGetText(locator).trim();
-			
+
 			// Get the subject
 			locator = rowLocator + " td[id$='__su']";
 			String subject = this.sGetText(locator).trim();
@@ -957,7 +955,7 @@ public class PageCalendar extends AbsTab {
 			item.setGFragment(fragment);
 			item.setGSubject(subject.replace(fragment, "").trim());
 
-			
+
 		} else {
 
 			// Only the subject is present
@@ -966,16 +964,16 @@ public class PageCalendar extends AbsTab {
 
 		}
 
-		
+
 		// What is the location
 		// TODO: see http://bugzilla.zimbra.com/show_bug.cgi?id=63883
-		
+
 		// What is the status
 		// TODO: see http://bugzilla.zimbra.com/show_bug.cgi?id=63883
 
 		// What calendar is it in
 		// TODO
-		
+
 		// Is it recurring
 		locator = rowLocator + " div[id=$='__re'][class='ImgApptRecur']";
 		item.setGIsRecurring(this.sIsElementPresent(locator));
@@ -984,11 +982,11 @@ public class PageCalendar extends AbsTab {
 		locator = rowLocator + " td[id$='__dt']";
 		item.setGStartDate(this.sGetText(locator));
 
-		
+
 		return (item);
 
 	}
-	
+
 	private List<AppointmentItem> zListGetAppointmentsListView() throws HarnessException {
 		List<AppointmentItem> items = new ArrayList<AppointmentItem>();
 
@@ -1000,7 +998,7 @@ public class PageCalendar extends AbsTab {
 		if ( !this.sIsElementPresent(divLocator) ) {
 			throw new HarnessException("List View Rows is not present: " + divLocator);
 		}
-		
+
 		// If the list doesn't exist, then no items are present
 		if ( !this.sIsElementPresent(listLocator) ) {
 			// return an empty list
@@ -1018,34 +1016,34 @@ public class PageCalendar extends AbsTab {
 			AppointmentItem item = parseListViewRow(listLocator + ":nth-of-type("+ i +")");
 			items.add(item);
 			logger.info(item.prettyPrint());
-			
+
 		}
 
 		// Return the list of items
 		return (items);
 
 	}
-	
+
 	private List<AppointmentItem> zListGetAppointmentsDayView() throws HarnessException {
 		throw new HarnessException("implement me");
 	}
-	
+
 	private List<AppointmentItem> zListGetAppointmentsWorkWeekView() throws HarnessException {
 		throw new HarnessException("implement me");
 	}
-	
+
 	private List<AppointmentItem> zListGetAppointmentsWeekView() throws HarnessException {
 		throw new HarnessException("implement me");
 	}
-	
+
 	private List<AppointmentItem> zListGetAppointmentsMonthView() throws HarnessException {
 		throw new HarnessException("implement me");
 	}
-	
+
 	private List<AppointmentItem> zListGetAppointmentsScheduleView() throws HarnessException {
 		throw new HarnessException("implement me");
 	}
-	
+
 	public List<AppointmentItem> zListGetAppointments() throws HarnessException {
 
 		if ( this.zIsVisiblePerPosition(Locators.CalendarViewListCSS, 0, 0) ) {

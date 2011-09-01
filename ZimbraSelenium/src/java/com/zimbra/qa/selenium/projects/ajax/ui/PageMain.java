@@ -28,6 +28,9 @@ public class PageMain extends AbsTab {
 
 		public static final String zAppbarSocialLocator	= "css=div[id^='zb__App__com_zimbra_social_']";
 		
+		// 8.0 D1: public static final String ButtonRefreshLocatorCSS = "css=div[id='CHECK_MAIL'] td[id='CHECK_MAIL_left_icon'] div[class='ImgRefresh']";
+		// 8.0 D2: public static final String ButtonRefreshLocatorCSS = "css=div[id='CHECK_MAIL'] td[id='CHECK_MAIL_left_icon'] div[class='ImgRefreshAll']";
+		public static final String ButtonRefreshLocatorCSS = "css=div[id='CHECK_MAIL'] td[id='CHECK_MAIL_left_icon']>div";
 	}
 	
 	
@@ -141,10 +144,48 @@ public class PageMain extends AbsTab {
 
 	@Override
 	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
 
 		// Q. Should the tabs or help or logout be processed here?
 		// A. I don't think those are considered "toolbars", so don't handle here for now (Matt)
-		throw new HarnessException("Main page does not have a Toolbar");
+
+		if (button == null)
+			throw new HarnessException("Button cannot be null!");
+
+		// Default behavior variables
+		//
+		String locator = null; // If set, this will be clicked
+		AbsPage page = null; // If set, this page will be returned
+
+		if (button == Button.B_REFRESH) {
+			
+			locator = Locators.ButtonRefreshLocatorCSS;
+			page = null;
+			
+		} else {
+			throw new HarnessException("no logic defined for button " + button);
+		}
+
+		if (locator == null) {
+			throw new HarnessException("locator was null for button " + button);
+		}
+
+		// Default behavior, process the locator by clicking on it
+		//
+		this.zClick(locator);
+
+		// If the app is busy, wait for it to become active
+		this.zWaitForBusyOverlay();
+
+		// If page was specified, make sure it is active
+		if (page != null) {
+
+			// This function (default) throws an exception if never active
+			page.zWaitForActive();
+
+		}
+
+		return (page);
 		
 	}
 

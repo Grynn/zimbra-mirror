@@ -425,10 +425,7 @@ public class PageTasks extends AbsTab {
 		//
 		if (button == Button.B_REFRESH) {
 
-			locator = "css=td#CHECK_MAIL_left_icon";
-			page = null;
-			
-			// FALLTHROUGH
+			return (((AppAjaxClient)this.MyApplication).zPageMain.zToolbarPressButton(Button.B_REFRESH));
 
 		} else if (button == Button.B_NEW) {
 

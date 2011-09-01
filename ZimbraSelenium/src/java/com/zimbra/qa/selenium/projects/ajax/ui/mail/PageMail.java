@@ -189,7 +189,7 @@ public class PageMail extends AbsTab {
 
 		} else if ( button == Button.B_GETMAIL || button == Button.B_LOADFEED || button == Button.B_REFRESH ) {
 
-			locator = "css=td#CHECK_MAIL_left_icon";
+			return (((AppAjaxClient)this.MyApplication).zPageMain.zToolbarPressButton(Button.B_REFRESH));
 
 		} else if ( button == Button.B_DELETE ) {
 
