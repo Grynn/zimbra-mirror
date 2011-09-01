@@ -132,6 +132,7 @@ public class TreeContacts extends AbsTree {
 		
 		
 		if ( action == Action.A_RIGHTCLICK ) {
+			zClick(treeItemLocator);			
 			zRightClickAt(treeItemLocator,"0,0");
 			zWaitForBusyOverlay();
 			
@@ -161,15 +162,23 @@ public class TreeContacts extends AbsTree {
 				zWaitForBusyOverlay();
 				page = new DialogCreateFolder(MyApplication, ((AppAjaxClient)MyApplication).zPageAddressbook);			    
 			}			
-			else if (option == Button.B_DELETE) {								
+			else if (option == Button.B_DELETE) {												
 				//if option is disabled
+				
 				optionLocator="tr#POPUP_DELETE";
 				if (zIsElementDisabled(optionLocator + ">td[id$=_left_icon]>div")) {
 					return null;
 				}
 				
-				zClickAt("css=" + optionLocator,"0,0");				
+				//zClickAt("css=" + optionLocator,"0,0");				
+			
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);				
+				zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);	
+				
 				zWaitForBusyOverlay();
+				
 				page= ((AppAjaxClient)MyApplication).zPageAddressbook;						
 		    } 
 			else if (option == Button.B_RENAME) {
