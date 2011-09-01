@@ -73,14 +73,7 @@ public class ModifyCallFeaturesTag extends CallFeaturesTagBase {
 				newVoiceMailPrefs.setEmailNotifAttach(oldVoiceMailPrefs.getEmailNotifAttach());
 			}
 
-			
-
-			if (mEmailNotificationActive!=null && mEmailNotificationAddress!=null && 
-				((!mEmailNotificationActive.booleanValue() && 
-				(oldVoiceMailPrefs.getEmailNotificationAddress() != null && oldVoiceMailPrefs.getEmailNotificationAddress().length() > 0)) || !oldVoiceMailPrefs.getEmailNotificationAddress().equalsIgnoreCase(mEmailNotificationAddress))) {
-				String address = mEmailNotificationActive.booleanValue() ? mEmailNotificationAddress : "";
-				newVoiceMailPrefs.setEmailNotificationAddress(address);
-			}
+			newVoiceMailPrefs.setEmailNotificationAddress((mEmailNotificationActive != null && mEmailNotificationActive.booleanValue()) ? mEmailNotificationAddress : "");
 			
 			ZCallForwardingBean callForwarding = oldFeatures.getCallForwardingAll();
 			if (mCallForwardingActive!=null && mCallForwardingForwardTo!=null && 
