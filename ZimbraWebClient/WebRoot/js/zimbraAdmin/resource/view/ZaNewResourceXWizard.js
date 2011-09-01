@@ -473,7 +473,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 	var defaultWidth = 250;	
 	var case2={type:_CASE_, numCols:1,  caseKey:ZaNewResourceXWizard.step2,
 					items: [
-					   {type:_ZAWIZGROUP_, 
+					   {type:_ZAWIZGROUP_,  colSizes:["200px","275px"],
 							items:[
 								{ref:ZaResource.A_zimbraCalResContactName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_ContactName,
 									label:ZaMsg.NAD_ContactName, labelLocation:_LEFT_, width:defaultWidth},
@@ -517,8 +517,8 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 									visibilityChangeEventSources:[ZaResource.A_zimbraCalResType]
 								}
 							]
-						},											
-						{type:_ZAWIZGROUP_, 
+						},
+						{type:_ZAWIZGROUP_, colSizes:["200px","275px"],
 							items:ZaAccountXFormView.getAddressFormItem()
 						}
 					]
