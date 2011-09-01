@@ -22,22 +22,26 @@ public class DialogWarning extends AbsDialog {
 
 	public static class DialogWarningID {
 		
-		public static DialogWarningID SaveCurrentMessageAsDraft = new DialogWarningID("YesNoCancel");
 
-		public static DialogWarningID SaveTaskChangeMessage = new DialogWarningID("YesNoCancel");
+		public static final DialogWarningID SaveCurrentMessageAsDraft = new DialogWarningID("YesNoCancel");
+
+		public static final DialogWarningID SaveTaskChangeMessage = new DialogWarningID("YesNoCancel");
 		
-		public static DialogWarningID SendLink = new DialogWarningID("css=div[class=DwtConfirmDialog]");
-		public static DialogWarningID DeleteTagWarningMessage = new DialogWarningID("YesNoCancel");
-		public static DialogWarningID EmptyFolderWarningMessage = new DialogWarningID("OkCancel");
-		public static DialogWarningID SaveSignatureChangeMessage = new DialogWarningID("YesNoCancel");
-		public static DialogWarningID CancelCreateContact = new DialogWarningID("YesNoCancel");
-		public static DialogWarningID PermanentlyDeleteTheItem = new DialogWarningID("OkCancel");
+		public static final DialogWarningID SendLink = new DialogWarningID("css=div[class=DwtConfirmDialog]");
+		public static final DialogWarningID DeleteTagWarningMessage = new DialogWarningID("YesNoCancel");
+		public static final DialogWarningID EmptyFolderWarningMessage = new DialogWarningID("OkCancel");
+		public static final DialogWarningID SaveSignatureChangeMessage = new DialogWarningID("YesNoCancel");
+		public static final DialogWarningID CancelCreateContact = new DialogWarningID("YesNoCancel");
+		public static final DialogWarningID PermanentlyDeleteTheItem = new DialogWarningID("OkCancel");
 		
-		public static DialogWarningID DeleteAppointment = new DialogWarningID("YesNo");
+		public static final DialogWarningID DeleteAppointment = new DialogWarningID("YesNo");
 
 		// See bug: http://bugzilla.zimbra.com/show_bug.cgi?id=63353
-		public static DialogWarningID SelectedTimeIsInPast = new DialogWarningID("ShowDelayPastDialog");
+		public static final DialogWarningID SelectedTimeIsInPast = new DialogWarningID("ShowDelayPastDialog");
 		
+		// See http://bugzilla.zimbra.com/show_bug.cgi?id=64081
+		public static final DialogWarningID SendReadReceipt = new DialogWarningID("Bug64081");;
+
 		protected String Id;
 		protected DialogWarningID(String id) {
 			Id = id;
