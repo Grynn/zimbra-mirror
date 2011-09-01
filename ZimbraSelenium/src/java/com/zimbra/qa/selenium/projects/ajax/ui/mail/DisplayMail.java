@@ -4,7 +4,6 @@ import java.util.*;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
-import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogShareAccept;
 import com.zimbra.qa.selenium.projects.ajax.ui.DialogShareDecline;
@@ -371,10 +370,11 @@ public class DisplayMail extends AbsDisplay {
 			locator = this.ContainerLocator + " tr[id$='_hdrTableTopRow'] td[class~='SubjectCol']";
 
 		} else if ( field == Field.To ) {
-			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-			   locator = this.ContainerLocator + " tr[id$='_to'] td[class~='LabelColValue'] span[id$='_com_zimbra_email']";
-			} else {
-			   locator = this.ContainerLocator + " tr[id$='_to'] td[class~='LabelColValue'] span[id$='_com_zimbra_email'] span span";
+			
+			locator = this.ContainerLocator + " tr[id$='_to'] td[class='LabelColValue'] span[id$='_com_zimbra_email'] span span";
+			if ( !sIsElementPresent(locator) ) {
+				// no email zimlet case
+				locator = this.ContainerLocator + " tr[id$='_to'] td[class='LabelColValue'] ";
 			}
 
 		} else {
