@@ -287,14 +287,15 @@ public final class GalSyncUtil {
                     GalSyncCheckpointUtil.checkpoint(galMbox, token, galAcctId, reqIds);
                 } else {
                     SortedMap<Integer, String> sorted = new TreeMap<Integer, String>();
+                    int count = Integer.MAX_VALUE;
                     for (Entry<String, ParsedContact> entry : parsedContacts.entrySet()) {
                         int itemId = GalSyncUtil.findContact(entry.getKey(), ds);
                         if (itemId > 0) {
                             sorted.put(itemId, entry.getKey()); //exists, sort by local item id
                         } else {
-                            sorted.put(Integer.MAX_VALUE, entry.getKey()); //doesn't exist; add at end; new items have highest id
+                            sorted.put(count--, entry.getKey()); //doesn't exist; add at end; new items have highest id
                         }
-                    } 
+                    }
                     for (String id : sorted.values()) {
                         ParsedContact pc = parsedContacts.get(id);
                         saveParsedContact(galMbox, ctxt, syncFolder, id, pc, getContactLogStr(pc), false, ds);
