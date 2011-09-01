@@ -471,8 +471,8 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 						{value:ZaResource.RESOURCE_TYPE_EQUIPMENT, label: "Resource_32"}   ];
 						
 	var headerItems = [	{type:_AJX_IMAGE_, ref:ZaResource.A_zimbraCalResType, src:"Resource_32", label:null, rowSpan:3, choices: imgChoices},
-						{type:_OUTPUT_, ref:ZaResource.A_displayname, label:null,cssClass:"AdminTitle", rowSpan:3,
-                            height: 32, visibilityChecks:[ZaItem.hasReadPermission]}];
+						{type:_OUTPUT_, ref:ZaResource.A_displayname, label:null,cssClass:"AdminTitle", height:"auto", width:350, rowSpan:3, cssStyle:"word-wrap:break-word;overflow:hidden",
+                             visibilityChecks:[ZaItem.hasReadPermission]}];
 						
 	/*headerItems.push({type:_OUTPUT_, ref:ZaResource.A_COSId, labelLocation:_LEFT_, label:ZaMsg.NAD_ClassOfService, 
 		choices:this.cosChoices,getDisplayValue:function(newValue) {

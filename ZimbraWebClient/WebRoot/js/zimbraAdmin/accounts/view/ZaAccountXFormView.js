@@ -1331,7 +1331,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 		
 	var emptyAlias = " @" + domainName;
 	var headerItems = [{type:_AJX_IMAGE_, src:"Person_32", label:null, rowSpan:3},
-        {type:_OUTPUT_, ref:ZaAccount.A_displayname, label:null,cssClass:"AdminTitle", height: 32, rowSpan:3,
+        {type:_OUTPUT_, ref:ZaAccount.A_displayname, label:null,cssClass:"AdminTitle", height:"auto", width:350, rowSpan:3, cssStyle:"word-wrap:break-word;overflow:hidden",
         visibilityChecks:[ZaItem.hasReadPermission]}];
 	/*headerItems.push({type:_OUTPUT_, ref:ZaAccount.A_COSId,valueChangeEventSources:[ZaAccount.A_COSId], labelLocation:_LEFT_, label:ZaMsg.NAD_ClassOfService, choices:this.cosChoices,getDisplayValue:function(newValue) {
 			if(ZaItem.ID_PATTERN.test(newValue)) {

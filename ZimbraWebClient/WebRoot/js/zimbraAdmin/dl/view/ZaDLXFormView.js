@@ -1405,7 +1405,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 	}
 
     var headerItems = [{type:_AJX_IMAGE_, src:"Group_32", label:null, rowSpan:3},
-						{type:_OUTPUT_, ref:"name", label:null,cssClass:"AdminTitle", height: 32, rowSpan:3}
+						{type:_OUTPUT_, ref:"name", label:null,cssClass:"AdminTitle", height:"auto", width:350, rowSpan:3, cssStyle:"word-wrap:break-word;overflow:hidden"}
 						] ;
 
     if (ZaItem.hasReadPermission (ZaItem.A_zimbraId, entry)) 
