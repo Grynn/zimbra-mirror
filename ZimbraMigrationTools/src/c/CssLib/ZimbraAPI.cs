@@ -16,6 +16,11 @@ namespace CssLib
         internal const int ACCOUNT_CREATE_FAILED = 99;
         //
 
+        // Upload modes
+        public const int STRING_MODE = 1;       // for messages -- request is all string data
+        public const int MIXED_MODE = 2;       // for contacts (or appts) -- mixed string and binary
+        //
+
         private string lastError;
         public string LastError
         {
@@ -265,7 +270,7 @@ namespace CssLib
         //////////
 
         // private UploadFile method
-        private int UploadFile(string filepath, out string uploadToken)
+        private int UploadFile(string filepath, int mode, out string uploadToken)
         {
             WebServiceClient client = new WebServiceClient
             {
@@ -277,7 +282,7 @@ namespace CssLib
             string rsp = "";
             uploadToken = "";
 
-            client.InvokeUploadService(ZimbraValues.GetZimbraValues().AuthToken, filepath, out rsp);
+            client.InvokeUploadService(ZimbraValues.GetZimbraValues().AuthToken, filepath, mode, out rsp);
             retval = client.status;
             if (retval == 0)
             {
@@ -725,7 +730,22 @@ namespace CssLib
             {
                 string nam = pair.Key;
                 string val = pair.Value;
-                WriteAttrNVPair(writer, "a", "n", nam, val);
+
+                if (nam == "image")
+                {
+                    string uploadToken = "";
+                    if (UploadFile(val, MIXED_MODE, out uploadToken) == 0)
+                    {
+                        writer.WriteStartElement("a");
+                        writer.WriteAttributeString("n", nam);
+                        writer.WriteAttributeString("aid", uploadToken);
+                        writer.WriteEndElement();
+                    }
+                }
+                else
+                {
+                    WriteAttrNVPair(writer, "a", "n", nam, val);
+                }
             }
             
             writer.WriteEndElement();   // cn
@@ -842,7 +862,7 @@ namespace CssLib
 
             if (!isInline)
             {
-                retval = UploadFile(filepath, out uploadToken);
+                retval = UploadFile(filepath, STRING_MODE, out uploadToken);
             }
             else
             {
@@ -933,7 +953,7 @@ namespace CssLib
 
                 for (int i = 0; i < lFilePaths.Count; i++)
                 {
-                    ufretval = UploadFile(lFilePaths[i], out uploadToken);
+                    ufretval = UploadFile(lFilePaths[i], STRING_MODE, out uploadToken);
                     if (ufretval == 0)
                     {
                         ZimbraMessage message = lMessages[i];

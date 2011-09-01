@@ -132,7 +132,7 @@ namespace CssLib
             return webRequest;
         }
 
-        public void InvokeUploadService(string authtoken, string filePath, out string rsp)
+        public void InvokeUploadService(string authtoken, string filePath, int mode, out string rsp)
         {
             WebResponse response = null;
             string strResponse = "";
@@ -170,34 +170,88 @@ namespace CssLib
             string contentType = Environment.NewLine + "Content-Type: application/octet-stream" + Environment.NewLine;
             string contentTransfer = "Content-Transfer-Encoding: binary" + Environment.NewLine + Environment.NewLine;
 
-            try
+            if (mode == ZimbraAPI.STRING_MODE)      // easier -- all text in the request
             {
-                StreamReader stmr = new StreamReader(filePath);
-                string fileContents = stmr.ReadToEnd();
-                int fcLen = fileContents.Length;
-                int buflen = fcLen + 400;
-
-                using (Stream stm = webReq.GetRequestStream())
+                try
                 {
-                    using (StreamWriter stmw = new StreamWriter(stm, System.Text.Encoding.Default, buflen))
+                    StreamReader stmr = new StreamReader(filePath);
+                    string fileContents = stmr.ReadToEnd();
+                    int fcLen = fileContents.Length;
+                    int buflen = fcLen + 400;
+
+                    using (Stream stm = webReq.GetRequestStream())
                     {
-                        stmw.Write(contentDisposition1);
-                        stmw.Write(contentDisposition2);
-                        stmw.Write(contentType);
-                        stmw.Write(contentTransfer);
-                        stmw.Write(fileContents);                      
-                        stmw.Write(endBoundary);
-                        stmr.Close();
-                        stmw.Close();
+                        using (StreamWriter stmw = new StreamWriter(stm, System.Text.Encoding.Default, buflen))
+                        {
+                            stmw.Write(contentDisposition1);
+                            stmw.Write(contentDisposition2);
+                            stmw.Write(contentType);
+                            stmw.Write(contentTransfer);
+                            stmw.Write(fileContents);
+                            stmw.Write(endBoundary);
+                            stmr.Close();
+                            stmw.Close();
+                        }
                     }
                 }
+                catch (System.Net.WebException wex)
+                //catch (Exception ex)
+                {
+                    setErrors(wex);
+                    rsp = "";
+                    return;
+                }
             }
-            catch (System.Net.WebException wex)
-            //catch (Exception ex)
+            else    // MIXED MODE -- text and binary attachment
             {
-                setErrors(wex);
-                rsp = "";
-                return;
+                try
+                {
+                    // first get the bytes from the file -- this is the attachment data
+                    byte[] buf = null;
+                    System.IO.FileStream fileStream = new System.IO.FileStream(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                    System.IO.BinaryReader binaryReader = new System.IO.BinaryReader(fileStream);
+                    long datalen = new System.IO.FileInfo(filePath).Length;
+                    buf = binaryReader.ReadBytes((Int32)datalen);
+                    fileStream.Close();
+                    fileStream.Dispose();
+                    binaryReader.Close();
+
+                    // now use a memory stream since we have mixed data
+                    using (Stream memStream = new System.IO.MemoryStream())
+                    {
+                        // write the request data
+                        byte[] cd1Bytes = System.Text.Encoding.UTF8.GetBytes(contentDisposition1);
+                        memStream.Write(cd1Bytes, 0, cd1Bytes.Length);
+                        byte[] cd2Bytes = System.Text.Encoding.UTF8.GetBytes(contentDisposition2);
+                        memStream.Write(cd2Bytes, 0, cd2Bytes.Length);
+                        byte[] cTypeBytes = System.Text.Encoding.UTF8.GetBytes(contentType);
+                        memStream.Write(cTypeBytes, 0, cTypeBytes.Length);
+                        byte[] cTransferBytes = System.Text.Encoding.UTF8.GetBytes(contentTransfer);
+                        memStream.Write(cTransferBytes, 0, cTransferBytes.Length);
+                        memStream.Write(buf, 0, (int)datalen);
+                        byte[] cEndBoundaryBytes = System.Text.Encoding.UTF8.GetBytes(endBoundary);
+                        memStream.Write(cEndBoundaryBytes, 0, cEndBoundaryBytes.Length);
+                        //
+
+                        // set up the web request to use our memory stream
+                        webReq.ContentLength = memStream.Length;
+                        Stream requestStream = webReq.GetRequestStream();
+                        memStream.Position = 0;
+                        byte[] tempBuffer = new byte[memStream.Length];
+                        memStream.Read(tempBuffer, 0, tempBuffer.Length);
+                        memStream.Close();
+                        requestStream.Write(tempBuffer, 0, tempBuffer.Length);
+                        requestStream.Close();
+                        //
+                    }
+                }
+                catch (System.Net.WebException wex)
+                //catch (Exception ex)
+                {
+                    setErrors(wex);
+                    rsp = "";
+                    return;
+                }
             }
 
             //get the response from the web service
