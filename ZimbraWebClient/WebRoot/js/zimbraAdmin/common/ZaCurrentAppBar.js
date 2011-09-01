@@ -89,7 +89,8 @@ function(menu) {
         x = dropDownLocation.x + 20;
     }
 	x = ((x - menuSize.x) >= 0) ? x - menuSize.x : x;
-
+    if (x > 13)
+        x = x -13; //here is 13px is for extra padding.
 	var y;
 
     var horizontalBorder = (parentElement.style.borderTopWidth == "") ? 0 : parseInt(parentElement.style.borderTopWidth);
@@ -98,3 +99,42 @@ function(menu) {
 
 	menu.popup(0, x, y);
 };
+
+ZaCurrentAppBar.prototype._isDropDownEvent =
+function(ev) {
+	if (this._dropDownEventsEnabled && this._dropDownEl) {
+		var mouseX = ev.docX;
+        if (this._imgEl) {
+            var imgX =  Dwt.toWindow(this._imgEl, 0, 0, window).x;
+            if (mouseX >= imgX)
+                return true;
+        }
+	}
+	return false;
+};
+
+ZaCurrentAppBar.prototype._handleClick =
+function(ev) {
+    // Nothing doing here
+}
+
+ZaCurrentAppBar.prototype.updateMenu =
+function(popupOperations) {
+    var oldMenu = this.getMenu();
+    if(oldMenu) {
+        this.setMenu("");
+        this.menu = "";
+        try {
+            delete oldMenu;
+        }catch(ex){
+            //nothing doing here to avoid delete exception;
+        }
+    }
+
+    if (popupOperations) {
+        this.menu = new ZaPopupMenu(this, "ActionMenu", null, popupOperations, ZaId.CURRENT_APP_BAR, ZaId.MENU_POP);
+        this.menu.setWidth(150);
+        this.setMenu(this.menu);
+    }
+
+}

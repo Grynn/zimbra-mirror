@@ -530,7 +530,9 @@ function(viewId, show) {
 		this._stickToGrid(list);
         ////// May be need to changed to app header...
         if (!appNewUI)
-		this._setTitle(viewId);
+		    this._setTitle(viewId);
+        else
+            this._setCurrentBar(viewId);
 	} else {
 		for (var cid in elements) {
 			elements[cid].setLocation(Dwt.LOC_NOWHERE, Dwt.LOC_NOWHERE);
@@ -550,6 +552,21 @@ function(viewId) {
 			this._components[ZaAppViewMgr.C_CURRENT_APP].setCurrentAppLabel (title);		
 		}
 		Dwt.setTitle(title ? ZaMsg.zimbraTitle + ": " + title : ZaMsg.zimbraTitle);
+	}
+}
+
+ZaAppViewMgr.prototype._setCurrentBar =
+function(viewId) {
+    var elements = this._views[viewId];
+	var content = elements[ZaAppViewMgr.C_APP_CONTENT];
+    var viewController = ZaApp.getInstance().getControllerById(viewId);
+	var popUpOperations = "" ;
+	if (viewController && viewController.getPopUpOperation) {
+		popUpOperations = viewController.getPopUpOperation();
+	}
+
+    if(this._components[ZaAppViewMgr.C_APP_HEADER] && this._components[ZaAppViewMgr.C_APP_HEADER].updateMenu ) {
+		this._components[ZaAppViewMgr.C_APP_HEADER].updateMenu (popUpOperations);
 	}
 }
 

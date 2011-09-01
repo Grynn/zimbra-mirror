@@ -1000,6 +1000,11 @@ function (item) {
 	}
 }
 
+ZaAccountListController.prototype.getPopUpOperation =
+function() {
+    return this._popupOperations;
+}
+
 ZaAccountListController.changeActionsStateMethod = 
 function () {
 	var cnt = this._contentView.getSelectionCount();

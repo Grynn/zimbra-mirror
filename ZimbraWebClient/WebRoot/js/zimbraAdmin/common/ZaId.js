@@ -172,7 +172,8 @@ ZaId.NEW_FOLDER_BUTTON				= "zb_newFolder";		// New Folder button on current app
 ZaId.STATUS_VIEW				= "z_status";			// status view (shows toast)
 ZaId.TOAST					= "z_toast";			// toast
 ZaId.APP_CHOOSER				= "ztb_appChooser";		// app chooser toolbar
-
+/* New UI*/
+ZaId.CURRENT_APP_BAR         = "zb_currentApp";
 
 /* Functions for generating IDs */
 
