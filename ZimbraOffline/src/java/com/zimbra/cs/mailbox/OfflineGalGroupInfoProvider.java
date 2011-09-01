@@ -37,7 +37,7 @@ public class OfflineGalGroupInfoProvider extends GalGroupInfoProvider {
     public GroupInfo getGroupInfo(String addr, boolean needCanExpand,
             Account requestedAcct, Account authedAcct) {
         try {
-            Contact con = GalSyncUtil.getGalContact(requestedAcct, addr);
+            Contact con = GalSyncUtil.getGalDlistContact(requestedAcct, addr);
             if (con != null && con.isGroup()) {
                 return needCanExpand ? GroupInfo.CAN_EXPAND : GroupInfo.IS_GROUP;
             }

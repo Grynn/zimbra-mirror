@@ -46,7 +46,7 @@ public class OfflineGetDistributionListMembers extends GetDistributionListMember
         
         Element d = request.getElement(AdminConstants.E_DL);
         String dlName = d.getText();
-        Contact con = GalSyncUtil.getGalContact(account, dlName);
+        Contact con = GalSyncUtil.getGalDlistContact(account, dlName);
         ContactDLMembers dlMembers = new ContactDLMembers(con); 
         return processDLMembers(zsc, dlName, account, limit, offset, dlMembers);
     }

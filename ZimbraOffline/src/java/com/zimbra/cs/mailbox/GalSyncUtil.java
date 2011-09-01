@@ -132,14 +132,18 @@ public final class GalSyncUtil {
      * @return Contact for the address or null if it does not exist
      * @throws ServiceException
      */
-    public static Contact getGalContact(Account requestedAcct, String addr) throws ServiceException {
+    public static Contact getGalDlistContact(Account requestedAcct, String addr) throws ServiceException {
         Contact con = null;
-        ZimbraQueryResults dlResult = (new OfflineGal((OfflineAccount)requestedAcct)).search(addr, "all", "", 0, 0, null);
+        ZimbraQueryResults dlResult = (new OfflineGal((OfflineAccount)requestedAcct)).search(addr, "group", "", 0, 0, null);
         if (dlResult != null) {
             try {
                 if (dlResult.hasNext()) {
                     ZimbraHit hit = dlResult.getNext();
                     con = (Contact) hit.getMailItem();
+                    while (OfflineLog.offline.isDebugEnabled() && dlResult.hasNext()) {
+                        Contact dupe = (Contact) dlResult.getNext().getMailItem();
+                        OfflineLog.offline.debug("Ignoring duplicate group %s",dupe);
+                    }
                 }
             } finally {
                 Closeables.closeQuietly(dlResult);
@@ -163,8 +167,11 @@ public final class GalSyncUtil {
                 while (dlResult.hasNext()) {
                     ZimbraHit hit = dlResult.getNext();
                     Contact contact = (Contact) hit.getMailItem();
-                    String listName = contact.getEmailAddresses().size() > 0 ? contact.getEmailAddresses().get(0) : contact.getFileAsString();
-                    groups.add(listName);
+                    if (contact.getEmailAddresses().size() > 0) {
+                        groups.addAll(contact.getEmailAddresses());
+                    } else {
+                        groups.add(contact.getFileAsString());
+                    }
                 }
             } finally {
                 Closeables.closeQuietly(dlResult);

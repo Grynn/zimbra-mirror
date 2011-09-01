@@ -55,7 +55,7 @@ public class OfflineAutoComplete extends AutoComplete {
         String typeStr = request.getAttribute(MailConstants.A_TYPE, "account");
         GalSearchType stype = GalSearchType.fromString(typeStr);
         int limit = account.getContactAutoCompleteMaxResults();
-        AutoCompleteResult result = query(request, zsc, account, true, name, limit, stype, octxt);
+        AutoCompleteResult result = query(request, zsc, account, true, name, limit, stype, true, octxt);
 
         ContactAutoComplete ac = new ContactAutoComplete(account, octxt);
         ac.setNeedCanExpand(true);
@@ -112,7 +112,7 @@ public class OfflineAutoComplete extends AutoComplete {
                 continue;
             }
 
-            AutoCompleteResult res = query(request, ctxt, account, true, name, lmt, stype, octxt);
+            AutoCompleteResult res = query(request, ctxt, account, true, name, lmt, stype, true, octxt);
             if (res != null)
                 result.appendEntries(res);
 
