@@ -150,16 +150,51 @@ ZaTree.prototype.setSelectionByPath =
 function (path, isAddHistory, skipNotify, kbNavEvent, noFocus) {
 
     var dataItem = this.getTreeItemDataByPath(path);
-    this.buildTree(dataItem);
+    var rootDataItem;
+    if (dataItem.isLeaf() && dataItem.parentObject) {
+        rootDataItem = dataItem.parentObject;
+    } else {
+        rootDataItem = dataItem;
+    }
+    this.buildTree(rootDataItem);
     this._selectedItems.removeAll();
 
-    var treeItem = this.currentRoot;
+    var treeItem;
+    if (dataItem == rootDataItem) {
+        treeItem = this.currentRoot;
+    }  else {
+        treeItem = this.getTreeItemByPath(path);
+    }
     this._selectedItems.add(treeItem);
 
     if (treeItem._setSelected(true, noFocus) && !skipNotify) {
     	this._notifyListeners(DwtEvent.SELECTION, [treeItem], DwtTree.ITEM_SELECTED, null, this._selEv, kbNavEvent);
 	}
     this._updateHistory(treeItem, isAddHistory);
+}
+
+ZaTree.prototype.getTreeItemByPath =
+function(path) {
+    if (!path)
+        return null;
+
+    if (!this.currentRoot)
+        return null;
+
+    var rootDataPath = this.currentRoot.getData("dataItem");
+    var rootPath = this.getABPath(rootDataPath);
+    if (rootPath == path)
+        return this.currentRoot;
+
+    var children = this.currentRoot.getChildren();
+    for (var i = 0; i < children.length; i++) {
+        var childTreeItem = children[i];
+        var text = childTreeItem.getText();
+        var childPath =  rootPath + ZaTree.SEPERATOR + text;
+        if (path == childPath)
+            return  childTreeItem;
+    }
+    return null;
 }
 
 ZaTree.prototype.buildTree =

@@ -1123,17 +1123,24 @@ function(item, currentView) {
 
     var tree = this.getOverviewPanel().getFolderTree();
     var parentPath = ZaOverviewPanelController.basePath + relativePath;
+    var name = item.name;
+    var namePath = parentPath + ZaTree.SEPERATOR + name;
+    var currentPath = tree.getTreeItemDataByPath (namePath);
+    // Add already
+    if (currentPath)
+        return;
+
     var parentDataItem = tree.getTreeItemDataByPath (parentPath);
     var index = parentDataItem.getChildrenNum();
-    var name = item.name;
+    var currentViewId = ZaApp.getInstance().getAppViewMgr().getCurrentView();
     var nameId = ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,"actLstHV",index);
     var nameDataItem =   new ZaTreeItemData({
                             parent:parentPath,
                             mappingId: ZaZimbraAdmin._XFORM_VIEW,
                             id:nameId,
                             text: name});
-    var namePath = parentPath + ZaTree.SEPERATOR + name;
 
+    nameDataItem.setData("viewId", currentViewId);
     tree.addTreeItemData(nameDataItem);
     var currentTabItem;
     var currentTabInfo;
@@ -1159,15 +1166,17 @@ function(item, currentView) {
 }
 
 ZaOverviewPanelController.xformTabTreeListener = function(ev) {
+    var viewId = ev.item.parent.getData("dataItem").getData("viewId");
     var stepValue = ev.item.getData("dataItem").getData("tabValue");
-    var currentView = ZaApp.getInstance().getAppViewMgr().getCurrentViewContent();
+    var currentView = ZaApp.getInstance().getAppViewMgr().getViewContentById(viewId);
     currentView._localXForm.setInstanceValue(stepValue, ZaModel.currentTab);
     currentView._localXForm.refresh() ;
 }
 
 ZaOverviewPanelController.xformTreeListener = function(ev) {
+    var viewId = ev.item.getData("dataItem").getData("viewId");
     var stepValue = ev.item.getData("dataItem").getData("firstTab");
-    var currentView = ZaApp.getInstance().getAppViewMgr().getCurrentViewContent();
+    var currentView = ZaApp.getInstance().getAppViewMgr().getViewContentById(viewId);
     currentView._localXForm.setInstanceValue(stepValue, ZaModel.currentTab);
     currentView._localXForm.refresh() ;
 }

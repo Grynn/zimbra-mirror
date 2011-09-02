@@ -195,6 +195,15 @@ function() {
 	var content = elements[ZaAppViewMgr.C_APP_CONTENT];
 	return content;
 }
+
+ZaAppViewMgr.prototype.getViewContentById =
+function(id) {
+    var elements = this._views[id];
+    if (!elements)
+        return "";
+	var content = elements[ZaAppViewMgr.C_APP_CONTENT];
+	return content;
+}
 /**
 * Creates an app view from the given components and puts it in an app container.
 *
