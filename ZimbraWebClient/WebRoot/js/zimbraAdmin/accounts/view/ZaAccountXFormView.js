@@ -1550,18 +1550,33 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 				colSizes:["275px","*"],numCols:2,
 				visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
                         			ZaAccountXFormView.ACCOUNT_NAME_GROUP_ATTRS]],				
-				items:ZaAccountXFormView.getAccountNameInfoItem() 
+				items:ZaAccountXFormView.getAccountNameInfoItem(),
+                displayLabelItem: true, headerLabelWidth:"100px",
+                headerItems:[
+                    {ref:ZaAccount.A_name, type:_EMAILADDR_,
+					 msgName:ZaMsg.NAD_AccountName,
+                                        labelLocation:_LEFT_,onChange:ZaAccount.setDomainChanged,forceUpdate:true,
+                                        enableDisableChecks:[[ZaItem.hasRight,ZaAccount.RENAME_ACCOUNT_RIGHT]],
+                                        visibilityChecks:[]
+                     }
+                ]
 			}
 		];
 	
-		var setupGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_AccountSetupGrouper, id:"account_form_setup_group", 
+		var setupGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_AccountSetupGrouper, id:"account_form_setup_group",
 			colSizes:["275px","*"],numCols:2,
 			items: [
 				{ref:ZaAccount.A_accountStatus, type:_OSELECT1_, msgName:ZaMsg.NAD_AccountStatus,
-					label:ZaMsg.NAD_AccountStatus, 
+					label:ZaMsg.NAD_AccountStatus, bmolsnr:true,
 					labelLocation:_LEFT_, choices:this.accountStatusChoices
 				}
 			],
+            headerItems: [
+                    {ref:ZaAccount.A_accountStatus, type:_OSELECT1_, //msgName:ZaMsg.NAD_AccountStatus,
+                        bmolsnr:true,
+                        labelLocation:_LEFT_, choices:this.accountStatusChoices
+                    }
+            ], displayLabelItem: true, headerLabelWidth:"100px",
 			visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
                         			[ZaAccount.A_accountStatus,
                         			ZaAccount.A_COSId,
@@ -1629,7 +1644,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	});
 	case1Items.push(setupGroup);
 	
-	var passwordGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper,id:"account_form_password_group", 
+	var passwordGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_PasswordGrouper,id:"account_form_password_group",
 		visibilityChecks:[[ZaItem.hasRight,ZaAccount.SET_PASSWORD_RIGHT]],
 		colSizes:["275px","*"],numCols:2,
 		items:[ 
@@ -1662,7 +1677,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 		]
 	};
 	case1Items.push(passwordGroup);														
-	
+
 	var notesGroup = {type:_TOP_GROUPER_, label:ZaMsg.NAD_NotesGrouper, id:"account_form_notes_group",
 		colSizes:["275px","*"],numCols:2,
 		visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, [ZaAccount.A_notes, ZaAccount.A_description]]],
@@ -1671,7 +1686,9 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 			{ref:ZaAccount.A_notes, type:_TEXTAREA_, msgName:ZaMsg.NAD_Notes,
 				label:ZaMsg.NAD_Notes, labelLocation:_LEFT_, labelCssStyle:"vertical-align:top", width:"30em"
 			}
-		]
+		],
+        displayLabelItem: true, headerLabelWidth:"100px",
+        headerItems:ZaItem.descriptionXFormItem
 	};
 
 	case1Items.push(notesGroup);

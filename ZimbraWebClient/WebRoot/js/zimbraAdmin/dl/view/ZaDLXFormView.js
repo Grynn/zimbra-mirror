@@ -539,8 +539,8 @@ function (entry) {
 	}
         this.modifyContainedObject () ;
 	this._localXForm.setInstance(this._containedObject);	
-	
-	this.updateTab();
+	if(!appNewUI)
+	    this.updateTab();
 }
 
 ZaDLXFormView.prototype.srchResWithoutSelf =

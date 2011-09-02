@@ -136,8 +136,9 @@ function(entry) {
 	this.formDirtyLsnr = new AjxListener(ZaApp.getInstance().getCurrentController(), ZaResourceController.prototype.handleXFormChange);
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, this.formDirtyLsnr);
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, this.formDirtyLsnr);	
-	
-	this.updateTab();
+
+    if(!appNewUI)
+	    this.updateTab();
 }
 
 ZaResourceXFormView.deleteCalFwdAddrButtonListener = function () {

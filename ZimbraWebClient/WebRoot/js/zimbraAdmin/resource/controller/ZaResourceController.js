@@ -181,6 +181,7 @@ function (entry) {
 		
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
+    if(!appNewUI) {
 	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
 	//ZaApp.getInstance().createView(ZaZimbraAdmin._RESOURCE_VIEW, elements);
 	var tabParams = {
@@ -188,7 +189,8 @@ function (entry) {
 			tabId: this.getContentViewId()
 		}
 	ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-	
+    } else
+         ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
 	this._removeConfirmMessageDialog = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], null, ZaId.VIEW_RES + "_removeConfirm");			
 	this._UICreated = true;
 	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;

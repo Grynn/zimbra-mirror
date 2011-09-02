@@ -3150,6 +3150,114 @@ function () {
     contentItems.items = [];
     return contentItems;
 }
+
+CollapsedGroup_XFormItem = function() {
+    this.expanded = true;
+}
+XFormItemFactory.createItemType("_COLLAPSED_GROUP_", "collapsedgroup", CollapsedGroup_XFormItem, Group_XFormItem)
+
+//	type defaults
+CollapsedGroup_XFormItem.prototype.headCss = "homeGroupHeader";
+CollapsedGroup_XFormItem.prototype.colSizes = "100%";
+CollapsedGroup_XFormItem.prototype.numCols = 1;
+CollapsedGroup_XFormItem.prototype.width = "100%";
+CollapsedGroup_XFormItem.prototype.defaultDisplay = false;
+CollapsedGroup_XFormItem.prototype.displayLabelItem = false;
+CollapsedGroup_XFormItem.prototype.cssStyle = "margin-top: 10px;";
+CollapsedGroup_XFormItem.prototype.headerLabel = "Collapsed Group";
+CollapsedGroup_XFormItem.prototype.expandedImg =  "ImgNodeExpanded";
+CollapsedGroup_XFormItem.prototype.collapsedImg =  "ImgNodeCollapsed";
+CollapsedGroup_XFormItem.prototype.initializeItems = function () {
+    var oldItems = this.getItems();
+    this.items = [];
+    if(this.__attributes.label) {
+        this.headerLabel = this.__attributes.label;
+    }
+    this.items[0] = this.getHeaderItems();
+    this.items[1] = this.getContentItems();
+    if(!this.items[1] || this.items[1].items.length == 0) {
+        if(oldItems)
+            this.items[1].items =  oldItems;
+    }
+
+    Group_XFormItem.prototype.initializeItems.call(this);
+}
+
+CollapsedGroup_XFormItem.prototype.onClick = function(ev) {
+    var headerItem =  this.getParentItem();
+    var collapsedItem = headerItem.getParentItem();
+    var headerContainer = headerItem.items[2];
+    var contentContainer = collapsedItem.items[1];
+    var displayLabelItem = collapsedItem.getInheritedProperty("displayLabelItem");
+    if (collapsedItem.expanded) {
+        collapsedItem.expanded = false;
+        this.updateElement(collapsedItem.collapsedImg);
+        contentContainer.hide();
+        if(displayLabelItem)
+            headerContainer.show();
+    } else {
+        collapsedItem.expanded = true;
+        this.updateElement(collapsedItem.expandedImg);
+        contentContainer.show();
+        headerContainer.hide();
+    }
+}
+
+CollapsedGroup_XFormItem.prototype.getHeaderItems =
+function () {
+    var headerLabel = this.getInheritedProperty("headerLabel");
+    var headerLabelWidth = this.getInheritedProperty("headerLabelWidth");
+    var headerCss = this.getInheritedProperty("headCss");
+    var headItems = this.getInheritedProperty("headerItems") || [];
+    var headerItems = { type:_COMPOSITE_, numCols:3, width:"100%",
+            colSizes:["20px", headerLabelWidth || "100%", "100%"], colSpan:"*",
+            items:[
+                {type:_DWT_IMAGE_, value: this.expandedImg, onClick:this.onClick},
+                {type:_OUTPUT_, value: headerLabel},
+                {type:_GROUP_, items: headItems}
+            ],
+            cssClass:headerCss
+        };
+    return headerItems;
+}
+
+CollapsedGroup_XFormItem.prototype.getContentItems =
+function () {
+    var colsize = this.getInheritedProperty("colSizes");
+    var numcols = this.getInheritedProperty("numCols");
+    var contentItems = { type:_GROUP_, items:[], colSpan:"*", colSizes:colsize,numCols:numcols
+    };
+    var content =  this.getInheritedProperty("contentItems");
+    if(content)
+        contentItems.items = content;
+    return contentItems;
+}
+
+CollapsedGroup_XFormItem.prototype.updateVisibility = function () {
+
+    XFormItem.prototype.updateVisibility.call(this);
+    var display = this.getInheritedProperty("defaultDisplay");
+    var displayLabelItem = this.getInheritedProperty("displayLabelItem");
+    if(display) {
+        this.items[0].items[2].hide();
+        this.items[1].show();
+        this.items[0].items[0].value = this.expandedImg;
+        this.expanded = true;
+    } else {
+        if(displayLabelItem)
+            this.items[0].items[2].show();
+        else this.items[0].items[2].hide();
+        this.items[1].hide();
+        this.items[0].items[0].__attributes.value = this.collapsedImg;
+        this.expanded = false;
+    }
+}
+
+CollapsedGroup_XFormItem.prototype.getLabel = function () {
+    return null;
+}
+
+
 /**
  * @class defines XFormItem type _GROUPER_
  * Draws a simple border around the group, with the label placed over the border
@@ -3369,7 +3477,9 @@ TopGrouper_XFormItem.prototype.outputHTMLEnd = function (html,  currentCol) {
 		);
 }
 
-
+if (appNewUI) {
+    XFormItemFactory.createItemType("_TOP_GROUPER_", "top_grouper", TopGrouper_XFormItem, CollapsedGroup_XFormItem);
+}
 
 
 /**
