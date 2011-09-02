@@ -566,9 +566,9 @@ ZaAutoProvConfigXWizard.myXFormModifier = function(xFormObject) {
                                 getDisplayValue:function() {
                                     var val = ZaItem.formatServerTime(this.getInstanceValue());
                                     if(!val)
-                                        return ZaMsg.LBL_setPassword;
-                                    else
                                         return ZaMsg.LBL_unsetPassword;
+                                    else
+                                        return ZaMsg.LBL_setPassword;
                                 },
                                 label:ZaMsg.LBL_zimbraAutoProvLdapAdminBindPassword, labelLocation:_LEFT_
                             },
