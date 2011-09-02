@@ -29,28 +29,53 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
 	DEST_BIN_DIR  :=	$(DEST_DIR)/bin
 endif
 
-MODULE_BUILD	:= Module::Build
 MODULE_WWW	:= LWP::Protocol::https
 MODULE_NETADDR_IP	:= NetAddr::IP
 MODULE_EXTUTIL_MAKEMAKER	:= ExtUtils::MakeMaker
 
+LWP_LIBS        := \
+	Mozilla::CA \
+	LWP::MediaTypes \
+	Encode::Locale \
+	HTTP::Date \
+	HTTP::Message \
+	HTTP::Negotiate \
+	File::Listing \
+	HTTP::Daemon \
+	HTTP::Cookies \
+	WWW::RobotRules \
+	LWP::UserAgent
+
+MODULE_BUILD_LIBS       := \
+	Locale::Maketext::Simple \
+	Params::Check \
+	Module::Load \
+	Module::CoreList \
+	Module::Load::Conditional \
+	IPC::Cmd \
+	ExtUtils::CBuilder \
+	S/SM/SMUELLER/ExtUtils-ParseXS-3.03_03.tar.gz \
+	Test::Harness \
+	D/DA/DAGOLDEN/Module-Build-0.3607.tar.gz
+
 ifeq (RHEL4,$(findstring RHEL4,$(BUILD_PLATFORM)))
-	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
+	MODULE_BUILD_LIBS	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
 	MODULE_WWW	:= G/GA/GAAS/libwww-perl-5.837.tar.gz
 	MODULE_NETADDR_IP	:= M/MI/MIKER/NetAddr-IP-4.040.tar.gz
 	MODULE_EXTUTIL_MAKEMAKER	:= M/MS/MSCHWERN/ExtUtils-MakeMaker-6.56.tar.gz
+	LWP_LIBS	:=
 endif
 
 ifeq (RHEL5,$(findstring RHEL5,$(BUILD_PLATFORM)))
-	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
+	MODULE_BUILD_LIBS	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
 endif
 
 ifeq (SLES10_64,$(findstring SLES10_64,$(BUILD_PLATFORM)))
-	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
+	MODULE_BUILD_LIBS	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
 endif
 
 ifeq (UBUNTU8,$(findstring UBUNTU8,$(BUILD_PLATFORM)))
-	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
+	MODULE_BUILD_LIBS	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
 endif
 
 LOGFILE ?= ThirdParty-Perllibs.log
@@ -86,6 +111,7 @@ UNZIP	:= $(shell which unzip)
 CMIRROR	?= http://zre-matrix.eng.vmware.com/cpan/
 
 BDB_INCLUDE	:= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/include
+MYSQL_INCLUDE	:= $(ZIMBRA_HOME)/mysql/include/mysql
 LDAP_INCLUDE 	:= $(ZIMBRA_HOME)/openldap/include
 SASL_INCLUDE	:= $(ZIMBRA_HOME)/cyrus-sasl/include
 
@@ -97,11 +123,10 @@ endif
 # DESTINATIONS
 
 # Order is important here
-
 PRE_PERL_LIBS	:= \
 	Tree::DAG_Node \
-	Sub::Uplevel \
 	Test::Simple \
+	Sub::Uplevel \
 	Test::Exception \
 	Test::Warn
 
@@ -126,10 +151,11 @@ PERL_LIBS 	:= \
 	Net::SMTP \
 	Proc::ProcessTable \
 	HTTP::Parser \
+	$(LWP_LIBS) \
 	$(MODULE_WWW) \
 	IO::Stringy \
 	E/ER/ERYQ/MIME-Lite-2.117.tar.gz \
-	$(MODULE_BUILD) \
+	$(MODULE_BUILD_LIBS) \
 	Date::Parse \
 	Pod::Escapes \
 	Pod::Simple \
@@ -139,6 +165,7 @@ PERL_LIBS 	:= \
 	Test::Tester \
 	Test::NoWarnings \
 	Test::Deep \
+	File::Temp \
 	D/DS/DSKOLL/MIME-tools-5.502.tar.gz \
 	Task::Weaken \
 	Class::Inspector \
@@ -160,17 +187,16 @@ PERL_LIBS 	:= \
 	Unix::Syslog \
 	Parallel::ForkManager \
 	Package::Constants \
-	IO::Compress::Base \
 	Archive::Tar \
+	Digest::SHA \
 	Digest::SHA1 \
 	Digest::HMAC \
+	Digest::HMAC_MD5 \
 	Convert::TNEF \
 	Convert::UUlib \
 	Net::IP \
-	Digest::SHA \
 	Net::DNS \
 	File::Tail \
-	File::Temp \
 	File::Grep \
 	Data::UUID \
 	List::Compare \
@@ -180,12 +206,14 @@ PERL_LIBS 	:= \
 	Error \
 	Mail::DKIM \
 	K/KH/KHAMPTON/XML-SAX-Base-1.04.tar.gz \
+	XML::NamespaceSupport \
+	XML::SAX \
 	XML::SAX::Expat \
 	XML::Simple \
 	IO::Socket::INET6 \
 	$(MODULE_NETADDR_IP) \
-	Net::DNS::Resolver::Programmable \
 	version \
+	Net::DNS::Resolver::Programmable \
 	Geography::Countries \
 	IP::Country \
 	DBD::SQLite
@@ -197,7 +225,7 @@ NET_SSLeay := \
 	Net-SSLeay-1.36
 
 CRYPT_SSLeay := \
-	Crypt-SSLeay-0.57
+	Crypt-SSLeay-0.58
 
 CRYPT_RANDOM := \
 	Crypt-OpenSSL-Random-0.04
@@ -230,7 +258,7 @@ NET_SERVER := \
 	Net-Server-0.99
 
 DBD_PERL_LIBS 	:= \
-	DBD-mysql-4.019
+	DBD-mysql-4.020
 
 PERL_MM_USE_DEFAULT	:= 1
 export PERL_MM_USE_DEFAULT
