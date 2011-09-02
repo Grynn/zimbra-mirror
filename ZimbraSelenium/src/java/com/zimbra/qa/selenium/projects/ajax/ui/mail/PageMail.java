@@ -486,7 +486,7 @@ public class PageMail extends AbsTab {
 
 			if ( this.zIsVisiblePerPosition("css=div#ztb__CLV2", 0, 0) ) {
 				pulldownLocator = "css=td[id$='zb__CLV2__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
-				optionLocator = "css=div[id='zm__CLV2'] tr[id='POPUP_SPAM'] td[id='zmi__CLV__SPAM_title']";
+				optionLocator = "css=div[id='zm__CLV2'] tr[id='POPUP_SPAM'] td[id='zmi__CLV2__SPAM_title']";
 			} else {
 				pulldownLocator = "css=td[id='zb__TV__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
 				optionLocator = "css=div[id='zm__TV'] tr[id='POPUP_SPAM'] td[id='zmi__TV__SPAM_title']";
@@ -736,8 +736,8 @@ public class PageMail extends AbsTab {
 			listLocator = "css=div[id='zl__TV__rows']";
 			rowLocator = "div[id^='zli__TV__']";
 		} else {
-			listLocator = "css=div[id='zl__CLV__rows']";
-			rowLocator = "div[id^='zli__CLV__']";
+			listLocator = "css=div[id='zl__CLV2__rows']";
+			rowLocator = "div[id^='zli__CLV2__']";
 		}
 
 		// Make sure the button exists
@@ -789,8 +789,8 @@ public class PageMail extends AbsTab {
 			listLocator = "css=div[id='zl__TV__rows']";
 			rowLocator = "div[id^='zli__TV__']";
 		} else {
-			listLocator = "css=div[id='zl__CLV__rows']";
-			rowLocator = "div[id^='zli__CLV__']";
+			listLocator = "css=div[id='zl__CLV2__rows']";
+			rowLocator = "div[id^='zli__CLV2__']";
 		}
 
 		// TODO: how to handle both messages and conversations, maybe check the view first?
@@ -1090,8 +1090,8 @@ public class PageMail extends AbsTab {
 			listLocator = "css=div[id='zl__TV__rows']";
 			rowLocator = "div[id^='zli__TV__']";
 		} else {
-			listLocator = "css=div[id='zl__CLV__rows']";
-			rowLocator = "div[id^='zli__CLV__']";
+			listLocator = "css=div[id='zl__CLV2__rows']";
+			rowLocator = "div[id^='zli__CLV2__']";
 		}
 
 		// TODO: how to handle both messages and conversations, maybe check the view first?
@@ -1137,7 +1137,7 @@ public class PageMail extends AbsTab {
 				if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
 					optionLocator = "css=div#zmi__TV__DELETE";
 				} else {
-					optionLocator = "css=div#zmi__CLV__Par__DELETE";
+					optionLocator = "css=div#zmi__CLV2__DELETE";
 				}
 
 				page = null;
@@ -1158,7 +1158,7 @@ public class PageMail extends AbsTab {
 					optionLocator="css=td[id^='zmi__TV__MARK_READ__']";
 				} else {
 					//optionLocator = "zmi__CLV__MARK_READ_title";
-					optionLocator="css=td[id^='zmi__CLV__MARK_READ__']";
+					optionLocator="css=td[id^='zmi__CLV2__MARK_READ__']";
 				}
 
 				page = null;
@@ -1172,7 +1172,7 @@ public class PageMail extends AbsTab {
 					optionLocator="css=td[id^='zmi__TV__MARK_UNREAD__']";
 				} else {
 					//optionLocator = "zmi__CLV__MARK_UNREAD_title";
-					optionLocator="css=td[id^='zmi__CLV__MARK_UNREAD__']";
+					optionLocator="css=td[id^='zmi__CLV2__MARK_UNREAD__']";
 				}
 
 				page = null;
@@ -1185,7 +1185,7 @@ public class PageMail extends AbsTab {
 				if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
 					optionLocator="css=td[id^='zmi__TV__REDIRECT__'] div[class='ImgRedirect']";
 				} else {
-					optionLocator="css=td[id^='zmi__CLV__REDIRECT__'] div[class='ImgRedirect']";
+					optionLocator="css=td[id^='zmi__CLV2__REDIRECT__'] div[class='ImgRedirect']";
 				}
 
 				page = new DialogRedirect(this.MyApplication, this);
@@ -1198,7 +1198,7 @@ public class PageMail extends AbsTab {
 				if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
 					optionLocator="css=td[id^='zmi__TV__CREATE_TASK__'] div[class='ImgNewTask']";
 				} else {
-					optionLocator="css=td[id^='zmi__CLV__CREATE_TASK__'] div[class='ImgNewTask']";
+					optionLocator="css=td[id^='zmi__CLV2__CREATE_TASK__'] div[class='ImgNewTask']";
 				}
 
 				page = null;
@@ -1445,7 +1445,7 @@ public class PageMail extends AbsTab {
 			// Check if we are CLV or MV
 			if ( this.zIsVisiblePerPosition("css=div#ztb__CLV2", 0, 0) ) {
 				pulldownLocator = "css=td#zb__CLV2__MOVE_MENU_dropdown>div";
-				optionLocator = "css=td#zti__DwtFolderChooser_MailCLV__"+ folder.getId() + "_textCell";
+				optionLocator = "css=td#zti__DwtFolderChooser_MailCLV2__"+ folder.getId() + "_textCell";
 			} else {
 				pulldownLocator = "css=td#zb__TV__MOVE_MENU_dropdown>div";
 				optionLocator = "css=td#zti__DwtFolderChooser_MailTV__"+ folder.getId() + "_textCell";
