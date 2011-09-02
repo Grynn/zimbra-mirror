@@ -23,7 +23,7 @@ public class TreeBriefcase extends AbsTree {
 		public static final String zNewTagTreeMenuItem = "css=tr[id=POPUP_NEW_TAG]:contains('New Tag')";
 		public static final String zNewFolderTreeMenuItem = "css=tr[id=POPUP_NEW_BRIEFCASE]:contains('New Folder')";
 		public static final String zRenameTagTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgRename]";
-		public static final String zDeleteTreeMenuItem = "css=td[id$=_left_icon]>[class=ImgDelete]";
+		public static final String zDeleteTreeMenuItem = "css=div[id^='POPUP_'] tr[id='POPUP_DELETE']:contains(Delete)";
 	}
 
 	public TreeBriefcase(AbsApplication application) {
@@ -111,7 +111,7 @@ public class TreeBriefcase extends AbsTree {
 
 		// Default behavior. Click the locator
 		zClickAt(optionLocator, "0,0");
-
+	
 		// If there is a busy overlay, wait for that to finish
 		this.zWaitForBusyOverlay();
 
