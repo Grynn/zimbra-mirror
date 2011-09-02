@@ -118,6 +118,7 @@ build:
 	cd $(FREETYPE_NAME)-$(FREETYPE_VERSION); \
 	env CFLAGS="-g -O2 -fPIC" ./configure \
 		--enable-shared=no \
+		--without-bzip2 \
 		--prefix=$(INSTALL_PREFIX); \
 	$(MAKE) $(MAKEARGS); $(MAKE) install; \
 	cd $(RRDTOOL_ROOT); \
