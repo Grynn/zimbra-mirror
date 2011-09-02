@@ -69,21 +69,42 @@ ifeq ($(ENVMOD), )
 		CPPFLAGS="-I$(INSTALL_PREFIX)/include -I$(INSTALL_PREFIX)/include/libart-2.0 -I$(INSTALL_PREFIX)/include/freetype2"
 endif
 
-filesa   := $(wildcard src/$(PNG_NAME)-$(PNG_VERSION).tar.gz)
-filesb   := $(wildcard src/$(FREETYPE_NAME)-$(FREETYPE_VERSION).tar.gz)
-filesc   := $(wildcard src/$(LIBART_NAME)-$(LIBART_VERSION).tar.gz)
-filesd   := $(wildcard src/$(RRDTOOL_NAME)-$(RRDTOOL_VERSION).tar.gz)
+pngsrc   := $(wildcard src/$(PNG_NAME)-$(PNG_VERSION).tar.*)
+freetypesrc   := $(wildcard src/$(FREETYPE_NAME)-$(FREETYPE_VERSION).tar.*)
+libartsrc   := $(wildcard src/$(LIBART_NAME)-$(LIBART_VERSION).tar.*)
+rrdtoolsrc   := $(wildcard src/$(RRDTOOL_NAME)-$(RRDTOOL_VERSION).tar.*)
+
+pngtar	:= xfz
+freetypetar	:= xfz
+libarttar	:= xfz
+rrdtooltar	:= xfz
+
+ifeq (tar.bz2,$(findstring tar.bz2,$(pngsrc)))
+	pngtar	:= xfj
+endif
+
+ifeq (tar.bz2,$(findstring tar.bz2,$(freetypesrc)))
+	freetypetar	:= xfj
+endif
+
+ifeq (tar.bz2,$(findstring tar.bz2,$(libartsrc)))
+	libarttar	:= xfj
+endif
+
+ifeq (tar.bz2,$(findstring tar.bz2,$(rrdtoolsrc)))
+	rrdtooltar	:= xfj
+endif
 
 all: checksrc allclean build tar
 
 checksrc:
-	$(if $(filesa), @echo "", exit 1)
-	$(if $(filesb), @echo "", exit 1)
-	$(if $(filesc), @echo "", exit 1)
-	$(if $(filesd), @echo "", exit 1)
+	$(if $(pngsrc), @echo "", exit 1)
+	$(if $(freetypesrc), @echo "", exit 1)
+	$(if $(libartsrc), @echo "", exit 1)
+	$(if $(rrdtoolsrc), @echo "", exit 1)
 
 build:
-	(tar xzf src/$(PNG_NAME)-$(PNG_VERSION).tar.gz; \
+	(tar $(pngtar) $(pngsrc); \
 	cd $(PNG_NAME)-$(PNG_VERSION); \
 	patch -N -g0 -p1 < ../patches/libtoolize.patch; \
 	./autogen.sh; \
@@ -93,14 +114,14 @@ build:
 		--enable-shared=no; \
 	$(MAKE) $(MAKEARGS); $(MAKE) install; \
 	cd $(RRDTOOL_ROOT); \
-	tar xfz src/$(FREETYPE_NAME)-$(FREETYPE_VERSION).tar.gz; \
+	tar $(freetypetar) $(freetypesrc); \
 	cd $(FREETYPE_NAME)-$(FREETYPE_VERSION); \
 	env CFLAGS="-g -O2 -fPIC" ./configure \
 		--enable-shared=no \
 		--prefix=$(INSTALL_PREFIX); \
 	$(MAKE) $(MAKEARGS); $(MAKE) install; \
 	cd $(RRDTOOL_ROOT); \
-	tar xfz src/$(LIBART_NAME)-$(LIBART_VERSION).tar.gz; \
+	tar $(libarttar) $(libartsrc); \
 	cd $(LIBART_NAME)-$(LIBART_VERSION); \
 	./configure --enable-shared=no --prefix=$(INSTALL_PREFIX); \
 	$(MAKE) $(MAKEARGS); $(MAKE) install; \
@@ -108,7 +129,7 @@ build:
 	rm -rf $(INSTALL_PREFIX)/share; \
 	rm -rf $(INSTALL_PREFIX)/bin; \
 	cd $(RRDTOOL_ROOT); \
-	tar xzf src/$(RRDTOOL_NAME)-$(RRDTOOL_VERSION).tar.gz; \
+	tar $(rrdtooltar) $(rrdtoolsrc); \
 	rm -rf $(PERL_DIR)/lib; \
 	cd $(RRDTOOL_NAME)-$(RRDTOOL_VERSION); \
 	$(ENVMOD) ./configure --prefix=$(INSTALL_PREFIX) \
