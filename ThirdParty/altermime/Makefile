@@ -22,7 +22,7 @@ endif
 
 files	:= $(wildcard src/$(ALTMIME_NAME)-$(ALTMIME_VERSION).tar.gz)
 
-all: checksrc build check tar
+all: checksrc allclean build check tar
 
 checksrc:
 	$(if $(files), @echo "", exit 1)
@@ -32,7 +32,9 @@ check:
 	$(ALTMIME_ROOT)/../zmcheck.pl -b $(ZIMBRA_HOME)/$(ALTMIME_NAME)-$(ALTMIME_VERSION)/bin/altermime
 
 build: $(ALTMIME_NAME)-$(ALTMIME_VERSION)
-	(cd $(ALTMIME_NAME)-$(ALTMIME_VERSION); $(MAKE))
+	(cd $(ALTMIME_NAME)-$(ALTMIME_VERSION); \
+	patch -p1 < ../patches/qpe.patch; \
+	$(MAKE))
 	(mkdir -p $(INSTALL_PREFIX)/bin)
 	(cp -f $(ALTMIME_NAME)-$(ALTMIME_VERSION)/LICENCE $(INSTALL_PREFIX)/LICENSE)
 	(cp -f $(ALTMIME_NAME)-$(ALTMIME_VERSION)/$(ALTMIME_NAME) $(INSTALL_PREFIX)/bin)
