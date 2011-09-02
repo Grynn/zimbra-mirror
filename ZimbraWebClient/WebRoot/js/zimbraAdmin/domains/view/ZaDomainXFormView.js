@@ -1394,9 +1394,12 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
             items: [
             	{type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_AutoProvision_Setting, colSizes:["275px","*"],
 					items: [
-                    {type:_OUTPUT_, value:ZaMsg.LBL_zimbraAutoProvMode, align:_LEFT_, colSpan:"*",cssStyle:"padding-left: 120px;"},
+                    {type:_OUTPUT_, label:ZaMsg.LBL_zimbraAutoProvMode,
+                        labelLocation:_LEFT_,
+                        label: ZaMsg.LBL_zimbraAutoProvMode
+                    },
                     {type:_GROUP_, numCols:2, label:null,
-                        cssStyle:"padding-left:150px;", colSpan:"*",
+                         colSpan:"*",colSizes:["275px","*"],width: "100%",
                         items: [
                             {ref:ZaDomain.A2_zimbraAutoProvModeEAGEREnabled, type:_OUTPUT_,
                                 label:ZaMsg.LBL_zimbraAutoProvModeEAGER + ":",
@@ -1416,13 +1419,13 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
                         ]
                     },
                     {type: _SPACER_, height: 10 },
-                    {type:_OUTPUT_, value:ZaMsg.LBL_zimbraAutoProvAuthMech, align:_LEFT_, colSpan:"*",
-                         cssStyle:"padding-left: 120px;",
+                    {type:_OUTPUT_, label:ZaMsg.LBL_zimbraAutoProvAuthMech, labelLocation:_LEFT_, colSpan:"*",
+                         colSizes:["275px","*"],width:"100%",
                         visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A2_zimbraAutoProvModeLAZYEnabled,"TRUE"]],
                         visibilityChangeEventSources:[ZaDomain.A2_zimbraAutoProvModeLAZYEnabled]
                     },
                     {type:_GROUP_, numCols:2,
-                        cssStyle:"padding-left:200px;", colSpan:"*",
+                        colSizes:["275px","*"],width:"100%", colSpan:"*",
                         visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A2_zimbraAutoProvModeLAZYEnabled,"TRUE"]],
                         visibilityChangeEventSources:[ZaDomain.A2_zimbraAutoProvModeLAZYEnabled],
                         items: [
