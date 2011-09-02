@@ -13,6 +13,16 @@
 #include "Zimbra/Zimbra.h"
 #include "Exchange_i.h"
 
+#include <objsel.h>
+#include <cmnquery.h>
+#include <dsquery.h>
+#include <Shlobj.h>
+#include <shlguid.h>
+#include <dsclient.h>
+#include <adshlp.h>
+#include <IADS.h>
+#include <sddl.h>
+
 using namespace Zimbra::MAPI;
 
 class CExchangeModule: public CAtlDllModuleT<CExchangeModule>{

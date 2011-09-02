@@ -52,11 +52,13 @@ class ExchangeOps {
 private:
     static ExchangeMigrationSetup *m_exchmigsetup;
     static bool Initialized;
-
+	static MAPISession *m_zmmapisession;
 public:
     static LPCWSTR GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername = NULL,
     LPCWSTR lpAdminPassword = NULL);
     static LPCWSTR GlobalUninit();
+	static LPCWSTR SelectExchangeUsers(vector<ObjectPickerData> &vUserList);
+
 };
 
 const LPCWSTR DEFAULT_ADMIN_PROFILE_NAME = L"zm_prof";

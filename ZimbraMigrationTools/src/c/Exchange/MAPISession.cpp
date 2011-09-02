@@ -22,8 +22,9 @@ MAPISessionException::MAPISessionException(HRESULT hrErrCode, LPCWSTR lpszDescri
 // MAPI Session Class
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-MAPISession::MAPISession(): m_Session(NULL)
-{}
+MAPISession::MAPISession(): m_Session(NULL){
+	MAPIInitialize(NULL);
+}
 
 MAPISession::~MAPISession() {
     if (m_Session != NULL) {
@@ -31,6 +32,7 @@ MAPISession::~MAPISession() {
         UlRelease(m_Session);
         m_Session = NULL;
     }
+	MAPIUninitialize();
 }
 
 HRESULT MAPISession::_mapiLogon(LPWSTR strProfile, DWORD dwFlags, LPMAPISESSION &session) {

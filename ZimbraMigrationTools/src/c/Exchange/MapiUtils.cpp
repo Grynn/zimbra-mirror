@@ -497,3 +497,335 @@ ExchangeSpecialFolderId Zimbra::MAPI::Util::GetExchangeSpecialFolderId(IN LPMAPI
 	}
 	return SPECIAL_FOLDER_ID_NONE;
 }
+
+HRESULT Zimbra::MAPI::Util::GetExchangeUsersUsingObjectPicker(vector<ObjectPickerData> &vUserList)
+{
+	HRESULT hr=S_OK;
+	wstring wstrExchangeDomainAddress;
+	MAPIInitialize(NULL);
+	CComPtr<IDsObjectPicker> pDsObjectPicker = NULL;
+	hr = CoCreateInstance( CLSID_DsObjectPicker, NULL, CLSCTX_INPROC_SERVER, IID_IDsObjectPicker, (LPVOID*)&pDsObjectPicker );
+	if( FAILED(hr) )
+	{
+		MAPIUninitialize();
+		throw MapiUtilsException(hr, L"Util::GetExchangeUsersUsingObjectPicker(): CoCreateInstance Failed.",
+			__LINE__, __FILE__);
+	}
+
+	DSOP_SCOPE_INIT_INFO aScopeInit[1];
+    DSOP_INIT_INFO  InitInfo;
+ 
+    // Initialize the DSOP_SCOPE_INIT_INFO array.
+    ZeroMemory(aScopeInit, sizeof(aScopeInit));
+ 
+    // Combine multiple scope types in a single array entry.
+    aScopeInit[0].cbSize = sizeof(DSOP_SCOPE_INIT_INFO);
+    aScopeInit[0].flType = DSOP_SCOPE_TYPE_UPLEVEL_JOINED_DOMAIN | DSOP_SCOPE_TYPE_DOWNLEVEL_JOINED_DOMAIN;
+ 
+    // Set up-level and down-level filters to include only computer objects.
+    // Up-level filters apply to both mixed and native modes.
+    // Be aware that the up-level and down-level flags are different.
+	aScopeInit[0].FilterFlags.Uplevel.flBothModes = DSOP_FILTER_USERS|DSOP_FILTER_COMPUTERS|DSOP_FILTER_WELL_KNOWN_PRINCIPALS
+		|DSOP_FILTER_DOMAIN_LOCAL_GROUPS_DL;
+	aScopeInit[0].FilterFlags.flDownlevel =  DSOP_DOWNLEVEL_FILTER_USERS;
+ 
+    // Initialize the DSOP_INIT_INFO structure.
+    ZeroMemory(&InitInfo, sizeof(InitInfo));
+ 
+    InitInfo.cbSize = sizeof(InitInfo);
+    InitInfo.pwzTargetComputer = NULL;  // Target is the local computer.
+    InitInfo.cDsScopeInfos = sizeof(aScopeInit)/sizeof(DSOP_SCOPE_INIT_INFO);
+    InitInfo.aDsScopeInfos = aScopeInit;
+    InitInfo.flOptions = DSOP_FLAG_MULTISELECT;
+
+	enum ATTRS{ 
+		EX_SERVER,		EX_STORE,	PROXY_ADDRS,	C,		CO,		COMPANY,		DESCRIPTION, 
+		DISPLAYNAME,	GIVENNAME,	INITIALS,		L,		O,		STREETADDRESS,	POSTALCODE,
+		SN,				ST,			PHONE,			TITLE,	OFFICE,	USERPRINCIPALNAME, OBJECTSID,
+		NATTRS };
+
+	LPCWSTR pAttrs[NATTRS] = { 
+		L"msExchHomeServerName", L"legacyExchangeDN", L"proxyAddresses", L"c", L"co", L"company", L"description",
+		L"displayName", L"givenName", L"initials", L"l", L"o", L"streetAddress",
+		L"postalCode", L"sn", L"st", L"telephoneNumber", L"title", L"physicalDeliveryOfficeName", L"userPrincipalName",
+		L"objectSID"};
+	
+
+	InitInfo.cAttributesToFetch = NATTRS;
+	InitInfo.apwzAttributeNames = pAttrs;
+
+    // Initialize can be called multiple times, but only the last call has effect.
+    // Be aware that object picker makes its own copy of InitInfo.
+    hr = pDsObjectPicker->Initialize(&InitInfo);
+	if( FAILED(hr) )
+	{
+		MAPIUninitialize();
+        throw MapiUtilsException(hr, L"Util::GetExchangeUsersUsingObjectPicker(): pDsObjectPicker::Initialize Failed",
+			__LINE__, __FILE__);
+	}
+
+	// Supply a window handle to the application.
+    HWND hwndParent = GetConsoleWindow(); 
+	CComPtr<IDataObject> pdo = NULL;
+	hr = pDsObjectPicker->InvokeDialog(hwndParent, &pdo);
+    if (hr == S_OK) 
+    {
+		//process the result set
+		STGMEDIUM   stm;
+		FORMATETC   fe;
+	 
+		// Get the global memory block that contain the user's selections.
+		fe.cfFormat = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_DSOP_DS_SELECTION_LIST);
+		fe.ptd = NULL;
+		fe.dwAspect = DVASPECT_CONTENT;
+		fe.lindex = -1;
+		fe.tymed = TYMED_HGLOBAL;
+
+		hr = pdo->GetData(&fe, &stm);
+		if(FAILED(hr))
+		{
+			MAPIUninitialize();
+			throw MapiUtilsException(hr, L"Util::GetExchangeUsersUsingObjectPicker(): pdo::GetData Failed",
+			__LINE__, __FILE__);
+		}
+		else
+		{
+			PDS_SELECTION_LIST pDsSelList = NULL;
+
+			// Retrieve a pointer to DS_SELECTION_LIST structure.
+			pDsSelList = (PDS_SELECTION_LIST)GlobalLock(stm.hGlobal);
+			if(NULL != pDsSelList)
+			{
+				if( NULL != pDsSelList->aDsSelection[0].pwzUPN  )
+				{
+					wstrExchangeDomainAddress= wcschr(pDsSelList->aDsSelection[0].pwzUPN,'@') + 1 ;
+				}
+
+				//TO Do: //use Zimbra domain here
+				CString pDomain = wstrExchangeDomainAddress.c_str();
+				int nDomain = pDomain.GetLength();
+
+				// Loop through DS_SELECTION array of selected objects.
+				for (ULONG i = 0; i < pDsSelList->cItems; i++) 
+				{
+					ObjectPickerData opdData;
+					if( pDsSelList->aDsSelection[i].pvarFetchedAttributes->vt == VT_EMPTY )
+						continue;
+
+					CString exStore(LPTSTR(pDsSelList->aDsSelection[i].pvarFetchedAttributes[1].bstrVal));
+					opdData.wstrExchangeStore = exStore;
+
+					//VT_ARRAY | VT_VARIANT 
+					SAFEARRAY* pArray = pDsSelList->aDsSelection[i].pvarFetchedAttributes[PROXY_ADDRS].parray;
+						
+					//pArray will be empty if the account is just created and never accessed 
+					if( !pArray )
+						continue ;
+
+					// Get a pointer to the elements of the array.
+					VARIANT* pbstr;
+					SafeArrayAccessData(pArray, (void**)&pbstr);
+
+					CString alias ;
+					//Use USERPRINCIPALNAME to provison account on Zimbra. bug: 34846
+					BSTR bstrAlias = pDsSelList->aDsSelection[i].pvarFetchedAttributes[USERPRINCIPALNAME].bstrVal;
+					alias = bstrAlias;
+					opdData.wstrUsername = alias;
+
+					if( !alias.IsEmpty() )
+					{
+						if( alias.Find(L"@") != -1 )
+						{
+							alias.Truncate( alias.Find(L"@") + 1 );
+                            alias += pDomain;							                            
+							opdData.vAliases.push_back(bstrAlias);
+						}
+						else
+						{ // make it empty. we will try it with SMTP: address next.
+							alias.Empty();
+						}
+					}
+
+					try
+                        {
+                            for (unsigned int ipa = 0; ipa < pArray->rgsabound->cElements; ipa++)
+                            {
+                                LPWSTR pwszAlias = pbstr[ipa].bstrVal;
+                                if( !pwszAlias )
+                                {
+                                    //Skipping alias with value NULL
+                                    continue;
+                                }
+
+                                //Use the primary SMTP address to create user's account at Zimbra
+                                //if "alias" is not currently set and "pwszAlias" refers to primaty SMTP address.
+                                if( !alias.GetLength() && wcsncmp( pwszAlias, L"SMTP:", 5 ) == 0 )
+                                {
+                                    alias = pwszAlias + 5;
+
+                                    LPWSTR pwszEnd = wcschr( pwszAlias, L'@' );
+                                    DWORD_PTR nAlias = pwszEnd - (pwszAlias + 5) ;
+                                    if(!pwszEnd)
+                                    {
+                                        nAlias = wcslen(alias)+1;
+                                    }
+                                    alias = alias.Left( (int) nAlias ) ;
+
+                                    CString aliasName = alias;
+                                    int nAliasName = aliasName.GetLength();
+                                    alias += _T("@");
+                                    alias += pDomain;
+									UNREFERENCED_PARAMETER(nAliasName);
+
+                                    opdData.vAliases.push_back(pwszAlias + 5 );
+
+                                    //Start again right from the first entry as some proxyaddresses might have 
+                                    //appeared before primary SMTP address and got skipped
+                                    ipa = (unsigned int)-1 ;
+                                }
+                                //If "alias" is set and "pwszAlias" does not refer to primary SMTP address
+                                //add it to the list of aliases
+                                else if( alias.GetLength() && wcsncmp( pwszAlias, L"smtp:", 5 ) == 0 )								
+                                {
+                                    LPWSTR pwszStart = pwszAlias + 5;
+                                    LPWSTR pwszEnd = wcschr( pwszAlias, L'@' );
+                                    DWORD_PTR nAlias = pwszEnd - pwszStart + 1;
+                                    if(!pwszEnd)
+                                    {
+                                        nAlias = wcslen(pwszStart) + 1;
+                                    }
+                                    LPWSTR pwszZimbraAlias = new WCHAR[ nAlias + nDomain + 1];
+                                    wcsncpy( pwszZimbraAlias, pwszStart, nAlias - 1 );
+                                    pwszZimbraAlias[nAlias-1] = L'\0';
+                                    wcscat( pwszZimbraAlias, L"@" );
+                                    wcscat( pwszZimbraAlias, pDomain );
+
+                                    wstring pwszNameTemp=L"zimbraMailAlias";
+                                    //Zimbra::Util::CopyString( pwszNameTemp, L"zimbraMailAlias" );
+
+                                    std::pair< wstring, wstring > p;
+                                    p.first = pwszNameTemp;
+                                    p.second = pwszZimbraAlias;
+									opdData.pAttributeList.push_back( p );
+
+									opdData.vAliases.push_back(pwszAlias + 5 );
+                                }
+                            }
+
+                            if( alias.IsEmpty() )
+                            {
+                                continue;
+                            }
+                        }
+                        catch(...)
+                        {
+                            if( alias.IsEmpty() )
+                            {
+                                SafeArrayUnaccessData(pArray);
+                                //Unknown exception while processing aliases")
+                                //Moving on to next entry
+                                continue;
+                            }
+                        }
+						SafeArrayUnaccessData(pArray);
+
+
+						for( int j = C; j < NATTRS; j++ )
+						{
+							if( pDsSelList->aDsSelection[i].pvarFetchedAttributes[j].vt == VT_EMPTY )
+								continue;
+
+							wstring pAttrName;
+							wstring pAttrVal;
+							std::pair<wstring,wstring> p;
+
+							//Get the objectSID for zimbraForeignPrincipal
+							if( j == OBJECTSID )
+							{
+
+								void HUGEP *pArray;
+								ULONG dwSLBound;
+								ULONG dwSUBound;
+
+								VARIANT var = pDsSelList->aDsSelection[i].pvarFetchedAttributes[j];
+
+								hr = SafeArrayGetLBound( V_ARRAY(&var),1,(long FAR *) &dwSLBound );
+								hr = SafeArrayGetUBound( V_ARRAY(&var),1,(long FAR *) &dwSUBound );
+								hr = SafeArrayAccessData( V_ARRAY(&var), &pArray );
+
+								if (SUCCEEDED(hr))
+								{
+									//Convert binary SID into String Format i.e. S-1-... Format
+									LPTSTR StringSid = NULL ;
+									ConvertSidToStringSid( ( PSID )pArray, &StringSid );
+
+									//Get the name of the domain 
+									TCHAR acco_name[512] = {0};
+									TCHAR domain_name[512]= {0};
+									DWORD cbacco_name = 512,cbdomain_name = 512; 
+									SID_NAME_USE sid_name_use;
+
+									BOOL bRet=LookupAccountSid( NULL, ( PSID )pArray, acco_name,
+														&cbacco_name, domain_name,
+														&cbdomain_name, &sid_name_use) ;
+									if(!bRet)
+									{
+										//LookupAccountSid Failed: %u ,GetLastError()
+									}
+									//Convert the SID as per zimbraForeignPrincipal format
+									CString strzimbraForeignPrincipal;
+									strzimbraForeignPrincipal = CString(L"ad:")+CString(acco_name);
+										
+									//Free the buffer allocated by ConvertSidToStringSid
+									LocalFree( StringSid ) ;
+
+									//Add the SID into the attribute list vector for zimbraForeignPrincipal
+									LPCTSTR lpZFP = strzimbraForeignPrincipal ;
+									//Zimbra::Util::CopyString( pAttrName, L"zimbraForeignPrincipal" );
+									//Zimbra::Util::CopyString( pAttrVal, ( LPWSTR ) lpZFP );
+
+									p.first =  L"zimbraForeignPrincipal";
+									p.second = ( LPWSTR ) lpZFP;
+									opdData.pAttributeList.push_back( p );
+
+									break;
+
+								}
+
+							}
+
+							BSTR b = pDsSelList->aDsSelection[i].pvarFetchedAttributes[j].bstrVal;
+							if( b != NULL )
+							{
+								//Zimbra doesnt know USERPRINCIPALNAME. Skip it.#39286
+								if (j== USERPRINCIPALNAME)
+									continue;
+								//Change the attribute name to "street" if its "streetAddress"
+								if( j == STREETADDRESS )
+								{
+									pAttrName= L"street" ;
+									//Zimbra::Util::CopyString( pAttrName, L"street" );
+								}
+								else
+								{
+									pAttrName= (LPWSTR)pAttrs[j];
+                                	//Zimbra::Util::CopyString( pAttrName, (LPWSTR)pAttrs[j] );
+								}
+								//Zimbra::Util::CopyString( pAttrVal,  (LPWSTR)b );
+								pAttrVal = (LPWSTR)b;
+								p.first = pAttrName;
+								p.second = pAttrVal;
+								opdData.pAttributeList.push_back( p );
+							}
+						}
+
+					vUserList.push_back(opdData);
+				}
+				GlobalUnlock(stm.hGlobal);
+			}
+			ReleaseStgMedium(&stm);
+		}
+	}
+	MAPIUninitialize();
+	return hr;
+}

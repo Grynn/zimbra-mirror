@@ -185,11 +185,18 @@ void ExchangeMigrationSetupTest()
 	*/
 	//If Profile exists, rest are Optional else rest 3 params must be there!!!
 	//ExchangeOps::Init("Profile", ExchangeIP[optional], AdminName[Optional], AdminPwd[Optional]);
-	LPCWSTR lpwstrStatus=ExchangeOps::GlobalInit(L"10.117.82.161",L"Administrator",L"z1mbr4Migration");//(L"10.20.141.161", L"fbs",L"Test7777");//
-	delete[]lpwstrStatus; 
+	LPCWSTR lpwstrStatus=ExchangeOps::GlobalInit(L"Outlook");//L"10.117.82.161",L"Administrator",L"z1mbr4Migration");//(L"10.20.141.161", L"fbs",L"Test7777");//
+	if(lpwstrStatus)
+		delete[]lpwstrStatus; 
 
 	lpwstrStatus=ExchangeOps::GlobalUninit();
-	delete[]lpwstrStatus;	
+	if(lpwstrStatus)
+		delete[]lpwstrStatus;	
+
+	vector<ObjectPickerData> vUserList;
+	lpwstrStatus=ExchangeOps::SelectExchangeUsers(vUserList);
+	if(lpwstrStatus)
+		delete[]lpwstrStatus;	
 }
 
 void MAPIAccessAPITest_tr()
@@ -237,12 +244,12 @@ int main(int argc, TCHAR *argv[])
 //	ZCFileUploadTest();
 //	CreateExchangeMailBox();
 //	GetAllProfiles();	
-	//MAPIAccessAPITest_tr();
+//MAPIAccessAPITest_tr();
 	
-	MAPIAccessAPITestV();
-	//Zimbra::MAPI::Util::ReverseDelimitedString(L"lb1/tv2/cr3/Inbox/TopFolder",L"/");
-	//ExchangeMigrationSetupTest();
-	//CreateExchangeMailBox();
+//MAPIAccessAPITestV();
+//Zimbra::MAPI::Util::ReverseDelimitedString(L"lb1/tv2/cr3/Inbox/TopFolder",L"/");
+ExchangeMigrationSetupTest();
+//CreateExchangeMailBox();
 	
 	return 0;
 }

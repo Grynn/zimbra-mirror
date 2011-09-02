@@ -2,6 +2,14 @@
 
 #define PR_IPM_OTHERSPECIALFOLDERS_ENTRYID	PROP_TAG( PT_MV_BINARY, 0x36D8)
 
+typedef struct _ObjectPickerData
+{
+	wstring wstrUsername;
+	wstring wstrExchangeStore;
+	vector<wstring> vAliases;
+	vector<std::pair<wstring,wstring>> pAttributeList;
+} ObjectPickerData;
+
 inline void HexStrFromBSTR(_bstr_t bstr, LPTSTR &szHex) {
     int i = 0;
     int len = bstr.length();
@@ -90,6 +98,9 @@ inline LPTSTR FromatExceptionInfo(HRESULT errCode, LPWSTR errDescription, LPSTR 
     return lpBuffer;
 }
 
+namespace Zimbra {
+namespace MAPI {
+namespace Util {
 class MapiUtilsException: public GenericException {
 public:
     MapiUtilsException(HRESULT hrErrCode, LPCWSTR lpszDescription): GenericException(hrErrCode,
@@ -99,9 +110,7 @@ public:
     virtual ~MapiUtilsException() {}
 };
 
-namespace Zimbra {
-namespace MAPI {
-namespace Util {
+
 HRESULT HrMAPIFindDefaultMsgStore(LPMAPISESSION lplhSession, SBinary &bin);
 HRESULT MailboxLogon(LPMAPISESSION pSession, LPMDB pMdb, LPWSTR pStoreDn, LPWSTR pMailboxDn,
     LPMDB *ppMdb);
@@ -115,6 +124,7 @@ HRESULT GetInboxSpecialFolders(LPMAPIFOLDER pInbox, SBinaryArray* pEntryIds);
 HRESULT GetAllSpecialFolders(IN LPMDB lpMdb, IN OUT SBinaryArray* pEntryIds);
 HRESULT FreeAllSpecialFolders(IN SBinaryArray* lpSFIds);
 ExchangeSpecialFolderId GetExchangeSpecialFolderId(IN LPMAPISESSION lpSession, IN ULONG cbEntryId, IN LPENTRYID pFolderEntryId, SBinaryArray* pEntryIds);
+HRESULT GetExchangeUsersUsingObjectPicker(vector<ObjectPickerData> &vUserList);
 
 ULONG IMAPHeaderInfoPropTag(LPMAPIPROP lpMapiProp);
 HRESULT CopyEntryID(SBinary &src, SBinary &dest);
