@@ -126,7 +126,7 @@ namespace MVVM.ViewModel
 
         private void GetSchedHelp()
         {
-            string urlString = (isBrowser) ? "http://10.20.140.218/sched.html" : "file:///C:/depot/main/ZimbraMigrationTools/src/c/Misc/Help/sched.html";
+            string urlString = (isBrowser) ? "http://W764IIS.prom.eng.vmware.com/sched.html" : "file:///C:/depot/main/ZimbraMigrationTools/src/c/Misc/Help/sched.html";
             Process.Start(new ProcessStartInfo(urlString));
         }
 

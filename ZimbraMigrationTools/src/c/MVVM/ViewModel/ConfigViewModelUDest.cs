@@ -31,7 +31,7 @@ namespace MVVM.ViewModel
 
         private void GetConfigDestHelp()
         {
-            string urlString = (isBrowser) ? "http://10.20.140.218/cfgUDest.html" : "file:///C:/depot/main/ZimbraMigrationTools/src/c/Misc/Help/cfgUDest.html";
+            string urlString = (isBrowser) ? "http://W764IIS.prom.eng.vmware.com/cfgUDest.html" : "file:///C:/depot/main/ZimbraMigrationTools/src/c/Misc/Help/cfgUDest.html";
             Process.Start(new ProcessStartInfo(urlString));
         }
 

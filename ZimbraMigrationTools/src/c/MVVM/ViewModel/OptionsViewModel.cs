@@ -196,7 +196,7 @@ namespace MVVM.ViewModel
 
         private void GetOptionsHelp()
         {
-            string urlString = (isBrowser) ? "http://10.20.140.218/options.html" : "file:///C:/depot/main/ZimbraMigrationTools/src/c/Misc/Help/options.html";
+            string urlString = (isBrowser) ? "http://W764IIS.prom.eng.vmware.com/options.html" : "file:///C:/depot/main/ZimbraMigrationTools/src/c/Misc/Help/options.html";
             Process.Start(new ProcessStartInfo(urlString));
         }
 
