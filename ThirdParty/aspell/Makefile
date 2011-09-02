@@ -24,14 +24,14 @@ ASPELL_TGZ_TARGET := \
 files	:= $(wildcard src/aspell-$(ASPELL_VERSION).tar.gz)
 
 ASPELL_DICTS := \
-	aspell6-en-6.0-0 \
+	aspell6-en-7.1-0 \
 	aspell-fr-0.50-3 \
 	aspell-nl-0.50-2 \
 	aspell-sv-0.51-0 \
 	aspell5-da-1.4.42-1 \
 	aspell6-ar-1.2-0 \
 	aspell6-de-20030222-1 \
-	aspell6-es-1.9a-1 \
+	aspell6-es-1.11-2 \
 	aspell6-hi-0.02-0 \
 	aspell6-hu-0.99.4.2-0 \
 	aspell6-it-2.2_20050523-0 \
