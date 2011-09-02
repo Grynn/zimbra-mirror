@@ -35,5 +35,14 @@
     <ClInclude Include="Testunmanaged.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BaseUser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseFolder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

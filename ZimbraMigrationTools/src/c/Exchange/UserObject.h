@@ -9,6 +9,7 @@
 #include "Exchange.h"
 #include "ExchangeAdmin.h"
 #include "..\Exchange\MAPIAccessAPI.h"
+#include "BaseUser.h"
 
 /*
 
@@ -24,12 +25,13 @@ using namespace ATL;
 class ATL_NO_VTABLE CUserObject :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CUserObject, &CLSID_UserObject>,
+	public BaseUser,
 	public ISupportErrorInfo,
 	public IDispatchImpl<IUserObject, &IID_IUserObject, &LIBID_Exchange, /*wMajor =*/ 1, /*wMinor =*/ 0>
 {
 private:
-	BSTR UserId;
-	BSTR Mailtype;
+	/*BSTR UserId;
+	BSTR Mailtype;*/
 	Zimbra::MAPI::MAPIAccessAPI *maapi;
 
 public:
@@ -66,8 +68,17 @@ public:
 	STDMETHOD(GetFolderObjects)(/*[out, retval]*/ VARIANT* vObjects);
 
 
+	///base class functions
+	virtual long Initialize(BSTR Id);
+
+	virtual long GetFolders(VARIANT* folders);
+	virtual long GetItems(VARIANT* Items);
+	virtual long UnInitialize();
+
+
+
 protected:
-	CSingleton* Logger;
+	//CSingleton* Logger;
 
 
 };

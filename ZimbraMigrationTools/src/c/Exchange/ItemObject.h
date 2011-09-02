@@ -7,6 +7,7 @@
 
 #include "Exchange_i.h"
 #include "folderObject.h"
+#include "BaseItem.h"
 
 /*
 
@@ -23,10 +24,11 @@ class ATL_NO_VTABLE CItemObject :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CItemObject, &CLSID_ItemObject>,
 	public ISupportErrorInfo,
+	public BaseItem,
 	public IDispatchImpl<IItemObject, &IID_IItemObject, &LIBID_Exchange, /*wMajor =*/ 1, /*wMinor =*/ 0>
 {
 private:
-	BSTR ID;
+	 /*BSTR ID;*/
 	 FolderType TYPE;
 
 	 CComQIPtr<IfolderObject,&IID_IfolderObject> parentObj;

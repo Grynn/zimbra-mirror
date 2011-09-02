@@ -6,6 +6,7 @@
 
 
 #include "Exchange_i.h"
+#include "BaseFolder.h"
 
 /*
 
@@ -21,12 +22,13 @@ using namespace ATL;
 class ATL_NO_VTABLE CfolderObject :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CfolderObject, &CLSID_folderObject>,
+	public BaseFolder,
 	public IDispatchImpl<IfolderObject, &IID_IfolderObject, &LIBID_Exchange, /*wMajor =*/ 1, /*wMinor =*/ 0>
 {
 private:
-	 BSTR Strname;
+	/* BSTR Strname;
 	 LONG LngID;
-	 BSTR parentPath;
+	 BSTR parentPath;*/
 public:
 	CfolderObject()
 	{

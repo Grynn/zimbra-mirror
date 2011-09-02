@@ -213,6 +213,9 @@
     <ClCompile Include="Testunmanaged.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseFolder.h" />
+    <ClInclude Include="BaseItem.h" />
+    <ClInclude Include="BaseUser.h" />
     <ClInclude Include="CMigration.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Testunmanaged.h" />

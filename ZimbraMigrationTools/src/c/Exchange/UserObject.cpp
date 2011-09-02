@@ -22,17 +22,49 @@ STDMETHODIMP CUserObject::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
+
+long CUserObject::Initialize(BSTR Id)
+{
+	UserID = Id;
+	MailType = L"MAPI";
+	m_pLogger = CSingleton::getInstance();
+return 0;
+
+}
+
+long CUserObject::GetFolders(VARIANT* folders)
+{
+
+		VariantInit(folders);
+		return 0;
+}
+long CUserObject::GetItems(VARIANT* Items)
+{
+
+		VariantInit(Items);
+		return 0;
+
+}
+long CUserObject::UnInitialize()
+{
+
+		return 0;
+}
+
+
 STDMETHODIMP  CUserObject::InitializeUser(BSTR UserID,BSTR MailType)
 	{
-		HRESULT hr = S_OK;
-		UserId = UserID;
-		Mailtype = MailType;
-Logger = CSingleton::getInstance();
+		HRESULT hr = S_OK;long retval =0;
+		UserID = UserID;
+		MailType = MailType;
+
+		retval =Initialize(UserID);
+		//Logger = CSingleton::getInstance();
 		if(wcscmp(MailType,L"MAPI") == 0)
 		{
 			//Initialize the Mapi API..
 
-			Logger->doSomething(DBG,"In Initalize User");
+			m_pLogger->doSomething(DBG,"In Initalize User");
 
 			maapi = new Zimbra::MAPI::MAPIAccessAPI(L"10.20.136.140",L"MyAdmin",L"TestZimbra1");
 			//Init session and stores
@@ -53,11 +85,11 @@ STDMETHODIMP CUserObject::GetFolderObjects(/*[out, retval]*/ VARIANT* vObjects)
 	
 	USES_CONVERSION;
 	vector<Folder_Data> vfolderlist;
-		Logger->doSomething(DBG,"In GetFolderObjects User");
+		m_pLogger->doSomething(DBG,"In GetFolderObjects User");
 	//Get all folders
 	maapi->GetRootFolderHierarchy(vfolderlist);
 
-	maapi->IterateVectorList(vfolderlist, Logger );
+	maapi->IterateVectorList(vfolderlist, m_pLogger );
 
 
 	std::vector<Folder_Data>::iterator it;
