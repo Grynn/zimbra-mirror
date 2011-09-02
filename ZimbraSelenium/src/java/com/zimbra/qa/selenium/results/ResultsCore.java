@@ -188,9 +188,6 @@ public class ResultsCore {
 			if ( a.BugID != null && b.BugID == null )
 				return (GreaterThan);
 
-			if ( a.BugID == null && b.BugID == null )
-				return (EqualTo);
-
 			// If BugStatus is not equal, return based on Status order, i.e. UNCONFIRMED, NEW, ASSIGNED, REOPENED, RESOLVED, VERIFIED, CLOSED
 			if (a.BugStatus != b.BugStatus) {
 				return (a.BugStatus.compareTo(b.BugStatus));
@@ -198,8 +195,8 @@ public class ResultsCore {
 			
 			// BugStatus are equal
 			
-			// Return based on bug ID
-			return (Integer.valueOf(a.BugID).compareTo(Integer.valueOf(b.BugID)));
+			// Return based on Test Case
+			return (a.TestCaseID.compareTo(b.TestCaseID));
 		}
 		
 	}
