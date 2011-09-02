@@ -26,11 +26,18 @@ public abstract class AbsSeparateWindow extends AbsPage {
 	 */
 	protected String DialogWindowTitle = null;
 	
+	/**
+	 * Whether or not to switch focus when working in the separate window
+	 */
+	protected boolean DoChangeWindowFocus = false;
+	
 	public AbsSeparateWindow(AbsApplication application) {
 		super(application);
 
 		logger.info("new " + AbsSeparateWindow.class.getCanonicalName());
 
+		DoChangeWindowFocus = false;
+		
 	}
 
 	/* (non-Javadoc)
@@ -42,7 +49,7 @@ public abstract class AbsSeparateWindow extends AbsPage {
 
 		try {
 			this.sSelectWindow(this.DialogWindowID);
-			this.sWindowFocus();
+			if ( DoChangeWindowFocus )			this.sWindowFocus();
 
 			super.sClick(locator);
 
@@ -67,7 +74,7 @@ public abstract class AbsSeparateWindow extends AbsPage {
 
 		try {
 			this.sSelectWindow(this.DialogWindowID);
-			this.sWindowFocus();
+			if ( DoChangeWindowFocus )			this.sWindowFocus();
 			
 			super.sType(locator, value);
 
@@ -88,7 +95,7 @@ public abstract class AbsSeparateWindow extends AbsPage {
 		
 		try {
 			this.sSelectWindow(this.DialogWindowID);
-			this.sWindowFocus();
+			if ( DoChangeWindowFocus )			this.sWindowFocus();
 			
 			text = super.sGetText(locator);
 
@@ -113,7 +120,7 @@ public abstract class AbsSeparateWindow extends AbsPage {
 		
 		try {
 			this.sSelectWindow(this.DialogWindowID);
-			this.sWindowFocus();
+			if ( DoChangeWindowFocus )			this.sWindowFocus();
 
 			present = super.sIsElementPresent(locator);
 
