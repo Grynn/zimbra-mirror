@@ -11,8 +11,6 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 
-OPATCH	:= patch -g0 -N -p1 < ../patches/openssl1x.patch;
-
 ifdef BETA
 	include $(HEIMDAL_ROOT)/../beta_versions.def
 else
@@ -51,7 +49,6 @@ build:
 	(tar xzf src/heimdal-$(HEIMDAL_VERSION).tar.gz; \
 	cd heimdal-$(HEIMDAL_VERSION); \
 	$(PATCH) \
-	$(OPATCH) \
 	$(CC) \
 	CFLAGS="-g -O2 -D_REENTRANT" \
 	CCFLAGS="-g -O2 -D_REENTRANT" \
@@ -71,29 +68,33 @@ build:
 	--without-openldap \
 	--without-hesiod; \
 	cd $(HEIMDAL_SOURCE)/include; $(MAKE) $(MAKEARGS); \
+	cd $(HEIMDAL_SOURCE)/base; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/lib/roken; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/lib/vers; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/lib/com_err; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/lib/asn1; $(MAKE) $(MAKEARGS); \
-	cd $(HEIMDAL_SOURCE)/lib/editline; $(MAKE) $(MAKEARGS); \
+	cd $(HEIMDAL_SOURCE)/lib/libedit; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/lib/sl; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/lib/hcrypto; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/lib/wind; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/lib/hx509; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/lib/sqlite; $(MAKE) $(MAKEARGS); \
+	cd $(HEIMDAL_SOURCE)/lib/ipc; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/lib/krb5; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/lib/ntlm; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/lib/gssapi; $(MAKE) $(MAKEARGS); \
 	cd $(HEIMDAL_SOURCE)/include; $(MAKE) install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/base; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/roken; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/com_err; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/asn1; $(MAKE) install STRIP=""; \
-	cd $(HEIMDAL_SOURCE)/lib/editline; $(MAKE) install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/libedit; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/sl; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/hcrypto; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/wind; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/hx509; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/sqlite; $(MAKE) install STRIP=""; \
+	cd $(HEIMDAL_SOURCE)/lib/ipc; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/krb5; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/ntlm; $(MAKE) install STRIP=""; \
 	cd $(HEIMDAL_SOURCE)/lib/gssapi; $(MAKE) install STRIP="")
