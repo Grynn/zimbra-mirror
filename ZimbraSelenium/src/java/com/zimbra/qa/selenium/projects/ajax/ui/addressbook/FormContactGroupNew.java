@@ -169,7 +169,7 @@ public class FormContactGroupNew extends AbsForm {
 	/*
 	 * check if the list group is empty
 	 */
-	public boolean zIsListGroupEmpty() {
+	public boolean zIsListGroupEmpty() throws HarnessException {
 		return sIsElementPresent(getLocator(" div#[id$=_listView].groupMembers div#zl__GRP__rows>div>table>tbody>tr>td.NoResults"));			
 	}
 

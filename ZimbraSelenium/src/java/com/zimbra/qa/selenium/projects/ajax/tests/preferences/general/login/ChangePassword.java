@@ -10,7 +10,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.preferences.DialogChangePassword;
+import com.zimbra.qa.selenium.projects.ajax.ui.preferences.SeparateWindowChangePassword;
 import com.zimbra.qa.selenium.projects.ajax.ui.preferences.TreePreferences.TreeItem;
 
 
@@ -41,7 +41,7 @@ public class ChangePassword extends AjaxCommonTest {
 		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.General);
 		
 		// Determine the status of the checkbox
-		DialogChangePassword dialog = (DialogChangePassword)app.zPagePreferences.zToolbarPressButton(Button.B_CHANGE_PASSWORD);
+		SeparateWindowChangePassword dialog = (SeparateWindowChangePassword)app.zPagePreferences.zToolbarPressButton(Button.B_CHANGE_PASSWORD);
 		ZAssert.assertNotNull(dialog, "Verify the dialog was created");
 		
 		dialog.zSetOldPassword(app.zGetActiveAccount().Password);

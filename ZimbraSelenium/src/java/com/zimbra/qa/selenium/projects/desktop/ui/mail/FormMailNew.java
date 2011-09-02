@@ -595,7 +595,7 @@ public class FormMailNew extends AbsForm {
 	          new Object[] {name}, WAIT_FOR_OPERAND.EQ, true, 30000, 1000);	    		   
 	}
 
-	public boolean zIsAttachmentReady(String name) {
+	public boolean zIsAttachmentReady(String name) throws HarnessException {
       //verify clipper image existed, checkbox is checked, and  attachment file name
 	   return  sIsElementPresent(Locators.zAttachmentImage) &&
       sIsChecked(Locators.zAttachmentCheckbox) &&

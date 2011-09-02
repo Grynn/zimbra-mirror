@@ -377,8 +377,9 @@ public class TreeMail extends AbsTree {
 	/**
 	 * To get whether the tree is collapsed or not
 	 * @return true if tree is collapsed, otherwise false
+	 * @throws HarnessException 
 	 */
-	public boolean isCollapsed() {
+	public boolean isCollapsed() throws HarnessException {
 	   // Browse all inventory in case of multiple accounts situation
 	   int i = 1;
 	   String locator = null;

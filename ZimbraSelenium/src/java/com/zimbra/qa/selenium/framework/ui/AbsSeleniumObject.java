@@ -399,8 +399,9 @@ public abstract class AbsSeleniumObject {
 	 * printed to the textfield
 	 * @param locator
 	 * @param value
+	 * @throws HarnessException 
 	 */
-	public void zTypeKeys(String locator, String value) {
+	public void zTypeKeys(String locator, String value) throws HarnessException {
 	   sTypeKeys(locator, value);
 	   sType(locator, value);
 	   logger.info("zTypeKeys(" + locator + "," + value + ")");
@@ -637,12 +638,18 @@ public abstract class AbsSeleniumObject {
 
 	/**
 	 * DefaultSelenium.sClick()
+	 * @throws HarnessException 
 	 */
-	public void sClick(String locator) {
-		// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
-		((DefaultSelenium) ClientSessionFactory.session().selenium())
-				.click(locator);
-		logger.info("click(" + locator + ")");
+	public void sClick(String locator) throws HarnessException {
+		try {
+
+			// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
+			((DefaultSelenium) ClientSessionFactory.session().selenium()).click(locator);
+			logger.info("click(" + locator + ")");
+
+		} catch (SeleniumException e){
+			throw new HarnessException(e);
+		}
 	}
 
 	/**
@@ -801,8 +808,9 @@ public abstract class AbsSeleniumObject {
 
 	/**
 	 * DefaultSelenium.isElementPresent()
+	 * @throws HarnessException 
 	 */
-	public boolean sIsElementPresent(String locator) {
+	public boolean sIsElementPresent(String locator) throws HarnessException {
 		// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
 		if (locator.startsWith("//") || locator.startsWith("xpath")) {
 			logger.warn("FIXME: the locator " + locator
@@ -1208,8 +1216,7 @@ public abstract class AbsSeleniumObject {
 	 */
 	public String sGetText(String locator) throws HarnessException {
 		try {
-			String text = ClientSessionFactory.session().selenium().getText(
-					locator);
+			String text = ((DefaultSelenium) ClientSessionFactory.session().selenium()).getText(locator);
 			logger.info("DefaultSelenium.getText(" + locator + ") = " + text);
 			return (text);
 		} catch (SeleniumException e) {
@@ -1252,10 +1259,17 @@ public abstract class AbsSeleniumObject {
 
 	/**
 	 * DefaultSelenium.type()
+	 * @throws HarnessException 
 	 */
-	public void sType(String locator, String text) {
-		ClientSessionFactory.session().selenium().type(locator, text);
-		logger.info("type(" + locator + ", " + text + ")");
+	public void sType(String locator, String text) throws HarnessException {
+		try {
+
+			ClientSessionFactory.session().selenium().type(locator, text);
+			logger.info("type(" + locator + ", " + text + ")");
+
+		} catch (SeleniumException e) {
+			throw new HarnessException(e);
+		}
 	}
 
 	/**

@@ -469,7 +469,7 @@ public class PageMail extends AbsTab {
 
 			pulldownLocator = "css=td[id$='__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
 			optionLocator = "css=div[id$='__DETACH'] td[id$='__DETACH_title']";
-			page = new DialogLaunchInSeparateWindow(this.MyApplication, this);
+			page = new SeparateWindowDisplayMail(this.MyApplication);
 
 			// We don't know the window title at this point (However, the test case should.)
 			// Don't check that the page is active, let the test case do that.

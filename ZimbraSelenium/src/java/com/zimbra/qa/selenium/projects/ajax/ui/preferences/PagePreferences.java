@@ -273,7 +273,7 @@ public class PagePreferences extends AbsTab {
 		} else if ( button == Button.B_CHANGE_PASSWORD ) {
 			
 			locator = "css=td[id='CHANGE_PASSWORD_title']";
-			page = new DialogChangePassword(MyApplication,((AppAjaxClient) MyApplication).zPagePreferences);
+			page = new SeparateWindowChangePassword(MyApplication);
 	
 		} else if ( button == Button.B_NEW_FILTER ) {
 			

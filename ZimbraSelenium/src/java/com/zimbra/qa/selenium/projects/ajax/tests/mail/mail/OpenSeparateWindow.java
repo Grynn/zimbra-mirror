@@ -13,8 +13,8 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogLaunchInSeparateWindow;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogLaunchInSeparateWindow.Field;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.SeparateWindowDisplayMail;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.SeparateWindowDisplayMail.Field;
 
 
 public class OpenSeparateWindow extends AjaxCommonTest {
@@ -73,12 +73,12 @@ public class OpenSeparateWindow extends AjaxCommonTest {
 		// Select the item
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
-		DialogLaunchInSeparateWindow window = null;
+		SeparateWindowDisplayMail window = null;
 		
 		try {
 			
 			// Choose Actions -> Launch in Window
-			window = (DialogLaunchInSeparateWindow)app.zPageMail.zToolbarPressPulldown(Button.B_ACTIONS, Button.B_LAUNCH_IN_SEPARATE_WINDOW);
+			window = (SeparateWindowDisplayMail)app.zPageMail.zToolbarPressPulldown(Button.B_ACTIONS, Button.B_LAUNCH_IN_SEPARATE_WINDOW);
 			
 			window.zSetWindowTitle(subject);
 			window.zWaitForActive();		// Make sure the window is there
@@ -132,12 +132,12 @@ public class OpenSeparateWindow extends AjaxCommonTest {
 		// Select the item
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		
-		DialogLaunchInSeparateWindow window = null;
+		SeparateWindowDisplayMail window = null;
 		
 		try {
 			
 			// Choose Actions -> Launch in Window
-			window = (DialogLaunchInSeparateWindow)app.zPageMail.zToolbarPressPulldown(Button.B_ACTIONS, Button.B_LAUNCH_IN_SEPARATE_WINDOW);
+			window = (SeparateWindowDisplayMail)app.zPageMail.zToolbarPressPulldown(Button.B_ACTIONS, Button.B_LAUNCH_IN_SEPARATE_WINDOW);
 			
 			window.zSetWindowTitle(subject);
 			window.zWaitForActive();		// Make sure the window is there

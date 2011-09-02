@@ -4,9 +4,8 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.preferences;
 
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsDialogSeparateWindow;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
-import com.zimbra.qa.selenium.framework.ui.AbsTab;
+import com.zimbra.qa.selenium.framework.ui.AbsSeparateWindow;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 
@@ -18,7 +17,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
  * @author Matt Rhoades
  *
  */
-public class DialogChangePassword extends AbsDialogSeparateWindow {
+public class SeparateWindowChangePassword extends AbsSeparateWindow {
 
 	public static class Locators {
 
@@ -31,25 +30,24 @@ public class DialogChangePassword extends AbsDialogSeparateWindow {
 	}
 	
 
-	public DialogChangePassword(AbsApplication application, AbsTab tab) {
-		super(application, tab);
+	public SeparateWindowChangePassword(AbsApplication application) {
+		super(application);
 		
 		this.DialogWindowTitle = "Change password"; // TODO: need to I18N
 	}
 	
 	public void zSetOldPassword(String password) throws HarnessException {
-		this.myType(Locators.LocatorOldPasswordCSS, password);
+		this.sType(Locators.LocatorOldPasswordCSS, password);
 	}
 	
 	public void zSetNewPassword(String password) throws HarnessException {
-		this.myType(Locators.LocatorNewPasswordCSS, password);
+		this.sType(Locators.LocatorNewPasswordCSS, password);
 	}
 	
 	public void zSetConfirmPassword(String password) throws HarnessException {
-		this.myType(Locators.LocatorConfirmPasswordCSS, password);
+		this.sType(Locators.LocatorConfirmPasswordCSS, password);
 	}
 	
-	@Override
 	public AbsPage zClickButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zClickButton("+ button +")");
 
@@ -71,18 +69,11 @@ public class DialogChangePassword extends AbsDialogSeparateWindow {
 			throw new HarnessException("Button "+ button +" not implemented");
 		}
 		
-		myClick(locator);
+		sClick(locator);
 		
 //		zWaitForBusyOverlay();
 		
 		return (null);
-	}
-
-	@Override
-	public String zGetDisplayedText(String locator) throws HarnessException {
-		
-		throw new HarnessException("implement me");
-		
 	}
 
 

@@ -133,7 +133,7 @@ public class FormAddZimbraAccount extends AbsForm {
       }
    }
 
-   public void zPressButton(Button button) {
+   public void zPressButton(Button button) throws HarnessException {
       String locator = null;
       if (button == Button.B_VALIDATE_AND_SAVE) {
          locator = Locators.zValidateAndSaveButton;

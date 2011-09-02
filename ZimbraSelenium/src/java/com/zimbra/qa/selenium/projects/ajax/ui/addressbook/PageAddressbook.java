@@ -690,7 +690,7 @@ public class PageAddressbook extends AbsTab {
 	
 	
 	// return the type of a contact
-	private String getContactType(String locator) {
+	private String getContactType(String locator) throws HarnessException {
 		String imageLocator = locator +" div[class*=";
         
 	    

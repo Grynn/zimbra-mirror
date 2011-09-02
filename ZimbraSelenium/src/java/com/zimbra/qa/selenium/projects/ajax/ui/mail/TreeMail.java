@@ -397,8 +397,9 @@ public class TreeMail extends AbsTree {
 	/**
 	 * To get whether the tree is collapsed or not
 	 * @return true if tree is collapsed, otherwise false
+	 * @throws HarnessException 
 	 */
-	public boolean isCollapsed() {
+	public boolean isCollapsed() throws HarnessException {
 		if (sIsElementPresent(Locators.treeExpandCollapseButton.replace(
 				"ImgNode", "ImgNodeCollapsed"))) {
 			return true;
