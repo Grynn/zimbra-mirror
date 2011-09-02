@@ -800,18 +800,19 @@ public class PageMail extends AbsTab {
 		// How many items are in the table?
 		int count = this.sGetCssCount(listLocator + " " + rowLocator);
 		logger.debug(myPageName() + " zListSelectItem: number of list items: "+ count);
-		itemlocator = listLocator + " :first-child";
+
+
 		// Get each conversation's data from the table list
 		for (int i = 1; i <= count; i++) {
 
-			//itemlocator = listLocator + " div:nth-of-type("+ i +") ";
+			itemlocator = listLocator + " div:nth-of-type("+ i +") ";
 			String s = this.sGetText(itemlocator + " td[id$='__su']").trim();
 
 			if ( s.contains(subject) ) {
 				break; // found it
 			}
-			itemlocator = itemlocator + " + div ";
-			//itemlocator = null;
+
+			itemlocator = null;
 		}
 
 		if ( itemlocator == null ) {
@@ -1101,17 +1102,20 @@ public class PageMail extends AbsTab {
 		// How many items are in the table?
 		int count = this.sGetCssCount(listLocator + " " + rowLocator);
 		logger.debug(myPageName() + " zListSelectItem: number of list items: "+ count);
-		itemlocator = listLocator + " :first-child";
+
+
 		// Get each conversation's data from the table list
 		for (int i = 1; i <= count; i++) {
-			//itemlocator = listLocator + " div:nth-of-type("+ i +") ";
+
+
+			itemlocator = listLocator + " div:nth-of-type("+ i +") ";
 			String s = this.sGetText(itemlocator + " td[id$='__su']").trim();
 
 			if ( s.contains(subject) ) {
 				break; // found it
 			}
-			itemlocator = itemlocator + " + div ";
-			//itemlocator = null;
+			
+			itemlocator = null;
 		}
 
 		if ( itemlocator == null ) {
