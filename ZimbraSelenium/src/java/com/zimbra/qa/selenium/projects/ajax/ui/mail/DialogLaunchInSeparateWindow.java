@@ -67,13 +67,27 @@ public class DialogLaunchInSeparateWindow extends AbsDialogSeparateWindow {
 		String locator = null;
 		
 		if ( field == Field.From ) {
-			locator = "css=div[id='zv__MSG1__MSG'] table[id='zv__MSG__MSG1_hdrTable'] tr[id$='_from'] span[id$='_com_zimbra_email']";
+			
+			locator = "css=tr[id$='_from'] span[id$='_com_zimbra_email']";
+			if ( !this.myIsElementPresent(locator) ) {
+				locator = "css=tr[id$='_from']"; // No bubbles
+			}
+			
 		} else if ( field == Field.To ) {
-			locator = "css=div[id='zv__MSG1__MSG'] table[id='zv__MSG__MSG1_hdrTable'] tr[id$='_to'] span[id$='_com_zimbra_email']";
+			
+			locator = "css=tr[id$='_to'] span[id$='_com_zimbra_email']";
+			if ( !this.myIsElementPresent(locator) ) {
+				locator = "css=tr[id$='_to']"; // No bubbles
+			}
+			
 		} else if ( field == Field.Subject ) {
+			
 			locator = "css=div[id='zv__MSG1__MSG'] tr[id='zv__MSG__MSG1_hdrTableTopRow'] td[class*='SubjectCol']";
+			
 		} else {
+			
 			throw new HarnessException("No logic defined for Field: "+ field);
+			
 		}
 
 

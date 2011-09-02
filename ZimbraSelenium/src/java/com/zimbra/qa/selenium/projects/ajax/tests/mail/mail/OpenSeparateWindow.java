@@ -33,7 +33,6 @@ public class OpenSeparateWindow extends AjaxCommonTest {
 		// Make sure we are using an account with message view
 		super.startingAccountPreferences = new HashMap<String, String>() {{
 				    put("zimbraPrefGroupMailBy", "message");
-				    put("zimbraPrefMessageViewHtmlPreferred", "TRUE");
 				}};
 
 
@@ -45,8 +44,8 @@ public class OpenSeparateWindow extends AjaxCommonTest {
 	public void OpenSeparateWindow_01() throws HarnessException {
 		
 		final String subject = "subject12996131112962";
-		final String from = "from13149322103433";
-		final String to = "to13149344503433";
+		final String from = "from13149322103433@testdomain.com";
+		final String to = "to13149344503433@testdomain.com";
 		final String content = "content13147814503433";
 
 
@@ -85,10 +84,73 @@ public class OpenSeparateWindow extends AjaxCommonTest {
 			window.zWaitForActive();		// Make sure the window is there
 			
 			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
-			ZAssert.assertEquals(window.zGetMailProperty(Field.Subject), subject, "Verify the 'Subject' matches");
 			
 		} finally {
 			
+			// Make sure to close the window
+			if ( window != null ) {
+				window.zCloseWindow();
+				window = null;
+			}
+			
+		}
+		
+		
+	}
+
+	@Test(	description = "Open message in separate window - check the display",
+			groups = { "smoke" })
+	public void OpenSeparateWindow_02() throws HarnessException {
+		
+		final String subject = "subject1291234112962";
+		final String from = "from13142352103433@testdomain.com";
+		final String to = "to13141111503433@testdomain.com";
+		final String content = "content13147988703433";
+
+
+		// Add a message to the inbox
+		app.zGetActiveAccount().soapSend(
+					"<AddMsgRequest xmlns='urn:zimbraMail'>"
+        		+		"<m l='"+ FolderItem.importFromSOAP(app.zGetActiveAccount(), FolderItem.SystemFolder.Inbox).getId() +"'>"
+            	+			"<content>From: "+ from + "\n"
+            	+				"To: "+ to +"\n"
+            	+				"Subject: "+ subject +"\n"
+            	+				"MIME-Version: 1.0 \n"
+            	+				"Content-Type: text/plain; charset=utf-8 \n"
+            	+				"Content-Transfer-Encoding: 7bit\n"
+            	+				"\n"
+            	+				content +"\n"
+            	+			"</content>"
+            	+		"</m>"
+				+	"</AddMsgRequest>");
+
+		
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Select the item
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+		
+		DialogLaunchInSeparateWindow window = null;
+		
+		try {
+			
+			// Choose Actions -> Launch in Window
+			window = (DialogLaunchInSeparateWindow)app.zPageMail.zToolbarPressPulldown(Button.B_ACTIONS, Button.B_LAUNCH_IN_SEPARATE_WINDOW);
+			
+			window.zSetWindowTitle(subject);
+			window.zWaitForActive();		// Make sure the window is there
+			
+			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
+			
+			ZAssert.assertEquals(window.zGetMailProperty(Field.Subject), subject, "Verify the 'Subject' matches");
+			ZAssert.assertEquals(window.zGetMailProperty(Field.From), from, "Verify the 'From' matches");
+			ZAssert.assertEquals(window.zGetMailProperty(Field.To), to, "Verify the 'To' matches");
+			
+		} finally {
+			
+			// Make sure to close the window
 			if ( window != null ) {
 				window.zCloseWindow();
 				window = null;

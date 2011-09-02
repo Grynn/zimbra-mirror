@@ -121,6 +121,36 @@ public abstract class AbsDialogSeparateWindow extends AbsDialog {
 	}
 
 	/**
+	 * Determine if a locator is present
+	 * @param locator
+	 * @return true if present, false otherwise
+	 * @throws HarnessException
+	 */
+	protected boolean myIsElementPresent(String locator) throws HarnessException {
+		logger.info(myPageName() + " myGetText("+ locator +")");
+		
+		boolean present = false;
+		
+		try {
+			this.sSelectWindow(this.DialogWindowID);
+			this.sWindowFocus();
+
+			// Make sure the locator exists
+			if ( !this.sIsElementPresent(locator) ) {
+				throw new HarnessException("myGetText: "+ locator +" is not present");
+			}
+
+			present = this.sIsElementPresent(locator);
+
+		} finally {
+			this.sSelectWindow(MainWindowID);
+			this.sWindowFocus();
+		}
+
+		return (present);
+	}
+
+	/**
 	 * Close the separate window (DefaultSelenium.close())
 	 * @throws HarnessException
 	 */
