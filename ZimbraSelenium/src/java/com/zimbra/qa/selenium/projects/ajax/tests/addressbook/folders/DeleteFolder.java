@@ -156,7 +156,11 @@ public class DeleteFolder extends AjaxCommonTest {
  	    // Delete the folder using shortcut Del		
 	    app.zPageAddressbook.zKeyboardKeyEvent(KeyEvent.VK_DELETE);
 		
-		verifyExistInTrashFolder(folderItem);
+	    // The following actions are just for display error details in bug 64120
+	    app.zPageAddressbook.zKeyboardKeyEvent(KeyEvent.VK_RIGHT);
+	    app.zPageAddressbook.zKeyboardKeyEvent(KeyEvent.VK_ENTER);
+		
+	    verifyExistInTrashFolder(folderItem);
 	}	
 
 }
