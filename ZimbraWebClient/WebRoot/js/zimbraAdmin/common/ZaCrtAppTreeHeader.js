@@ -9,6 +9,7 @@
 ZaCrtAppTreeHeader = function(parent, className, buttons) {
 
 	DwtButton.call(this, parent, "", className, Dwt.ABSOLUTE_STYLE);
+    this.preObj = null;
 	this._history = new AjxVector();
     this.menu = new ZaPopupMenu(this);
     this.menu.setWidth(150);
@@ -28,6 +29,7 @@ ZaCrtAppTreeHeader.prototype.TEMPLATE = "admin.Widgets#ZaTreeHeaderButton";
 
 ZaCrtAppTreeHeader.prototype._createHtmlFromTemplate = function(templateId, data) {
     DwtButton.prototype._createHtmlFromTemplate.call(this, templateId, data);
+    this._arrowEl = document.getElementById(data.id+"_doubleArrow");
     this._imgEl = document.getElementById(data.id+"_img");
 };
 
@@ -41,6 +43,10 @@ ZaCrtAppTreeHeader.prototype.setRightImg = function (imgName) {
 
 ZaCrtAppTreeHeader.prototype._handleClick =
 function(ev) {
+    if (this._isArrowEvent(ev)) {
+        var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
+        var currentDataItem = tree.setSelectionByPath(this.preObj.path, false);
+    }
     // Nothing doing here
 }
 
@@ -64,9 +70,39 @@ function(ev) {
 	return false;
 };
 
-ZaCrtAppTreeHeader.prototype.setText = function (path) {
-    var pathItem = path.split();
-	DwtLabel.prototype.setText.call(this, path);
+ZaCrtAppTreeHeader.prototype._isArrowEvent =
+function(ev) {
+    if (this._arrowEl && this._textEl) {
+        var arrowBounds = Dwt.getBounds(this._arrowEl);
+        var textBounds = Dwt.getBounds(this._textEl);
+        var start = arrowBounds.x;
+        var end = textBounds.x + textBounds.width;
+        var mouseX = ev.docX;
+        if (mouseX < start)
+            return false;
+        if (mouseX >= end)
+            return false;
+        return true;
+    }
+    return false;
+}
+
+ZaCrtAppTreeHeader.prototype.setText = function (historyObject) {
+    if (historyObject.path == "Home") {
+       this.preObj = historyObject;
+    } else {
+       var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
+       var pathItems = tree.getPathItems(historyObject.path);
+       pathItems.pop();
+       var displayName = pathItems[pathItems.length - 1];
+       var path = tree.getPathByArray(pathItems);
+       this.preObj = {
+          path: path,
+          displayName: displayName
+       };
+    }
+
+	DwtLabel.prototype.setText.call(this, this.preObj.displayName);
 }
 
 ZaCrtAppTreeHeader.prototype.addHistory = function (history) {
@@ -149,7 +185,7 @@ ZaCrtAppTreeHeader.prototype.goToTreeItemListener = function (ev) {
     // TODO
     var tree = ZaZimbraAdmin.getInstance().getOverviewPanelController().getOverviewPanel().getFolderTree();
     var currentDataItem = tree.setSelectionByPath(historyObject.path, false);
-    window.console.log("To select " + historyObject.path);
+    //window.console.log("To select " + historyObject.path);
 }
 
 ZaCrtAppTreeHeader.prototype.clearHistory = function (ev) {

@@ -984,7 +984,7 @@ ZaZimbraAdmin.prototype.updateHistory =
 function(historyObject, isAddHistory) {
     if(isAddHistory)
         this._header.addHistory(historyObject);
-    this._header.setText(historyObject.displayName);
+    this._header.setText(historyObject);
     this._currentAppBar.setText(historyObject.path);
 
 }
