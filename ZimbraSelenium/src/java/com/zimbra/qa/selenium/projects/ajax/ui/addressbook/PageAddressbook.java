@@ -414,7 +414,7 @@ public class PageAddressbook extends AbsTab {
 
 		// Click it
 		zClickAt(locator,"0,0");
-		
+		  ExecuteHarnessMain.ResultListener.captureScreen();
 		if (isAlphabetButton(button)) {
  		  //for addressbook alphabet button only
 		  sClick(locator);
@@ -423,7 +423,10 @@ public class PageAddressbook extends AbsTab {
 	
 		
 		if ( page != null ) {
+			sWaitForPageToLoad();			
+			  ExecuteHarnessMain.ResultListener.captureScreen();
 			page.zWaitForActive();
+			  ExecuteHarnessMain.ResultListener.captureScreen();
 		}
 		return (page);
 	}
@@ -477,7 +480,6 @@ public class PageAddressbook extends AbsTab {
 	  
       // Refresh the view, to pick up the new contact
       FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
-      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
       app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
     
       // Select the item
@@ -617,6 +619,7 @@ public class PageAddressbook extends AbsTab {
 			// If we click on pulldown/option and the page is specified, then
 			// wait for the page to go active
 			if ( page != null ) {
+				sWaitForPageToLoad();
 				page.zWaitForActive();
 			}
 			
@@ -982,6 +985,7 @@ public class PageAddressbook extends AbsTab {
 		
 		
 		if ( page != null ) {
+			sWaitForPageToLoad();
 			page.zWaitForActive();
 		}
 		return (page);
