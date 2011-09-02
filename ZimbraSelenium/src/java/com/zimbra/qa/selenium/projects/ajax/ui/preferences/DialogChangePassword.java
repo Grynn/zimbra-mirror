@@ -4,12 +4,11 @@
 package com.zimbra.qa.selenium.projects.ajax.ui.preferences;
 
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
-import com.zimbra.qa.selenium.framework.ui.AbsDialog;
+import com.zimbra.qa.selenium.framework.ui.AbsDialogSeparateWindow;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsTab;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
-import com.zimbra.qa.selenium.framework.util.SleepUtil;
 
 
 
@@ -19,7 +18,7 @@ import com.zimbra.qa.selenium.framework.util.SleepUtil;
  * @author Matt Rhoades
  *
  */
-public class DialogChangePassword extends AbsDialog {
+public class DialogChangePassword extends AbsDialogSeparateWindow {
 
 	public static class Locators {
 
@@ -32,76 +31,10 @@ public class DialogChangePassword extends AbsDialog {
 	}
 	
 
-	// TODO: need to I18N
-	public static final String ChangePasswordDialogTitle = "Change password";
-	public static final String MainPageTitle = "Zimbra: Preferences: General";
-
-	protected String DialogWindowID = null;
-	protected String MainWindowID = "null";
-	
 	public DialogChangePassword(AbsApplication application, AbsTab tab) {
 		super(application, tab);
-	}
-	
-	private void myClick(String locator) throws HarnessException {
-		logger.info(myPageName() + " click("+ locator +")");
 		
-		
-		try {
-			this.zSelectWindow(this.DialogWindowID);
-
-			// Make sure the locator exists
-			if ( !this.sIsElementPresent(locator) ) {
-				throw new HarnessException("click: "+ locator +" is not present");
-			}
-			
-			this.sClick(locator);
-			
-			// Wait for the SOAP request to finish
-			SleepUtil.sleepVeryLong();
-			// zWaitForBusyOverlay();
-
-		} finally {
-			this.zSelectWindow(MainWindowID);
-		}
-
-
-	}
-	
-	private void myType(String locator, String value) throws HarnessException {
-		logger.info(myPageName() + " type("+ locator +", " + value +")");
-		
-		
-		try {
-			this.zSelectWindow(this.DialogWindowID);
-
-			// Make sure the locator exists
-			if ( !this.sIsElementPresent(locator) ) {
-				throw new HarnessException("type: "+ locator +" is not present");
-			}
-			
-			this.sType(locator, value);
-
-		} finally {
-			this.zSelectWindow(MainWindowID);
-		}
-
-	}
-
-	public void zCloseWindow() throws HarnessException {
-		logger.info(myPageName() + " zCloseWindow()");
-		
-		
-		try {
-		
-			this.zSelectWindow(this.DialogWindowID);
-			this.sClose();
-
-		} finally {
-			this.zSelectWindow(MainWindowID);
-		}
-
-
+		this.DialogWindowTitle = "Change password"; // TODO: need to I18N
 	}
 	
 	public void zSetOldPassword(String password) throws HarnessException {
@@ -161,29 +94,6 @@ public class DialogChangePassword extends AbsDialog {
 		return (this.getClass().getName());
 	}
 
-	@Override
-	public boolean zIsActive() throws HarnessException {
-		logger.info(myPageName() + " zIsActive()");
-
-//		for (String name: this.sGetAllWindowIds()) {
-//			logger.info("Window ID: "+ name);
-//		}
-//		
-//		for (String name: this.sGetAllWindowNames()) {
-//			logger.info("Window name: "+ name);
-//		}
-//		
-		for (String title : this.sGetAllWindowTitles()) {
-			logger.info("Window title: "+ title);
-			if ( title.toLowerCase().contains(DialogChangePassword.ChangePasswordDialogTitle.toLowerCase()) ) {
-				this.DialogWindowID = title;
-				return (true);
-			}
-		}
-		
-		return (false);
-		
-	}
 
 
 

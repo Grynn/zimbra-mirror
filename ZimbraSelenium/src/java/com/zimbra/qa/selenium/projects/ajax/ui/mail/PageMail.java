@@ -51,7 +51,7 @@ public class PageMail extends AbsTab {
 
 		public static final String zCloseIconBtn_messageWindow 	= "css=td[id=zb__MSG__CLOSE_left_icon]";
 		public static final String cssTVRowsLocator	= "css=div#zl__TV__rows";
-		
+
 		public static class CONTEXT_MENU {
 			// TODO: Until https://bugzilla.zimbra.com/show_bug.cgi?id=56273 is fixed, ContextMenuItem will be defined using the text content
 			public static String stringToReplace = "<ITEM_NAME>";
@@ -465,6 +465,23 @@ public class PageMail extends AbsTab {
 			optionLocator = "css=div[id$='__REDIRECT'] td[id$='__REDIRECT_title']";
 			page = new DialogRedirect(this.MyApplication, this);
 
+		} else if ( (pulldown == Button.B_ACTIONS) && (option == Button.B_LAUNCH_IN_SEPARATE_WINDOW) ) {
+
+			pulldownLocator = "css=td[id$='__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+			optionLocator = "css=div[id$='__DETACH'] td[id$='__DETACH_title']";
+			page = new DialogLaunchInSeparateWindow(this.MyApplication, this);
+
+			// We don't know the window title at this point (However, the test case should.)
+			// Don't check that the page is active, let the test case do that.
+
+			this.zClickAt(pulldownLocator, "0,0");
+			zWaitForBusyOverlay();
+
+			this.zClickAt(optionLocator, "0,0");
+			zWaitForBusyOverlay();
+
+			return (page);
+
 		} else if ( (pulldown == Button.B_ACTIONS) && ((option == Button.B_RESPORTSPAM) || (option == Button.B_RESPORTNOTSPAM)) ) {
 
 			if ( this.zIsVisiblePerPosition("css=div#ztb__CLV2", 0, 0) ) {
@@ -482,11 +499,11 @@ public class PageMail extends AbsTab {
 			//optionLocator = "//td[contains(@id,'_title') and contains (text(),'sigName')]";
 
 			page = null;
-			
+
 		} else if ( pulldown == Button.B_MOVE ) {
 
 			if ( option == Button.O_NEW_FOLDER ) {
-				
+
 				// Check if we are CLV or MV
 				if ( this.zIsVisiblePerPosition("css=div#ztb__CLV2", 0, 0) ) {
 					pulldownLocator = "css=td#zb__CLV2__MOVE_MENU_dropdown>div";
@@ -520,7 +537,7 @@ public class PageMail extends AbsTab {
 
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
-			
+
 			page.zWaitForActive();
 
 			return (page);
@@ -600,22 +617,22 @@ public class PageMail extends AbsTab {
 
 	private MailItem parseMessageRow(String top) throws HarnessException {
 		MailItem item = null;
-		
+
 		if ( top.contains("CLV") ) {
 			item = new ConversationItem();
-			
+
 			if ( this.sIsElementPresent(top.trim() + "[class*='ZmConvExpanded']"))
 				((ConversationItem)item).gIsConvExpanded = true;
-			
+
 		} else if ( top.contains("TV") )  {
 			item = new MailItem();
 		} else {
 			throw new HarnessException("Unknown message row type "+ top);
 		}
-		
+
 		String msglocator = top;
 		String locator;
-		
+
 		// Is it checked?
 		locator = msglocator + " div[class*='ImgCheckboxChecked']";
 		item.gIsSelected = this.sIsElementPresent(locator);
@@ -650,9 +667,9 @@ public class PageMail extends AbsTab {
 		// Get the fragment and the subject
 		locator = msglocator + " span[id$='__fm']";
 		if ( this.sIsElementPresent(locator) ) {
-			
+
 			item.gFragment = this.sGetText(locator).trim();
-			
+
 			// Get the subject
 			locator = msglocator + " td[id$='__su']";
 			String subject = this.sGetText(locator).trim();
@@ -661,7 +678,7 @@ public class PageMail extends AbsTab {
 			// strip it off
 			item.gSubject = subject.replace(item.gFragment, "").trim();
 
-			
+
 		} else {
 
 			// Conversation items's fragment is in the subject field
@@ -698,7 +715,7 @@ public class PageMail extends AbsTab {
 
 		return (item);
 	}
-	
+
 	/**
 	 * Return a list of all messages in the current view.<p>
 	 * <p>
@@ -755,10 +772,10 @@ public class PageMail extends AbsTab {
 
 		if ( action == null )
 			throw new HarnessException("action cannot be null");
-		
+
 		if ( subject == null )
 			throw new HarnessException("subject cannot be null");
-		
+
 		AbsPage page = null;
 		String listLocator;
 		String rowLocator;
@@ -821,7 +838,7 @@ public class PageMail extends AbsTab {
 			this.zWaitForBusyOverlay();
 
 			page = new DisplayMail(MyApplication);
-			
+
 			// FALL THROUGH
 		} else if ( action == Action.A_CTRLSELECT ) {
 
@@ -1230,51 +1247,51 @@ public class PageMail extends AbsTab {
 				(shortcut == Shortcut.S_NEWMESSAGE) ||
 				(shortcut == Shortcut.S_NEWMESSAGE2) )
 		{
-			
+
 			// "New Message" shortcuts result in a compose form opening
 			page = new FormMailNew(this.MyApplication);
-			
+
 		}else if ( (shortcut == Shortcut.S_NEWTAG) ){
 
 			// "New Message" shortcuts result in a compose form opening
 			//page = new FormMailNew(this.MyApplication);
 			page = new DialogTag(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
-			
+
 		}else if ( (shortcut == Shortcut.S_NEWFOLDER) ){
 
 			// "New Message" shortcuts result in a compose form opening
 			//page = new FormMailNew(this.MyApplication);
 			page = new DialogCreateFolder(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
-			
+
 		} else if ( (shortcut == Shortcut.S_MAIL_HARDELETE) ) {
 
 			// Hard Delete shows the Warning Dialog : Are you sure you want to permanently delete it?
 			page = new DialogWarning(DialogWarning.DialogWarningID.PermanentlyDeleteTheItem,
 					MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
-			
+
 		} else if ( shortcut == Shortcut.S_ASSISTANT ) {
-			
+
 			page = new DialogAssistant(MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
 
 		} else if(shortcut== Shortcut.S_ESCAPE) {
-			
+
 			page = new DialogWarning(
 					DialogWarning.DialogWarningID.SaveCurrentMessageAsDraft,
 					this.MyApplication,
 					((AppAjaxClient)this.MyApplication).zPageMail);	
-			
+
 			keyCode = "27";
 			zKeyDown(keyCode);
 			return page;
-			
-// By default, just type the shortcut and return null page
-//		} else {
-//			
-//			throw new HarnessException("No logic for shortcut : "+ shortcut);
-//			
+
+			// By default, just type the shortcut and return null page
+			//		} else {
+			//			
+			//			throw new HarnessException("No logic for shortcut : "+ shortcut);
+			//			
 		}
 
-		
+
 		zKeyboard.zTypeCharacters(shortcut.getKeys());
 
 		// If the app is busy, wait for it to become active
@@ -1290,16 +1307,16 @@ public class PageMail extends AbsTab {
 	public AbsPage zToolbarPressPulldown(Button pulldown, Button option,String dynamic) throws HarnessException {
 		//logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
 		tracer.trace("Click pulldown "+ pulldown +" then "+ option +" then "+ dynamic);
-		
-		
+
+
 		if (pulldown == null)
 			throw new HarnessException("Pulldown cannot be null!");
 		if (option == null)
 			throw new HarnessException("Option cannot be null!");
 		if (dynamic == null)
 			throw new HarnessException("dynamic string cannot be null!");
-		
-		
+
+
 		// Default behavior variables
 		String pulldownLocator = null; // If set, this will be expanded
 		String optionLocator = null; // If set, this will be clicked
@@ -1322,7 +1339,7 @@ public class PageMail extends AbsTab {
 
 			String quickcommand = (String)dynamic;
 			logger.info("Click on Quick Command: "+ quickcommand);
-			
+
 			pulldownLocator	= "css=td[id='zb__TV__ACTIONS_MENU_dropdown'] div[class='ImgSelectPullDownArrow']";
 			optionLocator	= "css=div[id='zmi__TV__QUICK_COMMANDS'] td[id$='_title']";
 			dynamicLocator	= "css=div[id='POPUP_DWT30'] td[id$='_title']:contains('"+ quickcommand + "')";
@@ -1383,9 +1400,9 @@ public class PageMail extends AbsTab {
 			if (page != null) {
 				page.zWaitForActive();
 			}
-			
+
 		}
-		
+
 		// Return the specified page, or null if not set
 		return (page);
 
@@ -1401,30 +1418,30 @@ public class PageMail extends AbsTab {
 	 */
 	public AbsPage zToolbarPressPulldown(Button pulldown, Object dynamic) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ dynamic +")");
-		
+
 		tracer.trace("Click pulldown "+ pulldown +" then "+ dynamic);
-		
-		
+
+
 		if (pulldown == null)
 			throw new HarnessException("Pulldown cannot be null!");
 
 		if (dynamic == null)
 			throw new HarnessException("Option cannot be null!");
-		
-		
+
+
 		// Default behavior variables
 		String pulldownLocator = null; // If set, this will be expanded
 		String optionLocator = null; // If set, this will be clicked
 		AbsPage page = null; // If set, this page will be returned
 
-		
+
 		if ( pulldown == Button.B_MOVE ) {
-			
+
 			if ( !(dynamic instanceof FolderItem) ) 
 				throw new HarnessException("if pulldown = " + Button.B_MOVE +", then dynamic must be FolderItem");
 
 			FolderItem folder = (FolderItem)dynamic;
-			
+
 			// Check if we are CLV or MV
 			if ( this.zIsVisiblePerPosition("css=div#ztb__CLV2", 0, 0) ) {
 				pulldownLocator = "css=td#zb__CLV2__MOVE_MENU_dropdown>div";
@@ -1433,15 +1450,15 @@ public class PageMail extends AbsTab {
 				pulldownLocator = "css=td#zb__TV__MOVE_MENU_dropdown>div";
 				optionLocator = "css=td#zti__DwtFolderChooser_MailTV__"+ folder.getId() + "_textCell";
 			}
-			
+
 
 			page = null;
-			
-			
+
+
 		} else {
 
 			throw new HarnessException("no logic defined for pulldown/dynamic " + pulldown + "/" + dynamic);
-			
+
 		}
 
 		// Default behavior
@@ -1456,7 +1473,7 @@ public class PageMail extends AbsTab {
 
 			// If the app is busy, wait for it to become active
 			zWaitForBusyOverlay();
-			
+
 			SleepUtil.sleepSmall();
 
 			if (optionLocator != null) {
@@ -1477,16 +1494,16 @@ public class PageMail extends AbsTab {
 			if (page != null) {
 				page.zWaitForActive();
 			}
-			
+
 		}
-		
-		
-		
+
+
+
 		// Return the specified page, or null if not set
 		return (page);
 
 
-		
+
 	}
 
 
