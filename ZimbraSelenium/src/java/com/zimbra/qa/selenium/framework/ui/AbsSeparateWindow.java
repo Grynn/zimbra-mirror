@@ -197,7 +197,52 @@ public abstract class AbsSeparateWindow extends AbsPage {
 
 	}
 
+	/**
+	 * Type characters in the separate window
+	 * @param characters
+	 * @throws HarnessException
+	 */
+	public void zTypeCharacters(String characters) throws HarnessException {
+		logger.info(myPageName() + " zTypeCharacters()");
 
+
+		try {
+
+			super.sSelectWindow(this.DialogWindowID);
+			super.sWindowFocus(); // Must focus into the separate window
+
+			super.zKeyboard.zTypeCharacters(characters);
+
+		} finally {
+			super.zSelectWindow(MainWindowID);
+			super.sWindowFocus();
+		}
+		
+	}
+	
+	/**
+	 * Type characters in the separate window
+	 * @param characters
+	 * @throws HarnessException
+	 */
+	public void zKeyDown(String keyCode) throws HarnessException {
+		logger.info(myPageName() + " zKeyDown()");
+
+
+		try {
+
+			super.sSelectWindow(this.DialogWindowID);
+			super.sWindowFocus(); // Must focus into the separate window
+
+			this.zKeyDown(keyCode);
+
+		} finally {
+			super.zSelectWindow(MainWindowID);
+			super.sWindowFocus();
+		}
+		
+	}
+	
 	/**
 	 * Close the separate window (DefaultSelenium.close())
 	 * @throws HarnessException

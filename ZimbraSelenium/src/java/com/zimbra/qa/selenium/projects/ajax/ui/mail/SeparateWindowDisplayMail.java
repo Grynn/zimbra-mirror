@@ -7,6 +7,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsSeparateWindow;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail.Field;
@@ -231,6 +232,14 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 
 			// FALL THROUGH
 
+		} else if ( button == Button.B_RESPORTSPAM ) {
+
+			return (zToolbarPressPulldown(Button.B_ACTIONS, Button.B_RESPORTSPAM));
+
+		} else if ( button == Button.B_RESPORTNOTSPAM ) {
+
+			return (zToolbarPressPulldown(Button.B_ACTIONS, Button.B_RESPORTNOTSPAM));
+
 		} else {
 			
 			throw new HarnessException("no logic defined for button "+ button);
@@ -260,7 +269,139 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 		return (page);
 	}
 
-	
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
+		
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
+		
+		
+		if (pulldown == null)
+			throw new HarnessException("Pulldown cannot be null!");
+
+		if (option == null)
+			throw new HarnessException("Option cannot be null!");
+		
+		
+		// Default behavior variables
+		String containerToolbar = "css=div[id^='ztb__MSG']";
+		String containerActionMenu = "css=div[id^='zm__MSG']";
+		String pulldownLocator = null; // If set, this will be expanded
+		String optionLocator = null; // If set, this will be clicked
+		AbsPage page = null; // If set, this page will be returned
+
+		if ( pulldown == Button.B_ACTIONS ) {
+		
+			pulldownLocator = containerToolbar + " div[id$='__ACTIONS_MENU'] td[id$='_dropdown']>div";
+
+			if ( option == Button.B_PRINT ) {
+				
+				optionLocator = containerActionMenu + " div[id$='__PRINT'] td[id$='_title']";
+				page = null;
+				throw new HarnessException("implement me"); // Need to implement the print dialog
+
+				// FALL THROUGH
+				
+			} else if (option == Button.B_RESPORTSPAM) {
+				
+				optionLocator = containerActionMenu + " div[id$='__SPAM'] td[id$='_title']";
+				page = null;
+				
+				// FALL THROUGH
+				
+			} else if (option == Button.B_RESPORTNOTSPAM) {
+				
+				optionLocator = containerActionMenu + " div[id$='__SPAM'] td[id$='_title']";
+				page = null;
+				
+				// FALL THROUGH
+				
+			} else if (option == Button.O_MARK_AS_READ) {
+				
+				optionLocator = containerActionMenu + " div[id$='__MARK_READ'] td[id$='_title']";
+				page = null;
+				
+				// FALL THROUGH
+				
+			} else if (option == Button.O_MARK_AS_UNREAD) {
+				
+				optionLocator = containerActionMenu + " div[id$='__MARK_UNREAD'] td[id$='_title']";
+				page = null;
+				
+				// FALL THROUGH
+				
+			} else if (option == Button.O_SHOW_ORIGINAL) {
+				
+				optionLocator = containerActionMenu + " div[id$='__SHOW_ORIG'] td[id$='_title']";
+				page = null;
+				
+				// FALL THROUGH
+
+			} else if (option == Button.B_REDIRECT) {
+				
+				optionLocator = containerActionMenu + " div[id$='__REDIRECT'] td[id$='_title']";
+				page = null;
+				
+				// FALL THROUGH
+
+			} else if (option == Button.O_EDIT_AS_NEW) {
+				
+				optionLocator = containerActionMenu + " div[id$='__EDIT_AS_NEW'] td[id$='_title']";
+				page = null;
+				
+				// FALL THROUGH
+
+			} else {
+				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
+			}
+
+		} else if (pulldown == Button.B_TAG) {
+			
+			pulldownLocator = containerToolbar + " div[id$='__TAG_MENU'] td[id$='_dropdown']>div";
+
+			if (option == Button.O_TAG_NEWTAG) {
+
+				optionLocator = "css=td[id$='__TAG_MENU|MENU|NEWTAG_title']";
+				page = null; // new DialogTag(this.MyApplication, this);
+				throw new HarnessException("implement me"); // Need to implement the 'new tag' dialog
+
+				// FALL THROUGH
+				
+			} else if (option == Button.O_TAG_REMOVETAG) {
+
+				optionLocator = "css=td[id$='__TAG_MENU|MENU|REMOVETAG_title']";
+				page = null;
+
+				// FALL THROUGH
+				
+			} else {
+				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
+			}
+			
+		} else {
+			
+			throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
+			
+		}
+		
+		
+		if (pulldownLocator != null) {
+
+			this.zClickAt(pulldownLocator,"");
+
+			if (optionLocator != null) {
+
+				this.zClickAt(optionLocator,"");
+
+			}
+			
+		}
+			
+		return (page);
+
+	}
+			
+
+
 	
 	public AbsPage zToolbarPressPulldown(Button button, Object dynamic) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton("+ button +", "+ dynamic +")");
@@ -316,5 +457,30 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 			
 		return (page);
 
+	}
+
+	public AbsPage zKeyboardShortcut(Shortcut shortcut) throws HarnessException {
+		logger.info(myPageName() + " zKeyboardShortcut("+ shortcut +")");
+		
+		if (shortcut == null)
+			throw new HarnessException("Shortcut cannot be null");
+
+		tracer.trace("Using the keyboard, press the "+ shortcut.getKeys() +" keyboard shortcut");
+
+		AbsPage page = null;
+
+		if (shortcut== Shortcut.S_ESCAPE) {
+
+			// Close the window
+			zKeyDown("27");
+			return page;
+
+		}
+
+
+		zTypeCharacters(shortcut.getKeys());
+
+		return (page);	
+		
 	}
 }
