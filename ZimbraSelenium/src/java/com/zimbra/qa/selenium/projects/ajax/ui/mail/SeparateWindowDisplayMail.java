@@ -14,7 +14,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail.Field;
 
 
 /**
- * Represents a "Rename Folder" dialog box
+ * Represents a "Launch in New Window" display of a message
  * <p>
  * @author Matt Rhoades
  *
@@ -26,9 +26,6 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 	}
 	
 
-	// TODO: need to I18N
-	public String DialogLaunchInSeparateWindowTitle = null;
-
 	public SeparateWindowDisplayMail(AbsApplication application) {
 		super(application);
 		
@@ -38,13 +35,6 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 		
 	}
 	
-	public AbsPage zClickButton(Button button) throws HarnessException {
-		logger.info(myPageName() + " zClickButton("+ button +")");
-
-		throw new HarnessException("zClickButton("+ button +") not implemented");
-
-	}
-
 	public String zGetMailProperty(Field field) throws HarnessException {
 		logger.info(myPageName() + " zGetDisplayedValue(" + field + ")");
 
@@ -188,4 +178,143 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 
 	}
 
+	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
+
+		tracer.trace("Press the "+ button +" button");
+
+		if ( button == null )
+			throw new HarnessException("Button cannot be null!");
+
+
+		// Default behavior variables
+		//
+		String container = "css=div[id^='ztb__MSG']";
+		String locator = null;			// If set, this will be clicked
+		AbsPage page = null;	// If set, this page will be returned
+
+		// Based on the button specified, take the appropriate action(s)
+		//
+
+		if ( button == Button.B_CLOSE ) {
+
+			locator = container + " div[id$='__CLOSE'] td[id$='_title']";
+			page = null;
+
+			// FALL THROUGH
+
+		} else if ( button == Button.B_DELETE ) {
+
+			locator = container + " div[id$='__DELETE'] td[id$='_title']";
+			page = null;
+
+			// FALL THROUGH
+
+		} else if ( button == Button.B_REPLY ) {
+
+			locator = container + " div[id$='__REPLY'] td[id$='_title']";
+			page = null;
+
+			// FALL THROUGH
+
+		} else if ( button == Button.B_REPLYALL ) {
+
+			locator = container + " div[id$='__REPLY_ALL'] td[id$='_title']";
+			page = null;
+
+			// FALL THROUGH
+
+		} else if ( button == Button.B_FORWARD ) {
+
+			locator = container + " div[id$='__FORWARD'] td[id$='_title']";
+			page = null;
+
+			// FALL THROUGH
+
+		} else {
+			
+			throw new HarnessException("no logic defined for button "+ button);
+			
+		}
+
+		if ( locator == null ) {
+			throw new HarnessException("locator was null for button "+ button);
+		}
+
+		// Default behavior, process the locator by clicking on it
+		//
+		this.zClickAt(locator,"0,0");
+
+		// If the app is busy, wait for it to become active
+		this.zWaitForBusyOverlay();
+
+		// If page was specified, make sure it is active
+		if ( page != null ) {
+
+			// This function (default) throws an exception if never active
+			page.zWaitForActive();
+
+		}
+
+
+		return (page);
+	}
+
+	
+	
+	public AbsPage zToolbarPressPulldown(Button button, Object dynamic) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressButton("+ button +", "+ dynamic +")");
+
+		tracer.trace("Click pulldown "+ button +" then "+ dynamic);
+
+		if ( button == null )
+			throw new HarnessException("Button cannot be null!");
+
+		if ( dynamic == null )
+			throw new HarnessException("Dynamic cannot be null!");
+
+
+		// Default behavior variables
+		//
+		String container = "css=div[id^='ztb__MSG']";
+		String pulldownLocator = null; // If set, this will be expanded
+		String optionLocator = null; // If set, this will be clicked
+		AbsPage page = null; // If set, this page will be returned
+
+		// Based on the button specified, take the appropriate action(s)
+		//
+
+		if ( button == Button.B_TAG ) {
+
+			if ( !(dynamic instanceof String) ) 
+				throw new HarnessException("if button = B_TAG, then dynamic should be a tag name");
+			String tagname = (String)dynamic;
+			
+			pulldownLocator = container + " div[id$='__TAG_MENU'] td[id$='_dropdown']>div";
+			optionLocator = "css=div[id$='__TAG_MENU|MENU'] td[id$='_title']:contains("+ tagname +")";
+			page = null;
+
+			// FALL THROUGH
+
+		} else {
+			
+			throw new HarnessException("no logic defined for button "+ button);
+			
+		}
+
+		if (pulldownLocator != null) {
+
+			this.zClickAt(pulldownLocator,"");
+
+			if (optionLocator != null) {
+
+				this.zClickAt(optionLocator,"");
+
+			}
+			
+		}
+			
+		return (page);
+
+	}
 }

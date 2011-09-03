@@ -129,7 +129,7 @@ public abstract class AbsSeparateWindow extends AbsPage {
 			try {
 				
 				super.sSelectFrame(iframelocator);
-				text = super.sGetText(locator);
+				text = super.zGetHtml(locator);
 				
 				logger.info("DisplayMail.zGetBody(" + iframelocator + ", "+ locator +") = " + text);
 
@@ -171,6 +171,32 @@ public abstract class AbsSeparateWindow extends AbsPage {
 
 		return (present);
 	}
+
+	/* (non-Javadoc)
+	 * @see com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject#zClickAt(java.lang.String, java.lang.String)
+	 */
+	public void zClickAt(String locator, String coord) throws HarnessException {
+		logger.info(myPageName() + " zClickAt("+ locator +", "+ coord +")");
+
+
+		try {
+			super.sSelectWindow(this.DialogWindowID);
+			if ( DoChangeWindowFocus )			super.sWindowFocus();
+
+			if ( !super.sIsElementPresent(locator) )
+				throw new HarnessException("locator not present: "+ locator);
+			
+			super.sMouseDownAt(locator, coord);
+			super.sMouseUpAt(locator, coord);
+
+		} finally {
+			super.sSelectWindow(MainWindowID);
+			super.sWindowFocus();
+		}
+
+
+	}
+
 
 	/**
 	 * Close the separate window (DefaultSelenium.close())
