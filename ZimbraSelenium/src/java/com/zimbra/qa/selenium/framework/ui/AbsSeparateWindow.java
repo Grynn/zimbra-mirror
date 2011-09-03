@@ -48,8 +48,8 @@ public abstract class AbsSeparateWindow extends AbsPage {
 
 
 		try {
-			this.sSelectWindow(this.DialogWindowID);
-			if ( DoChangeWindowFocus )			this.sWindowFocus();
+			super.sSelectWindow(this.DialogWindowID);
+			if ( DoChangeWindowFocus )			super.sWindowFocus();
 
 			super.sClick(locator);
 
@@ -58,8 +58,8 @@ public abstract class AbsSeparateWindow extends AbsPage {
 			SleepUtil.sleepVeryLong();
 
 		} finally {
-			this.sSelectWindow(MainWindowID);
-			this.sWindowFocus();
+			super.sSelectWindow(MainWindowID);
+			super.sWindowFocus();
 		}
 
 
@@ -73,14 +73,14 @@ public abstract class AbsSeparateWindow extends AbsPage {
 
 
 		try {
-			this.sSelectWindow(this.DialogWindowID);
-			if ( DoChangeWindowFocus )			this.sWindowFocus();
+			super.sSelectWindow(this.DialogWindowID);
+			if ( DoChangeWindowFocus )			super.sWindowFocus();
 			
 			super.sType(locator, value);
 
 		} finally {
-			this.sSelectWindow(MainWindowID);
-			this.sWindowFocus();
+			super.sSelectWindow(MainWindowID);
+			super.sWindowFocus();
 		}
 
 	}
@@ -94,17 +94,57 @@ public abstract class AbsSeparateWindow extends AbsPage {
 		String text = "";
 		
 		try {
-			this.sSelectWindow(this.DialogWindowID);
-			if ( DoChangeWindowFocus )			this.sWindowFocus();
+			super.sSelectWindow(this.DialogWindowID);
+			if ( DoChangeWindowFocus )			super.sWindowFocus();
 			
 			text = super.sGetText(locator);
 
 		} finally {
-			this.sSelectWindow(MainWindowID);
-			this.sWindowFocus();
+			super.sSelectWindow(MainWindowID);
+			super.sWindowFocus();
 		}
 
 		return (text);
+	}
+
+	/**
+	 * Get text from a different iframe
+	 * @param iframelocator
+	 * @param locator
+	 * @return
+	 * @throws HarnessException
+	 */
+	public String sGetText(String iframelocator, String locator) throws HarnessException {
+		
+		String text = "";
+		
+		try {
+			super.sSelectWindow(this.DialogWindowID);
+			if ( DoChangeWindowFocus )			super.sWindowFocus();
+			
+
+			/*
+			 * To get the body contents, need to switch iframes
+			 */
+			try {
+				
+				super.sSelectFrame(iframelocator);
+				text = super.sGetText(locator);
+				
+				logger.info("DisplayMail.zGetBody(" + iframelocator + ", "+ locator +") = " + text);
+
+			} finally {
+				// Make sure to go back to the original iframe
+				this.sSelectFrame("relative=top");
+			}
+
+		} finally {
+			super.sSelectWindow(MainWindowID);
+			super.sWindowFocus();
+		}
+
+		return (text);
+		
 	}
 
 	/**
@@ -119,14 +159,14 @@ public abstract class AbsSeparateWindow extends AbsPage {
 		boolean present = false;
 		
 		try {
-			this.sSelectWindow(this.DialogWindowID);
-			if ( DoChangeWindowFocus )			this.sWindowFocus();
+			super.sSelectWindow(this.DialogWindowID);
+			if ( DoChangeWindowFocus )			super.sWindowFocus();
 
 			present = super.sIsElementPresent(locator);
 
 		} finally {
-			this.sSelectWindow(MainWindowID);
-			this.sWindowFocus();
+			super.sSelectWindow(MainWindowID);
+			super.sWindowFocus();
 		}
 
 		return (present);
@@ -142,12 +182,11 @@ public abstract class AbsSeparateWindow extends AbsPage {
 
 		try {
 
-			this.zSelectWindow(this.DialogWindowID);
-			this.sClose();
+			super.sSelectWindow(this.DialogWindowID);
+			super.sClose();
 
 		} finally {
-			this.zSelectWindow(MainWindowID);
-			this.sWindowFocus();
+			super.zSelectWindow(MainWindowID);
 		}
 
 
@@ -158,7 +197,7 @@ public abstract class AbsSeparateWindow extends AbsPage {
 	 * @param title A partial string that must be contained in the window title
 	 */
 	public void zSetWindowTitle(String title) throws HarnessException {
-		this.DialogWindowTitle = title;
+		DialogWindowTitle = title;
 	}
 	
 	
@@ -173,25 +212,25 @@ public abstract class AbsSeparateWindow extends AbsPage {
 		if ( IsDebugging ) {
 
 			// Helpful for debugging, log all the names, titles, names
-			for (String name: this.sGetAllWindowIds()) {
+			for (String name: super.sGetAllWindowIds()) {
 				logger.info("Window ID: "+ name);
 			}
 
-			for (String name: this.sGetAllWindowNames()) {
+			for (String name: super.sGetAllWindowNames()) {
 				logger.info("Window name: "+ name);
 			}
 
-			for (String t: this.sGetAllWindowTitles()) {
+			for (String t: super.sGetAllWindowTitles()) {
 				logger.info("Window title: "+ t);
 			}
 
 
 		}
 
-		for (String t : this.sGetAllWindowTitles()) {
+		for (String t : super.sGetAllWindowTitles()) {
 			logger.info("Window title: "+ t);
 			if ( t.toLowerCase().contains(title.toLowerCase()) ) {
-				this.DialogWindowID = title;
+				DialogWindowID = title;
 				return (true);
 			}
 		}
@@ -206,11 +245,11 @@ public abstract class AbsSeparateWindow extends AbsPage {
 		if ( this.DialogWindowTitle == null )
 			throw new HarnessException("Window Title is null.  Use zSetWindowTitle() first.");
 		
-		for (String title : this.sGetAllWindowTitles()) {
+		for (String title : super.sGetAllWindowTitles()) {
 			logger.info("Window title: "+ title);
-			if ( title.toLowerCase().contains(this.DialogWindowTitle.toLowerCase()) ) {
-				this.DialogWindowID = title;
-				logger.info("zIsActive() = true ... title = "+ this.DialogWindowID);
+			if ( title.toLowerCase().contains(DialogWindowTitle.toLowerCase()) ) {
+				DialogWindowID = title;
+				logger.info("zIsActive() = true ... title = "+ DialogWindowID);
 				return (true);
 			}
 		}

@@ -9,6 +9,7 @@ import com.zimbra.qa.selenium.framework.ui.AbsSeparateWindow;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.DisplayMail.Field;
 
 
 
@@ -44,44 +45,96 @@ public class SeparateWindowDisplayMail extends AbsSeparateWindow {
 
 	}
 
-	public static enum Field {
-		ReceivedTime,	// Message received time
-		ReceivedDate,	// Message received date
-		From,
-		ResentFrom,
-		ReplyTo,
-		To,
-		Cc,
-		OnBehalfOf,
-		OnBehalfOfLabel,
-		Bcc,			// Does this show in any mail views?  Maybe in Sent?
-		Subject,
-		Body
-	}
-	
 	public String zGetMailProperty(Field field) throws HarnessException {
 		logger.info(myPageName() + " zGetDisplayedValue(" + field + ")");
 
+		String container = "css=div[id='zv__MSG1__MSG']";
 		String locator = null;
 		
 		if ( field == Field.From ) {
 			
-			locator = "css=tr[id$='_from'] span[id$='_com_zimbra_email']";
+			locator = container + " tr[id$='_from'] span[id$='_com_zimbra_email']";
 			if ( !this.sIsElementPresent(locator) ) {
-				locator = "css=tr[id$='_from']"; // No bubbles
+				locator = container + " tr[id$='_from']"; // No bubbles
 			}
 			
 		} else if ( field == Field.To ) {
 			
-			locator = "css=tr[id$='_to'] span[id$='_com_zimbra_email']";
+			locator = container + " tr[id$='_to'] span[id$='_com_zimbra_email']";
 			if ( !this.sIsElementPresent(locator) ) {
-				locator = "css=tr[id$='_to']"; // No bubbles
+				locator = container + " tr[id$='_to']"; // No bubbles
 			}
 			
+		} else if ( field == Field.Cc ) {
+			
+			locator = container + " tr[id$='_cc'] span[id$='_com_zimbra_email']";
+			if ( !this.sIsElementPresent(locator) ) {
+				locator = container + " tr[id$='_cc']"; // No bubbles
+			}
+			
+		} else if ( field == Field.OnBehalfOf ) {
+			
+			locator = container + " td[id$='_obo'] span[id$='_com_zimbra_email']";
+			if ( !sIsElementPresent(locator) ) {
+				// no email zimlet case
+				locator = container + " td[id$='_obo']";
+			}
+
+		} else if ( field == Field.ResentFrom ) {
+			
+			locator = container + " td[id$='_bwo'] span[id$='_com_zimbra_email']";
+			if ( !sIsElementPresent(locator) ) {
+				// no email zimlet case
+				locator = container + " tr[id$='_bwo']";
+			}
+
+		} else if ( field == Field.OnBehalfOfLabel ) {
+			
+			locator = container + " td[id$='_obo_label']";
+
+		} else if ( field == Field.ReplyTo ) {
+			
+			locator = container + " tr[id$='_reply to'] span[id$='_com_zimbra_email']";
+			if ( !sIsElementPresent(locator) ) {
+				// no email zimlet case
+				locator = container + " tr[id$='_reply to']";
+			}
+
 		} else if ( field == Field.Subject ) {
 			
-			locator = "css=div[id='zv__MSG1__MSG'] tr[id='zv__MSG__MSG1_hdrTableTopRow'] td[class*='SubjectCol']";
+			locator = container + " tr[id='zv__MSG__MSG1_hdrTableTopRow'] td[class~='SubjectCol']";
 			
+		} else if ( field == Field.ReceivedDate ) {
+			
+			locator = container + " tr[id$='_hdrTableTopRow'] td[class~='DateCol'] span[id$='_com_zimbra_date']";
+
+		} else if ( field == Field.ReceivedTime ) {
+			
+			String timeAndDateLocator = container + " tr[id$='_hdrTableTopRow'] td[class~='DateCol'] span[id$='_com_zimbra_date']";
+
+			// Make sure the subject is present
+			if ( !sIsElementPresent(timeAndDateLocator) )
+				throw new HarnessException("Unable to find the time and date field!");
+			
+			// Get the subject value
+			String timeAndDate = this.sGetText(timeAndDateLocator).trim();
+			String date = this.zGetMailProperty(Field.ReceivedDate);
+			
+			// Strip the date so that only the time remains
+			String time = timeAndDate.replace(date, "").trim();
+			
+			logger.info("zGetDisplayedValue(" + field + ") = " + time);
+			return(time);
+
+		} else if ( field == Field.Body ) {
+			
+			/*
+			 * To get the body contents, need to switch iframes
+			 */
+			String text = sGetText("css=iframe[id$='_body__iframe']", "css=body");
+			logger.info("zGetDisplayedValue(" + field + ") = " + text);
+			return(text);
+
 		} else {
 			
 			throw new HarnessException("No logic defined for Field: "+ field);
