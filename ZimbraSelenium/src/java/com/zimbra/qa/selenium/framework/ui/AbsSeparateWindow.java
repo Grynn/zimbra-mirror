@@ -234,7 +234,7 @@ public abstract class AbsSeparateWindow extends AbsPage {
 			super.sSelectWindow(this.DialogWindowID);
 			super.sWindowFocus(); // Must focus into the separate window
 
-			this.zKeyDown(keyCode);
+			super.zKeyDown(keyCode);
 
 		} finally {
 			super.zSelectWindow(MainWindowID);
