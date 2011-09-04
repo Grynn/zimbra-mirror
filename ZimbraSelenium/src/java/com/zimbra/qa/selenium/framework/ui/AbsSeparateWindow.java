@@ -108,6 +108,41 @@ public abstract class AbsSeparateWindow extends AbsPage {
 	}
 
 	/**
+	 * Enter text from a different iframe
+	 * @param iframelocator
+	 * @param locator
+	 * @param value
+	 * @throws HarnessException 
+	 * @throws HarnessException
+	 */
+	public void sType(String iframelocator, String locator, String value) throws HarnessException {
+		
+		try {
+			super.sSelectWindow(this.DialogWindowID);
+			if ( DoChangeWindowFocus )			super.sWindowFocus();
+			
+
+			/*
+			 * To get the body contents, need to switch iframes
+			 */
+			try {
+				
+				super.sSelectFrame(iframelocator);
+				super.sType(locator, value);
+
+			} finally {
+				// Make sure to go back to the original iframe
+				this.sSelectFrame("relative=top");
+			}
+
+		} finally {
+			super.sSelectWindow(MainWindowID);
+			super.sWindowFocus();
+		}
+		
+	}
+
+	/**
 	 * Get text from a different iframe
 	 * @param iframelocator
 	 * @param locator

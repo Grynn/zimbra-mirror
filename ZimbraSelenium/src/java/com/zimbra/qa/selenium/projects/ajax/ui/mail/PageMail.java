@@ -187,6 +187,21 @@ public class PageMail extends AbsTab {
 
 			// FALL THROUGH
 
+		} else if ( button == Button.B_NEW_IN_NEW_WINDOW ) {
+
+			// New button
+			locator = "css=div[id$='__NEW_MENU'] td[id$='__NEW_MENU_title']";
+
+			// Create the page
+			page = new SeparateWindowFormMailNew(this.MyApplication);
+
+			// Don't fall through - the new window may need additional information from the test case
+			// such as "Zimbra: Compose" or "Zimbra: Reply" to determine if the window is open
+			
+			this.zClickAt(locator,"0,0");
+			
+			return (page);
+
 		} else if ( button == Button.B_GETMAIL || button == Button.B_LOADFEED || button == Button.B_REFRESH ) {
 
 			return (((AppAjaxClient)this.MyApplication).zPageMain.zToolbarPressButton(Button.B_REFRESH));

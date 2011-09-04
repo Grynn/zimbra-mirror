@@ -31,6 +31,7 @@ public class Button {
 
 	// General buttons and pulldown options
 	public static final Button B_NEW = new Button("B_NEW");
+	public static final Button B_NEW_IN_NEW_WINDOW = new Button("B_NEW_IN_NEW_WINDOW");
 	public static final Button B_DELETE = new Button("B_DELETE");
 	public static final Button B_MOVE = new Button("B_MOVE");
 	public static final Button B_PRINT = new Button("B_PRINT");

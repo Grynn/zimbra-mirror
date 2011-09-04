@@ -651,7 +651,6 @@ public class FormMailNew extends AbsForm {
 			
 		}
 		
-		// TODO: how to handle HTML body?
 		
 		// Handle the Recipient list, which can be a combination
 		// of To, Cc, Bcc, and From
