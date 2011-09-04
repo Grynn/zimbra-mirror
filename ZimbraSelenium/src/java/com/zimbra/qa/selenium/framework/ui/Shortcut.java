@@ -39,6 +39,9 @@ public class Shortcut {
 	public static final Shortcut S_NEWMESSAGE = new Shortcut("S_NEWMESSAGE",		"nm");
 	public static final Shortcut S_NEWMESSAGE2 = new Shortcut("S_NEWMESSAGE2",		"c");
 	public static final Shortcut S_COMPOSENEWWINDOW = new Shortcut("S_COMPOSENEWWINDOW",	"C");
+	public static final Shortcut S_NEWITEM_IN_NEW_WINDOW = new Shortcut("S_NEWITEM_IN_NEW_WINDOW",			"n");	// Same shortcut as S_NEWITEM, but harness returns a separate window
+	public static final Shortcut S_NEWMESSAGE_IN_NEW_WINDOW = new Shortcut("S_NEWMESSAGE_IN_NEW_WINDOW",	"nm");	// Same shortcut as S_NEWMESSAGE, but harness returns a separate window
+	public static final Shortcut S_NEWMESSAGE2_IN_NEW_WINDOW = new Shortcut("S_NEWMESSAGE2_IN_NEW_WINDOW",	"c");	// Same shortcut as S_NEWMESSAGE2, but harness returns a separate window
 	public static final Shortcut S_NEWCONTACT = new Shortcut("S_NEWCONTACT",		"nc");
 	public static final Shortcut S_MOVE = new Shortcut("S_MOVE",					"m");
 	public static final Shortcut S_MAIL_TAG = new Shortcut("S_MAIL_TAG",			"t");

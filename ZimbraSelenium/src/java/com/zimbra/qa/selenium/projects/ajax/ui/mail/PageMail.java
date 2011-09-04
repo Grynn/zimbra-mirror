@@ -1270,6 +1270,18 @@ public class PageMail extends AbsTab {
 			// "New Message" shortcuts result in a compose form opening
 			page = new FormMailNew(this.MyApplication);
 
+		} else if ( (shortcut == Shortcut.S_NEWITEM_IN_NEW_WINDOW) ||
+					(shortcut == Shortcut.S_NEWMESSAGE_IN_NEW_WINDOW) ||
+					(shortcut == Shortcut.S_NEWMESSAGE2_IN_NEW_WINDOW) )
+			{
+
+				// These shortcuts result in a separate window opening
+				page = new SeparateWindowFormMailNew(this.MyApplication);
+				
+				// Don't fall through.  The test case needs to make sure the separate window opens
+				zKeyboard.zTypeCharacters(shortcut.getKeys());
+				return (page);
+
 		}else if ( (shortcut == Shortcut.S_NEWTAG) ){
 
 			// "New Message" shortcuts result in a compose form opening

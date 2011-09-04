@@ -381,4 +381,68 @@ public class SeparateWindowFormMailNew extends AbsSeparateWindow {
 		
 	}
 
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressPulldown("+ pulldown +", "+ option +")");
+		
+		tracer.trace("Click pulldown "+ pulldown +" then "+ option);
+
+		if ( pulldown == null )
+			throw new HarnessException("Pulldown cannot be null!");
+		
+		if ( option == null )
+			throw new HarnessException("Option cannot be null!");
+
+		// Default behavior variables
+		//
+		String pulldownLocator = null;	// If set, this will be expanded
+		String optionLocator = null;	// If set, this will be clicked
+		AbsPage page = null;	// If set, this page will be returned
+		
+		// Based on the button specified, take the appropriate action(s)
+		//
+
+		if ( pulldown == Button.B_PRIORITY ) {
+			
+			pulldownLocator = "css=td[id$='___priority_dropdown']>div";
+
+			if ( option == Button.O_PRIORITY_HIGH ) {
+				
+				optionLocator = "css=td[id$='_left_icon']>div[class='ImgPriorityHigh_list']";
+				page = null;
+
+			} else if ( option == Button.O_PRIORITY_NORMAL ) {
+				
+				optionLocator = "css=td[id$='_left_icon']>div[class='ImgPriorityNormal_list']";
+				page = null;
+
+			} else if ( option == Button.O_PRIORITY_LOW ) {
+				
+				optionLocator = "css=td[id$='_left_icon']>div[class='ImgPriorityLow_list']";
+				page = null;
+
+			} else {
+				throw new HarnessException("unsupported priority option "+ option);
+			}
+		
+		} else {
+			throw new HarnessException("no logic defined for pulldown "+ pulldown);
+		}
+
+		// Default behavior
+		if ( pulldownLocator != null ) {
+						
+			zClickAt(pulldownLocator, "");
+
+			if ( optionLocator != null ) {
+
+				zClickAt(optionLocator, "");
+
+			}
+			
+		}
+		
+		// Return the specified page, or null if not set
+		return (page);
+	}
+
 }

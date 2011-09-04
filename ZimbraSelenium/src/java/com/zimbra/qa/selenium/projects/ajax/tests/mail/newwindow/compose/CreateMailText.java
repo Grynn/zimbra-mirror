@@ -9,13 +9,11 @@ import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.RecipientItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.ui.Shortcut;
-import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
-import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.SeparateWindowFormMailNew;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
@@ -93,14 +91,14 @@ public class CreateMailText extends AjaxCommonTest {
 	@DataProvider(name = "DataProvideNewMessageShortcuts")
 	public Object[][] DataProvideNewMessageShortcuts() {
 	  return new Object[][] {
-			  new Object[] { Shortcut.S_NEWITEM, Shortcut.S_NEWITEM.getKeys() },
-			  new Object[] { Shortcut.S_NEWMESSAGE, Shortcut.S_NEWMESSAGE.getKeys() },
-			  new Object[] { Shortcut.S_NEWMESSAGE2, Shortcut.S_NEWMESSAGE2.getKeys() }
+			  new Object[] { Shortcut.S_NEWITEM_IN_NEW_WINDOW, Shortcut.S_NEWITEM_IN_NEW_WINDOW.getKeys() },
+			  new Object[] { Shortcut.S_NEWMESSAGE_IN_NEW_WINDOW, Shortcut.S_NEWMESSAGE_IN_NEW_WINDOW.getKeys() },
+			  new Object[] { Shortcut.S_NEWMESSAGE2_IN_NEW_WINDOW, Shortcut.S_NEWMESSAGE2_IN_NEW_WINDOW.getKeys() }
 	  };
 	}
 	
-	@Test(	description = "Send a mail using Text editor using keyboard shortcuts",
-			groups = { "deprecated" },
+	@Test(	description = "Send a mail using Text editor using keyboard shortcuts - in separate window",
+			groups = { "functional" },
 			dataProvider = "DataProvideNewMessageShortcuts")
 	public void CreateMailText_02(Shortcut shortcut, String keys) throws HarnessException {
 		
@@ -111,16 +109,38 @@ public class CreateMailText extends AjaxCommonTest {
 		mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		mail.dBodyText = "body" + ZimbraSeleniumProperties.getUniqueString();
 		
-		
 		// Open the new mail form
-		FormMailNew mailform = (FormMailNew) app.zPageMail.zKeyboardShortcut(shortcut);
-		ZAssert.assertNotNull(mailform, "Verify the new form opened");
+		SeparateWindowFormMailNew window = null;
 		
-		// Send the message
-		mailform.zFill(mail);
-		mailform.zSubmit();
+		try {
+			
+			window = (SeparateWindowFormMailNew) app.zPageMail.zKeyboardShortcut(shortcut);
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+			window.zSetWindowTitle("Compose");
+			window.zWaitForActive();		// Make sure the window is there
+			
+			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
+			
+			// Fill out the form with the data
+			window.zFill(mail);
+			
+			// Send the message
+			window.zToolbarPressButton(Button.B_SEND);
+
+			// Window closes automatically
+			window = null;
+
+		} finally {
+			
+			// Make sure to close the window
+			if ( window != null ) {
+				window.zCloseWindow();
+				window = null;
+			}
+			
+		}
+		
+
 
 		// From the receipient end, make sure the message is received
 		MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ mail.dSubject +")");
@@ -129,8 +149,8 @@ public class CreateMailText extends AjaxCommonTest {
 		
 	}
 
-	@Test(	description = "Send a mail with CC",
-			groups = { "deprecated" })
+	@Test(	description = "Send a mail with CC - in a separate window",
+			groups = { "functional" })
 	public void CreateMailText_03() throws HarnessException {
 		
 		
@@ -141,16 +161,37 @@ public class CreateMailText extends AjaxCommonTest {
 		mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		mail.dBodyText = "body" + ZimbraSeleniumProperties.getUniqueString();
 		
-		
 		// Open the new mail form
-		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
-		ZAssert.assertNotNull(mailform, "Verify the new form opened");
+		SeparateWindowFormMailNew window = null;
 		
-		// Fill out the form with the data
-		mailform.zFill(mail);
-				
-		// Send the message
-		mailform.zSubmit();
+		try {
+			
+			window = (SeparateWindowFormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW_IN_NEW_WINDOW);
+			
+			window.zSetWindowTitle("Compose");
+			window.zWaitForActive();		// Make sure the window is there
+			
+			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
+			
+			// Fill out the form with the data
+			window.zFill(mail);
+			
+			// Send the message
+			window.zToolbarPressButton(Button.B_SEND);
+
+			// Window closes automatically
+			window = null;
+
+		} finally {
+			
+			// Make sure to close the window
+			if ( window != null ) {
+				window.zCloseWindow();
+				window = null;
+			}
+			
+		}
+		
 				
 		MailItem sent = MailItem.importFromSOAP(app.zGetActiveAccount(), "in:sent subject:("+ mail.dSubject +")");
 		ZAssert.assertNotNull(sent, "Verify the message is in the sent folder");
@@ -190,16 +231,37 @@ public class CreateMailText extends AjaxCommonTest {
 		
 		
 		// Open the new mail form
-		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
-		ZAssert.assertNotNull(mailform, "Verify the new form opened");
+		SeparateWindowFormMailNew window = null;
 		
-		// Fill out the form with the data
-		mailform.zFill(mail);
-		
-		// Send the message
-		mailform.zSubmit();
+		try {
+			
+			window = (SeparateWindowFormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW_IN_NEW_WINDOW);
+			
+			window.zSetWindowTitle("Compose");
+			window.zWaitForActive();		// Make sure the window is there
+			
+			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
+			
+			// Fill out the form with the data
+			window.zFill(mail);
+			
+			// Send the message
+			window.zToolbarPressButton(Button.B_SEND);
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+			// Window closes automatically
+			window = null;
+
+		} finally {
+			
+			// Make sure to close the window
+			if ( window != null ) {
+				window.zCloseWindow();
+				window = null;
+			}
+			
+		}
+		
+				
 				
 		MailItem sent = MailItem.importFromSOAP(app.zGetActiveAccount(), "in:sent subject:("+ mail.dSubject +")");
 		ZAssert.assertNotNull(sent, "Verify the message is in the sent folder");
@@ -229,8 +291,8 @@ public class CreateMailText extends AjaxCommonTest {
 	  };
 	}
 
-	@Test(	description = "Send a mail with different priorities high/normal/low",
-			groups = { "deprecated" },
+	@Test(	description = "Send a mail with different priorities high/normal/low - in a separate window",
+			groups = { "functional" },
 			dataProvider = "DataProvidePriorities")
 	public void CreateMailText_05(Button option, String verify) throws HarnessException {
 		
@@ -243,21 +305,42 @@ public class CreateMailText extends AjaxCommonTest {
 		
 		
 		// Open the new mail form
-		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
-		ZAssert.assertNotNull(mailform, "Verify the new form opened");
+		SeparateWindowFormMailNew window = null;
 		
-		// Change the priority
-		mailform.zToolbarPressPulldown(Button.B_PRIORITY, option);
-		
-		// Fill out the rest of the form
-		mailform.zFillField(Field.To, ZimbraAccount.AccountA().EmailAddress);
-		mailform.zFillField(Field.Subject, subject);
-		mailform.zFillField(Field.Body, body);
-		
-		// Send the message
-		mailform.zSubmit();
+		try {
+			
+			window = (SeparateWindowFormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW_IN_NEW_WINDOW);
+			
+			window.zSetWindowTitle("Compose");
+			window.zWaitForActive();		// Make sure the window is there
+			
+			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
+			
+			// Fill out the form with the data
+			// Change the priority
+			window.zToolbarPressPulldown(Button.B_PRIORITY, option);
+			
+			// Fill out the rest of the form
+			window.zFillField(Field.To, ZimbraAccount.AccountA().EmailAddress);
+			window.zFillField(Field.Subject, subject);
+			window.zFillField(Field.Body, body);
+			
+			// Send the message
+			window.zToolbarPressButton(Button.B_SEND);
 
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
+			// Window closes automatically
+			window = null;
+
+		} finally {
+			
+			// Make sure to close the window
+			if ( window != null ) {
+				window.zCloseWindow();
+				window = null;
+			}
+			
+		}
+		
 
 		MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
 		ZAssert.assertNotNull(received, "Verify the message is received");
