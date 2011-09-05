@@ -269,6 +269,14 @@ function() {
 	}
 }
 
+ZaZimbraAdmin.prototype.getTaskController =
+function() {
+    if (this._taskController == null) {
+        this._taskController= new ZaTaskController(this._appCtxt, this._shell);
+    }
+    return this._taskController;
+}
+
 /**
 * Sets the name of the currently active app. Done so we can figure out when an
 * app needs to be launched.
@@ -1035,6 +1043,7 @@ function() {
 	}
 
     this._currentAppBar = elements[ZaAppViewMgr.C_APP_HEADER] = new ZaCurrentAppBar(this._shell);
+    elements[ZaAppViewMgr.C_TOOL_HEADER] = this.getTaskController().getTaskHeaderPanel();
 	this._appViewMgr.addComponents(elements, true);
     ZaApp.getInstance().launch();
 

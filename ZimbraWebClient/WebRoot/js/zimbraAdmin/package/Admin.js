@@ -101,6 +101,7 @@ AjxPackage.require("zimbraAdmin.mta.controller.ZaMTAListController");
 AjxPackage.require("zimbraAdmin.mta.controller.ZaMTAController");
 AjxPackage.require("zimbraAdmin.search.controller.ZaSearchListController");
 AjxPackage.require("zimbraAdmin.search.controller.ZaSearchBuilderController");
+AjxPackage.require("zimbraAdmin.task.controller.ZaTaskController");
 
 // model
 AjxPackage.require("zimbraAdmin.home.model.ZaHome");
@@ -122,6 +123,7 @@ AjxPackage.require("zimbraAdmin.zimlets.model.ZaZimlet");
 AjxPackage.require("zimbraAdmin.globalconfig.model.ZaGlobalConfig");
 AjxPackage.require("zimbraAdmin.status.model.ZaStatus");
 AjxPackage.require("zimbraAdmin.mta.model.ZaMTA");
+AjxPackage.require("zimbraAdmin.task.model.ZaTask");
 
 // view
 AjxPackage.require("zimbraAdmin.home.view.ZaHomeXFormView");
@@ -199,5 +201,7 @@ AjxPackage.require("zimbraAdmin.mta.view.ZaMTAListView");
 AjxPackage.require("zimbraAdmin.mta.view.ZaMTAXFormView");
 AjxPackage.require("zimbraAdmin.mta.view.ZaMTAActionDialog");
 AjxPackage.require("zimbraAdmin.accounts.view.ZaAccountMemberOfListView");
+AjxPackage.require("zimbraAdmin.task.view.ZaTaskHeaderPanel");
+AjxPackage.require("zimbraAdmin.task.view.ZaTaskContentView");
 
 AjxPackage.require("zimbraAdmin.common.EmailAddr_FormItem");
