@@ -478,6 +478,7 @@ function(msg, clear) {
 	if(!ZaSettings.STATUS_ENABLED) {
 		return;
 	}
+    if(!appNewUI)
 	this._statusBox.setText(msg);
 }
 
@@ -870,8 +871,10 @@ function() {
  */
 ZaZimbraAdmin.prototype.setActionStatusMsg =
 function(params) {
-	params = Dwt.getParams(arguments, ZaActionStatusView.MSG_PARAMS);
-	this.actionStatusView.setStatusMsg(params);
+    if(!appNewUI) {
+	    params = Dwt.getParams(arguments, ZaActionStatusView.MSG_PARAMS);
+	    this.actionStatusView.setStatusMsg(params);
+    }
 };
 // Private methods
 

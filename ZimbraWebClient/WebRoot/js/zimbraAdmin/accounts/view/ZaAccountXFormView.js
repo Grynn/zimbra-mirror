@@ -1219,7 +1219,7 @@ ZaAccountXFormView.getAccountNameInfoItem = function(){
 	if(AjxUtil.isEmpty(ZaAccountXFormView.accountNameInfoPool)){
 		ZaAccountXFormView.accountNameInfoPool = new Object();
 		ZaAccountXFormView.accountNameInfoPool[ZaAccount.A_name] = {ref:ZaAccount.A_name, type:_EMAILADDR_,
-					 msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
+					 msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName, bmolsnr:false,
                                         labelLocation:_LEFT_,onChange:ZaAccount.setDomainChanged,forceUpdate:true,
                                         enableDisableChecks:[[ZaItem.hasRight,ZaAccount.RENAME_ACCOUNT_RIGHT]],
                                         visibilityChecks:[]
@@ -1557,7 +1557,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 					 msgName:ZaMsg.NAD_AccountName,
                                         labelLocation:_LEFT_,onChange:ZaAccount.setDomainChanged,forceUpdate:true,
                                         enableDisableChecks:[[ZaItem.hasRight,ZaAccount.RENAME_ACCOUNT_RIGHT]],
-                                        visibilityChecks:[]
+                                        visibilityChecks:[],bmolsnr:false
                      }
                 ]
 			}
@@ -3427,8 +3427,17 @@ nowrap:false, labelWrap:true,
         ];
     } else {
 	    xFormObject.items = [
-                {type:_SPACER_, height:"0px"}, // a hook here to keep the switch item's index for zimlet issue.
-                {type:_SPACER_, height:"0px"},
+                //{type:_SPACER_, height:"0px"}, // a hook here to keep the switch item's index for zimlet issue.
+                {type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_toolbar",
+                    items: [],
+                    cssStyle:"padding-top:5px; padding-bottom:5px"
+                },
+                {type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header",
+                    items: [
+                        {type:_GROUP_,	numCols:4,colSizes:["90px","350px","100px","*"],items:headerItems}
+                    ],
+                    cssStyle:"padding-top:5px; padding-bottom:5px"
+                },
                 {type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:cases}
 	    ];
     }

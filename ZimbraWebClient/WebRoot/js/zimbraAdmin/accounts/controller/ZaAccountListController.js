@@ -240,7 +240,11 @@ function () {
 	if(this._defaultType == ZaItem.ALIAS) {	
 		this._popupOperations[ZaOperation.MOVE_ALIAS] = new ZaOperation(ZaOperation.MOVE_ALIAS, ZaMsg.ACTBB_MoveAlias, ZaMsg.ACTBB_MoveAlias_tt, "MoveAlias", "MoveAlias", new AjxListener(this, ZaAccountListController.prototype._moveAliasListener));
 		this._popupOperations[ZaOperation.EXPIRE_SESSION] = new ZaOperation(ZaOperation.EXPIRE_SESSION, ZaMsg.ACTBB_ExpireSessions, ZaMsg.ACTBB_ExpireSessions_tt, "ExpireSession", "ExpireSessionDis", new AjxListener(this, ZaAccountListController.prototype._expireSessionListener));
-	}		    	
+	}
+    if(appNewUI) {
+        this._popupOperations[ZaOperation.NEW_MENU] = new ZaOperation(ZaOperation.NEW_MENU, ZaMsg.TBB_New, ZaMsg.ACTBB_New_tt, "Account", "AccountDis",new AjxListener(this, ZaAccountListController.prototype._newAccountListener));;
+        this._popupOrder.push(ZaOperation.NEW_MENU);
+    }
 }
 ZaController.initPopupMenuMethods["ZaAccountListController"].push(ZaAccountListController.initPopupMenuMethod);
 

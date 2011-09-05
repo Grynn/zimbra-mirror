@@ -500,7 +500,16 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
                ]
         },
         {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_AccountNameGrouper, id:"account_wiz_name_group",numCols:2,
-			items:ZaAccountXFormView.getAccountNameInfoItem() 
+			items:ZaAccountXFormView.getAccountNameInfoItem(),
+                displayLabelItem: true, headerLabelWidth:"100px",
+                headerItems:[
+                    {ref:ZaAccount.A_name, type:_EMAILADDR_,
+					 msgName:ZaMsg.NAD_AccountName,
+                                        labelLocation:_LEFT_,onChange:ZaAccount.setDomainChanged,forceUpdate:true,
+                                        enableDisableChecks:[[ZaItem.hasRight,ZaAccount.RENAME_ACCOUNT_RIGHT]],
+                                        visibilityChecks:[]
+                     }
+                ]
 		}
 	];
 	if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry, 
@@ -512,7 +521,13 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 					label:ZaMsg.NAD_AccountStatus, 
 					labelLocation:_LEFT_, choices:this.accountStatusChoices
 				}
-			]
+			],
+            headerItems: [
+                    {ref:ZaAccount.A_accountStatus, type:_OSELECT1_,
+                        bmolsnr:true,
+                        labelLocation:_LEFT_, choices:this.accountStatusChoices
+                    }
+            ], displayLabelItem: true, headerLabelWidth:"100px"
 		}
 		
 

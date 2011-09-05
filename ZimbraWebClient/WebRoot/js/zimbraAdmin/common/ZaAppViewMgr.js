@@ -575,7 +575,7 @@ function(viewId) {
 	}
 
     if(this._components[ZaAppViewMgr.C_APP_HEADER] && this._components[ZaAppViewMgr.C_APP_HEADER].updateMenu ) {
-		this._components[ZaAppViewMgr.C_APP_HEADER].updateMenu (popUpOperations);
+		this._components[ZaAppViewMgr.C_APP_HEADER].updateMenu (popUpOperations, viewController._popupOrder);
 	}
 }
 

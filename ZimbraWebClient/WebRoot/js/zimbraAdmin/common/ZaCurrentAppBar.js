@@ -119,7 +119,7 @@ function(ev) {
 }
 
 ZaCurrentAppBar.prototype.updateMenu =
-function(popupOperations) {
+function(popupOperations, popupOrder) {
     var oldMenu = this.getMenu();
     if(oldMenu) {
         this.setMenu("");
@@ -132,7 +132,7 @@ function(popupOperations) {
     }
 
     if (popupOperations) {
-        this.menu = new ZaPopupMenu(this, "ActionMenu", null, popupOperations, ZaId.CURRENT_APP_BAR, ZaId.MENU_POP);
+        this.menu = new ZaPopupMenu(this, "ActionMenu", null, popupOperations, ZaId.CURRENT_APP_BAR, ZaId.MENU_POP, popupOrder);
         this.menu.setWidth(150);
         this.setMenu(this.menu);
     }

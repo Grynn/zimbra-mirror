@@ -46,7 +46,8 @@ ZaController = function(appCtxt, container,iKeyName) {
     this._helpURL = ZaController.helpURL;
    	this._toolbarOperations = new Array();
    	this._toolbarOrder = new Array();
-   	this._popupOperations = new Array();	    
+   	this._popupOperations = new Array();
+    this._popupOrder = new Array();
 }
 ZaController.CLICK_DELAY = 150;
 ZaController.prototype.initDialogs = function (refresh) {
