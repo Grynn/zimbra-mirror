@@ -13,10 +13,20 @@ ZaEditSignatureDialog = function(parent,   w, h, title) {
 	ZaXDialog.call(this, parent, null, title, w, h, null, ZaId.DLG_EDIT_SIGNATURE);
 	this._containedObject = {};
 	this.initForm(ZaSignature.myXModel,this.getMyXForm());
+    this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaEditSignatureDialog.prototype.handleXFormChange));
+	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaEditSignatureDialog.prototype.handleXFormChange));
 }
 
 ZaEditSignatureDialog.prototype = new ZaXDialog;
 ZaEditSignatureDialog.prototype.constructor = ZaEditSignatureDialog;
+
+ZaEditSignatureDialog.prototype.handleXFormChange = function () {
+    var obj = this.getObject();
+
+    var isEnabledOk = (!AjxUtil.isEmpty(obj[ZaSignature.A2_name])) && (!AjxUtil.isEmpty(obj[ZaSignature.A2_content]));
+
+    this._button[DwtDialog.OK_BUTTON].setEnabled(isEnabledOk);
+}
 
 ZaEditSignatureDialog.prototype.getMyXForm =
 function() {
