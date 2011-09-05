@@ -29,7 +29,7 @@ Signature_XFormItem.typeChoice = [
 Signature_XFormItem.prototype.items = [
 	{type:_TEXTFIELD_, ref:".", width:"300px", labelLocation:_LEFT_, forceUpdate:true,label:ZaMsg.Dlg_SignatureName,
 		//enableDisableChecks:false,
-		required:true,  labelCssStyle:"width:194px",
+		labelCssStyle:"width:194px",
 		getDisplayValue:function(itemVal) {
 
 			if(itemVal && itemVal["name"])
@@ -52,7 +52,7 @@ Signature_XFormItem.prototype.items = [
 
 	},
 	{type:_TEXTAREA_, width: "300px",  forceUpdate:true, ref:".", labelLocation:_LEFT_, label:ZaMsg.Dlg_SignatureContent,
-		required:true,   labelCssStyle:"width:194px",
+		 labelCssStyle:"width:194px",
 		getDisplayValue:function (itemVal) {
 			var val;
 			if(itemVal && itemVal["content"])
