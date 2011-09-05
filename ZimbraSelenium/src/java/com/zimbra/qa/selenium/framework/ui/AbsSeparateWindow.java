@@ -3,6 +3,7 @@ package com.zimbra.qa.selenium.framework.ui;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import com.thoughtworks.selenium.SeleniumException;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 
@@ -312,13 +313,33 @@ public abstract class AbsSeparateWindow extends AbsPage {
 
 		try {
 
-			super.sSelectWindow(this.DialogWindowID);
+			try {
+				super.sSelectWindow(this.DialogWindowID);
+			} catch (SeleniumException e) {
+				logger.warn("In zCloseWindow(), unable to locate DialogWindowID.  Assume already closed.", e);
+				return;
+			}
+			
 			super.sClose();
 
 		} finally {
 			super.zSelectWindow(MainWindowID);
 		}
 
+
+	}
+
+	public void zWaitForBusyOverlay() throws HarnessException {
+		logger.info(myPageName() + " zWaitForBusyOverlay()");
+
+		try {
+			
+			super.sSelectWindow(this.DialogWindowID);
+			super.sWaitForCondition("selenium.browserbot.getUserWindow().top.appCtxt.getShell().getBusy()==false");
+
+		} finally {
+			super.zSelectWindow(MainWindowID);
+		}
 
 	}
 
@@ -330,6 +351,14 @@ public abstract class AbsSeparateWindow extends AbsPage {
 		DialogWindowTitle = title;
 	}
 	
+	/**
+	 * Used to locate the window.  Normally, the full browser 'title' is used, 
+	 * but the Selenium ID and Selenium Name are also valid.
+	 * @param id The window ID
+	 */
+	public void zSetWindowID(String id) throws HarnessException {
+		this.DialogWindowID = id;
+	}
 	
 
 	/**

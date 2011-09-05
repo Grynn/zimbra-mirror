@@ -967,7 +967,7 @@ public abstract class AbsSeleniumObject {
 	 * @param locator
 	 * @throws HarnessException
 	 */
-	private boolean sWaitForCondition(String condition) throws HarnessException {
+	protected boolean sWaitForCondition(String condition) throws HarnessException {
 		logger.info("sWaitForCondition(" + condition + "), timeout="
 				+ LoadDelay);
 		try {

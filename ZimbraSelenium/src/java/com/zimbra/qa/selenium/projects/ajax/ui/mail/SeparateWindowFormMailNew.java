@@ -13,9 +13,12 @@ import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsPage;
 import com.zimbra.qa.selenium.framework.ui.AbsSeparateWindow;
 import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.ui.Shortcut;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.staf.Stafpostqueue;
+import com.zimbra.qa.selenium.projects.ajax.ui.DialogWarning;
+import com.zimbra.qa.selenium.projects.ajax.ui.SeparateWindowDialog;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
 
 
@@ -214,7 +217,6 @@ public class SeparateWindowFormMailNew extends AbsSeparateWindow {
 
 					this.sFocus(locator);
 					this.zClick(locator);
-					this.zWaitForBusyOverlay();
 					this.sType(locator, value);
 
 					return;
@@ -228,9 +230,6 @@ public class SeparateWindowFormMailNew extends AbsSeparateWindow {
 								"Unable to locate compose body");
 
 					zTypeFormattedText(locator, value);
-
-					// Is this requried?
-					this.zWaitForBusyOverlay();
 
 					return;
 
@@ -336,7 +335,11 @@ public class SeparateWindowFormMailNew extends AbsSeparateWindow {
 			locator = container + " div[id$='__SAVE_DRAFT'] td[id$='_title']";
 			page = null;
 
-			// FALL THROUGH
+			this.zClickAt(locator,"0,0");
+
+			this.zWaitForBusyOverlay();
+
+			return (page);
 
 		} else if ( button == Button.B_ADD_ATTACHMENT ) {
 
@@ -365,17 +368,6 @@ public class SeparateWindowFormMailNew extends AbsSeparateWindow {
 		// Default behavior, process the locator by clicking on it
 		//
 		this.zClickAt(locator,"0,0");
-
-		// If the app is busy, wait for it to become active
-		this.zWaitForBusyOverlay();
-
-		// If page was specified, make sure it is active
-		if ( page != null ) {
-
-			// This function (default) throws an exception if never active
-			page.zWaitForActive();
-
-		}
 
 
 		return (page);
@@ -444,6 +436,38 @@ public class SeparateWindowFormMailNew extends AbsSeparateWindow {
 		
 		// Return the specified page, or null if not set
 		return (page);
+	}
+
+	public AbsPage zKeyboardShortcut(Shortcut shortcut) throws HarnessException {
+		logger.info(myPageName() + " zKeyboardShortcut("+ shortcut +")");
+		
+		if (shortcut == null)
+			throw new HarnessException("Shortcut cannot be null");
+
+		tracer.trace("Using the keyboard, press the "+ shortcut.getKeys() +" keyboard shortcut");
+
+		AbsPage page = null;
+
+		if (shortcut== Shortcut.S_ESCAPE) {
+
+			// This dialog may or may not appear, depending on the message content
+			page = new SeparateWindowDialog(
+					DialogWarning.DialogWarningID.SaveCurrentMessageAsDraft,
+					this.MyApplication,
+					this);
+			((AbsSeparateWindow)page).zSetWindowTitle(DialogWindowTitle);
+			((AbsSeparateWindow)page).zSetWindowID(DialogWindowTitle);
+
+			zKeyDown("27");
+			return page;
+
+		}
+
+
+		zTypeCharacters(shortcut.getKeys());
+
+		return (page);	
+		
 	}
 
 }
