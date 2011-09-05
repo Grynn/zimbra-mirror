@@ -142,7 +142,11 @@ ZimbraSpecialFolderId MAPIFolder::GetZimbraFolderId()
 
 	if(m_store && m_session)
 	{
-		return ZimbraSpecialFolderIdArray[(int)GetExchangeFolderId()];	
+		int idx = GetExchangeFolderId();
+		if(idx < ZM_SFID_MAX)
+			return ZimbraSpecialFolderIdArray[idx];	
+		else
+			return ZM_SFID_NONE;
 	}
 	return ZM_SFID_NONE;
 }
