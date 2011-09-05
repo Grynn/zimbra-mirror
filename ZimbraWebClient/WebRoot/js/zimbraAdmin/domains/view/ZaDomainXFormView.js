@@ -1464,6 +1464,9 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
                     {ref:ZaDomain.A_zimbraAutoProvLdapAdminBindDn, type:_OUTPUT_,
                         label:ZaMsg.LBL_zimbraAutoProvLdapAdminBindDn, labelLocation:_LEFT_
                     },
+                    {ref:ZaDomain.A_zimbraAutoProvNotificationFromAddress, type:_OUTPUT_,
+                        label:ZaMsg.LBL_zimbraAutoProvNotificationFromAddress, labelLocation:_LEFT_
+                    },
                     {ref:ZaDomain.A_zimbraAutoProvLdapAdminBindPassword, type:_OUTPUT_,
                         choices:ZaModel.BOOLEAN_CHOICES,
                         getDisplayValue:function() {
