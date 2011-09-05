@@ -201,16 +201,24 @@ public class PageCalendar extends AbsTab {
 
 		if ( action == Action.A_LEFTCLICK ) {
 			this.zClickAt(locator, "");
-
+			page=PageCalendar.this;
+			
 		} else if ( action == Action.A_RIGHTCLICK ) {
 			this.zRightClickAt(locator, "");
 
 		} else if ( action == Action.A_DOUBLECLICK) {
 			this.sDoubleClick(locator);
 
-		} else if ( action == Action.A_DOUBLECLICK) { //need to add action for iselement present
-			this.sIsElementPresent(locator);
-
+		} else if ( action == Action.V_ISNOTEXISTS) {
+			if (this.sIsElementPresent(locator) == true) {
+				throw new HarnessException(subject + " exists");
+			}
+			
+		} else if ( action == Action.V_ISEXISTS) {
+			if (this.sIsElementPresent(locator) == false) {
+				throw new HarnessException(subject + " is not exists");
+			}
+			
 		} else {
 			throw new HarnessException("implement me!  action = "+ action);
 		}
@@ -221,7 +229,7 @@ public class PageCalendar extends AbsTab {
 			page.zWaitForActive();
 		}
 
-		return (new ContextMenu(MyApplication));
+		return (page);
 	}
 
 	private AbsPage zListItemListView(Action action, Button option, String subject) throws HarnessException {
@@ -295,10 +303,7 @@ public class PageCalendar extends AbsTab {
 			} else if ( option == Button.O_DELETE ) {
 
 				optionLocator = "css=div[id='zm__Calendar'] div[id='zmi__Calendar__DELETE'] td[id$='_title']";
-				page = new DialogConfirm(
-						DialogConfirm.Confirmation.DELETE,
-						MyApplication, 
-						((AppAjaxClient) MyApplication).zPageCalendar);
+				page = new DialogConfirm(DialogConfirm.Confirmation.DELETE, MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 
 			} else if ( option == Button.O_MOVE ) {
 
@@ -440,6 +445,7 @@ public class PageCalendar extends AbsTab {
 
 			} else if (option == Button.O_DELETE_MENU) {
 				optionLocator = Locators.DeleteMenu;
+				page = new DialogConfirm(DialogConfirm.Confirmation.DELETE,	MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 
 			} else if (option == Button.O_CANCEL_MENU) {
 				optionLocator = Locators.CancelMenu;
@@ -532,7 +538,7 @@ public class PageCalendar extends AbsTab {
 			page.zWaitForActive();
 		}
 
-		return (new ContextMenu(MyApplication));
+		return (page);
 	}
 
 	@Override
@@ -725,7 +731,16 @@ public class PageCalendar extends AbsTab {
 
 		if ( shortcut == Shortcut.S_ASSISTANT ) {
 
+			zKeyboard.zTypeCharacters(shortcut.getKeys());
 			page = new DialogAssistant(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
+
+		} else if ( shortcut == Shortcut.S_DELETE ) {
+
+			zKeyboard.zTypeCharacters(shortcut.getKeys());
+			page = new DialogConfirm(
+					DialogConfirm.Confirmation.DELETE,
+					MyApplication, 
+					((AppAjaxClient) MyApplication).zPageCalendar);
 
 		} else if ( 
 				shortcut == Shortcut.S_MAIL_MOVETOTRASH ||
@@ -742,7 +757,6 @@ public class PageCalendar extends AbsTab {
 
 		}
 
-		zKeyboard.zTypeCharacters(shortcut.getKeys());
 
 		// If the app is busy, wait for it to become active
 		this.zWaitForBusyOverlay();
