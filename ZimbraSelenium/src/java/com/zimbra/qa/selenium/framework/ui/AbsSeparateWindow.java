@@ -107,6 +107,30 @@ public abstract class AbsSeparateWindow extends AbsPage {
 		return (text);
 	}
 
+	public int sGetCssCount(String css) throws HarnessException {
+		logger.info(myPageName() + " sGetCssCount("+ css +")");
+		
+		Integer count = null;
+		
+		try {
+			super.sSelectWindow(this.DialogWindowID);
+			if ( DoChangeWindowFocus )			super.sWindowFocus();
+			
+			count = super.sGetCssCount(css);
+
+		} finally {
+			super.sSelectWindow(MainWindowID);
+			super.sWindowFocus();
+		}
+
+		if ( count == null )
+			throw new HarnessException("Unable to determine CSS count");
+		
+		logger.info("getCssCount(" + css + ") = " + count);
+
+		return (count);
+	}
+
 	/**
 	 * Enter text from a different iframe
 	 * @param iframelocator

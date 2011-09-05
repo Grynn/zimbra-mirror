@@ -124,9 +124,9 @@ public class DisplayContact extends  AbsDisplay {
 	public boolean zIsActive() throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
-	
 
-	private void getAllLocators(ArrayList<String> array, String postfix) {
+
+	private void getAllLocators(ArrayList<String> array, String postfix) throws HarnessException {
 	  	   String css= "css=div[id$='_content'][class='ZmContactInfoView'] div[style*='display: block'] table:nth-of-type(2) tbody tr";
 	       int count= this.sGetCssCount(css);
 

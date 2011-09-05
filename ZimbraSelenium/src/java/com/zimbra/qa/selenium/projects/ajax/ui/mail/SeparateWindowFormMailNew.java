@@ -149,7 +149,8 @@ public class SeparateWindowFormMailNew extends AbsSeparateWindow {
 	}
 
 	public void zFillField(Field field, String value) throws HarnessException {
-		
+		logger.info(myPageName() + "zFillField("+ field +", "+ value +")");
+
 		tracer.trace("Set "+ field +" to "+ value);
 
 		String container = "css=div[id^='zv__COMPOSE']";
@@ -193,7 +194,7 @@ public class SeparateWindowFormMailNew extends AbsSeparateWindow {
 			//
 			SleepUtil.sleepLong();
 
-			int frames = this.sGetCssCount("css=iframe");
+			int frames = sGetCssCount("css=iframe");
 			logger.debug("Body: # of frames: " + frames);
 			String browser = SeleniumService.getInstance().getSeleniumBrowser();
 			/*

@@ -2,6 +2,7 @@ package com.zimbra.qa.selenium.projects.desktop.ui.addressbook;
 
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
+
 import java.util.*;
 
 
@@ -108,9 +109,9 @@ public class DisplayContactGroup extends AbsDisplay {
 	public boolean zIsActive() throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
-	
 
-    private void getAllLocators(ArrayList<String> array, String postfix) {
+
+    private void getAllLocators(ArrayList<String> array, String postfix) throws HarnessException {
   	   String css= "css=div[id$='_content'][class='ZmContactInfoView'] table:nth-of-type(2) tbody tr";
        int count= this.sGetCssCount(css);
 

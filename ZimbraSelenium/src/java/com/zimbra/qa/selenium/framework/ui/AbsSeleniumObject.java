@@ -844,8 +844,9 @@ public abstract class AbsSeleniumObject {
 
 	/**
 	 * DefaultSelenium.getCssCount()
+	 * @throws HarnessException 
 	 */
-	public int sGetCssCount(String css) {
+	public int sGetCssCount(String css) throws HarnessException {
 		int count = ClientSessionFactory.session().selenium().getCssCount(css)
 				.intValue();
 		logger.info("getCssCount(" + css + ") = " + count);
