@@ -106,8 +106,6 @@ checksrc:
 build:
 	(tar $(pngtar) $(pngsrc); \
 	cd $(PNG_NAME)-$(PNG_VERSION); \
-	patch -N -g0 -p1 < ../patches/libtoolize.patch; \
-	./autogen.sh; \
 	env CFLAGS="-g -O2 -fPIC" ./configure \
 		--prefix=$(INSTALL_PREFIX) \
 		--mandir=$(INSTALL_PREFIX)/man \
