@@ -1047,6 +1047,7 @@ function() {
 
     this._currentAppBar = elements[ZaAppViewMgr.C_APP_HEADER] = new ZaCurrentAppBar(this._shell);
     elements[ZaAppViewMgr.C_TOOL_HEADER] = this.getTaskController().getTaskHeaderPanel();
+    elements[ZaAppViewMgr.C_TOOL] = this.getTaskController().getTaskContentPanel();
 	this._appViewMgr.addComponents(elements, true);
     ZaApp.getInstance().launch();
 

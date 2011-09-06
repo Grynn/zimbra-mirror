@@ -19,3 +19,16 @@ function() {
     }
     return this._taskHeadPanel;
 }
+
+ZaTaskController.prototype.getTaskContentPanel =
+function(entry) {
+    if (!this._taskContentPanel) {
+        if(!entry) {
+            entry = new ZaTask();
+            entry.load(false, false, true);
+        }
+        this._taskContentPanel = new ZaTaskContentView(this._container, entry);
+        this._taskContentPanel.setObject(entry);
+    }
+    return this._taskContentPanel;
+}

@@ -43,9 +43,10 @@ ZaSkin.hints = {
 					  resizeContainers : ["skin_td_tree"]
 					},
 	
-	topToolbar:	 	{ containers: "skin_tr_top_toolbar" },
+	topToolbar:	 	{ containers: ["skin_tr_top_toolbar"] },
 
 	treeFooter:	 	{ containers: "skin_tr_tree_footer" },
+    rightTask:      { containers: ["skin_td_right_tool"]},
 
 	// specific components
 	helpButton: 	{	style:"link", url: "@HelpAdminURL@", daUrl: "@HelpDelegatedURL@"	},
@@ -124,14 +125,18 @@ ZaSkin.prototype = {
 	setTreeWidth : function(width) {
 		this._setContainerSizes("tree", width, null);
 	},
-		
-        getSBHeight : function() {
-                return Dwt.getSize(this._getEl(this.hints.searchBuilder.containers[0])).y;
-        },
 
-        setSBHeight: function(height) {
-                this._setContainerSizes("searchBuilder", null, height);
-        },
+    setToolWidth: function (width) {
+        this._setContainerSizes("rightTask", width, null);
+    },
+
+    getSBHeight : function() {
+            return Dwt.getSize(this._getEl(this.hints.searchBuilder.containers[0])).y;
+    },
+
+    setSBHeight: function(height) {
+            this._setContainerSizes("searchBuilder", null, height);
+    },
 
 	showLoginMsg : function (state) {
 		this._showEl("skin_container_login_msg", state);

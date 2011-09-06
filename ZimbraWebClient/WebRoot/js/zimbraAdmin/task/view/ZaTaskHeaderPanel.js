@@ -31,4 +31,14 @@ ZaTaskHeaderPanel.__handleClick =
 function(ev) {
     this._expanded = !this._expanded;
     this.getHtmlElement().innerHTML = this.getImgHtml();
+
+    // TODO  remove this to view manager
+    var width;
+    if (this._expanded) {
+        width = 100;
+    } else {
+        width = 20;
+    }
+    window.skin.setToolWidth(width);
+    window.skin._reflowApp();
 }
