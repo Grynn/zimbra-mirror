@@ -731,12 +731,10 @@ public class PageCalendar extends AbsTab {
 
 		if ( shortcut == Shortcut.S_ASSISTANT ) {
 
-			zKeyboard.zTypeCharacters(shortcut.getKeys());
 			page = new DialogAssistant(MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 
 		} else if ( shortcut == Shortcut.S_DELETE ) {
 
-			zKeyboard.zTypeCharacters(shortcut.getKeys());
 			page = new DialogConfirm(
 					DialogConfirm.Confirmation.DELETE,
 					MyApplication, 
@@ -757,6 +755,8 @@ public class PageCalendar extends AbsTab {
 
 		}
 
+		// Type the characters
+		zKeyboard.zTypeCharacters(shortcut.getKeys());
 
 		// If the app is busy, wait for it to become active
 		this.zWaitForBusyOverlay();
