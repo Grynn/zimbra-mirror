@@ -493,3 +493,14 @@ body						{	@ChromeBg@	}
     display: table-cell;
     vertical-align: middle;
 }
+
+.AdminOutputTab {
+    padding: 3px 15px 2px 15px;
+    min-height:18px;
+}
+
+.AdminOutputTabSelect {
+    padding: 3px 15px 2px 15px;
+    min-height:18px;
+    background-color:@HeaderColor@;
+}

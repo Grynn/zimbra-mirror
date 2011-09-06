@@ -2102,9 +2102,6 @@ Output_XFormItem.prototype.dirtyDisplay = function () {
 Output_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementEnabledCssClass;
 
 
-
-
-
 /**
  * @class defines XFormItem type _TEXTFIELD_
  * @constructor
@@ -3080,6 +3077,42 @@ Group_XFormItem.prototype.updateVisibility = function () {
 		this.updateElement();
 	}	
 }
+
+
+
+Step_Choices_XFormItem = function() {}
+XFormItemFactory.createItemType("_STEPCHOICE_", "stepchoices", Step_Choices_XFormItem, Group_XFormItem);
+
+Step_Choices_XFormItem.prototype.numCols = 1;
+Step_Choices_XFormItem.prototype.initFormItem = function() {
+	XFormItem.prototype.initFormItem.call(this);
+
+    this.signUpForEvents();
+    var label = this.getNormalizedLabels();
+    var values = this.getNormalizedValues();
+    this.items = [];
+    var currentItem;
+    for (var i = 0; i < label.length; i++) {
+        currentItem = {type:_OUTPUT_, value:label[i], sourceValue: values[i]};
+        this.items.push(currentItem);
+    }
+}
+
+Step_Choices_XFormItem.prototype.updateElement = function (newValue) {
+    var items = this.getItems();
+    var el;
+    for ( var i = 0; i < items.length; i++) {
+        el = items[i].getElement();
+        if (items[i].getInheritedProperty("sourceValue") == newValue) {
+            Dwt.addClass(el, "AdminOutputTabSelect");
+            Dwt.delClass(el, "AdminOutputTab");
+        } else {
+            Dwt.delClass(el, "AdminOutputTabSelect");
+            Dwt.addClass(el, "AdminOutputTab");
+        }
+    }
+}
+
 
 HomeGroup_XFormItem = function() {
     this.expanded = true;
