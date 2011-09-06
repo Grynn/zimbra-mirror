@@ -1,0 +1,594 @@
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: .autoreg
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: Info.plist
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: LICENSE
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: README.txt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: Resources
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: XUL
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: chrome
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: FeedProcessor.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: GPSDGeolocationProvider.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: NetworkGeolocationProvider.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: alerts.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: appshell.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: appstartup.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: autocomplete.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: autoconfig.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: caps.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: chardet.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: chrome.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: commandhandler.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: commandlines.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: components.list
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: composer.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: content_base.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: content_events.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: content_html.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: content_htmldoc.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: content_xmldoc.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: content_xslt.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: content_xtf.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: contentprefs.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: cookie.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: directory.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: docshell.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_base.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_canvas.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_core.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_css.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_events.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_geolocation.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_html.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_json.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_loadsave.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_offline.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_range.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_sidebar.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_storage.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_stylesheets.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_svg.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_threads.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_traversal.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_views.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_xbl.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_xpath.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: dom_xul.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: downloads.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: editor.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: embed_base.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: extensions.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: exthandler.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: exthelper.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: fastfind.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: feeds.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: find.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: gfx.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: htmlparser.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: imgicon.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: imglib2.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: inspector.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: intl.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: jar.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: jsconsole-clhandler.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: jsdservice.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: layout_base.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: layout_printing.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: layout_xul.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: layout_xul_tree.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: libalerts_s.dylib
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: locale.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: loginmgr.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: lwbrk.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: mimetype.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: mozbrwsr.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: mozfind.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: necko.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: necko_about.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: necko_cache.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: necko_cookie.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: necko_dns.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: necko_file.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: necko_ftp.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: necko_http.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: necko_res.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: necko_socket.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: necko_strconv.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: necko_viewsource.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: necko_wifi.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsAddonRepository.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsBadCertHandler.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsBlocklistService.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsContentDispatchChooser.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsContentPrefService.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsDefaultCLH.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsDownloadManagerUI.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsExtensionManager.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsFormAutoComplete.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsHandlerService.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsHelperAppDlg.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsINIProcessor.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsLivemarkService.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsLoginInfo.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsLoginManager.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsLoginManagerPrompter.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsPlacesAutoComplete.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsPlacesDBFlush.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsProgressDialog.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsProxyAutoConfig.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsSearchService.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsSearchSuggestions.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsTaggingService.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsTryToClose.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsURLFormatter.js
+diff -r drop/Prism.app/Contents/Frameworks/XUL.framework/components/nsUpdateService.js patches/Prism.app/Contents/Frameworks/XUL.framework/components/nsUpdateService.js
+4a5,9
+> 
+> /*
+> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> */
+> 
+2780c2785
+<       var openFeatures = "chrome,centerscreen,dialog=no,resizable=no,titlebar,toolbar=no";
+---
+>       var openFeatures = "chrome,centerscreen,dialog=no,resizable=yes,titlebar,toolbar=no,width=800,height=600";
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsUpdateServiceStub.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsUpdateTimerManager.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsWebHandlerApp.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: nsXULAppInstall.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: oji.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: parentalcontrols.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: pipboot.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: pipnss.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: pippki.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: places.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: plugin.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: pluginGlue.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: pref.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: prefetch.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: profile.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: proxyObjInst.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: rdf.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: satchel.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: saxparser.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: shistory.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: spellchecker.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: storage-Legacy.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: storage-mozStorage.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: storage.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: toolkitprofile.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: toolkitsearch.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: txEXSLTRegExFunctions.js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: txmgr.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: txtsvc.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: uconv.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: unicharutil.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: update.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: uriloader.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: urlformatter.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: webBrowser_core.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: webbrowserpersist.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: webshell_idls.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: widget.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: widget_cocoa.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: windowds.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: windowwatcher.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: xpcom_base.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: xpcom_components.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: xpcom_ds.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: xpcom_io.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: xpcom_system.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: xpcom_threads.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: xpcom_xpti.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: xpconnect.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: xpinstall.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: xulapp.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: xulapp_setup.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: xuldoc.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: xultmpl.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework/components: zipwriter.xpt
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: defaults
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: dependentlibs.list
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: dictionaries
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: greprefs
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: js
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: libfreebl3.dylib
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: libmozjs.dylib
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: libnspr4.dylib
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: libnss3.dylib
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: libnssckbi.dylib
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: libnssdbm3.dylib
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: libnssutil3.dylib
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: libplc4.dylib
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: libplds4.dylib
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: libsmime3.dylib
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: libsoftokn3.dylib
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: libsqlite3.dylib
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: libssl3.dylib
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: libxpcom.dylib
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: modules
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: nspr-config
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: platform.ini
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: plugins
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: regxpcom
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: res
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: run-mozilla.sh
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: update.locale
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: updater.app
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: xpcshell
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: xpt_dump
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: xpt_link
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: xulrunner
+Only in drop/Prism.app/Contents/Frameworks/XUL.framework: xulrunner-bin
+Only in drop/Prism.app/Contents/: Info.plist
+Only in drop/Prism.app/Contents/: MacOS
+Only in drop/Prism.app/Contents/Resources: application.ini
+Only in drop/Prism.app/Contents/Resources: branding
+Only in drop/Prism.app/Contents/Resources/chrome: classic
+Only in drop/Prism.app/Contents/Resources/chrome: classic.manifest
+Only in drop/Prism.app/Contents/Resources/chrome: en-US
+Only in drop/Prism.app/Contents/Resources/chrome: en-US.manifest
+Only in drop/Prism.app/Contents/Resources/chrome: icons
+Only in drop/Prism.app/Contents/Resources/chrome: newapp
+Only in drop/Prism.app/Contents/Resources/chrome: newapp.manifest
+diff -r drop/Prism.app/Contents/Resources/chrome/webrunner/branding/brand.dtd patches/Prism.app/Contents/Resources/chrome/webrunner/branding/brand.dtd
+1,2c1,2
+< <!ENTITY  brandShortName  "Prism">
+< <!ENTITY  brandFullName   "Prism">
+---
+> <!ENTITY  brandShortName  "Zimbra Desktop">
+> <!ENTITY  brandFullName   "Zimbra Desktop">
+diff -r drop/Prism.app/Contents/Resources/chrome/webrunner/branding/brand.properties patches/Prism.app/Contents/Resources/chrome/webrunner/branding/brand.properties
+1,3c1,3
+< brandShortName=Prism
+< brandFullName=Prism
+< vendorShortName=Prism
+\ No newline at end of file
+---
+> brandShortName=Zimbra Desktop
+> brandFullName=Zimbra Desktop
+> vendorShortName=VMware
+Only in drop/Prism.app/Contents/Resources/chrome/webrunner/branding: icon128.png
+diff -r drop/Prism.app/Contents/Resources/chrome/webrunner/content/about.js patches/Prism.app/Contents/Resources/chrome/webrunner/content/about.js
+39a40,44
+> /*
+> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> */
+> 
+> 
+56c61
+<   version.value = bundle.GetStringFromName("brandFullName") + " " + appInfo.version;
+---
+>   version.value = bundle.GetStringFromName("brandFullName") + " @version@ (build @buildid@)";
+59c64
+<   userAgent.value = navigator.userAgent;
+---
+>   userAgent.value = "Portions Copyright (c) 2008-2011 VMware Inc. \nAll rights reserved.";
+72a78,91
+> 
+> function checkForUpdates()
+> {
+>   var um = Cc["@mozilla.org/updates/update-manager;1"].getService(Components.interfaces.nsIUpdateManager);
+>   var prompter = Cc["@mozilla.org/updates/update-prompt;1"].createInstance(Components.interfaces.nsIUpdatePrompt);
+>   
+>   // If there's an update ready to be applied, show the "Update Downloaded"
+>   // UI instead and let the user know they have to restart the browser for
+>   // the changes to be applied. 
+>   if (um.activeUpdate && um.activeUpdate.state == "pending")
+>     prompter.showUpdateDownloaded(um.activeUpdate);
+>   else
+>     prompter.checkForUpdates();
+> }
+diff -r drop/Prism.app/Contents/Resources/chrome/webrunner/content/about.xul patches/Prism.app/Contents/Resources/chrome/webrunner/content/about.xul
+40a41,45
+> 
+> /*
+> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> */
+> 
+50,51c55,58
+<         buttons="accept"
+<         width="300" height="400">
+---
+> 	buttonlabelextra1="&bundle.chkupdates;"
+>         buttons="accept,extra1"
+>         ondialogextra1="window.close(); checkForUpdates();"
+>         width="300" height="300">
+55c62
+<     <image src="chrome://branding/locale/icon128.png"/>
+---
+>     <image src="chrome://webrunner/content/icon128.png"/>
+63,67d69
+<   <vbox flex="1" id="box_credits">
+<     <label id="bundleinfo" value="&bundle.credits;"/>
+<     <textbox id="credits" flex="1" readonly="true" multiline="true"/>
+<   </vbox>
+< 
+Only in drop/Prism.app/Contents/Resources/chrome/webrunner/content: browser
+Only in drop/Prism.app/Contents/Resources/chrome/webrunner/content: contentAreaUtils.js
+Only in drop/Prism.app/Contents/Resources/chrome/webrunner/content: preferences
+Only in drop/Prism.app/Contents/Resources/chrome/webrunner/content: unknownContentType.xul
+Only in drop/Prism.app/Contents/Resources/chrome/webrunner/content: utilityOverlay.js
+diff -r drop/Prism.app/Contents/Resources/chrome/webrunner/content/webrunner.js patches/Prism.app/Contents/Resources/chrome/webrunner/content/webrunner.js
+5a6,50
+> /*
+> # -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
+> # ***** BEGIN LICENSE BLOCK *****
+> # Version: MPL 1.1/GPL 2.0/LGPL 2.1
+> #
+> # The contents of this file are subject to the Mozilla Public License Version
+> # 1.1 (the "License"); you may not use this file except in compliance with
+> # the License. You may obtain a copy of the License at
+> # http://www.mozilla.org/MPL/
+> #
+> # Software distributed under the License is distributed on an "AS IS" basis,
+> # WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+> # for the specific language governing rights and limitations under the
+> # License.
+> #
+> # The Original Code is Mozilla Prism.
+> #
+> # The Initial Developer of the Original Code is
+> # Mark Finkle.
+> #
+> # Contributor(s):
+> # Matthew Gertner, <matthew.gertner@gmail.com>
+> # Mark Finkle, <mark.finkle@gmail.com>, <mfinkle@mozilla.com>
+> # Wladimir Palant <trev@adblockplus.org>
+> # Sylvain Pasche <sylvain.pasche@gmail.com>
+> #
+> # Alternatively, the contents of this file may be used under the terms of
+> # either the GNU General Public License Version 2 or later (the "GPL"), or
+> # the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+> # in which case the provisions of the GPL or the LGPL are applicable instead
+> # of those above. If you wish to allow use of your version of this file only
+> # under the terms of either the GPL or the LGPL, and not to allow others to
+> # use your version of this file under the terms of the MPL, indicate your
+> # decision by deleting the provisions above and replace them with the notice
+> # and other provisions required by the GPL or the LGPL. If you do not delete
+> # the provisions above, a recipient may use your version of this file under
+> # the terms of any one of the MPL, the GPL or the LGPL.
+> #
+> # ***** END LICENSE BLOCK *****
+> */
+> 
+> /*
+> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> */
+> 
+483a529,534
+>     if (aURI.scheme == "javascript") {
+>       return false;
+>     }
+>     if (aURI.scheme != "http" && aURI.scheme != "https") {
+>       return true;
+>     }
+568a620,630
+>     var platform = Cc["@mozilla.org/platform-web-api;1"].createInstance(Ci.nsIPlatformGlue);
+>     var callback = {};
+>     var uriString = platform.getProtocolURI(aURI.spec, callback);
+>     if (callback.value) {
+>       callback.value.handleURI(aURI.spec);
+>       return;
+>     }
+>     if (uriString) {
+>       gBrowser.loadURI(uriString, null, null);
+>       return;
+>     }
+606a669
+> 
+607a671
+>     this._ios.offline = false; //force online even no network
+817a882,896
+>   toggleStatusbar : function()
+>   {
+>     var statusbar = document.getElementById("statusbar");
+>     var collapsed = statusbar.getAttribute("collapsed") == "true";
+>     statusbar.setAttribute("collapsed", collapsed ? "false" : "true");
+>   },
+> 
+>   clearCache : function()
+>   {
+>      var cacheService = Cc["@mozilla.org/network/cache-service;1"].getService(Ci.nsICacheService);
+>      try {
+>        cacheService.evictEntries(Ci.nsICache.STORE_ANYWHERE);
+>      } catch(ex) {}
+>   },
+> 
+833c912
+<         window.openDialog("chrome://webrunner/content/preferences/preferences.xul", "preferences", "chrome,titlebar,toolbar,centerscreen,dialog", "paneContent");
+---
+>         window.openDialog("chrome://webrunner/content/preferences/preferences.xul", "preferences", "chrome,titlebar,toolbar,centerscreen,dialog", "paneApplications");
+869a949,955
+>       case "cmd_sb":
+>         this.toggleStatusbar();
+>         break;
+>       case "cmd_clearcache":
+>         this.clearCache();
+>         this._getBrowser().reload();
+>         break;
+diff -r drop/Prism.app/Contents/Resources/chrome/webrunner/content/webrunner.xul patches/Prism.app/Contents/Resources/chrome/webrunner/content/webrunner.xul
+3a4,46
+> # ***** BEGIN LICENSE BLOCK *****
+> # Version: MPL 1.1/GPL 2.0/LGPL 2.1
+> #
+> # The contents of this file are subject to the Mozilla Public License Version
+> # 1.1 (the "License"); you may not use this file except in compliance with
+> # the License. You may obtain a copy of the License at
+> # http://www.mozilla.org/MPL/
+> #
+> # Software distributed under the License is distributed on an "AS IS" basis,
+> # WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+> # for the specific language governing rights and limitations under the
+> # License.
+> #
+> # The Original Code is Mozilla Prism
+> #
+> # The Initial Developer of the Original Code is
+> # Ben Goodger.
+> # Portions created by the Initial Developer are Copyright (C) 2005
+> # the Initial Developer. All Rights Reserved.
+> #
+> # Contributor(s):
+> #   Matthew Gertner <matthew.gertner@gmail.com>
+> #   Mark Finkle, <mark.finkle@gmail.com>, <mfinkle@mozilla.com>
+> #   Wladimir Palant <trev@adblockplus.org>
+> #
+> # Alternatively, the contents of this file may be used under the terms of
+> # either the GNU General Public License Version 2 or later (the "GPL"), or
+> # the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+> # in which case the provisions of the GPL or the LGPL are applicable instead
+> # of those above. If you wish to allow use of your version of this file only
+> # under the terms of either the GPL or the LGPL, and not to allow others to
+> # use your version of this file under the terms of the MPL, indicate your
+> # decision by deleting the provisions above and replace them with the notice
+> # and other provisions required by the GPL or the LGPL. If you do not delete
+> # the provisions above, a recipient may use your version of this file under
+> # the terms of any one of the MPL, the GPL or the LGPL.
+> #
+> # ***** END LICENSE BLOCK *****
+> 
+> /*
+> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> */
+> 
+22c65
+<         width="750" height="550"
+---
+>         width="900" height="700"
+40c83
+<     <command id="cmd_prefs" label="&prefs.label;" oncommand="WebRunner.doCommand(this.id);"/>
+---
+>     <command id="cmd_prefs" label="&appsPref.label;" oncommand="WebRunner.doCommand(this.id);"/>
+61a105,106
+>     <command id="cmd_sb" label="Toggle Statusbar" oncommand="WebRunner.doCommand(this.id);"/>
+>     <command id="cmd_clearcache" label="Clear Cache" oncommand="WebRunner.doCommand(this.id);"/>
+75c120
+<     <key id="key_minimizeWindow" command="cmd_minimizeWindow" key="&minimizeWindow.key;" modifiers="accel"/>
+---
+>     <key id="key_minimizeWindow" command="cmd_minimizeWindow" key="m" modifiers="accel"/>
+85c130,132
+<     <key id="key_aboutConfig" key="a" command="cmd_aboutConfig" modifiers="control,shift"/>
+---
+>     <key id="key_aboutConfig" modifiers="shift" keycode="VK_F7" command="cmd_aboutConfig"/>
+>     <key id="key_sb" modifiers="shift" keycode="VK_F6" command="cmd_sb"/>
+>     <key id="key_clearcache" modifiers="shift" keycode="VK_F5" command="cmd_clearcache"/>
+171d217
+<         <menuitem id="menuitem_prefs" command="cmd_prefs"/>
+173a220
+>         <menuitem id="menuitem_prefs" command="cmd_prefs"/>
+Only in drop/Prism.app/Contents/Resources/chrome: webrunner.manifest
+Only in drop/Prism.app/Contents/Resources/components: WebContentConverter.js
+Only in drop/Prism.app/Contents/Resources/components: browser.xpt
+diff -r drop/Prism.app/Contents/Resources/components/components.list patches/Prism.app/Contents/Resources/components/components.list
+5a6
+> ForceOnline.js
+Only in drop/Prism.app/Contents/Resources/components: libprism.dylib
+Only in drop/Prism.app/Contents/Resources/components: nsAppStartup.js
+Only in drop/Prism.app/Contents/Resources/components: nsCommandLineHandler.js
+Only in drop/Prism.app/Contents/Resources/components: nsPlatformGlue.js
+Only in drop/Prism.app/Contents/Resources/components: prism.xpt
+diff -r drop/Prism.app/Contents/Resources/defaults/preferences/preferences.js patches/Prism.app/Contents/Resources/defaults/preferences/preferences.js
+5a6,47
+> /*
+> # ***** BEGIN LICENSE BLOCK *****
+> # Version: MPL 1.1/GPL 2.0/LGPL 2.1
+> #
+> # The contents of this file are subject to the Mozilla Public License Version
+> # 1.1 (the "License"); you may not use this file except in compliance with
+> # the License. You may obtain a copy of the License at
+> # http://www.mozilla.org/MPL/
+> #
+> # Software distributed under the License is distributed on an "AS IS" basis,
+> # WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+> # for the specific language governing rights and limitations under the
+> # License.
+> #
+> # The Original Code is Mozilla Prism.
+> #
+> # The Initial Developer of the Original Code is
+> # Mark Finkle.
+> #
+> # Contributor(s):
+> # Matthew Gertner, <matthew.gertner@gmail.com>
+> # Mark Finkle, <mark.finkle@gmail.com>, <mfinkle@mozilla.com>
+> #
+> # Alternatively, the contents of this file may be used under the terms of
+> # either the GNU General Public License Version 2 or later (the "GPL"), or
+> # the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+> # in which case the provisions of the GPL or the LGPL are applicable instead
+> # of those above. If you wish to allow use of your version of this file only
+> # under the terms of either the GPL or the LGPL, and not to allow others to
+> # use your version of this file under the terms of the MPL, indicate your
+> # decision by deleting the provisions above and replace them with the notice
+> # and other provisions required by the GPL or the LGPL. If you do not delete
+> # the provisions above, a recipient may use your version of this file under
+> # the terms of any one of the MPL, the GPL or the LGPL.
+> #
+> # ***** END LICENSE BLOCK *****
+> */
+> 
+> /*
+> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> */
+> 
+10c52
+< pref("general.useragent.extra.prism", "Prism/1.0b8");
+---
+> pref("general.useragent.extra.prism", "Prism zdesktop/@version@");
+32a75,77
+> /* use system proxy settings */
+> pref("network.proxy.type", 5);
+> 
+34,35c79,80
+< pref("browser.download.useDownloadDir", true);
+< pref("browser.download.folderList", 0);
+---
+> pref("browser.download.useDownloadDir", false);
+> pref("browser.download.folderList", 2);
+41c86
+< pref("browser.download.manager.closeWhenDone", true);
+---
+> pref("browser.download.manager.closeWhenDone", false);
+58c103
+< pref("signon.rememberSignons", true);
+---
+> pref("signon.rememberSignons", false);
+94c139
+< pref("browser.xul.error_pages.enabled", true);
+---
+> pref("browser.xul.error_pages.enabled", false);
+102c147,174
+< pref("prism.shortcut.fullScreen.disabled", false);
+---
+> pref("prism.shortcut.fullScreen.disabled", true);
+> 
+> // increase timeout for slow javascripts
+> pref("dom.max_script_run_time", 15);
+> 
+> // increase connections to avoid multiple zimlets hanging javascripts
+> pref("network.http.max-connections", 24);
+> pref("network.http.max-connections-per-server", 8);
+> pref("network.http.max-persistent-connections-per-proxy", 8);
+> pref("network.http.max-persistent-connections-per-server", 8);
+> 
+> // update service stuff
+> //pref("app.update.lastUpdateDate.background-update-timer", 0);
+> pref("app.update.enabled", true); //enables or disables the background update checker; default=true
+> pref("app.update.auto", false); //enables background download of updates according to the policy described by app.update.mode; default=true
+> pref("app.update.mode", 2); //defines the policy by which background downloads are done; 0=download all; 1=download compatible; 2=download minor and prompt for major; default=1
+> pref("app.update.silent", false); //disables all notification UI for updates; default=false
+> 
+> pref("app.update.timer", 600000); //the number of milliseconds between checker update interval expiry checks; default=600000
+> pref("app.update.interval", 86400); //the number of seconds between service XML pings; default=86400
+> pref("app.update.idletime", 60); //the number of seconds of idle time that must pass before displaying a pending software update dialog; default=60
+> pref("app.update.nagTimer.download", 86400); //the number of seconds after user dismissal to wait before prompting to download (if no background download); default=86400
+> pref("app.update.nagTimer.restart", 86400); //the number of seconds after user dismissal to wait before prompting to restart (if background download); default=86400
+> 
+> pref("app.update.url", "https://www.zimbra.com/aus/zdesktop2/update.php?chn=@channel@&ver=@version@&bid=@buildid@&bos=@buildos@");
+> pref("app.update.url.manual", "http://www.zimbra.com/products/desktop.html");
+> pref("app.update.url.details", "http://www.zimbra.com/products/desktop.html");
+> pref("app.update.log.all", true);
+Only in drop/Prism.app/Contents/Resources: en.lproj
+Only in drop/Prism.app/Contents/Resources: extensions
+Only in drop/Prism.app/Contents/Resources: modules
+Only in drop/Prism.app/Contents/Resources: webrunner.icns

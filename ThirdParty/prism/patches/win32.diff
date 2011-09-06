@@ -1,0 +1,775 @@
+Only in patches/: .DS_Store
+Only in drop/prism-090211.win32: UAC.dll
+Only in drop/prism-090211.win32: application.ini
+Binary files drop/prism-090211.win32/chrome/.DS_Store and patches/chrome/.DS_Store differ
+Only in drop/prism-090211.win32/chrome: classic
+Only in drop/prism-090211.win32/chrome: classic.manifest
+Only in drop/prism-090211.win32/chrome: en-US
+Only in drop/prism-090211.win32/chrome: en-US.manifest
+Only in drop/prism-090211.win32/chrome: icons
+Only in drop/prism-090211.win32/chrome: newapp
+Only in drop/prism-090211.win32/chrome: newapp.manifest
+Binary files drop/prism-090211.win32/chrome/webrunner/.DS_Store and patches/chrome/webrunner/.DS_Store differ
+diff -r drop/prism-090211.win32/chrome/webrunner/branding/brand.dtd patches/chrome/webrunner/branding/brand.dtd
+1,2c1,2
+< <!ENTITY  brandShortName  "Prism">
+< <!ENTITY  brandFullName   "Prism">
+---
+> <!ENTITY  brandShortName  "Zimbra Desktop">
+> <!ENTITY  brandFullName   "Zimbra Desktop">
+diff -r drop/prism-090211.win32/chrome/webrunner/branding/brand.properties patches/chrome/webrunner/branding/brand.properties
+1,3c1,3
+< brandShortName=Prism
+< brandFullName=Prism
+< vendorShortName=Prism
+\ No newline at end of file
+---
+> brandShortName=Zimbra Desktop
+> brandFullName=Zimbra Desktop
+> vendorShortName=VMware
+Only in drop/prism-090211.win32/chrome/webrunner/branding: icon128.png
+diff -r drop/prism-090211.win32/chrome/webrunner/content/about.js patches/chrome/webrunner/content/about.js
+39a40,43
+> /*
+> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> */
+> 
+56c60
+<   version.value = bundle.GetStringFromName("brandFullName") + " " + appInfo.version;
+---
+>   version.value = bundle.GetStringFromName("brandFullName") + " @version@ (build @buildid@)";
+59c63
+<   userAgent.value = navigator.userAgent;
+---
+>   userAgent.value = "Portions Copyright (c) 2008-2011 VMware Inc. \nAll rights reserved.";
+72a77,90
+> 
+> function checkForUpdates()
+> {
+>   var um = Cc["@mozilla.org/updates/update-manager;1"].getService(Components.interfaces.nsIUpdateManager);
+>   var prompter = Cc["@mozilla.org/updates/update-prompt;1"].createInstance(Components.interfaces.nsIUpdatePrompt);
+>   
+>   // If there's an update ready to be applied, show the "Update Downloaded"
+>   // UI instead and let the user know they have to restart the browser for
+>   // the changes to be applied. 
+>   if (um.activeUpdate && um.activeUpdate.state == "pending")
+>     prompter.showUpdateDownloaded(um.activeUpdate);
+>   else
+>     prompter.checkForUpdates();
+> }
+diff -r drop/prism-090211.win32/chrome/webrunner/content/about.xul patches/chrome/webrunner/content/about.xul
+40a41,46
+> 
+> 
+> /*
+> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> */
+> 
+50,51c56,59
+<         buttons="accept"
+<         width="300" height="400">
+---
+> 	buttonlabelextra1="&bundle.chkupdates;"
+>         buttons="accept,extra1"
+>         ondialogextra1="window.close(); checkForUpdates();"
+>         width="300" height="300">
+55c63
+<     <image src="chrome://branding/locale/icon128.png"/>
+---
+>     <image src="chrome://webrunner/content/icon128.png"/>
+63,67d70
+<   <vbox flex="1" id="box_credits">
+<     <label id="bundleinfo" value="&bundle.credits;"/>
+<     <textbox id="credits" flex="1" readonly="true" multiline="true"/>
+<   </vbox>
+< 
+Only in drop/prism-090211.win32/chrome/webrunner/content: browser
+Only in drop/prism-090211.win32/chrome/webrunner/content: contentAreaUtils.js
+Only in drop/prism-090211.win32/chrome/webrunner/content: preferences
+Only in drop/prism-090211.win32/chrome/webrunner/content: unknownContentType.xul
+Only in drop/prism-090211.win32/chrome/webrunner/content: utilityOverlay.js
+diff -r drop/prism-090211.win32/chrome/webrunner/content/webrunner.js patches/chrome/webrunner/content/webrunner.js
+5a6,50
+> /*
+> # -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
+> # ***** BEGIN LICENSE BLOCK *****
+> # Version: MPL 1.1/GPL 2.0/LGPL 2.1
+> #
+> # The contents of this file are subject to the Mozilla Public License Version
+> # 1.1 (the "License"); you may not use this file except in compliance with
+> # the License. You may obtain a copy of the License at
+> # http://www.mozilla.org/MPL/
+> #
+> # Software distributed under the License is distributed on an "AS IS" basis,
+> # WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+> # for the specific language governing rights and limitations under the
+> # License.
+> #
+> # The Original Code is Mozilla Prism.
+> #
+> # The Initial Developer of the Original Code is
+> # Mark Finkle.
+> #
+> # Contributor(s):
+> # Matthew Gertner, <matthew.gertner@gmail.com>
+> # Mark Finkle, <mark.finkle@gmail.com>, <mfinkle@mozilla.com>
+> # Wladimir Palant <trev@adblockplus.org>
+> # Sylvain Pasche <sylvain.pasche@gmail.com>
+> #
+> # Alternatively, the contents of this file may be used under the terms of
+> # either the GNU General Public License Version 2 or later (the "GPL"), or
+> # the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+> # in which case the provisions of the GPL or the LGPL are applicable instead
+> # of those above. If you wish to allow use of your version of this file only
+> # under the terms of either the GPL or the LGPL, and not to allow others to
+> # use your version of this file under the terms of the MPL, indicate your
+> # decision by deleting the provisions above and replace them with the notice
+> # and other provisions required by the GPL or the LGPL. If you do not delete
+> # the provisions above, a recipient may use your version of this file under
+> # the terms of any one of the MPL, the GPL or the LGPL.
+> #
+> # ***** END LICENSE BLOCK *****
+> */
+> 
+> /*
+> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> */
+> 
+471a517,522
+>     if (aURI.scheme == "javascript") {
+>       return false;
+>     }
+>     if (aURI.scheme != "http" && aURI.scheme != "https") {
+>       return true;
+>     }
+556a608,618
+>     var platform = Cc["@mozilla.org/platform-web-api;1"].createInstance(Ci.nsIPlatformGlue);
+>     var callback = {};
+>     var uriString = platform.getProtocolURI(aURI.spec, callback);
+>     if (callback.value) {
+>       callback.value.handleURI(aURI.spec);
+>       return;
+>     }
+>     if (uriString) {
+>       gBrowser.loadURI(uriString, null, null);
+>       return;
+>     }
+595a658
+>     this._ios.offline = false; //force online even no network
+814c877,891
+<   
+---
+>   toggleStatusbar : function()
+>   {
+>     var statusbar = document.getElementById("statusbar");
+>     var collapsed = statusbar.getAttribute("collapsed") == "true";
+>     statusbar.setAttribute("collapsed", collapsed ? "false" : "true");
+>   },
+> 
+>   clearCache : function()
+>   {
+>      var cacheService = Cc["@mozilla.org/network/cache-service;1"].getService(Ci.nsICacheService);
+>      try {
+>        cacheService.evictEntries(Ci.nsICache.STORE_ANYWHERE);
+>      } catch(ex) {}
+>   },
+> 
+830c907
+<         window.openDialog("chrome://webrunner/content/preferences/preferences.xul", "preferences", "chrome,titlebar,toolbar,centerscreen,dialog", "paneContent");
+---
+>         window.openDialog("chrome://webrunner/content/preferences/preferences.xul", "preferences", "chrome,titlebar,toolbar,centerscreen,dialog", "paneApplications");
+866a944,950
+>       case "cmd_sb":
+>         this.toggleStatusbar();
+>         break;
+>       case "cmd_clearcache":
+>         this.clearCache();
+>         this._getBrowser().reload();
+>         break;
+diff -r drop/prism-090211.win32/chrome/webrunner/content/webrunner.xul patches/chrome/webrunner/content/webrunner.xul
+2a3
+> 
+3a5,47
+> # ***** BEGIN LICENSE BLOCK *****
+> # Version: MPL 1.1/GPL 2.0/LGPL 2.1
+> #
+> # The contents of this file are subject to the Mozilla Public License Version
+> # 1.1 (the "License"); you may not use this file except in compliance with
+> # the License. You may obtain a copy of the License at
+> # http://www.mozilla.org/MPL/
+> #
+> # Software distributed under the License is distributed on an "AS IS" basis,
+> # WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+> # for the specific language governing rights and limitations under the
+> # License.
+> #
+> # The Original Code is Mozilla Prism
+> #
+> # The Initial Developer of the Original Code is
+> # Ben Goodger.
+> # Portions created by the Initial Developer are Copyright (C) 2005
+> # the Initial Developer. All Rights Reserved.
+> #
+> # Contributor(s):
+> #   Matthew Gertner <matthew.gertner@gmail.com>
+> #   Mark Finkle, <mark.finkle@gmail.com>, <mfinkle@mozilla.com>
+> #   Wladimir Palant <trev@adblockplus.org>
+> #
+> # Alternatively, the contents of this file may be used under the terms of
+> # either the GNU General Public License Version 2 or later (the "GPL"), or
+> # the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+> # in which case the provisions of the GPL or the LGPL are applicable instead
+> # of those above. If you wish to allow use of your version of this file only
+> # under the terms of either the GPL or the LGPL, and not to allow others to
+> # use your version of this file under the terms of the MPL, indicate your
+> # decision by deleting the provisions above and replace them with the notice
+> # and other provisions required by the GPL or the LGPL. If you do not delete
+> # the provisions above, a recipient may use your version of this file under
+> # the terms of any one of the MPL, the GPL or the LGPL.
+> #
+> # ***** END LICENSE BLOCK *****
+> 
+> /*
+> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> */
+> 
+22c66
+<         width="750" height="550"
+---
+>         width="900" height="700"
+40c84
+<     <command id="cmd_prefs" label="&prefs.label;" oncommand="WebRunner.doCommand(this.id);"/>
+---
+>     <command id="cmd_prefs" label="&appsPref.label;" oncommand="WebRunner.doCommand(this.id);"/>
+60a105,106
+>     <command id="cmd_sb" label="Toggle Statusbar" oncommand="WebRunner.doCommand(this.id);"/>
+>     <command id="cmd_clearcache" label="Clear Cache" oncommand="WebRunner.doCommand(this.id);"/>
+80c126,128
+<     <key id="key_aboutConfig" key="a" command="cmd_aboutConfig" modifiers="control,shift"/>
+---
+>     <key id="key_aboutConfig" modifiers="shift" keycode="VK_F7" command="cmd_aboutConfig"/>
+>     <key id="key_sb" modifiers="shift" keycode="VK_F6" command="cmd_sb"/>
+>     <key id="key_clearcache" modifiers="shift" keycode="VK_F5" command="cmd_clearcache"/>
+162d209
+<         <menuitem id="menuitem_prefs" command="cmd_prefs"/>
+164a212
+>         <menuitem id="menuitem_prefs" command="cmd_prefs"/>
+Only in drop/prism-090211.win32/chrome: webrunner.manifest
+Only in drop/prism-090211.win32/components: WebContentConverter.js
+diff -r drop/prism-090211.win32/components/components.list patches/components/components.list
+4a5
+> ForceOnline.js
+Only in drop/prism-090211.win32/components: nsCommandLineHandler.js
+Only in drop/prism-090211.win32/components: nsPlatformGlue.js
+Only in drop/prism-090211.win32/components: prism.dll
+Only in drop/prism-090211.win32/components: prism.xpt
+Only in drop/prism-090211.win32: crashinject.exe
+Only in drop/prism-090211.win32: crashinjectdll.dll
+Only in patches/defaults: .DS_Store
+diff -r drop/prism-090211.win32/defaults/preferences/preferences.js patches/defaults/preferences/preferences.js
+1,102c1,174
+< //@line 2 "c:\mozilla\workdir\mozilla\192src\prism\defaults\preferences\preferences.js"
+< /*
+< //@line 39 "c:\mozilla\workdir\mozilla\192src\prism\defaults\preferences\preferences.js"
+< */
+< 
+< pref("toolkit.defaultChromeURI", "chrome://webrunner/content/webrunner.xul");  // - main xul window
+< pref("browser.chromeURL", "chrome://webrunner/content/webrunner.xul");         // - allow popup windows to open
+< pref("toolkit.singletonWindowType", "navigator:browser");
+< 
+< pref("general.useragent.extra.prism", "Prism/1.0b8");
+< 
+< /* prefwindow prefs (see: MDC - Preferences System and bug 350528) */
+< pref("browser.preferences.animateFadeIn", "false");
+< pref("browser.preferences.instantApply", "false");
+< 
+< /* debugging prefs */
+< pref("browser.dom.window.dump.enabled", true);
+< pref("javascript.options.showInConsole", true);
+< pref("javascript.options.strict", true);
+< pref("nglayout.debug.disable_xul_cache", false);
+< pref("nglayout.debug.disable_xul_fastload", false);
+< 
+< /* default security dialogs like firefox */
+< pref("security.warn_entering_secure.show_once", false);
+< pref("security.warn_leaving_secure.show_once", false);
+< pref("security.warn_submit_insecure.show_once", false);
+< 
+< /* disable warnings when opening external links */
+< pref("network.protocol-handler.warn-external.http", false);
+< pref("network.protocol-handler.warn-external.https", false);
+< pref("network.protocol-handler.warn-external.ftp", false);
+< 
+< /* download manager */
+< pref("browser.download.useDownloadDir", true);
+< pref("browser.download.folderList", 0);
+< pref("browser.download.manager.showAlertOnComplete", true);
+< pref("browser.download.manager.showAlertInterval", 2000);
+< pref("browser.download.manager.retention", 2);
+< pref("browser.download.manager.showWhenStarting", true);
+< pref("browser.download.manager.useWindow", true);
+< pref("browser.download.manager.closeWhenDone", true);
+< pref("browser.download.manager.openDelay", 0);
+< pref("browser.download.manager.focusWhenStarting", false);
+< pref("browser.download.manager.flashCount", 2);
+< pref("browser.download.manager.displayedHistoryDays", 7);
+< 
+< /* for preferences */
+< pref("browser.download.show_plugins_in_list", true);
+< pref("browser.download.hide_plugins_without_extensions", true);
+< 
+< /* download alerts */
+< pref("alerts.slideIncrement", 1);
+< pref("alerts.slideIncrementTime", 10);
+< pref("alerts.totalOpenTime", 6000);
+< pref("alerts.height", 50);
+< 
+< /* password manager */
+< pref("signon.rememberSignons", true);
+< pref("signon.expireMasterPassword", false);
+< pref("signon.SignonFileName", "signons.txt");
+< 
+< /* autocomplete */
+< pref("browser.formfill.enable", true);
+< 
+< /* spellcheck */
+< pref("layout.spellcheckDefault", 1);
+< 
+< /* extension manager and xpinstall */
+< pref("xpinstall.dialog.confirm", "chrome://mozapps/content/xpinstall/xpinstallConfirm.xul");
+< pref("xpinstall.dialog.progress.skin", "chrome://mozapps/content/extensions/extensions.xul?type=themes");
+< pref("xpinstall.dialog.progress.chrome", "chrome://mozapps/content/extensions/extensions.xul?type=extensions");
+< pref("xpinstall.dialog.progress.type.skin", "Extension:Manager-themes");
+< pref("xpinstall.dialog.progress.type.chrome", "Extension:Manager-extensions");
+< pref("extensions.update.enabled", true);
+< pref("extensions.update.interval", 86400);
+< pref("extensions.dss.enabled", false);
+< pref("extensions.dss.switchPending", false);
+< pref("extensions.ignoreMTimeChanges", false);
+< pref("extensions.logging.enabled", false);
+< 
+< /* NB these point at AMO */
+< pref("extensions.update.url", "chrome://mozapps/locale/extensions/extensions.properties");
+< pref("extensions.getMoreExtensionsURL", "chrome://mozapps/locale/extensions/extensions.properties");
+< pref("extensions.getMoreThemesURL", "chrome://mozapps/locale/extensions/extensions.properties");
+< 
+< /* findbar support */
+< pref("accessibility.typeaheadfind", true);
+< pref("accessibility.typeaheadfind.timeout", 5000);
+< pref("accessibility.typeaheadfind.flashBar", 1);
+< pref("accessibility.typeaheadfind.linksonly", false);
+< pref("accessibility.typeaheadfind.casesensitive", 0);
+< 
+< /* enable xul error pages */
+< pref("browser.xul.error_pages.enabled", true);
+< 
+< /* SSL error page behaviour */
+< pref("browser.ssl_override_behavior", 2);
+< pref("browser.xul.error_pages.expert_bad_cert", false);
+< 
+< /* Prism-specific prefs */
+< pref("prism.shortcut.aboutConfig.enabled", false);
+< pref("prism.shortcut.fullScreen.disabled", false);
+---
+> //@line 2 "c:\mozilla\workdir\mozilla\192src\prism\defaults\preferences\preferences.js"
+> /*
+> //@line 39 "c:\mozilla\workdir\mozilla\192src\prism\defaults\preferences\preferences.js"
+> */
+> 
+> /*
+> # ***** BEGIN LICENSE BLOCK *****
+> # Version: MPL 1.1/GPL 2.0/LGPL 2.1
+> #
+> # The contents of this file are subject to the Mozilla Public License Version
+> # 1.1 (the "License"); you may not use this file except in compliance with
+> # the License. You may obtain a copy of the License at
+> # http://www.mozilla.org/MPL/
+> #
+> # Software distributed under the License is distributed on an "AS IS" basis,
+> # WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+> # for the specific language governing rights and limitations under the
+> # License.
+> #
+> # The Original Code is Mozilla Prism.
+> #
+> # The Initial Developer of the Original Code is
+> # Mark Finkle.
+> #
+> # Contributor(s):
+> # Matthew Gertner, <matthew.gertner@gmail.com>
+> # Mark Finkle, <mark.finkle@gmail.com>, <mfinkle@mozilla.com>
+> #
+> # Alternatively, the contents of this file may be used under the terms of
+> # either the GNU General Public License Version 2 or later (the "GPL"), or
+> # the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+> # in which case the provisions of the GPL or the LGPL are applicable instead
+> # of those above. If you wish to allow use of your version of this file only
+> # under the terms of either the GPL or the LGPL, and not to allow others to
+> # use your version of this file under the terms of the MPL, indicate your
+> # decision by deleting the provisions above and replace them with the notice
+> # and other provisions required by the GPL or the LGPL. If you do not delete
+> # the provisions above, a recipient may use your version of this file under
+> # the terms of any one of the MPL, the GPL or the LGPL.
+> #
+> # ***** END LICENSE BLOCK *****
+> */
+> 
+> /*
+> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> */
+> 
+> pref("toolkit.defaultChromeURI", "chrome://webrunner/content/webrunner.xul");  // - main xul window
+> pref("browser.chromeURL", "chrome://webrunner/content/webrunner.xul");         // - allow popup windows to open
+> pref("toolkit.singletonWindowType", "navigator:browser");
+> 
+> pref("general.useragent.extra.prism", "Prism zdesktop/@version@");
+> 
+> /* prefwindow prefs (see: MDC - Preferences System and bug 350528) */
+> pref("browser.preferences.animateFadeIn", "false");
+> pref("browser.preferences.instantApply", "false");
+> 
+> /* debugging prefs */
+> pref("browser.dom.window.dump.enabled", true);
+> pref("javascript.options.showInConsole", true);
+> pref("javascript.options.strict", true);
+> pref("nglayout.debug.disable_xul_cache", false);
+> pref("nglayout.debug.disable_xul_fastload", false);
+> 
+> /* default security dialogs like firefox */
+> pref("security.warn_entering_secure.show_once", false);
+> pref("security.warn_leaving_secure.show_once", false);
+> pref("security.warn_submit_insecure.show_once", false);
+> 
+> /* disable warnings when opening external links */
+> pref("network.protocol-handler.warn-external.http", false);
+> pref("network.protocol-handler.warn-external.https", false);
+> pref("network.protocol-handler.warn-external.ftp", false);
+> 
+> /* use system proxy settings */
+> pref("network.proxy.type", 5);
+> 
+> /* download manager */
+> pref("browser.download.useDownloadDir", false);
+> pref("browser.download.folderList", 2);
+> pref("browser.download.manager.showAlertOnComplete", true);
+> pref("browser.download.manager.showAlertInterval", 2000);
+> pref("browser.download.manager.retention", 2);
+> pref("browser.download.manager.showWhenStarting", true);
+> pref("browser.download.manager.useWindow", true);
+> pref("browser.download.manager.closeWhenDone", false);
+> pref("browser.download.manager.openDelay", 0);
+> pref("browser.download.manager.focusWhenStarting", false);
+> pref("browser.download.manager.flashCount", 2);
+> pref("browser.download.manager.displayedHistoryDays", 7);
+> 
+> /* for preferences */
+> pref("browser.download.show_plugins_in_list", true);
+> pref("browser.download.hide_plugins_without_extensions", true);
+> 
+> /* download alerts */
+> pref("alerts.slideIncrement", 1);
+> pref("alerts.slideIncrementTime", 10);
+> pref("alerts.totalOpenTime", 6000);
+> pref("alerts.height", 50);
+> 
+> /* password manager */
+> pref("signon.rememberSignons", false);
+> pref("signon.expireMasterPassword", false);
+> pref("signon.SignonFileName", "signons.txt");
+> 
+> /* autocomplete */
+> pref("browser.formfill.enable", true);
+> 
+> /* spellcheck */
+> pref("layout.spellcheckDefault", 1);
+> 
+> /* extension manager and xpinstall */
+> pref("xpinstall.dialog.confirm", "chrome://mozapps/content/xpinstall/xpinstallConfirm.xul");
+> pref("xpinstall.dialog.progress.skin", "chrome://mozapps/content/extensions/extensions.xul?type=themes");
+> pref("xpinstall.dialog.progress.chrome", "chrome://mozapps/content/extensions/extensions.xul?type=extensions");
+> pref("xpinstall.dialog.progress.type.skin", "Extension:Manager-themes");
+> pref("xpinstall.dialog.progress.type.chrome", "Extension:Manager-extensions");
+> pref("extensions.update.enabled", true);
+> pref("extensions.update.interval", 86400);
+> pref("extensions.dss.enabled", false);
+> pref("extensions.dss.switchPending", false);
+> pref("extensions.ignoreMTimeChanges", false);
+> pref("extensions.logging.enabled", false);
+> 
+> /* NB these point at AMO */
+> pref("extensions.update.url", "chrome://mozapps/locale/extensions/extensions.properties");
+> pref("extensions.getMoreExtensionsURL", "chrome://mozapps/locale/extensions/extensions.properties");
+> pref("extensions.getMoreThemesURL", "chrome://mozapps/locale/extensions/extensions.properties");
+> 
+> /* findbar support */
+> pref("accessibility.typeaheadfind", true);
+> pref("accessibility.typeaheadfind.timeout", 5000);
+> pref("accessibility.typeaheadfind.flashBar", 1);
+> pref("accessibility.typeaheadfind.linksonly", false);
+> pref("accessibility.typeaheadfind.casesensitive", 0);
+> 
+> /* enable xul error pages */
+> pref("browser.xul.error_pages.enabled", false);
+> 
+> /* SSL error page behaviour */
+> pref("browser.ssl_override_behavior", 2);
+> pref("browser.xul.error_pages.expert_bad_cert", false);
+> 
+> /* Prism-specific prefs */
+> pref("prism.shortcut.aboutConfig.enabled", false);
+> pref("prism.shortcut.fullScreen.disabled", true);
+> 
+> // increase timeout for slow javascripts
+> pref("dom.max_script_run_time", 15);
+> 
+> // increase connections to avoid multiple zimlets hanging javascripts
+> pref("network.http.max-connections", 24);
+> pref("network.http.max-connections-per-server", 8);
+> pref("network.http.max-persistent-connections-per-proxy", 8);
+> pref("network.http.max-persistent-connections-per-server", 8);
+> 
+> // update service stuff
+> //pref("app.update.lastUpdateDate.background-update-timer", 0);
+> pref("app.update.enabled", true); //enables or disables the background update checker; default=true
+> pref("app.update.auto", false); //enables background download of updates according to the policy described by app.update.mode; default=true
+> pref("app.update.mode", 2); //defines the policy by which background downloads are done; 0=download all; 1=download compatible; 2=download minor and prompt for major; default=1
+> pref("app.update.silent", false); //disables all notification UI for updates; default=false
+> 
+> pref("app.update.timer", 600000); //the number of milliseconds between checker update interval expiry checks; default=600000
+> pref("app.update.interval", 86400); //the number of seconds between service XML pings; default=86400
+> pref("app.update.idletime", 60); //the number of seconds of idle time that must pass before displaying a pending software update dialog; default=60
+> pref("app.update.nagTimer.download", 86400); //the number of seconds after user dismissal to wait before prompting to download (if no background download); default=86400
+> pref("app.update.nagTimer.restart", 86400); //the number of seconds after user dismissal to wait before prompting to restart (if background download); default=86400
+> 
+> pref("app.update.url", "https://www.zimbra.com/aus/zdesktop2/update.php?chn=@channel@&ver=@version@&bid=@buildid@&bos=@buildos@");
+> pref("app.update.url.manual", "http://www.zimbra.com/products/desktop.html");
+> pref("app.update.url.details", "http://www.zimbra.com/products/desktop.html");
+> pref("app.update.log.all", true);
+Only in drop/prism-090211.win32: modules
+Only in drop/prism-090211.win32: prism.exe
+Only in drop/prism-090211.win32: regprot.exe
+Only in patches/xulrunner: .DS_Store
+Only in drop/prism-090211.win32/xulrunner: .autoreg
+Only in drop/prism-090211.win32/xulrunner: LICENSE
+Only in drop/prism-090211.win32/xulrunner: README.txt
+Only in drop/prism-090211.win32/xulrunner: chrome
+Only in drop/prism-090211.win32/xulrunner/components: FeedProcessor.js
+Only in drop/prism-090211.win32/xulrunner/components: GPSDGeolocationProvider.js
+Only in drop/prism-090211.win32/xulrunner/components: NetworkGeolocationProvider.js
+Only in drop/prism-090211.win32/xulrunner/components: alerts.xpt
+Only in drop/prism-090211.win32/xulrunner/components: appshell.xpt
+Only in drop/prism-090211.win32/xulrunner/components: appstartup.xpt
+Only in drop/prism-090211.win32/xulrunner/components: autocomplete.xpt
+Only in drop/prism-090211.win32/xulrunner/components: autoconfig.xpt
+Only in drop/prism-090211.win32/xulrunner/components: caps.xpt
+Only in drop/prism-090211.win32/xulrunner/components: chardet.xpt
+Only in drop/prism-090211.win32/xulrunner/components: chrome.xpt
+Only in drop/prism-090211.win32/xulrunner/components: commandhandler.xpt
+Only in drop/prism-090211.win32/xulrunner/components: commandlines.xpt
+Only in drop/prism-090211.win32/xulrunner/components: components.list
+Only in drop/prism-090211.win32/xulrunner/components: composer.xpt
+Only in drop/prism-090211.win32/xulrunner/components: content_base.xpt
+Only in drop/prism-090211.win32/xulrunner/components: content_events.xpt
+Only in drop/prism-090211.win32/xulrunner/components: content_html.xpt
+Only in drop/prism-090211.win32/xulrunner/components: content_htmldoc.xpt
+Only in drop/prism-090211.win32/xulrunner/components: content_xmldoc.xpt
+Only in drop/prism-090211.win32/xulrunner/components: content_xslt.xpt
+Only in drop/prism-090211.win32/xulrunner/components: content_xtf.xpt
+Only in drop/prism-090211.win32/xulrunner/components: contentprefs.xpt
+Only in drop/prism-090211.win32/xulrunner/components: cookie.xpt
+Only in drop/prism-090211.win32/xulrunner/components: directory.xpt
+Only in drop/prism-090211.win32/xulrunner/components: docshell_base.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_base.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_canvas.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_core.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_css.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_events.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_geolocation.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_html.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_json.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_loadsave.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_offline.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_range.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_sidebar.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_storage.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_stylesheets.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_svg.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_threads.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_traversal.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_views.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_xbl.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_xpath.xpt
+Only in drop/prism-090211.win32/xulrunner/components: dom_xul.xpt
+Only in drop/prism-090211.win32/xulrunner/components: downloads.xpt
+Only in drop/prism-090211.win32/xulrunner/components: editor.xpt
+Only in drop/prism-090211.win32/xulrunner/components: embed_base.xpt
+Only in drop/prism-090211.win32/xulrunner/components: extensions.xpt
+Only in drop/prism-090211.win32/xulrunner/components: exthandler.xpt
+Only in drop/prism-090211.win32/xulrunner/components: exthelper.xpt
+Only in drop/prism-090211.win32/xulrunner/components: fastfind.xpt
+Only in drop/prism-090211.win32/xulrunner/components: feeds.xpt
+Only in drop/prism-090211.win32/xulrunner/components: find.xpt
+Only in drop/prism-090211.win32/xulrunner/components: gfx.xpt
+Only in drop/prism-090211.win32/xulrunner/components: htmlparser.xpt
+Only in drop/prism-090211.win32/xulrunner/components: imgicon.xpt
+Only in drop/prism-090211.win32/xulrunner/components: imglib2.xpt
+Only in drop/prism-090211.win32/xulrunner/components: inspector.xpt
+Only in drop/prism-090211.win32/xulrunner/components: intl.xpt
+Only in drop/prism-090211.win32/xulrunner/components: jar.xpt
+Only in drop/prism-090211.win32/xulrunner/components: jsconsole-clhandler.js
+Only in drop/prism-090211.win32/xulrunner/components: jsdservice.xpt
+Only in drop/prism-090211.win32/xulrunner/components: layout_base.xpt
+Only in drop/prism-090211.win32/xulrunner/components: layout_printing.xpt
+Only in drop/prism-090211.win32/xulrunner/components: layout_xul.xpt
+Only in drop/prism-090211.win32/xulrunner/components: layout_xul_tree.xpt
+Only in drop/prism-090211.win32/xulrunner/components: locale.xpt
+Only in drop/prism-090211.win32/xulrunner/components: loginmgr.xpt
+Only in drop/prism-090211.win32/xulrunner/components: lwbrk.xpt
+Only in drop/prism-090211.win32/xulrunner/components: mimetype.xpt
+Only in drop/prism-090211.win32/xulrunner/components: mozbrwsr.xpt
+Only in drop/prism-090211.win32/xulrunner/components: mozfind.xpt
+Only in drop/prism-090211.win32/xulrunner/components: necko.xpt
+Only in drop/prism-090211.win32/xulrunner/components: necko_about.xpt
+Only in drop/prism-090211.win32/xulrunner/components: necko_cache.xpt
+Only in drop/prism-090211.win32/xulrunner/components: necko_cookie.xpt
+Only in drop/prism-090211.win32/xulrunner/components: necko_dns.xpt
+Only in drop/prism-090211.win32/xulrunner/components: necko_file.xpt
+Only in drop/prism-090211.win32/xulrunner/components: necko_ftp.xpt
+Only in drop/prism-090211.win32/xulrunner/components: necko_http.xpt
+Only in drop/prism-090211.win32/xulrunner/components: necko_res.xpt
+Only in drop/prism-090211.win32/xulrunner/components: necko_socket.xpt
+Only in drop/prism-090211.win32/xulrunner/components: necko_strconv.xpt
+Only in drop/prism-090211.win32/xulrunner/components: necko_viewsource.xpt
+Only in drop/prism-090211.win32/xulrunner/components: necko_wifi.xpt
+Only in drop/prism-090211.win32/xulrunner/components: nsAddonRepository.js
+Only in drop/prism-090211.win32/xulrunner/components: nsBadCertHandler.js
+Only in drop/prism-090211.win32/xulrunner/components: nsBlocklistService.js
+Only in drop/prism-090211.win32/xulrunner/components: nsContentDispatchChooser.js
+Only in drop/prism-090211.win32/xulrunner/components: nsContentPrefService.js
+Only in drop/prism-090211.win32/xulrunner/components: nsDefaultCLH.js
+Only in drop/prism-090211.win32/xulrunner/components: nsDownloadManagerUI.js
+Only in drop/prism-090211.win32/xulrunner/components: nsExtensionManager.js
+Only in drop/prism-090211.win32/xulrunner/components: nsFormAutoComplete.js
+Only in drop/prism-090211.win32/xulrunner/components: nsHandlerService.js
+Only in drop/prism-090211.win32/xulrunner/components: nsHelperAppDlg.js
+Only in drop/prism-090211.win32/xulrunner/components: nsINIProcessor.js
+Only in drop/prism-090211.win32/xulrunner/components: nsLivemarkService.js
+Only in drop/prism-090211.win32/xulrunner/components: nsLoginInfo.js
+Only in drop/prism-090211.win32/xulrunner/components: nsLoginManager.js
+Only in drop/prism-090211.win32/xulrunner/components: nsLoginManagerPrompter.js
+Only in drop/prism-090211.win32/xulrunner/components: nsPlacesAutoComplete.js
+Only in drop/prism-090211.win32/xulrunner/components: nsPlacesDBFlush.js
+Only in drop/prism-090211.win32/xulrunner/components: nsProgressDialog.js
+Only in drop/prism-090211.win32/xulrunner/components: nsProxyAutoConfig.js
+Only in drop/prism-090211.win32/xulrunner/components: nsSearchService.js
+Only in drop/prism-090211.win32/xulrunner/components: nsSearchSuggestions.js
+Only in drop/prism-090211.win32/xulrunner/components: nsTaggingService.js
+Only in drop/prism-090211.win32/xulrunner/components: nsTryToClose.js
+Only in drop/prism-090211.win32/xulrunner/components: nsURLFormatter.js
+diff -r drop/prism-090211.win32/xulrunner/components/nsUpdateService.js patches/xulrunner/components/nsUpdateService.js
+4a5,9
+> 
+> /*
+> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> */
+> 
+2820c2825
+<       var openFeatures = "chrome,centerscreen,dialog=no,resizable=no,titlebar,toolbar=no";
+---
+>       var openFeatures = "chrome,centerscreen,dialog=no,resizable=yes,titlebar,toolbar=no,width=800,height=600";
+Only in drop/prism-090211.win32/xulrunner/components: nsUpdateServiceStub.js
+Only in drop/prism-090211.win32/xulrunner/components: nsUpdateTimerManager.js
+Only in drop/prism-090211.win32/xulrunner/components: nsWebHandlerApp.js
+Only in drop/prism-090211.win32/xulrunner/components: nsXULAppInstall.js
+Only in drop/prism-090211.win32/xulrunner/components: parentalcontrols.xpt
+Only in drop/prism-090211.win32/xulrunner/components: pipboot.xpt
+Only in drop/prism-090211.win32/xulrunner/components: pipnss.xpt
+Only in drop/prism-090211.win32/xulrunner/components: pippki.xpt
+Only in drop/prism-090211.win32/xulrunner/components: places.xpt
+Only in drop/prism-090211.win32/xulrunner/components: plugin.xpt
+Only in drop/prism-090211.win32/xulrunner/components: pluginGlue.js
+Only in drop/prism-090211.win32/xulrunner/components: pref.xpt
+Only in drop/prism-090211.win32/xulrunner/components: prefetch.xpt
+Only in drop/prism-090211.win32/xulrunner/components: profile.xpt
+Only in drop/prism-090211.win32/xulrunner/components: proxyObject.xpt
+Only in drop/prism-090211.win32/xulrunner/components: rdf.xpt
+Only in drop/prism-090211.win32/xulrunner/components: satchel.xpt
+Only in drop/prism-090211.win32/xulrunner/components: saxparser.xpt
+Only in drop/prism-090211.win32/xulrunner/components: shistory.xpt
+Only in drop/prism-090211.win32/xulrunner/components: spellchecker.xpt
+Only in drop/prism-090211.win32/xulrunner/components: storage-Legacy.js
+Only in drop/prism-090211.win32/xulrunner/components: storage-mozStorage.js
+Only in drop/prism-090211.win32/xulrunner/components: storage.xpt
+Only in drop/prism-090211.win32/xulrunner/components: toolkitprofile.xpt
+Only in drop/prism-090211.win32/xulrunner/components: toolkitsearch.xpt
+Only in drop/prism-090211.win32/xulrunner/components: txEXSLTRegExFunctions.js
+Only in drop/prism-090211.win32/xulrunner/components: txmgr.xpt
+Only in drop/prism-090211.win32/xulrunner/components: txtsvc.xpt
+Only in drop/prism-090211.win32/xulrunner/components: uconv.xpt
+Only in drop/prism-090211.win32/xulrunner/components: unicharutil.xpt
+Only in drop/prism-090211.win32/xulrunner/components: update.xpt
+Only in drop/prism-090211.win32/xulrunner/components: uriloader.xpt
+Only in drop/prism-090211.win32/xulrunner/components: urlformatter.xpt
+Only in drop/prism-090211.win32/xulrunner/components: webBrowser_core.xpt
+Only in drop/prism-090211.win32/xulrunner/components: webbrowserpersist.xpt
+Only in drop/prism-090211.win32/xulrunner/components: webshell_idls.xpt
+Only in drop/prism-090211.win32/xulrunner/components: widget.xpt
+Only in drop/prism-090211.win32/xulrunner/components: windowds.xpt
+Only in drop/prism-090211.win32/xulrunner/components: windowwatcher.xpt
+Only in drop/prism-090211.win32/xulrunner/components: xpcom_base.xpt
+Only in drop/prism-090211.win32/xulrunner/components: xpcom_components.xpt
+Only in drop/prism-090211.win32/xulrunner/components: xpcom_ds.xpt
+Only in drop/prism-090211.win32/xulrunner/components: xpcom_io.xpt
+Only in drop/prism-090211.win32/xulrunner/components: xpcom_system.xpt
+Only in drop/prism-090211.win32/xulrunner/components: xpcom_thread.xpt
+Only in drop/prism-090211.win32/xulrunner/components: xpcom_xpti.xpt
+Only in drop/prism-090211.win32/xulrunner/components: xpconnect.xpt
+Only in drop/prism-090211.win32/xulrunner/components: xpinstall.xpt
+Only in drop/prism-090211.win32/xulrunner/components: xulapp.xpt
+Only in drop/prism-090211.win32/xulrunner/components: xulapp_setup.xpt
+Only in drop/prism-090211.win32/xulrunner/components: xuldoc.xpt
+Only in drop/prism-090211.win32/xulrunner/components: xultmpl.xpt
+Only in drop/prism-090211.win32/xulrunner/components: zipwriter.xpt
+Only in drop/prism-090211.win32/xulrunner: defaults
+Only in drop/prism-090211.win32/xulrunner: dependentlibs.list
+Only in drop/prism-090211.win32/xulrunner: dictionaries
+Only in drop/prism-090211.win32/xulrunner: freebl3.chk
+Only in drop/prism-090211.win32/xulrunner: freebl3.dll
+Only in drop/prism-090211.win32/xulrunner: greprefs
+Only in drop/prism-090211.win32/xulrunner: js.exe
+Only in drop/prism-090211.win32/xulrunner: js3250.dll
+Only in drop/prism-090211.win32/xulrunner: mangle.exe
+Only in drop/prism-090211.win32/xulrunner: modules
+Only in drop/prism-090211.win32/xulrunner: nsinstall.exe
+Only in drop/prism-090211.win32/xulrunner: nspr-config
+Only in drop/prism-090211.win32/xulrunner: nspr4.dll
+Only in drop/prism-090211.win32/xulrunner: nss3.dll
+Only in drop/prism-090211.win32/xulrunner: nssckbi.dll
+Only in drop/prism-090211.win32/xulrunner: nssdbm3.chk
+Only in drop/prism-090211.win32/xulrunner: nssdbm3.dll
+Only in drop/prism-090211.win32/xulrunner: nssutil3.dll
+Only in drop/prism-090211.win32/xulrunner: platform.ini
+Only in drop/prism-090211.win32/xulrunner: plc4.dll
+Only in drop/prism-090211.win32/xulrunner: plds4.dll
+Only in drop/prism-090211.win32/xulrunner: plugins
+Only in drop/prism-090211.win32/xulrunner: redit.exe
+Only in drop/prism-090211.win32/xulrunner: regxpcom.exe
+Only in drop/prism-090211.win32/xulrunner: res
+Only in drop/prism-090211.win32/xulrunner: shlibsign.exe
+Only in drop/prism-090211.win32/xulrunner: smime3.dll
+Only in drop/prism-090211.win32/xulrunner: softokn3.chk
+Only in drop/prism-090211.win32/xulrunner: softokn3.dll
+Only in drop/prism-090211.win32/xulrunner: sqlite3.dll
+Only in drop/prism-090211.win32/xulrunner: ssl3.dll
+Only in drop/prism-090211.win32/xulrunner: update.locale
+Only in drop/prism-090211.win32/xulrunner: updater.exe
+Only in drop/prism-090211.win32/xulrunner: updater.ini
+Only in drop/prism-090211.win32/xulrunner: xpcom.dll
+Only in drop/prism-090211.win32/xulrunner: xpcshell.exe
+Only in drop/prism-090211.win32/xulrunner: xpidl.exe
+Only in drop/prism-090211.win32/xulrunner: xpt_dump.exe
+Only in drop/prism-090211.win32/xulrunner: xpt_link.exe
+Only in drop/prism-090211.win32/xulrunner: xul.dll
+Only in drop/prism-090211.win32/xulrunner: xulrunner-stub.exe
+Only in drop/prism-090211.win32/xulrunner: xulrunner.exe

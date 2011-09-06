@@ -1,0 +1,900 @@
+Only in patches/: .DS_Store
+Only in drop/prism-090211.linux/: application.ini
+Binary files drop/prism-090211.linux/chrome/.DS_Store and patches/chrome/.DS_Store differ
+Only in drop/prism-090211.linux/chrome: classic
+Only in drop/prism-090211.linux/chrome: classic.manifest
+Only in drop/prism-090211.linux/chrome: en-US
+Only in drop/prism-090211.linux/chrome: en-US.manifest
+Only in drop/prism-090211.linux/chrome: icons
+Only in drop/prism-090211.linux/chrome: newapp
+Only in drop/prism-090211.linux/chrome: newapp.manifest
+Binary files drop/prism-090211.linux/chrome/webrunner/.DS_Store and patches/chrome/webrunner/.DS_Store differ
+diff -r drop/prism-090211.linux/chrome/webrunner/branding/brand.dtd patches/chrome/webrunner/branding/brand.dtd
+1,2c1,2
+< <!ENTITY  brandShortName  "Prism">
+< <!ENTITY  brandFullName   "Prism">
+---
+> <!ENTITY  brandShortName  "Zimbra Desktop">
+> <!ENTITY  brandFullName   "Zimbra Desktop">
+diff -r drop/prism-090211.linux/chrome/webrunner/branding/brand.properties patches/chrome/webrunner/branding/brand.properties
+1,3c1,3
+< brandShortName=Prism
+< brandFullName=Prism
+< vendorShortName=Prism
+\ No newline at end of file
+---
+> brandShortName=Zimbra Desktop
+> brandFullName=Zimbra Desktop
+> vendorShortName=VMware
+Only in drop/prism-090211.linux/chrome/webrunner/branding: icon128.png
+Only in patches/chrome/webrunner/content: .DS_Store
+diff -r drop/prism-090211.linux/chrome/webrunner/content/about.js patches/chrome/webrunner/content/about.js
+1,23c1,41
+< /* ***** BEGIN LICENSE BLOCK *****
+<  * Version: MPL 1.1
+<  *
+<  * The contents of this file are subject to the Mozilla Public License Version
+<  * 1.1 (the "License"); you may not use this file except in compliance with
+<  * the License. You may obtain a copy of the License at
+<  * http://www.mozilla.org/MPL/
+<  *
+<  * Software distributed under the License is distributed on an "AS IS" basis,
+<  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+<  * for the specific language governing rights and limitations under the
+<  * License.
+<  *
+<  * The Original Code is WebRunner.
+<  *
+<  * The Initial Developer of the Original Code is Mozilla Corporation.
+<  * Portions created by the Initial Developer are Copyright (C) 2007
+<  * the Initial Developer. All Rights Reserved.
+<  *
+<  * Contributor(s):
+<  *   Mark Finkle, <mark.finkle@gmail.com>, <mfinkle@mozilla.com>
+<  *
+<  * ***** END LICENSE BLOCK ***** */
+---
+> /*
+> # ***** BEGIN LICENSE BLOCK *****
+> # Version: MPL 1.1/GPL 2.0/LGPL 2.1
+> #
+> # The contents of this file are subject to the Mozilla Public License Version
+> # 1.1 (the "License"); you may not use this file except in compliance with
+> # the License. You may obtain a copy of the License at
+> # http://www.mozilla.org/MPL/
+> #
+> # Software distributed under the License is distributed on an "AS IS" basis,
+> # WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+> # for the specific language governing rights and limitations under the
+> # License.
+> #
+> # The Original Code is Mozilla Prism.
+> #
+> # The Initial Developer of the Original Code is
+> # Mark Finkle.
+> #
+> # Contributor(s):
+> # Matthew Gertner, <matthew.gertner@gmail.com>
+> # Mark Finkle, <mark.finkle@gmail.com>, <mfinkle@mozilla.com>
+> #
+> # Alternatively, the contents of this file may be used under the terms of
+> # either the GNU General Public License Version 2 or later (the "GPL"), or
+> # the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+> # in which case the provisions of the GPL or the LGPL are applicable instead
+> # of those above. If you wish to allow use of your version of this file only
+> # under the terms of either the GPL or the LGPL, and not to allow others to
+> # use your version of this file under the terms of the MPL, indicate your
+> # decision by deleting the provisions above and replace them with the notice
+> # and other provisions required by the GPL or the LGPL. If you do not delete
+> # the provisions above, a recipient may use your version of this file under
+> # the terms of any one of the MPL, the GPL or the LGPL.
+> #
+> # ***** END LICENSE BLOCK *****
+> */
+> 
+> /*
+> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> */
+41c59
+<   version.value = bundle.GetStringFromName("brandFullName") + " " + appInfo.version;
+---
+>   version.value = bundle.GetStringFromName("brandFullName") + " @version@ (build @buildid@)";
+44c62
+<   userAgent.value = navigator.userAgent;
+---
+>   userAgent.value = "Portions Copyright (c) 2008-2011 VMware Inc. \nAll rights reserved.";
+57a76,89
+> 
+> function checkForUpdates()
+> {
+>   var um = Cc["@mozilla.org/updates/update-manager;1"].getService(Components.interfaces.nsIUpdateManager);
+>   var prompter = Cc["@mozilla.org/updates/update-prompt;1"].createInstance(Components.interfaces.nsIUpdatePrompt);
+>   
+>   // If there's an update ready to be applied, show the "Update Downloaded"
+>   // UI instead and let the user know they have to restart the browser for
+>   // the changes to be applied. 
+>   if (um.activeUpdate && um.activeUpdate.state == "pending")
+>     prompter.showUpdateDownloaded(um.activeUpdate);
+>   else
+>     prompter.checkForUpdates();
+> }
+diff -r drop/prism-090211.linux/chrome/webrunner/content/about.xul patches/chrome/webrunner/content/about.xul
+1a2,43
+> <!--
+> # -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
+> # ***** BEGIN LICENSE BLOCK *****
+> # Version: MPL 1.1/GPL 2.0/LGPL 2.1
+> #
+> # The contents of this file are subject to the Mozilla Public License Version
+> # 1.1 (the "License"); you may not use this file except in compliance with
+> # the License. You may obtain a copy of the License at
+> # http://www.mozilla.org/MPL/
+> #
+> # Software distributed under the License is distributed on an "AS IS" basis,
+> # WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+> # for the specific language governing rights and limitations under the
+> # License.
+> #
+> # The Original Code is Mozilla Prism.
+> #
+> # The Initial Developer of the Original Code is
+> # Ben Goodger.
+> # Portions created by the Initial Developer are Copyright (C) 2005
+> # the Initial Developer. All Rights Reserved.
+> #
+> # Contributor(s):
+> #   Matthew Gertner <matthew.gertner@gmail.com>
+> #
+> # Alternatively, the contents of this file may be used under the terms of
+> # either the GNU General Public License Version 2 or later (the "GPL"), or
+> # the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+> # in which case the provisions of the GPL or the LGPL are applicable instead
+> # of those above. If you wish to allow use of your version of this file only
+> # under the terms of either the GPL or the LGPL, and not to allow others to
+> # use your version of this file under the terms of the MPL, indicate your
+> # decision by deleting the provisions above and replace them with the notice
+> # and other provisions required by the GPL or the LGPL. If you do not delete
+> # the provisions above, a recipient may use your version of this file under
+> # the terms of any one of the MPL, the GPL or the LGPL.
+> #
+> # ***** END LICENSE BLOCK *****
+> 
+> /*
+> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> */
+2a45
+> -->
+10,11c53,56
+<         buttons="accept"
+<         width="300" height="400">
+---
+> 	buttonlabelextra1="&bundle.chkupdates;"
+>         buttons="accept,extra1"
+>         ondialogextra1="window.close(); checkForUpdates();"
+>         width="300" height="300">
+15c60
+<     <image src="chrome://branding/locale/icon128.png"/>
+---
+>     <image src="chrome://webrunner/content/icon128.png"/>
+23,27d67
+<   <vbox flex="1" id="box_credits">
+<     <label id="bundleinfo" value="&bundle.credits;"/>
+<     <textbox id="credits" flex="1" readonly="true" multiline="true"/>
+<   </vbox>
+< 
+Only in drop/prism-090211.linux/chrome/webrunner/content: browser
+Only in drop/prism-090211.linux/chrome/webrunner/content: contentAreaUtils.js
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: advanced-scripts.xul
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: advanced.js
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: advanced.xul
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: applicationManager.js
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: applicationManager.xul
+diff -r drop/prism-090211.linux/chrome/webrunner/content/preferences/applications.js patches/chrome/webrunner/content/preferences/applications.js
+1a2,5
+> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> */
+> 
+> /*
+8,12c12
+< /*
+< // This seems to cause problems on Windows and Linux. To be verified.
+< //@line 52 "/home/hudson/workdir/mozilla/192src/prism/chrome/content/preferences/applications.js"
+< var Cc = Components.classes;
+< var Ci = Components.interfaces;
+---
+> //@line 50 "/macpro/Development/moz1.9.2/src/prism/chrome/content/preferences/applications.js"
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: applications.xul
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: colors.xul
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: connection.js
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: connection.xul
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: content.js
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: content.xul
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: cookies.js
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: cookies.xul
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: fonts.js
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: fonts.xul
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: handlers.css
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: handlers.xml
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: languages.js
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: languages.xul
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: main.js
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: main.xul
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: permissions.js
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: permissions.xul
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: permissionsutils.js
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: preferences.js
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: preferences.xul
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: privacy.js
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: privacy.xul
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: sanitize.xul
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: security.js
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: security.xul
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: securityWarnings.js
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: securityWarnings.xul
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: selectBookmark.js
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: selectBookmark.xul
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: tabs.js
+Only in drop/prism-090211.linux/chrome/webrunner/content/preferences: tabs.xul
+Only in drop/prism-090211.linux/chrome/webrunner/content: unknownContentType.xul
+Only in drop/prism-090211.linux/chrome/webrunner/content: utilityOverlay.js
+diff -r drop/prism-090211.linux/chrome/webrunner/content/webrunner.js patches/chrome/webrunner/content/webrunner.js
+3,28c3,47
+< /* ***** BEGIN LICENSE BLOCK *****
+<  * Version: MPL 1.1
+<  *
+<  * The contents of this file are subject to the Mozilla Public License Version
+<  * 1.1 (the "License"); you may not use this file except in compliance with
+<  * the License. You may obtain a copy of the License at
+<  * http://www.mozilla.org/MPL/
+<  *
+<  * Software distributed under the License is distributed on an "AS IS" basis,
+<  * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+<  * for the specific language governing rights and limitations under the
+<  * License.
+<  *
+<  * The Original Code is WebRunner.
+<  *
+<  * The Initial Developer of the Original Code is Mozilla Corporation.
+<  * Portions created by the Initial Developer are Copyright (C) 2007
+<  * the Initial Developer. All Rights Reserved.
+<  *
+<  * Contributor(s):
+<  *   Mark Finkle, <mark.finkle@gmail.com>, <mfinkle@mozilla.com>
+<  *   Wladimir Palant <trev@adblockplus.org>
+<  *   Sylvain Pasche <sylvain.pasche@gmail.com>
+<  *   Matthew Gertner <matthew.gertner@gmail.com>
+<  *
+<  * ***** END LICENSE BLOCK ***** */
+---
+> /*
+> # -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*-
+> # ***** BEGIN LICENSE BLOCK *****
+> # Version: MPL 1.1/GPL 2.0/LGPL 2.1
+> #
+> # The contents of this file are subject to the Mozilla Public License Version
+> # 1.1 (the "License"); you may not use this file except in compliance with
+> # the License. You may obtain a copy of the License at
+> # http://www.mozilla.org/MPL/
+> #
+> # Software distributed under the License is distributed on an "AS IS" basis,
+> # WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+> # for the specific language governing rights and limitations under the
+> # License.
+> #
+> # The Original Code is Mozilla Prism.
+> #
+> # The Initial Developer of the Original Code is
+> # Mark Finkle.
+> #
+> # Contributor(s):
+> # Matthew Gertner, <matthew.gertner@gmail.com>
+> # Mark Finkle, <mark.finkle@gmail.com>, <mfinkle@mozilla.com>
+> # Wladimir Palant <trev@adblockplus.org>
+> # Sylvain Pasche <sylvain.pasche@gmail.com>
+> #
+> # Alternatively, the contents of this file may be used under the terms of
+> # either the GNU General Public License Version 2 or later (the "GPL"), or
+> # the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+> # in which case the provisions of the GPL or the LGPL are applicable instead
+> # of those above. If you wish to allow use of your version of this file only
+> # under the terms of either the GPL or the LGPL, and not to allow others to
+> # use your version of this file under the terms of the MPL, indicate your
+> # decision by deleting the provisions above and replace them with the notice
+> # and other provisions required by the GPL or the LGPL. If you do not delete
+> # the provisions above, a recipient may use your version of this file under
+> # the terms of any one of the MPL, the GPL or the LGPL.
+> #
+> # ***** END LICENSE BLOCK *****
+> */
+> 
+> /*
+> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> */
+> 
+495a515,520
+>     if (aURI.scheme == "javascript") {
+>       return false;
+>     }
+>     if (aURI.scheme != "http" && aURI.scheme != "https") {
+>       return true;
+>     }
+580a606,616
+>     var platform = Cc["@mozilla.org/platform-web-api;1"].createInstance(Ci.nsIPlatformGlue);
+>     var callback = {};
+>     var uriString = platform.getProtocolURI(aURI.spec, callback);
+>     if (callback.value) {
+>       callback.value.handleURI(aURI.spec);
+>       return;
+>     }
+>     if (uriString) {
+>       gBrowser.loadURI(uriString, null, null);
+>       return;
+>     }
+618a655
+> 
+619a657
+>     this._ios.offline = false; //force online even no network
+829c867,881
+<   
+---
+>   toggleStatusbar : function()
+>   {
+>     var statusbar = document.getElementById("statusbar");
+>     var collapsed = statusbar.getAttribute("collapsed") == "true";
+>     statusbar.setAttribute("collapsed", collapsed ? "false" : "true");
+>   },
+> 
+>   clearCache : function()
+>   {
+>      var cacheService = Cc["@mozilla.org/network/cache-service;1"].getService(Ci.nsICacheService);
+>      try {
+>        cacheService.evictEntries(Ci.nsICache.STORE_ANYWHERE);
+>      } catch(ex) {}
+>   },
+> 
+845c897
+<         window.openDialog("chrome://webrunner/content/preferences/preferences.xul", "preferences", "chrome,titlebar,toolbar,centerscreen,dialog", "paneContent");
+---
+>         window.openDialog("chrome://webrunner/content/preferences/preferences.xul", "preferences", "chrome,titlebar,toolbar,centerscreen,dialog", "paneApplications");
+881a934,940
+>       case "cmd_sb":
+>         this.toggleStatusbar();
+>         break;
+>       case "cmd_clearcache":
+>         this.clearCache();
+>         this._getBrowser().reload();
+>         break;
+diff -r drop/prism-090211.linux/chrome/webrunner/content/webrunner.xul patches/chrome/webrunner/content/webrunner.xul
+3,26c3,45
+< <!-- ***** BEGIN LICENSE BLOCK *****
+<    - Version: MPL 1.1
+<    -
+<    - The contents of this file are subject to the Mozilla Public License Version
+<    - 1.1 (the "License"); you may not use this file except in compliance with
+<    - the License. You may obtain a copy of the License at
+<    - http://www.mozilla.org/MPL/
+<    -
+<    - Software distributed under the License is distributed on an "AS IS" basis,
+<    - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+<    - for the specific language governing rights and limitations under the
+<    - License.
+<    -
+<    - The Original Code is WebRunner.
+<    -
+<    - The Initial Developer of the Original Code is Mozilla Corporation
+<    - Portions created by the Initial Developer are Copyright (C) 2007
+<    - the Initial Developer. All Rights Reserved.
+<    -
+<    - Contributor(s):
+<    -    Mark Finkle, <mark.finkle@gmail.com>, <mfinkle@mozilla.com>
+<    -    Wladimir Palant <trev@adblockplus.org>
+<    -
+<    - ***** END LICENSE BLOCK ***** -->
+---
+> <!--
+> # ***** BEGIN LICENSE BLOCK *****
+> # Version: MPL 1.1/GPL 2.0/LGPL 2.1
+> #
+> # The contents of this file are subject to the Mozilla Public License Version
+> # 1.1 (the "License"); you may not use this file except in compliance with
+> # the License. You may obtain a copy of the License at
+> # http://www.mozilla.org/MPL/
+> #
+> # Software distributed under the License is distributed on an "AS IS" basis,
+> # WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+> # for the specific language governing rights and limitations under the
+> # License.
+> #
+> # The Original Code is Mozilla Prism
+> #
+> # The Initial Developer of the Original Code is
+> # Ben Goodger.
+> # Portions created by the Initial Developer are Copyright (C) 2005
+> # the Initial Developer. All Rights Reserved.
+> #
+> # Contributor(s):
+> #   Matthew Gertner <matthew.gertner@gmail.com>
+> #   Mark Finkle, <mark.finkle@gmail.com>, <mfinkle@mozilla.com>
+> #   Wladimir Palant <trev@adblockplus.org>
+> #
+> # Alternatively, the contents of this file may be used under the terms of
+> # either the GNU General Public License Version 2 or later (the "GPL"), or
+> # the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+> # in which case the provisions of the GPL or the LGPL are applicable instead
+> # of those above. If you wish to allow use of your version of this file only
+> # under the terms of either the GPL or the LGPL, and not to allow others to
+> # use your version of this file under the terms of the MPL, indicate your
+> # decision by deleting the provisions above and replace them with the notice
+> # and other provisions required by the GPL or the LGPL. If you do not delete
+> # the provisions above, a recipient may use your version of this file under
+> # the terms of any one of the MPL, the GPL or the LGPL.
+> #
+> # ***** END LICENSE BLOCK *****
+> 
+> /*
+> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> */
+27a47
+> -->
+44c64
+<         width="750" height="550"
+---
+>         width="900" height="700"
+62c82
+<     <command id="cmd_prefs" label="&prefs.label;" oncommand="WebRunner.doCommand(this.id);"/>
+---
+>     <command id="cmd_prefs" label="&appsPref.label;" oncommand="WebRunner.doCommand(this.id);"/>
+82a103,104
+>     <command id="cmd_sb" label="Toggle Statusbar" oncommand="WebRunner.doCommand(this.id);"/>
+>     <command id="cmd_clearcache" label="Clear Cache" oncommand="WebRunner.doCommand(this.id);"/>
+102c124,126
+<     <key id="key_aboutConfig" key="a" command="cmd_aboutConfig" modifiers="control,shift"/>
+---
+>     <key id="key_aboutConfig" modifiers="shift" keycode="VK_F7" command="cmd_aboutConfig"/>
+>     <key id="key_sb" modifiers="shift" keycode="VK_F6" command="cmd_sb"/>
+>     <key id="key_clearcache" modifiers="shift" keycode="VK_F5" command="cmd_clearcache"/>
+184d207
+<         <menuitem id="menuitem_prefs" command="cmd_prefs"/>
+186a210
+>         <menuitem id="menuitem_prefs" command="cmd_prefs"/>
+Only in drop/prism-090211.linux/chrome: webrunner.manifest
+Only in drop/prism-090211.linux/components: WebContentConverter.js
+diff -r drop/prism-090211.linux/components/components.list patches/components/components.list
+4a5
+> ForceOnline.js
+Only in drop/prism-090211.linux/components: libprism.so
+Only in drop/prism-090211.linux/components: nsCommandLineHandler.js
+Only in drop/prism-090211.linux/components: nsPlatformGlue.js
+Only in drop/prism-090211.linux/components: prism.xpt
+Only in patches/defaults: .DS_Store
+diff -r drop/prism-090211.linux/defaults/preferences/preferences.js patches/defaults/preferences/preferences.js
+2a3,45
+> /*
+> # ***** BEGIN LICENSE BLOCK *****
+> # Version: MPL 1.1/GPL 2.0/LGPL 2.1
+> #
+> # The contents of this file are subject to the Mozilla Public License Version
+> # 1.1 (the "License"); you may not use this file except in compliance with
+> # the License. You may obtain a copy of the License at
+> # http://www.mozilla.org/MPL/
+> #
+> # Software distributed under the License is distributed on an "AS IS" basis,
+> # WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+> # for the specific language governing rights and limitations under the
+> # License.
+> #
+> # The Original Code is Mozilla Prism.
+> #
+> # The Initial Developer of the Original Code is
+> # Mark Finkle.
+> #
+> # Contributor(s):
+> # Matthew Gertner, <matthew.gertner@gmail.com>
+> # Mark Finkle, <mark.finkle@gmail.com>, <mfinkle@mozilla.com>
+> #
+> # Alternatively, the contents of this file may be used under the terms of
+> # either the GNU General Public License Version 2 or later (the "GPL"), or
+> # the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+> # in which case the provisions of the GPL or the LGPL are applicable instead
+> # of those above. If you wish to allow use of your version of this file only
+> # under the terms of either the GPL or the LGPL, and not to allow others to
+> # use your version of this file under the terms of the MPL, indicate your
+> # decision by deleting the provisions above and replace them with the notice
+> # and other provisions required by the GPL or the LGPL. If you do not delete
+> # the provisions above, a recipient may use your version of this file under
+> # the terms of any one of the MPL, the GPL or the LGPL.
+> #
+> # ***** END LICENSE BLOCK *****
+> */
+> 
+> /*
+> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> */
+> 
+> 
+7c50
+< pref("general.useragent.extra.prism", "Prism/1.0b8");
+---
+> pref("general.useragent.extra.prism", "Prism zdesktop/@version@");
+29a73,75
+> /* use system proxy settings */
+> pref("network.proxy.type", 5);
+> 
+31,32c77,78
+< pref("browser.download.useDownloadDir", true);
+< pref("browser.download.folderList", 0);
+---
+> pref("browser.download.useDownloadDir", false);
+> pref("browser.download.folderList", 2);
+38c84
+< pref("browser.download.manager.closeWhenDone", true);
+---
+> pref("browser.download.manager.closeWhenDone", false);
+55c101
+< pref("signon.rememberSignons", true);
+---
+> pref("signon.rememberSignons", false);
+91c137
+< pref("browser.xul.error_pages.enabled", true);
+---
+> pref("browser.xul.error_pages.enabled", false);
+99c145,172
+< pref("prism.shortcut.fullScreen.disabled", false);
+---
+> pref("prism.shortcut.fullScreen.disabled", true);
+> 
+> // increase timeout for slow javascripts
+> pref("dom.max_script_run_time", 15);
+> 
+> // increase connections to avoid multiple zimlets hanging javascripts
+> pref("network.http.max-connections", 24);
+> pref("network.http.max-connections-per-server", 8);
+> pref("network.http.max-persistent-connections-per-proxy", 8);
+> pref("network.http.max-persistent-connections-per-server", 8);
+> 
+> // update service stuff
+> //pref("app.update.lastUpdateDate.background-update-timer", 0);
+> pref("app.update.enabled", true); //enables or disables the background update checker; default=true
+> pref("app.update.auto", false); //enables background download of updates according to the policy described by app.update.mode; default=true
+> pref("app.update.mode", 2); //defines the policy by which background downloads are done; 0=download all; 1=download compatible; 2=download minor and prompt for major; default=1
+> pref("app.update.silent", false); //disables all notification UI for updates; default=false
+> 
+> pref("app.update.timer", 600000); //the number of milliseconds between checker update interval expiry checks; default=600000
+> pref("app.update.interval", 86400); //the number of seconds between service XML pings; default=86400
+> pref("app.update.idletime", 60); //the number of seconds of idle time that must pass before displaying a pending software update dialog; default=60
+> pref("app.update.nagTimer.download", 86400); //the number of seconds after user dismissal to wait before prompting to download (if no background download); default=86400
+> pref("app.update.nagTimer.restart", 86400); //the number of seconds after user dismissal to wait before prompting to restart (if background download); default=86400
+> 
+> pref("app.update.url", "https://www.zimbra.com/aus/zdesktop2/update.php?chn=@channel@&ver=@version@&bid=@buildid@&bos=@buildos@");
+> pref("app.update.url.manual", "http://www.zimbra.com/products/desktop.html");
+> pref("app.update.url.details", "http://www.zimbra.com/products/desktop.html");
+> pref("app.update.log.all", true);
+Only in drop/prism-090211.linux/: extensions
+Only in drop/prism-090211.linux/: fix-linux-stack.pl
+Only in drop/prism-090211.linux/: modules
+Only in drop/prism-090211.linux/: prism
+Only in patches/xulrunner: .DS_Store
+Only in drop/prism-090211.linux/xulrunner: .autoreg
+Only in drop/prism-090211.linux/xulrunner: BadPlugin
+Only in drop/prism-090211.linux/xulrunner: GoodPlugin
+Only in drop/prism-090211.linux/xulrunner: LICENSE
+Only in drop/prism-090211.linux/xulrunner: NormalizationTest
+Only in drop/prism-090211.linux/xulrunner: PrimitiveTest
+Only in drop/prism-090211.linux/xulrunner: PropertiesTest
+Only in drop/prism-090211.linux/xulrunner: README.txt
+Only in drop/prism-090211.linux/xulrunner: ReadNTLM
+Only in drop/prism-090211.linux/xulrunner: SimpleTypeLib
+Only in drop/prism-090211.linux/xulrunner: TestAUSHelper
+Only in drop/prism-090211.linux/xulrunner: TestAUSReadStrings
+Only in drop/prism-090211.linux/xulrunner: TestArguments
+Only in drop/prism-090211.linux/xulrunner: TestAutoPtr
+Only in drop/prism-090211.linux/xulrunner: TestBlockingProcess
+Only in drop/prism-090211.linux/xulrunner: TestBlockingSocket
+Only in drop/prism-090211.linux/xulrunner: TestCOMPtr
+Only in drop/prism-090211.linux/xulrunner: TestCOMPtrEq
+Only in drop/prism-090211.linux/xulrunner: TestCallTemplates
+Only in drop/prism-090211.linux/xulrunner: TestCallbacks
+Only in drop/prism-090211.linux/xulrunner: TestCookie
+Only in drop/prism-090211.linux/xulrunner: TestDNS
+Only in drop/prism-090211.linux/xulrunner: TestFactory
+Only in drop/prism-090211.linux/xulrunner: TestFile
+Only in drop/prism-090211.linux/xulrunner: TestGtkEmbed
+Only in drop/prism-090211.linux/xulrunner: TestGtkEmbedChild
+Only in drop/prism-090211.linux/xulrunner: TestGtkEmbedNotebook
+Only in drop/prism-090211.linux/xulrunner: TestGtkEmbedSocket
+Only in drop/prism-090211.linux/xulrunner: TestHashtables
+Only in drop/prism-090211.linux/xulrunner: TestID
+Only in drop/prism-090211.linux/xulrunner: TestINIParser
+Only in drop/prism-090211.linux/xulrunner: TestIncrementalDownload
+Only in drop/prism-090211.linux/xulrunner: TestLineBreak
+Only in drop/prism-090211.linux/xulrunner: TestMinStringAPI
+Only in drop/prism-090211.linux/xulrunner: TestNativeXMLHttpRequest
+Only in drop/prism-090211.linux/xulrunner: TestOOM
+Only in drop/prism-090211.linux/xulrunner: TestObserverArray
+Only in drop/prism-090211.linux/xulrunner: TestObserverService
+Only in drop/prism-090211.linux/xulrunner: TestOpen
+Only in drop/prism-090211.linux/xulrunner: TestPageLoad
+Only in drop/prism-090211.linux/xulrunner: TestParser
+Only in drop/prism-090211.linux/xulrunner: TestPipe
+Only in drop/prism-090211.linux/xulrunner: TestPlainTextSerializer
+Only in drop/prism-090211.linux/xulrunner: TestPoisonArea
+Only in drop/prism-090211.linux/xulrunner: TestQuickReturn
+Only in drop/prism-090211.linux/xulrunner: TestRacingServiceManager
+Only in drop/prism-090211.linux/xulrunner: TestRegistrationOrder
+Only in drop/prism-090211.linux/xulrunner: TestServ
+Only in drop/prism-090211.linux/xulrunner: TestServMgr
+Only in drop/prism-090211.linux/xulrunner: TestStandardURL
+Only in drop/prism-090211.linux/xulrunner: TestStreamConv
+Only in drop/prism-090211.linux/xulrunner: TestStreamLoader
+Only in drop/prism-090211.linux/xulrunner: TestStringAPI
+Only in drop/prism-090211.linux/xulrunner: TestTXMgr
+Only in drop/prism-090211.linux/xulrunner: TestTextFormatter
+Only in drop/prism-090211.linux/xulrunner: TestThreadPoolListener
+Only in drop/prism-090211.linux/xulrunner: TestTimers
+Only in drop/prism-090211.linux/xulrunner: TestURLParser
+Only in drop/prism-090211.linux/xulrunner: TestUpload
+Only in drop/prism-090211.linux/xulrunner: TestXPC
+Only in drop/prism-090211.linux/xulrunner: UnicharSelfTest
+Only in drop/prism-090211.linux/xulrunner: WriteArgument
+Only in drop/prism-090211.linux/xulrunner: bloaturls.txt
+Only in drop/prism-090211.linux/xulrunner: certutil
+Only in drop/prism-090211.linux/xulrunner: chrome
+Only in drop/prism-090211.linux/xulrunner/components: FeedProcessor.js
+Only in drop/prism-090211.linux/xulrunner/components: GPSDGeolocationProvider.js
+Only in drop/prism-090211.linux/xulrunner/components: NetworkGeolocationProvider.js
+Only in drop/prism-090211.linux/xulrunner/components: alerts.xpt
+Only in drop/prism-090211.linux/xulrunner/components: appshell.xpt
+Only in drop/prism-090211.linux/xulrunner/components: appstartup.xpt
+Only in drop/prism-090211.linux/xulrunner/components: autocomplete.xpt
+Only in drop/prism-090211.linux/xulrunner/components: autoconfig.xpt
+Only in drop/prism-090211.linux/xulrunner/components: caps.xpt
+Only in drop/prism-090211.linux/xulrunner/components: chardet.xpt
+Only in drop/prism-090211.linux/xulrunner/components: chrome.xpt
+Only in drop/prism-090211.linux/xulrunner/components: commandhandler.xpt
+Only in drop/prism-090211.linux/xulrunner/components: commandlines.xpt
+Only in drop/prism-090211.linux/xulrunner/components: components.list
+Only in drop/prism-090211.linux/xulrunner/components: composer.xpt
+Only in drop/prism-090211.linux/xulrunner/components: content_base.xpt
+Only in drop/prism-090211.linux/xulrunner/components: content_events.xpt
+Only in drop/prism-090211.linux/xulrunner/components: content_html.xpt
+Only in drop/prism-090211.linux/xulrunner/components: content_htmldoc.xpt
+Only in drop/prism-090211.linux/xulrunner/components: content_xmldoc.xpt
+Only in drop/prism-090211.linux/xulrunner/components: content_xslt.xpt
+Only in drop/prism-090211.linux/xulrunner/components: content_xtf.xpt
+Only in drop/prism-090211.linux/xulrunner/components: contentprefs.xpt
+Only in drop/prism-090211.linux/xulrunner/components: cookie.xpt
+Only in drop/prism-090211.linux/xulrunner/components: directory.xpt
+Only in drop/prism-090211.linux/xulrunner/components: docshell.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_base.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_canvas.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_core.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_css.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_events.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_geolocation.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_html.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_json.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_loadsave.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_offline.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_range.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_sidebar.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_storage.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_stylesheets.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_svg.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_threads.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_traversal.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_views.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_xbl.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_xpath.xpt
+Only in drop/prism-090211.linux/xulrunner/components: dom_xul.xpt
+Only in drop/prism-090211.linux/xulrunner/components: downloads.xpt
+Only in drop/prism-090211.linux/xulrunner/components: editor.xpt
+Only in drop/prism-090211.linux/xulrunner/components: embed_base.xpt
+Only in drop/prism-090211.linux/xulrunner/components: extensions.xpt
+Only in drop/prism-090211.linux/xulrunner/components: exthandler.xpt
+Only in drop/prism-090211.linux/xulrunner/components: exthelper.xpt
+Only in drop/prism-090211.linux/xulrunner/components: fastfind.xpt
+Only in drop/prism-090211.linux/xulrunner/components: feeds.xpt
+Only in drop/prism-090211.linux/xulrunner/components: filepicker.xpt
+Only in drop/prism-090211.linux/xulrunner/components: find.xpt
+Only in drop/prism-090211.linux/xulrunner/components: gfx.xpt
+Only in drop/prism-090211.linux/xulrunner/components: htmlparser.xpt
+Only in drop/prism-090211.linux/xulrunner/components: httpd.js
+Only in drop/prism-090211.linux/xulrunner/components: imgicon.xpt
+Only in drop/prism-090211.linux/xulrunner/components: imglib2.xpt
+Only in drop/prism-090211.linux/xulrunner/components: inspector.xpt
+Only in drop/prism-090211.linux/xulrunner/components: intl.xpt
+Only in drop/prism-090211.linux/xulrunner/components: jar.xpt
+Only in drop/prism-090211.linux/xulrunner/components: jsconsole-clhandler.js
+Only in drop/prism-090211.linux/xulrunner/components: jsdservice.xpt
+Only in drop/prism-090211.linux/xulrunner/components: layout_base.xpt
+Only in drop/prism-090211.linux/xulrunner/components: layout_printing.xpt
+Only in drop/prism-090211.linux/xulrunner/components: layout_xul.xpt
+Only in drop/prism-090211.linux/xulrunner/components: layout_xul_tree.xpt
+Only in drop/prism-090211.linux/xulrunner/components: libMyService.so
+Only in drop/prism-090211.linux/xulrunner/components: libdbusservice.so
+Only in drop/prism-090211.linux/xulrunner/components: libimgicon.so
+Only in drop/prism-090211.linux/xulrunner/components: libmozgnome.so
+Only in drop/prism-090211.linux/xulrunner/components: libnkgnomevfs.so
+Only in drop/prism-090211.linux/xulrunner/components: libtestdynamic.so
+Only in drop/prism-090211.linux/xulrunner/components: libxpcomsample.so
+Only in drop/prism-090211.linux/xulrunner/components: locale.xpt
+Only in drop/prism-090211.linux/xulrunner/components: loginmgr.xpt
+Only in drop/prism-090211.linux/xulrunner/components: lwbrk.xpt
+Only in drop/prism-090211.linux/xulrunner/components: mimetype.xpt
+Only in drop/prism-090211.linux/xulrunner/components: mozbrwsr.xpt
+Only in drop/prism-090211.linux/xulrunner/components: mozfind.xpt
+Only in drop/prism-090211.linux/xulrunner/components: necko.xpt
+Only in drop/prism-090211.linux/xulrunner/components: necko_about.xpt
+Only in drop/prism-090211.linux/xulrunner/components: necko_cache.xpt
+Only in drop/prism-090211.linux/xulrunner/components: necko_cookie.xpt
+Only in drop/prism-090211.linux/xulrunner/components: necko_dns.xpt
+Only in drop/prism-090211.linux/xulrunner/components: necko_file.xpt
+Only in drop/prism-090211.linux/xulrunner/components: necko_ftp.xpt
+Only in drop/prism-090211.linux/xulrunner/components: necko_http.xpt
+Only in drop/prism-090211.linux/xulrunner/components: necko_res.xpt
+Only in drop/prism-090211.linux/xulrunner/components: necko_socket.xpt
+Only in drop/prism-090211.linux/xulrunner/components: necko_strconv.xpt
+Only in drop/prism-090211.linux/xulrunner/components: necko_viewsource.xpt
+Only in drop/prism-090211.linux/xulrunner/components: necko_wifi.xpt
+Only in drop/prism-090211.linux/xulrunner/components: nsAddonRepository.js
+Only in drop/prism-090211.linux/xulrunner/components: nsBadCertHandler.js
+Only in drop/prism-090211.linux/xulrunner/components: nsBlocklistService.js
+Only in drop/prism-090211.linux/xulrunner/components: nsContentDispatchChooser.js
+Only in drop/prism-090211.linux/xulrunner/components: nsContentPrefService.js
+Only in drop/prism-090211.linux/xulrunner/components: nsDefaultCLH.js
+Only in drop/prism-090211.linux/xulrunner/components: nsDownloadManagerUI.js
+Only in drop/prism-090211.linux/xulrunner/components: nsExtensionManager.js
+Only in drop/prism-090211.linux/xulrunner/components: nsFilePicker.js
+Only in drop/prism-090211.linux/xulrunner/components: nsFormAutoComplete.js
+Only in drop/prism-090211.linux/xulrunner/components: nsHandlerService.js
+Only in drop/prism-090211.linux/xulrunner/components: nsHelperAppDlg.js
+Only in drop/prism-090211.linux/xulrunner/components: nsINIProcessor.js
+Only in drop/prism-090211.linux/xulrunner/components: nsLivemarkService.js
+Only in drop/prism-090211.linux/xulrunner/components: nsLoginInfo.js
+Only in drop/prism-090211.linux/xulrunner/components: nsLoginManager.js
+Only in drop/prism-090211.linux/xulrunner/components: nsLoginManagerPrompter.js
+Only in drop/prism-090211.linux/xulrunner/components: nsPlacesAutoComplete.js
+Only in drop/prism-090211.linux/xulrunner/components: nsPlacesDBFlush.js
+Only in drop/prism-090211.linux/xulrunner/components: nsProgressDialog.js
+Only in drop/prism-090211.linux/xulrunner/components: nsProxyAutoConfig.js
+Only in drop/prism-090211.linux/xulrunner/components: nsSample.js
+Only in drop/prism-090211.linux/xulrunner/components: nsSearchService.js
+Only in drop/prism-090211.linux/xulrunner/components: nsSearchSuggestions.js
+Only in drop/prism-090211.linux/xulrunner/components: nsTaggingService.js
+Only in drop/prism-090211.linux/xulrunner/components: nsTryToClose.js
+Only in drop/prism-090211.linux/xulrunner/components: nsURLFormatter.js
+diff -r drop/prism-090211.linux/xulrunner/components/nsUpdateService.js patches/xulrunner/components/nsUpdateService.js
+4a5,9
+> 
+> /*
+> * Portions Copyright (c) VMware, Inc. [1998 - 2011]. All Rights Reserved.
+> */
+> 
+2767c2772
+<       var openFeatures = "chrome,centerscreen,dialog=no,resizable=no,titlebar,toolbar=no";
+---
+>       var openFeatures = "chrome,centerscreen,dialog=no,resizable=yes,titlebar,toolbar=no,width=800,height=600";
+Only in drop/prism-090211.linux/xulrunner/components: nsUpdateServiceStub.js
+Only in drop/prism-090211.linux/xulrunner/components: nsUpdateTimerManager.js
+Only in drop/prism-090211.linux/xulrunner/components: nsWebHandlerApp.js
+Only in drop/prism-090211.linux/xulrunner/components: nsXULAppInstall.js
+Only in drop/prism-090211.linux/xulrunner/components: parentalcontrols.xpt
+Only in drop/prism-090211.linux/xulrunner/components: pipboot.xpt
+Only in drop/prism-090211.linux/xulrunner/components: pipnss.xpt
+Only in drop/prism-090211.linux/xulrunner/components: pippki.xpt
+Only in drop/prism-090211.linux/xulrunner/components: places.xpt
+Only in drop/prism-090211.linux/xulrunner/components: plugin.xpt
+Only in drop/prism-090211.linux/xulrunner/components: pluginGlue.js
+Only in drop/prism-090211.linux/xulrunner/components: pref.xpt
+Only in drop/prism-090211.linux/xulrunner/components: prefetch.xpt
+Only in drop/prism-090211.linux/xulrunner/components: profile.xpt
+Only in drop/prism-090211.linux/xulrunner/components: proxyObjInst.xpt
+Only in drop/prism-090211.linux/xulrunner/components: proxytest.xpt
+Only in drop/prism-090211.linux/xulrunner/components: rdf.xpt
+Only in drop/prism-090211.linux/xulrunner/components: reftest-cmdline.js
+Only in drop/prism-090211.linux/xulrunner/components: satchel.xpt
+Only in drop/prism-090211.linux/xulrunner/components: saxparser.xpt
+Only in drop/prism-090211.linux/xulrunner/components: shistory.xpt
+Only in drop/prism-090211.linux/xulrunner/components: spellchecker.xpt
+Only in drop/prism-090211.linux/xulrunner/components: storage-Legacy.js
+Only in drop/prism-090211.linux/xulrunner/components: storage-mozStorage.js
+Only in drop/prism-090211.linux/xulrunner/components: storage.xpt
+Only in drop/prism-090211.linux/xulrunner/components: test_necko.xpt
+Only in drop/prism-090211.linux/xulrunner/components: toolkitprofile.xpt
+Only in drop/prism-090211.linux/xulrunner/components: toolkitremote.xpt
+Only in drop/prism-090211.linux/xulrunner/components: toolkitsearch.xpt
+Only in drop/prism-090211.linux/xulrunner/components: tp-cmdline.js
+Only in drop/prism-090211.linux/xulrunner/components: txEXSLTRegExFunctions.js
+Only in drop/prism-090211.linux/xulrunner/components: txmgr.xpt
+Only in drop/prism-090211.linux/xulrunner/components: txtsvc.xpt
+Only in drop/prism-090211.linux/xulrunner/components: uconv.xpt
+Only in drop/prism-090211.linux/xulrunner/components: unicharutil.xpt
+Only in drop/prism-090211.linux/xulrunner/components: update.xpt
+Only in drop/prism-090211.linux/xulrunner/components: uriloader.xpt
+Only in drop/prism-090211.linux/xulrunner/components: urlformatter.xpt
+Only in drop/prism-090211.linux/xulrunner/components: webBrowser_core.xpt
+Only in drop/prism-090211.linux/xulrunner/components: webbrowserpersist.xpt
+Only in drop/prism-090211.linux/xulrunner/components: webshell_idls.xpt
+Only in drop/prism-090211.linux/xulrunner/components: widget.xpt
+Only in drop/prism-090211.linux/xulrunner/components: windowds.xpt
+Only in drop/prism-090211.linux/xulrunner/components: windowwatcher.xpt
+Only in drop/prism-090211.linux/xulrunner/components: xpcom_base.xpt
+Only in drop/prism-090211.linux/xulrunner/components: xpcom_components.xpt
+Only in drop/prism-090211.linux/xulrunner/components: xpcom_ds.xpt
+Only in drop/prism-090211.linux/xulrunner/components: xpcom_io.xpt
+Only in drop/prism-090211.linux/xulrunner/components: xpcom_system.xpt
+Only in drop/prism-090211.linux/xulrunner/components: xpcom_threads.xpt
+Only in drop/prism-090211.linux/xulrunner/components: xpcom_xpti.xpt
+Only in drop/prism-090211.linux/xulrunner/components: xpcomsample.xpt
+Only in drop/prism-090211.linux/xulrunner/components: xpconnect.xpt
+Only in drop/prism-090211.linux/xulrunner/components: xpconnect_tests.xpt
+Only in drop/prism-090211.linux/xulrunner/components: xpinstall.xpt
+Only in drop/prism-090211.linux/xulrunner/components: xulapp.xpt
+Only in drop/prism-090211.linux/xulrunner/components: xulapp_setup.xpt
+Only in drop/prism-090211.linux/xulrunner/components: xuldoc.xpt
+Only in drop/prism-090211.linux/xulrunner/components: xultmpl.xpt
+Only in drop/prism-090211.linux/xulrunner/components: zipwriter.xpt
+Only in drop/prism-090211.linux/xulrunner: defaults
+Only in drop/prism-090211.linux/xulrunner: dependentlibs.list
+Only in drop/prism-090211.linux/xulrunner: dictionaries
+Only in drop/prism-090211.linux/xulrunner: fix-linux-stack.pl
+Only in drop/prism-090211.linux/xulrunner: grabpage
+Only in drop/prism-090211.linux/xulrunner: greprefs
+Only in drop/prism-090211.linux/xulrunner: icons
+Only in drop/prism-090211.linux/xulrunner: js
+Only in drop/prism-090211.linux/xulrunner: jsapi-tests
+Only in drop/prism-090211.linux/xulrunner: libfreebl3.chk
+Only in drop/prism-090211.linux/xulrunner: libfreebl3.so
+Only in drop/prism-090211.linux/xulrunner: libmozjs.so
+Only in drop/prism-090211.linux/xulrunner: libnspr4.so
+Only in drop/prism-090211.linux/xulrunner: libnss3.so
+Only in drop/prism-090211.linux/xulrunner: libnssckbi.so
+Only in drop/prism-090211.linux/xulrunner: libnssdbm3.chk
+Only in drop/prism-090211.linux/xulrunner: libnssdbm3.so
+Only in drop/prism-090211.linux/xulrunner: libnssutil3.so
+Only in drop/prism-090211.linux/xulrunner: libplc4.so
+Only in drop/prism-090211.linux/xulrunner: libplds4.so
+Only in drop/prism-090211.linux/xulrunner: libsmime3.so
+Only in drop/prism-090211.linux/xulrunner: libsoftokn3.chk
+Only in drop/prism-090211.linux/xulrunner: libsoftokn3.so
+Only in drop/prism-090211.linux/xulrunner: libsqlite3.so
+Only in drop/prism-090211.linux/xulrunner: libssl3.so
+Only in drop/prism-090211.linux/xulrunner: libxpcom.so
+Only in drop/prism-090211.linux/xulrunner: libxul.so
+Only in drop/prism-090211.linux/xulrunner: mangle
+Only in drop/prism-090211.linux/xulrunner: modules
+Only in drop/prism-090211.linux/xulrunner: mozilla-xremote-client
+Only in drop/prism-090211.linux/xulrunner: nsIFileEnumerator
+Only in drop/prism-090211.linux/xulrunner: nsTestSample
+Only in drop/prism-090211.linux/xulrunner: nsinstall
+Only in drop/prism-090211.linux/xulrunner: nspr-config
+Only in drop/prism-090211.linux/xulrunner: pk12util
+Only in drop/prism-090211.linux/xulrunner: platform.ini
+Only in drop/prism-090211.linux/xulrunner: plugin-container
+Only in drop/prism-090211.linux/xulrunner: plugins
+Only in drop/prism-090211.linux/xulrunner: proxy-create-threadsafety
+Only in drop/prism-090211.linux/xulrunner: proxytests
+Only in drop/prism-090211.linux/xulrunner: rdfcat
+Only in drop/prism-090211.linux/xulrunner: rdfpoll
+Only in drop/prism-090211.linux/xulrunner: regxpcom
+Only in drop/prism-090211.linux/xulrunner: res
+Only in drop/prism-090211.linux/xulrunner: run-mozilla.sh
+Only in drop/prism-090211.linux/xulrunner: shlibsign
+Only in drop/prism-090211.linux/xulrunner: ssltunnel
+Only in drop/prism-090211.linux/xulrunner: test_binding_params
+Only in drop/prism-090211.linux/xulrunner: test_mutex
+Only in drop/prism-090211.linux/xulrunner: test_statement_scoper
+Only in drop/prism-090211.linux/xulrunner: test_transaction_helper
+Only in drop/prism-090211.linux/xulrunner: triplescat
+Only in drop/prism-090211.linux/xulrunner: update.locale
+Only in drop/prism-090211.linux/xulrunner: updater
+Only in drop/prism-090211.linux/xulrunner: updater.ini
+Only in drop/prism-090211.linux/xulrunner: urltest
+Only in drop/prism-090211.linux/xulrunner: xpcshell
+Only in drop/prism-090211.linux/xulrunner: xpidl
+Only in drop/prism-090211.linux/xulrunner: xpt_dump
+Only in drop/prism-090211.linux/xulrunner: xpt_link
+Only in drop/prism-090211.linux/xulrunner: xulrunner
+Only in drop/prism-090211.linux/xulrunner: xulrunner-bin
+Only in drop/prism-090211.linux/xulrunner: xulrunner-stub
