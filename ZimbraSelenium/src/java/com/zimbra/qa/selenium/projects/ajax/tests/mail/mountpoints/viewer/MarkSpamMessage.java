@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.testng.annotations.Test;
 
+import com.zimbra.qa.selenium.framework.core.Bugs;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.*;
@@ -111,6 +112,7 @@ public class MarkSpamMessage extends AjaxCommonTest {
 	}
 
 	
+	@Bugs(ids = "63796")
 	@Test(	description = "Verify Permission Denied on Spam (keyboard='ms') a shared mail (read-only share)",
 			groups = { "functional" })
 	public void MarkSpamMessage_02() throws HarnessException {
@@ -164,6 +166,9 @@ public class MarkSpamMessage extends AjaxCommonTest {
 
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		
+		// For some reason, it takes a bit of time for this share to show up
+		SleepUtil.sleepMedium();
 				
 		// Click on the mountpoint
 		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, mountpoint);
@@ -174,21 +179,16 @@ public class MarkSpamMessage extends AjaxCommonTest {
 		// Spam the item
 		app.zPageMail.zKeyboardShortcut(Shortcut.S_MAIL_MARKSPAM);
 		
-		// A "Permission Denied" error popup should occur
+		// http://bugzilla.zimbra.com/show_bug.cgi?id=63796
+		// A "Permission Denied" error popup should not occur
 		DialogError dialog = app.zPageMain.zGetErrorDialog(DialogError.DialogErrorID.Zimbra);
 		ZAssert.assertNotNull(dialog, "Verify the PERM DENIED Error Dialog is created");
-		ZAssert.assertTrue(dialog.zIsActive(), "Verify the PERM DENIED Error Dialog is active");
+		ZAssert.assertFalse(dialog.zIsActive(), "Verify the PERM DENIED Error Dialog is not active");
 		
-		// Close the dialog
-		dialog.zClickButton(Button.B_OK);
 
-		
-		GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-		
-		// Make sure the server does not show "flagged" for the owner
+		// Verify the message is still in the owner's folder
 		mail = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ subject +")");
-		ZAssert.assertStringDoesNotContain(mail.getFlags(), "f", "Verify the message is not flagged in the server");
-
+		ZAssert.assertEquals(mail.dFolderId, folder.getId(), "Verify the message is still in the owner's folder");
 		
 	}
 

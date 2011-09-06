@@ -312,26 +312,14 @@ public class TreeMail extends AbsTree {
 		String locator = null;
 
 		if ( action == Action.A_LEFTCLICK ) {
-			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-				locator = new StringBuffer("css=td[id^='zti__").
-				append(MyApplication.zGetActiveAccount().EmailAddress).
-				append(":main_Mail__']").append("[id$='").
-				append(folder.getId()).append("_textCell']").toString();
-			} else {
-				locator = "id=zti__main_Mail__"+ folder.getId() +"_textCell";
-			}
+			
+			locator = "css=td[id='zti__main_Mail__"+ folder.getId() +"_textCell']";
 
 			// FALL THROUGH
 
 		} else if ( action == Action.A_RIGHTCLICK ) {
-			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-				locator = new StringBuffer("css=td[id^='zti__").
-				append(MyApplication.zGetActiveAccount().EmailAddress).
-				append(":main_Mail__']").append("[id$='").
-				append(folder.getId()).append("_textCell']").toString();
-			} else {
-				locator = "id=zti__main_Mail__"+ folder.getId() +"_textCell";
-			}
+
+			locator = "css=td[id='zti__main_Mail__"+ folder.getId() +"_textCell']";
 
 			// Select the folder
 			this.zRightClickAt(locator,"");
