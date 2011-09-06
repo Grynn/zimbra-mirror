@@ -125,7 +125,7 @@ ZmArchiveZimlet.prototype._hideMenuBtn = function(controller, menu) {
 ZmArchiveZimlet.prototype.initializeToolbar =
 		function(app, toolbar, controller, viewId) {
 			//conversation-list-view or conversation-view or traditional-view(aka message-view)
-			if (viewId == ZmId.VIEW_CONVLIST || viewId == ZmId.VIEW_CONV || viewId == ZmId.VIEW_TRAD ||
+			if (viewId == appCtxt.get(ZmSetting.CONV_MODE) || viewId == ZmId.VIEW_CONV || viewId == ZmId.VIEW_TRAD ||
 					viewId.indexOf("MSG") == 0) {
 				var deleteBtn = toolbar.getButton(ZmOperation.DELETE) || toolbar.getButton(ZmOperation.DELETE_MENU);
 				if(deleteBtn) {

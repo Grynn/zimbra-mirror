@@ -338,7 +338,7 @@ function(app, toolbar, controller, view) {
 	if (!this.turnONstickynotesZimlet) {
 		return;
 	}
-	if (view == ZmId.VIEW_CONVLIST || view == ZmId.VIEW_CONV || view == ZmId.VIEW_TRAD || view == "CNS" || view == "CLD") {
+	if (view == appCtxt.get(ZmSetting.CONV_MODE) || view == ZmId.VIEW_CONV || view == ZmId.VIEW_TRAD || view == "CNS" || view == "CLD") {
 		var buttonIndex = -1;
 		for (var i = 0, count = toolbar.opList.length; i < count; i++) {
 			if (toolbar.opList[i] == ZmOperation.PRINT) {

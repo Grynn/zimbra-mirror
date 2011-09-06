@@ -180,7 +180,7 @@ WebExZimlet.prototype.init = function() {
 WebExZimlet.prototype.initializeToolbar = function(app, toolbar, controller, viewId) {
 	if ((viewId.indexOf("APPT") >= 0) && (viewId.indexOf("APPTRO") == -1)) {
 		this._initCalendarWebexToolbar(toolbar, controller);
-	} else 	if (viewId == ZmId.VIEW_CONVLIST || viewId == ZmId.VIEW_CONV || viewId == ZmId.VIEW_TRAD || viewId == "CNS" || viewId == "CLD") {
+	} else 	if (viewId == appCtxt.get(ZmSetting.CONV_MODE) || viewId == ZmId.VIEW_CONV || viewId == ZmId.VIEW_TRAD || viewId == "CNS" || viewId == "CLD") {
 
 		var op = toolbar.getOp(ZmId.OP_ACTIONS_MENU);
 		if(op) {
