@@ -4,7 +4,7 @@ cyrus_version=${cyrus_release}.${cyrus_patchlevel}
 cyrus_src=cyrus-sasl-${cyrus_version}
 
 heimdal_version=1.5
-openssl_version=1.0.0d
+openssl_version=1.0.0e
 curl_version=7.21.7
 xml2_version=2.7.8
 
