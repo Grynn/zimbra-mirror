@@ -38,8 +38,6 @@ build:
 	(tar xzf src/dspam-$(DSPAM_VERSION).tar.gz; \
 	cd dspam-$(DSPAM_VERSION); \
 	CFLAGS="-g -O2" \
-	./autogen.sh; \
-	CFLAGS="-g -O2" \
 	LDFLAGS="-L$(ZIMBRA_HOME)/mysql/lib -R$(ZIMBRA_HOME)/myqsl/lib" \
 	LD_LIBRARY_PATH=$(ZIMBRA_HOME)/openssl/lib:$(ZIMBRA_HOME)/mysql/lib \
 	./configure --prefix=$(ZIMBRA_HOME)/dspam-$(DSPAM_VERSION) \
