@@ -407,7 +407,8 @@ ZaZimbraAdmin.reinit_func = function() {
     AjxFormat.initialize();
     ZaItem.initDescriptionItem(); 
     ZaSettings.initConst();
-    ZaDomain.initDomainStatus();    
+    ZaDomain.initDomainStatus();
+    Dwt_Datetime_XFormItem.initialize();
 }
 
 ZaZimbraAdmin.initInfo =

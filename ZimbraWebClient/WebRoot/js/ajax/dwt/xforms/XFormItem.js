@@ -3325,6 +3325,7 @@ CollapsableRadioGrouper_XFormItem.prototype.getLabel = function () {
  */
 Case_XFormItem = function() {
 	Group_XFormItem.call(this);
+
 }
 XFormItemFactory.createItemType("_CASE_", "case", Case_XFormItem, Group_XFormItem);
 
@@ -4186,6 +4187,7 @@ Datetime_XFormItem.prototype.items = Datetime_XFormItem._datetimeFormatToItems(
 	{type:_TIME_, ref:".", labelLocation:_NONE_}
 );
 
+
 /**
  * @class defines XFormItem type _WIDGET_ADAPTOR_
  *	An adaptor for using any random (non-DWT) widget in an xform
@@ -4618,6 +4620,7 @@ Dwt_Date_XFormItem.prototype.updateWidget = function (newValue) {
 	this.widget.__cal.setDate(newValue,true);
 };
 
+
 Dwt_Date_XFormItem.prototype._calOnChange = function (event) {
 	var value = event.detail;
 	var cal = event.item;
@@ -4627,7 +4630,8 @@ Dwt_Date_XFormItem.prototype._calOnChange = function (event) {
 
 Dwt_Date_XFormItem.prototype.getButtonLabel = function (newValue) {
 	if (newValue == null || !(newValue instanceof Date)) return "";
-	return (newValue.getMonth()+1) + "/" + newValue.getDate() + "/" + (newValue.getFullYear());
+        var formatter = AjxDateFormat.getDateInstance(AjxDateFormat.NUMBER);
+	return formatter.format(newValue) ;//(newValue.getMonth()+1) + "/" + newValue.getDate() + "/" + (newValue.getFullYear());
 };
 
 
@@ -4663,10 +4667,11 @@ XFormItemFactory.createItemType("_DWT_DATETIME_", "dwt_datetime", Dwt_Datetime_X
 Dwt_Datetime_XFormItem.prototype.numCols = 3;
 Dwt_Datetime_XFormItem.prototype.useParentTable = false;
 Dwt_Datetime_XFormItem.prototype.cssClass =  "xform_dwt_datetime";
-Dwt_Datetime_XFormItem.prototype.items = Datetime_XFormItem._datetimeFormatToItems(
+Dwt_Datetime_XFormItem.initialize = function(){
+   Dwt_Datetime_XFormItem.prototype.items = Datetime_XFormItem._datetimeFormatToItems(
 	AjxMsg.xformDateTimeFormat,
 	{type:_DWT_DATE_, ref:".", labelLocation:_NONE_, errorLocation:_PARENT_,
-	 elementChanged: 
+	 elementChanged:
 	 function (newDate, currentDate, event) {
 	 	currentDate = currentDate ? currentDate : new Date();
 		newDate.setHours(currentDate.getHours(), currentDate.getMinutes(), currentDate.getSeconds(), 0);
@@ -4675,7 +4680,7 @@ Dwt_Datetime_XFormItem.prototype.items = Datetime_XFormItem._datetimeFormatToIte
 			elementChangedMethod.call(this.getParentItem(),newDate, currentDate, event);
 	 }
 	},
-	{type:_DWT_TIME_, ref:".", labelLocation:_NONE_, errorLocation:_PARENT_, 
+	{type:_DWT_TIME_, ref:".", labelLocation:_NONE_, errorLocation:_PARENT_,
 	 elementChanged:
 	 function (newDate, currentDate, event) {
 		currentDate = currentDate ? currentDate : new Date();
@@ -4685,6 +4690,8 @@ Dwt_Datetime_XFormItem.prototype.items = Datetime_XFormItem._datetimeFormatToIte
 	 }
 	}
 );
+}
+Dwt_Datetime_XFormItem.initialize();
 
 
 /**
