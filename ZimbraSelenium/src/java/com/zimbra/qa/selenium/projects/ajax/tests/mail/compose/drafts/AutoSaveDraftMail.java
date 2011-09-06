@@ -1,0 +1,81 @@
+package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose.drafts;
+
+
+
+import java.util.HashMap;
+
+import org.testng.annotations.Test;
+
+import com.zimbra.qa.selenium.framework.items.FolderItem;
+import com.zimbra.qa.selenium.framework.items.MailItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
+import com.zimbra.qa.selenium.framework.ui.Button;
+import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
+import com.zimbra.qa.selenium.framework.util.ZAssert;
+import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew;
+import com.zimbra.qa.selenium.projects.ajax.ui.mail.FormMailNew.Field;
+
+
+public class AutoSaveDraftMail extends AjaxCommonTest {
+
+	public static final int PrefAutoSaveDraftInterval = 10; // seconds
+
+	@SuppressWarnings("serial")
+	public AutoSaveDraftMail() {
+		logger.info("New "+ AutoSaveDraftMail.class.getCanonicalName());
+
+		// All tests start at the login page
+		super.startingPage = app.zPageMail;
+		super.startingAccountPreferences = new HashMap<String, String>() {{
+			put("zimbraPrefAutoSaveDraftInterval", ""+ PrefAutoSaveDraftInterval +"s");
+		}};
+
+	}
+
+	@Test(	description = "Auto save a basic draft (subject only)",
+			groups = { "smoke" })
+			public void SaveDraftMail_01() throws HarnessException {
+
+
+		// Create the message data to be sent
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+
+
+		FormMailNew mailform = null;
+
+		try {
+
+			// Open the new mail form
+			mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
+			ZAssert.assertNotNull(mailform, "Verify the new form opened");
+
+			// Fill out the form with the data
+			mailform.zFillField(Field.Subject, subject);
+
+			// Wait for twice the amount
+			SleepUtil.sleep(PrefAutoSaveDraftInterval * 2 * 1000);
+
+			// Get the message from the server
+			FolderItem draftsFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Drafts);
+			MailItem draft = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+
+			// Verify the draft data matches
+			ZAssert.assertEquals(draft.dSubject, subject, "Verify the subject field is correct");
+			ZAssert.assertEquals(draft.dFolderId, draftsFolder.getId(), "Verify the draft is saved in the drafts folder");
+
+		} finally {
+
+			if ( (mailform != null) && (mailform.zIsActive()) ) {
+				// Close out the draft
+				mailform.zToolbarPressButton(Button.B_SAVE_DRAFT);
+				mailform.zToolbarPressButton(Button.B_CANCEL);
+			}
+		}
+
+
+
+	}
+}

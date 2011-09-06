@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose;
+package com.zimbra.qa.selenium.projects.ajax.tests.mail.compose.drafts;
 
 
 
