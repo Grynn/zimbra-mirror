@@ -74,14 +74,15 @@ public class DeleteAppointment extends AjaxCommonTest {
         
         // Right click to appointment and delete it
         SleepUtil.sleepSmall();
-        DialogConfirm dlgConfirm =(DialogConfirm)app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE_MENU, apptSubject);
+        app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE_MENU, apptSubject);
+        DialogConfirm dlgConfirm = new DialogConfirm(DialogConfirm.Confirmation.DELETE, app, ((AppAjaxClient) app).zPageCalendar);
 		dlgConfirm.zClickButton(Button.B_YES);
 		dlgConfirm.zWaitForClose();
 		SleepUtil.sleepSmall();
-		app.zPageCalendar.zListItem(Action.V_ISNOTEXISTS, apptSubject);
+		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(apptSubject), false, "Verify appointment is deleted");
 	}
 	
-	@Test(description = "Delete an appointment using keyboard Del key",
+	@Test(description = "Delete an appointment using keyboard shortcut (Del)",
 			groups = { "smoke" })
 	public void DeleteAppointment_02() throws HarnessException {
 		
@@ -125,6 +126,6 @@ public class DeleteAppointment extends AjaxCommonTest {
 		dlgConfirm.zClickButton(Button.B_YES);
 		dlgConfirm.zWaitForClose();
 		SleepUtil.sleepSmall();
-		app.zPageCalendar.zListItem(Action.V_ISNOTEXISTS, apptSubject);
+		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(apptSubject), false, "Verify appointment is deleted");
 	}
 }

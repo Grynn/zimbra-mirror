@@ -435,7 +435,6 @@ public class PageCalendar extends AbsTab {
 
 			} else if (option == Button.O_DELETE_MENU) {
 				optionLocator = Locators.DeleteMenu;
-				page = new DialogConfirm(DialogConfirm.Confirmation.DELETE,	MyApplication, ((AppAjaxClient) MyApplication).zPageCalendar);
 
 			} else if (option == Button.O_CANCEL_MENU) {
 				optionLocator = Locators.CancelMenu;
