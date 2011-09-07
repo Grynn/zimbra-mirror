@@ -28,7 +28,7 @@ filesb	:= $(wildcard src/memcached-$(MEMCACHED_VERSION).tar.gz)
 all: checksrc allclean build tar
 
 ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
-	PATCH	:= patch -g0 -N -p1 < ../patches/issue222.patch; \
+	PATCH	:= patch -g0 -N -p1 < ../patches/issue222.patch;
 endif
 
 checksrc:
