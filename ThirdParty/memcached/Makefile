@@ -9,6 +9,8 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 
+PATCH	:=
+
 ifdef BETA
 	include $(MEMCACHED_ROOT)/../beta_versions.def
 else
@@ -25,6 +27,10 @@ filesb	:= $(wildcard src/memcached-$(MEMCACHED_VERSION).tar.gz)
 
 all: checksrc allclean build tar
 
+ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
+	PATCH	:= patch -g0 -N -p1 < ../patches/issue222.patch; \
+endif
+
 checksrc:
 	$(if $(filesa), @echo "", exit 1)
 	$(if $(filesb), @echo "", exit 1)
@@ -37,6 +43,7 @@ build:
 	cd $(MEMCACHED_ROOT); \
 	tar xzf src/memcached-$(MEMCACHED_VERSION).tar.gz; \
 	cd memcached-$(MEMCACHED_VERSION); \
+	$(PATCH); \
 	CFLAGS="-g -O2" ./configure --prefix=$(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION) \
 	--with-libevent=$(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION); \
 	LD_RUN_PATH=/opt/zimbra/memcached/lib make; make install)
