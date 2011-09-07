@@ -585,9 +585,9 @@ HRESULT Zimbra::MAPI::Util::GetExchangeUsersUsingObjectPicker(vector<ObjectPicke
 		hr = pdo->GetData(&fe, &stm);
 		if(FAILED(hr))
 		{
-			if (hwndParent != NULL) {
-				DestroyWindow(hwndParent);
-			}
+			//if (hwndParent != NULL) {
+			//	DestroyWindow(hwndParent);
+			//}
 			MAPIUninitialize();
 			throw MapiUtilsException(hr, L"Util::GetExchangeUsersUsingObjectPicker(): pdo::GetData Failed",
 			__LINE__, __FILE__);
@@ -830,9 +830,9 @@ HRESULT Zimbra::MAPI::Util::GetExchangeUsersUsingObjectPicker(vector<ObjectPicke
 			ReleaseStgMedium(&stm);
 		}
 	}
-	if (hwndParent != NULL) {
-		DestroyWindow(hwndParent);
-	}
+	//if (hwndParent != NULL) {
+	//	DestroyWindow(hwndParent);
+	//}
 	MAPIUninitialize();
 	return hr;
 }
