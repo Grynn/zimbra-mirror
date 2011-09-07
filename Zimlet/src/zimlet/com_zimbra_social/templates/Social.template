@@ -32,6 +32,36 @@
 	</DIV>
 </template>
 
+<template id='miniDlg'>
+	<div id='social_updateToCell_miniDlg'>${updateCheckBoxesHtml}</div>
+	<DIV>
+	<TABLE align=center width=100%>
+	<TR><TD style='width:90%;' >
+		<textarea  style="width:100%;height:35px;font-size:12px;overflow:auto;color:gray;resize: none;"  autocomplete="off" 	id='social_statusTextArea_miniDlg' >${whatAreYouDoingMsg}</textarea>
+	</TD>
+
+	<TD rowspan=2 align=center valign='middle'>
+	<div id='social_numberOfLettersAllowedDiv_miniDlg'>
+	<table width=100%><tr><td align=center>
+	<label style='font-size:18px;color:green;font-weight:bold' id='social_numberOfLettersAllowed_miniDlg'>140</label>
+	</td></tr><tr><td align=center>
+	<label>${charactersLeft}</label></td></tr></table>
+	</div>
+	</TD>
+	</TR>
+
+	<TR><TD>
+	<table width=100%><tr>
+	<td align=left> <div id='social_shortenUrlButtonDIV_miniDlg' /></td>
+	<td align=left><input type='checkbox'  id='social_autoShortenCheckbox_miniDlg'></input></td><td  nowrap=''><label style='color:#252525'>${autoShortenUrl}</label></td>
+	<td align=left width=90%><div id='social_undoShortenURLDIV_miniDlg' style='display:none'>
+	<a  href='#' id='social_undoShortenURLLink_miniDlg' style='text-decoration:underline;font-weight:bold'>${undo}</a></div></td>
+	<td align=right><div id='social_cancelPostButton_miniDlg' />
+	</td><td align=right><div id='social_updateStatusButton_miniDlg' /></td></tr></table>
+	</TD></TR>
+	</TABLE>
+	</DIV>
+</template>
 
 <template id='CardHeader'>
 	<div  class='overviewHeader'>

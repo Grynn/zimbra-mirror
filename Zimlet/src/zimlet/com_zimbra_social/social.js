@@ -23,33 +23,45 @@ com_zimbra_social_handlerObject.prototype.constructor = com_zimbra_social_handle
 
 var SocialZimlet = com_zimbra_social_handlerObject;
 
+SocialZimlet.SOCIALIZE_BUTTON = "SOCIAL_ZIMLET_TOOLBAR_BUTTON";
+
 SocialZimlet.prototype.init =
 		function() {
 			this.initializeVariables();
 			this._createsocialApp();
 		};
 
-/*
+
  SocialZimlet.prototype.initializeToolbar =
- function(app, toolbar, controller, view) {
+		 function(app, toolbar, controller, view) {
+			 if (!this.preferences || !this.preferences.social_pref_toolbarButtonOn)
+				 return;
 
- if (!this.preferences || !this.preferences.social_pref_toolbarButtonOn)
- return;
+			 if (view == ZmId.VIEW_CONVLIST ||
+					 view == ZmId.VIEW_CONV ||
+					 view == ZmId.VIEW_TRAD ||
+					 view == ZmId.VIEW_CONVLIST2) {
 
- if (view == ZmId.VIEW_CONVLIST ||
- view == ZmId.VIEW_CONV ||
- view == ZmId.VIEW_TRAD) {
+				 var op = toolbar.getOp(ZmId.OP_ACTIONS_MENU);
+				 if(op) {
+					 var menu = op.getMenu();
+					 if(menu) {
+						 if(menu.getMenuItem(SocialZimlet.SOCIALIZE_BUTTON)) {
+							 return;
+						 }
+						 var mi = menu.createMenuItem(SocialZimlet.SOCIALIZE_BUTTON, {image:"social-icon",
+							 				text:this.getMessage("socialize"), tooltip: this.getMessage("socializeTooltip")});
 
- ZmMsg.socialBtnLabel = this.getMessage("socialize");
- var buttonArgs = {
- text	: ZmMsg.socialBtnLabel,
- tooltip: this.getMessage("socializeTooltip"),
- image: "social-icon"
+						 mi.addSelectionListener(new AjxListener(this.miniDlg, this.miniDlg._buttonListener, [controller]));
+					 }
+				 } else {
+					 var button = toolbar.createOp(SocialZimlet.SOCIALIZE_BUTTON, {text: ZmMsg.socialBtnLabel,
+						 tooltip: this.getMessage("socializeTooltip"), image: "social-icon"});
+
+					 button.addSelectionListener(new AjxListener(this.miniDlg, this.miniDlg._buttonListener, [controller]));
+				 }
+			 }
  };
- var button = toolbar.createOp("SOCIAL_ZIMLET_TOOLBAR_BUTTON", buttonArgs);
- button.addSelectionListener(new AjxListener(this.miniDlg, this.miniDlg._buttonListener, [controller]));
- }
- }; */
 
 SocialZimlet.prototype.toggleFields =
 		function() {
@@ -221,7 +233,7 @@ SocialZimlet.prototype._displayTwitterAlert =
 
 SocialZimlet.prototype._addTweetButtons =
 		function() {
-			this.updateButton_main = new DwtButton({parent:this.getShell()});
+			this.updateButton = this.updateButton_main = new DwtButton({parent:this.getShell()});
 			this.updateButton_main.setText(this.getMessage("update"));
 			this.updateButton_main.addSelectionListener(new AjxListener(this, this._postToTweetOrFB));
 			document.getElementById("social_updateStatusButton").appendChild(this.updateButton_main.getHtmlElement());
@@ -242,10 +254,10 @@ SocialZimlet.prototype._addTweetButtons =
 			document.getElementById("social_searchButton").appendChild(searchButton.getHtmlElement());
 
 			Dwt.setHandler(document.getElementById("social_searchField"), DwtEvent.ONKEYPRESS, AjxCallback.simpleClosure(this.twitterSearchKeyHdlr, this));
-			var field = document.getElementById("social_statusTextArea");
-			Dwt.setHandler(field, DwtEvent.ONKEYUP, AjxCallback.simpleClosure(this.showNumberOfLetters, this));
-			field.onfocus = AjxCallback.simpleClosure(this._handleFieldFocusBlur, this, field, this.getMessage("whatAreYouDoing"));
-			field.onblur = AjxCallback.simpleClosure(this._handleFieldFocusBlur, this, field, this.getMessage("whatAreYouDoing"));
+
+			Dwt.setHandler(this.updateField, DwtEvent.ONKEYUP, AjxCallback.simpleClosure(this.showNumberOfLetters, this));
+			this.updateField.onfocus = AjxCallback.simpleClosure(this._handleFieldFocusBlur, this, this.updateField, this.getMessage("whatAreYouDoing"));
+			this.updateField.onblur = AjxCallback.simpleClosure(this._handleFieldFocusBlur, this, this.updateField, this.getMessage("whatAreYouDoing"));
 		};
 
 SocialZimlet.prototype._addAccountCheckBoxListeners =
@@ -456,21 +468,9 @@ SocialZimlet.prototype.showNumberOfLetters =
 			}
 			var val = this.updateField.value;
 			var len = val.length;
-			//if (len > 140) {
-			//	this.updateButton.setEnabled(false);
-			//} else {
 			this.updateButton.setEnabled(true);
-			//}
-			//if (this.whatAreYouDoingField != "NOT_PRESENT") {
-			//	if (val.toLowerCase().indexOf("d @") == 0) {
-			//	this.whatAreYouDoingField.innerHTML = this.getMessage("sendDirectMsg");
-			//	this.whatAreYouDoingField.style.background = "yellow";
-			//	} else {
-			//	this.whatAreYouDoingField.innerHTML = "";
-			//	this.whatAreYouDoingField.style.background = "";
-			//	}
-			//}
-			if (val.toLowerCase().indexOf("d @") == 0) {
+
+			if (val.toLowerCase().indexOf("d @") == 0 && len == 3) {
 				appCtxt.getAppController().setStatusMsg(this.getMessage("sendDirectMsg"), ZmStatusView.LEVEL_WARNING);
 			}
 			this._updateNumberOfLettersField(len);
@@ -1740,14 +1740,15 @@ SocialZimlet.prototype.showAppView =
 			this._setMainCardHeight();
 			this._dontAutoScroll = true;
 			this._updateAllWidgetItems({updateSearchTree:true, updateSystemTree:true, updateAccntCheckboxes:true, searchCards:true});
+			this.toggleFields();
+			this.updateUIWidgets();
+			this._showHideMaxAlowedCharsDiv();
+
 			this._addTweetButtons();
 			this._loadInformation();
 			this._setMainCardHeight();
 			this._dontAutoScroll = false;
 			this.miniDlg.miniDlgON = false;//set this first
-			this.toggleFields();
-			this.updateUIWidgets();
-			this._showHideMaxAlowedCharsDiv();
 		};
 
 SocialZimlet.prototype.addTwitterSearchWidget =
@@ -1771,12 +1772,16 @@ SocialZimlet.prototype._postToTweetOrFB =
 				this.isTextPasted = true;
 				return;
 			}
+
 			var isDM = false;
 			var noAccountSelected = true;
 
 			var message = this.updateField.value;
 			if (message.length == 0) {
 				return;
+			}
+			if (message.toLowerCase().indexOf("d @") == 0) {
+				isDM = true;
 			}
 
 			for (var id in this.allAccounts) {

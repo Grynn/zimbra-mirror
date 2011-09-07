@@ -94,8 +94,12 @@ com_zimbra_socialMiniDlg.prototype._showSocialMiniDlg = function(controller) {
 	this.miniDlgON = true;
 	if (this.socialMiniDialog) {
 		this.zimlet.toggleFields();
+		this.zimlet._updateMaxAllowedCharsToUpdate();
+		this.zimlet.updateUIWidgets();
+		this.zimlet._showHideMaxAlowedCharsDiv();
 		this.getMailContents(controller);
 		this.socialMiniDialog.popup();
+		this.zimlet.setFieldFocused(this.zimlet.updateField);
 		return;
 	}
 	this._socialMiniDlgView = new DwtComposite(this.zimlet.getShell());
@@ -111,15 +115,20 @@ com_zimbra_socialMiniDlg.prototype._showSocialMiniDlg = function(controller) {
 	this.socialMiniDialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this._SocialMiniCancelBtnListener));
 	this.updateButton_miniDlg = this.socialMiniDialog.getButton(_socialMiniUpdateBtnId);
 
-	Dwt.setHandler(document.getElementById("social_statusTextArea_miniDlg"), DwtEvent.ONKEYUP, AjxCallback.simpleClosure(this.zimlet.showNumberOfLetters, this.zimlet));
-	Dwt.setHandler(document.getElementById("social_statusTextArea_miniDlg"), DwtEvent.ONKEYPRESS, AjxCallback.simpleClosure(this.zimlet._postToTweetOrFB, this.zimlet));
-	this._addAccountCheckBoxListeners_miniDlg();
 	this.zimlet.toggleFields();
+	Dwt.setHandler(this.zimlet.updateField, DwtEvent.ONKEYUP, AjxCallback.simpleClosure(this.zimlet.showNumberOfLetters, this.zimlet));
+	this.zimlet.updateField.onfocus = AjxCallback.simpleClosure(this.zimlet._handleFieldFocusBlur, this.zimlet, this.zimlet.updateField, this.zimlet.getMessage("whatAreYouDoing"));
+	this.zimlet.updateField.onblur = AjxCallback.simpleClosure(this.zimlet._handleFieldFocusBlur, this.zimlet, this.zimlet.updateField, this.zimlet.getMessage("whatAreYouDoing"));
 	this.zimlet.updateUIWidgets();
+	this.zimlet._addSocialcastGroupsMenuHndler();
+	this.zimlet._addAccountCheckBoxListeners();
+	this.zimlet._updateMaxAllowedCharsToUpdate();
+	this.zimlet._showHideMaxAlowedCharsDiv();
 
 	this._addUrlShortenButton_miniDlg();
 	this.getMailContents(controller);
 	this.socialMiniDialog.popup();
+	this.zimlet.setFieldFocused(this.zimlet.updateField);
 };
 
 com_zimbra_socialMiniDlg.prototype._SocialMiniCancelBtnListener =
@@ -129,13 +138,6 @@ function() {
 	this.socialMiniDialog.popdown();
 };
 
-com_zimbra_socialMiniDlg.prototype._addAccountCheckBoxListeners_miniDlg =
-function() {
-	for (var accntId in this.zimlet.allAccounts) {
-		var callback = AjxCallback.simpleClosure(this.zimlet._saveToAccountCheckboxesPref, this.zimlet, accntId);
-		Dwt.setHandler(document.getElementById(this.zimlet.allAccounts[accntId].checkboxId_miniDlg), DwtEvent.ONCLICK, callback);
-	}
-};
 
 com_zimbra_socialMiniDlg.prototype._addUrlShortenButton_miniDlg =
 function() {
@@ -147,63 +149,13 @@ function() {
 
 com_zimbra_socialMiniDlg.prototype._createSocialMiniView =
 function() {
-	var html = [];
-	var idx = 0;
-	html[idx++] = "<DIV>";
-	html[idx++] = this._addUpdateToCheckboxes_miniDlg();
-	html[idx++] = "<TABLE width=100%>";
-	html[idx++] = "<TR><TD style=\"width:90%;\" >";
-	html[idx++] = "<input  style=\"width:100%;height:25px\" autocomplete=\"off\" id=\"social_statusTextArea_miniDlg\" />";
-	html[idx++] = "</TD>";
-
-	html[idx++] = "<TD rowspan=2 align=center valign='middle'>";
-	html[idx++] = "<table width=100%><tr><td align=center>";
-	html[idx++] = "<label style=\"font-size:18px;color:green;font-weight:bold\" id='social_numberOfLettersAllowed_miniDlg'>140</label>";
-	html[idx++] = "</td></tr><tr><td align=center>";
-	html[idx++] = "<label>"+this.zimlet.getMessage("charactersLeft")+"</label></td></tr></table>";
-	html[idx++] = "</TD>";
-	html[idx++] = "</TR>";
-
-	html[idx++] = "<TR><TD>";
-	html[idx++] = "<table width=100%><tr>";
-	html[idx++] = "<td align=left> <div id='social_shortenUrlButtonDIV_miniDlg' /></td>";
-	html[idx++] = "<td align=left><input type='checkbox'  id='social_autoShortenCheckbox_miniDlg'/></td><td  nowrap=''><label style='color:#252525'>"+this.zimlet.getMessage("autoShortenUrl")+"</label></td>";
-	html[idx++] = "<td align=left width=90%><div id='social_undoShortenURLDIV_miniDlg' style='display:none'><a  href='javascript:void(0)' id='social_undoShortenURLLink_miniDlg' style='text-decoration:underline;font-weight:bold'>"+this.zimlet.getMessage("undo")+"</a></div></td>";
-	html[idx++] = "</tr></table>";
-	html[idx++] = "</TD></TR>";
-	html[idx++] = "</TABLE>";
-	html[idx++] = "</DIV>";
-	return html.join("");
+	var subs = {
+		undo: this.zimlet.getMessage("undo"),
+		autoShortenUrl: this.zimlet.getMessage("autoShortenUrl"),
+		charactersLeft: this.zimlet.getMessage("charactersLeft"),
+		whatAreYouDoingMsg: this.zimlet.getMessage("whatAreYouDoing"),
+		updateCheckBoxesHtml: this.zimlet._addUpdateToCheckboxes()
+	};
+	return AjxTemplate.expand("com_zimbra_social.templates.Social#miniDlg", subs);
 };
 
-com_zimbra_socialMiniDlg.prototype._addUpdateToCheckboxes_miniDlg =
-function() {
-	var html = [];
-	var idx = 0;
-	var hasAccounts = false;
-	html[idx++] = "<TABLE>";
-	html[idx++] = "<TR><td>";
-	html[idx++] = "<label style=\"font-size:12px;color:black;font-weight:bold\">update to: ";
-	html[idx++] = "</label>";
-	html[idx++] = "</TD>";
-	for (var id in this.zimlet.allAccounts) {
-		hasAccounts = true;
-		var turnOnStr = "";
-		if (this.zimlet.allAccounts[id].__on == "true") {
-			turnOnStr = "checked";
-		}
-		var chkbxId = this.zimlet.allAccounts[id].checkboxId_miniDlg = "social_updateToCheckbox_miniDlg" + id;
-		html[idx++] = "<TD valign='middle' align=center>";
-		html[idx++] = "<input type='checkbox'  " + turnOnStr + "  id='" + chkbxId + "'>";
-		html[idx++] = "</TD><TD valign='middle' align=center>";
-		html[idx++] = this.zimlet.allAccounts[id].name;
-		html[idx++] = " &nbsp;&nbsp;&nbsp;&nbsp;";
-	}
-	html[idx++] = "</TR></TABLE>";
-
-	if (hasAccounts)
-		return html.join("");
-	else {
-		return "<label style=\"font-size:12px;color:#555555;font-style:italic\">"+this.zimlet.getMessage("goToSocialTabAndAddAccounts")+"</label>";
-	}
-};

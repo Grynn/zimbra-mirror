@@ -342,9 +342,18 @@ function(normalizedStr, ignoreEncodingArray) {
 com_zimbra_socialTwitter.prototype._postToTweetCallback =
 function(account, response) {
 	if (!response.success) {
-		var msgDialog = appCtxt.getMsgDialog();
-		msgDialog.setMessage(this.zimlet.getMessage("twitterError"), DwtMessageDialog.INFO_STYLE);
-		msgDialog.popup();
+		var text = response.text;
+		try{
+			jsonObj = eval("(" + text + ")");
+		} catch (e) {
+			jsonObj = {error: this.zimlet.getMessage("twitterError")}
+		}
+		if (jsonObj.error != undefined) {
+			var msgDialog = appCtxt.getMsgDialog();
+			var msg = jsonObj.error;
+			msgDialog.setMessage(msg, DwtMessageDialog.WARNING_STYLE);
+			msgDialog.popup();
+		}
 		return;
 	}
 	var jsonObj = eval("(" + response.text + ")");
