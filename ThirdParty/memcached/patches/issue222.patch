@@ -1,0 +1,13 @@
+--- memcached-1.4.7/configure.orig	2011-09-06 19:42:08.000000000 -0700
++++ memcached-1.4.7/configure	2011-09-06 19:43:22.000000000 -0700
+@@ -5280,10 +5280,6 @@
+          _myos=`echo $target_os | cut -f 1 -d .`
+          if test "$SUNCC" = "yes" -o "x$_myos" = "xsolaris2"; then :
+   saved_LDFLAGS="$saved_LDFLAGS -Wl,-R$ledir/lib"
+-else
+-  if test "$GCC" = "yes"; then :
+-  saved_LDFLAGS="$saved_LDFLAGS -Wl,-rpath=$ledir/lib"
+-fi
+ fi
+        else
+          ac_cv_libevent_dir="(system)"
