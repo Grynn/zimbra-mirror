@@ -3,6 +3,7 @@ package com.zimbra.qa.selenium.projects.ajax.tests.calendar.appointments;
 import java.awt.event.KeyEvent;
 import java.util.Calendar;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
@@ -73,18 +74,25 @@ public class DeleteAppointment extends AjaxCommonTest {
         SleepUtil.sleepMedium();
         
         // Right click to appointment and delete it
-        SleepUtil.sleepSmall();
         app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE_MENU, apptSubject);
         DialogConfirm dlgConfirm = new DialogConfirm(DialogConfirm.Confirmation.DELETE, app, ((AppAjaxClient) app).zPageCalendar);
 		dlgConfirm.zClickButton(Button.B_YES);
 		dlgConfirm.zWaitForClose();
-		SleepUtil.sleepSmall();
 		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(apptSubject), false, "Verify appointment is deleted");
 	}
 	
-	@Test(description = "Delete an appointment using keyboard shortcut (Del)",
-			groups = { "smoke" })
-	public void DeleteAppointment_02() throws HarnessException {
+	@DataProvider(name = "DataProviderDeleteKeys")
+	public Object[][] DataProviderDeleteKeys() {
+		return new Object[][] {
+				new Object[] { "VK_DELETE", KeyEvent.VK_DELETE },
+				new Object[] { "VK_BACK_SPACE", KeyEvent.VK_BACK_SPACE },
+		};
+	}
+
+	@Test(	description = "Delete an appointment using keyboard shortcut (Del)",
+			groups = { "functional" },
+			dataProvider = "DataProviderDeleteKeys")
+	public void DeleteAppointment_02(String name, int keyEvent) throws HarnessException {
 		
 		// Creating object for appointment data
 		String tz, apptSubject, apptBody;
@@ -119,10 +127,8 @@ public class DeleteAppointment extends AjaxCommonTest {
         SleepUtil.sleepMedium();
         
         // Delete appointment using keyboard Del key
-        SleepUtil.sleepSmall();
         PageCalendar page = (PageCalendar) app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
-        SleepUtil.sleepMedium();
-        DialogConfirm dlgConfirm = (DialogConfirm) app.zPageCalendar.zKeyboardShortcut(Shortcut.S_DELETE);
+        DialogConfirm dlgConfirm = (DialogConfirm)app.zPageCalendar.zKeyboardKeyEvent(keyEvent);
 		dlgConfirm.zClickButton(Button.B_YES);
 		dlgConfirm.zWaitForClose();
 		SleepUtil.sleepSmall();
