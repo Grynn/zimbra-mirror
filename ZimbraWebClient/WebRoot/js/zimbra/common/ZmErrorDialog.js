@@ -39,22 +39,14 @@ ZmErrorDialog = function(parent, msgs) {
 	this._strNav = this._getNavigatorInfo();
 	this._subjPfx = this._getSubjectPrefix();
 
-	var extraButtons = [];
 	var reportButton = new DwtDialog_ButtonDescriptor(ZmErrorDialog.REPORT_BUTTON, msgs.report, DwtDialog.ALIGN_LEFT);
-	extraButtons.push(reportButton);
-	var showDetails = appCtxt.get(ZmSetting.SHOW_SCRIPT_ERRORS);
-	if (showDetails) {
-		var detailButton = new DwtDialog_ButtonDescriptor(ZmErrorDialog.DETAIL_BUTTON, msgs.showDetails, DwtDialog.ALIGN_LEFT);
-		extraButtons.push(detailButton);
-	}
-	DwtMessageDialog.call(this, {parent:parent, extraButtons: extraButtons, id:"ErrorDialog"});
+	var detailButton = new DwtDialog_ButtonDescriptor(ZmErrorDialog.DETAIL_BUTTON, msgs.showDetails, DwtDialog.ALIGN_LEFT);
+	DwtMessageDialog.call(this, {parent:parent, extraButtons:[reportButton, detailButton], id:"ErrorDialog"});
 
 	this.registerCallback(ZmErrorDialog.REPORT_BUTTON, this._reportCallback, this);
-	if (showDetails) {
-		this.registerCallback(ZmErrorDialog.DETAIL_BUTTON, this.showDetail, this);
-		this._showDetailsMsg = msgs.showDetails;
-	}
+	this.registerCallback(ZmErrorDialog.DETAIL_BUTTON, this.showDetail, this);
 	
+	this._showDetailsMsg = msgs.showDetails;
 	this._hideDetailsMsg = msgs.hideDetails;
 
 	this._setAllowSelection();
@@ -132,9 +124,7 @@ function(msgStr, detailStr, style, title) {
 
 	// clear the 'detailsVisible' flag and reset the title of the 'showDetails' button
 	this._detailsVisible = false;
-	if (this._showDetailsMsg) {
-		this._button[ZmErrorDialog.DETAIL_BUTTON].setText(this._showDetailsMsg);
-	}
+	this._button[ZmErrorDialog.DETAIL_BUTTON].setText(this._showDetailsMsg);
 	
 	// Set the content, enveloped
 	this._updateContent();
