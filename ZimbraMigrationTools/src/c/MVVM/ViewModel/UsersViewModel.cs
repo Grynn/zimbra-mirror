@@ -57,7 +57,17 @@ namespace MVVM.ViewModel
 
         private void ObjectPicker()
         {
-            MessageBox.Show("Object Picker", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            CSMigrationwrapper mw = ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).mw;
+            string[] users = mw.GetListFromObjectPicker();
+            for (int i = 0; i < users.Length; i++)
+            {
+                string displayname = users[i].Substring(0, users[i].IndexOf("@"));
+                UsersList.Add(new UsersViewModel(displayname, ""));
+                ScheduleViewModel scheduleViewModel = ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
+                scheduleViewModel.SchedList.Add(new SchedUser(Username, false));
+                scheduleViewModel.EnableMigrate = (scheduleViewModel.SchedList.Count > 0);
+                EnableNext = (UsersList.Count > 0);
+            }
         }
 
         public ICommand QueryBuilderCommand

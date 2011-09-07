@@ -565,7 +565,8 @@ HRESULT Zimbra::MAPI::Util::GetExchangeUsersUsingObjectPicker(vector<ObjectPicke
 	}
 
 	// Supply a window handle to the application.
-    HWND hwndParent = GetConsoleWindow(); 
+    //HWND hwndParent = GetConsoleWindow(); 
+	HWND hwndParent = CreateWindow(L"STATIC",NULL,0,0,0,0,0,NULL,NULL,GetModuleHandle(NULL),NULL); 								   
 	CComPtr<IDataObject> pdo = NULL;
 	hr = pDsObjectPicker->InvokeDialog(hwndParent, &pdo);
     if (hr == S_OK) 
@@ -584,6 +585,9 @@ HRESULT Zimbra::MAPI::Util::GetExchangeUsersUsingObjectPicker(vector<ObjectPicke
 		hr = pdo->GetData(&fe, &stm);
 		if(FAILED(hr))
 		{
+			if (hwndParent != NULL) {
+				DestroyWindow(hwndParent);
+			}
 			MAPIUninitialize();
 			throw MapiUtilsException(hr, L"Util::GetExchangeUsersUsingObjectPicker(): pdo::GetData Failed",
 			__LINE__, __FILE__);
@@ -825,6 +829,9 @@ HRESULT Zimbra::MAPI::Util::GetExchangeUsersUsingObjectPicker(vector<ObjectPicke
 			}
 			ReleaseStgMedium(&stm);
 		}
+	}
+	if (hwndParent != NULL) {
+		DestroyWindow(hwndParent);
 	}
 	MAPIUninitialize();
 	return hr;

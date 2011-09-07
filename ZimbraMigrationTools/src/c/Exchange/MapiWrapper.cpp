@@ -447,6 +447,37 @@ STDMETHODIMP CMapiWrapper::GlobalUninit(BSTR* pErrorText) {
 	return S_OK;
 }
 
+STDMETHODIMP CMapiWrapper::SelectExchangeUsers(VARIANT* Users, BSTR* pErrorText) {
+	vector<ObjectPickerData> vUserList;
+	LPCWSTR lpszErrorText = ExchangeOps::SelectExchangeUsers(vUserList);
+
+	vector<CComBSTR> tempvectors;
+    std::vector<ObjectPickerData>::iterator its;
+    for (its = (vUserList.begin()); its != vUserList.end(); its++) {
+        ObjectPickerData obj = (*its);
+		wstring str = (*its).wstrUsername;
+		CComBSTR temp = SysAllocString(str.c_str());
+        tempvectors.push_back(temp);
+    }
+	VariantInit(Users);
+	Users->vt = VT_ARRAY | VT_BSTR;
+    SAFEARRAY *psa;
+    SAFEARRAYBOUND bounds = { vUserList.size(), 0 };
+	psa = SafeArrayCreate(VT_BSTR, 1, &bounds);
+
+	BSTR *bstrArray;
+	SafeArrayAccessData(psa, (void **)&bstrArray);
+    std::vector<CComBSTR>::iterator it;
+    int i = 0;
+    for (it = (tempvectors.begin()); it != tempvectors.end(); it++, i++)
+        bstrArray[i] = SysAllocString((*it).m_str);
+    SafeArrayUnaccessData(psa);
+
+    Users->parray = psa;
+	*pErrorText = (lpszErrorText) ? CComBSTR(lpszErrorText) : CComBSTR("");
+	return S_OK;
+}
+
 /*STDMETHODIMP CMapiWrapper::GetFolderObjects(long start, long length, SAFEARRAY **SequenceArr )
 {
     

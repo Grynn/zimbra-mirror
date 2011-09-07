@@ -209,6 +209,27 @@ namespace CssLib
 
         }
 
+        /*
+        public object[] GetListFromObjectPicker()
+        {
+
+            object var = new object();
+            MailWrapper.SelectExchangeUsers(out var);
+            object[] o = (object[])var;
+            return o;
+        }
+        */
+
+        public string[] GetListFromObjectPicker()
+        // Change this to above signature when I start getting the real ObjectPicker object back
+        {
+
+            object var = new object();
+            MailWrapper.SelectExchangeUsers(out var);
+            string[] s = (string[])var;
+            return s;
+        }
+
         public void  StartMigration(MigrationAccount Acct)
         {
             
