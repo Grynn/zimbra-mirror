@@ -6,6 +6,7 @@ import java.util.Calendar;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
+import com.zimbra.qa.selenium.framework.items.RecipientItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsDialog;
 import com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject;
@@ -37,11 +38,11 @@ public class DeleteAppointment extends AjaxCommonTest {
 
 	}
 	
-	@Test(description = "Delete an appointment - Right click -> Delete",
+	@Test(description = "Delete an appointment using context menu",
 			groups = { "smoke" })
 	public void DeleteAppointment_01() throws HarnessException {
 		
-		// Creating object for appointment data
+		// Creating objects for appointment data
 		String tz, apptSubject, apptBody;
 		tz = ZTimeZone.TimeZoneEST.getID();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
@@ -81,20 +82,20 @@ public class DeleteAppointment extends AjaxCommonTest {
 		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(apptSubject), false, "Verify appointment is deleted");
 	}
 	
-	@DataProvider(name = "DataProviderDeleteKeys")
-	public Object[][] DataProviderDeleteKeys() {
+	@DataProvider(name = "DataProviderShortcutKeys")
+	public Object[][] DataProviderShortcutKeys() {
 		return new Object[][] {
 				new Object[] { "VK_DELETE", KeyEvent.VK_DELETE },
 				new Object[] { "VK_BACK_SPACE", KeyEvent.VK_BACK_SPACE },
 		};
 	}
 
-	@Test(	description = "Delete an appointment using keyboard shortcut (Del)",
+	@Test(description = "Delete an appointment using keyboard shortcuts (Del & Backspace)",
 			groups = { "functional" },
-			dataProvider = "DataProviderDeleteKeys")
+			dataProvider = "DataProviderShortcutKeys")
 	public void DeleteAppointment_02(String name, int keyEvent) throws HarnessException {
 		
-		// Creating object for appointment data
+		// Creating objects for appointment data
 		String tz, apptSubject, apptBody;
 		tz = ZTimeZone.TimeZoneEST.getID();
 		apptSubject = ZimbraSeleniumProperties.getUniqueString();
@@ -126,7 +127,7 @@ public class DeleteAppointment extends AjaxCommonTest {
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         SleepUtil.sleepMedium();
         
-        // Delete appointment using keyboard Del key
+        // Delete appointment using keyboard Del and Backspace key
         PageCalendar page = (PageCalendar) app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
         DialogConfirm dlgConfirm = (DialogConfirm)app.zPageCalendar.zKeyboardKeyEvent(keyEvent);
 		dlgConfirm.zClickButton(Button.B_YES);
