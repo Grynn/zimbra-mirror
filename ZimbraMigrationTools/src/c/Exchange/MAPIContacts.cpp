@@ -2,6 +2,7 @@
 #include "Exchange.h"
 #include "MAPIContacts.h"
 
+
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // MAPIContact
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -200,6 +201,299 @@ HRESULT MAPIContact::Init()
 	hr = m_pMessage->GetProps( (LPSPropTagArray)&contactProps, fMapiUnicode, &cVals, &m_pPropVals );
 	if( FAILED(hr) )
 		return hr;
+	
+
+	//see if there is a file-as id
+	LONG zimbraFileAsId = 0;
+    if( m_bPersonalDL )//PDL's always have a custom file-as
+    {
+        zimbraFileAsId = 8 ;
+    }
+	else if( m_pPropVals[C_FILEASID].ulPropTag == contactProps.aulPropTag[C_FILEASID] )
+	{
+		switch( m_pPropVals[C_FILEASID].Value.l )
+		{
+			case OFA_LAST_C_FIRST:
+				zimbraFileAsId = 1;
+				break;
+			case OFA_FIRST_LAST:
+				zimbraFileAsId = 2;
+				break;
+			case OFA_COMPANY:
+				zimbraFileAsId = 3;
+				break;
+			case OFA_LAST_C_FIRST_COMPANY:
+				zimbraFileAsId = 4;
+				break;
+			case OFA_COMPANY_LAST_C_FIRST:
+				zimbraFileAsId = 6;
+				break;
+			case OFA_CUSTOM:
+				zimbraFileAsId = 8;
+				break;
+		}
+	}
+	//process all "String" properties
+	if( m_pPropVals[C_CALLBACK_TELEPHONE_NUMBER].ulPropTag == contactProps.aulPropTag[C_CALLBACK_TELEPHONE_NUMBER] )
+		CallbackPhone( m_pPropVals[C_CALLBACK_TELEPHONE_NUMBER].Value.lpszW );
+
+	if( m_pPropVals[C_CAR_TELEPHONE_NUMBER].ulPropTag == contactProps.aulPropTag[C_CAR_TELEPHONE_NUMBER] )
+		CarPhone( m_pPropVals[C_CAR_TELEPHONE_NUMBER].Value.lpszW );
+
+	if( m_pPropVals[C_COMPANY_NAME].ulPropTag == contactProps.aulPropTag[C_COMPANY_NAME] )
+		Company( m_pPropVals[C_COMPANY_NAME].Value.lpszW );
+
+	if( m_pPropVals[C_FILEAS].ulPropTag == contactProps.aulPropTag[C_FILEAS] )
+	{
+		if( zimbraFileAsId == 8 )
+		{
+            LPWSTR pwszFileAsValue = m_pPropVals[C_FILEAS].Value.lpszW;
+            if((pwszFileAsValue != NULL)&&(wcsicmp(pwszFileAsValue, L"") != 0)) {
+    			LPWSTR pwszTemp = new WCHAR[ wcslen(m_pPropVals[C_FILEAS].Value.lpszW) + 3 ];
+                // there is a legit string for the custom fileas value
+			    wsprintf( pwszTemp, L"8:%s", pwszFileAsValue );
+			    FileAs( pwszTemp );
+                //PDL's require a nickname
+                if( m_bPersonalDL )
+                {
+                    NickName( m_pPropVals[C_FILEAS].Value.lpszW ) ;
+                }
+    			delete [] pwszTemp;
+            }
+			else
+			{
+				LPWSTR pwszNONAME= new WCHAR[ wcslen(L"NO_NAME") +1];
+				wsprintf( pwszNONAME, L"%s", L"NO_NAME" );
+				LPWSTR pwszTemp = new WCHAR[ wcslen(pwszNONAME) + 3 ];
+                // there is a legit string for the custom fileas value
+			    wsprintf( pwszTemp, L"8:%s", pwszNONAME );
+			    FileAs( pwszTemp );
+                //PDL's require a nickname
+                if( m_bPersonalDL )
+                {
+                    NickName( pwszNONAME ) ;
+                }
+    			delete [] pwszTemp;
+				delete [] pwszNONAME;
+			}
+		}
+		else if( zimbraFileAsId )
+		{
+			WCHAR pwszTemp[3];
+			_ltow( zimbraFileAsId, pwszTemp, 10 );
+			FileAs( pwszTemp );
+		}
+	}
+	if( m_pPropVals[C_GIVEN_NAME].ulPropTag == contactProps.aulPropTag[C_GIVEN_NAME] )
+		FirstName( m_pPropVals[C_GIVEN_NAME].Value.lpszW );
+
+	if( m_pPropVals[C_HOME_ADDRESS_CITY].ulPropTag == contactProps.aulPropTag[C_HOME_ADDRESS_CITY] )
+		HomeCity( m_pPropVals[C_HOME_ADDRESS_CITY].Value.lpszW );
+	
+	if( m_pPropVals[C_HOME_ADDRESS_COUNTRY].ulPropTag == contactProps.aulPropTag[C_HOME_ADDRESS_COUNTRY] )
+		HomeCountry( m_pPropVals[C_HOME_ADDRESS_COUNTRY].Value.lpszW );
+
+	if( m_pPropVals[C_HOME_FAX_NUMBER].ulPropTag == contactProps.aulPropTag[C_HOME_FAX_NUMBER] )
+		HomeFax( m_pPropVals[C_HOME_FAX_NUMBER].Value.lpszW );
+
+	if( m_pPropVals[C_HOME_TELEPHONE_NUMBER].ulPropTag == contactProps.aulPropTag[C_HOME_TELEPHONE_NUMBER] )
+		HomePhone( m_pPropVals[C_HOME_TELEPHONE_NUMBER].Value.lpszW );
+
+	if( m_pPropVals[C_HOME2_TELEPHONE_NUMBER].ulPropTag == contactProps.aulPropTag[C_HOME2_TELEPHONE_NUMBER] )
+		HomePhone2( m_pPropVals[C_HOME2_TELEPHONE_NUMBER].Value.lpszW );
+
+	if( m_pPropVals[C_HOME_ADDRESS_POSTAL_CODE].ulPropTag == contactProps.aulPropTag[C_HOME_ADDRESS_POSTAL_CODE] )
+		HomePostalCode( m_pPropVals[C_HOME_ADDRESS_POSTAL_CODE].Value.lpszW );
+
+	if( m_pPropVals[C_HOME_ADDRESS_STATE_OR_PROVINCE].ulPropTag == contactProps.aulPropTag[C_HOME_ADDRESS_STATE_OR_PROVINCE] )
+		HomeState( m_pPropVals[C_HOME_ADDRESS_STATE_OR_PROVINCE].Value.lpszW );
+
+	if( m_pPropVals[C_HOME_ADDRESS_STREET].ulPropTag == contactProps.aulPropTag[C_HOME_ADDRESS_STREET] )
+		HomeStreet( m_pPropVals[C_HOME_ADDRESS_STREET].Value.lpszW );
+
+	if( m_pPropVals[C_TITLE].ulPropTag == contactProps.aulPropTag[C_TITLE] )
+		JobTitle( m_pPropVals[C_TITLE].Value.lpszW );
+
+	if( m_pPropVals[C_SURNAME].ulPropTag == contactProps.aulPropTag[C_SURNAME] )
+		LastName( m_pPropVals[C_SURNAME].Value.lpszW );
+
+	if( m_pPropVals[C_MIDDLE_NAME].ulPropTag == contactProps.aulPropTag[C_MIDDLE_NAME] )
+		MiddleName( m_pPropVals[C_MIDDLE_NAME].Value.lpszW );
+
+	if( m_pPropVals[C_CELLULAR_TELEPHONE_NUMBER].ulPropTag == contactProps.aulPropTag[C_CELLULAR_TELEPHONE_NUMBER] )
+		MobilePhone( m_pPropVals[C_CELLULAR_TELEPHONE_NUMBER].Value.lpszW );
+
+	if( m_pPropVals[C_DISPLAY_NAME_PREFIX].ulPropTag == contactProps.aulPropTag[C_DISPLAY_NAME_PREFIX] )
+		NamePrefix( m_pPropVals[C_DISPLAY_NAME_PREFIX].Value.lpszW );
+
+	if( m_pPropVals[C_GENERATION].ulPropTag == contactProps.aulPropTag[C_GENERATION] )
+		NameSuffix( m_pPropVals[C_GENERATION].Value.lpszW );
+
+	if( m_pPropVals[C_OTHER_ADDRESS_CITY].ulPropTag == contactProps.aulPropTag[C_OTHER_ADDRESS_CITY] )
+		OtherCity( m_pPropVals[C_OTHER_ADDRESS_CITY].Value.lpszW );
+
+	if( m_pPropVals[C_OTHER_ADDRESS_COUNTRY].ulPropTag == contactProps.aulPropTag[C_OTHER_ADDRESS_COUNTRY] )
+		OtherCountry( m_pPropVals[C_OTHER_ADDRESS_COUNTRY].Value.lpszW );
+
+	if( m_pPropVals[C_PRIMARY_FAX_NUMBER].ulPropTag == contactProps.aulPropTag[C_PRIMARY_FAX_NUMBER] )
+		OtherFax( m_pPropVals[C_PRIMARY_FAX_NUMBER].Value.lpszW );
+
+	if( m_pPropVals[C_OTHER_TELEPHONE_NUMBER].ulPropTag == contactProps.aulPropTag[C_OTHER_TELEPHONE_NUMBER] )
+		OtherPhone( m_pPropVals[C_OTHER_TELEPHONE_NUMBER].Value.lpszW );
+
+	if( m_pPropVals[C_OTHER_ADDRESS_POSTAL_CODE].ulPropTag == contactProps.aulPropTag[C_OTHER_ADDRESS_POSTAL_CODE] )
+		OtherPostalCode( m_pPropVals[C_OTHER_ADDRESS_POSTAL_CODE].Value.lpszW );
+
+	if( m_pPropVals[C_OTHER_ADDRESS_STATE_OR_PROVINCE].ulPropTag == contactProps.aulPropTag[C_OTHER_ADDRESS_STATE_OR_PROVINCE] )
+		OtherState( m_pPropVals[C_OTHER_ADDRESS_STATE_OR_PROVINCE].Value.lpszW );
+
+	if( m_pPropVals[C_OTHER_ADDRESS_STREET].ulPropTag == contactProps.aulPropTag[C_OTHER_ADDRESS_STREET] )
+		OtherStreet( m_pPropVals[C_OTHER_ADDRESS_STREET].Value.lpszW );
+
+	if( m_pPropVals[C_PAGER_TELEPHONE_NUMBER].ulPropTag == contactProps.aulPropTag[C_PAGER_TELEPHONE_NUMBER] )
+		Pager( m_pPropVals[C_PAGER_TELEPHONE_NUMBER].Value.lpszW );
+
+	if( m_pPropVals[C_BUSINESS_ADDRESS_CITY].ulPropTag == contactProps.aulPropTag[C_BUSINESS_ADDRESS_CITY] )
+		WorkCity( m_pPropVals[C_BUSINESS_ADDRESS_CITY].Value.lpszW );
+
+	if( m_pPropVals[C_BUSINESS_ADDRESS_COUNTRY].ulPropTag == contactProps.aulPropTag[C_BUSINESS_ADDRESS_COUNTRY] )
+		WorkCountry( m_pPropVals[C_BUSINESS_ADDRESS_COUNTRY].Value.lpszW );
+
+	if( m_pPropVals[C_BUSINESS_FAX_NUMBER].ulPropTag == contactProps.aulPropTag[C_BUSINESS_FAX_NUMBER] )
+		WorkFax( m_pPropVals[C_BUSINESS_FAX_NUMBER].Value.lpszW );
+
+	if( m_pPropVals[C_OFFICE_TELEPHONE_NUMBER].ulPropTag == contactProps.aulPropTag[C_OFFICE_TELEPHONE_NUMBER] )
+		WorkPhone( m_pPropVals[C_OFFICE_TELEPHONE_NUMBER].Value.lpszW );
+
+	if( m_pPropVals[C_BUSINESS_ADDRESS_POSTAL_CODE].ulPropTag == contactProps.aulPropTag[C_BUSINESS_ADDRESS_POSTAL_CODE] )
+		WorkPostalCode( m_pPropVals[C_BUSINESS_ADDRESS_POSTAL_CODE].Value.lpszW );
+
+	if( m_pPropVals[C_BUSINESS_ADDRESS_STATE].ulPropTag == contactProps.aulPropTag[C_BUSINESS_ADDRESS_STATE] )
+		WorkState( m_pPropVals[C_BUSINESS_ADDRESS_STATE].Value.lpszW );
+
+	if( m_pPropVals[C_BUSINESS_ADDRESS_STREET].ulPropTag == contactProps.aulPropTag[C_BUSINESS_ADDRESS_STREET] )
+		WorkStreet( m_pPropVals[C_BUSINESS_ADDRESS_STREET].Value.lpszW );
+
+	if( m_pPropVals[C_BUSINESS_HOME_PAGE].ulPropTag == contactProps.aulPropTag[C_BUSINESS_HOME_PAGE] )
+		WorkURL( m_pPropVals[C_BUSINESS_HOME_PAGE].Value.lpszW );
+
+    if( m_pPropVals[C_CONTACT_USER1_IDX].ulPropTag == contactProps.aulPropTag[C_CONTACT_USER1_IDX] )
+		UserField1( m_pPropVals[C_CONTACT_USER1_IDX].Value.lpszW );
+
+    if( m_pPropVals[C_CONTACT_USER2_IDX].ulPropTag == contactProps.aulPropTag[C_CONTACT_USER2_IDX] )
+		UserField2( m_pPropVals[C_CONTACT_USER2_IDX].Value.lpszW );
+
+    if( m_pPropVals[C_CONTACT_USER3_IDX].ulPropTag == contactProps.aulPropTag[C_CONTACT_USER3_IDX] )
+		UserField3( m_pPropVals[C_CONTACT_USER3_IDX].Value.lpszW );
+
+    if( m_pPropVals[C_CONTACT_USER4_IDX].ulPropTag == contactProps.aulPropTag[C_CONTACT_USER4_IDX] )
+		UserField4( m_pPropVals[C_CONTACT_USER4_IDX].Value.lpszW );
+
+	if( m_pPropVals[C_BIRTHDAY].ulPropTag == contactProps.aulPropTag[C_BIRTHDAY] )
+    {
+        SYSTEMTIME st = { 0 } ;
+        
+		FileTimeToSystemTime( &(m_pPropVals[C_BIRTHDAY].Value.ft), &st ) ;
+
+        //We get PR_BIRTHDAY in UTC so let's convert it into local time 
+        TIME_ZONE_INFORMATION tzInfo = { 0 } ;
+        GetTimeZoneInformation( &tzInfo ) ;
+        SystemTimeToTzSpecificLocalTime( &tzInfo, &st, &st ) ;
+
+		TCHAR pszBDay[11] ;
+		swprintf( pszBDay,11,_T("%4d-%02d-%02d"), st.wYear, st.wMonth, st.wDay ) ;
+
+        Birthday( pszBDay );
+    }
+	//email 1
+	RECIP_INFO tempRecip;
+
+	if( m_pPropVals[C_MAIL1TYPE].ulPropTag == contactProps.aulPropTag[C_MAIL1TYPE] &&
+		m_pPropVals[C_MAIL1ADDRESS].ulPropTag == contactProps.aulPropTag[C_MAIL1ADDRESS] 	)
+	{
+		if( wcscmp(m_pPropVals[C_MAIL1TYPE].Value.lpszW, L"SMTP") == 0 )
+		{
+			Email( m_pPropVals[C_MAIL1ADDRESS].Value.lpszW );
+		}
+		else if(wcscmp(m_pPropVals[C_MAIL1TYPE].Value.lpszW, L"EX") == 0 )
+		{
+			tempRecip.pAddrType		= m_pPropVals[C_MAIL1TYPE].Value.lpszW;
+			tempRecip.pEmailAddr	= m_pPropVals[C_MAIL1ADDRESS].Value.lpszW;
+			tempRecip.cbEid			= m_pPropVals[C_MAIL1EID].Value.bin.cb;
+			tempRecip.pEid			= (LPENTRYID)(m_pPropVals[C_MAIL1EID].Value.bin.lpb);
+
+			wstring strSenderEmail(_TEXT(""));
+			HRESULT hr = E_FAIL;//HrMAPIGetSMTPAddress( _session, tempRecip, strSenderEmail );
+			if(hr!=S_OK)
+			{
+				Email(m_pPropVals[C_MAIL1DISPNAME].Value.lpszW);
+			}
+			else
+			{
+				Email( (LPTSTR)strSenderEmail.c_str() );
+			}
+		}
+	}
+
+	//email 2
+	if( m_pPropVals[C_MAIL2TYPE].ulPropTag == contactProps.aulPropTag[C_MAIL2TYPE] &&
+		m_pPropVals[C_MAIL2ADDRESS].ulPropTag == contactProps.aulPropTag[C_MAIL2ADDRESS] 	)
+	{
+		if( wcscmp(m_pPropVals[C_MAIL2TYPE].Value.lpszW, L"SMTP") == 0 )
+		{
+			Email2( m_pPropVals[C_MAIL2ADDRESS].Value.lpszW );
+		}
+		else if(wcscmp(m_pPropVals[C_MAIL2TYPE].Value.lpszW, L"EX") == 0 )
+		{
+			tempRecip.pAddrType		= m_pPropVals[C_MAIL2TYPE].Value.lpszW;
+			tempRecip.pEmailAddr	= m_pPropVals[C_MAIL2ADDRESS].Value.lpszW;
+			tempRecip.cbEid			= m_pPropVals[C_MAIL2EID].Value.bin.cb;
+			tempRecip.pEid			= (LPENTRYID)(m_pPropVals[C_MAIL2EID].Value.bin.lpb);
+
+			wstring strSenderEmail(_TEXT(""));
+			HRESULT hr = E_FAIL;//HrMAPIGetSMTPAddress( _session, tempRecip, strSenderEmail );
+			if(hr!=S_OK)
+			{
+				Email(m_pPropVals[C_MAIL2DISPNAME].Value.lpszW);
+			}
+			else
+			{
+				Email2( (LPTSTR)strSenderEmail.c_str() );
+			}
+		}
+	}
+
+	//email 3
+	if( m_pPropVals[C_MAIL3TYPE].ulPropTag == contactProps.aulPropTag[C_MAIL3TYPE] &&
+		m_pPropVals[C_MAIL3ADDRESS].ulPropTag == contactProps.aulPropTag[C_MAIL3ADDRESS] 	)
+	{
+		if( wcscmp(m_pPropVals[C_MAIL3TYPE].Value.lpszW, L"SMTP") == 0 )
+		{
+			Email3( m_pPropVals[C_MAIL3ADDRESS].Value.lpszW );
+		}
+		else if(wcscmp(m_pPropVals[C_MAIL3TYPE].Value.lpszW, L"EX") == 0 )
+		{
+			tempRecip.pAddrType		= m_pPropVals[C_MAIL3TYPE].Value.lpszW;
+			tempRecip.pEmailAddr	= m_pPropVals[C_MAIL3ADDRESS].Value.lpszW;
+			tempRecip.cbEid			= m_pPropVals[C_MAIL3EID].Value.bin.cb;
+			tempRecip.pEid			= (LPENTRYID)(m_pPropVals[C_MAIL3EID].Value.bin.lpb);
+
+			wstring strSenderEmail(_TEXT(""));
+			HRESULT hr = E_FAIL;//HrMAPIGetSMTPAddress( _session, tempRecip, strSenderEmail );
+			if(hr!=S_OK)
+			{
+				Email(m_pPropVals[C_MAIL3DISPNAME].Value.lpszW);
+			}
+			else
+			{
+				Email3( (LPTSTR)strSenderEmail.c_str() );
+			}
+		}
+
+	}
+
+	if( m_pPropVals[C_IMADDRESS].ulPropTag == contactProps.aulPropTag[C_IMADDRESS] )
+		IMAddress1( m_pPropVals[C_IMADDRESS].Value.lpszW );
 	
 	return S_OK;
 }

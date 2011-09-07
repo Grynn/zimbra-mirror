@@ -82,6 +82,20 @@ inline ULONG SetPropType( ULONG propTag, ULONG propType )
 	return PROP_TAG( propType, PROP_ID(propTag) );
 }
 
+inline int CopyString( LPWSTR& pDest, LPWSTR pSrc )
+{
+	if( pSrc == NULL )
+	{
+		pDest = NULL;
+		return 0;
+	}
+
+	int nLength = (int)wcslen(pSrc);
+	pDest = new WCHAR[ nLength + 1 ];
+	wcscpy(pDest, pSrc);
+	return nLength;
+}
+
 #define UNICODE_EXCEPTION_STRING L"ErrCode:%s Description:%s SrcFile:%s SrcLine:%s"
 inline LPTSTR FromatExceptionInfo(HRESULT errCode, LPWSTR errDescription, LPSTR srcFile,
     int srcLine) {

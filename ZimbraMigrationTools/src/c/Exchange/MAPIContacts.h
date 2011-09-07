@@ -1,5 +1,14 @@
 #pragma once
 
+typedef struct _RecipInfo
+{
+	LPTSTR pAddrType;
+	LPTSTR pEmailAddr;
+	ULONG cbEid;
+	LPENTRYID pEid;
+
+} RECIP_INFO;
+
 //MAPContact class
 class MAPIContact
 {
@@ -124,9 +133,175 @@ private:
 	bool m_bPersonalDL;
 	LONG m_zimbraFileAsId;
 
+	//contact data members
+	LPTSTR m_pCallbackPhone;
+	LPTSTR m_pCarPhone;
+	LPTSTR m_pCompany;
+	LPTSTR m_pEmail;
+	LPTSTR m_pEmail2;
+	LPTSTR m_pEmail3;
+	LPTSTR m_pFileAs;
+	LPTSTR m_pFirstName;
+	LPTSTR m_pHomeCity;
+	LPTSTR m_pHomeCountry;
+	LPTSTR m_pHomeFax;
+	LPTSTR m_pHomePhone;
+	LPTSTR m_pHomePhone2;
+	LPTSTR m_pHomePostalCode;
+	LPTSTR m_pHomeState;
+	LPTSTR m_pHomeStreet;
+	LPTSTR m_pHomeURL;
+	LPTSTR m_pJobTitle;
+	LPTSTR m_pLastName;
+	LPTSTR m_pMiddleName;
+	LPTSTR m_pMobilePhone;
+	LPTSTR m_pNamePrefix;
+	LPTSTR m_pNameSuffix;
+	LPTSTR m_pNotes;
+	LPTSTR m_pOtherCity;
+	LPTSTR m_pOtherCountry;
+	LPTSTR m_pOtherFax;
+	LPTSTR m_pOtherPhone;
+	LPTSTR m_pOtherPostalCode;
+	LPTSTR m_pOtherState;
+	LPTSTR m_pOtherStreet;
+	LPTSTR m_pOtherURL;
+	LPTSTR m_pPager;
+	LPTSTR m_pWorkCity;
+	LPTSTR m_pWorkCountry;
+	LPTSTR m_pWorkFax;
+	LPTSTR m_pWorkPhone;
+	LPTSTR m_pWorkPostalCode;
+	LPTSTR m_pWorkState;
+	LPTSTR m_pWorkStreet;
+	LPTSTR m_pWorkURL;
+    LPTSTR m_pBirthday;
+    LPTSTR m_pUserField1;
+    LPTSTR m_pUserField2;
+    LPTSTR m_pUserField3;
+    LPTSTR m_pUserField4;
+    LPTSTR m_pNickName;
+    LPTSTR m_pDList;
+    LPTSTR m_pType;
+    LPTSTR m_pPictureID;
+	int	   m_size;
+	LPTSTR m_pIMAddress1;
+
 	HRESULT Init();
 public:
 	MAPIContact(LPMESSAGE pMessage);
 	~MAPIContact();
 	bool IsPersonalDL(){return m_bPersonalDL;};
+
+	void CallbackPhone( LPTSTR pStr ){ m_size += CopyString( m_pCallbackPhone, pStr ); }
+	void CarPhone( LPTSTR pStr ) { m_size += CopyString( m_pCarPhone, pStr );  }
+	void Company( LPTSTR pStr ) { m_size += CopyString( m_pCompany, pStr );  }
+	void Email( LPTSTR pStr ) { m_size += CopyString( m_pEmail, pStr );  }
+	void Email2( LPTSTR pStr ) { m_size += CopyString( m_pEmail2, pStr );  }
+	void Email3( LPTSTR pStr ) { m_size += CopyString( m_pEmail3, pStr );  }
+	void FileAs( LPTSTR pStr ) { m_size += CopyString( m_pFileAs, pStr );  }
+	void FirstName( LPTSTR pStr ) { m_size += CopyString( m_pFirstName, pStr );  }
+	void HomeCity( LPTSTR pStr ) { m_size += CopyString( m_pHomeCity, pStr );  }
+	void HomeCountry( LPTSTR pStr ) { m_size += CopyString( m_pHomeCountry, pStr );  }
+	void HomeFax( LPTSTR pStr ) { m_size += CopyString( m_pHomeFax, pStr );  }
+	void HomePhone( LPTSTR pStr ) { m_size += CopyString( m_pHomePhone, pStr );  }
+	void HomePhone2( LPTSTR pStr ) { m_size += CopyString( m_pHomePhone2, pStr );  }
+	void HomePostalCode( LPTSTR pStr ) { m_size += CopyString( m_pHomePostalCode, pStr );  }
+	void HomeState( LPTSTR pStr ) { m_size += CopyString( m_pHomeState, pStr );  }
+	void HomeStreet( LPTSTR pStr ) { m_size += CopyString( m_pHomeStreet, pStr );  }
+	void HomeURL( LPTSTR pStr ) { m_size += CopyString( m_pHomeURL, pStr );  }
+	void JobTitle( LPTSTR pStr ) { m_size += CopyString( m_pJobTitle, pStr );  }
+	void LastName( LPTSTR pStr ) { m_size += CopyString( m_pLastName, pStr );  }
+	void MiddleName( LPTSTR pStr ) { m_size += CopyString( m_pMiddleName, pStr );  }
+	void MobilePhone( LPTSTR pStr ) { m_size += CopyString( m_pMobilePhone, pStr );  }
+	void NamePrefix( LPTSTR pStr ) { m_size += CopyString( m_pNamePrefix, pStr );  }
+	void NameSuffix( LPTSTR pStr ) { m_size += CopyString( m_pNameSuffix, pStr );  }
+	void Notes( LPTSTR pStr ) { m_size += CopyString( m_pNotes, pStr );  }
+	void OtherCity( LPTSTR pStr ) { m_size += CopyString( m_pOtherCity, pStr );  }
+	void OtherCountry( LPTSTR pStr ) { m_size += CopyString( m_pOtherCountry, pStr );  }
+	void OtherFax( LPTSTR pStr ) { m_size += CopyString( m_pOtherFax, pStr );  }
+	void OtherPhone( LPTSTR pStr ) { m_size += CopyString( m_pOtherPhone, pStr );  }
+	void OtherPostalCode( LPTSTR pStr ) { m_size += CopyString( m_pOtherPostalCode, pStr );  }
+	void OtherState( LPTSTR pStr ) { m_size += CopyString( m_pOtherState, pStr );  }
+	void OtherStreet( LPTSTR pStr ) { m_size += CopyString( m_pOtherStreet, pStr );  }
+	void OtherURL( LPTSTR pStr ) { m_size += CopyString( m_pOtherURL, pStr );  }
+	void Pager( LPTSTR pStr ) { m_size += CopyString( m_pPager, pStr );  }
+	void WorkCity( LPTSTR pStr ) { m_size += CopyString( m_pWorkCity, pStr );  }
+	void WorkCountry( LPTSTR pStr ) { m_size += CopyString( m_pWorkCountry, pStr );  }
+	void WorkFax( LPTSTR pStr ) { m_size += CopyString( m_pWorkFax, pStr );  }
+	void WorkPhone( LPTSTR pStr ) { m_size += CopyString( m_pWorkPhone, pStr );  }
+	void WorkPostalCode( LPTSTR pStr ) { m_size += CopyString( m_pWorkPostalCode, pStr );  }
+	void WorkState( LPTSTR pStr ) { m_size += CopyString( m_pWorkState, pStr );  }
+	void WorkStreet( LPTSTR pStr ) { m_size += CopyString( m_pWorkStreet, pStr );  }
+	void WorkURL( LPTSTR pStr ) { m_size += CopyString( m_pWorkURL, pStr );  }
+    void Birthday( LPTSTR pStr ){ m_size += CopyString( m_pBirthday, pStr );  }
+    void UserField1( LPTSTR pStr ){ m_size += CopyString( m_pUserField1, pStr );  }
+    void UserField2( LPTSTR pStr ){ m_size += CopyString( m_pUserField2, pStr );  }
+    void UserField3( LPTSTR pStr ){ m_size += CopyString( m_pUserField3, pStr );  }
+    void UserField4( LPTSTR pStr ){ m_size += CopyString( m_pUserField4, pStr );  }
+    void NickName( LPTSTR pStr ){ m_size += CopyString( m_pNickName, pStr ); }
+    void DList( LPTSTR pStr ){ m_size += CopyString( m_pDList, pStr ); }
+    void Type( LPTSTR pStr ){ m_size += CopyString( m_pType, pStr ); }
+	void IMAddress1( LPTSTR pStr ){ m_size += CopyString( m_pIMAddress1, pStr ); }
+
+
+
+	LPTSTR CallbackPhone(){ return m_pCallbackPhone; }
+		LPTSTR CarPhone() { return m_pCarPhone; }
+		LPTSTR Company(){ return m_pCompany; }
+		LPTSTR Email() { return m_pEmail; }
+		LPTSTR Email2() { return m_pEmail2; }
+		LPTSTR Email3() { return m_pEmail3; }
+		LPTSTR FileAs() { return m_pFileAs; }
+		LPTSTR FirstName() { return m_pFirstName; }
+		LPTSTR HomeCity() { return m_pHomeCity; }
+		LPTSTR HomeCountry() { return m_pHomeCountry; }
+		LPTSTR HomeFax() { return m_pHomeFax; }
+		LPTSTR HomePhone() { return m_pHomePhone; }
+		LPTSTR HomePhone2() { return m_pHomePhone2; }
+		LPTSTR HomePostalCode() { return m_pHomePostalCode; }
+		LPTSTR HomeState() { return m_pHomeState; }
+		LPTSTR HomeStreet() { return m_pHomeStreet; }
+		LPTSTR HomeURL() { return m_pHomeURL; }
+		LPTSTR JobTitle() { return m_pJobTitle; }
+		LPTSTR LastName() { return m_pLastName; }
+		LPTSTR MiddleName() { return m_pMiddleName; }
+		LPTSTR MobilePhone() { return m_pMobilePhone; }
+		LPTSTR NamePrefix() { return m_pNamePrefix; }
+		LPTSTR NameSuffix() { return m_pNameSuffix; }
+		LPTSTR Notes() { return m_pNotes; }
+		LPTSTR OtherCity() { return m_pOtherCity; }
+		LPTSTR OtherCountry() { return m_pOtherCountry; }
+		LPTSTR OtherFax() { return m_pOtherFax; }
+		LPTSTR OtherPhone() { return m_pOtherPhone; }
+		LPTSTR OtherPostalCode() { return m_pOtherPostalCode; }
+		LPTSTR OtherState() { return m_pOtherState; }
+		LPTSTR OtherStreet() { return m_pOtherStreet; }
+		LPTSTR OtherURL() { return m_pOtherURL; }
+		LPTSTR Pager() { return m_pPager; }
+		LPTSTR WorkCity() { return m_pWorkCity; }
+		LPTSTR WorkCountry() { return m_pWorkCountry; }
+		LPTSTR WorkFax() { return m_pWorkFax; }
+		LPTSTR WorkPhone() { return m_pWorkPhone; }
+		LPTSTR WorkPostalCode() { return m_pWorkPostalCode; }
+		LPTSTR WorkState() { return m_pWorkState; }
+		LPTSTR WorkStreet() { return m_pWorkStreet; }
+		LPTSTR WorkURL() { return m_pWorkURL; }
+        LPTSTR Birthday(){ return m_pBirthday; }
+        LPTSTR UserField1(){ return m_pUserField1; }
+        LPTSTR UserField2(){ return m_pUserField2; }
+        LPTSTR UserField3(){ return m_pUserField3; }
+        LPTSTR UserField4(){ return m_pUserField4; }
+        LPTSTR NickName(){ return m_pNickName; }
+        LPTSTR DList(){ return m_pDList; }
+        LPTSTR Type(){ return m_pType; }
+		LPTSTR IMAddress1(){ return m_pIMAddress1; }
+		int Size(){ return m_size; }
+
+        LPTSTR Picture(){ return m_pPictureID; }
+        void Picture( LPTSTR pStr, UINT ulFileSize )
+        { 
+            CopyString( m_pPictureID, pStr );
+            m_size += ulFileSize;
+        }
 };

@@ -8,9 +8,10 @@
 #include "MAPIStore.h"
 #include "MAPITableIterator.h"
 #include "MAPIMessage.h"
-#include "MAPIContacts.h"
 #include "MAPIFolder.h"
 #include "MapiUtils.h"
+#include "MAPIContacts.h"
+
 #include "tree.h"
 #include "resource.h"
 #include "Zimbra/Zimbra.h"
