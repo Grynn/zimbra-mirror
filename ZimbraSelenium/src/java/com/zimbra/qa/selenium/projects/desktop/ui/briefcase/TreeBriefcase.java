@@ -54,8 +54,7 @@ public class TreeBriefcase extends AbsTree {
 		if (item instanceof TagItem) {
 		   actionLocator = Locators.briefcaseTreeView_Desktop + "[id*='"
                + MyApplication.zGetActiveAccount().EmailAddress + "']"
-               + "[id$='" + ((TagItem) item).getId()
-               + "_textCell']";
+               + ":contains('" + item.getName() + "')";
 		} else {
 			throw new HarnessException("Must use IItem as argument, but was "
 					+ item.getClass());
@@ -159,8 +158,7 @@ public class TreeBriefcase extends AbsTree {
 		if (item instanceof TagItem) {
 		   locator = Locators.briefcaseTreeView_Desktop + "[id*='"
                + MyApplication.zGetActiveAccount().EmailAddress + "']"
-               + "[id$='" + ((TagItem) item).getId()
-               + "_textCell']";
+               + ":contains('" + item.getName() + "')";
 		} else if (item instanceof FolderItem) {
 		   locator = Locators.briefcaseTreeView_Desktop + "[id*='"
 		         + MyApplication.zGetActiveAccount().EmailAddress + "']"
