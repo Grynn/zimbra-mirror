@@ -27,7 +27,7 @@
         <property type="string" name="social_pref_showTweetAlertsOn" value="true"/>
         <property type="string" name="social_pref_cardWidthList" value="400px"/>
         <property type="string" name="social_pref_autoShortenURLOn" value="true"/>
-        <property type="string" name="social_pref_toolbarButtonOn" value="true"/>
+        <property type="string" name="social_pref_socializeBtnOn" value="false"/>
         <property type="string" name="social_pref_numberofTweetsToReturn" value="50"/>
         <property type="string" name="social_pref_numberofTweetsSearchesToReturn" value="50"/>
     </userProperties>

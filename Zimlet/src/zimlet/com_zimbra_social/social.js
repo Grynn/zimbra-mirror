@@ -34,7 +34,7 @@ SocialZimlet.prototype.init =
 
  SocialZimlet.prototype.initializeToolbar =
 		 function(app, toolbar, controller, view) {
-			 if (!this.preferences || !this.preferences.social_pref_toolbarButtonOn)
+			 if (!this.preferences || !this.preferences.social_pref_socializeBtnOn)
 				 return;
 
 			 if (view == ZmId.VIEW_CONVLIST ||

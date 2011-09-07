@@ -27,7 +27,7 @@ function com_zimbra_socialPreferences(zimlet) {
 	this.social_pref_numberofTweetsToReturn = parseInt(this.zimlet.getUserProperty("social_pref_numberofTweetsToReturn"));
 	this.social_pref_numberofTweetsSearchesToReturn = parseInt(this.zimlet.getUserProperty("social_pref_numberofTweetsSearchesToReturn"));
 	this.social_pref_autoShortenURLOn = this.zimlet.getUserProperty("social_pref_autoShortenURLOn") == "true";
-	this.social_pref_toolbarButtonOn = this.zimlet.getUserProperty("social_pref_toolbarButtonOn") == "true";
+	this.social_pref_socializeBtnOn = this.zimlet.getUserProperty("social_pref_socializeBtnOn") == "true";
 	var socialcastAccounts = this.zimlet.getUserProperty("socialcastAccounts");
 	if(!socialcastAccounts) {
 		this.zimlet.socialcastAccounts = this.socialcastAccounts = [];
@@ -503,9 +503,9 @@ function() {
 		this.zimlet.setUserProperty("social_pref_diggPopularIsOn", currentVal);
 		save = true;
 	}
-	currentVal = document.getElementById("social_pref_toolbarButtonOn").checked;
-	if (this.social_pref_toolbarButtonOn != currentVal) {
-		this.zimlet.setUserProperty("social_pref_toolbarButtonOn", currentVal);
+	currentVal = document.getElementById("social_pref_socializeBtnOn").checked;
+	if (this.social_pref_socializeBtnOn != currentVal) {
+		this.zimlet.setUserProperty("social_pref_socializeBtnOn", currentVal);
 		save = true;
 	}
 	
@@ -581,8 +581,8 @@ com_zimbra_socialPreferences.prototype._setPrefCheckboxes = function() {
 	if (this.social_pref_diggPopularIsOn) {
 		document.getElementById("social_pref_diggPopularIsOn").checked = true;
 	}
-	if (this.social_pref_toolbarButtonOn) {
-		document.getElementById("social_pref_toolbarButtonOn").checked = true;
+	if (this.social_pref_socializeBtnOn) {
+		document.getElementById("social_pref_socializeBtnOn").checked = true;
 	}
 	if (this.social_pref_SocialMailUpdateOn) {
 		document.getElementById("social_pref_SocialMailUpdateOn").checked = true;
@@ -639,7 +639,7 @@ function() {
 	html[i++] = "<table>";
 	html[i++] = "<tr><td><input type='checkbox' id='social_pref_SocialMailUpdateOn' /></td><td width=100%>"+this.zimlet.getMessage("sendSocialMail")+"</td></tr>";
 	html[i++] = "<tr><td><input type='checkbox' id='social_pref_showTweetAlertsOn' /></td><td width=100%>"+this.zimlet.getMessage("showTweetAlert")+"</td></tr>";
-	html[i++] = "<tr><td><input type='checkbox' id='social_pref_toolbarButtonOn' /></td><td width=100%>"+this.zimlet.getMessage("showSocializeBtn")+"</td></tr>";
+	html[i++] = "<tr><td><input type='checkbox' id='social_pref_socializeBtnOn' /></td><td width=100%>"+this.zimlet.getMessage("showSocializeBtn")+"</td></tr>";
 
 	html[i++] = "</table>";
 	return html.join("");
