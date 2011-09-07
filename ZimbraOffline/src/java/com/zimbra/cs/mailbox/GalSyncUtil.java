@@ -307,4 +307,9 @@ public final class GalSyncUtil {
             }
         }
     }
+
+    public static void removeConfig(ZcsMailbox mbox, Mailbox galMbox) throws ServiceException {
+        GalSyncCheckpointUtil.removeCheckpoint(mbox);
+        GalSyncRetry.remove(galMbox);
+    }
 }

@@ -45,6 +45,9 @@ public interface OfflineConstants {
     public static final QName CHANGE_PASSWORD_REQUEST = QName.get("ChangePasswordRequest", NAMESPACE);
     public static final QName CHANGE_PASSWORD_RESPONSE = QName.get("ChangePasswordResponse", NAMESPACE);
 
+    public static final QName RESET_GAL_ACCOUNT_REQUEST = QName.get("ResetGalAccountRequest", NAMESPACE);
+    public static final QName RESET_GAL_ACCOUNT_RESPONSE = QName.get("ResetGalAccountResponse", NAMESPACE);
+
     public static final String A_Event = "e";
     public static final String EVENT_UI_LOAD_BEGIN = "ui_load_begin";
     public static final String EVENT_UI_LOAD_END = "ui_load_end";

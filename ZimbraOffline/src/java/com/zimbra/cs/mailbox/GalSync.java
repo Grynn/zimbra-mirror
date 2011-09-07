@@ -54,7 +54,7 @@ public class GalSync {
     private static GalSync instance = new GalSync();
     private TimerTask currentTask;
     private boolean isDisabled = false;
-    private boolean isRunning = false;
+    private volatile boolean isRunning = false;
     private OfflineProvisioning prov;
 
     private List<String> retryContactIds = new ArrayList<String>();
@@ -92,7 +92,7 @@ public class GalSync {
         5 * Constants.MILLIS_PER_SECOND,
         OfflineLC.zdesktop_gal_sync_timer_frequency.longValue());
     }
-    
+
     /*
      * the only starting point for running gal-sync task. if account == null, sync gal for all zcs accounts
      */
@@ -101,7 +101,7 @@ public class GalSync {
             OfflineLog.offline.debug("Offline GAL sync is disabled in local config (zdesktop_sync_gal = false)");
             return;
         }
-        
+
         synchronized (this) {
             if (isRunning) {
                 OfflineLog.offline.info("Offline GAL sync is already running");
@@ -110,7 +110,6 @@ public class GalSync {
                 isRunning = true;
             }
         }
-        
         try {
             for (Account acct : prov.getAllZcsAccounts()) {
                 OfflineAccount account = (OfflineAccount) acct;
@@ -129,9 +128,10 @@ public class GalSync {
         } finally {
             isRunning = false;
         }
+        return;
     }
 
-    private void sync(ZcsMailbox ombx, boolean isOnRequest) throws ServiceException {        
+    private void sync(ZcsMailbox ombx, boolean isOnRequest) throws ServiceException {
         OfflineAccount account = (OfflineAccount)ombx.getAccount();
         if (!account.getBooleanAttr(Provisioning.A_zimbraFeatureGalEnabled , false) ||
             !account.getBooleanAttr(Provisioning.A_zimbraFeatureGalSyncEnabled , false)) {
@@ -265,8 +265,56 @@ public class GalSync {
         if (fullSync) {
             OfflineLog.offline.info("Offline GAL full sync completed successfully, token persisted: " + token);
         } else {
-            OfflineLog.offline.info("Offline GAL delta sync completed, token persisted: " + token); 
+            OfflineLog.offline.info("Offline GAL delta sync completed, token persisted: " + token);
         }
+    }
+
+    public static boolean isFullSynced(Account account) {
+        String syncToken = account.getAttr(OfflineConstants.A_offlineGalAccountSyncToken, false);
+        return (syncToken != null && syncToken.length() != 0);
+    }
+
+    /**
+     * if GAL is full synced within 5 min, consider it recently full synced.
+     * @param account The account of mailbox, not GAL account
+     * @return whether it's recently full synced
+     */
+    private static boolean isRecentlyFullSynced(Account account) {
+        String lastRefreshStr = account.getAttr(OfflineConstants.A_offlineGalAccountLastRefresh);
+        try {
+            long lastRefresh = Long.parseLong(lastRefreshStr);
+            return (System.currentTimeMillis() - lastRefresh <= 5 * Constants.MILLIS_PER_MINUTE);
+        } catch (Exception e) {
+        }
+        return false;
+    }
+
+    public boolean resetGal(final ZcsMailbox mbox, final Mailbox galMbox, final OfflineAccount account,
+            final OfflineAccount galAccount) {
+        final String accountName = account.getName();
+        this.timer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                try {
+                    if (isRecentlyFullSynced(galAccount)) {
+                        OfflineLog.offline.debug("reseting gal for account %s -- Skipped because GAL is recently synced", accountName);
+                        return;
+                    }
+                    OfflineLog.offline.debug("reseting gal for account %s -- 1. begin", accountName);
+                    GalSyncUtil.removeConfig(mbox, galMbox);
+                    OfflineLog.offline.debug("reseting gal for account %s -- 2. removed config", accountName);
+                    prov.deleteGalAccount(account);
+                    OfflineLog.offline.debug("reseting gal for account %s -- 3. deleted its gal", accountName);
+                    OfflineLog.offline.debug("reseting gal for account %s -- 4. about to resync", accountName);
+                    runTask(account, true);
+                    OfflineLog.offline.debug("reseting gal for account %s -- 5. resync is done", accountName);
+                } catch (Exception e) {
+                    OfflineLog.offline.debug("reseting gal for account %s -- FAILED due to %s", accountName, e.getCause());
+                }
+            }
+        }, 0);
+        return true;
     }
 
     private void populateGroupMembers(ZcsMailbox mbox, OfflineAccount galAccount) throws ServiceException {

@@ -50,6 +50,10 @@ public final class GalSyncRetry {
         return this.mboxRetryMap.get(galMbox);
     }
 
+    private synchronized MailboxGalSyncRetry getExistingRetry(Mailbox galMbox) {
+        return this.mboxRetryMap.get(galMbox);
+    }
+
     public static void checkpoint(ZcsMailbox mbox, Mailbox galMbox, List<String> retryContactIds)
     throws ServiceException {
         LazyHolder.instance.getRetry(mbox, galMbox).checkpoint(retryContactIds);
@@ -58,6 +62,15 @@ public final class GalSyncRetry {
     public static void retry(ZcsMailbox mbox, Mailbox galMbox, List<String> retryContactIds)
     throws ServiceException, IOException {
         LazyHolder.instance.getRetry(mbox, galMbox).retry(retryContactIds);
+    }
+
+    public static boolean remove(Mailbox galMbox) throws ServiceException {
+        MailboxGalSyncRetry retry = LazyHolder.instance.getExistingRetry(galMbox);
+        if (retry != null) {
+            retry.remove();
+            return true;
+        }
+        return false;
     }
 
     private static final class MailboxGalSyncRetry {
@@ -160,6 +173,11 @@ public final class GalSyncRetry {
 
         void checkpoint() throws ServiceException {
             this.md.put(this.galMbox.getAccountId(), getRetryItems());
+            this.galMbox.setConfig(null, OfflineGalSyncRetry, this.md);
+        }
+
+        void remove() throws ServiceException {
+            this.md = null;
             this.galMbox.setConfig(null, OfflineGalSyncRetry, this.md);
         }
 
