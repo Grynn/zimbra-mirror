@@ -309,10 +309,10 @@ public class DisplayMail extends AbsDisplay {
 			
 		} else if ( field == Field.From ) {
 			
-			locator = this.ContainerLocator + " tr[id$='_from'] span[id$='_com_zimbra_email'] span span";
+			locator = this.ContainerLocator + " td[id$='_from'] span[id$='_com_zimbra_email'] span span";
 			if ( !sIsElementPresent(locator) ) {
 				// no email zimlet case
-				locator = this.ContainerLocator + " tr[id$='_from']";
+				locator = this.ContainerLocator + " td[id$='_from']";
 			}
 
 		} else if ( field == Field.OnBehalfOf ) {
@@ -325,10 +325,10 @@ public class DisplayMail extends AbsDisplay {
 
 		} else if ( field == Field.ResentFrom ) {
 			
-			locator = this.ContainerLocator + " td[id$='_bwo'] span[id$='_com_zimbra_email'] span span";
+			locator = this.ContainerLocator + " td[id$='_bwo'] span[id$='_com_zimbra_email'] span";
 			if ( !sIsElementPresent(locator) ) {
 				// no email zimlet case
-				locator = this.ContainerLocator + " tr[id$='_bwo']";
+				locator = this.ContainerLocator + " td[id$='_bwo']";
 			}
 
 		} else if ( field == Field.OnBehalfOfLabel ) {
@@ -337,10 +337,10 @@ public class DisplayMail extends AbsDisplay {
 
 		} else if ( field == Field.ReplyTo ) {
 			
-			locator = this.ContainerLocator + " tr[id$='_reply to'] span[id$='_com_zimbra_email'] span span";
+			locator = this.ContainerLocator + " tr[id$='_reply to'] td.LabelColValue span[id$='_com_zimbra_email'] span span";
 			if ( !sIsElementPresent(locator) ) {
 				// no email zimlet case
-				locator = this.ContainerLocator + " tr[id$='_reply to']";
+				locator = this.ContainerLocator + " tr[id$='_reply to'] td.LabelColValue";
 			}
 
 		} else if ( field == Field.ReceivedDate ) {
