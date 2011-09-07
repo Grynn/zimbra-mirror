@@ -99,7 +99,9 @@ function (loc) {
         var kbMgr = this._shell.getKeyboardMgr();
         if (kbMgr.isEnabled()){
                 kbMgr.popTabGroup(this._tabGroup);
+                kbMgr.grabFocus(this._tabGroup.getFocusMember());
         }
+
 
 	if(this._localXForm) {
 		this._localXForm.focusFirst();
