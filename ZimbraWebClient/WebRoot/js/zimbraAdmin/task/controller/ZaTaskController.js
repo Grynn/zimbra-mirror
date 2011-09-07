@@ -7,6 +7,7 @@
  */
 ZaTaskController = function(appCtxt, container) {
 	ZaController.call(this, appCtxt, container,"ZaTaskController");
+    this._workingInProcess = new AjxVector();
 }
 
 ZaTaskController.prototype = new ZaController();
@@ -31,4 +32,25 @@ function(entry) {
         this._taskContentPanel.setObject(entry);
     }
     return this._taskContentPanel;
+}
+
+ZaTaskController.prototype.addTask = function(task) {
+    if (!this._workingInProcess.containsLike(task, task.getData)) {
+        this._workingInProcess.add(task, undefined, true);
+        this._taskContentPanel._localXForm.setInstanceValue(this._workingInProcess.getArray(),ZaTask.A_workingInProcess);
+    }
+}
+
+ZaTaskController.prototype.setExpanded = function(isExpanded) {
+    // TODO  remove this to view manager
+    var width;
+    if (isExpanded) {
+        width = 100;
+    } else {
+        width = 20;
+    }
+    window.skin.setToolWidth(width);
+    window.skin._reflowApp();
+
+    this._taskContentPanel._localXForm.setInstanceValue(isExpanded, ZaTask.A2_isExpanded);
 }

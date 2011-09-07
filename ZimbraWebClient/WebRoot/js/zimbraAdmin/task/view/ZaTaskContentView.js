@@ -19,39 +19,18 @@ ZaTaskContentView.prototype = new ZaTabView();
 ZaTaskContentView.prototype.constructor = ZaTaskContentView;
 ZaTabView.XFormModifiers["ZaTaskContentView"] = new Array();
 
+ZaTaskContentView._dialogCache = new Array();
+ZaTaskContentView._getDialog =
+function(type, myConstructor) {
+    if (!ZaTaskContentView._dialogCache[type]) {
+        ZaTaskContentView._dialogCache[type] = new myConstructor(ZaApp.getInstance().getAppCtxt().getShell());
+    }
+    return ZaTaskContentView._dialogCache[type];
+}
 ZaTaskContentView.prototype.setObject =
 function(entry) {
 
-    this._containedObject = new Object();
-	this._containedObject.attrs = new Object();
-
-    for (var a in entry.attrs) {
-		var modelItem = this._localXForm.getModel().getItem(a) ;
-        if ((modelItem != null && modelItem.type == _LIST_) || (entry.attrs[a] != null && entry.attrs[a] instanceof Array)) {
-        	//need deep clone
-            this._containedObject.attrs [a] =
-                    ZaItem.deepCloneListItem (entry.attrs[a]);
-        } else {
-            this._containedObject.attrs[a] = entry.attrs[a];
-        }
-	}
-	this._containedObject.name = entry.name;
-	this._containedObject.type = entry.type;
-
-	if(entry.rights)
-		this._containedObject.rights = entry.rights;
-
-	if(entry.setAttrs)
-		this._containedObject.setAttrs = entry.setAttrs;
-
-	if(entry.getAttrs)
-		this._containedObject.getAttrs = entry.getAttrs;
-
-	if(entry._defaultValues)
-		this._containedObject._defaultValues = entry._defaultValues;
-
-	if(entry.id)
-		this._containedObject.id = entry.id;
+    this._containedObject = entry;
 
     this._localXForm.setInstance(this._containedObject);
 
@@ -60,20 +39,37 @@ function(entry) {
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, this.formDirtyLsnr);
 }
 
+ZaTaskContentView.workingInProcessSelectionListener =
+function (ev) {
+	var arr = this.widget.getSelection();
+	if(arr && arr.length) {
+		var selectedItem = arr[0];
+        var dialog = ZaTaskContentView._getDialog(selectedItem.type, selectedItem.constructor);
+        dialog.setObject(selectedItem.data);
+        dialog.popup();
+	}
+}
+
 ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
+    var workingInProcessHeader = new Array();
+    workingInProcessHeader[0] = new ZaListHeaderItem(ZaTask.A_workingInProcess, ZaMsg.MSG_WorkingTask, null, "auto", null, ZaTask.A_workingInProcess, false, true);
+
+    var runningTaskHeader = new Array();
+    runningTaskHeader[0] = new ZaListHeaderItem(ZaTask.A_runningTask, ZaMsg.MSG_RunningTask, null, "auto", null, ZaTask.A_runningTask, false, true);
     var items = {
         type:_GROUP_, numCols:1,  items:[
-            {type:_OUTPUT_, value: "working in progress"},
-            {ref:ZaTask.A_workingInProcess, type:_DWT_LIST_, height:"100px",
-               forceUpdate: true, preserveSelection:false, multiselect:true,
-               headerList:null,
-               visibilityChecks:[ZaItem.hasReadPermission]
+            {ref:ZaTask.A_workingInProcess, type:_DWT_LIST_, height:100,
+               forceUpdate: true, preserveSelection:false, multiselect:false,
+               headerList:workingInProcessHeader,
+               visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, true]],
+               visibilityChangeEventSources:[ZaTask.A2_isExpanded],
+               onSelection:ZaTaskContentView.workingInProcessSelectionListener
             },
-            {type:_OUTPUT_, value: "Running Task"},
-            {ref:ZaTask.A_runningTask, type:_DWT_LIST_, height:"100px",
-               forceUpdate: true, preserveSelection:false, multiselect:true,
-               headerList:null,
-               visibilityChecks:[ZaItem.hasReadPermission]
+            {ref:ZaTask.A_runningTask, type:_DWT_LIST_, height:100,
+               forceUpdate: true, preserveSelection:false, multiselect:false,
+               headerList:runningTaskHeader,
+               visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, true]],
+               visibilityChangeEventSources:[ZaTask.A2_isExpanded]
             },
             {type:_SPACER_, height:"100%"}
         ]

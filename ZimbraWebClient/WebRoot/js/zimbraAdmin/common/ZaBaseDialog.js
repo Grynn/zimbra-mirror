@@ -49,5 +49,18 @@ ZaBaseDialog.prototype.addMiniIcon =
 function () {
     if (this._minEl) {
         this._minEl.innerHTML = AjxImg.getImageHtml("Help");
+	this._minEl.onclick = AjxCallback.simpleClosure(ZaBaseDialog.__handleMinClick, this);
     }
 }
+
+ZaBaseDialog.__handleMinClick = 
+function () {
+    var constructor = this.constructor;
+    var dialogType = this.toString();
+    var dataObject = this.getObject();
+    var task = new ZaWorkingProcess(constructor, dialogType, dataObject);
+    ZaZimbraAdmin.getInstance().getTaskController().addTask(task);
+    this.popdown(); 	
+}
+	
+

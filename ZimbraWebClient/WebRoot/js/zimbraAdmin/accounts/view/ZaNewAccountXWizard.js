@@ -43,6 +43,9 @@ ZaNewAccountXWizard.prototype = new ZaXWizardDialog;
 if (appNewUI)
     ZaNewAccountXWizard.prototype = new ZaBaseDialog;
 ZaNewAccountXWizard.prototype.constructor = ZaNewAccountXWizard;
+ZaNewAccountXWizard.prototype.toString = function() {
+    return "ZaNewAccountXWizard";
+}
 ZaXDialog.XFormModifiers["ZaNewAccountXWizard"] = new Array();
 ZaNewAccountXWizard.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/create_an_account.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 ZaNewAccountXWizard.prototype.handleXFormChange = 
