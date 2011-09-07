@@ -10,6 +10,9 @@ endif
 ZIMBRA_HOME ?= /opt/zimbra
 
 PATCH	:=
+ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
+	PATCH	:= patch -g0 -N -p1 < ../patches/issue222.patch;
+endif
 
 ifdef BETA
 	include $(MEMCACHED_ROOT)/../beta_versions.def
@@ -27,15 +30,12 @@ filesb	:= $(wildcard src/memcached-$(MEMCACHED_VERSION).tar.gz)
 
 all: checksrc allclean build tar
 
-ifeq (MACOSXx86,$(findstring MACOSXx86,$(BUILD_PLATFORM)))
-	PATCH	:= patch -g0 -N -p1 < ../patches/issue222.patch;
-endif
-
 checksrc:
 	$(if $(filesa), @echo "", exit 1)
 	$(if $(filesb), @echo "", exit 1)
 
 build:
+	@echo $(BUILD_PLATFORM)
 	(tar xfz src/libevent-$(LIBEVENT_VERSION).tar.gz; \
 	cd libevent-$(LIBEVENT_VERSION); \
 	CFLAGS="-g -O2" ./configure --prefix=$(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION); \
