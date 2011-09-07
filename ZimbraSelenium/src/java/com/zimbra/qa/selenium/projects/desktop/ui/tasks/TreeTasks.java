@@ -189,12 +189,8 @@ public class TreeTasks extends AbsTree {
 
 		} else if (action == Action.A_RIGHTCLICK) {
 
-		   if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
-		      actionLocator = "css=[id^='zti__" + MyApplication.zGetActiveAccount().EmailAddress +
-		            ":main_Tasks__'][id$=':" + t.getId() + "_textCell']";
-		   } else {
-		      actionLocator = "zti__main_Tasks__" + t.getId() + "_textCell";
-		   }
+		   actionLocator = "css=[id^='zti__" + MyApplication.zGetActiveAccount().EmailAddress +
+		         ":main_Tasks__'] td:contains('" + t.getName() + "')";
 
 		   GeneralUtility.waitForElementPresent(this, actionLocator);
 		   // actionLocator= Locators.zTagsHeader;
