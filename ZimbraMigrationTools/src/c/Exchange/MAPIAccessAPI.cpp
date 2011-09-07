@@ -151,7 +151,57 @@ HRESULT MAPIAccessAPI::Iterate_folders(Zimbra::MAPI::MAPIFolder &folder, vector<
 	}
 	delete folderIter;
 	folderIter = NULL;
-    return true;
+    return S_OK;
+}
+
+
+HRESULT MAPIAccessAPI::GetInternalFolder(SBinary sbFolderEID, MAPIFolder &folder)
+{
+	LPMAPIFOLDER pFolder = NULL;
+    HRESULT hr = S_OK;
+    ULONG objtype;
+    if ((hr =
+             m_zmmapisession->OpenEntry(sbFolderEID.cb, (LPENTRYID)sbFolderEID.lpb, NULL, MAPI_BEST_ACCESS, &objtype,
+                 (LPUNKNOWN *)&pFolder)) != S_OK)
+        throw GenericException(hr, L"GetFolderItems OpenEntry Failed.", __LINE__,
+            __FILE__);
+	Zimbra::Util::ScopedBuffer<SPropValue> pPropValues;
+    // Get PR_DISPLAY_NAME
+    if(FAILED(hr= HrGetOneProp(pFolder,PR_DISPLAY_NAME,pPropValues.getptr())))
+		throw GenericException(hr, L"GetFolderItems HrGetOneProp() Failed.", __LINE__,
+            __FILE__);
+
+    folder.Initialize(pFolder, pPropValues->Value.LPSZ,&sbFolderEID);
+	return hr;
+}
+
+HRESULT MAPIAccessAPI::GetFolderItems(SBinary sbFolderEID, vector<Item_Data> &ItemList)
+{
+	HRESULT hr=S_OK;
+	MAPIFolder folder;
+	
+	if (FAILED(hr=GetInternalFolder(sbFolderEID, folder)!=S_OK))
+		return hr;
+
+	Zimbra::MAPI::MessageIterator *msgIter = new Zimbra::MAPI::MessageIterator();
+	folder.GetMessageIterator(*msgIter);
+    BOOL bContinue = true;
+    while (bContinue) {
+        Zimbra::MAPI::MAPIMessage *msg = new Zimbra::MAPI::MAPIMessage();
+        bContinue = msgIter->GetNext(*msg);
+        if (bContinue) {
+			Item_Data itemdata;
+			//
+			itemdata.lItemType = msg->ItemType();
+			itemdata.sbMessageID = msg->EntryID();
+			itemdata.MessageDate = msg->Date();
+			ItemList.push_back(itemdata);
+        }
+        delete msg;
+    }
+    delete msgIter;
+
+	return hr;
 }
 
 HRESULT MAPIAccessAPI::IterateVectorList(vector<Folder_Data> &vFolderList,CSingleton * Log)

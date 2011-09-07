@@ -9,6 +9,14 @@ public:
     virtual ~MAPISessionException() {}
 };
 
+// Item type consts
+#define ZCM_NONE                0x00
+#define ZCM_MAIL                0x01
+#define ZCM_CONTACTS            0x02
+#define ZCM_APPOINTMENTS        0x04
+#define ZCM_TASKS               0x08
+#define ZCM_MEETRQRS			0x10
+#define ZCM_ALL                 0xFF
 class MAPIStore;
 
 // MAPI session class

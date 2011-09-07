@@ -1,6 +1,5 @@
 #include "common.h"
 #include "Exchange.h"
-#include "MAPIObjects.h"
 #include "MAPISession.h"
 #include "MAPIStore.h"
 

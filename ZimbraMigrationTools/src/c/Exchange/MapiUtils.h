@@ -75,6 +75,13 @@ inline LPTSTR Int32ToString(int i) {
     return pRetVal;
 }
 
+inline ULONG SetPropType( ULONG propTag, ULONG propType )
+{
+	if( PROP_TYPE(propTag) == PT_ERROR )
+		return PR_NULL;
+	return PROP_TAG( propType, PROP_ID(propTag) );
+}
+
 #define UNICODE_EXCEPTION_STRING L"ErrCode:%s Description:%s SrcFile:%s SrcLine:%s"
 inline LPTSTR FromatExceptionInfo(HRESULT errCode, LPWSTR errDescription, LPSTR srcFile,
     int srcLine) {

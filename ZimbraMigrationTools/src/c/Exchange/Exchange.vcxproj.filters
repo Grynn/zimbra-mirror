@@ -39,9 +39,6 @@
     <ClCompile Include="ExchangeAdmin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MAPIObjects.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MAPITableIterator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -66,6 +63,15 @@
     <ClCompile Include="UserObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MAPIContacts.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MAPIMessage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MAPIFolder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MapiMigration.h">
@@ -87,9 +93,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MAPITableIterator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MAPIObjects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MAPISession.h">
@@ -120,6 +123,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UserObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MAPIContacts.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MAPIMessage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MAPIFolder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

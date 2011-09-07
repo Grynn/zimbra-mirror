@@ -266,8 +266,10 @@
     <ClCompile Include="folderObject.cpp" />
     <ClCompile Include="ItemObject.cpp" />
     <ClCompile Include="MAPIAccessAPI.cpp" />
+    <ClCompile Include="MAPIContacts.cpp" />
+    <ClCompile Include="MAPIFolder.cpp" />
+    <ClCompile Include="MAPIMessage.cpp" />
     <ClCompile Include="MapiMigration.cpp" />
-    <ClCompile Include="MAPIObjects.cpp" />
     <ClCompile Include="MAPISession.cpp" />
     <ClCompile Include="MAPIStore.cpp" />
     <ClCompile Include="MAPITableIterator.cpp" />
@@ -284,8 +286,10 @@
     <ClInclude Include="GenericException.h" />
     <ClInclude Include="ItemObject.h" />
     <ClInclude Include="MAPIAccessAPI.h" />
+    <ClInclude Include="MAPIContacts.h" />
+    <ClInclude Include="MAPIFolder.h" />
+    <ClInclude Include="MAPIMessage.h" />
     <ClInclude Include="MapiMigration.h" />
-    <ClInclude Include="MAPIObjects.h" />
     <ClInclude Include="MAPISession.h" />
     <ClInclude Include="MAPIStore.h" />
     <ClInclude Include="MAPITableIterator.h" />

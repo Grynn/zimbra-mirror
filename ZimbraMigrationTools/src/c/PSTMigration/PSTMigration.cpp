@@ -231,6 +231,14 @@ void MAPIAccessAPITestV()
 	maapi->GetRootFolderHierarchy(vfolderlist);
 
 //	maapi->IterateVectorList(vfolderlist);
+	vector<Item_Data> vItemDataList;
+	vector<Folder_Data>::iterator it;
+	for(it=vfolderlist.begin();it!=vfolderlist.end();it++)
+	{
+		printf("FolderName:  %S \n",(*it).name.c_str());
+		SBinary sbin = (*it).sbin;
+		maapi->GetFolderItems(sbin,vItemDataList);
+	}
 	delete maapi;
 }
 
@@ -246,9 +254,9 @@ int main(int argc, TCHAR *argv[])
 //	GetAllProfiles();	
 //MAPIAccessAPITest_tr();
 	
-//MAPIAccessAPITestV();
+MAPIAccessAPITestV();
 //Zimbra::MAPI::Util::ReverseDelimitedString(L"lb1/tv2/cr3/Inbox/TopFolder",L"/");
-ExchangeMigrationSetupTest();
+//ExchangeMigrationSetupTest();
 //CreateExchangeMailBox();
 	
 	return 0;
