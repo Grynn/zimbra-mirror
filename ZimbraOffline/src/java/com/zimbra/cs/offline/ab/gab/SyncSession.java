@@ -16,6 +16,7 @@ package com.zimbra.cs.offline.ab.gab;
 
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
+import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mailbox.Contact.Attachment;
@@ -398,32 +399,44 @@ public class SyncSession {
     private static String getEditUrl(BaseEntry entry) {
         return entry.getEditLink().getHref();
     }
+    
+    private boolean isGroup(int itemId) throws ServiceException {
+        try {
+            Contact contact = localData.getContact(itemId);
+            return ContactGroup.isContactGroup(contact); 
+        } catch (MailServiceException mse) {
+            if (MailServiceException.NO_SUCH_CONTACT != mse.getCode()) {
+                throw mse;
+            } else {
+                return false;
+            }
+        }
+    }
 
     private void processLocalContactChanges(Collection<Change> changes)
     throws ServiceException, IOException {
         LOG.debug("Found %d local contact changes", changes.size());
         List<SyncRequest> reqs = new ArrayList<SyncRequest>();
         // Push local changes to remote right away to avoid conflicts while update and delete
+        Set<Change> groups = new HashSet<Change>();
         for (Change change : changes) {
-            Contact contact = localData.getContact(change.getItemId());
-            if (!ContactGroup.isContactGroup(contact)) {
+            if (!isGroup(change.getItemId())) {
                 processLocalContactChange(change, reqs);
+            } else {
+                groups.add(change);
             }
         }
         pushContactChanges(reqs);
         if (reqs.size() > 0) {
             LOG.debug("Contact Group sync had %d error(s)", reqs.size());
             reqs.clear();
-	}
-	for (Change change : changes) {
-            Contact contact = localData.getContact(change.getItemId());
-            if (ContactGroup.isContactGroup(contact)) {
-                processLocalContactChange(change, reqs);
-                pushContactChanges(reqs);
-                if (reqs.size() > 0) {
-                    LOG.debug("Contact Group sync had %d error(s)", reqs.size());
-                    reqs.clear();
-                }
+        }
+        for (Change group : groups) {
+            processLocalContactChange(group, reqs);
+            pushContactChanges(reqs);
+            if (reqs.size() > 0) {
+                LOG.debug("Contact Group sync had %d error(s)", reqs.size());
+                reqs.clear();
             }
         }
     }
@@ -507,25 +520,36 @@ public class SyncSession {
         for (DataSourceItem dsi : mappings) {
             if (Gab.isContactId(dsi.remoteId)) {
                 ContactEntry contact = getEntry(dsi, ContactEntry.class);
-                if (contact.hasGroupMembershipInfos() && contact.hasEmailAddresses()) {
-                    boolean check = false;
-                    boolean update = false;
-                    for (GroupMembershipInfo gmi : contact.getGroupMembershipInfos()) {
-                        if (!isDeleted(gmi)) {
-                            if (localGroup.hasEmail(getPrimaryEmail(contact).getAddress())) {
-                                //update the contacts group membership info
-                                update = true;
-                                if(entryID.equals(gmi.getHref())) {
-                                    check = true;
+                if (contact == null) {
+                    continue;
+                } 
+                Email primaryEmail = getPrimaryEmail(contact);
+                if (primaryEmail == null) {
+                    continue;
+                }   
+                boolean check = false;
+                boolean update = false;
+                if (localGroup.hasEmail(primaryEmail.getAddress())) {
+                    //email is in local group
+                    if (contact.hasGroupMembershipInfos() && contact.hasEmailAddresses()) {
+                        for (GroupMembershipInfo gmi : contact.getGroupMembershipInfos()) {
+                            if (!isDeleted(gmi)) {
+                                    //update the contacts group membership info
+                                    update = true;
+                                    if(entryID.equals(gmi.getHref())) {
+                                        check = true;
+                                        break;
+                                    }
+                                } else if (entryID.equals(gmi.getHref())) {
+                                    //delete the contacts group membership info
+                                    contact.getGroupMembershipInfos().remove(gmi);
+                                    reqs.add(SyncRequest.update(this, dsi.itemId, contact));
                                     break;
                                 }
-                            } else if (entryID.equals(gmi.getHref())) {
-                                //delete the contacts group membership info
-                                contact.getGroupMembershipInfos().remove(gmi);
-                                reqs.add(SyncRequest.update(this, dsi.itemId, contact));
-                                break;
-                            }
                         }
+                    } else {
+                        //else always add; contact had no group membership info
+                        update = true;
                     }
                     if (update && !check) {
                         GroupMembershipInfo localgmi = new GroupMembershipInfo();
@@ -533,6 +557,18 @@ public class SyncSession {
                         localgmi.setHref(entryID);
                         contact.addGroupMembershipInfo(localgmi);
                         reqs.add(SyncRequest.update(this, dsi.itemId, contact));
+                    }
+                } else {
+                    //email is no longer in local group; may have been deleted
+                    if (contact.hasGroupMembershipInfos() && contact.hasEmailAddresses()) {
+                        for (GroupMembershipInfo gmi : contact.getGroupMembershipInfos()) {
+                            if (entryID.equals(gmi.getHref())) {
+                                //delete the contacts group membership info
+                                contact.getGroupMembershipInfos().remove(gmi);
+                                reqs.add(SyncRequest.update(this, dsi.itemId, contact));
+                                break;
+                            }
+                        }
                     }
                 }
             }
