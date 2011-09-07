@@ -12,25 +12,183 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
+ 
+/*----------------------------------------------- begin Basic Button Styling. */
+/* The Octopus basic button view uses a combination of classes to style the
+   buttons. Since Octopus support is not planned for IE6, we can get away
+   with using multiple class selectors for the styling.
+   The following are the states of the button, defined via selectors. */
+
+/* reset unneeded Zimbra states */
+.ZToolbarButtonTable, .ZToolbarButtonBorder, .ZButton, .ZButton.ZHover, .ZButton.ZActive, .ZButton.ZDisabled, .ZAppTab.ZActive {
+    border:0 !important;
+    background-color:transparent !important;
+    font-weight:inherit;
+}
+/* Button in default, unselected, unpressed state. */
+.ZButton, .DwtToolbarButton {
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fefefe), to(#e6e6e6));
+    background-image: -moz-linear-gradient(top, #fefefe, #e6e6e6);
+    border:1px solid #949494;
+    border-radius: 3px;
+    -moz-background-radius: 3px;
+    -webkit-background-radius: 3px;
+    padding:1px 2px;
+    margin:0 2px;
+    text-align:center;
+}
+
+/* mouse-over button */
+.ZButton.ZHover, .DwtToolbarButton.ZHover {
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#c7e9ff), to(#90b6ff));
+    background-image: -moz-linear-gradient(top, #c7e9ff, #90b6ff);
+    border:1px solid #6767a3;
+}
 
 
-body						{	@ChromeBg@	}
+/* Button is pressed. */
+.ZButton.ZActive, .DwtToolbarButton.ZActive {
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#90b6ff), to(#c7e9ff));
+    background-image: -moz-linear-gradient(top, #90b6ff, #c7e9ff);
+    border:1px solid #6767a3;
+}
+
+/* Button is disabled. */
+.ZButton.ZDisabled, .DwtToolbarButton.ZDisabled {
+    opacity:.5;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fefefe), to(#e6e6e6));
+    background-image: -moz-linear-gradient(top, #fefefe, #e6e6e6);
+    border:1px solid #949494;
+}
+
+/*------------------------------------------------- end Basic Button Styling. */
+
+/* Toolbars */
+.ZaToolBar {
+    padding:4px 1px;
+}
+.ZToolbarTable .vertSep {
+    display:none;
+}
+.ZaSearchResultCountLabel {
+    padding:0 2px;
+}
+/* Icons 
+div.ImgAccount, div.ImgAccountAlias {
+     background-image:url("@SkinImgDir@/admin.png"); 
+}*/
+
+div.ImgClose, div.ImgSelectPullDownArrow, div.ImgSelectPullDownArrowHover {
+     background-image:url("@SkinImgDir@/zimbra.png"); 
+}
+td.imageCell {
+    display:none;
+}
+
+/* Alerts */
+.DwtAlert {
+    border: 2px solid #F8981D;
+}
+
+#skin_container_username, .ZaUpdatedLabel {
+    cursor:default;
+}
+#skin_container_logoff span, #skin_container_help span, #skin_container_dw span, #_XForm_2_dwt_button_4___container td, #_XForm_2_dwt_button_5___container td, #skin_container_username td {
+    font-weight:normal !important;
+    color:white !important;
+    margin-right:5px;
+}
+#skin_container_logoff span:hover, #skin_container_help span:hover, #skin_container_dw span:hover, #_XForm_2_dwt_button_4___container td:hover, #_XForm_2_dwt_button_5___container td:hover {
+    text-decoration:underline;
+}
+
+div.ImgLogoff, div.ImgHelp, div.ImgMigration { display:none; }
+div.OverviewTree { background:#ffffff; }
+div.OverviewTreePanel { overflow-x: hidden !important; background:#ffffff; }
+div.AdminTreeItem-selected {
+    background-color: #c4ddfc !important;
+}
+
+.NoResults {
+    font-style:italic;
+}
+.ZSelected .ZAppTabBorder, .ZAppTabBorder {
+    background:transparent;
+    border:transparent;
+}
+.ZAppTab {
+    font-size:12px;
+    border-top:1px solid #dddddd;
+    background:url("") no-repeat scroll 0 0 #dddddd;
+    background-image:-moz-linear-gradient(center top , #cccccc, #aaaaaa);
+    background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#cccccc), to(#aaaaaa));
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding;
+    background-clip: padding-box;
+    box-shadow: none;
+    border-bottom:0 !important;
+    border-radius:4px 4px 0 0;
+}
+.ZToolbar, #skin_container_current_app, .ZaAppTabGroup .ZSelected {
+    font-size:12px;
+    border-top:1px solid #ffffff;
+    border-bottom:1px solid #ccdde8;
+    background:url("") no-repeat scroll 0 0 #dee5f1;
+    background-image:-moz-linear-gradient(center top , #dee5f1, #ffffff);
+    background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#dee5f1), to(#ffffff));
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding;
+    background-clip: padding-box;
+    box-shadow: none;
+}
+.ZSelected td {
+    font-weight:bold;
+}
+.ZToolbar, #skin_container_current_app {
+    border-top-right-radius: 8px;
+}
+div.ZTabBarSuffix, table.ZTabBorder {
+    border-bottom:1px solid #666666;
+}
+
+/* tab body background */
+.ZaTabBar {
+    background-color: #DEE5F1 !important;
+    margin-right:0 !important;
+}
+.GrouperLabel {
+    top:-20px;
+}
+.XFormCase, .SmallRadioGrouperLabel, .GrouperLabel, .RadioGrouperLabel {
+    background:#f2f2f2;
+}
+
+/* pane divider */
+div.ImgHSash_thumb {
+    display:none;
+}
+div.DwtHorizontalSash {
+    background:transparent;
+    border:0;
+}
 
 /* classes for the skin around the various pieces of the app */
 
 .skin_container						{	position:relative;	overflow:hidden;	}
+
 .skin_table	{	@FullSize@ }	
 .full_height {height:100%; } 	
 
-
-
-
-#skin_outer							{	@SkinOuter@	@FullSize@		}
+#skin_outer {
+    background:url("@SkinImgDir@/marge_large_bg.png") repeat-x scroll right top #1b355e;
+}
+/* fix elements that leak through the background color */
+.DwtListView, .DLSource, .DLTarget {
+    background: white;
+}
 #skin_top_td					{	height:40px;	}
 #skin_outer *	{ 	@FixBoxModel@
 }
-#skin_table_outer					{		padding:5px;		}
-
 /* top row:  logo, search box, quota */
 #skin_tr_top	{}
 #skin_td_logo	{	
@@ -38,7 +196,7 @@ body						{	@ChromeBg@	}
 	vertical-align:middle;
 }
 /** Logo displayed in the app **/
-#skin_td_logo						{}
+#skin_td_logo {}
 #skin_container_logo	{	
 	width:@TreeStartWidth@;
 	@SkinBorderLogo@
@@ -49,18 +207,64 @@ body						{	@ChromeBg@	}
 }
 .ImgAppBanner {
     background-position:0px;
+    margin-top:8px;
 }
-
-
 #skin_td_search	{	
 	vertical-align:top;
 	width:100%;
 	padding:8 15 5px 0;
 }
 #skin_container_search	{	
-	@SkinBorderSearch@
 	height:32;
 	padding:3px 4px 4px 4px;
+}
+
+/* search bar */
+div.ImgSearchAll, #_XForm_2_dwt_button_2___container, #_XForm_2_dwt_button_3___container, #_XForm_2_output___container,  #_XForm_2_dwt_button_4___container .ZLeftIcon, #_XForm_2_dwt_button_4___container .ZDropDown {
+    display:none !important;
+}
+#_XForm_2_menu_button___container .ZButtonBorder, #_XForm_2_dwt_button___container .ZButtonBorder, #_XForm_2_dwt_button_4___container .ZButtonBorder, #_XForm_2_dwt_button_5___container .ZButtonBorder, #_XForm_2_dwt_button___container .DwtToolbarButton, #_XForm_2_dwt_button_4___container .DwtToolbarButton, #_XForm_2_dwt_button_5___container .DwtToolbarButton {
+    background:transparent !important;
+    border:0 !important;
+    border-radius:0 !important;
+}
+#_XForm_2_menu_button___container {
+    display: inline !important;
+    position:relative !important;
+    left: 58px;
+    top: 1px;
+}
+#_XForm_2_menu_button___container .ZWidgetTitle {
+    display:none;
+}
+#_XForm_2_menu_button___container .DwtToolbarButton {
+    border:0;
+    border-right:1px solid #949494;
+    border-radius: 11px 0 0 11px;
+}
+#_XForm_2_menu_button___container .ImgSelectPullDownArrow {
+    float:right;
+    margin-right:4px;
+    position:relative;
+    top:2px;
+}
+#_XForm_2_group {
+    background:transparent;
+    border:0;
+}
+#_XForm_2_group input[type="text"] {
+    border-radius:11px;
+    padding: 1px 21px 0 61px;
+    height:22px;
+}
+#_XForm_2_dwt_button___container {
+    display: inline !important;
+    position:relative !important;
+    right: 22px;
+    top: 3px;
+}
+#_XForm_2_dwt_button_4___container .ZWidgetTitle:after {
+    content:"Save Search";
 }
 
 /* search builder */
@@ -92,6 +296,9 @@ body						{	@ChromeBg@	}
 #skin_tr_toolbar						{ overflow:hidden; height:30px; margin:0 0 0 0; }
 #skin_td_toolbar	{ width:100%; @ToolbarBg@ }
 #skin_container_top_toolbar			{	@SkinBorderAppToolbar@ height:30px; margin:0 0 0 0; width:100%; @ToolbarBg@ }
+div.ZaToolbar {
+    background:white;
+}
 
 #skin_td_current_app, #skin_td_tree_container			{	padding:0 0 0 6; 		}
 #skin_container_current_app				{	@SkinBorderCurrentApp@	height:30px;}
@@ -136,7 +343,11 @@ body						{	@ChromeBg@	}
 #skin_td_status {	
 		padding:0;
 }
-#skin_container_status 					{	@SkinBorderStatus@	height:45;		}
+#skin_container_status {
+    @SkinBorderStatus@
+    height:45;
+    background:white;
+}
 
 .AppSash-vert {
 	height:11px;
@@ -146,7 +357,11 @@ body						{	@ChromeBg@	}
 @Text-error@	
 }
 
-.overviewHeader,
+.overviewHeader {
+    background:transparent;
+    border-bottom:0;
+    text-transform: uppercase;
+}
 .DwtListView-Column,
 .ZaToolbar                         {
   background-color: @lighten(AppC,27)@;
@@ -165,17 +380,17 @@ body						{	@ChromeBg@	}
 #ZSplashBodyContainer   {   @SplashInnerBorder@     }
 
 .LoginScreen .decor1, .SplashScreen .decor1 {
-    background-image:url("@SkinImgDir@/vmwarePeel.png");
+    background-image:url("@SkinImgDir@/octopus-logo-white.png");
     background-repeat:no-repeat;
-    border-top-right-radius: 15px;
-    height:102px;
+    border-bottom-right-radius: 15px;
+    height:132px;
     overflow:hidden;
     position:absolute;
     right:0;
-    top:0;
-    width:103px;
-    -moz-border-radius-topright:15px;
-    -webkit-border-top-right-radius:15px;
+    bottom:0;
+    width:207px;
+    -moz-border-radius-bottomright:15px;
+    -webkit-border-bottom-right-radius:15px;
 }
 .SplashScreen { 
     position:absolute;
@@ -186,11 +401,11 @@ body						{	@ChromeBg@	}
     font-family:@font-default@;
     font-size:11px;
     
-    background-color: @SplashColor@;
-    background-image: -moz-linear-gradient(top, @SplashColor@, @darken(LoginColor,50)@); /* FF3.6 */
-    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, @SplashColor@),color-stop(1, @darken(LoginColor,50)@)); /* Saf4+, Chrome */
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='@SplashColor@', EndColorStr='@darken(LoginColor,50)@'); /* IE6,IE7 */
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='@SplashColor@', EndColorStr='@darken(LoginColor,50)@')"; /* IE8 */
+    background-color: #1D3B61;
+    background-image: -moz-linear-gradient(top, #4D96C8, #1D3B61); /* FF3.6 */
+    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #4D96C8),color-stop(1, #1D3B61)); /* Saf4+, Chrome */
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='#4D96C8', EndColorStr='#1D3B61'); /* IE6,IE7 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#4D96C8', EndColorStr='#1D3B61')"; /* IE8 */
 }
 .SplashScreen .center { 
     width:500px;
@@ -232,8 +447,8 @@ body						{	@ChromeBg@	}
     border: 1px solid @darken(AltC,50)@; /* Plain border for IE */
     #ENDIF
 }
-.SplashScreen h1 {
-    margin:22px 100px 32px 20px;
+.SplashScreen h1, .LoginScreen h1 {
+    margin:22px 0 32px 99px;
 }
 .SplashScreen .ImgLoginBanner {
     cursor:pointer;
@@ -275,7 +490,7 @@ body						{	@ChromeBg@	}
 }
 
 .LoginScreen {
-    background-color: @LoginColor@;
+    background-color: @darken(LoginColor,30)@;
     background-image: -moz-linear-gradient(top, @LoginColor@, @darken(LoginColor,50)@); /* FF3.6 */
     background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, @LoginColor@),color-stop(1, @darken(LoginColor,50)@)); /* Saf4+, Chrome */
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='@LoginColor@', EndColorStr='@darken(LoginColor,50)@'); /* IE6,IE7 */
@@ -285,15 +500,15 @@ body						{	@ChromeBg@	}
 .LoginScreen .center, .LoginScreen .center-small {
     
     /*Linear gradient backgrounds*/
-    background-color: @darken(LoginColor,30)@;
-    background-image: -moz-linear-gradient(top, @LoginColor@, @darken(LoginColor,50)@); /* FF3.6 */
-    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, @LoginColor@),color-stop(1, @darken(LoginColor,50)@)); /* Saf4+, Chrome */
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='@LoginColor@', EndColorStr='@darken(LoginColor,50)@'); /* IE6,IE7 */
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='@LoginColor@', EndColorStr='@darken(LoginColor,50)@')"; /* IE8 */
+    background-color: #1D3B61;
+    background-image: -moz-linear-gradient(top, #4D96C8, #1D3B61); /* FF3.6 */
+    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #4D96C8),color-stop(1, #1D3B61)); /* Saf4+, Chrome */
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='#4D96C8', EndColorStr='#1D3B61'); /* IE6,IE7 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#4D96C8', EndColorStr='#1D3B61')"; /* IE8 */
 
     /*Radial gradient backgrounds*/
-    background-image: -moz-radial-gradient(50% 0, circle farthest-corner, @LoginColor@ 0%, @darken(LoginColor,50)@ 100%); /* FF3.6 */
-    background-image: -webkit-gradient( radial, 50% 0%, 0, 50% 0%, 390, from(@LoginColor@), to(@darken(LoginColor,50)@) ); /* Saf4+, Chrome */
+    background-image: -moz-radial-gradient(50% 0, circle farthest-corner, #4D96C8 0%, #1D3B61 100%); /* FF3.6 */
+    background-image: -webkit-gradient( radial, 50% 0%, 0, 50% 0%, 390, from(#4D96C8), to(#1D3B61) ); /* Saf4+, Chrome */
 
     -moz-border-radius: 15px; /* FF1+ */
     -webkit-border-radius: 15px; /* Saf3-4 */
@@ -331,7 +546,8 @@ body						{	@ChromeBg@	}
 }
 
 .LoginScreen label {
-    color:@lighten(LoginColor,36)@; 
+    color:#ffffff;
+    text-shadow:0 -1px 0px #000000; 
 }
 
 /** Logo Images **/
