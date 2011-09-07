@@ -46,7 +46,7 @@ public class GetQuickCommand extends AjaxQuickCommandTest {
 
 		// Verify that the quick commands exist in the list
 		int count = app.zTreePreferences.sGetCssCount("css=div[id='zl__QCV__rows'] div[id^='zli__QCV__']");
-		ZAssert.assertEquals(count, 2, "Verify the two quick commands exist in the list");
+		ZAssert.assertEquals(count, 3, "Verify the two quick commands exist in the list");
 
 		
 		// See: https://bugzilla.zimbra.com/show_bug.cgi?id=63991
@@ -56,14 +56,19 @@ public class GetQuickCommand extends AjaxQuickCommandTest {
 		QuickCommand found3 = null;
 		for (int i = 1; i <= count; i++) {
 			String locator = "css=div[id='zl__QCV__rows'] div[id^='zli__QCV__']:nth-of-type("+ i +")";
+			
+			// TODO: could probably make this into an IItem and use app.zTreePreferences.zGetListItems()
+			boolean active = app.zTreePreferences.sIsElementPresent(locator + " td[id$='_ac'] div.ImgCheck");
 			String name = app.zTreePreferences.sGetText(locator + " td[id$='_na']");
-			String description = app.zTreePreferences.sGetText(locator + " td[id$='_de']");
-			if ( name.equals(this.getQuickCommand01().getName()) && description.equals(this.getQuickCommand01().getDescription()))
+			String description = app.zTreePreferences.sGetText(locator + " td[id$='_count']");
+			
+			if ( active && name.equals(this.getQuickCommand01().getName()) && description.equals(this.getQuickCommand01().getDescription()))
 				found1 = this.getQuickCommand01();
-			if ( name.equals(this.getQuickCommand02().getName()) && description.equals(this.getQuickCommand02().getDescription()))
+			if ( active && name.equals(this.getQuickCommand02().getName()) && description.equals(this.getQuickCommand02().getDescription()))
 				found2 = this.getQuickCommand02();	
-			if ( name.equals(this.getQuickCommand03().getName()) && description.equals(this.getQuickCommand03().getDescription()))
-				found2 = this.getQuickCommand03();	
+			if ( active && name.equals(this.getQuickCommand03().getName()) && description.equals(this.getQuickCommand03().getDescription()))
+				found3 = this.getQuickCommand03();	
+			
 		}
 		
 		ZAssert.assertNotNull(found1, "Verify Quick Command #1 appears in the list");
