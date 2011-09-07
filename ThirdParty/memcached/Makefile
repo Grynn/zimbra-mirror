@@ -43,7 +43,7 @@ build:
 	cd $(MEMCACHED_ROOT); \
 	tar xzf src/memcached-$(MEMCACHED_VERSION).tar.gz; \
 	cd memcached-$(MEMCACHED_VERSION); \
-	$(PATCH); \
+	$(PATCH) \
 	CFLAGS="-g -O2" ./configure --prefix=$(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION) \
 	--with-libevent=$(ZIMBRA_HOME)/memcached-$(MEMCACHED_VERSION); \
 	LD_RUN_PATH=/opt/zimbra/memcached/lib make; make install)
