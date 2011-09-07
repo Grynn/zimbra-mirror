@@ -75,7 +75,7 @@ public class DisplayContactGroup extends AbsDisplay {
 			  locatorArray.add("css=table[class*='contactHeaderTable'] div[class*='companyName']");
 			}		
 		else if ( field == Field.Email ) {					   			
-			getAllLocators(locatorArray,"email");
+			getAllLocators(locatorArray,Field.Email);
 		} 
 		else {			
 		  throw new HarnessException("no logic defined for field "+ field);			
@@ -110,18 +110,21 @@ public class DisplayContactGroup extends AbsDisplay {
 	}
 	
 
-    private void getAllLocators(ArrayList<String> array, String postfix) throws HarnessException {
-  	   String css= "css=div[id$='_content'][class='ZmContactInfoView'] table:nth-of-type(2) tbody tr";
-  	   
+    private void getAllLocators(ArrayList<String> array, Field field) throws HarnessException {
+  	   //String css= "css=div[id$='_content'][class='ZmContactInfoView'] table:nth-of-type(2) tbody tr";
+  	   String css= "css=div[id$='_content'][class='ZmContactInfoView']>div.DwtCompositer>table";
+ 
   	   int count= this.sGetCssCount(css);
 
-    	
-       for (int i=1; i<=count; i++) {
-    	 String tdLocator=  css + ":nth-of-type(" + i + ")" + " td[id$='_" + postfix + "']";  
-	     if (sIsElementPresent(tdLocator)) {
-	    	 logger.info(tdLocator + " has text " + sGetText(tdLocator).trim());
-	    	 array.add(tdLocator);	    	 
-	     }
+       if (field == Field.Email) {
+    	   for (int i=2; i<=count; i++) {
+    		   //String tdLocator=  css + ":nth-of-type(" + i + ")" + " td[id$='_" + postfix + "']";  
+    		   String tdLocator=  css + ":nth-of-type(" + i + ")" + " div[style='float: left; padding-right: 5px;']";
+    		   if (sIsElementPresent(tdLocator)) {
+    			   logger.info(tdLocator + " has text " + sGetText(tdLocator).trim());
+    			   array.add(tdLocator);	    	 
+    		   }
+    	   }
        }
     }
 

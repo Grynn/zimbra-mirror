@@ -96,7 +96,7 @@ public class ContextMenuContactGroup extends AjaxCommonTest  {
         
         //Verify group's emails displayed in the "To" field
         for (int i=0; i<group.dlist.size(); i++) {
-           ZAssert.assertTrue(app.zPageAddressbook.sGetText(FormMailNew.Locators.zBubbleToField).contains(group.dlist.get(i)), "Verify contact email displayed in field To - expected " + group.dlist.get(i) + " - was " + app.zPageAddressbook.sGetText(FormMailNew.Locators.zBubbleToField));
+           ZAssert.assertTrue(app.zPageAddressbook.sGetText(FormMailNew.Locators.zBubbleToField).contains(group.dlist.get(i).email), "Verify contact email displayed in field To - expected " + group.dlist.get(i) + " - was " + app.zPageAddressbook.sGetText(FormMailNew.Locators.zBubbleToField));
         }
         
         //TODO: Verify send email
