@@ -208,16 +208,6 @@ public class PageCalendar extends AbsTab {
 
 		} else if ( action == Action.A_DOUBLECLICK) {
 			this.sDoubleClick(locator);
-
-		} else if ( action == Action.V_ISNOTEXISTS) {
-			if (this.sIsElementPresent(locator) == true) {
-				throw new HarnessException(subject + " exists");
-			}
-			
-		} else if ( action == Action.V_ISEXISTS) {
-			if (this.sIsElementPresent(locator) == false) {
-				throw new HarnessException(subject + " is not exists");
-			}
 			
 		} else {
 			throw new HarnessException("implement me!  action = "+ action);
