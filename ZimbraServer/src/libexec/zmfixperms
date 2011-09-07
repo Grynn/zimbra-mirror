@@ -64,6 +64,7 @@ components="\
   openldap-clibs \
   openssl \
   perdition \
+  rsync \
   snmp \
   tcmalloc \
   zimbramon/bin \
