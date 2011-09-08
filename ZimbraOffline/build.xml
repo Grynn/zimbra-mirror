@@ -829,12 +829,17 @@
 
     <antcall target="offline-make-dist-ext"/>
     <antcall target="offline-make-dist-ext-converter" />
-  	<!-- remove junit.jar -->
+  	<!-- remove .jar files from ZD installation -->
     <delete>
       <fileset dir="${dist.dir}" includes="**/junit*.jar"/>
       <fileset dir="${dist.dir}" includes="**/xpp3*.jar"/>
       <fileset dir="${dist.dir}" includes="**/whack*.jar"/>
-      <fileset dir="${dist.dir}" includes="**/zimbraim.jar"/>
+      <fileset dir="${dist.dir}" includes="**/cassandra-*.jar"/>
+      <fileset dir="${dist.dir}" includes="**/apache-cassandra-*.jar"/>
+      <fileset dir="${dist.dir}" includes="**/hector-*.jar"/>
+      <fileset dir="${dist.dir}" includes="**/high-scale-lib-*.jar"/>
+      <fileset dir="${dist.dir}" includes="**/libthrift-*.jar"/>
+      <fileset dir="${dist.dir}" includes="**/perf4j-*.jar"/>
     </delete>
   </target>
 
