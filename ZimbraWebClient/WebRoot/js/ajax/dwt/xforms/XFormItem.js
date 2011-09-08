@@ -1555,6 +1555,16 @@ XFormItem.prototype.rowSpan = 1;
 XFormItem.prototype.getRowSpan = function () {
 	return this.getInheritedProperty("rowSpan");
 }
+
+/* displayGrid:
+*    1) true: display grid border
+*    2) false: don't display grid border
+*    3) _UNDEFINED_: inherid the parent's setting
+* */
+XFormItem.prototype.displayGrid = _UNDEFINED_;
+XFormItem.prototype.getDisplayGrid = function () {
+	return this.getInheritedProperty("displayGrid");
+}
 // END NEW TABLE LAYOUT STUFF
 
 // error handling
@@ -3194,7 +3204,8 @@ CollapsedGroup_XFormItem.prototype.headCss = "homeGroupHeader";
 CollapsedGroup_XFormItem.prototype.colSizes = "100%";
 CollapsedGroup_XFormItem.prototype.numCols = 1;
 CollapsedGroup_XFormItem.prototype.width = "100%";
-CollapsedGroup_XFormItem.prototype.defaultDisplay = false;
+CollapsedGroup_XFormItem.prototype.defaultDisplay = true;
+CollapsedGroup_XFormItem.prototype.displayGrid = true;
 CollapsedGroup_XFormItem.prototype.displayLabelItem = false;
 CollapsedGroup_XFormItem.prototype.cssStyle = "margin-top: 10px;";
 CollapsedGroup_XFormItem.prototype.headerLabel = "Collapsed Group";
@@ -3209,8 +3220,14 @@ CollapsedGroup_XFormItem.prototype.initializeItems = function () {
     this.items[0] = this.getHeaderItems();
     this.items[1] = this.getContentItems();
     if(!this.items[1] || this.items[1].items.length == 0) {
-        if(oldItems)
+        if(oldItems) {
+            for(var i = 0; i < oldItems.length; i++) {
+                oldItems[i].displayGrid = false;
+                if(oldItems[i].label || oldItems[i].txtBoxLabel)
+                    oldItems[i].labelCssStyle = "text-align:left;";
+            }
             this.items[1].items =  oldItems;
+        }
     }
 
     Group_XFormItem.prototype.initializeItems.call(this);
@@ -3243,7 +3260,7 @@ function () {
     var headerCss = this.getInheritedProperty("headCss");
     var headItems = this.getInheritedProperty("headerItems") || [];
     var headerItems = { type:_COMPOSITE_, numCols:3, width:"100%",
-            colSizes:["20px", headerLabelWidth || "100%", "100%"], colSpan:"*",
+            colSizes:["20px", headerLabelWidth || "100%", "100%"], colSpan:"*", displayGrid:false,
             items:[
                 {type:_DWT_IMAGE_, value: this.expandedImg, onClick:this.onClick},
                 {type:_OUTPUT_, value: headerLabel},
@@ -3258,7 +3275,7 @@ CollapsedGroup_XFormItem.prototype.getContentItems =
 function () {
     var colsize = this.getInheritedProperty("colSizes");
     var numcols = this.getInheritedProperty("numCols");
-    var contentItems = { type:_GROUP_, items:[], colSpan:"*", colSizes:colsize,numCols:numcols
+    var contentItems = { type:_GROUP_, items:[], colSpan:"*", colSizes:colsize,numCols:numcols, width:"100%",
     };
     var content =  this.getInheritedProperty("contentItems");
     if(content)
@@ -3420,6 +3437,12 @@ Case_XFormItem.prototype._outputHTML = function () {
 		}
 	}	
 
+    if(this.cacheInheritedMethod("getCustomPaddingStyle", "$getCustomPaddingStyle")) {
+        var paddingStyle = this.cacheInheritedMethod("getCustomPaddingStyle", "$getCustomPaddingStyle").call(this);
+        if(paddingStyle)
+            element.style.cssText += paddingStyle;
+    }
+
 	if (AjxEnv.isIE) {
 		var tempDiv = this.createElement("temp",null,"div","");
 		tempDiv.display = "none";
@@ -3515,6 +3538,27 @@ if (appNewUI) {
     XFormItemFactory.createItemType("_TOP_GROUPER_", "top_grouper", TopGrouper_XFormItem, CollapsedGroup_XFormItem);
 }
 
+BaseTopGrouper_XFormItem = function() {}
+XFormItemFactory.createItemType("_BASE_TOP_GROUPER_", "base_top_grouper", BaseTopGrouper_XFormItem, RadioGrouper_XFormItem)
+BaseTopGrouper_XFormItem.prototype.borderCssClass = "TopGrouperBorder";
+BaseTopGrouper_XFormItem.prototype.labelCssClass = "GrouperLabel";
+BaseTopGrouper_XFormItem.prototype.labelLocation = _INLINE_;		// managed manually by this class
+BaseTopGrouper_XFormItem.prototype.insetCssClass = "GrouperInset";
+
+// output the label
+BaseTopGrouper_XFormItem.prototype.outputHTMLStart = function (html,   currentCol) {
+    html.append(
+            "<div class=", this.getBorderCssClass(), ">",
+                "<div ", this.getLabelCssString(),">", this.getLabel(), "</div>",
+                "<div class=", this.getInsetCssClass(),">"
+        );
+}
+
+BaseTopGrouper_XFormItem.prototype.outputHTMLEnd = function (html,  currentCol) {
+    html.append(
+            "</div></div>"
+        );
+    }
 
 /**
  * @class defines XFormItem type _SWITCH_

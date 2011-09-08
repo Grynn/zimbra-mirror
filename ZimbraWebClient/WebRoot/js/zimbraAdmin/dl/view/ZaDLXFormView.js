@@ -804,7 +804,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
                                                 ]
                                         },
                                 {type:_SPACER_, height:spaceHeight},
-                                  {type:_ZA_TOP_GROUPER_, borderCssClass:"LeftGrouperBorder",
+                                  {type:_GROUPER_, borderCssClass:"LeftGrouperBorder",
                                          width:"100%", numCols:1,colSizes:["auto"],
                                         label:ZaMsg.DLXV_LabelListMembers,
 
@@ -978,7 +978,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 						]
 					},
 			        {type:_SPACER_, height:"7"},
-                            	  {type:_ZA_TOP_GROUPER_, borderCssClass:"LeftGrouperBorder",
+                            	  {type:_GROUPER_, borderCssClass:"LeftGrouperBorder",
                                          width:"100%", numCols:1,colSizes:["auto"],
                                         label:ZaMsg.DLXV_LabelListMembers,
 
@@ -1324,7 +1324,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 		var case4 = {type:_ZATABCASE_, width:"100%", numCols:1, colSizes:["auto"],caseKey:_tab4,
 		items: [
 				{type:_SPACER_, height:"9"},
-				{type:_ZA_TOP_GROUPER_, borderCssClass:"LeftGrouperBorder",
+				{type:_GROUPER_, borderCssClass:"LeftGrouperBorder",
 					 width:"100%", numCols:1,colSizes:["auto"],
 					label:ZaMsg.NAD_EditDLAliasesGroup,
 					items :[
@@ -1356,7 +1356,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 			    {type:_SPACER_, height:5},
 			    {type:_SPACER_, height:5},
 			    {type:_CELLSPACER_, width:10 },
-                {type:_TOP_GROUPER_, label:ZaMsg.NAD_MailOptionsReceiving, id:"dl_pref_replyto_group",
+                {type:_GROUPER_, label:ZaMsg.NAD_MailOptionsReceiving, id:"dl_pref_replyto_group",
                     colSpan: "*", numCols: 2, colSizes:[275, "*"],
                     visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,[
                             ZaDistributionList.A_zimbraPrefReplyToEnabled,

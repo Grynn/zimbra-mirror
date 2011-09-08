@@ -373,6 +373,7 @@ SuperWiz_Textfield_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePer
 
 Super_Textfield_XFormItem.prototype.initializeItems = function() {
 	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
+    var labelCssStyle = this.getInheritedProperty("labelCssStyle");
 	var textFieldCssClass = this.getInheritedProperty("textFieldCssClass");
 	var textFieldCssStyle = this.getInheritedProperty("textFieldCssStyle");
 	var textFieldWidth = this.getInheritedProperty("textFieldWidth");
@@ -391,7 +392,8 @@ Super_Textfield_XFormItem.prototype.initializeItems = function() {
 			Super_XFormItem.updateCss.call(this,5);
 			Textfield_XFormItem.prototype.updateElement.call(this, value);
 		},
-		label:txtBoxLabel,	
+		label:txtBoxLabel,
+        labelCssStyle:labelCssStyle,
 		labelLocation:(txtBoxLabel ? _LEFT_ : _NONE_),
 		cssClass:textFieldCssClass,
 		cssStyle:textFieldCssStyle,
@@ -445,6 +447,7 @@ SuperWiz_Textarea_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePerm
 
 Super_Textarea_XFormItem.prototype.initializeItems = function() {
 	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
+    var txtBoxLabelCssStyle = this.getInheritedProperty("txtBoxLabelCssStyle");
 	var textAreaCssClass = this.getInheritedProperty("textAreaCssClass");
 	var textAreaCssStyle = this.getInheritedProperty("textAreaCssStyle");
 	var textAreaWidth = this.getInheritedProperty("textAreaWidth");
@@ -462,7 +465,7 @@ Super_Textarea_XFormItem.prototype.initializeItems = function() {
 			Super_XFormItem.updateCss.call(this,5);
 			Textarea_XFormItem.prototype.updateElement.call(this, value);
 		},
-		label:txtBoxLabel,	
+		label:txtBoxLabel,
 		labelLocation:(txtBoxLabel ? _LEFT_ : _NONE_),
 		labelCssStyle: labelCssStyle,
 		cssClass:textAreaCssClass,
@@ -1272,6 +1275,7 @@ SuperWiz_Lifetime1_XFormItem.prototype.colSizes =["200px","80px","120px","150px"
 
 Super_Lifetime1_XFormItem.prototype.initializeItems = function() {
 	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
+    var labelCssStyle = this.getInheritedProperty("labelCssStyle");
 	var toolTip = this.getInheritedProperty("toolTipContent");
 	
 	var txtField =	{
@@ -1280,7 +1284,7 @@ Super_Lifetime1_XFormItem.prototype.initializeItems = function() {
 		toolTipContent: toolTip,
 		nowrap:this.getInheritedProperty("nowrap"),
 		labelWrap:this.getInheritedProperty("labelWrap"),		
-		labelCssStyle:this.getLabelCssStyle(),
+		labelCssStyle:labelCssStyle || this.getLabelCssStyle(),
 		labelLocation:(txtBoxLabel ? _LEFT_ : _NONE_),
 		cssClass:"admin_xform_number_input", 
 		getDisplayValue:function (itemVal) {
@@ -1375,6 +1379,7 @@ SuperWiz_Lifetime2_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePer
 
 Super_Lifetime2_XFormItem.prototype.initializeItems = function() {
 	var txtBoxLabel = this.getInheritedProperty("txtBoxLabel");
+    var labelCssStyle = this.getInheritedProperty("labelCssStyle");
 	var toolTip = this.getInheritedProperty("toolTipContent");
 	
 	var txtField =	{
@@ -1383,7 +1388,7 @@ Super_Lifetime2_XFormItem.prototype.initializeItems = function() {
 		toolTipContent: toolTip,
 		nowrap:this.getInheritedProperty("nowrap"),
 		labelWrap:this.getInheritedProperty("labelWrap"),		
-		labelCssStyle:this.getLabelCssStyle(),
+		labelCssStyle:labelCssStyle || this.getLabelCssStyle(),
 		labelLocation:(txtBoxLabel ? _LEFT_ : _NONE_),
 		cssClass:"admin_xform_number_input", 
 		getDisplayValue:function (itemVal) {
@@ -1495,6 +1500,9 @@ ZAPlainGrouper_XFormItem.prototype.cssClass = "PlainGrouperBorder";
 ZAPlainGrouper_XFormItem.isGroupVisible = ZATopGrouper_XFormItem.isGroupVisible;
 
 ZAWizTopGrouper_XFormItem = function() {}
+if (appNewUI) {
+XFormItemFactory.createItemType("_ZAWIZ_TOP_GROUPER_", "zawiz_top_grouper", ZAWizTopGrouper_XFormItem, BaseTopGrouper_XFormItem);
+} else
 XFormItemFactory.createItemType("_ZAWIZ_TOP_GROUPER_", "zawiz_top_grouper", ZAWizTopGrouper_XFormItem, TopGrouper_XFormItem);
 ZAWizTopGrouper_XFormItem.prototype.numCols = 2;
 ZAWizTopGrouper_XFormItem.prototype.colSizes = ["200px","auto"];
@@ -1609,6 +1617,10 @@ ZATabCase_XFormItem.prototype.getHMargin = function () {
     return this.getInheritedProperty("hMargin") || 0;
 }
 
+ZATabCase_XFormItem.prototype.getCustomPaddingStyle = function () {
+    return this.getInheritedProperty("paddingStyle");
+}
+
 ZATabCase_XFormItem.prototype.getCustomHeight = function () {
 	try {
 		var form = this.getForm();
@@ -1673,7 +1685,9 @@ ZATabCase_XFormItem.prototype.getCustomWidth = function () {
 		if(totalWidth<=0)
 			return "100%";
 		else {
-			return totalWidth - this.getHMargin();
+            var res = totalWidth - this.getHMargin();
+            if(appNewUI) res = res - 15;       // 15px is pandding width
+			return res;
 		}
 	} catch (ex) {
         

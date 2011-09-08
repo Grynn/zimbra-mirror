@@ -624,7 +624,8 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
 								{ref:ZaResource.A_zimbraPrefCalendarForwardInvitesTo, type:_DWT_LIST_, height:"100", width:"350px",
 									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
 									headerList:null,onSelection:ZaResourceXFormView.calFwdAddrSelectionListener,label:ZaMsg.zimbraPrefCalendarForwardInvitesTo,
-                                    visibilityChecks:[ZaItem.hasReadPermission]
+                                    visibilityChecks:[ZaItem.hasReadPermission],
+                                    labelCssStyle:(appNewUI?"text-align:left;":null)
 								},
 								{type:_GROUP_, numCols:6, width:"625px",colSizes:["275","100px","auto","100px","auto","100px"], colSpan:2,
 									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
@@ -748,6 +749,7 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
     ]};
 
     var case1 = {type:_ZATABCASE_, numCols:1,  caseKey:_tab1,
+        paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 //        height:"400px",  align:_LEFT_, valign:_TOP_,
         items:[nameGroup,setupGroup,passwordGroup,signatureGroup,notesGroup]
     };

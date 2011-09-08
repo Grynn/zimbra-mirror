@@ -31,6 +31,7 @@ ZaResourceController.prototype = new ZaXFormViewController();
 ZaResourceController.prototype.constructor = ZaResourceController;
 
 ZaController.initToolbarMethods["ZaResourceController"] = new Array();
+ZaController.initPopupMenuMethods["ZaResourceController"] = new Array();
 ZaController.setViewMethods["ZaResourceController"] = [];
 ZaController.changeActionsStateMethods["ZaResourceController"] = new Array();
 
@@ -127,6 +128,41 @@ function () {
 }
 ZaController.initToolbarMethods["ZaResourceController"].push(ZaResourceController.initToolbarMethod);
 
+ZaResourceController.initPopupMenuMethod =
+function () {
+	var showNewCalRes = false;
+	if(ZaSettings.HAVE_MORE_DOMAINS || ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+		showNewCalRes = true;
+	} else {
+		var domainList = ZaApp.getInstance().getDomainList().getArray();
+		var cnt = domainList.length;
+		for(var i = 0; i < cnt; i++) {
+			if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_CALRES,domainList[i])) {
+				showNewCalRes = true;
+				break;
+			}
+		}
+	}
+
+   	this._popupOperations[ZaOperation.SAVE]=new ZaOperation(ZaOperation.SAVE,ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));
+   	this._popupOperations[ZaOperation.CLOSE]=new ZaOperation(ZaOperation.CLOSE,ZaMsg.TBB_Close, ZaMsg.ALTBB_Close_tt, "Close", "CloseDis", new AjxListener(this, this.closeButtonListener));
+   	if(showNewCalRes) {
+		this._popupOperations[ZaOperation.NEW]=new ZaOperation(ZaOperation.NEW,ZaMsg.TBB_New, ZaMsg.RESTBB_New_tt, "Resource", "ResourceDis", new AjxListener(this, this.newButtonListener));
+   	}
+   	this._popupOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.RESTBB_Delete_tt,"Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));
+
+    this._popupOrder.push(ZaOperation.NEW);
+    this._popupOrder.push(ZaOperation.SAVE);
+    this._popupOrder.push(ZaOperation.CLOSE);
+    this._popupOrder.push(ZaOperation.DELETE);
+}
+ZaController.initPopupMenuMethods["ZaResourceController"].push(ZaResourceController.initPopupMenuMethod);
+
+ZaResourceController.prototype.getPopUpOperation =
+function() {
+    return this._popupOperations;
+}
+
 ZaResourceController.prototype.newResource = function () {
 	try {
 		var newResource = new ZaResource();
@@ -172,6 +208,7 @@ function (entry) {
 	this._contentView = this._view = new this.tabConstructor(this._container, entry);
 
     this._initToolbar();
+    this._initPopupMenu();
 	//always add Help button at the end of the toolbar    
 	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
 	this._toolbarOperations[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));		

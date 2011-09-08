@@ -1506,7 +1506,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 
 	var cases = [];
 
-		var case1 = {type:_ZATABCASE_,caseKey:_tab1,   
+		var case1 = {type:_ZATABCASE_,caseKey:_tab1,
+            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 			numCols:1};
 		
 		var case1Items = [
@@ -1893,7 +1894,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 		cases.push(case3);		
 	}				
 	if(_tab4) {
-		cases.push({type:_ZATABCASE_,id:"account_form_features_tab",  numCols:1, width:"100%", caseKey:_tab4, 
+		cases.push({type:_ZATABCASE_,id:"account_form_features_tab",  numCols:1, width:"100%", caseKey:_tab4,
+        paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 				items: [
 					{ type: _DWT_ALERT_,
 					  containerCssStyle: "padding-top:20px;width:400px;",
@@ -2134,7 +2136,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							],
 							cssStyle:"padding-top:5px; padding-bottom:5px"
 						},
-						{type:_ZA_PLAIN_GROUPER_, id:"account_prefs_general",colSizes:["auto"],numCols:1, 
+						{type:_ZA_PLAIN_GROUPER_, id:"account_prefs_general",colSizes:["auto"],numCols:1,
 							items :[
 								 { type:_GROUP_, numCols: 2, colSizes:["275", "auto"], width:"100%", items:[
 								{ref:ZaAccount.A_zimbraPrefClientType,
@@ -2195,7 +2197,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
                                  ]}
                             ]                                                             
 						},	
-						{type:_ZA_TOP_GROUPER_, id:"account_prefs_standard_client",colSizes:["275px","auto"],numCols:2,
+						{type:_BASE_TOP_GROUPER_, id:"account_prefs_standard_client",colSizes:["275px","auto"],numCols:2,
 							label:ZaMsg.NAD_MailOptionsStandardClient,
 							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
 								[
@@ -2285,7 +2287,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
                                 ]}
 							]
 						},
-						{type:_ZA_TOP_GROUPER_,colSizes:["275px","auto"], id:"account_prefs_mail_receiving", numCols: 2,
+						{type:_BASE_TOP_GROUPER_,colSizes:["275px","auto"], id:"account_prefs_mail_receiving", numCols: 2,
 							label:ZaMsg.NAD_MailOptionsReceiving,
 							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
 								[ZaAccount.A_zimbraPrefMailPollingInterval, 
@@ -2400,7 +2402,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								}								
 							]
 						},						
-						{type:_ZA_TOP_GROUPER_, colSizes:["275px","auto"], id:"account_prefs_mail_sending",borderCssClass:"LowPadedTopGrouperBorder",
+						{type:_BASE_TOP_GROUPER_, colSizes:["275px","auto"], id:"account_prefs_mail_sending",borderCssClass:"LowPadedTopGrouperBorder",
 							label:ZaMsg.NAD_MailOptionsSending,
 							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
 								[ZaAccount.A_zimbraPrefSaveToSent,
@@ -2452,7 +2454,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								}															
 							]
 						},
-						{type:_ZA_TOP_GROUPER_,colSizes:["275px","*"], id:"account_prefs_mail_composing",borderCssClass:"LowPadedTopGrouperBorder",
+						{type:_BASE_TOP_GROUPER_,colSizes:["275px","*"], id:"account_prefs_mail_composing",borderCssClass:"LowPadedTopGrouperBorder",
 							label:ZaMsg.NAD_MailOptionsComposing,
 							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
 								[
@@ -2743,7 +2745,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 					caseKey:_tab6, 
 					items: [
 						{type:_ZA_TOP_GROUPER_, id:"account_form_aliases_group",borderCssClass:"LowPadedTopGrouperBorder",
-							width:"100%", numCols:1,colSizes:["auto"],
+							width:"100%", numCols:1,colSizes:["auto"], displayGrid:false,
 							label:ZaMsg.NAD_EditAliasesGroup,
 							items :[
 								{ref:ZaAccount.A_zimbraMailAlias, type:_DWT_LIST_, height:"200", width:"350px", 
@@ -2782,7 +2784,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 		cases.push({type:_ZATABCASE_,id:"account_form_forwarding_tab", width:"100%", numCols:1,colSizes:["auto"],
 					caseKey:_tab7,  
 					items: [
-						{type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_EditFwdTopGroupGrouper,
+						{type:_BASE_TOP_GROUPER_, label:ZaMsg.NAD_EditFwdTopGroupGrouper,
 							id:"account_form_user_forwarding_addr",colSizes:["auto"],
                             				numCols:1,colSizes:["auto"], 
 							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
@@ -2901,7 +2903,7 @@ nowrap:false, labelWrap:true,
 					caseKey:_tab8, 
 					items: [
 						{type:_ZA_TOP_GROUPER_, id:"account_form_interop_group",
-                            borderCssClass:"LowPadedTopGrouperBorder",
+                            borderCssClass:"LowPadedTopGrouperBorder", displayGrid:false,
 							 width:"100%", numCols:1,colSizes:["auto"],
 							label:ZaMsg.NAD_EditFpGroup,
 							items :[
@@ -2999,6 +3001,7 @@ nowrap:false, labelWrap:true,
 	}
 	if(_tab11) {
 		cases.push({type:_ZATABCASE_, id:"account_form_advanced_tab", numCols:1,
+        paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 					caseKey:_tab11, 
 					items: [
 						{type:_ZA_TOP_GROUPER_, id:"account_attachment_settings",colSizes:["auto"],numCols:1,
@@ -3366,16 +3369,22 @@ nowrap:false, labelWrap:true,
 									        colSizes:["275px", "65px'", "210px", "*"],
                                             resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
                                             msgName:ZaMsg.MSG_zimbraMailMessageLifetime,
-                                            txtBoxLabel:ZaMsg.LBL_zimbraMailMessageLifetime},
+                                            txtBoxLabel:ZaMsg.LBL_zimbraMailMessageLifetime,
+                                            labelCssStyle:(appNewUI?"text-align:left;":null)
+                                        },
                                         {ref:ZaAccount.A_zimbraMailTrashLifetime, type:_SUPER_LIFETIME1_,
 									        colSizes:["275px", "65px'", "210px", "*"],
                                             resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.MSG_zimbraMailTrashLifetime,
-                                            txtBoxLabel:ZaMsg.LBL_zimbraMailTrashLifetime},
+                                            txtBoxLabel:ZaMsg.LBL_zimbraMailTrashLifetime,
+                                            labelCssStyle:(appNewUI?"text-align:left;":null)
+                                        },
                                         {ref:ZaAccount.A_zimbraMailSpamLifetime, type:_SUPER_LIFETIME1_,
 									        colSizes:["275px", "65px'", "210px", "*"],
                                             resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
                                             msgName:ZaMsg.MSG_zimbraMailSpamLifetime,
-                                            txtBoxLabel:ZaMsg.LBL_zimbraMailSpamLifetime}
+                                            txtBoxLabel:ZaMsg.LBL_zimbraMailSpamLifetime,
+                                            labelCssStyle:(appNewUI?"text-align:left;":null)
+                                        }
                                     ]
                                 }
                             ]
@@ -3427,11 +3436,7 @@ nowrap:false, labelWrap:true,
         ];
     } else {
 	    xFormObject.items = [
-                //{type:_SPACER_, height:"0px"}, // a hook here to keep the switch item's index for zimlet issue.
-                {type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_toolbar",
-                    items: [],
-                    cssStyle:"padding-top:5px; padding-bottom:5px"
-                },
+                {type:_SPACER_, height:"0px"}, // a hook here to keep the switch item's index for zimlet issue.
                 {type:_GROUP_, cssClass:"ZmSelectedHeaderBg", colSpan: "*", id:"xform_header",
                     items: [
                         {type:_GROUP_,	numCols:4,colSizes:["90px","350px","100px","*"],items:headerItems}
