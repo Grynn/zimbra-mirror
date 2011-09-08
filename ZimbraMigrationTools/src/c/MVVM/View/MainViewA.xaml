@@ -34,6 +34,14 @@
         <DataTemplate DataType="{x:Type ViewModel:AccountResultsViewModel}">
             <View:ResultsView />
         </DataTemplate>
+        <Style TargetType="ListBoxItem">
+            <Style.Resources>
+                <!--SelectedItem with focus-->
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="DodgerBlue" Opacity=".7"/>
+                <!--SelectedItem without focus-->
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="DodgerBlue" Opacity=".7"/>
+            </Style.Resources>
+        </Style>
     </Window.Resources>
 
     <Grid Name="MainGrid">
