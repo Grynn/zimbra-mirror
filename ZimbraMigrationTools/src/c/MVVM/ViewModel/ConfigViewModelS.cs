@@ -36,8 +36,7 @@ namespace MVVM.ViewModel
 
         private void GetConfigSourceHelp()
         {
-            string urlString = (isBrowser) ? "http://W764IIS.prom.eng.vmware.com/cfgS.html" : "file:///C:/depot/main/ZimbraMigrationTools/src/c/Misc/Help/cfgS.html";
-            Process.Start(new ProcessStartInfo(urlString));
+            DoHelp("cfgS.html");
         }
 
         public ICommand LoadCommand

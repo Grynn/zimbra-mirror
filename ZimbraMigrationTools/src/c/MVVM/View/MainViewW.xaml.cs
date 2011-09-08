@@ -34,6 +34,7 @@ namespace MVVM.View
             m_introViewModel.isBrowser = true;
             Intro intro = new Intro();
             m_introViewModel.WelcomeMsg = intro.WelcomeMsg;
+            m_introViewModel.InstallDir = intro.InstallDir;
             m_introViewModel.SetupViews(true);
 
             lbMode.SelectedIndex = 0;

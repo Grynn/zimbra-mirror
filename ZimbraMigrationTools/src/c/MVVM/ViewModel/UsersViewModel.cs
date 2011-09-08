@@ -45,8 +45,7 @@ namespace MVVM.ViewModel
 
         private void GetUsersHelp()
         {
-            string urlString = (isBrowser) ? "http://W764IIS.prom.eng.vmware.com/users.html" : "file:///C:/depot/main/ZimbraMigrationTools/src/c/Misc/Help/users.html";
-            Process.Start(new ProcessStartInfo(urlString));
+            DoHelp("users.html");
         }
 
         public ICommand ObjectPickerCommand

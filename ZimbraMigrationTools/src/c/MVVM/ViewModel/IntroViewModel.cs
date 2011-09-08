@@ -158,6 +158,12 @@ namespace MVVM.ViewModel
             }
         }
 
+        public string InstallDir
+        {
+            get;
+            set;
+        } 
+
         public void SetupViewModelPtrs()
         {
             for (int i = 0; i < (int)ViewType.MAX; i++)

@@ -31,8 +31,7 @@ namespace MVVM.ViewModel
 
         private void GetConfigDestHelp()
         {
-            string urlString = (isBrowser) ? "http://W764IIS.prom.eng.vmware.com/cfgSDest.html" : "file:///C:/depot/main/ZimbraMigrationTools/src/c/Misc/Help/cfgSDest.html";
-            Process.Start(new ProcessStartInfo(urlString));
+            DoHelp("cfgSDest.html");
         }
 
         public ICommand LoadCommand

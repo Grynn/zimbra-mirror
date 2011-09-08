@@ -1,6 +1,7 @@
 ﻿namespace MVVM.ViewModel
 {
     using System.ComponentModel;
+    using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
     using MVVM.Model;
@@ -8,6 +9,7 @@
     using System.Xml;
     using System;
     using System.IO;
+    using System.Diagnostics;
 
     public class BaseViewModel : INotifyPropertyChanged
     {
@@ -83,6 +85,35 @@
 
             xmlDoc.LoadXml(viewXmlElem.ToString());
             xmlDoc.Save(XmlfileName);       
+        }
+
+        protected void DoHelp(string htmlFile)
+        {
+            string fileName;
+            string urlString;
+            bool bDoProcess;
+            if (isBrowser)
+            {
+                fileName = urlString = "http://W764IIS.prom.eng.vmware.com/" + htmlFile;
+                bDoProcess = true; // too lazy to check if xbap
+            }
+            else
+            {
+                fileName = ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).InstallDir;
+                fileName += "/";
+                fileName += htmlFile;
+                urlString = "file:///" + fileName;
+                bDoProcess = File.Exists(fileName);
+            }
+
+            if (bDoProcess)
+            {
+                Process.Start(new ProcessStartInfo(urlString));
+            }
+            else
+            {
+                MessageBox.Show("Help file not found", "Open file error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     } 
 }

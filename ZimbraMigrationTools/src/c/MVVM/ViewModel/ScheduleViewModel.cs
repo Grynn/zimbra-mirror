@@ -98,7 +98,7 @@ namespace MVVM.ViewModel
             proc.StartInfo.Arguments += @"""";
             proc.StartInfo.Arguments += @"\";
             proc.StartInfo.Arguments += @"""";
-            proc.StartInfo.Arguments += Environment.CurrentDirectory;
+            proc.StartInfo.Arguments += ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).InstallDir;
             proc.StartInfo.Arguments += @"\";
             proc.StartInfo.Arguments += "ZimbraMigrationConsole.exe";
             proc.StartInfo.Arguments += @"\";
@@ -126,8 +126,7 @@ namespace MVVM.ViewModel
 
         private void GetSchedHelp()
         {
-            string urlString = (isBrowser) ? "http://W764IIS.prom.eng.vmware.com/sched.html" : "file:///C:/depot/main/ZimbraMigrationTools/src/c/Misc/Help/sched.html";
-            Process.Start(new ProcessStartInfo(urlString));
+            DoHelp("sched.html");
         }
 
         public ICommand BackCommand

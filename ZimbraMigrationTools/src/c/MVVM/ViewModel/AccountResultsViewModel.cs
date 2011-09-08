@@ -63,8 +63,7 @@ namespace MVVM.ViewModel
 
         private void GetAcctResultsHelp()
         {
-            string urlString = (isBrowser) ? "http://W764IIS.prom.eng.vmware.com/acctresults.html" : "file:///C:/depot/main/ZimbraMigrationTools/src/c/Misc/Help/acctresults.html";
-            Process.Start(new ProcessStartInfo(urlString));
+            DoHelp("acctresults.html");
         }
 
         public ICommand OpenLogFileCommand
