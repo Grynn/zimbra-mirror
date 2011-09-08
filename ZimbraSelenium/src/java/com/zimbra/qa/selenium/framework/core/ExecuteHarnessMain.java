@@ -15,6 +15,7 @@ import org.apache.log4j.*;
 import org.testng.*;
 import org.testng.xml.*;
 
+import com.zimbra.qa.selenium.framework.ui.PerfMetrics;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 
@@ -361,6 +362,7 @@ public class ExecuteHarnessMain {
 
 		StringBuilder result = new StringBuilder();
 		FileAppender appender = new FileAppender(new PatternLayout("%-4r %-5p %c %x - %m%n"), testoutputfoldername + "/debug.txt", false);
+		PerfMetrics.setOutputFolder(testoutputfoldername);
 
 		try {
 

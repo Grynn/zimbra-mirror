@@ -9,6 +9,8 @@ import java.util.Map.Entry;
 import org.apache.commons.configuration.*;
 import org.apache.log4j.*;
 
+import com.zimbra.qa.selenium.framework.ui.PerfMetrics;
+
 public class ZimbraSeleniumProperties {
 	private static final Logger logger = LogManager.getLogger(ZimbraSeleniumProperties.class);
 	
@@ -241,6 +243,10 @@ public class ZimbraSeleniumProperties {
 		
 		if ( CodeCoverage.getInstance().Enabled ) {
 			queryMap.putAll(CodeCoverage.getInstance().getQueryMap());
+		}
+		
+		if ( PerfMetrics.getInstance().Enabled ) {
+			queryMap.putAll(PerfMetrics.getInstance().getQueryMap());
 		}
 		
 		if ( appType == AppType.DESKTOP ) {

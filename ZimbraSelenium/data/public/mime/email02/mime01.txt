@@ -1,0 +1,21 @@
+Date: Thu, 08 Sep 2011 10:16:46 -0700 (PDT)
+From: foo@example.com
+To: bar@example.com
+Subject: Subject13155016716713
+Message-ID: <6656aab9-175a-46c0-86f7-9eba7ce1e3fc@zqa-171>
+Content-Type: multipart/alternative;
+ boundary="=_3ba34d07-68db-4f41-9869-23bac34a08ab"
+MIME-Version: 1.0
+
+--=_3ba34d07-68db-4f41-9869-23bac34a08ab
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+Simple HTML Content 
+
+--=_3ba34d07-68db-4f41-9869-23bac34a08ab
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+<html><head><style type='text/css'>p { margin: 0; }</style></head><body><div style='font-family: Times New Roman; font-size: 12pt; color: #000000'><span>Simple HTML Content<br></span><br /></div></body></html>
+--=_3ba34d07-68db-4f41-9869-23bac34a08ab--
