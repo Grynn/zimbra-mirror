@@ -18,11 +18,11 @@ public class BasicLogout extends OctopusCommonTest {
 	public void BasicLogout01() throws HarnessException {
 
 		ZAssert.assertTrue(app.zPageOctopus
-				.sIsElementPresent(PageOctopus.Locators.zSignOutButton),
+				.sIsElementPresent(PageOctopus.Locators.zSignOutButton.locator),
 				"Verify Sign Out Button is present on the page");
 		
 		// Click on logout
-		app.zPageOctopus.zClick(PageOctopus.Locators.zSignOutButton);
+		app.zPageOctopus.zClick(PageOctopus.Locators.zSignOutButton.locator);
 
 		app.zPageLogin.zWaitForActive();
 		

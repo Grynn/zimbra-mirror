@@ -167,7 +167,11 @@ public class Button {
 	public static final Button O_SEARCHTYPE_FILES = new Button("O_SEARCHTYPE_FILES");
 	public static final Button O_SEARCHTYPE_INCLUDESHARED = new Button("O_SEARCHTYPE_INCLUDESHARED");
 
-	
+	//Octopus buttons
+	public static final Button B_TAB_MY_FILES = new Button("B_TAB_MY_FILES");
+	public static final Button B_MY_FILES = new Button("B_MY_FILES");
+	public static final Button B_MY_FILES_LIST_ITEM = new Button("B_MY_FILES_LIST_ITEM");
+
 	//Briefcase buttons
 	public static final Button B_UPLOAD_FILE = new Button("B_UPLOAD_FILE");
 	public static final Button B_EDIT_FILE = new Button("B_EDIT_FILE");

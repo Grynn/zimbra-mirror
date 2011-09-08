@@ -964,7 +964,7 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.waitForCondition() Runs the specified JavaScript snippet
 	 * repeatedly until it evaluates to true
 	 * 
-	 * @param locator
+	 * @param condition
 	 * @throws HarnessException
 	 */
 	protected boolean sWaitForCondition(String condition) throws HarnessException {
@@ -973,6 +973,27 @@ public abstract class AbsSeleniumObject {
 		try {
 			ClientSessionFactory.session().selenium().waitForCondition(
 					condition, "" + LoadDelay);
+			return true;
+		} catch (Exception ex) {
+			logger.info(condition + " never become true: ");
+			return false;
+		}
+	}
+	
+	/**
+	 * DefaultSelenium.waitForCondition() Runs the specified JavaScript snippet
+	 * repeatedly during timout period until it evaluates to true
+	 * 
+	 * @param condition
+	 * @param timeout
+	 * @throws HarnessException
+	 */
+	public boolean sWaitForCondition(String condition, String timeout) throws HarnessException {
+		logger.info("sWaitForCondition(" + condition + "), timeout="
+				+ timeout);
+		try {
+			ClientSessionFactory.session().selenium().waitForCondition(
+					condition, timeout);
 			return true;
 		} catch (Exception ex) {
 			logger.info(condition + " never become true: ");
