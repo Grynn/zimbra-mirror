@@ -66,7 +66,6 @@ namespace MVVM.ViewModel
         private void GetIntroUserMig()
         {
             BaseViewModel.isServer = false;
-            BaseViewModel.isServer = false;
         }
 
         public ICommand GetIntroServerMigCommand
@@ -77,7 +76,6 @@ namespace MVVM.ViewModel
 
         private void GetIntroServerMig()
         {
-            BaseViewModel.isServer = true;
             BaseViewModel.isServer = true;
         }
 
