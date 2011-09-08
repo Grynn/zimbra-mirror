@@ -47,6 +47,15 @@ ZaTaskController.prototype.addTask = function(task) {
     }
 }
 
+ZaTaskController.prototype.removeTask = function(task) {
+    var index= this._workingInProcess.indexOfLike(task, task.getData);
+    if (index != -1) {
+        this._workingInProcess.getArray()._version = this._workingInProcess.getArray()._version + 1;
+        this._workingInProcess.removeAt(index);
+        this._taskContentPanel._localXForm.setInstanceValue(this._workingInProcess.getArray(),ZaTask.A_workingInProcess);
+    }
+}
+
 ZaTaskController.prototype.setExpanded = function(isExpanded) {
     // TODO  remove this to view manager
     var width;

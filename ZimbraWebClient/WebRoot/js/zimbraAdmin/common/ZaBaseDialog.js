@@ -9,6 +9,7 @@ ZaBaseDialog = function(parent,className, title, w, h,iKeyName, extraButtons, co
     if (arguments.length == 0) return;
     ZaXWizardDialog.call(this, parent,className,title, w, h,iKeyName, this._contextId);
     this.addMiniIcon();
+    this.addPopdownListener(new AjxListener(this, this.popdownHookListner));
 }
 
 ZaBaseDialog.prototype = new ZaXWizardDialog;
@@ -53,14 +54,29 @@ function () {
     }
 }
 
+ZaBaseDialog.prototype.getTask =
+function () {
+    if (!this._task) {
+        this._task = new ZaWorkingProcess(this.constructor, this.toString(), this.getObject());
+    } else {
+        this._task.data = this.getObject();
+    }
+    return this._task;
+}
+
+ZaBaseDialog.prototype.popdownHookListner = function() {
+    if (!this._inMin) {
+        ZaZimbraAdmin.getInstance().getTaskController().removeTask(this.getTask());
+    }
+}
+
 ZaBaseDialog.__handleMinClick = 
 function () {
-    var constructor = this.constructor;
-    var dialogType = this.toString();
-    var dataObject = this.getObject();
-    var task = new ZaWorkingProcess(constructor, dialogType, dataObject);
+    var task = this.getTask();
     ZaZimbraAdmin.getInstance().getTaskController().addTask(task);
-    this.popdown(); 	
+    this._inMin = true;
+    this.popdown();
+    this._inMin = false;
 }
 	
 
