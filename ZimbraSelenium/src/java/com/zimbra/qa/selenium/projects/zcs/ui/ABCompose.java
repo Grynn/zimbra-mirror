@@ -213,8 +213,9 @@ public class ABCompose extends AppPage {
 			
 			
 			// Add any members
-			for (String member : g.dlist) {
-				obj.zEditField.zType(localize(locator.findLabel), member);
+			
+			for (ContactItem member : g.dlist) {
+				obj.zEditField.zType(localize(locator.findLabel), member.email);
 				obj.zButton.zClick(localize(locator.search), "2");
 				SleepUtil.sleep(2500);
 				if (ClientSessionFactory.session().currentBrowserName().contains("Safari")) {
@@ -222,10 +223,10 @@ public class ABCompose extends AppPage {
 					obj.zButton.zClick(localize(locator.search), "2");
 					SleepUtil.sleep(1000);
 				}
-				obj.zListItem.zDblClickItemInSpecificList(member, "2");
+				obj.zListItem.zDblClickItemInSpecificList(member.email, "2");
 				obj.zButton.zClick(localize(locator.add));
 			}
-
+            
 			// Save
 			obj.zButton.zClick(localize(locator.save), "2");
 			obj.zToastAlertMessage.zAlertMsgExists(localize(locator.groupCreated),

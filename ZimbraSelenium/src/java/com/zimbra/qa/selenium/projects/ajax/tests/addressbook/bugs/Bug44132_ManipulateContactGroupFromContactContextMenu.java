@@ -115,9 +115,10 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		//verify group name displayed
 	    ZAssert.assertStringContains(groupView.zGetContactProperty(DisplayContactGroup.Field.Company), group.fileAs  , "Verify contact group email (" + group.fileAs + ") displayed");	
 		
+	   
 	    //verify members
 		for (int i=0; i<group.dlist.size(); i++) {
-	       ZAssert.assertStringContains(groupView.zGetContactProperty(DisplayContactGroup.Field.Email), group.dlist.get(i), "Verify contact group email (" + group.dlist.get(i) + ") displayed");	
+	       ZAssert.assertStringContains(groupView.zGetContactProperty(DisplayContactGroup.Field.Email), group.dlist.get(i).email, "Verify contact group email (" + group.dlist.get(i) + ") displayed");	
 		}            
 
 	}
@@ -152,7 +153,7 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		
 		  //Create contact group 
 		ContactGroupItem group = new ContactGroupItem("group_" + ZimbraSeleniumProperties.getUniqueString().substring(8));
-		group.addDListMember(contactItem.email);
+		group.addDListMember(contactItem);
 	
 		//verification
 		CreateGroupVerification(simpleFormGroup, group);
@@ -176,7 +177,7 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		
 	
 		//Add contact to existing group 
-		group.addDListMember(contactItem.email);
+		group.addDListMember(contactItem);
 	
 		//verify toasted message 'group saved'  
         String expectedMsg ="Group Saved";
@@ -224,9 +225,9 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
         ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
         		        expectedMsg , "Verify toast message '" + expectedMsg + "'");
     
-    	group.addDListMember(contactItem1.email);
-		group.addDListMember(contactItem2.email);
-		group.addDListMember(contactItem3.email);
+    	group.addDListMember(contactItem1);
+		group.addDListMember(contactItem2);
+		group.addDListMember(contactItem3);
 
 	    Verification(group);
 	}
@@ -257,9 +258,9 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		
 		  //Create contact group 
 		ContactGroupItem group = new ContactGroupItem("group_" + ZimbraSeleniumProperties.getUniqueString().substring(8));
-		group.addDListMember(contactItem1.email);
-		group.addDListMember(contactItem2.email);
-		group.addDListMember(contactItem3.email);
+		group.addDListMember(contactItem1);
+		group.addDListMember(contactItem2);
+		group.addDListMember(contactItem3);
 	
 		//verification
 		CreateGroupVerification(simpleFormGroup, group);
@@ -289,7 +290,7 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
 		
 		  //Create contact group 
 		ContactGroupItem newGroup = new ContactGroupItem("group_" + ZimbraSeleniumProperties.getUniqueString().substring(8));
-		newGroup.addDListMember(contactItem.email);
+		newGroup.addDListMember(contactItem);
 		for (int i=0; i<group.dlist.size(); i++) {
 			  newGroup.addDListMember(group.dlist.get(i));
 		}
@@ -335,7 +336,7 @@ public class Bug44132_ManipulateContactGroupFromContactContextMenu extends AjaxC
         ZAssert.assertStringContains(app.zPageMain.zGetToaster().zGetToastMessage(),
         		        expectedMsg , "Verify toast message '" + expectedMsg + "'");
     
-    	group.addDListMember(contactItem1.email);
+    	group.addDListMember(contactItem1);
     	
     	for (int i=0; i<group1.dlist.size(); i++) {
 			  group.addDListMember(group1.dlist.get(i));
