@@ -494,8 +494,8 @@ function () {
 			this.goPage(ZaNewDomainXWizard.NOTEBOOK_ACL_STEP);
 			this.changeButtonStateForStep(ZaNewDomainXWizard.NOTEBOOK_ACL_STEP);	
 		}else{
-			this.goPage(ZaNewDomainXWizard.ADVANCED_STEP);
-			this.changeButtonStateForStep(ZaNewDomainXWizard.ADVANCED_STEP);
+			this.goPage(ZaNewDomainXWizard.FEATURE_STEP);
+			this.changeButtonStateForStep(ZaNewDomainXWizard.FEATURE_STEP);
 		}
 	} else if (this._containedObject[ZaModel.currentStep] == ZaNewDomainXWizard.AUTH_CONFIG_SUM_STEP) {
 		if(this._containedObject.attrs[ZaDomain.A_AuthMech] == ZaDomain.AuthMech_zimbra) {
@@ -634,7 +634,7 @@ function() {
 		this.goPage(ZaNewDomainXWizard.AUTH_TEST_RESULT_STEP);
  		//this.testAuthSettings();
 		//this.changeButtonStateForStep(ZaNewDomainXWizard.AUTH_TEST_STEP);
-	} else if(this._containedObject[ZaModel.currentStep] == ZaNewDomainXWizard.ADVANCED_STEP) {
+	} else if(this._containedObject[ZaModel.currentStep] == ZaNewDomainXWizard.FEATURE_STEP) {
 		if (this._containedObject[ZaDomain.A_CreateNotebook] != "TRUE") {
 			this.goPage(this._containedObject[ZaModel.currentStep] + 2);
 			this.changeButtonStateForStep(this._containedObject[ZaModel.currentStep]);
