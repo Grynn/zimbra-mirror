@@ -35,8 +35,12 @@ function(entry) {
 }
 
 ZaTaskController.prototype.addTask = function(task) {
-    if (!this._workingInProcess.containsLike(task, task.getData)) {
+    var index= this._workingInProcess.indexOfLike(task, task.getData);
+    if (index == -1) {
         this._workingInProcess.add(task, undefined, true);
+        this._taskContentPanel._localXForm.setInstanceValue(this._workingInProcess.getArray(),ZaTask.A_workingInProcess);
+    }else{
+        this._workingInProcess.replace(index, task);
         this._taskContentPanel._localXForm.setInstanceValue(this._workingInProcess.getArray(),ZaTask.A_workingInProcess);
     }
 }

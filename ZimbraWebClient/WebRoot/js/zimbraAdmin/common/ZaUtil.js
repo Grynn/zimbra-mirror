@@ -178,3 +178,8 @@ ZaUtil.join = function (objArray, key, delimiter) {
     }
     return strArr.join(delimiter) ;
 }
+
+ZaUtil.getItemUUid = function() {
+    var itemPrefix = "ZaItem";
+    return Dwt.getNextId(itemPrefix);
+}

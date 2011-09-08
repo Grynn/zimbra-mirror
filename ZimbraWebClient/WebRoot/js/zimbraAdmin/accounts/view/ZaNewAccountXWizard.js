@@ -237,6 +237,10 @@ function(entry) {
 	}
 	this._containedObject.name = "";
 
+    if(entry._uuid) {
+        this._containedObject._uuid = entry._uuid;
+    }
+
 	if(entry.rights) {
 		this._containedObject.rights = entry.rights;
 	} else {

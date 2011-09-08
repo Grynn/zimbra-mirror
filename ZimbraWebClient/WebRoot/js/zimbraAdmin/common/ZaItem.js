@@ -20,6 +20,7 @@
 ZaItem = function(iKeyName) {
 	if (arguments.length == 0) return;
 	this._iKeyName = iKeyName;
+    this._uuid = ZaUtil.getItemUUid();
 	ZaModel.call(this, true);
 
 }

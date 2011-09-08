@@ -55,5 +55,5 @@ ZaWorkingProcess.prototype.toString = function() {
 }
 
 ZaWorkingProcess.prototype.getData = function() {
-    return this.data;
+    return this.data._uuid;
 }
