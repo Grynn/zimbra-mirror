@@ -19,15 +19,17 @@ use Migrate;
 
 ########################################################################################################################
 
+my $concurrent = 10;
+
 Migrate::verifySchemaVersion(83);
 
-foreach my $group (Migrate::getMailboxGroups()) {
-  addTagTable($group);
-  addTaggedItemTable($group);
-  addTagNamesColumn($group);
-  # can't drop indexes until *after* migration is complete
-#  dropTagIndexes($group);
-}
+my @groups = Migrate::getMailboxGroups();
+
+addTagTable();
+addTaggedItemTable();
+addTagNamesColumn();
+#can't drop indexes until *after* migration is complete
+#dropTagIndexes();
 
 Migrate::updateSchemaVersion(83, 84);
 
@@ -35,10 +37,11 @@ exit(0);
 
 ########################################################################################################################
 
-sub addTagTable($) {
-  my ($group) = @_;
-
-  my $sql = <<_EOF_;
+sub addTagTable() {
+  my @sql = ();
+  foreach my $group (@groups) {
+    Migrate::logSql("Adding $group.TAG table...");
+    my $sql = <<_EOF_;
 CREATE TABLE IF NOT EXISTS $group.tag (
    mailbox_id    INTEGER UNSIGNED NOT NULL,
    id            INTEGER NOT NULL,
@@ -55,15 +58,16 @@ CREATE TABLE IF NOT EXISTS $group.tag (
    CONSTRAINT fk_tag_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES zimbra.mailbox(id)
 ) ENGINE = InnoDB;
 _EOF_
-
-  Migrate::logSql("Adding $group.TAG table...");
-  Migrate::runSql($sql);
+    push(@sql,$sql);
+  }
+  Migrate::runSqlParallel($concurrent,@sql);
 }
 
-sub addTaggedItemTable($) {
-  my ($group) = @_;
-
-  my $sql = <<_EOF_;
+sub addTaggedItemTable() {
+  my @sql = ();
+  foreach my $group (@groups) {
+    Migrate::logSql("Adding $group.TAGGED_ITEM table...");
+    my $sql = <<_EOF_;
 CREATE TABLE IF NOT EXISTS $group.tagged_item (
    mailbox_id    INTEGER UNSIGNED NOT NULL,
    tag_id        INTEGER NOT NULL,
@@ -74,27 +78,29 @@ CREATE TABLE IF NOT EXISTS $group.tagged_item (
    CONSTRAINT fk_tagged_item_item FOREIGN KEY (mailbox_id, item_id) REFERENCES $group.mail_item(mailbox_id, id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 _EOF_
-
-  Migrate::logSql("Adding $group.TAGGED_ITEM table...");
-  Migrate::runSql($sql);
+    push(@sql,$sql);
+  }
+  Migrate::runSqlParallel($concurrent,@sql);
 }
 
-sub addTagNamesColumn($) {
-  my ($group) = @_;
-
-  my $sql = <<_EOF_;
+sub addTagNamesColumn() {
+  my @sql = ();
+  foreach my $group (@groups) {
+    Migrate::logSql("Adding TAG_NAMES column to $group.MAIL_ITEM and $group.MAIL_ITEM_DUMPSTER...");
+    my $sql = <<_EOF_;
 ALTER TABLE $group.mail_item ADD COLUMN tag_names TEXT AFTER tags;
 ALTER TABLE $group.mail_item_dumpster ADD COLUMN tag_names TEXT AFTER tags;
 _EOF_
-
-  Migrate::logSql("Adding TAG_NAMES column to $group.MAIL_ITEM and $group.MAIL_ITEM_DUMPSTER...");
-  Migrate::runSql($sql);
+    push(@sql,$sql);
+  }
+  Migrate::runSqlParallel($concurrent,@sql);
 }
 
-sub dropTagIndexes($) {
-  my ($group) = @_;
-
-  my $sql = <<_EOF_;
+sub dropTagIndexes() {
+  my @sql = ();
+  foreach my $group (@groups) {
+    Migrate::logSql("Dropping tag/flag/unread indexes from $group.MAIL_ITEM and $group.MAIL_ITEM_DUMPSTER...");
+    my $sql = <<_EOF_;
 ALTER TABLE $group.mail_item DROP INDEX i_unread;
 ALTER TABLE $group.mail_item DROP INDEX i_tags_date;
 ALTER TABLE $group.mail_item DROP INDEX i_flags_date;
@@ -102,7 +108,7 @@ ALTER TABLE $group.mail_item_dumpster DROP INDEX i_unread;
 ALTER TABLE $group.mail_item_dumpster DROP INDEX i_tags_date;
 ALTER TABLE $group.mail_item_dumpster DROP INDEX i_flags_date;
 _EOF_
-
-  Migrate::logSql("Dropping tag/flag/unread indexes from $group.MAIL_ITEM and $group.MAIL_ITEM_DUMPSTER...");
-  Migrate::runSql($sql);
+    push(@sql,$sql);
+  }
+  Migrate::runSqlParallel($concurrent,@sql);
 }

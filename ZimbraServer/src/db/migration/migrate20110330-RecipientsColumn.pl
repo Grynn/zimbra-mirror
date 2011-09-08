@@ -16,14 +16,12 @@
 
 use strict;
 use Migrate;
-
+my $concurrent = 10;
 ########################################################################################################################
 
 Migrate::verifySchemaVersion(81);
 
-foreach my $group (Migrate::getMailboxGroups()) {
-  addRecipientsColumn($group);
-}
+addRecipientsColumn();
 
 Migrate::updateSchemaVersion(81, 82);
 
@@ -31,14 +29,22 @@ exit(0);
 
 ########################################################################################################################
 
-sub addRecipientsColumn($) {
-  my ($group) = @_;
-
-  my $sql = <<_EOF_;
+sub addRecipientsColumn() {
+  my @groups = Migrate::getMailboxGroups();
+  my @sql = ();
+  foreach my $group (@groups) {
+    my $sql = <<_EOF_;
 ALTER TABLE $group.mail_item ADD COLUMN recipients VARCHAR(128) AFTER sender;
+_EOF_
+    push(@sql,$sql);
+  }
+  Migrate::runSqlParallel($concurrent,@sql);
+
+  foreach my $group (@groups) {
+    my $sql = <<_EOF_;
 ALTER TABLE $group.mail_item_dumpster ADD COLUMN recipients VARCHAR(128) AFTER sender;
 _EOF_
-
-  Migrate::logSql("Adding RECIPIENTS column to $group.MAIL_ITEM and $group.MAIL_ITEM_DUMPSTER...");
-  Migrate::runSql($sql);
+    push(@sql,$sql);
+  }
+  Migrate::runSqlParallel($concurrent,@sql);
 }
