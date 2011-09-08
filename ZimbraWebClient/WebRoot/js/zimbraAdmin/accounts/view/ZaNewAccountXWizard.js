@@ -235,7 +235,7 @@ function(entry) {
 	for (var a in entry.attrs) {
 		this._containedObject.attrs[a] = entry.attrs[a];
 	}
-	this._containedObject.name = "";
+	this._containedObject.name = entry.name || "";
 
     if(entry._uuid) {
         this._containedObject._uuid = entry._uuid;
@@ -258,19 +258,19 @@ function(entry) {
 	if(entry._defaultValues)
 		this._containedObject._defaultValues = entry._defaultValues;
 
-	this._containedObject.id = null;
+	this._containedObject.id = entry.id || null;
 
 	this.cosChoices.setChoices([this._containedObject.cos]);
 	this.cosChoices.dirtyChoices();
 
-    this._containedObject.attrs[ZaAccount.A_accountStatus] = ZaAccount.ACCOUNT_STATUS_ACTIVE;
-	this._containedObject[ZaAccount.A2_autodisplayname] = "TRUE";
-	this._containedObject[ZaAccount.A2_autoMailServer] = "TRUE";
-	this._containedObject[ZaAccount.A2_autoCos] = "TRUE";
-	this._containedObject[ZaAccount.A2_confirmPassword] = null;
-	this._containedObject[ZaModel.currentStep] = 1;
-	this._containedObject.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
-	this._containedObject[ZaAccount.A2_errorMessage] = "";
+    this._containedObject.attrs[ZaAccount.A_accountStatus] =  ZaAccount.ACCOUNT_STATUS_ACTIVE;
+	this._containedObject[ZaAccount.A2_autodisplayname] = entry[ZaAccount.A2_autodisplayname] || "TRUE";
+	this._containedObject[ZaAccount.A2_autoMailServer] = entry[ZaAccount.A2_autoMailServer] || "TRUE";
+	this._containedObject[ZaAccount.A2_autoCos] = entry[ZaAccount.A2_autoCos] || "TRUE";
+	this._containedObject[ZaAccount.A2_confirmPassword] = entry[ZaAccount.A2_confirmPassword] || null;
+	this._containedObject[ZaModel.currentStep] = entry[ZaModel.currentStep] || 1;
+	this._containedObject.attrs[ZaAccount.A_zimbraMailAlias] = entry.attrs[ZaAccount.A_zimbraMailAlias] || new Array();
+	this._containedObject[ZaAccount.A2_errorMessage] = entry[ZaAccount.A2_errorMessage] || "";
 	var domainName;
 	if(!domainName) {
 		//find out what is the default domain
@@ -289,6 +289,8 @@ function(entry) {
 		domainName =  ZaSettings.myDomainName;
 	}
 	this._containedObject[ZaAccount.A_name] = "@" + domainName;
+    if (entry[ZaAccount.A_name])
+        this._containedObject[ZaAccount.A_name] = entry[ZaAccount.A_name];
 	EmailAddr_XFormItem.domainChoices.setChoices([]);
 	EmailAddr_XFormItem.domainChoices.dirtyChoices();
 

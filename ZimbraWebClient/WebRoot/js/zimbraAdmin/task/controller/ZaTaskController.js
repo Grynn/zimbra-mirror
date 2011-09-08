@@ -8,6 +8,7 @@
 ZaTaskController = function(appCtxt, container) {
 	ZaController.call(this, appCtxt, container,"ZaTaskController");
     this._workingInProcess = new AjxVector();
+    this._workingInProcess.getArray()._version = 1;
 }
 
 ZaTaskController.prototype = new ZaController();
@@ -36,6 +37,7 @@ function(entry) {
 
 ZaTaskController.prototype.addTask = function(task) {
     var index= this._workingInProcess.indexOfLike(task, task.getData);
+    this._workingInProcess.getArray()._version = this._workingInProcess.getArray()._version + 1;
     if (index == -1) {
         this._workingInProcess.add(task, undefined, true);
         this._taskContentPanel._localXForm.setInstanceValue(this._workingInProcess.getArray(),ZaTask.A_workingInProcess);
