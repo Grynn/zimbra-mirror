@@ -57,9 +57,10 @@ function () {
 ZaBaseDialog.prototype.getTask =
 function () {
     if (!this._task) {
-        this._task = new ZaWorkingProcess(this.constructor, this.toString(), this.getObject());
+        this._task = new ZaWorkingProcess(this.constructor, this.toString(), this.getObject(), this.getBounds());
     } else {
         this._task.data = this.getObject();
+        this._task.position = this.getBounds();
     }
     return this._task;
 }

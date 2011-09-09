@@ -47,6 +47,8 @@ function (ev) {
         var dialog = ZaTaskContentView._getDialog(selectedItem.type, selectedItem.constructor);
         dialog.setObject(selectedItem.data);
         dialog.popup();
+        var position = selectedItem.position;
+        dialog.setBounds(position.x, position.y, position.width, position.height);
 	}
 }
 
@@ -56,18 +58,27 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
 
     var runningTaskHeader = new Array();
     runningTaskHeader[0] = new ZaListHeaderItem(ZaTask.A_runningTask, ZaMsg.MSG_RunningTask, null, "auto", null, ZaTask.A_runningTask, false, true);
+
+    var serverStatusHeader = new Array();
+    serverStatusHeader[0] = new ZaListHeaderItem(ZaTask.A_serverStatus, ZaMsg.MSG_ServerStatus, null, "auto", null, ZaTask.A_serverStatus, false, true);
     var items = {
         type:_GROUP_, numCols:1,  items:[
-            {ref:ZaTask.A_workingInProcess, type:_DWT_LIST_, height:100,
+            {ref:ZaTask.A_workingInProcess, type:_DWT_LIST_, height:160,
                forceUpdate: true, preserveSelection:false, multiselect:false,
                headerList:workingInProcessHeader,
                visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, true]],
                visibilityChangeEventSources:[ZaTask.A2_isExpanded],
                onSelection:ZaTaskContentView.workingInProcessSelectionListener
             },
-            {ref:ZaTask.A_runningTask, type:_DWT_LIST_, height:100,
+            {ref:ZaTask.A_runningTask, type:_DWT_LIST_, height:160,
                forceUpdate: true, preserveSelection:false, multiselect:false,
                headerList:runningTaskHeader,
+               visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, true]],
+               visibilityChangeEventSources:[ZaTask.A2_isExpanded]
+            },
+            {ref:ZaTask.A_serverStatus, type:_DWT_LIST_, height:160,
+               forceUpdate: true, preserveSelection:false, multiselect:false,
+               headerList:serverStatusHeader,
                visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, true]],
                visibilityChangeEventSources:[ZaTask.A2_isExpanded]
             },
