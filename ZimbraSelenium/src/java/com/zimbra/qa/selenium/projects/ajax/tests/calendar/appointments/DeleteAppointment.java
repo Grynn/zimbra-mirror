@@ -69,12 +69,8 @@ public class DeleteAppointment extends AjaxCommonTest {
                          "</CreateAppointmentRequest>");
         String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse//mail:appt", "id");
         
-        // Switch to work week view
-        app.zPageCalendar.zToolbarPressPulldown(Button.B_LISTVIEW, Button.O_LISTVIEW_WORKWEEK);
-        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        SleepUtil.sleepMedium();
-        
         // Right click to appointment and delete it
+        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_DELETE_MENU, apptSubject);
         DialogConfirm dlgConfirm = new DialogConfirm(DialogConfirm.Confirmation.DELETE, app, ((AppAjaxClient) app).zPageCalendar);
 		dlgConfirm.zClickButton(Button.B_YES);
@@ -122,17 +118,12 @@ public class DeleteAppointment extends AjaxCommonTest {
                          "</CreateAppointmentRequest>");
         String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse//mail:appt", "id");
         
-        // Switch to work week view
-        app.zPageCalendar.zToolbarPressPulldown(Button.B_LISTVIEW, Button.O_LISTVIEW_WORKWEEK);
-        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
-        SleepUtil.sleepMedium();
-        
         // Delete appointment using keyboard Del and Backspace key
-        PageCalendar page = (PageCalendar) app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
+        app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
+        app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
         DialogConfirm dlgConfirm = (DialogConfirm)app.zPageCalendar.zKeyboardKeyEvent(keyEvent);
 		dlgConfirm.zClickButton(Button.B_YES);
 		dlgConfirm.zWaitForClose();
-		SleepUtil.sleepSmall();
 		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(apptSubject), false, "Verify appointment is deleted");
 	}
 }
