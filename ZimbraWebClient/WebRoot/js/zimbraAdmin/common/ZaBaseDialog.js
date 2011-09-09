@@ -56,7 +56,8 @@ function () {
 
 ZaBaseDialog.prototype.popdownHookListner = function() {
     if (!this._inMin) {
-        ZaZimbraAdmin.getInstance().getTaskController().removeTask(this.getTask());
+	var task = new ZaWorkingProcess(this.constructor, this.toString(), this.getObject(), this.getBounds());
+        ZaZimbraAdmin.getInstance().getTaskController().removeTask(task);
     }
 }
 
