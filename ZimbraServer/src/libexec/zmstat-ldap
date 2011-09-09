@@ -82,6 +82,12 @@ sub getZimbraLdapPassword() {
     return $pass;
 }
 
+sub getZimbraUserDN() {
+    my $userdn = `zmlocalconfig -m nokey -s zimbra_ldap_userdn`;
+    chomp $userdn;
+    return $userdn;
+}
+
 #
 # main
 #
@@ -119,6 +125,7 @@ $LOGFH = openLogFile($LOGFILE, $HEADING);
 my $date = getDate();
 my $hostname = getZimbraServerHostname();
 my $password = getZimbraLdapPassword();
+my $user = getZimbraUserDN();
 
 waitUntilNiceRoundSecond($interval);
 while (1) {
@@ -130,7 +137,7 @@ while (1) {
 	sleep($interval);
         next;
     }
-    unless ($ldap->bind('cn=config', password => $password ) ) {
+    unless ($ldap->bind("$user", password => $password ) ) {
         $SEEN_ERROR or logError("Could not bind to LDAP server: $hostname");
 	sleep($interval);
         next;
@@ -147,6 +154,9 @@ while (1) {
             filter => '(objectClass=*)',
             attrs  => [ $val->{attr} ],
         );
+
+        print "val dn: ".$val->{dn}."\n";
+        print "Retrieving attr: ".$val->{attr}."\n";
 
         $val->{curr} = $mesg->pop_entry->get_value($val->{attr});
 
