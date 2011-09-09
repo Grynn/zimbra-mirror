@@ -40,6 +40,7 @@ _EOF_
   }
   Migrate::runSqlParallel($concurrent,@sql);
 
+  @sql = ();
   foreach my $group (@groups) {
     my $sql = <<_EOF_;
 ALTER TABLE $group.mail_item_dumpster ADD COLUMN recipients VARCHAR(128) AFTER sender;
