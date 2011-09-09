@@ -5,6 +5,8 @@ import java.util.Calendar;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
 import com.zimbra.qa.selenium.framework.items.RecipientItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
@@ -123,7 +125,12 @@ public class DeleteAppointment extends AjaxCommonTest {
         app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
         DialogConfirm dlgConfirm = (DialogConfirm)app.zPageCalendar.zKeyboardKeyEvent(keyEvent);
 		dlgConfirm.zClickButton(Button.B_YES);
-		dlgConfirm.zWaitForClose();
-		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(apptSubject), false, "Verify appointment is deleted");
+		app.zGetActiveAccount().soapSend(
+					"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-7).toMillis() +"' calExpandInstEnd='"+ startUTC.addDays(7).toMillis() +"'>"
+				+	"<query>subject:("+ apptSubject +")</query>"
+				+	"</SearchRequest>");
+
+		Element[] nodes = app.zGetActiveAccount().soapSelectNodes("//mail:appt");
+		ZAssert.assertEquals(nodes.length, 0, "Verify appointment is deleted");
 	}
 }
