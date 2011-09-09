@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.octopus.tests.folders;
+package com.zimbra.qa.selenium.projects.octopus.tests.myfiles.folders;
 
 import org.testng.annotations.Test;
 

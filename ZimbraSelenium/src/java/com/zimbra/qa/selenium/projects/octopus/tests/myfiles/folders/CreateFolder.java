@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.projects.octopus.tests.folders;
+package com.zimbra.qa.selenium.projects.octopus.tests.myfiles.folders;
 
 import org.testng.annotations.*;
 import com.zimbra.qa.selenium.framework.items.FolderItem;
@@ -36,7 +36,7 @@ public class CreateFolder extends OctopusCommonTest {
 		ZAssert.assertTrue(newsize > size, "Verify the new folder created");
 		
 		//FolderItem folder = FolderItem.importFromSOAP(account, _folderName);
-		//ZAssert.assertNotNull(folder, "Verify the new form opened");
+		//ZAssert.assertNotNull(folder, "Verify the new folder created");
 
 		//ZAssert.assertEquals(folder.getName(), _folderName,
 		//		"Verify the server and client folder names match");
