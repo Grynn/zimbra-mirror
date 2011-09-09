@@ -85,22 +85,18 @@ MAPIFolder::~MAPIFolder() {
 MAPIFolder::MAPIFolder(const MAPIFolder &folder) {
     m_folder = folder.m_folder;
     m_displayname = folder.m_displayname;
-    m_EntryID.cb = folder.m_EntryID.cb;
-    MAPIAllocateBuffer(folder.m_EntryID.cb, (LPVOID *)&(m_EntryID.lpb));
-    memcpy(m_EntryID.lpb, folder.m_EntryID.lpb, folder.m_EntryID.cb);
+	CopyEntryID((SBinary&)folder.m_EntryID,m_EntryID);
 }
 
 void MAPIFolder::Initialize(LPMAPIFOLDER pFolder, LPTSTR displayName, LPSBinary pEntryId) {
     if (m_folder != NULL)
         UlRelease(m_folder);
     if (m_EntryID.lpb != NULL)
-        MAPIFreeBuffer(m_EntryID.lpb);
+       FreeEntryID(m_EntryID);
     m_folder = pFolder;
     m_displayname = displayName;
-    m_EntryID.cb = pEntryId->cb;
-    MAPIAllocateBuffer(m_EntryID.cb, (LPVOID *)&(m_EntryID.lpb));
-    memcpy(m_EntryID.lpb, pEntryId->lpb, m_EntryID.cb);
-	if(m_session)
+	CopyEntryID(*pEntryId,m_EntryID);
+    if(m_session)
 	{
 		wstring wstrFolderPath = FindFolderPath();
 		m_folderpath = wstrFolderPath;
@@ -155,7 +151,7 @@ wstring MAPIFolder::FindFolderPath()
 	SBinary prevEntryID = {0};
 
 	//Make copy of prev EntryID
-	Zimbra::MAPI::Util::CopyEntryID(m_EntryID,prevEntryID);
+	CopyEntryID(m_EntryID,prevEntryID);
 	//Get parent ENTRYID
 	if(SUCCEEDED(hr=HrGetOneProp(m_folder,PR_PARENT_ENTRYID,&pPropVal)))
 	{
@@ -164,8 +160,7 @@ wstring MAPIFolder::FindFolderPath()
 			//compare entryID with previous
 			m_session->CompareEntryIDs(&prevEntryID,&pPropVal->Value.bin,ulResult);
 			//Free PrevEntryID
-			MAPIFreeBuffer( prevEntryID.lpb );
-			prevEntryID.lpb = NULL;
+			FreeEntryID(prevEntryID);
 			if(ulResult)
 			{
 				if(pPropVal)
@@ -185,7 +180,7 @@ wstring MAPIFolder::FindFolderPath()
 					pDisplayPropVal = NULL ;
 				}	
 				//Make copy of prev EntryID
-				Zimbra::MAPI::Util::CopyEntryID(pPropVal->Value.bin,prevEntryID);
+				CopyEntryID(pPropVal->Value.bin,prevEntryID);
 				//free parent folder entryID
 				MAPIFreeBuffer( pPropVal );
 				pPropVal = NULL;

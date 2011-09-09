@@ -65,9 +65,6 @@
     <ClInclude Include="..\Exchange\MAPITableIterator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tree-2.65\src\tree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Exchange\Exchange.h">
       <Filter>Header Files</Filter>
     </ClInclude>

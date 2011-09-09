@@ -89,7 +89,8 @@ STDMETHODIMP CUserObject::GetFolderObjects(/*[out, retval]*/ VARIANT* vObjects)
 	//Get all folders
 	maapi->GetRootFolderHierarchy(vfolderlist);
 
-	maapi->IterateVectorList(vfolderlist, m_pLogger );
+	//Amitabh: This test function has been removed from MAPIAccessAPI
+	//maapi->IterateVectorList(vfolderlist, m_pLogger );
 
 
 	std::vector<Folder_Data>::iterator it;

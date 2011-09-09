@@ -20,10 +20,14 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B4DEC736-0347-42E6-9F01-9AF82891FE82}</ProjectGuid>
-    <SccProjectName>SAK</SccProjectName>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccProvider>SAK</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccProvider>
+    </SccProvider>
     <Keyword>MFCProj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -290,7 +294,6 @@
     <ClInclude Include="..\Exchange\MAPIStore.h" />
     <ClInclude Include="..\Exchange\MAPITableIterator.h" />
     <ClInclude Include="..\Exchange\MapiUtils.h" />
-    <ClInclude Include="tree-2.65\src\tree.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\ZimbraMAPI\vcproj\Util.vcxproj">

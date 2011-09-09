@@ -199,25 +199,6 @@ void ExchangeMigrationSetupTest()
 		delete[]lpwstrStatus;	
 }
 
-void MAPIAccessAPITest_tr()
-{
-	tree<Folder_Data> tr;
-	//Create class instance with Exchange server hostname/IP, Outlook admin profile name, Exchange mailbox to be migrated
-	Zimbra::MAPI::MAPIAccessAPI *maapi = new Zimbra::MAPI::MAPIAccessAPI(L"10.117.82.161",L"Outlook",L"appt1");
-
-	//Init session and stores
-	maapi->Initialize();
-
-	//Get all folders
-	maapi->GetRootFolderHierarchy_tr(tr);
-
-	//iterate over folders
-	maapi->IterateTree_tr(tr);
-
-	//free it
-	delete maapi;
-}
-
 void MAPIAccessAPITestV()
 {
 	vector<Folder_Data> vfolderlist;
@@ -230,14 +211,54 @@ void MAPIAccessAPITestV()
 	//Get all folders
 	maapi->GetRootFolderHierarchy(vfolderlist);
 
-//	maapi->IterateVectorList(vfolderlist);
+	//
 	vector<Item_Data> vItemDataList;
 	vector<Folder_Data>::iterator it;
+
+	vector<Item_Data>::iterator idItr;
 	for(it=vfolderlist.begin();it!=vfolderlist.end();it++)
 	{
 		printf("FolderName:  %S \n",(*it).name.c_str());
+		printf("FolderPath: %S   ",(*it).folderpath.c_str());
+		printf("ItemCount: %d\n",(*it).itemcount);
+
 		SBinary sbin = (*it).sbin;
-		maapi->GetFolderItems(sbin,vItemDataList);
+		maapi->GetFolderItemsList(sbin,vItemDataList);
+		for(idItr=vItemDataList.begin();idItr!=vItemDataList.end();idItr++)
+		{
+			ContactItemData cd;
+			if((*idItr).lItemType == ZT_CONTACTS)
+			{
+				printf("Got contact item:");
+				maapi->GetItem((*idItr).sbMessageID,cd);
+				printf("%S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S			\
+					%S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S %S		\
+					%S %S %S %S %S %S %S %S %S %S %S %S %S %S %S \n ", 
+					cd.Birthday.c_str(), cd.CallbackPhone.c_str(), cd.CarPhone.c_str(),
+					cd.Company.c_str(), cd.Email1.c_str(), cd.Email2.c_str(),
+					cd.Email3.c_str(), cd.FileAs.c_str(),cd.FirstName.c_str(),
+					cd.HomeCity.c_str(),cd.HomeCountry.c_str(), cd.HomeFax.c_str(),
+					cd.HomePhone.c_str(), cd.HomePhone2.c_str(), cd.HomePostalCode.c_str(),
+					cd.HomeState.c_str(),cd.HomeStreet.c_str(), cd.HomeURL.c_str(),
+					cd.IMAddress1.c_str(),cd.JobTitle.c_str(), cd.LastName.c_str(),
+					cd.MiddleName.c_str(),cd.MobilePhone.c_str(),cd.NamePrefix.c_str(),
+					cd.NameSuffix.c_str(),cd.NickName.c_str(), cd.Notes.c_str(),
+					cd.OtherCity.c_str(), cd.OtherCountry.c_str(), cd.OtherFax.c_str(),
+					cd.OtherPhone.c_str(),cd.OtherPostalCode.c_str(), cd.OtherState.c_str(),
+					cd.OtherStreet.c_str(), cd.OtherURL.c_str(),cd.Pager.c_str(),
+					cd.pDList.c_str(), cd.PictureID.c_str(), cd.Type.c_str(),
+					cd.UserField1.c_str(), cd.UserField2.c_str(), cd.UserField3.c_str(),
+					cd.UserField4.c_str(), cd.WorkCity.c_str(), cd.WorkCountry.c_str(),
+					cd.WorkFax.c_str(), cd.WorkPhone.c_str(), cd.WorkPostalCode.c_str(),
+					cd.WorkState.c_str(), cd.WorkStreet.c_str(), cd.WorkURL.c_str()
+					);
+				
+			}
+			else
+				printf("PSTMIG: %d Skipping it...\n",(*idItr).lItemType);
+			FreeEntryID((*idItr).sbMessageID);
+		}
+		vItemDataList.clear();
 	}
 	delete maapi;
 }
@@ -252,7 +273,6 @@ int main(int argc, TCHAR *argv[])
 //	ZCFileUploadTest();
 //	CreateExchangeMailBox();
 //	GetAllProfiles();	
-//MAPIAccessAPITest_tr();
 	
 MAPIAccessAPITestV();
 //Zimbra::MAPI::Util::ReverseDelimitedString(L"lb1/tv2/cr3/Inbox/TopFolder",L"/");

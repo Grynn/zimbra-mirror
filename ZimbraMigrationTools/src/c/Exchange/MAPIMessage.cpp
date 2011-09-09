@@ -125,9 +125,9 @@ bool MAPIMessage::Subject(LPTSTR *ppSubject) {
         LPTSTR pSubject = m_pMessagePropVals[SUBJECT].Value.LPSZ;
        if(SUCCEEDED(hr= MAPIAllocateBuffer((nLen + 1) * sizeof (TCHAR), (LPVOID *)ppSubject)))
 	   {
-        ZeroMemory(*ppSubject, (nLen + 1) * sizeof (TCHAR));
-        _tcscpy(*ppSubject, pSubject);
-        return true;
+			ZeroMemory(*ppSubject, (nLen + 1) * sizeof (TCHAR));
+			_tcscpy(*ppSubject, pSubject);
+			return true;
 	   }
     }
     *ppSubject = NULL;
@@ -333,6 +333,80 @@ LPSTR MAPIMessage::DeliveryDateString()
 	return m_pDeliveryDateTimeStr;
 }
 
+bool MAPIMessage::TextBody( LPTSTR* ppBody, unsigned int& nTextChars )
+{
+	if( m_pMessagePropVals[TEXT_BODY].ulPropTag == PR_BODY )
+	{
+		LPTSTR pBody = m_pMessagePropVals[TEXT_BODY].Value.LPSZ;
+		int nLen = (int)_tcslen(pBody);
+		MAPIAllocateBuffer((nLen+1)*sizeof(TCHAR), (LPVOID FAR *) ppBody);
+		_tcscpy(*ppBody, pBody);
+		nTextChars = nLen;
+		return true;
+	}
+	else if( PROP_TYPE(	m_pMessagePropVals[TEXT_BODY].ulPropTag) == PT_ERROR  &&
+						m_pMessagePropVals[TEXT_BODY].Value.l == E_OUTOFMEMORY )
+	{
+		HRESULT hr = S_OK;
+
+		//must use the stream property
+		IStream *pIStream = NULL;
+		hr = m_pMessage->OpenProperty(PR_BODY, &IID_IStream, STGM_READ, 0, (LPUNKNOWN FAR *) &pIStream);
+        if(FAILED(hr))
+        {
+            return false;
+        }
+
+		// discover the size of the incoming body
+		STATSTG statstg;
+		hr = pIStream->Stat(&statstg, STATFLAG_NONAME);
+		if( FAILED(hr) )
+		{
+			pIStream->Release();
+			pIStream = NULL;
+			return false;
+		}
+		unsigned bodySize = statstg.cbSize.LowPart;
+
+		// allocate buffer for incoming body data
+		hr = MAPIAllocateBuffer(bodySize + 10, (LPVOID FAR *) ppBody);
+		ZeroMemory( *ppBody, bodySize + 10 );
+		if( FAILED(hr) )
+		{
+			pIStream->Release();
+			pIStream = NULL;
+			return false;
+		}
+
+		// download the text
+		ULONG cb;
+		hr = pIStream->Read(*ppBody, statstg.cbSize.LowPart, &cb);
+		if( FAILED(hr) )
+		{
+			pIStream->Release();
+			pIStream = NULL;
+			return false;
+		}
+
+		if( cb != statstg.cbSize.LowPart )
+		{
+			pIStream->Release();
+			pIStream = NULL;
+			return false;
+		}
+
+		// close the stream
+		pIStream->Release();
+			pIStream = NULL;
+		nTextChars = (unsigned int)_tcslen(*ppBody);
+		return true;
+	}
+	
+	//some other error occurred?
+	//i.e., some messages do not have a body
+	*ppBody = NULL;
+	return false;
+}
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // MessageIterator
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

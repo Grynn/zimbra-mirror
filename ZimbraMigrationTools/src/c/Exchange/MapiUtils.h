@@ -10,6 +10,15 @@ typedef struct _ObjectPickerData
 	vector<std::pair<wstring,wstring>> pAttributeList;
 } ObjectPickerData;
 
+typedef struct _RecipInfo
+{
+	LPTSTR pAddrType;
+	LPTSTR pEmailAddr;
+	ULONG cbEid;
+	LPENTRYID pEid;
+
+} RECIP_INFO;
+
 inline void HexStrFromBSTR(_bstr_t bstr, LPTSTR &szHex) {
     int i = 0;
     int len = bstr.length();
@@ -96,6 +105,20 @@ inline int CopyString( LPWSTR& pDest, LPWSTR pSrc )
 	return nLength;
 }
 
+inline void CopyEntryID(SBinary &src, SBinary &dest)
+{
+	dest.cb = src.cb;
+	MAPIAllocateBuffer(src.cb, (LPVOID *)&(dest.lpb));
+    memcpy(dest.lpb, src.lpb, src.cb);
+}
+
+inline void FreeEntryID(SBinary &bin)
+{
+	bin.cb=0;
+	MAPIFreeBuffer(bin.lpb);
+	bin.lpb = NULL;
+}
+
 #define UNICODE_EXCEPTION_STRING L"ErrCode:%s Description:%s SrcFile:%s SrcLine:%s"
 inline LPTSTR FromatExceptionInfo(HRESULT errCode, LPWSTR errDescription, LPSTR srcFile,
     int srcLine) {
@@ -146,9 +169,9 @@ HRESULT GetAllSpecialFolders(IN LPMDB lpMdb, IN OUT SBinaryArray* pEntryIds);
 HRESULT FreeAllSpecialFolders(IN SBinaryArray* lpSFIds);
 ExchangeSpecialFolderId GetExchangeSpecialFolderId(IN LPMAPISESSION lpSession, IN ULONG cbEntryId, IN LPENTRYID pFolderEntryId, SBinaryArray* pEntryIds);
 HRESULT GetExchangeUsersUsingObjectPicker(vector<ObjectPickerData> &vUserList);
+HRESULT HrMAPIGetSMTPAddress( IN MAPISession& session, IN RECIP_INFO& recipInfo, OUT wstring& strSmtpAddress );
 
 ULONG IMAPHeaderInfoPropTag(LPMAPIPROP lpMapiProp);
-HRESULT CopyEntryID(SBinary &src, SBinary &dest);
 wstring ReverseDelimitedString(wstring wstrString, WCHAR* delimiter);
 }
 }

@@ -12,7 +12,6 @@
 #include "MapiUtils.h"
 #include "MAPIContacts.h"
 
-#include "tree.h"
 #include "resource.h"
 #include "Zimbra/Zimbra.h"
 #include "Exchange_i.h"

@@ -9,7 +9,7 @@ typedef struct _Folder_Data {
     SBinary sbin;
 	wstring folderpath;
 	long zimbraid;
-    Zimbra::MAPI::MAPIFolder *mapifolder;
+	unsigned long itemcount;
 }Folder_Data;
 
 typedef struct _Item_Data {
@@ -18,6 +18,67 @@ typedef struct _Item_Data {
 	__int64 MessageDate;
 	//parent folder
 }Item_Data;
+
+//base item data
+typedef struct _BaseItemData {
+	__int64 MessageDate;
+}BaseItemData ;
+
+//contact item data
+typedef struct _ContactItemData:BaseItemData {
+	wstring CallbackPhone;
+	wstring CarPhone;
+	wstring Company;
+	wstring Email1;
+	wstring Email2;
+	wstring Email3;
+	wstring FileAs;
+	wstring FirstName;
+	wstring HomeCity;
+	wstring HomeCountry;
+	wstring HomeFax;
+	wstring HomePhone;
+	wstring HomePhone2;
+	wstring HomePostalCode;
+	wstring HomeState;
+	wstring HomeStreet;
+	wstring HomeURL;
+	wstring JobTitle;
+	wstring LastName;
+	wstring MiddleName;
+	wstring MobilePhone;
+	wstring NamePrefix;
+	wstring NameSuffix;
+	wstring Notes;
+	wstring OtherCity;
+	wstring OtherCountry;
+	wstring OtherFax;
+	wstring OtherPhone;
+	wstring OtherPostalCode;
+	wstring OtherState;
+	wstring OtherStreet;
+	wstring OtherURL;
+	wstring Pager;
+	wstring WorkCity;
+	wstring WorkCountry;
+	wstring WorkFax;
+	wstring WorkPhone;
+	wstring WorkPostalCode;
+	wstring WorkState;
+	wstring WorkStreet;
+	wstring WorkURL;
+	wstring Birthday;
+	wstring UserField1;
+	wstring UserField2;
+	wstring UserField3;
+	wstring UserField4;
+	wstring NickName;
+	wstring pDList;
+	wstring Type;
+	wstring PictureID;
+	wstring IMAddress1;
+	
+}ContactItemData;
 
 class MAPIAccessAPI {
 private:
@@ -29,29 +90,18 @@ private:
     Zimbra::MAPI::MAPIStore *m_userStore;
     Zimbra::MAPI::MAPIFolder *m_rootFolder;
 
-    HRESULT OpenSessionAndStore();
+    LPCWSTR OpenSessionAndStore();
     HRESULT Iterate_folders(Zimbra::MAPI::MAPIFolder &folder, vector<Folder_Data> &fd);
     void travrese_folder(Zimbra::MAPI::MAPIFolder &folder);
     HRESULT GetInternalFolder(SBinary sbFolderEID, MAPIFolder &folder);
-
-	//deprecated:WILL BE REMOVED
-	bool iterate_folders_tr(Zimbra::MAPI::MAPIFolder &folder, tree<Folder_Data> &tr,
-    tree<Folder_Data>::iterator tritr);
-	HRESULT MAPIAccessAPI::GetFolderHierarchy_tr(Zimbra::MAPI::MAPIFolder rootFolder,
-    tree<Folder_Data> &tr);
-
 public:
     MAPIAccessAPI(wstring strExchangeHostName, wstring strAdminProfileName, wstring strUserName);
     ~MAPIAccessAPI();
-    HRESULT Initialize();
-    HRESULT GetRootFolderHierarchy(vector<Folder_Data> &vfolderlist);
-	HRESULT IterateVectorList(vector<Folder_Data> &vFolderList,CSingleton * Log);
-    HRESULT GetFolderItems(SBinary sbFolderEID, vector<Item_Data> &ItemList);
+    LPCWSTR Initialize();
+    LPCWSTR GetRootFolderHierarchy(vector<Folder_Data> &vfolderlist);
+	LPCWSTR GetFolderItemsList(SBinary sbFolderEID, vector<Item_Data> &ItemList);
+	LPCWSTR GetItem(SBinary sbItemEID, BaseItemData &itemData); 
 
-	//deprecated:WILL BE REMOVED
-	HRESULT GetRootFolderHierarchy_tr(tree<Folder_Data> &tr);
-	HRESULT IterateTree_tr(tree<Folder_Data> &tr);
-	
 };
 }
 }

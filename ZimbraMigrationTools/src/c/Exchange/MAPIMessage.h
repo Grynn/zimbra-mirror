@@ -90,6 +90,7 @@ public:
     ~MAPIMessage();
     void Initialize(LPMESSAGE pMessage);
     void InternalFree();
+	LPMESSAGE InternalMessageObject(){return m_pMessage;}
     bool Subject(LPTSTR *ppSubject);
 	ZM_ITEM_TYPE ItemType();
 	BOOL IsFlagged();
@@ -110,6 +111,7 @@ public:
 	DWORD Size();
 	LPSTR DeliveryDateString();
 	SBinary EntryID(){return m_EntryID;}
+	bool TextBody(LPTSTR* ppBody, unsigned int& nTextChars);
 };
 
 // Message Iterator class

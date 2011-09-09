@@ -1,16 +1,30 @@
 #include "common.h"
 #include "Exchange.h"
+#include "MAPIMessage.h"
 #include "MAPIContacts.h"
 
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// MAPIMessageException
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+MAPIContactException::MAPIContactException(HRESULT hrErrCode,
+    LPCWSTR lpszDescription): GenericException(hrErrCode, lpszDescription) {
+    //
+}
 
+MAPIContactException::MAPIContactException(HRESULT hrErrCode, LPCWSTR lpszDescription,
+    int nLine,
+    LPCSTR strFile): GenericException(hrErrCode, lpszDescription, nLine, strFile) {
+    //
+}
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // MAPIContact
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-MAPIContact::MAPIContact(LPMESSAGE pMessage)
+MAPIContact::MAPIContact(Zimbra::MAPI::MAPISession &session,Zimbra::MAPI::MAPIMessage &mMessage)
 {
 	m_bPersonalDL=false;
-	m_pMessage = pMessage;
-
+	m_session = &session;
+	m_mapiMessage = &mMessage;
+	m_pMessage = m_mapiMessage->InternalMessageObject();
 	pr_mail1address = 0,
 	pr_mail1entryid = 0,
 	pr_mail1type = 0,
@@ -64,6 +78,59 @@ MAPIContact::MAPIContact(LPMESSAGE pMessage)
 	nameIds[0] = 0x8054;
 	nameIds[0] = 0x8062;
 	
+	m_pCallbackPhone=L"";
+	m_pCarPhone		=L"";
+	m_pCompany		=L"";
+	m_pEmail		=L"";	
+	m_pEmail2		=L"";
+	m_pEmail3		=L"";
+	m_pFileAs		=L"";
+	m_pFirstName	=L"";
+	m_pHomeCity		=L"";
+	m_pHomeCountry	=L"";
+	m_pHomeFax		=L"";
+	m_pHomePhone	=L"";
+	m_pHomePhone2	=L"";
+	m_pHomePostalCode=L"";
+	m_pHomeState	=L"";
+	m_pHomeStreet	=L"";
+	m_pHomeURL		=L"";
+	m_pJobTitle		=L"";
+	m_pLastName		=L"";
+	m_pMiddleName	=L"";
+	m_pMobilePhone	=L"";
+	m_pNamePrefix	=L"";
+	m_pNameSuffix	=L"";
+	m_pNotes		=L"";
+	m_pOtherCity	=L"";
+	m_pOtherCountry	=L"";
+	m_pOtherFax		=L"";
+	m_pOtherPhone	=L"";
+	m_pOtherPostalCode=L"";
+	m_pOtherState	=L"";
+	m_pOtherStreet	=L"";
+	m_pOtherURL		=L"";
+	m_pPager		=L"";
+	m_pWorkCity		=L"";
+	m_pWorkCountry	=L"";
+	m_pWorkFax		=L"";
+	m_pWorkPhone	=L"";
+	m_pWorkPostalCode=L"";
+	m_pWorkState	=L"";
+	m_pWorkStreet	=L"";
+	m_pWorkURL		=L"";
+	m_pBirthday		=L"";
+	m_pUserField1	=L"";
+	m_pUserField2	=L"";
+	m_pUserField3	=L"";
+	m_pUserField4	=L"";
+	m_pNickName		=L"";
+	m_pDList		=L"";
+	m_pType			=L"";
+	m_pPictureID	=L"";
+	m_size			=0;
+	m_pIMAddress1	=L"";
+
 	Init();
 }
 
@@ -74,15 +141,17 @@ MAPIContact::~MAPIContact()
 
 HRESULT MAPIContact::Init()
 {
-	//is Persoanl DL?
+	HRESULT hr=S_OK;
 	LPSPropValue pPropValMsgClass = NULL ;
-	HRESULT hr=HrGetOneProp( m_pMessage, PR_MESSAGE_CLASS, &pPropValMsgClass ) ;
+	if(FAILED(hr=HrGetOneProp( m_pMessage, PR_MESSAGE_CLASS, &pPropValMsgClass )))
+		throw MAPIContactException(E_FAIL, L"Init(): HrGetOneProp Failed.", __LINE__,
+                __FILE__);
     if( pPropValMsgClass->ulPropTag == PR_MESSAGE_CLASS_W && 
         _tcsicmp( pPropValMsgClass->Value.LPSZ, L"ipm.distlist" ) == 0 ) 
 		m_bPersonalDL = true ;
 	
     if( pPropValMsgClass )
-		MAPIFreeBuffer( pPropValMsgClass ) ;
+		MAPIFreeBuffer(pPropValMsgClass) ;
     
 	//initialize the MAPINAMEID structure GetIDsFromNames requires
 	LPMAPINAMEID ppNames[N_NUM_NAMES] = {0};
@@ -96,10 +165,9 @@ HRESULT MAPIContact::Init()
 
 	//get the real prop tag ID's
 	LPSPropTagArray pContactTags = NULL;
-	hr = m_pMessage->GetIDsFromNames( N_NUM_NAMES, ppNames, MAPI_CREATE, &pContactTags );
-	if(FAILED(hr)) {
-        return hr;
-    }
+	if(FAILED(hr = m_pMessage->GetIDsFromNames( N_NUM_NAMES, ppNames, MAPI_CREATE, &pContactTags )))
+		throw MAPIContactException(E_FAIL, L"Init(): GetIDsFromNames Failed.", __LINE__,
+                __FILE__);
 	
 	//give the prop tag ID's a type
 	pr_mail1address					= SetPropType( pContactTags->aulPropTag[N_MAIL1			], PT_TSTRING );
@@ -198,16 +266,16 @@ HRESULT MAPIContact::Init()
 	};
 
 	ULONG cVals = 0;
-	hr = m_pMessage->GetProps( (LPSPropTagArray)&contactProps, fMapiUnicode, &cVals, &m_pPropVals );
-	if( FAILED(hr) )
-		return hr;
-	
+	if(FAILED(hr = m_pMessage->GetProps( (LPSPropTagArray)&contactProps, fMapiUnicode, &cVals, &m_pPropVals )))
+		throw MAPIContactException(E_FAIL, L"Init(): GetProps Failed.", __LINE__,
+                __FILE__);
 
 	//see if there is a file-as id
 	LONG zimbraFileAsId = 0;
     if( m_bPersonalDL )//PDL's always have a custom file-as
     {
         zimbraFileAsId = 8 ;
+		Type(L"group");
     }
 	else if( m_pPropVals[C_FILEASID].ulPropTag == contactProps.aulPropTag[C_FILEASID] )
 	{
@@ -423,7 +491,7 @@ HRESULT MAPIContact::Init()
 			tempRecip.pEid			= (LPENTRYID)(m_pPropVals[C_MAIL1EID].Value.bin.lpb);
 
 			wstring strSenderEmail(_TEXT(""));
-			HRESULT hr = E_FAIL;//HrMAPIGetSMTPAddress( _session, tempRecip, strSenderEmail );
+			HRESULT hr = Zimbra::MAPI::Util::HrMAPIGetSMTPAddress( *m_session, tempRecip, strSenderEmail );
 			if(hr!=S_OK)
 			{
 				Email(m_pPropVals[C_MAIL1DISPNAME].Value.lpszW);
@@ -451,7 +519,7 @@ HRESULT MAPIContact::Init()
 			tempRecip.pEid			= (LPENTRYID)(m_pPropVals[C_MAIL2EID].Value.bin.lpb);
 
 			wstring strSenderEmail(_TEXT(""));
-			HRESULT hr = E_FAIL;//HrMAPIGetSMTPAddress( _session, tempRecip, strSenderEmail );
+			HRESULT hr = Zimbra::MAPI::Util::HrMAPIGetSMTPAddress( *m_session, tempRecip, strSenderEmail );
 			if(hr!=S_OK)
 			{
 				Email(m_pPropVals[C_MAIL2DISPNAME].Value.lpszW);
@@ -479,7 +547,7 @@ HRESULT MAPIContact::Init()
 			tempRecip.pEid			= (LPENTRYID)(m_pPropVals[C_MAIL3EID].Value.bin.lpb);
 
 			wstring strSenderEmail(_TEXT(""));
-			HRESULT hr = E_FAIL;//HrMAPIGetSMTPAddress( _session, tempRecip, strSenderEmail );
+			HRESULT hr = Zimbra::MAPI::Util::HrMAPIGetSMTPAddress( *m_session, tempRecip, strSenderEmail );
 			if(hr!=S_OK)
 			{
 				Email(m_pPropVals[C_MAIL3DISPNAME].Value.lpszW);
@@ -495,5 +563,48 @@ HRESULT MAPIContact::Init()
 	if( m_pPropVals[C_IMADDRESS].ulPropTag == contactProps.aulPropTag[C_IMADDRESS] )
 		IMAddress1( m_pPropVals[C_IMADDRESS].Value.lpszW );
 	
+	//add the 'notes' section
+	if(m_mapiMessage->HasTextPart() )
+	{
+		LPTSTR pBody = NULL;
+		UINT nText = 0;
+		m_mapiMessage->TextBody( &pBody, nText );
+		LPTSTR psz = pBody;
+        if( psz )
+        {
+            const char SPACE = ' ', TAB = '\t', CR = 0x0d, LF = 0x0a;            
+            while( *psz ) 
+            {
+                //Replace control characters with space
+                //Exclude carriage return and new line characters while doing the same
+                if( ( *psz < SPACE ) && ( *psz != CR ) && ( *psz != LF ) )
+                    *psz = _T(' ');
+
+                psz++;
+            }
+            //We'll add the body only if it has data other than white spaces and new lines
+            bool bHasValidChars = false;
+            psz = pBody;
+            while( *psz )
+            {
+                if( *psz == SPACE || *psz == TAB ||  *psz == CR || *psz == LF )
+                {
+                    psz++;
+                    continue;
+                }
+                else
+                {
+                    bHasValidChars = true;
+                    break;
+                }                
+            }
+            if( bHasValidChars )
+            {
+                Notes( pBody );
+            }
+            MAPIFreeBuffer( pBody );
+        }
+	}
+
 	return S_OK;
 }

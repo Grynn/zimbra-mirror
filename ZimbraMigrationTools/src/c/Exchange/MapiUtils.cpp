@@ -316,15 +316,6 @@ ULONG Zimbra::MAPI::Util::IMAPHeaderInfoPropTag(LPMAPIPROP lpMapiProp) {
     return ulIMAPHeaderPropTag;
 }
 
-HRESULT Zimbra::MAPI::Util::CopyEntryID(SBinary &src, SBinary &dest)
-{
-	HRESULT hr=S_OK;
-	dest.cb = src.cb;
-    hr=MAPIAllocateBuffer(src.cb, (LPVOID *)&(dest.lpb));
-    memcpy(dest.lpb, src.lpb, dest.cb);
-	return hr;
-}
-
 wstring Zimbra::MAPI::Util::ReverseDelimitedString(wstring wstrString, WCHAR* delimiter)
 {
 	wstring wstrresult=L"";
@@ -834,5 +825,68 @@ HRESULT Zimbra::MAPI::Util::GetExchangeUsersUsingObjectPicker(vector<ObjectPicke
 	//	DestroyWindow(hwndParent);
 	//}
 	MAPIUninitialize();
+	return hr;
+}
+
+HRESULT Zimbra::MAPI::Util::HrMAPIGetSMTPAddress( IN MAPISession& session, IN RECIP_INFO& recipInfo, OUT wstring& strSmtpAddress )
+{
+	LPMAILUSER pUser = NULL;
+	ULONG objtype = 0;
+	ULONG cVals = 0;
+	HRESULT hr = S_OK;
+	LPSPropValue pPropVal = NULL;
+	SizedSPropTagArray( 1, rgPropTags ) = {1,PR_EMS_AB_PROXY_ADDRESSES};
+		
+	if( _tcsicmp( recipInfo.pAddrType, _TEXT("SMTP") ) == 0 )
+	{
+        if(recipInfo.pEmailAddr == NULL) {
+            strSmtpAddress = _TEXT("");
+        } else {
+    		strSmtpAddress = recipInfo.pEmailAddr;
+        }
+	}
+	else if( _tcsicmp( recipInfo.pAddrType, _TEXT("EX") ) != 0 )
+	{
+		//unsupported sender type
+		hr = E_FAIL;
+	}
+	else
+	{
+		hr = session.OpenEntry( recipInfo.cbEid, recipInfo.pEid, NULL, 0, &objtype, (LPUNKNOWN*)&pUser );
+		if( FAILED(hr) )
+			return hr;
+
+		hr = pUser->GetProps( (LPSPropTagArray)&rgPropTags, fMapiUnicode, &cVals, &pPropVal );
+		if( FAILED(hr) )
+		{
+			UlRelease(pUser);
+			return hr;
+		}
+
+		//loop through the resulting array looking for the address of type SMTP
+		int nVals = pPropVal->Value.MVSZ.cValues;
+
+		hr = E_FAIL;
+		for( int i = 0; i < nVals; i++ )
+		{
+			LPTSTR pAdr = pPropVal->Value.MVSZ.LPPSZ[i];
+			if( _tcsncmp( pAdr, _TEXT("SMTP:"), 5 ) == 0 )
+			{
+				strSmtpAddress = (pAdr + 5);
+				hr = S_OK;
+				break;
+			}
+		}
+	}
+
+	if( pPropVal != NULL )
+	{
+		MAPIFreeBuffer( pPropVal );
+	}
+	if( pUser != NULL )
+	{
+		UlRelease(pUser);
+	}
+
 	return hr;
 }
