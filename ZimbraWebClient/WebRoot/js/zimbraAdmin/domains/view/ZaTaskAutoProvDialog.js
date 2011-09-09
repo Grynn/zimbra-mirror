@@ -39,28 +39,13 @@ ZaTaskAutoProvDialog.APPLY_BUTTON = ++DwtDialog.LAST_BUTTON;
 
 ZaTaskAutoProvDialog.prototype.setObject = function(entry) {
     entry[ZaDomain.A2_zimbraAutoProvSearchActivated] = "TRUE";
-    this._button[DwtDialog.OK_BUTTON].setEnabled(false);
-    this._button[ZaTaskAutoProvDialog.APPLY_BUTTON].setEnabled(false);
     this._separateConfigureValues(entry);
     ZaXDialog.prototype.setObject.call(this,entry);
 
     // auto provisioning object backup
-    this._autoprovLdapObject = {};
-    if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapURL])
-        this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapURL] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapURL];
-    if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled])
-        this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled];
-    if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindDn])
-        this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapAdminBindDn] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindDn];
-    if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword])
-        this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword];
-    if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapSearchBase])
-        this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapSearchBase] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapSearchBase];
-    if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapSearchFilter])
-        this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapSearchFilter] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapSearchFilter];
-    if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapBindDn])
-        this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapBindDn] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapBindDn];
-
+    this._backupLdapObj(entry);
+    this._button[DwtDialog.OK_BUTTON].setEnabled(false);
+    this._button[ZaTaskAutoProvDialog.APPLY_BUTTON].setEnabled(false);
 }
 
 ZaTaskAutoProvDialog.prototype.handleXFormChange =
@@ -72,6 +57,9 @@ function() {
         this._button[DwtDialog.OK_BUTTON].setEnabled(true);
         this._button[ZaTaskAutoProvDialog.APPLY_BUTTON].setEnabled(true);
     }
+
+    // check modification
+    this.tabClickHandler();
 }
 
 ZaTaskAutoProvDialog.prototype.getMyXForm =
@@ -89,7 +77,7 @@ function() {
     _tab3 = ++this.TAB_INDEX;
     this.tabChoices.push({value:_tab3, label:ZaMsg.TBB_AUTOPROV_LAZY});
 
-    _tab4 = ++this.TAB_INDEX;
+    this.TAB_STEP_MANUAL = _tab4 = ++this.TAB_INDEX;
     this.tabChoices.push({value:_tab4, label:ZaMsg.TBB_AUTOPROV_MANUAL});
 
 	var cases = [];
@@ -205,7 +193,7 @@ function() {
                     multiselect: true, preserveSelection: true,
                     enableDisableChecks: [[XForm.checkInstanceValue,ZaDomain.A2_zimbraAutoProvModeEAGEREnabled,"TRUE"]],
                     enableDisableChangeEventSources:[ZaDomain.A2_zimbraAutoProvModeEAGEREnabled],
-                    onSelection: ZaAutoProvConfigXWizard.filterSelectionListener
+                    onSelection: ZaTaskAutoProvDialog.filterSelectionListener
                 }
             ]},
             {type:_GROUPER_, colSpan:"*", width: "100%",label:"Note",
@@ -370,11 +358,6 @@ function() {
 
 ZaTaskAutoProvDialog.onFormFieldChanged =
 function (value, event, form) {
-    if(form.parent._checkLdapChanges(form.parent)) {
-        var dlgMsg = ZaMsg.MSG_LDAP_CHANGED;
-        form.parent._forceApplyMessageDialog.setMessage(dlgMsg, DwtMessageDialog.INFO_STYLE);
-        form.parent._forceApplyMessageDialog.popup();
-    }
     var instance = this.getInstance();
     instance[ZaDomain.A2_zimbraAutoProvSearchActivated] = "TRUE";
     this.setInstanceValue(value);
@@ -396,6 +379,8 @@ ZaTaskAutoProvDialog.getCustomHeight = function() {
 
 ZaTaskAutoProvDialog.prototype._applyButtonListener =
 function() {
+    if(this._forceApplyMessageDialog)
+        this._forceApplyMessageDialog.popdown();
     try {
         var controller = ZaApp.getInstance().getCurrentController();
         if(this._checkGeneralConfig() && this._checkEagerConfig() && this._checkLazyConfig()) {
@@ -408,9 +393,10 @@ function() {
                 this.finishConfig();
             this._button[DwtDialog.OK_BUTTON].setEnabled(false);
             this._button[ZaTaskAutoProvDialog.APPLY_BUTTON].setEnabled(false);
+            this._backupLdapObj(savedObj);
         }
     } catch (ex) {
-		this._handleException(ex, "ZaTaskAutoProvDialog.prototype._applyButtonListener", null, false);
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaTaskAutoProvDialog.prototype._applyButtonListener", null, false);
 	}
 }
 
@@ -571,33 +557,50 @@ function(entry) {
         entry.attrs[ZaDomain.A_zimbraAutoProvAuthMech].push("SPNEGO");
 }
 
-ZaTaskAutoProvDialog.prototype._checkLdapChanges =
-function(entry) {
-    if(!entry || !entry._autoprovLdapObject || !entry._containedObject) return false;
-    var containedObject = entry._containedObject;
-    if(entry._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapURL]
-            != containedObject.attrs[ZaDomain.A_zimbraAutoProvLdapURL])
-        return true;
-    if(entry._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled]
-            != containedObject.attrs[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled])
-        return true;
-    if(entry._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapAdminBindDn]
-            != containedObject.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindDn])
-        return true;
-    if(entry._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapBindDn]
-            != containedObject.attrs[ZaDomain.A_zimbraAutoProvLdapBindDn])
-        return true;
-    if(entry._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword]
-            != containedObject.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword])
-        return true;
-    if(entry._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapSearchBase]
-            != containedObject.attrs[ZaDomain.A_zimbraAutoProvLdapSearchBase])
-        return true;
-    if(entry._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapSearchFilter]
-            != containedObject.attrs[ZaDomain.A_zimbraAutoProvLdapSearchFilter])
-        return true;
+ZaTaskAutoProvDialog.prototype._backupLdapObj = function(entry) {
+    if(!this._autoprovLdapObject)
+        this._autoprovLdapObject = {};
+    if(!entry || !entry.attrs) return;
+    if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapURL])
+        this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapURL] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapURL];
+    if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled])
+        this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled];
+    if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindDn])
+        this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapAdminBindDn] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindDn];
+    if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword])
+        this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword];
+    if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapSearchBase])
+        this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapSearchBase] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapSearchBase];
+    if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapSearchFilter])
+        this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapSearchFilter] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapSearchFilter];
+    if(entry.attrs[ZaDomain.A_zimbraAutoProvLdapBindDn])
+        this._autoprovLdapObject[ZaDomain.A_zimbraAutoProvLdapBindDn] = entry.attrs[ZaDomain.A_zimbraAutoProvLdapBindDn];
+}
 
-    return false;
+ZaTaskAutoProvDialog.prototype._checkModified = function() {
+    var newObj = this.getObject();
+    var oldObj = this._autoprovLdapObject;
+
+    if((oldObj[ZaDomain.A_zimbraAutoProvLdapURL] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapURL])
+    && (oldObj[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapStartTlsEnabled])
+    && (oldObj[ZaDomain.A_zimbraAutoProvLdapAdminBindDn] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindDn])
+    && (oldObj[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapAdminBindPassword])
+    && (oldObj[ZaDomain.A_zimbraAutoProvLdapSearchBase] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapSearchBase])
+    && (oldObj[ZaDomain.A_zimbraAutoProvLdapSearchFilter] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapSearchFilter])
+    && (oldObj[ZaDomain.A_zimbraAutoProvLdapBindDn] == newObj.attrs[ZaDomain.A_zimbraAutoProvLdapBindDn]))
+        return false;
+    else
+        return true;
+}
+
+ZaTaskAutoProvDialog.prototype.tabClickHandler = function() {
+    if(this.getObject().currentTab != this.TAB_STEP_MANUAL)
+        return;
+    if(this._checkModified()) {
+        var dlgMsg = ZaMsg.MSG_LDAP_CHANGED;
+        this._forceApplyMessageDialog.setMessage(dlgMsg, DwtMessageDialog.INFO_STYLE);
+        this._forceApplyMessageDialog.popup();
+    }
 }
 ///////////////////
 ZaTaskAutoProvDialog.srchButtonHndlr = function() {
@@ -846,6 +849,7 @@ ZaTaskAutoProvDialog.prototype.finishConfig = function () {
     var instance = this.getObject();
 
     var acctlist = instance[ZaDomain.A2_zimbraAutoProvAccountTargetPool];//this.getModel().getInstanceValue(instance,ZaDomain.A2_zimbraAutoProvAccountTargetPool);
+    if(!acctlist || acctlist.length < 1) return;
     var soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
     soapDoc.setMethodAttribute("onerror", "continue");
 

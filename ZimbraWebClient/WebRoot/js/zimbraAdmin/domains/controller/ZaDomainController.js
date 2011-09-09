@@ -486,8 +486,16 @@ function(ev) {
 ZaDomainController.prototype._autoProvWizButtonListener =
 function(ev) {
 	try {
-		this._autoProvWizard = ZaApp.getInstance().dialogs["autoProvWizard"] =  new ZaAutoProvConfigXWizard(this._container);
-		this._autoProvWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainController.prototype._finishAutoProvButtonListener, this, null);
+		//this._autoProvWizard = ZaApp.getInstance().dialogs["autoProvWizard"] =  new ZaAutoProvConfigXWizard(this._container);
+		//this._autoProvWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainController.prototype._finishAutoProvButtonListener, this, null);
+        if(!this._autoProvWizard) {
+            if(ZaApp.getInstance().dialogs["autoProvWizard"])
+                 this._autoProvWizard = ZaApp.getInstance().dialogs["autoProvWizard"];
+            else
+                this._autoProvWizard = ZaApp.getInstance().dialogs["autoProvWizard"] = new ZaTaskAutoProvDialog(this._container, ZaMsg.NAD_AutoProvConfigTitle);//ZaAutoProvConfigXWizard(this._container);
+        }
+        this._autoProvWizard.registerCallback(DwtDialog.OK_BUTTON, ZaDomainController.prototype._finishAutoProvButtonListener, this, null);
+        this._currentObject.currentTab = "1";
 		this._autoProvWizard.setObject(this._currentObject);
 		this._autoProvWizard.popup();
 	} catch (ex) {
@@ -556,6 +564,10 @@ function(ev) {
 ZaDomainController.prototype._finishAutoProvButtonListener =
 function(ev) {
 	try {
+        if(!this._autoProvWizard._checkGeneralConfig() || !this._autoProvWizard._checkEagerConfig()
+                || !this._autoProvWizard._checkLazyConfig()) {
+            return;
+        }
 		ZaDomain.modifyAutoPovSettings.call(this._currentObject,this._autoProvWizard.getObject());
 		this._view.setObject(this._currentObject);
 		this._autoProvWizard.popdown();
