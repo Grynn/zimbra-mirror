@@ -116,7 +116,10 @@ class Command:
 			if (not output):
 				output = "UNKNOWN OUTPUT"
 			if (not error):
-				error = "UNKNOWN ERROR"
+				if rc == 0:
+					error = "OK"
+				else:
+					error = "UNKNOWN ERROR"
 
 			self.output = output
 			self.error = error
