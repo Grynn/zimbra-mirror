@@ -130,14 +130,16 @@ HRESULT ExchangeAdmin::CreateProfile(wstring strProfileName, wstring strMailboxN
         rgval[1].Value.lpszA = (LPSTR)strMBName.get();
 
         // Configure the message service by using the previous properties.
-        int trails = 10;
+        //int trials = 10;
+		int trials = 7;
         int itrTrials = 0;
         hr = 0x81002746;                // WSAECONNRESET
-        while ((hr == 0x81002746) && (itrTrials < trails)) {
+        while ((hr == 0x81002746) && (itrTrials < trials)) {
             hr = pSvcAdmin->ConfigureMsgService((LPMAPIUID)pSvcRows->aRow->lpProps[iSvcUID].
                         Value.bin.lpb, NULL, 0, 2, rgval);
             if (hr == 0x81002746)
-                Sleep(30000);
+                //Sleep(30000);
+				Sleep(10000);
             itrTrials++;
         }
         if (FAILED(hr)) {
