@@ -40,6 +40,7 @@ esac
 
 CP=${ZMROOT}/lib/jars/zimbracommon.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/zimbrasoap.jar\
+${PATHSEP}${ZMROOT}/lib/jars/zimbraclient.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/zimbrastore.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/zimbra-native.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/apache-log4j-extras-1.0.jar\
