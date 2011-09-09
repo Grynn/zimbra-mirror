@@ -26,6 +26,8 @@ var goHighLighted=null;
 var c_sEnginePath='/robo/bin/robo.dll';	// roboengine path
 var gbSearchPage=false;
 
+var gIllegalTopicNameChars = "*?\'\"<>|[];" ;
+
 function _getRelativePath(strParentPath,strCurrentPath)
 {
 	if(_isAbsPath(strCurrentPath)) return _getPath(strCurrentPath);
@@ -609,11 +611,40 @@ function _browserStringToText(sBStr)
 
 function IsInternal(urlName)
 {
-	if(urlName.indexOf(":") == -1 && urlName.indexOf("&#58;")== -1 && urlName.indexOf("//") != 0 && 
-			urlName.indexOf("/&#47;") != 0 && urlName.indexOf("&#47;/") != 0 && urlName.indexOf("&#47;&#47;") != 0)
-		return true;
-	else
+	// first pass: check raw urlName
+	if(!IsValidInternalTopicURL(urlName))
 		return false;
+	// second pass: check unescape'd urlName
+	var unescapedUrlName = unescape(urlName);
+	if(!IsValidInternalTopicURL(unescapedUrlName))
+		return false;
+	// third pass: check decodeUri'd urlName
+	var decodedUrlName = decodeURI(urlName);
+	if(!IsValidInternalTopicURL(decodedUrlName))
+		return false;
+
+	// looks good
+	return true;
+
+}
+
+function IsValidInternalTopicURL(urlName)
+{
+	if(urlName.indexOf(":") != -1 || urlName.indexOf("//")  != -1 || urlName.indexOf("&#")  != -1 || (!IsValidTopicURL(urlName)))
+		return false;
+		
+	return true;	
+		
+}
+
+function IsValidTopicURL(topicURL)
+{
+	for (var i = 0 ; i < gIllegalTopicNameChars.length ; i++)
+	{
+		if (topicURL.indexOf(gIllegalTopicNameChars.charAt(i)) != -1 )
+			return false ;
+	}
+	return true ;
 }
 
 function IsNonAscii(szWord)

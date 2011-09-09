@@ -5,7 +5,9 @@
 <item name="Quick search" url="Search/Quick_search.htm" />
 <item name="Using advanced search" url="Search/building_search_queries.htm" />
 <item name="Searching for messages" url="Search/_search__vs.__search_for_.htm" />
-<item name="Searching or messages sent to specific recipients" url="Search/Searching_for_Recipients_.htm" />
+<item name="Searching for messages sent to specific recipients" url="Search/Searching_for_Recipients_.htm" />
+<item name="Searching for messages sent to or received from a contact name" url="Search/Searching_for_messages_sent_to_or_received_from_a_contact_name.htm" />
+<item name="Searching for messages sent to or from the sender" url="Search/Searching_for_messages_sent_to_or_from_the_sender.htm" />
 <item name="Using * as a wildcard in search" url="Search/Using_Wildcard_in_Search.htm" />
 <item name="Saving search queries" url="Search/saving_search_queries.htm" />
 <item name="Query language description" url="Search/query_language_description.htm" />

@@ -7,7 +7,7 @@
 <meta name="generator" content="Adobe RoboHelp 8" />
 <title>Backing up the Content of Your Account</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
-<script type="text/javascript" language="JavaScript">
+<script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
 //<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
@@ -54,7 +54,7 @@ if (window.gbWhTopic)
 
 	if (window.addTocInfo)
 	{
-	addTocInfo("Saving Your Account Folders\nSaving the content of your account offline");
+	addTocInfo("Export and Import Your Account Data\nUse Export to backup personal account data");
 addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 
 	}
@@ -82,95 +82,121 @@ else
 
 //-->
 //]]></script>
-<div style="width: 100%; position: relative;" id="header">
-	
-</div>
-
-
-<h1>Saving the content of your 
- account offline  </h1>
-<p>You can export all of your 
- account data, including email messages and attachments, contacts, calendar, 
- tasks, and Briefcase folders, or you can export specific items in your 
- account. &#160;You can then save the data to your computer or other location 
- as a backup. The account data is saved as a tar-gzipped 
- ( tgz) archive file so that it can be imported 
- to restore your account.</p>
+<h1>Use Export to backup personal 
+ account data  </h1>
+<p>You can export your account 
+ data, including email messages and attachments, contacts, calendar, tasks, 
+ and Briefcase folders, or you can export specific items in your account. 
+ &#160;You can then save the data to your computer or other locations as 
+ a backup, or import the information into another application..</p>
 
 <p class="note">&#160;<span style="font-weight: bold;"><b>Note:</b></span> When 
  you export individual contact folders, they are saved as .csv files; individual 
  calendar folders are saved as .ics files.</p>
 <p>The data are copied, not removed from your account.</p>
-<p>You export the file from <span style="font-weight: bold;"><b>Preferences&gt; 
- Import/Export</b></span>.</p>
-<h6>To export data</h6>
+<p>You export the file from the &#160;<span style="font-weight: bold;"><b>Preferences 
+ &gt; Import/Export</b></span><span> page.</span></p>
+<h2>Export Options</h2>
+<ul type="disc">
+	<li><p>Export all account data including messages and attachments, 
+	 calendar data and contact lists in all folders</p></li>
+	<li><p>Use Advanced settings to export specific account data </p></li>
+	<li><p>Export Calendar</p></li>
+	<li><p>Export Contacts</p></li>
+</ul>
+<h2>Exporting all &#160;your account data</h2>
 <ol type="1">
-	<li class="p"><p>From the Preferences tab , click the <span 
-	 style="font-weight: bold;"><b>Import/Export</b></span> folder.</p></li>
-	<li class="p"><p>Either export all account data or selected a specific 
-	 type of folder to export.</p>
+	<li><p>Go to <span style="font-weight: bold;"><b>Preferences&gt;Import/Export</b></span></p></li>
+	<li><p>In <span style="font-weight: bold;"><b>Export</b></span>, select the 
+	 <span style="font-weight: bold;"><b>Type</b></span> as <span style="font-weight: bold;"><b>Account</b></span></p></li>
+	<li><p>Make sure <span style="font-weight: bold;"><b>Source</b></span> displays 
+	 <span style="font-weight: bold;"><b>All folders</b></span>.</p></li>
+	<li><p>Click <span style="font-weight: bold;"><b>Export</b></span>.</p></li>
+	<li><p>In the dialog that opens, select <span style="font-weight: bold;"><b>Save 
+	 File</b></span> and select where to save the file.</p></li>
+</ol>
+<p>The account data is saved as a tgz file.</p>
+<h2>Use Advanced settings to export specific data </h2>
+<ol type="1">
+	<li><p>Go to <span style="font-weight: bold;"><b>Preferences&gt;Import/Export</b></span><span>.</span></p></li>
+	<li><p>In <span style="font-weight: bold;"><b>Export</b></span>, select the 
+	 <span style="font-weight: bold;"><b>Type</b></span> as <span style="font-weight: bold;"><b>Account</b></span>.</p></li>
+	<li><p>In the <span style="font-weight: bold;"><b>Source</b></span> field, 
+	 &#160;select &#160;the folder to export. All data under that folder 
+	 is exported.</p></li>
+</ol>
+<p style="margin-left: 40px;">If the <span style="font-weight: bold;"><b>Source</b></span> 
+ is All folders, the data types field can be used to filter data by folder 
+ type. If the source is a specific folder, the data type does not matter</p>
+<ol start="4" type="1">
+	<li><p>To select data by date, enter a <span style="font-weight: bold;"><b>start</b></span> 
+	 and <span style="font-weight: bold;"><b>end date</b></span>. Only data between 
+	 these dates are exported.</p></li>
+	<li><p>To search for specific information, enter a search query in 
+	 the <span style="font-weight: bold;"><b>Search</b></span> filter field. &#160;Only 
+	 data that matches that query is exported.</p></li>
+	<li><p>In <span style="font-weight: bold;"><b>Other</b></span>, check <span 
+	 style="font-weight: bold;"><b>Only export content files, exclude meta 
+	 data when the data being exported</b></span> will &#160;being imported 
+	 into a non-Zimbra email account. &#160;.</p></li>
+	<li><p>Click <span style="font-weight: bold;"><b>Export</b></span>.</p></li>
+	<li><p>In the dialog that opens, select <span style="font-weight: bold;"><b>Save 
+	 File</b></span> and select where to save the file.</p></li>
+</ol>
+<p>Files are saves in the following format:</p>
+<ul type="disc">
+	<li><p>Each message is exported as a .eml file</p></li>
+	<li><p>Each contacts is exported as &#160;a.vcf file</p></li>
+	<li><p>Each Calendar item is exported as &#160;a.appt.meta file</p></li>
+</ul>
+<h2>Exporting a Calendar</h2>
+<ol type="1">
+	<li><p>Go to <span style="font-weight: bold;"><b>Preferences&gt;Import/Export</b></span>.</p></li>
+	<li><p>In <span style="font-weight: bold;"><b>Export</b></span>, select the 
+	 <span style="font-weight: bold;"><b>Type</b></span> as <span style="font-weight: bold;"><b>Calendar</b></span><span>.</span></p></li>
+	<li><p>In the <span style="font-weight: bold;"><b>Source</b></span> field 
+	 select the calendar to export.</p></li>
+	<li><p>Click <span style="font-weight: bold;"><b>Export</b></span>.</p></li>
+	<li><p>In the dialog that opens, select <span style="font-weight: bold;"><b>Save 
+	 File</b></span> and select where to save the file.</p></li>
+</ol>
+<p>The calendar is saved as an .ics file that can be imported into any 
+ calendar application that supports .ics.</p>
+<h2>Exporting Contact Lists</h2>
+<ol type="1">
+	<li><p>Go to <span style="font-weight: bold;"><b>Preferences&gt;Import/Export</b></span><span>.</span></p></li>
+	<li><p>In <span style="font-weight: bold;"><b>Export</b></span>, select the 
+	 <span style="font-weight: bold;"><b>Type</b></span> as <span style="font-weight: bold;"><b>Contacts</b></span>.</p></li>
+	<li><p>Select the contact format to export the contact file as.</p></li>
+</ol>
+<ul type="disc">
 	<ul type="disc">
-		<li class="p"><p>To export all data for the account, select <span 
-		 style="font-weight: bold;"><b>Account</b></span>. <span style="font-weight: bold;"><b>Note</b></span>: 
-		 Trash and spam folders are not exported.</p></li>
-		<li class="p"><p>To export a contact list or a specific calendar, 
-		 select that option. When you select a calendar or a contact to 
-		 export, select the format type to be exported as. See <a href="../Contacts/Exporting_Address_Books.htm">Exporting 
-		 Address Books</a> and <a href="../Calendar/Exporting_your_iCal_calendar.htm">Exporting 
-		 your iCal calendar</a>.</p></li>
-		<li class="p"><p style="margin-left: 0px;">If you want to select 
-		 several specific types of items to export at one time, check <span 
-		 style="font-weight: bold;"><b>Advanced Settings</b></span> to expand 
-		 the view. Check the boxes for the data items to export. All items 
-		 of the chosen type within all folders under the chosen folder 
-		 are included. If you want specific data, you can use the search 
-		 filter field to specify the specific type of data to export. See 
-		 <a href="../Search/query_language_description.htm">Query language 
-		 description</a> and <a href="../Search/search_examples.htm">Search 
-		 examples.</a> &#160;</p></li>
-	</ul></li>
+		<li><p>Windows Live Contacts</p></li>
+		<li><p>Outlook contacts</p></li>
+		<li><p>Account contacts (this keeps the contact information in 
+		 the same format is it is in)</p></li>
+		<li><p>Thunderbird</p></li>
+		<li><p>Outlook 2003</p></li>
+		<li><p>Yahoo contacts</p></li>
+	</ul>
+</ul>
+<ol start="4" type="1">
+	<li><p>In the <span style="font-weight: bold;"><b>Source</b></span> select 
+	 the contact list to export.</p></li>
+	<li><p>Click <span style="font-weight: bold;"><b>Export</b></span>.</p></li>
+	<li><p>In the dialog that opens, select <span style="font-weight: bold;"><b>Save 
+	 File</b></span> and select where to save the file.</p></li>
 </ol>
-<ol start="3" type="1">
-	<li class="p"><p>Click <span style="font-weight: bold;"><b>Export</b></span> 
-	 and select where to save the file.</p></li>
-	<li class="p"><p>Click <span style="font-weight: bold;"><b>OK</b></span>.</p></li>
-</ol>
-<p class="note"><span style="font-weight: bold;"><b>Note: </b></span>The exported 
- account data file can be viewed with an archive program such as WinRAR archiver.</p>
-<h6>To import saved account data</h6>
-<p>You restore an account from the file that you exported. &#160;</p>
-<ol type="1">
-	<li class="p"><p>From the Preferences tab, click the <span style="font-weight: bold;"><b>Import/Export</b></span> 
-	 folder.</p></li>
-	<li class="p"><p>In the <span style="font-weight: bold;"><b>Import </b></span>section, 
-	 browse to the file that you want to import. &#160;If you import Calendars 
-	 or Contacts, specify the format that is being imported. See <a href="../Contacts/Importing_Contacts.htm">Importing 
-	 Contacts</a> and <a href="../Calendar/Importing_your_iCal_calendar.htm">Importing 
-	 your iCal calendar</a>. &#160;When &#160;Account is selected, only 
-	 the tgz file that you have already exported can be imported to your 
-	 account. &#160;</p></li>
-</ol>
-<p style="margin-left: 40px;">Select 
- specific types of items from the saved tgz file to import in the <span 
-	 style="font-weight: bold;"><b>Data Types</b></span> section. When you click 
- Import only those item types are imported.</p>
-<ol start="3" type="1">
-	<li class="p"><p>Click <span 
-	 style="font-weight: bold;"><b>Import</b></span>.</p></li>
-</ol>
+<p>The contacts file is saved as an .csv file, with the contact information 
+ organized for the format you selected.</p>
+<p>
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PickupDialog_Invoke) == 'function') PickupDialog_Invoke(e,'_self','Import Account Data','../Userspecific/Import_Account_Data.htm','Importing Contacts','../Contacts/Importing_Contacts.htm');return false;" title=" Related Topics"><span style="font-family:Arial;font-size:8pt;font-weight:normal;font-style:normal;text-decoration:none"><nobr>  Related Topics </nobr></span></a>
 
-</li>
-</ol>
-
-
-
-<p style="margin-left: 24px;">&#160;</p>
-<p style="margin-left: 24px;">&#160;</p>
-<p>&#160;</p>
-<div style="width: 100%; position: relative;" id="footer">
-	<p>&#160;</p>
-</div>
-<script type="text/javascript" language="javascript1.2">//<![CDATA[
+</p>
+<script type="text/javascript" language="JavaScript">//<![CDATA[
+if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
+  WritePopupMenuLayer();
+//]]></script><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)
 	writeIntopicBar(0);

@@ -82,11 +82,6 @@ else
 
 //-->
 //]]></script>
-<div style="width: 100%; position: relative;" id="header">
-	
-</div>
-
-
 <h1>Query language description</h1>
 <p>This advanced topic describes in detail the search grammar used for 
  @CompanyName@ 's Search 
@@ -131,6 +126,11 @@ else
 	<li class="p"><p>The following characters are allowed in a search parameter 
 	 as long as they are not the first character: - + &lt; &gt;</p></li>
 </ul>
+<p><span style="font-weight: bold;"><b>Note</b></span>: Special characters, such 
+ as trademark symbols that are part of a word, are removed when the word 
+ is indexed for search. They are ignored in a search. For example, a search 
+ for Zimbra™ finds 
+ all references to Zimbra, including those without the trademark symbol.</p>
 <h2>Multiple Search Terms</h2>
 <p>If multiple search terms are entered (separated by spaces), they are 
  &quot; ANDed&quot; 
@@ -162,11 +162,14 @@ else
  is equivalent to <b>from:john AND from: thomas</b>. If you use OR in the parenthesis, <b>from:(john 
  or smith)</b>, the search is for results <b>from:john OR from: thomas</b>.</p>
 <h3>Using <b>*</b> as a wildcard in Search</h3>
-<p>The asterisk (<b>*</b>) can be used as a wildcard in a search to find 
- content that contains words that have similar spellings.</p>
+<p>The asterisk (<b>*</b>) can be used as a wildcard at the end of a word 
+ in a search to find content that contains words that have similar spellings.</p>
 <p>Use the asterisk <b>*</b> as a wildcard. For example, the search string 
  <b>do*</b> returns items such as <i>do</i>, 
  <i>dog</i>, <i>door</i>, etc.</p>
+<p><span style="font-weight: bold;"><b>Note</b></span>: A double-byte asterisk 
+ sign in a search query is not considered a wildcard character and is ignored 
+ when the search runs.</p>
 <h2>Keyword Descriptions and Examples</h2>
 <p style="font-weight: bold;">content:</p>
 <p style="margin-left: 40px;">Specifies text that the message must contain. 
@@ -262,9 +265,6 @@ else
  on &quot;high&quot; &quot;low&quot; priority. For example, priority<span 
 	 class="code">:high </span>will find items with a priority setting 
  of high..</p>
-<div style="width: 100%; position: relative;" id="footer">
-	<p>&#160;</p>
-</div>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

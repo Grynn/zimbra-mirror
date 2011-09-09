@@ -1,48 +1,7 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="pages, creating in Briefcase" >
-  <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="password" >
-  <topic name="If you forget your password" url="Userspecific/if_you_forget_your_password.htm" />
-  <topic name="Changing your password" url="Userspecific/chaning_your_password.htm" />
-</key>
-<key name="permission denied with meeting invite" >
-  <topic name="Receiving a permission denied message" url="Calendar/Receiving_a_permission_denied_message.htm" />
-</key>
-<key name="persona" >
-  <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
-  <topic name="Creating Personas" url="Userspecific/Creating_Personas.htm" />
-</key>
-<key name="Personal Contacts" >
-  <topic name="Editing a contact" url="Contacts/editing_a_contact.htm" />
-</key>
-<key name="personal distribution lists" >
-  <topic name="Creating Group Contact Lists" url="Contacts/Creating_Group_Contact_Lists.htm" />
-</key>
-<key name="phone, wipe" >
-  <topic name="Managing your mobile devices" url="Userspecific/Managing_your_mobile_devices.htm" />
-</key>
-<key name="polling for new mail" >
-  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="POP account" >
-  <topic name="Managing your POP Accounts" url="Userspecific/Managing_your_POP_Accounts.htm" />
-</key>
-<key name="POP account email, receiving" >
-  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="POP accounts, adding" >
-  <topic name="Adding POP accounts" url="Userspecific/Adding_POP_accounts.htm" />
-</key>
-<key name="POP addresses, adding" >
-  <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
-</key>
-<key name="preferences" >
-  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="preferences, Calendar" >
+<key name="preferences, calendar" >
   <topic name="Setting your Calendar preferences" url="Userspecific/Setting_your_Calendar_preferences.htm" />
 </key>
 <key name="preferences, changing" >
@@ -63,18 +22,17 @@
 <key name="print tasks" >
   <topic name="About Tasks" url="Tasks/About_Tasks.htm" />
 </key>
-<key name="Printing" >
-  <topic name="Printing a conversation" url="conversations/printing_a_conversation.htm" />
-  <topic name="Printing a mail message" url="reading_mail/printing_a_mail_message.htm" />
-  <key name="mail message" >
-    <topic name="Printing a mail message" url="reading_mail/printing_a_mail_message.htm" />
-  </key>
-</key>
 <key name="printing a calendar" >
   <topic name="Printing a calendar" url="Calendar/Printing_a_calendar.htm" />
 </key>
 <key name="printing contacts" >
   <topic name="Printing Contacts" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="printing conversations" >
+  <topic name="Printing a conversation" url="conversations/printing_a_conversation.htm" />
+</key>
+<key name="printing email messages" >
+  <topic name="Printing a mail message" url="reading_mail/printing_a_mail_message.htm" />
 </key>
 <key name="private appointments, sharing details" >
   <topic name="Delegating_Calendar_Access" url="Calendar/Delegating_Calendar_Access.htm" />
@@ -88,14 +46,20 @@
 <key name="public/private calendar events" >
   <topic name="Marking an appointment as private" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
-<key name="Query language description" >
+<key name="query language descriptions" >
   <topic name="Query language description" url="Search/query_language_description.htm" />
 </key>
-<key name="Quick search" >
+<key name="quick search" >
   <topic name="Quick search" url="Search/Quick_search.htm" />
 </key>
-<key name="QuickAdd" >
+<key name="quickadd" >
   <topic name="Using QuickAdd to Create an Appointment" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="ranking addresses" >
+  <topic name="How email addresses are ranked for autocomplete" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
+</key>
+<key name="reading mail" >
+  <topic name="Reading mail" url="reading_mail/reading_mail.htm" />
 </key>
 <key name="reading pane" >
   <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
@@ -116,11 +80,8 @@
 <key name="recover deleted messages" >
   <topic name="Empty Trash " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
-<key name="Recovering" >
+<key name="recovering deleted items" >
   <topic name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
-  <key name="deleted mail messages" >
-    <topic name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
-  </key>
 </key>
 <key name="recreate appointments" >
   <topic name="Creating an appointment from an existing appointment" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
@@ -134,6 +95,9 @@
 <key name="reminders" >
   <topic name="Setting up desktop alerts" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
+<key name="reminders, turn off" >
+  <topic name="Turning off reminders" url="Userspecific/Turning_off_reminders.htm" />
+</key>
 <key name="renaming files in briefcase" >
   <topic name="Working with files in Briefcase" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
@@ -146,14 +110,11 @@
 <key name="reply, display subject" >
   <topic name="Setting your preferences for the email compose window" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
-<key name="Replying" >
-  <topic name="Replying to mail messages" url="reading_mail/replying_to_mail_messages.htm" />
-  <key name="mail messages" >
-    <topic name="Replying to mail messages" url="reading_mail/replying_to_mail_messages.htm" />
-  </key>
-</key>
 <key name="replying from calendar" >
   <topic name="Replying from an appointment on my calendar" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
+</key>
+<key name="replying to email" >
+  <topic name="Replying to mail messages" url="reading_mail/replying_to_mail_messages.htm" />
 </key>
 <key name="resend" >
   <topic name="Right-click menus" url="Navigation_folders_and_tips/right-click_menus.htm" />
@@ -185,7 +146,7 @@
 <key name="right click" >
   <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
-<key name="Right-click menus" >
+<key name="right-click menus" >
   <topic name="Right-click menus" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="roles" >
@@ -204,30 +165,26 @@
 <key name="scheduling a room or equipment" >
   <topic name="Scheduling Resources" url="Calendar/Scheduling_Resources.htm" />
 </key>
-<key name="Search examples" >
+<key name="search examples" >
   <topic name="Search examples" url="Search/search_examples.htm" />
 </key>
 <key name="search feature" >
   <topic name="Using the search feature" url="Search/using_the_search_feature.htm" />
-  <key name="Using" >
-    <topic name="Using the search feature" url="Search/using_the_search_feature.htm" />
-  </key>
 </key>
 <key name="search for recipients" >
   <topic name="Searching for Recipients " url="Search/Searching_for_Recipients_.htm" />
 </key>
-<key name="search queries" >
-  <topic name="Building search queries" url="Search/building_search_queries.htm" />
-  <topic name="Saving search queries" url="Search/saving_search_queries.htm" />
-  <key name="Saving" >
-    <topic name="Saving search queries" url="Search/saving_search_queries.htm" />
-  </key>
-</key>
 <key name="search with wildcard" >
   <topic name="Using the search feature" url="Search/using_the_search_feature.htm" />
 </key>
+<key name="search, advanced" >
+  <topic name="Building search queries" url="Search/building_search_queries.htm" />
+</key>
 <key name="search, and/or" >
   <topic name="&quot;And&quot; vs. &quot;Or&quot; type searches" url="Search/and_vs_or_searches.htm" />
+</key>
+<key name="searches, saving" >
+  <topic name="Saving search queries" url="Search/saving_search_queries.htm" />
 </key>
 <key name="searching for a message" >
   <topic name="Searching for messages" url="Search/_search__vs.__search_for_.htm" />
@@ -243,6 +200,9 @@
 </key>
 <key name="setting a forwarding address" >
   <topic name="Setting a Forwarding Address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="setting up filter rules" >
+  <topic name="How Filtering Works" url="filters/how_filtering_works.htm" />
 </key>
 <key name="share your calendar" >
   <topic name="Delegating Calendar Access" url="Calendar/Delegating_Calendar_Access.htm" />
@@ -300,10 +260,10 @@
 <key name="tags" >
   <topic name="Assigning tags to messages" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
   <topic name="Deleting tags" url="Tags_and_flags/deleting_tags.htm" />
-  <key name="Assigning" >
+  <key name="assigning" >
     <topic name="Assigning tags to messages" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
   </key>
-  <key name="Deleting" >
+  <key name="deleting" >
     <topic name="Deleting tags" url="Tags_and_flags/deleting_tags.htm" />
   </key>
 </key>
@@ -312,6 +272,57 @@
 </key>
 <key name="task, mark as complete" >
   <topic name="Change a task" url="Tasks/Change_a_task.htm" />
+</key>
+<key name="tasks, print" >
+  <topic name="About Tasks" url="Tasks/About_Tasks.htm" />
+</key>
+<key name="three-pane view" >
+  <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="tool tips" >
+  <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="trash folder" >
+  <topic name="Trash folder" url="Navigation_folders_and_tips/trash_folder.htm" />
+</key>
+<key name="undeliverable mail" >
+  <topic name="Undeliverable mail" url="Creating_Messages/undeliverable_mail.htm" />
+</key>
+<key name="undo" >
+  <topic name="Undo Action" url="Userspecific/Undo_Action.htm" />
+</key>
+<key name="upload new Zimlets" >
+  <topic name="Managing your Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
+</key>
+<key name="URL in signatures" >
+  <topic name="Using a signature" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="user interface features" >
+  <topic name="User Interface Features and Shortcuts" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+</key>
+<key name="user preferences" >
+  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="using tags" >
+  <topic name="Using tags to classify mail messages" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="vacation message" >
+  <topic name="Vacation message" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="versions" >
+  <topic name="Version Control of Files in Briefcase" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+</key>
+<key name="view as HTML" >
+  <topic name="Opening file attachments" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="view reading pane" >
+  <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="view, calendar" >
+  <topic name="About Zimbra Calendar" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="view, calendars by lists" >
+  <topic name="Calendar List View" url="Calendar/Calendar_List_View.htm" />
 </key>
 
 </indexdata>

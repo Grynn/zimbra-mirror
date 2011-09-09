@@ -82,16 +82,11 @@ else
 
 //-->
 //]]></script>
-<div style="width: 100%; position: relative;" id="header">
-	
-</div>
-
-
 <h1>Using Search</h1>
-<p>Searching lets you find messages, contacts, appointments, Documents 
- pages, and files. &#160;You can search by specific words, by dates, time, 
- URL, size, tag, whether or not a message has been read, whether it has 
- file attachments or attachments of a particular file type and more.</p>
+<p>Searching lets you find messages, contacts, appointments, and Briefcase 
+ files. &#160;You can search by specific words, by dates, time, URL, size, 
+ tag, whether or not a message has been read, whether it has file attachments 
+ or attachments of a particular file type and more.</p>
 <p>@CollaborationProductFullName@ 
  offers two search tools:</p>
 <ul type="disc">
@@ -102,8 +97,8 @@ else
 	 is automatically displayed. In addition, the drop-down arrow at the 
 	 left of the search box allows you to select which type of items to 
 	 search for. You can select to search within messages, your contacts, 
-	 including company contact lists, tasks, appointments and pages and 
-	 files. This is an aid to quick searches as described in <a href="Quick_search.htm">Quick-search 
+	 including company contact lists, tasks, appointments and &#160;files. 
+	 This is an aid to quick searches as described in <a href="Quick_search.htm">Quick-search 
 	 settings</a>.</p></li>
 	<li class="p"><p><span style="font-weight: bold;"><b>Advanced</b></span> <span>search</span> 
 	 opens a new pane and makes it easier to <a href="building_search_queries.htm">execute 
@@ -143,12 +138,18 @@ else
 	 <span style="font-style: italic;"><i>south</i></span>, and <span style="font-style: italic;"><i>SOUTH</i></span> 
 	 are all the same thing.</p></li>
 	<li class="p"><p>These special characters cannot be used in your search 
-	 text. <span style="font-weight: bold;"><b>~ ' ! @ # $ % ^ &amp; * () 
-	 _- + ? / { }[ ] ; : &quot;</b></span></p></li>
-	<li class="p"><p>The asterisk <span style="font-weight: bold;"><b>*</b></span> 
-	 as a wildcard is supported. That is 
-	 search for do* returns items with the word 
-	 dog, door, etc.</p></li>
+	 text. <span style="font-weight: bold;"><b>~ ' ! # $ % ^ &amp; * () _- 
+	 + ? / { }[ ] ; : &quot;</b></span></p></li>
+	<li class="p"><p>Special characters, such as trademark symbols that 
+	 are part of a word, are removed when the word is indexed for search. 
+	 When these special characters are used in a search query as part of 
+	 a whole word search, they are ignored. For example, a search for Zimbra™ finds all references to Zimbra, 
+	 including those without the trademark symbol.</p></li>
+	<li class="p"><p>The single asterisk <span style="font-weight: bold;"><b>*</b></span> 
+	 as a wildcard at the end of a word is supported. That is search for 
+	 do* returns items with the word dog, door, 
+	 etc. Note: A double-byte asterisk sign in a search query is not considered 
+	 a wild card character and is ignored when the search runs.</p></li>
 	<li class="p"><p>Searching for content will search the body of a message 
 	 plus any (system-readable) file attachments it may have. A system-readable 
 	 file attachment is a type of file that can be converted to HTML-viewable 
@@ -164,9 +165,6 @@ else
  how to use And and Or in your search.</p>
 <p>&#160;</p>
 <p>&#160;</p>
-<div style="width: 100%; position: relative;" id="footer">
-	<p>&#160;</p>
-</div>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

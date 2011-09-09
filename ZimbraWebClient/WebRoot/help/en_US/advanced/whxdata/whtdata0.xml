@@ -36,7 +36,8 @@
   <item name="Setting a forwarding address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
   <item name="Subscribe to RSS/Atom feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
   <item name="Managing your account identities" url="Userspecific/Mail_Identities.htm" />
-  <item name="Managing your Spam Folder" url="filters/Managing_your_Junk_Folder.htm" />
+  <item name="Managing your Junk folder" url="filters/Managing_your_Junk_Folder.htm" />
+  <item name="Viewing Message Header Information" url="reading_mail/Viewing_Message_Header_Information.htm" />
   <item name="Recovering deleted items" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Purging email messages" url="reading_mail/archiving_old_messages.htm" />
   <book name="Reading Messages" >
@@ -62,6 +63,8 @@
   <item name="Parts of an email message" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Automatically add your signature" url="Userspecific/using_a_signature.htm" />
   <item name="Automatic address completion" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="How email addresses are ranked for autocomplete" url="Contacts/How_email_addresses_are_ranked_for_autocomplete.htm" />
+  <item name="How Address Bubbles Work" url="Miscellaneous_one_off_topics/How_Address_Bubbles_Work.htm" />
   <item name="Schedule emails for future delivery" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="Requesting a return receipt" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="Attaching files to your message" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
@@ -90,9 +93,9 @@
   <item name="Editing contact information" url="Contacts/editing_a_contact.htm" />
   <item name="Deleting contacts" url="Contacts/deleting_a_contact.htm" />
 </book>
-<book name="Managing Your  Calendar" >
+<book name="Managing Your Calendar" >
   <item name="About @CompanyName@ Calendar" url="Calendar/About_Calendar.htm" />
-  <item name="Create calendars" url="Calendar/Create_Calendars.htm" />
+  <item name="Creating calendars" url="Calendar/Create_Calendars.htm" />
   <item name="Color coding your calendars" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Setting your Calendar preferences" url="Userspecific/Setting_your_Calendar_preferences.htm" />
   <item name="Viewing Calendar week numbers" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
@@ -102,6 +105,7 @@
   <item name="Deleting calendars" url="Calendar/Deleting_Calendars.htm" />
   <item name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
   <item name="Exporting your iCal calendar" url="Calendar/Exporting_your_iCal_calendar.htm" />
+  <item name="Turning off reminders" url="Userspecific/Turning_off_reminders.htm" />
   <item name="Printing a calendar" url="Calendar/Printing_a_calendar.htm" />
 </book>
 <book name="Scheduling Appointments, Meetings and Events" >
@@ -135,23 +139,19 @@
 <chunk name="Using Tags and Folders to Organize Email" ref="whtdata4.xml" />
 </book>
 <book name="Using Mail Filters" >
-  <item name="Setting up filter rules" url="filters/how_filtering_works.htm" />
-  <item name="Filtering your messages" url="filters/filtering_your_messages.htm" />
-  <item name="Filter conditions and actions supported" url="filters/filter_conditions_and_actions_supported.htm" />
-  <item name="Filtering using CONTAINS, MATCHES, and IS options" url="Search/contains_vs_matches.htm" />
-  <item name="Filter wildcards" url="filters/wildcards.htm" />
+<chunk name="Using Mail Filters" ref="whtdata5.xml" />
 </book>
 <book name="Setting Your Preferences" >
-<chunk name="Setting Your Preferences" ref="whtdata5.xml" />
+<chunk name="Setting Your Preferences" ref="whtdata6.xml" />
 </book>
 <book name="Managing your Mobile Device (Network Edition Only)" >
-<chunk name="Managing your Mobile Device (Network Edition Only)" ref="whtdata6.xml" />
+<chunk name="Managing your Mobile Device (Network Edition Only)" ref="whtdata7.xml" />
 </book>
-<book name="Saving Your Account Folders" >
-<chunk name="Saving Your Account Folders" ref="whtdata7.xml" />
+<book name="Export and Import Your Account Data" >
+<chunk name="Export and Import Your Account Data" ref="whtdata8.xml" />
 </book>
 <book name="Using Zimlets" >
-<chunk name="Using Zimlets" ref="whtdata8.xml" />
+<chunk name="Using Zimlets" ref="whtdata9.xml" />
 </book>
 
 </tocdata>

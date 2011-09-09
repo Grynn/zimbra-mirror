@@ -4,6 +4,9 @@
 <key name="accessing external accounts" >
   <topic name="Accessing your external accounts" url="Userspecific/Managing_your_POP_Accounts.htm" />
 </key>
+<key name="account identities" >
+  <topic name="Managing your account identities" url="Userspecific/Mail_Identities.htm" />
+</key>
 <key name="account, export" >
   <topic name="Backing up the Content of Your Account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
@@ -67,13 +70,13 @@
 <key name="assistant" >
   <topic name="Zimbra Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
 </key>
-<key name="Atom feed" >
+<key name="atom feed" >
   <topic name="Subscribe to RSS/Atom feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
 <key name="attaching files from Briefcase" >
   <topic name="Attaching files to a mail message" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
-<key name="Attachment File Types Supported" >
+<key name="attachment file types supported" >
   <topic name="Attachment File Types Supported" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
 </key>
 <key name="attachments" >
@@ -97,7 +100,7 @@
 <key name="blocking junk mail" >
   <topic name="Filtering Junk Mail" url="filters/Filtering_Junk_Mail.htm" />
 </key>
-<key name="Briefcase, attaching files to email" >
+<key name="briefcase, attaching files to email" >
   <topic name="Attaching files to a mail message" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
 <key name="briefcase, sending files from" >
@@ -109,9 +112,8 @@
 <key name="browsers" >
   <topic name="Browser use with Zimbra" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
 </key>
-<key name="Calendar preferences" >
+<key name="calendar preferences" >
   <topic name="Setting your Calendar preferences" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-  <topic name="Identifying who can invite you to meetings" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
 <key name="calendar view" >
   <topic name="About Zimbra Calendar" url="Calendar/About_Calendar.htm" />
@@ -138,6 +140,9 @@
 <key name="calendar, free/busy" >
   <topic name="Seeing free/busy times" url="Calendar/Seeing_free_busy_times.htm" />
 </key>
+<key name="calendar, identifying who can invite you to meetings" >
+  <topic name="Identifying who can invite you to meetings" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+</key>
 <key name="calendar, printing" >
   <topic name="Printing a calendar" url="Calendar/Printing_a_calendar.htm" />
 </key>
@@ -147,14 +152,14 @@
 <key name="calendar, replying from" >
   <topic name="Replying from an appointment on my calendar" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
 </key>
-<key name="Calendar, setting permissions to invite" >
-  <topic name="Identifying who can invite you to meetings" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
-</key>
 <key name="calendar, shared with admin role" >
   <topic name="Admin rights for shared Calendars" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
 </key>
 <key name="cancel meetings" >
   <topic name="deleting an appointment" url="Calendar/Deleting_an_appointment.htm" />
+</key>
+<key name="changing a meeting you organized" >
+  <topic name="Changing a meeting" url="Calendar/Changing_a_meeting_.htm" />
 </key>
 <key name="changing an appointment" >
   <topic name="Changing recurring appointments" url="Calendar/Deleting_recurring_appointments.htm" />
@@ -187,18 +192,15 @@
   <topic name="Editing a contact" url="Contacts/editing_a_contact.htm" />
   <topic name="Contacts" url="Contacts/contacts.htm" />
   <topic name="Creating a new contact" url="Contacts/creating_a_new_contact.htm" />
-  <key name="Editing" >
-    <topic name="Editing a contact" url="Contacts/editing_a_contact.htm" />
-  </key>
 </key>
 <key name="contact, printing list" >
   <topic name="Printing Contacts" url="Contacts/Printing_Contacts.htm" />
 </key>
-<key name="Contacts Automatically" >
-  <topic name="Adding a contacts, Automatically" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
-</key>
-<key name="Contacts List" >
+<key name="contacts List" >
   <topic name="Contacts" url="Contacts/contacts.htm" />
+</key>
+<key name="contacts, adding automatically" >
+  <topic name="Adding a contactAutomatically" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
 </key>
 <key name="contacts, adding deleted contact back to list" >
   <topic name="Deleting a contact" url="Contacts/deleting_a_contact.htm" />
@@ -215,12 +217,11 @@
 <key name="conversation view" >
   <topic name="Managing your email message view" url="conversations/conversation_list_view.htm" />
 </key>
-<key name="Conversations" >
-  <topic name="Conversations can span folders" url="conversations/conversations_can_span_folders.htm" />
+<key name="conversation, printing" >
   <topic name="Printing a conversation" url="conversations/printing_a_conversation.htm" />
-  <key name="Printing" >
-    <topic name="Printing a conversation" url="conversations/printing_a_conversation.htm" />
-  </key>
+</key>
+<key name="conversations" >
+  <topic name="Conversations can span folders" url="conversations/conversations_can_span_folders.htm" />
 </key>
 <key name="copy appointments" >
   <topic name="Creating an appointment from an existing appointment" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
@@ -231,11 +232,8 @@
 <key name="create an appointment from a message" >
   <topic name="Zimbra Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
 </key>
-<key name="Creating" >
+<key name="creating new mail messages" >
   <topic name="Creating a new mail message" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  <key name="new mail message" >
-    <topic name="Creating a new mail message" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  </key>
 </key>
 <key name="creating new pages" >
   <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
@@ -267,12 +265,6 @@
 <key name="deleted messages, recover" >
   <topic name="Empty Trash " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
-<key name="Deleting" >
-  <topic name="Deleting folders" url="Navigation_folders_and_tips/deleting_folders.htm" />
-  <key name="folders" >
-    <topic name="Deleting folders" url="Navigation_folders_and_tips/deleting_folders.htm" />
-  </key>
-</key>
 <key name="deleting contacts" >
   <topic name="Deleting a contact" url="Contacts/deleting_a_contact.htm" />
 </key>
@@ -297,13 +289,13 @@
 <key name="edit as new" >
   <topic name="Right-click menus" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
-<key name="Edit Contact" >
-  <topic name="Editing a contact" url="Contacts/editing_a_contact.htm" />
-</key>
 <key name="edit mail folder permissions" >
   <topic name="Revoking a access to a shared folder" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
 </key>
-<key name="Email Message" >
+<key name="editing contacts" >
+  <topic name="Editing a contact" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="email message" >
   <topic name="Parts of an Email Message" url="Creating_Messages/parts_of_an_email_message.htm" />
 </key>
 <key name="email message view" >
@@ -318,6 +310,21 @@
 <key name="events" >
   <topic name="Scheduling All Day events" url="Calendar/Scheduling_All_Day_events.htm" />
   <topic name="About Appointments, Meetings and Events" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="export account data" >
+  <topic name="Backing up the Content of Your Account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="export iCal calendars" >
+  <topic name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="external accounts" >
+  <topic name="Managing your POP Accounts" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="external accounts, how to add" >
+  <topic name="Adding POP accounts" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="external user" >
+  <topic name="Identifying who can invite you to meetings" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
 
 </indexdata>

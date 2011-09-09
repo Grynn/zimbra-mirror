@@ -3156,7 +3156,7 @@ function writeTableHead()
 					"<TR STYLE='font-weight:bold'>" +
 						"<TD ID='OdinFtsTitle'	CLASS='fr_tt' STYLE='cursor:pointer'>"+gsTitle+"</TD>" +
 						"<TD ID='DragSep'		CLASS='fr_ts' STYLE='cursor:w-resize; width:4px'>&nbsp;</TD>" +
-						"<TD ID='OdinFtsRank'	CLASS='fr_tt' STYLE='cursor:pointer'>"+gsRank+"^</TD>" +
+						"<TD ID='OdinFtsRank'	CLASS='fr_tt' STYLE='cursor:pointer; width:0px'>"+gsRank+"^</TD>" +
 					"</TR>" +
 				"</THEAD>" +
 				"<TBODY ID='OdinFtsRslt'>";
