@@ -54,17 +54,6 @@ function () {
     }
 }
 
-ZaBaseDialog.prototype.getTask =
-function () {
-    if (!this._task) {
-        this._task = new ZaWorkingProcess(this.constructor, this.toString(), this.getObject(), this.getBounds());
-    } else {
-        this._task.data = this.getObject();
-        this._task.position = this.getBounds();
-    }
-    return this._task;
-}
-
 ZaBaseDialog.prototype.popdownHookListner = function() {
     if (!this._inMin) {
         ZaZimbraAdmin.getInstance().getTaskController().removeTask(this.getTask());
@@ -73,7 +62,7 @@ ZaBaseDialog.prototype.popdownHookListner = function() {
 
 ZaBaseDialog.__handleMinClick = 
 function () {
-    var task = this.getTask();
+    var task = new ZaWorkingProcess(this.constructor, this.toString(), this.getObject(), this.getBounds());
     ZaZimbraAdmin.getInstance().getTaskController().addTask(task);
     this._inMin = true;
     this.popdown();
