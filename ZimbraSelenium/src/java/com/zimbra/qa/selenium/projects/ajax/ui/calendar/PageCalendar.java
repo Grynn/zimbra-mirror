@@ -49,7 +49,7 @@ public class PageCalendar extends AbsTab {
 		public static final String ReplyToAllMenu = "id=zmi__Calendar__REPLY_ALL_title";
 		public static final String ForwardMenu = "id=zmi__Calendar__FORWARD_APPT_title";
 		public static final String DeleteMenu = "id=zmi__Calendar__DELETE_title";
-		public static final String CancelMenu = "id=zmi__Calendar__CANCEL_title";
+		public static final String CancelMenu = "id=zmi__Calendar__DELETE_title";
 		public static final String MoveMenu = "id=zmi__Calendar__MOVE_title";
 		public static final String TagAppointmentMenu = "id=zmi__Calendar__TAG_MENU_title";
 		public static final String TagAppointmentNewTagSubMenu = "id=zmi__Calendar__TAG_MENU|MENU|NEWTAG_title";
