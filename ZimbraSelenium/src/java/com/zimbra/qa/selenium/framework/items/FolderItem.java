@@ -2,17 +2,19 @@
  * 
  */
 package com.zimbra.qa.selenium.framework.items;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
+import com.zimbra.common.soap.MailConstants;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility.WAIT_FOR_OPERAND;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
+import com.zimbra.soap.mail.type.Folder;
 
 
 /**
@@ -206,11 +208,8 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 		
 		try {
 			
-			item = new FolderItem();
-			item.setId(fElement.getAttribute("id"));
-			item.setName(fElement.getAttribute("name"));
-			item.setParentId(fElement.getAttribute("l"));
-
+			item = CreateFolderItem(fElement);
+			
 			return (item);
 			
 		} catch (NumberFormatException e) {
@@ -218,9 +217,29 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 		} catch (ServiceException e) {
 			throw new HarnessException("Unable to create FolderItem", e);
 		} finally {
-			if ( item != null )	logger.info(item.prettyPrint());
+			if (item != null)
+				logger.info(item.prettyPrint());
 		}
 	}
+
+	protected static FolderItem CreateFolderItem(Element e)
+			throws ServiceException {
+		FolderItem item = null;
+
+		item = new FolderItem();
+		item.setId(e.getAttribute("id"));
+		item.setName(e.getAttribute("name"));
+		item.setParentId(e.getAttribute("l"));
+
+		// sub folders
+		List<Folder> subFolders = new ArrayList<Folder>();
+		for (Element child : e.listElements(MailConstants.E_FOLDER))
+			subFolders.add(CreateFolderItem(child));
+
+		item.setSubfolders(subFolders);
+
+		return (item);
+	}	
 
 	/**
     * Import a system folder (i.e. Inbox, Sent, Trash, Contacts, etc.) with specified destination type
