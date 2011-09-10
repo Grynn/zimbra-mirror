@@ -313,6 +313,9 @@ public class ExecuteHarnessMain {
 		} else {
 			excludeGroups.add("network");
 		}
+		
+		// If groups contains "performance", then enable performance metrics gathering
+		PerfMetrics.getInstance().Enabled = groups.contains("performance");
 
 		// Only one suite per run in the zimbra process (subject to change)
 		XmlSuite suite = new XmlSuite();

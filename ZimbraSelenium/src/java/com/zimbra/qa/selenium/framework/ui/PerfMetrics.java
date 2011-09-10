@@ -313,9 +313,6 @@ public class PerfMetrics extends AbsSeleniumObject {
 	protected PerfMetrics() {	
 		logger.info("New "+ this.getClass().getCanonicalName());
 		
-		// Only run perf if configured
-		Enabled = ZimbraSeleniumProperties.getStringProperty("performance.metrics.enabled", "false").toLowerCase().equals("true");
-		
 		metrics = new Hashtable<PerfToken, PerfData>();
 		
 		
