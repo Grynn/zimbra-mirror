@@ -47,17 +47,19 @@ ZaTask.myXModel = {
     ]
 };
 
-ZaWorkingProcess = function(constructor, type, data, position) {
+// type 1: for working in process, 2 for running task
+ZaTaskItem = function(constructor, cacheName, data, position, type) {
     this.constructor = constructor;
-    this.type = type;
+    this.cacheName = cacheName;
     this.data = data;
     this.position = position;
+    this.type = type || 1;
 }
 
-ZaWorkingProcess.prototype.toString = function() {
-    return this.type;
+ZaTaskItem.prototype.toString = function() {
+    return this.cacheName;
 }
 
-ZaWorkingProcess.prototype.getData = function() {
+ZaTaskItem.prototype.getData = function() {
     return this.data._uuid;
 }

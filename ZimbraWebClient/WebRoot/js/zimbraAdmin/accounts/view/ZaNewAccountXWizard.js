@@ -14,10 +14,7 @@
  */
 
 ZaNewAccountXWizard = function(parent, entry) {
-    var baseConstructor = ZaXWizardDialog;
-    if (appNewUI)
-        baseConstructor = ZaBaseDialog;
-	baseConstructor.call(this, parent, null, ZaMsg.NCD_NewAccTitle, "700px", "300px","ZaNewAccountXWizard",null,ZaId.DLG_NEW_ACCT);
+	ZaXWizardDialog.call(this, parent, null, ZaMsg.NCD_NewAccTitle, "700px", "300px","ZaNewAccountXWizard",null,ZaId.DLG_NEW_ACCT);
 	this.accountStatusChoices = [
 		{value:ZaAccount.ACCOUNT_STATUS_ACTIVE, label:ZaAccount.getAccountStatusMsg (ZaAccount.ACCOUNT_STATUS_ACTIVE)},
 		{value:ZaAccount.ACCOUNT_STATUS_CLOSED, label:ZaAccount.getAccountStatusMsg (ZaAccount.ACCOUNT_STATUS_CLOSED)},
@@ -40,8 +37,6 @@ ZaNewAccountXWizard = function(parent, entry) {
 ZaNewAccountXWizard.zimletChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
 ZaNewAccountXWizard.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
 ZaNewAccountXWizard.prototype = new ZaXWizardDialog;
-if (appNewUI)
-    ZaNewAccountXWizard.prototype = new ZaBaseDialog;
 ZaNewAccountXWizard.prototype.constructor = ZaNewAccountXWizard;
 ZaNewAccountXWizard.prototype.toString = function() {
     return "ZaNewAccountXWizard";

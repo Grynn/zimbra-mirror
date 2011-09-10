@@ -35,7 +35,9 @@ ZaXDialog = function(parent,className, title, w, h,iKeyName, contextId) {
 	}
 	
 	this._contextId = contextId? contextId:ZaId.DLG_UNDEF
-	
+	if (appNewUI && this.supportMinimize) {
+        this._supportMinimize = true;
+    }
 	DwtDialog.call(this, {
 		parent:parent, 
 		className:clsName, 
@@ -44,6 +46,10 @@ ZaXDialog = function(parent,className, title, w, h,iKeyName, contextId) {
 		extraButtons:this._extraButtons,
 		id:ZaId.getDialogId(this._contextId)
 	});
+    if (this._supportMinimize) {
+        this.addMiniIcon();
+        this.addPopdownListener(new AjxListener(this, this.popdownHookListner));
+    }
 	this._app = ZaApp.getInstance();
 	this._localXForm = null;
 	this._localXModel = null;
@@ -76,6 +82,44 @@ ZaXDialog = function(parent,className, title, w, h,iKeyName, contextId) {
 ZaXDialog.helpURL = location.pathname + ZaUtil.HELP_URL + "administration_console_help.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 ZaXDialog.prototype = new DwtDialog;
 ZaXDialog.prototype.constructor = ZaXDialog;
+
+if (appNewUI) {
+ZaXDialog.TEMPLATE = "admin.Widgets#ZaBaseDialog";
+ZaXDialog.prototype.supportMinimize = false;
+ZaXDialog.prototype.miniType = 1; // default is working in process
+ZaXDialog.prototype._createHtmlFromTemplate =
+function(templateId, data) {
+    if (this._supportMinimize) {
+        templateId = ZaXDialog.TEMPLATE;
+    }
+	DwtDialog.prototype._createHtmlFromTemplate.call(this, templateId, data);
+    this._minEl =  document.getElementById(data.id+"_minimize");
+};
+
+ZaXDialog.prototype.addMiniIcon =
+function () {
+    if (this._minEl) {
+        this._minEl.innerHTML = AjxImg.getImageHtml("Help");
+	    this._minEl.onclick = AjxCallback.simpleClosure(ZaXDialog.__handleMinClick, this);
+    }
+}
+
+ZaXDialog.prototype.popdownHookListner = function() {
+    if (!this._inMin) {
+	var task = new ZaTaskItem(this.constructor, this.toString(), this.getObject(), this.getBounds(), this.miniType);
+        ZaZimbraAdmin.getInstance().getTaskController().removeTask(task);
+    }
+}
+
+ZaXDialog.__handleMinClick =
+function () {
+    var task = new ZaTaskItem(this.constructor, this.toString(), this.getObject(), this.getBounds(), this.miniType);
+    ZaZimbraAdmin.getInstance().getTaskController().addTask(task);
+    this._inMin = true;
+    this.popdown();
+    this._inMin = false;
+}
+}
 /**
 * A map of funciton references. Functions in this map are called one after another from 
 * {@link #getMyXForm} method.

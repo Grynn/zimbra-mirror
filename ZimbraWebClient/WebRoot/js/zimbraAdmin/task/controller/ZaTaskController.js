@@ -9,6 +9,8 @@ ZaTaskController = function(appCtxt, container) {
 	ZaController.call(this, appCtxt, container,"ZaTaskController");
     this._workingInProcess = new AjxVector();
     this._workingInProcess.getArray()._version = 1;
+    this._runningTask = new AjxVector();
+    this._runningTask.getArray()._version = 1;
 }
 
 ZaTaskController.prototype = new ZaController();
@@ -36,23 +38,41 @@ function(entry) {
 }
 
 ZaTaskController.prototype.addTask = function(task) {
-    var index= this._workingInProcess.indexOfLike(task, task.getData);
-    this._workingInProcess.getArray()._version = this._workingInProcess.getArray()._version + 1;
+    var taskArray;
+    var modelItem;
+    if (task.type ==1) {
+        taskArray =  this._workingInProcess;
+        modelItem = ZaTask.A_workingInProcess;
+    } else {
+        taskArray =  this._runningTask;
+        modelItem = ZaTask.A_runningTask;
+    }
+    var index= taskArray.indexOfLike(task, task.getData);
+    taskArray.getArray()._version = taskArray.getArray()._version + 1;
     if (index == -1) {
-        this._workingInProcess.add(task, undefined, true);
-        this._taskContentPanel._localXForm.setInstanceValue(this._workingInProcess.getArray(),ZaTask.A_workingInProcess);
+        taskArray.add(task, undefined, true);
+        this._taskContentPanel._localXForm.setInstanceValue(taskArray.getArray(),modelItem);
     }else{
-        this._workingInProcess.replace(index, task);
-        this._taskContentPanel._localXForm.setInstanceValue(this._workingInProcess.getArray(),ZaTask.A_workingInProcess);
+        taskArray.replace(index, task);
+        this._taskContentPanel._localXForm.setInstanceValue(taskArray.getArray(),modelItem);
     }
 }
 
 ZaTaskController.prototype.removeTask = function(task) {
-    var index= this._workingInProcess.indexOfLike(task, task.getData);
+    var taskArray;
+    var modelItem;
+    if (task.type ==1) {
+        taskArray =  this._workingInProcess;
+        modelItem = ZaTask.A_workingInProcess;
+    } else {
+        taskArray =  this._runningTask;
+        modelItem = ZaTask.A_runningTask;
+    }
+    var index= taskArray.indexOfLike(task, task.getData);
     if (index != -1) {
-        this._workingInProcess.getArray()._version = this._workingInProcess.getArray()._version + 1;
-        this._workingInProcess.removeAt(index);
-        this._taskContentPanel._localXForm.setInstanceValue(this._workingInProcess.getArray(),ZaTask.A_workingInProcess);
+        taskArray.getArray()._version = taskArray.getArray()._version + 1;
+        taskArray.removeAt(index);
+        this._taskContentPanel._localXForm.setInstanceValue(taskArray.getArray(),modelItem);
     }
 }
 
