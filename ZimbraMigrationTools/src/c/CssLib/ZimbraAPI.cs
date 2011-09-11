@@ -362,6 +362,11 @@ namespace CssLib
         // API methods /////////
         public int Logon(string hostname, string port, string username, string password, bool isAdmin)
         {
+            if (ZimbraValues.GetZimbraValues().AuthToken.Length > 0)
+            {
+                return 0;   // already logged on
+            }
+
             lastError = "";
             string urn = "";
 
@@ -493,6 +498,11 @@ namespace CssLib
 
         public int GetAllDomains()
         {
+            if (ZimbraValues.zimbraValues.Domains.Count > 0)    // already got 'em
+            {
+                return 0;
+            }
+
             lastError = "";
             WebServiceClient client = new WebServiceClient
             {
@@ -544,6 +554,11 @@ namespace CssLib
 
         public int GetAllCos()
         {
+            if (ZimbraValues.zimbraValues.COSes.Count > 0)  // already got 'em
+            {
+                return 0;
+            }
+
             lastError = "";
             WebServiceClient client = new WebServiceClient
             {
