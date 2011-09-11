@@ -17,9 +17,12 @@ namespace CssLib
         //
 
         // Upload modes
-        public const int STRING_MODE = 1;       // for messages -- request is all string data
-        public const int MIXED_MODE = 2;       // for contacts (or appts) -- mixed string and binary
+        public const int STRING_MODE = 1;           // for messages -- request is all string data
+        public const int MIXED_MODE = 2;            // for contacts (or appts) -- mixed string and binary
         //
+
+        // Values
+        internal const int INLINE_LIMIT = 4000;     // smaller than this limit, we'll inline; larger, we'll upload  
 
         private string lastError;
         public string LastError
@@ -830,8 +833,9 @@ namespace CssLib
             return retval;
         }
 
-        public void AddMsgRequest(XmlWriter writer, string uploadToken, ZimbraMessage message, bool isInline, int requestId)
+        public void AddMsgRequest(XmlWriter writer, string uploadInfo, ZimbraMessage message, bool isInline, int requestId)
         {
+            // if isLine, uploadInfo will be a file path; if not, uploadInfo will be the upload token
             writer.WriteStartElement("AddMsgRequest", "urn:zimbraMail");
             if (requestId != -1)
             {
@@ -841,33 +845,37 @@ namespace CssLib
             writer.WriteAttributeString("l", message.folderId);
             writer.WriteAttributeString("d", message.rcvdDate);
             writer.WriteAttributeString("f", message.flags);
-            if (!isInline)
+            if (isInline)
             {
-                writer.WriteAttributeString("aid", uploadToken);
+                WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(uploadInfo)));
+                
             }
             else
             {
-                WriteNVPair(writer, "content", System.Text.Encoding.Default.GetString(File.ReadAllBytes(uploadToken)));
+                writer.WriteAttributeString("aid", uploadInfo);
             }
 
             writer.WriteEndElement();   // m
             writer.WriteEndElement();   // AddMsgRequest
         }
 
-        public int AddMessage(string filepath, ZimbraMessage message, bool isInline)
+        public int AddMessage(string filepath, ZimbraMessage message)
         {
             lastError = "";
-            string uploadToken = "";
+            string uploadInfo = "";
             int retval = 0;
 
-            if (!isInline)
+            FileInfo f = new FileInfo(filepath);
+            bool isInline = (f.Length < INLINE_LIMIT);
+            if (isInline)
             {
-                retval = UploadFile(filepath, STRING_MODE, out uploadToken);
+                uploadInfo = filepath;
             }
             else
             {
-                uploadToken = filepath;
+                retval = UploadFile(filepath, STRING_MODE, out uploadInfo);
             }
+
             if (retval == 0)
             {
                 WebServiceClient client = new WebServiceClient
@@ -888,7 +896,7 @@ namespace CssLib
 
                     writer.WriteStartElement("Body", "http://www.w3.org/2003/05/soap-envelope");
 
-                    AddMsgRequest(writer, uploadToken, message, isInline, -1);
+                    AddMsgRequest(writer, uploadInfo, message, isInline, -1);
 
                     writer.WriteEndElement();   // soap body
                     writer.WriteEndElement();   // soap envelope
@@ -930,7 +938,7 @@ namespace CssLib
             int retval = 0;
             int ufretval = 0;
             lastError = "";
-            string uploadToken = "";
+            string uploadInfo = "";
 
             WebServiceClient client = new WebServiceClient
             {
@@ -953,11 +961,21 @@ namespace CssLib
 
                 for (int i = 0; i < lFilePaths.Count; i++)
                 {
-                    ufretval = UploadFile(lFilePaths[i], STRING_MODE, out uploadToken);
+                    FileInfo f = new FileInfo(lFilePaths[i]);
+                    bool isInline = (f.Length < INLINE_LIMIT);
+                    if (isInline)
+                    {
+                        uploadInfo = lFilePaths[i];
+                    }
+                    else
+                    {
+                        ufretval = UploadFile(lFilePaths[i], STRING_MODE, out uploadInfo);
+                    }
+                    
                     if (ufretval == 0)
                     {
                         ZimbraMessage message = lMessages[i];
-                        AddMsgRequest(writer, uploadToken, message, false, -1);
+                        AddMsgRequest(writer, uploadInfo, message, isInline, -1);
                     }
                 }
 
