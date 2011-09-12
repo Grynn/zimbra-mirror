@@ -210,22 +210,22 @@ namespace CssLib
         }
 
         /*
-        public object[] GetListFromObjectPicker()
+        public object[] GetListFromObjectPicker(bool bObjectPicker)
         {
 
             object var = new object();
-            MailWrapper.SelectExchangeUsers(out var);
+            MailWrapper.SelectExchangeUsers(bObjectPicker, out var);
             object[] o = (object[])var;
             return o;
         }
         */
 
-        public string[] GetListFromObjectPicker()
+        public string[] GetListFromObjectPicker(bool bObjectPicker)
         // Change this to above signature when I start getting the real ObjectPicker object back
         {
 
             object var = new object();
-            MailWrapper.SelectExchangeUsers(out var);
+            MailWrapper.SelectExchangeUsers(bObjectPicker, out var);
             string[] s = (string[])var;
             return s;
         }

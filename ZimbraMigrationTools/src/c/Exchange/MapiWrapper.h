@@ -79,7 +79,7 @@ public:
 	STDMETHOD(GetFolderObjects)(/*[out, retval]*/ VARIANT* vObjects);
 
 	STDMETHOD(GlobalUninit)(BSTR* pErrorText);
-	STDMETHOD(SelectExchangeUsers)(VARIANT* Users, BSTR* pErrorText);
+	STDMETHOD(SelectExchangeUsers)(VARIANT_BOOL bObjectPicker, VARIANT* Users, BSTR* pErrorText);
 
 protected:
     UDTFolder m_pUDT;

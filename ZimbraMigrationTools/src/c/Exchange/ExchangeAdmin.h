@@ -57,7 +57,7 @@ public:
     static LPCWSTR GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername = NULL,
     LPCWSTR lpAdminPassword = NULL);
     static LPCWSTR GlobalUninit();
-	static LPCWSTR SelectExchangeUsers(vector<ObjectPickerData> &vUserList);
+	static LPCWSTR SelectExchangeUsers(VARIANT_BOOL bObjectPicker, vector<PickerData> &vUserList);
 
 };
 

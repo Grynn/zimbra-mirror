@@ -686,11 +686,13 @@ LPCWSTR ExchangeOps::GlobalUninit() {
     return lpwstrStatus;
 }
 
-LPCWSTR ExchangeOps::SelectExchangeUsers(vector<ObjectPickerData> &vUserList)
+LPCWSTR ExchangeOps::SelectExchangeUsers(VARIANT_BOOL bObjectPicker, vector<PickerData> &vUserList)
 {
 	LPCWSTR lpwstrStatus = NULL;
 	try {
-		Zimbra::MAPI::Util::GetExchangeUsersUsingObjectPicker(vUserList);
+		if (bObjectPicker) {
+			Zimbra::MAPI::Util::GetExchangeUsersUsingObjectPicker(vUserList);
+		}
 	}catch(Zimbra::MAPI::Util::MapiUtilsException &ex)
 	{
 		lpwstrStatus = FromatExceptionInfo(ex.ErrCode(), (LPWSTR)ex.Description().c_str(),

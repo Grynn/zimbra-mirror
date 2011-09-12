@@ -57,7 +57,7 @@ namespace MVVM.ViewModel
         private void ObjectPicker()
         {
             CSMigrationwrapper mw = ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).mw;
-            string[] users = mw.GetListFromObjectPicker();
+            string[] users = mw.GetListFromObjectPicker(true);
             for (int i = 0; i < users.Length; i++)
             {
                 string displayname = users[i].Substring(0, users[i].IndexOf("@"));

@@ -8,7 +8,7 @@ typedef struct _ObjectPickerData
 	wstring wstrExchangeStore;
 	vector<wstring> vAliases;
 	vector<std::pair<wstring,wstring>> pAttributeList;
-} ObjectPickerData;
+} PickerData;
 
 typedef struct _RecipInfo
 {
@@ -168,7 +168,7 @@ HRESULT GetInboxSpecialFolders(LPMAPIFOLDER pInbox, SBinaryArray* pEntryIds);
 HRESULT GetAllSpecialFolders(IN LPMDB lpMdb, IN OUT SBinaryArray* pEntryIds);
 HRESULT FreeAllSpecialFolders(IN SBinaryArray* lpSFIds);
 ExchangeSpecialFolderId GetExchangeSpecialFolderId(LPMDB userStore, IN ULONG cbEntryId, IN LPENTRYID pFolderEntryId, SBinaryArray* pEntryIds);
-HRESULT GetExchangeUsersUsingObjectPicker(vector<ObjectPickerData> &vUserList);
+HRESULT GetExchangeUsersUsingObjectPicker(vector<PickerData> &vUserList);
 HRESULT HrMAPIGetSMTPAddress( IN MAPISession& session, IN RECIP_INFO& recipInfo, OUT wstring& strSmtpAddress );
 
 ULONG IMAPHeaderInfoPropTag(LPMAPIPROP lpMapiProp);
