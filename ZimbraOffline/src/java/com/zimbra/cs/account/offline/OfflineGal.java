@@ -32,19 +32,21 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.index.ContactHit;
+import com.zimbra.cs.index.ResultsPager;
 import com.zimbra.cs.index.SearchParams;
 import com.zimbra.cs.index.SortBy;
 import com.zimbra.cs.index.ZimbraHit;
 import com.zimbra.cs.index.ZimbraQueryResults;
 import com.zimbra.cs.mailbox.Contact;
 import com.zimbra.cs.mailbox.ContactAutoComplete;
+import com.zimbra.cs.mailbox.ContactAutoComplete.AutoCompleteResult;
 import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.MailServiceException;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OperationContext;
-import com.zimbra.cs.mailbox.ContactAutoComplete.AutoCompleteResult;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.common.OfflineConstants;
 import com.zimbra.cs.service.util.ItemId;
@@ -64,11 +66,14 @@ public class OfflineGal {
 
     public static final String SECOND_GAL_FOLDER = "Contacts2";
 
-    public static final List<String> EMAIL_KEYS = Arrays.asList(ContactConstants.A_email, ContactConstants.A_email2, ContactConstants.A_email3);
+    public static final List<String> EMAIL_KEYS = Arrays.asList(ContactConstants.A_email, ContactConstants.A_email2,
+            ContactConstants.A_email3);
 
     private OfflineAccount mAccount;
     private Mailbox mGalMbox = null;
     private OperationContext mOpContext = null;
+    private static byte[] GAL_TYPES = new byte[] { MailItem.TYPE_CONTACT };
+    private SearchParams searchParams = null;
 
     public OfflineGal(OfflineAccount account) {
         mAccount = account;
@@ -86,13 +91,15 @@ public class OfflineGal {
         return mOpContext;
     }
 
-    public ZimbraQueryResults search(String name, String type, String sortBy, int offset, int limit, Element cursor) throws ServiceException {
+    public ZimbraQueryResults search(String name, String type, String sortBy, int offset, int limit, Element cursor)
+            throws ServiceException {
         Set<String> names = new HashSet<String>();
         names.add(name);
         return search(names, type, sortBy, offset, limit, cursor);
     }
 
-    public ZimbraQueryResults search(Set<String> names, String type, String sortBy, int offset, int limit, Element cursor) throws ServiceException {
+    public ZimbraQueryResults search(Set<String> names, String type, String sortBy, int offset, int limit,
+            Element cursor) throws ServiceException {
         String galAcctId = mAccount.getAttr(OfflineConstants.A_offlineGalAccountId, false);
         mGalMbox = null;
 
@@ -106,6 +113,23 @@ public class OfflineGal {
         mOpContext = new OperationContext(mGalMbox);
         Folder folder = getSyncFolder(mGalMbox, mOpContext, false);
 
+        String query = buildGalSearchQueryString(names, type, folder);
+
+        try {
+            this.searchParams = new SearchParams();
+            this.searchParams.setQueryStr(query.toString());
+            this.searchParams.setTypes(GAL_TYPES);
+            this.searchParams.setSortByStr(sortBy);
+            this.searchParams.setOffset(offset);
+            this.searchParams.setLimit(limit);
+            return mGalMbox.search(SoapProtocol.Soap12, mOpContext, this.searchParams);
+        } catch (IOException e) {
+            OfflineLog.offline.debug("gal mailbox IO error (" + mAccount.getName() + "): " + e.getMessage());
+            return null;
+        }
+    }
+
+    private String buildGalSearchQueryString(Set<String> names, String type, Folder folder) {
         StringBuilder query = new StringBuilder("in:\"").append(folder.getName()).append("\"");
         boolean firstName = true;
         for (String name : names) {
@@ -126,70 +150,65 @@ public class OfflineGal {
             query.append(" ) ");
         }
         if (type.equals(CTYPE_ACCOUNT)) {
-            query.append(" AND (#").append(ContactConstants.A_type).append(":").append(CTYPE_ACCOUNT).append(" OR #").append(ContactConstants.A_type).append(":").append(CTYPE_GROUP).append(")");
-        }
-        else if (type.equals(CTYPE_RESOURCE)) {
+            query.append(" AND (#").append(ContactConstants.A_type).append(":").append(CTYPE_ACCOUNT).append(" OR #")
+                    .append(ContactConstants.A_type).append(":").append(CTYPE_GROUP).append(")");
+        } else if (type.equals(CTYPE_RESOURCE)) {
             query.append(" AND #").append(ContactConstants.A_type).append(":").append(CTYPE_RESOURCE);
-        }
-        else if (type.equals(CTYPE_GROUP)) {
+        } else if (type.equals(CTYPE_GROUP)) {
             query.append(" AND (#").append(ContactConstants.A_type).append(":").append(CTYPE_GROUP).append(")");
         }
-        SearchParams sp = new SearchParams();
-        sp.setQueryString(query.toString());
-        sp.setTypes(EnumSet.of(MailItem.Type.CONTACT));
-        sp.setSortBy(sortBy);
-        sp.setOffset(offset);
-        sp.setLimit(limit);
-        if (cursor != null) {
-            sp.parseCursor(cursor, mAccount.getId());
-        }
-        return mGalMbox.index.search(SoapProtocol.Soap12, mOpContext, sp);
+        return query.toString();
     }
 
-    public void search(Element response, String name, String type, String sortBy, int offset, int limit, Element cursor) throws ServiceException {
+    public void search(Element response, String name, String type, String sortBy, int offset, int limit, Element cursor)
+            throws ServiceException {
         limit = limit == 0 ? mAccount.getIntAttr(Provisioning.A_zimbraGalMaxResults, 100) : limit;
         ZimbraQueryResults zqr = search(name, type, sortBy, offset, limit + 1, cursor); // use limit + 1 so that we know when to set "had more"
         if (zqr == null) {
             response.addAttribute(AccountConstants.A_MORE, false);
             return;
         }
-
-        SortBy sort = SortBy.of(sortBy);
-
+        ResultsPager pager = ResultsPager.create(zqr, this.searchParams);
+        int num = 0;
         try {
-            int c = 0;
-            while (c++ < limit && zqr.hasNext()) {
-                ZimbraHit hit = zqr.getNext();
-                int id = hit.getItemId();
-
-                Contact contact = (Contact) mGalMbox.getItemById(mOpContext, id, MailItem.Type.CONTACT);
-                Element cn = response.addElement(MailConstants.E_CONTACT);
-                cn.addAttribute(MailConstants.A_ID, hit.getAcctIdStr() + ":" + Integer.toString(id));
-
-                Map<String, String> fields = contact.getFields();
-                Iterator<String> it = fields.keySet().iterator();
-                while (it.hasNext()) {
-                    String key = it.next();
-                    if (!key.equals(MailConstants.A_ID) && !key.equals(OfflineConstants.GAL_LDAP_DN)) {
-                        cn.addKeyValuePair(key, fields.get(key), MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
+            while (pager.hasNext()) {
+                ZimbraHit hit = pager.getNextHit();
+                if (hit instanceof ContactHit) {
+                    int id = hit.getItemId();
+                    Contact contact = (Contact) mGalMbox.getItemById(mOpContext, id, MailItem.Type.CONTACT);
+                    Element cn = response.addElement(MailConstants.E_CONTACT);
+                    cn.addAttribute(MailConstants.A_ID, hit.getAcctIdStr() + ":" + Integer.toString(id));
+                    Map<String, String> fields = contact.getFields();
+                    Iterator<String> it = fields.keySet().iterator();
+                    while (it.hasNext()) {
+                        String key = it.next();
+                        if (!key.equals(MailConstants.A_ID) && !key.equals(OfflineConstants.GAL_LDAP_DN))
+                            cn.addKeyValuePair(key, fields.get(key), MailConstants.E_ATTRIBUTE,
+                                    MailConstants.A_ATTRIBUTE_NAME);
+                    }
+                    SortBy sortOrder = SortBy.lookup(sortBy);
+                    if (sortOrder != null) {
+                        Object sf = hit.getSortField(sortOrder);
+                        if (sf != null && sf instanceof String)
+                            cn.addAttribute(MailConstants.A_SORT_FIELD, (String) sf);
                     }
                 }
-
-                if (sort != null) {
-                    Object sf = hit.getSortField(sort);
-                    if (sf != null && sf instanceof String) {
-                        cn.addAttribute(MailConstants.A_SORT_FIELD, (String)sf);
-                    }
+                num++;
+                if (num == searchParams.getLimit()) {
+                    break;
                 }
             }
-
-            if (sort != null) {
-                response.addAttribute(MailConstants.A_SORTBY, sort.toString());
-            }
+            response.addAttribute(MailConstants.A_SORTBY, sortBy);
             response.addAttribute(MailConstants.A_QUERY_OFFSET, offset);
             response.addAttribute(AccountConstants.A_MORE, zqr.hasNext());
+        } catch (Exception e) {
+            OfflineLog.offline.debug("search on GalSync account failed...%s", e.getCause());
         } finally {
-            Closeables.closeQuietly(zqr);
+            if (zqr != null)
+                try {
+                    zqr.doneWithSearchResults();
+                } catch (ServiceException e) {
+                }
         }
     }
 
@@ -217,7 +236,7 @@ public class OfflineGal {
     private static ConcurrentMap<String, Folder> syncFolderCache = new ConcurrentHashMap<String, Folder>();
 
     /*
-     * We used to have two alternating folders to store GAL. After the upgrade, we should continue to use the
+     * We used to have two alternating folders to store GAL. After the upgrade, we should continue to use the 
      * "current" folder (sync folder) to store GAL, until a full-sync when we can safely delete the "second"
      * folder and only use the system folder "Contacts" from then on.
      */
