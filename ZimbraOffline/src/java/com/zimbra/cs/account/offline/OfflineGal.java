@@ -15,9 +15,9 @@
 package com.zimbra.cs.account.offline;
 
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -72,7 +72,6 @@ public class OfflineGal {
     private OfflineAccount mAccount;
     private Mailbox mGalMbox = null;
     private OperationContext mOpContext = null;
-    private static byte[] GAL_TYPES = new byte[] { MailItem.TYPE_CONTACT };
     private SearchParams searchParams = null;
 
     public OfflineGal(OfflineAccount account) {
@@ -114,19 +113,13 @@ public class OfflineGal {
         Folder folder = getSyncFolder(mGalMbox, mOpContext, false);
 
         String query = buildGalSearchQueryString(names, type, folder);
-
-        try {
-            this.searchParams = new SearchParams();
-            this.searchParams.setQueryStr(query.toString());
-            this.searchParams.setTypes(GAL_TYPES);
-            this.searchParams.setSortByStr(sortBy);
-            this.searchParams.setOffset(offset);
-            this.searchParams.setLimit(limit);
-            return mGalMbox.search(SoapProtocol.Soap12, mOpContext, this.searchParams);
-        } catch (IOException e) {
-            OfflineLog.offline.debug("gal mailbox IO error (" + mAccount.getName() + "): " + e.getMessage());
-            return null;
-        }
+        this.searchParams = new SearchParams();
+        this.searchParams.setQueryString(query);
+        this.searchParams.setTypes(EnumSet.of(MailItem.Type.CONTACT));
+        this.searchParams.setSortBy(sortBy);
+        this.searchParams.setOffset(offset);
+        this.searchParams.setLimit(limit);
+        return mGalMbox.index.search(SoapProtocol.Soap12, mOpContext, this.searchParams);
     }
 
     private String buildGalSearchQueryString(Set<String> names, String type, Folder folder) {
@@ -186,7 +179,7 @@ public class OfflineGal {
                             cn.addKeyValuePair(key, fields.get(key), MailConstants.E_ATTRIBUTE,
                                     MailConstants.A_ATTRIBUTE_NAME);
                     }
-                    SortBy sortOrder = SortBy.lookup(sortBy);
+                    SortBy sortOrder = SortBy.of(sortBy);
                     if (sortOrder != null) {
                         Object sf = hit.getSortField(sortOrder);
                         if (sf != null && sf instanceof String)
@@ -204,11 +197,9 @@ public class OfflineGal {
         } catch (Exception e) {
             OfflineLog.offline.debug("search on GalSync account failed...%s", e.getCause());
         } finally {
-            if (zqr != null)
-                try {
-                    zqr.doneWithSearchResults();
-                } catch (ServiceException e) {
-                }
+            if (zqr != null) {
+                Closeables.closeQuietly(zqr);
+            }
         }
     }
 
