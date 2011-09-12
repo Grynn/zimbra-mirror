@@ -324,6 +324,8 @@ public abstract class AbsPage extends AbsSeleniumObject {
 		    	logger.info("type("+ characters +")");
 		    	if (characters.equals("<Delete>")) {
 		    	   doType(KeyEvent.VK_DELETE);
+		    	} else if (characters.equals("<ESC>")) {
+		    	   doType(KeyEvent.VK_ESCAPE);
 		    	} else if (characters.equals("<SHIFT><DEL>")) {
 		    		
 		    		// http://forums.oracle.com/forums/thread.sjpa?threadID=2230592&tstart=0

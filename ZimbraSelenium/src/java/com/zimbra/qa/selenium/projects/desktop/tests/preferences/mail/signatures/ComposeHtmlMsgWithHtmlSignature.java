@@ -2,8 +2,10 @@ package com.zimbra.qa.selenium.projects.desktop.tests.preferences.mail.signature
 
 import java.util.HashMap;
 
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
+import com.thoughtworks.selenium.Selenium;
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.RecipientItem;
@@ -11,10 +13,12 @@ import com.zimbra.qa.selenium.framework.items.SignatureItem;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.GeneralUtility;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.OperatingSystem;
 import com.zimbra.qa.selenium.framework.util.XmlStringUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
+import com.zimbra.qa.selenium.framework.util.OperatingSystem.OsType;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount.SOAP_DESTINATION_HOST_TYPE;
 import com.zimbra.qa.selenium.projects.desktop.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.desktop.ui.mail.FormMailNew;
@@ -90,8 +94,11 @@ public class ComposeHtmlMsgWithHtmlSignature extends AjaxCommonTest {
 
       // Send the message
       mailform.zSubmit();
-      GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount());
-      app.zPageMail.zWaitForDesktopLoadingSpinner(5000);
+
+      // Please don't change this to GeneralUtility.syncDesktopToZcsWithSoap(app.zGetActiveAccount())
+      // because in linux when switching the iframe to top application, it selects the browser toolbar
+      // and it will cause syncDesktop through SOAP request to fail.
+      app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
       app.zGetActiveAccount().soapSend(
             "<SearchRequest xmlns='urn:zimbraMail' types='message'>"
@@ -115,4 +122,16 @@ public class ComposeHtmlMsgWithHtmlSignature extends AjaxCommonTest {
 
    }
 
+   @AfterMethod(alwaysRun=true)
+   public void cleanup() throws HarnessException {
+      // To close the selected browser toolbar dropdownlist due to switching the iframe
+      // to top application in linux, typing <ESC> keys few times on the page is required
+      if (OperatingSystem.getOSType() == OsType.LINUX ||
+            OperatingSystem.getOSType() == OsType.MAC) {
+         app.zPageMain.zKeyboardTypeString("<ESC>");
+         app.zPageMain.zKeyboardTypeString("<ESC>");
+         app.zPageMain.zKeyboardTypeString("<ESC>");
+         app.zPageMain.zKeyboardTypeString("<ESC>");
+      }
+   }
 }
