@@ -80,7 +80,7 @@ zimbraId: 12A0779A-88B6-11DC-AA4B-97F9DEB0B34E
 description: The zimbra amavis account
 userPassword: {SSHA}+3rEY5SCrc3KlzJxLQmm735pnRTPgnT2
 
-# place holder for amavis account
+# place holder for BES searcher account
 dn: uid=zmbes-searcher,cn=appaccts,cn=zimbra
 uid: zmbes-searcher
 objectclass: zimbraAccount
