@@ -16,22 +16,19 @@ import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
 
 public class UploadDomCert extends AdminDocumentHandler {
-    private final static String CERT_AID = "cert.aid" ;
-    private final static String KEY_AID = "key.aid" ;
-    private final static String CERT_NAME = "cert.filename" ;
-    private final static String KEY_NAME = "key.filename" ;
 
-   	public Element handle(Element request, Map<String, Object> context) throws ServiceException {
-   		ZimbraSoapContext lc = getZimbraSoapContext(context);
+    @Override
+    public Element handle(Element request, Map<String, Object> context) throws ServiceException {
+        ZimbraSoapContext lc = getZimbraSoapContext(context);
         Element response = lc.createElement(CertMgrConstants.UPLOAD_DOMCERT_RESPONSE);
 
         String attachId = null;
         String filename = null;
         Upload up = null ;
 
-		try {
-            attachId = request.getAttribute(CERT_AID) ;
-            filename = request.getAttribute(CERT_NAME) ;
+        try {
+            attachId = request.getAttribute(CertMgrConstants.A_CERT_AID) ;
+            filename = request.getAttribute(CertMgrConstants.A_CERT_NAME) ;
             ZimbraLog.security.debug("Found certificate Filename  = " + filename + "; attid = " + attachId );
 
             up = FileUploadServlet.fetchUpload(lc.getAuthtokenAccountId(), attachId, lc.getAuthToken());
@@ -40,16 +37,16 @@ public class UploadDomCert extends AdminDocumentHandler {
 
             byte [] blob = ByteUtil.getContent(up.getInputStream(),-1) ;
             if(blob.length > 0)
-                response.addAttribute("cert_content", new String(blob));
-		}catch (IOException ioe) {
-			throw ServiceException.FAILURE("Can not get uploaded certificate content", ioe);
-		}finally {
+                response.addAttribute(CertMgrConstants.A_cert_content, new String(blob));
+        }catch (IOException ioe) {
+            throw ServiceException.FAILURE("Can not get uploaded certificate content", ioe);
+        }finally {
             FileUploadServlet.deleteUpload(up);
         }
 
         try {
-            attachId = request.getAttribute(KEY_AID) ;
-            filename = request.getAttribute(KEY_NAME) ;
+            attachId = request.getAttribute(CertMgrConstants.A_KEY_AID);
+            filename = request.getAttribute(CertMgrConstants.A_KEY_NAME);
             ZimbraLog.security.debug("Found certificate Filename  = " + filename + "; attid = " + attachId );
 
             up = FileUploadServlet.fetchUpload(lc.getAuthtokenAccountId(), attachId, lc.getAuthToken());
@@ -58,15 +55,13 @@ public class UploadDomCert extends AdminDocumentHandler {
 
             byte [] blob = ByteUtil.getContent(up.getInputStream(),-1) ;
             if(blob.length > 0)
-                response.addAttribute("key_content", new String(blob));
-		}catch (IOException ioe) {
-			throw ServiceException.FAILURE("Can not get uploaded key content", ioe);
-		}finally {
+                response.addAttribute(CertMgrConstants.A_key_content, new String(blob));
+        }catch (IOException ioe) {
+            throw ServiceException.FAILURE("Can not get uploaded key content", ioe);
+        }finally {
             FileUploadServlet.deleteUpload(up);
         }
 
         return response;
-
-
-   	}
+    }
 }

@@ -36,8 +36,9 @@ public class VerifyCertKey extends AdminDocumentHandler {
         final static String CERT_TYPE_COMM = "comm" ;
     	private Provisioning prov = null;
 	private boolean verifyResult = false;
-   	
-   	public Element handle(Element request, Map<String, Object> context) throws ServiceException {
+
+    @Override
+    public Element handle(Element request, Map<String, Object> context) throws ServiceException {
    		ZimbraSoapContext lc = getZimbraSoapContext(context);
    		prov = Provisioning.getInstance();
    		String certBuffer = request.getAttribute(CertMgrConstants.E_cert) ;
