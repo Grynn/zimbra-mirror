@@ -95,8 +95,10 @@ LPCWSTR MAPIAccessAPI::Initialize() {
     HRESULT hr = S_OK;
 	try {
 		lpwstrStatus = OpenSessionAndStore();
+		if(lpwstrStatus)
+			return lpwstrStatus;
 	    // Get root folder from user store
-		m_rootFolder = new Zimbra::MAPI::MAPIFolder(*m_zmmapisession, *m_defaultStore);
+		m_rootFolder = new Zimbra::MAPI::MAPIFolder(*m_zmmapisession, *m_userStore);
 		if(FAILED(hr = m_userStore->GetRootFolder(*m_rootFolder)))
 			lpwstrStatus = FromatExceptionInfo(hr, L"MAPIAccessAPI::Initialize() Failed",
                     __FILE__, __LINE__);
@@ -131,7 +133,7 @@ HRESULT MAPIAccessAPI::Iterate_folders(Zimbra::MAPI::MAPIFolder &folder, vector<
     while (bMore) {
 		ULONG itemCount = 0;
 		// delete them while clearing the tree nodes
-        Zimbra::MAPI::MAPIFolder *childFolder = new Zimbra::MAPI::MAPIFolder(*m_zmmapisession,*m_defaultStore);
+        Zimbra::MAPI::MAPIFolder *childFolder = new Zimbra::MAPI::MAPIFolder(*m_zmmapisession,*m_userStore);
         bMore = folderIter->GetNext(*childFolder);
         if (bMore) {
             childFolder->GetItemCount(itemCount);

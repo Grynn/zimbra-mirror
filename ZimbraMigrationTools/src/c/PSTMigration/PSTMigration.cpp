@@ -203,7 +203,7 @@ void MAPIAccessAPITestV()
 {
 	vector<Folder_Data> vfolderlist;
 	//Create class instance with Exchange server hostname/IP, Outlook admin profile name, Exchange mailbox to be migrated
-	Zimbra::MAPI::MAPIAccessAPI *maapi = new Zimbra::MAPI::MAPIAccessAPI(L"10.117.82.161",L"Outlook",L"administrator");
+	Zimbra::MAPI::MAPIAccessAPI *maapi = new Zimbra::MAPI::MAPIAccessAPI(L"10.117.82.161",L"Outlook",L"seretary");
 
 	//Init session and stores
 	maapi->Initialize();
@@ -221,6 +221,7 @@ void MAPIAccessAPITestV()
 		printf("FolderName:  %S \n",(*it).name.c_str());
 		printf("FolderPath: %S   ",(*it).folderpath.c_str());
 		printf("ItemCount: %d\n",(*it).itemcount);
+		printf("ZimbraId: %d\n",(*it).zimbraid);
 
 		SBinary sbin = (*it).sbin;
 		maapi->GetFolderItemsList(sbin,vItemDataList);

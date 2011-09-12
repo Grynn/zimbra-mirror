@@ -144,7 +144,7 @@ HRESULT MAPIContact::Init()
 	HRESULT hr=S_OK;
 	LPSPropValue pPropValMsgClass = NULL ;
 	if(FAILED(hr=HrGetOneProp( m_pMessage, PR_MESSAGE_CLASS, &pPropValMsgClass )))
-		throw MAPIContactException(E_FAIL, L"Init(): HrGetOneProp Failed.", __LINE__,
+		throw MAPIContactException(hr, L"Init(): HrGetOneProp Failed.", __LINE__,
                 __FILE__);
     if( pPropValMsgClass->ulPropTag == PR_MESSAGE_CLASS_W && 
         _tcsicmp( pPropValMsgClass->Value.LPSZ, L"ipm.distlist" ) == 0 ) 
@@ -166,7 +166,7 @@ HRESULT MAPIContact::Init()
 	//get the real prop tag ID's
 	LPSPropTagArray pContactTags = NULL;
 	if(FAILED(hr = m_pMessage->GetIDsFromNames( N_NUM_NAMES, ppNames, MAPI_CREATE, &pContactTags )))
-		throw MAPIContactException(E_FAIL, L"Init(): GetIDsFromNames Failed.", __LINE__,
+		throw MAPIContactException(hr, L"Init(): GetIDsFromNames Failed.", __LINE__,
                 __FILE__);
 	
 	//give the prop tag ID's a type
@@ -267,7 +267,7 @@ HRESULT MAPIContact::Init()
 
 	ULONG cVals = 0;
 	if(FAILED(hr = m_pMessage->GetProps( (LPSPropTagArray)&contactProps, fMapiUnicode, &cVals, &m_pPropVals )))
-		throw MAPIContactException(E_FAIL, L"Init(): GetProps Failed.", __LINE__,
+		throw MAPIContactException(hr, L"Init(): GetProps Failed.", __LINE__,
                 __FILE__);
 
 	//see if there is a file-as id

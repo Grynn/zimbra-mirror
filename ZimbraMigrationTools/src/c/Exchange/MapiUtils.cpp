@@ -475,14 +475,17 @@ HRESULT Zimbra::MAPI::Util::FreeAllSpecialFolders( IN SBinaryArray* lpSFIds )
 	return hr;
 }
 
-ExchangeSpecialFolderId Zimbra::MAPI::Util::GetExchangeSpecialFolderId(IN LPMAPISESSION lpSession, 
+ExchangeSpecialFolderId Zimbra::MAPI::Util::GetExchangeSpecialFolderId(IN LPMDB userStore,
 	IN ULONG cbEntryId, IN LPENTRYID pFolderEntryId, SBinaryArray* pEntryIds)
 {
 	SBinary* pCurr = pEntryIds->lpbin;
 	for( ULONG i = 0; i < pEntryIds->cValues; i++, pCurr++ )
 	{
 		ULONG bResult = 0;
-		lpSession->CompareEntryIDs( cbEntryId, pFolderEntryId, pCurr->cb, (LPENTRYID)pCurr->lpb, 0, &bResult );
+		HRESULT hr=userStore->CompareEntryIDs( cbEntryId, pFolderEntryId, pCurr->cb, (LPENTRYID)pCurr->lpb, 0, &bResult );
+		if(hr!=S_OK)
+			throw MapiUtilsException(hr, L"Util::GetExchangeSpecialFolderId(): CompareEntryIDs Failed.",
+			__LINE__, __FILE__);
 		if( bResult )
 			return (ExchangeSpecialFolderId)i;
 	}

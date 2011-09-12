@@ -108,8 +108,8 @@ ExchangeSpecialFolderId MAPIFolder::GetExchangeFolderId()
 	if(m_store && m_session)
 	{
 		SBinaryArray specialFolderIds= m_store->GetSpecialFolderIds();
-		return Zimbra::MAPI::Util::GetExchangeSpecialFolderId( 
-			m_session->GetMAPISessionObject(), m_EntryID.cb, (LPENTRYID)(m_EntryID.lpb), &specialFolderIds);
+		return Zimbra::MAPI::Util::GetExchangeSpecialFolderId( m_store->GetInternalMAPIStore(),
+			m_EntryID.cb, (LPENTRYID)(m_EntryID.lpb), &specialFolderIds);
 	}
 	return SPECIAL_FOLDER_ID_NONE;
 }

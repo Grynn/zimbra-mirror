@@ -167,7 +167,7 @@ HRESULT GetMdbSpecialFolders(IN LPMDB lpMdb, IN OUT SBinaryArray* pEntryIds);
 HRESULT GetInboxSpecialFolders(LPMAPIFOLDER pInbox, SBinaryArray* pEntryIds);
 HRESULT GetAllSpecialFolders(IN LPMDB lpMdb, IN OUT SBinaryArray* pEntryIds);
 HRESULT FreeAllSpecialFolders(IN SBinaryArray* lpSFIds);
-ExchangeSpecialFolderId GetExchangeSpecialFolderId(IN LPMAPISESSION lpSession, IN ULONG cbEntryId, IN LPENTRYID pFolderEntryId, SBinaryArray* pEntryIds);
+ExchangeSpecialFolderId GetExchangeSpecialFolderId(LPMDB userStore, IN ULONG cbEntryId, IN LPENTRYID pFolderEntryId, SBinaryArray* pEntryIds);
 HRESULT GetExchangeUsersUsingObjectPicker(vector<ObjectPickerData> &vUserList);
 HRESULT HrMAPIGetSMTPAddress( IN MAPISession& session, IN RECIP_INFO& recipInfo, OUT wstring& strSmtpAddress );
 
