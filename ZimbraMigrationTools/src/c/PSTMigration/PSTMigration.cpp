@@ -193,8 +193,8 @@ void ExchangeMigrationSetupTest()
 	if(lpwstrStatus)
 		delete[]lpwstrStatus;	
 
-	vector<ObjectPickerData> vUserList;
-	lpwstrStatus=ExchangeOps::SelectExchangeUsers(vUserList);
+	vector<PickerData> vUserList;
+	lpwstrStatus=ExchangeOps::SelectExchangeUsers(VARIANT_TRUE, vUserList);
 	if(lpwstrStatus)
 		delete[]lpwstrStatus;	
 }
