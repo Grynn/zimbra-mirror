@@ -89,6 +89,12 @@ sub addTagNamesColumn() {
     Migrate::logSql("Adding TAG_NAMES column to $group.MAIL_ITEM and $group.MAIL_ITEM_DUMPSTER...");
     my $sql = <<_EOF_;
 ALTER TABLE $group.mail_item ADD COLUMN tag_names TEXT AFTER tags;
+_EOF_
+    push(@sql,$sql);
+  }
+  foreach my $group (@groups) {
+    Migrate::logSql("Adding TAG_NAMES column to $group.MAIL_ITEM and $group.MAIL_ITEM_DUMPSTER...");
+    my $sql = <<_EOF_;
 ALTER TABLE $group.mail_item_dumpster ADD COLUMN tag_names TEXT AFTER tags;
 _EOF_
     push(@sql,$sql);
@@ -99,13 +105,43 @@ _EOF_
 sub dropTagIndexes() {
   my @sql = ();
   foreach my $group (@groups) {
-    Migrate::logSql("Dropping tag/flag/unread indexes from $group.MAIL_ITEM and $group.MAIL_ITEM_DUMPSTER...");
+    Migrate::logSql("Dropping i_unread indexes from $group.MAIL_ITEM...");
     my $sql = <<_EOF_;
 ALTER TABLE $group.mail_item DROP INDEX i_unread;
+_EOF_
+    push(@sql,$sql);
+  }
+  foreach my $group (@groups) {
+    Migrate::logSql("Dropping i_tags indexes from $group.MAIL_ITEM...");
+    my $sql = <<_EOF_;
 ALTER TABLE $group.mail_item DROP INDEX i_tags_date;
+_EOF_
+    push(@sql,$sql);
+  }
+  foreach my $group (@groups) {
+    Migrate::logSql("Dropping i_flags indexes from $group.MAIL_ITEM...");
+    my $sql = <<_EOF_;
 ALTER TABLE $group.mail_item DROP INDEX i_flags_date;
+_EOF_
+    push(@sql,$sql);
+  }
+  foreach my $group (@groups) {
+    Migrate::logSql("Dropping i_unread indexes from $group.MAIL_ITEM_DUMPSTER...");
+    my $sql = <<_EOF_;
 ALTER TABLE $group.mail_item_dumpster DROP INDEX i_unread;
+_EOF_
+    push(@sql,$sql);
+  }
+  foreach my $group (@groups) {
+    Migrate::logSql("Dropping i_tags_date indexes from $group.MAIL_ITEM_DUMPSTER...");
+    my $sql = <<_EOF_;
 ALTER TABLE $group.mail_item_dumpster DROP INDEX i_tags_date;
+_EOF_
+    push(@sql,$sql);
+  }
+  foreach my $group (@groups) {
+    Migrate::logSql("Dropping i_flags_date indexes from $group.MAIL_ITEM_DUMPSTER...");
+    my $sql = <<_EOF_;
 ALTER TABLE $group.mail_item_dumpster DROP INDEX i_flags_date;
 _EOF_
     push(@sql,$sql);
