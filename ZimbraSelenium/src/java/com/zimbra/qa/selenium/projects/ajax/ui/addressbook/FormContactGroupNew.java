@@ -117,8 +117,9 @@ public class FormContactGroupNew extends AbsForm {
 		  sType(fieldList[i], "");
 		  
 		}
+		//TODO: remove existing contacts members
+		//zl__GRP__rows
 		
-		zClick(getLocator(Locators.zDeleteAllButton));
 	}
 	
 	public static String getLocator(String locator) {   
