@@ -17,6 +17,9 @@ namespace MVVM.ViewModel
 {
     public class ConfigViewModelS : BaseViewModel
     {
+        internal const int PROFILE_MODE = 1;
+        internal const int EXCHSVR_MODE = 2;
+
         public ConfigViewModelS()
         {
             this.GetConfigSourceHelpCommand = new ActionCommand(this.GetConfigSourceHelp, () => true);
@@ -26,6 +29,7 @@ namespace MVVM.ViewModel
             Isprofile = false;
             IsmailServer = false;
             CSEnableNext = false;
+            iMailSvrInitialized = -1;
         }
 
         public ICommand GetConfigSourceHelpCommand
@@ -150,28 +154,49 @@ namespace MVVM.ViewModel
 
         private void Next()
         {
-            string ret;
+            string ret = "";
+
             CSMigrationwrapper mw = ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).mw;
             if (IsProfile)
             {
-                ret = mw.InitializeMailClient(ProfileList[CurrentProfileSelection], null, null);
+                if (iMailSvrInitialized == EXCHSVR_MODE)
+                {
+                    MessageBox.Show("You are already logged in via Exchange Server credentials", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                if (iMailSvrInitialized == -1)
+                {
+                    ret = mw.InitializeMailClient(ProfileList[CurrentProfileSelection], null, null);
+                }
             }
             else
             {
-                if ((MailServerHostName.Length == 0) || (MailServerAdminID.Length == 0) || (MailServerAdminPwd.Length == 0))
+                if (iMailSvrInitialized == PROFILE_MODE)
                 {
-                    MessageBox.Show("Please enter all source mail server credentials", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("You are already logged in via an Outlook Profile", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-                ret = mw.InitializeMailClient(MailServerHostName, MailServerAdminID, MailServerAdminPwd);
+                if (iMailSvrInitialized == -1)
+                {
+                    if ((MailServerHostName.Length == 0) || (MailServerAdminID.Length == 0) || (MailServerAdminPwd.Length == 0))
+                    {
+                        MessageBox.Show("Please enter all source mail server credentials", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+                    ret = mw.InitializeMailClient(MailServerHostName, MailServerAdminID, MailServerAdminPwd);
+                }
             }
             if (ret.Length > 0)
             {
                 MessageBox.Show(ret, "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+            iMailSvrInitialized = (IsProfile) ? PROFILE_MODE : EXCHSVR_MODE;
+            
             lb.SelectedIndex = 1;
         }
+
+        private int iMailSvrInitialized;
 
         private bool IsProfile;
         private bool IsMailServer;
