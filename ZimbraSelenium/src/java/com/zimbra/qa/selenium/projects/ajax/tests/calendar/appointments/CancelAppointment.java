@@ -7,7 +7,9 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.zimbra.common.soap.Element;
+import com.zimbra.cs.mailbox.CalendarItem;
 import com.zimbra.qa.selenium.framework.items.AppointmentItem;
+import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.ui.AbsApplication;
 import com.zimbra.qa.selenium.framework.ui.AbsDialog;
 import com.zimbra.qa.selenium.framework.ui.AbsSeleniumObject;
@@ -25,8 +27,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.calendar.PageCalendar;
 
 
 @SuppressWarnings("unused")
-public class CancelAppointment extends AjaxCommonTest {
-
+public class CancelAppointment extends AjaxCommonTest {	
 	public CancelAppointment() {
 		logger.info("New "+ CancelAppointment.class.getCanonicalName());
 		
@@ -53,30 +54,36 @@ public class CancelAppointment extends AjaxCommonTest {
 		ZDate startUTC = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 12, 0, 0);
 		ZDate endUTC   = new ZDate(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), 14, 0, 0);
 		
-        app.zGetActiveAccount().soapSend(
-                          "<CreateAppointmentRequest xmlns='urn:zimbraMail'>" +
-                               "<m>"+
-                               "<inv method='REQUEST' type='event' fb='B' transp='O' allDay='0' name='"+ apptSubject +"'>"+
-                               "<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
-                               "<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
-                               "<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
-                               "<at role='REQ' ptst='NE' rsvp='1' a='" + apptAttendee1 + "' d='2'/>" + 
-                               "</inv>" +
-                               "<mp content-type='text/plain'>" +
-                               "<content>"+ apptBody +"</content>" +
-                               "</mp>" +
-                               "<su>"+ apptSubject +"</su>" +
-                               "</m>" +
-                         "</CreateAppointmentRequest>");
+		app.zGetActiveAccount().soapSend(
+                "<CreateAppointmentRequest xmlns='urn:zimbraMail'>" +
+                     "<m>"+
+                     "<inv method='REQUEST' type='event' status='CONF' draft='0' class='PUB' fb='B' transp='O' allDay='0' name='"+ apptSubject +"'>"+
+                     "<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
+                     "<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
+                     "<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+                     "<at role='REQ' ptst='NE' rsvp='1' a='" + apptAttendee1 + "' d='2'/>" + 
+                     "</inv>" +
+                     "<e a='"+ apptAttendee1 +"' t='t'/>" +
+                     "<mp content-type='text/plain'>" +
+                     "<content>"+ apptBody +"</content>" +
+                     "</mp>" +
+                     "<su>"+ apptSubject +"</su>" +
+                     "</m>" +
+               "</CreateAppointmentRequest>");
         String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse//mail:appt", "id");
         
         // Right click to appointment and cancel it
         app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         app.zPageCalendar.zListItem(Action.A_RIGHTCLICK, Button.O_CANCEL_MENU, apptSubject);
         DialogConfirm dlgConfirm = new DialogConfirm(DialogConfirm.Confirmation.DELETE, app, ((AppAjaxClient) app).zPageCalendar);
-		dlgConfirm.zClickButton(Button.B_YES);
+		dlgConfirm.zClickButton(Button.B_NO);
 		dlgConfirm.zWaitForClose();
-		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(apptSubject), false, "Verify appointment is canceled");
+		ZAssert.assertEquals(app.zPageCalendar.sIsElementPresent(apptSubject), false, "Verify appointment is deleted from organizer's calendar");
+		
+		// Verify appointment is deleted from Attendees' calendar too
+		SleepUtil.sleepLong(); //importSOAP gives wrong response without sleep
+		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")", startUTC, endUTC);
+		ZAssert.assertNull(canceledAppt, "Verify appointment is deleted from attendee's calendar");
 	}
 	
 	@DataProvider(name = "DataProviderShortcutKeys")
@@ -107,12 +114,13 @@ public class CancelAppointment extends AjaxCommonTest {
 		app.zGetActiveAccount().soapSend(
                 "<CreateAppointmentRequest xmlns='urn:zimbraMail'>" +
                      "<m>"+
-                     "<inv method='REQUEST' type='event' fb='B' transp='O' allDay='0' name='"+ apptSubject +"'>"+
+                     "<inv method='REQUEST' type='event' status='CONF' draft='0' class='PUB' fb='B' transp='O' allDay='0' name='"+ apptSubject +"'>"+
                      "<s d='"+ startUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
                      "<e d='"+ endUTC.toTimeZone(tz).toYYYYMMDDTHHMMSS() +"' tz='"+ tz +"'/>" +
                      "<or a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
                      "<at role='REQ' ptst='NE' rsvp='1' a='" + apptAttendee1 + "' d='2'/>" + 
                      "</inv>" +
+                     "<e a='"+ apptAttendee1 +"' t='t'/>" +
                      "<mp content-type='text/plain'>" +
                      "<content>"+ apptBody +"</content>" +
                      "</mp>" +
@@ -121,17 +129,21 @@ public class CancelAppointment extends AjaxCommonTest {
                "</CreateAppointmentRequest>");
 		String apptId = app.zGetActiveAccount().soapSelectValue("//mail:CreateAppointmentResponse//mail:appt", "id");
         
-        // Cancel an appointment using keyboard Del key
+        // Cancel appointment using keyboard Del and Backspace key
 		app.zPageCalendar.zToolbarPressButton(Button.B_REFRESH);
         app.zPageCalendar.zListItem(Action.A_LEFTCLICK, apptSubject);
         DialogConfirm dlgConfirm = (DialogConfirm)app.zPageCalendar.zKeyboardKeyEvent(keyEvent);
-		dlgConfirm.zClickButton(Button.B_YES);
+		dlgConfirm.zClickButton(Button.B_NO);
 		app.zGetActiveAccount().soapSend(
 				"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ startUTC.addDays(-7).toMillis() +"' calExpandInstEnd='"+ startUTC.addDays(7).toMillis() +"'>"
 			+	"<query>subject:("+ apptSubject +")</query>"
 			+	"</SearchRequest>");
-
 		Element[] nodes = app.zGetActiveAccount().soapSelectNodes("//mail:appt");
-		ZAssert.assertEquals(nodes.length, 0, "Verify appointment is deleted");
-		}
+		ZAssert.assertEquals(nodes.length, 0, "Verify appointment is deleted from organizer's calendar");
+		
+		// Verify appointment is deleted from Attendees' calendar too
+		SleepUtil.sleepLong(); //importSOAP gives wrong response without sleep
+		AppointmentItem canceledAppt = AppointmentItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ apptSubject +")", startUTC, endUTC);
+		ZAssert.assertNull(canceledAppt, "Verify appointment is deleted from attendee's calendar");
+	}
 }

@@ -111,17 +111,17 @@ public class AppointmentItem implements IItem {
 	public static AppointmentItem importFromSOAP(ZimbraAccount account, String query, ZDate start, ZDate end) throws HarnessException {
 		
 		try {
-			
 			account.soapSend(
-					"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ start.toMillis() +"' calExpandInstEnd='"+ end.toMillis() +"'>" +
+					"<SearchRequest xmlns='urn:zimbraMail' types='appointment' calExpandInstStart='"+ start.addDays(-7).toMillis() +"' calExpandInstEnd='"+ start.addDays(7).toMillis() +"'>" +
 						"<query>"+ query +"</query>" +
 					"</SearchRequest>");
 			
 			Element[] results = account.soapSelectNodes("//mail:SearchResponse/mail:appt");
 			if (results.length != 1)
-				throw new HarnessException("Query should return 1 result, not "+ results.length);
-	
-			String id = account.soapSelectValue("//mail:SearchResponse/mail:appt", "id");
+				//throw new HarnessException("Query should return 1 result, not "+ results.length);
+				return null;
+			
+			String id = account.soapSelectValue("//mail:appt", "id");
 			
 			account.soapSend(
 					"<GetAppointmentRequest xmlns='urn:zimbraMail' id='"+ id +"' includeContent='1'>" +
