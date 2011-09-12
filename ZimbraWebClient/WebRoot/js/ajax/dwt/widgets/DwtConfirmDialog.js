@@ -23,11 +23,11 @@
  * 
  * @extends		DwtDialog
  */
-DwtConfirmDialog = function(parent, className) {
+DwtConfirmDialog = function(parent, className, id) {
 	if (arguments.length == 0) return;
 	
 	var buttons = [ DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON ];
-	DwtDialog.call(this, {parent:parent, className:className || "DwtConfirmDialog", title:AjxMsg.confirmTitle, standardButtons:buttons});
+	DwtDialog.call(this, {parent:parent, className:className || "DwtConfirmDialog", title:AjxMsg.confirmTitle, standardButtons:buttons, id:id});
 	
 	this._questionDiv = document.createElement("DIV");
 	this._questionDiv.className = "DwtConfirmDialogQuestion";
