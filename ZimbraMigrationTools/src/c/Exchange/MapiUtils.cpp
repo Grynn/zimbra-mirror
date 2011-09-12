@@ -482,10 +482,7 @@ ExchangeSpecialFolderId Zimbra::MAPI::Util::GetExchangeSpecialFolderId(IN LPMDB 
 	for( ULONG i = 0; i < pEntryIds->cValues; i++, pCurr++ )
 	{
 		ULONG bResult = 0;
-		HRESULT hr=userStore->CompareEntryIDs( cbEntryId, pFolderEntryId, pCurr->cb, (LPENTRYID)pCurr->lpb, 0, &bResult );
-		if(hr!=S_OK)
-			throw MapiUtilsException(hr, L"Util::GetExchangeSpecialFolderId(): CompareEntryIDs Failed.",
-			__LINE__, __FILE__);
+		userStore->CompareEntryIDs( cbEntryId, pFolderEntryId, pCurr->cb, (LPENTRYID)pCurr->lpb, 0, &bResult );
 		if( bResult )
 			return (ExchangeSpecialFolderId)i;
 	}
