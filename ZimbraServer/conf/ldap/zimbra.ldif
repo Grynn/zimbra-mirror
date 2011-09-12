@@ -80,6 +80,19 @@ zimbraId: 12A0779A-88B6-11DC-AA4B-97F9DEB0B34E
 description: The zimbra amavis account
 userPassword: {SSHA}+3rEY5SCrc3KlzJxLQmm735pnRTPgnT2
 
+# place holder for amavis account
+dn: uid=zmbes-searcher,cn=appaccts,cn=zimbra
+uid: zmbes-searcher
+objectclass: zimbraAccount
+objectclass: organizationalPerson
+cn: zmbes-searcher
+sn: zmbes-searcher
+zimbraAccountStatus: active
+zimbraIsSystemResource: TRUE
+zimbraId: 30C08DC0-DB30-11E0-A9E3-832DA18C185A
+description: The zimbra BES searcher account
+userPassword: {SSHA}HdIhXsO3HVQI3NB0aU/ZfJ0ZjTnP/2Ld
+
 # place holder for global group tree
 dn: cn=groups,cn=zimbra
 objectClass: organizationalRole

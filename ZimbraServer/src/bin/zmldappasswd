@@ -58,7 +58,7 @@ if ($options{h})  {
    exit 1;
 }
 
-if ( $options{r} + $options{p} + $options{l} + $options{n} + $options{a} > 1) {
+if ( $options{r} + $options{p} + $options{l} + $options{n} + $options{a} + $options{b} > 1) {
     usage();
     exit 1;
 }
@@ -312,6 +312,48 @@ if ( $options{r}) {
         system("/bin/rm -f $infile.bak");
       }
     }
+} elsif ( $options{b} ) {
+    setLocalConfig("ldap_bes_searcher_password", "$password");
+    my $mesg = $ldap->bind("cn=config", password=>"$cur_rootdn_passwd");
+    $mesg = $ldap->modify('uid=zmbes-searcher,cn=appaccts,cn=zimbra',
+                           replace  => [ userPassword => $password ] );
+    my $infile = "$zimbra_home/conf/zimbra.ldif";
+    my $outfile = "$zimbra_tmp_directory/zimbra.ldif.$$";
+    my $ldifin = Net::LDAP::LDIF->new( "$infile", "r", onerror => 'undef' );
+    my $ldifout = Net::LDAP::LDIF->new("$outfile", "w", onerror => 'undef' );
+    my $entry;
+    while( not $ldifin->eof ( ) ) {
+      $entry = $ldifin->read_entry ( );
+      if ( $ldifin->error ( ) ) {
+        print "Error msg: ", $ldifin->error ( ), "\n";
+        print "Error lines:\n", $ldifin->error_lines ( ), "\n";
+      } else {
+          if ($entry->dn() eq "uid=zmbes-searcher,cn=appaccts,cn=zimbra") {
+            $entry->replace (
+              userPassword => "$ssha_password",
+            );
+          }
+        $ldifout->write($entry);
+      }
+    }
+    $ldifin->done ( ); 
+    $ldifout->done ( );
+    if ( -s $outfile ) {
+      my $rc=0xffff & system("/bin/mv -f $infile $infile.bak");
+      if ($rc != 0) {
+        print "Warning: Failed to backup $infile\n";
+      }
+      $rc=0xffff & system("/bin/mv -f $outfile $infile");
+      if ($rc != 0) {
+        print "Failed to move $outfile to $infile\nRestoring old configuration\n";
+        $rc=0xffff & system("/bin/mv -f $infile.bak $infile");
+        if ($rc != 0) {
+          print "Failed to restore backup\n";
+        }
+      } else {
+        system("/bin/rm -f $infile.bak");
+      }
+    }
 } else {
     my $zimbra_ldap_userdn = getLocalConfig("zimbra_ldap_userdn");
     setLocalConfig("zimbra_ldap_password", "$password");
@@ -367,6 +409,7 @@ sub usage() {
   print "Usage: $0 [-h] [-r] [-p] [[-c]-l] newpassword\n";
   print "\t-h: display this help message\n";
   print "\t-a: change ldap_amavis_password\n";
+  print "\t-b: change ldap_bes_searcher_password\n";
   print "\t-l: change ldap_replication_password\n";
   print "\t-c: Update ldap_replication_password on replica. Requires -l\n";
   print "\t-n: change ldap_nginx_password\n";
