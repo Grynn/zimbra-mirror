@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;extension base="{urn:zimbraAdmin}adminObjectInfo">
  *       &lt;all>
  *       &lt;/all>
+ *       &lt;attribute name="dynamic" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="via" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -32,8 +33,34 @@ public class testDlInfo
     extends testAdminObjectInfo
 {
 
+    @XmlAttribute(name = "dynamic")
+    protected Boolean dynamic;
     @XmlAttribute(name = "via", required = true)
     protected String via;
+
+    /**
+     * Gets the value of the dynamic property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isDynamic() {
+        return dynamic;
+    }
+
+    /**
+     * Sets the value of the dynamic property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setDynamic(Boolean value) {
+        this.dynamic = value;
+    }
 
     /**
      * Gets the value of the via property.

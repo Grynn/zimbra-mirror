@@ -28,8 +28,8 @@ import zimbra.generated.adminclient.zm.testGalSearchType;
  *         &lt;element name="cursor" type="{urn:zimbra}cursorInfo" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="domain" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="limit" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="type" type="{urn:zimbra}galSearchType" />
  *       &lt;attribute name="galAcctId" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="includeTagDeleted" type="{http://www.w3.org/2001/XMLSchema}boolean" />
@@ -73,10 +73,10 @@ public class testAutoCompleteGalRequest {
     protected testCursorInfo cursor;
     @XmlAttribute(name = "domain", required = true)
     protected String domain;
-    @XmlAttribute(name = "name", required = true)
-    protected String name;
     @XmlAttribute(name = "limit")
     protected Integer limit;
+    @XmlAttribute(name = "name", required = true)
+    protected String name;
     @XmlAttribute(name = "type")
     protected testGalSearchType type;
     @XmlAttribute(name = "galAcctId")
@@ -246,30 +246,6 @@ public class testAutoCompleteGalRequest {
     }
 
     /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    /**
      * Gets the value of the limit property.
      * 
      * @return
@@ -291,6 +267,30 @@ public class testAutoCompleteGalRequest {
      */
     public void setLimit(Integer value) {
         this.limit = value;
+    }
+
+    /**
+     * Gets the value of the name property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the value of the name property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setName(String value) {
+        this.name = value;
     }
 
     /**

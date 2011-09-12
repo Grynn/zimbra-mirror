@@ -56,17 +56,17 @@ public class testSyncResponse {
 
     protected testSyncDeletedInfo deleted;
     @XmlElements({
-        @XmlElement(name = "chat", type = testChatSummary.class),
-        @XmlElement(name = "cn", type = testContactInfo.class),
-        @XmlElement(name = "w", type = testCommonDocumentInfo.class),
-        @XmlElement(name = "task", type = testTaskItemInfo.class),
         @XmlElement(name = "m", type = testMessageSummary.class),
+        @XmlElement(name = "w", type = testCommonDocumentInfo.class),
+        @XmlElement(name = "cn", type = testContactInfo.class),
+        @XmlElement(name = "tag", type = testTagInfo.class),
         @XmlElement(name = "doc", type = testDocumentInfo.class),
         @XmlElement(name = "folder", type = testFolder.class),
-        @XmlElement(name = "note", type = testNoteInfo.class),
         @XmlElement(name = "appt", type = testCalendarItemInfo.class),
+        @XmlElement(name = "chat", type = testChatSummary.class),
         @XmlElement(name = "c", type = testConversationSummary.class),
-        @XmlElement(name = "tag", type = testTagInfo.class)
+        @XmlElement(name = "task", type = testTaskItemInfo.class),
+        @XmlElement(name = "note", type = testNoteInfo.class)
     })
     protected List<Object> folderOrTagOrNote;
     @XmlAttribute(name = "md", required = true)
@@ -120,17 +120,17 @@ public class testSyncResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testChatSummary }
-     * {@link testContactInfo }
-     * {@link testCommonDocumentInfo }
-     * {@link testTaskItemInfo }
      * {@link testMessageSummary }
+     * {@link testCommonDocumentInfo }
+     * {@link testContactInfo }
+     * {@link testTagInfo }
      * {@link testDocumentInfo }
      * {@link testFolder }
-     * {@link testNoteInfo }
      * {@link testCalendarItemInfo }
+     * {@link testChatSummary }
      * {@link testConversationSummary }
-     * {@link testTagInfo }
+     * {@link testTaskItemInfo }
+     * {@link testNoteInfo }
      * 
      * 
      */

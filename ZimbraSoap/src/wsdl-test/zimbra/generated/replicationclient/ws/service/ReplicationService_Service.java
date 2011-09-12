@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "ReplicationService", targetNamespace = "urn:zimbraRepl", wsdlLocation = "file:/p4/gelliot_coco/ZimbraSoap/build/classes/com/zimbra/soap/ReplicationService.wsdl")
+@WebServiceClient(name = "ReplicationService", targetNamespace = "http://www.zimbra.com/wsdl/ReplicationService.wsdl", wsdlLocation = "file:/p4/coco/main/ZimbraSoap/build/classes/com/zimbra/soap/ReplicationService.wsdl")
 public class ReplicationService_Service
     extends Service
 {
@@ -30,9 +30,9 @@ public class ReplicationService_Service
         try {
             URL baseUrl;
             baseUrl = zimbra.generated.replicationclient.ws.service.ReplicationService_Service.class.getResource(".");
-            url = new URL(baseUrl, "file:/p4/gelliot_coco/ZimbraSoap/build/classes/com/zimbra/soap/ReplicationService.wsdl");
+            url = new URL(baseUrl, "file:/p4/coco/main/ZimbraSoap/build/classes/com/zimbra/soap/ReplicationService.wsdl");
         } catch (MalformedURLException e) {
-            logger.warn("Failed to create URL for the wsdl Location: 'file:/p4/gelliot_coco/ZimbraSoap/build/classes/com/zimbra/soap/ReplicationService.wsdl', retrying as a local file");
+            logger.warn("Failed to create URL for the wsdl Location: 'file:/p4/coco/main/ZimbraSoap/build/classes/com/zimbra/soap/ReplicationService.wsdl', retrying as a local file");
             logger.warn(e.getMessage());
         }
         REPLICATIONSERVICE_WSDL_LOCATION = url;
@@ -43,7 +43,7 @@ public class ReplicationService_Service
     }
 
     public ReplicationService_Service() {
-        super(REPLICATIONSERVICE_WSDL_LOCATION, new QName("urn:zimbraRepl", "ReplicationService"));
+        super(REPLICATIONSERVICE_WSDL_LOCATION, new QName("http://www.zimbra.com/wsdl/ReplicationService.wsdl", "ReplicationService"));
     }
 
     /**
@@ -53,7 +53,7 @@ public class ReplicationService_Service
      */
     @WebEndpoint(name = "ReplicationServicePort")
     public ReplicationService getReplicationServicePort() {
-        return super.getPort(new QName("urn:zimbraRepl", "ReplicationServicePort"), ReplicationService.class);
+        return super.getPort(new QName("http://www.zimbra.com/wsdl/ReplicationService.wsdl", "ReplicationServicePort"), ReplicationService.class);
     }
 
     /**
@@ -65,7 +65,7 @@ public class ReplicationService_Service
      */
     @WebEndpoint(name = "ReplicationServicePort")
     public ReplicationService getReplicationServicePort(WebServiceFeature... features) {
-        return super.getPort(new QName("urn:zimbraRepl", "ReplicationServicePort"), ReplicationService.class, features);
+        return super.getPort(new QName("http://www.zimbra.com/wsdl/ReplicationService.wsdl", "ReplicationServicePort"), ReplicationService.class, features);
     }
 
 }

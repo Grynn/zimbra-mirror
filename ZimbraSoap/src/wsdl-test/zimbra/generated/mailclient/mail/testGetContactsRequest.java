@@ -31,6 +31,8 @@ import zimbra.generated.mailclient.zm.testId;
  *       &lt;attribute name="sync" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="l" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="sortBy" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="derefGroupMember" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="returnHiddenAttrs" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -55,6 +57,10 @@ public class testGetContactsRequest {
     protected String l;
     @XmlAttribute(name = "sortBy")
     protected String sortBy;
+    @XmlAttribute(name = "derefGroupMember")
+    protected Boolean derefGroupMember;
+    @XmlAttribute(name = "returnHiddenAttrs")
+    protected Boolean returnHiddenAttrs;
 
     /**
      * Gets the value of the aOrCn property.
@@ -156,6 +162,54 @@ public class testGetContactsRequest {
      */
     public void setSortBy(String value) {
         this.sortBy = value;
+    }
+
+    /**
+     * Gets the value of the derefGroupMember property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isDerefGroupMember() {
+        return derefGroupMember;
+    }
+
+    /**
+     * Sets the value of the derefGroupMember property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setDerefGroupMember(Boolean value) {
+        this.derefGroupMember = value;
+    }
+
+    /**
+     * Gets the value of the returnHiddenAttrs property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isReturnHiddenAttrs() {
+        return returnHiddenAttrs;
+    }
+
+    /**
+     * Sets the value of the returnHiddenAttrs property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setReturnHiddenAttrs(Boolean value) {
+        this.returnHiddenAttrs = value;
     }
 
 }

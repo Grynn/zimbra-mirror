@@ -9,6 +9,8 @@ import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import zimbra.generated.accountclient.account.testAuthRequest;
 import zimbra.generated.accountclient.account.testAuthResponse;
+import zimbra.generated.accountclient.account.testAutoCompleteGalRequest;
+import zimbra.generated.accountclient.account.testAutoCompleteGalResponse;
 import zimbra.generated.accountclient.account.testChangePasswordRequest;
 import zimbra.generated.accountclient.account.testChangePasswordResponse;
 import zimbra.generated.accountclient.account.testCheckLicenseRequest;
@@ -61,6 +63,8 @@ import zimbra.generated.accountclient.account.testModifySignatureRequest;
 import zimbra.generated.accountclient.account.testModifySignatureResponse;
 import zimbra.generated.accountclient.account.testModifyWhiteBlackListRequest;
 import zimbra.generated.accountclient.account.testModifyWhiteBlackListResponse;
+import zimbra.generated.accountclient.account.testModifyZimletPrefsRequest;
+import zimbra.generated.accountclient.account.testModifyZimletPrefsResponse;
 import zimbra.generated.accountclient.account.testUpdateProfileRequest;
 import zimbra.generated.accountclient.account.testUpdateProfileResponse;
 
@@ -71,7 +75,7 @@ import zimbra.generated.accountclient.account.testUpdateProfileResponse;
  * Generated source version: 2.1
  * 
  */
-@WebService(name = "AccountService", targetNamespace = "urn:zimbraAccount")
+@WebService(name = "AccountService", targetNamespace = "http://www.zimbra.com/wsdl/AccountService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
     zimbra.generated.accountclient.zm.ObjectFactory.class,
@@ -91,6 +95,18 @@ public interface AccountService {
     public testAuthResponse authRequest(
         @WebParam(name = "AuthRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
         testAuthRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.accountclient.account.testAutoCompleteGalResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/AutoCompleteGal")
+    @WebResult(name = "AutoCompleteGalResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public testAutoCompleteGalResponse autoCompleteGalRequest(
+        @WebParam(name = "AutoCompleteGalRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        testAutoCompleteGalRequest parameters);
 
     /**
      * 
@@ -403,6 +419,18 @@ public interface AccountService {
     public testModifyWhiteBlackListResponse modifyWhiteBlackListRequest(
         @WebParam(name = "ModifyWhiteBlackListRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
         testModifyWhiteBlackListRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.accountclient.account.testModifyZimletPrefsResponse
+     */
+    @WebMethod(action = "urn:zimbraAccount/ModifyZimletPrefs")
+    @WebResult(name = "ModifyZimletPrefsResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public testModifyZimletPrefsResponse modifyZimletPrefsRequest(
+        @WebParam(name = "ModifyZimletPrefsRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        testModifyZimletPrefsRequest parameters);
 
     /**
      * 

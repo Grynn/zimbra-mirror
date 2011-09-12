@@ -24,10 +24,10 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="f" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="t" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="l" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="s" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
- *       &lt;attribute name="md" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
- *       &lt;attribute name="ms" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
- *       &lt;attribute name="rev" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="s" type="{http://www.w3.org/2001/XMLSchema}long" />
+ *       &lt;attribute name="md" type="{http://www.w3.org/2001/XMLSchema}long" />
+ *       &lt;attribute name="ms" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="rev" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>
  *   &lt;/complexContent>
@@ -57,14 +57,14 @@ public class testCommonCalendaringData
     protected String t;
     @XmlAttribute(name = "l")
     protected String l;
-    @XmlAttribute(name = "s", required = true)
-    protected long s;
-    @XmlAttribute(name = "md", required = true)
-    protected long md;
-    @XmlAttribute(name = "ms", required = true)
-    protected int ms;
-    @XmlAttribute(name = "rev", required = true)
-    protected int rev;
+    @XmlAttribute(name = "s")
+    protected Long s;
+    @XmlAttribute(name = "md")
+    protected Long md;
+    @XmlAttribute(name = "ms")
+    protected Integer ms;
+    @XmlAttribute(name = "rev")
+    protected Integer rev;
     @XmlAttribute(name = "id")
     protected String id;
 
@@ -191,64 +191,96 @@ public class testCommonCalendaringData
     /**
      * Gets the value of the s property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Long }
+     *     
      */
-    public long getS() {
+    public Long getS() {
         return s;
     }
 
     /**
      * Sets the value of the s property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Long }
+     *     
      */
-    public void setS(long value) {
+    public void setS(Long value) {
         this.s = value;
     }
 
     /**
      * Gets the value of the md property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Long }
+     *     
      */
-    public long getMd() {
+    public Long getMd() {
         return md;
     }
 
     /**
      * Sets the value of the md property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Long }
+     *     
      */
-    public void setMd(long value) {
+    public void setMd(Long value) {
         this.md = value;
     }
 
     /**
      * Gets the value of the ms property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
-    public int getMs() {
+    public Integer getMs() {
         return ms;
     }
 
     /**
      * Sets the value of the ms property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
-    public void setMs(int value) {
+    public void setMs(Integer value) {
         this.ms = value;
     }
 
     /**
      * Gets the value of the rev property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
      */
-    public int getRev() {
+    public Integer getRev() {
         return rev;
     }
 
     /**
      * Sets the value of the rev property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
      */
-    public void setRev(int value) {
+    public void setRev(Integer value) {
         this.rev = value;
     }
 

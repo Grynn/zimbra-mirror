@@ -16,10 +16,10 @@ import javax.xml.bind.annotation.XmlValue;
  * <pre>
  * &lt;complexType name="serviceStatus">
  *   &lt;simpleContent>
- *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
+ *     &lt;extension base="&lt;urn:zimbra>zeroOrOne">
  *       &lt;attribute name="server" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="service" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="t" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="t" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
  * &lt;/complexType>
@@ -34,35 +34,27 @@ import javax.xml.bind.annotation.XmlValue;
 public class testServiceStatus {
 
     @XmlValue
-    protected String value;
+    protected int value;
     @XmlAttribute(name = "server", required = true)
     protected String server;
     @XmlAttribute(name = "service", required = true)
     protected String service;
     @XmlAttribute(name = "t", required = true)
-    protected String t;
+    protected long t;
 
     /**
      * Gets the value of the value property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
      */
-    public String getValue() {
+    public int getValue() {
         return value;
     }
 
     /**
      * Sets the value of the value property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
      */
-    public void setValue(String value) {
+    public void setValue(int value) {
         this.value = value;
     }
 
@@ -117,24 +109,16 @@ public class testServiceStatus {
     /**
      * Gets the value of the t property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
      */
-    public String getT() {
+    public long getT() {
         return t;
     }
 
     /**
      * Sets the value of the t property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
      */
-    public void setT(String value) {
+    public void setT(long value) {
         this.t = value;
     }
 

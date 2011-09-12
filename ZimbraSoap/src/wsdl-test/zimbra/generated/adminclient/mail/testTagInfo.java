@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="color" type="{http://www.w3.org/2001/XMLSchema}byte" />
  *       &lt;attribute name="rgb" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="u" type="{http://www.w3.org/2001/XMLSchema}int" />
- *       &lt;attribute name="i4u" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="n" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="d" type="{http://www.w3.org/2001/XMLSchema}long" />
  *       &lt;attribute name="rev" type="{http://www.w3.org/2001/XMLSchema}int" />
  *       &lt;attribute name="md" type="{http://www.w3.org/2001/XMLSchema}long" />
@@ -55,8 +55,8 @@ public class testTagInfo {
     protected String rgb;
     @XmlAttribute(name = "u")
     protected Integer u;
-    @XmlAttribute(name = "i4u")
-    protected Integer i4U;
+    @XmlAttribute(name = "n")
+    protected Integer n;
     @XmlAttribute(name = "d")
     protected Long d;
     @XmlAttribute(name = "rev")
@@ -216,27 +216,27 @@ public class testTagInfo {
     }
 
     /**
-     * Gets the value of the i4U property.
+     * Gets the value of the n property.
      * 
      * @return
      *     possible object is
      *     {@link Integer }
      *     
      */
-    public Integer getI4U() {
-        return i4U;
+    public Integer getN() {
+        return n;
     }
 
     /**
-     * Sets the value of the i4U property.
+     * Sets the value of the n property.
      * 
      * @param value
      *     allowed object is
      *     {@link Integer }
      *     
      */
-    public void setI4U(Integer value) {
-        this.i4U = value;
+    public void setN(Integer value) {
+        this.n = value;
     }
 
     /**

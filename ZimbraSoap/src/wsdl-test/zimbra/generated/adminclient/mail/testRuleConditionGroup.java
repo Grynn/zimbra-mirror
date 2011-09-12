@@ -43,8 +43,8 @@ public class testRuleConditionGroup {
 
     @XmlElements({
         @XmlElement(name = "action", type = testRuleAction.class),
-        @XmlElement(name = "c", type = testRuleCondition.class),
-        @XmlElement(name = "g", type = testRuleConditionGroup.class)
+        @XmlElement(name = "g", type = testRuleConditionGroup.class),
+        @XmlElement(name = "c", type = testRuleCondition.class)
     })
     protected List<Object> gOrCOrAction;
     @XmlAttribute(name = "op", required = true)
@@ -69,8 +69,8 @@ public class testRuleConditionGroup {
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link testRuleAction }
-     * {@link testRuleCondition }
      * {@link testRuleConditionGroup }
+     * {@link testRuleCondition }
      * 
      * 
      */

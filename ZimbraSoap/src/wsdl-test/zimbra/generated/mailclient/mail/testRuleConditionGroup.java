@@ -42,9 +42,9 @@ import javax.xml.bind.annotation.XmlType;
 public class testRuleConditionGroup {
 
     @XmlElements({
-        @XmlElement(name = "g", type = testRuleConditionGroup.class),
+        @XmlElement(name = "action", type = testRuleAction.class),
         @XmlElement(name = "c", type = testRuleCondition.class),
-        @XmlElement(name = "action", type = testRuleAction.class)
+        @XmlElement(name = "g", type = testRuleConditionGroup.class)
     })
     protected List<Object> gOrCOrAction;
     @XmlAttribute(name = "op", required = true)
@@ -68,9 +68,9 @@ public class testRuleConditionGroup {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link testRuleConditionGroup }
-     * {@link testRuleCondition }
      * {@link testRuleAction }
+     * {@link testRuleCondition }
+     * {@link testRuleConditionGroup }
      * 
      * 
      */

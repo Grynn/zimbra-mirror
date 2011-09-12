@@ -26,6 +26,7 @@ import zimbra.generated.adminclient.zm.testAccountSelector;
  *       &lt;attribute name="type" use="required" type="{urn:zimbraAdmin}galMode" />
  *       &lt;attribute name="password" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="folder" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="server" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -53,6 +54,8 @@ public class testCreateGalSyncAccountRequest
     protected String password;
     @XmlAttribute(name = "folder")
     protected String folder;
+    @XmlAttribute(name = "server", required = true)
+    protected String server;
 
     /**
      * Gets the value of the account property.
@@ -196,6 +199,30 @@ public class testCreateGalSyncAccountRequest
      */
     public void setFolder(String value) {
         this.folder = value;
+    }
+
+    /**
+     * Gets the value of the server property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getServer() {
+        return server;
+    }
+
+    /**
+     * Sets the value of the server property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setServer(String value) {
+        this.server = value;
     }
 
 }

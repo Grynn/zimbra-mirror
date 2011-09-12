@@ -193,15 +193,15 @@ public class testFilterRule {
     public static class FilterActions {
 
         @XmlElements({
-            @XmlElement(name = "actionFlag", type = testFilterActionFlag.class),
-            @XmlElement(name = "actionFileInto", type = testFilterActionFileInto.class),
-            @XmlElement(name = "actionKeep", type = testFilterActionKeep.class),
-            @XmlElement(name = "actionTag", type = testFilterActionTag.class),
             @XmlElement(name = "actionStop", type = testFilterActionStop.class),
-            @XmlElement(name = "actionNotify", type = testFilterActionNotify.class),
             @XmlElement(name = "actionReply", type = testFilterActionReply.class),
+            @XmlElement(name = "actionFileInto", type = testFilterActionFileInto.class),
             @XmlElement(name = "actionDiscard", type = testFilterActionDiscard.class),
-            @XmlElement(name = "actionRedirect", type = testFilterActionRedirect.class)
+            @XmlElement(name = "actionRedirect", type = testFilterActionRedirect.class),
+            @XmlElement(name = "actionTag", type = testFilterActionTag.class),
+            @XmlElement(name = "actionNotify", type = testFilterActionNotify.class),
+            @XmlElement(name = "actionFlag", type = testFilterActionFlag.class),
+            @XmlElement(name = "actionKeep", type = testFilterActionKeep.class)
         })
         protected List<Object> actionKeepOrActionDiscardOrActionFileInto;
 
@@ -223,15 +223,15 @@ public class testFilterRule {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link testFilterActionFlag }
-         * {@link testFilterActionFileInto }
-         * {@link testFilterActionKeep }
-         * {@link testFilterActionTag }
          * {@link testFilterActionStop }
-         * {@link testFilterActionNotify }
          * {@link testFilterActionReply }
+         * {@link testFilterActionFileInto }
          * {@link testFilterActionDiscard }
          * {@link testFilterActionRedirect }
+         * {@link testFilterActionTag }
+         * {@link testFilterActionNotify }
+         * {@link testFilterActionFlag }
+         * {@link testFilterActionKeep }
          * 
          * 
          */

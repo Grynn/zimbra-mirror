@@ -273,8 +273,8 @@ public class testNestedSearchConversation {
     public static class Info {
 
         @XmlElements({
-            @XmlElement(name = "spell", type = testSpellingSuggestionsQueryInfo.class),
-            @XmlElement(name = "wildcard", type = testWildcardExpansionQueryInfo.class)
+            @XmlElement(name = "wildcard", type = testWildcardExpansionQueryInfo.class),
+            @XmlElement(name = "spell", type = testSpellingSuggestionsQueryInfo.class)
         })
         protected List<Object> spellOrWildcard;
 
@@ -296,8 +296,8 @@ public class testNestedSearchConversation {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link testSpellingSuggestionsQueryInfo }
          * {@link testWildcardExpansionQueryInfo }
+         * {@link testSpellingSuggestionsQueryInfo }
          * 
          * 
          */

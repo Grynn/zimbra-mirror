@@ -33,7 +33,7 @@ import zimbra.generated.replicationclient.replication.testStopFailoverDaemonResp
  * Generated source version: 2.1
  * 
  */
-@WebService(name = "ReplicationService", targetNamespace = "urn:zimbraRepl")
+@WebService(name = "ReplicationService", targetNamespace = "http://www.zimbra.com/wsdl/ReplicationService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
     zimbra.generated.replicationclient.replication.ObjectFactory.class,

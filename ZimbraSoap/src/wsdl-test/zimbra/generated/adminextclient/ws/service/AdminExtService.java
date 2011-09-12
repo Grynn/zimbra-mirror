@@ -25,7 +25,7 @@ import zimbra.generated.adminextclient.adminext.testPurgeBulkIMAPImportTasksResp
  * Generated source version: 2.1
  * 
  */
-@WebService(name = "AdminExtService", targetNamespace = "urn:zimbraAdminExt")
+@WebService(name = "AdminExtService", targetNamespace = "http://www.zimbra.com/wsdl/AdminExtService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
     zimbra.generated.adminextclient.zm.ObjectFactory.class,

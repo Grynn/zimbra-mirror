@@ -49,6 +49,7 @@ import javax.xml.bind.annotation.XmlType;
     testCreateDomainRequest.class,
     testCheckRightRequest.class,
     testModifyCosRequest.class,
+    testAddGalSyncDataSourceRequest.class,
     testModifyLDAPEntryRequest.class,
     testGetDataSourcesRequest.class,
     testCheckGalConfigRequest.class,

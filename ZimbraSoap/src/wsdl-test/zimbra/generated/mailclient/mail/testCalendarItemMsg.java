@@ -23,6 +23,7 @@ import org.w3c.dom.Element;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="content" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="header" type="{urn:zimbraMail}header" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="mp" type="{urn:zimbraMail}mimePartInfo" minOccurs="0"/>
  *         &lt;element name="attach" type="{urn:zimbraMail}attachmentsInfo" minOccurs="0"/>
  *         &lt;element name="inv" type="{urn:zimbraMail}invitationInfo" minOccurs="0"/>
@@ -49,6 +50,7 @@ import org.w3c.dom.Element;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "calendarItemMsg", propOrder = {
     "content",
+    "header",
     "mp",
     "attach",
     "inv",
@@ -64,6 +66,7 @@ import org.w3c.dom.Element;
 public class testCalendarItemMsg {
 
     protected String content;
+    protected List<testHeader> header;
     protected testMimePartInfo mp;
     protected testAttachmentsInfo attach;
     protected testInvitationInfo inv;
@@ -111,6 +114,35 @@ public class testCalendarItemMsg {
      */
     public void setContent(String value) {
         this.content = value;
+    }
+
+    /**
+     * Gets the value of the header property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the header property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getHeader().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link testHeader }
+     * 
+     * 
+     */
+    public List<testHeader> getHeader() {
+        if (header == null) {
+            header = new ArrayList<testHeader>();
+        }
+        return this.header;
     }
 
     /**

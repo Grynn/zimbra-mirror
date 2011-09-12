@@ -27,7 +27,7 @@ import zimbra.generated.syncclient.sync.testSuspendDeviceResponse;
  * Generated source version: 2.1
  * 
  */
-@WebService(name = "SyncService", targetNamespace = "urn:zimbraSync")
+@WebService(name = "SyncService", targetNamespace = "http://www.zimbra.com/wsdl/SyncService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
     zimbra.generated.syncclient.sync.ObjectFactory.class,

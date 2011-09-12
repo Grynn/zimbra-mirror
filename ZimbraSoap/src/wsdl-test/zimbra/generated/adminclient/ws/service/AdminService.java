@@ -21,6 +21,8 @@ import zimbra.generated.adminclient.admin.testAddDistributionListAliasRequest;
 import zimbra.generated.adminclient.admin.testAddDistributionListAliasResponse;
 import zimbra.generated.adminclient.admin.testAddDistributionListMemberRequest;
 import zimbra.generated.adminclient.admin.testAddDistributionListMemberResponse;
+import zimbra.generated.adminclient.admin.testAddGalSyncDataSourceRequest;
+import zimbra.generated.adminclient.admin.testAddGalSyncDataSourceResponse;
 import zimbra.generated.adminclient.admin.testAdminCreateWaitSetRequest;
 import zimbra.generated.adminclient.admin.testAdminCreateWaitSetResponse;
 import zimbra.generated.adminclient.admin.testAdminDestroyWaitSetRequest;
@@ -31,6 +33,8 @@ import zimbra.generated.adminclient.admin.testAuthRequest;
 import zimbra.generated.adminclient.admin.testAuthResponse;
 import zimbra.generated.adminclient.admin.testAutoCompleteGalRequest;
 import zimbra.generated.adminclient.admin.testAutoCompleteGalResponse;
+import zimbra.generated.adminclient.admin.testAutoProvAccountRequest;
+import zimbra.generated.adminclient.admin.testAutoProvAccountResponse;
 import zimbra.generated.adminclient.admin.testBackupAccountQueryRequest;
 import zimbra.generated.adminclient.admin.testBackupAccountQueryResponse;
 import zimbra.generated.adminclient.admin.testBackupQueryRequest;
@@ -65,6 +69,8 @@ import zimbra.generated.adminclient.admin.testCountAccountRequest;
 import zimbra.generated.adminclient.admin.testCountAccountResponse;
 import zimbra.generated.adminclient.admin.testCreateAccountRequest;
 import zimbra.generated.adminclient.admin.testCreateAccountResponse;
+import zimbra.generated.adminclient.admin.testCreateArchiveRequest;
+import zimbra.generated.adminclient.admin.testCreateArchiveResponse;
 import zimbra.generated.adminclient.admin.testCreateCalendarResourceRequest;
 import zimbra.generated.adminclient.admin.testCreateCalendarResourceResponse;
 import zimbra.generated.adminclient.admin.testCreateCosRequest;
@@ -199,6 +205,8 @@ import zimbra.generated.adminclient.admin.testGetApplianceHSMFSRequest;
 import zimbra.generated.adminclient.admin.testGetApplianceHSMFSResponse;
 import zimbra.generated.adminclient.admin.testGetAttributeInfoRequest;
 import zimbra.generated.adminclient.admin.testGetAttributeInfoResponse;
+import zimbra.generated.adminclient.admin.testGetCSRRequest;
+import zimbra.generated.adminclient.admin.testGetCSRResponse;
 import zimbra.generated.adminclient.admin.testGetCalendarResourceRequest;
 import zimbra.generated.adminclient.admin.testGetCalendarResourceResponse;
 import zimbra.generated.adminclient.admin.testGetCertRequest;
@@ -223,6 +231,8 @@ import zimbra.generated.adminclient.admin.testGetDevicesCountSinceLastUsedReques
 import zimbra.generated.adminclient.admin.testGetDevicesCountSinceLastUsedResponse;
 import zimbra.generated.adminclient.admin.testGetDevicesCountUsedTodayRequest;
 import zimbra.generated.adminclient.admin.testGetDevicesCountUsedTodayResponse;
+import zimbra.generated.adminclient.admin.testGetDevicesRequest;
+import zimbra.generated.adminclient.admin.testGetDevicesResponse;
 import zimbra.generated.adminclient.admin.testGetDistributionListMembershipRequest;
 import zimbra.generated.adminclient.admin.testGetDistributionListMembershipResponse;
 import zimbra.generated.adminclient.admin.testGetDistributionListRequest;
@@ -255,6 +265,10 @@ import zimbra.generated.adminclient.admin.testGetMailboxRequest;
 import zimbra.generated.adminclient.admin.testGetMailboxResponse;
 import zimbra.generated.adminclient.admin.testGetMailboxStatsRequest;
 import zimbra.generated.adminclient.admin.testGetMailboxStatsResponse;
+import zimbra.generated.adminclient.admin.testGetMailboxVersionRequest;
+import zimbra.generated.adminclient.admin.testGetMailboxVersionResponse;
+import zimbra.generated.adminclient.admin.testGetMailboxVolumesRequest;
+import zimbra.generated.adminclient.admin.testGetMailboxVolumesResponse;
 import zimbra.generated.adminclient.admin.testGetMemcachedClientConfigRequest;
 import zimbra.generated.adminclient.admin.testGetMemcachedClientConfigResponse;
 import zimbra.generated.adminclient.admin.testGetQuotaUsageRequest;
@@ -339,6 +353,8 @@ import zimbra.generated.adminclient.admin.testModifyZimletRequest;
 import zimbra.generated.adminclient.admin.testModifyZimletResponse;
 import zimbra.generated.adminclient.admin.testMoveBlobsRequest;
 import zimbra.generated.adminclient.admin.testMoveBlobsResponse;
+import zimbra.generated.adminclient.admin.testMoveMailboxRequest;
+import zimbra.generated.adminclient.admin.testMoveMailboxResponse;
 import zimbra.generated.adminclient.admin.testNoOpRequest;
 import zimbra.generated.adminclient.admin.testNoOpResponse;
 import zimbra.generated.adminclient.admin.testPingRequest;
@@ -353,12 +369,18 @@ import zimbra.generated.adminclient.admin.testPurgeMovedMailboxRequest;
 import zimbra.generated.adminclient.admin.testPurgeMovedMailboxResponse;
 import zimbra.generated.adminclient.admin.testPushFreeBusyRequest;
 import zimbra.generated.adminclient.admin.testPushFreeBusyResponse;
+import zimbra.generated.adminclient.admin.testQueryMailboxMoveRequest;
+import zimbra.generated.adminclient.admin.testQueryMailboxMoveResponse;
 import zimbra.generated.adminclient.admin.testQueryWaitSetRequest;
 import zimbra.generated.adminclient.admin.testQueryWaitSetResponse;
 import zimbra.generated.adminclient.admin.testReIndexRequest;
 import zimbra.generated.adminclient.admin.testReIndexResponse;
 import zimbra.generated.adminclient.admin.testRecalculateMailboxCountsRequest;
 import zimbra.generated.adminclient.admin.testRecalculateMailboxCountsResponse;
+import zimbra.generated.adminclient.admin.testRegisterMailboxMoveOutRequest;
+import zimbra.generated.adminclient.admin.testRegisterMailboxMoveOutResponse;
+import zimbra.generated.adminclient.admin.testReloadAccountRequest;
+import zimbra.generated.adminclient.admin.testReloadAccountResponse;
 import zimbra.generated.adminclient.admin.testReloadLocalConfigRequest;
 import zimbra.generated.adminclient.admin.testReloadLocalConfigResponse;
 import zimbra.generated.adminclient.admin.testReloadMemcachedClientConfigRequest;
@@ -405,6 +427,18 @@ import zimbra.generated.adminclient.admin.testSetPasswordRequest;
 import zimbra.generated.adminclient.admin.testSetPasswordResponse;
 import zimbra.generated.adminclient.admin.testUndeployZimletRequest;
 import zimbra.generated.adminclient.admin.testUndeployZimletResponse;
+import zimbra.generated.adminclient.admin.testUnloadMailboxRequest;
+import zimbra.generated.adminclient.admin.testUnloadMailboxResponse;
+import zimbra.generated.adminclient.admin.testUnregisterMailboxMoveOutRequest;
+import zimbra.generated.adminclient.admin.testUnregisterMailboxMoveOutResponse;
+import zimbra.generated.adminclient.admin.testUpdateDeviceStatusRequest;
+import zimbra.generated.adminclient.admin.testUpdateDeviceStatusResponse;
+import zimbra.generated.adminclient.admin.testUploadDomCertRequest;
+import zimbra.generated.adminclient.admin.testUploadDomCertResponse;
+import zimbra.generated.adminclient.admin.testUploadProxyCARequest;
+import zimbra.generated.adminclient.admin.testUploadProxyCAResponse;
+import zimbra.generated.adminclient.admin.testVerifyCertKeyRequest;
+import zimbra.generated.adminclient.admin.testVerifyCertKeyResponse;
 import zimbra.generated.adminclient.admin.testVerifyIndexRequest;
 import zimbra.generated.adminclient.admin.testVerifyIndexResponse;
 import zimbra.generated.adminclient.admin.testVersionCheckRequest;
@@ -417,12 +451,12 @@ import zimbra.generated.adminclient.admin.testVersionCheckResponse;
  * Generated source version: 2.1
  * 
  */
-@WebService(name = "AdminService", targetNamespace = "urn:zimbraAdmin")
+@WebService(name = "AdminService", targetNamespace = "http://www.zimbra.com/wsdl/AdminService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    zimbra.generated.adminclient.mail.ObjectFactory.class,
+    zimbra.generated.adminclient.zm.ObjectFactory.class,
     zimbra.generated.adminclient.admin.ObjectFactory.class,
-    zimbra.generated.adminclient.zm.ObjectFactory.class
+    zimbra.generated.adminclient.mail.ObjectFactory.class
 })
 public interface AdminService {
 
@@ -515,6 +549,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns zimbra.generated.adminclient.admin.testAddGalSyncDataSourceResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/AddGalSyncDataSource")
+    @WebResult(name = "AddGalSyncDataSourceResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testAddGalSyncDataSourceResponse addGalSyncDataSourceRequest(
+        @WebParam(name = "AddGalSyncDataSourceRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testAddGalSyncDataSourceRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns zimbra.generated.adminclient.admin.testAdminCreateWaitSetResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/AdminCreateWaitSet")
@@ -570,6 +616,18 @@ public interface AdminService {
     public testAutoCompleteGalResponse autoCompleteGalRequest(
         @WebParam(name = "AutoCompleteGalRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testAutoCompleteGalRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.adminclient.admin.testAutoProvAccountResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/AutoProvAccount")
+    @WebResult(name = "AutoProvAccountResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testAutoProvAccountResponse autoProvAccountRequest(
+        @WebParam(name = "AutoProvAccountRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testAutoProvAccountRequest parameters);
 
     /**
      * 
@@ -774,6 +832,18 @@ public interface AdminService {
     public testCreateAccountResponse createAccountRequest(
         @WebParam(name = "CreateAccountRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testCreateAccountRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.adminclient.admin.testCreateArchiveResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/CreateArchive")
+    @WebResult(name = "CreateArchiveResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testCreateArchiveResponse createArchiveRequest(
+        @WebParam(name = "CreateArchiveRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testCreateArchiveRequest parameters);
 
     /**
      * 
@@ -1583,6 +1653,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns zimbra.generated.adminclient.admin.testGetCSRResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetCSR")
+    @WebResult(name = "GetCSRResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testGetCSRResponse getCSRRequest(
+        @WebParam(name = "GetCSRRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testGetCSRRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns zimbra.generated.adminclient.admin.testGetCalendarResourceResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/GetCalendarResource")
@@ -1722,6 +1804,18 @@ public interface AdminService {
     public testGetDevicesCountUsedTodayResponse getDevicesCountUsedTodayRequest(
         @WebParam(name = "GetDevicesCountUsedTodayRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testGetDevicesCountUsedTodayRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.adminclient.admin.testGetDevicesResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetDevices")
+    @WebResult(name = "GetDevicesResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testGetDevicesResponse getDevicesRequest(
+        @WebParam(name = "GetDevicesRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testGetDevicesRequest parameters);
 
     /**
      * 
@@ -1914,6 +2008,30 @@ public interface AdminService {
     public testGetMailboxStatsResponse getMailboxStatsRequest(
         @WebParam(name = "GetMailboxStatsRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testGetMailboxStatsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.adminclient.admin.testGetMailboxVersionResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetMailboxVersion")
+    @WebResult(name = "GetMailboxVersionResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testGetMailboxVersionResponse getMailboxVersionRequest(
+        @WebParam(name = "GetMailboxVersionRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testGetMailboxVersionRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.adminclient.admin.testGetMailboxVolumesResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetMailboxVolumes")
+    @WebResult(name = "GetMailboxVolumesResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testGetMailboxVolumesResponse getMailboxVolumesRequest(
+        @WebParam(name = "GetMailboxVolumesRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testGetMailboxVolumesRequest parameters);
 
     /**
      * 
@@ -2423,6 +2541,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns zimbra.generated.adminclient.admin.testMoveMailboxResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/MoveMailbox")
+    @WebResult(name = "MoveMailboxResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testMoveMailboxResponse moveMailboxRequest(
+        @WebParam(name = "MoveMailboxRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testMoveMailboxRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns zimbra.generated.adminclient.admin.testNoOpResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/NoOp")
@@ -2507,6 +2637,18 @@ public interface AdminService {
      * 
      * @param parameters
      * @return
+     *     returns zimbra.generated.adminclient.admin.testQueryMailboxMoveResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/QueryMailboxMove")
+    @WebResult(name = "QueryMailboxMoveResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testQueryMailboxMoveResponse queryMailboxMoveRequest(
+        @WebParam(name = "QueryMailboxMoveRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testQueryMailboxMoveRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns zimbra.generated.adminclient.admin.testQueryWaitSetResponse
      */
     @WebMethod(action = "urn:zimbraAdmin/QueryWaitSet")
@@ -2538,6 +2680,30 @@ public interface AdminService {
     public testRecalculateMailboxCountsResponse recalculateMailboxCountsRequest(
         @WebParam(name = "RecalculateMailboxCountsRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testRecalculateMailboxCountsRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.adminclient.admin.testRegisterMailboxMoveOutResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/RegisterMailboxMoveOut")
+    @WebResult(name = "RegisterMailboxMoveOutResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testRegisterMailboxMoveOutResponse registerMailboxMoveOutRequest(
+        @WebParam(name = "RegisterMailboxMoveOutRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testRegisterMailboxMoveOutRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.adminclient.admin.testReloadAccountResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/ReloadAccount")
+    @WebResult(name = "ReloadAccountResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testReloadAccountResponse reloadAccountRequest(
+        @WebParam(name = "ReloadAccountRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testReloadAccountRequest parameters);
 
     /**
      * 
@@ -2814,6 +2980,78 @@ public interface AdminService {
     public testUndeployZimletResponse undeployZimletRequest(
         @WebParam(name = "UndeployZimletRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         testUndeployZimletRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.adminclient.admin.testUnloadMailboxResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/UnloadMailbox")
+    @WebResult(name = "UnloadMailboxResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testUnloadMailboxResponse unloadMailboxRequest(
+        @WebParam(name = "UnloadMailboxRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testUnloadMailboxRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.adminclient.admin.testUnregisterMailboxMoveOutResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/UnregisterMailboxMoveOut")
+    @WebResult(name = "UnregisterMailboxMoveOutResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testUnregisterMailboxMoveOutResponse unregisterMailboxMoveOutRequest(
+        @WebParam(name = "UnregisterMailboxMoveOutRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testUnregisterMailboxMoveOutRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.adminclient.admin.testUpdateDeviceStatusResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/UpdateDeviceStatus")
+    @WebResult(name = "UpdateDeviceStatusResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testUpdateDeviceStatusResponse updateDeviceStatusRequest(
+        @WebParam(name = "UpdateDeviceStatusRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testUpdateDeviceStatusRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.adminclient.admin.testUploadDomCertResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/UploadDomCert")
+    @WebResult(name = "UploadDomCertResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testUploadDomCertResponse uploadDomCertRequest(
+        @WebParam(name = "UploadDomCertRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testUploadDomCertRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.adminclient.admin.testUploadProxyCAResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/UploadProxyCA")
+    @WebResult(name = "UploadProxyCAResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testUploadProxyCAResponse uploadProxyCARequest(
+        @WebParam(name = "UploadProxyCARequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testUploadProxyCARequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.adminclient.admin.testVerifyCertKeyResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/VerifyCertKey")
+    @WebResult(name = "VerifyCertKeyResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public testVerifyCertKeyResponse verifyCertKeyRequest(
+        @WebParam(name = "VerifyCertKeyRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        testVerifyCertKeyRequest parameters);
 
     /**
      * 

@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="inst" type="{urn:zimbraMail}instanceDataInfo" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="alarmData" type="{urn:zimbraMail}alarmDataInfo" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="d" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
+ *       &lt;attribute name="d" type="{http://www.w3.org/2001/XMLSchema}long" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -58,8 +58,8 @@ public class testCalendaringData
     protected String fr;
     protected List<testInstanceDataInfo> inst;
     protected testAlarmDataInfo alarmData;
-    @XmlAttribute(name = "d", required = true)
-    protected long d;
+    @XmlAttribute(name = "d")
+    protected Long d;
 
     /**
      * Gets the value of the or property.
@@ -218,16 +218,24 @@ public class testCalendaringData
     /**
      * Gets the value of the d property.
      * 
+     * @return
+     *     possible object is
+     *     {@link Long }
+     *     
      */
-    public long getD() {
+    public Long getD() {
         return d;
     }
 
     /**
      * Sets the value of the d property.
      * 
+     * @param value
+     *     allowed object is
+     *     {@link Long }
+     *     
      */
-    public void setD(long value) {
+    public void setD(Long value) {
         this.d = value;
     }
 

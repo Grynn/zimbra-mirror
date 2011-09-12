@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "AdminService", targetNamespace = "urn:zimbraAdmin", wsdlLocation = "file:/p4/gelliot_coco/ZimbraSoap/build/classes/com/zimbra/soap/AdminService.wsdl")
+@WebServiceClient(name = "AdminService", targetNamespace = "http://www.zimbra.com/wsdl/AdminService.wsdl", wsdlLocation = "file:/p4/coco/main/ZimbraSoap/build/classes/com/zimbra/soap/AdminService.wsdl")
 public class AdminService_Service
     extends Service
 {
@@ -30,9 +30,9 @@ public class AdminService_Service
         try {
             URL baseUrl;
             baseUrl = zimbra.generated.adminclient.ws.service.AdminService_Service.class.getResource(".");
-            url = new URL(baseUrl, "file:/p4/gelliot_coco/ZimbraSoap/build/classes/com/zimbra/soap/AdminService.wsdl");
+            url = new URL(baseUrl, "file:/p4/coco/main/ZimbraSoap/build/classes/com/zimbra/soap/AdminService.wsdl");
         } catch (MalformedURLException e) {
-            logger.warn("Failed to create URL for the wsdl Location: 'file:/p4/gelliot_coco/ZimbraSoap/build/classes/com/zimbra/soap/AdminService.wsdl', retrying as a local file");
+            logger.warn("Failed to create URL for the wsdl Location: 'file:/p4/coco/main/ZimbraSoap/build/classes/com/zimbra/soap/AdminService.wsdl', retrying as a local file");
             logger.warn(e.getMessage());
         }
         ADMINSERVICE_WSDL_LOCATION = url;
@@ -43,7 +43,7 @@ public class AdminService_Service
     }
 
     public AdminService_Service() {
-        super(ADMINSERVICE_WSDL_LOCATION, new QName("urn:zimbraAdmin", "AdminService"));
+        super(ADMINSERVICE_WSDL_LOCATION, new QName("http://www.zimbra.com/wsdl/AdminService.wsdl", "AdminService"));
     }
 
     /**
@@ -53,7 +53,7 @@ public class AdminService_Service
      */
     @WebEndpoint(name = "AdminServicePort")
     public AdminService getAdminServicePort() {
-        return super.getPort(new QName("urn:zimbraAdmin", "AdminServicePort"), AdminService.class);
+        return super.getPort(new QName("http://www.zimbra.com/wsdl/AdminService.wsdl", "AdminServicePort"), AdminService.class);
     }
 
     /**
@@ -65,7 +65,7 @@ public class AdminService_Service
      */
     @WebEndpoint(name = "AdminServicePort")
     public AdminService getAdminServicePort(WebServiceFeature... features) {
-        return super.getPort(new QName("urn:zimbraAdmin", "AdminServicePort"), AdminService.class, features);
+        return super.getPort(new QName("http://www.zimbra.com/wsdl/AdminService.wsdl", "AdminServicePort"), AdminService.class, features);
     }
 
 }

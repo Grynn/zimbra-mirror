@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "SyncService", targetNamespace = "urn:zimbraSync", wsdlLocation = "file:/p4/gelliot_coco/ZimbraSoap/build/classes/com/zimbra/soap/SyncService.wsdl")
+@WebServiceClient(name = "SyncService", targetNamespace = "http://www.zimbra.com/wsdl/SyncService.wsdl", wsdlLocation = "file:/p4/coco/main/ZimbraSoap/build/classes/com/zimbra/soap/SyncService.wsdl")
 public class SyncService_Service
     extends Service
 {
@@ -30,9 +30,9 @@ public class SyncService_Service
         try {
             URL baseUrl;
             baseUrl = zimbra.generated.syncclient.ws.service.SyncService_Service.class.getResource(".");
-            url = new URL(baseUrl, "file:/p4/gelliot_coco/ZimbraSoap/build/classes/com/zimbra/soap/SyncService.wsdl");
+            url = new URL(baseUrl, "file:/p4/coco/main/ZimbraSoap/build/classes/com/zimbra/soap/SyncService.wsdl");
         } catch (MalformedURLException e) {
-            logger.warn("Failed to create URL for the wsdl Location: 'file:/p4/gelliot_coco/ZimbraSoap/build/classes/com/zimbra/soap/SyncService.wsdl', retrying as a local file");
+            logger.warn("Failed to create URL for the wsdl Location: 'file:/p4/coco/main/ZimbraSoap/build/classes/com/zimbra/soap/SyncService.wsdl', retrying as a local file");
             logger.warn(e.getMessage());
         }
         SYNCSERVICE_WSDL_LOCATION = url;
@@ -43,7 +43,7 @@ public class SyncService_Service
     }
 
     public SyncService_Service() {
-        super(SYNCSERVICE_WSDL_LOCATION, new QName("urn:zimbraSync", "SyncService"));
+        super(SYNCSERVICE_WSDL_LOCATION, new QName("http://www.zimbra.com/wsdl/SyncService.wsdl", "SyncService"));
     }
 
     /**
@@ -53,7 +53,7 @@ public class SyncService_Service
      */
     @WebEndpoint(name = "SyncServicePort")
     public SyncService getSyncServicePort() {
-        return super.getPort(new QName("urn:zimbraSync", "SyncServicePort"), SyncService.class);
+        return super.getPort(new QName("http://www.zimbra.com/wsdl/SyncService.wsdl", "SyncServicePort"), SyncService.class);
     }
 
     /**
@@ -65,7 +65,7 @@ public class SyncService_Service
      */
     @WebEndpoint(name = "SyncServicePort")
     public SyncService getSyncServicePort(WebServiceFeature... features) {
-        return super.getPort(new QName("urn:zimbraSync", "SyncServicePort"), SyncService.class, features);
+        return super.getPort(new QName("http://www.zimbra.com/wsdl/SyncService.wsdl", "SyncServicePort"), SyncService.class, features);
     }
 
 }

@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="a" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="su" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="maxBodySize" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;attribute name="origHeaders" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -44,6 +45,8 @@ public class testFilterActionNotify
     protected String su;
     @XmlAttribute(name = "maxBodySize")
     protected Integer maxBodySize;
+    @XmlAttribute(name = "origHeaders")
+    protected String origHeaders;
 
     /**
      * Gets the value of the content property.
@@ -139,6 +142,30 @@ public class testFilterActionNotify
      */
     public void setMaxBodySize(Integer value) {
         this.maxBodySize = value;
+    }
+
+    /**
+     * Gets the value of the origHeaders property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getOrigHeaders() {
+        return origHeaders;
+    }
+
+    /**
+     * Sets the value of the origHeaders property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setOrigHeaders(String value) {
+        this.origHeaders = value;
     }
 
 }

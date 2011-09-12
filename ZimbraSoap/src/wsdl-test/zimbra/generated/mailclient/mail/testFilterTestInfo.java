@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlType;
     testFilterTestSize.class,
     testFilterTestMimeHeader.class,
     testFilterTestTrue.class,
+    testFilterTestImportance.class,
     testFilterTestInvite.class,
     testFilterTestCurrentDayOfWeek.class,
     testFilterTestAddressBook.class,

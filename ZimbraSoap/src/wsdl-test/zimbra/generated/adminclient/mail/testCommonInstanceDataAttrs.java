@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="fba" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="percentComplete" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="recur" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="hasEx" type="{http://www.w3.org/2001/XMLSchema}boolean" />
  *       &lt;attribute name="priority" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="fb" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="transp" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -69,6 +70,8 @@ public class testCommonInstanceDataAttrs {
     protected String percentComplete;
     @XmlAttribute(name = "recur")
     protected Boolean recur;
+    @XmlAttribute(name = "hasEx")
+    protected Boolean hasEx;
     @XmlAttribute(name = "priority")
     protected String priority;
     @XmlAttribute(name = "fb")
@@ -246,6 +249,30 @@ public class testCommonInstanceDataAttrs {
      */
     public void setRecur(Boolean value) {
         this.recur = value;
+    }
+
+    /**
+     * Gets the value of the hasEx property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public Boolean isHasEx() {
+        return hasEx;
+    }
+
+    /**
+     * Sets the value of the hasEx property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setHasEx(Boolean value) {
+        this.hasEx = value;
     }
 
     /**

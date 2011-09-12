@@ -75,6 +75,8 @@ import zimbra.generated.mailclient.mail.testDeclineCounterAppointmentRequest;
 import zimbra.generated.mailclient.mail.testDeclineCounterAppointmentResponse;
 import zimbra.generated.mailclient.mail.testDeleteDataSourceRequest;
 import zimbra.generated.mailclient.mail.testDeleteDataSourceResponse;
+import zimbra.generated.mailclient.mail.testDeleteDeviceRequest;
+import zimbra.generated.mailclient.mail.testDeleteDeviceResponse;
 import zimbra.generated.mailclient.mail.testDestroyWaitSetRequest;
 import zimbra.generated.mailclient.mail.testDestroyWaitSetResponse;
 import zimbra.generated.mailclient.mail.testDiffDocumentRequest;
@@ -268,11 +270,11 @@ import zimbra.generated.mailclient.mail.testWikiActionResponse;
  * Generated source version: 2.1
  * 
  */
-@WebService(name = "MailService", targetNamespace = "urn:zimbraMail")
+@WebService(name = "MailService", targetNamespace = "http://www.zimbra.com/wsdl/MailService.wsdl")
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 @XmlSeeAlso({
-    zimbra.generated.mailclient.zm.ObjectFactory.class,
-    zimbra.generated.mailclient.mail.ObjectFactory.class
+    zimbra.generated.mailclient.mail.ObjectFactory.class,
+    zimbra.generated.mailclient.zm.ObjectFactory.class
 })
 public interface MailService {
 
@@ -684,6 +686,18 @@ public interface MailService {
     public testDeleteDataSourceResponse deleteDataSourceRequest(
         @WebParam(name = "DeleteDataSourceRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
         testDeleteDataSourceRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns zimbra.generated.mailclient.mail.testDeleteDeviceResponse
+     */
+    @WebMethod(action = "urn:zimbraMail/DeleteDevice")
+    @WebResult(name = "DeleteDeviceResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public testDeleteDeviceResponse deleteDeviceRequest(
+        @WebParam(name = "DeleteDeviceRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        testDeleteDeviceRequest parameters);
 
     /**
      * 

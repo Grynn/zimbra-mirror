@@ -193,14 +193,14 @@ public class testFilterRule {
     public static class FilterActions {
 
         @XmlElements({
-            @XmlElement(name = "actionReply", type = testFilterActionReply.class),
-            @XmlElement(name = "actionStop", type = testFilterActionStop.class),
             @XmlElement(name = "actionFlag", type = testFilterActionFlag.class),
-            @XmlElement(name = "actionTag", type = testFilterActionTag.class),
-            @XmlElement(name = "actionKeep", type = testFilterActionKeep.class),
             @XmlElement(name = "actionFileInto", type = testFilterActionFileInto.class),
-            @XmlElement(name = "actionNotify", type = testFilterActionNotify.class),
+            @XmlElement(name = "actionKeep", type = testFilterActionKeep.class),
+            @XmlElement(name = "actionReply", type = testFilterActionReply.class),
             @XmlElement(name = "actionRedirect", type = testFilterActionRedirect.class),
+            @XmlElement(name = "actionStop", type = testFilterActionStop.class),
+            @XmlElement(name = "actionTag", type = testFilterActionTag.class),
+            @XmlElement(name = "actionNotify", type = testFilterActionNotify.class),
             @XmlElement(name = "actionDiscard", type = testFilterActionDiscard.class)
         })
         protected List<Object> actionKeepOrActionDiscardOrActionFileInto;
@@ -223,14 +223,14 @@ public class testFilterRule {
          * 
          * <p>
          * Objects of the following type(s) are allowed in the list
-         * {@link testFilterActionReply }
-         * {@link testFilterActionStop }
          * {@link testFilterActionFlag }
-         * {@link testFilterActionTag }
-         * {@link testFilterActionKeep }
          * {@link testFilterActionFileInto }
-         * {@link testFilterActionNotify }
+         * {@link testFilterActionKeep }
+         * {@link testFilterActionReply }
          * {@link testFilterActionRedirect }
+         * {@link testFilterActionStop }
+         * {@link testFilterActionTag }
+         * {@link testFilterActionNotify }
          * {@link testFilterActionDiscard }
          * 
          * 

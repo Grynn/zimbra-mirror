@@ -8,7 +8,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import zimbra.generated.mailclient.zm.testKeyValuePair;
-import zimbra.generated.mailclient.zm.testKeyValuePairsBase;
 
 
 /**
@@ -19,11 +18,11 @@ import zimbra.generated.mailclient.zm.testKeyValuePairsBase;
  * <pre>
  * &lt;complexType name="mailKeyValuePairs">
  *   &lt;complexContent>
- *     &lt;extension base="{urn:zimbra}keyValuePairsBase">
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="a" type="{urn:zimbra}keyValuePair" maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
- *     &lt;/extension>
+ *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
@@ -37,9 +36,7 @@ import zimbra.generated.mailclient.zm.testKeyValuePairsBase;
 @XmlSeeAlso({
     testMailCustomMetadata.class
 })
-public class testMailKeyValuePairs
-    extends testKeyValuePairsBase
-{
+public class testMailKeyValuePairs {
 
     protected List<testKeyValuePair> a;
 

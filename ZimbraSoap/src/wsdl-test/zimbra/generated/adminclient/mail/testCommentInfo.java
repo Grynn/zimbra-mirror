@@ -84,8 +84,8 @@ public class testCommentInfo {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link JAXBElement }{@code <}{@link testMailCustomMetadata }{@code >}
      * {@link String }
+     * {@link JAXBElement }{@code <}{@link testMailCustomMetadata }{@code >}
      * 
      * 
      */

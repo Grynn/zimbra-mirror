@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;enumeration value="cal"/>
  *     &lt;enumeration value="gal"/>
  *     &lt;enumeration value="xsync"/>
+ *     &lt;enumeration value="tagmap"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
@@ -49,7 +50,9 @@ public enum testDataSourceType {
     @XmlEnumValue("gal")
     GAL("gal"),
     @XmlEnumValue("xsync")
-    XSYNC("xsync");
+    XSYNC("xsync"),
+    @XmlEnumValue("tagmap")
+    TAGMAP("tagmap");
     private final String value;
 
     testDataSourceType(String v) {
