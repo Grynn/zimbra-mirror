@@ -89,7 +89,7 @@ public class PageBriefcase extends AbsTab {
 		public static final Locators zHeaderCheckBox = new Locators(
 				"css=div[id=zlhi__BDLV__se]");
 		public static final Locators zListItemLockIcon = new Locators(
-		"css=div[id^=zlif__BDLV__][id$=__loid][class=ImgPadLock]");
+				"css=div[id^=zlif__BDLV__][id$=__loid][class=ImgPadLock]");
 
 		private final String locator;
 
@@ -365,7 +365,8 @@ public class PageBriefcase extends AbsTab {
 				else
 					optionLocator = "css=div#zb__BDLV__NEW_MENU_NEW_BRIEFCASE";
 
-				page = new DialogCreateBriefcaseFolder(this.MyApplication,((AppAjaxClient) MyApplication).zPageBriefcase);
+				page = new DialogCreateBriefcaseFolder(this.MyApplication,
+						((AppAjaxClient) MyApplication).zPageBriefcase);
 
 				// FALL THROUGH
 			} else if (option == Button.O_NEW_DOCUMENT) {
@@ -451,7 +452,7 @@ public class PageBriefcase extends AbsTab {
 
 			if (option == Button.B_LAUNCH_IN_SEPARATE_WINDOW) {
 
-				optionLocator = "css=td[id=zmi__BDLV__NEW_BRIEFCASE_WIN_title]:contains('Launch in a separate window')";
+				optionLocator = "css=td[id$=NEW_BRIEFCASE_WIN_title]:contains('Launch in a separate window')";
 
 				page = new DocumentBriefcaseOpen(this.MyApplication, item);
 
@@ -590,11 +591,11 @@ public class PageBriefcase extends AbsTab {
 			// If we click on pulldown/option and the page is specified, then
 			// wait for the page to go active
 			if (page != null) {
-				if (option == Button.O_SEND_AS_ATTACHMENT){
+				if (option == Button.O_SEND_AS_ATTACHMENT) {
 					zWaitForElementPresent("css=div[id$=_attachments_div] a[class='AttLink']");
 					return page;
 				} else
-				page.zWaitForActive();
+					page.zWaitForActive();
 			}
 		}
 		// Return the specified page, or null if not set
@@ -969,7 +970,7 @@ public class PageBriefcase extends AbsTab {
 
 			} else if (option == Button.O_EDIT) {
 
-				optionLocator = "css=td#zmi__Briefcase__EDIT_FILE_title:contains(Edit)";
+				optionLocator = "css=td[id$=EDIT_FILE_title]:contains(Edit)";
 
 				page = new DocumentBriefcaseEdit(MyApplication,
 						(DocumentItem) item);
@@ -996,7 +997,7 @@ public class PageBriefcase extends AbsTab {
 
 			} else if (option == Button.O_DELETE) {
 
-				optionLocator = "css=td#zmi__Briefcase__DELETE_title:contains(Delete)";
+				optionLocator = "css=td[id^=DELETE__][id$=_title]:contains(Delete)";
 
 				page = new DialogConfirm(DialogConfirm.Confirmation.DELETE,
 						MyApplication, this);
@@ -1026,6 +1027,11 @@ public class PageBriefcase extends AbsTab {
 						+ " option:" + option);
 			}
 
+			// Make sure the button exists
+			if (!this.sIsElementPresent(optionLocator)) {
+				throw new HarnessException(optionLocator + " not present!");
+			}
+			
 			// click on the option
 			this.zClickAt(optionLocator, "0,0");
 
@@ -1038,11 +1044,11 @@ public class PageBriefcase extends AbsTab {
 		}
 
 		if (page != null) {
-			if (option == Button.O_SEND_AS_ATTACHMENT){
+			if (option == Button.O_SEND_AS_ATTACHMENT) {
 				zWaitForElementPresent("css=div[id$=_attachments_div] a[class='AttLink']");
 				return page;
 			} else
-			page.zWaitForActive();
+				page.zWaitForActive();
 		}
 
 		// Default behavior
@@ -1316,7 +1322,7 @@ public class PageBriefcase extends AbsTab {
 	public boolean isOptionDisabled(Locators name) throws HarnessException {
 		return sIsElementPresent(name.locator + "[class*=ZDisabled]");
 	}
-	
+
 	public boolean isLockIconPresent(IItem item) throws HarnessException {
 		boolean present = false;
 		String itemName = item.getName();
@@ -1341,7 +1347,7 @@ public class PageBriefcase extends AbsTab {
 				break;
 			}
 		}
-	
+
 		if (!this.sIsElementPresent(lockIconLocator))
 			throw new HarnessException("Lock icon locator is not present "
 					+ lockIconLocator);
@@ -1349,9 +1355,9 @@ public class PageBriefcase extends AbsTab {
 		String image = this.sGetAttribute(lockIconLocator + "@class");
 
 		if (image.equals("ImgPadLock"))
-		present = true;
-	
-		return present;		
+			present = true;
+
+		return present;
 	}
 
 	public boolean waitForDeletedFromListView(String itemName)
