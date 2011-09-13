@@ -64,6 +64,11 @@ public class DialogConfirm extends AbsDialog {
 			locator = "css=div[class='" + Locators.zDialogClass + "'] "
 					+ "div[class='" + Locators.zDialogButtonsClass
 					+ "'] td[class=ZWidgetTitle]:contains(No)";
+			
+		} else if (button == Button.B_CANCEL) {
+			locator = "css=div[class='" + Locators.zDialogClass + "'] "
+					+ "div[class='" + Locators.zDialogButtonsClass
+					+ "'] td[class=ZWidgetTitle]:contains(Cancel)";
 		} else {
 			throw new HarnessException("Button " + button + " not implemented");
 		}
