@@ -389,6 +389,9 @@ function(youTubeId) {
 
 Com_Zimbra_Url.prototype._getAllYouTubeLinks =
 function(text) {
+	if (!text) {
+		return null;
+	}
 	var youTubeArr = text.match(/(\b(((http | https)\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtube\.com\/watch\?.*\&v=)|(youtube\.com\/v\/)|(youtu\.be\/))((-)?[0-9a-zA-Z_-]+)?(&\w+=\w+)*)\b)/gi);
 	var hash = {};
 	var hashCount = 0;
