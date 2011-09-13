@@ -691,55 +691,56 @@ ZaId.PANEL_HOME = "Home";
 ZaOverviewPanelController.prototype._buildNewFolderTree =
 function() {
 	var tree = this._overviewPanel.getFolderTree();
+    var parentPath;
 	var l = new AjxListener(this, this._overviewTreeListener);
 	tree.addSelectionListener(l);
     // Home is always added;
     var home = new ZaTreeItemData({parent:"",
                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME, true),
                                    mappingId:ZaZimbraAdmin._HOME_VIEW,
-                                   text:"Home"});
+                                   text:ZaMsg.OVP_home});
     ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._HOME_VIEW] = ZaOverviewPanelController.homeTreeListener;
     tree.setRootData(home);
 
     var  ti = new ZaTreeItemData({
-                                    parent:"Home",
+                                    parent:ZaMsg.OVP_home,
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "monHV"),
-                                    text: "Monitor",
+                                    text: ZaMsg.OVP_monitor,
                                     mappingId: ZaZimbraAdmin._MONITOR_HOME_VIEW});
     tree.addTreeItemData(ti);
 
     var  ti = new ZaTreeItemData({
-                                    parent:"Home/Monitor",
+                                    parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_monitor]),
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "serverstatusHV"),
-                                    text: "Server Status",
+                                    text: ZaMsg.OVP_status,
                                     mappingId: ZaZimbraAdmin._SERVER_STATUS_VIEW});
     tree.addTreeItemData(ti);
 
     var accountMgr = new ZaTreeItemData({
-                                    parent:"Home",
+                                    parent:ZaMsg.OVP_home,
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "manActHV"),
-                                    text: "Manage Accounts",
+                                    text: ZaMsg.OVP_manageAccounts,
                                     mappingId: ZaZimbraAdmin._MANAGE_ACCOUNT_HOME_VIEW});
     tree.addTreeItemData(accountMgr);
 
     ti = new ZaTreeItemData({
-                                    parent:"Home",
+                                    parent:ZaMsg.OVP_home,
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "adminHV"),
-                                    text: "Administrator",
+                                    text: ZaMsg.OVP_configure,
                                     mappingId: ZaZimbraAdmin._ADMINISTRATION_HOME_VIEW});
     tree.addTreeItemData(ti);
 
     ti = new ZaTreeItemData({
-                                    parent:"Home",
+                                    parent:ZaMsg.OVP_home,
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "magHV"),
-                                    text: "Magration and Set-up",
+                                    text: ZaMsg.OVP_toolMig,
                                     mappingId: ZaZimbraAdmin._MIGRATION_HOME_VIEW});
     tree.addTreeItemData(ti);
 
     ti = new ZaTreeItemData({
-                                    parent:"Home",
+                                    parent:ZaMsg.OVP_home,
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "searchHV"),
-                                    text: "Search",
+                                    text: ZaMsg.OVP_search,
                                     mappingId: ZaZimbraAdmin._SEARCH_HOME_VIEW});
     tree.addTreeItemData(ti);
 
@@ -757,7 +758,7 @@ function() {
 
 
     if(accountMgr) {
-        var refpath = accountMgr.parent? accountMgr.parent + "/" + accountMgr.text:"Home";
+        var refpath = accountMgr.parent? accountMgr.parent + "/" + accountMgr.text:ZaMsg.OVP_home;
         var acctitem =  new ZaTreeItemData({
                                 parent:refpath,
                                 id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "actLstHV"),
@@ -1089,7 +1090,7 @@ function (itemType) {
 
 // Temporary hard code  here
 // It will be rmoved in futher
-ZaOverviewPanelController.basePath = "Home/Manage Accounts/";
+ZaOverviewPanelController.basePath = ZaMsg.OVP_home + ZaTree.SEPERATOR + ZaMsg.OVP_manageAccounts + ZaTree.SEPERATOR;
 ZaOverviewPanelController.prototype.addAccountItem =
 function(item, currentView) {
     if (!currentView) {

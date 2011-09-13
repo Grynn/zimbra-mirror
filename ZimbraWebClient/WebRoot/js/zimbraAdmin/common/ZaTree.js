@@ -296,5 +296,7 @@ function (arr) {
     return arr.join(ZaTree.SEPERATOR);
 }
 
+ZaTree.getPathByArray = ZaTree.prototype.getPathByArray;
+
 
 
