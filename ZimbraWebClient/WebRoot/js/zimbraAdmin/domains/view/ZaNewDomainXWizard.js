@@ -203,6 +203,8 @@ function(entry) {
 	if(entry._defaultValues)
 		this._containedObject._defaultValues = entry._defaultValues;
 
+    if(entry._uuid)
+        this._containedObject._uuid = entry._uuid;
 
 	if(entry.notebookAcls) {
 		for(var gt in entry.notebookAcls) {

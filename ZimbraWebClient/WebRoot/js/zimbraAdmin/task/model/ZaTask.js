@@ -48,16 +48,34 @@ ZaTask.myXModel = {
 };
 
 // type 1: for working in process, 2 for running task
-ZaTaskItem = function(constructor, cacheName, data, position, type) {
+ZaTaskItem = function(constructor, cacheName, title, data, position, type, displayName) {
     this.constructor = constructor;
     this.cacheName = cacheName;
+    this._title = title;
     this.data = data;
     this.position = position;
     this.type = type || 1;
+    this.displayName = displayName;
+}
+
+ZaTaskItem.minDisplayName = new Object();
+ZaTaskItem.prototype.getMinDisplayName =
+function (title) {
+    var ret ;
+    if (!ZaTaskItem.minDisplayName[title]) {
+        ZaTaskItem.minDisplayName[title] = 1;
+        ret = title;
+    } else {
+        ret  = title + " " + ZaTaskItem.minDisplayName[title];
+        ZaTaskItem.minDisplayName[title] ++;
+    }
+    return ret;
 }
 
 ZaTaskItem.prototype.toString = function() {
-    return this.cacheName;
+    if (!this.displayName)
+        this.displayName = this.getMinDisplayName(this._title);
+    return this.displayName;
 }
 
 ZaTaskItem.prototype.getData = function() {

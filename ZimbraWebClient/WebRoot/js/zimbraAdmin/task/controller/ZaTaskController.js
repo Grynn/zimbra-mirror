@@ -53,6 +53,8 @@ ZaTaskController.prototype.addTask = function(task) {
         taskArray.add(task, undefined, true);
         this._taskContentPanel._localXForm.setInstanceValue(taskArray.getArray(),modelItem);
     }else{
+        var currentTask = taskArray.get(index);
+        task.displayName = currentTask.displayName;
         taskArray.replace(index, task);
         this._taskContentPanel._localXForm.setInstanceValue(taskArray.getArray(),modelItem);
     }

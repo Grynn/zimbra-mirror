@@ -106,7 +106,11 @@ function () {
 
 ZaXDialog.prototype.getTaskItem = function() {
     var cacheName = this.getCacheName? this.getCacheName() : this.toString();
-    var taskItem = new ZaTaskItem(this.constructor, this.toString(), this.getObject(), this.getBounds(), this.miniType);
+    var title = this.getTitle();
+    if (!title) {
+        title = this.toString();
+    }
+    var taskItem = new ZaTaskItem(this.constructor, cacheName, title, this.getObject(), this.getBounds(), this.miniType);
     return taskItem;
 }
 
@@ -125,6 +129,11 @@ function () {
     this._inMin = true;
     this.popdown();
     this._inMin = false;
+}
+
+ZaXDialog.prototype.getTitle =
+function () {
+    return this._title;
 }
 }
 /**
