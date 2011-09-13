@@ -178,8 +178,9 @@ public class PerfMetrics extends AbsSeleniumObject {
 	 * Wait for the perf metric (being tracked by 'token') to be set
 	 * @param key the perf metric to watch
 	 * @return
+	 * @throws HarnessException 
 	 */
-	public static void waitTimestamp(PerfToken token) {
+	public static void waitTimestamp(PerfToken token) throws HarnessException {
 		logger.info("waitTimestamp("+ token +")");
 
 		if ( !getInstance().Enabled )
@@ -210,7 +211,12 @@ public class PerfMetrics extends AbsSeleniumObject {
 		}
 		
 		data.LaunchStamp = getInstance().getValue(data.Key.LaunchKey);
+		
+		// Log the data to a text file
 		traceLog.info(data.prettyPrint());
+		
+		// Log the data to the database
+		PerfDatabase.record(data);
 		
 	}
 	
