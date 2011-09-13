@@ -1097,7 +1097,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 								{ ref: ZaServer.A_zimbraImapBindPort, type:_TEXTFIELD_,
 								  enableDisableChecks:[ZaServerXFormView.getIMAPEnabled,ZaItem.hasReadPermission],
 								  enableDisableChangeEventSources:[ZaServer.A_ImapServerEnabled],
-								  label: ZaMsg.IMAP_Port+":", width: "5em",
+								  label: ZaMsg.LBL_IMAP_Port, width: "5em",
 								  onChange: ZaServerXFormView.onFormFieldChanged/*,
 						      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal*/
 								},
