@@ -23,6 +23,7 @@ import com.zimbra.qa.selenium.projects.ajax.ui.mail.PageMail.PageMailView;
 public class PageCalendar extends AbsTab {
 
 	public static class Locators {
+		
 		// Buttons
 		public static final String NewButton = "css=td#zb__CLWW__NEW_MENU_title";
 		public static final String ViewButton = "id=zb__CLD__VIEW_MENU_dropdown";
@@ -95,6 +96,10 @@ public class PageCalendar extends AbsTab {
 		logger.info("new " + PageCalendar.class.getCanonicalName());
 	}
 
+	public String zGetApptLocator(String apptSubject) throws HarnessException {
+		return "css=td.appt_name:contains('" + apptSubject + "')";
+	}
+	
 	private AbsPage zListItemListView(Action action, String subject) throws HarnessException {
 		logger.info(myPageName() + " zListItemListView("+ action +", "+ subject +")");
 

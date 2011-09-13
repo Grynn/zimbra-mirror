@@ -260,7 +260,7 @@ public class MailItem implements IItem {
 				mail.dSubject = sElement.getText().trim();
 			
 			// Parse the recipients
-			Element[] eElements = ZimbraAccount.SoapClient.selectNodes(m, "//mail:e");
+			Element[] eElements = ZimbraAccount.SoapClient.selectNodes(m, "mail:e");
 			for (Element eElement : eElements) {
 				
 				RecipientItem r = new RecipientItem();
