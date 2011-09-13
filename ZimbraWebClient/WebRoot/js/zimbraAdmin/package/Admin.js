@@ -41,7 +41,6 @@ AjxPackage.require("zimbraAdmin.common.ZaErrorDialog");
 AjxPackage.require("zimbraAdmin.common.ZaTabView");
 AjxPackage.require("zimbraAdmin.common.ZaXDialog");
 AjxPackage.require("zimbraAdmin.common.ZaXWizardDialog");
-AjxPackage.require("zimbraAdmin.common.ZaBaseDialog");
 AjxPackage.require("zimbraAdmin.common.LDAPURL_XFormItem");
 AjxPackage.require("zimbraAdmin.common.HostPort_XFormItem");
 AjxPackage.require("zimbraAdmin.common.MailQuota_XModelItem");

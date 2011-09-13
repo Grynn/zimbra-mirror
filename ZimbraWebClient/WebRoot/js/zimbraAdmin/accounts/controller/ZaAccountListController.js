@@ -744,7 +744,7 @@ function(ev) {
 			var item = arrItems[key];
 			if (item) {
 				//detect whether the deleting item is open in a tab
-				if (ZaApp.getInstance().getTabGroup().getTabByItemId (item.id)) {
+				if (ZaApp.getInstance().getTabGroup() && ZaApp.getInstance().getTabGroup().getTabByItemId (item.id)) {
 					this._itemsInTabList.push (item) ;
 				}else{
 					this._removeList.push(item);			

@@ -23,10 +23,14 @@ ZaTaskContentView._dialogCache = new Array();
 ZaTaskContentView._getDialog =
 function(cacheName, myConstructor) {
     if (!ZaTaskContentView._dialogCache[cacheName]) {
-        ZaTaskContentView._dialogCache[cacheName] = new myConstructor(ZaApp.getInstance().getAppCtxt().getShell());
+        if (ZaApp.getInstance().dialogs[cacheName])
+            ZaTaskContentView._dialogCache[cacheName] = ZaApp.getInstance().dialogs[cacheName];
+        else
+            ZaTaskContentView._dialogCache[cacheName] = new myConstructor(ZaApp.getInstance().getAppCtxt().getShell());
     }
     return ZaTaskContentView._dialogCache[cacheName];
 }
+
 ZaTaskContentView.prototype.setObject =
 function(entry) {
 
@@ -39,7 +43,7 @@ function(entry) {
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, this.formDirtyLsnr);
 }
 
-ZaTaskContentView.workingInProcessSelectionListener =
+ZaTaskContentView.taskItemSelectionListener =
 function (ev) {
 	var arr = this.widget.getSelection();
 	if(arr && arr.length) {
@@ -49,6 +53,9 @@ function (ev) {
         dialog.popup();
         var position = selectedItem.position;
         dialog.setBounds(position.x, position.y, position.width, position.height);
+        if (dialog.handleXFormChange) {
+            dialog.handleXFormChange();
+        }
 	}
 }
 
@@ -77,7 +84,7 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                headerList:workingInProcessHeader,
                visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, true]],
                visibilityChangeEventSources:[ZaTask.A2_isExpanded],
-               onSelection:ZaTaskContentView.workingInProcessSelectionListener
+               onSelection:ZaTaskContentView.taskItemSelectionListener
             },
             {ref:ZaTask.A_runningTask, type:_OUTPUT_, bmolsnr: true, value:0,
                 visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, false]],
@@ -92,7 +99,8 @@ ZaTaskContentView.myXFormModifier = function(xFormObject, entry) {
                forceUpdate: true, preserveSelection:false, multiselect:false,
                headerList:runningTaskHeader,
                visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, true]],
-               visibilityChangeEventSources:[ZaTask.A2_isExpanded]
+               visibilityChangeEventSources:[ZaTask.A2_isExpanded],
+               onSelection:ZaTaskContentView.taskItemSelectionListener
             },
             {ref:ZaTask.A_serverStatus, type:_OUTPUT_, bmolsnr: true, value:0,
                 visibilityChecks:[[XForm.checkInstanceValue, ZaTask.A2_isExpanded, false]],

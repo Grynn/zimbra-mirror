@@ -100,20 +100,27 @@ ZaXDialog.prototype.addMiniIcon =
 function () {
     if (this._minEl) {
         this._minEl.innerHTML = AjxImg.getImageHtml("Help");
-	    this._minEl.onclick = AjxCallback.simpleClosure(ZaXDialog.__handleMinClick, this);
+	    this._minEl.onclick = AjxCallback.simpleClosure(ZaXDialog.prototype.__handleMinClick, this);
     }
 }
 
-ZaXDialog.prototype.popdownHookListner = function() {
+ZaXDialog.prototype.getTaskItem = function() {
+    var cacheName = this.getCacheName? this.getCacheName() : this.toString();
+    var taskItem = new ZaTaskItem(this.constructor, this.toString(), this.getObject(), this.getBounds(), this.miniType);
+    return taskItem;
+}
+
+ZaXDialog.prototype.popdownHookListner =
+function() {
     if (!this._inMin) {
-	var task = new ZaTaskItem(this.constructor, this.toString(), this.getObject(), this.getBounds(), this.miniType);
+	    var task = this.getTaskItem();
         ZaZimbraAdmin.getInstance().getTaskController().removeTask(task);
     }
 }
 
-ZaXDialog.__handleMinClick =
+ZaXDialog.prototype.__handleMinClick =
 function () {
-    var task = new ZaTaskItem(this.constructor, this.toString(), this.getObject(), this.getBounds(), this.miniType);
+    var task = this.getTaskItem();
     ZaZimbraAdmin.getInstance().getTaskController().addTask(task);
     this._inMin = true;
     this.popdown();
