@@ -716,6 +716,154 @@ public class CreateAccount extends AjaxCommonTest {
             "Added account message is displayed");
    }
 
+   @Test(description="Wrong None security receiving port when creating Gmail IMAP Account", groups = { "functional" })
+   public void wrongNonePortGmailImapAccount() throws HarnessException {
+      String wrongSslPort = "111";
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            gmailUserName,
+            gmailUserName,
+            gmailPassword,
+            gmailImapReceivingServer,
+            SECURITY_TYPE.NONE,
+            wrongSslPort,
+            gmailImapSmtpServer,
+            true,
+            "465",
+            gmailUserName,
+            gmailPassword);
+
+      FormAddImapAccount accountForm = (FormAddImapAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.IMAP);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zPressButton(Button.B_VALIDATE_AND_SAVE);
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "Cannot connect to \"" + gmailImapReceivingServer + ":" + wrongSslPort + "\". Please check host/port and network connectivity.",
+            "Verify error message of wrong incoming server address");
+
+      app.zPageLogin.zNavigateTo();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
+   @Test(description="Wrong Ssl security receiving port when creating Gmail IMAP Account", groups = { "functional" })
+   public void wrongSslPortGmailImapAccount() throws HarnessException {
+      String wrongSslPort = "111";
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            gmailUserName,
+            gmailUserName,
+            gmailPassword,
+            gmailImapReceivingServer,
+            SECURITY_TYPE.SSL,
+            wrongSslPort,
+            gmailImapSmtpServer,
+            true,
+            "465",
+            gmailUserName,
+            gmailPassword);
+
+      FormAddImapAccount accountForm = (FormAddImapAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.IMAP);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zPressButton(Button.B_VALIDATE_AND_SAVE);
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "Cannot connect to \"" + gmailImapReceivingServer + ":" + wrongSslPort + "\". Please check host/port and network connectivity.",
+            "Verify error message of wrong incoming server address");
+
+      app.zPageLogin.zNavigateTo();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
+   @Test(description="Wrong TLS security receiving port when creating Gmail IMAP Account", groups = { "functional" })
+   public void wrongTlsPortGmailImapAccount() throws HarnessException {
+      String wrongSslPort = "111";
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            gmailUserName,
+            gmailUserName,
+            gmailPassword,
+            gmailImapReceivingServer,
+            SECURITY_TYPE.TLS,
+            wrongSslPort,
+            gmailImapSmtpServer,
+            true,
+            "465",
+            gmailUserName,
+            gmailPassword);
+
+      FormAddImapAccount accountForm = (FormAddImapAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.IMAP);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zPressButton(Button.B_VALIDATE_AND_SAVE);
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "Cannot connect to \"" + gmailImapReceivingServer + ":" + wrongSslPort + "\". Please check host/port and network connectivity.",
+            "Verify error message of wrong incoming server address");
+
+      app.zPageLogin.zNavigateTo();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
+   @Test(description="Wrong TLS If Available security receiving port when creating Gmail IMAP Account", groups = { "functional" })
+   public void wrongTlsIfAvailPortGmailImapAccount() throws HarnessException {
+      String wrongSslPort = "111";
+      DesktopAccountItem desktopAccountItem = DesktopAccountItem.generateDesktopImapAccountItem(
+            gmailUserName,
+            gmailUserName,
+            gmailPassword,
+            gmailImapReceivingServer,
+            SECURITY_TYPE.TLS_IF_AVAILABLE,
+            wrongSslPort,
+            gmailImapSmtpServer,
+            true,
+            "465",
+            gmailUserName,
+            gmailPassword);
+
+      FormAddImapAccount accountForm = (FormAddImapAccount)app.zPageAddNewAccount.zDropDownListSelect(DROP_DOWN_OPTION.IMAP);
+      accountForm.zFill(desktopAccountItem);
+      accountForm.zPressButton(Button.B_VALIDATE_AND_SAVE);
+
+      String message = app.zPageLogin.zGetMessage();
+      ZAssert.assertStringContains(message,
+            "Cannot connect to \"" + gmailImapReceivingServer + ":" + wrongSslPort + "\". Please check host/port and network connectivity.",
+            "Verify error message of wrong incoming server address");
+
+      app.zPageLogin.zNavigateTo();
+
+      String welcomeMessage = app.zPageLogin.zGetWelcomeMessage();
+      ZAssert.assertStringContains(welcomeMessage,
+            "Zimbra Desktop allows you to access email while you are disconnected from the internet.",
+            "Verify welcome message is displayed");
+
+      ZAssert.assertEquals(false,
+            app.zPageLogin.sIsElementPresent(PageLogin.Locators.zDisplayedMessage),
+            "Added account message is displayed");
+   }
+
    @Test(description="Wrong email address when creating Gmail Account", groups = { "functional" })
    public void wrongEmailAddressGmailAccount() throws HarnessException {
 
