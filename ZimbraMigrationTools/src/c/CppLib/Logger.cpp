@@ -67,11 +67,11 @@ void CSingleton::doSomething(LogType type,char* Msg) {
 		break;
 	}
 
-	unsigned long ulLen = ( strlen ( Temp ) );
+	size_t ulLen = ( strlen ( Temp ) );
 
 	DWORD dwWrittenBytes = NULL;
 	//WriteFile( m_LogFileHandle, strTemp, strTemp.GetLength(), &dwWrittenBytes, NULL );
-	WriteFile( m_LogFileHandle, Temp, ulLen, &dwWrittenBytes, NULL );
+	WriteFile( m_LogFileHandle, Temp, (DWORD)ulLen, &dwWrittenBytes, NULL );
 	CloseHandle( m_LogFileHandle );
 
 
