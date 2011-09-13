@@ -232,4 +232,7 @@
   <key name="zimbra_auth_provider">
     <value>offline</value>
   </key>
+  <key name="zimbra_archive_formatter_search_chunk_size">
+    <value>128</value>
+  </key>
 </localconfig>
