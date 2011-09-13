@@ -24,6 +24,7 @@ import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.account.Cos;
 import com.zimbra.cs.account.Domain;
 import com.zimbra.cs.account.Entry;
+import com.zimbra.cs.account.Group;
 import com.zimbra.cs.account.accesscontrol.Right;
 
 public class OfflineAccessManager extends AccessManager {
@@ -137,6 +138,16 @@ public class OfflineAccessManager extends AccessManager {
 	    return true;
     }
 
-	
+    @Override
+    public boolean canAccessGroup(AuthToken at, Group group)
+            throws ServiceException {
+        return true;
+    }
+
+    @Override
+    public boolean canCreateGroup(AuthToken at, String groupEmail)
+            throws ServiceException {
+        return true;
+    }
 
 }
