@@ -52,11 +52,19 @@ public class ContextMenu extends AbsDisplay {
       }
 
       return page;
-   }
+    }
 
-	public ContextMenuItem getContextMenuItem  (String locator, Class contextMenuItemObject)throws HarnessException {
+	public ContextMenuItem getContextMenuItem  (String parentLocator, Class contextMenuItemObject)throws HarnessException {
 		   ContextMenuItem cmi=null;
 		   
+		   
+	       if (parentLocator.startsWith("DWT")){
+				  //most likely separator 
+			   cmi = ContextMenuItem.C_SEPARATOR;		
+			   return cmi;
+		   }
+		  
+		   String locator=sGetAttribute("xpath=(//div[@id='" + parentLocator + "']/table/tbody/tr)@id");
 		   Field[] fields= contextMenuItemObject.getFields();
 	       
 	       for (Field f:fields) {
@@ -66,7 +74,7 @@ public class ContextMenu extends AbsDisplay {
 	    	    	
 		         if (cmi.locator.equals(locator)) {
 			     
-		        	 String cssLocator= "css=td[id='" + locator ;
+		        	 String cssLocator= "css=td[id='" + parentLocator ;
 			 
 			        //verify image, text, and shortcut 		   
 		        	 if (! this.sIsElementPresent(cssLocator + "_left_icon" + "'] " +cmi.image))
@@ -92,11 +100,6 @@ public class ContextMenu extends AbsDisplay {
 	    	   catch (Exception e) {}    		        	
 	    
 	       }	   
-		   
-	       if (locator.startsWith("DWT")){
-				  //most likely separator 
-			   cmi = ContextMenuItem.C_SEPARATOR;			  
-		   }
 		  
 			
 		   if (cmi == null) {
@@ -136,9 +139,10 @@ public class ContextMenu extends AbsDisplay {
             		    				
 			ContextMenuItem ci  = getContextMenuItem(id, contextMenuItemObjects);		    						
 			list.add(ci);
-			if ( PageAddressbook.CONTEXT_MENU.CONTEXT_MENUITEM_ARRAY[i-1]!= null) { 
+			ci.parentLocator = id;
+			/*if ( PageAddressbook.CONTEXT_MENU.CONTEXT_MENUITEM_ARRAY[i-1]!= null) { 
 			  PageAddressbook.CONTEXT_MENU.CONTEXT_MENUITEM_ARRAY[i-1].parentLocator=id;
-			}
+			}*/
 		}
 
         
