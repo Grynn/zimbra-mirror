@@ -1007,7 +1007,26 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
                                 visibilityChangeEventSources:[ZaDomain.A_AuthUseBindPassword]
                             }
                         ]
-                    }
+                    },
+						{type: _SPACER_, height: 10 },
+						{ref:ZaDomain.A_zimbraPasswordChangeListener, type:_TEXTFIELD_, 
+							label:ZaMsg.Domain_zimbraPasswordChangeListener, labelLocation:_LEFT_, 
+                                                        visibilityChecks:[function() {
+                                                                var instance = this.getInstance();
+                                                                return (instance.attrs[ZaDomain.A_AuthMech] !=  ZaDomain.AuthMech_zimbra);
+                                                        }],
+                                                        visibilityChangeEventSources:[ZaDomain.A_AuthMech]
+						},
+                                                {ref:ZaDomain.A_zimbraAuthFallbackToLocal, type:_CHECKBOX_,
+                                                        label:ZaMsg.Domain_zimbraAuthFallbackToLocal, labelLocation:_RIGHT_,
+                                                        trueValue:"TRUE", falseValue:"FALSE",
+                                                        visibilityChecks:[function() {
+                                                                var instance = this.getInstance();
+                                                                return (instance.attrs[ZaDomain.A_AuthMech] !=  ZaDomain.AuthMech_zimbra);
+                                                        }],
+                                                        visibilityChangeEventSources:[ZaDomain.A_AuthMech]
+                                                }
+
                 ]},
                 { type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_URLSetting, colSpan:"*",
                     numCols: 2, colSizes: ["275px","*"], items :[

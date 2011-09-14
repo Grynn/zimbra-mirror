@@ -152,6 +152,8 @@ ZaDomain.A_zimbraMailCatchAllForwardingAddress = "zimbraMailCatchAllForwardingAd
 ZaDomain.A_zimbraAdminConsoleSkinEnabled = "zimbraAdminConsoleSkinEnabled";
 ZaDomain.A_zimbraAdminConsoleLDAPAuthEnabled = "zimbraAdminConsoleLDAPAuthEnabled" ;
 ZaDomain.A_zimbraAuthLdapStartTlsEnabled = "zimbraAuthLdapStartTlsEnabled";
+ZaDomain.A_zimbraAuthFallbackToLocal = "zimbraAuthFallbackToLocal";
+ZaDomain.A_zimbraPasswordChangeListener = "zimbraPasswordChangeListener";
 
 //internal attributes - not synched with the server code yet
 //GAL               
@@ -621,6 +623,16 @@ function(tmpObj, newDomain) {
 		}
 	}
 
+	if(tmpObj.attrs[ZaDomain.A_AuthMech] != ZaDomain.AuthMech_zimbra) {
+		if(tmpObj.attrs[ZaDomain.A_zimbraAuthFallbackToLocal]) {
+               		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAuthFallbackToLocal]);
+               		attr.setAttribute("n", ZaDomain.A_zimbraAuthFallbackToLocal);
+		}
+		if(tmpObj.attrs[ZaDomain.A_zimbraPasswordChangeListener]) {
+               		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraPasswordChangeListener]);
+               		attr.setAttribute("n", ZaDomain.A_zimbraPasswordChangeListener);
+		}
+	}
 	var attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_AuthMech]);
 	attr.setAttribute("n", ZaDomain.A_AuthMech);	
 
@@ -2147,6 +2159,8 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_AuthTestResultCode, type:_STRING_},
 		{id:ZaDomain.A_AuthTestMessage, type:_STRING_},
 		{id:ZaDomain.A_AuthComputedBindDn, type:_STRING_},
+		{id:ZaDomain.A_zimbraPasswordChangeListener, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraPasswordChangeListener},
+		{id:ZaDomain.A_zimbraAuthFallbackToLocal, type:_ENUM_, ref:"attrs/" + ZaDomain.A_zimbraAuthFallbackToLocal, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaDomain.A_GALSearchTestMessage, type:_STRING_},
 		{id:ZaDomain.A_GALSyncTestMessage, type:_STRING_},
 		{id:ZaDomain.A_GALSearchTestResultCode, type:_STRING_},
