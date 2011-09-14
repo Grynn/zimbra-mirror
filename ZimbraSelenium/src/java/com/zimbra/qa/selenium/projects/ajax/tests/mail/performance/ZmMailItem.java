@@ -7,9 +7,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
-import com.zimbra.qa.selenium.framework.ui.PerfMetrics;
-import com.zimbra.qa.selenium.framework.ui.PerfMetrics.PerfKey;
-import com.zimbra.qa.selenium.framework.ui.PerfMetrics.PerfToken;
+import com.zimbra.qa.selenium.framework.util.performance.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.LmtpInject;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;

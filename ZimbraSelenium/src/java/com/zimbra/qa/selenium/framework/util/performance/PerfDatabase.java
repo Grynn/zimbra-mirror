@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.framework.ui;
+package com.zimbra.qa.selenium.framework.util.performance;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,7 +12,6 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.zimbra.common.soap.Element;
-import com.zimbra.qa.selenium.framework.ui.PerfMetrics.PerfData;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;

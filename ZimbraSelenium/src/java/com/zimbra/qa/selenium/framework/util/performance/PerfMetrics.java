@@ -1,4 +1,4 @@
-package com.zimbra.qa.selenium.framework.ui;
+package com.zimbra.qa.selenium.framework.util.performance;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +12,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
+import com.zimbra.qa.selenium.framework.core.ClientSessionFactory;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -22,130 +23,10 @@ import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
  * @author Matt Rhoades
  *
  */
-public class PerfMetrics extends AbsSeleniumObject {
+public class PerfMetrics {
 	protected static Logger logger = LogManager.getLogger(PerfMetrics.class);
 
 	protected static Logger traceLog = LogManager.getLogger(PerfMetrics.class.getName() + ".trace");
-
-	/**
-	 * A list of perf metrics that can be measured.
-	 * See http://bugzilla.zimbra.com/show_bug.cgi?id=61972
-	 * See http://bugzilla.zimbra.com/attachment.cgi?id=33941
-	 * @author Matt Rhoades
-	 *
-	 */
-	public static class PerfKey {
-		
-		public static final PerfKey ZmMailApp 			= new PerfKey("ZmMailApp", "ZmMailApp_launched", "ZmMailApp_loaded");
-		public static final PerfKey ZmMailItem 			= new PerfKey("ZmMailItem", "ZmMailItem_loading", "ZmMailItem_loaded");
-		public static final PerfKey ZmContactsApp 		= new PerfKey("ZmContactsApp", "ZmContactsApp_launched", "ZmContactsApp_loaded");
-		public static final PerfKey ZmContactsItem 		= new PerfKey("ZmContactsItem", "ZmContactsItem_loading", "ZmContactsItem_loaded");
-		public static final PerfKey ZmCalendarApp 		= new PerfKey("ZmCalendarApp", "ZmCalendarApp_launched", "ZmCalendarApp_loaded");
-		public static final PerfKey ZmCalWorkWeekView 	= new PerfKey("ZmCalWorkWeekView", "ZmCalWorkWeekView_loading", "ZmCalWorkWeekView_loaded");
-		public static final PerfKey ZmCalItemView 		= new PerfKey("ZmCalItemView", "ZmCalItemView_loading", "ZmCalItemView_loaded");
-		public static final PerfKey ZmCalViewItem 		= new PerfKey("ZmCalViewItem", "ZmCalViewItem_loading", "ZmCalViewItem_loaded");
-		public static final PerfKey ZmTasksApp 			= new PerfKey("ZmTasksApp", "ZmTasksApp_launched", "ZmTasksApp_loaded");
-		public static final PerfKey ZmTaskItem 			= new PerfKey("ZmTaskItem", "ZmTaskItem_loading", "ZmTaskItem_loaded");
-		public static final PerfKey ZmBriefcaseApp 		= new PerfKey("ZmBriefcaseApp", "ZmBriefcaseApp_launched", "ZmBriefcaseApp_loaded");
-		public static final PerfKey ZmBriefcaseItem 	= new PerfKey("ZmBriefcaseItem", "ZmBriefcaseItem_loading", "ZmBriefcaseItem_loaded");
-		
-		protected String Key;
-		protected String LaunchKey;
-		protected String FinishKey;
-		
-		public PerfKey(String key, String launch, String finish) {
-			Key = key;
-			LaunchKey = launch;
-			FinishKey = finish; 
-		}
-		
-		public String toString() {
-			return (Key);
-		}
-		
-	}
-		
-	/**
-	 * A PerfToken can be used to track one instance of measuring the browser performance
-	 * @author Matt Rhoades
-	 *
-	 */
-	public static class PerfToken {
-		
-		private static int c = 1;
-		
-		private int t;
-		
-		public PerfToken() {
-			t = c++;
-		}
-		
-		public String toString() {
-			return (""+ t);
-		}
-	}
-	
-	/**
-	 * A PerfData object tracks all the client performance data
-	 * @author Matt Rhoades
-	 *
-	 */
-	protected static class PerfData {
-		
-		protected PerfKey Key;
-		
-		protected String Message;
-		/**
-		 * When startTimestamp() is called
-		 */
-		protected long StartStamp = 0;
-
-		/**
-		 * The original value of Key_loaded and Key_Launched (so the harness can determine when a new value is set)
-		 */
-		protected String OriginalFinishStamp = null;
-		protected String OriginalLaunchStamp = null;
-
-		/**
-		 * The new value of Key_loaded and Key_Launched
-		 */
-		protected String FinishStamp = null;
-		protected String LaunchStamp = null;
-
-		
-		public PerfData(PerfKey key, String message) {
-			Key = key;
-			Message = message;
-		}
-		
-		public String prettyPrint() {
-			
-			if ( StartStamp == 0 ) {
-				// No start time!
-				return ("0, 0, 0, 0, 0, 0, Error: No Start Stamp");
-			}
-			
-			if ( FinishStamp == null || FinishStamp.trim().equals("")) {
-				return ("0, 0, 0, 0, 0, 0, Error: No Finish Stamp");
-			}
-			
-			// The 'real-time' delta from selenium
-			String rDelta = "" + (Long.parseLong(FinishStamp) - StartStamp);
-			
-			// The 'internal-time' delta from the ajax app
-			String iDelta = "0";
-			if ( LaunchStamp != null && !LaunchStamp.trim().equals("") ) {
-				iDelta = "" + (Long.parseLong(FinishStamp) - Long.parseLong(LaunchStamp));
-			}
-
-			return (String.format("%s, %s, %s, %s, %s, %s, %s",
-					Key, "" + StartStamp, LaunchStamp, FinishStamp, rDelta, iDelta, Message));
-		}
-		
-		public static String prettyPrintHeaders() {
-			return ("Key, Start, Launched, Loaded, Real Time, Internal Time, Description");
-		}
-	}
 
 	/**
 	 * Start monitoring the specified perf metric
@@ -291,7 +172,7 @@ public class PerfMetrics extends AbsSeleniumObject {
 	private String getValue(String id) {
 		String value = "";
 		try {
-			value = this.sGetEval("this.browserbot.getCurrentWindow().document.getElementById('"+ id +"').innerHTML");
+			value = ClientSessionFactory.session().selenium().getEval("this.browserbot.getCurrentWindow().document.getElementById('"+ id +"').innerHTML");
 		} catch (Exception e) {
 			logger.debug(e);
 		}

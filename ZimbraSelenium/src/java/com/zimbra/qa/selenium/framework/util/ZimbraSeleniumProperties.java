@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 import org.apache.commons.configuration.*;
 import org.apache.log4j.*;
 
-import com.zimbra.qa.selenium.framework.ui.PerfMetrics;
+import com.zimbra.qa.selenium.framework.util.performance.*;;
 
 public class ZimbraSeleniumProperties {
 	private static final Logger logger = LogManager.getLogger(ZimbraSeleniumProperties.class);

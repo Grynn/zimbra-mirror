@@ -2,11 +2,9 @@ package com.zimbra.qa.selenium.projects.ajax.tests.login.performance;
 
 import org.testng.annotations.Test;
 
-import com.zimbra.qa.selenium.framework.ui.PerfMetrics;
-import com.zimbra.qa.selenium.framework.ui.PerfMetrics.PerfKey;
-import com.zimbra.qa.selenium.framework.ui.PerfMetrics.PerfToken;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
+import com.zimbra.qa.selenium.framework.util.performance.*;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
 import com.zimbra.qa.selenium.projects.ajax.ui.PageLogin.Locators;
 

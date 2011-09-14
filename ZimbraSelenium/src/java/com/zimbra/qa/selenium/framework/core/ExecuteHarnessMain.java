@@ -15,7 +15,7 @@ import org.apache.log4j.*;
 import org.testng.*;
 import org.testng.xml.*;
 
-import com.zimbra.qa.selenium.framework.ui.PerfMetrics;
+import com.zimbra.qa.selenium.framework.util.performance.*;
 import com.zimbra.qa.selenium.framework.util.*;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties.AppType;
 
