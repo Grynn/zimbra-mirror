@@ -956,7 +956,7 @@ public class PageBriefcase extends AbsTab {
 
 			// Right-Click on the item
 			this.zRightClickAt(itemlocator, "0,0");
-
+		
 			// Now the ContextMenu is opened
 			// Click on the specified option
 
@@ -1014,12 +1014,12 @@ public class PageBriefcase extends AbsTab {
 				page = new DialogMove(MyApplication, this);
 			} else if (option == Button.O_CHECK_IN_FILE) {
 
-				optionLocator = "css=td#zmi__Briefcase__CHECKIN_title:contains('Check In File')";
-
+				optionLocator = "css=tr[id=POPUP_CHECKIN]>td[id^=CHECKIN__]:contains('Check In File')";
+				
 				page = new DialogCheckInFile(MyApplication, this);
 			} else if (option == Button.O_DISCARD_CHECK_OUT) {
 
-				optionLocator = "css=td#zmi__Briefcase__DISCARD_CHECKOUT_title:contains('Discard Check Out')";
+				optionLocator = "css=tr[id=POPUP_DISCARD_CHECKOUT]>td[id^=DISCARD_CHECKOUT__]:contains(Discard Check Out)";
 
 				page = null;
 			} else {
@@ -1101,8 +1101,8 @@ public class PageBriefcase extends AbsTab {
 
 			if (option == Button.O_TAG_FILE) {
 
-				optionLocator = "css=div[id^=TAG_MENU__] tr[id=POPUP_TAG_MENU]";
-
+				optionLocator = "css=tr[id=POPUP_TAG_MENU]>td[id^=TAG_MENU__]>div[class=ImgCascade]";
+			
 			} else {
 				throw new HarnessException("implement action: " + action
 						+ " option:" + option);
