@@ -144,237 +144,288 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 	                return response;
             	} else if(AdminFileDownload.FILE_FORMAT_BULK_CSV.equalsIgnoreCase(fileFormat)) {
             		outFileName = String.format("%s%s_bulk_%s_%s.csv", LC.zimbra_tmp_directory.value(),File.separator,zsc.getAuthtokenAccountId(),fileToken);
-            		FileOutputStream out = new FileOutputStream (outFileName) ;
-            		CSVWriter writer = new CSVWriter(new OutputStreamWriter (out) ) ;	            	
-	                for (GalContact entry : entries) {	
-	                	String mail = entry.getSingleAttr(ContactConstants.A_email);
-	                	if(mail == null)
-	                		continue;
-	                	
-	                	String [] line = new String [6] ;
-	                	line[0] = mail;
-	                	line[1] = entry.getSingleAttr(ContactConstants.A_fullName);
-	                	line[2] = entry.getSingleAttr(ContactConstants.A_firstName);
-	                	line[3] = entry.getSingleAttr(ContactConstants.A_lastName);
-	                	if(password != null) {
-	                		line[4] = password;
-	                	} else if(generatePwd.equalsIgnoreCase("true")) {
-	                		line[4] = String.valueOf(BulkImportAccounts.generateStrongPassword(genPwdLength));
-	                	}
-	                	
-	                	line[5] = mustChangePassword;
-	                	writer.writeNext(line);
-	            	}
-	                writer.close();
+            		FileOutputStream out = null;
+            		CSVWriter writer = null;	            	
+            		try {
+	            		out = new FileOutputStream (outFileName) ;
+	            		writer = new CSVWriter(new OutputStreamWriter (out) ) ;	            	
+		                for (GalContact entry : entries) {	
+		                	String mail = entry.getSingleAttr(ContactConstants.A_email);
+		                	if(mail == null)
+		                		continue;
+		                	
+		                	String [] line = new String [6] ;
+		                	line[0] = mail;
+		                	line[1] = entry.getSingleAttr(ContactConstants.A_fullName);
+		                	line[2] = entry.getSingleAttr(ContactConstants.A_firstName);
+		                	line[3] = entry.getSingleAttr(ContactConstants.A_lastName);
+		                	if(password != null) {
+		                		line[4] = password;
+		                	} else if(generatePwd.equalsIgnoreCase("true")) {
+		                		line[4] = String.valueOf(BulkImportAccounts.generateStrongPassword(genPwdLength));
+		                	}
+		                	
+		                	line[5] = mustChangePassword;
+		                	writer.writeNext(line);
+		            	}
+		                writer.close();
+            		} catch (IOException e) {
+		        			throw ServiceException.FAILURE(e.getMessage(), e);
+		        	} finally {
+		        		if(writer != null) {
+		        			try {
+		        				writer.close();
+		        			} catch (IOException ignore) {}
+		        		}
+		        		if(out != null) {
+		        			try {
+		        				out.close();
+		        			} catch (IOException ignore) {}
+		        		}
+		        	}
                 } else if (AdminFileDownload.FILE_FORMAT_BULK_XML.equalsIgnoreCase(fileFormat)) {
                 	outFileName = String.format("%s%s_bulk_%s_%s.xml", LC.zimbra_tmp_directory.value(),File.separator,zsc.getAuthtokenAccountId(),fileToken);
-                	FileWriter fileWriter = new FileWriter(outFileName);
-                	XMLWriter xw = new XMLWriter(fileWriter, org.dom4j.io.OutputFormat.createPrettyPrint());
-                    Document doc = DocumentHelper.createDocument();
-                    org.dom4j.Element rootEl = DocumentHelper.createElement(AdminExtConstants.E_ZCSImport);
-                    org.dom4j.Element usersEl = DocumentHelper.createElement(AdminExtConstants.E_ImportUsers);
-                    doc.add(rootEl);
-                    rootEl.add(usersEl);
-                    for (GalContact entry : entries) {
-                    	String email = entry.getSingleAttr(ContactConstants.A_email);
-                    	if(email == null)
-                    		continue;
-                    	
-                    	org.dom4j.Element eUser = DocumentHelper.createElement(AdminExtConstants.E_User);
-                    	org.dom4j.Element eName = DocumentHelper.createElement(AdminExtConstants.E_ExchangeMail);
-                    	
-                    	if(email != null) {
-                    		eName.setText(email);
-                    	}
-                    	eUser.add(eName);
-                    	
-                    	org.dom4j.Element eDisplayName = DocumentHelper.createElement(Provisioning.A_displayName);
-                    	String fullName = entry.getSingleAttr(ContactConstants.A_fullName);
-                    	if(fullName != null) {
-                    		eDisplayName.setText(fullName);
-                    	}
-                    	eUser.add(eDisplayName);
-                    	
-                    	org.dom4j.Element eGivenName = DocumentHelper.createElement(Provisioning.A_givenName);
-                    	String firstName = entry.getSingleAttr(ContactConstants.A_firstName);
-                    	if(firstName != null) {
-                    		eGivenName.setText(firstName);
-                    	}
-                    	eUser.add(eGivenName);
-                    	
-                    	org.dom4j.Element eLastName = DocumentHelper.createElement(Provisioning.A_sn);
-                    	String lastName = entry.getSingleAttr(ContactConstants.A_lastName);
-                    	if(lastName != null) {
-                    		eLastName.setText(lastName);
-                    	}
-                    	eUser.add(eLastName);
-                    	org.dom4j.Element ePassword = DocumentHelper.createElement(AdminExtConstants.A_password);
-	                	if(password != null) {
-	                    	ePassword.setText(password);
-	                	} else if(generatePwd.equalsIgnoreCase("true")) {
-	                    	ePassword.setText(String.valueOf(BulkImportAccounts.generateStrongPassword(genPwdLength)));
-	                	}   
-	                	eUser.add(ePassword);
-	                	
-	                	org.dom4j.Element elMustChangePassword = DocumentHelper.createElement(Provisioning.A_zimbraPasswordMustChange);
-	                	elMustChangePassword.setText(mustChangePassword);
-	                	eUser.add(elMustChangePassword);
-	                	
-                        usersEl.add(eUser);
-                    }                	
-                    xw.write(doc);
-                    xw.flush();
+                	FileWriter fileWriter = null;
+                	XMLWriter xw = null;
+                	try {
+	                	fileWriter = new FileWriter(outFileName);
+	                	xw = new XMLWriter(fileWriter, org.dom4j.io.OutputFormat.createPrettyPrint());
+	                    Document doc = DocumentHelper.createDocument();
+	                    org.dom4j.Element rootEl = DocumentHelper.createElement(AdminExtConstants.E_ZCSImport);
+	                    org.dom4j.Element usersEl = DocumentHelper.createElement(AdminExtConstants.E_ImportUsers);
+	                    doc.add(rootEl);
+	                    rootEl.add(usersEl);
+	                    for (GalContact entry : entries) {
+	                    	String email = entry.getSingleAttr(ContactConstants.A_email);
+	                    	if(email == null)
+	                    		continue;
+	                    	
+	                    	org.dom4j.Element eUser = DocumentHelper.createElement(AdminExtConstants.E_User);
+	                    	org.dom4j.Element eName = DocumentHelper.createElement(AdminExtConstants.E_ExchangeMail);
+	                    	
+	                    	if(email != null) {
+	                    		eName.setText(email);
+	                    	}
+	                    	eUser.add(eName);
+	                    	
+	                    	org.dom4j.Element eDisplayName = DocumentHelper.createElement(Provisioning.A_displayName);
+	                    	String fullName = entry.getSingleAttr(ContactConstants.A_fullName);
+	                    	if(fullName != null) {
+	                    		eDisplayName.setText(fullName);
+	                    	}
+	                    	eUser.add(eDisplayName);
+	                    	
+	                    	org.dom4j.Element eGivenName = DocumentHelper.createElement(Provisioning.A_givenName);
+	                    	String firstName = entry.getSingleAttr(ContactConstants.A_firstName);
+	                    	if(firstName != null) {
+	                    		eGivenName.setText(firstName);
+	                    	}
+	                    	eUser.add(eGivenName);
+	                    	
+	                    	org.dom4j.Element eLastName = DocumentHelper.createElement(Provisioning.A_sn);
+	                    	String lastName = entry.getSingleAttr(ContactConstants.A_lastName);
+	                    	if(lastName != null) {
+	                    		eLastName.setText(lastName);
+	                    	}
+	                    	eUser.add(eLastName);
+	                    	org.dom4j.Element ePassword = DocumentHelper.createElement(AdminExtConstants.A_password);
+		                	if(password != null) {
+		                    	ePassword.setText(password);
+		                	} else if(generatePwd.equalsIgnoreCase("true")) {
+		                    	ePassword.setText(String.valueOf(BulkImportAccounts.generateStrongPassword(genPwdLength)));
+		                	}   
+		                	eUser.add(ePassword);
+		                	
+		                	org.dom4j.Element elMustChangePassword = DocumentHelper.createElement(Provisioning.A_zimbraPasswordMustChange);
+		                	elMustChangePassword.setText(mustChangePassword);
+		                	eUser.add(elMustChangePassword);
+		                	
+	                        usersEl.add(eUser);
+	                    }                	
+	                    xw.write(doc);
+	                    xw.flush();
+                	} catch (IOException e) {
+		        			throw ServiceException.FAILURE(e.getMessage(), e);
+		        	} finally {
+		        		if(xw != null) {
+		        			try {
+		        				xw.close();
+		        			} catch (IOException ignore) {}
+		        		}
+		        		if(fileWriter != null) {
+		        			try {
+		        				fileWriter.close();
+		        			} catch (IOException ignore) {}
+		        		}
+		        	}
                 } else if(AdminFileDownload.FILE_FORMAT_MIGRATION_XML.equalsIgnoreCase(fileFormat)) {
                 	outFileName = String.format("%s%s_migration_%s_%s.xml", LC.zimbra_tmp_directory.value(),File.separator,zsc.getAuthtokenAccountId(),fileToken);
-                	FileWriter fileWriter = new FileWriter(outFileName);
-                	XMLWriter xw = new XMLWriter(fileWriter, org.dom4j.io.OutputFormat.createPrettyPrint());
-                    Document doc = DocumentHelper.createDocument();
-                    org.dom4j.Element rootEl = DocumentHelper.createElement(AdminExtConstants.E_ZCSImport);
-                    doc.add(rootEl);
-                    /**
-                     * set Options section
-                     */
-                    org.dom4j.Element optionsEl = DocumentHelper.createElement(E_Options);
-                    org.dom4j.Element importMailsEl = DocumentHelper.createElement(AdminExtConstants.E_importMails);
-                    if("TRUE".equalsIgnoreCase(request.getElement(AdminExtConstants.E_importMails).getTextTrim())) {
-                    	importMailsEl.setText("1");
-                    } else {
-                    	importMailsEl.setText("0");
-                    }
-                	optionsEl.add(importMailsEl);
-                	rootEl.add(optionsEl);
-                    org.dom4j.Element importContactsEl = DocumentHelper.createElement(AdminExtConstants.E_importContacts);
-                    if("TRUE".equalsIgnoreCase(request.getElement(AdminExtConstants.E_importContacts).getTextTrim())) {
-                    	importContactsEl.setText("1");
-                    } else {
-                    	importContactsEl.setText("0");
-                    }
-                	optionsEl.add(importContactsEl);                    
-                    org.dom4j.Element importCalendarEl = DocumentHelper.createElement(AdminExtConstants.E_importCalendar);
-                    if("TRUE".equalsIgnoreCase(request.getElement(AdminExtConstants.E_importCalendar).getTextTrim())) {
-                    	importCalendarEl.setText("1");
-                    } else {
-                    	importCalendarEl.setText("0");
-                    }   
-                    optionsEl.add(importCalendarEl);
-                    org.dom4j.Element importTasksEl = DocumentHelper.createElement(AdminExtConstants.E_importTasks);
-                    if("TRUE".equalsIgnoreCase(request.getElement(AdminExtConstants.E_importTasks).getTextTrim())) {
-                    	importTasksEl.setText("1");
-                    } else {
-                    	importTasksEl.setText("0");
-                    }
-                    optionsEl.add(importTasksEl);
-                    org.dom4j.Element importJunkEl = DocumentHelper.createElement(AdminExtConstants.E_importJunk);
-                    if("TRUE".equalsIgnoreCase(request.getElement(AdminExtConstants.E_importJunk).getTextTrim())) {
-                    	importJunkEl.setText("1");
-                    } else {
-                    	importJunkEl.setText("0");
-                    }
-                    optionsEl.add(importJunkEl);
-                    org.dom4j.Element importDeletedItemsEl = DocumentHelper.createElement(AdminExtConstants.E_importDeletedItems);
-                    if("TRUE".equalsIgnoreCase(request.getElement(AdminExtConstants.E_importDeletedItems).getTextTrim())) {
-                    	importDeletedItemsEl.setText("1");
-                    } else {
-                    	importDeletedItemsEl.setText("0");	
-                    }
-                    optionsEl.add(importDeletedItemsEl);
-                    org.dom4j.Element ignorePreviouslyImportedEl = DocumentHelper.createElement(AdminExtConstants.E_ignorePreviouslyImported);
-                    if("TRUE".equalsIgnoreCase(request.getElement(AdminExtConstants.E_ignorePreviouslyImported).getTextTrim())) {
-                    	ignorePreviouslyImportedEl.setText("1");
-                    } else {
-                    	ignorePreviouslyImportedEl.setText("0");
-                    }
-                    optionsEl.add(ignorePreviouslyImportedEl);
-                    org.dom4j.Element InvalidSSLOkEl = DocumentHelper.createElement(AdminExtConstants.E_InvalidSSLOk);
-                    if("TRUE".equalsIgnoreCase(request.getElement(AdminExtConstants.E_InvalidSSLOk).getTextTrim())) {
-                    	InvalidSSLOkEl.setText("1");
-                    } else {
-                    	InvalidSSLOkEl.setText("0");
-                    }
-                    optionsEl.add(InvalidSSLOkEl);
-                    
-                    /**
-                     * set MapiProfile section
-                     */
-                    org.dom4j.Element mapiProfileEl = DocumentHelper.createElement(AdminExtConstants.E_MapiProfile);
-                    rootEl.add(mapiProfileEl);
-                    org.dom4j.Element profileEl = DocumentHelper.createElement(E_profile);
-                    profileEl.setText(request.getElement(AdminExtConstants.E_MapiProfile).getTextTrim());
-                    mapiProfileEl.add(profileEl);
-                    
-                    org.dom4j.Element serverEl = DocumentHelper.createElement(E_server);
-                    serverEl.setText(request.getElement(AdminExtConstants.E_MapiServer).getTextTrim());
-                    mapiProfileEl.add(serverEl);
-                    
-                    org.dom4j.Element logonUserDNEl = DocumentHelper.createElement(E_logonUserDN);
-                    logonUserDNEl.setText(request.getElement(AdminExtConstants.E_MapiLogonUserDN).getTextTrim());
-                    mapiProfileEl.add(logonUserDNEl); 
-                    
-                    /**
-                     * set ZimbraServer section
-                     */
-                    org.dom4j.Element zimbraSererEl = DocumentHelper.createElement(E_ZimbraServer);
-                    rootEl.add(zimbraSererEl);                    
-                   
-                    org.dom4j.Element serverNameEl = DocumentHelper.createElement(AdminExtConstants.E_serverName);
-                    serverNameEl.setText(Provisioning.getInstance().getLocalServer().getName());
-                    zimbraSererEl.add(serverNameEl); 
-                    
-                    org.dom4j.Element adminUserNameEl = DocumentHelper.createElement(AdminExtConstants.E_adminUserName);
-                    adminUserNameEl.setText(request.getElement(AdminExtConstants.E_ZimbraAdminLogin).getTextTrim());
-                    zimbraSererEl.add(adminUserNameEl);                     
-                    
-                    org.dom4j.Element adminUserPasswordEl = DocumentHelper.createElement(E_password);
-                    adminUserPasswordEl.setText(request.getElement(AdminExtConstants.E_ZimbraAdminPassword).getTextTrim());
-                    zimbraSererEl.add(adminUserPasswordEl);                                         
-
-                    org.dom4j.Element domaindEl = DocumentHelper.createElement(E_domain);
-                    domaindEl.setText(request.getElement(AdminExtConstants.E_TargetDomainName).getTextTrim());
-                    zimbraSererEl.add(domaindEl); 
-                    
-                    /**
-                     * set UserProvision section
-                     */
-                    org.dom4j.Element userProvisionEl = DocumentHelper.createElement(E_UserProvision);
-                    rootEl.add(userProvisionEl); 
-                    org.dom4j.Element provisionUsersEl = DocumentHelper.createElement(AdminExtConstants.E_provisionUsers);
-                    if("TRUE".equalsIgnoreCase(request.getElement(AdminExtConstants.E_provisionUsers).getTextTrim())) {
-                    	provisionUsersEl.setText("1");
-                    } else {
-                    	provisionUsersEl.setText("0");
-                    }    
-                    userProvisionEl.add(provisionUsersEl);
-                    
-                    /**
-                     * set ImportUsers section
-                     */
-                    org.dom4j.Element usersEl = DocumentHelper.createElement(AdminExtConstants.E_ImportUsers);
-
-                    rootEl.add(usersEl);
-                    for (GalContact entry : entries) {
-                    	String email = entry.getSingleAttr(ContactConstants.A_email);
-                    	if(email == null)
-                    		continue;
-                    	
-                    	org.dom4j.Element eUser = DocumentHelper.createElement(AdminExtConstants.E_User);
-                    	org.dom4j.Element eExchangeMail = DocumentHelper.createElement(AdminExtConstants.E_ExchangeMail);
-                    	eExchangeMail.setText(email);
-                        eUser.add(eExchangeMail);
-                        
-                    	org.dom4j.Element ePassword = DocumentHelper.createElement(AdminExtConstants.A_password);
-	                	if(password != null) {
-	                    	ePassword.setText(password);
-	                	} else if(generatePwd.equalsIgnoreCase("true")) {
-	                    	ePassword.setText(String.valueOf(BulkImportAccounts.generateStrongPassword(genPwdLength)));
-	                	}   
-	                	eUser.add(ePassword);                        
-	                	org.dom4j.Element elMustChangePassword = DocumentHelper.createElement(Provisioning.A_zimbraPasswordMustChange);
-	                	elMustChangePassword.setText(mustChangePassword);
-	                	eUser.add(elMustChangePassword);                  
-	                	usersEl.add(eUser);
-                    }                	
-                    xw.write(doc);
-                    xw.flush();                	
+                	FileWriter fileWriter = null;
+                	XMLWriter xw = null;
+                	try {
+	                	fileWriter = new FileWriter(outFileName);
+	                	xw = new XMLWriter(fileWriter, org.dom4j.io.OutputFormat.createPrettyPrint());
+	                    Document doc = DocumentHelper.createDocument();
+	                    org.dom4j.Element rootEl = DocumentHelper.createElement(AdminExtConstants.E_ZCSImport);
+	                    doc.add(rootEl);
+	                    /**
+	                     * set Options section
+	                     */
+	                    org.dom4j.Element optionsEl = DocumentHelper.createElement(E_Options);
+	                    org.dom4j.Element importMailsEl = DocumentHelper.createElement(AdminExtConstants.E_importMails);
+	                    if("TRUE".equalsIgnoreCase(request.getElement(AdminExtConstants.E_importMails).getTextTrim())) {
+	                    	importMailsEl.setText("1");
+	                    } else {
+	                    	importMailsEl.setText("0");
+	                    }
+	                	optionsEl.add(importMailsEl);
+	                	rootEl.add(optionsEl);
+	                    org.dom4j.Element importContactsEl = DocumentHelper.createElement(AdminExtConstants.E_importContacts);
+	                    if("TRUE".equalsIgnoreCase(request.getElement(AdminExtConstants.E_importContacts).getTextTrim())) {
+	                    	importContactsEl.setText("1");
+	                    } else {
+	                    	importContactsEl.setText("0");
+	                    }
+	                	optionsEl.add(importContactsEl);                    
+	                    org.dom4j.Element importCalendarEl = DocumentHelper.createElement(AdminExtConstants.E_importCalendar);
+	                    if("TRUE".equalsIgnoreCase(request.getElement(AdminExtConstants.E_importCalendar).getTextTrim())) {
+	                    	importCalendarEl.setText("1");
+	                    } else {
+	                    	importCalendarEl.setText("0");
+	                    }   
+	                    optionsEl.add(importCalendarEl);
+	                    org.dom4j.Element importTasksEl = DocumentHelper.createElement(AdminExtConstants.E_importTasks);
+	                    if("TRUE".equalsIgnoreCase(request.getElement(AdminExtConstants.E_importTasks).getTextTrim())) {
+	                    	importTasksEl.setText("1");
+	                    } else {
+	                    	importTasksEl.setText("0");
+	                    }
+	                    optionsEl.add(importTasksEl);
+	                    org.dom4j.Element importJunkEl = DocumentHelper.createElement(AdminExtConstants.E_importJunk);
+	                    if("TRUE".equalsIgnoreCase(request.getElement(AdminExtConstants.E_importJunk).getTextTrim())) {
+	                    	importJunkEl.setText("1");
+	                    } else {
+	                    	importJunkEl.setText("0");
+	                    }
+	                    optionsEl.add(importJunkEl);
+	                    org.dom4j.Element importDeletedItemsEl = DocumentHelper.createElement(AdminExtConstants.E_importDeletedItems);
+	                    if("TRUE".equalsIgnoreCase(request.getElement(AdminExtConstants.E_importDeletedItems).getTextTrim())) {
+	                    	importDeletedItemsEl.setText("1");
+	                    } else {
+	                    	importDeletedItemsEl.setText("0");	
+	                    }
+	                    optionsEl.add(importDeletedItemsEl);
+	                    org.dom4j.Element ignorePreviouslyImportedEl = DocumentHelper.createElement(AdminExtConstants.E_ignorePreviouslyImported);
+	                    if("TRUE".equalsIgnoreCase(request.getElement(AdminExtConstants.E_ignorePreviouslyImported).getTextTrim())) {
+	                    	ignorePreviouslyImportedEl.setText("1");
+	                    } else {
+	                    	ignorePreviouslyImportedEl.setText("0");
+	                    }
+	                    optionsEl.add(ignorePreviouslyImportedEl);
+	                    org.dom4j.Element InvalidSSLOkEl = DocumentHelper.createElement(AdminExtConstants.E_InvalidSSLOk);
+	                    if("TRUE".equalsIgnoreCase(request.getElement(AdminExtConstants.E_InvalidSSLOk).getTextTrim())) {
+	                    	InvalidSSLOkEl.setText("1");
+	                    } else {
+	                    	InvalidSSLOkEl.setText("0");
+	                    }
+	                    optionsEl.add(InvalidSSLOkEl);
+	                    
+	                    /**
+	                     * set MapiProfile section
+	                     */
+	                    org.dom4j.Element mapiProfileEl = DocumentHelper.createElement(AdminExtConstants.E_MapiProfile);
+	                    rootEl.add(mapiProfileEl);
+	                    org.dom4j.Element profileEl = DocumentHelper.createElement(E_profile);
+	                    profileEl.setText(request.getElement(AdminExtConstants.E_MapiProfile).getTextTrim());
+	                    mapiProfileEl.add(profileEl);
+	                    
+	                    org.dom4j.Element serverEl = DocumentHelper.createElement(E_server);
+	                    serverEl.setText(request.getElement(AdminExtConstants.E_MapiServer).getTextTrim());
+	                    mapiProfileEl.add(serverEl);
+	                    
+	                    org.dom4j.Element logonUserDNEl = DocumentHelper.createElement(E_logonUserDN);
+	                    logonUserDNEl.setText(request.getElement(AdminExtConstants.E_MapiLogonUserDN).getTextTrim());
+	                    mapiProfileEl.add(logonUserDNEl); 
+	                    
+	                    /**
+	                     * set ZimbraServer section
+	                     */
+	                    org.dom4j.Element zimbraSererEl = DocumentHelper.createElement(E_ZimbraServer);
+	                    rootEl.add(zimbraSererEl);                    
+	                   
+	                    org.dom4j.Element serverNameEl = DocumentHelper.createElement(AdminExtConstants.E_serverName);
+	                    serverNameEl.setText(Provisioning.getInstance().getLocalServer().getName());
+	                    zimbraSererEl.add(serverNameEl); 
+	                    
+	                    org.dom4j.Element adminUserNameEl = DocumentHelper.createElement(AdminExtConstants.E_adminUserName);
+	                    adminUserNameEl.setText(request.getElement(AdminExtConstants.E_ZimbraAdminLogin).getTextTrim());
+	                    zimbraSererEl.add(adminUserNameEl);                     
+	                    
+	                    org.dom4j.Element adminUserPasswordEl = DocumentHelper.createElement(E_password);
+	                    adminUserPasswordEl.setText(request.getElement(AdminExtConstants.E_ZimbraAdminPassword).getTextTrim());
+	                    zimbraSererEl.add(adminUserPasswordEl);                                         
+	
+	                    org.dom4j.Element domaindEl = DocumentHelper.createElement(E_domain);
+	                    domaindEl.setText(request.getElement(AdminExtConstants.E_TargetDomainName).getTextTrim());
+	                    zimbraSererEl.add(domaindEl); 
+	                    
+	                    /**
+	                     * set UserProvision section
+	                     */
+	                    org.dom4j.Element userProvisionEl = DocumentHelper.createElement(E_UserProvision);
+	                    rootEl.add(userProvisionEl); 
+	                    org.dom4j.Element provisionUsersEl = DocumentHelper.createElement(AdminExtConstants.E_provisionUsers);
+	                    if("TRUE".equalsIgnoreCase(request.getElement(AdminExtConstants.E_provisionUsers).getTextTrim())) {
+	                    	provisionUsersEl.setText("1");
+	                    } else {
+	                    	provisionUsersEl.setText("0");
+	                    }    
+	                    userProvisionEl.add(provisionUsersEl);
+	                    
+	                    /**
+	                     * set ImportUsers section
+	                     */
+	                    org.dom4j.Element usersEl = DocumentHelper.createElement(AdminExtConstants.E_ImportUsers);
+	
+	                    rootEl.add(usersEl);
+	                    for (GalContact entry : entries) {
+	                    	String email = entry.getSingleAttr(ContactConstants.A_email);
+	                    	if(email == null)
+	                    		continue;
+	                    	
+	                    	org.dom4j.Element eUser = DocumentHelper.createElement(AdminExtConstants.E_User);
+	                    	org.dom4j.Element eExchangeMail = DocumentHelper.createElement(AdminExtConstants.E_ExchangeMail);
+	                    	eExchangeMail.setText(email);
+	                        eUser.add(eExchangeMail);
+	                        
+	                    	org.dom4j.Element ePassword = DocumentHelper.createElement(AdminExtConstants.A_password);
+		                	if(password != null) {
+		                    	ePassword.setText(password);
+		                	} else if(generatePwd.equalsIgnoreCase("true")) {
+		                    	ePassword.setText(String.valueOf(BulkImportAccounts.generateStrongPassword(genPwdLength)));
+		                	}   
+		                	eUser.add(ePassword);                        
+		                	org.dom4j.Element elMustChangePassword = DocumentHelper.createElement(Provisioning.A_zimbraPasswordMustChange);
+		                	elMustChangePassword.setText(mustChangePassword);
+		                	eUser.add(elMustChangePassword);                  
+		                	usersEl.add(eUser);
+	                    }                	
+	                    xw.write(doc);
+	                    xw.flush();     
+                	} catch (IOException e) {
+		        			throw ServiceException.FAILURE(e.getMessage(), e);
+		        	} finally {
+		        		if(xw != null) {
+		        			try {
+		        				xw.close();
+		        			} catch (IOException ignore) {}
+		        		}
+		        		if(fileWriter != null) {
+		        			try {
+		        				fileWriter.close();
+		        			} catch (IOException ignore) {}
+		        		}
+		        	}
                 } else {
                 	throw(ServiceException.INVALID_REQUEST("Wrong value for fileFormat parameter",null));
                 }
