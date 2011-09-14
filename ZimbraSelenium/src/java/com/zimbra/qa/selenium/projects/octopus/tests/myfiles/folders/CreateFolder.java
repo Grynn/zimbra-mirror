@@ -19,7 +19,7 @@ public class CreateFolder extends OctopusCommonTest {
 		super.startingAccountPreferences = null;
 	}
 
-	@Test(description = "Create a new folder using drop down list option", groups = { "sanity" })
+	@Test(description = "Create a new folder using drop down list option", groups = { "smoke" })
 	public void CreateFolder_01() throws HarnessException {
 		int size = app.zPageOctopus.zGetListViewItems().size();
 		
