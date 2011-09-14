@@ -59,7 +59,7 @@ public class PageBriefcase extends AbsTab {
 		public static final Locators zEditFileBtn = new Locators(
 				"css=div[id=zb__BDLV__EDIT_FILE]");
 		public static final Locators zEditFileMenuItem = new Locators(
-				"css=div[id=zmi__Briefcase__EDIT_FILE]");
+				"css=div[id=EDIT_FILE]");
 		public static final Locators zOpenFileInSeparateWindowIconBtn = new Locators(
 				"id=zb__BDLV__NEW_BRIEFCASE_WIN_left_icon");
 		public static final Locators zDeleteIconBtn = new Locators(
@@ -964,8 +964,8 @@ public class PageBriefcase extends AbsTab {
 
 			if (option == Button.B_RENAME) {
 
-				optionLocator = "css=td#zmi__Briefcase__RENAME_FILE_title:contains(Rename)";
-
+				optionLocator = "css=div[id^=RENAME_FILE__] tr[id=POPUP_RENAME_FILE]>td[id^=RENAME_FILE]:contains(Rename)";
+				
 				page = null;
 
 			} else if (option == Button.O_EDIT) {
@@ -984,7 +984,7 @@ public class PageBriefcase extends AbsTab {
 
 			} else if (option == Button.O_SEND_LINK) {
 
-				optionLocator = "css=td#zmi__Briefcase__SEND_FILE_title:contains('Send link')";
+				optionLocator = "css=tr[id=POPUP_SEND_FILE]>td[id^=SEND_FILE__]:contains('Send link(s)')";
 
 				page = new DialogConfirm(DialogConfirm.Confirmation.SENDLINK,
 						this.MyApplication, this);
@@ -1034,7 +1034,7 @@ public class PageBriefcase extends AbsTab {
 			
 			// click on the option
 			this.zClickAt(optionLocator, "0,0");
-
+			
 			this.zWaitForBusyOverlay();
 
 			// FALL THROUGH

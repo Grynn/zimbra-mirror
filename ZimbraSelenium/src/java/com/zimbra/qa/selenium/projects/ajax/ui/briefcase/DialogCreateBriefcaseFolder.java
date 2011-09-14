@@ -56,8 +56,8 @@ public class DialogCreateBriefcaseFolder extends AbsDialog {
 
 		String locator = Locators.zNameField;
 	
-		if (!this.sIsElementPresent(locator)) {
-			return (false); // Not even present
+		if (!this.zWaitForElementPresent(locator,"3000")) {
+			throw new HarnessException("locator not even present");			
 		}
 
 		if (!this.zIsVisiblePerPosition(locator, 0, 0)) {
