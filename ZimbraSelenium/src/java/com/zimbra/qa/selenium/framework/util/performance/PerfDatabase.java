@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import com.zimbra.common.soap.Element;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.OperatingSystem;
 import com.zimbra.qa.selenium.framework.util.ZimbraAdminAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 
@@ -51,13 +52,26 @@ mysql> insert into milestones (milestone) VALUES ('Helix');
 mysql> insert into milestones (milestone) VALUES ('IronMaiden');
 mysql> insert into milestones (milestone) VALUES ('JudasPriest');
 
+
+mysql> create table browsers ( 
+ id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+ name VARCHAR(35) 
+ );
+
+mysql> create table clients ( 
+ id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+ name VARCHAR(35) 
+ );
+
 mysql> create table perf (
  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
  created TIMESTAMP(8),
  name VARCHAR(35),
  appid INT,
  buildid INT,
- milestone VARCHAR(35),
+ browserid INT,
+ clientid INT,
+ milestoneid INT,
  start BIGINT,
  launched BIGINT,
  loaded BIGINT,
@@ -88,7 +102,9 @@ public class PerfDatabase {
 		table.put("name", "'" + data.Key.toString() +"'");		// VARCHAR ... enclose in single quotes
 		table.put("appid", "" + PerfDatabase.getInstance().getAppType());
 		table.put("buildid", "" + PerfDatabase.getInstance().getBuildID());
-		table.put("milestone", "'" + PerfDatabase.getInstance().getMilestone() +"'"); 		// VARCHAR ... enclose in single quotes
+		table.put("milestoneid", "" + PerfDatabase.getInstance().getMilestoneID());
+		table.put("browserid", "" + PerfDatabase.getInstance().getBrowserID());
+		table.put("clientid", "" + PerfDatabase.getInstance().getClientID());
 
 		table.put("start", "" + data.StartStamp);
 		table.put("launched", "" + data.LaunchStamp);
@@ -132,6 +148,7 @@ public class PerfDatabase {
 
 	}
 
+		
 	/**
 	 * Get the ID corresponding to the app from the perf DB
 	 * @return
@@ -249,6 +266,148 @@ public class PerfDatabase {
 
 
 	/**
+	 * Get the ID corresponding to the browser from the perf DB
+	 * @return
+	 * @throws HarnessException
+	 */
+	protected int getBrowserID() throws HarnessException {
+		getBrowserTable();
+		
+		String browser = ZimbraSeleniumProperties.getStringProperty("CalculatedBrowser", "unknown");
+
+		if (!browserTable.containsKey(browser)) {
+			insertBrowser(browser);
+		}
+
+		return (browserTable.get(browser));
+	}
+
+	protected static HashMap<String, Integer> browserTable = null;
+	protected void getBrowserTable() throws HarnessException {
+		if ( browserTable == null ) {
+			browserTable = new HashMap<String, Integer>();
+
+			try {
+
+				String query = "SELECT id, name FROM browsers";
+
+				Statement statement = DatabaseConnection.getInstance().createStatement();
+				ResultSet rs = statement.executeQuery(query);
+				while (rs.next()) {
+
+					Integer id = rs.getInt("id");
+					String name = rs.getString("name");
+
+					logger.info("getBrowserTable(): id="+ id +" name="+ name);
+
+					browserTable.put(name, id);
+
+				}
+
+			} catch (SQLException e) {
+				throw new HarnessException(e);
+			}
+
+
+		}
+	}
+	protected void insertBrowser(String browser) throws HarnessException {
+
+		if ( browserTable.containsKey(browser) )
+			throw new HarnessException("browserTable already contains "+ browser);
+
+		try {
+
+			String command = String.format("INSERT INTO browsers (name) VALUES ('%s')", browser);
+			logger.info("Statement: "+ command);
+
+			Statement statement = DatabaseConnection.getInstance().createStatement();
+			int ret = statement.executeUpdate(command);
+			logger.info("Statement: ret="+ ret);
+
+
+		} catch (SQLException e) {
+			throw new HarnessException(e);
+		}
+
+		// Reset the action table to pick up the new ID
+		browserTable = null;
+		getBrowserTable();
+
+	}
+
+	/**
+	 * Get the ID corresponding to the client OS from the perf DB
+	 * @return
+	 * @throws HarnessException
+	 */
+	protected int getClientID() throws HarnessException {
+		getClientTable();
+		
+		String os = OperatingSystem.getOSType().toString();
+
+		if (!clientTable.containsKey(os)) {
+			insertClient(os);
+		}
+
+		return (clientTable.get(os));
+	}
+
+	protected static HashMap<String, Integer> clientTable = null;
+	protected void getClientTable() throws HarnessException {
+		if ( clientTable == null ) {
+			clientTable = new HashMap<String, Integer>();
+
+			try {
+
+				String query = "SELECT id, name FROM clients";
+
+				Statement statement = DatabaseConnection.getInstance().createStatement();
+				ResultSet rs = statement.executeQuery(query);
+				while (rs.next()) {
+
+					Integer id = rs.getInt("id");
+					String name = rs.getString("name");
+
+					logger.info("getClientTable(): id="+ id +" name="+ name);
+
+					clientTable.put(name, id);
+
+				}
+
+			} catch (SQLException e) {
+				throw new HarnessException(e);
+			}
+
+
+		}
+	}
+	protected void insertClient(String os) throws HarnessException {
+
+		if ( clientTable.containsKey(os) )
+			throw new HarnessException("clientTable already contains "+ os);
+
+		try {
+
+			String command = String.format("INSERT INTO clients (name) VALUES ('%s')", os);
+			logger.info("Statement: "+ command);
+
+			Statement statement = DatabaseConnection.getInstance().createStatement();
+			int ret = statement.executeUpdate(command);
+			logger.info("Statement: ret="+ ret);
+
+
+		} catch (SQLException e) {
+			throw new HarnessException(e);
+		}
+
+		// Reset the action table to pick up the new ID
+		clientTable = null;
+		getClientTable();
+
+	}
+
+	/**
 	 * Get the ID corresponding to the key from the perf DB
 	 * @return
 	 * @throws HarnessException
@@ -317,24 +476,61 @@ public class PerfDatabase {
 
 	}
 
-	protected String getMilestone() throws HarnessException {
+	/**
+	 * Get the Milestone (string) corresponding to the version number from the perf DB
+	 * @return
+	 * @throws HarnessException
+	 */
+	protected int getMilestoneID() throws HarnessException {
+		getMilestoneTable();
 
 		if ( getVersionString().startsWith("6") ) {
-			return ("GunsNRoses");
+			return (milestoneTable.get("GunsNRoses"));
 		}
 		if ( getVersionString().startsWith("7") ) {
-			return ("Helix");
+			return (milestoneTable.get("Helix"));
 		}
 		if ( getVersionString().startsWith("8") ) {
-			return ("IronMaiden");
+			return (milestoneTable.get("IronMaiden"));
 		}
 		if ( getVersionString().startsWith("9") ) {
-			return ("JudasPriest");
+			return (milestoneTable.get("JudasPriest"));
 		}
 
 		throw new HarnessException("Unable to determine Milestone from version string: "+ getVersionString());
 
 	}
+	
+	protected static HashMap<String, Integer> milestoneTable = null;
+	protected void getMilestoneTable() throws HarnessException {
+		if ( milestoneTable == null ) {
+			milestoneTable = new HashMap<String, Integer>();
+
+			try {
+
+				String query = "SELECT id, milestone FROM milestones";
+
+				Statement statement = DatabaseConnection.getInstance().createStatement();
+				ResultSet rs = statement.executeQuery(query);
+				while (rs.next()) {
+
+					Integer id = rs.getInt("id");
+					String milestone = rs.getString("milestone");
+
+					logger.info("getActionTable(): id="+ id +" milestone="+ milestone);
+
+					milestoneTable.put(milestone, id);
+
+				}
+
+			} catch (SQLException e) {
+				throw new HarnessException(e);
+			}
+
+
+		}
+	}
+
 
 	protected String versionString = null;
 	protected String getVersionString() throws HarnessException {
