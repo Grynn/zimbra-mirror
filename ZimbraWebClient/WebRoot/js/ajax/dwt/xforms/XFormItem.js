@@ -3275,7 +3275,7 @@ CollapsedGroup_XFormItem.prototype.getContentItems =
 function () {
     var colsize = this.getInheritedProperty("colSizes");
     var numcols = this.getInheritedProperty("numCols");
-    var contentItems = { type:_GROUP_, items:[], colSpan:"*", colSizes:colsize,numCols:numcols, width:"100%",
+    var contentItems = { type:_GROUP_, items:[], colSpan:"*", colSizes:colsize,numCols:numcols, width:"100%"
     };
     var content =  this.getInheritedProperty("contentItems");
     if(content)

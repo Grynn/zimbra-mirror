@@ -348,6 +348,12 @@ function(tmpObj) {
 		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_NAME_REQUIRED);
 		return false;
 	}
+
+    if(ZaItem.hasWritePermission(ZaAccount.A_name,tmpObj) && ( tmpObj.name.length > 255)) {
+		//show error msg
+		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_ACCOUNT_NAME_TOOLONG);
+		return false;
+	}
 	
 	if(ZaItem.hasWritePermission(ZaAccount.A_lastName,tmpObj) && (tmpObj.attrs[ZaAccount.A_lastName] == null || tmpObj.attrs[ZaAccount.A_lastName].length < 1)) {
 		//show error msg
