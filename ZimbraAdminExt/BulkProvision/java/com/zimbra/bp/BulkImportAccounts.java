@@ -115,9 +115,10 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                     throw ServiceException.FAILURE("Uploaded CSV file with id " + aid + " was not found.", null);
                 }
                 InputStream in = null;
+                CSVReader reader = null;
                 try {
                     in = up.getInputStream();
-                    CSVReader reader = new CSVReader(new InputStreamReader(in));
+                    reader = new CSVReader(new InputStreamReader(in));
                     String[] nextLine;
 
                     List<String[]> allEntries = reader.readAll();
@@ -193,11 +194,21 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                 } catch (IOException e) {
                     throw ServiceException.FAILURE("", e);
                 } finally {
-                    try {
-                        in.close();
-                    } catch (IOException e) {
-                        ZimbraLog.extensions.error(e);
-                    }
+                	if(in != null) {
+                		try {
+                		in.close();
+                		} catch (IOException e) {
+                            ZimbraLog.extensions.error(e);
+                        }
+                	}
+                	if(reader != null) {
+                		try {
+                		reader.close();
+                		} catch (IOException e) {
+                            ZimbraLog.extensions.error(e);
+                        }
+                	}
+                    
                 }
             } else if (sourceType.equalsIgnoreCase(AdminFileDownload.FILE_FORMAT_BULK_XML)) {
                 String aid = request.getElement(AdminExtConstants.E_attachmentID).getTextTrim();
@@ -332,7 +343,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                     throw ServiceException.FAILURE(
                             "Bulk provisioning failed to read uploaded XML document.",
                             e);
-                }
+                } 
             } else if (sourceType.equalsIgnoreCase(ZimbraBulkProvisionExt.FILE_FORMAT_BULK_LDAP)) {
                 GalParams.ExternalGalParams galParams = new GalParams.ExternalGalParams(attrs, GalOp.search);
                 LdapGalMapRules rules = new LdapGalMapRules(Provisioning.getInstance().getConfig(), true);
@@ -543,9 +554,11 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                             "%s%s_bulk_report_%s_%s.csv",
                             LC.zimbra_tmp_directory.value(), File.separator,
                             zsc.getAuthtokenAccountId(), fileToken);
+                    FileOutputStream outReport = null;
+                    CSVWriter reportWriter = null;
                     try {
-                        FileOutputStream outReport = new FileOutputStream(outSuccessFileName);
-                        CSVWriter reportWriter = new CSVWriter(new OutputStreamWriter(outReport));
+                        outReport = new FileOutputStream(outSuccessFileName);
+                        reportWriter = new CSVWriter(new OutputStreamWriter(outReport));
                         for (String completedAccount : thread.getCompletedAccounts().keySet()) {
                             String[] line = new String[2];
                             line[0] = completedAccount; // account name
@@ -561,6 +574,22 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                         throw (ServiceException.FAILURE(
                                 "Failed to create CSV file with a list of provisioned accounts",
                                 e));
+                    } finally {
+                    	if(reportWriter != null) {
+                    		try {
+                    			reportWriter.close();
+                    		} catch (IOException e) {
+                    			ZimbraLog.extensions.error(e);
+                    		}
+                    	}
+                    	
+                    	if(outReport != null) {
+                    		try {
+                    			outReport.close();
+                    		} catch (IOException e) {
+                    			ZimbraLog.extensions.error(e);
+                    		}
+                    	}
                     }
                     response.addElement(AdminExtConstants.E_reportFileToken).addText(fileToken);
                     /**
@@ -568,14 +597,16 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                      * errors, generate an error report
                      */
                     if (thread.getWithErrors()) {
+                    	FileOutputStream out = null;
+                    	CSVWriter errorWriter = null;
                         try {
                             String outErrorsFileName = String.format(
                                     "%s%s_bulk_errors_%s_%s.csv",
                                     LC.zimbra_tmp_directory.value(),
                                     File.separator,
                                     zsc.getAuthtokenAccountId(), fileToken);
-                            FileOutputStream out = new FileOutputStream(outErrorsFileName);
-                            CSVWriter errorWriter = new CSVWriter(new OutputStreamWriter(out));
+                            out = new FileOutputStream(outErrorsFileName);
+                            errorWriter = new CSVWriter(new OutputStreamWriter(out));
                             for (String failedAccount : thread.getfailedAccounts().keySet()) {
                                 String[] line = new String[2];
                                 line[0] = failedAccount;
@@ -592,6 +623,21 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                             throw (ServiceException.FAILURE(
                                     "Failed to create CSV file with error report",
                                     e));
+                        } finally {
+                            if (errorWriter != null) {
+                                try {
+                                	errorWriter.close();
+                                } catch (IOException e) {
+                                	ZimbraLog.extensions.error(e);
+                                }
+                            }
+                            if(out != null) {
+                            	try {
+                            		out.close();
+                            	} catch (IOException e) {
+                            		ZimbraLog.extensions.error(e);
+                            	}
+                            }
                         }
                     }
                     BulkProvisioningThread.deleteThreadInstance(zsc.getAuthtokenAccountId());
