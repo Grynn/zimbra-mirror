@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import com.zimbra.qa.selenium.framework.items.*;
 import com.zimbra.qa.selenium.framework.ui.*;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.projects.ajax.ui.addressbook.PageAddressbook;
 import com.zimbra.qa.selenium.projects.ajax.ui.mail.DialogCreateFolder;
 
 /*
@@ -134,10 +135,14 @@ public class ContextMenu extends AbsDisplay {
 			String id = sGetAttribute("xpath=(//div[@" + typeLocator + "]/table/tbody/tr["+ i +"]/td/div)@id");
             		    				
 			ContextMenuItem ci  = getContextMenuItem(id, contextMenuItemObjects);		    						
-			list.add(ci);	    	      
+			list.add(ci);
+			if ( PageAddressbook.CONTEXT_MENU.CONTEXT_MENUITEM_ARRAY[i-1]!= null) { 
+			  PageAddressbook.CONTEXT_MENU.CONTEXT_MENUITEM_ARRAY[i-1].parentLocator=id;
+			}
 		}
 
-
+        
+		
 		return list;		
 	}
 	
@@ -169,7 +174,8 @@ public class ContextMenu extends AbsDisplay {
 
 	//check if a context menu item is enable
 	public boolean isEnable(ContextMenuItem cmi) throws HarnessException  {
-		return !zIsElementDisabled("div#" +cmi.locator);       		
+	//	String id = sGetAttribute("xpath=(../../../tr[@id='" + cmi.locator + "'])@id");        	
+		return !zIsElementDisabled("css=div#" + cmi.parentLocator );       		
 	}
 
 }

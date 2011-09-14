@@ -39,22 +39,26 @@ public class PageAddressbook extends AbsTab {
 		public static final String LOCATOR		= "id='zm__Contacts'";
 		
 		//contact's context menu	
-		public static final ContextMenuItem CONTACT_SEARCH = new ContextMenuItem("zmi__Contacts__SEARCH_MENU","Find Emails...","div[class*='ImgSearch']"," div[class*='ImgCascade']");	
-		public static final ContextMenuItem CONTACT_ADVANCED_SEARCH = new ContextMenuItem("zmi__Contacts__BROWSE","Advanced Search","div[class*='ImgSearchBuilder']","");	
-		public static final ContextMenuItem CONTACT_NEW_EMAIL = new ContextMenuItem("zmi__Contacts__NEW_MESSAGE","New Email","div[class*='ImgNewMessage']",":contains('nm')");  	
+		public static final ContextMenuItem CONTACT_SEARCH = new ContextMenuItem("POPUP_SEARCH_MENU","Find Emails...","div[class*='ImgSearch']"," div[class*='ImgCascade']");	
+		public static final ContextMenuItem CONTACT_ADVANCED_SEARCH = new ContextMenuItem("POPUP_BROWSE","Advanced Search","div[class*='ImgSearchBuilder']","");	
+		public static final ContextMenuItem CONTACT_NEW_EMAIL = new ContextMenuItem("POPUP_NEW_MESSAGE","New Email","div[class*='ImgNewMessage']",":contains('nm')");  	
     
 		//TODO: contact group: "Edit Group" instead of "Edit Contact"
-		public static final ContextMenuItem CONTACT_EDIT = new ContextMenuItem("zmi__Contacts__CONTACT","Edit Contact","div[class*='ImgEdit']","");	
-		public static final ContextMenuItem CONTACT_FORWARD = new ContextMenuItem("zmi__Contacts__SEND_CONTACTS_IN_EMAIL","Forward Contact","div[class*='ImgMsgStatusSent']","");	
+		public static final ContextMenuItem CONTACT_EDIT = new ContextMenuItem("POPUP_CONTACT","Edit Contact","div[class*='ImgEdit']","");	
+		public static final ContextMenuItem CONTACT_FORWARD = new ContextMenuItem("POPUP_SEND_CONTACTS_IN_EMAIL","Forward Contact","div[class*='ImgMsgStatusSent']","");	
 	
 		//TODO: contact group: "Tag Group" instead of "Tag Contact"
-		public static final ContextMenuItem CONTACT_TAG = new ContextMenuItem("zmi__Contacts__TAG_MENU","Tag Contact","div[class*='ImgTag']"," div[class='ImgCascade']");	
-		public static final ContextMenuItem CONTACT_DELETE = new ContextMenuItem("zmi__Contacts__DELETE","Delete","div[class*='ImgDelete']",":contains('Del')");
-		public static final ContextMenuItem CONTACT_MOVE = new ContextMenuItem("zmi__Contacts__MOVE","Move","div[class*='ImgMoveToFolder']","");
-		public static final ContextMenuItem CONTACT_PRINT = new ContextMenuItem("zmi__Contacts__PRINT_CONTACT","Print","div[class*='ImgPrint']",":contains('p')");
+		public static final ContextMenuItem CONTACT_TAG = new ContextMenuItem("POPUP_TAG_MENU","Tag Contact","div[class*='ImgTag']"," div[class='ImgCascade']");	
+		public static final ContextMenuItem CONTACT_DELETE = new ContextMenuItem("POPUP_DELETE","Delete","div[class*='ImgDelete']",":contains('Del')");
+		public static final ContextMenuItem CONTACT_MOVE = new ContextMenuItem("POPUP_MOVE","Move","div[class*='ImgMoveToFolder']","");
+		public static final ContextMenuItem CONTACT_PRINT = new ContextMenuItem("POPUP_PRINT_CONTACT","Print","div[class*='ImgPrint']",":contains('p')");
 	 		
-		public static final ContextMenuItem CONTACT_GROUP = new ContextMenuItem("zmi__Contacts__CONTACTGROUP_MENU","Contact Group","div[class*='ImgGroup']","");
+		public static final ContextMenuItem CONTACT_GROUP = new ContextMenuItem("POPUP_CONTACTGROUP_MENU","Contact Group","div[class*='ImgGroup']","");
+		public static final ContextMenuItem CONTACT_QUICK_COMMAND =  new ContextMenuItem("POPUP_QUICK_COMMANDS","Quick Commands","div[class='ImgQuickCommand']","");
 		
+		public static final ContextMenuItem[] CONTEXT_MENUITEM_ARRAY={CONTACT_SEARCH, CONTACT_ADVANCED_SEARCH, CONTACT_NEW_EMAIL, CONTACT_EDIT, CONTACT_FORWARD, null,
+			                                                          CONTACT_GROUP,CONTACT_TAG,CONTACT_DELETE,CONTACT_MOVE,CONTACT_PRINT,CONTACT_QUICK_COMMAND
+		                                                             };
 	}
 
 	
@@ -1108,19 +1112,20 @@ public class PageAddressbook extends AbsTab {
 		    
 			
 			id = cmi.locator;
-			locator = "id="+ id;
-
+			//locator = "id="+ id;
+			locator = "css=div#zm__Contacts tr#"+ id;
+			
 			//  Make sure the context menu exists
 			zWaitForElementPresent(locator) ;
 			
 			// Check if the item is enabled
-			if (sIsElementPresent("css=div[id=" + id + "][class*=ZDisabled]")) {
+			if (sIsElementPresent(locator + "[class*=ZDisabled]")) {
 				throw new HarnessException("Tried clicking on "+cmi.text +" but it was disabled ");
 			}
 
 		}
 		
-				
+		
 		zClickAt(locator,"0,0");
 		
 		zWaitForBusyOverlay();

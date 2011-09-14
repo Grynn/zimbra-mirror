@@ -53,17 +53,19 @@ public class ContextMenuContactGroup extends AjaxCommonTest  {
         
         ArrayList <ContextMenuItem> list = contextMenu.zListGetContextMenuItems(PageAddressbook.CONTEXT_MENU.class);
         
-         //verify all items in the context menu list
-        ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_SEARCH),"Verify contact search in context menu");
-        ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_ADVANCED_SEARCH),"Verify advanced search in context menu");
-        ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_NEW_EMAIL),"Verify new email in context menu");
-        ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_EDIT),"Verify edit contact group  in context menu");
+        String prefixLocator="css=div#zm__Contacts tr#";
         
-        ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_FORWARD),"Verify forward email in context menu");
-        ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_TAG),"Verify tag group option in context menu");
-        ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_DELETE),"Verify delete option in context menu");
-        ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_MOVE),"Verify move option in context menu");
-        ZAssert.assertTrue(list.contains(PageAddressbook.CONTEXT_MENU.CONTACT_PRINT),"Verify print option in context menu");
+         //verify all items in the context menu list
+        ZAssert.assertTrue(app.zPageAddressbook.sIsElementPresent(prefixLocator + PageAddressbook.CONTEXT_MENU.CONTACT_SEARCH.locator),"Verify contact search in context menu");
+        ZAssert.assertTrue(app.zPageAddressbook.sIsElementPresent(prefixLocator + PageAddressbook.CONTEXT_MENU.CONTACT_ADVANCED_SEARCH.locator),"Verify advanced search in context menu");
+        ZAssert.assertTrue(app.zPageAddressbook.sIsElementPresent(prefixLocator + PageAddressbook.CONTEXT_MENU.CONTACT_NEW_EMAIL.locator),"Verify new email in context menu");
+        ZAssert.assertTrue(app.zPageAddressbook.sIsElementPresent(prefixLocator + PageAddressbook.CONTEXT_MENU.CONTACT_EDIT.locator),"Verify edit contact group  in context menu");
+        
+        ZAssert.assertTrue(app.zPageAddressbook.sIsElementPresent(prefixLocator + PageAddressbook.CONTEXT_MENU.CONTACT_FORWARD.locator),"Verify forward email in context menu");
+        ZAssert.assertTrue(app.zPageAddressbook.sIsElementPresent(prefixLocator + PageAddressbook.CONTEXT_MENU.CONTACT_TAG.locator),"Verify tag group option in context menu");
+        ZAssert.assertTrue(app.zPageAddressbook.sIsElementPresent(prefixLocator + PageAddressbook.CONTEXT_MENU.CONTACT_DELETE.locator),"Verify delete option in context menu");
+        ZAssert.assertTrue(app.zPageAddressbook.sIsElementPresent(prefixLocator + PageAddressbook.CONTEXT_MENU.CONTACT_MOVE.locator),"Verify move option in context menu");
+        ZAssert.assertTrue(app.zPageAddressbook.sIsElementPresent(prefixLocator + PageAddressbook.CONTEXT_MENU.CONTACT_PRINT.locator),"Verify print option in context menu");
 
         //Verify only Edit Group, New Email, Tag Group, Delete, Move, Print enabled
         ZAssert.assertTrue(contextMenu.isEnable(PageAddressbook.CONTEXT_MENU.CONTACT_NEW_EMAIL),"Verify new email is enabled");

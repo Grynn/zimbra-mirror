@@ -19,6 +19,7 @@ public class ContextMenuItem {
 	public final String image;
 	public final String text;
 	public final String shortcut;
+	public  String parentLocator;
 
 	public ContextMenuItem (String locator, String text, String image, String shortcut) {
 		this.locator=locator;
