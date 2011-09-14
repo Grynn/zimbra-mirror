@@ -74,9 +74,9 @@ public class SendDocAttachment extends AjaxCommonTest {
 					Button.B_ACTIONS, Button.O_SEND_AS_ATTACHMENT, docItem);
 
 		// Verify the new mail form has attachment
-		ZAssert.assertTrue(app.zPageBriefcase
-				.sIsElementPresent(FormMailNew.Locators.zAttachmentText
-						+ docName + ")"), "Verify the attachment text");
+		ZAssert.assertTrue(app.zPageBriefcase.zWaitForElementPresent(
+				FormMailNew.Locators.zAttachmentText + docName + ")", "3000"),
+				"Verify the attachment text");
 
 		// Cancel the message
 		// A warning dialog should appear regarding losing changes
@@ -140,9 +140,9 @@ public class SendDocAttachment extends AjaxCommonTest {
 				Action.A_RIGHTCLICK, Button.O_SEND_AS_ATTACHMENT, docItem);
 
 		// Verify the new mail form has attachment
-		ZAssert.assertTrue(app.zPageBriefcase
-				.zWaitForElementPresent(FormMailNew.Locators.zAttachmentText
-						+ docName + ")"), "Verify the attachment text");
+		ZAssert.assertTrue(app.zPageBriefcase.zWaitForElementPresent(
+				FormMailNew.Locators.zAttachmentText + docName + ")", "3000"),
+				"Verify the attachment text");
 
 		// Cancel the message
 		// A warning dialog should appear regarding losing changes
