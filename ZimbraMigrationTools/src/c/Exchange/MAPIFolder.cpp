@@ -136,6 +136,34 @@ ZimbraSpecialFolderId MAPIFolder::GetZimbraFolderId()
 	return ZM_SFID_NONE;
 }
 
+bool MAPIFolder::HiddenFolder()
+{
+	if (!m_folder)
+		return false;
+	HRESULT hr=S_OK;
+	bool bRet=false;
+	Zimbra::Util::ScopedBuffer<SPropValue> pPropValues;
+    if(SUCCEEDED(hr= HrGetOneProp(m_folder,PR_ATTR_HIDDEN,pPropValues.getptr())))
+	{
+		bRet= (pPropValues->Value.b!=0);
+	}
+	return bRet;
+}
+
+HRESULT MAPIFolder::ContainerClass(wstring &wstrContainerClass)
+{
+	if (!m_folder)
+		return E_FAIL;
+	HRESULT hr=S_OK;
+	Zimbra::Util::ScopedBuffer<SPropValue> pPropValues;
+	wstrContainerClass=L"";
+    if(SUCCEEDED(hr= HrGetOneProp(m_folder,PR_CONTAINER_CLASS,pPropValues.getptr())))
+	{
+		wstrContainerClass=pPropValues->Value.LPSZ;
+	}
+	return hr;
+}
+
 wstring MAPIFolder::FindFolderPath()
 {
 	//return if no session object to compare ids

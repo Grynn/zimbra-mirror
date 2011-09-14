@@ -24,6 +24,11 @@ typedef struct _BaseItemData {
 	__int64 MessageDate;
 }BaseItemData ;
 
+//folders to skip
+enum	{TS_JOURNAL=0, TS_OUTBOX, TS_SYNC_CONFLICTS,
+		TS_SYNC_ISSUES, TS_SYNC_LOCAL_FAILURES, TS_SYNC_SERVER_FAILURES, 
+		TS_JUNK_MAIL, TS_FOLDERS_MAX};
+
 //contact item data
 typedef struct _ContactItemData:BaseItemData {
 	wstring CallbackPhone;
@@ -89,8 +94,11 @@ private:
     Zimbra::MAPI::MAPIStore *m_defaultStore;
     Zimbra::MAPI::MAPIStore *m_userStore;
     Zimbra::MAPI::MAPIFolder *m_rootFolder;
+	ExchangeSpecialFolderId FolderToSkip[TS_FOLDERS_MAX];
+	void InitFoldersToSkip();
 
-    LPCWSTR OpenSessionAndStore();
+	bool SkipFolder(ExchangeSpecialFolderId exfid);
+	LPCWSTR OpenSessionAndStore();
     HRESULT Iterate_folders(Zimbra::MAPI::MAPIFolder &folder, vector<Folder_Data> &fd);
     void travrese_folder(Zimbra::MAPI::MAPIFolder &folder);
     HRESULT GetInternalFolder(SBinary sbFolderEID, MAPIFolder &folder);

@@ -206,7 +206,9 @@ void MAPIAccessAPITestV()
 	Zimbra::MAPI::MAPIAccessAPI *maapi = new Zimbra::MAPI::MAPIAccessAPI(L"10.117.82.161",L"Outlook",L"seretary");
 
 	//Init session and stores
-	maapi->Initialize();
+	LPCWSTR lpStatus =maapi->Initialize();
+	if (lpStatus)
+		return;
 
 	//Get all folders
 	maapi->GetRootFolderHierarchy(vfolderlist);
@@ -218,11 +220,11 @@ void MAPIAccessAPITestV()
 	vector<Item_Data>::iterator idItr;
 	for(it=vfolderlist.begin();it!=vfolderlist.end();it++)
 	{
-		printf("FolderName:  %S \n",(*it).name.c_str());
-		printf("FolderPath: %S   ",(*it).folderpath.c_str());
-		printf("ItemCount: %d\n",(*it).itemcount);
+		printf("FolderName:  %S ",(*it).name.c_str());
+		printf("FolderPath: %S ",(*it).folderpath.c_str());
+		printf("ItemCount: %d ",(*it).itemcount);
 		printf("ZimbraId: %d\n",(*it).zimbraid);
-
+		printf("\n\n");
 		SBinary sbin = (*it).sbin;
 		maapi->GetFolderItemsList(sbin,vItemDataList);
 		for(idItr=vItemDataList.begin();idItr!=vItemDataList.end();idItr++)

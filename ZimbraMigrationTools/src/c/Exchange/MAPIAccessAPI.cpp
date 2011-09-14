@@ -13,6 +13,7 @@ MAPIAccessAPI::MAPIAccessAPI(wstring strExchangeHostName, wstring strAdminProfil
     MAPIInitialize(NULL);
     Zimbra::Mapi::Memory::SetMemAllocRoutines(NULL, MAPIAllocateBuffer, MAPIAllocateMore,
         MAPIFreeBuffer);
+	InitFoldersToSkip();
 }
 
 MAPIAccessAPI::~MAPIAccessAPI() {
@@ -26,6 +27,27 @@ MAPIAccessAPI::~MAPIAccessAPI() {
         delete m_zmmapisession;
     m_zmmapisession = NULL;
     MAPIUninitialize();
+}
+
+void MAPIAccessAPI::InitFoldersToSkip()
+{
+	FolderToSkip[TS_JOURNAL] = JOURNAL;
+	FolderToSkip[TS_OUTBOX] = OUTBOX;
+	FolderToSkip[TS_SYNC_CONFLICTS] = SYNC_CONFLICTS;
+	FolderToSkip[TS_SYNC_ISSUES] = SYNC_ISSUES;
+	FolderToSkip[TS_SYNC_LOCAL_FAILURES] = SYNC_LOCAL_FAILURES;
+	FolderToSkip[TS_SYNC_SERVER_FAILURES] = SYNC_SERVER_FAILURES;
+	FolderToSkip[TS_JUNK_MAIL] = JUNK_MAIL;
+}
+
+bool MAPIAccessAPI::SkipFolder(ExchangeSpecialFolderId exfid)
+{
+	for(int i = TS_JOURNAL; i<TS_FOLDERS_MAX; i++)
+	{
+		if (FolderToSkip[i] == exfid)
+			return true;
+	}
+	return false;
 }
 
 // Open MAPI sessiona and Open Stores
@@ -135,7 +157,20 @@ HRESULT MAPIAccessAPI::Iterate_folders(Zimbra::MAPI::MAPIFolder &folder, vector<
 		// delete them while clearing the tree nodes
         Zimbra::MAPI::MAPIFolder *childFolder = new Zimbra::MAPI::MAPIFolder(*m_zmmapisession,*m_userStore);
         bMore = folderIter->GetNext(*childFolder);
-        if (bMore) {
+		
+		bool bSkipFolder = false;
+		ExchangeSpecialFolderId exfid= childFolder->GetExchangeFolderId();
+		wstring wstrContainerClass;
+		childFolder->ContainerClass(wstrContainerClass);
+		//skip folders in exclusion list, hidden folders and non-standard type folders
+		if(SkipFolder(exfid) ||childFolder->HiddenFolder() || 
+			(((wstrContainerClass!=L"IPF.Note")&&(wstrContainerClass!=L"IPF.Contact")&&
+			(wstrContainerClass!=L"IPF.Appointment")&&(wstrContainerClass!=L"IPF.Task")&&
+			(wstrContainerClass!=L"IPF.StickyNote"))
+			&&(exfid==SPECIAL_FOLDER_ID_NONE)))
+			bSkipFolder = true;
+
+        if (bMore && !bSkipFolder) {
             childFolder->GetItemCount(itemCount);
 			
             // store foldername
@@ -158,14 +193,11 @@ HRESULT MAPIAccessAPI::Iterate_folders(Zimbra::MAPI::MAPIFolder &folder, vector<
             //append
 			fd.push_back(flderdata);
 		}
-		if (bMore) {
+		if (bMore && !bSkipFolder) {
             Iterate_folders(*childFolder, fd);
-			delete childFolder;
-            childFolder = NULL; 
-        } else {
-            delete childFolder;
-            childFolder = NULL;
-        }
+        } 
+        delete childFolder;
+        childFolder = NULL;
 	}
 	delete folderIter;
 	folderIter = NULL;

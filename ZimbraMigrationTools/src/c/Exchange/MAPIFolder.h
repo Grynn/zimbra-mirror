@@ -111,7 +111,8 @@ public:
 	SBinary EntryID() {return m_EntryID;}
 	ExchangeSpecialFolderId GetExchangeFolderId();
 	ZimbraSpecialFolderId GetZimbraFolderId();
-
+	bool HiddenFolder();
+	HRESULT ContainerClass(wstring &wstrContainerClass);
 };
 
 // global declaration
