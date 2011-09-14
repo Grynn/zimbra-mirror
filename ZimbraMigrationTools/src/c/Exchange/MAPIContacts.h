@@ -185,8 +185,8 @@ private:
     wstring m_pDList;
     wstring m_pType;
     wstring m_pPictureID;
-	int	   m_size;
-	wstring m_pIMAddress1;
+    size_t	   m_size;
+    wstring m_pIMAddress1;
 
 	HRESULT Init();
 public:
@@ -297,7 +297,7 @@ public:
     wstring DList(){ return m_pDList; }
     wstring Type(){ return m_pType; }
 	wstring IMAddress1(){ return m_pIMAddress1; }
-	int Size(){ return m_size; }
+	size_t Size(){ return m_size; }
 
     wstring Picture(){ return m_pPictureID; }
     void Picture( LPTSTR pStr, UINT ulFileSize ){ m_pPictureID= pStr; m_size += ulFileSize; }

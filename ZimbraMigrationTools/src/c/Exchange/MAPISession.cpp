@@ -104,7 +104,7 @@ HRESULT MAPISession::OpenOtherStore(LPMDB OpenedStore, LPWSTR pServerDn, LPWSTR 
             __FILE__);
     // build the dn of the store to open
     LPWSTR pszSuffix = L"/cn=Microsoft Private MDB";
-    int iLen = wcslen(pServerDn) + wcslen(pszSuffix) + 1;
+    size_t iLen = wcslen(pServerDn) + wcslen(pszSuffix) + 1;
     LPWSTR pszStoreDN = new WCHAR[iLen];
 
     swprintf(pszStoreDN, iLen, L"%s%s", pServerDn, pszSuffix);

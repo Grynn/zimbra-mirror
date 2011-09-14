@@ -94,14 +94,14 @@ STDMETHODIMP CUserObject::GetFolderObjects(/*[out, retval]*/ VARIANT* vObjects)
 
 
 	std::vector<Folder_Data>::iterator it;
-	int size = vfolderlist.size();
+	size_t size = vfolderlist.size();
 	it = vfolderlist.begin();
-	SAFEARRAYBOUND bounds ={size,0};
+	SAFEARRAYBOUND bounds ={(ULONG)size,0};
 
 	psa = SafeArrayCreate(VT_DISPATCH,1,&bounds);
 	IfolderObject** pfolders;
 	SafeArrayAccessData(psa,(void**)&pfolders);
-	for (int i = 0 ;i < size ; i ++,it++)
+	for (size_t i = 0 ;i < size ; i ++,it++)
 	{
 		CComPtr<IfolderObject> pIFolderObject;
 		//Isampleobj* pIStatistics;

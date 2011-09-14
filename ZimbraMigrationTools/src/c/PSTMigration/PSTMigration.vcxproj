@@ -20,14 +20,11 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B4DEC736-0347-42E6-9F01-9AF82891FE82}</ProjectGuid>
-    <SccProjectName>
-    </SccProjectName>
+    <SccProjectName>Perforce Project</SccProjectName>
     <SccAuxPath>
     </SccAuxPath>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccProvider>
-    </SccProvider>
+    <SccLocalPath>..\..\..</SccLocalPath>
+    <SccProvider>MSSCCI:Perforce SCM</SccProvider>
     <Keyword>MFCProj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -75,8 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">..\out\$(Configuration)\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">..\out\$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">..\out64\$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">..\out64\$(Configuration)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='dbg|x64'">$(Configuration)\</IntDir>
     <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='dbg|Win32'">false</IgnoreImportLibrary>
@@ -125,7 +122,7 @@
       <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;..\out\$(Configuration)\CppLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -164,7 +161,7 @@
       <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>comsupp.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
@@ -210,7 +207,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
-      <AdditionalDependencies>comsupp.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <Midl>
@@ -252,7 +249,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
-      <AdditionalDependencies>comsupp.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>comsupp.lib;ActiveDS.lib;adsiid.lib;mapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <Midl>

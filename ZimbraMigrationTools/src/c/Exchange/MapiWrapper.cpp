@@ -96,7 +96,7 @@ STDMETHODIMP CMapiWrapper::GetProfilelist(VARIANT *Profiles) {
     VariantInit(Profiles);
     Profiles->vt = VT_ARRAY | VT_BSTR;
     SAFEARRAY *psa;
-    SAFEARRAYBOUND bounds = { vProfileList.size(), 0 };
+    SAFEARRAYBOUND bounds = { (ULONG)vProfileList.size(), 0 };
     psa = SafeArrayCreate(VT_BSTR, 1, &bounds);
 
     BSTR *bstrArray;
@@ -196,9 +196,9 @@ std::wstring CMapiWrapper::str_to_wstr(const std::string &str) {
     MultiByteToWideChar(CP_ACP,
         0,
         str.c_str(),
-        str.length(),
+        (int)str.length(),
         &wstr[0],
-        str.length());
+        (int)str.length());
     return wstr;
 }
 
@@ -462,7 +462,7 @@ STDMETHODIMP CMapiWrapper::SelectExchangeUsers(VARIANT_BOOL bObjectPicker, VARIA
 	VariantInit(Users);
 	Users->vt = VT_ARRAY | VT_BSTR;
     SAFEARRAY *psa;
-    SAFEARRAYBOUND bounds = { vUserList.size(), 0 };
+    SAFEARRAYBOUND bounds = { (ULONG)vUserList.size(), 0 };
 	psa = SafeArrayCreate(VT_BSTR, 1, &bounds);
 
 	BSTR *bstrArray;

@@ -130,7 +130,7 @@ inline LPTSTR FromatExceptionInfo(HRESULT errCode, LPWSTR errDescription, LPSTR 
 
     AtoW(srcFile, lpstrSrcFile);
 
-    long totalLen = wcslen(lpstrErrCode) + wcslen(errDescription) + wcslen(lpstrSrcFile) +
+    size_t totalLen = wcslen(lpstrErrCode) + wcslen(errDescription) + wcslen(lpstrSrcFile) +
         wcslen(lpstrSrecline) + (sizeof (WCHAR) * 2);
     lpBuffer = new TCHAR[totalLen * sizeof (WCHAR)];
     wsprintf(lpBuffer, UNICODE_EXCEPTION_STRING, lpstrErrCode, errDescription, lpstrSrcFile,
