@@ -931,6 +931,11 @@ ZaOverviewPanelController.globalSettingsTreeListener = function (ev) {
 	} else {					
 		ZaApp.getInstance().getGlobalConfigViewController().show(ZaApp.getInstance().getGlobalConfig());
 	}
+    if (appNewUI) {
+        var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure]);
+        var name = ev.item.getText();
+        this.addObjectItem(parentPath, name, undefined, true);
+    }
 }
 
 
@@ -1093,28 +1098,17 @@ function (itemType) {
 				searchListController._searchField.resFilterSelected(); break ;
 			case ZaItem.DOMAIN:
 				searchListController._searchField.domainFilterSelected(); break ;
-                        case ZaItem.COS:
-                                searchListController._searchField.cosFilterSelected(); break ;
+            case ZaItem.COS:
+                searchListController._searchField.cosFilterSelected(); break ;
 		}
 	}
 }
 
 // Temporary hard code  here
 // It will be rmoved in futher
-ZaOverviewPanelController.basePath = ZaMsg.OVP_home + ZaTree.SEPERATOR + ZaMsg.OVP_manageAccounts + ZaTree.SEPERATOR;
+ZaOverviewPanelController.accountBasePath = ZaMsg.OVP_home + ZaTree.SEPERATOR + ZaMsg.OVP_manageAccounts + ZaTree.SEPERATOR;
 ZaOverviewPanelController.prototype.addAccountItem =
 function(item, currentView) {
-    if (!currentView) {
-        currentView = ZaApp.getInstance().getAppViewMgr().getCurrentViewContent();
-        if (!currentView)
-            return;
-        if (!currentView.getTabChoices)
-            return;
-        if (!currentView.getTabChoices())
-            return;
-    }
-
-    var tabChoices = currentView.getTabChoices();
 	var type = item.type;
     var relativePath = ZaMsg.OVP_accounts;
 	if (type == ZaItem.ACCOUNT) {
@@ -1133,40 +1127,71 @@ function(item, currentView) {
         }
 	}
 
-    var tree = this.getOverviewPanel().getFolderTree();
-    var parentPath = ZaOverviewPanelController.basePath + relativePath;
+    var parentPath = ZaOverviewPanelController.accountBasePath + relativePath;
     var name = item.name;
-    var namePath = parentPath + ZaTree.SEPERATOR + name;
-    var currentPath = tree.getTreeItemDataByPath (namePath);
-    // Add already
-    if (currentPath)
-        return;
+    this.addObjectItem(parentPath, name, currentView)
+}
 
-    var parentDataItem = tree.getTreeItemDataByPath (parentPath);
-    var index = parentDataItem.getChildrenNum();
-    var currentViewId = ZaApp.getInstance().getAppViewMgr().getCurrentView();
-    var nameId = ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,"actLstHV",index);
-    var nameDataItem =   new ZaTreeItemData({
+ZaOverviewPanelController.prototype.addObjectItem = function (parentPath, name, currentView, skipNotify) {
+    if (!currentView) {
+        currentView = ZaApp.getInstance().getAppViewMgr().getCurrentViewContent();
+        if (!currentView)
+            return;
+        if (!currentView.getTabChoices)
+            return;
+        if (!currentView.getTabChoices())
+            return;
+    }
+
+    var namePath = parentPath + ZaTree.SEPERATOR + name;
+    var tree = this.getOverviewPanel().getFolderTree();
+    var nameDataItem = tree.getTreeItemDataByPath (namePath);
+    var isAddNameNode = false;
+    var isAddTabNode = false;
+
+    if (!nameDataItem) {
+        isAddNameNode = true;
+        isAddTabNode = true;
+    } else {
+        if (nameDataItem.getChildrenNum() == 0) {
+            isAddTabNode = true;
+        }
+    }
+
+    if (isAddNameNode) {
+        var parentDataItem = tree.getTreeItemDataByPath (parentPath);
+        var index = parentDataItem.getChildrenNum();
+        var parentId = parentDataItem.id;
+        nameDataItem =   new ZaTreeItemData({
                             parent:parentPath,
                             mappingId: ZaZimbraAdmin._XFORM_VIEW,
-                            id:nameId,
+                            id:DwtId._makeId(parentId, index + 1),
                             text: name});
+        tree.addTreeItemData(nameDataItem);
+    }
 
-    nameDataItem.setData("viewId", currentViewId);
-    tree.addTreeItemData(nameDataItem);
-    var currentTabItem;
-    var currentTabInfo;
-    for (var i = 0; i <  tabChoices.length; i++) {
-        currentTabInfo = tabChoices[i];
-        currentTabItem =   new ZaTreeItemData({
-                            parent:namePath,
-                            id:DwtId._makeId(nameId, i+1),
-                            mappingId: ZaZimbraAdmin._XFORM_TAB_VIEW,
-                            text: currentTabInfo.label});
-        currentTabItem.setData("tabValue", currentTabInfo.value);
-        tree.addTreeItemData(currentTabItem);
-        if (i == 0) {
-            nameDataItem.setData("firstTab", currentTabInfo.value);
+    if (!nameDataItem.getData("viewId")) {
+        var currentViewId = ZaApp.getInstance().getAppViewMgr().getCurrentView();
+        nameDataItem.setData("viewId", currentViewId);
+    }
+
+    if (isAddTabNode) {
+        var currentTabItem;
+        var currentTabInfo;
+        var nameId = nameDataItem.id;
+        var tabChoices = currentView.getTabChoices();
+        for (var i = 0; i <  tabChoices.length; i++) {
+            currentTabInfo = tabChoices[i];
+            currentTabItem =   new ZaTreeItemData({
+                                parent:namePath,
+                                id:DwtId._makeId(nameId, i+1),
+                                mappingId: ZaZimbraAdmin._XFORM_TAB_VIEW,
+                                text: currentTabInfo.label});
+            currentTabItem.setData("tabValue", currentTabInfo.value);
+            tree.addTreeItemData(currentTabItem);
+            if (i == 0) {
+                nameDataItem.setData("firstTab", currentTabInfo.value);
+            }
         }
     }
 
@@ -1174,7 +1199,7 @@ function(item, currentView) {
         ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._XFORM_VIEW] = ZaOverviewPanelController.xformTreeListener;
     if (! ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._XFORM_TAB_VIEW])
         ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._XFORM_TAB_VIEW] = ZaOverviewPanelController.xformTabTreeListener;
-    tree.setSelectionByPath(namePath, true);
+    tree.setSelectionByPath(namePath, true, skipNotify);
 }
 
 ZaOverviewPanelController.xformTabTreeListener = function(ev) {

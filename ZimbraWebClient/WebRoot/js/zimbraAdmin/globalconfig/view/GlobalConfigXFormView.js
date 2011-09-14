@@ -1062,7 +1062,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
               id:"xform_header"
             },
 		    {type:_TAB_BAR_,  ref:ZaModel.currentTab,id:"xform_tabbar", height:"0px",
-		 	    containerCssStyle: "padding-top:0px; display:none;",
+		 	    containerCssStyle: "padding-top:0px; ", cssStyle:"display:none;",
 			    choices: tabBarChoices
 		    },
             {type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:switchItems}
