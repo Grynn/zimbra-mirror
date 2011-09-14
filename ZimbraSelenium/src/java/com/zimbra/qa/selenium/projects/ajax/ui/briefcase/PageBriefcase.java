@@ -592,7 +592,7 @@ public class PageBriefcase extends AbsTab {
 			// wait for the page to go active
 			if (page != null) {
 				if (option == Button.O_SEND_AS_ATTACHMENT) {
-					zWaitForElementPresent("css=div[id$=_attachments_div] a[class='AttLink']");
+					zWaitForElementPresent("css=div[id$=_attachments_div] a[class='AttLink']", "3000");
 					return page;
 				} else
 					page.zWaitForActive();
@@ -977,7 +977,7 @@ public class PageBriefcase extends AbsTab {
 
 			} else if (option == Button.O_OPEN) {
 
-				optionLocator = "css=td#zmi__Briefcase__OPEN_FILE_title:contains(Open)";
+				optionLocator = "css=td#OPEN_FILE_title:contains(Open)";
 
 				page = new DocumentBriefcaseOpen(MyApplication,
 						(DocumentItem) item);
@@ -991,7 +991,7 @@ public class PageBriefcase extends AbsTab {
 
 			} else if (option == Button.O_SEND_AS_ATTACHMENT) {
 
-				optionLocator = "css=div#zmi__Briefcase__SEND_FILE_AS_ATT:contains(Send as attachment(s))";
+				optionLocator = "css=div[id^=SEND_FILE_AS_ATT]:contains(Send as attachment(s))";
 
 				page = new FormMailNew(this.MyApplication);
 
@@ -1004,7 +1004,7 @@ public class PageBriefcase extends AbsTab {
 
 			} else if (option == Button.O_MOVE) {
 
-				optionLocator = "css=td#zmi__Briefcase__MOVE_title:contains(Move)";
+				optionLocator = "css=td[id^=MOVE__][id$=_title]:contains(Move)";
 
 				page = new DialogMove(MyApplication, this);
 			} else if (option == Button.O_TAG_FILE) {
@@ -1093,7 +1093,7 @@ public class PageBriefcase extends AbsTab {
 
 			// Right-Click on the item
 			this.zRightClickAt(itemlocator, "0,0");
-
+				
 			// Now the ContextMenu is opened
 			// Click on the specified option
 
@@ -1101,7 +1101,7 @@ public class PageBriefcase extends AbsTab {
 
 			if (option == Button.O_TAG_FILE) {
 
-				optionLocator = "css=td#zmi__Briefcase__TAG_MENU_dropdown>div[class=ImgCascade]";
+				optionLocator = "css=div[id^=TAG_MENU__] tr[id=POPUP_TAG_MENU]";
 
 			} else {
 				throw new HarnessException("implement action: " + action
@@ -1114,7 +1114,7 @@ public class PageBriefcase extends AbsTab {
 			// Now the ContextMenu option is opened
 			// Click on the specified sub option
 
-			String subOptionLocator = "css=div[id=zmi__Briefcase__TAG_MENU|MENU] [class=ZWidgetTitle]:contains("
+			String subOptionLocator = "css=div[id^=TAG_MENU_][id$=|MENU] [class=ZWidgetTitle]:contains("
 					+ subOption + ")";
 
 			// click on the sub option
