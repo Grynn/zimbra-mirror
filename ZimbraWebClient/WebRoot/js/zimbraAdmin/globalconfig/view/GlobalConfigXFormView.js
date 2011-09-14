@@ -207,6 +207,8 @@ function(entry) {
         }
 
     	this._localXForm.setInstance(this._containedObject);
+
+    if(!appNewUI)
         this.updateTab();
 }
 
@@ -1031,6 +1033,8 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                 };
         switchItems.push (case10) ;
     }
+    this.tabChoices = tabBarChoices;
+   if (!appNewUI) {
     xFormObject.items = [
 		{ type: _DWT_ALERT_,
 		  cssClass: "DwtTabTable",
@@ -1047,5 +1051,27 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 		{type:_SWITCH_, items: switchItems
 		}
 	];
+   } else {
+	    xFormObject.items = [
+            { type: _DWT_ALERT_,
+              cssClass: "DwtTabTable",
+              containerCssStyle: "padding-bottom:0px",
+              style: DwtAlert.WARNING,
+              iconVisible: false,
+              content: ZaMsg.Alert_GlobalConfig,
+              id:"xform_header"
+            },
+		    {type:_TAB_BAR_,  ref:ZaModel.currentTab,id:"xform_tabbar", height:"0px",
+		 	    containerCssStyle: "padding-top:0px; display:none;",
+			    choices: tabBarChoices
+		    },
+            {type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:switchItems}
+	    ];
+    }
 };
 ZaTabView.XFormModifiers["GlobalConfigXFormView"].push(GlobalConfigXFormView.myXFormModifier);
+
+GlobalConfigXFormView.prototype.getTabChoices =
+function() {
+    return this.tabChoices;
+}

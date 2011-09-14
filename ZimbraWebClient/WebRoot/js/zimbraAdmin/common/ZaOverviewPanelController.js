@@ -723,13 +723,24 @@ function() {
                                     mappingId: ZaZimbraAdmin._MANAGE_ACCOUNT_HOME_VIEW});
     tree.addTreeItemData(accountMgr);
 
-    ti = new ZaTreeItemData({
+    ti = this._configure = new ZaTreeItemData({
                                     parent:ZaMsg.OVP_home,
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "adminHV"),
                                     text: ZaMsg.OVP_configure,
                                     mappingId: ZaZimbraAdmin._ADMINISTRATION_HOME_VIEW});
     tree.addTreeItemData(ti);
 
+    if (this._configure) {
+        parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure]);
+        ti = new ZaTreeItemData({
+                                    parent:parentPath,
+                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, ZaId.TREEITEM_GSET),
+                                    text: ZaMsg.OVP_global,
+                                    mappingId: ZaZimbraAdmin._GLOBAL_SETTINGS});
+        tree.addTreeItemData(ti);
+        ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._GLOBAL_SETTINGS] = ZaOverviewPanelController.globalSettingsTreeListener;
+
+    }
     ti = new ZaTreeItemData({
                                     parent:ZaMsg.OVP_home,
                                     id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "magHV"),
