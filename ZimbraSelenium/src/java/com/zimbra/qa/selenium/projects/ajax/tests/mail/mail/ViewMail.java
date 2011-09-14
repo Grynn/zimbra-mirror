@@ -139,5 +139,36 @@ public class ViewMail extends AjaxCommonTest {
 		
 	}
 
+	@Bugs(	ids = "64444")
+	@Test(	description = "Receive a mail with only audio/vav content",
+			groups = { "functional" })
+	public void ViewMail_04() throws HarnessException {
+		
+		final String mime = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/mime/Bugs/Bug64444";
+		final String subject = "subject13150123168433";
+		final String from = "from13160123168433@testdomain.com";
+		final String to = "to3163210168433@testdomain.com";
+
+		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mime));
+
+
+		
+		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:(" + subject +")");
+		ZAssert.assertNotNull(mail, "Verify message is received");
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Select the message so that it shows in the reading pane
+		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
+
+		// Verify the To, From, Subject, Body
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.From), from, "Verify the From matches the 'From:' header");
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.To), to, "Verify the From matches the 'From:' header");
+		
+
+		
+	}
+
 
 }
