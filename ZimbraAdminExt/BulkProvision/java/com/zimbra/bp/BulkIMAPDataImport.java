@@ -132,10 +132,12 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
             } catch (IOException e) {
                 throw ServiceException.FAILURE("Bulk provisioning failed to read uploaded XML document.",e);
             }
-        } /*else if (sourceType.equalsIgnoreCase(ZimbraBulkProvisionExt.FILE_FORMAT_BULK_LDAP) || sourceType.equalsIgnoreCase(ZimbraBulkProvisionExt.FILE_FORMAT_BULK_AD)) {
-            IMAPAccounts = getExternalIMAPAccounts(request, zsc);
-        } */ else if (sourceType.equalsIgnoreCase(ZimbraBulkProvisionExt.FILE_FORMAT_ZIMBRA)) {
+        } else if (sourceType.equalsIgnoreCase(ZimbraBulkProvisionExt.FILE_FORMAT_ZIMBRA)) {
             IMAPAccounts = getZimbraAccounts(request, zsc);
+        } else {
+        	throw ServiceException.INVALID_REQUEST(
+        			String.format("Invalid value of %s parameter: %s. Allowed values: %s, %s",
+        					AdminExtConstants.A_sourceType, sourceType, ZimbraBulkProvisionExt.FILE_FORMAT_ZIMBRA,AdminFileDownload.FILE_FORMAT_BULK_XML), null);
         }
 
         /*
