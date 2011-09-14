@@ -1119,7 +1119,7 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt, convertor, onlyOne
 		if (listType == AjxStringUtil._ORDERED_LIST) {
 			text[idx++] = bulletNum + ". ";
 		} else {
-			text[idx++] = "\u2022 "; // TODO ZmMsg.bullet
+			text[idx++] = "\u002A "; // TODO ZmMsg.bullet
 		}
 	} else if (nodeName == "img") {
 		if (el.alt && el.alt != "") {
