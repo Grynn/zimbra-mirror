@@ -1195,11 +1195,16 @@ ZaAccountXFormView.getAddressFormItem = function(){
 	// the subItems of Address Items only init once;
 	if(AjxUtil.isEmpty(ZaAccountXFormView.addressItemsPool)){
 		ZaAccountXFormView.addressItemsPool = new Object();
-		ZaAccountXFormView.addressItemsPool[ZaAccount.A_zip] =  {ref:ZaAccount.A_zip, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zip,label:ZaMsg.NAD_zip, labelLocation:_LEFT_, width:100};
-		ZaAccountXFormView.addressItemsPool[ZaAccount.A_state] = {ref:ZaAccount.A_state, type:_TEXTFIELD_, msgName:ZaMsg.NAD_state,label:ZaMsg.NAD_state, labelLocation:_LEFT_, width:250};
-		ZaAccountXFormView.addressItemsPool[ZaAccount.A_street] = {ref:ZaAccount.A_street, type:_TEXTAREA_, msgName:ZaMsg.NAD_street,label:ZaMsg.NAD_street, labelLocation:_LEFT_, width:250};
-		ZaAccountXFormView.addressItemsPool[ZaAccount.A_city] = {ref:ZaAccount.A_city, type:_TEXTFIELD_, msgName:ZaMsg.NAD_city,label:ZaMsg.NAD_city, labelLocation:_LEFT_, width:250};
-		ZaAccountXFormView.addressItemsPool[ZaAccount.A_country] = {ref:ZaAccount.A_country, type:_TEXTFIELD_, msgName:ZaMsg.NAD_country,label:ZaMsg.NAD_country, labelLocation:_LEFT_, width:250};
+		ZaAccountXFormView.addressItemsPool[ZaAccount.A_zip] =  {ref:ZaAccount.A_zip, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zip,label:ZaMsg.NAD_zip,
+            labelCssStyle:(appNewUI?"text-align:left;":null),labelLocation:_LEFT_, width:100};
+		ZaAccountXFormView.addressItemsPool[ZaAccount.A_state] = {ref:ZaAccount.A_state, type:_TEXTFIELD_, msgName:ZaMsg.NAD_state,label:ZaMsg.NAD_state,
+            labelCssStyle:(appNewUI?"text-align:left;":null),labelLocation:_LEFT_, width:250};
+		ZaAccountXFormView.addressItemsPool[ZaAccount.A_street] = {ref:ZaAccount.A_street, type:_TEXTAREA_, msgName:ZaMsg.NAD_street,label:ZaMsg.NAD_street,
+            labelCssStyle:(appNewUI?"text-align:left;":null),labelLocation:_LEFT_, width:250};
+		ZaAccountXFormView.addressItemsPool[ZaAccount.A_city] = {ref:ZaAccount.A_city, type:_TEXTFIELD_, msgName:ZaMsg.NAD_city,label:ZaMsg.NAD_city,
+            labelCssStyle:(appNewUI?"text-align:left;":null),labelLocation:_LEFT_, width:250};
+		ZaAccountXFormView.addressItemsPool[ZaAccount.A_country] = {ref:ZaAccount.A_country, type:_TEXTFIELD_, msgName:ZaMsg.NAD_country,label:ZaMsg.NAD_country,
+            labelCssStyle:(appNewUI?"text-align:left;":null),labelLocation:_LEFT_, width:250};
 		
 	}
 	var addressFormItems = new Array();
@@ -1266,7 +1271,7 @@ ZaAccountXFormView.getAccountNameInfoItem = function(){
                                                         enableDisableChangeEventSources:[ZaAccount.A2_autodisplayname],bmolsnr:true,
                                                         visibilityChecks:[]
                                                 },
-                                                {ref:ZaAccount.A2_autodisplayname, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
+                                                {ref:ZaAccount.A2_autodisplayname, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE", subLabel:"",
                                                         elementChanged: function(elementValue,instanceValue, event) {
                                                                 if(elementValue=="TRUE") {
                                                                         if(ZaAccount.generateDisplayName.call(this, this.getInstance(), this.getInstanceValue(ZaAccount.A_firstName), this.getInstanceValue(ZaAccount.A_lastName),this.getInstanceValue(ZaAccount.A_initials))) {
@@ -1620,7 +1625,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							}
 					},
 					{ref:ZaAccount.A2_autoCos, type:_CHECKBOX_,
-						visibilityChecks:[],
+						visibilityChecks:[], subLabel:"",
                         enableDisableChecks:[ [ZaItem.hasWritePermission,ZaAccount.A_COSId]],
 						msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,
 						trueValue:"TRUE", falseValue:"FALSE" ,
@@ -1700,28 +1705,37 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	cases.push(case1);
 
 	if(_tab2) {
-		var case2={type:_ZATABCASE_, numCols:1, caseKey:_tab2, 
+		var case2={type:_ZATABCASE_, numCols:1, caseKey:_tab2,
+            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 					items: [
-						{type:_ZAGROUP_, 
+						{type:_ZAGROUP_, displayGrid:true,width:"100%", numCols:2,colSizes: ["275px","100%"],
 							items:[
-								{ref:ZaAccount.A_telephoneNumber, type:_TEXTFIELD_, msgName:ZaMsg.NAD_telephoneNumber,label:ZaMsg.NAD_telephoneNumber, labelLocation:_LEFT_, width:250} ,
-                                {ref:ZaAccount.A_homePhone, type:_TEXTFIELD_, msgName:ZaMsg.NAD_homePhone,label:ZaMsg.NAD_homePhone, labelLocation:_LEFT_, width:250} ,
-                                {ref:ZaAccount.A_mobile, type:_TEXTFIELD_, msgName:ZaMsg.NAD_mobile,label:ZaMsg.NAD_mobile, labelLocation:_LEFT_, width:250} ,
-                                {ref:ZaAccount.A_pager, type:_TEXTFIELD_, msgName:ZaMsg.NAD_pager,label:ZaMsg.NAD_pager, labelLocation:_LEFT_, width:250},
-                                 {ref:ZaAccount.A_facsimileTelephoneNumber, type:_TEXTFIELD_, msgName:ZaMsg.NAD_facsimileTelephoneNumber,label:ZaMsg.NAD_facsimileTelephoneNumber, labelLocation:_LEFT_, width:250}
+								{ref:ZaAccount.A_telephoneNumber, type:_TEXTFIELD_, msgName:ZaMsg.NAD_telephoneNumber,label:ZaMsg.NAD_telephoneNumber,
+                                 labelCssStyle:(appNewUI?"text-align:left;":null),labelLocation:_LEFT_, width:250} ,
+                                {ref:ZaAccount.A_homePhone, type:_TEXTFIELD_, msgName:ZaMsg.NAD_homePhone,label:ZaMsg.NAD_homePhone,
+                                 labelCssStyle:(appNewUI?"text-align:left;":null),labelLocation:_LEFT_, width:250} ,
+                                {ref:ZaAccount.A_mobile, type:_TEXTFIELD_, msgName:ZaMsg.NAD_mobile,label:ZaMsg.NAD_mobile,
+                                 labelCssStyle:(appNewUI?"text-align:left;":null),labelLocation:_LEFT_, width:250} ,
+                                {ref:ZaAccount.A_pager, type:_TEXTFIELD_, msgName:ZaMsg.NAD_pager,label:ZaMsg.NAD_pager,
+                                 labelCssStyle:(appNewUI?"text-align:left;":null),labelLocation:_LEFT_, width:250},
+                                 {ref:ZaAccount.A_facsimileTelephoneNumber, type:_TEXTFIELD_, msgName:ZaMsg.NAD_facsimileTelephoneNumber,
+                                 labelCssStyle:(appNewUI?"text-align:left;":null),label:ZaMsg.NAD_facsimileTelephoneNumber, labelLocation:_LEFT_, width:250}
 							]
 						},
-						{type:_ZAGROUP_, 
+						{type:_ZAGROUP_, displayGrid:true,width:"100%", numCols:2,colSizes: ["275px","100%"],
 							items:[	
-								{ref:ZaAccount.A_zimbraPhoneticCompany, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPhoneticCompany, label:ZaMsg.NAD_zimbraPhoneticCompany, labelLocation:_LEFT_, width:250, visibilityChecks:[[ZaZimbraAdmin.isLanguage, "ja"]]},				
-								{ref:ZaAccount.A_company, type:_TEXTFIELD_, msgName:ZaMsg.NAD_company,label:ZaMsg.NAD_company, labelLocation:_LEFT_, width:250} ,
-                                {ref:ZaAccount.A_title,  type:_TEXTFIELD_, msgName:ZaMsg.NAD_title,label:ZaMsg.NAD_title, labelLocation:_LEFT_, width:250}
+								{ref:ZaAccount.A_zimbraPhoneticCompany, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPhoneticCompany,
+                                 labelCssStyle:(appNewUI?"text-align:left;":null),label:ZaMsg.NAD_zimbraPhoneticCompany, labelLocation:_LEFT_, width:250, visibilityChecks:[[ZaZimbraAdmin.isLanguage, "ja"]]},
+								{ref:ZaAccount.A_company, type:_TEXTFIELD_, msgName:ZaMsg.NAD_company,label:ZaMsg.NAD_company, labelLocation:_LEFT_,
+                                 labelCssStyle:(appNewUI?"text-align:left;":null),width:250} ,
+                                {ref:ZaAccount.A_title,  type:_TEXTFIELD_, msgName:ZaMsg.NAD_title,label:ZaMsg.NAD_title, labelLocation:_LEFT_,
+                                 labelCssStyle:(appNewUI?"text-align:left;":null),width:250}
                                 /*,
 								{ref:ZaAccount.A_orgUnit, type:_TEXTFIELD_, msgName:ZaMsg.NAD_orgUnit,label:ZaMsg.NAD_orgUnit, labelLocation:_LEFT_, width:250},														
 								{ref:ZaAccount.A_office, type:_TEXTFIELD_, msgName:ZaMsg.NAD_office,label:ZaMsg.NAD_office, labelLocation:_LEFT_, width:250} */
 							]
 						},
-						{type:_ZAGROUP_, 
+						{type:_ZAGROUP_,displayGrid:true,width:"100%", numCols:2,colSizes: ["275px","100%"],
 							items: ZaAccountXFormView.getAddressFormItem() 
 						}							
 					]
@@ -1735,6 +1749,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	if(_tab3) {
 		//MemberOf Tab
 		var case3={type:_ZATABCASE_, numCols:2, caseKey:_tab3, colSizes: ["50%","50%"],
+            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 					items: [
 						{type:_SPACER_, height:"10"},
 						//layout rapper around the direct/indrect list						
@@ -2202,7 +2217,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
                                  ]}
                             ]                                                             
 						},	
-						{type:_BASE_TOP_GROUPER_, id:"account_prefs_standard_client",colSizes:["275px","auto"],numCols:2,
+						{type:_ZA_TOP_GROUPER_, id:"account_prefs_standard_client",colSizes:["275px","auto"],numCols:2,
 							label:ZaMsg.NAD_MailOptionsStandardClient,
 							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
 								[
@@ -2292,7 +2307,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
                                 ]}
 							]
 						},
-						{type:_BASE_TOP_GROUPER_,colSizes:["275px","auto"], id:"account_prefs_mail_receiving", numCols: 2,
+						{type:_ZA_TOP_GROUPER_,colSizes:["275px","100%"], id:"account_prefs_mail_receiving", numCols: 2,
 							label:ZaMsg.NAD_MailOptionsReceiving,
 							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
 								[ZaAccount.A_zimbraPrefMailPollingInterval, 
@@ -2407,7 +2422,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								}								
 							]
 						},						
-						{type:_BASE_TOP_GROUPER_, colSizes:["275px","auto"], id:"account_prefs_mail_sending",borderCssClass:"LowPadedTopGrouperBorder",
+						{type:_ZA_TOP_GROUPER_, colSizes:["275px","100%"], id:"account_prefs_mail_sending",borderCssClass:"LowPadedTopGrouperBorder",
 							label:ZaMsg.NAD_MailOptionsSending,
 							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
 								[ZaAccount.A_zimbraPrefSaveToSent,
@@ -2459,7 +2474,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								}															
 							]
 						},
-						{type:_BASE_TOP_GROUPER_,colSizes:["275px","*"], id:"account_prefs_mail_composing",borderCssClass:"LowPadedTopGrouperBorder",
+						{type:_ZA_TOP_GROUPER_,colSizes:["275px","100%"], id:"account_prefs_mail_composing",borderCssClass:"LowPadedTopGrouperBorder",
 							label:ZaMsg.NAD_MailOptionsComposing,
 							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
 								[
@@ -2739,7 +2754,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							]
 						}						
 					];
-		cases.push({type:_ZATABCASE_, id:"account_form_prefs_tab", numCols:1, 
+		cases.push({type:_ZATABCASE_, id:"account_form_prefs_tab", numCols:1,
+            paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 					width:"100%", caseKey:_tab5, 
 					/*colSizes:["275px","275px","150px"],*/ items :prefItems});
 	}
@@ -2787,11 +2803,10 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	
 	if(_tab7) {
 		cases.push({type:_ZATABCASE_,id:"account_form_forwarding_tab", width:"100%", numCols:1,colSizes:["auto"],
-					caseKey:_tab7,  
+					caseKey:_tab7, paddingStyle:(appNewUI? "padding-left:15px;":null), width:(appNewUI? "98%":"100%"), cellpadding:(appNewUI?2:0),
 					items: [
-						{type:_BASE_TOP_GROUPER_, label:ZaMsg.NAD_EditFwdTopGroupGrouper,
-							id:"account_form_user_forwarding_addr",colSizes:["auto"],
-                            				numCols:1,colSizes:["auto"], 
+						{type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_EditFwdTopGroupGrouper,
+							id:"account_form_user_forwarding_addr",colSizes:["275px","100%"],
 							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
 								[
 									ZaAccount.A_zimbraFeatureMailForwardingEnabled
@@ -2801,20 +2816,17 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							{
 								ref:ZaAccount.A_zimbraFeatureMailForwardingEnabled,
 								resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
-								type:_SUPER_CHECKBOX_, colSpan: 1,  
+								type:_SUPER_CHECKBOX_, colSpan: 2,
 								colSizes:["275", "275", "*"],
 								checkBoxLabel:ZaMsg.LBL_zimbraFeatureMailForwardingEnabled,  
 								trueValue:"TRUE", falseValue:"FALSE"
 							},
-							{type:_GROUP_,numCols:2 ,colSizes:["275px","auto"], 
-						  		items:[					  	
 									{ref:ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled, 
 										type:_ZA_CHECKBOX_, 
 										msgName:ZaMsg.LBL_zimbraPrefMailLocalDeliveryDisabled,
 										label:ZaMsg.LBL_zimbraPrefMailLocalDeliveryDisabled, 
 										trueValue:"TRUE", falseValue:"FALSE"
-									},	
-									{type:_SPACER_},						
+									},
 									{ref:ZaAccount.A_zimbraPrefMailForwardingAddress, type:_TEXTFIELD_,width:"350px",
 
 labelCssClass:"xform_label", cssClass:"admin_xform_name_input",
@@ -2823,22 +2835,17 @@ labelCssClass:"xform_label", cssClass:"admin_xform_name_input",
 
 nowrap:false, labelWrap:true,
 										labelLocation:_LEFT_,
+                                        labelCssStyle:(appNewUI?"text-align:left;":null),
 										align:_LEFT_,
 										visibilityChecks:[ZaItem.hasReadPermission],
 										enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraFeatureMailForwardingEnabled,"TRUE"]],
 										enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureMailForwardingEnabled, ZaAccount.A_COSId]										
 									},
-								  	{type:_SPACER_}
-								]
-						  	}
-							
-						]},
-						{type:_ZA_PLAIN_GROUPER_, id:"account_form_forwarding_group",
-							numCols:2,label:null,colSizes:["275px","425px"],
-							items :[
+                                {type:_GROUP_, colSizes:["275px", "*"], numCols: 2, width: "100%", colSpan:2,items:[
 								{ref:ZaAccount.A_zimbraPrefCalendarForwardInvitesTo, type:_DWT_LIST_, height:"100", width:"350px",
 									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource",
 									headerList:null,onSelection:ZaAccountXFormView.calFwdAddrSelectionListener,label:ZaMsg.zimbraPrefCalendarForwardInvitesTo,
+                                    labelCssStyle:(appNewUI?"text-align:left;":null),
 									visibilityChecks:[ZaItem.hasReadPermission]
 								},
 								{type:_GROUP_, numCols:6, width:"625px",colSizes:["275","100px","auto","100px","auto","100px"], colSpan:2,
@@ -2863,7 +2870,7 @@ nowrap:false, labelWrap:true,
 											onActivate:"ZaAccountXFormView.addCalFwdAddrButtonListener.call(this);"
 										}
 									]
-								},							
+								},
                                {type: _DWT_ALERT_, colSpan: 2,
                                    containerCssStyle: "padding:10px;padding-top: 0px; width:100%;",
                                    style: DwtAlert.WARNING,
@@ -2873,6 +2880,7 @@ nowrap:false, labelWrap:true,
                                 {ref:ZaAccount.A_zimbraMailForwardingAddress, type:_DWT_LIST_, height:"100", width:"350px",
 									forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
 									headerList:null,onSelection:ZaAccountXFormView.fwdAddrSelectionListener,label:ZaMsg.NAD_EditFwdGroup,
+                                    labelCssStyle:(appNewUI?"text-align:left;":null),
 									visibilityChecks:[ZaItem.hasReadPermission]
 								},
 								{type:_GROUP_, numCols:6, width:"625px",colSizes:["275","100px","auto","100px","auto","100px"], colSpan:2,
@@ -2898,7 +2906,8 @@ nowrap:false, labelWrap:true,
 									]
 								}
 							]
-						}						
+						}
+                        ]}
 					]
 				});
 	}
@@ -3015,7 +3024,7 @@ nowrap:false, labelWrap:true,
                         			[ZaAccount.A_zimbraAttachmentsBlocked]]],
 							items :[
 								{ref:ZaAccount.A_zimbraAttachmentsBlocked, type:_SUPER_CHECKBOX_, 
-									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
 									msgName:ZaMsg.NAD_RemoveAllAttachments,
 									checkBoxLabel:ZaMsg.NAD_RemoveAllAttachments, 
 									trueValue:"TRUE", falseValue:"FALSE"
@@ -3167,7 +3176,7 @@ nowrap:false, labelWrap:true,
                                   				enableDisableChecks:[[ZaItem.hasWritePermission,ZaAccount.A_zimbraProxyAllowedDomains]],
                                   				width: "15em"}
                                 				]			
-                     					},
+                     					}
                						]				
              					},
 
@@ -3394,7 +3403,7 @@ nowrap:false, labelWrap:true,
                                 }
                             ]
                         },
-                        {type:_ZA_TOP_GROUPER_, colSizes:["auto"],numCols:1,
+                        {type:_ZA_TOP_GROUPER_, //colSizes:["auto"],numCols:1,
 								label:ZaMsg.NAD_InteropGrouper,   id: "interop_settings",
 								visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
                         			[ZaAccount.A_zimbraFreebusyExchangeUserOrg]]],

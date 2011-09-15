@@ -2307,10 +2307,10 @@ XFormItemFactory.createItemType("_CHECKBOX_", "checkbox", Checkbox_XFormItem, XF
 //	type defaults
 Checkbox_XFormItem.prototype._inputType = "checkbox";
 Checkbox_XFormItem.prototype.elementChangeHandler = "onclick";
-Checkbox_XFormItem.prototype.labelLocation = _RIGHT_;
+Checkbox_XFormItem.prototype.labelLocation = (appNewUI?_LEFT_:_RIGHT_);
 Checkbox_XFormItem.prototype.cssClass = "xform_checkbox";
 Checkbox_XFormItem.prototype.labelCssClass = "xform_checkbox";
-Checkbox_XFormItem.prototype.align = _RIGHT_;
+Checkbox_XFormItem.prototype.align = (appNewUI?_LEFT_:_RIGHT_);
 Checkbox_XFormItem.prototype.trueValue = _UNDEFINED_;		// Don't set in proto so model can override
 Checkbox_XFormItem.prototype.falseValue = _UNDEFINED_;
 Checkbox_XFormItem.prototype.focusable = true;
@@ -2371,6 +2371,18 @@ Checkbox_XFormItem.prototype.getElementValueGetterHTML = function () {
 }
 
 
+Checkbox_XFormItem.prototype.outputContainerTDEndHTML = function (html) {
+    var tdLabel = this.getInheritedProperty("subLabel");
+    // for compatible with old UI
+    if(appNewUI && tdLabel && tdLabel != "") {
+        tdLabel = " " + tdLabel;
+    } else if (appNewUI && tdLabel == null)
+        tdLabel = " Enabled";
+    else tdLabel = "";
+
+    html.append(tdLabel + "</td id=\"",  this.getId(), "___container\">");
+}
+
 // set up how disabling works for this item type
 //	XXXX eventually we want to disable our label as well...
 Checkbox_XFormItem.prototype.setElementEnabled = XFormItem.prototype.setElementDisabledProperty;
@@ -2390,6 +2402,8 @@ XFormItemFactory.createItemType("_RADIO_", "radio", Radio_XFormItem, Checkbox_XF
 Radio_XFormItem.prototype._inputType = "radio";
 Radio_XFormItem.prototype.focusable = true;
 Radio_XFormItem.prototype.groupname=null;
+Radio_XFormItem.prototype.subLabel = (appNewUI?"":null);
+Radio_XFormItem.prototype.align = _RIGHT_;
 //	methods
 
 Radio_XFormItem.prototype.updateElement = function(newValue) {

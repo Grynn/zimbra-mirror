@@ -513,7 +513,7 @@ Super_Checkbox_XFormItem.prototype.initializeItems = function() {
 	var anchorCssStyle = this.getInheritedProperty("anchorCssStyle");
 	
 	var chkBox = {	
-		type:_CHECKBOX_, ref:".", 
+		type:_CHECKBOX_, ref:".",
 		onChange:Composite_XFormItem.onFieldChange,
 		updateElement:function(value) {
 			Super_XFormItem.updateCss.call(this,5);
@@ -1449,8 +1449,8 @@ TopGrouper_XFormItem.prototype.numCols = 2;
 
 ZACheckbox_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZA_CHECKBOX_", "za_checkbox", ZACheckbox_XFormItem, Checkbox_XFormItem);
-ZACheckbox_XFormItem.prototype.labelLocation = _RIGHT_;
-ZACheckbox_XFormItem.prototype.align = _RIGHT_;
+//ZACheckbox_XFormItem.prototype.labelLocation = _RIGHT_;
+//ZACheckbox_XFormItem.prototype.align = _RIGHT_;
 
 ZATopGrouper_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZA_TOP_GROUPER_", "za_top_grouper", ZATopGrouper_XFormItem, TopGrouper_XFormItem);
@@ -1494,10 +1494,34 @@ ZATopGrouper_XFormItem.isGroupVisible = function(attrsArray, rightsArray,entry) 
 }
 ZAPlainGrouper_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZA_PLAIN_GROUPER_", "za_plain_grouper", ZAPlainGrouper_XFormItem, Group_XFormItem);
+if (!appNewUI) {
 ZAPlainGrouper_XFormItem.prototype.numCols = 2;
 ZAPlainGrouper_XFormItem.prototype.colSizes = ["275px","auto"];
 ZAPlainGrouper_XFormItem.prototype.cssClass = "PlainGrouperBorder";
 ZAPlainGrouper_XFormItem.isGroupVisible = ZATopGrouper_XFormItem.isGroupVisible;
+} else {
+ZAPlainGrouper_XFormItem.prototype.colSizes = "100%";
+ZAPlainGrouper_XFormItem.prototype.numCols = 1;
+ZAPlainGrouper_XFormItem.prototype.width = "100%";
+ZAPlainGrouper_XFormItem.prototype.displayGrid = true;
+ZAPlainGrouper_XFormItem.prototype.initializeItems = function () {
+    var oldItems = this.getItems();
+    if(oldItems.length == 1 && oldItems[0].type == "group")  {
+        oldItems[0].displayGrid = this.getInheritedProperty("displayGrid");
+        if(oldItems[0].colSizes.length > 1)
+           oldItems[0].colSizes[oldItems[0].colSizes.length -1] = "100%";
+        //oldItems[0].colSizes = ["275px","100%"];
+        var subitems = oldItems[0].items;
+        for(var i = 0; i < subitems.length; i++) {
+            subitems[i].displayGrid = false;
+            if(subitems[i].label || subitems[i].txtBoxLabel)
+                subitems[i].labelCssStyle = "text-align:left;";
+        }
+    }
+    Group_XFormItem.prototype.initializeItems.call(this);
+}
+
+}
 
 ZAWizTopGrouper_XFormItem = function() {}
 if (appNewUI) {
