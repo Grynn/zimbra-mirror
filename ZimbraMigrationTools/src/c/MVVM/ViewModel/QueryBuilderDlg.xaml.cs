@@ -78,9 +78,7 @@ namespace MVVM.ViewModel
                 ? String.Format("(|(&(objectCategory=user)(name={0})))", tbFilter.Text)              
                 : "(|(&(objectCategory=user)(name=*)))";
           
-            //ds.Filter = "(|(&(objectCategory=user)(name=*)))";
-            ds.PropertyNamesOnly = true;		// this will get names of only those properties to which a value is set
-            ds.PropertiesToLoad.Add("name");
+            ds.PropertiesToLoad.Add("sAMAccountName");
             if (cbEntireSubt.IsChecked == false)
             {
                 ds.SearchScope = SearchScope.OneLevel;
@@ -91,8 +89,18 @@ namespace MVVM.ViewModel
             {
                 foreach (SearchResult sr in src)
                 {
-                    DirectoryEntry de =  sr.GetDirectoryEntry();
-                    lbQBUsers.Items.Add(de.Name.Substring(3));
+                    DirectoryEntry de = sr.GetDirectoryEntry();
+                    foreach (String property in ds.PropertiesToLoad)
+                    {
+                        foreach (Object myCollection in sr.Properties[property])
+                        {
+                            if (property == "sAMAccountName")
+                            {
+                                lbQBUsers.Items.Add(myCollection.ToString());
+                                break;
+                            }
+                        }
+                    }
                 }
             }
             catch (Exception ex)
