@@ -68,6 +68,7 @@ public class TreeMail extends AbsTree {
 	}
 
 	protected AbsPage zTreeItem(Action action, Button option, FolderItem folder) throws HarnessException {
+
 		if ( (action == null) || (option == null) || (folder == null) ) {
 			throw new HarnessException("Must define an action, option, and addressbook");
 		}
@@ -77,11 +78,7 @@ public class TreeMail extends AbsTree {
 		FolderItem f= (FolderItem) folder;
 		tracer.trace("processing " + f.getName());
 
-		if (action == Action.A_LEFTCLICK) {
-
-			actionLocator = "implement me";
-
-		} else if (action == Action.A_RIGHTCLICK) {
+		if (action == Action.A_RIGHTCLICK) {
 
 			if (ZimbraSeleniumProperties.getAppType() == AppType.DESKTOP) {
 				actionLocator = "css=[id^='zti__" + MyApplication.zGetActiveAccount().EmailAddress +
@@ -91,7 +88,6 @@ public class TreeMail extends AbsTree {
 			}
 
 			GeneralUtility.waitForElementPresent(this, actionLocator);
-			// actionLocator= Locators.zTagsHeader;
 			this.zRightClickAt(actionLocator,"");
 
 			page = new DialogEditFolder(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
@@ -99,49 +95,104 @@ public class TreeMail extends AbsTree {
 		} else {
 			throw new HarnessException("Action " + action+ " not yet implemented");
 		}
-		if (option == Button.B_TREE_EDIT) {
 
-			optionLocator = Locators.zEditTreeMenuItem;
-			page = new DialogEditFolder(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+		// Initialize the container
+		optionLocator = "css=div[id='ZmActionMenu_1']";
+
+		if ( (option == Button.B_NEW) || (option == Button.O_NEW_FOLDER) ) {
+
+			optionLocator += " div[id^='NEW_FOLDER'] td[id$='_title']";
+			page = null;
+
+			// FALL THROUGH
+
+		} else if ( (option == Button.O_MARK_AS_READ) || (option == Button.B_TREE_FOLDER_MARKASREAD) ) {
+
+			optionLocator += " div[id^='MARK_ALL_READ'] td[id$='_title']";
+			page = null;
+
+			// FALL THROUGH
 
 		} else if (option == Button.B_DELETE) {
 
 			// See http://bugzilla.zimbra.com/show_bug.cgi?id=64023
-			optionLocator= "css=div[id^='POPUP_'] tr[id='POPUP_DELETE'] td[id$='_title']";
+			optionLocator += " div[id^='DELETE_WITHOUT_SHORTCUT'] td[id$='_title']";
 			page= null;
+
+			// FALL THROUGH
 
 		} else if (option == Button.B_RENAME) {
 
-			optionLocator= "id=POPUP_RENAME_FOLDER";
-
+			optionLocator += " div[id^='RENAME_FOLDER'] td[id$='_title']";
 			page = new DialogRenameFolder(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
 
-		}else if (option == Button.B_TREE_FOLDER_EMPTY) {
-			optionLocator= "id=POPUP_EMPTY_FOLDER";
+			// FALL THROUGH
+
+		} else if (option == Button.B_MOVE) {
+
+			optionLocator += " div[id^='MOVE'] td[id$='_title']";
+			page = new DialogMove(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+
+			// FALL THROUGH
+
+		} else if (option == Button.B_SHARE) {
+			
+			optionLocator += " div[id^='SHARE_FOLDER'] td[id$='_title']";
+			page = new DialogShare(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+
+			// FALL THROUGH
+
+		} else if (option == Button.B_TREE_EDIT) {
+
+			optionLocator += " div[id^='EDIT_PROPS'] td[id$='_title']";
+			page = new DialogEditFolder(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
+
+			// FALL THROUGH
+
+		} else if (option == Button.B_TREE_FOLDER_EXPANDALL) {
+
+			optionLocator += " div[id^='EXPAND_ALL'] td[id$='_title']";
+			page = null;
+
+			// FALL THROUGH
+
+//		} else if (option == Button.B_TREE_FOLDER_SYNC) {
+//
+//			optionLocator += " div[id^='SYNC'] td[id$='_title']";
+//			page = null;
+//
+//			// FALL THROUGH
+//
+//		} else if (option == Button.B_TREE_FOLDER_SYNC_ALL) {
+//
+//			optionLocator += " div[id^='SYNC_ALL'] td[id$='_title']";
+//			page = null;
+//
+//			// FALL THROUGH
+//
+//		} else if (option == Button.B_TREE_FOLDER_SYNC_OFFLINE) {
+//
+//			optionLocator += " div[id^='SYNC_OFFLINE_FOLDER'] td[id$='_title']";
+//			page = null;
+//
+//			// FALL THROUGH
+//
+		} else if (option == Button.B_TREE_FOLDER_EMPTY) {
+			
+			optionLocator += " div[id^='EMPTY_FOLDER'] td[id$='_title']";
 			page = new DialogWarning(DialogWarning.DialogWarningID.EmptyFolderWarningMessage,
 					MyApplication, ((AppAjaxClient) MyApplication).zPageMail);
 
-		}else if (option == Button.B_TREE_FOLDER_MARKASREAD) {
-			optionLocator= "id=POPUP_MARK_ALL_READ";
-			page= null;
-
-		}else if (option == Button.B_MOVE) {
-			optionLocator= "id=POPUP_MOVE";
-			page = new DialogMove(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
-
-		} else if (option == Button.B_SHARE) {
-			optionLocator= "id=POPUP_SHARE_FOLDER";
-			page = new DialogShare(MyApplication,((AppAjaxClient) MyApplication).zPageMail);
-
 		} else if (option == Button.B_RECOVER_DELETED_ITEMS) {
 
-			optionLocator= "css=tr#POPUP_RECOVER_DELETED_ITEMS";
+			optionLocator += " div[id^='RECOVER_DELETED_ITEMS'] td[id$='_title']";
 			page = new FormRecoverDeletedItems(MyApplication);
 
 		} else {
-			throw new HarnessException("button " + option
-					+ " not yet implemented");
+			throw new HarnessException("button " + option + " not yet implemented");
 		}
+
+
 		if (actionLocator == null)
 			throw new HarnessException("locator is null for action " + action);
 		if (optionLocator == null)
@@ -157,7 +208,9 @@ public class TreeMail extends AbsTree {
 
 			// Wait for the page to become active, if it was specified
 			page.zWaitForActive();
+
 		}
+
 		return page;
 	}
 
