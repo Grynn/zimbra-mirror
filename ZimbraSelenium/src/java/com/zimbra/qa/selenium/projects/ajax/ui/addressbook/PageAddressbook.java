@@ -64,8 +64,8 @@ public class PageAddressbook extends AbsTab {
 	
 	public static class CONTEXT_SUB_MENU {
 				
-		public static final ContextMenuItem CONTACT_SUB_NEW_TAG = new ContextMenuItem("div#zmi__Contacts__TAG_MENU|MENU|NEWTAG","New Tag","div[class='ImgNewTag']",":contains('nt')");
-		public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("div#zmi__Contacts__TAG_MENU|MENU|REMOVETAG","Remove Tag","div[class='ImgDeleteTag']","");
+		public static final ContextMenuItem CONTACT_SUB_NEW_TAG = new ContextMenuItem("div[id^='TAG_MENU__DWT'][id$='|MENU|NEWTAG']","New Tag","div[class='ImgNewTag']",":contains('nt')");
+		public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("div[id^='TAG_MENU__DWT'][id$='|MENU|REMOVETAG']","Remove Tag","div[class='ImgDeleteTag']","");
 		//public static final ContextMenuItem CONTACT_SUB_REMOVE_TAG = new ContextMenuItem("td#zmi__Contacts__TAG_MENU|MENU|REMOVETAG_title","Remove Tag","div[class='ImgDeleteTag']","");
 
 		
@@ -865,16 +865,18 @@ public class PageAddressbook extends AbsTab {
 				}
 					
 			}
-			id = cmi.locator;
-			locator = "id="+ id;
+			//id = cmi.locator;
+			locator = "css=div#zm__Contacts tr#"+ cmi.locator;
+						
+			//locator = "id="+ id;
 			
 			//  Make sure the context menu exists
 			zWaitForElementPresent(locator) ;
 			
-			// Check if the item is enabled
-			if (zIsElementDisabled("div#" + id )) {
-				throw new HarnessException("Tried clicking on "+ cmi.text +" but it was disabled ");
-			}
+			// TODO: Check if the item is enabled
+			//if (zIsElementDisabled("div#" + id )) {
+			//	throw new HarnessException("Tried clicking on "+ cmi.text +" but it was disabled ");
+			//}
 
 			//For Safari 
 			// as an alternative for sMouseOver(locator) 
@@ -951,9 +953,8 @@ public class PageAddressbook extends AbsTab {
    
       
     	if (option == Button.B_TAG) {
-    		//int numItems = this.sGetCssCount("css=div#zmi__Contacts__TAG_MENU|MENU>table>tbody>tr") -1;
-    		int numItems = Integer.parseInt(sGetEval("window.document.getElementById('zmi__Contacts__TAG_MENU|MENU').childNodes[0].childNodes[0].childNodes.length")) -1;
-    		
+    		String tagMenuid = findMenuId("ActionMenu ZHasIcon","TAG_MENU__");
+    		int numItems = Integer.parseInt(sGetEval("window.document.getElementById('" + tagMenuid +"').childNodes[0].childNodes[0].childNodes.length")) -1;
     		
     		for (int i=0; i<numItems -2; i++) {
     			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);									
@@ -967,8 +968,10 @@ public class PageAddressbook extends AbsTab {
     	}
     	else if (option == Button.B_CONTACTGROUP) {
     		if (subOption == Button.O_NEW_CONTACTGROUP) {
-				
-    			int numItems = Integer.parseInt(sGetEval("window.document.getElementById('zmi__Contacts__CONTACTGROUP_MENU|GROUP_MENU').childNodes[0].childNodes[0].childNodes.length")) -1;
+    			String groupMenuid = findMenuId("ActionMenu ZHasIcon","CONTACTGROUP_MENU__");
+        			
+    		
+    			int numItems = Integer.parseInt(sGetEval("window.document.getElementById('" + groupMenuid + "').childNodes[0].childNodes[0].childNodes.length")) -1;
     		   		
     			for (int i=0; i<numItems -1; i++) {
     				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);									
@@ -995,7 +998,28 @@ public class PageAddressbook extends AbsTab {
 		return (page);
     
 	}
+	
+    private String findMenuId(String className, String prefix) throws HarnessException {
 
+		String menuid = null;
+		int count = sGetCssCount("css=div[class='" + className +"']") -1;
+		
+		//folder menu usually located at the end, so go backward  
+		try {		
+		    for (; count>=0; count--) {
+		    	menuid = sGetEval("window.document.getElementsByClassName('" + className + "')[" + count + "].id" );
+		    	if ( zIsVisiblePerPosition(menuid, 0, 0) && menuid.startsWith("TAG_MENU__")) {
+		    		break;
+		    	}		    					    	
+	        }	    		    
+		}
+		catch (Exception e) {
+			logger.info(e.getMessage());
+			throw new HarnessException(" cannot get menuid with class=" + className + " and prefix=" + prefix );
+		}
+		
+	    return menuid;
+    }
 	
 	public void zListItem(Action action, Button option ,IItem item, String contact) throws HarnessException {
 		String locator = null;			// If set, this will be clicked
