@@ -24,6 +24,7 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineGal;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.index.SortBy;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailbox.OfflineServiceException;
@@ -54,10 +55,11 @@ public class OfflineSearchGal extends DocumentHandler {
                 name = name.substring(0, name.length() - 1);            
 
             String type = request.getAttribute(AccountConstants.A_TYPE, "all");
-            String sortBy = request.getAttribute(AccountConstants.A_SORT_BY, "score");
+            String sortByStr = request.getAttribute(AccountConstants.A_SORT_BY, null);
             int offset = (int) request.getAttributeLong(MailConstants.A_QUERY_OFFSET, 0);
             int limit = (int) request.getAttributeLong(MailConstants.A_QUERY_LIMIT, 0);
             Element cursor = request.getOptionalElement(MailConstants.E_CURSOR);
+            SortBy sortBy = sortByStr == null ? null : SortBy.of(sortByStr);
             (new OfflineGal((OfflineAccount)account)).search(response, name, type, sortBy, offset, limit, cursor);                  
         } else { // proxy mode
             response = ((ZcsMailbox)mbox).proxyRequest(request, ctxt.getResponseProtocol(), true, "search GAL");

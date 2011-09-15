@@ -45,6 +45,7 @@ import com.zimbra.cs.account.offline.OfflineGal;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.DbDataSource;
 import com.zimbra.cs.db.DbDataSource.DataSourceItem;
+import com.zimbra.cs.index.SortBy;
 import com.zimbra.cs.index.ZimbraHit;
 import com.zimbra.cs.index.ZimbraQueryResults;
 import com.zimbra.cs.mime.ParsedContact;
@@ -134,7 +135,7 @@ public final class GalSyncUtil {
      */
     public static Contact getGalDlistContact(Account requestedAcct, String addr) throws ServiceException {
         Contact con = null;
-        ZimbraQueryResults dlResult = (new OfflineGal((OfflineAccount)requestedAcct)).search(addr, "group", "", 0, 0, null);
+        ZimbraQueryResults dlResult = (new OfflineGal((OfflineAccount)requestedAcct)).search(addr, "group", SortBy.NONE, 0, 0, null);
         if (dlResult != null) {
             try {
                 if (dlResult.hasNext()) {
@@ -160,7 +161,7 @@ public final class GalSyncUtil {
      * @throws ServiceException
      */
     public static List<String> getGroupNames(Account requestedAcct, Set<String> addrs) throws ServiceException {
-        ZimbraQueryResults dlResult = (new OfflineGal((OfflineAccount)requestedAcct)).search(addrs, "group", "", 0, 0, null);
+        ZimbraQueryResults dlResult = (new OfflineGal((OfflineAccount)requestedAcct)).search(addrs, "group", SortBy.NONE, 0, 0, null);
         List<String> groups = new ArrayList<String>();
         if (dlResult != null) {
             try {

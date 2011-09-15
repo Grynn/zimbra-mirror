@@ -90,14 +90,14 @@ public class OfflineGal {
         return mOpContext;
     }
 
-    public ZimbraQueryResults search(String name, String type, String sortBy, int offset, int limit, Element cursor)
+    public ZimbraQueryResults search(String name, String type, SortBy sortBy, int offset, int limit, Element cursor)
             throws ServiceException {
         Set<String> names = new HashSet<String>();
         names.add(name);
         return search(names, type, sortBy, offset, limit, cursor);
     }
 
-    public ZimbraQueryResults search(Set<String> names, String type, String sortBy, int offset, int limit,
+    public ZimbraQueryResults search(Set<String> names, String type, SortBy sortBy, int offset, int limit,
             Element cursor) throws ServiceException {
         String galAcctId = mAccount.getAttr(OfflineConstants.A_offlineGalAccountId, false);
         mGalMbox = null;
@@ -153,9 +153,12 @@ public class OfflineGal {
         return query.toString();
     }
 
-    public void search(Element response, String name, String type, String sortBy, int offset, int limit, Element cursor)
+    public void search(Element response, String name, String type, SortBy sortBy, int offset, int limit, Element cursor)
             throws ServiceException {
         limit = limit == 0 ? mAccount.getIntAttr(Provisioning.A_zimbraGalMaxResults, 100) : limit;
+        if (sortBy == null) {
+            sortBy = SortBy.NAME_ASC;
+        }
         ZimbraQueryResults zqr = search(name, type, sortBy, offset, limit + 1, cursor); // use limit + 1 so that we know when to set "had more"
         if (zqr == null) {
             response.addAttribute(AccountConstants.A_MORE, false);
@@ -179,19 +182,16 @@ public class OfflineGal {
                             cn.addKeyValuePair(key, fields.get(key), MailConstants.E_ATTRIBUTE,
                                     MailConstants.A_ATTRIBUTE_NAME);
                     }
-                    SortBy sortOrder = SortBy.of(sortBy);
-                    if (sortOrder != null) {
-                        Object sf = hit.getSortField(sortOrder);
-                        if (sf != null && sf instanceof String)
-                            cn.addAttribute(MailConstants.A_SORT_FIELD, (String) sf);
-                    }
+                    Object sf = hit.getSortField(sortBy);
+                    if (sf != null && sf instanceof String)
+                        cn.addAttribute(MailConstants.A_SORT_FIELD, (String) sf);
                 }
                 num++;
                 if (num == searchParams.getLimit()) {
                     break;
                 }
             }
-            response.addAttribute(MailConstants.A_SORTBY, sortBy);
+            response.addAttribute(MailConstants.A_SORTBY, sortBy.toString());
             response.addAttribute(MailConstants.A_QUERY_OFFSET, offset);
             response.addAttribute(AccountConstants.A_MORE, zqr.hasNext());
         } catch (Exception e) {
@@ -204,7 +204,7 @@ public class OfflineGal {
     }
 
     public void search(AutoCompleteResult result, String name, int limit, String type) throws ServiceException {
-        ZimbraQueryResults zqr = search(name, type, "score", 0, limit, null);
+        ZimbraQueryResults zqr = search(name, type, SortBy.NAME_ASC, 0, limit, null);
         if (zqr == null) {
             return;
         }
