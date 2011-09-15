@@ -29,57 +29,59 @@ public class PageCalendar extends AbsTab {
 		public static final String ViewButton = "id=zb__CLD__VIEW_MENU_dropdown";
 
 		// Menus
-		public static final String ViewDayMenu = "id=POPUP_DAY_VIEW";
-		public static final String ViewWorkWeekMenu = "id=POPUP_WORK_WEEK_VIEW";
-		public static final String ViewWeekMenu = "id=POPUP_WEEK_VIEW";
-		public static final String ViewMonthMenu = "id=POPUP_MONTH_VIEW";
-		public static final String ViewListMenu = "id=POPUP_CAL_LIST_VIEW";
-		public static final String ViewScheduleMenu = "id=POPUP_SCHEDULE_VIEW";
-		public static final String OpenMenu = "id=zmi__Calendar__VIEW_APPOINTMENT_title";
-		public static final String PrintMenu = "id=zmi__Calendar__PRINT_title";
-		public static final String AcceptMenu = "id=zmi__Calendar__REPLY_ACCEPT_title";
-		public static final String TentativeMenu = "id=zmi__Calendar__REPLY_TENTATIVE_title";
-		public static final String DeclineMenu = "id=zmi__Calendar__REPLY_DECLINE_title";
-		public static final String EditReplyMenu = "id=zmi__Calendar__INVITE_REPLY_MENU_title";
-		public static final String EditReplyAcceptSubMenu = "id=POPUP_EDIT_REPLY_ACCEPT";
-		public static final String EditReplyTentativeSubMenu = "id=POPUP_EDIT_REPLY_TENTATIVE";
-		public static final String EditReplyDeclineSubMenu = "id=POPUP_EDIT_REPLY_DECLINE";
-		public static final String ProposeNewTimeMenu = "id=zmi__Calendar__PROPOSE_NEW_TIME_title";
-		public static final String CreateACopyMenu = "id=zmi__Calendar__DUPLICATE_APPT_title";
-		public static final String ReplyMenu = "id=zmi__Calendar__REPLY_title";
-		public static final String ReplyToAllMenu = "id=zmi__Calendar__REPLY_ALL_title";
-		public static final String ForwardMenu = "id=zmi__Calendar__FORWARD_APPT_title";
-		public static final String DeleteMenu = "id=zmi__Calendar__DELETE_title";
-		public static final String CancelMenu = "id=zmi__Calendar__DELETE_title";
-		public static final String MoveMenu = "id=zmi__Calendar__MOVE_title";
-		public static final String TagAppointmentMenu = "id=zmi__Calendar__TAG_MENU_title";
-		public static final String TagAppointmentNewTagSubMenu = "id=zmi__Calendar__TAG_MENU|MENU|NEWTAG_title";
-		public static final String TagAppointmentRemoveTagSubMenu = "id=zmi__Calendar__TAG_MENU|MENU|REMOVETAG_title";
-		public static final String ShowOriginalMenu = "id=zmi__Calendar__SHOW_ORIG_title";
-		public static final String QuickCommandsMenu = "id=zmi__Calendar__QUICK_COMMANDS_title";
-		public static final String InstanceMenu = "id=POPUP_VIEW_APPT_INSTANCE";
-		public static final String SeriesMenu = "id=POPUP_VIEW_APPT_SERIES";
-		public static final String OpenInstanceMenu = "id=zmi__Calendar__OPEN_APPT_INSTANCE_title";
-		public static final String ForwardInstanceMenu = "id=zmi__Calendar__FORWARD_APPT_INSTANCE_title";
-		public static final String DeleteInstanceMenu = "id=zmi__Calendar__DELETE_INSTANCE_title";
-		public static final String OpenSeriesMenu = "id=zmi__Calendar__OPEN_APPT_SERIES_title";
-		public static final String ForwardSeriesMenu = "id=zmi__Calendar__FORWARD_APPT_SERIES_title";
-		public static final String DeleteSeriesMenu = "id=zmi__Calendar__DELETE_SERIES_title";
-		public static final String NewAppointmentMenu = "id=POPUP_NEW_APPT";
-		public static final String NewAllDayAppointmentMenu = "id=POPUP_NEW_ALLDAY_APPT";
-		public static final String GoToTodayMenu = "id=POPUP_TODAY";
-		public static final String ViewMenu = "id=POPUP_CAL_VIEW_MENU";
-		public static final String ViewDaySubMenu = "id=POPUP_DAY_VIEW";
-		public static final String ViewWorkWeekSubMenu = "id=POPUP_WORK_WEEK_VIEW";
-		public static final String ViewWeekSubMenu = "id=POPUP_WEEK_VIEW";
-		public static final String ViewMonthSubMenu = "id=POPUP_MONTH_VIEW";
-		public static final String ViewListSubMenu = "id=POPUP_CAL_LIST_VIEW";
-		public static final String ViewScheduleSubMenu = "id=POPUP_SCHEDULE_VIEW";
+		public static final String ViewDayMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_DAY_VIEW]";
+		public static final String ViewWorkWeekMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_WORK_WEEK_VIEW]";
+		public static final String ViewWeekMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_WEEK_VIEW]";
+		public static final String ViewMonthMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_MONTH_VIEW]";
+		public static final String ViewListMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_CAL_LIST_VIEW]";
+		public static final String ViewScheduleMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_SCHEDULE_VIEW]";
+		
+		public static final String OpenMenu = "id=VIEW_APPOINTMENT_title";
+		public static final String PrintMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_PRINT]";
+		public static final String AcceptMenu = "id=REPLY_ACCEPT_title";
+		public static final String TentativeMenu = "id=REPLY_TENTATIVE_title";
+		public static final String DeclineMenu = "id=REPLY_DECLINE_title";
+		public static final String EditReplyMenu = "id=INVITE_REPLY_MENU_title";
+		public static final String EditReplyAcceptSubMenu = "id=EDIT_REPLY_ACCEPT_title";
+		public static final String EditReplyTentativeSubMenu = "id=EDIT_REPLY_TENTATIVE_title";
+		public static final String EditReplyDeclineSubMenu = "id=EDIT_REPLY_DECLINE_title";
+		public static final String ProposeNewTimeMenu = "id=PROPOSE_NEW_TIME_title";
+		public static final String CreateACopyMenu = "id=DUPLICATE_APPT_title";
+		public static final String ReplyMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_REPLY]";
+		public static final String ReplyToAllMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_REPLY_ALL]";
+		public static final String ForwardMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_FORWARD_APPT]";
+		public static final String DeleteMenu = "css=div[id='zm__Calendar'] tr[id='POPUP_DELETE']";
+		public static final String CancelMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_DELETE']";
+		public static final String MoveMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_MOVE]";
+		public static final String TagAppointmentMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_TAG_MENU]";
+		public static final String TagAppointmentNewTagSubMenu = "id=TAG_MENU|MENU|NEWTAG_title";
+		public static final String TagAppointmentRemoveTagSubMenu = "id=TAG_MENU|MENU|REMOVETAG_title";
+		public static final String ShowOriginalMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_SHOW_ORIG]";
+		public static final String QuickCommandsMenu = "css=div[id='zm__Calendar'] tr[id=POPUP_QUICK_COMMANDS]";
+		
+		public static final String InstanceMenu = "id=VIEW_APPT_INSTANCE_title";
+		public static final String SeriesMenu = "id=VIEW_APPT_SERIES_title";
+		public static final String OpenInstanceMenu = "id=OPEN_APPT_INSTANCE_title";
+		public static final String ForwardInstanceMenu = "id=FORWARD_APPT_INSTANCE_title";
+		public static final String DeleteInstanceMenu = "id=DELETE_INSTANCE_title";
+		public static final String OpenSeriesMenu = "id=OPEN_APPT_SERIES_title";
+		public static final String ForwardSeriesMenu = "id=FORWARD_APPT_SERIES_title";
+		public static final String DeleteSeriesMenu = "id=DELETE_SERIES_title";
+		
+		public static final String NewAppointmentMenu = "id=NEW_APPT_title";
+		public static final String NewAllDayAppointmentMenu = "id=NEW_ALLDAY_APPT_title";
+		public static final String GoToTodayMenu = "id=TODAY_title";
+		public static final String ViewMenu = "id=CAL_VIEW_MENU_title";
+		public static final String ViewDaySubMenu = "id=DAY_VIEW_title";
+		public static final String ViewWorkWeekSubMenu = "id=WORK_WEEK_VIEW_title";
+		public static final String ViewWeekSubMenu = "id=WEEK_VIEW_title";
+		public static final String ViewMonthSubMenu = "id=MONTH_VIEW_title";
+		public static final String ViewListSubMenu = "id=CAL_LIST_VIEW_title";
+		public static final String ViewScheduleSubMenu = "id=SCHEDULE_VIEW_title";
 
-		// Radio button
+		// Radio buttons
 		public static final String OpenThisInstanceRadioButton = "id=";
 		public static final String OpenThisSeriesRadioButton = "id=";
-
 
 		public static final String CalendarViewListCSS		= "css=div[id='zv__CLL']";
 		public static final String CalendarViewDayCSS		= "css=div[class='ImgCalendarDayGrid']";
@@ -97,6 +99,10 @@ public class PageCalendar extends AbsTab {
 	}
 
 	public String zGetApptLocator(String apptSubject) throws HarnessException {
+		return "css=td.appt_name:contains('" + apptSubject + "')";
+	}
+	
+	public String zGetAllDayApptLocator(String apptSubject) throws HarnessException {
 		return "css=td.appt_name:contains('" + apptSubject + "')";
 	}
 	
