@@ -217,8 +217,8 @@ function (showRootNode) {
         ti.setImage(currentAddNode.image);
         ti.setData(ZaOverviewPanelController._TID, currentAddNode.mappingId);
         ti.setData("dataItem", currentAddNode);
-        for (var key in this._data) {
-            this.setData(key, this._data[key]);
+        for (var key in currentAddNode._data) {
+            ti.setData(key, currentAddNode._data[key]);
         }
         for (j = 0; j < currentAddNode.childrenData.size(); j++) {
             var currentNextNode =  currentAddNode.childrenData.get(j);
@@ -227,8 +227,8 @@ function (showRootNode) {
             nextTi.setImage(currentNextNode.image);
             nextTi.setData(ZaOverviewPanelController._TID, currentNextNode.mappingId);
             nextTi.setData("dataItem", currentNextNode);
-            for (var key in this._data) {
-                this.setData(key, currentNextNode._data[key]);
+            for (var key in currentNextNode._data) {
+                nextTi.setData(key, currentNextNode._data[key]);
             }
         }
     }

@@ -152,6 +152,49 @@ ZaCert.certOvTreeModifier = function (tree) {
 	
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CERTS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		try {
+            if (appNewUI) {
+            var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure]);
+
+			var serverList = overviewPanelController._app.getServerList().getArray();
+			if(serverList && serverList.length) {
+				var cnt = serverList.length;
+				if(cnt>0) {
+                    var certTi = new ZaTreeItemData({
+                                        parent:parentPath,
+                                        id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_CONFIGURATION,null, "CertHV"),
+                                        text: com_zimbra_cert_manager.OVP_certs,
+                                        mappingId: ZaZimbraAdmin._CERTS_SERVER_LIST_VIEW});
+                    tree.addTreeItemData(certTi);
+					//add the server nodes
+                    var subParentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, com_zimbra_cert_manager.OVP_certs]);
+					for(var ix=0; ix< cnt; ix++) {
+                        var ti1 = new ZaTreeItemData({
+                                parent:subParentPath,
+                                id:DwtId._makeId(certTi.id, ix + 1),
+                                text: serverList[ix].name,
+                                mappingId: ZaZimbraAdmin._CERTS});
+                        ti1.setData(ZaOverviewPanelController._OBJ_ID, serverList[ix].id);
+                        tree.addTreeItemData(ti1);
+						ZaCert.TARGET_SERVER_CHOICES.push (
+							{label: serverList[ix].name, value: serverList[ix].id }
+						);
+					}
+					ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._CERTS_SERVER_LIST_VIEW] = ZaCert.certsServerListTreeListener;
+				} else {
+                    var certTi = new ZaTreeItemData({
+                                        parent:parentPath,
+                                        id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_CONFIGURATION,null, "CertHV"),
+                                        text: com_zimbra_cert_manager.OVP_certs,
+                                        mappingId: ZaZimbraAdmin._CERTS});
+					certTi.setData(ZaOverviewPanelController._OBJ_ID, serverList[0].id);
+                    tree.addTreeItemData(certTi);
+					ZaCert.TARGET_SERVER_CHOICES.push (
+							{label: serverList[0].name, value: serverList[0].id }
+						);
+				}
+				ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._CERTS] = ZaCert.certsServerNodeTreeListener;
+			}
+            } else {
 			overviewPanelController._certTi = new DwtTreeItem({parent:overviewPanelController._toolsTi,className:"AdminTreeItem"});
 			overviewPanelController._certTi.setText(com_zimbra_cert_manager.OVP_certs);
 			overviewPanelController._certTi.setImage("OverviewCertificate"); //TODO: Use Cert icons
@@ -163,8 +206,8 @@ ZaCert.certOvTreeModifier = function (tree) {
 					overviewPanelController._certTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._CERTS_SERVER_LIST_VIEW);
 					//add the server nodes
 					for(var ix=0; ix< cnt; ix++) {
-						var ti1 = new DwtTreeItem({parent:overviewPanelController._certTi,className:"AdminTreeItem"});			
-						ti1.setText(serverList[ix].name);	
+						var ti1 = new DwtTreeItem({parent:overviewPanelController._certTi,className:"AdminTreeItem"});
+						ti1.setText(serverList[ix].name);
 						ti1.setImage("Server");
 						ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._CERTS);
 						ti1.setData(ZaOverviewPanelController._OBJ_ID, serverList[ix].id);
@@ -182,6 +225,7 @@ ZaCert.certOvTreeModifier = function (tree) {
 				}
 				ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._CERTS] = ZaCert.certsServerNodeTreeListener;
 			}
+            }
 		} catch (ex) {
 			overviewPanelController._handleException(ex, "ZaCert.certOvTreeModifier", null, false);
 		}

@@ -238,18 +238,28 @@ ZaVersionCheck.versionCheckTreeModifier = function (tree) {
 	var overviewPanelController = this ;
 	if (!overviewPanelController) throw new Exception("ZaCert.versionCheckTreeModifier: Overview Panel Controller is not set.");	
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SOFTWARE_UPDATES_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		if(!this._toolsTi) {
-			this._toolsTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
-			this._toolsTi.enableSelection(false);	
-			this._toolsTi.setText(ZaMsg.OVP_tools);
-			this._toolsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._TOOLS);
-		}
-	
-		this._versionCheckTi = new DwtTreeItem({parent:this._toolsTi,className:"AdminTreeItem"});
-		this._versionCheckTi.setText(com_zimbra_adminversioncheck.OVP_versionCheck);
-		this._versionCheckTi.setImage("AdminRefresh");
-		this._versionCheckTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._VERSION_CHECK_VIEW);	
-		
+        if (!appNewUI) {
+            if(!this._toolsTi) {
+                this._toolsTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
+                this._toolsTi.enableSelection(false);
+                this._toolsTi.setText(ZaMsg.OVP_tools);
+                this._toolsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._TOOLS);
+            }
+
+            this._versionCheckTi = new DwtTreeItem({parent:this._toolsTi,className:"AdminTreeItem"});
+            this._versionCheckTi.setText(com_zimbra_adminversioncheck.OVP_versionCheck);
+            this._versionCheckTi.setImage("AdminRefresh");
+            this._versionCheckTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._VERSION_CHECK_VIEW);
+        } else {
+            var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_toolMig]);
+
+            var ti = new ZaTreeItemData({
+                                    parent:parentPath,
+                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,"magHV",null, "VersionCheckHV"),
+                                    text: com_zimbra_adminversioncheck.OVP_versionCheck,
+                                    mappingId: ZaZimbraAdmin._VERSION_CHECK_VIEW});
+            tree.addTreeItemData(ti);
+        }
 		if(ZaOverviewPanelController.overviewTreeListeners) {
 			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._VERSION_CHECK_VIEW] = ZaVersionCheck.versionCheckTreeListener;
 		}

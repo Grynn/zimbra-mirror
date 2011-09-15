@@ -75,8 +75,7 @@ ZaCertsServerListController.prototype._createUI = function () {
 		this._contentView = new ZaCertsServerListView(this._container);
 		this._initToolbar();
 		if(this._toolbarOperations && this._toolbarOperations.length) {
-			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations); 
-			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations);
 		}
 		this._initPopupMenu();
 		if(this._popupOperations && this._popupOperations.length) {
@@ -84,13 +83,18 @@ ZaCertsServerListController.prototype._createUI = function () {
 		}
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
 		//ZaApp.getInstance().createView(ZaZimbraAdmin._SERVERS_LIST_VIEW, elements);
-		var tabParams = {
-			openInNewTab: false,
-			tabId: this.getContentViewId(),
-			tab: this.getMainTab() 
-		}
-		ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-
+        if (!appNewUI) {
+            if (this._toolbar)
+                elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+            var tabParams = {
+                openInNewTab: false,
+                tabId: this.getContentViewId(),
+                tab: this.getMainTab()
+            }
+            ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
+        } else {
+            ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
+        }
 		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
 		this._removeConfirmMessageDialog = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON], ZaApp.getInstance());					

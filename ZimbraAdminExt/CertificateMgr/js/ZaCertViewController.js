@@ -55,18 +55,23 @@ ZaCertViewController.prototype._createUI = function () {
 		this._contentView = new ZaCertView( this._container, this._app );
 		this._initToolbar();
 		if(this._toolbarOperations && this._toolbarOperations.length) {
-			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations); 
-			elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+			this._toolbar = new ZaToolBar(this._container, this._toolbarOperations);
 		}
-		
-		elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-		var tabParams = {
-			openInNewTab: true,
-			tabId: this.getContentViewId(),
-			tab: this.getMainTab() 
-		}
-		this._app.createView(this.getContentViewId(), elements, tabParams) ;
 
+        elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
+        if (!appNewUI) {
+            if (this._toolbar)
+                elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+
+            var tabParams = {
+                openInNewTab: true,
+                tabId: this.getContentViewId(),
+                tab: this.getMainTab()
+            }
+            this._app.createView(this.getContentViewId(), elements, tabParams) ;
+        } else {
+            ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
+        }
 		//this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 		//this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
 	

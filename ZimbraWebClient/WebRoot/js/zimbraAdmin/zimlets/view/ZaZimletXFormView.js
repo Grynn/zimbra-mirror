@@ -65,8 +65,10 @@ function(entry) {
         this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
 
     this._localXForm.setInstance(this._containedObject) ;
-    this.updateTab();
+    if (!appNewUI)
+        this.updateTab();
 }
+
 ZaZimletXFormView.myXFormModifier = function(xFormObject) {
     this.tabChoices = [] ;
     var cases = [] ;
@@ -101,9 +103,13 @@ ZaZimletXFormView.myXFormModifier = function(xFormObject) {
 				],
 				cssStyle:"padding-top:5px; padding-bottom:5px"
 			},
-			{type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:this.tabChoices,cssClass:"ZaTabBar", id:"xform_tabbar"},
+			{type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:this.tabChoices,cssClass:"ZaTabBar", id:"xform_tabbar", cssStyle:"display:none;"},
 			{type:_SWITCH_, align:_LEFT_, valign:_TOP_, items:cases}
 	];
 
 };
 ZaTabView.XFormModifiers["ZaZimletXFormView"].push(ZaZimletXFormView.myXFormModifier);
+
+ZaZimletXFormView.prototype.getTabChoices = function() {
+    return this.tabChoices;
+}

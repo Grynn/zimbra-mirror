@@ -84,7 +84,8 @@ function(entry) {
 	
 	this._localXForm.setInstance(this._containedObject);
 	//update the tab
-	this.updateTab();
+    if (!appNewUI)
+	    this.updateTab();
 }
 
 ZaVersionCheckXFormView.myXFormModifier = function(xFormObject, entry) {
