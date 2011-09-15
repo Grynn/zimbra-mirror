@@ -694,6 +694,7 @@ function() {
     var parentPath;
 	var l = new AjxListener(this, this._overviewTreeListener);
 	tree.addSelectionListener(l);
+    var mtaList = ZaApp.getInstance().getPostQList().getArray();
     // Home is always added;
     var home = new ZaTreeItemData({parent:"",
                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME, true),
@@ -711,10 +712,51 @@ function() {
 
     var  ti = new ZaTreeItemData({
                                     parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_monitor]),
-                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_HOME,null, "serverstatusHV"),
+                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,"monHV",null, "serverstatusHV"),
                                     text: ZaMsg.OVP_status,
                                     mappingId: ZaZimbraAdmin._SERVER_STATUS_VIEW});
     tree.addTreeItemData(ti);
+    // Add Mail Queue
+    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.MAILQ_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+        try {
+            if(mtaList && mtaList.length) {
+                var cnt = mtaList.length;
+                var postTi;
+                if(cnt>1) {
+                    postTi = new ZaTreeItemData({
+                                    parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_monitor]),
+                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,"monHV",null, "postQueueHV"),
+                                    text: ZaMsg.OVP_postq,
+                                    mappingId:  ZaZimbraAdmin._POSTQ_VIEW});
+                    tree.addTreeItemData(postTi);
+                    for(var ix=0; ix< cnt; ix++) {
+                        var ti1 = new ZaTreeItemData({
+                                    parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_monitor, ZaMsg.OVP_postq]),
+                                    id:DwtId._makeId(postTi.id, ix + 1),
+                                    text: mtaList[ix].name,
+                                    mappingId: ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW});;
+                        ti1.setData(ZaOverviewPanelController._OBJ_ID, mtaList[ix].id);
+                        this._mailqMap[mtaList[ix].id] = ti1;
+                        tree.addTreeItemData(ti1);
+                    }
+                    ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._POSTQ_VIEW] = ZaOverviewPanelController.postqTreeListener;
+                } else {
+                    postTi = new ZaTreeItemData({
+                                    parent:ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_monitor]),
+                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,"monHV",null, "postQueueHV"),
+                                    text: ZaMsg.OVP_postq,
+                                    mappingId: ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW});
+                    postTi.setData(ZaOverviewPanelController._OBJ_ID, mtaList[0].id);
+                    tree.addTreeItemData(postTi);
+                }
+                ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW] = ZaOverviewPanelController.postqByServerTreeListener;
+            }
+        } catch (ex) {
+            this._handleException(ex, "ZaOverviewPanelController.prototype._buildFolderTree", null, false);
+        }
+
+
+    }
 
     var accountMgr = new ZaTreeItemData({
                                     parent:ZaMsg.OVP_home,

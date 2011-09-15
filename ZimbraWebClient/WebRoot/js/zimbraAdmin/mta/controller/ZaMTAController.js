@@ -27,6 +27,7 @@ ZaMTAController = function(appCtxt, container) {
 	this._UICreated = false;
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "monitoring/monitoring_zimbra_mta_mail_queues.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 	this._toolbarOperations = new Array();
+    this._popupOperations = new Array();
 	this.objType = ZaEvent.S_MTA;	
 	this.tabConstructor = ZaMTAXFormView;	
 }
@@ -35,6 +36,7 @@ ZaMTAController.prototype = new ZaXFormViewController();
 ZaMTAController.prototype.constructor = ZaMTAController;
 
 ZaController.initToolbarMethods["ZaMTAController"] = new Array();
+ZaController.initPopupMenuMethods["ZaMTAController"] = new Array();
 ZaController.setViewMethods["ZaMTAController"] = new Array();
 ZaController.changeActionsStateMethods["ZaMTAController"] = new Array();
 /**
@@ -75,7 +77,7 @@ ZaController.setViewMethods["ZaMTAController"].push(ZaMTAController.setViewMetho
 * Each ZaOperation object defines one toolbar button.
 * Help button is always the last button in the toolbar
 **/
-ZaMTAController.initToolbarMethod = 
+ZaMTAController.initToolbarMethod =
 function () {
 	//this._toolbarOperations[ZaOperation.LABEL]=new ZaOperation(ZaOperation.LABEL,ZaMsg.TBB_LastUpdated, ZaMsg.TBB_LastUpdated_tt, null, null, null,null,null,null,"refreshTime"));	
 //	this._toolbarOperations[ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
@@ -86,6 +88,11 @@ function () {
 }
 ZaController.initToolbarMethods["ZaMTAController"].push(ZaMTAController.initToolbarMethod);
 
+ZaMTAController.initPopupMenuMethod =
+function () {
+	this._popupOperations[ZaOperation.FLUSH]=new ZaOperation(ZaOperation.FLUSH,ZaMsg.TBB_FlushQs, ZaMsg.TBB_TBB_FlushQs_tt, "FlushAllQueues", "FlushAllQueues", new AjxListener(this, this.flushListener));
+}
+ZaController.initPopupMenuMethods["ZaMTAController"].push(ZaMTAController.initPopupMenuMethod);
 /**
 * @method _createUI
 **/
@@ -100,16 +107,21 @@ function () {
 	this._toolbarOrder.push(ZaOperation.NONE);
 	this._toolbarOrder.push(ZaOperation.HELP);								
 	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder, null, null, ZaId.VIEW_MTA);		
-	
+
+    this._initPopupMenu();
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
-	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-    //ZaApp.getInstance().createView(ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW, elements);
-    var tabParams = {
-			openInNewTab: true,
-			tabId: this.getContentViewId()
-		}
-	ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
+    if (!appNewUI) {
+        elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+        //ZaApp.getInstance().createView(ZaZimbraAdmin._POSTQ_BY_SERVER_VIEW, elements);
+        var tabParams = {
+                openInNewTab: true,
+                tabId: this.getContentViewId()
+            }
+        ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
+    } else {
+        ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
+    }
 	this._UICreated = true;
 	ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
 }

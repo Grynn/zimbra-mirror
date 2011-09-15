@@ -1022,3 +1022,11 @@ function (params) {
 	}
 	ZaApp.getInstance().getAppCtxt().getShell().setBusy(false, params.busyId);	
 }
+
+ZaController.prototype.getPopUpOperation =
+function() {
+    if (this._popupOperations && this._popupOperations.length > 0)
+        return  this._popupOperations;
+    else
+        return "";
+}

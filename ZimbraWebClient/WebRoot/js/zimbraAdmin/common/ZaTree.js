@@ -201,12 +201,15 @@ ZaTree.prototype.buildTree =
 function (showRootNode) {
 
     this.clearItems();
-    var ti, nextTi;
+    var ti, nextTi, key;
     this.currentRoot =  new ZaTreeItem({parent:this,className:"overviewHeader",id:showRootNode.id, forceNotifySelection:true});
 	this.currentRoot.enableSelection(false);
 	this.currentRoot.setText(showRootNode.text);
 	this.currentRoot.setData(ZaOverviewPanelController._TID, showRootNode.mappingId);
     this.currentRoot.setData("dataItem", showRootNode);
+    for (key in showRootNode._data) {
+        this.currentRoot.setData(key, showRootNode._data[key]);
+    }
 
     var i, j;
     for (i = 0; i < showRootNode.childrenData.size(); i++) {
@@ -217,7 +220,7 @@ function (showRootNode) {
         ti.setImage(currentAddNode.image);
         ti.setData(ZaOverviewPanelController._TID, currentAddNode.mappingId);
         ti.setData("dataItem", currentAddNode);
-        for (var key in currentAddNode._data) {
+        for (key in currentAddNode._data) {
             ti.setData(key, currentAddNode._data[key]);
         }
         for (j = 0; j < currentAddNode.childrenData.size(); j++) {
@@ -227,7 +230,7 @@ function (showRootNode) {
             nextTi.setImage(currentNextNode.image);
             nextTi.setData(ZaOverviewPanelController._TID, currentNextNode.mappingId);
             nextTi.setData("dataItem", currentNextNode);
-            for (var key in currentNextNode._data) {
+            for (key in currentNextNode._data) {
                 nextTi.setData(key, currentNextNode._data[key]);
             }
         }
