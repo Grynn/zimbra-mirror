@@ -15,7 +15,7 @@ public:
 #define ZCM_CONTACTS            0x02
 #define ZCM_APPOINTMENTS        0x04
 #define ZCM_TASKS               0x08
-#define ZCM_MEETRQRS			0x10
+#define ZCM_MEETRQRS            0x10
 #define ZCM_ALL                 0xFF
 class MAPIStore;
 
@@ -36,9 +36,10 @@ public:
     HRESULT OpenOtherStore(LPMDB OpenedStore, LPWSTR pServerDn, LPWSTR pUserDn,
     MAPIStore &OtherStore);
     HRESULT OpenAddressBook(LPADRBOOK *ppAddrBook);
-	HRESULT OpenEntry(ULONG cbEntryID,LPENTRYID lpEntryID,LPCIID lpInterface,
-		ULONG ulFlags,ULONG FAR * lpulObjType,LPUNKNOWN FAR * lppUnk );
-	HRESULT CompareEntryIDs(SBinary *pBin1, SBinary *pBin2, ULONG &lpulResult);
+    HRESULT OpenEntry(ULONG cbEntryID, LPENTRYID lpEntryID, LPCIID lpInterface, ULONG ulFlags,
+    ULONG FAR *lpulObjType,
+    LPUNKNOWN FAR *lppUnk);
+    HRESULT CompareEntryIDs(SBinary *pBin1, SBinary *pBin2, ULONG &lpulResult);
 };
 }
 }

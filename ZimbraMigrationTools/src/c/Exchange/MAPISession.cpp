@@ -21,8 +21,8 @@ MAPISessionException::MAPISessionException(HRESULT hrErrCode, LPCWSTR lpszDescri
 // MAPI Session Class
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-MAPISession::MAPISession(): m_Session(NULL){
-	MAPIInitialize(NULL);
+MAPISession::MAPISession(): m_Session(NULL) {
+    MAPIInitialize(NULL);
 }
 
 MAPISession::~MAPISession() {
@@ -31,7 +31,7 @@ MAPISession::~MAPISession() {
         UlRelease(m_Session);
         m_Session = NULL;
     }
-	MAPIUninitialize();
+    MAPIUninitialize();
 }
 
 HRESULT MAPISession::_mapiLogon(LPWSTR strProfile, DWORD dwFlags, LPMAPISESSION &session) {
@@ -128,14 +128,15 @@ HRESULT MAPISession::OpenAddressBook(LPADRBOOK *ppAddrBook) {
     return hr;
 }
 
-HRESULT MAPISession::OpenEntry(ULONG cbEntryID,LPENTRYID lpEntryID,LPCIID lpInterface,
-		ULONG ulFlags,ULONG FAR * lpulObjType,LPUNKNOWN FAR * lppUnk )
-{
-	return m_Session->OpenEntry(cbEntryID, lpEntryID, lpInterface, ulFlags, lpulObjType, lppUnk);
+HRESULT MAPISession::OpenEntry(ULONG cbEntryID, LPENTRYID lpEntryID, LPCIID lpInterface,
+    ULONG ulFlags, ULONG FAR *lpulObjType,
+    LPUNKNOWN FAR *lppUnk) {
+    return m_Session->OpenEntry(cbEntryID, lpEntryID, lpInterface, ulFlags, lpulObjType, lppUnk);
 }
 
 HRESULT MAPISession::CompareEntryIDs(SBinary *pBin1, SBinary *pBin2, ULONG &lpulResult) {
     HRESULT hr = S_OK;
+
     hr =
         m_Session->CompareEntryIDs(pBin1->cb, (LPENTRYID)(pBin1->lpb), pBin2->cb,
             (LPENTRYID)(pBin2->lpb), 0, &lpulResult);

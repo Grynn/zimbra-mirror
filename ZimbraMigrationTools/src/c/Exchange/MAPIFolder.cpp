@@ -61,7 +61,7 @@ BOOL FolderIterator::GetNext(MAPIFolder &folder) {
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // MAPIFolder
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-MAPIFolder::MAPIFolder(): m_folder(NULL),m_session(NULL),m_store(NULL) {
+MAPIFolder::MAPIFolder(): m_folder(NULL), m_session(NULL), m_store(NULL) {
     m_EntryID.cb = 0;
     m_EntryID.lpb = NULL;
 }
@@ -69,9 +69,10 @@ MAPIFolder::MAPIFolder(): m_folder(NULL),m_session(NULL),m_store(NULL) {
 MAPIFolder::MAPIFolder(MAPISession &session, MAPIStore &store): m_folder(NULL) {
     m_EntryID.cb = 0;
     m_EntryID.lpb = NULL;
-	m_session = &session;
-	m_store = &store;
+    m_session = &session;
+    m_store = &store;
 }
+
 MAPIFolder::~MAPIFolder() {
     if (m_folder != NULL)
         UlRelease(m_folder);
@@ -85,150 +86,133 @@ MAPIFolder::~MAPIFolder() {
 MAPIFolder::MAPIFolder(const MAPIFolder &folder) {
     m_folder = folder.m_folder;
     m_displayname = folder.m_displayname;
-	CopyEntryID((SBinary&)folder.m_EntryID,m_EntryID);
+    CopyEntryID((SBinary &)folder.m_EntryID, m_EntryID);
 }
 
 void MAPIFolder::Initialize(LPMAPIFOLDER pFolder, LPTSTR displayName, LPSBinary pEntryId) {
     if (m_folder != NULL)
         UlRelease(m_folder);
     if (m_EntryID.lpb != NULL)
-       FreeEntryID(m_EntryID);
+        FreeEntryID(m_EntryID);
     m_folder = pFolder;
     m_displayname = displayName;
-	CopyEntryID(*pEntryId,m_EntryID);
-    if(m_session)
-	{
-		wstring wstrFolderPath = FindFolderPath();
-		m_folderpath = wstrFolderPath;
-	}
+    CopyEntryID(*pEntryId, m_EntryID);
+    if (m_session) {
+        wstring wstrFolderPath = FindFolderPath();
+        m_folderpath = wstrFolderPath;
+    }
 }
 
-ExchangeSpecialFolderId MAPIFolder::GetExchangeFolderId()
-{
-	if(m_store && m_session)
-	{
-		SBinaryArray specialFolderIds= m_store->GetSpecialFolderIds();
-		return Zimbra::MAPI::Util::GetExchangeSpecialFolderId( m_store->GetInternalMAPIStore(),
-			m_EntryID.cb, (LPENTRYID)(m_EntryID.lpb), &specialFolderIds);
-	}
-	return SPECIAL_FOLDER_ID_NONE;
+ExchangeSpecialFolderId MAPIFolder::GetExchangeFolderId() {
+    if (m_store && m_session) {
+        SBinaryArray specialFolderIds = m_store->GetSpecialFolderIds();
+        return Zimbra::MAPI::Util::GetExchangeSpecialFolderId(m_store->GetInternalMAPIStore(),
+            m_EntryID.cb, (LPENTRYID)(m_EntryID.lpb), &specialFolderIds);
+    }
+    return SPECIAL_FOLDER_ID_NONE;
 }
 
+ZimbraSpecialFolderId MAPIFolder::GetZimbraFolderId() {
+    ZimbraSpecialFolderId ZimbraSpecialFolderIdArray[TOTAL_NUM_SPECIAL_FOLDERS] = {
+        ZM_INBOX, ZM_ROOT, ZM_CALENDAR,
+        ZM_CONTACTS, ZM_DRAFTS, ZM_SFID_NONE /*JOURNAL*/,
+        ZM_SFID_NONE /*NOTES*/, ZM_TASKS, ZM_SFID_NONE /*OUTBOX*/,
+        ZM_SENT_MAIL, ZM_TRASH, ZM_SFID_NONE /*SYNC_CONFLICTS*/,
+        ZM_SFID_NONE /*SYNC_ISSUES*/, ZM_SFID_NONE /*SYNC_LOCAL_FAILURES*/, ZM_SFID_NONE /*SYNC_SERVER_FAILURES*/,
+        ZM_SPAM
+    };
 
-ZimbraSpecialFolderId MAPIFolder::GetZimbraFolderId()
-{
-	ZimbraSpecialFolderId ZimbraSpecialFolderIdArray[TOTAL_NUM_SPECIAL_FOLDERS]={
-	ZM_INBOX,ZM_ROOT,ZM_CALENDAR,
-	ZM_CONTACTS,ZM_DRAFTS,ZM_SFID_NONE/*JOURNAL*/,
-	ZM_SFID_NONE/*NOTES*/,ZM_TASKS,ZM_SFID_NONE/*OUTBOX*/,
-	ZM_SENT_MAIL,ZM_TRASH,ZM_SFID_NONE/*SYNC_CONFLICTS*/,
-	ZM_SFID_NONE/*SYNC_ISSUES*/,ZM_SFID_NONE/*SYNC_LOCAL_FAILURES*/,ZM_SFID_NONE/*SYNC_SERVER_FAILURES*/,
-	ZM_SPAM};
-
-	if(m_store && m_session)
-	{
-		int idx = GetExchangeFolderId();
-		if(idx < ZM_SFID_MAX)
-			return ZimbraSpecialFolderIdArray[idx];	
-		else
-			return ZM_SFID_NONE;
-	}
-	return ZM_SFID_NONE;
+    if (m_store && m_session) {
+        int idx = GetExchangeFolderId();
+        if (idx < ZM_SFID_MAX)
+            return ZimbraSpecialFolderIdArray[idx];
+        else
+            return ZM_SFID_NONE;
+    }
+    return ZM_SFID_NONE;
 }
 
-bool MAPIFolder::HiddenFolder()
-{
-	if (!m_folder)
-		return false;
-	HRESULT hr=S_OK;
-	bool bRet=false;
-	Zimbra::Util::ScopedBuffer<SPropValue> pPropValues;
-    if(SUCCEEDED(hr= HrGetOneProp(m_folder,PR_ATTR_HIDDEN,pPropValues.getptr())))
-	{
-		bRet= (pPropValues->Value.b!=0);
-	}
-	return bRet;
+bool MAPIFolder::HiddenFolder() {
+    if (!m_folder)
+        return false;
+    HRESULT hr = S_OK;
+    bool bRet = false;
+    Zimbra::Util::ScopedBuffer<SPropValue> pPropValues;
+    if (SUCCEEDED(hr = HrGetOneProp(m_folder, PR_ATTR_HIDDEN, pPropValues.getptr())))
+        bRet = (pPropValues->Value.b != 0);
+    return bRet;
 }
 
-HRESULT MAPIFolder::ContainerClass(wstring &wstrContainerClass)
-{
-	if (!m_folder)
-		return E_FAIL;
-	HRESULT hr=S_OK;
-	Zimbra::Util::ScopedBuffer<SPropValue> pPropValues;
-	wstrContainerClass=L"";
-    if(SUCCEEDED(hr= HrGetOneProp(m_folder,PR_CONTAINER_CLASS,pPropValues.getptr())))
-	{
-		wstrContainerClass=pPropValues->Value.LPSZ;
-	}
-	return hr;
+HRESULT MAPIFolder::ContainerClass(wstring &wstrContainerClass) {
+    if (!m_folder)
+        return E_FAIL;
+    HRESULT hr = S_OK;
+    Zimbra::Util::ScopedBuffer<SPropValue> pPropValues;
+    wstrContainerClass = L"";
+    if (SUCCEEDED(hr = HrGetOneProp(m_folder, PR_CONTAINER_CLASS, pPropValues.getptr())))
+        wstrContainerClass = pPropValues->Value.LPSZ;
+    return hr;
 }
 
-wstring MAPIFolder::FindFolderPath()
-{
-	//return if no session object to compare ids
-	if(!m_session)
-		return L"";
+wstring MAPIFolder::FindFolderPath() {
+    // return if no session object to compare ids
+    if (!m_session)
+        return L"";
+    HRESULT hr = S_OK;
+    ULONG ulResult = FALSE;
+    wstring wstrPath = m_displayname;
+    LPSPropValue pPropVal = NULL;
+    ULONG ulType = 0;
+    LPMAPIFOLDER lpMAPIFolder = NULL;
+    SBinary prevEntryID = { 0 };
 
-	HRESULT hr=S_OK;
-	ULONG ulResult=FALSE;
-	wstring wstrPath=m_displayname;
-	LPSPropValue pPropVal = NULL ;
-	ULONG ulType = 0 ;
-	LPMAPIFOLDER lpMAPIFolder = NULL ;
-	SBinary prevEntryID = {0};
+    // Make copy of prev EntryID
+    CopyEntryID(m_EntryID, prevEntryID);
+    // Get parent ENTRYID
+    if (SUCCEEDED(hr = HrGetOneProp(m_folder, PR_PARENT_ENTRYID, &pPropVal))) {
+        while (!ulResult) {
+            // compare entryID with previous
+            m_session->CompareEntryIDs(&prevEntryID, &pPropVal->Value.bin, ulResult);
 
-	//Make copy of prev EntryID
-	CopyEntryID(m_EntryID,prevEntryID);
-	//Get parent ENTRYID
-	if(SUCCEEDED(hr=HrGetOneProp(m_folder,PR_PARENT_ENTRYID,&pPropVal)))
-	{
-		while(!ulResult)
-		{
-			//compare entryID with previous
-			m_session->CompareEntryIDs(&prevEntryID,&pPropVal->Value.bin,ulResult);
-			//Free PrevEntryID
-			FreeEntryID(prevEntryID);
-			if(ulResult)
-			{
-				if(pPropVal)
-					MAPIFreeBuffer( pPropVal );
-				continue;
-			}
-			//Get Parent MAPI Folder
-			if(SUCCEEDED(hr=m_session->OpenEntry(pPropVal->Value.bin.cb,(LPENTRYID)pPropVal->Value.bin.lpb,
-					NULL, 0, &ulType, (LPUNKNOWN*)&lpMAPIFolder )))
-			{
-				//Get parent folder name
-				LPSPropValue pDisplayPropVal = NULL ;
-				if(SUCCEEDED(hr=HrGetOneProp(lpMAPIFolder,PR_DISPLAY_NAME,&pDisplayPropVal))) 
-				{
-					wstrPath= wstrPath+L"/"+pDisplayPropVal->Value.lpszW;
-					MAPIFreeBuffer(pDisplayPropVal);
-					pDisplayPropVal = NULL ;
-				}	
-				//Make copy of prev EntryID
-				CopyEntryID(pPropVal->Value.bin,prevEntryID);
-				//free parent folder entryID
-				MAPIFreeBuffer( pPropVal );
-				pPropVal = NULL;
+            // Free PrevEntryID
+            FreeEntryID(prevEntryID);
+            if (ulResult) {
+                if (pPropVal)
+                    MAPIFreeBuffer(pPropVal);
+                continue;
+            }
+            // Get Parent MAPI Folder
+            if (SUCCEEDED(hr =
+                        m_session->OpenEntry(pPropVal->Value.bin.cb,
+                            (LPENTRYID)pPropVal->Value.bin.lpb,
+                            NULL, 0, &ulType, (LPUNKNOWN *)&lpMAPIFolder))) {
+                // Get parent folder name
+                LPSPropValue pDisplayPropVal = NULL;
+                if (SUCCEEDED(hr =
+                            HrGetOneProp(lpMAPIFolder, PR_DISPLAY_NAME, &pDisplayPropVal))) {
+                    wstrPath = wstrPath + L"/" + pDisplayPropVal->Value.lpszW;
+                    MAPIFreeBuffer(pDisplayPropVal);
+                    pDisplayPropVal = NULL;
+                }
+                // Make copy of prev EntryID
+                CopyEntryID(pPropVal->Value.bin, prevEntryID);
 
-				//Get parent's parent entry ID
-				if(!SUCCEEDED(hr=HrGetOneProp(lpMAPIFolder,PR_PARENT_ENTRYID,&pPropVal))) 
-				{
-					ulResult = TRUE;
-				}
-				//free parent folder
-				lpMAPIFolder->Release();
-			}
-			else
-			{
-				ulResult = TRUE;
-			}
-		}
-	}
-	wstrPath=Zimbra::MAPI::Util::ReverseDelimitedString(wstrPath,L"/");
-	return wstrPath;
+                // free parent folder entryID
+                MAPIFreeBuffer(pPropVal);
+                pPropVal = NULL;
+                // Get parent's parent entry ID
+                if (!SUCCEEDED(hr = HrGetOneProp(lpMAPIFolder, PR_PARENT_ENTRYID, &pPropVal)))
+                    ulResult = TRUE;
+                // free parent folder
+                lpMAPIFolder->Release();
+                lpMAPIFolder = NULL;
+            } else {
+                ulResult = TRUE;
+            }
+        }
+    }
+    wstrPath = Zimbra::MAPI::Util::ReverseDelimitedString(wstrPath, L"/");
+    return wstrPath;
 }
 
 HRESULT MAPIFolder::GetItemCount(ULONG &ulCount) {
@@ -336,5 +320,3 @@ HRESULT MAPIFolder::GetMessageIterator(MessageIterator &msgIterator) {
     msgIterator.Initialize(pContentsTable, m_folder);
     return S_OK;
 }
-
-

@@ -15,6 +15,7 @@ MAPIMessageException::MAPIMessageException(HRESULT hrErrCode, LPCWSTR lpszDescri
     LPCSTR strFile): GenericException(hrErrCode, lpszDescription, nLine, strFile) {
     //
 }
+
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // MAPIMessage
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -49,10 +50,10 @@ MAPIMessage::ReplyToPropTags MAPIMessage::m_replyToPropTags = {
     }
 };
 
-MAPIMessage::MAPIMessage(): m_pMessage(NULL), m_pMessagePropVals(NULL), m_pRecipientRows(NULL)
-{
-	m_EntryID.cb=0;
-	m_EntryID.lpb =NULL;
+MAPIMessage::MAPIMessage(): m_pMessage(NULL), m_pMessagePropVals(NULL),
+    m_pRecipientRows(NULL) {
+    m_EntryID.cb = 0;
+    m_EntryID.lpb = NULL;
 }
 
 MAPIMessage::~MAPIMessage() {
@@ -100,7 +101,7 @@ void MAPIMessage::Initialize(LPMESSAGE pMessage) {
         if (pRecipTable != NULL)
             UlRelease(pRecipTable);
     }
-	m_EntryID =  m_pMessagePropVals[ENTRYID].Value.bin;
+    m_EntryID = m_pMessagePropVals[ENTRYID].Value.bin;
 }
 
 void MAPIMessage::InternalFree() {
@@ -119,294 +120,255 @@ void MAPIMessage::InternalFree() {
 }
 
 bool MAPIMessage::Subject(LPTSTR *ppSubject) {
-	HRESULT hr=S_OK;
+    HRESULT hr = S_OK;
+
     if (PROP_TYPE(m_pMessagePropVals[SUBJECT].ulPropTag) != PT_ERROR) {
         int nLen = (int)_tcslen(m_pMessagePropVals[SUBJECT].Value.LPSZ);
         LPTSTR pSubject = m_pMessagePropVals[SUBJECT].Value.LPSZ;
-       if(SUCCEEDED(hr= MAPIAllocateBuffer((nLen + 1) * sizeof (TCHAR), (LPVOID *)ppSubject)))
-	   {
-			ZeroMemory(*ppSubject, (nLen + 1) * sizeof (TCHAR));
-			_tcscpy(*ppSubject, pSubject);
-			return true;
-	   }
+        if (SUCCEEDED(hr =
+                    MAPIAllocateBuffer((nLen + 1) * sizeof (TCHAR), (LPVOID *)ppSubject))) {
+            ZeroMemory(*ppSubject, (nLen + 1) * sizeof (TCHAR));
+            _tcscpy(*ppSubject, pSubject);
+            return true;
+        }
     }
     *ppSubject = NULL;
     return false;
 }
 
-ZM_ITEM_TYPE MAPIMessage::ItemType()
-{
-	if( PROP_TYPE(m_pMessagePropVals[MESSAGE_CLASS].ulPropTag) != PT_ERROR )
-	{
-		if(_tcsnicmp(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT("IPM.NOTE"),8 ) == 0
-		|| _tcsnicmp(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT("IPM.POST"),8 ) == 0)
-			return ZT_MAIL;
-		else if(_tcsnicmp(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT("IPM.CONTACT"), 11 ) == 0 ||
-        _tcsnicmp(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT("IPM.DISTLIST"), 12 ) == 0 )
-			return ZT_CONTACTS;
-		else if (_tcsnicmp(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, 
-            _TEXT("IPM.APPOINTMENT"), 15 ) == 0 )
-			return ZT_APPOINTMENTS;
-		else if (_tcsicmp(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT("IPM.TASK") ) == 0 )
-			return ZT_TASKS;
-		else if(_tcsstr(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT("IPM.Schedule")))
-			return ZT_MEETREQ_RESP;
-			
-	}
-	return ZT_NONE;
-}
-
-BOOL MAPIMessage::IsFlagged()
-{
-	if( PROP_TYPE(m_pMessagePropVals[FLAG_STATUS].ulPropTag) != PT_ERROR )
-		return (m_pMessagePropVals[FLAG_STATUS].Value.ul == 2);
-	return false;
-}
-
-LPTSTR MAPIMessage::GetURLName()
-{
-	if( PROP_TYPE(m_pMessagePropVals[URL_NAME].ulPropTag) != PT_ERROR )
-		return m_pMessagePropVals[URL_NAME].Value.LPSZ ;
-	return NULL ;
-}
-
-bool MAPIMessage::IsDraft()
-{
-    if(PROP_TYPE(m_pMessagePropVals[MESSAGE_FLAGS].ulPropTag) != PT_ERROR)
-    {
-        if(m_pMessagePropVals[MESSAGE_FLAGS].Value.ul & MSGFLAG_UNSENT)
-			return true;
+ZM_ITEM_TYPE MAPIMessage::ItemType() {
+    if (PROP_TYPE(m_pMessagePropVals[MESSAGE_CLASS].ulPropTag) != PT_ERROR) {
+        if ((_tcsnicmp(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT("IPM.NOTE"),
+                 8) == 0) ||
+            (_tcsnicmp(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT("IPM.POST"), 8) == 0))
+            return ZT_MAIL;
+        else if ((_tcsnicmp(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT("IPM.CONTACT"),
+                      11) == 0) ||
+                 (_tcsnicmp(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT("IPM.DISTLIST"),
+                      12) == 0))
+            return ZT_CONTACTS;
+        else if (_tcsnicmp(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ,
+                     _TEXT("IPM.APPOINTMENT"), 15) == 0)
+            return ZT_APPOINTMENTS;
+        else if (_tcsicmp(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT("IPM.TASK")) == 0)
+            return ZT_TASKS;
+        else if (_tcsstr(m_pMessagePropVals[MESSAGE_CLASS].Value.LPSZ, _TEXT("IPM.Schedule")))
+            return ZT_MEETREQ_RESP;
     }
-	return false;
+    return ZT_NONE;
 }
 
-BOOL MAPIMessage::IsFromMe()
-{
-	if( PROP_TYPE(m_pMessagePropVals[MESSAGE_FLAGS].ulPropTag) != PT_ERROR )
-		return (m_pMessagePropVals[MESSAGE_FLAGS].Value.ul & MSGFLAG_FROMME);
-
-	return FALSE;
+BOOL MAPIMessage::IsFlagged() {
+    if (PROP_TYPE(m_pMessagePropVals[FLAG_STATUS].ulPropTag) != PT_ERROR)
+        return m_pMessagePropVals[FLAG_STATUS].Value.ul == 2;
+    return false;
 }
 
-BOOL MAPIMessage::IsUnread()
-{
-	if( PROP_TYPE(m_pMessagePropVals[MESSAGE_FLAGS].ulPropTag) != PT_ERROR )
-		return !(m_pMessagePropVals[MESSAGE_FLAGS].Value.ul & MSGFLAG_READ);
-	return FALSE;
+LPTSTR MAPIMessage::GetURLName() {
+    if (PROP_TYPE(m_pMessagePropVals[URL_NAME].ulPropTag) != PT_ERROR)
+        return m_pMessagePropVals[URL_NAME].Value.LPSZ;
+    return NULL;
 }
 
-BOOL MAPIMessage::Forwarded()
-{
-	if( PROP_TYPE(m_pMessagePropVals[LAST_VERB_EXECUTED].ulPropTag) != PT_ERROR )
-		return (m_pMessagePropVals[LAST_VERB_EXECUTED].Value.ul == EXCHIVERB_FORWARD);
-	return FALSE;
+bool MAPIMessage::IsDraft() {
+    if (PROP_TYPE(m_pMessagePropVals[MESSAGE_FLAGS].ulPropTag) != PT_ERROR) {
+        if (m_pMessagePropVals[MESSAGE_FLAGS].Value.ul & MSGFLAG_UNSENT)
+            return true;
+    }
+    return false;
 }
 
-BOOL MAPIMessage::RepliedTo()
-{
-	if( PROP_TYPE(m_pMessagePropVals[LAST_VERB_EXECUTED].ulPropTag) != PT_ERROR )
-		return ( (m_pMessagePropVals[LAST_VERB_EXECUTED].Value.ul == EXCHIVERB_REPLYTOALL) ||
-				 (m_pMessagePropVals[LAST_VERB_EXECUTED].Value.ul == EXCHIVERB_REPLYTOSENDER) );
-	return FALSE;
+BOOL MAPIMessage::IsFromMe() {
+    if (PROP_TYPE(m_pMessagePropVals[MESSAGE_FLAGS].ulPropTag) != PT_ERROR)
+        return m_pMessagePropVals[MESSAGE_FLAGS].Value.ul & MSGFLAG_FROMME;
+    return FALSE;
 }
 
-bool MAPIMessage::HasAttach()
-{
-	if( PROP_TYPE(m_pMessagePropVals[MESSAGE_FLAGS].ulPropTag) != PT_ERROR &&
-		( (m_pMessagePropVals[MESSAGE_FLAGS].Value.l & MSGFLAG_HASATTACH) != 0) )
-		return true;
-	return false;
+BOOL MAPIMessage::IsUnread() {
+    if (PROP_TYPE(m_pMessagePropVals[MESSAGE_FLAGS].ulPropTag) != PT_ERROR)
+        return !(m_pMessagePropVals[MESSAGE_FLAGS].Value.ul & MSGFLAG_READ);
+    return FALSE;
 }
 
-BOOL MAPIMessage::IsUnsent()
-{
-	if( PROP_TYPE(m_pMessagePropVals[MESSAGE_FLAGS].ulPropTag) != PT_ERROR &&
-		( (m_pMessagePropVals[MESSAGE_FLAGS].Value.l & MSGFLAG_UNSENT) != 0) )
-		return true;
-	return false;
+BOOL MAPIMessage::Forwarded() {
+    if (PROP_TYPE(m_pMessagePropVals[LAST_VERB_EXECUTED].ulPropTag) != PT_ERROR)
+        return m_pMessagePropVals[LAST_VERB_EXECUTED].Value.ul == EXCHIVERB_FORWARD;
+    return FALSE;
 }
 
-bool MAPIMessage::HasHtmlPart()
-{
-	if( m_pMessagePropVals[HTML_BODY].ulPropTag == PR_BODY_HTML ||
-			(PROP_TYPE(m_pMessagePropVals[HTML_BODY].ulPropTag) == PT_ERROR &&
-			 m_pMessagePropVals[HTML_BODY].Value.l == E_OUTOFMEMORY) )
-		return true;
-	return false;
+BOOL MAPIMessage::RepliedTo() {
+    if (PROP_TYPE(m_pMessagePropVals[LAST_VERB_EXECUTED].ulPropTag) != PT_ERROR)
+        return (m_pMessagePropVals[LAST_VERB_EXECUTED].Value.ul == EXCHIVERB_REPLYTOALL) ||
+               (m_pMessagePropVals[LAST_VERB_EXECUTED].Value.ul == EXCHIVERB_REPLYTOSENDER);
+    return FALSE;
 }
 
-bool MAPIMessage::HasTextPart()
-{
-	if( ( m_pMessagePropVals[TEXT_BODY].ulPropTag == PR_BODY ) ||
-		( PROP_TYPE(m_pMessagePropVals[TEXT_BODY].ulPropTag) == PT_ERROR  &&
-        			m_pMessagePropVals[TEXT_BODY].Value.l == E_OUTOFMEMORY ) )
-		return true;
-	return false;
+bool MAPIMessage::HasAttach() {
+    if ((PROP_TYPE(m_pMessagePropVals[MESSAGE_FLAGS].ulPropTag) != PT_ERROR) &&
+        ((m_pMessagePropVals[MESSAGE_FLAGS].Value.l & MSGFLAG_HASATTACH) != 0))
+        return true;
+    return false;
 }
 
-
-SBinary& MAPIMessage::UniqueId()
-{
-	return m_pMessagePropVals[ENTRYID].Value.bin;	
+BOOL MAPIMessage::IsUnsent() {
+    if ((PROP_TYPE(m_pMessagePropVals[MESSAGE_FLAGS].ulPropTag) != PT_ERROR) &&
+        ((m_pMessagePropVals[MESSAGE_FLAGS].Value.l & MSGFLAG_UNSENT) != 0))
+        return true;
+    return false;
 }
 
-__int64 MAPIMessage::Date()
-{
-	//calculate the unix date
-	if( PROP_TYPE(m_pMessagePropVals[MESSAGE_DATE].ulPropTag) != PT_ERROR )
-	{
-		__int64 ft = m_pMessagePropVals[MESSAGE_DATE].Value.ft.dwHighDateTime;
-		ft <<= 32;
-		ft |= m_pMessagePropVals[MESSAGE_DATE].Value.ft.dwLowDateTime;
-		return ft;
-	}
-
-	return -1;
+bool MAPIMessage::HasHtmlPart() {
+    if ((m_pMessagePropVals[HTML_BODY].ulPropTag == PR_BODY_HTML) ||
+        ((PROP_TYPE(m_pMessagePropVals[HTML_BODY].ulPropTag) == PT_ERROR) &&
+         (m_pMessagePropVals[HTML_BODY].Value.l == E_OUTOFMEMORY)))
+        return true;
+    return false;
 }
 
-__int64 MAPIMessage::DeliveryDate()
-{
-	//calculate the unix date
-	if( PROP_TYPE(m_pMessagePropVals[DELIVERY_DATE].ulPropTag) != PT_ERROR )
-	{
-		__int64 ft = m_pMessagePropVals[DELIVERY_DATE].Value.ft.dwHighDateTime;
-		ft <<= 32;
-		ft |= m_pMessagePropVals[DELIVERY_DATE].Value.ft.dwLowDateTime;
-		return ft;
-	}
-
-	return -1;
+bool MAPIMessage::HasTextPart() {
+    if ((m_pMessagePropVals[TEXT_BODY].ulPropTag == PR_BODY) ||
+        ((PROP_TYPE(m_pMessagePropVals[TEXT_BODY].ulPropTag) == PT_ERROR) &&
+         (m_pMessagePropVals[TEXT_BODY].Value.l == E_OUTOFMEMORY)))
+        return true;
+    return false;
 }
 
-LPSTR MAPIMessage::DateString()
-{
-	if( PROP_TYPE(m_pMessagePropVals[MESSAGE_DATE].ulPropTag) == PT_ERROR )
-	{
-		strcpy( m_pDateTimeStr, "No Date" );
-	}
-	else if( m_pDateTimeStr[0] == '\0' )
-	{
-		//convert the filetime to a system time.
-		SYSTEMTIME st;
-		FileTimeToSystemTime( &(m_pMessagePropVals[MESSAGE_DATE].Value.ft), &st );
-
-		//build the GMT date/time string
-		int nWritten = GetDateFormatA( MAKELCID( MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US ), SORT_DEFAULT ), 
-			LOCALE_USE_CP_ACP, &st, "ddd, d MMM yyyy", m_pDateTimeStr, 32 );
-
-		GetTimeFormatA( MAKELCID( MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US ), SORT_DEFAULT ),
-			LOCALE_USE_CP_ACP, &st, " HH:mm:ss -0000", (m_pDateTimeStr + nWritten - 1), 32 - nWritten + 1 );
-	}
-
-	return m_pDateTimeStr;
+SBinary &MAPIMessage::UniqueId() {
+    return m_pMessagePropVals[ENTRYID].Value.bin;
 }
 
-DWORD MAPIMessage::Size()
-{
-	if( PROP_TYPE(m_pMessagePropVals[MESSAGE_SIZE].ulPropTag ) == PT_ERROR ) 
-		return 0;
-	else 
-		return m_pMessagePropVals[MESSAGE_SIZE].Value.l;
+__int64 MAPIMessage::Date() {
+    // calculate the unix date
+    if (PROP_TYPE(m_pMessagePropVals[MESSAGE_DATE].ulPropTag) != PT_ERROR) {
+        __int64 ft = m_pMessagePropVals[MESSAGE_DATE].Value.ft.dwHighDateTime;
+        ft <<= 32;
+        ft |= m_pMessagePropVals[MESSAGE_DATE].Value.ft.dwLowDateTime;
+        return ft;
+    }
+    return -1;
 }
 
-
-LPSTR MAPIMessage::DeliveryDateString()
-{
-	if( PROP_TYPE(m_pMessagePropVals[DELIVERY_DATE].ulPropTag) == PT_ERROR )
-	{
-		strcpy( m_pDeliveryDateTimeStr, "No Date" );
-	}
-	else if( m_pDeliveryDateTimeStr[0] == '\0' )
-	{
-		//convert the filetime to a system time.
-		SYSTEMTIME st;
-		FileTimeToSystemTime( &(m_pMessagePropVals[DELIVERY_DATE].Value.ft), &st );
-
-		//build the GMT date/time string
-		int nWritten = GetDateFormatA( MAKELCID( MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US ), SORT_DEFAULT ), 
-			LOCALE_USE_CP_ACP, &st, "ddd, d MMM yyyy", m_pDeliveryDateTimeStr, 32 );
-
-		GetTimeFormatA( MAKELCID( MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US ), SORT_DEFAULT ),
-			LOCALE_USE_CP_ACP, &st, " HH:mm:ss -0000", (m_pDeliveryDateTimeStr + nWritten - 1), 32 - nWritten + 1 );
-	}
-
-	return m_pDeliveryDateTimeStr;
+__int64 MAPIMessage::DeliveryDate() {
+    // calculate the unix date
+    if (PROP_TYPE(m_pMessagePropVals[DELIVERY_DATE].ulPropTag) != PT_ERROR) {
+        __int64 ft = m_pMessagePropVals[DELIVERY_DATE].Value.ft.dwHighDateTime;
+        ft <<= 32;
+        ft |= m_pMessagePropVals[DELIVERY_DATE].Value.ft.dwLowDateTime;
+        return ft;
+    }
+    return -1;
 }
 
-bool MAPIMessage::TextBody( LPTSTR* ppBody, unsigned int& nTextChars )
-{
-	if( m_pMessagePropVals[TEXT_BODY].ulPropTag == PR_BODY )
-	{
-		LPTSTR pBody = m_pMessagePropVals[TEXT_BODY].Value.LPSZ;
-		int nLen = (int)_tcslen(pBody);
-		MAPIAllocateBuffer((nLen+1)*sizeof(TCHAR), (LPVOID FAR *) ppBody);
-		_tcscpy(*ppBody, pBody);
-		nTextChars = nLen;
-		return true;
-	}
-	else if( PROP_TYPE(	m_pMessagePropVals[TEXT_BODY].ulPropTag) == PT_ERROR  &&
-						m_pMessagePropVals[TEXT_BODY].Value.l == E_OUTOFMEMORY )
-	{
-		HRESULT hr = S_OK;
+LPSTR MAPIMessage::DateString() {
+    if (PROP_TYPE(m_pMessagePropVals[MESSAGE_DATE].ulPropTag) == PT_ERROR) {
+        strcpy(m_pDateTimeStr, "No Date");
+    } else if (m_pDateTimeStr[0] == '\0') {
+        // convert the filetime to a system time.
+        SYSTEMTIME st;
+        FileTimeToSystemTime(&(m_pMessagePropVals[MESSAGE_DATE].Value.ft), &st);
 
-		//must use the stream property
-		IStream *pIStream = NULL;
-		hr = m_pMessage->OpenProperty(PR_BODY, &IID_IStream, STGM_READ, 0, (LPUNKNOWN FAR *) &pIStream);
-        if(FAILED(hr))
-        {
+        // build the GMT date/time string
+        int nWritten =
+            GetDateFormatA(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT),
+                LOCALE_USE_CP_ACP, &st, "ddd, d MMM yyyy", m_pDateTimeStr, 32);
+
+        GetTimeFormatA(MAKELCID(MAKELANGID(LANG_ENGLISH,
+                    SUBLANG_ENGLISH_US), SORT_DEFAULT),
+            LOCALE_USE_CP_ACP, &st, " HH:mm:ss -0000",
+            (m_pDateTimeStr + nWritten - 1), 32 - nWritten + 1);
+    }
+    return m_pDateTimeStr;
+}
+
+DWORD MAPIMessage::Size() {
+    if (PROP_TYPE(m_pMessagePropVals[MESSAGE_SIZE].ulPropTag) == PT_ERROR)
+        return 0;
+    else
+        return m_pMessagePropVals[MESSAGE_SIZE].Value.l;
+}
+
+LPSTR MAPIMessage::DeliveryDateString() {
+    if (PROP_TYPE(m_pMessagePropVals[DELIVERY_DATE].ulPropTag) == PT_ERROR) {
+        strcpy(m_pDeliveryDateTimeStr, "No Date");
+    } else if (m_pDeliveryDateTimeStr[0] == '\0') {
+        // convert the filetime to a system time.
+        SYSTEMTIME st;
+        FileTimeToSystemTime(&(m_pMessagePropVals[DELIVERY_DATE].Value.ft), &st);
+
+        // build the GMT date/time string
+        int nWritten =
+            GetDateFormatA(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT),
+                LOCALE_USE_CP_ACP, &st, "ddd, d MMM yyyy", m_pDeliveryDateTimeStr, 32);
+
+        GetTimeFormatA(MAKELCID(MAKELANGID(LANG_ENGLISH,
+                    SUBLANG_ENGLISH_US), SORT_DEFAULT),
+            LOCALE_USE_CP_ACP, &st, " HH:mm:ss -0000", (m_pDeliveryDateTimeStr + nWritten - 1),
+            32 - nWritten + 1);
+    }
+    return m_pDeliveryDateTimeStr;
+}
+
+bool MAPIMessage::TextBody(LPTSTR *ppBody, unsigned int &nTextChars) {
+    if (m_pMessagePropVals[TEXT_BODY].ulPropTag == PR_BODY) {
+        LPTSTR pBody = m_pMessagePropVals[TEXT_BODY].Value.LPSZ;
+        int nLen = (int)_tcslen(pBody);
+        MAPIAllocateBuffer((nLen + 1) * sizeof (TCHAR), (LPVOID FAR *)ppBody);
+        _tcscpy(*ppBody, pBody);
+        nTextChars = nLen;
+        return true;
+    } else if ((PROP_TYPE(m_pMessagePropVals[TEXT_BODY].ulPropTag) == PT_ERROR) &&
+               (m_pMessagePropVals[TEXT_BODY].Value.l == E_OUTOFMEMORY)) {
+        HRESULT hr = S_OK;
+
+        // must use the stream property
+        IStream *pIStream = NULL;
+        hr = m_pMessage->OpenProperty(PR_BODY, &IID_IStream, STGM_READ, 0,
+                (LPUNKNOWN FAR *)&pIStream);
+        if (FAILED(hr))
+            return false;
+                                        // discover the size of the incoming body
+        STATSTG statstg;
+        hr = pIStream->Stat(&statstg, STATFLAG_NONAME);
+        if (FAILED(hr)) {
+            pIStream->Release();
+            pIStream = NULL;
             return false;
         }
+        unsigned bodySize = statstg.cbSize.LowPart;
 
-		// discover the size of the incoming body
-		STATSTG statstg;
-		hr = pIStream->Stat(&statstg, STATFLAG_NONAME);
-		if( FAILED(hr) )
-		{
-			pIStream->Release();
-			pIStream = NULL;
-			return false;
-		}
-		unsigned bodySize = statstg.cbSize.LowPart;
-
-		// allocate buffer for incoming body data
-		hr = MAPIAllocateBuffer(bodySize + 10, (LPVOID FAR *) ppBody);
-		ZeroMemory( *ppBody, bodySize + 10 );
-		if( FAILED(hr) )
-		{
-			pIStream->Release();
-			pIStream = NULL;
-			return false;
-		}
-
-		// download the text
-		ULONG cb;
-		hr = pIStream->Read(*ppBody, statstg.cbSize.LowPart, &cb);
-		if( FAILED(hr) )
-		{
-			pIStream->Release();
-			pIStream = NULL;
-			return false;
-		}
-
-		if( cb != statstg.cbSize.LowPart )
-		{
-			pIStream->Release();
-			pIStream = NULL;
-			return false;
-		}
-
-		// close the stream
-		pIStream->Release();
-			pIStream = NULL;
-		nTextChars = (unsigned int)_tcslen(*ppBody);
-		return true;
-	}
-	
-	//some other error occurred?
-	//i.e., some messages do not have a body
-	*ppBody = NULL;
-	return false;
+        // allocate buffer for incoming body data
+        hr = MAPIAllocateBuffer(bodySize + 10, (LPVOID FAR *)ppBody);
+        ZeroMemory(*ppBody, bodySize + 10);
+        if (FAILED(hr)) {
+            pIStream->Release();
+            pIStream = NULL;
+            return false;
+        }
+        // download the text
+        ULONG cb;
+        hr = pIStream->Read(*ppBody, statstg.cbSize.LowPart, &cb);
+        if (FAILED(hr)) {
+            pIStream->Release();
+            pIStream = NULL;
+            return false;
+        }
+        if (cb != statstg.cbSize.LowPart) {
+            pIStream->Release();
+            pIStream = NULL;
+            return false;
+        }
+        // close the stream
+        pIStream->Release();
+        pIStream = NULL;
+        nTextChars = (unsigned int)_tcslen(*ppBody);
+        return true;
+    }
+    // some other error occurred?
+    // i.e., some messages do not have a body
+    *ppBody = NULL;
+    return false;
 }
+
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // MessageIterator
 // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -440,11 +402,10 @@ LPSRestriction MessageIterator::GetRestriction(ULONG TypeMask, FILETIME startDat
 }
 
 BOOL MessageIterator::GetNext(MAPIMessage &msg) {
-
     SRow *pRow = MAPITableIterator::GetNext();
-	if (pRow == NULL) {
+
+    if (pRow == NULL)
         return FALSE;
-    }
     LPMESSAGE pMessage = NULL;
     HRESULT hr = S_OK;
     ULONG objtype;
@@ -677,7 +638,7 @@ LPSRestriction MessageIterator::MIRestriction::GetRestriction(ULONG TypeMask,
     // ImportApptments will always return TRUE but if we are using CDOEX
     // to extract calendar data, and fail to retrieve base forder URL of Exchange Server,
     // ImportApptments will return FALSE
-    if (TypeMask > 0) { // TODO true xxxxxxxxxxxxxxxxxx
+    if (TypeMask > 0) {                 // TODO true xxxxxxxxxxxxxxxxxx
         if (TypeMask & ZCM_TASKS) {
             pR[iCounter].rt = RES_CONTENT;
             pR[iCounter].res.resContent.ulFuzzyLevel = FL_IGNORECASE | FL_SUBSTRING;

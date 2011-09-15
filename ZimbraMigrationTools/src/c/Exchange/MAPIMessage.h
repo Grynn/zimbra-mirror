@@ -4,23 +4,23 @@ namespace Zimbra {
 namespace MAPI {
 #define PR_URL_NAME PROP_TAG(PT_TSTRING, 0x6707)
 
-#define EXCHIVERB_OPEN              0
-#define EXCHIVERB_RESERVED_COMPOSE  100
-#define EXCHIVERB_RESERVED_OPEN     101
-#define EXCHIVERB_REPLYTOSENDER     102
-#define EXCHIVERB_REPLYTOALL        103
-#define EXCHIVERB_FORWARD           104
-#define EXCHIVERB_PRINT             105
-#define EXCHIVERB_SAVEAS            106
-#define EXCHIVERB_RESERVED_DELIVERY 107
-#define EXCHIVERB_REPLYTOFOLDER     108
+#define EXCHIVERB_OPEN                  0
+#define EXCHIVERB_RESERVED_COMPOSE      100
+#define EXCHIVERB_RESERVED_OPEN         101
+#define EXCHIVERB_REPLYTOSENDER         102
+#define EXCHIVERB_REPLYTOALL            103
+#define EXCHIVERB_FORWARD               104
+#define EXCHIVERB_PRINT                 105
+#define EXCHIVERB_SAVEAS                106
+#define EXCHIVERB_RESERVED_DELIVERY     107
+#define EXCHIVERB_REPLYTOFOLDER         108
 
 typedef enum _ZM_ITEM_TYPE {
-	ZT_NONE=0, ZT_MAIL, ZT_CONTACTS,
-	ZT_APPOINTMENTS,ZT_TASKS, ZT_MEETREQ_RESP,ZTMAX
+    ZT_NONE = 0, ZT_MAIL, ZT_CONTACTS,
+    ZT_APPOINTMENTS, ZT_TASKS, ZT_MEETREQ_RESP, ZTMAX
 } ZM_ITEM_TYPE;
 
-//MAPIMessageException class
+// MAPIMessageException class
 class MAPIMessageException: public GenericException {
 public:
     MAPIMessageException(HRESULT hrErrCode, LPCWSTR lpszDescription);
@@ -77,9 +77,9 @@ private:
     LPMESSAGE m_pMessage;
     LPSPropValue m_pMessagePropVals;
     LPSRowSet m_pRecipientRows;
-	SBinary m_EntryID;
-	CHAR m_pDateTimeStr[32];
-	CHAR m_pDeliveryDateTimeStr[32];
+    SBinary m_EntryID;
+    CHAR m_pDateTimeStr[32];
+    CHAR m_pDeliveryDateTimeStr[32];
 
     static MessagePropTags m_messagePropTags;
     static RecipientPropTags m_recipientPropTags;
@@ -90,28 +90,30 @@ public:
     ~MAPIMessage();
     void Initialize(LPMESSAGE pMessage);
     void InternalFree();
-	LPMESSAGE InternalMessageObject(){return m_pMessage;}
+
+    LPMESSAGE InternalMessageObject() { return m_pMessage; }
     bool Subject(LPTSTR *ppSubject);
-	ZM_ITEM_TYPE ItemType();
-	BOOL IsFlagged();
-	LPTSTR GetURLName();
-	bool IsDraft();
-	BOOL IsFromMe();
-	BOOL IsUnread();
-	BOOL Forwarded();
-	BOOL RepliedTo();
-	bool HasAttach();
-	BOOL IsUnsent();
-	bool HasHtmlPart();
-	bool HasTextPart();
-	SBinary& UniqueId();
-	__int64 DeliveryDate();
-	LPSTR DateString();
-	__int64 Date();
-	DWORD Size();
-	LPSTR DeliveryDateString();
-	SBinary EntryID(){return m_EntryID;}
-	bool TextBody(LPTSTR* ppBody, unsigned int& nTextChars);
+    ZM_ITEM_TYPE ItemType();
+    BOOL IsFlagged();
+    LPTSTR GetURLName();
+    bool IsDraft();
+    BOOL IsFromMe();
+    BOOL IsUnread();
+    BOOL Forwarded();
+    BOOL RepliedTo();
+    bool HasAttach();
+    BOOL IsUnsent();
+    bool HasHtmlPart();
+    bool HasTextPart();
+    SBinary &UniqueId();
+    __int64 DeliveryDate();
+    LPSTR DateString();
+    __int64 Date();
+    DWORD Size();
+    LPSTR DeliveryDateString();
+
+    SBinary EntryID() { return m_EntryID; }
+    bool TextBody(LPTSTR *ppBody, unsigned int &nTextChars);
 };
 
 // Message Iterator class
@@ -182,8 +184,5 @@ private:
 
     SPropValue _propValIMAPHeaderOnly;
 };
-
-
-
 }
 }

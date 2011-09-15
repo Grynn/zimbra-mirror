@@ -24,6 +24,7 @@ MAPIStore::MAPIStore(): m_Store(NULL), m_mapiSession(NULL)
 MAPIStore::~MAPIStore() {
     ULONG flags = LOGOFF_ORDERLY;
 
+    Zimbra::MAPI::Util::FreeAllSpecialFolders(&m_specialFolderIds);
     if (m_Store) {
         m_Store->StoreLogoff(&flags);
         m_Store->Release();
@@ -36,7 +37,7 @@ void MAPIStore::Initialize(LPMAPISESSION mapisession, LPMDB pMdb) {
     m_mapiSession = mapisession;
     g_ulIMAPHeaderInfoPropTag = Zimbra::MAPI::Util::IMAPHeaderInfoPropTag(m_Store);
 
-	Zimbra::MAPI::Util::GetAllSpecialFolders( m_Store, &m_specialFolderIds );
+    Zimbra::MAPI::Util::GetAllSpecialFolders(m_Store, &m_specialFolderIds);
 }
 
 HRESULT MAPIStore::CompareEntryIDs(SBinary *pBin1, SBinary *pBin2, ULONG &lpulResult) {
@@ -65,4 +66,3 @@ HRESULT MAPIStore::GetRootFolder(MAPIFolder &rootFolder) {
     rootFolder.Initialize(pFolder, _TEXT("/"), &bin);
     return hr;
 }
-

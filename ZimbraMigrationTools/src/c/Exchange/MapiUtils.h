@@ -1,22 +1,19 @@
 #pragma once
 
-#define PR_IPM_OTHERSPECIALFOLDERS_ENTRYID	PROP_TAG( PT_MV_BINARY, 0x36D8)
+#define PR_IPM_OTHERSPECIALFOLDERS_ENTRYID PROP_TAG(PT_MV_BINARY, 0x36D8)
 
-typedef struct _ObjectPickerData
-{
-	wstring wstrUsername;
-	wstring wstrExchangeStore;
-	vector<wstring> vAliases;
-	vector<std::pair<wstring,wstring>> pAttributeList;
+typedef struct _ObjectPickerData {
+    wstring wstrUsername;
+    wstring wstrExchangeStore;
+    vector<wstring> vAliases;
+    vector<std::pair<wstring, wstring> > pAttributeList;
 } PickerData;
 
-typedef struct _RecipInfo
-{
-	LPTSTR pAddrType;
-	LPTSTR pEmailAddr;
-	ULONG cbEid;
-	LPENTRYID pEid;
-
+typedef struct _RecipInfo {
+    LPTSTR pAddrType;
+    LPTSTR pEmailAddr;
+    ULONG cbEid;
+    LPENTRYID pEid;
 } RECIP_INFO;
 
 inline void HexStrFromBSTR(_bstr_t bstr, LPTSTR &szHex) {
@@ -84,39 +81,33 @@ inline LPTSTR Int32ToString(int i) {
     return pRetVal;
 }
 
-inline ULONG SetPropType( ULONG propTag, ULONG propType )
-{
-	if( PROP_TYPE(propTag) == PT_ERROR )
-		return PR_NULL;
-	return PROP_TAG( propType, PROP_ID(propTag) );
+inline ULONG SetPropType(ULONG propTag, ULONG propType) {
+    if (PROP_TYPE(propTag) == PT_ERROR)
+        return PR_NULL;
+    return PROP_TAG(propType, PROP_ID(propTag));
 }
 
-inline int CopyString( LPWSTR& pDest, LPWSTR pSrc )
-{
-	if( pSrc == NULL )
-	{
-		pDest = NULL;
-		return 0;
-	}
-
-	int nLength = (int)wcslen(pSrc);
-	pDest = new WCHAR[ nLength + 1 ];
-	wcscpy(pDest, pSrc);
-	return nLength;
+inline int CopyString(LPWSTR &pDest, LPWSTR pSrc) {
+    if (pSrc == NULL) {
+        pDest = NULL;
+        return 0;
+    }
+    int nLength = (int)wcslen(pSrc);
+    pDest = new WCHAR[nLength + 1];
+    wcscpy(pDest, pSrc);
+    return nLength;
 }
 
-inline void CopyEntryID(SBinary &src, SBinary &dest)
-{
-	dest.cb = src.cb;
-	MAPIAllocateBuffer(src.cb, (LPVOID *)&(dest.lpb));
+inline void CopyEntryID(SBinary &src, SBinary &dest) {
+    dest.cb = src.cb;
+    MAPIAllocateBuffer(src.cb, (LPVOID *)&(dest.lpb));
     memcpy(dest.lpb, src.lpb, src.cb);
 }
 
-inline void FreeEntryID(SBinary &bin)
-{
-	bin.cb=0;
-	MAPIFreeBuffer(bin.lpb);
-	bin.lpb = NULL;
+inline void FreeEntryID(SBinary &bin) {
+    bin.cb = 0;
+    MAPIFreeBuffer(bin.lpb);
+    bin.lpb = NULL;
 }
 
 #define UNICODE_EXCEPTION_STRING L"ErrCode:%s Description:%s SrcFile:%s SrcLine:%s"
@@ -154,25 +145,28 @@ public:
     virtual ~MapiUtilsException() {}
 };
 
-
 HRESULT HrMAPIFindDefaultMsgStore(LPMAPISESSION lplhSession, SBinary &bin);
 HRESULT MailboxLogon(LPMAPISESSION pSession, LPMDB pMdb, LPWSTR pStoreDn, LPWSTR pMailboxDn,
     LPMDB *ppMdb);
-HRESULT GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR lpszUser, LPCWSTR lpszPwd, wstring &wstruserdn,
+HRESULT GetUserDNAndLegacyName(LPCWSTR lpszServer, LPCWSTR lpszUser, LPCWSTR lpszPwd,
+    wstring &wstruserdn,
     wstring &wstrlegacyname);
 HRESULT GetUserDnAndServerDnFromProfile(LPMAPISESSION pSession, LPSTR &pExchangeServerDn,
     LPSTR &pExchangeUserDn);
 HRESULT HrMAPIFindIPMSubtree(LPMDB lpMdb, SBinary &bin);
-HRESULT GetMdbSpecialFolders(IN LPMDB lpMdb, IN OUT SBinaryArray* pEntryIds);
-HRESULT GetInboxSpecialFolders(LPMAPIFOLDER pInbox, SBinaryArray* pEntryIds);
-HRESULT GetAllSpecialFolders(IN LPMDB lpMdb, IN OUT SBinaryArray* pEntryIds);
-HRESULT FreeAllSpecialFolders(IN SBinaryArray* lpSFIds);
-ExchangeSpecialFolderId GetExchangeSpecialFolderId(LPMDB userStore, IN ULONG cbEntryId, IN LPENTRYID pFolderEntryId, SBinaryArray* pEntryIds);
+HRESULT GetMdbSpecialFolders(IN LPMDB lpMdb, IN OUT SBinaryArray *pEntryIds);
+HRESULT GetInboxSpecialFolders(LPMAPIFOLDER pInbox, SBinaryArray *pEntryIds);
+HRESULT GetAllSpecialFolders(IN LPMDB lpMdb, IN OUT SBinaryArray *pEntryIds);
+HRESULT FreeAllSpecialFolders(IN SBinaryArray *lpSFIds);
+ExchangeSpecialFolderId GetExchangeSpecialFolderId(LPMDB userStore, IN ULONG cbEntryId,
+    IN LPENTRYID pFolderEntryId,
+    SBinaryArray *pEntryIds);
 HRESULT GetExchangeUsersUsingObjectPicker(vector<PickerData> &vUserList);
-HRESULT HrMAPIGetSMTPAddress( IN MAPISession& session, IN RECIP_INFO& recipInfo, OUT wstring& strSmtpAddress );
+HRESULT HrMAPIGetSMTPAddress(IN MAPISession &session, IN RECIP_INFO &recipInfo,
+    OUT wstring &strSmtpAddress);
 
 ULONG IMAPHeaderInfoPropTag(LPMAPIPROP lpMapiProp);
-wstring ReverseDelimitedString(wstring wstrString, WCHAR* delimiter);
+wstring ReverseDelimitedString(wstring wstrString, WCHAR *delimiter);
 }
 }
 }
