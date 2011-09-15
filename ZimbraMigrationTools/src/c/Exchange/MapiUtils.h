@@ -7,7 +7,7 @@ typedef struct _ObjectPickerData {
     wstring wstrExchangeStore;
     vector<wstring> vAliases;
     vector<std::pair<wstring, wstring> > pAttributeList;
-} PickerData;
+} ObjectPickerData;
 
 typedef struct _RecipInfo {
     LPTSTR pAddrType;
@@ -161,7 +161,7 @@ HRESULT FreeAllSpecialFolders(IN SBinaryArray *lpSFIds);
 ExchangeSpecialFolderId GetExchangeSpecialFolderId(LPMDB userStore, IN ULONG cbEntryId,
     IN LPENTRYID pFolderEntryId,
     SBinaryArray *pEntryIds);
-HRESULT GetExchangeUsersUsingObjectPicker(vector<PickerData> &vUserList);
+HRESULT GetExchangeUsersUsingObjectPicker(vector<ObjectPickerData> &vUserList);
 HRESULT HrMAPIGetSMTPAddress(IN MAPISession &session, IN RECIP_INFO &recipInfo,
     OUT wstring &strSmtpAddress);
 

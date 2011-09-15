@@ -59,7 +59,7 @@ namespace MVVM.ViewModel
         {
             EnablePopButtons = false;
             CSMigrationwrapper mw = ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).mw;
-            string[] users = mw.GetListFromObjectPicker(true);
+            string[] users = mw.GetListFromObjectPicker();
             for (int i = 0; i < users.Length; i++)
             {
                 string displayname = users[i].Substring(0, users[i].IndexOf("@"));

@@ -495,7 +495,7 @@ ExchangeSpecialFolderId Zimbra::MAPI::Util::GetExchangeSpecialFolderId(
     return SPECIAL_FOLDER_ID_NONE;
 }
 
-HRESULT Zimbra::MAPI::Util::GetExchangeUsersUsingObjectPicker(vector<PickerData> &vUserList) {
+HRESULT Zimbra::MAPI::Util::GetExchangeUsersUsingObjectPicker(vector<ObjectPickerData> &vUserList) {
     HRESULT hr = S_OK;
     wstring wstrExchangeDomainAddress;
 
@@ -608,7 +608,7 @@ HRESULT Zimbra::MAPI::Util::GetExchangeUsersUsingObjectPicker(vector<PickerData>
                 int nDomain = pDomain.GetLength();
                 // Loop through DS_SELECTION array of selected objects.
                 for (ULONG i = 0; i < pDsSelList->cItems; i++) {
-                    PickerData opdData;
+                    ObjectPickerData opdData;
                     if (pDsSelList->aDsSelection[i].pvarFetchedAttributes->vt == VT_EMPTY)
                         continue;
                     CString exStore(

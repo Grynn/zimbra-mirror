@@ -447,14 +447,15 @@ STDMETHODIMP CMapiWrapper::GlobalUninit(BSTR* pErrorText) {
 	return S_OK;
 }
 
-STDMETHODIMP CMapiWrapper::SelectExchangeUsers(VARIANT_BOOL bObjectPicker, VARIANT* Users, BSTR* pErrorText) {
-	vector<PickerData> vUserList;
-	LPCWSTR lpszErrorText = ExchangeOps::SelectExchangeUsers(bObjectPicker, vUserList);
+STDMETHODIMP CMapiWrapper::SelectExchangeUsers(VARIANT* Users, BSTR* pErrorText) {
+	vector<ObjectPickerData> vUserList;
+	LPCWSTR lpszErrorText = ExchangeOps::SelectExchangeUsers(vUserList);
 
 	vector<CComBSTR> tempvectors;
-    std::vector<PickerData>::iterator its;
+    std::vector<ObjectPickerData>::iterator its;
     for (its = (vUserList.begin()); its != vUserList.end(); its++) {
-        PickerData obj = (*its);
+        ObjectPickerData obj = (*its);
+
 		wstring str = (*its).wstrUsername;
 		CComBSTR temp = SysAllocString(str.c_str());
         tempvectors.push_back(temp);

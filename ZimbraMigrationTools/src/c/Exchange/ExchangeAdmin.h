@@ -58,8 +58,7 @@ public:
     static LPCWSTR GlobalInit(LPCWSTR lpMAPITarget, LPCWSTR lpAdminUsername = NULL,
     LPCWSTR lpAdminPassword = NULL);
     static LPCWSTR GlobalUninit();
-    static LPCWSTR SelectExchangeUsers(VARIANT_BOOL bObjectPicker,
-    vector<PickerData> &vUserList);
+    static LPCWSTR SelectExchangeUsers(vector<ObjectPickerData> &vUserList);
 };
 
 const LPCWSTR DEFAULT_ADMIN_PROFILE_NAME = L"zm_prof";
