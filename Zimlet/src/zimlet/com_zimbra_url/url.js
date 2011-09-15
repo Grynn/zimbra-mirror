@@ -591,6 +591,7 @@ function(appId) {
 
 Com_Zimbra_Url.prototype._newCalListener =
 function(ev) {
+    AjxDispatcher.require(["CalendarCore", "Calendar"]);
     var oc = appCtxt.getOverviewController();
 	var treeController = oc.getTreeController(ZmOrganizer.CALENDAR);
 
