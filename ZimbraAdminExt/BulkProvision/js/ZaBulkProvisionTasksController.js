@@ -78,6 +78,30 @@ function () {
 }
 ZaController.initToolbarMethods["ZaBulkProvisionTasksController"].push(ZaBulkProvisionTasksController.initToolbarMethod);
 
+ZaBulkProvisionTasksController.initPopupMenuMethod =
+function () {
+	var showBulkProvision = false;
+	if(ZaSettings.HAVE_MORE_DOMAINS || ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+		showBulkProvision = true;
+	} else {
+		var domainList = ZaApp.getInstance().getDomainList().getArray();
+		var cnt = domainList.length;
+		for(var i = 0; i < cnt; i++) {
+			if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_ACCOUNT,domainList[i])) {
+				showBulkProvision = true;
+				break;
+			}
+		}
+	}
+	if(showBulkProvision) {
+		this._popupOperations[ZaOperation.BULK_DATA_IMPORT]=new ZaOperation(ZaOperation.BULK_DATA_IMPORT,com_zimbra_bulkprovision.TB_IMAP_Import, com_zimbra_bulkprovision.TB_IMAP_Import_tt, "ApplianceMigration", "ApplianceMigration", new AjxListener(this, this.bulkDataImportListener));
+		this._popupOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,com_zimbra_bulkprovision.DeleteTask, com_zimbra_bulkprovision.DeleteTask_tt, "Delete", "Delete", new AjxListener(this, this.deleteButtonListener));
+		this._popupOperations[ZaOperation.REFRESH]=new ZaOperation(ZaOperation.REFRESH,ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, "Refresh", "Refresh", new AjxListener(this, this.refreshButtonListener));
+	}
+}
+ZaController.initPopupMenuMethods["ZaBulkProvisionTasksController"].push(ZaBulkProvisionTasksController.initPopupMenuMethod);
+
+
 ZaBulkProvisionTasksController.prototype.refreshButtonListener = function(ev) {
 	var list = ZaBulkProvision.getBulkDataImportTasks();
 	if (list != null)

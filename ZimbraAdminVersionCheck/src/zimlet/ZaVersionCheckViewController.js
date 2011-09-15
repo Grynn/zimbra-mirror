@@ -30,6 +30,7 @@ ZaVersionCheckViewController = function(appCtxt, container) {
 ZaVersionCheckViewController.prototype = new ZaXFormViewController();
 ZaVersionCheckViewController.prototype.constructor = ZaVersionCheckViewController;
 ZaController.initToolbarMethods["ZaVersionCheckViewController"] = new Array();
+ZaController.initPopupMenuMethods["ZaVersionCheckViewController"] = new Array();
 ZaController.setViewMethods["ZaVersionCheckViewController"] = [];
 ZaController.changeActionsStateMethods["ZaVersionCheckViewController"] = new Array();
 
@@ -42,6 +43,13 @@ function () {
 	this._toolbarOrder.push(ZaOperation.VERSION_CHECK);
 }
 ZaController.initToolbarMethods["ZaVersionCheckViewController"].push(ZaVersionCheckViewController.initToolbarMethod);
+
+ZaVersionCheckViewController.initPopupMenuMethod =
+function () {
+	this._popupOperations[ZaOperation.SAVE] = new ZaOperation(ZaOperation.SAVE, ZaMsg.TBB_Save, ZaMsg.ALTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));
+	this._popupOperations[ZaOperation.VERSION_CHECK] = new ZaOperation(ZaOperation.VERSION_CHECK, com_zimbra_adminversioncheck.CheckNow, com_zimbra_adminversioncheck.CheckNow_tt, "Refresh", "Refresh", new AjxListener(this, this.checkNowListener));
+}
+ZaController.initPopupMenuMethods["ZaVersionCheckViewController"].push(ZaVersionCheckViewController.initPopupMenuMethod);
 
 ZaVersionCheckViewController.prototype.checkNowListener =
 function(ev) {
@@ -78,7 +86,7 @@ ZaVersionCheckViewController.setViewMethod = function (item) {
 		this._toolbarOrder.push(ZaOperation.NONE);
 		this._toolbarOrder.push(ZaOperation.HELP);
 		this._toolbar = new ZaToolBar(this._container, this._toolbarOperations, this._toolbarOrder);
-	
+	    this._initPopupMenu();
 		this._contentView = this._view = new this.tabConstructor(this._container,item);
 		var elements = new Object();
 		elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
