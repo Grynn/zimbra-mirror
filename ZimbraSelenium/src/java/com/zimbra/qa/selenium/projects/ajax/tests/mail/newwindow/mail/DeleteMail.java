@@ -11,6 +11,7 @@ import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
+import com.zimbra.qa.selenium.framework.util.SleepUtil;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraAccount;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
@@ -74,6 +75,14 @@ public class DeleteMail extends AjaxCommonTest {
 			ZAssert.assertTrue(window.zIsActive(), "Verify the window is active");
 			
 			window.zToolbarPressButton(Button.B_DELETE);
+			
+			// It may take some time for the window to close, so
+			// wait for up to 15 seconds for the window to close
+			for (int i = 0; i < 15; i++) {
+				if ( !window.zIsActive() )
+					break;
+				SleepUtil.sleep(1000);
+			}
 			
 			ZAssert.assertFalse(window.zIsActive(), "Verify the window is closed");
 			
