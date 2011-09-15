@@ -5379,8 +5379,9 @@ var Dom = YAHOO.util.Dom,
             }
 
             if (fn_button) {
-                for (var b = 0; b < fn_button._configs.menu.value.length; b++) {
-                    if (family && fn_button._configs.menu.value[b].text.toLowerCase() == family.toLowerCase()) {
+                var entries = fn_button._configs.menu.value;
+                for (var b = 0; b < entries.length; b++) {
+                    if (family && (entries[b].value && entries[b].value.toLowerCase() == family.toLowerCase()) || (entries[b].text && entries[b].text.toLowerCase() == family.toLowerCase())) {
                         validFont = true;
                         family = fn_button._configs.menu.value[b].text; //Put the proper menu name in the button
                     }
