@@ -1415,8 +1415,8 @@ public class PageMail extends AbsTab {
 		return (page);
 	}
 
-	public AbsPage zToolbarPressPulldown(Button pulldown, Button option,String dynamic) throws HarnessException {
-		//logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option, Object dynamic) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +", "+ dynamic +")");
 		tracer.trace("Click pulldown "+ pulldown +" then "+ option +" then "+ dynamic);
 
 
@@ -1425,7 +1425,7 @@ public class PageMail extends AbsTab {
 		if (option == null)
 			throw new HarnessException("Option cannot be null!");
 		if (dynamic == null)
-			throw new HarnessException("dynamic string cannot be null!");
+			throw new HarnessException("dynamic object cannot be null!");
 
 
 		// Default behavior variables
@@ -1435,28 +1435,70 @@ public class PageMail extends AbsTab {
 		AbsPage page = null; // If set, this page will be returned
 
 		if ((pulldown == Button.B_OPTIONS)&& (option == Button.O_ADD_SIGNATURE)) {
+
+			if ( !(dynamic instanceof String) ) 
+				throw new HarnessException("dynamic must be a string!  "+ dynamic.getClass().getCanonicalName());
+
 			String name = (String)dynamic;
-			logger.info(name);
+			logger.info("Click on Signature: "+ name);
+			
 			//pulldownLocator = "css=td[id$='_ADD_SIGNATURE_dropdown']>div[class='ImgSelectPullDownArrow']";
 			pulldownLocator="css=[id^=zb__COMPOSE][id$=__COMPOSE_OPTIONS_dropdown]";
 			optionLocator="css=div[id='ADD_SIGNATURE'] tr[id='POPUP_ADD_SIGNATURE']> td[id='ADD_SIGNATURE_dropdown']>div[class='ImgCascade']";
 			dynamicLocator ="css=td[id*='_title']td:contains('"+ name + "')";
 			page = null;
 
-		} else if ( (pulldown == Button.B_ACTIONS) && (option == Button.O_QUICK_COMMANDS_MENU) ) {
+		} else if ( pulldown == Button.B_ACTIONS ) {
+			
+			boolean isCLV = this.zIsVisiblePerPosition("css=div#ztb__CLV2", 0, 0);
 
-			if ( !(dynamic instanceof String) ) 
-				throw new HarnessException("dynamic must be a string!  "+ dynamic.getClass().getCanonicalName());
+			if (isCLV) {
+				pulldownLocator = "css=td[id='zb__CLV2__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+				optionLocator = "css=div[id='zm__CLV2']";
+			} else {
+				pulldownLocator = "css=td[id='zb__TV__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+				optionLocator = "css=div[id='zm__TV']";
+			}
+			
+			if ( option == Button.O_QUICK_COMMANDS_MENU ) {
+				
+				if ( !(dynamic instanceof String) ) 
+					throw new HarnessException("dynamic must be a string!  "+ dynamic.getClass().getCanonicalName());
 
-			String quickcommand = (String)dynamic;
-			logger.info("Click on Quick Command: "+ quickcommand);
+				String quickcommand = (String)dynamic;
+				logger.info("Click on Quick Command: "+ quickcommand);
 
-			pulldownLocator	= "css=td[id='zb__TV__ACTIONS_MENU_dropdown'] div[class='ImgSelectPullDownArrow']";
-			optionLocator	= "css=div[id='zmi__TV__QUICK_COMMANDS'] td[id$='_title']";
-			dynamicLocator	= "css=div[id='POPUP_DWT30'] td[id$='_title']:contains('"+ quickcommand + "')";
-			page = null;
+				optionLocator += " div[id^='QUICK_COMMANDS'] td[id$='_title']";
+				dynamicLocator	= "css=div[id^='quickCommandSubMenu_'] td[id$='_title']:contains('"+ quickcommand + "')";
+				page = null;
+				
+				// Make sure the locator exists
+				if (!this.sIsElementPresent(pulldownLocator)) {
+					throw new HarnessException(pulldownLocator + " not present!");
+				}
 
-			// FALL THROUGH
+				this.zClickAt(pulldownLocator,"");
+				zWaitForBusyOverlay();
+
+				if (!this.sIsElementPresent(optionLocator)) {
+					throw new HarnessException(optionLocator + " not present!");
+				}
+
+				this.sMouseOver(optionLocator);
+				zWaitForBusyOverlay();
+
+				// Make sure the locator exists
+				// Sometimes the menu isn't drawn right away.  Wait for it.
+				GeneralUtility.waitForElementPresent(this, dynamicLocator);
+
+				this.zClickAt(dynamicLocator,"");
+				zWaitForBusyOverlay();
+				
+				return (page);
+				
+			} else {
+				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
+			}
 
 		} else {
 			throw new HarnessException("no logic defined for pulldown/option "

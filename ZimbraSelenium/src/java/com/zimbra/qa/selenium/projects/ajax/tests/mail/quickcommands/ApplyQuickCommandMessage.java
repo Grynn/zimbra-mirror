@@ -72,7 +72,7 @@ public class ApplyQuickCommandMessage extends AjaxQuickCommandTest {
 		mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
 		ZAssert.assertStringContains(mail.getFlags(), "f", "Verify the message is flagged in the server");
 
-
+		// TODO: add tags, folder, unread checks
 	}
 
 
