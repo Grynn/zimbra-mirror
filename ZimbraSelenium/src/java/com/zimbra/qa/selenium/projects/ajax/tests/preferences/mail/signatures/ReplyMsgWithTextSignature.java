@@ -5,8 +5,10 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.zimbra.common.soap.Element;
+import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.SignatureItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -57,7 +59,7 @@ public class ReplyMsgWithTextSignature extends AjaxCommonTest {
 	 */
 	@Test(description = " Reply Msg with text signature and Verify signature through soap", groups = { "functional" })
 	public void ReplyMsgWithTextSignature_01() throws HarnessException {
-
+		FolderItem inboxFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(),SystemFolder.Inbox);
 		// Signature is created
 		SignatureItem signature = SignatureItem.importFromSOAP(app.zGetActiveAccount(), this.sigName);
 		ZAssert.assertEquals(signature.getName(), this.sigName,"verified Text Signature is created");
@@ -82,6 +84,8 @@ public class ReplyMsgWithTextSignature extends AjaxCommonTest {
 
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inboxFolder);
+
 
 		// Select the item
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);

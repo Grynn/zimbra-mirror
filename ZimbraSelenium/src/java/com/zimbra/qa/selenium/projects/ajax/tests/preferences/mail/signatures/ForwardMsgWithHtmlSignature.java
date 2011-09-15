@@ -6,8 +6,10 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.zimbra.common.soap.Element;
+import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
 import com.zimbra.qa.selenium.framework.items.SignatureItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
@@ -34,6 +36,7 @@ public class ForwardMsgWithHtmlSignature extends AjaxCommonTest {
 		super.startingAccountPreferences = new HashMap<String, String>() {
 			{
 				put("zimbraPrefComposeFormat", "html");
+				//put("zimbraPrefGroupMailBy", "message");
 			}
 		};
 	}
@@ -66,6 +69,7 @@ public class ForwardMsgWithHtmlSignature extends AjaxCommonTest {
 
 		SignatureItem signature = SignatureItem.importFromSOAP(app.zGetActiveAccount(), this.sigName);
 		logger.info(signature.dBodyHtmlText);
+		FolderItem inboxFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(),SystemFolder.Inbox);
 		ZAssert.assertEquals(signature.getName(), this.sigName,"verified Text Signature is created");
 
 		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
@@ -102,6 +106,7 @@ public class ForwardMsgWithHtmlSignature extends AjaxCommonTest {
 
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inboxFolder);
 
 		// Select the item
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
