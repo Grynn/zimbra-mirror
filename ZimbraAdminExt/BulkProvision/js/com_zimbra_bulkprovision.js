@@ -33,18 +33,28 @@ bulkprovision.bulkprovOvTreeListener = function (ev) {
 
 bulkprovision.bulkprovOvTreeModifier = function (tree) {
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.BULK_PROVISION_TASKS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		if(!this._toolsTi) {
-			this._toolsTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
-			this._toolsTi.enableSelection(false);	
-			this._toolsTi.setText(ZaMsg.OVP_tools);
-			this._toolsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._TOOLS);
-		}
-	
-		this._bulkprovTi = new DwtTreeItem({parent:this._toolsTi,className:"AdminTreeItem"});
-		this._bulkprovTi.setText(com_zimbra_bulkprovision.OVP_bulkProvisioning);
-		this._bulkprovTi.setImage("BulkProvision");
-		this._bulkprovTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._BULK_PROVISION_TASKS_LIST);	
-		
+        if (!appNewUI) {
+            if(!this._toolsTi) {
+                this._toolsTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
+                this._toolsTi.enableSelection(false);
+                this._toolsTi.setText(ZaMsg.OVP_tools);
+                this._toolsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._TOOLS);
+            }
+
+            this._bulkprovTi = new DwtTreeItem({parent:this._toolsTi,className:"AdminTreeItem"});
+            this._bulkprovTi.setText(com_zimbra_bulkprovision.OVP_bulkProvisioning);
+            this._bulkprovTi.setImage("BulkProvision");
+            this._bulkprovTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._BULK_PROVISION_TASKS_LIST);
+        } else {
+            var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_toolMig]);
+
+            var ti = new ZaTreeItemData({
+                                    parent:parentPath,
+                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,"magHV",null, "bpHV"),
+                                    text: com_zimbra_bulkprovision.OVP_bulkProvisioning,
+                                    mappingId: ZaZimbraAdmin._BULK_PROVISION_TASKS_LIST});
+            tree.addTreeItemData(ti);
+        }
 		if(ZaOverviewPanelController.overviewTreeListeners) {
 			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._BULK_PROVISION_TASKS_LIST] = bulkprovision.bulkprovOvTreeListener;
 		}
