@@ -428,11 +428,15 @@ public class PageMail extends AbsTab {
 
 		if (option == null)
 			throw new HarnessException("Option cannot be null!");
-		// Default behavior variables
 
+		
+		// Default behavior variables
 		String pulldownLocator = null; // If set, this will be expanded
 		String optionLocator = null; // If set, this will be clicked
 		AbsPage page = null; // If set, this page will be returned
+		
+		// CLV vs. MLV
+		boolean isCLV = this.zIsVisiblePerPosition("css=div#ztb__CLV2", 0, 0);
 
 		if (pulldown == Button.B_TAG) {
 			if (option == Button.O_TAG_NEWTAG) {
@@ -474,40 +478,116 @@ public class PageMail extends AbsTab {
 
 			}
 
-		} else if ( (pulldown == Button.B_ACTIONS) && (option == Button.B_REDIRECT) ) {
-
-			pulldownLocator = "css=td[id$='__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
-			optionLocator = "css=div[id$='__REDIRECT'] td[id$='__REDIRECT_title']";
-			page = new DialogRedirect(this.MyApplication, this);
-
-		} else if ( (pulldown == Button.B_ACTIONS) && (option == Button.B_LAUNCH_IN_SEPARATE_WINDOW) ) {
-
-			pulldownLocator = "css=td[id$='__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
-			optionLocator = "css=div[id$='__DETACH'] td[id$='__DETACH_title']";
-			page = new SeparateWindowDisplayMail(this.MyApplication);
-
-			// We don't know the window title at this point (However, the test case should.)
-			// Don't check that the page is active, let the test case do that.
-
-			this.zClickAt(pulldownLocator, "0,0");
-			zWaitForBusyOverlay();
-
-			this.zClickAt(optionLocator, "0,0");
-			zWaitForBusyOverlay();
-
-			return (page);
-
-		} else if ( (pulldown == Button.B_ACTIONS) && ((option == Button.B_RESPORTSPAM) || (option == Button.B_RESPORTNOTSPAM)) ) {
-
-			if ( this.zIsVisiblePerPosition("css=div#ztb__CLV2", 0, 0) ) {
-				pulldownLocator = "css=td[id$='zb__CLV2__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
-				optionLocator = "css=div[id='zm__CLV2'] tr[id='POPUP_SPAM'] td[id='zmi__CLV2__SPAM_title']";
+		} else if ( pulldown == Button.B_ACTIONS ) {
+			
+			if (isCLV) {
+				pulldownLocator = "css=td[id='zb__CLV2__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
+				optionLocator = "css=div[id='zm__CLV2']";
 			} else {
 				pulldownLocator = "css=td[id='zb__TV__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']";
-				optionLocator = "css=div[id='zm__TV'] tr[id='POPUP_SPAM'] td[id='zmi__TV__SPAM_title']";
+				optionLocator = "css=div[id='zm__TV']";
 			}
-			page = null;
 
+			if ( option == Button.B_PRINT ) {
+				
+				optionLocator += " div[id^='PRINT'] td[id$='_title']";
+				page = new DialogRedirect(this.MyApplication, this);
+				
+				// FALL THROUGH
+
+				
+			} else if ((option == Button.B_RESPORTSPAM) || (option == Button.B_RESPORTNOTSPAM)) {
+				
+				optionLocator += " div[id^='SPAM'] td[id$='_title']";
+				page = null;
+
+				// FALL THROUGH
+
+			} else if ( option == Button.B_LAUNCH_IN_SEPARATE_WINDOW ) {
+				
+				optionLocator += " div[id^='DETACH'] td[id$='_title']";
+				page = new SeparateWindowDisplayMail(this.MyApplication);
+
+				// We don't know the window title at this point (However, the test case should.)
+				// Don't check that the page is active, let the test case do that.
+
+				this.zClickAt(pulldownLocator, "0,0");
+				zWaitForBusyOverlay();
+
+				this.zClickAt(optionLocator, "0,0");
+				zWaitForBusyOverlay();
+
+				return (page);
+
+			} else if ( option == Button.O_MARK_AS_READ ) {
+				
+				optionLocator += " div[id^='MARK_READ'] td[id$='_title']";
+				page = null;
+				
+				// FALL THROUGH
+
+			} else if ( option == Button.O_MARK_AS_UNREAD ) {
+				
+				optionLocator += " div[id^='MARK_UNREAD'] td[id$='_title']";
+				page = null;
+				
+				// FALL THROUGH
+
+			} else if ( option == Button.O_SHOW_ORIGINAL ) {
+				
+				optionLocator += " div[id^='SHOW_ORIG'] td[id$='_title']";
+				page = null;
+				
+				// FALL THROUGH
+
+			} else if ( option == Button.B_REDIRECT ) {
+				
+				optionLocator += " div[id^='REDIRECT'] td[id$='_title']";
+				page = new DialogRedirect(this.MyApplication, this);
+				
+				// FALL THROUGH
+
+			} else if ( option == Button.O_EDIT_AS_NEW ) {
+				
+				optionLocator += " div[id^='EDIT_AS_NEW'] td[id$='_title']";
+				page = null;
+				
+				// FALL THROUGH
+
+			} else if ( option == Button.O_NEW_FILTER ) {
+				
+				optionLocator += " div[id^='ADD_FILTER_RULE'] td[id$='_title']";
+				page = null;
+				
+				// FALL THROUGH
+
+			} else if ( option == Button.O_NEW_APPOINTMENT ) {
+				
+				optionLocator += " div[id^='CREATE_APPT'] td[id$='_title']";
+				page = null;
+				
+				// FALL THROUGH
+
+			} else if ( option == Button.O_NEW_TASK ) {
+				
+				optionLocator += " div[id^='CREATE_TASK'] td[id$='_title']";
+				page = null;
+				
+				// FALL THROUGH
+
+			} else if ( option == Button.O_QUICK_COMMANDS_MENU ) {
+				
+				optionLocator += " div[id^='QUICK_COMMANDS'] td[id$='_title']";
+				page = null;
+				
+				// FALL THROUGH
+
+			} else {
+				
+				throw new HarnessException("no logic defined for pulldown/option " + pulldown + "/" + option);
+
+			}
+			
 		} else if ((pulldown == Button.B_OPTIONS)&& (option == Button.O_ADD_SIGNATURE)) {
 
 			pulldownLocator = "css=td[id$='_ADD_SIGNATURE_dropdown']>div[class='ImgSelectPullDownArrow']";
