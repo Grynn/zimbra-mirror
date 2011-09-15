@@ -27,7 +27,7 @@ use Zimbra::Mon::Zmstat;
 use vars qw(
     $VERSION $PID_FILE $DEFAULT_DEST $JMAP $JAVA $DEFAULT_TIMEOUT
     $HAVE_GCORE $HAVE_PSTACK $HAVE_LSOF $HAVE_DMESG $LOG_FILE $ZMSTAT_CONF
-    $ZMDUMPENV $ZMLOCALCONFIG $ZMPROV $ZMHOSTNAME $SU $HAVE_NETSTAT
+    $ZMDUMPENV $ZMLOCALCONFIG $ZMPROV $ZMHOSTNAME $SU $HAVE_NETSTAT $HAVE_MYSQL
 );
 
 my $isMac = isMac();
@@ -57,6 +57,7 @@ $HAVE_PSTACK = has_cmd('pstack');
 $HAVE_LSOF = has_cmd('lsof');
 $HAVE_DMESG = has_cmd('dmesg');
 $HAVE_NETSTAT = has_cmd('netstat');
+$HAVE_MYSQL = has_cmd('/opt/zimbra/mysql/bin/mysql');
 $LOG_FILE = 'zmdiag.log';
 $ZMSTAT_CONF = '/opt/zimbra/conf/zmstat-chart.xml';
 $ZMDUMPENV = '/opt/zimbra/bin/zmdumpenv';
@@ -229,6 +230,21 @@ EOF
 }
 
 
+sub get_mysql_data() {
+    if ($HAVE_MYSQL) {
+        my $mysql_cmd="/opt/zimbra/bin/mysql";
+        logmsg "Collecting MySQL data ";
+        logmsg ".";
+        system("echo \"show engine innodb status\\G;\" | $SU $mysql_cmd > mysql-innodb-status.txt");
+        logmsg ".";
+        system("echo \"show global status;\" | $SU $mysql_cmd > mysql-show-global-status.txt");
+        logmsg ".";
+        system("echo \"select * from information_schema.processlist;\" | $SU $mysql_cmd > mysql-information_schema.processlist.txt");
+        logmsg " done.";
+    }
+}
+
+
 # "main"
 sub run() {
     my %options;
@@ -393,6 +409,8 @@ sub run() {
     } else {
       logmsg "ld.so.conf not present...skipping copy.\n";
     }
+
+    get_mysql_data();
 
     my $dumped = save_heap_info($JAVA_VERSION, $destination,
             $mailboxd_pid, $timeout) if ($options{'a'});
