@@ -53,6 +53,9 @@ public class PageTasks extends AbsTab {
 		public static final String zMarkAsCompleted = "css=div#zb__TKL__MARK_AS_COMPLETED";
 		public static final String zNewTaskMenuItem ="css=div#zb__TKL__NEW_MENU_NEW_TASK";
 		public static final String zNewTaskFolderMenuItem ="css=div#zb__TKL__NEW_MENU_NEW_TASK_FOLDER";
+		public static final String zDeleteTaskMenuItem ="css=div[id='zm__Tasks'] tr[id='POPUP_DELETE']";
+		
+		
 	}
 
 	public PageTasks(AbsApplication application) {
@@ -381,7 +384,8 @@ public class PageTasks extends AbsTab {
 			if (option == Button.B_DELETE) {
 
 				// <div id="zmi__Tasks__DELETE" ...
-				optionLocator = "zmi__Tasks__DELETE";
+				//optionLocator = "zmi__Tasks__DELETE";
+				optionLocator= Locators.zDeleteTaskMenuItem;
 				page = null;
 
 			} else {

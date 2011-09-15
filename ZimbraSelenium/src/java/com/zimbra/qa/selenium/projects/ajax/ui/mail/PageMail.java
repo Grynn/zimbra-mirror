@@ -1215,9 +1215,9 @@ public class PageMail extends AbsTab {
 			else if ( option == Button.O_CREATE_TASK ) {
 
 				if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-					optionLocator="css=td[id^='zmi__TV__CREATE_TASK__'] div[class='ImgNewTask']";
+					optionLocator="css=div[id^='zm__TV__DWT'] tr[id='POPUP_CREATE_TASK']";
 				} else {
-					optionLocator="css=td[id^='zmi__CLV2__CREATE_TASK__'] div[class='ImgNewTask']";
+					optionLocator="css=div[id^='zm__CLV2__DWT'] tr[id='POPUP_CREATE_TASK']";
 				}
 
 				page = null;

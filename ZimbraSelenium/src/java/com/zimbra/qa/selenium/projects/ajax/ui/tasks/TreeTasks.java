@@ -29,7 +29,7 @@ public class TreeTasks extends AbsTree {
 		public static final String zTagsHeader = "//td[contains(@id,'ztih__main_Tasks__TAG_textCell')]";
 	//	public static final String zDeleteTreeMenuItem = "//div[contains(@class,'ZMenuItem')]//tbody//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgDelete')]";
 	//	public static final String zRenameTreeMenuItem = "//div[contains(@class,'ZMenuItem')]//tbody//td[contains(@id,'_left_icon')]/div[contains(@class,'ImgRename')]";
-		public static final String zDeleteTreeMenuItem = "css=div[id^='DWT'] tr[id='POPUP_DELETE']";
+		public static final String zDeleteTreeMenuItem = "css=div[id^='POPUP'] tr[id='POPUP_DELETE']";
 		public static final String zRenameTreeMenuItem ="css=tr#POPUP_RENAME_FOLDER";
 		public static final String zEditTreeMenuItem ="css=tr#POPUP_EDIT_PROPS";
 	}
