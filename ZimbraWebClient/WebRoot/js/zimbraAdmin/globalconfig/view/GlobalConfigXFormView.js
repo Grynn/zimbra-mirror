@@ -878,6 +878,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
                         { type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_AD_EmailValidate,
                             items :[
 					        { ref: ZaGlobalConfig.A_zimbraMailAddressValidationRegex, type: _REPEAT_,
+                                nowrap:false,labelWrap:true,
                                 label: ZaMsg.LBL_EmailValidate,
                                 labelLocation:_LEFT_,
                                 align:_LEFT_,

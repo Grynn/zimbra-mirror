@@ -1488,7 +1488,8 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
                                                   items :[
 
                                                 	{ref:ZaDomain.A_zimbraMailAddressValidationRegex, type:_REPEAT_, 
-                                                		label:ZaMsg.LBL_EmailValidate, repeatInstance:"", labelWrap:true,
+                                                		nowrap:false,labelWrap:true,
+                                                        label:ZaMsg.LBL_EmailValidate, repeatInstance:"", labelWrap:true,
                                                 		showAddButton:true, showRemoveButton:true,
                                                                 addButtonLabel:ZaMsg.NAD_AddRegex,
                                                                 showAddOnNextRow:true,
