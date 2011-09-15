@@ -85,10 +85,10 @@ public class DeleteMountpoint extends OctopusCommonTest {
 				.importFromSOAP(currentAccount, folderMountpointName);
 
 		ZAssert.assertNotNull(folderMountpointItem,
-				"Verify the subfolder is available");
+				"Verify the mountpoint is available");
 
 		ZAssert.assertEquals(folderMountpointItem.getName(), folderMountpointName,
-				"Verify the server and client folder names match");
+				"Verify the server and client mountpoint names match");
 		
 		// Verify the mountpoint exists in the list view
 		List<String> items = app.zPageOctopus.zGetListViewItems();
@@ -99,10 +99,10 @@ public class DeleteMountpoint extends OctopusCommonTest {
 		ZAssert.assertContains(items, folderMountpointName,
 		"Verify list view contains mountpoint folder");
 		
-		// Delete the folder using drop down list option
+		// Delete the mountpoint folder using drop down list option
 		app.zPageOctopus.zToolbarPressPulldown(Button.B_MY_FILES_LIST_ITEM, Button.O_DELETE, folderMountpointItem);
 
-		// Verify the folder is now in the trash
+		// Verify the mountpoint folder is now in the trash
 		for(int i = 0; i<5; i++){
 			folderMountpointItem = FolderMountpointItem.importFromSOAP(currentAccount,
 					folderMountpointName);

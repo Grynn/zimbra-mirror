@@ -28,18 +28,14 @@ public class CreateMountpoint extends OctopusCommonTest {
 		ownerAccount.authenticate();
 	}
 
-	@Test(description = "Delete a mountpoint to a shared folder using pull down list", groups = { "functional" })
-	public void DeleteMountpoint_01() throws HarnessException {
+	@Test(description = "Create a mountpoint to a shared folder using SOAP", groups = { "functional" })
+	public void CreateMountpoint_01() throws HarnessException {
 		FolderItem ownerBriefcaseRootFolder = FolderItem.importFromSOAP(
 				ownerAccount, SystemFolder.Briefcase);
 
 		ZAssert.assertNotNull(ownerBriefcaseRootFolder,
 				"Verify the owner Briefcase root folder exists");
 
-		FolderItem trash = FolderItem.importFromSOAP(app.zGetActiveAccount(),
-				SystemFolder.Trash);
-		ZAssert.assertNotNull(trash, "Verify the trash is available");
-		
 		// Owner creates a folder, shares it with current user
 		String ownerFoldername = "ownerFolder"
 				+ ZimbraSeleniumProperties.getUniqueString();
@@ -84,10 +80,10 @@ public class CreateMountpoint extends OctopusCommonTest {
 				.importFromSOAP(currentAccount, folderMountpointName);
 
 		ZAssert.assertNotNull(folderMountpointItem,
-				"Verify the subfolder is available");
+				"Verify the mountpoint is available");
 
 		ZAssert.assertEquals(folderMountpointItem.getName(), folderMountpointName,
-				"Verify the server and client folder names match");
+				"Verify the server and client mountpoint names match");
 		
 		
 		// refresh Octopus page
