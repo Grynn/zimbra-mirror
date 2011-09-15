@@ -22,7 +22,7 @@ namespace MVVM.ViewModel
         {
             this.GetUsersHelpCommand = new ActionCommand(this.GetUsersHelp, () => true);
             this.ObjectPickerCommand = new ActionCommand(this.ObjectPicker, () => true);
-            this.QueryBuilderCommand = new ActionCommand(this.QueryBuilder, () => true);
+            this.LDAPBrowserCommand = new ActionCommand(this.LDAPBrowser, () => true);
             this.UserMapCommand = new ActionCommand(this.UserMap, () => true);
             this.PublicFolderCommand = new ActionCommand(this.PublicFolder, () => true);
             this.AddCommand = new ActionCommand(this.Add, () => true);
@@ -33,6 +33,7 @@ namespace MVVM.ViewModel
             this.Username = username;
             this.MappedName = mappedname;
             this.IsProvisioned = false;
+            this.EnablePopButtons = true;
         }
 
 
@@ -56,6 +57,7 @@ namespace MVVM.ViewModel
 
         private void ObjectPicker()
         {
+            EnablePopButtons = false;
             CSMigrationwrapper mw = ((IntroViewModel)ViewModelPtrs[(int)ViewType.INTRO]).mw;
             string[] users = mw.GetListFromObjectPicker(true);
             for (int i = 0; i < users.Length; i++)
@@ -67,17 +69,26 @@ namespace MVVM.ViewModel
                 scheduleViewModel.EnableMigrate = (scheduleViewModel.SchedList.Count > 0);
                 EnableNext = (UsersList.Count > 0);
             }
+            EnablePopButtons = true;
         }
 
-        public ICommand QueryBuilderCommand
+        public ICommand LDAPBrowserCommand
         {
             get;
             private set;
         }
 
-        private void QueryBuilder()
+        private void LDAPBrowser()
         {
-            MessageBox.Show("Query Builder", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            EnablePopButtons = false;
+            QueryBuilderDlg qbDlg = new QueryBuilderDlg(this);
+            qbDlg.Owner = Application.Current.MainWindow;
+            qbDlg.ShowDialog();
+            ScheduleViewModel scheduleViewModel = ((ScheduleViewModel)ViewModelPtrs[(int)ViewType.SCHED]);
+            scheduleViewModel.SchedList.Add(new SchedUser(Username, false));
+            scheduleViewModel.EnableMigrate = (scheduleViewModel.SchedList.Count > 0);
+            EnableNext = (UsersList.Count > 0);
+            EnablePopButtons = true;
         }
 
         public ICommand UserMapCommand
@@ -213,7 +224,9 @@ namespace MVVM.ViewModel
 
         private void PublicFolder()
         {
+            EnablePopButtons = false;
             MessageBox.Show("Public Folder", "Zimbra Migration", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            EnablePopButtons = true;
         }
 
         public ICommand AddCommand
@@ -563,6 +576,17 @@ namespace MVVM.ViewModel
             {
                 enableNext = value;
                 OnPropertyChanged(new PropertyChangedEventArgs("EnableNext"));
+            }
+        }
+
+        private bool enablePopButtons;
+        public bool EnablePopButtons
+        {
+            get { return enablePopButtons; }
+            set
+            {
+                enablePopButtons = value;
+                OnPropertyChanged(new PropertyChangedEventArgs("EnablePopButtons"));
             }
         }
     }

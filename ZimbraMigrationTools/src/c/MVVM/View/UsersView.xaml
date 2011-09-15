@@ -25,9 +25,9 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" HorizontalAlignment="Left"  HorizontalContentAlignment="Left" Name="objPickerButton" Command="{Binding ObjectPickerCommand}" Width="{Binding ElementName=queryBuilderButton, Path=ActualWidth}"> Object Picker...</Button>
-                <Button Grid.Column="1" HorizontalAlignment="Center" HorizontalContentAlignment="Left" Name="queryBuilderButton" Command="{Binding QueryBuilderCommand}" >Query Builder...</Button>
-                <Button Grid.Column="2" HorizontalAlignment="Right"  HorizontalContentAlignment="Left" Name="publicFolderButton" Command="{Binding PublicFolderCommand}" Width="{Binding ElementName=queryBuilderButton, Path=ActualWidth}">Public Folder...</Button>
+                <Button Grid.Column="0" HorizontalAlignment="Left"  HorizontalContentAlignment="Left" Name="objPickerButton" IsEnabled="{Binding Path=EnablePopButtons}" Command="{Binding ObjectPickerCommand}" Width="{Binding ElementName=ldapBrowserButton, Path=ActualWidth}">Object Picker...</Button>
+                <Button Grid.Column="1" HorizontalAlignment="Center" HorizontalContentAlignment="Left" Name="ldapBrowserButton" IsEnabled="{Binding Path=EnablePopButtons}" Command="{Binding LDAPBrowserCommand}" >LDAP Browser...</Button>
+                <Button Grid.Column="2" HorizontalAlignment="Right"  HorizontalContentAlignment="Left" Name="publicFolderButton" IsEnabled="{Binding Path=EnablePopButtons}" Command="{Binding PublicFolderCommand}" Width="{Binding ElementName=ldapBrowserButton, Path=ActualWidth}">Public Folder...</Button>
             </Grid>
         </GroupBox>
         <DataGrid Grid.Row="2" Margin="30,20,30,0" Name="dgUsers" AutoGenerateColumns="False" CanUserAddRows="True" SelectionMode="Single" ItemsSource="{Binding UsersList}" SelectedIndex="{Binding Path=CurrentUserSelection, Mode=TwoWay}" MinHeight="165" MaxHeight="165" MinWidth="{Binding ElementName=GBPop, Path=ActualWidth}" MaxWidth="{Binding ElementName=GBPop, Path=ActualWidth}">

@@ -80,6 +80,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -122,6 +123,9 @@
     <Compile Include="ViewModel\ConfigViewModelUDest.cs" />
     <Compile Include="ViewModel\IntroViewModel.cs" />
     <Compile Include="ViewModel\OptionsViewModel.cs" />
+    <Compile Include="ViewModel\QueryBuilderDlg.xaml.cs">
+      <DependentUpon>QueryBuilderDlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\ScheduleViewModel.cs" />
     <Compile Include="ViewModel\UserResultsViewModel.cs" />
     <Compile Include="ViewModel\UsersViewModel.cs" />
@@ -187,6 +191,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="ViewModel\QueryBuilderDlg.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\ConfigViewS.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -249,6 +257,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="View\Images\AppBanner.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ViewModel\Images\button.ico" />
+    <Resource Include="ViewModel\Images\computer.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
