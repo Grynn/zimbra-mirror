@@ -142,18 +142,22 @@ public class MoveContactGroup extends AjaxCommonTest  {
 		//Click Edit 	
         FormContactGroupNew formContactGroupNew = (FormContactGroupNew) app.zPageAddressbook.zToolbarPressButton(Button.B_EDIT);
 	  
-        //select emailed contacts
-        formContactGroupNew.selectFolder(emailedContacts);     
+        //click location's folder 
+        DialogMove dialogMove =  formContactGroupNew.clickFolder();
         
-        //Click Save
-        formContactGroupNew.zSubmit();        
+	    //enter the moved folder
+        dialogMove.zClickTreeFolder(emailedContacts);
+        dialogMove.zClickButton(Button.B_OK);
         
-        //verify toasted message Group Saved
+        //click  Save button
+        formContactGroupNew.save();
+        
+        // verify toasted message 'Group Saved'
         String expectedMsg = "Group Saved";
         String toastMessage = app.zPageMain.zGetToaster().zGetToastMessage();
         ZAssert.assertStringContains(toastMessage, expectedMsg , "Verify toast message '" + expectedMsg + "'");
-
        
+        // verify group moved to different folder
         //verify moved contact group not displayed in Contact folder
         ZAssert.assertFalse(app.zPageAddressbook.zIsContactDisplayed(group), "Verify contact group fileAs (" + group.fileAs + ") not displayed in folder Contacts");
 	
@@ -162,8 +166,7 @@ public class MoveContactGroup extends AjaxCommonTest  {
         app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, emailedContacts);
    	 
         ZAssert.assertTrue(app.zPageAddressbook.zIsContactDisplayed(group), "Verify contact group fileAs (" + group.fileAs + ") displayed in folder " + emailedContacts.getName());
-	
-
+	           
 	}
 }
 

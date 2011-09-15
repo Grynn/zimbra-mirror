@@ -1008,7 +1008,7 @@ public class PageAddressbook extends AbsTab {
 		try {		
 		    for (; count>=0; count--) {
 		    	menuid = sGetEval("window.document.getElementsByClassName('" + className + "')[" + count + "].id" );
-		    	if ( zIsVisiblePerPosition(menuid, 0, 0) && menuid.startsWith("TAG_MENU__")) {
+		    	if ( zIsVisiblePerPosition(menuid, 0, 0) && menuid.startsWith(prefix)) {
 		    		break;
 		    	}		    					    	
 	        }	    		    
