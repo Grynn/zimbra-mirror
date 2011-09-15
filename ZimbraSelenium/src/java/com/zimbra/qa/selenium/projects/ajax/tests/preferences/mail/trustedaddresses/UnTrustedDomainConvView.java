@@ -4,7 +4,10 @@ import java.io.File;
 import java.util.HashMap;
 
 import org.testng.annotations.Test;
+
+import com.zimbra.qa.selenium.framework.items.FolderItem;
 import com.zimbra.qa.selenium.framework.items.MailItem;
+import com.zimbra.qa.selenium.framework.items.FolderItem.SystemFolder;
 import com.zimbra.qa.selenium.framework.ui.Action;
 import com.zimbra.qa.selenium.framework.ui.Button;
 import com.zimbra.qa.selenium.framework.util.HarnessException;
@@ -47,7 +50,7 @@ public class UnTrustedDomainConvView extends AjaxCommonTest {
 		final String to = "admin@testdoamin.com";
 		final String mimeFolder = ZimbraSeleniumProperties.getBaseDirectory()
 				+ "/data/public/mime/ExternalImg.txt";
-
+		FolderItem inboxFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(),SystemFolder.Inbox);
 		// Inject the external image message(s)
 		LmtpInject.injectFile(app.zGetActiveAccount().EmailAddress, new File(mimeFolder));
 
@@ -59,6 +62,7 @@ public class UnTrustedDomainConvView extends AjaxCommonTest {
 
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+		app.zTreeMail.zTreeItem(Action.A_LEFTCLICK, inboxFolder);
 
 		// Select the message so that it shows in the reading pane
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
