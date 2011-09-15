@@ -91,20 +91,17 @@ public class MarkSpamMessage extends AjaxCommonTest {
 		
 		
 		// Click Actions
-		app.zPageMail.zClick("css=td[id$='__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']");		
+		app.zPageMail.zClick("css=td[id='zb__TV__ACTIONS_MENU_dropdown']>div[class='ImgSelectPullDownArrow']");
+		app.zPageMail.zWaitForBusyOverlay();
 		
-		// Verify spam button is inactive
-		String id = "zmi__TV__SPAM";
-		if ( app.zPageMail.zIsVisiblePerPosition("css=div#ztb__CLV2", 0, 0) ) {
-			id = "zmi__CLV2__SPAM";
-		}
+		String locator = "css=div[id='zm__TV'] div[id='SPAM']";
 
 		ZAssert.assertTrue(
-				app.zPageMail.sIsElementPresent("css=div[id='"+ id +"']"),
+				app.zPageMail.sIsElementPresent(locator),
 				"Verify the spam button is present");
 		
 		ZAssert.assertTrue(
-				app.zPageMail.sIsElementPresent("css=div[id='"+ id +"'][class*='ZDisabled']"),
+				app.zPageMail.sIsElementPresent(locator + "[class*='ZDisabled']"),
 				"Verify the spam button is disabled");
 		
 		

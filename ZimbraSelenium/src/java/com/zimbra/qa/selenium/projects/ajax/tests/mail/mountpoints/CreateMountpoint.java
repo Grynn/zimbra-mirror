@@ -1,6 +1,7 @@
 package com.zimbra.qa.selenium.projects.ajax.tests.mail.mountpoints;
 
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.testng.annotations.Test;
@@ -23,12 +24,15 @@ public class CreateMountpoint extends AjaxCommonTest {
 	private ZimbraAccount Owner = null;
 	
 	
+	@SuppressWarnings("serial")
 	public CreateMountpoint() {
 		logger.info("New "+ CreateMountpoint.class.getCanonicalName());
 		
 		// All tests start at the login page
 		super.startingPage = app.zPageMail;
-		super.startingAccountPreferences = null;
+		super.startingAccountPreferences = new HashMap<String, String>() {{
+		    put("zimbraPrefGroupMailBy", "message");
+		}};
 		
 		Owner = new ZimbraAccount();
 		Owner.provision();
