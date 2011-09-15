@@ -1359,7 +1359,7 @@ public class PageMail extends AbsTab {
 			logger.info(name);
 			//pulldownLocator = "css=td[id$='_ADD_SIGNATURE_dropdown']>div[class='ImgSelectPullDownArrow']";
 			pulldownLocator="css=[id^=zb__COMPOSE][id$=__COMPOSE_OPTIONS_dropdown]";
-			optionLocator="css=td[id$='_ADD_SIGNATURE_dropdown']>div[class='ImgCascade']";
+			optionLocator="css=div[id='ADD_SIGNATURE'] tr[id='POPUP_ADD_SIGNATURE']> td[id='ADD_SIGNATURE_dropdown']>div[class='ImgCascade']";
 			dynamicLocator ="css=td[id*='_title']td:contains('"+ name + "')";
 			page = null;
 
