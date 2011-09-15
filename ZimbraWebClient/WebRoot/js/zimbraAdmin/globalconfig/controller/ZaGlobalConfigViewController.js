@@ -34,6 +34,7 @@ ZaGlobalConfigViewController.prototype.constructor = ZaGlobalConfigViewControlle
 
 //ZaGlobalConfigViewController.STATUS_VIEW = "ZaGlobalConfigViewController.STATUS_VIEW";
 ZaController.initToolbarMethods["ZaGlobalConfigViewController"] = new Array();
+ZaController.initPopupMenuMethods["ZaGlobalConfigViewController"] = new Array();
 ZaController.setViewMethods["ZaGlobalConfigViewController"] = [];
 ZaController.changeActionsStateMethods["ZaGlobalConfigViewController"] = [];
 ZaXFormViewController.preSaveValidationMethods["ZaGlobalConfigViewController"] = new Array();
@@ -63,11 +64,21 @@ function () {
 }
 ZaController.initToolbarMethods["ZaGlobalConfigViewController"].push(ZaGlobalConfigViewController.initToolbarMethod);
 
+ZaGlobalConfigViewController.initPopupMenuMethod =
+function () {
+    for (var key in this._toolbarOperations) {
+        // For zimlet issue.
+
+        this._popupOperations[key] = ZaOperation.duplicate(this._toolbarOperations[key]);
+    }
+}
+ZaController.initPopupMenuMethods["ZaGlobalConfigViewController"].push(ZaGlobalConfigViewController.initPopupMenuMethod);
 
 ZaGlobalConfigViewController.setViewMethod = function (item) {
     try {
 	    if ( !this._UICreated || (this._view == null) || (this._toolbar == null)) {
             this._initToolbar();
+            this._initPopupMenu();
             this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
             this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
             this._toolbarOrder.push(ZaOperation.NONE);

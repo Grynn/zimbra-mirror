@@ -80,6 +80,9 @@ ZaController.initToolbarMethods["ZaZimletListController"].push(ZaZimletListContr
 
 ZaZimletListController.initPopupMenuMethod =
 function () {
+    if (appNewUI) {
+	    this._popupOperations[ZaOperation.DEPLOY_ZIMLET]=new ZaOperation(ZaOperation.DEPLOY_ZIMLET,ZaMsg.TBB_DeployNew, ZaMsg.TBB_DeployNew_tt, "Deploy", "Deploy", new AjxListener(this, this.deployZimletListener));
+    }
    	this._popupOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Undeploy, ZaMsg.DTBB_Undeploy_tt, "Undeploy", "Undeploy", new AjxListener(this, this._undeployButtonListener));    	    		
    	this._popupOperations[ZaOperation.TOGGLE]=new ZaOperation(ZaOperation.TOGGLE,ZaMsg.TBB_Toggle, ZaMsg.TBB_Toggle_tt, "ToggleStatus", "ToggleStatus", new AjxListener(this, this._toggleButtonListener));    	    		
    
