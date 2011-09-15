@@ -54,7 +54,7 @@ public class DeleteFolder extends OctopusCommonTest {
 		for(int i = 0; i<5; i++){
 			briefcaseSubFolder = FolderItem.importFromSOAP(account,
 					briefcaseSubFolderName);
-			if(trash.getId().contentEquals(briefcaseSubFolder.getParentId()))
+			if(briefcaseSubFolder!=null && trash.getId().contentEquals(briefcaseSubFolder.getParentId()))
 				break;
 			SleepUtil.sleepVerySmall();
 		}
@@ -62,6 +62,6 @@ public class DeleteFolder extends OctopusCommonTest {
 		ZAssert.assertNotNull(briefcaseSubFolder,
 				"Verify the subfolder is again available");
 		ZAssert.assertEquals(trash.getId(), briefcaseSubFolder.getParentId(),
-				"Verify the subfolder's parent is now the trash folder ID");
+				"Verify the subfolder's parent is now the trash folder");
 	}	
 }

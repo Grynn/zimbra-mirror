@@ -277,8 +277,7 @@ public class PageOctopus extends AbsTab {
 				// ">div.my-files-list-item:nth-child(1)");
 
 				if (this
-						.sWaitForCondition(
-								"selenium.isElementPresent(\"css=div[role=dialog]>label[class^=edit]\")",
+						.zWaitForElementPresent("css=div[role=dialog]>label[class^=edit]",
 								"3000")) {
 					// this.sClick("css=div[role=dialog]>label[class^=edit]");
 					zKeyEvent("css=div[role=dialog]>label[class^=edit]", "13",
