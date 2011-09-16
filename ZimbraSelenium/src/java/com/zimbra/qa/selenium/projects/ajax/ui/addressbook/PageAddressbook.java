@@ -56,9 +56,6 @@ public class PageAddressbook extends AbsTab {
 		public static final ContextMenuItem CONTACT_GROUP = new ContextMenuItem("POPUP_CONTACTGROUP_MENU","Contact Group","div[class*='ImgGroup']","");
 		public static final ContextMenuItem CONTACT_QUICK_COMMAND =  new ContextMenuItem("POPUP_QUICK_COMMANDS","Quick Commands","div[class='ImgQuickCommand']","");
 		
-		public static final ContextMenuItem[] CONTEXT_MENUITEM_ARRAY={CONTACT_SEARCH, CONTACT_ADVANCED_SEARCH, CONTACT_NEW_EMAIL, CONTACT_EDIT, CONTACT_FORWARD, null,
-			                                                          CONTACT_GROUP,CONTACT_TAG,CONTACT_DELETE,CONTACT_MOVE,CONTACT_PRINT,CONTACT_QUICK_COMMAND
-		                                                             };
 	}
 
 	
@@ -72,8 +69,8 @@ public class PageAddressbook extends AbsTab {
 		public static final ContextMenuItem CONTACT_SUB_RECEIVED_FROM_CONTACT = new ContextMenuItem("tr#POPUP_SEARCH","Received From Contact","div[class='ImgSearch']","");
 	    public static final ContextMenuItem CONTACT_SUB_SENT_TO_CONTACT = new ContextMenuItem("tr#POPUP_SEARCH_TO","Sent To Contact","div[class='ImgSearch']","");
 	
-	    public static final ContextMenuItem CONTACT_SUB_NEW_CONTACT_GROUP = new ContextMenuItem("div#zmi__Contacts__CONTACTGROUP_MENU|GROUP_MENU|NEWGROUP","New Contact Group","div[class='ImgNewGroup']","");
-		
+	    public static final ContextMenuItem CONTACT_SUB_NEW_CONTACT_GROUP = new ContextMenuItem("div[id^='CONTACTGROUP_MENU__DWT'][id$='|GROUP_MENU|NEWGROUP']","New Contact Group","div[class='ImgNewGroup']","");
+	    
 	}
 	
 	public PageAddressbook(AbsApplication application) {
@@ -951,43 +948,13 @@ public class PageAddressbook extends AbsTab {
 		
         ExecuteHarnessMain.ResultListener.captureScreen();
    
-      
-    	if (option == Button.B_TAG) {
-    		String tagMenuid = findMenuId("ActionMenu ZHasIcon","TAG_MENU__");
-    		int numItems = Integer.parseInt(sGetEval("window.document.getElementById('" + tagMenuid +"').childNodes[0].childNodes[0].childNodes.length")) -1;
-    		
-    		for (int i=0; i<numItems -2; i++) {
-    			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);									
-    		}
-    			
-    		zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);												
-    		if (subOption == Button.O_TAG_REMOVETAG) {
-    			zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);									
-			}
-    		zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);											
-    	}
-    	else if (option == Button.B_CONTACTGROUP) {
-    		if (subOption == Button.O_NEW_CONTACTGROUP) {
-    			String groupMenuid = findMenuId("ActionMenu ZHasIcon","CONTACTGROUP_MENU__");
-        			
-    		
-    			int numItems = Integer.parseInt(sGetEval("window.document.getElementById('" + groupMenuid + "').childNodes[0].childNodes[0].childNodes.length")) -1;
-    		   		
-    			for (int i=0; i<numItems -1; i++) {
-    				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);									
-    			}
-    			
-				zKeyboard.zTypeKeyEvent(KeyEvent.VK_DOWN);									    			    		
-    		    zKeyboard.zTypeKeyEvent(KeyEvent.VK_ENTER);											
     
-    		}    		
-    	}
-    	else {
+    	//else {
     		sFocus(locator);
             sMouseOver(locator);
             //jClick(locator);
             zClickAt(locator, "0,0");
-     	}
+     	//}
        zWaitForBusyOverlay();
 		
 		
@@ -999,28 +966,7 @@ public class PageAddressbook extends AbsTab {
     
 	}
 	
-    private String findMenuId(String className, String prefix) throws HarnessException {
-
-		String menuid = null;
-		int count = sGetCssCount("css=div[class='" + className +"']") -1;
-		
-		//folder menu usually located at the end, so go backward  
-		try {		
-		    for (; count>=0; count--) {
-		    	menuid = sGetEval("window.document.getElementsByClassName('" + className + "')[" + count + "].id" );
-		    	if ( zIsVisiblePerPosition(menuid, 0, 0) && menuid.startsWith(prefix)) {
-		    		break;
-		    	}		    					    	
-	        }	    		    
-		}
-		catch (Exception e) {
-			logger.info(e.getMessage());
-			throw new HarnessException(" cannot get menuid with class=" + className + " and prefix=" + prefix );
-		}
-		
-	    return menuid;
-    }
-	
+  
 	public void zListItem(Action action, Button option ,IItem item, String contact) throws HarnessException {
 		String locator = null;			// If set, this will be clicked
 	
