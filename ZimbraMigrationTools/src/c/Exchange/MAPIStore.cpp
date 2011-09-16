@@ -66,3 +66,9 @@ HRESULT MAPIStore::GetRootFolder(MAPIFolder &rootFolder) {
     rootFolder.Initialize(pFolder, _TEXT("/"), &bin);
     return hr;
 }
+
+HRESULT MAPIStore::OpenEntry(ULONG cbEntryID, LPENTRYID lpEntryID, LPCIID lpInterface,
+    ULONG ulFlags, ULONG FAR *lpulObjType,
+    LPUNKNOWN FAR *lppUnk) {
+    return m_Store->OpenEntry(cbEntryID, lpEntryID, lpInterface, ulFlags, lpulObjType, lppUnk);
+}

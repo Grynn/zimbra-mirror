@@ -205,7 +205,7 @@ HRESULT MAPIAccessAPI::GetInternalFolder(SBinary sbFolderEID, MAPIFolder &folder
     ULONG objtype;
 
     if ((hr =
-             m_zmmapisession->OpenEntry(sbFolderEID.cb, (LPENTRYID)sbFolderEID.lpb, NULL,
+             m_userStore->OpenEntry(sbFolderEID.cb, (LPENTRYID)sbFolderEID.lpb, NULL,
                  MAPI_BEST_ACCESS, &objtype,
                  (LPUNKNOWN *)&pFolder)) != S_OK)
         throw GenericException(hr, L"GetFolderItems OpenEntry Failed.", __LINE__,
@@ -274,7 +274,7 @@ LPCWSTR MAPIAccessAPI::GetItem(SBinary sbItemEID, BaseItemData &itemData) {
     LPMESSAGE pMessage = NULL;
     ULONG objtype;
 
-    if (FAILED(hr = m_zmmapisession->OpenEntry(sbItemEID.cb, (LPENTRYID)sbItemEID.lpb,
+    if (FAILED(hr = m_userStore->OpenEntry(sbItemEID.cb, (LPENTRYID)sbItemEID.lpb,
                     NULL, MAPI_BEST_ACCESS, &objtype, (LPUNKNOWN *)&pMessage))) {
         lpwstrStatus = FromatExceptionInfo(hr, L"MAPIAccessAPI::GetItem() Failed",
                 __FILE__, __LINE__);
