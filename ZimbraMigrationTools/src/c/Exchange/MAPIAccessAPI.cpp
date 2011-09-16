@@ -163,7 +163,8 @@ HRESULT MAPIAccessAPI::Iterate_folders(Zimbra::MAPI::MAPIFolder &folder,
             (((wstrContainerClass != L"IPF.Note") && (wstrContainerClass != L"IPF.Contact") &&
               (wstrContainerClass != L"IPF.Appointment") &&
               (wstrContainerClass != L"IPF.Task") &&
-              (wstrContainerClass != L"IPF.StickyNote")) &&
+              (wstrContainerClass != L"IPF.StickyNote") &&
+			  (wstrContainerClass != L"")) &&
              (exfid == SPECIAL_FOLDER_ID_NONE)))
             bSkipFolder = true;
         if (bMore && !bSkipFolder) {
