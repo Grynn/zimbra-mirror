@@ -86,9 +86,6 @@ public class TagContactGroup extends AjaxCommonTest  {
 		// Create a new tag via soap
 	    TagItem tagItem = TagItem.CreateTagViaSoap(app.zGetActiveAccount());
 		
-		// Refresh to display the new tag
-		app.zPageAddressbook.zRefresh();
-	
 	    // Dnd on the new tag
 		app.zPageAddressbook.zDragAndDrop(
 				"css=td#zlif__CNS__" + group.getId() + "__fileas:contains("+ group.fileAs + ")",

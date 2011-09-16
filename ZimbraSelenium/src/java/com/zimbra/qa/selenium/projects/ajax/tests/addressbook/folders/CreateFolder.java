@@ -36,8 +36,8 @@ public class CreateFolder extends AjaxCommonTest {
                 "</CreateFolderRequest>");
 
 		// Refresh addressbook
-	    app.zPageAddressbook.zRefresh();
-
+	   	app.zPageMain.zToolbarPressButton(Button.B_REFRESH);
+		
 		
 		FolderItem folderItem = FolderItem.importFromSOAP(app.zGetActiveAccount(), name);
 		ZAssert.assertNotNull(folderItem, "Verify the folderItem is available");

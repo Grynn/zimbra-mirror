@@ -146,17 +146,6 @@ public class PageAddressbook extends AbsTab {
 
 	}
 
-	public void zRefresh() throws HarnessException {
-		sRefresh();
-		sWaitForPageToLoad();
-								
-		zWaitForElementPresent(PageMain.Locators.zAppbarContact);		
-		
-		// Click on Addressbook tab
-		zClickAt(PageMain.Locators.zAppbarContact,"0,0");
-		zWaitForElementPresent("css=div#ztih__main_Contacts__ADDRBOOK_div");
-			
-	}
 	
 	//get subFolders
 	public List<FolderItem> zListGetFolders(ZimbraAccount account, FolderItem parentFolder) throws HarnessException {

@@ -12,6 +12,7 @@ import com.zimbra.qa.selenium.framework.util.HarnessException;
 import com.zimbra.qa.selenium.framework.util.ZAssert;
 import com.zimbra.qa.selenium.framework.util.ZimbraSeleniumProperties;
 import com.zimbra.qa.selenium.projects.ajax.core.AjaxCommonTest;
+import com.zimbra.qa.selenium.projects.ajax.ui.AppAjaxClient;
 
 
 
@@ -52,7 +53,7 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		TagItem tagItem = TagItem.CreateTagViaSoap(app.zGetActiveAccount());
 		
 		// Refresh to display the new tag
-		app.zPageAddressbook.zRefresh();
+		app.zPageMain.zToolbarPressButton(Button.B_REFRESH);
 				
 		// Create a contact group via Soap then select
 		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK, tagItem.getId());
@@ -73,8 +74,8 @@ public class UnTagContactGroup extends AjaxCommonTest  {
 		TagItem tagItem = TagItem.CreateTagViaSoap(app.zGetActiveAccount());
 		
 		// Refresh to display the new tag
-		app.zPageAddressbook.zRefresh();
-		
+		app.zPageMain.zToolbarPressButton(Button.B_REFRESH);
+	
 		// Create a contact group via Soap then select
 		ContactGroupItem group = app.zPageAddressbook.createUsingSOAPSelectContactGroup(app, Action.A_LEFTCLICK, tagItem.getId());
 	  

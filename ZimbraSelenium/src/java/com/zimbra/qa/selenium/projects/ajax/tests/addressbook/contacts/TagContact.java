@@ -88,8 +88,8 @@ public class TagContact extends AjaxCommonTest  {
 	    TagItem tagItem = TagItem.CreateTagViaSoap(app.zGetActiveAccount());
 		
 		// Refresh to display the new tag
-		app.zPageAddressbook.zRefresh();
-	
+		app.zPageMain.zToolbarPressButton(Button.B_REFRESH);
+		
 	    // Dnd on the new tag
 		app.zPageAddressbook.zDragAndDrop(
 				"css=td#zlif__CNS__" + contactItem.getId() + "__fileas:contains("+ contactItem.fileAs + ")",
