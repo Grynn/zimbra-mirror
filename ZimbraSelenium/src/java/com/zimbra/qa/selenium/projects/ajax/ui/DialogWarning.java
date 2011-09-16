@@ -40,7 +40,7 @@ public class DialogWarning extends AbsDialog {
 		public static final DialogWarningID SelectedTimeIsInPast = new DialogWarningID("ShowDelayPastDialog");
 		
 		// See http://bugzilla.zimbra.com/show_bug.cgi?id=64081
-		public static final DialogWarningID SendReadReceipt = new DialogWarningID("Bug64081");;
+		public static final DialogWarningID SendReadReceipt = new DialogWarningID("YesNoMsgDialog");;
 
 		protected String Id;
 		protected DialogWarningID(String id) {
