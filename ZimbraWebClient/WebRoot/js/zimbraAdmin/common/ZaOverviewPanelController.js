@@ -792,6 +792,15 @@ function() {
         tree.addTreeItemData(ti);
         ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._COS_LIST_VIEW] = ZaOverviewPanelController.cosListTreeListener;
 
+        // Add Configuration /Domain
+        ti = new ZaTreeItemData({
+                                    parent:parentPath,
+                                    id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_CONFIGURATION,null, ZaId.TREEITEM_DOMAINS),
+                                    text: ZaMsg.OVP_domains,
+                                    mappingId: ZaZimbraAdmin._DOMAINS_LIST_VIEW});
+        tree.addTreeItemData(ti);
+        ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._DOMAINS_LIST_VIEW] = ZaOverviewPanelController.domainListTreeListener;
+
         // Add Configuration / Global Settings
         ti = new ZaTreeItemData({
                                     parent:parentPath,

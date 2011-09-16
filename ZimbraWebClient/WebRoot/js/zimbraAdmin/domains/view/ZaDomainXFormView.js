@@ -280,8 +280,9 @@ function(entry) {
 		this._containedObject = containedObj;
 	}
 
-    this._localXForm.setInstance(this._containedObject);        
-	this.updateTab();
+    this._localXForm.setInstance(this._containedObject);
+    if (!appNewUI)
+	    this.updateTab();
 }
 
 ZaDomainXFormView.isCatchAllEnabled = function () {
@@ -731,7 +732,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 			cssStyle:"padding-top:5px; padding-left:2px; padding-bottom:5px"
 	});	
 	var tabIx = ++this.TAB_INDEX;
-	var tabBar = {type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:[],cssClass:"ZaTabBar", id:"xform_tabbar"};
+	var tabBar = {type:_TAB_BAR_,  ref:ZaModel.currentTab,choices:[],cssClass:"ZaTabBar", id:"xform_tabbar", cssStyle: (appNewUI? "display:none;":"")};
 	tabBar.choices.push({value:tabIx, label:ZaMsg.TABT_GeneralPage});
 	var switchGroup = {type:_SWITCH_, items:[]};
 	var case1 = {type:_ZATABCASE_, caseKey:tabIx, 
@@ -1567,10 +1568,14 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
     }
     xFormObject.items.push(tabBar);
 	xFormObject.items.push(switchGroup);
+    this.tabChoices = tabBar.choices;
 }
 
 ZaTabView.XFormModifiers["ZaDomainXFormView"].push(ZaDomainXFormView.myXFormModifier);
-
+ZaDomainXFormView.prototype.getTabChoices =
+function() {
+    return this.tabChoices;
+}
 
 ZaAccMiniListView = function(parent, className, posStyle, headerList) {
 	if (arguments.length == 0) return;

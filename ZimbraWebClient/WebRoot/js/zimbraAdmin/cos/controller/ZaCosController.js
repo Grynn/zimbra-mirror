@@ -33,6 +33,7 @@ ZaCosController.helpURL = "cos/creating_classes_of_service.htm";
 ZaCosController.prototype = new ZaXFormViewController();
 ZaCosController.prototype.constructor = ZaCosController;
 ZaController.initToolbarMethods["ZaCosController"] = new Array();
+ZaController.initPopupMenuMethods["ZaCosController"] = new Array();
 ZaController.setViewMethods["ZaCosController"] = new Array();
 ZaController.changeActionsStateMethods["ZaCosController"] = new Array();
 /**
@@ -62,6 +63,17 @@ ZaCosController.changeActionsStateMethod = function () {
 }
 ZaController.changeActionsStateMethods["ZaCosController"].push(ZaCosController.changeActionsStateMethod);
 
+ZaCosController.initPopupMenuMethod =
+function () {
+	this._popupOperations[ZaOperation.SAVE]=new ZaOperation(ZaOperation.SAVE,ZaMsg.TBB_Save, ZaMsg.COSTBB_Save_tt, "Save", "SaveDis", new AjxListener(this, this.saveButtonListener));
+
+	if(ZaItem.hasRight(ZaCos.CREATE_COS_RIGHT, ZaZimbraAdmin.currentAdminAccount)) {
+		this._popupOperations[ZaOperation.NEW]=new ZaOperation(ZaOperation.NEW,ZaMsg.TBB_New, ZaMsg.COSTBB_New_tt, "NewCOS", "NewCOSDis", new AjxListener(this, ZaCosController.prototype._newButtonListener, [true]));
+	}
+	this._popupOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.COSTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, this.deleteButtonListener));
+}
+ZaController.initPopupMenuMethods["ZaCosController"].push(ZaCosController.initPopupMenuMethod);
+
 /**
 *	@method setViewMethod 
 *	@param entry - isntance of ZaCos class
@@ -77,6 +89,7 @@ function(entry) {
 		
          //create toolbar
 		this._initToolbar();
+        this._initPopupMenu();
 		//always add Help button at the end of the toolbar		
 		this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
 		this._toolbarOperations[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));

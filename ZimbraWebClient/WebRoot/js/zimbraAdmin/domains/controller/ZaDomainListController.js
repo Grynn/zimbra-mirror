@@ -80,7 +80,8 @@ function (list,  openInNewTab, openInSearchTab) {
 	this._updateUI(list, openInNewTab, openInSearchTab);
 	//ZaApp.getInstance().pushView(ZaZimbraAdmin._DOMAINS_LIST_VIEW);
 	ZaApp.getInstance().pushView(this.getContentViewId(), openInNewTab, openInSearchTab);
-	
+	if (appNewUI)
+        return;
 	if (openInSearchTab) {
 		ZaApp.getInstance().updateSearchTab();
 	} else if(openInNewTab) {
@@ -209,15 +210,18 @@ function (openInNewTab, openInSearchTab) {
 		
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._contentView;
-	elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;		
-	//ZaApp.getInstance().createView(ZaZimbraAdmin._DOMAINS_LIST_VIEW, elements);
-	var tabParams = {
-			openInNewTab: openInNewTab ? openInNewTab : false,
-			tabId: this.getContentViewId(),
-			tab: openInNewTab ? null : (openInSearchTab ? this.getSearchTab() : this.getMainTab()) 
-		}
-	ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
-	
+    if (!appNewUI) {
+        elements[ZaAppViewMgr.C_TOOLBAR_TOP] = this._toolbar;
+        //ZaApp.getInstance().createView(ZaZimbraAdmin._DOMAINS_LIST_VIEW, elements);
+        var tabParams = {
+                openInNewTab: openInNewTab ? openInNewTab : false,
+                tabId: this.getContentViewId(),
+                tab: openInNewTab ? null : (openInSearchTab ? this.getSearchTab() : this.getMainTab())
+            }
+        ZaApp.getInstance().createView(this.getContentViewId(), elements, tabParams) ;
+    } else {
+        ZaApp.getInstance().getAppViewMgr().createView(this.getContentViewId(), elements);
+    }
 	this._initPopupMenu();
 	this._actionMenu =  new ZaPopupMenu(this._contentView, "ActionMenu", null, this._popupOperations, ZaId.VIEW_DMLIST, ZaId.MENU_POP);
 	
@@ -283,6 +287,10 @@ function(ev) {
             } else if ( item.attrs [ZaDomain.A_domainType] == ZaDomain.domainTypes.alias) {
                 ZaApp.getInstance().getDomainAliasWizard(true).editDomainAlias (item, true) ;
             }
+            if (appNewUI) {
+                var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_domains]);
+                ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, item.name);
+            }
 		}
 	} else {
 		this.changeActionsState();	
@@ -308,6 +316,10 @@ function(ev) {
 		    ZaApp.getInstance().getDomainController().show(item);
         } else if ( item.attrs [ZaDomain.A_domainType] == ZaDomain.domainTypes.alias) {
             ZaApp.getInstance().getDomainAliasWizard(true).editDomainAlias (item, true) ;
+        }
+        if (appNewUI) {
+            var parentPath = ZaTree.getPathByArray([ZaMsg.OVP_home, ZaMsg.OVP_configure, ZaMsg.OVP_domains]);
+            ZaZimbraAdmin.getInstance().getOverviewPanelController().addObjectItem(parentPath, item.name);
         }
 	}
 }
