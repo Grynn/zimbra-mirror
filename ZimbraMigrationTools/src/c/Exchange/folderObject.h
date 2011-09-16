@@ -7,6 +7,7 @@
 
 #include "Exchange_i.h"
 #include "BaseFolder.h"
+#include "MAPIDefs.h"
 
 /*
 
@@ -29,6 +30,7 @@ private:
 	/* BSTR Strname;
 	 LONG LngID;
 	 BSTR parentPath;*/
+	SBinary FolderId;
 public:
 	CfolderObject()
 	{
@@ -66,6 +68,9 @@ public:
 	STDMETHOD(put_Id)(LONG newVal);
 	STDMETHOD(get_ParentPath)(BSTR* pVal);
 	STDMETHOD(put_ParentPath)(BSTR newVal);
+
+	STDMETHOD(put_FolderID)(VARIANT id);
+	STDMETHOD(get_FolderID)(VARIANT* id);
 	
 };
 

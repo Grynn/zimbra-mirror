@@ -30,6 +30,7 @@ class ATL_NO_VTABLE CItemObject :
 private:
 	 /*BSTR ID;*/
 	 FolderType TYPE;
+	 SBinary ItemID;
 
 	 CComQIPtr<IfolderObject,&IID_IfolderObject> parentObj;
 public:
@@ -79,6 +80,9 @@ public:
 	STDMETHOD(put_CreationDate)(VARIANT newVal);
 	STDMETHOD(GetDataForItem)(VARIANT* pVal);
 
+	STDMETHOD(put_ItemID)(VARIANT id);
+	STDMETHOD(get_ItemID)(VARIANT* id);
+	
 };
 
 OBJECT_ENTRY_AUTO(__uuidof(ItemObject), CItemObject)

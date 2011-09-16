@@ -155,6 +155,75 @@ namespace CssLib
             long id = Folders[0].Id;
 
             string path = Folders[0].ParentPath;
+            ZimbraAPI api = new ZimbraAPI();
+            foreach (folderObject F1 in Folders)
+            {
+                if (F1.Id == 0)
+                {
+
+
+                    ZimbraValues.GetZimbraValues().AccountName = "KNuthi@knuthi-win-1";
+                    int stat = api.CreateFolder(F1.Name, "1");
+                    //stat=  api.CreateFolder("testfolder","2");
+
+                }
+                else
+                {
+                    if ((F1.Name == "Contacts") && (F1.Id == 7))
+                    {
+                        ZimbraValues.GetZimbraValues().AccountName = "KNuthi@knuthi-win-1";
+                        // int stat = api.CreateContact(
+                    }
+
+                    DateTime dt;
+                    dt = DateTime.UtcNow;
+                    objectArray = O1.GetItemsForFolderObjects(F1, FolderType.Contacts, dt.ToOADate());
+                    ItemObject[] Items = Array.ConvertAll(objectArray, Item => (ItemObject)Item);
+
+
+                    Dictionary<string, string> dict = new Dictionary<string, string>();
+                    foreach (ItemObject I1 in Items)
+                    {
+                        if (I1 != null)
+                        {
+                            FolderType type = I1.Type;
+                            if (type == FolderType.Contacts)
+                            {
+
+                                string[,] data = O1.GetDataForItem(I1.ItemID);
+
+                                int bound0 = data.GetUpperBound(0);
+
+                              
+
+                                for (int i = 0; i <= bound0; i++)
+                                {
+                                    string Key = data[0, i];
+                                    string Value = data[1, i];
+                                    dict.Add(Key, Value);
+                                    // Console.WriteLine("{0}, {1}", so1, so2);
+                                }
+                            }
+                        }
+                        ZimbraValues.GetZimbraValues().AccountName = "KNuthi@knuthi-win-1";
+                        if (dict.Count > 0)
+                        { int stat = api.CreateContact(dict); }
+
+                    }
+
+                   
+
+
+                }
+
+            }
+
+           /* folderObject[] Folders = Array.ConvertAll(objectArray, folder => (folderObject)folder);
+
+            string name = Folders[0].Name;
+            long id = Folders[0].Id;
+
+            string path = Folders[0].ParentPath;*/
            
 
 

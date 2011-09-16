@@ -4,6 +4,7 @@
 #include "ItemObject.h"
 #include "ContactObj.h"
 
+
 // CItemObject
 
 STDMETHODIMP CItemObject::InterfaceSupportsErrorInfo(REFIID riid)
@@ -107,6 +108,8 @@ STDMETHODIMP CItemObject::GetDataForItem(VARIANT* data)
 		ContactObj *C1 = new ContactObj();
 		C1->GetData(pIt);
 		
+
+			
 		VariantInit(data);
 
     // Create SafeArray of VARIANT BSTRs
@@ -146,4 +149,84 @@ data->vt =VT_ARRAY | VT_BSTR;
 
 	}
 	return S_OK;
+}
+
+
+STDMETHODIMP CItemObject::put_ItemID(VARIANT id)
+{
+
+	//FolderId = id;
+
+//Binary data is stored in the variant as an array of unsigned char
+ if(id.vt == (VT_ARRAY|VT_UI1)) // (OLE SAFEARRAY)
+ {
+ //Retrieve size of array
+ ItemID.cb = id.parray->rgsabound[0].cElements;
+ ItemID.lpb = new BYTE[ItemID.cb]; //Allocate a buffer to store the data
+ if(ItemID.lpb != NULL)
+ {
+ void * pArrayData;
+ //Obtain safe pointer to the array
+ SafeArrayAccessData(id.parray,&pArrayData);
+ //Copy the bitmap into our buffer
+ memcpy(ItemID.lpb, pArrayData, ItemID.cb); //Unlock the variant data
+ SafeArrayUnaccessData(id.parray);
+
+	
+}
+ }
+ return S_OK;
+}
+
+STDMETHODIMP CItemObject::get_ItemID(VARIANT* id)
+{
+
+	//*id = FolderId;
+
+	/*VARIANT var;
+ VariantInit(&var); //Initialize our variant
+ //Set the type to an array of unsigned chars (OLE SAFEARRAY)
+ var.vt = VT_ARRAY | VT_UI1;
+ //Set up the bounds structure
+ SAFEARRAYBOUND rgsabound[1];
+ rgsabound[0].cElements = FolderId.cb;
+ rgsabound[0].lLbound = 0;
+ //Create an OLE SAFEARRAY
+ var.parray = SafeArrayCreate(VT_UI1,1,rgsabound);
+ if(var.parray != NULL)
+ {
+ void * pArrayData = NULL;
+ //Get a safe pointer to the array
+ SafeArrayAccessData(var.parray,&pArrayData);
+ //Copy data to it
+ memcpy(pArrayData, FolderId.lpb, FolderId.cb);
+ //Unlock the variant data
+ SafeArrayUnaccessData(var.parray);
+ id->parray = var.parray;
+// *id = var;
+ // Create a COleVariant based on our variant
+ VariantClear(&var);
+
+ }*/
+	HRESULT hr = S_OK;
+	VariantInit(id);
+	id->vt = VT_ARRAY |VT_UI1;
+	SAFEARRAY* psa;
+	SAFEARRAYBOUND bounds[1];// ={1,0};
+	bounds[0].cElements = ItemID.cb;
+ bounds[0].lLbound = 0;
+ 
+	psa = SafeArrayCreate(VT_UI1,1,bounds);
+	if(psa != NULL)
+	{
+		void * pArrayData = NULL;
+		SafeArrayAccessData(psa,&pArrayData);
+	memcpy(pArrayData, ItemID.lpb, ItemID.cb);
+ //Unlock the variant data
+ //SafeArrayUnaccessData(var.parray);
+	SafeArrayUnaccessData(psa);
+	id->parray = psa;
+
+	}
+	return hr;
 }

@@ -17,14 +17,14 @@ namespace ZimbraMigrationConsole
 
            Migration Test = new Migration();
 
-            Test.test();
+            //Test.test();
 
           //  Test.MigrationClient();
 
 
 
 
-          /*  if (args.Count() == 2)
+          if (args.Count() == 2)
             {
                 string ConfigXmlFile = args[0];
                 string UserMapFile = args[1];
@@ -50,20 +50,20 @@ namespace ZimbraMigrationConsole
 
                                 ZimbraAPI zimbraAPI = new ZimbraAPI();
 
-                                int stat = zimbraAPI.Logon(myXmlConfig.ConfigObj.zimbraServer.HostName, myXmlConfig.ConfigObj.zimbraServer.Port, myXmlConfig.ConfigObj.zimbraServer.AdminAccount, myXmlConfig.ConfigObj.zimbraServer.AdminPassword, true);
+                                int stat = zimbraAPI.Logon(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname, myXmlConfig.ConfigObj.zimbraServer.Port, myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID, myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminPwd, true);
                                 if (stat != 0)
                                 {
                                     zimbraAPI.LastError.Count();
 
                                     System.Console.WriteLine();
-                                    ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red, "Logon to to Zimbra Server  for adminAccount failed " + myXmlConfig.ConfigObj.zimbraServer.AdminAccount);
+                                    ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red, "Logon to to Zimbra Server  for adminAccount failed " + myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID);
                                     System.Console.WriteLine("......... \n");
                                     System.Console.WriteLine();
                                     Thread.Sleep(2000);
                                     //return;
                                 }
 
-                                userAcct.InitializeMigration(myXmlConfig.ConfigObj.zimbraServer.HostName, myXmlConfig.ConfigObj.zimbraServer.Port, myXmlConfig.ConfigObj.zimbraServer.AdminAccount,user);
+                              //  userAcct.InitializeMigration(myXmlConfig.ConfigObj.zimbraServer.ZimbraHostname, myXmlConfig.ConfigObj.zimbraServer.Port, myXmlConfig.ConfigObj.zimbraServer.ZimbraAdminID);
 
 
                                 string acctName = user.UserName + '@' + myXmlConfig.ConfigObj.UserProvision.Domain;
@@ -76,7 +76,8 @@ namespace ZimbraMigrationConsole
                                     System.Console.WriteLine();
                                     System.Console.WriteLine();
 
-                                    userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
+                                    //userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
+                                    Test.test();
                                     Thread.Sleep(15000);
                                 }
                                 else
@@ -103,7 +104,8 @@ namespace ZimbraMigrationConsole
                                         ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Green, " Migration to Zimbra Started  for UserAccount  " + user.UserName);
                                         System.Console.WriteLine();
                                         System.Console.WriteLine();
-                                        userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
+                                       // userAcct.StartMigration(user.UserName, myXmlConfig.ConfigObj.importOptions.Mail.ToString());
+                                        Test.test();
                                         System.Console.WriteLine("......... \n");
                                         Thread.Sleep(9000);
                                     }
@@ -152,7 +154,7 @@ namespace ZimbraMigrationConsole
                 ProgressUtil.RenderConsoleProgress(30, '\u2591', ConsoleColor.Red, " Make sure the correct arguments (2) are passed \n");
                 System.Console.WriteLine();
             }
-            */
+            
 
         }
         }
